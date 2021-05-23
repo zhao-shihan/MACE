@@ -1,0 +1,21 @@
+#macro file for the initialization of GE1
+# in interactive session
+#
+# Set some default verbose
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+#
+# Change the default number of threads (in multi-threaded mode)
+/run/numberOfThreads 1
+#
+# Initialize kernel
+/run/initialize
+
+/PSIMACEPhysics/SetMuonRareDecayMode 3.4e-5
+/PSIMACEPhysics/SetMuMuConversion 0.
+/PSIMACEPhysics/SetMuFormation 1
+
+#
+# Visualization setting
+/control/execute vis.mac

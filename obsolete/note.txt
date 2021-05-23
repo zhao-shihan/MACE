@@ -1,0 +1,12 @@
+搬运0913
+DetectorConstruction～Scint材料改为有机玻璃
+EventAction～磁谱仪读入范围，设置内圈文件输出
+RunAction~root范围
+MagSpecSD～磁谱仪动量读取
+MuFormation~动能0.0256溢出，仅3.3%，其余留在target内部。
+
+8.7 关闭了MuFormation，测试mu+本底，分稀有衰变和常规衰变模式，记得改mac。
+
+100*100 服务器 4thread =30s
+100*100 本地 4 =24s
+100*1000 服务器 16t = 301s

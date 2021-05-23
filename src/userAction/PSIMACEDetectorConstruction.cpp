@@ -1,0 +1,748 @@
+// PSIMACEDetectorConstruction
+//
+// Author:	Yuzhe Mao 02.2020
+//
+// Review and update: Shihan Zhao 05.2021
+// 
+// Simulation of PSIMACE Muonium-AntiMuonium Conversion Expriment Detector
+// Missing collimator and beam counter.
+
+#include "G4FieldManager.hh"
+#include "G4UniformMagField.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4NistManager.hh"
+#include "G4SDManager.hh"
+#include "G4FieldManager.hh"
+#include "G4Region.hh"
+#include "G4ProductionCuts.hh"
+#include "G4UserLimits.hh"
+#include "G4Box.hh"
+#include "G4Tubs.hh"
+#include "G4Material.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4EqMagElectricField.hh"
+#include "G4DormandPrince745.hh"
+#include "G4IntegrationDriver.hh"
+#include "G4ChordFinder.hh"
+
+#include "userAction/PSIMACEDetectorConstruction.hh"
+#include "SD/PSIMACEMWPCSD.hh"
+#include "SD/PSIMACEMCPSD.hh"
+#include "SD/PSIMACECsISD.hh"
+#include "fields/PSIMACEAcceleratorField.hh"
+#include "fields/PSIMACESeparatorField.hh"
+#include "fields/PSIMACETransportField2.hh"
+
+PSIMACEDetectorConstruction::PSIMACEDetectorConstruction() :
+    G4VUserDetectorConstruction(),
+    fLogicalMWPC{ nullptr },
+    fLogicalMCP(nullptr),
+    fLogicalCsI(nullptr),
+
+    fLogicalTransportField1(nullptr),
+    fLogicalAcceleratorField(nullptr),
+    fLogicalMagneticSpectrometerField(nullptr),
+    fLogicalSeparatorField(nullptr),
+    fLogicalTransportField2(nullptr),
+    fLogicalTransportField3(nullptr),
+    fLogicalCsIShellField(nullptr),
+
+    fTransportField2Z(0.),
+
+    fPhysicalSiO2Target(nullptr),
+    fPhysicalMagneticSpectrometerShield{ nullptr },
+    fPhysicalCsIShield{ nullptr } {}
+
+PSIMACEDetectorConstruction::~PSIMACEDetectorConstruction() {}
+
+G4VPhysicalVolume* PSIMACEDetectorConstruction::Construct() {
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                             Material                                   //
+    ////////////////////////////////////////////////////////////////////////////
+
+    G4NistManager* nistManager = G4NistManager::Instance();
+    auto materialSiO2 = nistManager->FindOrBuildMaterial("G4_SILICON_DIOXIDE");
+    auto materialVacuo = nistManager->FindOrBuildMaterial("G4_Galactic");
+    auto materialAl = nistManager->FindOrBuildMaterial("G4_Al");
+    auto materialC = nistManager->FindOrBuildMaterial("G4_C");
+    auto materialCu = nistManager->FindOrBuildMaterial("G4_Cu");
+    auto materialCsI = nistManager->FindOrBuildMaterial("G4_CESIUM_IODIDE");
+    auto materialPlexiGlass = nistManager->FindOrBuildMaterial("G4_PLEXIGLASS");
+    auto materialMCP = nistManager->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4 * g / cm3);
+    // auto materialMgO = nistManager->FindOrBuildMaterial("G4_MAGNESIUM_OXIDE");
+    auto materialIron = nistManager->FindOrBuildMaterial("G4_Fe");
+    auto materialMylar = nistManager->FindOrBuildMaterial("G4_MYLAR");
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                             Geometry                                   //
+    ////////////////////////////////////////////////////////////////////////////
+
+    constexpr G4bool checkSurfaceOverlaps = true;
+
+    //--------------------------------------------------------------------------
+    // Solid world.
+    //--------------------------------------------------------------------------
+
+    auto solidWorld = new G4Box(
+        "World",
+        3.0 * m,
+        3.0 * m,
+        3.0 * m
+    );
+
+    //--------------------------------------------------------------------------
+    // Solid fields.
+    //--------------------------------------------------------------------------
+
+    auto solidTransportField1 = new G4Tubs(
+        "TransportField1",
+        0. * cm,
+        8.1 * cm,
+        0.5 * (47. - (8. * cos(30 * deg) + 1.)) * cm,
+        0. * deg,
+        360. * deg
+    );
+    auto solidAcceleratorField = new G4Tubs(
+        "AcceleratorField",
+        0. * cm,
+        8.1 * cm,
+        0.5 * (40. + 8. * cos(30 * deg) + 1.) * cm,
+        0. * deg,
+        360. * deg
+    );
+    auto solidMagneticSpectrometerField = new G4Tubs(
+        "MagneticSpectrometerField",
+        8.1 * cm,
+        37.0 * cm,
+        47.0 * cm,
+        0. * deg,
+        360. * deg
+    );
+    auto solidSeparatorField = new G4Tubs(
+        "SeparatorField",
+        0. * cm,
+        8.1 * cm,
+        25. * cm,
+        0. * deg,
+        360. * deg
+    );
+    auto solidTransportField2 = new G4Box(
+        "TransportField2",
+        35. * cm,
+        12. * cm,
+        35. * cm
+    );
+    auto solidTransportField3 = new G4Tubs(
+        "TransportField3",
+        0. * cm,
+        10.5 * cm,
+        50. * cm,
+        0. * deg,
+        360. * deg
+    );
+    auto solidCsIShellField = new G4Tubs(
+        "CsIShellField",
+        0. * cm,
+        23. * cm,
+        40. * cm,
+        0. * deg,
+        360. * deg
+    );
+
+    //--------------------------------------------------------------------------
+    // solid parts.
+    //--------------------------------------------------------------------------
+
+    auto solidBeamCounter = new G4Tubs(
+        "BeamCounter",
+        0. * cm,
+        8. * cm,
+        147.5 * um,
+        0. * deg,
+        360. * deg
+    );
+    auto solidMylarDegrader = new G4Tubs(
+        "MylarDegrader",
+        0. * cm,
+        8. * cm,
+        142.5 * um,
+        0. * deg,
+        360. * deg
+    );
+    auto solidSiO2Target = new G4Tubs(
+        "SiO2Target",
+        0. * cm,
+        8. * cm,
+        36.37 * um, //half width equals to 8 mg/cm2
+        0. * deg,
+        360. * deg
+    );
+    G4Tubs* solidMWPC[5];
+    for (G4int chamberNb = 0; chamberNb < 5; ++chamberNb) {
+        G4double radii = (8.2 + chamberNb * (32 - 8.2) / 4) * cm;
+        G4double halfActiveLength = (19 + chamberNb * (40 - 19) / 4) * cm;
+        solidMWPC[chamberNb] = new G4Tubs(
+            "MWPC",
+            radii,
+            radii + 1.0 * cm,
+            halfActiveLength,
+            0. * deg,
+            360. * deg
+        );
+    }
+    auto solidAlSupporter = new G4Tubs(
+        "AlSupporter",
+        0. * cm,
+        8. * cm,
+        25 * um,
+        0. * deg,
+        360. * deg
+    );
+    G4Tubs* solidCollimator[8];
+    for (G4int collimatorNb = 0; collimatorNb < 8; ++collimatorNb) {
+        G4double radii = (5. + collimatorNb * 10.) * mm;
+        G4double collilength = 40. * cm;
+        solidCollimator[collimatorNb] = new G4Tubs(
+            "Collimator",
+            radii - 0.5 * mm,
+            radii + 0.5 * mm,
+            collilength,
+            0. * deg,
+            360. * deg
+        );
+    }
+    auto solidCarbonFoil = new G4Tubs(
+        "CarbonFoil",
+        0.,
+        7. * cm,
+        160. * um,//0.0000964 * m
+        0. * deg,
+        360. * deg
+    );
+    auto solidMCP = new G4Tubs(
+        "MCP",
+        0. * cm,
+        8. * cm,
+        1 * cm,
+        0. * deg,
+        360. * deg
+    );
+    auto solidCsI = new G4Tubs(
+        "CsI",
+        8.5 * cm,
+        14.5 * cm,
+        14. * cm,
+        0. * deg,
+        360. * deg
+    );
+    auto solidMagneticSpectrometerShield1 = new G4Tubs(
+        "MagneticSpectrometerShield1",
+        40. * cm,
+        45. * cm,
+        50. * cm,
+        0. * deg,
+        360. * deg
+    );
+    auto solidMagneticSpectrometerShield2 = new G4Tubs(
+        "MagneticSpectrometerShield2",
+        8.5 * cm,
+        45. * cm,
+        2.5 * cm,
+        0. * deg,
+        360. * deg
+    );
+    auto solidCsIShield1 = new G4Tubs(
+        "CsIShield1",
+        27. * cm,
+        30. * cm,
+        48. * cm,
+        0. * deg,
+        360. * deg
+    );
+    auto solidCsIShield2 = new G4Tubs(
+        "CsIShield2",
+        0. * cm,
+        27. * cm,
+        1.5 * cm,
+        0. * deg,
+        360. * deg
+    );
+
+    //--------------------------------------------------------------------------
+    // logical world.
+    //--------------------------------------------------------------------------
+
+    auto logicalWorld = new G4LogicalVolume(
+        solidWorld,
+        materialVacuo,
+        solidWorld->GetName()
+    );
+
+    //--------------------------------------------------------------------------
+    // logical fields.
+    //--------------------------------------------------------------------------
+
+    fLogicalTransportField1 = new G4LogicalVolume(
+        solidTransportField1,
+        materialVacuo,
+        solidTransportField1->GetName()
+    );
+    fLogicalAcceleratorField = new G4LogicalVolume(
+        solidAcceleratorField,
+        materialVacuo,
+        solidAcceleratorField->GetName()
+    );
+    fLogicalMagneticSpectrometerField = new G4LogicalVolume(
+        solidMagneticSpectrometerField,
+        materialVacuo,
+        solidMagneticSpectrometerField->GetName()
+    );
+    fLogicalSeparatorField = new G4LogicalVolume(
+        solidSeparatorField,
+        materialVacuo,
+        solidSeparatorField->GetName()
+    );
+    fLogicalTransportField2 = new G4LogicalVolume(
+        solidTransportField2,
+        materialVacuo,
+        solidTransportField2->GetName()
+    );
+    fLogicalTransportField3 = new G4LogicalVolume(
+        solidTransportField3,
+        materialVacuo,
+        solidTransportField3->GetName()
+    );
+    fLogicalCsIShellField = new G4LogicalVolume(
+        solidCsIShellField,
+        materialVacuo,
+        solidCsIShellField->GetName()
+    );
+
+    //--------------------------------------------------------------------------
+    // logical parts.
+    //--------------------------------------------------------------------------
+
+    auto logicalBeamCounter = new G4LogicalVolume(
+        solidBeamCounter,
+        materialPlexiGlass,
+        solidBeamCounter->GetName()
+    );
+    auto logicalMylarDegrader = new G4LogicalVolume(
+        solidMylarDegrader,
+        materialMylar,
+        solidMylarDegrader->GetName()
+    );
+    auto logicalSiO2Target = new G4LogicalVolume(
+        solidSiO2Target,
+        materialSiO2,
+        solidSiO2Target->GetName()
+    );
+    for (G4int chamberNb = 0; chamberNb < 5; ++chamberNb) {
+        fLogicalMWPC[chamberNb] = new G4LogicalVolume(
+            solidMWPC[chamberNb],
+            materialVacuo,
+            solidMWPC[chamberNb]->GetName()
+        );
+    }
+    auto logicalAlSupporter = new G4LogicalVolume(
+        solidAlSupporter,
+        materialAl,
+        solidAlSupporter->GetName()
+    );
+    G4LogicalVolume* logicalCollimator[8];
+    for (G4int collimatorNb = 0; collimatorNb < 8; ++collimatorNb) {
+        logicalCollimator[collimatorNb] = new G4LogicalVolume(
+            solidCollimator[collimatorNb],
+            materialCu,
+            solidCollimator[collimatorNb]->GetName()
+        );
+    }
+    auto logicalCarbonFoil = new G4LogicalVolume(
+        solidCarbonFoil,
+        materialC,
+        solidCarbonFoil->GetName()
+    );
+    fLogicalMCP = new G4LogicalVolume(
+        solidMCP,
+        materialMCP,
+        solidMCP->GetName()
+    );
+    fLogicalCsI = new G4LogicalVolume(
+        solidCsI,
+        materialCsI,
+        solidCsI->GetName()
+    );
+    auto logicalMagneticSpectrometerShield1 = new G4LogicalVolume(
+        solidMagneticSpectrometerShield1,
+        materialIron,
+        solidMagneticSpectrometerShield1->GetName()
+    );
+    auto logicalMagneticSpectrometerShield2 = new G4LogicalVolume(
+        solidMagneticSpectrometerShield2,
+        materialIron,
+        solidMagneticSpectrometerShield2->GetName()
+    );
+    auto logicalCsIShield1 = new G4LogicalVolume(
+        solidCsIShield1,
+        materialIron,
+        solidCsIShield1->GetName()
+    );
+    auto logicalCsIShield2 = new G4LogicalVolume(
+        solidCsIShield2,
+        materialIron,
+        solidCsIShield2->GetName()
+    );
+
+    // Production Cuts, dont kill low Energy e- and e+.
+    G4Region* myRegion = new G4Region("logicalAcceleratorFieldRegion");
+    myRegion->AddRootLogicalVolume(fLogicalAcceleratorField);
+    G4ProductionCuts* cuts = new G4ProductionCuts();
+    // cuts->SetProductionCut(1 * eV, "e+");
+    // cuts->SetProductionCut(1 * eV, "e-");
+    cuts->SetProductionCut(0., "Mu");
+    myRegion->SetProductionCuts(cuts);
+
+    //--------------------------------------------------------------------------
+    // physical world.
+    //--------------------------------------------------------------------------
+
+    auto physicalWorld = new G4PVPlacement(
+        G4Transform3D(),
+        logicalWorld->GetName(),
+        logicalWorld,
+        nullptr,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+
+    //--------------------------------------------------------------------------
+    // physical fields.
+    //--------------------------------------------------------------------------
+
+    auto physicalTransportField1 = new G4PVPlacement(
+        G4Transform3D(
+            G4RotationMatrix(),
+            G4ThreeVector(0., 0., -solidMagneticSpectrometerField->GetDz() + solidTransportField1->GetDz())
+        ),
+        fLogicalTransportField1->GetName(),
+        fLogicalTransportField1,
+        physicalWorld,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+    auto physicalAcceleratorField = new G4PVPlacement(
+        G4Transform3D(
+            G4RotationMatrix(),
+            G4ThreeVector(0., 0., solidAcceleratorField->GetDz() - (8. * cos(30 * deg) + 1.) * cm)
+        ),
+        fLogicalAcceleratorField->GetName(),
+        fLogicalAcceleratorField,
+        physicalWorld,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+    auto physicalMagneticSpectrometerField = new G4PVPlacement(
+        G4Transform3D(
+            G4RotationMatrix(),
+            G4ThreeVector()
+        ),
+        fLogicalMagneticSpectrometerField->GetName(),
+        fLogicalMagneticSpectrometerField,
+        physicalWorld,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+    new G4PVPlacement(
+        G4Transform3D(
+            G4RotationMatrix(),
+            G4ThreeVector(0., 0., 2.0 * solidAcceleratorField->GetDz() - (8. * cos(30 * deg) + 1.) * cm +
+                solidSeparatorField->GetDz())
+        ),
+        fLogicalSeparatorField->GetName(),
+        fLogicalSeparatorField,
+        physicalWorld,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+    fTransportField2Z = 2.0 * solidAcceleratorField->GetDz() - (8. * cos(30 * deg) + 1.) * cm +
+        2.0 * solidSeparatorField->GetDz() +
+        solidTransportField2->GetZHalfLength();
+    new G4PVPlacement(
+        G4Transform3D(
+            G4RotationMatrix(),
+            G4ThreeVector(0., 0., fTransportField2Z)
+        ),
+        fLogicalTransportField2->GetName(),
+        fLogicalTransportField2,
+        physicalWorld,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+    auto physicalTransportField3 = new G4PVPlacement(
+        G4Transform3D(
+            G4RotationMatrix(G4ThreeVector(0., 1., 0.), 90 * deg),
+            G4ThreeVector(solidTransportField2->GetXHalfLength() +
+                solidTransportField3->GetDz(), 0., fTransportField2Z)
+        ),
+        fLogicalTransportField3->GetName(),
+        fLogicalTransportField3,
+        physicalWorld,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+    auto physicalCsIShellField = new G4PVPlacement(
+        G4Transform3D(
+            G4RotationMatrix(G4ThreeVector(0., 1., 0.), 90 * deg),
+            G4ThreeVector(solidTransportField2->GetXHalfLength() +
+                2.0 * solidTransportField3->GetDz() + solidCsIShellField->GetDz(), 0., fTransportField2Z)
+        ),
+        fLogicalCsIShellField->GetName(),
+        fLogicalCsIShellField,
+        physicalWorld,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+
+    //--------------------------------------------------------------------------
+    // physical parts.
+    //--------------------------------------------------------------------------
+
+    new G4PVPlacement(
+        G4Transform3D(
+            G4RotationMatrix(),
+            G4ThreeVector(0., 0., -(8. * cos(30 * deg) + 1.) * cm - 2. * cm)
+            - physicalTransportField1->GetTranslation()
+        ),
+        logicalBeamCounter->GetName(),
+        logicalBeamCounter,
+        physicalTransportField1,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+    new G4PVPlacement(
+        G4Transform3D(
+            G4RotationMatrix(),
+            G4ThreeVector(0., 0., -(8. * cos(30 * deg) + 1.) * cm - 1. * cm)
+            - physicalTransportField1->GetTranslation()
+        ),
+        logicalMylarDegrader->GetName(),
+        logicalMylarDegrader,
+        physicalTransportField1,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+    fPhysicalSiO2Target = new G4PVPlacement(
+        G4Transform3D(
+            G4RotationMatrix(G4ThreeVector(1., 0., 0.), 60 * deg),
+            G4ThreeVector() - physicalAcceleratorField->GetTranslation()
+        ),
+        logicalSiO2Target->GetName(),
+        logicalSiO2Target,
+        physicalAcceleratorField,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+    for (G4int chamberNb = 0; chamberNb < 5; ++chamberNb) {
+        new G4PVPlacement(
+            G4Transform3D(),
+            fLogicalMWPC[chamberNb]->GetName(),
+            fLogicalMWPC[chamberNb],
+            physicalMagneticSpectrometerField,
+            true, chamberNb,
+            checkSurfaceOverlaps
+        );
+    }
+    new G4PVPlacement(
+        G4Transform3D(
+            G4RotationMatrix(G4ThreeVector(1., 0., 0.), 60 * deg),
+            G4ThreeVector(0., 0., (solidSiO2Target->GetDz() + solidAlSupporter->GetDz()) / cos(60 * deg))
+            - physicalAcceleratorField->GetTranslation()
+        ),
+        logicalAlSupporter->GetName(),
+        logicalAlSupporter,
+        physicalAcceleratorField,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+    for (G4int collimatorNb = 0; collimatorNb < 8; ++collimatorNb) {
+        new G4PVPlacement(
+            G4Transform3D(),
+            logicalCollimator[collimatorNb]->GetName(),
+            logicalCollimator[collimatorNb],
+            physicalTransportField3,
+            true, collimatorNb,
+            checkSurfaceOverlaps
+        );
+    }
+    new G4PVPlacement(
+        G4Transform3D(
+            G4RotationMatrix(),
+            G4ThreeVector(0., 0., 18.5 * cm - solidCsIShellField->GetDz())
+        ),
+        logicalCarbonFoil->GetName(),
+        logicalCarbonFoil,
+        physicalCsIShellField,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+    new G4PVPlacement(
+        G4Transform3D(
+            G4RotationMatrix(),
+            G4ThreeVector(0., 0., 20.0 * cm - solidCsIShellField->GetDz())
+        ),
+        fLogicalMCP->GetName(),
+        fLogicalMCP,
+        physicalCsIShellField,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+    new G4PVPlacement(
+        G4Transform3D(
+            G4RotationMatrix(),
+            G4ThreeVector(0., 0., 25.5 * cm - solidCsIShellField->GetDz())
+        ),
+        fLogicalCsI->GetName(),
+        fLogicalCsI,
+        physicalCsIShellField,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+    fPhysicalMagneticSpectrometerShield[0] = new G4PVPlacement(
+        G4Transform3D(),
+        logicalMagneticSpectrometerShield1->GetName(),
+        logicalMagneticSpectrometerShield1,
+        physicalWorld,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+    fPhysicalMagneticSpectrometerShield[1] = new G4PVPlacement(
+        G4Transform3D(
+            G4RotationMatrix(),
+            G4ThreeVector(0., 0.,
+                -solidMagneticSpectrometerShield1->GetDz() - solidMagneticSpectrometerShield2->GetDz())
+        ),
+        logicalMagneticSpectrometerShield2->GetName(),
+        logicalMagneticSpectrometerShield2,
+        physicalWorld,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+    fPhysicalMagneticSpectrometerShield[2] = new G4PVPlacement(
+        G4Transform3D(
+            G4RotationMatrix(),
+            G4ThreeVector(0., 0.,
+                solidMagneticSpectrometerShield1->GetDz() + solidMagneticSpectrometerShield2->GetDz())
+        ),
+        logicalMagneticSpectrometerShield2->GetName(),
+        logicalMagneticSpectrometerShield2,
+        physicalWorld,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+    fPhysicalCsIShield[0] = new G4PVPlacement(
+        G4Transform3D(
+            G4RotationMatrix(G4ThreeVector(0., 1., 0.), 90 * deg),
+            physicalCsIShellField->GetTranslation()
+        ),
+        logicalCsIShield1->GetName(),
+        logicalCsIShield1,
+        physicalWorld,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+    fPhysicalCsIShield[1] = new G4PVPlacement(
+        G4Transform3D(
+            G4RotationMatrix(G4ThreeVector(0., 1., 0.), 90 * deg),
+            physicalCsIShellField->GetTranslation() + G4ThreeVector(
+                solidCsIShield1->GetDz() - solidCsIShield2->GetDz(), 0., 0.)
+        ),
+        logicalCsIShield2->GetName(),
+        logicalCsIShield2,
+        physicalWorld,
+        false, 0,
+        checkSurfaceOverlaps
+    );
+
+    return physicalWorld;
+}
+
+void PSIMACEDetectorConstruction::ConstructSDandField() {
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                                SD                                      //
+    ////////////////////////////////////////////////////////////////////////////
+
+    auto SDManager = G4SDManager::GetSDMpointer();
+
+    auto MCPSD = new PSIMACEMCPSD(fLogicalMCP->GetName());
+    SDManager->AddNewDetector(MCPSD);
+    SetSensitiveDetector(fLogicalMCP, MCPSD);
+
+    auto CsISD = new PSIMACECsISD(fLogicalCsI->GetName());
+    SDManager->AddNewDetector(CsISD);
+    SetSensitiveDetector(fLogicalCsI, CsISD);
+
+    auto MWPCSD = new PSIMACEMWPCSD((*fLogicalMWPC)->GetName());
+    SDManager->AddNewDetector(MWPCSD);
+    for (auto MWPC : fLogicalMWPC) { SetSensitiveDetector(MWPC, MWPCSD); }
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                                Field                                   //
+    ////////////////////////////////////////////////////////////////////////////
+
+    using G4DP745Driver = G4IntegrationDriver<G4DormandPrince745>;
+
+    auto transportField1Manager = new G4FieldManager();
+    auto transportField1 = new G4UniformMagField(G4ThreeVector(0., 0., 0.1 * tesla));
+    transportField1Manager->SetDetectorField(transportField1);
+    transportField1Manager->CreateChordFinder(transportField1);
+    fLogicalTransportField1->SetFieldManager(transportField1Manager, true);
+
+    auto acceleratorFieldManager = new G4FieldManager();
+    auto acceleratorField = new PSIMACEAcceleratorField();
+    acceleratorFieldManager->SetDetectorField(acceleratorField);
+    auto acceleratorFieldEquation = new G4EqMagElectricField(acceleratorField);
+    auto acceleratorFieldStepper = new G4DormandPrince745(acceleratorFieldEquation, 8);
+    auto acceleratorFieldDriver =
+        new G4DP745Driver(100 * um, acceleratorFieldStepper, acceleratorFieldStepper->GetNumberOfVariables());
+    auto acceleratorFieldChordFinder = new G4ChordFinder(acceleratorFieldDriver);
+    acceleratorFieldManager->SetChordFinder(acceleratorFieldChordFinder);
+    fLogicalAcceleratorField->SetFieldManager(acceleratorFieldManager, true);
+
+    auto magneticSpectrometerFieldManager = new G4FieldManager();
+    auto magneticSpectrometerField = new G4UniformMagField(G4ThreeVector(0., 0., 0.1 * tesla));
+    magneticSpectrometerFieldManager->SetDetectorField(magneticSpectrometerField);
+    magneticSpectrometerFieldManager->CreateChordFinder(magneticSpectrometerField);
+    fLogicalMagneticSpectrometerField->SetFieldManager(magneticSpectrometerFieldManager, true);
+
+    auto separatorFieldManager = new G4FieldManager();
+    auto separatorField = new PSIMACESeparatorField();
+    separatorFieldManager->SetDetectorField(separatorField);
+    auto separatorFieldEquation = new G4EqMagElectricField(separatorField);
+    auto separatorFieldStepper = new G4DormandPrince745(separatorFieldEquation, 8);
+    auto separatorFieldDriver =
+        new G4DP745Driver(1 * mm, separatorFieldStepper, separatorFieldStepper->GetNumberOfVariables());
+    auto separatorFieldChordFinder = new G4ChordFinder(separatorFieldDriver);
+    separatorFieldManager->SetChordFinder(separatorFieldChordFinder);
+    fLogicalSeparatorField->SetFieldManager(separatorFieldManager, true);
+
+    auto transportField2Manager = new G4FieldManager();
+    auto transportField2 = new PSIMACETransportField2(fTransportField2Z);
+    transportField2Manager->SetDetectorField(transportField2);
+    transportField2Manager->CreateChordFinder(transportField2);
+    fLogicalTransportField2->SetFieldManager(transportField2Manager, true);
+
+    auto transportField3Manager = new G4FieldManager();
+    auto transportField3 = new G4UniformMagField(G4ThreeVector(0.1 * tesla, 0., 0.));
+    transportField3Manager->SetDetectorField(transportField3);
+    transportField3Manager->CreateChordFinder(transportField3);
+    fLogicalTransportField3->SetFieldManager(transportField3Manager, true);
+
+    auto CsIShellFieldManager = new G4FieldManager();
+    auto CsIShellField = new G4UniformMagField(G4ThreeVector(0.1 * tesla, 0., 0.));
+    CsIShellFieldManager->SetDetectorField(CsIShellField);
+    CsIShellFieldManager->CreateChordFinder(CsIShellField);
+    fLogicalCsIShellField->SetFieldManager(CsIShellFieldManager, true);
+}
+

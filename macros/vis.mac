@@ -1,0 +1,67 @@
+# Macro file for the visualization setting in the initialization phase 
+# of the test when running in interactive mode
+#
+/vis/open OGL 600x600-0+0
+
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+
+/vis/drawVolume
+
+/vis/viewer/set/viewpointVector -1 0.5 0.5
+/vis/viewer/set/lightsVector -1 1 1
+#/vis/viewer/set/rotationStyle freeRotation
+/vis/viewer/set/projection p
+/vis/viewer/set/style s
+#/vis/viewer/set/hiddenEdge 1
+/vis/viewer/set/auxiliaryEdge false
+/vis/viewer/set/lineSegmentsPerCircle 100
+/vis/viewer/zoom 3
+
+# Colors
+# World:
+/vis/geometry/set/colour World 0 1 1 1 0.01
+# Fields:
+/vis/geometry/set/colour TransportField1 0 1 1 1 0.05
+/vis/geometry/set/colour AcceleratorField 0 1 1 1 0.05
+/vis/geometry/set/colour MagneticSpectrometerField 0 1 1 1 0.05
+/vis/geometry/set/colour SeparatorField 0 1 1 1 0.05
+/vis/geometry/set/colour TransportField2 0 1 1 1 0.05
+/vis/geometry/set/colour TransportField3 0 1 1 1 0.05
+/vis/geometry/set/colour CsIShellField 0 1 1 1 0.05
+# Parts:
+/vis/geometry/set/colour BeamCounter 0 0.0 0.0 1.0 0.5
+/vis/geometry/set/colour MylarDegrader 0 0.6 0.1 0.1 0.5
+/vis/geometry/set/colour SiO2Target 0 0.0 0.0 1.0 0.5
+/vis/geometry/set/colour MWPC 0 0.0 1.0 0.0 0.05
+/vis/geometry/set/colour AlSupporter 0 1.0 1.0 1.0 0.5
+/vis/geometry/set/colour Collimator 0 0.8 0.3 0.0 0.2
+/vis/geometry/set/colour CarbonFoil 80 1.0 1.0 1.0 0.5
+/vis/geometry/set/colour MCP 0 0.1 0.6 0.1 0.2
+/vis/geometry/set/colour CsI 0 0.0 0.0 1.0 0.2
+/vis/geometry/set/colour MagneticSpectrometerShield1 0 0.5 0.5 0.5 0.05
+/vis/geometry/set/colour MagneticSpectrometerShield2 0 0.5 0.5 0.5 0.05
+/vis/geometry/set/colour CsIShield1 0 0.5 0.5 0.5 0.05
+/vis/geometry/set/colour CsIShield2 0 0.5 0.5 0.5 0.05
+
+/vis/scene/add/axes 0 0 0 10 cm
+
+/vis/filtering/trajectories/create/particleFilter
+/vis/filtering/trajectories/particleFilter-0/add e+
+/vis/filtering/trajectories/particleFilter-0/add e-
+#/vis/filtering/trajectories/particleFilter-0/add gamma
+/vis/filtering/trajectories/particleFilter-0/add Mu
+#/vis/filtering/trajectories/particleFilter-0/add mu+
+
+/vis/scene/add/trajectories smooth
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+
+/vis/scene/add/hits
+
+/vis/ogl/set/displayListLimit 2147483646
+/vis/scene/endOfEventAction accumulate -1
+
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
