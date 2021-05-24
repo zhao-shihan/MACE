@@ -3,23 +3,20 @@
 
 #include "PSIMACEProgressMonitor.hh"
 
-PSIMACEProgressMonitor* PSIMACEProgressMonitor::Instance() {
-    static PSIMACEProgressMonitor instance;
-    return &instance;
-}
+PSIMACEProgressMonitor PSIMACEProgressMonitor::fInstance;
 
 PSIMACEProgressMonitor::PSIMACEProgressMonitor() :
-    fRunManager(G4MTRunManager::GetMasterRunManager()),
     fRunStartTime(0),
     fRunEndTime(0),
     fTimerStarted(false),
     fTotalEventsInThisRun(0),
     fTotalEvents(0),
     fProcessedEventsInThisRun(0),
-    fEventsPerReport(1000),
+    fEventsPerReport(1),
     fCPUTime(0) {}
 
 void PSIMACEProgressMonitor::SetNumberOfEventsPerReport(G4int n) {
+    if (fTimerStarted) { return; }
     fEventsPerReport = n;
 }
 
@@ -31,7 +28,7 @@ void PSIMACEProgressMonitor::SetTotalEvents(G4int n) {
 void PSIMACEProgressMonitor::RunStart() {
     if (fTimerStarted) { return; }
     time(&fRunStartTime);
-    fTotalEventsInThisRun = fRunManager->GetCurrentRun()->GetNumberOfEventToBeProcessed();
+    fTotalEventsInThisRun = G4MTRunManager::GetMasterRunManager()->GetCurrentRun()->GetNumberOfEventToBeProcessed();
     if (fTotalEvents < fTotalEventsInThisRun) { fTotalEvents = fTotalEventsInThisRun; }
     fProcessedEventsInThisRun = 0;
     fCPUTime = clock();
@@ -63,18 +60,16 @@ void PSIMACEProgressMonitor::EventComplete() {
 
 void PSIMACEProgressMonitor::RunComplete() {
     if (!fTimerStarted) { return; }
-    auto run = G4MTRunManager::GetMasterRunManager()->GetCurrentRun();
-    if (run->GetNumberOfEvent() == run->GetNumberOfEventToBeProcessed()) {
-        time(&fRunEndTime);
-        fCPUTime = clock() - fCPUTime;
-        fTimerStarted = false;
-        std::cout
-            << '\n'
-            << "  Start time: " << ctime(&fRunStartTime)
-            << "    End time: " << ctime(&fRunEndTime)
-            << "Elapsed time: " << difftime(fRunEndTime, fRunStartTime) << "s\n"
-            << "    CPU time: " << fCPUTime / CLOCKS_PER_SEC << 's'
-            << std::endl;
-    }
+    if (G4ThisThread::get_id() != G4MTRunManager::GetMasterRunManager()->GetMasterThreadId()) { return; }
+    time(&fRunEndTime);
+    fCPUTime = clock() - fCPUTime;
+    fTimerStarted = false;
+    std::cout
+        << '\n'
+        << "  Start time: " << ctime(&fRunStartTime)
+        << "    End time: " << ctime(&fRunEndTime)
+        << "Elapsed time: " << difftime(fRunEndTime, fRunStartTime) << "s\n"
+        << "    CPU time: " << fCPUTime / CLOCKS_PER_SEC << 's'
+        << std::endl;
 }
 

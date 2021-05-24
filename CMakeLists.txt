@@ -23,20 +23,22 @@ include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # PSIMACE sources and headers
-file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cpp 
-                  ${PROJECT_SOURCE_DIR}/src/fields/*.cpp
-                  ${PROJECT_SOURCE_DIR}/src/messenger/*.cpp
-                  ${PROJECT_SOURCE_DIR}/src/physics/*.cpp
-                  ${PROJECT_SOURCE_DIR}/src/SD/*.cpp
-                  ${PROJECT_SOURCE_DIR}/src/userAction/*.cpp)
+file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc 
+                  ${PROJECT_SOURCE_DIR}/src/fields/*.cc
+                  ${PROJECT_SOURCE_DIR}/src/hit/*.cc
+                  ${PROJECT_SOURCE_DIR}/src/messenger/*.cc
+                  ${PROJECT_SOURCE_DIR}/src/physics/*.cc
+                  ${PROJECT_SOURCE_DIR}/src/SD/*.cc
+                  ${PROJECT_SOURCE_DIR}/src/userAction/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh
                   ${PROJECT_SOURCE_DIR}/include/fields/*.hh
+                  ${PROJECT_SOURCE_DIR}/include/hit/*.hh
                   ${PROJECT_SOURCE_DIR}/include/messenger/*.hh
                   ${PROJECT_SOURCE_DIR}/include/physics/*.hh
                   ${PROJECT_SOURCE_DIR}/include/SD/*.hh
                   ${PROJECT_SOURCE_DIR}/include/userAction/*.hh)
 
-add_executable(PSIMACE PSIMACE.cpp ${sources} ${headers})
+add_executable(PSIMACE PSIMACE.cc ${sources} ${headers})
 target_link_libraries(PSIMACE ${Geant4_LIBRARIES})
 target_link_libraries(PSIMACE ${ROOT_LIBRARIES} )
 

@@ -5,6 +5,7 @@
 #include "G4RunManager.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+#include "G4Gamma.hh"
 #include "userAction/PSIMACEDetectorConstruction.hh"
 
 PSIMACESteppingAction::PSIMACESteppingAction() :
@@ -18,8 +19,10 @@ PSIMACESteppingAction::PSIMACESteppingAction() :
 PSIMACESteppingAction::~PSIMACESteppingAction() {}
 
 void PSIMACESteppingAction::UserSteppingAction(const G4Step* step) {
-    if (step->GetTrack()->GetDefinition() == G4Electron::Definition() ||
-        step->GetTrack()->GetDefinition() == G4Positron::Definition()) {
+    auto particle = step->GetTrack()->GetDefinition();
+    if (particle == G4Electron::Definition() ||
+        particle == G4Positron::Definition() ||
+        particle == G4Gamma::Definition()) {
         auto nextVolume = step->GetTrack()->GetNextVolume();
         for (size_t i = 0; i < fPhysicalMagneticSpectrometerShieldCount; ++i) {
             if (nextVolume == fPhysicalMagneticSpectrometerShield[i]) {

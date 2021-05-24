@@ -1,40 +1,51 @@
 #ifndef PSIMACEAnalysisManager_h
 #define PSIMACEAnalysisManager_h 1
 
-#include <fstream>
-#include <array>
 #include <list>
+#include <fstream>
+#include "hit/PSIMACECsIHit.hh"
+#include "hit/PSIMACEMCPHit.hh"
+#include "hit/PSIMACEMWPCHit.hh"
 
 #include "globals.hh"
 
 class PSIMACEAnalysisManager {
 private:
-    static PSIMACEAnalysisManager* instance;
+    G4ThreadLocal static PSIMACEAnalysisManager fInstance;
 public:
-    static PSIMACEAnalysisManager* Instance();
+    static PSIMACEAnalysisManager& ThreadLocalInstance() { return fInstance; }
 private:
     PSIMACEAnalysisManager();
+    ~PSIMACEAnalysisManager();
     PSIMACEAnalysisManager(const PSIMACEAnalysisManager&) = delete;
     const PSIMACEAnalysisManager& operator=(const PSIMACEAnalysisManager&) = delete;
 
 private:
-    G4String fFileName;
-    std::ofstream* fout[3];
+    static G4String fFileName;
+    static std::ofstream* fout[3];
     enum { fMCP, fCsI, fMWPC };
-
 public:
-    ~PSIMACEAnalysisManager();
+    static void Open();
+    static void Close();
+    static void SetFileName(const G4String& csvFileName) { fFileName = csvFileName; }
+    static const G4String& GetFileName() { return fFileName; }
 
-    void Open();
+private:
+    std::vector<PSIMACEMCPHit>* fpMCPHitList;
+    std::vector<PSIMACECsIHit>* fpCsIHitList;
+    std::vector<PSIMACEMWPCHit>* fpMWPCHitList;
+public:
+    void SubmitMCPHitList(std::vector<PSIMACEMCPHit>* hitList) { fpMCPHitList = hitList; }
+    void SubmitCsIHitList(std::vector<PSIMACECsIHit>* hitList) { fpCsIHitList = hitList; }
+    void SubmitMWPCHitList(std::vector<PSIMACEMWPCHit>* hitList) { fpMWPCHitList = hitList; }
+    void AnalysisAndWrite();
 
-    void WriteMCPHitList(std::vector<std::array<G4double, 3>>& list);
-    void WriteCsIHitList(std::vector<std::array<G4double, 2>>& list);
-    void WriteMWPCHitList(std::vector<std::pair<std::array<G4double, 4>, G4int>>& list);
+private:
+    static size_t fSignalSN;
 
-    void Close();
-
-    void SetFileName(const G4String& csvFileName) { fFileName = csvFileName; }
-    const G4String& GetFileName() { return fFileName; }
+    void WriteCoincidentMCPHit(const PSIMACEMCPHit& CMCPHit) const;
+    void WriteCoincidentCsIHit(std::list<const PSIMACECsIHit*>& CCsIHitList) const;
+    void WriteCoincidentMWPCHit(std::list<const PSIMACEMWPCHit*>& CMWPCHitList) const;
 };
 
 #endif

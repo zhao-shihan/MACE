@@ -9,16 +9,15 @@
 //
 class PSIMACEProgressMonitor {
 public:
-    static PSIMACEProgressMonitor* Instance();
+    static PSIMACEProgressMonitor& Instance() { return fInstance; }
 private:
+    static PSIMACEProgressMonitor fInstance;
     PSIMACEProgressMonitor();
     ~PSIMACEProgressMonitor() {}
     PSIMACEProgressMonitor(const PSIMACEProgressMonitor&) = delete;
     PSIMACEProgressMonitor& operator=(const PSIMACEProgressMonitor&) = delete;
 
 private:
-    const G4MTRunManager* fRunManager;
-
     time_t  fRunStartTime;
     time_t  fRunEndTime;
     G4bool  fTimerStarted;

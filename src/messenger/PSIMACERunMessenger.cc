@@ -23,7 +23,7 @@ PSIMACERunMessenger::~PSIMACERunMessenger() {
 
 void PSIMACERunMessenger::SetNewValue(G4UIcommand* command, G4String newvalue) {
     if (command == fRootcmd) {
-        PSIMACEAnalysisManager::Instance()->SetFileName(newvalue);
+        PSIMACEAnalysisManager::SetFileName(newvalue);
     }
 }
 

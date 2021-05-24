@@ -1,17 +1,15 @@
 #ifndef PSIMACEMWPCSD_h
 #define PSIMACEMWPCSD_h 1
 
-#include <list>
-
 #include "G4VSensitiveDetector.hh"
-#include "PSIMACEAnalysisManager.hh"
+#include "PSIMACEMWPCSD.hh"
+#include "hit/PSIMACEMWPCHit.hh"
 
 /// PSIMACEMagSpectrometer sensitive detector class
 
 class PSIMACEMWPCSD : public G4VSensitiveDetector {
 private:
-    static G4ThreadLocal std::vector<std::pair<std::array<G4double, 4>, G4int>> fMagSpecHitList;
-    PSIMACEAnalysisManager* fAnalysisManager;
+    G4ThreadLocal static std::vector<PSIMACEMWPCHit> fMWPCHitList;
 
 public:
     PSIMACEMWPCSD(const G4String& name);
