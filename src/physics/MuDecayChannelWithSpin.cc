@@ -1,5 +1,5 @@
 //  Geant4 simulation for MuSR
-//  AUTHOR: Toni SHIROKA, Paul Scherrer Institut, PSIMACE
+//  AUTHOR: Toni SHIROKA, Paul Scherrer Institut, MACE
 //  DATE  : 2008-05
 //
 

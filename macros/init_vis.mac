@@ -12,9 +12,9 @@
 # Initialize kernel
 /run/initialize
 
-/PSIMACEPhysics/SetMuonRareDecayMode 3.4e-5
-/PSIMACEPhysics/SetMuMuConversion 0.
-/PSIMACEPhysics/SetMuFormation 1
+/MACEPhysics/SetMuonRareDecayMode 3.4e-5
+/MACEPhysics/SetMuMuConversion 0.
+/MACEPhysics/SetMuFormation 1
 
 #
 # Visualization setting

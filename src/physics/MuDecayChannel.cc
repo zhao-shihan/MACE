@@ -41,7 +41,7 @@
 //      Adding V-A fluxes for neutrinos using a new algortithm : 
 //
 //  2008-05
-//      Modified for the muonium decay by Toni SHIROKA, Paul Scherrer Institut, PSIMACE
+//      Modified for the muonium decay by Toni SHIROKA, Paul Scherrer Institut, MACE
 // ------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"
@@ -54,7 +54,7 @@
 #include "G4LorentzRotation.hh"
 #include "G4RotationMatrix.hh"
 
-#include "userAction/PSIMACEEventAction.hh"
+#include "useraction/MACEEventAction.hh"
 
 using namespace CLHEP;
 
@@ -148,17 +148,17 @@ do
 
  //initialisation of rotation parameters
 
- G4double costheta,sintheta,rphi,rtheta,rPSIMACE;
+ G4double costheta,sintheta,rphi,rtheta,rMACE;
   costheta= 1.-2./Ee-2./Ene+2./Ene/Ee;
   sintheta=sqrt(1.-costheta*costheta);
   
 
   rphi=CLHEP::twopi*G4UniformRand()*CLHEP::rad;
   rtheta=(std::acos(2.*G4UniformRand()-1.));
-  rPSIMACE=CLHEP::twopi*G4UniformRand()*CLHEP::rad;
+  rMACE=CLHEP::twopi*G4UniformRand()*CLHEP::rad;
 
   G4RotationMatrix rot;
-  rot.set(rphi,rtheta,rPSIMACE);
+  rot.set(rphi,rtheta,rMACE);
 
   if(G4UniformRand() > conversionP )
   {
