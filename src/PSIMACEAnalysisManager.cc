@@ -4,7 +4,7 @@
 #include "G4Run.hh"
 #include "G4SystemOfUnits.hh"
 
-#include <iomanip>
+#include <sstream>
 #include <numeric>
 
 G4ThreadLocal PSIMACEAnalysisManager PSIMACEAnalysisManager::fInstance;
@@ -24,25 +24,53 @@ PSIMACEAnalysisManager::~PSIMACEAnalysisManager() {
 
 void PSIMACEAnalysisManager::Open() {
     if (G4ThisThread::get_id() != G4MTRunManager::GetMasterRunManager()->GetMasterThreadId()) { return; }
-    fSignalSN = 0;
-    G4String fileName[3]{
+    const G4String fileName[3]{
         fFileName + "_MCP.csv",
         fFileName + "_CsI.csv",
         fFileName + "_MWPC.csv"
     };
-    G4String title[3]{
+    const G4String title[3]{
         "SN,t/ns,x/mm,y/mm",
         "SN,t/ns,E/MeV",
         "SN,t/ns,x/mm,y/mm,z/mm,chamberNb"
     };
+
+    bool isContinue = true;
     for (size_t i = 0; i < 3; ++i) {
-        bool isContinue = false;
         std::ifstream fin(fileName[i]);
         if (fin.is_open()) {
             std::string line;
-            isContinue = !std::getline(fin, line).eof();
+            if (std::getline(fin, line).eof()) {
+                isContinue = false;
+                fin.close();
+                break;
+            }
+            fin.close();
+        } else {
+            isContinue = false;
+            break;
+        }
+    }
+
+    fSignalSN = 0;
+    if (isContinue) {
+        std::ifstream fin(fileName[fMCP]);
+        if (fin.is_open()) {
+            fin.seekg(-2, std::ios_base::end);
+            char ch;
+            do {
+                fin.get(ch);
+                fin.seekg(-2, std::ios_base::cur);
+                if (fin.fail()) { break; }
+            } while (ch != '\n');
+            fin.seekg(2, std::ios_base::cur);
+            fin >> fSignalSN;
+            ++fSignalSN;
             fin.close();
         }
+    }
+
+    for (size_t i = 0; i < 3; ++i) {
         if (isContinue) {
             fout[i] = new std::ofstream(fileName[i], std::ios::app);
         } else {

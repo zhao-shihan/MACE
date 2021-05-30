@@ -29,8 +29,8 @@ G4bool PSIMACEMCPSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     fMCPHitList.push_back(
         PSIMACEMCPHit(
             step->GetTrack()->GetGlobalTime(),
-            step->GetPostStepPoint()->GetPosition().y(),
-            -(step->GetPostStepPoint()->GetPosition().z() - 1600. * CLHEP::mm)
+            step->GetPreStepPoint()->GetPosition().y(),
+            -(step->GetPreStepPoint()->GetPosition().z() - 1600. * CLHEP::mm)
         )
     );
     return true;
