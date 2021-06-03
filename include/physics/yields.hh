@@ -1,9 +1,9 @@
 /***************************************************************************
  *  musrSim - the program for the simulation of (mainly) muSR instruments. *
- *          More info on http://lmu.web.MACE.ch/simulation/index.html .     *
+ *          More info on http://lmu.web.psi.ch/simulation/index.html .     *
  *          musrSim is based od Geant4 (http://geant4.web.cern.ch/geant4/) *
  *                                                                         *
- *  Copyright (C) 2009 by Paul Scherrer Institut, 5232 Villigen MACE,       *
+ *  Copyright (C) 2009 by Paul Scherrer Institut, 5232 Villigen PSI,       *
  *                                                       Switzerland       *
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *

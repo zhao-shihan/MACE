@@ -7,7 +7,7 @@ MACESeparatorField::MACESeparatorField() :
     G4ElectroMagneticField(),
     fBy(0.1 * tesla),
     fBz(0.1 * tesla),
-    fEx(49.82583 * kilovolt / cm) {}
+    fEx(49.118386 * kilovolt / cm) {}
 
 MACESeparatorField::~MACESeparatorField() {}
 

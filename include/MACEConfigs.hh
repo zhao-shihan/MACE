@@ -3,7 +3,7 @@
 
 //  1 = detect M.
 // -1 = detect Anti-M.
-#define MACE_EXPERIMENT_TYPE -1
+#define MACE_EXPERIMENT_TYPE 1
 
 #endif
 
