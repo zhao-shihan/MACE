@@ -678,8 +678,8 @@ G4VPhysicalVolume* MACEDetectorConstruction::Construct() {
     acceleratorFieldRegion->AddRootLogicalVolume(fLogicalAcceleratorField);
     auto acceleratorFieldRegionCuts = new G4ProductionCuts();
     acceleratorFieldRegionCuts->SetProductionCut(0., "Mu");
-    acceleratorFieldRegionCuts->SetProductionCut(0.1 * eV, "e-");
-    acceleratorFieldRegionCuts->SetProductionCut(0.1 * eV, "e+");
+    acceleratorFieldRegionCuts->SetProductionCut(1 * eV, "e-");
+    acceleratorFieldRegionCuts->SetProductionCut(1 * eV, "e+");
     acceleratorFieldRegion->SetProductionCuts(acceleratorFieldRegionCuts);
 
     return physicalWorld;

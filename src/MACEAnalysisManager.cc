@@ -106,8 +106,8 @@ void MACEAnalysisManager::AnalysisAndWrite() {
             if (CsIHitEnd->t < CsIWindowEnd) { ++CsIHitEnd; } else { break; }
         }
 
-        G4double MWPCWindowBegin = MCPHit.t - 60. * ns - 10. * ns;
-        G4double MWPCWindowEnd = MWPCWindowBegin + 2. * ns + 10. * ns;
+        G4double MWPCWindowBegin = MCPHit.t - 68.514 * ns - 3.5 * ns;
+        G4double MWPCWindowEnd = MCPHit.t - 68.514 * ns + 3.5 * ns;
         while (MWPCHitBegin != fpMWPCHitList->end()) {
             if (MWPCHitBegin->t < MWPCWindowBegin) { ++MWPCHitBegin; } else { break; }
         }
