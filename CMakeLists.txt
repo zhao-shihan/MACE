@@ -61,7 +61,7 @@ set(MACE_ANALYSIS
 foreach(_analysis ${MACE_ANALYSIS})
     configure_file(
         ${PROJECT_SOURCE_DIR}/analysis/${_analysis}
-        ${PROJECT_BINARY_DIR}/analysis/${_analysis}
+        ${PROJECT_BINARY_DIR}/${_analysis}
         COPYONLY
     )
 endforeach()
