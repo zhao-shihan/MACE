@@ -22,27 +22,26 @@
 # World:
 /vis/geometry/set/colour World 0 1 1 1 0.01
 # Fields:
-/vis/geometry/set/colour TransportField1 0 1 1 1 0.05
+/vis/geometry/set/colour SpectrometerField 0 1 1 1 0.05
 /vis/geometry/set/colour AcceleratorField 0 1 1 1 0.05
-/vis/geometry/set/colour MagneticSpectrometerField 0 1 1 1 0.05
-/vis/geometry/set/colour SeparatorField 0 1 1 1 0.05
-/vis/geometry/set/colour TransportField2 0 1 1 1 0.05
-/vis/geometry/set/colour TransportField3 0 1 1 1 0.05
-/vis/geometry/set/colour CsIShellField 0 1 1 1 0.05
+/vis/geometry/set/colour ParallelTransportField 0 1 1 1 0.05
+/vis/geometry/set/colour SelectField 0 1 1 1 0.05
+/vis/geometry/set/colour TurnField 0 1 1 1 0.05
+/vis/geometry/set/colour VerticalTransportField 0 1 1 1 0.05
+/vis/geometry/set/colour OrbitalDetectorShellField 0 1 1 1 0.05
 # Parts:
-/vis/geometry/set/colour BeamCounter 0 0.0 0.0 1.0 0.5
-/vis/geometry/set/colour MylarDegrader 0 0.6 0.1 0.1 0.5
-/vis/geometry/set/colour SiO2Target 0 0.0 0.0 1.0 0.5
-/vis/geometry/set/colour MWPC 0 0.0 1.0 0.0 0.05
-/vis/geometry/set/colour AlSupporter 0 1.0 1.0 1.0 0.5
+#/vis/geometry/set/colour BeamCounter 0 0.0 0.0 1.0 0.5
+#/vis/geometry/set/colour MylarDegrader 0 0.6 0.1 0.1 0.5
+/vis/geometry/set/colour Target 0 0.0 0.0 1.0 0.5
+/vis/geometry/set/colour Spectrometer 0 0.0 1.0 0.0 0.05
 /vis/geometry/set/colour Collimator 0 0.8 0.3 0.0 0.2
-/vis/geometry/set/colour CarbonFoil 80 1.0 1.0 1.0 0.5
-/vis/geometry/set/colour MCP 0 0.1 0.6 0.1 0.2
-/vis/geometry/set/colour CsI 0 0.0 0.0 1.0 0.2
-/vis/geometry/set/colour MagneticSpectrometerShield1 0 0.5 0.5 0.5 0.05
-/vis/geometry/set/colour MagneticSpectrometerShield2 0 0.5 0.5 0.5 0.05
-/vis/geometry/set/colour CsIShield1 0 0.5 0.5 0.5 0.05
-/vis/geometry/set/colour CsIShield2 0 0.5 0.5 0.5 0.05
+#/vis/geometry/set/colour CarbonFoil 80 1.0 1.0 1.0 0.5
+/vis/geometry/set/colour OrbitalDetector 0 0.1 0.6 0.1 0.2
+/vis/geometry/set/colour Calorimeter 0 0.0 0.0 1.0 0.2
+#/vis/geometry/set/colour MagneticSpectrometerShield1 0 0.5 0.5 0.5 0.05
+#/vis/geometry/set/colour MagneticSpectrometerShield2 0 0.5 0.5 0.5 0.05
+#/vis/geometry/set/colour CsIShield1 0 0.5 0.5 0.5 0.05
+#/vis/geometry/set/colour CsIShield2 0 0.5 0.5 0.5 0.05
 
 /vis/scene/add/axes 0 0 0 10 cm
 

@@ -1,5 +1,9 @@
-cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 project(MACE)
+
+# MPI
+find_package(MPI REQUIRED)
+include_directories(${MPI_INCLUDE_DIRS})
 
 # Geant4
 option(WITH_GEANT4_UIVIS "Build example with Geant4 UI and Vis drivers" ON)
@@ -8,39 +12,23 @@ if(WITH_GEANT4_UIVIS)
 else()
     find_package(Geant4 REQUIRED)
 endif()
+# G4mpi
+find_package(G4mpi REQUIRED)
 include(${Geant4_USE_FILE})
 
-# # ROOT
-# find_package(ROOT QUIET)
-# if(NOT ROOT_FOUND)
-#     message(STATUS "ROOT package not found")
-#     return()
-# else()
-#     include_directories(${ROOT_INCLUDE_DIR})
-# endif()
+# ROOT
+find_package(ROOT REQUIRED)
+include_directories(${ROOT_INCLUDE_DIRS})
 
 # MACE include
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # MACE sources and headers
-file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc 
-                  ${PROJECT_SOURCE_DIR}/src/fields/*.cc
-                  ${PROJECT_SOURCE_DIR}/src/hit/*.cc
-                  ${PROJECT_SOURCE_DIR}/src/messenger/*.cc
-                  ${PROJECT_SOURCE_DIR}/src/physics/*.cc
-                  ${PROJECT_SOURCE_DIR}/src/SD/*.cc
-                  ${PROJECT_SOURCE_DIR}/src/useraction/*.cc)
-file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh
-                  ${PROJECT_SOURCE_DIR}/include/fields/*.hh
-                  ${PROJECT_SOURCE_DIR}/include/hit/*.hh
-                  ${PROJECT_SOURCE_DIR}/include/messenger/*.hh
-                  ${PROJECT_SOURCE_DIR}/include/physics/*.hh
-                  ${PROJECT_SOURCE_DIR}/include/SD/*.hh
-                  ${PROJECT_SOURCE_DIR}/include/useraction/*.hh)
+file(GLOB_RECURSE sources ${PROJECT_SOURCE_DIR}/src/*.cc)
+file(GLOB_RECURSE headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 add_executable(MACE MACE.cc ${sources} ${headers})
-target_link_libraries(MACE ${Geant4_LIBRARIES})
-target_link_libraries(MACE ${ROOT_LIBRARIES} )
+target_link_libraries(MACE ${Geant4_LIBRARIES} ${G4mpi_LIBRARIES} ${ROOT_LIBRARIES})
 
 set(MACE_MACROS
     init_vis.mac
@@ -55,15 +43,15 @@ foreach(_macros ${MACE_MACROS})
     )
 endforeach()
 
-set(MACE_ANALYSIS
-    MACE.ipynb
-)
-foreach(_analysis ${MACE_ANALYSIS})
-    configure_file(
-        ${PROJECT_SOURCE_DIR}/analysis/${_analysis}
-        ${PROJECT_BINARY_DIR}/${_analysis}
-        COPYONLY
-    )
-endforeach()
+# set(MACE_ANALYSIS
+#     MACE.ipynb
+# )
+# foreach(_analysis ${MACE_ANALYSIS})
+#     configure_file(
+#         ${PROJECT_SOURCE_DIR}/analysis/${_analysis}
+#         ${PROJECT_BINARY_DIR}/${_analysis}
+#         COPYONLY
+#     )
+# endforeach()
 
-# install(TARGETS MACE DESTINATION bin)
+install(TARGETS MACE DESTINATION bin)

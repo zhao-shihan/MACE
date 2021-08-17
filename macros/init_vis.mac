@@ -1,4 +1,4 @@
-#macro file for the initialization of GE1
+# macro file for the initialization of MACE
 # in interactive session
 #
 # Set some default verbose
@@ -6,16 +6,12 @@
 /control/saveHistory
 /run/verbose 2
 #
-# Change the default number of threads (in multi-threaded mode)
-/run/numberOfThreads 1
-#
 # Initialize kernel
 /run/initialize
-
-/MACEPhysics/SetMuonRareDecayMode 3.4e-5
-/MACEPhysics/SetMuMuConversion 0.
-/MACEPhysics/SetMuFormation 1
-
+#
+#/MACEPhysics/SetMuonRareDecayMode 3.4e-5
+#/MACEPhysics/SetMuMuConversion 0.
+#/MACEPhysics/SetMuFormation 1
 #
 # Visualization setting
 /control/execute vis.mac
