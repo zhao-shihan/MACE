@@ -1,9 +1,9 @@
 #pragma once
 
 #include "MACEGlobal.hh"
-#include "detector/geometry/Base.hh"
+#include "detector/geometry/BaseInterface.hh"
 
-class MACE::Geometry::OrbitalDetector : public MACE::Geometry::Base {
+class MACE::Geometry::OrbitalDetector : public MACE::Geometry::BaseInterface {
 public:
     OrbitalDetector();
 

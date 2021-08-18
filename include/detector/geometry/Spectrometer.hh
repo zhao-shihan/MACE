@@ -1,9 +1,9 @@
 #pragma once
 
 #include "MACEGlobal.hh"
-#include "Base.hh"
+#include "BaseInterface.hh"
 
-class MACE::Geometry::Spectrometer : public MACE::Geometry::Base {
+class MACE::Geometry::Spectrometer : public MACE::Geometry::BaseInterface {
 public:
     Spectrometer();
 

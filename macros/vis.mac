@@ -38,10 +38,8 @@
 #/vis/geometry/set/colour CarbonFoil 80 1.0 1.0 1.0 0.5
 /vis/geometry/set/colour OrbitalDetector 0 0.1 0.6 0.1 0.2
 /vis/geometry/set/colour Calorimeter 0 0.0 0.0 1.0 0.2
-#/vis/geometry/set/colour MagneticSpectrometerShield1 0 0.5 0.5 0.5 0.05
-#/vis/geometry/set/colour MagneticSpectrometerShield2 0 0.5 0.5 0.5 0.05
-#/vis/geometry/set/colour CsIShield1 0 0.5 0.5 0.5 0.05
-#/vis/geometry/set/colour CsIShield2 0 0.5 0.5 0.5 0.05
+/vis/geometry/set/colour SpectrometerShield 0 0.5 0.5 0.5 0.05
+/vis/geometry/set/colour OrbitalDetectorShield 0 0.5 0.5 0.5 0.05
 
 /vis/scene/add/axes 0 0 0 10 cm
 

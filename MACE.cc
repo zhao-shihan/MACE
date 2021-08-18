@@ -9,8 +9,8 @@
 
 #include "MACEGlobal.hh"
 #include "detector/DetectorConstruction.hh"
+#include "action/ActionInitialization.hh"
 
-// #include "useraction/MACEActionInitialization.hh"
 // #include "physics/MACEEmStandardPhysics.hh"
 
 int main(int argc, char** argv) {
@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     auto runManager = new G4RunManager();
     runManager->SetUserInitialization(new FTFP_BERT());
     runManager->SetUserInitialization(new MACE::DetectorConstruction());
-    // runManager->SetUserInitialization(new MACEActionInitialization());
+    runManager->SetUserInitialization(new MACE::ActionInitialization());
 
     if (argc == 1) {
         // Initialize visualization

@@ -2,7 +2,7 @@
 #include "detector/geometry/ParallelTransportField.hh"
 
 MACE::Geometry::ParallelTransportField::ParallelTransportField() :
-    MACE::Geometry::Base(1) {}
+    MACE::Geometry::BaseInterface(1) {}
 
 void MACE::Geometry::ParallelTransportField::Make(G4Material* material, G4VPhysicalVolume* mother) {
     G4String name("ParallelTransportField");

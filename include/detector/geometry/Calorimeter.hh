@@ -1,9 +1,9 @@
 #pragma once
 
 #include "MACEGlobal.hh"
-#include "detector/geometry/Base.hh"
+#include "detector/geometry/BaseInterface.hh"
 
-class MACE::Geometry::Calorimeter : public MACE::Geometry::Base {
+class MACE::Geometry::Calorimeter : public MACE::Geometry::BaseInterface {
 public:
     Calorimeter();
 

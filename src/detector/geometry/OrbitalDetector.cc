@@ -2,7 +2,7 @@
 #include "detector/geometry/OrbitalDetector.hh"
 
 MACE::Geometry::OrbitalDetector::OrbitalDetector() :
-    MACE::Geometry::Base(1) {}
+    MACE::Geometry::BaseInterface(1) {}
 
 void MACE::Geometry::OrbitalDetector::Make(G4Material* material, G4VPhysicalVolume* mother) {
     G4String name("OrbitalDetector");

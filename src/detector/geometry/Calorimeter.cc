@@ -2,7 +2,7 @@
 #include "detector/geometry/Calorimeter.hh"
 
 MACE::Geometry::Calorimeter::Calorimeter() :
-    MACE::Geometry::Base(1) {}
+    MACE::Geometry::BaseInterface(1) {}
 
 void MACE::Geometry::Calorimeter::Make(G4Material* material, G4VPhysicalVolume* mother) {
     G4String name("Calorimeter");

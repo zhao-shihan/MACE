@@ -3,7 +3,7 @@
 #include "detector/geometry/World.hh"
 
 MACE::Geometry::World::World() :
-    MACE::Geometry::Base(1) {}
+    MACE::Geometry::BaseInterface(1) {}
 
 void MACE::Geometry::World::Make(G4Material* material, G4VPhysicalVolume*) {
     auto solid = new G4Box("World", fHalfXExtent, fHalfYExtent, fHalfZExtent);

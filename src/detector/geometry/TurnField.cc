@@ -2,7 +2,7 @@
 #include "detector/geometry/TurnField.hh"
 
 MACE::Geometry::TurnField::TurnField() :
-    MACE::Geometry::Base(1) {}
+    MACE::Geometry::BaseInterface(1) {}
 
 void MACE::Geometry::TurnField::Make(G4Material* material, G4VPhysicalVolume* mother) {
     G4String name("TurnField");

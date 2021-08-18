@@ -1,9 +1,9 @@
 #pragma once
 
 #include "MACEGlobal.hh"
-#include "detector/geometry/Base.hh"
+#include "detector/geometry/BaseInterface.hh"
 
-class MACE::Geometry::ParallelTransportField : public MACE::Geometry::Base {
+class MACE::Geometry::ParallelTransportField : public MACE::Geometry::BaseInterface {
 public:
     ParallelTransportField();
 

@@ -2,7 +2,7 @@
 #include "detector/geometry/Collimator.hh"
 
 MACE::Geometry::Collimator::Collimator() :
-    MACE::Geometry::Base(8) {}
+    MACE::Geometry::BaseInterface(8) {}
 
 void MACE::Geometry::Collimator::Make(G4Material* material, G4VPhysicalVolume* mother) {
     G4String name("Collimator");

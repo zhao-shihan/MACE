@@ -4,13 +4,15 @@
 
 #include "MACEGlobal.hh"
 
-class MACE::Field::AcceleratorField : public G4ElectroMagneticField {
+class MACE::Field::SelectField : public G4ElectroMagneticField {
 public:
-    AcceleratorField();
+    SelectField();
     virtual void GetFieldValue(const G4double*, G4double* F) const;
     virtual G4bool DoesFieldChangeEnergy() const { return true; }
 
 private:
+    const G4double fEkin = 7 * keV;
+    const G4double fBx = 0.1 * tesla;
     const G4double fBz = 0.1 * tesla;
-    const G4double fEz = -7 * kilovolt / (10 * cm);
+    const G4double fEy;
 };

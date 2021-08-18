@@ -3,7 +3,7 @@
 #include "detector/geometry/Spectrometer.hh"
 
 MACE::Geometry::Spectrometer::Spectrometer() :
-    MACE::Geometry::Base(5) {}
+    MACE::Geometry::BaseInterface(5) {}
 
 void MACE::Geometry::Spectrometer::Make(G4Material* material, G4VPhysicalVolume* mother) {
     for (size_t i = 0; i < GetVolumeSetCount(); ++i) {

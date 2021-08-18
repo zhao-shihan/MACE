@@ -5,10 +5,10 @@
 #include "MACEGlobal.hh"
 #include "VolumeSet.hh"
 
-class MACE::Geometry::Base {
+class MACE::Geometry::BaseInterface {
 public:
-    Base(size_t volumeCount);
-    virtual ~Base();
+    BaseInterface(size_t volumeCount);
+    virtual ~BaseInterface();
 
     virtual void Make(G4Material* material, G4VPhysicalVolume* mother) = 0;
 

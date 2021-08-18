@@ -3,7 +3,7 @@
 #include "detector/geometry/Target.hh"
 
 MACE::Geometry::Target::Target() :
-    MACE::Geometry::Base(1) {}
+    MACE::Geometry::BaseInterface(1) {}
 
 void MACE::Geometry::Target::Make(G4Material* material, G4VPhysicalVolume* mother) {
     G4String name("Target");
