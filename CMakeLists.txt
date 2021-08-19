@@ -20,38 +20,7 @@ include(${Geant4_USE_FILE})
 find_package(ROOT REQUIRED)
 include_directories(${ROOT_INCLUDE_DIRS})
 
-# MACE include
-include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/Global/include)
 
-# MACE sources and headers
-file(GLOB_RECURSE sources ${PROJECT_SOURCE_DIR}/src/*.cc)
-file(GLOB_RECURSE headers ${PROJECT_SOURCE_DIR}/include/*.hh)
-
-add_executable(MACE MACE.cc ${sources} ${headers})
-target_link_libraries(MACE ${Geant4_LIBRARIES} ${G4mpi_LIBRARIES} ${ROOT_LIBRARIES})
-
-set(MACE_MACROS
-    init_vis.mac
-    run.mac
-    vis.mac
-)
-foreach(_macros ${MACE_MACROS})
-    configure_file(
-        ${PROJECT_SOURCE_DIR}/macros/${_macros}
-        ${PROJECT_BINARY_DIR}/${_macros}
-        COPYONLY
-    )
-endforeach()
-
-# set(MACE_ANALYSIS
-#     MACE.ipynb
-# )
-# foreach(_analysis ${MACE_ANALYSIS})
-#     configure_file(
-#         ${PROJECT_SOURCE_DIR}/analysis/${_analysis}
-#         ${PROJECT_BINARY_DIR}/${_analysis}
-#         COPYONLY
-#     )
-# endforeach()
-
-install(TARGETS MACE DESTINATION bin)
+add_subdirectory(SimG4)
+add_subdirectory(SimMuTransport)

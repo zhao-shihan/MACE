@@ -1,0 +1,70 @@
+#ifndef Config_hh
+#define Config_hh 1
+
+#include "CheckedConfig.hh"
+
+#undef POST_TARGET_X_MIN
+#undef POST_TARGET_X_MAX
+#undef POST_TARGET_Y_MIN 
+#undef POST_TARGET_Y_MAX
+#undef POST_TARGET_Z_MIN 
+#undef POST_TARGET_Z_MAX 
+#undef POST_WORLD_X_MIN
+#undef POST_WORLD_X_MAX
+#undef POST_WORLD_Y_MIN 
+#undef POST_WORLD_Y_MAX
+#undef POST_WORLD_Z_MIN 
+#undef POST_WORLD_Z_MAX 
+#undef POST_POS_N_BINS_X
+#undef POST_POS_N_BINS_Y 
+#undef POST_POS_N_BINS_Z 
+#undef POST_POS_N_XY_SLICE 
+#undef POST_POS_XY_SLICE_DZ
+#undef POST_POS_XY_SLICE_N_BINS_X 
+#undef POST_POS_XY_SLICE_N_BINS_Y 
+#undef POST_POS_N_YZ_SLICE 
+#undef POST_POS_YZ_SLICE_DX
+#undef POST_POS_YZ_SLICE_N_BINS_Y 
+#undef POST_POS_YZ_SLICE_N_BINS_Z 
+#undef POST_POS_N_XZ_SLICE 
+#undef POST_POS_XZ_SLICE_DY
+#undef POST_POS_XZ_SLICE_N_BINS_X 
+#undef POST_POS_XZ_SLICE_N_BINS_Z 
+#undef POST_VTX_BINS_X 
+#undef POST_VTX_BINS_Y 
+#undef POST_VTX_BINS_Z 
+#undef POST_VTX_N_XY_SLICE 
+#undef POST_VTX_XY_SLICE_DZ
+#undef POST_VTX_XY_SLICE_N_BINS_X 
+#undef POST_VTX_XY_SLICE_N_BINS_Y 
+#undef POST_VTX_N_YZ_SLICE 
+#undef POST_VTX_YZ_SLICE_DX
+#undef POST_VTX_YZ_SLICE_N_BINS_Y 
+#undef POST_VTX_YZ_SLICE_N_BINS_Z 
+#undef POST_VTX_N_XZ_SLICE 
+#undef POST_VTX_XZ_SLICE_DY
+#undef POST_VTX_XZ_SLICE_N_BINS_X 
+#undef POST_VTX_XZ_SLICE_N_BINS_Z
+#undef POST_DEC_BINS_X 
+#undef POST_DEC_BINS_Y 
+#undef POST_DEC_BINS_Z 
+#undef POST_DEC_N_XY_SLICE 
+#undef POST_DEC_XY_SLICE_DZ
+#undef POST_DEC_XY_SLICE_N_BINS_X 
+#undef POST_DEC_XY_SLICE_N_BINS_Y 
+#undef POST_DEC_N_YZ_SLICE 
+#undef POST_DEC_YZ_SLICE_DX
+#undef POST_DEC_YZ_SLICE_N_BINS_Y 
+#undef POST_DEC_YZ_SLICE_N_BINS_Z 
+#undef POST_DEC_N_XZ_SLICE 
+#undef POST_DEC_XZ_SLICE_DY
+#undef POST_DEC_XZ_SLICE_N_BINS_X 
+#undef POST_DEC_XZ_SLICE_N_BINS_Z
+
+#ifndef SEED
+#warning "Definition of SEED not found. Using default: 4357."
+#define SEED 4357
+#endif
+
+#endif
+

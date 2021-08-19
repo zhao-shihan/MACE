@@ -1,7 +1,6 @@
-/build/
-/.vscode/
-/.ipynb_checkpoints/
-/obsolete/
-/analysis/.vscode/
-/analysis/.ipynb_checkpoints/
-/analysis/data/
+.vscode/
+build/
+*/.vscode/
+*/build/
+*/.ipynb_checkpoints
+*/obsolete
