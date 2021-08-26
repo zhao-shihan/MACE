@@ -4,7 +4,7 @@
 #include <cmath>
 
 namespace MACE {
-    namespace SimMuTransport {
+    namespace SimMTransport {
         struct Vector3 {
             double_t x, y, z;
 

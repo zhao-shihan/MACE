@@ -1,4 +1,5 @@
 #include "FTFP_BERT.hh"
+#include "G4EmStandardPhysics.hh"
 #include "Randomize.hh"
 #include "G4RunManager.hh"
 #include "G4MPImanager.hh"
@@ -7,20 +8,21 @@
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
 
-
+#include "physics/PhysicsList.hh"
 #include "detector/DetectorConstruction.hh"
 #include "action/ActionInitialization.hh"
 
-// #include "physics/MACEEmStandardPhysics.hh"
+using namespace MACE::SimG4;
 
 int main(int argc, char** argv) {
     CLHEP::MTwistEngine randomEngine(4357L);
     G4Random::setTheEngine(&randomEngine);
 
     auto runManager = new G4RunManager();
-    runManager->SetUserInitialization(new FTFP_BERT());
-    runManager->SetUserInitialization(new MACE::SimG4::DetectorConstruction());
-    runManager->SetUserInitialization(new MACE::SimG4::ActionInitialization());
+
+    runManager->SetUserInitialization(new Physics::PhysicsList());    
+    runManager->SetUserInitialization(new DetectorConstruction());
+    runManager->SetUserInitialization(new ActionInitialization());
 
     if (argc == 1) {
         // Initialize visualization

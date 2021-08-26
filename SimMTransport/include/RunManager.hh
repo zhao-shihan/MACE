@@ -6,7 +6,7 @@
 #include "Worker.hh"
 
 namespace MACE {
-    namespace SimMuTransport {
+    namespace SimMTransport {
         enum RunStatus {
             kRunUndefined,
             kRunInitialized,
@@ -17,7 +17,7 @@ namespace MACE {
     }
 }
 
-class MACE::SimMuTransport::RunManager {
+class MACE::SimMTransport::RunManager {
 public:
     static RunManager* Instance();
     ~RunManager();

@@ -3,7 +3,7 @@
 #include "RunManager.hh"
 #include "Analysis.hh"
 
-using namespace MACE::SimMuTransport;
+using namespace MACE::SimMTransport;
 
 RunManager* RunManager::fInstance = nullptr;
 

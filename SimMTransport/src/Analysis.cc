@@ -2,7 +2,7 @@
 
 #include "Analysis.hh"
 
-using namespace MACE::SimMuTransport;
+using namespace MACE::SimMTransport;
 
 Analysis* Analysis::fInstance = nullptr;
 

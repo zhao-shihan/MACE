@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "mpi.h"
+#include "MACEGlobal.hh"
 #include "Vector3.hh"
 #include "Config.hh"
 
@@ -111,21 +112,6 @@ extern const MPIGlobal* gMPIGlobal;
 #undef WORKER_JOB_SIZE
 #undef TO_STR
 #undef CFG_TO_STR
-
-#include "MACEGlobal.hh"
-
-namespace MACE {
-    namespace SimMuTransport {
-        class Analysis;
-        class Master;
-        class MonteCarlo;
-        struct Muonium;
-        class RunManager;
-        class Track;
-        struct Vector3;
-        class Worker;
-    }
-}
 
 #endif
 

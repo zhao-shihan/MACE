@@ -3,7 +3,7 @@
 
 #include "Global.hh"
 
-class MACE::SimMuTransport::Master {
+class MACE::SimMTransport::Master {
 private:
     clock_t fBeginCPUTime;
     clock_t fEndCPUTime;

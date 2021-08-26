@@ -2,7 +2,7 @@
 
 MACE::SimG4::Field::SelectField::SelectField() :
     G4ElectroMagneticField(),
-    fEy(-c_light * sqrt(1 - 1 / ((1 + 511 * keV / fEkin) * (1 + 511 * keV / fEkin))) * fBx) {}
+    fEy(-c_light * sqrt(2.0 * fEkin / (511 * keV)) * fBx) {}
 
 void MACE::SimG4::Field::SelectField::GetFieldValue(const G4double*, G4double* F) const {
     F[0] = fBx;

@@ -1,6 +1,6 @@
 #include "MonteCarlo.hh"
 
-using namespace MACE::SimMuTransport;
+using namespace MACE::SimMTransport;
 
 #define MONTE_CARLO_STOCK_INIT(name, type, stockSize) \
     name##Stock(new type[stockSize]), \

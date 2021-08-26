@@ -4,7 +4,7 @@
 #include "Global.hh"
 #include "Vector3.hh"
 
-struct MACE::SimMuTransport::Muonium {
+struct MACE::SimMTransport::Muonium {
     double_t    preTime;
     double_t    postTime;
     Vector3 prePosition;

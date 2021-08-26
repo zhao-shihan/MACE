@@ -17,5 +17,5 @@ public:
 private:
     G4double fWidth = 50 * mm;
     G4double fThickness = 10 * mm;
-    G4double fDownZPosition = -3 * cm;
+    G4double fDownZPosition = -13 * cm;
 };

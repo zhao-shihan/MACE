@@ -10,15 +10,15 @@ constexpr size_t kB = 1024;
 constexpr size_t MonteCarloInitStockTotalCapacity = 512 * kB;
 constexpr size_t MonteCarloStockTotalCapacity = 4096 * kB;
 
-constexpr size_t MonteCarloInitStockSize = MonteCarloInitStockTotalCapacity / (2 * sizeof(double_t) + sizeof(MACE::SimMuTransport::Vector3));
-constexpr size_t MonteCarloStockSize = MonteCarloStockTotalCapacity / (sizeof(MACE::SimMuTransport::Vector3) + sizeof(double_t));
+constexpr size_t MonteCarloInitStockSize = MonteCarloInitStockTotalCapacity / (2 * sizeof(double_t) + sizeof(MACE::SimMTransport::Vector3));
+constexpr size_t MonteCarloStockSize = MonteCarloStockTotalCapacity / (sizeof(MACE::SimMTransport::Vector3) + sizeof(double_t));
 
 #define MONTE_CARLO_STOCK_DECL(type, name) \
     type* const name##Stock; \
     type* const name##StockEnd; \
     type*       name##Iter
 
-class MACE::SimMuTransport::MonteCarlo {
+class MACE::SimMTransport::MonteCarlo {
 private:
     TRandom* const fEngine;
     TF3* const fSource;

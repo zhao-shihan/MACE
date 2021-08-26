@@ -2,7 +2,7 @@
 #include "Analysis.hh"
 #include "RunManager.hh"
 
-using namespace MACE::SimMuTransport;
+using namespace MACE::SimMTransport;
 
 const MPIGlobal* gMPIGlobal = nullptr;
 

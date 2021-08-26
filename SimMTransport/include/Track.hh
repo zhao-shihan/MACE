@@ -6,7 +6,7 @@
 #include "MonteCarlo.hh"
 
 namespace MACE {
-    namespace SimMuTransport {
+    namespace SimMTransport {
         enum TrackStatus {
             kTrackUndefined,
             kTrackInitialized,
@@ -16,7 +16,7 @@ namespace MACE {
     }
 }
 
-class MACE::SimMuTransport::Track {
+class MACE::SimMTransport::Track {
 private:
     Muonium* const    fMuonium;
     MonteCarlo* const fMonteCarlo;

@@ -13,5 +13,5 @@ public:
 
 private:
     const G4double fBz = 0.1 * tesla;
-    const G4double fEz = -7 * kilovolt / (10 * cm);
+    const G4double fEz = -7 * kilovolt / (30 * cm);
 };

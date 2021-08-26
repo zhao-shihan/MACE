@@ -1,6 +1,6 @@
 #include "Muonium.hh"
 
-using namespace MACE::SimMuTransport;
+using namespace MACE::SimMTransport;
 
 Muonium::Muonium() :
     preTime(0.),

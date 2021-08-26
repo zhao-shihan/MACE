@@ -7,7 +7,7 @@
 #include "Global.hh"
 #include "Track.hh"
 
-class MACE::SimMuTransport::Analysis {
+class MACE::SimMTransport::Analysis {
 public:
     static Analysis* Instance();
     ~Analysis();

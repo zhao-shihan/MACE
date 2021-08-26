@@ -4,7 +4,7 @@
 #include "Global.hh"
 #include "Track.hh"
 
-class MACE::SimMuTransport::Worker {
+class MACE::SimMTransport::Worker {
 private:
     Track* const fTrack;
     clock_t          fBeginCPUTime;

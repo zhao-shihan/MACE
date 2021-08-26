@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 project(MACE)
 
+set(CMAKE_CXX_STANDARD 14)
+
 # MPI
 find_package(MPI REQUIRED)
 include_directories(${MPI_INCLUDE_DIRS})
@@ -23,4 +25,4 @@ include_directories(${ROOT_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR}/Global/include)
 
 add_subdirectory(SimG4)
-add_subdirectory(SimMuTransport)
+add_subdirectory(SimMTransport)

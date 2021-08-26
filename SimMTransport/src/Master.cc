@@ -2,7 +2,7 @@
 
 #include "Master.hh"
 
-using namespace MACE::SimMuTransport;
+using namespace MACE::SimMTransport;
 
 Master::Master() :
     fBeginCPUTime(0),

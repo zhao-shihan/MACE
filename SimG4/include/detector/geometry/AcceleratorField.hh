@@ -17,5 +17,5 @@ public:
 private:
     G4double fWidth = 7 * M_SQRT2 * cm;
     G4double fUpStreamLength = 4 * cm;
-    G4double fDownStreamLength = 10 * cm;
+    G4double fDownStreamLength = 30 * cm;
 };

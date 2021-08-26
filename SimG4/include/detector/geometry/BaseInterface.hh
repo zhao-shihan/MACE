@@ -33,7 +33,7 @@ private:
 namespace MACE {
     namespace SimG4 {
         namespace Geometry {
-            constexpr G4bool checkOverlaps = true;
+            constexpr G4bool checkOverlaps = false;
         }
     }
 }
