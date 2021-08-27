@@ -48,6 +48,7 @@ namespace MACE {
     }
     namespace SimMTransport {
         class Analysis;
+        class Global;
         class Master;
         class MonteCarlo;
         struct Muonium;

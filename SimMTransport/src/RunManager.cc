@@ -22,20 +22,20 @@ RunManager::RunManager() :
 RunManager::~RunManager() {}
 
 #define MASTER_DO(statement) \
-    if (gCommRank == gMasterRank) statement
+    if (Global::Instance()->CommRank() == Global::Instance()->MasterRank()) statement
 #define WORKER_DO(statement) \
     else statement
 
-void RunManager::Initialize(int* argc, char*** argv) {
+void RunManager::Initialize(int& argc, char**& argv) {
     if (fStatus == kRunRunning || fStatus == kRunStopped) { return; }
 
-    MPIGlobal::Initialize(argc, argv);
+    Global::Initialize(argc, argv);
 
     MASTER_DO(fMaster = new Master());
     WORKER_DO(fWorker = new Worker());
 
     InitialReport();
-    // ToDo: check gMeanFreePath grad.
+    // ToDo: check Global::Instance()->MeanFreePath() grad.
 
     MASTER_DO(fMaster->Initialize());
     WORKER_DO(fWorker->Initialize());
@@ -64,7 +64,7 @@ void RunManager::Finalize() {
     MASTER_DO(delete fMaster);
     WORKER_DO(delete fWorker);
 
-    MPIGlobal::Finalize();
+    Global::Finalize();
 
     fStatus = kRunFinalized;
 }
@@ -75,10 +75,14 @@ void RunManager::InitialReport() const {
     char processorName[MPI_MAX_PROCESSOR_NAME]; int processorNameLen;
     MPI_Get_processor_name(processorName, &processorNameLen);
 
+    auto global = Global::Instance();
+
     MPI_Barrier(MPI_COMM_WORLD);
-    if (gCommRank == gMasterRank) {
+    if (global->CommRank() == global->MasterRank()) {
         char commName[MPI_MAX_OBJECT_NAME]; int commNameLen;
         MPI_Comm_get_name(MPI_COMM_WORLD, commName, &commNameLen);
+        double_t xMin, xMax, yMin, yMax, zMin, zMax;
+        global->Source()->GetRange(xMin, xMax, yMin, yMax, zMin, zMax);
         auto currentTime = time(nullptr);
 
         std::cout <<
@@ -86,51 +90,42 @@ void RunManager::InitialReport() const {
             " MTransportMC\n"
             "  A muonium transport simulation tool.\n"
             "\n"
-            " This run is named <" << gName << ">.\n"
-            " Running " << gCommSize << " processes in " << commName << ".\n"
+            " This run is named <" << global->Name() << ">.\n"
+            " Running " << global->CommSize() << " processes in " << commName << ".\n"
             "\n"
             " Physical parameters and simulation configurations:\n"
             "  Target region:\n"
-            "   " << gTargetFormula << "\n"
+            "   " << global->Target()->GetExpFormula() << "\n"
             "  Step length of pushing:\n"
-            "   " << gStepOfPushing << " [um]\n"
+            "   " << global->StepOfPushing() << " [um]\n"
             "  Periodic boundary:\n"
-#ifdef PERIODIC_BOUNDARY_X
-            "   |x|=" << gPeriodicBoundaryX << " [um]"
-#endif
-#ifdef PERIODIC_BOUNDARY_Y
-            "   |y|=" << gPeriodicBoundaryY << " [um]"
-#endif
-#ifdef PERIODIC_BOUNDARY_Z
-            "   |z|=" << gPeriodicBoundaryZ << " [um]"
-#endif
-            "\n"
+            "   |x|=" << global->PeriodicBoundaryX() << " [um]   |y|=" << global->PeriodicBoundaryY() << " [um]   |z|=" << global->PeriodicBoundaryZ() << " [um]\n"
             "  Muonium life:\n"
-            "   " << gMuoniumLife << " [us]\n"
+            "   " << global->MuoniumLife() << " [us]\n"
             "  Muonium Mass:\n"
-            "   " << gMuoniumMass << " [MeV]\n"
+            "   " << global->MuoniumMass() << " [MeV]\n"
             "  Muonium transportation mean free path:\n"
-            "   " << gMeanFreePathFormula << " [um]\n"
+            "   " << global->MeanFreePath()->GetExpFormula() << " [um]\n"
             "  Temperature:\n"
-            "   " << gTemperature << " [K]\n"
+            "   " << global->Temperature() << " [K]\n"
             "  Muonium source:\n"
-            "   " << gSourceFormula << " [1/um^3]\n"
-            "   in range (" << gSourceXMin << "," << gSourceXMax << ")x(" << gSourceYMin << "," << gSourceYMax << ")x(" << gSourceZMin << "," << gSourceZMax << ") [um^3]\n"
+            "   " << global->Source()->GetExpFormula() << " [1/um^3]\n"
+            "   in range (" << xMin << "," << xMax << ")x(" << yMin << "," << yMax << ")x(" << zMin << "," << zMax << ") [um^3]\n"
             "  Total number of muonium:\n"
-            "   " << gMuoniumNum << "\n"
+            "   " << global->MuoniumNum() << "\n"
             "  Simulation start time:\n"
-            "   " << gBeginTime << " [us]\n"
+            "   " << global->BeginTime() << " [us]\n"
             "  Result output time step:\n"
-            "   " << gOutputStep << " [us]\n"
+            "   " << global->OutputStep() << " [us]\n"
             "  Simulation end time:\n"
-            "   " << gEndTime << " [us]\n"
+            "   " << global->EndTime() << " [us]\n"
             "                                       " << ctime(&currentTime) <<
             "------------------------> Run starting <------------------------\n"
             "Master at " << processorName << " has initialized." << std::endl;
     }
     MPI_Barrier(MPI_COMM_WORLD);
-    if (gCommRank != gMasterRank) {
-        std::cout << "Worker " << gCommRank << " at " << processorName << " has initialized." << std::endl;
+    if (global->CommRank() != global->MasterRank()) {
+        std::cout << "Worker " << global->CommRank() << " at " << processorName << " has initialized." << std::endl;
     }
 }
 
@@ -140,18 +135,20 @@ void RunManager::FinalReport() const {
     char processorName[MPI_MAX_PROCESSOR_NAME]; int processorNameLen;
     MPI_Get_processor_name(processorName, &processorNameLen);
 
-    auto recvCPUTime = new clock_t[gCommSize];
+    auto global = Global::Instance();
+    
+    auto recvCPUTime = new clock_t[global->CommSize()];
     clock_t sendCPUTime;
     MASTER_DO(sendCPUTime = fMaster->GetUsedCPUTime());
     WORKER_DO(sendCPUTime = fWorker->GetUsedCPUTime());
-    MPI_Gather(&sendCPUTime, 1, MPI_LONG, recvCPUTime, 1, MPI_LONG, gMasterRank, MPI_COMM_WORLD);
+    MPI_Gather(&sendCPUTime, 1, MPI_LONG, recvCPUTime, 1, MPI_LONG, global->MasterRank(), MPI_COMM_WORLD);
 
     auto currentTime = time(nullptr);
 
-    if (gCommRank == gMasterRank) {
+    if (global->CommRank() == global->MasterRank()) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
         clock_t totalCPUTime = 0;
-        for (int i = 0; i < gCommSize; ++i) {
+        for (int i = 0; i < global->CommSize(); ++i) {
             totalCPUTime += recvCPUTime[i];
         }
         auto runBeginTime = fMaster->GetRunBeginTime();
@@ -168,7 +165,7 @@ void RunManager::FinalReport() const {
     } else {
         std::cout <<
             ctime(&currentTime) <<
-            "Worker " << gCommRank << " at " << processorName << " is finalizing." << std::endl;
+            "Worker " << global->CommRank() << " at " << processorName << " is finalizing." << std::endl;
     }
 
     delete[] recvCPUTime;

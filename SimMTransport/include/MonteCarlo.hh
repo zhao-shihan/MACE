@@ -21,7 +21,6 @@ constexpr size_t MonteCarloStockSize = MonteCarloStockTotalCapacity / (sizeof(MA
 class MACE::SimMTransport::MonteCarlo {
 private:
     TRandom* const fEngine;
-    TF3* const fSource;
     MONTE_CARLO_STOCK_DECL(double_t, fVertexTime);
     MONTE_CARLO_STOCK_DECL(Vector3, fVertexPosition);
     MONTE_CARLO_STOCK_DECL(double_t, fLife);
@@ -34,11 +33,11 @@ public:
     MonteCarlo(const MonteCarlo&) = delete;
     MonteCarlo& operator=(const MonteCarlo&) = delete;
 
-    double_t           VertexTime();
+    double_t       VertexTime();
     const Vector3& VertexPosition();
-    double_t           Life();
+    double_t       Life();
     const Vector3& MaxwellBoltzmann();
-    double_t           FreePath(const Vector3& pos);
+    double_t       FreePath(const Vector3& pos);
 };
 
 #endif

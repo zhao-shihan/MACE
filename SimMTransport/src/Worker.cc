@@ -21,7 +21,7 @@ void Worker::Initialize() {
 void Worker::Run() {
     size_t thisJob, nextJob;
     MPI_Request request;
-    MPI_Recv_init(&nextJob, 1, MPI_UNSIGNED_LONG, gMasterRank, 0, MPI_COMM_WORLD, &request);
+    MPI_Recv_init(&nextJob, 1, MPI_UNSIGNED_LONG, Global::Instance()->MasterRank(), 0, MPI_COMM_WORLD, &request);
     MPI_Start(&request);
     MPI_Wait(&request, MPI_STATUS_IGNORE);
     thisJob = nextJob;

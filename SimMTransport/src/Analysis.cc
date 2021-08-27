@@ -8,7 +8,7 @@ Analysis* Analysis::fInstance = nullptr;
 
 Analysis* Analysis::Instance() {
     if (fInstance == nullptr) {
-        if (gCommRank != gMasterRank) {
+        if (Global::Instance()->CommRank() != Global::Instance()->MasterRank()) {
             fInstance = new Analysis();
         }
     }
@@ -27,18 +27,18 @@ Analysis::~Analysis() {}
 void Analysis::Open() {
     if (fOpened) { return; }
 
-    new TFile(TString(gName) + "_rank" + gCommRank + ".root", "RECREATE");
+    new TFile(TString(Global::Instance()->Name()) + "_rank" + Global::Instance()->CommRank() + ".root", "RECREATE");
 
     fOutputTimeNum = 1;
-    for (double_t time = gBeginTime; time < gEndTime; time += gOutputStep) {
+    for (double_t time = Global::Instance()->BeginTime(); time < Global::Instance()->EndTime(); time += Global::Instance()->OutputStep()) {
         ++fOutputTimeNum;
     }
 
     fOutputTime = new double_t[fOutputTimeNum];
     for (size_t timeId = 0; timeId < fOutputTimeNum - 1; ++timeId) {
-        fOutputTime[timeId] = gBeginTime + timeId * gOutputStep;
+        fOutputTime[timeId] = Global::Instance()->BeginTime() + timeId * Global::Instance()->OutputStep();
     }
-    fOutputTime[fOutputTimeNum - 1] = gEndTime;
+    fOutputTime[fOutputTimeNum - 1] = Global::Instance()->EndTime();
 
     fTimeNtuples = new TNtuple * [fOutputTimeNum];
     for (size_t timeId = 0; timeId < fOutputTimeNum; ++timeId) {

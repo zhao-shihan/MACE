@@ -33,7 +33,7 @@ private:
     RunStatus fStatus;
 
 public:
-    void Initialize(int* argc, char*** argv);
+    void Initialize(int& argc, char**& argv);
     void Run();
     void Finalize();
 

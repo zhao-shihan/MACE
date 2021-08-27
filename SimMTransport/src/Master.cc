@@ -18,28 +18,28 @@ void Master::Initialize() {
 }
 
 void Master::Run() {
-    auto workersJob = new size_t[gWorkerNum];
-    auto requests = new MPI_Request[gWorkerNum];
+    auto workersJob = new size_t[Global::Instance()->WorkerNum()];
+    auto requests = new MPI_Request[Global::Instance()->WorkerNum()];
     size_t jobSend = 0;
     int finished = 0;
-    for (int dest = 0; dest < gWorkerNum; ++dest) {
+    for (int dest = 0; dest < Global::Instance()->WorkerNum(); ++dest) {
         MPI_Ssend_init(workersJob + dest, 1, MPI_UNSIGNED_LONG, dest, 0, MPI_COMM_WORLD, requests + dest);
-        workersJob[dest] = std::min(gWorkerJobSize, gMuoniumNum - jobSend);
+        workersJob[dest] = std::min(Global::Instance()->WorkerJobSize(), Global::Instance()->MuoniumNum() - jobSend);
         MPI_Start(requests + dest);
         jobSend += workersJob[dest];
         finished += (workersJob[dest] == 0);
     }
-    while (jobSend < gMuoniumNum) {
+    while (jobSend < Global::Instance()->MuoniumNum()) {
         int dest;
-        MPI_Waitany(gWorkerNum, requests, &dest, MPI_STATUS_IGNORE);
-        workersJob[dest] = std::min(gWorkerJobSize, gMuoniumNum - jobSend);
+        MPI_Waitany(Global::Instance()->WorkerNum(), requests, &dest, MPI_STATUS_IGNORE);
+        workersJob[dest] = std::min(Global::Instance()->WorkerJobSize(), Global::Instance()->MuoniumNum() - jobSend);
         MPI_Start(requests + dest);
         jobSend += workersJob[dest];
         ProgressReport(jobSend);
     }
-    while (finished < gWorkerNum) {
+    while (finished < Global::Instance()->WorkerNum()) {
         int dest;
-        MPI_Waitany(gWorkerNum, requests, &dest, MPI_STATUS_IGNORE);
+        MPI_Waitany(Global::Instance()->WorkerNum(), requests, &dest, MPI_STATUS_IGNORE);
         if (workersJob[dest] > 0) {
             workersJob[dest] = 0;
             MPI_Start(requests + dest);
@@ -57,16 +57,16 @@ void Master::Finalize() {
 }
 
 void Master::ProgressReport(size_t jobSend) const {
-    size_t estJobDone = jobSend - gWorkerJobSize * gWorkerNum;
+    size_t estJobDone = jobSend - Global::Instance()->WorkerJobSize() * Global::Instance()->WorkerNum();
     time_t currentTime = time(nullptr);
-    time_t eta = double(gMuoniumNum - estJobDone) * double(currentTime - fRunBeginTime) / double(estJobDone);
+    time_t eta = double(Global::Instance()->MuoniumNum() - estJobDone) * double(currentTime - fRunBeginTime) / double(estJobDone);
     time_t etaHr = eta / 3600;
     time_t etaMin = (eta - etaHr * 3600) / 60;
     time_t etaSec = eta - (etaMin * 60 + etaHr * 3600);
     std::cout
         << ctime(&currentTime)
-        << jobSend << '/' << gMuoniumNum << " have been assigned ("
-        << 100.f * float(jobSend) / gMuoniumNum << "%). "
+        << jobSend << '/' << Global::Instance()->MuoniumNum() << " have been assigned ("
+        << 100.f * float(jobSend) / Global::Instance()->MuoniumNum() << "%). "
         << "ETA: " << etaHr << "h " << etaMin << "m " << etaSec << 's'
         << std::endl;
 }

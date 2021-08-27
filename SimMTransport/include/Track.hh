@@ -21,11 +21,11 @@ private:
     Muonium* const    fMuonium;
     MonteCarlo* const fMonteCarlo;
 
-    double_t              fVertexTime;
+    double_t          fVertexTime;
     Vector3           fVertexPosition;
-    double_t              fLife;
+    double_t          fLife;
 
-    bool                  fEscaping;
+    bool              fEscaping;
 
     TrackStatus       fStatus;
 
@@ -40,9 +40,9 @@ public:
     void Stepping();
 
     const Muonium* GetMuonium() const { return fMuonium; }
-    double_t           GetVertexTime() const { return fVertexTime; }
+    double_t       GetVertexTime() const { return fVertexTime; }
     const Vector3& GetVertexPosition() const { return fVertexPosition; }
-    bool               IsEscaping() const { return fEscaping; }
+    bool           IsEscaping() const { return fEscaping; }
     TrackStatus    GetTrackStatus() const { return fStatus; }
 
 private:

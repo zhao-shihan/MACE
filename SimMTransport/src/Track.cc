@@ -18,6 +18,7 @@ Track::~Track() {
 }
 
 static Analysis* analysis = nullptr;
+static Global* global = nullptr;
 
 void Track::Initialize() {
     fVertexTime = fMonteCarlo->VertexTime();
@@ -30,8 +31,17 @@ void Track::Initialize() {
     fEscaping = false;
 
     if (analysis == nullptr) { analysis = Analysis::Instance(); }
+    if (global == nullptr) { global = Global::Instance(); }
 
     fStatus = kTrackInitialized;
+}
+
+inline bool Target(double_t x, double_t y, double_t z) {
+    return (*global->Target())(x, y, z) > 0.5;
+}
+
+inline double_t MeanFreePath(double_t x, double_t y, double_t z) {
+    return (*global->MeanFreePath())(x, y, z);
 }
 
 void Track::Stepping() {
@@ -45,7 +55,7 @@ void Track::Stepping() {
     fMuonium->prePosition = fMuonium->postPosition;
     fMuonium->postPosition += fMuonium->velocity * deltaTime;
 
-    if (!gTarget(fMuonium->postPosition.x, fMuonium->postPosition.y, fMuonium->postPosition.z)) {
+    if (!Target(fMuonium->postPosition.x, fMuonium->postPosition.y, fMuonium->postPosition.z)) {
         EscapingDoIt();
     }
 
@@ -59,108 +69,108 @@ void Track::Stepping() {
 void Track::EscapingDoIt() {
     fEscaping = true;
     bool isNormalStep = true;
-    auto checkStep = gStepOfPushing;
+    auto checkStep = global->StepOfPushing();
     auto checkDeltaTime = checkStep / fMuonium->velocity.Norm();
     auto checkDeltaPosition = fMuonium->velocity * checkDeltaTime;
     do {
-#ifdef PERIODIC_BOUNDARY_X
-        if (fMuonium->postPosition.x < -gPeriodicBoundaryX || fMuonium->postPosition.x > gPeriodicBoundaryX) {
-            auto denominator = fMuonium->postPosition.x - fMuonium->prePosition.x;
-            double_t preRatio;
-            Vector3 boundary;
-            if (abs(denominator) < std::numeric_limits<float_t>::epsilon()) {
-                preRatio = 0.5;
-                boundary = 0.5 * (fMuonium->postPosition + fMuonium->prePosition);
-            } else {
-                if (fMuonium->postPosition.x > gPeriodicBoundaryX) {
-                    preRatio = (gPeriodicBoundaryX - fMuonium->prePosition.x) / denominator;
+        if (global->PeriodicBoundaryX() > 0) {
+            if (fMuonium->postPosition.x < -global->PeriodicBoundaryX() || fMuonium->postPosition.x > global->PeriodicBoundaryX()) {
+                auto denominator = fMuonium->postPosition.x - fMuonium->prePosition.x;
+                double_t preRatio;
+                Vector3 boundary;
+                if (abs(denominator) < std::numeric_limits<float_t>::epsilon()) {
+                    preRatio = 0.5;
+                    boundary = 0.5 * (fMuonium->postPosition + fMuonium->prePosition);
                 } else {
-                    preRatio = (-gPeriodicBoundaryX - fMuonium->prePosition.x) / denominator;
+                    if (fMuonium->postPosition.x > global->PeriodicBoundaryX()) {
+                        preRatio = (global->PeriodicBoundaryX() - fMuonium->prePosition.x) / denominator;
+                    } else {
+                        preRatio = (-global->PeriodicBoundaryX() - fMuonium->prePosition.x) / denominator;
+                    }
+                    boundary = fMuonium->prePosition + preRatio * (fMuonium->postPosition - fMuonium->prePosition);
                 }
-                boundary = fMuonium->prePosition + preRatio * (fMuonium->postPosition - fMuonium->prePosition);
-            }
-            auto newBoundary = Vector3(-boundary.x, boundary.y, boundary.z);
-            auto newPostTime = fMuonium->postTime;
-            auto newPostPosition = fMuonium->postPosition + newBoundary - boundary;
-            fMuonium->postTime = fMuonium->preTime + preRatio * (fMuonium->postTime - fMuonium->preTime);
-            fMuonium->postPosition = boundary;
-            analysis->Update(this);
-            fMuonium->preTime = fMuonium->postTime;
-            fMuonium->prePosition = newBoundary;
-            fMuonium->postTime = newPostTime;
-            fMuonium->postPosition = newPostPosition;
-            if (gTarget(fMuonium->postPosition.x, fMuonium->postPosition.y, fMuonium->postPosition.z)) {
-                break;
+                auto newBoundary = Vector3(-boundary.x, boundary.y, boundary.z);
+                auto newPostTime = fMuonium->postTime;
+                auto newPostPosition = fMuonium->postPosition + newBoundary - boundary;
+                fMuonium->postTime = fMuonium->preTime + preRatio * (fMuonium->postTime - fMuonium->preTime);
+                fMuonium->postPosition = boundary;
+                analysis->Update(this);
+                fMuonium->preTime = fMuonium->postTime;
+                fMuonium->prePosition = newBoundary;
+                fMuonium->postTime = newPostTime;
+                fMuonium->postPosition = newPostPosition;
+                if (Target(fMuonium->postPosition.x, fMuonium->postPosition.y, fMuonium->postPosition.z)) {
+                    break;
+                }
             }
         }
-#endif
-#ifdef PERIODIC_BOUNDARY_Y
-        if (fMuonium->postPosition.y < -gPeriodicBoundaryY || fMuonium->postPosition.y > gPeriodicBoundaryY) {
-            auto denominator = fMuonium->postPosition.y - fMuonium->prePosition.y;
-            double_t preRatio;
-            Vector3 boundary;
-            if (abs(denominator) < std::numeric_limits<float_t>::epsilon()) {
-                preRatio = 0.5;
-                boundary = 0.5 * (fMuonium->postPosition + fMuonium->prePosition);
-            } else {
-                if (fMuonium->postPosition.y > gPeriodicBoundaryY) {
-                    preRatio = (gPeriodicBoundaryY - fMuonium->prePosition.y) / denominator;
+        if (global->PeriodicBoundaryY() > 0) {
+            if (fMuonium->postPosition.y < -global->PeriodicBoundaryY() || fMuonium->postPosition.y > global->PeriodicBoundaryY()) {
+                auto denominator = fMuonium->postPosition.y - fMuonium->prePosition.y;
+                double_t preRatio;
+                Vector3 boundary;
+                if (abs(denominator) < std::numeric_limits<float_t>::epsilon()) {
+                    preRatio = 0.5;
+                    boundary = 0.5 * (fMuonium->postPosition + fMuonium->prePosition);
                 } else {
-                    preRatio = (-gPeriodicBoundaryY - fMuonium->prePosition.y) / denominator;
+                    if (fMuonium->postPosition.y > global->PeriodicBoundaryY()) {
+                        preRatio = (global->PeriodicBoundaryY() - fMuonium->prePosition.y) / denominator;
+                    } else {
+                        preRatio = (-global->PeriodicBoundaryY() - fMuonium->prePosition.y) / denominator;
+                    }
+                    boundary = fMuonium->prePosition + preRatio * (fMuonium->postPosition - fMuonium->prePosition);
                 }
-                boundary = fMuonium->prePosition + preRatio * (fMuonium->postPosition - fMuonium->prePosition);
-            }
-            auto newBoundary = Vector3(boundary.x, -boundary.y, boundary.z);
-            auto newPostTime = fMuonium->postTime;
-            auto newPostPosition = fMuonium->postPosition + newBoundary - boundary;
-            fMuonium->postTime = fMuonium->preTime + preRatio * (fMuonium->postTime - fMuonium->preTime);
-            fMuonium->postPosition = boundary;
-            analysis->Update(this);
-            fMuonium->preTime = fMuonium->postTime;
-            fMuonium->prePosition = newBoundary;
-            fMuonium->postTime = newPostTime;
-            fMuonium->postPosition = newPostPosition;
-            if (gTarget(fMuonium->postPosition.x, fMuonium->postPosition.y, fMuonium->postPosition.z)) {
-                break;
+                auto newBoundary = Vector3(boundary.x, -boundary.y, boundary.z);
+                auto newPostTime = fMuonium->postTime;
+                auto newPostPosition = fMuonium->postPosition + newBoundary - boundary;
+                fMuonium->postTime = fMuonium->preTime + preRatio * (fMuonium->postTime - fMuonium->preTime);
+                fMuonium->postPosition = boundary;
+                analysis->Update(this);
+                fMuonium->preTime = fMuonium->postTime;
+                fMuonium->prePosition = newBoundary;
+                fMuonium->postTime = newPostTime;
+                fMuonium->postPosition = newPostPosition;
+                if (Target(fMuonium->postPosition.x, fMuonium->postPosition.y, fMuonium->postPosition.z)) {
+                    break;
+                }
             }
         }
-#endif
-#ifdef PERIODIC_BOUNDARY_Z
-        if (fMuonium->postPosition.z < -gPeriodicBoundaryZ || fMuonium->postPosition.z > gPeriodicBoundaryZ) {
-            auto denominator = fMuonium->postPosition.z - fMuonium->prePosition.z;
-            double_t preRatio;
-            Vector3 boundary;
-            if (abs(denominator) < std::numeric_limits<float_t>::epsilon()) {
-                preRatio = 0.5;
-                boundary = 0.5 * (fMuonium->postPosition + fMuonium->prePosition);
-            } else {
-                if (fMuonium->postPosition.z > gPeriodicBoundaryZ) {
-                    preRatio = (gPeriodicBoundaryZ - fMuonium->prePosition.z) / denominator;
+        if (global->PeriodicBoundaryZ() > 0) {
+            if (fMuonium->postPosition.z < -global->PeriodicBoundaryZ() || fMuonium->postPosition.z > global->PeriodicBoundaryZ()) {
+                auto denominator = fMuonium->postPosition.z - fMuonium->prePosition.z;
+                double_t preRatio;
+                Vector3 boundary;
+                if (abs(denominator) < std::numeric_limits<float_t>::epsilon()) {
+                    preRatio = 0.5;
+                    boundary = 0.5 * (fMuonium->postPosition + fMuonium->prePosition);
                 } else {
-                    preRatio = (-gPeriodicBoundaryZ - fMuonium->prePosition.z) / denominator;
+                    if (fMuonium->postPosition.z > global->PeriodicBoundaryZ()) {
+                        preRatio = (global->PeriodicBoundaryZ() - fMuonium->prePosition.z) / denominator;
+                    } else {
+                        preRatio = (-global->PeriodicBoundaryZ() - fMuonium->prePosition.z) / denominator;
+                    }
+                    boundary = fMuonium->prePosition + preRatio * (fMuonium->postPosition - fMuonium->prePosition);
                 }
-                boundary = fMuonium->prePosition + preRatio * (fMuonium->postPosition - fMuonium->prePosition);
-            }
-            auto newBoundary = Vector3(boundary.x, boundary.y, -boundary.z);
-            auto newPostTime = fMuonium->postTime;
-            auto newPostPosition = fMuonium->postPosition + newBoundary - boundary;
-            fMuonium->postTime = fMuonium->preTime + preRatio * (fMuonium->postTime - fMuonium->preTime);
-            fMuonium->postPosition = boundary;
-            analysis->Update(this);
-            fMuonium->preTime = fMuonium->postTime;
-            fMuonium->prePosition = newBoundary;
-            fMuonium->postTime = newPostTime;
-            fMuonium->postPosition = newPostPosition;
-            if (gTarget(fMuonium->postPosition.x, fMuonium->postPosition.y, fMuonium->postPosition.z)) {
-                break;
+                auto newBoundary = Vector3(boundary.x, boundary.y, -boundary.z);
+                auto newPostTime = fMuonium->postTime;
+                auto newPostPosition = fMuonium->postPosition + newBoundary - boundary;
+                fMuonium->postTime = fMuonium->preTime + preRatio * (fMuonium->postTime - fMuonium->preTime);
+                fMuonium->postPosition = boundary;
+                analysis->Update(this);
+                fMuonium->preTime = fMuonium->postTime;
+                fMuonium->prePosition = newBoundary;
+                fMuonium->postTime = newPostTime;
+                fMuonium->postPosition = newPostPosition;
+                if (Target(fMuonium->postPosition.x, fMuonium->postPosition.y, fMuonium->postPosition.z)) {
+                    break;
+                }
             }
         }
-#endif
         fMuonium->postTime += checkDeltaTime;
         fMuonium->postPosition += checkDeltaPosition;
         isNormalStep = false;
         if (fMuonium->postTime > fVertexTime + fLife) { return; }
-    } while (!gTarget(fMuonium->postPosition.x, fMuonium->postPosition.y, fMuonium->postPosition.z));
+    } while (!Target(fMuonium->postPosition.x, fMuonium->postPosition.y, fMuonium->postPosition.z));
     fEscaping = false;
     if (isNormalStep) { return; }
     auto out = fMuonium->postPosition - checkDeltaPosition;
@@ -168,13 +178,13 @@ void Track::EscapingDoIt() {
     do {
         checkStep *= 0.5;
         checkDeltaTime *= 0.5;
-        if (gTarget(center.x, center.y, center.z)) {
+        if (Target(center.x, center.y, center.z)) {
             fMuonium->postTime -= checkDeltaTime;
             fMuonium->postPosition = center;
         } else {
             out = center;
         }
         center = (fMuonium->postPosition + out) * 0.5;
-    } while (checkStep > 0.01 * gMeanFreePath(center.x, center.y, center.z));
+    } while (checkStep > 0.01 * MeanFreePath(center.x, center.y, center.z));
 }
 
