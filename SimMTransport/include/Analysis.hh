@@ -1,5 +1,4 @@
-#ifndef Analysis_hh
-#define Analysis_hh
+#pragma once
 
 #include "TFile.h"
 #include "TNtuple.h"
@@ -30,6 +29,3 @@ public:
     void Update(const Track* track) const;
     void WriteAndClose();
 };
-
-#endif
-

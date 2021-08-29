@@ -2,7 +2,6 @@
 
 #include "G4VUserDetectorConstruction.hh"
 
-
 #include "SimG4Global.hh"
 
 class MACE::SimG4::DetectorConstruction : public G4VUserDetectorConstruction {
@@ -10,6 +9,8 @@ public:
     DetectorConstruction();
     virtual ~DetectorConstruction();
     virtual G4VPhysicalVolume* Construct();
+
+    auto* GetTarget() const { return fTarget; }
 
 private:
     void ConstructGeometry();

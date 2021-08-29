@@ -1,5 +1,4 @@
-#ifndef Vector3_hh
-#define Vector3_hh 1
+#pragma once
 
 #include <cmath>
 
@@ -79,6 +78,3 @@ namespace MACE {
         }
     }
 }
-
-#endif
-

@@ -1,5 +1,4 @@
-#ifndef Worker_hh
-#define Worker_hh 1
+#pragma once
 
 #include "Global.hh"
 #include "Track.hh"
@@ -22,6 +21,3 @@ public:
 
     clock_t GetUsedCPUTime() const { return fEndCPUTime - fBeginCPUTime; }
 };
-
-#endif
-

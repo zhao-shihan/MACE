@@ -66,9 +66,9 @@ void Analysis::Update(const Track* track) const {
     if (!fOpened) { return; }
 
     for (size_t timeId = 0; timeId < fOutputTimeNum; ++timeId) {
-        if (track->GetMuonium()->preTime <= fOutputTime[timeId] &&
-            track->GetMuonium()->postTime > fOutputTime[timeId]) {
-            auto interPosition = track->GetMuonium()->prePosition + ((fOutputTime[timeId] - track->GetMuonium()->preTime) / (track->GetMuonium()->postTime - track->GetMuonium()->preTime)) * (track->GetMuonium()->postPosition - track->GetMuonium()->prePosition);
+        if (track->GetCurrentStep()->preTime <= fOutputTime[timeId] &&
+            track->GetCurrentStep()->postTime > fOutputTime[timeId]) {
+            auto interPosition = track->GetCurrentStep()->prePosition + ((fOutputTime[timeId] - track->GetCurrentStep()->preTime) / (track->GetCurrentStep()->postTime - track->GetCurrentStep()->preTime)) * (track->GetCurrentStep()->postPosition - track->GetCurrentStep()->prePosition);
             fTimeNtuples[timeId]->Fill(
                 interPosition.x,
                 interPosition.y,
@@ -83,10 +83,10 @@ void Analysis::Update(const Track* track) const {
             track->GetVertexPosition().y,
             track->GetVertexPosition().z,
             track->GetVertexTime(),
-            track->GetMuonium()->postPosition.x,
-            track->GetMuonium()->postPosition.y,
-            track->GetMuonium()->postPosition.z,
-            track->GetMuonium()->postTime
+            track->GetCurrentStep()->postPosition.x,
+            track->GetCurrentStep()->postPosition.y,
+            track->GetCurrentStep()->postPosition.z,
+            track->GetCurrentStep()->postTime
         );
     }
 }

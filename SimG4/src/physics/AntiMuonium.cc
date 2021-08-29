@@ -1,4 +1,4 @@
-/* #include "G4ParticleTable.hh"
+#include "G4ParticleTable.hh"
 #include "G4DecayTable.hh"
 
 #include "physics/AntiMuonium.hh"
@@ -36,13 +36,14 @@ AntiMuonium* AntiMuonium::Definition() {
             false
         );
 
-        // Bohr magnetron of AntiMuonium - T. Shiroka
+        // Bohr magnetron of Muonium - T. Shiroka
         // The magnetic moment of Mu is the sum of those of mu+ and e- with
         // the respective gyromagnetic ratio anomalies as coefficients
         G4double muBmu = 0.5 * eplus * hbar_Planck / (0.10565840 * GeV / c_squared);
         G4double muBel = -0.5 * eplus * hbar_Planck / (0.51099906 * MeV / c_squared);
         G4double muB = 1.0011659208 * muBmu + 1.0011596521859 * muBel;
-        anInstance->SetPDGMagneticMoment(muB);
+        // !  Anti-muonium: is negative
+        anInstance->SetPDGMagneticMoment(-muB);
 
         // create Decay Table 
         auto table = new G4DecayTable();
@@ -58,4 +59,3 @@ AntiMuonium* AntiMuonium::Definition() {
 AntiMuonium* AntiMuonium::AntiMuoniumDefinition() {
     return Definition();
 }
- */

@@ -5,6 +5,7 @@
 #include "physics/AntiMuonium.hh"
 #include "physics/Muonium.hh"
 #include "physics/MuoniumProduction.hh"
+#include "physics/MuoniumTransport.hh"
 
 using namespace MACE::SimG4::Physics;
 
@@ -14,13 +15,14 @@ MuoniumPhysics::MuoniumPhysics(G4int verbose) :
 
 void MuoniumPhysics::ConstructParticle() {
     G4MuonPlus::Definition();
+    AntiMuonium::Definition();
     Muonium::Definition();
 }
 
 void MuoniumPhysics::ConstructProcess() {
     auto muonPlus = G4MuonPlus::Definition()->GetProcessManager();
-    // auto muonium = Muonium::Definition()->GetProcessManager();
-
     muonPlus->AddRestProcess(new MuoniumProduction());
-    // muonium->AddProcess()
+
+    auto muonium = Muonium::Definition()->GetProcessManager();
+    muonium->AddContinuousProcess(new MuoniumTransport());
 }

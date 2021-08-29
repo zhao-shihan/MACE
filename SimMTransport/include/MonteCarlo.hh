@@ -1,5 +1,4 @@
-#ifndef MonteCarlo_hh
-#define MonteCarlo_hh 1
+#pragma once
 
 #include "TRandom3.h"
 #include "TF3.h"
@@ -39,6 +38,3 @@ public:
     const Vector3& MaxwellBoltzmann();
     double_t       FreePath(const Vector3& pos);
 };
-
-#endif
-

@@ -52,40 +52,37 @@
 #include "G4LorentzRotation.hh"
 #include "G4RotationMatrix.hh"
 
-#include "physics/MuoniumDecayChannel.hh"
+#include "physics/AntiMuoniumDecayChannel.hh"
 
-using MACE::SimG4::Physics::MuoniumDecayChannel;
+using MACE::SimG4::Physics::AntiMuoniumDecayChannel;
 
-MuoniumDecayChannel::MuoniumDecayChannel(const G4String& theParentName, G4double theBR, G4int verbose) :
-    G4VDecayChannel("MuoniumDecay", verbose) {
-    if (theParentName == "M") {
+AntiMuoniumDecayChannel::AntiMuoniumDecayChannel(const G4String& theParentName, G4double theBR, G4int verbose) :
+    G4VDecayChannel("AntiMuoniumDecay", verbose) {
+    if (theParentName == "-M") {
         SetBR(theBR);
-        SetParent("M");
+        SetParent("-M");
         SetNumberOfDaughters(4);
-        SetDaughter(0, "e+");
-        SetDaughter(1, "nu_e");
-        SetDaughter(2, "anti_nu_mu");
-        SetDaughter(3, "e-");
-        // Daughter 4 and 5 for AntiMuonium Decay.
-        // SetDaughter(4, "anti_nu_e");
-        // SetDaughter(5, "nu_mu");
+        SetDaughter(0, "e-");
+        SetDaughter(1, "anti_nu_e");
+        SetDaughter(2, "nu_mu");
+        SetDaughter(3, "e+");
     } else {
 #ifdef G4VERBOSE
         if (GetVerboseLevel() > 0) {
             G4cout <<
-                "MuoniumDecayChannel::(Constructor) says\n"
-                "\tParent particle is not Muonium(M) but " << theParentName << G4endl;
+                "AntiMuoniumDecayChannel::(Constructor) says\n"
+                "\tParent particle is not AntiMuonium(-M) but " << theParentName << G4endl;
         }
 #endif
     }
 }
 
-G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
+G4DecayProducts* AntiMuoniumDecayChannel::DecayIt(G4double) {
     // this version neglects muon polarization,and electron mass  
     //              assumes the pure V-A coupling
     //              the Neutrinos are correctly V-A. 
 #ifdef G4VERBOSE
-    if (GetVerboseLevel() > 1) G4cout << "MuoniumDecayChannel::DecayIt ";
+    if (GetVerboseLevel() > 1) G4cout << "AntiMuoniumDecayChannel::DecayIt ";
 #endif
 
     if (G4MT_parent == 0)    CheckAndFillParent();
@@ -144,7 +141,8 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
     G4RotationMatrix rot;
     rot.set(rphi, rtheta, rMACE);
 
-    //Positron 0
+    
+    //eletron 0
 
     daughtermomentum[0] = sqrt((Ee * EMax) * (Ee * EMax) + 2.0 * (Ee * EMax) * daughtermass[0]);
     G4ThreeVector direction0(0.0, 0.0, 1.0);
@@ -152,7 +150,7 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
     auto daughterparticle = new G4DynamicParticle(G4MT_daughters[0], direction0 * daughtermomentum[0]);
     products->PushProducts(daughterparticle);
 
-    //electronic neutrino  1
+    //positronic neutrino  1
 
     daughtermomentum[1] = sqrt(Ene * Ene * EMax * EMax + 2.0 * Ene * EMax * daughtermass[1]);
     G4ThreeVector direction1(sintheta, 0.0, costheta);
@@ -160,7 +158,7 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
     auto daughterparticle1 = new G4DynamicParticle(G4MT_daughters[1], direction1 * daughtermomentum[1]);
     products->PushProducts(daughterparticle1);
 
-    //muonic neutrino 2
+    //anti muonic neutrino 2
 
     daughtermomentum[2] = sqrt(Enm * Enm * EMax * EMax + 2.0 * Enm * EMax * daughtermass[2]);
     G4ThreeVector direction2(-Ene / Enm * sintheta, 0, -Ee / Enm - Ene / Enm * costheta);
@@ -168,7 +166,7 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
     auto daughterparticle2 = new G4DynamicParticle(G4MT_daughters[2], direction2 * daughtermomentum[2]);
     products->PushProducts(daughterparticle2);
 
-    //orbital electron 3
+    //orbital positron 3
     //energy distribution
     double ProbTable[100] = { 0.0579448, 0.0820584, 0.0822704, 0.0764795, 0.0690145, 0.0614549, 0.054404, 0.0480648, 0.0424683, 0.0375724, 0.0333076, 0.0295981, 0.0263708, 0.0235596, 0.0211061, 0.0189599, 0.0170777, 0.0154228, 0.0139636, 0.0126736, 0.01153, 0.0105136, 0.0096078, 0.00879855, 0.00807379, 0.00742315, 0.00683769, 0.00630972, 0.00583257, 0.00540044, 0.0050083, 0.00465176, 0.00432698, 0.00403061, 0.00375967, 0.00351158, 0.00328404, 0.00307501, 0.0028827, 0.00270552, 0.00254203, 0.00239098, 0.00225124, 0.00212178, 0.00200171, 0.0018902, 0.00178653, 0.00169004, 0.00160012, 0.00151625, 0.00143793, 0.00136472, 0.00129622, 0.00123207, 0.00117194, 0.00111552, 0.00106253, 0.00101274, 0.000965894, 0.000921796, 0.000880247, 0.000841072, 0.000804106, 0.0007692, 0.000736214, 0.000705023, 0.000675507, 0.00064756, 0.000621079, 0.000595972, 0.000572154, 0.000549544, 0.000528069, 0.000507659, 0.000488251, 0.000469786, 0.000452208, 0.000435466, 0.000419511, 0.0004043, 0.000389789, 0.000375941, 0.000362718, 0.000350087, 0.000338015, 0.000326472, 0.000315431, 0.000304866, 0.00029475, 0.000285062, 0.000275778, 0.00026688, 0.000258347, 0.000250162, 0.000242306, 0.000234765, 0.000227523, 0.000220565, 0.000213878, 0.000207449 };
     double probsum3 = 0.;

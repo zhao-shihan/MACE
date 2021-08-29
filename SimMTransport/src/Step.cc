@@ -1,13 +1,13 @@
-#include "Muonium.hh"
+#include "Step.hh"
 
 using namespace MACE::SimMTransport;
 
-Muonium::Muonium() :
+Step::Step() :
     preTime(0.),
     postTime(0.),
     prePosition(),
     postPosition(),
     velocity() {}
 
-Muonium::~Muonium() {}
+Step::~Step() {}
 

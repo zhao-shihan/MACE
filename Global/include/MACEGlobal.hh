@@ -39,10 +39,12 @@ namespace MACE {
         // physics
         namespace Physics {
             class AntiMuonium; // ToDo
+            class AntiMuoniumDecayChannel; // ToDo
             class Muonium;
             class MuoniumDecayChannel;
             class MuoniumPhysics;
             class MuoniumProduction;
+            class MuoniumTransport;
             class PhysicsList;
         }
     }
@@ -51,7 +53,7 @@ namespace MACE {
         class Global;
         class Master;
         class MonteCarlo;
-        struct Muonium;
+        struct Step;
         class RunManager;
         class Track;
         struct Vector3;

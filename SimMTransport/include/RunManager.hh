@@ -1,5 +1,4 @@
-#ifndef RunManager_hh
-#define RunManager_hh 1
+#pragma once
 
 #include "Global.hh"
 #include "Master.hh"
@@ -41,5 +40,3 @@ private:
     void InitialReport() const;
     void FinalReport() const;
 };
-
-#endif

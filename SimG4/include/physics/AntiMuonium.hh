@@ -1,4 +1,4 @@
-/* #pragma once
+#pragma once
 
 #include "SimG4Global.hh"
 #include "G4ParticleDefinition.hh"
@@ -11,7 +11,5 @@ private:
 
 public:
     static MACE::SimG4::Physics::AntiMuonium* Definition();
-    static MACE::SimG4::Physics::AntiMuonium* MuoniumDefinition();
+    static MACE::SimG4::Physics::AntiMuonium* AntiMuoniumDefinition();
 };
-
- */

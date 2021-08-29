@@ -1,8 +1,7 @@
-#ifndef Track_hh
-#define Track_hh 1
+#pragma once
 
 #include "Global.hh"
-#include "Muonium.hh"
+#include "Step.hh"
 #include "MonteCarlo.hh"
 
 namespace MACE {
@@ -17,8 +16,8 @@ namespace MACE {
 }
 
 class MACE::SimMTransport::Track {
-private:
-    Muonium* const    fMuonium;
+protected:
+    Step* const       fCurrentStep;
     MonteCarlo* const fMonteCarlo;
 
     double_t          fVertexTime;
@@ -28,6 +27,9 @@ private:
     bool              fEscaping;
 
     TrackStatus       fStatus;
+
+    Global* global;
+    Analysis* analysis;
 
 public:
     Track();
@@ -39,15 +41,14 @@ public:
     void Initialize();
     void Stepping();
 
-    const Muonium* GetMuonium() const { return fMuonium; }
+    const    Step* GetCurrentStep() const { return fCurrentStep; }
     double_t       GetVertexTime() const { return fVertexTime; }
     const Vector3& GetVertexPosition() const { return fVertexPosition; }
     bool           IsEscaping() const { return fEscaping; }
     TrackStatus    GetTrackStatus() const { return fStatus; }
 
 private:
+    bool Target(double_t x, double_t y, double_t z) { return (*global->Target())(x, y, z) > 0.5; }
+    double_t MeanFreePath(double_t x, double_t y, double_t z) { return (*global->MeanFreePath())(x, y, z); }
     void EscapingDoIt();
 };
-
-#endif
-

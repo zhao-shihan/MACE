@@ -1,5 +1,4 @@
-#ifndef Master_hh
-#define Master_hh 1
+#pragma once
 
 #include "Global.hh"
 
@@ -27,6 +26,3 @@ public:
 private:
     void ProgressReport(size_t jobSend) const;
 };
-
-#endif
-

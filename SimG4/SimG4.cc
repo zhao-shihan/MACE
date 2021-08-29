@@ -37,7 +37,6 @@ int main(int argc, char** argv) {
     } else {
         // mpirun
         auto g4MPIManager = new G4MPImanager(argc, argv);
-        runManager->SetVerboseLevel(0);
         g4MPIManager->GetMPIsession()->SessionStart();
         delete g4MPIManager;
     }
