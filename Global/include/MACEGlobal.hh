@@ -38,10 +38,11 @@ namespace MACE {
         class DetectorConstruction;
         // physics
         namespace Physics {
-            class AntiMuonium; // ToDo
-            class AntiMuoniumDecayChannel; // ToDo
+            class AntiMuonium;
+            class AntiMuoniumDecayChannel;
             class Muonium;
             class MuoniumDecayChannel;
+            // class MuoniumLFV;
             class MuoniumPhysics;
             class MuoniumProduction;
             class MuoniumTransport;

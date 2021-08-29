@@ -192,7 +192,7 @@ G4DecayProducts* AntiMuoniumDecayChannel::DecayIt(G4double) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel() > 1) {
         G4cout <<
-            "MuoniumDecayChannel::DecayIt\n"
+            "AntiMuoniumDecayChannel::DecayIt\n"
             "\tCreate decay products in rest frame." << G4endl;
         products->DumpInfo();
     }

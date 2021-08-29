@@ -4,6 +4,7 @@
 #include "physics/MuoniumPhysics.hh"
 #include "physics/AntiMuonium.hh"
 #include "physics/Muonium.hh"
+// #include "physics/MuoniumLFV.hh"
 #include "physics/MuoniumProduction.hh"
 #include "physics/MuoniumTransport.hh"
 
@@ -25,4 +26,8 @@ void MuoniumPhysics::ConstructProcess() {
 
     auto muonium = Muonium::Definition()->GetProcessManager();
     muonium->AddContinuousProcess(new MuoniumTransport());
+    // muonium->AddDiscreteProcess(new MuoniumLFV());
+
+    auto antiMuonium = AntiMuonium::Definition()->GetProcessManager();
+    antiMuonium->AddContinuousProcess(new MuoniumTransport());
 }

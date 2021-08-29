@@ -16,4 +16,5 @@ public:
 private:
     G4ParticleChange* const fParticleChange;
     const G4double fMeanLifeTime = 1.46467 * us; // 60%
+    G4double fConversionProbability = 1.0;
 };

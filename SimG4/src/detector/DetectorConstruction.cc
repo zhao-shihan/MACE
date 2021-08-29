@@ -68,9 +68,9 @@ void MACE::SimG4::DetectorConstruction::ConstructGeometry() {
     // auto materialPlexiGlass = nist->FindOrBuildMaterial("G4_PLEXIGLASS");
     // auto materialMylar = nist->FindOrBuildMaterial("G4_MYLAR");
     auto materialSilicaAerogel = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30 * mg / cm3);
-    auto materialMWPC = new G4Material("MWPC", 0.5 * g / cm3, 2);
-    materialMWPC->AddElement(nist->FindOrBuildElement("Ar"), 0.8);
-    materialMWPC->AddElement(nist->FindOrBuildElement("Al"), 0.2);
+    auto materialMWPC = new G4Material("MWPC", 0.1 * g / cm3, 1);
+    materialMWPC->AddElement(nist->FindOrBuildElement("Ar"), 1);
+    // materialMWPC->AddElement(nist->FindOrBuildElement("Al"), 0.05);
     // auto materialAl = nist->FindOrBuildMaterial("G4_Al");
     auto materialCu = nist->FindOrBuildMaterial("G4_Cu");
     // auto materialGraphite = nist->FindOrBuildMaterial("G4_GRAPHITE");
