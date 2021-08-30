@@ -20,7 +20,7 @@ public:
 private:
     G4double fInnerRadius = 8.2 * cm;
     G4double fOuterRadius = 32 * cm;
-    G4double fInnerEffectiveLength = 38 * cm;
+    G4double fInnerEffectiveLength = 20 * cm;
     G4double fOuterEffectiveLength = 80 * cm;
     G4double fThickness = 1 * cm;
 };

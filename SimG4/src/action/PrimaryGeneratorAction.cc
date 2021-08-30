@@ -22,7 +22,7 @@ constexpr G4double energySpreadRMS = 5 * perCent;
 void MACE::SimG4::PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
     constexpr G4double avgTimeInterval = 1 / beamFlux;
     fParticleGun->SetParticleTime(avgTimeInterval * (event->GetEventID() + G4RandFlat::shoot()));
-    fParticleGun->SetParticlePosition(G4ThreeVector(G4RandGauss::shoot(0, beamWidthRMS), G4RandGauss::shoot(0, beamWidthRMS), -0.5 * m));
+    fParticleGun->SetParticlePosition(G4ThreeVector(G4RandGauss::shoot(0, beamWidthRMS), G4RandGauss::shoot(0, beamWidthRMS), -1.5 * m));
     fParticleGun->SetParticleEnergy(G4RandGauss::shoot(meanEnergy, energySpreadRMS * meanEnergy));
     fParticleGun->GeneratePrimaryVertex(event);
 }

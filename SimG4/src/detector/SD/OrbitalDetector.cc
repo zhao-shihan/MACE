@@ -2,37 +2,36 @@
 #include "G4Step.hh"
 #include "G4SDManager.hh"
 
-#include "detector/SD/Spectrometer.hh"
+#include "detector/SD/OrbitalDetector.hh"
 
 using namespace MACE::SimG4::SD;
 using namespace MACE::SimG4::Hit;
 
-Spectrometer::Spectrometer(const G4String& SDName, const G4String& hitsCollectionName) :
+OrbitalDetector::OrbitalDetector(const G4String& SDName, const G4String& hitsCollectionName) :
     G4VSensitiveDetector(SDName),
     fHitsCollection(nullptr) {
     collectionName.insert(hitsCollectionName);
-    if (SpectrometerHitAllocator == nullptr) {
-        SpectrometerHitAllocator = new G4Allocator<SpectrometerHit>();
+    if (OrbitalDetectorHitAllocator == nullptr) {
+        OrbitalDetectorHitAllocator = new G4Allocator<OrbitalDetectorHit>();
     }
 }
 
-Spectrometer::~Spectrometer() {}
+OrbitalDetector::~OrbitalDetector() {}
 
-void Spectrometer::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
-    fHitsCollection = new SpectrometerHitsCollection(SensitiveDetectorName, collectionName[0]);
+void OrbitalDetector::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
+    fHitsCollection = new OrbitalDetectorHitsCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-G4bool Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
+G4bool OrbitalDetector::ProcessHits(G4Step* step, G4TouchableHistory*) {
     if (!(step->IsFirstStepInVolume() && step->GetTrack()->GetCurrentStepNumber() > 1 &&
         step->GetTrack()->GetDefinition()->GetPDGCharge() != 0)) {
         return false;
     }
     fHitsCollection->insert(
-        new SpectrometerHit(
+        new OrbitalDetectorHit(
             step->GetTrack()->GetTrackID(),
-            step->GetPreStepPoint()->GetPhysicalVolume()->GetCopyNo(),
             step->GetTrack()->GetGlobalTime() - step->GetTrack()->GetLocalTime(),
             step->GetTrack()->GetVertexPosition(),
             step->GetPreStepPoint()->GetGlobalTime(),
@@ -42,4 +41,4 @@ G4bool Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
     return true;
 }
 
-void Spectrometer::EndOfEvent(G4HCofThisEvent*) {}
+void OrbitalDetector::EndOfEvent(G4HCofThisEvent*) {}

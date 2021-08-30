@@ -30,10 +30,15 @@ namespace MACE {
             class VolumeSet;
             class World;
         }
+        namespace Hit {
+            class CalorimeterHit;
+            class OrbitalDetectorHit;
+            class SpectrometerHit;
+        }
         namespace SD {
-            class Calorimeter; // ToDo
-            class OrbitalDetector; // ToDo
-            class Spectrometer; // ToDo
+            class Calorimeter;
+            class OrbitalDetector;
+            class Spectrometer;
         }
         class DetectorConstruction;
         // physics

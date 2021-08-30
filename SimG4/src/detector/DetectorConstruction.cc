@@ -1,6 +1,9 @@
 #include "G4NistManager.hh"
 
 #include "detector/DetectorConstruction.hh"
+
+using namespace MACE::SimG4;
+
 #include "detector/geometry/AcceleratorField.hh"
 #include "detector/geometry/Calorimeter.hh"
 #include "detector/geometry/Collimator.hh"
@@ -17,25 +20,25 @@
 #include "detector/geometry/VerticalTransportField.hh"
 #include "detector/geometry/World.hh"
 
-MACE::SimG4::DetectorConstruction::DetectorConstruction() :
+DetectorConstruction::DetectorConstruction() :
     G4VUserDetectorConstruction(),
-    fAcceleratorField(new MACE::SimG4::Geometry::AcceleratorField()),
-    fCalorimeter(new MACE::SimG4::Geometry::Calorimeter()),
-    fCollimator(new MACE::SimG4::Geometry::Collimator()),
-    fOrbitalDetector(new MACE::SimG4::Geometry::OrbitalDetector),
-    fOrbitalDetectorShellField(new MACE::SimG4::Geometry::OrbitalDetectorShellField()),
-    fOrbitalDetectorShield(new MACE::SimG4::Geometry::OrbitalDetectorShield()),
-    fParallelTransportField(new MACE::SimG4::Geometry::ParallelTransportField()),
-    fSelectField(new MACE::SimG4::Geometry::SelectField()),
-    fSpectormeter(new MACE::SimG4::Geometry::Spectrometer()),
-    fSpectormeterField(new MACE::SimG4::Geometry::SpectrometerField()),
-    fSpectrometerShield(new MACE::SimG4::Geometry::SpectrometerShield()),
-    fTarget(new MACE::SimG4::Geometry::Target()),
-    fTurnField(new MACE::SimG4::Geometry::TurnField()),
-    fVerticalTransportField(new MACE::SimG4::Geometry::VerticalTransportField()),
-    fWorld(new MACE::SimG4::Geometry::World) {}
+    fAcceleratorField(new Geometry::AcceleratorField()),
+    fCalorimeter(new Geometry::Calorimeter()),
+    fCollimator(new Geometry::Collimator()),
+    fOrbitalDetector(new Geometry::OrbitalDetector),
+    fOrbitalDetectorShellField(new Geometry::OrbitalDetectorShellField()),
+    fOrbitalDetectorShield(new Geometry::OrbitalDetectorShield()),
+    fParallelTransportField(new Geometry::ParallelTransportField()),
+    fSelectField(new Geometry::SelectField()),
+    fSpectormeter(new Geometry::Spectrometer()),
+    fSpectormeterField(new Geometry::SpectrometerField()),
+    fSpectrometerShield(new Geometry::SpectrometerShield()),
+    fTarget(new Geometry::Target()),
+    fTurnField(new Geometry::TurnField()),
+    fVerticalTransportField(new Geometry::VerticalTransportField()),
+    fWorld(new Geometry::World) {}
 
-MACE::SimG4::DetectorConstruction::~DetectorConstruction() {
+DetectorConstruction::~DetectorConstruction() {
     delete fAcceleratorField;
     delete fCalorimeter;
     delete fCollimator;
@@ -53,13 +56,14 @@ MACE::SimG4::DetectorConstruction::~DetectorConstruction() {
     delete fWorld;
 }
 
-G4VPhysicalVolume* MACE::SimG4::DetectorConstruction::Construct() {
+G4VPhysicalVolume* DetectorConstruction::Construct() {
     ConstructGeometry();
+    ConstructSD();
     ConstructField();
     return fWorld->GetPhysicalVolume();
 }
 
-void MACE::SimG4::DetectorConstruction::ConstructGeometry() {
+void DetectorConstruction::ConstructGeometry() {
     //
     // materials
     //
@@ -68,9 +72,7 @@ void MACE::SimG4::DetectorConstruction::ConstructGeometry() {
     // auto materialPlexiGlass = nist->FindOrBuildMaterial("G4_PLEXIGLASS");
     // auto materialMylar = nist->FindOrBuildMaterial("G4_MYLAR");
     auto materialSilicaAerogel = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30 * mg / cm3);
-    auto materialMWPC = new G4Material("MWPC", 0.1 * g / cm3, 1);
-    materialMWPC->AddElement(nist->FindOrBuildElement("Ar"), 1);
-    // materialMWPC->AddElement(nist->FindOrBuildElement("Al"), 0.05);
+    auto materialAr = nist->FindOrBuildMaterial("G4_Ar");
     // auto materialAl = nist->FindOrBuildMaterial("G4_Al");
     auto materialCu = nist->FindOrBuildMaterial("G4_Cu");
     // auto materialGraphite = nist->FindOrBuildMaterial("G4_GRAPHITE");
@@ -92,12 +94,39 @@ void MACE::SimG4::DetectorConstruction::ConstructGeometry() {
     fOrbitalDetectorShellField->Make(materialVacuum, fWorld->GetPhysicalVolume());
     // entities
     fTarget->Make(materialSilicaAerogel, fAcceleratorField->GetPhysicalVolume());
-    fSpectormeter->Make(materialMWPC, fSpectormeterField->GetPhysicalVolume());
+    fSpectormeter->Make(materialAr, fSpectormeterField->GetPhysicalVolume());
     fCollimator->Make(materialCu, fVerticalTransportField->GetPhysicalVolume());
     fOrbitalDetector->Make(materialMCP, fOrbitalDetectorShellField->GetPhysicalVolume());
     fCalorimeter->Make(materialCsI, fOrbitalDetectorShellField->GetPhysicalVolume());
     fSpectrometerShield->Make(materialLead, fWorld->GetPhysicalVolume());
     fOrbitalDetectorShield->Make(materialLead, fWorld->GetPhysicalVolume());
+}
+
+#include "G4SDManager.hh"
+
+#include "detector/SD/Calorimeter.hh"
+#include "detector/SD/OrbitalDetector.hh"
+#include "detector/SD/Spectrometer.hh"
+
+void DetectorConstruction::ConstructSD() {
+    auto SDManager = G4SDManager::GetSDMpointer();
+
+    auto calorimeterName = fCalorimeter->GetLogicalVolume()->GetName();
+    auto calorimeterSD = new SD::Calorimeter(calorimeterName, calorimeterName + "HC");
+    SDManager->AddNewDetector(calorimeterSD);
+    SetSensitiveDetector(fCalorimeter->GetLogicalVolume(), calorimeterSD);
+
+    auto orbitalDetectorName = fOrbitalDetector->GetLogicalVolume()->GetName();
+    auto orbitalDetectorSD = new SD::OrbitalDetector(orbitalDetectorName, orbitalDetectorName + "HC");
+    SDManager->AddNewDetector(orbitalDetectorSD);
+    SetSensitiveDetector(fOrbitalDetector->GetLogicalVolume(), orbitalDetectorSD);
+
+    auto spectrometerName = fSpectormeter->GetLogicalVolume()->GetName();
+    auto spectrometerSD = new SD::Spectrometer(spectrometerName, spectrometerName + "HC");
+    SDManager->AddNewDetector(spectrometerSD);
+    for (size_t i = 0; i < fSpectormeter->GetVolumeSetCount(); ++i) {
+        SetSensitiveDetector(fSpectormeter->GetLogicalVolume(i), spectrometerSD);
+    }
 }
 
 #include "G4FieldManager.hh"
@@ -123,7 +152,7 @@ static void RegisterFields(G4LogicalVolume* logicalVolume, Field_t* field, G4dou
     logicalVolume->SetFieldManager(new G4FieldManager(field, chordFinder), true);
 }
 
-void MACE::SimG4::DetectorConstruction::ConstructField() {
+void DetectorConstruction::ConstructField() {
     constexpr G4double B = 0.1 * tesla;
     auto parallelBField = new G4UniformMagField(G4ThreeVector(0, 0, B));
     auto verticalBField = new G4UniformMagField(G4ThreeVector(B, 0, 0));
@@ -138,11 +167,11 @@ void MACE::SimG4::DetectorConstruction::ConstructField() {
     >(fSpectormeterField->GetLogicalVolume(), parallelBField, hMin, 6);
 
     RegisterFields <
-        MACE::SimG4::Field::AcceleratorField,
+        Field::AcceleratorField,
         G4EqMagElectricField,
         G4DormandPrince745,
         G4IntegrationDriver<G4DormandPrince745>
-    >(fAcceleratorField->GetLogicalVolume(), new MACE::SimG4::Field::AcceleratorField(), hMin, 8);
+    >(fAcceleratorField->GetLogicalVolume(), new Field::AcceleratorField(), hMin, 8);
 
     RegisterFields <
         G4UniformMagField,
@@ -152,18 +181,18 @@ void MACE::SimG4::DetectorConstruction::ConstructField() {
     >(fParallelTransportField->GetLogicalVolume(), parallelBField, hMin, 6);
 
     RegisterFields <
-        MACE::SimG4::Field::SelectField,
+        Field::SelectField,
         G4EqMagElectricField,
         G4DormandPrince745,
         G4IntegrationDriver<G4DormandPrince745>
-    >(fSelectField->GetLogicalVolume(), new MACE::SimG4::Field::SelectField(), hMin, 8);
+    >(fSelectField->GetLogicalVolume(), new Field::SelectField(), hMin, 8);
 
     RegisterFields <
-        MACE::SimG4::Field::TurnField,
-        G4TMagFieldEquation<MACE::SimG4::Field::TurnField>,
-        G4TDormandPrince45<G4TMagFieldEquation<MACE::SimG4::Field::TurnField>>,
-        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<MACE::SimG4::Field::TurnField>>>
-    >(fTurnField->GetLogicalVolume(), new MACE::SimG4::Field::TurnField(), hMin, 6);
+        Field::TurnField,
+        G4TMagFieldEquation<Field::TurnField>,
+        G4TDormandPrince45<G4TMagFieldEquation<Field::TurnField>>,
+        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<Field::TurnField>>>
+    >(fTurnField->GetLogicalVolume(), new Field::TurnField(), hMin, 6);
 
     RegisterFields <
         G4UniformMagField,

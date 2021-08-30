@@ -1,4 +1,3 @@
-#include "G4Track.hh"
 #include "G4RunManager.hh"
 
 #include "detector/geometry/Target.hh"
