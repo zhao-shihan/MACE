@@ -11,7 +11,7 @@ public:
 
     void   Initialize(G4HCofThisEvent* hitsCollection) override;
     G4bool ProcessHits(G4Step* step, G4TouchableHistory*) override;
-    void   EndOfEvent(G4HCofThisEvent* hitsCollection) override;
+    void   EndOfEvent(G4HCofThisEvent*) override;
 
 private:
     Hit::OrbitalDetectorHitsCollection* fHitsCollection;

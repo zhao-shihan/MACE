@@ -1,16 +1,18 @@
 #include "action/ActionInitialization.hh"
 #include "action/PrimaryGeneratorAction.hh"
-// #include "useraction/MACERunAction.hh"
+#include "action/RunAction.hh"
 // #include "useraction/MACEEventAction.hh"
 // #include "useraction/MACESteppingAction.hh"
 
-MACE::SimG4::ActionInitialization::ActionInitialization()
-    : G4VUserActionInitialization() {}
+using namespace MACE::SimG4;
 
-void MACE::SimG4::ActionInitialization::Build() const {
-    SetUserAction(new MACE::SimG4::PrimaryGeneratorAction);
+ActionInitialization::ActionInitialization() :
+    G4VUserActionInitialization() {}
+
+void ActionInitialization::Build() const {
+    SetUserAction(new PrimaryGeneratorAction);
     // SetUserAction(new MACEEventAction);
-    // SetUserAction(new MACERunAction());
+    SetUserAction(new RunAction());
     // SetUserAction(new MACESteppingAction());
 }
 

@@ -2,6 +2,7 @@
 #include "G4Step.hh"
 #include "G4SDManager.hh"
 #include "G4Gamma.hh"
+#include "g4analysis.hh"
 
 #include "detector/SD/Calorimeter.hh"
 
@@ -26,20 +27,31 @@ void Calorimeter::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
 }
 
 G4bool Calorimeter::ProcessHits(G4Step* step, G4TouchableHistory*) {
-    if (!(step->IsFirstStepInVolume() && step->GetTrack()->GetCurrentStepNumber() > 1 &&
-        (step->GetTrack()->GetDefinition()->GetPDGCharge() != 0 || step->GetTrack()->GetDefinition() == G4Gamma::Definition()) &&
-        step->GetPreStepPoint()->GetKineticEnergy() > 461 * keV &&
-        step->GetPreStepPoint()->GetKineticEnergy() < 561 * keV)) {
+    const auto* const track = step->GetTrack();
+    const auto* const preStepPoint = step->GetPreStepPoint();
+    if (!(step->IsFirstStepInVolume() && track->GetCurrentStepNumber() > 1 &&
+        (track->GetDefinition()->GetPDGCharge() != 0 || track->GetDefinition() == G4Gamma::Definition()) &&
+        preStepPoint->GetKineticEnergy() > 461 * keV && preStepPoint->GetKineticEnergy() < 561 * keV)) {
         return false;
     }
     fHitsCollection->insert(
         new CalorimeterHit(
-            step->GetTrack()->GetTrackID(),
-            step->GetPreStepPoint()->GetGlobalTime(),
-            step->GetPreStepPoint()->GetPosition()
+            track->GetTrackID(),
+            preStepPoint->GetGlobalTime(),
+            preStepPoint->GetKineticEnergy()
         )
     );
     return true;
 }
 
-void Calorimeter::EndOfEvent(G4HCofThisEvent*) {}
+void Calorimeter::EndOfEvent(G4HCofThisEvent*) {
+    auto* const analysis = G4AnalysisManager::Instance();
+    for (size_t i = 0; i < fHitsCollection->GetSize(); ++i) {
+        const auto* const hit = static_cast<CalorimeterHit*>(fHitsCollection->GetHit(i));
+        constexpr G4int ntupleID = 0;
+        analysis->FillNtupleIColumn(ntupleID, 0, hit->TrackID);
+        analysis->FillNtupleFColumn(ntupleID, 1, hit->HitTime);
+        analysis->FillNtupleFColumn(ntupleID, 2, hit->Energy);
+        analysis->AddNtupleRow(ntupleID);
+    }
+}

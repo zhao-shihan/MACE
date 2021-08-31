@@ -1,6 +1,7 @@
 #include "G4HCofThisEvent.hh"
 #include "G4Step.hh"
 #include "G4SDManager.hh"
+#include "g4analysis.hh"
 
 #include "detector/SD/OrbitalDetector.hh"
 
@@ -25,20 +26,40 @@ void OrbitalDetector::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
 }
 
 G4bool OrbitalDetector::ProcessHits(G4Step* step, G4TouchableHistory*) {
-    if (!(step->IsFirstStepInVolume() && step->GetTrack()->GetCurrentStepNumber() > 1 &&
-        step->GetTrack()->GetDefinition()->GetPDGCharge() != 0)) {
+    const auto* const track = step->GetTrack();
+    if (!(step->IsFirstStepInVolume() && track->GetCurrentStepNumber() > 1 &&
+        track->GetDefinition()->GetPDGCharge() != 0)) {
         return false;
     }
+    const auto* const preStepPoint = step->GetPreStepPoint();
+    const auto& detectorPosition = preStepPoint->GetTouchable()->GetTranslation();
+    const auto* const detectorRotation = preStepPoint->GetTouchable()->GetRotation();
     fHitsCollection->insert(
         new OrbitalDetectorHit(
-            step->GetTrack()->GetTrackID(),
-            step->GetTrack()->GetGlobalTime() - step->GetTrack()->GetLocalTime(),
-            step->GetTrack()->GetVertexPosition(),
-            step->GetPreStepPoint()->GetGlobalTime(),
-            step->GetPreStepPoint()->GetPosition()
+            track->GetTrackID(),
+            track->GetGlobalTime() - track->GetLocalTime(),
+            track->GetVertexPosition(),
+            preStepPoint->GetGlobalTime(),
+            detectorRotation->inverse() * (preStepPoint->GetPosition() - detectorPosition)
         )
     );
     return true;
 }
 
-void OrbitalDetector::EndOfEvent(G4HCofThisEvent*) {}
+void OrbitalDetector::EndOfEvent(G4HCofThisEvent*) {
+    auto* const analysis = G4AnalysisManager::Instance();
+    for (size_t i = 0; i < fHitsCollection->GetSize(); ++i) {
+        const auto* const hit = static_cast<OrbitalDetectorHit*>(fHitsCollection->GetHit(i));
+        constexpr G4int ntupleID = 1;
+        analysis->FillNtupleIColumn(ntupleID, 0, hit->TrackID);
+        analysis->FillNtupleFColumn(ntupleID, 1, hit->VertexTime);
+        analysis->FillNtupleFColumn(ntupleID, 2, hit->VertexPosition.x());
+        analysis->FillNtupleFColumn(ntupleID, 3, hit->VertexPosition.y());
+        analysis->FillNtupleFColumn(ntupleID, 4, hit->VertexPosition.z());
+        analysis->FillNtupleFColumn(ntupleID, 5, hit->HitTime);
+        analysis->FillNtupleFColumn(ntupleID, 6, hit->HitPosition.x());
+        analysis->FillNtupleFColumn(ntupleID, 7, hit->HitPosition.y());
+        analysis->FillNtupleFColumn(ntupleID, 8, hit->HitPosition.z());
+        analysis->AddNtupleRow(ntupleID);
+    }
+}

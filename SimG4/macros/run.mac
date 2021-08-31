@@ -1,10 +1,2 @@
-#EMPhysics parameter
-#/MACEPhysics/SetMuonRareDecayMode 3.4e-5
-#/MACEPhysics/SetMuMuConversion 0.
-#/MACEPhysics/SetMuFormation 1
-
-#filename
-#/MACERun/SetFileName test
-
 /run/initialize
 /run/beamOn 10000

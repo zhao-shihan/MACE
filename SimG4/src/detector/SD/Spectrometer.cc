@@ -1,6 +1,7 @@
 #include "G4HCofThisEvent.hh"
 #include "G4Step.hh"
 #include "G4SDManager.hh"
+#include "g4analysis.hh"
 
 #include "detector/SD/Spectrometer.hh"
 
@@ -25,21 +26,40 @@ void Spectrometer::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
 }
 
 G4bool Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
-    if (!(step->IsFirstStepInVolume() && step->GetTrack()->GetCurrentStepNumber() > 1 &&
-        step->GetTrack()->GetDefinition()->GetPDGCharge() != 0)) {
+    const auto* const track = step->GetTrack();
+    if (!(step->IsFirstStepInVolume() && track->GetCurrentStepNumber() > 1 &&
+        track->GetDefinition()->GetPDGCharge() != 0)) {
         return false;
     }
+    const auto* const preStepPoint = step->GetPreStepPoint();
     fHitsCollection->insert(
         new SpectrometerHit(
-            step->GetTrack()->GetTrackID(),
-            step->GetPreStepPoint()->GetPhysicalVolume()->GetCopyNo(),
-            step->GetTrack()->GetGlobalTime() - step->GetTrack()->GetLocalTime(),
-            step->GetTrack()->GetVertexPosition(),
-            step->GetPreStepPoint()->GetGlobalTime(),
-            step->GetPreStepPoint()->GetPosition()
+            track->GetTrackID(),
+            preStepPoint->GetTouchable()->GetCopyNumber(),
+            track->GetGlobalTime() - track->GetLocalTime(),
+            track->GetVertexPosition(),
+            preStepPoint->GetGlobalTime(),
+            preStepPoint->GetPosition()
         )
     );
     return true;
 }
 
-void Spectrometer::EndOfEvent(G4HCofThisEvent*) {}
+void Spectrometer::EndOfEvent(G4HCofThisEvent*) {
+    auto* const analysis = G4AnalysisManager::Instance();
+    for (size_t i = 0; i < fHitsCollection->GetSize(); ++i) {
+        const auto* const hit = static_cast<SpectrometerHit*>(fHitsCollection->GetHit(i));
+        constexpr G4int ntupleID = 2;
+        analysis->FillNtupleIColumn(ntupleID, 0, hit->TrackID);
+        analysis->FillNtupleIColumn(ntupleID, 1, hit->ChamberID);
+        analysis->FillNtupleFColumn(ntupleID, 2, hit->VertexTime);
+        analysis->FillNtupleFColumn(ntupleID, 3, hit->VertexPosition.x());
+        analysis->FillNtupleFColumn(ntupleID, 4, hit->VertexPosition.y());
+        analysis->FillNtupleFColumn(ntupleID, 5, hit->VertexPosition.z());
+        analysis->FillNtupleFColumn(ntupleID, 6, hit->HitTime);
+        analysis->FillNtupleFColumn(ntupleID, 7, hit->HitPosition.x());
+        analysis->FillNtupleFColumn(ntupleID, 8, hit->HitPosition.y());
+        analysis->FillNtupleFColumn(ntupleID, 9, hit->HitPosition.z());
+        analysis->AddNtupleRow(ntupleID);
+    }
+}

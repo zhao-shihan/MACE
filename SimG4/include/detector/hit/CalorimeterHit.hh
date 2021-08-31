@@ -12,7 +12,7 @@ public:
     CalorimeterHit(
         G4int trackID,
         G4double hitTime,
-        const G4ThreeVector& hitPosition);
+        G4double Energy);
     ~CalorimeterHit();
 
     inline void* operator new(size_t);
@@ -23,7 +23,7 @@ public:
 
     const G4int         TrackID;
     const G4double      HitTime;
-    const G4ThreeVector HitPosition;
+    const G4double      Energy;
 };
 
 namespace MACE {
