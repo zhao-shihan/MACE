@@ -1,2 +1,4 @@
 /run/initialize
+/run/printProgress 10
 /run/beamOn 10000
+/mpi/status

@@ -4,7 +4,9 @@ namespace MACE {
     namespace SimG4 {
         // action
         class ActionInitialization;
+        class EventAction;
         class PrimaryGeneratorAction;
+        class RunAction;
         // detector
         namespace Field {
             class AcceleratorField;
@@ -53,6 +55,7 @@ namespace MACE {
             class MuoniumTransport;
             class PhysicsList;
         }
+        class Analysis;
     }
     namespace SimMTransport {
         class Analysis;

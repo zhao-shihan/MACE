@@ -4,7 +4,7 @@
 
 #include "SimG4Global.hh"
 
-class RunAction : public G4UserRunAction {
+class MACE::SimG4::RunAction : public G4UserRunAction {
 public:
     RunAction();
     ~RunAction();

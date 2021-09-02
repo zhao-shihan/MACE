@@ -14,16 +14,17 @@ MACE::SimG4::PrimaryGeneratorAction::~PrimaryGeneratorAction() {
     delete fParticleGun;
 }
 
-constexpr G4double beamFlux = 8e6 / s;
-constexpr G4double beamWidthRMS = 5 * mm;
-constexpr G4double meanEnergy = 1.5 * MeV;
-constexpr G4double energySpreadRMS = 5 * perCent;
-
 void MACE::SimG4::PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
-    constexpr G4double avgTimeInterval = 1 / beamFlux;
-    fParticleGun->SetParticleTime(avgTimeInterval * (event->GetEventID() + G4RandFlat::shoot()));
-    fParticleGun->SetParticlePosition(G4ThreeVector(G4RandGauss::shoot(0, beamWidthRMS), G4RandGauss::shoot(0, beamWidthRMS), -1.5 * m));
-    fParticleGun->SetParticleEnergy(G4RandGauss::shoot(meanEnergy, energySpreadRMS * meanEnergy));
-    fParticleGun->GeneratePrimaryVertex(event);
+    const G4int count = round(fPlusePeakInterval * fFlux);
+    const G4double timeAtPeak = event->GetEventID() * fPlusePeakInterval;
+    auto* const vertexTime = new G4double[count];
+    G4RandGauss::shootArray(count, vertexTime, timeAtPeak, fPluseSpreadRMS);
+    std::sort(vertexTime, vertexTime + count);
+    for (G4int i = 0; i < count; ++i) {
+        fParticleGun->SetParticleTime(vertexTime[i]);
+        fParticleGun->SetParticlePosition(G4ThreeVector(G4RandGauss::shoot(0, fWidthRMS), G4RandGauss::shoot(0, fWidthRMS), -1.5 * m));
+        fParticleGun->SetParticleEnergy(G4RandGauss::shoot(fEnergy, fEnergySpreadRMS));
+        fParticleGun->GeneratePrimaryVertex(event);
+    }
+    delete vertexTime;
 }
-

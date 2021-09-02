@@ -7,5 +7,5 @@
 class MACE::SimG4::ActionInitialization : public G4VUserActionInitialization {
 public:
     ActionInitialization();
-    virtual void Build() const;
+    void Build() const override;
 };

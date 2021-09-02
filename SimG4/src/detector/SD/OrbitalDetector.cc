@@ -1,9 +1,9 @@
 #include "G4HCofThisEvent.hh"
 #include "G4Step.hh"
 #include "G4SDManager.hh"
-#include "g4analysis.hh"
 
 #include "detector/SD/OrbitalDetector.hh"
+#include "Analysis.hh"
 
 using namespace MACE::SimG4::SD;
 using namespace MACE::SimG4::Hit;
@@ -47,19 +47,5 @@ G4bool OrbitalDetector::ProcessHits(G4Step* step, G4TouchableHistory*) {
 }
 
 void OrbitalDetector::EndOfEvent(G4HCofThisEvent*) {
-    auto* const analysis = G4AnalysisManager::Instance();
-    for (size_t i = 0; i < fHitsCollection->GetSize(); ++i) {
-        const auto* const hit = static_cast<OrbitalDetectorHit*>(fHitsCollection->GetHit(i));
-        constexpr G4int ntupleID = 1;
-        analysis->FillNtupleIColumn(ntupleID, 0, hit->TrackID);
-        analysis->FillNtupleFColumn(ntupleID, 1, hit->VertexTime);
-        analysis->FillNtupleFColumn(ntupleID, 2, hit->VertexPosition.x());
-        analysis->FillNtupleFColumn(ntupleID, 3, hit->VertexPosition.y());
-        analysis->FillNtupleFColumn(ntupleID, 4, hit->VertexPosition.z());
-        analysis->FillNtupleFColumn(ntupleID, 5, hit->HitTime);
-        analysis->FillNtupleFColumn(ntupleID, 6, hit->HitPosition.x());
-        analysis->FillNtupleFColumn(ntupleID, 7, hit->HitPosition.y());
-        analysis->FillNtupleFColumn(ntupleID, 8, hit->HitPosition.z());
-        analysis->AddNtupleRow(ntupleID);
-    }
+    Analysis::Instance()->SubmitOrbitalDetectorHC(fHitsCollection);
 }
