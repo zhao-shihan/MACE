@@ -17,7 +17,7 @@ private:
     AnalysisMessenger& operator=(const AnalysisMessenger&) = delete;
 
 public:
-    void SetAnalysis(Analysis* pAnalysis) { fpAnalysis = pAnalysis; }
+    void Set(Analysis* pAnalysis) { fpAnalysis = pAnalysis; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 

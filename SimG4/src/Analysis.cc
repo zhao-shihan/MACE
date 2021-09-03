@@ -19,7 +19,7 @@ Analysis::Analysis() :
     fpCalorimeterHC(nullptr),
     fpOrbitalDetectorHC(nullptr),
     fpSpectrometerHC(nullptr) {
-    AnalysisMessenger::Instance()->SetAnalysis(this);
+    AnalysisMessenger::Instance()->Set(this);
 }
 
 Analysis::~Analysis() {

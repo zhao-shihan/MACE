@@ -11,7 +11,7 @@ using namespace MACE::SimG4;
 #include "detector/geometry/OrbitalDetectorShellField.hh"
 #include "detector/geometry/OrbitalDetectorShield.hh"
 #include "detector/geometry/ParallelTransportField.hh"
-#include "detector/geometry/SelectField.hh"
+#include "detector/geometry/SelectorField.hh"
 #include "detector/geometry/Spectrometer.hh"
 #include "detector/geometry/SpectrometerField.hh"
 #include "detector/geometry/SpectrometerShield.hh"
@@ -29,7 +29,7 @@ DetectorConstruction::DetectorConstruction() :
     fOrbitalDetectorShellField(new Geometry::OrbitalDetectorShellField()),
     fOrbitalDetectorShield(new Geometry::OrbitalDetectorShield()),
     fParallelTransportField(new Geometry::ParallelTransportField()),
-    fSelectField(new Geometry::SelectField()),
+    fSelectorField(new Geometry::SelectorField()),
     fSpectormeter(new Geometry::Spectrometer()),
     fSpectormeterField(new Geometry::SpectrometerField()),
     fSpectrometerShield(new Geometry::SpectrometerShield()),
@@ -46,7 +46,7 @@ DetectorConstruction::~DetectorConstruction() {
     delete fOrbitalDetectorShellField;
     delete fOrbitalDetectorShield;
     delete fParallelTransportField;
-    delete fSelectField;
+    delete fSelectorField;
     delete fSpectormeter;
     delete fSpectormeterField;
     delete fSpectrometerShield;
@@ -88,7 +88,7 @@ void DetectorConstruction::ConstructGeometry() {
     fSpectormeterField->Make(materialVacuum, fWorld->GetPhysicalVolume());
     fAcceleratorField->Make(materialVacuum, fSpectormeterField->GetPhysicalVolume());
     fParallelTransportField->Make(materialVacuum, fWorld->GetPhysicalVolume());
-    fSelectField->Make(materialVacuum, fParallelTransportField->GetPhysicalVolume());
+    fSelectorField->Make(materialVacuum, fParallelTransportField->GetPhysicalVolume());
     fTurnField->Make(materialVacuum, fWorld->GetPhysicalVolume());
     fVerticalTransportField->Make(materialVacuum, fWorld->GetPhysicalVolume());
     fOrbitalDetectorShellField->Make(materialVacuum, fWorld->GetPhysicalVolume());
@@ -130,8 +130,6 @@ void DetectorConstruction::ConstructSD() {
 }
 
 #include "G4FieldManager.hh"
-#include "G4UniformMagField.hh"
-#include "G4UniformElectricField.hh"
 #include "G4TMagFieldEquation.hh"
 #include "G4EqMagElectricField.hh"
 #include "G4TDormandPrince45.hh"
@@ -140,8 +138,10 @@ void DetectorConstruction::ConstructSD() {
 #include "G4ChordFinder.hh"
 
 #include "detector/field/AcceleratorField.hh"
-#include "detector/field/SelectField.hh"
+#include "detector/field/ParallelTransportField.hh"
+#include "detector/field/SelectorField.hh"
 #include "detector/field/TurnField.hh"
+#include "detector/field/VerticalTransportField.hh"
 
 template<class Field_t, class Equation_t, class Stepper_t, class Driver_t>
 static void RegisterFields(G4LogicalVolume* logicalVolume, Field_t* field, G4double hMin, G4int nVal) {
@@ -153,13 +153,13 @@ static void RegisterFields(G4LogicalVolume* logicalVolume, Field_t* field, G4dou
 }
 
 void DetectorConstruction::ConstructField() {
-    constexpr G4double B = 0.1 * tesla;
-    auto parallelBField = new G4UniformMagField(G4ThreeVector(0, 0, B));
-    auto verticalBField = new G4UniformMagField(G4ThreeVector(B, 0, 0));
-
     constexpr G4double hMin = 100. * um;
-
-    RegisterFields<
+    
+    constexpr G4double defaultB = 0.1 * tesla;
+    auto parallelBField = new Field::ParallelTransportField(defaultB);
+    auto verticalBField = new Field::VerticalTransportField(defaultB);
+    
+    RegisterFields <
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
@@ -181,11 +181,11 @@ void DetectorConstruction::ConstructField() {
     >(fParallelTransportField->GetLogicalVolume(), parallelBField, hMin, 6);
 
     RegisterFields <
-        Field::SelectField,
+        Field::SelectorField,
         G4EqMagElectricField,
         G4DormandPrince745,
         G4IntegrationDriver<G4DormandPrince745>
-    >(fSelectField->GetLogicalVolume(), new Field::SelectField(), hMin, 8);
+    >(fSelectorField->GetLogicalVolume(), new Field::SelectorField(), hMin, 8);
 
     RegisterFields <
         Field::TurnField,

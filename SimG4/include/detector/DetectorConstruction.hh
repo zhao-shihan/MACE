@@ -24,7 +24,7 @@ private:
     Geometry::OrbitalDetectorShellField* const fOrbitalDetectorShellField;
     Geometry::OrbitalDetectorShield* const     fOrbitalDetectorShield;
     Geometry::ParallelTransportField* const    fParallelTransportField;
-    Geometry::SelectField* const               fSelectField;
+    Geometry::SelectorField* const               fSelectorField;
     Geometry::Spectrometer* const              fSpectormeter;
     Geometry::SpectrometerField* const         fSpectormeterField;
     Geometry::SpectrometerShield* const        fSpectrometerShield;

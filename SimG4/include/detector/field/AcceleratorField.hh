@@ -8,10 +8,19 @@
 class MACE::SimG4::Field::AcceleratorField : public G4ElectroMagneticField {
 public:
     AcceleratorField();
-    virtual void GetFieldValue(const G4double*, G4double* F) const;
-    virtual G4bool DoesFieldChangeEnergy() const { return true; }
+    void GetFieldValue(const G4double*, G4double* F) const override;
+    G4bool DoesFieldChangeEnergy() const override { return true; }
+
+    void SetTransportBField(G4double B) { fBz = B; }
+    void SetAcceleratorPotential(G4double V);
+    void SetAccelerateBegin(G4double beginZPos);
+    void SetAccelerateEnd(G4double endZPos);
 
 private:
-    const G4double fBz = 0.1 * tesla;
-    const G4double fEz = 2 * kilovolt / (30 * cm - 13.02 * mm);
+    G4double fBz = 0.1 * tesla;
+    G4double fEz = 2 * kilovolt / (30 * cm - 13.02 * mm);
+    
+    G4double fV = 2 * kilovolt;
+    G4double fAccelerateBegin = 13.02 * mm;
+    G4double fAccelerateEnd = 30 * cm;
 };

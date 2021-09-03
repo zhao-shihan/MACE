@@ -15,7 +15,7 @@ private:
     MuonBeamMessenger& operator=(const MuonBeamMessenger&) = delete;
     
 public:
-    void SetPrimaryGeneratorAction(PrimaryGeneratorAction* pPrimaryGeneratorAction) { fpPrimaryGeneratorAction = pPrimaryGeneratorAction; }
+    void Set(PrimaryGeneratorAction* pPrimaryGeneratorAction) { fpPrimaryGeneratorAction = pPrimaryGeneratorAction; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 

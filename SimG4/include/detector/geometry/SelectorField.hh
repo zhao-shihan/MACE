@@ -4,9 +4,9 @@
 
 #include "detector/geometry/BaseInterface.hh"
 
-class MACE::SimG4::Geometry::SelectField : public MACE::SimG4::Geometry::BaseInterface {
+class MACE::SimG4::Geometry::SelectorField : public MACE::SimG4::Geometry::BaseInterface {
 public:
-    SelectField();
+    SelectorField();
 
     void Make(G4Material* material, G4VPhysicalVolume* mother);
 
