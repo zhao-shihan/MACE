@@ -49,6 +49,7 @@ AnalysisMessenger::~AnalysisMessenger() {
     delete fSetSpectrometerWindowWidth;
     delete fEnableCoincidenceOfCalorimeter;
     delete fSetFileName;
+    delete fDirectory;
 }
 
 void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {

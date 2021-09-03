@@ -10,8 +10,10 @@ namespace MACE {
         // detector
         namespace Field {
             class AcceleratorField;
-            class SelectField;
+            class ParallelTransportField;
+            class SelectorField;
             class TurnField;
+            class VerticalTransportField;
         }
         namespace Geometry {
             class AcceleratorField;
@@ -22,7 +24,7 @@ namespace MACE {
             class OrbitalDetectorShellField;
             class OrbitalDetectorShield;
             class ParallelTransportField;
-            class SelectField;
+            class SelectorField;
             class Spectrometer;
             class SpectrometerField;
             class SpectrometerShield;
@@ -45,6 +47,7 @@ namespace MACE {
         class DetectorConstruction;
         // messenger
         class AnalysisMessenger;
+        class FieldMessenger;
         class MuonBeamMessenger;
         // physics
         namespace Physics {

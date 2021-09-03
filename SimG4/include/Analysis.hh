@@ -1,6 +1,7 @@
 #pragma once
 
 #include "g4analysis.hh"
+#include "G4Positron.hh"
 
 #include "SimG4Global.hh"
 #include "detector/hit/CalorimeterHit.hh"
@@ -26,8 +27,9 @@ public:
     void DoCoincidenceAnalysisAndFill() const;
     void WriteAndClose() const;
 
+    void SetFlightDistance(G4double val);
+    void SetEkinOfOrbital(G4double val);
     void SetCalorimeterWindowWidth(G4double val) { fCalorimeterWindowWidth = val; }
-    void SetMeanTOF(G4double val) { fMeanTOF = val; }
     void SetSpectrometerWindowWidth(G4double val) { fSpectrometerWindowWidth = val; }
     void SetEnableCoincidenceOfCalorimeter(G4bool val) { fEnableCoincidenceOfCalorimeter = val; }
     void SetFileName(const G4String& fileName) { fFileName = fileName; }
@@ -43,8 +45,11 @@ private:
     const Hit::OrbitalDetectorHitsCollection* fpOrbitalDetectorHC;
     const Hit::SpectrometerHitsCollection* fpSpectrometerHC;
 
+    G4double fFlightDistance = 2985 * mm;
+    G4double fEkin = 2 * keV;
+    G4double fMeanTOF = fFlightDistance / (c_light * sqrt(2 * fEkin / G4Positron::Definition()->GetPDGMass()));
+
     G4double fCalorimeterWindowWidth = 2 * ns;
-    G4double fMeanTOF = 2985 * mm / (c_light * sqrt(2 * 2 * keV / (511 * keV)));
     G4double fSpectrometerWindowWidth = 8 * ns;
 
     G4bool fEnableCoincidenceOfCalorimeter = true;

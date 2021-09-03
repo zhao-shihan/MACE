@@ -2,6 +2,7 @@
 
 #include "Analysis.hh"
 #include "messenger/AnalysisMessenger.hh"
+#include "messenger/FieldMessenger.hh"
 
 using namespace MACE::SimG4;
 
@@ -19,7 +20,8 @@ Analysis::Analysis() :
     fpCalorimeterHC(nullptr),
     fpOrbitalDetectorHC(nullptr),
     fpSpectrometerHC(nullptr) {
-    AnalysisMessenger::Instance()->SetAnalysis(this);
+    AnalysisMessenger::Instance()->Set(this);
+    FieldMessenger::Instance()->Set(this);
 }
 
 Analysis::~Analysis() {
@@ -122,6 +124,16 @@ void Analysis::DoCoincidenceAnalysisAndFill() const {
 void Analysis::WriteAndClose() const {
     fpG4Analysis->Write();
     fpG4Analysis->CloseFile();
+}
+
+void Analysis::SetFlightDistance(G4double val) {
+    fFlightDistance = val;
+    fMeanTOF = fFlightDistance / (c_light * sqrt(2 * fEkin / G4Positron::Definition()->GetPDGMass()));
+}
+
+void Analysis::SetEkinOfOrbital(G4double val) {
+    fEkin = val;
+    fMeanTOF = fFlightDistance / (c_light * sqrt(2 * fEkin / G4Positron::Definition()->GetPDGMass()));
 }
 
 void Analysis::FillOrbitalDetectorHit(const Hit::OrbitalDetectorHit* const hit) const {

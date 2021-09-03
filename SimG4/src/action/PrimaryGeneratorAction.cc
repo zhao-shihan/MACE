@@ -9,7 +9,7 @@ MACE::SimG4::PrimaryGeneratorAction::PrimaryGeneratorAction() :
     G4VUserPrimaryGeneratorAction(),
     fParticleGun(new G4ParticleGun(G4MuonPlus::Definition())) {
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0, 0, 1));
-    MuonBeamMessenger::Instance()->SetPrimaryGeneratorAction(this);
+    MuonBeamMessenger::Instance()->Set(this);
 }
 
 MACE::SimG4::PrimaryGeneratorAction::~PrimaryGeneratorAction() {

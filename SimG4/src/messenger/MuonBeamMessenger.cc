@@ -70,6 +70,7 @@ MuonBeamMessenger::~MuonBeamMessenger() {
     delete fSetEnergy;
     delete fSetEnergySpreadRMS;
     delete fSetBeamWidthRMS;
+    delete fDirectory;
 }
 
 void MuonBeamMessenger::SetNewValue(G4UIcommand* command, G4String value) {
