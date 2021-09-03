@@ -47,6 +47,8 @@ public:
     bool           IsEscaping() const { return fEscaping; }
     TrackStatus    GetTrackStatus() const { return fStatus; }
 
+    void           SetSeed(UInt_t seed) const { fMonteCarlo->SetSeed(seed); }
+
 private:
     bool Target(double_t x, double_t y, double_t z) { return (*global->Target())(x, y, z) > 0.5; }
     double_t MeanFreePath(double_t x, double_t y, double_t z) { return (*global->MeanFreePath())(x, y, z); }

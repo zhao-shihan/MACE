@@ -44,8 +44,8 @@ namespace MACE {
         }
         class DetectorConstruction;
         // messenger
-        class MuonBeamMessenger;
         class AnalysisMessenger;
+        class MuonBeamMessenger;
         // physics
         namespace Physics {
             class AntiMuonium;
