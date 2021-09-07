@@ -2,21 +2,14 @@
 
 ## How to Build
 
-External dependencies:
-
-    MPI-3   (MPICH, OpenMPI, Intel MPI, etc. On your frequency.)
-
-    Geant4  (min: 4.10.7.p02)
-
-    ROOT    (min: 6.24.02)
-
-
-Builtin dependencies:
-
-    G4mpi
-
-    GenFit2
-
+External dependencies:  
+    MPI-3   (MPICH, OpenMPI, Intel MPI, etc. On your frequency.)  
+    Geant4  (min: 4.10.7.p02)  
+    ROOT    (min: 6.24.02)  
+  
+Builtin dependencies:  
+    G4mpi  
+    GenFit2  
 
 MACE software follows a classical cmake & make procedure, as
 ```shell
