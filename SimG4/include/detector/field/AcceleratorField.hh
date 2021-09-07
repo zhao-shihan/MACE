@@ -18,9 +18,9 @@ public:
 
 private:
     G4double fBz = 0.1 * tesla;
-    G4double fEz = 2 * kilovolt / (30 * cm - 13.02 * mm);
+    G4double fEz = 7 * kilovolt / (30 * cm - 13.02 * mm);
     
-    G4double fV = 2 * kilovolt;
+    G4double fV = 7 * kilovolt;
     G4double fAccelerateBegin = 13.02 * mm;
     G4double fAccelerateEnd = 30 * cm;
 };

@@ -46,7 +46,7 @@ private:
     const Hit::SpectrometerHitsCollection* fpSpectrometerHC;
 
     G4double fFlightDistance = 2985 * mm;
-    G4double fEkin = 2 * keV;
+    G4double fEkin = 7 * keV;
     G4double fMeanTOF = fFlightDistance / (c_light * sqrt(2 * fEkin / G4Positron::Definition()->GetPDGMass()));
 
     G4double fCalorimeterWindowWidth = 2 * ns;

@@ -18,7 +18,7 @@ public:
 private:
     G4double fBx = 0.1 * tesla;
     G4double fBz = 0.1 * tesla;
-    G4double fEy = -c_light * sqrt(2.0 * 2.0 * keV / G4Positron::Definition()->GetPDGMass()) * fBx;
+    G4double fEy = -c_light * sqrt(2.0 * 7 * keV / G4Positron::Definition()->GetPDGMass()) * fBx;
 
-    G4double fSelectEk = 2.0 * keV;
+    G4double fSelectEk = 7 * keV;
 };
