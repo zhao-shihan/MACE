@@ -1,12 +1,22 @@
 # MACE
 
-# How to Build
+## How to Build
 
-Dependencies:
-    MPI-3   (MPICH, OpenMPI, etc., on your frequency.)
+External dependencies:
+
+    MPI-3   (MPICH, OpenMPI, Intel MPI, etc. On your frequency.)
+
     Geant4  (min: 4.10.7.p02)
-    G4mpi   (you can find it at ${G4_DIR}/share/Geant4(...)/examples/extended/parallel/MPI)
+
     ROOT    (min: 6.24.02)
+
+
+Builtin dependencies:
+
+    G4mpi
+
+    GenFit2
+
 
 MACE software follows a classical cmake & make procedure, as
 ```shell
@@ -16,9 +26,9 @@ cmake ..
 make
 ```
 
-# How to Run
+## How to Run
 
-## SimG4
+### SimG4
 In sequential mode with graphics:
 ```shell
 ./SimG4
@@ -32,7 +42,7 @@ In parallel mode with a macro:
 mpirun -n N ./SimG4 run.mac
 ```
 
-## SimMTransport
+### SimMTransport
 ```shell
 mpirun -n N ./SimMTransport sample.cfg
 ```
