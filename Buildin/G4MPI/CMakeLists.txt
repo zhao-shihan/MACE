@@ -200,17 +200,17 @@ endforeach()
 
 #------------------------------------------------------------------------------
 #install
-if(BUILD_SHARED_LIBS)
-  INSTALL(TARGETS ${_targetname}
-          EXPORT ${_targetname}Targets 
-          LIBRARY DESTINATION ${INSTALL_LIB_DIR} COMPONENT shlib)
-endif()
-if(BUILD_STATIC_LIBS)
-   INSTALL(TARGETS ${_targetname}-static
-           EXPORT ${_targetname}Targets 
-           ARCHIVE DESTINATION ${INSTALL_LIB_DIR} COMPONENT dev)
-endif()
-INSTALL(FILES ${HEADERS} DESTINATION include)
+# if(BUILD_SHARED_LIBS)
+#   INSTALL(TARGETS ${_targetname}
+#           EXPORT ${_targetname}Targets 
+#           LIBRARY DESTINATION ${INSTALL_LIB_DIR} COMPONENT shlib)
+# endif()
+# if(BUILD_STATIC_LIBS)
+#    INSTALL(TARGETS ${_targetname}-static
+#            EXPORT ${_targetname}Targets 
+#            ARCHIVE DESTINATION ${INSTALL_LIB_DIR} COMPONENT dev)
+# endif()
+# INSTALL(FILES ${HEADERS} DESTINATION include)
 
 #G4mpiTargets.cmake files
 if(BUILD_SHARED_LIBS)
@@ -248,13 +248,13 @@ set(THE_VERSION ${${_targetname}_VERSION})
 configure_file(G4mpiConfigVersion.cmake.in
   "${PROJECT_BINARY_DIR}/${_targetname}ConfigVersion.cmake" @ONLY)
   
-# Install the G4mpiConfig.cmake 
-install(FILES
-  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${_targetname}Config.cmake"
-  "${PROJECT_BINARY_DIR}/${_targetname}ConfigVersion.cmake" 
-  DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
-# Install the export set for use with the install-tree
-install(EXPORT ${_targetname}Targets DESTINATION
-  "${INSTALL_CMAKE_DIR}" COMPONENT dev)
+# # Install the G4mpiConfig.cmake 
+# install(FILES
+#   "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${_targetname}Config.cmake"
+#   "${PROJECT_BINARY_DIR}/${_targetname}ConfigVersion.cmake" 
+#   DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
+# # Install the export set for use with the install-tree
+# install(EXPORT ${_targetname}Targets DESTINATION
+#   "${INSTALL_CMAKE_DIR}" COMPONENT dev)
 
 

@@ -18,11 +18,11 @@ include(GNUInstallDirs)
 # cmake -DLIBRARY_OUTPUT_DIRECTORY:PATH=.... -DINCLUDE_OUTPUT_DIRECTORY:PATH=....
 # otherwise, set default install destinations
 IF(NOT DEFINED LIBRARY_OUTPUT_DIRECTORY)
-	set( LIBRARY_OUTPUT_DIRECTORY ${CMAKE_INSTALL_LIBDIR} )
+	set( LIBRARY_OUTPUT_DIRECTORY ${MACE_LIBRARY_INSTALL_DIR} )
 ENDIF()
-IF(NOT DEFINED INCLUDE_OUTPUT_DIRECTORY)
-	set( INCLUDE_OUTPUT_DIRECTORY ${CMAKE_INSTALL_INCLUDEDIR} )
-ENDIF()
+# IF(NOT DEFINED INCLUDE_OUTPUT_DIRECTORY)
+# 	set( INCLUDE_OUTPUT_DIRECTORY ${CMAKE_INSTALL_INCLUDEDIR} )
+# ENDIF()
 
 # define path to macros and settings
 LIST( APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake )
@@ -89,9 +89,9 @@ SET(GF_INC_DIRS
 		${GF_INC_DIRS}
 )
 
-INSTALL(DIRECTORY ${GF_INC_DIRS}
-        DESTINATION ${INCLUDE_OUTPUT_DIRECTORY}
-        PATTERN ".svn" EXCLUDE)
+# INSTALL(DIRECTORY ${GF_INC_DIRS}
+#         DESTINATION ${INCLUDE_OUTPUT_DIRECTORY}
+#         PATTERN ".svn" EXCLUDE)
 
 IF(NOT CMAKE_BUILD_TYPE)
   SET(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
@@ -114,17 +114,17 @@ INCLUDE_DIRECTORIES(
 		${GF_INC_DIRS}
 )
 
-FIND_PACKAGE(Doxygen)
-IF(DOXYGEN_FOUND)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/doc/Doxyfile @ONLY)
+# FIND_PACKAGE(Doxygen)
+# IF(DOXYGEN_FOUND)
+#     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/doc/Doxyfile @ONLY)
 
-    ADD_CUSTOM_TARGET(doc
-        ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/doc/Doxyfile
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/doc
-        COMMENT "Generating API documentation with Doxygen" VERBATIM)
-ELSE()
-    MESSAGE( STATUS "Doxygen not installed or found -- API documentation can't be generated!" )
-ENDIF(DOXYGEN_FOUND)
+#     ADD_CUSTOM_TARGET(doc
+#         ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/doc/Doxyfile
+#         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/doc
+#         COMMENT "Generating API documentation with Doxygen" VERBATIM)
+# ELSE()
+#     MESSAGE( STATUS "Doxygen not installed or found -- API documentation can't be generated!" )
+# ENDIF(DOXYGEN_FOUND)
 
 
 # declare the ROOT library path
@@ -291,7 +291,7 @@ endif()
 
 
 # install
-ADD_LIBRARY( ${PROJECT_NAME} ${library_sources})
+ADD_SHARED_LIBRARY( ${PROJECT_NAME} ${library_sources})
 INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${LIBRARY_OUTPUT_DIRECTORY})
 
 # link ROOT libraries
@@ -307,35 +307,35 @@ else()
 endif()
 
 
-ADD_CUSTOM_TARGET( tests )
+# ADD_CUSTOM_TARGET( tests )
 
-ADD_GENFIT_TEST( fitterTests               test/fitterTests/main.cc)
-ADD_GENFIT_TEST( minimalFittingExample     test/minimalFittingExample/main.cc)
-ADD_GENFIT_TEST( minimalFittingExample2    test/minimalFittingExample/main2.cc)
-ADD_GENFIT_TEST( measurementFactoryExample test/measurementFactoryExample/main.cc)
-ADD_GENFIT_TEST( streamerTest              test/streamerTest/main.cc)
-ADD_GENFIT_TEST( unitTests                 test/unitTests/main.cc)
-IF(DEFINED RAVE)
-  ADD_GENFIT_TEST( vertexingTest           test/vertexingTest/main.cc)
-  ADD_GENFIT_TEST( vertexingTestRead       test/vertexingTest/read.cc)
-ENDIF()
+# ADD_GENFIT_TEST( fitterTests               test/fitterTests/main.cc)
+# ADD_GENFIT_TEST( minimalFittingExample     test/minimalFittingExample/main.cc)
+# ADD_GENFIT_TEST( minimalFittingExample2    test/minimalFittingExample/main2.cc)
+# ADD_GENFIT_TEST( measurementFactoryExample test/measurementFactoryExample/main.cc)
+# ADD_GENFIT_TEST( streamerTest              test/streamerTest/main.cc)
+# ADD_GENFIT_TEST( unitTests                 test/unitTests/main.cc)
+# IF(DEFINED RAVE)
+#   ADD_GENFIT_TEST( vertexingTest           test/vertexingTest/main.cc)
+#   ADD_GENFIT_TEST( vertexingTestRead       test/vertexingTest/read.cc)
+# ENDIF()
 
 
-FIND_PACKAGE(GTest)
-IF(GTEST_FOUND)
-	ADD_EXECUTABLE(gtests
-			gtest/TestConstField.cpp
-			gtest/TestMaterialEffects.cpp
-			gtest/TestRKTrackRep.cpp
-			gtest/TestMaterial.cpp
-			)
-	TARGET_LINK_LIBRARIES(gtests ${GTEST_BOTH_LIBRARIES} ${ROOT_LIBS} ${PROJECT_NAME})  # gtest gtest_main
-	MESSAGE(STATUS  ${GTEST_INCLUDE_DIRS})
-	TARGET_INCLUDE_DIRECTORIES(gtests PUBLIC ${GTEST_INCLUDE_DIRS})
-	INSTALL(TARGETS gtests DESTINATION bin)
-ELSE()
-	MESSAGE(STATUS "GTest not installed or found -- skip building unittests.")
-ENDIF()
+# FIND_PACKAGE(GTest)
+# IF(GTEST_FOUND)
+# 	ADD_EXECUTABLE(gtests
+# 			gtest/TestConstField.cpp
+# 			gtest/TestMaterialEffects.cpp
+# 			gtest/TestRKTrackRep.cpp
+# 			gtest/TestMaterial.cpp
+# 			)
+# 	TARGET_LINK_LIBRARIES(gtests ${GTEST_BOTH_LIBRARIES} ${ROOT_LIBS} ${PROJECT_NAME})  # gtest gtest_main
+# 	MESSAGE(STATUS  ${GTEST_INCLUDE_DIRS})
+# 	TARGET_INCLUDE_DIRECTORIES(gtests PUBLIC ${GTEST_INCLUDE_DIRS})
+# 	INSTALL(TARGETS gtests DESTINATION bin)
+# ELSE()
+# 	MESSAGE(STATUS "GTest not installed or found -- skip building unittests.")
+# ENDIF()
 
 # generate and install following configuration files
 #GENERATE_PACKAGE_CONFIGURATION_FILES( genfitConfig.cmake genfitConfigVersion.cmake )
