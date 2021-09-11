@@ -34,7 +34,6 @@
 //      30 May 1997 H.Kurashige
 //
 //      2008-05 Toni Shiroka: Extention of the code for the muonium decay
-//	 2020-04 Yuzhe Mao: Extention of the code for the Anti-muonium decay
 //
 
 #pragma once

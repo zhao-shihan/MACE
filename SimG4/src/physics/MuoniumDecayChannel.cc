@@ -41,7 +41,7 @@
 //      Adding V-A fluxes for neutrinos using a new algortithm : 
 //
 //  2008-05
-//      Modified for the muonium decay by Toni SHIROKA, Paul Scherrer Institut, MACE
+//      Modified for the muonium decay by Toni SHIROKA, Paul Scherrer Institut, PSI
 // ------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"

@@ -22,6 +22,6 @@ private:
     G4double fInnerLength = 50 * cm;
     G4double fWindowRadius = 11 * cm;
     G4double fThickness = 5 * cm;
-    G4double fCenterZ = 170 * cm;
-    G4double fUpXPosition = 120 * cm;
+    G4double fCenterZ = 160 * cm;
+    G4double fUpXPosition = 140 * cm;
 };

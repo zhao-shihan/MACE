@@ -16,6 +16,6 @@ public:
 
 private:
     G4double fRadius = 10.5 * cm;
-    G4double fLength = 90 * cm;
+    G4double fLength = 60 * cm;
     G4double fUpZPosition = 50 * cm;
 };

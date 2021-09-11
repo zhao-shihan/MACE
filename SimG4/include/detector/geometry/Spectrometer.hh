@@ -1,12 +1,15 @@
 #pragma once
 
+#include "G4GDMLParser.hh"
+
 #include "SimG4Global.hh"
 
 #include "BaseInterface.hh"
 
-class MACE::SimG4::Geometry::Spectrometer : public MACE::SimG4::Geometry::BaseInterface {
+class MACE::SimG4::Geometry::Spectrometer final : public MACE::SimG4::Geometry::BaseInterface {
 public:
     Spectrometer();
+    ~Spectrometer();
 
     void Make(G4Material* material, G4VPhysicalVolume* mother);
 
@@ -23,4 +26,6 @@ private:
     G4double fInnerEffectiveLength = 20 * cm;
     G4double fOuterEffectiveLength = 80 * cm;
     G4double fThickness = 1 * cm;
+
+    G4GDMLParser* const fGDML;
 };

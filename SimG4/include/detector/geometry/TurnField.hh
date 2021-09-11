@@ -10,12 +10,12 @@ public:
 
     void Make(G4Material* material, G4VPhysicalVolume* mother);
 
-    void SetHalfHeight(G4double val) { fHalfHeight = val; }
-    void SetWidth(G4double val) { fWidth = val; }
+    void SetRaidus(G4double val) { fRadius = val; }
+    void SetBendRadius(G4double val) { fBendRadius = val; }
     void SetUpZPosition(G4double val) { fUpZPosition = val; }
-    
+
 private:
-    G4double fHalfHeight = 11 * cm;
-    G4double fWidth = 60 * cm;
-    G4double fUpZPosition = 140 * cm;
+    G4double fRadius = 10.5 * cm;
+    G4double fBendRadius = 50 * cm;
+    G4double fUpZPosition = 110 * cm;
 };

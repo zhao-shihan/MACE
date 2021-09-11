@@ -18,6 +18,6 @@ public:
 private:
     G4double fLength = 90 * cm;
     G4double fRadius = 10.5 * cm;
-    G4double fCenterZ = 170 * cm;
-    G4double fUpXPosition = 30 * cm;
+    G4double fCenterZ = 160 * cm;
+    G4double fUpXPosition = 50 * cm;
 };
