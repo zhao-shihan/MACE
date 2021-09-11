@@ -1,4 +1,8 @@
 /run/initialize
-/run/printProgress 10
-/run/beamOn 1000
+
+#/MACE/Physics/SetConversionProbability 1.0
+#/MACE/Analysis/SetFileName test
+
+/run/printProgress 1
+/run/beamOn 80
 /mpi/status

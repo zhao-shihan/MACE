@@ -80,13 +80,13 @@ static inline bool CompareHit(const Hit_t* const hit1, const Hit_t* const hit2) 
 }
 
 void Analysis::DoCoincidenceAnalysisAndFill() const {
-    auto* const calorimeterHits = fpCalorimeterHC->GetVector();
-    auto* const orbitalDetectorHits = fpOrbitalDetectorHC->GetVector();
-    auto* const spectrometerHits = fpSpectrometerHC->GetVector();
-    std::sort(calorimeterHits->begin(), calorimeterHits->end(), CompareHit<Hit::CalorimeterHit>);
-    std::sort(orbitalDetectorHits->begin(), orbitalDetectorHits->end(), CompareHit<Hit::OrbitalDetectorHit>);
-    std::sort(spectrometerHits->begin(), spectrometerHits->end(), CompareHit<Hit::SpectrometerHit>);
-
+    std::sort(fpCalorimeterHC->GetVector()->begin(), fpCalorimeterHC->GetVector()->end(), CompareHit<Hit::CalorimeterHit>);
+    std::sort(fpOrbitalDetectorHC->GetVector()->begin(), fpOrbitalDetectorHC->GetVector()->end(), CompareHit<Hit::OrbitalDetectorHit>);
+    std::sort(fpSpectrometerHC->GetVector()->begin(), fpSpectrometerHC->GetVector()->end(), CompareHit<Hit::SpectrometerHit>);
+    
+    const auto* const calorimeterHits = fpCalorimeterHC->GetVector();
+    const auto* const orbitalDetectorHits = fpOrbitalDetectorHC->GetVector();
+    const auto* const spectrometerHits = fpSpectrometerHC->GetVector();
     auto calorimeterHitBegin = calorimeterHits->begin();
     auto calorimeterHitEnd = calorimeterHitBegin;
     auto spectrometerHitBegin = spectrometerHits->begin();

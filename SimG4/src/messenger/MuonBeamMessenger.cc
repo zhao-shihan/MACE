@@ -30,37 +30,37 @@ MuonBeamMessenger::MuonBeamMessenger() :
     fSetFlux->SetGuidance("Set muon flux.");
     fSetFlux->SetParameterName("flux", false);
     fSetFlux->SetUnitCategory("1/Time");
-    fSetFlux->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fSetFlux->AvailableForStates(G4State_Idle);
 
     fSetPlusePeakInterval = new G4UIcmdWithADoubleAndUnit("/MACE/MuonBeam/SetPlusePeakInterval", this);
     fSetPlusePeakInterval->SetGuidance("Set time interval of pluse peak.");
     fSetPlusePeakInterval->SetParameterName("time interval", false);
     fSetPlusePeakInterval->SetUnitCategory("Time");
-    fSetPlusePeakInterval->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fSetPlusePeakInterval->AvailableForStates(G4State_Idle);
 
     fSetPluseWidthRMS = new G4UIcmdWithADoubleAndUnit("/MACE/MuonBeam/SetPluseWidthRMS", this);
     fSetPluseWidthRMS->SetGuidance("Set pluse width in time (RMS).");
     fSetPluseWidthRMS->SetParameterName("pluse width", false);
     fSetPluseWidthRMS->SetUnitCategory("Time");
-    fSetPluseWidthRMS->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fSetPluseWidthRMS->AvailableForStates(G4State_Idle);
 
     fSetEnergy = new G4UIcmdWithADoubleAndUnit("/MACE/MuonBeam/SetEnergy", this);
     fSetEnergy->SetGuidance("Set mean beam kinetic energy.");
     fSetEnergy->SetParameterName("energy", false);
     fSetEnergy->SetUnitCategory("Energy");
-    fSetEnergy->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fSetEnergy->AvailableForStates(G4State_Idle);
 
     fSetEnergySpreadRMS = new G4UIcmdWithADoubleAndUnit("/MACE/MuonBeam/SetEnergySpreadRMS", this);
     fSetEnergySpreadRMS->SetGuidance("Set beam kinetic energy spread (RMS).");
     fSetEnergySpreadRMS->SetParameterName("energy spread", false);
     fSetEnergySpreadRMS->SetUnitCategory("Energy");
-    fSetEnergySpreadRMS->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fSetEnergySpreadRMS->AvailableForStates(G4State_Idle);
 
     fSetBeamWidthRMS = new G4UIcmdWithADoubleAndUnit("/MACE/MuonBeam/SetBeamWidthRMS", this);
     fSetBeamWidthRMS->SetGuidance("Set beam width (RMS).");
     fSetBeamWidthRMS->SetParameterName("width (mm)", false);
     fSetBeamWidthRMS->SetUnitCategory("Length");
-    fSetBeamWidthRMS->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fSetBeamWidthRMS->AvailableForStates(G4State_Idle);
 }
 
 MuonBeamMessenger::~MuonBeamMessenger() {

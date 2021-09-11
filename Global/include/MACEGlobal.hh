@@ -49,6 +49,7 @@ namespace MACE {
         class AnalysisMessenger;
         class FieldMessenger;
         class MuonBeamMessenger;
+        class PhysicsMessenger;
         // physics
         namespace Physics {
             class AntiMuonium;

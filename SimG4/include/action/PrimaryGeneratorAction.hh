@@ -11,6 +11,8 @@ public:
     ~PrimaryGeneratorAction();
     void GeneratePrimaries(G4Event* event) override;
 
+    void SetFirstPluseIDOfThisRank(G4int pluseID) { fFirstPluseIDOfThisRank = pluseID; }
+
     void SetFlux(G4double val) { fFlux = val; }
     void SetPlusePeakInterval(G4double val) { fPlusePeakInterval = val; }
     void SetPluseWidthRMS(G4double val) { fPluseWidthRMS = val; }
@@ -20,6 +22,8 @@ public:
 
 private:
     G4ParticleGun* const fParticleGun;
+
+    G4int    fFirstPluseIDOfThisRank;
 
     G4double fFlux = 1e8 / s;
     G4double fPlusePeakInterval = 10 * us;

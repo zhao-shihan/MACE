@@ -40,7 +40,7 @@ G4bool OrbitalDetector::ProcessHits(G4Step* step, G4TouchableHistory*) {
             track->GetGlobalTime() - track->GetLocalTime(),
             track->GetVertexPosition(),
             preStepPoint->GetGlobalTime(),
-            detectorRotation->inverse() * (preStepPoint->GetPosition() - detectorPosition)
+            (*detectorRotation) * (preStepPoint->GetPosition() - detectorPosition)
         )
     );
     return true;

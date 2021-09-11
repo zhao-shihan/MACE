@@ -21,13 +21,13 @@ AnalysisMessenger::AnalysisMessenger() :
     fSetCalorimeterWindowWidth->SetGuidance("Set calorimeter coincidence window width in time.");
     fSetCalorimeterWindowWidth->SetParameterName("window", false);
     fSetCalorimeterWindowWidth->SetUnitCategory("Time");
-    fSetCalorimeterWindowWidth->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fSetCalorimeterWindowWidth->AvailableForStates(G4State_Idle);
 
     fSetSpectrometerWindowWidth = new G4UIcmdWithADoubleAndUnit("/MACE/Analysis/SetSpectrometerWindowWidth", this);
     fSetSpectrometerWindowWidth->SetGuidance("Set spectrometer coincidence window width in time.");
     fSetSpectrometerWindowWidth->SetParameterName("window", false);
     fSetSpectrometerWindowWidth->SetUnitCategory("Time");
-    fSetSpectrometerWindowWidth->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fSetSpectrometerWindowWidth->AvailableForStates(G4State_Idle);
 
     fEnableCoincidenceOfCalorimeter = new G4UIcmdWithABool("/MACE/Analysis/EnableCoincidenceOfCalorimeter", this);
     fEnableCoincidenceOfCalorimeter->SetGuidance("Decide whether to enable the coincidence detection of the calorimeter. "
@@ -36,12 +36,12 @@ AnalysisMessenger::AnalysisMessenger() :
         "It is automatically set to true when detecting anti-muonium, and automatically set to false when detecting muonium. "
         "(See also /MACE/Setup/DetectionMode)");
     fEnableCoincidenceOfCalorimeter->SetParameterName("mode", false);
-    fEnableCoincidenceOfCalorimeter->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fEnableCoincidenceOfCalorimeter->AvailableForStates(G4State_Idle);
 
     fSetFileName = new G4UIcmdWithAString("/MACE/Analysis/SetFileName", this);
     fSetFileName->SetGuidance("Set file name.");
     fSetFileName->SetParameterName("file name", false);
-    fSetFileName->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fSetFileName->AvailableForStates(G4State_Idle);
 }
 
 AnalysisMessenger::~AnalysisMessenger() {

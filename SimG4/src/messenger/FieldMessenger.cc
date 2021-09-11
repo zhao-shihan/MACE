@@ -25,21 +25,21 @@ FieldMessenger::FieldMessenger() :
     fSetTransportMagneticField->SetGuidance("Set transport magnetic field.");
     fSetTransportMagneticField->SetParameterName("B", false);
     fSetTransportMagneticField->SetUnitCategory("Magnetic flux density");
-    fSetTransportMagneticField->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fSetTransportMagneticField->AvailableForStates(G4State_Idle);
 
     fSetAcceleratorPotential = new G4UIcmdWithADoubleAndUnit("/MACE/Field/SetAcceleratorPotential", this);
     fSetAcceleratorPotential->SetGuidance("Set accelerator electric potential."
-        "(Selector field changes, respectively.)");
+        "(Selector electric field changes, respectively.)");
     fSetAcceleratorPotential->SetParameterName("V", false);
     fSetAcceleratorPotential->SetUnitCategory("Electric potential");
-    fSetAcceleratorPotential->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fSetAcceleratorPotential->AvailableForStates(G4State_Idle);
 
     fSetSelectorMagneticField = new G4UIcmdWithADoubleAndUnit("/MACE/Field/SetSelectorMagneticField", this);
     fSetSelectorMagneticField->SetGuidance("Set selector magnetic field. "
         "(Selector electric field changes, respectively, to ensure the seleted kinetic energy stays the same.)");
     fSetSelectorMagneticField->SetParameterName("B", false);
     fSetSelectorMagneticField->SetUnitCategory("Magnetic flux density");
-    fSetSelectorMagneticField->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fSetSelectorMagneticField->AvailableForStates(G4State_Idle);
 }
 
 FieldMessenger::~FieldMessenger() {}

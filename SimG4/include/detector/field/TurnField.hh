@@ -15,6 +15,6 @@ public:
 private:
     G4double fB = 0.1 * tesla;
     
-    G4double fXc = 30 * cm;
-    G4double fZc = 140 * cm;
+    G4double fXc = 50 * cm;
+    G4double fZc = 110 * cm;
 };

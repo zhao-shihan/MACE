@@ -4,12 +4,15 @@
 #include "physics/MuoniumProduction.hh"
 #include "physics/AntiMuonium.hh"
 #include "physics/Muonium.hh"
+#include "messenger/PhysicsMessenger.hh"
 
 using namespace MACE::SimG4::Physics;
 
 MuoniumProduction::MuoniumProduction(const G4String& name, G4ProcessType aType) :
     G4VRestProcess(name, aType),
-    fParticleChange(new G4ParticleChange()) {}
+    fParticleChange(new G4ParticleChange()) {
+    PhysicsMessenger::Instance()->Set(this);
+}
 
 MuoniumProduction::~MuoniumProduction() {
     delete fParticleChange;
