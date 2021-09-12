@@ -53,7 +53,6 @@ void Global::Initialize(int& argc, char**& argv) {
         global->SetBeginTime(std::stod(cfg.at("BeginTime")));
         global->SetOutputStep(std::stod(cfg.at("OutputStep")));
         global->SetEndTime(std::stod(cfg.at("EndTime")));
-        global->SetSeedForWorker0(std::stoul(cfg.at("SeedForWorker0")));
         global->SetWorkerJobSize(std::stoul(cfg.at("WorkerJobSize")));
     } catch (std::out_of_range& err) {
         if (commRank == commSize - 1) {

@@ -24,7 +24,6 @@ MuoniumTransport::MuoniumTransport(const G4String& name, G4ProcessType aType) :
     SimMTransport::Track::global->SetMuoniumMass(Muonium::Definition()->GetPDGMass() / MeV);
     SimMTransport::Track::global->SetMeanFreePath(new TF3("MeanFreePath", "0.1"));
     SimMTransport::Track::global->SetTemperature(300);
-    SimMTransport::Track::SetSeed(G4Random::getTheSeed());
 }
 
 MuoniumTransport::~MuoniumTransport() {

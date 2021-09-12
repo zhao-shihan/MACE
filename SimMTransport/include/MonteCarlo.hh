@@ -32,8 +32,6 @@ public:
     MonteCarlo(const MonteCarlo&) = delete;
     MonteCarlo& operator=(const MonteCarlo&) = delete;
 
-    void SetSeed(UInt_t seed) { fEngine->SetSeed(seed + Global::Instance()->CommRank()); }
-
     double_t       VertexTime();
     const Vector3& VertexPosition();
     double_t       Life();

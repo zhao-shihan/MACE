@@ -15,22 +15,13 @@
 
 using namespace MACE::SimG4;
 
-G4RunManager* runManager;
-
-void SetUserInitializations() {
-    runManager->SetUserInitialization(new Physics::PhysicsList());
+int main(int argc, char** argv) {
+    auto runManager = new G4RunManager();
+    runManager->SetUserInitialization(new Physics::PhysicsList(0));
     runManager->SetUserInitialization(new DetectorConstruction());
     runManager->SetUserInitialization(new ActionInitialization());
-}
-
-int main(int argc, char** argv) {
-    CLHEP::MTwistEngine randomEngine(4357L);
-    G4Random::setTheEngine(&randomEngine);
-
-    runManager = new G4RunManager();
 
     if (argc == 1) {
-        SetUserInitializations();
         auto uiManager = G4UImanager::GetUIpointer();
         auto visExecutive = new G4VisExecutive();
         auto uiExecutive = new G4UIExecutive(argc, argv);
@@ -40,15 +31,7 @@ int main(int argc, char** argv) {
         delete uiExecutive;
         delete visExecutive;
     } else {
-        // ! Construct G4MPImanager before construct PhysicsList to ensure
-        //   the correct random behavior (processes has different seed).
-        //
-        //   See G4MPImanager::G4MPImanager(...)
-        //       MACE::SimG4::Physics::MuoniumTransport::MuoniumTransport(...)
-        //       MACE::SimMTransport::Track::SetSeed(...)
-        //       MACE::SimMTransport::MonteCarlo::SetSeed(...)
         auto g4MPIManager = new G4MPImanager(argc, argv);
-        SetUserInitializations();
         g4MPIManager->GetMPIsession()->SessionStart();
         delete g4MPIManager;
     }

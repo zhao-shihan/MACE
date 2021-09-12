@@ -10,12 +10,16 @@ using namespace MACE::SimMTransport;
 static Global* global = nullptr;
 
 MonteCarlo::MonteCarlo() :
-    fEngine(new TRandom3(Global::Instance()->SeedForWorker0() + Global::Instance()->CommRank())),
+    fEngine(new TRandom3()),
     MONTE_CARLO_STOCK_INIT(fVertexTime, double_t, MonteCarloInitStockSize),
     MONTE_CARLO_STOCK_INIT(fVertexPosition, Vector3, MonteCarloInitStockSize),
     MONTE_CARLO_STOCK_INIT(fLife, double_t, MonteCarloInitStockSize),
     MONTE_CARLO_STOCK_INIT(fMB, Vector3, MonteCarloStockSize),
     MONTE_CARLO_STOCK_INIT(fFreePath, double_t, MonteCarloStockSize) {
+    int rank = 0;
+    if (MPI::Is_initialized()) { MPI_Comm_rank(MPI_COMM_WORLD, &rank); }
+    fEngine->SetSeed(4357UL + rank);
+    fEngine->SetSeed(fEngine->Integer(std::numeric_limits<int32_t>::max() - 1));
     global = Global::Instance();
 }
 

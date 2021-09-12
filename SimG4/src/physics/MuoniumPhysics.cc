@@ -21,13 +21,16 @@ void MuoniumPhysics::ConstructParticle() {
 }
 
 void MuoniumPhysics::ConstructProcess() {
+    auto muoniumProduction = new MuoniumProduction();
+    auto muoniumTransport = new MuoniumTransport();
+
     auto muonPlus = G4MuonPlus::Definition()->GetProcessManager();
-    muonPlus->AddRestProcess(new MuoniumProduction());
+    muonPlus->AddRestProcess(muoniumProduction);
 
     auto muonium = Muonium::Definition()->GetProcessManager();
-    muonium->AddContinuousProcess(new MuoniumTransport());
+    muonium->AddContinuousProcess(muoniumTransport);
     // muonium->AddDiscreteProcess(new MuoniumLFV());
 
     auto antiMuonium = AntiMuonium::Definition()->GetProcessManager();
-    antiMuonium->AddContinuousProcess(new MuoniumTransport());
+    antiMuonium->AddContinuousProcess(muoniumTransport);
 }

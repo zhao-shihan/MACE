@@ -71,7 +71,6 @@ public:
     MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double_t, BeginTime, -1);
     MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double_t, OutputStep, -1);
     MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double_t, EndTime, -1);
-    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(uint64_t, SeedForWorker0, 4357);
     MACE_SIMMTRANSPORT_GLOBAL_MEMBER(size_t, WorkerJobSize, 1000);
 };
 
