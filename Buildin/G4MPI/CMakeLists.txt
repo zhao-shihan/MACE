@@ -237,16 +237,16 @@ set(TARGET_NAME ${_targetname})
 set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/include")
 file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}"
    "${INSTALL_INCLUDE_DIR}")
-configure_file(G4mpiConfig.cmake.in
-  "${PROJECT_BINARY_DIR}/${_targetname}Config.cmake" @ONLY)
-# ... for the install tree
-set(CONF_INCLUDE_DIRS "\${${_targetname}_CMAKE_DIR}/${REL_INCLUDE_DIR}")
-configure_file(${_targetname}Config.cmake.in
-  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${_targetname}Config.cmake" @ONLY)
-# ... for both
-set(THE_VERSION ${${_targetname}_VERSION})
-configure_file(G4mpiConfigVersion.cmake.in
-  "${PROJECT_BINARY_DIR}/${_targetname}ConfigVersion.cmake" @ONLY)
+# configure_file(G4mpiConfig.cmake.in
+#   "${PROJECT_BINARY_DIR}/${_targetname}Config.cmake" @ONLY)
+# # ... for the install tree
+# set(CONF_INCLUDE_DIRS "\${${_targetname}_CMAKE_DIR}/${REL_INCLUDE_DIR}")
+# configure_file(${_targetname}Config.cmake.in
+#   "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${_targetname}Config.cmake" @ONLY)
+# # ... for both
+# set(THE_VERSION ${${_targetname}_VERSION})
+# configure_file(G4mpiConfigVersion.cmake.in
+#   "${PROJECT_BINARY_DIR}/${_targetname}ConfigVersion.cmake" @ONLY)
   
 # # Install the G4mpiConfig.cmake 
 # install(FILES

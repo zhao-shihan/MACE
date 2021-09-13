@@ -16,6 +16,9 @@
 using namespace MACE::SimG4;
 
 int main(int argc, char** argv) {
+    auto engine = new CLHEP::MTwistEngine();
+    G4Random::setTheEngine(engine);
+
     auto runManager = new G4RunManager();
     runManager->SetUserInitialization(new Physics::PhysicsList(0));
     runManager->SetUserInitialization(new DetectorConstruction());
@@ -37,6 +40,7 @@ int main(int argc, char** argv) {
     }
 
     delete runManager;
+    delete engine;
 
     return EXIT_SUCCESS;
 }
