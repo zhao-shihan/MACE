@@ -8,7 +8,7 @@ class MACE::SimG4::Geometry::Collimator : public MACE::SimG4::Geometry::BaseInte
 public:
     Collimator();
 
-    void Make(G4Material* material, G4VPhysicalVolume* mother);
+    void Create(G4Material* material, G4VPhysicalVolume* mother);
 
     void SetInnerRadius(G4double val) { fInnerRadius = val; }
     void SetOuterRadius(G4double val) { fOuterRadius = val; }

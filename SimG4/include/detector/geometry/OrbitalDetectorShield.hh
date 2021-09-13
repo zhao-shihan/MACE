@@ -8,7 +8,7 @@ class MACE::SimG4::Geometry::OrbitalDetectorShield : public MACE::SimG4::Geometr
 public:
     OrbitalDetectorShield();
 
-    void Make(G4Material* material, G4VPhysicalVolume* mother);
+    void Create(G4Material* material, G4VPhysicalVolume* mother);
 
     void SetInnerRadius(G4double val) { fInnerRadius = val; }
     void SetInnerLength(G4double val) { fInnerLength = val; }

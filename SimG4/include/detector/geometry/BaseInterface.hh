@@ -11,7 +11,7 @@ public:
     BaseInterface(size_t volumeCount);
     virtual ~BaseInterface();
 
-    virtual void Make(G4Material* material, G4VPhysicalVolume* mother) = 0;
+    virtual void Create(G4Material* material, G4VPhysicalVolume* mother) = 0;
 
     auto* GetSolidVolume() const { return fVolumeSetList.front().GetSolidVolume(); }
     auto* GetLogicalVolume() const { return fVolumeSetList.front().GetLogicalVolume(); }

@@ -4,7 +4,7 @@
 #include "detector/field/AcceleratorField.hh"
 #include "detector/field/ParallelTransportField.hh"
 #include "detector/field/SelectorField.hh"
-#include "detector/field/TurnField.hh"
+#include "detector/field/CounterClockwiseGuideField.hh"
 #include "detector/field/VerticalTransportField.hh"
 #include "Analysis.hh"
 
@@ -50,7 +50,7 @@ void FieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
         fpAcceleratorField->SetTransportBField(B);
         fpParallelTransportField->SetFieldNorm(B);
         fpSelectorField->SetTransportField(B);
-        fpTurnField->SetTransportMagneticField(B);
+        fpCounterClockwiseGuideField->SetTransportMagneticField(B);
         fpVerticalTransportField->SetFieldNorm(B);
     } else if (command == fSetAcceleratorPotential) {
         const auto V = fSetAcceleratorPotential->GetNewDoubleValue(value);

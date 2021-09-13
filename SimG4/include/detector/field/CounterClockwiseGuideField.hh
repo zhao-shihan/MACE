@@ -5,9 +5,9 @@
 #include "SimG4Global.hh"
 
 
-class MACE::SimG4::Field::TurnField : public G4MagneticField {
+class MACE::SimG4::Field::CounterClockwiseGuideField : public G4MagneticField {
 public:
-    TurnField();
+    CounterClockwiseGuideField();
     void GetFieldValue(const G4double* x, G4double* B) const override;
 
     void SetTransportMagneticField(G4double B) { fB = B; }

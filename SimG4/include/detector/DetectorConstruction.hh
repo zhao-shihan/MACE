@@ -29,7 +29,7 @@ private:
     Geometry::SpectrometerField* const         fSpectormeterField;
     Geometry::SpectrometerShield* const        fSpectrometerShield;
     Geometry::Target* const                    fTarget;
-    Geometry::TurnField* const                 fTurnField;
+    Geometry::CounterClockwiseGuideField* const                 fCounterClockwiseGuideField;
     Geometry::VerticalTransportField* const    fVerticalTransportField;
     Geometry::World* const                     fWorld;
 };

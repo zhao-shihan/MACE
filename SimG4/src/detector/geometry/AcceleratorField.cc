@@ -5,7 +5,7 @@
 MACE::SimG4::Geometry::AcceleratorField::AcceleratorField() :
     MACE::SimG4::Geometry::BaseInterface(1) {}
 
-void MACE::SimG4::Geometry::AcceleratorField::Make(G4Material* material, G4VPhysicalVolume* mother) {
+void MACE::SimG4::Geometry::AcceleratorField::Create(G4Material* material, G4VPhysicalVolume* mother) {
     G4String name("AcceleratorField");
     auto solid = new G4Box(name, 0.5 * fWidth, 0.5 * fWidth, 0.5 * (fUpStreamLength + fDownStreamLength));
     auto logic = new G4LogicalVolume(solid, material, name);

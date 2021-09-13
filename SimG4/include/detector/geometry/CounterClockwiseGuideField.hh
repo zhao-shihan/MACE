@@ -4,11 +4,11 @@
 
 #include "detector/geometry/BaseInterface.hh"
 
-class MACE::SimG4::Geometry::TurnField : public MACE::SimG4::Geometry::BaseInterface {
+class MACE::SimG4::Geometry::CounterClockwiseGuideField : public MACE::SimG4::Geometry::BaseInterface {
 public:
-    TurnField();
+    CounterClockwiseGuideField();
 
-    void Make(G4Material* material, G4VPhysicalVolume* mother);
+    void Create(G4Material* material, G4VPhysicalVolume* mother);
 
     void SetRaidus(G4double val) { fRadius = val; }
     void SetBendRadius(G4double val) { fBendRadius = val; }

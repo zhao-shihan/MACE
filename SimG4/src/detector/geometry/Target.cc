@@ -5,7 +5,7 @@
 MACE::SimG4::Geometry::Target::Target() :
     MACE::SimG4::Geometry::BaseInterface(1) {}
 
-void MACE::SimG4::Geometry::Target::Make(G4Material* material, G4VPhysicalVolume* mother) {
+void MACE::SimG4::Geometry::Target::Create(G4Material* material, G4VPhysicalVolume* mother) {
     G4String name("Target");
     auto solid = new G4Box(name, 0.5 * fWidth, 0.5 * fWidth, 0.5 * fThickness);
     auto logic = new G4LogicalVolume(solid, material, name);

@@ -13,7 +13,7 @@ Spectrometer::~Spectrometer() {
     delete fGDML;
 }
 
-void Spectrometer::Make(G4Material* material, G4VPhysicalVolume* mother) {
+void Spectrometer::Create(G4Material* material, G4VPhysicalVolume* mother) {
     G4String name("Spectrometer");
     for (size_t i = 0; i < GetVolumeSetCount(); ++i) {
         G4double radii = fInnerRadius + i * (fOuterRadius - fInnerRadius) / (GetVolumeSetCount() - 1);

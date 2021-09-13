@@ -4,7 +4,7 @@
 MACE::SimG4::Geometry::Collimator::Collimator() :
     MACE::SimG4::Geometry::BaseInterface(8) {}
 
-void MACE::SimG4::Geometry::Collimator::Make(G4Material* material, G4VPhysicalVolume* mother) {
+void MACE::SimG4::Geometry::Collimator::Create(G4Material* material, G4VPhysicalVolume* mother) {
     G4String name("Collimator");
     for (size_t i = 0; i < GetVolumeSetCount(); ++i) {
         G4double radii = fInnerRadius + i * (fOuterRadius - fInnerRadius) / (GetVolumeSetCount() - 1);

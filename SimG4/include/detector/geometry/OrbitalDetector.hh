@@ -8,7 +8,7 @@ class MACE::SimG4::Geometry::OrbitalDetector : public MACE::SimG4::Geometry::Bas
 public:
     OrbitalDetector();
 
-    void Make(G4Material* material, G4VPhysicalVolume* mother);
+    void Create(G4Material* material, G4VPhysicalVolume* mother);
 
     void SetWidth(G4double val) { fWidth = val; }
     void SetThickness(G4double val) { fThickness = val; }

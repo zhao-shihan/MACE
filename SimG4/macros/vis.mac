@@ -26,7 +26,7 @@
 /vis/geometry/set/colour AcceleratorField 0 1 1 1 0.05
 /vis/geometry/set/colour ParallelTransportField 0 1 1 1 0.05
 /vis/geometry/set/colour SelectorField 0 1 1 1 0.05
-/vis/geometry/set/colour TurnField 0 1 1 1 0.05
+/vis/geometry/set/colour CounterClockwiseGuideField 0 1 1 1 0.05
 /vis/geometry/set/colour VerticalTransportField 0 1 1 1 0.05
 /vis/geometry/set/colour OrbitalDetectorShellField 0 1 1 1 0.05
 # Parts:

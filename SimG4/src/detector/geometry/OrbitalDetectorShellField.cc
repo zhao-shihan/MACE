@@ -4,7 +4,7 @@
 MACE::SimG4::Geometry::OrbitalDetectorShellField::OrbitalDetectorShellField() :
     MACE::SimG4::Geometry::BaseInterface(1) {}
 
-void MACE::SimG4::Geometry::OrbitalDetectorShellField::Make(G4Material* material, G4VPhysicalVolume* mother) {
+void MACE::SimG4::Geometry::OrbitalDetectorShellField::Create(G4Material* material, G4VPhysicalVolume* mother) {
     G4String name("OrbitalDetectorShellField");
     auto solid = new G4Tubs(name, 0, fRadius, 0.5 * fLength, 0, 2 * M_PI);
     auto logic = new G4LogicalVolume(solid, material, name);

@@ -18,7 +18,7 @@ public:
     void Set(Field::AcceleratorField* field) { fpAcceleratorField = field; }
     void Set(Field::ParallelTransportField* field) { fpParallelTransportField = field; }
     void Set(Field::SelectorField* field) { fpSelectorField = field; }
-    void Set(Field::TurnField* field) { fpTurnField = field; }
+    void Set(Field::CounterClockwiseGuideField* field) { fpCounterClockwiseGuideField = field; }
     void Set(Field::VerticalTransportField* field) { fpVerticalTransportField = field; }
     void Set(Analysis* analysis) { fpAnalysis = analysis; }
 
@@ -28,7 +28,7 @@ private:
     Field::AcceleratorField* fpAcceleratorField;
     Field::ParallelTransportField* fpParallelTransportField;
     Field::SelectorField* fpSelectorField;
-    Field::TurnField* fpTurnField;
+    Field::CounterClockwiseGuideField* fpCounterClockwiseGuideField;
     Field::VerticalTransportField* fpVerticalTransportField;
     Analysis* fpAnalysis;
 

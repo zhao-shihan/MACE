@@ -8,7 +8,7 @@ class MACE::SimG4::Geometry::World : public MACE::SimG4::Geometry::BaseInterface
 public:
     World();
 
-    void Make(G4Material* material, G4VPhysicalVolume*);
+    void Create(G4Material* material, G4VPhysicalVolume*);
 
     void SetHalfXExtent(G4double val) { fHalfXExtent = val; }
     void SetHalfYExtent(G4double val) { fHalfYExtent = val; }

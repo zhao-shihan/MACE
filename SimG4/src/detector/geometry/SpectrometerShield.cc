@@ -5,7 +5,7 @@
 MACE::SimG4::Geometry::SpectrometerShield::SpectrometerShield() :
     MACE::SimG4::Geometry::BaseInterface(1) {}
 
-void MACE::SimG4::Geometry::SpectrometerShield::Make(G4Material* material, G4VPhysicalVolume* mother) {
+void MACE::SimG4::Geometry::SpectrometerShield::Create(G4Material* material, G4VPhysicalVolume* mother) {
     G4String name("SpectrometerShield");
     auto body = new G4Tubs(name + "Body", fInnerRadius, fInnerRadius + fThickness, 0.5 * fInnerLength, 0, 2 * M_PI);
     auto cap = new G4Tubs(name + "Cap", fWindowRadius, fInnerRadius + fThickness, 0.5 * fThickness, 0, 2 * M_PI);

@@ -8,7 +8,7 @@ class MACE::SimG4::Geometry::VerticalTransportField : public MACE::SimG4::Geomet
 public:
     VerticalTransportField();
 
-    void Make(G4Material* material, G4VPhysicalVolume* mother);
+    void Create(G4Material* material, G4VPhysicalVolume* mother);
 
     void SetLength(G4double val) { fLength = val; }
     void SetRadius(G4double val) { fRadius = val; }

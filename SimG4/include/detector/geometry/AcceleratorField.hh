@@ -8,7 +8,7 @@ class MACE::SimG4::Geometry::AcceleratorField : public MACE::SimG4::Geometry::Ba
 public:
     AcceleratorField();
 
-    void Make(G4Material* material, G4VPhysicalVolume* mother);
+    void Create(G4Material* material, G4VPhysicalVolume* mother);
 
     void SetWidth(G4double val) { fWidth = val; }
     void SetUpStreamLength(G4double val) { fUpStreamLength = val; }

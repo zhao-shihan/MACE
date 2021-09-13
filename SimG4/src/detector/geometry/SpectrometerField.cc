@@ -5,7 +5,7 @@
 MACE::SimG4::Geometry::SpectrometerField::SpectrometerField() :
     MACE::SimG4::Geometry::BaseInterface(1) {}
 
-void MACE::SimG4::Geometry::SpectrometerField::Make(G4Material* material, G4VPhysicalVolume* mother) {
+void MACE::SimG4::Geometry::SpectrometerField::Create(G4Material* material, G4VPhysicalVolume* mother) {
     auto solid = new G4Tubs("SpectrometerField", 0, fRadius, 0.5 * fLength, 0, 2 * M_PI);
     auto logic = new G4LogicalVolume(solid, material, solid->GetName());
     auto physic = new G4PVPlacement(G4Transform3D(), solid->GetName(), logic, mother, false, 0, checkOverlaps);

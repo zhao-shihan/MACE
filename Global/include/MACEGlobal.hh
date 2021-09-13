@@ -10,9 +10,9 @@ namespace MACE {
         // detector
         namespace Field {
             class AcceleratorField;
+            class CounterClockwiseGuideField;
             class ParallelTransportField;
             class SelectorField;
-            class TurnField;
             class VerticalTransportField;
         }
         namespace Geometry {
@@ -20,6 +20,7 @@ namespace MACE {
             class BaseInterface;
             class Calorimeter;
             class Collimator;
+            class CounterClockwiseGuideField;
             class OrbitalDetector;
             class OrbitalDetectorShellField;
             class OrbitalDetectorShield;
@@ -29,7 +30,6 @@ namespace MACE {
             class SpectrometerField;
             class SpectrometerShield;
             class Target;
-            class TurnField;
             class VerticalTransportField;
             class VolumeSet;
             class World;
