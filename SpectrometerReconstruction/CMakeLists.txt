@@ -1,0 +1,7 @@
+project(SpectrometerReconstruction)
+
+include_directories(${ROOT_INCLUDE_DIRS})
+include_directories_recursively(${MACE_PROJECT_ROOT_DIR}/Buildin/GenFit2)
+
+add_executable(SpectrometerReconstruction SpectrometerReconstruction.cc)
+target_link_libraries(SpectrometerReconstruction genfit2)
