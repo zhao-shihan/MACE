@@ -21,25 +21,29 @@ Calorimeter::Calorimeter(const G4String& SDName, const G4String& hitsCollectionN
 
 Calorimeter::~Calorimeter() {}
 
+const G4ParticleDefinition* photon = nullptr;
+
 void Calorimeter::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
     fHitsCollection = new CalorimeterHitsCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
+    photon = G4Gamma::Definition();
 }
 
 G4bool Calorimeter::ProcessHits(G4Step* step, G4TouchableHistory*) {
     const auto* const track = step->GetTrack();
     const auto* const preStepPoint = step->GetPreStepPoint();
+    const auto* const particle = track->GetDefinition();
     if (!(step->IsFirstStepInVolume() && track->GetCurrentStepNumber() > 1 &&
-        (track->GetDefinition()->GetPDGCharge() != 0 || track->GetDefinition() == G4Gamma::Definition()) &&
-        preStepPoint->GetKineticEnergy() > 461 * keV && preStepPoint->GetKineticEnergy() < 561 * keV)) {
+        (particle->GetPDGCharge() != 0 || particle == photon))) {
         return false;
     }
     fHitsCollection->insert(
         new CalorimeterHit(
             track->GetTrackID(),
             preStepPoint->GetGlobalTime(),
-            preStepPoint->GetKineticEnergy()
+            preStepPoint->GetKineticEnergy(),
+            particle
         )
     );
     return true;

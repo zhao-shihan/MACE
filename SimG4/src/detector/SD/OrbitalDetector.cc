@@ -27,8 +27,9 @@ void OrbitalDetector::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
 
 G4bool OrbitalDetector::ProcessHits(G4Step* step, G4TouchableHistory*) {
     const auto* const track = step->GetTrack();
+    const auto* const particle = track->GetDefinition();
     if (!(step->IsFirstStepInVolume() && track->GetCurrentStepNumber() > 1 &&
-        track->GetDefinition()->GetPDGCharge() != 0)) {
+        particle->GetPDGCharge() != 0)) {
         return false;
     }
     const auto* const preStepPoint = step->GetPreStepPoint();
@@ -40,7 +41,8 @@ G4bool OrbitalDetector::ProcessHits(G4Step* step, G4TouchableHistory*) {
             track->GetGlobalTime() - track->GetLocalTime(),
             track->GetVertexPosition(),
             preStepPoint->GetGlobalTime(),
-            (*detectorRotation) * (preStepPoint->GetPosition() - detectorPosition)
+            (*detectorRotation) * (preStepPoint->GetPosition() - detectorPosition),
+            particle
         )
     );
     return true;

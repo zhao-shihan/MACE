@@ -4,13 +4,15 @@
 
 #include "action/RunAction.hh"
 #include "action/PrimaryGeneratorAction.hh"
+#include "action/EventAction.hh"
 #include "Analysis.hh"
 
 using namespace MACE::SimG4;
 
-RunAction::RunAction(PrimaryGeneratorAction* pPrimaryGeneratorAction) :
+RunAction::RunAction(PrimaryGeneratorAction* pPrimaryGeneratorAction, EventAction* pEventAction) :
     G4UserRunAction(),
-    fpPrimaryGeneratorAction(pPrimaryGeneratorAction) {
+    fpPrimaryGeneratorAction(pPrimaryGeneratorAction),
+    fpEventAction(pEventAction) {
     Analysis::Instance()->Initialize();
 }
 
@@ -30,8 +32,10 @@ void RunAction::BeginOfRunAction(const G4Run* run) {
         for (G4int i = 0; i < mpiManager->GetRank(); ++i) {
             firstPluseIDOfThisRank += allNumberOfEvent[i];
         }
+        delete[] allNumberOfEvent;
     }
     fpPrimaryGeneratorAction->SetFirstPluseIDOfThisRank(firstPluseIDOfThisRank);
+    fpEventAction->SetFirstPluseIDOfThisRank(firstPluseIDOfThisRank);
 }
 
 void RunAction::EndOfRunAction(const G4Run*) {

@@ -23,7 +23,7 @@ public:
 private:
     G4ParticleGun* const fParticleGun;
 
-    G4int    fFirstPluseIDOfThisRank;
+    G4int    fFirstPluseIDOfThisRank = 0;
 
     G4double fFlux = 1e8 / s;
     G4double fPlusePeakInterval = 10 * us;
