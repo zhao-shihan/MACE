@@ -1,56 +1,27 @@
-#include "TVector3.h"
-#include "TFile.h"
-#include "TTreeReader.h"
-
-using HitList = std::list<TVector3>;
-
-std::vector<HitList> ReadData(const char* fileName) {
-    auto file = new TFile(fileName, "READ");
-    if (!file->IsOpen()) { return std::vector<HitList>(); }
-
-    TTreeReader reader("Spectrometer", file);
-    TTreeReaderValue<Int_t>   pluseID(reader, "PluseID");
-    TTreeReaderValue<Float_t> hitPositionX(reader, "HitPositionX");
-    TTreeReaderValue<Float_t> hitPositionY(reader, "HitPositionY");
-    TTreeReaderValue<Float_t> hitPositionZ(reader, "HitPositionZ");
-
-    std::vector<HitList> hitDataList(0);
-    std::vector<HitList>::reverse_iterator thisData;
-    Int_t thisPluse = -1;
-    while (reader.Next()) {
-        if (thisPluse != *pluseID) {
-            hitDataList.emplace_back(0);
-            thisData = hitDataList.rbegin();
-            thisPluse = *pluseID;
-        }
-        thisData->emplace_back(*hitPositionX, *hitPositionY, *hitPositionZ);
-    }
-
-    file->Close();
-    delete file;
-
-    return hitDataList;
-}
-
 #include "Eigen/Core"
 #include "TH2I.h"
 #include "TCanvas.h"
 
+#include "ExperimentData.hh"
+
+using namespace MACE::SpectrometerReconstruction;
+
 // using InitialValue = std::pair<TVector3, TVector3>;
-using HitPointerList = std::vector<const TVector3*>;
+using HitPointerList = std::vector<const Hit*>;
 // using RawTrack = std::pair<InitialValue, HitPointerList>;
 
 HitPointerList Hough(const HitList& hitList) {
     constexpr      int threshold = 5;
-    constexpr Double_t   xExtent = 10000;
+    constexpr Double_t   xExtent = 5000;
     constexpr      int     xSize = 100;
-    constexpr Double_t   yExtent = 10000;
+    constexpr Double_t   yExtent = 5000;
     constexpr      int     ySize = 100;
     constexpr Double_t spectrometerFirstLayerRadius = 90;
+    constexpr Double_t protectedRadius = 3 * spectrometerFirstLayerRadius;
     constexpr Double_t yResolution = yExtent / ySize;
     constexpr Double_t xResolution = xExtent / xSize;
     using HoughSpace = Eigen::Matrix<HitPointerList, Eigen::Dynamic, Eigen::Dynamic>;
-    using HoughSizeSpace = Eigen::Matrix<size_t, Eigen::Dynamic, Eigen::Dynamic>;
+    using HoughSizeSpace = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic>;
 
     if (hitList.size() < threshold) { return HitPointerList(0); }
 
@@ -64,15 +35,15 @@ HitPointerList Hough(const HitList& hitList) {
     }
 
     for (const auto& hit : hitList) {
-        const Double_t R2 = hit.x() * hit.x() + hit.y() * hit.y();
-        const Double_t X = 2.0 * hit.x() / R2;
-        const Double_t Y = 2.0 * hit.y() / R2;
+        const Double_t R2 = hit.HitPosition().x() * hit.HitPosition().x() + hit.HitPosition().y() * hit.HitPosition().y();
+        const Double_t X = 2.0 * hit.HitPosition().x() / R2;
+        const Double_t Y = 2.0 * hit.HitPosition().y() / R2;
 
         if (fabs(X / Y) < 1.0) {
             for (int i = 0; i < xSize; ++i) {
                 const Double_t xc = (-xExtent / 2.0) + (i + 0.5) * xResolution;
                 const Double_t yc = (1.0 - X * xc) / Y;
-                if (xc * xc + yc * yc < 3 * spectrometerFirstLayerRadius * 3 * spectrometerFirstLayerRadius) { continue; }
+                if (xc * xc + yc * yc < protectedRadius * protectedRadius) { continue; }
                 const int j = yc / yResolution + (yExtent / (2.0 * yResolution));
                 if (0 <= j && j < ySize) {
                     hough(i, j).push_back(&hit);
@@ -83,7 +54,7 @@ HitPointerList Hough(const HitList& hitList) {
             for (int j = 0; j < ySize; ++j) {
                 const Double_t yc = (-yExtent / 2.0) + (j + 0.5) * yResolution;
                 const Double_t xc = (1.0 - Y * yc) / X;
-                if (xc * xc + yc * yc < 3 * spectrometerFirstLayerRadius * 3 * spectrometerFirstLayerRadius) { continue; }
+                if (xc * xc + yc * yc < protectedRadius * protectedRadius) { continue; }
                 const int i = xc / xResolution + (xExtent / (2.0 * xResolution));
                 if (0 <= i && i < xSize) {
                     hough(i, j).push_back(&hit);
@@ -93,29 +64,31 @@ HitPointerList Hough(const HitList& hitList) {
         }
     }
 
-    // TCanvas vis;
-    // TH2I h("h2", "hough space", xSize, 0, xSize, ySize, 0, ySize);
-    // for (int i = 0; i < xSize; ++i) {
-    //     for (int j = 0; j < ySize; ++j) {
-    //         h.Fill(i, j, houghSize(i, j));
-    //     }
-    // }
-    // h.Draw("COL");
-    // vis.Print("houghSpace.png");
+    TCanvas canvas;
+    TH2I houghHist("HoughSpace", "hough space", xSize, 0, xSize, ySize, 0, ySize);
+    for (int i = 0; i < xSize; ++i) {
+        for (int j = 0; j < ySize; ++j) {
+            houghHist.Fill(i, j, houghSize(i, j));
+        }
+    }
+    houghHist.Draw("LEGO");
+    canvas.Print("houghSpace_LEGO.png");
+    houghHist.Draw("COL");
+    canvas.Print("houghSpace_COL.png");
 
     HitPointerList firstHitList(0);
     int imax, jmax;
     while (houghSize.maxCoeff(&imax, &jmax) >= threshold) {
         houghSize(imax, jmax) = 0;
-        const auto* firstHit = *std::min_element(hough(imax, jmax).begin(), hough(imax, jmax).end(), [](const TVector3* r1, const TVector3* r2)->bool { return r1->Mag2() < r2->Mag2(); });
-        if (std::find(firstHitList.begin(), firstHitList.end(), firstHit) == firstHitList.end()) {
-            if (firstHit->x() * firstHit->x() + firstHit->y() * firstHit->y() < spectrometerFirstLayerRadius * spectrometerFirstLayerRadius) {
-                firstHitList.push_back(firstHit);
-            }
+        const auto* firstHit = *std::min_element(hough(imax, jmax).begin(), hough(imax, jmax).end(),
+            [](const Hit* h1, const Hit* h2)->bool { return h1->HitPosition().Mag2() < h2->HitPosition().Mag2(); });
+        if (firstHit->ChamberID() == 0 &&
+            std::find(firstHitList.begin(), firstHitList.end(), firstHit) == firstHitList.end()) {
+            firstHitList.push_back(firstHit);
         }
     }
 
-    // std::cout << hitList.size() << '\t' << firstHitList.size() << std::endl;
+    std::cout << hitList.size() << '\t' << firstHitList.size() << std::endl;
 
     return firstHitList;
 }
@@ -144,7 +117,7 @@ HitPointerList Hough(const HitList& hitList) {
 #include "TMath.h"
 
 int main(int, char** argv) {
-    auto data = ReadData(argv[1]);
+    ExperimentData data(argv[1]);
     for (const auto& hitList : data) {
         Hough(hitList);
     }
