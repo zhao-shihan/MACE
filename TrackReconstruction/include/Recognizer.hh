@@ -2,6 +2,8 @@
 
 #include "Eigen/Core"
 
+#include "TFile.h"
+
 #include "TrackReconstructionGlobal.hh"
 
 class MACE::TrackReconstruction::Recognizer final {
@@ -11,16 +13,17 @@ private:
     using HoughCount_t = Int_t;
 
 public:
-    Recognizer(Eigen::Index size);
+    Recognizer(Double_t houghSpaceExtent, Double_t proposingHoughSpaceResolution);
+    ~Recognizer();
 
     void SetPluseData(const PluseData& pluseData) { fpPluseData = &pluseData; fDataResultIsConsistent = false; }
     void Recognize();
-    const HitPointerList& GetResult() const { return fResult; }
-    void PrintLastRecognition(const char* realSpaceGraphFileName, const char* houghSpaceGraphFileName, UInt_t graphWidth = 680, UInt_t graphHeight = 480) const;
+    const auto& GetResult() const { return fResult; }
 
-    void SetThreshold(HoughCount_t val) { fThreshold = val; }
-    void SetMaxRadius(Double_t val) { fMaxRadius = val; }
+    void SaveLastRecognition(const char* fileName);
+
     void SetProtectedRadius(Double_t val) { fProtectedRadius = val; }
+    void SetThreshold(HoughCount_t val) { fThreshold = val; }
     void SetCoincidenceChamberID(Int_t val) { fCoincidenceChamberID = val; }
 
 private:
@@ -29,16 +32,19 @@ private:
     void GenerateResult();
 
 private:
-    HoughCount_t fThreshold = 5;
-    Double_t fMaxRadius = 2000;
+    const Eigen::Index fSize;
+    const Double_t fExtent;
+    const Double_t fResolution;
     Double_t fProtectedRadius = 200;
+    HoughCount_t fThreshold = 5;
     Int_t fCoincidenceChamberID = 3;
 
-    bool fDataResultIsConsistent = false;
-
     const PluseData* fpPluseData = nullptr;
-    const Eigen::Index fSize;
     HoughSpace<HitPointerList> fHoughStore;
     HoughSpace<HoughCount_t> fHoughCount;
     HitPointerList fResult;
+
+    bool fDataResultIsConsistent;
+
+    TFile* fFile = nullptr;
 };

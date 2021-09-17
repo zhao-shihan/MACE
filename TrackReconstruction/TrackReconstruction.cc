@@ -34,11 +34,11 @@ using namespace MACE::TrackReconstruction;
 
 int main(int, char** argv) {
     ExperimentData experiment(argv[1]);
-    Recognizer recognizer(200);
+    Recognizer recognizer(2500, 30);
     for (const auto& pluse : experiment) {
         recognizer.SetPluseData(pluse);
         recognizer.Recognize();
-        recognizer.PrintLastRecognition("real.png", "hough.png");
+        recognizer.SaveLastRecognition("recognition.root");
         recognizer.GetResult();
     }
 

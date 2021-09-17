@@ -1,36 +1,52 @@
+#include "TKey.h"
 #include "TH2I.h"
-#include "TGraph.h"
 #include "TCanvas.h"
 #include "TMarker.h"
-#include "TDirectory.h"
+#include "TFolder.h"
 
 #include "Recognizer.hh"
 #include "Hit.hh"
 
 using namespace MACE::TrackReconstruction;
 
-Recognizer::Recognizer(Eigen::Index size) :
-    fSize(size),
-    fHoughStore(size, size),
-    fHoughCount(size, size),
-    fResult(0) {}
+Recognizer::Recognizer(Double_t houghSpaceExtent, Double_t proposingHoughSpaceResolution) :
+    fSize(round(2.0 * houghSpaceExtent / proposingHoughSpaceResolution)),
+    fExtent(houghSpaceExtent),
+    fResolution(2.0 * houghSpaceExtent / fSize),
+    fHoughStore(fSize, fSize),
+    fHoughCount(fSize, fSize),
+    fResult(0),
+    fDataResultIsConsistent(false) {}
 
 Recognizer::Recognizer(Recognizer&& rvalue) :
-    fThreshold(std::move(rvalue.fThreshold)),
-    fMaxRadius(std::move(rvalue.fMaxRadius)),
-    fProtectedRadius(std::move(rvalue.fProtectedRadius)),
-    fCoincidenceChamberID(std::move(rvalue.fCoincidenceChamberID)),
-    fDataResultIsConsistent(std::move(rvalue.fDataResultIsConsistent)),
-    fpPluseData(std::move(rvalue.fpPluseData)),
     fSize(std::move(rvalue.fSize)),
+    fExtent(std::move(rvalue.fExtent)),
+    fResolution(std::move(rvalue.fResolution)),
+    fProtectedRadius(std::move(rvalue.fProtectedRadius)),
+    fThreshold(std::move(rvalue.fThreshold)),
+    fCoincidenceChamberID(std::move(rvalue.fCoincidenceChamberID)),
+    fpPluseData(std::move(rvalue.fpPluseData)),
     fHoughStore(std::move(rvalue.fHoughStore)),
     fHoughCount(std::move(rvalue.fHoughCount)),
-    fResult(std::move(rvalue.fResult)) {}
+    fResult(std::move(rvalue.fResult)),
+    fDataResultIsConsistent(std::move(rvalue.fDataResultIsConsistent)),
+    fFile(std::move(rvalue.fFile)) {}
+
+Recognizer::~Recognizer() {
+    if (fFile != nullptr) {
+        if (fFile->IsOpen()) {
+            fFile->Write();
+            fFile->Close();
+        }
+    }
+    delete fFile;
+}
 
 void Recognizer::Recognize() {
-    if (fpPluseData->size() < fThreshold) { return; }
     Initialize();
-    HoughTransform();
+    if (fpPluseData->size() >= fThreshold) {
+        HoughTransform();
+    }
     GenerateResult();
     fDataResultIsConsistent = true;
 }
@@ -46,7 +62,6 @@ void Recognizer::Initialize() {
 }
 
 void Recognizer::HoughTransform() {
-    const Double_t resolution = 2.0 * fMaxRadius / fSize;
     // do hough transform
     for (const auto& hit : *fpPluseData) {
         const Double_t R2 = hit.HitPosition().x() * hit.HitPosition().x() + hit.HitPosition().y() * hit.HitPosition().y();
@@ -54,18 +69,18 @@ void Recognizer::HoughTransform() {
         const Double_t Y = 2.0 * hit.HitPosition().y() / R2;
         if (fabs(X / Y) < 1.0) {
             for (Eigen::Index i = 0; i < fSize; ++i) {
-                const Double_t xc = -fMaxRadius + (i + 0.5) * resolution;
+                const Double_t xc = -fExtent + (i + 0.5) * fResolution;
                 const Double_t yc = (1.0 - X * xc) / Y;
                 if (xc * xc + yc * yc < fProtectedRadius * fProtectedRadius) { continue; }
-                const Eigen::Index j = yc / resolution + (fMaxRadius / resolution);
+                const Eigen::Index j = (yc + fExtent) / fResolution;
                 if (0 <= j && j < fSize) { fHoughStore(i, j).push_back(&hit); }
             }
         } else {
             for (Eigen::Index j = 0; j < fSize; ++j) {
-                const Double_t yc = -fMaxRadius + (j + 0.5) * resolution;
+                const Double_t yc = -fExtent + (j + 0.5) * fResolution;
                 const Double_t xc = (1.0 - Y * yc) / X;
                 if (xc * xc + yc * yc < fProtectedRadius * fProtectedRadius) { continue; }
-                const Eigen::Index i = xc / resolution + (fMaxRadius / resolution);
+                const Eigen::Index i = (xc + fExtent) / fResolution;
                 if (0 <= i && i < fSize) { fHoughStore(i, j).push_back(&hit); }
             }
         }
@@ -92,45 +107,48 @@ void Recognizer::GenerateResult() {
     }
 }
 
-void Recognizer::PrintLastRecognition(const char* realSpaceGraphFileName, const char* houghSpaceGraphFileName, UInt_t graphWidth, UInt_t graphHeight) const {
+void Recognizer::SaveLastRecognition(const char* fileName) {
     if (!fDataResultIsConsistent) {
-        printf("Warning: Data and result are inconsistent. Try do Recognize() before printing the result. Nothing was done here.");
+        std::cout << "Warning: Data and result are inconsistent. Try do Recognize() before printing the result. Nothing was done here." << std::endl;
         return;
     }
+    if (fFile == nullptr) { fFile = new TFile(fileName, "RECREATE"); }
 
-    std::cout << fpPluseData->size() << '\t' << fResult.size() << std::endl;
+    TH2I houghSpace("HoughSpace", "hough space", fSize, -fExtent, fExtent, fSize, -fExtent, fExtent);
+    houghSpace.SetStats(false);
+    houghSpace.SetXTitle("x[mm]");
+    houghSpace.SetYTitle("y[mm]");
+    houghSpace.SetDrawOption("COLZ");
+    for (Eigen::Index i = 0; i < fSize; ++i) {
+        for (Eigen::Index j = 0; j < fSize; ++j) {
+            const Double_t xc = -fExtent + (i + 0.5) * fResolution;
+            const Double_t yc = -fExtent + (j + 0.5) * fResolution;
+            houghSpace.Fill(xc, yc, fHoughStore(i, j).size());
+        }
+    }
 
-    auto dir = new TDirectory();
-
-    auto canvas = new TCanvas(); dir->Add(canvas);
-    canvas->SetCanvasSize(graphWidth, graphHeight);
-    canvas->SetGrid();
-
-    auto realSpace = new TH2I("RealSpace", "real space", 1, -350, 350, 1, -350, 350); realSpace->SetDirectory(dir);
-    realSpace->SetStats(false);
-    realSpace->Draw("AXIS");
+    TCanvas realSpace("RealSpace", "real space");
+    realSpace.SetGrid();
+    TH2I realSpaceAxis("RealSpace", "real space", 1, -350, 350, 1, -350, 350);
+    realSpaceAxis.SetStats(false);
+    realSpaceAxis.SetXTitle("x[mm]");
+    realSpaceAxis.SetYTitle("y[mm]");
+    realSpaceAxis.Draw("AXIS");
     for (const auto& hit : *fpPluseData) {
-        auto hitMarker = new TMarker(hit.HitPosition().x(), hit.HitPosition().y(), kFullSquare); dir->Add(hitMarker);
+        auto hitMarker = new TMarker(hit.HitPosition().x(), hit.HitPosition().y(), kFullCircle);
         hitMarker->SetMarkerColor(kBlue);
+        if (std::find(fResult.cbegin(), fResult.cend(), &hit) != fResult.cend()) {
+            hitMarker->SetMarkerStyle(kFullSquare);
+        }
         hitMarker->Draw();
-        auto vertexMarker = new TMarker(hit.VertexPosition().x(), hit.VertexPosition().y(), kPlus); dir->Add(vertexMarker);
+        auto vertexMarker = new TMarker(hit.VertexPosition().x(), hit.VertexPosition().y(), kPlus);
         vertexMarker->SetMarkerSize(2);
         vertexMarker->SetMarkerColor(kRed);
         vertexMarker->Draw();
     }
-    canvas->Print(realSpaceGraphFileName);
-    canvas->Clear();
 
-    auto houghSpace = new TH2I("HoughSpace", "hough space", fSize, 0, fSize, fSize, 0, fSize); houghSpace->SetDirectory(dir);
-    for (Eigen::Index i = 0; i < fSize; ++i) {
-        for (Eigen::Index j = 0; j < fSize; ++j) {
-            houghSpace->Fill(i, j, fHoughStore(i, j).size());
-        }
-    }
-    houghSpace->SetStats(false);
-    houghSpace->Draw("COLZ");
-    canvas->Print(houghSpaceGraphFileName);
-    canvas->Clear();
-
-    delete dir;
+    TFolder folder("Recognition", "a recognition");
+    folder.Add(&houghSpace);
+    folder.Add(&realSpace);
+    folder.Write();
 }
