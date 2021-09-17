@@ -3,7 +3,7 @@
 
 #include "ExperimentData.hh"
 
-using namespace MACE::SpectrometerReconstruction;
+using namespace MACE::TrackReconstruction;
 
 ExperimentData::ExperimentData(const char* rootFile) :
     ExperimentDataBase(0) {

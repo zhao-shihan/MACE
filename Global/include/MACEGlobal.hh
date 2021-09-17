@@ -75,8 +75,9 @@ namespace MACE {
         struct Vector3;
         class Worker;
     }
-    namespace SpectrometerReconstruction {
+    namespace TrackReconstruction {
         class ExperimentData;
         class Hit;
+        class Recognizer;
     }
 }

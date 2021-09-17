@@ -1,98 +1,14 @@
-#include "Eigen/Core"
 #include "TH2I.h"
+#include "TGraph.h"
 #include "TCanvas.h"
+#include "TMarker.h"
+#include "TEllipse.h"
+#include "TDirectory.h"
 
 #include "ExperimentData.hh"
+#include "Recognizer.hh"
 
-using namespace MACE::SpectrometerReconstruction;
-
-// using InitialValue = std::pair<TVector3, TVector3>;
-using HitPointerList = std::vector<const Hit*>;
-// using RawTrack = std::pair<InitialValue, HitPointerList>;
-
-HitPointerList Hough(const HitList& hitList) {
-    constexpr      int threshold = 5;
-    constexpr Double_t   xExtent = 5000;
-    constexpr      int     xSize = 100;
-    constexpr Double_t   yExtent = 5000;
-    constexpr      int     ySize = 100;
-    constexpr Double_t spectrometerFirstLayerRadius = 90;
-    constexpr Double_t protectedRadius = 3 * spectrometerFirstLayerRadius;
-    constexpr Double_t yResolution = yExtent / ySize;
-    constexpr Double_t xResolution = xExtent / xSize;
-    using HoughSpace = Eigen::Matrix<HitPointerList, Eigen::Dynamic, Eigen::Dynamic>;
-    using HoughSizeSpace = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic>;
-
-    if (hitList.size() < threshold) { return HitPointerList(0); }
-
-    HoughSpace     hough(xSize, ySize);
-    HoughSizeSpace houghSize(xSize, ySize);
-    for (int i = 0; i < xSize; ++i) {
-        for (int j = 0; j < ySize; ++j) {
-            hough(i, j).reserve(10);
-            houghSize(i, j) = 0;
-        }
-    }
-
-    for (const auto& hit : hitList) {
-        const Double_t R2 = hit.HitPosition().x() * hit.HitPosition().x() + hit.HitPosition().y() * hit.HitPosition().y();
-        const Double_t X = 2.0 * hit.HitPosition().x() / R2;
-        const Double_t Y = 2.0 * hit.HitPosition().y() / R2;
-
-        if (fabs(X / Y) < 1.0) {
-            for (int i = 0; i < xSize; ++i) {
-                const Double_t xc = (-xExtent / 2.0) + (i + 0.5) * xResolution;
-                const Double_t yc = (1.0 - X * xc) / Y;
-                if (xc * xc + yc * yc < protectedRadius * protectedRadius) { continue; }
-                const int j = yc / yResolution + (yExtent / (2.0 * yResolution));
-                if (0 <= j && j < ySize) {
-                    hough(i, j).push_back(&hit);
-                    ++houghSize(i, j);
-                }
-            }
-        } else {
-            for (int j = 0; j < ySize; ++j) {
-                const Double_t yc = (-yExtent / 2.0) + (j + 0.5) * yResolution;
-                const Double_t xc = (1.0 - Y * yc) / X;
-                if (xc * xc + yc * yc < protectedRadius * protectedRadius) { continue; }
-                const int i = xc / xResolution + (xExtent / (2.0 * xResolution));
-                if (0 <= i && i < xSize) {
-                    hough(i, j).push_back(&hit);
-                    ++houghSize(i, j);
-                }
-            }
-        }
-    }
-
-    TCanvas canvas;
-    TH2I houghHist("HoughSpace", "hough space", xSize, 0, xSize, ySize, 0, ySize);
-    for (int i = 0; i < xSize; ++i) {
-        for (int j = 0; j < ySize; ++j) {
-            houghHist.Fill(i, j, houghSize(i, j));
-        }
-    }
-    houghHist.Draw("LEGO");
-    canvas.Print("houghSpace_LEGO.png");
-    houghHist.Draw("COL");
-    canvas.Print("houghSpace_COL.png");
-
-    HitPointerList firstHitList(0);
-    int imax, jmax;
-    while (houghSize.maxCoeff(&imax, &jmax) >= threshold) {
-        houghSize(imax, jmax) = 0;
-        const auto* firstHit = *std::min_element(hough(imax, jmax).begin(), hough(imax, jmax).end(),
-            [](const Hit* h1, const Hit* h2)->bool { return h1->HitPosition().Mag2() < h2->HitPosition().Mag2(); });
-        if (firstHit->ChamberID() == 0 &&
-            std::find(firstHitList.begin(), firstHitList.end(), firstHit) == firstHitList.end()) {
-            firstHitList.push_back(firstHit);
-        }
-    }
-
-    std::cout << hitList.size() << '\t' << firstHitList.size() << std::endl;
-
-    return firstHitList;
-}
-
+using namespace MACE::TrackReconstruction;
 
 #include "ConstField.h"
 #include "Exception.h"
@@ -117,9 +33,13 @@ HitPointerList Hough(const HitList& hitList) {
 #include "TMath.h"
 
 int main(int, char** argv) {
-    ExperimentData data(argv[1]);
-    for (const auto& hitList : data) {
-        Hough(hitList);
+    ExperimentData experiment(argv[1]);
+    Recognizer recognizer(200);
+    for (const auto& pluse : experiment) {
+        recognizer.SetPluseData(pluse);
+        recognizer.Recognize();
+        recognizer.PrintLastRecognition("real.png", "hough.png");
+        recognizer.GetResult();
     }
 
     /*

@@ -18,6 +18,9 @@ endif()
 # ROOT
 find_package(ROOT REQUIRED)
 
+# EIGEN3
+find_package(Eigen3 REQUIRED)
+
 # Vars
 set(MACE_PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
 set(MACE_BINARY_INSTALL_DIR .)
@@ -42,4 +45,4 @@ endfunction()
 add_subdirectory(Buildin)
 add_subdirectory(SimG4)
 add_subdirectory(SimMTransport)
-add_subdirectory(SpectrometerReconstruction)
+add_subdirectory(TrackReconstruction)
