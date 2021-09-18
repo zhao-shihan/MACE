@@ -13,7 +13,7 @@
 using namespace MACE::SimG4;
 
 int main(int argc, char** argv) {
-    auto engine = new CLHEP::MTwistEngine();
+    auto engine = new CLHEP::MTwistEngine(4357L);
     G4Random::setTheEngine(engine);
 
     auto runManager = new G4RunManager();

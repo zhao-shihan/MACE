@@ -4,6 +4,7 @@
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
+#include "G4ParticleDefinition.hh"
 
 #include "SimG4Global.hh"
 
@@ -12,36 +13,34 @@ public:
     CalorimeterHit(
         G4int trackID,
         G4double hitTime,
-        G4double Energy);
-    ~CalorimeterHit();
+        G4double Energy,
+        const G4ParticleDefinition* particle);
+    // ~CalorimeterHit();
 
     inline void* operator new(size_t);
     inline void  operator delete(void*);
 
-    void Draw() override;
-    void Print() override;
+    // void Draw() override;
+    // void Print() override;
 
     const G4int         TrackID;
     const G4double      HitTime;
     const G4double      Energy;
+    const G4ParticleDefinition* const ParticleDefinition;
 };
 
-namespace MACE {
-    namespace SimG4 {
-        namespace Hit {
+namespace MACE::SimG4::Hit {
 
-            using CalorimeterHitsCollection = G4THitsCollection<CalorimeterHit>;
+    using CalorimeterHitsCollection = G4THitsCollection<CalorimeterHit>;
 
-            extern G4Allocator<CalorimeterHit>* CalorimeterHitAllocator;
+    extern G4Allocator<CalorimeterHit>* CalorimeterHitAllocator;
 
-            inline void* CalorimeterHit::operator new(size_t) {
-                return static_cast<void*>(CalorimeterHitAllocator->MallocSingle());
-            }
-
-            inline void CalorimeterHit::operator delete(void* hit) {
-                CalorimeterHitAllocator->FreeSingle(static_cast<CalorimeterHit*>(hit));
-            }
-
-        }
+    inline void* CalorimeterHit::operator new(size_t) {
+        return static_cast<void*>(CalorimeterHitAllocator->MallocSingle());
     }
+
+    inline void CalorimeterHit::operator delete(void* hit) {
+        CalorimeterHitAllocator->FreeSingle(static_cast<CalorimeterHit*>(hit));
+    }
+
 }

@@ -6,7 +6,7 @@
 
 class MACE::SimG4::RunAction : public G4UserRunAction {
 public:
-    RunAction(PrimaryGeneratorAction* pPrimaryGeneratorAction);
+    RunAction(PrimaryGeneratorAction* pPrimaryGeneratorAction, EventAction* pEventAction);
     ~RunAction();
 
     void BeginOfRunAction(const G4Run* run) override;
@@ -14,4 +14,5 @@ public:
 
 private:
     PrimaryGeneratorAction* const fpPrimaryGeneratorAction;
+    EventAction* const fpEventAction;
 };

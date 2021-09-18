@@ -21,10 +21,13 @@ private:
 public:
     void Initialize();
     void Open() const;
+
+    void SetPluseID(G4int pluseID) { fPluseID = pluseID; }
     void SubmitCalorimeterHC(const Hit::CalorimeterHitsCollection* const hc) { fpCalorimeterHC = hc; }
     void SubmitOrbitalDetectorHC(const Hit::OrbitalDetectorHitsCollection* const hc) { fpOrbitalDetectorHC = hc; }
     void SubmitSpectrometerHC(const Hit::SpectrometerHitsCollection* const hc) { fpSpectrometerHC = hc; }
     void DoCoincidenceAnalysisAndFill() const;
+
     void WriteAndClose() const;
 
     void SetFlightDistance(G4double val);
@@ -36,8 +39,8 @@ public:
 
 private:
     void FillOrbitalDetectorHit(const Hit::OrbitalDetectorHit* const hit) const;
-    void FillCalorimeterHits(const std::vector<Hit::CalorimeterHit*>::const_iterator hitBegin, const std::vector<Hit::CalorimeterHit*>::const_iterator hitEnd) const;
-    void FillSpectrometerHits(const std::vector<Hit::SpectrometerHit*>::const_iterator hitBegin, const std::vector<Hit::SpectrometerHit*>::const_iterator hitEnd) const;
+    void FillCalorimeterHits(std::vector<Hit::CalorimeterHit*>::const_iterator& hitBegin, const std::vector<Hit::CalorimeterHit*>::const_iterator hitEnd) const;
+    void FillSpectrometerHits(std::vector<Hit::SpectrometerHit*>::const_iterator& hitBegin, const std::vector<Hit::SpectrometerHit*>::const_iterator hitEnd) const;
 
 private:
     G4ToolsAnalysisManager* fpG4Analysis;
@@ -52,7 +55,9 @@ private:
     G4double fCalorimeterWindowWidth = 2 * ns;
     G4double fSpectrometerWindowWidth = 8 * ns;
 
-    G4bool fEnableCoincidenceOfCalorimeter = true;
+    G4bool   fEnableCoincidenceOfCalorimeter = true;
+
+    G4int    fPluseID = 0;
 
     G4String fFileName = "MACE_SimG4";
 };
