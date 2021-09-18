@@ -16,8 +16,7 @@ public:
     Recognizer(Double_t houghSpaceExtent, Double_t proposingHoughSpaceResolution);
     ~Recognizer();
 
-    void SetPluseData(const PluseData& pluseData) { fpPluseData = &pluseData; fDataResultIsConsistent = false; }
-    void Recognize();
+    void Recognize(const PluseData& pluseData);
     const auto& GetResult() const { return fResult; }
 
     void SaveLastRecognition(const char* fileName);
@@ -40,11 +39,8 @@ private:
     Int_t fCoincidenceChamberID = 3;
 
     const PluseData* fpPluseData = nullptr;
-    HoughSpace<HitPointerList> fHoughStore;
-    HoughSpace<HoughCount_t> fHoughCount;
+    HoughSpace<HitPointerList> fHoughSpace;
     HitPointerList fResult;
-
-    bool fDataResultIsConsistent;
 
     TFile* fFile = nullptr;
 };

@@ -13,10 +13,14 @@ Recognizer::Recognizer(Double_t houghSpaceExtent, Double_t proposingHoughSpaceRe
     fSize(round(2.0 * houghSpaceExtent / proposingHoughSpaceResolution)),
     fExtent(houghSpaceExtent),
     fResolution(2.0 * houghSpaceExtent / fSize),
-    fHoughStore(fSize, fSize),
-    fHoughCount(fSize, fSize),
-    fResult(0),
-    fDataResultIsConsistent(false) {}
+    fHoughSpace(fSize, fSize),
+    fResult(0) {
+    auto* const houghSpace = fHoughSpace.data();
+    for (size_t i = 0; i < fSize * fSize; ++i) {
+        houghSpace[i].reserve(0x40UL);
+    }
+    fResult.reserve(0x10UL);
+}
 
 Recognizer::Recognizer(Recognizer&& rvalue) :
     fSize(std::move(rvalue.fSize)),
@@ -26,10 +30,8 @@ Recognizer::Recognizer(Recognizer&& rvalue) :
     fThreshold(std::move(rvalue.fThreshold)),
     fCoincidenceChamberID(std::move(rvalue.fCoincidenceChamberID)),
     fpPluseData(std::move(rvalue.fpPluseData)),
-    fHoughStore(std::move(rvalue.fHoughStore)),
-    fHoughCount(std::move(rvalue.fHoughCount)),
+    fHoughSpace(std::move(rvalue.fHoughSpace)),
     fResult(std::move(rvalue.fResult)),
-    fDataResultIsConsistent(std::move(rvalue.fDataResultIsConsistent)),
     fFile(std::move(rvalue.fFile)) {}
 
 Recognizer::~Recognizer() {
@@ -38,27 +40,25 @@ Recognizer::~Recognizer() {
             fFile->Write();
             fFile->Close();
         }
+        delete fFile;
     }
-    delete fFile;
 }
 
-void Recognizer::Recognize() {
+void Recognizer::Recognize(const PluseData& pluseData) {
+    fpPluseData = &pluseData;
     Initialize();
     if (fpPluseData->size() >= fThreshold) {
         HoughTransform();
     }
     GenerateResult();
-    fDataResultIsConsistent = true;
 }
 
 void Recognizer::Initialize() {
-    for (Eigen::Index i = 0; i < fSize; ++i) {
-        for (Eigen::Index j = 0; j < fSize; ++j) {
-            fHoughStore(i, j).clear();
-            fHoughStore(i, j).reserve(0x40UL);
-        }
+    auto* const  houghSpace = fHoughSpace.data();
+    for (size_t i = 0; i < fSize * fSize; ++i) {
+        houghSpace[i].clear();
     }
-    fHoughCount.fill(0);
+    fResult.clear();
 }
 
 void Recognizer::HoughTransform() {
@@ -73,7 +73,7 @@ void Recognizer::HoughTransform() {
                 const Double_t yc = (1.0 - X * xc) / Y;
                 if (xc * xc + yc * yc < fProtectedRadius * fProtectedRadius) { continue; }
                 const Eigen::Index j = (yc + fExtent) / fResolution;
-                if (0 <= j && j < fSize) { fHoughStore(i, j).push_back(&hit); }
+                if (0 <= j && j < fSize) { fHoughSpace(i, j).push_back(&hit); }
             }
         } else {
             for (Eigen::Index j = 0; j < fSize; ++j) {
@@ -81,38 +81,37 @@ void Recognizer::HoughTransform() {
                 const Double_t xc = (1.0 - Y * yc) / X;
                 if (xc * xc + yc * yc < fProtectedRadius * fProtectedRadius) { continue; }
                 const Eigen::Index i = (xc + fExtent) / fResolution;
-                if (0 <= i && i < fSize) { fHoughStore(i, j).push_back(&hit); }
+                if (0 <= i && i < fSize) { fHoughSpace(i, j).push_back(&hit); }
             }
-        }
-    }
-    // counting
-    for (Eigen::Index i = 0; i < fSize; ++i) {
-        for (Eigen::Index j = 0; j < fSize; ++j) {
-            fHoughCount(i, j) = fHoughStore(i, j).size();
         }
     }
 }
 
 void Recognizer::GenerateResult() {
-    fResult.clear();
-    Eigen::Index imax, jmax;
-    while (fHoughCount.maxCoeff(&imax, &jmax) >= fThreshold) {
-        fHoughCount(imax, jmax) = 0;
-        const auto firstHit = std::find_if(fHoughStore(imax, jmax).cbegin(), fHoughStore(imax, jmax).cend(),
+    auto* const houghSpace = fHoughSpace.data();
+    auto* maxPoint = houghSpace - 1;
+    while ((maxPoint = std::max_element(maxPoint + 1, houghSpace + fSize * fSize,
+        [](const HitPointerList& h1, const HitPointerList& h2)->bool { return h1.size() < h2.size(); }))
+        ->size() >= fThreshold) {
+        const auto markedHit = std::find_if(maxPoint->cbegin(), maxPoint->cend(),
             [this](const Hit* const hit)->bool { return hit->ChamberID() == fCoincidenceChamberID; });
-        if (firstHit == fHoughStore(imax, jmax).cend()) { continue; }
-        if (std::find(fResult.cbegin(), fResult.cend(), *firstHit) == fResult.cend()) {
-            fResult.push_back(*firstHit);
+        if (markedHit == maxPoint->cend()) { continue; }
+        if (std::find(fResult.cbegin(), fResult.cend(), *markedHit) == fResult.cend()) {
+            fResult.push_back(*markedHit);
         }
     }
 }
 
 void Recognizer::SaveLastRecognition(const char* fileName) {
-    if (!fDataResultIsConsistent) {
-        std::cout << "Warning: Data and result are inconsistent. Try do Recognize() before printing the result. Nothing was done here." << std::endl;
-        return;
-    }
     if (fFile == nullptr) { fFile = new TFile(fileName, "RECREATE"); }
+    if (strcmp(fileName, fFile->GetName()) != 0) {
+        if (fFile->IsOpen()) {
+            fFile->Write();
+            fFile->Close();
+        }
+        delete fFile;
+        fFile = new TFile(fileName, "RECREATE");
+    }
 
     TH2I houghSpace("HoughSpace", "hough space", fSize, -fExtent, fExtent, fSize, -fExtent, fExtent);
     houghSpace.SetStats(false);
@@ -123,7 +122,7 @@ void Recognizer::SaveLastRecognition(const char* fileName) {
         for (Eigen::Index j = 0; j < fSize; ++j) {
             const Double_t xc = -fExtent + (i + 0.5) * fResolution;
             const Double_t yc = -fExtent + (j + 0.5) * fResolution;
-            houghSpace.Fill(xc, yc, fHoughStore(i, j).size());
+            houghSpace.Fill(xc, yc, fHoughSpace(i, j).size());
         }
     }
 

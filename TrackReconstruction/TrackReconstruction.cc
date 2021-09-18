@@ -36,8 +36,7 @@ int main(int, char** argv) {
     ExperimentData experiment(argv[1]);
     Recognizer recognizer(2500, 30);
     for (const auto& pluse : experiment) {
-        recognizer.SetPluseData(pluse);
-        recognizer.Recognize();
+        recognizer.Recognize(pluse);
         recognizer.SaveLastRecognition("recognition.root");
         recognizer.GetResult();
     }
