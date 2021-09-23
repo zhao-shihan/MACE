@@ -8,7 +8,7 @@ class MACE::SimG4::Geometry::SpectrometerShield : public MACE::SimG4::Geometry::
 public:
     SpectrometerShield();
 
-    void Create(G4Material* material, G4VPhysicalVolume* mother);
+    void Create(G4Material* material, const BaseInterface* mother);
 
     void SetInnerRadius(G4double val) { fInnerRadius = val; }
     void SetInnerLength(G4double val) { fInnerLength = val; }

@@ -8,7 +8,7 @@ class MACE::SimG4::Geometry::SpectrometerField : public MACE::SimG4::Geometry::B
 public:
     SpectrometerField();
 
-    void Create(G4Material* material, G4VPhysicalVolume* mother);
+    void Create(G4Material* material, const BaseInterface* mother);
 
     void SetRadius(G4double val) { fRadius = val; }
     void SetLength(G4double val) { fLength = val; }

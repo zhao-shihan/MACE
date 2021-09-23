@@ -1,36 +1,21 @@
-#include "G4Tubs.hh"
-#include "G4MultiUnion.hh"
+#include "G4Polycone.hh"
 
 #include "detector/geometry/Spectrometer.hh"
 
 using namespace MACE::SimG4::Geometry;
 
 Spectrometer::Spectrometer() :
-    BaseInterface(8),
-    fGDML(new G4GDMLParser()) {}
+    BaseInterface(1) {}
 
-Spectrometer::~Spectrometer() {
-    delete fGDML;
-}
+Spectrometer::~Spectrometer() {}
 
-void Spectrometer::Create(G4Material* material, G4VPhysicalVolume* mother) {
+void Spectrometer::Create(G4Material* material, const BaseInterface* mother) {
     G4String name("Spectrometer");
-    for (size_t i = 0; i < GetVolumeSetCount(); ++i) {
-        G4double radii = fInnerRadius + i * (fOuterRadius - fInnerRadius) / (GetVolumeSetCount() - 1);
-        G4double halfActiveLength = 0.5 * (fInnerEffectiveLength + i * (fOuterEffectiveLength - fInnerEffectiveLength) / (GetVolumeSetCount() - 1));
-        auto solid = new G4Tubs(name, radii, radii + fThickness, halfActiveLength, 0. * deg, 360. * deg);
-        auto logic = new G4LogicalVolume(solid, material, name);
-        auto physic = new G4PVPlacement(G4Transform3D(), name, logic, mother, true, i, checkOverlaps);
-        GetVolumeSet(i).Set(solid, logic, physic);
-    }
-    // ... then construct a temp union and write to gdml for fitter or others.
-    G4MultiUnion unionSolid(name);
-    G4Transform3D noTransform;
-    for (size_t i = 0; i < GetVolumeSetCount(); ++i) {
-        unionSolid.AddNode(*GetVolumeSet(i).GetSolidVolume(), noTransform);
-    }
-    unionSolid.Voxelize();
-    G4LogicalVolume logicalUnion(&unionSolid, material, name);
-    fGDML->SetOutputFileOverwrite(true);
-    fGDML->Write("spectrometer_geometry.gdml", &logicalUnion);
+    const G4double zPlane[] = { -fOuterLength / 2, -fInnerLength / 2, fInnerLength / 2, fOuterLength / 2 };
+    const G4double rInner[] = { fOuterRadius, fInnerRadius, fInnerRadius, fOuterRadius };
+    const G4double rOuter[] = { fOuterRadius, fOuterRadius, fOuterRadius, fOuterRadius };
+    auto solid = new G4Polycone(name, 0, 2 * pi, 4, zPlane, rInner, rOuter);
+    auto logic = new G4LogicalVolume(solid, material, name);
+    auto physic = new G4PVPlacement(G4Transform3D(), name, logic, mother->GetPhysicalVolume(), false, 0, checkOverlaps);
+    GetVolumeSet().Set(solid, logic, physic);
 }

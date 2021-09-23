@@ -11,7 +11,7 @@ public:
     BaseInterface(size_t volumeCount);
     virtual ~BaseInterface();
 
-    virtual void Create(G4Material* material, G4VPhysicalVolume* mother) = 0;
+    virtual void Create(G4Material* material, const BaseInterface* mother) = 0;
 
     auto* GetSolidVolume() const { return fVolumeSetList.front().GetSolidVolume(); }
     auto* GetLogicalVolume() const { return fVolumeSetList.front().GetLogicalVolume(); }
@@ -30,10 +30,6 @@ private:
     std::vector<VolumeSet> fVolumeSetList;
 };
 
-namespace MACE {
-    namespace SimG4 {
-        namespace Geometry {
-            constexpr G4bool checkOverlaps = false;
-        }
-    }
+namespace MACE::SimG4::Geometry {
+    constexpr G4bool checkOverlaps = false;
 }

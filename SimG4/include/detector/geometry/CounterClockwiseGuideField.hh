@@ -8,7 +8,7 @@ class MACE::SimG4::Geometry::CounterClockwiseGuideField : public MACE::SimG4::Ge
 public:
     CounterClockwiseGuideField();
 
-    void Create(G4Material* material, G4VPhysicalVolume* mother);
+    void Create(G4Material* material, const BaseInterface* mother);
 
     void SetRaidus(G4double val) { fRadius = val; }
     void SetBendRadius(G4double val) { fBendRadius = val; }

@@ -5,7 +5,7 @@
 MACE::SimG4::Geometry::OrbitalDetectorShield::OrbitalDetectorShield() :
     MACE::SimG4::Geometry::BaseInterface(1) {}
 
-void MACE::SimG4::Geometry::OrbitalDetectorShield::Create(G4Material* material, G4VPhysicalVolume* mother) {
+void MACE::SimG4::Geometry::OrbitalDetectorShield::Create(G4Material* material, const BaseInterface* mother) {
     G4String name("OrbitalDetectorShield");
     auto body = new G4Tubs(name + "Body", fInnerRadius, fInnerRadius + fThickness, 0.5 * fInnerLength, 0, 2 * M_PI);
     auto cap = new G4Tubs(name + "Cap", fWindowRadius, fInnerRadius + fThickness, 0.5 * fThickness, 0, 2 * M_PI);
@@ -18,6 +18,6 @@ void MACE::SimG4::Geometry::OrbitalDetectorShield::Create(G4Material* material, 
     solid->AddNode(*cap, downStreamTrans);
     solid->Voxelize();
     auto logic = new G4LogicalVolume(solid, material, name);
-    auto physic = new G4PVPlacement(G4Transform3D(G4RotationMatrix(G4ThreeVector(0, 1, 0), M_PI_2), G4ThreeVector(fUpXPosition + 0.5 * fInnerLength, 0, fCenterZ)), name, logic, mother, false, 0, checkOverlaps);
+    auto physic = new G4PVPlacement(G4Transform3D(G4RotationMatrix(G4ThreeVector(0, 1, 0), M_PI_2), G4ThreeVector(fUpXPosition + 0.5 * fInnerLength, 0, fCenterZ)), name, logic, mother->GetPhysicalVolume(), false, 0, checkOverlaps);
     GetVolumeSet().Set(solid, logic, physic);
 }

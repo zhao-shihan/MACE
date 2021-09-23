@@ -19,6 +19,7 @@ namespace MACE {
             class AcceleratorField;
             class BaseInterface;
             class Calorimeter;
+            class ClockwiseGuideField;
             class Collimator;
             class CounterClockwiseGuideField;
             class OrbitalDetector;
@@ -28,6 +29,8 @@ namespace MACE {
             class SelectorField;
             class Spectrometer;
             class SpectrometerField;
+            class SpectrometerReadOutLayer;
+            class SpectrometerShell;
             class SpectrometerShield;
             class Target;
             class VerticalTransportField;

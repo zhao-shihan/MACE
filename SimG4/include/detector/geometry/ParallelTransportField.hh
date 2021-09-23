@@ -8,7 +8,7 @@ class MACE::SimG4::Geometry::ParallelTransportField : public MACE::SimG4::Geomet
 public:
     ParallelTransportField();
 
-    void Create(G4Material* material, G4VPhysicalVolume* mother);
+    void Create(G4Material* material, const BaseInterface* mother);
 
     void SetRaidus(G4double val) { fRadius = val; }
     void SetLength(G4double val) { fLength = val; }

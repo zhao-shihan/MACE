@@ -14,6 +14,7 @@ using namespace MACE::SimG4;
 #include "detector/geometry/SelectorField.hh"
 #include "detector/geometry/Spectrometer.hh"
 #include "detector/geometry/SpectrometerField.hh"
+#include "detector/geometry/SpectrometerReadOutLayer.hh"
 #include "detector/geometry/SpectrometerShield.hh"
 #include "detector/geometry/Target.hh"
 #include "detector/geometry/CounterClockwiseGuideField.hh"
@@ -32,6 +33,7 @@ DetectorConstruction::DetectorConstruction() :
     fSelectorField(new Geometry::SelectorField()),
     fSpectormeter(new Geometry::Spectrometer()),
     fSpectormeterField(new Geometry::SpectrometerField()),
+    fSpectrometerReadOutLayer(new Geometry::SpectrometerReadOutLayer()),
     fSpectrometerShield(new Geometry::SpectrometerShield()),
     fTarget(new Geometry::Target()),
     fCounterClockwiseGuideField(new Geometry::CounterClockwiseGuideField()),
@@ -49,6 +51,7 @@ DetectorConstruction::~DetectorConstruction() {
     delete fSelectorField;
     delete fSpectormeter;
     delete fSpectormeterField;
+    delete fSpectrometerReadOutLayer;
     delete fSpectrometerShield;
     delete fTarget;
     delete fCounterClockwiseGuideField;
@@ -80,26 +83,27 @@ void DetectorConstruction::ConstructGeometry() {
     auto materialCsI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
     auto materialLead = nist->FindOrBuildMaterial("G4_Pb");
     //
-    // make geometry
+    // create geometry
     //
     // world
     fWorld->Create(materialVacuum, nullptr);
     // fields
-    fSpectormeterField->Create(materialVacuum, fWorld->GetPhysicalVolume());
-    fAcceleratorField->Create(materialVacuum, fSpectormeterField->GetPhysicalVolume());
-    fParallelTransportField->Create(materialVacuum, fWorld->GetPhysicalVolume());
-    fSelectorField->Create(materialVacuum, fParallelTransportField->GetPhysicalVolume());
-    fCounterClockwiseGuideField->Create(materialVacuum, fWorld->GetPhysicalVolume());
-    fVerticalTransportField->Create(materialVacuum, fWorld->GetPhysicalVolume());
-    fOrbitalDetectorShellField->Create(materialVacuum, fWorld->GetPhysicalVolume());
+    fSpectormeterField->Create(materialVacuum, fWorld);
+    fAcceleratorField->Create(materialVacuum, fSpectormeterField);
+    fParallelTransportField->Create(materialVacuum, fWorld);
+    fSelectorField->Create(materialVacuum, fParallelTransportField);
+    fCounterClockwiseGuideField->Create(materialVacuum, fWorld);
+    fVerticalTransportField->Create(materialVacuum, fWorld);
+    fOrbitalDetectorShellField->Create(materialVacuum, fWorld);
     // entities
-    fTarget->Create(materialSilicaAerogel, fAcceleratorField->GetPhysicalVolume());
-    fSpectormeter->Create(materialAr, fSpectormeterField->GetPhysicalVolume());
-    fCollimator->Create(materialCu, fVerticalTransportField->GetPhysicalVolume());
-    fOrbitalDetector->Create(materialMCP, fOrbitalDetectorShellField->GetPhysicalVolume());
-    fCalorimeter->Create(materialCsI, fOrbitalDetectorShellField->GetPhysicalVolume());
-    fSpectrometerShield->Create(materialLead, fWorld->GetPhysicalVolume());
-    fOrbitalDetectorShield->Create(materialLead, fWorld->GetPhysicalVolume());
+    fTarget->Create(materialSilicaAerogel, fAcceleratorField);
+    fSpectormeter->Create(materialAr, fSpectormeterField);
+    fSpectrometerReadOutLayer->Create(materialAr, fSpectormeter);
+    fCollimator->Create(materialCu, fVerticalTransportField);
+    fOrbitalDetector->Create(materialMCP, fOrbitalDetectorShellField);
+    fCalorimeter->Create(materialCsI, fOrbitalDetectorShellField);
+    fSpectrometerShield->Create(materialLead, fWorld);
+    fOrbitalDetectorShield->Create(materialLead, fWorld);
 }
 
 #include "G4SDManager.hh"
@@ -121,11 +125,11 @@ void DetectorConstruction::ConstructSD() {
     SDManager->AddNewDetector(orbitalDetectorSD);
     SetSensitiveDetector(fOrbitalDetector->GetLogicalVolume(), orbitalDetectorSD);
 
-    auto spectrometerName = fSpectormeter->GetLogicalVolume()->GetName();
+    auto spectrometerName = fSpectrometerReadOutLayer->GetLogicalVolume()->GetName();
     auto spectrometerSD = new SD::Spectrometer(spectrometerName, spectrometerName + "HC");
     SDManager->AddNewDetector(spectrometerSD);
-    for (size_t i = 0; i < fSpectormeter->GetVolumeSetCount(); ++i) {
-        SetSensitiveDetector(fSpectormeter->GetLogicalVolume(i), spectrometerSD);
+    for (size_t i = 0; i < fSpectrometerReadOutLayer->GetVolumeSetCount(); ++i) {
+        SetSensitiveDetector(fSpectrometerReadOutLayer->GetLogicalVolume(i), spectrometerSD);
     }
 }
 
