@@ -88,9 +88,9 @@ void Recognizer::HoughTransform() {
 }
 
 void Recognizer::GenerateResult() {
-    auto* const houghSpace = fHoughSpace.data();
-    auto* maxPoint = houghSpace - 1;
-    while ((maxPoint = std::max_element(maxPoint + 1, houghSpace + fSize * fSize,
+    const auto* const houghSpace = fHoughSpace.data();
+    const HitPointerList* maxPoint;
+    while ((maxPoint = std::max_element(houghSpace, houghSpace + fSize * fSize,
         [](const HitPointerList& h1, const HitPointerList& h2)->bool { return h1.size() < h2.size(); }))
         ->size() >= fThreshold) {
         const auto markedHit = std::find_if(maxPoint->cbegin(), maxPoint->cend(),
