@@ -89,13 +89,12 @@ void Recognizer::HoughTransform() {
 
 void Recognizer::GenerateResult() {
     const auto* const houghSpace = fHoughSpace.data();
-    const HitPointerList* maxPoint;
-    while ((maxPoint = std::max_element(houghSpace, houghSpace + fSize * fSize,
-        [](const HitPointerList& h1, const HitPointerList& h2)->bool { return h1.size() < h2.size(); }))
-        ->size() >= fThreshold) {
-        const auto markedHit = std::find_if(maxPoint->cbegin(), maxPoint->cend(),
-            [this](const Hit* const hit)->bool { return hit->ChamberID() == fCoincidenceChamberID; });
-        if (markedHit == maxPoint->cend()) { continue; }
+    const auto* candidate = houghSpace - 1;
+    while ((candidate =
+        std::find_if(candidate + 1, houghSpace + fSize * fSize, [this](const HitPointerList& hit)->bool { return hit.size() >= fThreshold; }))
+        != houghSpace + fSize * fSize) {
+        const auto markedHit = std::find_if(candidate->cbegin(), candidate->cend(), [this](const Hit* const hit)->bool { return hit->ChamberID() == fCoincidenceChamberID; });
+        if (markedHit == candidate->cend()) { continue; }
         if (std::find(fResult.cbegin(), fResult.cend(), *markedHit) == fResult.cend()) {
             fResult.push_back(*markedHit);
         }
