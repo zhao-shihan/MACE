@@ -4,20 +4,20 @@
 
 #include "detector/geometry/BaseInterface.hh"
 
-class MACE::SimG4::Geometry::OrbitalDetectorShellField : public MACE::SimG4::Geometry::BaseInterface {
+class MACE::SimG4::Geometry::ThirdTransportField final : public MACE::SimG4::Geometry::BaseInterface {
 public:
-    OrbitalDetectorShellField();
+    ThirdTransportField();
 
     void Create(G4Material* material, const BaseInterface* mother) override;
-    
-    void SetRadius(G4double val) { fRadius = val; }
+
     void SetLength(G4double val) { fLength = val; }
+    void SetRadius(G4double val) { fRadius = val; }
     void SetCenterX(G4double val) { fCenterX = val; }
     void SetUpZPosition(G4double val) { fUpZPosition = val; }
 
 private:
-    G4double fRadius = 23 * cm;
-    G4double fLength = 45.75222 * cm;
+    G4double fLength = 20 * cm;
+    G4double fRadius = 10 * cm;
     G4double fCenterX = 200 * cm;
-    G4double fUpZPosition = 190 * cm;
+    G4double fUpZPosition = 170 * cm;
 };

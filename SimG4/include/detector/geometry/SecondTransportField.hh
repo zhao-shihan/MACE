@@ -4,11 +4,11 @@
 
 #include "detector/geometry/BaseInterface.hh"
 
-class MACE::SimG4::Geometry::VerticalTransportField : public MACE::SimG4::Geometry::BaseInterface {
+class MACE::SimG4::Geometry::SecondTransportField final : public MACE::SimG4::Geometry::BaseInterface {
 public:
-    VerticalTransportField();
+    SecondTransportField();
 
-    void Create(G4Material* material, const BaseInterface* mother);
+    void Create(G4Material* material, const BaseInterface* mother) override;
 
     void SetLength(G4double val) { fLength = val; }
     void SetRadius(G4double val) { fRadius = val; }
@@ -16,8 +16,8 @@ public:
     void SetUpXPosition(G4double val) { fUpXPosition = val; }
 
 private:
-    G4double fLength = 90 * cm;
-    G4double fRadius = 10.5 * cm;
-    G4double fCenterZ = 160 * cm;
+    G4double fLength = 100 * cm;
+    G4double fRadius = 10 * cm;
+    G4double fCenterZ = 120 * cm;
     G4double fUpXPosition = 50 * cm;
 };

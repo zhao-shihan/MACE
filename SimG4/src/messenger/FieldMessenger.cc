@@ -2,10 +2,11 @@
 
 #include "messenger/FieldMessenger.hh"
 #include "detector/field/AcceleratorField.hh"
-#include "detector/field/ParallelTransportField.hh"
+#include "detector/field/FirstBendField.hh"
+#include "detector/field/ParallelField.hh"
+#include "detector/field/SecondBendField.hh"
 #include "detector/field/SelectorField.hh"
-#include "detector/field/CounterClockwiseGuideField.hh"
-#include "detector/field/VerticalTransportField.hh"
+#include "detector/field/VerticalField.hh"
 #include "Analysis.hh"
 
 using namespace MACE::SimG4;
@@ -48,10 +49,11 @@ void FieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     if (command == fSetTransportMagneticField) {
         const auto B = fSetTransportMagneticField->GetNewDoubleValue(value);
         fpAcceleratorField->SetTransportBField(B);
-        fpParallelTransportField->SetFieldNorm(B);
+        fpFirstBendField->SetTransportMagneticField(B);
+        fpParallelField->SetFieldNorm(B);
+        fpSecondBendField->SetTransportMagneticField(B);
         fpSelectorField->SetTransportField(B);
-        fpCounterClockwiseGuideField->SetTransportMagneticField(B);
-        fpVerticalTransportField->SetFieldNorm(B);
+        fpVerticalField->SetFieldNorm(B);
     } else if (command == fSetAcceleratorPotential) {
         const auto V = fSetAcceleratorPotential->GetNewDoubleValue(value);
         fpAcceleratorField->SetAcceleratorPotential(V);

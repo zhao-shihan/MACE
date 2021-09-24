@@ -10,30 +10,32 @@ namespace MACE {
         // detector
         namespace Field {
             class AcceleratorField;
-            class CounterClockwiseGuideField;
-            class ParallelTransportField;
+            class FirstBendField;
+            class ParallelField;
+            class SecondBendField;
             class SelectorField;
-            class VerticalTransportField;
+            class VerticalField;
         }
         namespace Geometry {
             class AcceleratorField;
             class BaseInterface;
             class Calorimeter;
-            class ClockwiseGuideField;
             class Collimator;
-            class CounterClockwiseGuideField;
+            class FirstBendField;
+            class FirstTransportField;
             class OrbitalDetector;
             class OrbitalDetectorShellField;
             class OrbitalDetectorShield;
-            class ParallelTransportField;
+            class SecondBendField;
+            class SecondTransportField;
             class SelectorField;
             class Spectrometer;
             class SpectrometerField;
-            class SpectrometerReadOutLayer;
             class SpectrometerGas;
+            class SpectrometerReadOutLayer;
             class SpectrometerShield;
             class Target;
-            class VerticalTransportField;
+            class ThirdTransportField;
             class VolumeSet;
             class World;
         }

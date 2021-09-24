@@ -17,5 +17,5 @@ public:
 private:
     G4double fHalfXExtent = 3 * m;
     G4double fHalfYExtent = 1 * m;
-    G4double fHalfZExtent = 3 * m;
+    G4double fHalfZExtent = 4 * m;
 };

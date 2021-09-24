@@ -12,8 +12,10 @@ public:
 
     void SetRaidus(G4double val) { fRadius = val; }
     void SetLength(G4double val) { fLength = val; }
+    void SetZPosition(G4double val) { fZPosition = val; }
 
 private:
-    G4double fRadius = 10.5 * cm;
+    G4double fRadius = 10 * cm;
     G4double fLength = 30 * cm;
+    G4double fZPosition = 20 * cm;
 };

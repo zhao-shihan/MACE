@@ -7,10 +7,13 @@ using namespace MACE::SimG4;
 #include "detector/geometry/AcceleratorField.hh"
 #include "detector/geometry/Calorimeter.hh"
 #include "detector/geometry/Collimator.hh"
+#include "detector/geometry/FirstBendField.hh"
+#include "detector/geometry/FirstTransportField.hh"
 #include "detector/geometry/OrbitalDetector.hh"
 #include "detector/geometry/OrbitalDetectorShellField.hh"
 #include "detector/geometry/OrbitalDetectorShield.hh"
-#include "detector/geometry/ParallelTransportField.hh"
+#include "detector/geometry/SecondBendField.hh"
+#include "detector/geometry/SecondTransportField.hh"
 #include "detector/geometry/SelectorField.hh"
 #include "detector/geometry/Spectrometer.hh"
 #include "detector/geometry/SpectrometerField.hh"
@@ -18,8 +21,7 @@ using namespace MACE::SimG4;
 #include "detector/geometry/SpectrometerReadOutLayer.hh"
 #include "detector/geometry/SpectrometerShield.hh"
 #include "detector/geometry/Target.hh"
-#include "detector/geometry/CounterClockwiseGuideField.hh"
-#include "detector/geometry/VerticalTransportField.hh"
+#include "detector/geometry/ThirdTransportField.hh"
 #include "detector/geometry/World.hh"
 
 DetectorConstruction::DetectorConstruction() :
@@ -27,38 +29,42 @@ DetectorConstruction::DetectorConstruction() :
     fAcceleratorField(new Geometry::AcceleratorField()),
     fCalorimeter(new Geometry::Calorimeter()),
     fCollimator(new Geometry::Collimator()),
+    fFirstBendField(new Geometry::FirstBendField()),
+    fFirstTransportField(new Geometry::FirstTransportField()),
     fOrbitalDetector(new Geometry::OrbitalDetector),
     fOrbitalDetectorShellField(new Geometry::OrbitalDetectorShellField()),
     fOrbitalDetectorShield(new Geometry::OrbitalDetectorShield()),
-    fParallelTransportField(new Geometry::ParallelTransportField()),
+    fSecondBendField(new Geometry::SecondBendField()),
+    fSecondTransportField(new Geometry::SecondTransportField()),
     fSelectorField(new Geometry::SelectorField()),
-    fSpectormeter(new Geometry::Spectrometer()),
-    fSpectormeterField(new Geometry::SpectrometerField()),
+    fSpectrometer(new Geometry::Spectrometer()),
+    fSpectrometerField(new Geometry::SpectrometerField()),
     fSpectrometerGas(new Geometry::SpectrometerGas()),
     fSpectrometerReadOutLayer(new Geometry::SpectrometerReadOutLayer()),
     fSpectrometerShield(new Geometry::SpectrometerShield()),
     fTarget(new Geometry::Target()),
-    fCounterClockwiseGuideField(new Geometry::CounterClockwiseGuideField()),
-    fVerticalTransportField(new Geometry::VerticalTransportField()),
+    fThirdTransportField(new Geometry::ThirdTransportField()),
     fWorld(new Geometry::World()) {}
 
 DetectorConstruction::~DetectorConstruction() {
     delete fAcceleratorField;
     delete fCalorimeter;
     delete fCollimator;
+    delete fFirstBendField;
+    delete fFirstTransportField;
     delete fOrbitalDetector;
     delete fOrbitalDetectorShellField;
     delete fOrbitalDetectorShield;
-    delete fParallelTransportField;
+    delete fSecondBendField;
+    delete fSecondTransportField;
     delete fSelectorField;
-    delete fSpectormeter;
-    delete fSpectormeterField;
+    delete fSpectrometer;
+    delete fSpectrometerField;
     delete fSpectrometerGas;
     delete fSpectrometerReadOutLayer;
     delete fSpectrometerShield;
     delete fTarget;
-    delete fCounterClockwiseGuideField;
-    delete fVerticalTransportField;
+    delete fThirdTransportField;
     delete fWorld;
 }
 
@@ -91,19 +97,21 @@ void DetectorConstruction::ConstructGeometry() {
     // world
     fWorld->Create(materialVacuum, nullptr);
     // fields
-    fSpectormeterField->Create(materialVacuum, fWorld);
-    fAcceleratorField->Create(materialVacuum, fSpectormeterField);
-    fParallelTransportField->Create(materialVacuum, fWorld);
-    fSelectorField->Create(materialVacuum, fParallelTransportField);
-    fCounterClockwiseGuideField->Create(materialVacuum, fWorld);
-    fVerticalTransportField->Create(materialVacuum, fWorld);
+    fSpectrometerField->Create(materialVacuum, fWorld);
+    fAcceleratorField->Create(materialVacuum, fSpectrometerField);
+    fFirstTransportField->Create(materialVacuum, fWorld);
+    fFirstBendField->Create(materialVacuum, fWorld);
+    fSecondTransportField->Create(materialVacuum, fWorld);
+    fSelectorField->Create(materialVacuum, fSecondTransportField);
+    fSecondBendField->Create(materialVacuum, fWorld);
+    fThirdTransportField->Create(materialVacuum, fWorld);
     fOrbitalDetectorShellField->Create(materialVacuum, fWorld);
     // entities
     fTarget->Create(materialSilicaAerogel, fAcceleratorField);
-    fSpectormeter->Create(materialAl, fSpectormeterField);
-    fSpectrometerGas->Create(materialAr, fSpectormeter);
+    fSpectrometer->Create(materialAl, fSpectrometerField);
+    fSpectrometerGas->Create(materialAr, fSpectrometer);
     fSpectrometerReadOutLayer->Create(materialAr, fSpectrometerGas);
-    fCollimator->Create(materialCu, fVerticalTransportField);
+    fCollimator->Create(materialCu, fSecondTransportField);
     fOrbitalDetector->Create(materialMCP, fOrbitalDetectorShellField);
     fCalorimeter->Create(materialCsI, fOrbitalDetectorShellField);
     fSpectrometerShield->Create(materialLead, fWorld);
@@ -146,10 +154,11 @@ void DetectorConstruction::ConstructSD() {
 #include "G4ChordFinder.hh"
 
 #include "detector/field/AcceleratorField.hh"
-#include "detector/field/ParallelTransportField.hh"
+#include "detector/field/FirstBendField.hh"
+#include "detector/field/ParallelField.hh"
+#include "detector/field/SecondBendField.hh"
 #include "detector/field/SelectorField.hh"
-#include "detector/field/CounterClockwiseGuideField.hh"
-#include "detector/field/VerticalTransportField.hh"
+#include "detector/field/VerticalField.hh"
 
 template<class Field_t, class Equation_t, class Stepper_t, class Driver_t>
 static void RegisterFields(G4LogicalVolume* logicalVolume, Field_t* field, G4double hMin, G4int nVal) {
@@ -164,15 +173,15 @@ void DetectorConstruction::ConstructField() {
     constexpr G4double hMin = 100. * um;
 
     constexpr G4double defaultB = 0.1 * tesla;
-    auto parallelBField = new Field::ParallelTransportField(defaultB);
-    auto verticalBField = new Field::VerticalTransportField(defaultB);
+    auto parallelBField = new Field::ParallelField(defaultB);
+    auto verticalBField = new Field::VerticalField(defaultB);
 
     RegisterFields <
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(fSpectormeterField->GetLogicalVolume(), parallelBField, hMin, 6);
+    >(fSpectrometerField->GetLogicalVolume(), parallelBField, hMin, 6);
 
     RegisterFields <
         Field::AcceleratorField,
@@ -186,7 +195,21 @@ void DetectorConstruction::ConstructField() {
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(fParallelTransportField->GetLogicalVolume(), parallelBField, hMin, 6);
+    >(fFirstTransportField->GetLogicalVolume(), parallelBField, hMin, 6);
+
+    RegisterFields <
+        Field::FirstBendField,
+        G4TMagFieldEquation<Field::FirstBendField>,
+        G4TDormandPrince45<G4TMagFieldEquation<Field::FirstBendField>>,
+        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<Field::FirstBendField>>>
+    >(fFirstBendField->GetLogicalVolume(), new Field::FirstBendField(), hMin, 6);
+
+    RegisterFields <
+        G4UniformMagField,
+        G4TMagFieldEquation<G4UniformMagField>,
+        G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
+        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
+    >(fSecondTransportField->GetLogicalVolume(), verticalBField, hMin, 6);
 
     RegisterFields <
         Field::SelectorField,
@@ -196,23 +219,23 @@ void DetectorConstruction::ConstructField() {
     >(fSelectorField->GetLogicalVolume(), new Field::SelectorField(), hMin, 8);
 
     RegisterFields <
-        Field::CounterClockwiseGuideField,
-        G4TMagFieldEquation<Field::CounterClockwiseGuideField>,
-        G4TDormandPrince45<G4TMagFieldEquation<Field::CounterClockwiseGuideField>>,
-        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<Field::CounterClockwiseGuideField>>>
-    >(fCounterClockwiseGuideField->GetLogicalVolume(), new Field::CounterClockwiseGuideField(), hMin, 6);
+        Field::SecondBendField,
+        G4TMagFieldEquation<Field::SecondBendField>,
+        G4TDormandPrince45<G4TMagFieldEquation<Field::SecondBendField>>,
+        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<Field::SecondBendField>>>
+    >(fSecondBendField->GetLogicalVolume(), new Field::SecondBendField(), hMin, 6);
 
     RegisterFields <
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(fVerticalTransportField->GetLogicalVolume(), verticalBField, hMin, 6);
+    >(fThirdTransportField->GetLogicalVolume(), parallelBField, hMin, 6);
 
     RegisterFields <
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(fOrbitalDetectorShellField->GetLogicalVolume(), verticalBField, hMin, 6);
+    >(fOrbitalDetectorShellField->GetLogicalVolume(), parallelBField, hMin, 6);
 }

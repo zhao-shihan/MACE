@@ -10,7 +10,7 @@ void MACE::SimG4::Geometry::Collimator::Create(G4Material* material, const BaseI
         G4double radii = fInnerRadius + i * (fOuterRadius - fInnerRadius) / (GetVolumeSetCount() - 1);
         auto soild = new G4Tubs(name, radii, radii + fThickness, 0.5 * fLength, 0, 2 * M_PI);
         auto logic = new G4LogicalVolume(soild, material, name);
-        auto physic = new G4PVPlacement(G4Transform3D(), name, logic, mother->GetPhysicalVolume(), false, 0, checkOverlaps);
+        auto physic = new G4PVPlacement(nullptr, G4ThreeVector(0.0, 0.0, fZPosition), name, logic, mother->GetPhysicalVolume(), false, 0, checkOverlaps);
         GetVolumeSet().Set(soild, logic, physic);
     }
 }

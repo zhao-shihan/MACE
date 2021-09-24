@@ -12,13 +12,13 @@ public:
     G4bool DoesFieldChangeEnergy() const override { return true; }
 
     void SetSelectorMagneticField(G4double B);
-    void SetTransportField(G4double B) { fBz = B; }
+    void SetTransportField(G4double B) { fBTransport = B; }
     void SetSelectEnergy(G4double Ek);
 
 private:
-    G4double fBx = 0.1 * tesla;
-    G4double fBz = 0.1 * tesla;
-    G4double fEy = -c_light * sqrt(2.0 * 7 * keV / G4Positron::Definition()->GetPDGMass()) * fBx;
+    G4double fBSelect = 0.01 * tesla;
+    G4double fBTransport = 0.1 * tesla;
+    G4double fESelect = c_light * sqrt(2.0 * 7 * keV / G4Positron::Definition()->GetPDGMass()) * fBSelect;
 
     G4double fSelectEk = 7 * keV;
 };
