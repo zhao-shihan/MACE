@@ -27,6 +27,7 @@ private:
     Geometry::SelectorField* const              fSelectorField;
     Geometry::Spectrometer* const               fSpectormeter;
     Geometry::SpectrometerField* const          fSpectormeterField;
+    Geometry::SpectrometerGas* const            fSpectrometerGas;
     Geometry::SpectrometerReadOutLayer* const   fSpectrometerReadOutLayer;
     Geometry::SpectrometerShield* const         fSpectrometerShield;
     Geometry::Target* const                     fTarget;

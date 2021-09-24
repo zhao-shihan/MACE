@@ -1,7 +1,7 @@
 # Macro file for the visualization setting in the initialization phase 
 # of the test when running in interactive mode
 #
-/vis/open OGL 600x600-0+0
+/vis/open OGL 800x600-0+0
 
 /vis/viewer/set/autoRefresh false
 /vis/verbose errors
@@ -33,7 +33,9 @@
 #/vis/geometry/set/colour BeamCounter 0 0.0 0.0 1.0 0.5
 #/vis/geometry/set/colour MylarDegrader 0 0.6 0.1 0.1 0.5
 /vis/geometry/set/colour Target 0 0.0 0.0 1.0 0.5
-/vis/geometry/set/colour Spectrometer 0 0.0 1.0 0.0 0.05
+/vis/geometry/set/colour SpectrometerShell 0 1.0 1.0 1.0 0.05
+/vis/geometry/set/colour SpectrometerGas 0 0.0 2.0 2.0 0.05
+/vis/geometry/set/colour Spectrometer 0 0.0 0.0 1.0 0.025
 /vis/geometry/set/colour Collimator 0 0.8 0.3 0.0 0.2
 #/vis/geometry/set/colour CarbonFoil 80 1.0 1.0 1.0 0.5
 /vis/geometry/set/colour OrbitalDetector 0 0.1 0.6 0.1 0.2

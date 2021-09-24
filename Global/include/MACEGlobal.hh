@@ -30,7 +30,7 @@ namespace MACE {
             class Spectrometer;
             class SpectrometerField;
             class SpectrometerReadOutLayer;
-            class SpectrometerShell;
+            class SpectrometerGas;
             class SpectrometerShield;
             class Target;
             class VerticalTransportField;

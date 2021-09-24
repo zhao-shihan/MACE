@@ -1,4 +1,4 @@
-# macro file for the initialization of MACE
+# macro file for the initialization of MACE::SimG4
 # in interactive session
 #
 # Set some default verbose
@@ -8,10 +8,6 @@
 #
 # Initialize kernel
 /run/initialize
-#
-#/MACEPhysics/SetMuonRareDecayMode 3.4e-5
-#/MACEPhysics/SetMuMuConversion 0.
-#/MACEPhysics/SetMuFormation 1
 #
 # Visualization setting
 /control/execute vis.mac

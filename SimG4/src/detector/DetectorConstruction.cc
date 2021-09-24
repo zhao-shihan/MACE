@@ -14,6 +14,7 @@ using namespace MACE::SimG4;
 #include "detector/geometry/SelectorField.hh"
 #include "detector/geometry/Spectrometer.hh"
 #include "detector/geometry/SpectrometerField.hh"
+#include "detector/geometry/SpectrometerGas.hh"
 #include "detector/geometry/SpectrometerReadOutLayer.hh"
 #include "detector/geometry/SpectrometerShield.hh"
 #include "detector/geometry/Target.hh"
@@ -33,12 +34,13 @@ DetectorConstruction::DetectorConstruction() :
     fSelectorField(new Geometry::SelectorField()),
     fSpectormeter(new Geometry::Spectrometer()),
     fSpectormeterField(new Geometry::SpectrometerField()),
+    fSpectrometerGas(new Geometry::SpectrometerGas()),
     fSpectrometerReadOutLayer(new Geometry::SpectrometerReadOutLayer()),
     fSpectrometerShield(new Geometry::SpectrometerShield()),
     fTarget(new Geometry::Target()),
     fCounterClockwiseGuideField(new Geometry::CounterClockwiseGuideField()),
     fVerticalTransportField(new Geometry::VerticalTransportField()),
-    fWorld(new Geometry::World) {}
+    fWorld(new Geometry::World()) {}
 
 DetectorConstruction::~DetectorConstruction() {
     delete fAcceleratorField;
@@ -51,6 +53,7 @@ DetectorConstruction::~DetectorConstruction() {
     delete fSelectorField;
     delete fSpectormeter;
     delete fSpectormeterField;
+    delete fSpectrometerGas;
     delete fSpectrometerReadOutLayer;
     delete fSpectrometerShield;
     delete fTarget;
@@ -76,7 +79,7 @@ void DetectorConstruction::ConstructGeometry() {
     // auto materialMylar = nist->FindOrBuildMaterial("G4_MYLAR");
     auto materialSilicaAerogel = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30 * mg / cm3);
     auto materialAr = nist->FindOrBuildMaterial("G4_Ar");
-    // auto materialAl = nist->FindOrBuildMaterial("G4_Al");
+    auto materialAl = nist->FindOrBuildMaterial("G4_Al");
     auto materialCu = nist->FindOrBuildMaterial("G4_Cu");
     // auto materialGraphite = nist->FindOrBuildMaterial("G4_GRAPHITE");
     auto materialMCP = nist->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4 * g / cm3);
@@ -97,8 +100,9 @@ void DetectorConstruction::ConstructGeometry() {
     fOrbitalDetectorShellField->Create(materialVacuum, fWorld);
     // entities
     fTarget->Create(materialSilicaAerogel, fAcceleratorField);
-    fSpectormeter->Create(materialAr, fSpectormeterField);
-    fSpectrometerReadOutLayer->Create(materialAr, fSpectormeter);
+    fSpectormeter->Create(materialAl, fSpectormeterField);
+    fSpectrometerGas->Create(materialAr, fSpectormeter);
+    fSpectrometerReadOutLayer->Create(materialAr, fSpectrometerGas);
     fCollimator->Create(materialCu, fVerticalTransportField);
     fOrbitalDetector->Create(materialMCP, fOrbitalDetectorShellField);
     fCalorimeter->Create(materialCsI, fOrbitalDetectorShellField);
@@ -158,11 +162,11 @@ static void RegisterFields(G4LogicalVolume* logicalVolume, Field_t* field, G4dou
 
 void DetectorConstruction::ConstructField() {
     constexpr G4double hMin = 100. * um;
-    
+
     constexpr G4double defaultB = 0.1 * tesla;
     auto parallelBField = new Field::ParallelTransportField(defaultB);
     auto verticalBField = new Field::VerticalTransportField(defaultB);
-    
+
     RegisterFields <
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
