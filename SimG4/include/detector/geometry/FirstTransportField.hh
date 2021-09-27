@@ -14,6 +14,8 @@ public:
     void SetLength(G4double val) { fLength = val; }
     void SetUpZPosition(G4double val) { fUpZPosition = val; }
 
+    auto GetLength() const { return fLength; }
+
 private:
     G4double fRadius = 10 * cm;
     G4double fLength = 20 * cm;

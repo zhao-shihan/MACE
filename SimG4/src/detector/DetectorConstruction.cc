@@ -4,47 +4,8 @@
 
 using namespace MACE::SimG4;
 
-#include "detector/geometry/AcceleratorField.hh"
-#include "detector/geometry/Calorimeter.hh"
-#include "detector/geometry/Collimator.hh"
-#include "detector/geometry/FirstBendField.hh"
-#include "detector/geometry/FirstTransportField.hh"
-#include "detector/geometry/OrbitalDetector.hh"
-#include "detector/geometry/OrbitalDetectorShellField.hh"
-#include "detector/geometry/OrbitalDetectorShield.hh"
-#include "detector/geometry/SecondBendField.hh"
-#include "detector/geometry/SecondTransportField.hh"
-#include "detector/geometry/SelectorField.hh"
-#include "detector/geometry/Spectrometer.hh"
-#include "detector/geometry/SpectrometerField.hh"
-#include "detector/geometry/SpectrometerGas.hh"
-#include "detector/geometry/SpectrometerReadOutLayer.hh"
-#include "detector/geometry/SpectrometerShield.hh"
-#include "detector/geometry/Target.hh"
-#include "detector/geometry/ThirdTransportField.hh"
-#include "detector/geometry/World.hh"
-
 DetectorConstruction::DetectorConstruction() :
-    G4VUserDetectorConstruction(),
-    fAcceleratorField(new Geometry::AcceleratorField()),
-    fCalorimeter(new Geometry::Calorimeter()),
-    fCollimator(new Geometry::Collimator()),
-    fFirstBendField(new Geometry::FirstBendField()),
-    fFirstTransportField(new Geometry::FirstTransportField()),
-    fOrbitalDetector(new Geometry::OrbitalDetector),
-    fOrbitalDetectorShellField(new Geometry::OrbitalDetectorShellField()),
-    fOrbitalDetectorShield(new Geometry::OrbitalDetectorShield()),
-    fSecondBendField(new Geometry::SecondBendField()),
-    fSecondTransportField(new Geometry::SecondTransportField()),
-    fSelectorField(new Geometry::SelectorField()),
-    fSpectrometer(new Geometry::Spectrometer()),
-    fSpectrometerField(new Geometry::SpectrometerField()),
-    fSpectrometerGas(new Geometry::SpectrometerGas()),
-    fSpectrometerReadOutLayer(new Geometry::SpectrometerReadOutLayer()),
-    fSpectrometerShield(new Geometry::SpectrometerShield()),
-    fTarget(new Geometry::Target()),
-    fThirdTransportField(new Geometry::ThirdTransportField()),
-    fWorld(new Geometry::World()) {}
+    G4VUserDetectorConstruction() {}
 
 DetectorConstruction::~DetectorConstruction() {
     delete fAcceleratorField;

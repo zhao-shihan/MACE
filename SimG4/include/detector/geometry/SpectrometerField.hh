@@ -13,6 +13,8 @@ public:
     void SetRadius(G4double val) { fRadius = val; }
     void SetLength(G4double val) { fLength = val; }
 
+    auto GetLength() const { return fLength; }
+
 private:
     G4double fRadius = 37 * cm;
     G4double fLength = 100 * cm;

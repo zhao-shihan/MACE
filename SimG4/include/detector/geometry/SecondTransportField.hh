@@ -15,6 +15,8 @@ public:
     void SetCenterZ(G4double val) { fCenterZ = val; }
     void SetUpXPosition(G4double val) { fUpXPosition = val; }
 
+    auto GetLength() const { return fLength; }
+
 private:
     G4double fLength = 100 * cm;
     G4double fRadius = 10 * cm;

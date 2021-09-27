@@ -45,7 +45,6 @@ G4bool OrbitalDetector::ProcessHits(G4Step* step, G4TouchableHistory*) {
             particle
         )
     );
-    track->SetTrackStatus(fStopAndKill);
     return true;
 }
 

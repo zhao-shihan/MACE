@@ -3,14 +3,16 @@
 #include "G4Run.hh"
 
 #include "action/RunAction.hh"
+#include "detector/DetectorConstruction.hh"
 #include "action/PrimaryGeneratorAction.hh"
 #include "action/EventAction.hh"
 #include "Analysis.hh"
 
 using namespace MACE::SimG4;
 
-RunAction::RunAction(PrimaryGeneratorAction* pPrimaryGeneratorAction, EventAction* pEventAction) :
+RunAction::RunAction(const DetectorConstruction* pDetectorConstruction, PrimaryGeneratorAction* pPrimaryGeneratorAction, EventAction* pEventAction) :
     G4UserRunAction(),
+    fpDetectorConstruction(pDetectorConstruction),
     fpPrimaryGeneratorAction(pPrimaryGeneratorAction),
     fpEventAction(pEventAction) {
     Analysis::Instance()->Initialize();
@@ -21,7 +23,18 @@ RunAction::~RunAction() {
 }
 
 void RunAction::BeginOfRunAction(const G4Run* run) {
-    Analysis::Instance()->Open();
+    const G4double flightDistance =
+        fpDetectorConstruction->SpectrometerField()->GetLength() / 2.0 +
+        fpDetectorConstruction->FirstTransportField()->GetLength() +
+        fpDetectorConstruction->FirstBendField()->GetRadius() * M_PI_2 +
+        fpDetectorConstruction->SecondTransportField()->GetLength() +
+        fpDetectorConstruction->SecondBendField()->GetRadius() * M_PI_2 +
+        fpDetectorConstruction->ThirdTransportField()->GetLength() +
+        fpDetectorConstruction->OrbitalDetectorShellField()->GetLength() / 2.0;
+    auto* analysis = Analysis::Instance();
+    analysis->SetFlightDistance(flightDistance);
+    
+    analysis->Open();
 
     G4int firstPluseIDOfThisRank = 0;
     if (MPI::Is_initialized()) {
