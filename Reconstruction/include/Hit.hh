@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TrackReconstructionGlobal.hh"
+#include "ReconstructionGlobal.hh"
 
 #define MACE_TRACK_RECONSTRUCTION_HIT_MEMBER(T, Name) \
     public: \
@@ -8,7 +8,7 @@
     private: \
         T f##Name
 
-class MACE::TrackReconstruction::Hit final {
+class MACE::Reconstruction::Hit final {
     MACE_TRACK_RECONSTRUCTION_NOT_ALLOW_TO_COPY_BUT_ALLOW_TO_MOVE(Hit);
 public:
     Hit() {}

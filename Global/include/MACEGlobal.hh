@@ -80,7 +80,7 @@ namespace MACE {
         struct Vector3;
         class Worker;
     }
-    namespace TrackReconstruction {
+    namespace Reconstruction {
         class ExperimentData;
         class Hit;
         class Recognizer;

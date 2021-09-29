@@ -7,7 +7,7 @@
 #include "Recognizer.hh"
 #include "Hit.hh"
 
-using namespace MACE::TrackReconstruction;
+using namespace MACE::Reconstruction;
 
 Recognizer::Recognizer(Double_t houghSpaceExtent, Double_t proposingHoughSpaceResolution) :
     fSize(round(2.0 * houghSpaceExtent / proposingHoughSpaceResolution)),

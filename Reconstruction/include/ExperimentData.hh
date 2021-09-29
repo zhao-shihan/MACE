@@ -1,13 +1,13 @@
 #pragma once
 
-#include "TrackReconstructionGlobal.hh"
+#include "ReconstructionGlobal.hh"
 #include "Hit.hh"
 
-namespace MACE::TrackReconstruction {
+namespace MACE::Reconstruction {
     using ExperimentDataBase = std::vector<PluseData>;
 }
 
-class MACE::TrackReconstruction::ExperimentData final : public ExperimentDataBase {
+class MACE::Reconstruction::ExperimentData final : public ExperimentDataBase {
     MACE_TRACK_RECONSTRUCTION_NOT_ALLOW_TO_COPY_BUT_ALLOW_TO_MOVE(ExperimentData);
 public:
     ExperimentData(const char* rootFile);

@@ -8,7 +8,7 @@
 #include "ExperimentData.hh"
 #include "Recognizer.hh"
 
-using namespace MACE::TrackReconstruction;
+using namespace MACE::Reconstruction;
 
 #include "ConstField.h"
 #include "Exception.h"

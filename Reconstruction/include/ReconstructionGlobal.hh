@@ -13,7 +13,7 @@
         ClassName& operator=(const ClassName&) = delete; \
         ClassName(ClassName&& value)
 
-namespace MACE::TrackReconstruction {
+namespace MACE::Reconstruction {
     using PluseData = std::vector<Hit>;
     using HitPointerList = std::vector<const Hit*>;
 }

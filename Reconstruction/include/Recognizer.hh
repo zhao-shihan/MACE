@@ -4,9 +4,9 @@
 
 #include "TFile.h"
 
-#include "TrackReconstructionGlobal.hh"
+#include "ReconstructionGlobal.hh"
 
-class MACE::TrackReconstruction::Recognizer final {
+class MACE::Reconstruction::Recognizer final {
     MACE_TRACK_RECONSTRUCTION_NOT_ALLOW_TO_COPY_BUT_ALLOW_TO_MOVE(Recognizer);
 private:
     template<typename T> using HoughSpace = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;

@@ -1,6 +1,6 @@
 #include "Hit.hh"
 
-using namespace MACE::TrackReconstruction;
+using namespace MACE::Reconstruction;
 
 Hit::Hit(Int_t trackID, Int_t chamberID, Double_t vertexTime, const TVector3& vertexPosition, Double_t hitTime, const TVector3& hitPosition) :
     fTrackID(trackID),
