@@ -58,7 +58,6 @@ void FieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
         const auto V = fSetAcceleratorPotential->GetNewDoubleValue(value);
         fpAcceleratorField->SetAcceleratorPotential(V);
         fpSelectorField->SetSelectEnergy(eplus * V);
-        fpAnalysis->SetEkinOfOrbital(eplus * V);
     } else if (command == fSetSelectorMagneticField) {
         fpSelectorField->SetSelectorMagneticField(fSetSelectorMagneticField->GetNewDoubleValue(value));
     }

@@ -23,18 +23,7 @@ RunAction::~RunAction() {
 }
 
 void RunAction::BeginOfRunAction(const G4Run* run) {
-    const G4double flightDistance =
-        fpDetectorConstruction->SpectrometerField()->GetLength() / 2.0 +
-        fpDetectorConstruction->FirstTransportField()->GetLength() +
-        fpDetectorConstruction->FirstBendField()->GetRadius() * M_PI_2 +
-        fpDetectorConstruction->SecondTransportField()->GetLength() +
-        fpDetectorConstruction->SecondBendField()->GetRadius() * M_PI_2 +
-        fpDetectorConstruction->ThirdTransportField()->GetLength() +
-        fpDetectorConstruction->OrbitalDetectorShellField()->GetLength() / 2.0;
-    auto* analysis = Analysis::Instance();
-    analysis->SetFlightDistance(flightDistance);
-    
-    analysis->Open();
+    Analysis::Instance()->Open();
 
     G4int firstPluseIDOfThisRank = 0;
     if (MPI::Is_initialized()) {

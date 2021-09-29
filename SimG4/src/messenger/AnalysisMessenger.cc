@@ -17,18 +17,6 @@ AnalysisMessenger::AnalysisMessenger() :
     fDirectory = new G4UIdirectory("/MACE/Analysis/");
     fDirectory->SetGuidance("MACE::SimG4::Analysis controller.");
 
-    fSetCalorimeterWindowWidth = new G4UIcmdWithADoubleAndUnit("/MACE/Analysis/SetCalorimeterWindowWidth", this);
-    fSetCalorimeterWindowWidth->SetGuidance("Set calorimeter coincidence window width in time.");
-    fSetCalorimeterWindowWidth->SetParameterName("window", false);
-    fSetCalorimeterWindowWidth->SetUnitCategory("Time");
-    fSetCalorimeterWindowWidth->AvailableForStates(G4State_Idle);
-
-    fSetSpectrometerWindowWidth = new G4UIcmdWithADoubleAndUnit("/MACE/Analysis/SetSpectrometerWindowWidth", this);
-    fSetSpectrometerWindowWidth->SetGuidance("Set spectrometer coincidence window width in time.");
-    fSetSpectrometerWindowWidth->SetParameterName("window", false);
-    fSetSpectrometerWindowWidth->SetUnitCategory("Time");
-    fSetSpectrometerWindowWidth->AvailableForStates(G4State_Idle);
-
     fEnableCoincidenceOfCalorimeter = new G4UIcmdWithABool("/MACE/Analysis/EnableCoincidenceOfCalorimeter", this);
     fEnableCoincidenceOfCalorimeter->SetGuidance("Decide whether to enable the coincidence detection of the calorimeter. "
         "If true, save the event only when the orbital detector, magnetic spectrometer, and calorimeter are all coincident. "
@@ -45,19 +33,13 @@ AnalysisMessenger::AnalysisMessenger() :
 }
 
 AnalysisMessenger::~AnalysisMessenger() {
-    delete fSetCalorimeterWindowWidth;
-    delete fSetSpectrometerWindowWidth;
     delete fEnableCoincidenceOfCalorimeter;
     delete fSetFileName;
     delete fDirectory;
 }
 
 void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
-    if (command == fSetCalorimeterWindowWidth) {
-        fpAnalysis->SetCalorimeterWindowWidth(fSetCalorimeterWindowWidth->GetNewDoubleValue(value));
-    } else if (command == fSetSpectrometerWindowWidth) {
-        fpAnalysis->SetSpectrometerWindowWidth(fSetSpectrometerWindowWidth->GetNewDoubleValue(value));
-    } else if (command == fEnableCoincidenceOfCalorimeter) {
+    if (command == fEnableCoincidenceOfCalorimeter) {
         fpAnalysis->SetEnableCoincidenceOfCalorimeter(fEnableCoincidenceOfCalorimeter->GetNewBoolValue(value));
     } else if (command == fSetFileName) {
         fpAnalysis->SetFileName(value);

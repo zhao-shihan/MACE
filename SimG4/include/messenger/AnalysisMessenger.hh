@@ -25,8 +25,6 @@ private:
     Analysis* fpAnalysis;
     
     G4UIdirectory* fDirectory;
-    G4UIcmdWithADoubleAndUnit* fSetCalorimeterWindowWidth;
-    G4UIcmdWithADoubleAndUnit* fSetSpectrometerWindowWidth;
     G4UIcmdWithABool* fEnableCoincidenceOfCalorimeter;
     G4UIcmdWithAString* fSetFileName;
 };

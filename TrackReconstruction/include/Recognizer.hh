@@ -23,7 +23,7 @@ public:
 
     void SetProtectedRadius(Double_t val) { fProtectedRadius = val; }
     void SetThreshold(HoughCount_t val) { fThreshold = val; }
-    void SetCoincidenceChamberID(Int_t val) { fCoincidenceChamberID = val; }
+    // void SetCoincidenceChamberID(Int_t val) { fCoincidenceChamberID = val; }
 
 private:
     void Initialize();
@@ -35,8 +35,8 @@ private:
     const Double_t fExtent;
     const Double_t fResolution;
     Double_t fProtectedRadius = 200;
-    HoughCount_t fThreshold = 5;
-    Int_t fCoincidenceChamberID = 3;
+    HoughCount_t fThreshold = 10;
+    Int_t fCoincidenceChamberID = 0;
 
     const PluseData* fpPluseData = nullptr;
     HoughSpace<HitPointerList> fHoughSpace;

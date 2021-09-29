@@ -21,7 +21,6 @@ public:
     void Set(Field::SecondBendField* field) { fpSecondBendField = field; }
     void Set(Field::SelectorField* field) { fpSelectorField = field; }
     void Set(Field::VerticalField* field) { fpVerticalField = field; }
-    void Set(Analysis* analysis) { fpAnalysis = analysis; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
@@ -32,7 +31,6 @@ private:
     Field::SecondBendField* fpSecondBendField = nullptr;
     Field::SelectorField* fpSelectorField = nullptr;
     Field::VerticalField* fpVerticalField = nullptr;
-    Analysis* fpAnalysis = nullptr;
 
     G4UIdirectory* fDirectory;
     G4UIcmdWithADoubleAndUnit* fSetTransportMagneticField;

@@ -21,7 +21,6 @@ Analysis::Analysis() :
     fpOrbitalDetectorHC(nullptr),
     fpSpectrometerHC(nullptr) {
     AnalysisMessenger::Instance()->Set(this);
-    FieldMessenger::Instance()->Set(this);
 }
 
 Analysis::~Analysis() {
@@ -80,88 +79,23 @@ void Analysis::Open() const {
     fpG4Analysis->OpenFile(fullFileName);
 }
 
-template<typename Hit_t>
-static inline bool CompareHit(const Hit_t* const hit1, const Hit_t* const hit2) {
-    return hit1->HitTime < hit2->HitTime;
-}
-
-void Analysis::DoCoincidenceAnalysisAndFill() const {
-    std::sort(fpCalorimeterHC->GetVector()->begin(), fpCalorimeterHC->GetVector()->end(), CompareHit<Hit::CalorimeterHit>);
-    std::sort(fpOrbitalDetectorHC->GetVector()->begin(), fpOrbitalDetectorHC->GetVector()->end(), CompareHit<Hit::OrbitalDetectorHit>);
-    std::sort(fpSpectrometerHC->GetVector()->begin(), fpSpectrometerHC->GetVector()->end(), CompareHit<Hit::SpectrometerHit>);
-
-    const auto* const calorimeterHits = fpCalorimeterHC->GetVector();
-    const auto* const orbitalDetectorHits = fpOrbitalDetectorHC->GetVector();
-    const auto* const spectrometerHits = fpSpectrometerHC->GetVector();
-    auto calorimeterHitBegin = calorimeterHits->begin();
-    auto calorimeterHitEnd = calorimeterHitBegin;
-    auto spectrometerHitBegin = spectrometerHits->begin();
-    auto spectrometerHitEnd = spectrometerHitBegin;
-
-    for (const auto* const orbitalDetectorHit : *orbitalDetectorHits) {
-        const G4double calorimeterWindowBegin = orbitalDetectorHit->HitTime;
-        const G4double calorimeterWindowEnd = calorimeterWindowBegin + fCalorimeterWindowWidth;
-        while (calorimeterHitBegin != calorimeterHits->end()) {
-            if ((*calorimeterHitBegin)->HitTime < calorimeterWindowBegin) { ++calorimeterHitBegin; } else { break; }
+void Analysis::Fill() const {
+    if (fEnableCoincidenceOfCalorimeter) {
+        if (fpCalorimeterHC->entries() == 0 ||
+            fpOrbitalDetectorHC->entries() == 0 ||
+            fpSpectrometerHC->entries() == 0) {
+            return;
         }
-        while (calorimeterHitEnd != calorimeterHits->end()) {
-            if ((*calorimeterHitEnd)->HitTime < calorimeterWindowEnd) { ++calorimeterHitEnd; } else { break; }
-        }
-
-        const G4double spectrometerWindowBegin = orbitalDetectorHit->HitTime - fMeanTOF - 0.5 * fSpectrometerWindowWidth;
-        const G4double spectrometerWindowEnd = spectrometerWindowBegin + fSpectrometerWindowWidth;
-        while (spectrometerHitBegin != spectrometerHits->end()) {
-            if ((*spectrometerHitBegin)->HitTime < spectrometerWindowBegin) { ++spectrometerHitBegin; } else { break; }
-        }
-        while (spectrometerHitEnd != spectrometerHits->end()) {
-            if ((*spectrometerHitEnd)->HitTime < spectrometerWindowEnd) { ++spectrometerHitEnd; } else { break; }
-        }
-
-        const G4bool calorimeterCoincidence = (!fEnableCoincidenceOfCalorimeter) || (calorimeterHitBegin != calorimeterHitEnd);
-        const G4bool spectrometerCoincidence = (spectrometerHitBegin != spectrometerHitEnd);
-        if (calorimeterCoincidence && spectrometerCoincidence) {
-            FillOrbitalDetectorHit(orbitalDetectorHit);
-            FillCalorimeterHits(calorimeterHitBegin, calorimeterHitEnd);
-            FillSpectrometerHits(spectrometerHitBegin, spectrometerHitEnd);
+    } else {
+        if (fpOrbitalDetectorHC->entries() == 0 ||
+            fpSpectrometerHC->entries() == 0) {
+            return;
         }
     }
-}
 
-void Analysis::WriteAndClose() const {
-    fpG4Analysis->Write();
-    fpG4Analysis->CloseFile();
-}
-
-void Analysis::SetFlightDistance(G4double val) {
-    fFlightDistance = val;
-    fMeanTOF = fFlightDistance / (c_light * sqrt(2 * fEkin / G4Positron::Definition()->GetPDGMass()));
-}
-
-void Analysis::SetEkinOfOrbital(G4double val) {
-    fEkin = val;
-    fMeanTOF = fFlightDistance / (c_light * sqrt(2 * fEkin / G4Positron::Definition()->GetPDGMass()));
-}
-
-void Analysis::FillOrbitalDetectorHit(const Hit::OrbitalDetectorHit* const hit) const {
-    constexpr G4int ntupleID = 1;
-    fpG4Analysis->FillNtupleIColumn(ntupleID, 0, fPluseID);
-    fpG4Analysis->FillNtupleIColumn(ntupleID, 1, hit->TrackID);
-    fpG4Analysis->FillNtupleFColumn(ntupleID, 2, hit->VertexTime);
-    fpG4Analysis->FillNtupleFColumn(ntupleID, 3, hit->VertexPosition.x());
-    fpG4Analysis->FillNtupleFColumn(ntupleID, 4, hit->VertexPosition.y());
-    fpG4Analysis->FillNtupleFColumn(ntupleID, 5, hit->VertexPosition.z());
-    fpG4Analysis->FillNtupleFColumn(ntupleID, 6, hit->HitTime);
-    fpG4Analysis->FillNtupleFColumn(ntupleID, 7, hit->HitPosition.x());
-    fpG4Analysis->FillNtupleFColumn(ntupleID, 8, hit->HitPosition.y());
-    fpG4Analysis->FillNtupleFColumn(ntupleID, 9, hit->HitPosition.z());
-    fpG4Analysis->FillNtupleSColumn(ntupleID, 10, hit->ParticleDefinition->GetParticleName());
-    fpG4Analysis->AddNtupleRow(ntupleID);
-}
-
-void Analysis::FillCalorimeterHits(std::vector<Hit::CalorimeterHit*>::const_iterator& hitBegin, const std::vector<Hit::CalorimeterHit*>::const_iterator hitEnd) const {
-    constexpr G4int ntupleID = 0;
-    for (; hitBegin != hitEnd; ++hitBegin) {
-        const auto* const hit = *hitBegin;
+    const auto* const calorimeterHits = fpCalorimeterHC->GetVector();
+    for (const auto* const hit : *calorimeterHits) {
+        constexpr G4int ntupleID = 0;
         fpG4Analysis->FillNtupleIColumn(ntupleID, 0, fPluseID);
         fpG4Analysis->FillNtupleIColumn(ntupleID, 1, hit->TrackID);
         fpG4Analysis->FillNtupleFColumn(ntupleID, 2, hit->HitTime);
@@ -169,12 +103,27 @@ void Analysis::FillCalorimeterHits(std::vector<Hit::CalorimeterHit*>::const_iter
         fpG4Analysis->FillNtupleSColumn(ntupleID, 4, hit->ParticleDefinition->GetParticleName());
         fpG4Analysis->AddNtupleRow(ntupleID);
     }
-}
 
-void Analysis::FillSpectrometerHits(std::vector<Hit::SpectrometerHit*>::const_iterator& hitBegin, const std::vector<Hit::SpectrometerHit*>::const_iterator hitEnd) const {
-    constexpr G4int ntupleID = 2;
-    for (; hitBegin != hitEnd; ++hitBegin) {
-        const auto* const hit = *hitBegin;
+    const auto* const orbitalDetectorHits = fpOrbitalDetectorHC->GetVector();
+    for (const auto* const hit : *orbitalDetectorHits) {
+        constexpr G4int ntupleID = 1;
+        fpG4Analysis->FillNtupleIColumn(ntupleID, 0, fPluseID);
+        fpG4Analysis->FillNtupleIColumn(ntupleID, 1, hit->TrackID);
+        fpG4Analysis->FillNtupleFColumn(ntupleID, 2, hit->VertexTime);
+        fpG4Analysis->FillNtupleFColumn(ntupleID, 3, hit->VertexPosition.x());
+        fpG4Analysis->FillNtupleFColumn(ntupleID, 4, hit->VertexPosition.y());
+        fpG4Analysis->FillNtupleFColumn(ntupleID, 5, hit->VertexPosition.z());
+        fpG4Analysis->FillNtupleFColumn(ntupleID, 6, hit->HitTime);
+        fpG4Analysis->FillNtupleFColumn(ntupleID, 7, hit->HitPosition.x());
+        fpG4Analysis->FillNtupleFColumn(ntupleID, 8, hit->HitPosition.y());
+        fpG4Analysis->FillNtupleFColumn(ntupleID, 9, hit->HitPosition.z());
+        fpG4Analysis->FillNtupleSColumn(ntupleID, 10, hit->ParticleDefinition->GetParticleName());
+        fpG4Analysis->AddNtupleRow(ntupleID);
+    }
+
+    const auto* const spectrometerHits = fpSpectrometerHC->GetVector();
+    for (const auto* const hit : *spectrometerHits) {
+        constexpr G4int ntupleID = 2;
         fpG4Analysis->FillNtupleIColumn(ntupleID, 0, fPluseID);
         fpG4Analysis->FillNtupleIColumn(ntupleID, 1, hit->TrackID);
         fpG4Analysis->FillNtupleIColumn(ntupleID, 2, hit->ChamberID);
@@ -189,4 +138,9 @@ void Analysis::FillSpectrometerHits(std::vector<Hit::SpectrometerHit*>::const_it
         fpG4Analysis->FillNtupleSColumn(ntupleID, 11, hit->ParticleDefinition->GetParticleName());
         fpG4Analysis->AddNtupleRow(ntupleID);
     }
+}
+
+void Analysis::WriteAndClose() const {
+    fpG4Analysis->Write();
+    fpG4Analysis->CloseFile();
 }
