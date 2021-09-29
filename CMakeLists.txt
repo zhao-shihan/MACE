@@ -7,6 +7,9 @@ set(CMAKE_CXX_STANDARD 17)
 # MPI
 find_package(MPI REQUIRED)
 
+# CLHEP
+find_package(CLHEP REQUIRED)
+
 # Geant4
 option(WITH_GEANT4_UIVIS "Build example with Geant4 UI and Vis drivers" ON)
 if(WITH_GEANT4_UIVIS)
@@ -43,6 +46,7 @@ function(include_directories_recursively root_dir)
 endfunction()
 
 add_subdirectory(Buildin)
+add_subdirectory(DataModel)
+add_subdirectory(Reconstruction)
 add_subdirectory(SimG4)
 add_subdirectory(SimMTransport)
-add_subdirectory(Reconstruction)

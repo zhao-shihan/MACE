@@ -6,27 +6,18 @@
 #include "G4ThreeVector.hh"
 #include "G4ParticleDefinition.hh"
 
+#include "datamodel/CalorimeterHit.hh"
+
 #include "SimG4Global.hh"
 
-class MACE::SimG4::Hit::CalorimeterHit : public G4VHit {
+class MACE::SimG4::Hit::CalorimeterHit :
+    public MACE::DataModel::CalorimeterHit,
+    public G4VHit {
 public:
-    CalorimeterHit(
-        G4int trackID,
-        G4double hitTime,
-        G4double Energy,
-        const G4ParticleDefinition* particle);
-    // ~CalorimeterHit();
+    CalorimeterHit() : DataModel::CalorimeterHit(), G4VHit() {}
 
     inline void* operator new(size_t);
     inline void  operator delete(void*);
-
-    // void Draw() override;
-    // void Print() override;
-
-    const G4int         TrackID;
-    const G4double      HitTime;
-    const G4double      Energy;
-    const G4ParticleDefinition* const ParticleDefinition;
 };
 
 namespace MACE::SimG4::Hit {

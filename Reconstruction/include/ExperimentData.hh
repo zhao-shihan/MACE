@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ReconstructionGlobal.hh"
-#include "Hit.hh"
+#include "datamodel/SpectrometerHit.hh"
 
 namespace MACE::Reconstruction {
     using ExperimentDataBase = std::vector<PluseData>;

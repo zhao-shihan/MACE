@@ -14,6 +14,6 @@
         ClassName(ClassName&& value)
 
 namespace MACE::Reconstruction {
-    using PluseData = std::vector<Hit>;
-    using HitPointerList = std::vector<const Hit*>;
+    using PluseData = std::vector<MACE::DataModel::SpectrometerHit>;
+    using HitPointerList = std::vector<const MACE::DataModel::SpectrometerHit*>;
 }

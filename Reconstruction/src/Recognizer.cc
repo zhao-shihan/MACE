@@ -5,9 +5,10 @@
 #include "TFolder.h"
 
 #include "Recognizer.hh"
-#include "Hit.hh"
+#include "datamodel/SpectrometerHit.hh"
 
 using namespace MACE::Reconstruction;
+using namespace MACE::DataModel;
 
 Recognizer::Recognizer(Double_t houghSpaceExtent, Double_t proposingHoughSpaceResolution) :
     fSize(round(2.0 * houghSpaceExtent / proposingHoughSpaceResolution)),
@@ -93,7 +94,7 @@ void Recognizer::GenerateResult() {
     while ((candidate =
         std::find_if(candidate + 1, houghSpace + fSize * fSize, [this](const HitPointerList& hit)->bool { return hit.size() >= fThreshold; }))
         != houghSpace + fSize * fSize) {
-        const auto markedHit = std::find_if(candidate->cbegin(), candidate->cend(), [this](const Hit* const hit)->bool { return hit->ChamberID() == fCoincidenceChamberID; });
+        const auto markedHit = std::find_if(candidate->cbegin(), candidate->cend(), [this](const SpectrometerHit* const hit)->bool { return hit->ChamberID() == fCoincidenceChamberID; });
         if (markedHit == candidate->cend()) { continue; }
         if (std::find(fResult.cbegin(), fResult.cend(), *markedHit) == fResult.cend()) {
             fResult.push_back(*markedHit);

@@ -33,17 +33,15 @@ G4bool Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
         return false;
     }
     const auto* const preStepPoint = step->GetPreStepPoint();
-    fHitsCollection->insert(
-        new SpectrometerHit(
-            track->GetTrackID(),
-            preStepPoint->GetTouchable()->GetCopyNumber(),
-            track->GetGlobalTime() - track->GetLocalTime(),
-            track->GetVertexPosition(),
-            preStepPoint->GetGlobalTime(),
-            preStepPoint->GetPosition(),
-            particle
-        )
-    );
+    auto* const hit = new SpectrometerHit();
+    hit->SetTrackID(track->GetTrackID());
+    hit->SetChamberID(preStepPoint->GetTouchable()->GetCopyNumber());
+    hit->SetHitTime(preStepPoint->GetGlobalTime());
+    hit->SetHitPosition(preStepPoint->GetPosition());
+    hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
+    hit->SetVertexPosition(track->GetVertexPosition());
+    hit->SetParticleName(particle->GetParticleName().c_str());
+    fHitsCollection->insert(hit);
     return true;
 }
 

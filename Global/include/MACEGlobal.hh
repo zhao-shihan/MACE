@@ -1,6 +1,15 @@
 #pragma once
 
 namespace MACE {
+    namespace DataModel {
+        class CalorimeterHit;
+        class OrbitalDetectorHit;
+        class SpectrometerHit;
+    }
+    namespace Reconstruction {
+        class ExperimentData;
+        class Recognizer;
+    }
     namespace SimG4 {
         // action
         class ActionInitialization;
@@ -79,10 +88,5 @@ namespace MACE {
         class Track;
         struct Vector3;
         class Worker;
-    }
-    namespace Reconstruction {
-        class ExperimentData;
-        class Hit;
-        class Recognizer;
     }
 }

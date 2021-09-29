@@ -34,10 +34,7 @@ ExperimentData::ExperimentData(const char* rootFile) :
             thisHitList->reserve(20);
             thisPluse = *pluseID;
         }
-        thisHitList->emplace_back(
-            *trackID, *chamberID,
-            *vertexTime, TVector3(*vertexPositionX, *vertexPositionY, *vertexPositionZ),
-            *hitTime, TVector3(*hitPositionX, *hitPositionY, *hitPositionZ));
+        thisHitList->emplace_back();//!!!!!!!!!
     } while (reader.Next());
 
     file->Close();

@@ -38,14 +38,12 @@ G4bool Calorimeter::ProcessHits(G4Step* step, G4TouchableHistory*) {
         (particle->GetPDGCharge() != 0 || particle == photon))) {
         return false;
     }
-    fHitsCollection->insert(
-        new CalorimeterHit(
-            track->GetTrackID(),
-            preStepPoint->GetGlobalTime(),
-            preStepPoint->GetKineticEnergy(),
-            particle
-        )
-    );
+    auto* const hit = new CalorimeterHit();
+    hit->SetTrackID(track->GetTrackID());
+    hit->SetHitTime(preStepPoint->GetGlobalTime());
+    hit->SetEnergy(preStepPoint->GetKineticEnergy());
+    hit->SetParticleName(particle->GetParticleName().c_str());
+    fHitsCollection->insert(hit);
     return true;
 }
 
