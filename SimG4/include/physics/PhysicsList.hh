@@ -1,10 +1,10 @@
 #pragma once
 
-#include "FTFP_BERT.hh"
+#include "G4VModularPhysicsList.hh"
 
 #include "SimG4Global.hh"
 
-class MACE::SimG4::Physics::PhysicsList : public FTFP_BERT {
+class MACE::SimG4::Physics::PhysicsList : public G4VModularPhysicsList  {
 public:
     PhysicsList(G4int verbose = 1);
     virtual ~PhysicsList() {}
