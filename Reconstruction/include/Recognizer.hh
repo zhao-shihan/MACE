@@ -7,7 +7,7 @@
 #include "ReconstructionGlobal.hh"
 
 class MACE::Reconstruction::Recognizer final {
-    MACE_TRACK_RECONSTRUCTION_NOT_ALLOW_TO_COPY_BUT_ALLOW_TO_MOVE(Recognizer);
+    MACE_RECONSTRUCTION_NOT_ALLOW_TO_COPY_BUT_ALLOW_TO_MOVE(Recognizer);
 private:
     template<typename T> using HoughSpace = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
     using HoughCount_t = Int_t;

@@ -6,15 +6,15 @@
 #include "G4ThreeVector.hh"
 #include "G4ParticleDefinition.hh"
 
-#include "datamodel/OrbitalDetectorHit.hh"
+#include "digitized/OrbitalDetectorHit.hh"
 
 #include "SimG4Global.hh"
 
 class MACE::SimG4::Hit::OrbitalDetectorHit :
-    public MACE::DataModel::OrbitalDetectorHit,
+    public MACE::DataModel::Digitized::OrbitalDetectorHit,
     public G4VHit {
 public:
-    OrbitalDetectorHit() : DataModel::OrbitalDetectorHit(), G4VHit() {}
+    OrbitalDetectorHit() : DataModel::Digitized::OrbitalDetectorHit(), G4VHit() {}
 
     inline void* operator new(size_t);
     inline void  operator delete(void*);

@@ -6,15 +6,15 @@
 #include "G4ThreeVector.hh"
 #include "G4ParticleDefinition.hh"
 
-#include "datamodel/SpectrometerHit.hh"
+#include "digitized/SpectrometerHit.hh"
 
 #include "SimG4Global.hh"
 
 class MACE::SimG4::Hit::SpectrometerHit :
-    public MACE::DataModel::SpectrometerHit,
+    public MACE::DataModel::Digitized::SpectrometerHit,
     public G4VHit {
 public:
-    SpectrometerHit() : DataModel::SpectrometerHit(), G4VHit() {}
+    SpectrometerHit() : DataModel::Digitized::SpectrometerHit(), G4VHit() {}
 
     inline void* operator new(size_t);
     inline void  operator delete(void*);

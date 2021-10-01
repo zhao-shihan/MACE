@@ -5,7 +5,7 @@
 #include "TFolder.h"
 
 #include "Recognizer.hh"
-#include "datamodel/SpectrometerHit.hh"
+#include "digitized/SpectrometerHit.hh"
 
 using namespace MACE::Reconstruction;
 using namespace MACE::DataModel;

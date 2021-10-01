@@ -7,7 +7,7 @@ include_directories(${ROOT_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${MACE_PROJECT_ROOT_DIR}/Buildin/G4MPI/include)
 include_directories(${MACE_PROJECT_ROOT_DIR}/SimMTransport/include)
-include_directories(${MACE_PROJECT_ROOT_DIR}/DataModel)
+include_directories(${MACE_PROJECT_ROOT_DIR}/DataModel/include)
 
 # SimG4 sources and headers
 file(GLOB_RECURSE SimG4_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cc)

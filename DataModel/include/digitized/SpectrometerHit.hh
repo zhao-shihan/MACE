@@ -2,7 +2,7 @@
 
 #include "DataModelGlobal.hh"
 
-class MACE::DataModel::SpectrometerHit {
+class MACE::DataModel::Digitized::SpectrometerHit {
 public:
     SpectrometerHit() {}
     virtual ~SpectrometerHit() {}

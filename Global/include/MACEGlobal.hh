@@ -2,13 +2,41 @@
 
 namespace MACE {
     namespace DataModel {
-        class CalorimeterHit;
-        class OrbitalDetectorHit;
-        class SpectrometerHit;
+        namespace Base {
+            namespace Persistency {
+                class Container;
+                class Handler;
+                class Reader;
+                class Writer;
+            }
+        }
+        namespace Digitized {
+            namespace Persistency {
+                class Container;
+                class Handler;
+                class Reader;
+                class Writer;
+            }
+            class CalorimeterHit;
+            class OrbitalDetectorHit;
+            class SpectrometerHit;
+        }
+        namespace Raw {
+            namespace Persistency {
+                class Container;
+                class Handler;
+                class Reader;
+                class Writer;
+            }
+            class CalorimeterHit;
+            class OrbitalDetectorHit;
+            class SpectrometerHit;
+        }
     }
     namespace Reconstruction {
         class ExperimentData;
         class Recognizer;
+        class TOFAnalyzer;
     }
     namespace SimG4 {
         // action

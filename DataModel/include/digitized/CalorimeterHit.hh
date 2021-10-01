@@ -2,7 +2,7 @@
 
 #include "DataModelGlobal.hh"
 
-class MACE::DataModel::CalorimeterHit {
+class MACE::DataModel::Digitized::CalorimeterHit {
 public:
     CalorimeterHit() {}
     virtual ~CalorimeterHit() {}

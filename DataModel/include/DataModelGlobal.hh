@@ -4,6 +4,14 @@
 
 #include "MACEGlobal.hh"
 
+namespace MACE::Reconstruction {
+    enum {
+        kCalorimeter,
+        kOrbitalDetector,
+        kSpectrometer
+    };
+}
+
 #define MACE_DATA_MODEL_SMALL_MEMBER(T, Name, defaultValue) \
     public: \
         T Name() const { return f##Name; } \

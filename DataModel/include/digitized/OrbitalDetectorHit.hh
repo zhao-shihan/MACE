@@ -2,7 +2,7 @@
 
 #include "DataModelGlobal.hh"
 
-class MACE::DataModel::OrbitalDetectorHit {
+class MACE::DataModel::Digitized::OrbitalDetectorHit {
 public:
     OrbitalDetectorHit() {}
     virtual ~OrbitalDetectorHit() {}

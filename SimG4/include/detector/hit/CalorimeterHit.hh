@@ -6,15 +6,15 @@
 #include "G4ThreeVector.hh"
 #include "G4ParticleDefinition.hh"
 
-#include "datamodel/CalorimeterHit.hh"
+#include "digitized/CalorimeterHit.hh"
 
 #include "SimG4Global.hh"
 
 class MACE::SimG4::Hit::CalorimeterHit :
-    public MACE::DataModel::CalorimeterHit,
+    public MACE::DataModel::Digitized::CalorimeterHit,
     public G4VHit {
 public:
-    CalorimeterHit() : DataModel::CalorimeterHit(), G4VHit() {}
+    CalorimeterHit() : DataModel::Digitized::CalorimeterHit(), G4VHit() {}
 
     inline void* operator new(size_t);
     inline void  operator delete(void*);
