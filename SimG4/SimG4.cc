@@ -17,10 +17,9 @@ int main(int argc, char** argv) {
     G4Random::setTheEngine(engine);
 
     auto runManager = new G4RunManager();
-    runManager->SetUserInitialization(new Physics::PhysicsList(0));
-    auto detectorConstruction = new DetectorConstruction();
-    runManager->SetUserInitialization(detectorConstruction);
-    runManager->SetUserInitialization(new ActionInitialization(detectorConstruction));
+    runManager->SetUserInitialization(new Physics::PhysicsList());
+    runManager->SetUserInitialization(new DetectorConstruction());
+    runManager->SetUserInitialization(new ActionInitialization());
 
     if (argc == 1) {
         auto uiManager = G4UImanager::GetUIpointer();

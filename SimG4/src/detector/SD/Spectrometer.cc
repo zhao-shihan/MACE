@@ -5,27 +5,26 @@
 #include "detector/SD/Spectrometer.hh"
 #include "Analysis.hh"
 
-using namespace MACE::SimG4::SD;
-using namespace MACE::SimG4::Hit;
+using namespace MACE::SimG4;
 
-Spectrometer::Spectrometer(const G4String& SDName, const G4String& hitsCollectionName) :
+SD::Spectrometer::Spectrometer(const G4String& SDName, const G4String& hitsCollectionName) :
     G4VSensitiveDetector(SDName),
     fHitsCollection(nullptr) {
     collectionName.insert(hitsCollectionName);
-    if (SpectrometerHitAllocator == nullptr) {
-        SpectrometerHitAllocator = new G4Allocator<SpectrometerHit>();
+    if (Hit::AllocatorOfSpectrometer == nullptr) {
+        Hit::AllocatorOfSpectrometer = new G4Allocator<Hit::Spectrometer>();
     }
 }
 
-Spectrometer::~Spectrometer() {}
+SD::Spectrometer::~Spectrometer() {}
 
-void Spectrometer::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
-    fHitsCollection = new SpectrometerHitsCollection(SensitiveDetectorName, collectionName[0]);
+void SD::Spectrometer::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
+    fHitsCollection = new Hit::CollectionOfSpectrometer(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-G4bool Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
+G4bool SD::Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
     const auto* const track = step->GetTrack();
     const auto* const particle = track->GetDefinition();
     if (!(step->IsFirstStepInVolume() && track->GetCurrentStepNumber() > 1 &&
@@ -33,7 +32,7 @@ G4bool Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
         return false;
     }
     const auto* const preStepPoint = step->GetPreStepPoint();
-    auto* const hit = new SpectrometerHit();
+    auto* const hit = new Hit::Spectrometer();
     hit->SetTrackID(track->GetTrackID());
     hit->SetChamberID(preStepPoint->GetTouchable()->GetCopyNumber());
     hit->SetHitTime(preStepPoint->GetGlobalTime());
@@ -45,6 +44,6 @@ G4bool Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
     return true;
 }
 
-void Spectrometer::EndOfEvent(G4HCofThisEvent*) {
+void SD::Spectrometer::EndOfEvent(G4HCofThisEvent*) {
     Analysis::Instance()->SubmitSpectrometerHC(fHitsCollection);
 }

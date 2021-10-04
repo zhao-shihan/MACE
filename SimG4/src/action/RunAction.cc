@@ -10,36 +10,33 @@
 
 using namespace MACE::SimG4;
 
-RunAction::RunAction(const DetectorConstruction* pDetectorConstruction, PrimaryGeneratorAction* pPrimaryGeneratorAction, EventAction* pEventAction) :
+RunAction::RunAction(PrimaryGeneratorAction* pPrimaryGeneratorAction, EventAction* pEventAction) :
     G4UserRunAction(),
-    fpDetectorConstruction(pDetectorConstruction),
     fpPrimaryGeneratorAction(pPrimaryGeneratorAction),
-    fpEventAction(pEventAction) {
-    Analysis::Instance()->Initialize();
-}
+    fpEventAction(pEventAction),
+    fpAnalysis(Analysis::Instance()) {}
 
-RunAction::~RunAction() {
-    delete Analysis::Instance();
-}
+RunAction::~RunAction() {}
 
 void RunAction::BeginOfRunAction(const G4Run* run) {
-    Analysis::Instance()->Open();
-
-    G4int firstPluseIDOfThisRank = 0;
+    G4int firstTrueEventIDOfThisRank = 0;
     if (MPI::Is_initialized()) {
         const auto* const mpiManager = G4MPImanager::GetManager();
         const int thisNumberOfEvent = run->GetNumberOfEventToBeProcessed();
         int* allNumberOfEvent = new int[mpiManager->GetActiveSize()];
         mpiManager->GetComm()->Allgather(&thisNumberOfEvent, 1, MPI::INT, allNumberOfEvent, 1, MPI::INT);
         for (G4int i = 0; i < mpiManager->GetRank(); ++i) {
-            firstPluseIDOfThisRank += allNumberOfEvent[i];
+            firstTrueEventIDOfThisRank += allNumberOfEvent[i];
         }
         delete[] allNumberOfEvent;
     }
-    fpPrimaryGeneratorAction->SetFirstPluseIDOfThisRank(firstPluseIDOfThisRank);
-    fpEventAction->SetFirstPluseIDOfThisRank(firstPluseIDOfThisRank);
+    fpPrimaryGeneratorAction->SetFirstTrueEventIDOfThisRank(firstTrueEventIDOfThisRank);
+    fpEventAction->SetFirstTrueEventIDOfThisRank(firstTrueEventIDOfThisRank);
+
+    fpAnalysis->Open();
 }
 
 void RunAction::EndOfRunAction(const G4Run*) {
-    Analysis::Instance()->WriteAndClose();
+    fpAnalysis->Write();
+    fpAnalysis->Close();
 }

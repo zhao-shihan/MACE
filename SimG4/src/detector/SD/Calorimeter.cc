@@ -7,30 +7,29 @@
 #include "detector/SD/Calorimeter.hh"
 #include "Analysis.hh"
 
-using namespace MACE::SimG4::SD;
-using namespace MACE::SimG4::Hit;
+using namespace MACE::SimG4;
 
-Calorimeter::Calorimeter(const G4String& SDName, const G4String& hitsCollectionName) :
+SD::Calorimeter::Calorimeter(const G4String& SDName, const G4String& hitsCollectionName) :
     G4VSensitiveDetector(SDName),
     fHitsCollection(nullptr) {
     collectionName.insert(hitsCollectionName);
-    if (CalorimeterHitAllocator == nullptr) {
-        CalorimeterHitAllocator = new G4Allocator<CalorimeterHit>();
+    if (Hit::AllocatorOfCalorimeter == nullptr) {
+        Hit::AllocatorOfCalorimeter = new G4Allocator<Hit::Calorimeter>();
     }
 }
 
-Calorimeter::~Calorimeter() {}
+SD::Calorimeter::~Calorimeter() {}
 
 const G4ParticleDefinition* photon = nullptr;
 
-void Calorimeter::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
-    fHitsCollection = new CalorimeterHitsCollection(SensitiveDetectorName, collectionName[0]);
+void SD::Calorimeter::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
+    fHitsCollection = new Hit::CollectionOfCalorimeter(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
     photon = G4Gamma::Definition();
 }
 
-G4bool Calorimeter::ProcessHits(G4Step* step, G4TouchableHistory*) {
+G4bool SD::Calorimeter::ProcessHits(G4Step* step, G4TouchableHistory*) {
     const auto* const track = step->GetTrack();
     const auto* const preStepPoint = step->GetPreStepPoint();
     const auto* const particle = track->GetDefinition();
@@ -38,7 +37,7 @@ G4bool Calorimeter::ProcessHits(G4Step* step, G4TouchableHistory*) {
         (particle->GetPDGCharge() != 0 || particle == photon))) {
         return false;
     }
-    auto* const hit = new CalorimeterHit();
+    auto* const hit = new Hit::Calorimeter();
     hit->SetTrackID(track->GetTrackID());
     hit->SetHitTime(preStepPoint->GetGlobalTime());
     hit->SetEnergy(preStepPoint->GetKineticEnergy());
@@ -47,6 +46,6 @@ G4bool Calorimeter::ProcessHits(G4Step* step, G4TouchableHistory*) {
     return true;
 }
 
-void Calorimeter::EndOfEvent(G4HCofThisEvent*) {
+void SD::Calorimeter::EndOfEvent(G4HCofThisEvent*) {
     Analysis::Instance()->SubmitCalorimeterHC(fHitsCollection);
 }

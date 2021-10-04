@@ -5,14 +5,13 @@
 
 using namespace MACE::SimG4;
 
-ActionInitialization::ActionInitialization(const DetectorConstruction* pDetectorConstruction) :
-    G4VUserActionInitialization(),
-    fpDetectorConstruction(pDetectorConstruction) {}
+ActionInitialization::ActionInitialization() :
+    G4VUserActionInitialization() {}
 
 void ActionInitialization::Build() const {
     auto primaryGeneratorAction = new PrimaryGeneratorAction();
     auto eventAction = new EventAction();
-    auto runAction = new RunAction(fpDetectorConstruction, primaryGeneratorAction, eventAction);
+    auto runAction = new RunAction(primaryGeneratorAction, eventAction);
 
     SetUserAction(primaryGeneratorAction);
     SetUserAction(eventAction);

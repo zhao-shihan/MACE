@@ -8,7 +8,6 @@ include_directories(${MACE_PROJECT_ROOT_DIR}/DataModel/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
-file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
-add_executable(Reconstruction Reconstruction.cc ${sources} ${headers})
+add_executable(Reconstruction Reconstruction.cc ${sources})
 target_link_libraries(Reconstruction genfit2)

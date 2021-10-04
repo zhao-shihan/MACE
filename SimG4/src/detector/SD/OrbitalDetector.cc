@@ -5,27 +5,26 @@
 #include "detector/SD/OrbitalDetector.hh"
 #include "Analysis.hh"
 
-using namespace MACE::SimG4::SD;
-using namespace MACE::SimG4::Hit;
+using namespace MACE::SimG4;
 
-OrbitalDetector::OrbitalDetector(const G4String& SDName, const G4String& hitsCollectionName) :
+SD::OrbitalDetector::OrbitalDetector(const G4String& SDName, const G4String& hitsCollectionName) :
     G4VSensitiveDetector(SDName),
     fHitsCollection(nullptr) {
     collectionName.insert(hitsCollectionName);
-    if (OrbitalDetectorHitAllocator == nullptr) {
-        OrbitalDetectorHitAllocator = new G4Allocator<OrbitalDetectorHit>();
+    if (Hit::AllocatorOfOrbitalDetector == nullptr) {
+        Hit::AllocatorOfOrbitalDetector = new G4Allocator<Hit::OrbitalDetector>();
     }
 }
 
-OrbitalDetector::~OrbitalDetector() {}
+SD::OrbitalDetector::~OrbitalDetector() {}
 
-void OrbitalDetector::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
-    fHitsCollection = new OrbitalDetectorHitsCollection(SensitiveDetectorName, collectionName[0]);
+void SD::OrbitalDetector::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
+    fHitsCollection = new Hit::CollectionOfOrbitalDetector(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-G4bool OrbitalDetector::ProcessHits(G4Step* step, G4TouchableHistory*) {
+G4bool SD::OrbitalDetector::ProcessHits(G4Step* step, G4TouchableHistory*) {
     auto* const track = step->GetTrack();
     const auto* const particle = track->GetDefinition();
     if (!(step->IsFirstStepInVolume() && track->GetCurrentStepNumber() > 1 &&
@@ -35,7 +34,7 @@ G4bool OrbitalDetector::ProcessHits(G4Step* step, G4TouchableHistory*) {
     const auto* const preStepPoint = step->GetPreStepPoint();
     const auto& detectorPosition = preStepPoint->GetTouchable()->GetTranslation();
     const auto* const detectorRotation = preStepPoint->GetTouchable()->GetRotation();
-    auto* const hit = new OrbitalDetectorHit();
+    auto* const hit = new Hit::OrbitalDetector();
     hit->SetTrackID(track->GetTrackID());
     hit->SetHitTime(preStepPoint->GetGlobalTime());
     hit->SetHitPosition((*detectorRotation) * (preStepPoint->GetPosition() - detectorPosition));
@@ -46,6 +45,6 @@ G4bool OrbitalDetector::ProcessHits(G4Step* step, G4TouchableHistory*) {
     return true;
 }
 
-void OrbitalDetector::EndOfEvent(G4HCofThisEvent*) {
+void SD::OrbitalDetector::EndOfEvent(G4HCofThisEvent*) {
     Analysis::Instance()->SubmitOrbitalDetectorHC(fHitsCollection);
 }

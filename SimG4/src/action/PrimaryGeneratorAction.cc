@@ -18,7 +18,7 @@ MACE::SimG4::PrimaryGeneratorAction::~PrimaryGeneratorAction() {
 
 void MACE::SimG4::PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
     const G4int count = round(fPlusePeakInterval * fFlux);
-    const G4double timeAtPeak = (fFirstPluseIDOfThisRank+event->GetEventID()) * fPlusePeakInterval;
+    const G4double timeAtPeak = (fFirstTrueEventIDOfThisRank+event->GetEventID()) * fPlusePeakInterval;
     for (G4int i = 0; i < count; ++i) {
         fParticleGun->SetParticleTime(G4RandGauss::shoot(timeAtPeak, fPluseWidthRMS));
         fParticleGun->SetParticlePosition(G4ThreeVector(G4RandGauss::shoot(0, fBeamWidthRMS), G4RandGauss::shoot(0, fBeamWidthRMS), -1.5 * m));

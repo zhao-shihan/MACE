@@ -7,9 +7,6 @@
 
 class MACE::SimG4::ActionInitialization : public G4VUserActionInitialization {
 public:
-    ActionInitialization(const DetectorConstruction* pDetectorConstruction);
+    ActionInitialization();
     void Build() const override;
-
-private:
-    const DetectorConstruction* const fpDetectorConstruction;
 };

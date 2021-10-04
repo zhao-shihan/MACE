@@ -3,34 +3,33 @@
 namespace MACE {
     namespace DataModel {
         namespace Base {
-            namespace Persistency {
-                class Container;
-                class Handler;
-                class Reader;
-                class Writer;
-            }
+            class Manager;
         }
-        namespace Digitized {
+        namespace Hit {
             namespace Persistency {
-                class Container;
-                class Handler;
-                class Reader;
-                class Writer;
+                struct Calorimeter;
+                struct OrbitalDetector;
+                struct Spectrometer;
             }
-            class CalorimeterHit;
-            class OrbitalDetectorHit;
-            class SpectrometerHit;
+            namespace Transient {
+                class Calorimeter;
+                class OrbitalDetector;
+                class Spectrometer;
+            }
+            class Manager;
         }
         namespace Raw {
             namespace Persistency {
-                class Container;
-                class Handler;
-                class Reader;
-                class Writer;
+                struct Calorimeter;
+                struct OrbitalDetector;
+                struct Spectrometer;
             }
-            class CalorimeterHit;
-            class OrbitalDetectorHit;
-            class SpectrometerHit;
+            namespace Transient {
+                class Calorimeter;
+                class OrbitalDetector;
+                class Spectrometer;
+            }
+            class Manager;
         }
     }
     namespace Reconstruction {
@@ -77,9 +76,9 @@ namespace MACE {
             class World;
         }
         namespace Hit {
-            class CalorimeterHit;
-            class OrbitalDetectorHit;
-            class SpectrometerHit;
+            class Calorimeter;
+            class OrbitalDetector;
+            class Spectrometer;
         }
         namespace SD {
             class Calorimeter;

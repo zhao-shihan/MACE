@@ -9,11 +9,11 @@ public:
     EventAction();
     ~EventAction();
 
-    void SetFirstPluseIDOfThisRank(G4int pluseID) { fFirstPluseIDOfThisRank = pluseID; }
+    void SetFirstTrueEventIDOfThisRank(G4int trueEventID) { fFirstTrueEventIDOfThisRank = trueEventID; }
 
     void BeginOfEventAction(const G4Event* event) override;
     void   EndOfEventAction(const G4Event*) override;
 
 private:
-    G4int fFirstPluseIDOfThisRank = 0;
+    G4int fFirstTrueEventIDOfThisRank = 0;
 };

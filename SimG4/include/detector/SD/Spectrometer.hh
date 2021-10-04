@@ -2,7 +2,7 @@
 
 #include "G4VSensitiveDetector.hh"
 
-#include "detector/hit/SpectrometerHit.hh"
+#include "detector/hit/Spectrometer.hh"
 
 class MACE::SimG4::SD::Spectrometer : public G4VSensitiveDetector {
 public:
@@ -14,5 +14,5 @@ public:
     void   EndOfEvent(G4HCofThisEvent*) override;
 
 private:
-    Hit::SpectrometerHitsCollection* fHitsCollection;
+    Hit::CollectionOfSpectrometer* fHitsCollection;
 };

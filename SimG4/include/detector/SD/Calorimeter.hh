@@ -2,7 +2,7 @@
 
 #include "G4VSensitiveDetector.hh"
 
-#include "detector/hit/CalorimeterHit.hh"
+#include "detector/hit/Calorimeter.hh"
 
 class MACE::SimG4::SD::Calorimeter : public G4VSensitiveDetector {
 public:
@@ -14,5 +14,5 @@ public:
     void   EndOfEvent(G4HCofThisEvent*) override;
 
 private:
-    Hit::CalorimeterHitsCollection* fHitsCollection;
+    Hit::CollectionOfCalorimeter* fHitsCollection;
 };

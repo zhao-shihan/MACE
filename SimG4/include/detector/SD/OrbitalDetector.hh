@@ -2,7 +2,7 @@
 
 #include "G4VSensitiveDetector.hh"
 
-#include "detector/hit/OrbitalDetectorHit.hh"
+#include "detector/hit/OrbitalDetector.hh"
 
 class MACE::SimG4::SD::OrbitalDetector : public G4VSensitiveDetector {
 public:
@@ -14,5 +14,5 @@ public:
     void   EndOfEvent(G4HCofThisEvent*) override;
 
 private:
-    Hit::OrbitalDetectorHitsCollection* fHitsCollection;
+    Hit::CollectionOfOrbitalDetector* fHitsCollection;
 };
