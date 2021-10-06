@@ -19,10 +19,13 @@ Analysis::Analysis() :
 }
 
 void Analysis::Open() {
-    G4String fullFileName = fFileName;
+    G4String fullFileName("");
+    std::stringstream ss;
     if (MPI::Is_initialized()) {
-        std::stringstream ss;
-        ss << fullFileName << "_rank" << G4MPImanager::GetManager()->GetRank() << ".root";
+        ss << fFileName << "_rank" << G4MPImanager::GetManager()->GetRank() << ".root";
+        ss >> fullFileName;
+    } else {
+        ss << fFileName << ".root";
         ss >> fullFileName;
     }
     DataModel::Base::Manager::Open(fullFileName);
@@ -41,15 +44,15 @@ void Analysis::CreateAllBranchesFromCoincident() {
             return;
         }
     }
-    CreateBranchFromTransientList<
+    Persistify<
         DataModel::kCalorimeter,
         DataModel::Hit::Persistency::Calorimeter>
         (fpCalorimeterHC->GetVector());
-    CreateBranchFromTransientList<
+    Persistify<
         DataModel::kOrbitalDetector,
         DataModel::Hit::Persistency::OrbitalDetector>
         (fpOrbitalDetectorHC->GetVector());
-    CreateBranchFromTransientList<
+    Persistify<
         DataModel::kSpectrometer,
         DataModel::Hit::Persistency::Spectrometer>
         (fpSpectrometerHC->GetVector());

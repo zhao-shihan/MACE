@@ -18,11 +18,11 @@ public:
     static Analysis* Instance();
 
     void SetFileName(const G4String& fileName) { fFileName = fileName; }
+    const G4String& GetFileName() const { return fFileName; }
     void SetEnableCoincidenceOfCalorimeter(G4bool val) { fEnableCoincidenceOfCalorimeter = val; }
 
     void Open();
-    using DataModel::Hit::Manager::Write;
-    using DataModel::Hit::Manager::Close;
+    using DataModel::Hit::Manager::WriteAndClose;
 
     void SetTrueEventID(G4int trueEventID) { SetBranchTitle(TString("Event") + trueEventID); }
     void SubmitCalorimeterHC(const Hit::CollectionOfCalorimeter* const hc) { fpCalorimeterHC = hc; }

@@ -8,7 +8,7 @@ Manager::Manager() :
     fTrees{ nullptr } {}
 
 Manager::~Manager() {
-    Close();
+    WriteAndClose();
 }
 
 void Manager::Open(const char* fileName) {
@@ -25,19 +25,14 @@ void Manager::Open(const char* fileName) {
     }
 }
 
-void Manager::Write() {
+void Manager::WriteAndClose(Int_t writeOption, Int_t writeBufSize, Option_t* closeOption, Bool_t branchStatus) {
     if (fFile == nullptr) { return; }
     if (fFile->IsOpen()) {
         for (auto tree : fTrees) {
-            tree->Write();
+            tree->SetBranchStatus("*");
+            tree->Write(nullptr, writeOption, writeBufSize);
         }
-    }
-}
-
-void Manager::Close() {
-    if (fFile == nullptr) { return; }
-    if (fFile->IsOpen()) {
-        fFile->Close();
+        fFile->Close(closeOption);
     }
     delete fFile;
     fFile = nullptr;

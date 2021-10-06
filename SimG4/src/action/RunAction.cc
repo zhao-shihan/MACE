@@ -37,6 +37,5 @@ void RunAction::BeginOfRunAction(const G4Run* run) {
 }
 
 void RunAction::EndOfRunAction(const G4Run*) {
-    fpAnalysis->Write();
-    fpAnalysis->Close();
+    fpAnalysis->WriteAndClose();
 }

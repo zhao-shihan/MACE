@@ -38,10 +38,10 @@ G4bool SD::Calorimeter::ProcessHits(G4Step* step, G4TouchableHistory*) {
         return false;
     }
     auto* const hit = new Hit::Calorimeter();
-    hit->SetTrackID(track->GetTrackID());
+    hit->SetParticleName(particle->GetParticleName().c_str());
     hit->SetHitTime(preStepPoint->GetGlobalTime());
     hit->SetEnergy(preStepPoint->GetKineticEnergy());
-    hit->SetParticleName(particle->GetParticleName().c_str());
+    hit->SetTrackID(track->GetTrackID());
     fHitsCollection->insert(hit);
     return true;
 }

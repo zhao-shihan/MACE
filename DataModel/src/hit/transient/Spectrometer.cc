@@ -4,89 +4,89 @@
 using namespace MACE::DataModel::Hit;
 
 Transient::Spectrometer::Spectrometer() :
-    fHitPosition(),
-    fVertexPosition(),
     fParticleName(nullptr),
     fHitTime(0.0),
+    fHitPosition(),
     fVertexTime(0.0),
+    fVertexPosition(),
     fChamberID(-1),
     fTrackID(-1) {}
 
 Transient::Spectrometer::Spectrometer(const Spectrometer& hit) :
-    fHitPosition(hit.fHitPosition),
-    fVertexPosition(hit.fVertexPosition),
     fParticleName(hit.fParticleName),
     fHitTime(hit.fHitTime),
+    fHitPosition(hit.fHitPosition),
     fVertexTime(hit.fVertexTime),
+    fVertexPosition(hit.fVertexPosition),
     fChamberID(hit.fChamberID),
     fTrackID(hit.fTrackID) {}
 
 Transient::Spectrometer::Spectrometer(Spectrometer&& hit) :
-    fHitPosition(std::move(hit.fHitPosition)),
-    fVertexPosition(std::move(hit.fVertexPosition)),
     fParticleName(std::move(hit.fParticleName)),
     fHitTime(std::move(hit.fHitTime)),
+    fHitPosition(std::move(hit.fHitPosition)),
     fVertexTime(std::move(hit.fVertexTime)),
+    fVertexPosition(std::move(hit.fVertexPosition)),
     fChamberID(std::move(hit.fChamberID)),
     fTrackID(std::move(hit.fTrackID)) {}
 
 Transient::Spectrometer& Transient::Spectrometer::operator=(const Spectrometer& hit) {
-    fHitPosition = hit.fHitPosition;
-    fVertexPosition = hit.fVertexPosition;
     fParticleName = hit.fParticleName;
     fHitTime = hit.fHitTime;
+    fHitPosition = hit.fHitPosition;
     fVertexTime = hit.fVertexTime;
+    fVertexPosition = hit.fVertexPosition;
     fChamberID = hit.fChamberID;
     fTrackID = hit.fTrackID;
     return *this;
 }
 
 Transient::Spectrometer& Transient::Spectrometer::operator=(Spectrometer&& hit) {
-    fHitPosition = std::move(hit.fHitPosition);
-    fVertexPosition = std::move(hit.fVertexPosition);
     fParticleName = std::move(hit.fParticleName);
     fHitTime = std::move(hit.fHitTime);
+    fHitPosition = std::move(hit.fHitPosition);
     fVertexTime = std::move(hit.fVertexTime);
+    fVertexPosition = std::move(hit.fVertexPosition);
     fChamberID = std::move(hit.fChamberID);
     fTrackID = std::move(hit.fTrackID);
     return *this;
 }
 
 Transient::Spectrometer::Spectrometer(const Persistency::Spectrometer& hit) :
-    fHitPosition(hit.HitPosition[0], hit.HitPosition[1], hit.HitPosition[2]),
-    fVertexPosition(hit.VertexPosition[0], hit.VertexPosition[1], hit.VertexPosition[2]),
     fParticleName(hit.ParticleName),
-    fHitTime(hit.HitTime),
-    fVertexTime(hit.VertexTime),
+    fHitTime(hit.HitT),
+    fHitPosition(hit.HitX, hit.HitY, hit.HitZ),
+    fVertexTime(hit.VertexT),
+    fVertexPosition(hit.VertexX, hit.VertexY, hit.VertexZ),
     fChamberID(hit.ChamberID),
     fTrackID(hit.TrackID) {}
 
 Transient::Spectrometer::Spectrometer(Persistency::Spectrometer&& hit) :
-    fHitPosition(std::move(hit.HitPosition[0]), std::move(hit.HitPosition[1]), std::move(hit.HitPosition[2])),
-    fVertexPosition(std::move(hit.VertexPosition[0]), std::move(hit.VertexPosition[1]), std::move(hit.VertexPosition[2])),
     fParticleName(std::move(hit.ParticleName)),
-    fHitTime(std::move(hit.HitTime)),
-    fVertexTime(std::move(hit.VertexTime)),
+    fHitTime(std::move(hit.HitT)),
+    fHitPosition(std::move(hit.HitX), std::move(hit.HitY), std::move(hit.HitZ)),
+    fVertexTime(std::move(hit.VertexT)),
+    fVertexPosition(std::move(hit.VertexX), std::move(hit.VertexY), std::move(hit.VertexZ)),
     fChamberID(std::move(hit.ChamberID)),
     fTrackID(std::move(hit.TrackID)) {}
 
 Transient::Spectrometer& Transient::Spectrometer::operator=(const Persistency::Spectrometer& hit) {
-    fHitPosition = CLHEP::Hep3Vector(hit.HitPosition[0], hit.HitPosition[1], hit.HitPosition[2]);
-    fVertexPosition = CLHEP::Hep3Vector(hit.VertexPosition[0], hit.VertexPosition[1], hit.VertexPosition[2]);
     fParticleName = hit.ParticleName;
-    fHitTime = hit.HitTime;
-    fVertexTime = hit.VertexTime;
+    fHitTime = hit.HitT;
+    fHitPosition = CLHEP::Hep3Vector(hit.HitX, hit.HitY, hit.HitZ);
+    fVertexTime = hit.VertexT;
+    fVertexPosition = CLHEP::Hep3Vector(hit.VertexX, hit.VertexY, hit.VertexZ);
     fChamberID = hit.ChamberID;
     fTrackID = hit.TrackID;
     return *this;
 }
 
 Transient::Spectrometer& Transient::Spectrometer::operator=(Persistency::Spectrometer&& hit) {
-    fHitPosition = CLHEP::Hep3Vector(std::move(hit.HitPosition[0]), std::move(hit.HitPosition[1]), std::move(hit.HitPosition[2]));
-    fVertexPosition = CLHEP::Hep3Vector(std::move(hit.VertexPosition[0]), std::move(hit.VertexPosition[1]), std::move(hit.VertexPosition[2]));
     fParticleName = std::move(hit.ParticleName);
-    fHitTime = std::move(hit.HitTime);
-    fVertexTime = std::move(hit.VertexTime);
+    fHitTime = std::move(hit.HitT);
+    fHitPosition = CLHEP::Hep3Vector(std::move(hit.HitX), std::move(hit.HitY), std::move(hit.HitZ));
+    fVertexTime = std::move(hit.VertexT);
+    fVertexPosition = CLHEP::Hep3Vector(std::move(hit.VertexX), std::move(hit.VertexY), std::move(hit.VertexZ));
     fChamberID = std::move(hit.ChamberID);
     fTrackID = std::move(hit.TrackID);
     return *this;
@@ -94,11 +94,15 @@ Transient::Spectrometer& Transient::Spectrometer::operator=(Persistency::Spectro
 
 Persistency::Spectrometer Transient::Spectrometer::ToPersistency() {
     return Persistency::Spectrometer{
-        { (float)fHitPosition.x(), (float)fHitPosition.y(), (float)fHitPosition.z() },
-        { (float)fVertexPosition.x(), (float)fVertexPosition.y(), (float)fVertexPosition.z() },
         (const char*)fParticleName,
         (float)fHitTime,
+        (float)fHitPosition.x(),
+        (float)fHitPosition.y(),
+        (float)fHitPosition.z(),
         (float)fVertexTime,
+        (float)fVertexPosition.x(),
+        (float)fVertexPosition.y(),
+        (float)fVertexPosition.z(),
         (int)fChamberID,
         (int)fTrackID
     };

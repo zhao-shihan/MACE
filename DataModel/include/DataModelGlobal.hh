@@ -4,6 +4,9 @@
 
 #include "CLHEP/Vector/ThreeVector.h"
 
+#include "TFile.h"
+#include "TTree.h"
+
 #include "MACEGlobal.hh"
 
 namespace MACE::DataModel {
