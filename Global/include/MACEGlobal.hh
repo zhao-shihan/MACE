@@ -3,34 +3,19 @@
 namespace MACE {
     namespace DataModel {
         namespace Base {
-            class Manager;
+            class Data;
         }
         namespace Hit {
-            namespace Persistency {
-                struct Calorimeter;
-                struct OrbitalDetector;
-                struct Spectrometer;
-            }
-            namespace Transient {
-                class Calorimeter;
-                class OrbitalDetector;
-                class Spectrometer;
-            }
-            class Manager;
+            class Calorimeter;
+            class OrbitalDetector;
+            class Spectrometer;
         }
         namespace Raw {
-            namespace Persistency {
-                struct Calorimeter;
-                struct OrbitalDetector;
-                struct Spectrometer;
-            }
-            namespace Transient {
-                class Calorimeter;
-                class OrbitalDetector;
-                class Spectrometer;
-            }
-            class Manager;
+            class Calorimeter;
+            class OrbitalDetector;
+            class Spectrometer;
         }
+        class PersistencyWriter;
     }
     namespace Reconstruction {
         class ExperimentData;

@@ -28,10 +28,10 @@ void Analysis::Open() {
         ss << fFileName << ".root";
         ss >> fullFileName;
     }
-    DataModel::Base::Manager::Open(fullFileName);
+    DataModel::PersistencyWriter::Open(fullFileName);
 }
 
-void Analysis::CreateAllBranchesFromCoincident() {
+void Analysis::RecordCoincidence() {
     if (fEnableCoincidenceOfCalorimeter) {
         if (fpCalorimeterHC->entries() == 0 ||
             fpOrbitalDetectorHC->entries() == 0 ||
@@ -44,16 +44,8 @@ void Analysis::CreateAllBranchesFromCoincident() {
             return;
         }
     }
-    Persistify<
-        DataModel::kCalorimeter,
-        DataModel::Hit::Persistency::Calorimeter>
-        (fpCalorimeterHC->GetVector());
-    Persistify<
-        DataModel::kOrbitalDetector,
-        DataModel::Hit::Persistency::OrbitalDetector>
-        (fpOrbitalDetectorHC->GetVector());
-    Persistify<
-        DataModel::kSpectrometer,
-        DataModel::Hit::Persistency::Spectrometer>
-        (fpSpectrometerHC->GetVector());
+    CreateTree(fpCalorimeterHC->GetVector());
+    CreateTree(fpOrbitalDetectorHC->GetVector());
+    CreateTree(fpSpectrometerHC->GetVector());
+    WriteTrees();
 }

@@ -7,10 +7,10 @@
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow" // suppress ridiculous warnings caused by TString: (const char* s) shadows CLHEP::s
-#include "hit/Manager.hh"
+#include "PersistencyWriter.hh"
 #pragma GCC diagnostic pop
 
-class MACE::SimG4::Analysis final : private MACE::DataModel::Hit::Manager {
+class MACE::SimG4::Analysis final : private MACE::DataModel::PersistencyWriter {
     MACE_DATA_MODEL_NOT_ALLOW_TO_COPY(Analysis);
 private:
     Analysis();
@@ -22,13 +22,14 @@ public:
     void SetEnableCoincidenceOfCalorimeter(G4bool val) { fEnableCoincidenceOfCalorimeter = val; }
 
     void Open();
-    using DataModel::Hit::Manager::WriteAndClose;
+    using DataModel::PersistencyWriter::WriteTrees;
+    using DataModel::PersistencyWriter::Close;
 
-    void SetTrueEventID(G4int trueEventID) { SetBranchTitle(TString("Event") + trueEventID); }
+    void SetTrueEventID(G4int trueEventID) { SetNamePrefix(TString("Event") + trueEventID + '_'); }
     void SubmitCalorimeterHC(const Hit::CollectionOfCalorimeter* const hc) { fpCalorimeterHC = hc; }
     void SubmitOrbitalDetectorHC(const Hit::CollectionOfOrbitalDetector* const hc) { fpOrbitalDetectorHC = hc; }
     void SubmitSpectrometerHC(const Hit::CollectionOfSpectrometer* const hc) { fpSpectrometerHC = hc; }
-    void CreateAllBranchesFromCoincident();
+    void RecordCoincidence();
 
 private:
     G4String fFileName = "MACE_SimG4";

@@ -1,24 +1,32 @@
 #pragma once
 
 #include "G4VHit.hh"
-#include "G4THitsCollection.hh"
-#include "G4Allocator.hh"
-#include "G4ThreeVector.hh"
-#include "G4ParticleDefinition.hh"
-
-#include "hit/transient/Calorimeter.hh"
 
 #include "SimG4Global.hh"
 
-class MACE::SimG4::Hit::Calorimeter :
-    public MACE::DataModel::Hit::Transient::Calorimeter,
-    public G4VHit {
+#include "hit/Calorimeter.hh"
+
+class MACE::SimG4::Hit::Calorimeter final :
+    public G4VHit,
+    public MACE::DataModel::Hit::Calorimeter{
+    MACE_DATA_MODEL_CONSTRUCTORS_AND_ASSIGNMENTS(Calorimeter);
+
+    MACE_DATA_MODEL_LARGE_MEMBER(TString, ParticleName);
+    MACE_DATA_MODEL_SMALL_MEMBER(int32_t, TrackID);
+
+    MACE_DATA_MODEL_PERSISTIFIER(TString, ParticleName);
+    MACE_DATA_MODEL_PERSISTIFIER(Int_t, TrackID);
+
 public:
-    Calorimeter() : DataModel::Hit::Transient::Calorimeter(), G4VHit() {}
+    static void CreateBranches(TTree* tree);
+    void FillBranches() override;
 
     inline void* operator new(size_t);
     inline void  operator delete(void*);
 };
+
+#include "G4THitsCollection.hh"
+#include "G4Allocator.hh"
 
 namespace MACE::SimG4::Hit {
 

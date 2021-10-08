@@ -1,42 +1,8 @@
 #pragma once
 
-#include <array>
-
-#include "CLHEP/Vector/ThreeVector.h"
-
-#include "TFile.h"
 #include "TTree.h"
 
 #include "MACEGlobal.hh"
-
-namespace MACE::DataModel {
-
-    static constexpr uint32_t detectorNum = 3;
-
-    enum DetectorSubscript {
-        kCalorimeter,
-        kOrbitalDetector,
-        kSpectrometer
-    };
-
-    static constexpr std::array<const char*, detectorNum> detectorName = {
-        "Calorimeter",
-        "OrbitalDetector",
-        "Spectrometer"
-    };
-
-}
-
-#define MACE_DATA_MODEL_NOT_ALLOW_TO_COPY(ClassName) \
-    public: \
-        ClassName(const ClassName&) = delete; \
-        ClassName& operator=(const ClassName&) = delete
-
-#define MACE_DATA_MODEL_NOT_ALLOW_TO_COPY_BUT_ALLOW_TO_MOVE(ClassName) \
-    public: \
-        ClassName(const ClassName&) = delete; \
-        ClassName& operator=(const ClassName&) = delete; \
-        ClassName(ClassName&& value)
 
 #define MACE_DATA_MODEL_SMALL_MEMBER(T, Name) \
     public: \
@@ -53,16 +19,33 @@ namespace MACE::DataModel {
     private: \
         T f##Name
 
-#define MACE_DATA_MODEL_TRANSIENT_ESSENTIAL(ClassName) \
-public: \
-    virtual ~ClassName() {} \
-    ClassName(); \
-    ClassName(const ClassName& hit); \
-    ClassName(ClassName&& hit); \
-    ClassName& operator=(const ClassName& hit); \
-    ClassName& operator=(ClassName&& hit); \
-    ClassName(const MACE::DataModel::Hit::Persistency::ClassName& hit); \
-    ClassName(MACE::DataModel::Hit::Persistency::ClassName&& hit); \
-    ClassName& operator=(const MACE::DataModel::Hit::Persistency::ClassName& hit); \
-    ClassName& operator=(MACE::DataModel::Hit::Persistency::ClassName&& hit); \
-    MACE::DataModel::Hit::Persistency::ClassName ToPersistency()
+#define MACE_DATA_MODEL_PERSISTIFIER(T, Name) \
+    private: \
+        static T persist##Name
+
+#define MACE_DATA_MODEL_PERSISTIFIER_DEF(ClassName, Name, defaultVal) \
+    decltype(ClassName::persist##Name) ClassName::persist##Name = defaultVal
+
+#define MACE_DATA_MODEL_NAME(nameStr) \
+    public: \
+        static constexpr const char* name = nameStr
+
+#define MACE_DATA_MODEL_CONSTRUCTORS_AND_ASSIGNMENTS(ClassName) \
+    public: \
+        ClassName() noexcept; \
+        virtual ~ClassName() noexcept {} \
+        ClassName(const ClassName& hit) noexcept; \
+        ClassName(ClassName&& hit) noexcept; \
+        ClassName& operator=(const ClassName& hit) noexcept; \
+        ClassName& operator=(ClassName&& hit) noexcept
+
+#define MACE_DATA_MODEL_NOT_ALLOW_TO_COPY(ClassName) \
+    public: \
+        ClassName(const ClassName&) = delete; \
+        ClassName& operator=(const ClassName&) = delete
+
+#define MACE_DATA_MODEL_NOT_ALLOW_TO_COPY_BUT_ALLOW_TO_MOVE(ClassName) \
+    public: \
+        ClassName(const ClassName&) = delete; \
+        ClassName& operator=(const ClassName&) = delete; \
+        ClassName(ClassName&& value)

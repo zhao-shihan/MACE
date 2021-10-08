@@ -35,11 +35,11 @@ G4bool SD::OrbitalDetector::ProcessHits(G4Step* step, G4TouchableHistory*) {
     const auto& detectorPosition = preStepPoint->GetTouchable()->GetTranslation();
     const auto* const detectorRotation = preStepPoint->GetTouchable()->GetRotation();
     auto* const hit = new Hit::OrbitalDetector();
-    hit->SetParticleName(particle->GetParticleName().c_str());
     hit->SetHitTime(preStepPoint->GetGlobalTime());
     hit->SetHitPosition((*detectorRotation) * (preStepPoint->GetPosition() - detectorPosition));
     hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
     hit->SetVertexPosition(track->GetVertexPosition());
+    hit->SetParticleName(particle->GetParticleName());
     hit->SetTrackID(track->GetTrackID());
     fHitsCollection->insert(hit);
     return true;
