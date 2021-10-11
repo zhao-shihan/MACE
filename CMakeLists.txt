@@ -29,7 +29,7 @@ set(MACE_PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
 set(MACE_BINARY_INSTALL_DIR .)
 set(MACE_LIBRARY_INSTALL_DIR .)
 
-include_directories(${PROJECT_SOURCE_DIR}/Global/include)
+include_directories(${PROJECT_SOURCE_DIR})
 
 # A useful function
 function(include_directories_recursively root_dir)

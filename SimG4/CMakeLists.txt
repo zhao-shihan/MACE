@@ -4,13 +4,10 @@ project(SimG4)
 include_directories(${MPI_INCLUDE_PATH})
 include_directories(${Geant4_INCLUDE_DIRS})
 include_directories(${ROOT_INCLUDE_DIRS})
-include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${MACE_PROJECT_ROOT_DIR}/Buildin/G4MPI/include)
-include_directories(${MACE_PROJECT_ROOT_DIR}/SimMTransport/include)
-include_directories(${MACE_PROJECT_ROOT_DIR}/DataModel/include)
 
 # SimG4 sources
-file(GLOB_RECURSE SimG4_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cc)
+file(GLOB_RECURSE SimG4_SOURCES ${PROJECT_SOURCE_DIR}/*.cc)
 
 # targets
 add_executable(SimG4 SimG4.cc ${SimG4_SOURCES})

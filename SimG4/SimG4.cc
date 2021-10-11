@@ -6,9 +6,9 @@
 #include "G4MPImanager.hh"
 #include "G4MPIsession.hh"
 
-#include "physics/PhysicsList.hh"
-#include "detector/DetectorConstruction.hh"
-#include "action/ActionInitialization.hh"
+#include "SimG4/physics/PhysicsList.hh"
+#include "SimG4/action/DetectorConstruction.hh"
+#include "SimG4/action/ActionInitialization.hh"
 
 using namespace MACE::SimG4;
 
@@ -18,8 +18,8 @@ int main(int argc, char** argv) {
 
     auto runManager = new G4RunManager();
     runManager->SetUserInitialization(new Physics::PhysicsList());
-    runManager->SetUserInitialization(new DetectorConstruction());
-    runManager->SetUserInitialization(new ActionInitialization());
+    runManager->SetUserInitialization(new Action::DetectorConstruction());
+    runManager->SetUserInitialization(new Action::ActionInitialization());
 
     if (argc == 1) {
         auto uiManager = G4UImanager::GetUIpointer();
