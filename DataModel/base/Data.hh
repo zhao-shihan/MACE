@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DataModel/DataModelGlobal.hh"
+#include "DataModel/Global.hh"
 
 class MACE::DataModel::Base::Data {
 public:

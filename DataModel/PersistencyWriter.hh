@@ -3,7 +3,7 @@
 #include "TFile.h"
 #include "TFolder.h"
 
-#include "DataModel/DataModelGlobal.hh"
+#include "DataModel/Global.hh"
 
 class MACE::DataModel::PersistencyWriter {
     MACE_DATA_MODEL_NOT_ALLOW_TO_COPY(PersistencyWriter);

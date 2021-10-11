@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DataModel/DataModelGlobal.hh"
+#include "DataModel/Global.hh"
 #include "DataModel/base/Data.hh"
 
 class MACE::DataModel::Hit::CalorimeterHit :
