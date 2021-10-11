@@ -94,10 +94,9 @@ namespace MACE {
         class Global;
         class Master;
         class MonteCarlo;
-        struct Step;
         class RunManager;
+        struct Step;
         class Track;
-        struct Vector3;
         class Worker;
     }
 }

@@ -7,7 +7,6 @@
 #include "mpi.h"
 
 #include "MACEGlobal.hh"
-#include "Vector3.hh"
 
 // Unit system:
 //  us = 1.0;

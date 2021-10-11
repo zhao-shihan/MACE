@@ -1,14 +1,14 @@
 #pragma once
 
 #include "Global.hh"
-#include "Vector3.hh"
+#include "CLHEP/Vector/ThreeVector.h"
 
 struct MACE::SimMTransport::Step {
     double_t preTime;
     double_t postTime;
-    Vector3  prePosition;
-    Vector3  postPosition;
-    Vector3  velocity;
+    CLHEP::Hep3Vector prePosition;
+    CLHEP::Hep3Vector postPosition;
+    CLHEP::Hep3Vector velocity;
 
     Step();
     ~Step();
