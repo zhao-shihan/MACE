@@ -6,9 +6,9 @@
 #include "G4MPImanager.hh"
 #include "G4MPIsession.hh"
 
-#include "SimG4/physics/PhysicsList.hh"
-#include "SimG4/action/DetectorConstruction.hh"
-#include "SimG4/action/ActionInitialization.hh"
+#include "SimG4/Physics/PhysicsList.hh"
+#include "SimG4/Action/DetectorConstruction.hh"
+#include "SimG4/Action/ActionInitialization.hh"
 
 using namespace MACE::SimG4;
 

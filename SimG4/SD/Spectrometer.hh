@@ -2,7 +2,7 @@
 
 #include "G4VSensitiveDetector.hh"
 
-#include "SimG4/hit/SpectrometerHit.hh"
+#include "SimG4/Hit/SpectrometerHit.hh"
 
 class MACE::SimG4::SD::Spectrometer : public G4VSensitiveDetector {
 public:

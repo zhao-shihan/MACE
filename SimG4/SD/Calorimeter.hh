@@ -2,7 +2,7 @@
 
 #include "G4VSensitiveDetector.hh"
 
-#include "SimG4/hit/CalorimeterHit.hh"
+#include "SimG4/Hit/CalorimeterHit.hh"
 
 class MACE::SimG4::SD::Calorimeter : public G4VSensitiveDetector {
 public:

@@ -2,7 +2,7 @@
 
 #include "G4VSensitiveDetector.hh"
 
-#include "SimG4/hit/OrbitalDetectorHit.hh"
+#include "SimG4/Hit/OrbitalDetectorHit.hh"
 
 class MACE::SimG4::SD::OrbitalDetector : public G4VSensitiveDetector {
 public:

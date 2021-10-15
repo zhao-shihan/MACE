@@ -1,9 +1,9 @@
 #pragma once
 
 #include "SimG4/Global.hh"
-#include "SimG4/hit/CalorimeterHit.hh"
-#include "SimG4/hit/OrbitalDetectorHit.hh"
-#include "SimG4/hit/SpectrometerHit.hh"
+#include "SimG4/Hit/CalorimeterHit.hh"
+#include "SimG4/Hit/OrbitalDetectorHit.hh"
+#include "SimG4/Hit/SpectrometerHit.hh"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow" // suppress ridiculous warnings caused by TString: (const char* s) shadows CLHEP::s

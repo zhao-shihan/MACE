@@ -1,8 +1,8 @@
 #include "G4MPImanager.hh"
 
 #include "SimG4/Analysis.hh"
-#include "messenger/AnalysisMessenger.hh"
-#include "messenger/FieldMessenger.hh"
+#include "SimG4/Messenger/AnalysisMessenger.hh"
+#include "SimG4/Messenger/FieldMessenger.hh"
 
 using namespace MACE::SimG4;
 
