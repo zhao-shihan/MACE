@@ -14,5 +14,5 @@ public:
     void   EndOfEvent(G4HCofThisEvent*) override;
 
 private:
-    Hit::CollectionOfCalorimeter* fHitsCollection;
+    Hit::CalorimeterHitCollection* fHitsCollection;
 };

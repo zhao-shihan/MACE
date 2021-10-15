@@ -11,15 +11,15 @@ SD::OrbitalDetector::OrbitalDetector(const G4String& SDName, const G4String& hit
     G4VSensitiveDetector(SDName),
     fHitsCollection(nullptr) {
     collectionName.insert(hitsCollectionName);
-    if (Hit::AllocatorOfOrbitalDetector == nullptr) {
-        Hit::AllocatorOfOrbitalDetector = new G4Allocator<Hit::OrbitalDetectorHit>();
+    if (Hit::OrbitalDetectorAllocator == nullptr) {
+        Hit::OrbitalDetectorAllocator = new G4Allocator<Hit::OrbitalDetectorHit>();
     }
 }
 
 SD::OrbitalDetector::~OrbitalDetector() {}
 
 void SD::OrbitalDetector::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
-    fHitsCollection = new Hit::CollectionOfOrbitalDetector(SensitiveDetectorName, collectionName[0]);
+    fHitsCollection = new Hit::OrbitalDetectorHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
@@ -46,5 +46,5 @@ G4bool SD::OrbitalDetector::ProcessHits(G4Step* step, G4TouchableHistory*) {
 }
 
 void SD::OrbitalDetector::EndOfEvent(G4HCofThisEvent*) {
-    Analysis::Instance()->SubmitOrbitalDetectorHC(fHitsCollection);
+    Analysis::Instance()->SubmitOrbitalDetectorHC(fHitsCollection->GetVector());
 }

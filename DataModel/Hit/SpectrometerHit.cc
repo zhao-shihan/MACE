@@ -2,11 +2,9 @@
 
 using namespace MACE::DataModel::Hit;
 
-MACE_DATA_MODEL_PERSISTIFIER_DEF(SpectrometerHit, HitTime, 0.0);
-MACE_DATA_MODEL_PERSISTIFIER_DEF(SpectrometerHit, HitPositionX, 0.0);
-MACE_DATA_MODEL_PERSISTIFIER_DEF(SpectrometerHit, HitPositionY, 0.0);
-MACE_DATA_MODEL_PERSISTIFIER_DEF(SpectrometerHit, HitPositionZ, 0.0);
-MACE_DATA_MODEL_PERSISTIFIER_DEF(SpectrometerHit, ChamberID, -1);
+Float_t SpectrometerHit::persistHitTime = 0.0f;
+std::array<Float_t, 3> SpectrometerHit::persistHitPosition = { 0.0f, 0.0f, 0.0f };
+Int_t SpectrometerHit::persistChamberID = -1;
 
 SpectrometerHit::SpectrometerHit() noexcept :
     Data(),
@@ -15,19 +13,19 @@ SpectrometerHit::SpectrometerHit() noexcept :
     fChamberID(-1) {}
 
 SpectrometerHit::SpectrometerHit(const SpectrometerHit& hit) noexcept :
-    Data(hit),
+    Data(static_cast<const Data&>(hit)),
     fHitTime(hit.fHitTime),
     fHitPosition(hit.fHitPosition),
     fChamberID(hit.fChamberID) {}
 
 SpectrometerHit::SpectrometerHit(SpectrometerHit&& hit) noexcept :
-    Data(std::move(hit)),
+    Data(static_cast<Data&&>(hit)),
     fHitTime(std::move(hit.fHitTime)),
     fHitPosition(std::move(hit.fHitPosition)),
     fChamberID(std::move(hit.fChamberID)) {}
 
 SpectrometerHit& SpectrometerHit::operator=(const SpectrometerHit& hit) noexcept {
-    Data::operator=(hit);
+    Data::operator=(static_cast<const Data&>(hit));
     fHitTime = hit.fHitTime;
     fHitPosition = hit.fHitPosition;
     fChamberID = hit.fChamberID;
@@ -35,7 +33,7 @@ SpectrometerHit& SpectrometerHit::operator=(const SpectrometerHit& hit) noexcept
 }
 
 SpectrometerHit& SpectrometerHit::operator=(SpectrometerHit&& hit) noexcept {
-    Data::operator=(std::move(hit));
+    Data::operator=(static_cast<Data&&>(hit));
     fHitTime = std::move(hit.fHitTime);
     fHitPosition = std::move(hit.fHitPosition);
     fChamberID = std::move(hit.fChamberID);
@@ -43,17 +41,17 @@ SpectrometerHit& SpectrometerHit::operator=(SpectrometerHit&& hit) noexcept {
 }
 
 void SpectrometerHit::CreateBranches(TTree* tree) {
-    tree->Branch("HitTime", &persistHitTime);
-    tree->Branch("HitPositionX", &persistHitPositionX);
-    tree->Branch("HitPositionY", &persistHitPositionY);
-    tree->Branch("HitPositionZ", &persistHitPositionZ);
+    tree->Branch("HitT", &persistHitTime);
+    tree->Branch("HitX", &std::get<0>(persistHitPosition));
+    tree->Branch("HitY", &std::get<1>(persistHitPosition));
+    tree->Branch("HitZ", &std::get<2>(persistHitPosition));
     tree->Branch("ChamberID", &persistChamberID);
 }
 
-void SpectrometerHit::FillBranches() {
+void SpectrometerHit::FillBranches() noexcept {
     persistHitTime = fHitTime;
-    persistHitPositionX = fHitPosition.x();
-    persistHitPositionY = fHitPosition.y();
-    persistHitPositionZ = fHitPosition.z();
+    std::get<0>(persistHitPosition) = fHitPosition.x();
+    std::get<1>(persistHitPosition) = fHitPosition.y();
+    std::get<2>(persistHitPosition) = fHitPosition.z();
     persistChamberID = fChamberID;
 }

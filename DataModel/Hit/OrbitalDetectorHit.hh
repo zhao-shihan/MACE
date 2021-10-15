@@ -8,18 +8,22 @@
 class MACE::DataModel::Hit::OrbitalDetectorHit :
     protected MACE::DataModel::Base::Data {
     MACE_DATA_MODEL_CONSTRUCTORS_AND_ASSIGNMENTS(OrbitalDetectorHit);
-
-    MACE_DATA_MODEL_SMALL_MEMBER(double_t, HitTime);
-    MACE_DATA_MODEL_LARGE_MEMBER(CLHEP::Hep3Vector, HitPosition);
-
-    MACE_DATA_MODEL_PERSISTIFIER(Float_t, HitTime);
-    MACE_DATA_MODEL_PERSISTIFIER(Float_t, HitPositionX);
-    MACE_DATA_MODEL_PERSISTIFIER(Float_t, HitPositionY);
-    MACE_DATA_MODEL_PERSISTIFIER(Float_t, HitPositionZ);
-
-    MACE_DATA_MODEL_NAME("OrbitalDetector");
-
 public:
+    static constexpr const char* Name() { return "MCPHit"; }
     static void CreateBranches(TTree* tree);
-    virtual void FillBranches() override;
+    virtual void FillBranches() noexcept override;
+
+    auto GetHitTime() const { return fHitTime; }
+    const auto& GetHitPosition() const { return fHitPosition; }
+
+    void SetHitTime(double_t val) { fHitTime = val; }
+    void SetHitPosition(const CLHEP::Hep3Vector& val) { fHitPosition = val; }
+    void SetHitPosition(CLHEP::Hep3Vector&& val) { fHitPosition = std::move(val); }
+
+private:
+    double_t fHitTime;
+    CLHEP::Hep3Vector fHitPosition;
+
+    static Float_t persistHitTime;
+    static std::array<Float_t, 3> persistHitPosition;
 };

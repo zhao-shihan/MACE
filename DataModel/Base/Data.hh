@@ -4,6 +4,7 @@
 
 class MACE::DataModel::Base::Data {
 public:
+    static constexpr const char* Name();
     static void CreateBranches(TTree* tree);
-    virtual void FillBranches() = 0;
+    virtual void FillBranches() noexcept = 0;
 };

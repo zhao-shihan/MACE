@@ -11,15 +11,15 @@ SD::Spectrometer::Spectrometer(const G4String& SDName, const G4String& hitsColle
     G4VSensitiveDetector(SDName),
     fHitsCollection(nullptr) {
     collectionName.insert(hitsCollectionName);
-    if (Hit::AllocatorOfSpectrometer == nullptr) {
-        Hit::AllocatorOfSpectrometer = new G4Allocator<Hit::SpectrometerHit>();
+    if (Hit::SpectrometerHitAllocator == nullptr) {
+        Hit::SpectrometerHitAllocator = new G4Allocator<Hit::SpectrometerHit>();
     }
 }
 
 SD::Spectrometer::~Spectrometer() {}
 
 void SD::Spectrometer::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
-    fHitsCollection = new Hit::CollectionOfSpectrometer(SensitiveDetectorName, collectionName[0]);
+    fHitsCollection = new Hit::SpectrometerHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
@@ -45,5 +45,5 @@ G4bool SD::Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
 }
 
 void SD::Spectrometer::EndOfEvent(G4HCofThisEvent*) {
-    Analysis::Instance()->SubmitSpectrometerHC(fHitsCollection);
+    Analysis::Instance()->SubmitSpectrometerHC(fHitsCollection->GetVector());
 }

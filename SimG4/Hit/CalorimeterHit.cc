@@ -2,10 +2,10 @@
 
 using namespace MACE::SimG4::Hit;
 
-MACE_DATA_MODEL_PERSISTIFIER_DEF(CalorimeterHit, ParticleName, "");
-MACE_DATA_MODEL_PERSISTIFIER_DEF(CalorimeterHit, TrackID, -1);
+const char* CalorimeterHit::persistParticleName = "";
+Int_t CalorimeterHit::persistTrackID = -1;
 
-G4Allocator<CalorimeterHit>* MACE::SimG4::Hit::AllocatorOfCalorimeter = nullptr;
+G4Allocator<CalorimeterHit>* MACE::SimG4::Hit::CalorimeterHitAllocator = nullptr;
 
 CalorimeterHit::CalorimeterHit() noexcept :
     G4VHit(),
@@ -14,28 +14,28 @@ CalorimeterHit::CalorimeterHit() noexcept :
     fTrackID(-1) {}
 
 CalorimeterHit::CalorimeterHit(const CalorimeterHit& hit) noexcept :
-    G4VHit(hit),
-    DataModel::Hit::CalorimeterHit(hit),
+    G4VHit(static_cast<const G4VHit&>(hit)),
+    DataModel::Hit::CalorimeterHit(static_cast<const DataModel::Hit::CalorimeterHit&>(hit)),
     fParticleName(hit.fParticleName),
     fTrackID(hit.fTrackID) {}
 
 CalorimeterHit::CalorimeterHit(CalorimeterHit&& hit) noexcept :
-    G4VHit(std::move(hit)),
-    DataModel::Hit::CalorimeterHit(std::move(hit)),
+    G4VHit(static_cast<G4VHit&&>(hit)),
+    DataModel::Hit::CalorimeterHit(static_cast<DataModel::Hit::CalorimeterHit&&>(hit)),
     fParticleName(std::move(hit.fParticleName)),
     fTrackID(std::move(hit.fTrackID)) {}
 
 CalorimeterHit& CalorimeterHit::operator=(const CalorimeterHit& hit) noexcept {
-    G4VHit::operator=(hit);
-    DataModel::Hit::CalorimeterHit::operator=(hit);
+    G4VHit::operator=(static_cast<const G4VHit&>(hit));
+    DataModel::Hit::CalorimeterHit::operator=(static_cast<const DataModel::Hit::CalorimeterHit&>(hit));
     fParticleName = hit.fParticleName;
     fTrackID = hit.fTrackID;
     return *this;
 }
 
 CalorimeterHit& CalorimeterHit::operator=(CalorimeterHit&& hit) noexcept {
-    G4VHit::operator=(std::move(hit));
-    DataModel::Hit::CalorimeterHit::operator=(std::move(hit));
+    G4VHit::operator=(static_cast<G4VHit&&>(hit));
+    DataModel::Hit::CalorimeterHit::operator=(static_cast<DataModel::Hit::CalorimeterHit&&>(hit));
     fParticleName = std::move(hit.fParticleName);
     fTrackID = std::move(hit.fTrackID);
     return *this;
@@ -43,12 +43,12 @@ CalorimeterHit& CalorimeterHit::operator=(CalorimeterHit&& hit) noexcept {
 
 void CalorimeterHit::CreateBranches(TTree* tree) {
     DataModel::Hit::CalorimeterHit::CreateBranches(tree);
-    tree->Branch("ParticleName", const_cast<char*>(persistParticleName.Data()), "ParticleName/C");
+    tree->Branch("Particle", const_cast<char*>(persistParticleName), "Particle/C");
     tree->Branch("TrackID", &persistTrackID);
 }
 
-void CalorimeterHit::FillBranches() {
+void CalorimeterHit::FillBranches() noexcept {
     DataModel::Hit::CalorimeterHit::FillBranches();
-    persistParticleName = fParticleName;
+    persistParticleName = fParticleName.Data();
     persistTrackID = fTrackID;
 }

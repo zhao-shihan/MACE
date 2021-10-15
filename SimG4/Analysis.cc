@@ -12,9 +12,9 @@ Analysis* Analysis::Instance() {
 }
 
 Analysis::Analysis() :
-    fpCalorimeterHC(nullptr),
-    fpOrbitalDetectorHC(nullptr),
-    fpSpectrometerHC(nullptr) {
+    fpCalorimeterHitList(nullptr),
+    fpOrbitalDetectorHitList(nullptr),
+    fpSpectrometerHitList(nullptr) {
     Messenger::AnalysisMessenger::Instance()->Set(this);
 }
 
@@ -33,19 +33,19 @@ void Analysis::Open() {
 
 void Analysis::RecordCoincidence() {
     if (fEnableCoincidenceOfCalorimeter) {
-        if (fpCalorimeterHC->entries() == 0 ||
-            fpOrbitalDetectorHC->entries() == 0 ||
-            fpSpectrometerHC->entries() == 0) {
+        if (fpCalorimeterHitList->empty() ||
+            fpOrbitalDetectorHitList->empty() ||
+            fpSpectrometerHitList->empty()) {
             return;
         }
     } else {
-        if (fpOrbitalDetectorHC->entries() == 0 ||
-            fpSpectrometerHC->entries() == 0) {
+        if (fpOrbitalDetectorHitList->empty() ||
+            fpSpectrometerHitList->empty()) {
             return;
         }
     }
-    CreateTree(fpCalorimeterHC->GetVector());
-    CreateTree(fpOrbitalDetectorHC->GetVector());
-    CreateTree(fpSpectrometerHC->GetVector());
+    CreateTree(fpCalorimeterHitList);
+    CreateTree(fpOrbitalDetectorHitList);
+    CreateTree(fpSpectrometerHitList);
     WriteTrees();
 }

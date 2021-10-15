@@ -8,19 +8,27 @@
 
 class MACE::SimG4::Hit::CalorimeterHit final :
     public G4VHit,
-    public MACE::DataModel::Hit::CalorimeterHit{
+    public MACE::DataModel::Hit::CalorimeterHit {
     MACE_DATA_MODEL_CONSTRUCTORS_AND_ASSIGNMENTS(CalorimeterHit);
-
-    MACE_DATA_MODEL_LARGE_MEMBER(TString, ParticleName);
-    MACE_DATA_MODEL_SMALL_MEMBER(int32_t, TrackID);
-
-    MACE_DATA_MODEL_PERSISTIFIER(TString, ParticleName);
-    MACE_DATA_MODEL_PERSISTIFIER(Int_t, TrackID);
-
 public:
     static void CreateBranches(TTree* tree);
-    void FillBranches() override;
+    void FillBranches() noexcept override;
 
+    const auto& GetParticleName() const { return fParticleName; }
+    auto GetTrackID() const { return fTrackID; }
+
+    void SetParticleName(const TString& name) { fParticleName = name; }
+    void SetParticleName(TString&& name) { fParticleName = std::move(name); }
+    void SetTrackID(int32_t val) { fTrackID = val; }
+
+private:
+    TString fParticleName;
+    int32_t fTrackID;
+
+    static const char* persistParticleName;
+    static Int_t persistTrackID;
+
+public:
     inline void* operator new(size_t);
     inline void  operator delete(void*);
 };
@@ -30,16 +38,16 @@ public:
 
 namespace MACE::SimG4::Hit {
 
-    using CollectionOfCalorimeter = G4THitsCollection<CalorimeterHit>;
+    using CalorimeterHitCollection = G4THitsCollection<CalorimeterHit>;
 
-    extern G4Allocator<CalorimeterHit>* AllocatorOfCalorimeter;
+    extern G4Allocator<CalorimeterHit>* CalorimeterHitAllocator;
 
     inline void* CalorimeterHit::operator new(size_t) {
-        return static_cast<void*>(AllocatorOfCalorimeter->MallocSingle());
+        return static_cast<void*>(CalorimeterHitAllocator->MallocSingle());
     }
 
     inline void CalorimeterHit::operator delete(void* hit) {
-        AllocatorOfCalorimeter->FreeSingle(static_cast<CalorimeterHit*>(hit));
+        CalorimeterHitAllocator->FreeSingle(static_cast<CalorimeterHit*>(hit));
     }
 
 }

@@ -2,14 +2,12 @@
 
 using namespace MACE::SimG4::Hit;
 
-MACE_DATA_MODEL_PERSISTIFIER_DEF(OrbitalDetectorHit, VertexTime, 0.0);
-MACE_DATA_MODEL_PERSISTIFIER_DEF(OrbitalDetectorHit, VertexPositionX, 0.0);
-MACE_DATA_MODEL_PERSISTIFIER_DEF(OrbitalDetectorHit, VertexPositionY, 0.0);
-MACE_DATA_MODEL_PERSISTIFIER_DEF(OrbitalDetectorHit, VertexPositionZ, 0.0);
-MACE_DATA_MODEL_PERSISTIFIER_DEF(OrbitalDetectorHit, ParticleName, "");
-MACE_DATA_MODEL_PERSISTIFIER_DEF(OrbitalDetectorHit, TrackID, -1);
+Float_t OrbitalDetectorHit::persistVertexTime = 0.0f;
+std::array<Float_t, 3> OrbitalDetectorHit::persistVertexPosition = { 0.0f, 0.0f, 0.0f };
+const char* OrbitalDetectorHit::persistParticleName = "";
+int32_t OrbitalDetectorHit::persistTrackID = -1;
 
-G4Allocator<OrbitalDetectorHit>* MACE::SimG4::Hit::AllocatorOfOrbitalDetector = nullptr;
+G4Allocator<OrbitalDetectorHit>* MACE::SimG4::Hit::OrbitalDetectorAllocator = nullptr;
 
 OrbitalDetectorHit::OrbitalDetectorHit() noexcept :
     G4VHit(),
@@ -20,24 +18,24 @@ OrbitalDetectorHit::OrbitalDetectorHit() noexcept :
     fTrackID(-1) {}
 
 OrbitalDetectorHit::OrbitalDetectorHit(const OrbitalDetectorHit& hit) noexcept :
-    G4VHit(hit),
-    DataModel::Hit::OrbitalDetectorHit(hit),
+    G4VHit(static_cast<const G4VHit&>(hit)),
+    DataModel::Hit::OrbitalDetectorHit(static_cast<const DataModel::Hit::OrbitalDetectorHit&>(hit)),
     fVertexTime(hit.fVertexTime),
     fVertexPosition(hit.fVertexPosition),
     fParticleName(hit.fParticleName),
     fTrackID(hit.fTrackID) {}
 
 OrbitalDetectorHit::OrbitalDetectorHit(OrbitalDetectorHit&& hit) noexcept :
-    G4VHit(std::move(hit)),
-    DataModel::Hit::OrbitalDetectorHit(std::move(hit)),
+    G4VHit(static_cast<G4VHit&&>(hit)),
+    DataModel::Hit::OrbitalDetectorHit(static_cast<DataModel::Hit::OrbitalDetectorHit&&>(hit)),
     fVertexTime(std::move(hit.fVertexTime)),
     fVertexPosition(std::move(hit.fVertexPosition)),
     fParticleName(std::move(hit.fParticleName)),
     fTrackID(std::move(hit.fTrackID)) {}
 
 OrbitalDetectorHit& OrbitalDetectorHit::operator=(const OrbitalDetectorHit& hit) noexcept {
-    G4VHit::operator=(hit);
-    DataModel::Hit::OrbitalDetectorHit::operator=(hit);
+    G4VHit::operator=(static_cast<const G4VHit&>(hit));
+    DataModel::Hit::OrbitalDetectorHit::operator=(static_cast<const DataModel::Hit::OrbitalDetectorHit&>(hit));
     fVertexTime = hit.fVertexTime;
     fVertexPosition = hit.fVertexPosition;
     fParticleName = hit.fParticleName;
@@ -46,8 +44,8 @@ OrbitalDetectorHit& OrbitalDetectorHit::operator=(const OrbitalDetectorHit& hit)
 }
 
 OrbitalDetectorHit& OrbitalDetectorHit::operator=(OrbitalDetectorHit&& hit) noexcept {
-    G4VHit::operator=(std::move(hit));
-    DataModel::Hit::OrbitalDetectorHit::operator=(std::move(hit));
+    G4VHit::operator=(static_cast<G4VHit&&>(hit));
+    DataModel::Hit::OrbitalDetectorHit::operator=(static_cast<DataModel::Hit::OrbitalDetectorHit&&>(hit));
     fVertexTime = std::move(hit.fVertexTime);
     fVertexPosition = std::move(hit.fVertexPosition);
     fParticleName = std::move(hit.fParticleName);
@@ -57,20 +55,20 @@ OrbitalDetectorHit& OrbitalDetectorHit::operator=(OrbitalDetectorHit&& hit) noex
 
 void OrbitalDetectorHit::CreateBranches(TTree* tree) {
     DataModel::Hit::OrbitalDetectorHit::CreateBranches(tree);
-    tree->Branch("VertexTime", &persistVertexTime);
-    tree->Branch("VertexPositionX", &persistVertexPositionX);
-    tree->Branch("VertexPositionY", &persistVertexPositionY);
-    tree->Branch("VertexPositionZ", &persistVertexPositionZ);
-    tree->Branch("ParticleName", const_cast<char*>(persistParticleName.Data()), "ParticleName/C");
+    tree->Branch("VertexT", &persistVertexTime);
+    tree->Branch("VertexX", &std::get<0>(persistVertexPosition));
+    tree->Branch("VertexY", &std::get<1>(persistVertexPosition));
+    tree->Branch("VertexZ", &std::get<2>(persistVertexPosition));
+    tree->Branch("Particle", const_cast<char*>(persistParticleName), "Particle/C");
     tree->Branch("TrackID", &persistTrackID);
 }
 
-void OrbitalDetectorHit::FillBranches() {
+void OrbitalDetectorHit::FillBranches() noexcept {
     DataModel::Hit::OrbitalDetectorHit::FillBranches();
     persistVertexTime = fVertexTime;
-    persistVertexPositionX = fVertexPosition.x();
-    persistVertexPositionY = fVertexPosition.y();
-    persistVertexPositionZ = fVertexPosition.z();
-    persistParticleName = fParticleName;
+    std::get<0>(persistVertexPosition) = fVertexPosition.x();
+    std::get<1>(persistVertexPosition) = fVertexPosition.y();
+    std::get<2>(persistVertexPosition) = fVertexPosition.z();
+    persistParticleName = fParticleName.Data();
     persistTrackID = fTrackID;
 }

@@ -14,5 +14,5 @@ public:
     void   EndOfEvent(G4HCofThisEvent*) override;
 
 private:
-    Hit::CollectionOfSpectrometer* fHitsCollection;
+    Hit::SpectrometerHitCollection* fHitsCollection;
 };

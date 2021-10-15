@@ -26,16 +26,16 @@ public:
     using DataModel::PersistencyWriter::Close;
 
     void SetTrueEventID(G4int trueEventID) { SetNamePrefix(TString("Event") + trueEventID + '_'); }
-    void SubmitCalorimeterHC(const Hit::CollectionOfCalorimeter* const hc) { fpCalorimeterHC = hc; }
-    void SubmitOrbitalDetectorHC(const Hit::CollectionOfOrbitalDetector* const hc) { fpOrbitalDetectorHC = hc; }
-    void SubmitSpectrometerHC(const Hit::CollectionOfSpectrometer* const hc) { fpSpectrometerHC = hc; }
+    void SubmitCalorimeterHC(const std::vector<Hit::CalorimeterHit*>* hitList) { fpCalorimeterHitList = hitList; }
+    void SubmitOrbitalDetectorHC(const std::vector<Hit::OrbitalDetectorHit*>* hitList) { fpOrbitalDetectorHitList = hitList; }
+    void SubmitSpectrometerHC(const std::vector<Hit::SpectrometerHit*>* hitList) { fpSpectrometerHitList = hitList; }
     void RecordCoincidence();
 
 private:
     G4String fFileName = "MACE_SimG4";
     G4bool   fEnableCoincidenceOfCalorimeter = true;
 
-    const Hit::CollectionOfCalorimeter* fpCalorimeterHC;
-    const Hit::CollectionOfOrbitalDetector* fpOrbitalDetectorHC;
-    const Hit::CollectionOfSpectrometer* fpSpectrometerHC;
+    const std::vector<Hit::CalorimeterHit*>* fpCalorimeterHitList;
+    const std::vector<Hit::OrbitalDetectorHit*>* fpOrbitalDetectorHitList;
+    const std::vector<Hit::SpectrometerHit*>* fpSpectrometerHitList;
 };

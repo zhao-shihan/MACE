@@ -34,7 +34,7 @@ private:
 
 template<class DataType>
 inline void MACE::DataModel::PersistencyWriter::CreateTree(const std::vector<DataType*>* dataList) {
-    TString name = fPrefix + DataType::name + fSuffix;
+    TString name = fPrefix + DataType::Name() + fSuffix;
     TTree* tree = new TTree(name, name);
     DataType::CreateBranches(tree);
     for (DataType* data : *dataList) {

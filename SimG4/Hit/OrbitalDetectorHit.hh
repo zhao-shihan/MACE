@@ -6,27 +6,38 @@
 
 #include "DataModel/Hit/OrbitalDetectorHit.hh"
 
-class MACE::SimG4::Hit::OrbitalDetectorHit :
+class MACE::SimG4::Hit::OrbitalDetectorHit final :
     public G4VHit,
     public MACE::DataModel::Hit::OrbitalDetectorHit {
     MACE_DATA_MODEL_CONSTRUCTORS_AND_ASSIGNMENTS(OrbitalDetectorHit);
-
-    MACE_DATA_MODEL_SMALL_MEMBER(double_t, VertexTime);
-    MACE_DATA_MODEL_LARGE_MEMBER(CLHEP::Hep3Vector, VertexPosition);
-    MACE_DATA_MODEL_LARGE_MEMBER(TString, ParticleName);
-    MACE_DATA_MODEL_SMALL_MEMBER(int32_t, TrackID);
-
-    MACE_DATA_MODEL_PERSISTIFIER(Float_t, VertexTime);
-    MACE_DATA_MODEL_PERSISTIFIER(Float_t, VertexPositionX);
-    MACE_DATA_MODEL_PERSISTIFIER(Float_t, VertexPositionY);
-    MACE_DATA_MODEL_PERSISTIFIER(Float_t, VertexPositionZ);
-    MACE_DATA_MODEL_PERSISTIFIER(TString, ParticleName);
-    MACE_DATA_MODEL_PERSISTIFIER(Int_t, TrackID);
-
 public:
     static void CreateBranches(TTree* tree);
-    void FillBranches() override;
+    void FillBranches() noexcept override;
 
+    auto GetVertexTime() const { return fVertexTime; }
+    const auto& GetVertexPosition() const { return fVertexPosition; }
+    const auto& GetParticleName() const { return fParticleName; }
+    auto GetTrackID() const { return fTrackID; }
+
+    void SetVertexTime(double_t val) { fVertexTime = val; }
+    void SetVertexPosition(const CLHEP::Hep3Vector& pos) { fVertexPosition = pos; }
+    void SetVertexPosition(CLHEP::Hep3Vector&& pos) { fVertexPosition = std::move(pos); }
+    void SetParticleName(const TString& name) { fParticleName = name; }
+    void SetParticleName(TString&& name) { fParticleName = std::move(name); }
+    void SetTrackID(int32_t val) { fTrackID = val; }
+    
+private:
+    double_t fVertexTime;
+    CLHEP::Hep3Vector fVertexPosition;
+    TString fParticleName;
+    int32_t fTrackID;
+
+    static Float_t persistVertexTime;
+    static std::array<Float_t, 3> persistVertexPosition;
+    static const char* persistParticleName;
+    static int32_t persistTrackID;
+
+public:
     inline void* operator new(size_t);
     inline void  operator delete(void*);
 };
@@ -36,16 +47,16 @@ public:
 
 namespace MACE::SimG4::Hit {
 
-    using CollectionOfOrbitalDetector = G4THitsCollection<OrbitalDetectorHit>;
+    using OrbitalDetectorHitCollection = G4THitsCollection<OrbitalDetectorHit>;
 
-    extern G4Allocator<OrbitalDetectorHit>* AllocatorOfOrbitalDetector;
+    extern G4Allocator<OrbitalDetectorHit>* OrbitalDetectorAllocator;
 
     inline void* OrbitalDetectorHit::operator new(size_t) {
-        return static_cast<void*>(AllocatorOfOrbitalDetector->MallocSingle());
+        return static_cast<void*>(OrbitalDetectorAllocator->MallocSingle());
     }
 
     inline void OrbitalDetectorHit::operator delete(void* hit) {
-        AllocatorOfOrbitalDetector->FreeSingle(static_cast<OrbitalDetectorHit*>(hit));
+        OrbitalDetectorAllocator->FreeSingle(static_cast<OrbitalDetectorHit*>(hit));
     }
 
 }

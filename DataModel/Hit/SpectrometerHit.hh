@@ -8,20 +8,26 @@
 class MACE::DataModel::Hit::SpectrometerHit :
     protected MACE::DataModel::Base::Data {
     MACE_DATA_MODEL_CONSTRUCTORS_AND_ASSIGNMENTS(SpectrometerHit);
-
-    MACE_DATA_MODEL_SMALL_MEMBER(double_t, HitTime);
-    MACE_DATA_MODEL_LARGE_MEMBER(CLHEP::Hep3Vector, HitPosition);
-    MACE_DATA_MODEL_SMALL_MEMBER(int32_t, ChamberID);
-
-    MACE_DATA_MODEL_PERSISTIFIER(Float_t, HitTime);
-    MACE_DATA_MODEL_PERSISTIFIER(Float_t, HitPositionX);
-    MACE_DATA_MODEL_PERSISTIFIER(Float_t, HitPositionY);
-    MACE_DATA_MODEL_PERSISTIFIER(Float_t, HitPositionZ);
-    MACE_DATA_MODEL_PERSISTIFIER(Int_t, ChamberID);
-
-    MACE_DATA_MODEL_NAME("Spectrometer");
-
 public:
+    static constexpr const char* Name() { return "CDCHit"; }
     static void CreateBranches(TTree* tree);
-    virtual void FillBranches() override;
+    virtual void FillBranches() noexcept override;
+
+    auto GetHitTime() const { return fHitTime; }
+    const auto& GetHitPosition() const { return fHitPosition; }
+    auto GetChamberID() const { return fChamberID; }
+
+    void SetHitTime(double_t val) { fHitTime = val; }
+    void SetHitPosition(const CLHEP::Hep3Vector& val) { fHitPosition = val; }
+    void SetHitPosition(CLHEP::Hep3Vector&& val) { fHitPosition = std::move(val); }
+    void SetChamberID(int32_t val) { fChamberID = val; }
+
+private:
+    double_t fHitTime;
+    CLHEP::Hep3Vector fHitPosition;
+    int32_t fChamberID;
+
+    static Float_t persistHitTime;
+    static std::array<Float_t, 3> persistHitPosition;
+    static Int_t persistChamberID;
 };
