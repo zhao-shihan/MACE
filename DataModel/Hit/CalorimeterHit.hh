@@ -5,8 +5,14 @@
 
 class MACE::DataModel::Hit::CalorimeterHit :
     protected MACE::DataModel::Base::Data {
-    MACE_DATA_MODEL_CONSTRUCTORS_AND_ASSIGNMENTS(CalorimeterHit);
 public:
+    CalorimeterHit() noexcept;
+    CalorimeterHit(const CalorimeterHit& hit) noexcept;
+    CalorimeterHit(CalorimeterHit&& hit) noexcept;
+    virtual ~CalorimeterHit() noexcept {}
+    CalorimeterHit& operator=(const CalorimeterHit& hit) noexcept;
+    CalorimeterHit& operator=(CalorimeterHit&& hit) noexcept;
+
     static constexpr const char* Name() { return "CalHit"; }
     static void CreateBranches(TTree* tree);
     virtual void FillBranches() noexcept override;

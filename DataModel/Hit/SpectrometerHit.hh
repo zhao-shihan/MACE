@@ -7,8 +7,14 @@
 
 class MACE::DataModel::Hit::SpectrometerHit :
     protected MACE::DataModel::Base::Data {
-    MACE_DATA_MODEL_CONSTRUCTORS_AND_ASSIGNMENTS(SpectrometerHit);
 public:
+    SpectrometerHit() noexcept;
+    SpectrometerHit(const SpectrometerHit& hit) noexcept;
+    SpectrometerHit(SpectrometerHit&& hit) noexcept;
+    virtual ~SpectrometerHit() noexcept {}
+    SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept;
+    SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept;
+
     static constexpr const char* Name() { return "CDCHit"; }
     static void CreateBranches(TTree* tree);
     virtual void FillBranches() noexcept override;

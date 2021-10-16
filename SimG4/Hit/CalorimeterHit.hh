@@ -9,8 +9,14 @@
 class MACE::SimG4::Hit::CalorimeterHit final :
     public G4VHit,
     public MACE::DataModel::Hit::CalorimeterHit {
-    MACE_DATA_MODEL_CONSTRUCTORS_AND_ASSIGNMENTS(CalorimeterHit);
 public:
+    CalorimeterHit() noexcept;
+    CalorimeterHit(const CalorimeterHit& hit) noexcept;
+    CalorimeterHit(CalorimeterHit&& hit) noexcept;
+    ~CalorimeterHit() noexcept {}
+    CalorimeterHit& operator=(const CalorimeterHit& hit) noexcept;
+    CalorimeterHit& operator=(CalorimeterHit&& hit) noexcept;
+
     static void CreateBranches(TTree* tree);
     void FillBranches() noexcept override;
 

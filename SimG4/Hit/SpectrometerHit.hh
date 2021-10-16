@@ -9,8 +9,14 @@
 class MACE::SimG4::Hit::SpectrometerHit :
     public G4VHit,
     public MACE::DataModel::Hit::SpectrometerHit {
-    MACE_DATA_MODEL_CONSTRUCTORS_AND_ASSIGNMENTS(SpectrometerHit);
 public:
+    SpectrometerHit() noexcept;
+    SpectrometerHit(const SpectrometerHit& hit) noexcept;
+    SpectrometerHit(SpectrometerHit&& hit) noexcept;
+    ~SpectrometerHit() noexcept {}
+    SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept;
+    SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept;
+
     static void CreateBranches(TTree* tree);
     void FillBranches() noexcept override;
 

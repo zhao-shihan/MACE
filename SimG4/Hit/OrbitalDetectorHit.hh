@@ -9,8 +9,14 @@
 class MACE::SimG4::Hit::OrbitalDetectorHit final :
     public G4VHit,
     public MACE::DataModel::Hit::OrbitalDetectorHit {
-    MACE_DATA_MODEL_CONSTRUCTORS_AND_ASSIGNMENTS(OrbitalDetectorHit);
 public:
+    OrbitalDetectorHit() noexcept;
+    OrbitalDetectorHit(const OrbitalDetectorHit& hit) noexcept;
+    OrbitalDetectorHit(OrbitalDetectorHit&& hit) noexcept;
+    ~OrbitalDetectorHit() noexcept {}
+    OrbitalDetectorHit& operator=(const OrbitalDetectorHit& hit) noexcept;
+    OrbitalDetectorHit& operator=(OrbitalDetectorHit&& hit) noexcept;
+
     static void CreateBranches(TTree* tree);
     void FillBranches() noexcept override;
 
@@ -25,7 +31,7 @@ public:
     void SetParticleName(const TString& name) { fParticleName = name; }
     void SetParticleName(TString&& name) { fParticleName = std::move(name); }
     void SetTrackID(int32_t val) { fTrackID = val; }
-    
+
 private:
     double_t fVertexTime;
     CLHEP::Hep3Vector fVertexPosition;

@@ -7,8 +7,14 @@
 
 class MACE::DataModel::Hit::OrbitalDetectorHit :
     protected MACE::DataModel::Base::Data {
-    MACE_DATA_MODEL_CONSTRUCTORS_AND_ASSIGNMENTS(OrbitalDetectorHit);
 public:
+    OrbitalDetectorHit() noexcept;
+    OrbitalDetectorHit(const OrbitalDetectorHit& hit) noexcept;
+    OrbitalDetectorHit(OrbitalDetectorHit&& hit) noexcept;
+    virtual ~OrbitalDetectorHit() noexcept {}
+    OrbitalDetectorHit& operator=(const OrbitalDetectorHit& hit) noexcept;
+    OrbitalDetectorHit& operator=(OrbitalDetectorHit&& hit) noexcept;
+
     static constexpr const char* Name() { return "MCPHit"; }
     static void CreateBranches(TTree* tree);
     virtual void FillBranches() noexcept override;
