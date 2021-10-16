@@ -4,6 +4,7 @@ namespace MACE {
     namespace DataModel {
         namespace Base {
             class Data;
+            class PersistencyHandler;
         }
         namespace Hit {
             class CalorimeterHit;
@@ -15,7 +16,9 @@ namespace MACE {
             class OrbitalDetectorRawHit;
             class SpectrometerRawHit;
         }
+        class PersistencyReader;
         class PersistencyWriter;
+        class TreeNameHandler;
     }
     namespace Reconstruction {
         class ExperimentData;

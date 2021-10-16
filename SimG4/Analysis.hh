@@ -8,10 +8,12 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow" // suppress ridiculous warnings caused by TString: (const char* s) shadows CLHEP::s
 #include "DataModel/PersistencyWriter.hh"
+#include "DataModel/TreeNameHandler.hh"
 #pragma GCC diagnostic pop
 
 class MACE::SimG4::Analysis final : private MACE::DataModel::PersistencyWriter {
-    MACE_DATA_MODEL_NOT_ALLOW_TO_COPY(Analysis);
+    Analysis(const Analysis&) = delete;
+    Analysis& operator=(const Analysis&) = delete;
 private:
     Analysis();
 public:
@@ -22,10 +24,9 @@ public:
     void SetEnableCoincidenceOfCalorimeter(G4bool val) { fEnableCoincidenceOfCalorimeter = val; }
 
     void Open();
-    using DataModel::PersistencyWriter::WriteTrees;
     using DataModel::PersistencyWriter::Close;
 
-    void SetTrueEventID(G4int trueEventID) { SetNamePrefix(TString("Event") + trueEventID + '_'); }
+    void SetTrueEventID(G4int trueEventID) { DataModel::TreeNameHandler::SetIndex(trueEventID); }
     void SubmitCalorimeterHC(const std::vector<Hit::CalorimeterHit*>* hitList) { fpCalorimeterHitList = hitList; }
     void SubmitOrbitalDetectorHC(const std::vector<Hit::OrbitalDetectorHit*>* hitList) { fpOrbitalDetectorHitList = hitList; }
     void SubmitSpectrometerHC(const std::vector<Hit::SpectrometerHit*>* hitList) { fpSpectrometerHitList = hitList; }
