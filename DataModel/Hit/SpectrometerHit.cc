@@ -41,17 +41,10 @@ SpectrometerHit& SpectrometerHit::operator=(SpectrometerHit&& hit) noexcept {
 }
 
 void SpectrometerHit::CreateBranches(TTree* tree) {
+    Data::CreateBranches(tree);
     tree->Branch("HitT", &persistHitTime);
     tree->Branch("HitX", &std::get<0>(persistHitPosition));
     tree->Branch("HitY", &std::get<1>(persistHitPosition));
     tree->Branch("HitZ", &std::get<2>(persistHitPosition));
     tree->Branch("ChamberID", &persistChamberID);
-}
-
-void SpectrometerHit::FillBranches() noexcept {
-    persistHitTime = fHitTime;
-    std::get<0>(persistHitPosition) = fHitPosition.x();
-    std::get<1>(persistHitPosition) = fHitPosition.y();
-    std::get<2>(persistHitPosition) = fHitPosition.z();
-    persistChamberID = fChamberID;
 }

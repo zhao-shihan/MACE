@@ -4,7 +4,7 @@ using namespace MACE::SimG4::Hit;
 
 Float_t OrbitalDetectorHit::persistVertexTime = 0.0f;
 std::array<Float_t, 3> OrbitalDetectorHit::persistVertexPosition = { 0.0f, 0.0f, 0.0f };
-const char* OrbitalDetectorHit::persistParticleName = "";
+TString OrbitalDetectorHit::persistParticleName = "";
 int32_t OrbitalDetectorHit::persistTrackID = -1;
 
 G4Allocator<OrbitalDetectorHit>* MACE::SimG4::Hit::OrbitalDetectorAllocator = nullptr;
@@ -59,16 +59,6 @@ void OrbitalDetectorHit::CreateBranches(TTree* tree) {
     tree->Branch("VertexX", &std::get<0>(persistVertexPosition));
     tree->Branch("VertexY", &std::get<1>(persistVertexPosition));
     tree->Branch("VertexZ", &std::get<2>(persistVertexPosition));
-    tree->Branch("Particle", const_cast<char*>(persistParticleName), "Particle/C");
+    tree->Branch("Particle", const_cast<char*>(persistParticleName.Data()), "Particle/C");
     tree->Branch("TrackID", &persistTrackID);
-}
-
-void OrbitalDetectorHit::FillBranches() noexcept {
-    DataModel::Hit::OrbitalDetectorHit::FillBranches();
-    persistVertexTime = fVertexTime;
-    std::get<0>(persistVertexPosition) = fVertexPosition.x();
-    std::get<1>(persistVertexPosition) = fVertexPosition.y();
-    std::get<2>(persistVertexPosition) = fVertexPosition.z();
-    persistParticleName = fParticleName.Data();
-    persistTrackID = fTrackID;
 }

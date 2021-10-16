@@ -18,7 +18,7 @@ public:
     CalorimeterHit& operator=(CalorimeterHit&& hit) noexcept;
 
     static void CreateBranches(TTree* tree);
-    void FillBranches() noexcept override;
+    inline void FillBranches() noexcept;
 
     const auto& GetParticleName() const { return fParticleName; }
     auto GetTrackID() const { return fTrackID; }
@@ -31,13 +31,19 @@ private:
     TString fParticleName;
     int32_t fTrackID;
 
-    static const char* persistParticleName;
+    static TString persistParticleName;
     static Int_t persistTrackID;
 
 public:
     inline void* operator new(size_t);
     inline void  operator delete(void*);
 };
+
+void MACE::SimG4::Hit::CalorimeterHit::FillBranches() noexcept {
+    DataModel::Hit::CalorimeterHit::FillBranches();
+    persistParticleName = fParticleName;
+    persistTrackID = fTrackID;
+}
 
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"

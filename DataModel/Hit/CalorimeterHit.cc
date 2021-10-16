@@ -35,11 +35,7 @@ CalorimeterHit& CalorimeterHit::operator=(CalorimeterHit&& hit) noexcept {
 }
 
 void CalorimeterHit::CreateBranches(TTree* tree) {
+    Data::CreateBranches(tree);
     tree->Branch("HitT", &persistHitTime);
     tree->Branch("Energy", &persistEnergy);
-}
-
-void CalorimeterHit::FillBranches() noexcept {
-    persistHitTime = fHitTime;
-    persistEnergy = fEnergy;
 }

@@ -17,7 +17,7 @@ public:
 
     static constexpr const char* Name() { return "CDCHit"; }
     static void CreateBranches(TTree* tree);
-    virtual void FillBranches() noexcept override;
+    inline void FillBranches() noexcept;
 
     auto GetHitTime() const { return fHitTime; }
     const auto& GetHitPosition() const { return fHitPosition; }
@@ -37,3 +37,12 @@ private:
     static std::array<Float_t, 3> persistHitPosition;
     static Int_t persistChamberID;
 };
+
+void MACE::DataModel::Hit::SpectrometerHit::FillBranches() noexcept {
+    MACE::DataModel::Base::Data::FillBranches();
+    persistHitTime = fHitTime;
+    std::get<0>(persistHitPosition) = fHitPosition.x();
+    std::get<1>(persistHitPosition) = fHitPosition.y();
+    std::get<2>(persistHitPosition) = fHitPosition.z();
+    persistChamberID = fChamberID;
+}

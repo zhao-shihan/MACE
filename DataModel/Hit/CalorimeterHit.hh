@@ -15,7 +15,7 @@ public:
 
     static constexpr const char* Name() { return "CalHit"; }
     static void CreateBranches(TTree* tree);
-    virtual void FillBranches() noexcept override;
+    inline void FillBranches() noexcept;
 
     auto GetHitTime() const { return fHitTime; }
     auto GetEnergy() const { return fEnergy; }
@@ -30,3 +30,9 @@ private:
     static Float_t persistHitTime;
     static Float_t persistEnergy;
 };
+
+void MACE::DataModel::Hit::CalorimeterHit::FillBranches() noexcept {
+    MACE::DataModel::Base::Data::FillBranches();
+    persistHitTime = fHitTime;
+    persistEnergy = fEnergy;
+}

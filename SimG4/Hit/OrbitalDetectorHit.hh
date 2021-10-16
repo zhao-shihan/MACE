@@ -18,7 +18,7 @@ public:
     OrbitalDetectorHit& operator=(OrbitalDetectorHit&& hit) noexcept;
 
     static void CreateBranches(TTree* tree);
-    void FillBranches() noexcept override;
+    inline void FillBranches() noexcept;
 
     auto GetVertexTime() const { return fVertexTime; }
     const auto& GetVertexPosition() const { return fVertexPosition; }
@@ -40,13 +40,23 @@ private:
 
     static Float_t persistVertexTime;
     static std::array<Float_t, 3> persistVertexPosition;
-    static const char* persistParticleName;
+    static TString persistParticleName;
     static int32_t persistTrackID;
 
 public:
     inline void* operator new(size_t);
     inline void  operator delete(void*);
 };
+
+void MACE::SimG4::Hit::OrbitalDetectorHit::FillBranches() noexcept {
+    DataModel::Hit::OrbitalDetectorHit::FillBranches();
+    persistVertexTime = fVertexTime;
+    std::get<0>(persistVertexPosition) = fVertexPosition.x();
+    std::get<1>(persistVertexPosition) = fVertexPosition.y();
+    std::get<2>(persistVertexPosition) = fVertexPosition.z();
+    persistParticleName = fParticleName;
+    persistTrackID = fTrackID;
+}
 
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"

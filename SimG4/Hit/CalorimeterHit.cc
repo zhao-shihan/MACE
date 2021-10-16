@@ -2,7 +2,7 @@
 
 using namespace MACE::SimG4::Hit;
 
-const char* CalorimeterHit::persistParticleName = "";
+TString CalorimeterHit::persistParticleName = "";
 Int_t CalorimeterHit::persistTrackID = -1;
 
 G4Allocator<CalorimeterHit>* MACE::SimG4::Hit::CalorimeterHitAllocator = nullptr;
@@ -43,12 +43,6 @@ CalorimeterHit& CalorimeterHit::operator=(CalorimeterHit&& hit) noexcept {
 
 void CalorimeterHit::CreateBranches(TTree* tree) {
     DataModel::Hit::CalorimeterHit::CreateBranches(tree);
-    tree->Branch("Particle", const_cast<char*>(persistParticleName), "Particle/C");
+    tree->Branch("Particle", const_cast<char*>(persistParticleName.Data()), "Particle/C");
     tree->Branch("TrackID", &persistTrackID);
-}
-
-void CalorimeterHit::FillBranches() noexcept {
-    DataModel::Hit::CalorimeterHit::FillBranches();
-    persistParticleName = fParticleName.Data();
-    persistTrackID = fTrackID;
 }

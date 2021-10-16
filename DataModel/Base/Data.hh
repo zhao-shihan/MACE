@@ -4,9 +4,12 @@
 
 class MACE::DataModel::Base::Data {
 public:
-    virtual ~Data() noexcept {}
+    virtual ~Data() noexcept = 0;
 
-    static constexpr const char* Name();
-    static void CreateBranches(TTree* tree);
-    virtual void FillBranches() noexcept = 0;
+    // Override this in derived classes at least once!
+    static constexpr const char* Name() { return "MACE_DataModel_Base_Data"; }
+    // Extend (override & invoke) this in derived classes!
+    static void CreateBranches(TTree* tree) {}
+    // Extend (override & invoke) this in derived classes!
+    inline void FillBranches() noexcept {}
 };
