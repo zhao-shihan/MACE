@@ -4,7 +4,8 @@
 
 #include "SimG4/Geometry/BaseInterface.hh"
 
-class MACE::SimG4::Geometry::SpectrometerShield : public MACE::SimG4::Geometry::BaseInterface {
+class MACE::SimG4::Geometry::SpectrometerShield final :
+    public MACE::SimG4::Geometry::BaseInterface {
 public:
     SpectrometerShield();
 
@@ -17,7 +18,7 @@ public:
 
 private:
     G4double fInnerRadius = 50 * cm;
-    G4double fInnerLength = 100 * cm;
+    G4double fInnerLength = 110 * cm;
     G4double fWindowRadius = 11 * cm;
     G4double fThickness = 5 * cm;
 };

@@ -4,7 +4,8 @@
 
 #include "SimG4/Geometry/BaseInterface.hh"
 
-class MACE::SimG4::Geometry::OrbitalDetectorShield : public MACE::SimG4::Geometry::BaseInterface {
+class MACE::SimG4::Geometry::OrbitalDetectorShield final :
+    public MACE::SimG4::Geometry::BaseInterface {
 public:
     OrbitalDetectorShield();
 
@@ -19,7 +20,7 @@ public:
 
 private:
     G4double fInnerRadius = 25 * cm;
-    G4double fInnerLength = 50 * cm;
+    G4double fInnerLength = 60 * cm;
     G4double fWindowRadius = 11 * cm;
     G4double fThickness = 5 * cm;
     G4double fCenterX = 200 * cm;

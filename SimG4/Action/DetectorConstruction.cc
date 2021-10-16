@@ -77,6 +77,8 @@ void DetectorConstruction::ConstructGeometry() {
     fCalorimeter->Create(materialCsI, fOrbitalDetectorShellField);
     fSpectrometerShield->Create(materialLead, fWorld);
     fOrbitalDetectorShield->Create(materialLead, fWorld);
+
+    fWorld->WriteGDML();
 }
 
 #include "G4SDManager.hh"

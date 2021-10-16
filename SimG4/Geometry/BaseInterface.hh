@@ -12,6 +12,7 @@ public:
     virtual ~BaseInterface();
 
     virtual void Create(G4Material* material, const BaseInterface* mother) = 0;
+    virtual void WriteGDML() {}
 
     auto* GetSolidVolume() const { return fVolumeSetList.front().GetSolidVolume(); }
     auto* GetLogicalVolume() const { return fVolumeSetList.front().GetLogicalVolume(); }

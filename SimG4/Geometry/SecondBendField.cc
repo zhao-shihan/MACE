@@ -1,5 +1,4 @@
 #include "G4Torus.hh"
-#include "G4MultiUnion.hh"
 #include "SimG4/Geometry/SecondBendField.hh"
 
 MACE::SimG4::Geometry::SecondBendField::SecondBendField() :
