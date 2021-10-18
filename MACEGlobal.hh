@@ -18,7 +18,6 @@ namespace MACE {
         }
         class PersistencyReader;
         class PersistencyWriter;
-        class TreeNameHandler;
     }
     namespace Reconstruction {
         class ExperimentData;

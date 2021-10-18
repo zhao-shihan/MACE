@@ -4,7 +4,6 @@
 
 #include "DataModel/Global.hh"
 #include "DataModel/Base/PersistencyHandler.hh"
-#include "DataModel/TreeNameHandler.hh"
 
 class MACE::DataModel::PersistencyReader :
     public MACE::DataModel::Base::PersistencyHandler {
@@ -18,5 +17,5 @@ public:
     using PersistencyHandler::Close;
 
     // template<class DataType>
-    // ROOT::RDataFrame ReadTree() { return ROOT::RDataFrame(TreeNameHandler::GetName(), fFile); }
+    // ROOT::RDataFrame ReadTree() { return ROOT::RDataFrame(TreeNameHandler::GetTreeName(), fFile); }
 };

@@ -2,7 +2,6 @@
 
 #include "DataModel/Global.hh"
 #include "DataModel/Base/PersistencyHandler.hh"
-#include "DataModel/TreeNameHandler.hh"
 
 class MACE::DataModel::PersistencyWriter :
     public MACE::DataModel::Base::PersistencyHandler {
@@ -34,7 +33,7 @@ inline void MACE::DataModel::PersistencyWriter::CreateTree(const std::vector<Dat
     static_assert(std::is_base_of_v<Base::Data, DataTypeInList>, "DataTypeInList should be derived from DataModel::Base::Data");
     static_assert(std::is_base_of_v<Base::Data, DataTypeInTree>, "DataTypeInTree should be derived from DataModel::Base::Data");
     static_assert(std::is_base_of_v<DataTypeInTree, DataTypeInList>, "DataTypeInList should be derived from DataTypeInTree");
-    TString name = TreeNameHandler::GetName<DataTypeInTree>();
+    TString name = PersistencyHandler::GetTreeName<DataTypeInTree>();
     TTree* tree = new TTree(name, name);
     DataTypeInTree::CreateBranches(tree);
     for (DataTypeInTree* data : *dataList) {
