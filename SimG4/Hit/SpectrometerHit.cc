@@ -2,20 +2,22 @@
 
 using namespace MACE::SimG4::Hit;
 
-Float_t SpectrometerHit::persistVertexTime = 0.0f;
-std::array<Float_t, 3> SpectrometerHit::persistVertexPosition = { 0.0f, 0.0f, 0.0f };
-TString SpectrometerHit::persistParticleName = "";
-int32_t SpectrometerHit::persistTrackID = -1;
+MACE::DataModel::Core::Column<Float_t> SpectrometerHit::fgVertexTime = { "VertexT", 0.0f };
+MACE::DataModel::Core::Column<Float_t> SpectrometerHit::fgVertexPositionX = { "VertexX", 0.0f };
+MACE::DataModel::Core::Column<Float_t> SpectrometerHit::fgVertexPositionY = { "VertexY", 0.0f };
+MACE::DataModel::Core::Column<Float_t> SpectrometerHit::fgVertexPositionZ = { "VertexZ", 0.0f };
+MACE::DataModel::Core::Column<TString> SpectrometerHit::fgParticleName = { "Particle", "" };
+MACE::DataModel::Core::Column<Int_t> SpectrometerHit::fgTrackID = { "TrackID", -1 };
 
 G4Allocator<SpectrometerHit>* MACE::SimG4::Hit::SpectrometerHitAllocator = nullptr;
 
 SpectrometerHit::SpectrometerHit() noexcept :
     G4VHit(),
     DataModel::Hit::SpectrometerHit(),
-    fVertexTime(0.0),
-    fVertexPosition(),
-    fParticleName(nullptr),
-    fTrackID(-1) {}
+    fVertexTime(fgVertexTime.value),
+    fVertexPosition(fgVertexPositionX.value, fgVertexPositionY.value, fgVertexPositionZ.value),
+    fParticleName(fgParticleName.value.Data()),
+    fTrackID(fgTrackID.value) {}
 
 SpectrometerHit::SpectrometerHit(const SpectrometerHit& hit) noexcept :
     G4VHit(static_cast<const G4VHit&>(hit)),
@@ -55,10 +57,20 @@ SpectrometerHit& SpectrometerHit::operator=(SpectrometerHit&& hit) noexcept {
 
 void SpectrometerHit::CreateBranches(TTree* tree) {
     DataModel::Hit::SpectrometerHit::CreateBranches(tree);
-    tree->Branch("VertexT", &persistVertexTime);
-    tree->Branch("VertexX", &std::get<0>(persistVertexPosition));
-    tree->Branch("VertexY", &std::get<1>(persistVertexPosition));
-    tree->Branch("VertexZ", &std::get<2>(persistVertexPosition));
-    tree->Branch("Particle", const_cast<char*>(persistParticleName.Data()), "Particle/C");
-    tree->Branch("TrackID", &persistTrackID);
+    tree->Branch(fgVertexTime.name, &fgVertexTime.value);
+    tree->Branch(fgVertexPositionX.name, &fgVertexPositionX.value);
+    tree->Branch(fgVertexPositionY.name, &fgVertexPositionY.value);
+    tree->Branch(fgVertexPositionZ.name, &fgVertexPositionZ.value);
+    tree->Branch(fgParticleName.name, const_cast<char*>(fgParticleName.value.Data()), "Particle/C");
+    tree->Branch(fgTrackID.name, &fgTrackID.value);
+}
+
+void SpectrometerHit::ReadBranches(TTree* tree) {
+    DataModel::Hit::SpectrometerHit::ReadBranches(tree);
+    tree->SetBranchAddress(fgVertexTime.name, &fgVertexTime.value);
+    tree->SetBranchAddress(fgVertexPositionX.name, &fgVertexPositionX.value);
+    tree->SetBranchAddress(fgVertexPositionY.name, &fgVertexPositionY.value);
+    tree->SetBranchAddress(fgVertexPositionZ.name, &fgVertexPositionZ.value);
+    tree->SetBranchAddress(fgParticleName.name, &fgParticleName.value);
+    tree->SetBranchAddress(fgTrackID.name, &fgTrackID.value);
 }

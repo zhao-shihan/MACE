@@ -44,8 +44,8 @@ void Analysis::RecordCoincidence() {
             return;
         }
     }
-    CreateTree(fpCalorimeterHitList);
-    CreateTree(fpOrbitalDetectorHitList);
-    CreateTree(fpSpectrometerHitList);
+    CreateTreeFromList(fpCalorimeterHitList);
+    CreateTreeFromList(fpOrbitalDetectorHitList);
+    CreateTreeFromList(fpSpectrometerHitList);
     WriteTrees();
 }

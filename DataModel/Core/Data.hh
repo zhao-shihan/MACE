@@ -1,8 +1,9 @@
 #pragma once
 
 #include "DataModel/Global.hh"
+#include "DataModel/Core/Column.hh"
 
-class MACE::DataModel::Base::Data {
+class MACE::DataModel::Core::Data {
 public:
     virtual ~Data() noexcept = 0;
 
@@ -12,4 +13,6 @@ public:
     static void CreateBranches(TTree* tree) {}
     // Extend (override & invoke) this in derived classes!
     inline void FillBranches() noexcept {}
+    // Extend (override & invoke) this in derived classes!
+    static void ReadBranches(TTree* tree) {}
 };

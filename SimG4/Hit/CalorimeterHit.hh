@@ -19,6 +19,7 @@ public:
 
     static void CreateBranches(TTree* tree);
     inline void FillBranches() noexcept;
+    static void ReadBranches(TTree* tree);
 
     const auto& GetParticleName() const { return fParticleName; }
     auto GetTrackID() const { return fTrackID; }
@@ -31,8 +32,8 @@ private:
     TString fParticleName;
     int32_t fTrackID;
 
-    static TString persistParticleName;
-    static Int_t persistTrackID;
+    static DataModel::Core::Column<TString> fgParticleName;
+    static DataModel::Core::Column<Int_t> fgTrackID;
 
 public:
     inline void* operator new(size_t);
@@ -41,8 +42,8 @@ public:
 
 void MACE::SimG4::Hit::CalorimeterHit::FillBranches() noexcept {
     DataModel::Hit::CalorimeterHit::FillBranches();
-    persistParticleName = fParticleName;
-    persistTrackID = fTrackID;
+    fgParticleName.value = fParticleName;
+    fgTrackID.value = fTrackID;
 }
 
 #include "G4THitsCollection.hh"

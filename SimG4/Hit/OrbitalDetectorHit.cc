@@ -2,20 +2,22 @@
 
 using namespace MACE::SimG4::Hit;
 
-Float_t OrbitalDetectorHit::persistVertexTime = 0.0f;
-std::array<Float_t, 3> OrbitalDetectorHit::persistVertexPosition = { 0.0f, 0.0f, 0.0f };
-TString OrbitalDetectorHit::persistParticleName = "";
-int32_t OrbitalDetectorHit::persistTrackID = -1;
+MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgVertexTime = { "VertexT", 0.0f };
+MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgVertexPositionX = { "VertexX", 0.0f };
+MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgVertexPositionY = { "VertexY", 0.0f };
+MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgVertexPositionZ = { "VertexZ", 0.0f };
+MACE::DataModel::Core::Column<TString> OrbitalDetectorHit::fgParticleName = { "Particle", "" };
+MACE::DataModel::Core::Column<Int_t> OrbitalDetectorHit::fgTrackID = { "TrackID", -1 };
 
 G4Allocator<OrbitalDetectorHit>* MACE::SimG4::Hit::OrbitalDetectorAllocator = nullptr;
 
 OrbitalDetectorHit::OrbitalDetectorHit() noexcept :
     G4VHit(),
     DataModel::Hit::OrbitalDetectorHit(),
-    fVertexTime(0.0),
-    fVertexPosition(),
-    fParticleName(nullptr),
-    fTrackID(-1) {}
+    fVertexTime(fgVertexTime.value),
+    fVertexPosition(fgVertexPositionX.value, fgVertexPositionY.value, fgVertexPositionZ.value),
+    fParticleName(fgParticleName.value.Data()),
+    fTrackID(fgTrackID.value) {}
 
 OrbitalDetectorHit::OrbitalDetectorHit(const OrbitalDetectorHit& hit) noexcept :
     G4VHit(static_cast<const G4VHit&>(hit)),
@@ -55,10 +57,20 @@ OrbitalDetectorHit& OrbitalDetectorHit::operator=(OrbitalDetectorHit&& hit) noex
 
 void OrbitalDetectorHit::CreateBranches(TTree* tree) {
     DataModel::Hit::OrbitalDetectorHit::CreateBranches(tree);
-    tree->Branch("VertexT", &persistVertexTime);
-    tree->Branch("VertexX", &std::get<0>(persistVertexPosition));
-    tree->Branch("VertexY", &std::get<1>(persistVertexPosition));
-    tree->Branch("VertexZ", &std::get<2>(persistVertexPosition));
-    tree->Branch("Particle", const_cast<char*>(persistParticleName.Data()), "Particle/C");
-    tree->Branch("TrackID", &persistTrackID);
+    tree->Branch(fgVertexTime.name, &fgVertexTime.value);
+    tree->Branch(fgVertexPositionX.name, &fgVertexPositionX.value);
+    tree->Branch(fgVertexPositionY.name, &fgVertexPositionY.value);
+    tree->Branch(fgVertexPositionZ.name, &fgVertexPositionZ.value);
+    tree->Branch(fgParticleName.name, const_cast<char*>(fgParticleName.value.Data()), "Particle/C");
+    tree->Branch(fgTrackID.name, &fgTrackID.value);
+}
+
+void OrbitalDetectorHit::ReadBranches(TTree* tree) {
+    DataModel::Hit::OrbitalDetectorHit::ReadBranches(tree);
+    tree->SetBranchAddress(fgVertexTime.name, &fgVertexTime.value);
+    tree->SetBranchAddress(fgVertexPositionX.name, &fgVertexPositionX.value);
+    tree->SetBranchAddress(fgVertexPositionY.name, &fgVertexPositionY.value);
+    tree->SetBranchAddress(fgVertexPositionZ.name, &fgVertexPositionZ.value);
+    tree->SetBranchAddress(fgParticleName.name, &fgParticleName.value);
+    tree->SetBranchAddress(fgTrackID.name, &fgTrackID.value);
 }

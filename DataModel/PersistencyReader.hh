@@ -3,19 +3,50 @@
 #include "ROOT/RDataFrame.hxx"
 
 #include "DataModel/Global.hh"
-#include "DataModel/Base/PersistencyHandler.hh"
+#include "DataModel/Core/PersistencyHandler.hh"
 
 class MACE::DataModel::PersistencyReader :
-    public MACE::DataModel::Base::PersistencyHandler {
+    public MACE::DataModel::Core::PersistencyHandler {
     PersistencyReader(const PersistencyReader&) = delete;
     PersistencyReader& operator=(const PersistencyReader&) = delete;
 public:
     PersistencyReader();
-    virtual ~PersistencyReader();
+    virtual ~PersistencyReader() {}
 
     virtual void Open(const char* fileName, Option_t* = nullptr) override { PersistencyHandler::Open(fileName, "READ"); }
     using PersistencyHandler::Close;
 
-    // template<class DataType>
-    // ROOT::RDataFrame ReadTree() { return ROOT::RDataFrame(TreeNameHandler::GetTreeName(), fFile); }
+    template<class DataType>
+    typename std::enable_if_t<std::is_class_v<DataType>, std::vector<DataType>> CreateListFromTree();
+    template<class DataPointer>
+    typename std::enable_if_t<std::is_pointer_v<DataPointer>, std::vector<DataPointer>> CreateListFromTree();
+    template<class DataType>
+    TTree* GetTree() { return fFile->Get<TTree>(GetTreeName<DataType>()); }
 };
+
+template<class DataType>
+typename std::enable_if_t<std::is_class_v<DataType>, std::vector<DataType>>
+MACE::DataModel::PersistencyReader::CreateListFromTree() {
+    std::vector<DataType> dataList(0);
+    TTree* tree = GetTree<DataType>();
+    DataType::ReadBranches(tree);
+    for (Long64_t i = 0; i < tree->GetEntries(); ++i) {
+        tree->GetEntry();
+        dataList.emplace_back();
+    }
+    return dataList;
+}
+
+template<class DataPointer>
+typename std::enable_if_t<std::is_pointer_v<DataPointer>, std::vector<DataPointer>>
+MACE::DataModel::PersistencyReader::CreateListFromTree() {
+    using DataType = std::remove_pointer_t<DataPointer>;
+    std::vector<DataPointer> dataList(0);
+    TTree* tree = GetTree<DataType>();
+    DataType::ReadBranches(tree);
+    for (Long64_t i = 0; i < tree->GetEntries(); ++i) {
+        tree->GetEntry();
+        dataList.emplace_back(new DataType());
+    }
+    return dataList;
+}

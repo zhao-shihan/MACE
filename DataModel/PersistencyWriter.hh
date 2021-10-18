@@ -1,12 +1,18 @@
 #pragma once
 
 #include "DataModel/Global.hh"
-#include "DataModel/Base/PersistencyHandler.hh"
+#include "DataModel/Core/PersistencyHandler.hh"
 
 class MACE::DataModel::PersistencyWriter :
-    public MACE::DataModel::Base::PersistencyHandler {
+    public MACE::DataModel::Core::PersistencyHandler {
     PersistencyWriter(const PersistencyWriter&) = delete;
     PersistencyWriter& operator=(const PersistencyWriter&) = delete;
+public:
+    enum TreeOperation {
+        kJustWrite,
+        kDeleteAfterWrite
+    };
+
 public:
     PersistencyWriter();
     virtual ~PersistencyWriter();
@@ -15,23 +21,25 @@ public:
     virtual void Close(Option_t* option = nullptr) override;
 
     template<class DataTypeInTree, class DataTypeInList>
-    inline void CreateTree(const std::vector<DataTypeInList*>* dataList);
+    TTree* CreateTreeFromList(const std::vector<DataTypeInList*>* dataList, TreeOperation behaviour = kDeleteAfterWrite);
     template<class DataTypeInTree, class DataTypeInList>
-    inline void CreateTree(const std::vector<DataTypeInList*>& dataList);
+    TTree* CreateTreeFromList(const std::vector<DataTypeInList*>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataTypeInList, DataTypeInTree>(&dataList, behaviour); }
     template<class DataType>
-    inline void CreateTree(const std::vector<DataType*>* dataList) { CreateTree<DataType, DataType>(dataList); }
+    TTree* CreateTreeFromList(const std::vector<DataType*>* dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataType, DataType>(dataList, behaviour); }
     template<class DataType>
-    inline void CreateTree(const std::vector<DataType*>& dataList) { CreateTree<DataType, DataType>(dataList); }
+    TTree* CreateTreeFromList(const std::vector<DataType*>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataType, DataType>(&dataList, behaviour); }
+    void AddTree(TTree* tree, TreeOperation behaviour = kJustWrite) { fTreeAndBehaviours.emplace_back(tree, behaviour); }
+
     void WriteTrees(Int_t option = 0, Int_t bufsize = 0);
 
 private:
-    std::vector<TTree*> fTrees;
+    std::vector<std::pair<TTree*, TreeOperation>> fTreeAndBehaviours;
 };
 
 template<class DataTypeInTree, class DataTypeInList>
-inline void MACE::DataModel::PersistencyWriter::CreateTree(const std::vector<DataTypeInList*>* dataList) {
-    static_assert(std::is_base_of_v<Base::Data, DataTypeInList>, "DataTypeInList should be derived from DataModel::Base::Data");
-    static_assert(std::is_base_of_v<Base::Data, DataTypeInTree>, "DataTypeInTree should be derived from DataModel::Base::Data");
+TTree* MACE::DataModel::PersistencyWriter::CreateTreeFromList(const std::vector<DataTypeInList*>* dataList, TreeOperation behaviour) {
+    static_assert(std::is_base_of_v<Core::Data, DataTypeInList>, "DataTypeInList should be derived from DataModel::Core::Data");
+    static_assert(std::is_base_of_v<Core::Data, DataTypeInTree>, "DataTypeInTree should be derived from DataModel::Core::Data");
     static_assert(std::is_base_of_v<DataTypeInTree, DataTypeInList>, "DataTypeInList should be derived from DataTypeInTree");
     TString name = PersistencyHandler::GetTreeName<DataTypeInTree>();
     TTree* tree = new TTree(name, name);
@@ -40,10 +48,6 @@ inline void MACE::DataModel::PersistencyWriter::CreateTree(const std::vector<Dat
         data->FillBranches();
         tree->Fill();
     }
-    fTrees.push_back(tree);
-}
-
-template<class DataTypeInTree, class DataTypeInList>
-inline void MACE::DataModel::PersistencyWriter::CreateTree(const std::vector<DataTypeInList*>& dataList) {
-    CreateTree<DataTypeInList, DataTypeInTree>(&dataList);
+    fTreeAndBehaviours.emplace_back(tree, behaviour);
+    return tree;
 }

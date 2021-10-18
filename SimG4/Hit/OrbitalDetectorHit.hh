@@ -19,6 +19,7 @@ public:
 
     static void CreateBranches(TTree* tree);
     inline void FillBranches() noexcept;
+    static void ReadBranches(TTree* tree);
 
     auto GetVertexTime() const { return fVertexTime; }
     const auto& GetVertexPosition() const { return fVertexPosition; }
@@ -38,10 +39,12 @@ private:
     TString fParticleName;
     int32_t fTrackID;
 
-    static Float_t persistVertexTime;
-    static std::array<Float_t, 3> persistVertexPosition;
-    static TString persistParticleName;
-    static int32_t persistTrackID;
+    static DataModel::Core::Column<Float_t> fgVertexTime;
+    static DataModel::Core::Column<Float_t> fgVertexPositionX;
+    static DataModel::Core::Column<Float_t> fgVertexPositionY;
+    static DataModel::Core::Column<Float_t> fgVertexPositionZ;
+    static DataModel::Core::Column<TString> fgParticleName;
+    static DataModel::Core::Column<Int_t> fgTrackID;
 
 public:
     inline void* operator new(size_t);
@@ -50,12 +53,12 @@ public:
 
 void MACE::SimG4::Hit::OrbitalDetectorHit::FillBranches() noexcept {
     DataModel::Hit::OrbitalDetectorHit::FillBranches();
-    persistVertexTime = fVertexTime;
-    std::get<0>(persistVertexPosition) = fVertexPosition.x();
-    std::get<1>(persistVertexPosition) = fVertexPosition.y();
-    std::get<2>(persistVertexPosition) = fVertexPosition.z();
-    persistParticleName = fParticleName;
-    persistTrackID = fTrackID;
+    fgVertexTime.value = fVertexTime;
+    fgVertexPositionX.value = fVertexPosition.x();
+    fgVertexPositionX.value = fVertexPosition.y();
+    fgVertexPositionX.value = fVertexPosition.z();
+    fgParticleName.value = fParticleName;
+    fgTrackID.value = fTrackID;
 }
 
 #include "G4THitsCollection.hh"

@@ -2,15 +2,17 @@
 
 using namespace MACE::DataModel::Hit;
 
-Float_t SpectrometerHit::persistHitTime = 0.0f;
-std::array<Float_t, 3> SpectrometerHit::persistHitPosition = { 0.0f, 0.0f, 0.0f };
-Int_t SpectrometerHit::persistChamberID = -1;
+MACE::DataModel::Core::Column<Float_t> SpectrometerHit::fgHitTime = { "HitT", 0.0f };
+MACE::DataModel::Core::Column<Float_t> SpectrometerHit::fgHitPositionX = { "HitX", 0.0f };
+MACE::DataModel::Core::Column<Float_t> SpectrometerHit::fgHitPositionY = { "HitY", 0.0f };
+MACE::DataModel::Core::Column<Float_t> SpectrometerHit::fgHitPositionZ = { "HitZ", 0.0f };
+MACE::DataModel::Core::Column<Int_t> SpectrometerHit::fgChamberID = { "CbID", -1 };
 
 SpectrometerHit::SpectrometerHit() noexcept :
     Data(),
-    fHitTime(0.0),
-    fHitPosition(),
-    fChamberID(-1) {}
+    fHitTime(fgHitTime.value),
+    fHitPosition(fgHitPositionX.value, fgHitPositionY.value, fgHitPositionZ.value),
+    fChamberID(fgChamberID.value) {}
 
 SpectrometerHit::SpectrometerHit(const SpectrometerHit& hit) noexcept :
     Data(static_cast<const Data&>(hit)),
@@ -42,9 +44,18 @@ SpectrometerHit& SpectrometerHit::operator=(SpectrometerHit&& hit) noexcept {
 
 void SpectrometerHit::CreateBranches(TTree* tree) {
     Data::CreateBranches(tree);
-    tree->Branch("HitT", &persistHitTime);
-    tree->Branch("HitX", &std::get<0>(persistHitPosition));
-    tree->Branch("HitY", &std::get<1>(persistHitPosition));
-    tree->Branch("HitZ", &std::get<2>(persistHitPosition));
-    tree->Branch("ChamberID", &persistChamberID);
+    tree->Branch(fgHitTime.name, &fgHitTime.value);
+    tree->Branch(fgHitPositionX.name, &fgHitPositionX.value);
+    tree->Branch(fgHitPositionY.name, &fgHitPositionY.value);
+    tree->Branch(fgHitPositionZ.name, &fgHitPositionZ.value);
+    tree->Branch(fgChamberID.name, &fgChamberID.value);
+}
+
+void SpectrometerHit::ReadBranches(TTree* tree) {
+    Data::ReadBranches(tree);
+    tree->SetBranchAddress(fgHitTime.name, &fgHitTime.value);
+    tree->SetBranchAddress(fgHitPositionX.name, &fgHitPositionX.value);
+    tree->SetBranchAddress(fgHitPositionY.name, &fgHitPositionY.value);
+    tree->SetBranchAddress(fgHitPositionZ.name, &fgHitPositionZ.value);
+    tree->SetBranchAddress(fgChamberID.name, &fgChamberID.value);
 }

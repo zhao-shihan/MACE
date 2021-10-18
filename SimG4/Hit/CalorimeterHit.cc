@@ -2,16 +2,16 @@
 
 using namespace MACE::SimG4::Hit;
 
-TString CalorimeterHit::persistParticleName = "";
-Int_t CalorimeterHit::persistTrackID = -1;
+MACE::DataModel::Core::Column<TString> CalorimeterHit::fgParticleName = { "Particle", "" };
+MACE::DataModel::Core::Column<Int_t> CalorimeterHit::fgTrackID = { "TrackID", -1 };
 
 G4Allocator<CalorimeterHit>* MACE::SimG4::Hit::CalorimeterHitAllocator = nullptr;
 
 CalorimeterHit::CalorimeterHit() noexcept :
     G4VHit(),
     DataModel::Hit::CalorimeterHit(),
-    fParticleName(nullptr),
-    fTrackID(-1) {}
+    fParticleName(fgParticleName.value.Data()),
+    fTrackID(fgTrackID.value) {}
 
 CalorimeterHit::CalorimeterHit(const CalorimeterHit& hit) noexcept :
     G4VHit(static_cast<const G4VHit&>(hit)),
@@ -43,6 +43,12 @@ CalorimeterHit& CalorimeterHit::operator=(CalorimeterHit&& hit) noexcept {
 
 void CalorimeterHit::CreateBranches(TTree* tree) {
     DataModel::Hit::CalorimeterHit::CreateBranches(tree);
-    tree->Branch("Particle", const_cast<char*>(persistParticleName.Data()), "Particle/C");
-    tree->Branch("TrackID", &persistTrackID);
+    tree->Branch(fgParticleName.name, const_cast<char*>(fgParticleName.value.Data()), "Particle/C");
+    tree->Branch(fgTrackID.name, &fgTrackID.value);
+}
+
+void CalorimeterHit::ReadBranches(TTree* tree) {
+    DataModel::Hit::CalorimeterHit::ReadBranches(tree);
+    tree->Branch(fgParticleName.name, &fgParticleName.value);
+    tree->Branch(fgTrackID.name, &fgTrackID.value);
 }

@@ -3,10 +3,10 @@
 #include "CLHEP/Vector/ThreeVector.h"
 
 #include "DataModel/Global.hh"
-#include "DataModel/Base/Data.hh"
+#include "DataModel/Core/Data.hh"
 
 class MACE::DataModel::Hit::OrbitalDetectorHit :
-    protected MACE::DataModel::Base::Data {
+    protected MACE::DataModel::Core::Data {
 public:
     OrbitalDetectorHit() noexcept;
     OrbitalDetectorHit(const OrbitalDetectorHit& hit) noexcept;
@@ -18,6 +18,7 @@ public:
     static constexpr const char* Name() { return "MCPHit"; }
     static void CreateBranches(TTree* tree);
     inline void FillBranches() noexcept;
+    static void ReadBranches(TTree* tree);
 
     auto GetHitTime() const { return fHitTime; }
     const auto& GetHitPosition() const { return fHitPosition; }
@@ -30,14 +31,16 @@ private:
     double_t fHitTime;
     CLHEP::Hep3Vector fHitPosition;
 
-    static Float_t persistHitTime;
-    static std::array<Float_t, 3> persistHitPosition;
+    static Core::Column<Float_t> fgHitTime;
+    static Core::Column<Float_t> fgHitPositionX;
+    static Core::Column<Float_t> fgHitPositionY;
+    static Core::Column<Float_t> fgHitPositionZ;
 };
 
 void MACE::DataModel::Hit::OrbitalDetectorHit::FillBranches() noexcept {
-    MACE::DataModel::Base::Data::FillBranches();
-    persistHitTime = fHitTime;
-    std::get<0>(persistHitPosition) = fHitPosition.x();
-    std::get<1>(persistHitPosition) = fHitPosition.y();
-    std::get<2>(persistHitPosition) = fHitPosition.z();
+    MACE::DataModel::Core::Data::FillBranches();
+    fgHitTime.value = fHitTime;
+    fgHitPositionX.value = fHitPosition.x();
+    fgHitPositionY.value = fHitPosition.y();
+    fgHitPositionZ.value = fHitPosition.z();
 }

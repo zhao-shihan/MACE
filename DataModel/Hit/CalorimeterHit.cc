@@ -2,13 +2,13 @@
 
 using namespace MACE::DataModel::Hit;
 
-Float_t CalorimeterHit::persistHitTime = 0.0f;
-Float_t CalorimeterHit::persistEnergy = 0.0f;
+MACE::DataModel::Core::Column<Float_t> CalorimeterHit::fgHitTime = { "HitT", 0.0f };
+MACE::DataModel::Core::Column<Float_t> CalorimeterHit::fgEnergy = { "Energy", 0.0f };
 
 CalorimeterHit::CalorimeterHit() noexcept :
     Data(),
-    fHitTime(0.0),
-    fEnergy(0.0) {}
+    fHitTime(fgHitTime.value),
+    fEnergy(fgEnergy.value) {}
 
 CalorimeterHit::CalorimeterHit(const CalorimeterHit& hit) noexcept :
     Data(static_cast<const Data&>(hit)),
@@ -36,6 +36,12 @@ CalorimeterHit& CalorimeterHit::operator=(CalorimeterHit&& hit) noexcept {
 
 void CalorimeterHit::CreateBranches(TTree* tree) {
     Data::CreateBranches(tree);
-    tree->Branch("HitT", &persistHitTime);
-    tree->Branch("Energy", &persistEnergy);
+    tree->Branch(fgHitTime.name, &fgHitTime.value);
+    tree->Branch(fgEnergy.name, &fgEnergy.value);
+}
+
+void CalorimeterHit::ReadBranches(TTree* tree) {
+    Data::ReadBranches(tree);
+    tree->SetBranchAddress(fgHitTime.name, &fgHitTime.value);
+    tree->SetBranchAddress(fgEnergy.name, &fgHitTime.value);
 }

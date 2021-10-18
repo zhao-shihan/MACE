@@ -4,7 +4,7 @@
 
 #include "DataModel/Global.hh"
 
-class MACE::DataModel::Base::PersistencyHandler {
+class MACE::DataModel::Core::PersistencyHandler {
     PersistencyHandler(const PersistencyHandler&) = delete;
     PersistencyHandler& operator=(const PersistencyHandler&) = delete;
 public:

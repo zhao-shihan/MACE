@@ -2,7 +2,8 @@
 
 namespace MACE {
     namespace DataModel {
-        namespace Base {
+        namespace Core {
+            template<typename ColumnType> struct Column;
             class Data;
             class PersistencyHandler;
         }

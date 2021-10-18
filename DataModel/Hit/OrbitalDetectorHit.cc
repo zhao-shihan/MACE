@@ -2,13 +2,15 @@
 
 using namespace MACE::DataModel::Hit;
 
-Float_t OrbitalDetectorHit::persistHitTime = 0.0f;
-std::array<Float_t, 3> OrbitalDetectorHit::persistHitPosition = { 0.0f, 0.0f, 0.0f };
+MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgHitTime = { "HitT", 0.0f };
+MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgHitPositionX = { "HitX", 0.0f };
+MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgHitPositionY = { "HitY", 0.0f };
+MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgHitPositionZ = { "HitZ", 0.0f };
 
 OrbitalDetectorHit::OrbitalDetectorHit() noexcept :
     Data(),
-    fHitTime(0.0),
-    fHitPosition() {}
+    fHitTime(fgHitTime.value),
+    fHitPosition(fgHitPositionX.value, fgHitPositionY.value, fgHitPositionZ.value) {}
 
 OrbitalDetectorHit::OrbitalDetectorHit(const OrbitalDetectorHit& hit) noexcept :
     Data(static_cast<const Data&>(hit)),
@@ -36,8 +38,16 @@ OrbitalDetectorHit& OrbitalDetectorHit::operator=(OrbitalDetectorHit&& hit) noex
 
 void OrbitalDetectorHit::CreateBranches(TTree* tree) {
     Data::CreateBranches(tree);
-    tree->Branch("HitT", &persistHitTime);
-    tree->Branch("HitX", &std::get<0>(persistHitPosition));
-    tree->Branch("HitY", &std::get<1>(persistHitPosition));
-    tree->Branch("HitZ", &std::get<2>(persistHitPosition));
+    tree->Branch(fgHitTime.name, &fgHitTime.value);
+    tree->Branch(fgHitPositionX.name, &fgHitPositionX.value);
+    tree->Branch(fgHitPositionY.name, &fgHitPositionY.value);
+    tree->Branch(fgHitPositionZ.name, &fgHitPositionZ.value);
+}
+
+void OrbitalDetectorHit::ReadBranches(TTree* tree) {
+    Data::ReadBranches(tree);
+    tree->SetBranchAddress(fgHitTime.name, &fgHitTime.value);
+    tree->SetBranchAddress(fgHitPositionX.name, &fgHitPositionX.value);
+    tree->SetBranchAddress(fgHitPositionY.name, &fgHitPositionY.value);
+    tree->SetBranchAddress(fgHitPositionZ.name, &fgHitPositionZ.value);
 }

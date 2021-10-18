@@ -1,10 +1,10 @@
 #pragma once
 
 #include "DataModel/Global.hh"
-#include "DataModel/Base/Data.hh"
+#include "DataModel/Core/Data.hh"
 
 class MACE::DataModel::Hit::CalorimeterHit :
-    protected MACE::DataModel::Base::Data {
+    protected MACE::DataModel::Core::Data {
 public:
     CalorimeterHit() noexcept;
     CalorimeterHit(const CalorimeterHit& hit) noexcept;
@@ -16,6 +16,7 @@ public:
     static constexpr const char* Name() { return "CalHit"; }
     static void CreateBranches(TTree* tree);
     inline void FillBranches() noexcept;
+    static void ReadBranches(TTree* tree);
 
     auto GetHitTime() const { return fHitTime; }
     auto GetEnergy() const { return fEnergy; }
@@ -27,12 +28,12 @@ private:
     double_t fHitTime;
     double_t fEnergy;
 
-    static Float_t persistHitTime;
-    static Float_t persistEnergy;
+    static Core::Column<Float_t> fgHitTime;
+    static Core::Column<Float_t> fgEnergy;
 };
 
 void MACE::DataModel::Hit::CalorimeterHit::FillBranches() noexcept {
-    MACE::DataModel::Base::Data::FillBranches();
-    persistHitTime = fHitTime;
-    persistEnergy = fEnergy;
+    MACE::DataModel::Core::Data::FillBranches();
+    fgHitTime.value = fHitTime;
+    fgEnergy.value = fEnergy;
 }

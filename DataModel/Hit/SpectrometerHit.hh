@@ -3,10 +3,10 @@
 #include "CLHEP/Vector/ThreeVector.h"
 
 #include "DataModel/Global.hh"
-#include "DataModel/Base/Data.hh"
+#include "DataModel/Core/Data.hh"
 
 class MACE::DataModel::Hit::SpectrometerHit :
-    protected MACE::DataModel::Base::Data {
+    protected MACE::DataModel::Core::Data {
 public:
     SpectrometerHit() noexcept;
     SpectrometerHit(const SpectrometerHit& hit) noexcept;
@@ -18,6 +18,7 @@ public:
     static constexpr const char* Name() { return "CDCHit"; }
     static void CreateBranches(TTree* tree);
     inline void FillBranches() noexcept;
+    static void ReadBranches(TTree* tree);
 
     auto GetHitTime() const { return fHitTime; }
     const auto& GetHitPosition() const { return fHitPosition; }
@@ -33,16 +34,18 @@ private:
     CLHEP::Hep3Vector fHitPosition;
     int32_t fChamberID;
 
-    static Float_t persistHitTime;
-    static std::array<Float_t, 3> persistHitPosition;
-    static Int_t persistChamberID;
+    static Core::Column<Float_t> fgHitTime;
+    static Core::Column<Float_t> fgHitPositionX;
+    static Core::Column<Float_t> fgHitPositionY;
+    static Core::Column<Float_t> fgHitPositionZ;
+    static Core::Column<Int_t> fgChamberID;
 };
 
 void MACE::DataModel::Hit::SpectrometerHit::FillBranches() noexcept {
-    MACE::DataModel::Base::Data::FillBranches();
-    persistHitTime = fHitTime;
-    std::get<0>(persistHitPosition) = fHitPosition.x();
-    std::get<1>(persistHitPosition) = fHitPosition.y();
-    std::get<2>(persistHitPosition) = fHitPosition.z();
-    persistChamberID = fChamberID;
+    MACE::DataModel::Core::Data::FillBranches();
+    fgHitTime.value = fHitTime;
+    fgHitPositionX.value = fHitPosition.x();
+    fgHitPositionY.value = fHitPosition.y();
+    fgHitPositionZ.value = fHitPosition.z();
+    fgChamberID.value = fChamberID;
 }
