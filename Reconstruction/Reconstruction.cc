@@ -5,10 +5,10 @@
 #include "TEllipse.h"
 #include "TDirectory.h"
 
-#include "ExperimentData.hh"
-#include "Recognizer.hh"
+#include "DataModel/PersistencyReader.hh"
+#include "Reconstruction/Recognizer.hh"
 
-using namespace MACE::Reconstruction;
+using namespace MACE;
 
 #include "ConstField.h"
 #include "Exception.h"
@@ -33,13 +33,14 @@ using namespace MACE::Reconstruction;
 #include "TMath.h"
 
 int main(int, char** argv) {
-    ExperimentData experiment(argv[1]);
-    Recognizer recognizer(2500, 30);
-    for (const auto& pluse : experiment) {
-        recognizer.Recognize(pluse);
-        recognizer.SaveLastRecognition("recognition.root");
-        recognizer.GetResult();
-    }
+    DataModel::PersistencyReader reader(argv[1]);
+    Reconstruction::Recognizer recognizer(2500, std::stod(argv[2]));
+    auto hitList = reader.CreateListFromTree<DataModel::Hit::SpectrometerHit>();
+    recognizer.SetHitListToBeRecognized(&hitList);
+    recognizer.Recognize();
+    recognizer.GetRecognizedTrackList();
+    recognizer.SaveLastRecognition("recognition.root");
+    reader.Close();
 
     /*
     // init geometry and mag. field

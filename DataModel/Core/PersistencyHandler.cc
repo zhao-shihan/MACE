@@ -6,7 +6,8 @@ using namespace MACE::DataModel::Core;
 
 PersistencyHandler::PersistencyHandler() :
     fFile(nullptr),
-    fTreeIndex('#'),
+    fTreeNameIndexer('#'),
+    fTreeIndex(0),
     fTreeNamePrefixFormat("Eve#_"),
     fTreeNameSuffixFormat(""),
     fPrefixHasIndexer(true),

@@ -15,6 +15,7 @@ public:
 
 public:
     PersistencyWriter();
+    PersistencyWriter(const char* fileName);
     virtual ~PersistencyWriter();
 
     virtual void Open(const char* fileName, Option_t* = nullptr) override { PersistencyHandler::Open(fileName, "RECREATE"); }
