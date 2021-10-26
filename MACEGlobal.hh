@@ -21,8 +21,12 @@ namespace MACE {
         class PersistencyWriter;
     }
     namespace Reconstruction {
+        namespace Recognizer{
+            class HoughBase;
+            class HoughPolar;
+            class HoughXY;
+        }
         class ExperimentData;
-        class Recognizer;
         class TOFAnalyzer;
     }
     namespace SimG4 {

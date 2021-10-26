@@ -5,27 +5,17 @@
 #include "TCanvas.h"
 #include "TMarker.h"
 
-#include "Recognizer.hh"
+#include "Reconstruction/Recognizer/HoughXY.hh"
 
-using namespace MACE::Reconstruction;
+using namespace MACE::Reconstruction::Recognizer;
 using namespace MACE::DataModel::Hit;
 
-Recognizer::Recognizer(Double_t houghSpaceExtent, Double_t proposingHoughSpaceResolution) :
-    fSize(round(2.0 * houghSpaceExtent / proposingHoughSpaceResolution)),
+HoughXY::HoughXY(Double_t houghSpaceExtent, Double_t proposingHoughSpaceResolution) :
+    HoughBase(round(2.0 * houghSpaceExtent / proposingHoughSpaceResolution)),
     fExtent(houghSpaceExtent),
-    fResolution(2.0 * houghSpaceExtent / fSize),
-    fHoughStore(fSize, fSize),
-    fHoughSpace(fSize, fSize),
-    fCenterCandidateList(0),
-    fCenterClusterList(0),
-    fRecognizedTrackList(0) {
-    std::for_each_n(fHoughStore.data(), fSize * fSize, [](SpectrometerHitPointerList& elem) { elem.reserve(64UL); });
-    fCenterClusterList.reserve(32UL);
-    fRecognizedTrackList.reserve(32UL);
-    Initialize();
-}
+    fResolution(2.0 * houghSpaceExtent / fSize) {}
 
-Recognizer::~Recognizer() {
+HoughXY::~HoughXY() {
     if (fFile != nullptr) {
         if (fFile->IsOpen()) {
             fFile->Write();
@@ -35,7 +25,7 @@ Recognizer::~Recognizer() {
     }
 }
 
-void Recognizer::Recognize() {
+void HoughXY::Recognize() {
     Initialize();
     HoughTransform();
     VoteForCenter();
@@ -43,7 +33,7 @@ void Recognizer::Recognize() {
     GenerateResult();
 }
 
-void Recognizer::Initialize() {
+void HoughXY::Initialize() {
     std::for_each_n(fHoughStore.data(), fSize * fSize, [](SpectrometerHitPointerList& elem) { elem.clear(); });
     fHoughSpace.fill(0);
     fCenterCandidateList.clear();
@@ -51,7 +41,7 @@ void Recognizer::Initialize() {
     fRecognizedTrackList.clear();
 }
 
-void Recognizer::HoughTransform() {
+void HoughXY::HoughTransform() {
     // do hough transform
     for (auto&& hit : *fpHitList) {
         const auto hitX = hit.GetHitPosition().x();
@@ -89,7 +79,7 @@ void Recognizer::HoughTransform() {
     }
 }
 
-void Recognizer::VoteForCenter() {
+void HoughXY::VoteForCenter() {
     for (Eigen::Index i = 0; i < fSize; ++i) {
         for (Eigen::Index j = 0; j < fSize; ++j) {
             if (fHoughSpace(i, j) >= fThreshold) {
@@ -103,7 +93,7 @@ void Recognizer::VoteForCenter() {
     }
 }
 
-void Recognizer::CenterClusterizaion() {
+void HoughXY::CenterClusterizaion() {
     while (!fCenterCandidateList.empty()) {
         // new cluster
         auto& cluster = fCenterClusterList.emplace_back(0);
@@ -114,7 +104,7 @@ void Recognizer::CenterClusterizaion() {
     }
 }
 
-void Recognizer::ClusterizationImpl(std::list<CoordinateSet>::const_iterator candidate, std::vector<HoughCoordinate>& cluster) {
+void HoughXY::ClusterizationImpl(std::list<CoordinateSet>::const_iterator candidate, std::vector<HoughCoordinate>& cluster) {
     // find neighbour
     const auto thisR = candidate->second.first;
     const auto thisPhi = candidate->second.second;
@@ -136,7 +126,7 @@ void Recognizer::ClusterizationImpl(std::list<CoordinateSet>::const_iterator can
     ClusterizationImpl(neighbour, cluster);
 }
 
-void Recognizer::GenerateResult() {
+void HoughXY::GenerateResult() {
     std::unordered_set<const DataModel::Hit::SpectrometerHit*> trackHitSet;
 
     for (auto&& cluster : fCenterClusterList) {
@@ -182,7 +172,7 @@ void Recognizer::GenerateResult() {
     }
 }
 
-void Recognizer::SaveLastRecognition(const char* fileName) {
+void HoughXY::SaveLastRecognition(const char* fileName) {
     if (fFile == nullptr) { fFile = new TFile(fileName, "RECREATE"); }
     if (strcmp(fileName, fFile->GetName()) != 0) {
         if (fFile->IsOpen()) {
