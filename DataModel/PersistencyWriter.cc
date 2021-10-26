@@ -36,7 +36,7 @@ void PersistencyWriter::WriteTrees(Int_t option, Int_t bufsize) {
         return;
     }
     if (fFile->IsOpen()) {
-        for (const auto& tree : fTreeAndBehaviours) {
+        for (auto&& tree : fTreeAndBehaviours) {
             tree.first->Write(nullptr, option, bufsize);
             if (tree.second == kDeleteAfterWrite) {
                 delete tree.first;

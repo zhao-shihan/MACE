@@ -53,14 +53,16 @@ void Recognizer::Initialize() {
 
 void Recognizer::HoughTransform() {
     // do hough transform
-    for (const auto& hit : *fpHitList) {
-        const Double_t R2 = hit.GetHitPosition().x() * hit.GetHitPosition().x() + hit.GetHitPosition().y() * hit.GetHitPosition().y();
-        const Double_t X = 2.0 * hit.GetHitPosition().x() / R2;
-        const Double_t Y = 2.0 * hit.GetHitPosition().y() / R2;
+    for (auto&& hit : *fpHitList) {
+        const auto hitX = hit.GetHitPosition().x();
+        const auto hitY = hit.GetHitPosition().y();
+        const auto R2 = hitX * hitX + hitY * hitY;
+        const auto X = 2.0 * hitX / R2;
+        const auto Y = 2.0 * hitY / R2;
         if (fabs(X / Y) < 1.0) {
             for (Eigen::Index i = 0; i < fSize; ++i) {
-                const Double_t xc = ToRealX(i);
-                const Double_t yc = (1.0 - X * xc) / Y;
+                const auto xc = ToRealX(i);
+                const auto yc = (1.0 - X * xc) / Y;
                 if (xc * xc + yc * yc < fProtectedRadius * fProtectedRadius) { continue; }
                 const Eigen::Index j = ToHoughY(yc);
                 if (0 <= j && j < fSize) {
@@ -69,8 +71,8 @@ void Recognizer::HoughTransform() {
             }
         } else {
             for (Eigen::Index j = 0; j < fSize; ++j) {
-                const Double_t yc = ToRealY(j);
-                const Double_t xc = (1.0 - Y * yc) / X;
+                const auto yc = ToRealY(j);
+                const auto xc = (1.0 - Y * yc) / X;
                 if (xc * xc + yc * yc < fProtectedRadius * fProtectedRadius) { continue; }
                 const Eigen::Index i = ToHoughX(xc);
                 if (0 <= i && i < fSize) {
@@ -112,16 +114,17 @@ void Recognizer::CenterClusterizaion() {
     }
 }
 
-void Recognizer::ClusterizationImpl(std::list<std::pair<HoughPoint, RealPointPolar>>::const_iterator candidate, std::vector<HoughPoint>& cluster) {
+void Recognizer::ClusterizationImpl(std::list<CoordinateSet>::const_iterator candidate, std::vector<HoughCoordinate>& cluster) {
     // find neighbour
+    const auto thisR = candidate->second.first;
+    const auto thisPhi = candidate->second.second;
     auto neighbour = std::find_if(std::next(candidate), fCenterCandidateList.cend(),
-        [&](const std::pair<HoughPoint, RealPointPolar>& anotherCandidate) {
-            const auto deltaR = candidate->second.first - anotherCandidate.second.first;
-            const auto deltaPhi = candidate->second.second - anotherCandidate.second.second;
-            return (-fScannerDR < deltaR) && (deltaR < fScannerDR) && (
-                ((-fScannerDPhi < deltaPhi) && (deltaPhi < fScannerDPhi)) ||
-                ((-fScannerDPhi < deltaPhi - (2.0 * M_PI)) && (deltaPhi - (2.0 * M_PI) < fScannerDPhi)) ||
-                ((-fScannerDPhi < deltaPhi + (2.0 * M_PI)) && (deltaPhi + (2.0 * M_PI) < fScannerDPhi)));
+        [&](const CoordinateSet& anotherCandidate) {
+            const auto [anotherR, anotherPhi] = anotherCandidate.second;
+            const auto deltaR = std::fabs(thisR - anotherR);
+            const auto deltaPhi = std::fabs(thisPhi - anotherPhi);
+            return deltaR < fScannerDR &&
+                (deltaPhi < fScannerDPhi || ((2.0 * M_PI) - deltaPhi) < fScannerDPhi);
         }
     );
     // fill candidate itself
@@ -134,22 +137,48 @@ void Recognizer::ClusterizationImpl(std::list<std::pair<HoughPoint, RealPointPol
 }
 
 void Recognizer::GenerateResult() {
-    std::unordered_set<const DataModel::Hit::SpectrometerHit*> trackPointSet;
-    for (const auto& cluster : fCenterClusterList) {
+    std::unordered_set<const DataModel::Hit::SpectrometerHit*> trackHitSet;
+
+    for (auto&& cluster : fCenterClusterList) {
         // drop duplications
-        for (const auto& candidate : cluster) {
-            for (const auto* hitPointer : fHoughStore(candidate.first, candidate.second)) {
-                trackPointSet.emplace(hitPointer);
+        for (auto&& center : cluster) {
+            for (auto&& hitPointer : fHoughStore(center.first, center.second)) {
+                trackHitSet.emplace(hitPointer);
             }
         }
-        // dump point set to a track
-        auto& newTrack = fRecognizedTrackList.emplace_back(0);
-        newTrack.reserve(trackPointSet.size());
-        for (const auto* trackPoint : trackPointSet) {
-            newTrack.emplace_back(trackPoint);
+
+        Double_t centerX = 0;
+        Double_t centerY = 0;
+        for (auto&& center : cluster) {
+            centerX += ToRealX(center.first);
+            centerY += ToRealY(center.second);
         }
-        // clear set for next use
-        trackPointSet.clear();
+        centerX /= cluster.size();
+        centerY /= cluster.size();
+        // calculate each point's cross product with center, and drop the lesser side.
+        SpectrometerHitPointerList leftHandHitList;
+        SpectrometerHitPointerList rightHandHitList;
+        leftHandHitList.reserve(trackHitSet.size());
+        rightHandHitList.reserve(trackHitSet.size());
+        for (auto&& trackPoint : trackHitSet) {
+            const auto hitX = trackPoint->GetHitPosition().x();
+            const auto hitY = trackPoint->GetHitPosition().y();
+            const auto cross = hitX * centerY - centerX * hitY;
+            if (cross > 0) {
+                rightHandHitList.emplace_back(trackPoint);
+            } else {
+                leftHandHitList.emplace_back(trackPoint);
+            }
+        }
+        trackHitSet.clear();
+
+        // dump to track list
+        if (leftHandHitList.size() >= fThreshold) {
+            fRecognizedTrackList.emplace_back(std::move(leftHandHitList));
+        }
+        if (rightHandHitList.size() >= fThreshold) {
+            fRecognizedTrackList.emplace_back(std::move(rightHandHitList));
+        }
     }
 }
 
@@ -171,8 +200,8 @@ void Recognizer::SaveLastRecognition(const char* fileName) {
     houghSpace.SetDrawOption("COLZ");
     for (Eigen::Index i = 0; i < fSize; ++i) {
         for (Eigen::Index j = 0; j < fSize; ++j) {
-            const Double_t xc = ToRealX(i);
-            const Double_t yc = ToRealY(j);
+            const auto xc = ToRealX(i);
+            const auto yc = ToRealY(j);
             houghSpace.Fill(xc, yc, fHoughStore(i, j).size());
         }
     }
@@ -185,8 +214,8 @@ void Recognizer::SaveLastRecognition(const char* fileName) {
     houghSpaceET.SetDrawOption("COLZ");
     for (Eigen::Index i = 0; i < fSize; ++i) {
         for (Eigen::Index j = 0; j < fSize; ++j) {
-            const Double_t xc = ToRealX(i);
-            const Double_t yc = ToRealY(j);
+            const auto xc = ToRealX(i);
+            const auto yc = ToRealY(j);
             if (fHoughStore(i, j).size() >= fThreshold) {
                 houghSpaceET.Fill(xc, yc, fHoughStore(i, j).size());
             }
@@ -202,9 +231,9 @@ void Recognizer::SaveLastRecognition(const char* fileName) {
     realSpaceAxis.SetYTitle("y[mm]");
     realSpaceAxis.Draw("AXIS");
     constexpr std::array<EColor, 14> markerColor = { kBlack, kGray, kRed, kGreen, kBlue, kYellow, kMagenta, kCyan, kOrange, kSpring, kTeal, kAzure, kViolet, kPink };
-    constexpr std::array<EMarkerStyle, 7> markerStyle = { kPlus, kMultiply, kOpenCircle, kOpenSquare, kOpenTriangleUp, kOpenDiamond, kOpenTriangleDown };
+    constexpr std::array<EMarkerStyle, 5> markerStyle = { kPlus, kMultiply, kOpenTriangleUp, kOpenDiamond, kOpenTriangleDown };
     for (size_t i = 0; i < std::min<size_t>(fRecognizedTrackList.size(), markerColor.size() * markerStyle.size()); ++i) {
-        for (const auto& point : fRecognizedTrackList[i]) {
+        for (auto&& point : fRecognizedTrackList[i]) {
             auto colorStyleIndex = i % (markerColor.size() * markerStyle.size());
             auto styleIndex = colorStyleIndex / markerColor.size();
             auto colorIndex = colorStyleIndex % markerColor.size();
@@ -214,7 +243,7 @@ void Recognizer::SaveLastRecognition(const char* fileName) {
         }
     }
     realSpace.Write();
-    // for (const auto& hit : *fpHitList) {
+    // for (auto&& hit : *fpHitList) {
     //     auto hitMarker = new TMarker(hit.GetHitPosition().x(), hit.GetHitPosition().y(), kFullCircle);
     //     hitMarker->SetMarkerColor(kBlue);
     //     if (std::find(fRecognizedTrackList.cbegin(), fRecognizedTrackList.cend(), &hit) != fRecognizedTrackList.cend()) {

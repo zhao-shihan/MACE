@@ -20,9 +20,10 @@ private:
     template<typename T>
     using HoughSpace = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
     using Height_t = Int_t;
-    using HoughPoint = std::pair<Eigen::Index, Eigen::Index>;
-    using RealPoint = std::pair<Double_t, Double_t>;
-    using RealPointPolar = std::pair<Double_t, Double_t>;
+    using HoughCoordinate = std::pair<Eigen::Index, Eigen::Index>;
+    using RealCoordinate = std::pair<Double_t, Double_t>;
+    using RealCoordinatePolar = std::pair<Double_t, Double_t>;
+    using CoordinateSet = std::pair<HoughCoordinate, RealCoordinatePolar>;
 
 public:
     Recognizer(Double_t houghSpaceExtent, Double_t proposingHoughSpaceResolution);
@@ -36,8 +37,8 @@ public:
 
     void SetProtectedRadius(Double_t val) { fProtectedRadius = val; }
     void SetThreshold(Height_t val) { fThreshold = val; }
-    void SetHoughClusterScannerRadialExtent(Double_t val) { fScannerDR = 0.5 * val; }
-    void SetHoughClusterScannerAngularExtent(Double_t val) { fScannerDPhi = 0.5 * val; }
+    void SetHoughClusterScannerRadialExtent(Double_t val) { fScannerDR = std::fabs(0.5 * val); }
+    void SetHoughClusterScannerAngularExtent(Double_t val) { fScannerDPhi = std::fabs(0.5 * val); }
 
 private:
     void Initialize();
@@ -46,7 +47,7 @@ private:
     void CenterClusterizaion();
     void GenerateResult();
 
-    void ClusterizationImpl(std::list<std::pair<HoughPoint, RealPointPolar>>::const_iterator candidate, std::vector<HoughPoint>& cluster);
+    void ClusterizationImpl(std::list<CoordinateSet>::const_iterator candidate, std::vector<HoughCoordinate>& cluster);
 
     Double_t ToRealX(Eigen::Index i) const { return -fExtent + (i + 0.5) * fResolution; }
     Double_t ToRealY(Eigen::Index j) const { return -fExtent + (j + 0.5) * fResolution; }
@@ -65,8 +66,8 @@ private:
     const SpectrometerHitList* fpHitList = nullptr;
     HoughSpace<SpectrometerHitPointerList> fHoughStore;
     HoughSpace<Height_t> fHoughSpace;
-    std::list<std::pair<HoughPoint, RealPointPolar>> fCenterCandidateList;
-    std::vector<std::vector<HoughPoint>> fCenterClusterList;
+    std::list<CoordinateSet> fCenterCandidateList;
+    std::vector<std::vector<HoughCoordinate>> fCenterClusterList;
     std::vector<SpectrometerHitPointerList> fRecognizedTrackList;
 
     TFile* fFile = nullptr;
