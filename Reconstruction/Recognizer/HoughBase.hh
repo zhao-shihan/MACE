@@ -23,14 +23,23 @@ protected:
 
 public:
     HoughBase(Eigen::Index size);
-    ~HoughBase();
+    virtual ~HoughBase();
 
     void SetHitListToBeRecognized(const SpectrometerHitList* hitList) { fpHitList = hitList; }
-    virtual void Recognize() = 0;
+    void Recognize();
     const auto& GetRecognizedTrackList() const { return fRecognizedTrackList; }
+
+    virtual void SaveLastRecognition(const char*) { /* no impl */ }
 
     void SetProtectedRadius(Double_t val) { fProtectedRadius = val; }
     void SetThreshold(Height_t val) { fThreshold = val; }
+
+private:
+    void Initialize();
+    virtual void HoughTransform() = 0;
+    virtual void VoteForCenter() = 0;
+    virtual void CenterClusterizaion() = 0;
+    virtual void GenerateResult() = 0;
 
 protected:
     const Eigen::Index fSize;

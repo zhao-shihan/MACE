@@ -13,19 +13,16 @@ public:
     HoughXY(Double_t houghSpaceExtent, Double_t proposingHoughSpaceResolution);
     ~HoughXY();
 
-    void Recognize() override;
-
-    void SaveLastRecognition(const char* fileName);
+    void SaveLastRecognition(const char* fileName) override;
 
     void SetHoughClusterScannerRadialExtent(Double_t val) { fScannerDR = std::fabs(0.5 * val); }
     void SetHoughClusterScannerAngularExtent(Double_t val) { fScannerDPhi = std::fabs(0.5 * val); }
 
 private:
-    void Initialize();
-    void HoughTransform();
-    void VoteForCenter();
-    void CenterClusterizaion();
-    void GenerateResult();
+    void HoughTransform() override;
+    void VoteForCenter() override;
+    void CenterClusterizaion() override;
+    void GenerateResult() override;
 
     void ClusterizationImpl(std::list<CoordinateSet>::const_iterator candidate, std::vector<HoughCoordinate>& cluster);
 

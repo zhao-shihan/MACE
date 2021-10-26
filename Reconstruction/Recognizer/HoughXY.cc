@@ -25,22 +25,6 @@ HoughXY::~HoughXY() {
     }
 }
 
-void HoughXY::Recognize() {
-    Initialize();
-    HoughTransform();
-    VoteForCenter();
-    CenterClusterizaion();
-    GenerateResult();
-}
-
-void HoughXY::Initialize() {
-    std::for_each_n(fHoughStore.data(), fSize * fSize, [](SpectrometerHitPointerList& elem) { elem.clear(); });
-    fHoughSpace.fill(0);
-    fCenterCandidateList.clear();
-    fCenterClusterList.clear();
-    fRecognizedTrackList.clear();
-}
-
 void HoughXY::HoughTransform() {
     // do hough transform
     for (auto&& hit : *fpHitList) {

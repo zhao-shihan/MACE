@@ -16,3 +16,19 @@ HoughBase::HoughBase(Eigen::Index size) :
 }
 
 HoughBase::~HoughBase() {}
+
+void HoughBase::Recognize() {
+    Initialize();
+    HoughTransform();
+    VoteForCenter();
+    CenterClusterizaion();
+    GenerateResult();
+}
+
+void HoughBase::Initialize() {
+    std::for_each_n(fHoughStore.data(), fSize * fSize, [](SpectrometerHitPointerList& elem) { elem.clear(); });
+    fHoughSpace.fill(0);
+    fCenterCandidateList.clear();
+    fCenterClusterList.clear();
+    fRecognizedTrackList.clear();
+}
