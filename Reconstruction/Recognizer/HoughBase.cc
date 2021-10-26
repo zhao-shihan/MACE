@@ -3,14 +3,16 @@
 using namespace MACE::Reconstruction::Recognizer;
 using namespace MACE::DataModel::Hit;
 
-HoughBase::HoughBase(Eigen::Index size) :
-    fSize(size),
-    fHoughStore(size, size),
-    fHoughSpace(size, size),
+HoughBase::HoughBase(Eigen::Index rows, Eigen::Index cols, Double_t protectedRadius) :
+    fRows(rows),
+    fCols(cols),
+    fProtectedRadius(protectedRadius),
+    fHoughStore(rows, cols),
+    fHoughSpace(rows, cols),
     fCenterCandidateList(0),
     fCenterClusterList(0),
     fRecognizedTrackList(0) {
-    std::for_each_n(fHoughStore.data(), fSize * fSize, [](SpectrometerHitPointerList& elem) { elem.reserve(128UL); });
+    std::for_each_n(fHoughStore.data(), fRows * fCols, [](SpectrometerHitPointerList& elem) { elem.reserve(128UL); });
     fCenterClusterList.reserve(64UL);
     fRecognizedTrackList.reserve(64UL);
 }
@@ -26,7 +28,7 @@ void HoughBase::Recognize() {
 }
 
 void HoughBase::Initialize() {
-    std::for_each_n(fHoughStore.data(), fSize * fSize, [](SpectrometerHitPointerList& elem) { elem.clear(); });
+    std::for_each_n(fHoughStore.data(), fRows * fCols, [](SpectrometerHitPointerList& elem) { elem.clear(); });
     fHoughSpace.fill(0);
     fCenterCandidateList.clear();
     fCenterClusterList.clear();

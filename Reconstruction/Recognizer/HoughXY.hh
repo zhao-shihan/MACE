@@ -10,13 +10,13 @@ class MACE::Reconstruction::Recognizer::HoughXY final :
     HoughXY(const HoughXY&) = delete;
     HoughXY& operator=(const HoughXY&) = delete;
 public:
-    HoughXY(Double_t houghSpaceExtent, Double_t proposingHoughSpaceResolution);
+    HoughXY(Double_t houghSpaceExtent, Eigen::Index size, Double_t protectedRadius);
     ~HoughXY();
 
     void SaveLastRecognition(const char* fileName) override;
 
-    void SetHoughClusterScannerRadialExtent(Double_t val) { fScannerDR = std::fabs(0.5 * val); }
-    void SetHoughClusterScannerAngularExtent(Double_t val) { fScannerDPhi = std::fabs(0.5 * val); }
+    void SetHoughClusterScannerRadialSize(Double_t val) { fScannerDR = std::fabs(0.5 * val); }
+    void SetHoughClusterScannerAngularSize(Double_t val) { fScannerDPhi = std::fabs(0.5 * val); }
 
 private:
     void HoughTransform() override;

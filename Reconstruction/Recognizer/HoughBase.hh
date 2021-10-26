@@ -22,7 +22,7 @@ protected:
     using CoordinateSet = std::pair<HoughCoordinate, RealCoordinate>;
 
 public:
-    HoughBase(Eigen::Index size);
+    HoughBase(Eigen::Index rows, Eigen::Index cols, Double_t protectedRadius);
     virtual ~HoughBase();
 
     void SetHitListToBeRecognized(const SpectrometerHitList* hitList) { fpHitList = hitList; }
@@ -31,7 +31,6 @@ public:
 
     virtual void SaveLastRecognition(const char*) { /* no impl */ }
 
-    void SetProtectedRadius(Double_t val) { fProtectedRadius = val; }
     void SetThreshold(Height_t val) { fThreshold = val; }
 
 private:
@@ -42,8 +41,9 @@ private:
     virtual void GenerateResult() = 0;
 
 protected:
-    const Eigen::Index fSize;
-    Double_t fProtectedRadius = 500;
+    const Eigen::Index fRows;
+    const Eigen::Index fCols;
+    const Double_t fProtectedRadius;
     Height_t fThreshold = 12;
 
     const SpectrometerHitList* fpHitList = nullptr;

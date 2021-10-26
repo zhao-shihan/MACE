@@ -10,10 +10,10 @@
 using namespace MACE::Reconstruction::Recognizer;
 using namespace MACE::DataModel::Hit;
 
-HoughXY::HoughXY(Double_t houghSpaceExtent, Double_t proposingHoughSpaceResolution) :
-    HoughBase(round(2.0 * houghSpaceExtent / proposingHoughSpaceResolution)),
+HoughXY::HoughXY(Double_t houghSpaceExtent, Eigen::Index size, Double_t protectedRadius) :
+    HoughBase(size, size, protectedRadius),
     fExtent(houghSpaceExtent),
-    fResolution(2.0 * houghSpaceExtent / fSize) {}
+    fResolution(2.0 * houghSpaceExtent / size) {}
 
 HoughXY::~HoughXY() {
     if (fFile != nullptr) {
@@ -34,38 +34,38 @@ void HoughXY::HoughTransform() {
         const auto X = 2.0 * hitX / R2;
         const auto Y = 2.0 * hitY / R2;
         if (fabs(X / Y) < 1.0) {
-            for (Eigen::Index i = 0; i < fSize; ++i) {
+            for (Eigen::Index i = 0; i < fRows; ++i) {
                 const auto xc = ToRealX(i);
                 const auto yc = (1.0 - X * xc) / Y;
                 if (xc * xc + yc * yc < fProtectedRadius * fProtectedRadius) { continue; }
                 const Eigen::Index j = ToHoughY(yc);
-                if (0 <= j && j < fSize) {
+                if (0 <= j && j < fRows) {
                     fHoughStore(i, j).emplace_back(&hit);
                 }
             }
         } else {
-            for (Eigen::Index j = 0; j < fSize; ++j) {
+            for (Eigen::Index j = 0; j < fRows; ++j) {
                 const auto yc = ToRealY(j);
                 const auto xc = (1.0 - Y * yc) / X;
                 if (xc * xc + yc * yc < fProtectedRadius * fProtectedRadius) { continue; }
                 const Eigen::Index i = ToHoughX(xc);
-                if (0 <= i && i < fSize) {
+                if (0 <= i && i < fRows) {
                     fHoughStore(i, j).emplace_back(&hit);
                 }
             }
         }
     }
     // fill count space
-    for (Eigen::Index i = 0; i < fSize; ++i) {
-        for (Eigen::Index j = 0; j < fSize; ++j) {
+    for (Eigen::Index i = 0; i < fRows; ++i) {
+        for (Eigen::Index j = 0; j < fRows; ++j) {
             fHoughSpace(i, j) = fHoughStore(i, j).size();
         }
     }
 }
 
 void HoughXY::VoteForCenter() {
-    for (Eigen::Index i = 0; i < fSize; ++i) {
-        for (Eigen::Index j = 0; j < fSize; ++j) {
+    for (Eigen::Index i = 0; i < fRows; ++i) {
+        for (Eigen::Index j = 0; j < fRows; ++j) {
             if (fHoughSpace(i, j) >= fThreshold) {
                 const auto x = ToRealX(i);
                 const auto y = ToRealY(j);
@@ -95,8 +95,8 @@ void HoughXY::ClusterizationImpl(std::list<CoordinateSet>::const_iterator candid
     auto neighbour = std::find_if(std::next(candidate), fCenterCandidateList.cend(),
         [&](const CoordinateSet& anotherCandidate) {
             const auto [anotherR, anotherPhi] = anotherCandidate.second;
-            const auto deltaR = std::fabs(thisR - anotherR);
-            const auto deltaPhi = std::fabs(thisPhi - anotherPhi);
+            const auto deltaR = fabs(thisR - anotherR);
+            const auto deltaPhi = fabs(thisPhi - anotherPhi);
             return deltaR < fScannerDR &&
                 (deltaPhi < fScannerDPhi || ((2.0 * M_PI) - deltaPhi) < fScannerDPhi);
         }
@@ -129,7 +129,7 @@ void HoughXY::GenerateResult() {
         }
         centerX /= cluster.size();
         centerY /= cluster.size();
-        // calculate each point's cross product with center, and drop the lesser side.
+
         SpectrometerHitPointerList leftHandHitList;
         SpectrometerHitPointerList rightHandHitList;
         leftHandHitList.reserve(trackHitSet.size());
@@ -167,13 +167,13 @@ void HoughXY::SaveLastRecognition(const char* fileName) {
         fFile = new TFile(fileName, "RECREATE");
     }
 
-    TH2I houghSpace("HoughSpace", "hough space", fSize, -fExtent, fExtent, fSize, -fExtent, fExtent);
+    TH2I houghSpace("HoughSpace", "hough space", fRows, -fExtent, fExtent, fRows, -fExtent, fExtent);
     houghSpace.SetStats(false);
     houghSpace.SetXTitle("x[mm]");
     houghSpace.SetYTitle("y[mm]");
     houghSpace.SetDrawOption("COLZ");
-    for (Eigen::Index i = 0; i < fSize; ++i) {
-        for (Eigen::Index j = 0; j < fSize; ++j) {
+    for (Eigen::Index i = 0; i < fRows; ++i) {
+        for (Eigen::Index j = 0; j < fRows; ++j) {
             const auto xc = ToRealX(i);
             const auto yc = ToRealY(j);
             houghSpace.Fill(xc, yc, fHoughStore(i, j).size());
@@ -181,13 +181,13 @@ void HoughXY::SaveLastRecognition(const char* fileName) {
     }
     houghSpace.Write();
 
-    TH2I houghSpaceET("HoughSpaceExceedThreshold", "hough space exceed threshold", fSize, -fExtent, fExtent, fSize, -fExtent, fExtent);
+    TH2I houghSpaceET("HoughSpaceExceedThreshold", "hough space exceed threshold", fRows, -fExtent, fExtent, fRows, -fExtent, fExtent);
     houghSpaceET.SetStats(false);
     houghSpaceET.SetXTitle("x[mm]");
     houghSpaceET.SetYTitle("y[mm]");
     houghSpaceET.SetDrawOption("COLZ");
-    for (Eigen::Index i = 0; i < fSize; ++i) {
-        for (Eigen::Index j = 0; j < fSize; ++j) {
+    for (Eigen::Index i = 0; i < fRows; ++i) {
+        for (Eigen::Index j = 0; j < fRows; ++j) {
             const auto xc = ToRealX(i);
             const auto yc = ToRealY(j);
             if (fHoughStore(i, j).size() >= fThreshold) {
