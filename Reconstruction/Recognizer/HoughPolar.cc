@@ -10,10 +10,12 @@
 using namespace MACE::Reconstruction::Recognizer;
 using namespace MACE::DataModel::Hit;
 
-HoughPolar::HoughPolar(Double_t protectedRadius, Eigen::Index nRhos, Eigen::Index nPhis) :
-    HoughBase(nRhos, nPhis, protectedRadius),
-    fRhoResolution((1.0 / protectedRadius) / nRhos),
-    fPhiResolution(2.0 * M_PI / nPhis) {}
+HoughPolar::HoughPolar(Double_t innerRadius, Double_t outerRadius, Eigen::Index nPhis, Eigen::Index nRhos) :
+    HoughBase(nPhis, nRhos),
+    fRhoLow(1.0 / outerRadius),
+    fRhoUp(1.0 / innerRadius),
+    fPhiResolution(2.0 * M_PI / nPhis),
+    fRhoResolution((fRhoUp - fRhoLow) / nRhos) {}
 
 HoughPolar::~HoughPolar() {
     if (fFile != nullptr) {
@@ -35,42 +37,42 @@ void HoughPolar::HoughTransform() {
         const auto Y = 2.0 * hitY / R2;
         // do hough transform
         auto phi = ToRealPhi(0);
-        auto iLast = ToHoughRho(X * cos(phi) + Y * sin(phi));
-        if (0 <= iLast && iLast < fRows) {
-            fHoughStore(iLast, 0).emplace_back(&hit);
+        auto jLast = ToHoughRho(X * cos(phi) + Y * sin(phi));
+        if (0 <= jLast && jLast < fCols) {
+            fHoughStore(0, jLast).emplace_back(&hit);
         }
-        for (Eigen::Index j = 1; j < fCols; ++j) {
-            phi = ToRealPhi(j);
-            const auto i = ToHoughRho(X * cos(phi) + Y * sin(phi));
-            const auto iDiff = i - iLast;
-            if (iDiff > 1) {
-                for (auto k = iLast + 1; k < iLast + iDiff / 2; ++k) {
-                    if (0 <= k && k < fRows) {
-                        fHoughStore(k, j - 1).emplace_back(&hit);
+        for (Eigen::Index i = 1; i < fRows; ++i) {
+            phi = ToRealPhi(i);
+            const auto j = ToHoughRho(X * cos(phi) + Y * sin(phi));
+            const auto jDiff = j - jLast;
+            if (jDiff > 1) {
+                for (auto k = jLast + 1; k < jLast + jDiff / 2; ++k) {
+                    if (0 <= k && k < fCols) {
+                        fHoughStore(i - 1, k).emplace_back(&hit);
                     }
                 }
-                for (auto k = iLast + iDiff / 2; k < i; ++k) {
-                    if (0 <= k && k < fRows) {
-                        fHoughStore(k, j).emplace_back(&hit);
-                    }
-                }
-            }
-            if (iDiff < -1) {
-                for (auto k = iLast - 1; k > iLast + iDiff / 2; --k) {
-                    if (0 <= k && k < fRows) {
-                        fHoughStore(k, j - 1).emplace_back(&hit);
-                    }
-                }
-                for (auto k = iLast + iDiff / 2; k > i; --k) {
-                    if (0 <= k && k < fRows) {
-                        fHoughStore(k, j).emplace_back(&hit);
+                for (auto k = jLast + jDiff / 2; k < j; ++k) {
+                    if (0 <= k && k < fCols) {
+                        fHoughStore(i, k).emplace_back(&hit);
                     }
                 }
             }
-            if (0 <= i && i < fRows) {
+            if (jDiff < -1) {
+                for (auto k = jLast - 1; k > jLast + jDiff / 2; --k) {
+                    if (0 <= k && k < fCols) {
+                        fHoughStore(i - 1, k).emplace_back(&hit);
+                    }
+                }
+                for (auto k = jLast + jDiff / 2; k > j; --k) {
+                    if (0 <= k && k < fCols) {
+                        fHoughStore(i, k).emplace_back(&hit);
+                    }
+                }
+            }
+            if (0 <= j && j < fCols) {
                 fHoughStore(i, j).emplace_back(&hit);
             }
-            iLast = i;
+            jLast = j;
         }
     }
     // fill count space
@@ -135,14 +137,14 @@ void HoughPolar::GenerateResult() {
             }
         }
 
-        Double_t centerRho = 0;
         Double_t centerPhi = 0;
+        Double_t centerRho = 0;
         for (auto&& center : cluster) {
-            centerRho += ToRealRho(center.first);
-            centerPhi += ToRealPhi(center.second);
+            centerPhi += ToRealPhi(center.first);
+            centerRho += ToRealRho(center.second);
         }
-        centerRho /= cluster.size();
         centerPhi /= cluster.size();
+        centerRho /= cluster.size();
         const auto centerX = cos(centerPhi) / centerRho;
         const auto centerY = sin(centerPhi) / centerRho;
 
@@ -183,31 +185,31 @@ void HoughPolar::SaveLastRecognition(const char* fileName) {
         fFile = new TFile(fileName, "RECREATE");
     }
 
-    TH2I houghSpace("HoughSpace", "hough space", fRows, 0.0, 1.0 / fProtectedRadius, fCols, -M_PI, M_PI);
+    TH2I houghSpace("HoughSpace", "hough space", fRows, -M_PI, M_PI, fCols, fRhoLow, fRhoUp);
     houghSpace.SetStats(false);
     houghSpace.SetXTitle("1/r[1/mm]");
     houghSpace.SetYTitle("phi[rad]");
     houghSpace.SetDrawOption("COLZ");
     for (Eigen::Index i = 0; i < fRows; ++i) {
         for (Eigen::Index j = 0; j < fCols; ++j) {
-            const auto rho = ToRealRho(i);
-            const auto phi = ToRealPhi(j);
-            houghSpace.Fill(rho, phi, fHoughStore(i, j).size());
+            const auto phi = ToRealPhi(i);
+            const auto rho = ToRealRho(j);
+            houghSpace.Fill(phi, rho, fHoughStore(i, j).size());
         }
     }
     houghSpace.Write();
 
-    TH2I houghSpaceET("HoughSpaceExceedThreshold", "hough space exceed threshold", fRows, 0.0, 1.0 / fProtectedRadius, fCols, -M_PI, M_PI);
+    TH2I houghSpaceET("HoughSpaceExceedThreshold", "hough space exceed threshold", fRows, -M_PI, M_PI, fCols, fRhoLow, fRhoUp);
     houghSpaceET.SetStats(false);
-    houghSpace.SetXTitle("1/r[1/mm]");
-    houghSpace.SetYTitle("phi[rad]");
+    houghSpaceET.SetXTitle("1/r[1/mm]");
+    houghSpaceET.SetYTitle("phi[rad]");
     houghSpaceET.SetDrawOption("COLZ");
     for (Eigen::Index i = 0; i < fRows; ++i) {
         for (Eigen::Index j = 0; j < fCols; ++j) {
-            const auto rho = ToRealRho(i);
-            const auto phi = ToRealPhi(j);
+            const auto phi = ToRealPhi(i);
+            const auto rho = ToRealRho(j);
             if (fHoughStore(i, j).size() >= fThreshold) {
-                houghSpace.Fill(rho, phi, fHoughStore(i, j).size());
+                houghSpaceET.Fill(phi, rho, fHoughStore(i, j).size());
             }
         }
     }

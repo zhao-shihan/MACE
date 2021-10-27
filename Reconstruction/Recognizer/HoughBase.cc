@@ -3,10 +3,9 @@
 using namespace MACE::Reconstruction::Recognizer;
 using namespace MACE::DataModel::Hit;
 
-HoughBase::HoughBase(Eigen::Index rows, Eigen::Index cols, Double_t protectedRadius) :
+HoughBase::HoughBase(Eigen::Index rows, Eigen::Index cols) :
     fRows(rows),
     fCols(cols),
-    fProtectedRadius(protectedRadius),
     fHoughStore(rows, cols),
     fHoughSpace(rows, cols),
     fCenterCandidateList(0),

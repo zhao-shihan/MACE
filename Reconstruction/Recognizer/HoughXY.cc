@@ -11,9 +11,10 @@ using namespace MACE::Reconstruction::Recognizer;
 using namespace MACE::DataModel::Hit;
 
 HoughXY::HoughXY(Double_t houghSpaceExtent, Eigen::Index size, Double_t protectedRadius) :
-    HoughBase(size, size, protectedRadius),
+    HoughBase(size, size),
     fExtent(houghSpaceExtent),
-    fResolution(2.0 * houghSpaceExtent / size) {}
+    fResolution(2.0 * houghSpaceExtent / size),
+    fProtectedRadius(protectedRadius) {}
 
 HoughXY::~HoughXY() {
     if (fFile != nullptr) {
@@ -33,7 +34,7 @@ void HoughXY::HoughTransform() {
         const auto R2 = hitX * hitX + hitY * hitY;
         const auto X = 2.0 * hitX / R2;
         const auto Y = 2.0 * hitY / R2;
-        if (fabs(X / Y) < 1.0) {
+        if (abs(X / Y) < 1.0) {
             for (Eigen::Index i = 0; i < fRows; ++i) {
                 const auto xc = ToRealX(i);
                 const auto yc = (1.0 - X * xc) / Y;
@@ -95,8 +96,8 @@ void HoughXY::ClusterizationImpl(std::list<CoordinateSet>::const_iterator candid
     auto neighbour = std::find_if(std::next(candidate), fCenterCandidateList.cend(),
         [&](const CoordinateSet& anotherCandidate) {
             const auto [anotherR, anotherPhi] = anotherCandidate.second;
-            const auto deltaR = fabs(thisR - anotherR);
-            const auto deltaPhi = fabs(thisPhi - anotherPhi);
+            const auto deltaR = abs(thisR - anotherR);
+            const auto deltaPhi = abs(thisPhi - anotherPhi);
             return deltaR < fScannerDR &&
                 (deltaPhi < fScannerDPhi || ((2.0 * M_PI) - deltaPhi) < fScannerDPhi);
         }

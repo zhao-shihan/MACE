@@ -34,6 +34,7 @@ private:
 private:
     const Double_t fExtent;
     const Double_t fResolution;
+    const Double_t fProtectedRadius;
     Double_t fScannerDR = 100;
     Double_t fScannerDPhi = M_PI / 180;
 

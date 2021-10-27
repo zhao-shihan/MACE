@@ -22,7 +22,7 @@ protected:
     using CoordinateSet = std::pair<HoughCoordinate, RealCoordinate>;
 
 public:
-    HoughBase(Eigen::Index rows, Eigen::Index cols, Double_t protectedRadius);
+    HoughBase(Eigen::Index rows, Eigen::Index cols);
     virtual ~HoughBase();
 
     void SetHitListToBeRecognized(const SpectrometerHitList* hitList) { fpHitList = hitList; }
@@ -43,7 +43,6 @@ private:
 protected:
     const Eigen::Index fRows;
     const Eigen::Index fCols;
-    const Double_t fProtectedRadius;
     Height_t fThreshold = 12;
 
     const SpectrometerHitList* fpHitList = nullptr;
