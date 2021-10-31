@@ -12,43 +12,54 @@ class MACE::Reconstruction::Recognizer::HoughBase {
     HoughBase(const HoughBase&) = delete;
     HoughBase& operator=(const HoughBase&) = delete;
 protected:
-    using SpectrometerHitList = std::vector<DataModel::Hit::SpectrometerHit>;
-    using SpectrometerHitPointerList = std::vector<const DataModel::Hit::SpectrometerHit*>;
+    using Hit = std::shared_ptr<const DataModel::Hit::SpectrometerHit>;
+
+    // I use void* to avoid type self-reference. No elegant methods found so far.
+    using HitMapList = std::list<void*>; // Important: const void* == const HitMap*
+    using HitMap = std::pair<Hit, std::vector<std::pair<HitMapList*, HitMapList::const_iterator>>>;
+
     template<typename T>
     using HoughSpace = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
-    using Height_t = Int_t;
     using HoughCoordinate = std::pair<Eigen::Index, Eigen::Index>;
     using RealCoordinate = std::pair<Double_t, Double_t>;
-    using CoordinateSet = std::pair<HoughCoordinate, RealCoordinate>;
 
 public:
     HoughBase(Eigen::Index rows, Eigen::Index cols);
     virtual ~HoughBase();
 
-    void SetHitListToBeRecognized(const SpectrometerHitList* hitList) { fpHitList = hitList; }
+    void SetThreshold(size_t threshold) { fThreshold = threshold; }
+    void SetTrackTimeWindow(Double_t time) { fTrackTimeWindow = time; }
+
+    void SetEventToBeRecognized(const std::vector<Hit>& hitVector);
     void Recognize();
-    const auto& GetRecognizedTrackList() const { return fRecognizedTrackList; }
+    const auto& GetRecognizedTrackList() const { return fRecognizedList; }
 
     virtual void SaveLastRecognition(const char*) { /* no impl */ }
-
-    void SetThreshold(Height_t val) { fThreshold = val; }
 
 private:
     void Initialize();
     virtual void HoughTransform() = 0;
-    virtual void VoteForCenter() = 0;
-    virtual void CenterClusterizaion() = 0;
-    virtual void GenerateResult() = 0;
+    void FindExceedThreshold();
+    void GenerateResult();
+
+    virtual Double_t ToReal1(Eigen::Index i) const = 0;
+    virtual Double_t ToReal2(Eigen::Index j) const = 0;
+    virtual Eigen::Index ToHough1(Double_t x1) const = 0;
+    virtual Eigen::Index ToHough2(Double_t x2) const = 0;
+    virtual Double_t Cross(const CLHEP::Hep3Vector& hitPos, const RealCoordinate& center) const = 0;
 
 protected:
     const Eigen::Index fRows;
     const Eigen::Index fCols;
-    Height_t fThreshold = 12;
+    size_t fThreshold = 12;
+    Double_t fTrackTimeWindow = 10.0;
 
-    const SpectrometerHitList* fpHitList = nullptr;
-    HoughSpace<SpectrometerHitPointerList> fHoughStore;
-    HoughSpace<Height_t> fHoughSpace;
-    std::list<CoordinateSet> fCenterCandidateList;
-    std::vector<std::vector<HoughCoordinate>> fCenterClusterList;
-    std::vector<SpectrometerHitPointerList> fRecognizedTrackList;
+    std::vector<HitMap> fHitStore;
+    HoughSpace<HitMapList> fHoughSpace;
+    std::vector<std::pair<std::vector<Hit>, RealCoordinate>> fRecognizedList;
+
+private:
+    std::vector<std::pair<const HitMapList*, RealCoordinate>> fExceedThreshold;
+    std::vector<std::pair<Double_t, std::vector<HitMap*>>> fLeftHandCandidateTrackList;
+    std::vector<std::pair<Double_t, std::vector<HitMap*>>> fRightHandCandidateTrackList;
 };

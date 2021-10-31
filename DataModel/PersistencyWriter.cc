@@ -11,7 +11,7 @@ PersistencyWriter::PersistencyWriter() :
 PersistencyWriter::PersistencyWriter(const char* fileName) :
     PersistencyHandler(),
     fTreeAndBehaviours(0) {
-    Open(fileName);
+    PersistencyWriter::Open(fileName);
 }
 
 PersistencyWriter::~PersistencyWriter() {

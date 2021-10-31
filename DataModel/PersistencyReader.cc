@@ -7,5 +7,5 @@ PersistencyReader::PersistencyReader() :
 
 PersistencyReader::PersistencyReader(const char* fileName) :
     PersistencyHandler() {
-    Open(fileName);
+    PersistencyReader::Open(fileName);
 }

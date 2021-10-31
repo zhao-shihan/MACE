@@ -2,19 +2,18 @@
 #include "TCanvas.h"
 #include "TMarker.h"
 
-#include "Reconstruction/Recognizer/HoughPolar.hh"
+#include "Reconstruction/Recognizer/HoughCartesian.hh"
 
 using namespace MACE::Reconstruction::Recognizer;
 
-HoughPolar::HoughPolar(Double_t innerRadius, Double_t outerRadius, Eigen::Index nPhis, Eigen::Index nRhos) :
-    HoughBase(nPhis, nRhos),
-    fRhoLow(1.0 / outerRadius),
-    fRhoUp(1.0 / innerRadius),
-    fPhiResolution(2.0 * M_PI / nPhis),
-    fRhoResolution((fRhoUp - fRhoLow) / nRhos),
-    fHoughSpaceVis(nPhis, nRhos) {}
+HoughCartesian::HoughCartesian(Double_t houghSpaceExtent, Eigen::Index size, Double_t protectedRadius) :
+    HoughBase(size, size),
+    fExtent(houghSpaceExtent),
+    fResolution(2.0 * houghSpaceExtent / size),
+    fProtectedRadius(protectedRadius),
+    fHoughSpaceVis(size, size) {}
 
-HoughPolar::~HoughPolar() {
+HoughCartesian::~HoughCartesian() {
     if (fFile != nullptr) {
         if (fFile->IsOpen()) {
             fFile->Write();
@@ -24,12 +23,12 @@ HoughPolar::~HoughPolar() {
     }
 }
 
-void HoughPolar::HoughTransform() {
+void HoughCartesian::HoughTransform() {
     // for each hit
     for (auto&& hitMap : fHitStore) {
         const auto& hit = hitMap.first;
         auto& addressList = hitMap.second;
-        addressList.reserve(std::max(fRows, fCols) * 5);
+        addressList.reserve(fRows * 2);
 
         const auto hitX = hit->GetHitPosition().x();
         const auto hitY = hit->GetHitPosition().y();
@@ -43,63 +42,44 @@ void HoughPolar::HoughTransform() {
             theList.emplace_front(&hitMap);
             addressList.emplace_back(&theList, theList.cbegin());
         };
-        auto phi = ToReal1(0);
-        auto jLast = ToHough2(X * cos(phi) + Y * sin(phi));
-        if (0 <= jLast && jLast < fCols) {
-            DoFill(0, jLast);
-        }
-        for (Eigen::Index i = 1; i < fRows; ++i) {
-            phi = ToReal1(i);
-            const auto j = ToHough2(X * cos(phi) + Y * sin(phi));
-            const auto jDiff = j - jLast;
-            if (jDiff > 1) {
-                for (auto k = jLast + 1; k < jLast + jDiff / 2; ++k) {
-                    if (0 <= k && k < fCols) {
-                        DoFill(i - 1, k);
-                    }
-                }
-                for (auto k = jLast + jDiff / 2; k < j; ++k) {
-                    if (0 <= k && k < fCols) {
-                        DoFill(i, k);
-                    }
+        if (abs(X / Y) < 1.0) {
+            for (Eigen::Index i = 0; i < fRows; ++i) {
+                const auto xc = ToReal1(i);
+                const auto yc = (1.0 - X * xc) / Y;
+                if (xc * xc + yc * yc < fProtectedRadius * fProtectedRadius) { continue; }
+                const auto j = ToHough2(yc);
+                if (0 <= j && j < fRows) {
+                    DoFill(i, j);
                 }
             }
-            if (jDiff < -1) {
-                for (auto k = jLast - 1; k > jLast + jDiff / 2; --k) {
-                    if (0 <= k && k < fCols) {
-                        DoFill(i - 1, k);
-                    }
-                }
-                for (auto k = jLast + jDiff / 2; k > j; --k) {
-                    if (0 <= k && k < fCols) {
-                        DoFill(i, k);
-                    }
+        } else {
+            for (Eigen::Index j = 0; j < fRows; ++j) {
+                const auto yc = ToReal2(j);
+                const auto xc = (1.0 - Y * yc) / X;
+                if (xc * xc + yc * yc < fProtectedRadius * fProtectedRadius) { continue; }
+                const auto i = ToHough1(xc);
+                if (0 <= i && i < fRows) {
+                    DoFill(i, j);
                 }
             }
-            if (0 <= j && j < fCols) {
-                DoFill(i, j);
-            }
-            jLast = j;
         }
     }
 
     if (fEnableHoughSpaceVis) {
         // save for visualization
         for (Eigen::Index i = 0; i < fRows; ++i) {
-            for (Eigen::Index j = 0; j < fCols; ++j) {
+            for (Eigen::Index j = 0; j < fRows; ++j) {
                 fHoughSpaceVis(i, j) = fHoughSpace(i, j).size();
             }
         }
     }
 }
 
-Double_t HoughPolar::Cross(const CLHEP::Hep3Vector& hitPos, const RealCoordinate& center) const {
-    auto centerX = cos(center.first) / center.second;
-    auto centerY = sin(center.first) / center.second;
-    return hitPos.x() * centerY - centerX * hitPos.y();
+Double_t HoughCartesian::Cross(const CLHEP::Hep3Vector& hitPos, const RealCoordinate& center) const {
+    return hitPos.x() * center.second - center.first * hitPos.y();
 }
 
-void HoughPolar::SaveLastRecognition(const char* fileName) {
+void HoughCartesian::SaveLastRecognition(const char* fileName) {
     if (fFile == nullptr) { fFile = new TFile(fileName, "RECREATE"); }
     if (strcmp(fileName, fFile->GetName()) != 0) {
         if (fFile->IsOpen()) {
@@ -112,31 +92,31 @@ void HoughPolar::SaveLastRecognition(const char* fileName) {
 
     if (fEnableHoughSpaceVis) {
 
-        TH2I houghSpace("HoughSpace", "hough space", fRows, -M_PI, M_PI, fCols, fRhoLow, fRhoUp);
+        TH2I houghSpace("HoughSpace", "hough space", fRows, -fExtent, fExtent, fRows, -fExtent, fExtent);
         houghSpace.SetStats(false);
-        houghSpace.SetXTitle("phi[rad]");
-        houghSpace.SetYTitle("1/r[1/mm]");
+        houghSpace.SetXTitle("x[mm]");
+        houghSpace.SetYTitle("y[mm]");
         houghSpace.SetDrawOption("COLZ");
         for (Eigen::Index i = 0; i < fRows; ++i) {
-            for (Eigen::Index j = 0; j < fCols; ++j) {
-                const auto phi = ToReal1(i);
-                const auto rho = ToReal2(j);
-                houghSpace.Fill(phi, rho, fHoughSpaceVis(i, j));
+            for (Eigen::Index j = 0; j < fRows; ++j) {
+                const auto xc = ToReal1(i);
+                const auto yc = ToReal2(j);
+                houghSpace.Fill(xc, yc, fHoughSpaceVis(i, j));
             }
         }
         houghSpace.Write();
 
-        TH2I houghSpaceET("HoughSpaceExceedThreshold", "hough space exceed threshold", fRows, -M_PI, M_PI, fCols, fRhoLow, fRhoUp);
+        TH2I houghSpaceET("HoughSpaceExceedThreshold", "hough space exceed threshold", fRows, -fExtent, fExtent, fRows, -fExtent, fExtent);
         houghSpaceET.SetStats(false);
-        houghSpaceET.SetXTitle("phi[rad]");
-        houghSpaceET.SetYTitle("1/r[1/mm]");
+        houghSpaceET.SetXTitle("x[mm]");
+        houghSpaceET.SetYTitle("y[mm]");
         houghSpaceET.SetDrawOption("COLZ");
         for (Eigen::Index i = 0; i < fRows; ++i) {
-            for (Eigen::Index j = 0; j < fCols; ++j) {
-                const auto phi = ToReal1(i);
-                const auto rho = ToReal2(j);
+            for (Eigen::Index j = 0; j < fRows; ++j) {
+                const auto xc = ToReal1(i);
+                const auto yc = ToReal2(j);
                 if (fHoughSpaceVis(i, j) >= fThreshold) {
-                    houghSpaceET.Fill(phi, rho, fHoughSpaceVis(i, j));
+                    houghSpaceET.Fill(xc, yc, fHoughSpaceVis(i, j));
                 }
             }
         }

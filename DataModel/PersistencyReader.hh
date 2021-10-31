@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ROOT/RDataFrame.hxx"
+#include <memory>
 
 #include "DataModel/Global.hh"
 #include "DataModel/Core/PersistencyHandler.hh"
@@ -18,36 +18,20 @@ public:
     virtual void Close(Option_t* option = nullptr) { PersistencyHandler::Close(option); }
 
     template<class DataType>
-    typename std::enable_if_t<std::is_class_v<DataType>, std::vector<DataType>> CreateListFromTree();
-    template<class DataPointer>
-    typename std::enable_if_t<std::is_pointer_v<DataPointer>, std::vector<DataPointer>> CreateListFromTree();
+    std::vector<std::shared_ptr<const DataType>> CreateListFromTree();
     template<class DataType>
     TTree* GetTree() { return fFile->Get<TTree>(GetTreeName<DataType>()); }
 };
 
 template<class DataType>
-typename std::enable_if_t<std::is_class_v<DataType>, std::vector<DataType>>
-MACE::DataModel::PersistencyReader::CreateListFromTree() {
-    std::vector<DataType> dataList(0);
+std::vector<std::shared_ptr<const DataType>> MACE::DataModel::PersistencyReader::CreateListFromTree() {
     TTree* tree = GetTree<DataType>();
+    std::vector<std::shared_ptr<const DataType>> dataList(0);
+    dataList.reserve(tree->GetEntries());
     DataType::ReadBranches(tree);
     for (Long64_t i = 0; i < tree->GetEntries(); ++i) {
         tree->GetEntry(i);
-        dataList.emplace_back();
-    }
-    return dataList;
-}
-
-template<class DataPointer>
-typename std::enable_if_t<std::is_pointer_v<DataPointer>, std::vector<DataPointer>>
-MACE::DataModel::PersistencyReader::CreateListFromTree() {
-    using DataType = std::remove_pointer_t<DataPointer>;
-    std::vector<DataPointer> dataList(0);
-    TTree* tree = GetTree<DataType>();
-    DataType::ReadBranches(tree);
-    for (Long64_t i = 0; i < tree->GetEntries(); ++i) {
-        tree->GetEntry();
-        dataList.emplace_back(new DataType());
+        dataList.emplace_back(std::make_shared<DataType>());
     }
     return dataList;
 }

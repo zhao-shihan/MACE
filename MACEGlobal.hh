@@ -24,7 +24,7 @@ namespace MACE {
         namespace Recognizer{
             class HoughBase;
             class HoughPolar;
-            class HoughXY;
+            class HoughCartesian;
         }
         class ExperimentData;
         class TOFAnalyzer;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "DataModel/Global.hh"
 #include "DataModel/Core/PersistencyHandler.hh"
 
@@ -29,6 +31,16 @@ public:
     TTree* CreateTreeFromList(const std::vector<DataType*>* dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataType, DataType>(dataList, behaviour); }
     template<class DataType>
     TTree* CreateTreeFromList(const std::vector<DataType*>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataType, DataType>(&dataList, behaviour); }
+
+    template<class DataTypeInTree, class DataTypeInList>
+    TTree* CreateTreeFromList(const std::vector<std::shared_ptr<DataTypeInList>>* dataList, TreeOperation behaviour = kDeleteAfterWrite);
+    template<class DataTypeInTree, class DataTypeInList>
+    TTree* CreateTreeFromList(const std::vector<std::shared_ptr<DataTypeInList>>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataTypeInList, DataTypeInTree>(&dataList, behaviour); }
+    template<class DataType>
+    TTree* CreateTreeFromList(const std::vector<std::shared_ptr<DataType>>* dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataType, DataType>(dataList, behaviour); }
+    template<class DataType>
+    TTree* CreateTreeFromList(const std::vector<std::shared_ptr<DataType>>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataType, DataType>(&dataList, behaviour); }
+
     void AddTree(TTree* tree, TreeOperation behaviour = kJustWrite) { fTreeAndBehaviours.emplace_back(tree, behaviour); }
 
     void WriteTrees(Int_t option = 0, Int_t bufsize = 0);
@@ -45,7 +57,23 @@ TTree* MACE::DataModel::PersistencyWriter::CreateTreeFromList(const std::vector<
     TString name = PersistencyHandler::GetTreeName<DataTypeInTree>();
     TTree* tree = new TTree(name, name);
     DataTypeInTree::CreateBranches(tree);
-    for (DataTypeInTree* data : *dataList) {
+    for (auto&& data : *dataList) {
+        data->FillBranches();
+        tree->Fill();
+    }
+    fTreeAndBehaviours.emplace_back(tree, behaviour);
+    return tree;
+}
+
+template<class DataTypeInTree, class DataTypeInList>
+TTree* MACE::DataModel::PersistencyWriter::CreateTreeFromList(const std::vector<std::shared_ptr<DataTypeInList>>* dataList, TreeOperation behaviour) {
+    static_assert(std::is_base_of_v<Core::Data, DataTypeInList>, "DataTypeInList should be derived from DataModel::Core::Data");
+    static_assert(std::is_base_of_v<Core::Data, DataTypeInTree>, "DataTypeInTree should be derived from DataModel::Core::Data");
+    static_assert(std::is_base_of_v<DataTypeInTree, DataTypeInList>, "DataTypeInList should be derived from DataTypeInTree");
+    TString name = PersistencyHandler::GetTreeName<DataTypeInTree>();
+    TTree* tree = new TTree(name, name);
+    DataTypeInTree::CreateBranches(tree);
+    for (auto&& data : *dataList) {
         data->FillBranches();
         tree->Fill();
     }

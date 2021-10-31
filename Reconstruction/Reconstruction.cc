@@ -6,7 +6,7 @@
 #include "TDirectory.h"
 
 #include "DataModel/PersistencyReader.hh"
-#include "Reconstruction/Recognizer/HoughXY.hh"
+#include "Reconstruction/Recognizer/HoughCartesian.hh"
 #include "Reconstruction/Recognizer/HoughPolar.hh"
 
 using namespace MACE;
@@ -35,10 +35,11 @@ using namespace MACE;
 
 int main(int, char** argv) {
     DataModel::PersistencyReader reader(argv[1]);
-    // Reconstruction::Recognizer::HoughXY recognizer(2500, std::stol(argv[2]), 500);
-    Reconstruction::Recognizer::HoughPolar recognizer(100, 3000, std::stol(argv[2]), std::stol(argv[3]));
+    Reconstruction::Recognizer::HoughCartesian recognizer(2500, std::stol(argv[2]), 500);
+    // Reconstruction::Recognizer::HoughPolar recognizer(350, 5000, std::stol(argv[2]), std::stol(argv[3]));
+    recognizer.EnableHoughSpaceVisualization(true);
     auto hitList = reader.CreateListFromTree<DataModel::Hit::SpectrometerHit>();
-    recognizer.SetHitListToBeRecognized(&hitList);
+    recognizer.SetEventToBeRecognized(hitList);
     recognizer.Recognize();
     recognizer.GetRecognizedTrackList();
     recognizer.SaveLastRecognition("recognition.root");
