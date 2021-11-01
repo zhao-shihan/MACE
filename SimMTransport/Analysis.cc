@@ -70,22 +70,22 @@ void Analysis::Update(const Track* track) const {
             track->GetCurrentStep()->postTime > fOutputTime[timeId]) {
             auto interPosition = track->GetCurrentStep()->prePosition + ((fOutputTime[timeId] - track->GetCurrentStep()->preTime) / (track->GetCurrentStep()->postTime - track->GetCurrentStep()->preTime)) * (track->GetCurrentStep()->postPosition - track->GetCurrentStep()->prePosition);
             fTimeNtuples[timeId]->Fill(
-                interPosition.x(),
-                interPosition.y(),
-                interPosition.z()
+                interPosition.fX,
+                interPosition.fY,
+                interPosition.fZ
             );
             break;
         }
     }
     if (track->GetTrackStatus() == kTrackDecayed && track->IsEscaping()) {
         fEscapedNtuple->Fill(
-            track->GetVertexPosition().x(),
-            track->GetVertexPosition().y(),
-            track->GetVertexPosition().z(),
+            track->GetVertexPosition().fX,
+            track->GetVertexPosition().fY,
+            track->GetVertexPosition().fZ,
             track->GetVertexTime(),
-            track->GetCurrentStep()->postPosition.x(),
-            track->GetCurrentStep()->postPosition.y(),
-            track->GetCurrentStep()->postPosition.z(),
+            track->GetCurrentStep()->postPosition.fX,
+            track->GetCurrentStep()->postPosition.fY,
+            track->GetCurrentStep()->postPosition.fZ,
             track->GetCurrentStep()->postTime
         );
     }

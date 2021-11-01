@@ -21,7 +21,7 @@ protected:
     MonteCarlo* const fMonteCarlo;
 
     double_t          fVertexTime;
-    CLHEP::Hep3Vector fVertexPosition;
+    TEveVectorD fVertexPosition;
     double_t          fLife;
 
     bool              fEscaping;
@@ -43,7 +43,7 @@ public:
 
     const Step* GetCurrentStep() const { return fCurrentStep; }
     double_t GetVertexTime() const { return fVertexTime; }
-    const CLHEP::Hep3Vector& GetVertexPosition() const { return fVertexPosition; }
+    const TEveVectorD& GetVertexPosition() const { return fVertexPosition; }
     bool IsEscaping() const { return fEscaping; }
     TrackStatus GetTrackStatus() const { return fStatus; }
 

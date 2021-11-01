@@ -5,7 +5,6 @@
 #include "Eigen/Core"
 
 #include "DataModel/Hit/SpectrometerHit.hh"
-
 #include "Reconstruction/Global.hh"
 
 class MACE::Reconstruction::Recognizer::HoughBase {
@@ -46,7 +45,7 @@ private:
     virtual Double_t ToReal2(Eigen::Index j) const = 0;
     virtual Eigen::Index ToHough1(Double_t x1) const = 0;
     virtual Eigen::Index ToHough2(Double_t x2) const = 0;
-    virtual Double_t Cross(const CLHEP::Hep3Vector& hitPos, const RealCoordinate& center) const = 0;
+    virtual Double_t Cross(const TEveVectorD& hitPos, const RealCoordinate& center) const = 0;
 
 protected:
     const Eigen::Index fRows;

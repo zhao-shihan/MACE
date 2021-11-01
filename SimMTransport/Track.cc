@@ -39,13 +39,13 @@ void Track::Stepping() {
     if (fStatus != kTrackAlive) { return; }
 
     fCurrentStep->velocity = fMonteCarlo->MaxwellBoltzmann();
-    auto deltaTime = fMonteCarlo->FreePath(fCurrentStep->postPosition) / fCurrentStep->velocity.mag();
+    auto deltaTime = fMonteCarlo->FreePath(fCurrentStep->postPosition) / fCurrentStep->velocity.Mag();
     fCurrentStep->preTime = fCurrentStep->postTime;
     fCurrentStep->postTime += deltaTime;
     fCurrentStep->prePosition = fCurrentStep->postPosition;
     fCurrentStep->postPosition += fCurrentStep->velocity * deltaTime;
 
-    if (!Target(fCurrentStep->postPosition.x(), fCurrentStep->postPosition.y(), fCurrentStep->postPosition.z())) {
+    if (!Target(fCurrentStep->postPosition.fX, fCurrentStep->postPosition.fY, fCurrentStep->postPosition.fZ)) {
         EscapingDoIt();
     }
 
@@ -60,26 +60,26 @@ void Track::EscapingDoIt() {
     fEscaping = true;
     bool isNormalStep = true;
     auto checkStep = global->StepOfPushing();
-    auto checkDeltaTime = checkStep / fCurrentStep->velocity.mag();
+    auto checkDeltaTime = checkStep / fCurrentStep->velocity.Mag();
     auto checkDeltaPosition = fCurrentStep->velocity * checkDeltaTime;
     do {
         if (global->PeriodicBoundaryX() > 0) {
-            if (fCurrentStep->postPosition.x() < -global->PeriodicBoundaryX() || fCurrentStep->postPosition.x() > global->PeriodicBoundaryX()) {
-                auto denominator = fCurrentStep->postPosition.x() - fCurrentStep->prePosition.x();
+            if (fCurrentStep->postPosition.fX < -global->PeriodicBoundaryX() || fCurrentStep->postPosition.fX > global->PeriodicBoundaryX()) {
+                auto denominator = fCurrentStep->postPosition.fX - fCurrentStep->prePosition.fX;
                 double_t preRatio;
-                CLHEP::Hep3Vector boundary;
+                TEveVectorD boundary;
                 if (abs(denominator) < std::numeric_limits<float_t>::epsilon()) {
                     preRatio = 0.5;
                     boundary = 0.5 * (fCurrentStep->postPosition + fCurrentStep->prePosition);
                 } else {
-                    if (fCurrentStep->postPosition.x() > global->PeriodicBoundaryX()) {
-                        preRatio = (global->PeriodicBoundaryX() - fCurrentStep->prePosition.x()) / denominator;
+                    if (fCurrentStep->postPosition.fX > global->PeriodicBoundaryX()) {
+                        preRatio = (global->PeriodicBoundaryX() - fCurrentStep->prePosition.fX) / denominator;
                     } else {
-                        preRatio = (-global->PeriodicBoundaryX() - fCurrentStep->prePosition.x()) / denominator;
+                        preRatio = (-global->PeriodicBoundaryX() - fCurrentStep->prePosition.fX) / denominator;
                     }
                     boundary = fCurrentStep->prePosition + preRatio * (fCurrentStep->postPosition - fCurrentStep->prePosition);
                 }
-                auto newBoundary = CLHEP::Hep3Vector(-boundary.x(), boundary.y(), boundary.z());
+                auto newBoundary = TEveVectorD(-boundary.fX, boundary.fY, boundary.fZ);
                 auto newPostTime = fCurrentStep->postTime;
                 auto newPostPosition = fCurrentStep->postPosition + newBoundary - boundary;
                 fCurrentStep->postTime = fCurrentStep->preTime + preRatio * (fCurrentStep->postTime - fCurrentStep->preTime);
@@ -89,28 +89,28 @@ void Track::EscapingDoIt() {
                 fCurrentStep->prePosition = newBoundary;
                 fCurrentStep->postTime = newPostTime;
                 fCurrentStep->postPosition = newPostPosition;
-                if (Target(fCurrentStep->postPosition.x(), fCurrentStep->postPosition.y(), fCurrentStep->postPosition.z())) {
+                if (Target(fCurrentStep->postPosition.fX, fCurrentStep->postPosition.fY, fCurrentStep->postPosition.fZ)) {
                     break;
                 }
             }
         }
         if (global->PeriodicBoundaryY() > 0) {
-            if (fCurrentStep->postPosition.y() < -global->PeriodicBoundaryY() || fCurrentStep->postPosition.y() > global->PeriodicBoundaryY()) {
-                auto denominator = fCurrentStep->postPosition.y() - fCurrentStep->prePosition.y();
+            if (fCurrentStep->postPosition.fY < -global->PeriodicBoundaryY() || fCurrentStep->postPosition.fY > global->PeriodicBoundaryY()) {
+                auto denominator = fCurrentStep->postPosition.fY - fCurrentStep->prePosition.fY;
                 double_t preRatio;
-                CLHEP::Hep3Vector boundary;
+                TEveVectorD boundary;
                 if (abs(denominator) < std::numeric_limits<float_t>::epsilon()) {
                     preRatio = 0.5;
                     boundary = 0.5 * (fCurrentStep->postPosition + fCurrentStep->prePosition);
                 } else {
-                    if (fCurrentStep->postPosition.y() > global->PeriodicBoundaryY()) {
-                        preRatio = (global->PeriodicBoundaryY() - fCurrentStep->prePosition.y()) / denominator;
+                    if (fCurrentStep->postPosition.fY > global->PeriodicBoundaryY()) {
+                        preRatio = (global->PeriodicBoundaryY() - fCurrentStep->prePosition.fY) / denominator;
                     } else {
-                        preRatio = (-global->PeriodicBoundaryY() - fCurrentStep->prePosition.y()) / denominator;
+                        preRatio = (-global->PeriodicBoundaryY() - fCurrentStep->prePosition.fY) / denominator;
                     }
                     boundary = fCurrentStep->prePosition + preRatio * (fCurrentStep->postPosition - fCurrentStep->prePosition);
                 }
-                auto newBoundary = CLHEP::Hep3Vector(boundary.x(), -boundary.y(), boundary.z());
+                auto newBoundary = TEveVectorD(boundary.fX, -boundary.fY, boundary.fZ);
                 auto newPostTime = fCurrentStep->postTime;
                 auto newPostPosition = fCurrentStep->postPosition + newBoundary - boundary;
                 fCurrentStep->postTime = fCurrentStep->preTime + preRatio * (fCurrentStep->postTime - fCurrentStep->preTime);
@@ -120,28 +120,28 @@ void Track::EscapingDoIt() {
                 fCurrentStep->prePosition = newBoundary;
                 fCurrentStep->postTime = newPostTime;
                 fCurrentStep->postPosition = newPostPosition;
-                if (Target(fCurrentStep->postPosition.x(), fCurrentStep->postPosition.y(), fCurrentStep->postPosition.z())) {
+                if (Target(fCurrentStep->postPosition.fX, fCurrentStep->postPosition.fY, fCurrentStep->postPosition.fZ)) {
                     break;
                 }
             }
         }
         if (global->PeriodicBoundaryZ() > 0) {
-            if (fCurrentStep->postPosition.z() < -global->PeriodicBoundaryZ() || fCurrentStep->postPosition.z() > global->PeriodicBoundaryZ()) {
-                auto denominator = fCurrentStep->postPosition.z() - fCurrentStep->prePosition.z();
+            if (fCurrentStep->postPosition.fZ < -global->PeriodicBoundaryZ() || fCurrentStep->postPosition.fZ > global->PeriodicBoundaryZ()) {
+                auto denominator = fCurrentStep->postPosition.fZ - fCurrentStep->prePosition.fZ;
                 double_t preRatio;
-                CLHEP::Hep3Vector boundary;
+                TEveVectorD boundary;
                 if (abs(denominator) < std::numeric_limits<float_t>::epsilon()) {
                     preRatio = 0.5;
                     boundary = 0.5 * (fCurrentStep->postPosition + fCurrentStep->prePosition);
                 } else {
-                    if (fCurrentStep->postPosition.z() > global->PeriodicBoundaryZ()) {
-                        preRatio = (global->PeriodicBoundaryZ() - fCurrentStep->prePosition.z()) / denominator;
+                    if (fCurrentStep->postPosition.fZ > global->PeriodicBoundaryZ()) {
+                        preRatio = (global->PeriodicBoundaryZ() - fCurrentStep->prePosition.fZ) / denominator;
                     } else {
-                        preRatio = (-global->PeriodicBoundaryZ() - fCurrentStep->prePosition.z()) / denominator;
+                        preRatio = (-global->PeriodicBoundaryZ() - fCurrentStep->prePosition.fZ) / denominator;
                     }
                     boundary = fCurrentStep->prePosition + preRatio * (fCurrentStep->postPosition - fCurrentStep->prePosition);
                 }
-                auto newBoundary = CLHEP::Hep3Vector(boundary.x(), boundary.y(), -boundary.z());
+                auto newBoundary = TEveVectorD(boundary.fX, boundary.fY, -boundary.fZ);
                 auto newPostTime = fCurrentStep->postTime;
                 auto newPostPosition = fCurrentStep->postPosition + newBoundary - boundary;
                 fCurrentStep->postTime = fCurrentStep->preTime + preRatio * (fCurrentStep->postTime - fCurrentStep->preTime);
@@ -151,7 +151,7 @@ void Track::EscapingDoIt() {
                 fCurrentStep->prePosition = newBoundary;
                 fCurrentStep->postTime = newPostTime;
                 fCurrentStep->postPosition = newPostPosition;
-                if (Target(fCurrentStep->postPosition.x(), fCurrentStep->postPosition.y(), fCurrentStep->postPosition.z())) {
+                if (Target(fCurrentStep->postPosition.fX, fCurrentStep->postPosition.fY, fCurrentStep->postPosition.fZ)) {
                     break;
                 }
             }
@@ -160,7 +160,7 @@ void Track::EscapingDoIt() {
         fCurrentStep->postPosition += checkDeltaPosition;
         isNormalStep = false;
         if (fCurrentStep->postTime > fVertexTime + fLife) { return; }
-    } while (!Target(fCurrentStep->postPosition.x(), fCurrentStep->postPosition.y(), fCurrentStep->postPosition.z()));
+    } while (!Target(fCurrentStep->postPosition.fX, fCurrentStep->postPosition.fY, fCurrentStep->postPosition.fZ));
     fEscaping = false;
     if (isNormalStep) { return; }
     auto out = fCurrentStep->postPosition - checkDeltaPosition;
@@ -168,13 +168,13 @@ void Track::EscapingDoIt() {
     do {
         checkStep *= 0.5;
         checkDeltaTime *= 0.5;
-        if (Target(center.x(), center.y(), center.z())) {
+        if (Target(center.fX, center.fY, center.fZ)) {
             fCurrentStep->postTime -= checkDeltaTime;
             fCurrentStep->postPosition = center;
         } else {
             out = center;
         }
         center = (fCurrentStep->postPosition + out) * 0.5;
-    } while (checkStep > 0.01 * MeanFreePath(center.x(), center.y(), center.z()));
+    } while (checkStep > 0.01 * MeanFreePath(center.fX, center.fY, center.fZ));
 }
 

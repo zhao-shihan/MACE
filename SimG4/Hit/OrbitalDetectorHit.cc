@@ -35,25 +35,25 @@ OrbitalDetectorHit::OrbitalDetectorHit(OrbitalDetectorHit&& hit) noexcept :
     fParticleName(std::move(hit.fParticleName)),
     fTrackID(std::move(hit.fTrackID)) {}
 
-OrbitalDetectorHit& OrbitalDetectorHit::operator=(const OrbitalDetectorHit& hit) noexcept {
-    G4VHit::operator=(static_cast<const G4VHit&>(hit));
-    DataModel::Hit::OrbitalDetectorHit::operator=(static_cast<const DataModel::Hit::OrbitalDetectorHit&>(hit));
-    fVertexTime = hit.fVertexTime;
-    fVertexPosition = hit.fVertexPosition;
-    fParticleName = hit.fParticleName;
-    fTrackID = hit.fTrackID;
-    return *this;
-}
+// OrbitalDetectorHit& OrbitalDetectorHit::operator=(const OrbitalDetectorHit& hit) noexcept {
+//     G4VHit::operator=(static_cast<const G4VHit&>(hit));
+//     DataModel::Hit::OrbitalDetectorHit::operator=(static_cast<const DataModel::Hit::OrbitalDetectorHit&>(hit));
+//     fVertexTime = hit.fVertexTime;
+//     fVertexPosition = hit.fVertexPosition;
+//     fParticleName = hit.fParticleName;
+//     fTrackID = hit.fTrackID;
+//     return *this;
+// }
 
-OrbitalDetectorHit& OrbitalDetectorHit::operator=(OrbitalDetectorHit&& hit) noexcept {
-    G4VHit::operator=(static_cast<G4VHit&&>(hit));
-    DataModel::Hit::OrbitalDetectorHit::operator=(static_cast<DataModel::Hit::OrbitalDetectorHit&&>(hit));
-    fVertexTime = std::move(hit.fVertexTime);
-    fVertexPosition = std::move(hit.fVertexPosition);
-    fParticleName = std::move(hit.fParticleName);
-    fTrackID = std::move(hit.fTrackID);
-    return *this;
-}
+// OrbitalDetectorHit& OrbitalDetectorHit::operator=(OrbitalDetectorHit&& hit) noexcept {
+//     G4VHit::operator=(static_cast<G4VHit&&>(hit));
+//     DataModel::Hit::OrbitalDetectorHit::operator=(static_cast<DataModel::Hit::OrbitalDetectorHit&&>(hit));
+//     fVertexTime = std::move(hit.fVertexTime);
+//     fVertexPosition = std::move(hit.fVertexPosition);
+//     fParticleName = std::move(hit.fParticleName);
+//     fTrackID = std::move(hit.fTrackID);
+//     return *this;
+// }
 
 void OrbitalDetectorHit::CreateBranches(TTree* tree) {
     DataModel::Hit::OrbitalDetectorHit::CreateBranches(tree);

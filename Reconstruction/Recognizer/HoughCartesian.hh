@@ -23,7 +23,7 @@ private:
     Double_t ToReal2(Eigen::Index j) const override { return -fExtent + (j + 0.5) * fResolution; }
     Eigen::Index ToHough1(Double_t x) const override { return (x + fExtent) / fResolution; }
     Eigen::Index ToHough2(Double_t y) const override { return (y + fExtent) / fResolution; }
-    Double_t Cross(const CLHEP::Hep3Vector& hitPos, const RealCoordinate& center) const override;
+    Double_t Cross(const TEveVectorD& hitPos, const RealCoordinate& center) const override;
 
 private:
     const Double_t fExtent;

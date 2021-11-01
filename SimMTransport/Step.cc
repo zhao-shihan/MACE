@@ -8,6 +8,3 @@ Step::Step() :
     prePosition(),
     postPosition(),
     velocity() {}
-
-Step::~Step() {}
-

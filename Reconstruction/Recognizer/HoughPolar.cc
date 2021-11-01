@@ -31,8 +31,8 @@ void HoughPolar::HoughTransform() {
         auto& addressList = hitMap.second;
         addressList.reserve(std::max(fRows, fCols) * 5);
 
-        const auto hitX = hit->GetHitPosition().x();
-        const auto hitY = hit->GetHitPosition().y();
+        const auto hitX = hit->GetHitPosition().fX;
+        const auto hitY = hit->GetHitPosition().fY;
         const auto R2 = hitX * hitX + hitY * hitY;
         const auto X = 2.0 * hitX / R2;
         const auto Y = 2.0 * hitY / R2;
@@ -93,10 +93,10 @@ void HoughPolar::HoughTransform() {
     }
 }
 
-Double_t HoughPolar::Cross(const CLHEP::Hep3Vector& hitPos, const RealCoordinate& center) const {
+Double_t HoughPolar::Cross(const TEveVectorD& hitPos, const RealCoordinate& center) const {
     auto centerX = cos(center.first) / center.second;
     auto centerY = sin(center.first) / center.second;
-    return hitPos.x() * centerY - centerX * hitPos.y();
+    return hitPos.fX * centerY - centerX * hitPos.fY;
 }
 
 void HoughPolar::SaveLastRecognition(const char* fileName) {
@@ -158,7 +158,7 @@ void HoughPolar::SaveLastRecognition(const char* fileName) {
             auto colorStyleIndex = i % (markerColor.size() * markerStyle.size());
             auto styleIndex = colorStyleIndex / markerColor.size();
             auto colorIndex = colorStyleIndex % markerColor.size();
-            auto hitMarker = new TMarker(point->GetHitPosition().x(), point->GetHitPosition().y(), markerStyle[styleIndex]);
+            auto hitMarker = new TMarker(point->GetHitPosition().fX, point->GetHitPosition().fY, markerStyle[styleIndex]);
             hitMarker->SetMarkerColor(markerColor[colorIndex]);
             hitMarker->Draw();
         }

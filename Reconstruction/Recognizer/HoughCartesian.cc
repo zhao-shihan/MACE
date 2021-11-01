@@ -30,8 +30,8 @@ void HoughCartesian::HoughTransform() {
         auto& addressList = hitMap.second;
         addressList.reserve(fRows * 2);
 
-        const auto hitX = hit->GetHitPosition().x();
-        const auto hitY = hit->GetHitPosition().y();
+        const auto hitX = hit->GetHitPosition().fX;
+        const auto hitY = hit->GetHitPosition().fY;
         const auto R2 = hitX * hitX + hitY * hitY;
         const auto X = 2.0 * hitX / R2;
         const auto Y = 2.0 * hitY / R2;
@@ -75,8 +75,8 @@ void HoughCartesian::HoughTransform() {
     }
 }
 
-Double_t HoughCartesian::Cross(const CLHEP::Hep3Vector& hitPos, const RealCoordinate& center) const {
-    return hitPos.x() * center.second - center.first * hitPos.y();
+Double_t HoughCartesian::Cross(const TEveVectorD& hitPos, const RealCoordinate& center) const {
+    return hitPos.fX * center.second - center.first * hitPos.fY;
 }
 
 void HoughCartesian::SaveLastRecognition(const char* fileName) {
@@ -138,7 +138,7 @@ void HoughCartesian::SaveLastRecognition(const char* fileName) {
             auto colorStyleIndex = i % (markerColor.size() * markerStyle.size());
             auto styleIndex = colorStyleIndex / markerColor.size();
             auto colorIndex = colorStyleIndex % markerColor.size();
-            auto hitMarker = new TMarker(point->GetHitPosition().x(), point->GetHitPosition().y(), markerStyle[styleIndex]);
+            auto hitMarker = new TMarker(point->GetHitPosition().fX, point->GetHitPosition().fY, markerStyle[styleIndex]);
             hitMarker->SetMarkerColor(markerColor[colorIndex]);
             hitMarker->Draw();
         }

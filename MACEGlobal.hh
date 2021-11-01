@@ -21,7 +21,10 @@ namespace MACE {
         class PersistencyWriter;
     }
     namespace Reconstruction {
-        namespace Recognizer{
+        namespace Fitter{
+            class Kalman;
+        }
+        namespace Recognizer {
             class HoughBase;
             class HoughPolar;
             class HoughCartesian;

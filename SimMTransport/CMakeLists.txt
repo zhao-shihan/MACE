@@ -2,7 +2,6 @@ project(SimMTransport)
 
 include_directories(${MPI_INCLUDE_PATH})
 include_directories(${ROOT_INCLUDE_DIRS})
-include_directories(${CLHEP_INCLUDE_DIRS})
 
 file(GLOB SimMTransport_SOURCES ${PROJECT_SOURCE_DIR}/*.cc)
 

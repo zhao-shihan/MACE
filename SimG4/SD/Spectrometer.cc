@@ -34,10 +34,12 @@ G4bool SD::Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
     const auto* const preStepPoint = step->GetPreStepPoint();
     auto* const hit = new Hit::SpectrometerHit();
     hit->SetHitTime(preStepPoint->GetGlobalTime());
-    hit->SetHitPosition(preStepPoint->GetPosition());
+    const auto& hitPosition = preStepPoint->GetPosition();
+    hit->SetHitPosition(hitPosition.x(), hitPosition.y(), hitPosition.z());
     hit->SetChamberID(preStepPoint->GetTouchable()->GetCopyNumber());
     hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
-    hit->SetVertexPosition(track->GetVertexPosition());
+    const auto& vertexPosition = track->GetVertexPosition();
+    hit->SetVertexPosition(vertexPosition.x(), vertexPosition.y(), vertexPosition.z());
     hit->SetParticleName(particle->GetParticleName());
     hit->SetTrackID(track->GetTrackID());
     fHitsCollection->insert(hit);

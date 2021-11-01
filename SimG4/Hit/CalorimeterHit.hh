@@ -14,8 +14,8 @@ public:
     CalorimeterHit(const CalorimeterHit& hit) noexcept;
     CalorimeterHit(CalorimeterHit&& hit) noexcept;
     ~CalorimeterHit() noexcept {}
-    CalorimeterHit& operator=(const CalorimeterHit& hit) noexcept;
-    CalorimeterHit& operator=(CalorimeterHit&& hit) noexcept;
+    // CalorimeterHit& operator=(const CalorimeterHit& hit) noexcept;
+    // CalorimeterHit& operator=(CalorimeterHit&& hit) noexcept;
 
     static void CreateBranches(TTree* tree);
     inline void FillBranches() noexcept;

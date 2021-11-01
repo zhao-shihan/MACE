@@ -4,7 +4,6 @@
 
 External dependencies:  
     MPI-3   (MPICH, OpenMPI, Intel MPI, etc. On your frequency.)  
-    CLHEP   (min: 2.4)  
     Geant4  (min: 4.10.7.p02)  
     ROOT    (min: 6.24.02)  
     Eigen3

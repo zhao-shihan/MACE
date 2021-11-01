@@ -44,11 +44,10 @@ int main(int, char** argv) {
     recognizer.GetRecognizedTrackList();
     recognizer.SaveLastRecognition("recognition.root");
     reader.Close();
-
-    /*
+/*
     // init geometry and mag. field
-    // new TGeoManager("Geometry", "Geane geometry");
-    // TGeoManager::Import("genfitGeom.root");
+    new TGeoManager("Geometry", "Geane geometry");
+    TGeoManager::Import("genfitGeom.root");
     genfit::MaterialEffects::getInstance()->init(new genfit::TGeoMaterialInterface());
     genfit::FieldManager::getInstance()->init(new genfit::ConstField(0., 1, 0)); // 1 T
 
@@ -139,5 +138,5 @@ int main(int, char** argv) {
     delete fitter;
 
     // open event display
-    display->open(); */
+    display->open();*/
 }

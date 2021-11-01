@@ -10,8 +10,8 @@ public:
     CalorimeterHit(const CalorimeterHit& hit) noexcept;
     CalorimeterHit(CalorimeterHit&& hit) noexcept;
     virtual ~CalorimeterHit() noexcept {}
-    CalorimeterHit& operator=(const CalorimeterHit& hit) noexcept;
-    CalorimeterHit& operator=(CalorimeterHit&& hit) noexcept;
+    // CalorimeterHit& operator=(const CalorimeterHit& hit) noexcept;
+    // CalorimeterHit& operator=(CalorimeterHit&& hit) noexcept;
 
     static constexpr const char* Name() { return "CalHit"; }
     static void CreateBranches(TTree* tree);
@@ -32,7 +32,7 @@ private:
     static Core::Column<Float_t> fgEnergy;
 };
 
-void MACE::DataModel::Hit::CalorimeterHit::FillBranches() noexcept {
+inline void MACE::DataModel::Hit::CalorimeterHit::FillBranches() noexcept {
     MACE::DataModel::Core::Data::FillBranches();
     fgHitTime.value = fHitTime;
     fgEnergy.value = fEnergy;

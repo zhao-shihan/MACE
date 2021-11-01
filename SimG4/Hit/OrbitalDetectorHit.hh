@@ -14,8 +14,8 @@ public:
     OrbitalDetectorHit(const OrbitalDetectorHit& hit) noexcept;
     OrbitalDetectorHit(OrbitalDetectorHit&& hit) noexcept;
     ~OrbitalDetectorHit() noexcept {}
-    OrbitalDetectorHit& operator=(const OrbitalDetectorHit& hit) noexcept;
-    OrbitalDetectorHit& operator=(OrbitalDetectorHit&& hit) noexcept;
+    // OrbitalDetectorHit& operator=(const OrbitalDetectorHit& hit) noexcept;
+    // OrbitalDetectorHit& operator=(OrbitalDetectorHit&& hit) noexcept;
 
     static void CreateBranches(TTree* tree);
     inline void FillBranches() noexcept;
@@ -27,15 +27,16 @@ public:
     auto GetTrackID() const { return fTrackID; }
 
     void SetVertexTime(double_t val) { fVertexTime = val; }
-    void SetVertexPosition(const CLHEP::Hep3Vector& pos) { fVertexPosition = pos; }
-    void SetVertexPosition(CLHEP::Hep3Vector&& pos) { fVertexPosition = std::move(pos); }
+    void SetVertexPosition(const TEveVectorD& pos) { fVertexPosition = pos; }
+    void SetVertexPosition(TEveVectorD&& pos) { fVertexPosition = std::move(pos); }
+    inline void SetVertexPosition(Double_t x, Double_t y, Double_t z);
     void SetParticleName(const TString& name) { fParticleName = name; }
     void SetParticleName(TString&& name) { fParticleName = std::move(name); }
     void SetTrackID(int32_t val) { fTrackID = val; }
 
 private:
     double_t fVertexTime;
-    CLHEP::Hep3Vector fVertexPosition;
+    TEveVectorD fVertexPosition;
     TString fParticleName;
     int32_t fTrackID;
 
@@ -54,11 +55,17 @@ public:
 void MACE::SimG4::Hit::OrbitalDetectorHit::FillBranches() noexcept {
     DataModel::Hit::OrbitalDetectorHit::FillBranches();
     fgVertexTime.value = fVertexTime;
-    fgVertexPositionX.value = fVertexPosition.x();
-    fgVertexPositionX.value = fVertexPosition.y();
-    fgVertexPositionX.value = fVertexPosition.z();
+    fgVertexPositionX.value = fVertexPosition.fX;
+    fgVertexPositionY.value = fVertexPosition.fY;
+    fgVertexPositionZ.value = fVertexPosition.fZ;
     fgParticleName.value = fParticleName;
     fgTrackID.value = fTrackID;
+}
+
+inline void MACE::SimG4::Hit::OrbitalDetectorHit::SetVertexPosition(Double_t x, Double_t y, Double_t z) {
+    fVertexPosition.fX = x;
+    fVertexPosition.fY = y;
+    fVertexPosition.fZ = z;
 }
 
 #include "G4THitsCollection.hh"

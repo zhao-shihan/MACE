@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CLHEP/Vector/ThreeVector.h"
+#include "TEveVector.h"
 
 #include "DataModel/Global.hh"
 #include "DataModel/Core/Data.hh"
@@ -12,8 +12,8 @@ public:
     SpectrometerHit(const SpectrometerHit& hit) noexcept;
     SpectrometerHit(SpectrometerHit&& hit) noexcept;
     virtual ~SpectrometerHit() noexcept {}
-    SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept;
-    SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept;
+    // SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept;
+    // SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept;
 
     static constexpr const char* Name() { return "CDCHit"; }
     static void CreateBranches(TTree* tree);
@@ -25,13 +25,14 @@ public:
     auto GetChamberID() const { return fChamberID; }
 
     void SetHitTime(double_t val) { fHitTime = val; }
-    void SetHitPosition(const CLHEP::Hep3Vector& val) { fHitPosition = val; }
-    void SetHitPosition(CLHEP::Hep3Vector&& val) { fHitPosition = std::move(val); }
+    void SetHitPosition(const TEveVectorD& val) { fHitPosition = val; }
+    void SetHitPosition(TEveVectorD&& val) { fHitPosition = std::move(val); }
+    inline void SetHitPosition(Double_t x, Double_t y, Double_t z);
     void SetChamberID(int32_t val) { fChamberID = val; }
 
 private:
     double_t fHitTime;
-    CLHEP::Hep3Vector fHitPosition;
+    TEveVectorD fHitPosition;
     int32_t fChamberID;
 
     static Core::Column<Float_t> fgHitTime;
@@ -41,11 +42,17 @@ private:
     static Core::Column<Int_t> fgChamberID;
 };
 
-void MACE::DataModel::Hit::SpectrometerHit::FillBranches() noexcept {
+inline void MACE::DataModel::Hit::SpectrometerHit::FillBranches() noexcept {
     MACE::DataModel::Core::Data::FillBranches();
     fgHitTime.value = fHitTime;
-    fgHitPositionX.value = fHitPosition.x();
-    fgHitPositionY.value = fHitPosition.y();
-    fgHitPositionZ.value = fHitPosition.z();
+    fgHitPositionX.value = fHitPosition.fX;
+    fgHitPositionY.value = fHitPosition.fY;
+    fgHitPositionZ.value = fHitPosition.fZ;
     fgChamberID.value = fChamberID;
+}
+
+inline void MACE::DataModel::Hit::SpectrometerHit::SetHitPosition(Double_t x, Double_t y, Double_t z) {
+    fHitPosition.fX = x;
+    fHitPosition.fY = y;
+    fHitPosition.fZ = z;
 }
