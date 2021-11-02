@@ -81,7 +81,7 @@ void Kalman::Fit(const std::vector<RecognizedTrack>& recognized) {
 }
 
 void Kalman::OpenDisplay() const {
-    genfit::EventDisplay* display = genfit::EventDisplay::getInstance();
+    auto display = genfit::EventDisplay::getInstance();
     for (auto&& track : fFitted) {
         display->addEvent(track.get());
     }
