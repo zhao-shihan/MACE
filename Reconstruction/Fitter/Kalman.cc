@@ -1,16 +1,22 @@
-/* #include "FieldManager.h"
+#include "FieldManager.h"
+#include "MaterialEffects.h"
+#include "TGeoMaterialInterface.h"
 #include "Track.h"
 #include "SpacepointMeasurement.h"
+#include "EventDisplay.h"
 
 #include "Reconstruction/Fitter/Kalman.hh"
 #include "DataModel/Hit/SpectrometerHit.hh"
 
 using namespace MACE::Reconstruction::Fitter;
 
-Kalman::Kalman() :
+Kalman::Kalman(const char* gdml) :
     fBField(new genfit::ConstField(0.0, 0.0, 0.1)),
-    // fGeoManager(new TGeoManager("FitterGeom", "detector geometry")),
-    fKalmanFitter(new genfit::KalmanFitterRefTrack()) {
+    fKalmanFitter(new genfit::KalmanFitterRefTrack()),
+    fFitted(0) {
+    new TGeoManager("Geom", "detector geometry");
+    TGeoManager::Import(gdml);
+    genfit::MaterialEffects::getInstance()->init(new genfit::TGeoMaterialInterface());
     genfit::FieldManager::getInstance()->init(fBField);
 }
 
@@ -21,34 +27,64 @@ Kalman::~Kalman() {
     genfit::FieldManager::getInstance()->destruct();
 }
 
-void Kalman::SetMagneticField(Double_t val) {
+void Kalman::SetMagneticField(Double_t Bz) {
     delete fBField;
-    fBField = new genfit::ConstField(0.0, 0.0, 0.1);
+    fBField = new genfit::ConstField(0.0, 0.0, Bz);
     genfit::FieldManager::getInstance()->init(fBField);
 }
 
-void Kalman::Fit() {
-    Initialize();
-    DoFit();
-}
-
-void Kalman::Initialize() {
+void Kalman::Fit(const std::vector<RecognizedTrack>& recognized) {
     fFitted.clear();
-    fFitted.reserve(fpRecognized->size());
-}
+    fFitted.reserve(recognized.size());
 
-void Kalman::DoFit() {
-    std::vector<genfit::TrackPoint*> points(0);
-    for (auto&& [recognizedTrack, center] : *fpRecognized) {
-        points.reserve(recognizedTrack.size());
-        auto& track = fFitted.emplace_back(std::make_shared<genfit::Track>());
+    std::vector<genfit::TrackPoint*> trackPointList(0);
+    TMatrixDSym hitCov(3);
+    hitCov.Zero();
+    Int_t hitID = 0;
+
+    for (auto&& [recognizedTrack, center] : recognized) {
+        trackPointList.reserve(recognizedTrack.size());
+
+        const auto& firstHitPos = std::min_element(recognizedTrack.cbegin(), recognizedTrack.cend(),
+            [](const auto& hit1, const auto& hit2)->bool {
+                return hit1->GetChamberID() < hit2->GetChamberID();
+            }
+        )->get()->GetHitPosition();
+        auto hitCrossCenter = firstHitPos.fX * center.second - center.first * firstHitPos.fY;
+        auto pdgCode = (hitCrossCenter > 0) ? (11) : (-11); // cross>0 => e-(11), cross<0 => e+(-11)
+        const auto& track = fFitted.emplace_back(std::make_shared<genfit::Track>(new genfit::RKTrackRep(pdgCode), TVector3(0.0, 0.0, 0.0), TVector3(firstHitPos)));
+
         for (auto&& hit : recognizedTrack) {
-            auto measurement = new genfit::SpacepointMeasurement(
-                TVectorD(3, hit->GetHitPosition().Arr()),);
-            points.emplace_back();
+            const auto& hitPos = hit->GetHitPosition();
+
+            auto hitR = hitPos.Perp();
+            auto resX = -(hitPos.fY / hitR) * fArcResolution;
+            auto resY = (hitPos.fX / hitR) * fArcResolution;
+            auto resZ = fZResolution;
+            hitCov(0, 0) = resX * resX;
+            hitCov(1, 1) = resY * resY;
+            hitCov(2, 2) = resZ * resZ;
+
+            auto measurement = new genfit::SpacepointMeasurement(TVectorD(3, hitPos), hitCov, hit->GetChamberID(), hitID, nullptr);
+            trackPointList.emplace_back(new genfit::TrackPoint(measurement, track.get()));
+
+            ++hitID;
         }
 
-        track->insertPoints(points);
-        points.clear();
+        track->insertPoints(trackPointList);
+        track->checkConsistency();
+        fKalmanFitter->processTrack(track.get());
+        track->checkConsistency();
+
+        trackPointList.clear();
     }
-} */
+}
+
+void Kalman::OpenDisplay() const {
+    genfit::EventDisplay* display = genfit::EventDisplay::getInstance();
+    for (auto&& track : fFitted) {
+        display->addEvent(track.get());
+    }
+    display->open();
+    display->reset();
+}

@@ -8,6 +8,7 @@
 #include "DataModel/PersistencyReader.hh"
 #include "Reconstruction/Recognizer/HoughCartesian.hh"
 #include "Reconstruction/Recognizer/HoughPolar.hh"
+#include "Reconstruction/Fitter/Kalman.hh"
 
 using namespace MACE;
 
@@ -41,11 +42,15 @@ int main(int, char** argv) {
     auto hitList = reader.CreateListFromTree<DataModel::Hit::SpectrometerHit>();
     recognizer.SetEventToBeRecognized(hitList);
     recognizer.Recognize();
-    recognizer.GetRecognizedTrackList();
+    const auto& recognized = recognizer.GetRecognizedTrackList();
     recognizer.SaveLastRecognition("recognition.root");
     reader.Close();
-/*
-    // init geometry and mag. field
+
+    Reconstruction::Fitter::Kalman fitter("MACEGeometry.gdml");
+    fitter.Fit(recognized);
+    fitter.OpenDisplay();
+
+    /*     // init geometry and mag. field
     new TGeoManager("Geometry", "Geane geometry");
     TGeoManager::Import("genfitGeom.root");
     genfit::MaterialEffects::getInstance()->init(new genfit::TGeoMaterialInterface());
@@ -138,5 +143,5 @@ int main(int, char** argv) {
     delete fitter;
 
     // open event display
-    display->open();*/
+    display->open(); */
 }

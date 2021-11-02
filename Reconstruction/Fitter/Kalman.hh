@@ -1,8 +1,9 @@
-/* #pragma once
+#pragma once
 
 #include "TGeoManager.h"
 
 #include "ConstField.h"
+#include "RKTrackRep.h"
 #include "KalmanFitterRefTrack.h"
 
 #include "Reconstruction/Global.hh"
@@ -14,22 +15,19 @@ private:
     using RecognizedTrack = std::pair<std::vector<std::shared_ptr<const DataModel::Hit::SpectrometerHit>>, std::pair<Double_t, Double_t>>;
 
 public:
-    Kalman();
+    Kalman(const char* gdml);
     ~Kalman();
 
-    // void SetGeometry(const char* gdml) { fGeoManager->Import(gdml); }
-    void SetRecognizedToBeFit(const std::vector<RecognizedTrack>& recgzed) { fpRecognized = &recgzed; }
-    void SetMagneticField(Double_t val);
-    void Fit();
+    void SetMagneticField(Double_t Bz);
+    void SetArcResolution(Double_t res) { fArcResolution = res; }
+    void SetZResolution(Double_t res) { fZResolution = res; }
+    void Fit(const std::vector<RecognizedTrack>& recognized);
+    void OpenDisplay() const;
 
 private:
-    void Initialize();
-    void DoFit();
-
-private:
-    const std::vector<RecognizedTrack>* fpRecognized = nullptr;
+    Double_t fArcResolution = 1.0;
+    Double_t fZResolution = 2.0;
     genfit::ConstField* fBField;
-    // TGeoManager* fGeoManager;
     genfit::KalmanFitterRefTrack* fKalmanFitter;
     std::vector<std::shared_ptr<genfit::Track>> fFitted;
-}; */
+};
