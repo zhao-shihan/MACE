@@ -7,14 +7,19 @@
 #include "DataModel/Hit/SpectrometerHit.hh"
 #include "Reconstruction/Global.hh"
 
+template<class SpectrometerHitType>
 class MACE::Reconstruction::Recognizer::HoughBase {
+    static_assert(std::is_base_of_v<DataModel::Hit::SpectrometerHit, SpectrometerHitType>,
+        "SpectrometerHitType should be derived from MACE::DataModel::Hit::SpectrometerHit");
+
     HoughBase(const HoughBase&) = delete;
     HoughBase& operator=(const HoughBase&) = delete;
+
 protected:
-    using Hit = std::shared_ptr<const DataModel::Hit::SpectrometerHit>;
+    using Hit = std::shared_ptr<const SpectrometerHitType>;
 
     // I use void* to avoid type self-reference. No elegant methods found so far.
-    using HitMapList = std::list<void*>; // Important: const void* == const HitMap*
+    using HitMapList = std::list<void*>; // Important: void* == HitMap*
     using HitMap = std::pair<Hit, std::vector<std::pair<HitMapList*, HitMapList::const_iterator>>>;
 
     template<typename T>
@@ -41,17 +46,13 @@ private:
     void FindExceedThreshold();
     void GenerateResult();
 
-    virtual Double_t ToReal1(Eigen::Index i) const = 0;
-    virtual Double_t ToReal2(Eigen::Index j) const = 0;
-    virtual Eigen::Index ToHough1(Double_t x1) const = 0;
-    virtual Eigen::Index ToHough2(Double_t x2) const = 0;
-    virtual Double_t Cross(const TEveVectorD& hitPos, const RealCoordinate& center) const = 0;
+    virtual RealCoordinate ToRealCartesian(const HoughCoordinate& center) const = 0;
 
 protected:
     const Eigen::Index fRows;
     const Eigen::Index fCols;
     size_t fThreshold = 12;
-    Double_t fTrackTimeWindow = 10.0;
+    Double_t fTrackTimeWindow = 500.0;
 
     std::vector<HitMap> fHitStore;
     HoughSpace<HitMapList> fHoughSpace;
@@ -62,3 +63,5 @@ private:
     std::vector<std::pair<Double_t, std::vector<HitMap*>>> fLeftHandCandidateTrackList;
     std::vector<std::pair<Double_t, std::vector<HitMap*>>> fRightHandCandidateTrackList;
 };
+
+#include "Reconstruction/Recognizer/HoughBase.tcc"

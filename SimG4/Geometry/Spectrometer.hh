@@ -26,7 +26,7 @@ protected:
     G4double fGasInnerLength = 19 * cm;
     G4double fGasOuterLength = 81 * cm;
 
-    G4double fShellInnerThickness = 2 * mm;
+    G4double fShellInnerThickness = 0.2 * mm;
     G4double fShellSideThickness = 5 * mm;
     G4double fShellOuterThickness = 10 * mm;
 };

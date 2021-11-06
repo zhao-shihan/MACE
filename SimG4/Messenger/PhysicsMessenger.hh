@@ -5,7 +5,8 @@
 
 #include "SimG4/Global.hh"
 
-class MACE::SimG4::Messenger::PhysicsMessenger final : public G4UImessenger {
+class MACE::SimG4::Messenger::PhysicsMessenger final :
+    public G4UImessenger {
 public:
     static PhysicsMessenger* Instance();
 private:
@@ -13,7 +14,7 @@ private:
     ~PhysicsMessenger();
     PhysicsMessenger(const PhysicsMessenger&) = delete;
     PhysicsMessenger& operator=(const PhysicsMessenger&) = delete;
-    
+
 public:
     void Set(Physics::MuoniumProduction* pMuoniumProduction) { fpMuoniumProduction = pMuoniumProduction; }
 
@@ -21,7 +22,7 @@ public:
 
 private:
     Physics::MuoniumProduction* fpMuoniumProduction;
-    
+
     G4UIdirectory* fDirectory;
     G4UIcmdWithADouble* fSetConversionProbability;
 };

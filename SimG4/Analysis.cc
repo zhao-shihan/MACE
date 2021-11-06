@@ -21,7 +21,13 @@ Analysis::Analysis() :
 void Analysis::Open() {
     G4String fullFileName("");
     std::stringstream ss;
+    bool isParallel = false;
     if (MPI::Is_initialized()) {
+        if (G4MPImanager::GetManager()->GetActiveSize() > 1) {
+            isParallel = true;
+        }
+    }
+    if (isParallel) {
         ss << fFileName << "_rank" << G4MPImanager::GetManager()->GetRank() << ".root";
         ss >> fullFileName;
     } else {
@@ -31,21 +37,14 @@ void Analysis::Open() {
     DataModel::PersistencyWriter::Open(fullFileName);
 }
 
-void Analysis::RecordCoincidence() {
-    if (fEnableCoincidenceOfCalorimeter) {
-        if (fpCalorimeterHitList->empty() ||
-            fpOrbitalDetectorHitList->empty() ||
-            fpSpectrometerHitList->empty()) {
-            return;
-        }
-    } else {
-        if (fpOrbitalDetectorHitList->empty() ||
-            fpSpectrometerHitList->empty()) {
-            return;
-        }
+void Analysis::WriteEvent() {
+    const G4bool calorimeterTriggered = !(fEnableCoincidenceOfCalorimeter && fpCalorimeterHitList->empty());
+    const G4bool orbitalDetectorTriggered = !(fEnableCoincidenceOfOrbitalDetector && fpOrbitalDetectorHitList->empty());
+    const G4bool spectrometerTriggered = !fpSpectrometerHitList->empty();
+    if (calorimeterTriggered && orbitalDetectorTriggered && spectrometerTriggered) {
+        CreateTreeFromList(fpCalorimeterHitList);
+        CreateTreeFromList(fpOrbitalDetectorHitList);
+        CreateTreeFromList(fpSpectrometerHitList);
+        WriteTrees();
     }
-    CreateTreeFromList(fpCalorimeterHitList);
-    CreateTreeFromList(fpOrbitalDetectorHitList);
-    CreateTreeFromList(fpSpectrometerHitList);
-    WriteTrees();
 }

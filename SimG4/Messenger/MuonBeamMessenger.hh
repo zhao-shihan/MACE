@@ -5,7 +5,8 @@
 
 #include "SimG4/Global.hh"
 
-class MACE::SimG4::Messenger::MuonBeamMessenger final : public G4UImessenger {
+class MACE::SimG4::Messenger::MuonBeamMessenger final :
+    public G4UImessenger {
 public:
     static MuonBeamMessenger* Instance();
 private:
@@ -13,7 +14,7 @@ private:
     ~MuonBeamMessenger();
     MuonBeamMessenger(const MuonBeamMessenger&) = delete;
     MuonBeamMessenger& operator=(const MuonBeamMessenger&) = delete;
-    
+
 public:
     void Set(Action::PrimaryGeneratorAction* pPrimaryGeneratorAction) { fpPrimaryGeneratorAction = pPrimaryGeneratorAction; }
 
@@ -21,7 +22,7 @@ public:
 
 private:
     Action::PrimaryGeneratorAction* fpPrimaryGeneratorAction;
-    
+
     G4UIdirectory* fDirectory;
     G4UIcmdWithADoubleAndUnit* fSetFlux;
     G4UIcmdWithADoubleAndUnit* fSetPlusePeakInterval;

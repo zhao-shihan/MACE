@@ -1,9 +1,9 @@
 #pragma once
 
 #include "G4VHit.hh"
+#include "G4ThreeVector.hh"
 
 #include "SimG4/Global.hh"
-
 #include "DataModel/Hit/OrbitalDetectorHit.hh"
 
 class MACE::SimG4::Hit::OrbitalDetectorHit final :
@@ -23,28 +23,30 @@ public:
 
     auto GetVertexTime() const { return fVertexTime; }
     const auto& GetVertexPosition() const { return fVertexPosition; }
-    const auto& GetParticleName() const { return fParticleName; }
+    const auto& GetParticlePDGCode() const { return fPDGCode; }
     auto GetTrackID() const { return fTrackID; }
 
+    using DataModel::Hit::OrbitalDetectorHit::SetHitPosition;
+    void SetHitPosition(const G4ThreeVector& pos) { SetHitPosition(pos.x(), pos.y(), pos.z()); }
     void SetVertexTime(double_t val) { fVertexTime = val; }
     void SetVertexPosition(const TEveVectorD& pos) { fVertexPosition = pos; }
     void SetVertexPosition(TEveVectorD&& pos) { fVertexPosition = std::move(pos); }
-    inline void SetVertexPosition(Double_t x, Double_t y, Double_t z);
-    void SetParticleName(const TString& name) { fParticleName = name; }
-    void SetParticleName(TString&& name) { fParticleName = std::move(name); }
-    void SetTrackID(int32_t val) { fTrackID = val; }
+    void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition.fX = x; fVertexPosition.fY = y; fVertexPosition.fZ = z; }
+    void SetVertexPosition(const G4ThreeVector& pos) { SetVertexPosition(pos.x(), pos.y(), pos.z()); }
+    void SetPDGCode(Int_t pdgCode) { fPDGCode = pdgCode; }
+    void SetTrackID(Int_t val) { fTrackID = val; }
 
 private:
     double_t fVertexTime;
     TEveVectorD fVertexPosition;
-    TString fParticleName;
-    int32_t fTrackID;
+    Int_t fPDGCode;
+    Int_t fTrackID;
 
     static DataModel::Core::Column<Float_t> fgVertexTime;
     static DataModel::Core::Column<Float_t> fgVertexPositionX;
     static DataModel::Core::Column<Float_t> fgVertexPositionY;
     static DataModel::Core::Column<Float_t> fgVertexPositionZ;
-    static DataModel::Core::Column<TString> fgParticleName;
+    static DataModel::Core::Column<Int_t> fgPDGCode;
     static DataModel::Core::Column<Int_t> fgTrackID;
 
 public:
@@ -58,14 +60,8 @@ void MACE::SimG4::Hit::OrbitalDetectorHit::FillBranches() noexcept {
     fgVertexPositionX.value = fVertexPosition.fX;
     fgVertexPositionY.value = fVertexPosition.fY;
     fgVertexPositionZ.value = fVertexPosition.fZ;
-    fgParticleName.value = fParticleName;
+    fgPDGCode.value = fPDGCode;
     fgTrackID.value = fTrackID;
-}
-
-inline void MACE::SimG4::Hit::OrbitalDetectorHit::SetVertexPosition(Double_t x, Double_t y, Double_t z) {
-    fVertexPosition.fX = x;
-    fVertexPosition.fY = y;
-    fVertexPosition.fZ = z;
 }
 
 #include "G4THitsCollection.hh"

@@ -17,11 +17,11 @@ MuonBeamMessenger::MuonBeamMessenger() :
 
     // Introduce some useful units.
     // per second (for beam flux)
-    new G4UnitDefinition("1/second", "1/s", "1/Time", 1.0 / second);
-    new G4UnitDefinition("1/millisecond", "1/ms", "1/Time", 1.0 / millisecond);
-    new G4UnitDefinition("1/microsecond", "1/us", "1/Time", 1.0 / microsecond);
-    new G4UnitDefinition("1/nanosecond", "1/ns", "1/Time", 1.0 / nanosecond);
-    new G4UnitDefinition("1/picosecond", "1/ps", "1/Time", 1.0 / picosecond);
+    new G4UnitDefinition("second^-1", "s^-1", "Time^-1", 1.0 / second);
+    new G4UnitDefinition("millisecond^-1", "ms^-1", "Time^-1", 1.0 / millisecond);
+    new G4UnitDefinition("microsecond^-1", "us^-1", "Time^-1", 1.0 / microsecond);
+    new G4UnitDefinition("nanosecond^-1", "ns^-1", "Time^-1", 1.0 / nanosecond);
+    new G4UnitDefinition("picosecond^-1", "ps^-1", "Time^-1", 1.0 / picosecond);
 
     fDirectory = new G4UIdirectory("/MACE/MuonBeam/");
     fDirectory->SetGuidance("MACE muon beam.");
@@ -29,7 +29,7 @@ MuonBeamMessenger::MuonBeamMessenger() :
     fSetFlux = new G4UIcmdWithADoubleAndUnit("/MACE/MuonBeam/SetFlux", this);
     fSetFlux->SetGuidance("Set muon flux.");
     fSetFlux->SetParameterName("flux", false);
-    fSetFlux->SetUnitCategory("1/Time");
+    fSetFlux->SetUnitCategory("Time^-1");
     fSetFlux->AvailableForStates(G4State_Idle);
 
     fSetPlusePeakInterval = new G4UIcmdWithADoubleAndUnit("/MACE/MuonBeam/SetPlusePeakInterval", this);

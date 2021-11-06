@@ -19,7 +19,7 @@ MonteCarlo::MonteCarlo() :
     int rank = 0;
     if (MPI::Is_initialized()) { MPI_Comm_rank(MPI_COMM_WORLD, &rank); }
     fEngine->SetSeed(4357UL + rank);
-    fEngine->SetSeed(fEngine->Integer(std::numeric_limits<int32_t>::max() - 1));
+    fEngine->SetSeed(fEngine->Integer(std::numeric_limits<int>::max() - 1));
     global = Global::Instance();
 }
 

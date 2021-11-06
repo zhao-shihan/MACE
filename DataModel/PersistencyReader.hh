@@ -31,7 +31,7 @@ std::vector<std::shared_ptr<const DataType>> MACE::DataModel::PersistencyReader:
     DataType::ReadBranches(tree);
     for (Long64_t i = 0; i < tree->GetEntries(); ++i) {
         tree->GetEntry(i);
-        dataList.emplace_back(std::make_shared<DataType>());
+        dataList.emplace_back(std::make_shared<const DataType>());
     }
     return dataList;
 }

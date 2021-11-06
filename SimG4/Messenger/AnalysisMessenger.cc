@@ -18,13 +18,14 @@ AnalysisMessenger::AnalysisMessenger() :
     fDirectory->SetGuidance("MACE::SimG4::Analysis controller.");
 
     fEnableCoincidenceOfCalorimeter = new G4UIcmdWithABool("/MACE/Analysis/EnableCoincidenceOfCalorimeter", this);
-    fEnableCoincidenceOfCalorimeter->SetGuidance("Decide whether to enable the coincidence detection of the calorimeter. "
-        "If true, save the event only when the orbital detector, magnetic spectrometer, and calorimeter are all coincident. "
-        "Otherwise, the event will be saved once the orbital detector and the magnetic spectrometer are coincident. "
-        "It is automatically set to true when detecting anti-muonium, and automatically set to false when detecting muonium. "
-        "(See also /MACE/Setup/DetectionMode)");
+    fEnableCoincidenceOfCalorimeter->SetGuidance("Enable calorimeter for coincident detection.");
     fEnableCoincidenceOfCalorimeter->SetParameterName("mode", false);
     fEnableCoincidenceOfCalorimeter->AvailableForStates(G4State_Idle);
+
+    fEnableCoincidenceOfOrbitalDetector = new G4UIcmdWithABool("/MACE/Analysis/EnableCoincidenceOfOrbitalDetector", this);
+    fEnableCoincidenceOfOrbitalDetector->SetGuidance("Enable orbital e-/e+ detector (typically MCP currently) for coincident detection.");
+    fEnableCoincidenceOfOrbitalDetector->SetParameterName("mode", false);
+    fEnableCoincidenceOfOrbitalDetector->AvailableForStates(G4State_Idle);
 
     fSetFileName = new G4UIcmdWithAString("/MACE/Analysis/SetFileName", this);
     fSetFileName->SetGuidance("Set file name.");
@@ -34,6 +35,7 @@ AnalysisMessenger::AnalysisMessenger() :
 
 AnalysisMessenger::~AnalysisMessenger() {
     delete fEnableCoincidenceOfCalorimeter;
+    delete fEnableCoincidenceOfOrbitalDetector;
     delete fSetFileName;
     delete fDirectory;
 }
@@ -41,6 +43,8 @@ AnalysisMessenger::~AnalysisMessenger() {
 void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     if (command == fEnableCoincidenceOfCalorimeter) {
         fpAnalysis->SetEnableCoincidenceOfCalorimeter(fEnableCoincidenceOfCalorimeter->GetNewBoolValue(value));
+    } else if (command == fEnableCoincidenceOfOrbitalDetector) {
+        fpAnalysis->SetEnableCoincidenceOfOrbitalDetector(fEnableCoincidenceOfOrbitalDetector->GetNewBoolValue(value));
     } else if (command == fSetFileName) {
         fpAnalysis->SetFileName(value);
     }

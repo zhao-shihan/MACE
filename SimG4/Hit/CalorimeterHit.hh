@@ -3,7 +3,6 @@
 #include "G4VHit.hh"
 
 #include "SimG4/Global.hh"
-
 #include "DataModel/Hit/CalorimeterHit.hh"
 
 class MACE::SimG4::Hit::CalorimeterHit final :
@@ -21,18 +20,17 @@ public:
     inline void FillBranches() noexcept;
     static void ReadBranches(TTree* tree);
 
-    const auto& GetParticleName() const { return fParticleName; }
+    const auto& GetParticlePDGCode() const { return fPDGCode; }
     auto GetTrackID() const { return fTrackID; }
 
-    void SetParticleName(const TString& name) { fParticleName = name; }
-    void SetParticleName(TString&& name) { fParticleName = std::move(name); }
-    void SetTrackID(int32_t val) { fTrackID = val; }
+    void SetPDGCode(Int_t pdgCode) { fPDGCode = pdgCode; }
+    void SetTrackID(Int_t val) { fTrackID = val; }
 
 private:
-    TString fParticleName;
-    int32_t fTrackID;
+    Int_t fPDGCode;
+    Int_t fTrackID;
 
-    static DataModel::Core::Column<TString> fgParticleName;
+    static DataModel::Core::Column<Int_t> fgPDGCode;
     static DataModel::Core::Column<Int_t> fgTrackID;
 
 public:
@@ -42,7 +40,7 @@ public:
 
 void MACE::SimG4::Hit::CalorimeterHit::FillBranches() noexcept {
     DataModel::Hit::CalorimeterHit::FillBranches();
-    fgParticleName.value = fParticleName;
+    fgPDGCode.value = fPDGCode;
     fgTrackID.value = fTrackID;
 }
 

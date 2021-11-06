@@ -6,7 +6,7 @@ MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgVertexTime = { "Ver
 MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgVertexPositionX = { "VertexX", 0.0f };
 MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgVertexPositionY = { "VertexY", 0.0f };
 MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgVertexPositionZ = { "VertexZ", 0.0f };
-MACE::DataModel::Core::Column<TString> OrbitalDetectorHit::fgParticleName = { "Particle", "" };
+MACE::DataModel::Core::Column<Int_t> OrbitalDetectorHit::fgPDGCode = { "PDGCode", 0 };
 MACE::DataModel::Core::Column<Int_t> OrbitalDetectorHit::fgTrackID = { "TrackID", -1 };
 
 G4Allocator<OrbitalDetectorHit>* MACE::SimG4::Hit::OrbitalDetectorAllocator = nullptr;
@@ -16,7 +16,7 @@ OrbitalDetectorHit::OrbitalDetectorHit() noexcept :
     DataModel::Hit::OrbitalDetectorHit(),
     fVertexTime(fgVertexTime.value),
     fVertexPosition(fgVertexPositionX.value, fgVertexPositionY.value, fgVertexPositionZ.value),
-    fParticleName(fgParticleName.value.Data()),
+    fPDGCode(fgPDGCode.value),
     fTrackID(fgTrackID.value) {}
 
 OrbitalDetectorHit::OrbitalDetectorHit(const OrbitalDetectorHit& hit) noexcept :
@@ -24,7 +24,7 @@ OrbitalDetectorHit::OrbitalDetectorHit(const OrbitalDetectorHit& hit) noexcept :
     DataModel::Hit::OrbitalDetectorHit(static_cast<const DataModel::Hit::OrbitalDetectorHit&>(hit)),
     fVertexTime(hit.fVertexTime),
     fVertexPosition(hit.fVertexPosition),
-    fParticleName(hit.fParticleName),
+    fPDGCode(hit.fPDGCode),
     fTrackID(hit.fTrackID) {}
 
 OrbitalDetectorHit::OrbitalDetectorHit(OrbitalDetectorHit&& hit) noexcept :
@@ -32,7 +32,7 @@ OrbitalDetectorHit::OrbitalDetectorHit(OrbitalDetectorHit&& hit) noexcept :
     DataModel::Hit::OrbitalDetectorHit(static_cast<DataModel::Hit::OrbitalDetectorHit&&>(hit)),
     fVertexTime(std::move(hit.fVertexTime)),
     fVertexPosition(std::move(hit.fVertexPosition)),
-    fParticleName(std::move(hit.fParticleName)),
+    fPDGCode(std::move(hit.fPDGCode)),
     fTrackID(std::move(hit.fTrackID)) {}
 
 // OrbitalDetectorHit& OrbitalDetectorHit::operator=(const OrbitalDetectorHit& hit) noexcept {
@@ -40,7 +40,7 @@ OrbitalDetectorHit::OrbitalDetectorHit(OrbitalDetectorHit&& hit) noexcept :
 //     DataModel::Hit::OrbitalDetectorHit::operator=(static_cast<const DataModel::Hit::OrbitalDetectorHit&>(hit));
 //     fVertexTime = hit.fVertexTime;
 //     fVertexPosition = hit.fVertexPosition;
-//     fParticleName = hit.fParticleName;
+//     fPDGCode = hit.fPDGCode;
 //     fTrackID = hit.fTrackID;
 //     return *this;
 // }
@@ -50,7 +50,7 @@ OrbitalDetectorHit::OrbitalDetectorHit(OrbitalDetectorHit&& hit) noexcept :
 //     DataModel::Hit::OrbitalDetectorHit::operator=(static_cast<DataModel::Hit::OrbitalDetectorHit&&>(hit));
 //     fVertexTime = std::move(hit.fVertexTime);
 //     fVertexPosition = std::move(hit.fVertexPosition);
-//     fParticleName = std::move(hit.fParticleName);
+//     fPDGCode = std::move(hit.fPDGCode);
 //     fTrackID = std::move(hit.fTrackID);
 //     return *this;
 // }
@@ -61,7 +61,7 @@ void OrbitalDetectorHit::CreateBranches(TTree* tree) {
     tree->Branch(fgVertexPositionX.name, &fgVertexPositionX.value);
     tree->Branch(fgVertexPositionY.name, &fgVertexPositionY.value);
     tree->Branch(fgVertexPositionZ.name, &fgVertexPositionZ.value);
-    tree->Branch(fgParticleName.name, const_cast<char*>(fgParticleName.value.Data()), "Particle/C");
+    tree->Branch(fgPDGCode.name, &fgPDGCode.value);
     tree->Branch(fgTrackID.name, &fgTrackID.value);
 }
 
@@ -71,6 +71,6 @@ void OrbitalDetectorHit::ReadBranches(TTree* tree) {
     tree->SetBranchAddress(fgVertexPositionX.name, &fgVertexPositionX.value);
     tree->SetBranchAddress(fgVertexPositionY.name, &fgVertexPositionY.value);
     tree->SetBranchAddress(fgVertexPositionZ.name, &fgVertexPositionZ.value);
-    tree->SetBranchAddress(fgParticleName.name, &fgParticleName.value);
+    tree->SetBranchAddress(fgPDGCode.name, &fgPDGCode.value);
     tree->SetBranchAddress(fgTrackID.name, &fgTrackID.value);
 }

@@ -10,7 +10,8 @@
 
 using namespace MACE::Reconstruction::Fitter;
 
-Kalman::Kalman(const char* gdml) :
+template<class SpectrometerHitType>
+Kalman<SpectrometerHitType>::Kalman(const char* gdml) :
     fBField(new genfit::ConstField(0.0, 0.0, 0.1)),
     fKalmanFitter(new genfit::KalmanFitterRefTrack()),
     fFitted(0) {
@@ -20,20 +21,23 @@ Kalman::Kalman(const char* gdml) :
     genfit::FieldManager::getInstance()->init(fBField);
 }
 
-Kalman::~Kalman() {
+template<class SpectrometerHitType>
+Kalman<SpectrometerHitType>::~Kalman() {
     // delete fGeoManager;
     delete fBField;
     delete fKalmanFitter;
     genfit::FieldManager::getInstance()->destruct();
 }
 
-void Kalman::SetMagneticField(Double_t Bz) {
+template<class SpectrometerHitType>
+void Kalman<SpectrometerHitType>::SetMagneticField(Double_t Bz) {
     delete fBField;
     fBField = new genfit::ConstField(0.0, 0.0, Bz);
     genfit::FieldManager::getInstance()->init(fBField);
 }
 
-void Kalman::Fit(const std::vector<RecognizedTrack>& recognized) {
+template<class SpectrometerHitType>
+void Kalman<SpectrometerHitType>::Fit(const std::vector<RecognizedTrack>& recognized) {
     fFitted.clear();
     fFitted.reserve(recognized.size());
 
@@ -80,7 +84,8 @@ void Kalman::Fit(const std::vector<RecognizedTrack>& recognized) {
     }
 }
 
-void Kalman::OpenDisplay() const {
+template<class SpectrometerHitType>
+void Kalman<SpectrometerHitType>::OpenDisplay() const {
     auto display = genfit::EventDisplay::getInstance();
     for (auto&& track : fFitted) {
         display->addEvent(track.get());

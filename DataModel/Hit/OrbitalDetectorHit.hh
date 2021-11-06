@@ -26,7 +26,7 @@ public:
     void SetHitTime(double_t val) { fHitTime = val; }
     void SetHitPosition(const TEveVectorD& val) { fHitPosition = val; }
     void SetHitPosition(TEveVectorD&& val) { fHitPosition = std::move(val); }
-    inline void SetHitPosition(Double_t x, Double_t y, Double_t z);
+    void SetHitPosition(Double_t x, Double_t y, Double_t z) { fHitPosition.fX = x; fHitPosition.fY = y; fHitPosition.fZ = z; }
 
 private:
     double_t fHitTime;
@@ -44,10 +44,4 @@ inline void MACE::DataModel::Hit::OrbitalDetectorHit::FillBranches() noexcept {
     fgHitPositionX.value = fHitPosition.fX;
     fgHitPositionY.value = fHitPosition.fY;
     fgHitPositionZ.value = fHitPosition.fZ;
-}
-
-inline void MACE::DataModel::Hit::OrbitalDetectorHit::SetHitPosition(Double_t x, Double_t y, Double_t z) {
-    fHitPosition.fX = x;
-    fHitPosition.fY = y;
-    fHitPosition.fZ = z;
 }

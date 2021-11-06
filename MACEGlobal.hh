@@ -21,13 +21,13 @@ namespace MACE {
         class PersistencyWriter;
     }
     namespace Reconstruction {
-        namespace Fitter{
-            class Kalman;
+        namespace Fitter {
+            template<class SpectrometerHitType> class Kalman;
         }
         namespace Recognizer {
-            class HoughBase;
-            class HoughPolar;
-            class HoughCartesian;
+            template<class SpectrometerHitType> class HoughBase;
+            template<class SpectrometerHitType> class HoughPolar;
+            template<class SpectrometerHitType> class HoughCartesian;
         }
         class ExperimentData;
         class TOFAnalyzer;

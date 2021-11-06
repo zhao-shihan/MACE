@@ -1,8 +1,5 @@
-#include "Reconstruction/Recognizer/HoughBase.hh"
-
-using namespace MACE::Reconstruction::Recognizer;
-
-HoughBase::HoughBase(Eigen::Index rows, Eigen::Index cols) :
+template<class SpectrometerHitType>
+MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType>::HoughBase(Eigen::Index rows, Eigen::Index cols) :
     fRows(rows),
     fCols(cols),
     fHitStore(0),
@@ -15,9 +12,11 @@ HoughBase::HoughBase(Eigen::Index rows, Eigen::Index cols) :
     fExceedThreshold.reserve(rows * cols / 5);
 }
 
-HoughBase::~HoughBase() {}
+template<class SpectrometerHitType>
+MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType>::~HoughBase() {}
 
-void HoughBase::SetEventToBeRecognized(const std::vector<Hit>& hitVector) {
+template<class SpectrometerHitType>
+void MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType>::SetEventToBeRecognized(const std::vector<Hit>& hitVector) {
     fHitStore.clear();
     fHitStore.reserve(hitVector.size());
     for (auto&& hit : hitVector) {
@@ -25,14 +24,16 @@ void HoughBase::SetEventToBeRecognized(const std::vector<Hit>& hitVector) {
     }
 }
 
-void HoughBase::Recognize() {
+template<class SpectrometerHitType>
+void MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType>::Recognize() {
     Initialize();
     HoughTransform();
     FindExceedThreshold();
     GenerateResult();
 }
 
-void HoughBase::Initialize() {
+template<class SpectrometerHitType>
+void MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType>::Initialize() {
     std::for_each_n(fHoughSpace.data(), fRows * fCols, [](auto& elem) { elem.clear(); });
     fRecognizedList.clear();
     fExceedThreshold.clear();
@@ -40,12 +41,13 @@ void HoughBase::Initialize() {
     fRightHandCandidateTrackList.clear();
 }
 
-void HoughBase::FindExceedThreshold() {
+template<class SpectrometerHitType>
+void MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType>::FindExceedThreshold() {
     for (Eigen::Index i = 0; i < fRows; ++i) {
-        for (Eigen::Index j = 0; j < fRows; ++j) {
+        for (Eigen::Index j = 0; j < fCols; ++j) {
             const auto& hitMapList = fHoughSpace(i, j);
             if (hitMapList.size() >= fThreshold) {
-                fExceedThreshold.emplace_back(&hitMapList, std::make_pair(ToReal1(i), ToReal2(j)));
+                fExceedThreshold.emplace_back(&hitMapList, ToRealCartesian(std::make_pair(i, j)));
             }
         }
     }
@@ -56,7 +58,8 @@ void HoughBase::FindExceedThreshold() {
     );
 }
 
-void HoughBase::GenerateResult() {
+template<class SpectrometerHitType>
+void MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType>::GenerateResult() {
     for (auto&& rawListAndCenter : fExceedThreshold) {
         const auto& rawList = rawListAndCenter.first;
         const auto& center = rawListAndCenter.second;
@@ -68,7 +71,7 @@ void HoughBase::GenerateResult() {
         for (auto&& hitMapVoid : *rawList) {
             const auto& hit = static_cast<HitMap*>(hitMapVoid)->first;
 
-            auto cross = Cross(hit->GetHitPosition(), center);
+            auto cross = hit->GetHitPosition().fX * center.second - center.first * hit->GetHitPosition().fY;
             auto& candidateTrackList = (cross > 0) ? fRightHandCandidateTrackList : fLeftHandCandidateTrackList;
 
             auto candidateTrackToBeJoin = std::find_if(candidateTrackList.begin(), candidateTrackList.end(),
@@ -86,7 +89,7 @@ void HoughBase::GenerateResult() {
         }
 
         auto DumpToResultAndEraseHoughCurve =
-            [&](const std::vector<std::pair<Double_t, std::vector<HitMap*>>>& candidateTrackList) {
+            [&](const decltype(fLeftHandCandidateTrackList)& candidateTrackList) {
             for (auto&& candidateTrack : candidateTrackList) {
                 const auto& hitMapVector = candidateTrack.second;
                 if (hitMapVector.size() < fThreshold) { continue; }

@@ -7,7 +7,8 @@
 
 #include "SimG4/Global.hh"
 
-class MACE::SimG4::Messenger::AnalysisMessenger final : public G4UImessenger {
+class MACE::SimG4::Messenger::AnalysisMessenger final :
+    public G4UImessenger {
 public:
     static AnalysisMessenger* Instance();
 private:
@@ -23,8 +24,9 @@ public:
 
 private:
     Analysis* fpAnalysis;
-    
+
     G4UIdirectory* fDirectory;
     G4UIcmdWithABool* fEnableCoincidenceOfCalorimeter;
+    G4UIcmdWithABool* fEnableCoincidenceOfOrbitalDetector;
     G4UIcmdWithAString* fSetFileName;
 };

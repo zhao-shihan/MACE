@@ -5,11 +5,11 @@ include_directories(${ROOT_INCLUDE_DIRS})
 
 file(GLOB SimMTransport_SOURCES ${PROJECT_SOURCE_DIR}/*.cc)
 
-add_library(SimMTransport-static ${SimMTransport_SOURCES})
-target_link_libraries(SimMTransport-static ${ROOT_LIBRARIES} ${MPI_LIBRARIES})
+add_library(SimMTransport_static ${SimMTransport_SOURCES})
+target_link_libraries(SimMTransport_static ${ROOT_LIBRARIES} ${MPI_LIBRARIES})
 
 add_executable(SimMTransport SimMTransport.cc)
-target_link_libraries(SimMTransport ${ROOT_LIBRARIES} ${MPI_LIBRARIES} SimMTransport-static)
+target_link_libraries(SimMTransport SimMTransport_static ${ROOT_LIBRARIES} ${MPI_LIBRARIES})
 
 configure_file(${PROJECT_SOURCE_DIR}/sample.cfg ${PROJECT_BINARY_DIR} COPYONLY)
 

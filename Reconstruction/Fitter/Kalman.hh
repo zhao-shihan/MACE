@@ -8,11 +8,16 @@
 
 #include "Reconstruction/Global.hh"
 
+template<class SpectrometerHitType>
 class MACE::Reconstruction::Fitter::Kalman final {
+    static_assert(std::is_base_of_v<DataModel::Hit::SpectrometerHit, SpectrometerHitType>,
+        "SpectrometerHitType should be derived from MACE::DataModel::Hit::SpectrometerHit");
+
     Kalman(const Kalman&) = delete;
     Kalman& operator=(const Kalman&) = delete;
+
 private:
-    using RecognizedTrack = std::pair<std::vector<std::shared_ptr<const DataModel::Hit::SpectrometerHit>>, std::pair<Double_t, Double_t>>;
+    using RecognizedTrack = std::pair<std::vector<std::shared_ptr<const SpectrometerHitType>>, std::pair<Double_t, Double_t>>;
 
 public:
     Kalman(const char* gdml);
@@ -31,3 +36,5 @@ private:
     genfit::KalmanFitterRefTrack* fKalmanFitter;
     std::vector<std::shared_ptr<genfit::Track>> fFitted;
 };
+
+#include "Reconstruction/Fitter/Kalman.tcc"

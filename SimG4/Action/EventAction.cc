@@ -16,5 +16,5 @@ void EventAction::BeginOfEventAction(const G4Event* event) {
 }
 
 void EventAction::EndOfEventAction(const G4Event*) {
-    Analysis::Instance()->RecordCoincidence();
+    Analysis::Instance()->WriteEvent();
 }

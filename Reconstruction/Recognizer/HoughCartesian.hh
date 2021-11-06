@@ -5,10 +5,21 @@
 #include "Reconstruction/Global.hh"
 #include "Reconstruction/Recognizer/HoughBase.hh"
 
+template<class SpectrometerHitType>
 class MACE::Reconstruction::Recognizer::HoughCartesian final :
-    public MACE::Reconstruction::Recognizer::HoughBase {
+    public MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType> {
     HoughCartesian(const HoughCartesian&) = delete;
     HoughCartesian& operator=(const HoughCartesian&) = delete;
+private:
+    using Base = MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType>;
+    using Hit = typename Base::Hit;
+    using HitMapList = typename Base::HitMapList;
+    using HitMap = typename Base::HitMap;
+    template<typename T>
+    using HoughSpace = typename Base::HoughSpace<T>;
+    using HoughCoordinate = typename Base::HoughCoordinate;
+    using RealCoordinate = typename Base::RealCoordinate;
+
 public:
     HoughCartesian(Double_t houghSpaceExtent, Eigen::Index size, Double_t protectedRadius);
     ~HoughCartesian();
@@ -19,11 +30,11 @@ public:
 private:
     void HoughTransform() override;
 
-    Double_t ToReal1(Eigen::Index i) const override { return -fExtent + (i + 0.5) * fResolution; }
-    Double_t ToReal2(Eigen::Index j) const override { return -fExtent + (j + 0.5) * fResolution; }
-    Eigen::Index ToHough1(Double_t x) const override { return (x + fExtent) / fResolution; }
-    Eigen::Index ToHough2(Double_t y) const override { return (y + fExtent) / fResolution; }
-    Double_t Cross(const TEveVectorD& hitPos, const RealCoordinate& center) const override;
+    Double_t ToRealX(Eigen::Index i) const { return -fExtent + (i + 0.5) * fResolution; }
+    Double_t ToRealY(Eigen::Index j) const { return -fExtent + (j + 0.5) * fResolution; }
+    Eigen::Index ToHoughX(Double_t x) const { return (x + fExtent) / fResolution; }
+    Eigen::Index ToHoughY(Double_t y) const { return (y + fExtent) / fResolution; }
+    RealCoordinate ToRealCartesian(const HoughCoordinate& center) const override { return std::make_pair(ToRealX(center.first), ToRealY(center.second)); }
 
 private:
     const Double_t fExtent;
@@ -35,3 +46,5 @@ private:
 
     TFile* fFile = nullptr;
 };
+
+#include "Reconstruction/Recognizer/HoughCartesian.tcc"

@@ -40,7 +40,7 @@ G4bool SD::Calorimeter::ProcessHits(G4Step* step, G4TouchableHistory*) {
     auto* const hit = new Hit::CalorimeterHit();
     hit->SetHitTime(preStepPoint->GetGlobalTime());
     hit->SetEnergy(preStepPoint->GetKineticEnergy());
-    hit->SetParticleName(particle->GetParticleName());
+    hit->SetPDGCode(particle->GetPDGEncoding());
     hit->SetTrackID(track->GetTrackID());
     fHitsCollection->insert(hit);
     return true;

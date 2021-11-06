@@ -27,13 +27,13 @@ public:
     void SetHitTime(double_t val) { fHitTime = val; }
     void SetHitPosition(const TEveVectorD& val) { fHitPosition = val; }
     void SetHitPosition(TEveVectorD&& val) { fHitPosition = std::move(val); }
-    inline void SetHitPosition(Double_t x, Double_t y, Double_t z);
-    void SetChamberID(int32_t val) { fChamberID = val; }
+    void SetHitPosition(Double_t x, Double_t y, Double_t z) { fHitPosition.fX = x; fHitPosition.fY = y; fHitPosition.fZ = z; }
+    void SetChamberID(Int_t val) { fChamberID = val; }
 
 private:
     double_t fHitTime;
     TEveVectorD fHitPosition;
-    int32_t fChamberID;
+    Int_t fChamberID;
 
     static Core::Column<Float_t> fgHitTime;
     static Core::Column<Float_t> fgHitPositionX;
@@ -49,10 +49,4 @@ inline void MACE::DataModel::Hit::SpectrometerHit::FillBranches() noexcept {
     fgHitPositionY.value = fHitPosition.fY;
     fgHitPositionZ.value = fHitPosition.fZ;
     fgChamberID.value = fChamberID;
-}
-
-inline void MACE::DataModel::Hit::SpectrometerHit::SetHitPosition(Double_t x, Double_t y, Double_t z) {
-    fHitPosition.fX = x;
-    fHitPosition.fY = y;
-    fHitPosition.fZ = z;
 }

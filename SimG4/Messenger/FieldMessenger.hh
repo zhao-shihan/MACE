@@ -5,7 +5,8 @@
 
 #include "SimG4/Global.hh"
 
-class MACE::SimG4::Messenger::FieldMessenger final : public G4UImessenger {
+class MACE::SimG4::Messenger::FieldMessenger final :
+    public G4UImessenger {
 public:
     static FieldMessenger* Instance();
 private:
