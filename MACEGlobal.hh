@@ -2,8 +2,7 @@
 
 namespace MACE {
     namespace DataModel {
-        namespace Core {
-            template<typename ColumnType> struct Column;
+        namespace Interface {
             class Data;
             class PersistencyHandler;
         }
@@ -17,8 +16,36 @@ namespace MACE {
             class OrbitalDetectorRawHit;
             class SpectrometerRawHit;
         }
+        template<typename ColumnType> struct Column;
         class PersistencyReader;
         class PersistencyWriter;
+    }
+    namespace Geometry {
+        namespace Entity {
+            class AcceleratorField;
+            class BaseInterface;
+            class Calorimeter;
+            class Collimator;
+            class FirstBendField;
+            class FirstTransportField;
+            class OrbitalDetector;
+            class OrbitalDetectorShellField;
+            class OrbitalDetectorShield;
+            class SecondBendField;
+            class SecondTransportField;
+            class SelectorField;
+            class Spectrometer;
+            class SpectrometerField;
+            class SpectrometerGas;
+            class SpectrometerReadOutLayer;
+            class SpectrometerShield;
+            class Target;
+            class ThirdTransportField;
+            class World;
+        }
+        namespace Interface {
+            class Entity;
+        }
     }
     namespace Reconstruction {
         namespace Fitter {
@@ -29,8 +56,6 @@ namespace MACE {
             template<class SpectrometerHitType> class HoughPolar;
             template<class SpectrometerHitType> class HoughCartesian;
         }
-        class ExperimentData;
-        class TOFAnalyzer;
     }
     namespace SimG4 {
         namespace Action {

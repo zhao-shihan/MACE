@@ -2,12 +2,12 @@
 
 using namespace MACE::SimG4::Hit;
 
-MACE::DataModel::Core::Column<Float_t> SpectrometerHit::fgVertexTime = { "VertexT", 0.0f };
-MACE::DataModel::Core::Column<Float_t> SpectrometerHit::fgVertexPositionX = { "VertexX", 0.0f };
-MACE::DataModel::Core::Column<Float_t> SpectrometerHit::fgVertexPositionY = { "VertexY", 0.0f };
-MACE::DataModel::Core::Column<Float_t> SpectrometerHit::fgVertexPositionZ = { "VertexZ", 0.0f };
-MACE::DataModel::Core::Column<Int_t> SpectrometerHit::fgPDGCode = { "PDGCode", 0 };
-MACE::DataModel::Core::Column<Int_t> SpectrometerHit::fgTrackID = { "TrackID", -1 };
+MACE::DataModel::Column<Float_t> SpectrometerHit::fgVertexTime = { "VertexT", 0.0f };
+MACE::DataModel::Column<Float_t> SpectrometerHit::fgVertexPositionX = { "VertexX", 0.0f };
+MACE::DataModel::Column<Float_t> SpectrometerHit::fgVertexPositionY = { "VertexY", 0.0f };
+MACE::DataModel::Column<Float_t> SpectrometerHit::fgVertexPositionZ = { "VertexZ", 0.0f };
+MACE::DataModel::Column<Int_t> SpectrometerHit::fgPDGCode = { "PDGCode", 0 };
+MACE::DataModel::Column<Int_t> SpectrometerHit::fgTrackID = { "TrackID", -1 };
 
 G4Allocator<SpectrometerHit>* MACE::SimG4::Hit::SpectrometerHitAllocator = nullptr;
 

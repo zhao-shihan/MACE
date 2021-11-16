@@ -2,10 +2,10 @@
 
 using namespace MACE::DataModel::Hit;
 
-MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgHitTime = { "HitT", 0.0f };
-MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgHitPositionX = { "HitX", 0.0f };
-MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgHitPositionY = { "HitY", 0.0f };
-MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgHitPositionZ = { "HitZ", 0.0f };
+MACE::DataModel::Column<Float_t> OrbitalDetectorHit::fgHitTime = { "HitT", 0.0f };
+MACE::DataModel::Column<Float_t> OrbitalDetectorHit::fgHitPositionX = { "HitX", 0.0f };
+MACE::DataModel::Column<Float_t> OrbitalDetectorHit::fgHitPositionY = { "HitY", 0.0f };
+MACE::DataModel::Column<Float_t> OrbitalDetectorHit::fgHitPositionZ = { "HitZ", 0.0f };
 
 OrbitalDetectorHit::OrbitalDetectorHit() noexcept :
     Data(),

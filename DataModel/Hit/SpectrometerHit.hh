@@ -3,10 +3,10 @@
 #include "TEveVector.h"
 
 #include "DataModel/Global.hh"
-#include "DataModel/Core/Data.hh"
+#include "DataModel/Interface/Data.hh"
 
 class MACE::DataModel::Hit::SpectrometerHit :
-    protected MACE::DataModel::Core::Data {
+    protected MACE::DataModel::Interface::Data {
 public:
     SpectrometerHit() noexcept;
     SpectrometerHit(const SpectrometerHit& hit) noexcept;
@@ -35,15 +35,15 @@ private:
     TEveVectorD fHitPosition;
     Int_t fChamberID;
 
-    static Core::Column<Float_t> fgHitTime;
-    static Core::Column<Float_t> fgHitPositionX;
-    static Core::Column<Float_t> fgHitPositionY;
-    static Core::Column<Float_t> fgHitPositionZ;
-    static Core::Column<Int_t> fgChamberID;
+    static Column<Float_t> fgHitTime;
+    static Column<Float_t> fgHitPositionX;
+    static Column<Float_t> fgHitPositionY;
+    static Column<Float_t> fgHitPositionZ;
+    static Column<Int_t> fgChamberID;
 };
 
 inline void MACE::DataModel::Hit::SpectrometerHit::FillBranches() noexcept {
-    MACE::DataModel::Core::Data::FillBranches();
+    MACE::DataModel::Interface::Data::FillBranches();
     fgHitTime.value = fHitTime;
     fgHitPositionX.value = fHitPosition.fX;
     fgHitPositionY.value = fHitPosition.fY;

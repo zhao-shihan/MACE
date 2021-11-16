@@ -30,8 +30,8 @@ private:
     Int_t fPDGCode;
     Int_t fTrackID;
 
-    static DataModel::Core::Column<Int_t> fgPDGCode;
-    static DataModel::Core::Column<Int_t> fgTrackID;
+    static DataModel::Column<Int_t> fgPDGCode;
+    static DataModel::Column<Int_t> fgTrackID;
 
 public:
     inline void* operator new(size_t);

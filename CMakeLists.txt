@@ -16,7 +16,7 @@ else()
 endif()
 
 # ROOT
-find_package(ROOT REQUIRED)
+find_package(ROOT REQUIRED COMPONENTS Geom)
 
 # EIGEN3
 find_package(Eigen3 REQUIRED)
@@ -44,6 +44,7 @@ endfunction()
 
 add_subdirectory(Buildin)
 add_subdirectory(DataModel)
+add_subdirectory(Geometry)
 add_subdirectory(Reconstruction)
 add_subdirectory(SimG4)
 add_subdirectory(SimMTransport)

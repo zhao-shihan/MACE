@@ -2,8 +2,8 @@
 
 using namespace MACE::SimG4::Hit;
 
-MACE::DataModel::Core::Column<Int_t> CalorimeterHit::fgPDGCode = { "PDGCode", 0 };
-MACE::DataModel::Core::Column<Int_t> CalorimeterHit::fgTrackID = { "TrackID", -1 };
+MACE::DataModel::Column<Int_t> CalorimeterHit::fgPDGCode = { "PDGCode", 0 };
+MACE::DataModel::Column<Int_t> CalorimeterHit::fgTrackID = { "TrackID", -1 };
 
 G4Allocator<CalorimeterHit>* MACE::SimG4::Hit::CalorimeterHitAllocator = nullptr;
 

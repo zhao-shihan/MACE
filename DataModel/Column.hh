@@ -3,7 +3,7 @@
 #include "DataModel/Global.hh"
 
 template<typename ColumnType>
-struct MACE::DataModel::Core::Column {
+struct MACE::DataModel::Column {
     const char* const name;
     ColumnType value;
 };

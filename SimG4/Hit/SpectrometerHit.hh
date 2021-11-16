@@ -42,12 +42,12 @@ private:
     Int_t fPDGCode;
     Int_t fTrackID;
 
-    static DataModel::Core::Column<Float_t> fgVertexTime;
-    static DataModel::Core::Column<Float_t> fgVertexPositionX;
-    static DataModel::Core::Column<Float_t> fgVertexPositionY;
-    static DataModel::Core::Column<Float_t> fgVertexPositionZ;
-    static DataModel::Core::Column<Int_t> fgPDGCode;
-    static DataModel::Core::Column<Int_t> fgTrackID;
+    static DataModel::Column<Float_t> fgVertexTime;
+    static DataModel::Column<Float_t> fgVertexPositionX;
+    static DataModel::Column<Float_t> fgVertexPositionY;
+    static DataModel::Column<Float_t> fgVertexPositionZ;
+    static DataModel::Column<Int_t> fgPDGCode;
+    static DataModel::Column<Int_t> fgTrackID;
 
 public:
     inline void* operator new(size_t);

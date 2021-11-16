@@ -2,8 +2,8 @@
 
 using namespace MACE::DataModel::Hit;
 
-MACE::DataModel::Core::Column<Float_t> CalorimeterHit::fgHitTime = { "HitT", 0.0f };
-MACE::DataModel::Core::Column<Float_t> CalorimeterHit::fgEnergy = { "Energy", 0.0f };
+MACE::DataModel::Column<Float_t> CalorimeterHit::fgHitTime = { "HitT", 0.0f };
+MACE::DataModel::Column<Float_t> CalorimeterHit::fgEnergy = { "Energy", 0.0f };
 
 CalorimeterHit::CalorimeterHit() noexcept :
     Data(),

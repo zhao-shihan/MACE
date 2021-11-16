@@ -1,9 +1,9 @@
 #pragma once
 
 #include "DataModel/Global.hh"
-#include "DataModel/Core/Column.hh"
+#include "DataModel/Column.hh"
 
-class MACE::DataModel::Core::Data {
+class MACE::DataModel::Interface::Data {
 public:
     virtual ~Data() noexcept = 0;
 

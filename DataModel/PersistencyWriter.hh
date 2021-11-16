@@ -3,10 +3,10 @@
 #include <memory>
 
 #include "DataModel/Global.hh"
-#include "DataModel/Core/PersistencyHandler.hh"
+#include "DataModel/Interface/PersistencyHandler.hh"
 
 class MACE::DataModel::PersistencyWriter :
-    public MACE::DataModel::Core::PersistencyHandler {
+    public MACE::DataModel::Interface::PersistencyHandler {
     PersistencyWriter(const PersistencyWriter&) = delete;
     PersistencyWriter& operator=(const PersistencyWriter&) = delete;
 public:
@@ -51,8 +51,8 @@ private:
 
 template<class DataTypeInTree, class DataTypeInList>
 TTree* MACE::DataModel::PersistencyWriter::CreateTreeFromList(const std::vector<DataTypeInList*>* dataList, TreeOperation behaviour) {
-    static_assert(std::is_base_of_v<Core::Data, DataTypeInList>, "DataTypeInList should be derived from DataModel::Core::Data");
-    static_assert(std::is_base_of_v<Core::Data, DataTypeInTree>, "DataTypeInTree should be derived from DataModel::Core::Data");
+    static_assert(std::is_base_of_v<Interface::Data, DataTypeInList>, "DataTypeInList should be derived from DataModel::Core::Data");
+    static_assert(std::is_base_of_v<Interface::Data, DataTypeInTree>, "DataTypeInTree should be derived from DataModel::Core::Data");
     static_assert(std::is_base_of_v<DataTypeInTree, DataTypeInList>, "DataTypeInList should be derived from DataTypeInTree");
     TString name = PersistencyHandler::GetTreeName<DataTypeInTree>();
     TTree* tree = new TTree(name, name);
@@ -67,8 +67,8 @@ TTree* MACE::DataModel::PersistencyWriter::CreateTreeFromList(const std::vector<
 
 template<class DataTypeInTree, class DataTypeInList>
 TTree* MACE::DataModel::PersistencyWriter::CreateTreeFromList(const std::vector<std::shared_ptr<DataTypeInList>>* dataList, TreeOperation behaviour) {
-    static_assert(std::is_base_of_v<Core::Data, DataTypeInList>, "DataTypeInList should be derived from DataModel::Core::Data");
-    static_assert(std::is_base_of_v<Core::Data, DataTypeInTree>, "DataTypeInTree should be derived from DataModel::Core::Data");
+    static_assert(std::is_base_of_v<Interface::Data, DataTypeInList>, "DataTypeInList should be derived from DataModel::Core::Data");
+    static_assert(std::is_base_of_v<Interface::Data, DataTypeInTree>, "DataTypeInTree should be derived from DataModel::Core::Data");
     static_assert(std::is_base_of_v<DataTypeInTree, DataTypeInList>, "DataTypeInList should be derived from DataTypeInTree");
     TString name = PersistencyHandler::GetTreeName<DataTypeInTree>();
     TTree* tree = new TTree(name, name);

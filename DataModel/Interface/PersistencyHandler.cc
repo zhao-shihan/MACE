@@ -1,8 +1,8 @@
 #include <iostream>
 
-#include "DataModel/Core/PersistencyHandler.hh"
+#include "DataModel/Interface/PersistencyHandler.hh"
 
-using namespace MACE::DataModel::Core;
+using namespace MACE::DataModel::Interface;
 
 PersistencyHandler::PersistencyHandler() :
     fFile(nullptr),

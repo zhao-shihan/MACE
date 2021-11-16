@@ -2,11 +2,11 @@
 
 using namespace MACE::DataModel::Hit;
 
-MACE::DataModel::Core::Column<Float_t> SpectrometerHit::fgHitTime = { "HitT", 0.0f };
-MACE::DataModel::Core::Column<Float_t> SpectrometerHit::fgHitPositionX = { "HitX", 0.0f };
-MACE::DataModel::Core::Column<Float_t> SpectrometerHit::fgHitPositionY = { "HitY", 0.0f };
-MACE::DataModel::Core::Column<Float_t> SpectrometerHit::fgHitPositionZ = { "HitZ", 0.0f };
-MACE::DataModel::Core::Column<Int_t> SpectrometerHit::fgChamberID = { "CbID", -1 };
+MACE::DataModel::Column<Float_t> SpectrometerHit::fgHitTime = { "HitT", 0.0f };
+MACE::DataModel::Column<Float_t> SpectrometerHit::fgHitPositionX = { "HitX", 0.0f };
+MACE::DataModel::Column<Float_t> SpectrometerHit::fgHitPositionY = { "HitY", 0.0f };
+MACE::DataModel::Column<Float_t> SpectrometerHit::fgHitPositionZ = { "HitZ", 0.0f };
+MACE::DataModel::Column<Int_t> SpectrometerHit::fgChamberID = { "CbID", -1 };
 
 SpectrometerHit::SpectrometerHit() noexcept :
     Data(),

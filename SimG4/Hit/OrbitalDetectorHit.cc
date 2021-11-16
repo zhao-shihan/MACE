@@ -2,12 +2,12 @@
 
 using namespace MACE::SimG4::Hit;
 
-MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgVertexTime = { "VertexT", 0.0f };
-MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgVertexPositionX = { "VertexX", 0.0f };
-MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgVertexPositionY = { "VertexY", 0.0f };
-MACE::DataModel::Core::Column<Float_t> OrbitalDetectorHit::fgVertexPositionZ = { "VertexZ", 0.0f };
-MACE::DataModel::Core::Column<Int_t> OrbitalDetectorHit::fgPDGCode = { "PDGCode", 0 };
-MACE::DataModel::Core::Column<Int_t> OrbitalDetectorHit::fgTrackID = { "TrackID", -1 };
+MACE::DataModel::Column<Float_t> OrbitalDetectorHit::fgVertexTime = { "VertexT", 0.0f };
+MACE::DataModel::Column<Float_t> OrbitalDetectorHit::fgVertexPositionX = { "VertexX", 0.0f };
+MACE::DataModel::Column<Float_t> OrbitalDetectorHit::fgVertexPositionY = { "VertexY", 0.0f };
+MACE::DataModel::Column<Float_t> OrbitalDetectorHit::fgVertexPositionZ = { "VertexZ", 0.0f };
+MACE::DataModel::Column<Int_t> OrbitalDetectorHit::fgPDGCode = { "PDGCode", 0 };
+MACE::DataModel::Column<Int_t> OrbitalDetectorHit::fgTrackID = { "TrackID", -1 };
 
 G4Allocator<OrbitalDetectorHit>* MACE::SimG4::Hit::OrbitalDetectorAllocator = nullptr;
 

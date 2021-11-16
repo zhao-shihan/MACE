@@ -3,10 +3,10 @@
 #include "TEveVector.h"
 
 #include "DataModel/Global.hh"
-#include "DataModel/Core/Data.hh"
+#include "DataModel/Interface/Data.hh"
 
 class MACE::DataModel::Hit::OrbitalDetectorHit :
-    protected MACE::DataModel::Core::Data {
+    protected MACE::DataModel::Interface::Data {
 public:
     OrbitalDetectorHit() noexcept;
     OrbitalDetectorHit(const OrbitalDetectorHit& hit) noexcept;
@@ -32,14 +32,14 @@ private:
     double_t fHitTime;
     TEveVectorD fHitPosition;
 
-    static Core::Column<Float_t> fgHitTime;
-    static Core::Column<Float_t> fgHitPositionX;
-    static Core::Column<Float_t> fgHitPositionY;
-    static Core::Column<Float_t> fgHitPositionZ;
+    static Column<Float_t> fgHitTime;
+    static Column<Float_t> fgHitPositionX;
+    static Column<Float_t> fgHitPositionY;
+    static Column<Float_t> fgHitPositionZ;
 };
 
 inline void MACE::DataModel::Hit::OrbitalDetectorHit::FillBranches() noexcept {
-    MACE::DataModel::Core::Data::FillBranches();
+    MACE::DataModel::Interface::Data::FillBranches();
     fgHitTime.value = fHitTime;
     fgHitPositionX.value = fHitPosition.fX;
     fgHitPositionY.value = fHitPosition.fY;

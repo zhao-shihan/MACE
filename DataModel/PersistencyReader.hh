@@ -3,10 +3,10 @@
 #include <memory>
 
 #include "DataModel/Global.hh"
-#include "DataModel/Core/PersistencyHandler.hh"
+#include "DataModel/Interface/PersistencyHandler.hh"
 
 class MACE::DataModel::PersistencyReader :
-    public MACE::DataModel::Core::PersistencyHandler {
+    public MACE::DataModel::Interface::PersistencyHandler {
     PersistencyReader(const PersistencyReader&) = delete;
     PersistencyReader& operator=(const PersistencyReader&) = delete;
 public:
