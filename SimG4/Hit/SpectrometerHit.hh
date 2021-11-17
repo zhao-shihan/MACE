@@ -14,8 +14,8 @@ public:
     SpectrometerHit(const SpectrometerHit& hit) noexcept;
     SpectrometerHit(SpectrometerHit&& hit) noexcept;
     ~SpectrometerHit() noexcept {}
-    // SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept;
-    // SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept;
+    SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept;
+    SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept;
 
     static void CreateBranches(TTree* tree);
     inline void FillBranches() noexcept;

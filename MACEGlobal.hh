@@ -1,6 +1,7 @@
 #pragma once
 
 namespace MACE {
+
     namespace DataModel {
         namespace Interface {
             class Data;
@@ -20,33 +21,106 @@ namespace MACE {
         class PersistencyReader;
         class PersistencyWriter;
     }
+
     namespace Geometry {
-        namespace Entity {
-            class AcceleratorField;
-            class BaseInterface;
-            class Calorimeter;
-            class Collimator;
-            class FirstBendField;
-            class FirstTransportField;
-            class OrbitalDetector;
-            class OrbitalDetectorShellField;
-            class OrbitalDetectorShield;
-            class SecondBendField;
-            class SecondTransportField;
-            class SelectorField;
-            class Spectrometer;
-            class SpectrometerField;
-            class SpectrometerGas;
-            class SpectrometerReadOutLayer;
-            class SpectrometerShield;
-            class Target;
-            class ThirdTransportField;
+        namespace Description {
+            namespace DescendantsOfWorld {
+                namespace DescendantsOfCalorimeterField {
+                    class Calorimeter;
+                    class OrbitalDetector;
+                }
+                namespace DescendantsOfSecondTransportField {
+                    class Collimator;
+                    class SelectorField;
+                }
+                namespace DescendantsOfSpectrometerField {
+                    namespace DescendantsOfAcceleratorField {
+                        class Target;
+                    }
+                    class AcceleratorField;
+                    class SpectrometerShell;
+                    class SpectrometerWires;
+                }
+                class CalorimeterField;
+                class FirstBendField;
+                class FirstTransportField;
+                class OrbitalDetectorShield;
+                class SecondBendField;
+                class SecondTransportField;
+                class SpectrometerField;
+                class SpectrometerShield;
+                class ThirdTransportField;
+            }
+            class World;
+        }
+        /* namespace EntityG4 {
+            namespace DescendantsOfWorld {
+                namespace DescendantsOfCalorimeterField {
+                    class Calorimeter;
+                    class OrbitalDetector;
+                }
+                namespace DescendantsOfSecondTransportField {
+                    class Collimator;
+                    class SelectorField;
+                }
+                namespace DescendantsOfSpectrometerField {
+                    namespace DescendantsOfAcceleratorField {
+                        class Target;
+                    }
+                    class AcceleratorField;
+                    class SpectrometerShell;
+                    class SpectrometerWires;
+                }
+                class CalorimeterField;
+                class FirstBendField;
+                class FirstTransportField;
+                class OrbitalDetectorShield;
+                class SecondBendField;
+                class SecondTransportField;
+                class SpectrometerField;
+                class SpectrometerShield;
+                class ThirdTransportField;
+            }
+            class World;
+        } */
+        namespace EntityROOT {
+            namespace DescendantsOfWorld {
+                namespace DescendantsOfCalorimeterField {
+                    class Calorimeter;
+                    class OrbitalDetector;
+                }
+                namespace DescendantsOfSecondTransportField {
+                    class Collimator;
+                    class SelectorField;
+                }
+                namespace DescendantsOfSpectrometerField {
+                    namespace DescendantsOfAcceleratorField {
+                        class Target;
+                    }
+                    class AcceleratorField;
+                    class SpectrometerShell;
+                    class SpectrometerWires;
+                }
+                class CalorimeterField;
+                class FirstBendField;
+                class FirstTransportField;
+                class OrbitalDetectorShield;
+                class SecondBendField;
+                class SecondTransportField;
+                class SpectrometerField;
+                class SpectrometerShield;
+                class ThirdTransportField;
+            }
             class World;
         }
         namespace Interface {
-            class Entity;
+            class Description;
+            template<class VolumeType> class Entity;
+            // class EntityG4;
+            class EntityROOT;
         }
     }
+
     namespace Reconstruction {
         namespace Fitter {
             template<class SpectrometerHitType> class Kalman;
@@ -57,6 +131,7 @@ namespace MACE {
             template<class SpectrometerHitType> class HoughCartesian;
         }
     }
+
     namespace SimG4 {
         namespace Action {
             class ActionInitialization;
@@ -124,6 +199,7 @@ namespace MACE {
         }
         class Analysis;
     }
+
     namespace SimMTransport {
         class Analysis;
         class Global;
@@ -134,4 +210,5 @@ namespace MACE {
         class Track;
         class Worker;
     }
+
 }

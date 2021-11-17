@@ -1,30 +1,31 @@
 #pragma once
 
-#include <memory>
+#include <vector>
 
 #include "Geometry/Global.hh"
 
+template<class VolumeType>
 class MACE::Geometry::Interface::Entity {
 public:
     Entity();
+    virtual ~Entity();
     Entity(const Entity&) = delete;
-    virtual ~Entity() { delete fVolume; }
+    Entity& operator=(const Entity&) = delete;
 
-    void SetMother(Entity* mother);
-
-    auto* GetVolume() const { return fVolume; }
+    void AddDaughter(Entity* daughter);
+    VolumeType* GetVolume() const { return fVolumes.front(); }
+    VolumeType* GetVolume(size_t i) const { return fVolumes.at(i); }
 
 protected:
-    void CreateWholeFamily();
+    void CreateSelfAndDescendants();
 
 private:
     virtual void CreateSelf() = 0;
 
 protected:
     Entity* fMother;
-    TGeoVolume* fVolume;
+    std::vector<VolumeType*> fVolumes;
     std::vector<Entity*> fDaughters;
-
-    static TGeoManager* fgGeoManager;
-    static TGeoElementTable* fgElementTable;
 };
+
+#include "Geometry/Interface/Entity.tcc"

@@ -26,21 +26,21 @@ SpectrometerHit::SpectrometerHit(SpectrometerHit&& hit) noexcept :
     fHitPosition(std::move(hit.fHitPosition)),
     fChamberID(std::move(hit.fChamberID)) {}
 
-// SpectrometerHit& SpectrometerHit::operator=(const SpectrometerHit& hit) noexcept {
-//     Data::operator=(static_cast<const Data&>(hit));
-//     fHitTime = hit.fHitTime;
-//     fHitPosition = hit.fHitPosition;
-//     fChamberID = hit.fChamberID;
-//     return *this;
-// }
+SpectrometerHit& SpectrometerHit::operator=(const SpectrometerHit& hit) noexcept {
+    Data::operator=(static_cast<const Data&>(hit));
+    fHitTime = hit.fHitTime;
+    fHitPosition = hit.fHitPosition;
+    fChamberID = hit.fChamberID;
+    return *this;
+}
 
-// SpectrometerHit& SpectrometerHit::operator=(SpectrometerHit&& hit) noexcept {
-//     Data::operator=(static_cast<Data&&>(hit));
-//     fHitTime = std::move(hit.fHitTime);
-//     fHitPosition = std::move(hit.fHitPosition);
-//     fChamberID = std::move(hit.fChamberID);
-//     return *this;
-// }
+SpectrometerHit& SpectrometerHit::operator=(SpectrometerHit&& hit) noexcept {
+    Data::operator=(static_cast<Data&&>(hit));
+    fHitTime = std::move(hit.fHitTime);
+    fHitPosition = std::move(hit.fHitPosition);
+    fChamberID = std::move(hit.fChamberID);
+    return *this;
+}
 
 void SpectrometerHit::CreateBranches(TTree* tree) {
     Data::CreateBranches(tree);

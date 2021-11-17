@@ -12,8 +12,8 @@ public:
     SpectrometerHit(const SpectrometerHit& hit) noexcept;
     SpectrometerHit(SpectrometerHit&& hit) noexcept;
     virtual ~SpectrometerHit() noexcept {}
-    // SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept;
-    // SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept;
+    SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept;
+    SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept;
 
     static constexpr const char* Name() { return "CDCHit"; }
     static void CreateBranches(TTree* tree);

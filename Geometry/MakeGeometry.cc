@@ -1,21 +1,23 @@
-#include "Geometry/Entity/World.hh"
-#include "Geometry/Entity/Target.hh"
+#include "Geometry/EntityROOT/World.hh"
+#include "Geometry/EntityROOT/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfAcceleratorField/Target.hh"
 
-using namespace MACE::Geometry::Entity;
-using namespace MACE::Geometry;
+using namespace MACE::Geometry::EntityROOT;
 
 int main(int, char**) {
-    auto world = std::make_unique<World>();
-    auto target = std::make_unique<Target>();
+    auto world = new World();
+    auto target = new DescendantsOfWorld::DescendantsOfSpectrometerField::DescendantsOfAcceleratorField::Target();
 
-    target->SetMother(world.get());
+    world->AddDaughter(target);
 
-    world->CreateWholeFamily();
+    world->CreateSelfAndDescendants();
 
     gGeoManager->SetTopVolume(world->GetVolume());
     gGeoManager->CloseGeometry();
     gGeoManager->Draw();
     gGeoManager->Export("test.root");
+
+    delete world;
+    delete gGeoManager;
 
     return 0;
 }

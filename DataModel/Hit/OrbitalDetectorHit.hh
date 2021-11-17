@@ -12,8 +12,8 @@ public:
     OrbitalDetectorHit(const OrbitalDetectorHit& hit) noexcept;
     OrbitalDetectorHit(OrbitalDetectorHit&& hit) noexcept;
     virtual ~OrbitalDetectorHit() noexcept {}
-    // OrbitalDetectorHit& operator=(const OrbitalDetectorHit& hit) noexcept;
-    // OrbitalDetectorHit& operator=(OrbitalDetectorHit&& hit) noexcept;
+    OrbitalDetectorHit& operator=(const OrbitalDetectorHit& hit) noexcept;
+    OrbitalDetectorHit& operator=(OrbitalDetectorHit&& hit) noexcept;
 
     static constexpr const char* Name() { return "MCPHit"; }
     static void CreateBranches(TTree* tree);

@@ -14,8 +14,8 @@ public:
     OrbitalDetectorHit(const OrbitalDetectorHit& hit) noexcept;
     OrbitalDetectorHit(OrbitalDetectorHit&& hit) noexcept;
     ~OrbitalDetectorHit() noexcept {}
-    // OrbitalDetectorHit& operator=(const OrbitalDetectorHit& hit) noexcept;
-    // OrbitalDetectorHit& operator=(OrbitalDetectorHit&& hit) noexcept;
+    OrbitalDetectorHit& operator=(const OrbitalDetectorHit& hit) noexcept;
+    OrbitalDetectorHit& operator=(OrbitalDetectorHit&& hit) noexcept;
 
     static void CreateBranches(TTree* tree);
     inline void FillBranches() noexcept;
