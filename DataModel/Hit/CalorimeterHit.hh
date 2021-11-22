@@ -3,7 +3,7 @@
 #include "DataModel/Global.hh"
 #include "DataModel/Interface/Data.hh"
 
-class MACE::DataModel::Hit::CalorimeterHit :
+class MACE::DataModel::CalorimeterHit :
     protected MACE::DataModel::Interface::Data {
 public:
     CalorimeterHit() noexcept;

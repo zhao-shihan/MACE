@@ -9,7 +9,7 @@
 
 template<class SpectrometerHitType>
 class MACE::Reconstruction::Recognizer::HoughBase {
-    static_assert(std::is_base_of_v<DataModel::Hit::SpectrometerHit, SpectrometerHitType>,
+    static_assert(std::is_base_of_v<DataModel::SpectrometerHit, SpectrometerHitType>,
         "SpectrometerHitType should be derived from MACE::DataModel::Hit::SpectrometerHit");
 
     HoughBase(const HoughBase&) = delete;

@@ -2,8 +2,8 @@
 
 #include "G4VPhysicalVolume.hh"
 
-#include "Geometry/Interface/Entity.hh"
+#include "Geometry/Interface/EntityWithDescription.hh"
 
 namespace MACE::Geometry::Interface {
-    using EntityG4 = Entity<G4VPhysicalVolume>;
+    using EntityG4 = EntityWithDescription<G4VPhysicalVolume>;
 }

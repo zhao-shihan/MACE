@@ -1,11 +1,10 @@
 #pragma once
 
-#include "Geometry/Interface/EntityROOT.hh"
 #include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfAcceleratorField/Target.hh"
+#include "Geometry/Interface/EntityROOT.hh"
 
-class MACE::Geometry::EntityROOT::DescendantsOfWorld::DescendantsOfSpectrometerField::DescendantsOfAcceleratorField::Target final :
-    public MACE::Geometry::Description::DescendantsOfWorld::DescendantsOfSpectrometerField::DescendantsOfAcceleratorField::Target,
-    public MACE::Geometry::Interface::EntityROOT {
+class MACE::Geometry::Entity::Fast::Target final :
+    public MACE::Geometry::Interface::EntityROOT<MACE::Geometry::Description::Target> {
     void CreateSelf() override {
         auto material = new TGeoMixture("Aerogel", 2);
         material->SetState(TGeoMaterial::kMatStateSolid);
@@ -14,10 +13,14 @@ class MACE::Geometry::EntityROOT::DescendantsOfWorld::DescendantsOfSpectrometerF
         material->SetDensity(30_mg_cm3);
         auto medium = new TGeoMedium("Aerogel", 1, material);
 
-        auto volume = fgGeoManager->MakeBox("Target", medium, 0.5 * fWidth, 0.5 * fWidth, 0.5 * fThickness);
+        auto name = GetDescription()->GetName();
+        auto width = GetDescription()->GetWidth();
+        auto thickness = GetDescription()->GetThickness();
+        auto volume = fgGeoManager->MakeBox(name, medium, 0.5 * width, 0.5 * width, 0.5 * thickness);
         fVolumes.emplace_back(volume);
 
-        auto translation = new TGeoTranslation(0.0, 0.0, fDownZPosition);
+        auto downZPosition = GetDescription()->GetDownZPosition();
+        auto translation = new TGeoTranslation(0.0, 0.0, downZPosition);
         fMother->GetVolume()->AddNode(volume, 0, translation);
     }
 };

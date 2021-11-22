@@ -5,7 +5,7 @@
 #include "DataModel/Global.hh"
 #include "DataModel/Interface/Data.hh"
 
-class MACE::DataModel::Hit::SpectrometerHit :
+class MACE::DataModel::SpectrometerHit :
     protected MACE::DataModel::Interface::Data {
 public:
     SpectrometerHit() noexcept;

@@ -5,7 +5,7 @@
 #include "DataModel/Global.hh"
 #include "DataModel/Interface/Data.hh"
 
-class MACE::DataModel::Hit::OrbitalDetectorHit :
+class MACE::DataModel::OrbitalDetectorHit :
     protected MACE::DataModel::Interface::Data {
 public:
     OrbitalDetectorHit() noexcept;

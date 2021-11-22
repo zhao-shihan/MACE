@@ -3,13 +3,8 @@
 #include "Geometry/Description/World.hh"
 #include "Geometry/Interface/EntityROOT.hh"
 
-class MACE::Geometry::EntityROOT::World final :
-    public MACE::Geometry::Description::World,
-    public MACE::Geometry::Interface::EntityROOT {
-public:
-    using EntityROOT::CreateSelfAndDescendants;
-
-private:
+class MACE::Geometry::Entity::Fast::World final :
+    public MACE::Geometry::Interface::EntityROOT<MACE::Geometry::Description::World> {
     void CreateSelf() override {
         auto material = new TGeoMixture("Vacuum", 3);
         material->SetState(TGeoMaterial::kMatStateGas);
@@ -19,6 +14,13 @@ private:
         material->SetPressure(0.1_Pa);
         auto medium = new TGeoMedium("Vacuum", 1, material);
 
-        fVolumes.emplace_back(fgGeoManager->MakeBox("World", medium, fHalfXExtent, fHalfYExtent, fHalfZExtent));
+        auto name = GetDescription()->GetName();
+        auto halfX = GetDescription()->GetHalfXExtent();
+        auto halfY = GetDescription()->GetHalfYExtent();
+        auto halfZ = GetDescription()->GetHalfZExtent();
+        fVolumes.emplace_back(fgGeoManager->MakeBox(name, medium, halfX, halfY, halfZ));
     }
+
+public:
+    using EntityROOT::CreateSelfAndDescendants;
 };

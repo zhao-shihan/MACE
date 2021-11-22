@@ -5,8 +5,8 @@ using namespace MACE::Geometry::Interface;
 std::ostream& operator<<(std::ostream& out, const Description& geomDescp) {
     out << "Name:\n"
         << '\t' << geomDescp.GetName() << '\n'
-        << "Is composed of multi-volume:"
-        << '\t' << geomDescp.IsComposedOfMultiVolume() << '\n'
+        << "Is composed of multi-volume:\n"
+        << '\t' << geomDescp.GetOverallDescription() << '\n'
         << "Material description:\n"
         << '\t' << geomDescp.GetMaterialDescription() << '\n'
         << "Shape description:\n"
@@ -18,6 +18,6 @@ std::ostream& operator<<(std::ostream& out, const Description& geomDescp) {
         << "Rotation description:\n"
         << '\t' << geomDescp.GetRotationDescription() << '\n'
         << "Other description:\n"
-        << '\t' << geomDescp.GetOtherDescription() << std::endl;
+        << '\t' << geomDescp.GetOtherDescription();
     return out;
 }

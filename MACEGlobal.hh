@@ -7,12 +7,12 @@ namespace MACE {
             class Data;
             class PersistencyHandler;
         }
-        namespace Hit {
+        inline namespace Hit {
             class CalorimeterHit;
             class OrbitalDetectorHit;
             class SpectrometerHit;
         }
-        namespace RawHit {
+        inline namespace RawHit { // no impl yet
             class CalorimeterRawHit;
             class OrbitalDetectorRawHit;
             class SpectrometerRawHit;
@@ -24,22 +24,22 @@ namespace MACE {
 
     namespace Geometry {
         namespace Description {
-            namespace DescendantsOfWorld {
-                namespace DescendantsOfCalorimeterField {
+            inline namespace DescendantsOfWorld {
+                inline namespace DescendantsOfCalorimeterField {
                     class Calorimeter;
                     class OrbitalDetector;
                 }
-                namespace DescendantsOfSecondTransportField {
+                inline namespace DescendantsOfSecondTransportField {
                     class Collimator;
                     class SelectorField;
                 }
-                namespace DescendantsOfSpectrometerField {
-                    namespace DescendantsOfAcceleratorField {
+                inline namespace DescendantsOfSpectrometerField {
+                    inline namespace DescendantsOfAcceleratorField {
                         class Target;
                     }
                     class AcceleratorField;
+                    class SpectrometerCells;
                     class SpectrometerShell;
-                    class SpectrometerWires;
                 }
                 class CalorimeterField;
                 class FirstBendField;
@@ -53,71 +53,47 @@ namespace MACE {
             }
             class World;
         }
-        /* namespace EntityG4 {
-            namespace DescendantsOfWorld {
-                namespace DescendantsOfCalorimeterField {
-                    class Calorimeter;
-                    class OrbitalDetector;
-                }
-                namespace DescendantsOfSecondTransportField {
-                    class Collimator;
-                    class SelectorField;
-                }
-                namespace DescendantsOfSpectrometerField {
-                    namespace DescendantsOfAcceleratorField {
-                        class Target;
+        namespace Entity {
+            namespace Fast {
+                inline namespace DescendantsOfWorld {
+                    inline namespace DescendantsOfCalorimeterField {
+                        class Calorimeter;
+                        class OrbitalDetector;
                     }
-                    class AcceleratorField;
-                    class SpectrometerShell;
-                    class SpectrometerWires;
-                }
-                class CalorimeterField;
-                class FirstBendField;
-                class FirstTransportField;
-                class OrbitalDetectorShield;
-                class SecondBendField;
-                class SecondTransportField;
-                class SpectrometerField;
-                class SpectrometerShield;
-                class ThirdTransportField;
-            }
-            class World;
-        } */
-        namespace EntityROOT {
-            namespace DescendantsOfWorld {
-                namespace DescendantsOfCalorimeterField {
-                    class Calorimeter;
-                    class OrbitalDetector;
-                }
-                namespace DescendantsOfSecondTransportField {
-                    class Collimator;
-                    class SelectorField;
-                }
-                namespace DescendantsOfSpectrometerField {
-                    namespace DescendantsOfAcceleratorField {
-                        class Target;
+                    inline namespace DescendantsOfSecondTransportField {
+                        class Collimator;
+                        class SelectorField;
                     }
-                    class AcceleratorField;
-                    class SpectrometerShell;
-                    class SpectrometerWires;
+                    inline namespace DescendantsOfSpectrometerField {
+                        inline namespace DescendantsOfAcceleratorField {
+                            class Target;
+                        }
+                        class AcceleratorField;
+                        class SpectrometerShell;
+                        class SpectrometerCells;
+                    }
+                    class CalorimeterField;
+                    class FirstBendField;
+                    class FirstTransportField;
+                    class OrbitalDetectorShield;
+                    class SecondBendField;
+                    class SecondTransportField;
+                    class SpectrometerField;
+                    class SpectrometerShield;
+                    class ThirdTransportField;
                 }
-                class CalorimeterField;
-                class FirstBendField;
-                class FirstTransportField;
-                class OrbitalDetectorShield;
-                class SecondBendField;
-                class SecondTransportField;
-                class SpectrometerField;
-                class SpectrometerShield;
-                class ThirdTransportField;
+                class World;
             }
-            class World;
+            namespace Full { // no impl yet
+                class World;
+            }
         }
         namespace Interface {
             class Description;
             template<class VolumeType> class Entity;
-            // class EntityG4;
-            class EntityROOT;
+            template<class VolumeType, class... RequiredDescriptions> class EntityWithDescription;
+            template<class... RequiredDescriptions> class EntityG4; // no impl yet
+            template<class... RequiredDescriptions> class EntityROOT;
         }
     }
 

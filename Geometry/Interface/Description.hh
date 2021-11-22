@@ -6,13 +6,13 @@
 
 class MACE::Geometry::Interface::Description {
 public:
-    Description() {}
-    virtual ~Description() {}
+    Description() noexcept {}
+    virtual ~Description() noexcept {}
     Description(const Description&) = delete;
     Description& operator=(const Description&) = delete;
 
     virtual const char* GetName()                   const = 0;
-    virtual bool        IsComposedOfMultiVolume()   const = 0;
+    virtual const char* GetOverallDescription()     const = 0;
     virtual const char* GetMaterialDescription()    const = 0;
     virtual const char* GetShapeDescription()       const = 0;
     virtual const char* GetMotherDescription()      const = 0;
@@ -22,3 +22,20 @@ public:
 
     friend std::ostream& operator<<(std::ostream& out, const Description& geomDescp);
 };
+
+#define MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(DerivedGeometryDescriptionClass) \
+    public: \
+        static DerivedGeometryDescriptionClass* Instance() { \
+            static DerivedGeometryDescriptionClass instance; \
+            return &instance; \
+        } \
+        ~DerivedGeometryDescriptionClass() noexcept final {} \
+    private: \
+        DerivedGeometryDescriptionClass() noexcept { \
+            static_assert(std::is_base_of_v<MACE::Geometry::Interface::Description, DerivedGeometryDescriptionClass>, \
+                "DerivedGeometryDescriptionClass here should be derived from MACE::Geometry::Interface::Description."); \
+            static_assert(std::is_final_v<DerivedGeometryDescriptionClass>, \
+                "DerivedGeometryDescriptionClass should be a final class."); \
+        } \
+        DerivedGeometryDescriptionClass(const DerivedGeometryDescriptionClass&) = delete; \
+        DerivedGeometryDescriptionClass& operator=(const DerivedGeometryDescriptionClass&) = delete

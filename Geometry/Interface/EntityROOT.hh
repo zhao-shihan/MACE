@@ -3,10 +3,11 @@
 #include "TGeoManager.h"
 
 #include "Geometry/Global.hh"
-#include "Geometry/Interface/Entity.hh"
+#include "Geometry/Interface/EntityWithDescription.hh"
 
+template<class... RequiredDescriptions>
 class MACE::Geometry::Interface::EntityROOT :
-    public MACE::Geometry::Interface::Entity<TGeoVolume> {
+    public MACE::Geometry::Interface::EntityWithDescription<TGeoVolume, RequiredDescriptions...> {
 public:
     EntityROOT();
     virtual ~EntityROOT() = 0;
@@ -17,3 +18,5 @@ protected:
     static TGeoManager* fgGeoManager;
     static TGeoElementTable* fgElementTable;
 };
+
+#include "Geometry/Interface/EntityROOT.tcc"
