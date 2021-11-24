@@ -1,26 +1,23 @@
 #pragma once
 
+#include "G4Box.hh"
+
 #include "Geometry/Description/World.hh"
-#include "Geometry/Interface/EntityROOT.hh"
+#include "Geometry/Interface/EntityG4.hh"
 
 class MACE::Geometry::Entity::Fast::World final :
-    public MACE::Geometry::Interface::EntityROOT<MACE::Geometry::Description::World> {
+    public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::World> {
     void CreateSelf() override {
-        auto material = new TGeoMixture("Vacuum", 3);
-        material->SetState(TGeoMaterial::kMatStateGas);
-        material->AddElement(fgElementTable->FindElement("N"), 0.7809);
-        material->AddElement(fgElementTable->FindElement("O"), 0.2095);
-        material->AddElement(fgElementTable->FindElement("AR"), 0.0096);
-        material->SetPressure(0.1_Pa);
-        auto medium = new TGeoMedium("Vacuum", 1, material);
-
         auto name = GetDescription()->GetName();
         auto halfX = GetDescription()->GetHalfXExtent();
         auto halfY = GetDescription()->GetHalfYExtent();
         auto halfZ = GetDescription()->GetHalfZExtent();
-        fVolumes.emplace_back(fgGeoManager->MakeBox(name, medium, halfX, halfY, halfZ));
-    }
 
-public:
-    using EntityROOT::CreateSelfAndDescendants;
+        auto material = fgG4Nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1.149_kg_m3, 293.145_K, 0.1_Pa);
+
+        auto solid = new G4Box(name, halfX, halfY, halfZ);
+        auto logic = new G4LogicalVolume(solid, material, name);
+        auto physic = new G4PVPlacement(G4Transform3D(), name, logic, nullptr, false, 0, fgCheckOverlaps);
+        fVolumes.emplace_back(physic);
+    }
 };

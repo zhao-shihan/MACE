@@ -8,23 +8,23 @@ namespace MACE::Geometry {
 
         constexpr auto K = 1.0L;
 
-        // ROOT:
-
-        constexpr auto centimeter = 1.0L;
-        constexpr auto second = 1.0L;
-        constexpr auto gigaElectronVolt = 1.0L;
-        constexpr auto m = 1e2 * centimeter;
-        constexpr auto s = second;
-        constexpr auto g = 1e-12 * gigaElectronVolt * s * s / (m * m * 1.602176634e-19);
-
         // G4:
 
-        /* constexpr auto millimeter = 1.0L;
+        constexpr auto millimeter = 1.0L;
         constexpr auto nanosecond = 1.0L;
         constexpr auto megaElectronVolt = 1.0L;
         constexpr auto m = 1e3 * millimeter;
         constexpr auto s = 1e9 * nanosecond;
-        constexpr auto g = 1e-9 * megaElectronVolt * s * s / (m * m * 1.602176634e-19); */
+        constexpr auto g = 1e-9 * megaElectronVolt * s * s / (m * m * 1.602176634e-19);
+
+        // ROOT (Do not use for now. No way of making unit consistent so far.):
+
+        /* constexpr auto centimeter = 1.0L;
+        constexpr auto second = 1.0L;
+        constexpr auto gigaElectronVolt = 1.0L;
+        constexpr auto m = 1e2 * centimeter;
+        constexpr auto s = second;
+        constexpr auto g = 1e-12 * gigaElectronVolt * s * s / (m * m * 1.602176634e-19); */
 
         // ... and write down other units.
 

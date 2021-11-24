@@ -2,11 +2,11 @@
 
 #include "Geometry/Interface/Description.hh"
 
-class MACE::Geometry::Description::FirstTransportField final :
+class MACE::Geometry::Description::OrbitalDetectorShield final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(FirstTransportField);
+    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(OrbitalDetectorShield);
 public:
-    const char* GetName()                   const override { return "FirstTransportField"; }
+    const char* GetName()                   const override { return "OrbitalDetectorShield"; }
     const char* GetOverallDescription()     const override { return ""; }
     const char* GetMaterialDescription()    const override { return ""; }
     const char* GetShapeDescription()       const override { return ""; }
@@ -14,12 +14,12 @@ public:
     const char* GetTranslationDescription() const override { return ""; }
     const char* GetRotationDescription()    const override { return ""; }
 
-    auto GetInnerRadius() { return fInnerRadius; }
-    auto GetInnerLength() { return fInnerLength; }
-    auto GetWindowRadius() { return fWindowRadius; }
-    auto GetThickness() { return fThickness; }
-    auto GetCenterX() { return fCenterX; }
-    auto GetUpZPosition() { return fUpZPosition; }
+    auto GetInnerRadius()  const { return fInnerRadius; }
+    auto GetInnerLength()  const { return fInnerLength; }
+    auto GetWindowRadius() const { return fWindowRadius; }
+    auto GetThickness()    const { return fThickness; }
+    auto GetCenterX()      const { return fCenterX; }
+    auto GetUpZPosition()  const { return fUpZPosition; }
 
     void SetInnerRadius(double val) { fInnerRadius = val; }
     void SetInnerLength(double val) { fInnerLength = val; }

@@ -92,8 +92,8 @@ namespace MACE {
             class Description;
             template<class VolumeType> class Entity;
             template<class VolumeType, class... RequiredDescriptions> class EntityWithDescription;
-            template<class... RequiredDescriptions> class EntityG4; // no impl yet
-            template<class... RequiredDescriptions> class EntityROOT;
+            template<class... RequiredDescriptions> class EntityG4;
+            template<class... RequiredDescriptions> class EntityROOT; // DO NOT USE for now.
         }
     }
 

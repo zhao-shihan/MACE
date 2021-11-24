@@ -14,9 +14,9 @@ public:
     const char* GetTranslationDescription() const override { return ""; }
     const char* GetRotationDescription()    const override { return ""; }
 
-    auto GetRaidus() { return fRadius; }
-    auto GetLength() { return fLength; }
-    auto GetUpZPosition() { return fUpZPosition; }
+    auto GetRaidus()      const { return fRadius; }
+    auto GetLength()      const { return fLength; }
+    auto GetUpZPosition() const { return fUpZPosition; }
 
     void SetRaidus(double val) { fRadius = val; }
     void SetLength(double val) { fLength = val; }

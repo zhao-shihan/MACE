@@ -1,10 +1,11 @@
-#pragma once
+/* #pragma once
 
 #include "TGeoManager.h"
 
 #include "Geometry/Global.hh"
 #include "Geometry/Interface/EntityWithDescription.hh"
 
+// (Do not use for now. No way of making units consistent so far.)
 template<class... RequiredDescriptions>
 class MACE::Geometry::Interface::EntityROOT :
     public MACE::Geometry::Interface::EntityWithDescription<TGeoVolume, RequiredDescriptions...> {
@@ -20,3 +21,4 @@ protected:
 };
 
 #include "Geometry/Interface/EntityROOT.tcc"
+ */

@@ -5,12 +5,13 @@
 #include "Geometry/Global.hh"
 
 class MACE::Geometry::Interface::Description {
-public:
+protected:
     Description() noexcept {}
     virtual ~Description() noexcept {}
     Description(const Description&) = delete;
     Description& operator=(const Description&) = delete;
 
+public:
     virtual const char* GetName()                   const = 0;
     virtual const char* GetOverallDescription()     const = 0;
     virtual const char* GetMaterialDescription()    const = 0;
@@ -32,9 +33,9 @@ public:
         ~DerivedGeometryDescriptionClass() noexcept final {} \
     private: \
         DerivedGeometryDescriptionClass() noexcept { \
-            static_assert(std::is_base_of_v<MACE::Geometry::Interface::Description, DerivedGeometryDescriptionClass>, \
+            static_assert(std::is_base_of<MACE::Geometry::Interface::Description, DerivedGeometryDescriptionClass>::value, \
                 "DerivedGeometryDescriptionClass here should be derived from MACE::Geometry::Interface::Description."); \
-            static_assert(std::is_final_v<DerivedGeometryDescriptionClass>, \
+            static_assert(std::is_final<DerivedGeometryDescriptionClass>::value, \
                 "DerivedGeometryDescriptionClass should be a final class."); \
         } \
         DerivedGeometryDescriptionClass(const DerivedGeometryDescriptionClass&) = delete; \

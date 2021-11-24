@@ -14,9 +14,9 @@ public:
     const char* GetTranslationDescription() const override { return ""; }
     const char* GetRotationDescription()    const override { return ""; }
 
-    auto GetWidth() { return fWidth; }
-    auto GetThickness() { return fThickness; }
-    
+    auto GetWidth()     const { return fWidth; }
+    auto GetThickness() const { return fThickness; }
+
     void SetWidth(double val) { fWidth = val; }
     void SetThickness(double val) { fThickness = val; }
 

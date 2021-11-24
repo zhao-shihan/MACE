@@ -14,14 +14,16 @@ public:
     const char* GetTranslationDescription() const override { return ""; }
     const char* GetRotationDescription()    const override { return ""; }
 
-    auto GetInnerRadius() { return fInnerRadius; }
-    auto GetOuterRadius() { return fOuterRadius; }
-    auto GetThickness() { return fThickness; }
-    auto GetZPosition() { return fZPosition; }
-    auto GetCount() { return fCount; }
+    auto GetInnerRadius() const { return fInnerRadius; }
+    auto GetOuterRadius() const { return fOuterRadius; }
+    auto GetLength()      const { return fLength; }
+    auto GetThickness()   const { return fThickness; }
+    auto GetZPosition()   const { return fZPosition; }
+    auto GetCount()       const { return fCount; }
 
     void SetInnerRadius(double val) { fInnerRadius = val; }
     void SetOuterRadius(double val) { fOuterRadius = val; }
+    void SetLength(double val) { fLength = val; }
     void SetThickness(double val) { fThickness = val; }
     void SetZPosition(double val) { fZPosition = val; }
     void SetCount(int val) { fCount = val; }

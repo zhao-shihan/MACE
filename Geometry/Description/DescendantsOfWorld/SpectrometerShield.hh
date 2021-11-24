@@ -14,10 +14,10 @@ public:
     const char* GetTranslationDescription() const override { return ""; }
     const char* GetRotationDescription()    const override { return ""; }
 
-    auto GetInnerRadius() { return fInnerRadius; }
-    auto GetInnerLength() { return fInnerLength; }
-    auto GetWindowRadius() { return fWindowRadius; }
-    auto GetThickness() { return fThickness; }
+    auto GetInnerRadius()  const { return fInnerRadius; }
+    auto GetInnerLength()  const { return fInnerLength; }
+    auto GetWindowRadius() const { return fWindowRadius; }
+    auto GetThickness()    const { return fThickness; }
 
     void SetInnerRadius(double val) { fInnerRadius = val; }
     void SetInnerLength(double val) { fInnerLength = val; }

@@ -1,4 +1,4 @@
-template<class... RequiredDescriptions>
+/* template<class... RequiredDescriptions>
 TGeoManager* MACE::Geometry::Interface::EntityROOT<RequiredDescriptions...>::fgGeoManager = nullptr;
 template<class... RequiredDescriptions>
 TGeoElementTable* MACE::Geometry::Interface::EntityROOT<RequiredDescriptions...>::fgElementTable = nullptr;
@@ -20,3 +20,4 @@ MACE::Geometry::Interface::EntityROOT<RequiredDescriptions...>::EntityROOT() :
 
 template<class... RequiredDescriptions>
 MACE::Geometry::Interface::EntityROOT<RequiredDescriptions...>::~EntityROOT() {}
+ */
