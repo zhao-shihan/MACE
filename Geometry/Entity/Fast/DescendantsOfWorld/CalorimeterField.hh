@@ -7,7 +7,7 @@
 
 class MACE::Geometry::Entity::Fast::CalorimeterField final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::CalorimeterField> {
-    void CreateSelf() override {
+    void ConstructSelf() override {
         auto name = GetDescription()->GetName();
         auto radius = GetDescription()->GetRadius();
         auto length = GetDescription()->GetLength();

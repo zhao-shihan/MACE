@@ -8,7 +8,7 @@
 
 class MACE::Geometry::Entity::Fast::OrbitalDetectorShield final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::OrbitalDetectorShield> {
-    void CreateSelf() override {
+    void ConstructSelf() override {
         auto name = GetDescription()->GetName();
         auto innerRadius = GetDescription()->GetInnerRadius();
         auto innerLength = GetDescription()->GetInnerLength();

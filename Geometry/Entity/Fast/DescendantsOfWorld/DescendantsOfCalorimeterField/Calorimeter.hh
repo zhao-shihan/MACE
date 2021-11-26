@@ -7,7 +7,7 @@
 
 class MACE::Geometry::Entity::Fast::Calorimeter final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::Calorimeter> {
-    void CreateSelf() override {
+    void ConstructSelf() override {
         auto name = GetDescription()->GetName();
         auto innerRadius = GetDescription()->GetInnerRadius();
         auto outerRadius = GetDescription()->GetOuterRadius();

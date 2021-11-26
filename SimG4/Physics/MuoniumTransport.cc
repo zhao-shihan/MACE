@@ -1,7 +1,8 @@
 #include "G4RunManager.hh"
 #include "G4MPImanager.hh"
 
-#include "SimG4/Geometry/Target.hh"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfAcceleratorField/Target.hh"
+
 #include "SimG4/Physics/Muonium.hh"
 #include "SimG4/Physics/MuoniumTransport.hh"
 
@@ -11,7 +12,7 @@ MuoniumTransport::MuoniumTransport(const G4String& name, G4ProcessType aType) :
     G4VContinuousProcess(name, aType),
     SimMTransport::Track(),
     fParticleChange(new G4ParticleChange()),
-    fpTarget(static_cast<const Action::DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction())->GetTarget()->GetPhysicalVolume()) {
+    fpTarget(static_cast<const Action::DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction())->GetTarget()->GetVolume()) {
 
     if (MPI::Is_initialized()) {
         SimMTransport::Track::global->SetCommRank(G4MPImanager::GetManager()->GetRank());

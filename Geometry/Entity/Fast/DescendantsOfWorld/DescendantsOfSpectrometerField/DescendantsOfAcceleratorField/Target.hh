@@ -7,7 +7,7 @@
 
 class MACE::Geometry::Entity::Fast::Target final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::Target> {
-    void CreateSelf() override {
+    void ConstructSelf() override {
         auto name = GetDescription()->GetName();
         auto width = GetDescription()->GetWidth();
         auto thickness = GetDescription()->GetThickness();

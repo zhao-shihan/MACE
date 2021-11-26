@@ -7,7 +7,7 @@
 
 class MACE::Geometry::Entity::Fast::SelectorField final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SelectorField> {
-    void CreateSelf() override {
+    void ConstructSelf() override {
         auto name = GetDescription()->GetName();
         auto raidus = GetDescription()->GetRaidus();
         auto length = GetDescription()->GetLength();

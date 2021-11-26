@@ -7,7 +7,7 @@
 
 class MACE::Geometry::Entity::Fast::SpectrometerShell final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SpectrometerShell> {
-    void CreateSelf() override {
+    void ConstructSelf() override {
         auto name = GetDescription()->GetName();
         auto innerRadius = GetDescription()->GetInnerRadius();
         auto outerRadius = GetDescription()->GetOuterRadius();

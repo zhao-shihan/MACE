@@ -17,9 +17,9 @@ void MACE::Geometry::Interface::Entity<VolumeType>::AddDaughter(MACE::Geometry::
 }
 
 template<class VolumeType>
-void MACE::Geometry::Interface::Entity<VolumeType>::CreateSelfAndDescendants() {
-    this->CreateSelf();
+void MACE::Geometry::Interface::Entity<VolumeType>::ConstructSelfAndDescendants() {
+    this->ConstructSelf();
     for (auto&& daughter : fDaughters) {
-        daughter->CreateSelfAndDescendants();
+        daughter->ConstructSelfAndDescendants();
     }
 }

@@ -7,7 +7,7 @@
 
 class MACE::Geometry::Entity::Fast::World final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::World> {
-    void CreateSelf() override {
+    void ConstructSelf() override {
         auto name = GetDescription()->GetName();
         auto halfX = GetDescription()->GetHalfXExtent();
         auto halfY = GetDescription()->GetHalfYExtent();

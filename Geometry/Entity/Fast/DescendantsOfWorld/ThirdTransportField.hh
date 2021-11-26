@@ -7,7 +7,7 @@
 
 class MACE::Geometry::Entity::Fast::ThirdTransportField final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::ThirdTransportField> {
-    void CreateSelf() override {
+    void ConstructSelf() override {
         auto name = GetDescription()->GetName();
         auto raidus = GetDescription()->GetRadius();
         auto length = GetDescription()->GetLength();

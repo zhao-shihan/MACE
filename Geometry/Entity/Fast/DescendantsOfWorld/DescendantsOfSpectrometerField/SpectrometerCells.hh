@@ -9,7 +9,7 @@
 class MACE::Geometry::Entity::Fast::SpectrometerCells final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SpectrometerCells, MACE::Geometry::Description::SpectrometerShell> {
     enum { kSpectrometerCells, kSpectrometerShell };
-    void CreateSelf() override {
+    void ConstructSelf() override {
         auto name = GetDescription<kSpectrometerCells>()->GetName();
         auto avgWidth = GetDescription<kSpectrometerCells>()->GetAverageCellWidth();
         auto innerRadius = GetDescription<kSpectrometerShell>()->GetInnerRadius();

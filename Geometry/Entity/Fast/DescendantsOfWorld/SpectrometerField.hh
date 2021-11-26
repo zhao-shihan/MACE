@@ -7,7 +7,7 @@
 
 class MACE::Geometry::Entity::Fast::SpectrometerField final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SpectrometerField> {
-    void CreateSelf() override {
+    void ConstructSelf() override {
         auto name = GetDescription()->GetName();
         auto length = GetDescription()->GetLength();
         auto raidus = GetDescription()->GetRadius();

@@ -14,7 +14,7 @@ protected:
 
 public:
     void AddDaughter(Entity* daughter);
-    void CreateSelfAndDescendants();
+    void ConstructSelfAndDescendants();
     VolumeType* GetVolume() const { return fVolumes.front(); }
     VolumeType* GetVolume(size_t i) const { return fVolumes.at(i); }
 
@@ -22,7 +22,7 @@ protected:
     VolumeType* MotherVolume() const { return fMother->GetVolume(); }
 
 private:
-    virtual void CreateSelf() = 0;
+    virtual void ConstructSelf() = 0;
 
 protected:
     std::vector<VolumeType*> fVolumes;

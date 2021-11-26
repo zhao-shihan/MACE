@@ -8,35 +8,39 @@ DetectorConstruction::DetectorConstruction() :
     G4VUserDetectorConstruction() {}
 
 DetectorConstruction::~DetectorConstruction() {
-    delete fAcceleratorField;
-    delete fCalorimeter;
-    delete fCollimator;
-    delete fFirstBendField;
-    delete fFirstTransportField;
-    delete fOrbitalDetector;
-    delete fOrbitalDetectorShellField;
-    delete fOrbitalDetectorShield;
-    delete fSecondBendField;
-    delete fSecondTransportField;
-    delete fSelectorField;
-    delete fSpectrometer;
-    delete fSpectrometerField;
-    delete fSpectrometerGas;
-    delete fSpectrometerReadOutLayer;
-    delete fSpectrometerShield;
-    delete fTarget;
-    delete fThirdTransportField;
     delete fWorld;
 }
 
 G4VPhysicalVolume* DetectorConstruction::Construct() {
-    ConstructGeometry();
+    ConstructVolumes();
     ConstructSD();
     ConstructField();
-    return fWorld->GetPhysicalVolume();
+    return fWorld->GetVolume();
 }
 
-void DetectorConstruction::ConstructGeometry() {
+void DetectorConstruction::ConstructVolumes() {
+    fWorld->AddDaughter(fCalorimeterField);
+    fWorld->AddDaughter(fFirstBendField);
+    fWorld->AddDaughter(fFirstTransportField);
+    fWorld->AddDaughter(fOrbitalDetectorShield);
+    fWorld->AddDaughter(fSecondBendField);
+    fWorld->AddDaughter(fSecondTransportField);
+    fWorld->AddDaughter(fSpectrometerField);
+    fWorld->AddDaughter(fSpectrometerShield);
+    fWorld->AddDaughter(fThirdTransportField);
+    fCalorimeterField->AddDaughter(fCalorimeter);
+    fCalorimeterField->AddDaughter(fOrbitalDetector);
+    fSecondTransportField->AddDaughter(fCollimator);
+    fSecondTransportField->AddDaughter(fSelectorField);
+    fSpectrometerField->AddDaughter(fAcceleratorField);
+    fSpectrometerField->AddDaughter(fSpectrometerCells);
+    fSpectrometerField->AddDaughter(fSpectrometerShell);
+    fAcceleratorField->AddDaughter(fTarget);
+
+    fWorld->ConstructSelfAndDescendants();
+
+    /* Deprecated.
+
     //
     // materials
     //
@@ -55,7 +59,7 @@ void DetectorConstruction::ConstructGeometry() {
     //
     // create geometry
     //
-    // world
+    // fWorld
     fWorld->Create(materialVacuum, nullptr);
     // fields
     fSpectrometerField->Create(materialVacuum, fWorld);
@@ -79,6 +83,7 @@ void DetectorConstruction::ConstructGeometry() {
     fOrbitalDetectorShield->Create(materialLead, fWorld);
 
     fWorld->WriteGDML();
+    */
 }
 
 #include "G4SDManager.hh"
@@ -88,24 +93,24 @@ void DetectorConstruction::ConstructGeometry() {
 #include "SimG4/SD/Spectrometer.hh"
 
 void DetectorConstruction::ConstructSD() {
-    auto SDManager = G4SDManager::GetSDMpointer();
+    /* auto SDManager = G4SDManager::GetSDMpointer();
 
-    auto calorimeterName = fCalorimeter->GetLogicalVolume()->GetName();
-    auto calorimeterSD = new SD::Calorimeter(calorimeterName, calorimeterName + "HC");
-    SDManager->AddNewDetector(calorimeterSD);
-    SetSensitiveDetector(fCalorimeter->GetLogicalVolume(), calorimeterSD);
+    auto fCalorimeterName = fCalorimeter->GetLogicalVolume()->GetName();
+    auto fCalorimeterSD = new SD::Calorimeter(fCalorimeterName, fCalorimeterName + "HC");
+    SDManager->AddNewDetector(fCalorimeterSD);
+    SetSensitiveDetector(fCalorimeter->GetLogicalVolume(), fCalorimeterSD);
 
-    auto orbitalDetectorName = fOrbitalDetector->GetLogicalVolume()->GetName();
-    auto orbitalDetectorSD = new SD::OrbitalDetector(orbitalDetectorName, orbitalDetectorName + "HC");
-    SDManager->AddNewDetector(orbitalDetectorSD);
-    SetSensitiveDetector(fOrbitalDetector->GetLogicalVolume(), orbitalDetectorSD);
+    auto fOrbitalDetectorName = fOrbitalDetector->GetLogicalVolume()->GetName();
+    auto fOrbitalDetectorSD = new SD::OrbitalDetector(fOrbitalDetectorName, fOrbitalDetectorName + "HC");
+    SDManager->AddNewDetector(fOrbitalDetectorSD);
+    SetSensitiveDetector(fOrbitalDetector->GetLogicalVolume(), fOrbitalDetectorSD);
 
     auto spectrometerName = fSpectrometerReadOutLayer->GetLogicalVolume()->GetName();
     auto spectrometerSD = new SD::Spectrometer(spectrometerName, spectrometerName + "HC");
     SDManager->AddNewDetector(spectrometerSD);
     for (size_t i = 0; i < fSpectrometerReadOutLayer->GetVolumeSetCount(); ++i) {
         SetSensitiveDetector(fSpectrometerReadOutLayer->GetLogicalVolume(i), spectrometerSD);
-    }
+    } */
 }
 
 #include "G4FieldManager.hh"
@@ -133,7 +138,7 @@ static void RegisterFields(G4LogicalVolume* logicalVolume, Field_t* field, G4dou
 }
 
 void DetectorConstruction::ConstructField() {
-    constexpr G4double hMin = 100. * um;
+    /* constexpr G4double hMin = 100. * um;
 
     constexpr G4double defaultB = 0.1 * tesla;
     auto parallelBField = new Field::ParallelField(defaultB);
@@ -200,5 +205,5 @@ void DetectorConstruction::ConstructField() {
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(fOrbitalDetectorShellField->GetLogicalVolume(), parallelBField, hMin, 6);
+    >(fOrbitalDetectorShellField->GetLogicalVolume(), parallelBField, hMin, 6); */
 }

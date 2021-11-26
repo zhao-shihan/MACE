@@ -124,29 +124,6 @@ namespace MACE {
             class SelectorField;
             class VerticalField;
         }
-        namespace Geometry {
-            class AcceleratorField;
-            class BaseInterface;
-            class Calorimeter;
-            class Collimator;
-            class FirstBendField;
-            class FirstTransportField;
-            class OrbitalDetector;
-            class OrbitalDetectorShellField;
-            class OrbitalDetectorShield;
-            class SecondBendField;
-            class SecondTransportField;
-            class SelectorField;
-            class Spectrometer;
-            class SpectrometerField;
-            class SpectrometerGas;
-            class SpectrometerReadOutLayer;
-            class SpectrometerShield;
-            class Target;
-            class ThirdTransportField;
-            class VolumeSet;
-            class World;
-        }
         namespace Hit {
             class CalorimeterHit;
             class OrbitalDetectorHit;

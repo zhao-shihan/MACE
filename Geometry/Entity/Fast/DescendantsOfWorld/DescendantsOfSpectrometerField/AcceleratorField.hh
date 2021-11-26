@@ -7,7 +7,7 @@
 
 class MACE::Geometry::Entity::Fast::AcceleratorField final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::AcceleratorField> {
-    void CreateSelf() override {
+    void ConstructSelf() override {
         auto name = GetDescription()->GetName();
         auto width = GetDescription()->GetWidth();
         auto upStreamLength = GetDescription()->GetUpStreamLength();

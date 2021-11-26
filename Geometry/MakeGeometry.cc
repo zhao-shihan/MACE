@@ -59,7 +59,7 @@ int main(int, char**) {
     spectrometerField->AddDaughter(spectrometerShell);
     acceleratorField->AddDaughter(target);
 
-    world->CreateSelfAndDescendants();
+    world->ConstructSelfAndDescendants();
 
     world->WriteSelfAndDesendentsToGDML("test.gdml");
 
