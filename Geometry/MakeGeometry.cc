@@ -28,7 +28,7 @@ int main(int, char**) {
     auto selectorField = new SelectorField();
     auto target = new Target();
     auto acceleratorField = new AcceleratorField();
-    // auto spectrometerCells = new SpectrometerCells();
+    auto spectrometerCells = new SpectrometerCells();
     auto spectrometerShell = new SpectrometerShell();
     auto calorimeterField = new CalorimeterField();
     auto firstBendField = new FirstBendField();
@@ -41,13 +41,6 @@ int main(int, char**) {
     auto thirdTransportField = new ThirdTransportField();
     auto world = new World();
 
-    calorimeterField->AddDaughter(calorimeter);
-    calorimeterField->AddDaughter(orbitalDetector);
-    secondTransportField->AddDaughter(collimator);
-    secondTransportField->AddDaughter(selectorField);
-    acceleratorField->AddDaughter(target);
-    spectrometerField->AddDaughter(acceleratorField);
-    spectrometerField->AddDaughter(spectrometerShell);
     world->AddDaughter(calorimeterField);
     world->AddDaughter(firstBendField);
     world->AddDaughter(firstTransportField);
@@ -57,6 +50,14 @@ int main(int, char**) {
     world->AddDaughter(spectrometerField);
     world->AddDaughter(spectrometerShield);
     world->AddDaughter(thirdTransportField);
+    calorimeterField->AddDaughter(calorimeter);
+    calorimeterField->AddDaughter(orbitalDetector);
+    secondTransportField->AddDaughter(collimator);
+    secondTransportField->AddDaughter(selectorField);
+    spectrometerField->AddDaughter(acceleratorField);
+    spectrometerField->AddDaughter(spectrometerCells);
+    spectrometerField->AddDaughter(spectrometerShell);
+    acceleratorField->AddDaughter(target);
 
     world->CreateSelfAndDescendants();
 
@@ -67,6 +68,7 @@ int main(int, char**) {
     gGeoManager->Export("test.root");
 
     delete world;
+    delete gGeoManager;
 
     return 0;
 }

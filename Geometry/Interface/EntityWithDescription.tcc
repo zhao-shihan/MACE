@@ -4,7 +4,7 @@ namespace MACE::Geometry::Interface::__Meta {
         template<size_t N, class Tuple>
         struct InitializeDescriptions {
             static void Initialize(Tuple& descriptions) {
-                Initialize<N - 1>(descriptions);
+                InitializeDescriptions<N - 1, Tuple>::Initialize(descriptions);
                 std::get<N - 1>(descriptions) = std::remove_const_t<std::remove_pointer_t<std::tuple_element_t<N - 1, Tuple>>>::Instance();
             }
         };

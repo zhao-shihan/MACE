@@ -33,7 +33,7 @@ public:
 private:
     double fGasInnerRadius = 8_cm;
     double fGasOuterRadius = 32_cm;
-    double fGasInnerLength = 19_cm;
+    double fGasInnerLength = 39_cm;
     double fGasOuterLength = 81_cm;
     double fShellInnerThickness = 1_mm;
     double fShellSideThickness = 5_mm;

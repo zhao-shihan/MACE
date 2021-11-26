@@ -25,5 +25,5 @@ public:
 private:
     double fWidth = 50_mm;
     double fThickness = 10_mm;
-    double fDownZPosition = -13_mm;
+    double fDownZPosition = -130_mm;
 };
