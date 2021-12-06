@@ -17,9 +17,10 @@ public:
     void ConstructSelfAndDescendants();
     VolumeType* GetVolume() const { return fVolumes.front(); }
     VolumeType* GetVolume(size_t i) const { return fVolumes.at(i); }
+    auto GetVolumeNum() const { return fVolumes.size(); }
 
 protected:
-    VolumeType* MotherVolume() const { return fMother->GetVolume(); }
+    const auto* Mother() const { return fMother; }
 
 private:
     virtual void ConstructSelf() = 0;

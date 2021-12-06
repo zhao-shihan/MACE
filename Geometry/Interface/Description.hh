@@ -30,7 +30,6 @@ public:
             static DerivedGeometryDescriptionClass instance; \
             return &instance; \
         } \
-        ~DerivedGeometryDescriptionClass() noexcept final {} \
     private: \
         DerivedGeometryDescriptionClass() noexcept { \
             static_assert(std::is_base_of<MACE::Geometry::Interface::Description, DerivedGeometryDescriptionClass>::value, \
@@ -38,5 +37,6 @@ public:
             static_assert(std::is_final<DerivedGeometryDescriptionClass>::value, \
                 "DerivedGeometryDescriptionClass should be a final class."); \
         } \
+        ~DerivedGeometryDescriptionClass() noexcept final {} \
         DerivedGeometryDescriptionClass(const DerivedGeometryDescriptionClass&) = delete; \
         DerivedGeometryDescriptionClass& operator=(const DerivedGeometryDescriptionClass&) = delete

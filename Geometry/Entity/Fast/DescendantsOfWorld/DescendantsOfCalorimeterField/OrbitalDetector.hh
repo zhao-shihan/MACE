@@ -16,7 +16,7 @@ class MACE::Geometry::Entity::Fast::OrbitalDetector final :
 
         auto solid = new G4Box(name, 0.5 * width, 0.5 * width, 0.5 * thickness);
         auto logic = new G4LogicalVolume(solid, material, name);
-        auto physic = new G4PVPlacement(nullptr, G4ThreeVector(0.0, 0.0, 0.5 * thickness), name, logic, MotherVolume(), false, 0, fgCheckOverlaps);
+        auto physic = new G4PVPlacement(nullptr, G4ThreeVector(0.0, 0.0, 0.5 * thickness), name, logic, Mother()->GetVolume(), false, 0, fCheckOverlaps);
         fVolumes.emplace_back(physic);
     }
 };

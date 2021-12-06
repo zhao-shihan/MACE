@@ -5,9 +5,10 @@
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/Collimator.hh"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/SelectorField.hh"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfAcceleratorField/Target.hh"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayer/SpectrometerCells.hh"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/SpectrometerReadoutLayer.hh"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/AcceleratorField.hh"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/SpectrometerCells.hh"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/SpectrometerShell.hh"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/SpectrometerBody.hh"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterField.hh"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/FirstBendField.hh"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/FirstTransportField.hh"
@@ -27,9 +28,10 @@ int main(int, char**) {
     auto collimator = new Collimator();
     auto selectorField = new SelectorField();
     auto target = new Target();
-    auto acceleratorField = new AcceleratorField();
     auto spectrometerCells = new SpectrometerCells();
-    auto spectrometerShell = new SpectrometerShell();
+    auto spectrometerReadoutLayer = new SpectrometerReadoutLayer();
+    auto acceleratorField = new AcceleratorField();
+    auto spectrometerBody = new SpectrometerBody();
     auto calorimeterField = new CalorimeterField();
     auto firstBendField = new FirstBendField();
     auto firstTransportField = new FirstTransportField();
@@ -55,9 +57,10 @@ int main(int, char**) {
     secondTransportField->AddDaughter(collimator);
     secondTransportField->AddDaughter(selectorField);
     spectrometerField->AddDaughter(acceleratorField);
-    spectrometerField->AddDaughter(spectrometerCells);
-    spectrometerField->AddDaughter(spectrometerShell);
+    spectrometerField->AddDaughter(spectrometerBody);
     acceleratorField->AddDaughter(target);
+    spectrometerBody->AddDaughter(spectrometerReadoutLayer);
+    spectrometerReadoutLayer->AddDaughter(spectrometerCells);
 
     world->ConstructSelfAndDescendants();
 

@@ -37,9 +37,14 @@ namespace MACE {
                     inline namespace DescendantsOfAcceleratorField {
                         class Target;
                     }
+                    inline namespace DescendantsOfSpectrometerBody {
+                        inline namespace DescendantsOfSpectrometerReadoutLayer {
+                            class SpectrometerCells;
+                        }
+                        class SpectrometerReadoutLayer;
+                    }
                     class AcceleratorField;
-                    class SpectrometerCells;
-                    class SpectrometerShell;
+                    class SpectrometerBody;
                 }
                 class CalorimeterField;
                 class FirstBendField;
@@ -68,9 +73,14 @@ namespace MACE {
                         inline namespace DescendantsOfAcceleratorField {
                             class Target;
                         }
+                        inline namespace DescendantsOfSpectrometerBody {
+                            inline namespace DescendantsOfSpectrometerReadoutLayer {
+                                class SpectrometerCells;
+                            }
+                            class SpectrometerReadoutLayer;
+                        }
                         class AcceleratorField;
-                        class SpectrometerShell;
-                        class SpectrometerCells;
+                        class SpectrometerBody;
                     }
                     class CalorimeterField;
                     class FirstBendField;

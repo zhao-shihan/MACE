@@ -17,7 +17,7 @@ class MACE::Geometry::Entity::Fast::Calorimeter final :
 
         auto solid = new G4Tubs(name, innerRadius, outerRadius, 0.5 * length, 0, 2 * M_PI);
         auto logic = new G4LogicalVolume(solid, material, name);
-        auto physic = new G4PVPlacement(G4Transform3D(), name, logic, MotherVolume(), false, 0, fgCheckOverlaps);
+        auto physic = new G4PVPlacement(G4Transform3D(), name, logic, Mother()->GetVolume(), false, 0, fCheckOverlaps);
         fVolumes.emplace_back(physic);
     }
 };

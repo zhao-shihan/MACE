@@ -13,11 +13,11 @@ class MACE::Geometry::Entity::Fast::AcceleratorField final :
         auto upStreamLength = GetDescription()->GetUpStreamLength();
         auto downStreamLength = GetDescription()->GetDownStreamLength();
 
-        auto material = MotherVolume()->GetLogicalVolume()->GetMaterial();
+        auto material = Mother()->GetVolume()->GetLogicalVolume()->GetMaterial();
 
         auto solid = new G4Box(name, 0.5 * width, 0.5 * width, 0.5 * (upStreamLength + downStreamLength));
         auto logic = new G4LogicalVolume(solid, material, name);
-        auto physic = new G4PVPlacement(nullptr, G4ThreeVector(0, 0, 0.5 * (downStreamLength - upStreamLength)), name, logic, MotherVolume(), false, 0, fgCheckOverlaps);
+        auto physic = new G4PVPlacement(nullptr, G4ThreeVector(0, 0, 0.5 * (downStreamLength - upStreamLength)), name, logic, Mother()->GetVolume(), false, 0, fCheckOverlaps);
         fVolumes.emplace_back(physic);
     }
 };

@@ -14,11 +14,11 @@ class MACE::Geometry::Entity::Fast::ThirdTransportField final :
         auto centerX = GetDescription()->GetCenterX();
         auto upZPosition = GetDescription()->GetUpZPosition();
 
-        auto material = MotherVolume()->GetLogicalVolume()->GetMaterial();
+        auto material = Mother()->GetVolume()->GetLogicalVolume()->GetMaterial();
 
         auto solid = new G4Tubs(name, 0.0, raidus, 0.5 * length, 0, 2.0 * M_PI);
         auto logic = new G4LogicalVolume(solid, material, name);
-        auto physic = new G4PVPlacement(nullptr, G4ThreeVector(centerX, 0.0, upZPosition + 0.5 * length), name, logic, MotherVolume(), false, 0, fgCheckOverlaps);
+        auto physic = new G4PVPlacement(nullptr, G4ThreeVector(centerX, 0.0, upZPosition + 0.5 * length), name, logic, Mother()->GetVolume(), false, 0, fCheckOverlaps);
         fVolumes.emplace_back(physic);
     }
 };

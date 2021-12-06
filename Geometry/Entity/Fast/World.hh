@@ -13,11 +13,11 @@ class MACE::Geometry::Entity::Fast::World final :
         auto halfY = GetDescription()->GetHalfYExtent();
         auto halfZ = GetDescription()->GetHalfZExtent();
 
-        auto material = fgG4Nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1.149_kg_m3, 293.145_K, 0.1_Pa);
+        auto material = fgG4Nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3, 293.145_K);
 
         auto solid = new G4Box(name, halfX, halfY, halfZ);
         auto logic = new G4LogicalVolume(solid, material, name);
-        auto physic = new G4PVPlacement(G4Transform3D(), name, logic, nullptr, false, 0, fgCheckOverlaps);
+        auto physic = new G4PVPlacement(G4Transform3D(), name, logic, nullptr, false, 0, fCheckOverlaps);
         fVolumes.emplace_back(physic);
     }
 };

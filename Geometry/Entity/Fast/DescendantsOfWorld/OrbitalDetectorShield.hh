@@ -24,7 +24,7 @@ class MACE::Geometry::Entity::Fast::OrbitalDetectorShield final :
         auto temp = new G4UnionSolid("_temp", body, cap, G4Transform3D(G4RotationMatrix(), G4ThreeVector(0, 0, -0.5 * innerLength - 0.5 * thickness)));
         auto solid = new G4UnionSolid(name, temp, cap, G4Transform3D(G4RotationMatrix(), G4ThreeVector(0, 0, 0.5 * innerLength + 0.5 * thickness)));
         auto logic = new G4LogicalVolume(solid, material, name);
-        auto physic = new G4PVPlacement(nullptr, G4ThreeVector(centerX, 0.0, upZPosition + 0.5 * innerLength), name, logic, MotherVolume(), false, 0, fgCheckOverlaps);
+        auto physic = new G4PVPlacement(nullptr, G4ThreeVector(centerX, 0.0, upZPosition + 0.5 * innerLength), name, logic, Mother()->GetVolume(), false, 0, fCheckOverlaps);
         fVolumes.emplace_back(physic);
     }
 };
