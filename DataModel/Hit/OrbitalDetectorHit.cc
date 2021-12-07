@@ -23,16 +23,20 @@ OrbitalDetectorHit::OrbitalDetectorHit(OrbitalDetectorHit&& hit) noexcept :
     fHitPosition(std::move(hit.fHitPosition)) {}
 
 OrbitalDetectorHit& OrbitalDetectorHit::operator=(const OrbitalDetectorHit& hit) noexcept {
-    Data::operator=(static_cast<const Data&>(hit));
-    fHitTime = hit.fHitTime;
-    fHitPosition = hit.fHitPosition;
+    if (&hit != this) {
+        Data::operator=(static_cast<const Data&>(hit));
+        fHitTime = hit.fHitTime;
+        fHitPosition = hit.fHitPosition;
+    }
     return *this;
 }
 
 OrbitalDetectorHit& OrbitalDetectorHit::operator=(OrbitalDetectorHit&& hit) noexcept {
-    Data::operator=(static_cast<Data&&>(hit));
-    fHitTime = std::move(hit.fHitTime);
-    fHitPosition = std::move(hit.fHitPosition);
+    if (&hit != this) {
+        Data::operator=(static_cast<Data&&>(hit));
+        fHitTime = std::move(hit.fHitTime);
+        fHitPosition = std::move(hit.fHitPosition);
+    }
     return *this;
 }
 

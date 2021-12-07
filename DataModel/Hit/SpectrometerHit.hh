@@ -21,32 +21,40 @@ public:
     static void ReadBranches(TTree* tree);
 
     auto GetHitTime() const { return fHitTime; }
-    const auto& GetHitPosition() const { return fHitPosition; }
-    auto GetChamberID() const { return fChamberID; }
+    const auto& GetWirePosition() const { return fWirePosition; }
+    auto GetDriftDistance() const { return fDriftDistance; }
+    auto GetHitPositionZ() const { return fHitPositionZ; }
+    auto GetCellID() const { return fCellID; }
 
-    void SetHitTime(double_t val) { fHitTime = val; }
-    void SetHitPosition(const TEveVectorD& val) { fHitPosition = val; }
-    void SetHitPosition(TEveVectorD&& val) { fHitPosition = std::move(val); }
-    void SetHitPosition(Double_t x, Double_t y, Double_t z) { fHitPosition.fX = x; fHitPosition.fY = y; fHitPosition.fZ = z; }
-    void SetChamberID(Int_t val) { fChamberID = val; }
+    void SetHitTime(Double_t val) { fHitTime = val; }
+    void SetWirePosition(const TEveVector2D& val) { fWirePosition = val; }
+    void SetWirePosition(TEveVector2D&& val) { fWirePosition = std::move(val); }
+    void SetWirePosition(Double_t x, Double_t y) { fWirePosition.fX = x; fWirePosition.fY = y; }
+    void SetDriftDistance(Double_t r) { fDriftDistance = r; }
+    void SetHitPositionZ(Double_t z) { fHitPositionZ = z; }
+    void SetCellID(Int_t val) { fCellID = val; }
 
 private:
-    double_t fHitTime;
-    TEveVectorD fHitPosition;
-    Int_t fChamberID;
+    Double_t fHitTime;
+    TEveVector2D fWirePosition;
+    Double_t fDriftDistance;
+    Double_t fHitPositionZ;
+    Int_t fCellID;
 
     static Column<Float_t> fgHitTime;
-    static Column<Float_t> fgHitPositionX;
-    static Column<Float_t> fgHitPositionY;
+    static Column<Float_t> fgWirePositionX;
+    static Column<Float_t> fgWirePositionY;
+    static Column<Float_t> fgDriftDistance;
     static Column<Float_t> fgHitPositionZ;
-    static Column<Int_t> fgChamberID;
+    static Column<Int_t> fgCellID;
 };
 
 inline void MACE::DataModel::Hit::SpectrometerHit::FillBranches() noexcept {
     MACE::DataModel::Interface::Data::FillBranches();
     fgHitTime.value = fHitTime;
-    fgHitPositionX.value = fHitPosition.fX;
-    fgHitPositionY.value = fHitPosition.fY;
-    fgHitPositionZ.value = fHitPosition.fZ;
-    fgChamberID.value = fChamberID;
+    fgWirePositionX.value = fWirePosition.fX;
+    fgWirePositionY.value = fWirePosition.fY;
+    fgDriftDistance.value = fDriftDistance;
+    fgHitPositionZ.value = fHitPositionZ;
+    fgCellID.value = fCellID;
 }

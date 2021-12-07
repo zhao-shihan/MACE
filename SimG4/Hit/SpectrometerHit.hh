@@ -26,8 +26,6 @@ public:
     const auto& GetParticlePDGCode() const { return fPDGCode; }
     auto GetTrackID() const { return fTrackID; }
 
-    using DataModel::Hit::SpectrometerHit::SetHitPosition;
-    void SetHitPosition(const G4ThreeVector& pos) { SetHitPosition(pos.x(), pos.y(), pos.z()); }
     void SetVertexTime(double_t val) { fVertexTime = val; }
     void SetVertexPosition(const TEveVectorD& pos) { fVertexPosition = pos; }
     void SetVertexPosition(TEveVectorD&& pos) { fVertexPosition = std::move(pos); }

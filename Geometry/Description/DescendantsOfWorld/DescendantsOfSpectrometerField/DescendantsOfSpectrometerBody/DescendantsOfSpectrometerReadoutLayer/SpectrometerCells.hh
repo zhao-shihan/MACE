@@ -6,7 +6,7 @@ class MACE::Geometry::Description::SpectrometerCells final :
     public MACE::Geometry::Interface::Description {
     MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(SpectrometerCells);
 public:
-    const char* GetName()                   const override { return "SpectrometerCells"; }
+    const char* GetName()                   const override { return "SpectrometerCell"; }
     const char* GetOverallDescription()     const override { return "Sensitive cells of MWDC. The cell's full geometry includes sense wires, field wires, and readout volume, respectively. Fast geometry might exclude wires."; }
     const char* GetMaterialDescription()    const override { return "Gas: Same as mother's. Wires: respect to BESIII currently."; }
     const char* GetShapeDescription()       const override { return "Wire: Cylinders. Gas: A angular slice of tube."; }

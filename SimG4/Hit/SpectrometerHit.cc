@@ -36,22 +36,26 @@ SpectrometerHit::SpectrometerHit(SpectrometerHit&& hit) noexcept :
     fTrackID(std::move(hit.fTrackID)) {}
 
 SpectrometerHit& SpectrometerHit::operator=(const SpectrometerHit& hit) noexcept {
-    G4VHit::operator=(static_cast<const G4VHit&>(hit));
-    DataModel::Hit::SpectrometerHit::operator=(static_cast<const DataModel::Hit::SpectrometerHit&>(hit));
-    fVertexTime = hit.fVertexTime;
-    fVertexPosition = hit.fVertexPosition;
-    fPDGCode = hit.fPDGCode;
-    fTrackID = hit.fTrackID;
+    if (&hit != this) {
+        G4VHit::operator=(static_cast<const G4VHit&>(hit));
+        DataModel::Hit::SpectrometerHit::operator=(static_cast<const DataModel::Hit::SpectrometerHit&>(hit));
+        fVertexTime = hit.fVertexTime;
+        fVertexPosition = hit.fVertexPosition;
+        fPDGCode = hit.fPDGCode;
+        fTrackID = hit.fTrackID;
+    }
     return *this;
 }
 
 SpectrometerHit& SpectrometerHit::operator=(SpectrometerHit&& hit) noexcept {
-    G4VHit::operator=(static_cast<G4VHit&&>(hit));
-    DataModel::Hit::SpectrometerHit::operator=(static_cast<DataModel::Hit::SpectrometerHit&&>(hit));
-    fVertexTime = std::move(hit.fVertexTime);
-    fVertexPosition = std::move(hit.fVertexPosition);
-    fPDGCode = std::move(hit.fPDGCode);
-    fTrackID = std::move(hit.fTrackID);
+    if (&hit != this) {
+        G4VHit::operator=(static_cast<G4VHit&&>(hit));
+        DataModel::Hit::SpectrometerHit::operator=(static_cast<DataModel::Hit::SpectrometerHit&&>(hit));
+        fVertexTime = std::move(hit.fVertexTime);
+        fVertexPosition = std::move(hit.fVertexPosition);
+        fPDGCode = std::move(hit.fPDGCode);
+        fTrackID = std::move(hit.fTrackID);
+    }
     return *this;
 }
 

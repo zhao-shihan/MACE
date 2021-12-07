@@ -30,13 +30,14 @@
 /vis/geometry/set/colour SelectorField 0 1 1 1 0.05
 /vis/geometry/set/colour SecondBendField 0 1 1 1 0.05
 /vis/geometry/set/colour ThirdTransportField 0 1 1 1 0.05
-/vis/geometry/set/colour OrbitalDetectorShellField 0 1 1 1 0.05
+/vis/geometry/set/colour CalorimeterField 0 1 1 1 0.05
 # Parts:
 #/vis/geometry/set/colour BeamCounter 0 0.0 0.0 1.0 0.5
 #/vis/geometry/set/colour MylarDegrader 0 0.6 0.1 0.1 0.5
 /vis/geometry/set/colour Target 0 0.0 0.0 1.0 0.5
-/vis/geometry/set/colour SpectrometerShell 0 1.0 1.0 1.0 0.05
-/vis/geometry/set/colour SpectrometerGas 0 0.0 2.0 2.0 0.05
+/vis/geometry/set/colour SpectrometerBody 0 1.0 1.0 1.0 0.05
+/vis/geometry/set/colour SpectrometerCell 0 0.0 2.0 2.0 0.05
+/vis/geometry/set/colour SpectrometerReadoutLayer 0 0.0 2.0 2.0 0.05
 /vis/geometry/set/colour Spectrometer 0 0.0 0.0 1.0 0.025
 /vis/geometry/set/colour Collimator 0 0.8 0.3 0.0 0.2
 #/vis/geometry/set/colour CarbonFoil 80 1.0 1.0 1.0 0.5

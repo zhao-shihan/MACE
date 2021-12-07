@@ -26,18 +26,22 @@ CalorimeterHit::CalorimeterHit(CalorimeterHit&& hit) noexcept :
     fTrackID(std::move(hit.fTrackID)) {}
 
 CalorimeterHit& CalorimeterHit::operator=(const CalorimeterHit& hit) noexcept {
-    G4VHit::operator=(static_cast<const G4VHit&>(hit));
-    DataModel::Hit::CalorimeterHit::operator=(static_cast<const DataModel::Hit::CalorimeterHit&>(hit));
-    fPDGCode = hit.fPDGCode;
-    fTrackID = hit.fTrackID;
+    if (&hit != this) {
+        G4VHit::operator=(static_cast<const G4VHit&>(hit));
+        DataModel::Hit::CalorimeterHit::operator=(static_cast<const DataModel::Hit::CalorimeterHit&>(hit));
+        fPDGCode = hit.fPDGCode;
+        fTrackID = hit.fTrackID;
+    }
     return *this;
 }
 
 CalorimeterHit& CalorimeterHit::operator=(CalorimeterHit&& hit) noexcept {
-    G4VHit::operator=(static_cast<G4VHit&&>(hit));
-    DataModel::Hit::CalorimeterHit::operator=(static_cast<DataModel::Hit::CalorimeterHit&&>(hit));
-    fPDGCode = std::move(hit.fPDGCode);
-    fTrackID = std::move(hit.fTrackID);
+    if (&hit != this) {
+        G4VHit::operator=(static_cast<G4VHit&&>(hit));
+        DataModel::Hit::CalorimeterHit::operator=(static_cast<DataModel::Hit::CalorimeterHit&&>(hit));
+        fPDGCode = std::move(hit.fPDGCode);
+        fTrackID = std::move(hit.fTrackID);
+    }
     return *this;
 }
 

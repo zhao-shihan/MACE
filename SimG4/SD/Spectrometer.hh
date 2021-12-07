@@ -15,4 +15,7 @@ public:
 
 private:
     Hit::SpectrometerHitCollection* fHitsCollection;
+    const G4Track* fCurrentTrack;
+    G4double fInX;
+    G4double fInY;
 };

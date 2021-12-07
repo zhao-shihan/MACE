@@ -28,7 +28,7 @@ class MACE::Geometry::Entity::Fast::SpectrometerCells final :
             const int cellCount = round(2.0 * M_PI / (2.0 * asin(0.5 * cellWidth / layerCenterRadius)));
             const auto cellAngle = 2.0 * M_PI / cellCount;
             const auto gapHalfAngle = rFieldWire / layerInnerRadius;
-            auto solid = new G4Tubs(name, layerInnerRadius + rFieldWire, layerOuterRadius, halfLength, gapHalfAngle, cellAngle - gapHalfAngle);
+            auto solid = new G4Tubs(name, layerInnerRadius + rFieldWire, layerOuterRadius, halfLength, gapHalfAngle, cellAngle - 2.0 * gapHalfAngle);
             auto logic = new G4LogicalVolume(solid, material, name);
             for (int j = 0; j < cellCount; ++j) {
                 auto physic = new G4PVPlacement(G4Transform3D(G4RotationMatrix(G4ThreeVector(0.0, 0.0, 1.0), j * cellAngle), G4ThreeVector()), name, logic, motherVolume, true, cellId, fCheckOverlaps);
