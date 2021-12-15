@@ -2,7 +2,6 @@
 #include "G4Step.hh"
 #include "G4SDManager.hh"
 #include "G4Gamma.hh"
-#include "g4analysis.hh"
 
 #include "SimG4/SD/Calorimeter.hh"
 #include "SimG4/Analysis.hh"
