@@ -45,9 +45,9 @@ template<class SpectrometerHitType>
 void MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType>::FindExceedThreshold() {
     for (Eigen::Index i = 0; i < fRows; ++i) {
         for (Eigen::Index j = 0; j < fCols; ++j) {
-            const auto& hitMapList = fHoughSpace(i, j);
-            if (hitMapList.size() >= fThreshold) {
-                fExceedThreshold.emplace_back(&hitMapList, ToRealCartesian(std::make_pair(i, j)));
+            const auto& hitList = fHoughSpace(i, j);
+            if (hitList.size() >= fThreshold) {
+                fExceedThreshold.emplace_back(&hitList, ToRealCartesian(std::make_pair(i, j)));
             }
         }
     }
@@ -60,18 +60,15 @@ void MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType>::FindExcee
 
 template<class SpectrometerHitType>
 void MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType>::GenerateResult() {
-    for (auto&& rawListAndCenter : fExceedThreshold) {
-        const auto& rawList = rawListAndCenter.first;
-        const auto& center = rawListAndCenter.second;
-        if (rawList->size() < fThreshold) { continue; }
+    for (auto&& [rawList, center] : fExceedThreshold) {
+        auto effectiveSizeOfRawList = EffectiveSizeOf(rawList);
+        if (effectiveSizeOfRawList < fThreshold) { continue; }
 
-        fLeftHandCandidateTrackList.reserve(rawList->size());
-        fRightHandCandidateTrackList.reserve(rawList->size());
+        fLeftHandCandidateTrackList.reserve(effectiveSizeOfRawList);
+        fRightHandCandidateTrackList.reserve(effectiveSizeOfRawList);
 
-        for (auto&& hitMapVoid : *rawList) {
-            const auto& hit = static_cast<HitMap*>(hitMapVoid)->first;
-
-            auto cross = hit->GetHitPosition().fX * center.second - center.first * hit->GetHitPosition().fY;
+        for (auto&& hit : *rawList) {
+            auto cross = hit->GetWirePosition().fX * center.second - center.first * hit->GetWirePosition().fY;
             auto& candidateTrackList = (cross > 0) ? fRightHandCandidateTrackList : fLeftHandCandidateTrackList;
 
             auto candidateTrackToBeJoin = std::find_if(candidateTrackList.begin(), candidateTrackList.end(),
@@ -81,27 +78,27 @@ void MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType>::GenerateR
                 }
             );
             if (candidateTrackToBeJoin == candidateTrackList.end()) {
-                auto& candidateTrackOfTheTime = candidateTrackList.emplace_back(hit->GetHitTime(), 0).second;
-                candidateTrackOfTheTime.reserve(64UL);
+                auto& candidateTrackOfNewTime = candidateTrackList.emplace_back(hit->GetHitTime(), 0).second;
+                candidateTrackOfNewTime.reserve(64UL);
                 candidateTrackToBeJoin = std::prev(candidateTrackList.end());
             }
-            candidateTrackToBeJoin->second.emplace_back(static_cast<HitMap*>(hitMapVoid));
+            candidateTrackToBeJoin->second.emplace_back(hit);
         }
 
         auto DumpToResultAndEraseHoughCurve =
             [&](const decltype(fLeftHandCandidateTrackList)& candidateTrackList) {
             for (auto&& candidateTrack : candidateTrackList) {
-                const auto& hitMapVector = candidateTrack.second;
-                if (hitMapVector.size() < fThreshold) { continue; }
+                const auto& hitVector = candidateTrack.second;
+                if (hitVector.size() < fThreshold) { continue; }
 
                 auto& track = fRecognizedList.emplace_back(0, center).first;
-                track.reserve(hitMapVector.size());
-                for (auto&& hitMap : hitMapVector) {
-                    track.emplace_back(std::move(hitMap->first));
-                    for (auto&& [hitMapList, hitMapListIter] : hitMap->second) {
+                track.reserve(hitVector.size());
+                for (auto&& hit : *hitVector) {
+                    track.emplace_back(*hit);
+                    for (auto&& [hitMapList, hitMapListIter] : hit->second) {
                         hitMapList->erase(hitMapListIter);
                     }
-                    hitMap->second.clear();
+                    hit->second.clear();
                 }
             }
         };

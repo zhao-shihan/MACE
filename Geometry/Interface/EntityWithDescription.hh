@@ -23,4 +23,4 @@ private:
     DescriptionTuple fDescriptions;
 };
 
-#include "Geometry/Interface/EntityWithDescription.tcc"
+#include "Geometry/Interface/EntityWithDescription.icc"

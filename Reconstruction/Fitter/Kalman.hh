@@ -37,4 +37,4 @@ private:
     std::vector<std::shared_ptr<genfit::Track>> fFitted;
 };
 
-#include "Reconstruction/Fitter/Kalman.tcc"
+#include "Reconstruction/Fitter/Kalman.icc"

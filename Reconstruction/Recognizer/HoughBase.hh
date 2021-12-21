@@ -1,7 +1,5 @@
 #pragma once
 
-#include <list>
-
 #include "Eigen/Core"
 
 #include "DataModel/Hit/SpectrometerHit.hh"
@@ -18,12 +16,9 @@ class MACE::Reconstruction::Recognizer::HoughBase {
 protected:
     using Hit = std::shared_ptr<const SpectrometerHitType>;
 
-    // I use void* to avoid type self-reference. No elegant methods found so far.
-    using HitMapList = std::list<void*>; // Important: void* == HitMap*
-    using HitMap = std::pair<Hit, std::vector<std::pair<HitMapList*, HitMapList::const_iterator>>>;
+    using HitList = std::vector<const Hit*>;
 
-    template<typename T>
-    using HoughSpace = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
+    using HoughSpace = Eigen::Matrix<HitList, Eigen::Dynamic, Eigen::Dynamic>;
     using HoughCoordinate = std::pair<Eigen::Index, Eigen::Index>;
     using RealCoordinate = std::pair<Double_t, Double_t>;
 
@@ -48,20 +43,22 @@ private:
 
     virtual RealCoordinate ToRealCartesian(const HoughCoordinate& center) const = 0;
 
+    size_t EffectiveSizeOf(const HitList* hitList) { return std::count_if(hitList->begin(), hitList->end(), [](auto hit) { *hit != nullptr; }); }
+
 protected:
     const Eigen::Index fRows;
     const Eigen::Index fCols;
     size_t fThreshold = 12;
     Double_t fTrackTimeWindow = 500.0;
 
-    std::vector<HitMap> fHitStore;
-    HoughSpace<HitMapList> fHoughSpace;
+    std::vector<Hit> fHitStore;
+    HoughSpace fHoughSpace;
     std::vector<std::pair<std::vector<Hit>, RealCoordinate>> fRecognizedList;
 
 private:
-    std::vector<std::pair<const HitMapList*, RealCoordinate>> fExceedThreshold;
-    std::vector<std::pair<Double_t, std::vector<HitMap*>>> fLeftHandCandidateTrackList;
-    std::vector<std::pair<Double_t, std::vector<HitMap*>>> fRightHandCandidateTrackList;
+    std::vector<std::pair<const HitList*, RealCoordinate>> fExceedThreshold;
+    std::vector<std::pair<Double_t, std::vector<const Hit*>>> fLeftHandCandidateTrackList;
+    std::vector<std::pair<Double_t, std::vector<const Hit*>>> fRightHandCandidateTrackList;
 };
 
-#include "Reconstruction/Recognizer/HoughBase.tcc"
+#include "Reconstruction/Recognizer/HoughBase.icc"

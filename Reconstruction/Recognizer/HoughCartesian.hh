@@ -13,7 +13,7 @@ class MACE::Reconstruction::Recognizer::HoughCartesian final :
 private:
     using Base = MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType>;
     using Hit = typename Base::Hit;
-    using HitMapList = typename Base::HitMapList;
+    using HitList = typename Base::HitList;
     using HitMap = typename Base::HitMap;
     template<typename T>
     using HoughSpace = typename Base::HoughSpace<T>;
@@ -47,4 +47,4 @@ private:
     TFile* fFile = nullptr;
 };
 
-#include "Reconstruction/Recognizer/HoughCartesian.tcc"
+#include "Reconstruction/Recognizer/HoughCartesian.icc"

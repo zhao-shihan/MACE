@@ -25,7 +25,7 @@ class MACE::Geometry::Entity::Fast::SpectrometerCells final :
             const auto layerOuterRadius = motherSolid->GetOuterRadius();
             const auto layerCenterRadius = (layerInnerRadius + layerOuterRadius) / 2.0;
 
-            const int cellCount = round(2.0 * M_PI / (2.0 * asin(0.5 * cellWidth / layerCenterRadius)));
+            const int cellCount = 4 * round(M_PI_2 / (2.0 * asin(0.5 * cellWidth / layerCenterRadius)));
             const auto cellAngle = 2.0 * M_PI / cellCount;
             const auto gapHalfAngle = rFieldWire / layerInnerRadius;
             auto solid = new G4Tubs(name, layerInnerRadius + rFieldWire, layerOuterRadius, halfLength, gapHalfAngle, cellAngle - 2.0 * gapHalfAngle);
