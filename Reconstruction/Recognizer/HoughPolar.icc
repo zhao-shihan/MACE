@@ -25,22 +25,16 @@ MACE::Reconstruction::Recognizer::HoughPolar<SpectrometerHitType>::~HoughPolar()
 template<class SpectrometerHitType>
 void MACE::Reconstruction::Recognizer::HoughPolar<SpectrometerHitType>::HoughTransform() {
     // for each hit
-    for (auto&& hitMap : Base::fHitStore) {
-        const auto& hit = hitMap.first;
-        auto& addressList = hitMap.second;
-        addressList.reserve(std::max(Base::fRows, Base::fCols) * 5);
-
-        const auto hitX = hit->GetHitPosition().fX;
-        const auto hitY = hit->GetHitPosition().fY;
+    for (auto&& hit : Base::fHitStore) {
+        const auto hitX = hit->GetWirePosition().fX;
+        const auto hitY = hit->GetWirePosition().fY;
         const auto R2 = hitX * hitX + hitY * hitY;
         const auto X = 2.0 * hitX / R2;
         const auto Y = 2.0 * hitY / R2;
 
         // do hough transform
         auto DoFill = [&](Eigen::Index row, Eigen::Index col)->void {
-            auto& theList = Base::fHoughSpace(row, col);
-            theList.emplace_front(&hitMap);
-            addressList.emplace_back(&theList, theList.cbegin());
+            Base::fHoughSpace(row, col).emplace_back(&hit);
         };
         auto phi = ToRealPhi(0);
         auto jLast = ToHoughRho(X * cos(phi) + Y * sin(phi));
@@ -152,7 +146,7 @@ void MACE::Reconstruction::Recognizer::HoughPolar<SpectrometerHitType>::SaveLast
             auto colorStyleIndex = i % (markerColor.size() * markerStyle.size());
             auto styleIndex = colorStyleIndex / markerColor.size();
             auto colorIndex = colorStyleIndex % markerColor.size();
-            auto hitMarker = new TMarker(point->GetHitPosition().fX, point->GetHitPosition().fY, markerStyle[styleIndex]);
+            auto hitMarker = new TMarker(point->GetWirePosition().fX, point->GetWirePosition().fY, markerStyle[styleIndex]);
             hitMarker->SetMarkerColor(markerColor[colorIndex]);
             hitMarker->Draw();
         }

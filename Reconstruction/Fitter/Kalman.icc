@@ -51,17 +51,17 @@ void Kalman<SpectrometerHitType>::Fit(const std::vector<RecognizedTrack>& recogn
 
         const auto& firstHitPos = std::min_element(recognizedTrack.cbegin(), recognizedTrack.cend(),
             [](const auto& hit1, const auto& hit2)->bool {
-                return hit1->GetChamberID() < hit2->GetChamberID();
+                return hit1->GetCellID() < hit2->GetCellID();
             }
-        )->get()->GetHitPosition();
+        )->get()->GetWirePosition();
         auto hitCrossCenter = firstHitPos.fX * center.second - center.first * firstHitPos.fY;
         auto pdgCode = (hitCrossCenter > 0) ? (11) : (-11); // cross>0 => e-(11), cross<0 => e+(-11)
         const auto& track = fFitted.emplace_back(std::make_shared<genfit::Track>(new genfit::RKTrackRep(pdgCode), TVector3(0.0, 0.0, 0.0), TVector3(firstHitPos)));
 
         for (auto&& hit : recognizedTrack) {
-            const auto& hitPos = hit->GetHitPosition();
+            const auto& hitPos = hit->GetWirePosition();
 
-            auto hitR = hitPos.Perp();
+            auto hitR = hitPos.Mag();
             auto resX = -(hitPos.fY / hitR) * fArcResolution;
             auto resY = (hitPos.fX / hitR) * fArcResolution;
             auto resZ = fZResolution;
@@ -69,7 +69,7 @@ void Kalman<SpectrometerHitType>::Fit(const std::vector<RecognizedTrack>& recogn
             hitCov(1, 1) = resY * resY;
             hitCov(2, 2) = resZ * resZ;
 
-            auto measurement = new genfit::SpacepointMeasurement(TVectorD(3, hitPos), hitCov, hit->GetChamberID(), hitID, nullptr);
+            auto measurement = new genfit::SpacepointMeasurement(TVectorD(3, hitPos), hitCov, hit->GetCellID(), hitID, nullptr);
             trackPointList.emplace_back(new genfit::TrackPoint(measurement, track.get()));
 
             ++hitID;

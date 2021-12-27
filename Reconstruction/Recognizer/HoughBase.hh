@@ -16,7 +16,7 @@ class MACE::Reconstruction::Recognizer::HoughBase {
 protected:
     using Hit = std::shared_ptr<const SpectrometerHitType>;
 
-    using HitList = std::vector<const Hit*>;
+    using HitList = std::vector<Hit*>;
 
     using HoughSpace = Eigen::Matrix<HitList, Eigen::Dynamic, Eigen::Dynamic>;
     using HoughCoordinate = std::pair<Eigen::Index, Eigen::Index>;
@@ -43,7 +43,7 @@ private:
 
     virtual RealCoordinate ToRealCartesian(const HoughCoordinate& center) const = 0;
 
-    size_t EffectiveSizeOf(const HitList* hitList) { return std::count_if(hitList->begin(), hitList->end(), [](auto hit) { *hit != nullptr; }); }
+    size_t EffectiveSizeOf(const HitList* hitList) { return std::count_if(hitList->begin(), hitList->end(), [](auto hit) { return !(*hit == nullptr); }); }
 
 protected:
     const Eigen::Index fRows;
@@ -57,8 +57,8 @@ protected:
 
 private:
     std::vector<std::pair<const HitList*, RealCoordinate>> fExceedThreshold;
-    std::vector<std::pair<Double_t, std::vector<const Hit*>>> fLeftHandCandidateTrackList;
-    std::vector<std::pair<Double_t, std::vector<const Hit*>>> fRightHandCandidateTrackList;
+    std::vector<std::pair<Double_t, HitList>> fLeftHandCandidateTrackList;
+    std::vector<std::pair<Double_t, HitList>> fRightHandCandidateTrackList;
 };
 
 #include "Reconstruction/Recognizer/HoughBase.icc"

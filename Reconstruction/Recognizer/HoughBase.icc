@@ -20,7 +20,7 @@ void MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType>::SetEventT
     fHitStore.clear();
     fHitStore.reserve(hitVector.size());
     for (auto&& hit : hitVector) {
-        fHitStore.emplace_back(hit, 0);
+        fHitStore.emplace_back(hit);
     }
 }
 
@@ -67,7 +67,8 @@ void MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType>::GenerateR
         fLeftHandCandidateTrackList.reserve(effectiveSizeOfRawList);
         fRightHandCandidateTrackList.reserve(effectiveSizeOfRawList);
 
-        for (auto&& hit : *rawList) {
+        for (auto&& hitPtr : *rawList) {
+            const auto* hit = hitPtr->get();
             auto cross = hit->GetWirePosition().fX * center.second - center.first * hit->GetWirePosition().fY;
             auto& candidateTrackList = (cross > 0) ? fRightHandCandidateTrackList : fLeftHandCandidateTrackList;
 
@@ -82,7 +83,7 @@ void MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType>::GenerateR
                 candidateTrackOfNewTime.reserve(64UL);
                 candidateTrackToBeJoin = std::prev(candidateTrackList.end());
             }
-            candidateTrackToBeJoin->second.emplace_back(hit);
+            candidateTrackToBeJoin->second.emplace_back(hitPtr);
         }
 
         auto DumpToResultAndEraseHoughCurve =
@@ -93,12 +94,9 @@ void MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType>::GenerateR
 
                 auto& track = fRecognizedList.emplace_back(0, center).first;
                 track.reserve(hitVector.size());
-                for (auto&& hit : *hitVector) {
-                    track.emplace_back(*hit);
-                    for (auto&& [hitMapList, hitMapListIter] : hit->second) {
-                        hitMapList->erase(hitMapListIter);
-                    }
-                    hit->second.clear();
+                for (auto&& hitPtr : hitVector) {
+                    track.emplace_back(*hitPtr);
+                    hitPtr->reset(static_cast<const SpectrometerHitType*>(nullptr));
                 }
             }
         };

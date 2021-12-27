@@ -14,9 +14,7 @@ private:
     using Base = MACE::Reconstruction::Recognizer::HoughBase<SpectrometerHitType>;
     using Hit = typename Base::Hit;
     using HitList = typename Base::HitList;
-    using HitMap = typename Base::HitMap;
-    template<typename T>
-    using HoughSpace = typename Base::HoughSpace<T>;
+    using HoughSpace = typename Base::HoughSpace;
     using HoughCoordinate = typename Base::HoughCoordinate;
     using RealCoordinate = typename Base::RealCoordinate;
 
@@ -47,7 +45,7 @@ private:
     const Double_t fRhoResolution;
 
     bool fEnableHoughSpaceVis = false;
-    HoughSpace<size_t> fHoughSpaceVis;
+    Eigen::Matrix<size_t, Eigen::Dynamic, Eigen::Dynamic> fHoughSpaceVis;
 
     TFile* fFile = nullptr;
 };
