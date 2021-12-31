@@ -1,0 +1,29 @@
+#pragma once
+
+#include "Geometry/Interface/Description.hxx"
+
+class MACE::Geometry::Description::World final :
+    public MACE::Geometry::Interface::Description {
+    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(World);
+public:
+    const char* GetName()                   const override { return "World"; }
+    const char* GetOverallDescription()     const override { return "The geometry world."; }
+    const char* GetMaterialDescription()    const override { return "Vacuum (of air). A properly defined pressure/density is recommended."; }
+    const char* GetShapeDescription()       const override { return "A big box that can contain everything."; }
+    const char* GetMotherDescription()      const override { return "Void."; }
+    const char* GetTranslationDescription() const override { return "No translation."; }
+    const char* GetRotationDescription()    const override { return "No rotation."; }
+
+    auto GetHalfXExtent() const { return fHalfXExtent; }
+    auto GetHalfYExtent() const { return fHalfYExtent; }
+    auto GetHalfZExtent() const { return fHalfZExtent; }
+
+    void SetHalfXExtent(double val) { fHalfXExtent = val; }
+    void SetHalfYExtent(double val) { fHalfYExtent = val; }
+    void SetHalfZExtent(double val) { fHalfZExtent = val; }
+
+private:
+    double fHalfXExtent = 3_m;
+    double fHalfYExtent = 1_m;
+    double fHalfZExtent = 4_m;
+};
