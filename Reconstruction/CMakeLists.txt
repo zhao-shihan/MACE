@@ -9,3 +9,5 @@ file(GLOB_RECURSE sources ${PROJECT_SOURCE_DIR}/*.cxx)
 
 add_executable(Reconstruction Reconstruction.cxx ${sources})
 target_link_libraries(Reconstruction DataModel genfit2 SimG4_static)
+
+install(TARGETS Reconstruction DESTINATION bin)

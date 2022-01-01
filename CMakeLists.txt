@@ -23,8 +23,6 @@ find_package(Eigen3 REQUIRED)
 
 # Vars
 set(MACE_PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
-set(MACE_BINARY_INSTALL_DIR .)
-set(MACE_LIBRARY_INSTALL_DIR .)
 
 include_directories(${PROJECT_SOURCE_DIR})
 

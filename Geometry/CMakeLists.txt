@@ -11,5 +11,4 @@ target_link_libraries(Geometry ${Geant4_LIBRARIES})
 add_executable(MakeGeometry MakeGeometry.cxx)
 target_link_libraries(MakeGeometry Geometry ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 
-install(TARGETS Geometry DESTINATION lib)
 install(TARGETS MakeGeometry DESTINATION bin)

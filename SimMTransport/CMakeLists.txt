@@ -13,5 +13,5 @@ target_link_libraries(SimMTransport SimMTransport_static ${ROOT_LIBRARIES} ${MPI
 
 configure_file(${PROJECT_SOURCE_DIR}/sample.cfg ${PROJECT_BINARY_DIR} COPYONLY)
 
-install(TARGETS SimMTransport DESTINATION ${MACE_BINARY_INSTALL_DIR})
-install(FILES ${PROJECT_SOURCE_DIR}/sample.cfg DESTINATION ${MACE_BINARY_INSTALL_DIR})
+install(TARGETS SimMTransport DESTINATION bin)
+install(FILES ${PROJECT_SOURCE_DIR}/sample.cfg DESTINATION share/SimMTransport)
