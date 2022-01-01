@@ -16,7 +16,7 @@ GenFit2
 Linux, with gcc(9,10,11)
 
 ### Prepare for your PC:  
-Geant4 and ROOT can be compiled and installed on your computer following the official installation guides. They should compiled against C++17 standard.  
+Geant4 and ROOT can be compiled and installed on your computer following the official installation guides. They should be compiled against C++17 standard.  
 MPI-3 and Eigen3 can also be installed via package manager (apt, yum, etc.) respect to your linux distrbution. For example, you can install MPICH and Eigen3 on Ubuntu with
 ```shell
 sudo apt update
@@ -32,11 +32,11 @@ After everything prepared, it's time to build.
 
 MACE software follows a classical cmake & make procedure, as
 ```shell
-cd ${MACE_DIR}
 mkdir build
-cmake ..
+cmake <MACE_ROOT_DIR>
 make
 ```
+Using ninja or other make tools is also OK, respect to your preference.  
 Notice: MACE is compiled against C++17, which is configured directly in ./CMakeLists.txt, your -DCMAKE_CXX_STANDARD flag may not work. Other C++ standard is not supported or tested, we might do that later.  
 
 ## How to Run
@@ -75,6 +75,6 @@ No standalone executable file for this module. It appears nowhere, it appears ev
 ### Reconstruction
 Run as
 ```shell
-./Reconstruction
+./Reconstruction SimG4Result.root
 ```
 Development in progess.
