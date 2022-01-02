@@ -4,7 +4,7 @@ project(SimG4)
 include_directories(${MPI_INCLUDE_PATH})
 include_directories(${Geant4_INCLUDE_DIRS})
 include_directories(${ROOT_INCLUDE_DIRS})
-include_directories(${MACE_PROJECT_ROOT_DIR}/Buildin/G4MPI/include)
+include_directories(${MACE_THIRD_PARTY_DIR}/G4MPI/include)
 
 # SimG4 sources
 file(GLOB_RECURSE SimG4_SOURCES ${PROJECT_SOURCE_DIR}/*.cxx)

@@ -1,6 +1,13 @@
 # MACE
 
+## Introduction
+
+This software is designed for MACE experiment. For now, it is mainly used for designing the experiment.  
+MACE software are made up of several modules, including SimG4, SimMTransport, Reconstruction, Geometry, and DataModel. SimG4 is used for the simulation of whole experiment. SimMTransport handles the muonium transport in target after formed, and is used in SimG4 as a physics process. SimMTransport can also be run independently to calculate the yield of target, see it's README for detail. Reconstruction handles the track reconstruction in the spectrometer. Geometry handles the construction of detector geometry, which provides a universial interface of detector geometry. DataModel provides a interface of datamodel for each detector, which is transportable between modules.
+
 ## How to Build
+
+To build MACE software from source, there are a few prerequisites.
 
 ### External dependencies:  
 MPI-3   (MPICH, OpenMPI, Intel MPI, etc. On your frequency.)  
@@ -8,9 +15,7 @@ Geant4  (min: 4.11.0, with C++17, and gdml enabled)
 ROOT    (min: 6.24.02, C++17)  
 Eigen3  
 
-### Builtin dependencies:  
-G4mpi  
-GenFit2  
+Some other dependencies are bulit in (in ./ThirdParty), including G4mpi and GenFit2.    
 
 ### (Tested) Platform:  
 Linux, with gcc(9,10,11)

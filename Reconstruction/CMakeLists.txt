@@ -2,7 +2,7 @@ project(Reconstruction)
 
 include_directories(${ROOT_INCLUDE_DIRS})
 include_directories(${EIGEN3_INCLUDE_DIR})
-include_directories_recursively(${MACE_PROJECT_ROOT_DIR}/Buildin/GenFit2)
+include_directories_recursively(${MACE_THIRD_PARTY_DIR}/GenFit2)
 include_directories(${Geant4_INCLUDE_DIRS})
 
 file(GLOB_RECURSE sources ${PROJECT_SOURCE_DIR}/*.cxx)

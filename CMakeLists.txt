@@ -23,6 +23,7 @@ find_package(Eigen3 REQUIRED)
 
 # Vars
 set(MACE_PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
+set(MACE_THIRD_PARTY_DIR ${PROJECT_SOURCE_DIR}/ThirdParty)
 
 include_directories(${PROJECT_SOURCE_DIR})
 
@@ -40,7 +41,7 @@ function(include_directories_recursively root_dir)
     endforeach()
 endfunction()
 
-add_subdirectory(Buildin)
+add_subdirectory(ThirdParty)
 add_subdirectory(DataModel)
 add_subdirectory(Geometry)
 add_subdirectory(Reconstruction)
