@@ -19,15 +19,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 }
 
 void DetectorConstruction::ConstructVolumes() {
-    fWorld->AddDaughter(fCalorimeterField);
-    fWorld->AddDaughter(fFirstBendField);
-    fWorld->AddDaughter(fFirstTransportField);
-    fWorld->AddDaughter(fOrbitalDetectorShield);
-    fWorld->AddDaughter(fSecondBendField);
-    fWorld->AddDaughter(fSecondTransportField);
-    fWorld->AddDaughter(fSpectrometerField);
-    fWorld->AddDaughter(fSpectrometerShield);
-    fWorld->AddDaughter(fThirdTransportField);
     fCalorimeterField->AddDaughter(fCalorimeter);
     fCalorimeterField->AddDaughter(fOrbitalDetector);
     fSecondTransportField->AddDaughter(fCollimator);
@@ -37,6 +28,20 @@ void DetectorConstruction::ConstructVolumes() {
     fAcceleratorField->AddDaughter(fTarget);
     fSpectrometerBody->AddDaughter(fSpectrometerReadoutLayer);
     fSpectrometerReadoutLayer->AddDaughter(fSpectrometerCells);
+    fWorld->AddDaughter(fCalorimeterField);
+    fWorld->AddDaughter(fFirstBendField);
+    fWorld->AddDaughter(fFirstBendSolenoid);
+    fWorld->AddDaughter(fFirstTransportField);
+    fWorld->AddDaughter(fFirstTransportSolenoid);
+    fWorld->AddDaughter(fOrbitalDetectorShield);
+    fWorld->AddDaughter(fSecondBendField);
+    fWorld->AddDaughter(fSecondBendSolenoid);
+    fWorld->AddDaughter(fSecondTransportField);
+    fWorld->AddDaughter(fSecondTransportSolenoid);
+    fWorld->AddDaughter(fSpectrometerField);
+    fWorld->AddDaughter(fSpectrometerShield);
+    fWorld->AddDaughter(fThirdTransportField);
+    fWorld->AddDaughter(fThirdTransportSolenoid);
 
     fWorld->ConstructSelfAndDescendants();
 

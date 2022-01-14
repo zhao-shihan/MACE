@@ -48,13 +48,18 @@ namespace MACE {
                 }
                 class CalorimeterField;
                 class FirstBendField;
+                class FirstBendSolenoid;
                 class FirstTransportField;
+                class FirstTransportSolenoid;
                 class OrbitalDetectorShield;
                 class SecondBendField;
+                class SecondBendSolenoid;
                 class SecondTransportField;
+                class SecondTransportSolenoid;
                 class SpectrometerField;
                 class SpectrometerShield;
                 class ThirdTransportField;
+                class ThirdTransportSolenoid;
             }
             class World;
         }
@@ -84,13 +89,18 @@ namespace MACE {
                     }
                     class CalorimeterField;
                     class FirstBendField;
+                    class FirstBendSolenoid;
                     class FirstTransportField;
+                    class FirstTransportSolenoid;
                     class OrbitalDetectorShield;
                     class SecondBendField;
+                    class SecondBendSolenoid;
                     class SecondTransportField;
+                    class SecondTransportSolenoid;
                     class SpectrometerField;
                     class SpectrometerShield;
                     class ThirdTransportField;
+                    class ThirdTransportSolenoid;
                 }
                 class World;
             }

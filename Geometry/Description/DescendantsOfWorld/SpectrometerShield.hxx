@@ -27,6 +27,6 @@ public:
 private:
     double fInnerRadius = 50_cm;
     double fInnerLength = 110_cm;
-    double fWindowRadius = 11_cm;
+    double fWindowRadius = 16_cm;
     double fThickness = 5_cm;
 };
