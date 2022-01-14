@@ -1,5 +1,5 @@
-namespace MACE::Geometry::Interface::__Meta {
-    namespace __Impl {
+namespace MACE::Geometry::Interface::Meta__ {
+    namespace Impl__ {
         // implementation of initialize helper for fDescriptions
         template<size_t N, class Tuple>
         struct InitializeDescriptions {
@@ -18,7 +18,7 @@ namespace MACE::Geometry::Interface::__Meta {
     // initialize helper for fDescriptions
     template<class Tuple>
     void InitializeDescriptions(Tuple& descriptions) {
-        __Impl::InitializeDescriptions<std::tuple_size_v<Tuple>, Tuple>::Initialize(descriptions);
+        Impl__::InitializeDescriptions<std::tuple_size_v<Tuple>, Tuple>::Initialize(descriptions);
     }
 }
 
@@ -27,7 +27,7 @@ MACE::Geometry::Interface::EntityWithDescription<VolumeType, RequiredDescription
     Entity<VolumeType>(),
     fDescriptions() {
     // initialize fDescriptions
-    __Meta::InitializeDescriptions(fDescriptions);
+    Meta__::InitializeDescriptions(fDescriptions);
 }
 
 template<class VolumeType, class... RequiredDescriptions>
