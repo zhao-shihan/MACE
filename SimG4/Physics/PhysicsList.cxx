@@ -6,6 +6,8 @@
 #include "G4IonPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 #include "G4DecayPhysics.hh"
+#include "G4ProductionCuts.hh"
+#include "G4RegionStore.hh"
 
 #include "SimG4/Physics/PhysicsList.hxx"
 #include "SimG4/Physics/MuoniumPhysics.hxx"
@@ -13,8 +15,8 @@
 using namespace MACE::SimG4::Physics;
 
 PhysicsList::PhysicsList(G4int verbose) :
-    G4VModularPhysicsList(),
-    fVerbose(verbose) {
+    G4VModularPhysicsList() {
+    SetVerboseLevel(verbose);
     RegisterPhysics(new G4EmLivermorePhysics(verbose));
     RegisterPhysics(new G4EmExtraPhysics(verbose));
     RegisterPhysics(new G4DecayPhysics(verbose));

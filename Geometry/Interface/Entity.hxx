@@ -20,7 +20,7 @@ public:
     auto GetVolumeNum() const { return fVolumes.size(); }
 
 protected:
-    const auto* Mother() const { return fMother; }
+    const Entity* Mother() const { return fMother; }
 
 private:
     virtual void ConstructSelf() = 0;

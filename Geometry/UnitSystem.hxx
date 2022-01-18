@@ -76,6 +76,13 @@ namespace MACE::Geometry {
     constexpr long double operator""_ug_cm3(long double val) { return val * (Unit::ug / Unit::cm3); }
     constexpr long double operator""_mg_mm3(long double val) { return val * (Unit::mg / Unit::mm3); }
     constexpr long double operator""_ug_mm3(long double val) { return val * (Unit::ug / Unit::mm3); }
+    constexpr long double operator""_kg_m2(long double val) { return val * (Unit::kg / Unit::m2); }
+    constexpr long double operator""_g_m2(long double val) { return val * (Unit::g / Unit::m2); }
+    constexpr long double operator""_g_cm2(long double val) { return val * (Unit::g / Unit::cm2); }
+    constexpr long double operator""_mg_cm2(long double val) { return val * (Unit::mg / Unit::cm2); }
+    constexpr long double operator""_ug_cm2(long double val) { return val * (Unit::ug / Unit::cm2); }
+    constexpr long double operator""_mg_mm2(long double val) { return val * (Unit::mg / Unit::mm2); }
+    constexpr long double operator""_ug_mm2(long double val) { return val * (Unit::ug / Unit::mm2); }
 
     constexpr long double operator""_K(unsigned long long val) { return val * Unit::K; }
     constexpr long double operator""_nm(unsigned long long val) { return val * Unit::nm; }
@@ -98,4 +105,11 @@ namespace MACE::Geometry {
     constexpr long double operator""_ug_cm3(unsigned long long val) { return val * (Unit::ug / Unit::cm3); }
     constexpr long double operator""_mg_mm3(unsigned long long val) { return val * (Unit::mg / Unit::mm3); }
     constexpr long double operator""_ug_mm3(unsigned long long val) { return val * (Unit::ug / Unit::mm3); }
+    constexpr long double operator""_kg_m2(unsigned long long val) { return val * (Unit::kg / Unit::m2); }
+    constexpr long double operator""_g_m2(unsigned long long val) { return val * (Unit::g / Unit::m2); }
+    constexpr long double operator""_g_cm2(unsigned long long val) { return val * (Unit::g / Unit::cm2); }
+    constexpr long double operator""_mg_cm2(unsigned long long val) { return val * (Unit::mg / Unit::cm2); }
+    constexpr long double operator""_ug_cm2(unsigned long long val) { return val * (Unit::ug / Unit::cm2); }
+    constexpr long double operator""_mg_mm2(unsigned long long val) { return val * (Unit::mg / Unit::mm2); }
+    constexpr long double operator""_ug_mm2(unsigned long long val) { return val * (Unit::ug / Unit::mm2); }
 }

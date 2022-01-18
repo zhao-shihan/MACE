@@ -44,52 +44,6 @@ void DetectorConstruction::ConstructVolumes() {
     fWorld->AddDaughter(fThirdTransportSolenoid);
 
     fWorld->ConstructSelfAndDescendants();
-
-    /* Deprecated.
-
-    //
-    // materials
-    //
-    auto nist = G4NistManager::Instance();
-    auto materialVacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1.16e-10 * g / m3);
-    // auto materialPlexiGlass = nist->FindOrBuildMaterial("G4_PLEXIGLASS");
-    // auto materialMylar = nist->FindOrBuildMaterial("G4_MYLAR");
-    auto materialSilicaAerogel = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30 * mg / cm3);
-    auto materialAr = nist->FindOrBuildMaterial("G4_Ar");
-    auto materialAl = nist->FindOrBuildMaterial("G4_Al");
-    auto materialCu = nist->FindOrBuildMaterial("G4_Cu");
-    // auto materialGraphite = nist->FindOrBuildMaterial("G4_GRAPHITE");
-    auto materialMCP = nist->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4 * g / cm3);
-    auto materialCsI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
-    auto materialLead = nist->FindOrBuildMaterial("G4_Pb");
-    //
-    // create geometry
-    //
-    // fWorld
-    fWorld->Create(materialVacuum, nullptr);
-    // fields
-    fSpectrometerField->Create(materialVacuum, fWorld);
-    fAcceleratorField->Create(materialVacuum, fSpectrometerField);
-    fFirstTransportField->Create(materialVacuum, fWorld);
-    fFirstBendField->Create(materialVacuum, fWorld);
-    fSecondTransportField->Create(materialVacuum, fWorld);
-    fSelectorField->Create(materialVacuum, fSecondTransportField);
-    fSecondBendField->Create(materialVacuum, fWorld);
-    fThirdTransportField->Create(materialVacuum, fWorld);
-    fOrbitalDetectorShellField->Create(materialVacuum, fWorld);
-    // entities
-    fTarget->Create(materialSilicaAerogel, fAcceleratorField);
-    fSpectrometer->Create(materialAl, fSpectrometerField);
-    fSpectrometerGas->Create(materialAr, fSpectrometer);
-    fSpectrometerReadOutLayer->Create(materialAr, fSpectrometerGas);
-    fCollimator->Create(materialCu, fSecondTransportField);
-    fOrbitalDetector->Create(materialMCP, fOrbitalDetectorShellField);
-    fCalorimeter->Create(materialCsI, fOrbitalDetectorShellField);
-    fSpectrometerShield->Create(materialLead, fWorld);
-    fOrbitalDetectorShield->Create(materialLead, fWorld);
-
-    fWorld->WriteGDML();
-    */
 }
 
 #include "G4SDManager.hh"

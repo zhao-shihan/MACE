@@ -17,7 +17,7 @@ private:
 
 public:
     template<size_t Index = 0>
-    const std::tuple_element_t<Index, DescriptionTuple>& GetDescription() { return std::get<Index>(fDescriptions); }
+    const std::tuple_element_t<Index, DescriptionTuple>& GetDescription() const { return std::get<Index>(fDescriptions); }
 
 private:
     DescriptionTuple fDescriptions;
