@@ -3,7 +3,7 @@
 ## Introduction
 
 This software is designed for MACE experiment. For now, it is mainly used for designing the experiment.  
-MACE software are made up of several modules, including SimG4, SimMTransport, Reconstruction, Geometry, and DataModel. SimG4 is used for the simulation of whole experiment. SimMTransport handles the muonium transport in target after formed, and is used in SimG4 as a physics process. SimMTransport can also be run independently to calculate the yield of target, see it's README for detail. Reconstruction handles the track reconstruction in the spectrometer. Geometry handles the construction of detector geometry, which provides a universial interface of detector geometry. DataModel provides a interface of datamodel for each detector, which is transportable between modules.
+MACE software are made up of several modules, including SimMACE, SimMTransport, ReconSpectrometer, Geometry, and DataModel. SimMACE is used for the simulation of whole experiment. SimMTransport handles the muonium transport in target after formed, and is used in SimMACE as a physics process. SimMTransport can also be run independently to calculate the yield of target, see it's README for detail. ReconSpectrometer handles the track reconstruction in the spectrometer. Geometry handles the construction of detector geometry, which provides a universial interface of detector geometry. DataModel provides a interface of datamodel for each detector, which is transportable between modules.
 
 ## How to Build
 
@@ -15,7 +15,7 @@ Geant4  (min: 4.11.0, with C++17, and gdml enabled)
 ROOT    (min: 6.24.02, C++17)  
 Eigen3  
 
-Some other dependencies are bulit in (in ./ThirdParty), including G4mpi and GenFit2.    
+G4mpi is bulit in. (in ./ThirdParty)    
 
 ### (Tested) Platform:  
 Linux, with gcc(9,10,11)
@@ -46,18 +46,18 @@ Notice: MACE is compiled against C++17, which is configured directly in ./CMakeL
 
 ## How to Run
 
-### SimG4
+### SimMACE
 In sequential mode with graphics:
 ```shell
-./SimG4
+./SimMACE
 ```
 In sequential mode with a macro:
 ```shell
-./SimG4 run.mac
+./SimMACE run.mac
 ```
 In parallel mode with a macro:
 ```shell
-mpirun -n N ./SimG4 run.mac
+mpirun -n N ./SimMACE run.mac
 ```
 
 ### SimMTransport
@@ -72,14 +72,14 @@ Just
 ```shell
 ./MakeGeometry
 ```
-This is mainly used for test. A gdml file and a root file will be generated and you can keep it for another purpose. Be note that SimG4 use this module internally, which means you need not to import gdml into SimG4 manually, we already do that.
+This is mainly used for test. A gdml file and a root file will be generated and you can keep it for another purpose. Be note that SimMACE use this module internally, which means you need not to import gdml into SimMACE manually, we already do that.
 
 ### Datamodel
 No standalone executable file for this module. It appears nowhere, it appears everywhere.
 
-### Reconstruction
+### ReconSpectrometer
 Run as
 ```shell
-./Reconstruction SimG4Result.root
+./ReconSpectrometer SimMACEResult.root
 ```
 Development in progess.

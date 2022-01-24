@@ -117,20 +117,20 @@ namespace MACE {
         }
     }
 
-    namespace Reconstruction {
+    namespace ReconSpectrometer {
         namespace Fitter {
             template<class SpectrometerHitType> class LeastChiSquare;
         }
         namespace Interface {
             template<class SpectrometerHitType> class Fitter;
-            template<class SpectrometerHitType> class Recognizer;
+            template<class SpectrometerHitType> class Reconstructor;
         }
-        namespace Recognizer {
+        namespace Reconstructor {
             template<class SpectrometerHitType> class Hough;
         }
     }
 
-    namespace SimG4 {
+    namespace SimMACE {
         namespace Action {
             class ActionInitialization;
             class DetectorConstruction;
