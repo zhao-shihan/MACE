@@ -7,11 +7,10 @@
 class MACE::DataModel::Interface::PersistencyHandler {
     PersistencyHandler(const PersistencyHandler&) = delete;
     PersistencyHandler& operator=(const PersistencyHandler&) = delete;
-public:
+protected:
     PersistencyHandler();
     virtual ~PersistencyHandler() = 0;
 
-protected:
     virtual void Open(const char* fileName, Option_t* option);
     virtual void Close(Option_t* option = nullptr);
 
@@ -35,12 +34,12 @@ protected:
     TFile* fFile;
 
 private:
-    Char_t                      fTreeNameIndexer;
+    Char_t                      fTreeNameIndexer = '#';
     Long64_t                    fTreeIndex;
-    TString                     fTreeNamePrefixFormat;
-    TString                     fTreeNameSuffixFormat;
-    Bool_t                      fPrefixHasIndexer;
-    Bool_t                      fSuffixHasIndexer;
+    TString                     fTreeNamePrefixFormat = "Eve#_";
+    TString                     fTreeNameSuffixFormat = "";
+    Bool_t                      fPrefixHasIndexer = true;
+    Bool_t                      fSuffixHasIndexer = false;
     std::pair<TString, TString> fTreeNamePrefix;
     std::pair<TString, TString> fTreeNameSuffix;
 };

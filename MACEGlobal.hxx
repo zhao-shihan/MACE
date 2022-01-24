@@ -119,12 +119,14 @@ namespace MACE {
 
     namespace Reconstruction {
         namespace Fitter {
-            template<class SpectrometerHitType> class Kalman;
+            template<class SpectrometerHitType> class LeastChiSquare;
+        }
+        namespace Interface {
+            template<class SpectrometerHitType> class Fitter;
+            template<class SpectrometerHitType> class Recognizer;
         }
         namespace Recognizer {
-            template<class SpectrometerHitType> class HoughBase;
-            template<class SpectrometerHitType> class HoughPolar;
-            template<class SpectrometerHitType> class HoughCartesian;
+            template<class SpectrometerHitType> class Hough;
         }
     }
 

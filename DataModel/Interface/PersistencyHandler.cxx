@@ -6,12 +6,7 @@ using namespace MACE::DataModel::Interface;
 
 PersistencyHandler::PersistencyHandler() :
     fFile(nullptr),
-    fTreeNameIndexer('#'),
     fTreeIndex(0),
-    fTreeNamePrefixFormat("Eve#_"),
-    fTreeNameSuffixFormat(""),
-    fPrefixHasIndexer(true),
-    fSuffixHasIndexer(false),
     fTreeNamePrefix(std::make_pair<TString, TString>("Eve", "_")),
     fTreeNameSuffix(std::make_pair<TString, TString>("", "")) {}
 

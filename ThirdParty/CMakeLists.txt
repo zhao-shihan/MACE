@@ -1,2 +1,2 @@
 add_subdirectory(G4MPI)
-add_subdirectory(GenFit2)
+# add_subdirectory(GenFit2)

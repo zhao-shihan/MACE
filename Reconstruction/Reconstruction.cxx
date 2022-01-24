@@ -1,4 +1,5 @@
 #include <unordered_map>
+#include <iostream>
 
 #include "TH2I.h"
 #include "TGraph.h"
@@ -6,9 +7,8 @@
 #include "TMarker.h"
 
 #include "DataModel/PersistencyReader.hxx"
-#include "Reconstruction/Recognizer/HoughCartesian.hxx"
-#include "Reconstruction/Recognizer/HoughPolar.hxx"
-#include "Reconstruction/Fitter/Kalman.hxx"
+#include "DataModel/PersistencyWriter.hxx"
+#include "Reconstruction/Recognizer/Hough.hxx"
 #include "SimG4/Hit/SpectrometerHit.hxx"
 
 using namespace MACE;
@@ -17,56 +17,57 @@ int main(int, char** argv) {
     using Hit = SimG4::Hit::SpectrometerHit;
 
     DataModel::PersistencyReader reader(argv[1]);
-    // Reconstruction::Recognizer::HoughCartesian<Hit> recognizer(2500, std::stol(argv[2]), 500);
-    Reconstruction::Recognizer::HoughPolar<Hit> recognizer(350, 5000, std::stol(argv[2]), std::stol(argv[3]));
-    recognizer.EnableHoughSpaceVisualization(true);
-    auto hitList = reader.CreateListFromTree<Hit>();
-    recognizer.SetEventToBeRecognized(hitList);
-    recognizer.Recognize();
-    const auto& recognized = recognizer.GetRecognizedTrackList();
-    recognizer.SaveLastRecognition("recognition.root");
+    Reconstruction::Recognizer::Hough<Hit> recognizer(350, 5000, std::stol(argv[2]), std::stol(argv[3]), -50, 150, std::stol(argv[4]), std::stol(argv[5]));
+    auto event = reader.CreateListFromTree<Hit>();
     reader.Close();
 
-    Reconstruction::Fitter::Kalman<Hit> fitter("MACEGeometry.gdml");
-    fitter.Fit(recognized);
-    fitter.OpenDisplay();
+    recognizer.Recognize(event);
+    const auto& recognized = recognizer.GetRecognizedTrackList();
+
+    DataModel::PersistencyWriter writer(TString("recoged_") + argv[1]);
+    for (auto&& recogTrack : recognized) {
+        writer.CreateTreeFromList(recogTrack);
+    }
+    writer.WriteTrees();
+    writer.Close();
 
     /* DataModel::PersistencyReader reader;
 
     for (int res = 100; res <= 1000; res += 10) {
-        Reconstruction::Recognizer::HoughCartesian<Hit> recognizer(2500, res, 500);
-        // Reconstruction::Recognizer::HoughPolar<Hit> recognizer(350, 5000, res, res);
+        Reconstruction::Recognizer::Hough<Hit> recognizer(350, 5000, res, res, -50, 200, res, res);
 
         reader.Open(argv[1]);
-        auto hitList = reader.CreateListFromTree<Hit>();
+        auto event = reader.CreateListFromTree<Hit>();
         reader.Close();
 
-        std::unordered_map<Int_t, std::vector<const Hit*>> trueTrackMap;
-        for (auto&& hit : hitList) {
-            auto [trackIt, newTrack] = trueTrackMap.emplace(hit->GetTrackID(), 0);
-            if (newTrack) {
+        std::unordered_map<Int_t, std::vector<std::shared_ptr<Hit>>> trueTrackMap;
+        for (auto&& hit : event) {
+            auto [trackIt, isNewTrack] = trueTrackMap.emplace(hit->GetTrackID(), 0);
+            if (isNewTrack) {
                 trackIt->second.reserve(32);
             }
-            trackIt->second.emplace_back(hit.get());
+            trackIt->second.emplace_back(hit);
         }
         Int_t trackCount = 0;
         for (auto&& track : trueTrackMap) {
             if (track.second.size() >= 13) { ++trackCount; }
         }
 
-        recognizer.SetEventToBeRecognized(hitList);
-        recognizer.Recognize();
+        recognizer.Recognize(event);
         const auto& recognized = recognizer.GetRecognizedTrackList();
-        Double_t trackErrorRate = 0.0;
-        Double_t chargeErrorRate = 0.0;
-        for (auto&& [recoTrack, center] : recognized) {
-            std::unordered_map<Int_t, std::vector<const Hit*>> recognizedTrackMap;
+        const auto& parameters = recognizer.GetRecognizedParameterList();
+        double trackErrorRate = 0.0;
+        double chargeErrorRate = 0.0;
+        for (size_t i = 0; i < recognized.size(); ++i) {
+            const auto& recoTrack = recognized[i];
+            auto center = std::make_pair(std::get<0>(parameters[i]), std::get<1>(parameters[i]));
+            std::unordered_map<Int_t, std::vector<std::shared_ptr<Hit>>> recognizedTrackMap;
             for (auto&& recoHit : recoTrack) {
-                auto [trackIt, newTrack] = recognizedTrackMap.emplace(recoHit->GetTrackID(), 0);
-                if (newTrack) {
+                auto [trackIt, isNewTrack] = recognizedTrackMap.emplace(recoHit->GetTrackID(), 0);
+                if (isNewTrack) {
                     trackIt->second.reserve(32);
                 }
-                trackIt->second.emplace_back(recoHit.get());
+                trackIt->second.emplace_back(recoHit);
             }
             auto exactTrack = std::max_element(recognizedTrackMap.cbegin(), recognizedTrackMap.cend(),
                 [](const auto& left, const auto& right) {
