@@ -2,26 +2,20 @@
 
 #include "Eigen/Core"
 
-#include "DataModel/Hit/SpectrometerHit.hxx"
 #include "ReconSpectrometer/Global.hxx"
 #include "ReconSpectrometer/Interface/Reconstructor.hxx"
 
-template<class SpectrometerHitType>
 class MACE::ReconSpectrometer::Reconstructor::Hough final :
-    public MACE::ReconSpectrometer::Interface::Reconstructor<SpectrometerHitType> {
+    public MACE::ReconSpectrometer::Interface::Reconstructor {
 
     Hough(const Hough&) = delete;
     Hough& operator=(const Hough&) = delete;
-
-private:
-    using Base = MACE::ReconSpectrometer::Interface::Reconstructor<SpectrometerHitType>;
-    using Hit = typename Base::Hit;
 
 public:
     Hough(double r0Low, double r0Up, Eigen::Index nPhi, Eigen::Index nRho, double z0Low, double z0Up, Eigen::Index nZ0, Eigen::Index nAlpha);
     ~Hough();
 
-    void Recognize(const std::vector<Hit>& hitList) override;
+    void Recognize() override;
     const auto& GetRecognizedParameterList() const { return fRecognizedParameterList; }
 
     void SetThresholdXY(size_t threshold) { fThresholdXY = threshold; }
@@ -53,13 +47,11 @@ private:
     static size_t EffectiveSizeOf(const std::vector<Hit*>& hitPtrList) { return std::count_if(hitPtrList.begin(), hitPtrList.end(), [](auto hitPtr) { return (bool)(*hitPtr); }); }
 
 private:
-    std::vector<Hit> fEvent;
-
     const double fRhoLow;
     const double fRhoUp;
     const double fPhiResolution;
     const double fRhoResolution;
-    size_t fThresholdXY = 12;
+    size_t fThresholdXY = 20;
     Eigen::Matrix<std::vector<Hit*>, Eigen::Dynamic, Eigen::Dynamic> fHoughSpaceXY;
     std::vector<std::pair<const std::vector<Hit*>*, std::pair<double, double>>> fPiledTrackList;
 
@@ -67,11 +59,9 @@ private:
     const double fZ0Up;
     const double fZ0Resolution;
     const double fAlphaResolution;
-    size_t fThresholdSZ = 12;
+    size_t fThresholdSZ = 20;
     Eigen::Matrix<std::vector<Hit*>, Eigen::Dynamic, Eigen::Dynamic> fHoughSpaceSZ;
     std::vector<std::pair<const std::vector<Hit*>*, std::tuple<double, double, double, double>>> fTrackList;
 
     std::vector<std::tuple<double, double, double, double>> fRecognizedParameterList;
 };
-
-#include "ReconSpectrometer/Reconstructor/Hough.txx"

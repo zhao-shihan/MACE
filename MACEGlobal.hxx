@@ -119,14 +119,14 @@ namespace MACE {
 
     namespace ReconSpectrometer {
         namespace Fitter {
-            template<class SpectrometerHitType> class LeastChiSquare;
+            class LeastChiSquare;
         }
         namespace Interface {
-            template<class SpectrometerHitType> class Fitter;
-            template<class SpectrometerHitType> class Reconstructor;
+            class Fitter;
+            class Reconstructor;
         }
         namespace Reconstructor {
-            template<class SpectrometerHitType> class Hough;
+            class Hough;
         }
     }
 

@@ -17,12 +17,13 @@ int main(int, char** argv) {
     using Hit = SimMACE::Hit::SpectrometerHit;
 
     DataModel::PersistencyReader reader(argv[1]);
-    ReconSpectrometer::Reconstructor::Hough<Hit> reconstructor(350, 5000, std::stol(argv[2]), std::stol(argv[3]), -50, 150, std::stol(argv[4]), std::stol(argv[5]));
+    ReconSpectrometer::Reconstructor::Hough reconstructor(350, 5000, std::stol(argv[2]), std::stol(argv[3]), -50, 150, std::stol(argv[4]), std::stol(argv[5]));
     auto event = reader.CreateListFromTree<Hit>();
     reader.Close();
 
-    reconstructor.Recognize(event);
-    const auto& recognized = reconstructor.GetRecognizedTrackList();
+    reconstructor.SetHitDataToBeRecongnized(event);
+    reconstructor.Recognize();
+    const auto& recognized = reconstructor.GetRecognizedTrackList<Hit>();
 
     DataModel::PersistencyWriter writer(TString("recoged_") + argv[1]);
     for (auto&& recogTrack : recognized) {

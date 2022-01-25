@@ -1,8 +1,9 @@
-template<class SpectrometerHitType>
-MACE::ReconSpectrometer::Reconstructor::Hough<SpectrometerHitType>::
-Hough(double r0Low, double r0Up, Eigen::Index nPhi, Eigen::Index nRho, double z0Low, double z0Up, Eigen::Index nZ0, Eigen::Index nAlpha) :
-    MACE::ReconSpectrometer::Interface::Reconstructor<SpectrometerHitType>(),
-    fEvent(0),
+#include "ReconSpectrometer/Reconstructor/Hough.hxx"
+
+using namespace MACE::ReconSpectrometer::Reconstructor;
+
+Hough::Hough(double r0Low, double r0Up, Eigen::Index nPhi, Eigen::Index nRho, double z0Low, double z0Up, Eigen::Index nZ0, Eigen::Index nAlpha) :
+    MACE::ReconSpectrometer::Interface::Reconstructor(),
     fRhoLow(1 / r0Up),
     fRhoUp(1 / r0Low),
     fPhiResolution(2 * M_PI / nPhi),
@@ -17,20 +18,10 @@ Hough(double r0Low, double r0Up, Eigen::Index nPhi, Eigen::Index nRho, double z0
     fTrackList(0),
     fRecognizedParameterList(0) {}
 
-template<class SpectrometerHitType>
-MACE::ReconSpectrometer::Reconstructor::Hough<SpectrometerHitType>::
-~Hough() {}
+Hough::~Hough() {}
 
-template<class SpectrometerHitType>
-void MACE::ReconSpectrometer::Reconstructor::Hough<SpectrometerHitType>::
-Recognize(const std::vector<Hit>& hitList) {
-    fEvent.clear();
-    fEvent.reserve(hitList.size());
-    for (auto&& hit : hitList) {
-        fEvent.emplace_back(hit);
-    }
-
-    Base::fRecognizedList.clear();
+void Hough::Recognize() {
+    fRecognizedTrackList.clear();
     fRecognizedParameterList.clear();
 
     HoughTransformXY();
@@ -43,12 +34,10 @@ Recognize(const std::vector<Hit>& hitList) {
     }
 }
 
-template<class SpectrometerHitType>
-void MACE::ReconSpectrometer::Reconstructor::Hough<SpectrometerHitType>::
-HoughTransformXY() {
+void Hough::HoughTransformXY() {
     std::for_each_n(fHoughSpaceXY.data(), fHoughSpaceXY.rows() * fHoughSpaceXY.cols(), [](auto& elem) { elem.clear(); });
     // for each hit
-    for (auto&& hit : fEvent) {
+    for (auto&& hit : fHitData) {
         const auto x = hit->GetWirePosition().fX;
         const auto y = hit->GetWirePosition().fY;
         const auto d = hit->GetDriftDistance();
@@ -59,16 +48,22 @@ HoughTransformXY() {
 
         // do hough transform
         auto phi = ToPhiReal(0);
-        auto jLast = ToRhoIndex(X * cos(phi) + Y * sin(phi) + D);
-        auto DoFill = [&](Eigen::Index i, Eigen::Index j)->void {
-            if (0 <= j && j < fHoughSpaceXY.cols()) {
-                fHoughSpaceXY(i, j).emplace_back(&hit);
+        auto jLast = ToRhoIndex(X * cos(phi) + Y * sin(phi));
+        auto jDrift = (Eigen::Index)std::lround(D / fRhoResolution);
+        auto DoFill = [&](Eigen::Index i, Eigen::Index jCenter)->void {
+            const auto jPlus = jCenter + jDrift;
+            if (0 <= jPlus && jPlus < fHoughSpaceXY.cols()) {
+                fHoughSpaceXY(i, jPlus).emplace_back(&hit);
+            }
+            const auto jMinus = jCenter - jDrift;
+            if (0 <= jMinus && jMinus < fHoughSpaceXY.cols()) {
+                fHoughSpaceXY(i, jMinus).emplace_back(&hit);
             }
         };
         DoFill(0, jLast);
         for (Eigen::Index i = 1; i < fHoughSpaceXY.rows(); ++i) {
             phi = ToPhiReal(i);
-            const auto j = ToRhoIndex(X * cos(phi) + Y * sin(phi) + D);
+            const auto j = ToRhoIndex(X * cos(phi) + Y * sin(phi));
             const auto jDiff = j - jLast;
             if (jDiff > 1) {
                 for (auto k = jLast + 1; k < jLast + jDiff / 2; ++k) {
@@ -92,9 +87,7 @@ HoughTransformXY() {
     }
 }
 
-template<class SpectrometerHitType>
-void MACE::ReconSpectrometer::Reconstructor::Hough<SpectrometerHitType>::
-FindExceedThresholdXY() {
+void Hough::FindExceedThresholdXY() {
     fPiledTrackList.clear();
     for (Eigen::Index i = 0; i < fHoughSpaceXY.rows(); ++i) {
         for (Eigen::Index j = 0; j < fHoughSpaceXY.cols(); ++j) {
@@ -115,9 +108,7 @@ FindExceedThresholdXY() {
     );
 }
 
-template<class SpectrometerHitType>
-void MACE::ReconSpectrometer::Reconstructor::Hough<SpectrometerHitType>::
-HoughTransformSZ(const std::vector<Hit*>* piledTracks, const std::pair<double, double>& center) {
+void Hough::HoughTransformSZ(const std::vector<Hit*>* piledTracks, const std::pair<double, double>& center) {
     std::for_each_n(fHoughSpaceSZ.data(), fHoughSpaceSZ.rows() * fHoughSpaceSZ.cols(), [](auto& elem) { elem.clear(); });
     // for each hit exceed threshold in XY hough space
     for (auto&& hitPtr : *piledTracks) {
@@ -167,9 +158,7 @@ HoughTransformSZ(const std::vector<Hit*>* piledTracks, const std::pair<double, d
     }
 }
 
-template<class SpectrometerHitType>
-void MACE::ReconSpectrometer::Reconstructor::Hough<SpectrometerHitType>::
-FindExceedThresholdSZ(const std::pair<double, double>& center) {
+void Hough::FindExceedThresholdSZ(const std::pair<double, double>& center) {
     fTrackList.clear();
     for (Eigen::Index i = 0; i < fHoughSpaceSZ.rows(); ++i) {
         for (Eigen::Index j = 0; j < fHoughSpaceSZ.cols(); ++j) {
@@ -188,17 +177,16 @@ FindExceedThresholdSZ(const std::pair<double, double>& center) {
     );
 }
 
-template<class SpectrometerHitType>
-void MACE::ReconSpectrometer::Reconstructor::Hough<SpectrometerHitType>::DumpToResult() {
+void Hough::DumpToResult() {
     for (auto&& [track, parameters] : fTrackList) {
         if (EffectiveSizeOf(*track) < fThresholdSZ) { continue; }
         // dump to result
-        auto& trackResult = Base::fRecognizedList.emplace_back();
+        auto& trackResult = fRecognizedTrackList.emplace_back();
         for (auto&& hitPtr : *track) {
             if (*hitPtr == nullptr) { continue; }
             trackResult.emplace_back(*hitPtr);
             // remove hough curve
-            hitPtr->reset(static_cast<SpectrometerHitType*>(nullptr));
+            hitPtr->reset(static_cast<DataModel::SpectrometerHit*>(nullptr));
         }
         fRecognizedParameterList.emplace_back(std::move(parameters));
     }
