@@ -14,10 +14,10 @@ public:
     const char* GetTranslationDescription() const override { return "No translation."; }
     const char* GetRotationDescription()    const override { return "No rotation."; }
 
-    auto GetLayerThickness() const { return fLayerThickness; }
+    auto GetAverageCellWidth() const { return fAverageCellWidth; }
 
-    void SetLayerThickness(double val) { fLayerThickness = val; }
+    void SetAverageCellWidth(double val) { fAverageCellWidth = val; }
 
 private:
-    double fLayerThickness = 1_cm;
+    double fAverageCellWidth = 1_cm;
 };

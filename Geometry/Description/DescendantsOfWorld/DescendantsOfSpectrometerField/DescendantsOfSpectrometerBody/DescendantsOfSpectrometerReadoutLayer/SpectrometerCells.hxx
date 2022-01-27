@@ -14,16 +14,13 @@ public:
     const char* GetTranslationDescription() const override { return "Depending on the implementation."; }
     const char* GetRotationDescription()    const override { return "Depending on the implementation."; }
 
-    auto GetAverageCellWidth() const { return fAverageCellWidth; }
     auto GetSenseWireDiameter() const { return fSenseWireDiameter; }
     auto GetFieldWireDiameter() const { return fFieldWireDiameter; }
 
-    void SetAverageCellWidth(double val) { fAverageCellWidth = val; }
     void SetSenseWireDiameter(double val) { fSenseWireDiameter = val; }
     void SetFieldWireDiameter(double val) { fFieldWireDiameter = val; }
 
 private:
-    double fAverageCellWidth = 1_cm;
     double fSenseWireDiameter = 25_um;
     double fFieldWireDiameter = 110_um;
 };

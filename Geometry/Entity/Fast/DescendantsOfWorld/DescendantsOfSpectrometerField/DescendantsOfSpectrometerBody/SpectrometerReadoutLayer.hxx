@@ -11,7 +11,7 @@ class MACE::Geometry::Entity::Fast::SpectrometerReadoutLayer final :
     enum { kSpectrometerReadoutLayer, kSpectrometerBody };
     void ConstructSelf() override {
         const auto name = GetDescription<kSpectrometerReadoutLayer>()->GetName();
-        const auto layerThickness = GetDescription<kSpectrometerReadoutLayer>()->GetLayerThickness();
+        const auto layerThickness = GetDescription<kSpectrometerReadoutLayer>()->GetAverageCellWidth();
         const auto gasInnerRadius = GetDescription<kSpectrometerBody>()->GetGasInnerRadius();
         const auto gasOuterRadius = GetDescription<kSpectrometerBody>()->GetGasOuterRadius();
         const auto gasInnerLength = GetDescription<kSpectrometerBody>()->GetGasInnerLength();
@@ -20,7 +20,7 @@ class MACE::Geometry::Entity::Fast::SpectrometerReadoutLayer final :
         auto material = fgG4Nist->FindOrBuildMaterial("G4_He");
 
         auto sideSlope = 0.5 * (gasOuterLength - gasInnerLength) / (gasOuterRadius - gasInnerRadius);
-        const int layerCount = floor((gasOuterRadius - gasInnerRadius) / layerThickness);
+        const int layerCount = std::floor((gasOuterRadius - gasInnerRadius) / layerThickness);
         for (int i = 0; i < layerCount; ++i) {
             const auto halfLength = 0.5 * gasInnerLength + i * layerThickness * sideSlope;
             const auto layerCenterRadius = gasInnerRadius + (i + 0.5) * layerThickness;

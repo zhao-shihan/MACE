@@ -32,15 +32,14 @@ G4bool SD::Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
     const auto* const particle = track->GetDefinition();
     auto monitoring = FindMonitoring(track);
     auto isMonitoring = (monitoring != fMonitoringTrackList.cend());
-    const auto isEntering = step->IsFirstStepInVolume() && track->GetCurrentStepNumber() > 1 && particle->GetPDGCharge() != 0 && !isMonitoring;
-    if (isEntering) {
+    if (!isMonitoring && step->IsFirstStepInVolume() && track->GetCurrentStepNumber() > 1 && particle->GetPDGCharge() != 0) {
         const auto* const preStepPoint = step->GetPreStepPoint();
         fMonitoringTrackList.emplace_back(track, preStepPoint->GetGlobalTime(), preStepPoint->GetPosition());
         monitoring = std::prev(fMonitoringTrackList.cend());
         isMonitoring = true;
     }
-    const auto isExiting = step->IsLastStepInVolume() && isMonitoring;
-    if (isExiting) {
+    G4bool hasNewHit = false;
+    if (isMonitoring && step->IsLastStepInVolume()) {
         // retrive entering time and position
         const auto inT = std::get<1>(*monitoring);
         const auto inX = std::get<2>(*monitoring).x();
@@ -52,30 +51,36 @@ G4bool SD::Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
         const auto outX = postStepPoint->GetPosition().x();
         const auto outY = postStepPoint->GetPosition().y();
         const auto outZ = postStepPoint->GetPosition().z();
-        // calculate cell center
+        // retrive cell info
         const auto* const touchable = step->GetPreStepPoint()->GetTouchable();
         const auto* const solidCell = static_cast<const G4Tubs*>(touchable->GetSolid());
-        const auto cellCenterRadius = (solidCell->GetInnerRadius() + solidCell->GetOuterRadius()) / 2;
+        const auto cellCenterRadius = (solidCell->GetOuterRadius() + solidCell->GetInnerRadius()) / 2;
+        const auto cellHalfWidth = (solidCell->GetOuterRadius() - solidCell->GetInnerRadius()) / 2;
         const auto* const cellRotation = touchable->GetRotation();
         const auto cellCenterPhi = ((cellRotation->getAxis().z() > 0) ? (-cellRotation->getDelta()) : (cellRotation->getDelta())) + solidCell->GetStartPhiAngle() + solidCell->GetDeltaPhiAngle() / 2;
-        const auto centerX = cellCenterRadius * cos(cellCenterPhi);
-        const auto centerY = cellCenterRadius * sin(cellCenterPhi);
-        // new a hit
-        auto* const hit = new Hit::SpectrometerHit();
-        hit->SetHitTime((inT + outT) / 2);
-        hit->SetWirePosition(centerX, centerY);
-        hit->SetDriftDistance(std::fabs((inX - centerX) * (outY - centerY) - (outX - centerX) * (inY - centerY)) / hypot(outX - inX, outY - inY));
-        hit->SetHitPositionZ((inZ + outZ) / 2);
-        hit->SetCellID(touchable->GetCopyNumber());
-        hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
-        hit->SetVertexPosition(track->GetVertexPosition());
-        hit->SetPDGCode(particle->GetPDGEncoding());
-        hit->SetTrackID(track->GetTrackID());
-        fHitsCollection->insert(hit);
+        const auto cellXc = cellCenterRadius * cos(cellCenterPhi);
+        const auto cellYc = cellCenterRadius * sin(cellCenterPhi);
+        // calculate drift distance
+        const auto driftDistance = std::fabs((inX - cellXc) * (outY - cellYc) - (outX - cellXc) * (inY - cellYc)) / hypot(outX - inX, outY - inY);
+        if (driftDistance < cellHalfWidth) {
+            // if drift distance exceeds threshold, new a hit
+            auto* const hit = new Hit::SpectrometerHit();
+            hit->SetHitTime((inT + outT) / 2);
+            hit->SetWirePosition(cellXc, cellYc);
+            hit->SetDriftDistance(driftDistance);
+            hit->SetHitPositionZ((inZ + outZ) / 2);
+            hit->SetCellID(touchable->GetCopyNumber());
+            hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
+            hit->SetVertexPosition(track->GetVertexPosition());
+            hit->SetPDGCode(particle->GetPDGEncoding());
+            hit->SetTrackID(track->GetTrackID());
+            fHitsCollection->insert(hit);
+            hasNewHit = true;
+        }
         // particle exited, remove it from queue
         fMonitoringTrackList.erase(monitoring);
     }
-    return isEntering || isExiting;
+    return hasNewHit;
 }
 
 void SD::Spectrometer::EndOfEvent(G4HCofThisEvent*) {

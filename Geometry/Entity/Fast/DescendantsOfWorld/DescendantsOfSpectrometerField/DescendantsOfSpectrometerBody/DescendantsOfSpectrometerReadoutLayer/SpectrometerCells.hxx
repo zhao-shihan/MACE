@@ -3,16 +3,18 @@
 #include "G4Tubs.hh"
 
 #include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayer/SpectrometerCells.hxx"
+#include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/SpectrometerReadoutLayers.hxx"
 #include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/SpectrometerBody.hxx"
 #include "Geometry/Interface/EntityG4.hxx"
 
 class MACE::Geometry::Entity::Fast::SpectrometerCells final :
-    public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SpectrometerCells> {
+    public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SpectrometerCells, MACE::Geometry::Description::SpectrometerReadoutLayer> {
+    enum { kSpectrometerCells, kSpectrometerReadoutLayer };
     void ConstructSelf() override {
-        const auto name = GetDescription()->GetName();
+        const auto name = GetDescription<kSpectrometerCells>()->GetName();
         // const auto rSenseWire = GetDescription()->GetSenseWireDiameter() / 2;
-        const auto rFieldWire = GetDescription()->GetFieldWireDiameter() / 2;
-        const auto cellWidth = GetDescription()->GetAverageCellWidth();
+        const auto rFieldWire = GetDescription<kSpectrometerCells>()->GetFieldWireDiameter() / 2;
+        const auto cellWidth = GetDescription<kSpectrometerReadoutLayer>()->GetAverageCellWidth();
 
         auto material = Mother()->GetVolume()->GetLogicalVolume()->GetMaterial();
 
@@ -25,7 +27,7 @@ class MACE::Geometry::Entity::Fast::SpectrometerCells final :
             const auto layerOuterRadius = motherSolid->GetOuterRadius();
             const auto layerCenterRadius = (layerInnerRadius + layerOuterRadius) / 2.0;
 
-            const int cellCount = 4 * round(M_PI_2 / (2.0 * asin(0.5 * cellWidth / layerCenterRadius)));
+            const int cellCount = 4 * std::lround(M_PI_2 / (2.0 * std::asin(0.5 * cellWidth / layerCenterRadius)));
             const auto cellAngle = 2.0 * M_PI / cellCount;
             const auto gapHalfAngle = rFieldWire / layerInnerRadius;
             auto solid = new G4Tubs(name, layerInnerRadius + rFieldWire, layerOuterRadius, halfLength, gapHalfAngle, cellAngle - 2.0 * gapHalfAngle);
