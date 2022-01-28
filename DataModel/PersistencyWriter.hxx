@@ -25,23 +25,23 @@ public:
 
     template<class DataTypeInTree, class DataTypeInList>
     TTree* CreateTreeFromList(const std::vector<DataTypeInList*>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataTypeInTree, DataTypeInList, DataTypeInList*>(dataList, behaviour); }
-    template<class DataType>
-    TTree* CreateTreeFromList(const std::vector<DataType*>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataType, DataType>(dataList, behaviour); }
+    // template<class DataType>
+    // TTree* CreateTreeFromList(const std::vector<DataType*>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataType, DataType>(dataList, behaviour); }
 
     template<class DataTypeInTree, class DataTypeInList>
     TTree* CreateTreeFromList(const std::vector<const DataTypeInList*>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataTypeInTree, DataTypeInList, const DataTypeInList*>(dataList, behaviour); }
-    template<class DataType>
-    TTree* CreateTreeFromList(const std::vector<const DataType*>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataType, DataType>(dataList, behaviour); }
+    // template<class DataType>
+    // TTree* CreateTreeFromList(const std::vector<const DataType*>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataType, DataType>(dataList, behaviour); }
 
     template<class DataTypeInTree, class DataTypeInList>
     TTree* CreateTreeFromList(const std::vector<std::shared_ptr<DataTypeInList>>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataTypeInTree, DataTypeInList, std::shared_ptr<DataTypeInList>>(dataList, behaviour); }
-    template<class DataType>
-    TTree* CreateTreeFromList(const std::vector<std::shared_ptr<DataType>>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataType, DataType>(dataList, behaviour); }
+    // template<class DataType>
+    // TTree* CreateTreeFromList(const std::vector<std::shared_ptr<DataType>>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataType, DataType>(dataList, behaviour); }
 
     template<class DataTypeInTree, class DataTypeInList>
     TTree* CreateTreeFromList(const std::vector<std::shared_ptr<const DataTypeInList>>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataTypeInTree, DataTypeInList, std::shared_ptr<const DataTypeInList>>(dataList, behaviour); }
-    template<class DataType>
-    TTree* CreateTreeFromList(const std::vector<std::shared_ptr<const DataType>>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataType, DataType>(dataList, behaviour); }
+    // template<class DataType>
+    // TTree* CreateTreeFromList(const std::vector<std::shared_ptr<const DataType>>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataType, DataType>(dataList, behaviour); }
 
     void AppendTree(TTree* tree, TreeOperation behaviour = kJustWrite) { fTreeAndBehaviours.emplace_back(tree, behaviour); }
 

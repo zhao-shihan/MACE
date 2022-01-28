@@ -42,9 +42,9 @@ void Analysis::WriteEvent() {
     const G4bool orbitalDetectorTriggered = !(fEnableCoincidenceOfOrbitalDetector && fpOrbitalDetectorHitList->empty());
     const G4bool spectrometerTriggered = !fpSpectrometerHitList->empty();
     if (calorimeterTriggered && orbitalDetectorTriggered && spectrometerTriggered) {
-        CreateTreeFromList(*fpCalorimeterHitList);
-        CreateTreeFromList(*fpOrbitalDetectorHitList);
-        CreateTreeFromList(*fpSpectrometerHitList);
+        CreateTreeFromList<Hit::CalorimeterHit>(*fpCalorimeterHitList);
+        CreateTreeFromList<Hit::OrbitalDetectorHit>(*fpOrbitalDetectorHitList);
+        CreateTreeFromList<Hit::SpectrometerHit>(*fpSpectrometerHitList);
         WriteTrees();
     }
 }

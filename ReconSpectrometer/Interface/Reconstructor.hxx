@@ -1,65 +1,35 @@
 #pragma once
 
-#include "DataModel/Hit/SpectrometerHit.hxx"
 #include "ReconSpectrometer/Global.hxx"
 
+template<template<class T> class FitterType, class SpectromrterHitType>
 class MACE::ReconSpectrometer::Interface::Reconstructor {
+    MACE_RECONSPECTROMETER_SPECTROMETERHIT_CONCEPT(SpectromrterHitType);
+    MACE_RECONSPECTROMETER_FITTER_CONCEPT(FitterType, SpectromrterHitType);
+
     Reconstructor(const Reconstructor&) = delete;
     Reconstructor& operator=(const Reconstructor&) = delete;
 
 protected:
-    using HitType = DataModel::SpectrometerHit;
-    using Hit = std::shared_ptr<HitType>;
+    using HitPtr = std::shared_ptr<SpectromrterHitType>;
 
     Reconstructor();
     virtual ~Reconstructor();
 
 public:
-    void SetHitDataToBeRecongnized(const std::vector<Hit>& hitData) { fHitData = hitData; }
-    template<class SpectrometerHitType>
-    void SetHitDataToBeRecongnized(const std::vector<std::shared_ptr<SpectrometerHitType>>& hitData);
-
-    virtual void Recognize() = 0;
-
-    template<class SpectrometerHitType = HitType>
-    std::vector<std::vector<std::shared_ptr<SpectrometerHitType>>> GetRecognizedTrackList();
+    void SetHitDataToBeRecongnized(const std::vector<HitPtr>& hitData) { fHitData = hitData; }
+    virtual void Reconstruct() = 0;
+    const auto& GetRecognizedTrackList() { return fReconstructedTrackList; }
 
 protected:
-    std::vector<Hit> fHitData;
-    std::vector<std::vector<Hit>> fRecognizedTrackList;
+    FitterType<SpectromrterHitType>& Fitter() const { return *fFitter; }
+
+protected:
+    std::vector<HitPtr> fHitData;
+    std::vector<std::vector<HitPtr>> fReconstructedTrackList;
+
+private:
+    FitterType<SpectromrterHitType>* fFitter;
 };
 
-template<class SpectrometerHitType>
-void MACE::ReconSpectrometer::Interface::Reconstructor::
-SetHitDataToBeRecongnized(const std::vector<std::shared_ptr<SpectrometerHitType>>& hitData) {
-    static_assert(std::is_base_of_v<HitType, SpectrometerHitType>,
-        "SpectrometerHitType should be derived from MACE::DataModel::Hit::SpectrometerHit");
-    fHitData.clear();
-    fHitData.reserve(hitData.size());
-    for (auto&& hit : hitData) {
-        fHitData.emplace_back(std::static_pointer_cast<HitType>(hit));
-    }
-}
-
-template<>
-inline std::vector<std::vector<MACE::ReconSpectrometer::Interface::Reconstructor::Hit>> MACE::ReconSpectrometer::Interface::Reconstructor::
-GetRecognizedTrackList<MACE::ReconSpectrometer::Interface::Reconstructor::HitType>() {
-    return fRecognizedTrackList;
-}
-
-template<class SpectrometerHitType>
-std::vector<std::vector<std::shared_ptr<SpectrometerHitType>>> MACE::ReconSpectrometer::Interface::Reconstructor::
-GetRecognizedTrackList() {
-    static_assert(std::is_base_of_v<HitType, SpectrometerHitType>,
-        "SpectrometerHitType should be derived from MACE::DataModel::Hit::SpectrometerHit");
-    std::vector<std::vector<std::shared_ptr<SpectrometerHitType>>> recognizedTrackList(fRecognizedTrackList.size());
-    for (size_t i = 0; i < fRecognizedTrackList.size(); ++i) {
-        const auto& srcTrack = fRecognizedTrackList[i];
-        auto& dstTrack = recognizedTrackList[i];
-        dstTrack.reserve(srcTrack.size());
-        for (size_t j = 0; j < srcTrack.size(); ++j) {
-            dstTrack.emplace_back(std::static_pointer_cast<SpectrometerHitType>(srcTrack[j]));
-        }
-    }
-    return recognizedTrackList;
-}
+#include "ReconSpectrometer/Interface/Reconstructor.txx"
