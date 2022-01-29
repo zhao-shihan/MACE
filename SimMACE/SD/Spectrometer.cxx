@@ -8,9 +8,10 @@
 
 using namespace MACE::SimMACE;
 
-SD::Spectrometer::Spectrometer(const G4String& SDName, const G4String& hitsCollectionName) :
+SD::Spectrometer::Spectrometer(const G4String& SDName, const G4String& hitsCollectionName, const Geometry::Entity::Fast::SpectrometerCells* spectrometerCellEntity) :
     G4VSensitiveDetector(SDName),
     fHitsCollection(nullptr),
+    fSpectrometerCellEntity(spectrometerCellEntity),
     fMonitoringTrackList(0) {
     collectionName.insert(hitsCollectionName);
     if (Hit::SpectrometerHitAllocator == nullptr) {
@@ -54,12 +55,11 @@ G4bool SD::Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
         // retrive cell info
         const auto* const touchable = step->GetPreStepPoint()->GetTouchable();
         const auto* const solidCell = static_cast<const G4Tubs*>(touchable->GetSolid());
-        const auto cellCenterRadius = (solidCell->GetOuterRadius() + solidCell->GetInnerRadius()) / 2;
         const auto cellHalfWidth = (solidCell->GetOuterRadius() - solidCell->GetInnerRadius()) / 2;
-        const auto* const cellRotation = touchable->GetRotation();
-        const auto cellCenterPhi = ((cellRotation->getAxis().z() > 0) ? (-cellRotation->getDelta()) : (cellRotation->getDelta())) + solidCell->GetStartPhiAngle() + solidCell->GetDeltaPhiAngle() / 2;
-        const auto cellXc = cellCenterRadius * cos(cellCenterPhi);
-        const auto cellYc = cellCenterRadius * sin(cellCenterPhi);
+        auto cellId = touchable->GetCopyNumber();
+        const auto& [layerId, cellPosition] = fSpectrometerCellEntity->GetLayerIdAndPosition(cellId);
+        const auto& cellXc = cellPosition.x();
+        const auto& cellYc = cellPosition.y();
         // calculate drift distance
         const auto driftDistance = std::fabs((inX - cellXc) * (outY - cellYc) - (outX - cellXc) * (inY - cellYc)) / hypot(outX - inX, outY - inY);
         if (driftDistance < cellHalfWidth) {
@@ -69,7 +69,8 @@ G4bool SD::Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
             hit->SetWirePosition(cellXc, cellYc);
             hit->SetDriftDistance(driftDistance);
             hit->SetHitPositionZ((inZ + outZ) / 2);
-            hit->SetCellID(touchable->GetCopyNumber());
+            hit->SetCellID(cellId);
+            hit->SetLayerID(layerId);
             hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
             hit->SetVertexPosition(track->GetVertexPosition());
             hit->SetPDGCode(particle->GetPDGEncoding());

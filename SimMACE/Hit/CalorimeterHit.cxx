@@ -47,12 +47,12 @@ CalorimeterHit& CalorimeterHit::operator=(CalorimeterHit&& hit) noexcept {
 
 void CalorimeterHit::CreateBranches(TTree* tree) {
     DataModel::Hit::CalorimeterHit::CreateBranches(tree);
-    tree->Branch(fgPDGCode.name, &fgPDGCode.value);
-    tree->Branch(fgTrackID.name, &fgTrackID.value);
+    tree->Branch(fgPDGCode.name, std::addressof(fgPDGCode.value));
+    tree->Branch(fgTrackID.name, std::addressof(fgTrackID.value));
 }
 
 void CalorimeterHit::ReadBranches(TTree* tree) {
     DataModel::Hit::CalorimeterHit::ReadBranches(tree);
-    tree->SetBranchAddress(fgPDGCode.name, &fgPDGCode.value);
-    tree->SetBranchAddress(fgTrackID.name, &fgTrackID.value);
+    tree->SetBranchAddress(fgPDGCode.name, std::addressof(fgPDGCode.value));
+    tree->SetBranchAddress(fgTrackID.name, std::addressof(fgTrackID.value));
 }

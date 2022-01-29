@@ -3,11 +3,12 @@
 #include "G4VSensitiveDetector.hh"
 
 #include "SimMACE/Hit/SpectrometerHit.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayer/SpectrometerCells.hxx"
 
 class MACE::SimMACE::SD::Spectrometer final :
     public G4VSensitiveDetector {
 public:
-    Spectrometer(const G4String& SDName, const G4String& hitsCollectionName);
+    Spectrometer(const G4String& SDName, const G4String& hitsCollectionName, const Geometry::Entity::Fast::SpectrometerCells* spectrometerCellEntity);
     ~Spectrometer();
 
     void   Initialize(G4HCofThisEvent* hitsCollection) override;
@@ -19,5 +20,6 @@ private:
 
 private:
     Hit::SpectrometerHitCollection* fHitsCollection;
+    const Geometry::Entity::Fast::SpectrometerCells* fSpectrometerCellEntity;
     std::vector<std::tuple<const G4Track*, G4double, G4ThreeVector>> fMonitoringTrackList;
 };

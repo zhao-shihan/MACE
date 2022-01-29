@@ -42,16 +42,16 @@ OrbitalDetectorHit& OrbitalDetectorHit::operator=(OrbitalDetectorHit&& hit) noex
 
 void OrbitalDetectorHit::CreateBranches(TTree* tree) {
     Data::CreateBranches(tree);
-    tree->Branch(fgHitTime.name, &fgHitTime.value);
-    tree->Branch(fgHitPositionX.name, &fgHitPositionX.value);
-    tree->Branch(fgHitPositionY.name, &fgHitPositionY.value);
-    tree->Branch(fgHitPositionZ.name, &fgHitPositionZ.value);
+    tree->Branch(fgHitTime.name, std::addressof(fgHitTime.value));
+    tree->Branch(fgHitPositionX.name, std::addressof(fgHitPositionX.value));
+    tree->Branch(fgHitPositionY.name, std::addressof(fgHitPositionY.value));
+    tree->Branch(fgHitPositionZ.name, std::addressof(fgHitPositionZ.value));
 }
 
 void OrbitalDetectorHit::ReadBranches(TTree* tree) {
     Data::ReadBranches(tree);
-    tree->SetBranchAddress(fgHitTime.name, &fgHitTime.value);
-    tree->SetBranchAddress(fgHitPositionX.name, &fgHitPositionX.value);
-    tree->SetBranchAddress(fgHitPositionY.name, &fgHitPositionY.value);
-    tree->SetBranchAddress(fgHitPositionZ.name, &fgHitPositionZ.value);
+    tree->SetBranchAddress(fgHitTime.name, std::addressof(fgHitTime.value));
+    tree->SetBranchAddress(fgHitPositionX.name, std::addressof(fgHitPositionX.value));
+    tree->SetBranchAddress(fgHitPositionY.name, std::addressof(fgHitPositionY.value));
+    tree->SetBranchAddress(fgHitPositionZ.name, std::addressof(fgHitPositionZ.value));
 }

@@ -72,7 +72,7 @@ void DetectorConstruction::ConstructSD() {
         logicSpectrometerCells.insert(fSpectrometerCells->GetVolume(i)->GetLogicalVolume());
     }
     auto fSpectrometerName = (*logicSpectrometerCells.begin())->GetName();
-    auto fSpectrometerSD = new SD::Spectrometer(fSpectrometerName, fSpectrometerName + "HC");
+    auto fSpectrometerSD = new SD::Spectrometer(fSpectrometerName, fSpectrometerName + "HC", fSpectrometerCells);
     SDManager->AddNewDetector(fSpectrometerSD);
     for (auto&& logicSpectrometerCell : logicSpectrometerCells) {
         SetSensitiveDetector(logicSpectrometerCell, fSpectrometerSD);

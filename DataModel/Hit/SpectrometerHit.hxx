@@ -25,6 +25,7 @@ public:
     auto GetDriftDistance() const { return fDriftDistance; }
     auto GetHitPositionZ() const { return fHitPositionZ; }
     auto GetCellID() const { return fCellID; }
+    auto GetLayerID() const { return fLayerID; }
 
     void SetHitTime(Double_t val) { fHitTime = val; }
     void SetWirePosition(const TEveVector2D& val) { fWirePosition = val; }
@@ -33,6 +34,7 @@ public:
     void SetDriftDistance(Double_t r) { fDriftDistance = r; }
     void SetHitPositionZ(Double_t z) { fHitPositionZ = z; }
     void SetCellID(Int_t val) { fCellID = val; }
+    void SetLayerID(Int_t val) { fLayerID = val; }
 
 private:
     Double_t fHitTime;
@@ -40,6 +42,7 @@ private:
     Double_t fDriftDistance;
     Double_t fHitPositionZ;
     Int_t fCellID;
+    Int_t fLayerID;
 
     static Column<Float_t> fgHitTime;
     static Column<Float_t> fgWirePositionX;
@@ -47,6 +50,7 @@ private:
     static Column<Float_t> fgDriftDistance;
     static Column<Float_t> fgHitPositionZ;
     static Column<Int_t> fgCellID;
+    static Column<Int_t> fgLayerID;
 };
 
 inline void MACE::DataModel::Hit::SpectrometerHit::FillBranches() noexcept {
@@ -57,4 +61,5 @@ inline void MACE::DataModel::Hit::SpectrometerHit::FillBranches() noexcept {
     fgDriftDistance.value = fDriftDistance;
     fgHitPositionZ.value = fHitPositionZ;
     fgCellID.value = fCellID;
+    fgLayerID.value = fLayerID;
 }

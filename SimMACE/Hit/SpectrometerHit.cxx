@@ -61,20 +61,20 @@ SpectrometerHit& SpectrometerHit::operator=(SpectrometerHit&& hit) noexcept {
 
 void SpectrometerHit::CreateBranches(TTree* tree) {
     DataModel::Hit::SpectrometerHit::CreateBranches(tree);
-    tree->Branch(fgVertexTime.name, &fgVertexTime.value);
-    tree->Branch(fgVertexPositionX.name, &fgVertexPositionX.value);
-    tree->Branch(fgVertexPositionY.name, &fgVertexPositionY.value);
-    tree->Branch(fgVertexPositionZ.name, &fgVertexPositionZ.value);
-    tree->Branch(fgPDGCode.name, &fgPDGCode.value);
-    tree->Branch(fgTrackID.name, &fgTrackID.value);
+    tree->Branch(fgVertexTime.name, std::addressof(fgVertexTime.value));
+    tree->Branch(fgVertexPositionX.name, std::addressof(fgVertexPositionX.value));
+    tree->Branch(fgVertexPositionY.name, std::addressof(fgVertexPositionY.value));
+    tree->Branch(fgVertexPositionZ.name, std::addressof(fgVertexPositionZ.value));
+    tree->Branch(fgPDGCode.name, std::addressof(fgPDGCode.value));
+    tree->Branch(fgTrackID.name, std::addressof(fgTrackID.value));
 }
 
 void SpectrometerHit::ReadBranches(TTree* tree) {
     DataModel::Hit::SpectrometerHit::ReadBranches(tree);
-    tree->SetBranchAddress(fgVertexTime.name, &fgVertexTime.value);
-    tree->SetBranchAddress(fgVertexPositionX.name, &fgVertexPositionX.value);
-    tree->SetBranchAddress(fgVertexPositionY.name, &fgVertexPositionY.value);
-    tree->SetBranchAddress(fgVertexPositionZ.name, &fgVertexPositionZ.value);
-    tree->SetBranchAddress(fgPDGCode.name, &fgPDGCode.value);
-    tree->SetBranchAddress(fgTrackID.name, &fgTrackID.value);
+    tree->SetBranchAddress(fgVertexTime.name, std::addressof(fgVertexTime.value));
+    tree->SetBranchAddress(fgVertexPositionX.name, std::addressof(fgVertexPositionX.value));
+    tree->SetBranchAddress(fgVertexPositionY.name, std::addressof(fgVertexPositionY.value));
+    tree->SetBranchAddress(fgVertexPositionZ.name, std::addressof(fgVertexPositionZ.value));
+    tree->SetBranchAddress(fgPDGCode.name, std::addressof(fgPDGCode.value));
+    tree->SetBranchAddress(fgTrackID.name, std::addressof(fgTrackID.value));
 }

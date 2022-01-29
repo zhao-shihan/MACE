@@ -8,6 +8,7 @@ MACE::DataModel::Column<Float_t> SpectrometerHit::fgWirePositionY = { "WireY", 0
 MACE::DataModel::Column<Float_t> SpectrometerHit::fgDriftDistance = { "DriftD",0.0f };
 MACE::DataModel::Column<Float_t> SpectrometerHit::fgHitPositionZ = { "HitZ", 0.0f };
 MACE::DataModel::Column<Int_t> SpectrometerHit::fgCellID = { "CellID", -1 };
+MACE::DataModel::Column<Int_t> SpectrometerHit::fgLayerID = { "LayerID", -1 };
 
 SpectrometerHit::SpectrometerHit() noexcept :
     Data(),
@@ -15,7 +16,8 @@ SpectrometerHit::SpectrometerHit() noexcept :
     fWirePosition(fgWirePositionX.value, fgWirePositionY.value),
     fDriftDistance(fgDriftDistance.value),
     fHitPositionZ(fgHitPositionZ.value),
-    fCellID(fgCellID.value) {}
+    fCellID(fgCellID.value),
+    fLayerID(fgLayerID.value) {}
 
 SpectrometerHit::SpectrometerHit(const SpectrometerHit& hit) noexcept :
     Data(static_cast<const Data&>(hit)),
@@ -23,7 +25,8 @@ SpectrometerHit::SpectrometerHit(const SpectrometerHit& hit) noexcept :
     fWirePosition(hit.fWirePosition),
     fDriftDistance(hit.fDriftDistance),
     fHitPositionZ(hit.fHitPositionZ),
-    fCellID(hit.fCellID) {}
+    fCellID(hit.fCellID),
+    fLayerID(hit.fLayerID) {}
 
 SpectrometerHit::SpectrometerHit(SpectrometerHit&& hit) noexcept :
     Data(static_cast<Data&&>(hit)),
@@ -31,7 +34,8 @@ SpectrometerHit::SpectrometerHit(SpectrometerHit&& hit) noexcept :
     fWirePosition(std::move(hit.fWirePosition)),
     fDriftDistance(std::move(hit.fDriftDistance)),
     fHitPositionZ(std::move(hit.fHitPositionZ)),
-    fCellID(std::move(hit.fCellID)) {}
+    fCellID(std::move(hit.fCellID)),
+    fLayerID(std::move(hit.fLayerID)) {}
 
 SpectrometerHit& SpectrometerHit::operator=(const SpectrometerHit& hit) noexcept {
     if (&hit != this) {
@@ -41,6 +45,7 @@ SpectrometerHit& SpectrometerHit::operator=(const SpectrometerHit& hit) noexcept
         fDriftDistance = hit.fDriftDistance;
         fHitPositionZ = hit.fHitPositionZ;
         fCellID = hit.fCellID;
+        fLayerID = hit.fLayerID;
     }
     return *this;
 }
@@ -53,26 +58,29 @@ SpectrometerHit& SpectrometerHit::operator=(SpectrometerHit&& hit) noexcept {
         fDriftDistance = std::move(hit.fDriftDistance);
         fHitPositionZ = std::move(hit.fHitPositionZ);
         fCellID = std::move(hit.fCellID);
+        fLayerID = std::move(hit.fLayerID);
     }
     return *this;
 }
 
 void SpectrometerHit::CreateBranches(TTree* tree) {
     Data::CreateBranches(tree);
-    tree->Branch(fgHitTime.name, &fgHitTime.value);
-    tree->Branch(fgWirePositionX.name, &fgWirePositionX.value);
-    tree->Branch(fgWirePositionY.name, &fgWirePositionY.value);
-    tree->Branch(fgDriftDistance.name, &fgDriftDistance.value);
-    tree->Branch(fgHitPositionZ.name, &fgHitPositionZ.value);
-    tree->Branch(fgCellID.name, &fgCellID.value);
+    tree->Branch(fgHitTime.name, std::addressof(fgHitTime.value));
+    tree->Branch(fgWirePositionX.name, std::addressof(fgWirePositionX.value));
+    tree->Branch(fgWirePositionY.name, std::addressof(fgWirePositionY.value));
+    tree->Branch(fgDriftDistance.name, std::addressof(fgDriftDistance.value));
+    tree->Branch(fgHitPositionZ.name, std::addressof(fgHitPositionZ.value));
+    tree->Branch(fgCellID.name, std::addressof(fgCellID.value));
+    tree->Branch(fgLayerID.name, std::addressof(fgLayerID.value));
 }
 
 void SpectrometerHit::ReadBranches(TTree* tree) {
     Data::ReadBranches(tree);
-    tree->SetBranchAddress(fgHitTime.name, &fgHitTime.value);
-    tree->SetBranchAddress(fgWirePositionX.name, &fgWirePositionX.value);
-    tree->SetBranchAddress(fgWirePositionY.name, &fgWirePositionY.value);
-    tree->SetBranchAddress(fgDriftDistance.name, &fgDriftDistance.value);
-    tree->SetBranchAddress(fgHitPositionZ.name, &fgHitPositionZ.value);
-    tree->SetBranchAddress(fgCellID.name, &fgCellID.value);
+    tree->SetBranchAddress(fgHitTime.name, std::addressof(fgHitTime.value));
+    tree->SetBranchAddress(fgWirePositionX.name, std::addressof(fgWirePositionX.value));
+    tree->SetBranchAddress(fgWirePositionY.name, std::addressof(fgWirePositionY.value));
+    tree->SetBranchAddress(fgDriftDistance.name, std::addressof(fgDriftDistance.value));
+    tree->SetBranchAddress(fgHitPositionZ.name, std::addressof(fgHitPositionZ.value));
+    tree->SetBranchAddress(fgCellID.name, std::addressof(fgCellID.value));
+    tree->SetBranchAddress(fgLayerID.name, std::addressof(fgLayerID.value));
 }
