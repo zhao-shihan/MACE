@@ -1,12 +1,10 @@
-template<template<class T> class FitterType, class SpectromrterHitType>
-MACE::ReconSpectrometer::Interface::Reconstructor<FitterType, SpectromrterHitType>::
+template<template<class T> class FitterT_t, class SpectromrterHit_t>
+MACE::ReconSpectrometer::Interface::Reconstructor<FitterT_t, SpectromrterHit_t>::
 Reconstructor() :
     fHitData(0),
-    fReconstructedTrackList(0),
-    fFitter(new FitterType<SpectromrterHitType>()) {}
+    fFitter(std::make_unique<Fitter_t>()),
+    fReconstructedTrackList(0) {}
 
-template<template<class T> class FitterType, class SpectromrterHitType>
-MACE::ReconSpectrometer::Interface::Reconstructor<FitterType, SpectromrterHitType>::
-~Reconstructor() {
-    delete fFitter;
-}
+template<template<class T> class FitterT_t, class SpectromrterHit_t>
+MACE::ReconSpectrometer::Interface::Reconstructor<FitterT_t, SpectromrterHit_t>::
+~Reconstructor() {}

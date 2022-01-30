@@ -4,7 +4,7 @@
 
 #include "Geometry/Global.hxx"
 
-template<class VolumeType>
+template<class Volume_t>
 class MACE::Geometry::Interface::Entity {
 protected:
     Entity();
@@ -15,8 +15,8 @@ protected:
 public:
     void AddDaughter(Entity* daughter);
     void ConstructSelfAndDescendants();
-    VolumeType* GetVolume() const { return fVolumes.front(); }
-    VolumeType* GetVolume(size_t i) const { return fVolumes.at(i); }
+    Volume_t* GetVolume() const { return fVolumes.front(); }
+    Volume_t* GetVolume(size_t i) const { return fVolumes.at(i); }
     auto GetVolumeNum() const { return fVolumes.size(); }
 
 protected:
@@ -26,7 +26,7 @@ private:
     virtual void ConstructSelf() = 0;
 
 protected:
-    std::vector<VolumeType*> fVolumes;
+    std::vector<Volume_t*> fVolumes;
 
 private:
     Entity* fMother;

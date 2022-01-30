@@ -3,10 +3,12 @@
 #include "MACEGlobal.hxx"
 #include "DataModel/Hit/SpectrometerHit.hxx"
 
-#define MACE_RECONSPECTROMETER_SPECTROMETERHIT_CONCEPT(HitType) \
-    static_assert(std::is_base_of_v<MACE::DataModel::SpectrometerHit, HitType>, \
+#define MACE_RECONSPECTROMETER_SPECTROMETERHIT_CONCEPT(Hit_t) \
+    static_assert(std::is_base_of_v<MACE::DataModel::SpectrometerHit, Hit_t>, \
         "The hit type should be derived from MACE::DataModel::SpectrometerHit")
 
-#define MACE_RECONSPECTROMETER_FITTER_CONCEPT(FitterType, HitType) \
-    static_assert(std::is_base_of_v<MACE::ReconSpectrometer::Interface::Fitter<HitType>, FitterType<HitType>>, \
-        "The fitter type should be derived from MACE::ReconSpectrometer::Interface::Fitter")
+#define MACE_RECONSPECTROMETER_FITTER_CONCEPT(Fitter_t, Hit_t) \
+    static_assert(std::is_base_of_v<MACE::ReconSpectrometer::Interface::Fitter<Hit_t>, FitterT_t<Hit_t>>, \
+        "The fitter type should be derived from MACE::ReconSpectrometer::Interface::Fitter"); \
+    static_assert(std::is_default_constructible_v<FitterT_t<Hit_t>>, \
+        "The fitter type should be default constructible")

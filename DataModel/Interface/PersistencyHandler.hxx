@@ -27,8 +27,8 @@ public:
     const TString& GetTreeNameSuffixFormat() { return fTreeNameSuffixFormat; }
     TString GetTreeNamePrefix() { return fPrefixHasIndexer ? (fTreeNamePrefix.first + fTreeIndex + fTreeNamePrefix.second) : fTreeNamePrefixFormat; }
     TString GetTreeNameSuffix() { return fSuffixHasIndexer ? (fTreeNameSuffix.first + fTreeIndex + fTreeNameSuffix.second) : fTreeNameSuffixFormat; }
-    template<class DataType>
-    TString GetTreeName() { return GetTreeNamePrefix() + static_cast<const char*>(DataType::Name()) + GetTreeNameSuffix(); }
+    template<class Data_t>
+    TString GetTreeName() { return GetTreeNamePrefix() + static_cast<const char*>(Data_t::Name()) + GetTreeNameSuffix(); }
 
 protected:
     TFile* fFile;

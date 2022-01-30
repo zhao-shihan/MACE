@@ -1,10 +1,11 @@
-template<class SpectromrterHitType>
-MACE::ReconSpectrometer::Interface::Fitter<SpectromrterHitType>::
+template<class SpectromrterHit_t>
+MACE::ReconSpectrometer::Interface::Fitter<SpectromrterHit_t>::
 Fitter() :
-    fTrack(nullptr),
+    fHitData(0),
     fFittedTrack(0),
-    fBadPointList(0) {}
+    fHelixParameter(),
+    fUnfittedList(0) {}
 
-template<class SpectromrterHitType>
-MACE::ReconSpectrometer::Interface::Fitter<SpectromrterHitType>::
+template<class SpectromrterHit_t>
+MACE::ReconSpectrometer::Interface::Fitter<SpectromrterHit_t>::
 ~Fitter() {}

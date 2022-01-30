@@ -16,11 +16,11 @@ using namespace MACE::ReconSpectrometer;
 using namespace MACE::DataModel;
 
 int main(int, char** argv) {
-    using Hit = MACE::SimMACE::Hit::SpectrometerHit;
+    using Hit_t = MACE::SimMACE::Hit::SpectrometerHit;
 
     PersistencyReader reader(argv[1]);
-    Reconstructor::Hough<Fitter::DirectLeastChiSquare, Hit> reconstructor(350, 5000, std::stol(argv[2]), std::stol(argv[3]), -50, 150, std::stol(argv[4]), std::stol(argv[5]));
-    auto event = reader.CreateListFromTree<Hit>();
+    Reconstructor::Hough<Fitter::DirectLeastChiSquare, Hit_t> reconstructor(350, 5000, std::stol(argv[2]), std::stol(argv[3]), -50, 150, std::stol(argv[4]), std::stol(argv[5]));
+    auto event = reader.CreateListFromTree<Hit_t>();
     reader.Close();
 
     reconstructor.SetHitDataToBeRecongnized(event);
@@ -28,8 +28,8 @@ int main(int, char** argv) {
     const auto& recognized = reconstructor.GetRecognizedTrackList();
 
     PersistencyWriter writer(TString("reconed_") + argv[1]);
-    for (auto&& recogTrack : recognized) {
-        writer.CreateTreeFromList<Hit>(recogTrack);
+    for (auto&& [recogParameter, recogTrack] : recognized) {
+        writer.CreateTreeFromList<Hit_t>(recogTrack);
     }
     writer.WriteTrees();
     writer.Close();
@@ -37,13 +37,13 @@ int main(int, char** argv) {
     /* PersistencyReader reader;
 
     for (int res = 100; res <= 1000; res += 10) {
-        Reconstructor::Hough<Hit> reconstructor(350, 5000, res, res, -50, 200, res, res);
+        Reconstructor::Hough<Hit_t> reconstructor(350, 5000, res, res, -50, 200, res, res);
 
         reader.Open(argv[1]);
-        auto event = reader.CreateListFromTree<Hit>();
+        auto event = reader.CreateListFromTree<Hit_t>();
         reader.Close();
 
-        std::unordered_map<Int_t, std::vector<std::shared_ptr<Hit>>> trueTrackMap;
+        std::unordered_map<Int_t, std::vector<std::shared_ptr<Hit_t>>> trueTrackMap;
         for (auto&& hit : event) {
             auto [trackIt, isNewTrack] = trueTrackMap.emplace(hit->GetTrackID(), 0);
             if (isNewTrack) {
@@ -64,7 +64,7 @@ int main(int, char** argv) {
         for (size_t i = 0; i < recognized.size(); ++i) {
             const auto& recoTrack = recognized[i];
             auto center = std::make_pair(std::get<0>(parameters[i]), std::get<1>(parameters[i]));
-            std::unordered_map<Int_t, std::vector<std::shared_ptr<Hit>>> recognizedTrackMap;
+            std::unordered_map<Int_t, std::vector<std::shared_ptr<Hit_t>>> recognizedTrackMap;
             for (auto&& recoHit : recoTrack) {
                 auto [trackIt, isNewTrack] = recognizedTrackMap.emplace(recoHit->GetTrackID(), 0);
                 if (isNewTrack) {

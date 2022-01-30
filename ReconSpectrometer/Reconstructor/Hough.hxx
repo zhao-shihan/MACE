@@ -5,15 +5,15 @@
 #include "ReconSpectrometer/Global.hxx"
 #include "ReconSpectrometer/Interface/Reconstructor.hxx"
 
-template<template<class T> class FitterType, class SpectromrterHitType>
+template<template<class T> class FitterT_t, class SpectromrterHit_t>
 class MACE::ReconSpectrometer::Reconstructor::Hough final :
-    public MACE::ReconSpectrometer::Interface::Reconstructor<FitterType, SpectromrterHitType> {
+    public MACE::ReconSpectrometer::Interface::Reconstructor<FitterT_t, SpectromrterHit_t> {
 
     Hough(const Hough&) = delete;
     Hough& operator=(const Hough&) = delete;
 
 protected:
-    using Base = MACE::ReconSpectrometer::Interface::Reconstructor<FitterType, SpectromrterHitType>;
+    using Base = MACE::ReconSpectrometer::Interface::Reconstructor<FitterT_t, SpectromrterHit_t>;
     using HitPtr = typename Base::HitPtr;
 
 public:
@@ -21,22 +21,24 @@ public:
     ~Hough();
 
     void Reconstruct() override;
-    const auto& GetRecognizedParameterList() const { return fRecognizedParameterList; }
 
     void SetThresholdXY(size_t threshold) { fThresholdXY = threshold; }
     void SetThresholdSZ(size_t threshold) { fThresholdSZ = threshold; }
 
 private:
-    // Step 1
+    // Step 1: 2D pattern recognition
     void HoughTransformXY();
     void FindExceedThresholdXY();
     // Step 2
     // Loop over fPiledTrackList
-    //     SubStep 1
-    void HoughTransformSZ(const std::vector<HitPtr*>* piledTracks, const std::pair<double, double>& center);
+    // |   Sub-step 1: Complete 3D pattern recognition
+    void HoughTransformSZ(const std::pair<double, double>& center, const std::vector<HitPtr*>* piledTracks);
     void FindExceedThresholdSZ(const std::pair<double, double>& center);
-    //     SubStep 2
-    void DumpToResult();
+    // |   Sub-step 2: Fit
+    // |   Loop over fTrackList
+    // |   |   Sub-sub-step 1
+    void FitAndDumpToResult(const HelixParameters& parameters, const std::vector<HitPtr*>* track);
+    // |   End loop
     // End loop
 
     double ToPhiReal(Eigen::Index i) const { return -M_PI + (i + 0.5) * fPhiResolution; }
@@ -49,7 +51,7 @@ private:
     Eigen::Index ToZ0Index(double z0) const { return (z0 - fZ0Low) / fZ0Resolution; }
     Eigen::Index ToAlphaIndex(double alpha) const { return (alpha + M_PI) / fAlphaResolution; }
 
-    static size_t EffectiveSizeOf(const std::vector<HitPtr*>& hitPtrList) { return std::count_if(hitPtrList.begin(), hitPtrList.end(), [](auto hitPtr) { return (bool)(*hitPtr); }); }
+    static size_t EffectiveSizeOf(const std::vector<HitPtr*>& std::vector<HitPtr>) { return std::count_if(std::vector<HitPtr>.begin(), std::vector<HitPtr>.end(), [](auto hitPtr) { return (bool)(*hitPtr); }); }
 
 private:
     const double fRhoLow;
@@ -58,7 +60,7 @@ private:
     const double fRhoResolution;
     size_t fThresholdXY = 20;
     Eigen::Matrix<std::vector<HitPtr*>, Eigen::Dynamic, Eigen::Dynamic> fHoughSpaceXY;
-    std::vector<std::pair<const std::vector<HitPtr*>*, std::pair<double, double>>> fPiledTrackList;
+    std::vector<std::pair<std::pair<double, double>, const std::vector<HitPtr*>*>> fPiledTrackList;
 
     const double fZ0Low;
     const double fZ0Up;
@@ -66,9 +68,7 @@ private:
     const double fAlphaResolution;
     size_t fThresholdSZ = 20;
     Eigen::Matrix<std::vector<HitPtr*>, Eigen::Dynamic, Eigen::Dynamic> fHoughSpaceSZ;
-    std::vector<std::pair<const std::vector<HitPtr*>*, std::tuple<double, double, double, double>>> fTrackList;
-
-    std::vector<std::tuple<double, double, double, double>> fRecognizedParameterList;
+    std::vector<std::pair<HelixParameters, const std::vector<HitPtr*>*>> fTrackList;
 };
 
 #include "ReconSpectrometer/Reconstructor/Hough.txx"

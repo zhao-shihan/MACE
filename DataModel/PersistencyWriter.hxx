@@ -23,50 +23,50 @@ public:
     virtual void Open(const char* fileName, Option_t* = nullptr) override { PersistencyHandler::Open(fileName, "RECREATE"); }
     virtual void Close(Option_t* option = nullptr) override;
 
-    template<class DataTypeInTree, class DataTypeInList>
-    TTree* CreateTreeFromList(const std::vector<DataTypeInList*>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataTypeInTree, DataTypeInList, DataTypeInList*>(dataList, behaviour); }
-    // template<class DataType>
-    // TTree* CreateTreeFromList(const std::vector<DataType*>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataType, DataType>(dataList, behaviour); }
+    template<class DataInTree_t, class DataInList_t>
+    TTree* CreateTreeFromList(const std::vector<DataInList_t*>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataInTree_t, DataInList_t, DataInList_t*>(dataList, behaviour); }
+    // template<class Data_t>
+    // TTree* CreateTreeFromList(const std::vector<Data_t*>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<Data_t, Data_t>(dataList, behaviour); }
 
-    template<class DataTypeInTree, class DataTypeInList>
-    TTree* CreateTreeFromList(const std::vector<const DataTypeInList*>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataTypeInTree, DataTypeInList, const DataTypeInList*>(dataList, behaviour); }
-    // template<class DataType>
-    // TTree* CreateTreeFromList(const std::vector<const DataType*>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataType, DataType>(dataList, behaviour); }
+    template<class DataInTree_t, class DataInList_t>
+    TTree* CreateTreeFromList(const std::vector<const DataInList_t*>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataInTree_t, DataInList_t, const DataInList_t*>(dataList, behaviour); }
+    // template<class Data_t>
+    // TTree* CreateTreeFromList(const std::vector<const Data_t*>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<Data_t, Data_t>(dataList, behaviour); }
 
-    template<class DataTypeInTree, class DataTypeInList>
-    TTree* CreateTreeFromList(const std::vector<std::shared_ptr<DataTypeInList>>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataTypeInTree, DataTypeInList, std::shared_ptr<DataTypeInList>>(dataList, behaviour); }
-    // template<class DataType>
-    // TTree* CreateTreeFromList(const std::vector<std::shared_ptr<DataType>>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataType, DataType>(dataList, behaviour); }
+    template<class DataInTree_t, class DataInList_t>
+    TTree* CreateTreeFromList(const std::vector<std::shared_ptr<DataInList_t>>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataInTree_t, DataInList_t, std::shared_ptr<DataInList_t>>(dataList, behaviour); }
+    // template<class Data_t>
+    // TTree* CreateTreeFromList(const std::vector<std::shared_ptr<Data_t>>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<Data_t, Data_t>(dataList, behaviour); }
 
-    template<class DataTypeInTree, class DataTypeInList>
-    TTree* CreateTreeFromList(const std::vector<std::shared_ptr<const DataTypeInList>>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataTypeInTree, DataTypeInList, std::shared_ptr<const DataTypeInList>>(dataList, behaviour); }
-    // template<class DataType>
-    // TTree* CreateTreeFromList(const std::vector<std::shared_ptr<const DataType>>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataType, DataType>(dataList, behaviour); }
+    template<class DataInTree_t, class DataInList_t>
+    TTree* CreateTreeFromList(const std::vector<std::shared_ptr<const DataInList_t>>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<DataInTree_t, DataInList_t, std::shared_ptr<const DataInList_t>>(dataList, behaviour); }
+    // template<class Data_t>
+    // TTree* CreateTreeFromList(const std::vector<std::shared_ptr<const Data_t>>& dataList, TreeOperation behaviour = kDeleteAfterWrite) { return CreateTreeFromList<Data_t, Data_t>(dataList, behaviour); }
 
     void AppendTree(TTree* tree, TreeOperation behaviour = kJustWrite) { fTreeAndBehaviours.emplace_back(tree, behaviour); }
 
     void WriteTrees(Int_t option = 0, Int_t bufsize = 0);
 
 private:
-    template<class DataTypeInTree, class DataTypeInList, class PointerOfDataTypeInTree>
-    TTree* CreateTreeFromList(const std::vector<PointerOfDataTypeInTree>& dataList, TreeOperation behaviour = kDeleteAfterWrite);
+    template<class DataInTree_t, class DataInList_t, class PointerOfDataInTree_t>
+    TTree* CreateTreeFromList(const std::vector<PointerOfDataInTree_t>& dataList, TreeOperation behaviour = kDeleteAfterWrite);
 
 private:
     std::vector<std::pair<TTree*, TreeOperation>> fTreeAndBehaviours;
 };
 
-template<class DataTypeInTree, class DataTypeInList, class PointerOfDataTypeInTree>
+template<class DataInTree_t, class DataInList_t, class PointerOfDataInTree_t>
 TTree* MACE::DataModel::PersistencyWriter::
-CreateTreeFromList(const std::vector<PointerOfDataTypeInTree>& dataList, TreeOperation behaviour) {
-    static_assert(std::is_base_of_v<Interface::Data, DataTypeInTree>,
-        "DataTypeInTree should be derived from DataModel::Interface::Data");
-    static_assert(std::is_base_of_v<Interface::Data, DataTypeInList>,
-        "DataTypeInList should be derived from DataModel::Interface::Data");
-    static_assert(std::is_base_of_v<DataTypeInTree, DataTypeInList>,
-        "DataTypeInList should be derived from DataTypeInTree");
-    TString name = PersistencyHandler::GetTreeName<DataTypeInTree>();
+CreateTreeFromList(const std::vector<PointerOfDataInTree_t>& dataList, TreeOperation behaviour) {
+    static_assert(std::is_base_of_v<Interface::Data, DataInTree_t>,
+        "DataInTree_t should be derived from DataModel::Interface::Data");
+    static_assert(std::is_base_of_v<Interface::Data, DataInList_t>,
+        "DataInList_t should be derived from DataModel::Interface::Data");
+    static_assert(std::is_base_of_v<DataInTree_t, DataInList_t>,
+        "DataInList_t should be derived from DataInTree_t");
+    TString name = PersistencyHandler::GetTreeName<DataInTree_t>();
     TTree* tree = new TTree(name, name);
-    DataTypeInTree::CreateBranches(tree);
+    DataInTree_t::CreateBranches(tree);
     for (auto&& data : dataList) {
         data->FillBranches();
         tree->Fill();

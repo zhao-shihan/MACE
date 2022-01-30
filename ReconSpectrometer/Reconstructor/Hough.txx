@@ -1,5 +1,5 @@
-template<template<class T> class FitterType, class SpectromrterHitType>
-MACE::ReconSpectrometer::Reconstructor::Hough<FitterType, SpectromrterHitType>::
+template<template<class T> class FitterT_t, class SpectromrterHit_t>
+MACE::ReconSpectrometer::Reconstructor::Hough<FitterT_t, SpectromrterHit_t>::
 Hough(double r0Low, double r0Up, Eigen::Index nPhi, Eigen::Index nRho, double z0Low, double z0Up, Eigen::Index nZ0, Eigen::Index nAlpha) :
     Base(),
     fRhoLow(1 / r0Up),
@@ -13,31 +13,36 @@ Hough(double r0Low, double r0Up, Eigen::Index nPhi, Eigen::Index nRho, double z0
     fZ0Resolution((fZ0Up - fZ0Low) / nZ0),
     fAlphaResolution(2 * M_PI / nAlpha),
     fHoughSpaceSZ(nZ0, nAlpha),
-    fTrackList(0),
-    fRecognizedParameterList(0) {}
+    fTrackList(0) {}
 
-template<template<class T> class FitterType, class SpectromrterHitType>
-MACE::ReconSpectrometer::Reconstructor::Hough<FitterType, SpectromrterHitType>::
+template<template<class T> class FitterT_t, class SpectromrterHit_t>
+MACE::ReconSpectrometer::Reconstructor::Hough<FitterT_t, SpectromrterHit_t>::
 ~Hough() {}
 
-template<template<class T> class FitterType, class SpectromrterHitType>
-void MACE::ReconSpectrometer::Reconstructor::Hough<FitterType, SpectromrterHitType>::
+template<template<class T> class FitterT_t, class SpectromrterHit_t>
+void MACE::ReconSpectrometer::Reconstructor::Hough<FitterT_t, SpectromrterHit_t>::
 Reconstruct() {
     Base::fReconstructedTrackList.clear();
-    fRecognizedParameterList.clear();
 
     HoughTransformXY();
     FindExceedThresholdXY();
-    for (auto&& [piledTracks, center] : fPiledTrackList) {
-        if (EffectiveSizeOf(*piledTracks) < fThresholdXY) { continue; }
-        HoughTransformSZ(piledTracks, center);
-        FindExceedThresholdSZ(center);
-        DumpToResult();
+
+    for (auto&& [center, piledTracks] : fPiledTrackList) {
+        while (EffectiveSizeOf(*piledTracks) > fThresholdXY) {
+            HoughTransformSZ(center, piledTracks);
+            FindExceedThresholdSZ(center);
+
+            for (auto&& [parameters, track] : fTrackList) {
+                while (EffectiveSizeOf(*track) > fThresholdSZ) {
+                    FitAndDumpToResult(parameters, track);
+                }
+            }
+        }
     }
 }
 
-template<template<class T> class FitterType, class SpectromrterHitType>
-void MACE::ReconSpectrometer::Reconstructor::Hough<FitterType, SpectromrterHitType>::
+template<template<class T> class FitterT_t, class SpectromrterHit_t>
+void MACE::ReconSpectrometer::Reconstructor::Hough<FitterT_t, SpectromrterHit_t>::
 HoughTransformXY() {
     std::for_each_n(fHoughSpaceXY.data(), fHoughSpaceXY.rows() * fHoughSpaceXY.cols(), [](auto& elem) { elem.clear(); });
     // for each hit
@@ -55,13 +60,19 @@ HoughTransformXY() {
         auto jLast = ToRhoIndex(X * cos(phi) + Y * sin(phi));
         auto jDrift = (Eigen::Index)std::lround(D / fRhoResolution);
         auto DoFill = [&](Eigen::Index i, Eigen::Index jCenter)->void {
-            const auto jPlus = jCenter + jDrift;
-            if (0 <= jPlus && jPlus < fHoughSpaceXY.cols()) {
-                fHoughSpaceXY(i, jPlus).emplace_back(std::addressof(hit));
-            }
-            const auto jMinus = jCenter - jDrift;
-            if (0 <= jMinus && jMinus < fHoughSpaceXY.cols()) {
-                fHoughSpaceXY(i, jMinus).emplace_back(std::addressof(hit));
+            if (jDrift == 0) {
+                if (0 <= jCenter && jCenter < fHoughSpaceXY.cols()) {
+                    fHoughSpaceXY(i, jCenter).emplace_back(std::addressof(hit));
+                }
+            } else {
+                const auto jPlus = jCenter + jDrift;
+                if (0 <= jPlus && jPlus < fHoughSpaceXY.cols()) {
+                    fHoughSpaceXY(i, jPlus).emplace_back(std::addressof(hit));
+                }
+                const auto jMinus = jCenter - jDrift;
+                if (0 <= jMinus && jMinus < fHoughSpaceXY.cols()) {
+                    fHoughSpaceXY(i, jMinus).emplace_back(std::addressof(hit));
+                }
             }
         };
         DoFill(0, jLast);
@@ -91,8 +102,8 @@ HoughTransformXY() {
     }
 }
 
-template<template<class T> class FitterType, class SpectromrterHitType>
-void MACE::ReconSpectrometer::Reconstructor::Hough<FitterType, SpectromrterHitType>::
+template<template<class T> class FitterT_t, class SpectromrterHit_t>
+void MACE::ReconSpectrometer::Reconstructor::Hough<FitterT_t, SpectromrterHit_t>::
 FindExceedThresholdXY() {
     fPiledTrackList.clear();
     for (Eigen::Index i = 0; i < fHoughSpaceXY.rows(); ++i) {
@@ -103,26 +114,26 @@ FindExceedThresholdXY() {
                 auto rho = ToRhoReal(j);
                 auto x0 = cos(phi) / rho;
                 auto y0 = sin(phi) / rho;
-                fPiledTrackList.emplace_back(&piledTracks, std::make_pair(x0, y0));
+                fPiledTrackList.emplace_back(std::make_pair(x0, y0), std::addressof(piledTracks));
             }
         }
     }
     std::sort(fPiledTrackList.begin(), fPiledTrackList.end(),
         [](const auto& left, const auto& right)->bool {
-            return left.first->size() > right.first->size();
+            return left.second->size() > right.second->size();
         }
     );
 }
 
-template<template<class T> class FitterType, class SpectromrterHitType>
-void MACE::ReconSpectrometer::Reconstructor::Hough<FitterType, SpectromrterHitType>::
-HoughTransformSZ(const std::vector<HitPtr*>* piledTracks, const std::pair<double, double>& center) {
+template<template<class T> class FitterT_t, class SpectromrterHit_t>
+void MACE::ReconSpectrometer::Reconstructor::Hough<FitterT_t, SpectromrterHit_t>::
+HoughTransformSZ(const std::pair<double, double>& center, const std::vector<HitPtr*>* piledTracks) {
     std::for_each_n(fHoughSpaceSZ.data(), fHoughSpaceSZ.rows() * fHoughSpaceSZ.cols(), [](auto& elem) { elem.clear(); });
     // for each hit exceed threshold in XY hough space
-    for (auto&& hitPtr : *piledTracks) {
-        if (*hitPtr == nullptr) { continue; }
+    for (auto&& pHitPtr : *piledTracks) {
+        if (*pHitPtr == nullptr) { continue; }
 
-        const auto* hit = hitPtr->get();
+        const auto* hit = pHitPtr->get();
         const auto x = hit->GetWirePosition().fX;
         const auto y = hit->GetWirePosition().fY;
         const auto [x0, y0] = center;
@@ -136,7 +147,7 @@ HoughTransformSZ(const std::vector<HitPtr*>* piledTracks, const std::pair<double
         auto jLast = ToAlphaIndex(std::atan2(s, z - z0));
         auto DoFill = [&](Eigen::Index i, Eigen::Index j)->void {
             if (0 <= j && j < fHoughSpaceSZ.cols()) {
-                fHoughSpaceSZ(i, j).emplace_back(hitPtr);
+                fHoughSpaceSZ(i, j).emplace_back(pHitPtr);
             }
         };
         DoFill(0, jLast);
@@ -166,8 +177,8 @@ HoughTransformSZ(const std::vector<HitPtr*>* piledTracks, const std::pair<double
     }
 }
 
-template<template<class T> class FitterType, class SpectromrterHitType>
-void MACE::ReconSpectrometer::Reconstructor::Hough<FitterType, SpectromrterHitType>::
+template<template<class T> class FitterT_t, class SpectromrterHit_t>
+void MACE::ReconSpectrometer::Reconstructor::Hough<FitterT_t, SpectromrterHit_t>::
 FindExceedThresholdSZ(const std::pair<double, double>& center) {
     fTrackList.clear();
     for (Eigen::Index i = 0; i < fHoughSpaceSZ.rows(); ++i) {
@@ -176,30 +187,41 @@ FindExceedThresholdSZ(const std::pair<double, double>& center) {
             if (track.size() >= fThresholdSZ) {
                 auto alpha = ToAlphaReal(i);
                 auto z0 = ToZ0Real(j);
-                fTrackList.emplace_back(&track, std::make_tuple(center.first, center.second, z0, alpha));
+                fTrackList.emplace_back(HelixParameters{ center.first, center.second, z0, alpha }, std::addressof(track));
             }
         }
     }
     std::sort(fTrackList.begin(), fTrackList.end(),
         [](const auto& left, const auto& right)->bool {
-            return left.first->size() > right.first->size();
+            return left.second->size() > right.second->size();
         }
     );
 }
 
-template<template<class T> class FitterType, class SpectromrterHitType>
-void MACE::ReconSpectrometer::Reconstructor::Hough<FitterType, SpectromrterHitType>::
-DumpToResult() {
-    for (auto&& [track, parameters] : fTrackList) {
-        if (EffectiveSizeOf(*track) < fThresholdSZ) { continue; }
-        // dump to result
-        auto& trackResult = Base::fReconstructedTrackList.emplace_back();
-        for (auto&& hitPtr : *track) {
-            if (*hitPtr == nullptr) { continue; }
-            trackResult.emplace_back(*hitPtr);
-            // remove hough curve
-            hitPtr->reset(static_cast<SpectromrterHitType*>(nullptr));
-        }
-        fRecognizedParameterList.emplace_back(std::move(parameters));
+template<template<class T> class FitterT_t, class SpectromrterHit_t>
+void MACE::ReconSpectrometer::Reconstructor::Hough<FitterT_t, SpectromrterHit_t>::
+FitAndDumpToResult(const HelixParameters& parameters, const std::vector<HitPtr*>* track) {
+    std::unordered_map<HitPtr, HitPtr*> hitPtrMap;
+    hitPtrMap.reserve(track->size());
+    std::vector<HitPtr> hitDataToBeFitted;
+    hitDataToBeFitted.reserve(tracks->size());
+    for (auto&& pHitPtr : *track) {
+        if (*pHitPtr == nullptr) { continue; }
+        hitPtrMap.emplace(*pHitPtr, pHitPtr);
+        hitDataToBeFitted.emplace_back(*pHitPtr);
     }
+
+    Base::fFitter->SetHitDataToBeFitted(hitDataToBeFitted);
+    Base::fFitter->Fit();
+    const auto& fittedTrack = Base::fFitter->GetFittedTrack();
+    const auto& fittedParameters = Base::fFitter->GetHelixParameter();
+
+    // dump to result and remove hough curve, skip unfitted points
+    auto& [parametersResult, trackResult] = Base::fReconstructedTrackList.emplace_back();
+    for (auto&& hitPtr : fittedTrack) {
+        trackResult.emplace_back(hitPtr);
+        // remove hough curve
+        hitPtrMap[hitPtr]->reset(static_cast<SpectromrterHit_t*>(nullptr));
+    }
+    parametersResult = std::move(parameters);
 }

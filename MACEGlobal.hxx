@@ -17,7 +17,7 @@ namespace MACE {
             class OrbitalDetectorRawHit;
             class SpectrometerRawHit;
         }
-        template<typename ColumnType> struct Column;
+        template<typename Value_t> struct Column;
         class PersistencyReader;
         class PersistencyWriter;
     }
@@ -110,8 +110,8 @@ namespace MACE {
         }
         namespace Interface {
             class Description;
-            template<class VolumeType> class Entity;
-            template<class VolumeType, class... RequiredDescriptions> class EntityWithDescription;
+            template<class Volume_t> class Entity;
+            template<class Volume_t, class... RequiredDescriptions> class EntityWithDescription;
             template<class... RequiredDescriptions> class EntityG4;
             template<class... RequiredDescriptions> class EntityROOT; // DO NOT USE for now.
         }
@@ -119,15 +119,16 @@ namespace MACE {
 
     namespace ReconSpectrometer {
         namespace Fitter {
-            template<class SpectromrterHitType> class DirectLeastChiSquare;
+            template<class SpectromrterHit_t> class DirectLeastChiSquare;
         }
         namespace Interface {
-            template<class SpectromrterHitType> class Fitter;
-            template<template<class T> class FitterType, class SpectromrterHitType> class Reconstructor;
+            template<class SpectromrterHit_t> class Fitter;
+            template<template<class T> class FitterT_t, class SpectromrterHit_t> class Reconstructor;
         }
         namespace Reconstructor {
-            template<template<class T> class FitterType, class SpectromrterHitType> class Hough;
+            template<template<class T> class FitterT_t, class SpectromrterHit_t> class Hough;
         }
+        struct HelixParameters;
     }
 
     namespace SimMACE {

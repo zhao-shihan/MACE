@@ -22,13 +22,13 @@ namespace MACE::Geometry::Interface::Meta__ {
     }
 }
 
-template<class VolumeType, class... RequiredDescriptions>
-MACE::Geometry::Interface::EntityWithDescription<VolumeType, RequiredDescriptions...>::EntityWithDescription() :
-    Entity<VolumeType>(),
+template<class Volume_t, class... RequiredDescriptions>
+MACE::Geometry::Interface::EntityWithDescription<Volume_t, RequiredDescriptions...>::EntityWithDescription() :
+    Entity<Volume_t>(),
     fDescriptions() {
     // initialize fDescriptions
     Meta__::InitializeDescriptions(fDescriptions);
 }
 
-template<class VolumeType, class... RequiredDescriptions>
-MACE::Geometry::Interface::EntityWithDescription<VolumeType, RequiredDescriptions...>::~EntityWithDescription() {}
+template<class Volume_t, class... RequiredDescriptions>
+MACE::Geometry::Interface::EntityWithDescription<Volume_t, RequiredDescriptions...>::~EntityWithDescription() {}

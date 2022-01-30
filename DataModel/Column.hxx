@@ -2,8 +2,8 @@
 
 #include "DataModel/Global.hxx"
 
-template<typename ColumnType>
+template<typename Value_t>
 struct MACE::DataModel::Column {
     const char* const name;
-    ColumnType value;
+    Value_t value;
 };

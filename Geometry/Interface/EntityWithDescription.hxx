@@ -3,9 +3,9 @@
 #include "Geometry/Global.hxx"
 #include "Geometry/Interface/Entity.hxx"
 
-template<class VolumeType, class... RequiredDescriptions>
+template<class Volume_t, class... RequiredDescriptions>
 class MACE::Geometry::Interface::EntityWithDescription :
-    public MACE::Geometry::Interface::Entity<VolumeType> {
+    public MACE::Geometry::Interface::Entity<Volume_t> {
 protected:
     EntityWithDescription();
     virtual ~EntityWithDescription() = 0;
