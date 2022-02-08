@@ -1,5 +1,7 @@
 #pragma once
 
+#include <optional>
+
 #include "ReconSpectrometer/Global.hxx"
 #include "ReconSpectrometer/HelixParameters.hxx"
 
@@ -17,17 +19,16 @@ protected:
     virtual ~Fitter();
 
 public:
-    void SetHitDataToBeFitted(const std::vector<HitPtr>& hitData) { fHitData = hitData; }
-    virtual bool Fit() = 0;
+    virtual bool Fit(const std::vector<HitPtr>& hitData, const std::optional<HelixParameters>& initParameters) = 0;
+
+    const auto& GetFittedParameters() const { return fFittedParameters; }
     const auto& GetFittedTrack() const { return fFittedTrack; }
-    const auto& GetHelixParameter() const { return fHelixParameter; }
-    const auto& GetUnfittedList() const { return fUnfittedList; }
+    const auto& GetOmittedList() const { return fOmittedList; }
 
 protected:
-    std::vector<HitPtr> fHitData;
+    HelixParameters     fFittedParameters;
     std::vector<HitPtr> fFittedTrack;
-    HelixParameters     fHelixParameter;
-    std::vector<HitPtr> fUnfittedList;
+    std::vector<HitPtr> fOmittedList;
 };
 
 #include "ReconSpectrometer/Interface/Fitter.txx"

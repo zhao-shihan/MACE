@@ -9,7 +9,7 @@ MACE::ReconSpectrometer::Fitter::DirectLeastChiSquare<SpectromrterHit_t>::
 
 template<class SpectromrterHit_t>
 bool MACE::ReconSpectrometer::Fitter::DirectLeastChiSquare<SpectromrterHit_t>::
-Fit() {
+Fit(const std::vector<HitPtr>& hitData, const std::optional<HelixParameters>&) {
 
 }
 

@@ -4,20 +4,20 @@
 #include "ReconSpectrometer/Interface/Fitter.hxx"
 
 template<class SpectromrterHit_t>
-class MACE::ReconSpectrometer::Fitter::DirectLeastChiSquare final :
+class MACE::ReconSpectrometer::Fitter::Dummy final :
     public MACE::ReconSpectrometer::Interface::Fitter<SpectromrterHit_t> {
     MACE_RECONSPECTROMETER_SPECTROMETERHIT_CONCEPT(SpectromrterHit_t);
 
-    DirectLeastChiSquare(const DirectLeastChiSquare&) = delete;
-    DirectLeastChiSquare& operator=(const DirectLeastChiSquare&) = delete;
+    Dummy(const Dummy&) = delete;
+    Dummy& operator=(const Dummy&) = delete;
 
 protected:
     using Base = MACE::ReconSpectrometer::Interface::Fitter<SpectromrterHit_t>;
     using HitPtr = typename Base::HitPtr;
 
 public:
-    DirectLeastChiSquare();
-    ~DirectLeastChiSquare();
+    Dummy();
+    ~Dummy();
 
     bool Fit(const std::vector<HitPtr>& hitData, const std::optional<HelixParameters>& initParameters) override;
 
@@ -25,4 +25,4 @@ private:
     void SortHitsByCellID();
 };
 
-#include "ReconSpectrometer/Fitter/DirectLeastChiSquare.txx"
+#include "ReconSpectrometer/Fitter/Dummy.txx"

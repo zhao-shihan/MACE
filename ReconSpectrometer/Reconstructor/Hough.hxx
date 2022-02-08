@@ -1,4 +1,4 @@
-#pragma once
+/* #pragma once
 
 #include "Eigen/Core"
 
@@ -20,7 +20,7 @@ public:
     Hough(double r0Low, double r0Up, Eigen::Index nPhi, Eigen::Index nRho, double z0Low, double z0Up, Eigen::Index nZ0, Eigen::Index nAlpha);
     ~Hough();
 
-    void Reconstruct() override;
+    void Reconstruct(const std::vector<HitPtr>& hitData) override;
 
     void SetThresholdXY(size_t threshold) { fThresholdXY = threshold; }
     void SetThresholdSZ(size_t threshold) { fThresholdSZ = threshold; }
@@ -40,20 +40,24 @@ private:
     void FitAndDumpToResult(const HelixParameters& parameters, const std::vector<HitPtr*>* track);
     // |   End loop
     // End loop
+    // Step 3: Generate omitted list
+    void GenerateOmitted();
 
     double ToPhiReal(Eigen::Index i) const { return -M_PI + (i + 0.5) * fPhiResolution; }
     double ToRhoReal(Eigen::Index j) const { return fRhoLow + (j + 0.5) * fRhoResolution; }
     Eigen::Index ToPhiIndex(double phi) const { return (phi + M_PI) / fPhiResolution; }
     Eigen::Index ToRhoIndex(double rho) const { return (rho - fRhoLow) / fRhoResolution; }
 
-    double ToZ0Real(Eigen::Index j) const { return fZ0Low + (j + 0.5) * fZ0Resolution; }
-    double ToAlphaReal(Eigen::Index i) const { return -M_PI + (i + 0.5) * fAlphaResolution; }
+    double ToZ0Real(Eigen::Index i) const { return fZ0Low + (i + 0.5) * fZ0Resolution; }
+    double ToAlphaReal(Eigen::Index j) const { return -M_PI + (j + 0.5) * fAlphaResolution; }
     Eigen::Index ToZ0Index(double z0) const { return (z0 - fZ0Low) / fZ0Resolution; }
     Eigen::Index ToAlphaIndex(double alpha) const { return (alpha + M_PI) / fAlphaResolution; }
 
-    static size_t EffectiveSizeOf(const std::vector<HitPtr*>& std::vector<HitPtr>) { return std::count_if(std::vector<HitPtr>.begin(), std::vector<HitPtr>.end(), [](auto hitPtr) { return (bool)(*hitPtr); }); }
+    static size_t EffectiveSizeOf(const std::vector<HitPtr*>& hitPtrPtrList) { return std::count_if(hitPtrPtrList.begin(), hitPtrPtrList.end(), [](auto hitPtrPtr) { return !(*hitPtrPtr == nullptr); }); }
 
 private:
+    std::vector<HitPtr> fHitData;
+
     const double fRhoLow;
     const double fRhoUp;
     const double fPhiResolution;
@@ -71,4 +75,4 @@ private:
     std::vector<std::pair<HelixParameters, const std::vector<HitPtr*>*>> fTrackList;
 };
 
-#include "ReconSpectrometer/Reconstructor/Hough.txx"
+#include "ReconSpectrometer/Reconstructor/Hough.txx" */

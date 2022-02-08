@@ -19,14 +19,16 @@ protected:
     virtual ~Reconstructor();
 
 public:
-    void SetHitDataToBeRecongnized(const std::vector<HitPtr>& hitData) { fHitData = hitData; }
-    virtual void Reconstruct() = 0;
-    const auto& GetRecognizedTrackList() { return fReconstructedTrackList; }
+    virtual void Reconstruct(const std::vector<HitPtr>& hitData) = 0;
+
+    const auto& GetReconstructed() { return fReconstructedList; }
+    const auto& GetOmitted() { return fOmittedList; }
 
 protected:
-    std::vector<HitPtr> fHitData;
-    std::unique_ptr<Fitter_t> fFitter;
-    std::vector<std::pair<HelixParameters, std::vector<HitPtr>>> fReconstructedTrackList;
+    const std::unique_ptr<Fitter_t> fFitter;
+
+    std::vector<std::pair<HelixParameters, std::vector<HitPtr>>> fReconstructedList;
+    std::vector<HitPtr> fOmittedList;
 };
 
 #include "ReconSpectrometer/Interface/Reconstructor.txx"

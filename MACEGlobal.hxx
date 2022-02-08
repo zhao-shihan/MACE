@@ -120,6 +120,7 @@ namespace MACE {
     namespace ReconSpectrometer {
         namespace Fitter {
             template<class SpectromrterHit_t> class DirectLeastChiSquare;
+            template<class SpectromrterHit_t> class Dummy;
         }
         namespace Interface {
             template<class SpectromrterHit_t> class Fitter;
