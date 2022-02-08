@@ -22,10 +22,10 @@ AnalysisMessenger::AnalysisMessenger() :
     fEnableCoincidenceOfCalorimeter->SetParameterName("mode", false);
     fEnableCoincidenceOfCalorimeter->AvailableForStates(G4State_Idle);
 
-    fEnableCoincidenceOfOrbitalDetector = new G4UIcmdWithABool("/MACE/Analysis/EnableCoincidenceOfOrbitalDetector", this);
-    fEnableCoincidenceOfOrbitalDetector->SetGuidance("Enable orbital e-/e+ detector (typically MCP currently) for coincident detection.");
-    fEnableCoincidenceOfOrbitalDetector->SetParameterName("mode", false);
-    fEnableCoincidenceOfOrbitalDetector->AvailableForStates(G4State_Idle);
+    fEnableCoincidenceOfVertexDetector = new G4UIcmdWithABool("/MACE/Analysis/EnableCoincidenceOfVertexDetector", this);
+    fEnableCoincidenceOfVertexDetector->SetGuidance("Enable atomic shell e-/e+ detector (typically MCP currently) for coincident detection.");
+    fEnableCoincidenceOfVertexDetector->SetParameterName("mode", false);
+    fEnableCoincidenceOfVertexDetector->AvailableForStates(G4State_Idle);
 
     fSetFileName = new G4UIcmdWithAString("/MACE/Analysis/SetFileName", this);
     fSetFileName->SetGuidance("Set file name.");
@@ -35,7 +35,7 @@ AnalysisMessenger::AnalysisMessenger() :
 
 AnalysisMessenger::~AnalysisMessenger() {
     delete fEnableCoincidenceOfCalorimeter;
-    delete fEnableCoincidenceOfOrbitalDetector;
+    delete fEnableCoincidenceOfVertexDetector;
     delete fSetFileName;
     delete fDirectory;
 }
@@ -43,8 +43,8 @@ AnalysisMessenger::~AnalysisMessenger() {
 void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     if (command == fEnableCoincidenceOfCalorimeter) {
         fpAnalysis->SetEnableCoincidenceOfCalorimeter(fEnableCoincidenceOfCalorimeter->GetNewBoolValue(value));
-    } else if (command == fEnableCoincidenceOfOrbitalDetector) {
-        fpAnalysis->SetEnableCoincidenceOfOrbitalDetector(fEnableCoincidenceOfOrbitalDetector->GetNewBoolValue(value));
+    } else if (command == fEnableCoincidenceOfVertexDetector) {
+        fpAnalysis->SetEnableCoincidenceOfVertexDetector(fEnableCoincidenceOfVertexDetector->GetNewBoolValue(value));
     } else if (command == fSetFileName) {
         fpAnalysis->SetFileName(value);
     }

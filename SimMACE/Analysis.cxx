@@ -13,7 +13,7 @@ Analysis* Analysis::Instance() {
 
 Analysis::Analysis() :
     fpCalorimeterHitList(nullptr),
-    fpOrbitalDetectorHitList(nullptr),
+    fpVertexDetectorHitList(nullptr),
     fpSpectrometerHitList(nullptr) {
     Messenger::AnalysisMessenger::Instance()->Set(this);
 }
@@ -39,11 +39,11 @@ void Analysis::Open() {
 
 void Analysis::WriteEvent() {
     const G4bool calorimeterTriggered = !(fEnableCoincidenceOfCalorimeter && fpCalorimeterHitList->empty());
-    const G4bool orbitalDetectorTriggered = !(fEnableCoincidenceOfOrbitalDetector && fpOrbitalDetectorHitList->empty());
+    const G4bool vertexDetectorTriggered = !(fEnableCoincidenceOfVertexDetector && fpVertexDetectorHitList->empty());
     const G4bool spectrometerTriggered = !fpSpectrometerHitList->empty();
-    if (calorimeterTriggered && orbitalDetectorTriggered && spectrometerTriggered) {
+    if (calorimeterTriggered && vertexDetectorTriggered && spectrometerTriggered) {
         CreateTreeFromList<Hit::CalorimeterHit>(*fpCalorimeterHitList);
-        CreateTreeFromList<Hit::OrbitalDetectorHit>(*fpOrbitalDetectorHitList);
+        CreateTreeFromList<Hit::VertexDetectorHit>(*fpVertexDetectorHitList);
         CreateTreeFromList<Hit::SpectrometerHit>(*fpSpectrometerHitList);
         WriteTrees();
     }

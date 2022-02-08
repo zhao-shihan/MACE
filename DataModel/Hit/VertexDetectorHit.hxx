@@ -5,15 +5,15 @@
 #include "DataModel/Global.hxx"
 #include "DataModel/Interface/Data.hxx"
 
-class MACE::DataModel::OrbitalDetectorHit :
+class MACE::DataModel::VertexDetectorHit :
     protected MACE::DataModel::Interface::Data {
 public:
-    OrbitalDetectorHit() noexcept;
-    OrbitalDetectorHit(const OrbitalDetectorHit& hit) noexcept;
-    OrbitalDetectorHit(OrbitalDetectorHit&& hit) noexcept;
-    virtual ~OrbitalDetectorHit() noexcept {}
-    OrbitalDetectorHit& operator=(const OrbitalDetectorHit& hit) noexcept;
-    OrbitalDetectorHit& operator=(OrbitalDetectorHit&& hit) noexcept;
+    VertexDetectorHit() noexcept;
+    VertexDetectorHit(const VertexDetectorHit& hit) noexcept;
+    VertexDetectorHit(VertexDetectorHit&& hit) noexcept;
+    virtual ~VertexDetectorHit() noexcept {}
+    VertexDetectorHit& operator=(const VertexDetectorHit& hit) noexcept;
+    VertexDetectorHit& operator=(VertexDetectorHit&& hit) noexcept;
 
     static constexpr const char* Name() { return "MCPHit"; }
     static void CreateBranches(TTree* tree);
@@ -38,7 +38,7 @@ private:
     static Column<Float_t> fgHitPositionZ;
 };
 
-inline void MACE::DataModel::Hit::OrbitalDetectorHit::FillBranches() noexcept {
+inline void MACE::DataModel::Hit::VertexDetectorHit::FillBranches() noexcept {
     MACE::DataModel::Interface::Data::FillBranches();
     fgHitTime.value = fHitTime;
     fgHitPositionX.value = fHitPosition.fX;

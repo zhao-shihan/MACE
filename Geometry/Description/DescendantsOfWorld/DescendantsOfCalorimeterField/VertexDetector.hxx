@@ -2,11 +2,11 @@
 
 #include "Geometry/Interface/Description.hxx"
 
-class MACE::Geometry::Description::OrbitalDetector final :
+class MACE::Geometry::Description::VertexDetector final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(OrbitalDetector);
+    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(VertexDetector);
 public:
-    const char* GetName()                   const override { return "OrbitalDetector"; }
+    const char* GetName()                   const override { return "VertexDetector"; }
     const char* GetOverallDescription()     const override { return ""; }
     const char* GetMaterialDescription()    const override { return ""; }
     const char* GetShapeDescription()       const override { return ""; }

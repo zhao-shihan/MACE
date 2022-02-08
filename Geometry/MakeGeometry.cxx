@@ -1,7 +1,7 @@
 #include "TGeoManager.h"
 
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfCalorimeterField/Calorimeter.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfCalorimeterField/OrbitalDetector.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfCalorimeterField/VertexDetector.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/Collimator.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/SelectorField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfAcceleratorField/Target.hxx"
@@ -12,7 +12,7 @@
 #include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/FirstBendField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/FirstTransportField.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/OrbitalDetectorShield.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/VertexDetectorShield.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/SecondBendField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/SecondTransportField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/SpectrometerField.hxx"
@@ -24,7 +24,7 @@ using namespace MACE::Geometry::Entity::Fast;
 
 int main(int, char**) {
     auto calorimeter = new Calorimeter();
-    auto orbitalDetector = new OrbitalDetector();
+    auto vertexDetector = new VertexDetector();
     auto collimator = new Collimator();
     auto selectorField = new SelectorField();
     auto target = new Target();
@@ -35,7 +35,7 @@ int main(int, char**) {
     auto calorimeterField = new CalorimeterField();
     auto firstBendField = new FirstBendField();
     auto firstTransportField = new FirstTransportField();
-    auto orbitalDetectorShield = new OrbitalDetectorShield();
+    auto vertexDetectorShield = new VertexDetectorShield();
     auto secondBendField = new SecondBendField();
     auto secondTransportField = new SecondTransportField();
     auto spectrometerField = new SpectrometerField();
@@ -46,14 +46,14 @@ int main(int, char**) {
     world->AddDaughter(calorimeterField);
     world->AddDaughter(firstBendField);
     world->AddDaughter(firstTransportField);
-    world->AddDaughter(orbitalDetectorShield);
+    world->AddDaughter(vertexDetectorShield);
     world->AddDaughter(secondBendField);
     world->AddDaughter(secondTransportField);
     world->AddDaughter(spectrometerField);
     world->AddDaughter(spectrometerShield);
     world->AddDaughter(thirdTransportField);
     calorimeterField->AddDaughter(calorimeter);
-    calorimeterField->AddDaughter(orbitalDetector);
+    calorimeterField->AddDaughter(vertexDetector);
     secondTransportField->AddDaughter(collimator);
     secondTransportField->AddDaughter(selectorField);
     spectrometerField->AddDaughter(acceleratorField);

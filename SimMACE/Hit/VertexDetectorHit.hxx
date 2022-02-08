@@ -4,18 +4,18 @@
 #include "G4ThreeVector.hh"
 
 #include "SimMACE/Global.hxx"
-#include "DataModel/Hit/OrbitalDetectorHit.hxx"
+#include "DataModel/Hit/VertexDetectorHit.hxx"
 
-class MACE::SimMACE::Hit::OrbitalDetectorHit final :
+class MACE::SimMACE::Hit::VertexDetectorHit final :
     public G4VHit,
-    public MACE::DataModel::Hit::OrbitalDetectorHit {
+    public MACE::DataModel::Hit::VertexDetectorHit {
 public:
-    OrbitalDetectorHit() noexcept;
-    OrbitalDetectorHit(const OrbitalDetectorHit& hit) noexcept;
-    OrbitalDetectorHit(OrbitalDetectorHit&& hit) noexcept;
-    ~OrbitalDetectorHit() noexcept {}
-    OrbitalDetectorHit& operator=(const OrbitalDetectorHit& hit) noexcept;
-    OrbitalDetectorHit& operator=(OrbitalDetectorHit&& hit) noexcept;
+    VertexDetectorHit() noexcept;
+    VertexDetectorHit(const VertexDetectorHit& hit) noexcept;
+    VertexDetectorHit(VertexDetectorHit&& hit) noexcept;
+    ~VertexDetectorHit() noexcept {}
+    VertexDetectorHit& operator=(const VertexDetectorHit& hit) noexcept;
+    VertexDetectorHit& operator=(VertexDetectorHit&& hit) noexcept;
 
     static void CreateBranches(TTree* tree);
     inline void FillBranches() noexcept;
@@ -26,7 +26,7 @@ public:
     const auto& GetParticlePDGCode() const { return fPDGCode; }
     auto GetTrackID() const { return fTrackID; }
 
-    using DataModel::Hit::OrbitalDetectorHit::SetHitPosition;
+    using DataModel::Hit::VertexDetectorHit::SetHitPosition;
     void SetHitPosition(const G4ThreeVector& pos) { SetHitPosition(pos.x(), pos.y(), pos.z()); }
     void SetVertexTime(double_t val) { fVertexTime = val; }
     void SetVertexPosition(const TEveVectorD& pos) { fVertexPosition = pos; }
@@ -54,8 +54,8 @@ public:
     inline void  operator delete(void*);
 };
 
-void MACE::SimMACE::Hit::OrbitalDetectorHit::FillBranches() noexcept {
-    DataModel::Hit::OrbitalDetectorHit::FillBranches();
+void MACE::SimMACE::Hit::VertexDetectorHit::FillBranches() noexcept {
+    DataModel::Hit::VertexDetectorHit::FillBranches();
     fgVertexTime.value = fVertexTime;
     fgVertexPositionX.value = fVertexPosition.fX;
     fgVertexPositionY.value = fVertexPosition.fY;
@@ -69,16 +69,16 @@ void MACE::SimMACE::Hit::OrbitalDetectorHit::FillBranches() noexcept {
 
 namespace MACE::SimMACE::Hit {
 
-    using OrbitalDetectorHitCollection = G4THitsCollection<OrbitalDetectorHit>;
+    using VertexDetectorHitCollection = G4THitsCollection<VertexDetectorHit>;
 
-    extern G4Allocator<OrbitalDetectorHit>* OrbitalDetectorAllocator;
+    extern G4Allocator<VertexDetectorHit>* VertexDetectorAllocator;
 
-    inline void* OrbitalDetectorHit::operator new(size_t) {
-        return static_cast<void*>(OrbitalDetectorAllocator->MallocSingle());
+    inline void* VertexDetectorHit::operator new(size_t) {
+        return static_cast<void*>(VertexDetectorAllocator->MallocSingle());
     }
 
-    inline void OrbitalDetectorHit::operator delete(void* hit) {
-        OrbitalDetectorAllocator->FreeSingle(static_cast<OrbitalDetectorHit*>(hit));
+    inline void VertexDetectorHit::operator delete(void* hit) {
+        VertexDetectorAllocator->FreeSingle(static_cast<VertexDetectorHit*>(hit));
     }
 
 }

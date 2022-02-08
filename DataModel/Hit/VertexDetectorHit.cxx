@@ -1,28 +1,28 @@
-#include "DataModel/Hit/OrbitalDetectorHit.hxx"
+#include "DataModel/Hit/VertexDetectorHit.hxx"
 
 using namespace MACE::DataModel::Hit;
 
-MACE::DataModel::Column<Float_t> OrbitalDetectorHit::fgHitTime = { "HitT", 0.0f };
-MACE::DataModel::Column<Float_t> OrbitalDetectorHit::fgHitPositionX = { "HitX", 0.0f };
-MACE::DataModel::Column<Float_t> OrbitalDetectorHit::fgHitPositionY = { "HitY", 0.0f };
-MACE::DataModel::Column<Float_t> OrbitalDetectorHit::fgHitPositionZ = { "HitZ", 0.0f };
+MACE::DataModel::Column<Float_t> VertexDetectorHit::fgHitTime = { "HitT", 0.0f };
+MACE::DataModel::Column<Float_t> VertexDetectorHit::fgHitPositionX = { "HitX", 0.0f };
+MACE::DataModel::Column<Float_t> VertexDetectorHit::fgHitPositionY = { "HitY", 0.0f };
+MACE::DataModel::Column<Float_t> VertexDetectorHit::fgHitPositionZ = { "HitZ", 0.0f };
 
-OrbitalDetectorHit::OrbitalDetectorHit() noexcept :
+VertexDetectorHit::VertexDetectorHit() noexcept :
     Data(),
     fHitTime(fgHitTime.value),
     fHitPosition(fgHitPositionX.value, fgHitPositionY.value, fgHitPositionZ.value) {}
 
-OrbitalDetectorHit::OrbitalDetectorHit(const OrbitalDetectorHit& hit) noexcept :
+VertexDetectorHit::VertexDetectorHit(const VertexDetectorHit& hit) noexcept :
     Data(static_cast<const Data&>(hit)),
     fHitTime(hit.fHitTime),
     fHitPosition(hit.fHitPosition) {}
 
-OrbitalDetectorHit::OrbitalDetectorHit(OrbitalDetectorHit&& hit) noexcept :
+VertexDetectorHit::VertexDetectorHit(VertexDetectorHit&& hit) noexcept :
     Data(static_cast<Data&&>(hit)),
     fHitTime(std::move(hit.fHitTime)),
     fHitPosition(std::move(hit.fHitPosition)) {}
 
-OrbitalDetectorHit& OrbitalDetectorHit::operator=(const OrbitalDetectorHit& hit) noexcept {
+VertexDetectorHit& VertexDetectorHit::operator=(const VertexDetectorHit& hit) noexcept {
     if (&hit != this) {
         Data::operator=(static_cast<const Data&>(hit));
         fHitTime = hit.fHitTime;
@@ -31,7 +31,7 @@ OrbitalDetectorHit& OrbitalDetectorHit::operator=(const OrbitalDetectorHit& hit)
     return *this;
 }
 
-OrbitalDetectorHit& OrbitalDetectorHit::operator=(OrbitalDetectorHit&& hit) noexcept {
+VertexDetectorHit& VertexDetectorHit::operator=(VertexDetectorHit&& hit) noexcept {
     if (&hit != this) {
         Data::operator=(static_cast<Data&&>(hit));
         fHitTime = std::move(hit.fHitTime);
@@ -40,7 +40,7 @@ OrbitalDetectorHit& OrbitalDetectorHit::operator=(OrbitalDetectorHit&& hit) noex
     return *this;
 }
 
-void OrbitalDetectorHit::CreateBranches(TTree* tree) {
+void VertexDetectorHit::CreateBranches(TTree* tree) {
     Data::CreateBranches(tree);
     tree->Branch(fgHitTime.name, std::addressof(fgHitTime.value));
     tree->Branch(fgHitPositionX.name, std::addressof(fgHitPositionX.value));
@@ -48,7 +48,7 @@ void OrbitalDetectorHit::CreateBranches(TTree* tree) {
     tree->Branch(fgHitPositionZ.name, std::addressof(fgHitPositionZ.value));
 }
 
-void OrbitalDetectorHit::ReadBranches(TTree* tree) {
+void VertexDetectorHit::ReadBranches(TTree* tree) {
     Data::ReadBranches(tree);
     tree->SetBranchAddress(fgHitTime.name, std::addressof(fgHitTime.value));
     tree->SetBranchAddress(fgHitPositionX.name, std::addressof(fgHitPositionX.value));

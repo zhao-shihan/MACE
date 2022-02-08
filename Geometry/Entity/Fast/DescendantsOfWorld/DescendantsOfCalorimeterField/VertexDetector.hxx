@@ -2,11 +2,11 @@
 
 #include "G4Box.hh"
 
-#include "Geometry/Description/DescendantsOfWorld/DescendantsOfCalorimeterField/OrbitalDetector.hxx"
+#include "Geometry/Description/DescendantsOfWorld/DescendantsOfCalorimeterField/VertexDetector.hxx"
 #include "Geometry/Interface/EntityG4.hxx"
 
-class MACE::Geometry::Entity::Fast::OrbitalDetector final :
-    public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::OrbitalDetector> {
+class MACE::Geometry::Entity::Fast::VertexDetector final :
+    public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::VertexDetector> {
     void ConstructSelf() override {
         auto name = GetDescription()->GetName();
         auto width = GetDescription()->GetWidth();

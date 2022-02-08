@@ -9,12 +9,12 @@ namespace MACE {
         }
         inline namespace Hit {
             class CalorimeterHit;
-            class OrbitalDetectorHit;
+            class VertexDetectorHit;
             class SpectrometerHit;
         }
         inline namespace RawHit { // no impl yet
             class CalorimeterRawHit;
-            class OrbitalDetectorRawHit;
+            class VertexDetectorRawHit;
             class SpectrometerRawHit;
         }
         template<typename Value_t> struct Column;
@@ -27,7 +27,7 @@ namespace MACE {
             inline namespace DescendantsOfWorld {
                 inline namespace DescendantsOfCalorimeterField {
                     class Calorimeter;
-                    class OrbitalDetector;
+                    class VertexDetector;
                 }
                 inline namespace DescendantsOfSecondTransportField {
                     class Collimator;
@@ -51,7 +51,7 @@ namespace MACE {
                 class FirstBendSolenoid;
                 class FirstTransportField;
                 class FirstTransportSolenoid;
-                class OrbitalDetectorShield;
+                class VertexDetectorShield;
                 class SecondBendField;
                 class SecondBendSolenoid;
                 class SecondTransportField;
@@ -68,7 +68,7 @@ namespace MACE {
                 inline namespace DescendantsOfWorld {
                     inline namespace DescendantsOfCalorimeterField {
                         class Calorimeter;
-                        class OrbitalDetector;
+                        class VertexDetector;
                     }
                     inline namespace DescendantsOfSecondTransportField {
                         class Collimator;
@@ -92,7 +92,7 @@ namespace MACE {
                     class FirstBendSolenoid;
                     class FirstTransportField;
                     class FirstTransportSolenoid;
-                    class OrbitalDetectorShield;
+                    class VertexDetectorShield;
                     class SecondBendField;
                     class SecondBendSolenoid;
                     class SecondTransportField;
@@ -150,7 +150,7 @@ namespace MACE {
         }
         namespace Hit {
             class CalorimeterHit;
-            class OrbitalDetectorHit;
+            class VertexDetectorHit;
             class SpectrometerHit;
         }
         namespace Messenger {
@@ -171,7 +171,7 @@ namespace MACE {
         }
         namespace SD {
             class Calorimeter;
-            class OrbitalDetector;
+            class VertexDetector;
             class Spectrometer;
         }
         class Analysis;

@@ -27,6 +27,6 @@ private:
 
     G4UIdirectory* fDirectory;
     G4UIcmdWithABool* fEnableCoincidenceOfCalorimeter;
-    G4UIcmdWithABool* fEnableCoincidenceOfOrbitalDetector;
+    G4UIcmdWithABool* fEnableCoincidenceOfVertexDetector;
     G4UIcmdWithAString* fSetFileName;
 };

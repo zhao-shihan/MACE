@@ -4,7 +4,7 @@
 
 #include "SimMACE/Global.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfCalorimeterField/Calorimeter.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfCalorimeterField/OrbitalDetector.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfCalorimeterField/VertexDetector.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/Collimator.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/SelectorField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfAcceleratorField/Target.hxx"
@@ -17,7 +17,7 @@
 #include "Geometry/Entity/Fast/DescendantsOfWorld/FirstBendSolenoid.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/FirstTransportField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/FirstTransportSolenoid.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/OrbitalDetectorShield.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/VertexDetectorShield.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/SecondBendField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/SecondBendSolenoid.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/SecondTransportField.hxx"
@@ -47,7 +47,7 @@ private:
     void ConstructField();
 
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(Calorimeter);
-    MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(OrbitalDetector);
+    MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(VertexDetector);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(Collimator);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(SelectorField);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(Target);
@@ -60,7 +60,7 @@ private:
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(FirstBendSolenoid);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(FirstTransportField);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(FirstTransportSolenoid);
-    MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(OrbitalDetectorShield);
+    MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(VertexDetectorShield);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(SecondBendField);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(SecondBendSolenoid);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(SecondTransportField);

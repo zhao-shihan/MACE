@@ -3,11 +3,11 @@
 #include "G4Tubs.hh"
 #include "G4UnionSolid.hh"
 
-#include "Geometry/Description/DescendantsOfWorld/OrbitalDetectorShield.hxx"
+#include "Geometry/Description/DescendantsOfWorld/VertexDetectorShield.hxx"
 #include "Geometry/Interface/EntityG4.hxx"
 
-class MACE::Geometry::Entity::Fast::OrbitalDetectorShield final :
-    public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::OrbitalDetectorShield> {
+class MACE::Geometry::Entity::Fast::VertexDetectorShield final :
+    public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::VertexDetectorShield> {
     void ConstructSelf() override {
         auto name = GetDescription()->GetName();
         auto innerRadius = GetDescription()->GetInnerRadius();

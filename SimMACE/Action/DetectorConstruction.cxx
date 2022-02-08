@@ -20,7 +20,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 
 void DetectorConstruction::ConstructVolumes() {
     fCalorimeterField->AddDaughter(fCalorimeter);
-    fCalorimeterField->AddDaughter(fOrbitalDetector);
+    fCalorimeterField->AddDaughter(fVertexDetector);
     fSecondTransportField->AddDaughter(fCollimator);
     fSecondTransportField->AddDaughter(fSelectorField);
     fSpectrometerField->AddDaughter(fAcceleratorField);
@@ -33,7 +33,7 @@ void DetectorConstruction::ConstructVolumes() {
     fWorld->AddDaughter(fFirstBendSolenoid);
     fWorld->AddDaughter(fFirstTransportField);
     fWorld->AddDaughter(fFirstTransportSolenoid);
-    fWorld->AddDaughter(fOrbitalDetectorShield);
+    fWorld->AddDaughter(fVertexDetectorShield);
     fWorld->AddDaughter(fSecondBendField);
     fWorld->AddDaughter(fSecondBendSolenoid);
     fWorld->AddDaughter(fSecondTransportField);
@@ -49,7 +49,7 @@ void DetectorConstruction::ConstructVolumes() {
 #include "G4SDManager.hh"
 
 #include "SimMACE/SD/Calorimeter.hxx"
-#include "SimMACE/SD/OrbitalDetector.hxx"
+#include "SimMACE/SD/VertexDetector.hxx"
 #include "SimMACE/SD/Spectrometer.hxx"
 
 void DetectorConstruction::ConstructSD() {
@@ -61,11 +61,11 @@ void DetectorConstruction::ConstructSD() {
     SDManager->AddNewDetector(fCalorimeterSD);
     SetSensitiveDetector(logicCalorimeter, fCalorimeterSD);
 
-    auto logicOrbitalDetector = fOrbitalDetector->GetVolume()->GetLogicalVolume();
-    auto fOrbitalDetectorName = logicOrbitalDetector->GetName();
-    auto fOrbitalDetectorSD = new SD::OrbitalDetector(fOrbitalDetectorName, fOrbitalDetectorName + "HC");
-    SDManager->AddNewDetector(fOrbitalDetectorSD);
-    SetSensitiveDetector(logicOrbitalDetector, fOrbitalDetectorSD);
+    auto logicVertexDetector = fVertexDetector->GetVolume()->GetLogicalVolume();
+    auto fVertexDetectorName = logicVertexDetector->GetName();
+    auto fVertexDetectorSD = new SD::VertexDetector(fVertexDetectorName, fVertexDetectorName + "HC");
+    SDManager->AddNewDetector(fVertexDetectorSD);
+    SetSensitiveDetector(logicVertexDetector, fVertexDetectorSD);
 
     std::set<G4LogicalVolume*> logicSpectrometerCells;
     for (size_t i = 0; i < fSpectrometerCells->GetVolumeNum(); ++i) {
