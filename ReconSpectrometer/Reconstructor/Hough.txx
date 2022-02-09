@@ -33,14 +33,14 @@ Reconstruct(const std::vector<HitPtr>& hitData) {
     for (auto&& [center, piledTracks] : fPiledTrackList) {
         auto lastHitCountOfPiledTracks = std::numeric_limits<decltype(EffectiveSizeOf(*piledTracks))>::max();
         auto thisHitCountOfPiledTracks = EffectiveSizeOf(*piledTracks);
-        while (thisHitCountOfPiledTracks > fThresholdXY && thisHitCountOfPiledTracks < lastHitCountOfPiledTracks) {
+        while (thisHitCountOfPiledTracks > fThresholdXY and thisHitCountOfPiledTracks < lastHitCountOfPiledTracks) {
             HoughTransformSZ(center, piledTracks);
             FindExceedThresholdSZ(center);
 
             for (auto&& [parameters, track] : fTrackList) {
                 auto lastHitCountOfTracks = std::numeric_limits<decltype(EffectiveSizeOf(*track))>::max();
                 auto thisHitCountOfTracks = EffectiveSizeOf(*track);
-                while (thisHitCountOfTracks > fThresholdSZ && thisHitCountOfTracks < lastHitCountOfTracks) {
+                while (thisHitCountOfTracks > fThresholdSZ and thisHitCountOfTracks < lastHitCountOfTracks) {
                     FitAndDumpToResult(parameters, track);
                     lastHitCountOfTracks = thisHitCountOfTracks;
                     thisHitCountOfTracks = EffectiveSizeOf(*track);
@@ -79,7 +79,7 @@ HoughTransformXY() {
         if (jDrift == 0) {
 
             auto DoFill = [&](Eigen::Index i, Eigen::Index j)->void {
-                if (0 <= j && j < fHoughSpaceXY.cols()) {
+                if (0 <= j and j < fHoughSpaceXY.cols()) {
                     fHoughSpaceXY(i, j).emplace_back(std::addressof(hit));
                 }
             };
@@ -202,7 +202,7 @@ HoughTransformSZ(const std::pair<double, double>& center, const std::vector<HitP
         auto z0 = ToZ0Real(0);
         auto jLast = ToAlphaIndex(std::atan2(s, z - z0));
         auto DoFill = [&](Eigen::Index i, Eigen::Index j)->void {
-            if (0 <= j && j < fHoughSpaceSZ.cols()) {
+            if (0 <= j and j < fHoughSpaceSZ.cols()) {
                 fHoughSpaceSZ(i, j).emplace_back(hitPtrPtr);
             }
         };

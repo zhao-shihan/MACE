@@ -22,7 +22,7 @@ void Global::Initialize(int& argc, char**& argv) {
     int commRank; MPI_Comm_rank(MPI_COMM_WORLD, &commRank);
     int commSize; MPI_Comm_size(MPI_COMM_WORLD, &commSize);
 
-    if (commSize < 2 || argc < 2) {
+    if (commSize < 2 or argc < 2) {
         delete RunManager::Instance();
         MPI_Finalize();
         exit(EXIT_FAILURE);

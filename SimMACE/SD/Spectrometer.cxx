@@ -28,19 +28,19 @@ void SD::Spectrometer::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
 }
 
 G4bool SD::Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
-    if (!(step->IsFirstStepInVolume() || step->IsLastStepInVolume())) { return false; }
+    if (!(step->IsFirstStepInVolume() or step->IsLastStepInVolume())) { return false; }
     const auto* const track = step->GetTrack();
     const auto* const particle = track->GetDefinition();
     auto monitoring = FindMonitoring(track);
     auto isMonitoring = (monitoring != fMonitoringTrackList.cend());
-    if (!isMonitoring && step->IsFirstStepInVolume() && track->GetCurrentStepNumber() > 1 && particle->GetPDGCharge() != 0) {
+    if (!isMonitoring and step->IsFirstStepInVolume() and track->GetCurrentStepNumber() > 1 and particle->GetPDGCharge() != 0) {
         const auto* const preStepPoint = step->GetPreStepPoint();
         fMonitoringTrackList.emplace_back(track, preStepPoint->GetGlobalTime(), preStepPoint->GetPosition());
         monitoring = std::prev(fMonitoringTrackList.cend());
         isMonitoring = true;
     }
     G4bool hasNewHit = false;
-    if (isMonitoring && step->IsLastStepInVolume()) {
+    if (isMonitoring and step->IsLastStepInVolume()) {
         // retrive entering time and position
         const auto inT = std::get<1>(*monitoring);
         const auto inX = std::get<2>(*monitoring).x();

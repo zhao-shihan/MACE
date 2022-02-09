@@ -66,7 +66,7 @@ void Analysis::Update(const Track* track) const {
     if (!fOpened) { return; }
 
     for (size_t timeId = 0; timeId < fOutputTimeNum; ++timeId) {
-        if (track->GetCurrentStep()->preTime <= fOutputTime[timeId] &&
+        if (track->GetCurrentStep()->preTime <= fOutputTime[timeId] and
             track->GetCurrentStep()->postTime > fOutputTime[timeId]) {
             auto interPosition = track->GetCurrentStep()->prePosition + ((fOutputTime[timeId] - track->GetCurrentStep()->preTime) / (track->GetCurrentStep()->postTime - track->GetCurrentStep()->preTime)) * (track->GetCurrentStep()->postPosition - track->GetCurrentStep()->prePosition);
             fTimeNtuples[timeId]->Fill(
@@ -77,7 +77,7 @@ void Analysis::Update(const Track* track) const {
             break;
         }
     }
-    if (track->GetTrackStatus() == kTrackDecayed && track->IsEscaping()) {
+    if (track->GetTrackStatus() == kTrackDecayed and track->IsEscaping()) {
         fEscapedNtuple->Fill(
             track->GetVertexPosition().fX,
             track->GetVertexPosition().fY,

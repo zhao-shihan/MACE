@@ -38,10 +38,10 @@ void Analysis::Open() {
 }
 
 void Analysis::WriteEvent() {
-    const G4bool calorimeterTriggered = !(fEnableCoincidenceOfCalorimeter && fpCalorimeterHitList->empty());
-    const G4bool vertexDetectorTriggered = !(fEnableCoincidenceOfVertexDetector && fpVertexDetectorHitList->empty());
+    const G4bool calorimeterTriggered = !(fEnableCoincidenceOfCalorimeter and fpCalorimeterHitList->empty());
+    const G4bool vertexDetectorTriggered = !(fEnableCoincidenceOfVertexDetector and fpVertexDetectorHitList->empty());
     const G4bool spectrometerTriggered = !fpSpectrometerHitList->empty();
-    if (calorimeterTriggered && vertexDetectorTriggered && spectrometerTriggered) {
+    if (calorimeterTriggered and vertexDetectorTriggered and spectrometerTriggered) {
         CreateTreeFromList<Hit::CalorimeterHit>(*fpCalorimeterHitList);
         CreateTreeFromList<Hit::VertexDetectorHit>(*fpVertexDetectorHitList);
         CreateTreeFromList<Hit::SpectrometerHit>(*fpSpectrometerHitList);

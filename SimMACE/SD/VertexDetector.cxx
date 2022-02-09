@@ -27,7 +27,7 @@ void SD::VertexDetector::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) 
 G4bool SD::VertexDetector::ProcessHits(G4Step* step, G4TouchableHistory*) {
     auto* const track = step->GetTrack();
     const auto* const particle = track->GetDefinition();
-    if (!(step->IsFirstStepInVolume() && track->GetCurrentStepNumber() > 1 &&
+    if (!(step->IsFirstStepInVolume() and track->GetCurrentStepNumber() > 1 and
         particle->GetPDGCharge() != 0)) {
         return false;
     }

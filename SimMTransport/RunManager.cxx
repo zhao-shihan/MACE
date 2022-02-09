@@ -27,7 +27,7 @@ RunManager::~RunManager() {}
     else statement
 
 void RunManager::Initialize(int& argc, char**& argv) {
-    if (fStatus == kRunRunning || fStatus == kRunStopped) { return; }
+    if (fStatus == kRunRunning or fStatus == kRunStopped) { return; }
 
     Global::Initialize(argc, argv);
 
@@ -44,7 +44,7 @@ void RunManager::Initialize(int& argc, char**& argv) {
 }
 
 void RunManager::Run() {
-    if (fStatus == kRunUndefined || fStatus == kRunFinalized) { return; }
+    if (fStatus == kRunUndefined or fStatus == kRunFinalized) { return; }
     fStatus = kRunRunning;
 
     MASTER_DO(fMaster->Run());
@@ -70,7 +70,7 @@ void RunManager::Finalize() {
 }
 
 void RunManager::InitialReport() const {
-    if (fStatus == kRunRunning || fStatus == kRunStopped) { return; }
+    if (fStatus == kRunRunning or fStatus == kRunStopped) { return; }
 
     char processorName[MPI_MAX_PROCESSOR_NAME]; int processorNameLen;
     MPI_Get_processor_name(processorName, &processorNameLen);

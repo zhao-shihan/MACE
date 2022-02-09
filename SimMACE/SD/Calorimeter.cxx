@@ -29,8 +29,8 @@ G4bool SD::Calorimeter::ProcessHits(G4Step* step, G4TouchableHistory*) {
     const auto* const track = step->GetTrack();
     const auto* const preStepPoint = step->GetPreStepPoint();
     const auto* const particle = track->GetDefinition();
-    if (!(step->IsFirstStepInVolume() && track->GetCurrentStepNumber() > 1 &&
-        (particle->GetPDGCharge() != 0 || particle == photon))) {
+    if (!(step->IsFirstStepInVolume() and track->GetCurrentStepNumber() > 1 and
+        (particle->GetPDGCharge() != 0 or particle == photon))) {
         return false;
     }
     auto* const hit = new Hit::CalorimeterHit();
