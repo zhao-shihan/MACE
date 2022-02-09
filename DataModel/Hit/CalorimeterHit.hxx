@@ -4,7 +4,7 @@
 #include "DataModel/Interface/Data.hxx"
 
 class MACE::DataModel::CalorimeterHit :
-    protected MACE::DataModel::Interface::Data {
+    private MACE::DataModel::Interface::Data {
 public:
     CalorimeterHit() noexcept;
     CalorimeterHit(const CalorimeterHit& hit) noexcept;

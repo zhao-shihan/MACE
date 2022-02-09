@@ -12,9 +12,6 @@ SD::Calorimeter::Calorimeter(const G4String& SDName, const G4String& hitsCollect
     G4VSensitiveDetector(SDName),
     fHitsCollection(nullptr) {
     collectionName.insert(hitsCollectionName);
-    if (Hit::CalorimeterHitAllocator == nullptr) {
-        Hit::CalorimeterHitAllocator = new G4Allocator<Hit::CalorimeterHit>();
-    }
 }
 
 SD::Calorimeter::~Calorimeter() {}

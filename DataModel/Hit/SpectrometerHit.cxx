@@ -38,7 +38,7 @@ SpectrometerHit::SpectrometerHit(SpectrometerHit&& hit) noexcept :
     fLayerID(std::move(hit.fLayerID)) {}
 
 SpectrometerHit& SpectrometerHit::operator=(const SpectrometerHit& hit) noexcept {
-    if (&hit != this) {
+    if (std::addressof(hit) != this) {
         Data::operator=(static_cast<const Data&>(hit));
         fHitTime = hit.fHitTime;
         fWirePosition = hit.fWirePosition;
@@ -51,7 +51,7 @@ SpectrometerHit& SpectrometerHit::operator=(const SpectrometerHit& hit) noexcept
 }
 
 SpectrometerHit& SpectrometerHit::operator=(SpectrometerHit&& hit) noexcept {
-    if (&hit != this) {
+    if (std::addressof(hit) != this) {
         Data::operator=(static_cast<Data&&>(hit));
         fHitTime = std::move(hit.fHitTime);
         fWirePosition = std::move(hit.fWirePosition);

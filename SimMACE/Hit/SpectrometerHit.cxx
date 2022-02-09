@@ -36,7 +36,7 @@ SpectrometerHit::SpectrometerHit(SpectrometerHit&& hit) noexcept :
     fTrackID(std::move(hit.fTrackID)) {}
 
 SpectrometerHit& SpectrometerHit::operator=(const SpectrometerHit& hit) noexcept {
-    if (&hit != this) {
+    if (std::addressof(hit) != this) {
         G4VHit::operator=(static_cast<const G4VHit&>(hit));
         DataModel::Hit::SpectrometerHit::operator=(static_cast<const DataModel::Hit::SpectrometerHit&>(hit));
         fVertexTime = hit.fVertexTime;
@@ -48,7 +48,7 @@ SpectrometerHit& SpectrometerHit::operator=(const SpectrometerHit& hit) noexcept
 }
 
 SpectrometerHit& SpectrometerHit::operator=(SpectrometerHit&& hit) noexcept {
-    if (&hit != this) {
+    if (std::addressof(hit) != this) {
         G4VHit::operator=(static_cast<G4VHit&&>(hit));
         DataModel::Hit::SpectrometerHit::operator=(static_cast<DataModel::Hit::SpectrometerHit&&>(hit));
         fVertexTime = std::move(hit.fVertexTime);

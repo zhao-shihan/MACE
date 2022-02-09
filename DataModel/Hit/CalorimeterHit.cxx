@@ -21,7 +21,7 @@ CalorimeterHit::CalorimeterHit(CalorimeterHit&& hit) noexcept :
     fEnergy(std::move(hit.fEnergy)) {}
 
 CalorimeterHit& CalorimeterHit::operator=(const CalorimeterHit& hit) noexcept {
-    if (&hit != this) {
+    if (std::addressof(hit) != this) {
         Data::operator=(static_cast<const Data&>(hit));
         fHitTime = hit.fHitTime;
         fEnergy = hit.fEnergy;
@@ -30,7 +30,7 @@ CalorimeterHit& CalorimeterHit::operator=(const CalorimeterHit& hit) noexcept {
 }
 
 CalorimeterHit& CalorimeterHit::operator=(CalorimeterHit&& hit) noexcept {
-    if (&hit != this) {
+    if (std::addressof(hit) != this) {
         Data::operator=(static_cast<Data&&>(hit));
         fHitTime = std::move(hit.fHitTime);
         fEnergy = std::move(hit.fEnergy);

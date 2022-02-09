@@ -1,13 +1,15 @@
 #pragma once
 
 #include "G4VHit.hh"
+#include "G4THitsCollection.hh"
+#include "G4Allocator.hh"
 
 #include "SimMACE/Global.hxx"
-#include "DataModel/Hit/CalorimeterHit.hxx"
+#include "DataModel/SimHit/CalorimeterSimHit.hxx"
 
 class MACE::SimMACE::Hit::CalorimeterHit final :
     public G4VHit,
-    public MACE::DataModel::Hit::CalorimeterHit {
+    public MACE::DataModel::CalorimeterSimHit {
 public:
     CalorimeterHit() noexcept;
     CalorimeterHit(const CalorimeterHit& hit) noexcept;
@@ -16,49 +18,23 @@ public:
     CalorimeterHit& operator=(const CalorimeterHit& hit) noexcept;
     CalorimeterHit& operator=(CalorimeterHit&& hit) noexcept;
 
-    static void CreateBranches(TTree* tree);
-    inline void FillBranches() noexcept;
-    static void ReadBranches(TTree* tree);
-
-    const auto& GetParticlePDGCode() const { return fPDGCode; }
-    auto GetTrackID() const { return fTrackID; }
-
-    void SetPDGCode(Int_t pdgCode) { fPDGCode = pdgCode; }
-    void SetTrackID(Int_t val) { fTrackID = val; }
-
-private:
-    Int_t fPDGCode;
-    Int_t fTrackID;
-
-    static DataModel::Column<Int_t> fgPDGCode;
-    static DataModel::Column<Int_t> fgTrackID;
-
-public:
     inline void* operator new(size_t);
     inline void  operator delete(void*);
+
+private:
+    static G4Allocator<CalorimeterHit> fgCalorimeterHitAllocator;
 };
 
-void MACE::SimMACE::Hit::CalorimeterHit::FillBranches() noexcept {
-    DataModel::Hit::CalorimeterHit::FillBranches();
-    fgPDGCode.value = fPDGCode;
-    fgTrackID.value = fTrackID;
+namespace MACE::SimMACE::Hit {
+    using CalorimeterHitCollection = G4THitsCollection<CalorimeterHit>;
 }
 
-#include "G4THitsCollection.hh"
-#include "G4Allocator.hh"
+inline void* MACE::SimMACE::Hit::CalorimeterHit::
+operator new(size_t) {
+    return static_cast<void*>(fgCalorimeterHitAllocator.MallocSingle());
+}
 
-namespace MACE::SimMACE::Hit {
-
-    using CalorimeterHitCollection = G4THitsCollection<CalorimeterHit>;
-
-    extern G4Allocator<CalorimeterHit>* CalorimeterHitAllocator;
-
-    inline void* CalorimeterHit::operator new(size_t) {
-        return static_cast<void*>(CalorimeterHitAllocator->MallocSingle());
-    }
-
-    inline void CalorimeterHit::operator delete(void* hit) {
-        CalorimeterHitAllocator->FreeSingle(static_cast<CalorimeterHit*>(hit));
-    }
-
+inline void MACE::SimMACE::Hit::CalorimeterHit::
+operator delete(void* hit) {
+    fgCalorimeterHitAllocator.FreeSingle(static_cast<CalorimeterHit*>(hit));
 }

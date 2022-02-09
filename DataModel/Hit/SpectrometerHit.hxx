@@ -6,7 +6,7 @@
 #include "DataModel/Interface/Data.hxx"
 
 class MACE::DataModel::SpectrometerHit :
-    protected MACE::DataModel::Interface::Data {
+    private MACE::DataModel::Interface::Data {
 public:
     SpectrometerHit() noexcept;
     SpectrometerHit(const SpectrometerHit& hit) noexcept;

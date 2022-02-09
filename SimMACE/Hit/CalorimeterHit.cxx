@@ -2,57 +2,32 @@
 
 using namespace MACE::SimMACE::Hit;
 
-MACE::DataModel::Column<Int_t> CalorimeterHit::fgPDGCode = { "PDGCode", 0 };
-MACE::DataModel::Column<Int_t> CalorimeterHit::fgTrackID = { "TrackID", -1 };
-
-G4Allocator<CalorimeterHit>* MACE::SimMACE::Hit::CalorimeterHitAllocator = nullptr;
+G4Allocator<CalorimeterHit> MACE::SimMACE::Hit::CalorimeterHit::fgCalorimeterHitAllocator = G4Allocator<CalorimeterHit>();
 
 CalorimeterHit::CalorimeterHit() noexcept :
     G4VHit(),
-    DataModel::Hit::CalorimeterHit(),
-    fPDGCode(fgPDGCode.value),
-    fTrackID(fgTrackID.value) {}
+    DataModel::CalorimeterSimHit() {}
 
 CalorimeterHit::CalorimeterHit(const CalorimeterHit& hit) noexcept :
     G4VHit(static_cast<const G4VHit&>(hit)),
-    DataModel::Hit::CalorimeterHit(static_cast<const DataModel::Hit::CalorimeterHit&>(hit)),
-    fPDGCode(hit.fPDGCode),
-    fTrackID(hit.fTrackID) {}
+    DataModel::CalorimeterSimHit(static_cast<const DataModel::CalorimeterSimHit&>(hit)) {}
 
 CalorimeterHit::CalorimeterHit(CalorimeterHit&& hit) noexcept :
     G4VHit(static_cast<G4VHit&&>(hit)),
-    DataModel::Hit::CalorimeterHit(static_cast<DataModel::Hit::CalorimeterHit&&>(hit)),
-    fPDGCode(std::move(hit.fPDGCode)),
-    fTrackID(std::move(hit.fTrackID)) {}
+    DataModel::CalorimeterSimHit(static_cast<DataModel::CalorimeterSimHit&&>(hit)) {}
 
 CalorimeterHit& CalorimeterHit::operator=(const CalorimeterHit& hit) noexcept {
-    if (&hit != this) {
+    if (std::addressof(hit) != this) {
         G4VHit::operator=(static_cast<const G4VHit&>(hit));
-        DataModel::Hit::CalorimeterHit::operator=(static_cast<const DataModel::Hit::CalorimeterHit&>(hit));
-        fPDGCode = hit.fPDGCode;
-        fTrackID = hit.fTrackID;
+        DataModel::CalorimeterSimHit::operator=(static_cast<const DataModel::CalorimeterSimHit&>(hit));
     }
     return *this;
 }
 
 CalorimeterHit& CalorimeterHit::operator=(CalorimeterHit&& hit) noexcept {
-    if (&hit != this) {
+    if (std::addressof(hit) != this) {
         G4VHit::operator=(static_cast<G4VHit&&>(hit));
-        DataModel::Hit::CalorimeterHit::operator=(static_cast<DataModel::Hit::CalorimeterHit&&>(hit));
-        fPDGCode = std::move(hit.fPDGCode);
-        fTrackID = std::move(hit.fTrackID);
+        DataModel::CalorimeterSimHit::operator=(static_cast<DataModel::CalorimeterSimHit&&>(hit));
     }
     return *this;
-}
-
-void CalorimeterHit::CreateBranches(TTree* tree) {
-    DataModel::Hit::CalorimeterHit::CreateBranches(tree);
-    tree->Branch(fgPDGCode.name, std::addressof(fgPDGCode.value));
-    tree->Branch(fgTrackID.name, std::addressof(fgTrackID.value));
-}
-
-void CalorimeterHit::ReadBranches(TTree* tree) {
-    DataModel::Hit::CalorimeterHit::ReadBranches(tree);
-    tree->SetBranchAddress(fgPDGCode.name, std::addressof(fgPDGCode.value));
-    tree->SetBranchAddress(fgTrackID.name, std::addressof(fgTrackID.value));
 }

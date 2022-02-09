@@ -6,7 +6,7 @@
 #include "DataModel/Interface/Data.hxx"
 
 class MACE::DataModel::VertexDetectorHit :
-    protected MACE::DataModel::Interface::Data {
+    private MACE::DataModel::Interface::Data {
 public:
     VertexDetectorHit() noexcept;
     VertexDetectorHit(const VertexDetectorHit& hit) noexcept;

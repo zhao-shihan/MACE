@@ -3,19 +3,29 @@
 namespace MACE {
 
     namespace DataModel {
-        namespace Interface {
-            class Data;
-            class PersistencyHandler;
-        }
         inline namespace Hit {
             class CalorimeterHit;
             class VertexDetectorHit;
             class SpectrometerHit;
         }
+        namespace Interface {
+            class Data;
+            class PersistencyHandler;
+        }
         inline namespace RawHit { // no impl yet
             class CalorimeterRawHit;
             class VertexDetectorRawHit;
             class SpectrometerRawHit;
+        }
+        inline namespace SimHit {
+            class CalorimeterSimHit;
+            class VertexDetectorSimHit;
+            class SpectrometerSimHit;
+        }
+        inline namespace SimRawHit { // no impl yet
+            class CalorimeterSimRawHit;
+            class VertexDetectorSimRawHit;
+            class SpectrometerSimRawHit;
         }
         template<typename Value_t> struct Column;
         class PersistencyReader;

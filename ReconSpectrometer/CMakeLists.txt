@@ -8,7 +8,7 @@ include_directories(${Geant4_INCLUDE_DIRS})
 file(GLOB_RECURSE sources ${PROJECT_SOURCE_DIR}/*.cxx)
 
 add_executable(ReconSpectrometer ReconSpectrometer.cxx ${sources})
-# target_link_libraries(ReconSpectrometer DataModel genfit2 SimMACE_static)
-target_link_libraries(ReconSpectrometer DataModel SimMACE_static)
+# target_link_libraries(ReconSpectrometer DataModel genfit2)
+target_link_libraries(ReconSpectrometer DataModel)
 
 install(TARGETS ReconSpectrometer DESTINATION bin)

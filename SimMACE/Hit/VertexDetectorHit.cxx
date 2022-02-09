@@ -36,7 +36,7 @@ VertexDetectorHit::VertexDetectorHit(VertexDetectorHit&& hit) noexcept :
     fTrackID(std::move(hit.fTrackID)) {}
 
 VertexDetectorHit& VertexDetectorHit::operator=(const VertexDetectorHit& hit) noexcept {
-    if (&hit != this) {
+    if (std::addressof(hit) != this) {
         G4VHit::operator=(static_cast<const G4VHit&>(hit));
         DataModel::Hit::VertexDetectorHit::operator=(static_cast<const DataModel::Hit::VertexDetectorHit&>(hit));
         fVertexTime = hit.fVertexTime;
@@ -48,7 +48,7 @@ VertexDetectorHit& VertexDetectorHit::operator=(const VertexDetectorHit& hit) no
 }
 
 VertexDetectorHit& VertexDetectorHit::operator=(VertexDetectorHit&& hit) noexcept {
-    if (&hit != this) {
+    if (std::addressof(hit) != this) {
         G4VHit::operator=(static_cast<G4VHit&&>(hit));
         DataModel::Hit::VertexDetectorHit::operator=(static_cast<DataModel::Hit::VertexDetectorHit&&>(hit));
         fVertexTime = std::move(hit.fVertexTime);
