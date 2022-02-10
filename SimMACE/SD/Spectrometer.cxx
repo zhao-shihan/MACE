@@ -14,9 +14,6 @@ SD::Spectrometer::Spectrometer(const G4String& SDName, const G4String& hitsColle
     fSpectrometerCellEntity(spectrometerCellEntity),
     fMonitoringTrackList(0) {
     collectionName.insert(hitsCollectionName);
-    if (Hit::SpectrometerHitAllocator == nullptr) {
-        Hit::SpectrometerHitAllocator = new G4Allocator<Hit::SpectrometerHit>();
-    }
 }
 
 SD::Spectrometer::~Spectrometer() {}
