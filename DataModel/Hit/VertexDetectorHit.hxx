@@ -39,7 +39,7 @@ private:
 };
 
 inline void MACE::DataModel::Hit::VertexDetectorHit::FillBranches() noexcept {
-    MACE::DataModel::Interface::Data::FillBranches();
+    Interface::Data::FillBranches();
     fgHitTime.value = fHitTime;
     fgHitPositionX.value = fHitPosition.fX;
     fgHitPositionY.value = fHitPosition.fY;

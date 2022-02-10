@@ -9,7 +9,7 @@ public:
     SpectrometerSimHit() noexcept;
     SpectrometerSimHit(const SpectrometerSimHit& hit) noexcept;
     SpectrometerSimHit(SpectrometerSimHit&& hit) noexcept;
-    ~SpectrometerSimHit() noexcept {}
+    virtual ~SpectrometerSimHit() noexcept {}
     SpectrometerSimHit& operator=(const SpectrometerSimHit& hit) noexcept;
     SpectrometerSimHit& operator=(SpectrometerSimHit&& hit) noexcept;
 
@@ -35,16 +35,16 @@ private:
     Int_t fPDGCode;
     Int_t fTrackID;
 
-    static DataModel::Column<Float_t> fgVertexTime;
-    static DataModel::Column<Float_t> fgVertexPositionX;
-    static DataModel::Column<Float_t> fgVertexPositionY;
-    static DataModel::Column<Float_t> fgVertexPositionZ;
-    static DataModel::Column<Int_t> fgPDGCode;
-    static DataModel::Column<Int_t> fgTrackID;
+    static Column<Float_t> fgVertexTime;
+    static Column<Float_t> fgVertexPositionX;
+    static Column<Float_t> fgVertexPositionY;
+    static Column<Float_t> fgVertexPositionZ;
+    static Column<Int_t> fgPDGCode;
+    static Column<Int_t> fgTrackID;
 };
 
 inline void MACE::DataModel::SpectrometerSimHit::FillBranches() noexcept {
-    DataModel::SpectrometerHit::FillBranches();
+    SpectrometerHit::FillBranches();
     fgVertexTime.value = fVertexTime;
     fgVertexPositionX.value = fVertexPosition.fX;
     fgVertexPositionY.value = fVertexPosition.fY;

@@ -54,7 +54,7 @@ private:
 };
 
 inline void MACE::DataModel::Hit::SpectrometerHit::FillBranches() noexcept {
-    MACE::DataModel::Interface::Data::FillBranches();
+    Interface::Data::FillBranches();
     fgHitTime.value = fHitTime;
     fgWirePositionX.value = fWirePosition.fX;
     fgWirePositionY.value = fWirePosition.fY;

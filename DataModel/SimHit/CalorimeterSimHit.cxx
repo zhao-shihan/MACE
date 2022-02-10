@@ -2,27 +2,27 @@
 
 using namespace MACE::DataModel;
 
-MACE::DataModel::Column<Int_t> CalorimeterSimHit::fgPDGCode = { "PDGCode", 0 };
-MACE::DataModel::Column<Int_t> CalorimeterSimHit::fgTrackID = { "TrackID", -1 };
+Column<Int_t> CalorimeterSimHit::fgPDGCode = { "PDGCode", 0 };
+Column<Int_t> CalorimeterSimHit::fgTrackID = { "TrackID", -1 };
 
 CalorimeterSimHit::CalorimeterSimHit() noexcept :
-    DataModel::CalorimeterHit(),
+    CalorimeterHit(),
     fPDGCode(fgPDGCode.value),
     fTrackID(fgTrackID.value) {}
 
 CalorimeterSimHit::CalorimeterSimHit(const CalorimeterSimHit& hit) noexcept :
-    DataModel::CalorimeterHit(static_cast<const DataModel::CalorimeterHit&>(hit)),
+    CalorimeterHit(static_cast<const CalorimeterHit&>(hit)),
     fPDGCode(hit.fPDGCode),
     fTrackID(hit.fTrackID) {}
 
 CalorimeterSimHit::CalorimeterSimHit(CalorimeterSimHit&& hit) noexcept :
-    DataModel::CalorimeterHit(static_cast<DataModel::CalorimeterHit&&>(hit)),
+    CalorimeterHit(static_cast<CalorimeterHit&&>(hit)),
     fPDGCode(std::move(hit.fPDGCode)),
     fTrackID(std::move(hit.fTrackID)) {}
 
 CalorimeterSimHit& CalorimeterSimHit::operator=(const CalorimeterSimHit& hit) noexcept {
     if (std::addressof(hit) != this) {
-        DataModel::CalorimeterHit::operator=(static_cast<const DataModel::CalorimeterHit&>(hit));
+        CalorimeterHit::operator=(static_cast<const CalorimeterHit&>(hit));
         fPDGCode = hit.fPDGCode;
         fTrackID = hit.fTrackID;
     }
@@ -31,7 +31,7 @@ CalorimeterSimHit& CalorimeterSimHit::operator=(const CalorimeterSimHit& hit) no
 
 CalorimeterSimHit& CalorimeterSimHit::operator=(CalorimeterSimHit&& hit) noexcept {
     if (std::addressof(hit) != this) {
-        DataModel::CalorimeterHit::operator=(static_cast<DataModel::CalorimeterHit&&>(hit));
+        CalorimeterHit::operator=(static_cast<CalorimeterHit&&>(hit));
         fPDGCode = std::move(hit.fPDGCode);
         fTrackID = std::move(hit.fTrackID);
     }
@@ -39,13 +39,13 @@ CalorimeterSimHit& CalorimeterSimHit::operator=(CalorimeterSimHit&& hit) noexcep
 }
 
 void CalorimeterSimHit::CreateBranches(TTree* tree) {
-    DataModel::CalorimeterHit::CreateBranches(tree);
+    CalorimeterHit::CreateBranches(tree);
     tree->Branch(fgPDGCode.name, std::addressof(fgPDGCode.value));
     tree->Branch(fgTrackID.name, std::addressof(fgTrackID.value));
 }
 
 void CalorimeterSimHit::ReadBranches(TTree* tree) {
-    DataModel::CalorimeterHit::ReadBranches(tree);
+    CalorimeterHit::ReadBranches(tree);
     tree->SetBranchAddress(fgPDGCode.name, std::addressof(fgPDGCode.value));
     tree->SetBranchAddress(fgTrackID.name, std::addressof(fgTrackID.value));
 }

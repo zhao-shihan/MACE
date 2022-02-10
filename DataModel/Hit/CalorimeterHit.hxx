@@ -33,7 +33,7 @@ private:
 };
 
 inline void MACE::DataModel::Hit::CalorimeterHit::FillBranches() noexcept {
-    MACE::DataModel::Interface::Data::FillBranches();
+    Interface::Data::FillBranches();
     fgHitTime.value = fHitTime;
     fgEnergy.value = fEnergy;
 }

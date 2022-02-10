@@ -27,12 +27,12 @@ private:
     Int_t fPDGCode;
     Int_t fTrackID;
 
-    static DataModel::Column<Int_t> fgPDGCode;
-    static DataModel::Column<Int_t> fgTrackID;
+    static Column<Int_t> fgPDGCode;
+    static Column<Int_t> fgTrackID;
 };
 
 inline void MACE::DataModel::CalorimeterSimHit::FillBranches() noexcept {
-    DataModel::CalorimeterHit::FillBranches();
+    CalorimeterHit::FillBranches();
     fgPDGCode.value = fPDGCode;
     fgTrackID.value = fTrackID;
 }

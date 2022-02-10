@@ -11,9 +11,6 @@ SD::VertexDetector::VertexDetector(const G4String& SDName, const G4String& hitsC
     G4VSensitiveDetector(SDName),
     fHitsCollection(nullptr) {
     collectionName.insert(hitsCollectionName);
-    if (Hit::VertexDetectorAllocator == nullptr) {
-        Hit::VertexDetectorAllocator = new G4Allocator<Hit::VertexDetectorHit>();
-    }
 }
 
 SD::VertexDetector::~VertexDetector() {}

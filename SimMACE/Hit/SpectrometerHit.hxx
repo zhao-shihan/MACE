@@ -8,7 +8,7 @@
 #include "SimMACE/Global.hxx"
 #include "DataModel/SimHit/SpectrometerSimHit.hxx"
 
-class MACE::SimMACE::Hit::SpectrometerHit :
+class MACE::SimMACE::Hit::SpectrometerHit final :
     public G4VHit,
     public MACE::DataModel::SpectrometerSimHit {
 public:
