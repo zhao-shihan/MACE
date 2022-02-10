@@ -19,7 +19,7 @@ public:
     Dummy();
     ~Dummy();
 
-    bool Fit(const std::vector<HitPtr>& hitData, const std::optional<HelixParameters>& initParameters) override;
+    bool Fit(const std::vector<HitPtr>& hitData, const HelixParameters& initParameters = defaultHelixParameters) override;
 
 private:
     void SortHitsByCellID();

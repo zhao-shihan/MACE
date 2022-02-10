@@ -138,6 +138,7 @@ namespace MACE {
         }
         namespace Reconstructor {
             template<template<class T> class FitterT_t, class SpectromrterHit_t> class Hough;
+            template<template<class T> class FitterT_t, class SpectromrterHit_t> class TrueFinder;
         }
         struct HelixParameters;
     }

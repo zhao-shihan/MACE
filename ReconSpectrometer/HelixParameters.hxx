@@ -9,3 +9,7 @@ struct MACE::ReconSpectrometer::HelixParameters {
     double z0;
     double alpha;
 };
+
+namespace MACE::ReconSpectrometer {
+    constexpr auto defaultHelixParameters = HelixParameters{ 0.0, 0.0, 0.0, 0.0, 0.0 };
+}

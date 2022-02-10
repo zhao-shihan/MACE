@@ -16,10 +16,10 @@ protected:
     using HitPtr = std::shared_ptr<SpectromrterHit_t>;
 
     Fitter();
-    virtual ~Fitter();
+    virtual ~Fitter() {}
 
 public:
-    virtual bool Fit(const std::vector<HitPtr>& hitData, const std::optional<HelixParameters>& initParameters) = 0;
+    virtual bool Fit(const std::vector<HitPtr>& hitData, const HelixParameters& initParameters) = 0;
 
     const auto& GetFittedParameters() const { return fFittedParameters; }
     const auto& GetFittedTrack() const { return fFittedTrack; }

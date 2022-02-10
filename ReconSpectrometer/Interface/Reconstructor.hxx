@@ -16,7 +16,7 @@ protected:
     using Fitter_t = FitterT_t<SpectromrterHit_t>;
 
     Reconstructor();
-    virtual ~Reconstructor();
+    virtual ~Reconstructor() {}
 
 public:
     virtual void Reconstruct(const std::vector<HitPtr>& hitData) = 0;
