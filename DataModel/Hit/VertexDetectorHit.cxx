@@ -1,11 +1,11 @@
 #include "DataModel/Hit/VertexDetectorHit.hxx"
 
-using namespace MACE::DataModel::Hit;
+using namespace MACE::DataModel;
 
-MACE::DataModel::Column<Float_t> VertexDetectorHit::fgHitTime = { "HitT", 0.0f };
-MACE::DataModel::Column<Float_t> VertexDetectorHit::fgHitPositionX = { "HitX", 0.0f };
-MACE::DataModel::Column<Float_t> VertexDetectorHit::fgHitPositionY = { "HitY", 0.0f };
-MACE::DataModel::Column<Float_t> VertexDetectorHit::fgHitPositionZ = { "HitZ", 0.0f };
+Column<Float_t> VertexDetectorHit::fgHitTime = { "HitT", 0.0f };
+Column<Float_t> VertexDetectorHit::fgHitPositionX = { "HitX", 0.0f };
+Column<Float_t> VertexDetectorHit::fgHitPositionY = { "HitY", 0.0f };
+Column<Float_t> VertexDetectorHit::fgHitPositionZ = { "HitZ", 0.0f };
 
 VertexDetectorHit::VertexDetectorHit() noexcept :
     Data(),

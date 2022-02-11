@@ -21,18 +21,18 @@ public:
     auto GetHitTime() const { return fHitTime; }
     auto GetEnergy() const { return fEnergy; }
 
-    void SetHitTime(double_t val) { fHitTime = val; }
-    void SetEnergy(double_t val) { fEnergy = val; }
+    void SetHitTime(Double_t val) { fHitTime = val; }
+    void SetEnergy(Double_t val) { fEnergy = val; }
 
 private:
-    double_t fHitTime;
-    double_t fEnergy;
+    Double_t fHitTime;
+    Double_t fEnergy;
 
     static Column<Float_t> fgHitTime;
     static Column<Float_t> fgEnergy;
 };
 
-inline void MACE::DataModel::Hit::CalorimeterHit::FillBranches() noexcept {
+inline void MACE::DataModel::CalorimeterHit::FillBranches() noexcept {
     Interface::Data::FillBranches();
     fgHitTime.value = fHitTime;
     fgEnergy.value = fEnergy;

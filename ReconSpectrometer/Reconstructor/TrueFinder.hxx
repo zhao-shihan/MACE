@@ -3,17 +3,18 @@
 #include "ReconSpectrometer/Global.hxx"
 #include "ReconSpectrometer/Interface/Reconstructor.hxx"
 
-template<template<class T> class FitterT_t, class SpectromrterHit_t>
+template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t>
 class MACE::ReconSpectrometer::Reconstructor::TrueFinder final :
-    public MACE::ReconSpectrometer::Interface::Reconstructor<FitterT_t, SpectromrterHit_t> {
+    public MACE::ReconSpectrometer::Interface::Reconstructor<FitterT_t, SpectromrterHit_t, Track_t> {
     MACE_RECONSPECTROMETER_SPECTROMETERSIMHIT_CONCEPT(SpectromrterHit_t);
 
     TrueFinder(const TrueFinder&) = delete;
     TrueFinder& operator=(const TrueFinder&) = delete;
 
 protected:
-    using Base = MACE::ReconSpectrometer::Interface::Reconstructor<FitterT_t, SpectromrterHit_t>;
+    using Base = MACE::ReconSpectrometer::Interface::Reconstructor<FitterT_t, SpectromrterHit_t, Track_t>;
     using HitPtr = typename Base::HitPtr;
+    using TrackPtr = typename Base::TrackPtr;
 
 public:
     TrueFinder();

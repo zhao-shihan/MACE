@@ -23,13 +23,13 @@ public:
     auto GetHitTime() const { return fHitTime; }
     const auto& GetHitPosition() const { return fHitPosition; }
 
-    void SetHitTime(double_t val) { fHitTime = val; }
+    void SetHitTime(Double_t val) { fHitTime = val; }
     void SetHitPosition(const TEveVectorD& val) { fHitPosition = val; }
     void SetHitPosition(TEveVectorD&& val) { fHitPosition = std::move(val); }
     void SetHitPosition(Double_t x, Double_t y, Double_t z) { fHitPosition.fX = x; fHitPosition.fY = y; fHitPosition.fZ = z; }
 
 private:
-    double_t fHitTime;
+    Double_t fHitTime;
     TEveVectorD fHitPosition;
 
     static Column<Float_t> fgHitTime;
@@ -38,7 +38,7 @@ private:
     static Column<Float_t> fgHitPositionZ;
 };
 
-inline void MACE::DataModel::Hit::VertexDetectorHit::FillBranches() noexcept {
+inline void MACE::DataModel::VertexDetectorHit::FillBranches() noexcept {
     Interface::Data::FillBranches();
     fgHitTime.value = fHitTime;
     fgHitPositionX.value = fHitPosition.fX;

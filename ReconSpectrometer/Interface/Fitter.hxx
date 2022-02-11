@@ -1,33 +1,32 @@
 #pragma once
 
-#include <optional>
-
 #include "ReconSpectrometer/Global.hxx"
-#include "ReconSpectrometer/HelixParameters.hxx"
 
-template<class SpectromrterHit_t>
+template<class SpectromrterHit_t, class Track_t>
 class MACE::ReconSpectrometer::Interface::Fitter {
     MACE_RECONSPECTROMETER_SPECTROMETERHIT_CONCEPT(SpectromrterHit_t);
+    MACE_RECONSPECTROMETER_TRACK_CONCEPT(Track_t);
 
     Fitter(const Fitter&) = delete;
     Fitter& operator=(const Fitter&) = delete;
 
 protected:
     using HitPtr = std::shared_ptr<SpectromrterHit_t>;
+    using TrackPtr = std::shared_ptr<Track_t>;
 
     Fitter();
     virtual ~Fitter() {}
 
 public:
-    virtual bool Fit(const std::vector<HitPtr>& hitData, const HelixParameters& initParameters) = 0;
+    virtual bool Fit(const std::vector<HitPtr>& hitData, const Track_t& seed) = 0;
 
-    const auto& GetFittedParameters() const { return fFittedParameters; }
     const auto& GetFittedTrack() const { return fFittedTrack; }
+    const auto& GetFittedList() const { return fFittedList; }
     const auto& GetOmittedList() const { return fOmittedList; }
 
 protected:
-    HelixParameters     fFittedParameters;
-    std::vector<HitPtr> fFittedTrack;
+    TrackPtr fFittedTrack;
+    std::vector<HitPtr> fFittedList;
     std::vector<HitPtr> fOmittedList;
 };
 

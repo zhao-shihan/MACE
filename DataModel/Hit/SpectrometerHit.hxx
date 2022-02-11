@@ -53,7 +53,7 @@ private:
     static Column<Int_t> fgLayerID;
 };
 
-inline void MACE::DataModel::Hit::SpectrometerHit::FillBranches() noexcept {
+inline void MACE::DataModel::SpectrometerHit::FillBranches() noexcept {
     Interface::Data::FillBranches();
     fgHitTime.value = fHitTime;
     fgWirePositionX.value = fWirePosition.fX;

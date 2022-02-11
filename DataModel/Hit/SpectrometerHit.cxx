@@ -1,14 +1,14 @@
 #include "DataModel/Hit/SpectrometerHit.hxx"
 
-using namespace MACE::DataModel::Hit;
+using namespace MACE::DataModel;
 
-MACE::DataModel::Column<Float_t> SpectrometerHit::fgHitTime = { "HitT", 0.0f };
-MACE::DataModel::Column<Float_t> SpectrometerHit::fgWirePositionX = { "WireX", 0.0f };
-MACE::DataModel::Column<Float_t> SpectrometerHit::fgWirePositionY = { "WireY", 0.0f };
-MACE::DataModel::Column<Float_t> SpectrometerHit::fgDriftDistance = { "DriftD",0.0f };
-MACE::DataModel::Column<Float_t> SpectrometerHit::fgHitPositionZ = { "HitZ", 0.0f };
-MACE::DataModel::Column<Int_t> SpectrometerHit::fgCellID = { "CellID", -1 };
-MACE::DataModel::Column<Int_t> SpectrometerHit::fgLayerID = { "LayerID", -1 };
+Column<Float_t> SpectrometerHit::fgHitTime = { "HitT", 0.0f };
+Column<Float_t> SpectrometerHit::fgWirePositionX = { "WireX", 0.0f };
+Column<Float_t> SpectrometerHit::fgWirePositionY = { "WireY", 0.0f };
+Column<Float_t> SpectrometerHit::fgDriftDistance = { "DriftD",0.0f };
+Column<Float_t> SpectrometerHit::fgHitPositionZ = { "HitZ", 0.0f };
+Column<Int_t> SpectrometerHit::fgCellID = { "CellID", -1 };
+Column<Int_t> SpectrometerHit::fgLayerID = { "LayerID", -1 };
 
 SpectrometerHit::SpectrometerHit() noexcept :
     Data(),

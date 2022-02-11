@@ -27,6 +27,10 @@ namespace MACE {
             class VertexDetectorSimRawHit;
             class SpectrometerSimRawHit;
         }
+        inline namespace Track {
+            class HelixTrack;
+            class PhysicsTrack;
+        }
         template<typename Value_t> struct Column;
         class PersistencyReader;
         class PersistencyWriter;
@@ -129,18 +133,17 @@ namespace MACE {
 
     namespace ReconSpectrometer {
         namespace Fitter {
-            template<class SpectromrterHit_t> class DirectLeastChiSquare;
-            template<class SpectromrterHit_t> class Dummy;
+            template<class SpectromrterHit_t, class Track_t> class DirectLeastChiSquare;
+            template<class SpectromrterHit_t, class Track_t> class Dummy;
         }
         namespace Interface {
-            template<class SpectromrterHit_t> class Fitter;
-            template<template<class T> class FitterT_t, class SpectromrterHit_t> class Reconstructor;
+            template<class SpectromrterHit_t, class Track_t> class Fitter;
+            template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t> class Reconstructor;
         }
         namespace Reconstructor {
-            template<template<class T> class FitterT_t, class SpectromrterHit_t> class Hough;
-            template<template<class T> class FitterT_t, class SpectromrterHit_t> class TrueFinder;
+            template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t> class Hough;
+            template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t> class TrueFinder;
         }
-        struct HelixParameters;
     }
 
     namespace SimMACE {

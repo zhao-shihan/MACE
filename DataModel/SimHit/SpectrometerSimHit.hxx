@@ -22,7 +22,7 @@ public:
     const auto& GetParticlePDGCode() const { return fPDGCode; }
     auto GetTrackID() const { return fTrackID; }
 
-    void SetVertexTime(double_t val) { fVertexTime = val; }
+    void SetVertexTime(Double_t val) { fVertexTime = val; }
     void SetVertexPosition(const TEveVectorD& pos) { fVertexPosition = pos; }
     void SetVertexPosition(TEveVectorD&& pos) { fVertexPosition = std::move(pos); }
     void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition.fX = x; fVertexPosition.fY = y; fVertexPosition.fZ = z; }
@@ -30,7 +30,7 @@ public:
     void SetTrackID(Int_t val) { fTrackID = val; }
 
 private:
-    double_t fVertexTime;
+    Double_t fVertexTime;
     TEveVectorD fVertexPosition;
     Int_t fPDGCode;
     Int_t fTrackID;

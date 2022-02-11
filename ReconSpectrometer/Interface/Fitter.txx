@@ -1,6 +1,6 @@
-template<class SpectromrterHit_t>
-MACE::ReconSpectrometer::Interface::Fitter<SpectromrterHit_t>::
+template<class SpectromrterHit_t, class Track_t>
+MACE::ReconSpectrometer::Interface::Fitter<SpectromrterHit_t, Track_t>::
 Fitter() :
-    fFittedParameters(),
-    fFittedTrack(0),
+    fFittedTrack(),
+    fFittedList(0),
     fOmittedList(0) {}

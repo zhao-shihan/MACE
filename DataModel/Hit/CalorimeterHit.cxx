@@ -1,9 +1,9 @@
 #include "DataModel/Hit/CalorimeterHit.hxx"
 
-using namespace MACE::DataModel::Hit;
+using namespace MACE::DataModel;
 
-MACE::DataModel::Column<Float_t> CalorimeterHit::fgHitTime = { "HitT", 0.0f };
-MACE::DataModel::Column<Float_t> CalorimeterHit::fgEnergy = { "Energy", 0.0f };
+Column<Float_t> CalorimeterHit::fgHitTime = { "HitT", 0.0f };
+Column<Float_t> CalorimeterHit::fgEnergy = { "Energy", 0.0f };
 
 CalorimeterHit::CalorimeterHit() noexcept :
     Data(),

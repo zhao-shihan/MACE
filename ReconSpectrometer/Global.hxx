@@ -5,14 +5,45 @@
 
 #define MACE_RECONSPECTROMETER_SPECTROMETERHIT_CONCEPT(Hit_t) \
     static_assert(std::is_base_of_v<MACE::DataModel::SpectrometerHit, Hit_t>, \
-        "The hit type should be derived from MACE::DataModel::SpectrometerHit")
+        "The hit type should be or derived from " \
+            "MACE::DataModel::SpectrometerHit")
 
 #define MACE_RECONSPECTROMETER_SPECTROMETERSIMHIT_CONCEPT(Hit_t) \
     static_assert(std::is_base_of_v<MACE::DataModel::SpectrometerSimHit, Hit_t>, \
-        "The hit type should be derived from MACE::DataModel::SpectrometerSimHit")
+        "The hit type should be or derived from " \
+            "MACE::DataModel::SpectrometerSimHit")
 
-#define MACE_RECONSPECTROMETER_FITTER_CONCEPT(FitterT_t, Hit_t) \
-    static_assert(std::is_base_of_v<MACE::ReconSpectrometer::Interface::Fitter<Hit_t>, FitterT_t<Hit_t>>, \
-        "The fitter type should be derived from MACE::ReconSpectrometer::Interface::Fitter"); \
-    static_assert(std::is_default_constructible_v<FitterT_t<Hit_t>>, \
+#define MACE_RECONSPECTROMETER_TRACK_CONCEPT(Track_t) \
+    static_assert(std::is_base_of_v<MACE::DataModel::HelixTrack, Track_t> or \
+                  std::is_base_of_v<MACE::DataModel::PhysicsTrack, Track_t>, \
+        "The track type should be or derived from " \
+            "MACE::DataModel::HelixTrack or " \
+            "MACE::DataModel::PhysicsTrack"); \
+    static_assert(std::is_default_constructible_v<Track_t>, \
+        "The track type should be default constructible")
+
+#define MACE_RECONSPECTROMETER_HELIXTRACK_CONCEPT(Track_t) \
+    static_assert(std::is_base_of_v<MACE::DataModel::HelixTrack, Track_t>, \
+        "The track type should be or derived from " \
+            "MACE::DataModel::HelixTrack"); \
+    static_assert(std::is_default_constructible_v<Track_t>, \
+        "The track type should be default constructible")
+
+#define MACE_RECONSPECTROMETER_PHYSICSTRACK_CONCEPT(Track_t) \
+    static_assert(std::is_base_of_v<MACE::DataModel::PhysicsTrack, Track_t>, \
+        "The track type should be or derived from " \
+            "MACE::DataModel::PhysicsTrack"); \
+    static_assert(std::is_default_constructible_v<Track_t>, \
+        "The track type should be default constructible")
+
+#define MACE_RECONSPECTROMETER_FITTER_CONCEPT(FitterT_t, Hit_t, Track_t) \
+    static_assert(std::is_base_of_v<MACE::ReconSpectrometer::Interface::Fitter<Hit_t, Track_t>, FitterT_t<Hit_t, Track_t>>, \
+        "The fitter type should derived from " \
+            "MACE::ReconSpectrometer::Interface::Fitter"); \
+    static_assert(std::is_default_constructible_v<FitterT_t<Hit_t, Track_t>>, \
         "The fitter type should be default constructible")
+
+#define MACE_RECONSPECTROMETER_RECONSTRUCTOR_CONCEPT(Reconstructor_t, FitterT_t, Hit_t, Track_t) \
+    static_assert(std::is_base_of_v<MACE::ReconSpectrometer::Interface::Reconstructor<FitterT_t, Hit_t, Track_t>, Reconstructor_t<FitterT_t, Hit_t, Track_t>>, \
+        "The reconstructor type should derived from " \
+            "MACE::ReconSpectrometer::Interface::Reconstructor")
