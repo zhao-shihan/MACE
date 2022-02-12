@@ -14,9 +14,9 @@ public:
     const char* GetTranslationDescription() const override { return "Downstream surface at z=0. (Be aware of AcceleratorField's position)"; }
     const char* GetRotationDescription()    const override { return "No rotation."; }
 
-    auto GetWidth() const { return fWidth; }
-    auto GetThickness() const { return fThickness; }
-    auto GetDownZPosition() const { return fDownZPosition; }
+    const auto& GetWidth() const { return fWidth; }
+    const auto& GetThickness() const { return fThickness; }
+    const auto& GetDownZPosition() const { return fDownZPosition; }
 
     void SetWidth(double val) { fWidth = val; }
     void SetThickness(double val) { fThickness = val; }

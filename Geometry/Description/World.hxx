@@ -14,9 +14,9 @@ public:
     const char* GetTranslationDescription() const override { return "No translation."; }
     const char* GetRotationDescription()    const override { return "No rotation."; }
 
-    auto GetHalfXExtent() const { return fHalfXExtent; }
-    auto GetHalfYExtent() const { return fHalfYExtent; }
-    auto GetHalfZExtent() const { return fHalfZExtent; }
+    const auto& GetHalfXExtent() const { return fHalfXExtent; }
+    const auto& GetHalfYExtent() const { return fHalfYExtent; }
+    const auto& GetHalfZExtent() const { return fHalfZExtent; }
 
     void SetHalfXExtent(double val) { fHalfXExtent = val; }
     void SetHalfYExtent(double val) { fHalfYExtent = val; }

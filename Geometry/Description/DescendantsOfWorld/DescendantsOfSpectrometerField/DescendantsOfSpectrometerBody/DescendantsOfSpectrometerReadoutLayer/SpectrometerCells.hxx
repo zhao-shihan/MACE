@@ -14,8 +14,8 @@ public:
     const char* GetTranslationDescription() const override { return "Depending on the implementation."; }
     const char* GetRotationDescription()    const override { return "Depending on the implementation."; }
 
-    auto GetSenseWireDiameter() const { return fSenseWireDiameter; }
-    auto GetFieldWireDiameter() const { return fFieldWireDiameter; }
+    const auto& GetSenseWireDiameter() const { return fSenseWireDiameter; }
+    const auto& GetFieldWireDiameter() const { return fFieldWireDiameter; }
 
     void SetSenseWireDiameter(double val) { fSenseWireDiameter = val; }
     void SetFieldWireDiameter(double val) { fFieldWireDiameter = val; }

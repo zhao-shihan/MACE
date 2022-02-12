@@ -14,9 +14,9 @@ public:
     const char* GetTranslationDescription() const override { return "Translation should ensure the center z position satisifies shape description (see above)."; }
     const char* GetRotationDescription()    const override { return "No rotation."; }
 
-    auto GetWidth() const { return fWidth; }
-    auto GetUpStreamLength() const { return fUpStreamLength; }
-    auto GetDownStreamLength() const { return fDownStreamLength; }
+    const auto& GetWidth() const { return fWidth; }
+    const auto& GetUpStreamLength() const { return fUpStreamLength; }
+    const auto& GetDownStreamLength() const { return fDownStreamLength; }
 
     void SetWidth(double val) { fWidth = val; }
     void SetUpStreamLength(double val) { fUpStreamLength = val; }

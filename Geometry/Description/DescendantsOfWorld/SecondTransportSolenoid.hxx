@@ -14,11 +14,11 @@ public:
     const char* GetTranslationDescription() const override { return ""; }
     const char* GetRotationDescription()    const override { return ""; }
 
-    auto GetOuterRaidus() const { return fOuterRadius; }
-    auto GetInnerRaidus() const { return fInnerRadius; }
-    auto GetLength()      const { return fLength; }
-    auto GetCenterZ()     const { return fCenterZ; }
-    auto GetUpXPosition() const { return fUpXPosition; }
+    const auto& GetOuterRaidus() const { return fOuterRadius; }
+    const auto& GetInnerRaidus() const { return fInnerRadius; }
+    const auto& GetLength()      const { return fLength; }
+    const auto& GetCenterZ()     const { return fCenterZ; }
+    const auto& GetUpXPosition() const { return fUpXPosition; }
 
     void SetOuterRaidus(double val) { fInnerRadius = val; }
     void SetInnerRaidus(double val) { fOuterRadius = val; }

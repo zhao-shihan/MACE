@@ -14,13 +14,13 @@ public:
     const char* GetTranslationDescription() const override { return "No translation."; }
     const char* GetRotationDescription()    const override { return "No rotation."; }
 
-    auto GetGasInnerRadius() const { return fGasInnerRadius; }
-    auto GetGasOuterRadius() const { return fGasOuterRadius; }
-    auto GetGasInnerLength() const { return fGasInnerLength; }
-    auto GetGasOuterLength() const { return fGasOuterLength; }
-    auto GetShellInnerThickness() const { return fShellInnerThickness; }
-    auto GetShellSideThickness()  const { return fShellSideThickness; }
-    auto GetShellOuterThickness() const { return fShellOuterThickness; }
+    const auto& GetGasInnerRadius() const { return fGasInnerRadius; }
+    const auto& GetGasOuterRadius() const { return fGasOuterRadius; }
+    const auto& GetGasInnerLength() const { return fGasInnerLength; }
+    const auto& GetGasOuterLength() const { return fGasOuterLength; }
+    const auto& GetShellInnerThickness() const { return fShellInnerThickness; }
+    const auto& GetShellSideThickness()  const { return fShellSideThickness; }
+    const auto& GetShellOuterThickness() const { return fShellOuterThickness; }
 
     void SetGasInnerRadius(double val) { fGasInnerRadius = val; }
     void SetGasOuterRadius(double val) { fGasOuterRadius = val; }

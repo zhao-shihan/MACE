@@ -14,10 +14,10 @@ public:
     const char* GetTranslationDescription() const override { return ""; }
     const char* GetRotationDescription()    const override { return ""; }
 
-    auto GetRaidus()     const { return fRadius; }
-    auto GetBendRadius() const { return fBendRadius; }
-    auto GetXPosition()  const { return fXPosition; }
-    auto GetZPosition()  const { return fZPosition; }
+    const auto& GetRaidus()     const { return fRadius; }
+    const auto& GetBendRadius() const { return fBendRadius; }
+    const auto& GetXPosition()  const { return fXPosition; }
+    const auto& GetZPosition()  const { return fZPosition; }
 
     void SetRaidus(double val) { fRadius = val; }
     void SetBendRadius(double val) { fBendRadius = val; }

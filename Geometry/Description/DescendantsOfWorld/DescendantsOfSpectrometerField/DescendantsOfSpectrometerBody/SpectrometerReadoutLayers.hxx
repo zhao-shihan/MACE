@@ -14,7 +14,7 @@ public:
     const char* GetTranslationDescription() const override { return "No translation."; }
     const char* GetRotationDescription()    const override { return "No rotation."; }
 
-    auto GetAverageCellWidth() const { return fAverageCellWidth; }
+    const auto& GetAverageCellWidth() const { return fAverageCellWidth; }
 
     void SetAverageCellWidth(double val) { fAverageCellWidth = val; }
 
