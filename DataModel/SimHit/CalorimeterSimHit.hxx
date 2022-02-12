@@ -18,7 +18,7 @@ public:
     static void ReadBranches(TTree* tree);
 
     const auto& GetParticlePDGCode() const { return fPDGCode; }
-    auto GetTrackID() const { return fTrackID; }
+    const auto& GetTrackID() const { return fTrackID; }
 
     void SetPDGCode(Int_t pdgCode) { fPDGCode = pdgCode; }
     void SetTrackID(Int_t val) { fTrackID = val; }

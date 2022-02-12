@@ -17,10 +17,10 @@ public:
     inline void FillBranches() noexcept;
     static void ReadBranches(TTree* tree);
 
-    auto GetVertexTime() const { return fVertexTime; }
+    const auto& GetVertexTime() const { return fVertexTime; }
     const auto& GetVertexPosition() const { return fVertexPosition; }
     const auto& GetParticlePDGCode() const { return fPDGCode; }
-    auto GetTrackID() const { return fTrackID; }
+    const auto& GetTrackID() const { return fTrackID; }
 
     void SetVertexTime(Double_t val) { fVertexTime = val; }
     void SetVertexPosition(const TEveVectorD& pos) { fVertexPosition = pos; }

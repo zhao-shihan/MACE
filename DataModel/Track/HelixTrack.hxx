@@ -21,9 +21,10 @@ public:
     static void ReadBranches(TTree* tree);
 
     const auto& GetCenter() const { return fCenter; }
-    auto GetRadius() const { return fRadius; }
-    auto GetZ0() const { return fZ0; }
-    auto GetAlpha() const { return fAlpha; }
+    const auto& GetRadius() const { return fRadius; }
+    const auto& GetZ0() const { return fZ0; }
+    const auto& GetAlpha() const { return fAlpha; }
+    const auto& GetChi2() const { return fChi2; }
 
     void SetCenter(const TEveVector2D& val) { fCenter = val; }
     void SetCenter(TEveVector2D&& val) { fCenter = std::move(val); }
@@ -31,18 +32,21 @@ public:
     void SetRadius(Double_t val) { fRadius = val; }
     void SetZ0(Double_t val) { fZ0 = val; }
     void SetAlpha(Double_t val) { fAlpha = val; }
+    void SetChi2(Double_t val) { fChi2 = val; }
 
 private:
     TEveVector2D fCenter;
     Double_t fRadius;
     Double_t fZ0;
     Double_t fAlpha;
+    Double_t fChi2;
 
     static Column<Float_t> fgCenterX;
     static Column<Float_t> fgCenterY;
     static Column<Float_t> fgRadius;
     static Column<Float_t> fgZ0;
     static Column<Float_t> fgAlpha;
+    static Column<Float_t> fgChi2;
 };
 
 inline void MACE::DataModel::HelixTrack::FillBranches() noexcept {
@@ -52,4 +56,5 @@ inline void MACE::DataModel::HelixTrack::FillBranches() noexcept {
     fgRadius.value = fRadius;
     fgZ0.value = fZ0;
     fgAlpha.value = fAlpha;
+    fgChi2.value = fChi2;
 }

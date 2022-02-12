@@ -20,7 +20,7 @@ public:
     inline void FillBranches() noexcept;
     static void ReadBranches(TTree* tree);
 
-    auto GetHitTime() const { return fHitTime; }
+    const auto& GetHitTime() const { return fHitTime; }
     const auto& GetHitPosition() const { return fHitPosition; }
 
     void SetHitTime(Double_t val) { fHitTime = val; }

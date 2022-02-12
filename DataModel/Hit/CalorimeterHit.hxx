@@ -18,8 +18,8 @@ public:
     inline void FillBranches() noexcept;
     static void ReadBranches(TTree* tree);
 
-    auto GetHitTime() const { return fHitTime; }
-    auto GetEnergy() const { return fEnergy; }
+    const auto& GetHitTime() const { return fHitTime; }
+    const auto& GetEnergy() const { return fEnergy; }
 
     void SetHitTime(Double_t val) { fHitTime = val; }
     void SetEnergy(Double_t val) { fEnergy = val; }

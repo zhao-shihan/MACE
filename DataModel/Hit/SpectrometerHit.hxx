@@ -20,19 +20,23 @@ public:
     inline void FillBranches() noexcept;
     static void ReadBranches(TTree* tree);
 
-    auto GetHitTime() const { return fHitTime; }
+    const auto& GetHitTime() const { return fHitTime; }
     const auto& GetWirePosition() const { return fWirePosition; }
-    auto GetDriftDistance() const { return fDriftDistance; }
-    auto GetHitPositionZ() const { return fHitPositionZ; }
-    auto GetCellID() const { return fCellID; }
-    auto GetLayerID() const { return fLayerID; }
+    const auto& GetDriftDistance() const { return fDriftDistance; }
+    const auto& GetDriftDistanceVariance() const { return fDriftDistanceVariance; }
+    const auto& GetHitPositionZ() const { return fHitPositionZ; }
+    const auto& GetHitPositionZVariance() const { return fHitPositionZVariance; }
+    const auto& GetCellID() const { return fCellID; }
+    const auto& GetLayerID() const { return fLayerID; }
 
     void SetHitTime(Double_t val) { fHitTime = val; }
     void SetWirePosition(const TEveVector2D& val) { fWirePosition = val; }
     void SetWirePosition(TEveVector2D&& val) { fWirePosition = std::move(val); }
     void SetWirePosition(Double_t x, Double_t y) { fWirePosition.fX = x; fWirePosition.fY = y; }
-    void SetDriftDistance(Double_t r) { fDriftDistance = r; }
+    void SetDriftDistance(Double_t d) { fDriftDistance = d; }
+    void SetDriftDistanceVariance(Double_t var) { fDriftDistanceVariance = var; }
     void SetHitPositionZ(Double_t z) { fHitPositionZ = z; }
+    void SetHitPositionZVariance(Double_t var) { fHitPositionZVariance = var; }
     void SetCellID(Int_t val) { fCellID = val; }
     void SetLayerID(Int_t val) { fLayerID = val; }
 
@@ -40,7 +44,9 @@ private:
     Double_t fHitTime;
     TEveVector2D fWirePosition;
     Double_t fDriftDistance;
+    Double_t fDriftDistanceVariance;
     Double_t fHitPositionZ;
+    Double_t fHitPositionZVariance;
     Int_t fCellID;
     Int_t fLayerID;
 
@@ -48,7 +54,9 @@ private:
     static Column<Float_t> fgWirePositionX;
     static Column<Float_t> fgWirePositionY;
     static Column<Float_t> fgDriftDistance;
+    static Column<Float_t> fgDriftDistanceVariance;
     static Column<Float_t> fgHitPositionZ;
+    static Column<Float_t> fgHitPositionZVariance;
     static Column<Int_t> fgCellID;
     static Column<Int_t> fgLayerID;
 };
