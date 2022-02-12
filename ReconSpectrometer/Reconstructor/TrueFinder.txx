@@ -6,6 +6,10 @@ TrueFinder() :
 template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t>
 void MACE::ReconSpectrometer::Reconstructor::TrueFinder<FitterT_t, SpectromrterHit_t, Track_t>::
 Reconstruct(const std::vector<HitPtr>& hitData) {
+    Base::fTrackList.clear();
+    Base::fReconstructedHitList.clear();
+    Base::fOmittedHitList.clear();
+
     const auto& [minHitIter, maxHitIter] = std::minmax_element(hitData.cbegin(), hitData.cend(),
         [](const auto& hit1, const auto& hit2)->bool {
             return hit1->GetTrackID() < hit2->GetTrackID();
