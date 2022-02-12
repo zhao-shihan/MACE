@@ -20,11 +20,13 @@ protected:
     virtual ~Reconstructor() {}
 
 public:
+    const auto& GetFitter() const { return fFitter; }
+
     virtual void Reconstruct(const std::vector<HitPtr>& hitData) = 0;
 
-    const auto& GetTrackList() { return fTrackList; }
-    const auto& GetReconstructedHitList() { return fReconstructedHitList; }
-    const auto& GetOmittedHitList() { return fOmittedHitList; }
+    const auto& GetTrackList() const { return fTrackList; }
+    const auto& GetReconstructedHitList() const { return fReconstructedHitList; }
+    const auto& GetOmittedHitList() const { return fOmittedHitList; }
 
 protected:
     const std::unique_ptr<Fitter_t> fFitter;

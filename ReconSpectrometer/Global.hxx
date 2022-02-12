@@ -1,7 +1,12 @@
 #pragma once
 
+#include <iostream>
+
 #include "MACEGlobal.hxx"
 #include "DataModel/Hit/SpectrometerHit.hxx"
+#include "DataModel/SimHit/SpectrometerSimHit.hxx"
+#include "DataModel/Track/HelixTrack.hxx"
+#include "DataModel/Track/PhysicsTrack.hxx"
 
 #define MACE_RECONSPECTROMETER_SPECTROMETERHIT_CONCEPT(Hit_t) \
     static_assert(std::is_base_of_v<MACE::DataModel::SpectrometerHit, Hit_t>, \

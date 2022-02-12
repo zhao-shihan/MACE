@@ -16,30 +16,30 @@ Reconstruct(const std::vector<HitPtr>& hitData) {
 
     fClassifier.clear();
     fClassifier.resize(maxTrackID - minTrackID + 1);
-    for (auto&& candidateContainer : fClassifier) {
-        candidateContainer.reserve(fThreshold + 10);
+    for (auto&& hitData : fClassifier) {
+        hitData.reserve(fThreshold + 10);
     }
 
     for (auto&& hitPtr : std::as_const(hitData)) {
         fClassifier[hitPtr->GetTrackID() - minTrackID].emplace_back(hitPtr);
     }
 
-    for (auto&& candidate : fClassifier) {
-        if (candidate.size() < fThreshold) {
-            Base::fOmittedHitList.insert(Base::fOmittedHitList.cend(), candidate.cbegin(), candidate.cend());
+    for (auto&& hitData : fClassifier) {
+        if (hitData.size() < fThreshold) {
+            Base::fOmittedHitList.insert(Base::fOmittedHitList.cend(), hitData.cbegin(), hitData.cend());
             continue;
         }
 
-        Base::fFitter->Fit(candidate, Track_t());
-        const auto& track = Base::fFitter->GetFittedTrack();
-        const auto& fitted = Base::fFitter->GetFittedList();
-        const auto& omitted = Base::fFitter->GetOmittedList();
+        auto track = std::make_shared<Track_t>();
+        bool good = Base::fFitter->Fit(hitData, track);
+        const auto& omitted = Base::fFitter->GetOmitted();
 
-        if (fitted.size() < fThreshold) {
-            Base::fOmittedHitList.insert(Base::fOmittedHitList.cend(), candidate.cbegin(), candidate.cend());
+        if (hitData.size() < fThreshold or !good) {
+            Base::fOmittedHitList.insert(Base::fOmittedHitList.cend(), hitData.cbegin(), hitData.cend());
+            Base::fOmittedHitList.insert(Base::fOmittedHitList.cend(), omitted.cbegin(), omitted.cend());
         } else {
             Base::fTrackList.emplace_back(track);
-            Base::fReconstructedHitList.emplace_back(fitted);
+            Base::fReconstructedHitList.emplace_back(hitData);
             Base::fOmittedHitList.insert(Base::fOmittedHitList.cend(), omitted.cbegin(), omitted.cend());
         }
     }

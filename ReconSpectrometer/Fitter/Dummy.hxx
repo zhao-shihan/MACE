@@ -19,10 +19,7 @@ public:
     Dummy();
     ~Dummy();
 
-    bool Fit(const std::vector<HitPtr>& hitData, const Track_t& seed) override;
-
-private:
-    void SortHitsByCellID();
+    bool Fit(std::vector<HitPtr>& hitData, TrackPtr& seed) override;
 };
 
 #include "ReconSpectrometer/Fitter/Dummy.txx"

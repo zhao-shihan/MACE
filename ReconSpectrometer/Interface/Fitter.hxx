@@ -18,15 +18,10 @@ protected:
     virtual ~Fitter() {}
 
 public:
-    virtual bool Fit(const std::vector<HitPtr>& hitData, const Track_t& seed) = 0;
-
-    const auto& GetFittedTrack() const { return fFittedTrack; }
-    const auto& GetFittedList() const { return fFittedList; }
-    const auto& GetOmittedList() const { return fOmittedList; }
+    virtual bool Fit(std::vector<HitPtr>& hitDataToBeFitted, TrackPtr& seed) = 0;
+    const auto& GetOmitted() const { return fOmittedList; }
 
 protected:
-    TrackPtr fFittedTrack;
-    std::vector<HitPtr> fFittedList;
     std::vector<HitPtr> fOmittedList;
 };
 

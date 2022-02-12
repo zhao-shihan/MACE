@@ -133,7 +133,7 @@ namespace MACE {
 
     namespace ReconSpectrometer {
         namespace Fitter {
-            template<class SpectromrterHit_t, class Track_t> class DirectLeastChiSquare;
+            template<class SpectromrterHit_t, class Track_t> class DirectSubSpaceLeastVariance;
             template<class SpectromrterHit_t, class Track_t> class Dummy;
         }
         namespace Interface {
