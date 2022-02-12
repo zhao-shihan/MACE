@@ -6,7 +6,6 @@ using namespace MACE::DataModel::Interface;
 
 PersistencyHandler::PersistencyHandler() :
     fFile(nullptr),
-    fTreeIndex(0),
     fTreeNamePrefix(std::make_pair<TString, TString>("Eve", "_")),
     fTreeNameSuffix(std::make_pair<TString, TString>("", "")) {}
 
@@ -76,16 +75,16 @@ static Bool_t Split(const TString& format, Char_t indexer, std::pair<TString, TS
 
 void PersistencyHandler::SetTreeNameIndexer(Char_t indexer) {
     fTreeNameIndexer = indexer;
-    fPrefixHasIndexer = Split(fTreeNamePrefixFormat, fTreeIndex, fTreeNamePrefix);
-    fSuffixHasIndexer = Split(fTreeNameSuffixFormat, fTreeIndex, fTreeNameSuffix);
+    fPrefixHasIndexer = Split(fTreeNamePrefixFormat, fTreeNameIndexer, fTreeNamePrefix);
+    fSuffixHasIndexer = Split(fTreeNameSuffixFormat, fTreeNameIndexer, fTreeNameSuffix);
 }
 
 void PersistencyHandler::SetTreeNamePrefixFormat(const TString& prefix) {
     fTreeNamePrefixFormat = prefix;
-    fPrefixHasIndexer = Split(fTreeNamePrefixFormat, fTreeIndex, fTreeNamePrefix);
+    fPrefixHasIndexer = Split(fTreeNamePrefixFormat, fTreeNameIndexer, fTreeNamePrefix);
 }
 
 void PersistencyHandler::SetTreeNameSuffixFormat(const TString& suffix) {
     fTreeNameSuffixFormat = suffix;
-    fSuffixHasIndexer = Split(fTreeNameSuffixFormat, fTreeIndex, fTreeNameSuffix);
+    fSuffixHasIndexer = Split(fTreeNameSuffixFormat, fTreeNameIndexer, fTreeNameSuffix);
 }

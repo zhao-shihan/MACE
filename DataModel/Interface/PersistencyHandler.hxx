@@ -19,23 +19,18 @@ public:
     void SetTreeNamePrefixFormat(const TString& prefix);
     void SetTreeNameSuffixFormat(const TString& suffix);
 
-    void SetTreeIndex(Long64_t index) { fTreeIndex = index; }
-    void NextTree() { ++fTreeIndex; }
-    Long64_t GetTreeIndex() { return fTreeIndex; }
-
     const TString& GetTreeNamePrefixFormat() { return fTreeNamePrefixFormat; }
     const TString& GetTreeNameSuffixFormat() { return fTreeNameSuffixFormat; }
-    TString GetTreeNamePrefix() { return fPrefixHasIndexer ? (fTreeNamePrefix.first + fTreeIndex + fTreeNamePrefix.second) : fTreeNamePrefixFormat; }
-    TString GetTreeNameSuffix() { return fSuffixHasIndexer ? (fTreeNameSuffix.first + fTreeIndex + fTreeNameSuffix.second) : fTreeNameSuffixFormat; }
+    TString GetTreeNamePrefix(Long64_t i) { return fPrefixHasIndexer ? (fTreeNamePrefix.first + i + fTreeNamePrefix.second) : fTreeNamePrefixFormat; }
+    TString GetTreeNameSuffix(Long64_t i) { return fSuffixHasIndexer ? (fTreeNameSuffix.first + i + fTreeNameSuffix.second) : fTreeNameSuffixFormat; }
     template<class Data_t>
-    TString GetTreeName() { return GetTreeNamePrefix() + static_cast<const char*>(Data_t::Name()) + GetTreeNameSuffix(); }
+    TString GetTreeName(Long64_t i) { return GetTreeNamePrefix(i) + static_cast<const char*>(Data_t::Name()) + GetTreeNameSuffix(i); }
 
 protected:
     TFile* fFile;
 
 private:
     Char_t                      fTreeNameIndexer = '#';
-    Long64_t                    fTreeIndex;
     TString                     fTreeNamePrefixFormat = "Eve#_";
     TString                     fTreeNameSuffixFormat = "";
     Bool_t                      fPrefixHasIndexer = true;

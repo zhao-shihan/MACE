@@ -8,12 +8,6 @@ PersistencyWriter::PersistencyWriter() :
     PersistencyHandler(),
     fTreeAndBehaviours(0) {}
 
-PersistencyWriter::PersistencyWriter(const char* fileName) :
-    PersistencyHandler(),
-    fTreeAndBehaviours(0) {
-    PersistencyWriter::Open(fileName);
-}
-
 PersistencyWriter::~PersistencyWriter() {
     if (!fTreeAndBehaviours.empty()) {
         std::cerr << "Warning from MACE::DataModel::PersistencyWriter::~PersistencyWriter : "

@@ -23,7 +23,7 @@ public:
     void Open();
     using DataModel::PersistencyWriter::Close;
 
-    void SetTrueEventID(G4int trueEventID) { SetTreeIndex(trueEventID); }
+    void SetTrueEventID(G4int trueEventID) { fTrueEventID = trueEventID; }
     void SubmitCalorimeterHC(const std::vector<Hit::CalorimeterHit*>* hitList) { fpCalorimeterHitList = hitList; }
     void SubmitVertexDetectorHC(const std::vector<Hit::VertexDetectorHit*>* hitList) { fpVertexDetectorHitList = hitList; }
     void SubmitSpectrometerHC(const std::vector<Hit::SpectrometerHit*>* hitList) { fpSpectrometerHitList = hitList; }
@@ -33,6 +33,7 @@ private:
     G4String fFileName = "MACE_SimMACE";
     G4bool   fEnableCoincidenceOfCalorimeter = true;
     G4bool   fEnableCoincidenceOfVertexDetector = true;
+    G4int    fTrueEventID;
 
     const std::vector<Hit::CalorimeterHit*>* fpCalorimeterHitList;
     const std::vector<Hit::VertexDetectorHit*>* fpVertexDetectorHitList;

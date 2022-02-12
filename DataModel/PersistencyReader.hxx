@@ -11,27 +11,34 @@ class MACE::DataModel::PersistencyReader :
     PersistencyReader& operator=(const PersistencyReader&) = delete;
 public:
     PersistencyReader();
-    PersistencyReader(const char* fileName);
     virtual ~PersistencyReader() {}
 
     virtual void Open(const char* fileName, Option_t* = nullptr) override { PersistencyHandler::Open(fileName, "READ"); }
     virtual void Close(Option_t* option = nullptr) { PersistencyHandler::Close(option); }
 
     template<class Data_t>
-    std::vector<std::shared_ptr<Data_t>> CreateListFromTree();
-    template<class Data_t>
-    TTree* GetTree() { return fFile->Get<TTree>(GetTreeName<Data_t>()); }
+    TTree* GetTree(Long64_t i) { return fFile->Get<TTree>(GetTreeName<Data_t>(i)); }
+    template<class DataInTree_t, class DataInList_t = DataInTree_t>
+    std::pair<std::vector<std::shared_ptr<DataInList_t>>, TTree*> CreateListFromTree(Long64_t treeIndex = 0);
 };
 
-template<class Data_t>
-std::vector<std::shared_ptr<Data_t>> MACE::DataModel::PersistencyReader::CreateListFromTree() {
-    TTree* tree = GetTree<Data_t>();
-    std::vector<std::shared_ptr<Data_t>> dataList(0);
-    dataList.reserve(tree->GetEntries());
-    Data_t::ReadBranches(tree);
-    for (Long64_t i = 0; i < tree->GetEntries(); ++i) {
-        tree->GetEntry(i);
-        dataList.emplace_back(std::make_shared<Data_t>());
+template<class DataInTree_t, class DataInList_t>
+std::pair<std::vector<std::shared_ptr<DataInList_t>>, TTree*> MACE::DataModel::PersistencyReader::CreateListFromTree(Long64_t treeIndex) {
+    static_assert(std::is_base_of_v<Interface::Data, DataInTree_t>,
+        "DataInTree_t should be derived from DataModel::Interface::Data");
+    static_assert(std::is_base_of_v<Interface::Data, DataInList_t>,
+        "DataInList_t should be derived from DataModel::Interface::Data");
+    static_assert(std::is_base_of_v<DataInList_t, DataInTree_t>,
+        "DataInList_t should be the base of DataInTree_t");
+    std::vector<std::shared_ptr<DataInList_t>> dataList(0);
+    TTree* tree = GetTree<DataInTree_t>(treeIndex);
+    if (tree != nullptr) {
+        dataList.reserve(tree->GetEntries());
+        DataInList_t::ReadBranches(tree);
+        for (Long64_t i = 0; i < tree->GetEntries(); ++i) {
+            tree->GetEntry(i);
+            dataList.emplace_back(std::make_shared<DataInList_t>());
+        }
     }
-    return dataList;
+    return std::make_pair(dataList, tree);
 }
