@@ -26,4 +26,4 @@ protected:
     static G4NistManager* fgG4Nist;
 };
 
-#include "Geometry/Interface/EntityG4.txx"
+#include "Geometry/Interface/EntityG4.ixx"

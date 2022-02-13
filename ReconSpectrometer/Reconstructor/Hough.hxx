@@ -75,4 +75,5 @@ private:
     std::vector<std::pair<HelixParameters, const std::vector<HitPtr*>*>> fTrackList;
 };
 
-#include "ReconSpectrometer/Reconstructor/Hough.txx" */
+#include "ReconSpectrometer/Reconstructor/Hough.ixx"
+*/

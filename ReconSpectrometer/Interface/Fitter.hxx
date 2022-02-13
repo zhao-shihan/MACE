@@ -25,4 +25,4 @@ protected:
     std::vector<HitPtr> fOmittedList;
 };
 
-#include "ReconSpectrometer/Interface/Fitter.txx"
+#include "ReconSpectrometer/Interface/Fitter.ixx"

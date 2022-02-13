@@ -22,4 +22,4 @@ public:
     bool Fit(std::vector<HitPtr>& hitData, TrackPtr& seed) override;
 };
 
-#include "ReconSpectrometer/Fitter/Dummy.txx"
+#include "ReconSpectrometer/Fitter/Dummy.ixx"

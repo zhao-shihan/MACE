@@ -20,5 +20,5 @@ protected:
     static TGeoElementTable* fgElementTable;
 };
 
-#include "Geometry/Interface/EntityROOT.txx"
+#include "Geometry/Interface/EntityROOT.ixx"
  */

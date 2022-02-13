@@ -36,4 +36,4 @@ protected:
     std::vector<HitPtr> fOmittedHitList;
 };
 
-#include "ReconSpectrometer/Interface/Reconstructor.txx"
+#include "ReconSpectrometer/Interface/Reconstructor.ixx"

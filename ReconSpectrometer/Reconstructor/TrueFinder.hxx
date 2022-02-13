@@ -30,4 +30,4 @@ private:
     std::vector<std::vector<HitPtr>> fClassifier;
 };
 
-#include "ReconSpectrometer/Reconstructor/TrueFinder.txx"
+#include "ReconSpectrometer/Reconstructor/TrueFinder.ixx"

@@ -48,4 +48,4 @@ private:
     double_t fReducedChi2Bound = 20;
 };
 
-#include "ReconSpectrometer/Fitter/DirectSubSpaceLeastVariance.txx"
+#include "ReconSpectrometer/Fitter/DirectSubSpaceLeastVariance.ixx"

@@ -33,4 +33,4 @@ private:
     std::vector<Entity*> fDaughters;
 };
 
-#include "Geometry/Interface/Entity.txx"
+#include "Geometry/Interface/Entity.ixx"
