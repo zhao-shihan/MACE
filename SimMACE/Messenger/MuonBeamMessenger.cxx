@@ -6,9 +6,9 @@
 
 using namespace MACE::SimMACE::Messenger;
 
-MuonBeamMessenger* MuonBeamMessenger::Instance() {
+MuonBeamMessenger& MuonBeamMessenger::Instance() {
     static MuonBeamMessenger instance;
-    return &instance;
+    return instance;
 }
 
 MuonBeamMessenger::MuonBeamMessenger() :
@@ -88,5 +88,3 @@ void MuonBeamMessenger::SetNewValue(G4UIcommand* command, G4String value) {
         fpPrimaryGeneratorAction->SetBeamWidthRMS(fSetBeamWidthRMS->GetNewDoubleValue(value));
     }
 }
-
-

@@ -4,7 +4,15 @@
 
 class MACE::Geometry::Description::VertexDetector final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(VertexDetector);
+public:
+    static VertexDetector& Instance();
+
+private:
+    VertexDetector() noexcept {}
+    ~VertexDetector() noexcept {}
+    VertexDetector(const VertexDetector&) = delete;
+    VertexDetector& operator=(const VertexDetector&) = delete;
+
 public:
     const char* GetName()                   const override { return "VertexDetector"; }
     const char* GetOverallDescription()     const override { return ""; }

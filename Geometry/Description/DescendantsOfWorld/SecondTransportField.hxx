@@ -4,7 +4,15 @@
 
 class MACE::Geometry::Description::SecondTransportField final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(SecondTransportField);
+public:
+    static SecondTransportField& Instance();
+
+private:
+    SecondTransportField() noexcept {}
+    ~SecondTransportField() noexcept {}
+    SecondTransportField(const SecondTransportField&) = delete;
+    SecondTransportField& operator=(const SecondTransportField&) = delete;
+
 public:
     const char* GetName()                   const override { return "SecondTransportField"; }
     const char* GetOverallDescription()     const override { return ""; }

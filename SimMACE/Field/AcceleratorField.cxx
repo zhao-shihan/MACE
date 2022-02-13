@@ -5,7 +5,7 @@ using namespace MACE::SimMACE::Field;
 
 AcceleratorField::AcceleratorField() :
     G4ElectroMagneticField() {
-    Messenger::FieldMessenger::Instance()->Set(this);
+    Messenger::FieldMessenger::Instance().Set(this);
 }
 
 void AcceleratorField::GetFieldValue(const G4double*, G4double* F) const {

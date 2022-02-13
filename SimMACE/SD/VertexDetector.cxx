@@ -43,5 +43,5 @@ G4bool SD::VertexDetector::ProcessHits(G4Step* step, G4TouchableHistory*) {
 }
 
 void SD::VertexDetector::EndOfEvent(G4HCofThisEvent*) {
-    Analysis::Instance()->SubmitVertexDetectorHC(fHitsCollection->GetVector());
+    Analysis::Instance().SubmitVertexDetectorHC(fHitsCollection->GetVector());
 }

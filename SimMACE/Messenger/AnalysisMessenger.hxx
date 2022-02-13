@@ -10,7 +10,8 @@
 class MACE::SimMACE::Messenger::AnalysisMessenger final :
     public G4UImessenger {
 public:
-    static AnalysisMessenger* Instance();
+    static AnalysisMessenger& Instance();
+
 private:
     AnalysisMessenger();
     ~AnalysisMessenger();

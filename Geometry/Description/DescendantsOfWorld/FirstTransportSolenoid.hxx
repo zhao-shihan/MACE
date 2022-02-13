@@ -4,7 +4,15 @@
 
 class MACE::Geometry::Description::FirstTransportSolenoid final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(FirstTransportSolenoid);
+public:
+    static FirstTransportSolenoid& Instance();
+
+private:
+    FirstTransportSolenoid() noexcept {}
+    ~FirstTransportSolenoid() noexcept {}
+    FirstTransportSolenoid(const FirstTransportSolenoid&) = delete;
+    FirstTransportSolenoid& operator=(const FirstTransportSolenoid&) = delete;
+
 public:
     const char* GetName()                   const override { return "FirstTransportSolenoid"; }
     const char* GetOverallDescription()     const override { return ""; }

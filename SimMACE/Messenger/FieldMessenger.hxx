@@ -8,10 +8,11 @@
 class MACE::SimMACE::Messenger::FieldMessenger final :
     public G4UImessenger {
 public:
-    static FieldMessenger* Instance();
+    static FieldMessenger& Instance();
+
 private:
     FieldMessenger();
-    ~FieldMessenger();
+    ~FieldMessenger() noexcept {}
     FieldMessenger(const FieldMessenger&) = delete;
     FieldMessenger& operator=(const FieldMessenger&) = delete;
 

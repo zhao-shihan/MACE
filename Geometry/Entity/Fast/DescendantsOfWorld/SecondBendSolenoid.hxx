@@ -8,12 +8,12 @@
 class MACE::Geometry::Entity::Fast::SecondBendSolenoid final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SecondBendSolenoid> {
     void ConstructSelf() override {
-        auto name = GetDescription()->GetName();
-        auto innerRadius = GetDescription()->GetInnerRaidus();
-        auto outerRaidus = GetDescription()->GetOuterRaidus();
-        auto bendRadius = GetDescription()->GetBendRadius();
-        auto xPosition = GetDescription()->GetXPosition();
-        auto zPosition = GetDescription()->GetZPosition();
+        auto name = GetDescription().GetName();
+        auto innerRadius = GetDescription().GetInnerRaidus();
+        auto outerRaidus = GetDescription().GetOuterRaidus();
+        auto bendRadius = GetDescription().GetBendRadius();
+        auto xPosition = GetDescription().GetXPosition();
+        auto zPosition = GetDescription().GetZPosition();
 
         auto material = fgG4Nist->FindOrBuildMaterial("G4_Cu");
 

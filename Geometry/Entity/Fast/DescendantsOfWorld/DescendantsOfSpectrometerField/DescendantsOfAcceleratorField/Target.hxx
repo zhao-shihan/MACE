@@ -8,10 +8,10 @@
 class MACE::Geometry::Entity::Fast::Target final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::Target> {
     void ConstructSelf() override {
-        auto name = GetDescription()->GetName();
-        auto width = GetDescription()->GetWidth();
-        auto thickness = GetDescription()->GetThickness();
-        auto downZ = GetDescription()->GetDownZPosition();
+        auto name = GetDescription().GetName();
+        auto width = GetDescription().GetWidth();
+        auto thickness = GetDescription().GetThickness();
+        auto downZ = GetDescription().GetDownZPosition();
 
         auto material = fgG4Nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30_mg_cm3);
 

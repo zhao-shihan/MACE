@@ -15,5 +15,4 @@ public:
 private:
     PrimaryGeneratorAction* const fpPrimaryGeneratorAction;
     EventAction* const fpEventAction;
-    Analysis* const fpAnalysis;
 };

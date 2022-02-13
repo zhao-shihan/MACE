@@ -4,7 +4,15 @@
 
 class MACE::Geometry::Description::FirstTransportField final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(FirstTransportField);
+public:
+    static FirstTransportField& Instance();
+
+private:
+    FirstTransportField() noexcept {}
+    ~FirstTransportField() noexcept {}
+    FirstTransportField(const FirstTransportField&) = delete;
+    FirstTransportField& operator=(const FirstTransportField&) = delete;
+
 public:
     const char* GetName()                   const override { return "FirstTransportField"; }
     const char* GetOverallDescription()     const override { return ""; }

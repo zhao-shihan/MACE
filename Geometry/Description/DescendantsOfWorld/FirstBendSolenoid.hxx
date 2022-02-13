@@ -4,7 +4,15 @@
 
 class MACE::Geometry::Description::FirstBendSolenoid final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(FirstBendSolenoid);
+public:
+    static FirstBendSolenoid& Instance();
+
+private:
+    FirstBendSolenoid() noexcept {}
+    ~FirstBendSolenoid() noexcept {}
+    FirstBendSolenoid(const FirstBendSolenoid&) = delete;
+    FirstBendSolenoid& operator=(const FirstBendSolenoid&) = delete;
+
 public:
     const char* GetName()                   const override { return "FirstBendSolenoid"; }
     const char* GetOverallDescription()     const override { return ""; }

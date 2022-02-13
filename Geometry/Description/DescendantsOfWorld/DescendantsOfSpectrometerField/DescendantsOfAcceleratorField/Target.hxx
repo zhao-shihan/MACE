@@ -4,7 +4,15 @@
 
 class MACE::Geometry::Description::Target final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(Target);
+public:
+    static Target& Instance();
+
+private:
+    Target() noexcept {}
+    ~Target() noexcept {}
+    Target(const Target&) = delete;
+    Target& operator=(const Target&) = delete;
+
 public:
     const char* GetName()                   const override { return "Target"; }
     const char* GetOverallDescription()     const override { return "Muonium target."; }

@@ -5,9 +5,9 @@
 
 using namespace MACE::SimMACE::Messenger;
 
-AnalysisMessenger* AnalysisMessenger::Instance() {
+AnalysisMessenger& AnalysisMessenger::Instance() {
     static AnalysisMessenger instance;
-    return &instance;
+    return instance;
 }
 
 AnalysisMessenger::AnalysisMessenger() :

@@ -4,7 +4,15 @@
 
 class MACE::Geometry::Description::SecondBendField final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(SecondBendField);
+public:
+    static SecondBendField& Instance();
+
+private:
+    SecondBendField() noexcept {}
+    ~SecondBendField() noexcept {}
+    SecondBendField(const SecondBendField&) = delete;
+    SecondBendField& operator=(const SecondBendField&) = delete;
+
 public:
     const char* GetName()                   const override { return "SecondBendField"; }
     const char* GetOverallDescription()     const override { return ""; }

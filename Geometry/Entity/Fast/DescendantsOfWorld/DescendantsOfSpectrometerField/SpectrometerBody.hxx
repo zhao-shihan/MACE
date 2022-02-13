@@ -8,14 +8,14 @@
 class MACE::Geometry::Entity::Fast::SpectrometerBody final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SpectrometerBody> {
     void ConstructSelf() override {
-        auto name = GetDescription()->GetName();
-        auto shellInnerThickness = GetDescription()->GetShellInnerThickness();
-        auto shellSideThickness = GetDescription()->GetShellSideThickness();
-        auto shellOuterThickness = GetDescription()->GetShellOuterThickness();
-        auto gasInnerRadius = GetDescription()->GetGasInnerRadius();
-        auto gasOuterRadius = GetDescription()->GetGasOuterRadius();
-        auto gasInnerLength = GetDescription()->GetGasInnerLength();
-        auto gasOuterLength = GetDescription()->GetGasOuterLength();
+        auto name = GetDescription().GetName();
+        auto shellInnerThickness = GetDescription().GetShellInnerThickness();
+        auto shellSideThickness = GetDescription().GetShellSideThickness();
+        auto shellOuterThickness = GetDescription().GetShellOuterThickness();
+        auto gasInnerRadius = GetDescription().GetGasInnerRadius();
+        auto gasOuterRadius = GetDescription().GetGasOuterRadius();
+        auto gasInnerLength = GetDescription().GetGasInnerLength();
+        auto gasOuterLength = GetDescription().GetGasOuterLength();
 
         auto shellMaterial = fgG4Nist->BuildMaterialWithNewDensity("CarbonFiber", "G4_C", 1.7_g_cm3);
 

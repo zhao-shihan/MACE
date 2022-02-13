@@ -12,8 +12,11 @@ using namespace MACE::SimMACE::Action;
 RunAction::RunAction(PrimaryGeneratorAction* pPrimaryGeneratorAction, EventAction* pEventAction) :
     G4UserRunAction(),
     fpPrimaryGeneratorAction(pPrimaryGeneratorAction),
-    fpEventAction(pEventAction),
-    fpAnalysis(Analysis::Instance()) {}
+    fpEventAction(pEventAction) {
+    // need to create an instance of Analysis ahead of time,
+    // otherwise AnalysisMessenger won't work!
+    Analysis::Instance();
+}
 
 RunAction::~RunAction() {}
 
@@ -32,9 +35,9 @@ void RunAction::BeginOfRunAction(const G4Run* run) {
     fpPrimaryGeneratorAction->SetFirstTrueEventIDOfThisRank(firstTrueEventIDOfThisRank);
     fpEventAction->SetFirstTrueEventIDOfThisRank(firstTrueEventIDOfThisRank);
 
-    fpAnalysis->Open();
+    Analysis::Instance().Open();
 }
 
 void RunAction::EndOfRunAction(const G4Run*) {
-    fpAnalysis->Close();
+    Analysis::Instance().Close();
 }

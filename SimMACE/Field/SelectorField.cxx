@@ -5,7 +5,7 @@ using namespace MACE::SimMACE::Field;
 
 SelectorField::SelectorField() :
     G4ElectroMagneticField() {
-    Messenger::FieldMessenger::Instance()->Set(this);
+    Messenger::FieldMessenger::Instance().Set(this);
 }
 
 void SelectorField::GetFieldValue(const G4double*, G4double* F) const {

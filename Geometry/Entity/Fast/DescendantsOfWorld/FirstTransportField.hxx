@@ -8,10 +8,10 @@
 class MACE::Geometry::Entity::Fast::FirstTransportField final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::FirstTransportField> {
     void ConstructSelf() override {
-        auto name = GetDescription()->GetName();
-        auto raidus = GetDescription()->GetRaidus();
-        auto length = GetDescription()->GetLength();
-        auto upZPosition = GetDescription()->GetUpZPosition();
+        auto name = GetDescription().GetName();
+        auto raidus = GetDescription().GetRaidus();
+        auto length = GetDescription().GetLength();
+        auto upZPosition = GetDescription().GetUpZPosition();
 
         auto material = Mother()->GetVolume()->GetLogicalVolume()->GetMaterial();
 

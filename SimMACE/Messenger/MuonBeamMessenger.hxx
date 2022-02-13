@@ -8,7 +8,8 @@
 class MACE::SimMACE::Messenger::MuonBeamMessenger final :
     public G4UImessenger {
 public:
-    static MuonBeamMessenger* Instance();
+    static MuonBeamMessenger& Instance();
+
 private:
     MuonBeamMessenger();
     ~MuonBeamMessenger();

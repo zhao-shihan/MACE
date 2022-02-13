@@ -6,9 +6,9 @@
 
 using namespace MACE::SimMACE::Messenger;
 
-PhysicsMessenger* PhysicsMessenger::Instance() {
+PhysicsMessenger& PhysicsMessenger::Instance() {
     static PhysicsMessenger instance;
-    return &instance;
+    return instance;
 }
 
 PhysicsMessenger::PhysicsMessenger() :

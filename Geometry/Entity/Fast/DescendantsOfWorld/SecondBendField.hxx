@@ -8,11 +8,11 @@
 class MACE::Geometry::Entity::Fast::SecondBendField final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SecondBendField> {
     void ConstructSelf() override {
-        auto name = GetDescription()->GetName();
-        auto raidus = GetDescription()->GetRaidus();
-        auto bendRadius = GetDescription()->GetBendRadius();
-        auto xPosition = GetDescription()->GetXPosition();
-        auto zPosition = GetDescription()->GetZPosition();
+        auto name = GetDescription().GetName();
+        auto raidus = GetDescription().GetRaidus();
+        auto bendRadius = GetDescription().GetBendRadius();
+        auto xPosition = GetDescription().GetXPosition();
+        auto zPosition = GetDescription().GetZPosition();
 
         auto material = Mother()->GetVolume()->GetLogicalVolume()->GetMaterial();
 

@@ -11,7 +11,7 @@ using namespace MACE::SimMACE::Physics;
 MuoniumProduction::MuoniumProduction(const G4String& name, G4ProcessType aType) :
     G4VRestProcess(name, aType),
     fParticleChange(new G4ParticleChange()) {
-    Messenger::PhysicsMessenger::Instance()->Set(this);
+    Messenger::PhysicsMessenger::Instance().Set(this);
 }
 
 MuoniumProduction::~MuoniumProduction() {

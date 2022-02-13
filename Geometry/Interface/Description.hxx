@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "Geometry/Global.hxx"
+#include "Geometry/UnitSystem.hxx"
 
 class MACE::Geometry::Interface::Description {
 protected:
@@ -23,20 +24,3 @@ public:
 
     friend std::ostream& operator<<(std::ostream& out, const Description& geomDescp);
 };
-
-#define MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(DerivedGeometryDescriptionClass) \
-    public: \
-        static DerivedGeometryDescriptionClass* Instance() { \
-            static DerivedGeometryDescriptionClass instance; \
-            return &instance; \
-        } \
-    private: \
-        DerivedGeometryDescriptionClass() noexcept { \
-            static_assert(std::is_base_of<MACE::Geometry::Interface::Description, DerivedGeometryDescriptionClass>::value, \
-                "DerivedGeometryDescriptionClass here should be derived from MACE::Geometry::Interface::Description."); \
-            static_assert(std::is_final<DerivedGeometryDescriptionClass>::value, \
-                "DerivedGeometryDescriptionClass should be a final class."); \
-        } \
-        ~DerivedGeometryDescriptionClass() noexcept final {} \
-        DerivedGeometryDescriptionClass(const DerivedGeometryDescriptionClass&) = delete; \
-        DerivedGeometryDescriptionClass& operator=(const DerivedGeometryDescriptionClass&) = delete

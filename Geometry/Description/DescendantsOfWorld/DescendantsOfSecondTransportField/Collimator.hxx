@@ -4,7 +4,15 @@
 
 class MACE::Geometry::Description::Collimator final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(Collimator);
+public:
+    static Collimator& Instance();
+
+private:
+    Collimator() noexcept {}
+    ~Collimator() noexcept {}
+    Collimator(const Collimator&) = delete;
+    Collimator& operator=(const Collimator&) = delete;
+
 public:
     const char* GetName()                   const override { return "Collimator"; }
     const char* GetOverallDescription()     const override { return ""; }

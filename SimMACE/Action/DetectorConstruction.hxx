@@ -17,7 +17,6 @@
 #include "Geometry/Entity/Fast/DescendantsOfWorld/FirstBendSolenoid.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/FirstTransportField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/FirstTransportSolenoid.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/VertexDetectorShield.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/SecondBendField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/SecondBendSolenoid.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/SecondTransportField.hxx"
@@ -26,6 +25,7 @@
 #include "Geometry/Entity/Fast/DescendantsOfWorld/SpectrometerShield.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/ThirdTransportField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/ThirdTransportSolenoid.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/VertexDetectorShield.hxx"
 #include "Geometry/Entity/Fast/World.hxx"
 
 #define MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(ClassName) \
@@ -60,7 +60,6 @@ private:
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(FirstBendSolenoid);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(FirstTransportField);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(FirstTransportSolenoid);
-    MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(VertexDetectorShield);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(SecondBendField);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(SecondBendSolenoid);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(SecondTransportField);
@@ -70,6 +69,7 @@ private:
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(ThirdTransportField);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(ThirdTransportSolenoid);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(World);
+    MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(VertexDetectorShield);
 };
 
 #undef MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER

@@ -7,14 +7,18 @@
 
 #include "DataModel/PersistencyWriter.hxx"
 
-class MACE::SimMACE::Analysis final : private MACE::DataModel::PersistencyWriter {
-    Analysis(const Analysis&) = delete;
-    Analysis& operator=(const Analysis&) = delete;
+class MACE::SimMACE::Analysis final :
+    private MACE::DataModel::PersistencyWriter {
+public:
+    static Analysis& Instance();
+
 private:
     Analysis();
-public:
-    static Analysis* Instance();
+    ~Analysis() noexcept {}
+    Analysis(const Analysis&) = delete;
+    Analysis& operator=(const Analysis&) = delete;
 
+public:
     void SetFileName(const G4String& fileName) { fFileName = fileName; }
     const G4String& GetFileName() const { return fFileName; }
     void SetEnableCoincidenceOfCalorimeter(G4bool val) { fEnableCoincidenceOfCalorimeter = val; }
@@ -30,7 +34,7 @@ public:
     void WriteEvent();
 
 private:
-    G4String fFileName = "MACE_SimMACE";
+    G4String fFileName = "untitled_SimMACE";
     G4bool   fEnableCoincidenceOfCalorimeter = true;
     G4bool   fEnableCoincidenceOfVertexDetector = true;
     G4int    fTrueEventID;

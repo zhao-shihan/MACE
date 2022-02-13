@@ -11,7 +11,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
     G4VUserPrimaryGeneratorAction(),
     fParticleGun(new G4ParticleGun(G4MuonPlus::Definition())) {
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0, 0, 1));
-    Messenger::MuonBeamMessenger::Instance()->Set(this);
+    Messenger::MuonBeamMessenger::Instance().Set(this);
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction() {

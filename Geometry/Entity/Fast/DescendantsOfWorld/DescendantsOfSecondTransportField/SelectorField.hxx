@@ -8,10 +8,10 @@
 class MACE::Geometry::Entity::Fast::SelectorField final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SelectorField> {
     void ConstructSelf() override {
-        auto name = GetDescription()->GetName();
-        auto raidus = GetDescription()->GetRaidus();
-        auto length = GetDescription()->GetLength();
-        auto zPosition = GetDescription()->GetZPosition();
+        auto name = GetDescription().GetName();
+        auto raidus = GetDescription().GetRaidus();
+        auto length = GetDescription().GetLength();
+        auto zPosition = GetDescription().GetZPosition();
 
         auto material = Mother()->GetVolume()->GetLogicalVolume()->GetMaterial();
 

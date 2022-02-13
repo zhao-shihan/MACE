@@ -43,5 +43,5 @@ G4bool SD::Calorimeter::ProcessHits(G4Step* step, G4TouchableHistory*) {
 }
 
 void SD::Calorimeter::EndOfEvent(G4HCofThisEvent*) {
-    Analysis::Instance()->SubmitCalorimeterHC(fHitsCollection->GetVector());
+    Analysis::Instance().SubmitCalorimeterHC(fHitsCollection->GetVector());
 }

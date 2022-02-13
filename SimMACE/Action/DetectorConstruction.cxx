@@ -33,7 +33,6 @@ void DetectorConstruction::ConstructVolumes() {
     fWorld->AddDaughter(fFirstBendSolenoid);
     fWorld->AddDaughter(fFirstTransportField);
     fWorld->AddDaughter(fFirstTransportSolenoid);
-    fWorld->AddDaughter(fVertexDetectorShield);
     fWorld->AddDaughter(fSecondBendField);
     fWorld->AddDaughter(fSecondBendSolenoid);
     fWorld->AddDaughter(fSecondTransportField);
@@ -42,6 +41,7 @@ void DetectorConstruction::ConstructVolumes() {
     fWorld->AddDaughter(fSpectrometerShield);
     fWorld->AddDaughter(fThirdTransportField);
     fWorld->AddDaughter(fThirdTransportSolenoid);
+    fWorld->AddDaughter(fVertexDetectorShield);
 
     fWorld->ConstructSelfAndDescendants();
 }

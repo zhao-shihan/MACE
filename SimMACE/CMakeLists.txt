@@ -10,8 +10,8 @@ include_directories(${MACE_THIRD_PARTY_DIR}/G4MPI/include)
 file(GLOB_RECURSE SimMACE_SOURCES ${PROJECT_SOURCE_DIR}/*.cxx)
 
 # targets
-add_executable(SimMACE SimMACE.cxx ${SimMACE_SOURCES})
-target_link_libraries(SimMACE ${Geant4_LIBRARIES} G4mpi-static SimMTransport_static DataModel)
+add_executable(SimMACE ${SimMACE_SOURCES})
+target_link_libraries(SimMACE ${Geant4_LIBRARIES} G4mpi-static SimMTransport_static DataModel Geometry)
 
 file(GLOB SimMACE_MACROS ${PROJECT_SOURCE_DIR}/macros/*.mac)
 foreach(_macros ${SimMACE_MACROS})

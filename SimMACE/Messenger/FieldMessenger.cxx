@@ -11,9 +11,9 @@
 
 using namespace MACE::SimMACE::Messenger;
 
-FieldMessenger* FieldMessenger::Instance() {
+FieldMessenger& FieldMessenger::Instance() {
     static FieldMessenger instance;
-    return &instance;
+    return instance;
 }
 
 FieldMessenger::FieldMessenger() :
@@ -42,8 +42,6 @@ FieldMessenger::FieldMessenger() :
     fSetSelectorMagneticField->SetUnitCategory("Magnetic flux density");
     fSetSelectorMagneticField->AvailableForStates(G4State_Idle);
 }
-
-FieldMessenger::~FieldMessenger() {}
 
 void FieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     if (command == fSetTransportMagneticField) {

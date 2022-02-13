@@ -8,10 +8,10 @@
 class MACE::Geometry::Entity::Fast::Calorimeter final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::Calorimeter> {
     void ConstructSelf() override {
-        auto name = GetDescription()->GetName();
-        auto innerRadius = GetDescription()->GetInnerRadius();
-        auto outerRadius = GetDescription()->GetOuterRadius();
-        auto length = GetDescription()->GetLength();
+        auto name = GetDescription().GetName();
+        auto innerRadius = GetDescription().GetInnerRadius();
+        auto outerRadius = GetDescription().GetOuterRadius();
+        auto length = GetDescription().GetLength();
 
         auto material = fgG4Nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
 

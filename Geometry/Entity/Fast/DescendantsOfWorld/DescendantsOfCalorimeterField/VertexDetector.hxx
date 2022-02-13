@@ -8,9 +8,9 @@
 class MACE::Geometry::Entity::Fast::VertexDetector final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::VertexDetector> {
     void ConstructSelf() override {
-        auto name = GetDescription()->GetName();
-        auto width = GetDescription()->GetWidth();
-        auto thickness = GetDescription()->GetThickness();
+        auto name = GetDescription().GetName();
+        auto width = GetDescription().GetWidth();
+        auto thickness = GetDescription().GetThickness();
 
         auto material = fgG4Nist->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4_g_cm3);
 

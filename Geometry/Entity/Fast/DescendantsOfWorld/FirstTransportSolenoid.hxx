@@ -8,11 +8,11 @@
 class MACE::Geometry::Entity::Fast::FirstTransportSolenoid final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::FirstTransportSolenoid> {
     void ConstructSelf() override {
-        auto name = GetDescription()->GetName();
-        auto innerRadius = GetDescription()->GetInnerRaidus();
-        auto outerRaidus = GetDescription()->GetOuterRaidus();
-        auto length = GetDescription()->GetLength();
-        auto upZPosition = GetDescription()->GetUpZPosition();
+        auto name = GetDescription().GetName();
+        auto innerRadius = GetDescription().GetInnerRaidus();
+        auto outerRaidus = GetDescription().GetOuterRaidus();
+        auto length = GetDescription().GetLength();
+        auto upZPosition = GetDescription().GetUpZPosition();
 
         auto material = fgG4Nist->FindOrBuildMaterial("G4_Cu");
 

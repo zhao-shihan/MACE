@@ -6,17 +6,17 @@
 
 using namespace MACE::SimMACE;
 
-Analysis* Analysis::Instance() {
+Analysis& Analysis::Instance() {
     static Analysis instance;
-    return &instance;
+    return instance;
 }
 
 Analysis::Analysis() :
     fpCalorimeterHitList(nullptr),
     fpVertexDetectorHitList(nullptr),
     fpSpectrometerHitList(nullptr),
-    fTrueEventID(-1) {
-    Messenger::AnalysisMessenger::Instance()->Set(this);
+    fTrueEventID(std::numeric_limits<G4int>::min()) {
+    Messenger::AnalysisMessenger::Instance().Set(this);
 }
 
 void Analysis::Open() {

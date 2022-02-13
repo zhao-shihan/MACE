@@ -4,7 +4,15 @@
 
 class MACE::Geometry::Description::Calorimeter final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(Calorimeter);
+public:
+    static Calorimeter& Instance();
+
+private:
+    Calorimeter() noexcept {}
+    ~Calorimeter() noexcept {}
+    Calorimeter(const Calorimeter&) = delete;
+    Calorimeter& operator=(const Calorimeter&) = delete;
+
 public:
     const char* GetName()                   const override { return "Calorimeter"; }
     const char* GetOverallDescription()     const override { return ""; }

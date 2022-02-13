@@ -4,7 +4,15 @@
 
 class MACE::Geometry::Description::World final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(World);
+public:
+    static World& Instance();
+
+private:
+    World() noexcept {}
+    ~World() noexcept {}
+    World(const World&) = delete;
+    World& operator=(const World&) = delete;
+
 public:
     const char* GetName()                   const override { return "World"; }
     const char* GetOverallDescription()     const override { return "The geometry world."; }

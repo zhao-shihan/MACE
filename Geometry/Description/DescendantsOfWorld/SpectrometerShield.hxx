@@ -4,7 +4,15 @@
 
 class MACE::Geometry::Description::SpectrometerShield final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(SpectrometerShield);
+public:
+    static SpectrometerShield& Instance();
+
+private:
+    SpectrometerShield() noexcept {}
+    ~SpectrometerShield() noexcept {}
+    SpectrometerShield(const SpectrometerShield&) = delete;
+    SpectrometerShield& operator=(const SpectrometerShield&) = delete;
+
 public:
     const char* GetName()                   const override { return "SpectrometerShield"; }
     const char* GetOverallDescription()     const override { return ""; }

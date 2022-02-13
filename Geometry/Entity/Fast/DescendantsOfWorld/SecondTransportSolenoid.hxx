@@ -8,12 +8,12 @@
 class MACE::Geometry::Entity::Fast::SecondTransportSolenoid final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SecondTransportSolenoid> {
     void ConstructSelf() override {
-        auto name = GetDescription()->GetName();
-        auto length = GetDescription()->GetLength();
-        auto innerRadius = GetDescription()->GetInnerRaidus();
-        auto outerRaidus = GetDescription()->GetOuterRaidus();
-        auto centerZ = GetDescription()->GetCenterZ();
-        auto upXPosition = GetDescription()->GetUpXPosition();
+        auto name = GetDescription().GetName();
+        auto length = GetDescription().GetLength();
+        auto innerRadius = GetDescription().GetInnerRaidus();
+        auto outerRaidus = GetDescription().GetOuterRaidus();
+        auto centerZ = GetDescription().GetCenterZ();
+        auto upXPosition = GetDescription().GetUpXPosition();
 
         auto material = fgG4Nist->FindOrBuildMaterial("G4_Cu");
 

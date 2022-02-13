@@ -8,7 +8,8 @@
 class MACE::SimMACE::Messenger::PhysicsMessenger final :
     public G4UImessenger {
 public:
-    static PhysicsMessenger* Instance();
+    static PhysicsMessenger& Instance();
+
 private:
     PhysicsMessenger();
     ~PhysicsMessenger();

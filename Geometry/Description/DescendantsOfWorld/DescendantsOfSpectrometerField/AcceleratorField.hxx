@@ -4,7 +4,15 @@
 
 class MACE::Geometry::Description::AcceleratorField final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(AcceleratorField);
+public:
+    static AcceleratorField& Instance();
+
+private:
+    AcceleratorField() noexcept {}
+    ~AcceleratorField() noexcept {}
+    AcceleratorField(const AcceleratorField&) = delete;
+    AcceleratorField& operator=(const AcceleratorField&) = delete;
+
 public:
     const char* GetName()                   const override { return "AcceleratorField"; }
     const char* GetOverallDescription()     const override { return "An accelerator field box inside spectrometer"; }

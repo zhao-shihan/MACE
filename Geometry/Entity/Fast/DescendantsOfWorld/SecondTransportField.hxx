@@ -8,11 +8,11 @@
 class MACE::Geometry::Entity::Fast::SecondTransportField final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SecondTransportField> {
     void ConstructSelf() override {
-        auto name = GetDescription()->GetName();
-        auto length = GetDescription()->GetLength();
-        auto raidus = GetDescription()->GetRadius();
-        auto centerZ = GetDescription()->GetCenterZ();
-        auto upXPosition = GetDescription()->GetUpXPosition();
+        auto name = GetDescription().GetName();
+        auto length = GetDescription().GetLength();
+        auto raidus = GetDescription().GetRadius();
+        auto centerZ = GetDescription().GetCenterZ();
+        auto upXPosition = GetDescription().GetUpXPosition();
 
         auto material = Mother()->GetVolume()->GetLogicalVolume()->GetMaterial();
 

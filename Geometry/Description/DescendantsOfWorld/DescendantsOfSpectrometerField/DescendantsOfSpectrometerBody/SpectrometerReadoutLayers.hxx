@@ -4,7 +4,15 @@
 
 class MACE::Geometry::Description::SpectrometerReadoutLayer final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(SpectrometerReadoutLayer);
+public:
+    static SpectrometerReadoutLayer& Instance();
+
+private:
+    SpectrometerReadoutLayer() noexcept {}
+    ~SpectrometerReadoutLayer() noexcept {}
+    SpectrometerReadoutLayer(const SpectrometerReadoutLayer&) = delete;
+    SpectrometerReadoutLayer& operator=(const SpectrometerReadoutLayer&) = delete;
+
 public:
     const char* GetName()                   const override { return "SpectrometerReadoutLayer"; }
     const char* GetOverallDescription()     const override { return "Readout layer of MWDC. Cell's mother."; }

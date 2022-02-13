@@ -4,7 +4,15 @@
 
 class MACE::Geometry::Description::ThirdTransportSolenoid final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(ThirdTransportSolenoid);
+public:
+    static ThirdTransportSolenoid& Instance();
+
+private:
+    ThirdTransportSolenoid() noexcept {}
+    ~ThirdTransportSolenoid() noexcept {}
+    ThirdTransportSolenoid(const ThirdTransportSolenoid&) = delete;
+    ThirdTransportSolenoid& operator=(const ThirdTransportSolenoid&) = delete;
+
 public:
     const char* GetName()                   const override { return "ThirdTransportSolenoid"; }
     const char* GetOverallDescription()     const override { return ""; }

@@ -1,17 +1,19 @@
 namespace MACE::Geometry::Interface::Meta__ {
     namespace Impl__ {
+        template<size_t Index, class Tuple>
+        using DescriptionType = std::remove_const_t<std::remove_pointer_t<std::tuple_element_t<Index, Tuple>>>;
         // implementation of initialize helper for fDescriptions
         template<size_t N, class Tuple>
         struct InitializeDescriptions {
             static void Initialize(Tuple& descriptions) {
                 InitializeDescriptions<N - 1, Tuple>::Initialize(descriptions);
-                std::get<N - 1>(descriptions) = std::remove_const_t<std::remove_pointer_t<std::tuple_element_t<N - 1, Tuple>>>::Instance();
+                std::get<N - 1>(descriptions) = std::addressof(DescriptionType<N - 1, Tuple>::Instance());
             }
         };
         template<class Tuple>
         struct InitializeDescriptions<1, Tuple> {
             static void Initialize(Tuple& descriptions) {
-                std::get<0>(descriptions) = std::remove_const_t<std::remove_pointer_t<std::tuple_element_t<0, Tuple>>>::Instance();
+                std::get<0>(descriptions) = std::addressof(DescriptionType<0, Tuple>::Instance());
             }
         };
     }
@@ -23,7 +25,8 @@ namespace MACE::Geometry::Interface::Meta__ {
 }
 
 template<class Volume_t, class... RequiredDescriptions>
-MACE::Geometry::Interface::EntityWithDescription<Volume_t, RequiredDescriptions...>::EntityWithDescription() :
+MACE::Geometry::Interface::EntityWithDescription<Volume_t, RequiredDescriptions...>::
+EntityWithDescription() :
     Entity<Volume_t>(),
     fDescriptions() {
     // initialize fDescriptions
@@ -31,4 +34,5 @@ MACE::Geometry::Interface::EntityWithDescription<Volume_t, RequiredDescriptions.
 }
 
 template<class Volume_t, class... RequiredDescriptions>
-MACE::Geometry::Interface::EntityWithDescription<Volume_t, RequiredDescriptions...>::~EntityWithDescription() {}
+MACE::Geometry::Interface::EntityWithDescription<Volume_t, RequiredDescriptions...>::
+~EntityWithDescription() {}

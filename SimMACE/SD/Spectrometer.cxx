@@ -82,5 +82,5 @@ G4bool SD::Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
 }
 
 void SD::Spectrometer::EndOfEvent(G4HCofThisEvent*) {
-    Analysis::Instance()->SubmitSpectrometerHC(fHitsCollection->GetVector());
+    Analysis::Instance().SubmitSpectrometerHC(fHitsCollection->GetVector());
 }

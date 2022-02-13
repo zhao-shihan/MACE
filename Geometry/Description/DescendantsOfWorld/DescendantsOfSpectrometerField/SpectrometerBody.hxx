@@ -4,7 +4,15 @@
 
 class MACE::Geometry::Description::SpectrometerBody final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(SpectrometerBody);
+public:
+    static SpectrometerBody& Instance();
+
+private:
+    SpectrometerBody() noexcept {}
+    ~SpectrometerBody() noexcept {}
+    SpectrometerBody(const SpectrometerBody&) = delete;
+    SpectrometerBody& operator=(const SpectrometerBody&) = delete;
+
 public:
     const char* GetName()                   const override { return "SpectrometerBody"; }
     const char* GetOverallDescription()     const override { return "The shell of spectrometer, mother of cells."; }

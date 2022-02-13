@@ -20,10 +20,10 @@ public:
 private:
     enum { kSpectrometerCells, kSpectrometerReadoutLayer };
     void ConstructSelf() override {
-        const auto name = GetDescription<kSpectrometerCells>()->GetName();
-        // const auto rSenseWire = GetDescription()->GetSenseWireDiameter() / 2;
-        const auto rFieldWire = GetDescription<kSpectrometerCells>()->GetFieldWireDiameter() / 2;
-        const auto cellWidth = GetDescription<kSpectrometerReadoutLayer>()->GetAverageCellWidth();
+        const auto name = GetDescription<kSpectrometerCells>().GetName();
+        // const auto rSenseWire = GetDescription().GetSenseWireDiameter() / 2;
+        const auto rFieldWire = GetDescription<kSpectrometerCells>().GetFieldWireDiameter() / 2;
+        const auto cellWidth = GetDescription<kSpectrometerReadoutLayer>().GetAverageCellWidth();
 
         auto material = Mother()->GetVolume()->GetLogicalVolume()->GetMaterial();
 

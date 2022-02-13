@@ -10,12 +10,12 @@ class MACE::Geometry::Entity::Fast::SpectrometerReadoutLayer final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SpectrometerReadoutLayer, MACE::Geometry::Description::SpectrometerBody> {
     enum { kSpectrometerReadoutLayer, kSpectrometerBody };
     void ConstructSelf() override {
-        const auto name = GetDescription<kSpectrometerReadoutLayer>()->GetName();
-        const auto layerThickness = GetDescription<kSpectrometerReadoutLayer>()->GetAverageCellWidth();
-        const auto gasInnerRadius = GetDescription<kSpectrometerBody>()->GetGasInnerRadius();
-        const auto gasOuterRadius = GetDescription<kSpectrometerBody>()->GetGasOuterRadius();
-        const auto gasInnerLength = GetDescription<kSpectrometerBody>()->GetGasInnerLength();
-        const auto gasOuterLength = GetDescription<kSpectrometerBody>()->GetGasOuterLength();
+        const auto name = GetDescription<kSpectrometerReadoutLayer>().GetName();
+        const auto layerThickness = GetDescription<kSpectrometerReadoutLayer>().GetAverageCellWidth();
+        const auto gasInnerRadius = GetDescription<kSpectrometerBody>().GetGasInnerRadius();
+        const auto gasOuterRadius = GetDescription<kSpectrometerBody>().GetGasOuterRadius();
+        const auto gasInnerLength = GetDescription<kSpectrometerBody>().GetGasInnerLength();
+        const auto gasOuterLength = GetDescription<kSpectrometerBody>().GetGasOuterLength();
 
         auto material = fgG4Nist->FindOrBuildMaterial("G4_He");
 

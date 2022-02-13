@@ -9,13 +9,13 @@
 class MACE::Geometry::Entity::Fast::VertexDetectorShield final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::VertexDetectorShield> {
     void ConstructSelf() override {
-        auto name = GetDescription()->GetName();
-        auto innerRadius = GetDescription()->GetInnerRadius();
-        auto innerLength = GetDescription()->GetInnerLength();
-        auto windowRadius = GetDescription()->GetWindowRadius();
-        auto thickness = GetDescription()->GetThickness();
-        auto centerX = GetDescription()->GetCenterX();
-        auto upZPosition = GetDescription()->GetUpZPosition();
+        auto name = GetDescription().GetName();
+        auto innerRadius = GetDescription().GetInnerRadius();
+        auto innerLength = GetDescription().GetInnerLength();
+        auto windowRadius = GetDescription().GetWindowRadius();
+        auto thickness = GetDescription().GetThickness();
+        auto centerX = GetDescription().GetCenterX();
+        auto upZPosition = GetDescription().GetUpZPosition();
 
         auto material = fgG4Nist->FindOrBuildMaterial("G4_Pb");
 

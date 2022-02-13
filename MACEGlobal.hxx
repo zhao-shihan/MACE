@@ -65,7 +65,6 @@ namespace MACE {
                 class FirstBendSolenoid;
                 class FirstTransportField;
                 class FirstTransportSolenoid;
-                class VertexDetectorShield;
                 class SecondBendField;
                 class SecondBendSolenoid;
                 class SecondTransportField;
@@ -74,6 +73,7 @@ namespace MACE {
                 class SpectrometerShield;
                 class ThirdTransportField;
                 class ThirdTransportSolenoid;
+                class VertexDetectorShield;
             }
             class World;
         }
@@ -106,7 +106,6 @@ namespace MACE {
                     class FirstBendSolenoid;
                     class FirstTransportField;
                     class FirstTransportSolenoid;
-                    class VertexDetectorShield;
                     class SecondBendField;
                     class SecondBendSolenoid;
                     class SecondTransportField;
@@ -115,6 +114,7 @@ namespace MACE {
                     class SpectrometerShield;
                     class ThirdTransportField;
                     class ThirdTransportSolenoid;
+                    class VertexDetectorShield;
                 }
                 class World;
             }
@@ -127,7 +127,7 @@ namespace MACE {
             template<class Volume_t> class Entity;
             template<class Volume_t, class... RequiredDescriptions> class EntityWithDescription;
             template<class... RequiredDescriptions> class EntityG4;
-            template<class... RequiredDescriptions> class EntityROOT; // DO NOT USE for now.
+            // template<class... RequiredDescriptions> class EntityROOT; // DO NOT USE for now.
         }
     }
 
@@ -145,6 +145,8 @@ namespace MACE {
             template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t> class TrueFinder;
         }
     }
+
+    namespace SimCalorimeter {}
 
     namespace SimMACE {
         namespace Action {
@@ -201,5 +203,7 @@ namespace MACE {
         class Track;
         class Worker;
     }
+
+    namespace SimSpectrometer {}
 
 }

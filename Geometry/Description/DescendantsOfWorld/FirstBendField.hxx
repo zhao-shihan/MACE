@@ -4,7 +4,15 @@
 
 class MACE::Geometry::Description::FirstBendField final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(FirstBendField);
+public:
+    static FirstBendField& Instance();
+
+private:
+    FirstBendField() noexcept {}
+    ~FirstBendField() noexcept {}
+    FirstBendField(const FirstBendField&) = delete;
+    FirstBendField& operator=(const FirstBendField&) = delete;
+
 public:
     const char* GetName()                   const override { return "FirstBendField"; }
     const char* GetOverallDescription()     const override { return ""; }

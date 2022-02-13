@@ -8,13 +8,13 @@
 class MACE::Geometry::Entity::Fast::Collimator final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::Collimator> {
     void ConstructSelf() override {
-        auto name = GetDescription()->GetName();
-        auto innerRadius = GetDescription()->GetInnerRadius();
-        auto outerRadius = GetDescription()->GetOuterRadius();
-        auto length = GetDescription()->GetLength();
-        auto thickness = GetDescription()->GetThickness();
-        auto zPosition = GetDescription()->GetZPosition();
-        auto count = GetDescription()->GetCount();
+        auto name = GetDescription().GetName();
+        auto innerRadius = GetDescription().GetInnerRadius();
+        auto outerRadius = GetDescription().GetOuterRadius();
+        auto length = GetDescription().GetLength();
+        auto thickness = GetDescription().GetThickness();
+        auto zPosition = GetDescription().GetZPosition();
+        auto count = GetDescription().GetCount();
 
         auto material = fgG4Nist->FindOrBuildMaterial("G4_Cu");
 

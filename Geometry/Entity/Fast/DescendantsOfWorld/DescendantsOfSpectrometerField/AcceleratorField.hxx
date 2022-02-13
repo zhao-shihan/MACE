@@ -8,10 +8,10 @@
 class MACE::Geometry::Entity::Fast::AcceleratorField final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::AcceleratorField> {
     void ConstructSelf() override {
-        auto name = GetDescription()->GetName();
-        auto width = GetDescription()->GetWidth();
-        auto upStreamLength = GetDescription()->GetUpStreamLength();
-        auto downStreamLength = GetDescription()->GetDownStreamLength();
+        auto name = GetDescription().GetName();
+        auto width = GetDescription().GetWidth();
+        auto upStreamLength = GetDescription().GetUpStreamLength();
+        auto downStreamLength = GetDescription().GetDownStreamLength();
 
         auto material = Mother()->GetVolume()->GetLogicalVolume()->GetMaterial();
 

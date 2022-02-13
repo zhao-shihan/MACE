@@ -8,11 +8,11 @@
 class MACE::Geometry::Entity::Fast::CalorimeterField final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::CalorimeterField> {
     void ConstructSelf() override {
-        auto name = GetDescription()->GetName();
-        auto radius = GetDescription()->GetRadius();
-        auto length = GetDescription()->GetLength();
-        auto centerX = GetDescription()->GetCenterX();
-        auto upZPosition = GetDescription()->GetUpZPosition();
+        auto name = GetDescription().GetName();
+        auto radius = GetDescription().GetRadius();
+        auto length = GetDescription().GetLength();
+        auto centerX = GetDescription().GetCenterX();
+        auto upZPosition = GetDescription().GetUpZPosition();
 
         auto material = Mother()->GetVolume()->GetLogicalVolume()->GetMaterial();
 

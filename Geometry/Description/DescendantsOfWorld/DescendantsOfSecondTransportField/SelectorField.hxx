@@ -4,7 +4,15 @@
 
 class MACE::Geometry::Description::SelectorField final :
     public MACE::Geometry::Interface::Description {
-    MACE_GEOMETRY_DESCRIPTION_CONSTRAINT(SelectorField);
+public:
+    static SelectorField& Instance();
+
+private:
+    SelectorField() noexcept {}
+    ~SelectorField() noexcept {}
+    SelectorField(const SelectorField&) = delete;
+    SelectorField& operator=(const SelectorField&) = delete;
+
 public:
     const char* GetName()                   const override { return "SelectorField"; }
     const char* GetOverallDescription()     const override { return ""; }
