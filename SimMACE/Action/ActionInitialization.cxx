@@ -5,9 +5,6 @@
 
 using namespace MACE::SimMACE::Action;
 
-ActionInitialization::ActionInitialization() :
-    G4VUserActionInitialization() {}
-
 void ActionInitialization::Build() const {
     auto primaryGeneratorAction = new PrimaryGeneratorAction();
     auto eventAction = new EventAction();
@@ -17,4 +14,3 @@ void ActionInitialization::Build() const {
     SetUserAction(eventAction);
     SetUserAction(runAction);
 }
-

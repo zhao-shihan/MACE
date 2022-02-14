@@ -2,7 +2,7 @@
 
 using namespace MACE::Geometry::Description;
 
-Collimator& Collimator::Instance() {
+Collimator& Collimator::Instance() noexcept {
     static Collimator instance;
     return instance;
 }

@@ -2,7 +2,7 @@
 
 using namespace MACE::Geometry::Description;
 
-World& World::Instance() {
+World& World::Instance() noexcept {
     static World instance;
     return instance;
 }

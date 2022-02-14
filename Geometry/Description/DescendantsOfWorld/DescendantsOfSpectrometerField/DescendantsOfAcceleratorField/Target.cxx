@@ -2,7 +2,7 @@
 
 using namespace MACE::Geometry::Description;
 
-Target& Target::Instance() {
+Target& Target::Instance() noexcept {
     static Target instance;
     return instance;
 }

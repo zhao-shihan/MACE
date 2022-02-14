@@ -9,7 +9,7 @@ public:
     VertexDetectorSimHit() noexcept;
     VertexDetectorSimHit(const VertexDetectorSimHit& hit) noexcept;
     VertexDetectorSimHit(VertexDetectorSimHit&& hit) noexcept;
-    virtual ~VertexDetectorSimHit() noexcept {}
+    virtual ~VertexDetectorSimHit() noexcept = default;
     VertexDetectorSimHit& operator=(const VertexDetectorSimHit& hit) noexcept;
     VertexDetectorSimHit& operator=(VertexDetectorSimHit&& hit) noexcept;
 

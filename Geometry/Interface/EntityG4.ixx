@@ -10,7 +10,7 @@ MACE::Geometry::Interface::EntityG4<RequiredDescriptions...>::EntityG4() :
 }
 
 template<class... RequiredDescriptions>
-MACE::Geometry::Interface::EntityG4<RequiredDescriptions...>::~EntityG4() {}
+MACE::Geometry::Interface::EntityG4<RequiredDescriptions...>::~EntityG4() noexcept = default;
 
 template<class... RequiredDescriptions>
 void MACE::Geometry::Interface::EntityG4<RequiredDescriptions...>::SetCheckOverlaps(G4bool val) {

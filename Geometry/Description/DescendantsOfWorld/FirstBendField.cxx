@@ -2,7 +2,7 @@
 
 using namespace MACE::Geometry::Description;
 
-FirstBendField& FirstBendField::Instance() {
+FirstBendField& FirstBendField::Instance() noexcept {
     static FirstBendField instance;
     return instance;
 }

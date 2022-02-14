@@ -4,10 +4,11 @@
 
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::Action::EventAction final : public G4UserEventAction {
+class MACE::SimMACE::Action::EventAction final :
+    public G4UserEventAction {
 public:
-    EventAction();
-    ~EventAction();
+    EventAction() = default;
+    ~EventAction() noexcept = default;
 
     void SetFirstTrueEventIDOfThisRank(G4int trueEventID) { fFirstTrueEventIDOfThisRank = trueEventID; }
 

@@ -18,7 +18,7 @@ protected:
 
 public:
     TrueFinder();
-    ~TrueFinder() {}
+    ~TrueFinder() noexcept = default;
 
     void Reconstruct(const std::vector<HitPtr>& hitData) override;
 

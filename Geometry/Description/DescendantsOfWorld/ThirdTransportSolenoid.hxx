@@ -5,11 +5,11 @@
 class MACE::Geometry::Description::ThirdTransportSolenoid final :
     public MACE::Geometry::Interface::Description {
 public:
-    static ThirdTransportSolenoid& Instance();
+    static ThirdTransportSolenoid& Instance() noexcept;
 
 private:
-    ThirdTransportSolenoid() noexcept {}
-    ~ThirdTransportSolenoid() noexcept {}
+    ThirdTransportSolenoid() noexcept = default;
+    ~ThirdTransportSolenoid() noexcept = default;
     ThirdTransportSolenoid(const ThirdTransportSolenoid&) = delete;
     ThirdTransportSolenoid& operator=(const ThirdTransportSolenoid&) = delete;
 

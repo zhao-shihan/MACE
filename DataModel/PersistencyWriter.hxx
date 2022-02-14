@@ -17,10 +17,11 @@ public:
 
 public:
     PersistencyWriter();
-    virtual ~PersistencyWriter();
+    virtual ~PersistencyWriter() noexcept;
 
-    virtual void Open(const char* fileName, Option_t* = nullptr) override { PersistencyHandler::Open(fileName, "RECREATE"); }
-    virtual void Close(Option_t* option = nullptr) override;
+    // FIXME: allow option of both APPEND(?) and RECREATE
+    void Open(const char* fileName) { PersistencyHandler::Open(fileName, "RECREATE"); }
+    void Close(Option_t* option = nullptr);
 
     template<class DataInTree_t, class DataInList_t>
     TTree* CreateTreeFromList(const std::vector<DataInList_t*>& dataList, Long64_t treeIndex = 0, TreeOperation behaviour = kDeleteAfterWrite);

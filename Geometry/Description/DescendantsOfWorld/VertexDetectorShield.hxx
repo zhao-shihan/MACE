@@ -5,11 +5,11 @@
 class MACE::Geometry::Description::VertexDetectorShield final :
     public MACE::Geometry::Interface::Description {
 public:
-    static VertexDetectorShield& Instance();
+    static VertexDetectorShield& Instance() noexcept;
 
 private:
-    VertexDetectorShield() noexcept {}
-    ~VertexDetectorShield() noexcept {}
+    VertexDetectorShield() noexcept = default;
+    ~VertexDetectorShield() noexcept = default;
     VertexDetectorShield(const VertexDetectorShield&) = delete;
     VertexDetectorShield& operator=(const VertexDetectorShield&) = delete;
 

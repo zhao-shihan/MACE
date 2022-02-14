@@ -16,8 +16,8 @@ protected:
     using TrackPtr = typename Base::TrackPtr;
 
 public:
-    Dummy();
-    ~Dummy();
+    Dummy() = default;
+    ~Dummy() noexcept = default;
 
     bool Fit(std::vector<HitPtr>& hitData, TrackPtr& seed) override;
 };

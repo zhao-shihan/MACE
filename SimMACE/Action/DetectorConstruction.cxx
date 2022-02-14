@@ -4,10 +4,7 @@
 
 using namespace MACE::SimMACE::Action;
 
-DetectorConstruction::DetectorConstruction() :
-    G4VUserDetectorConstruction() {}
-
-DetectorConstruction::~DetectorConstruction() {
+DetectorConstruction::~DetectorConstruction() noexcept {
     delete fWorld;
 }
 

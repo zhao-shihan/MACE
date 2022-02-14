@@ -15,7 +15,7 @@ protected:
     using TrackPtr = std::shared_ptr<Track_t>;
 
     Fitter();
-    virtual ~Fitter() {}
+    virtual ~Fitter() noexcept = default;
 
 public:
     virtual bool Fit(std::vector<HitPtr>& hitDataToBeFitted, TrackPtr& seed) = 0;

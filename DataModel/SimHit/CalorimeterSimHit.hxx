@@ -9,7 +9,7 @@ public:
     CalorimeterSimHit() noexcept;
     CalorimeterSimHit(const CalorimeterSimHit& hit) noexcept;
     CalorimeterSimHit(CalorimeterSimHit&& hit) noexcept;
-    virtual ~CalorimeterSimHit() noexcept {}
+    virtual ~CalorimeterSimHit() noexcept = default;
     CalorimeterSimHit& operator=(const CalorimeterSimHit& hit) noexcept;
     CalorimeterSimHit& operator=(CalorimeterSimHit&& hit) noexcept;
 

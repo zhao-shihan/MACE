@@ -2,7 +2,7 @@
 
 using namespace MACE::Geometry::Description;
 
-AcceleratorField& AcceleratorField::Instance() {
+AcceleratorField& AcceleratorField::Instance() noexcept {
     static AcceleratorField instance;
     return instance;
 }

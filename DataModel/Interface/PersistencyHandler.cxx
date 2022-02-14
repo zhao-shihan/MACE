@@ -9,7 +9,7 @@ PersistencyHandler::PersistencyHandler() :
     fTreeNamePrefix(std::make_pair<TString, TString>("Eve", "_")),
     fTreeNameSuffix(std::make_pair<TString, TString>("", "")) {}
 
-PersistencyHandler::~PersistencyHandler() {
+PersistencyHandler::~PersistencyHandler() noexcept {
     if (fFile != nullptr) {
         if (fFile->IsOpen()) {
             std::cerr << "Warning from MACE::DataModel::PersistencyHandler::~PersistencyHandler : "

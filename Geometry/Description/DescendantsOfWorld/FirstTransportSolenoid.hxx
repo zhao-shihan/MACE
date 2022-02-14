@@ -5,11 +5,11 @@
 class MACE::Geometry::Description::FirstTransportSolenoid final :
     public MACE::Geometry::Interface::Description {
 public:
-    static FirstTransportSolenoid& Instance();
+    static FirstTransportSolenoid& Instance() noexcept;
 
 private:
-    FirstTransportSolenoid() noexcept {}
-    ~FirstTransportSolenoid() noexcept {}
+    FirstTransportSolenoid() noexcept = default;
+    ~FirstTransportSolenoid() noexcept = default;
     FirstTransportSolenoid(const FirstTransportSolenoid&) = delete;
     FirstTransportSolenoid& operator=(const FirstTransportSolenoid&) = delete;
 

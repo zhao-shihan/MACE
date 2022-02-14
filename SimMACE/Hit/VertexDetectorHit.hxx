@@ -12,12 +12,12 @@ class MACE::SimMACE::Hit::VertexDetectorHit final :
     public G4VHit,
     public MACE::DataModel::VertexDetectorSimHit {
 public:
-    VertexDetectorHit() noexcept;
-    VertexDetectorHit(const VertexDetectorHit& hit) noexcept;
-    VertexDetectorHit(VertexDetectorHit&& hit) noexcept;
-    ~VertexDetectorHit() noexcept {}
-    VertexDetectorHit& operator=(const VertexDetectorHit& hit) noexcept;
-    VertexDetectorHit& operator=(VertexDetectorHit&& hit) noexcept;
+    VertexDetectorHit() noexcept = default;
+    VertexDetectorHit(const VertexDetectorHit& hit) noexcept = default;
+    VertexDetectorHit(VertexDetectorHit&& hit) noexcept = default;
+    ~VertexDetectorHit() noexcept = default;
+    VertexDetectorHit& operator=(const VertexDetectorHit& hit) noexcept = default;
+    VertexDetectorHit& operator=(VertexDetectorHit&& hit) noexcept = default;
 
     void SetHitPosition(const G4ThreeVector& pos) { DataModel::VertexDetectorSimHit::SetHitPosition(pos.x(), pos.y(), pos.z()); }
     void SetVertexPosition(const G4ThreeVector& pos) { DataModel::VertexDetectorSimHit::SetVertexPosition(pos.x(), pos.y(), pos.z()); }

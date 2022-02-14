@@ -3,13 +3,16 @@
 #include "SimMACE/Global.hxx"
 #include "G4ParticleDefinition.hh"
 
-// AntiMuonium Definition
-
-class MACE::SimMACE::Physics::AntiMuonium : public G4ParticleDefinition {
+class MACE::SimMACE::Physics::AntiMuonium final :
+    public G4ParticleDefinition {
+public:
+    static AntiMuonium* Definition();
 private:
-    static MACE::SimMACE::Physics::AntiMuonium* instance;
+    static AntiMuonium* fgInstance;
+
+private:
+    AntiMuonium();
 
 public:
-    static MACE::SimMACE::Physics::AntiMuonium* Definition();
-    static MACE::SimMACE::Physics::AntiMuonium* AntiMuoniumDefinition();
+    ~AntiMuonium() noexcept = default;
 };

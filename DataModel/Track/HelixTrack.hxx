@@ -11,7 +11,7 @@ public:
     HelixTrack() noexcept;
     HelixTrack(const HelixTrack& hit) noexcept;
     HelixTrack(HelixTrack&& hit) noexcept;
-    virtual ~HelixTrack() noexcept {}
+    virtual ~HelixTrack() noexcept = default;
     HelixTrack& operator=(const HelixTrack& hit) noexcept;
     HelixTrack& operator=(HelixTrack&& hit) noexcept;
 

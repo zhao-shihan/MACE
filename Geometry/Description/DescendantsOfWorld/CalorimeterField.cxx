@@ -2,7 +2,7 @@
 
 using namespace MACE::Geometry::Description;
 
-CalorimeterField& CalorimeterField::Instance() {
+CalorimeterField& CalorimeterField::Instance() noexcept {
     static CalorimeterField instance;
     return instance;
 }

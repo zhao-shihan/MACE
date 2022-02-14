@@ -2,4 +2,4 @@
 
 using namespace MACE::DataModel::Interface;
 
-Data::~Data() {}
+Data::~Data() noexcept = default;

@@ -6,11 +6,6 @@
 
 using namespace MACE::SimMACE::Action;
 
-EventAction::EventAction() :
-    G4UserEventAction() {}
-
-EventAction::~EventAction() {}
-
 void EventAction::BeginOfEventAction(const G4Event* event) {
     Analysis::Instance().SetTrueEventID(fFirstTrueEventIDOfThisRank + event->GetEventID());
 }

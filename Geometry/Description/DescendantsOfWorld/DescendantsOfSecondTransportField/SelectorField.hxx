@@ -5,11 +5,11 @@
 class MACE::Geometry::Description::SelectorField final :
     public MACE::Geometry::Interface::Description {
 public:
-    static SelectorField& Instance();
+    static SelectorField& Instance() noexcept;
 
 private:
-    SelectorField() noexcept {}
-    ~SelectorField() noexcept {}
+    SelectorField() noexcept = default;
+    ~SelectorField() noexcept = default;
     SelectorField(const SelectorField&) = delete;
     SelectorField& operator=(const SelectorField&) = delete;
 

@@ -35,4 +35,4 @@ EntityWithDescription() :
 
 template<class Volume_t, class... RequiredDescriptions>
 MACE::Geometry::Interface::EntityWithDescription<Volume_t, RequiredDescriptions...>::
-~EntityWithDescription() {}
+~EntityWithDescription() noexcept = default;

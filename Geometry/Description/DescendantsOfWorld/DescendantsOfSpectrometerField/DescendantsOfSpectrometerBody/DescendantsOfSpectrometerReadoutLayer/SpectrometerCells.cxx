@@ -2,7 +2,7 @@
 
 using namespace MACE::Geometry::Description;
 
-SpectrometerCells& SpectrometerCells::Instance() {
+SpectrometerCells& SpectrometerCells::Instance() noexcept {
     static SpectrometerCells instance;
     return instance;
 }

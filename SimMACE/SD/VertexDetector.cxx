@@ -13,8 +13,6 @@ SD::VertexDetector::VertexDetector(const G4String& SDName, const G4String& hitsC
     collectionName.insert(hitsCollectionName);
 }
 
-SD::VertexDetector::~VertexDetector() {}
-
 void SD::VertexDetector::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
     fHitsCollection = new Hit::VertexDetectorHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);

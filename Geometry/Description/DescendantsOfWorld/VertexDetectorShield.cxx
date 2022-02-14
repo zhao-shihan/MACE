@@ -2,7 +2,7 @@
 
 using namespace MACE::Geometry::Description;
 
-VertexDetectorShield& VertexDetectorShield::Instance() {
+VertexDetectorShield& VertexDetectorShield::Instance() noexcept {
     static VertexDetectorShield instance;
     return instance;
 }

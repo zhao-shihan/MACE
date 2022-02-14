@@ -5,11 +5,11 @@
 class MACE::Geometry::Description::Collimator final :
     public MACE::Geometry::Interface::Description {
 public:
-    static Collimator& Instance();
+    static Collimator& Instance() noexcept;
 
 private:
-    Collimator() noexcept {}
-    ~Collimator() noexcept {}
+    Collimator() noexcept = default;
+    ~Collimator() noexcept = default;
     Collimator(const Collimator&) = delete;
     Collimator& operator=(const Collimator&) = delete;
 

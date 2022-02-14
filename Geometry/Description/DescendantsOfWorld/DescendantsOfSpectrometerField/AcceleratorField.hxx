@@ -5,11 +5,11 @@
 class MACE::Geometry::Description::AcceleratorField final :
     public MACE::Geometry::Interface::Description {
 public:
-    static AcceleratorField& Instance();
+    static AcceleratorField& Instance() noexcept;
 
 private:
-    AcceleratorField() noexcept {}
-    ~AcceleratorField() noexcept {}
+    AcceleratorField() noexcept = default;
+    ~AcceleratorField() noexcept = default;
     AcceleratorField(const AcceleratorField&) = delete;
     AcceleratorField& operator=(const AcceleratorField&) = delete;
 

@@ -16,8 +16,6 @@ SD::Spectrometer::Spectrometer(const G4String& SDName, const G4String& hitsColle
     collectionName.insert(hitsCollectionName);
 }
 
-SD::Spectrometer::~Spectrometer() {}
-
 void SD::Spectrometer::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
     fHitsCollection = new Hit::SpectrometerHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);

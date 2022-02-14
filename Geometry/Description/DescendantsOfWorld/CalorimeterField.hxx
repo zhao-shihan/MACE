@@ -5,11 +5,11 @@
 class MACE::Geometry::Description::CalorimeterField final :
     public MACE::Geometry::Interface::Description {
 public:
-    static CalorimeterField& Instance();
+    static CalorimeterField& Instance() noexcept;
 
 private:
-    CalorimeterField() noexcept {}
-    ~CalorimeterField() noexcept {}
+    CalorimeterField() noexcept = default;
+    ~CalorimeterField() noexcept = default;
     CalorimeterField(const CalorimeterField&) = delete;
     CalorimeterField& operator=(const CalorimeterField&) = delete;
 

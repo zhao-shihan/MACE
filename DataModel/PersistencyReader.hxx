@@ -10,11 +10,11 @@ class MACE::DataModel::PersistencyReader :
     PersistencyReader(const PersistencyReader&) = delete;
     PersistencyReader& operator=(const PersistencyReader&) = delete;
 public:
-    PersistencyReader();
-    virtual ~PersistencyReader() {}
+    PersistencyReader() = default;
+    virtual ~PersistencyReader() noexcept = default;
 
-    virtual void Open(const char* fileName, Option_t* = nullptr) override { PersistencyHandler::Open(fileName, "READ"); }
-    virtual void Close(Option_t* option = nullptr) { PersistencyHandler::Close(option); }
+    void Open(const char* fileName) { PersistencyHandler::Open(fileName, "READ"); }
+    void Close(Option_t* option = nullptr) { PersistencyHandler::Close(option); }
 
     template<class Data_t>
     TTree* GetTree(Long64_t i) { return fFile->Get<TTree>(GetTreeName<Data_t>(i)); }

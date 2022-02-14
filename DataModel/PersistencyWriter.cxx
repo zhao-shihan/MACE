@@ -8,7 +8,7 @@ PersistencyWriter::PersistencyWriter() :
     PersistencyHandler(),
     fTreeAndBehaviours(0) {}
 
-PersistencyWriter::~PersistencyWriter() {
+PersistencyWriter::~PersistencyWriter() noexcept {
     if (!fTreeAndBehaviours.empty()) {
         std::cerr << "Warning from MACE::DataModel::PersistencyWriter::~PersistencyWriter : "
             "Some trees are not written to disk, they are lost." << std::endl;

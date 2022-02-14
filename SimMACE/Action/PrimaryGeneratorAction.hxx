@@ -5,10 +5,11 @@
 
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::Action::PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
+class MACE::SimMACE::Action::PrimaryGeneratorAction final :
+    public G4VUserPrimaryGeneratorAction {
 public:
     PrimaryGeneratorAction();
-    ~PrimaryGeneratorAction();
+    ~PrimaryGeneratorAction() noexcept;
     void GeneratePrimaries(G4Event* event) override;
 
     void SetFirstTrueEventIDOfThisRank(G4int trueEventID) { fFirstTrueEventIDOfThisRank = trueEventID; }

@@ -8,7 +8,7 @@ template<class Volume_t>
 class MACE::Geometry::Interface::Entity {
 protected:
     Entity();
-    virtual ~Entity();
+    virtual ~Entity() noexcept;
     Entity(const Entity&) = delete;
     Entity& operator=(const Entity&) = delete;
 

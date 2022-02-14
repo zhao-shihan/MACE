@@ -12,7 +12,7 @@ public:
 
 private:
     FieldMessenger();
-    ~FieldMessenger() noexcept {}
+    ~FieldMessenger() noexcept;
     FieldMessenger(const FieldMessenger&) = delete;
     FieldMessenger& operator=(const FieldMessenger&) = delete;
 

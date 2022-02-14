@@ -10,10 +10,8 @@
 class MACE::Geometry::Entity::Fast::SpectrometerCells final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SpectrometerCells, MACE::Geometry::Description::SpectrometerReadoutLayer> {
 public:
-    SpectrometerCells() :
-        fCellLayerIDAndPositionList(0) {}
-
-    ~SpectrometerCells() {}
+    SpectrometerCells() : fCellLayerIDAndPositionList(0) {}
+    ~SpectrometerCells() noexcept = default;
 
     const auto& GetLayerIdAndPosition(G4int cellId) const { return fCellLayerIDAndPositionList[cellId]; }
 

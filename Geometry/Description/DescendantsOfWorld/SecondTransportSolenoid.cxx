@@ -2,7 +2,7 @@
 
 using namespace MACE::Geometry::Description;
 
-SecondTransportSolenoid& SecondTransportSolenoid::Instance() {
+SecondTransportSolenoid& SecondTransportSolenoid::Instance() noexcept {
     static SecondTransportSolenoid instance;
     return instance;
 }

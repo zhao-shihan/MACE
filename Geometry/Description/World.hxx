@@ -5,11 +5,11 @@
 class MACE::Geometry::Description::World final :
     public MACE::Geometry::Interface::Description {
 public:
-    static World& Instance();
+    static World& Instance() noexcept;
 
 private:
-    World() noexcept {}
-    ~World() noexcept {}
+    World() noexcept = default;
+    ~World() noexcept = default;
     World(const World&) = delete;
     World& operator=(const World&) = delete;
 

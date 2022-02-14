@@ -10,8 +10,6 @@ Master::Master() :
     fRunBeginTime(0),
     fRunEndTime(0) {}
 
-Master::~Master() {}
-
 void Master::Initialize() {
     time(&fRunBeginTime);
     fBeginCPUTime = clock();

@@ -5,11 +5,11 @@
 class MACE::Geometry::Description::ThirdTransportField final :
     public MACE::Geometry::Interface::Description {
 public:
-    static ThirdTransportField& Instance();
+    static ThirdTransportField& Instance() noexcept;
 
 private:
-    ThirdTransportField() noexcept {}
-    ~ThirdTransportField() noexcept {}
+    ThirdTransportField() noexcept = default;
+    ~ThirdTransportField() noexcept = default;
     ThirdTransportField(const ThirdTransportField&) = delete;
     ThirdTransportField& operator=(const ThirdTransportField&) = delete;
 

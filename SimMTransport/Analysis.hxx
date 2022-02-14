@@ -9,7 +9,7 @@
 class MACE::SimMTransport::Analysis {
 public:
     static Analysis* Instance();
-    ~Analysis();
+    ~Analysis() noexcept = default;
 private:
     static Analysis* fInstance;
     Analysis();

@@ -2,7 +2,7 @@
 
 using namespace MACE::Geometry::Description;
 
-SecondTransportField& SecondTransportField::Instance() {
+SecondTransportField& SecondTransportField::Instance() noexcept {
     static SecondTransportField instance;
     return instance;
 }

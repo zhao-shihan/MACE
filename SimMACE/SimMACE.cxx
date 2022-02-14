@@ -17,11 +17,13 @@ int main(int argc, char** argv) {
     G4Random::setTheEngine(engine);
 
     auto runManager = new G4RunManager();
-    runManager->SetUserInitialization(new Physics::PhysicsList());
+    auto physicsList = new Physics::PhysicsList();
+    runManager->SetUserInitialization(physicsList);
     runManager->SetUserInitialization(new Action::DetectorConstruction());
     runManager->SetUserInitialization(new Action::ActionInitialization());
 
     if (argc == 1) {
+        physicsList->SetVerboseLevel(1);
         auto uiManager = G4UImanager::GetUIpointer();
         auto visExecutive = new G4VisExecutive();
         auto uiExecutive = new G4UIExecutive(argc, argv);
@@ -31,6 +33,7 @@ int main(int argc, char** argv) {
         delete uiExecutive;
         delete visExecutive;
     } else {
+        physicsList->SetVerboseLevel(0);
         auto g4MPIManager = new G4MPImanager(argc, argv);
         g4MPIManager->GetMPIsession()->SessionStart();
         delete g4MPIManager;

@@ -4,10 +4,11 @@
 
 #include "SimMACE/Global.hxx"
 
-
-class MACE::SimMACE::Field::AcceleratorField : public G4ElectroMagneticField {
+class MACE::SimMACE::Field::AcceleratorField final :
+    public G4ElectroMagneticField {
 public:
     AcceleratorField();
+    ~AcceleratorField() noexcept = default;
     void GetFieldValue(const G4double*, G4double* F) const override;
     G4bool DoesFieldChangeEnergy() const override { return true; }
 
@@ -19,7 +20,7 @@ public:
 private:
     G4double fBz = 0.1 * tesla;
     G4double fEz = 7 * kilovolt / (30 * cm - 13.02 * mm);
-    
+
     G4double fV = 7 * kilovolt;
     G4double fAccelerateBegin = 13.02 * mm;
     G4double fAccelerateEnd = 30 * cm;

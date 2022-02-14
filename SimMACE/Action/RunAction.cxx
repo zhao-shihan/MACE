@@ -18,8 +18,6 @@ RunAction::RunAction(PrimaryGeneratorAction* pPrimaryGeneratorAction, EventActio
     Analysis::Instance();
 }
 
-RunAction::~RunAction() {}
-
 void RunAction::BeginOfRunAction(const G4Run* run) {
     G4int firstTrueEventIDOfThisRank = 0;
     if (MPI::Is_initialized()) {

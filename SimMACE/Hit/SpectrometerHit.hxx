@@ -12,12 +12,12 @@ class MACE::SimMACE::Hit::SpectrometerHit final :
     public G4VHit,
     public MACE::DataModel::SpectrometerSimHit {
 public:
-    SpectrometerHit() noexcept;
-    SpectrometerHit(const SpectrometerHit& hit) noexcept;
-    SpectrometerHit(SpectrometerHit&& hit) noexcept;
-    ~SpectrometerHit() noexcept {}
-    SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept;
-    SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept;
+    SpectrometerHit() noexcept = default;
+    SpectrometerHit(const SpectrometerHit& hit) noexcept = default;
+    SpectrometerHit(SpectrometerHit&& hit) noexcept = default;
+    ~SpectrometerHit() noexcept = default;
+    SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept = default;
+    SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept = default;
 
     void SetVertexPosition(const G4ThreeVector& pos) { DataModel::SpectrometerSimHit::SetVertexPosition(pos.x(), pos.y(), pos.z()); }
 

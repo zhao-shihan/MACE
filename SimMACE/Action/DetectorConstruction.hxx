@@ -34,11 +34,11 @@
     private: \
         MACE::Geometry::Entity::Fast::ClassName* const f##ClassName = new MACE::Geometry::Entity::Fast::ClassName()
 
-class MACE::SimMACE::Action::DetectorConstruction :
+class MACE::SimMACE::Action::DetectorConstruction final :
     public G4VUserDetectorConstruction {
 public:
-    DetectorConstruction();
-    ~DetectorConstruction();
+    DetectorConstruction() = default;
+    ~DetectorConstruction() noexcept;
     G4VPhysicalVolume* Construct() override;
 
 private:

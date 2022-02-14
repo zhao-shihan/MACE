@@ -18,7 +18,7 @@ protected:
 
 public:
     Hough(double r0Low, double r0Up, Eigen::Index nPhi, Eigen::Index nRho, double z0Low, double z0Up, Eigen::Index nZ0, Eigen::Index nAlpha);
-    ~Hough();
+    ~Hough() noexcept;
 
     void Reconstruct(const std::vector<HitPtr>& hitData) override;
 

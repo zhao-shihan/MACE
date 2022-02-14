@@ -48,9 +48,11 @@
 //              assumes the pure V-A coupling
 //              gives incorrect energy spectrum for neutrinos
 //
-class MACE::SimMACE::Physics::AntiMuoniumDecayChannel : public G4VDecayChannel {
-public:  // With Description
+class MACE::SimMACE::Physics::AntiMuoniumDecayChannel final :
+    public G4VDecayChannel {
+public:
     AntiMuoniumDecayChannel(const G4String& theParentName, G4double theBR, G4int verbose = 1);
+    ~AntiMuoniumDecayChannel() noexcept = default;
 
-    virtual G4DecayProducts* DecayIt(G4double) override;
+    G4DecayProducts* DecayIt(G4double) override;
 };

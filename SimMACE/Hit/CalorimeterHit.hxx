@@ -11,12 +11,12 @@ class MACE::SimMACE::Hit::CalorimeterHit final :
     public G4VHit,
     public MACE::DataModel::CalorimeterSimHit {
 public:
-    CalorimeterHit() noexcept;
-    CalorimeterHit(const CalorimeterHit& hit) noexcept;
-    CalorimeterHit(CalorimeterHit&& hit) noexcept;
-    ~CalorimeterHit() noexcept {}
-    CalorimeterHit& operator=(const CalorimeterHit& hit) noexcept;
-    CalorimeterHit& operator=(CalorimeterHit&& hit) noexcept;
+    CalorimeterHit() noexcept = default;
+    CalorimeterHit(const CalorimeterHit& hit) noexcept = default;
+    CalorimeterHit(CalorimeterHit&& hit) noexcept = default;
+    ~CalorimeterHit() noexcept = default;
+    CalorimeterHit& operator=(const CalorimeterHit& hit) noexcept = default;
+    CalorimeterHit& operator=(CalorimeterHit&& hit) noexcept = default;
 
     inline void* operator new(size_t);
     inline void  operator delete(void*);

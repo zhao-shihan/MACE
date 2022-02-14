@@ -5,7 +5,7 @@ MACE::Geometry::Interface::Entity<Volume_t>::Entity() :
     fDaughters(0) {}
 
 template<class Volume_t>
-MACE::Geometry::Interface::Entity<Volume_t>::~Entity() {
+MACE::Geometry::Interface::Entity<Volume_t>::~Entity() noexcept {
     for (auto&& daughter : fDaughters) { delete daughter; }
     for (auto&& volume : fVolumes) { delete volume; }
 }

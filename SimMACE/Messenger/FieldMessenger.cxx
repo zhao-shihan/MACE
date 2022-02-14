@@ -43,6 +43,13 @@ FieldMessenger::FieldMessenger() :
     fSetSelectorMagneticField->AvailableForStates(G4State_Idle);
 }
 
+FieldMessenger::~FieldMessenger() {
+    delete fSetTransportMagneticField;
+    delete fSetAcceleratorPotential;
+    delete fSetSelectorMagneticField;
+    delete fDirectory;
+}
+
 void FieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     if (command == fSetTransportMagneticField) {
         const auto B = fSetTransportMagneticField->GetNewDoubleValue(value);

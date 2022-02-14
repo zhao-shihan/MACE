@@ -2,7 +2,7 @@
 
 using namespace MACE::Geometry::Description;
 
-SecondBendSolenoid& SecondBendSolenoid::Instance() {
+SecondBendSolenoid& SecondBendSolenoid::Instance() noexcept {
     static SecondBendSolenoid instance;
     return instance;
 }

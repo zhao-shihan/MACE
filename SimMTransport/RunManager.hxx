@@ -19,7 +19,7 @@ namespace MACE {
 class MACE::SimMTransport::RunManager {
 public:
     static RunManager* Instance();
-    ~RunManager();
+    ~RunManager() noexcept = default;
 private:
     static RunManager* fInstance;
     RunManager();

@@ -14,8 +14,6 @@ SD::Calorimeter::Calorimeter(const G4String& SDName, const G4String& hitsCollect
     collectionName.insert(hitsCollectionName);
 }
 
-SD::Calorimeter::~Calorimeter() {}
-
 const G4ParticleDefinition* photon = nullptr;
 
 void SD::Calorimeter::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {

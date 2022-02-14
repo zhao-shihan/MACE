@@ -9,7 +9,7 @@ class MACE::SimMACE::SD::Spectrometer final :
     public G4VSensitiveDetector {
 public:
     Spectrometer(const G4String& SDName, const G4String& hitsCollectionName, const Geometry::Entity::Fast::SpectrometerCells* spectrometerCellEntity);
-    ~Spectrometer();
+    ~Spectrometer() noexcept = default;
 
     void   Initialize(G4HCofThisEvent* hitsCollection) override;
     G4bool ProcessHits(G4Step* step, G4TouchableHistory*) override;

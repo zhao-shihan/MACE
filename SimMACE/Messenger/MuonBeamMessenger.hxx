@@ -12,7 +12,7 @@ public:
 
 private:
     MuonBeamMessenger();
-    ~MuonBeamMessenger();
+    ~MuonBeamMessenger() noexcept;
     MuonBeamMessenger(const MuonBeamMessenger&) = delete;
     MuonBeamMessenger& operator=(const MuonBeamMessenger&) = delete;
 

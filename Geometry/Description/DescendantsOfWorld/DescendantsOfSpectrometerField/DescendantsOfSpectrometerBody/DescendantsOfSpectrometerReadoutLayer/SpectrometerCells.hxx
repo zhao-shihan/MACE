@@ -5,11 +5,11 @@
 class MACE::Geometry::Description::SpectrometerCells final :
     public MACE::Geometry::Interface::Description {
 public:
-    static SpectrometerCells& Instance();
+    static SpectrometerCells& Instance() noexcept;
 
 private:
-    SpectrometerCells() noexcept {}
-    ~SpectrometerCells() noexcept {}
+    SpectrometerCells() noexcept = default;
+    ~SpectrometerCells() noexcept = default;
     SpectrometerCells(const SpectrometerCells&) = delete;
     SpectrometerCells& operator=(const SpectrometerCells&) = delete;
 

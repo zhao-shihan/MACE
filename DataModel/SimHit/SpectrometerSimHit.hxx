@@ -9,7 +9,7 @@ public:
     SpectrometerSimHit() noexcept;
     SpectrometerSimHit(const SpectrometerSimHit& hit) noexcept;
     SpectrometerSimHit(SpectrometerSimHit&& hit) noexcept;
-    virtual ~SpectrometerSimHit() noexcept {}
+    virtual ~SpectrometerSimHit() noexcept = default;
     SpectrometerSimHit& operator=(const SpectrometerSimHit& hit) noexcept;
     SpectrometerSimHit& operator=(SpectrometerSimHit&& hit) noexcept;
 

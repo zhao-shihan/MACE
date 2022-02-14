@@ -14,7 +14,7 @@ public:
 
 private:
     Analysis();
-    ~Analysis() noexcept {}
+    ~Analysis() noexcept = default;
     Analysis(const Analysis&) = delete;
     Analysis& operator=(const Analysis&) = delete;
 

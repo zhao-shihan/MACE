@@ -12,7 +12,7 @@ public:
 
 private:
     PhysicsMessenger();
-    ~PhysicsMessenger();
+    ~PhysicsMessenger() noexcept;
     PhysicsMessenger(const PhysicsMessenger&) = delete;
     PhysicsMessenger& operator=(const PhysicsMessenger&) = delete;
 

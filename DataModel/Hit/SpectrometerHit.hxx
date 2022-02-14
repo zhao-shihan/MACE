@@ -11,7 +11,7 @@ public:
     SpectrometerHit() noexcept;
     SpectrometerHit(const SpectrometerHit& hit) noexcept;
     SpectrometerHit(SpectrometerHit&& hit) noexcept;
-    virtual ~SpectrometerHit() noexcept {}
+    virtual ~SpectrometerHit() noexcept = default;
     SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept;
     SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept;
 

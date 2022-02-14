@@ -8,6 +8,7 @@
 class MACE::SimMACE::Field::FirstBendField : public G4MagneticField {
 public:
     FirstBendField();
+    ~FirstBendField() noexcept = default;
     void GetFieldValue(const G4double* x, G4double* B) const override;
 
     void SetTransportMagneticField(G4double B) { fB = B; }

@@ -17,7 +17,7 @@ protected:
     using TrackPtr = std::shared_ptr<Track_t>;
 
     Reconstructor();
-    virtual ~Reconstructor() {}
+    virtual ~Reconstructor() noexcept = default;
 
 public:
     const auto& GetFitter() const { return fFitter; }

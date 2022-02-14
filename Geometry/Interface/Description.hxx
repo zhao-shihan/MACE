@@ -7,8 +7,8 @@
 
 class MACE::Geometry::Interface::Description {
 protected:
-    Description() noexcept {}
-    virtual ~Description() noexcept {}
+    Description() noexcept = default;
+    virtual ~Description() noexcept = default;
     Description(const Description&) = delete;
     Description& operator=(const Description&) = delete;
 

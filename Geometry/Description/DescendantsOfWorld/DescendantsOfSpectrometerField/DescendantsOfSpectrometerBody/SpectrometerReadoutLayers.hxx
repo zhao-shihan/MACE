@@ -5,11 +5,11 @@
 class MACE::Geometry::Description::SpectrometerReadoutLayer final :
     public MACE::Geometry::Interface::Description {
 public:
-    static SpectrometerReadoutLayer& Instance();
+    static SpectrometerReadoutLayer& Instance() noexcept;
 
 private:
-    SpectrometerReadoutLayer() noexcept {}
-    ~SpectrometerReadoutLayer() noexcept {}
+    SpectrometerReadoutLayer() noexcept = default;
+    ~SpectrometerReadoutLayer() noexcept = default;
     SpectrometerReadoutLayer(const SpectrometerReadoutLayer&) = delete;
     SpectrometerReadoutLayer& operator=(const SpectrometerReadoutLayer&) = delete;
 

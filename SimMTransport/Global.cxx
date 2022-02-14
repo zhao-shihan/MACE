@@ -7,8 +7,6 @@
 
 using namespace MACE::SimMTransport;
 
-Global::~Global() {}
-
 Global* Global::Instance() {
     static Global global;
     return &global;

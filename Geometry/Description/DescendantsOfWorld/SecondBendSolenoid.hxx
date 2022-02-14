@@ -5,11 +5,11 @@
 class MACE::Geometry::Description::SecondBendSolenoid final :
     public MACE::Geometry::Interface::Description {
 public:
-    static SecondBendSolenoid& Instance();
+    static SecondBendSolenoid& Instance() noexcept;
 
 private:
-    SecondBendSolenoid() noexcept {}
-    ~SecondBendSolenoid() noexcept {}
+    SecondBendSolenoid() noexcept = default;
+    ~SecondBendSolenoid() noexcept = default;
     SecondBendSolenoid(const SecondBendSolenoid&) = delete;
     SecondBendSolenoid& operator=(const SecondBendSolenoid&) = delete;
 

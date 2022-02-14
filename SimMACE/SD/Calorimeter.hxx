@@ -7,7 +7,7 @@
 class MACE::SimMACE::SD::Calorimeter : public G4VSensitiveDetector {
 public:
     Calorimeter(const G4String& SDName, const G4String& hitsCollectionName);
-    ~Calorimeter();
+    ~Calorimeter() noexcept = default;
 
     void   Initialize(G4HCofThisEvent* hitsCollection) override;
     G4bool ProcessHits(G4Step* step, G4TouchableHistory*) override;

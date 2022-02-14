@@ -5,9 +5,11 @@
 
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::Field::SecondBendField : public G4MagneticField {
+class MACE::SimMACE::Field::SecondBendField final :
+    public G4MagneticField {
 public:
     SecondBendField();
+    ~SecondBendField() noexcept = default;
     void GetFieldValue(const G4double* x, G4double* B) const override;
 
     void SetTransportMagneticField(G4double B) { fB = B; }

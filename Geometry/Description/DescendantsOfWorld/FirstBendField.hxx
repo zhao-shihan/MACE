@@ -5,11 +5,11 @@
 class MACE::Geometry::Description::FirstBendField final :
     public MACE::Geometry::Interface::Description {
 public:
-    static FirstBendField& Instance();
+    static FirstBendField& Instance() noexcept;
 
 private:
-    FirstBendField() noexcept {}
-    ~FirstBendField() noexcept {}
+    FirstBendField() noexcept = default;
+    ~FirstBendField() noexcept = default;
     FirstBendField(const FirstBendField&) = delete;
     FirstBendField& operator=(const FirstBendField&) = delete;
 

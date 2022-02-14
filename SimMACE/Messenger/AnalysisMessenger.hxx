@@ -14,7 +14,7 @@ public:
 
 private:
     AnalysisMessenger();
-    ~AnalysisMessenger();
+    ~AnalysisMessenger() noexcept;
     AnalysisMessenger(const AnalysisMessenger&) = delete;
     AnalysisMessenger& operator=(const AnalysisMessenger&) = delete;
 

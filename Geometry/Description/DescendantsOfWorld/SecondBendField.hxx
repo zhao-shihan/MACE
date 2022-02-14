@@ -5,11 +5,11 @@
 class MACE::Geometry::Description::SecondBendField final :
     public MACE::Geometry::Interface::Description {
 public:
-    static SecondBendField& Instance();
+    static SecondBendField& Instance() noexcept;
 
 private:
-    SecondBendField() noexcept {}
-    ~SecondBendField() noexcept {}
+    SecondBendField() noexcept = default;
+    ~SecondBendField() noexcept = default;
     SecondBendField(const SecondBendField&) = delete;
     SecondBendField& operator=(const SecondBendField&) = delete;
 

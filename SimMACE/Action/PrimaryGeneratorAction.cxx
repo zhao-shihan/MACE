@@ -14,7 +14,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
     Messenger::MuonBeamMessenger::Instance().Set(this);
 }
 
-PrimaryGeneratorAction::~PrimaryGeneratorAction() {
+PrimaryGeneratorAction::~PrimaryGeneratorAction() noexcept {
     delete fParticleGun;
 }
 

@@ -17,7 +17,7 @@ Hough(double r0Low, double r0Up, Eigen::Index nPhi, Eigen::Index nRho, double z0
 
 template<template<class T> class FitterT_t, class SpectromrterHit_t>
 MACE::ReconSpectrometer::Reconstructor::Hough<FitterT_t, SpectromrterHit_t>::
-~Hough() {}
+~Hough() noexcept = default;
 
 template<template<class T> class FitterT_t, class SpectromrterHit_t>
 void MACE::ReconSpectrometer::Reconstructor::Hough<FitterT_t, SpectromrterHit_t>::

@@ -9,10 +9,10 @@ class MACE::DataModel::Interface::PersistencyHandler {
     PersistencyHandler& operator=(const PersistencyHandler&) = delete;
 protected:
     PersistencyHandler();
-    virtual ~PersistencyHandler() = 0;
+    virtual ~PersistencyHandler() noexcept = 0;
 
-    virtual void Open(const char* fileName, Option_t* option);
-    virtual void Close(Option_t* option = nullptr);
+    void Open(const char* fileName, Option_t* option);
+    void Close(Option_t* option = nullptr);
 
 public:
     void SetTreeNameIndexer(Char_t indexer);

@@ -17,8 +17,8 @@ protected:
     using TrackPtr = typename Base::TrackPtr;
 
 public:
-    DirectSubSpaceLeastVariance();
-    ~DirectSubSpaceLeastVariance();
+    DirectSubSpaceLeastVariance() = default;
+    ~DirectSubSpaceLeastVariance() noexcept = default;
 
     void SetCenterXBound(double_t low, double_t up) { fXcBound = { low, up }; }
     void SetCenterYBound(double_t low, double_t up) { fYcBound = { low, up }; }

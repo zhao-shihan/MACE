@@ -11,7 +11,7 @@ public:
     VertexDetectorHit() noexcept;
     VertexDetectorHit(const VertexDetectorHit& hit) noexcept;
     VertexDetectorHit(VertexDetectorHit&& hit) noexcept;
-    virtual ~VertexDetectorHit() noexcept {}
+    virtual ~VertexDetectorHit() noexcept = default;
     VertexDetectorHit& operator=(const VertexDetectorHit& hit) noexcept;
     VertexDetectorHit& operator=(VertexDetectorHit&& hit) noexcept;
 

@@ -40,8 +40,8 @@ private: \
 
 class MACE::SimMTransport::Global {
 private:
-    Global() {}
-    ~Global();
+    Global() noexcept = default;
+    ~Global() noexcept = default;
     Global(const Global&) = delete;
     Global& operator=(const Global&) = delete;
 

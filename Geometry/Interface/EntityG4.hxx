@@ -13,7 +13,7 @@ class MACE::Geometry::Interface::EntityG4 :
     public MACE::Geometry::Interface::EntityWithDescription<G4VPhysicalVolume, RequiredDescriptions...> {
 public:
     EntityG4();
-    virtual ~EntityG4() = 0;
+    virtual ~EntityG4() noexcept = 0;
     EntityG4(const EntityG4&) = delete;
     EntityG4& operator=(const EntityG4&) = delete;
 

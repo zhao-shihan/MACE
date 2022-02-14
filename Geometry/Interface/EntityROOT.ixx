@@ -19,5 +19,5 @@ MACE::Geometry::Interface::EntityROOT<RequiredDescriptions...>::EntityROOT() :
 }
 
 template<class... RequiredDescriptions>
-MACE::Geometry::Interface::EntityROOT<RequiredDescriptions...>::~EntityROOT() {}
+MACE::Geometry::Interface::EntityROOT<RequiredDescriptions...>::~EntityROOT() noexcept = default;
  */

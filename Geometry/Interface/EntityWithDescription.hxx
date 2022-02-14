@@ -8,7 +8,7 @@ class MACE::Geometry::Interface::EntityWithDescription :
     public MACE::Geometry::Interface::Entity<Volume_t> {
 protected:
     EntityWithDescription();
-    virtual ~EntityWithDescription() = 0;
+    virtual ~EntityWithDescription() noexcept = 0;
     EntityWithDescription(const EntityWithDescription&) = delete;
     EntityWithDescription& operator=(const EntityWithDescription&) = delete;
 

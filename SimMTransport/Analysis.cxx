@@ -22,8 +22,6 @@ Analysis::Analysis() :
     fEscapedNtuple(nullptr),
     fOpened(false) {}
 
-Analysis::~Analysis() {}
-
 void Analysis::Open() {
     if (fOpened) { return; }
 

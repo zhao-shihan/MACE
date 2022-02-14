@@ -5,11 +5,11 @@
 class MACE::Geometry::Description::Target final :
     public MACE::Geometry::Interface::Description {
 public:
-    static Target& Instance();
+    static Target& Instance() noexcept;
 
 private:
-    Target() noexcept {}
-    ~Target() noexcept {}
+    Target() noexcept = default;
+    ~Target() noexcept = default;
     Target(const Target&) = delete;
     Target& operator=(const Target&) = delete;
 

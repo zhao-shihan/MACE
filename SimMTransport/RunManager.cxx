@@ -19,8 +19,6 @@ RunManager::RunManager() :
     fWorker(nullptr),
     fStatus(kRunUndefined) {}
 
-RunManager::~RunManager() {}
-
 #define MASTER_DO(statement) \
     if (Global::Instance()->CommRank() == Global::Instance()->MasterRank()) statement
 #define WORKER_DO(statement) \

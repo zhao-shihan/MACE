@@ -1,15 +1,6 @@
 #include <valarray>
 
 template<class SpectromrterHit_t, class Track_t>
-MACE::ReconSpectrometer::Fitter::DirectSubSpaceLeastVariance<SpectromrterHit_t, Track_t>::
-DirectSubSpaceLeastVariance() :
-    Base() {}
-
-template<class SpectromrterHit_t, class Track_t>
-MACE::ReconSpectrometer::Fitter::DirectSubSpaceLeastVariance<SpectromrterHit_t, Track_t>::
-~DirectSubSpaceLeastVariance() {}
-
-template<class SpectromrterHit_t, class Track_t>
 bool MACE::ReconSpectrometer::Fitter::DirectSubSpaceLeastVariance<SpectromrterHit_t, Track_t>::
 Fit(std::vector<HitPtr>& hitData, TrackPtr& track) {
     std::sort(hitData.begin(), hitData.end(),

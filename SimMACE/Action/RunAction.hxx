@@ -4,10 +4,11 @@
 
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::Action::RunAction : public G4UserRunAction {
+class MACE::SimMACE::Action::RunAction final :
+    public G4UserRunAction {
 public:
     RunAction(PrimaryGeneratorAction* pPrimaryGeneratorAction, EventAction* pEventAction);
-    ~RunAction();
+    ~RunAction() noexcept = default;
 
     void BeginOfRunAction(const G4Run* run) override;
     void   EndOfRunAction(const G4Run*) override;

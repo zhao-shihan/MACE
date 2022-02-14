@@ -2,7 +2,7 @@
 
 using namespace MACE::Geometry::Description;
 
-Calorimeter& Calorimeter::Instance() {
+Calorimeter& Calorimeter::Instance() noexcept {
     static Calorimeter instance;
     return instance;
 }

@@ -5,9 +5,11 @@
 
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::Field::SelectorField : public G4ElectroMagneticField {
+class MACE::SimMACE::Field::SelectorField :
+    public G4ElectroMagneticField {
 public:
     SelectorField();
+    ~SelectorField() noexcept = default;
     void GetFieldValue(const G4double*, G4double* F) const override;
     G4bool DoesFieldChangeEnergy() const override { return true; }
 

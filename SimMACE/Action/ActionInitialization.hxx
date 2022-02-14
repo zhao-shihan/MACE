@@ -4,8 +4,10 @@
 
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::Action::ActionInitialization : public G4VUserActionInitialization {
+class MACE::SimMACE::Action::ActionInitialization final :
+    public G4VUserActionInitialization {
 public:
-    ActionInitialization();
+    ActionInitialization() = default;
+    ~ActionInitialization() noexcept = default;
     void Build() const override;
 };

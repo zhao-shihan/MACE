@@ -11,7 +11,7 @@ private:
 
 public:
     Master();
-    ~Master();
+    ~Master() noexcept = default;
     Master(const Master&) = delete;
     Master& operator=(const Master&) = delete;
 

@@ -5,11 +5,11 @@
 class MACE::Geometry::Description::FirstTransportField final :
     public MACE::Geometry::Interface::Description {
 public:
-    static FirstTransportField& Instance();
+    static FirstTransportField& Instance() noexcept;
 
 private:
-    FirstTransportField() noexcept {}
-    ~FirstTransportField() noexcept {}
+    FirstTransportField() noexcept = default;
+    ~FirstTransportField() noexcept = default;
     FirstTransportField(const FirstTransportField&) = delete;
     FirstTransportField& operator=(const FirstTransportField&) = delete;
 
