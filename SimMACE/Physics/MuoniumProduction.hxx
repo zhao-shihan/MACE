@@ -5,10 +5,11 @@
 
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::Physics::MuoniumProduction : public G4VRestProcess {
+class MACE::SimMACE::Physics::MuoniumProduction final :
+    public G4VRestProcess {
 public:
-    MuoniumProduction(const G4String& name = "MuoniumProduction", G4ProcessType aType = fElectromagnetic);
-    ~MuoniumProduction();
+    MuoniumProduction();
+    ~MuoniumProduction() noexcept;
 
     G4VParticleChange* AtRestDoIt(const G4Track& track, const G4Step&) override;
     G4double GetMeanLifeTime(const G4Track&, G4ForceCondition*) override { return fMeanLifeTime; }

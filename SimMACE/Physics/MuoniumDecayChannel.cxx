@@ -66,9 +66,6 @@ MuoniumDecayChannel::MuoniumDecayChannel(const G4String& theParentName, G4double
         SetDaughter(1, "nu_e");
         SetDaughter(2, "anti_nu_mu");
         SetDaughter(3, "e-");
-        // Daughter 4 and 5 for AntiMuonium Decay.
-        // SetDaughter(4, "anti_nu_e");
-        // SetDaughter(5, "nu_mu");
     } else {
 #ifdef G4VERBOSE
         if (GetVerboseLevel() > 0) {
@@ -85,39 +82,37 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
     //              assumes the pure V-A coupling
     //              the Neutrinos are correctly V-A. 
 #ifdef G4VERBOSE
-    if (GetVerboseLevel() > 1) G4cout << "MuoniumDecayChannel::DecayIt ";
+    if (GetVerboseLevel() > 1) { G4cout << "MuoniumDecayChannel::DecayIt "; }
 #endif
 
-    if (G4MT_parent == 0)    CheckAndFillParent();
-    if (G4MT_daughters == 0) CheckAndFillDaughters();
+    if (G4MT_parent == nullptr) { CheckAndFillParent(); }
+    if (G4MT_daughters == nullptr) { CheckAndFillDaughters(); }
 
     // parent mass
-    G4double parentmass = G4MT_parent->GetPDGMass();
+    auto parentMass = G4MT_parent->GetPDGMass();
 
-    //daughters'mass
-    G4double daughtermass[4];
-    G4double sumofdaughtermass = 0.0;
-    for (G4int index = 0; index < 3; index++) {
-        daughtermass[index] = G4MT_daughters[index]->GetPDGMass();
-        sumofdaughtermass += daughtermass[index];
+    // daughters'mass
+    G4double daughterMass[4];
+    G4double sumDaughterMass = 0.0;
+    for (G4int index = 0; index < 3; ++index) {
+        daughterMass[index] = G4MT_daughters[index]->GetPDGMass();
+        sumDaughterMass += daughterMass[index];
     }
 
-    //create parent G4DynamicParticle at rest
-    auto parentparticle = new G4DynamicParticle(G4MT_parent, G4ThreeVector(), 0.0);
-    //create G4Decayproducts
-    auto products = new G4DecayProducts(*parentparticle);
-    delete parentparticle;
+    // create G4Decayproducts
+    // (?) assuming muonium at rest?
+    auto products = new G4DecayProducts(G4DynamicParticle(G4MT_parent, G4ThreeVector(), 0.0));
 
     // calculate daughter momentum
     G4double daughtermomentum[3];
     // calcurate electron energy
-    G4double xmax = (1.0 + daughtermass[0] * daughtermass[0] / (parentmass * parentmass));
+    G4double xmax = (1.0 + daughterMass[0] * daughterMass[0] / (parentMass * parentMass));
     G4double x;
 
     G4double Ee, Ene;
 
     G4double gam;
-    G4double EMax = 0.5 * parentmass - daughtermass[0];
+    G4double EMax = 0.5 * parentMass - daughterMass[0];
 
 
     //Generating Random Energy
@@ -129,24 +124,23 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
         } while (gam > x * (1. - x));
         Ene = x;
     } while (Ene < (1. - Ee));
-    G4double Enm = (2. - Ee - Ene);
+    auto Enm = (2. - Ee - Ene);
 
     //initialisation of rotation parameters
 
-    G4double costheta, sintheta, rphi, rtheta, rMACE;
+    G4double costheta, sintheta, rphi, rtheta, rpsi;
     costheta = 1. - 2. / Ee - 2. / Ene + 2. / (Ene * Ee);
     sintheta = sqrt(1. - costheta * costheta);
 
     rphi = twopi * G4UniformRand() * rad;
     rtheta = acos(2. * G4UniformRand() - 1.);
-    rMACE = twopi * G4UniformRand() * rad;
+    rpsi = twopi * G4UniformRand() * rad;
 
-    G4RotationMatrix rot;
-    rot.set(rphi, rtheta, rMACE);
+    G4RotationMatrix rot(rphi, rtheta, rpsi);
 
     //Positron 0
 
-    daughtermomentum[0] = sqrt((Ee * EMax) * (Ee * EMax) + 2.0 * (Ee * EMax) * daughtermass[0]);
+    daughtermomentum[0] = sqrt((Ee * EMax) * (Ee * EMax) + 2.0 * (Ee * EMax) * daughterMass[0]);
     G4ThreeVector direction0(0.0, 0.0, 1.0);
     direction0 *= rot;
     auto daughterparticle = new G4DynamicParticle(G4MT_daughters[0], direction0 * daughtermomentum[0]);
@@ -154,7 +148,7 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
 
     //electronic neutrino  1
 
-    daughtermomentum[1] = sqrt(Ene * Ene * EMax * EMax + 2.0 * Ene * EMax * daughtermass[1]);
+    daughtermomentum[1] = sqrt(Ene * Ene * EMax * EMax + 2.0 * Ene * EMax * daughterMass[1]);
     G4ThreeVector direction1(sintheta, 0.0, costheta);
     direction1 *= rot;
     auto daughterparticle1 = new G4DynamicParticle(G4MT_daughters[1], direction1 * daughtermomentum[1]);
@@ -162,7 +156,7 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
 
     //muonic neutrino 2
 
-    daughtermomentum[2] = sqrt(Enm * Enm * EMax * EMax + 2.0 * Enm * EMax * daughtermass[2]);
+    daughtermomentum[2] = sqrt(Enm * Enm * EMax * EMax + 2.0 * Enm * EMax * daughterMass[2]);
     G4ThreeVector direction2(-Ene / Enm * sintheta, 0, -Ee / Enm - Ene / Enm * costheta);
     direction2 *= rot;
     auto daughterparticle2 = new G4DynamicParticle(G4MT_daughters[2], direction2 * daughtermomentum[2]);
@@ -170,7 +164,7 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
 
     //atomic shell electron 3
     //energy distribution
-    double ProbTable[100] = { 0.0579448, 0.0820584, 0.0822704, 0.0764795, 0.0690145, 0.0614549, 0.054404, 0.0480648, 0.0424683, 0.0375724, 0.0333076, 0.0295981, 0.0263708, 0.0235596, 0.0211061, 0.0189599, 0.0170777, 0.0154228, 0.0139636, 0.0126736, 0.01153, 0.0105136, 0.0096078, 0.00879855, 0.00807379, 0.00742315, 0.00683769, 0.00630972, 0.00583257, 0.00540044, 0.0050083, 0.00465176, 0.00432698, 0.00403061, 0.00375967, 0.00351158, 0.00328404, 0.00307501, 0.0028827, 0.00270552, 0.00254203, 0.00239098, 0.00225124, 0.00212178, 0.00200171, 0.0018902, 0.00178653, 0.00169004, 0.00160012, 0.00151625, 0.00143793, 0.00136472, 0.00129622, 0.00123207, 0.00117194, 0.00111552, 0.00106253, 0.00101274, 0.000965894, 0.000921796, 0.000880247, 0.000841072, 0.000804106, 0.0007692, 0.000736214, 0.000705023, 0.000675507, 0.00064756, 0.000621079, 0.000595972, 0.000572154, 0.000549544, 0.000528069, 0.000507659, 0.000488251, 0.000469786, 0.000452208, 0.000435466, 0.000419511, 0.0004043, 0.000389789, 0.000375941, 0.000362718, 0.000350087, 0.000338015, 0.000326472, 0.000315431, 0.000304866, 0.00029475, 0.000285062, 0.000275778, 0.00026688, 0.000258347, 0.000250162, 0.000242306, 0.000234765, 0.000227523, 0.000220565, 0.000213878, 0.000207449 };
+    constexpr double ProbTable[100] = { 0.0579448, 0.0820584, 0.0822704, 0.0764795, 0.0690145, 0.0614549, 0.054404, 0.0480648, 0.0424683, 0.0375724, 0.0333076, 0.0295981, 0.0263708, 0.0235596, 0.0211061, 0.0189599, 0.0170777, 0.0154228, 0.0139636, 0.0126736, 0.01153, 0.0105136, 0.0096078, 0.00879855, 0.00807379, 0.00742315, 0.00683769, 0.00630972, 0.00583257, 0.00540044, 0.0050083, 0.00465176, 0.00432698, 0.00403061, 0.00375967, 0.00351158, 0.00328404, 0.00307501, 0.0028827, 0.00270552, 0.00254203, 0.00239098, 0.00225124, 0.00212178, 0.00200171, 0.0018902, 0.00178653, 0.00169004, 0.00160012, 0.00151625, 0.00143793, 0.00136472, 0.00129622, 0.00123207, 0.00117194, 0.00111552, 0.00106253, 0.00101274, 0.000965894, 0.000921796, 0.000880247, 0.000841072, 0.000804106, 0.0007692, 0.000736214, 0.000705023, 0.000675507, 0.00064756, 0.000621079, 0.000595972, 0.000572154, 0.000549544, 0.000528069, 0.000507659, 0.000488251, 0.000469786, 0.000452208, 0.000435466, 0.000419511, 0.0004043, 0.000389789, 0.000375941, 0.000362718, 0.000350087, 0.000338015, 0.000326472, 0.000315431, 0.000304866, 0.00029475, 0.000285062, 0.000275778, 0.00026688, 0.000258347, 0.000250162, 0.000242306, 0.000234765, 0.000227523, 0.000220565, 0.000213878, 0.000207449 };
     double probsum3 = 0.;
     double seed3 = G4UniformRand();
     G4double kineticE3 = 0.;

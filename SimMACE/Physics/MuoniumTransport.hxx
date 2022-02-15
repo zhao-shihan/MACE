@@ -10,10 +10,12 @@
 #include "SimMTransport/Track.hxx"
 #pragma GCC diagnostic pop
 
-class MACE::SimMACE::Physics::MuoniumTransport : public G4VContinuousProcess, protected MACE::SimMTransport::Track {
+class MACE::SimMACE::Physics::MuoniumTransport final :
+    public G4VContinuousProcess,
+    protected MACE::SimMTransport::Track {
 public:
-    MuoniumTransport(const G4String& name = "MuoniumTransport", G4ProcessType aType = fTransportation);
-    ~MuoniumTransport();
+    MuoniumTransport();
+    ~MuoniumTransport() noexcept;
 
     G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step&) override;
     G4double GetContinuousStepLimit(const G4Track& track, G4double previousStepSize, G4double currentMinimumStep, G4double& currentSafety) override;

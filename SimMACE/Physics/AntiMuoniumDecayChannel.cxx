@@ -100,7 +100,7 @@ G4DecayProducts* AntiMuoniumDecayChannel::DecayIt(G4double) {
     }
 
     // create G4Decayproducts
-    // (?) assuming muonium at rest?
+    // (?) assuming anti-muonium at rest?
     auto products = new G4DecayProducts(G4DynamicParticle(G4MT_parent, G4ThreeVector(), 0.0));
 
     // calculate daughter momentum
@@ -136,9 +136,7 @@ G4DecayProducts* AntiMuoniumDecayChannel::DecayIt(G4double) {
     rtheta = acos(2. * G4UniformRand() - 1.);
     rpsi = twopi * G4UniformRand() * rad;
 
-    G4RotationMatrix rot;
-    rot.set(rphi, rtheta, rpsi);
-
+    G4RotationMatrix rot(rphi, rtheta, rpsi);
 
     //eletron 0
 

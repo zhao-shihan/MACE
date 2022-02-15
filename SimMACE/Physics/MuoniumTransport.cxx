@@ -8,8 +8,8 @@
 
 using namespace MACE::SimMACE::Physics;
 
-MuoniumTransport::MuoniumTransport(const G4String& name, G4ProcessType aType) :
-    G4VContinuousProcess(name, aType),
+MuoniumTransport::MuoniumTransport() :
+    G4VContinuousProcess("MuoniumTransport", fTransportation),
     SimMTransport::Track(),
     fParticleChange(new G4ParticleChange()),
     fpTarget(static_cast<const Action::DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction())->GetTarget()->GetVolume()) {

@@ -8,6 +8,13 @@ using namespace MACE::SimMACE::Physics;
 
 AntiMuonium* AntiMuonium::fgInstance = nullptr;
 
+AntiMuonium* AntiMuonium::Definition() {
+    if (fgInstance == nullptr) {
+        fgInstance = new AntiMuonium();
+    }
+    return fgInstance;
+}
+
 AntiMuonium::AntiMuonium() :
     // Arguments for constructor as follows
     //      name             mass          width         charge
@@ -38,11 +45,4 @@ AntiMuonium::AntiMuonium() :
     // create a decay channel
     table->Insert(new AntiMuoniumDecayChannel("-M", 1.00));
     this->SetDecayTable(table);
-}
-
-AntiMuonium* AntiMuonium::Definition() {
-    if (fgInstance == nullptr) {
-        fgInstance = new AntiMuonium();
-    }
-    return fgInstance;
 }

@@ -6,12 +6,16 @@
 
 // Muonium Definition
 
-class MACE::SimMACE::Physics::Muonium : public G4ParticleDefinition {
+class MACE::SimMACE::Physics::Muonium final :
+    public G4ParticleDefinition {
+public:
+    static Muonium* Definition();
 private:
-    static MACE::SimMACE::Physics::Muonium* instance;
+    static Muonium* fgInstance;
+
+private:
+    Muonium();
 
 public:
-    static MACE::SimMACE::Physics::Muonium* Definition();
-    static MACE::SimMACE::Physics::Muonium* MuoniumDefinition();
+    ~Muonium() noexcept = default;
 };
-

@@ -13,10 +13,10 @@
 using namespace MACE::SimMACE;
 
 int main(int argc, char** argv) {
-    auto engine = new CLHEP::MTwistEngine(4357L);
-    G4Random::setTheEngine(engine);
+    auto engine = std::make_unique<CLHEP::MTwistEngine>(4357L);
+    G4Random::setTheEngine(engine.get());
 
-    auto runManager = new G4RunManager();
+    auto runManager = std::make_unique<G4RunManager>();
     auto physicsList = new Physics::PhysicsList();
     runManager->SetUserInitialization(physicsList);
     runManager->SetUserInitialization(new Action::DetectorConstruction());
@@ -38,9 +38,6 @@ int main(int argc, char** argv) {
         g4MPIManager->GetMPIsession()->SessionStart();
         delete g4MPIManager;
     }
-
-    delete runManager;
-    delete engine;
 
     return EXIT_SUCCESS;
 }

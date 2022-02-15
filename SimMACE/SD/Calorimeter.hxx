@@ -4,7 +4,8 @@
 
 #include "SimMACE/Hit/CalorimeterHit.hxx"
 
-class MACE::SimMACE::SD::Calorimeter : public G4VSensitiveDetector {
+class MACE::SimMACE::SD::Calorimeter final :
+    public G4VSensitiveDetector {
 public:
     Calorimeter(const G4String& SDName, const G4String& hitsCollectionName);
     ~Calorimeter() noexcept = default;

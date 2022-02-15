@@ -4,7 +4,6 @@
 #include "SimMACE/Physics/MuoniumPhysics.hxx"
 #include "SimMACE/Physics/AntiMuonium.hxx"
 #include "SimMACE/Physics/Muonium.hxx"
-// #include "physics/MuoniumLFV.hxx"
 #include "SimMACE/Physics/MuoniumProduction.hxx"
 #include "SimMACE/Physics/MuoniumTransport.hxx"
 
@@ -29,7 +28,6 @@ void MuoniumPhysics::ConstructProcess() {
 
     auto muonium = Muonium::Definition()->GetProcessManager();
     muonium->AddContinuousProcess(muoniumTransport);
-    // muonium->AddDiscreteProcess(new MuoniumLFV());
 
     auto antiMuonium = AntiMuonium::Definition()->GetProcessManager();
     antiMuonium->AddContinuousProcess(muoniumTransport);

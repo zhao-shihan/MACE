@@ -8,8 +8,8 @@
 
 using namespace MACE::SimMACE::Physics;
 
-MuoniumProduction::MuoniumProduction(const G4String& name, G4ProcessType aType) :
-    G4VRestProcess(name, aType),
+MuoniumProduction::MuoniumProduction() :
+    G4VRestProcess("MuoniumProduction", fElectromagnetic),
     fParticleChange(new G4ParticleChange()) {
     Messenger::PhysicsMessenger::Instance().Set(this);
 }
@@ -29,7 +29,7 @@ G4VParticleChange* MuoniumProduction::AtRestDoIt(const G4Track& track, const G4S
     }
     auto muoniumDynamicParticle = new G4DynamicParticle(*track.GetDynamicParticle());
     muoniumDynamicParticle->SetDefinition(muonium);
-    muoniumDynamicParticle->SetPreAssignedDecayProperTime(G4RandExponential::shoot(muonium->GetPDGLifeTime()));
+    muoniumDynamicParticle->SetPreAssignedDecayProperTime(G4RandExponential::shoot(G4Random::getTheEngine(), muonium->GetPDGLifeTime()));
     muoniumDynamicParticle->SetKineticEnergy(k_Boltzmann * 300 * kelvin);
 
     fParticleChange->AddSecondary(new G4Track(muoniumDynamicParticle, track.GetGlobalTime(), track.GetPosition()));
