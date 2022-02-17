@@ -14,17 +14,17 @@ private:
     Target& operator=(const Target&) = delete;
 
 public:
-    const char* GetName()                   const override { return "Target"; }
-    const char* GetOverallDescription()     const override { return "Muonium target."; }
-    const char* GetMaterialDescription()    const override { return "Silica aerogel."; }
-    const char* GetShapeDescription()       const override { return "A box with certain width(along XY) and thickness(along Z)."; }
-    const char* GetMotherDescription()      const override { return "AcceleratorField"; }
-    const char* GetTranslationDescription() const override { return "Downstream surface at z=0. (Be aware of AcceleratorField's position)"; }
-    const char* GetRotationDescription()    const override { return "No rotation."; }
+    [[nodiscard]] const char* GetName()                   const override { return "Target"; }
+    [[nodiscard]] const char* GetOverallDescription()     const override { return "Muonium target."; }
+    [[nodiscard]] const char* GetMaterialDescription()    const override { return "Silica aerogel."; }
+    [[nodiscard]] const char* GetShapeDescription()       const override { return "A box with certain width(along XY) and thickness(along Z)."; }
+    [[nodiscard]] const char* GetMotherDescription()      const override { return "AcceleratorField"; }
+    [[nodiscard]] const char* GetTranslationDescription() const override { return "Downstream surface at z=0. (Be aware of AcceleratorField's position)"; }
+    [[nodiscard]] const char* GetRotationDescription()    const override { return "No rotation."; }
 
-    const auto& GetWidth() const { return fWidth; }
-    const auto& GetThickness() const { return fThickness; }
-    const auto& GetDownZPosition() const { return fDownZPosition; }
+    [[nodiscard]] const auto& GetWidth() const { return fWidth; }
+    [[nodiscard]] const auto& GetThickness() const { return fThickness; }
+    [[nodiscard]] const auto& GetDownZPosition() const { return fDownZPosition; }
 
     void SetWidth(double val) { fWidth = val; }
     void SetThickness(double val) { fThickness = val; }

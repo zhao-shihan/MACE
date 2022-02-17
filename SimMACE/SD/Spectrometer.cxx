@@ -8,7 +8,7 @@
 
 using namespace MACE::SimMACE;
 
-SD::Spectrometer::Spectrometer(const G4String& SDName, const G4String& hitsCollectionName, const Geometry::Entity::Fast::SpectrometerCells* spectrometerCellEntity) :
+SD::Spectrometer::Spectrometer(const G4String& SDName, const G4String& hitsCollectionName, const std::shared_ptr<const Geometry::Entity::Fast::SpectrometerCells>& spectrometerCellEntity) :
     G4VSensitiveDetector(SDName),
     fHitsCollection(nullptr),
     fSpectrometerCellEntity(spectrometerCellEntity),

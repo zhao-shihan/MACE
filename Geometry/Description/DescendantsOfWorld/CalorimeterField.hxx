@@ -14,18 +14,18 @@ private:
     CalorimeterField& operator=(const CalorimeterField&) = delete;
 
 public:
-    const char* GetName()                   const override { return "CalorimeterField"; }
-    const char* GetOverallDescription()     const override { return ""; }
-    const char* GetMaterialDescription()    const override { return ""; }
-    const char* GetShapeDescription()       const override { return ""; }
-    const char* GetMotherDescription()      const override { return ""; }
-    const char* GetTranslationDescription() const override { return ""; }
-    const char* GetRotationDescription()    const override { return ""; }
+    [[nodiscard]] const char* GetName()                   const override { return "CalorimeterField"; }
+    [[nodiscard]] const char* GetOverallDescription()     const override { return ""; }
+    [[nodiscard]] const char* GetMaterialDescription()    const override { return ""; }
+    [[nodiscard]] const char* GetShapeDescription()       const override { return ""; }
+    [[nodiscard]] const char* GetMotherDescription()      const override { return ""; }
+    [[nodiscard]] const char* GetTranslationDescription() const override { return ""; }
+    [[nodiscard]] const char* GetRotationDescription()    const override { return ""; }
 
-    const auto& GetRadius()      const { return fRadius; }
-    const auto& GetLength()      const { return fLength; }
-    const auto& GetCenterX()     const { return fCenterX; }
-    const auto& GetUpZPosition() const { return fUpZPosition; }
+    [[nodiscard]] const auto& GetRadius()      const { return fRadius; }
+    [[nodiscard]] const auto& GetLength()      const { return fLength; }
+    [[nodiscard]] const auto& GetCenterX()     const { return fCenterX; }
+    [[nodiscard]] const auto& GetUpZPosition() const { return fUpZPosition; }
 
     void SetRadius(double val) { fRadius = val; }
     void SetLength(double val) { fLength = val; }

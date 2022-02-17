@@ -41,11 +41,11 @@ public:
     void Initialize();
     void Stepping();
 
-    const Step* GetCurrentStep() const { return fCurrentStep; }
-    double_t GetVertexTime() const { return fVertexTime; }
-    const TEveVectorD& GetVertexPosition() const { return fVertexPosition; }
-    bool IsEscaping() const { return fEscaping; }
-    TrackStatus GetTrackStatus() const { return fStatus; }
+    [[nodiscard]] const Step* GetCurrentStep() const { return fCurrentStep; }
+    [[nodiscard]] double_t GetVertexTime() const { return fVertexTime; }
+    [[nodiscard]] const TEveVectorD& GetVertexPosition() const { return fVertexPosition; }
+    [[nodiscard]] bool IsEscaping() const { return fEscaping; }
+    [[nodiscard]] TrackStatus GetTrackStatus() const { return fStatus; }
 
 private:
     bool Target(double_t x, double_t y, double_t z) { return (*global->Target())(x, y, z) > 0.5; }

@@ -23,25 +23,25 @@
 using namespace MACE::Geometry::Entity::Fast;
 
 int main(int, char**) {
-    auto calorimeter = new Calorimeter();
-    auto vertexDetector = new VertexDetector();
-    auto collimator = new Collimator();
-    auto selectorField = new SelectorField();
-    auto target = new Target();
-    auto spectrometerCells = new SpectrometerCells();
-    auto spectrometerReadoutLayer = new SpectrometerReadoutLayer();
-    auto acceleratorField = new AcceleratorField();
-    auto spectrometerBody = new SpectrometerBody();
-    auto calorimeterField = new CalorimeterField();
-    auto firstBendField = new FirstBendField();
-    auto firstTransportField = new FirstTransportField();
-    auto vertexDetectorShield = new VertexDetectorShield();
-    auto secondBendField = new SecondBendField();
-    auto secondTransportField = new SecondTransportField();
-    auto spectrometerField = new SpectrometerField();
-    auto spectrometerShield = new SpectrometerShield();
-    auto thirdTransportField = new ThirdTransportField();
-    auto world = new World();
+    auto calorimeter = std::make_shared<Calorimeter>();
+    auto vertexDetector = std::make_shared<VertexDetector>();
+    auto collimator = std::make_shared<Collimator>();
+    auto selectorField = std::make_shared<SelectorField>();
+    auto target = std::make_shared<Target>();
+    auto spectrometerCells = std::make_shared<SpectrometerCells>();
+    auto spectrometerReadoutLayer = std::make_shared<SpectrometerReadoutLayer>();
+    auto acceleratorField = std::make_shared<AcceleratorField>();
+    auto spectrometerBody = std::make_shared<SpectrometerBody>();
+    auto calorimeterField = std::make_shared<CalorimeterField>();
+    auto firstBendField = std::make_shared<FirstBendField>();
+    auto firstTransportField = std::make_shared<FirstTransportField>();
+    auto vertexDetectorShield = std::make_shared<VertexDetectorShield>();
+    auto secondBendField = std::make_shared<SecondBendField>();
+    auto secondTransportField = std::make_shared<SecondTransportField>();
+    auto spectrometerField = std::make_shared<SpectrometerField>();
+    auto spectrometerShield = std::make_shared<SpectrometerShield>();
+    auto thirdTransportField = std::make_shared<ThirdTransportField>();
+    auto world = std::make_shared<World>();
 
     world->AddDaughter(calorimeterField);
     world->AddDaughter(firstBendField);
@@ -69,9 +69,7 @@ int main(int, char**) {
     new TGeoManager("MACEGeom", "MACE Geometry");
     gGeoManager->Import("test.gdml");
     gGeoManager->Export("test.root");
-
-    delete world;
     delete gGeoManager;
 
-    return 0;
+    return EXIT_SUCCESS;
 }

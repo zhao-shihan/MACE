@@ -14,17 +14,17 @@ private:
     World& operator=(const World&) = delete;
 
 public:
-    const char* GetName()                   const override { return "World"; }
-    const char* GetOverallDescription()     const override { return "The geometry world."; }
-    const char* GetMaterialDescription()    const override { return "Vacuum (of air). A properly defined pressure/density is recommended."; }
-    const char* GetShapeDescription()       const override { return "A big box that can contain everything."; }
-    const char* GetMotherDescription()      const override { return "Void."; }
-    const char* GetTranslationDescription() const override { return "No translation."; }
-    const char* GetRotationDescription()    const override { return "No rotation."; }
+    [[nodiscard]] const char* GetName()                   const override { return "World"; }
+    [[nodiscard]] const char* GetOverallDescription()     const override { return "The geometry world."; }
+    [[nodiscard]] const char* GetMaterialDescription()    const override { return "Vacuum (of air). A properly defined pressure/density is recommended."; }
+    [[nodiscard]] const char* GetShapeDescription()       const override { return "A big box that can contain everything."; }
+    [[nodiscard]] const char* GetMotherDescription()      const override { return "Void."; }
+    [[nodiscard]] const char* GetTranslationDescription() const override { return "No translation."; }
+    [[nodiscard]] const char* GetRotationDescription()    const override { return "No rotation."; }
 
-    const auto& GetHalfXExtent() const { return fHalfXExtent; }
-    const auto& GetHalfYExtent() const { return fHalfYExtent; }
-    const auto& GetHalfZExtent() const { return fHalfZExtent; }
+    [[nodiscard]] const auto& GetHalfXExtent() const { return fHalfXExtent; }
+    [[nodiscard]] const auto& GetHalfYExtent() const { return fHalfYExtent; }
+    [[nodiscard]] const auto& GetHalfZExtent() const { return fHalfZExtent; }
 
     void SetHalfXExtent(double val) { fHalfXExtent = val; }
     void SetHalfYExtent(double val) { fHalfYExtent = val; }

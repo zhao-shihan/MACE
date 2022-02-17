@@ -10,7 +10,7 @@ public:
     // Override this in derived classes at least once!
     static constexpr const char* Name() { return "MACE_DataModel_Base_Data"; }
     // Extend (override & invoke) this in derived classes!
-    static void CreateBranches(TTree* tree) {}
+    static void CreateBranches(const std::shared_ptr<TTree>& tree) {}
     // Extend (override & invoke) this in derived classes!
     inline void FillBranches() noexcept {}
     // Extend (override & invoke) this in derived classes!

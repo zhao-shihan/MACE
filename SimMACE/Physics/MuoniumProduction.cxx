@@ -10,16 +10,12 @@ using namespace MACE::SimMACE::Physics;
 
 MuoniumProduction::MuoniumProduction() :
     G4VRestProcess("MuoniumProduction", fElectromagnetic),
-    fParticleChange(new G4ParticleChange()) {
+    fParticleChange() {
     Messenger::PhysicsMessenger::Instance().Set(this);
 }
 
-MuoniumProduction::~MuoniumProduction() {
-    delete fParticleChange;
-}
-
 G4VParticleChange* MuoniumProduction::AtRestDoIt(const G4Track& track, const G4Step&) {
-    fParticleChange->Initialize(track);
+    fParticleChange.Initialize(track);
 
     G4ParticleDefinition* muonium;
     if (G4UniformRand() < fConversionProbability) {
@@ -32,9 +28,9 @@ G4VParticleChange* MuoniumProduction::AtRestDoIt(const G4Track& track, const G4S
     muoniumDynamicParticle->SetPreAssignedDecayProperTime(G4RandExponential::shoot(G4Random::getTheEngine(), muonium->GetPDGLifeTime()));
     muoniumDynamicParticle->SetKineticEnergy(k_Boltzmann * 300 * kelvin);
 
-    fParticleChange->AddSecondary(new G4Track(muoniumDynamicParticle, track.GetGlobalTime(), track.GetPosition()));
+    fParticleChange.AddSecondary(new G4Track(muoniumDynamicParticle, track.GetGlobalTime(), track.GetPosition()));
 
-    fParticleChange->ProposeTrackStatus(fStopAndKill);
+    fParticleChange.ProposeTrackStatus(fStopAndKill);
 
-    return fParticleChange;
+    return std::addressof(fParticleChange);
 }

@@ -4,6 +4,7 @@
 #include "G4UIcmdWithADouble.hh"
 
 #include "SimMACE/Global.hxx"
+#include "Utility/ObserverPtr.hxx"
 
 class MACE::SimMACE::Messenger::PhysicsMessenger final :
     public G4UImessenger {
@@ -12,18 +13,18 @@ public:
 
 private:
     PhysicsMessenger();
-    ~PhysicsMessenger() noexcept;
+    ~PhysicsMessenger() noexcept = default;
     PhysicsMessenger(const PhysicsMessenger&) = delete;
     PhysicsMessenger& operator=(const PhysicsMessenger&) = delete;
 
 public:
-    void Set(Physics::MuoniumProduction* pMuoniumProduction) { fpMuoniumProduction = pMuoniumProduction; }
+    void Set(ObserverPtr<Physics::MuoniumProduction> muoniumProduction) { fMuoniumProduction = muoniumProduction; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    Physics::MuoniumProduction* fpMuoniumProduction;
+    ObserverPtr<Physics::MuoniumProduction> fMuoniumProduction = nullptr;
 
-    G4UIdirectory* fDirectory;
-    G4UIcmdWithADouble* fSetConversionProbability;
+    G4UIdirectory fDirectory;
+    G4UIcmdWithADouble fSetConversionProbability;
 };

@@ -1,14 +1,15 @@
 #pragma once
 
+#include "TFile.h"
+
 #include "SimMACE/Global.hxx"
 #include "SimMACE/Hit/CalorimeterHit.hxx"
 #include "SimMACE/Hit/VertexDetectorHit.hxx"
 #include "SimMACE/Hit/SpectrometerHit.hxx"
+#include "DataModel/TreeManager/TreeProvider.hxx"
+#include "Utility/ObserverPtr.hxx"
 
-#include "DataModel/PersistencyWriter.hxx"
-
-class MACE::SimMACE::Analysis final :
-    private MACE::DataModel::PersistencyWriter {
+class MACE::SimMACE::Analysis final {
 public:
     static Analysis& Instance();
 
@@ -20,26 +21,29 @@ private:
 
 public:
     void SetFileName(const G4String& fileName) { fFileName = fileName; }
-    const G4String& GetFileName() const { return fFileName; }
+    [[nodiscard]] const G4String& GetFileName() const { return fFileName; }
     void SetEnableCoincidenceOfCalorimeter(G4bool val) { fEnableCoincidenceOfCalorimeter = val; }
     void SetEnableCoincidenceOfVertexDetector(G4bool val) { fEnableCoincidenceOfVertexDetector = val; }
 
-    void Open();
-    using DataModel::PersistencyWriter::Close;
+    void Open(Option_t* option = "recreate");
+    void Close(Option_t* option = nullptr);
 
     void SetTrueEventID(G4int trueEventID) { fTrueEventID = trueEventID; }
-    void SubmitCalorimeterHC(const std::vector<Hit::CalorimeterHit*>* hitList) { fpCalorimeterHitList = hitList; }
-    void SubmitVertexDetectorHC(const std::vector<Hit::VertexDetectorHit*>* hitList) { fpVertexDetectorHitList = hitList; }
-    void SubmitSpectrometerHC(const std::vector<Hit::SpectrometerHit*>* hitList) { fpSpectrometerHitList = hitList; }
+    void SubmitCalorimeterHC(ObserverPtr<const std::vector<Hit::CalorimeterHit*>> hitList) { fCalorimeterHitList = hitList; }
+    void SubmitVertexDetectorHC(ObserverPtr<const std::vector<Hit::VertexDetectorHit*>> hitList) { fVertexDetectorHitList = hitList; }
+    void SubmitSpectrometerHC(ObserverPtr<const std::vector<Hit::SpectrometerHit*>> hitList) { fSpectrometerHitList = hitList; }
     void WriteEvent();
 
 private:
+    std::unique_ptr<TFile> fFile;
+    DataModel::TreeProvider fTreeProvider;
+
     G4String fFileName = "untitled_SimMACE";
     G4bool   fEnableCoincidenceOfCalorimeter = true;
     G4bool   fEnableCoincidenceOfVertexDetector = true;
     G4int    fTrueEventID;
 
-    const std::vector<Hit::CalorimeterHit*>* fpCalorimeterHitList;
-    const std::vector<Hit::VertexDetectorHit*>* fpVertexDetectorHitList;
-    const std::vector<Hit::SpectrometerHit*>* fpSpectrometerHitList;
+    ObserverPtr<const std::vector<Hit::CalorimeterHit*>> fCalorimeterHitList;
+    ObserverPtr<const std::vector<Hit::VertexDetectorHit*>> fVertexDetectorHitList;
+    ObserverPtr<const std::vector<Hit::SpectrometerHit*>> fSpectrometerHitList;
 };

@@ -12,14 +12,16 @@ Analysis& Analysis::Instance() {
 }
 
 Analysis::Analysis() :
-    fpCalorimeterHitList(nullptr),
-    fpVertexDetectorHitList(nullptr),
-    fpSpectrometerHitList(nullptr),
+    fFile(nullptr),
+    fTreeProvider(),
+    fCalorimeterHitList(nullptr),
+    fVertexDetectorHitList(nullptr),
+    fSpectrometerHitList(nullptr),
     fTrueEventID(std::numeric_limits<G4int>::min()) {
     Messenger::AnalysisMessenger::Instance().Set(this);
 }
 
-void Analysis::Open() {
+void Analysis::Open(Option_t* option) {
     G4String fullFileName("");
     std::stringstream ss;
     bool isParallel = false;
@@ -35,17 +37,21 @@ void Analysis::Open() {
         ss << fFileName << ".root";
         ss >> fullFileName;
     }
-    DataModel::PersistencyWriter::Open(fullFileName);
+    fFile.reset(TFile::Open(fullFileName.c_str(), option));
+}
+
+void Analysis::Close(Option_t* option) {
+    fFile->Close(option);
+    fFile.reset();
 }
 
 void Analysis::WriteEvent() {
-    const G4bool calorimeterTriggered = !(fEnableCoincidenceOfCalorimeter and fpCalorimeterHitList->empty());
-    const G4bool vertexDetectorTriggered = !(fEnableCoincidenceOfVertexDetector and fpVertexDetectorHitList->empty());
-    const G4bool spectrometerTriggered = !fpSpectrometerHitList->empty();
+    const G4bool calorimeterTriggered = !(fEnableCoincidenceOfCalorimeter and fCalorimeterHitList->empty());
+    const G4bool vertexDetectorTriggered = !(fEnableCoincidenceOfVertexDetector and fVertexDetectorHitList->empty());
+    const G4bool spectrometerTriggered = !fSpectrometerHitList->empty();
     if (calorimeterTriggered and vertexDetectorTriggered and spectrometerTriggered) {
-        CreateTreeFromList<Hit::CalorimeterHit>(*fpCalorimeterHitList, fTrueEventID);
-        CreateTreeFromList<Hit::VertexDetectorHit>(*fpVertexDetectorHitList, fTrueEventID);
-        CreateTreeFromList<Hit::SpectrometerHit>(*fpSpectrometerHitList, fTrueEventID);
-        WriteTrees();
+        fTreeProvider.CreateTree<Hit::CalorimeterHit>(*fCalorimeterHitList, fTrueEventID)->Write();
+        fTreeProvider.CreateTree<Hit::VertexDetectorHit>(*fVertexDetectorHitList, fTrueEventID)->Write();
+        fTreeProvider.CreateTree<Hit::SpectrometerHit>(*fSpectrometerHitList, fTrueEventID)->Write();
     }
 }

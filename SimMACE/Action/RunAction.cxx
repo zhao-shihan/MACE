@@ -9,10 +9,10 @@
 
 using namespace MACE::SimMACE::Action;
 
-RunAction::RunAction(PrimaryGeneratorAction* pPrimaryGeneratorAction, EventAction* pEventAction) :
+RunAction::RunAction(ObserverPtr<PrimaryGeneratorAction> primaryGeneratorAction, ObserverPtr<EventAction> eventAction) :
     G4UserRunAction(),
-    fpPrimaryGeneratorAction(pPrimaryGeneratorAction),
-    fpEventAction(pEventAction) {
+    fPrimaryGeneratorAction(primaryGeneratorAction),
+    fEventAction(eventAction) {
     // need to create an instance of Analysis ahead of time,
     // otherwise AnalysisMessenger won't work!
     Analysis::Instance();
@@ -30,8 +30,8 @@ void RunAction::BeginOfRunAction(const G4Run* run) {
         }
         delete[] allNumberOfEvent;
     }
-    fpPrimaryGeneratorAction->SetFirstTrueEventIDOfThisRank(firstTrueEventIDOfThisRank);
-    fpEventAction->SetFirstTrueEventIDOfThisRank(firstTrueEventIDOfThisRank);
+    fPrimaryGeneratorAction->SetFirstTrueEventIDOfThisRank(firstTrueEventIDOfThisRank);
+    fEventAction->SetFirstTrueEventIDOfThisRank(firstTrueEventIDOfThisRank);
 
     Analysis::Instance().Open();
 }

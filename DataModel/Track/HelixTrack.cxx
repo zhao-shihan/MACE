@@ -57,7 +57,7 @@ HelixTrack& HelixTrack::operator=(HelixTrack&& track) noexcept {
     return *this;
 }
 
-void HelixTrack::CreateBranches(TTree* tree) {
+void HelixTrack::CreateBranches(const std::shared_ptr<TTree>& tree) {
     Data::CreateBranches(tree);
     tree->Branch(fgCenterX.name, std::addressof(fgCenterX.value));
     tree->Branch(fgCenterY.name, std::addressof(fgCenterY.value));

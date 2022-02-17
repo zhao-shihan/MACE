@@ -75,7 +75,7 @@ SpectrometerHit& SpectrometerHit::operator=(SpectrometerHit&& hit) noexcept {
     return *this;
 }
 
-void SpectrometerHit::CreateBranches(TTree* tree) {
+void SpectrometerHit::CreateBranches(const std::shared_ptr<TTree>& tree) {
     Data::CreateBranches(tree);
     tree->Branch(fgHitTime.name, std::addressof(fgHitTime.value));
     tree->Branch(fgWirePositionX.name, std::addressof(fgWirePositionX.value));

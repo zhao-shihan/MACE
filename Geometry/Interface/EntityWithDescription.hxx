@@ -17,7 +17,7 @@ private:
 
 public:
     template<size_t Index = 0>
-    const auto& GetDescription() const { return *std::get<Index>(fDescriptions); }
+    [[nodiscard]] const auto& GetDescription() const { return *std::get<Index>(fDescriptions); }
 
 private:
     DescriptionTuple fDescriptions;

@@ -14,16 +14,16 @@ private:
     SpectrometerField& operator=(const SpectrometerField&) = delete;
 
 public:
-    const char* GetName()                   const override { return "SpectrometerField"; }
-    const char* GetOverallDescription()     const override { return ""; }
-    const char* GetMaterialDescription()    const override { return ""; }
-    const char* GetShapeDescription()       const override { return ""; }
-    const char* GetMotherDescription()      const override { return ""; }
-    const char* GetTranslationDescription() const override { return ""; }
-    const char* GetRotationDescription()    const override { return ""; }
+    [[nodiscard]] const char* GetName()                   const override { return "SpectrometerField"; }
+    [[nodiscard]] const char* GetOverallDescription()     const override { return ""; }
+    [[nodiscard]] const char* GetMaterialDescription()    const override { return ""; }
+    [[nodiscard]] const char* GetShapeDescription()       const override { return ""; }
+    [[nodiscard]] const char* GetMotherDescription()      const override { return ""; }
+    [[nodiscard]] const char* GetTranslationDescription() const override { return ""; }
+    [[nodiscard]] const char* GetRotationDescription()    const override { return ""; }
 
-    const auto& GetRadius() const { return fRadius; }
-    const auto& GetLength() const { return fLength; }
+    [[nodiscard]] const auto& GetRadius() const { return fRadius; }
+    [[nodiscard]] const auto& GetLength() const { return fLength; }
 
     void SetRadius(double val) { fRadius = val; }
     void SetLength(double val) { fLength = val; }

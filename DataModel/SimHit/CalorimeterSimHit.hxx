@@ -13,12 +13,12 @@ public:
     CalorimeterSimHit& operator=(const CalorimeterSimHit& hit) noexcept;
     CalorimeterSimHit& operator=(CalorimeterSimHit&& hit) noexcept;
 
-    static void CreateBranches(TTree* tree);
+    static void CreateBranches(const std::shared_ptr<TTree>& tree);
     inline void FillBranches() noexcept;
     static void ReadBranches(TTree* tree);
 
-    const auto& GetParticlePDGCode() const { return fPDGCode; }
-    const auto& GetTrackID() const { return fTrackID; }
+    [[nodiscard]] const auto& GetParticlePDGCode() const { return fPDGCode; }
+    [[nodiscard]] const auto& GetTrackID() const { return fTrackID; }
 
     void SetPDGCode(Int_t pdgCode) { fPDGCode = pdgCode; }
     void SetTrackID(Int_t val) { fTrackID = val; }

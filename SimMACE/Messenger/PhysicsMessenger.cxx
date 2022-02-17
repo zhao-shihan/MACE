@@ -13,24 +13,18 @@ PhysicsMessenger& PhysicsMessenger::Instance() {
 
 PhysicsMessenger::PhysicsMessenger() :
     G4UImessenger(),
-    fpMuoniumProduction(nullptr) {
+    fDirectory("/MACE/Physics/"),
+    fSetConversionProbability("/MACE/Physics/SetConversionProbability", this) {
 
-    fDirectory = new G4UIdirectory("/MACE/Physics/");
-    fDirectory->SetGuidance("MACE Physics.");
+    fDirectory.SetGuidance("MACE Physics.");
 
-    fSetConversionProbability = new G4UIcmdWithADouble("/MACE/Physics/SetConversionProbability", this);
-    fSetConversionProbability->SetGuidance("Set probability of muonium to anti-muonium conversion.");
-    fSetConversionProbability->SetParameterName("P", false);
-    fSetConversionProbability->AvailableForStates(G4State_Idle);
-}
-
-PhysicsMessenger::~PhysicsMessenger() {
-    delete fSetConversionProbability;
-    delete fDirectory;
+    fSetConversionProbability.SetGuidance("Set probability of muonium to anti-muonium conversion.");
+    fSetConversionProbability.SetParameterName("P", false);
+    fSetConversionProbability.AvailableForStates(G4State_Idle);
 }
 
 void PhysicsMessenger::SetNewValue(G4UIcommand* command, G4String value) {
-    if (command == fSetConversionProbability) {
-        fpMuoniumProduction->SetConversionProbability(fSetConversionProbability->GetNewDoubleValue(value));
+    if (command == std::addressof(fSetConversionProbability)) {
+        fMuoniumProduction->SetConversionProbability(fSetConversionProbability.GetNewDoubleValue(value));
     }
 }

@@ -52,7 +52,7 @@ SpectrometerSimHit& SpectrometerSimHit::operator=(SpectrometerSimHit&& hit) noex
     return *this;
 }
 
-void SpectrometerSimHit::CreateBranches(TTree* tree) {
+void SpectrometerSimHit::CreateBranches(const std::shared_ptr<TTree>& tree) {
     SpectrometerHit::CreateBranches(tree);
     tree->Branch(fgVertexTime.name, std::addressof(fgVertexTime.value));
     tree->Branch(fgVertexPositionX.name, std::addressof(fgVertexPositionX.value));

@@ -14,16 +14,16 @@ private:
     VertexDetector& operator=(const VertexDetector&) = delete;
 
 public:
-    const char* GetName()                   const override { return "VertexDetector"; }
-    const char* GetOverallDescription()     const override { return ""; }
-    const char* GetMaterialDescription()    const override { return ""; }
-    const char* GetShapeDescription()       const override { return ""; }
-    const char* GetMotherDescription()      const override { return ""; }
-    const char* GetTranslationDescription() const override { return ""; }
-    const char* GetRotationDescription()    const override { return ""; }
+    [[nodiscard]] const char* GetName()                   const override { return "VertexDetector"; }
+    [[nodiscard]] const char* GetOverallDescription()     const override { return ""; }
+    [[nodiscard]] const char* GetMaterialDescription()    const override { return ""; }
+    [[nodiscard]] const char* GetShapeDescription()       const override { return ""; }
+    [[nodiscard]] const char* GetMotherDescription()      const override { return ""; }
+    [[nodiscard]] const char* GetTranslationDescription() const override { return ""; }
+    [[nodiscard]] const char* GetRotationDescription()    const override { return ""; }
 
-    const auto& GetWidth()     const { return fWidth; }
-    const auto& GetThickness() const { return fThickness; }
+    [[nodiscard]] const auto& GetWidth()     const { return fWidth; }
+    [[nodiscard]] const auto& GetThickness() const { return fThickness; }
 
     void SetWidth(double val) { fWidth = val; }
     void SetThickness(double val) { fThickness = val; }

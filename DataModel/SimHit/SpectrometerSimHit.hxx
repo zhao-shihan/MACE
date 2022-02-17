@@ -13,14 +13,14 @@ public:
     SpectrometerSimHit& operator=(const SpectrometerSimHit& hit) noexcept;
     SpectrometerSimHit& operator=(SpectrometerSimHit&& hit) noexcept;
 
-    static void CreateBranches(TTree* tree);
+    static void CreateBranches(const std::shared_ptr<TTree>& tree);
     inline void FillBranches() noexcept;
     static void ReadBranches(TTree* tree);
 
-    const auto& GetVertexTime() const { return fVertexTime; }
-    const auto& GetVertexPosition() const { return fVertexPosition; }
-    const auto& GetParticlePDGCode() const { return fPDGCode; }
-    const auto& GetTrackID() const { return fTrackID; }
+    [[nodiscard]] const auto& GetVertexTime() const { return fVertexTime; }
+    [[nodiscard]] const auto& GetVertexPosition() const { return fVertexPosition; }
+    [[nodiscard]] const auto& GetParticlePDGCode() const { return fPDGCode; }
+    [[nodiscard]] const auto& GetTrackID() const { return fTrackID; }
 
     void SetVertexTime(Double_t val) { fVertexTime = val; }
     void SetVertexPosition(const TEveVectorD& pos) { fVertexPosition = pos; }

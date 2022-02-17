@@ -16,15 +16,15 @@ public:
     HelixTrack& operator=(HelixTrack&& hit) noexcept;
 
     static constexpr const char* Name() { return "HlxTrk"; }
-    static void CreateBranches(TTree* tree);
+    static void CreateBranches(const std::shared_ptr<TTree>& tree);
     inline void FillBranches() noexcept;
     static void ReadBranches(TTree* tree);
 
-    const auto& GetCenter() const { return fCenter; }
-    const auto& GetRadius() const { return fRadius; }
-    const auto& GetZ0() const { return fZ0; }
-    const auto& GetAlpha() const { return fAlpha; }
-    const auto& GetChi2() const { return fChi2; }
+    [[nodiscard]] const auto& GetCenter() const { return fCenter; }
+    [[nodiscard]] const auto& GetRadius() const { return fRadius; }
+    [[nodiscard]] const auto& GetZ0() const { return fZ0; }
+    [[nodiscard]] const auto& GetAlpha() const { return fAlpha; }
+    [[nodiscard]] const auto& GetChi2() const { return fChi2; }
 
     void SetCenter(const TEveVector2D& val) { fCenter = val; }
     void SetCenter(TEveVector2D&& val) { fCenter = std::move(val); }

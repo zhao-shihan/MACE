@@ -30,15 +30,15 @@
 
 #define MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(ClassName) \
     public: \
-        const MACE::Geometry::Entity::Fast::ClassName* Get##ClassName() const { return f##ClassName; } \
+        [[nodiscard]] const std::shared_ptr<MACE::Geometry::Entity::Fast::ClassName>& Get##ClassName() const { return f##ClassName; } \
     private: \
-        MACE::Geometry::Entity::Fast::ClassName* const f##ClassName = new MACE::Geometry::Entity::Fast::ClassName()
+        std::shared_ptr<MACE::Geometry::Entity::Fast::ClassName> f##ClassName = std::make_shared<MACE::Geometry::Entity::Fast::ClassName>()
 
 class MACE::SimMACE::Action::DetectorConstruction final :
     public G4VUserDetectorConstruction {
 public:
     DetectorConstruction() = default;
-    ~DetectorConstruction() noexcept;
+    ~DetectorConstruction() noexcept = default;
     G4VPhysicalVolume* Construct() override;
 
 private:

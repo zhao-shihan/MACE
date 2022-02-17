@@ -4,6 +4,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
 #include "SimMACE/Global.hxx"
+#include "Utility/ObserverPtr.hxx"
 
 class MACE::SimMACE::Messenger::FieldMessenger final :
     public G4UImessenger {
@@ -12,30 +13,30 @@ public:
 
 private:
     FieldMessenger();
-    ~FieldMessenger() noexcept;
+    ~FieldMessenger() noexcept = default;
     FieldMessenger(const FieldMessenger&) = delete;
     FieldMessenger& operator=(const FieldMessenger&) = delete;
 
 public:
-    void Set(Field::AcceleratorField* field) { fpAcceleratorField = field; }
-    void Set(Field::FirstBendField* field) { fpFirstBendField = field; }
-    void Set(Field::ParallelField* field) { fpParallelField = field; }
-    void Set(Field::SecondBendField* field) { fpSecondBendField = field; }
-    void Set(Field::SelectorField* field) { fpSelectorField = field; }
-    void Set(Field::VerticalField* field) { fpVerticalField = field; }
+    void Set(ObserverPtr<Field::AcceleratorField> field) { fAcceleratorField = field; }
+    void Set(ObserverPtr<Field::FirstBendField> field) { fFirstBendField = field; }
+    void Set(ObserverPtr<Field::ParallelField> field) { fParallelField = field; }
+    void Set(ObserverPtr<Field::SecondBendField> field) { fSecondBendField = field; }
+    void Set(ObserverPtr<Field::SelectorField> field) { fSelectorField = field; }
+    void Set(ObserverPtr<Field::VerticalField> field) { fVerticalField = field; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    Field::AcceleratorField* fpAcceleratorField = nullptr;
-    Field::FirstBendField* fpFirstBendField = nullptr;
-    Field::ParallelField* fpParallelField = nullptr;
-    Field::SecondBendField* fpSecondBendField = nullptr;
-    Field::SelectorField* fpSelectorField = nullptr;
-    Field::VerticalField* fpVerticalField = nullptr;
+    ObserverPtr<Field::AcceleratorField> fAcceleratorField = nullptr;
+    ObserverPtr<Field::FirstBendField> fFirstBendField = nullptr;
+    ObserverPtr<Field::ParallelField> fParallelField = nullptr;
+    ObserverPtr<Field::SecondBendField> fSecondBendField = nullptr;
+    ObserverPtr<Field::SelectorField> fSelectorField = nullptr;
+    ObserverPtr<Field::VerticalField> fVerticalField = nullptr;
 
-    G4UIdirectory* fDirectory;
-    G4UIcmdWithADoubleAndUnit* fSetTransportMagneticField;
-    G4UIcmdWithADoubleAndUnit* fSetAcceleratorPotential;
-    G4UIcmdWithADoubleAndUnit* fSetSelectorMagneticField;
+    G4UIdirectory fDirectory;
+    G4UIcmdWithADoubleAndUnit fSetTransportMagneticField;
+    G4UIcmdWithADoubleAndUnit fSetAcceleratorPotential;
+    G4UIcmdWithADoubleAndUnit fSetSelectorMagneticField;
 };

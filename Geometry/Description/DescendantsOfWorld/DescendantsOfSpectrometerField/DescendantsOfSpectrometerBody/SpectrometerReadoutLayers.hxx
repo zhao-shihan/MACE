@@ -14,15 +14,15 @@ private:
     SpectrometerReadoutLayer& operator=(const SpectrometerReadoutLayer&) = delete;
 
 public:
-    const char* GetName()                   const override { return "SpectrometerReadoutLayer"; }
-    const char* GetOverallDescription()     const override { return "Readout layer of MWDC. Cell's mother."; }
-    const char* GetMaterialDescription()    const override { return "Helium based gas."; }
-    const char* GetShapeDescription()       const override { return "Tube."; }
-    const char* GetMotherDescription()      const override { return "SpectrometerBody"; }
-    const char* GetTranslationDescription() const override { return "No translation."; }
-    const char* GetRotationDescription()    const override { return "No rotation."; }
+    [[nodiscard]] const char* GetName()                   const override { return "SpectrometerReadoutLayer"; }
+    [[nodiscard]] const char* GetOverallDescription()     const override { return "Readout layer of MWDC. Cell's mother."; }
+    [[nodiscard]] const char* GetMaterialDescription()    const override { return "Helium based gas."; }
+    [[nodiscard]] const char* GetShapeDescription()       const override { return "Tube."; }
+    [[nodiscard]] const char* GetMotherDescription()      const override { return "SpectrometerBody"; }
+    [[nodiscard]] const char* GetTranslationDescription() const override { return "No translation."; }
+    [[nodiscard]] const char* GetRotationDescription()    const override { return "No rotation."; }
 
-    const auto& GetAverageCellWidth() const { return fAverageCellWidth; }
+    [[nodiscard]] const auto& GetAverageCellWidth() const { return fAverageCellWidth; }
 
     void SetAverageCellWidth(double val) { fAverageCellWidth = val; }
 

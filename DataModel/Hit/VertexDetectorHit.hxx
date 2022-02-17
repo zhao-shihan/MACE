@@ -16,12 +16,12 @@ public:
     VertexDetectorHit& operator=(VertexDetectorHit&& hit) noexcept;
 
     static constexpr const char* Name() { return "MCPHit"; }
-    static void CreateBranches(TTree* tree);
+    static void CreateBranches(const std::shared_ptr<TTree>& tree);
     inline void FillBranches() noexcept;
     static void ReadBranches(TTree* tree);
 
-    const auto& GetHitTime() const { return fHitTime; }
-    const auto& GetHitPosition() const { return fHitPosition; }
+    [[nodiscard]] const auto& GetHitTime() const { return fHitTime; }
+    [[nodiscard]] const auto& GetHitPosition() const { return fHitPosition; }
 
     void SetHitTime(Double_t val) { fHitTime = val; }
     void SetHitPosition(const TEveVectorD& val) { fHitPosition = val; }

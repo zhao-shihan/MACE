@@ -11,8 +11,8 @@ using namespace MACE::SimMACE::Physics;
 MuoniumTransport::MuoniumTransport() :
     G4VContinuousProcess("MuoniumTransport", fTransportation),
     SimMTransport::Track(),
-    fParticleChange(new G4ParticleChange()),
-    fpTarget(static_cast<const Action::DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction())->GetTarget()->GetVolume()) {
+    fParticleChange(),
+    fTarget(static_cast<const Action::DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction())->GetTarget()->GetVolume()) {
 
     if (MPI::Is_initialized()) {
         SimMTransport::Track::global->SetCommRank(G4MPImanager::GetManager()->GetRank());
@@ -27,12 +27,8 @@ MuoniumTransport::MuoniumTransport() :
     SimMTransport::Track::global->SetTemperature(300);
 }
 
-MuoniumTransport::~MuoniumTransport() {
-    delete fParticleChange;
-}
-
 G4double MuoniumTransport::GetContinuousStepLimit(const G4Track& track, G4double, G4double, G4double&) {
-    if (track.GetVolume() == fpTarget) {
+    if (track.GetVolume() == fTarget) {
         SimMTransport::Track::fLife = (track.GetDynamicParticle()->GetPreAssignedDecayProperTime() - track.GetProperTime()) / us;
         if (SimMTransport::Track::fLife > 0) {
             SimMTransport::Track::fVertexTime = track.GetProperTime() / us;
@@ -58,19 +54,19 @@ G4double MuoniumTransport::GetContinuousStepLimit(const G4Track& track, G4double
 }
 
 G4VParticleChange* MuoniumTransport::AlongStepDoIt(const G4Track& track, const G4Step&) {
-    fParticleChange->Initialize(track);
-    if (track.GetVolume() == fpTarget) {
+    fParticleChange.Initialize(track);
+    if (track.GetVolume() == fTarget) {
         if (SimMTransport::Track::fLife > 0) {
-            fParticleChange->ProposeProperTime(SimMTransport::Track::fCurrentStep->postTime * us);
+            fParticleChange.ProposeProperTime(SimMTransport::Track::fCurrentStep->postTime * us);
             const auto& position = SimMTransport::Track::fCurrentStep->postPosition;
-            fParticleChange->ProposePosition(G4ThreeVector(position.fX, position.fY, position.fZ) * um);
+            fParticleChange.ProposePosition(G4ThreeVector(position.fX, position.fY, position.fZ) * um);
             const auto& velocity = SimMTransport::Track::fCurrentStep->velocity;
             auto speed = velocity.Mag();
-            fParticleChange->ProposeMomentumDirection(G4ThreeVector(velocity.fX, velocity.fY, velocity.fZ) / speed);
-            fParticleChange->ProposeVelocity(speed * (um / us));
+            fParticleChange.ProposeMomentumDirection(G4ThreeVector(velocity.fX, velocity.fY, velocity.fZ) / speed);
+            fParticleChange.ProposeVelocity(speed * (um / us));
         }
     } else if (track.GetMaterial()->GetState() != kStateGas) {
-        fParticleChange->ProposeTrackStatus(fStopButAlive);
+        fParticleChange.ProposeTrackStatus(fStopButAlive);
     }
-    return fParticleChange;
+    return std::addressof(fParticleChange);
 }

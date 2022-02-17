@@ -14,18 +14,18 @@ private:
     FirstTransportSolenoid& operator=(const FirstTransportSolenoid&) = delete;
 
 public:
-    const char* GetName()                   const override { return "FirstTransportSolenoid"; }
-    const char* GetOverallDescription()     const override { return ""; }
-    const char* GetMaterialDescription()    const override { return ""; }
-    const char* GetShapeDescription()       const override { return ""; }
-    const char* GetMotherDescription()      const override { return ""; }
-    const char* GetTranslationDescription() const override { return ""; }
-    const char* GetRotationDescription()    const override { return ""; }
+    [[nodiscard]] const char* GetName()                   const override { return "FirstTransportSolenoid"; }
+    [[nodiscard]] const char* GetOverallDescription()     const override { return ""; }
+    [[nodiscard]] const char* GetMaterialDescription()    const override { return ""; }
+    [[nodiscard]] const char* GetShapeDescription()       const override { return ""; }
+    [[nodiscard]] const char* GetMotherDescription()      const override { return ""; }
+    [[nodiscard]] const char* GetTranslationDescription() const override { return ""; }
+    [[nodiscard]] const char* GetRotationDescription()    const override { return ""; }
 
-    const auto& GetOuterRaidus() const { return fOuterRadius; }
-    const auto& GetInnerRaidus() const { return fInnerRadius; }
-    const auto& GetLength()      const { return fLength; }
-    const auto& GetUpZPosition() const { return fUpZPosition; }
+    [[nodiscard]] const auto& GetOuterRaidus() const { return fOuterRadius; }
+    [[nodiscard]] const auto& GetInnerRaidus() const { return fInnerRadius; }
+    [[nodiscard]] const auto& GetLength()      const { return fLength; }
+    [[nodiscard]] const auto& GetUpZPosition() const { return fUpZPosition; }
 
     void SetOuterRaidus(double val) { fInnerRadius = val; }
     void SetInnerRaidus(double val) { fOuterRadius = val; }

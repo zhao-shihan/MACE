@@ -14,20 +14,20 @@ private:
     Collimator& operator=(const Collimator&) = delete;
 
 public:
-    const char* GetName()                   const override { return "Collimator"; }
-    const char* GetOverallDescription()     const override { return ""; }
-    const char* GetMaterialDescription()    const override { return ""; }
-    const char* GetShapeDescription()       const override { return ""; }
-    const char* GetMotherDescription()      const override { return ""; }
-    const char* GetTranslationDescription() const override { return ""; }
-    const char* GetRotationDescription()    const override { return ""; }
+    [[nodiscard]] const char* GetName()                   const override { return "Collimator"; }
+    [[nodiscard]] const char* GetOverallDescription()     const override { return ""; }
+    [[nodiscard]] const char* GetMaterialDescription()    const override { return ""; }
+    [[nodiscard]] const char* GetShapeDescription()       const override { return ""; }
+    [[nodiscard]] const char* GetMotherDescription()      const override { return ""; }
+    [[nodiscard]] const char* GetTranslationDescription() const override { return ""; }
+    [[nodiscard]] const char* GetRotationDescription()    const override { return ""; }
 
-    const auto& GetInnerRadius() const { return fInnerRadius; }
-    const auto& GetOuterRadius() const { return fOuterRadius; }
-    const auto& GetLength()      const { return fLength; }
-    const auto& GetThickness()   const { return fThickness; }
-    const auto& GetZPosition()   const { return fZPosition; }
-    const auto& GetCount()       const { return fCount; }
+    [[nodiscard]] const auto& GetInnerRadius() const { return fInnerRadius; }
+    [[nodiscard]] const auto& GetOuterRadius() const { return fOuterRadius; }
+    [[nodiscard]] const auto& GetLength()      const { return fLength; }
+    [[nodiscard]] const auto& GetThickness()   const { return fThickness; }
+    [[nodiscard]] const auto& GetZPosition()   const { return fZPosition; }
+    [[nodiscard]] const auto& GetCount()       const { return fCount; }
 
     void SetInnerRadius(double val) { fInnerRadius = val; }
     void SetOuterRadius(double val) { fOuterRadius = val; }

@@ -14,12 +14,12 @@ public:
     CalorimeterHit& operator=(CalorimeterHit&& hit) noexcept;
 
     static constexpr const char* Name() { return "CalHit"; }
-    static void CreateBranches(TTree* tree);
+    static void CreateBranches(const std::shared_ptr<TTree>& tree);
     inline void FillBranches() noexcept;
     static void ReadBranches(TTree* tree);
 
-    const auto& GetHitTime() const { return fHitTime; }
-    const auto& GetEnergy() const { return fEnergy; }
+    [[nodiscard]] const auto& GetHitTime() const { return fHitTime; }
+    [[nodiscard]] const auto& GetEnergy() const { return fEnergy; }
 
     void SetHitTime(Double_t val) { fHitTime = val; }
     void SetEnergy(Double_t val) { fEnergy = val; }

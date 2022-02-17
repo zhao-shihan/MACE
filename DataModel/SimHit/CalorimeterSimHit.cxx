@@ -38,7 +38,7 @@ CalorimeterSimHit& CalorimeterSimHit::operator=(CalorimeterSimHit&& hit) noexcep
     return *this;
 }
 
-void CalorimeterSimHit::CreateBranches(TTree* tree) {
+void CalorimeterSimHit::CreateBranches(const std::shared_ptr<TTree>& tree) {
     CalorimeterHit::CreateBranches(tree);
     tree->Branch(fgPDGCode.name, std::addressof(fgPDGCode.value));
     tree->Branch(fgTrackID.name, std::addressof(fgTrackID.value));

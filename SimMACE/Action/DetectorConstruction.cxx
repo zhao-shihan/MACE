@@ -4,10 +4,6 @@
 
 using namespace MACE::SimMACE::Action;
 
-DetectorConstruction::~DetectorConstruction() noexcept {
-    delete fWorld;
-}
-
 G4VPhysicalVolume* DetectorConstruction::Construct() {
     ConstructVolumes();
     ConstructSD();

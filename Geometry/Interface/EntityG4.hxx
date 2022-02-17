@@ -7,6 +7,7 @@
 #include "G4LogicalVolume.hh"
 
 #include "Geometry/Interface/EntityWithDescription.hxx"
+#include "Utility/ObserverPtr.hxx"
 
 template<class... RequiredDescriptions>
 class MACE::Geometry::Interface::EntityG4 :
@@ -18,12 +19,12 @@ public:
     EntityG4& operator=(const EntityG4&) = delete;
 
     void SetCheckOverlaps(G4bool val);
-    void WriteSelfAndDesendentsToGDML(const char* fileName) const;
+    void WriteSelfAndDesendentsToGDML(std::string_view fileName, size_t volumeIndex = 0) const;
 
 protected:
     G4bool fCheckOverlaps = true;
 
-    static G4NistManager* fgG4Nist;
+    static ObserverPtr<G4NistManager> fgG4Nist;
 };
 
 #include "Geometry/Interface/EntityG4.ixx"

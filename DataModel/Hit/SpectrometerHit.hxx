@@ -16,18 +16,18 @@ public:
     SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept;
 
     static constexpr const char* Name() { return "CDCHit"; }
-    static void CreateBranches(TTree* tree);
+    static void CreateBranches(const std::shared_ptr<TTree>& tree);
     inline void FillBranches() noexcept;
     static void ReadBranches(TTree* tree);
 
-    const auto& GetHitTime() const { return fHitTime; }
-    const auto& GetWirePosition() const { return fWirePosition; }
-    const auto& GetDriftDistance() const { return fDriftDistance; }
-    const auto& GetDriftDistanceVariance() const { return fDriftDistanceVariance; }
-    const auto& GetHitPositionZ() const { return fHitPositionZ; }
-    const auto& GetHitPositionZVariance() const { return fHitPositionZVariance; }
-    const auto& GetCellID() const { return fCellID; }
-    const auto& GetLayerID() const { return fLayerID; }
+    [[nodiscard]] const auto& GetHitTime() const { return fHitTime; }
+    [[nodiscard]] const auto& GetWirePosition() const { return fWirePosition; }
+    [[nodiscard]] const auto& GetDriftDistance() const { return fDriftDistance; }
+    [[nodiscard]] const auto& GetDriftDistanceVariance() const { return fDriftDistanceVariance; }
+    [[nodiscard]] const auto& GetHitPositionZ() const { return fHitPositionZ; }
+    [[nodiscard]] const auto& GetHitPositionZVariance() const { return fHitPositionZVariance; }
+    [[nodiscard]] const auto& GetCellID() const { return fCellID; }
+    [[nodiscard]] const auto& GetLayerID() const { return fLayerID; }
 
     void SetHitTime(Double_t val) { fHitTime = val; }
     void SetWirePosition(const TEveVector2D& val) { fWirePosition = val; }

@@ -14,19 +14,19 @@ private:
     SecondTransportSolenoid& operator=(const SecondTransportSolenoid&) = delete;
 
 public:
-    const char* GetName()                   const override { return "SecondTransportSolenoid"; }
-    const char* GetOverallDescription()     const override { return ""; }
-    const char* GetMaterialDescription()    const override { return ""; }
-    const char* GetShapeDescription()       const override { return ""; }
-    const char* GetMotherDescription()      const override { return ""; }
-    const char* GetTranslationDescription() const override { return ""; }
-    const char* GetRotationDescription()    const override { return ""; }
+    [[nodiscard]] const char* GetName()                   const override { return "SecondTransportSolenoid"; }
+    [[nodiscard]] const char* GetOverallDescription()     const override { return ""; }
+    [[nodiscard]] const char* GetMaterialDescription()    const override { return ""; }
+    [[nodiscard]] const char* GetShapeDescription()       const override { return ""; }
+    [[nodiscard]] const char* GetMotherDescription()      const override { return ""; }
+    [[nodiscard]] const char* GetTranslationDescription() const override { return ""; }
+    [[nodiscard]] const char* GetRotationDescription()    const override { return ""; }
 
-    const auto& GetOuterRaidus() const { return fOuterRadius; }
-    const auto& GetInnerRaidus() const { return fInnerRadius; }
-    const auto& GetLength()      const { return fLength; }
-    const auto& GetCenterZ()     const { return fCenterZ; }
-    const auto& GetUpXPosition() const { return fUpXPosition; }
+    [[nodiscard]] const auto& GetOuterRaidus() const { return fOuterRadius; }
+    [[nodiscard]] const auto& GetInnerRaidus() const { return fInnerRadius; }
+    [[nodiscard]] const auto& GetLength()      const { return fLength; }
+    [[nodiscard]] const auto& GetCenterZ()     const { return fCenterZ; }
+    [[nodiscard]] const auto& GetUpXPosition() const { return fUpXPosition; }
 
     void SetOuterRaidus(double val) { fInnerRadius = val; }
     void SetInnerRaidus(double val) { fOuterRadius = val; }

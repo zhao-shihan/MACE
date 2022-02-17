@@ -19,7 +19,7 @@ protected:
 
 public:
     virtual bool Fit(std::vector<HitPtr>& hitDataToBeFitted, TrackPtr& seed) = 0;
-    const auto& GetOmitted() const { return fOmittedList; }
+    [[nodiscard]] const auto& GetOmitted() const { return fOmittedList; }
 
 protected:
     std::vector<HitPtr> fOmittedList;

@@ -40,7 +40,7 @@ VertexDetectorHit& VertexDetectorHit::operator=(VertexDetectorHit&& hit) noexcep
     return *this;
 }
 
-void VertexDetectorHit::CreateBranches(TTree* tree) {
+void VertexDetectorHit::CreateBranches(const std::shared_ptr<TTree>& tree) {
     Data::CreateBranches(tree);
     tree->Branch(fgHitTime.name, std::addressof(fgHitTime.value));
     tree->Branch(fgHitPositionX.name, std::addressof(fgHitPositionX.value));

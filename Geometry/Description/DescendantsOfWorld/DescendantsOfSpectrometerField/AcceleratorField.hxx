@@ -14,17 +14,17 @@ private:
     AcceleratorField& operator=(const AcceleratorField&) = delete;
 
 public:
-    const char* GetName()                   const override { return "AcceleratorField"; }
-    const char* GetOverallDescription()     const override { return "An accelerator field box inside spectrometer"; }
-    const char* GetMaterialDescription()    const override { return "Vacuum."; }
-    const char* GetShapeDescription()       const override { return "A box with certain Width(along XY), UpStreamLength(length of z<0), and DownStreamLength(length of z>0)."; }
-    const char* GetMotherDescription()      const override { return "SpectrometerField"; }
-    const char* GetTranslationDescription() const override { return "Translation should ensure the center z position satisifies shape description (see above)."; }
-    const char* GetRotationDescription()    const override { return "No rotation."; }
+    [[nodiscard]] const char* GetName()                   const override { return "AcceleratorField"; }
+    [[nodiscard]] const char* GetOverallDescription()     const override { return "An accelerator field box inside spectrometer"; }
+    [[nodiscard]] const char* GetMaterialDescription()    const override { return "Vacuum."; }
+    [[nodiscard]] const char* GetShapeDescription()       const override { return "A box with certain Width(along XY), UpStreamLength(length of z<0), and DownStreamLength(length of z>0)."; }
+    [[nodiscard]] const char* GetMotherDescription()      const override { return "SpectrometerField"; }
+    [[nodiscard]] const char* GetTranslationDescription() const override { return "Translation should ensure the center z position satisifies shape description (see above)."; }
+    [[nodiscard]] const char* GetRotationDescription()    const override { return "No rotation."; }
 
-    const auto& GetWidth() const { return fWidth; }
-    const auto& GetUpStreamLength() const { return fUpStreamLength; }
-    const auto& GetDownStreamLength() const { return fDownStreamLength; }
+    [[nodiscard]] const auto& GetWidth() const { return fWidth; }
+    [[nodiscard]] const auto& GetUpStreamLength() const { return fUpStreamLength; }
+    [[nodiscard]] const auto& GetDownStreamLength() const { return fDownStreamLength; }
 
     void SetWidth(double val) { fWidth = val; }
     void SetUpStreamLength(double val) { fUpStreamLength = val; }

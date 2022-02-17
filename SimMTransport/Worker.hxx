@@ -19,5 +19,5 @@ public:
     void Run();
     void Finalize();
 
-    clock_t GetUsedCPUTime() const { return fEndCPUTime - fBeginCPUTime; }
+    [[nodiscard]] clock_t GetUsedCPUTime() const { return fEndCPUTime - fBeginCPUTime; }
 };

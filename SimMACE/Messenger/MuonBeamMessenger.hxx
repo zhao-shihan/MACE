@@ -4,6 +4,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
 #include "SimMACE/Global.hxx"
+#include "Utility/ObserverPtr.hxx"
 
 class MACE::SimMACE::Messenger::MuonBeamMessenger final :
     public G4UImessenger {
@@ -12,23 +13,23 @@ public:
 
 private:
     MuonBeamMessenger();
-    ~MuonBeamMessenger() noexcept;
+    ~MuonBeamMessenger() noexcept = default;
     MuonBeamMessenger(const MuonBeamMessenger&) = delete;
     MuonBeamMessenger& operator=(const MuonBeamMessenger&) = delete;
 
 public:
-    void Set(Action::PrimaryGeneratorAction* pPrimaryGeneratorAction) { fpPrimaryGeneratorAction = pPrimaryGeneratorAction; }
+    void Set(ObserverPtr<Action::PrimaryGeneratorAction> primaryGeneratorAction) { fPrimaryGeneratorAction = primaryGeneratorAction; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    Action::PrimaryGeneratorAction* fpPrimaryGeneratorAction;
+    ObserverPtr<Action::PrimaryGeneratorAction> fPrimaryGeneratorAction = nullptr;
 
-    G4UIdirectory* fDirectory;
-    G4UIcmdWithADoubleAndUnit* fSetFlux;
-    G4UIcmdWithADoubleAndUnit* fSetPlusePeakInterval;
-    G4UIcmdWithADoubleAndUnit* fSetPluseWidthRMS;
-    G4UIcmdWithADoubleAndUnit* fSetEnergy;
-    G4UIcmdWithADoubleAndUnit* fSetEnergySpreadRMS;
-    G4UIcmdWithADoubleAndUnit* fSetBeamWidthRMS;
+    G4UIdirectory fDirectory;
+    G4UIcmdWithADoubleAndUnit fSetFlux;
+    G4UIcmdWithADoubleAndUnit fSetPlusePeakInterval;
+    G4UIcmdWithADoubleAndUnit fSetPluseWidthRMS;
+    G4UIcmdWithADoubleAndUnit fSetEnergy;
+    G4UIcmdWithADoubleAndUnit fSetEnergySpreadRMS;
+    G4UIcmdWithADoubleAndUnit fSetBeamWidthRMS;
 };

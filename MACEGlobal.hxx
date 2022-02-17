@@ -10,7 +10,6 @@ namespace MACE {
         }
         namespace Interface {
             class Data;
-            class PersistencyHandler;
         }
         inline namespace RawHit { // no impl yet
             class CalorimeterRawHit;
@@ -31,9 +30,11 @@ namespace MACE {
             class HelixTrack;
             class PhysicsTrack;
         }
+        inline namespace TreeManager {
+            class TreeConverter;
+            class TreeProvider;
+        }
         template<typename Value_t> struct Column;
-        class PersistencyReader;
-        class PersistencyWriter;
     }
 
     namespace Geometry {

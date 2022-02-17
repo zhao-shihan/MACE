@@ -13,14 +13,14 @@ protected:
     Description& operator=(const Description&) = delete;
 
 public:
-    virtual const char* GetName()                   const = 0;
-    virtual const char* GetOverallDescription()     const = 0;
-    virtual const char* GetMaterialDescription()    const = 0;
-    virtual const char* GetShapeDescription()       const = 0;
-    virtual const char* GetMotherDescription()      const = 0;
-    virtual const char* GetTranslationDescription() const = 0;
-    virtual const char* GetRotationDescription()    const = 0;
-    virtual const char* GetOtherDescription()       const { return "None."; }
+    [[nodiscard]] virtual const char* GetName()                   const = 0;
+    [[nodiscard]] virtual const char* GetOverallDescription()     const = 0;
+    [[nodiscard]] virtual const char* GetMaterialDescription()    const = 0;
+    [[nodiscard]] virtual const char* GetShapeDescription()       const = 0;
+    [[nodiscard]] virtual const char* GetMotherDescription()      const = 0;
+    [[nodiscard]] virtual const char* GetTranslationDescription() const = 0;
+    [[nodiscard]] virtual const char* GetRotationDescription()    const = 0;
+    [[nodiscard]] virtual const char* GetOtherDescription()       const { return "None."; }
 
     friend std::ostream& operator<<(std::ostream& out, const Description& geomDescp);
 };

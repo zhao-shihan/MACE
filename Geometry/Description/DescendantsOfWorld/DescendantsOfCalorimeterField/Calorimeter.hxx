@@ -14,17 +14,17 @@ private:
     Calorimeter& operator=(const Calorimeter&) = delete;
 
 public:
-    const char* GetName()                   const override { return "Calorimeter"; }
-    const char* GetOverallDescription()     const override { return ""; }
-    const char* GetMaterialDescription()    const override { return ""; }
-    const char* GetShapeDescription()       const override { return ""; }
-    const char* GetMotherDescription()      const override { return ""; }
-    const char* GetTranslationDescription() const override { return ""; }
-    const char* GetRotationDescription()    const override { return ""; }
+    [[nodiscard]] const char* GetName()                   const override { return "Calorimeter"; }
+    [[nodiscard]] const char* GetOverallDescription()     const override { return ""; }
+    [[nodiscard]] const char* GetMaterialDescription()    const override { return ""; }
+    [[nodiscard]] const char* GetShapeDescription()       const override { return ""; }
+    [[nodiscard]] const char* GetMotherDescription()      const override { return ""; }
+    [[nodiscard]] const char* GetTranslationDescription() const override { return ""; }
+    [[nodiscard]] const char* GetRotationDescription()    const override { return ""; }
 
-    const auto& GetInnerRadius() const { return fInnerRadius; }
-    const auto& GetOuterRadius() const { return fOuterRadius; }
-    const auto& GetLength()      const { return fLength; }
+    [[nodiscard]] const auto& GetInnerRadius() const { return fInnerRadius; }
+    [[nodiscard]] const auto& GetOuterRadius() const { return fOuterRadius; }
+    [[nodiscard]] const auto& GetLength()      const { return fLength; }
 
     void SetInnerRadius(double val) { fInnerRadius = val; }
     void SetOuterRadius(double val) { fOuterRadius = val; }

@@ -9,18 +9,19 @@
 #pragma GCC diagnostic ignored "-Wshadow" // suppress ridiculous warnings caused by TString: (const char* s) shadows CLHEP::s
 #include "SimMTransport/Track.hxx"
 #pragma GCC diagnostic pop
+#include "Utility/ObserverPtr.hxx"
 
 class MACE::SimMACE::Physics::MuoniumTransport final :
     public G4VContinuousProcess,
     protected MACE::SimMTransport::Track {
 public:
     MuoniumTransport();
-    ~MuoniumTransport() noexcept;
+    ~MuoniumTransport() noexcept = default;
 
     G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step&) override;
     G4double GetContinuousStepLimit(const G4Track& track, G4double previousStepSize, G4double currentMinimumStep, G4double& currentSafety) override;
 
 private:
-    G4ParticleChange* const fParticleChange;
-    G4VPhysicalVolume* const fpTarget;
+    G4ParticleChange fParticleChange;
+    ObserverPtr<G4VPhysicalVolume> fTarget;
 };

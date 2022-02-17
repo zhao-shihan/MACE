@@ -13,7 +13,7 @@ public:
     SpectrometerCells() : fCellLayerIDAndPositionList(0) {}
     ~SpectrometerCells() noexcept = default;
 
-    const auto& GetLayerIdAndPosition(G4int cellId) const { return fCellLayerIDAndPositionList[cellId]; }
+    [[nodiscard]] const auto& GetLayerIdAndPosition(G4int cellId) const { return fCellLayerIDAndPositionList[cellId]; }
 
 private:
     enum { kSpectrometerCells, kSpectrometerReadoutLayer };

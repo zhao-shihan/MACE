@@ -9,7 +9,7 @@ class MACE::SimMACE::Action::PrimaryGeneratorAction final :
     public G4VUserPrimaryGeneratorAction {
 public:
     PrimaryGeneratorAction();
-    ~PrimaryGeneratorAction() noexcept;
+    ~PrimaryGeneratorAction() noexcept = default;
     void GeneratePrimaries(G4Event* event) override;
 
     void SetFirstTrueEventIDOfThisRank(G4int trueEventID) { fFirstTrueEventIDOfThisRank = trueEventID; }
@@ -22,7 +22,7 @@ public:
     void SetBeamWidthRMS(G4double val) { fBeamWidthRMS = val; }
 
 private:
-    G4ParticleGun* const fParticleGun;
+    G4ParticleGun fParticleGun;
 
     G4int    fFirstTrueEventIDOfThisRank = 0;
 

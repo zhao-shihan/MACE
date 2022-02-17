@@ -14,18 +14,18 @@ private:
     SecondBendField& operator=(const SecondBendField&) = delete;
 
 public:
-    const char* GetName()                   const override { return "SecondBendField"; }
-    const char* GetOverallDescription()     const override { return ""; }
-    const char* GetMaterialDescription()    const override { return ""; }
-    const char* GetShapeDescription()       const override { return ""; }
-    const char* GetMotherDescription()      const override { return ""; }
-    const char* GetTranslationDescription() const override { return ""; }
-    const char* GetRotationDescription()    const override { return ""; }
+    [[nodiscard]] const char* GetName()                   const override { return "SecondBendField"; }
+    [[nodiscard]] const char* GetOverallDescription()     const override { return ""; }
+    [[nodiscard]] const char* GetMaterialDescription()    const override { return ""; }
+    [[nodiscard]] const char* GetShapeDescription()       const override { return ""; }
+    [[nodiscard]] const char* GetMotherDescription()      const override { return ""; }
+    [[nodiscard]] const char* GetTranslationDescription() const override { return ""; }
+    [[nodiscard]] const char* GetRotationDescription()    const override { return ""; }
 
-    const auto& GetRaidus()     const { return fRadius; }
-    const auto& GetBendRadius() const { return fBendRadius; }
-    const auto& GetXPosition()  const { return fXPosition; }
-    const auto& GetZPosition()  const { return fZPosition; }
+    [[nodiscard]] const auto& GetRaidus()     const { return fRadius; }
+    [[nodiscard]] const auto& GetBendRadius() const { return fBendRadius; }
+    [[nodiscard]] const auto& GetXPosition()  const { return fXPosition; }
+    [[nodiscard]] const auto& GetZPosition()  const { return fZPosition; }
 
     void SetRaidus(double val) { fRadius = val; }
     void SetBendRadius(double val) { fBendRadius = val; }

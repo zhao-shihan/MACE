@@ -52,7 +52,7 @@ VertexDetectorSimHit& VertexDetectorSimHit::operator=(VertexDetectorSimHit&& hit
     return *this;
 }
 
-void VertexDetectorSimHit::CreateBranches(TTree* tree) {
+void VertexDetectorSimHit::CreateBranches(const std::shared_ptr<TTree>& tree) {
     VertexDetectorHit::CreateBranches(tree);
     tree->Branch(fgVertexTime.name, std::addressof(fgVertexTime.value));
     tree->Branch(fgVertexPositionX.name, std::addressof(fgVertexPositionX.value));

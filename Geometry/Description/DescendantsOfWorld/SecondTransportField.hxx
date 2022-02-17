@@ -14,18 +14,18 @@ private:
     SecondTransportField& operator=(const SecondTransportField&) = delete;
 
 public:
-    const char* GetName()                   const override { return "SecondTransportField"; }
-    const char* GetOverallDescription()     const override { return ""; }
-    const char* GetMaterialDescription()    const override { return ""; }
-    const char* GetShapeDescription()       const override { return ""; }
-    const char* GetMotherDescription()      const override { return ""; }
-    const char* GetTranslationDescription() const override { return ""; }
-    const char* GetRotationDescription()    const override { return ""; }
+    [[nodiscard]] const char* GetName()                   const override { return "SecondTransportField"; }
+    [[nodiscard]] const char* GetOverallDescription()     const override { return ""; }
+    [[nodiscard]] const char* GetMaterialDescription()    const override { return ""; }
+    [[nodiscard]] const char* GetShapeDescription()       const override { return ""; }
+    [[nodiscard]] const char* GetMotherDescription()      const override { return ""; }
+    [[nodiscard]] const char* GetTranslationDescription() const override { return ""; }
+    [[nodiscard]] const char* GetRotationDescription()    const override { return ""; }
 
-    const auto& GetLength()      const { return fLength; }
-    const auto& GetRadius()      const { return fRadius; }
-    const auto& GetCenterZ()     const { return fCenterZ; }
-    const auto& GetUpXPosition() const { return fUpXPosition; }
+    [[nodiscard]] const auto& GetLength()      const { return fLength; }
+    [[nodiscard]] const auto& GetRadius()      const { return fRadius; }
+    [[nodiscard]] const auto& GetCenterZ()     const { return fCenterZ; }
+    [[nodiscard]] const auto& GetUpXPosition() const { return fUpXPosition; }
 
     void SetLength(double val) { fLength = val; }
     void SetRadius(double val) { fRadius = val; }

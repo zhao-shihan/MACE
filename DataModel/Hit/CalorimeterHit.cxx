@@ -38,7 +38,7 @@ CalorimeterHit& CalorimeterHit::operator=(CalorimeterHit&& hit) noexcept {
     return *this;
 }
 
-void CalorimeterHit::CreateBranches(TTree* tree) {
+void CalorimeterHit::CreateBranches(const std::shared_ptr<TTree>& tree) {
     Data::CreateBranches(tree);
     tree->Branch(fgHitTime.name, std::addressof(fgHitTime.value));
     tree->Branch(fgEnergy.name, std::addressof(fgEnergy.value));
