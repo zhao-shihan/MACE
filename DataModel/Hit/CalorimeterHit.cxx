@@ -38,14 +38,14 @@ CalorimeterHit& CalorimeterHit::operator=(CalorimeterHit&& hit) noexcept {
     return *this;
 }
 
-void CalorimeterHit::CreateBranches(const std::shared_ptr<TTree>& tree) {
+void CalorimeterHit::CreateBranches(TTree& tree) {
     Data::CreateBranches(tree);
-    tree->Branch(fgHitTime.name, std::addressof(fgHitTime.value));
-    tree->Branch(fgEnergy.name, std::addressof(fgEnergy.value));
+    tree.Branch(fgHitTime.name, std::addressof(fgHitTime.value));
+    tree.Branch(fgEnergy.name, std::addressof(fgEnergy.value));
 }
 
-void CalorimeterHit::ReadBranches(TTree* tree) {
+void CalorimeterHit::ReadBranches(TTree& tree) {
     Data::ReadBranches(tree);
-    tree->SetBranchAddress(fgHitTime.name, std::addressof(fgHitTime.value));
-    tree->SetBranchAddress(fgEnergy.name, std::addressof(fgHitTime.value));
+    tree.SetBranchAddress(fgHitTime.name, std::addressof(fgHitTime.value));
+    tree.SetBranchAddress(fgEnergy.name, std::addressof(fgHitTime.value));
 }

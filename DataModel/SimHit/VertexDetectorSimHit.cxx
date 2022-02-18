@@ -52,22 +52,22 @@ VertexDetectorSimHit& VertexDetectorSimHit::operator=(VertexDetectorSimHit&& hit
     return *this;
 }
 
-void VertexDetectorSimHit::CreateBranches(const std::shared_ptr<TTree>& tree) {
+void VertexDetectorSimHit::CreateBranches(TTree& tree) {
     VertexDetectorHit::CreateBranches(tree);
-    tree->Branch(fgVertexTime.name, std::addressof(fgVertexTime.value));
-    tree->Branch(fgVertexPositionX.name, std::addressof(fgVertexPositionX.value));
-    tree->Branch(fgVertexPositionY.name, std::addressof(fgVertexPositionY.value));
-    tree->Branch(fgVertexPositionZ.name, std::addressof(fgVertexPositionZ.value));
-    tree->Branch(fgPDGCode.name, std::addressof(fgPDGCode.value));
-    tree->Branch(fgTrackID.name, std::addressof(fgTrackID.value));
+    tree.Branch(fgVertexTime.name, std::addressof(fgVertexTime.value));
+    tree.Branch(fgVertexPositionX.name, std::addressof(fgVertexPositionX.value));
+    tree.Branch(fgVertexPositionY.name, std::addressof(fgVertexPositionY.value));
+    tree.Branch(fgVertexPositionZ.name, std::addressof(fgVertexPositionZ.value));
+    tree.Branch(fgPDGCode.name, std::addressof(fgPDGCode.value));
+    tree.Branch(fgTrackID.name, std::addressof(fgTrackID.value));
 }
 
-void VertexDetectorSimHit::ReadBranches(TTree* tree) {
+void VertexDetectorSimHit::ReadBranches(TTree& tree) {
     VertexDetectorHit::ReadBranches(tree);
-    tree->SetBranchAddress(fgVertexTime.name, std::addressof(fgVertexTime.value));
-    tree->SetBranchAddress(fgVertexPositionX.name, std::addressof(fgVertexPositionX.value));
-    tree->SetBranchAddress(fgVertexPositionY.name, std::addressof(fgVertexPositionY.value));
-    tree->SetBranchAddress(fgVertexPositionZ.name, std::addressof(fgVertexPositionZ.value));
-    tree->SetBranchAddress(fgPDGCode.name, std::addressof(fgPDGCode.value));
-    tree->SetBranchAddress(fgTrackID.name, std::addressof(fgTrackID.value));
+    tree.SetBranchAddress(fgVertexTime.name, std::addressof(fgVertexTime.value));
+    tree.SetBranchAddress(fgVertexPositionX.name, std::addressof(fgVertexPositionX.value));
+    tree.SetBranchAddress(fgVertexPositionY.name, std::addressof(fgVertexPositionY.value));
+    tree.SetBranchAddress(fgVertexPositionZ.name, std::addressof(fgVertexPositionZ.value));
+    tree.SetBranchAddress(fgPDGCode.name, std::addressof(fgPDGCode.value));
+    tree.SetBranchAddress(fgTrackID.name, std::addressof(fgTrackID.value));
 }

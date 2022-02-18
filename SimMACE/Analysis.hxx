@@ -6,7 +6,7 @@
 #include "SimMACE/Hit/CalorimeterHit.hxx"
 #include "SimMACE/Hit/VertexDetectorHit.hxx"
 #include "SimMACE/Hit/SpectrometerHit.hxx"
-#include "DataModel/TreeManager/TreeProvider.hxx"
+#include "DataModel/DataHub.hxx"
 #include "Utility/ObserverPtr.hxx"
 
 class MACE::SimMACE::Analysis final {
@@ -36,7 +36,7 @@ public:
 
 private:
     std::unique_ptr<TFile> fFile;
-    DataModel::TreeProvider fTreeProvider;
+    DataModel::DataHub fDataHub;
 
     G4String fFileName = "untitled_SimMACE";
     G4bool   fEnableCoincidenceOfCalorimeter = true;

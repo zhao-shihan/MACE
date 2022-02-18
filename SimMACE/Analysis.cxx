@@ -13,7 +13,7 @@ Analysis& Analysis::Instance() {
 
 Analysis::Analysis() :
     fFile(nullptr),
-    fTreeProvider(),
+    fDataHub(),
     fCalorimeterHitList(nullptr),
     fVertexDetectorHitList(nullptr),
     fSpectrometerHitList(nullptr),
@@ -50,8 +50,8 @@ void Analysis::WriteEvent() {
     const G4bool vertexDetectorTriggered = !(fEnableCoincidenceOfVertexDetector and fVertexDetectorHitList->empty());
     const G4bool spectrometerTriggered = !fSpectrometerHitList->empty();
     if (calorimeterTriggered and vertexDetectorTriggered and spectrometerTriggered) {
-        fTreeProvider.CreateTree<Hit::CalorimeterHit>(*fCalorimeterHitList, fTrueEventID)->Write();
-        fTreeProvider.CreateTree<Hit::VertexDetectorHit>(*fVertexDetectorHitList, fTrueEventID)->Write();
-        fTreeProvider.CreateTree<Hit::SpectrometerHit>(*fSpectrometerHitList, fTrueEventID)->Write();
+        fDataHub.CreateTree(*fCalorimeterHitList, fTrueEventID)->Write();
+        fDataHub.CreateTree(*fVertexDetectorHitList, fTrueEventID)->Write();
+        fDataHub.CreateTree(*fSpectrometerHitList, fTrueEventID)->Write();
     }
 }

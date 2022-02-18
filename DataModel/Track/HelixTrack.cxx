@@ -57,22 +57,22 @@ HelixTrack& HelixTrack::operator=(HelixTrack&& track) noexcept {
     return *this;
 }
 
-void HelixTrack::CreateBranches(const std::shared_ptr<TTree>& tree) {
+void HelixTrack::CreateBranches(TTree& tree) {
     Data::CreateBranches(tree);
-    tree->Branch(fgCenterX.name, std::addressof(fgCenterX.value));
-    tree->Branch(fgCenterY.name, std::addressof(fgCenterY.value));
-    tree->Branch(fgRadius.name, std::addressof(fgRadius.value));
-    tree->Branch(fgZ0.name, std::addressof(fgZ0.value));
-    tree->Branch(fgAlpha.name, std::addressof(fgAlpha.value));
-    tree->Branch(fgChi2.name, std::addressof(fgChi2.value));
+    tree.Branch(fgCenterX.name, std::addressof(fgCenterX.value));
+    tree.Branch(fgCenterY.name, std::addressof(fgCenterY.value));
+    tree.Branch(fgRadius.name, std::addressof(fgRadius.value));
+    tree.Branch(fgZ0.name, std::addressof(fgZ0.value));
+    tree.Branch(fgAlpha.name, std::addressof(fgAlpha.value));
+    tree.Branch(fgChi2.name, std::addressof(fgChi2.value));
 }
 
-void HelixTrack::ReadBranches(TTree* tree) {
+void HelixTrack::ReadBranches(TTree& tree) {
     Data::ReadBranches(tree);
-    tree->SetBranchAddress(fgCenterX.name, std::addressof(fgCenterX.value));
-    tree->SetBranchAddress(fgCenterY.name, std::addressof(fgCenterY.value));
-    tree->SetBranchAddress(fgRadius.name, std::addressof(fgRadius.value));
-    tree->SetBranchAddress(fgZ0.name, std::addressof(fgZ0.value));
-    tree->SetBranchAddress(fgAlpha.name, std::addressof(fgAlpha.value));
-    tree->SetBranchAddress(fgChi2.name, std::addressof(fgChi2.value));
+    tree.SetBranchAddress(fgCenterX.name, std::addressof(fgCenterX.value));
+    tree.SetBranchAddress(fgCenterY.name, std::addressof(fgCenterY.value));
+    tree.SetBranchAddress(fgRadius.name, std::addressof(fgRadius.value));
+    tree.SetBranchAddress(fgZ0.name, std::addressof(fgZ0.value));
+    tree.SetBranchAddress(fgAlpha.name, std::addressof(fgAlpha.value));
+    tree.SetBranchAddress(fgChi2.name, std::addressof(fgChi2.value));
 }

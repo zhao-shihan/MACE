@@ -6,7 +6,9 @@
 #include "DataModel/Interface/Data.hxx"
 
 class MACE::DataModel::SpectrometerHit :
-    private MACE::DataModel::Interface::Data {
+    public MACE::DataModel::Interface::Data {
+    friend MACE::DataModel::DataHub;
+
 public:
     SpectrometerHit() noexcept;
     SpectrometerHit(const SpectrometerHit& hit) noexcept;
@@ -14,11 +16,6 @@ public:
     virtual ~SpectrometerHit() noexcept = default;
     SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept;
     SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept;
-
-    static constexpr const char* Name() { return "CDCHit"; }
-    static void CreateBranches(const std::shared_ptr<TTree>& tree);
-    inline void FillBranches() noexcept;
-    static void ReadBranches(TTree* tree);
 
     [[nodiscard]] const auto& GetHitTime() const { return fHitTime; }
     [[nodiscard]] const auto& GetWirePosition() const { return fWirePosition; }
@@ -39,6 +36,12 @@ public:
     void SetHitPositionZVariance(Double_t var) { fHitPositionZVariance = var; }
     void SetCellID(Int_t val) { fCellID = val; }
     void SetLayerID(Int_t val) { fLayerID = val; }
+
+protected:
+    static constexpr const char* Name() { return "CDCHit"; }
+    static void CreateBranches(TTree& tree);
+    inline void FillBranchVariables() const noexcept;
+    static void ReadBranches(TTree& tree);
 
 private:
     Double_t fHitTime;
@@ -61,8 +64,8 @@ private:
     static Column<Int_t> fgLayerID;
 };
 
-inline void MACE::DataModel::SpectrometerHit::FillBranches() noexcept {
-    Interface::Data::FillBranches();
+inline void MACE::DataModel::SpectrometerHit::FillBranchVariables() const noexcept {
+    Interface::Data::FillBranchVariables();
     fgHitTime.value = fHitTime;
     fgWirePositionX.value = fWirePosition.fX;
     fgWirePositionY.value = fWirePosition.fY;

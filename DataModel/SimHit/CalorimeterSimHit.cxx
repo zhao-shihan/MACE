@@ -38,14 +38,14 @@ CalorimeterSimHit& CalorimeterSimHit::operator=(CalorimeterSimHit&& hit) noexcep
     return *this;
 }
 
-void CalorimeterSimHit::CreateBranches(const std::shared_ptr<TTree>& tree) {
+void CalorimeterSimHit::CreateBranches(TTree& tree) {
     CalorimeterHit::CreateBranches(tree);
-    tree->Branch(fgPDGCode.name, std::addressof(fgPDGCode.value));
-    tree->Branch(fgTrackID.name, std::addressof(fgTrackID.value));
+    tree.Branch(fgPDGCode.name, std::addressof(fgPDGCode.value));
+    tree.Branch(fgTrackID.name, std::addressof(fgTrackID.value));
 }
 
-void CalorimeterSimHit::ReadBranches(TTree* tree) {
+void CalorimeterSimHit::ReadBranches(TTree& tree) {
     CalorimeterHit::ReadBranches(tree);
-    tree->SetBranchAddress(fgPDGCode.name, std::addressof(fgPDGCode.value));
-    tree->SetBranchAddress(fgTrackID.name, std::addressof(fgTrackID.value));
+    tree.SetBranchAddress(fgPDGCode.name, std::addressof(fgPDGCode.value));
+    tree.SetBranchAddress(fgTrackID.name, std::addressof(fgTrackID.value));
 }

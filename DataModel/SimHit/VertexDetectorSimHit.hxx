@@ -5,6 +5,8 @@
 
 class MACE::DataModel::VertexDetectorSimHit :
     public MACE::DataModel::VertexDetectorHit {
+    friend MACE::DataModel::DataHub;
+
 public:
     VertexDetectorSimHit() noexcept;
     VertexDetectorSimHit(const VertexDetectorSimHit& hit) noexcept;
@@ -12,10 +14,6 @@ public:
     virtual ~VertexDetectorSimHit() noexcept = default;
     VertexDetectorSimHit& operator=(const VertexDetectorSimHit& hit) noexcept;
     VertexDetectorSimHit& operator=(VertexDetectorSimHit&& hit) noexcept;
-
-    static void CreateBranches(const std::shared_ptr<TTree>& tree);
-    inline void FillBranches() noexcept;
-    static void ReadBranches(TTree* tree);
 
     [[nodiscard]] const auto& GetVertexTime() const { return fVertexTime; }
     [[nodiscard]] const auto& GetVertexPosition() const { return fVertexPosition; }
@@ -28,6 +26,12 @@ public:
     void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition.fX = x; fVertexPosition.fY = y; fVertexPosition.fZ = z; }
     void SetPDGCode(Int_t pdgCode) { fPDGCode = pdgCode; }
     void SetTrackID(Int_t val) { fTrackID = val; }
+
+protected:
+    static constexpr const char* Name() { return "MCPSimHit"; }
+    static void CreateBranches(TTree& tree);
+    inline void FillBranchVariables() const noexcept;
+    static void ReadBranches(TTree& tree);
 
 private:
     Double_t fVertexTime;
@@ -43,8 +47,8 @@ private:
     static Column<Int_t> fgTrackID;
 };
 
-inline void MACE::DataModel::VertexDetectorSimHit::FillBranches() noexcept {
-    VertexDetectorHit::FillBranches();
+inline void MACE::DataModel::VertexDetectorSimHit::FillBranchVariables() const noexcept {
+    VertexDetectorHit::FillBranchVariables();
     fgVertexTime.value = fVertexTime;
     fgVertexPositionX.value = fVertexPosition.fX;
     fgVertexPositionY.value = fVertexPosition.fY;

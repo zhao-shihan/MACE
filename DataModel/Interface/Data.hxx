@@ -4,15 +4,20 @@
 #include "DataModel/Column.hxx"
 
 class MACE::DataModel::Interface::Data {
-public:
+protected:
+    Data() = default;
+    Data(const Data& data) noexcept = default;
+    Data(Data&& data) noexcept = default;
     virtual ~Data() noexcept = 0;
+    Data& operator=(const Data& data) noexcept = default;
+    Data& operator=(Data&& data) noexcept = default;
 
     // Override this in derived classes at least once!
     static constexpr const char* Name() { return "MACE_DataModel_Base_Data"; }
     // Extend (override & invoke) this in derived classes!
-    static void CreateBranches(const std::shared_ptr<TTree>& tree) {}
+    static void CreateBranches(TTree& tree) { tree.ResetBranchAddresses(); }
     // Extend (override & invoke) this in derived classes!
-    inline void FillBranches() noexcept {}
+    inline void FillBranchVariables() const noexcept {}
     // Extend (override & invoke) this in derived classes!
-    static void ReadBranches(TTree* tree) {}
+    static void ReadBranches(TTree& tree) { tree.ResetBranchAddresses(); }
 };

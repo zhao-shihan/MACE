@@ -5,6 +5,8 @@
 
 class MACE::DataModel::CalorimeterSimHit :
     public MACE::DataModel::CalorimeterHit {
+    friend MACE::DataModel::DataHub;
+
 public:
     CalorimeterSimHit() noexcept;
     CalorimeterSimHit(const CalorimeterSimHit& hit) noexcept;
@@ -13,15 +15,17 @@ public:
     CalorimeterSimHit& operator=(const CalorimeterSimHit& hit) noexcept;
     CalorimeterSimHit& operator=(CalorimeterSimHit&& hit) noexcept;
 
-    static void CreateBranches(const std::shared_ptr<TTree>& tree);
-    inline void FillBranches() noexcept;
-    static void ReadBranches(TTree* tree);
-
     [[nodiscard]] const auto& GetParticlePDGCode() const { return fPDGCode; }
     [[nodiscard]] const auto& GetTrackID() const { return fTrackID; }
 
     void SetPDGCode(Int_t pdgCode) { fPDGCode = pdgCode; }
     void SetTrackID(Int_t val) { fTrackID = val; }
+
+protected:
+    static constexpr const char* Name() { return "CalSimHit"; }
+    static void CreateBranches(TTree& tree);
+    inline void FillBranchVariables() const noexcept;
+    static void ReadBranches(TTree& tree);
 
 private:
     Int_t fPDGCode;
@@ -31,8 +35,8 @@ private:
     static Column<Int_t> fgTrackID;
 };
 
-inline void MACE::DataModel::CalorimeterSimHit::FillBranches() noexcept {
-    CalorimeterHit::FillBranches();
+inline void MACE::DataModel::CalorimeterSimHit::FillBranchVariables() const noexcept {
+    CalorimeterHit::FillBranchVariables();
     fgPDGCode.value = fPDGCode;
     fgTrackID.value = fTrackID;
 }

@@ -6,7 +6,9 @@
 #include "DataModel/Interface/Data.hxx"
 
 class MACE::DataModel::HelixTrack :
-    private MACE::DataModel::Interface::Data {
+    public MACE::DataModel::Interface::Data {
+    friend MACE::DataModel::DataHub;
+
 public:
     HelixTrack() noexcept;
     HelixTrack(const HelixTrack& hit) noexcept;
@@ -14,11 +16,6 @@ public:
     virtual ~HelixTrack() noexcept = default;
     HelixTrack& operator=(const HelixTrack& hit) noexcept;
     HelixTrack& operator=(HelixTrack&& hit) noexcept;
-
-    static constexpr const char* Name() { return "HlxTrk"; }
-    static void CreateBranches(const std::shared_ptr<TTree>& tree);
-    inline void FillBranches() noexcept;
-    static void ReadBranches(TTree* tree);
 
     [[nodiscard]] const auto& GetCenter() const { return fCenter; }
     [[nodiscard]] const auto& GetRadius() const { return fRadius; }
@@ -33,6 +30,12 @@ public:
     void SetZ0(Double_t val) { fZ0 = val; }
     void SetAlpha(Double_t val) { fAlpha = val; }
     void SetChi2(Double_t val) { fChi2 = val; }
+
+protected:
+    static constexpr const char* Name() { return "HlxTrk"; }
+    static void CreateBranches(TTree& tree);
+    inline void FillBranchVariables() const noexcept;
+    static void ReadBranches(TTree& tree);
 
 private:
     TEveVector2D fCenter;
@@ -49,8 +52,8 @@ private:
     static Column<Float_t> fgChi2;
 };
 
-inline void MACE::DataModel::HelixTrack::FillBranches() noexcept {
-    Interface::Data::FillBranches();
+inline void MACE::DataModel::HelixTrack::FillBranchVariables() const noexcept {
+    Interface::Data::FillBranchVariables();
     fgCenterX.value = fCenter.fX;
     fgCenterY.value = fCenter.fY;
     fgRadius.value = fRadius;

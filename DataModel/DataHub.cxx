@@ -1,6 +1,6 @@
-#include "DataModel/TreeManager/TreeProvider.hxx"
+#include "DataModel/DataHub.hxx"
 
-using namespace MACE::DataModel::TreeManager;
+using namespace MACE::DataModel;
 
 static Bool_t Split(const TString& format, Char_t indexer, std::pair<TString, TString>& result) {
     auto index = format.First(indexer);
@@ -13,18 +13,18 @@ static Bool_t Split(const TString& format, Char_t indexer, std::pair<TString, TS
     }
 }
 
-void TreeProvider::SetIndexerOfTreeName(Char_t indexer) {
+void DataHub::SetIndexerOfTreeName(Char_t indexer) {
     fIndexer = indexer;
     fPrefixHasIndexer = Split(fPrefixFormat, fIndexer, fSplitPrefix);
     fSuffixHasIndexer = Split(fSuffixFormat, fIndexer, fSplitSuffix);
 }
 
-void TreeProvider::SetPrefixFormatOfTreeName(const TString& prefix) {
+void DataHub::SetPrefixFormatOfTreeName(const TString& prefix) {
     fPrefixFormat = prefix;
     fPrefixHasIndexer = Split(fPrefixFormat, fIndexer, fSplitPrefix);
 }
 
-void TreeProvider::SetSuffixFormatOfTreeName(const TString& suffix) {
+void DataHub::SetSuffixFormatOfTreeName(const TString& suffix) {
     fSuffixFormat = suffix;
     fSuffixHasIndexer = Split(fSuffixFormat, fIndexer, fSplitSuffix);
 }

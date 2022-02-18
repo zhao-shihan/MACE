@@ -75,28 +75,28 @@ SpectrometerHit& SpectrometerHit::operator=(SpectrometerHit&& hit) noexcept {
     return *this;
 }
 
-void SpectrometerHit::CreateBranches(const std::shared_ptr<TTree>& tree) {
+void SpectrometerHit::CreateBranches(TTree& tree) {
     Data::CreateBranches(tree);
-    tree->Branch(fgHitTime.name, std::addressof(fgHitTime.value));
-    tree->Branch(fgWirePositionX.name, std::addressof(fgWirePositionX.value));
-    tree->Branch(fgWirePositionY.name, std::addressof(fgWirePositionY.value));
-    tree->Branch(fgDriftDistance.name, std::addressof(fgDriftDistance.value));
-    tree->Branch(fgDriftDistanceVariance.name, std::addressof(fgDriftDistanceVariance.value));
-    tree->Branch(fgHitPositionZ.name, std::addressof(fgHitPositionZ.value));
-    tree->Branch(fgHitPositionZVariance.name, std::addressof(fgHitPositionZVariance.value));
-    tree->Branch(fgCellID.name, std::addressof(fgCellID.value));
-    tree->Branch(fgLayerID.name, std::addressof(fgLayerID.value));
+    tree.Branch(fgHitTime.name, std::addressof(fgHitTime.value));
+    tree.Branch(fgWirePositionX.name, std::addressof(fgWirePositionX.value));
+    tree.Branch(fgWirePositionY.name, std::addressof(fgWirePositionY.value));
+    tree.Branch(fgDriftDistance.name, std::addressof(fgDriftDistance.value));
+    tree.Branch(fgDriftDistanceVariance.name, std::addressof(fgDriftDistanceVariance.value));
+    tree.Branch(fgHitPositionZ.name, std::addressof(fgHitPositionZ.value));
+    tree.Branch(fgHitPositionZVariance.name, std::addressof(fgHitPositionZVariance.value));
+    tree.Branch(fgCellID.name, std::addressof(fgCellID.value));
+    tree.Branch(fgLayerID.name, std::addressof(fgLayerID.value));
 }
 
-void SpectrometerHit::ReadBranches(TTree* tree) {
+void SpectrometerHit::ReadBranches(TTree& tree) {
     Data::ReadBranches(tree);
-    tree->SetBranchAddress(fgHitTime.name, std::addressof(fgHitTime.value));
-    tree->SetBranchAddress(fgWirePositionX.name, std::addressof(fgWirePositionX.value));
-    tree->SetBranchAddress(fgWirePositionY.name, std::addressof(fgWirePositionY.value));
-    tree->SetBranchAddress(fgDriftDistance.name, std::addressof(fgDriftDistance.value));
-    tree->SetBranchAddress(fgDriftDistanceVariance.name, std::addressof(fgDriftDistanceVariance.value));
-    tree->SetBranchAddress(fgHitPositionZ.name, std::addressof(fgHitPositionZ.value));
-    tree->SetBranchAddress(fgHitPositionZVariance.name, std::addressof(fgHitPositionZVariance.value));
-    tree->SetBranchAddress(fgCellID.name, std::addressof(fgCellID.value));
-    tree->SetBranchAddress(fgLayerID.name, std::addressof(fgLayerID.value));
+    tree.SetBranchAddress(fgHitTime.name, std::addressof(fgHitTime.value));
+    tree.SetBranchAddress(fgWirePositionX.name, std::addressof(fgWirePositionX.value));
+    tree.SetBranchAddress(fgWirePositionY.name, std::addressof(fgWirePositionY.value));
+    tree.SetBranchAddress(fgDriftDistance.name, std::addressof(fgDriftDistance.value));
+    tree.SetBranchAddress(fgDriftDistanceVariance.name, std::addressof(fgDriftDistanceVariance.value));
+    tree.SetBranchAddress(fgHitPositionZ.name, std::addressof(fgHitPositionZ.value));
+    tree.SetBranchAddress(fgHitPositionZVariance.name, std::addressof(fgHitPositionZVariance.value));
+    tree.SetBranchAddress(fgCellID.name, std::addressof(fgCellID.value));
+    tree.SetBranchAddress(fgLayerID.name, std::addressof(fgLayerID.value));
 }

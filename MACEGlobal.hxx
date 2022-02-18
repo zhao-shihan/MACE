@@ -30,11 +30,8 @@ namespace MACE {
             class HelixTrack;
             class PhysicsTrack;
         }
-        inline namespace TreeManager {
-            class TreeConverter;
-            class TreeProvider;
-        }
         template<typename Value_t> struct Column;
+        class DataHub;
     }
 
     namespace Geometry {

@@ -40,18 +40,18 @@ VertexDetectorHit& VertexDetectorHit::operator=(VertexDetectorHit&& hit) noexcep
     return *this;
 }
 
-void VertexDetectorHit::CreateBranches(const std::shared_ptr<TTree>& tree) {
+void VertexDetectorHit::CreateBranches(TTree& tree) {
     Data::CreateBranches(tree);
-    tree->Branch(fgHitTime.name, std::addressof(fgHitTime.value));
-    tree->Branch(fgHitPositionX.name, std::addressof(fgHitPositionX.value));
-    tree->Branch(fgHitPositionY.name, std::addressof(fgHitPositionY.value));
-    tree->Branch(fgHitPositionZ.name, std::addressof(fgHitPositionZ.value));
+    tree.Branch(fgHitTime.name, std::addressof(fgHitTime.value));
+    tree.Branch(fgHitPositionX.name, std::addressof(fgHitPositionX.value));
+    tree.Branch(fgHitPositionY.name, std::addressof(fgHitPositionY.value));
+    tree.Branch(fgHitPositionZ.name, std::addressof(fgHitPositionZ.value));
 }
 
-void VertexDetectorHit::ReadBranches(TTree* tree) {
+void VertexDetectorHit::ReadBranches(TTree& tree) {
     Data::ReadBranches(tree);
-    tree->SetBranchAddress(fgHitTime.name, std::addressof(fgHitTime.value));
-    tree->SetBranchAddress(fgHitPositionX.name, std::addressof(fgHitPositionX.value));
-    tree->SetBranchAddress(fgHitPositionY.name, std::addressof(fgHitPositionY.value));
-    tree->SetBranchAddress(fgHitPositionZ.name, std::addressof(fgHitPositionZ.value));
+    tree.SetBranchAddress(fgHitTime.name, std::addressof(fgHitTime.value));
+    tree.SetBranchAddress(fgHitPositionX.name, std::addressof(fgHitPositionX.value));
+    tree.SetBranchAddress(fgHitPositionY.name, std::addressof(fgHitPositionY.value));
+    tree.SetBranchAddress(fgHitPositionZ.name, std::addressof(fgHitPositionZ.value));
 }
