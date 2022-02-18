@@ -37,6 +37,7 @@ After everything prepared, it's time to build.
 MACE software follows a classical cmake & make procedure, as
 ```shell
 mkdir build
+cd build
 cmake <MACE_ROOT_DIR>
 make
 ```
