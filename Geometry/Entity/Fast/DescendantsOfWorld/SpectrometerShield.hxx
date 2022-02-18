@@ -8,7 +8,7 @@
 
 class MACE::Geometry::Entity::Fast::SpectrometerShield final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SpectrometerShield> {
-    void ConstructSelf() override {
+    void ConstructSelf(bool checkOverlaps) override {
         auto name = GetDescription().GetName();
         auto innerRadius = GetDescription().GetInnerRadius();
         auto innerLength = GetDescription().GetInnerLength();
@@ -22,7 +22,7 @@ class MACE::Geometry::Entity::Fast::SpectrometerShield final :
         auto temp = new G4UnionSolid("_temp", body, cap, G4Transform3D(G4RotationMatrix(), G4ThreeVector(0.0, 0.0, -0.5 * innerLength - 0.5 * thickness)));
         auto solid = new G4UnionSolid(name, temp, cap, G4Transform3D(G4RotationMatrix(), G4ThreeVector(0.0, 0.0, 0.5 * innerLength + 0.5 * thickness)));
         auto logic = new G4LogicalVolume(solid, material, name);
-        auto physic = new G4PVPlacement(G4Transform3D(), name, logic, Mother()->GetVolume(), false, 0, fCheckOverlaps);
+        auto physic = new G4PVPlacement(G4Transform3D(), name, logic, Mother()->GetVolume(), false, 0, checkOverlaps);
         fVolumes.emplace_back(physic);
     }
 };

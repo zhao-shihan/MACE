@@ -7,7 +7,7 @@
 
 class MACE::Geometry::Entity::Fast::World final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::World> {
-    void ConstructSelf() override {
+    void ConstructSelf(bool checkOverlaps) override {
         auto name = GetDescription().GetName();
         auto halfX = GetDescription().GetHalfXExtent();
         auto halfY = GetDescription().GetHalfYExtent();
@@ -17,7 +17,7 @@ class MACE::Geometry::Entity::Fast::World final :
 
         auto solid = new G4Box(name, halfX, halfY, halfZ);
         auto logic = new G4LogicalVolume(solid, material, name);
-        auto physic = new G4PVPlacement(G4Transform3D(), name, logic, nullptr, false, 0, fCheckOverlaps);
+        auto physic = new G4PVPlacement(G4Transform3D(), name, logic, nullptr, false, 0, checkOverlaps);
         fVolumes.emplace_back(physic);
     }
 };

@@ -7,7 +7,7 @@
 
 class MACE::Geometry::Entity::Fast::FirstTransportSolenoid final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::FirstTransportSolenoid> {
-    void ConstructSelf() override {
+    void ConstructSelf(bool checkOverlaps) override {
         auto name = GetDescription().GetName();
         auto innerRadius = GetDescription().GetInnerRaidus();
         auto outerRaidus = GetDescription().GetOuterRaidus();
@@ -18,7 +18,7 @@ class MACE::Geometry::Entity::Fast::FirstTransportSolenoid final :
 
         auto solid = new G4Tubs(name, innerRadius, outerRaidus, 0.5 * length, 0, 2 * M_PI);
         auto logic = new G4LogicalVolume(solid, material, name);
-        auto physic = new G4PVPlacement(nullptr, G4ThreeVector(0, 0, upZPosition + 0.5 * length), name, logic, Mother()->GetVolume(), false, 0, fCheckOverlaps);
+        auto physic = new G4PVPlacement(nullptr, G4ThreeVector(0, 0, upZPosition + 0.5 * length), name, logic, Mother()->GetVolume(), false, 0, checkOverlaps);
         fVolumes.emplace_back(physic);
     }
 };

@@ -7,7 +7,7 @@
 
 class MACE::Geometry::Entity::Fast::SpectrometerBody final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SpectrometerBody> {
-    void ConstructSelf() override {
+    void ConstructSelf(bool checkOverlaps) override {
         auto name = GetDescription().GetName();
         auto shellInnerThickness = GetDescription().GetShellInnerThickness();
         auto shellSideThickness = GetDescription().GetShellSideThickness();
@@ -25,7 +25,7 @@ class MACE::Geometry::Entity::Fast::SpectrometerBody final :
         const G4double rOuter[] = { gasOuterRadius + shellOuterThickness, gasOuterRadius + shellOuterThickness, gasOuterRadius + shellOuterThickness, gasOuterRadius + shellOuterThickness };
         auto solid = new G4Polycone(name, 0, 2.0 * M_PI, numZPlane, zPlane, rInner, rOuter);
         auto logic = new G4LogicalVolume(solid, shellMaterial, name);
-        auto physic = new G4PVPlacement(G4Transform3D(), name, logic, Mother()->GetVolume(), false, 0, fCheckOverlaps);
+        auto physic = new G4PVPlacement(G4Transform3D(), name, logic, Mother()->GetVolume(), false, 0, checkOverlaps);
         fVolumes.emplace_back(physic);
     }
 };

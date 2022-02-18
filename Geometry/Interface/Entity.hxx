@@ -15,7 +15,7 @@ public:
     Entity& operator=(const Entity&) = delete;
 
     void AddDaughter(const std::shared_ptr<Entity>& daughter);
-    void ConstructSelfAndDescendants();
+    void ConstructSelfAndDescendants(bool checkOverlaps);
     [[nodiscard]] Volume_t* GetVolume() const { return fVolumes.front(); }
     [[nodiscard]] Volume_t* GetVolume(size_t i) const { return fVolumes.at(i); }
     [[nodiscard]] auto GetVolumeNum() const { return fVolumes.size(); }
@@ -24,7 +24,7 @@ protected:
     std::shared_ptr<const Entity> Mother() const { return fMother.lock(); }
 
 private:
-    virtual void ConstructSelf() = 0;
+    virtual void ConstructSelf(bool checkOverlaps) = 0;
 
 protected:
     std::vector<Volume_t*> fVolumes;

@@ -7,7 +7,7 @@
 
 class MACE::Geometry::Entity::Fast::SpectrometerField final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SpectrometerField> {
-    void ConstructSelf() override {
+    void ConstructSelf(bool checkOverlaps) override {
         auto name = GetDescription().GetName();
         auto length = GetDescription().GetLength();
         auto raidus = GetDescription().GetRadius();
@@ -16,7 +16,7 @@ class MACE::Geometry::Entity::Fast::SpectrometerField final :
 
         auto solid = new G4Tubs(name, 0.0, raidus, 0.5 * length, 0.0, 2.0 * M_PI);
         auto logic = new G4LogicalVolume(solid, material, solid->GetName());
-        auto physic = new G4PVPlacement(G4Transform3D(), solid->GetName(), logic, Mother()->GetVolume(), false, 0, fCheckOverlaps);
+        auto physic = new G4PVPlacement(G4Transform3D(), solid->GetName(), logic, Mother()->GetVolume(), false, 0, checkOverlaps);
         fVolumes.emplace_back(physic);
     }
 };

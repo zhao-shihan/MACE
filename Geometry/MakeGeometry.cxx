@@ -62,7 +62,7 @@ int main(int, char**) {
     spectrometerBody->AddDaughter(spectrometerReadoutLayer);
     spectrometerReadoutLayer->AddDaughter(spectrometerCells);
 
-    world->ConstructSelfAndDescendants();
+    world->ConstructSelfAndDescendants(true);
 
     world->WriteSelfAndDesendentsToGDML("test.gdml");
 

@@ -7,7 +7,7 @@
 
 class MACE::Geometry::Entity::Fast::SecondBendSolenoid final :
     public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SecondBendSolenoid> {
-    void ConstructSelf() override {
+    void ConstructSelf(bool checkOverlaps) override {
         auto name = GetDescription().GetName();
         auto innerRadius = GetDescription().GetInnerRaidus();
         auto outerRaidus = GetDescription().GetOuterRaidus();
@@ -19,7 +19,7 @@ class MACE::Geometry::Entity::Fast::SecondBendSolenoid final :
 
         auto solid = new G4Torus(name, innerRadius, outerRaidus, bendRadius, -M_PI_2, M_PI_2);
         auto logic = new G4LogicalVolume(solid, material, name);
-        auto physic = new G4PVPlacement(G4Transform3D(G4RotationMatrix(G4ThreeVector(1.0, 0.0, 0.0), M_PI_2), G4ThreeVector(xPosition, 0.0, zPosition)), name, logic, Mother()->GetVolume(), false, 0, fCheckOverlaps);
+        auto physic = new G4PVPlacement(G4Transform3D(G4RotationMatrix(G4ThreeVector(1.0, 0.0, 0.0), M_PI_2), G4ThreeVector(xPosition, 0.0, zPosition)), name, logic, Mother()->GetVolume(), false, 0, checkOverlaps);
         fVolumes.emplace_back(physic);
     }
 };

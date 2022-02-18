@@ -22,9 +22,9 @@ void MACE::Geometry::Interface::Entity<Volume_t>::AddDaughter(const std::shared_
 }
 
 template<class Volume_t>
-void MACE::Geometry::Interface::Entity<Volume_t>::ConstructSelfAndDescendants() {
-    this->ConstructSelf();
+void MACE::Geometry::Interface::Entity<Volume_t>::ConstructSelfAndDescendants(bool checkOverlaps) {
+    this->ConstructSelf(checkOverlaps);
     for (auto&& daughter : fDaughters) {
-        daughter->ConstructSelfAndDescendants();
+        daughter->ConstructSelfAndDescendants(checkOverlaps);
     }
 }

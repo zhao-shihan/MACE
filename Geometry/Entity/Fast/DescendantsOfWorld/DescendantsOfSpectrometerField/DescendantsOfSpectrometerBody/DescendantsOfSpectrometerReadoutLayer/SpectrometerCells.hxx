@@ -17,7 +17,7 @@ public:
 
 private:
     enum { kSpectrometerCells, kSpectrometerReadoutLayer };
-    void ConstructSelf() override {
+    void ConstructSelf(bool checkOverlaps) override {
         const auto name = GetDescription<kSpectrometerCells>().GetName();
         // const auto rSenseWire = GetDescription().GetSenseWireDiameter() / 2;
         const auto rFieldWire = GetDescription<kSpectrometerCells>().GetFieldWireDiameter() / 2;
@@ -42,7 +42,7 @@ private:
             auto logic = new G4LogicalVolume(solid, material, name);
             for (int k = 0; k < cellCount; ++k) {
                 auto cellPhi = k * cellAngle;
-                auto physic = new G4PVPlacement(G4Transform3D(G4RotationMatrix(G4ThreeVector(0.0, 0.0, 1.0), cellPhi), G4ThreeVector()), name, logic, motherVolume, true, cellId, fCheckOverlaps);
+                auto physic = new G4PVPlacement(G4Transform3D(G4RotationMatrix(G4ThreeVector(0.0, 0.0, 1.0), cellPhi), G4ThreeVector()), name, logic, motherVolume, true, cellId, checkOverlaps);
                 fVolumes.emplace_back(physic);
 
                 auto cellX = layerCenterRadius * std::cos(cellPhi);
