@@ -2,8 +2,9 @@
 
 #include "TEveVector.h"
 
-#include "DataModel/Global.hxx"
 #include "DataModel/Interface/Data.hxx"
+#include "DataModel/BranchSocket/BasicBranchSocket.hxx"
+#include "DataModel/BranchSocket/ClassBranchSocket.hxx"
 
 class MACE::DataModel::VertexDetectorHit :
     public MACE::DataModel::Interface::Data {
@@ -19,11 +20,15 @@ public:
 
     [[nodiscard]] const auto& GetHitTime() const { return fHitTime; }
     [[nodiscard]] const auto& GetHitPosition() const { return fHitPosition; }
+    [[nodiscard]] const auto& GetHitPositionVariance() const { return fHitPositionVariance; }
 
     void SetHitTime(Double_t val) { fHitTime = val; }
-    void SetHitPosition(const TEveVectorD& val) { fHitPosition = val; }
-    void SetHitPosition(TEveVectorD&& val) { fHitPosition = std::move(val); }
-    void SetHitPosition(Double_t x, Double_t y, Double_t z) { fHitPosition.Set(x, y, z); }
+    void SetHitPosition(const TEveVector2D& val) { fHitPosition = val; }
+    void SetHitPosition(TEveVector2D&& val) { fHitPosition = std::move(val); }
+    void SetHitPosition(Double_t x, Double_t y) { fHitPosition.Set(x, y); }
+    void SetHitPositionVariance(const TEveVector2D& val) { fHitPositionVariance = val; }
+    void SetHitPositionVariance(TEveVector2D&& val) { fHitPositionVariance = std::move(val); }
+    void SetHitPositionVariance(Double_t xVar, Double_t yVar) { fHitPositionVariance.Set(xVar, yVar); }
 
 protected:
     static void CreateBranches(TTree& tree);
@@ -34,15 +39,18 @@ private:
     static constexpr const char* BasicName() { return "MCPHit"; }
 
 private:
-    Double_t fHitTime;
-    TEveVectorD fHitPosition;
+    Double_t     fHitTime;
+    TEveVector2D fHitPosition;
+    TEveVector2D fHitPositionVariance;
 
-    static Column<Float_t> fgHitTime;
-    static Column<TEveVectorF> fgHitPosition;
+    static FloatBranchSocket    fgHitTime;
+    static Vector2FBranchSocket fgHitPosition;
+    static Vector2FBranchSocket fgHitPositionVariance;
 };
 
 inline void MACE::DataModel::VertexDetectorHit::FillBranchVariables() const noexcept {
     Interface::Data::FillBranchVariables();
-    fgHitTime.value = fHitTime;
-    fgHitPosition.value = fHitPosition;
+    fgHitTime.Value() = fHitTime;
+    fgHitPosition.Value() = fHitPosition;
+    fgHitPositionVariance.Value() = fHitPositionVariance;
 }

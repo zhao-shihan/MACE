@@ -19,7 +19,7 @@ public:
     VertexDetectorHit& operator=(const VertexDetectorHit& hit) noexcept = default;
     VertexDetectorHit& operator=(VertexDetectorHit&& hit) noexcept = default;
 
-    void SetHitPosition(const G4ThreeVector& pos) { DataModel::VertexDetectorSimHit::SetHitPosition(pos.x(), pos.y(), pos.z()); }
+    void SetHitPosition(const G4ThreeVector& pos) { DataModel::VertexDetectorSimHit::SetHitPosition(pos.x(), pos.y()); }
     void SetVertexPosition(const G4ThreeVector& pos) { DataModel::VertexDetectorSimHit::SetVertexPosition(pos.x(), pos.y(), pos.z()); }
 
     inline void* operator new(size_t);

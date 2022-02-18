@@ -2,22 +2,22 @@
 
 using namespace MACE::DataModel;
 
-Column<Int_t> CalorimeterSimHit::fgPDGCode = { "PDGCode", 0 };
-Column<Int_t> CalorimeterSimHit::fgTrackID = { "TrackID", -1 };
+IntBranchSocket CalorimeterSimHit::fgPDGCode("PDGCode", std::numeric_limits<Int_t>::max());
+IntBranchSocket CalorimeterSimHit::fgTrackID("TrackID", -1);
 
 CalorimeterSimHit::CalorimeterSimHit() noexcept :
     CalorimeterHit(),
-    fPDGCode(fgPDGCode.value),
-    fTrackID(fgTrackID.value) {}
+    fPDGCode(fgPDGCode.Value()),
+    fTrackID(fgTrackID.Value()) {}
 
 void CalorimeterSimHit::CreateBranches(TTree& tree) {
     CalorimeterHit::CreateBranches(tree);
-    tree.Branch(fgPDGCode.name, std::addressof(fgPDGCode.value));
-    tree.Branch(fgTrackID.name, std::addressof(fgTrackID.value));
+    tree.Branch(fgPDGCode.BranchName(), fgPDGCode.Address());
+    tree.Branch(fgTrackID.BranchName(), fgTrackID.Address());
 }
 
 void CalorimeterSimHit::ReadBranches(TTree& tree) {
     CalorimeterHit::ReadBranches(tree);
-    tree.SetBranchAddress(fgPDGCode.name, std::addressof(fgPDGCode.value));
-    tree.SetBranchAddress(fgTrackID.name, std::addressof(fgTrackID.value));
+    tree.SetBranchAddress(fgPDGCode.BranchName(), fgPDGCode.Address());
+    tree.SetBranchAddress(fgTrackID.BranchName(), fgTrackID.Address());
 }

@@ -2,8 +2,9 @@
 
 #include "TEveVector.h"
 
-#include "DataModel/Global.hxx"
 #include "DataModel/Interface/Data.hxx"
+#include "DataModel/BranchSocket/BasicBranchSocket.hxx"
+#include "DataModel/BranchSocket/ClassBranchSocket.hxx"
 
 class MACE::DataModel::HelixTrack :
     public MACE::DataModel::Interface::Data {
@@ -41,25 +42,23 @@ private:
 
 private:
     TEveVector2D fCenter;
-    Double_t fRadius;
-    Double_t fZ0;
-    Double_t fAlpha;
-    Double_t fChi2;
+    Double_t     fRadius;
+    Double_t     fZ0;
+    Double_t     fAlpha;
+    Double_t     fChi2;
 
-    static Column<Float_t> fgCenterX;
-    static Column<Float_t> fgCenterY;
-    static Column<Float_t> fgRadius;
-    static Column<Float_t> fgZ0;
-    static Column<Float_t> fgAlpha;
-    static Column<Float_t> fgChi2;
+    static Vector2FBranchSocket fgCenter;
+    static FloatBranchSocket    fgRadius;
+    static FloatBranchSocket    fgZ0;
+    static FloatBranchSocket    fgAlpha;
+    static FloatBranchSocket    fgChi2;
 };
 
 inline void MACE::DataModel::HelixTrack::FillBranchVariables() const noexcept {
     Interface::Data::FillBranchVariables();
-    fgCenterX.value = fCenter.fX;
-    fgCenterY.value = fCenter.fY;
-    fgRadius.value = fRadius;
-    fgZ0.value = fZ0;
-    fgAlpha.value = fAlpha;
-    fgChi2.value = fChi2;
+    fgCenter.Value() = fCenter;
+    fgRadius.Value() = fRadius;
+    fgZ0.Value() = fZ0;
+    fgAlpha.Value() = fAlpha;
+    fgChi2.Value() = fChi2;
 }

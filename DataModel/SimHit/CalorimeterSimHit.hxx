@@ -2,6 +2,7 @@
 
 #include "DataModel/Global.hxx"
 #include "DataModel/Hit/CalorimeterHit.hxx"
+#include "DataModel/BranchSocket/BasicBranchSocket.hxx"
 
 class MACE::DataModel::CalorimeterSimHit :
     public MACE::DataModel::CalorimeterHit {
@@ -33,12 +34,12 @@ private:
     Int_t fPDGCode;
     Int_t fTrackID;
 
-    static Column<Int_t> fgPDGCode;
-    static Column<Int_t> fgTrackID;
+    static IntBranchSocket fgPDGCode;
+    static IntBranchSocket fgTrackID;
 };
 
 inline void MACE::DataModel::CalorimeterSimHit::FillBranchVariables() const noexcept {
     CalorimeterHit::FillBranchVariables();
-    fgPDGCode.value = fPDGCode;
-    fgTrackID.value = fTrackID;
+    fgPDGCode.Value() = fPDGCode;
+    fgTrackID.Value() = fTrackID;
 }

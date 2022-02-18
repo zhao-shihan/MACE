@@ -2,6 +2,8 @@
 
 #include "DataModel/Global.hxx"
 #include "DataModel/Hit/SpectrometerHit.hxx"
+#include "DataModel/BranchSocket/BasicBranchSocket.hxx"
+#include "DataModel/BranchSocket/ClassBranchSocket.hxx"
 
 class MACE::DataModel::SpectrometerSimHit :
     public MACE::DataModel::SpectrometerHit {
@@ -23,7 +25,7 @@ public:
     void SetVertexTime(Double_t val) { fVertexTime = val; }
     void SetVertexPosition(const TEveVectorD& pos) { fVertexPosition = pos; }
     void SetVertexPosition(TEveVectorD&& pos) { fVertexPosition = std::move(pos); }
-    void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition.fX = x; fVertexPosition.fY = y; fVertexPosition.fZ = z; }
+    void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition.Set(x, y, z); }
     void SetPDGCode(Int_t pdgCode) { fPDGCode = pdgCode; }
     void SetTrackID(Int_t val) { fTrackID = val; }
 
@@ -36,25 +38,21 @@ private:
     static constexpr const char* BasicName() { return "CDCSimHit"; }
 
 private:
-    Double_t fVertexTime;
+    Double_t    fVertexTime;
     TEveVectorD fVertexPosition;
-    Int_t fPDGCode;
-    Int_t fTrackID;
+    Int_t       fPDGCode;
+    Int_t       fTrackID;
 
-    static Column<Float_t> fgVertexTime;
-    static Column<Float_t> fgVertexPositionX;
-    static Column<Float_t> fgVertexPositionY;
-    static Column<Float_t> fgVertexPositionZ;
-    static Column<Int_t> fgPDGCode;
-    static Column<Int_t> fgTrackID;
+    static FloatBranchSocket    fgVertexTime;
+    static Vector3FBranchSocket fgVertexPosition;
+    static IntBranchSocket      fgPDGCode;
+    static IntBranchSocket      fgTrackID;
 };
 
 inline void MACE::DataModel::SpectrometerSimHit::FillBranchVariables() const noexcept {
     SpectrometerHit::FillBranchVariables();
-    fgVertexTime.value = fVertexTime;
-    fgVertexPositionX.value = fVertexPosition.fX;
-    fgVertexPositionY.value = fVertexPosition.fY;
-    fgVertexPositionZ.value = fVertexPosition.fZ;
-    fgPDGCode.value = fPDGCode;
-    fgTrackID.value = fTrackID;
+    fgVertexTime.Value() = fVertexTime;
+    fgVertexPosition.Value() = fVertexPosition;
+    fgPDGCode.Value() = fPDGCode;
+    fgTrackID.Value() = fTrackID;
 }

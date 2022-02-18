@@ -2,8 +2,9 @@
 
 #include "TEveVector.h"
 
-#include "DataModel/Global.hxx"
 #include "DataModel/Interface/Data.hxx"
+#include "DataModel/BranchSocket/BasicBranchSocket.hxx"
+#include "DataModel/BranchSocket/ClassBranchSocket.hxx"
 
 class MACE::DataModel::SpectrometerHit :
     public MACE::DataModel::Interface::Data {
@@ -18,24 +19,24 @@ public:
     SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept = default;
 
     [[nodiscard]] const auto& GetHitTime() const { return fHitTime; }
-    [[nodiscard]] const auto& GetWirePosition() const { return fWirePosition; }
     [[nodiscard]] const auto& GetDriftDistance() const { return fDriftDistance; }
-    [[nodiscard]] const auto& GetDriftDistanceVariance() const { return fDriftDistanceVariance; }
     [[nodiscard]] const auto& GetHitPositionZ() const { return fHitPositionZ; }
+    [[nodiscard]] const auto& GetDriftDistanceVariance() const { return fDriftDistanceVariance; }
     [[nodiscard]] const auto& GetHitPositionZVariance() const { return fHitPositionZVariance; }
     [[nodiscard]] const auto& GetCellID() const { return fCellID; }
     [[nodiscard]] const auto& GetLayerID() const { return fLayerID; }
+    [[nodiscard]] const auto& GetWirePosition() const { return fWirePosition; }
 
     void SetHitTime(Double_t val) { fHitTime = val; }
-    void SetWirePosition(const TEveVector2D& val) { fWirePosition = val; }
-    void SetWirePosition(TEveVector2D&& val) { fWirePosition = std::move(val); }
-    void SetWirePosition(Double_t x, Double_t y) { fWirePosition.fX = x; fWirePosition.fY = y; }
     void SetDriftDistance(Double_t d) { fDriftDistance = d; }
-    void SetDriftDistanceVariance(Double_t var) { fDriftDistanceVariance = var; }
     void SetHitPositionZ(Double_t z) { fHitPositionZ = z; }
+    void SetDriftDistanceVariance(Double_t var) { fDriftDistanceVariance = var; }
     void SetHitPositionZVariance(Double_t var) { fHitPositionZVariance = var; }
     void SetCellID(Int_t val) { fCellID = val; }
     void SetLayerID(Int_t val) { fLayerID = val; }
+    void SetWirePosition(const TEveVector2D& val) { fWirePosition = val; }
+    void SetWirePosition(TEveVector2D&& val) { fWirePosition = std::move(val); }
+    void SetWirePosition(Double_t x, Double_t y) { fWirePosition.Set(x, y); }
 
 protected:
     static void CreateBranches(TTree& tree);
@@ -46,33 +47,33 @@ private:
     static constexpr const char* BasicName() { return "CDCHit"; }
 
 private:
-    Double_t fHitTime;
+    Double_t     fHitTime;
+    Double_t     fDriftDistance;
+    Double_t     fHitPositionZ;
+    Double_t     fDriftDistanceVariance;
+    Double_t     fHitPositionZVariance;
+    Int_t        fCellID;
+    Int_t        fLayerID;
     TEveVector2D fWirePosition;
-    Double_t fDriftDistance;
-    Double_t fDriftDistanceVariance;
-    Double_t fHitPositionZ;
-    Double_t fHitPositionZVariance;
-    Int_t fCellID;
-    Int_t fLayerID;
 
-    static Column<Float_t> fgHitTime;
-    static Column<Float_t> fgWirePositionX;
-    static Column<Float_t> fgWirePositionY;
-    static Column<Float_t> fgDriftDistance;
-    static Column<Float_t> fgDriftDistanceVariance;
-    static Column<Float_t> fgHitPositionZ;
-    static Column<Float_t> fgHitPositionZVariance;
-    static Column<Int_t> fgCellID;
-    static Column<Int_t> fgLayerID;
+    static FloatBranchSocket    fgHitTime;
+    static FloatBranchSocket    fgDriftDistance;
+    static FloatBranchSocket    fgHitPositionZ;
+    static FloatBranchSocket    fgDriftDistanceVariance;
+    static FloatBranchSocket    fgHitPositionZVariance;
+    static IntBranchSocket      fgCellID;
+    static IntBranchSocket      fgLayerID;
+    static Vector2FBranchSocket fgWirePosition;
 };
 
 inline void MACE::DataModel::SpectrometerHit::FillBranchVariables() const noexcept {
     Interface::Data::FillBranchVariables();
-    fgHitTime.value = fHitTime;
-    fgWirePositionX.value = fWirePosition.fX;
-    fgWirePositionY.value = fWirePosition.fY;
-    fgDriftDistance.value = fDriftDistance;
-    fgHitPositionZ.value = fHitPositionZ;
-    fgCellID.value = fCellID;
-    fgLayerID.value = fLayerID;
+    fgHitTime.Value() = fHitTime;
+    fgDriftDistance.Value() = fDriftDistance;
+    fgHitPositionZ.Value() = fHitPositionZ;
+    fgDriftDistanceVariance.Value() = fDriftDistanceVariance;
+    fgHitPositionZVariance.Value() = fHitPositionZVariance;
+    fgCellID.Value() = fCellID;
+    fgLayerID.Value() = fLayerID;
+    fgWirePosition.Value() = fWirePosition;
 }

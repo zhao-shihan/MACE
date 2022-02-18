@@ -1,7 +1,6 @@
 #pragma once
 
 #include "DataModel/Global.hxx"
-#include "DataModel/Column.hxx"
 
 class MACE::DataModel::Interface::Data {
 protected:

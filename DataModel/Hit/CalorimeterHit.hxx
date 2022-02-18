@@ -1,7 +1,7 @@
 #pragma once
 
-#include "DataModel/Global.hxx"
 #include "DataModel/Interface/Data.hxx"
+#include "DataModel/BranchSocket/BasicBranchSocket.hxx"
 
 class MACE::DataModel::CalorimeterHit :
     public MACE::DataModel::Interface::Data {
@@ -17,9 +17,11 @@ public:
 
     [[nodiscard]] const auto& GetHitTime() const { return fHitTime; }
     [[nodiscard]] const auto& GetEnergy() const { return fEnergy; }
+    [[nodiscard]] const auto& GetEnergyVariance() const { return fEnergyVariance; }
 
     void SetHitTime(Double_t val) { fHitTime = val; }
     void SetEnergy(Double_t val) { fEnergy = val; }
+    void SetEnergyVariance(Double_t val) { fEnergyVariance = val; }
 
 protected:
     static void CreateBranches(TTree& tree);
@@ -32,13 +34,16 @@ private:
 private:
     Double_t fHitTime;
     Double_t fEnergy;
+    Double_t fEnergyVariance;
 
-    static Column<Float_t> fgHitTime;
-    static Column<Float_t> fgEnergy;
+    static FloatBranchSocket fgHitTime;
+    static FloatBranchSocket fgEnergy;
+    static FloatBranchSocket fgEnergyVariance;
 };
 
 inline void MACE::DataModel::CalorimeterHit::FillBranchVariables() const noexcept {
     Interface::Data::FillBranchVariables();
-    fgHitTime.value = fHitTime;
-    fgEnergy.value = fEnergy;
+    fgHitTime.Value() = fHitTime;
+    fgEnergy.Value() = fEnergy;
+    fgEnergyVariance.Value() = fEnergyVariance;
 }

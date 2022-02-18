@@ -2,22 +2,26 @@
 
 using namespace MACE::DataModel;
 
-Column<Float_t> VertexDetectorHit::fgHitTime = { "HitT", 0.0f };
-Column<TEveVectorF> VertexDetectorHit::fgHitPosition = { "HitPos", TEveVectorF(0, 0, 0) };
+FloatBranchSocket                VertexDetectorHit::fgHitTime("HitT", 0);
+Vector2FBranchSocket         VertexDetectorHit::fgHitPosition("HitPos", 0, 0);
+Vector2FBranchSocket VertexDetectorHit::fgHitPositionVariance("HitPosVar", 0, 0);
 
 VertexDetectorHit::VertexDetectorHit() noexcept :
     Data(),
-    fHitTime(fgHitTime.value),
-    fHitPosition(fgHitPosition.value) {}
+    fHitTime(fgHitTime.Value()),
+    fHitPosition(fgHitPosition.Value()),
+    fHitPositionVariance(fgHitPositionVariance.Value()) {}
 
 void VertexDetectorHit::CreateBranches(TTree& tree) {
     Data::CreateBranches(tree);
-    tree.Branch(fgHitTime.name, std::addressof(fgHitTime.value));
-    tree.Branch(fgHitPosition.name, std::addressof(fgHitPosition.value));
+    tree.Branch(fgHitTime.BranchName(), fgHitTime.Address());
+    tree.Branch(fgHitPosition.BranchName(), fgHitPosition.Address());
+    tree.Branch(fgHitPositionVariance.BranchName(), fgHitPositionVariance.Address());
 }
 
 void VertexDetectorHit::ReadBranches(TTree& tree) {
     Data::ReadBranches(tree);
-    tree.SetBranchAddress(fgHitTime.name, std::addressof(fgHitTime.value));
-    tree.SetBranchAddress(fgHitPosition.name, std::addressof(fgHitPosition.value));
+    tree.SetBranchAddress(fgHitTime.BranchName(), fgHitTime.Address());
+    tree.SetBranchAddress(fgHitPosition.BranchName(), fgHitPosition.Address());
+    tree.SetBranchAddress(fgHitPositionVariance.BranchName(), fgHitPositionVariance.Address());
 }
