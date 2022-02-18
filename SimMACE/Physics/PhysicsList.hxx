@@ -7,7 +7,7 @@
 class MACE::SimMACE::Physics::PhysicsList final :
     public G4VModularPhysicsList {
 public:
-    PhysicsList(G4int verbose = 1);
+    PhysicsList(G4int verbose);
     ~PhysicsList() noexcept = default;
 
     PhysicsList(const PhysicsList&) = delete;

@@ -4,6 +4,10 @@
 
 using namespace MACE::SimMACE::Action;
 
+DetectorConstruction::DetectorConstruction(G4bool checkOverlaps) :
+    G4VUserDetectorConstruction(),
+    fCheckOverlaps(checkOverlaps) {}
+
 G4VPhysicalVolume* DetectorConstruction::Construct() {
     ConstructVolumes();
     ConstructSD();
@@ -36,7 +40,7 @@ void DetectorConstruction::ConstructVolumes() {
     fWorld->AddDaughter(fThirdTransportSolenoid);
     fWorld->AddDaughter(fVertexDetectorShield);
 
-    fWorld->ConstructSelfAndDescendants();
+    fWorld->ConstructSelfAndDescendants(fCheckOverlaps);
 }
 
 #include "G4SDManager.hh"

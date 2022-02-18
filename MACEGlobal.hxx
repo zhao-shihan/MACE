@@ -3,12 +3,17 @@
 namespace MACE {
 
     namespace DataModel {
+        inline namespace BranchSocket {
+            template<typename Arith_t> class BasicBranchSocket;
+            template<typename Class_t> class ClassBranchSocket;
+        }
         inline namespace Hit {
             class CalorimeterHit;
             class VertexDetectorHit;
             class SpectrometerHit;
         }
         namespace Interface {
+            template<typename Object_t, typename Address_t> class BranchSocket;
             class Data;
         }
         inline namespace RawHit { // no impl yet
@@ -30,7 +35,6 @@ namespace MACE {
             class HelixTrack;
             class PhysicsTrack;
         }
-        template<typename Value_t> struct Column;
         class DataHub;
     }
 

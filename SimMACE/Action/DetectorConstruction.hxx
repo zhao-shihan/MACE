@@ -37,7 +37,7 @@
 class MACE::SimMACE::Action::DetectorConstruction final :
     public G4VUserDetectorConstruction {
 public:
-    DetectorConstruction() = default;
+    DetectorConstruction(G4bool checkOverlaps);
     ~DetectorConstruction() noexcept = default;
     G4VPhysicalVolume* Construct() override;
 
@@ -70,6 +70,9 @@ private:
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(ThirdTransportSolenoid);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(World);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(VertexDetectorShield);
+
+private:
+    G4bool fCheckOverlaps;
 };
 
 #undef MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER
