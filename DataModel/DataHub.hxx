@@ -22,7 +22,7 @@ public:
     [[nodiscard]] TString GetPrefixOfTreeName(Long64_t i) const { return fPrefixHasIndexer ? (fSplitPrefix.first + i + fSplitPrefix.second) : fPrefixFormat; }
     [[nodiscard]] TString GetSuffixOfTreeName(Long64_t i) const { return fSuffixHasIndexer ? (fSplitSuffix.first + i + fSplitSuffix.second) : fSuffixFormat; }
     template<class Data_t>
-    [[nodiscard]] TString GetTreeName(Long64_t i) const { return GetPrefixOfTreeName(i) + static_cast<const char*>(Data_t::Name()) + GetSuffixOfTreeName(i); }
+    [[nodiscard]] TString GetTreeName(Long64_t treeIndex) const;
 
     template<class Data_t>
     [[nodiscard]] inline ObserverPtr<TTree> FindTree(TFile& file, Long64_t treeIndex = 0);

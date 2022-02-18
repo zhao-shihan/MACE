@@ -23,58 +23,6 @@ SpectrometerHit::SpectrometerHit() noexcept :
     fCellID(fgCellID.value),
     fLayerID(fgLayerID.value) {}
 
-SpectrometerHit::SpectrometerHit(const SpectrometerHit& hit) noexcept :
-    Data(static_cast<const Data&>(hit)),
-    fHitTime(hit.fHitTime),
-    fWirePosition(hit.fWirePosition),
-    fDriftDistance(hit.fDriftDistance),
-    fDriftDistanceVariance(hit.fDriftDistanceVariance),
-    fHitPositionZ(hit.fHitPositionZ),
-    fHitPositionZVariance(hit.fHitPositionZVariance),
-    fCellID(hit.fCellID),
-    fLayerID(hit.fLayerID) {}
-
-SpectrometerHit::SpectrometerHit(SpectrometerHit&& hit) noexcept :
-    Data(static_cast<Data&&>(hit)),
-    fHitTime(std::move(hit.fHitTime)),
-    fWirePosition(std::move(hit.fWirePosition)),
-    fDriftDistance(std::move(hit.fDriftDistance)),
-    fDriftDistanceVariance(std::move(hit.fDriftDistanceVariance)),
-    fHitPositionZ(std::move(hit.fHitPositionZ)),
-    fHitPositionZVariance(std::move(hit.fHitPositionZVariance)),
-    fCellID(std::move(hit.fCellID)),
-    fLayerID(std::move(hit.fLayerID)) {}
-
-SpectrometerHit& SpectrometerHit::operator=(const SpectrometerHit& hit) noexcept {
-    if (std::addressof(hit) != this) {
-        Data::operator=(static_cast<const Data&>(hit));
-        fHitTime = hit.fHitTime;
-        fWirePosition = hit.fWirePosition;
-        fDriftDistance = hit.fDriftDistance;
-        fDriftDistanceVariance = hit.fDriftDistanceVariance;
-        fHitPositionZ = hit.fHitPositionZ;
-        fHitPositionZVariance = hit.fHitPositionZVariance;
-        fCellID = hit.fCellID;
-        fLayerID = hit.fLayerID;
-    }
-    return *this;
-}
-
-SpectrometerHit& SpectrometerHit::operator=(SpectrometerHit&& hit) noexcept {
-    if (std::addressof(hit) != this) {
-        Data::operator=(static_cast<Data&&>(hit));
-        fHitTime = std::move(hit.fHitTime);
-        fWirePosition = std::move(hit.fWirePosition);
-        fDriftDistance = std::move(hit.fDriftDistance);
-        fDriftDistanceVariance = std::move(hit.fDriftDistanceVariance);
-        fHitPositionZ = std::move(hit.fHitPositionZ);
-        fHitPositionZVariance = std::move(hit.fHitPositionZVariance);
-        fCellID = std::move(hit.fCellID);
-        fLayerID = std::move(hit.fLayerID);
-    }
-    return *this;
-}
-
 void SpectrometerHit::CreateBranches(TTree& tree) {
     Data::CreateBranches(tree);
     tree.Branch(fgHitTime.name, std::addressof(fgHitTime.value));

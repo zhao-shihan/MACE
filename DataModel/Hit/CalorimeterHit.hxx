@@ -9,11 +9,11 @@ class MACE::DataModel::CalorimeterHit :
 
 public:
     CalorimeterHit() noexcept;
-    CalorimeterHit(const CalorimeterHit& hit) noexcept;
-    CalorimeterHit(CalorimeterHit&& hit) noexcept;
+    CalorimeterHit(const CalorimeterHit& hit) noexcept = default;
+    CalorimeterHit(CalorimeterHit&& hit) noexcept = default;
     virtual ~CalorimeterHit() noexcept = default;
-    CalorimeterHit& operator=(const CalorimeterHit& hit) noexcept;
-    CalorimeterHit& operator=(CalorimeterHit&& hit) noexcept;
+    CalorimeterHit& operator=(const CalorimeterHit& hit) noexcept = default;
+    CalorimeterHit& operator=(CalorimeterHit&& hit) noexcept = default;
 
     [[nodiscard]] const auto& GetHitTime() const { return fHitTime; }
     [[nodiscard]] const auto& GetEnergy() const { return fEnergy; }
@@ -22,10 +22,12 @@ public:
     void SetEnergy(Double_t val) { fEnergy = val; }
 
 protected:
-    static constexpr const char* Name() { return "CalHit"; }
     static void CreateBranches(TTree& tree);
     inline void FillBranchVariables() const noexcept;
     static void ReadBranches(TTree& tree);
+
+private:
+    static constexpr const char* BasicName() { return "CalHit"; }
 
 private:
     Double_t fHitTime;

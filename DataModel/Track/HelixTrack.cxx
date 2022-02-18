@@ -17,46 +17,6 @@ HelixTrack::HelixTrack() noexcept :
     fAlpha(fgAlpha.value),
     fChi2(fgChi2.value) {}
 
-HelixTrack::HelixTrack(const HelixTrack& track) noexcept :
-    Data(static_cast<const Data&>(track)),
-    fCenter(track.fCenter),
-    fRadius(track.fRadius),
-    fZ0(track.fZ0),
-    fAlpha(track.fAlpha),
-    fChi2(track.fChi2) {}
-
-HelixTrack::HelixTrack(HelixTrack&& track) noexcept :
-    Data(static_cast<Data&&>(track)),
-    fCenter(std::move(track.fCenter)),
-    fRadius(std::move(track.fRadius)),
-    fZ0(std::move(track.fZ0)),
-    fAlpha(std::move(track.fAlpha)),
-    fChi2(std::move(track.fChi2)) {}
-
-HelixTrack& HelixTrack::operator=(const HelixTrack& track) noexcept {
-    if (std::addressof(track) != this) {
-        Data::operator=(static_cast<const Data&>(track));
-        fCenter = track.fCenter;
-        fRadius = track.fRadius;
-        fZ0 = track.fZ0;
-        fAlpha = track.fAlpha;
-        fChi2 = track.fChi2;
-    }
-    return *this;
-}
-
-HelixTrack& HelixTrack::operator=(HelixTrack&& track) noexcept {
-    if (std::addressof(track) != this) {
-        Data::operator=(static_cast<Data&&>(track));
-        fCenter = std::move(track.fCenter);
-        fRadius = std::move(track.fRadius);
-        fZ0 = std::move(track.fZ0);
-        fAlpha = std::move(track.fAlpha);
-        fChi2 = std::move(track.fChi2);
-    }
-    return *this;
-}
-
 void HelixTrack::CreateBranches(TTree& tree) {
     Data::CreateBranches(tree);
     tree.Branch(fgCenterX.name, std::addressof(fgCenterX.value));

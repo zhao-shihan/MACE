@@ -9,11 +9,11 @@ class MACE::DataModel::CalorimeterSimHit :
 
 public:
     CalorimeterSimHit() noexcept;
-    CalorimeterSimHit(const CalorimeterSimHit& hit) noexcept;
-    CalorimeterSimHit(CalorimeterSimHit&& hit) noexcept;
+    CalorimeterSimHit(const CalorimeterSimHit& hit) noexcept = default;
+    CalorimeterSimHit(CalorimeterSimHit&& hit) noexcept = default;
     virtual ~CalorimeterSimHit() noexcept = default;
-    CalorimeterSimHit& operator=(const CalorimeterSimHit& hit) noexcept;
-    CalorimeterSimHit& operator=(CalorimeterSimHit&& hit) noexcept;
+    CalorimeterSimHit& operator=(const CalorimeterSimHit& hit) noexcept = default;
+    CalorimeterSimHit& operator=(CalorimeterSimHit&& hit) noexcept = default;
 
     [[nodiscard]] const auto& GetParticlePDGCode() const { return fPDGCode; }
     [[nodiscard]] const auto& GetTrackID() const { return fTrackID; }
@@ -22,10 +22,12 @@ public:
     void SetTrackID(Int_t val) { fTrackID = val; }
 
 protected:
-    static constexpr const char* Name() { return "CalSimHit"; }
     static void CreateBranches(TTree& tree);
     inline void FillBranchVariables() const noexcept;
     static void ReadBranches(TTree& tree);
+
+private:
+    static constexpr const char* BasicName() { return "CalSimHit"; }
 
 private:
     Int_t fPDGCode;

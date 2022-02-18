@@ -11,11 +11,11 @@ class MACE::DataModel::HelixTrack :
 
 public:
     HelixTrack() noexcept;
-    HelixTrack(const HelixTrack& hit) noexcept;
-    HelixTrack(HelixTrack&& hit) noexcept;
+    HelixTrack(const HelixTrack& hit) noexcept = default;
+    HelixTrack(HelixTrack&& hit) noexcept = default;
     virtual ~HelixTrack() noexcept = default;
-    HelixTrack& operator=(const HelixTrack& hit) noexcept;
-    HelixTrack& operator=(HelixTrack&& hit) noexcept;
+    HelixTrack& operator=(const HelixTrack& hit) noexcept = default;
+    HelixTrack& operator=(HelixTrack&& hit) noexcept = default;
 
     [[nodiscard]] const auto& GetCenter() const { return fCenter; }
     [[nodiscard]] const auto& GetRadius() const { return fRadius; }
@@ -32,10 +32,12 @@ public:
     void SetChi2(Double_t val) { fChi2 = val; }
 
 protected:
-    static constexpr const char* Name() { return "HlxTrk"; }
     static void CreateBranches(TTree& tree);
     inline void FillBranchVariables() const noexcept;
     static void ReadBranches(TTree& tree);
+
+private:
+    static constexpr const char* BasicName() { return "HlxTrk"; }
 
 private:
     TEveVector2D fCenter;

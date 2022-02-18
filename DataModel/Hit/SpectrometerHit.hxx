@@ -11,11 +11,11 @@ class MACE::DataModel::SpectrometerHit :
 
 public:
     SpectrometerHit() noexcept;
-    SpectrometerHit(const SpectrometerHit& hit) noexcept;
-    SpectrometerHit(SpectrometerHit&& hit) noexcept;
+    SpectrometerHit(const SpectrometerHit& hit) noexcept = default;
+    SpectrometerHit(SpectrometerHit&& hit) noexcept = default;
     virtual ~SpectrometerHit() noexcept = default;
-    SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept;
-    SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept;
+    SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept = default;
+    SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept = default;
 
     [[nodiscard]] const auto& GetHitTime() const { return fHitTime; }
     [[nodiscard]] const auto& GetWirePosition() const { return fWirePosition; }
@@ -38,10 +38,12 @@ public:
     void SetLayerID(Int_t val) { fLayerID = val; }
 
 protected:
-    static constexpr const char* Name() { return "CDCHit"; }
     static void CreateBranches(TTree& tree);
     inline void FillBranchVariables() const noexcept;
     static void ReadBranches(TTree& tree);
+
+private:
+    static constexpr const char* BasicName() { return "CDCHit"; }
 
 private:
     Double_t fHitTime;

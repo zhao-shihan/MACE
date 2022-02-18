@@ -9,11 +9,11 @@ class MACE::DataModel::SpectrometerSimHit :
 
 public:
     SpectrometerSimHit() noexcept;
-    SpectrometerSimHit(const SpectrometerSimHit& hit) noexcept;
-    SpectrometerSimHit(SpectrometerSimHit&& hit) noexcept;
+    SpectrometerSimHit(const SpectrometerSimHit& hit) noexcept = default;
+    SpectrometerSimHit(SpectrometerSimHit&& hit) noexcept = default;
     virtual ~SpectrometerSimHit() noexcept = default;
-    SpectrometerSimHit& operator=(const SpectrometerSimHit& hit) noexcept;
-    SpectrometerSimHit& operator=(SpectrometerSimHit&& hit) noexcept;
+    SpectrometerSimHit& operator=(const SpectrometerSimHit& hit) noexcept = default;
+    SpectrometerSimHit& operator=(SpectrometerSimHit&& hit) noexcept = default;
 
     [[nodiscard]] const auto& GetVertexTime() const { return fVertexTime; }
     [[nodiscard]] const auto& GetVertexPosition() const { return fVertexPosition; }
@@ -28,10 +28,12 @@ public:
     void SetTrackID(Int_t val) { fTrackID = val; }
 
 protected:
-    static constexpr const char* Name() { return "CDCSimHit"; }
     static void CreateBranches(TTree& tree);
     inline void FillBranchVariables() const noexcept;
     static void ReadBranches(TTree& tree);
+
+private:
+    static constexpr const char* BasicName() { return "CDCSimHit"; }
 
 private:
     Double_t fVertexTime;

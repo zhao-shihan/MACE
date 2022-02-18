@@ -9,11 +9,11 @@ class MACE::DataModel::VertexDetectorSimHit :
 
 public:
     VertexDetectorSimHit() noexcept;
-    VertexDetectorSimHit(const VertexDetectorSimHit& hit) noexcept;
-    VertexDetectorSimHit(VertexDetectorSimHit&& hit) noexcept;
+    VertexDetectorSimHit(const VertexDetectorSimHit& hit) noexcept = default;
+    VertexDetectorSimHit(VertexDetectorSimHit&& hit) noexcept = default;
     virtual ~VertexDetectorSimHit() noexcept = default;
-    VertexDetectorSimHit& operator=(const VertexDetectorSimHit& hit) noexcept;
-    VertexDetectorSimHit& operator=(VertexDetectorSimHit&& hit) noexcept;
+    VertexDetectorSimHit& operator=(const VertexDetectorSimHit& hit) noexcept = default;
+    VertexDetectorSimHit& operator=(VertexDetectorSimHit&& hit) noexcept = default;
 
     [[nodiscard]] const auto& GetVertexTime() const { return fVertexTime; }
     [[nodiscard]] const auto& GetVertexPosition() const { return fVertexPosition; }
@@ -28,10 +28,12 @@ public:
     void SetTrackID(Int_t val) { fTrackID = val; }
 
 protected:
-    static constexpr const char* Name() { return "MCPSimHit"; }
     static void CreateBranches(TTree& tree);
     inline void FillBranchVariables() const noexcept;
     static void ReadBranches(TTree& tree);
+
+private:
+    static constexpr const char* BasicName() { return "MCPSimHit"; }
 
 private:
     Double_t fVertexTime;

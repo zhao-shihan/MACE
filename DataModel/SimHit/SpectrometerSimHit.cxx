@@ -16,42 +16,6 @@ SpectrometerSimHit::SpectrometerSimHit() noexcept :
     fPDGCode(fgPDGCode.value),
     fTrackID(fgTrackID.value) {}
 
-SpectrometerSimHit::SpectrometerSimHit(const SpectrometerSimHit& hit) noexcept :
-    SpectrometerHit(static_cast<const SpectrometerHit&>(hit)),
-    fVertexTime(hit.fVertexTime),
-    fVertexPosition(hit.fVertexPosition),
-    fPDGCode(hit.fPDGCode),
-    fTrackID(hit.fTrackID) {}
-
-SpectrometerSimHit::SpectrometerSimHit(SpectrometerSimHit&& hit) noexcept :
-    SpectrometerHit(static_cast<SpectrometerHit&&>(hit)),
-    fVertexTime(std::move(hit.fVertexTime)),
-    fVertexPosition(std::move(hit.fVertexPosition)),
-    fPDGCode(std::move(hit.fPDGCode)),
-    fTrackID(std::move(hit.fTrackID)) {}
-
-SpectrometerSimHit& SpectrometerSimHit::operator=(const SpectrometerSimHit& hit) noexcept {
-    if (std::addressof(hit) != this) {
-        SpectrometerHit::operator=(static_cast<const SpectrometerHit&>(hit));
-        fVertexTime = hit.fVertexTime;
-        fVertexPosition = hit.fVertexPosition;
-        fPDGCode = hit.fPDGCode;
-        fTrackID = hit.fTrackID;
-    }
-    return *this;
-}
-
-SpectrometerSimHit& SpectrometerSimHit::operator=(SpectrometerSimHit&& hit) noexcept {
-    if (std::addressof(hit) != this) {
-        SpectrometerHit::operator=(static_cast<SpectrometerHit&&>(hit));
-        fVertexTime = std::move(hit.fVertexTime);
-        fVertexPosition = std::move(hit.fVertexPosition);
-        fPDGCode = std::move(hit.fPDGCode);
-        fTrackID = std::move(hit.fTrackID);
-    }
-    return *this;
-}
-
 void SpectrometerSimHit::CreateBranches(TTree& tree) {
     SpectrometerHit::CreateBranches(tree);
     tree.Branch(fgVertexTime.name, std::addressof(fgVertexTime.value));

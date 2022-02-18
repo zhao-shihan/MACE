@@ -16,42 +16,6 @@ VertexDetectorSimHit::VertexDetectorSimHit() noexcept :
     fPDGCode(fgPDGCode.value),
     fTrackID(fgTrackID.value) {}
 
-VertexDetectorSimHit::VertexDetectorSimHit(const VertexDetectorSimHit& hit) noexcept :
-    VertexDetectorHit(static_cast<const VertexDetectorHit&>(hit)),
-    fVertexTime(hit.fVertexTime),
-    fVertexPosition(hit.fVertexPosition),
-    fPDGCode(hit.fPDGCode),
-    fTrackID(hit.fTrackID) {}
-
-VertexDetectorSimHit::VertexDetectorSimHit(VertexDetectorSimHit&& hit) noexcept :
-    VertexDetectorHit(static_cast<VertexDetectorHit&&>(hit)),
-    fVertexTime(std::move(hit.fVertexTime)),
-    fVertexPosition(std::move(hit.fVertexPosition)),
-    fPDGCode(std::move(hit.fPDGCode)),
-    fTrackID(std::move(hit.fTrackID)) {}
-
-VertexDetectorSimHit& VertexDetectorSimHit::operator=(const VertexDetectorSimHit& hit) noexcept {
-    if (std::addressof(hit) != this) {
-        VertexDetectorHit::operator=(static_cast<const VertexDetectorHit&>(hit));
-        fVertexTime = hit.fVertexTime;
-        fVertexPosition = hit.fVertexPosition;
-        fPDGCode = hit.fPDGCode;
-        fTrackID = hit.fTrackID;
-    }
-    return *this;
-}
-
-VertexDetectorSimHit& VertexDetectorSimHit::operator=(VertexDetectorSimHit&& hit) noexcept {
-    if (std::addressof(hit) != this) {
-        VertexDetectorHit::operator=(static_cast<VertexDetectorHit&&>(hit));
-        fVertexTime = std::move(hit.fVertexTime);
-        fVertexPosition = std::move(hit.fVertexPosition);
-        fPDGCode = std::move(hit.fPDGCode);
-        fTrackID = std::move(hit.fTrackID);
-    }
-    return *this;
-}
-
 void VertexDetectorSimHit::CreateBranches(TTree& tree) {
     VertexDetectorHit::CreateBranches(tree);
     tree.Branch(fgVertexTime.name, std::addressof(fgVertexTime.value));

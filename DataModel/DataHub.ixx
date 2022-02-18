@@ -1,4 +1,12 @@
 template<class Data_t>
+TString MACE::DataModel::DataHub::
+GetTreeName(Long64_t treeIndex) const {
+    static_assert(std::is_base_of_v<Interface::Data, Data_t>,
+        "Data_t should be derived from DataModel::Interface::Data.");
+    return GetPrefixOfTreeName(treeIndex) + static_cast<const char*>(Data_t::BasicName()) + GetSuffixOfTreeName(treeIndex);
+}
+
+template<class Data_t>
 inline MACE::ObserverPtr<TTree> MACE::DataModel::DataHub::
 FindTree(TFile& file, Long64_t treeIndex) {
     static_assert(std::is_base_of_v<Interface::Data, Data_t>,
