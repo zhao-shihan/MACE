@@ -14,13 +14,13 @@ private:
     World& operator=(const World&) = delete;
 
 public:
-    [[nodiscard]] const char* GetName()                   const override { return "World"; }
-    [[nodiscard]] const char* GetOverallDescription()     const override { return "The geometry world."; }
-    [[nodiscard]] const char* GetMaterialDescription()    const override { return "Vacuum (of air). A properly defined pressure/density is recommended."; }
-    [[nodiscard]] const char* GetShapeDescription()       const override { return "A big box that can contain everything."; }
-    [[nodiscard]] const char* GetMotherDescription()      const override { return "Void."; }
-    [[nodiscard]] const char* GetTranslationDescription() const override { return "No translation."; }
-    [[nodiscard]] const char* GetRotationDescription()    const override { return "No rotation."; }
+    [[nodiscard]] std::string GetName()                   const override { return "World"; }
+    [[nodiscard]] std::string GetOverallDescription()     const override { return "The geometry world."; }
+    [[nodiscard]] std::string GetMaterialDescription()    const override { return "Vacuum (of air). A properly defined pressure/density is recommended."; }
+    [[nodiscard]] std::string GetShapeDescription()       const override { return "A big box that can contain everything."; }
+    [[nodiscard]] std::string GetMotherDescription()      const override { return "Void."; }
+    [[nodiscard]] std::string GetTranslationDescription() const override { return "No translation."; }
+    [[nodiscard]] std::string GetRotationDescription()    const override { return "No rotation."; }
 
     [[nodiscard]] const auto& GetHalfXExtent() const { return fHalfXExtent; }
     [[nodiscard]] const auto& GetHalfYExtent() const { return fHalfYExtent; }

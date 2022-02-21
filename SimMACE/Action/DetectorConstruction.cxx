@@ -12,7 +12,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     ConstructVolumes();
     ConstructSD();
     ConstructField();
-    return fWorld->GetVolume();
+    return fWorld->GetPhysicalVolume();
 }
 
 void DetectorConstruction::ConstructVolumes() {
@@ -23,8 +23,8 @@ void DetectorConstruction::ConstructVolumes() {
     fSpectrometerField->AddDaughter(fAcceleratorField);
     fSpectrometerField->AddDaughter(fSpectrometerBody);
     fAcceleratorField->AddDaughter(fTarget);
-    fSpectrometerBody->AddDaughter(fSpectrometerReadoutLayer);
-    fSpectrometerReadoutLayer->AddDaughter(fSpectrometerCells);
+    fSpectrometerBody->AddDaughter(fSpectrometerReadoutLayers);
+    fSpectrometerReadoutLayers->AddDaughter(fSpectrometerCells);
     fWorld->AddDaughter(fCalorimeterField);
     fWorld->AddDaughter(fFirstBendField);
     fWorld->AddDaughter(fFirstBendSolenoid);
@@ -52,23 +52,23 @@ void DetectorConstruction::ConstructVolumes() {
 void DetectorConstruction::ConstructSD() {
     auto SDManager = G4SDManager::GetSDMpointer();
 
-    auto logicCalorimeter = fCalorimeter->GetVolume()->GetLogicalVolume();
+    auto logicCalorimeter = fCalorimeter->GetLogicalVolume();
     auto fCalorimeterName = logicCalorimeter->GetName();
     auto fCalorimeterSD = new SD::Calorimeter(fCalorimeterName, fCalorimeterName + "HC");
     SDManager->AddNewDetector(fCalorimeterSD);
     SetSensitiveDetector(logicCalorimeter, fCalorimeterSD);
 
-    auto logicVertexDetector = fVertexDetector->GetVolume()->GetLogicalVolume();
+    auto logicVertexDetector = fVertexDetector->GetLogicalVolume();
     auto fVertexDetectorName = logicVertexDetector->GetName();
     auto fVertexDetectorSD = new SD::VertexDetector(fVertexDetectorName, fVertexDetectorName + "HC");
     SDManager->AddNewDetector(fVertexDetectorSD);
     SetSensitiveDetector(logicVertexDetector, fVertexDetectorSD);
 
     std::set<G4LogicalVolume*> logicSpectrometerCells;
-    for (size_t i = 0; i < fSpectrometerCells->GetVolumeNum(); ++i) {
-        logicSpectrometerCells.insert(fSpectrometerCells->GetVolume(i)->GetLogicalVolume());
+    for (size_t i = 0; i < fSpectrometerCells->GetPhysicalVolumeNum(); ++i) {
+        logicSpectrometerCells.insert(fSpectrometerCells->GetLogicalVolume(i));
     }
-    auto fSpectrometerName = (*logicSpectrometerCells.begin())->GetName();
+    auto fSpectrometerName = (*logicSpectrometerCells.cbegin())->GetName();
     auto fSpectrometerSD = new SD::Spectrometer(fSpectrometerName, fSpectrometerName + "HC", fSpectrometerCells);
     SDManager->AddNewDetector(fSpectrometerSD);
     for (auto&& logicSpectrometerCell : logicSpectrometerCells) {
@@ -112,61 +112,61 @@ void DetectorConstruction::ConstructField() {
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(fSpectrometerField->GetVolume()->GetLogicalVolume(), parallelBField, hMin, 6);
+    >(fSpectrometerField->GetLogicalVolume(), parallelBField, hMin, 6);
 
     RegisterFields <
         Field::AcceleratorField,
         G4EqMagElectricField,
         G4DormandPrince745,
         G4IntegrationDriver<G4DormandPrince745>
-    >(fAcceleratorField->GetVolume()->GetLogicalVolume(), new Field::AcceleratorField(), hMin, 8);
+    >(fAcceleratorField->GetLogicalVolume(), new Field::AcceleratorField(), hMin, 8);
 
     RegisterFields <
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(fFirstTransportField->GetVolume()->GetLogicalVolume(), parallelBField, hMin, 6);
+    >(fFirstTransportField->GetLogicalVolume(), parallelBField, hMin, 6);
 
     RegisterFields <
         Field::FirstBendField,
         G4TMagFieldEquation<Field::FirstBendField>,
         G4TDormandPrince45<G4TMagFieldEquation<Field::FirstBendField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<Field::FirstBendField>>>
-    >(fFirstBendField->GetVolume()->GetLogicalVolume(), new Field::FirstBendField(), hMin, 6);
+    >(fFirstBendField->GetLogicalVolume(), new Field::FirstBendField(), hMin, 6);
 
     RegisterFields <
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(fSecondTransportField->GetVolume()->GetLogicalVolume(), verticalBField, hMin, 6);
+    >(fSecondTransportField->GetLogicalVolume(), verticalBField, hMin, 6);
 
     RegisterFields <
         Field::SelectorField,
         G4EqMagElectricField,
         G4DormandPrince745,
         G4IntegrationDriver<G4DormandPrince745>
-    >(fSelectorField->GetVolume()->GetLogicalVolume(), new Field::SelectorField(), hMin, 8);
+    >(fSelectorField->GetLogicalVolume(), new Field::SelectorField(), hMin, 8);
 
     RegisterFields <
         Field::SecondBendField,
         G4TMagFieldEquation<Field::SecondBendField>,
         G4TDormandPrince45<G4TMagFieldEquation<Field::SecondBendField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<Field::SecondBendField>>>
-    >(fSecondBendField->GetVolume()->GetLogicalVolume(), new Field::SecondBendField(), hMin, 6);
+    >(fSecondBendField->GetLogicalVolume(), new Field::SecondBendField(), hMin, 6);
 
     RegisterFields <
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(fThirdTransportField->GetVolume()->GetLogicalVolume(), parallelBField, hMin, 6);
+    >(fThirdTransportField->GetLogicalVolume(), parallelBField, hMin, 6);
 
     RegisterFields <
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(fCalorimeterField->GetVolume()->GetLogicalVolume(), parallelBField, hMin, 6);
+    >(fCalorimeterField->GetLogicalVolume(), parallelBField, hMin, 6);
 }

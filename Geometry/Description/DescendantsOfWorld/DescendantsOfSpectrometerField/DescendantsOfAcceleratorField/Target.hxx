@@ -14,13 +14,13 @@ private:
     Target& operator=(const Target&) = delete;
 
 public:
-    [[nodiscard]] const char* GetName()                   const override { return "Target"; }
-    [[nodiscard]] const char* GetOverallDescription()     const override { return "Muonium target."; }
-    [[nodiscard]] const char* GetMaterialDescription()    const override { return "Silica aerogel."; }
-    [[nodiscard]] const char* GetShapeDescription()       const override { return "A box with certain width(along XY) and thickness(along Z)."; }
-    [[nodiscard]] const char* GetMotherDescription()      const override { return "AcceleratorField"; }
-    [[nodiscard]] const char* GetTranslationDescription() const override { return "Downstream surface at z=0. (Be aware of AcceleratorField's position)"; }
-    [[nodiscard]] const char* GetRotationDescription()    const override { return "No rotation."; }
+    [[nodiscard]] std::string GetName()                   const override { return "Target"; }
+    [[nodiscard]] std::string GetOverallDescription()     const override { return "Muonium target."; }
+    [[nodiscard]] std::string GetMaterialDescription()    const override { return "Silica aerogel."; }
+    [[nodiscard]] std::string GetShapeDescription()       const override { return "A box with certain width(along XY) and thickness(along Z)."; }
+    [[nodiscard]] std::string GetMotherDescription()      const override { return "AcceleratorField"; }
+    [[nodiscard]] std::string GetTranslationDescription() const override { return "Downstream surface at z=0. (Be aware of AcceleratorField's position)"; }
+    [[nodiscard]] std::string GetRotationDescription()    const override { return "No rotation."; }
 
     [[nodiscard]] const auto& GetWidth() const { return fWidth; }
     [[nodiscard]] const auto& GetThickness() const { return fThickness; }

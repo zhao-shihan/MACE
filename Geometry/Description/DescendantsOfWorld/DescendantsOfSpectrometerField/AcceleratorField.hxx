@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 #include "Geometry/Interface/Description.hxx"
 
 class MACE::Geometry::Description::AcceleratorField final :
@@ -14,13 +16,13 @@ private:
     AcceleratorField& operator=(const AcceleratorField&) = delete;
 
 public:
-    [[nodiscard]] const char* GetName()                   const override { return "AcceleratorField"; }
-    [[nodiscard]] const char* GetOverallDescription()     const override { return "An accelerator field box inside spectrometer"; }
-    [[nodiscard]] const char* GetMaterialDescription()    const override { return "Vacuum."; }
-    [[nodiscard]] const char* GetShapeDescription()       const override { return "A box with certain Width(along XY), UpStreamLength(length of z<0), and DownStreamLength(length of z>0)."; }
-    [[nodiscard]] const char* GetMotherDescription()      const override { return "SpectrometerField"; }
-    [[nodiscard]] const char* GetTranslationDescription() const override { return "Translation should ensure the center z position satisifies shape description (see above)."; }
-    [[nodiscard]] const char* GetRotationDescription()    const override { return "No rotation."; }
+    [[nodiscard]] std::string GetName()                   const override { return "AcceleratorField"; }
+    [[nodiscard]] std::string GetOverallDescription()     const override { return "An accelerator field box inside spectrometer"; }
+    [[nodiscard]] std::string GetMaterialDescription()    const override { return "Vacuum."; }
+    [[nodiscard]] std::string GetShapeDescription()       const override { return "A box with certain Width(along XY), UpStreamLength(length of z<0), and DownStreamLength(length of z>0)."; }
+    [[nodiscard]] std::string GetMotherDescription()      const override { return "SpectrometerField"; }
+    [[nodiscard]] std::string GetTranslationDescription() const override { return "Translation should ensure the center z position satisifies shape description (see above)."; }
+    [[nodiscard]] std::string GetRotationDescription()    const override { return "No rotation."; }
 
     [[nodiscard]] const auto& GetWidth() const { return fWidth; }
     [[nodiscard]] const auto& GetUpStreamLength() const { return fUpStreamLength; }

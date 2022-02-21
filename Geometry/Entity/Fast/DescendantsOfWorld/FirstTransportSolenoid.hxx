@@ -1,24 +1,15 @@
 #pragma once
 
-#include "G4Tubs.hh"
-
-#include "Geometry/Description/DescendantsOfWorld/FirstTransportSolenoid.hxx"
-#include "Geometry/Interface/EntityG4.hxx"
+#include "Geometry/Interface/Entity.hxx"
 
 class MACE::Geometry::Entity::Fast::FirstTransportSolenoid final :
-    public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::FirstTransportSolenoid> {
-    void ConstructSelf(bool checkOverlaps) override {
-        auto name = GetDescription().GetName();
-        auto innerRadius = GetDescription().GetInnerRaidus();
-        auto outerRaidus = GetDescription().GetOuterRaidus();
-        auto length = GetDescription().GetLength();
-        auto upZPosition = GetDescription().GetUpZPosition();
+    public MACE::Geometry::Interface::Entity {
+public:
+    FirstTransportSolenoid() = default;
+    ~FirstTransportSolenoid() noexcept = default;
+    FirstTransportSolenoid(const FirstTransportSolenoid&) = delete;
+    FirstTransportSolenoid& operator=(const FirstTransportSolenoid&) = delete;
 
-        auto material = fgG4Nist->FindOrBuildMaterial("G4_Cu");
-
-        auto solid = new G4Tubs(name, innerRadius, outerRaidus, 0.5 * length, 0, 2 * M_PI);
-        auto logic = new G4LogicalVolume(solid, material, name);
-        auto physic = new G4PVPlacement(nullptr, G4ThreeVector(0, 0, upZPosition + 0.5 * length), name, logic, Mother()->GetVolume(), false, 0, checkOverlaps);
-        fVolumes.emplace_back(physic);
-    }
+private:
+    void ConstructSelf(G4bool checkOverlaps) override;
 };

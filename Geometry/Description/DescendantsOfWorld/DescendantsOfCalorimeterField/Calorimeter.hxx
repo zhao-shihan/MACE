@@ -14,13 +14,13 @@ private:
     Calorimeter& operator=(const Calorimeter&) = delete;
 
 public:
-    [[nodiscard]] const char* GetName()                   const override { return "Calorimeter"; }
-    [[nodiscard]] const char* GetOverallDescription()     const override { return ""; }
-    [[nodiscard]] const char* GetMaterialDescription()    const override { return ""; }
-    [[nodiscard]] const char* GetShapeDescription()       const override { return ""; }
-    [[nodiscard]] const char* GetMotherDescription()      const override { return ""; }
-    [[nodiscard]] const char* GetTranslationDescription() const override { return ""; }
-    [[nodiscard]] const char* GetRotationDescription()    const override { return ""; }
+    [[nodiscard]] std::string GetName()                   const override { return "Calorimeter"; }
+    [[nodiscard]] std::string GetOverallDescription()     const override { return ""; }
+    [[nodiscard]] std::string GetMaterialDescription()    const override { return ""; }
+    [[nodiscard]] std::string GetShapeDescription()       const override { return ""; }
+    [[nodiscard]] std::string GetMotherDescription()      const override { return ""; }
+    [[nodiscard]] std::string GetTranslationDescription() const override { return ""; }
+    [[nodiscard]] std::string GetRotationDescription()    const override { return ""; }
 
     [[nodiscard]] const auto& GetInnerRadius() const { return fInnerRadius; }
     [[nodiscard]] const auto& GetOuterRadius() const { return fOuterRadius; }

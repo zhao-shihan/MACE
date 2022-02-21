@@ -14,13 +14,13 @@ private:
     SpectrometerBody& operator=(const SpectrometerBody&) = delete;
 
 public:
-    [[nodiscard]] const char* GetName()                   const override { return "SpectrometerBody"; }
-    [[nodiscard]] const char* GetOverallDescription()     const override { return "The shell of spectrometer, mother of cells."; }
-    [[nodiscard]] const char* GetMaterialDescription()    const override { return "Carbon fiber."; }
-    [[nodiscard]] const char* GetShapeDescription()       const override { return "A rotate trapezoid."; }
-    [[nodiscard]] const char* GetMotherDescription()      const override { return "SpectrometerField"; }
-    [[nodiscard]] const char* GetTranslationDescription() const override { return "No translation."; }
-    [[nodiscard]] const char* GetRotationDescription()    const override { return "No rotation."; }
+    [[nodiscard]] std::string GetName()                   const override { return "SpectrometerBody"; }
+    [[nodiscard]] std::string GetOverallDescription()     const override { return "The shell of spectrometer, mother of cells."; }
+    [[nodiscard]] std::string GetMaterialDescription()    const override { return "Carbon fiber."; }
+    [[nodiscard]] std::string GetShapeDescription()       const override { return "A rotate trapezoid."; }
+    [[nodiscard]] std::string GetMotherDescription()      const override { return "SpectrometerField"; }
+    [[nodiscard]] std::string GetTranslationDescription() const override { return "No translation."; }
+    [[nodiscard]] std::string GetRotationDescription()    const override { return "No rotation."; }
 
     [[nodiscard]] const auto& GetGasInnerRadius() const { return fGasInnerRadius; }
     [[nodiscard]] const auto& GetGasOuterRadius() const { return fGasOuterRadius; }

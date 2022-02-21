@@ -1,24 +1,15 @@
 #pragma once
 
-#include "G4Torus.hh"
-
-#include "Geometry/Description/DescendantsOfWorld/SecondBendField.hxx"
-#include "Geometry/Interface/EntityG4.hxx"
+#include "Geometry/Interface/Entity.hxx"
 
 class MACE::Geometry::Entity::Fast::SecondBendField final :
-    public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::SecondBendField> {
-    void ConstructSelf(bool checkOverlaps) override {
-        auto name = GetDescription().GetName();
-        auto raidus = GetDescription().GetRaidus();
-        auto bendRadius = GetDescription().GetBendRadius();
-        auto xPosition = GetDescription().GetXPosition();
-        auto zPosition = GetDescription().GetZPosition();
+    public MACE::Geometry::Interface::Entity {
+public:
+    SecondBendField() = default;
+    ~SecondBendField() noexcept = default;
+    SecondBendField(const SecondBendField&) = delete;
+    SecondBendField& operator=(const SecondBendField&) = delete;
 
-        auto material = Mother()->GetVolume()->GetLogicalVolume()->GetMaterial();
-
-        auto solid = new G4Torus(name, 0, raidus, bendRadius, -M_PI_2, M_PI_2);
-        auto logic = new G4LogicalVolume(solid, material, name);
-        auto physic = new G4PVPlacement(G4Transform3D(G4RotationMatrix(G4ThreeVector(1.0, 0.0, 0.0), M_PI_2), G4ThreeVector(xPosition, 0.0, zPosition)), name, logic, Mother()->GetVolume(), false, 0, checkOverlaps);
-        fVolumes.emplace_back(physic);
-    }
+private:
+    void ConstructSelf(G4bool checkOverlaps) override;
 };

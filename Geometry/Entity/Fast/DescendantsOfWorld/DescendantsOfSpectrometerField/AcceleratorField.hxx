@@ -1,23 +1,15 @@
 #pragma once
 
-#include "G4Box.hh"
-
-#include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/AcceleratorField.hxx"
-#include "Geometry/Interface/EntityG4.hxx"
+#include "Geometry/Interface/Entity.hxx"
 
 class MACE::Geometry::Entity::Fast::AcceleratorField final :
-    public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::AcceleratorField> {
-    void ConstructSelf(bool checkOverlaps) override {
-        auto name = GetDescription().GetName();
-        auto width = GetDescription().GetWidth();
-        auto upStreamLength = GetDescription().GetUpStreamLength();
-        auto downStreamLength = GetDescription().GetDownStreamLength();
+    public MACE::Geometry::Interface::Entity {
+public:
+    AcceleratorField() = default;
+    ~AcceleratorField() noexcept = default;
+    AcceleratorField(const AcceleratorField&) = delete;
+    AcceleratorField& operator=(const AcceleratorField&) = delete;
 
-        auto material = Mother()->GetVolume()->GetLogicalVolume()->GetMaterial();
-
-        auto solid = new G4Box(name, 0.5 * width, 0.5 * width, 0.5 * (upStreamLength + downStreamLength));
-        auto logic = new G4LogicalVolume(solid, material, name);
-        auto physic = new G4PVPlacement(nullptr, G4ThreeVector(0, 0, 0.5 * (downStreamLength - upStreamLength)), name, logic, Mother()->GetVolume(), false, 0, checkOverlaps);
-        fVolumes.emplace_back(physic);
-    }
+private:
+    void ConstructSelf(G4bool checkOverlaps) override;
 };

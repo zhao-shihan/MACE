@@ -14,13 +14,13 @@ private:
     SpectrometerCells& operator=(const SpectrometerCells&) = delete;
 
 public:
-    [[nodiscard]] const char* GetName()                   const override { return "SpectrometerCell"; }
-    [[nodiscard]] const char* GetOverallDescription()     const override { return "Sensitive cells of MWDC. The cell's full geometry includes sense wires, field wires, and readout volume, respectively. Fast geometry might exclude wires."; }
-    [[nodiscard]] const char* GetMaterialDescription()    const override { return "Gas: Same as mother's. Wires: respect to BESIII currently."; }
-    [[nodiscard]] const char* GetShapeDescription()       const override { return "Wire: Cylinders. Gas: A angular slice of tube."; }
-    [[nodiscard]] const char* GetMotherDescription()      const override { return "SpectrometerBody"; }
-    [[nodiscard]] const char* GetTranslationDescription() const override { return "Depending on the implementation."; }
-    [[nodiscard]] const char* GetRotationDescription()    const override { return "Depending on the implementation."; }
+    [[nodiscard]] std::string GetName()                   const override { return "SpectrometerCell"; }
+    [[nodiscard]] std::string GetOverallDescription()     const override { return "Sensitive cells of MWDC. The cell's full geometry includes sense wires, field wires, and readout volume, respectively. Fast geometry might exclude wires."; }
+    [[nodiscard]] std::string GetMaterialDescription()    const override { return "Gas: Same as mother's. Wires: respect to BESIII currently."; }
+    [[nodiscard]] std::string GetShapeDescription()       const override { return "Wire: Cylinders. Gas: A angular slice of tube."; }
+    [[nodiscard]] std::string GetMotherDescription()      const override { return "SpectrometerBody"; }
+    [[nodiscard]] std::string GetTranslationDescription() const override { return "Depending on the implementation."; }
+    [[nodiscard]] std::string GetRotationDescription()    const override { return "Depending on the implementation."; }
 
     [[nodiscard]] const auto& GetSenseWireDiameter() const { return fSenseWireDiameter; }
     [[nodiscard]] const auto& GetFieldWireDiameter() const { return fFieldWireDiameter; }

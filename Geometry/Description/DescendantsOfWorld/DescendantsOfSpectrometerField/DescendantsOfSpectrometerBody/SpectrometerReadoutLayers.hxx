@@ -2,25 +2,25 @@
 
 #include "Geometry/Interface/Description.hxx"
 
-class MACE::Geometry::Description::SpectrometerReadoutLayer final :
+class MACE::Geometry::Description::SpectrometerReadoutLayers final :
     public MACE::Geometry::Interface::Description {
 public:
-    static SpectrometerReadoutLayer& Instance() noexcept;
+    static SpectrometerReadoutLayers& Instance() noexcept;
 
 private:
-    SpectrometerReadoutLayer() noexcept = default;
-    ~SpectrometerReadoutLayer() noexcept = default;
-    SpectrometerReadoutLayer(const SpectrometerReadoutLayer&) = delete;
-    SpectrometerReadoutLayer& operator=(const SpectrometerReadoutLayer&) = delete;
+    SpectrometerReadoutLayers() noexcept = default;
+    ~SpectrometerReadoutLayers() noexcept = default;
+    SpectrometerReadoutLayers(const SpectrometerReadoutLayers&) = delete;
+    SpectrometerReadoutLayers& operator=(const SpectrometerReadoutLayers&) = delete;
 
 public:
-    [[nodiscard]] const char* GetName()                   const override { return "SpectrometerReadoutLayer"; }
-    [[nodiscard]] const char* GetOverallDescription()     const override { return "Readout layer of MWDC. Cell's mother."; }
-    [[nodiscard]] const char* GetMaterialDescription()    const override { return "Helium based gas."; }
-    [[nodiscard]] const char* GetShapeDescription()       const override { return "Tube."; }
-    [[nodiscard]] const char* GetMotherDescription()      const override { return "SpectrometerBody"; }
-    [[nodiscard]] const char* GetTranslationDescription() const override { return "No translation."; }
-    [[nodiscard]] const char* GetRotationDescription()    const override { return "No rotation."; }
+    [[nodiscard]] std::string GetName()                   const override { return "SpectrometerReadoutLayer"; }
+    [[nodiscard]] std::string GetOverallDescription()     const override { return "Readout layer of MWDC. Mother volume of cells and field wires."; }
+    [[nodiscard]] std::string GetMaterialDescription()    const override { return "Helium based gas."; }
+    [[nodiscard]] std::string GetShapeDescription()       const override { return "Tube."; }
+    [[nodiscard]] std::string GetMotherDescription()      const override { return "SpectrometerBody"; }
+    [[nodiscard]] std::string GetTranslationDescription() const override { return "No translation."; }
+    [[nodiscard]] std::string GetRotationDescription()    const override { return "No rotation."; }
 
     [[nodiscard]] const auto& GetAverageCellWidth() const { return fAverageCellWidth; }
 

@@ -2,7 +2,7 @@
 
 using namespace MACE::Geometry::Description;
 
-SpectrometerReadoutLayer& SpectrometerReadoutLayer::Instance() noexcept {
-    static SpectrometerReadoutLayer instance;
+SpectrometerReadoutLayers& SpectrometerReadoutLayers::Instance() noexcept {
+    static SpectrometerReadoutLayers instance;
     return instance;
 }

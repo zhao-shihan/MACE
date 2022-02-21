@@ -9,7 +9,7 @@
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/SelectorField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfAcceleratorField/Target.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayer/SpectrometerCells.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/SpectrometerReadoutLayer.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/SpectrometerReadoutLayers.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/AcceleratorField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/SpectrometerBody.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterField.hxx"
@@ -52,7 +52,7 @@ private:
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(SelectorField);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(Target);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(SpectrometerCells);
-    MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(SpectrometerReadoutLayer);
+    MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(SpectrometerReadoutLayers);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(AcceleratorField);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(SpectrometerBody);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(CalorimeterField);

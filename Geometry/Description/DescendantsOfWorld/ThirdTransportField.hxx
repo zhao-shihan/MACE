@@ -14,13 +14,13 @@ private:
     ThirdTransportField& operator=(const ThirdTransportField&) = delete;
 
 public:
-    [[nodiscard]] const char* GetName()                   const override { return "ThirdTransportField"; }
-    [[nodiscard]] const char* GetOverallDescription()     const override { return ""; }
-    [[nodiscard]] const char* GetMaterialDescription()    const override { return ""; }
-    [[nodiscard]] const char* GetShapeDescription()       const override { return ""; }
-    [[nodiscard]] const char* GetMotherDescription()      const override { return ""; }
-    [[nodiscard]] const char* GetTranslationDescription() const override { return ""; }
-    [[nodiscard]] const char* GetRotationDescription()    const override { return ""; }
+    [[nodiscard]] std::string GetName()                   const override { return "ThirdTransportField"; }
+    [[nodiscard]] std::string GetOverallDescription()     const override { return ""; }
+    [[nodiscard]] std::string GetMaterialDescription()    const override { return ""; }
+    [[nodiscard]] std::string GetShapeDescription()       const override { return ""; }
+    [[nodiscard]] std::string GetMotherDescription()      const override { return ""; }
+    [[nodiscard]] std::string GetTranslationDescription() const override { return ""; }
+    [[nodiscard]] std::string GetRotationDescription()    const override { return ""; }
 
     [[nodiscard]] const auto& GetLength()      const { return fLength; }
     [[nodiscard]] const auto& GetRadius()      const { return fRadius; }

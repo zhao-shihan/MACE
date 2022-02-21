@@ -57,7 +57,7 @@ namespace MACE {
                         inline namespace DescendantsOfSpectrometerReadoutLayer {
                             class SpectrometerCells;
                         }
-                        class SpectrometerReadoutLayer;
+                        class SpectrometerReadoutLayers;
                     }
                     class AcceleratorField;
                     class SpectrometerBody;
@@ -98,7 +98,7 @@ namespace MACE {
                             inline namespace DescendantsOfSpectrometerReadoutLayer {
                                 class SpectrometerCells;
                             }
-                            class SpectrometerReadoutLayer;
+                            class SpectrometerReadoutLayers;
                         }
                         class AcceleratorField;
                         class SpectrometerBody;
@@ -126,10 +126,7 @@ namespace MACE {
         }
         namespace Interface {
             class Description;
-            template<class Volume_t> class Entity;
-            template<class Volume_t, class... RequiredDescriptions> class EntityWithDescription;
-            template<class... RequiredDescriptions> class EntityG4;
-            // template<class... RequiredDescriptions> class EntityROOT; // DO NOT USE for now.
+            class Entity;
         }
     }
 

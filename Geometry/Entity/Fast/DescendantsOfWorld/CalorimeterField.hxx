@@ -1,24 +1,15 @@
 #pragma once
 
-#include "G4Tubs.hh"
-
-#include "Geometry/Description/DescendantsOfWorld/CalorimeterField.hxx"
-#include "Geometry/Interface/EntityG4.hxx"
+#include "Geometry/Interface/Entity.hxx"
 
 class MACE::Geometry::Entity::Fast::CalorimeterField final :
-    public MACE::Geometry::Interface::EntityG4<MACE::Geometry::Description::CalorimeterField> {
-    void ConstructSelf(bool checkOverlaps) override {
-        auto name = GetDescription().GetName();
-        auto radius = GetDescription().GetRadius();
-        auto length = GetDescription().GetLength();
-        auto centerX = GetDescription().GetCenterX();
-        auto upZPosition = GetDescription().GetUpZPosition();
+    public MACE::Geometry::Interface::Entity {
+public:
+    CalorimeterField() = default;
+    ~CalorimeterField() noexcept = default;
+    CalorimeterField(const CalorimeterField&) = delete;
+    CalorimeterField& operator=(const CalorimeterField&) = delete;
 
-        auto material = Mother()->GetVolume()->GetLogicalVolume()->GetMaterial();
-
-        auto solid = new G4Tubs(name, 0.0, radius, 0.5 * length, 0.0, 2.0 * M_PI);
-        auto logic = new G4LogicalVolume(solid, material, name);
-        auto physic = new G4PVPlacement(nullptr, G4ThreeVector(centerX, 0.0, upZPosition + 0.5 * length), name, logic, Mother()->GetVolume(), false, 0, checkOverlaps);
-        fVolumes.emplace_back(physic);
-    }
+private:
+    void ConstructSelf(G4bool checkOverlaps) override;
 };

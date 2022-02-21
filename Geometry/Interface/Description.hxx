@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "Geometry/Global.hxx"
-#include "Geometry/UnitSystem.hxx"
+#include "Utility/UnitSystem.hxx"
 
 class MACE::Geometry::Interface::Description {
 protected:
@@ -13,14 +13,14 @@ protected:
     Description& operator=(const Description&) = delete;
 
 public:
-    [[nodiscard]] virtual const char* GetName()                   const = 0;
-    [[nodiscard]] virtual const char* GetOverallDescription()     const = 0;
-    [[nodiscard]] virtual const char* GetMaterialDescription()    const = 0;
-    [[nodiscard]] virtual const char* GetShapeDescription()       const = 0;
-    [[nodiscard]] virtual const char* GetMotherDescription()      const = 0;
-    [[nodiscard]] virtual const char* GetTranslationDescription() const = 0;
-    [[nodiscard]] virtual const char* GetRotationDescription()    const = 0;
-    [[nodiscard]] virtual const char* GetOtherDescription()       const { return "None."; }
+    [[nodiscard]] virtual std::string GetName()                   const = 0;
+    [[nodiscard]] virtual std::string GetOverallDescription()     const = 0;
+    [[nodiscard]] virtual std::string GetMaterialDescription()    const = 0;
+    [[nodiscard]] virtual std::string GetShapeDescription()       const = 0;
+    [[nodiscard]] virtual std::string GetMotherDescription()      const = 0;
+    [[nodiscard]] virtual std::string GetTranslationDescription() const = 0;
+    [[nodiscard]] virtual std::string GetRotationDescription()    const = 0;
+    [[nodiscard]] virtual std::string GetOtherDescription()       const { return "None."; }
 
     friend std::ostream& operator<<(std::ostream& out, const Description& geomDescp);
 };

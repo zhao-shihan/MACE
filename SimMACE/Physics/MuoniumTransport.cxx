@@ -12,7 +12,9 @@ MuoniumTransport::MuoniumTransport() :
     G4VContinuousProcess("MuoniumTransport", fTransportation),
     SimMTransport::Track(),
     fParticleChange(),
-    fTarget(static_cast<const Action::DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction())->GetTarget()->GetVolume()) {
+    fTarget(static_cast<const Action::DetectorConstruction*>(
+        G4RunManager::GetRunManager()->GetUserDetectorConstruction()
+        )->GetTarget()->GetPhysicalVolume()) {
 
     if (MPI::Is_initialized()) {
         SimMTransport::Track::global->SetCommRank(G4MPImanager::GetManager()->GetRank());

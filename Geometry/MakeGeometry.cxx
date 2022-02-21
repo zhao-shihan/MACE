@@ -6,7 +6,7 @@
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/SelectorField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfAcceleratorField/Target.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayer/SpectrometerCells.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/SpectrometerReadoutLayer.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/SpectrometerReadoutLayers.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/AcceleratorField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/SpectrometerBody.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterField.hxx"
@@ -29,7 +29,7 @@ int main(int, char**) {
     auto selectorField = std::make_shared<SelectorField>();
     auto target = std::make_shared<Target>();
     auto spectrometerCells = std::make_shared<SpectrometerCells>();
-    auto spectrometerReadoutLayer = std::make_shared<SpectrometerReadoutLayer>();
+    auto spectrometerReadoutLayer = std::make_shared<SpectrometerReadoutLayers>();
     auto acceleratorField = std::make_shared<AcceleratorField>();
     auto spectrometerBody = std::make_shared<SpectrometerBody>();
     auto calorimeterField = std::make_shared<CalorimeterField>();
