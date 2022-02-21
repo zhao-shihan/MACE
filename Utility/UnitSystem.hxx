@@ -1,117 +1,181 @@
 #pragma once
 
-// #include "G4UnitSystem.hh"
+#include "CLHEP/Units/SystemOfUnits.h"
+
+#define MACE_UTILITY_LITERAL_UNIT_SYSTEM(suffix, unit) \
+    constexpr long double operator""##suffix(long double val) { return val * (unit); } \
+    constexpr long double operator""##suffix(unsigned long long val) { return val * (unit); }
 
 namespace MACE {
     inline namespace Utility {
-        namespace Unit {
-            // Choose a unit system, ...
 
-            constexpr auto K = 1.0L;
+        // Length [L] symbols
 
-            // G4:
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_nm, CLHEP::nm);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_um, CLHEP::um);
 
-            constexpr auto millimeter = 1.0L;
-            constexpr auto nanosecond = 1.0L;
-            constexpr auto megaElectronVolt = 1.0L;
-            constexpr auto m = 1e3 * millimeter;
-            constexpr auto s = 1e9 * nanosecond;
-            constexpr auto g = 1e-9 * megaElectronVolt * s * s / (m * m * 1.602176634e-19);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mm, CLHEP::mm);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mm2, CLHEP::mm2);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mm3, CLHEP::mm3);
 
-            // ROOT (Do not use for now. No way of making unit consistent so far.):
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_cm, CLHEP::cm);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_cm2, CLHEP::cm2);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_cm3, CLHEP::cm3);
 
-            /* constexpr auto centimeter = 1.0L;
-            constexpr auto second = 1.0L;
-            constexpr auto gigaElectronVolt = 1.0L;
-            constexpr auto m = 1e2 * centimeter;
-            constexpr auto s = second;
-            constexpr auto g = 1e-12 * gigaElectronVolt * s * s / (m * m * 1.602176634e-19); */
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_L, CLHEP::L);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_dL, CLHEP::dL);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_cL, CLHEP::cL);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mL, CLHEP::mL);
 
-            // ... and write down other units.
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_m, CLHEP::m);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_m2, CLHEP::m2);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_m3, CLHEP::m3);
 
-            constexpr auto nm = 1e-9 * m;
-            constexpr auto um = 1e-6 * m;
-            constexpr auto mm = 1e-3 * m;
-            constexpr auto cm = 1e-2 * m;
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_km, CLHEP::km);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_km2, CLHEP::km2);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_km3, CLHEP::km3);
 
-            constexpr auto nm2 = nm * nm;
-            constexpr auto um2 = um * um;
-            constexpr auto mm2 = mm * mm;
-            constexpr auto cm2 = cm * cm;
-            constexpr auto m2 = m * m;
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_pc, CLHEP::pc);
 
-            constexpr auto nm3 = nm2 * nm;
-            constexpr auto um3 = um2 * um;
-            constexpr auto mm3 = mm2 * mm;
-            constexpr auto cm3 = cm2 * cm;
-            constexpr auto m3 = m2 * m;
+        // Angle symbols
 
-            constexpr auto kg = 1e+3 * g;
-            constexpr auto mg = 1e-3 * g;
-            constexpr auto ug = 1e-6 * g;
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_rad, CLHEP::rad);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mrad, CLHEP::mrad);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_sr, CLHEP::sr);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_deg, CLHEP::deg);
 
-            constexpr auto Pa = kg / (m * s * s);
-            constexpr auto atm = 101325. * Pa;
-            constexpr auto bar = 1e5 * Pa;
-            constexpr auto Torr = atm / 760.;
-        }
+        // Time [T] symbols
 
-        constexpr long double operator""_K(long double val) { return val * Unit::K; }
-        constexpr long double operator""_nm(long double val) { return val * Unit::nm; }
-        constexpr long double operator""_um(long double val) { return val * Unit::um; }
-        constexpr long double operator""_mm(long double val) { return val * Unit::mm; }
-        constexpr long double operator""_cm(long double val) { return val * Unit::cm; }
-        constexpr long double operator""_m(long double val) { return val * Unit::m; }
-        constexpr long double operator""_kg(long double val) { return val * Unit::kg; }
-        constexpr long double operator""_g(long double val) { return val * Unit::g; }
-        constexpr long double operator""_mg(long double val) { return val * Unit::mg; }
-        constexpr long double operator""_ug(long double val) { return val * Unit::ug; }
-        constexpr long double operator""_Pa(long double val) { return val * Unit::Pa; }
-        constexpr long double operator""_atm(long double val) { return val * Unit::atm; }
-        constexpr long double operator""_bar(long double val) { return val * Unit::bar; }
-        constexpr long double operator""_Torr(long double val) { return val * Unit::Torr; }
-        constexpr long double operator""_kg_m3(long double val) { return val * (Unit::kg / Unit::m3); }
-        constexpr long double operator""_g_m3(long double val) { return val * (Unit::g / Unit::m3); }
-        constexpr long double operator""_g_cm3(long double val) { return val * (Unit::g / Unit::cm3); }
-        constexpr long double operator""_mg_cm3(long double val) { return val * (Unit::mg / Unit::cm3); }
-        constexpr long double operator""_ug_cm3(long double val) { return val * (Unit::ug / Unit::cm3); }
-        constexpr long double operator""_mg_mm3(long double val) { return val * (Unit::mg / Unit::mm3); }
-        constexpr long double operator""_ug_mm3(long double val) { return val * (Unit::ug / Unit::mm3); }
-        constexpr long double operator""_kg_m2(long double val) { return val * (Unit::kg / Unit::m2); }
-        constexpr long double operator""_g_m2(long double val) { return val * (Unit::g / Unit::m2); }
-        constexpr long double operator""_g_cm2(long double val) { return val * (Unit::g / Unit::cm2); }
-        constexpr long double operator""_mg_cm2(long double val) { return val * (Unit::mg / Unit::cm2); }
-        constexpr long double operator""_ug_cm2(long double val) { return val * (Unit::ug / Unit::cm2); }
-        constexpr long double operator""_mg_mm2(long double val) { return val * (Unit::mg / Unit::mm2); }
-        constexpr long double operator""_ug_mm2(long double val) { return val * (Unit::ug / Unit::mm2); }
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_ns, CLHEP::ns);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_s, CLHEP::s);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_ms, CLHEP::ms);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_us, CLHEP::us);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_ps, CLHEP::ps);
 
-        constexpr long double operator""_K(unsigned long long val) { return val * Unit::K; }
-        constexpr long double operator""_nm(unsigned long long val) { return val * Unit::nm; }
-        constexpr long double operator""_um(unsigned long long val) { return val * Unit::um; }
-        constexpr long double operator""_mm(unsigned long long val) { return val * Unit::mm; }
-        constexpr long double operator""_cm(unsigned long long val) { return val * Unit::cm; }
-        constexpr long double operator""_m(unsigned long long val) { return val * Unit::m; }
-        constexpr long double operator""_kg(unsigned long long val) { return val * Unit::kg; }
-        constexpr long double operator""_g(unsigned long long val) { return val * Unit::g; }
-        constexpr long double operator""_mg(unsigned long long val) { return val * Unit::mg; }
-        constexpr long double operator""_ug(unsigned long long val) { return val * Unit::ug; }
-        constexpr long double operator""_Pa(unsigned long long val) { return val * Unit::Pa; }
-        constexpr long double operator""_atm(unsigned long long val) { return val * Unit::atm; }
-        constexpr long double operator""_bar(unsigned long long val) { return val * Unit::bar; }
-        constexpr long double operator""_Torr(unsigned long long val) { return val * Unit::Torr; }
-        constexpr long double operator""_kg_m3(unsigned long long val) { return val * (Unit::kg / Unit::m3); }
-        constexpr long double operator""_g_m3(unsigned long long val) { return val * (Unit::g / Unit::m3); }
-        constexpr long double operator""_g_cm3(unsigned long long val) { return val * (Unit::g / Unit::cm3); }
-        constexpr long double operator""_mg_cm3(unsigned long long val) { return val * (Unit::mg / Unit::cm3); }
-        constexpr long double operator""_ug_cm3(unsigned long long val) { return val * (Unit::ug / Unit::cm3); }
-        constexpr long double operator""_mg_mm3(unsigned long long val) { return val * (Unit::mg / Unit::mm3); }
-        constexpr long double operator""_ug_mm3(unsigned long long val) { return val * (Unit::ug / Unit::mm3); }
-        constexpr long double operator""_kg_m2(unsigned long long val) { return val * (Unit::kg / Unit::m2); }
-        constexpr long double operator""_g_m2(unsigned long long val) { return val * (Unit::g / Unit::m2); }
-        constexpr long double operator""_g_cm2(unsigned long long val) { return val * (Unit::g / Unit::cm2); }
-        constexpr long double operator""_mg_cm2(unsigned long long val) { return val * (Unit::mg / Unit::cm2); }
-        constexpr long double operator""_ug_cm2(unsigned long long val) { return val * (Unit::ug / Unit::cm2); }
-        constexpr long double operator""_mg_mm2(unsigned long long val) { return val * (Unit::mg / Unit::mm2); }
-        constexpr long double operator""_ug_mm2(unsigned long long val) { return val * (Unit::ug / Unit::mm2); }
+        // Energy [E] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_MeV, CLHEP::MeV);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_eV, CLHEP::eV);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_keV, CLHEP::keV);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_GeV, CLHEP::GeV);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_TeV, CLHEP::TeV);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_PeV, CLHEP::PeV);
+
+        // Mass [E][T^2][L^-2] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_kg, CLHEP::kg);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_g, CLHEP::g);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mg, CLHEP::mg);
+
+        // Power [E][T^-1] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_W, CLHEP::watt);
+
+        // Force [E][L^-1] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_N, CLHEP::newton);
+
+        // Pressure [E][L^-3] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_Pa, CLHEP::hep_pascal);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_bar, CLHEP::bar);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_atm, CLHEP::atmosphere);
+
+        // Electric current [Q][T^-1] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_A, CLHEP::ampere);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mA, CLHEP::milliampere);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_uA, CLHEP::microampere);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_nA, CLHEP::nanoampere);
+
+        // Electric potential [E][Q^-1] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_kV, CLHEP::kilovolt);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_V, CLHEP::volt);
+
+        // Electric capacitance [Q^2][E^-1] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_F, CLHEP::farad);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mF, CLHEP::millifarad);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_uF, CLHEP::microfarad);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_nF, CLHEP::nanofarad);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_pF, CLHEP::picofarad);
+
+        // Magnetic Flux [T][E][Q^-1] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_Wb, CLHEP::weber);
+
+        // Magnetic Field [T][E][Q^-1][L^-2] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_T, CLHEP::tesla);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mT, 1e-3 * CLHEP::tesla);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_uT, 1e-6 * CLHEP::tesla);
+
+        // Inductance [T^2][E][Q^-2] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_H, CLHEP::henry);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mH, 1e-3 * CLHEP::henry);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_uH, 1e-6 * CLHEP::henry);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_nH, 1e-9 * CLHEP::henry);
+
+        // Temperature symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_K, CLHEP::kelvin);
+
+        // Amount of substance symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mol, CLHEP::mole);
+
+        // Activity [T^-1] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_Bq, CLHEP::Bq);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_kBq, CLHEP::kBq);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_MBq, CLHEP::MBq);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_GBq, CLHEP::GBq);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_Ci, CLHEP::Ci);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mCi, CLHEP::mCi);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_uCi, CLHEP::uCi);
+
+        // Absorbed dose [L^2][T^-2] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_Gy, CLHEP::gray);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_kGy, CLHEP::kilogray);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mGy, CLHEP::milligray);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_uGy, CLHEP::microgray);
+
+        // Luminous intensity [I] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_cd, CLHEP::candela);
+
+        // Luminous flux [I] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_lm, CLHEP::lumen);
+
+        // Illuminance [I][L^-2] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_lux, CLHEP::lux);
+
+        /////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////
+
+        // Density [E][T^2][L^-5] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_kg_m3, CLHEP::kg / CLHEP::m3);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_g_m3, CLHEP::g / CLHEP::m3);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_g_cm3, CLHEP::g / CLHEP::cm3);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mg_cm3, CLHEP::mg / CLHEP::cm3);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mg_mm3, CLHEP::mg / CLHEP::mm3);
+
+        // Surface density [E][T^2][L^-4] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_kg_m2, CLHEP::kg / CLHEP::m2);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_g_m2, CLHEP::g / CLHEP::m2);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_g_cm2, CLHEP::g / CLHEP::cm2);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mg_cm2, CLHEP::mg / CLHEP::cm2);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mg_mm2, CLHEP::mg / CLHEP::mm2);
+
     }
 }
+
+#undef MACE_UTILITY_LITERAL_UNIT_SYSTEM
