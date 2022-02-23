@@ -8,6 +8,7 @@
 #include "SimMACE/Hit/SpectrometerHit.hxx"
 #include "DataModel/DataHub.hxx"
 #include "Utility/ObserverPtr.hxx"
+#include "Utility/FileTools4MPI.hxx"
 
 class MACE::SimMACE::Analysis final {
 public:
@@ -20,13 +21,14 @@ private:
     Analysis& operator=(const Analysis&) = delete;
 
 public:
-    void SetFileName(const G4String& fileName) { fFileName = fileName; }
-    [[nodiscard]] const G4String& GetFileName() const { return fFileName; }
+    void SetResultName(const G4String& resultName) { fResultName = resultName; }
+    [[nodiscard]] const G4String& GetResultName() const { return fResultName; }
     void SetEnableCoincidenceOfCalorimeter(G4bool val) { fEnableCoincidenceOfCalorimeter = val; }
     void SetEnableCoincidenceOfVertexDetector(G4bool val) { fEnableCoincidenceOfVertexDetector = val; }
 
     void Open(Option_t* option = "recreate");
     void Close(Option_t* option = nullptr);
+    auto Merge(G4bool forced = true) { return fFileTools4MPI->MergeRootFiles(forced); }
 
     void SetTrueEventID(G4int trueEventID) { fTrueEventID = trueEventID; }
     void SubmitCalorimeterHC(ObserverPtr<const std::vector<Hit::CalorimeterHit*>> hitList) { fCalorimeterHitList = hitList; }
@@ -35,13 +37,15 @@ public:
     void WriteEvent();
 
 private:
-    std::unique_ptr<TFile> fFile;
-    DataModel::DataHub fDataHub;
+    std::unique_ptr<TFile>         fFile;
+    std::unique_ptr<FileTools4MPI> fFileTools4MPI;
 
-    G4String fFileName = "untitled_SimMACE";
+    G4String fResultName = "untitled_SimMACE";
     G4bool   fEnableCoincidenceOfCalorimeter = true;
     G4bool   fEnableCoincidenceOfVertexDetector = true;
     G4int    fTrueEventID;
+
+    DataModel::DataHub fDataHub;
 
     ObserverPtr<const std::vector<Hit::CalorimeterHit*>> fCalorimeterHitList;
     ObserverPtr<const std::vector<Hit::VertexDetectorHit*>> fVertexDetectorHitList;

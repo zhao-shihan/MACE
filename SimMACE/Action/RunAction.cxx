@@ -37,5 +37,7 @@ void RunAction::BeginOfRunAction(const G4Run* run) {
 }
 
 void RunAction::EndOfRunAction(const G4Run*) {
-    Analysis::Instance().Close();
+    auto&& analysis = Analysis::Instance();
+    analysis.Close();
+    analysis.Merge();
 }

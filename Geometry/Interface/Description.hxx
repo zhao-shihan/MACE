@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "Geometry/Global.hxx"
-#include "Utility/UnitSystem.hxx"
+#include "Utility/LiteralUnits.hxx"
 
 class MACE::Geometry::Interface::Description {
 protected:

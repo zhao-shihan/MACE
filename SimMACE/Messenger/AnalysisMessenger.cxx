@@ -15,7 +15,7 @@ AnalysisMessenger::AnalysisMessenger() :
     fDirectory("/MACE/Analysis/"),
     fEnableCoincidenceOfCalorimeter("/MACE/Analysis/EnableCoincidenceOfCalorimeter", this),
     fEnableCoincidenceOfVertexDetector("/MACE/Analysis/EnableCoincidenceOfVertexDetector", this),
-    fSetFileName("/MACE/Analysis/SetFileName", this) {
+    fSetResultName("/MACE/Analysis/SetResultName", this) {
 
     fDirectory.SetGuidance("MACE::SimMACE::Analysis controller.");
     
@@ -27,9 +27,9 @@ AnalysisMessenger::AnalysisMessenger() :
     fEnableCoincidenceOfVertexDetector.SetParameterName("mode", false);
     fEnableCoincidenceOfVertexDetector.AvailableForStates(G4State_Idle);
 
-    fSetFileName.SetGuidance("Set file name.");
-    fSetFileName.SetParameterName("file name", false);
-    fSetFileName.AvailableForStates(G4State_Idle);
+    fSetResultName.SetGuidance("Set file name.");
+    fSetResultName.SetParameterName("file name", false);
+    fSetResultName.AvailableForStates(G4State_Idle);
 }
 
 void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
@@ -37,7 +37,7 @@ void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
         fAnalysis->SetEnableCoincidenceOfCalorimeter(fEnableCoincidenceOfCalorimeter.GetNewBoolValue(value));
     } else if (command == std::addressof(fEnableCoincidenceOfVertexDetector)) {
         fAnalysis->SetEnableCoincidenceOfVertexDetector(fEnableCoincidenceOfVertexDetector.GetNewBoolValue(value));
-    } else if (command == std::addressof(fSetFileName)) {
-        fAnalysis->SetFileName(value);
+    } else if (command == std::addressof(fSetResultName)) {
+        fAnalysis->SetResultName(value);
     }
 }

@@ -30,5 +30,5 @@ private:
     G4UIdirectory fDirectory;
     G4UIcmdWithABool fEnableCoincidenceOfCalorimeter;
     G4UIcmdWithABool fEnableCoincidenceOfVertexDetector;
-    G4UIcmdWithAString fSetFileName;
+    G4UIcmdWithAString fSetResultName;
 };

@@ -205,4 +205,8 @@ namespace MACE {
 
     namespace SimSpectrometer {}
 
+    inline namespace Utility {
+        class FileTools4MPI;
+    }
+
 }

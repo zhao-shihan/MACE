@@ -13,35 +13,23 @@ Analysis& Analysis::Instance() {
 
 Analysis::Analysis() :
     fFile(nullptr),
+    fFileTools4MPI(nullptr),
+    fTrueEventID(std::numeric_limits<G4int>::min()),
     fDataHub(),
     fCalorimeterHitList(nullptr),
     fVertexDetectorHitList(nullptr),
-    fSpectrometerHitList(nullptr),
-    fTrueEventID(std::numeric_limits<G4int>::min()) {
+    fSpectrometerHitList(nullptr) {
     Messenger::AnalysisMessenger::Instance().Set(this);
 }
 
 void Analysis::Open(Option_t* option) {
-    G4String fullFileName("");
-    std::stringstream ss;
-    bool isParallel = false;
-    if (MPI::Is_initialized()) {
-        if (G4MPImanager::GetManager()->GetActiveSize() > 1) {
-            isParallel = true;
-        }
-    }
-    if (isParallel) {
-        ss << fFileName << "_rank" << G4MPImanager::GetManager()->GetRank() << ".root";
-        ss >> fullFileName;
-    } else {
-        ss << fFileName << ".root";
-        ss >> fullFileName;
-    }
-    fFile.reset(TFile::Open(fullFileName.c_str(), option));
+    fFileTools4MPI = std::make_unique<FileTools4MPI>(fResultName, ".root");
+    fFile.reset(TFile::Open(fFileTools4MPI->GetFilePath().c_str(), option));
 }
 
 void Analysis::Close(Option_t* option) {
     fFile->Close(option);
+    // must delete the file object otherwise segmentation violation.
     fFile.reset();
 }
 

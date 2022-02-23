@@ -1,7 +1,7 @@
 /run/initialize
 
 #/MACE/Physics/SetConversionProbability 1.0
-#/MACE/Analysis/SetFileName test
+#/MACE/Analysis/SetResultName test
 
 /run/printProgress 1
 /run/beamOn 80
