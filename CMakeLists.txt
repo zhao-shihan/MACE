@@ -2,11 +2,11 @@ project(MACE)
 
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
-# MACE at C++17 or above, default C++20
+# MACE at C++20
 if(NOT DEFINED CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 20)
-elseif(CMAKE_CXX_STANDARD LESS 17)
-    message(FATAL_ERROR "MACE should be built, at least, with C++17")
+elseif(CMAKE_CXX_STANDARD LESS 20)
+    message(FATAL_ERROR "MACE should be built, at least, with C++20")
 endif()
 message("-- MACE will be built with C++${CMAKE_CXX_STANDARD}")
 #

@@ -13,7 +13,7 @@ Entity::Entity() :
     fPhysicalVolumes(0) {}
 
 void Entity::AddDaughter(const std::shared_ptr<Entity>& daughter) {
-    if (daughter->fMother != nullptr) {
+    if (daughter->fMother) {
         std::cerr << "Error: Entity " << daughter << " already registered to " << daughter->fMother << " as a daughter,\n"
             "\tbut now trying again to register to " << this << " as a daughter. Please check the geometry hierarchy." << std::endl;
         return;

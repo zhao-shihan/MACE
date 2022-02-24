@@ -10,7 +10,7 @@ Reconstruct(const std::vector<HitPtr>& hitData) {
     Base::fReconstructedHitList.clear();
     Base::fOmittedHitList.clear();
 
-    const auto& [minHitIter, maxHitIter] = std::minmax_element(hitData.cbegin(), hitData.cend(),
+    const auto& [minHitIter, maxHitIter] = std::ranges::minmax_element(std::as_const(hitData),
         [](const auto& hit1, const auto& hit2)->bool {
             return hit1->GetTrackID() < hit2->GetTrackID();
         }

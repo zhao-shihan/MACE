@@ -26,7 +26,7 @@ private:
 };
 
 inline auto MACE::SimMACE::SD::Spectrometer::FindMonitoring(ObserverPtr<const G4Track> track) {
-    return std::find_if(fMonitoringTrackList.cbegin(), fMonitoringTrackList.cend(),
+    return std::ranges::find_if(std::as_const(fMonitoringTrackList),
         [&track](const auto& monitoring) {
             return track == std::get<0>(monitoring);
         }

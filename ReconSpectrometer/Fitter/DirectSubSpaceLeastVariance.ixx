@@ -3,7 +3,7 @@
 template<class SpectromrterHit_t, class Track_t>
 bool MACE::ReconSpectrometer::Fitter::DirectSubSpaceLeastVariance<SpectromrterHit_t, Track_t>::
 Fit(std::vector<HitPtr>& hitData, TrackPtr& track) {
-    std::sort(hitData.begin(), hitData.end(),
+    std::ranges::sort(hitData,
         [](const auto& hit1, const auto& hit2)->bool {
             return hit1->GetLayerID() < hit2->GetLayerID();
         }
