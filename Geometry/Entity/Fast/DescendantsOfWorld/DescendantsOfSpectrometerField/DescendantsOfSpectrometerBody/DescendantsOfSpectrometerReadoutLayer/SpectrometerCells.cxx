@@ -22,7 +22,7 @@ void SpectrometerCells::ConstructSelf(G4bool checkOverlaps) {
 
     int cellId = 0;
     fCellLayerIDAndPositionList.clear();
-    for (int layerId = 0; layerId < Mother()->GetPhysicalVolumeNum(); ++layerId) {
+    for (size_t layerId = 0; layerId < Mother()->GetPhysicalVolumeNum(); ++layerId) {
         auto motherVolume = Mother()->GetPhysicalVolume(layerId);
         const auto motherSolid = static_cast<const G4Tubs*>(motherVolume->GetLogicalVolume()->GetSolid());
         const auto halfLength = motherSolid->GetZHalfLength();
@@ -46,7 +46,7 @@ void SpectrometerCells::ConstructSelf(G4bool checkOverlaps) {
             name);
         for (int k = 0; k < cellCount; ++k) {
             auto cellPhi = k * cellAngle;
-            auto physics = Make<G4PVPlacement>(
+            Make<G4PVPlacement>(
                 G4Transform3D(
                     G4RotationMatrix(G4ThreeVector(0.0, 0.0, 1.0), cellPhi),
                     G4ThreeVector()),

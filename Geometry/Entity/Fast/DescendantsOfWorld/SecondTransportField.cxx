@@ -27,7 +27,7 @@ void SecondTransportField::ConstructSelf(G4bool checkOverlaps) {
         solid,
         material,
         name);
-    auto physics = Make<G4PVPlacement>(
+    Make<G4PVPlacement>(
         G4Transform3D(
             G4RotationMatrix(G4ThreeVector(0, 1, 0), M_PI_2),
             G4ThreeVector(upXPosition + length / 2, 0, centerZ)),

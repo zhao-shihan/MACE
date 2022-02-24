@@ -46,7 +46,7 @@ void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
         analysis.SetEnableCoincidenceOfVertexDetector(fEnableCoincidenceOfVertexDetector.GetNewBoolValue(value));
     } else if (command == std::addressof(fSetResultName)) {
         analysis.SetResultName(value);
-    } else if (command = std::addressof(fMergeResult)) {
+    } else if (command == std::addressof(fMergeResult)) {
         analysis.Merge(fMergeResult.GetNewBoolValue(value));
     }
 }

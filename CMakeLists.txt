@@ -8,7 +8,7 @@ if(NOT DEFINED CMAKE_CXX_STANDARD)
 elseif(CMAKE_CXX_STANDARD LESS 20)
     message(FATAL_ERROR "MACE should be built, at least, with C++20")
 endif()
-message("-- MACE will be built with C++${CMAKE_CXX_STANDARD}")
+message("-- MACE is building with C++${CMAKE_CXX_STANDARD}")
 #
 # Suppress warning from TStorage.h which is only raised in C++20 and above:
 #
@@ -22,6 +22,9 @@ message("-- MACE will be built with C++${CMAKE_CXX_STANDARD}")
 if(CMAKE_CXX_STANDARD GREATER 17)
     add_definitions(-Wno-volatile)
 endif()
+
+# more warnings
+add_definitions(-Wall -Wextra)
 
 # MPI
 find_package(MPI 3.0 REQUIRED)

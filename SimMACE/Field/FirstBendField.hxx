@@ -16,9 +16,9 @@ public:
     void SetBendFieldCenter(const G4ThreeVector& center) { fXc = center.x(); fZc = center.z(); }
 
 private:
-    G4double fB = 0.1 * tesla;
+    G4double fB = 0.1_T;
 
-    G4double fRadius = 50 * cm;
-    G4double fXc = 50 * cm;
-    G4double fZc = 70 * cm;
+    G4double fRadius = 50_cm;
+    G4double fXc = 50_cm;
+    G4double fZc = 70_cm;
 };

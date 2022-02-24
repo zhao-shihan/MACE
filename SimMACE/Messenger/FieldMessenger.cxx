@@ -1,4 +1,5 @@
 #include "G4UIdirectory.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "SimMACE/Messenger/FieldMessenger.hxx"
 #include "SimMACE/Field/AcceleratorField.hxx"

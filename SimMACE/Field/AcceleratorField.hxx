@@ -18,10 +18,10 @@ public:
     void SetAccelerateEnd(G4double endZPos);
 
 private:
-    G4double fBz = 0.1 * tesla;
-    G4double fEz = 7 * kilovolt / (30 * cm - 13.02 * mm);
+    G4double fBz = 0.1_T;
+    G4double fEz = 7_kV / (30_cm - 13.02_mm);
 
-    G4double fV = 7 * kilovolt;
-    G4double fAccelerateBegin = 13.02 * mm;
-    G4double fAccelerateEnd = 30 * cm;
+    G4double fV = 7_kV;
+    G4double fAccelerateBegin = 13.02_mm;
+    G4double fAccelerateEnd = 30_cm;
 };

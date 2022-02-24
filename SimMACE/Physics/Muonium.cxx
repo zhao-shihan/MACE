@@ -1,5 +1,7 @@
 #include "G4ParticleTable.hh"
 #include "G4DecayTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "SimMACE/Physics/Muonium.hxx"
 #include "SimMACE/Physics/MuoniumDecayChannel.hxx"
@@ -24,18 +26,18 @@ Muonium::Muonium() :
     //    stable         lifetime    decay table
     //    shortlived
     G4ParticleDefinition(
-        "M", 105.658369 * MeV + 511 * keV, 2.99591e-16 * MeV, 0,
+        "M", 105.658369_MeV + 511_keV, 2.99591e-16_MeV, 0,
         1, 0, 0,
         0, 0, 0,
         "lepton", 0, 0, -1313,
-        false, 2197.03 * ns, nullptr,
+        false, 2197.03_ns, nullptr,
         false) {
 
     // Bohr magnetron of Muonium - T. Shiroka
     // The magnetic moment of Mu is the sum of those of mu+ and e- with
     // the respective gyromagnetic ratio anomalies as coefficients
-    constexpr auto muBohrMu = 0.5 * eplus * hbar_Planck / (0.10565840 * GeV / c_squared);
-    constexpr auto muBohrE = -0.5 * eplus * hbar_Planck / (0.51099906 * MeV / c_squared);
+    constexpr auto muBohrMu = 0.5 * eplus * hbar_Planck / (0.10565840_GeV / c_squared);
+    constexpr auto muBohrE = -0.5 * eplus * hbar_Planck / (0.51099906_MeV / c_squared);
     constexpr auto muBohrM = 1.0011659208 * muBohrMu + 1.0011596521859 * muBohrE;
     this->SetPDGMagneticMoment(muBohrM);
 

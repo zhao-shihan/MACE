@@ -51,6 +51,7 @@
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
 #include "G4RotationMatrix.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "SimMACE/Physics/MuoniumDecayChannel.hxx"
 
@@ -132,9 +133,9 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
     costheta = 1. - 2. / Ee - 2. / Ene + 2. / (Ene * Ee);
     sintheta = sqrt(1. - costheta * costheta);
 
-    rphi = twopi * G4UniformRand() * rad;
+    rphi = 2 * M_PI * G4UniformRand() * rad;
     rtheta = acos(2. * G4UniformRand() - 1.);
-    rpsi = twopi * G4UniformRand() * rad;
+    rpsi = 2 * M_PI * G4UniformRand() * rad;
 
     G4RotationMatrix rot(rphi, rtheta, rpsi);
 
@@ -179,7 +180,7 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
     //Set Direction
     auto r3 = G4UniformRand();
     auto a3 = 2.0 * sqrt(r3 * (1.0 - r3));
-    auto b3 = twopi * G4UniformRand();
+    auto b3 = 2 * M_PI * G4UniformRand();
     auto daughterparticle3 = new G4DynamicParticle(
         G4MT_daughters[3], G4ThreeVector(a3 * cos(b3), a3 * sin(b3), 1.0 - 2.0 * r3), kineticE3);
     products->PushProducts(daughterparticle3);

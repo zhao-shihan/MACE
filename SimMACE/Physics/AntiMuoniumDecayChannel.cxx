@@ -51,6 +51,8 @@
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
 #include "G4RotationMatrix.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 
 #include "SimMACE/Physics/AntiMuoniumDecayChannel.hxx"
 
@@ -133,7 +135,7 @@ G4DecayProducts* AntiMuoniumDecayChannel::DecayIt(G4double) {
     sintheta = sqrt(1. - costheta * costheta);
 
     rphi = twopi * G4UniformRand() * rad;
-    rtheta = acos(2. * G4UniformRand() - 1.);
+    rtheta = acos(2 * G4UniformRand() - 1);
     rpsi = twopi * G4UniformRand() * rad;
 
     G4RotationMatrix rot(rphi, rtheta, rpsi);

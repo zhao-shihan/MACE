@@ -26,12 +26,12 @@ private:
 
     G4int    fFirstTrueEventIDOfThisRank = 0;
 
-    G4double fFlux = 1e8 / s;
-    G4double fPlusePeakInterval = 10 * us;
-    G4double fPluseWidthRMS = 2 * us;
+    G4double fFlux = 1e8_s_1;
+    G4double fPlusePeakInterval = 10_us;
+    G4double fPluseWidthRMS = 2_us;
 
-    G4double fEnergy = 1.5 * MeV;
+    G4double fEnergy = 1.5_MeV;
     G4double fEnergySpreadRMS = 0.05 * fEnergy;
 
-    G4double fBeamWidthRMS = 5 * mm;
+    G4double fBeamWidthRMS = 5_mm;
 };

@@ -92,14 +92,14 @@ void FileTools4MPI::ConstructPathMPIImpl() {
                 directoryList.emplace_back(std::filesystem::path(fBasicName) / uniqueProcessorName);
             }
             // construct full file paths
-            for (size_t rank = 0; rank < commSize; ++rank) {
+            for (int rank = 0; rank < commSize; ++rank) {
                 filePathList.emplace_back(std::filesystem::path(fBasicName) / std::as_const(processorNameList[rank]) / FileNameForRank(rank));
             }
         } else { // is running on work station!
             // construct directory names
             directoryList.emplace_back(fBasicName);
             // construct full file paths
-            for (size_t rank = 0; rank < commSize; ++rank) {
+            for (int rank = 0; rank < commSize; ++rank) {
                 filePathList.emplace_back(std::filesystem::path(fBasicName) / FileNameForRank(rank));
             }
         }
@@ -145,7 +145,7 @@ int FileTools4MPI::MergeRootFilesMPIImpl(bool forced) const {
 
     int retVal;
     if (commRank == fgMasterRank) {
-        *fgOut << "Rank" << fgMasterRank << " is merging root files via hadd.\n";
+        *fgOut << "Rank" << fgMasterRank << " is merging root files via hadd." << std::endl;
         // hadd command
         std::string command = "hadd ";
         // flag: -j

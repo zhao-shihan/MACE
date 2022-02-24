@@ -29,7 +29,7 @@ void ThirdTransportSolenoid::ConstructSelf(G4bool checkOverlaps) {
         solid,
         material,
         name);
-    auto physics = Make<G4PVPlacement>(
+    Make<G4PVPlacement>(
         G4Transform3D(
             G4RotationMatrix(),
             G4ThreeVector(

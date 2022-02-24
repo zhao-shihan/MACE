@@ -5,10 +5,7 @@
 
 #include "SimMACE/Global.hxx"
 #include "SimMACE/Action/DetectorConstruction.hxx"
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wshadow" // suppress ridiculous warnings caused by TString: (const char* s) shadows CLHEP::s
 #include "SimMTransport/Track.hxx"
-#pragma GCC diagnostic pop
 #include "Utility/ObserverPtr.hxx"
 
 class MACE::SimMACE::Physics::MuoniumTransport final :

@@ -1,5 +1,6 @@
 #include "G4RunManager.hh"
 #include "G4MPImanager.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfAcceleratorField/Target.hxx"
 

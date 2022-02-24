@@ -1,3 +1,5 @@
+#include "G4PhysicalConstants.hh"
+
 #include "SimMACE/Field/SelectorField.hxx"
 #include "SimMACE/Messenger/FieldMessenger.hxx"
 

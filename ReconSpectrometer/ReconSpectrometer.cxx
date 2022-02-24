@@ -26,7 +26,7 @@ int main(int, char** argv) {
         auto hitData = dataHub.CreateList<Hit_t>(tree);
 
         reconstructor.Reconstruct(hitData);
-        const auto& reconHits = reconstructor.GetReconstructedHitList();
+        // const auto& reconHits = reconstructor.GetReconstructedHitList();
         const auto& tracks = reconstructor.GetTrackList();
 
         dataHub.CreateTree(tracks, i)->Write();

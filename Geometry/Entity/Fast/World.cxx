@@ -25,7 +25,7 @@ void World::ConstructSelf(G4bool checkOverlaps) {
         solid,
         material,
         name);
-    auto physics = Make<G4PVPlacement>(
+    Make<G4PVPlacement>(
         G4Transform3D(),
         name,
         logic,

@@ -1,5 +1,6 @@
 #include "G4UIdirectory.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "SimMACE/Messenger/MuonBeamMessenger.hxx"
 #include "SimMACE/Action/PrimaryGeneratorAction.hxx"
@@ -23,9 +24,9 @@ MuonBeamMessenger::MuonBeamMessenger() :
 
     // Introduce some useful units.
     // per second (for beam flux)
-    new G4UnitDefinition("second-1", "s-1", "Time-1", 1.0 / second);
-    new G4UnitDefinition("millisecond-1", "ms-1", "Time-1", 1.0 / millisecond);
-    new G4UnitDefinition("microsecond-1", "us-1", "Time-1", 1.0 / microsecond);
+    new G4UnitDefinition("second-1", "s-1", "Time-1", 1 / second);
+    new G4UnitDefinition("millisecond-1", "ms-1", "Time-1", 1 / millisecond);
+    new G4UnitDefinition("microsecond-1", "us-1", "Time-1", 1 / microsecond);
 
     fDirectory.SetGuidance("MACE muon beam.");
 

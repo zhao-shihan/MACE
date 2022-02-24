@@ -92,3 +92,4 @@
 
 1. (Ongoing) Better CMakeLists coding.
 2. (Ongoing) Use C++20 feature.
+3. (Completed) ~~Suppress all of -Wall and -Wextra warnings (excluding ThirdParty).~~

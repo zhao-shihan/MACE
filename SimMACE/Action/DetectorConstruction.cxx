@@ -101,9 +101,9 @@ static void RegisterFields(G4LogicalVolume* logicalVolume, Field_t* field, G4dou
 }
 
 void DetectorConstruction::ConstructField() {
-    constexpr G4double hMin = 100. * um;
+    constexpr G4double hMin = 100_um;
 
-    constexpr G4double defaultB = 0.1 * tesla;
+    constexpr G4double defaultB = 0.1_T;
     auto parallelBField = new Field::ParallelField(defaultB);
     auto verticalBField = new Field::VerticalField(defaultB);
 

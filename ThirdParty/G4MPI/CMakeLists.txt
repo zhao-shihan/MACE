@@ -8,7 +8,7 @@ project(${_projname})
 if(CMAKE_CXX_STANDARD GREATER 17)
     set(CMAKE_CXX_STANDARD 17)
 endif()
-message("-- ${_projname} will be built with C++${CMAKE_CXX_STANDARD}")
+message("-- ${_projname} is building with C++${CMAKE_CXX_STANDARD}")
 
 #------------------------------------------------------------------------------
 #Manadatory dependencies

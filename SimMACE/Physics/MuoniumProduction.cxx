@@ -1,5 +1,6 @@
 #include "G4MuonPlus.hh"
 #include "G4RunManager.hh"
+#include "G4PhysicalConstants.hh"
 
 #include "SimMACE/Physics/MuoniumProduction.hxx"
 #include "SimMACE/Physics/AntiMuonium.hxx"
@@ -26,7 +27,7 @@ G4VParticleChange* MuoniumProduction::AtRestDoIt(const G4Track& track, const G4S
     auto muoniumDynamicParticle = new G4DynamicParticle(*track.GetDynamicParticle());
     muoniumDynamicParticle->SetDefinition(muonium);
     muoniumDynamicParticle->SetPreAssignedDecayProperTime(G4RandExponential::shoot(G4Random::getTheEngine(), muonium->GetPDGLifeTime()));
-    muoniumDynamicParticle->SetKineticEnergy(k_Boltzmann * 300 * kelvin);
+    muoniumDynamicParticle->SetKineticEnergy(k_Boltzmann * 300_K);
 
     fParticleChange.AddSecondary(new G4Track(muoniumDynamicParticle, track.GetGlobalTime(), track.GetPosition()));
 

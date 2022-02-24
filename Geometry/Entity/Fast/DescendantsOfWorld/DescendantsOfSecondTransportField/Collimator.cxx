@@ -19,7 +19,7 @@ void Collimator::ConstructSelf(G4bool checkOverlaps) {
 
     auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu");
 
-    for (size_t i = 0; i < count; ++i) {
+    for (int i = 0; i < count; ++i) {
         auto radii = innerRadius + i * (outerRadius - innerRadius) / (count - 1);
         auto solid = Make<G4Tubs>(
             name,
@@ -32,7 +32,7 @@ void Collimator::ConstructSelf(G4bool checkOverlaps) {
             solid,
             material,
             name);
-        auto physics = Make<G4PVPlacement>(
+        Make<G4PVPlacement>(
             G4Transform3D(
                 G4RotationMatrix(),
                 G4ThreeVector(0.0, 0.0, zPosition)),

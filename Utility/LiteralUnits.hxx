@@ -110,6 +110,7 @@ namespace MACE {
         MACE_UTILITY_LITERAL_UNIT_SYSTEM(_T, CLHEP::tesla);
         MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mT, 1e-3 * CLHEP::tesla);
         MACE_UTILITY_LITERAL_UNIT_SYSTEM(_uT, 1e-6 * CLHEP::tesla);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_Gs, CLHEP::gauss);
 
         // Inductance [T^2][E][Q^-2] symbols
 
@@ -174,6 +175,14 @@ namespace MACE {
         MACE_UTILITY_LITERAL_UNIT_SYSTEM(_g_cm2, CLHEP::g / CLHEP::cm2);
         MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mg_cm2, CLHEP::mg / CLHEP::cm2);
         MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mg_mm2, CLHEP::mg / CLHEP::mm2);
+
+        // Per unit time [T^-1] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_ns_1, 1 / CLHEP::ns);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_s_1, 1 / CLHEP::s);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_ms_1, 1 / CLHEP::ms);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_us_1, 1 / CLHEP::us);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_ps_1, 1 / CLHEP::ps);
 
     }
 }
