@@ -1,9 +1,11 @@
 #include <string_view>
 #include <filesystem>
+#include <iostream>
 
 #include "mpi.h"
 
 #include "MACEGlobal.hxx"
+#include "Utility/ObserverPtr.hxx"
 
 // Create directories and file paths to help managing files during mpi processing.
 //
@@ -58,29 +60,34 @@
 //
 class MACE::Utility::FileTools4MPI final {
 public:
-    FileTools4MPI(std::string_view basicName, std::string_view suffix);
+    FileTools4MPI(std::string_view basicName, std::string_view suffix, const MPI::Comm& comm = MPI::COMM_WORLD);
     ~FileTools4MPI() noexcept = default;
     FileTools4MPI(const FileTools4MPI&) = delete;
     FileTools4MPI& operator=(const FileTools4MPI&) = delete;
 
     [[nodiscard]] const auto& GetFilePath() const { return fFilePath; }
-    int MergeRootFiles(bool forced = true) const;
+    int MergeRootFiles(bool forced = false) const;
+
+    static void SetOutStream(std::ostream& os) { fgOut = std::addressof(os); }
 
 private:
-    void ConstructPathMPIImpl(const MPI::Nullcomm& comm);
+    void ConstructPathMPIImpl();
     void ConstructPathSerialImpl() { fFilePath = fBasicName + fSuffix; }
 
-    [[nodiscard]] int MergeRootFilesMPIImpl(bool forced, const MPI::Nullcomm& comm) const;
+    [[nodiscard]] int MergeRootFilesMPIImpl(bool forced) const;
     [[nodiscard]] int MergeRootFilesSerialImpl() const;
     void ReportSuffixNotRoot() const;
 
 private:
-    const std::string     fBasicName;
-    const std::string     fSuffix;
+    const std::string                  fBasicName;
+    const std::string                  fSuffix;
+    const ObserverPtr<const MPI::Comm> fComm;
 
-    std::filesystem::path fFilePath;
+    std::filesystem::path              fFilePath;
 
-    static constexpr int  fgMasterRank = 0;
-    static constexpr int  fgProcessorNameMax = MPI_MAX_PROCESSOR_NAME;
-    static constexpr int  fgFilePathMax = 4 * MPI_MAX_PROCESSOR_NAME;
+    static constexpr int               fgMasterRank = 0;
+    static constexpr int               fgProcessorNameMax = MPI_MAX_PROCESSOR_NAME;
+    static constexpr int               fgFilePathMax = 4 * MPI_MAX_PROCESSOR_NAME;
+
+    static ObserverPtr<std::ostream>   fgOut;
 };

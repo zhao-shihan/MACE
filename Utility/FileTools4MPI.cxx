@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <set>
 #include <cstring>
-#include <iostream>
 #include <thread>
 #include <cmath>
 
@@ -11,14 +10,16 @@
 
 using namespace MACE::Utility;
 
-FileTools4MPI::FileTools4MPI(std::string_view basicName, std::string_view suffix) :
+ObserverPtr<std::ostream> FileTools4MPI::fgOut = std::addressof(std::cout);
+
+FileTools4MPI::FileTools4MPI(std::string_view basicName, std::string_view suffix, const MPI::Comm& comm) :
     fBasicName(basicName),
     fSuffix(suffix),
+    fComm(std::addressof(comm)),
     fFilePath() {
     if (MPI::Is_initialized()) {
-        MPI::Nullcomm comm(MPI_COMM_WORLD);
-        if (comm.Get_size() > 1) {
-            ConstructPathMPIImpl(comm);
+        if (fComm->Get_size() > 1) {
+            ConstructPathMPIImpl();
         } else {
             ConstructPathSerialImpl();
         }
@@ -29,9 +30,8 @@ FileTools4MPI::FileTools4MPI(std::string_view basicName, std::string_view suffix
 
 int FileTools4MPI::MergeRootFiles(bool forced) const {
     if (MPI::Is_initialized()) {
-        MPI::Nullcomm comm(MPI_COMM_WORLD);
-        if (comm.Get_size() > 1) {
-            return MergeRootFilesMPIImpl(forced, comm);
+        if (fComm->Get_size() > 1) {
+            return MergeRootFilesMPIImpl(forced);
         } else {
             return MergeRootFilesSerialImpl();
         }
@@ -40,9 +40,9 @@ int FileTools4MPI::MergeRootFiles(bool forced) const {
     }
 }
 
-void FileTools4MPI::ConstructPathMPIImpl(const MPI::Nullcomm& comm) {
-    const auto commRank = comm.Get_rank();
-    const auto commSize = comm.Get_size();
+void FileTools4MPI::ConstructPathMPIImpl() {
+    const auto commRank = fComm->Get_rank();
+    const auto commSize = fComm->Get_size();
 
     // First: gather processor names
 
@@ -54,7 +54,7 @@ void FileTools4MPI::ConstructPathMPIImpl(const MPI::Nullcomm& comm) {
     // master rank collects processor names
     std::vector<std::array<char, fgProcessorNameMax>> processorNamesRecv(0);
     if (commRank == fgMasterRank) { processorNamesRecv.resize(commSize); }
-    comm.Gather(processorNameSend, fgProcessorNameMax, MPI_CHAR, processorNamesRecv.data(), fgProcessorNameMax, MPI_CHAR, fgMasterRank);
+    fComm->Gather(processorNameSend, fgProcessorNameMax, MPI::CHAR, processorNamesRecv.data(), fgProcessorNameMax, MPI::CHAR, fgMasterRank);
 
     std::vector<std::array<char, fgFilePathMax>> filePathsSend(0);
     if (commRank == fgMasterRank) {
@@ -120,14 +120,14 @@ void FileTools4MPI::ConstructPathMPIImpl(const MPI::Nullcomm& comm) {
     // Third: Scatter file paths
 
     char filePathRecv[fgFilePathMax];
-    comm.Scatter(filePathsSend.data(), fgFilePathMax, MPI_CHAR, filePathRecv, fgFilePathMax, MPI_CHAR, fgMasterRank);
+    fComm->Scatter(filePathsSend.data(), fgFilePathMax, MPI::CHAR, filePathRecv, fgFilePathMax, MPI::CHAR, fgMasterRank);
 
     fFilePath = filePathRecv;
 }
 
-int FileTools4MPI::MergeRootFilesMPIImpl(bool forced, const MPI::Nullcomm& comm) const {
-    const auto commRank = comm.Get_rank();
-    const auto commSize = comm.Get_size();
+int FileTools4MPI::MergeRootFilesMPIImpl(bool forced) const {
+    const auto commRank = fComm->Get_rank();
+    const auto commSize = fComm->Get_size();
 
     if (fSuffix != ".root") {
         if (commRank == fgMasterRank) { ReportSuffixNotRoot(); }
@@ -141,11 +141,11 @@ int FileTools4MPI::MergeRootFilesMPIImpl(bool forced, const MPI::Nullcomm& comm)
 
     std::vector<std::array<char, fgFilePathMax>> filePathsRecv(0);
     if (commRank == fgMasterRank) { filePathsRecv.resize(commSize); }
-    comm.Gather(filePathSend, fgFilePathMax, MPI_CHAR, filePathsRecv.data(), fgFilePathMax, MPI_CHAR, fgMasterRank);
+    fComm->Gather(filePathSend, fgFilePathMax, MPI::CHAR, filePathsRecv.data(), fgFilePathMax, MPI::CHAR, fgMasterRank);
 
     int retVal;
     if (commRank == fgMasterRank) {
-        std::cout << "Rank" << fgMasterRank << " is merging root files via hadd.\n";
+        *fgOut << "Rank" << fgMasterRank << " is merging root files via hadd.\n";
         // hadd command
         std::string command = "hadd ";
         // flag: -j
@@ -168,15 +168,16 @@ int FileTools4MPI::MergeRootFilesMPIImpl(bool forced, const MPI::Nullcomm& comm)
         retVal = std::system(command.c_str());
         // check hadd return value
         if (retVal == 0) {
-            std::cout << "Files merged successfully." << std::endl;
+            *fgOut << "Files merged successfully." << std::endl;
         } else {
-            std::cout << "Warning: Detected that hadd is returning non-zero value: " << retVal << "\n"
+            *fgOut << "Warning: Detected that hadd is returning non-zero value: " << retVal << "\n"
                 "\tPlease check the infomation provided by hadd.\n"
-                "\tMerge result might be corrupted, you could try to merge again." << std::endl;
+                "\tMerge result might be corrupted, you could try to merge again.\n"
+                "\t(Maybe you need to force re-creation of output? Can be done by passing argument <true>.)" << std::endl;
         }
     }
 
-    comm.Bcast(std::addressof(retVal), 1, MPI_INT, fgMasterRank);
+    fComm->Bcast(std::addressof(retVal), 1, MPI::INT, fgMasterRank);
     return retVal;
 }
 
@@ -185,11 +186,11 @@ int FileTools4MPI::MergeRootFilesSerialImpl() const {
         ReportSuffixNotRoot();
         return -1;
     }
-    std::cout << "Need not to merge files in serial execution. Skipped." << std::endl;
+    *fgOut << "Need not to merge files in serial execution. Skipped." << std::endl;
     return 0;
 }
 
 void FileTools4MPI::ReportSuffixNotRoot() const {
-    std::cout << "Warning: MACE::Utility::FileTools4MPI::MergeRootFiles() only supports merging root files, "
+    *fgOut << "Warning: MACE::Utility::FileTools4MPI::MergeRootFiles() only supports merging root files, "
         "with suffix <.root>. <" << fSuffix << "> files are not supported. Nothing was done." << std::endl;
 }

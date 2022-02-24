@@ -19,11 +19,16 @@ Analysis::Analysis() :
     fCalorimeterHitList(nullptr),
     fVertexDetectorHitList(nullptr),
     fSpectrometerHitList(nullptr) {
-    Messenger::AnalysisMessenger::Instance().Set(this);
+    Messenger::AnalysisMessenger::Instance();
+    FileTools4MPI::SetOutStream(G4cout);
 }
 
 void Analysis::Open(Option_t* option) {
-    fFileTools4MPI = std::make_unique<FileTools4MPI>(fResultName, ".root");
+    if (MPI::Is_initialized()) {
+        fFileTools4MPI = std::make_unique<FileTools4MPI>(fResultName, ".root", *G4MPImanager::GetManager()->GetComm());
+    } else {
+        fFileTools4MPI = std::make_unique<FileTools4MPI>(fResultName, ".root");
+    }
     fFile.reset(TFile::Open(fFileTools4MPI->GetFilePath().c_str(), option));
 }
 
@@ -31,6 +36,16 @@ void Analysis::Close(Option_t* option) {
     fFile->Close(option);
     // must delete the file object otherwise segmentation violation.
     fFile.reset();
+}
+
+int Analysis::Merge(G4bool forced) {
+    if (fFileTools4MPI == nullptr) {
+        G4ExceptionDescription description("There is nothing to merge!");
+        G4Exception("MACE::SimMACE::Analysis::Merge(G4bool)",
+            "MACE_SimMACE_Analysis_W0", JustWarning, description);
+        return -1;
+    }
+    return fFileTools4MPI->MergeRootFiles(forced);
 }
 
 void Analysis::WriteEvent() {

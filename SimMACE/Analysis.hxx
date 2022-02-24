@@ -28,7 +28,7 @@ public:
 
     void Open(Option_t* option = "recreate");
     void Close(Option_t* option = nullptr);
-    auto Merge(G4bool forced = true) { return fFileTools4MPI->MergeRootFiles(forced); }
+    int Merge(G4bool forced = false);
 
     void SetTrueEventID(G4int trueEventID) { fTrueEventID = trueEventID; }
     void SubmitCalorimeterHC(ObserverPtr<const std::vector<Hit::CalorimeterHit*>> hitList) { fCalorimeterHitList = hitList; }

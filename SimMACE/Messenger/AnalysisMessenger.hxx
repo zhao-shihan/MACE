@@ -20,15 +20,12 @@ private:
     AnalysisMessenger& operator=(const AnalysisMessenger&) = delete;
 
 public:
-    void Set(ObserverPtr<Analysis> analysis) { fAnalysis = analysis; }
-
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    ObserverPtr<Analysis> fAnalysis = nullptr;
-
     G4UIdirectory fDirectory;
     G4UIcmdWithABool fEnableCoincidenceOfCalorimeter;
     G4UIcmdWithABool fEnableCoincidenceOfVertexDetector;
     G4UIcmdWithAString fSetResultName;
+    G4UIcmdWithABool fMergeResult;
 };

@@ -15,10 +15,11 @@ AnalysisMessenger::AnalysisMessenger() :
     fDirectory("/MACE/Analysis/"),
     fEnableCoincidenceOfCalorimeter("/MACE/Analysis/EnableCoincidenceOfCalorimeter", this),
     fEnableCoincidenceOfVertexDetector("/MACE/Analysis/EnableCoincidenceOfVertexDetector", this),
-    fSetResultName("/MACE/Analysis/SetResultName", this) {
+    fSetResultName("/MACE/Analysis/SetResultName", this),
+    fMergeResult("/MACE/Analysis/MergeResult", this) {
 
     fDirectory.SetGuidance("MACE::SimMACE::Analysis controller.");
-    
+
     fEnableCoincidenceOfCalorimeter.SetGuidance("Enable calorimeter for coincident detection.");
     fEnableCoincidenceOfCalorimeter.SetParameterName("mode", false);
     fEnableCoincidenceOfCalorimeter.AvailableForStates(G4State_Idle);
@@ -30,14 +31,22 @@ AnalysisMessenger::AnalysisMessenger() :
     fSetResultName.SetGuidance("Set file name.");
     fSetResultName.SetParameterName("file name", false);
     fSetResultName.AvailableForStates(G4State_Idle);
+
+    fMergeResult.SetGuidance("Merge result after MPI execution.");
+    fMergeResult.SetParameterName("forced", true);
+    fMergeResult.SetDefaultValue(false);
+    fMergeResult.AvailableForStates(G4State_Idle);
 }
 
 void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
+    auto&& analysis = Analysis::Instance();
     if (command == std::addressof(fEnableCoincidenceOfCalorimeter)) {
-        fAnalysis->SetEnableCoincidenceOfCalorimeter(fEnableCoincidenceOfCalorimeter.GetNewBoolValue(value));
+        analysis.SetEnableCoincidenceOfCalorimeter(fEnableCoincidenceOfCalorimeter.GetNewBoolValue(value));
     } else if (command == std::addressof(fEnableCoincidenceOfVertexDetector)) {
-        fAnalysis->SetEnableCoincidenceOfVertexDetector(fEnableCoincidenceOfVertexDetector.GetNewBoolValue(value));
+        analysis.SetEnableCoincidenceOfVertexDetector(fEnableCoincidenceOfVertexDetector.GetNewBoolValue(value));
     } else if (command == std::addressof(fSetResultName)) {
-        fAnalysis->SetResultName(value);
+        analysis.SetResultName(value);
+    } else if (command = std::addressof(fMergeResult)) {
+        analysis.Merge(fMergeResult.GetNewBoolValue(value));
     }
 }
