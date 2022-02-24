@@ -63,8 +63,16 @@ public:
     FileTools4MPI(const FileTools4MPI&) = delete;
     FileTools4MPI& operator=(const FileTools4MPI&) = delete;
 
-    const auto& GetFilePath() { return fFilePath; }
-    int MergeRootFiles(bool forced = true);
+    [[nodiscard]] const auto& GetFilePath() const { return fFilePath; }
+    int MergeRootFiles(bool forced = true) const;
+
+private:
+    void ConstructPathMPIImpl(const MPI::Nullcomm& comm);
+    void ConstructPathSerialImpl() { fFilePath = fBasicName + fSuffix; }
+
+    [[nodiscard]] int MergeRootFilesMPIImpl(bool forced, const MPI::Nullcomm& comm) const;
+    [[nodiscard]] int MergeRootFilesSerialImpl() const;
+    void ReportSuffixNotRoot() const;
 
 private:
     const std::string     fBasicName;
