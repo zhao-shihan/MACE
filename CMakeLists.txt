@@ -1,31 +1,60 @@
-cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 project(MACE)
 
-# MACE at C++17
-set(CMAKE_CXX_STANDARD 17)
+cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
-# MPI
-find_package(MPI REQUIRED)
-
-# Geant4
-option(WITH_GEANT4_UIVIS "Build example with Geant4 UI and Vis drivers" ON)
-if(WITH_GEANT4_UIVIS)
-    find_package(Geant4 REQUIRED ui_all vis_all)
-else()
-    find_package(Geant4 REQUIRED)
+# MACE at C++17 or above, default C++20
+if(NOT DEFINED CMAKE_CXX_STANDARD)
+    set(CMAKE_CXX_STANDARD 20)
+elseif(CMAKE_CXX_STANDARD LESS 17)
+    message(FATAL_ERROR "MACE should be built, at least, with C++17")
+endif()
+message("-- MACE will be built with C++${CMAKE_CXX_STANDARD}")
+#
+# Suppress warning from TStorage.h which is only raised in C++20 and above:
+#
+# TStorage.h:133:12: warning: compound assignment with ‘volatile’-qualified left operand is deprecated [-Wvolatile]
+#   133 |       bits |= kIsOnHeap;
+#       |       ~~~~~^~~~~~~~~~~~
+# TStorage.h:135:12: warning: compound assignment with ‘volatile’-qualified left operand is deprecated [-Wvolatile]
+#   135 |       bits &= ~kIsOnHeap;
+#       |       ~~~~~^~~~~~~~~~~~~
+#
+if(CMAKE_CXX_STANDARD GREATER 17)
+    add_definitions(-Wno-volatile)
 endif()
 
+# MPI
+find_package(MPI 3.0 REQUIRED)
+message("-- MACE uses MPI_C includes from: ${MPI_C_INCLUDE_DIRS}")
+message("-- MACE uses MPI_C libraries: ${MPI_C_LIBRARIES}")
+message("-- MACE uses MPI_CXX includes from: ${MPI_CXX_INCLUDE_DIRS}")
+message("-- MACE uses MPI_CXX libraries: ${MPI_CXX_LIBRARIES}")
+
+# Geant4
+# ?? not very sure about this if
+#option(MACE_WITH_VIS "Build MACE with visualization" ON)
+#if(MACE_WITH_VIS)
+find_package(Geant4 11.0.0 REQUIRED ui_all vis_all)
+#else()
+#    find_package(Geant4 11.0.0 REQUIRED)
+#endif()
+message("-- MACE uses Geant4 includes from: ${Geant4_INCLUDE_DIRS}")
+message("-- MACE uses Geant4 libraries: ${Geant4_LIBRARIES}")
+
 # ROOT
-find_package(ROOT REQUIRED COMPONENTS Geom)
+find_package(ROOT 6.24.02 REQUIRED COMPONENTS Geom)
+message("-- MACE uses ROOT includes from: ${ROOT_INCLUDE_DIRS}")
+message("-- MACE uses ROOT libraries: ${ROOT_LIBRARIES}")
 
 # EIGEN3
-find_package(Eigen3 REQUIRED)
+find_package(Eigen3 3.3.9 REQUIRED)
+message("-- MACE uses Eigen3 includes from: ${EIGEN3_INCLUDE_DIRS}")
 
 # Vars
 set(MACE_PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
 set(MACE_THIRD_PARTY_DIR ${PROJECT_SOURCE_DIR}/ThirdParty)
 
-include_directories(${PROJECT_SOURCE_DIR})
+include_directories(${MACE_PROJECT_ROOT_DIR})
 
 # A useful function
 # function(include_directories_recursively root_dir)

@@ -8,8 +8,8 @@
 2. Add vertex time in Track (for vertex time coincidence).
 3. Implement PhysicsTrack. It can be transformed from and to HelixTrack.
 4. How to store fully-reconstructed event?
-5. (long-term) Implement RawHit.
-6. (long-term) Implement SimRawHit.
+5. (Long-term) Implement RawHit.
+6. (Long-term) Implement SimRawHit.
 
 ## EventDisplay
 
@@ -65,7 +65,7 @@
 
 ### Utility
 
-1. (long-term) Need to connect to G4, a little bit of performance lose is ok. Already have some preliminary ideas: e.g when true random walk displacement exceeds a threshold then create a step in G4 (though there are many more true step); Defining target overall shape in G4 but use bool expression to define its fine structure; Target has many part, each part is applied with a bool expression, and using MC to define the exact material density used by G4; etc. 
+1. (Long-term) Need to connect to G4, a little bit of performance lose is ok. Already have some preliminary ideas: e.g when true random walk displacement exceeds a threshold then create a step in G4 (though there are many more true step); Defining target overall shape in G4 but use bool expression to define its fine structure; Target has many part, each part is applied with a bool expression, and using MC to define the exact material density used by G4; etc. 
 
 ### Coding Style
 
@@ -79,7 +79,7 @@
 
 ## ThirdParty
 
-1. Better CMakeLists.txt for G4mpi.
+1. (Completed) ~~Better CMakeLists.txt for G4mpi.~~
 
 ## Utility
 
@@ -90,4 +90,5 @@
 
 ## Other
 
-1. 
+1. (Ongoing) Better CMakeLists coding.
+2. (Ongoing) Use C++20 feature.

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This software is designed for MACE experiment. For now, it's for designing the experiment.  
+This software is designed for MACE experiment.  
 MACE software consists of several modules: SimMACE, SimMTransport, ReconSpectrometer, Geometry, DataModel. "SimMACE" is designed for the simulation of the whole experiment. "SimMTransport" handles the transport of muonium in target after produced, as a physics process in SimMACE. "SimMTransport" can be run independently aim at calculate the yield of a target, see it's README for detail. "ReconSpectrometer" handles track reconstruction in the spectrometer. "Geometry" handles the construction of detector geometry, provides a universial interface of detector geometry. "DataModel" provides a interface for datamodel of each detector, transportable between modules.
 
 ## How to Build
@@ -10,18 +10,20 @@ MACE software consists of several modules: SimMACE, SimMTransport, ReconSpectrom
 To build MACE software from source, there are a few prerequisites.
 
 ### External dependencies:  
-MPI-3   (MPICH, OpenMPI, Intel MPI, etc. On your frequency.)  
-Geant4  (min: 4.11.0, with C++17, gdml enabled)  
-ROOT    (min: 6.24.02, C++17)  
-Eigen3  (min: 3.3.9)
+0. C/C++ compiler that supports ≥ C++17.
+1. CMake   (≥ 3.16)
+2. MPI-3   (MPICH, OpenMPI, Intel MPI, etc. On your frequency.)  
+3. Geant4  (≥ 4.11.0, with ≥ C++17, gdml enabled)  
+4. ROOT    (≥ 6.24.02, ≥ C++17)  
+5. Eigen3  (≥ 3.3.9)
 
 G4mpi is bulit in. (in ./ThirdParty)  
 
 ### (Tested) Platform:  
-Linux, with gcc(9,10,11)
+Linux with gcc10, gcc11
 
 ### Prepare for your PC:  
-Geant4 and ROOT can be compiled and installed on your PC following the official guides. They should be compiled against C++17.  
+Geant4 and ROOT can be compiled and installed on your PC following the official guides. They should be compiled at least with C++17.  
 On your PC, MPI-3 and Eigen3 can be installed via package manager (apt, yum, etc.) respect to your linux distrbution. For example, you can install MPICH and Eigen3 on Ubuntu with
 ```shell
 sudo apt update
@@ -42,7 +44,6 @@ cmake <MACE_ROOT_DIR>
 make
 ```
 That's ok to use ninja or other make tools, respect to your preference.  
-Notice: MACE is compiled against C++17, configured forcibly in ./CMakeLists.txt. Your own -DCMAKE_CXX_STANDARD flag might not work. Be note that other C++ standard is not supported or tested, we might do that later.  
 
 ## How to Run
 
