@@ -4,7 +4,7 @@ project(SimMACE)
 include_directories(${MPI_CXX_INCLUDE_PATH})
 include_directories(${Geant4_INCLUDE_DIRS})
 include_directories(${ROOT_INCLUDE_DIRS})
-include_directories(${MACE_THIRD_PARTY_DIR}/G4MPI/include)
+include_directories(${MACE_THIRD_PARTY_DIR}/G4mpi/include)
 
 # SimMACE sources
 file(GLOB_RECURSE SimMACE_SOURCES ${PROJECT_SOURCE_DIR}/*.cxx)

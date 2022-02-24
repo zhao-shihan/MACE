@@ -9,6 +9,15 @@ if(CMAKE_CXX_STANDARD GREATER 17)
     set(CMAKE_CXX_STANDARD 17)
 endif()
 message("-- ${_projname} is building with C++${CMAKE_CXX_STANDARD}")
+#
+# Suppress warning:
+#
+# ../ThirdParty/G4mpi/src/G4MPImanager.cc: In member function ‘void G4MPImanager::ExecuteBeamOnThread(const G4String&)’:
+# ../ThirdParty/G4mpi/src/G4MPImanager.cc:496:31: warning: cast between incompatible function types from ‘void (*)(const G4String*)’ to ‘Func_t’ {aka ‘void* (*)(void*)’} [-Wcast-function-type]
+#   496 |                               (Func_t)thread_ExecuteThreadCommand,
+#       |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+add_definitions(-Wno-cast-function-type)
 
 #------------------------------------------------------------------------------
 #Manadatory dependencies
@@ -19,9 +28,9 @@ cmake_minimum_required(VERSION 3.16...3.21)
 include(${Geant4_USE_FILE})
 
 #------------------------------------------------------------------------------
-#message("-- G4MPI: ${_projname} uses includes from: "
+#message("-- G4mpi: ${_projname} uses includes from: "
 #        "${MPI_CXX_INCLUDE_PATH}")
-#message("-- G4MPI: ${_projname} uses libraries: ${MPI_CXX_LIBRARIES}")
+#message("-- G4mpi: ${_projname} uses libraries: ${MPI_CXX_LIBRARIES}")
 
 #Version of this package is the same as the G4 version
 set(${_targetname}_VERSION ${Geant4_VERSION})
