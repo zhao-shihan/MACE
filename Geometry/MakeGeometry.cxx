@@ -13,6 +13,7 @@
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/SpectrometerReadoutLayers.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/AcceleratorField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/SpectrometerBody.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/SpectrometerMagnet.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfThirdTransportField/ThirdTransportSolenoid.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterShield.hxx"
@@ -41,6 +42,7 @@ int main(int, char**) {
     auto spectrometerReadoutLayer = std::make_shared<SpectrometerReadoutLayers>();
     auto acceleratorField = std::make_shared<AcceleratorField>();
     auto spectrometerBody = std::make_shared<SpectrometerBody>();
+    auto spectrometerMagnet = std::make_shared<SpectrometerMagnet>();
     auto thirdTransportSolenoid = std::make_shared<ThirdTransportSolenoid>();
     auto calorimeterField = std::make_shared<CalorimeterField>();
     auto calorimeterShield = std::make_shared<CalorimeterShield>();
@@ -63,6 +65,7 @@ int main(int, char**) {
     secondTransportField->AddDaughter(selectorField);
     spectrometerField->AddDaughter(acceleratorField);
     spectrometerField->AddDaughter(spectrometerBody);
+    spectrometerField->AddDaughter(spectrometerMagnet);
     thirdTransportField->AddDaughter(thirdTransportSolenoid);
     acceleratorField->AddDaughter(target);
     spectrometerBody->AddDaughter(spectrometerReadoutLayer);

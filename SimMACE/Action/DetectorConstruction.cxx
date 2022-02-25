@@ -24,6 +24,7 @@ void DetectorConstruction::ConstructVolumes() {
     fSecondTransportField->AddDaughter(fSelectorField);
     fSpectrometerField->AddDaughter(fAcceleratorField);
     fSpectrometerField->AddDaughter(fSpectrometerBody);
+    fSpectrometerField->AddDaughter(fSpectrometerMagnet);
     fThirdTransportField->AddDaughter(fThirdTransportSolenoid);
     fAcceleratorField->AddDaughter(fTarget);
     fSpectrometerBody->AddDaughter(fSpectrometerReadoutLayers);

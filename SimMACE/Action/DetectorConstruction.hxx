@@ -16,6 +16,7 @@
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/SpectrometerReadoutLayers.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/AcceleratorField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/SpectrometerBody.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/SpectrometerMagnet.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfThirdTransportField/ThirdTransportSolenoid.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterShield.hxx"
@@ -59,6 +60,7 @@ private:
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(SpectrometerReadoutLayers);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(AcceleratorField);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(SpectrometerBody);
+    MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(SpectrometerMagnet);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(ThirdTransportSolenoid);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(CalorimeterField);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(FirstBendField);

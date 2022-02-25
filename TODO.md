@@ -26,7 +26,7 @@
 
 ### Interface
 
-1. Update description interface for pure G4 geometry usage.
+1. (Cancelled) ~~Update description interface for pure G4 geometry usage.~~
 
 ## ReconSpectrometer
 

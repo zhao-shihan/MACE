@@ -71,6 +71,7 @@ namespace MACE {
                     }
                     class AcceleratorField;
                     class SpectrometerBody;
+                    class SpectrometerMagnet;
                 }
                 inline namespace DescendantsOfThirdTransportField {
                     class ThirdTransportSolenoid;
@@ -120,6 +121,7 @@ namespace MACE {
                         }
                         class AcceleratorField;
                         class SpectrometerBody;
+                        class SpectrometerMagnet;
                     }
                     inline namespace DescendantsOfThirdTransportField {
                         class ThirdTransportSolenoid;
