@@ -15,6 +15,7 @@
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/SpectrometerBody.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfThirdTransportField/ThirdTransportSolenoid.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterField.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterShield.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/FirstBendField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/FirstTransportField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/SecondBendField.hxx"
@@ -22,7 +23,6 @@
 #include "Geometry/Entity/Fast/DescendantsOfWorld/SpectrometerField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/SpectrometerShield.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/ThirdTransportField.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/VertexDetectorShield.hxx"
 #include "Geometry/Entity/Fast/World.hxx"
 
 using namespace MACE::Geometry::Entity::Fast;
@@ -43,6 +43,7 @@ int main(int, char**) {
     auto spectrometerBody = std::make_shared<SpectrometerBody>();
     auto thirdTransportSolenoid = std::make_shared<ThirdTransportSolenoid>();
     auto calorimeterField = std::make_shared<CalorimeterField>();
+    auto calorimeterShield = std::make_shared<CalorimeterShield>();
     auto firstBendField = std::make_shared<FirstBendField>();
     auto firstTransportField = std::make_shared<FirstTransportField>();
     auto secondBendField = std::make_shared<SecondBendField>();
@@ -50,7 +51,6 @@ int main(int, char**) {
     auto spectrometerField = std::make_shared<SpectrometerField>();
     auto spectrometerShield = std::make_shared<SpectrometerShield>();
     auto thirdTransportField = std::make_shared<ThirdTransportField>();
-    auto vertexDetectorShield = std::make_shared<VertexDetectorShield>();
     auto world = std::make_shared<World>();
 
     calorimeterField->AddDaughter(calorimeter);
@@ -68,6 +68,7 @@ int main(int, char**) {
     spectrometerBody->AddDaughter(spectrometerReadoutLayer);
     spectrometerReadoutLayer->AddDaughter(spectrometerCells);
     world->AddDaughter(calorimeterField);
+    world->AddDaughter(calorimeterShield);
     world->AddDaughter(firstBendField);
     world->AddDaughter(firstTransportField);
     world->AddDaughter(secondBendField);
@@ -75,7 +76,6 @@ int main(int, char**) {
     world->AddDaughter(spectrometerField);
     world->AddDaughter(spectrometerShield);
     world->AddDaughter(thirdTransportField);
-    world->AddDaughter(vertexDetectorShield);
 
     world->ConstructSelfAndDescendants(true);
 

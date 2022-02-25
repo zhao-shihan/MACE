@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Geometry/Interface/Description.hxx"
+#include "Geometry/Description/DescendantsOfWorld/SpectrometerField.hxx"
 
 class MACE::Geometry::Description::FirstTransportField final :
     public MACE::Geometry::Interface::Description {
@@ -22,16 +22,20 @@ public:
     [[nodiscard]] std::string GetTranslationDescription() const override { return ""; }
     [[nodiscard]] std::string GetRotationDescription()    const override { return ""; }
 
-    [[nodiscard]] const auto& GetRaidus()      const { return fRadius; }
-    [[nodiscard]] const auto& GetLength()      const { return fLength; }
-    [[nodiscard]] const auto& GetUpZPosition() const { return fUpZPosition; }
+    [[nodiscard]] const auto& GetRadius()    const { return fRadius; }
+    [[nodiscard]] const auto& GetLength()    const { return fLength; }
+    [[nodiscard]] inline auto GetTransform() const;
 
     void SetRaidus(double val) { fRadius = val; }
     void SetLength(double val) { fLength = val; }
-    void SetUpZPosition(double val) { fUpZPosition = val; }
 
 private:
-    double fRadius = 16_cm;
+    double fRadius = 10.5_cm;
     double fLength = 20_cm;
-    double fUpZPosition = 50_cm;
 };
+
+inline auto MACE::Geometry::Description::FirstTransportField::GetTransform() const {
+    return G4Transform3D(
+        G4RotationMatrix(),
+        G4ThreeVector(0, 0, SpectrometerField::Instance().GetLength() / 2 + fLength / 2));
+}

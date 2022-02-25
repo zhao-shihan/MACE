@@ -11,8 +11,7 @@ void CalorimeterField::ConstructSelf(G4bool checkOverlaps) {
     auto name = description.GetName();
     auto radius = description.GetRadius();
     auto length = description.GetLength();
-    auto centerX = description.GetCenterX();
-    auto upZPosition = description.GetUpZPosition();
+    auto transform = description.GetTransform();
 
     auto material = Mother()->GetPhysicalVolume()->GetLogicalVolume()->GetMaterial();
 
@@ -28,9 +27,7 @@ void CalorimeterField::ConstructSelf(G4bool checkOverlaps) {
         material,
         name);
     Make<G4PVPlacement>(
-        G4Transform3D(
-            G4RotationMatrix(),
-            G4ThreeVector(centerX, 0, upZPosition + 0.5 * length)),
+        transform,
         name,
         logic,
         Mother()->GetPhysicalVolume(),

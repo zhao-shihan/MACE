@@ -11,8 +11,7 @@ void SecondTransportField::ConstructSelf(G4bool checkOverlaps) {
     auto name = description.GetName();
     auto length = description.GetLength();
     auto radius = description.GetRadius();
-    auto centerZ = description.GetCenterZ();
-    auto upXPosition = description.GetUpXPosition();
+    auto transform = description.GetTransform();
 
     auto material = Mother()->GetPhysicalVolume()->GetLogicalVolume()->GetMaterial();
 
@@ -28,9 +27,7 @@ void SecondTransportField::ConstructSelf(G4bool checkOverlaps) {
         material,
         name);
     Make<G4PVPlacement>(
-        G4Transform3D(
-            G4RotationMatrix(G4ThreeVector(0, 1, 0), M_PI_2),
-            G4ThreeVector(upXPosition + length / 2, 0, centerZ)),
+        transform,
         name,
         logic,
         Mother()->GetPhysicalVolume(),

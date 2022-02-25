@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Geometry/Interface/Description.hxx"
+#include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/AcceleratorField.hxx"
 
 class MACE::Geometry::Description::Target final :
     public MACE::Geometry::Interface::Description {
@@ -24,14 +24,18 @@ public:
 
     [[nodiscard]] const auto& GetWidth() const { return fWidth; }
     [[nodiscard]] const auto& GetThickness() const { return fThickness; }
-    [[nodiscard]] const auto& GetDownZPosition() const { return fDownZPosition; }
+    [[nodiscard]] inline auto GetTransform() const;
 
     void SetWidth(double val) { fWidth = val; }
     void SetThickness(double val) { fThickness = val; }
-    void SetDownZPosition(double val) { fDownZPosition = val; }
 
 private:
-    double fWidth = 50_mm;
+    double fWidth = 60_mm;
     double fThickness = 10_mm;
-    double fDownZPosition = -130_mm;
 };
+
+inline auto MACE::Geometry::Description::Target::GetTransform() const {
+    const auto& acceleratorField = AcceleratorField::Instance();
+    auto transZ = acceleratorField.GetLength() / 2 - acceleratorField.GetDownStreamLength() - fThickness / 2;
+    return G4Transform3D(G4RotationMatrix(), G4ThreeVector(0, 0, transZ));
+}

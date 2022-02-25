@@ -16,7 +16,7 @@ void SpectrometerShield::ConstructSelf(G4bool checkOverlaps) {
     auto windowRadius = description.GetWindowRadius();
     auto thickness = description.GetThickness();
 
-    auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Fe");
+    auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Pb");
 
     auto body = Make<G4Tubs>(
         "_temp",

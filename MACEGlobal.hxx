@@ -76,6 +76,7 @@ namespace MACE {
                     class ThirdTransportSolenoid;
                 }
                 class CalorimeterField;
+                class CalorimeterShield;
                 class FirstBendField;
                 class FirstTransportField;
                 class SecondBendField;
@@ -83,7 +84,6 @@ namespace MACE {
                 class SpectrometerField;
                 class SpectrometerShield;
                 class ThirdTransportField;
-                class VertexDetectorShield;
             }
             class World;
         }
@@ -125,6 +125,7 @@ namespace MACE {
                         class ThirdTransportSolenoid;
                     }
                     class CalorimeterField;
+                    class CalorimeterShield;
                     class FirstBendField;
                     class FirstTransportField;
                     class SecondBendField;
@@ -132,7 +133,6 @@ namespace MACE {
                     class SpectrometerField;
                     class SpectrometerShield;
                     class ThirdTransportField;
-                    class VertexDetectorShield;
                 }
                 class World;
             }

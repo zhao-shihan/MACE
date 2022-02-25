@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Geometry/Interface/Description.hxx"
+#include "Geometry/Description/DescendantsOfWorld/FirstTransportField.hxx"
 
 class MACE::Geometry::Description::FirstBendField final :
     public MACE::Geometry::Interface::Description {
@@ -22,19 +22,20 @@ public:
     [[nodiscard]] std::string GetTranslationDescription() const override { return ""; }
     [[nodiscard]] std::string GetRotationDescription()    const override { return ""; }
 
-    [[nodiscard]] const auto& GetRaidus()     const { return fRadius; }
+    [[nodiscard]] const auto& GetRadius()     const { return FirstTransportField::Instance().GetRadius(); }
     [[nodiscard]] const auto& GetBendRadius() const { return fBendRadius; }
-    [[nodiscard]] const auto& GetXPosition()  const { return fXPosition; }
-    [[nodiscard]] const auto& GetZPosition()  const { return fZPosition; }
+    [[nodiscard]] inline auto GetTransform()  const;
 
-    void SetRaidus(double val) { fRadius = val; }
     void SetBendRadius(double val) { fBendRadius = val; }
-    void SetXPosition(double val) { fXPosition = val; }
-    void SetZPosition(double val) { fZPosition = val; }
 
 private:
-    double fRadius = 16_cm;
     double fBendRadius = 50_cm;
-    double fXPosition = fBendRadius;
-    double fZPosition = 70_cm;
 };
+
+inline auto MACE::Geometry::Description::FirstBendField::GetTransform() const {
+    auto&& firstTransportField = FirstTransportField::Instance();
+    auto transX = firstTransportField.GetTransform().dx() + fBendRadius;
+    auto transY = firstTransportField.GetTransform().dy();
+    auto transZ = firstTransportField.GetTransform().dz() + firstTransportField.GetLength() / 2;
+    return G4Transform3D(G4RotationMatrix(G4ThreeVector(1, 0, 0), M_PI_2), G4ThreeVector(transX, transY, transZ));
+}

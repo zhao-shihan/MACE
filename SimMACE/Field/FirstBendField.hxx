@@ -5,20 +5,15 @@
 
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::Field::FirstBendField : public G4MagneticField {
+class MACE::SimMACE::Field::FirstBendField final :
+    public G4MagneticField {
 public:
     FirstBendField();
     ~FirstBendField() noexcept = default;
     void GetFieldValue(const G4double* x, G4double* B) const override;
 
     void SetTransportMagneticField(G4double B) { fB = B; }
-    void SetBendRadius(G4double r) { fRadius = r; }
-    void SetBendFieldCenter(const G4ThreeVector& center) { fXc = center.x(); fZc = center.z(); }
 
 private:
     G4double fB = 0.1_T;
-
-    G4double fRadius = 50_cm;
-    G4double fXc = 50_cm;
-    G4double fZc = 70_cm;
 };

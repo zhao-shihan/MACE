@@ -1,10 +1,14 @@
 #include "SimMACE/Field/AcceleratorField.hxx"
 #include "SimMACE/Messenger/FieldMessenger.hxx"
+#include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/AcceleratorField.hxx"
 
 using namespace MACE::SimMACE::Field;
 
+using AccFldGeomDscrpt = MACE::Geometry::Description::AcceleratorField;
+
 AcceleratorField::AcceleratorField() :
-    G4ElectroMagneticField() {
+    G4ElectroMagneticField(),
+    fEz(7_kV / (AccFldGeomDscrpt::Instance().GetDownStreamLength() - 13.02_mm)) {
     Messenger::FieldMessenger::Instance().Set(this);
 }
 
@@ -19,15 +23,10 @@ void AcceleratorField::GetFieldValue(const G4double*, G4double* F) const {
 
 void AcceleratorField::SetAcceleratorPotential(G4double V) {
     fV = V;
-    fEz = fV / (fAccelerateEnd - fAccelerateBegin);
+    fEz = fV / (AccFldGeomDscrpt::Instance().GetDownStreamLength() - fMuoniumDecayAvgZ);
 }
 
-void AcceleratorField::SetAccelerateBegin(G4double beginZPos) {
-    fAccelerateBegin = beginZPos;
-    fEz = fV / (fAccelerateEnd - fAccelerateBegin);
-}
-
-void AcceleratorField::SetAccelerateEnd(G4double endZPos) {
-    fAccelerateEnd = endZPos;
-    fEz = fV / (fAccelerateEnd - fAccelerateBegin);
+void AcceleratorField::SetMuoniumDecayAvgZ(G4double decayAvgZ) {
+    fMuoniumDecayAvgZ = decayAvgZ;
+    fEz = fV / (AccFldGeomDscrpt::Instance().GetDownStreamLength() - fMuoniumDecayAvgZ);
 }

@@ -14,14 +14,12 @@ public:
 
     void SetTransportBField(G4double B) { fBz = B; }
     void SetAcceleratorPotential(G4double V);
-    void SetAccelerateBegin(G4double beginZPos);
-    void SetAccelerateEnd(G4double endZPos);
+    void SetMuoniumDecayAvgZ(G4double decayAvgZ);
 
 private:
     G4double fBz = 0.1_T;
-    G4double fEz = 7_kV / (30_cm - 13.02_mm);
+    G4double fEz;
 
     G4double fV = 7_kV;
-    G4double fAccelerateBegin = 13.02_mm;
-    G4double fAccelerateEnd = 30_cm;
+    G4double fMuoniumDecayAvgZ = 13.02_mm;
 };

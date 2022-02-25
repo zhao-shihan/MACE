@@ -18,6 +18,7 @@
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/SpectrometerBody.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfThirdTransportField/ThirdTransportSolenoid.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterField.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterShield.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/FirstBendField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/FirstTransportField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/SecondBendField.hxx"
@@ -25,7 +26,6 @@
 #include "Geometry/Entity/Fast/DescendantsOfWorld/SpectrometerField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/SpectrometerShield.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/ThirdTransportField.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/VertexDetectorShield.hxx"
 #include "Geometry/Entity/Fast/World.hxx"
 
 #define MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(ClassName) \
@@ -69,7 +69,7 @@ private:
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(SpectrometerShield);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(ThirdTransportField);
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(World);
-    MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(VertexDetectorShield);
+    MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(CalorimeterShield);
 
 private:
     G4bool fCheckOverlaps;

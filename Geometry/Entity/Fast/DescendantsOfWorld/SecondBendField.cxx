@@ -9,10 +9,9 @@ using namespace MACE::Geometry::Entity::Fast;
 void SecondBendField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::SecondBendField::Instance();
     auto name = description.GetName();
-    auto raidus = description.GetRaidus();
+    auto raidus = description.GetRadius();
     auto bendRadius = description.GetBendRadius();
-    auto xPosition = description.GetXPosition();
-    auto zPosition = description.GetZPosition();
+    auto transform = description.GetTransform();
 
     auto material = Mother()->GetPhysicalVolume()->GetLogicalVolume()->GetMaterial();
 
@@ -28,9 +27,7 @@ void SecondBendField::ConstructSelf(G4bool checkOverlaps) {
         material,
         name);
     Make<G4PVPlacement>(
-        G4Transform3D(
-            G4RotationMatrix(G4ThreeVector(1, 0, 0), M_PI_2),
-            G4ThreeVector(xPosition, 0, zPosition)),
+        transform,
         name,
         logic,
         Mother()->GetPhysicalVolume(),

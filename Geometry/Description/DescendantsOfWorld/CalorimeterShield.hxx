@@ -1,20 +1,20 @@
 #pragma once
 
-#include "Geometry/Interface/Description.hxx"
+#include "Geometry/Description/DescendantsOfWorld/CalorimeterField.hxx"
 
-class MACE::Geometry::Description::VertexDetectorShield final :
+class MACE::Geometry::Description::CalorimeterShield final :
     public MACE::Geometry::Interface::Description {
 public:
-    static VertexDetectorShield& Instance() noexcept;
+    static CalorimeterShield& Instance() noexcept;
 
 private:
-    VertexDetectorShield() noexcept = default;
-    ~VertexDetectorShield() noexcept = default;
-    VertexDetectorShield(const VertexDetectorShield&) = delete;
-    VertexDetectorShield& operator=(const VertexDetectorShield&) = delete;
+    CalorimeterShield() noexcept = default;
+    ~CalorimeterShield() noexcept = default;
+    CalorimeterShield(const CalorimeterShield&) = delete;
+    CalorimeterShield& operator=(const CalorimeterShield&) = delete;
 
 public:
-    [[nodiscard]] std::string GetName()                   const override { return "VertexDetectorShield"; }
+    [[nodiscard]] std::string GetName()                   const override { return "CalorimeterShield"; }
     [[nodiscard]] std::string GetOverallDescription()     const override { return ""; }
     [[nodiscard]] std::string GetMaterialDescription()    const override { return ""; }
     [[nodiscard]] std::string GetShapeDescription()       const override { return ""; }
@@ -26,21 +26,16 @@ public:
     [[nodiscard]] const auto& GetInnerLength()  const { return fInnerLength; }
     [[nodiscard]] const auto& GetWindowRadius() const { return fWindowRadius; }
     [[nodiscard]] const auto& GetThickness()    const { return fThickness; }
-    [[nodiscard]] const auto& GetCenterX()      const { return fCenterX; }
-    [[nodiscard]] const auto& GetUpZPosition()  const { return fUpZPosition; }
+    [[nodiscard]] auto        GetTransform()    const { return CalorimeterField::Instance().GetTransform(); }
 
     void SetInnerRadius(double val) { fInnerRadius = val; }
     void SetInnerLength(double val) { fInnerLength = val; }
     void SetWindowRadius(double val) { fWindowRadius = val; }
     void SetThickness(double val) { fThickness = val; }
-    void SetCenterX(double val) { fCenterX = val; }
-    void SetUpZPosition(double val) { fUpZPosition = val; }
 
 private:
     double fInnerRadius = 25_cm;
     double fInnerLength = 60_cm;
-    double fWindowRadius = 17_cm;
+    double fWindowRadius = 11_cm;
     double fThickness = 5_cm;
-    double fCenterX = 200_cm;
-    double fUpZPosition = 190_cm;
 };

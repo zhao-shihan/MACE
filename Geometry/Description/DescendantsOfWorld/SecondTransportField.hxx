@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Geometry/Interface/Description.hxx"
+#include "Geometry/Description/DescendantsOfWorld/FirstBendField.hxx"
 
 class MACE::Geometry::Description::SecondTransportField final :
     public MACE::Geometry::Interface::Description {
@@ -19,22 +19,23 @@ public:
     [[nodiscard]] std::string GetMaterialDescription()    const override { return ""; }
     [[nodiscard]] std::string GetShapeDescription()       const override { return ""; }
     [[nodiscard]] std::string GetMotherDescription()      const override { return ""; }
-    [[nodiscard]] std::string GetTranslationDescription() const override { return ""; }
+    [[nodiscard]] std::string GetTranslationDescription() const override { return "As this GetTranslation()"; }
     [[nodiscard]] std::string GetRotationDescription()    const override { return ""; }
 
-    [[nodiscard]] const auto& GetLength()      const { return fLength; }
-    [[nodiscard]] const auto& GetRadius()      const { return fRadius; }
-    [[nodiscard]] const auto& GetCenterZ()     const { return fCenterZ; }
-    [[nodiscard]] const auto& GetUpXPosition() const { return fUpXPosition; }
+    [[nodiscard]] const auto& GetLength() const { return fLength; }
+    [[nodiscard]] const auto& GetRadius() const { return FirstBendField::Instance().GetRadius(); }
+    [[nodiscard]] inline auto GetTransform() const;
 
     void SetLength(double val) { fLength = val; }
-    void SetRadius(double val) { fRadius = val; }
-    void SetCenterZ(double val) { fCenterZ = val; }
-    void SetUpXPosition(double val) { fUpXPosition = val; }
 
 private:
     double fLength = 100_cm;
-    double fRadius = 16_cm;
-    double fCenterZ = 120_cm;
-    double fUpXPosition = 50_cm;
 };
+
+inline auto MACE::Geometry::Description::SecondTransportField::GetTransform() const {
+    auto&& firstBendField = FirstBendField::Instance();
+    auto transX = firstBendField.GetTransform().dx() + fLength / 2;
+    auto transY = firstBendField.GetTransform().dy();
+    auto transZ = firstBendField.GetTransform().dz() + firstBendField.GetBendRadius();
+    return G4Transform3D(G4RotationMatrix(G4ThreeVector(0, 1, 0), M_PI_2), G4ThreeVector(transX, transY, transZ));
+}

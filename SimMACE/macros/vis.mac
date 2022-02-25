@@ -13,42 +13,38 @@
 #/vis/viewer/set/rotationStyle freeRotation
 /vis/viewer/set/projection p
 /vis/viewer/set/style s
-#/vis/viewer/set/hiddenEdge 1
-/vis/viewer/set/auxiliaryEdge false
+/vis/viewer/set/auxiliaryEdge true
 /vis/viewer/set/lineSegmentsPerCircle 100
 /vis/viewer/zoom 3
 
 # Colors
 /vis/geometry/set/colour Calorimeter                   0     1     1     1     0.1
 /vis/geometry/set/colour VertexDetector                0     1     1     1     0.1
-/vis/geometry/set/colour FirstBendSolenoid             0     1     1     1     0.025
-/vis/geometry/set/colour FirstTransportSolenoid        0     1     1     1     0.025
-/vis/geometry/set/colour SecondBendSolenoid            0     1     1     1     0.025
+/vis/geometry/set/colour FirstBendSolenoid             0     1     1     1     0.05
+/vis/geometry/set/colour FirstTransportSolenoid        0     1     1     1     0.05
+/vis/geometry/set/colour SecondBendSolenoid            0     1     1     1     0.05
 /vis/geometry/set/colour Collimator                    0     1     1     1     0.05
-/vis/geometry/set/colour SecondTransportSolenoid       0     1     1     1     0.025
+/vis/geometry/set/colour SecondTransportSolenoid       0     1     1     1     0.05
 /vis/geometry/set/colour SelectorField                 0     1     1     1     0.05
 /vis/geometry/set/colour Target                        0     1     1     1     0.1
 /vis/geometry/set/colour SpectrometerCell              0     1     1     1     0.005
 /vis/geometry/set/colour SpectrometerReadoutLayer      0     1     1     1     0.005
 /vis/geometry/set/colour AcceleratorField              0     1     1     1     0.05
-/vis/geometry/set/colour SpectrometerBody              0     1     1     1     0.01
-/vis/geometry/set/colour ThirdTransportSolenoid        0     1     1     1     0.025
-/vis/geometry/set/colour CalorimeterField              0     1     1     1     0.01
-/vis/geometry/set/colour FirstBendField                0     1     1     1     0.01
-/vis/geometry/set/colour FirstTransportField           0     1     1     1     0.01
-/vis/geometry/set/colour SecondBendField               0     1     1     1     0.01
-/vis/geometry/set/colour SecondTransportField          0     1     1     1     0.01
-/vis/geometry/set/colour SpectrometerField             0     1     1     1     0.01
-/vis/geometry/set/colour SpectrometerShield            0     1     1     1     0.01
-/vis/geometry/set/colour ThirdTransportField           0     1     1     1     0.01
-/vis/geometry/set/colour VertexDetectorShield          0     1     1     1     0.01
-/vis/geometry/set/colour World                         0     1     1     1     0.01
+/vis/geometry/set/colour SpectrometerBody              0     1     1     1     0.05
+/vis/geometry/set/colour ThirdTransportSolenoid        0     1     1     1     0.05
+/vis/geometry/set/colour CalorimeterField              0     1     1     1     0.05
+/vis/geometry/set/colour CalorimeterShield             0     1     1     1     0.05
+/vis/geometry/set/colour FirstBendField                0     1     1     1     0.05
+/vis/geometry/set/colour FirstTransportField           0     1     1     1     0.05
+/vis/geometry/set/colour SecondBendField               0     1     1     1     0.05
+/vis/geometry/set/colour SecondTransportField          0     1     1     1     0.05
+/vis/geometry/set/colour SpectrometerField             0     1     1     1     0.05
+/vis/geometry/set/colour SpectrometerShield            0     1     1     1     0.05
+/vis/geometry/set/colour ThirdTransportField           0     1     1     1     0.05
+/vis/geometry/set/colour World                         0     1     1     1     0.001
 #/vis/geometry/set/colour BeamCounter                   0     0.0   0.0   1.0   0.5
 #/vis/geometry/set/colour MylarDegrader                 0     0.6   0.1   0.1   0.5
 #/vis/geometry/set/colour CarbonFoil                    80    1.0   1.0   1.0   0.5
-
-# Hide world
-/vis/geometry/set/visibility World 0
 
 /vis/scene/add/axes 0 0 0 10 cm
 

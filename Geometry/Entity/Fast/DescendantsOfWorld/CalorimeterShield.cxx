@@ -3,22 +3,21 @@
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 
-#include "Geometry/Entity/Fast/DescendantsOfWorld/VertexDetectorShield.hxx"
-#include "Geometry/Description/DescendantsOfWorld/VertexDetectorShield.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterShield.hxx"
+#include "Geometry/Description/DescendantsOfWorld/CalorimeterShield.hxx"
 
 using namespace MACE::Geometry::Entity::Fast;
 
-void VertexDetectorShield::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::VertexDetectorShield::Instance();
+void CalorimeterShield::ConstructSelf(G4bool checkOverlaps) {
+    const auto& description = Description::CalorimeterShield::Instance();
     auto name = description.GetName();
     auto innerRadius = description.GetInnerRadius();
     auto innerLength = description.GetInnerLength();
     auto windowRadius = description.GetWindowRadius();
     auto thickness = description.GetThickness();
-    auto centerX = description.GetCenterX();
-    auto upZPosition = description.GetUpZPosition();
+    auto transform = description.GetTransform();
 
-    auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Fe");
+    auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Pb");
 
     auto body = Make<G4Tubs>(
         "_temp",
@@ -53,9 +52,7 @@ void VertexDetectorShield::ConstructSelf(G4bool checkOverlaps) {
         material,
         name);
     Make<G4PVPlacement>(
-        G4Transform3D(
-            G4RotationMatrix(),
-            G4ThreeVector(centerX, 0, upZPosition + innerLength / 2)),
+        transform,
         name,
         logic,
         Mother()->GetPhysicalVolume(),

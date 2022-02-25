@@ -29,6 +29,7 @@ void DetectorConstruction::ConstructVolumes() {
     fSpectrometerBody->AddDaughter(fSpectrometerReadoutLayers);
     fSpectrometerReadoutLayers->AddDaughter(fSpectrometerCells);
     fWorld->AddDaughter(fCalorimeterField);
+    fWorld->AddDaughter(fCalorimeterShield);
     fWorld->AddDaughter(fFirstBendField);
     fWorld->AddDaughter(fFirstTransportField);
     fWorld->AddDaughter(fSecondBendField);
@@ -36,7 +37,6 @@ void DetectorConstruction::ConstructVolumes() {
     fWorld->AddDaughter(fSpectrometerField);
     fWorld->AddDaughter(fSpectrometerShield);
     fWorld->AddDaughter(fThirdTransportField);
-    fWorld->AddDaughter(fVertexDetectorShield);
 
     fWorld->ConstructSelfAndDescendants(fCheckOverlaps);
 }

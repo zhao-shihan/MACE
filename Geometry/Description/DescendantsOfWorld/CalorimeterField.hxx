@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Geometry/Interface/Description.hxx"
+#include "Geometry/Description/DescendantsOfWorld/ThirdTransportField.hxx"
 
 class MACE::Geometry::Description::CalorimeterField final :
     public MACE::Geometry::Interface::Description {
@@ -22,19 +22,22 @@ public:
     [[nodiscard]] std::string GetTranslationDescription() const override { return ""; }
     [[nodiscard]] std::string GetRotationDescription()    const override { return ""; }
 
-    [[nodiscard]] const auto& GetRadius()      const { return fRadius; }
-    [[nodiscard]] const auto& GetLength()      const { return fLength; }
-    [[nodiscard]] const auto& GetCenterX()     const { return fCenterX; }
-    [[nodiscard]] const auto& GetUpZPosition() const { return fUpZPosition; }
+    [[nodiscard]] const auto& GetRadius()    const { return fRadius; }
+    [[nodiscard]] const auto& GetLength()    const { return fLength; }
+    [[nodiscard]] inline auto GetTransform() const;
 
     void SetRadius(double val) { fRadius = val; }
     void SetLength(double val) { fLength = val; }
-    void SetCenterX(double val) { fCenterX = val; }
-    void SetUpZPosition(double val) { fUpZPosition = val; }
 
 private:
     double fRadius = 23_cm;
     double fLength = 50_cm;
-    double fCenterX = 200_cm;
-    double fUpZPosition = 190_cm;
 };
+
+inline auto MACE::Geometry::Description::CalorimeterField::GetTransform() const {
+    auto&& thirdTransportField = ThirdTransportField::Instance();
+    auto transX = thirdTransportField.GetTransform().dx();
+    auto transY = thirdTransportField.GetTransform().dy();
+    auto transZ = thirdTransportField.GetTransform().dz() + thirdTransportField.GetLength() / 2 + fLength / 2;
+    return G4Transform3D(G4RotationMatrix(), G4ThreeVector(transX, transY, transZ));
+}

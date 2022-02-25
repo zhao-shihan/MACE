@@ -18,10 +18,15 @@
 ### Utility
 
 1. CDC cell's sensitive volume should be a cylinder instead of parallepipe. This behaviour is now act in SD as an if(...), draw it down directly in geometry is simpler.
-2. (Completed) ~~In geometry hierarchy, solenoid and field volume is at the same level. Maybe the field as solenoid's mother is better.~~ (Note: fixed a lot of "stuck")
-3. Like above, but for shields.
-4. Add a geometry constructor for universial usage.
-5. Consider location constraints. E.g. solenoid has exactly the same length as the corresponding field, down-stream field is connect to the up-stream field, etc. Benefits for dynamic geometry.
+2. CDC cells and layers transform and size (and layerId for cells) list should be constructed in description.
+3. (Completed) ~~In geometry hierarchy, solenoid and field volume is at the same level. Maybe the field as solenoid's mother is better.~~ (Note: fixed a lot of "stuck")
+4. (Cancelled) ~~Like above, but for shields.~~
+5. (Cancelled) ~~Add a geometry constructor for universial usage.~~
+6. (Ongoing) Consider location constraints. E.g. solenoid has exactly the same length as the corresponding field, down-stream field is connect to the up-stream field, etc. Benefits for dynamic geometry.
+
+### Interface
+
+1. Update description interface for pure G4 geometry usage.
 
 ## ReconSpectrometer
 

@@ -7,5 +7,6 @@ class MACE::SimMACE::Field::ParallelField final :
 public:
     ParallelField(G4double B);
     ~ParallelField() noexcept = default;
+
     void SetFieldNorm(G4double B) { SetFieldValue(G4ThreeVector(0, 0, B)); }
 };

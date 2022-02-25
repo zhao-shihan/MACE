@@ -54,7 +54,7 @@ void FieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     } else if (command == std::addressof(fSetAcceleratorPotential)) {
         const auto V = fSetAcceleratorPotential.GetNewDoubleValue(value);
         fAcceleratorField->SetAcceleratorPotential(V);
-        fSelectorField->SetSelectEnergy(eplus * V);
+        fSelectorField->SetSelectEnergy(eplus * std::abs(V));
     } else if (command == std::addressof(fSetSelectorMagneticField)) {
         fSelectorField->SetSelectorMagneticField(fSetSelectorMagneticField.GetNewDoubleValue(value));
     }

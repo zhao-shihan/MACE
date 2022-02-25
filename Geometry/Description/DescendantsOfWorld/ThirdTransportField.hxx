@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Geometry/Interface/Description.hxx"
+#include "Geometry/Description/DescendantsOfWorld/SecondBendField.hxx"
 
 class MACE::Geometry::Description::ThirdTransportField final :
     public MACE::Geometry::Interface::Description {
@@ -22,19 +22,20 @@ public:
     [[nodiscard]] std::string GetTranslationDescription() const override { return ""; }
     [[nodiscard]] std::string GetRotationDescription()    const override { return ""; }
 
-    [[nodiscard]] const auto& GetLength()      const { return fLength; }
-    [[nodiscard]] const auto& GetRadius()      const { return fRadius; }
-    [[nodiscard]] const auto& GetCenterX()     const { return fCenterX; }
-    [[nodiscard]] const auto& GetUpZPosition() const { return fUpZPosition; }
+    [[nodiscard]] const auto& GetLength() const { return fLength; }
+    [[nodiscard]] const auto& GetRadius() const { return SecondBendField::Instance().GetRadius(); }
+    [[nodiscard]] inline auto GetTransform() const;
 
     void SetLength(double val) { fLength = val; }
-    void SetRadius(double val) { fRadius = val; }
-    void SetCenterX(double val) { fCenterX = val; }
-    void SetUpZPosition(double val) { fUpZPosition = val; }
 
 private:
     double fLength = 20_cm;
-    double fRadius = 16_cm;
-    double fCenterX = 200_cm;
-    double fUpZPosition = 170_cm;
 };
+
+inline auto MACE::Geometry::Description::ThirdTransportField::GetTransform() const {
+    auto&& secondBendField = SecondBendField::Instance();
+    auto transX = secondBendField.GetTransform().dx() + secondBendField.GetBendRadius();
+    auto transY = secondBendField.GetTransform().dy();
+    auto transZ = secondBendField.GetTransform().dz() + fLength / 2;
+    return G4Transform3D(G4RotationMatrix(), G4ThreeVector(transX, transY, transZ));
+}

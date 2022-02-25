@@ -24,16 +24,17 @@ public:
     [[nodiscard]] std::string GetTranslationDescription() const override { return "Translation should ensure the center z position satisifies shape description (see above)."; }
     [[nodiscard]] std::string GetRotationDescription()    const override { return "No rotation."; }
 
-    [[nodiscard]] const auto& GetWidth() const { return fWidth; }
-    [[nodiscard]] const auto& GetUpStreamLength() const { return fUpStreamLength; }
+    [[nodiscard]] const auto& GetRadius() const { return fRadius; }
+    [[nodiscard]] const auto& GetLength() const { return fLength; }
     [[nodiscard]] const auto& GetDownStreamLength() const { return fDownStreamLength; }
+    [[nodiscard]] auto        GetTransform() const { return G4Transform3D(G4RotationMatrix(), G4ThreeVector(0, 0, fDownStreamLength - fLength / 2)); }
 
-    void SetWidth(double val) { fWidth = val; }
-    void SetUpStreamLength(double val) { fUpStreamLength = val; }
+    void SetRadius(double val) { fRadius = val; }
+    void SetLength(double val) { fLength = val; }
     void SetDownStreamLength(double val) { fDownStreamLength = val; }
 
 private:
-    double fWidth = M_SQRT2 * 7_cm;
-    double fUpStreamLength = 4_cm;
-    double fDownStreamLength = 30_cm;
+    double fRadius = 5_cm;
+    double fLength = 85_cm;
+    double fDownStreamLength = 80_cm;
 };

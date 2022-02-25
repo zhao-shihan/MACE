@@ -9,7 +9,7 @@ using namespace MACE::Geometry::Entity::Fast;
 void SelectorField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::SelectorField::Instance();
     const auto name = description.GetName();
-    const auto raidus = description.GetRaidus();
+    const auto raidus = description.GetRadius();
     const auto length = description.GetLength();
     const auto zPosition = description.GetZPosition();
 

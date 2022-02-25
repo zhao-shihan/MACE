@@ -9,9 +9,9 @@ using namespace MACE::Geometry::Entity::Fast;
 void FirstTransportField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::FirstTransportField::Instance();
     auto name = description.GetName();
-    auto raidus = description.GetRaidus();
+    auto raidus = description.GetRadius();
     auto length = description.GetLength();
-    auto upZPosition = description.GetUpZPosition();
+    auto transform = description.GetTransform();
 
     auto material = Mother()->GetPhysicalVolume()->GetLogicalVolume()->GetMaterial();
 
@@ -27,9 +27,7 @@ void FirstTransportField::ConstructSelf(G4bool checkOverlaps) {
         material,
         name);
     Make<G4PVPlacement>(
-        G4Transform3D(
-            G4RotationMatrix(),
-            G4ThreeVector(0, 0, upZPosition + length / 2)),
+        transform,
         name,
         logic,
         Mother()->GetPhysicalVolume(),

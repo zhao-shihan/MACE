@@ -31,7 +31,7 @@ public:
     void SetBendRadius(double val) { fBendRadius = val; }
 
 private:
-    double fInnerRadius = 10_cm;
-    double fOuterRadius = 15_cm;
+    double fInnerRadius = 5_cm;
+    double fOuterRadius = 10_cm;
     double fBendRadius = 50_cm;
 };
