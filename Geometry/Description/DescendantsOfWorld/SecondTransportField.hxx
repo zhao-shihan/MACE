@@ -34,7 +34,7 @@ public:
 
 private:
     double fLength = 100_cm;
-    double fRadius = 10_cm;
+    double fRadius = 16_cm;
     double fCenterZ = 120_cm;
     double fUpXPosition = 50_cm;
 };

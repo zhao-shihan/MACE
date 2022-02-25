@@ -2,18 +2,17 @@
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 
-#include "Geometry/Entity/Fast/DescendantsOfWorld/FirstTransportSolenoid.hxx"
-#include "Geometry/Description/DescendantsOfWorld/FirstTransportSolenoid.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/SecondTransportSolenoid.hxx"
+#include "Geometry/Description/DescendantsOfWorld/DescendantsOfSecondTransportField/SecondTransportSolenoid.hxx"
 
 using namespace MACE::Geometry::Entity::Fast;
 
-void FirstTransportSolenoid::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::FirstTransportSolenoid::Instance();
+void SecondTransportSolenoid::ConstructSelf(G4bool checkOverlaps) {
+    const auto& description = Description::SecondTransportSolenoid::Instance();
     auto name = description.GetName();
+    auto length = description.GetLength();
     auto innerRadius = description.GetInnerRaidus();
     auto outerRaidus = description.GetOuterRaidus();
-    auto length = description.GetLength();
-    auto upZPosition = description.GetUpZPosition();
 
     auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu");
 
@@ -29,9 +28,7 @@ void FirstTransportSolenoid::ConstructSelf(G4bool checkOverlaps) {
         material,
         name);
     Make<G4PVPlacement>(
-        G4Transform3D(
-            G4RotationMatrix(),
-            G4ThreeVector(0, 0, upZPosition + length / 2)),
+        G4Transform3D(),
         name,
         logic,
         Mother()->GetPhysicalVolume(),

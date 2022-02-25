@@ -2,19 +2,19 @@
 
 #include "Geometry/Interface/Description.hxx"
 
-class MACE::Geometry::Description::SecondBendSolenoid final :
+class MACE::Geometry::Description::FirstTransportSolenoid final :
     public MACE::Geometry::Interface::Description {
 public:
-    static SecondBendSolenoid& Instance() noexcept;
+    static FirstTransportSolenoid& Instance() noexcept;
 
 private:
-    SecondBendSolenoid() noexcept = default;
-    ~SecondBendSolenoid() noexcept = default;
-    SecondBendSolenoid(const SecondBendSolenoid&) = delete;
-    SecondBendSolenoid& operator=(const SecondBendSolenoid&) = delete;
+    FirstTransportSolenoid() noexcept = default;
+    ~FirstTransportSolenoid() noexcept = default;
+    FirstTransportSolenoid(const FirstTransportSolenoid&) = delete;
+    FirstTransportSolenoid& operator=(const FirstTransportSolenoid&) = delete;
 
 public:
-    [[nodiscard]] std::string GetName()                   const override { return "SecondBendSolenoid"; }
+    [[nodiscard]] std::string GetName()                   const override { return "FirstTransportSolenoid"; }
     [[nodiscard]] std::string GetOverallDescription()     const override { return ""; }
     [[nodiscard]] std::string GetMaterialDescription()    const override { return ""; }
     [[nodiscard]] std::string GetShapeDescription()       const override { return ""; }
@@ -24,20 +24,14 @@ public:
 
     [[nodiscard]] const auto& GetOuterRaidus() const { return fOuterRadius; }
     [[nodiscard]] const auto& GetInnerRaidus() const { return fInnerRadius; }
-    [[nodiscard]] const auto& GetBendRadius()  const { return fBendRadius; }
-    [[nodiscard]] const auto& GetXPosition()   const { return fXPosition; }
-    [[nodiscard]] const auto& GetZPosition()   const { return fZPosition; }
+    [[nodiscard]] const auto& GetLength()      const { return fLength; }
 
     void SetOuterRaidus(double val) { fInnerRadius = val; }
     void SetInnerRaidus(double val) { fOuterRadius = val; }
-    void SetBendRadius(double val) { fBendRadius = val; }
-    void SetXPosition(double val) { fXPosition = val; }
-    void SetZPosition(double val) { fZPosition = val; }
+    void SetLength(double val) { fLength = val; }
 
 private:
     double fInnerRadius = 10_cm;
     double fOuterRadius = 15_cm;
-    double fBendRadius = 50_cm;
-    double fXPosition = 150_cm;
-    double fZPosition = 170_cm;
+    double fLength = 20_cm;
 };

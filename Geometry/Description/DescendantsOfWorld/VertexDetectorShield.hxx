@@ -39,7 +39,7 @@ public:
 private:
     double fInnerRadius = 25_cm;
     double fInnerLength = 60_cm;
-    double fWindowRadius = 16_cm;
+    double fWindowRadius = 17_cm;
     double fThickness = 5_cm;
     double fCenterX = 200_cm;
     double fUpZPosition = 190_cm;

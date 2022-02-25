@@ -2,8 +2,8 @@
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 
-#include "Geometry/Entity/Fast/DescendantsOfWorld/FirstBendSolenoid.hxx"
-#include "Geometry/Description/DescendantsOfWorld/FirstBendSolenoid.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfFirstBendField/FirstBendSolenoid.hxx"
+#include "Geometry/Description/DescendantsOfWorld/DescendantsOfFirstBendField/FirstBendSolenoid.hxx"
 
 using namespace MACE::Geometry::Entity::Fast;
 
@@ -13,8 +13,6 @@ void FirstBendSolenoid::ConstructSelf(G4bool checkOverlaps) {
     const auto innerRadius = description.GetInnerRaidus();
     const auto outerRaidus = description.GetOuterRaidus();
     const auto bendRadius = description.GetBendRadius();
-    const auto xPosition = description.GetXPosition();
-    const auto zPosition = description.GetZPosition();
 
     auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu");
 
@@ -30,9 +28,7 @@ void FirstBendSolenoid::ConstructSelf(G4bool checkOverlaps) {
         material,
         name);
     Make<G4PVPlacement>(
-        G4Transform3D(
-            G4RotationMatrix(G4ThreeVector(1, 0, 0), M_PI_2),
-            G4ThreeVector(xPosition, 0, zPosition)),
+        G4Transform3D(),
         name,
         logic,
         Mother()->GetPhysicalVolume(),

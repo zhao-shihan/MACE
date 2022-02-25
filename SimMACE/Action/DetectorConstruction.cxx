@@ -1,5 +1,3 @@
-#include "G4NistManager.hh"
-
 #include "SimMACE/Action/DetectorConstruction.hxx"
 
 using namespace MACE::SimMACE::Action;
@@ -18,26 +16,26 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 void DetectorConstruction::ConstructVolumes() {
     fCalorimeterField->AddDaughter(fCalorimeter);
     fCalorimeterField->AddDaughter(fVertexDetector);
+    fFirstBendField->AddDaughter(fFirstBendSolenoid);
+    fFirstTransportField->AddDaughter(fFirstTransportSolenoid);
+    fSecondBendField->AddDaughter(fSecondBendSolenoid);
     fSecondTransportField->AddDaughter(fCollimator);
+    fSecondTransportField->AddDaughter(fSecondTransportSolenoid);
     fSecondTransportField->AddDaughter(fSelectorField);
     fSpectrometerField->AddDaughter(fAcceleratorField);
     fSpectrometerField->AddDaughter(fSpectrometerBody);
+    fThirdTransportField->AddDaughter(fThirdTransportSolenoid);
     fAcceleratorField->AddDaughter(fTarget);
     fSpectrometerBody->AddDaughter(fSpectrometerReadoutLayers);
     fSpectrometerReadoutLayers->AddDaughter(fSpectrometerCells);
     fWorld->AddDaughter(fCalorimeterField);
     fWorld->AddDaughter(fFirstBendField);
-    fWorld->AddDaughter(fFirstBendSolenoid);
     fWorld->AddDaughter(fFirstTransportField);
-    fWorld->AddDaughter(fFirstTransportSolenoid);
     fWorld->AddDaughter(fSecondBendField);
-    fWorld->AddDaughter(fSecondBendSolenoid);
     fWorld->AddDaughter(fSecondTransportField);
-    fWorld->AddDaughter(fSecondTransportSolenoid);
     fWorld->AddDaughter(fSpectrometerField);
     fWorld->AddDaughter(fSpectrometerShield);
     fWorld->AddDaughter(fThirdTransportField);
-    fWorld->AddDaughter(fThirdTransportSolenoid);
     fWorld->AddDaughter(fVertexDetectorShield);
 
     fWorld->ConstructSelfAndDescendants(fCheckOverlaps);

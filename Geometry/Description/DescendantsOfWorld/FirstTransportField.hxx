@@ -31,7 +31,7 @@ public:
     void SetUpZPosition(double val) { fUpZPosition = val; }
 
 private:
-    double fRadius = 10_cm;
+    double fRadius = 16_cm;
     double fLength = 20_cm;
     double fUpZPosition = 50_cm;
 };

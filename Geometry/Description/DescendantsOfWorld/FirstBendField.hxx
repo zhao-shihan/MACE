@@ -33,7 +33,7 @@ public:
     void SetZPosition(double val) { fZPosition = val; }
 
 private:
-    double fRadius = 10_cm;
+    double fRadius = 16_cm;
     double fBendRadius = 50_cm;
     double fXPosition = fBendRadius;
     double fZPosition = 70_cm;

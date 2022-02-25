@@ -1,4 +1,4 @@
-#include "Geometry/Description/DescendantsOfWorld/FirstBendSolenoid.hxx"
+#include "Geometry/Description/DescendantsOfWorld/DescendantsOfFirstBendField/FirstBendSolenoid.hxx"
 
 using namespace MACE::Geometry::Description;
 

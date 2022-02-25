@@ -29,6 +29,6 @@ public:
     void SetLength(double val) { fLength = val; }
 
 private:
-    double fRadius = 37_cm;
+    double fRadius = 45_cm;
     double fLength = 100_cm;
 };

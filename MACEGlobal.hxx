@@ -45,8 +45,18 @@ namespace MACE {
                     class Calorimeter;
                     class VertexDetector;
                 }
+                inline namespace DescendantsOfFirstBendField {
+                    class FirstBendSolenoid;
+                }
+                inline namespace DescendantsOfFirstTransportField {
+                    class FirstTransportSolenoid;
+                }
+                inline namespace DescendantsOfSecondBendField {
+                    class SecondBendSolenoid;
+                }
                 inline namespace DescendantsOfSecondTransportField {
                     class Collimator;
+                    class SecondTransportSolenoid;
                     class SelectorField;
                 }
                 inline namespace DescendantsOfSpectrometerField {
@@ -62,19 +72,17 @@ namespace MACE {
                     class AcceleratorField;
                     class SpectrometerBody;
                 }
+                inline namespace DescendantsOfThirdTransportField {
+                    class ThirdTransportSolenoid;
+                }
                 class CalorimeterField;
                 class FirstBendField;
-                class FirstBendSolenoid;
                 class FirstTransportField;
-                class FirstTransportSolenoid;
                 class SecondBendField;
-                class SecondBendSolenoid;
                 class SecondTransportField;
-                class SecondTransportSolenoid;
                 class SpectrometerField;
                 class SpectrometerShield;
                 class ThirdTransportField;
-                class ThirdTransportSolenoid;
                 class VertexDetectorShield;
             }
             class World;
@@ -86,8 +94,18 @@ namespace MACE {
                         class Calorimeter;
                         class VertexDetector;
                     }
+                    inline namespace DescendantsOfFirstBendField {
+                        class FirstBendSolenoid;
+                    }
+                    inline namespace DescendantsOfFirstTransportField {
+                        class FirstTransportSolenoid;
+                    }
+                    inline namespace DescendantsOfSecondBendField {
+                        class SecondBendSolenoid;
+                    }
                     inline namespace DescendantsOfSecondTransportField {
                         class Collimator;
+                        class SecondTransportSolenoid;
                         class SelectorField;
                     }
                     inline namespace DescendantsOfSpectrometerField {
@@ -103,19 +121,17 @@ namespace MACE {
                         class AcceleratorField;
                         class SpectrometerBody;
                     }
+                    inline namespace DescendantsOfThirdTransportField {
+                        class ThirdTransportSolenoid;
+                    }
                     class CalorimeterField;
                     class FirstBendField;
-                    class FirstBendSolenoid;
                     class FirstTransportField;
-                    class FirstTransportSolenoid;
                     class SecondBendField;
-                    class SecondBendSolenoid;
                     class SecondTransportField;
-                    class SecondTransportSolenoid;
                     class SpectrometerField;
                     class SpectrometerShield;
                     class ThirdTransportField;
-                    class ThirdTransportSolenoid;
                     class VertexDetectorShield;
                 }
                 class World;

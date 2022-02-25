@@ -1,4 +1,4 @@
-#include "Geometry/Description/DescendantsOfWorld/FirstTransportSolenoid.hxx"
+#include "Geometry/Description/DescendantsOfWorld/DescendantsOfFirstTransportField/FirstTransportSolenoid.hxx"
 
 using namespace MACE::Geometry::Description;
 
