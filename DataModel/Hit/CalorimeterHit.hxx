@@ -5,6 +5,7 @@
 
 class MACE::DataModel::CalorimeterHit :
     public MACE::DataModel::Interface::Data {
+    using Base = MACE::DataModel::Interface::Data;
     friend MACE::DataModel::DataHub;
 
 public:
@@ -25,8 +26,8 @@ public:
 
 protected:
     static void CreateBranches(TTree& tree);
-    inline void FillBranchVariables() const noexcept;
-    static void ReadBranches(TTree& tree);
+    static void ConnectToBranches(TTree& tree);
+    inline void FillBranchSockets() const noexcept;
 
 private:
     static constexpr const char* BasicName() { return "CalHit"; }
@@ -41,8 +42,8 @@ private:
     static FloatBranchSocket fgEnergyVariance;
 };
 
-inline void MACE::DataModel::CalorimeterHit::FillBranchVariables() const noexcept {
-    Interface::Data::FillBranchVariables();
+inline void MACE::DataModel::CalorimeterHit::FillBranchSockets() const noexcept {
+    Base::FillBranchSockets();
     fgHitTime.Value() = fHitTime;
     fgEnergy.Value() = fEnergy;
     fgEnergyVariance.Value() = fEnergyVariance;

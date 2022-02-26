@@ -4,34 +4,38 @@
 #include "G4ParticleGun.hh"
 
 #include "SimMACE/Global.hxx"
+#include "Utility/ObserverPtr.hxx"
 
 class MACE::SimMACE::Action::PrimaryGeneratorAction final :
     public G4VUserPrimaryGeneratorAction {
 public:
-    PrimaryGeneratorAction();
+    PrimaryGeneratorAction(ObserverPtr<const EventAction> eventAction);
     ~PrimaryGeneratorAction() noexcept = default;
     void GeneratePrimaries(G4Event* event) override;
 
-    void SetFirstTrueEventIDOfThisRank(G4int trueEventID) { fFirstTrueEventIDOfThisRank = trueEventID; }
-
     void SetFlux(G4double val) { fFlux = val; }
-    void SetPlusePeakInterval(G4double val) { fPlusePeakInterval = val; }
-    void SetPluseWidthRMS(G4double val) { fPluseWidthRMS = val; }
+    void SetRepetitionRate(G4double val) { fRepetitionRate = val; }
+    void SetTimeWidthRMS(G4double val) { fTimeWidthRMS = val; }
     void SetEnergy(G4double val) { fEnergy = val; }
     void SetEnergySpreadRMS(G4double val) { fEnergySpreadRMS = val; }
-    void SetBeamWidthRMS(G4double val) { fBeamWidthRMS = val; }
+    void SetBeamProfileRMS(G4double val) { fBeamProfileRMS = val; }
+
+    void SetMuonsPerG4Event(G4int n) { fMuonsPerG4Event = n; }
+
+    auto GetRepetitionID() const { return fRepetitionID; }
 
 private:
+    const ObserverPtr<const EventAction> fEventAction;
+
     G4ParticleGun fParticleGun;
 
-    G4int    fFirstTrueEventIDOfThisRank = 0;
-
-    G4double fFlux = 1e8_s_1;
-    G4double fPlusePeakInterval = 10_us;
-    G4double fPluseWidthRMS = 2_us;
-
+    G4double fFlux = 5e5_s_1;
+    G4double fRepetitionRate = 2.5_Hz;
+    G4double fTimeWidthRMS = 10_ms;
     G4double fEnergy = 1.5_MeV;
     G4double fEnergySpreadRMS = 0.05 * fEnergy;
+    G4double fBeamProfileRMS = 5_mm;
 
-    G4double fBeamWidthRMS = 5_mm;
+    G4int    fMuonsPerG4Event = 2000;
+    G4int    fRepetitionID;
 };

@@ -12,7 +12,7 @@ IntBranchSocket                   SpectrometerHit::fgLayerID("LayerID", -1);
 Vector2FBranchSocket         SpectrometerHit::fgWirePosition("WirePos", 0, 0);
 
 SpectrometerHit::SpectrometerHit() noexcept :
-    Data(),
+    Base(),
     fHitTime(fgHitTime.Value()),
     fDriftDistance(fgDriftDistance.Value()),
     fHitPositionZ(fgHitPositionZ.Value()),
@@ -23,7 +23,7 @@ SpectrometerHit::SpectrometerHit() noexcept :
     fWirePosition(fgWirePosition.Value()) {}
 
 void SpectrometerHit::CreateBranches(TTree& tree) {
-    Data::CreateBranches(tree);
+    Base::CreateBranches(tree);
     tree.Branch(fgHitTime.BranchName(), fgHitTime.Address());
     tree.Branch(fgDriftDistance.BranchName(), fgDriftDistance.Address());
     tree.Branch(fgHitPositionZ.BranchName(), fgHitPositionZ.Address());
@@ -34,8 +34,8 @@ void SpectrometerHit::CreateBranches(TTree& tree) {
     tree.Branch(fgWirePosition.BranchName(), fgWirePosition.Address());
 }
 
-void SpectrometerHit::ReadBranches(TTree& tree) {
-    Data::ReadBranches(tree);
+void SpectrometerHit::ConnectToBranches(TTree& tree) {
+    Base::ConnectToBranches(tree);
     tree.SetBranchAddress(fgHitTime.BranchName(), fgHitTime.Address());
     tree.SetBranchAddress(fgDriftDistance.BranchName(), fgDriftDistance.Address());
     tree.SetBranchAddress(fgHitPositionZ.BranchName(), fgHitPositionZ.Address());

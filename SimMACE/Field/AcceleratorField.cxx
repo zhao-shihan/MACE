@@ -8,7 +8,7 @@ using AccFldGeomDscrpt = MACE::Geometry::Description::AcceleratorField;
 
 AcceleratorField::AcceleratorField() :
     G4ElectroMagneticField(),
-    fEz(7_kV / (AccFldGeomDscrpt::Instance().GetDownStreamLength() - 13.02_mm)) {
+    fEz(7_kV / (AccFldGeomDscrpt::Instance().GetDownStreamLength() - 13.05_mm)) {
     Messenger::FieldMessenger::Instance().Set(this);
 }
 

@@ -21,5 +21,5 @@ private:
     G4double fEz;
 
     G4double fV = 7_kV;
-    G4double fMuoniumDecayAvgZ = 13.02_mm;
+    G4double fMuoniumDecayAvgZ = 13.05_mm;
 };

@@ -7,6 +7,7 @@
 
 class MACE::DataModel::VertexDetectorSimHit :
     public MACE::DataModel::VertexDetectorHit {
+    using Base = MACE::DataModel::VertexDetectorHit;
     friend MACE::DataModel::DataHub;
 
 public:
@@ -31,8 +32,8 @@ public:
 
 protected:
     static void CreateBranches(TTree& tree);
-    inline void FillBranchVariables() const noexcept;
-    static void ReadBranches(TTree& tree);
+    static void ConnectToBranches(TTree& tree);
+    inline void FillBranchSockets() const noexcept;
 
 private:
     static constexpr const char* BasicName() { return "MCPSimHit"; }
@@ -49,8 +50,8 @@ private:
     static IntBranchSocket      fgTrackID;
 };
 
-inline void MACE::DataModel::VertexDetectorSimHit::FillBranchVariables() const noexcept {
-    VertexDetectorHit::FillBranchVariables();
+inline void MACE::DataModel::VertexDetectorSimHit::FillBranchSockets() const noexcept {
+    Base::FillBranchSockets();
     fgVertexTime.Value() = fVertexTime;
     fgVertexPosition.Value() = fVertexPosition;
     fgPDGCode.Value() = fPDGCode;

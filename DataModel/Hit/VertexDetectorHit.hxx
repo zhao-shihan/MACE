@@ -8,6 +8,7 @@
 
 class MACE::DataModel::VertexDetectorHit :
     public MACE::DataModel::Interface::Data {
+    using Base = MACE::DataModel::Interface::Data;
     friend MACE::DataModel::DataHub;
 
 public:
@@ -32,8 +33,8 @@ public:
 
 protected:
     static void CreateBranches(TTree& tree);
-    inline void FillBranchVariables() const noexcept;
-    static void ReadBranches(TTree& tree);
+    static void ConnectToBranches(TTree& tree);
+    inline void FillBranchSockets() const noexcept;
 
 private:
     static constexpr const char* BasicName() { return "MCPHit"; }
@@ -48,8 +49,8 @@ private:
     static Vector2FBranchSocket fgHitPositionVariance;
 };
 
-inline void MACE::DataModel::VertexDetectorHit::FillBranchVariables() const noexcept {
-    Interface::Data::FillBranchVariables();
+inline void MACE::DataModel::VertexDetectorHit::FillBranchSockets() const noexcept {
+    Base::FillBranchSockets();
     fgHitTime.Value() = fHitTime;
     fgHitPosition.Value() = fHitPosition;
     fgHitPositionVariance.Value() = fHitPositionVariance;

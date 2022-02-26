@@ -6,6 +6,7 @@
 
 class MACE::DataModel::CalorimeterSimHit :
     public MACE::DataModel::CalorimeterHit {
+    using Base = MACE::DataModel::CalorimeterHit;
     friend MACE::DataModel::DataHub;
 
 public:
@@ -24,8 +25,8 @@ public:
 
 protected:
     static void CreateBranches(TTree& tree);
-    inline void FillBranchVariables() const noexcept;
-    static void ReadBranches(TTree& tree);
+    static void ConnectToBranches(TTree& tree);
+    inline void FillBranchSockets() const noexcept;
 
 private:
     static constexpr const char* BasicName() { return "CalSimHit"; }
@@ -38,8 +39,8 @@ private:
     static IntBranchSocket fgTrackID;
 };
 
-inline void MACE::DataModel::CalorimeterSimHit::FillBranchVariables() const noexcept {
-    CalorimeterHit::FillBranchVariables();
+inline void MACE::DataModel::CalorimeterSimHit::FillBranchSockets() const noexcept {
+    Base::FillBranchSockets();
     fgPDGCode.Value() = fPDGCode;
     fgTrackID.Value() = fTrackID;
 }

@@ -8,6 +8,7 @@
 
 class MACE::DataModel::SpectrometerHit :
     public MACE::DataModel::Interface::Data {
+    using Base = MACE::DataModel::Interface::Data;
     friend MACE::DataModel::DataHub;
 
 public:
@@ -40,8 +41,8 @@ public:
 
 protected:
     static void CreateBranches(TTree& tree);
-    inline void FillBranchVariables() const noexcept;
-    static void ReadBranches(TTree& tree);
+    static void ConnectToBranches(TTree& tree);
+    inline void FillBranchSockets() const noexcept;
 
 private:
     static constexpr const char* BasicName() { return "CDCHit"; }
@@ -66,8 +67,8 @@ private:
     static Vector2FBranchSocket fgWirePosition;
 };
 
-inline void MACE::DataModel::SpectrometerHit::FillBranchVariables() const noexcept {
-    Interface::Data::FillBranchVariables();
+inline void MACE::DataModel::SpectrometerHit::FillBranchSockets() const noexcept {
+    Base::FillBranchSockets();
     fgHitTime.Value() = fHitTime;
     fgDriftDistance.Value() = fDriftDistance;
     fgHitPositionZ.Value() = fHitPositionZ;

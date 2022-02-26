@@ -8,22 +8,22 @@ IntBranchSocket             VertexDetectorSimHit::fgPDGCode("PDGCode", std::nume
 IntBranchSocket             VertexDetectorSimHit::fgTrackID("TrackID", -1);
 
 VertexDetectorSimHit::VertexDetectorSimHit() noexcept :
-    VertexDetectorHit(),
+    Base(),
     fVertexTime(fgVertexTime.Value()),
     fVertexPosition(fgVertexPosition.Value()),
     fPDGCode(fgPDGCode.Value()),
     fTrackID(fgTrackID.Value()) {}
 
 void VertexDetectorSimHit::CreateBranches(TTree& tree) {
-    VertexDetectorHit::CreateBranches(tree);
+    Base::CreateBranches(tree);
     tree.Branch(fgVertexTime.BranchName(), fgVertexTime.Address());
     tree.Branch(fgVertexPosition.BranchName(), fgVertexPosition.Address());
     tree.Branch(fgPDGCode.BranchName(), fgPDGCode.Address());
     tree.Branch(fgTrackID.BranchName(), fgTrackID.Address());
 }
 
-void VertexDetectorSimHit::ReadBranches(TTree& tree) {
-    VertexDetectorHit::ReadBranches(tree);
+void VertexDetectorSimHit::ConnectToBranches(TTree& tree) {
+    Base::ConnectToBranches(tree);
     tree.SetBranchAddress(fgVertexTime.BranchName(), fgVertexTime.Address());
     tree.SetBranchAddress(fgVertexPosition.BranchName(), fgVertexPosition.Address());
     tree.SetBranchAddress(fgPDGCode.BranchName(), fgPDGCode.Address());

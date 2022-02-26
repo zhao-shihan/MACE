@@ -176,6 +176,14 @@ namespace MACE {
         MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mg_cm2, CLHEP::mg / CLHEP::cm2);
         MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mg_mm2, CLHEP::mg / CLHEP::mm2);
 
+        // Frequency [T^-1] symbols
+
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_Hz, 1 / CLHEP::s);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_kHz, 1 / CLHEP::ms);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_MHz, 1 / CLHEP::us);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_GHz, 1 / CLHEP::ns);
+        MACE_UTILITY_LITERAL_UNIT_SYSTEM(_THz, 1 / CLHEP::ps);
+
         // Per unit time [T^-1] symbols
 
         MACE_UTILITY_LITERAL_UNIT_SYSTEM(_ns_1, 1 / CLHEP::ns);

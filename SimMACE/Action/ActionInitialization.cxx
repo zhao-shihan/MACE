@@ -6,11 +6,11 @@
 using namespace MACE::SimMACE::Action;
 
 void ActionInitialization::Build() const {
-    auto primaryGeneratorAction = new PrimaryGeneratorAction();
-    auto eventAction = new EventAction();
-    auto runAction = new RunAction(primaryGeneratorAction, eventAction);
+    auto runAction = new RunAction();
+    auto eventAction = new EventAction(runAction);
+    auto primaryGeneratorAction = new PrimaryGeneratorAction(eventAction);
 
-    SetUserAction(primaryGeneratorAction);
-    SetUserAction(eventAction);
     SetUserAction(runAction);
+    SetUserAction(eventAction);
+    SetUserAction(primaryGeneratorAction);
 }

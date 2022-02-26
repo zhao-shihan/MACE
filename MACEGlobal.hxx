@@ -189,8 +189,8 @@ namespace MACE {
         namespace Messenger {
             class AnalysisMessenger;
             class FieldMessenger;
-            class MuonBeamMessenger;
             class PhysicsMessenger;
+            class PrimaryGeneratorMessenger;
         }
         namespace Physics {
             class AntiMuonium;

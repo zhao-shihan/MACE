@@ -8,22 +8,22 @@ IntBranchSocket             SpectrometerSimHit::fgPDGCode("PDGCode", std::numeri
 IntBranchSocket             SpectrometerSimHit::fgTrackID("TrackID", -1);
 
 SpectrometerSimHit::SpectrometerSimHit() noexcept :
-    SpectrometerHit(),
+    Base(),
     fVertexTime(fgVertexTime.Value()),
     fVertexPosition(fgVertexPosition.Value()),
     fPDGCode(fgPDGCode.Value()),
     fTrackID(fgTrackID.Value()) {}
 
 void SpectrometerSimHit::CreateBranches(TTree& tree) {
-    SpectrometerHit::CreateBranches(tree);
+    Base::CreateBranches(tree);
     tree.Branch(fgVertexTime.BranchName(), fgVertexTime.Address());
     tree.Branch(fgVertexPosition.BranchName(), fgVertexPosition.Address());
     tree.Branch(fgPDGCode.BranchName(), fgPDGCode.Address());
     tree.Branch(fgTrackID.BranchName(), fgTrackID.Address());
 }
 
-void SpectrometerSimHit::ReadBranches(TTree& tree) {
-    SpectrometerHit::ReadBranches(tree);
+void SpectrometerSimHit::ConnectToBranches(TTree& tree) {
+    Base::ConnectToBranches(tree);
     tree.SetBranchAddress(fgVertexTime.BranchName(), fgVertexTime.Address());
     tree.SetBranchAddress(fgVertexPosition.BranchName(), fgVertexPosition.Address());
     tree.SetBranchAddress(fgPDGCode.BranchName(), fgPDGCode.Address());

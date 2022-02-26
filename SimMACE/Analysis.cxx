@@ -14,13 +14,17 @@ Analysis& Analysis::Instance() {
 Analysis::Analysis() :
     fFile(nullptr),
     fFileTools4MPI(nullptr),
-    fTrueEventID(std::numeric_limits<G4int>::min()),
     fDataHub(),
+    fRepetitionIDOfLastG4Event(std::numeric_limits<decltype(fRepetitionIDOfLastG4Event)>::max()),
+    fCalorimeterHitTree(nullptr),
+    fVertexDetectorHitTree(nullptr),
+    fSpectrometerHitTree(nullptr),
     fCalorimeterHitList(nullptr),
     fVertexDetectorHitList(nullptr),
     fSpectrometerHitList(nullptr) {
     Messenger::AnalysisMessenger::Instance();
     FileTools4MPI::SetOutStream(G4cout);
+    fDataHub.SetPrefixFormatOfTreeName("Rep#_");
 }
 
 void Analysis::Open(Option_t* option) {
@@ -33,6 +37,7 @@ void Analysis::Open(Option_t* option) {
 }
 
 void Analysis::Close(Option_t* option) {
+    WriteTrees();
     fFile->Close(option);
     // must delete the file object otherwise segmentation violation.
     fFile.reset();
@@ -48,13 +53,33 @@ int Analysis::Merge(G4bool forced) {
     return fFileTools4MPI->MergeRootFiles(forced);
 }
 
-void Analysis::WriteEvent() {
-    const G4bool calorimeterTriggered = !(fEnableCoincidenceOfCalorimeter and fCalorimeterHitList->empty());
-    const G4bool vertexDetectorTriggered = !(fEnableCoincidenceOfVertexDetector and fVertexDetectorHitList->empty());
-    const G4bool spectrometerTriggered = !fSpectrometerHitList->empty();
+void Analysis::WriteEvent(G4int repetitionID) {
+    if (repetitionID != fRepetitionIDOfLastG4Event) { // means a new repetition or the first repetition
+        // last repetition had already come to the end, write its data. If first, skipped inside.
+        WriteTrees();
+        // create trees for new repetition
+        fCalorimeterHitTree = fDataHub.CreateTree<DataModel::CalorimeterSimHit>(repetitionID);
+        fVertexDetectorHitTree = fDataHub.CreateTree<DataModel::VertexDetectorSimHit>(repetitionID);
+        fSpectrometerHitTree = fDataHub.CreateTree<DataModel::SpectrometerSimHit>(repetitionID);
+    }
+
+    fDataHub.FillTree<DataModel::CalorimeterSimHit>(*fCalorimeterHitList, *fCalorimeterHitTree, true);
+    fDataHub.FillTree<DataModel::VertexDetectorSimHit>(*fVertexDetectorHitList, *fVertexDetectorHitTree, true);
+    fDataHub.FillTree<DataModel::SpectrometerSimHit>(*fSpectrometerHitList, *fSpectrometerHitTree, true);
+
+    // dont forget to update repID!
+    fRepetitionIDOfLastG4Event = repetitionID;
+}
+
+void Analysis::WriteTrees() {
+    if (fCalorimeterHitTree == nullptr or fVertexDetectorHitTree == nullptr or fSpectrometerHitTree == nullptr) { return; }
+    const auto calorimeterTriggered = !fEnableCoincidenceOfCalorimeter or fCalorimeterHitTree->GetEntries() != 0;
+    const auto vertexDetectorTriggered = !fEnableCoincidenceOfVertexDetector or fVertexDetectorHitTree->GetEntries() != 0;
+    const auto spectrometerTriggered = fSpectrometerHitTree->GetEntries() != 0;
+    // if all coincident then write their data
     if (calorimeterTriggered and vertexDetectorTriggered and spectrometerTriggered) {
-        fDataHub.CreateTree(*fCalorimeterHitList, fTrueEventID)->Write();
-        fDataHub.CreateTree(*fVertexDetectorHitList, fTrueEventID)->Write();
-        fDataHub.CreateTree(*fSpectrometerHitList, fTrueEventID)->Write();
+        fCalorimeterHitTree->Write();
+        fVertexDetectorHitTree->Write();
+        fSpectrometerHitTree->Write();
     }
 }

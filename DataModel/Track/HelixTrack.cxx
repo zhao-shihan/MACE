@@ -9,7 +9,7 @@ FloatBranchSocket     HelixTrack::fgAlpha("Alpha", 0);
 FloatBranchSocket      HelixTrack::fgChi2("Chi2", 0);
 
 HelixTrack::HelixTrack() noexcept :
-    Data(),
+    Base(),
     fCenter(fgCenter.Value()),
     fRadius(fgRadius.Value()),
     fZ0(fgZ0.Value()),
@@ -17,7 +17,7 @@ HelixTrack::HelixTrack() noexcept :
     fChi2(fgChi2.Value()) {}
 
 void HelixTrack::CreateBranches(TTree& tree) {
-    Data::CreateBranches(tree);
+    Base::CreateBranches(tree);
     tree.Branch(fgCenter.BranchName(), fgCenter.Address());
     tree.Branch(fgRadius.BranchName(), fgRadius.Address());
     tree.Branch(fgZ0.BranchName(), fgZ0.Address());
@@ -25,8 +25,8 @@ void HelixTrack::CreateBranches(TTree& tree) {
     tree.Branch(fgChi2.BranchName(), fgChi2.Address());
 }
 
-void HelixTrack::ReadBranches(TTree& tree) {
-    Data::ReadBranches(tree);
+void HelixTrack::ConnectToBranches(TTree& tree) {
+    Base::ConnectToBranches(tree);
     tree.SetBranchAddress(fgCenter.BranchName(), fgCenter.Address());
     tree.SetBranchAddress(fgRadius.BranchName(), fgRadius.Address());
     tree.SetBranchAddress(fgZ0.BranchName(), fgZ0.Address());

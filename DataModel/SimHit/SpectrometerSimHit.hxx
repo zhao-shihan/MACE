@@ -7,6 +7,7 @@
 
 class MACE::DataModel::SpectrometerSimHit :
     public MACE::DataModel::SpectrometerHit {
+    using Base = MACE::DataModel::SpectrometerHit;
     friend MACE::DataModel::DataHub;
 
 public:
@@ -31,8 +32,8 @@ public:
 
 protected:
     static void CreateBranches(TTree& tree);
-    inline void FillBranchVariables() const noexcept;
-    static void ReadBranches(TTree& tree);
+    static void ConnectToBranches(TTree& tree);
+    inline void FillBranchSockets() const noexcept;
 
 private:
     static constexpr const char* BasicName() { return "CDCSimHit"; }
@@ -49,8 +50,8 @@ private:
     static IntBranchSocket      fgTrackID;
 };
 
-inline void MACE::DataModel::SpectrometerSimHit::FillBranchVariables() const noexcept {
-    SpectrometerHit::FillBranchVariables();
+inline void MACE::DataModel::SpectrometerSimHit::FillBranchSockets() const noexcept {
+    Base::FillBranchSockets();
     fgVertexTime.Value() = fVertexTime;
     fgVertexPosition.Value() = fVertexPosition;
     fgPDGCode.Value() = fPDGCode;

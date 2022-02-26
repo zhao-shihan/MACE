@@ -1,4 +1,4 @@
-# macro file for the initialization of MACE::SimMACE
+# macro file for the initialization of SimMACE
 # in interactive session
 #
 # Set some default verbose
@@ -8,6 +8,9 @@
 #
 # Initialize kernel
 /run/initialize
+#
+# Some customized properties
+/MACE/PrimaryGenerator/SetMuonsPerG4Event 200
 #
 # Visualization setting
 /control/execute vis.mac

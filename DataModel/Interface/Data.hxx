@@ -14,9 +14,9 @@ protected:
     // Extend (override & invoke) this in derived classes!
     static void CreateBranches(TTree& tree) { tree.ResetBranchAddresses(); }
     // Extend (override & invoke) this in derived classes!
-    inline void FillBranchVariables() const noexcept {}
+    static void ConnectToBranches(TTree& tree) { tree.ResetBranchAddresses(); }
     // Extend (override & invoke) this in derived classes!
-    static void ReadBranches(TTree& tree) { tree.ResetBranchAddresses(); }
+    inline void FillBranchSockets() const noexcept {}
 
 private:
     // Override this in derived classes at least once!

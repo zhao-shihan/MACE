@@ -8,6 +8,7 @@
 
 class MACE::DataModel::HelixTrack :
     public MACE::DataModel::Interface::Data {
+    using Base = MACE::DataModel::Interface::Data;
     friend MACE::DataModel::DataHub;
 
 public:
@@ -34,8 +35,8 @@ public:
 
 protected:
     static void CreateBranches(TTree& tree);
-    inline void FillBranchVariables() const noexcept;
-    static void ReadBranches(TTree& tree);
+    static void ConnectToBranches(TTree& tree);
+    inline void FillBranchSockets() const noexcept;
 
 private:
     static constexpr const char* BasicName() { return "HlxTrk"; }
@@ -54,8 +55,8 @@ private:
     static FloatBranchSocket    fgChi2;
 };
 
-inline void MACE::DataModel::HelixTrack::FillBranchVariables() const noexcept {
-    Interface::Data::FillBranchVariables();
+inline void MACE::DataModel::HelixTrack::FillBranchSockets() const noexcept {
+    Base::FillBranchSockets();
     fgCenter.Value() = fCenter;
     fgRadius.Value() = fRadius;
     fgZ0.Value() = fZ0;

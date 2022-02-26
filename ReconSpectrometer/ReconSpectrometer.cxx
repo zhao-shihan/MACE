@@ -23,18 +23,18 @@ int main(int, char** argv) {
     for (Long64_t i = 0; ; ++i) {
         auto tree = dataHub.FindTree<Hit_t>(fileIn, i);
         if (tree == nullptr) { break; }
-        auto hitData = dataHub.CreateList<Hit_t>(tree);
+        auto hitData = dataHub.CreateAndFillList<Hit_t>(*tree);
 
         reconstructor.Reconstruct(hitData);
         // const auto& reconHits = reconstructor.GetReconstructedHitList();
         const auto& tracks = reconstructor.GetTrackList();
 
-        dataHub.CreateTree(tracks, i)->Write();
+        dataHub.CreateAndFillTree<Track_t>(tracks, i)->Write();
         allTracks.insert(allTracks.cend(), tracks.cbegin(), tracks.cend());
     }
 
     dataHub.SetPrefixFormatOfTreeName("All_");
-    dataHub.CreateTree(allTracks)->Write();
+    dataHub.CreateAndFillTree<Track_t>(allTracks)->Write();
 
     fileOut.Close();
     fileIn.Close();

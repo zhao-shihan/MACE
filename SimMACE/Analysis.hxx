@@ -30,11 +30,13 @@ public:
     void Close(Option_t* option = nullptr);
     int Merge(G4bool forced = false);
 
-    void SetTrueEventID(G4int trueEventID) { fTrueEventID = trueEventID; }
     void SubmitCalorimeterHC(ObserverPtr<const std::vector<Hit::CalorimeterHit*>> hitList) { fCalorimeterHitList = hitList; }
     void SubmitVertexDetectorHC(ObserverPtr<const std::vector<Hit::VertexDetectorHit*>> hitList) { fVertexDetectorHitList = hitList; }
     void SubmitSpectrometerHC(ObserverPtr<const std::vector<Hit::SpectrometerHit*>> hitList) { fSpectrometerHitList = hitList; }
-    void WriteEvent();
+    void WriteEvent(G4int repetitionID);
+
+private:
+    void WriteTrees();
 
 private:
     std::unique_ptr<TFile>         fFile;
@@ -43,9 +45,13 @@ private:
     G4String fResultName = "untitled_SimMACE";
     G4bool   fEnableCoincidenceOfCalorimeter = true;
     G4bool   fEnableCoincidenceOfVertexDetector = true;
-    G4int    fTrueEventID;
 
     DataModel::DataHub fDataHub;
+
+    G4int fRepetitionIDOfLastG4Event;
+    std::shared_ptr<TTree> fCalorimeterHitTree;
+    std::shared_ptr<TTree> fVertexDetectorHitTree;
+    std::shared_ptr<TTree> fSpectrometerHitTree;
 
     ObserverPtr<const std::vector<Hit::CalorimeterHit*>> fCalorimeterHitList;
     ObserverPtr<const std::vector<Hit::VertexDetectorHit*>> fVertexDetectorHitList;

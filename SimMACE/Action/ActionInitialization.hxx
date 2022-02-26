@@ -9,5 +9,6 @@ class MACE::SimMACE::Action::ActionInitialization final :
 public:
     ActionInitialization() = default;
     ~ActionInitialization() noexcept = default;
+
     void Build() const override;
 };
