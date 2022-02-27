@@ -5,7 +5,7 @@
 
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::Field::SecondBendField final :
+class MACE::SimMACE::SecondBendField final :
     public G4MagneticField {
 public:
     SecondBendField();

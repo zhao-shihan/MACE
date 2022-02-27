@@ -8,7 +8,7 @@
 #include "SimMACE/Global.hxx"
 #include "DataModel/SimHit/VertexDetectorSimHit.hxx"
 
-class MACE::SimMACE::Hit::VertexDetectorHit final :
+class MACE::SimMACE::VertexDetectorHit final :
     public G4VHit,
     public MACE::DataModel::VertexDetectorSimHit {
 public:
@@ -33,12 +33,12 @@ namespace MACE::SimMACE::Hit {
     using VertexDetectorHitCollection = G4THitsCollection<VertexDetectorHit>;
 }
 
-inline void* MACE::SimMACE::Hit::VertexDetectorHit::
+inline void* MACE::SimMACE::VertexDetectorHit::
 operator new(size_t) {
     return static_cast<void*>(fgVertexDetectorAllocator.MallocSingle());
 }
 
-inline void MACE::SimMACE::Hit::VertexDetectorHit::
+inline void MACE::SimMACE::VertexDetectorHit::
 operator delete(void* hit) {
     fgVertexDetectorAllocator.FreeSingle(static_cast<VertexDetectorHit*>(hit));
 }

@@ -8,7 +8,7 @@
 #include "SimMACE/Global.hxx"
 #include "DataModel/SimHit/SpectrometerSimHit.hxx"
 
-class MACE::SimMACE::Hit::SpectrometerHit final :
+class MACE::SimMACE::SpectrometerHit final :
     public G4VHit,
     public MACE::DataModel::SpectrometerSimHit {
 public:
@@ -32,12 +32,12 @@ namespace MACE::SimMACE::Hit {
     using SpectrometerHitCollection = G4THitsCollection<SpectrometerHit>;
 }
 
-inline void* MACE::SimMACE::Hit::SpectrometerHit::
+inline void* MACE::SimMACE::SpectrometerHit::
 operator new(size_t) {
     return static_cast<void*>(fgSpectrometerHitAllocator.MallocSingle());
 }
 
-inline void MACE::SimMACE::Hit::SpectrometerHit::
+inline void MACE::SimMACE::SpectrometerHit::
 operator delete(void* hit) {
     fgSpectrometerHitAllocator.FreeSingle(static_cast<SpectrometerHit*>(hit));
 }

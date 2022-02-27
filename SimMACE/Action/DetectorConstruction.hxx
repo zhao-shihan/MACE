@@ -35,7 +35,7 @@
     private: \
         std::shared_ptr<MACE::Geometry::Entity::Fast::ClassName> f##ClassName = std::make_shared<MACE::Geometry::Entity::Fast::ClassName>()
 
-class MACE::SimMACE::Action::DetectorConstruction final :
+class MACE::SimMACE::DetectorConstruction final :
     public G4VUserDetectorConstruction {
 public:
     DetectorConstruction(G4bool checkOverlaps);

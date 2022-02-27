@@ -2,4 +2,4 @@
 
 using namespace MACE::SimMACE::Hit;
 
-G4Allocator<CalorimeterHit> MACE::SimMACE::Hit::CalorimeterHit::fgCalorimeterHitAllocator = G4Allocator<CalorimeterHit>();
+G4Allocator<CalorimeterHit> MACE::SimMACE::CalorimeterHit::fgCalorimeterHitAllocator = G4Allocator<CalorimeterHit>();

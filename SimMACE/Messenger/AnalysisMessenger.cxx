@@ -1,7 +1,7 @@
 #include "G4UIdirectory.hh"
 
 #include "SimMACE/Messenger/AnalysisMessenger.hxx"
-#include "SimMACE/Analysis.hxx"
+#include "SimMACE/Utility/Analysis.hxx"
 
 using namespace MACE::SimMACE::Messenger;
 
@@ -18,7 +18,7 @@ AnalysisMessenger::AnalysisMessenger() :
     fSetResultName("/MACE/Analysis/SetResultName", this),
     fMergeResult("/MACE/Analysis/MergeResult", this) {
 
-    fDirectory.SetGuidance("MACE::SimMACE::Analysis controller.");
+    fDirectory.SetGuidance("MACE::SimMACE::Utility::Analysis controller.");
 
     fEnableCoincidenceOfCalorimeter.SetGuidance("Enable calorimeter for coincident detection.");
     fEnableCoincidenceOfCalorimeter.SetParameterName("mode", false);

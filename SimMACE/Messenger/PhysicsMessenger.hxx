@@ -6,7 +6,7 @@
 #include "SimMACE/Global.hxx"
 #include "Utility/ObserverPtr.hxx"
 
-class MACE::SimMACE::Messenger::PhysicsMessenger final :
+class MACE::SimMACE::PhysicsMessenger final :
     public G4UImessenger {
 public:
     static PhysicsMessenger& Instance();

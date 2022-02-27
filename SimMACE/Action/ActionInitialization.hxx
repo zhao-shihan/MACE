@@ -4,7 +4,7 @@
 
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::Action::ActionInitialization final :
+class MACE::SimMACE::ActionInitialization final :
     public G4VUserActionInitialization {
 public:
     ActionInitialization() = default;

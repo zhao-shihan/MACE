@@ -20,8 +20,8 @@ int main(int argc, char** argv) {
 
     auto runManager = std::make_unique<G4RunManager>();
     runManager->SetUserInitialization(new Physics::PhysicsList(visMode ? 1 : 0));
-    runManager->SetUserInitialization(new Action::DetectorConstruction(visMode ? true : false));
-    runManager->SetUserInitialization(new Action::ActionInitialization());
+    runManager->SetUserInitialization(new DetectorConstruction(visMode ? true : false));
+    runManager->SetUserInitialization(new ActionInitialization());
 
     if (visMode) {
         auto uiManager = G4UImanager::GetUIpointer();

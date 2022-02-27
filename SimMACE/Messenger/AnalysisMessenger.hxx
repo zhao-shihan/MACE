@@ -8,7 +8,7 @@
 #include "SimMACE/Global.hxx"
 #include "Utility/ObserverPtr.hxx"
 
-class MACE::SimMACE::Messenger::AnalysisMessenger final :
+class MACE::SimMACE::AnalysisMessenger final :
     public G4UImessenger {
 public:
     static AnalysisMessenger& Instance();

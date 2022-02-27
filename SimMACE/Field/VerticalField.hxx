@@ -2,7 +2,7 @@
 
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::Field::VerticalField final :
+class MACE::SimMACE::VerticalField final :
     public G4UniformMagField {
 public:
     VerticalField(G4double B);

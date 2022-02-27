@@ -4,7 +4,7 @@
 
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::Field::AcceleratorField final :
+class MACE::SimMACE::AcceleratorField final :
     public G4ElectroMagneticField {
 public:
     AcceleratorField();

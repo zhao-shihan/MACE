@@ -7,7 +7,7 @@
 #include "SimMACE/Global.hxx"
 #include "Utility/ObserverPtr.hxx"
 
-class MACE::SimMACE::Messenger::PrimaryGeneratorMessenger final :
+class MACE::SimMACE::PrimaryGeneratorMessenger final :
     public G4UImessenger {
 public:
     static PrimaryGeneratorMessenger& Instance();

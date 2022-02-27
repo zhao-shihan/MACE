@@ -3,24 +3,24 @@
 #include "G4SDManager.hh"
 #include "G4Gamma.hh"
 
-#include "SimMACE/SD/Calorimeter.hxx"
-#include "SimMACE/Analysis.hxx"
+#include "SimMACE/SD/CalorimeterSD.hxx"
+#include "SimMACE/Utility/Analysis.hxx"
 
-using namespace MACE::SimMACE;
+using namespace MACE::SimMACE::SD;
 
-SD::Calorimeter::Calorimeter(const G4String& SDName, const G4String& hitsCollectionName) :
+CalorimeterSD::CalorimeterSD(const G4String& SDName, const G4String& hitsCollectionName) :
     G4VSensitiveDetector(SDName),
     fHitsCollection(nullptr) {
     collectionName.insert(hitsCollectionName);
 }
 
-void SD::Calorimeter::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
-    fHitsCollection = new Hit::CalorimeterHitCollection(SensitiveDetectorName, collectionName[0]);
+void CalorimeterSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
+    fHitsCollection = new CalorimeterHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-G4bool SD::Calorimeter::ProcessHits(G4Step* step, G4TouchableHistory*) {
+G4bool CalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     const auto* const track = step->GetTrack();
     const auto* const preStepPoint = step->GetPreStepPoint();
     const auto* const particle = track->GetDefinition();
@@ -28,7 +28,7 @@ G4bool SD::Calorimeter::ProcessHits(G4Step* step, G4TouchableHistory*) {
         (particle->GetPDGCharge() != 0 or particle == G4Gamma::Definition()))) {
         return false;
     }
-    auto* const hit = new Hit::CalorimeterHit();
+    auto* const hit = new CalorimeterHit();
     hit->SetHitTime(preStepPoint->GetGlobalTime());
     hit->SetEnergy(preStepPoint->GetKineticEnergy());
     hit->SetPDGCode(particle->GetPDGEncoding());
@@ -37,6 +37,6 @@ G4bool SD::Calorimeter::ProcessHits(G4Step* step, G4TouchableHistory*) {
     return true;
 }
 
-void SD::Calorimeter::EndOfEvent(G4HCofThisEvent*) {
+void CalorimeterSD::EndOfEvent(G4HCofThisEvent*) {
     Analysis::Instance().SubmitCalorimeterHC(fHitsCollection->GetVector());
 }

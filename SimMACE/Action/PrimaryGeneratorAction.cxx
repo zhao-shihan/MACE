@@ -14,7 +14,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(ObserverPtr<const EventAction> ev
     fParticleGun(G4MuonPlus::Definition()),
     fRepetitionID(-1) {
     fParticleGun.SetParticleMomentumDirection(G4ThreeVector(0, 0, 1));
-    Messenger::PrimaryGeneratorMessenger::Instance().Set(this);
+    PrimaryGeneratorMessenger::Instance().Set(this);
 }
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {

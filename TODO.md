@@ -66,7 +66,7 @@
 
 ### Coding Style
 
-1. More inline namespaces.
+1. (Completed) ~~More inline namespaces.~~
 
 ## SimMTransport
 

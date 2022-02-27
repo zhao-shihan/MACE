@@ -7,7 +7,7 @@ using namespace MACE::SimMACE::Field;
 
 SecondBendField::SecondBendField() :
     G4MagneticField() {
-    Messenger::FieldMessenger::Instance().Set(this);
+    FieldMessenger::Instance().Set(this);
 }
 
 void SecondBendField::GetFieldValue(const G4double* x, G4double* B) const {

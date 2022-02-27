@@ -5,7 +5,7 @@
 #include "SimMACE/Global.hxx"
 #include "Utility/ObserverPtr.hxx"
 
-class MACE::SimMACE::Action::RunAction final :
+class MACE::SimMACE::RunAction final :
     public G4UserRunAction {
 public:
     RunAction();

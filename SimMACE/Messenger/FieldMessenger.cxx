@@ -8,7 +8,7 @@
 #include "SimMACE/Field/SecondBendField.hxx"
 #include "SimMACE/Field/SelectorField.hxx"
 #include "SimMACE/Field/VerticalField.hxx"
-#include "SimMACE/Analysis.hxx"
+#include "SimMACE/Utility/Analysis.hxx"
 
 using namespace MACE::SimMACE::Messenger;
 

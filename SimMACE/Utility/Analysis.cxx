@@ -1,10 +1,10 @@
 #include "G4MPImanager.hh"
 
-#include "SimMACE/Analysis.hxx"
+#include "SimMACE/Utility/Analysis.hxx"
 #include "SimMACE/Messenger/AnalysisMessenger.hxx"
 #include "SimMACE/Messenger/FieldMessenger.hxx"
 
-using namespace MACE::SimMACE;
+using namespace MACE::SimMACE::Utility;
 
 Analysis& Analysis::Instance() {
     static Analysis instance;
@@ -22,7 +22,7 @@ Analysis::Analysis() :
     fCalorimeterHitList(nullptr),
     fVertexDetectorHitList(nullptr),
     fSpectrometerHitList(nullptr) {
-    Messenger::AnalysisMessenger::Instance();
+    AnalysisMessenger::Instance();
     FileTools4MPI::SetOutStream(G4cout);
     fDataHub.SetPrefixFormatOfTreeName("Rep#_");
 }
@@ -46,7 +46,7 @@ void Analysis::Close(Option_t* option) {
 int Analysis::Merge(G4bool forced) {
     if (fFileTools4MPI == nullptr) {
         G4ExceptionDescription description("There is nothing to merge!");
-        G4Exception("MACE::SimMACE::Analysis::Merge(G4bool)",
+        G4Exception("MACE::SimMACE::Utility::Analysis::Merge(G4bool)",
             "MACE_SimMACE_Analysis_W0", JustWarning, description);
         return -1;
     }

@@ -6,7 +6,7 @@
 #include "G4RunManager.hh"
 #include "SimMACE/Action/PrimaryGeneratorAction.hxx"
 
-#include "SimMACE/Analysis.hxx"
+#include "SimMACE/Utility/Analysis.hxx"
 
 using namespace MACE::SimMACE::Action;
 

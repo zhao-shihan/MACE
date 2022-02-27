@@ -3,12 +3,12 @@
 #include "G4SDManager.hh"
 #include "G4Tubs.hh"
 
-#include "SimMACE/SD/Spectrometer.hxx"
-#include "SimMACE/Analysis.hxx"
+#include "SimMACE/SD/SpectrometerSD.hxx"
+#include "SimMACE/Utility/Analysis.hxx"
 
 using namespace MACE::SimMACE;
 
-SD::Spectrometer::Spectrometer(const G4String& SDName, const G4String& hitsCollectionName, const std::shared_ptr<const Geometry::Entity::Fast::SpectrometerCells>& spectrometerCellEntity) :
+SD::SpectrometerSD::SpectrometerSD(const G4String& SDName, const G4String& hitsCollectionName, const std::shared_ptr<const Geometry::Entity::Fast::SpectrometerCells>& spectrometerCellEntity) :
     G4VSensitiveDetector(SDName),
     fHitsCollection(nullptr),
     fSpectrometerCellEntity(spectrometerCellEntity),
@@ -16,13 +16,13 @@ SD::Spectrometer::Spectrometer(const G4String& SDName, const G4String& hitsColle
     collectionName.insert(hitsCollectionName);
 }
 
-void SD::Spectrometer::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
-    fHitsCollection = new Hit::SpectrometerHitCollection(SensitiveDetectorName, collectionName[0]);
+void SD::SpectrometerSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
+    fHitsCollection = new SpectrometerHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-G4bool SD::Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
+G4bool SD::SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     if (!(step->IsFirstStepInVolume() or step->IsLastStepInVolume())) { return false; }
     const auto* const track = step->GetTrack();
     const auto* const particle = track->GetDefinition();
@@ -59,7 +59,7 @@ G4bool SD::Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
         const auto driftDistance = std::fabs((inX - cellXc) * (outY - cellYc) - (outX - cellXc) * (inY - cellYc)) / hypot(outX - inX, outY - inY);
         if (driftDistance < cellHalfWidth) {
             // if drift distance exceeds threshold, new a hit
-            auto* const hit = new Hit::SpectrometerHit();
+            auto* const hit = new SpectrometerHit();
             hit->SetHitTime((inT + outT) / 2);
             hit->SetWirePosition(cellXc, cellYc);
             hit->SetDriftDistance(driftDistance);
@@ -79,6 +79,6 @@ G4bool SD::Spectrometer::ProcessHits(G4Step* step, G4TouchableHistory*) {
     return hasNewHit;
 }
 
-void SD::Spectrometer::EndOfEvent(G4HCofThisEvent*) {
+void SD::SpectrometerSD::EndOfEvent(G4HCofThisEvent*) {
     Analysis::Instance().SubmitSpectrometerHC(fHitsCollection->GetVector());
 }

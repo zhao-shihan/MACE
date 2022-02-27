@@ -5,7 +5,7 @@
 #include "SimMACE/Global.hxx"
 #include "Utility/ObserverPtr.hxx"
 
-class MACE::SimMACE::Action::EventAction final :
+class MACE::SimMACE::EventAction final :
     public G4UserEventAction {
 public:
     EventAction(ObserverPtr<const RunAction> runAction);

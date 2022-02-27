@@ -166,14 +166,14 @@ namespace MACE {
     namespace SimCalorimeter {}
 
     namespace SimMACE {
-        namespace Action {
+        inline namespace Action {
             class ActionInitialization;
             class DetectorConstruction;
             class EventAction;
             class PrimaryGeneratorAction;
             class RunAction;
         }
-        namespace Field {
+        inline namespace Field {
             class AcceleratorField;
             class FirstBendField;
             class ParallelField;
@@ -181,12 +181,12 @@ namespace MACE {
             class SelectorField;
             class VerticalField;
         }
-        namespace Hit {
+        inline namespace Hit {
             class CalorimeterHit;
             class VertexDetectorHit;
             class SpectrometerHit;
         }
-        namespace Messenger {
+        inline namespace Messenger {
             class AnalysisMessenger;
             class FieldMessenger;
             class PhysicsMessenger;
@@ -202,12 +202,14 @@ namespace MACE {
             class MuoniumTransport;
             class PhysicsList;
         }
-        namespace SD {
-            class Calorimeter;
-            class VertexDetector;
-            class Spectrometer;
+        inline namespace SD {
+            class CalorimeterSD;
+            class VertexDetectorSD;
+            class SpectrometerSD;
         }
-        class Analysis;
+        inline namespace Utility {
+            class Analysis;
+        }
     }
 
     namespace SimMTransport {

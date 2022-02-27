@@ -7,7 +7,7 @@
 #include "SimMACE/Global.hxx"
 #include "DataModel/SimHit/CalorimeterSimHit.hxx"
 
-class MACE::SimMACE::Hit::CalorimeterHit final :
+class MACE::SimMACE::CalorimeterHit final :
     public G4VHit,
     public MACE::DataModel::CalorimeterSimHit {
 public:
@@ -29,12 +29,12 @@ namespace MACE::SimMACE::Hit {
     using CalorimeterHitCollection = G4THitsCollection<CalorimeterHit>;
 }
 
-inline void* MACE::SimMACE::Hit::CalorimeterHit::
+inline void* MACE::SimMACE::CalorimeterHit::
 operator new(size_t) {
     return static_cast<void*>(fgCalorimeterHitAllocator.MallocSingle());
 }
 
-inline void MACE::SimMACE::Hit::CalorimeterHit::
+inline void MACE::SimMACE::CalorimeterHit::
 operator delete(void* hit) {
     fgCalorimeterHitAllocator.FreeSingle(static_cast<CalorimeterHit*>(hit));
 }

@@ -13,7 +13,7 @@ MuoniumTransport::MuoniumTransport() :
     G4VContinuousProcess("MuoniumTransport", fTransportation),
     SimMTransport::Track(),
     fParticleChange(),
-    fTarget(static_cast<const Action::DetectorConstruction*>(
+    fTarget(static_cast<const DetectorConstruction*>(
         G4RunManager::GetRunManager()->GetUserDetectorConstruction()
         )->GetTarget()->GetPhysicalVolume()) {
 

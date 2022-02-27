@@ -5,7 +5,7 @@
 #include "SimMACE/Action/RunAction.hxx"
 #include "SimMACE/Action/PrimaryGeneratorAction.hxx"
 #include "SimMACE/Action/EventAction.hxx"
-#include "SimMACE/Analysis.hxx"
+#include "SimMACE/Utility/Analysis.hxx"
 
 using namespace MACE::SimMACE::Action;
 

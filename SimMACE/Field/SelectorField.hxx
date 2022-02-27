@@ -5,7 +5,7 @@
 
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::Field::SelectorField final :
+class MACE::SimMACE::SelectorField final :
     public G4ElectroMagneticField {
 public:
     SelectorField();

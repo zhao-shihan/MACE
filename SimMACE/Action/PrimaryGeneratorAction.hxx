@@ -6,7 +6,7 @@
 #include "SimMACE/Global.hxx"
 #include "Utility/ObserverPtr.hxx"
 
-class MACE::SimMACE::Action::PrimaryGeneratorAction final :
+class MACE::SimMACE::PrimaryGeneratorAction final :
     public G4VUserPrimaryGeneratorAction {
 public:
     PrimaryGeneratorAction(ObserverPtr<const EventAction> eventAction);

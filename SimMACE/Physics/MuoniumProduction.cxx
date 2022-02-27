@@ -12,7 +12,7 @@ using namespace MACE::SimMACE::Physics;
 MuoniumProduction::MuoniumProduction() :
     G4VRestProcess("MuoniumProduction", fElectromagnetic),
     fParticleChange() {
-    Messenger::PhysicsMessenger::Instance().Set(this);
+    PhysicsMessenger::Instance().Set(this);
 }
 
 G4VParticleChange* MuoniumProduction::AtRestDoIt(const G4Track& track, const G4Step&) {

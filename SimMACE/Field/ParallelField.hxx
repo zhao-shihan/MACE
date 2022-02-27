@@ -2,7 +2,7 @@
 
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::Field::ParallelField final :
+class MACE::SimMACE::ParallelField final :
     public G4UniformMagField {
 public:
     ParallelField(G4double B);
