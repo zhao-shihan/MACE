@@ -3,19 +3,15 @@
 #include "G4UserRunAction.hh"
 
 #include "SimMACE/Global.hxx"
-#include "Utility/ObserverPtr.hxx"
 
 class MACE::SimMACE::RunAction final :
     public G4UserRunAction {
 public:
-    RunAction();
+    RunAction() = default;
     ~RunAction() noexcept = default;
+    RunAction(const RunAction&) = delete;
+    RunAction& operator=(const RunAction&) = delete;
 
-    void BeginOfRunAction(const G4Run* run) override;
-    void   EndOfRunAction(const G4Run*) override;
-
-    auto GetFirstTrueEventID() const { return firstTrueEventID; }
-
-private:
-    G4int firstTrueEventID;
+    void BeginOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 };

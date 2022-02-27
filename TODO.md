@@ -57,12 +57,13 @@
 
 ### Primary Generator
 
-1. Time structure of bunch?
+1. (Ongoing) Time structure of bunch?
 2. Correct momentum. Using degrader to slow muon down.
 
 ### Other
 
 1. Note: now, as fast simulation, MCP may not annihilate e+ but scatter it back instead. In this case, calorimeter will not detect annihilate photons.
+2. (Completed) ~~Customized RunManager.~~
 
 ### Coding Style
 
@@ -94,6 +95,8 @@
 2. (Completed) ~~Filename generator and result file management for MPI.~~
 3. Common random seed distributor.
 4. Config file reader?
+5. (Completed) ~~G4MPIRunManager!~~
+6. Better eventID distribution on ranks for G4MPIRunManager.
 
 ## Other
 

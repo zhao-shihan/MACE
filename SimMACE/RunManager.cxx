@@ -1,0 +1,17 @@
+#include "SimMACE/RunManager.hxx"
+#include "SimMACE/Physics/PhysicsList.hxx"
+#include "SimMACE/Utility/Analysis.hxx"
+
+using namespace MACE::SimMACE;
+
+RunManager::RunManager() :
+    G4MPIRunManager() {
+    SetUserInitialization(new DetectorConstruction());
+    SetUserInitialization(new Physics::PhysicsList());
+    SetUserAction(new PrimaryGeneratorAction());
+    SetUserAction(new RunAction());
+    SetUserAction(new EventAction());
+    // need to create an instance of Analysis ahead of time,
+    // otherwise AnalysisMessenger won't work!
+    Analysis::Instance();
+}

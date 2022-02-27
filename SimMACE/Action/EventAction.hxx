@@ -8,16 +8,10 @@
 class MACE::SimMACE::EventAction final :
     public G4UserEventAction {
 public:
-    EventAction(ObserverPtr<const RunAction> runAction);
+    EventAction() = default;
     ~EventAction() noexcept = default;
+    EventAction(const EventAction&) = delete;
+    EventAction& operator=(const EventAction&) = delete;
 
-    void BeginOfEventAction(const G4Event* event) override;
-    void   EndOfEventAction(const G4Event*) override;
-
-    auto GetTrueEventID() const { return fTrueEventID; }
-
-private:
-    const ObserverPtr<const RunAction> fRunAction;
-
-    G4int fTrueEventID;
+    void EndOfEventAction(const G4Event*) override;
 };

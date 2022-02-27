@@ -38,9 +38,14 @@
 class MACE::SimMACE::DetectorConstruction final :
     public G4VUserDetectorConstruction {
 public:
-    DetectorConstruction(G4bool checkOverlaps);
+    DetectorConstruction() = default;
     ~DetectorConstruction() noexcept = default;
+    DetectorConstruction(const DetectorConstruction&) = delete;
+    DetectorConstruction& operator=(const DetectorConstruction&) = delete;
+
     G4VPhysicalVolume* Construct() override;
+
+    void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlaps = checkOverlaps; }
 
 private:
     void ConstructVolumes();
@@ -74,7 +79,7 @@ private:
     MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER(CalorimeterShield);
 
 private:
-    G4bool fCheckOverlaps;
+    G4bool fCheckOverlaps = false;
 };
 
 #undef MACE_SIMMACE_DETECTOR_CONSTRUCTION_GEOMETRY_MEMBER

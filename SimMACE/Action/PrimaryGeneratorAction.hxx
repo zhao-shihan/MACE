@@ -4,13 +4,15 @@
 #include "G4ParticleGun.hh"
 
 #include "SimMACE/Global.hxx"
-#include "Utility/ObserverPtr.hxx"
 
 class MACE::SimMACE::PrimaryGeneratorAction final :
     public G4VUserPrimaryGeneratorAction {
 public:
-    PrimaryGeneratorAction(ObserverPtr<const EventAction> eventAction);
+    PrimaryGeneratorAction();
     ~PrimaryGeneratorAction() noexcept = default;
+    PrimaryGeneratorAction(const PrimaryGeneratorAction&) = delete;
+    PrimaryGeneratorAction& operator=(const PrimaryGeneratorAction&) = delete;
+
     void GeneratePrimaries(G4Event* event) override;
 
     void SetFlux(G4double val) { fFlux = val; }
@@ -25,8 +27,6 @@ public:
     auto GetRepetitionID() const { return fRepetitionID; }
 
 private:
-    const ObserverPtr<const EventAction> fEventAction;
-
     G4ParticleGun fParticleGun;
 
     G4double fFlux = 5e5_s_1;

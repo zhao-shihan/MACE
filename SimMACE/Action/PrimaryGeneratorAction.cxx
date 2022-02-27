@@ -3,14 +3,12 @@
 #include "Randomize.hh"
 
 #include "SimMACE/Action/PrimaryGeneratorAction.hxx"
-#include "SimMACE/Action/EventAction.hxx"
 #include "SimMACE/Messenger/PrimaryGeneratorMessenger.hxx"
 
 using namespace MACE::SimMACE::Action;
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(ObserverPtr<const EventAction> eventAction) :
+PrimaryGeneratorAction::PrimaryGeneratorAction() :
     G4VUserPrimaryGeneratorAction(),
-    fEventAction(eventAction),
     fParticleGun(G4MuonPlus::Definition()),
     fRepetitionID(-1) {
     fParticleGun.SetParticleMomentumDirection(G4ThreeVector(0, 0, 1));
@@ -21,7 +19,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
     const auto muonsPerReptition = fFlux / fRepetitionRate;
     const auto g4EventsPerReptition = muonsPerReptition / fMuonsPerG4Event;
 
-    fRepetitionID = fEventAction->GetTrueEventID() / g4EventsPerReptition;
+    fRepetitionID = event->GetEventID() / g4EventsPerReptition;
     const auto meanTime = fRepetitionID / fRepetitionRate;
 
     auto* const randEngine = G4Random::getTheEngine();

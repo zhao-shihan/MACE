@@ -167,7 +167,6 @@ namespace MACE {
 
     namespace SimMACE {
         inline namespace Action {
-            class ActionInitialization;
             class DetectorConstruction;
             class EventAction;
             class PrimaryGeneratorAction;
@@ -210,6 +209,7 @@ namespace MACE {
         inline namespace Utility {
             class Analysis;
         }
+        class RunManager;
     }
 
     namespace SimMTransport {
@@ -227,6 +227,7 @@ namespace MACE {
 
     inline namespace Utility {
         class FileTools4MPI;
+        class G4MPIRunManager;
     }
 
 }

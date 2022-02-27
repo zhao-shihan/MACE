@@ -14,8 +14,9 @@
 
 using namespace MACE::SimMACE::Physics;
 
-PhysicsList::PhysicsList(G4int verbose) :
+PhysicsList::PhysicsList() :
     G4VModularPhysicsList() {
+    constexpr G4int verbose = 0;
     SetVerboseLevel(verbose);
     RegisterPhysics(new G4EmLivermorePhysics(verbose));
     RegisterPhysics(new G4EmExtraPhysics(verbose));

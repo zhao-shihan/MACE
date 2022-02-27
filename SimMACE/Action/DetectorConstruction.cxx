@@ -2,10 +2,6 @@
 
 using namespace MACE::SimMACE::Action;
 
-DetectorConstruction::DetectorConstruction(G4bool checkOverlaps) :
-    G4VUserDetectorConstruction(),
-    fCheckOverlaps(checkOverlaps) {}
-
 G4VPhysicalVolume* DetectorConstruction::Construct() {
     ConstructVolumes();
     ConstructSD();
@@ -53,13 +49,13 @@ void DetectorConstruction::ConstructSD() {
 
     auto logicCalorimeter = fCalorimeter->GetLogicalVolume();
     auto fCalorimeterName = logicCalorimeter->GetName();
-    auto fCalorimeterSD = new SD::CalorimeterSD(fCalorimeterName, fCalorimeterName + "HC");
+    auto fCalorimeterSD = new CalorimeterSD(fCalorimeterName, fCalorimeterName + "HC");
     SDManager->AddNewDetector(fCalorimeterSD);
     SetSensitiveDetector(logicCalorimeter, fCalorimeterSD);
 
     auto logicVertexDetector = fVertexDetector->GetLogicalVolume();
     auto fVertexDetectorName = logicVertexDetector->GetName();
-    auto fVertexDetectorSD = new SD::VertexDetectorSD(fVertexDetectorName, fVertexDetectorName + "HC");
+    auto fVertexDetectorSD = new VertexDetectorSD(fVertexDetectorName, fVertexDetectorName + "HC");
     SDManager->AddNewDetector(fVertexDetectorSD);
     SetSensitiveDetector(logicVertexDetector, fVertexDetectorSD);
 
@@ -68,7 +64,7 @@ void DetectorConstruction::ConstructSD() {
         logicSpectrometerCells.insert(fSpectrometerCells->GetLogicalVolume(i));
     }
     auto fSpectrometerName = (*logicSpectrometerCells.cbegin())->GetName();
-    auto fSpectrometerSD = new SD::SpectrometerSD(fSpectrometerName, fSpectrometerName + "HC", fSpectrometerCells);
+    auto fSpectrometerSD = new SpectrometerSD(fSpectrometerName, fSpectrometerName + "HC", fSpectrometerCells);
     SDManager->AddNewDetector(fSpectrometerSD);
     for (auto&& logicSpectrometerCell : logicSpectrometerCells) {
         SetSensitiveDetector(logicSpectrometerCell, fSpectrometerSD);
