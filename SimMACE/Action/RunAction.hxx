@@ -6,9 +6,12 @@
 
 class MACE::SimMACE::RunAction final :
     public G4UserRunAction {
-public:
+    friend RunManager;
+private:
     RunAction() = default;
     ~RunAction() noexcept = default;
+
+public:
     RunAction(const RunAction&) = delete;
     RunAction& operator=(const RunAction&) = delete;
 

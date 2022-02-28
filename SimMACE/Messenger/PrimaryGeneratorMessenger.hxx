@@ -5,7 +5,6 @@
 #include "G4UIcmdWithAnInteger.hh"
 
 #include "SimMACE/Global.hxx"
-#include "Utility/ObserverPtr.hxx"
 
 class MACE::SimMACE::PrimaryGeneratorMessenger final :
     public G4UImessenger {
@@ -19,13 +18,9 @@ private:
     PrimaryGeneratorMessenger& operator=(const PrimaryGeneratorMessenger&) = delete;
 
 public:
-    void Set(ObserverPtr<Action::PrimaryGeneratorAction> primaryGeneratorAction) { fPrimaryGeneratorAction = primaryGeneratorAction; }
-
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    ObserverPtr<Action::PrimaryGeneratorAction> fPrimaryGeneratorAction = nullptr;
-
     G4UIdirectory fDirectory;
     G4UIcmdWithADoubleAndUnit fSetFlux;
     G4UIcmdWithADoubleAndUnit fSetRepetitionRate;

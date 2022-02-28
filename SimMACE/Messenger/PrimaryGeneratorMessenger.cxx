@@ -3,6 +3,7 @@
 #include "G4SystemOfUnits.hh"
 
 #include "SimMACE/Messenger/PrimaryGeneratorMessenger.hxx"
+#include "SimMACE/RunManager.hxx"
 #include "SimMACE/Action/PrimaryGeneratorAction.hxx"
 
 using namespace MACE::SimMACE::Messenger;
@@ -67,19 +68,20 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger() :
 }
 
 void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String value) {
+    auto&& primaryGeneratorAction = RunManager::Instance().GetPrimaryGeneratorAction();
     if (command == std::addressof(fSetFlux)) {
-        fPrimaryGeneratorAction->SetFlux(fSetFlux.GetNewDoubleValue(value));
+        primaryGeneratorAction.SetFlux(fSetFlux.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetRepetitionRate)) {
-        fPrimaryGeneratorAction->SetRepetitionRate(fSetRepetitionRate.GetNewDoubleValue(value));
+        primaryGeneratorAction.SetRepetitionRate(fSetRepetitionRate.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetTimeWidthRMS)) {
-        fPrimaryGeneratorAction->SetTimeWidthRMS(fSetTimeWidthRMS.GetNewDoubleValue(value));
+        primaryGeneratorAction.SetTimeWidthRMS(fSetTimeWidthRMS.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetEnergy)) {
-        fPrimaryGeneratorAction->SetEnergy(fSetEnergy.GetNewDoubleValue(value));
+        primaryGeneratorAction.SetEnergy(fSetEnergy.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetEnergySpreadRMS)) {
-        fPrimaryGeneratorAction->SetEnergySpreadRMS(fSetEnergySpreadRMS.GetNewDoubleValue(value));
+        primaryGeneratorAction.SetEnergySpreadRMS(fSetEnergySpreadRMS.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetBeamProfileRMS)) {
-        fPrimaryGeneratorAction->SetBeamProfileRMS(fSetBeamProfileRMS.GetNewDoubleValue(value));
+        primaryGeneratorAction.SetBeamProfileRMS(fSetBeamProfileRMS.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetMuonsPerG4Event)) {
-        fPrimaryGeneratorAction->SetMuonsPerG4Event(fSetMuonsPerG4Event.GetNewIntValue(value));
+        primaryGeneratorAction.SetMuonsPerG4Event(fSetMuonsPerG4Event.GetNewIntValue(value));
     }
 }

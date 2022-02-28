@@ -23,6 +23,8 @@
 4. (Cancelled) ~~Like above, but for shields.~~
 5. (Cancelled) ~~Add a geometry constructor for universial usage.~~
 6. (Ongoing) Consider location constraints. E.g. solenoid has exactly the same length as the corresponding field, down-stream field is connect to the up-stream field, etc. Benefits for dynamic geometry.
+7. (Completed) ~~Add spectrometer magnet.~~
+8. Add vacuum chamber shell.
 
 ### Interface
 
@@ -32,7 +34,7 @@
 
 ### Utility
 
-1.
+1. 
 
 ### Interface
 
@@ -59,6 +61,15 @@
 
 1. (Ongoing) Time structure of bunch?
 2. Correct momentum. Using degrader to slow muon down.
+
+### Detector
+
+1. Setup G4Regions, like calorimeter region, solenoid region, shield region, etc.
+2. Set cut for solenoid and shield to acclerate simulation in certain case.
+
+### Action
+
+1. (Cancelled, replaced by region cut) ~~SteppingAction for killing track in spectrometer magnet and shield.~~
 
 ### Other
 
@@ -96,7 +107,7 @@
 3. Common random seed distributor.
 4. Config file reader?
 5. (Completed) ~~G4MPIRunManager!~~
-6. Better eventID distribution on ranks for G4MPIRunManager.
+6. (Suspended) ~~Better eventID distribution on ranks for G4MPIRunManager.~~
 
 ## Other
 

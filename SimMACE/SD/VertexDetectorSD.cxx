@@ -20,24 +20,25 @@ void SD::VertexDetectorSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent
 }
 
 G4bool SD::VertexDetectorSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
-    auto* const track = step->GetTrack();
+    const auto* const track = step->GetTrack();
     const auto* const particle = track->GetDefinition();
-    if (!(step->IsFirstStepInVolume() and track->GetCurrentStepNumber() > 1 and
-        particle->GetPDGCharge() != 0)) {
+    if (step->IsFirstStepInVolume() and track->GetCurrentStepNumber() > 1 and // is coming from outside, and
+        particle->GetPDGCharge() != 0) {                                      // is a charged particle.
+        const auto* const preStepPoint = step->GetPreStepPoint();
+        const auto& detectorPosition = preStepPoint->GetTouchable()->GetTranslation();
+        const auto* const detectorRotation = preStepPoint->GetTouchable()->GetRotation();
+        auto* const hit = new VertexDetectorHit();
+        hit->SetHitTime(preStepPoint->GetGlobalTime());
+        hit->SetHitPosition((*detectorRotation) * (preStepPoint->GetPosition() - detectorPosition));
+        hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
+        hit->SetVertexPosition(track->GetVertexPosition());
+        hit->SetPDGCode(particle->GetPDGEncoding());
+        hit->SetTrackID(track->GetTrackID());
+        fHitsCollection->insert(hit);
+        return true;
+    } else {
         return false;
     }
-    const auto* const preStepPoint = step->GetPreStepPoint();
-    const auto& detectorPosition = preStepPoint->GetTouchable()->GetTranslation();
-    const auto* const detectorRotation = preStepPoint->GetTouchable()->GetRotation();
-    auto* const hit = new VertexDetectorHit();
-    hit->SetHitTime(preStepPoint->GetGlobalTime());
-    hit->SetHitPosition((*detectorRotation) * (preStepPoint->GetPosition() - detectorPosition));
-    hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
-    hit->SetVertexPosition(track->GetVertexPosition());
-    hit->SetPDGCode(particle->GetPDGEncoding());
-    hit->SetTrackID(track->GetTrackID());
-    fHitsCollection->insert(hit);
-    return true;
 }
 
 void SD::VertexDetectorSD::EndOfEvent(G4HCofThisEvent*) {

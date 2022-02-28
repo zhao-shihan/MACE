@@ -7,9 +7,12 @@
 
 class MACE::SimMACE::PrimaryGeneratorAction final :
     public G4VUserPrimaryGeneratorAction {
-public:
+    friend RunManager;
+private:
     PrimaryGeneratorAction();
     ~PrimaryGeneratorAction() noexcept = default;
+
+public:
     PrimaryGeneratorAction(const PrimaryGeneratorAction&) = delete;
     PrimaryGeneratorAction& operator=(const PrimaryGeneratorAction&) = delete;
 
