@@ -204,10 +204,11 @@ namespace MACE {
         inline namespace SD {
             class CalorimeterSD;
             class VertexDetectorSD;
-            class SpectrometerSD;
+            class SpectrometerCellSD;
         }
         inline namespace Utility {
             class Analysis;
+            class Region;
         }
         class RunManager;
     }

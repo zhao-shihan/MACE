@@ -1,3 +1,4 @@
+#include "G4SDManager.hh"
 #include "G4GDMLParser.hh"
 
 #include "Geometry/Interface/Entity.hxx"
@@ -32,6 +33,45 @@ void Entity::ConstructSelfAndDescendants(G4bool checkOverlaps) {
     this->ConstructSelf(checkOverlaps);
     for (auto&& daughter : fDaughters) {
         daughter.lock()->ConstructSelfAndDescendants(checkOverlaps);
+    }
+}
+
+void Entity::RegisterRegion(size_t volumeIndex, G4Region* region) const {
+    auto logicalVolume = GetLogicalVolume(volumeIndex);
+    if (logicalVolume->GetRegion() != region) {
+        logicalVolume->SetRegion(region);
+        region->AddRootLogicalVolume(logicalVolume);
+    }
+}
+
+void Entity::RegisterRegion(G4Region* region) const {
+    for (size_t i = 0; i < GetPhysicalVolumeNum(); ++i) {
+        RegisterRegion(i, region);
+    }
+}
+
+void Entity::RegisterSensitiveDetector(size_t volumeIndex, G4VSensitiveDetector* sd) const {
+    auto logicalVolume = GetLogicalVolume(volumeIndex);
+    if (logicalVolume->GetSensitiveDetector() == nullptr) {
+        // Register to logicalVolume
+        logicalVolume->SetSensitiveDetector(sd);
+        // Register to G4SDManager
+        auto sdManager = G4SDManager::GetSDMpointer();
+        if (sdManager->FindSensitiveDetector(sd->GetFullPathName(), false) == nullptr) {
+            sdManager->AddNewDetector(sd);
+        }
+    } else if (logicalVolume->GetSensitiveDetector() != sd) {
+        G4ExceptionDescription msg;
+        msg << "Attempting to register SD multiple times for \"" << logicalVolume->GetName() << "\" is currently not supported "
+            "(G4MultiSensitiveDetector not supported currently), skipping.";
+        G4Exception("MACE::Geometry::Interface::Entity::RegisterSensitiveDetector", "-1", JustWarning, msg);
+        return;
+    }
+}
+
+void Entity::RegisterSensitiveDetector(G4VSensitiveDetector* sd) const {
+    for (size_t i = 0; i < GetPhysicalVolumeNum(); ++i) {
+        RegisterSensitiveDetector(i, sd);
     }
 }
 

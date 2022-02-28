@@ -20,5 +20,4 @@ public:
 
 private:
     G4ParticleChange fParticleChange;
-    ObserverPtr<G4VPhysicalVolume> fTarget;
 };

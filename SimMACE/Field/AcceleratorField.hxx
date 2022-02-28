@@ -6,9 +6,14 @@
 
 class MACE::SimMACE::AcceleratorField final :
     public G4ElectroMagneticField {
-public:
+    friend DetectorConstruction;
+private:
     AcceleratorField();
     ~AcceleratorField() noexcept = default;
+    AcceleratorField(const AcceleratorField&) = delete;
+    AcceleratorField& operator=(const AcceleratorField&) = delete;
+
+public:
     void GetFieldValue(const G4double*, G4double* F) const override;
     G4bool DoesFieldChangeEnergy() const override { return true; }
 

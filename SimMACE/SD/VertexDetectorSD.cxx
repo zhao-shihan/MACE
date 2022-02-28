@@ -5,21 +5,21 @@
 #include "SimMACE/SD/VertexDetectorSD.hxx"
 #include "SimMACE/Utility/Analysis.hxx"
 
-using namespace MACE::SimMACE;
+using namespace MACE::SimMACE::SD;
 
-SD::VertexDetectorSD::VertexDetectorSD(const G4String& SDName, const G4String& hitsCollectionName) :
+VertexDetectorSD::VertexDetectorSD(const G4String& SDName, const G4String& hitsCollectionName) :
     G4VSensitiveDetector(SDName),
     fHitsCollection(nullptr) {
     collectionName.insert(hitsCollectionName);
 }
 
-void SD::VertexDetectorSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
+void VertexDetectorSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
     fHitsCollection = new VertexDetectorHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-G4bool SD::VertexDetectorSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
+G4bool VertexDetectorSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     const auto* const track = step->GetTrack();
     const auto* const particle = track->GetDefinition();
     if (step->IsFirstStepInVolume() and track->GetCurrentStepNumber() > 1 and // is coming from outside, and
@@ -41,6 +41,6 @@ G4bool SD::VertexDetectorSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     }
 }
 
-void SD::VertexDetectorSD::EndOfEvent(G4HCofThisEvent*) {
+void VertexDetectorSD::EndOfEvent(G4HCofThisEvent*) {
     Analysis::Instance().SubmitVertexDetectorHC(fHitsCollection->GetVector());
 }

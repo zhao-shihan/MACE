@@ -3,26 +3,25 @@
 #include "G4SDManager.hh"
 #include "G4Tubs.hh"
 
-#include "SimMACE/SD/SpectrometerSD.hxx"
+#include "SimMACE/SD/SpectrometerCellSD.hxx"
 #include "SimMACE/Utility/Analysis.hxx"
 
-using namespace MACE::SimMACE;
+using namespace MACE::SimMACE::SD;
 
-SD::SpectrometerSD::SpectrometerSD(const G4String& SDName, const G4String& hitsCollectionName, const std::shared_ptr<const Geometry::Entity::Fast::SpectrometerCells>& spectrometerCellEntity) :
+SpectrometerCellSD::SpectrometerCellSD(const G4String& SDName, const G4String& hitsCollectionName) :
     G4VSensitiveDetector(SDName),
     fHitsCollection(nullptr),
-    fSpectrometerCellEntity(spectrometerCellEntity),
     fMonitoringTrackList(0) {
     collectionName.insert(hitsCollectionName);
 }
 
-void SD::SpectrometerSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
+void SpectrometerCellSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
     fHitsCollection = new SpectrometerHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-G4bool SD::SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
+G4bool SpectrometerCellSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     if (!(step->IsFirstStepInVolume() or step->IsLastStepInVolume())) { return false; }
     const auto* const track = step->GetTrack();
     const auto* const particle = track->GetDefinition();
@@ -79,6 +78,14 @@ G4bool SD::SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     return hasNewHit;
 }
 
-void SD::SpectrometerSD::EndOfEvent(G4HCofThisEvent*) {
+void SpectrometerCellSD::EndOfEvent(G4HCofThisEvent*) {
     Analysis::Instance().SubmitSpectrometerHC(fHitsCollection->GetVector());
+}
+
+auto SpectrometerCellSD::FindMonitoring(ObserverPtr<const G4Track> track) {
+    return std::ranges::find_if(std::as_const(fMonitoringTrackList),
+        [&track](const auto& monitoring) {
+            return track == std::get<0>(monitoring);
+        }
+    );
 }

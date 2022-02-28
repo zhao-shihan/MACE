@@ -7,9 +7,14 @@
 
 class MACE::SimMACE::SecondBendField final :
     public G4MagneticField {
-public:
+    friend DetectorConstruction;
+private:
     SecondBendField();
     ~SecondBendField() noexcept = default;
+    SecondBendField(const SecondBendField&) = delete;
+    SecondBendField& operator=(const SecondBendField&) = delete;
+
+public:
     void GetFieldValue(const G4double* x, G4double* B) const override;
 
     void SetTransportMagneticField(G4double B) { fB = B; }

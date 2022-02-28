@@ -1,19 +1,16 @@
 #include "G4MPImanager.hh"
 #include "G4SystemOfUnits.hh"
 
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfAcceleratorField/Target.hxx"
-
-#include "SimMACE/RunManager.hxx"
-#include "SimMACE/Physics/Muonium.hxx"
 #include "SimMACE/Physics/MuoniumTransport.hxx"
+#include "SimMACE/Physics/Muonium.hxx"
+#include "SimMACE/Utility/Region.hxx"
 
 using namespace MACE::SimMACE::Physics;
 
 MuoniumTransport::MuoniumTransport() :
     G4VContinuousProcess("MuoniumTransport", fTransportation),
     SimMTransport::Track(),
-    fParticleChange(),
-    fTarget(RunManager::Instance().GetDetectorConstruction().GetTarget().GetPhysicalVolume()) {
+    fParticleChange() {
 
     if (MPI::Is_initialized()) {
         SimMTransport::Track::global->SetCommRank(G4MPImanager::GetManager()->GetRank());
@@ -29,7 +26,9 @@ MuoniumTransport::MuoniumTransport() :
 }
 
 G4double MuoniumTransport::GetContinuousStepLimit(const G4Track& track, G4double, G4double, G4double&) {
-    if (track.GetVolume() == fTarget) {
+    G4cout << track.GetVolume()->GetLogicalVolume()->GetRegion()->GetName() << G4endl;
+    G4cout << static_cast<Region*>(track.GetVolume()->GetLogicalVolume()->GetRegion())->GetType() << G4endl;
+    if (static_cast<Region*>(track.GetVolume()->GetLogicalVolume()->GetRegion())->GetType() == kTargetRegion) {
         SimMTransport::Track::fLife = (track.GetDynamicParticle()->GetPreAssignedDecayProperTime() - track.GetProperTime()) / us;
         if (SimMTransport::Track::fLife > 0) {
             SimMTransport::Track::fVertexTime = track.GetProperTime() / us;
@@ -56,7 +55,7 @@ G4double MuoniumTransport::GetContinuousStepLimit(const G4Track& track, G4double
 
 G4VParticleChange* MuoniumTransport::AlongStepDoIt(const G4Track& track, const G4Step&) {
     fParticleChange.Initialize(track);
-    if (track.GetVolume() == fTarget) {
+    if (static_cast<Region*>(track.GetVolume()->GetLogicalVolume()->GetRegion())->GetType() == kTargetRegion) {
         if (SimMTransport::Track::fLife > 0) {
             fParticleChange.ProposeProperTime(SimMTransport::Track::fCurrentStep->postTime * us);
             const auto& position = SimMTransport::Track::fCurrentStep->postPosition;

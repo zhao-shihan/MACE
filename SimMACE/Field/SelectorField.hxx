@@ -7,9 +7,14 @@
 
 class MACE::SimMACE::SelectorField final :
     public G4ElectroMagneticField {
-public:
+    friend DetectorConstruction;
+private:
     SelectorField();
     ~SelectorField() noexcept = default;
+    SelectorField(const SelectorField&) = delete;
+    SelectorField& operator=(const SelectorField&) = delete;
+
+public:
     void GetFieldValue(const G4double*, G4double* F) const override;
     G4bool DoesFieldChangeEnergy() const override { return true; }
 
