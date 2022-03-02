@@ -2,10 +2,6 @@
 
 #include <iostream>
 
-#include "G4Transform3D.hh"
-#include "G4RotationMatrix.hh"
-#include "G4ThreeVector.hh"
-
 #include "Geometry/Global.hxx"
 #include "Utility/LiteralUnits.hxx"
 

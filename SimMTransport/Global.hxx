@@ -16,8 +16,8 @@
 //  rad = 1.0;
 namespace MACE {
     namespace SimMTransport {
-        constexpr double_t cLight = 299792458.0;
-        constexpr double_t kBoltzmann = 8.617333262145178152e-11;
+        constexpr double cLight = 299792458.0;
+        constexpr double kBoltzmann = 8.617333262145178152e-11;
     }
 }
 
@@ -57,19 +57,19 @@ public:
 
     MACE_SIMMTRANSPORT_GLOBAL_MEMBER(std::string, Name, "");
     MACE_SIMMTRANSPORT_GLOBAL_MEMBER_POINT_TO_OBJ(TF3, Target, nullptr);
-    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double_t, StepOfPushing, -1);
-    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double_t, PeriodicBoundaryX, -1);
-    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double_t, PeriodicBoundaryY, -1);
-    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double_t, PeriodicBoundaryZ, -1);
-    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double_t, MuoniumLife, -1);
-    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double_t, MuoniumMass, -1);
+    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double, StepOfPushing, -1);
+    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double, PeriodicBoundaryX, -1);
+    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double, PeriodicBoundaryY, -1);
+    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double, PeriodicBoundaryZ, -1);
+    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double, MuoniumLife, -1);
+    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double, MuoniumMass, -1);
     MACE_SIMMTRANSPORT_GLOBAL_MEMBER_POINT_TO_OBJ(TF3, MeanFreePath, nullptr);
-    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double_t, Temperature, -1);
+    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double, Temperature, -1);
     MACE_SIMMTRANSPORT_GLOBAL_MEMBER_POINT_TO_OBJ(TF3, Source, nullptr);
     MACE_SIMMTRANSPORT_GLOBAL_MEMBER(size_t, MuoniumNum, 0);
-    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double_t, BeginTime, -1);
-    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double_t, OutputStep, -1);
-    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double_t, EndTime, -1);
+    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double, BeginTime, -1);
+    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double, OutputStep, -1);
+    MACE_SIMMTRANSPORT_GLOBAL_MEMBER(double, EndTime, -1);
     MACE_SIMMTRANSPORT_GLOBAL_MEMBER(size_t, WorkerJobSize, 1000);
 };
 

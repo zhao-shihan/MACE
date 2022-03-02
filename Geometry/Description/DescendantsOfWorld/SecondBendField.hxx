@@ -24,18 +24,10 @@ public:
 
     [[nodiscard]] const auto& GetRadius()     const { return SecondTransportField::Instance().GetRadius(); }
     [[nodiscard]] const auto& GetBendRadius() const { return fBendRadius; }
-    [[nodiscard]] inline auto GetTransform()  const;
+    [[nodiscard]] G4Transform3D GetTransform()  const;
 
     void SetBendRadius(double val) { fBendRadius = val; }
 
 private:
     double fBendRadius = 50_cm;
 };
-
-inline auto MACE::Geometry::Description::SecondBendField::GetTransform() const {
-    auto&& secondTransportField = SecondTransportField::Instance();
-    auto transX = secondTransportField.GetTransform().dx() + secondTransportField.GetLength() / 2;
-    auto transY = secondTransportField.GetTransform().dy();
-    auto transZ = secondTransportField.GetTransform().dz() + fBendRadius;
-    return G4Transform3D(G4RotationMatrix(G4ThreeVector(1, 0, 0), M_PI_2), G4ThreeVector(transX, transY, transZ));
-}

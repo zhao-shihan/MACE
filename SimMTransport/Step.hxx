@@ -4,8 +4,8 @@
 #include "TEveVector.h"
 
 struct MACE::SimMTransport::Step {
-    double_t preTime;
-    double_t postTime;
+    double preTime;
+    double postTime;
     TEveVectorD prePosition;
     TEveVectorD postPosition;
     TEveVectorD velocity;

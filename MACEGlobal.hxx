@@ -64,7 +64,14 @@ namespace MACE {
                         class Target;
                     }
                     inline namespace DescendantsOfSpectrometerBody {
-                        inline namespace DescendantsOfSpectrometerReadoutLayer {
+                        inline namespace DescendantsOfSpectrometerReadoutLayers {
+                            inline namespace DescendantsOfSpectrometerCells {
+                                inline namespace DescendantsOfSpectrometerSensitiveVolumes {
+                                    class SpectrometerSenseWires;
+                                }
+                                class SpectrometerFieldWires;
+                                class SpectrometerSensitiveVolumes;
+                            }
                             class SpectrometerCells;
                         }
                         class SpectrometerReadoutLayers;
@@ -114,7 +121,14 @@ namespace MACE {
                             class Target;
                         }
                         inline namespace DescendantsOfSpectrometerBody {
-                            inline namespace DescendantsOfSpectrometerReadoutLayer {
+                            inline namespace DescendantsOfSpectrometerReadoutLayers {
+                                inline namespace DescendantsOfSpectrometerCells {
+                                    inline namespace DescendantsOfSpectrometerSensitiveVolumes {
+                                        class SpectrometerSenseWires;
+                                    }
+                                    class SpectrometerFieldWires;
+                                    class SpectrometerSensitiveVolumes;
+                                }
                                 class SpectrometerCells;
                             }
                             class SpectrometerReadoutLayers;
@@ -204,7 +218,7 @@ namespace MACE {
         inline namespace SD {
             class CalorimeterSD;
             class VertexDetectorSD;
-            class SpectrometerCellSD;
+            class SpectrometerSD;
         }
         inline namespace Utility {
             class Analysis;

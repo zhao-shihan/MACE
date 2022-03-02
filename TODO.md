@@ -25,6 +25,7 @@
 6. (Ongoing) Consider location constraints. E.g. solenoid has exactly the same length as the corresponding field, down-stream field is connect to the up-stream field, etc. Benefits for dynamic geometry.
 7. (Completed) ~~Add spectrometer magnet.~~
 8. Add vacuum chamber shell.
+9. CDC herierachy: Body - ReadOutLayer - Cell - (FieldWire, Sensitive - SenseWire)
 
 ### Interface
 
@@ -114,3 +115,4 @@
 1. (Ongoing) Better CMakeLists coding.
 2. (Ongoing) Use C++20 feature.
 3. (Completed) ~~Suppress all of -Wall and -Wextra warnings (excluding ThirdParty).~~
+4. Defect: Base-class of class that handles by G4Allocator should not have inlined virtual deconstructor. Maybe we can implement an alternative allocator.

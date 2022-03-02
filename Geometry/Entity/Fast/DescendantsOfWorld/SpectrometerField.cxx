@@ -12,8 +12,6 @@ void SpectrometerField::ConstructSelf(G4bool checkOverlaps) {
     auto length = description.GetLength();
     auto raidus = description.GetRadius();
 
-    auto material = Mother()->GetPhysicalVolume()->GetLogicalVolume()->GetMaterial();
-
     auto solid = Make<G4Tubs>(
         name,
         0,
@@ -23,7 +21,7 @@ void SpectrometerField::ConstructSelf(G4bool checkOverlaps) {
         2 * M_PI);
     auto logic = Make<G4LogicalVolume>(
         solid,
-        material,
+        Mother()->GetMaterial(),
         name);
     Make<G4PVPlacement>(
         G4Transform3D(),

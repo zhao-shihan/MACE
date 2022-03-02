@@ -13,7 +13,7 @@
 #/vis/viewer/set/rotationStyle freeRotation
 /vis/viewer/set/projection p
 /vis/viewer/set/style s
-/vis/viewer/set/auxiliaryEdge true
+/vis/viewer/set/auxiliaryEdge false
 /vis/viewer/set/lineSegmentsPerCircle 100
 /vis/viewer/zoom 3
 
@@ -27,6 +27,8 @@
 /vis/geometry/set/colour SecondTransportSolenoid       0     1     1     1     0.05
 /vis/geometry/set/colour SelectorField                 0     1     1     1     0.05
 /vis/geometry/set/colour Target                        0     1     1     1     0.1
+/vis/geometry/set/colour SpectrometerFieldWire         0     1     1     1     0.5
+/vis/geometry/set/colour SpectrometerSensitiveVolume   0     1     1     1     0.005
 /vis/geometry/set/colour SpectrometerCell              0     1     1     1     0.005
 /vis/geometry/set/colour SpectrometerReadoutLayer      0     1     1     1     0.005
 /vis/geometry/set/colour AcceleratorField              0     1     1     1     0.05

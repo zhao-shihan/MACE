@@ -5,18 +5,18 @@
 #include "G4VUserDetectorConstruction.hh"
 
 #include "SimMACE/Global.hxx"
+#include "Utility/ObserverPtr.hxx"
 
 class MACE::SimMACE::DetectorConstruction final :
     public G4VUserDetectorConstruction {
     friend RunManager;
 private:
-    DetectorConstruction() = default;
+    DetectorConstruction();
     ~DetectorConstruction() noexcept = default;
-
-public:
     DetectorConstruction(const DetectorConstruction&) = delete;
     DetectorConstruction& operator=(const DetectorConstruction&) = delete;
 
+public:
     G4VPhysicalVolume* Construct() override;
 
     void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlaps = checkOverlaps; }
@@ -49,6 +49,9 @@ private:
     std::shared_ptr<Geometry::Entity::Fast::SecondTransportSolenoid> fSecondTransportSolenoid;
     std::shared_ptr<Geometry::Entity::Fast::SelectorField> fSelectorField;
     std::shared_ptr<Geometry::Entity::Fast::Target> fTarget;
+    // std::shared_ptr<Geometry::Entity::Fast::SpectrometerSenseWires>() fSpectrometerSenseWires;
+    std::shared_ptr<Geometry::Entity::Fast::SpectrometerFieldWires> fSpectrometerFieldWires;
+    std::shared_ptr<Geometry::Entity::Fast::SpectrometerSensitiveVolumes> fSpectrometerSensitiveVolumes;
     std::shared_ptr<Geometry::Entity::Fast::SpectrometerCells> fSpectrometerCells;
     std::shared_ptr<Geometry::Entity::Fast::SpectrometerReadoutLayers> fSpectrometerReadoutLayers;
     std::shared_ptr<Geometry::Entity::Fast::AcceleratorField> fAcceleratorField;
@@ -66,13 +69,13 @@ private:
     std::shared_ptr<Geometry::Entity::Fast::ThirdTransportField> fThirdTransportField;
     std::shared_ptr<Geometry::Entity::Fast::World> fWorld;
 
-    std::unique_ptr<Region> fCalorimeterSensitiveRegion;
-    std::unique_ptr<Region> fDefaultSolidRegion;
-    std::unique_ptr<Region> fDefaultGaseousRegion;
-    std::unique_ptr<Region> fShieldRegion;
-    std::unique_ptr<Region> fSolenoidOrMagnetRegion;
-    std::unique_ptr<Region> fSpectrometerSensitiveRegion;
-    std::unique_ptr<Region> fTargetRegion;
-    std::unique_ptr<Region> fVacuumRegion;
-    std::unique_ptr<Region> fVertexDetectorSensitiveRegion;
+    ObserverPtr<Region> fCalorimeterSensitiveRegion;
+    ObserverPtr<Region> fDefaultSolidRegion;
+    ObserverPtr<Region> fDefaultGaseousRegion;
+    ObserverPtr<Region> fShieldRegion;
+    ObserverPtr<Region> fSolenoidOrMagnetRegion;
+    ObserverPtr<Region> fSpectrometerSensitiveRegion;
+    ObserverPtr<Region> fTargetRegion;
+    ObserverPtr<Region> fVacuumRegion;
+    ObserverPtr<Region> fVertexDetectorSensitiveRegion;
 };

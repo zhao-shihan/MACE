@@ -10,11 +10,10 @@ class MACE::SimMACE::RunAction final :
 private:
     RunAction() = default;
     ~RunAction() noexcept = default;
-
-public:
     RunAction(const RunAction&) = delete;
     RunAction& operator=(const RunAction&) = delete;
 
+public:
     void BeginOfRunAction(const G4Run*) override;
     void EndOfRunAction(const G4Run*) override;
 };

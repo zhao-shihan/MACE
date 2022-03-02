@@ -20,32 +20,32 @@ public:
     DirectSubSpaceLeastVariance() = default;
     ~DirectSubSpaceLeastVariance() noexcept = default;
 
-    void SetCenterXBound(double_t low, double_t up) { fXcBound = { low, up }; }
-    void SetCenterYBound(double_t low, double_t up) { fYcBound = { low, up }; }
-    void SetRadiusBound(double_t low, double_t up) { fRBound = { low, up }; }
+    void SetCenterXBound(double low, double up) { fXcBound = { low, up }; }
+    void SetCenterYBound(double low, double up) { fYcBound = { low, up }; }
+    void SetRadiusBound(double low, double up) { fRBound = { low, up }; }
 
     void EnableGradientDescent(bool b) { fEnableGradientDescent = b; }
-    void SetDerivativeStep(double_t h) { fH = h; }
-    void SetDescentRate(double_t val) { fDescentRate = val; }
-    void SetTolerance(double_t val) { fTolerance = val; }
+    void SetDerivativeStep(double h) { fH = h; }
+    void SetDescentRate(double val) { fDescentRate = val; }
+    void SetTolerance(double val) { fTolerance = val; }
     void SetMaxSteps(int32_t val) { fMaxSteps = val; }
 
-    void SetReducedChi2Bound(double_t val) { fReducedChi2Bound = val; }
+    void SetReducedChi2Bound(double val) { fReducedChi2Bound = val; }
 
     bool Fit(std::vector<HitPtr>& hitData, TrackPtr& track) override;
 
 private:
-    std::pair<double_t, double_t> fXcBound = { -1e4, 1e4 };
-    std::pair<double_t, double_t> fYcBound = { -1e4, 1e4 };
-    std::pair<double_t, double_t> fRBound = { 0.0, 1e4 };
+    std::pair<double, double> fXcBound = { -1e4, 1e4 };
+    std::pair<double, double> fYcBound = { -1e4, 1e4 };
+    std::pair<double, double> fRBound = { 0.0, 1e4 };
 
     bool fEnableGradientDescent = true;
-    double_t fH = 1e-6;
-    double_t fDescentRate = 0.1;
-    double_t fTolerance = 0.001;
-    int32_t fMaxSteps = 10000;
+    double fH = 1e-6;
+    double fDescentRate = 0.1;
+    double fTolerance = 0.001;
+    int fMaxSteps = 10000;
 
-    double_t fReducedChi2Bound = 20;
+    double fReducedChi2Bound = 20;
 };
 
 #include "ReconSpectrometer/Fitter/DirectSubSpaceLeastVariance.ixx"

@@ -1,15 +1,7 @@
 #include "SimMACE/Action/DetectorConstruction.hxx"
-
-using namespace MACE::SimMACE::Action;
-
-G4VPhysicalVolume* DetectorConstruction::Construct() {
-    ConstructVolumes();
-    ConstructRegions();
-    ConstructSDs();
-    ConstructFields();
-    return fWorld->GetPhysicalVolume();
-}
-
+//
+// Entity relevant includes
+//
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfCalorimeterField/Calorimeter.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfCalorimeterField/VertexDetector.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfFirstBendField/FirstBendSolenoid.hxx"
@@ -19,7 +11,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/SecondTransportSolenoid.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/SelectorField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfAcceleratorField/Target.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayer/SpectrometerCells.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/DescendantsOfSpectrometerCells/DescendantsOfSpectrometerSensitiveVolumes/SpectrometerSenseWires.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/DescendantsOfSpectrometerCells/SpectrometerFieldWires.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/DescendantsOfSpectrometerCells/SpectrometerSensitiveVolumes.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/SpectrometerCells.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/SpectrometerReadoutLayers.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/AcceleratorField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/SpectrometerBody.hxx"
@@ -35,6 +30,43 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 #include "Geometry/Entity/Fast/DescendantsOfWorld/SpectrometerShield.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/ThirdTransportField.hxx"
 #include "Geometry/Entity/Fast/World.hxx"
+//
+// Region relevant includes
+//
+#include "SimMACE/Utility/Region.hxx"
+//
+// SD relevant includes
+//
+#include "G4SDManager.hh"
+#include "SimMACE/SD/CalorimeterSD.hxx"
+#include "SimMACE/SD/VertexDetectorSD.hxx"
+#include "SimMACE/SD/SpectrometerSD.hxx"
+//
+// Field relevant includes
+//
+#include "G4TMagFieldEquation.hh"
+#include "G4EqMagElectricField.hh"
+#include "G4TDormandPrince45.hh"
+#include "G4DormandPrince745.hh"
+#include "G4IntegrationDriver.hh"
+#include "SimMACE/Field/AcceleratorField.hxx"
+#include "SimMACE/Field/FirstBendField.hxx"
+#include "SimMACE/Field/ParallelField.hxx"
+#include "SimMACE/Field/SecondBendField.hxx"
+#include "SimMACE/Field/SelectorField.hxx"
+#include "SimMACE/Field/VerticalField.hxx"
+
+using namespace MACE::SimMACE::Action;
+
+DetectorConstruction::DetectorConstruction() = default;
+
+G4VPhysicalVolume* DetectorConstruction::Construct() {
+    ConstructVolumes();
+    ConstructRegions();
+    ConstructSDs();
+    ConstructFields();
+    return fWorld->GetPhysicalVolume();
+}
 
 void DetectorConstruction::ConstructVolumes() {
     // Construct entity objects
@@ -47,6 +79,9 @@ void DetectorConstruction::ConstructVolumes() {
     fSecondTransportSolenoid = std::make_shared<Geometry::Entity::Fast::SecondTransportSolenoid>();
     fSelectorField = std::make_shared<Geometry::Entity::Fast::SelectorField>();
     fTarget = std::make_shared<Geometry::Entity::Fast::Target>();
+    // fSpectrometerSenseWires = std::make_shared<Geometry::Entity::Fast::SpectrometerSenseWires>();
+    // fSpectrometerFieldWires = std::make_shared<Geometry::Entity::Fast::SpectrometerFieldWires>();
+    fSpectrometerSensitiveVolumes = std::make_shared<Geometry::Entity::Fast::SpectrometerSensitiveVolumes>();
     fSpectrometerCells = std::make_shared<Geometry::Entity::Fast::SpectrometerCells>();
     fSpectrometerReadoutLayers = std::make_shared<Geometry::Entity::Fast::SpectrometerReadoutLayers>();
     fAcceleratorField = std::make_shared<Geometry::Entity::Fast::AcceleratorField>();
@@ -73,13 +108,16 @@ void DetectorConstruction::ConstructVolumes() {
     fSecondTransportField->AddDaughter(fCollimator);
     fSecondTransportField->AddDaughter(fSecondTransportSolenoid);
     fSecondTransportField->AddDaughter(fSelectorField);
+    fAcceleratorField->AddDaughter(fTarget);
+    // fSpectrometerSensitiveVolumes->AddDaughter(fSpectrometerSenseWires);
+    // fSpectrometerCells->AddDaughter(fSpectrometerFieldWires);
+    fSpectrometerCells->AddDaughter(fSpectrometerSensitiveVolumes);
+    fSpectrometerReadoutLayers->AddDaughter(fSpectrometerCells);
+    fSpectrometerBody->AddDaughter(fSpectrometerReadoutLayers);
     fSpectrometerField->AddDaughter(fAcceleratorField);
     fSpectrometerField->AddDaughter(fSpectrometerBody);
     fSpectrometerField->AddDaughter(fSpectrometerMagnet);
     fThirdTransportField->AddDaughter(fThirdTransportSolenoid);
-    fAcceleratorField->AddDaughter(fTarget);
-    fSpectrometerBody->AddDaughter(fSpectrometerReadoutLayers);
-    fSpectrometerReadoutLayers->AddDaughter(fSpectrometerCells);
     fWorld->AddDaughter(fCalorimeterField);
     fWorld->AddDaughter(fCalorimeterShield);
     fWorld->AddDaughter(fFirstBendField);
@@ -94,91 +132,69 @@ void DetectorConstruction::ConstructVolumes() {
     fWorld->ConstructSelfAndDescendants(fCheckOverlaps);
 }
 
-#include "SimMACE/Utility/Region.hxx"
-
 void DetectorConstruction::ConstructRegions() {
     // CalorimeterSensitiveRegion
-    fCalorimeterSensitiveRegion = std::make_unique<Region>("CalorimeterSensitive", kCalorimeterSensitiveRegion);
-    fCalorimeter->RegisterRegion(fCalorimeterSensitiveRegion.get());
+    fCalorimeterSensitiveRegion = new Region("CalorimeterSensitive", Region::kCalorimeterSensitive);
+    fCalorimeter->RegisterRegion(fCalorimeterSensitiveRegion);
 
     // DefaultSolidRegion
-    fDefaultSolidRegion = std::make_unique<Region>("DefaultSolid", kDefaultSolidRegion);
-    fCollimator->RegisterRegion(fDefaultSolidRegion.get());
-    fSpectrometerBody->RegisterRegion(fDefaultSolidRegion.get());
+    fDefaultSolidRegion = new Region("DefaultSolid", Region::kDefaultSolid);
+    fCollimator->RegisterRegion(fDefaultSolidRegion);
+    fSpectrometerBody->RegisterRegion(fDefaultSolidRegion);
+    // fSpectrometerFieldWires->RegisterRegion(fDefaultSolidRegion);
 
     // DefaultGaseousRegion
-    fDefaultGaseousRegion = std::make_unique<Region>("DefaultGaseous", kDefaultGaseousRegion);
-    fSpectrometerReadoutLayers->RegisterRegion(fDefaultGaseousRegion.get());
-    fWorld->RegisterRegion(fDefaultGaseousRegion.get());
+    fDefaultGaseousRegion = new Region("DefaultGaseous", Region::kDefaultGaseous);
+    fSpectrometerCells->RegisterRegion(fDefaultGaseousRegion);
+    fSpectrometerReadoutLayers->RegisterRegion(fDefaultGaseousRegion);
 
     // ShieldRegion
-    fShieldRegion = std::make_unique<Region>("Shield", kShieldRegion);
-    fSpectrometerShield->RegisterRegion(fShieldRegion.get());
-    fCalorimeterShield->RegisterRegion(fShieldRegion.get());
+    fShieldRegion = new Region("Shield", Region::kShield);
+    fSpectrometerShield->RegisterRegion(fShieldRegion);
+    fCalorimeterShield->RegisterRegion(fShieldRegion);
 
     // SolenoidOrMagnetRegion
-    fSolenoidOrMagnetRegion = std::make_unique<Region>("SolenoidOrMagnet", kSolenoidOrMagnetRegion);
-    fFirstBendSolenoid->RegisterRegion(fSolenoidOrMagnetRegion.get());
-    fFirstTransportSolenoid->RegisterRegion(fSolenoidOrMagnetRegion.get());
-    fSecondBendSolenoid->RegisterRegion(fSolenoidOrMagnetRegion.get());
-    fSecondTransportSolenoid->RegisterRegion(fSolenoidOrMagnetRegion.get());
-    fSpectrometerMagnet->RegisterRegion(fSolenoidOrMagnetRegion.get());
-    fThirdTransportSolenoid->RegisterRegion(fSolenoidOrMagnetRegion.get());
+    fSolenoidOrMagnetRegion = new Region("SolenoidOrMagnet", Region::kSolenoidOrMagnet);
+    fFirstBendSolenoid->RegisterRegion(fSolenoidOrMagnetRegion);
+    fFirstTransportSolenoid->RegisterRegion(fSolenoidOrMagnetRegion);
+    fSecondBendSolenoid->RegisterRegion(fSolenoidOrMagnetRegion);
+    fSecondTransportSolenoid->RegisterRegion(fSolenoidOrMagnetRegion);
+    fSpectrometerMagnet->RegisterRegion(fSolenoidOrMagnetRegion);
+    fThirdTransportSolenoid->RegisterRegion(fSolenoidOrMagnetRegion);
 
     // SpectrometerSensitiveRegion
-    fSpectrometerSensitiveRegion = std::make_unique<Region>("SpectrometerSensitive", kSpectrometerSensitiveRegion);
-    fSpectrometerCells->RegisterRegion(fSpectrometerSensitiveRegion.get());
+    fSpectrometerSensitiveRegion = new Region("SpectrometerSensitive", Region::kSpectrometerSensitive);
+    fSpectrometerSensitiveVolumes->RegisterRegion(fSpectrometerSensitiveRegion);
 
     // TargetRegion
-    fTargetRegion = std::make_unique<Region>("Target", kTargetRegion);
-    fTarget->RegisterRegion(fTargetRegion.get());
+    fTargetRegion = new Region("Target", Region::kTarget);
+    fTarget->RegisterRegion(fTargetRegion);
 
     // VacuumRegion
-    fVacuumRegion = std::make_unique<Region>("Vacuum", kVacuumRegion);
-    fSelectorField->RegisterRegion(fVacuumRegion.get());
-    fAcceleratorField->RegisterRegion(fVacuumRegion.get());
-    fCalorimeterField->RegisterRegion(fVacuumRegion.get());
-    fFirstBendField->RegisterRegion(fVacuumRegion.get());
-    fFirstTransportField->RegisterRegion(fVacuumRegion.get());
-    fSecondBendField->RegisterRegion(fVacuumRegion.get());
-    fSecondTransportField->RegisterRegion(fVacuumRegion.get());
-    fSpectrometerField->RegisterRegion(fVacuumRegion.get());
-    fThirdTransportField->RegisterRegion(fVacuumRegion.get());
+    fVacuumRegion = new Region("Vacuum", Region::kVacuum);
+    fSelectorField->RegisterRegion(fVacuumRegion);
+    fAcceleratorField->RegisterRegion(fVacuumRegion);
+    fCalorimeterField->RegisterRegion(fVacuumRegion);
+    fFirstBendField->RegisterRegion(fVacuumRegion);
+    fFirstTransportField->RegisterRegion(fVacuumRegion);
+    fSecondBendField->RegisterRegion(fVacuumRegion);
+    fSecondTransportField->RegisterRegion(fVacuumRegion);
+    fSpectrometerField->RegisterRegion(fVacuumRegion);
+    fThirdTransportField->RegisterRegion(fVacuumRegion);
 
     // VertexDetectorSensitiveRegion
-    fVertexDetectorSensitiveRegion = std::make_unique<Region>("VertexDetectorSensitive", kVertexDetectorSensitiveRegion);
-    fVertexDetector->RegisterRegion(fVertexDetectorSensitiveRegion.get());
+    fVertexDetectorSensitiveRegion = new Region("VertexDetectorSensitive", Region::kVertexDetectorSensitive);
+    fVertexDetector->RegisterRegion(fVertexDetectorSensitiveRegion);
 }
-
-#include "G4SDManager.hh"
-
-#include "SimMACE/SD/CalorimeterSD.hxx"
-#include "SimMACE/SD/VertexDetectorSD.hxx"
-#include "SimMACE/SD/SpectrometerCellSD.hxx"
 
 void DetectorConstruction::ConstructSDs() {
     const auto& calorimeterName = fCalorimeter->GetLogicalVolumeName();
     fCalorimeter->RegisterSensitiveDetector(new CalorimeterSD(calorimeterName, calorimeterName + "HC"));
     const auto& vertexDetectorName = fVertexDetector->GetLogicalVolumeName();
     fVertexDetector->RegisterSensitiveDetector(new VertexDetectorSD(vertexDetectorName, vertexDetectorName + "HC"));
-    const auto& spectrometerCellName = fSpectrometerCells->GetLogicalVolumeName();
-    fSpectrometerCells->RegisterSensitiveDetector(new SpectrometerCellSD(spectrometerCellName, spectrometerCellName + "HC"));
+    const auto& spectrometerCellName = fSpectrometerSensitiveVolumes->GetLogicalVolumeName();
+    fSpectrometerSensitiveVolumes->RegisterSensitiveDetector(new SpectrometerSD(spectrometerCellName, spectrometerCellName + "HC"));
 }
-
-#include "G4FieldManager.hh"
-#include "G4TMagFieldEquation.hh"
-#include "G4EqMagElectricField.hh"
-#include "G4TDormandPrince45.hh"
-#include "G4DormandPrince745.hh"
-#include "G4IntegrationDriver.hh"
-#include "G4ChordFinder.hh"
-
-#include "SimMACE/Field/AcceleratorField.hxx"
-#include "SimMACE/Field/FirstBendField.hxx"
-#include "SimMACE/Field/ParallelField.hxx"
-#include "SimMACE/Field/SecondBendField.hxx"
-#include "SimMACE/Field/SelectorField.hxx"
-#include "SimMACE/Field/VerticalField.hxx"
 
 void DetectorConstruction::ConstructFields() {
     constexpr G4double hMin = 100_um;
@@ -192,61 +208,61 @@ void DetectorConstruction::ConstructFields() {
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(parallelBField, hMin, 6);
+    >(parallelBField, hMin, 6, true);
 
     fAcceleratorField->RegisterField<
         AcceleratorField,
         G4EqMagElectricField,
         G4DormandPrince745,
         G4IntegrationDriver<G4DormandPrince745>
-    >(new AcceleratorField(), hMin, 8);
+    >(new AcceleratorField(), hMin, 8, true);
 
-    fFirstTransportField->RegisterField <
+    fFirstTransportField->RegisterField<
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(parallelBField, hMin, 6);
+    >(parallelBField, hMin, 6, true);
 
     fFirstBendField->RegisterField<
         FirstBendField,
         G4TMagFieldEquation<Field::FirstBendField>,
         G4TDormandPrince45<G4TMagFieldEquation<Field::FirstBendField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<Field::FirstBendField>>>
-    >(new FirstBendField(), hMin, 6);
+    >(new FirstBendField(), hMin, 6, true);
 
     fSecondTransportField->RegisterField<
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(verticalBField, hMin, 6);
+    >(verticalBField, hMin, 6, true);
 
-    fSelectorField->RegisterField <
+    fSelectorField->RegisterField<
         SelectorField,
         G4EqMagElectricField,
         G4DormandPrince745,
         G4IntegrationDriver<G4DormandPrince745>
-    >(new SelectorField(), hMin, 8);
+    >(new SelectorField(), hMin, 8, true);
 
-    fSecondBendField->RegisterField <
+    fSecondBendField->RegisterField<
         SecondBendField,
         G4TMagFieldEquation<Field::SecondBendField>,
         G4TDormandPrince45<G4TMagFieldEquation<Field::SecondBendField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<Field::SecondBendField>>>
-    >(new SecondBendField(), hMin, 6);
+    >(new SecondBendField(), hMin, 6, true);
 
     fThirdTransportField->RegisterField<
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(parallelBField, hMin, 6);
+    >(parallelBField, hMin, 6, true);
 
     fCalorimeterField->RegisterField<
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(parallelBField, hMin, 6);
+    >(parallelBField, hMin, 6, true);
 }

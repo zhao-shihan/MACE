@@ -1,27 +1,30 @@
+#include "G4FieldManager.hh"
+#include "G4ChordFinder.hh"
 #include "G4Exception.hh"
 
 namespace MACE::Geometry::Interface {
 
     template<class Field_t, class Equation_t, class Stepper_t, class Driver_t>
-    void Entity::RegisterField(size_t volumeIndex, Field_t* field, G4double hMin, G4int nVal) const {
+    void Entity::RegisterField(size_t volumeIndex, Field_t* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const {
         auto logicalVolume = GetLogicalVolume(volumeIndex);
-        if (logicalVolume->GetFieldManager() == nullptr) {
+        auto DoRegister = [&field, &hMin, &nVal, &logicalVolume, &propagateToDescendants] {
             auto equation = new Equation_t(field);
             auto stepper = new Stepper_t(equation, nVal);
             auto driver = new Driver_t(hMin, stepper, nVal);
             auto chordFinder = new G4ChordFinder(driver);
-            logicalVolume->SetFieldManager(new G4FieldManager(field, chordFinder), true);
+            logicalVolume->SetFieldManager(new G4FieldManager(field, chordFinder), propagateToDescendants);
+        };
+        if (logicalVolume->GetFieldManager() == nullptr) {
+            DoRegister();
         } else if (logicalVolume->GetFieldManager()->GetDetectorField() != field) {
-            G4ExceptionDescription msg;
-            msg << "Attempting to register field multiple times for \"" << logicalVolume->GetName() << "\" is not allowed, skipping.";
-            G4Exception("MACE::Geometry::Interface::Entity::RegisterField", "-1", JustWarning, msg);
+            DoRegister();
         }
     }
 
     template<class Field_t, class Equation_t, class Stepper_t, class Driver_t>
-    void Entity::RegisterField(Field_t* field, G4double hMin, G4int nVal) const {
+    void Entity::RegisterField(Field_t* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const {
         for (size_t i = 0; i < GetPhysicalVolumeNum(); ++i) {
-            RegisterField<Field_t, Equation_t, Stepper_t, Driver_t>(i, field, hMin, nVal);
+            RegisterField<Field_t, Equation_t, Stepper_t, Driver_t>(i, field, hMin, nVal, propagateToDescendants);
         }
     }
 

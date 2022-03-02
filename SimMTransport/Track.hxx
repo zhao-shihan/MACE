@@ -20,9 +20,9 @@ protected:
     Step* const       fCurrentStep;
     MonteCarlo* const fMonteCarlo;
 
-    double_t          fVertexTime;
+    double          fVertexTime;
     TEveVectorD fVertexPosition;
-    double_t          fLife;
+    double          fLife;
 
     bool              fEscaping;
 
@@ -42,13 +42,13 @@ public:
     void Stepping();
 
     [[nodiscard]] const Step* GetCurrentStep() const { return fCurrentStep; }
-    [[nodiscard]] double_t GetVertexTime() const { return fVertexTime; }
+    [[nodiscard]] double GetVertexTime() const { return fVertexTime; }
     [[nodiscard]] const TEveVectorD& GetVertexPosition() const { return fVertexPosition; }
     [[nodiscard]] bool IsEscaping() const { return fEscaping; }
     [[nodiscard]] TrackStatus GetTrackStatus() const { return fStatus; }
 
 private:
-    bool Target(double_t x, double_t y, double_t z) { return (*global->Target())(x, y, z) > 0.5; }
-    double_t MeanFreePath(double_t x, double_t y, double_t z) { return (*global->MeanFreePath())(x, y, z); }
+    bool Target(double x, double y, double z) { return (*global->Target())(x, y, z) > 0.5; }
+    double MeanFreePath(double x, double y, double z) { return (*global->MeanFreePath())(x, y, z); }
     void EscapingDoIt();
 };

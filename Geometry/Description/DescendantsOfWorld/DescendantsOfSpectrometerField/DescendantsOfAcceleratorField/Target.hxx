@@ -24,7 +24,7 @@ public:
 
     [[nodiscard]] const auto& GetWidth() const { return fWidth; }
     [[nodiscard]] const auto& GetThickness() const { return fThickness; }
-    [[nodiscard]] inline auto GetTransform() const;
+    [[nodiscard]] G4Transform3D GetTransform() const;
 
     void SetWidth(double val) { fWidth = val; }
     void SetThickness(double val) { fThickness = val; }
@@ -33,9 +33,3 @@ private:
     double fWidth = 60_mm;
     double fThickness = 10_mm;
 };
-
-inline auto MACE::Geometry::Description::Target::GetTransform() const {
-    const auto& acceleratorField = AcceleratorField::Instance();
-    auto transZ = acceleratorField.GetLength() / 2 - acceleratorField.GetDownStreamLength() - fThickness / 2;
-    return G4Transform3D(G4RotationMatrix(), G4ThreeVector(0, 0, transZ));
-}

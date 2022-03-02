@@ -24,18 +24,10 @@ public:
 
     [[nodiscard]] const auto& GetLength() const { return fLength; }
     [[nodiscard]] const auto& GetRadius() const { return SecondBendField::Instance().GetRadius(); }
-    [[nodiscard]] inline auto GetTransform() const;
+    [[nodiscard]] G4Transform3D GetTransform() const;
 
     void SetLength(double val) { fLength = val; }
 
 private:
     double fLength = 20_cm;
 };
-
-inline auto MACE::Geometry::Description::ThirdTransportField::GetTransform() const {
-    auto&& secondBendField = SecondBendField::Instance();
-    auto transX = secondBendField.GetTransform().dx() + secondBendField.GetBendRadius();
-    auto transY = secondBendField.GetTransform().dy();
-    auto transZ = secondBendField.GetTransform().dz() + fLength / 2;
-    return G4Transform3D(G4RotationMatrix(), G4ThreeVector(transX, transY, transZ));
-}

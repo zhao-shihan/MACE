@@ -9,7 +9,10 @@
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/SecondTransportSolenoid.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/SelectorField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfAcceleratorField/Target.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayer/SpectrometerCells.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/DescendantsOfSpectrometerCells/DescendantsOfSpectrometerSensitiveVolumes/SpectrometerSenseWires.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/DescendantsOfSpectrometerCells/SpectrometerFieldWires.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/DescendantsOfSpectrometerCells/SpectrometerSensitiveVolumes.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/SpectrometerCells.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/SpectrometerReadoutLayers.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/AcceleratorField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/SpectrometerBody.hxx"
@@ -38,8 +41,11 @@ int main(int, char**) {
     auto secondTransportSolenoid = std::make_shared<SecondTransportSolenoid>();
     auto selectorField = std::make_shared<SelectorField>();
     auto target = std::make_shared<Target>();
+    // auto spectrometerSenseWires = std::make_shared<SpectrometerSenseWires>();
+    auto spectrometerFieldWires = std::make_shared<SpectrometerFieldWires>();
+    auto spectrometerSensitiveVolumes = std::make_shared<SpectrometerSensitiveVolumes>();
     auto spectrometerCells = std::make_shared<SpectrometerCells>();
-    auto spectrometerReadoutLayer = std::make_shared<SpectrometerReadoutLayers>();
+    auto spectrometerReadoutLayers = std::make_shared<SpectrometerReadoutLayers>();
     auto acceleratorField = std::make_shared<AcceleratorField>();
     auto spectrometerBody = std::make_shared<SpectrometerBody>();
     auto spectrometerMagnet = std::make_shared<SpectrometerMagnet>();
@@ -63,13 +69,16 @@ int main(int, char**) {
     secondTransportField->AddDaughter(collimator);
     secondTransportField->AddDaughter(secondTransportSolenoid);
     secondTransportField->AddDaughter(selectorField);
+    acceleratorField->AddDaughter(target);
+    // spectrometerSensitiveVolumes->AddDaughter(spectrometerSenseWires);
+    spectrometerCells->AddDaughter(spectrometerFieldWires);
+    spectrometerCells->AddDaughter(spectrometerSensitiveVolumes);
+    spectrometerReadoutLayers->AddDaughter(spectrometerCells);
+    spectrometerBody->AddDaughter(spectrometerReadoutLayers);
     spectrometerField->AddDaughter(acceleratorField);
     spectrometerField->AddDaughter(spectrometerBody);
     spectrometerField->AddDaughter(spectrometerMagnet);
     thirdTransportField->AddDaughter(thirdTransportSolenoid);
-    acceleratorField->AddDaughter(target);
-    spectrometerBody->AddDaughter(spectrometerReadoutLayer);
-    spectrometerReadoutLayer->AddDaughter(spectrometerCells);
     world->AddDaughter(calorimeterField);
     world->AddDaughter(calorimeterShield);
     world->AddDaughter(firstBendField);

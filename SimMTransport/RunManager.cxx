@@ -79,7 +79,7 @@ void RunManager::InitialReport() const {
     if (global->CommRank() == global->MasterRank()) {
         char commName[MPI_MAX_OBJECT_NAME]; int commNameLen;
         MPI_Comm_get_name(MPI_COMM_WORLD, commName, &commNameLen);
-        double_t xMin, xMax, yMin, yMax, zMin, zMax;
+        double xMin, xMax, yMin, yMax, zMin, zMax;
         global->Source()->GetRange(xMin, xMax, yMin, yMax, zMin, zMax);
         auto currentTime = time(nullptr);
 

@@ -2,6 +2,9 @@
 
 #include <cmath>
 
+#include "G4Transform3D.hh"
+#include "G4RotationMatrix.hh"
+
 #include "Geometry/Interface/Description.hxx"
 
 class MACE::Geometry::Description::AcceleratorField final :
@@ -27,7 +30,7 @@ public:
     [[nodiscard]] const auto& GetRadius() const { return fRadius; }
     [[nodiscard]] const auto& GetLength() const { return fLength; }
     [[nodiscard]] const auto& GetDownStreamLength() const { return fDownStreamLength; }
-    [[nodiscard]] auto        GetTransform() const { return G4Transform3D(G4RotationMatrix(), G4ThreeVector(0, 0, fDownStreamLength - fLength / 2)); }
+    [[nodiscard]] G4Transform3D GetTransform() const;
 
     void SetRadius(double val) { fRadius = val; }
     void SetLength(double val) { fLength = val; }

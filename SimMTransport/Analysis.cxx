@@ -28,11 +28,11 @@ void Analysis::Open() {
     new TFile(TString(Global::Instance()->Name()) + "_rank" + Global::Instance()->CommRank() + ".root", "RECREATE");
 
     fOutputTimeNum = 1;
-    for (double_t time = Global::Instance()->BeginTime(); time < Global::Instance()->EndTime(); time += Global::Instance()->OutputStep()) {
+    for (double time = Global::Instance()->BeginTime(); time < Global::Instance()->EndTime(); time += Global::Instance()->OutputStep()) {
         ++fOutputTimeNum;
     }
 
-    fOutputTime = new double_t[fOutputTimeNum];
+    fOutputTime = new double[fOutputTimeNum];
     for (size_t timeId = 0; timeId < fOutputTimeNum - 1; ++timeId) {
         fOutputTime[timeId] = Global::Instance()->BeginTime() + timeId * Global::Instance()->OutputStep();
     }

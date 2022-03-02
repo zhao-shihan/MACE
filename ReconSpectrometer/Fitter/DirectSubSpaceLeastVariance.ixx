@@ -13,10 +13,10 @@ Fit(std::vector<HitPtr>& hitData, TrackPtr& track) {
 
     // constuct valarrays
 
-    std::valarray<double_t> xWire(n);
-    std::valarray<double_t> yWire(n);
-    std::valarray<double_t> d(n);
-    std::valarray<double_t> z(n);
+    std::valarray<double> xWire(n);
+    std::valarray<double> yWire(n);
+    std::valarray<double> d(n);
+    std::valarray<double> z(n);
     for (size_t i = 0; i < n; ++i) {
         xWire[i] = hitData[i]->GetWirePosition().fX;
         yWire[i] = hitData[i]->GetWirePosition().fY;
@@ -26,9 +26,9 @@ Fit(std::vector<HitPtr>& hitData, TrackPtr& track) {
 
     // initialize with wire position
 
-    double_t initXc;
-    double_t initYc;
-    double_t initR;
+    double initXc;
+    double initYc;
+    double initR;
     {
         auto xMean = xWire.sum() / n;
         auto yMean = yWire.sum() / n;
@@ -85,7 +85,7 @@ Fit(std::vector<HitPtr>& hitData, TrackPtr& track) {
                 auto deltaRPlus = R + d;
                 auto deltaPlus = std::sqrt(deltaX * deltaX + deltaY * deltaY) - deltaRPlus;
                 auto varPlus = deltaPlus * deltaPlus;
-                double_t var = 0;
+                double var = 0;
                 for (size_t i = 0; i < n; ++i) {
                     var += std::min(varMinus[i], varPlus[i]);
                 }
@@ -107,7 +107,7 @@ Fit(std::vector<HitPtr>& hitData, TrackPtr& track) {
             return std::make_tuple(var, gradXc, gradYc, gradR);
         };
 
-        double_t lastVar;
+        double lastVar;
         auto [thisVar, gradXc, gradYc, gradR] = Variance(Xc, Yc, R);
         decltype(fMaxSteps) stepCount = 0;
         do {
@@ -135,10 +135,10 @@ Fit(std::vector<HitPtr>& hitData, TrackPtr& track) {
 
     // fit s-z space
 
-    std::valarray<double_t> phi(n);
-    double_t Z0;
-    double_t cotAlpha;
-    double_t Alpha;
+    std::valarray<double> phi(n);
+    double Z0;
+    double cotAlpha;
+    double Alpha;
     {
         auto deltaX = xWire - Xc;
         auto deltaY = yWire - Yc;
@@ -165,7 +165,7 @@ Fit(std::vector<HitPtr>& hitData, TrackPtr& track) {
 
     // caculate reduced chi2
 
-    double_t reducedChi2;
+    double reducedChi2;
     {
         auto phi0 = std::atan2(-Yc, -Xc);
         auto xPred = Xc + R * std::cos(phi + phi0);

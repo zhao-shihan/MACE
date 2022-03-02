@@ -1,5 +1,8 @@
 #pragma once
 
+#include "G4Transform3D.hh"
+#include "G4RotationMatrix.hh"
+
 #include "Geometry/Description/DescendantsOfWorld/SpectrometerField.hxx"
 
 class MACE::Geometry::Description::FirstTransportField final :
@@ -24,7 +27,7 @@ public:
 
     [[nodiscard]] const auto& GetRadius()    const { return fRadius; }
     [[nodiscard]] const auto& GetLength()    const { return fLength; }
-    [[nodiscard]] inline auto GetTransform() const;
+    [[nodiscard]] G4Transform3D GetTransform() const;
 
     void SetRaidus(double val) { fRadius = val; }
     void SetLength(double val) { fLength = val; }
@@ -33,9 +36,3 @@ private:
     double fRadius = 10.5_cm;
     double fLength = 20_cm;
 };
-
-inline auto MACE::Geometry::Description::FirstTransportField::GetTransform() const {
-    return G4Transform3D(
-        G4RotationMatrix(),
-        G4ThreeVector(0, 0, SpectrometerField::Instance().GetLength() / 2 + fLength / 2));
-}

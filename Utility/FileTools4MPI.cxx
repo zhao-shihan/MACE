@@ -149,8 +149,8 @@ int FileTools4MPI::MergeRootFilesMPIImpl(bool forced) const {
         // hadd command
         std::string command = "hadd ";
         // flag: -j
-        const uint32_t hardwareMax = std::thread::hardware_concurrency();
-        const uint32_t haddRequire = std::ceil(double(commSize) / 5.0);
+        const unsigned int hardwareMax = std::thread::hardware_concurrency();
+        const unsigned int haddRequire = std::ceil(double(commSize) / 5.0);
         const auto haddProcesses = std::min(hardwareMax, haddRequire);
         if (haddProcesses > 1) {
             command += ("-j " + std::to_string(haddProcesses) + ' ');

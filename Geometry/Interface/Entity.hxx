@@ -30,9 +30,9 @@ public:
     void RegisterSensitiveDetector(G4VSensitiveDetector* sd) const;
 
     template<class Field_t, class Equation_t, class Stepper_t, class Driver_t>
-    void RegisterField(size_t volumeIndex, Field_t* field, G4double hMin, G4int nVal) const;
+    void RegisterField(size_t volumeIndex, Field_t* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const;
     template<class Field_t, class Equation_t, class Stepper_t, class Driver_t>
-    void RegisterField(Field_t* field, G4double hMin, G4int nVal) const;
+    void RegisterField(Field_t* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const;
 
     void WriteSelfAndDesendentsToGDML(std::string_view fileName, size_t volumeIndex = 0) const;
 
@@ -41,10 +41,11 @@ public:
     [[nodiscard]] auto GetPhysicalVolume(size_t volumeIndex = 0) const { return fPhysicalVolumes.at(volumeIndex).get(); }
     [[nodiscard]] auto GetLogicalVolume(size_t volumeIndex = 0) const { return GetPhysicalVolume(volumeIndex)->GetLogicalVolume(); }
     [[nodiscard]] auto GetSolid(size_t volumeIndex = 0) const { return GetLogicalVolume(volumeIndex)->GetSolid(); }
+    [[nodiscard]] auto GetMaterial(size_t volumeIndex = 0) const { return GetLogicalVolume(volumeIndex)->GetMaterial(); }
 
     [[nodiscard]] const auto& GetPhysicalVolumeName(size_t volumeIndex = 0) const { return GetPhysicalVolume(volumeIndex)->GetName(); }
     [[nodiscard]] const auto& GetLogicalVolumeName(size_t volumeIndex = 0) const { return GetLogicalVolume(volumeIndex)->GetName(); }
-    [[nodiscard]] const auto& GetSolidName(size_t volumeIndex = 0) const { return GetSolid(volumeIndex)->GetName(); }
+    [[nodiscard]] auto        GetSolidName(size_t volumeIndex = 0) const { return GetSolid(volumeIndex)->GetName(); /* ??? G4 is returning a copy of name */ }
 
 protected:
     // Make a G4Solid and keep it (just for deleting when Entity deconstructs).

@@ -18,7 +18,7 @@ private:
 
 private:
     size_t fOutputTimeNum;
-    double_t* fOutputTime;
+    double* fOutputTime;
     TNtuple** fTimeNtuples;
     TNtuple* fEscapedNtuple;
 

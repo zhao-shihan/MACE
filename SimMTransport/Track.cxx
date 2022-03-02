@@ -66,9 +66,9 @@ void Track::EscapingDoIt() {
         if (global->PeriodicBoundaryX() > 0) {
             if (fCurrentStep->postPosition.fX < -global->PeriodicBoundaryX() or fCurrentStep->postPosition.fX > global->PeriodicBoundaryX()) {
                 auto denominator = fCurrentStep->postPosition.fX - fCurrentStep->prePosition.fX;
-                double_t preRatio;
+                double preRatio;
                 TEveVectorD boundary;
-                if (abs(denominator) < std::numeric_limits<float_t>::epsilon()) {
+                if (abs(denominator) < std::numeric_limits<float>::epsilon()) {
                     preRatio = 0.5;
                     boundary = 0.5 * (fCurrentStep->postPosition + fCurrentStep->prePosition);
                 } else {
@@ -97,9 +97,9 @@ void Track::EscapingDoIt() {
         if (global->PeriodicBoundaryY() > 0) {
             if (fCurrentStep->postPosition.fY < -global->PeriodicBoundaryY() or fCurrentStep->postPosition.fY > global->PeriodicBoundaryY()) {
                 auto denominator = fCurrentStep->postPosition.fY - fCurrentStep->prePosition.fY;
-                double_t preRatio;
+                double preRatio;
                 TEveVectorD boundary;
-                if (abs(denominator) < std::numeric_limits<float_t>::epsilon()) {
+                if (abs(denominator) < std::numeric_limits<float>::epsilon()) {
                     preRatio = 0.5;
                     boundary = 0.5 * (fCurrentStep->postPosition + fCurrentStep->prePosition);
                 } else {
@@ -128,9 +128,9 @@ void Track::EscapingDoIt() {
         if (global->PeriodicBoundaryZ() > 0) {
             if (fCurrentStep->postPosition.fZ < -global->PeriodicBoundaryZ() or fCurrentStep->postPosition.fZ > global->PeriodicBoundaryZ()) {
                 auto denominator = fCurrentStep->postPosition.fZ - fCurrentStep->prePosition.fZ;
-                double_t preRatio;
+                double preRatio;
                 TEveVectorD boundary;
-                if (abs(denominator) < std::numeric_limits<float_t>::epsilon()) {
+                if (abs(denominator) < std::numeric_limits<float>::epsilon()) {
                     preRatio = 0.5;
                     boundary = 0.5 * (fCurrentStep->postPosition + fCurrentStep->prePosition);
                 } else {

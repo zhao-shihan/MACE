@@ -4,22 +4,21 @@
 
 #include "MACEGlobal.hxx"
 
-namespace MACE::SimMACE::Utility {
-    enum RegionType {
-        kCalorimeterSensitiveRegion,
-        kDefaultSolidRegion,
-        kDefaultGaseousRegion,
-        kShieldRegion,
-        kSolenoidOrMagnetRegion,
-        kSpectrometerSensitiveRegion,
-        kTargetRegion,
-        kVacuumRegion,
-        kVertexDetectorSensitiveRegion
-    };
-}
-
 class MACE::SimMACE::Region final :
     public G4Region {
+public:
+    enum RegionType {
+        kCalorimeterSensitive,
+        kDefaultSolid,
+        kDefaultGaseous,
+        kShield,
+        kSolenoidOrMagnet,
+        kSpectrometerSensitive,
+        kTarget,
+        kVacuum,
+        kVertexDetectorSensitive
+    };
+
 public:
     Region(const G4String& name, RegionType type);
     ~Region() noexcept = default;

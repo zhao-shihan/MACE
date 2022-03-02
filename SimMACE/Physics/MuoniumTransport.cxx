@@ -26,9 +26,7 @@ MuoniumTransport::MuoniumTransport() :
 }
 
 G4double MuoniumTransport::GetContinuousStepLimit(const G4Track& track, G4double, G4double, G4double&) {
-    G4cout << track.GetVolume()->GetLogicalVolume()->GetRegion()->GetName() << G4endl;
-    G4cout << static_cast<Region*>(track.GetVolume()->GetLogicalVolume()->GetRegion())->GetType() << G4endl;
-    if (static_cast<Region*>(track.GetVolume()->GetLogicalVolume()->GetRegion())->GetType() == kTargetRegion) {
+    if (static_cast<Region*>(track.GetVolume()->GetLogicalVolume()->GetRegion())->GetType() == Region::kTarget) {
         SimMTransport::Track::fLife = (track.GetDynamicParticle()->GetPreAssignedDecayProperTime() - track.GetProperTime()) / us;
         if (SimMTransport::Track::fLife > 0) {
             SimMTransport::Track::fVertexTime = track.GetProperTime() / us;
@@ -55,7 +53,7 @@ G4double MuoniumTransport::GetContinuousStepLimit(const G4Track& track, G4double
 
 G4VParticleChange* MuoniumTransport::AlongStepDoIt(const G4Track& track, const G4Step&) {
     fParticleChange.Initialize(track);
-    if (static_cast<Region*>(track.GetVolume()->GetLogicalVolume()->GetRegion())->GetType() == kTargetRegion) {
+    if (static_cast<Region*>(track.GetVolume()->GetLogicalVolume()->GetRegion())->GetType() == Region::kTarget) {
         if (SimMTransport::Track::fLife > 0) {
             fParticleChange.ProposeProperTime(SimMTransport::Track::fCurrentStep->postTime * us);
             const auto& position = SimMTransport::Track::fCurrentStep->postPosition;

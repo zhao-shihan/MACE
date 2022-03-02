@@ -11,10 +11,9 @@ class MACE::SimMACE::EventAction final :
 private:
     EventAction() = default;
     ~EventAction() noexcept = default;
-
-public:
     EventAction(const EventAction&) = delete;
     EventAction& operator=(const EventAction&) = delete;
 
+public:
     void EndOfEventAction(const G4Event*) override;
 };

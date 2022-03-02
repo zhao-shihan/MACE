@@ -13,8 +13,6 @@ void SecondBendField::ConstructSelf(G4bool checkOverlaps) {
     auto bendRadius = description.GetBendRadius();
     auto transform = description.GetTransform();
 
-    auto material = Mother()->GetPhysicalVolume()->GetLogicalVolume()->GetMaterial();
-
     auto solid = Make<G4Torus>(
         name,
         0,
@@ -24,7 +22,7 @@ void SecondBendField::ConstructSelf(G4bool checkOverlaps) {
         M_PI_2);
     auto logic = Make<G4LogicalVolume>(
         solid,
-        material,
+        Mother()->GetMaterial(),
         name);
     Make<G4PVPlacement>(
         transform,

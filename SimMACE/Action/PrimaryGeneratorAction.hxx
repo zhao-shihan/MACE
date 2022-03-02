@@ -11,11 +11,10 @@ class MACE::SimMACE::PrimaryGeneratorAction final :
 private:
     PrimaryGeneratorAction();
     ~PrimaryGeneratorAction() noexcept = default;
-
-public:
     PrimaryGeneratorAction(const PrimaryGeneratorAction&) = delete;
     PrimaryGeneratorAction& operator=(const PrimaryGeneratorAction&) = delete;
 
+public:
     void GeneratePrimaries(G4Event* event) override;
 
     void SetFlux(G4double val) { fFlux = val; }
