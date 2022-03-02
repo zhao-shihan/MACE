@@ -17,15 +17,15 @@
 
 ### Utility
 
-1. CDC cell's sensitive volume should be a cylinder instead of parallepipe. This behaviour is now act in SD as an if(...), draw it down directly in geometry is simpler.
-2. CDC cells and layers transform and size (and layerId for cells) list should be constructed in description.
+1. (Completed) ~~CDC cell's sensitive volume should be a cylinder instead of parallepipe. This behaviour is now act in SD as an if(...), draw it down directly in geometry is simpler.~~
+2. (Completed) ~~CDC cells and layers transform and size (and layerId for cells) list should be constructed in description.~~
 3. (Completed) ~~In geometry hierarchy, solenoid and field volume is at the same level. Maybe the field as solenoid's mother is better.~~ (Note: fixed a lot of "stuck")
 4. (Cancelled) ~~Like above, but for shields.~~
 5. (Cancelled) ~~Add a geometry constructor for universial usage.~~
 6. (Ongoing) Consider location constraints. E.g. solenoid has exactly the same length as the corresponding field, down-stream field is connect to the up-stream field, etc. Benefits for dynamic geometry.
 7. (Completed) ~~Add spectrometer magnet.~~
 8. Add vacuum chamber shell.
-9. CDC herierachy: Body - ReadOutLayer - Cell - (FieldWire, Sensitive - SenseWire)
+9. (Completed) ~~CDC herierachy: Body - ReadOutLayer - Cell - (FieldWire, Sensitive - SenseWire)~~
 
 ### Interface
 
