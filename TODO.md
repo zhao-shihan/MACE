@@ -28,7 +28,7 @@
 8. Add vacuum chamber shell.
 9. (Completed) ~CDC herierachy: Body - ReadOutLayer - Cell - (FieldWire, Sensitive - SenseWire)~
 10. (Completed) ~Using a more resonable way of constructing spectrometer (instead of making a large bunch of logical volumes...).~
-11. Fix sensitive volume overlaps.
+11. (Completed) ~Fix sensitive volume overlaps.~
 
 ### Interface
 
