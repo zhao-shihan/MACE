@@ -5,6 +5,7 @@
 
 #include "SimMACE/SD/SpectrometerSD.hxx"
 #include "SimMACE/Utility/Analysis.hxx"
+#include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/SpectrometerCells.hxx"
 #include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/DescendantsOfSpectrometerCells/SpectrometerSensitiveVolumes.hxx"
 
 using namespace MACE::SimMACE::SD;
@@ -13,8 +14,21 @@ SpectrometerSD::SpectrometerSD(const G4String& SDName, const G4String& hitsColle
     G4VSensitiveDetector(SDName),
     fHitsCollection(nullptr),
     fMonitoringTrackList(0),
-    fSpectrometerSensitiveVolumeInfoList(Geometry::Description::SpectrometerSensitiveVolumes::Instance().GetInformationList()) {
+    fSenseWireMap(0) {
+
     collectionName.insert(hitsCollectionName);
+
+    const auto cellInfoList = Geometry::Description::SpectrometerCells::Instance().GetInformationList();
+    const auto svInfoList = Geometry::Description::SpectrometerSensitiveVolumes::Instance().GetInformationList();
+    const auto layerCount = cellInfoList.size();
+    fSenseWireMap.reserve(3 * layerCount * layerCount); // just an estimation of cell count (pi*r^2), for optimization.
+    for (size_t layerID = 0; layerID < layerCount; ++layerID) {
+        auto&& localPosition = std::get<2>(svInfoList[layerID]);
+        for (auto&& rotation : std::get<2>(cellInfoList[layerID])) {
+            fSenseWireMap.emplace_back(rotation * localPosition);
+        }
+    }
+    fSenseWireMap.shrink_to_fit();
 }
 
 void SpectrometerSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
@@ -31,35 +45,35 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     auto monitoring = FindMonitoring(track);
     auto isMonitoring = (monitoring != fMonitoringTrackList.cend());
     if (!isMonitoring and step->IsFirstStepInVolume()) {
-        const auto* const preStepPoint = step->GetPreStepPoint();
-        fMonitoringTrackList.emplace_back(track, preStepPoint->GetGlobalTime(), preStepPoint->GetPosition());
+        fMonitoringTrackList.emplace_back(track, step->GetPreStepPoint());
         monitoring = std::prev(fMonitoringTrackList.cend());
         isMonitoring = true;
     }
     if (isMonitoring and step->IsLastStepInVolume()) {
         // retrive entering time and position
-        const auto inT = std::get<1>(*monitoring);
-        const auto inX = std::get<2>(*monitoring).x();
-        const auto inY = std::get<2>(*monitoring).y();
-        const auto inZ = std::get<2>(*monitoring).z();
+        const auto& enterPoint = monitoring->second;
+        const auto tIn = enterPoint->GetGlobalTime();
+        const auto rIn = G4TwoVector(enterPoint->GetPosition());
+        const auto zIn = enterPoint->GetPosition().z();
         // retrive exiting time and position
-        const auto* const postStepPoint = step->GetPostStepPoint();
-        const auto outT = postStepPoint->GetGlobalTime();
-        const auto outX = postStepPoint->GetPosition().x();
-        const auto outY = postStepPoint->GetPosition().y();
-        const auto outZ = postStepPoint->GetPosition().z();
-        // retrive cell info
-        auto cellID = step->GetPreStepPoint()->GetTouchable()->GetCopyNumber();
-        const auto& [layerID, _, wirePosition] = fSpectrometerSensitiveVolumeInfoList[cellID];
-        const auto wireX = wirePosition.x();
-        const auto wireY = wirePosition.y();
+        const auto* const exitPoint = step->GetPostStepPoint();
+        const auto tOut = exitPoint->GetGlobalTime();
+        const auto rOut = G4TwoVector(exitPoint->GetPosition());
+        const auto zOut = exitPoint->GetPosition().z();
+        // retrive cellID and layerID
+        const auto* const svTouchable = track->GetTouchable();
+        const auto cellID = svTouchable->GetReplicaNumber(1);
+        const auto layerID = svTouchable->GetReplicaNumber(2);
+        // retrive wire position
+        const auto& rWire = fSenseWireMap[cellID];
         // calculate drift distance
-        const auto driftDistance = std::fabs((inX - wireX) * (outY - wireY) - (outX - wireX) * (inY - wireY)) / std::hypot(outX - inX, outY - inY);
+        const auto driftDistance = ((rIn - rWire) + (rOut - rWire)).mag() / 2;
+        // new a hit
         auto* const hit = new SpectrometerHit();
-        hit->SetHitTime((inT + outT) / 2);
-        hit->SetWirePosition(wireX, wireY);
+        hit->SetHitTime((tIn + tOut) / 2);
+        hit->SetWirePosition(rWire);
         hit->SetDriftDistance(driftDistance);
-        hit->SetHitPositionZ((inZ + outZ) / 2);
+        hit->SetHitPositionZ((zIn + zOut) / 2);
         hit->SetCellID(cellID);
         hit->SetLayerID(layerID);
         hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
@@ -67,7 +81,7 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         hit->SetPDGCode(particle->GetPDGEncoding());
         hit->SetTrackID(track->GetTrackID());
         fHitsCollection->insert(hit);
-        // particle exited, remove it from monitoring list
+        // particle is exiting, remove it from monitoring list
         fMonitoringTrackList.erase(monitoring);
         return true;
     }

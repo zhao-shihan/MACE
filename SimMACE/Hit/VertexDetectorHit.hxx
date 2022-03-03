@@ -1,6 +1,7 @@
 #pragma once
 
 #include "G4VHit.hh"
+#include "G4TwoVector.hh"
 #include "G4ThreeVector.hh"
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
@@ -19,7 +20,7 @@ public:
     VertexDetectorHit& operator=(const VertexDetectorHit& hit) noexcept = default;
     VertexDetectorHit& operator=(VertexDetectorHit&& hit) noexcept = default;
 
-    void SetHitPosition(const G4ThreeVector& pos) { DataModel::VertexDetectorSimHit::SetHitPosition(pos.x(), pos.y()); }
+    void SetHitPosition(const G4TwoVector& pos) { DataModel::VertexDetectorSimHit::SetHitPosition(pos.x(), pos.y()); }
     void SetVertexPosition(const G4ThreeVector& pos) { DataModel::VertexDetectorSimHit::SetVertexPosition(pos.x(), pos.y(), pos.z()); }
 
     inline void* operator new(size_t);

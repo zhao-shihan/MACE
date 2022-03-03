@@ -36,23 +36,21 @@ public:
 
     void WriteSelfAndDesendentsToGDML(std::string_view fileName, size_t volumeIndex = 0) const;
 
-    [[nodiscard]] auto GetPhysicalVolumeNum() const { return fPhysicalVolumes.size(); }
-
-    [[nodiscard]] auto GetPhysicalVolume(size_t volumeIndex = 0) const { return fPhysicalVolumes.at(volumeIndex).get(); }
-    [[nodiscard]] auto GetLogicalVolume(size_t volumeIndex = 0) const { return GetPhysicalVolume(volumeIndex)->GetLogicalVolume(); }
-    [[nodiscard]] auto GetSolid(size_t volumeIndex = 0) const { return GetLogicalVolume(volumeIndex)->GetSolid(); }
+    [[nodiscard]] auto GetLogicalVolumeNum() const { return fLogicalVolumes.size(); }
+    [[nodiscard]] auto GetLogicalVolume(size_t volumeIndex = 0) const { return fLogicalVolumes.at(volumeIndex).get(); }
+    [[nodiscard]] auto&& GetLogicalVolumeName(size_t volumeIndex = 0) const { return GetLogicalVolume(volumeIndex)->GetName(); }
     [[nodiscard]] auto GetMaterial(size_t volumeIndex = 0) const { return GetLogicalVolume(volumeIndex)->GetMaterial(); }
 
-    [[nodiscard]] const auto& GetPhysicalVolumeName(size_t volumeIndex = 0) const { return GetPhysicalVolume(volumeIndex)->GetName(); }
-    [[nodiscard]] const auto& GetLogicalVolumeName(size_t volumeIndex = 0) const { return GetLogicalVolume(volumeIndex)->GetName(); }
-    [[nodiscard]] auto        GetSolidName(size_t volumeIndex = 0) const { return GetSolid(volumeIndex)->GetName(); /* ??? G4 is returning a copy of name */ }
+    [[nodiscard]] auto GetPhysicalVolumeNum() const { return fPhysicalVolumes.size(); }
+    [[nodiscard]] auto GetPhysicalVolume(size_t volumeIndex = 0) const { return fPhysicalVolumes.at(volumeIndex).get(); }
+    [[nodiscard]] auto&& GetPhysicalVolumeName(size_t volumeIndex = 0) const { return GetPhysicalVolume(volumeIndex)->GetName(); }
 
 protected:
     // Make a G4Solid and keep it (just for deleting when Entity deconstructs).
     template<class Solid_t, typename... Args>
     std::enable_if_t<std::is_base_of_v<G4VSolid, Solid_t>,
         ObserverPtr<Solid_t>> Make(Args&&... args);
-    // Make a G4LogicalVolume and keep it (just for deleting when Entity deconstructs).
+    // Make a G4LogicalVolume and keep it for futher access. Will be deleted when Entity deconstructed.
     template<class Logical_t, typename... Args>
     std::enable_if_t<std::is_base_of_v<G4LogicalVolume, Logical_t>,
         ObserverPtr<Logical_t>> Make(Args&&... args);
@@ -60,6 +58,7 @@ protected:
     template<class Physical_t, typename... Args>
     std::enable_if_t<std::is_base_of_v<G4VPhysicalVolume, Physical_t>,
         ObserverPtr<Physical_t>> Make(Args&&... args);
+
     // shared_ptr points to the mother Entity.
     auto Mother() const { return std::static_pointer_cast<const Entity>(fMother); }
 
@@ -71,7 +70,7 @@ private:
     std::vector<std::weak_ptr<Entity>>              fDaughters;
 
     std::vector<std::unique_ptr<G4VSolid>>          fSolidStore;
-    std::vector<std::unique_ptr<G4LogicalVolume>>   fLogicalVolumeStore;
+    std::vector<std::unique_ptr<G4LogicalVolume>>   fLogicalVolumes;
     std::vector<std::unique_ptr<G4VPhysicalVolume>> fPhysicalVolumes;
 };
 

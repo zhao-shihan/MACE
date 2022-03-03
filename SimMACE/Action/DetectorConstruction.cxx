@@ -80,7 +80,7 @@ void DetectorConstruction::ConstructVolumes() {
     fSelectorField = std::make_shared<Geometry::Entity::Fast::SelectorField>();
     fTarget = std::make_shared<Geometry::Entity::Fast::Target>();
     // fSpectrometerSenseWires = std::make_shared<Geometry::Entity::Fast::SpectrometerSenseWires>();
-    // fSpectrometerFieldWires = std::make_shared<Geometry::Entity::Fast::SpectrometerFieldWires>();
+    fSpectrometerFieldWires = std::make_shared<Geometry::Entity::Fast::SpectrometerFieldWires>();
     fSpectrometerSensitiveVolumes = std::make_shared<Geometry::Entity::Fast::SpectrometerSensitiveVolumes>();
     fSpectrometerCells = std::make_shared<Geometry::Entity::Fast::SpectrometerCells>();
     fSpectrometerReadoutLayers = std::make_shared<Geometry::Entity::Fast::SpectrometerReadoutLayers>();
@@ -110,7 +110,7 @@ void DetectorConstruction::ConstructVolumes() {
     fSecondTransportField->AddDaughter(fSelectorField);
     fAcceleratorField->AddDaughter(fTarget);
     // fSpectrometerSensitiveVolumes->AddDaughter(fSpectrometerSenseWires);
-    // fSpectrometerCells->AddDaughter(fSpectrometerFieldWires);
+    fSpectrometerCells->AddDaughter(fSpectrometerFieldWires);
     fSpectrometerCells->AddDaughter(fSpectrometerSensitiveVolumes);
     fSpectrometerReadoutLayers->AddDaughter(fSpectrometerCells);
     fSpectrometerBody->AddDaughter(fSpectrometerReadoutLayers);
@@ -141,7 +141,7 @@ void DetectorConstruction::ConstructRegions() {
     fDefaultSolidRegion = new Region("DefaultSolid", Region::kDefaultSolid);
     fCollimator->RegisterRegion(fDefaultSolidRegion);
     fSpectrometerBody->RegisterRegion(fDefaultSolidRegion);
-    // fSpectrometerFieldWires->RegisterRegion(fDefaultSolidRegion);
+    fSpectrometerFieldWires->RegisterRegion(fDefaultSolidRegion);
 
     // DefaultGaseousRegion
     fDefaultGaseousRegion = new Region("DefaultGaseous", Region::kDefaultGaseous);

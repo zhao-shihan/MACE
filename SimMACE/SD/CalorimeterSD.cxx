@@ -22,10 +22,11 @@ void CalorimeterSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
 
 G4bool CalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     const auto* const track = step->GetTrack();
-    const auto* const preStepPoint = step->GetPreStepPoint();
     const auto* const particle = track->GetDefinition();
     if (step->IsFirstStepInVolume() and track->GetCurrentStepNumber() > 1 and   // is coming from outside, and
         (particle->GetPDGCharge() != 0 or particle == G4Gamma::Definition())) { // is a charged particle or gamma
+        const auto* const preStepPoint = step->GetPreStepPoint();
+        // new a hit
         auto* const hit = new CalorimeterHit();
         hit->SetHitTime(preStepPoint->GetGlobalTime());
         hit->SetEnergy(preStepPoint->GetKineticEnergy());

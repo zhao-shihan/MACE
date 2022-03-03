@@ -10,30 +10,30 @@ void SpectrometerSensitiveVolumes::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::SpectrometerSensitiveVolumes::Instance();
     const auto name = description.GetName();
     const auto infoList = description.GetInformationList();
-    const auto cellCount = infoList.size(); // sensitiveVolumeCount == cellCount
+    const auto layerCount = infoList.size();
 
-    for (size_t cellID = 0; cellID < cellCount; ++cellID) {
-        auto&& [_, svRadius, svPosition] = infoList[cellID];
+    for (size_t layerID = 0; layerID < layerCount; ++layerID) {
+        auto&& [radius, halfLength, localPosition] = infoList[layerID];
         auto solid = Make<G4Tubs>(
             name,
             0,
-            svRadius,
-            dynamic_cast<const G4Tubs*>(Mother()->GetSolid(cellID))->GetZHalfLength(),
+            radius,
+            halfLength,
             0,
             2 * M_PI);
         auto logic = Make<G4LogicalVolume>(
             solid,
-            Mother()->GetMaterial(cellID),
+            Mother()->GetMaterial(layerID),
             name);
         Make<G4PVPlacement>(
             G4Transform3D(
                 G4RotationMatrix(),
-                svPosition),
-            name,
+                localPosition),
             logic,
-            Mother()->GetPhysicalVolume(cellID),
-            true,
-            cellID,
+            name,
+            Mother()->GetLogicalVolume(layerID),
+            false,
+            0,
             checkOverlaps);
     }
 }

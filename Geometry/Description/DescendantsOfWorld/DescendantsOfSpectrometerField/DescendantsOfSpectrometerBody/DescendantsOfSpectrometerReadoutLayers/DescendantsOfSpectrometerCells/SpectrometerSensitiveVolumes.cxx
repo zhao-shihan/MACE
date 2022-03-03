@@ -12,33 +12,33 @@ SpectrometerSensitiveVolumes& SpectrometerSensitiveVolumes::Instance() noexcept 
     return instance;
 }
 
-std::vector<std::tuple<int, double, G4TwoVector>> SpectrometerSensitiveVolumes::GetInformationList() const {
+std::vector<std::tuple<double, double, G4TwoVector>> SpectrometerSensitiveVolumes::GetInformationList() const {
     const auto& readoutLayersDescription = SpectrometerReadoutLayers::Instance();
     const auto layerThick = readoutLayersDescription.GetThickness();
     const auto layerInfoList = readoutLayersDescription.GetInformationList();
+    const auto layerCount = layerInfoList.size();
 
     const auto& cellsDescription = SpectrometerCells::Instance();
     const auto cellInfoList = cellsDescription.GetInformationList();
-    const auto cellCount = cellInfoList.size();
 
     const auto& fieldWiresDescription = SpectrometerFieldWires::Instance();
     const auto dFieldWire = fieldWiresDescription.GetDiameter();
 
-    std::vector<std::tuple<int, double, G4TwoVector>> infoList(0);
-    infoList.reserve(cellCount);
+    std::vector<std::tuple<double, double, G4TwoVector>> infoList(0);
+    infoList.reserve(layerCount);
 
-    for (size_t cellID = 0; cellID < cellCount; ++cellID) {
-        auto&& [layerID, cellAngle, cellPhi] = cellInfoList[cellID];
+    for (size_t layerID = 0; layerID < layerCount; ++layerID) {
+        auto&& [cellAngle, halfLength, _] = cellInfoList[layerID];
         const auto svRho = layerInfoList[layerID].first - dFieldWire / 2;
         const auto fieldWireAngle = 2 * std::atan(dFieldWire / (2 * svRho));
 
         const auto svRadius = std::min(svRho * std::tan((cellAngle - fieldWireAngle) / 2), (layerThick - dFieldWire) / 2);
 
-        const auto svPhi = cellPhi - fieldWireAngle / 2;
-        const auto svX = svRho * std::cos(svPhi) /* + baisX */;
-        const auto svY = svRho * std::sin(svPhi) /* + baisY */;
+        const auto svPhi = -fieldWireAngle / 2;
+        const auto svX = svRho * std::cos(svPhi);
+        const auto svY = svRho * std::sin(svPhi);
 
-        infoList.emplace_back(layerID, svRadius, G4TwoVector(svX, svY));
+        infoList.emplace_back(svRadius, halfLength, G4TwoVector(svX, svY));
     }
 
     return infoList;

@@ -21,10 +21,10 @@ public:
     void   EndOfEvent(G4HCofThisEvent*) override;
 
 private:
-    auto FindMonitoring(ObserverPtr<const G4Track> track) { return std::ranges::find_if(std::as_const(fMonitoringTrackList), [&track](const auto& monitoring) { return track == std::get<0>(monitoring); }); }
+    auto FindMonitoring(ObserverPtr<const G4Track> track) { return std::ranges::find_if(std::as_const(fMonitoringTrackList), [&track](const auto& monitoring) { return track == monitoring.first; }); }
 
 private:
     SpectrometerHitCollection* fHitsCollection;
-    std::vector<std::tuple<ObserverPtr<const G4Track>, G4double, G4ThreeVector>> fMonitoringTrackList;
-    const std::vector<std::tuple<int, double, G4TwoVector>> fSpectrometerSensitiveVolumeInfoList;
+    std::vector<std::pair<ObserverPtr<const G4Track>, ObserverPtr<const G4StepPoint>>> fMonitoringTrackList;
+    std::vector<G4TwoVector> fSenseWireMap;
 };

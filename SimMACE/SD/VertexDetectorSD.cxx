@@ -25,11 +25,16 @@ G4bool VertexDetectorSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     if (step->IsFirstStepInVolume() and track->GetCurrentStepNumber() > 1 and // is coming from outside, and
         particle->GetPDGCharge() != 0) {                                      // is a charged particle.
         const auto* const preStepPoint = step->GetPreStepPoint();
-        const auto& detectorPosition = preStepPoint->GetTouchable()->GetTranslation();
-        const auto* const detectorRotation = preStepPoint->GetTouchable()->GetRotation();
+        const auto* const touchable = preStepPoint->GetTouchable();
+        // get detector transform
+        const auto& detectorPosition = touchable->GetTranslation();
+        const auto& detectorRotation = *touchable->GetRotation();
+        // transform hit position to local coordinate
+        const auto hitPosition = G4TwoVector(detectorRotation * (preStepPoint->GetPosition() - detectorPosition));
+        // new a hit
         auto* const hit = new VertexDetectorHit();
         hit->SetHitTime(preStepPoint->GetGlobalTime());
-        hit->SetHitPosition((*detectorRotation) * (preStepPoint->GetPosition() - detectorPosition));
+        hit->SetHitPosition(hitPosition);
         hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
         hit->SetVertexPosition(track->GetVertexPosition());
         hit->SetPDGCode(particle->GetPDGEncoding());

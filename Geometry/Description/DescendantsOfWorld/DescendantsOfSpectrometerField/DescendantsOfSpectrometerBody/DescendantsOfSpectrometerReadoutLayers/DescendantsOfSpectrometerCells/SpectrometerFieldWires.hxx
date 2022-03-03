@@ -28,13 +28,13 @@ public:
     [[nodiscard]] std::string GetRotationDescription()    const override { return ""; }
 
     [[nodiscard]] const auto& GetDiameter() const { return fDiameter; }
-    /// @return Field wire info list. Subscript with cellID and get [ layerID, (sub-list)[ fieldWireID, (local) position ]].
+    /// @return Field wire info list. Subscript with layerID and get [ half length, (sub-list)[ (local) position ] ].
     /// the sub-list contains 3 elements, represents the 3 field wire in a lattice.
     /// @warning This method constructs a std::vector<...> according to current Description status,
     /// thus may become invalid after some Set..., invoke it after any Set method.
     /// @attention Keep the return value instead of invoke mutiple times if you need to check up the cell info.
     /// Otherwise constructs a std::vector<...> like this for many times could lead to performance problem.
-    [[nodiscard]] std::vector<std::pair<int, std::array<std::pair<int, G4TwoVector>, 3>>> GetInformationList() const;
+    [[nodiscard]] std::vector<std::pair<double, std::array<G4TwoVector, 3>>> GetInformationList() const;
 
     void SetFieldWireDiameter(double val) { fDiameter = val; }
 

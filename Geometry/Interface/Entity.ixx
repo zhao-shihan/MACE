@@ -18,12 +18,16 @@ namespace MACE::Geometry::Interface {
             DoRegister();
         } else if (logicalVolume->GetFieldManager()->GetDetectorField() != field) {
             DoRegister();
+        } else {
+            G4ExceptionDescription msg;
+            msg << "Attempting to register the same field multiple times for \"" << logicalVolume->GetName() << "\", skipping.";
+            G4Exception("MACE::Geometry::Interface::Entity::RegisterSensitiveDetector", "-1", JustWarning, msg);
         }
     }
 
     template<class Field_t, class Equation_t, class Stepper_t, class Driver_t>
     void Entity::RegisterField(Field_t* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const {
-        for (size_t i = 0; i < GetPhysicalVolumeNum(); ++i) {
+        for (size_t i = 0; i < GetLogicalVolumeNum(); ++i) {
             RegisterField<Field_t, Equation_t, Stepper_t, Driver_t>(i, field, hMin, nVal, propagateToDescendants);
         }
     }
@@ -40,7 +44,7 @@ namespace MACE::Geometry::Interface {
     std::enable_if_t<std::is_base_of_v<G4LogicalVolume, Logical_t>,
         MACE::ObserverPtr<Logical_t>> Entity::Make(Args&&... args) {
         auto logic = new Logical_t(std::forward<Args>(args)...);
-        fLogicalVolumeStore.emplace_back(static_cast<G4LogicalVolume*>(logic));
+        fLogicalVolumes.emplace_back(static_cast<G4LogicalVolume*>(logic));
         return logic;
     }
 

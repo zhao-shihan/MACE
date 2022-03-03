@@ -9,20 +9,20 @@ SpectrometerFieldWires& SpectrometerFieldWires::Instance() noexcept {
     return instance;
 }
 
-std::vector<std::pair<int, std::array<std::pair<int, G4TwoVector>, 3>>> SpectrometerFieldWires::GetInformationList() const {
+std::vector<std::pair<double, std::array<G4TwoVector, 3>>> SpectrometerFieldWires::GetInformationList() const {
     const auto& readoutLayersDescription = SpectrometerReadoutLayers::Instance();
     const auto layerThick = readoutLayersDescription.GetThickness();
     const auto layerInfoList = readoutLayersDescription.GetInformationList();
+    const auto layerCount = layerInfoList.size();
 
     const auto& cellsDescription = SpectrometerCells::Instance();
     const auto cellInfoList = cellsDescription.GetInformationList();
-    const auto cellCount = cellInfoList.size();
 
-    std::vector<std::pair<int, std::array<std::pair<int, G4TwoVector>, 3>>> infoList(0);
-    infoList.reserve(cellCount);
+    std::vector<std::pair<double, std::array<G4TwoVector, 3>>> infoList(0);
+    infoList.reserve(layerCount);
 
-    for (size_t wireID = 0, cellID = 0; cellID < cellCount; ++cellID) {
-        auto&& [layerID, cellAngle, cellPhi] = cellInfoList[cellID];
+    for (size_t layerID = 0; layerID < layerCount; ++layerID) {
+        auto&& [cellAngle, halfLength, _] = cellInfoList[layerID];
         const auto layerRadius = layerInfoList[layerID].first;
 
         auto ToXY = [](double rho, double phi)->G4TwoVector {
@@ -33,18 +33,14 @@ std::vector<std::pair<int, std::array<std::pair<int, G4TwoVector>, 3>>> Spectrom
 
         const auto rhoInn = layerRadius - fDiameter / 2;
         const auto rhoOut = rhoInn + layerThick / 2;
-        const auto phiLow = cellPhi - std::atan(fDiameter / (2 * rhoInn));
+        const auto phiLow = -std::atan(fDiameter / (2 * rhoInn));
         const auto phiUp = phiLow + cellAngle / 2;
 
         auto&& infoPair = infoList.emplace_back();
-        infoPair.first = layerID;
-        auto&& infoSubList = infoPair.second;
-        infoSubList[0] = std::make_pair(wireID, ToXY(rhoOut, phiLow) /* + bais[0] */);
-        ++wireID;
-        infoSubList[1] = std::make_pair(wireID, ToXY(rhoInn, phiUp) /* + bais[1] */);
-        ++wireID;
-        infoSubList[2] = std::make_pair(wireID, ToXY(rhoOut, phiUp) /* + bais[2] */);
-        ++wireID;
+        infoPair.first = halfLength;
+        infoPair.second[0] = ToXY(rhoOut, phiLow);
+        infoPair.second[1] = ToXY(rhoInn, phiUp);
+        infoPair.second[2] = ToXY(rhoOut, phiUp);
     }
 
     return infoList;

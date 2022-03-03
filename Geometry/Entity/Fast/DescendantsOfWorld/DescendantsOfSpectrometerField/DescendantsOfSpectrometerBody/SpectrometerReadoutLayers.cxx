@@ -31,10 +31,10 @@ void SpectrometerReadoutLayers::ConstructSelf(G4bool checkOverlaps) {
             name);
         Make<G4PVPlacement>(
             G4Transform3D(),
-            name,
             logic,
-            Mother()->GetPhysicalVolume(),
-            true,
+            name,
+            Mother()->GetLogicalVolume(),
+            false,
             layerID,
             checkOverlaps);
     }

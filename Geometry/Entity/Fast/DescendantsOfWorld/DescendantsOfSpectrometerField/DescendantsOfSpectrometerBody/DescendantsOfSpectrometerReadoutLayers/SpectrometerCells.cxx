@@ -9,35 +9,40 @@ using namespace MACE::Geometry::Entity::Fast;
 
 void SpectrometerCells::ConstructSelf(G4bool checkOverlaps) {
     const auto& layersDescription = Description::SpectrometerReadoutLayers::Instance();
-    const auto layerInfoList = layersDescription.GetInformationList();
     const auto layerThick = layersDescription.GetThickness();
+    const auto layerInfoList = layersDescription.GetInformationList();
+    const auto layerCount = layerInfoList.size();
 
     const auto& cellsDescription = Description::SpectrometerCells::Instance();
     const auto name = cellsDescription.GetName();
     const auto cellInfoList = cellsDescription.GetInformationList();
-    const auto cellCount = cellInfoList.size();
 
-    for (size_t cellID = 0; cellID < cellCount; ++cellID) {
-        auto&& [layerID, cellAngle, cellPhi] = cellInfoList[cellID];
+    for (size_t cellID = 0, layerID = 0; layerID < layerCount; ++layerID) {
+        auto&& [cellAngle, _, rotations] = cellInfoList[layerID];
         auto&& [layerRadius, halfLength] = layerInfoList[layerID];
         auto solid = Make<G4Tubs>(
             name,
             layerRadius - layerThick / 2,
             layerRadius + layerThick / 2,
             halfLength,
-            cellPhi - cellAngle / 2,
+            -cellAngle / 2,
             cellAngle);
         auto logic = Make<G4LogicalVolume>(
             solid,
             Mother()->GetMaterial(layerID),
             name);
-        Make<G4PVPlacement>(
-            G4Transform3D(),
-            name,
-            logic,
-            Mother()->GetPhysicalVolume(layerID),
-            true,
-            cellID,
-            checkOverlaps);
+        for (auto&& rotation : rotations) {
+            Make<G4PVPlacement>(
+                G4Transform3D(
+                    rotation,
+                    G4ThreeVector()),
+                logic,
+                name,
+                Mother()->GetLogicalVolume(layerID),
+                false,
+                cellID,
+                checkOverlaps);
+            ++cellID;
+        }
     }
 }

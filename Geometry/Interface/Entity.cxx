@@ -10,7 +10,7 @@ Entity::Entity() :
     fMother(nullptr),
     fDaughters(0),
     fSolidStore(0),
-    fLogicalVolumeStore(0),
+    fLogicalVolumes(0),
     fPhysicalVolumes(0) {}
 
 void Entity::AddDaughter(const std::shared_ptr<Entity>& daughter) {
@@ -45,7 +45,7 @@ void Entity::RegisterRegion(size_t volumeIndex, G4Region* region) const {
 }
 
 void Entity::RegisterRegion(G4Region* region) const {
-    for (size_t i = 0; i < GetPhysicalVolumeNum(); ++i) {
+    for (size_t i = 0; i < GetLogicalVolumeNum(); ++i) {
         RegisterRegion(i, region);
     }
 }
@@ -65,12 +65,15 @@ void Entity::RegisterSensitiveDetector(size_t volumeIndex, G4VSensitiveDetector*
         msg << "Attempting to register SD multiple times for \"" << logicalVolume->GetName() << "\" is currently not supported "
             "(G4MultiSensitiveDetector not supported currently), skipping.";
         G4Exception("MACE::Geometry::Interface::Entity::RegisterSensitiveDetector", "-1", JustWarning, msg);
-        return;
+    } else {
+        G4ExceptionDescription msg;
+        msg << "Attempting to register the same SD multiple times for \"" << logicalVolume->GetName() << "\", skipping.";
+        G4Exception("MACE::Geometry::Interface::Entity::RegisterSensitiveDetector", "-1", JustWarning, msg);
     }
 }
 
 void Entity::RegisterSensitiveDetector(G4VSensitiveDetector* sd) const {
-    for (size_t i = 0; i < GetPhysicalVolumeNum(); ++i) {
+    for (size_t i = 0; i < GetLogicalVolumeNum(); ++i) {
         RegisterSensitiveDetector(i, sd);
     }
 }

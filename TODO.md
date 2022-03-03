@@ -10,6 +10,7 @@
 4. How to store fully-reconstructed event?
 5. (Long-term) Implement RawHit.
 6. (Long-term) Implement SimRawHit.
+7. With new way of manage the relation between beam repetition and G4Event, trackID is not longer identical, need to save eventID. (see also ReconSpectrometer-Utility-1)
 
 ## EventDisplay
 
@@ -26,20 +27,26 @@
 7. (Completed) ~~Add spectrometer magnet.~~
 8. Add vacuum chamber shell.
 9. (Completed) ~~CDC herierachy: Body - ReadOutLayer - Cell - (FieldWire, Sensitive - SenseWire)~~
+10. (Completed) ~~Using a more resonable way of constructing spectrometer (instead of making a large bunch of logical volumes...).~~
 
 ### Interface
 
 1. (Cancelled) ~~Update description interface for pure G4 geometry usage.~~
 
+### Coding
+
+1. Using correct (or better) version of G4PVPlacement constructor. Fooled by exampleB1.
+
 ## ReconSpectrometer
 
 ### Utility
 
-1. 
+1. With new way of manage the relation between beam repetition and G4Event, trackID is not longer identical. Use both trackID and eventID in TrueFinder to recognize tracks. (see also DataModel-Utility-7)
 
 ### Interface
 
-1. Keep the status quo.
+1. (Cancelled) ~~Keep the status quo.~~
+2. New herierachy: Reconstructor - (GlobalFinder - LocalFinder - Fitter)
 
 ## SimCalorimeter
 
@@ -65,12 +72,12 @@
 
 ### Detector
 
-1. Setup G4Regions, like calorimeter region, solenoid region, shield region, etc.
+1. (Completed) ~~Setup G4Regions, like calorimeter region, solenoid region, shield region, etc.~~
 2. Set cut for solenoid and shield to acclerate simulation in certain case.
 
 ### Action
 
-1. (Cancelled, replaced by region cut) ~~SteppingAction for killing track in spectrometer magnet and shield.~~
+1. (Cancelled, replaced by SimMACE-Detector-2) ~~SteppingAction for killing track in spectrometer magnet and shield.~~
 
 ### Other
 
@@ -109,10 +116,17 @@
 4. Config file reader?
 5. (Completed) ~~G4MPIRunManager!~~
 6. (Suspended) ~~Better eventID distribution on ranks for G4MPIRunManager.~~
+7. Use std::filesystem features to allow independent process of root file merging.
 
 ## Other
 
 1. (Ongoing) Better CMakeLists coding.
 2. (Ongoing) Use C++20 feature.
 3. (Completed) ~~Suppress all of -Wall and -Wextra warnings (excluding ThirdParty).~~
-4. Defect: Base-class of class that handles by G4Allocator should not have inlined virtual deconstructor. Maybe we can implement an alternative allocator.
+4. Consider to use built-in mimalloc as replacement of default allocator. (see also Defect-1)
+5. Planning global interface of data analysis: Initialize - Process - Finalize, ReconSpectormeter and other could use the concept.
+
+## Defect
+
+1. Base-class of class that handles by G4Allocator should not have inlined virtual deconstructor. Maybe we can implement an alternative allocator. (see also Other-4)
+2. In TTreeViewer, the sub-branch of same name (like VertexPos.fX and HitPos.fX) is conflict. Maybe adjust split level could help?

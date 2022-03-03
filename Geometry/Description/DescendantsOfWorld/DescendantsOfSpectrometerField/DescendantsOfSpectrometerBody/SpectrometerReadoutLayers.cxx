@@ -19,9 +19,9 @@ std::vector<std::pair<double, double>> SpectrometerReadoutLayers::GetInformation
     const auto layerCount = static_cast<int>((gasOuterRadius - gasInnerRadius) / fLayerThickness);
 
     std::vector<std::pair<double, double>> infoList(0);
-    for (int i = 0; i < layerCount; ++i) {
-        const auto layerCenterRadius = gasInnerRadius + (i + 0.5) * fLayerThickness;
-        const auto halfLength = gasInnerLength / 2 + i * fLayerThickness * sideSlope;
+    for (int k = 0; k < layerCount; ++k) {
+        const auto layerCenterRadius = gasInnerRadius + (k + 0.5) * fLayerThickness;
+        const auto halfLength = gasInnerLength / 2 + k * fLayerThickness * sideSlope;
         infoList.emplace_back(layerCenterRadius, halfLength);
     }
 

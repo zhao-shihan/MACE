@@ -26,10 +26,10 @@ public:
     [[nodiscard]] std::string GetTranslationDescription() const override { return ""; }
     [[nodiscard]] std::string GetRotationDescription()    const override { return ""; }
 
-    /// @return Spectrometer sensitive volume info list. Subscript with cellID and get [ layerID, radius, (local) position ].
+    /// @return Spectrometer sensitive volume info list. Subscript with layerID and get [ radius, half length, (local) position ].
     /// @warning This method constructs a std::vector<...> according to current Description status,
     /// thus may become invalid after some Set..., invoke it after any Set method.
     /// @attention Keep the return value instead of invoke mutiple times if you need to check up the cell info.
     /// Otherwise constructs a std::vector<...> like this for many times could lead to performance problem.
-    [[nodiscard]] std::vector<std::tuple<int, double, G4TwoVector>> GetInformationList() const;
+    [[nodiscard]] std::vector<std::tuple<double, double, G4TwoVector>> GetInformationList() const;
 };

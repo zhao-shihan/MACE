@@ -12,41 +12,33 @@ void SpectrometerFieldWires::ConstructSelf(G4bool checkOverlaps) {
     const auto name = description.GetName();
     const auto rFieldWire = description.GetDiameter() / 2;
     const auto infoList = description.GetInformationList();
-    const auto cellCount = infoList.size(); // wireCount == 3 * cellCount
+    const auto layerCount = infoList.size();
 
     auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
 
-    int currentLayerID = -1;
-    G4Tubs* solid = nullptr;
-    G4LogicalVolume* logic = nullptr;
-    for (size_t cellID = 0; cellID < cellCount; ++cellID) {
-        auto&& [layerID, infoSubList] = infoList[cellID];
-        // cells in a layer shares the same solid and logical volume, and
-        // sensitive volumes in a layer shares the same solid and logical volume
-        if (layerID != currentLayerID) {
-            currentLayerID = layerID;
-            solid = Make<G4Tubs>(
-                name,
-                0,
-                rFieldWire,
-                dynamic_cast<const G4Tubs*>(Mother()->GetSolid(cellID))->GetZHalfLength(),
-                0,
-                2 * M_PI);
-            logic = Make<G4LogicalVolume>(
-                solid,
-                material,
-                name);
-        }
-        for (auto&& [fieldWireID, position] : infoSubList) {
+    for (size_t layerID = 0; layerID < layerCount; ++layerID) {
+        auto&& [halfLength, positionList] = infoList[layerID];
+        auto solid = Make<G4Tubs>(
+            name,
+            0,
+            rFieldWire,
+            halfLength,
+            0,
+            2 * M_PI);
+        auto logic = Make<G4LogicalVolume>(
+            solid,
+            material,
+            name);
+        for (size_t wireID = 0; wireID < positionList.size(); ++wireID) {
             Make<G4PVPlacement>(
                 G4Transform3D(
                     G4RotationMatrix(),
-                    position),
-                name,
+                    positionList[wireID]),
                 logic,
-                Mother()->GetPhysicalVolume(cellID),
-                true,
-                fieldWireID,
+                name,
+                Mother()->GetLogicalVolume(layerID),
+                false,
+                wireID,
                 checkOverlaps);
         }
     }

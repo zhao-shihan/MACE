@@ -1,6 +1,7 @@
 #pragma once
 
 #include "G4VHit.hh"
+#include "G4TwoVector.hh"
 #include "G4ThreeVector.hh"
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
@@ -19,6 +20,7 @@ public:
     SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept = default;
     SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept = default;
 
+    void SetWirePosition(const G4TwoVector& pos) { DataModel::SpectrometerSimHit::SetWirePosition(pos.x(), pos.y()); }
     void SetVertexPosition(const G4ThreeVector& pos) { DataModel::SpectrometerSimHit::SetVertexPosition(pos.x(), pos.y(), pos.z()); }
 
     inline void* operator new(size_t);
