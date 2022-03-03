@@ -2,7 +2,8 @@
 
 #include <iostream>
 
-#include "MACEGlobal.hxx"
+#include "CoreForwardDeclaration.hxx"
+#include "ReconForwardDeclaration.hxx"
 #include "DataModel/Hit/SpectrometerHit.hxx"
 #include "DataModel/SimHit/SpectrometerSimHit.hxx"
 #include "DataModel/Track/HelixTrack.hxx"

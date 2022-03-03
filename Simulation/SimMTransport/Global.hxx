@@ -6,7 +6,8 @@
 
 #include "mpi.h"
 
-#include "MACEGlobal.hxx"
+#include "CoreForwardDeclaration.hxx"
+#include "SimForwardDeclaration.hxx"
 
 // Unit system:
 //  us = 1.0;

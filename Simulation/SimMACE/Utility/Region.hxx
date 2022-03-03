@@ -2,7 +2,7 @@
 
 #include "G4Region.hh"
 
-#include "MACEGlobal.hxx"
+#include "SimForwardDeclaration.hxx"
 
 class MACE::SimMACE::Region final :
     public G4Region {

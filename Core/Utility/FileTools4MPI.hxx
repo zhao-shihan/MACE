@@ -4,7 +4,7 @@
 
 #include "mpi.h"
 
-#include "MACEGlobal.hxx"
+#include "CoreForwardDeclaration.hxx"
 #include "Utility/ObserverPtr.hxx"
 
 // Create directories and file paths to help managing files during mpi processing.

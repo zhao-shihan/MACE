@@ -2,7 +2,7 @@
 
 #include "G4RunManager.hh"
 
-#include "MACEGlobal.hxx"
+#include "CoreForwardDeclaration.hxx"
 #include "Utility/ObserverPtr.hxx"
 
 class G4MPImanager;

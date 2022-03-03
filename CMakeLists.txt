@@ -2,30 +2,37 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
 project(MACE)
 
+# ================================================================================================================================
 # MACE at C++20
+# ================================================================================================================================
 if(NOT DEFINED CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 20)
 elseif(CMAKE_CXX_STANDARD LESS 20)
     message(FATAL_ERROR "MACE should be built, at least, with C++20")
 endif()
 message(STATUS "MACE is building with C++${CMAKE_CXX_STANDARD}")
-#
+
+# ================================================================================================================================
+# Compile flags
+# ================================================================================================================================
+# More warnings
+add_definitions(-Wall -Wextra)
 # Suppress warning from TStorage.h which is only raised in C++20 and above:
-#
-# TStorage.h:133:12: warning: compound assignment with ‘volatile’-qualified left operand is deprecated [-Wvolatile]
-#   133 |       bits |= kIsOnHeap;
-#       |       ~~~~~^~~~~~~~~~~~
-# TStorage.h:135:12: warning: compound assignment with ‘volatile’-qualified left operand is deprecated [-Wvolatile]
-#   135 |       bits &= ~kIsOnHeap;
-#       |       ~~~~~^~~~~~~~~~~~~
-#
 if(CMAKE_CXX_STANDARD GREATER 17)
+    #
+    # TStorage.h:133:12: warning: compound assignment with ‘volatile’-qualified left operand is deprecated [-Wvolatile]
+    #   133 |       bits |= kIsOnHeap;
+    #       |       ~~~~~^~~~~~~~~~~~
+    # TStorage.h:135:12: warning: compound assignment with ‘volatile’-qualified left operand is deprecated [-Wvolatile]
+    #   135 |       bits &= ~kIsOnHeap;
+    #       |       ~~~~~^~~~~~~~~~~~~
+    #
     add_definitions(-Wno-volatile)
 endif()
 
-# more warnings
-add_definitions(-Wall -Wextra)
-
+# ================================================================================================================================
+# Dependencies
+# ================================================================================================================================
 # MPI
 find_package(MPI 3.0 REQUIRED)
 message(STATUS "MACE uses MPI_C includes from: ${MPI_C_INCLUDE_DIRS}")
@@ -53,16 +60,17 @@ message(STATUS "MACE uses ROOT libraries: ${ROOT_LIBRARIES}")
 find_package(Eigen3 3.3.9 REQUIRED)
 message(STATUS "MACE uses Eigen3 includes from: ${EIGEN3_INCLUDE_DIRS}")
 
+# ================================================================================================================================
+# Variables
+# ================================================================================================================================
 # Dirs
 set(MACE_PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
 set(MACE_THIRD_PARTY_DIR ${PROJECT_SOURCE_DIR}/ThirdParty)
 
-include_directories(${MACE_PROJECT_ROOT_DIR})
-
-add_subdirectory(DataModel)
-add_subdirectory(Geometry)
-add_subdirectory(ReconSpectrometer)
-add_subdirectory(SimMACE)
-add_subdirectory(SimMTransport)
-add_subdirectory(Utility)
+# ================================================================================================================================
+# sub directories
+# ================================================================================================================================
+add_subdirectory(Core)
+add_subdirectory(Reconstruction)
+add_subdirectory(Simulation)
 add_subdirectory(ThirdParty)

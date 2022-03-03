@@ -2,6 +2,9 @@
 
 namespace MACE {
 
+    // FIXME: using inline namespace at this level (just under MACE) confuses VSCode's C++ extension. ...&$@!(>:$#@!
+    // inline namespace Core {
+
     namespace DataModel {
         inline namespace BranchSocket {
             template<typename Arith_t> class BasicBranchSocket;
@@ -36,7 +39,7 @@ namespace MACE {
             class PhysicsTrack;
         }
         class DataHub;
-    }
+    } // inline namespace DataModel
 
     namespace Geometry {
         namespace Description {
@@ -160,89 +163,13 @@ namespace MACE {
             class Description;
             class Entity;
         }
-    }
-
-    namespace ReconSpectrometer {
-        namespace Fitter {
-            template<class SpectromrterHit_t, class Track_t> class DirectSubSpaceLeastVariance;
-            template<class SpectromrterHit_t, class Track_t> class Dummy;
-        }
-        namespace Interface {
-            template<class SpectromrterHit_t, class Track_t> class Fitter;
-            template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t> class Reconstructor;
-        }
-        namespace Reconstructor {
-            template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t> class Hough;
-            template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t> class TrueFinder;
-        }
-    }
-
-    namespace SimCalorimeter {}
-
-    namespace SimMACE {
-        inline namespace Action {
-            class DetectorConstruction;
-            class EventAction;
-            class PrimaryGeneratorAction;
-            class RunAction;
-        }
-        inline namespace Field {
-            class AcceleratorField;
-            class FirstBendField;
-            class ParallelField;
-            class SecondBendField;
-            class SelectorField;
-            class VerticalField;
-        }
-        inline namespace Hit {
-            class CalorimeterHit;
-            class VertexDetectorHit;
-            class SpectrometerHit;
-        }
-        inline namespace Messenger {
-            class AnalysisMessenger;
-            class FieldMessenger;
-            class PhysicsMessenger;
-            class PrimaryGeneratorMessenger;
-        }
-        namespace Physics {
-            class AntiMuonium;
-            class AntiMuoniumDecayChannel;
-            class Muonium;
-            class MuoniumDecayChannel;
-            class MuoniumPhysics;
-            class MuoniumProduction;
-            class MuoniumTransport;
-            class PhysicsList;
-        }
-        inline namespace SD {
-            class CalorimeterSD;
-            class VertexDetectorSD;
-            class SpectrometerSD;
-        }
-        inline namespace Utility {
-            class Analysis;
-            class Region;
-        }
-        class RunManager;
-    }
-
-    namespace SimMTransport {
-        class Analysis;
-        class Global;
-        class Master;
-        class MonteCarlo;
-        class RunManager;
-        struct Step;
-        class Track;
-        class Worker;
-    }
-
-    namespace SimSpectrometer {}
+    } // namespace Geometry
 
     inline namespace Utility {
         class FileTools4MPI;
         class G4MPIRunManager;
     }
 
-}
+    // } // inline namespace Core
+
+} // namespace MACE
