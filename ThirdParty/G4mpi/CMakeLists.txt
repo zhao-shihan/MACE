@@ -1,3 +1,10 @@
+#----------------------------------------------------------------------------------------------------------------
+# Informations of MACE edits: 
+# 1. All ##MACE_EDIT##. ##MACE_EDIT## at the begin of line means deletion, at end of line means addition
+# 2. MACE_EDIT_BEGIN - MACE_EDIT_END blocks
+# 3. {message("-- G4 Examples:} -> {message(STATUS "${_projname}:}
+#----------------------------------------------------------------------------------------------------------------
+
 # - CmakeLists.txt for G4mpi interface
 
 #------------------------------------------------------------------------------
@@ -11,7 +18,7 @@ project(${_projname})
 if(CMAKE_CXX_STANDARD GREATER 17)
     set(CMAKE_CXX_STANDARD 17)
 endif()
-message("-- ${_projname} is building with C++${CMAKE_CXX_STANDARD}")
+message(STATUS "${_projname} is building with C++${CMAKE_CXX_STANDARD}")
 #
 # Suppress warning:
 #
@@ -34,9 +41,9 @@ add_definitions(-Wno-cast-function-type)
 include(${Geant4_USE_FILE})
 
 #------------------------------------------------------------------------------
-##MACE_EDIT## message("-- G4 Examples: ${_projname} uses includes from: "
+##MACE_EDIT## message(STATUS "${_projname}: ${_projname} uses includes from: "
 ##MACE_EDIT##         "${MPI_CXX_INCLUDE_PATH}")
-##MACE_EDIT## message("-- G4 Examples: ${_projname} uses libraries: ${MPI_CXX_LIBRARIES}")
+##MACE_EDIT## message(STATUS "${_projname}: ${_projname} uses libraries: ${MPI_CXX_LIBRARIES}")
 
 #Version of this package is the same as the G4 version
 set(${_targetname}_VERSION ${Geant4_VERSION})
@@ -64,7 +71,7 @@ mark_as_advanced(G4MPI_OLD_MPI)
 #Setup compilation options specific to this project
 add_definitions(-DTOOLS_USE_NATIVE_MPI) 
 if(G4MPI_OLD_MPI)
-  message("-- G4 Examples: ${_projname} using old non-const signatures for" 
+  message(STATUS "${_projname}: ${_projname} using old non-const signatures for" 
           "MPI_[Un]Pack functions")
   add_definitions(-DTOOLS_USE_MPI_PACK_NOT_CONST)
   add_definitions(-DG4MPI_USE_MPI_PACK_NOT_CONST)
