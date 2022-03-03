@@ -30,9 +30,9 @@ std::vector<std::tuple<double, double, G4TwoVector>> SpectrometerSensitiveVolume
     for (size_t layerID = 0; layerID < layerCount; ++layerID) {
         auto&& [cellAngle, halfLength, _] = cellInfoList[layerID];
         const auto svRho = layerInfoList[layerID].first - dFieldWire / 2;
-        const auto fieldWireAngle = 2 * std::atan(dFieldWire / (2 * svRho));
+        const auto fieldWireAngle = 2 * std::asin(dFieldWire / (2 * svRho));
 
-        const auto svRadius = std::min(svRho * std::tan((cellAngle - fieldWireAngle) / 2), (layerThick - dFieldWire) / 2);
+        const auto svRadius = std::min(svRho * std::sin((cellAngle - fieldWireAngle) / 2), (layerThick - dFieldWire) / 2);
 
         const auto svPhi = -fieldWireAngle / 2;
         const auto svX = svRho * std::cos(svPhi);

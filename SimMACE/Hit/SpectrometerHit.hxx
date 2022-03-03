@@ -43,4 +43,3 @@ inline void MACE::SimMACE::SpectrometerHit::
 operator delete(void* hit) {
     fgSpectrometerHitAllocator.FreeSingle(static_cast<SpectrometerHit*>(hit));
 }
-
