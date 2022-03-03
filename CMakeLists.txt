@@ -59,20 +59,6 @@ set(MACE_THIRD_PARTY_DIR ${PROJECT_SOURCE_DIR}/ThirdParty)
 
 include_directories(${MACE_PROJECT_ROOT_DIR})
 
-# A useful function
-# function(include_directories_recursively root_dir)
-#     file(GLOB ALL_SUB RELATIVE ${root_dir} ${root_dir}/*)
-#     foreach(sub ${ALL_SUB})
-#         if (IS_DIRECTORY ${root_dir}/${sub})
-#             if(${sub} STREQUAL "include")
-#                 include_directories(${root_dir}/${sub})
-#             else()
-#                 include_directories_recursively(${root_dir}/${sub})
-#             endif()
-#         endif()
-#     endforeach()
-# endfunction()
-
 add_subdirectory(ThirdParty)
 add_subdirectory(DataModel)
 add_subdirectory(Geometry)
