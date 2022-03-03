@@ -8,7 +8,7 @@ public:
     static SecondBendField& Instance() noexcept;
 
 private:
-    SecondBendField() noexcept = default;
+    SecondBendField() = default;
     ~SecondBendField() noexcept = default;
     SecondBendField(const SecondBendField&) = delete;
     SecondBendField& operator=(const SecondBendField&) = delete;

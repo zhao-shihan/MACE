@@ -8,7 +8,7 @@ public:
     static CalorimeterShield& Instance() noexcept;
 
 private:
-    CalorimeterShield() noexcept = default;
+    CalorimeterShield() = default;
     ~CalorimeterShield() noexcept = default;
     CalorimeterShield(const CalorimeterShield&) = delete;
     CalorimeterShield& operator=(const CalorimeterShield&) = delete;

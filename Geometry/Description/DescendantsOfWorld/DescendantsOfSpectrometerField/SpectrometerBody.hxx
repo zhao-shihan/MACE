@@ -8,7 +8,7 @@ public:
     static SpectrometerBody& Instance() noexcept;
 
 private:
-    SpectrometerBody() noexcept = default;
+    SpectrometerBody() = default;
     ~SpectrometerBody() noexcept = default;
     SpectrometerBody(const SpectrometerBody&) = delete;
     SpectrometerBody& operator=(const SpectrometerBody&) = delete;

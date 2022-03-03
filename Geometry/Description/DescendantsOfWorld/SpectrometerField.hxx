@@ -8,7 +8,7 @@ public:
     static SpectrometerField& Instance() noexcept;
 
 private:
-    SpectrometerField() noexcept = default;
+    SpectrometerField() = default;
     ~SpectrometerField() noexcept = default;
     SpectrometerField(const SpectrometerField&) = delete;
     SpectrometerField& operator=(const SpectrometerField&) = delete;

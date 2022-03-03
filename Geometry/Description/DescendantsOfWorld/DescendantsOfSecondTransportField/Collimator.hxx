@@ -8,7 +8,7 @@ public:
     static Collimator& Instance() noexcept;
 
 private:
-    Collimator() noexcept = default;
+    Collimator() = default;
     ~Collimator() noexcept = default;
     Collimator(const Collimator&) = delete;
     Collimator& operator=(const Collimator&) = delete;

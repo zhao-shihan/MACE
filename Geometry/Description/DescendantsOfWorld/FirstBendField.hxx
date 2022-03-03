@@ -8,7 +8,7 @@ public:
     static FirstBendField& Instance() noexcept;
 
 private:
-    FirstBendField() noexcept = default;
+    FirstBendField() = default;
     ~FirstBendField() noexcept = default;
     FirstBendField(const FirstBendField&) = delete;
     FirstBendField& operator=(const FirstBendField&) = delete;

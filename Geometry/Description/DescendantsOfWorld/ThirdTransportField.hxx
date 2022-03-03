@@ -8,7 +8,7 @@ public:
     static ThirdTransportField& Instance() noexcept;
 
 private:
-    ThirdTransportField() noexcept = default;
+    ThirdTransportField() = default;
     ~ThirdTransportField() noexcept = default;
     ThirdTransportField(const ThirdTransportField&) = delete;
     ThirdTransportField& operator=(const ThirdTransportField&) = delete;

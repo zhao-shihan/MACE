@@ -13,7 +13,7 @@ public:
     static SpectrometerFieldWires& Instance() noexcept;
 
 private:
-    SpectrometerFieldWires() noexcept = default;
+    SpectrometerFieldWires() = default;
     ~SpectrometerFieldWires() noexcept = default;
     SpectrometerFieldWires(const SpectrometerFieldWires&) = delete;
     SpectrometerFieldWires& operator=(const SpectrometerFieldWires&) = delete;

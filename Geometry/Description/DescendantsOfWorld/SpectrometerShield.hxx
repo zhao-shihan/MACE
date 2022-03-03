@@ -8,7 +8,7 @@ public:
     static SpectrometerShield& Instance() noexcept;
 
 private:
-    SpectrometerShield() noexcept = default;
+    SpectrometerShield() = default;
     ~SpectrometerShield() noexcept = default;
     SpectrometerShield(const SpectrometerShield&) = delete;
     SpectrometerShield& operator=(const SpectrometerShield&) = delete;

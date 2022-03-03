@@ -8,7 +8,7 @@ public:
     static Target& Instance() noexcept;
 
 private:
-    Target() noexcept = default;
+    Target() = default;
     ~Target() noexcept = default;
     Target(const Target&) = delete;
     Target& operator=(const Target&) = delete;

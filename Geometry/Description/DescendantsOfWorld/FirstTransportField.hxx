@@ -11,7 +11,7 @@ public:
     static FirstTransportField& Instance() noexcept;
 
 private:
-    FirstTransportField() noexcept = default;
+    FirstTransportField() = default;
     ~FirstTransportField() noexcept = default;
     FirstTransportField(const FirstTransportField&) = delete;
     FirstTransportField& operator=(const FirstTransportField&) = delete;

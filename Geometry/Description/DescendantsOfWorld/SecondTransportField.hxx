@@ -8,7 +8,7 @@ public:
     static SecondTransportField& Instance() noexcept;
 
 private:
-    SecondTransportField() noexcept = default;
+    SecondTransportField() = default;
     ~SecondTransportField() noexcept = default;
     SecondTransportField(const SecondTransportField&) = delete;
     SecondTransportField& operator=(const SecondTransportField&) = delete;

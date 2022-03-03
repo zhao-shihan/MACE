@@ -12,7 +12,7 @@ public:
     static SpectrometerSensitiveVolumes& Instance() noexcept;
 
 private:
-    SpectrometerSensitiveVolumes() noexcept = default;
+    SpectrometerSensitiveVolumes() = default;
     ~SpectrometerSensitiveVolumes() noexcept = default;
     SpectrometerSensitiveVolumes(const SpectrometerSensitiveVolumes&) = delete;
     SpectrometerSensitiveVolumes& operator=(const SpectrometerSensitiveVolumes&) = delete;

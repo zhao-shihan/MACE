@@ -13,7 +13,7 @@ public:
     static SpectrometerCells& Instance() noexcept;
 
 private:
-    SpectrometerCells() noexcept = default;
+    SpectrometerCells() = default;
     ~SpectrometerCells() noexcept = default;
     SpectrometerCells(const SpectrometerCells&) = delete;
     SpectrometerCells& operator=(const SpectrometerCells&) = delete;

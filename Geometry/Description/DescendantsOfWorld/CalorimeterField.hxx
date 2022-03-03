@@ -8,7 +8,7 @@ public:
     static CalorimeterField& Instance() noexcept;
 
 private:
-    CalorimeterField() noexcept = default;
+    CalorimeterField() = default;
     ~CalorimeterField() noexcept = default;
     CalorimeterField(const CalorimeterField&) = delete;
     CalorimeterField& operator=(const CalorimeterField&) = delete;

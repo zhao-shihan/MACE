@@ -8,7 +8,7 @@ public:
     static World& Instance() noexcept;
 
 private:
-    World() noexcept = default;
+    World() = default;
     ~World() noexcept = default;
     World(const World&) = delete;
     World& operator=(const World&) = delete;

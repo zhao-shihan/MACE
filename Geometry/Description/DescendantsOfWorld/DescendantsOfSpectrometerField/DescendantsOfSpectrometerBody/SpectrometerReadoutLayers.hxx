@@ -10,7 +10,7 @@ public:
     static SpectrometerReadoutLayers& Instance() noexcept;
 
 private:
-    SpectrometerReadoutLayers() noexcept = default;
+    SpectrometerReadoutLayers() = default;
     ~SpectrometerReadoutLayers() noexcept = default;
     SpectrometerReadoutLayers(const SpectrometerReadoutLayers&) = delete;
     SpectrometerReadoutLayers& operator=(const SpectrometerReadoutLayers&) = delete;

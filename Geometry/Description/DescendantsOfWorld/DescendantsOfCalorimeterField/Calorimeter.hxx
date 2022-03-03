@@ -8,7 +8,7 @@ public:
     static Calorimeter& Instance() noexcept;
 
 private:
-    Calorimeter() noexcept = default;
+    Calorimeter() = default;
     ~Calorimeter() noexcept = default;
     Calorimeter(const Calorimeter&) = delete;
     Calorimeter& operator=(const Calorimeter&) = delete;

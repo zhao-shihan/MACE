@@ -8,7 +8,7 @@ public:
     static ThirdTransportSolenoid& Instance() noexcept;
 
 private:
-    ThirdTransportSolenoid() noexcept = default;
+    ThirdTransportSolenoid() = default;
     ~ThirdTransportSolenoid() noexcept = default;
     ThirdTransportSolenoid(const ThirdTransportSolenoid&) = delete;
     ThirdTransportSolenoid& operator=(const ThirdTransportSolenoid&) = delete;

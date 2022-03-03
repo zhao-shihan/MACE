@@ -8,7 +8,7 @@ public:
     static VertexDetector& Instance() noexcept;
 
 private:
-    VertexDetector() noexcept = default;
+    VertexDetector() = default;
     ~VertexDetector() noexcept = default;
     VertexDetector(const VertexDetector&) = delete;
     VertexDetector& operator=(const VertexDetector&) = delete;

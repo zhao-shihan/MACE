@@ -13,7 +13,7 @@ public:
     static AcceleratorField& Instance() noexcept;
 
 private:
-    AcceleratorField() noexcept = default;
+    AcceleratorField() = default;
     ~AcceleratorField() noexcept = default;
     AcceleratorField(const AcceleratorField&) = delete;
     AcceleratorField& operator=(const AcceleratorField&) = delete;

@@ -10,7 +10,7 @@ public:
     static SelectorField& Instance() noexcept;
 
 private:
-    SelectorField() noexcept = default;
+    SelectorField() = default;
     ~SelectorField() noexcept = default;
     SelectorField(const SelectorField&) = delete;
     SelectorField& operator=(const SelectorField&) = delete;

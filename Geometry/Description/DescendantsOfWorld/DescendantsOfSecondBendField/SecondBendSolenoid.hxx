@@ -8,7 +8,7 @@ public:
     static SecondBendSolenoid& Instance() noexcept;
 
 private:
-    SecondBendSolenoid() noexcept = default;
+    SecondBendSolenoid() = default;
     ~SecondBendSolenoid() noexcept = default;
     SecondBendSolenoid(const SecondBendSolenoid&) = delete;
     SecondBendSolenoid& operator=(const SecondBendSolenoid&) = delete;

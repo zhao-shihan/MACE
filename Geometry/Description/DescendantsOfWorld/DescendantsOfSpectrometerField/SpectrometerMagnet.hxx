@@ -8,7 +8,7 @@ public:
     static SpectrometerMagnet& Instance() noexcept;
 
 private:
-    SpectrometerMagnet() noexcept = default;
+    SpectrometerMagnet() = default;
     ~SpectrometerMagnet() noexcept = default;
     SpectrometerMagnet(const SpectrometerMagnet&) = delete;
     SpectrometerMagnet& operator=(const SpectrometerMagnet&) = delete;
