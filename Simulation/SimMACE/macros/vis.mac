@@ -1,7 +1,7 @@
 # Macro file for the visualization setting in the initialization phase 
 # of the test when running in interactive mode
 #
-/vis/open OGL 800x600-0+0
+/vis/open OGL
 
 /vis/viewer/set/autoRefresh false
 /vis/verbose errors

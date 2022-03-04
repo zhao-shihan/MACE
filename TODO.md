@@ -47,7 +47,7 @@
 ### Interface
 
 1. (Cancelled) ~Keep the status quo.~
-2. New herierachy: Reconstructor - (GlobalFinder - LocalFinder - Fitter)
+2. New herierachy: Tracker - (GlobalFinder - LocalFinder - Fitter)
 
 ## SimCalorimeter
 
@@ -127,7 +127,7 @@
 3. (Completed) ~Suppress all of -Wall and -Wextra warnings (excluding ThirdParty).~
 4. (Cancelled, tough) ~~Consider to use built-in mimalloc as replacement of default allocator. (see also Defect-1)~~
 5. Planning global interface of data analysis: Initialize - Process - Finalize, ReconSpectormeter and other could use the concept.
-6. Investigate G4 vis engine.
+6. (Completed) ~Investigate G4 vis engine.~
 
 ## Defect
 
