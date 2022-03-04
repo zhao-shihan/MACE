@@ -4,8 +4,8 @@
 #include "ObserverPtr.hxx"
 #include "SimMACE/Global.hxx"
 #include "SimMACE/Action/DetectorConstruction.hxx"
-#include "SimMACE/Action/PrimaryGeneratorAction.hxx"
 #include "SimMACE/Action/RunAction.hxx"
+#include "SimMACE/Action/PrimaryGeneratorAction.hxx"
 #include "SimMACE/Action/EventAction.hxx"
 
 class MACE::SimMACE::RunManager final :

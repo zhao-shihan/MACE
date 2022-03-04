@@ -11,7 +11,7 @@ class MACE::SimMACE::DetectorConstruction final :
     public G4VUserDetectorConstruction {
     friend RunManager;
 private:
-    DetectorConstruction();
+    DetectorConstruction() = default;
     ~DetectorConstruction() noexcept = default;
     DetectorConstruction(const DetectorConstruction&) = delete;
     DetectorConstruction& operator=(const DetectorConstruction&) = delete;

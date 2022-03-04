@@ -58,8 +58,6 @@
 
 using namespace MACE::SimMACE::Action;
 
-DetectorConstruction::DetectorConstruction() = default;
-
 G4VPhysicalVolume* DetectorConstruction::Construct() {
     ConstructVolumes();
     ConstructRegions();

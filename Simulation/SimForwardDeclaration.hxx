@@ -9,6 +9,7 @@ namespace MACE {
 
     namespace SimMACE {
         inline namespace Action {
+            class ActionInitialization;
             class DetectorConstruction;
             class EventAction;
             class PrimaryGeneratorAction;

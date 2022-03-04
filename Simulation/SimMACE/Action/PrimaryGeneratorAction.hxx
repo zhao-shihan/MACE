@@ -7,7 +7,7 @@
 
 class MACE::SimMACE::PrimaryGeneratorAction final :
     public G4VUserPrimaryGeneratorAction {
-    friend RunManager;
+    friend ActionInitialization;
 private:
     PrimaryGeneratorAction();
     ~PrimaryGeneratorAction() noexcept = default;

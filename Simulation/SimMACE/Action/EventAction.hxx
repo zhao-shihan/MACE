@@ -7,7 +7,7 @@
 
 class MACE::SimMACE::EventAction final :
     public G4UserEventAction {
-    friend RunManager;
+    friend ActionInitialization;
 private:
     EventAction() = default;
     ~EventAction() noexcept = default;
