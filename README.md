@@ -1,13 +1,29 @@
 # MACE
 
-<img align="right" width="100" height="100" src="doc/MACE_logo.png"/>
+<img align="right" width="100" height="100" src="doc/pics/MACE_logo.png"/>
+
+  - [Introduction](#introduction)
+  - [How to Build](#how-to-build)
+    - [External dependencies](#external-dependencies)
+    - [(Tested) Platform](#tested-platform)
+    - [Prepare for your PC](#prepare-for-your-pc)
+    - [Prepare for cluster/supercomputer](#prepare-for-clustersupercomputer)
+    - [Build](#build)
+  - [How to Run](#how-to-run)
+    - [SimMACE](#simmace)
+    - [SimMTransport](#simmtransport)
+    - [SimCalorimeter](#simcalorimeter)
+    - [SimSpectrometer](#simspectrometer)
+    - [ReconSpectrometer](#reconspectrometer)
+    - [Geometry](#geometry)
+    - [Datamodel](#datamodel)
 
 ## Introduction
 
 This software is designed for MACE experiment.  
 MACE software consists of several modules: SimMACE, SimMTransport, ReconSpectrometer, Geometry, DataModel. "SimMACE" is designed for the simulation of the whole experiment. "SimMTransport" handles the transport of muonium in target after produced, as a physics process in SimMACE. "SimMTransport" can be run independently aim at calculate the yield of a target, see it's README for detail. "ReconSpectrometer" handles track reconstruction in the spectrometer. "Geometry" handles the construction of detector geometry, provides a universial interface of detector geometry. "DataModel" provides a interface for datamodel of each detector, transportable between modules.
 
-![](doc/MACE_sim.png)
+![SimMACE](doc/pics/MACE_sim.png)
 
 ## How to Build
 
