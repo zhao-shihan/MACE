@@ -6,7 +6,7 @@
 #include "SimMACE/Global.hxx"
 #include "SimMACE/Action/DetectorConstruction.hxx"
 #include "SimMTransport/Track.hxx"
-#include "Utility/ObserverPtr.hxx"
+#include "ObserverPtr.hxx"
 
 class MACE::SimMACE::Physics::MuoniumTransport final :
     public G4VContinuousProcess,

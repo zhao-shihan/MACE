@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ReconSpectrometer/Global.hxx"
+#include "ReconSpectrometer/ReconTrack/Global.hxx"
 
 template<class SpectromrterHit_t, class Track_t>
 class MACE::ReconSpectrometer::Interface::Fitter {
@@ -25,4 +25,4 @@ protected:
     std::vector<HitPtr> fOmittedList;
 };
 
-#include "ReconSpectrometer/Interface/Fitter.ixx"
+#include "ReconSpectrometer/ReconTrack/Interface/Fitter.ixx"

@@ -5,7 +5,7 @@
 #include "G4VUserDetectorConstruction.hh"
 
 #include "SimMACE/Global.hxx"
-#include "Utility/ObserverPtr.hxx"
+#include "ObserverPtr.hxx"
 
 class MACE::SimMACE::DetectorConstruction final :
     public G4VUserDetectorConstruction {

@@ -4,7 +4,7 @@
 #include "G4UIcmdWithADouble.hh"
 
 #include "SimMACE/Global.hxx"
-#include "Utility/ObserverPtr.hxx"
+#include "ObserverPtr.hxx"
 
 class MACE::SimMACE::PhysicsMessenger final :
     public G4UImessenger {

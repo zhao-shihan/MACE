@@ -3,7 +3,7 @@
 #include "G4UserEventAction.hh"
 
 #include "SimMACE/Global.hxx"
-#include "Utility/ObserverPtr.hxx"
+#include "ObserverPtr.hxx"
 
 class MACE::SimMACE::EventAction final :
     public G4UserEventAction {

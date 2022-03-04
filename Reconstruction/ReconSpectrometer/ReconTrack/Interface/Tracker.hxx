@@ -1,23 +1,23 @@
 #pragma once
 
-#include "ReconSpectrometer/Global.hxx"
+#include "ReconSpectrometer/ReconTrack/Global.hxx"
 
 template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t>
-class MACE::ReconSpectrometer::Interface::Reconstructor {
+class MACE::ReconSpectrometer::Interface::Tracker {
     MACE_RECONSPECTROMETER_FITTER_CONCEPT(FitterT_t, SpectromrterHit_t, Track_t);
     MACE_RECONSPECTROMETER_SPECTROMETERHIT_CONCEPT(SpectromrterHit_t);
     MACE_RECONSPECTROMETER_TRACK_CONCEPT(Track_t);
 
-    Reconstructor(const Reconstructor&) = delete;
-    Reconstructor& operator=(const Reconstructor&) = delete;
+    Tracker(const Tracker&) = delete;
+    Tracker& operator=(const Tracker&) = delete;
 
 protected:
     using Fitter_t = FitterT_t<SpectromrterHit_t, Track_t>;
     using HitPtr = std::shared_ptr<SpectromrterHit_t>;
     using TrackPtr = std::shared_ptr<Track_t>;
 
-    Reconstructor();
-    virtual ~Reconstructor() noexcept = default;
+    Tracker();
+    virtual ~Tracker() noexcept = default;
 
 public:
     [[nodiscard]] const auto& GetFitter() const { return fFitter; }
@@ -36,4 +36,4 @@ protected:
     std::vector<HitPtr> fOmittedHitList;
 };
 
-#include "ReconSpectrometer/Interface/Reconstructor.ixx"
+#include "ReconSpectrometer/ReconTrack/Interface/Tracker.ixx"

@@ -3,9 +3,9 @@
 #include "G4StateManager.hh"
 #include "G4MPImanager.hh"
 
-#include "Utility/G4MPIRunManager.hxx"
+#include "MPITools/G4MPIRunManager.hxx"
 
-using namespace MACE::Utility;
+using namespace MACE;
 
 void G4MPIRunManager::SetG4MPImanager(const G4MPImanager& g4mpi) {
     auto currentState = G4StateManager::GetStateManager()->GetCurrentState();

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ReconSpectrometer/Global.hxx"
-#include "ReconSpectrometer/Interface/Fitter.hxx"
+#include "ReconSpectrometer/ReconTrack/Global.hxx"
+#include "ReconSpectrometer/ReconTrack/Interface/Fitter.hxx"
 
 template<class SpectromrterHit_t, class Track_t>
 class MACE::ReconSpectrometer::Fitter::DirectSubSpaceLeastVariance final :
@@ -48,4 +48,4 @@ private:
     double fReducedChi2Bound = 20;
 };
 
-#include "ReconSpectrometer/Fitter/DirectSubSpaceLeastVariance.ixx"
+#include "ReconSpectrometer/ReconTrack/Fitter/DirectSubSpaceLeastVariance.ixx"

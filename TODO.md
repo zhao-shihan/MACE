@@ -94,7 +94,7 @@
 
 ### Utility
 
-1. (Long-term) Need to connect to G4, a little bit of performance lose is ok. Already have some preliminary ideas: e.g when true random walk displacement exceeds a threshold then create a step in G4 (though there are many more true step); Defining target overall shape in G4 but use bool expression to define its fine structure; Target has many part, each part is applied with a bool expression, and using MC to define the exact material density used by G4; etc. 
+1. (Long-term) Need to connect to G4, a little bit of performance lose is ok. Already have some preliminary ideas: e.g when true random walk displacement exceeds a threshold then create a step in G4 (though there are many more true step); Defining target overall shape in G4 but use bool expression to define its fine structure; Target has many part, each part is applied with a bool expression, and using MC to define the exact material density used by G4; etc.
 
 ### Coding Style
 

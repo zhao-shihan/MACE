@@ -1,8 +1,8 @@
 #include "DataModel/DataHub.hxx"
-#include "ReconSpectrometer/Reconstructor/TrueFinder.hxx"
-#include "ReconSpectrometer/Reconstructor/Hough.hxx"
-#include "ReconSpectrometer/Fitter/Dummy.hxx"
-#include "ReconSpectrometer/Fitter/DirectSubSpaceLeastVariance.hxx"
+#include "ReconSpectrometer/ReconTrack/Tracker/TrueFinder.hxx"
+#include "ReconSpectrometer/ReconTrack/Tracker/Hough.hxx"
+#include "ReconSpectrometer/ReconTrack/Fitter/Dummy.hxx"
+#include "ReconSpectrometer/ReconTrack/Fitter/DirectSubSpaceLeastVariance.hxx"
 
 using namespace MACE::ReconSpectrometer;
 using namespace MACE::DataModel;
@@ -14,9 +14,9 @@ int main(int, char** argv) {
     using Hit_t = SpectrometerSimHit;
     using Track_t = HelixTrack;
 
-    // Reconstructor::TrueFinder<Fitter::Dummy, Hit_t, Track_t> reconstructor;
-    // Reconstructor::Hough<Fitter::Dummy, Hit_t> reconstructor(350, 5000, std::stol(argv[2]), std::stol(argv[3]), -50, 150, std::stol(argv[4]), std::stol(argv[5]));
-    Reconstructor::TrueFinder<Fitter::DirectSubSpaceLeastVariance, Hit_t, Track_t> reconstructor;
+    // Tracker::TrueFinder<Fitter::Dummy, Hit_t, Track_t> reconstructor;
+    // Tracker::Hough<Fitter::Dummy, Hit_t> reconstructor(350, 5000, std::stol(argv[2]), std::stol(argv[3]), -50, 150, std::stol(argv[4]), std::stol(argv[5]));
+    Tracker::TrueFinder<Fitter::DirectSubSpaceLeastVariance, Hit_t, Track_t> reconstructor;
 
     DataHub dataHub;
     std::vector<std::shared_ptr<Track_t>> allTracks(0);

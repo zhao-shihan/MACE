@@ -4,7 +4,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
 #include "SimMACE/Global.hxx"
-#include "Utility/ObserverPtr.hxx"
+#include "ObserverPtr.hxx"
 
 class MACE::SimMACE::FieldMessenger final :
     public G4UImessenger {

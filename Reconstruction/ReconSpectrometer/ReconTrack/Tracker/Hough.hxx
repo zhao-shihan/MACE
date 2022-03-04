@@ -2,18 +2,18 @@
 
 #include "Eigen/Core"
 
-#include "ReconSpectrometer/Global.hxx"
-#include "ReconSpectrometer/Interface/Reconstructor.hxx"
+#include "ReconSpectrometer/ReconTrack/Global.hxx"
+#include "ReconSpectrometer/ReconTrack/Interface/Tracker.hxx"
 
 template<template<class T> class FitterT_t, class SpectromrterHit_t>
-class MACE::ReconSpectrometer::Reconstructor::Hough final :
-    public MACE::ReconSpectrometer::Interface::Reconstructor<FitterT_t, SpectromrterHit_t> {
+class MACE::ReconSpectrometer::Tracker::Hough final :
+    public MACE::ReconSpectrometer::Interface::Tracker<FitterT_t, SpectromrterHit_t> {
 
     Hough(const Hough&) = delete;
     Hough& operator=(const Hough&) = delete;
 
 protected:
-    using Base = MACE::ReconSpectrometer::Interface::Reconstructor<FitterT_t, SpectromrterHit_t>;
+    using Base = MACE::ReconSpectrometer::Interface::Tracker<FitterT_t, SpectromrterHit_t>;
     using HitPtr = typename Base::HitPtr;
 
 public:
@@ -75,5 +75,5 @@ private:
     std::vector<std::pair<HelixParameters, const std::vector<HitPtr*>*>> fTrackList;
 };
 
-#include "ReconSpectrometer/Reconstructor/Hough.ixx"
+#include "ReconSpectrometer/ReconTrack/Tracker/Hough.ixx"
 */

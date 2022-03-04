@@ -1,11 +1,13 @@
+#pragma once
+
 #include <string_view>
 #include <filesystem>
 #include <iostream>
 
 #include "mpi.h"
 
-#include "CoreForwardDeclaration.hxx"
-#include "Utility/ObserverPtr.hxx"
+#include "UtilityForwardDeclaration.hxx"
+#include "ObserverPtr.hxx"
 
 // Create directories and file paths to help managing files during mpi processing.
 //
@@ -15,7 +17,7 @@
 //
 //   MPI::Init(...);
 //   ...
-//   FileTools4MPI mpiFileTools("result", ".root");
+//   MPIFileTools mpiFileTools("result", ".root");
 //   SomeFileHandler::Open(mpiFileTools.GetFilePath());
 //   ... (do some work, could be MPI parallely)
 //   SomeFileHandler::Close();
@@ -58,12 +60,12 @@
 // When just ./xxx (not in MPI mode) : 
 // Just a single result.root will be created.
 //
-class MACE::Utility::FileTools4MPI final {
+class MACE::MPIFileTools final {
 public:
-    FileTools4MPI(std::string_view basicName, std::string_view suffix, const MPI::Comm& comm = MPI::COMM_WORLD);
-    ~FileTools4MPI() noexcept = default;
-    FileTools4MPI(const FileTools4MPI&) = delete;
-    FileTools4MPI& operator=(const FileTools4MPI&) = delete;
+    MPIFileTools(std::string_view basicName, std::string_view suffix, const MPI::Comm& comm = MPI::COMM_WORLD);
+    ~MPIFileTools() noexcept = default;
+    MPIFileTools(const MPIFileTools&) = delete;
+    MPIFileTools& operator=(const MPIFileTools&) = delete;
 
     [[nodiscard]] const auto& GetFilePath() const { return fFilePath; }
     int MergeRootFiles(bool forced = false) const;

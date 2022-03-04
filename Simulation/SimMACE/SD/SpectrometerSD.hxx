@@ -4,7 +4,7 @@
 #include "G4TwoVector.hh"
 
 #include "SimMACE/Hit/SpectrometerHit.hxx"
-#include "Utility/ObserverPtr.hxx"
+#include "ObserverPtr.hxx"
 
 class MACE::SimMACE::SpectrometerSD final :
     public G4VSensitiveDetector {

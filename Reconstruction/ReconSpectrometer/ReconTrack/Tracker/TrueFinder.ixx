@@ -1,10 +1,10 @@
 template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t>
-MACE::ReconSpectrometer::Reconstructor::TrueFinder<FitterT_t, SpectromrterHit_t, Track_t>::
+MACE::ReconSpectrometer::Tracker::TrueFinder<FitterT_t, SpectromrterHit_t, Track_t>::
 TrueFinder() :
     fClassifier(0) {}
 
 template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t>
-void MACE::ReconSpectrometer::Reconstructor::TrueFinder<FitterT_t, SpectromrterHit_t, Track_t>::
+void MACE::ReconSpectrometer::Tracker::TrueFinder<FitterT_t, SpectromrterHit_t, Track_t>::
 Reconstruct(const std::vector<HitPtr>& hitData) {
     Base::fTrackList.clear();
     Base::fReconstructedHitList.clear();

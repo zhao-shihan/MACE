@@ -49,7 +49,7 @@
     static_assert(std::is_default_constructible_v<FitterT_t<Hit_t, Track_t>>, \
         "The fitter type should be default constructible")
 
-#define MACE_RECONSPECTROMETER_RECONSTRUCTOR_CONCEPT(Reconstructor_t, FitterT_t, Hit_t, Track_t) \
-    static_assert(std::is_base_of_v<MACE::ReconSpectrometer::Interface::Reconstructor<FitterT_t, Hit_t, Track_t>, Reconstructor_t<FitterT_t, Hit_t, Track_t>>, \
+#define MACE_RECONSPECTROMETER_RECONSTRUCTOR_CONCEPT(Tracker_t, FitterT_t, Hit_t, Track_t) \
+    static_assert(std::is_base_of_v<MACE::ReconSpectrometer::Interface::Tracker<FitterT_t, Hit_t, Track_t>, Tracker_t<FitterT_t, Hit_t, Track_t>>, \
         "The reconstructor type should derived from " \
-            "MACE::ReconSpectrometer::Interface::Reconstructor")
+            "MACE::ReconSpectrometer::Interface::Tracker")

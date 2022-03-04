@@ -2,7 +2,7 @@
 
 namespace MACE {
 
-    // FIXME: using inline namespace at this level (just under MACE) confuses VSCode's C++ extension. ...&$@!(>:$#@!
+    // FIXME: using inline namespace at this level (just under MACE) confuses VSCode's C++ extension. Maybe conflicts with the C++ standard? 
     // inline namespace Core {
 
     namespace DataModel {
@@ -164,11 +164,6 @@ namespace MACE {
             class Entity;
         }
     } // namespace Geometry
-
-    inline namespace Utility {
-        class FileTools4MPI;
-        class G4MPIRunManager;
-    }
 
     // } // inline namespace Core
 

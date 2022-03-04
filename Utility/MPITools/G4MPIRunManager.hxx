@@ -2,12 +2,12 @@
 
 #include "G4RunManager.hh"
 
-#include "CoreForwardDeclaration.hxx"
-#include "Utility/ObserverPtr.hxx"
+#include "UtilityForwardDeclaration.hxx"
+#include "ObserverPtr.hxx"
 
 class G4MPImanager;
 
-class MACE::Utility::G4MPIRunManager :
+class MACE::G4MPIRunManager :
     public G4RunManager {
 public:
     G4MPIRunManager() = default;

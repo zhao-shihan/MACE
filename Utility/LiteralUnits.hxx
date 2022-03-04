@@ -6,7 +6,7 @@
     constexpr long double operator""##suffix(long double val) { return val * (unit); } \
     constexpr long double operator""##suffix(unsigned long long val) { return val * (unit); }
 
-namespace MACE::inline Utility{
+namespace MACE/* ::inline Utility */{
 
     // Length [L] symbols
 

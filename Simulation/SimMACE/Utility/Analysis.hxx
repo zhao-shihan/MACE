@@ -7,8 +7,8 @@
 #include "SimMACE/Hit/VertexDetectorHit.hxx"
 #include "SimMACE/Hit/SpectrometerHit.hxx"
 #include "DataModel/DataHub.hxx"
-#include "Utility/ObserverPtr.hxx"
-#include "Utility/FileTools4MPI.hxx"
+#include "ObserverPtr.hxx"
+#include "MPITools/MPIFileTools.hxx"
 
 class MACE::SimMACE::Analysis final {
 public:
@@ -40,7 +40,7 @@ private:
 
 private:
     std::unique_ptr<TFile>         fFile;
-    std::unique_ptr<FileTools4MPI> fFileTools4MPI;
+    std::unique_ptr<MPIFileTools> fMPIFileTools;
 
     G4String fResultName = "untitled_SimMACE";
     G4bool   fEnableCoincidenceOfCalorimeter = true;

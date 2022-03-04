@@ -6,13 +6,13 @@
 #include <thread>
 #include <cmath>
 
-#include "Utility/FileTools4MPI.hxx"
+#include "MPITools/MPIFileTools.hxx"
 
-using namespace MACE::Utility;
+using namespace MACE;
 
-ObserverPtr<std::ostream> FileTools4MPI::fgOut = std::addressof(std::cout);
+ObserverPtr<std::ostream> MPIFileTools::fgOut = std::addressof(std::cout);
 
-FileTools4MPI::FileTools4MPI(std::string_view basicName, std::string_view suffix, const MPI::Comm& comm) :
+MPIFileTools::MPIFileTools(std::string_view basicName, std::string_view suffix, const MPI::Comm& comm) :
     fBasicName(basicName),
     fSuffix(suffix),
     fComm(std::addressof(comm)),
@@ -28,7 +28,7 @@ FileTools4MPI::FileTools4MPI(std::string_view basicName, std::string_view suffix
     }
 }
 
-int FileTools4MPI::MergeRootFiles(bool forced) const {
+int MPIFileTools::MergeRootFiles(bool forced) const {
     if (MPI::Is_initialized()) {
         if (fComm->Get_size() > 1) {
             return MergeRootFilesMPIImpl(forced);
@@ -40,7 +40,7 @@ int FileTools4MPI::MergeRootFiles(bool forced) const {
     }
 }
 
-void FileTools4MPI::ConstructPathMPIImpl() {
+void MPIFileTools::ConstructPathMPIImpl() {
     const auto commRank = fComm->Get_rank();
     const auto commSize = fComm->Get_size();
 
@@ -125,7 +125,7 @@ void FileTools4MPI::ConstructPathMPIImpl() {
     fFilePath = filePathRecv;
 }
 
-int FileTools4MPI::MergeRootFilesMPIImpl(bool forced) const {
+int MPIFileTools::MergeRootFilesMPIImpl(bool forced) const {
     const auto commRank = fComm->Get_rank();
     const auto commSize = fComm->Get_size();
 
@@ -181,7 +181,7 @@ int FileTools4MPI::MergeRootFilesMPIImpl(bool forced) const {
     return retVal;
 }
 
-int FileTools4MPI::MergeRootFilesSerialImpl() const {
+int MPIFileTools::MergeRootFilesSerialImpl() const {
     if (fSuffix != ".root") {
         ReportSuffixNotRoot();
         return -1;
@@ -190,7 +190,7 @@ int FileTools4MPI::MergeRootFilesSerialImpl() const {
     return 0;
 }
 
-void FileTools4MPI::ReportSuffixNotRoot() const {
-    *fgOut << "Warning: MACE::Utility::FileTools4MPI::MergeRootFiles() only supports merging root files, "
+void MPIFileTools::ReportSuffixNotRoot() const {
+    *fgOut << "Warning: MACE::MPIFileTools::MergeRootFiles() only supports merging root files, "
         "with suffix <.root>. <" << fSuffix << "> files are not supported. Nothing was done." << std::endl;
 }

@@ -10,7 +10,7 @@
 #include "G4VSensitiveDetector.hh"
 
 #include "Geometry/Global.hxx"
-#include "Utility/ObserverPtr.hxx"
+#include "ObserverPtr.hxx"
 
 class MACE::Geometry::Interface::Entity :
     public std::enable_shared_from_this<MACE::Geometry::Interface::Entity> {

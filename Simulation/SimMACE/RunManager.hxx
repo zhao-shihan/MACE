@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Utility/G4MPIRunManager.hxx"
-#include "Utility/ObserverPtr.hxx"
+#include "MPITools/G4MPIRunManager.hxx"
+#include "ObserverPtr.hxx"
 #include "SimMACE/Global.hxx"
 #include "SimMACE/Action/DetectorConstruction.hxx"
 #include "SimMACE/Action/PrimaryGeneratorAction.hxx"

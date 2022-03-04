@@ -5,7 +5,7 @@
 #include "TFile.h"
 
 #include "DataModel/Global.hxx"
-#include "Utility/ObserverPtr.hxx"
+#include "ObserverPtr.hxx"
 
 class MACE::DataModel::DataHub final {
 public:

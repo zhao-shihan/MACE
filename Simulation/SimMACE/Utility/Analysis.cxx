@@ -13,7 +13,7 @@ Analysis& Analysis::Instance() {
 
 Analysis::Analysis() :
     fFile(nullptr),
-    fFileTools4MPI(nullptr),
+    fMPIFileTools(nullptr),
     fDataHub(),
     fRepetitionIDOfLastG4Event(std::numeric_limits<decltype(fRepetitionIDOfLastG4Event)>::max()),
     fCalorimeterHitTree(nullptr),
@@ -23,17 +23,17 @@ Analysis::Analysis() :
     fVertexDetectorHitList(nullptr),
     fSpectrometerHitList(nullptr) {
     AnalysisMessenger::Instance();
-    FileTools4MPI::SetOutStream(G4cout);
+    MPIFileTools::SetOutStream(G4cout);
     fDataHub.SetPrefixFormatOfTreeName("Rep#_");
 }
 
 void Analysis::Open(Option_t* option) {
     if (MPI::Is_initialized()) {
-        fFileTools4MPI = std::make_unique<FileTools4MPI>(fResultName, ".root", *G4MPImanager::GetManager()->GetComm());
+        fMPIFileTools = std::make_unique<MPIFileTools>(fResultName, ".root", *G4MPImanager::GetManager()->GetComm());
     } else {
-        fFileTools4MPI = std::make_unique<FileTools4MPI>(fResultName, ".root");
+        fMPIFileTools = std::make_unique<MPIFileTools>(fResultName, ".root");
     }
-    fFile.reset(TFile::Open(fFileTools4MPI->GetFilePath().c_str(), option));
+    fFile.reset(TFile::Open(fMPIFileTools->GetFilePath().c_str(), option));
 }
 
 void Analysis::Close(Option_t* option) {
@@ -44,13 +44,13 @@ void Analysis::Close(Option_t* option) {
 }
 
 int Analysis::Merge(G4bool forced) {
-    if (fFileTools4MPI == nullptr) {
+    if (fMPIFileTools == nullptr) {
         G4ExceptionDescription description("There is nothing to merge!");
         G4Exception("MACE::SimMACE::Utility::Analysis::Merge(G4bool)",
             "MACE_SimMACE_Analysis_W0", JustWarning, description);
         return -1;
     }
-    return fFileTools4MPI->MergeRootFiles(forced);
+    return fMPIFileTools->MergeRootFiles(forced);
 }
 
 void Analysis::WriteEvent(G4int repetitionID) {

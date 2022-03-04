@@ -6,7 +6,7 @@
 #include "G4UIcmdWithAString.hh"
 
 #include "SimMACE/Global.hxx"
-#include "Utility/ObserverPtr.hxx"
+#include "ObserverPtr.hxx"
 
 class MACE::SimMACE::AnalysisMessenger final :
     public G4UImessenger {
