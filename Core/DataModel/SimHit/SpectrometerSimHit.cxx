@@ -2,10 +2,10 @@
 
 using namespace MACE::DataModel;
 
-FloatBranchSocket        SpectrometerSimHit::fgVertexTime("VertexT", 0);
-Vector3FBranchSocket SpectrometerSimHit::fgVertexPosition("VertexPos", 0, 0, 0);
+FloatBranchSocket        SpectrometerSimHit::fgVertexTime("VtxT", 0);
+Vector3FBranchSocket SpectrometerSimHit::fgVertexPosition("VtxPos", 0, 0, 0);
 IntBranchSocket             SpectrometerSimHit::fgPDGCode("PDGCode", std::numeric_limits<Int_t>::max());
-IntBranchSocket             SpectrometerSimHit::fgTrackID("TrackID", -1);
+IntBranchSocket             SpectrometerSimHit::fgTrackID("TrkID", -1);
 
 SpectrometerSimHit::SpectrometerSimHit() noexcept :
     Base(),
