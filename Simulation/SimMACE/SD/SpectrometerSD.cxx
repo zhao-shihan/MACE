@@ -10,13 +10,13 @@
 
 using namespace MACE::SimMACE::SD;
 
-SpectrometerSD::SpectrometerSD(const G4String& SDName, const G4String& hitsCollectionName) :
-    G4VSensitiveDetector(SDName),
+SpectrometerSD::SpectrometerSD(const G4String& sdName) :
+    G4VSensitiveDetector(sdName),
     fHitsCollection(nullptr),
     fMonitoringTrackList(0),
     fSenseWireMap(0) {
 
-    collectionName.insert(hitsCollectionName);
+    collectionName.insert(sdName + "HC");
 
     const auto cellInfoList = Geometry::Description::SpectrometerCells::Instance().GetInformationList();
     const auto svInfoList = Geometry::Description::SpectrometerSensitiveVolumes::Instance().GetInformationList();

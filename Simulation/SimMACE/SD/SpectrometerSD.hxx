@@ -10,7 +10,7 @@ class MACE::SimMACE::SpectrometerSD final :
     public G4VSensitiveDetector {
     friend DetectorConstruction;
 private:
-    SpectrometerSD(const G4String& SDName, const G4String& hitsCollectionName);
+    SpectrometerSD(const G4String& sdName);
     ~SpectrometerSD() noexcept = default;
     SpectrometerSD(const SpectrometerSD&) = delete;
     SpectrometerSD& operator=(const SpectrometerSD&) = delete;

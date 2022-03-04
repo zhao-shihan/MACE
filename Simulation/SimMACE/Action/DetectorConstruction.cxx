@@ -33,6 +33,8 @@
 //
 // Region relevant includes
 //
+#include "G4ProductionCuts.hh"
+#include "G4ProductionCutsTable.hh"
 #include "SimMACE/Utility/Region.hxx"
 //
 // SD relevant includes
@@ -131,28 +133,40 @@ void DetectorConstruction::ConstructVolumes() {
 }
 
 void DetectorConstruction::ConstructRegions() {
+    auto defaultCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts();
+
     // CalorimeterSensitiveRegion
     fCalorimeterSensitiveRegion = new Region("CalorimeterSensitive", Region::kCalorimeterSensitive);
+    fCalorimeterSensitiveRegion->SetProductionCuts(defaultCuts);
+
     fCalorimeter->RegisterRegion(fCalorimeterSensitiveRegion);
 
     // DefaultSolidRegion
     fDefaultSolidRegion = new Region("DefaultSolid", Region::kDefaultSolid);
+    fDefaultSolidRegion->SetProductionCuts(defaultCuts);
+
     fCollimator->RegisterRegion(fDefaultSolidRegion);
     fSpectrometerBody->RegisterRegion(fDefaultSolidRegion);
     fSpectrometerFieldWires->RegisterRegion(fDefaultSolidRegion);
 
     // DefaultGaseousRegion
     fDefaultGaseousRegion = new Region("DefaultGaseous", Region::kDefaultGaseous);
+    fDefaultGaseousRegion->SetProductionCuts(defaultCuts);
+
     fSpectrometerCells->RegisterRegion(fDefaultGaseousRegion);
     fSpectrometerReadoutLayers->RegisterRegion(fDefaultGaseousRegion);
 
     // ShieldRegion
     fShieldRegion = new Region("Shield", Region::kShield);
+    fShieldRegion->SetProductionCuts(defaultCuts);
+
     fSpectrometerShield->RegisterRegion(fShieldRegion);
     fCalorimeterShield->RegisterRegion(fShieldRegion);
 
     // SolenoidOrMagnetRegion
     fSolenoidOrMagnetRegion = new Region("SolenoidOrMagnet", Region::kSolenoidOrMagnet);
+    fSolenoidOrMagnetRegion->SetProductionCuts(defaultCuts);
+
     fFirstBendSolenoid->RegisterRegion(fSolenoidOrMagnetRegion);
     fFirstTransportSolenoid->RegisterRegion(fSolenoidOrMagnetRegion);
     fSecondBendSolenoid->RegisterRegion(fSolenoidOrMagnetRegion);
@@ -162,14 +176,20 @@ void DetectorConstruction::ConstructRegions() {
 
     // SpectrometerSensitiveRegion
     fSpectrometerSensitiveRegion = new Region("SpectrometerSensitive", Region::kSpectrometerSensitive);
+    fSpectrometerSensitiveRegion->SetProductionCuts(defaultCuts);
+
     fSpectrometerSensitiveVolumes->RegisterRegion(fSpectrometerSensitiveRegion);
 
     // TargetRegion
     fTargetRegion = new Region("Target", Region::kTarget);
+    fTargetRegion->SetProductionCuts(defaultCuts);
+
     fTarget->RegisterRegion(fTargetRegion);
 
     // VacuumRegion
     fVacuumRegion = new Region("Vacuum", Region::kVacuum);
+    fVacuumRegion->SetProductionCuts(defaultCuts);
+
     fSelectorField->RegisterRegion(fVacuumRegion);
     fAcceleratorField->RegisterRegion(fVacuumRegion);
     fCalorimeterField->RegisterRegion(fVacuumRegion);
@@ -182,16 +202,15 @@ void DetectorConstruction::ConstructRegions() {
 
     // VertexDetectorSensitiveRegion
     fVertexDetectorSensitiveRegion = new Region("VertexDetectorSensitive", Region::kVertexDetectorSensitive);
+    fVertexDetectorSensitiveRegion->SetProductionCuts(defaultCuts);
+
     fVertexDetector->RegisterRegion(fVertexDetectorSensitiveRegion);
 }
 
 void DetectorConstruction::ConstructSDs() {
-    const auto& calorimeterName = fCalorimeter->GetLogicalVolumeName();
-    fCalorimeter->RegisterSensitiveDetector(new CalorimeterSD(calorimeterName, calorimeterName + "HC"));
-    const auto& vertexDetectorName = fVertexDetector->GetLogicalVolumeName();
-    fVertexDetector->RegisterSensitiveDetector(new VertexDetectorSD(vertexDetectorName, vertexDetectorName + "HC"));
-    const auto& spectrometerCellName = fSpectrometerSensitiveVolumes->GetLogicalVolumeName();
-    fSpectrometerSensitiveVolumes->RegisterSensitiveDetector(new SpectrometerSD(spectrometerCellName, spectrometerCellName + "HC"));
+    fCalorimeter->RegisterSD(new CalorimeterSD(fCalorimeter->GetLogicalVolumeName()));
+    fVertexDetector->RegisterSD(new VertexDetectorSD(fVertexDetector->GetLogicalVolumeName()));
+    fSpectrometerSensitiveVolumes->RegisterSD(new SpectrometerSD(fSpectrometerSensitiveVolumes->GetLogicalVolumeName()));
 }
 
 void DetectorConstruction::ConstructFields() {

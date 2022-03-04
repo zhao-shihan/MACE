@@ -8,7 +8,7 @@ class MACE::SimMACE::CalorimeterSD final :
     public G4VSensitiveDetector {
     friend DetectorConstruction;
 private:
-    CalorimeterSD(const G4String& SDName, const G4String& hitsCollectionName);
+    CalorimeterSD(const G4String& sdName);
     ~CalorimeterSD() noexcept = default;
     CalorimeterSD(const CalorimeterSD&) = delete;
     CalorimeterSD& operator=(const CalorimeterSD&) = delete;

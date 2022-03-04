@@ -8,10 +8,10 @@
 
 using namespace MACE::SimMACE::SD;
 
-CalorimeterSD::CalorimeterSD(const G4String& SDName, const G4String& hitsCollectionName) :
-    G4VSensitiveDetector(SDName),
+CalorimeterSD::CalorimeterSD(const G4String& sdName) :
+    G4VSensitiveDetector(sdName),
     fHitsCollection(nullptr) {
-    collectionName.insert(hitsCollectionName);
+    collectionName.insert(sdName + "HC");
 }
 
 void CalorimeterSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {

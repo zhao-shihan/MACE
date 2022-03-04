@@ -26,8 +26,8 @@ public:
     void RegisterRegion(size_t volumeIndex, G4Region* region) const;
     void RegisterRegion(G4Region* region) const;
 
-    void RegisterSensitiveDetector(size_t volumeIndex, G4VSensitiveDetector* sd) const;
-    void RegisterSensitiveDetector(G4VSensitiveDetector* sd) const;
+    void RegisterSD(size_t volumeIndex, G4VSensitiveDetector* sd) const;
+    void RegisterSD(G4VSensitiveDetector* sd) const;
 
     template<class Field_t, class Equation_t, class Stepper_t, class Driver_t>
     void RegisterField(size_t volumeIndex, Field_t* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const;

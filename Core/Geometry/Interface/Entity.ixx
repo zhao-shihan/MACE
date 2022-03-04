@@ -21,7 +21,7 @@ namespace MACE::Geometry::Interface {
         } else {
             G4ExceptionDescription msg;
             msg << "Attempting to register the same field multiple times for \"" << logicalVolume->GetName() << "\", skipping.";
-            G4Exception("MACE::Geometry::Interface::Entity::RegisterSensitiveDetector", "-1", JustWarning, msg);
+            G4Exception("MACE::Geometry::Interface::Entity::RegisterSD", "-1", JustWarning, msg);
         }
     }
 
