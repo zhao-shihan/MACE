@@ -20,6 +20,7 @@ public:
     SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept = default;
     SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept = default;
 
+    void SetMomentum(const G4ThreeVector& mom) { DataModel::SpectrometerSimHit::SetMomentum(mom.x(), mom.y(), mom.z()); }
     void SetWirePosition(const G4TwoVector& pos) { DataModel::SpectrometerSimHit::SetWirePosition(pos.x(), pos.y()); }
     void SetVertexPosition(const G4ThreeVector& pos) { DataModel::SpectrometerSimHit::SetVertexPosition(pos.x(), pos.y(), pos.z()); }
 

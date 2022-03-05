@@ -25,14 +25,14 @@ public:
     virtual void Reconstruct(const std::vector<HitPtr>& hitData) = 0;
 
     [[nodiscard]] const auto& GetTrackList() const { return fTrackList; }
-    [[nodiscard]] const auto& GetReconstructedHitList() const { return fReconstructedHitList; }
+    [[nodiscard]] const auto& GetReconstructedHitList() const { return fTrackedHitList; }
     [[nodiscard]] const auto& GetOmittedHitList() const { return fOmittedHitList; }
 
 protected:
     const std::unique_ptr<Fitter_t> fFitter;
 
     std::vector<TrackPtr> fTrackList;
-    std::vector<std::vector<HitPtr>> fReconstructedHitList;
+    std::vector<std::vector<HitPtr>> fTrackedHitList;
     std::vector<HitPtr> fOmittedHitList;
 };
 

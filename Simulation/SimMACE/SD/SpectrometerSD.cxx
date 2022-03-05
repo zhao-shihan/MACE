@@ -4,6 +4,7 @@
 #include "G4Tubs.hh"
 
 #include "SimMACE/SD/SpectrometerSD.hxx"
+#include "SimMACE/RunManager.hxx"
 #include "SimMACE/Utility/Analysis.hxx"
 #include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/SpectrometerCells.hxx"
 #include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/DescendantsOfSpectrometerCells/SpectrometerSensitiveVolumes.hxx"
@@ -76,9 +77,11 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         hit->SetHitPositionZ((zIn + zOut) / 2);
         hit->SetCellID(cellID);
         hit->SetLayerID(layerID);
+        hit->SetMomentum((enterPoint->GetMomentum() + exitPoint->GetMomentum()) / 2);
         hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
         hit->SetVertexPosition(track->GetVertexPosition());
         hit->SetPDGCode(particle->GetPDGEncoding());
+        hit->SetEventID(fEventID);
         hit->SetTrackID(track->GetTrackID());
         fHitsCollection->insert(hit);
         // particle is exiting, remove it from monitoring list

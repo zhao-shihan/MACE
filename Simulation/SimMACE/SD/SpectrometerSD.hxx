@@ -16,14 +16,18 @@ private:
     SpectrometerSD& operator=(const SpectrometerSD&) = delete;
 
 public:
-    void   Initialize(G4HCofThisEvent* hitsCollection) override;
+    void Initialize(G4HCofThisEvent* hitsCollection) override;
     G4bool ProcessHits(G4Step* step, G4TouchableHistory*) override;
-    void   EndOfEvent(G4HCofThisEvent*) override;
+    void EndOfEvent(G4HCofThisEvent*) override;
+
+    /// Inform this SD of event id in EventAction
+    void SetEventID(G4int eventID) { fEventID = eventID; }
 
 private:
     auto FindMonitoring(ObserverPtr<const G4Track> track) { return std::ranges::find_if(std::as_const(fMonitoringTrackList), [&track](const auto& monitoring) { return track == monitoring.first; }); }
 
 private:
+    G4int fEventID;
     SpectrometerHitCollection* fHitsCollection;
     std::vector<std::pair<ObserverPtr<const G4Track>, ObserverPtr<const G4StepPoint>>> fMonitoringTrackList;
     std::vector<G4TwoVector> fSenseWireMap;

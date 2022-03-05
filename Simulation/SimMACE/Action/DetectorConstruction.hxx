@@ -31,6 +31,10 @@ public:
     [[nodiscard]] auto& GetVacuumRegion() const { return *fVacuumRegion; }
     [[nodiscard]] auto& GetVertexDetectorSensitiveRegion() const { return *fVertexDetectorSensitiveRegion; }
 
+    [[nodiscard]] auto& GetCalorimeterSD() const { return *fCalorimeterSD; }
+    [[nodiscard]] auto& GetSpectrometerSD() const { return *fSpectrometerSD; }
+    [[nodiscard]] auto& GetVertexDetectorSD() const { return *fVertexDetectorSD; }
+
 private:
     void ConstructVolumes();
     void ConstructRegions();
@@ -78,4 +82,8 @@ private:
     ObserverPtr<Region> fTargetRegion;
     ObserverPtr<Region> fVacuumRegion;
     ObserverPtr<Region> fVertexDetectorSensitiveRegion;
+
+    ObserverPtr<CalorimeterSD> fCalorimeterSD;
+    ObserverPtr<SpectrometerSD> fSpectrometerSD;
+    ObserverPtr<VertexDetectorSD> fVertexDetectorSD;
 };

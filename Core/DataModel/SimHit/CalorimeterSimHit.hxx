@@ -18,9 +18,11 @@ public:
     CalorimeterSimHit& operator=(CalorimeterSimHit&& hit) noexcept = default;
 
     [[nodiscard]] const auto& GetParticlePDGCode() const { return fPDGCode; }
+    [[nodiscard]] const auto& GetEventID() const { return fEventID; }
     [[nodiscard]] const auto& GetTrackID() const { return fTrackID; }
 
     void SetPDGCode(Int_t pdgCode) { fPDGCode = pdgCode; }
+    void SetEventID(Int_t val) { fEventID = val; }
     void SetTrackID(Int_t val) { fTrackID = val; }
 
 protected:
@@ -33,14 +35,17 @@ private:
 
 private:
     Int_t fPDGCode;
+    Int_t fEventID;
     Int_t fTrackID;
 
     static IntBranchSocket fgPDGCode;
+    static IntBranchSocket fgEventID;
     static IntBranchSocket fgTrackID;
 };
 
 inline void MACE::DataModel::CalorimeterSimHit::FillBranchSockets() const noexcept {
     Base::FillBranchSockets();
     fgPDGCode.Value() = fPDGCode;
+    fgEventID.Value() = fEventID;
     fgTrackID.Value() = fTrackID;
 }

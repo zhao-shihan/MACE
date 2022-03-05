@@ -3,5 +3,5 @@ MACE::ReconSpectrometer::Interface::Tracker<FitterT_t, SpectromrterHit_t, Track_
 Tracker() :
     fFitter(std::make_unique<Fitter_t>()),
     fTrackList(0),
-    fReconstructedHitList(0),
+    fTrackedHitList(0),
     fOmittedHitList(0) {}

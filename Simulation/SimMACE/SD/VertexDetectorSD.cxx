@@ -3,6 +3,7 @@
 #include "G4SDManager.hh"
 
 #include "SimMACE/SD/VertexDetectorSD.hxx"
+#include "SimMACE/RunManager.hxx"
 #include "SimMACE/Utility/Analysis.hxx"
 
 using namespace MACE::SimMACE::SD;
@@ -38,6 +39,7 @@ G4bool VertexDetectorSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
         hit->SetVertexPosition(track->GetVertexPosition());
         hit->SetPDGCode(particle->GetPDGEncoding());
+        hit->SetEventID(fEventID);
         hit->SetTrackID(track->GetTrackID());
         fHitsCollection->insert(hit);
         return true;

@@ -15,5 +15,6 @@ private:
     EventAction& operator=(const EventAction&) = delete;
 
 public:
+    void BeginOfEventAction(const G4Event* event) override;
     void EndOfEventAction(const G4Event*) override;
 };

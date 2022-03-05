@@ -14,10 +14,14 @@ private:
     CalorimeterSD& operator=(const CalorimeterSD&) = delete;
 
 public:
-    void   Initialize(G4HCofThisEvent* hitsCollection) override;
+    void Initialize(G4HCofThisEvent* hitsCollection) override;
     G4bool ProcessHits(G4Step* step, G4TouchableHistory*) override;
-    void   EndOfEvent(G4HCofThisEvent*) override;
+    void EndOfEvent(G4HCofThisEvent*) override;
+
+    /// Inform this SD of event id in EventAction
+    void SetEventID(G4int eventID) { fEventID = eventID; }
 
 private:
+    G4int fEventID;
     CalorimeterHitCollection* fHitsCollection;
 };

@@ -19,6 +19,8 @@ int main(int, char** argv) {
     Tracker::TrueFinder<Fitter::DirectSubSpaceLeastVariance, Hit_t, Track_t> reconstructor;
 
     DataHub dataHub;
+    dataHub.SetPrefixFormatOfTreeName("Rep#_");
+
     std::vector<std::shared_ptr<Track_t>> allTracks(0);
     for (Long64_t i = 0; ; ++i) {
         auto tree = dataHub.FindTree<Hit_t>(fileIn, i);

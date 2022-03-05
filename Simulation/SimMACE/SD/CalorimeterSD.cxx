@@ -4,6 +4,7 @@
 #include "G4Gamma.hh"
 
 #include "SimMACE/SD/CalorimeterSD.hxx"
+#include "SimMACE/RunManager.hxx"
 #include "SimMACE/Utility/Analysis.hxx"
 
 using namespace MACE::SimMACE::SD;
@@ -31,6 +32,7 @@ G4bool CalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         hit->SetHitTime(preStepPoint->GetGlobalTime());
         hit->SetEnergy(preStepPoint->GetKineticEnergy());
         hit->SetPDGCode(particle->GetPDGEncoding());
+        hit->SetEventID(fEventID);
         hit->SetTrackID(track->GetTrackID());
         fHitsCollection->insert(hit);
         return true;

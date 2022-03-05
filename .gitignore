@@ -1,7 +1,8 @@
 .vscode/
 build/
+.ipynb_checkpoints/
 obsolete/
 */.vscode/
 */build/
-*/.ipynb_checkpoints
-*/obsolete
+*/.ipynb_checkpoints/
+*/obsolete/

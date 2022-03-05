@@ -21,6 +21,7 @@ public:
     [[nodiscard]] const auto& GetVertexTime() const { return fVertexTime; }
     [[nodiscard]] const auto& GetVertexPosition() const { return fVertexPosition; }
     [[nodiscard]] const auto& GetParticlePDGCode() const { return fPDGCode; }
+    [[nodiscard]] const auto& GetEventID() const { return fEventID; }
     [[nodiscard]] const auto& GetTrackID() const { return fTrackID; }
 
     void SetVertexTime(Double_t val) { fVertexTime = val; }
@@ -28,6 +29,7 @@ public:
     void SetVertexPosition(TEveVectorD&& pos) { fVertexPosition = std::move(pos); }
     void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition.Set(x, y, z); }
     void SetPDGCode(Int_t pdgCode) { fPDGCode = pdgCode; }
+    void SetEventID(Int_t val) { fEventID = val; }
     void SetTrackID(Int_t val) { fTrackID = val; }
 
 protected:
@@ -42,11 +44,13 @@ private:
     Double_t    fVertexTime;
     TEveVectorD fVertexPosition;
     Int_t       fPDGCode;
+    Int_t       fEventID;
     Int_t       fTrackID;
 
     static FloatBranchSocket    fgVertexTime;
     static Vector3FBranchSocket fgVertexPosition;
     static IntBranchSocket      fgPDGCode;
+    static IntBranchSocket      fgEventID;
     static IntBranchSocket      fgTrackID;
 };
 
@@ -55,5 +59,6 @@ inline void MACE::DataModel::VertexDetectorSimHit::FillBranchSockets() const noe
     fgVertexTime.Value() = fVertexTime;
     fgVertexPosition.Value() = fVertexPosition;
     fgPDGCode.Value() = fPDGCode;
+    fgEventID.Value() = fEventID;
     fgTrackID.Value() = fTrackID;
 }

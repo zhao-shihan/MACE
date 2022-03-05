@@ -208,9 +208,14 @@ void DetectorConstruction::ConstructRegions() {
 }
 
 void DetectorConstruction::ConstructSDs() {
-    fCalorimeter->RegisterSD(new CalorimeterSD(fCalorimeter->GetLogicalVolumeName()));
-    fVertexDetector->RegisterSD(new VertexDetectorSD(fVertexDetector->GetLogicalVolumeName()));
-    fSpectrometerSensitiveVolumes->RegisterSD(new SpectrometerSD(fSpectrometerSensitiveVolumes->GetLogicalVolumeName()));
+    fCalorimeterSD = new CalorimeterSD(fCalorimeter->GetLogicalVolumeName());
+    fCalorimeter->RegisterSD(fCalorimeterSD);
+
+    fVertexDetectorSD = new VertexDetectorSD(fVertexDetector->GetLogicalVolumeName());
+    fVertexDetector->RegisterSD(fVertexDetectorSD);
+
+    fSpectrometerSD = new SpectrometerSD(fSpectrometerSensitiveVolumes->GetLogicalVolumeName());
+    fSpectrometerSensitiveVolumes->RegisterSD(fSpectrometerSD);
 }
 
 void DetectorConstruction::ConstructFields() {

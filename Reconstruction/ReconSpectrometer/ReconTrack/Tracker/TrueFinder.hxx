@@ -17,7 +17,7 @@ protected:
     using TrackPtr = typename Base::TrackPtr;
 
 public:
-    TrueFinder();
+    TrueFinder() = default;
     ~TrueFinder() noexcept = default;
 
     void Reconstruct(const std::vector<HitPtr>& hitData) override;
@@ -25,9 +25,10 @@ public:
     void SetThreshold(size_t val) { fThreshold = val; }
 
 private:
-    size_t fThreshold = 10;
+    std::vector<std::vector<HitPtr>> Classify(const std::vector<HitPtr>& hitData);
 
-    std::vector<std::vector<HitPtr>> fClassifier;
+private:
+    size_t fThreshold = 10;
 };
 
 #include "ReconSpectrometer/ReconTrack/Tracker/TrueFinder.ixx"

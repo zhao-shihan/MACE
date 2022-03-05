@@ -1,50 +1,61 @@
 template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t>
-MACE::ReconSpectrometer::Tracker::TrueFinder<FitterT_t, SpectromrterHit_t, Track_t>::
-TrueFinder() :
-    fClassifier(0) {}
-
-template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t>
 void MACE::ReconSpectrometer::Tracker::TrueFinder<FitterT_t, SpectromrterHit_t, Track_t>::
 Reconstruct(const std::vector<HitPtr>& hitData) {
     Base::fTrackList.clear();
-    Base::fReconstructedHitList.clear();
+    Base::fTrackedHitList.clear();
     Base::fOmittedHitList.clear();
 
-    const auto& [minHitIter, maxHitIter] = std::ranges::minmax_element(std::as_const(hitData),
-        [](const auto& hit1, const auto& hit2)->bool {
-            return hit1->GetTrackID() < hit2->GetTrackID();
-        }
-    );
-    auto minTrackID = (*minHitIter)->GetTrackID();
-    auto maxTrackID = (*maxHitIter)->GetTrackID();
-
-    fClassifier.clear();
-    fClassifier.resize(maxTrackID - minTrackID + 1);
-    for (auto&& hitData : fClassifier) {
-        hitData.reserve(fThreshold + 10);
-    }
-
-    for (auto&& hitPtr : std::as_const(hitData)) {
-        fClassifier[hitPtr->GetTrackID() - minTrackID].emplace_back(hitPtr);
-    }
-
-    for (auto&& hitData : fClassifier) {
-        if (hitData.size() < fThreshold) {
-            Base::fOmittedHitList.insert(Base::fOmittedHitList.cend(), hitData.cbegin(), hitData.cend());
+    for (auto&& candidate : Classify(hitData)) {
+        if (candidate.size() < fThreshold) {
+            Base::fOmittedHitList.insert(Base::fOmittedHitList.cend(), candidate.cbegin(), candidate.cend());
             continue;
         }
 
         auto track = std::make_shared<Track_t>();
-        bool good = Base::fFitter->Fit(hitData, track);
+        bool good = Base::fFitter->Fit(candidate, track);
         const auto& omitted = Base::fFitter->GetOmitted();
 
-        if (hitData.size() < fThreshold or !good) {
-            Base::fOmittedHitList.insert(Base::fOmittedHitList.cend(), hitData.cbegin(), hitData.cend());
+        if (candidate.size() < fThreshold or !good) {
+            Base::fOmittedHitList.insert(Base::fOmittedHitList.cend(), candidate.cbegin(), candidate.cend());
             Base::fOmittedHitList.insert(Base::fOmittedHitList.cend(), omitted.cbegin(), omitted.cend());
         } else {
             Base::fTrackList.emplace_back(track);
-            Base::fReconstructedHitList.emplace_back(hitData);
+            Base::fTrackedHitList.emplace_back(candidate);
             Base::fOmittedHitList.insert(Base::fOmittedHitList.cend(), omitted.cbegin(), omitted.cend());
         }
     }
+}
+
+template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t>
+std::vector<std::vector<typename MACE::ReconSpectrometer::Tracker::TrueFinder<FitterT_t, SpectromrterHit_t, Track_t>::HitPtr>>
+MACE::ReconSpectrometer::Tracker::TrueFinder<FitterT_t, SpectromrterHit_t, Track_t>::
+Classify(const std::vector<HitPtr>& hitData) {
+    std::vector<HitPtr> sortedHitData(hitData);
+    std::ranges::sort(sortedHitData,
+        [](const auto& hit1, const auto& hit2) {
+            auto eventOrder = (hit1->GetEventID() <=> hit2->GetEventID());
+            if (eventOrder < 0) {
+                return true;
+            } else if (eventOrder > 0) {
+                return false;
+            } else {
+                return hit1->GetTrackID() < hit2->GetTrackID();
+            }
+        }
+    );
+
+    std::vector<std::vector<HitPtr>> candidates;
+    int currentTrackID = -1;
+    int currentEventID = -1;
+    std::vector<HitPtr>* currentTrack = nullptr;
+    for (auto&& hit : std::as_const(sortedHitData)) {
+        if (hit->GetEventID() != currentEventID or hit->GetTrackID() != currentTrackID) {
+            currentEventID = hit->GetEventID();
+            currentTrackID = hit->GetTrackID();
+            currentTrack = std::addressof(candidates.emplace_back());
+            currentTrack->reserve(2 * fThreshold);
+        }
+        currentTrack->emplace_back(hit);
+    }
+    return candidates;
 }
