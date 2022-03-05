@@ -62,7 +62,9 @@ Fit(std::vector<HitPtr>& hitData, TrackPtr& track) {
         if (initXc < fXcBound.first or initXc > fXcBound.second or
             initYc < fYcBound.first or initYc > fYcBound.second or
             initR < fRBound.first or initR > fRBound.second) {
-            std::cout << "Warning: parameter bound reached, aborted." << std::endl;
+            if (Base::fVerbose > 0) {
+                std::cout << "Warning: parameter bound reached, aborted." << std::endl;
+            }
             return false;
         }
     }
@@ -118,7 +120,9 @@ Fit(std::vector<HitPtr>& hitData, TrackPtr& track) {
             if (Xc < fXcBound.first or Xc > fXcBound.second or
                 Yc < fYcBound.first or Yc > fYcBound.second or
                 R < fRBound.first or R > fRBound.second) {
-                std::cout << "Warning: parameter bound reached, aborted." << std::endl;
+                if (Base::fVerbose > 0) {
+                    std::cout << "Warning: parameter bound reached, aborted." << std::endl;
+                }
                 return false;
             }
 
@@ -127,7 +131,9 @@ Fit(std::vector<HitPtr>& hitData, TrackPtr& track) {
 
             ++stepCount;
             if (stepCount >= fMaxSteps) {
-                std::cout << "Warning: max step " << fMaxSteps << " reached." << std::endl;
+                if (Base::fVerbose > 0) {
+                    std::cout << "Warning: max step " << fMaxSteps << " reached." << std::endl;
+                }
                 break;
             }
         } while (std::abs(thisVar - lastVar) > fTolerance);
@@ -184,7 +190,9 @@ Fit(std::vector<HitPtr>& hitData, TrackPtr& track) {
     }
 
     if (reducedChi2 > fReducedChi2Bound) {
-        std::cout << "Warning: reduced chi2 bound reached, aborted." << std::endl;
+        if (Base::fVerbose > 0) {
+            std::cout << "Warning: reduced chi2 bound reached, aborted." << std::endl;
+        }
         return false;
     }
 

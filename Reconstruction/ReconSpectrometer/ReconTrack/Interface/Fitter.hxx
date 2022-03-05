@@ -21,8 +21,12 @@ public:
     virtual bool Fit(std::vector<HitPtr>& hitDataToBeFitted, TrackPtr& seed) = 0;
     [[nodiscard]] const auto& GetOmitted() const { return fOmittedList; }
 
+    void SetVerbose(int verbose) { fVerbose = verbose; }
+
 protected:
     std::vector<HitPtr> fOmittedList;
+
+    int fVerbose = 1;
 };
 
 #include "ReconSpectrometer/ReconTrack/Interface/Fitter.ixx"
