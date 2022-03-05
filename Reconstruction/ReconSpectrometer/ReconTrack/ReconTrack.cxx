@@ -3,13 +3,20 @@
 #include "ReconSpectrometer/ReconTrack/Tracker/Hough.hxx"
 #include "ReconSpectrometer/ReconTrack/Fitter/Dummy.hxx"
 #include "ReconSpectrometer/ReconTrack/Fitter/DirectSubSpaceLeastVariance.hxx"
+#include "MPITools/MPIFileTools.hxx"
 
+using namespace MACE;
 using namespace MACE::ReconSpectrometer;
 using namespace MACE::DataModel;
 
 int main(int, char** argv) {
-    TFile fileIn(argv[1], "read");
-    TFile fileOut(TString("reconed_") + argv[1], "recreate");
+    MPI::Init();
+
+    MPIFileTools mpiFileToolsIn(argv[1], ".root");
+    MPIFileTools mpiFileToolsOut(std::string("reconed_") + argv[1], ".root");
+
+    TFile fileIn(mpiFileToolsIn.GetFilePath().c_str(), "read");
+    TFile fileOut(mpiFileToolsOut.GetFilePath().c_str(), "recreate");
 
     using Hit_t = SpectrometerSimHit;
     using Track_t = HelixTrack;
@@ -17,11 +24,14 @@ int main(int, char** argv) {
     // Tracker::TrueFinder<Fitter::Dummy, Hit_t, Track_t> reconstructor;
     // Tracker::Hough<Fitter::Dummy, Hit_t> reconstructor(350, 5000, std::stol(argv[2]), std::stol(argv[3]), -50, 150, std::stol(argv[4]), std::stol(argv[5]));
     Tracker::TrueFinder<Fitter::DirectSubSpaceLeastVariance, Hit_t, Track_t> reconstructor;
+    reconstructor.GetFitter()->SetVerbose(0);
+    reconstructor.GetFitter()->SetDescentRate(std::stod(argv[2]));
+    reconstructor.GetFitter()->SetTolerance(std::stod(argv[3]));
+    reconstructor.GetFitter()->SetMaxSteps(std::stod(argv[4]));
 
     DataHub dataHub;
     dataHub.SetPrefixFormatOfTreeName("Rep#_");
 
-    std::vector<std::shared_ptr<Track_t>> allTracks(0);
     for (Long64_t i = 0; ; ++i) {
         auto tree = dataHub.FindTree<Hit_t>(fileIn, i);
         if (tree == nullptr) { break; }
@@ -32,14 +42,13 @@ int main(int, char** argv) {
         const auto& tracks = reconstructor.GetTrackList();
 
         dataHub.CreateAndFillTree<Track_t>(tracks, i)->Write();
-        allTracks.insert(allTracks.cend(), tracks.cbegin(), tracks.cend());
     }
-
-    dataHub.SetPrefixFormatOfTreeName("All_");
-    dataHub.CreateAndFillTree<Track_t>(allTracks)->Write();
 
     fileOut.Close();
     fileIn.Close();
+    
+    mpiFileToolsOut.MergeRootFiles(true);
 
+    MPI::Finalize();
     return EXIT_SUCCESS;
 }
