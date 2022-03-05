@@ -39,7 +39,7 @@
 4. How to store fully-reconstructed event?
 5. (Long-term) Implement RawHit.
 6. (Long-term) Implement SimRawHit.
-7. With new way of manage the relation between beam repetition and G4Event, trackID is not longer identical, need to save eventID. (see also ReconSpectrometer-Utility-1)
+7. (Completed) ~With new way of manage the relation between beam repetition and G4Event, trackID is not longer identical, need to save eventID. (see also ReconSpectrometer-Utility-1)~
 
 ## EventDisplay
 
@@ -71,7 +71,7 @@
 
 ### Utility
 
-1. With new way of manage the relation between beam repetition and G4Event, trackID is not longer identical. Use both trackID and eventID in TrueFinder to recognize tracks. (see also DataModel-Utility-7)
+1. (Completed) ~With new way of manage the relation between beam repetition and G4Event, trackID is not longer identical. Use both trackID and eventID in TrueFinder to recognize tracks. (see also DataModel-Utility-7)~
 
 ### Interface
 
