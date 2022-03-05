@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 #include "G4VSensitiveDetector.hh"
 #include "G4TwoVector.hh"
 
@@ -24,11 +26,8 @@ public:
     void SetEventID(G4int eventID) { fEventID = eventID; }
 
 private:
-    auto FindMonitoring(ObserverPtr<const G4Track> track) { return std::ranges::find_if(std::as_const(fMonitoringTrackList), [&track](const auto& monitoring) { return track == monitoring.first; }); }
-
-private:
     G4int fEventID;
     SpectrometerHitCollection* fHitsCollection;
-    std::vector<std::pair<ObserverPtr<const G4Track>, ObserverPtr<const G4StepPoint>>> fMonitoringTrackList;
+    std::map<ObserverPtr<const G4Track>, const G4StepPoint> fMonitoringTrackList;
     std::vector<G4TwoVector> fSenseWireMap;
 };

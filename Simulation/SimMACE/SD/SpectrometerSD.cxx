@@ -14,7 +14,7 @@ using namespace MACE::SimMACE::SD;
 SpectrometerSD::SpectrometerSD(const G4String& sdName) :
     G4VSensitiveDetector(sdName),
     fHitsCollection(nullptr),
-    fMonitoringTrackList(0),
+    fMonitoringTrackList(),
     fSenseWireMap(0) {
 
     collectionName.insert(sdName + "HC");
@@ -43,19 +43,19 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     const auto* const track = step->GetTrack();
     const auto* const particle = track->GetDefinition();
     if (track->GetCurrentStepNumber() <= 1 or particle->GetPDGCharge() == 0) { return false; }
-    auto monitoring = FindMonitoring(track);
+    auto monitoring = std::as_const(fMonitoringTrackList).find(track);
     auto isMonitoring = (monitoring != fMonitoringTrackList.cend());
     if (!isMonitoring and step->IsFirstStepInVolume()) {
-        fMonitoringTrackList.emplace_back(track, step->GetPreStepPoint());
+        fMonitoringTrackList.emplace(track, *step->GetPreStepPoint());
         monitoring = std::prev(fMonitoringTrackList.cend());
         isMonitoring = true;
     }
     if (isMonitoring and step->IsLastStepInVolume()) {
         // retrive entering time and position
         const auto& enterPoint = monitoring->second;
-        const auto tIn = enterPoint->GetGlobalTime();
-        const auto rIn = G4TwoVector(enterPoint->GetPosition());
-        const auto zIn = enterPoint->GetPosition().z();
+        const auto tIn = enterPoint.GetGlobalTime();
+        const auto rIn = G4TwoVector(enterPoint.GetPosition());
+        const auto zIn = enterPoint.GetPosition().z();
         // retrive exiting time and position
         const auto* const exitPoint = step->GetPostStepPoint();
         const auto tOut = exitPoint->GetGlobalTime();
@@ -68,7 +68,9 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         // retrive wire position
         const auto& rWire = fSenseWireMap[cellID];
         // calculate drift distance
-        const auto driftDistance = ((rIn - rWire) + (rOut - rWire)).mag() / 2;
+        const auto r1 = rIn - rWire;
+        const auto r2 = rOut - rWire;
+        const auto driftDistance = std::abs(r1.x() * r2.y() - r2.x() * r1.y()) / (r1 - r2).mag();
         // new a hit
         auto* const hit = new SpectrometerHit();
         hit->SetHitTime((tIn + tOut) / 2);
@@ -77,7 +79,7 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         hit->SetHitPositionZ((zIn + zOut) / 2);
         hit->SetCellID(cellID);
         hit->SetLayerID(layerID);
-        hit->SetMomentum((enterPoint->GetMomentum() + exitPoint->GetMomentum()) / 2);
+        hit->SetMomentum((enterPoint.GetMomentum() + exitPoint->GetMomentum()) / 2);
         hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
         hit->SetVertexPosition(track->GetVertexPosition());
         hit->SetPDGCode(particle->GetPDGEncoding());

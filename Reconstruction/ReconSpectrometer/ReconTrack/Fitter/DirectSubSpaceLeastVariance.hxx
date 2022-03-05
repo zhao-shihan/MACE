@@ -41,9 +41,9 @@ private:
 
     bool fEnableGradientDescent = true;
     double fH = 1e-6;
-    double fDescentRate = 0.1;
-    double fTolerance = 0.001;
-    int fMaxSteps = 10000;
+    double fDescentRate = 0.53;
+    double fTolerance = 1e-6;
+    int fMaxSteps = 100000;
 
     double fReducedChi2Bound = 20;
 };
