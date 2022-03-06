@@ -14,14 +14,14 @@ CalorimeterHit::CalorimeterHit() noexcept :
 
 void CalorimeterHit::CreateBranches(TTree& tree) {
     Base::CreateBranches(tree);
-    tree.Branch(fgHitTime.BranchName(), fgHitTime.Address());
-    tree.Branch(fgEnergy.BranchName(), fgEnergy.Address());
-    tree.Branch(fgEnergyVariance.BranchName(), fgEnergyVariance.Address());
+    fgHitTime.CreateBranch(tree);
+    fgEnergy.CreateBranch(tree);
+    fgEnergyVariance.CreateBranch(tree);
 }
 
 void CalorimeterHit::ConnectToBranches(TTree& tree) {
     Base::ConnectToBranches(tree);
-    tree.SetBranchAddress(fgHitTime.BranchName(), fgHitTime.Address());
-    tree.SetBranchAddress(fgEnergy.BranchName(), fgEnergy.Address());
-    tree.SetBranchAddress(fgEnergyVariance.BranchName(), fgEnergyVariance.Address());
+    fgHitTime.ConnectToBranch(tree);
+    fgEnergy.ConnectToBranch(tree);
+    fgEnergyVariance.ConnectToBranch(tree);
 }

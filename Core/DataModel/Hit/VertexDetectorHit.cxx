@@ -14,14 +14,14 @@ VertexDetectorHit::VertexDetectorHit() noexcept :
 
 void VertexDetectorHit::CreateBranches(TTree& tree) {
     Base::CreateBranches(tree);
-    tree.Branch(fgHitTime.BranchName(), fgHitTime.Address());
-    tree.Branch(fgHitPosition.BranchName(), fgHitPosition.Address());
-    tree.Branch(fgHitPositionVariance.BranchName(), fgHitPositionVariance.Address());
+    fgHitTime.CreateBranch(tree);
+    fgHitPosition.CreateBranch(tree);
+    fgHitPositionVariance.CreateBranch(tree);
 }
 
 void VertexDetectorHit::ConnectToBranches(TTree& tree) {
     Base::ConnectToBranches(tree);
-    tree.SetBranchAddress(fgHitTime.BranchName(), fgHitTime.Address());
-    tree.SetBranchAddress(fgHitPosition.BranchName(), fgHitPosition.Address());
-    tree.SetBranchAddress(fgHitPositionVariance.BranchName(), fgHitPositionVariance.Address());
+    fgHitTime.ConnectToBranch(tree);
+    fgHitPosition.ConnectToBranch(tree);
+    fgHitPositionVariance.ConnectToBranch(tree);
 }

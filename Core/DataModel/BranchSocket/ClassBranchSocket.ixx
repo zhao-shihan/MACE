@@ -10,3 +10,11 @@ MACE::DataModel::ClassBranchSocket<Class_t>::
 ~ClassBranchSocket() noexcept {
     delete fObject;
 }
+
+template<typename Class_t>
+void MACE::DataModel::ClassBranchSocket<Class_t>::
+CreateBranch(TTree& tree) {
+    using Base = MACE::DataModel::Interface::BranchSocket<Class_t, Class_t**>;
+    Base::fConnectedTree = std::addressof(tree);
+    tree.Branch(Base::fBranchName, Address(), 256000, 0);
+}

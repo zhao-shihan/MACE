@@ -17,6 +17,9 @@ public:
     [[nodiscard]] Class_t& Value() override { return *fObject; }
     [[nodiscard]] Class_t** Address() override { return std::addressof(fObject); }
 
+    // create an un-split branch.
+    void CreateBranch(TTree& tree) override;
+
 private:
     Class_t* fObject;
 };

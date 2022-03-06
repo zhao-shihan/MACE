@@ -18,18 +18,18 @@ VertexDetectorSimHit::VertexDetectorSimHit() noexcept :
 
 void VertexDetectorSimHit::CreateBranches(TTree& tree) {
     Base::CreateBranches(tree);
-    tree.Branch(fgVertexTime.BranchName(), fgVertexTime.Address());
-    tree.Branch(fgVertexPosition.BranchName(), fgVertexPosition.Address());
-    tree.Branch(fgPDGCode.BranchName(), fgPDGCode.Address());
-    tree.Branch(fgEventID.BranchName(), fgEventID.Address());
-    tree.Branch(fgTrackID.BranchName(), fgTrackID.Address());
+    fgVertexTime.CreateBranch(tree);
+    fgVertexPosition.CreateBranch(tree);
+    fgPDGCode.CreateBranch(tree);
+    fgEventID.CreateBranch(tree);
+    fgTrackID.CreateBranch(tree);
 }
 
 void VertexDetectorSimHit::ConnectToBranches(TTree& tree) {
     Base::ConnectToBranches(tree);
-    tree.SetBranchAddress(fgVertexTime.BranchName(), fgVertexTime.Address());
-    tree.SetBranchAddress(fgVertexPosition.BranchName(), fgVertexPosition.Address());
-    tree.SetBranchAddress(fgPDGCode.BranchName(), fgPDGCode.Address());
-    tree.SetBranchAddress(fgEventID.BranchName(), fgEventID.Address());
-    tree.SetBranchAddress(fgTrackID.BranchName(), fgTrackID.Address());
+    fgVertexTime.ConnectToBranch(tree);
+    fgVertexPosition.ConnectToBranch(tree);
+    fgPDGCode.ConnectToBranch(tree);
+    fgEventID.ConnectToBranch(tree);
+    fgTrackID.ConnectToBranch(tree);
 }

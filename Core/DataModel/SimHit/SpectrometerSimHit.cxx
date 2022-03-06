@@ -20,20 +20,20 @@ SpectrometerSimHit::SpectrometerSimHit() noexcept :
 
 void SpectrometerSimHit::CreateBranches(TTree& tree) {
     Base::CreateBranches(tree);
-    tree.Branch(fgMomentum.BranchName(), fgMomentum.Address());
-    tree.Branch(fgVertexTime.BranchName(), fgVertexTime.Address());
-    tree.Branch(fgVertexPosition.BranchName(), fgVertexPosition.Address());
-    tree.Branch(fgPDGCode.BranchName(), fgPDGCode.Address());
-    tree.Branch(fgEventID.BranchName(), fgEventID.Address());
-    tree.Branch(fgTrackID.BranchName(), fgTrackID.Address());
+    fgMomentum.CreateBranch(tree);
+    fgVertexTime.CreateBranch(tree);
+    fgVertexPosition.CreateBranch(tree);
+    fgPDGCode.CreateBranch(tree);
+    fgEventID.CreateBranch(tree);
+    fgTrackID.CreateBranch(tree);
 }
 
 void SpectrometerSimHit::ConnectToBranches(TTree& tree) {
     Base::ConnectToBranches(tree);
-    tree.SetBranchAddress(fgMomentum.BranchName(), fgMomentum.Address());
-    tree.SetBranchAddress(fgVertexTime.BranchName(), fgVertexTime.Address());
-    tree.SetBranchAddress(fgVertexPosition.BranchName(), fgVertexPosition.Address());
-    tree.SetBranchAddress(fgPDGCode.BranchName(), fgPDGCode.Address());
-    tree.SetBranchAddress(fgEventID.BranchName(), fgEventID.Address());
-    tree.SetBranchAddress(fgTrackID.BranchName(), fgTrackID.Address());
+    fgMomentum.ConnectToBranch(tree);
+    fgVertexTime.ConnectToBranch(tree);
+    fgVertexPosition.ConnectToBranch(tree);
+    fgPDGCode.ConnectToBranch(tree);
+    fgEventID.ConnectToBranch(tree);
+    fgTrackID.ConnectToBranch(tree);
 }

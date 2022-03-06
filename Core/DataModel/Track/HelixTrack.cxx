@@ -20,20 +20,20 @@ HelixTrack::HelixTrack() noexcept :
 
 void HelixTrack::CreateBranches(TTree& tree) {
     Base::CreateBranches(tree);
-    tree.Branch(fgVertexTime.BranchName(), fgVertexTime.Address());
-    tree.Branch(fgCenter.BranchName(), fgCenter.Address());
-    tree.Branch(fgRadius.BranchName(), fgRadius.Address());
-    tree.Branch(fgZ0.BranchName(), fgZ0.Address());
-    tree.Branch(fgAlpha.BranchName(), fgAlpha.Address());
-    tree.Branch(fgChi2.BranchName(), fgChi2.Address());
+    fgVertexTime.CreateBranch(tree);
+    fgCenter.CreateBranch(tree);
+    fgRadius.CreateBranch(tree);
+    fgZ0.CreateBranch(tree);
+    fgAlpha.CreateBranch(tree);
+    fgChi2.CreateBranch(tree);
 }
 
 void HelixTrack::ConnectToBranches(TTree& tree) {
     Base::ConnectToBranches(tree);
-    tree.SetBranchAddress(fgVertexTime.BranchName(), fgVertexTime.Address());
-    tree.SetBranchAddress(fgCenter.BranchName(), fgCenter.Address());
-    tree.SetBranchAddress(fgRadius.BranchName(), fgRadius.Address());
-    tree.SetBranchAddress(fgZ0.BranchName(), fgZ0.Address());
-    tree.SetBranchAddress(fgAlpha.BranchName(), fgAlpha.Address());
-    tree.SetBranchAddress(fgChi2.BranchName(), fgChi2.Address());
+    fgVertexTime.ConnectToBranch(tree);
+    fgCenter.ConnectToBranch(tree);
+    fgRadius.ConnectToBranch(tree);
+    fgZ0.ConnectToBranch(tree);
+    fgAlpha.ConnectToBranch(tree);
+    fgChi2.ConnectToBranch(tree);
 }
