@@ -40,7 +40,8 @@
 5. (Long-term) Implement RawHit.
 6. (Long-term) Implement SimRawHit.
 7. (Completed) ~With new way of manage the relation between beam repetition and G4Event, trackID is not longer identical, need to save eventID. (see also ReconSpectrometer-Utility-1)~
-8. Track should hold time.
+8. (Completed) ~Track should hold time.~
+9. Branch name's first letter should be lower-cased.
 
 ## EventDisplay
 
