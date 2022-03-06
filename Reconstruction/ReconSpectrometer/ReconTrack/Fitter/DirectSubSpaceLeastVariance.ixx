@@ -11,6 +11,8 @@ Fit(std::vector<HitPtr>& hitData, Track_t& track) {
 
     Finalize(track);
 
+    track.SetVertexTime(hitData.front()->GetHitTime());
+
     return true;
 }
 

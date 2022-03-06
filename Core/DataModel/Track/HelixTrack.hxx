@@ -19,12 +19,14 @@ public:
     HelixTrack& operator=(const HelixTrack& hit) noexcept = default;
     HelixTrack& operator=(HelixTrack&& hit) noexcept = default;
 
+    [[nodiscard]] const auto& GetVertexTime() const { return fVertexTime; }
     [[nodiscard]] const auto& GetCenter() const { return fCenter; }
     [[nodiscard]] const auto& GetRadius() const { return fRadius; }
     [[nodiscard]] const auto& GetZ0() const { return fZ0; }
     [[nodiscard]] const auto& GetAlpha() const { return fAlpha; }
     [[nodiscard]] const auto& GetChi2() const { return fChi2; }
 
+    void SetVertexTime(Double_t val) { fVertexTime = val; }
     void SetCenter(const TEveVector2D& val) { fCenter = val; }
     void SetCenter(TEveVector2D&& val) { fCenter = std::move(val); }
     void SetCenter(Double_t x, Double_t y) { fCenter.Set(x, y); }
@@ -42,12 +44,14 @@ private:
     static constexpr const char* BasicName() { return "HlxTrk"; }
 
 private:
+    Double_t     fVertexTime;
     TEveVector2D fCenter;
     Double_t     fRadius;
     Double_t     fZ0;
     Double_t     fAlpha;
     Double_t     fChi2;
 
+    static FloatBranchSocket    fgVertexTime;
     static Vector2FBranchSocket fgCenter;
     static FloatBranchSocket    fgRadius;
     static FloatBranchSocket    fgZ0;
@@ -57,6 +61,7 @@ private:
 
 inline void MACE::DataModel::HelixTrack::FillBranchSockets() const noexcept {
     Base::FillBranchSockets();
+    fgVertexTime.Value() = fVertexTime;
     fgCenter.Value() = fCenter;
     fgRadius.Value() = fRadius;
     fgZ0.Value() = fZ0;

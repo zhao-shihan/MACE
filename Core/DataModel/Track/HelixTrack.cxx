@@ -2,14 +2,16 @@
 
 using namespace MACE::DataModel;
 
-Vector2FBranchSocket HelixTrack::fgCenter("Center", 0, 0);
-FloatBranchSocket    HelixTrack::fgRadius("R", 0);
-FloatBranchSocket        HelixTrack::fgZ0("Z0", 0);
-FloatBranchSocket     HelixTrack::fgAlpha("Alpha", 0);
-FloatBranchSocket      HelixTrack::fgChi2("Chi2", 0);
+FloatBranchSocket   HelixTrack::fgVertexTime("VtxT", 0);
+Vector2FBranchSocket    HelixTrack::fgCenter("Center", 0, 0);
+FloatBranchSocket       HelixTrack::fgRadius("R", 0);
+FloatBranchSocket           HelixTrack::fgZ0("Z0", 0);
+FloatBranchSocket        HelixTrack::fgAlpha("Alpha", 0);
+FloatBranchSocket         HelixTrack::fgChi2("Chi2", 0);
 
 HelixTrack::HelixTrack() noexcept :
     Base(),
+    fVertexTime(fgVertexTime.Value()),
     fCenter(fgCenter.Value()),
     fRadius(fgRadius.Value()),
     fZ0(fgZ0.Value()),
@@ -18,6 +20,7 @@ HelixTrack::HelixTrack() noexcept :
 
 void HelixTrack::CreateBranches(TTree& tree) {
     Base::CreateBranches(tree);
+    tree.Branch(fgVertexTime.BranchName(), fgVertexTime.Address());
     tree.Branch(fgCenter.BranchName(), fgCenter.Address());
     tree.Branch(fgRadius.BranchName(), fgRadius.Address());
     tree.Branch(fgZ0.BranchName(), fgZ0.Address());
@@ -27,6 +30,7 @@ void HelixTrack::CreateBranches(TTree& tree) {
 
 void HelixTrack::ConnectToBranches(TTree& tree) {
     Base::ConnectToBranches(tree);
+    tree.SetBranchAddress(fgVertexTime.BranchName(), fgVertexTime.Address());
     tree.SetBranchAddress(fgCenter.BranchName(), fgCenter.Address());
     tree.SetBranchAddress(fgRadius.BranchName(), fgRadius.Address());
     tree.SetBranchAddress(fgZ0.BranchName(), fgZ0.Address());
