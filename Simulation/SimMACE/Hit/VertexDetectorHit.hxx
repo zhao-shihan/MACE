@@ -8,6 +8,7 @@
 
 #include "SimMACE/Global.hxx"
 #include "DataModel/SimHit/VertexDetectorSimHit.hxx"
+#include "ObserverPtr.hxx"
 
 class MACE::SimMACE::VertexDetectorHit final :
     public G4VHit,
@@ -27,7 +28,7 @@ public:
     inline void  operator delete(void*);
 
 private:
-    static G4Allocator<VertexDetectorHit> fgVertexDetectorAllocator;
+    static ObserverPtr<G4Allocator<VertexDetectorHit>> fgVertexDetectorAllocator;
 };
 
 namespace MACE::SimMACE::Hit {
@@ -36,10 +37,13 @@ namespace MACE::SimMACE::Hit {
 
 inline void* MACE::SimMACE::VertexDetectorHit::
 operator new(size_t) {
-    return static_cast<void*>(fgVertexDetectorAllocator.MallocSingle());
+    if (fgVertexDetectorAllocator == nullptr) {
+        fgVertexDetectorAllocator = new G4Allocator<VertexDetectorHit>();
+    }
+    return static_cast<void*>(fgVertexDetectorAllocator->MallocSingle());
 }
 
 inline void MACE::SimMACE::VertexDetectorHit::
 operator delete(void* hit) {
-    fgVertexDetectorAllocator.FreeSingle(static_cast<VertexDetectorHit*>(hit));
+    fgVertexDetectorAllocator->FreeSingle(static_cast<VertexDetectorHit*>(hit));
 }

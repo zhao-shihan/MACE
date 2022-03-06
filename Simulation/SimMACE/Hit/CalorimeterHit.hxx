@@ -6,6 +6,7 @@
 
 #include "SimMACE/Global.hxx"
 #include "DataModel/SimHit/CalorimeterSimHit.hxx"
+#include "ObserverPtr.hxx"
 
 class MACE::SimMACE::CalorimeterHit final :
     public G4VHit,
@@ -22,7 +23,7 @@ public:
     inline void  operator delete(void*);
 
 private:
-    static G4Allocator<CalorimeterHit> fgCalorimeterHitAllocator;
+    static ObserverPtr<G4Allocator<CalorimeterHit>> fgCalorimeterHitAllocator;
 };
 
 namespace MACE::SimMACE::Hit {
@@ -31,10 +32,13 @@ namespace MACE::SimMACE::Hit {
 
 inline void* MACE::SimMACE::CalorimeterHit::
 operator new(size_t) {
-    return static_cast<void*>(fgCalorimeterHitAllocator.MallocSingle());
+    if (fgCalorimeterHitAllocator == nullptr) {
+        fgCalorimeterHitAllocator = new G4Allocator<CalorimeterHit>();
+    }
+    return static_cast<void*>(fgCalorimeterHitAllocator->MallocSingle());
 }
 
 inline void MACE::SimMACE::CalorimeterHit::
 operator delete(void* hit) {
-    fgCalorimeterHitAllocator.FreeSingle(static_cast<CalorimeterHit*>(hit));
+    fgCalorimeterHitAllocator->FreeSingle(static_cast<CalorimeterHit*>(hit));
 }

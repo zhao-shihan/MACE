@@ -2,4 +2,4 @@
 
 using namespace MACE::SimMACE::Hit;
 
-G4Allocator<VertexDetectorHit> MACE::SimMACE::VertexDetectorHit::fgVertexDetectorAllocator = G4Allocator<VertexDetectorHit>();
+MACE::ObserverPtr<G4Allocator<VertexDetectorHit>> VertexDetectorHit::fgVertexDetectorAllocator = nullptr;

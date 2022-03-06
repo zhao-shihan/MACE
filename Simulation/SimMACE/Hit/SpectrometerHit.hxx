@@ -8,6 +8,7 @@
 
 #include "SimMACE/Global.hxx"
 #include "DataModel/SimHit/SpectrometerSimHit.hxx"
+#include "ObserverPtr.hxx"
 
 class MACE::SimMACE::SpectrometerHit final :
     public G4VHit,
@@ -28,7 +29,7 @@ public:
     inline void  operator delete(void*);
 
 private:
-    static G4Allocator<SpectrometerHit> fgSpectrometerHitAllocator;
+    static ObserverPtr<G4Allocator<SpectrometerHit>> fgSpectrometerHitAllocator;
 };
 
 namespace MACE::SimMACE::Hit {
@@ -37,10 +38,13 @@ namespace MACE::SimMACE::Hit {
 
 inline void* MACE::SimMACE::SpectrometerHit::
 operator new(size_t) {
-    return static_cast<void*>(fgSpectrometerHitAllocator.MallocSingle());
+    if (fgSpectrometerHitAllocator == nullptr) {
+        fgSpectrometerHitAllocator = new G4Allocator<SpectrometerHit>();
+    }
+    return static_cast<void*>(fgSpectrometerHitAllocator->MallocSingle());
 }
 
 inline void MACE::SimMACE::SpectrometerHit::
 operator delete(void* hit) {
-    fgSpectrometerHitAllocator.FreeSingle(static_cast<SpectrometerHit*>(hit));
+    fgSpectrometerHitAllocator->FreeSingle(static_cast<SpectrometerHit*>(hit));
 }

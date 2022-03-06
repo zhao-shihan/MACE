@@ -2,4 +2,4 @@
 
 using namespace MACE::SimMACE::Hit;
 
-G4Allocator<SpectrometerHit> MACE::SimMACE::SpectrometerHit::fgSpectrometerHitAllocator = G4Allocator<SpectrometerHit>();
+MACE::ObserverPtr<G4Allocator<SpectrometerHit>> SpectrometerHit::fgSpectrometerHitAllocator = nullptr;

@@ -51,7 +51,7 @@
 
 /vis/scene/add/date
 /vis/scene/add/axes 0 0 0 10 cm
-/vis/scene/add/trajectories smooth rich
+/vis/scene/add/trajectories smooth #rich
 /vis/scene/add/hits
 
 /vis/filtering/trajectories/create/particleFilter
