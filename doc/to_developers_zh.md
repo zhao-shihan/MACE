@@ -28,7 +28,7 @@
   - [内联文件规则](#内联文件规则)
     - [命名](#命名-2)
     - [和类的关系](#和类的关系-2)
-  - [](#)
+  - [C++上的实用操作](#c上的实用操作)
   - [附录](#附录)
     - [C++中英文术语对照](#c中英文术语对照)
 
@@ -253,7 +253,24 @@ MACE 软件**必须**使用面向对象的编程范式。这隐含的假设是�
 
 - 内联文件内的实现**必须**都声明自同名类。
 
-## 
+## C++上的实用操作
+
+- 使用```std::tie```进行字典序比较。
+```C++
+class Foo {
+public:
+    bool operator<(const Foo& rhs) const {
+        // compares fCount to rhs.fCount, if equal,
+        // then compares fValue to rhs.fValue, if equal,
+        // then compares fTitle to rhs.fTitle.
+        return std::tie(fCount, fValue, fTitle) < std::tie(rhs.fCount, rhs.fValue, rhs.fTitle);
+    }
+private:
+    int fCount;
+    float fValue;
+    std::string fTitle;
+};
+```
 
 ## 附录
 

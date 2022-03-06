@@ -24,8 +24,7 @@ int main(int, char** argv) {
     // Tracker::TrueFinder<Fitter::Dummy, Hit_t, Track_t> reconstructor;
     // Tracker::Hough<Fitter::Dummy, Hit_t> reconstructor(350, 5000, std::stol(argv[2]), std::stol(argv[3]), -50, 150, std::stol(argv[4]), std::stol(argv[5]));
     Tracker::TrueFinder<Fitter::DirectSubSpaceLeastVariance, Hit_t, Track_t> reconstructor;
-    reconstructor.GetFitter()->SetVerbose(0);
-    reconstructor.GetFitter()->SetDescentRate(std::stod(argv[2]));
+    reconstructor.GetFitter()->SetVerbose(std::stoi(argv[2]));
     reconstructor.GetFitter()->SetTolerance(std::stod(argv[3]));
     reconstructor.GetFitter()->SetMaxSteps(std::stod(argv[4]));
 
@@ -46,7 +45,7 @@ int main(int, char** argv) {
 
     fileOut.Close();
     fileIn.Close();
-    
+
     mpiFileToolsOut.MergeRootFiles(true);
 
     MPI::Finalize();

@@ -13,13 +13,12 @@ class MACE::ReconSpectrometer::Fitter::Dummy final :
 protected:
     using Base = MACE::ReconSpectrometer::Interface::Fitter<SpectromrterHit_t, Track_t>;
     using HitPtr = typename Base::HitPtr;
-    using TrackPtr = typename Base::TrackPtr;
 
 public:
     Dummy() = default;
     ~Dummy() noexcept = default;
 
-    bool Fit(std::vector<HitPtr>& hitData, TrackPtr& seed) override;
+    bool Fit(std::vector<HitPtr>&, Track_t&) override;
 };
 
 #include "ReconSpectrometer/ReconTrack/Fitter/Dummy.ixx"

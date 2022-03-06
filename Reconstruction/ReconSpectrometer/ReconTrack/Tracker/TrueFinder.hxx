@@ -28,7 +28,7 @@ private:
     std::vector<std::vector<HitPtr>> Classify(const std::vector<HitPtr>& hitData);
 
 private:
-    size_t fThreshold = 10;
+    size_t fThreshold = 18;
 };
 
 #include "ReconSpectrometer/ReconTrack/Tracker/TrueFinder.ixx"

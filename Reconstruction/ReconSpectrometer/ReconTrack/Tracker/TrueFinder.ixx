@@ -12,7 +12,7 @@ Reconstruct(const std::vector<HitPtr>& hitData) {
         }
 
         auto track = std::make_shared<Track_t>();
-        bool good = Base::fFitter->Fit(candidate, track);
+        bool good = Base::fFitter->Fit(candidate, *track);
         const auto& omitted = Base::fFitter->GetOmitted();
 
         if (candidate.size() < fThreshold or !good) {
@@ -33,14 +33,7 @@ Classify(const std::vector<HitPtr>& hitData) {
     std::vector<HitPtr> sortedHitData(hitData);
     std::ranges::sort(sortedHitData,
         [](const auto& hit1, const auto& hit2) {
-            auto eventOrder = (hit1->GetEventID() <=> hit2->GetEventID());
-            if (eventOrder < 0) {
-                return true;
-            } else if (eventOrder > 0) {
-                return false;
-            } else {
-                return hit1->GetTrackID() < hit2->GetTrackID();
-            }
+            return std::tie(hit1->GetEventID(), hit1->GetTrackID()) < std::tie(hit2->GetEventID(), hit2->GetTrackID());
         }
     );
 
