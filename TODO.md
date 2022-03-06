@@ -163,6 +163,7 @@
 ## Defect
 
 1. (Ignored) ~Base-class of class that handles by G4Allocator should not have inlined virtual deconstructor. Maybe we can implement an alternative allocator. (see also Other-4)~
-2. In TTreeViewer, the sub-branch of same name (like VertexPos.fX and HitPos.fX) is conflict. Maybe adjust split level could help?
+2. (Completed, lead to Defect-5) ~In TTreeViewer, the sub-branch of same name (like VertexPos.fX and HitPos.fX) is conflict. Maybe adjust split level could help?~
 3. (Completed) ~~Geometry::Description should use c'tor w/o noexcept, otherwise compile fail on clang (reported by S. S. Wan)~~
 4. Using inline namespace just under namespace MACE (that is, Core, Simulation, Reconstruction, etc.) would confuse VSCode's C++ extension. However, the semantic and concept of MACE project herierachy is conserved.
+5. Now use un-split class branch, causing root file's size larger: ~112% original size.
