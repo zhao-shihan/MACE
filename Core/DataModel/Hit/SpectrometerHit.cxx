@@ -2,14 +2,14 @@
 
 using namespace MACE::DataModel;
 
-FloatBranchSocket                 SpectrometerHit::fgHitTime("HitT", 0);
-FloatBranchSocket           SpectrometerHit::fgDriftDistance("DriftD", 0);
-FloatBranchSocket            SpectrometerHit::fgHitPositionZ("HitZ", 0);
-FloatBranchSocket   SpectrometerHit::fgDriftDistanceVariance("DriftDVar", 0);
-FloatBranchSocket    SpectrometerHit::fgHitPositionZVariance("HitZVar", 0);
-IntBranchSocket                    SpectrometerHit::fgCellID("CellID", -1);
-IntBranchSocket                   SpectrometerHit::fgLayerID("LayerID", -1);
-Vector2FBranchSocket         SpectrometerHit::fgWirePosition("WirePos", 0, 0);
+FloatBranchSocket                 SpectrometerHit::fgHitTime("hitT", 0);
+FloatBranchSocket           SpectrometerHit::fgDriftDistance("drift", 0);
+FloatBranchSocket            SpectrometerHit::fgHitPositionZ("hitZ", 0);
+FloatBranchSocket   SpectrometerHit::fgDriftDistanceVariance("varDrift", 0);
+FloatBranchSocket    SpectrometerHit::fgHitPositionZVariance("varHitZ", 0);
+IntBranchSocket                    SpectrometerHit::fgCellID("cellID", -1);
+IntBranchSocket                   SpectrometerHit::fgLayerID("layerID", -1);
+Vector2FBranchSocket         SpectrometerHit::fgWirePosition("wirePos", 0, 0);
 
 SpectrometerHit::SpectrometerHit() noexcept :
     Base(),

@@ -2,12 +2,12 @@
 
 using namespace MACE::DataModel;
 
-FloatBranchSocket   HelixTrack::fgVertexTime("VtxT", 0);
-Vector2FBranchSocket    HelixTrack::fgCenter("Center", 0, 0);
-FloatBranchSocket       HelixTrack::fgRadius("R", 0);
-FloatBranchSocket           HelixTrack::fgZ0("Z0", 0);
-FloatBranchSocket        HelixTrack::fgAlpha("Alpha", 0);
-FloatBranchSocket         HelixTrack::fgChi2("Chi2", 0);
+FloatBranchSocket   HelixTrack::fgVertexTime("vtxT", 0);
+Vector2FBranchSocket    HelixTrack::fgCenter("center", 0, 0);
+FloatBranchSocket       HelixTrack::fgRadius("r", 0);
+FloatBranchSocket           HelixTrack::fgZ0("z0", 0);
+FloatBranchSocket        HelixTrack::fgAlpha("alpha", 0);
+FloatBranchSocket         HelixTrack::fgChi2("chi2", 0);
 
 HelixTrack::HelixTrack() noexcept :
     Base(),

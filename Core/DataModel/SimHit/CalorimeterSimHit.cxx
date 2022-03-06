@@ -2,9 +2,9 @@
 
 using namespace MACE::DataModel;
 
-IntBranchSocket CalorimeterSimHit::fgPDGCode("PDGCode", std::numeric_limits<Int_t>::max());
-IntBranchSocket CalorimeterSimHit::fgEventID("EvtID", -1);
-IntBranchSocket CalorimeterSimHit::fgTrackID("TrkID", -1);
+IntBranchSocket CalorimeterSimHit::fgPDGCode("pdgCode", std::numeric_limits<Int_t>::max());
+IntBranchSocket CalorimeterSimHit::fgEventID("evtID", -1);
+IntBranchSocket CalorimeterSimHit::fgTrackID("trkID", -1);
 
 CalorimeterSimHit::CalorimeterSimHit() noexcept :
     Base(),

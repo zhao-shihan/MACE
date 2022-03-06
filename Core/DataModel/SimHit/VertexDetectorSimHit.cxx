@@ -2,11 +2,11 @@
 
 using namespace MACE::DataModel;
 
-FloatBranchSocket        VertexDetectorSimHit::fgVertexTime("VtxT", 0);
-Vector3FBranchSocket VertexDetectorSimHit::fgVertexPosition("VtxPos", 0, 0, 0);
-IntBranchSocket             VertexDetectorSimHit::fgPDGCode("PDGCode", std::numeric_limits<Int_t>::max());
-IntBranchSocket             VertexDetectorSimHit::fgEventID("EvtID", -1);
-IntBranchSocket             VertexDetectorSimHit::fgTrackID("TrkID", -1);
+FloatBranchSocket        VertexDetectorSimHit::fgVertexTime("vtxT", 0);
+Vector3FBranchSocket VertexDetectorSimHit::fgVertexPosition("vtxPos", 0, 0, 0);
+IntBranchSocket             VertexDetectorSimHit::fgPDGCode("pdgCode", std::numeric_limits<Int_t>::max());
+IntBranchSocket             VertexDetectorSimHit::fgEventID("evtID", -1);
+IntBranchSocket             VertexDetectorSimHit::fgTrackID("trkID", -1);
 
 VertexDetectorSimHit::VertexDetectorSimHit() noexcept :
     Base(),

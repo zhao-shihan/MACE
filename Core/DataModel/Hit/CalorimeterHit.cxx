@@ -2,9 +2,9 @@
 
 using namespace MACE::DataModel;
 
-FloatBranchSocket        CalorimeterHit::fgHitTime("HitT", 0.0);
-FloatBranchSocket         CalorimeterHit::fgEnergy("Energy", 0.0);
-FloatBranchSocket CalorimeterHit::fgEnergyVariance("EnergyVar", 0.0);
+FloatBranchSocket        CalorimeterHit::fgHitTime("hitT", 0.0);
+FloatBranchSocket         CalorimeterHit::fgEnergy("E", 0.0);
+FloatBranchSocket CalorimeterHit::fgEnergyVariance("varE", 0.0);
 
 CalorimeterHit::CalorimeterHit() noexcept :
     Base(),
