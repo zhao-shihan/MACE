@@ -1,7 +1,7 @@
 #include "Eigen/LU"
 
 template<class SpectromrterHit_t, class Track_t>
-bool MACE::ReconSpectrometer::Fitter::DirectSubSpaceLeastVariance<SpectromrterHit_t, Track_t>::
+bool MACE::ReconSpectrometer::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
 Fit(std::vector<HitPtr>& hitData, Track_t& track) {
     Initialize(hitData);
 
@@ -17,7 +17,7 @@ Fit(std::vector<HitPtr>& hitData, Track_t& track) {
 }
 
 template<class SpectromrterHit_t, class Track_t>
-void MACE::ReconSpectrometer::Fitter::DirectSubSpaceLeastVariance<SpectromrterHit_t, Track_t>::
+void MACE::ReconSpectrometer::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
 Initialize(std::vector<HitPtr>& hitData) {
     // sort data by layer ID
     std::ranges::sort(hitData,
@@ -42,7 +42,7 @@ Initialize(std::vector<HitPtr>& hitData) {
 }
 
 template<class SpectromrterHit_t, class Track_t>
-bool MACE::ReconSpectrometer::Fitter::DirectSubSpaceLeastVariance<SpectromrterHit_t, Track_t>::
+bool MACE::ReconSpectrometer::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
 InitialCircleFit() {
     auto& Xc = fCircleParameters[0];
     auto& Yc = fCircleParameters[1];
@@ -85,50 +85,39 @@ InitialCircleFit() {
 }
 
 template<class SpectromrterHit_t, class Track_t>
-bool MACE::ReconSpectrometer::Fitter::DirectSubSpaceLeastVariance<SpectromrterHit_t, Track_t>::
+bool MACE::ReconSpectrometer::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
 CircleFit() {
     double lastVar;
     auto [thisVar, grad, hessian] = CircleVarianceGradHessian();
 
     decltype(fMaxSteps) stepCount = 0;
     do {
-        if (fEnableDownHill) {
-            constexpr double minDownHill = 1. / 65537.; // 12 attempts max.
-            Eigen::Vector3d step = hessian.inverse() * grad;
-            fCircleParameters -= step;
-            double downHillFactor = 0.5;
-            for (; CircleVariance() > thisVar and downHillFactor > minDownHill; downHillFactor /= 2) {
-                fCircleParameters += downHillFactor * step;
-            }
-            if (downHillFactor < minDownHill) [[unlikely]] {
-                constexpr double minAlpha = 1. / 65537.; // 12 attempts max.
-                fCircleParameters -= grad;
-                for (double alpha = 0.5; CircleVariance() > thisVar and alpha > minAlpha; alpha /= 2) {
-                    fCircleParameters += alpha * grad;
-                }
-                if (Base::fVerbose > 0) { std::cout << "Warning: down-hill failed, stepping by grad." << std::endl; }
-            }
-        } else {
-            fCircleParameters -= hessian.inverse() * grad;
-        }
-
-        if (CircleParametersBoundCheck() == false) [[unlikely]] { return false; }
-
+        // update last variance
         lastVar = thisVar;
+
+        // do stepping
+        fCircleParameters -= hessian.inverse() * grad;
+
+        // bound check
+        if (CircleParametersBoundCheck() == false) [[unlikely]] { return false; }
+            //
+        // update variance, gradient, and hessian
         std::tie(thisVar, grad, hessian) = CircleVarianceGradHessian();
 
+        // update step count
         ++stepCount;
-        if (stepCount >= fMaxSteps) [[unlikely]] {
-            if (Base::fVerbose > 0) { std::cout << "Warning: max step " << fMaxSteps << " reached." << std::endl; }
-            break;
-        }
-    } while (std::abs(thisVar - lastVar) / thisVar > fTolerance);
+    } while (std::abs(thisVar - lastVar) / thisVar > fTolerance and stepCount < fMaxSteps);
+
+    // check step count
+    if (stepCount >= fMaxSteps) [[unlikely]] {
+        if (Base::fVerbose > 0) { std::cout << "Warning: max step " << fMaxSteps << " reached." << std::endl; }
+    }
 
     return true;
 }
 
 template<class SpectromrterHit_t, class Track_t>
-void MACE::ReconSpectrometer::Fitter::DirectSubSpaceLeastVariance<SpectromrterHit_t, Track_t>::
+void MACE::ReconSpectrometer::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
 RevolveFit() {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];
@@ -160,7 +149,7 @@ RevolveFit() {
 }
 
 template<class SpectromrterHit_t, class Track_t>
-void MACE::ReconSpectrometer::Fitter::DirectSubSpaceLeastVariance<SpectromrterHit_t, Track_t>::
+void MACE::ReconSpectrometer::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
 Finalize(Track_t& track) {
     track.SetCenter(fCircleParameters[0], fCircleParameters[1]);
     track.SetRadius(fCircleParameters[2]);
@@ -170,7 +159,7 @@ Finalize(Track_t& track) {
 }
 
 template<class SpectromrterHit_t, class Track_t>
-inline bool MACE::ReconSpectrometer::Fitter::DirectSubSpaceLeastVariance<SpectromrterHit_t, Track_t>::
+inline bool MACE::ReconSpectrometer::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
 CircleParametersBoundCheck() const {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];
@@ -189,24 +178,24 @@ CircleParametersBoundCheck() const {
 }
 
 template<class SpectromrterHit_t, class Track_t>
-inline double MACE::ReconSpectrometer::Fitter::DirectSubSpaceLeastVariance<SpectromrterHit_t, Track_t>::
+inline double MACE::ReconSpectrometer::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
 CircleVariance(const double& Xc, const double& Yc, const double& R) const {
-    const auto deltaX = Xc - fWireX;
-    const auto deltaY = Yc - fWireY;
-    const auto deltaR = std::sqrt(deltaX * deltaX + deltaY * deltaY);
-    const auto deltaMinus = deltaR - (R - fD);
+    const auto rX = Xc - fWireX;
+    const auto rY = Yc - fWireY;
+    const auto dca = std::sqrt(rX * rX + rY * rY) - R;
+    const auto deltaMinus = dca - fD;
     const auto varMinus = deltaMinus * deltaMinus;
-    const auto deltaPlus = deltaR - (R + fD);
+    const auto deltaPlus = dca + fD;
     const auto varPlus = deltaPlus * deltaPlus;
     double variance = 0;
     for (size_t i = 0; i < fN; ++i) {
         variance += std::min(varMinus[i], varPlus[i]);
     }
-    return variance / (fN - 3);
+    return variance / (R * R * fN);
 }
 
 template<class SpectromrterHit_t, class Track_t>
-inline std::tuple<double, Eigen::Vector3d, Eigen::Matrix3d> MACE::ReconSpectrometer::Fitter::DirectSubSpaceLeastVariance<SpectromrterHit_t, Track_t>::
+inline std::tuple<double, Eigen::Vector3d, Eigen::Matrix3d> MACE::ReconSpectrometer::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
 CircleVarianceGradHessian() const {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];
@@ -265,7 +254,7 @@ CircleVarianceGradHessian() const {
 }
 
 template<class SpectromrterHit_t, class Track_t>
-double MACE::ReconSpectrometer::Fitter::DirectSubSpaceLeastVariance<SpectromrterHit_t, Track_t>::
+double MACE::ReconSpectrometer::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
 CalculateReducedChi2() {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];

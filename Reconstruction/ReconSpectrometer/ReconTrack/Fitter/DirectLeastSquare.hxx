@@ -9,27 +9,26 @@
 #include "LiteralUnits.hxx"
 
 template<class SpectromrterHit_t, class Track_t>
-class MACE::ReconSpectrometer::Fitter::DirectSubSpaceLeastVariance final :
+class MACE::ReconSpectrometer::Fitter::DirectLeastSquare final :
     public MACE::ReconSpectrometer::Interface::Fitter<SpectromrterHit_t, Track_t> {
     MACE_RECONSPECTROMETER_HELIXTRACK_CONCEPT(Track_t);
 
-    DirectSubSpaceLeastVariance(const DirectSubSpaceLeastVariance&) = delete;
-    DirectSubSpaceLeastVariance& operator=(const DirectSubSpaceLeastVariance&) = delete;
+    DirectLeastSquare(const DirectLeastSquare&) = delete;
+    DirectLeastSquare& operator=(const DirectLeastSquare&) = delete;
 
 protected:
     using Base = MACE::ReconSpectrometer::Interface::Fitter<SpectromrterHit_t, Track_t>;
     using HitPtr = typename Base::HitPtr;
 
 public:
-    DirectSubSpaceLeastVariance() = default;
-    ~DirectSubSpaceLeastVariance() noexcept = default;
+    DirectLeastSquare() = default;
+    ~DirectLeastSquare() noexcept = default;
 
     void SetCenterXBound(double low, double up) { fXcBound = { low, up }; }
     void SetCenterYBound(double low, double up) { fYcBound = { low, up }; }
     void SetRadiusBound(double up) { fRBound = up; }
 
     void SetDerivativeStep(double h) { fH = h; }
-    void SetEnableDownHill(bool val) { fEnableDownHill = val; }
     void SetTolerance(double val) { fTolerance = val; }
     void SetMaxSteps(size_t val) { fMaxSteps = val; }
 
@@ -56,8 +55,7 @@ private:
     double fRBound = 10_m;
 
     double fH = 1e-3;
-    bool fEnableDownHill = true;
-    double fTolerance = 1e-8;
+    double fTolerance = 1e-6;
     size_t fMaxSteps = 5000;
 
     size_t fN;
@@ -72,4 +70,4 @@ private:
     Eigen::Vector2d fRevolveParameters;
 };
 
-#include "ReconSpectrometer/ReconTrack/Fitter/DirectSubSpaceLeastVariance.ixx"
+#include "ReconSpectrometer/ReconTrack/Fitter/DirectLeastSquare.ixx"
