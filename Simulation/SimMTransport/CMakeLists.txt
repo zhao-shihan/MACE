@@ -1,8 +1,5 @@
 project(SimMTransport)
 
-include_directories(${MPI_CXX_INCLUDE_PATH})
-include_directories(${ROOT_INCLUDE_DIRS})
-
 file(GLOB SimMTransport_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
 
 add_library(SimMTransport_static ${SimMTransport_srcs})
@@ -15,3 +12,4 @@ configure_file(${PROJECT_SOURCE_DIR}/sample.cfg ${PROJECT_BINARY_DIR} COPYONLY)
 
 install(TARGETS SimMTransport DESTINATION bin)
 install(FILES ${PROJECT_SOURCE_DIR}/sample.cfg DESTINATION share/SimMTransport)
+

@@ -13,11 +13,11 @@ class MACE::DataModel::HelixTrack :
 
 public:
     HelixTrack() noexcept;
-    HelixTrack(const HelixTrack& hit) noexcept = default;
-    HelixTrack(HelixTrack&& hit) noexcept = default;
+    HelixTrack(const HelixTrack&) noexcept = default;
+    HelixTrack(HelixTrack&&) noexcept = default;
     virtual ~HelixTrack() noexcept = default;
-    HelixTrack& operator=(const HelixTrack& hit) noexcept = default;
-    HelixTrack& operator=(HelixTrack&& hit) noexcept = default;
+    HelixTrack& operator=(const HelixTrack&) noexcept = default;
+    HelixTrack& operator=(HelixTrack&&) noexcept = default;
 
     [[nodiscard]] const auto& GetVertexTime() const { return fVertexTime; }
     [[nodiscard]] const auto& GetCenter() const { return fCenter; }

@@ -68,10 +68,25 @@ set(MACE_PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
 set(MACE_THIRD_PARTY_DIR ${PROJECT_SOURCE_DIR}/ThirdParty)
 
 # ================================================================================================================================
+# Global includes
+# ================================================================================================================================
+# external
+include_directories(${MPI_CXX_INCLUDE_DIRS})
+include_directories(${Geant4_INCLUDE_DIRS})
+include_directories(${ROOT_INCLUDE_DIRS})
+include_directories(${EIGEN3_INCLUDE_DIRS})
+# built-in
+include_directories(${MACE_THIRD_PARTY_DIR}/G4mpi/include)
+# intrinsic
+include_directories(${MACE_PROJECT_ROOT_DIR}/Core)
+include_directories(${MACE_PROJECT_ROOT_DIR}/Utility)
+
+# ================================================================================================================================
 # sub directories
 # ================================================================================================================================
 add_subdirectory(Core)
 add_subdirectory(Reconstruction)
 add_subdirectory(Simulation)
 add_subdirectory(ThirdParty)
+add_subdirectory(UnitTest)
 add_subdirectory(Utility)

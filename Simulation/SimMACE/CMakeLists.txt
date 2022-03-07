@@ -1,11 +1,5 @@
 project(SimMACE)
 
-# SimMACE include
-include_directories(${MPI_CXX_INCLUDE_PATH})
-include_directories(${Geant4_INCLUDE_DIRS})
-include_directories(${ROOT_INCLUDE_DIRS})
-include_directories(${MACE_THIRD_PARTY_DIR}/G4mpi/include)
-
 # SimMACE sources
 file(GLOB_RECURSE SimMACE_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
 
@@ -22,3 +16,4 @@ install(TARGETS SimMACE DESTINATION bin)
 foreach(_macros ${SimMACE_MACROS})
     install(FILES ${_macros} DESTINATION share/SimMACE)
 endforeach()
+

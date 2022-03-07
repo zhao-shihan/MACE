@@ -4,7 +4,7 @@ using namespace MACE::DataModel;
 
 Vector3FBranchSocket       SpectrometerSimHit::fgMomentum("mom", 0, 0, 0);
 FloatBranchSocket        SpectrometerSimHit::fgVertexTime("vtxT", 0);
-Vector3FBranchSocket SpectrometerSimHit::fgVertexPosition("vtxPos", 0, 0, 0);
+Vector3FBranchSocket SpectrometerSimHit::fgVertexPosition("vtx", 0, 0, 0);
 IntBranchSocket             SpectrometerSimHit::fgPDGCode("pdgCode", std::numeric_limits<Int_t>::max());
 IntBranchSocket             SpectrometerSimHit::fgEventID("evtID", -1);
 IntBranchSocket             SpectrometerSimHit::fgTrackID("trkID", -1);
