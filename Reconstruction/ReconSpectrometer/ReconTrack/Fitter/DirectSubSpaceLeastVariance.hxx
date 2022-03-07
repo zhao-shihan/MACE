@@ -29,6 +29,7 @@ public:
     void SetRadiusBound(double up) { fRBound = up; }
 
     void SetDerivativeStep(double h) { fH = h; }
+    void SetEnableDownHill(bool val) { fEnableDownHill = val; }
     void SetTolerance(double val) { fTolerance = val; }
     void SetMaxSteps(size_t val) { fMaxSteps = val; }
 
@@ -41,9 +42,10 @@ private:
     void RevolveFit();
     void Finalize(Track_t& track);
 
-    [[nodiscard]] inline bool CircleParametersBoundCheck();
+    [[nodiscard]] inline bool CircleParametersBoundCheck() const;
 
     [[nodiscard]] inline double CircleVariance(const double& Xc, const double& Yc, const double& R) const;
+    [[nodiscard]] inline double CircleVariance() const { return CircleVariance(fCircleParameters[0], fCircleParameters[1], fCircleParameters[2]); }
     [[nodiscard]] inline std::tuple<double, Eigen::Vector3d, Eigen::Matrix3d> CircleVarianceGradHessian() const;
 
     [[nodiscard]] double CalculateReducedChi2();
@@ -54,6 +56,7 @@ private:
     double fRBound = 10_m;
 
     double fH = 1e-3;
+    bool fEnableDownHill = true;
     double fTolerance = 1e-8;
     size_t fMaxSteps = 5000;
 

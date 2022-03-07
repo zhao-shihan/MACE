@@ -1,5 +1,8 @@
 project(ReconTrack)
 
+# Surpress warning from Eigen3
+add_definitions(-Wno-deprecated-enum-enum-conversion)
+
 include_directories(${ROOT_INCLUDE_DIRS})
 include_directories(${EIGEN3_INCLUDE_DIRS})
 include_directories(${MPI_CXX_INCLUDE_DIRS})

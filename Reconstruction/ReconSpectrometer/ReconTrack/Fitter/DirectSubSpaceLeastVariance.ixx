@@ -92,7 +92,25 @@ CircleFit() {
 
     decltype(fMaxSteps) stepCount = 0;
     do {
-        fCircleParameters -= hessian.inverse() * grad;
+        if (fEnableDownHill) {
+            constexpr double minDownHill = 1. / 65537.; // 12 attempts max.
+            Eigen::Vector3d step = hessian.inverse() * grad;
+            fCircleParameters -= step;
+            double downHillFactor = 0.5;
+            for (; CircleVariance() > thisVar and downHillFactor > minDownHill; downHillFactor /= 2) {
+                fCircleParameters += downHillFactor * step;
+            }
+            if (downHillFactor < minDownHill) [[unlikely]] {
+                constexpr double minAlpha = 1. / 65537.; // 12 attempts max.
+                fCircleParameters -= grad;
+                for (double alpha = 0.5; CircleVariance() > thisVar and alpha > minAlpha; alpha /= 2) {
+                    fCircleParameters += alpha * grad;
+                }
+                if (Base::fVerbose > 0) { std::cout << "Warning: down-hill failed, stepping by grad." << std::endl; }
+            }
+        } else {
+            fCircleParameters -= hessian.inverse() * grad;
+        }
 
         if (CircleParametersBoundCheck() == false) [[unlikely]] { return false; }
 
@@ -153,7 +171,7 @@ Finalize(Track_t& track) {
 
 template<class SpectromrterHit_t, class Track_t>
 inline bool MACE::ReconSpectrometer::Fitter::DirectSubSpaceLeastVariance<SpectromrterHit_t, Track_t>::
-CircleParametersBoundCheck() {
+CircleParametersBoundCheck() const {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];
     const auto& R = fCircleParameters[2];
