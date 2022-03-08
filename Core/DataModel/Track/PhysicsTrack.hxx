@@ -2,13 +2,13 @@
 
 #include "TEveVector.h"
 
-#include "DataModel/Interface/Data.hxx"
+#include "DataModel/Interface/Transient.hxx"
 #include "DataModel/BranchSocket/BasicBranchSocket.hxx"
 #include "DataModel/BranchSocket/ClassBranchSocket.hxx"
 
 class MACE::DataModel::PhysicsTrack :
-    public MACE::DataModel::Interface::Data {
-    using Base = MACE::DataModel::Interface::Data;
+    public MACE::DataModel::Interface::Transient {
+    using Base = MACE::DataModel::Interface::Transient;
     friend MACE::DataModel::DataHub;
 
 public:

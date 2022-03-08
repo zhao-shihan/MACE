@@ -2,14 +2,14 @@
 
 #include "DataModel/Global.hxx"
 
-class MACE::DataModel::Interface::Data {
+class MACE::DataModel::Interface::Transient {
 protected:
-    Data() noexcept = default;
-    Data(const Data& data) noexcept = default;
-    Data(Data&& data) noexcept = default;
-    virtual ~Data() noexcept = 0;
-    Data& operator=(const Data& data) noexcept = default;
-    Data& operator=(Data&& data) noexcept = default;
+    Transient() noexcept = default;
+    Transient(const Transient& data) noexcept = default;
+    Transient(Transient&& data) noexcept = default;
+    virtual ~Transient() noexcept = 0;
+    Transient& operator=(const Transient& data) noexcept = default;
+    Transient& operator=(Transient&& data) noexcept = default;
 
     // Extend (override & invoke) this in derived classes!
     static void CreateBranches(TTree&) {}

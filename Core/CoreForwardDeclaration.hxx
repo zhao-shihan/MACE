@@ -19,7 +19,7 @@ namespace MACE {
         }
         namespace Interface {
             template<typename Object_t, typename Address_t> class BranchSocket;
-            class Data;
+            class Transient;
         }
         inline namespace RawHit { // no impl yet
             class CalorimeterRawHit;
