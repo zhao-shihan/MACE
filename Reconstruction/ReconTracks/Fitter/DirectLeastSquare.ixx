@@ -5,8 +5,8 @@ bool MACE::ReconTracks::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
 Fit(std::vector<HitPtr>& hitData, Track_t& track) {
     Initialize(hitData);
 
-    if (InitialCircleFit() == false) [[unlikely]] { return false; }
-    if (CircleFit() == false) [[unlikely]] { return false; }
+    if (InitialCircleFit() == false) { [[unlikely]] return false; }
+    if (CircleFit() == false) { [[unlikely]] return false; }
     RevolveFit();
 
     Finalize(track);
@@ -66,7 +66,8 @@ InitialCircleFit() {
     auto uw2Sum = uw2.sum();
     auto vw2Sum = vw2.sum();
     auto cauchy = u2Sum * v2Sum - uvSum * uvSum;
-    if (std::abs(cauchy) < std::numeric_limits<decltype(cauchy)>::min() / std::numeric_limits<decltype(cauchy)>::epsilon()) [[unlikely]] {
+    if (std::abs(cauchy) < std::numeric_limits<decltype(cauchy)>::min() / std::numeric_limits<decltype(cauchy)>::epsilon()) {
+        [[unlikely]]
         if (this->fVerbose > 0) {
             std::cout << "Warning: denominator is effectively 0, aborted." << std::endl;
         }
@@ -79,7 +80,7 @@ InitialCircleFit() {
     auto deltaY = fWireY - Yc;
     R = std::sqrt((deltaX * deltaX + deltaY * deltaY).sum() / fN);
 
-    if (CircleParametersBoundCheck() == false) [[unlikely]] { return false; }
+    if (CircleParametersIsOutOfBound()) { [[unlikely]] return false; }
 
     return true;
 }
@@ -99,8 +100,8 @@ CircleFit() {
         fCircleParameters -= hessian.inverse() * grad;
 
         // bound check
-        if (CircleParametersBoundCheck() == false) [[unlikely]] { return false; }
-            //
+        if (CircleParametersIsOutOfBound()) { [[unlikely]] return false; }
+
         // update variance, gradient, and hessian
         std::tie(thisVar, grad, hessian) = CircleVarianceGradHessian();
 
@@ -109,7 +110,8 @@ CircleFit() {
     } while (std::abs(thisVar - lastVar) / thisVar > fTolerance and stepCount < fMaxSteps);
 
     // check step count
-    if (stepCount >= fMaxSteps) [[unlikely]] {
+    if (stepCount >= fMaxSteps) {
+        [[unlikely]]
         if (this->fVerbose > 0) { std::cout << "Warning: max step " << fMaxSteps << " reached." << std::endl; }
     }
 
@@ -160,20 +162,22 @@ Finalize(Track_t& track) {
 
 template<class SpectromrterHit_t, class Track_t>
 inline bool MACE::ReconTracks::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
-CircleParametersBoundCheck() const {
+CircleParametersIsOutOfBound() const {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];
     const auto& R = fCircleParameters[2];
 
     if (fXcBound.first < Xc and Xc < fXcBound.second and
         fYcBound.first < Yc and Yc < fYcBound.second and
-        0.0 < R and R < fRBound) [[likely]] {
-        return true;
+        0.0 < R and R < fRBound) {
+        [[likely]]
+        return false;
     } else {
+        [[unlikely]]
         if (this->fVerbose > 0) {
             std::cout << "Warning: parameter bound reached, aborted." << std::endl;
         }
-        return false;
+        return true;
     }
 }
 

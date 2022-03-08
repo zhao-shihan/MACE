@@ -2,7 +2,7 @@
 
 using namespace MACE::DataModel;
 
-FloatBranchSocket        CalorimeterHit::fgHitTime("hitT", 0.0);
+DoubleBranchSocket       CalorimeterHit::fgHitTime("hitT", 0.0);
 FloatBranchSocket         CalorimeterHit::fgEnergy("E", 0.0);
 FloatBranchSocket CalorimeterHit::fgEnergyVariance("varE", 0.0);
 

@@ -47,7 +47,7 @@ private:
     Int_t       fEventID;
     Int_t       fTrackID;
 
-    static FloatBranchSocket    fgVertexTime;
+    static DoubleBranchSocket   fgVertexTime;
     static Vector3FBranchSocket fgVertexPosition;
     static IntBranchSocket      fgPDGCode;
     static IntBranchSocket      fgEventID;

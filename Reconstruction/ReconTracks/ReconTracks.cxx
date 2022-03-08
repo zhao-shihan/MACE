@@ -1,5 +1,5 @@
 #include "DataModel/DataHub.hxx"
-#include "ReconTracks/Tracker/TrueFinder.hxx"
+#include "ReconTracks/Tracker/PerfectFinder.hxx"
 #include "ReconTracks/Tracker/Hough.hxx"
 #include "ReconTracks/Fitter/Dummy.hxx"
 #include "ReconTracks/Fitter/DirectLeastSquare.hxx"
@@ -16,9 +16,9 @@ using Track_t = HelixTrack;
 int main(int, char** argv) {
     MPI::Init();
 
-    // Tracker::TrueFinder<Fitter::Dummy, Hit_t, Track_t> reconstructor;
+    // Tracker::PerfectFinder<Fitter::Dummy, Hit_t, Track_t> reconstructor;
     // Tracker::Hough<Fitter::Dummy, Hit_t> reconstructor(350, 5000, std::stol(argv[2]), std::stol(argv[3]), -50, 150, std::stol(argv[4]), std::stol(argv[5]));
-    Tracker::TrueFinder<Fitter::DirectLeastSquare, Hit_t, Track_t> reconstructor;
+    Tracker::PerfectFinder<Fitter::DirectLeastSquare, Hit_t, Track_t> reconstructor;
     reconstructor.GetFitter()->SetVerbose(std::stoi(argv[2]));
     reconstructor.GetFitter()->SetTolerance(std::stod(argv[3]));
     reconstructor.GetFitter()->SetMaxSteps(std::stod(argv[4]));

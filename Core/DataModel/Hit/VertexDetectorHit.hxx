@@ -44,7 +44,7 @@ private:
     TEveVector2D fHitPosition;
     TEveVector2D fHitPositionVariance;
 
-    static FloatBranchSocket    fgHitTime;
+    static DoubleBranchSocket   fgHitTime;
     static Vector2FBranchSocket fgHitPosition;
     static Vector2FBranchSocket fgHitPositionVariance;
 };

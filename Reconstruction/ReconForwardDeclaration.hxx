@@ -20,7 +20,7 @@ namespace MACE {
         }
         namespace Tracker {
             template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t> class Hough;
-            template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t> class TrueFinder;
+            template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t> class PerfectFinder;
         }
     }
 

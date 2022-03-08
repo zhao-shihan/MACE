@@ -2,7 +2,7 @@
 
 using namespace MACE::DataModel;
 
-FloatBranchSocket                VertexDetectorHit::fgHitTime("hitT", 0);
+DoubleBranchSocket               VertexDetectorHit::fgHitTime("hitT", 0);
 Vector2FBranchSocket         VertexDetectorHit::fgHitPosition("hit", 0, 0);
 Vector2FBranchSocket VertexDetectorHit::fgHitPositionVariance("varHit", 0, 0);
 

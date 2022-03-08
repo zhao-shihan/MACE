@@ -37,9 +37,9 @@ private:
     Double_t fEnergy;
     Double_t fEnergyVariance;
 
-    static FloatBranchSocket fgHitTime;
-    static FloatBranchSocket fgEnergy;
-    static FloatBranchSocket fgEnergyVariance;
+    static DoubleBranchSocket fgHitTime;
+    static FloatBranchSocket  fgEnergy;
+    static FloatBranchSocket  fgEnergyVariance;
 };
 
 inline void MACE::DataModel::CalorimeterHit::FillBranchSockets() const noexcept {

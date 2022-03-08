@@ -73,7 +73,7 @@
 
 ### Utility
 
-1. (Completed) ~~With new way of manage the relation between beam repetition and G4Event, trackID is not longer identical. Use both trackID and eventID in TrueFinder to recognize tracks. (see also DataModel-Utility-7)~~
+1. (Completed) ~~With new way of manage the relation between beam repetition and G4Event, trackID is not longer identical. Use both trackID and eventID in PerfectFinder to recognize tracks. (see also DataModel-Utility-7)~~
 
 ### Interface
 

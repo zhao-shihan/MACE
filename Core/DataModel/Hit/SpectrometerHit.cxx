@@ -2,7 +2,7 @@
 
 using namespace MACE::DataModel;
 
-FloatBranchSocket                 SpectrometerHit::fgHitTime("hitT", 0);
+DoubleBranchSocket                SpectrometerHit::fgHitTime("hitT", 0);
 FloatBranchSocket           SpectrometerHit::fgDriftDistance("drift", 0);
 FloatBranchSocket            SpectrometerHit::fgHitPositionZ("hitZ", 0);
 FloatBranchSocket   SpectrometerHit::fgDriftDistanceVariance("varDrift", 0);

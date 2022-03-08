@@ -18,15 +18,13 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
     const auto muonsForEachReptition = fFlux / fRepetitionRate; // no rounding
     const auto g4EventsForEachReptition = muonsForEachReptition / fMuonsForEachG4Event; // no rounding
-
     fRepetitionID = event->GetEventID() / g4EventsForEachReptition; // rounding here
-    const auto meanTime = fRepetitionID / fRepetitionRate;
 
     std::vector<std::tuple<G4double, G4ThreeVector, G4double>> muonStates(fMuonsForEachG4Event);
     auto* const randEngine = G4Random::getTheEngine();
     for (G4int i = 0; i < fMuonsForEachG4Event; ++i) {
         muonStates[i] = std::make_tuple(
-            G4RandGauss::shoot(randEngine, meanTime, fTimeWidthRMS),
+            G4RandGauss::shoot(randEngine, 0, fTimeWidthRMS),
             G4ThreeVector(
                 G4RandGauss::shoot(randEngine, 0, fBeamProfileRMS),
                 G4RandGauss::shoot(randEngine, 0, fBeamProfileRMS),

@@ -2,7 +2,7 @@
 
 using namespace MACE::DataModel;
 
-FloatBranchSocket   HelixTrack::fgVertexTime("vtxT", 0);
+DoubleBranchSocket  HelixTrack::fgVertexTime("vtxT", 0);
 Vector2FBranchSocket    HelixTrack::fgCenter("center", 0, 0);
 FloatBranchSocket       HelixTrack::fgRadius("r", 0);
 FloatBranchSocket           HelixTrack::fgZ0("z0", 0);

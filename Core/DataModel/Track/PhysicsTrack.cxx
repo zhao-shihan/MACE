@@ -3,7 +3,7 @@
 
 using namespace MACE::DataModel;
 
-FloatBranchSocket        PhysicsTrack::fgVertexTime("vtxT", 0);
+DoubleBranchSocket       PhysicsTrack::fgVertexTime("vtxT", 0);
 Vector3FBranchSocket PhysicsTrack::fgVertexPosition("vtx", 0, 0, 0);
 Vector3FBranchSocket       PhysicsTrack::fgMomentum("mom", 0, 0, 0);
 IntBranchSocket              PhysicsTrack::fgCharge("q", 0);

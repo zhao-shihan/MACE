@@ -25,5 +25,6 @@ namespace MACE::DataModel {
     inline namespace BranchSocket {
         using IntBranchSocket = BasicBranchSocket<Int_t>;
         using FloatBranchSocket = BasicBranchSocket<Float_t>;
+        using DoubleBranchSocket = BasicBranchSocket<Double_t>;
     }
 }

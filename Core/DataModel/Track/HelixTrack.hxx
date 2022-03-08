@@ -51,7 +51,7 @@ private:
     Double_t     fAlpha;
     Double_t     fChi2;
 
-    static FloatBranchSocket    fgVertexTime;
+    static DoubleBranchSocket   fgVertexTime;
     static Vector2FBranchSocket fgCenter;
     static FloatBranchSocket    fgRadius;
     static FloatBranchSocket    fgZ0;

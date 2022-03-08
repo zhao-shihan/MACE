@@ -41,7 +41,7 @@ private:
     void RevolveFit();
     void Finalize(Track_t& track);
 
-    [[nodiscard]] inline bool CircleParametersBoundCheck() const;
+    [[nodiscard]] inline bool CircleParametersIsOutOfBound() const;
 
     [[nodiscard]] inline double CircleVariance(const double& Xc, const double& Yc, const double& R) const;
     [[nodiscard]] inline double CircleVariance() const { return CircleVariance(fCircleParameters[0], fCircleParameters[1], fCircleParameters[2]); }

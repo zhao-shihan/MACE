@@ -52,7 +52,7 @@ private:
     Int_t       fCharge;
     Double_t    fChi2;
 
-    static FloatBranchSocket    fgVertexTime;
+    static DoubleBranchSocket   fgVertexTime;
     static Vector3FBranchSocket fgVertexPosition;
     static Vector3FBranchSocket fgMomentum;
     static IntBranchSocket      fgCharge;

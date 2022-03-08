@@ -57,7 +57,7 @@ private:
     Int_t        fLayerID;
     TEveVector2D fWirePosition;
 
-    static FloatBranchSocket    fgHitTime;
+    static DoubleBranchSocket   fgHitTime;
     static FloatBranchSocket    fgDriftDistance;
     static FloatBranchSocket    fgHitPositionZ;
     static FloatBranchSocket    fgDriftDistanceVariance;
