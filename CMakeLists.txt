@@ -13,22 +13,43 @@ endif()
 message(STATUS "MACE is building with C++${CMAKE_CXX_STANDARD}")
 
 # ================================================================================================================================
-# Compile flags
+# About compile warnings
 # ================================================================================================================================
 # More warnings
 add_definitions(-Wall -Wextra)
-# Suppress warning from TStorage.h which is only raised in C++20 and above:
-if(CMAKE_CXX_STANDARD GREATER 17)
-    #
-    # TStorage.h:133:12: warning: compound assignment with ‘volatile’-qualified left operand is deprecated [-Wvolatile]
-    #   133 |       bits |= kIsOnHeap;
-    #       |       ~~~~~^~~~~~~~~~~~
-    # TStorage.h:135:12: warning: compound assignment with ‘volatile’-qualified left operand is deprecated [-Wvolatile]
-    #   135 |       bits &= ~kIsOnHeap;
-    #       |       ~~~~~^~~~~~~~~~~~~
-    #
-    add_definitions(-Wno-volatile)
-endif()
+# Suppress external warnings:
+#
+# TStorage.h:133:12: warning: compound assignment with ‘volatile’-qualified left operand is deprecated [-Wvolatile]
+#   133 |       bits |= kIsOnHeap;
+#       |       ~~~~~^~~~~~~~~~~~
+# TStorage.h:135:12: warning: compound assignment with ‘volatile’-qualified left operand is deprecated [-Wvolatile]
+#   135 |       bits &= ~kIsOnHeap;
+#       |       ~~~~~^~~~~~~~~~~~~
+#
+add_definitions(-Wno-volatile)
+#
+# PlainObjectBase.h:905:102: warning: bitwise operation between different enumeration types ‘Eigen::PlainObjectBase<Eigen::Matrix<double, 3, 1> >::<unnamed enum>’ and ‘Eigen::StorageOptions’ is deprecated [-Wdeprecated-enum-enum-conversion]
+#   905 |       EIGEN_STATIC_ASSERT((EIGEN_IMPLIES(MaxRowsAtCompileTime==1 && MaxColsAtCompileTime!=1, (Options&RowMajor)==RowMajor)
+#       |                                                                                              ~~~~~~~~^~~~~~~~~~
+# util/StaticAssert.h:33:54: note: in definition of macro ‘EIGEN_STATIC_ASSERT’
+#    33 |     #define EIGEN_STATIC_ASSERT(X,MSG) static_assert(X,#MSG);
+#       |                                                      ^
+# PlainObjectBase.h:905:28: note: in expansion of macro ‘EIGEN_IMPLIES’
+#   905 |       EIGEN_STATIC_ASSERT((EIGEN_IMPLIES(MaxRowsAtCompileTime==1 && MaxColsAtCompileTime!=1, (Options&RowMajor)==RowMajor)
+#       |                            ^~~~~~~~~~~~~
+# PlainObjectBase.h:906:102: warning: bitwise operation between different enumeration types ‘Eigen::PlainObjectBase<Eigen::Matrix<double, 3, 1> >::<unnamed enum>’ and ‘Eigen::StorageOptions’ is deprecated [-Wdeprecated-enum-enum-conversion]
+#   906 |                         && EIGEN_IMPLIES(MaxColsAtCompileTime==1 && MaxRowsAtCompileTime!=1, (Options&RowMajor)==0)
+#       |                                                                                              ~~~~~~~~^~~~~~~~~~
+# util/StaticAssert.h:33:54: note: in definition of macro ‘EIGEN_STATIC_ASSERT’
+#    33 |     #define EIGEN_STATIC_ASSERT(X,MSG) static_assert(X,#MSG);
+#       |                                                      ^
+# PlainObjectBase.h:906:28: note: in expansion of macro ‘EIGEN_IMPLIES’
+#   906 |                         && EIGEN_IMPLIES(MaxColsAtCompileTime==1 && MaxRowsAtCompileTime!=1, (Options&RowMajor)==0)
+#       |                            ^~~~~~~~~~~~~
+#
+# ...
+#
+add_definitions(-Wno-deprecated-enum-enum-conversion)
 
 # ================================================================================================================================
 # Dependencies
@@ -88,5 +109,4 @@ add_subdirectory(Core)
 add_subdirectory(Reconstruction)
 add_subdirectory(Simulation)
 add_subdirectory(ThirdParty)
-add_subdirectory(UnitTest)
 add_subdirectory(Utility)
