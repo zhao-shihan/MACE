@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ReconSpectrometer/ReconTrack/Global.hxx"
+#include "ReconTracks/Global.hxx"
 
 template<class SpectromrterHit_t, class Track_t>
-class MACE::ReconSpectrometer::Interface::Fitter {
+class MACE::ReconTracks::Interface::Fitter {
     MACE_RECONSPECTROMETER_SPECTROMETERHIT_CONCEPT(SpectromrterHit_t);
     MACE_RECONSPECTROMETER_TRACK_CONCEPT(Track_t);
 
@@ -28,4 +28,4 @@ protected:
     int fVerbose = 1;
 };
 
-#include "ReconSpectrometer/ReconTrack/Interface/Fitter.ixx"
+#include "ReconTracks/Interface/Fitter.ixx"

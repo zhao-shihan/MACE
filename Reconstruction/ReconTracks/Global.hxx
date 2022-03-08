@@ -43,13 +43,13 @@
         "The track type should be default constructible")
 
 #define MACE_RECONSPECTROMETER_FITTER_CONCEPT(FitterT_t, Hit_t, Track_t) \
-    static_assert(std::is_base_of_v<MACE::ReconSpectrometer::Interface::Fitter<Hit_t, Track_t>, FitterT_t<Hit_t, Track_t>>, \
+    static_assert(std::is_base_of_v<MACE::ReconTracks::Interface::Fitter<Hit_t, Track_t>, FitterT_t<Hit_t, Track_t>>, \
         "The fitter type should derived from " \
-            "MACE::ReconSpectrometer::Interface::Fitter"); \
+            "MACE::ReconTracks::Interface::Fitter"); \
     static_assert(std::is_default_constructible_v<FitterT_t<Hit_t, Track_t>>, \
         "The fitter type should be default constructible")
 
 #define MACE_RECONSPECTROMETER_RECONSTRUCTOR_CONCEPT(Tracker_t, FitterT_t, Hit_t, Track_t) \
-    static_assert(std::is_base_of_v<MACE::ReconSpectrometer::Interface::Tracker<FitterT_t, Hit_t, Track_t>, Tracker_t<FitterT_t, Hit_t, Track_t>>, \
+    static_assert(std::is_base_of_v<MACE::ReconTracks::Interface::Tracker<FitterT_t, Hit_t, Track_t>, Tracker_t<FitterT_t, Hit_t, Track_t>>, \
         "The reconstructor type should derived from " \
-            "MACE::ReconSpectrometer::Interface::Tracker")
+            "MACE::ReconTracks::Interface::Tracker")

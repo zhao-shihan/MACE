@@ -4,20 +4,20 @@
 
 #include "Eigen/Core"
 
-#include "ReconSpectrometer/ReconTrack/Global.hxx"
-#include "ReconSpectrometer/ReconTrack/Interface/Fitter.hxx"
+#include "ReconTracks/Global.hxx"
+#include "ReconTracks/Interface/Fitter.hxx"
 #include "LiteralUnits.hxx"
 
 template<class SpectromrterHit_t, class Track_t>
-class MACE::ReconSpectrometer::Fitter::DirectLeastSquare final :
-    public MACE::ReconSpectrometer::Interface::Fitter<SpectromrterHit_t, Track_t> {
+class MACE::ReconTracks::Fitter::DirectLeastSquare final :
+    public MACE::ReconTracks::Interface::Fitter<SpectromrterHit_t, Track_t> {
     MACE_RECONSPECTROMETER_HELIXTRACK_CONCEPT(Track_t);
 
     DirectLeastSquare(const DirectLeastSquare&) = delete;
     DirectLeastSquare& operator=(const DirectLeastSquare&) = delete;
 
 protected:
-    using Base = MACE::ReconSpectrometer::Interface::Fitter<SpectromrterHit_t, Track_t>;
+    using Base = MACE::ReconTracks::Interface::Fitter<SpectromrterHit_t, Track_t>;
     using HitPtr = typename Base::HitPtr;
 
 public:
@@ -70,4 +70,4 @@ private:
     Eigen::Vector2d fRevolveParameters;
 };
 
-#include "ReconSpectrometer/ReconTrack/Fitter/DirectLeastSquare.ixx"
+#include "ReconTracks/Fitter/DirectLeastSquare.ixx"

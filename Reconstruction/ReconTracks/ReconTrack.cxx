@@ -1,13 +1,13 @@
 #include "DataModel/DataHub.hxx"
-#include "ReconSpectrometer/ReconTrack/Tracker/TrueFinder.hxx"
-#include "ReconSpectrometer/ReconTrack/Tracker/Hough.hxx"
-#include "ReconSpectrometer/ReconTrack/Fitter/Dummy.hxx"
-#include "ReconSpectrometer/ReconTrack/Fitter/DirectLeastSquare.hxx"
+#include "ReconTracks/Tracker/TrueFinder.hxx"
+#include "ReconTracks/Tracker/Hough.hxx"
+#include "ReconTracks/Fitter/Dummy.hxx"
+#include "ReconTracks/Fitter/DirectLeastSquare.hxx"
 #include "MPITools/MPIFileTools.hxx"
 #include "MPITools/MPIJobsAssigner.hxx"
 
 using namespace MACE;
-using namespace MACE::ReconSpectrometer;
+using namespace MACE::ReconTracks;
 using namespace MACE::DataModel;
 
 using Hit_t = SpectrometerSimHit;

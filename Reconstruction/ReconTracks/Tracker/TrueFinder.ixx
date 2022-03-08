@@ -1,5 +1,5 @@
 template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t>
-void MACE::ReconSpectrometer::Tracker::TrueFinder<FitterT_t, SpectromrterHit_t, Track_t>::
+void MACE::ReconTracks::Tracker::TrueFinder<FitterT_t, SpectromrterHit_t, Track_t>::
 Reconstruct(const std::vector<HitPtr>& hitData) {
     Base::fTrackList.clear();
     Base::fTrackedHitList.clear();
@@ -27,8 +27,8 @@ Reconstruct(const std::vector<HitPtr>& hitData) {
 }
 
 template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t>
-std::vector<std::vector<typename MACE::ReconSpectrometer::Tracker::TrueFinder<FitterT_t, SpectromrterHit_t, Track_t>::HitPtr>>
-MACE::ReconSpectrometer::Tracker::TrueFinder<FitterT_t, SpectromrterHit_t, Track_t>::
+std::vector<std::vector<typename MACE::ReconTracks::Tracker::TrueFinder<FitterT_t, SpectromrterHit_t, Track_t>::HitPtr>>
+MACE::ReconTracks::Tracker::TrueFinder<FitterT_t, SpectromrterHit_t, Track_t>::
 Classify(const std::vector<HitPtr>& hitData) {
     std::vector<HitPtr> sortedHitData(hitData);
     std::ranges::sort(sortedHitData,

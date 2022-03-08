@@ -9,7 +9,7 @@ namespace MACE {
 
     namespace ReconMuonium {}
 
-    namespace ReconSpectrometer {
+    namespace ReconTracks {
         namespace Fitter {
             template<class SpectromrterHit_t, class Track_t> class DirectLeastSquare;
             template<class SpectromrterHit_t, class Track_t> class Dummy;

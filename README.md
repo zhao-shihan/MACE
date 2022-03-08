@@ -14,14 +14,14 @@
     - [SimMTransport](#simmtransport)
     - [SimCalorimeter](#simcalorimeter)
     - [SimSpectrometer](#simspectrometer)
-    - [ReconSpectrometer](#reconspectrometer)
+    - [ReconTracks](#reconspectrometer)
     - [Geometry](#geometry)
     - [Datamodel](#datamodel)
 
 ## Introduction
 
 This software is designed for MACE experiment.  
-MACE software consists of several modules: SimMACE, SimMTransport, ReconSpectrometer, Geometry, DataModel. "SimMACE" is designed for the simulation of the whole experiment. "SimMTransport" handles the transport of muonium in target after produced, as a physics process in SimMACE. "SimMTransport" can be run independently aim at calculate the yield of a target, see it's README for detail. "ReconSpectrometer" handles track reconstruction in the spectrometer. "Geometry" handles the construction of detector geometry, provides a universial interface of detector geometry. "DataModel" provides a interface for datamodel of each detector, transportable between modules.
+MACE software consists of several modules: SimMACE, SimMTransport, ReconTracks, Geometry, DataModel. "SimMACE" is designed for the simulation of the whole experiment. "SimMTransport" handles the transport of muonium in target after produced, as a physics process in SimMACE. "SimMTransport" can be run independently aim at calculate the yield of a target, see it's README for detail. "ReconTracks" handles track reconstruction in the spectrometer. "Geometry" handles the construction of detector geometry, provides a universial interface of detector geometry. "DataModel" provides a interface for datamodel of each detector, transportable between modules.
 
 ![SimMACE](doc/pics/MACE_sim.png)
 
@@ -113,12 +113,12 @@ Note that N=1 or without mpirun is not supported, because there should always a 
 
 (Development in progess.)
 
-### ReconSpectrometer
+### ReconTracks
 
 Run as
 
 ```shell
-./ReconSpectrometer SimMACEResult.root <...>
+./ReconTracks SimMACEResult.root <...>
 ```
 
 (Development in progess.)
