@@ -6,7 +6,8 @@
 using namespace MACE::SimMACE::Field;
 
 SelectorField::SelectorField() :
-    G4ElectroMagneticField() {
+    G4ElectroMagneticField(),
+    fBSelect(fESelect / c_light * std::sqrt(G4Positron::Definition()->GetPDGMass() / (2 * fSelectEk))) {
     FieldMessenger::Instance().Set(this);
 }
 
@@ -19,9 +20,9 @@ void SelectorField::GetFieldValue(const G4double*, G4double* F) const {
     F[5] = 0;
 }
 
-void SelectorField::SetSelectorMagneticField(G4double B) {
-    fBSelect = B;
-    fESelect = c_light * std::sqrt(2 * fSelectEk / G4Positron::Definition()->GetPDGMass()) * fBSelect;
+void SelectorField::SetSelectorElectricField(G4double E) {
+    fESelect = E;
+    fBSelect = E / c_light * std::sqrt(G4Positron::Definition()->GetPDGMass() / (2 * fSelectEk));
 }
 
 void SelectorField::SetSelectEnergy(G4double Ek) {

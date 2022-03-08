@@ -24,12 +24,12 @@ public:
     void SetEnergySpreadRMS(G4double val) { fEnergySpreadRMS = val; }
     void SetBeamProfileRMS(G4double val) { fBeamProfileRMS = val; }
 
-    void SetMuonsPerG4Event(G4int n) { fMuonsPerG4Event = n; }
+    void SetMuonsForEachG4Event(G4int n) { fMuonsForEachG4Event = n; }
 
     auto GetRepetitionID() const { return fRepetitionID; }
 
 private:
-    G4ParticleGun fParticleGun;
+    G4ParticleGun fSurfaceMuonBeam;
 
     G4double fFlux = 5e5_s_1;
     G4double fRepetitionRate = 2.5_Hz;
@@ -38,6 +38,6 @@ private:
     G4double fEnergySpreadRMS = 0.05 * fEnergy;
     G4double fBeamProfileRMS = 5_mm;
 
-    G4int    fMuonsPerG4Event = 2000;
+    G4int    fMuonsForEachG4Event = 500;
     G4int    fRepetitionID;
 };

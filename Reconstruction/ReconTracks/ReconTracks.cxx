@@ -26,7 +26,7 @@ int main(int, char** argv) {
     TFile fileIn(argv[1], "read");
 
     std::string outName(argv[1]);
-    outName.erase(outName.find_last_of(".root"));
+    outName.erase(outName.length() - 5);
     MPIFileTools mpiFileOut("reconed_" + outName, ".root");
     TFile fileOut(mpiFileOut.GetFilePath().c_str(), "recreate");
 
@@ -34,6 +34,8 @@ int main(int, char** argv) {
     dataHub.SetPrefixFormatOfTreeName("Rep#_");
     auto treeIndexRange = dataHub.FindTreeIndexRange<Hit_t>(fileIn);
     auto [treeBegin, treeEnd] = MPIJobsAssigner(treeIndexRange).GetJobsIndexRange();
+
+    std::cout << "Rank" << MPI::COMM_WORLD.Get_rank() << " is ready to process data of repetition " << treeBegin << " to " << treeEnd - 1 << std::endl;
 
     for (Long64_t treeIndex = treeBegin; treeIndex < treeEnd; ++treeIndex) {
         auto tree = dataHub.FindTree<Hit_t>(fileIn, treeIndex);
@@ -43,7 +45,14 @@ int main(int, char** argv) {
         const auto& tracks = reconstructor.GetTrackList();
         const auto& ommitedHits = reconstructor.GetOmittedHitList();
 
+        std::vector<std::shared_ptr<PhysicsTrack>> physicsTracks;
+        physicsTracks.reserve(tracks.size());
+        for (auto&& track : tracks) {
+            physicsTracks.emplace_back(std::make_shared<PhysicsTrack>(*track, 1, 0.1_T));
+        }
+
         dataHub.CreateAndFillTree<Track_t>(tracks, treeIndex)->Write();
+        dataHub.CreateAndFillTree<PhysicsTrack>(physicsTracks, treeIndex)->Write();
         dataHub.CreateAndFillTree<Hit_t>(ommitedHits, treeIndex)->Write();
     }
 

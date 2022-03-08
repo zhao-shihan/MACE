@@ -1,27 +1,27 @@
 template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t>
 void MACE::ReconTracks::Tracker::TrueFinder<FitterT_t, SpectromrterHit_t, Track_t>::
 Reconstruct(const std::vector<HitPtr>& hitData) {
-    Base::fTrackList.clear();
-    Base::fTrackedHitList.clear();
-    Base::fOmittedHitList.clear();
+    this->fTrackList.clear();
+    this->fTrackedHitList.clear();
+    this->fOmittedHitList.clear();
 
     for (auto&& candidate : Classify(hitData)) {
         if (candidate.size() < fThreshold) {
-            Base::fOmittedHitList.insert(Base::fOmittedHitList.cend(), candidate.cbegin(), candidate.cend());
+            this->fOmittedHitList.insert(this->fOmittedHitList.cend(), candidate.cbegin(), candidate.cend());
             continue;
         }
 
         auto track = std::make_shared<Track_t>();
-        bool good = Base::fFitter->Fit(candidate, *track);
-        const auto& omitted = Base::fFitter->GetOmitted();
+        bool good = this->fFitter->Fit(candidate, *track);
+        const auto& omitted = this->fFitter->GetOmitted();
 
         if (candidate.size() < fThreshold or !good) {
-            Base::fOmittedHitList.insert(Base::fOmittedHitList.cend(), candidate.cbegin(), candidate.cend());
-            Base::fOmittedHitList.insert(Base::fOmittedHitList.cend(), omitted.cbegin(), omitted.cend());
+            this->fOmittedHitList.insert(this->fOmittedHitList.cend(), candidate.cbegin(), candidate.cend());
+            this->fOmittedHitList.insert(this->fOmittedHitList.cend(), omitted.cbegin(), omitted.cend());
         } else {
-            Base::fTrackList.emplace_back(track);
-            Base::fTrackedHitList.emplace_back(candidate);
-            Base::fOmittedHitList.insert(Base::fOmittedHitList.cend(), omitted.cbegin(), omitted.cend());
+            this->fTrackList.emplace_back(track);
+            this->fTrackedHitList.emplace_back(candidate);
+            this->fOmittedHitList.insert(this->fOmittedHitList.cend(), omitted.cbegin(), omitted.cend());
         }
     }
 }

@@ -3,10 +3,9 @@
 #include "DataModel/Interface/BranchSocket.hxx"
 
 template<typename Arith_t>
+    requires std::integral<Arith_t> or std::floating_point<Arith_t>
 class MACE::DataModel::BasicBranchSocket final :
     public MACE::DataModel::Interface::BranchSocket<Arith_t, Arith_t*> {
-    static_assert(std::is_arithmetic_v<Arith_t>,
-        "Arith_t should be an arithmetic type!");
 public:
     BasicBranchSocket(const char* branchName, Arith_t defaultValue);
     ~BasicBranchSocket() noexcept = default;

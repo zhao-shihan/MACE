@@ -9,24 +9,36 @@ using namespace MACE::SimMACE::Action;
 
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
     G4VUserPrimaryGeneratorAction(),
-    fParticleGun(G4MuonPlus::Definition()),
+    fSurfaceMuonBeam(G4MuonPlus::Definition()),
     fRepetitionID(-1) {
-    fParticleGun.SetParticleMomentumDirection(G4ThreeVector(0, 0, 1));
+    fSurfaceMuonBeam.SetParticleMomentumDirection(G4ThreeVector(0, 0, 1));
     PrimaryGeneratorMessenger::Instance();
 }
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
-    const auto muonsPerReptition = fFlux / fRepetitionRate;
-    const auto g4EventsPerReptition = muonsPerReptition / fMuonsPerG4Event;
+    const auto muonsForEachReptition = fFlux / fRepetitionRate; // no rounding
+    const auto g4EventsForEachReptition = muonsForEachReptition / fMuonsForEachG4Event; // no rounding
 
-    fRepetitionID = event->GetEventID() / g4EventsPerReptition;
+    fRepetitionID = event->GetEventID() / g4EventsForEachReptition; // rounding here
     const auto meanTime = fRepetitionID / fRepetitionRate;
 
+    std::vector<std::tuple<G4double, G4ThreeVector, G4double>> muonStates(fMuonsForEachG4Event);
     auto* const randEngine = G4Random::getTheEngine();
-    for (G4int i = 0; i < fMuonsPerG4Event; ++i) {
-        fParticleGun.SetParticleTime(G4RandGauss::shoot(randEngine, meanTime, fTimeWidthRMS));
-        fParticleGun.SetParticlePosition(G4ThreeVector(G4RandGauss::shoot(randEngine, 0, fBeamProfileRMS), G4RandGauss::shoot(randEngine, 0, fBeamProfileRMS), -1.5_m));
-        fParticleGun.SetParticleEnergy(G4RandGauss::shoot(randEngine, fEnergy, fEnergySpreadRMS));
-        fParticleGun.GeneratePrimaryVertex(event);
+    for (G4int i = 0; i < fMuonsForEachG4Event; ++i) {
+        muonStates[i] = std::make_tuple(
+            G4RandGauss::shoot(randEngine, meanTime, fTimeWidthRMS),
+            G4ThreeVector(
+                G4RandGauss::shoot(randEngine, 0, fBeamProfileRMS),
+                G4RandGauss::shoot(randEngine, 0, fBeamProfileRMS),
+                -1.5_m),
+            G4RandGauss::shoot(randEngine, fEnergy, fEnergySpreadRMS));
+    }
+
+    for (G4int i = 0; i < fMuonsForEachG4Event; ++i) {
+        const auto& [time, position, energy] = muonStates[i];
+        fSurfaceMuonBeam.SetParticleTime(time);
+        fSurfaceMuonBeam.SetParticlePosition(position);
+        fSurfaceMuonBeam.SetParticleEnergy(energy);
+        fSurfaceMuonBeam.GeneratePrimaryVertex(event);
     }
 }

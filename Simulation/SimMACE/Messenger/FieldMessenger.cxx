@@ -22,7 +22,7 @@ FieldMessenger::FieldMessenger() :
     fDirectory("/MACE/Field/"),
     fSetTransportMagneticField("/MACE/Field/SetTransportMagneticField", this),
     fSetAcceleratorPotential("/MACE/Field/SetAcceleratorPotential", this),
-    fSetSelectorMagneticField("/MACE/Field/SetSelectorMagneticField", this) {
+    fSetSelectorElectricField("/MACE/Field/SetSelectorElectricField", this) {
 
     fDirectory.SetGuidance("Detector field controller.");
 
@@ -36,10 +36,10 @@ FieldMessenger::FieldMessenger() :
     fSetAcceleratorPotential.SetUnitCategory("Electric potential");
     fSetAcceleratorPotential.AvailableForStates(G4State_Idle);
 
-    fSetSelectorMagneticField.SetGuidance("Set selector magnetic field. (Selector electric field changes, respectively, to ensure the seleted kinetic energy stays the same.)");
-    fSetSelectorMagneticField.SetParameterName("B", false);
-    fSetSelectorMagneticField.SetUnitCategory("Magnetic flux density");
-    fSetSelectorMagneticField.AvailableForStates(G4State_Idle);
+    fSetSelectorElectricField.SetGuidance("Set selector electric field. (Selector magnetic field changes, respectively, to ensure the seleted kinetic energy stays the same.)");
+    fSetSelectorElectricField.SetParameterName("E", false);
+    fSetSelectorElectricField.SetUnitCategory("Electric field");
+    fSetSelectorElectricField.AvailableForStates(G4State_Idle);
 }
 
 void FieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
@@ -55,7 +55,7 @@ void FieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
         const auto V = fSetAcceleratorPotential.GetNewDoubleValue(value);
         fAcceleratorField->SetAcceleratorPotential(V);
         fSelectorField->SetSelectEnergy(eplus * std::abs(V));
-    } else if (command == std::addressof(fSetSelectorMagneticField)) {
-        fSelectorField->SetSelectorMagneticField(fSetSelectorMagneticField.GetNewDoubleValue(value));
+    } else if (command == std::addressof(fSetSelectorElectricField)) {
+        fSelectorField->SetSelectorElectricField(fSetSelectorElectricField.GetNewDoubleValue(value));
     }
 }

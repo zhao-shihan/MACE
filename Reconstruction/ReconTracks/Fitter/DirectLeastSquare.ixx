@@ -67,7 +67,7 @@ InitialCircleFit() {
     auto vw2Sum = vw2.sum();
     auto cauchy = u2Sum * v2Sum - uvSum * uvSum;
     if (std::abs(cauchy) < std::numeric_limits<decltype(cauchy)>::min() / std::numeric_limits<decltype(cauchy)>::epsilon()) [[unlikely]] {
-        if (Base::fVerbose > 0) {
+        if (this->fVerbose > 0) {
             std::cout << "Warning: denominator is effectively 0, aborted." << std::endl;
         }
         return false;
@@ -110,7 +110,7 @@ CircleFit() {
 
     // check step count
     if (stepCount >= fMaxSteps) [[unlikely]] {
-        if (Base::fVerbose > 0) { std::cout << "Warning: max step " << fMaxSteps << " reached." << std::endl; }
+        if (this->fVerbose > 0) { std::cout << "Warning: max step " << fMaxSteps << " reached." << std::endl; }
     }
 
     return true;
@@ -170,7 +170,7 @@ CircleParametersBoundCheck() const {
         0.0 < R and R < fRBound) [[likely]] {
         return true;
     } else {
-        if (Base::fVerbose > 0) {
+        if (this->fVerbose > 0) {
             std::cout << "Warning: parameter bound reached, aborted." << std::endl;
         }
         return false;

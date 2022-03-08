@@ -22,7 +22,7 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger() :
     fSetEnergy("/MACE/PrimaryGenerator/SetEnergy", this),
     fSetEnergySpreadRMS("/MACE/PrimaryGenerator/SetEnergySpreadRMS", this),
     fSetBeamProfileRMS("/MACE/PrimaryGenerator/SetBeamProfileRMS", this),
-    fSetMuonsPerG4Event("/MACE/PrimaryGenerator/SetMuonsPerG4Event", this) {
+    fSetMuonsForEachG4Event("/MACE/PrimaryGenerator/SetMuonsForEachG4Event", this) {
 
     // Introduce some useful units.
     // per second (for beam flux)
@@ -62,9 +62,9 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger() :
     fSetBeamProfileRMS.SetUnitCategory("Length");
     fSetBeamProfileRMS.AvailableForStates(G4State_Idle);
 
-    fSetMuonsPerG4Event.SetGuidance("Set muons generated for each G4 event. Beam properties are not affected if the value is proper.");
-    fSetMuonsPerG4Event.SetParameterName("n", false);
-    fSetMuonsPerG4Event.AvailableForStates(G4State_Idle);
+    fSetMuonsForEachG4Event.SetGuidance("Set muons generated for each G4 event. Beam properties are not affected if the value is proper.");
+    fSetMuonsForEachG4Event.SetParameterName("n", false);
+    fSetMuonsForEachG4Event.AvailableForStates(G4State_Idle);
 }
 
 void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String value) {
@@ -81,7 +81,7 @@ void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String value
         primaryGeneratorAction.SetEnergySpreadRMS(fSetEnergySpreadRMS.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetBeamProfileRMS)) {
         primaryGeneratorAction.SetBeamProfileRMS(fSetBeamProfileRMS.GetNewDoubleValue(value));
-    } else if (command == std::addressof(fSetMuonsPerG4Event)) {
-        primaryGeneratorAction.SetMuonsPerG4Event(fSetMuonsPerG4Event.GetNewIntValue(value));
+    } else if (command == std::addressof(fSetMuonsForEachG4Event)) {
+        primaryGeneratorAction.SetMuonsForEachG4Event(fSetMuonsForEachG4Event.GetNewIntValue(value));
     }
 }

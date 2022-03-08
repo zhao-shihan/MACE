@@ -38,5 +38,5 @@ private:
     G4UIdirectory fDirectory;
     G4UIcmdWithADoubleAndUnit fSetTransportMagneticField;
     G4UIcmdWithADoubleAndUnit fSetAcceleratorPotential;
-    G4UIcmdWithADoubleAndUnit fSetSelectorMagneticField;
+    G4UIcmdWithADoubleAndUnit fSetSelectorElectricField;
 };

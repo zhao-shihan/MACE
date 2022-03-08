@@ -15,12 +15,11 @@ public:
     [[nodiscard]] virtual Object_t& Value() = 0;
     [[nodiscard]] virtual Address_t Address() = 0;
 
-    virtual void CreateBranch(TTree& tree);
-    virtual void ConnectToBranch(TTree& tree);
+    virtual void CreateBranch(TTree& tree) { tree.Branch(fBranchName, Address()); }
+    virtual void ConnectToBranch(TTree& tree) { tree.SetBranchAddress(fBranchName, Address()); }
 
 protected:
     const char* const fBranchName;
-    ObserverPtr<const TTree> fConnectedTree;
 };
 
 #include "DataModel/Interface/BranchSocket.ixx"

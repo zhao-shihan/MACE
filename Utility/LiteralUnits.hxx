@@ -6,7 +6,7 @@
     constexpr long double operator""##suffix(long double val) { return val * (unit); } \
     constexpr long double operator""##suffix(unsigned long long val) { return val * (unit); }
 
-namespace MACE/* ::inline Utility */{
+namespace MACE/* ::inline Utility */ {
 
     // Length [L] symbols
 
@@ -190,6 +190,13 @@ namespace MACE/* ::inline Utility */{
     MACE_UTILITY_LITERAL_UNIT_SYSTEM(_ms_1, 1 / CLHEP::ms);
     MACE_UTILITY_LITERAL_UNIT_SYSTEM(_us_1, 1 / CLHEP::us);
     MACE_UTILITY_LITERAL_UNIT_SYSTEM(_ps_1, 1 / CLHEP::ps);
+
+    // Electric field [E][L^-1][Q^-1] symbols
+
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_V_m, CLHEP::volt / CLHEP::m);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_V_cm, CLHEP::volt / CLHEP::cm);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_kV_m, CLHEP::kilovolt / CLHEP::m);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_kV_cm, CLHEP::kilovolt / CLHEP::cm);
 
 }
 

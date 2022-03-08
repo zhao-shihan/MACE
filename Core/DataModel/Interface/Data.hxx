@@ -4,7 +4,7 @@
 
 class MACE::DataModel::Interface::Data {
 protected:
-    Data() = default;
+    Data() noexcept = default;
     Data(const Data& data) noexcept = default;
     Data(Data&& data) noexcept = default;
     virtual ~Data() noexcept = 0;
@@ -12,9 +12,9 @@ protected:
     Data& operator=(Data&& data) noexcept = default;
 
     // Extend (override & invoke) this in derived classes!
-    static void CreateBranches(TTree& tree) { tree.ResetBranchAddresses(); }
+    static void CreateBranches(TTree&) {}
     // Extend (override & invoke) this in derived classes!
-    static void ConnectToBranches(TTree& tree) { tree.ResetBranchAddresses(); }
+    static void ConnectToBranches(TTree&) {}
     // Extend (override & invoke) this in derived classes!
     inline void FillBranchSockets() const noexcept {}
 

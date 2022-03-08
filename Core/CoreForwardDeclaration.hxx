@@ -1,5 +1,7 @@
 #pragma once
 
+#include <concepts>
+
 namespace MACE {
 
     // FIXME: using inline namespace at this level (just under MACE) confuses VSCode's C++ extension. Maybe conflicts with the C++ standard? 
@@ -7,7 +9,7 @@ namespace MACE {
 
     namespace DataModel {
         inline namespace BranchSocket {
-            template<typename Arith_t> class BasicBranchSocket;
+            template<typename Arith_t> requires std::integral<Arith_t> or std::floating_point<Arith_t> class BasicBranchSocket;
             template<typename Class_t> class ClassBranchSocket;
         }
         inline namespace Hit {

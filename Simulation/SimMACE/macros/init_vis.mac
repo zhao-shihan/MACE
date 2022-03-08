@@ -1,16 +1,32 @@
-# macro file for the initialization of SimMACE
-# in interactive session
-#
+# macro file for the initialization of SimMACE in interactive session
+
 # Set some default verbose
 /control/verbose 2
 /control/saveHistory
 /run/verbose 2
-#
+
 # Initialize kernel
 /run/initialize
-#
+
 # Some customized properties
-/MACE/PrimaryGenerator/SetMuonsPerG4Event 200
-#
+/MACE/PrimaryGenerator/SetFlux                   5e5 s-1
+/MACE/PrimaryGenerator/SetRepetitionRate         2.5 Hz
+/MACE/PrimaryGenerator/SetTimeWidthRMS           10 ms
+/MACE/PrimaryGenerator/SetEnergy                 1.5 MeV
+/MACE/PrimaryGenerator/SetEnergySpreadRMS        0.08 MeV
+/MACE/PrimaryGenerator/SetBeamProfileRMS         5 mm
+/MACE/PrimaryGenerator/SetMuonsForEachG4Event    200
+
+/MACE/Physics/SetConversionProbability           1.0          # high :) 
+
+/MACE/Field/SetTransportMagneticField            0.1 tesla
+/MACE/Field/SetAcceleratorPotential              7 kilovolt
+/MACE/Field/SetSelectorElectricField             500 kilovolt/m
+
+/MACE/Analysis/EnableCoincidenceOfCalorimeter    true
+/MACE/Analysis/EnableCoincidenceOfVertexDetector true
+
+/MACE/Analysis/SetResultName                     test
+
 # Visualization setting
 /control/execute vis.mac

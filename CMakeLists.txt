@@ -27,29 +27,33 @@ add_definitions(-Wall -Wextra)
 #       |       ~~~~~^~~~~~~~~~~~~
 #
 add_definitions(-Wno-volatile)
-#
-# PlainObjectBase.h:905:102: warning: bitwise operation between different enumeration types ‘Eigen::PlainObjectBase<Eigen::Matrix<double, 3, 1> >::<unnamed enum>’ and ‘Eigen::StorageOptions’ is deprecated [-Wdeprecated-enum-enum-conversion]
-#   905 |       EIGEN_STATIC_ASSERT((EIGEN_IMPLIES(MaxRowsAtCompileTime==1 && MaxColsAtCompileTime!=1, (Options&RowMajor)==RowMajor)
-#       |                                                                                              ~~~~~~~~^~~~~~~~~~
-# util/StaticAssert.h:33:54: note: in definition of macro ‘EIGEN_STATIC_ASSERT’
-#    33 |     #define EIGEN_STATIC_ASSERT(X,MSG) static_assert(X,#MSG);
-#       |                                                      ^
-# PlainObjectBase.h:905:28: note: in expansion of macro ‘EIGEN_IMPLIES’
-#   905 |       EIGEN_STATIC_ASSERT((EIGEN_IMPLIES(MaxRowsAtCompileTime==1 && MaxColsAtCompileTime!=1, (Options&RowMajor)==RowMajor)
-#       |                            ^~~~~~~~~~~~~
-# PlainObjectBase.h:906:102: warning: bitwise operation between different enumeration types ‘Eigen::PlainObjectBase<Eigen::Matrix<double, 3, 1> >::<unnamed enum>’ and ‘Eigen::StorageOptions’ is deprecated [-Wdeprecated-enum-enum-conversion]
-#   906 |                         && EIGEN_IMPLIES(MaxColsAtCompileTime==1 && MaxRowsAtCompileTime!=1, (Options&RowMajor)==0)
-#       |                                                                                              ~~~~~~~~^~~~~~~~~~
-# util/StaticAssert.h:33:54: note: in definition of macro ‘EIGEN_STATIC_ASSERT’
-#    33 |     #define EIGEN_STATIC_ASSERT(X,MSG) static_assert(X,#MSG);
-#       |                                                      ^
-# PlainObjectBase.h:906:28: note: in expansion of macro ‘EIGEN_IMPLIES’
-#   906 |                         && EIGEN_IMPLIES(MaxColsAtCompileTime==1 && MaxRowsAtCompileTime!=1, (Options&RowMajor)==0)
-#       |                            ^~~~~~~~~~~~~
-#
-# ...
-#
-add_definitions(-Wno-deprecated-enum-enum-conversion)
+if(CMAKE_COMPILER_IS_GNUCXX)
+    if(GCC_VERSION GREATER_EQUAL 11)
+        #
+        # PlainObjectBase.h:905:102: warning: bitwise operation between different enumeration types ‘Eigen::PlainObjectBase<Eigen::Matrix<double, 3, 1> >::<unnamed enum>’ and ‘Eigen::StorageOptions’ is deprecated [-Wdeprecated-enum-enum-conversion]
+        #   905 |       EIGEN_STATIC_ASSERT((EIGEN_IMPLIES(MaxRowsAtCompileTime==1 && MaxColsAtCompileTime!=1, (Options&RowMajor)==RowMajor)
+        #       |                                                                                              ~~~~~~~~^~~~~~~~~~
+        # util/StaticAssert.h:33:54: note: in definition of macro ‘EIGEN_STATIC_ASSERT’
+        #    33 |     #define EIGEN_STATIC_ASSERT(X,MSG) static_assert(X,#MSG);
+        #       |                                                      ^
+        # PlainObjectBase.h:905:28: note: in expansion of macro ‘EIGEN_IMPLIES’
+        #   905 |       EIGEN_STATIC_ASSERT((EIGEN_IMPLIES(MaxRowsAtCompileTime==1 && MaxColsAtCompileTime!=1, (Options&RowMajor)==RowMajor)
+        #       |                            ^~~~~~~~~~~~~
+        # PlainObjectBase.h:906:102: warning: bitwise operation between different enumeration types ‘Eigen::PlainObjectBase<Eigen::Matrix<double, 3, 1> >::<unnamed enum>’ and ‘Eigen::StorageOptions’ is deprecated [-Wdeprecated-enum-enum-conversion]
+        #   906 |                         && EIGEN_IMPLIES(MaxColsAtCompileTime==1 && MaxRowsAtCompileTime!=1, (Options&RowMajor)==0)
+        #       |                                                                                              ~~~~~~~~^~~~~~~~~~
+        # util/StaticAssert.h:33:54: note: in definition of macro ‘EIGEN_STATIC_ASSERT’
+        #    33 |     #define EIGEN_STATIC_ASSERT(X,MSG) static_assert(X,#MSG);
+        #       |                                                      ^
+        # PlainObjectBase.h:906:28: note: in expansion of macro ‘EIGEN_IMPLIES’
+        #   906 |                         && EIGEN_IMPLIES(MaxColsAtCompileTime==1 && MaxRowsAtCompileTime!=1, (Options&RowMajor)==0)
+        #       |                            ^~~~~~~~~~~~~
+        #
+        # ...
+        #
+        add_definitions(-Wno-deprecated-enum-enum-conversion)
+    endif()
+endif()
 
 # ================================================================================================================================
 # Dependencies

@@ -19,13 +19,13 @@ public:
     G4bool DoesFieldChangeEnergy() const override { return true; }
 
     void SetTransportField(G4double B) { fBTransport = B; }
-    void SetSelectorMagneticField(G4double B);
+    void SetSelectorElectricField(G4double E);
     void SetSelectEnergy(G4double Ek);
 
 private:
     G4double fBTransport = 0.1_T;
-    G4double fBSelect = 0.01_T;
-    G4double fESelect = CLHEP::c_light * std::sqrt(2 * 7_keV / G4Positron::Definition()->GetPDGMass()) * fBSelect;
 
     G4double fSelectEk = 7_keV;
+    G4double fESelect = 5_kV_cm;
+    G4double fBSelect;
 };
