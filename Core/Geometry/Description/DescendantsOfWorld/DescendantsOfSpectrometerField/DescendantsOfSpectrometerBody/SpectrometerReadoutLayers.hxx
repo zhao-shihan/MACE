@@ -35,5 +35,5 @@ public:
     void SetLayerThickness(double val) { fLayerThickness = val; }
 
 private:
-    double fLayerThickness = 10_mm;
+    double fLayerThickness = 16.2_mm;
 };
