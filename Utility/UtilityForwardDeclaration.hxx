@@ -6,8 +6,9 @@ namespace MACE {
     // inline namespace Utility {
 
     inline namespace MPITools {
-        class MPIFileTools;
         class G4MPIRunManager;
+        class MPIFileTools;
+        class MPIJobsAssigner;
     }
 
     // } // inline namespace Utility

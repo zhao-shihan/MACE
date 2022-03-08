@@ -11,6 +11,15 @@ namespace MACE::DataModel {
     }
 
     template<std::derived_from<Interface::Data> Data_t>
+    std::pair<Long64_t, Long64_t> DataHub::FindTreeIndexRange(TFile& file) {
+        Long64_t beginIndex = 0;
+        for (; FindTree<Data_t>(file, beginIndex) == nullptr; ++beginIndex);
+        Long64_t endIndex = beginIndex;
+        for (; FindTree<Data_t>(file, endIndex) != nullptr; ++endIndex);
+        return std::make_pair(beginIndex, endIndex);
+    }
+
+    template<std::derived_from<Interface::Data> Data_t>
     inline std::shared_ptr<TTree> DataHub::CreateTree(Long64_t treeIndex) {
         auto tree = std::make_shared<TTree>();
         tree->SetName(GetTreeName<Data_t>(treeIndex));
@@ -20,8 +29,8 @@ namespace MACE::DataModel {
     }
 
     template<std::derived_from<Interface::Data> DataInTree_t, template<class T> typename Pointer_t, std::derived_from<DataInTree_t> DataInList_t>
-    void DataHub::FillTree(const std::vector<Pointer_t<DataInList_t>>& dataList, TTree& tree, bool connected) {
-        if (!connected) { DataInTree_t::ConnectToBranches(tree); }
+    void DataHub::FillTree(const std::vector<Pointer_t<DataInList_t>>& dataList, TTree& tree) {
+        DataInTree_t::ConnectToBranches(tree);
         for (auto&& data : dataList) {
             static_cast<const DataInTree_t&>(*data).FillBranchSockets();
             tree.Fill();
@@ -29,17 +38,17 @@ namespace MACE::DataModel {
     }
 
     template<std::derived_from<Interface::Data> DataInTree_t, std::derived_from<DataInTree_t> DataInList_t>
-    inline void DataHub::FillTree(const std::vector<DataInList_t*>& dataList, TTree& tree, bool connected) {
+    inline void DataHub::FillTree(const std::vector<DataInList_t*>& dataList, TTree& tree) {
         //      A Trick, not means dataList should be observer
         //                          |
         //                          V
-        FillTree<DataInTree_t, ObserverPtr, DataInList_t>(dataList, tree, connected);
+        FillTree<DataInTree_t, ObserverPtr, DataInList_t>(dataList, tree);
     }
 
     template<std::derived_from<Interface::Data> DataInTree_t, template<class T> typename Pointer_t, std::derived_from<DataInTree_t> DataInList_t>
     inline std::shared_ptr<TTree> DataHub::CreateAndFillTree(const std::vector<Pointer_t<DataInList_t>>& dataList, Long64_t treeIndex) {
         auto tree = CreateTree<DataInTree_t>(treeIndex);
-        FillTree<DataInTree_t, Pointer_t, DataInList_t>(dataList, *tree, true);
+        FillTree<DataInTree_t, Pointer_t, DataInList_t>(dataList, *tree);
         return tree;
     }
 
@@ -52,16 +61,20 @@ namespace MACE::DataModel {
     }
 
     template<std::derived_from<Interface::Data> Data_t>
-    std::vector<std::shared_ptr<Data_t>> DataHub::CreateAndFillList(TTree& tree, bool connected) {
+    std::vector<std::shared_ptr<Data_t>> DataHub::CreateAndFillList(TTree& tree, const std::pair<Long64_t, Long64_t>& entriesRange) {
         std::vector<std::shared_ptr<Data_t>> dataList(0);
-        auto entries = tree.GetEntries();
-        dataList.reserve(entries);
-        if (!connected) { Data_t::ConnectToBranches(tree); }
-        for (Long64_t i = 0; i < entries; ++i) {
+        dataList.reserve(entriesRange.second - entriesRange.first);
+        Data_t::ConnectToBranches(tree);
+        for (Long64_t i = entriesRange.first; i < entriesRange.second; ++i) {
             tree.GetEntry(i);
             dataList.emplace_back(std::make_shared<Data_t>());
         }
         return dataList;
+    }
+    
+    template<std::derived_from<Interface::Data> Data_t>
+    inline std::vector<std::shared_ptr<Data_t>> DataHub::CreateAndFillList(TTree& tree) {
+        return CreateAndFillList<Data_t>(tree, std::make_pair<Long64_t, Long64_t>(0, tree.GetEntries()));
     }
 
 }
