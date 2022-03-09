@@ -3,16 +3,16 @@
 #include "ReconTracks/Global.hxx"
 #include "ReconTracks/Interface/Tracker.hxx"
 
-template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t>
+template<template<class H, class T> class FitterT_t, class SpectrometerHit_t, class Track_t>
 class MACE::ReconTracks::Tracker::PerfectFinder final :
-    public MACE::ReconTracks::Interface::Tracker<FitterT_t, SpectromrterHit_t, Track_t> {
-    MACE_RECONSPECTROMETER_SPECTROMETERSIMHIT_CONCEPT(SpectromrterHit_t);
+    public MACE::ReconTracks::Interface::Tracker<FitterT_t, SpectrometerHit_t, Track_t> {
+    MACE_RECONSPECTROMETER_SPECTROMETERSIMHIT_CONCEPT(SpectrometerHit_t);
 
     PerfectFinder(const PerfectFinder&) = delete;
     PerfectFinder& operator=(const PerfectFinder&) = delete;
 
 protected:
-    using Base = MACE::ReconTracks::Interface::Tracker<FitterT_t, SpectromrterHit_t, Track_t>;
+    using Base = MACE::ReconTracks::Interface::Tracker<FitterT_t, SpectrometerHit_t, Track_t>;
     using HitPtr = typename Base::HitPtr;
     using TrackPtr = typename Base::TrackPtr;
 
@@ -31,7 +31,7 @@ private:
     void FitAndDumpToResult(std::vector<HitPtr>& candidate);
 
 private:
-    size_t fThreshold = 18;
+    size_t fThreshold = 10;
 };
 
 #include "ReconTracks/Tracker/PerfectFinder.ixx"

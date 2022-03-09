@@ -159,6 +159,43 @@ namespace MACE/* ::inline Utility */ {
     /////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////
 
+    // Velocity [L][T^-1] symbols
+
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_km_ps, CLHEP::km / CLHEP::ps);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_m_ps, CLHEP::m / CLHEP::ps);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_cm_ps, CLHEP::cm / CLHEP::ps);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mm_ps, CLHEP::mm / CLHEP::ps);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_um_ps, CLHEP::um / CLHEP::ps);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_nm_ps, CLHEP::nm / CLHEP::ps);
+
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_km_ns, CLHEP::km / CLHEP::ns);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_m_ns, CLHEP::m / CLHEP::ns);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_cm_ns, CLHEP::cm / CLHEP::ns);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mm_ns, CLHEP::mm / CLHEP::ns);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_um_ns, CLHEP::um / CLHEP::ns);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_nm_ns, CLHEP::nm / CLHEP::ns);
+
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_km_us, CLHEP::km / CLHEP::us);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_m_us, CLHEP::m / CLHEP::us);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_cm_us, CLHEP::cm / CLHEP::us);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mm_us, CLHEP::mm / CLHEP::us);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_um_us, CLHEP::um / CLHEP::us);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_nm_us, CLHEP::nm / CLHEP::us);
+
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_km_ms, CLHEP::km / CLHEP::ms);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_m_ms, CLHEP::m / CLHEP::ms);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_cm_ms, CLHEP::cm / CLHEP::ms);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mm_ms, CLHEP::mm / CLHEP::ms);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_um_ms, CLHEP::um / CLHEP::ms);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_nm_ms, CLHEP::nm / CLHEP::ms);
+
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_km_s, CLHEP::km / CLHEP::s);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_m_s, CLHEP::m / CLHEP::s);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_cm_s, CLHEP::cm / CLHEP::s);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_mm_s, CLHEP::mm / CLHEP::s);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_um_s, CLHEP::um / CLHEP::s);
+    MACE_UTILITY_LITERAL_UNIT_SYSTEM(_nm_s, CLHEP::nm / CLHEP::s);
+
     // Density [E][T^2][L^-5] symbols
 
     MACE_UTILITY_LITERAL_UNIT_SYSTEM(_kg_m3, CLHEP::kg / CLHEP::m3);

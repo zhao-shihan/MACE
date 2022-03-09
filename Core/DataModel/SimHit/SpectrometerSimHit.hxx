@@ -18,13 +18,15 @@ public:
     SpectrometerSimHit& operator=(const SpectrometerSimHit& hit) noexcept = default;
     SpectrometerSimHit& operator=(SpectrometerSimHit&& hit) noexcept = default;
 
+    [[nodiscard]] const auto& GetEnergy() const { return fEnergy; }
     [[nodiscard]] const auto& GetMomentum() const { return fMomentum; }
     [[nodiscard]] const auto& GetVertexTime() const { return fVertexTime; }
     [[nodiscard]] const auto& GetVertexPosition() const { return fVertexPosition; }
-    [[nodiscard]] const auto& GetParticlePDGCode() const { return fPDGCode; }
+    [[nodiscard]] const auto& GetPDGCode() const { return fPDGCode; }
     [[nodiscard]] const auto& GetEventID() const { return fEventID; }
     [[nodiscard]] const auto& GetTrackID() const { return fTrackID; }
 
+    void SetEnergy(Double_t E) { fEnergy = E; }
     void SetMomentum(const TEveVectorD& mom) { fMomentum = mom; }
     void SetMomentum(TEveVectorD&& mom) { fMomentum = std::move(mom); }
     void SetMomentum(Double_t pX, Double_t pY, Double_t pZ) { fMomentum.Set(pX, pY, pZ); }
@@ -45,6 +47,7 @@ private:
     static constexpr const char* BasicName() { return "CDCSimHit"; }
 
 private:
+    Double_t    fEnergy;
     TEveVectorD fMomentum;
     Double_t    fVertexTime;
     TEveVectorD fVertexPosition;
@@ -52,6 +55,7 @@ private:
     Int_t       fEventID;
     Int_t       fTrackID;
 
+    static FloatBranchSocket    fgEnergy;
     static Vector3FBranchSocket fgMomentum;
     static DoubleBranchSocket   fgVertexTime;
     static Vector3FBranchSocket fgVertexPosition;
@@ -62,6 +66,7 @@ private:
 
 inline void MACE::DataModel::SpectrometerSimHit::FillBranchSockets() const noexcept {
     Base::FillBranchSockets();
+    fgEnergy.Value() = fEnergy;
     fgMomentum.Value() = fMomentum;
     fgVertexTime.Value() = fVertexTime;
     fgVertexPosition.Value() = fVertexPosition;

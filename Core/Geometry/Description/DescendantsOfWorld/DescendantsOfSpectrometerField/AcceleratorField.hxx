@@ -38,6 +38,6 @@ public:
 
 private:
     double fRadius = 75_mm;
-    double fLength = 80_cm;
-    double fDownStreamLength = 70_cm;
+    double fLength = 60_cm;
+    double fDownStreamLength = 50_cm;
 };

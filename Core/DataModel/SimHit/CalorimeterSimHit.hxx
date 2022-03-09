@@ -17,7 +17,7 @@ public:
     CalorimeterSimHit& operator=(const CalorimeterSimHit& hit) noexcept = default;
     CalorimeterSimHit& operator=(CalorimeterSimHit&& hit) noexcept = default;
 
-    [[nodiscard]] const auto& GetParticlePDGCode() const { return fPDGCode; }
+    [[nodiscard]] const auto& GetPDGCode() const { return fPDGCode; }
     [[nodiscard]] const auto& GetEventID() const { return fEventID; }
     [[nodiscard]] const auto& GetTrackID() const { return fTrackID; }
 

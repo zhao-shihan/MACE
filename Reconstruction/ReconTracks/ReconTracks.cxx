@@ -1,8 +1,11 @@
+#include "CLHEP/Units/PhysicalConstants.h"
+
 #include "DataModel/DataHub.hxx"
 #include "ReconTracks/Tracker/PerfectFinder.hxx"
 #include "ReconTracks/Tracker/Hough.hxx"
-#include "ReconTracks/Fitter/Dummy.hxx"
 #include "ReconTracks/Fitter/DirectLeastSquare.hxx"
+#include "ReconTracks/Fitter/Dummy.hxx"
+#include "ReconTracks/Fitter/PerfectFitter.hxx"
 #include "MPITools/MPIFileTools.hxx"
 #include "MPITools/MPIJobsAssigner.hxx"
 
@@ -11,17 +14,20 @@ using namespace MACE::ReconTracks;
 using namespace MACE::DataModel;
 
 using Hit_t = SpectrometerSimHit;
-using Track_t = HelixTrack;
 
 int main(int, char** argv) {
     MPI::Init();
 
     // Tracker::PerfectFinder<Fitter::Dummy, Hit_t, Track_t> reconstructor;
     // Tracker::Hough<Fitter::Dummy, Hit_t> reconstructor(350, 5000, std::stol(argv[2]), std::stol(argv[3]), -50, 150, std::stol(argv[4]), std::stol(argv[5]));
-    Tracker::PerfectFinder<Fitter::DirectLeastSquare, Hit_t, Track_t> reconstructor;
-    reconstructor.GetFitter()->SetVerbose(std::stoi(argv[2]));
-    reconstructor.GetFitter()->SetTolerance(std::stod(argv[3]));
-    reconstructor.GetFitter()->SetMaxSteps(std::stod(argv[4]));
+    Tracker::PerfectFinder<Fitter::DirectLeastSquare, Hit_t, HelixTrack> reconstructor;
+    reconstructor.SetThreshold(std::stoi(argv[2]));
+    reconstructor.GetFitter()->SetVerbose(std::stoi(argv[3]));
+    reconstructor.GetFitter()->SetTolerance(std::stod(argv[4]));
+    reconstructor.GetFitter()->SetMaxSteps(std::stod(argv[5]));
+
+    Tracker::PerfectFinder<Fitter::PerfectFitter, Hit_t, PhysicsTrack> perfectReconstructor;
+    auto&& perfectFitter = *perfectReconstructor.GetFitter();
 
     TFile fileIn(argv[1], "read");
 
@@ -41,19 +47,48 @@ int main(int, char** argv) {
         auto tree = dataHub.FindTree<Hit_t>(fileIn, treeIndex);
         auto hitData = dataHub.CreateAndFillList<Hit_t>(*tree);
 
-        reconstructor.Reconstruct(hitData);
-        const auto& tracks = reconstructor.GetTrackList();
-        const auto& ommitedHits = reconstructor.GetOmittedHitList();
+        perfectReconstructor.Reconstruct(hitData);
+        const auto& perfectTracks = perfectReconstructor.GetTrackList();
 
+        reconstructor.Reconstruct(hitData);
+        const auto& helixTracks = reconstructor.GetTrackList();
+        const auto& trackedHits = reconstructor.GetTrackedHitList();
+        const auto& ommitedHits = reconstructor.GetOmittedHitList();
         std::vector<std::shared_ptr<PhysicsTrack>> physicsTracks;
-        physicsTracks.reserve(tracks.size());
-        for (auto&& track : tracks) {
-            physicsTracks.emplace_back(std::make_shared<PhysicsTrack>(*track, 1, 0.1_T));
+        physicsTracks.reserve(helixTracks.size());
+        for (auto&& track : helixTracks) {
+            physicsTracks.emplace_back(std::make_shared<PhysicsTrack>(*track, 1, 0.1_T, CLHEP::electron_mass_c2));
         }
 
-        dataHub.CreateAndFillTree<Track_t>(tracks, treeIndex)->Write();
-        dataHub.CreateAndFillTree<PhysicsTrack>(physicsTracks, treeIndex)->Write();
+        std::vector<std::shared_ptr<PhysicsTrack>> errors;
+        errors.reserve(physicsTracks.size());
+        for (size_t i = 0; i < physicsTracks.size(); ++i) {
+            auto hits = trackedHits[i];
+            const auto& physicsTrack = *physicsTracks[i];
+            auto& error = *errors.emplace_back(std::make_shared<PhysicsTrack>());
+            perfectFitter.Fit(hits, error);
+            const auto vertexTimeErr = physicsTrack.GetVertexTime() - error.GetVertexTime();
+            const auto vertexPositionErr = physicsTrack.GetVertexPosition() - error.GetVertexPosition();
+            const auto energyErr = physicsTrack.GetEnergy() - error.GetEnergy();
+            const auto momentumErr = physicsTrack.GetMomentum() - error.GetMomentum();
+            const auto chargeErr = physicsTrack.GetCharge() - error.GetCharge();
+            error.SetVertexTime(vertexTimeErr);
+            error.SetVertexPosition(vertexPositionErr);
+            error.SetEnergy(energyErr);
+            error.SetMomentum(momentumErr);
+            error.SetCharge(chargeErr);
+            error.SetChi2(physicsTrack.GetChi2());
+        }
+
+        dataHub.SetPrefixFormatOfTreeName("Rep#_Omitted_");
         dataHub.CreateAndFillTree<Hit_t>(ommitedHits, treeIndex)->Write();
+        dataHub.SetPrefixFormatOfTreeName("Rep#_Perfect_");
+        dataHub.CreateAndFillTree<PhysicsTrack>(perfectTracks, treeIndex)->Write();
+        dataHub.SetPrefixFormatOfTreeName("Rep#_Exact_");
+        dataHub.CreateAndFillTree<HelixTrack>(helixTracks, treeIndex)->Write();
+        dataHub.CreateAndFillTree<PhysicsTrack>(physicsTracks, treeIndex)->Write();
+        dataHub.SetPrefixFormatOfTreeName("Rep#_Error_");
+        dataHub.CreateAndFillTree<PhysicsTrack>(errors, treeIndex)->Write();
     }
 
     fileOut.Close();

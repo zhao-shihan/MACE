@@ -1,5 +1,5 @@
-/* template<template<class T> class FitterT_t, class SpectromrterHit_t>
-MACE::ReconTracks::Tracker::Hough<FitterT_t, SpectromrterHit_t>::
+/* template<template<class T> class FitterT_t, class SpectrometerHit_t>
+MACE::ReconTracks::Tracker::Hough<FitterT_t, SpectrometerHit_t>::
 Hough(double r0Low, double r0Up, Eigen::Index nPhi, Eigen::Index nRho, double z0Low, double z0Up, Eigen::Index nZ0, Eigen::Index nAlpha) :
     Base(),
     fRhoLow(1 / r0Up),
@@ -15,12 +15,12 @@ Hough(double r0Low, double r0Up, Eigen::Index nPhi, Eigen::Index nRho, double z0
     fHoughSpaceSZ(nZ0, nAlpha),
     fTrackList(0) {}
 
-template<template<class T> class FitterT_t, class SpectromrterHit_t>
-MACE::ReconTracks::Tracker::Hough<FitterT_t, SpectromrterHit_t>::
+template<template<class T> class FitterT_t, class SpectrometerHit_t>
+MACE::ReconTracks::Tracker::Hough<FitterT_t, SpectrometerHit_t>::
 ~Hough() noexcept = default;
 
-template<template<class T> class FitterT_t, class SpectromrterHit_t>
-void MACE::ReconTracks::Tracker::Hough<FitterT_t, SpectromrterHit_t>::
+template<template<class T> class FitterT_t, class SpectrometerHit_t>
+void MACE::ReconTracks::Tracker::Hough<FitterT_t, SpectrometerHit_t>::
 Reconstruct(const std::vector<HitPtr>& hitData) {
     fHitData = hitData;
 
@@ -55,8 +55,8 @@ Reconstruct(const std::vector<HitPtr>& hitData) {
     GenerateOmitted();
 }
 
-template<template<class T> class FitterT_t, class SpectromrterHit_t>
-void MACE::ReconTracks::Tracker::Hough<FitterT_t, SpectromrterHit_t>::
+template<template<class T> class FitterT_t, class SpectrometerHit_t>
+void MACE::ReconTracks::Tracker::Hough<FitterT_t, SpectrometerHit_t>::
 HoughTransformXY() {
     std::for_each_n(fHoughSpaceXY.data(), fHoughSpaceXY.rows() * fHoughSpaceXY.cols(), [](auto& elem) { elem.clear(); });
     // for each hit
@@ -158,8 +158,8 @@ HoughTransformXY() {
     }
 }
 
-template<template<class T> class FitterT_t, class SpectromrterHit_t>
-void MACE::ReconTracks::Tracker::Hough<FitterT_t, SpectromrterHit_t>::
+template<template<class T> class FitterT_t, class SpectrometerHit_t>
+void MACE::ReconTracks::Tracker::Hough<FitterT_t, SpectrometerHit_t>::
 FindExceedThresholdXY() {
     fPiledTrackList.clear();
     for (Eigen::Index i = 0; i < fHoughSpaceXY.rows(); ++i) {
@@ -181,8 +181,8 @@ FindExceedThresholdXY() {
     );
 }
 
-template<template<class T> class FitterT_t, class SpectromrterHit_t>
-void MACE::ReconTracks::Tracker::Hough<FitterT_t, SpectromrterHit_t>::
+template<template<class T> class FitterT_t, class SpectrometerHit_t>
+void MACE::ReconTracks::Tracker::Hough<FitterT_t, SpectrometerHit_t>::
 HoughTransformSZ(const std::pair<double, double>& center, const std::vector<HitPtr*>* piledTracks) {
     std::for_each_n(fHoughSpaceSZ.data(), fHoughSpaceSZ.rows() * fHoughSpaceSZ.cols(), [](auto& elem) { elem.clear(); });
     // for each hit exceed threshold in XY hough space
@@ -233,8 +233,8 @@ HoughTransformSZ(const std::pair<double, double>& center, const std::vector<HitP
     }
 }
 
-template<template<class T> class FitterT_t, class SpectromrterHit_t>
-void MACE::ReconTracks::Tracker::Hough<FitterT_t, SpectromrterHit_t>::
+template<template<class T> class FitterT_t, class SpectrometerHit_t>
+void MACE::ReconTracks::Tracker::Hough<FitterT_t, SpectrometerHit_t>::
 FindExceedThresholdSZ(const std::pair<double, double>& center) {
     fTrackList.clear();
     auto radius = std::hypot(center.first, center.second);
@@ -255,8 +255,8 @@ FindExceedThresholdSZ(const std::pair<double, double>& center) {
     );
 }
 
-template<template<class T> class FitterT_t, class SpectromrterHit_t>
-void MACE::ReconTracks::Tracker::Hough<FitterT_t, SpectromrterHit_t>::
+template<template<class T> class FitterT_t, class SpectrometerHit_t>
+void MACE::ReconTracks::Tracker::Hough<FitterT_t, SpectrometerHit_t>::
 FitAndDumpToResult(const HelixParameters& parameters, const std::vector<HitPtr*>* track) {
     std::unordered_map<HitPtr, HitPtr*> hitPtrMap;
     hitPtrMap.reserve(track->size());
@@ -278,12 +278,12 @@ FitAndDumpToResult(const HelixParameters& parameters, const std::vector<HitPtr*>
     Base::fReconstructedList.emplace_back(fittedParameters, fittedTrack);
     // remove hough curve
     for (auto&& hitPtr : fittedTrack) {
-        hitPtrMap[hitPtr]->reset(static_cast<SpectromrterHit_t*>(nullptr));
+        hitPtrMap[hitPtr]->reset(static_cast<SpectrometerHit_t*>(nullptr));
     }
 }
 
-template<template<class T> class FitterT_t, class SpectromrterHit_t>
-void MACE::ReconTracks::Tracker::Hough<FitterT_t, SpectromrterHit_t>::
+template<template<class T> class FitterT_t, class SpectrometerHit_t>
+void MACE::ReconTracks::Tracker::Hough<FitterT_t, SpectrometerHit_t>::
 GenerateOmitted() {
     for (auto&& hitPtr : fHitData) {
         if (hitPtr) {

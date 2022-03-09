@@ -19,10 +19,11 @@ public:
     PhysicsTrack& operator=(const PhysicsTrack&) noexcept = default;
     PhysicsTrack& operator=(PhysicsTrack&&) noexcept = default;
 
-    PhysicsTrack(const HelixTrack& helix, UInt_t absQ, Double_t B);
+    PhysicsTrack(const HelixTrack& helix, UInt_t absQ, Double_t B, Double_t mass);
 
     [[nodiscard]] const auto& GetVertexTime() const { return fVertexTime; }
     [[nodiscard]] const auto& GetVertexPosition() const { return fVertexPosition; }
+    [[nodiscard]] const auto& GetEnergy() const { return fEnergy; }
     [[nodiscard]] const auto& GetMomentum() const { return fMomentum; }
     [[nodiscard]] const auto& GetCharge() const { return fCharge; }
     [[nodiscard]] const auto& GetChi2() const { return fChi2; }
@@ -31,9 +32,10 @@ public:
     void SetVertexPosition(const TEveVectorD& pos) { fVertexPosition = pos; }
     void SetVertexPosition(TEveVectorD&& pos) { fVertexPosition = std::move(pos); }
     void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition.Set(x, y, z); }
-    void SetMomentum(const TEveVectorD& mom) { fVertexPosition = mom; }
-    void SetMomentum(TEveVectorD&& mom) { fVertexPosition = std::move(mom); }
-    void SetMomentum(Double_t pX, Double_t pY, Double_t pZ) { fVertexPosition.Set(pX, pY, pZ); }
+    void SetEnergy(Double_t E) { fEnergy = E; }
+    void SetMomentum(const TEveVectorD& mom) { fMomentum = mom; }
+    void SetMomentum(TEveVectorD&& mom) { fMomentum = std::move(mom); }
+    void SetMomentum(Double_t pX, Double_t pY, Double_t pZ) { fMomentum.Set(pX, pY, pZ); }
     void SetCharge(Int_t q) { fCharge = q; }
     void SetChi2(Double_t val) { fChi2 = val; }
 
@@ -48,12 +50,14 @@ private:
 private:
     Double_t    fVertexTime;
     TEveVectorD fVertexPosition;
+    Double_t    fEnergy;
     TEveVectorD fMomentum;
     Int_t       fCharge;
     Double_t    fChi2;
 
     static DoubleBranchSocket   fgVertexTime;
     static Vector3FBranchSocket fgVertexPosition;
+    static FloatBranchSocket    fgEnergy;
     static Vector3FBranchSocket fgMomentum;
     static IntBranchSocket      fgCharge;
     static FloatBranchSocket    fgChi2;
@@ -63,6 +67,7 @@ inline void MACE::DataModel::PhysicsTrack::FillBranchSockets() const noexcept {
     Base::FillBranchSockets();
     fgVertexTime.Value() = fVertexTime;
     fgVertexPosition.Value() = fVertexPosition;
+    fgEnergy.Value() = fEnergy;
     fgMomentum.Value() = fMomentum;
     fgCharge.Value() = fCharge;
     fgChi2.Value() = fChi2;

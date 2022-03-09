@@ -1,5 +1,5 @@
-template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t>
-void MACE::ReconTracks::Tracker::PerfectFinder<FitterT_t, SpectromrterHit_t, Track_t>::
+template<template<class H, class T> class FitterT_t, class SpectrometerHit_t, class Track_t>
+void MACE::ReconTracks::Tracker::PerfectFinder<FitterT_t, SpectrometerHit_t, Track_t>::
 Reconstruct(const std::vector<HitPtr>& hitData) {
     this->fTrackList.clear();
     this->fTrackedHitList.clear();
@@ -21,9 +21,9 @@ Reconstruct(const std::vector<HitPtr>& hitData) {
     }
 }
 
-template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t>
-std::vector<typename MACE::ReconTracks::Tracker::PerfectFinder<FitterT_t, SpectromrterHit_t, Track_t>::HitPtr>
-MACE::ReconTracks::Tracker::PerfectFinder<FitterT_t, SpectromrterHit_t, Track_t>::
+template<template<class H, class T> class FitterT_t, class SpectrometerHit_t, class Track_t>
+std::vector<typename MACE::ReconTracks::Tracker::PerfectFinder<FitterT_t, SpectrometerHit_t, Track_t>::HitPtr>
+MACE::ReconTracks::Tracker::PerfectFinder<FitterT_t, SpectrometerHit_t, Track_t>::
 LexicographicalSort(std::vector<HitPtr> hitData) {
     std::ranges::sort(hitData,
         [](const auto& hit1, const auto& hit2) {
@@ -35,9 +35,9 @@ LexicographicalSort(std::vector<HitPtr> hitData) {
     return hitData;
 }
 
-template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t>
-std::vector<std::vector<typename MACE::ReconTracks::Tracker::PerfectFinder<FitterT_t, SpectromrterHit_t, Track_t>::HitPtr>>
-MACE::ReconTracks::Tracker::PerfectFinder<FitterT_t, SpectromrterHit_t, Track_t>::
+template<template<class H, class T> class FitterT_t, class SpectrometerHit_t, class Track_t>
+std::vector<std::vector<typename MACE::ReconTracks::Tracker::PerfectFinder<FitterT_t, SpectrometerHit_t, Track_t>::HitPtr>>
+MACE::ReconTracks::Tracker::PerfectFinder<FitterT_t, SpectrometerHit_t, Track_t>::
 ClassifyToG4Tracks(const std::vector<HitPtr>& sortedHitData) const {
     std::vector<std::vector<HitPtr>> g4Tracks;
     g4Tracks.reserve(sortedHitData.size() / fThreshold);
@@ -58,8 +58,8 @@ ClassifyToG4Tracks(const std::vector<HitPtr>& sortedHitData) const {
     return g4Tracks;
 }
 
-template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t>
-void MACE::ReconTracks::Tracker::PerfectFinder<FitterT_t, SpectromrterHit_t, Track_t>::
+template<template<class H, class T> class FitterT_t, class SpectrometerHit_t, class Track_t>
+void MACE::ReconTracks::Tracker::PerfectFinder<FitterT_t, SpectrometerHit_t, Track_t>::
 CutByLayerID(std::vector<HitPtr>& g4Track) {
     const auto lastHitIter = std::prev(g4Track.cend());
     for (auto hitIter = g4Track.cbegin(); hitIter != lastHitIter; ++hitIter) {
@@ -73,8 +73,8 @@ CutByLayerID(std::vector<HitPtr>& g4Track) {
     }
 }
 
-template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t>
-void MACE::ReconTracks::Tracker::PerfectFinder<FitterT_t, SpectromrterHit_t, Track_t>::
+template<template<class H, class T> class FitterT_t, class SpectrometerHit_t, class Track_t>
+void MACE::ReconTracks::Tracker::PerfectFinder<FitterT_t, SpectrometerHit_t, Track_t>::
 FitAndDumpToResult(std::vector<HitPtr>& candidate) {
     auto track = std::make_shared<Track_t>();
     bool good = this->fFitter->Fit(candidate, *track);

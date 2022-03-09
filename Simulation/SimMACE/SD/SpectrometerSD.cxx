@@ -79,6 +79,7 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         hit->SetHitPositionZ((zIn + zOut) / 2);
         hit->SetCellID(cellID);
         hit->SetLayerID(layerID);
+        hit->SetEnergy((enterPoint.GetTotalEnergy() + exitPoint->GetTotalEnergy()) / 2);
         hit->SetMomentum((enterPoint.GetMomentum() + exitPoint->GetMomentum()) / 2);
         hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
         hit->SetVertexPosition(track->GetVertexPosition());

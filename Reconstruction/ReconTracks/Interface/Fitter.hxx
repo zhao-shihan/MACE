@@ -2,16 +2,16 @@
 
 #include "ReconTracks/Global.hxx"
 
-template<class SpectromrterHit_t, class Track_t>
+template<class SpectrometerHit_t, class Track_t>
 class MACE::ReconTracks::Interface::Fitter {
-    MACE_RECONSPECTROMETER_SPECTROMETERHIT_CONCEPT(SpectromrterHit_t);
+    MACE_RECONSPECTROMETER_SPECTROMETERHIT_CONCEPT(SpectrometerHit_t);
     MACE_RECONSPECTROMETER_TRACK_CONCEPT(Track_t);
 
     Fitter(const Fitter&) = delete;
     Fitter& operator=(const Fitter&) = delete;
 
 protected:
-    using HitPtr = std::shared_ptr<SpectromrterHit_t>;
+    using HitPtr = std::shared_ptr<SpectrometerHit_t>;
 
     Fitter();
     virtual ~Fitter() noexcept = default;

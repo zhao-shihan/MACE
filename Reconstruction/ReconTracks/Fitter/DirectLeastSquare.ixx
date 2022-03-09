@@ -1,7 +1,7 @@
 #include "Eigen/LU"
 
-template<class SpectromrterHit_t, class Track_t>
-bool MACE::ReconTracks::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
+template<class SpectrometerHit_t, class Track_t>
+bool MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
 Fit(std::vector<HitPtr>& hitData, Track_t& track) {
     Initialize(hitData);
 
@@ -16,8 +16,8 @@ Fit(std::vector<HitPtr>& hitData, Track_t& track) {
     return true;
 }
 
-template<class SpectromrterHit_t, class Track_t>
-void MACE::ReconTracks::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
+template<class SpectrometerHit_t, class Track_t>
+void MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
 Initialize(std::vector<HitPtr>& hitData) {
     // sort data by layer ID
     std::ranges::sort(hitData,
@@ -41,8 +41,8 @@ Initialize(std::vector<HitPtr>& hitData) {
     }
 }
 
-template<class SpectromrterHit_t, class Track_t>
-bool MACE::ReconTracks::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
+template<class SpectrometerHit_t, class Track_t>
+bool MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
 InitialCircleFit() {
     auto& Xc = fCircleParameters[0];
     auto& Yc = fCircleParameters[1];
@@ -85,8 +85,8 @@ InitialCircleFit() {
     return true;
 }
 
-template<class SpectromrterHit_t, class Track_t>
-bool MACE::ReconTracks::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
+template<class SpectrometerHit_t, class Track_t>
+bool MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
 CircleFit() {
     double lastVar;
     auto [thisVar, grad, hessian] = CircleVarianceGradHessian();
@@ -118,8 +118,8 @@ CircleFit() {
     return true;
 }
 
-template<class SpectromrterHit_t, class Track_t>
-void MACE::ReconTracks::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
+template<class SpectrometerHit_t, class Track_t>
+void MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
 RevolveFit() {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];
@@ -150,8 +150,8 @@ RevolveFit() {
     }
 }
 
-template<class SpectromrterHit_t, class Track_t>
-void MACE::ReconTracks::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
+template<class SpectrometerHit_t, class Track_t>
+void MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
 Finalize(Track_t& track) {
     track.SetCenter(fCircleParameters[0], fCircleParameters[1]);
     track.SetRadius(fCircleParameters[2]);
@@ -160,8 +160,8 @@ Finalize(Track_t& track) {
     track.SetChi2(CalculateReducedChi2());
 }
 
-template<class SpectromrterHit_t, class Track_t>
-inline bool MACE::ReconTracks::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
+template<class SpectrometerHit_t, class Track_t>
+inline bool MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
 CircleParametersIsOutOfBound() const {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];
@@ -181,8 +181,8 @@ CircleParametersIsOutOfBound() const {
     }
 }
 
-template<class SpectromrterHit_t, class Track_t>
-inline double MACE::ReconTracks::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
+template<class SpectrometerHit_t, class Track_t>
+inline double MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
 CircleVariance(const double& Xc, const double& Yc, const double& R) const {
     const auto rX = Xc - fWireX;
     const auto rY = Yc - fWireY;
@@ -198,8 +198,8 @@ CircleVariance(const double& Xc, const double& Yc, const double& R) const {
     return variance / (R * R * fN);
 }
 
-template<class SpectromrterHit_t, class Track_t>
-inline std::tuple<double, Eigen::Vector3d, Eigen::Matrix3d> MACE::ReconTracks::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
+template<class SpectrometerHit_t, class Track_t>
+inline std::tuple<double, Eigen::Vector3d, Eigen::Matrix3d> MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
 CircleVarianceGradHessian() const {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];
@@ -257,8 +257,8 @@ CircleVarianceGradHessian() const {
     return std::make_tuple(v000, grad, hessian);
 }
 
-template<class SpectromrterHit_t, class Track_t>
-double MACE::ReconTracks::Fitter::DirectLeastSquare<SpectromrterHit_t, Track_t>::
+template<class SpectrometerHit_t, class Track_t>
+double MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
 CalculateReducedChi2() {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];

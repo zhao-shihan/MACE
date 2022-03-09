@@ -11,16 +11,17 @@ namespace MACE {
 
     namespace ReconTracks {
         namespace Fitter {
-            template<class SpectromrterHit_t, class Track_t> class DirectLeastSquare;
-            template<class SpectromrterHit_t, class Track_t> class Dummy;
+            template<class SpectrometerHit_t, class Track_t> class DirectLeastSquare;
+            template<class SpectrometerHit_t, class Track_t> class Dummy;
+            template<class SpectrometerHit_t, class Track_t> class PerfectFitter;
         }
         namespace Interface {
-            template<class SpectromrterHit_t, class Track_t> class Fitter;
-            template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t> class Tracker;
+            template<class SpectrometerHit_t, class Track_t> class Fitter;
+            template<template<class H, class T> class FitterT_t, class SpectrometerHit_t, class Track_t> class Tracker;
         }
         namespace Tracker {
-            template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t> class Hough;
-            template<template<class H, class T> class FitterT_t, class SpectromrterHit_t, class Track_t> class PerfectFinder;
+            template<template<class H, class T> class FitterT_t, class SpectrometerHit_t, class Track_t> class Hough;
+            template<template<class H, class T> class FitterT_t, class SpectrometerHit_t, class Track_t> class PerfectFinder;
         }
     }
 

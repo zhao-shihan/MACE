@@ -4,25 +4,22 @@
 
 #include "Eigen/Core"
 
-#include "ReconTracks/Global.hxx"
 #include "ReconTracks/Interface/Fitter.hxx"
 #include "LiteralUnits.hxx"
 
-template<class SpectromrterHit_t, class Track_t>
+template<class SpectrometerHit_t, class Track_t>
 class MACE::ReconTracks::Fitter::DirectLeastSquare final :
-    public MACE::ReconTracks::Interface::Fitter<SpectromrterHit_t, Track_t> {
+    public MACE::ReconTracks::Interface::Fitter<SpectrometerHit_t, Track_t> {
     MACE_RECONSPECTROMETER_HELIXTRACK_CONCEPT(Track_t);
-
-    DirectLeastSquare(const DirectLeastSquare&) = delete;
-    DirectLeastSquare& operator=(const DirectLeastSquare&) = delete;
-
 protected:
-    using Base = MACE::ReconTracks::Interface::Fitter<SpectromrterHit_t, Track_t>;
+    using Base = MACE::ReconTracks::Interface::Fitter<SpectrometerHit_t, Track_t>;
     using HitPtr = typename Base::HitPtr;
 
 public:
     DirectLeastSquare() = default;
     ~DirectLeastSquare() noexcept = default;
+    DirectLeastSquare(const DirectLeastSquare&) = delete;
+    DirectLeastSquare& operator=(const DirectLeastSquare&) = delete;
 
     void SetCenterXBound(double low, double up) { fXcBound = { low, up }; }
     void SetCenterYBound(double low, double up) { fYcBound = { low, up }; }

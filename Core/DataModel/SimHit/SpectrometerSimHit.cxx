@@ -2,7 +2,8 @@
 
 using namespace MACE::DataModel;
 
-Vector3FBranchSocket       SpectrometerSimHit::fgMomentum("mom", 0, 0, 0);
+FloatBranchSocket            SpectrometerSimHit::fgEnergy("E", 0);
+Vector3FBranchSocket       SpectrometerSimHit::fgMomentum("p", 0, 0, 0);
 DoubleBranchSocket       SpectrometerSimHit::fgVertexTime("vtxT", 0);
 Vector3FBranchSocket SpectrometerSimHit::fgVertexPosition("vtx", 0, 0, 0);
 IntBranchSocket             SpectrometerSimHit::fgPDGCode("pdgCode", std::numeric_limits<Int_t>::max());
@@ -11,6 +12,7 @@ IntBranchSocket             SpectrometerSimHit::fgTrackID("trkID", -1);
 
 SpectrometerSimHit::SpectrometerSimHit() noexcept :
     Base(),
+    fEnergy(fgEnergy.Value()),
     fMomentum(fgMomentum.Value()),
     fVertexTime(fgVertexTime.Value()),
     fVertexPosition(fgVertexPosition.Value()),
@@ -20,6 +22,7 @@ SpectrometerSimHit::SpectrometerSimHit() noexcept :
 
 void SpectrometerSimHit::CreateBranches(TTree& tree) {
     Base::CreateBranches(tree);
+    fgEnergy.CreateBranch(tree);
     fgMomentum.CreateBranch(tree);
     fgVertexTime.CreateBranch(tree);
     fgVertexPosition.CreateBranch(tree);
@@ -30,6 +33,7 @@ void SpectrometerSimHit::CreateBranches(TTree& tree) {
 
 void SpectrometerSimHit::ConnectToBranches(TTree& tree) {
     Base::ConnectToBranches(tree);
+    fgEnergy.ConnectToBranch(tree);
     fgMomentum.ConnectToBranch(tree);
     fgVertexTime.ConnectToBranch(tree);
     fgVertexPosition.ConnectToBranch(tree);
