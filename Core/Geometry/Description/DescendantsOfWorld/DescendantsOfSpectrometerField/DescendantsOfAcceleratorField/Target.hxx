@@ -28,8 +28,10 @@ public:
 
     void SetWidth(double val) { fWidth = val; }
     void SetThickness(double val) { fThickness = val; }
+    void SetRetreat(double val) { fRetreat = val; }
 
 private:
-    double fWidth = 60_mm;
-    double fThickness = 10_mm;
+    double fWidth = 6_cm;
+    double fThickness = 1_cm;
+    double fRetreat = 13.05_mm;
 };

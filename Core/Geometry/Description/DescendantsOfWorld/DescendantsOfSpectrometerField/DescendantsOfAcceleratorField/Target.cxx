@@ -12,6 +12,6 @@ Target& Target::Instance() noexcept {
 
 G4Transform3D Target::GetTransform() const {
     const auto& acceleratorField = AcceleratorField::Instance();
-    auto transZ = acceleratorField.GetLength() / 2 - acceleratorField.GetDownStreamLength() - fThickness / 2;
+    auto transZ = acceleratorField.GetLength() / 2 - acceleratorField.GetDownStreamLength() - fThickness / 2 - fRetreat;;
     return G4Transform3D(G4RotationMatrix(), G4ThreeVector(0, 0, transZ));
 }

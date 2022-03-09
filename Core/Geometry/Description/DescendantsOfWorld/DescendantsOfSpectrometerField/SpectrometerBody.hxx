@@ -39,10 +39,10 @@ public:
     void SetShellOuterThickness(double val) { fShellOuterThickness = val; }
 
 private:
-    double fGasInnerRadius = 10_cm;
-    double fGasOuterRadius = 50_cm;
+    double fGasInnerRadius = 20_cm;
+    double fGasOuterRadius = 40_cm;
     double fGasInnerLength = 100_cm;
-    double fGasOuterLength = 200_cm;
+    double fGasOuterLength = 165_cm;
     double fShellInnerThickness = 1_mm;
     double fShellSideThickness = 5_mm;
     double fShellOuterThickness = 10_mm;

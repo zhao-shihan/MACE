@@ -38,9 +38,9 @@ public:
 
 private:
     double fInnerRadius = 5_mm;
-    double fOuterRadius = 45_mm;
+    double fOuterRadius = 65_mm;
     double fLength = 30_cm;
     double fZPosition = -20_cm;
     double fThickness = 0.75_mm;
-    int fCount = 5;
+    int fCount = 7;
 };

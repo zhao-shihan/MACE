@@ -37,7 +37,7 @@ public:
     void SetDownStreamLength(double val) { fDownStreamLength = val; }
 
 private:
-    double fRadius = 5_cm;
-    double fLength = 105_cm;
-    double fDownStreamLength = 100_cm;
+    double fRadius = 75_mm;
+    double fLength = 80_cm;
+    double fDownStreamLength = 70_cm;
 };

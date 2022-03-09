@@ -8,7 +8,7 @@ using AccFldGeomDscrpt = MACE::Geometry::Description::AcceleratorField;
 
 AcceleratorField::AcceleratorField() :
     G4ElectroMagneticField(),
-    fEz(7_kV / (AccFldGeomDscrpt::Instance().GetDownStreamLength() - 13.05_mm)) {
+    fEz(7_kV / AccFldGeomDscrpt::Instance().GetDownStreamLength()) {
     FieldMessenger::Instance().Set(this);
 }
 
@@ -23,10 +23,5 @@ void AcceleratorField::GetFieldValue(const G4double*, G4double* F) const {
 
 void AcceleratorField::SetAcceleratorPotential(G4double V) {
     fV = V;
-    fEz = fV / (AccFldGeomDscrpt::Instance().GetDownStreamLength() - fMuoniumDecayAvgZ);
-}
-
-void AcceleratorField::SetMuoniumDecayAvgZ(G4double decayAvgZ) {
-    fMuoniumDecayAvgZ = decayAvgZ;
-    fEz = fV / (AccFldGeomDscrpt::Instance().GetDownStreamLength() - fMuoniumDecayAvgZ);
+    fEz = fV / AccFldGeomDscrpt::Instance().GetDownStreamLength();
 }
