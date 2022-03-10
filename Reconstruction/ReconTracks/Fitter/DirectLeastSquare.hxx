@@ -21,39 +21,66 @@ public:
     DirectLeastSquare(const DirectLeastSquare&) = delete;
     DirectLeastSquare& operator=(const DirectLeastSquare&) = delete;
 
-    void SetCenterXBound(double low, double up) { fXcBound = { low, up }; }
-    void SetCenterYBound(double low, double up) { fYcBound = { low, up }; }
+    void SetCenterXBound(double low, double up) { fXcBound = std::make_pair(low, up); }
+    void SetCenterYBound(double low, double up) { fYcBound = std::make_pair(low, up); }
     void SetRadiusBound(double up) { fRBound = up; }
 
+    // For calculating the gradient and hessian
     void SetDerivativeStep(double h) { fH = h; }
+
     void SetTolerance(double val) { fTolerance = val; }
-    void SetMaxSteps(size_t val) { fMaxSteps = val; }
+
+    // Stop condition for Newton-Raphson method
+    void SetMaxStepsForNewtonRaphson(size_t val) { fMaxStepsNR = val; }
+    // Settings for conjugate gradient method
+    void SetSufficientDecreaseCoefficient(double val) { fSufficentCoeff = val; }
+    void SetBackTrackingLength(double val) { fBackTrackingLength = val; }
+    void SetMaxStepsForConjugateGrad(size_t val) { fMaxStepsCG = val; }
 
     bool Fit(std::vector<HitPtr>& hitData, Track_t& track) override;
 
 private:
+    enum MinimizerState {
+        kSuccess,
+        kMaxStepsReached,
+        kParameterBoundsReached
+    };
+
+private:
     void Initialize(std::vector<HitPtr>& hitData);
+    void InitialScaling();
     [[nodiscard]] bool InitialCircleFit();
     [[nodiscard]] bool CircleFit();
     void RevolveFit();
+    void FinalScaling();
     void Finalize(Track_t& track);
 
     [[nodiscard]] inline bool CircleParametersIsOutOfBound() const;
 
-    [[nodiscard]] inline double CircleVariance(const double& Xc, const double& Yc, const double& R) const;
-    [[nodiscard]] inline double CircleVariance() const { return CircleVariance(fCircleParameters[0], fCircleParameters[1], fCircleParameters[2]); }
-    [[nodiscard]] inline std::tuple<double, Eigen::Vector3d, Eigen::Matrix3d> CircleVarianceGradHessian() const;
+    [[nodiscard]] inline double TargetFunction(const double& Xc, const double& Yc, const double& R) const;
+    [[nodiscard]] inline double TargetFunction() const { return TargetFunction(fCircleParameters[0], fCircleParameters[1], fCircleParameters[2]); }
+    [[nodiscard]] inline std::pair<double, Eigen::Vector3d> TargetGrad() const;
+    [[nodiscard]] inline std::tuple<double, Eigen::Vector3d, Eigen::Matrix3d> TargetGradHessian() const;
+
+    [[nodiscard]] MinimizerState CircleFitNewtonRaphson();
+    [[nodiscard]] MinimizerState CircleFitConjugateGrad();
 
     [[nodiscard]] double CalculateReducedChi2();
 
 private:
+    double fScalingFactor = 1 / 30_cm;
+
     std::pair<double, double> fXcBound = { -10_m, 10_m };
     std::pair<double, double> fYcBound = { -10_m, 10_m };
     double fRBound = 10_m;
 
     double fH = 1e-3;
+
     double fTolerance = 1e-6;
-    size_t fMaxSteps = 5000;
+    size_t fMaxStepsNR = 500;
+    double fSufficentCoeff = 1e-4;
+    double fBackTrackingLength = 0.1;
+    size_t fMaxStepsCG = 10000;
 
     size_t fN;
     std::valarray<double> fWireX;

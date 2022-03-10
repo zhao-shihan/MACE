@@ -24,7 +24,8 @@ int main(int, char** argv) {
     reconstructor.SetThreshold(std::stoi(argv[2]));
     reconstructor.GetFitter()->SetVerbose(std::stoi(argv[3]));
     reconstructor.GetFitter()->SetTolerance(std::stod(argv[4]));
-    reconstructor.GetFitter()->SetMaxSteps(std::stod(argv[5]));
+    reconstructor.GetFitter()->SetMaxStepsForNewtonRaphson(std::stod(argv[5]));
+    reconstructor.GetFitter()->SetMaxStepsForConjugateGrad(std::stod(argv[6]));
 
     Tracker::PerfectFinder<Fitter::PerfectFitter, Hit_t, PhysicsTrack> perfectReconstructor;
     auto&& perfectFitter = *perfectReconstructor.GetFitter();
