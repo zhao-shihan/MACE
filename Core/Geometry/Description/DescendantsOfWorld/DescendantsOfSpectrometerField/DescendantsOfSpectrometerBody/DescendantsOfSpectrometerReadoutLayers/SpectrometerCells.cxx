@@ -1,8 +1,10 @@
 #include <cmath>
+#include <numbers>
 
 #include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/SpectrometerReadoutLayers.hxx"
 #include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/SpectrometerCells.hxx"
 
+namespace sn = std::numbers;
 using namespace MACE::Geometry::Description;
 
 SpectrometerCells& SpectrometerCells::Instance() noexcept {
@@ -19,10 +21,13 @@ std::vector<std::tuple<double, double, std::vector<G4RotationMatrix>>> Spectrome
     std::vector<std::tuple<double, double, std::vector<G4RotationMatrix>>> infoList(0);
     infoList.reserve(layerCount);
 
+    int cellCount = 1;
     for (size_t layerID = 0; layerID < layerCount; ++layerID) {
         auto&& [layerRadius, halfLength] = layerInfoList[layerID];
-        const auto cellCount = 4 * std::lround(M_PI_2 / (2 * std::asin(layerThick / (2 * layerRadius))));
-        const auto cellDeltaPhi = 2 * M_PI / cellCount;
+        if (2 * sn::pi * layerRadius / cellCount > (1 + fAllowedDistortion) * layerThick) {
+            cellCount = 4 * std::lround((sn::pi / 2) * layerRadius / ((1 - fAllowedDistortion) * layerThick));
+        }
+        const auto cellDeltaPhi = 2 * sn::pi / cellCount;
         const auto firstCellPhi = (layerID % 2 == 0) ? 0 : (cellDeltaPhi / 2);
 
         auto&& infoSubList = std::get<2>(infoList.emplace_back(cellDeltaPhi, halfLength, 0));
