@@ -23,20 +23,22 @@ public:
 
     [[nodiscard]] const auto& GetVertexTime() const { return fVertexTime; }
     [[nodiscard]] const auto& GetVertexPosition() const { return fVertexPosition; }
-    [[nodiscard]] const auto& GetEnergy() const { return fEnergy; }
-    [[nodiscard]] const auto& GetMomentum() const { return fMomentum; }
+    [[nodiscard]] const auto& GetVertexEnergy() const { return fVertexEnergy; }
+    [[nodiscard]] const auto& GetVertexMomentum() const { return fVertexMomentum; }
     [[nodiscard]] const auto& GetCharge() const { return fCharge; }
+    [[nodiscard]] const auto& GetNumberOfFittedPoints() const { return fNumberOfFittedPoints; }
     [[nodiscard]] const auto& GetChi2() const { return fChi2; }
 
     void SetVertexTime(Double_t val) { fVertexTime = val; }
     void SetVertexPosition(const TEveVectorD& pos) { fVertexPosition = pos; }
     void SetVertexPosition(TEveVectorD&& pos) { fVertexPosition = std::move(pos); }
     void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition.Set(x, y, z); }
-    void SetEnergy(Double_t E) { fEnergy = E; }
-    void SetMomentum(const TEveVectorD& mom) { fMomentum = mom; }
-    void SetMomentum(TEveVectorD&& mom) { fMomentum = std::move(mom); }
-    void SetMomentum(Double_t pX, Double_t pY, Double_t pZ) { fMomentum.Set(pX, pY, pZ); }
+    void SetVertexEnergy(Double_t E) { fVertexEnergy = E; }
+    void SetVertexMomentum(const TEveVectorD& mom) { fVertexMomentum = mom; }
+    void SetVertexMomentum(TEveVectorD&& mom) { fVertexMomentum = std::move(mom); }
+    void SetVertexMomentum(Double_t pX, Double_t pY, Double_t pZ) { fVertexMomentum.Set(pX, pY, pZ); }
     void SetCharge(Int_t q) { fCharge = q; }
+    void SetNumberOfFittedPoints(Int_t n) { fNumberOfFittedPoints = n; }
     void SetChi2(Double_t val) { fChi2 = val; }
 
 protected:
@@ -50,16 +52,18 @@ private:
 private:
     Double_t    fVertexTime;
     TEveVectorD fVertexPosition;
-    Double_t    fEnergy;
-    TEveVectorD fMomentum;
+    Double_t    fVertexEnergy;
+    TEveVectorD fVertexMomentum;
     Int_t       fCharge;
+    Int_t       fNumberOfFittedPoints;
     Double_t    fChi2;
 
     static DoubleBranchSocket   fgVertexTime;
     static Vector3FBranchSocket fgVertexPosition;
-    static FloatBranchSocket    fgEnergy;
-    static Vector3FBranchSocket fgMomentum;
+    static FloatBranchSocket    fgVertexEnergy;
+    static Vector3FBranchSocket fgVertexMomentum;
     static IntBranchSocket      fgCharge;
+    static IntBranchSocket      fgNumberOfFittedPoints;
     static FloatBranchSocket    fgChi2;
 };
 
@@ -67,8 +71,9 @@ inline void MACE::DataModel::PhysicsTrack::FillBranchSockets() const noexcept {
     Base::FillBranchSockets();
     fgVertexTime.Value() = fVertexTime;
     fgVertexPosition.Value() = fVertexPosition;
-    fgEnergy.Value() = fEnergy;
-    fgMomentum.Value() = fMomentum;
+    fgVertexEnergy.Value() = fVertexEnergy;
+    fgVertexMomentum.Value() = fVertexMomentum;
     fgCharge.Value() = fCharge;
+    fgNumberOfFittedPoints.Value() = fNumberOfFittedPoints;
     fgChi2.Value() = fChi2;
 }

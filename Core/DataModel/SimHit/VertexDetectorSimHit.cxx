@@ -3,7 +3,7 @@
 using namespace MACE::DataModel;
 
 DoubleBranchSocket       VertexDetectorSimHit::fgVertexTime("vtxT", 0);
-Vector3FBranchSocket VertexDetectorSimHit::fgVertexPosition("vtx", 0, 0, 0);
+Vector3FBranchSocket VertexDetectorSimHit::fgVertexPosition("vtxX", 0, 0, 0);
 IntBranchSocket             VertexDetectorSimHit::fgPDGCode("pdgCode", std::numeric_limits<Int_t>::max());
 IntBranchSocket             VertexDetectorSimHit::fgEventID("evtID", -1);
 IntBranchSocket             VertexDetectorSimHit::fgTrackID("trkID", -1);

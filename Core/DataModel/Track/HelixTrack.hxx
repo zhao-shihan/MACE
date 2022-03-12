@@ -24,6 +24,7 @@ public:
     [[nodiscard]] const auto& GetRadius() const { return fRadius; }
     [[nodiscard]] const auto& GetZ0() const { return fZ0; }
     [[nodiscard]] const auto& GetAlpha() const { return fAlpha; }
+    [[nodiscard]] const auto& GetNumberOfFittedPoints() const { return fNumberOfFittedPoints; }
     [[nodiscard]] const auto& GetChi2() const { return fChi2; }
 
     void SetVertexTime(Double_t val) { fVertexTime = val; }
@@ -33,6 +34,7 @@ public:
     void SetRadius(Double_t val) { fRadius = val; }
     void SetZ0(Double_t val) { fZ0 = val; }
     void SetAlpha(Double_t val) { fAlpha = val; }
+    void SetNumberOfFittedPoints(Int_t n) { fNumberOfFittedPoints = n; }
     void SetChi2(Double_t val) { fChi2 = val; }
 
 protected:
@@ -49,6 +51,7 @@ private:
     Double_t     fRadius;
     Double_t     fZ0;
     Double_t     fAlpha;
+    Int_t        fNumberOfFittedPoints;
     Double_t     fChi2;
 
     static DoubleBranchSocket   fgVertexTime;
@@ -56,6 +59,7 @@ private:
     static FloatBranchSocket    fgRadius;
     static FloatBranchSocket    fgZ0;
     static FloatBranchSocket    fgAlpha;
+    static IntBranchSocket      fgNumberOfFittedPoints;
     static FloatBranchSocket    fgChi2;
 };
 
@@ -66,5 +70,6 @@ inline void MACE::DataModel::HelixTrack::FillBranchSockets() const noexcept {
     fgRadius.Value() = fRadius;
     fgZ0.Value() = fZ0;
     fgAlpha.Value() = fAlpha;
+    fgNumberOfFittedPoints.Value() = fNumberOfFittedPoints;
     fgChi2.Value() = fChi2;
 }

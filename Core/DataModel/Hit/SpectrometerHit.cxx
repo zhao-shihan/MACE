@@ -3,10 +3,10 @@
 using namespace MACE::DataModel;
 
 DoubleBranchSocket                SpectrometerHit::fgHitTime("hitT", 0);
-FloatBranchSocket           SpectrometerHit::fgDriftDistance("drift", 0);
+FloatBranchSocket           SpectrometerHit::fgDriftDistance("hitD", 0);
 FloatBranchSocket            SpectrometerHit::fgHitPositionZ("hitZ", 0);
-FloatBranchSocket   SpectrometerHit::fgDriftDistanceVariance("varDrift", 0);
-FloatBranchSocket    SpectrometerHit::fgHitPositionZVariance("varHitZ", 0);
+FloatBranchSocket   SpectrometerHit::fgDriftDistanceVariance("vhitD", 0);
+FloatBranchSocket    SpectrometerHit::fgHitPositionZVariance("vhitZ", 0);
 IntBranchSocket                    SpectrometerHit::fgCellID("cellID", -1);
 IntBranchSocket                   SpectrometerHit::fgLayerID("layerID", -1);
 Vector2FBranchSocket         SpectrometerHit::fgWirePosition("wire", 0, 0);

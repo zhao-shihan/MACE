@@ -71,6 +71,9 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         const auto r1 = rIn - rWire;
         const auto r2 = rOut - rWire;
         const auto driftDistance = std::abs(r1.x() * r2.y() - r2.x() * r1.y()) / (r1 - r2).mag();
+        // calculate vertex energy and momentum
+        const auto vertexTotalEnergy = track->GetVertexKineticEnergy() + particle->GetPDGMass();
+        const auto vertexMomentum = track->GetVertexMomentumDirection() * std::sqrt(track->GetVertexKineticEnergy() * (vertexTotalEnergy + particle->GetPDGMass()));
         // new a hit
         auto* const hit = new SpectrometerHit();
         hit->SetHitTime((tIn + tOut) / 2);
@@ -83,6 +86,8 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         hit->SetMomentum((enterPoint.GetMomentum() + exitPoint->GetMomentum()) / 2);
         hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
         hit->SetVertexPosition(track->GetVertexPosition());
+        hit->SetVertexEnergy(vertexTotalEnergy);
+        hit->SetVertexMomentum(vertexMomentum);
         hit->SetPDGCode(particle->GetPDGEncoding());
         hit->SetEventID(fEventID);
         hit->SetTrackID(track->GetTrackID());

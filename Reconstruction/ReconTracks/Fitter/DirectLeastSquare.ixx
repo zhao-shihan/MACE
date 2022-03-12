@@ -11,9 +11,7 @@ Fit(std::vector<HitPtr>& hitData, Track_t& track) {
     if (CircleFit() == false) { [[unlikely]] return false; }
     RevolveFit();
 
-    Finalize(track);
-
-    track.SetVertexTime(hitData.front()->GetHitTime());
+    Finalize(hitData, track);
 
     return true;
 }
@@ -171,11 +169,13 @@ FinalScaling() {
 
 template<class SpectrometerHit_t, class Track_t>
 void MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
-Finalize(Track_t& track) {
+Finalize(const std::vector<HitPtr>& hitData, Track_t& track) {
+    track.SetVertexTime(hitData.front()->GetHitTime());
     track.SetCenter(fCircleParameters[0], fCircleParameters[1]);
     track.SetRadius(fCircleParameters[2]);
     track.SetZ0(fRevolveParameters[0]);
     track.SetAlpha(fRevolveParameters[1]);
+    track.SetNumberOfFittedPoints(hitData.size());
     track.SetChi2(CalculateReducedChi2());
 }
 
@@ -408,7 +408,7 @@ CircleFitConjugateGrad() {
 
         // do stepping
         double stepLength = 1;
-        fCircleParameters += stepLength * step;
+        fCircleParameters += step;
         while (stepLength > 0 and TargetFunction() > thisFunc + fSufficentCoeff * stepLength * step.dot(thisGrad)) {
             stepLength -= fBackTrackingLength;
             fCircleParameters -= fBackTrackingLength * step;

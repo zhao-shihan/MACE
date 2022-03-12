@@ -3,8 +3,8 @@
 using namespace MACE::DataModel;
 
 DoubleBranchSocket               VertexDetectorHit::fgHitTime("hitT", 0);
-Vector2FBranchSocket         VertexDetectorHit::fgHitPosition("hit", 0, 0);
-Vector2FBranchSocket VertexDetectorHit::fgHitPositionVariance("varHit", 0, 0);
+Vector2FBranchSocket         VertexDetectorHit::fgHitPosition("hitX", 0, 0);
+Vector2FBranchSocket VertexDetectorHit::fgHitPositionVariance("vhitX", 0, 0);
 
 VertexDetectorHit::VertexDetectorHit() noexcept :
     Base(),

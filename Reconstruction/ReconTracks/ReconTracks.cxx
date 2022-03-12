@@ -34,7 +34,7 @@ int main(int, char** argv) {
 
     std::string outName(argv[1]);
     outName.erase(outName.length() - 5);
-    MPIFileTools mpiFileOut("reconed_" + outName, ".root");
+    MPIFileTools mpiFileOut(outName + "_rec", ".root");
     TFile fileOut(mpiFileOut.GetFilePath().c_str(), "recreate");
 
     DataHub dataHub;
@@ -45,6 +45,9 @@ int main(int, char** argv) {
     std::cout << "Rank" << MPI::COMM_WORLD.Get_rank() << " is ready to process data of repetition " << treeBegin << " to " << treeEnd - 1 << std::endl;
 
     for (Long64_t treeIndex = treeBegin; treeIndex < treeEnd; ++treeIndex) {
+        dataHub.SetPrefixFormatOfTreeName("Rep#_");
+        std::cout << "Now processing " << dataHub.GetTreeName<Hit_t>(treeIndex) << " ..." << std::endl;
+
         auto tree = dataHub.FindTree<Hit_t>(fileIn, treeIndex);
         auto hitData = dataHub.CreateAndFillList<Hit_t>(*tree);
 
@@ -68,15 +71,15 @@ int main(int, char** argv) {
             const auto& physicsTrack = *physicsTracks[i];
             auto& error = *errors.emplace_back(std::make_shared<PhysicsTrack>());
             perfectFitter.Fit(hits, error);
-            const auto vertexTimeErr = physicsTrack.GetVertexTime() - error.GetVertexTime();
-            const auto vertexPositionErr = physicsTrack.GetVertexPosition() - error.GetVertexPosition();
-            const auto energyErr = physicsTrack.GetEnergy() - error.GetEnergy();
-            const auto momentumErr = physicsTrack.GetMomentum() - error.GetMomentum();
+            const auto timeErr = physicsTrack.GetVertexTime() - error.GetVertexTime();
+            const auto positionErr = physicsTrack.GetVertexPosition() - error.GetVertexPosition();
+            const auto energyErr = physicsTrack.GetVertexEnergy() - error.GetVertexEnergy();
+            const auto momentumErr = physicsTrack.GetVertexMomentum() - error.GetVertexMomentum();
             const auto chargeErr = physicsTrack.GetCharge() - error.GetCharge();
-            error.SetVertexTime(vertexTimeErr);
-            error.SetVertexPosition(vertexPositionErr);
-            error.SetEnergy(energyErr);
-            error.SetMomentum(momentumErr);
+            error.SetVertexTime(timeErr);
+            error.SetVertexPosition(positionErr);
+            error.SetVertexEnergy(energyErr);
+            error.SetVertexMomentum(momentumErr);
             error.SetCharge(chargeErr);
             error.SetChi2(physicsTrack.GetChi2());
         }

@@ -10,9 +10,10 @@ Fit(std::vector<HitPtr>& hitData, Track_t& track) {
     );
     track.SetVertexTime(firstHit->GetVertexTime());
     track.SetVertexPosition(firstHit->GetVertexPosition());
-    track.SetEnergy(firstHit->GetEnergy());
-    track.SetMomentum(firstHit->GetMomentum());
+    track.SetVertexEnergy(firstHit->GetVertexEnergy());
+    track.SetVertexMomentum(firstHit->GetVertexMomentum());
     track.SetCharge((firstHit->GetPDGCode() > 0) ? (-1) : (1));
+    track.SetNumberOfFittedPoints(hitData.size());
     track.SetChi2(0);
     return true;
 }

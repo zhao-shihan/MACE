@@ -53,7 +53,7 @@ private:
     [[nodiscard]] bool CircleFit();
     void RevolveFit();
     void FinalScaling();
-    void Finalize(Track_t& track);
+    void Finalize(const std::vector<HitPtr>& hitData, Track_t& track);
 
     [[nodiscard]] inline bool CircleParametersIsOutOfBound() const;
 
@@ -77,9 +77,9 @@ private:
     double fH = 1e-3;
 
     double fTolerance = 1e-6;
-    size_t fMaxStepsNR = 500;
+    size_t fMaxStepsNR = 100;
     double fSufficentCoeff = 1e-4;
-    double fBackTrackingLength = 0.1;
+    double fBackTrackingLength = 0.09;
     size_t fMaxStepsCG = 10000;
 
     size_t fN;
