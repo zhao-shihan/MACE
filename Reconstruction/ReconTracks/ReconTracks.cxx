@@ -1,4 +1,6 @@
 #include "CLHEP/Units/PhysicalConstants.h"
+#include "CLHEP/Random/RandGauss.h"
+#include "CLHEP/Random/MTwistEngine.h"
 
 #include "DataModel/DataHub.hxx"
 #include "ReconTracks/Tracker/PerfectFinder.hxx"
@@ -18,21 +20,30 @@ using Hit_t = SpectrometerSimHit;
 int main(int, char** argv) {
     MPI::Init();
 
+    const char* nameIn = argv[1];
+    const auto threshold = std::stoi(argv[2]);
+    const auto fitterVerbose = std::stoi(argv[3]);
+    const auto tolerance = std::stod(argv[4]);
+    const auto maxStepNR = std::stod(argv[5]);
+    const auto maxStepCG = std::stod(argv[6]);
+    const auto deltaD = std::stod(argv[7]);
+    const auto deltaZ = std::stod(argv[8]);
+
+    TFile fileIn(nameIn, "read");
+
     // Tracker::PerfectFinder<Fitter::Dummy, Hit_t, Track_t> reconstructor;
     // Tracker::Hough<Fitter::Dummy, Hit_t> reconstructor(350, 5000, std::stol(argv[2]), std::stol(argv[3]), -50, 150, std::stol(argv[4]), std::stol(argv[5]));
     Tracker::PerfectFinder<Fitter::DirectLeastSquare, Hit_t, HelixTrack> reconstructor;
-    reconstructor.SetThreshold(std::stoi(argv[2]));
-    reconstructor.GetFitter()->SetVerbose(std::stoi(argv[3]));
-    reconstructor.GetFitter()->SetTolerance(std::stod(argv[4]));
-    reconstructor.GetFitter()->SetMaxStepsForNewtonRaphson(std::stod(argv[5]));
-    reconstructor.GetFitter()->SetMaxStepsForConjugateGrad(std::stod(argv[6]));
+    reconstructor.SetThreshold(threshold);
+    reconstructor.GetFitter()->SetVerbose(fitterVerbose);
+    reconstructor.GetFitter()->SetTolerance(tolerance);
+    reconstructor.GetFitter()->SetMaxStepsForNewtonRaphson(maxStepNR);
+    reconstructor.GetFitter()->SetMaxStepsForConjugateGrad(maxStepCG);
 
     Tracker::PerfectFinder<Fitter::PerfectFitter, Hit_t, PhysicsTrack> perfectReconstructor;
     auto&& perfectFitter = *perfectReconstructor.GetFitter();
 
-    TFile fileIn(argv[1], "read");
-
-    std::string outName(argv[1]);
+    std::string outName(nameIn);
     outName.erase(outName.length() - 5);
     MPIFileTools mpiFileOut(outName + "_rec", ".root");
     TFile fileOut(mpiFileOut.GetFilePath().c_str(), "recreate");
@@ -42,6 +53,8 @@ int main(int, char** argv) {
     auto treeIndexRange = dataHub.FindTreeIndexRange<Hit_t>(fileIn);
     auto [treeBegin, treeEnd] = MPIJobsAssigner(treeIndexRange).GetJobsIndexRange();
 
+    CLHEP::MTwistEngine mtEng;
+
     std::cout << "Rank" << MPI::COMM_WORLD.Get_rank() << " is ready to process data of repetition " << treeBegin << " to " << treeEnd - 1 << std::endl;
 
     for (Long64_t treeIndex = treeBegin; treeIndex < treeEnd; ++treeIndex) {
@@ -50,6 +63,21 @@ int main(int, char** argv) {
 
         auto tree = dataHub.FindTree<Hit_t>(fileIn, treeIndex);
         auto hitData = dataHub.CreateAndFillList<Hit_t>(*tree);
+
+        if (deltaD > 0) {
+            for (auto&& hit : hitData) {
+                hit->SetDriftDistanceVariance(deltaD);
+                const auto smearD = CLHEP::RandGauss::shoot(std::addressof(mtEng), 0, deltaD);
+                hit->SetDriftDistance(smearD + hit->GetDriftDistance());
+            }
+        }
+        if (deltaZ > 0) {
+            for (auto&& hit : hitData) {
+                hit->SetHitPositionZVariance(deltaZ);
+                const auto smearZ = CLHEP::RandGauss::shoot(std::addressof(mtEng), 0, deltaZ);
+                hit->SetHitPositionZ(smearZ + hit->GetHitPositionZ());
+            }
+        }
 
         perfectReconstructor.Reconstruct(hitData);
         const auto& perfectTracks = perfectReconstructor.GetTrackList();

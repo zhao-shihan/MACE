@@ -17,6 +17,8 @@ public:
     [[nodiscard]] Class_t& Value() override { return *fObject; }
     [[nodiscard]] Class_t** Address() override { return std::addressof(fObject); }
 
+    virtual void CreateBranch(TTree& tree) { tree.Branch(this->fBranchName, Address(), 256000, 0); }
+
 private:
     Class_t* fObject;
 };
