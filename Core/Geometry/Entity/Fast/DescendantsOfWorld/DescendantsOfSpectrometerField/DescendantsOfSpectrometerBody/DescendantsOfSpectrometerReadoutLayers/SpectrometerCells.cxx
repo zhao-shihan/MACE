@@ -25,7 +25,7 @@ void SpectrometerCells::ConstructSelf(G4bool checkOverlaps) {
             layerRadius - layerThick / 2,
             layerRadius + layerThick / 2,
             halfLength,
-            -cellAngle / 2,
+            0,
             cellAngle);
         auto logic = Make<G4LogicalVolume>(
             solid,

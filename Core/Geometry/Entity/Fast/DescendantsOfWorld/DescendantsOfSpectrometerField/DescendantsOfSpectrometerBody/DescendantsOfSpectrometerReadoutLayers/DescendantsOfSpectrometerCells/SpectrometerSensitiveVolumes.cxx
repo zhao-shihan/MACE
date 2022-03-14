@@ -13,22 +13,20 @@ void SpectrometerSensitiveVolumes::ConstructSelf(G4bool checkOverlaps) {
     const auto layerCount = infoList.size();
 
     for (size_t layerID = 0; layerID < layerCount; ++layerID) {
-        auto&& [radius, halfLength, localPosition] = infoList[layerID];
+        auto&& [rCenter, thick, halfLength, phiCenter, dPhi] = infoList[layerID];
         auto solid = Make<G4Tubs>(
             name,
-            0,
-            radius,
+            rCenter - thick / 2,
+            rCenter + thick / 2,
             halfLength,
-            0,
-            2 * M_PI);
+            phiCenter - dPhi / 2,
+            dPhi);
         auto logic = Make<G4LogicalVolume>(
             solid,
             Mother()->GetMaterial(layerID),
             name);
         Make<G4PVPlacement>(
-            G4Transform3D(
-                G4RotationMatrix(),
-                localPosition),
+            G4Transform3D(),
             logic,
             name,
             Mother()->GetLogicalVolume(layerID),

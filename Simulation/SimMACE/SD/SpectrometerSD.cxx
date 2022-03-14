@@ -24,9 +24,13 @@ SpectrometerSD::SpectrometerSD(const G4String& sdName) :
     const auto layerCount = cellInfoList.size();
     fSenseWireMap.reserve(3 * layerCount * layerCount); // just an estimation of cell count (pi*r^2), for optimization.
     for (size_t layerID = 0; layerID < layerCount; ++layerID) {
-        auto&& localPosition = std::get<2>(svInfoList[layerID]);
+        const auto& [svCenterR, _0, _1, svCenterPhi, _2] = svInfoList[layerID];
+        G4TwoVector wireLocalPosition(
+            svCenterR * std::cos(svCenterPhi),
+            svCenterR * std::sin(svCenterPhi)
+        );
         for (auto&& rotation : std::get<2>(cellInfoList[layerID])) {
-            fSenseWireMap.emplace_back(rotation * localPosition);
+            fSenseWireMap.emplace_back(rotation * wireLocalPosition);
         }
     }
     fSenseWireMap.shrink_to_fit();

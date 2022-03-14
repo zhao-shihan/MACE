@@ -25,7 +25,7 @@ std::vector<std::tuple<double, double, std::vector<G4RotationMatrix>>> Spectrome
     for (size_t layerID = 0; layerID < layerCount; ++layerID) {
         auto&& [layerRadius, halfLength] = layerInfoList[layerID];
         if (2 * sn::pi * layerRadius / cellCount > (1 + fAllowedDistortion) * layerThick) {
-            cellCount = 4 * std::lround((sn::pi / 2) * layerRadius / ((1 - fAllowedDistortion) * layerThick));
+            cellCount = 4 * std::lround((sn::pi / 2) / (2 * std::asin(((1 - fAllowedDistortion) * layerThick) / (2 * layerRadius))));
         }
         const auto cellDeltaPhi = 2 * sn::pi / cellCount;
         const auto firstCellPhi = (layerID % 2 == 0) ? 0 : (cellDeltaPhi / 2);

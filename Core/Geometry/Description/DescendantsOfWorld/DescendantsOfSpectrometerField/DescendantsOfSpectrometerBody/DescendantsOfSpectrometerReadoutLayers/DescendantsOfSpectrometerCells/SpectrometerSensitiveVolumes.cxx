@@ -12,7 +12,7 @@ SpectrometerSensitiveVolumes& SpectrometerSensitiveVolumes::Instance() noexcept 
     return instance;
 }
 
-std::vector<std::tuple<double, double, G4TwoVector>> SpectrometerSensitiveVolumes::GetInformationList() const {
+std::vector<std::tuple<double, double, double, double, double>> SpectrometerSensitiveVolumes::GetInformationList() const {
     const auto& readoutLayersDescription = SpectrometerReadoutLayers::Instance();
     const auto layerThick = readoutLayersDescription.GetThickness();
     const auto layerInfoList = readoutLayersDescription.GetInformationList();
@@ -24,21 +24,18 @@ std::vector<std::tuple<double, double, G4TwoVector>> SpectrometerSensitiveVolume
     const auto& fieldWiresDescription = SpectrometerFieldWires::Instance();
     const auto dFieldWire = fieldWiresDescription.GetDiameter();
 
-    std::vector<std::tuple<double, double, G4TwoVector>> infoList(0);
+    std::vector<std::tuple<double, double, double, double, double>> infoList(0);
     infoList.reserve(layerCount);
 
     for (size_t layerID = 0; layerID < layerCount; ++layerID) {
         auto&& [cellAngle, halfLength, _] = cellInfoList[layerID];
-        const auto svRho = layerInfoList[layerID].first - dFieldWire / 2;
-        const auto fieldWireAngle = 2 * std::asin(dFieldWire / (2 * svRho));
-
-        const auto svRadius = std::min(svRho * std::sin((cellAngle - fieldWireAngle) / 2), (layerThick - dFieldWire) / 2);
-
-        const auto svPhi = -fieldWireAngle / 2;
-        const auto svX = svRho * std::cos(svPhi);
-        const auto svY = svRho * std::sin(svPhi);
-
-        infoList.emplace_back(svRadius, halfLength, G4TwoVector(svX, svY));
+        const auto layerRho = layerInfoList[layerID].first;
+        const auto svRho = layerRho - dFieldWire / 2;
+        const auto svThick = fSensitiveWidth * layerThick;
+        const auto fieldWireAngle = 2 * std::asin(dFieldWire / (2 * layerRho));
+        const auto svDPhi = fSensitiveWidth * cellAngle;
+        const auto svSPhi = (cellAngle - svDPhi) / 2 - fieldWireAngle / 2;
+        infoList.emplace_back(svRho, svThick, halfLength, svSPhi + svDPhi / 2, svDPhi);
     }
 
     return infoList;

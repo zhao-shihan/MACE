@@ -33,7 +33,7 @@ std::vector<std::pair<double, std::array<G4TwoVector, 3>>> SpectrometerFieldWire
 
         const auto rhoInn = layerRadius - fDiameter / 2;
         const auto rhoOut = rhoInn + layerThick / 2;
-        const auto phiLow = -std::asin(fDiameter / (2 * rhoInn));
+        const auto phiLow = cellAngle / 2 - std::asin(fDiameter / (2 * rhoInn));
         const auto phiUp = phiLow + cellAngle / 2;
 
         auto&& infoPair = infoList.emplace_back();
