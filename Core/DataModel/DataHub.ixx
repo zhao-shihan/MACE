@@ -6,16 +6,19 @@ namespace MACE::DataModel {
     }
 
     template<std::derived_from<Interface::Transient> Data_t>
-    inline MACE::ObserverPtr<TTree> DataHub::FindTree(TFile& file, Long64_t treeIndex) {
+    inline MACE::ObserverPtr<TTree> DataHub::GetTree(TFile& file, Long64_t treeIndex) {
         return file.Get<TTree>(GetTreeName<Data_t>(treeIndex));
     }
 
     template<std::derived_from<Interface::Transient> Data_t>
-    std::pair<Long64_t, Long64_t> DataHub::FindTreeIndexRange(TFile& file) {
+    std::pair<Long64_t, Long64_t> DataHub::GetTreeIndexRange(TFile& file) {
+        const auto maxKeys = file.GetNkeys();
         Long64_t beginIndex = 0;
-        for (; FindTree<Data_t>(file, beginIndex) == nullptr; ++beginIndex);
-        Long64_t endIndex = beginIndex;
-        for (; FindTree<Data_t>(file, endIndex) != nullptr; ++endIndex);
+        for (; file.GetKey(GetTreeName<Data_t>(beginIndex)) == nullptr; ++beginIndex) {
+            if (beginIndex + 1 >= maxKeys) { return std::pair<Long64_t, Long64_t>(0, 0); }
+        }
+        Long64_t endIndex = beginIndex + 1;
+        for (; file.GetKey(GetTreeName<Data_t>(endIndex)) != nullptr; ++endIndex);
         return std::make_pair(beginIndex, endIndex);
     }
 

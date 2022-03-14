@@ -14,7 +14,7 @@ int main(int, char** argv) {
     dataHub.SetPrefixFormatOfTreeName("Rep#_");
 
     auto fileIn = TFile::Open(argv[1], "open");
-    auto helixTree = dataHub.FindTree<HelixTrack>(*fileIn);
+    auto helixTree = dataHub.GetTree<HelixTrack>(*fileIn);
     auto helixList = dataHub.CreateAndFillList<HelixTrack>(*helixTree);
     fileIn->Close();
     delete fileIn;

@@ -42,6 +42,7 @@ int main(int, char** argv) {
 
     Tracker::PerfectFinder<Fitter::PerfectFitter, Hit_t, PhysicsTrack> perfectReconstructor;
     auto&& perfectFitter = *perfectReconstructor.GetFitter();
+    perfectReconstructor.SetThreshold(threshold);
 
     std::string outName(nameIn);
     outName.erase(outName.length() - 5);
@@ -50,7 +51,7 @@ int main(int, char** argv) {
 
     DataHub dataHub;
     dataHub.SetPrefixFormatOfTreeName("Rep#_");
-    auto treeIndexRange = dataHub.FindTreeIndexRange<Hit_t>(fileIn);
+    auto treeIndexRange = dataHub.GetTreeIndexRange<Hit_t>(fileIn);
     auto [treeBegin, treeEnd] = MPIJobsAssigner(treeIndexRange).GetJobsIndexRange();
 
     CLHEP::MTwistEngine mtEng;
@@ -61,7 +62,7 @@ int main(int, char** argv) {
         dataHub.SetPrefixFormatOfTreeName("Rep#_");
         std::cout << "Now processing " << dataHub.GetTreeName<Hit_t>(treeIndex) << " ..." << std::endl;
 
-        auto tree = dataHub.FindTree<Hit_t>(fileIn, treeIndex);
+        auto tree = dataHub.GetTree<Hit_t>(fileIn, treeIndex);
         auto hitData = dataHub.CreateAndFillList<Hit_t>(*tree);
 
         if (deltaD > 0) {

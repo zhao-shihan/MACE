@@ -30,10 +30,10 @@ public:
     /// The tree is owned by the file.
     /// If not found, the return value is defined by ROOT (usually nullptr).
     template<std::derived_from<Interface::Transient> Data_t>
-    [[nodiscard]] inline ObserverPtr<TTree> FindTree(TFile& file, Long64_t treeIndex = 0);
+    [[nodiscard]] inline ObserverPtr<TTree> GetTree(TFile& file, Long64_t treeIndex = 0);
     /// Get the range of tree index in current tree name setting.
     template<std::derived_from<Interface::Transient> Data_t>
-    [[nodiscard]] std::pair<Long64_t, Long64_t> FindTreeIndexRange(TFile& file);
+    [[nodiscard]] std::pair<Long64_t, Long64_t> GetTreeIndexRange(TFile& file);
     /// Create an empty tree with name provided by Data_t and DataHub settings.
     /// The tree is owned by shared_ptr.
     template<std::derived_from<Interface::Transient> Data_t>
