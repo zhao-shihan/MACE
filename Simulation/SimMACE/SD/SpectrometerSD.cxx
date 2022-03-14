@@ -1,13 +1,14 @@
 #include "G4HCofThisEvent.hh"
 #include "G4Step.hh"
 #include "G4SDManager.hh"
-#include "G4Tubs.hh"
+#include "G4ProductionCuts.hh"
 
 #include "SimMACE/SD/SpectrometerSD.hxx"
 #include "SimMACE/RunManager.hxx"
 #include "SimMACE/Utility/Analysis.hxx"
 #include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/SpectrometerCells.hxx"
-#include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/DescendantsOfSpectrometerCells/SpectrometerSensitiveVolumes.hxx"
+#include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/DescendantsOfSpectrometerCells/DescendantsOfSpectrometerSensitiveVolumes/SpectrometerSenseWires.hxx"
+#include "SimMACE/Utility/Region.hxx"
 
 using namespace MACE::SimMACE::SD;
 
@@ -20,15 +21,11 @@ SpectrometerSD::SpectrometerSD(const G4String& sdName) :
     collectionName.insert(sdName + "HC");
 
     const auto cellInfoList = Geometry::Description::SpectrometerCells::Instance().GetInformationList();
-    const auto svInfoList = Geometry::Description::SpectrometerSensitiveVolumes::Instance().GetInformationList();
+    const auto wireInfoList = Geometry::Description::SpectrometerSenseWires::Instance().GetInformationList();
     const auto layerCount = cellInfoList.size();
     fSenseWireMap.reserve(3 * layerCount * layerCount); // just an estimation of cell count (pi*r^2), for optimization.
     for (size_t layerID = 0; layerID < layerCount; ++layerID) {
-        const auto& [svCenterR, _0, _1, svCenterPhi, _2] = svInfoList[layerID];
-        G4TwoVector wireLocalPosition(
-            svCenterR * std::cos(svCenterPhi),
-            svCenterR * std::sin(svCenterPhi)
-        );
+        const auto& [wireLocalPosition, _3] = wireInfoList[layerID];
         for (auto&& rotation : std::get<2>(cellInfoList[layerID])) {
             fSenseWireMap.emplace_back(rotation * wireLocalPosition);
         }
@@ -49,12 +46,13 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     if (track->GetCurrentStepNumber() <= 1 or particle->GetPDGCharge() == 0) { return false; }
     auto monitoring = std::as_const(fMonitoringTrackList).find(track);
     auto isMonitoring = (monitoring != fMonitoringTrackList.cend());
-    if (!isMonitoring and step->IsFirstStepInVolume()) {
+    if (!isMonitoring and step->IsFirstStepInVolume()) { // is first time entering.
         fMonitoringTrackList.emplace(track, *step->GetPreStepPoint());
         monitoring = std::prev(fMonitoringTrackList.cend());
         isMonitoring = true;
     }
-    if (isMonitoring and step->IsLastStepInVolume()) {
+    if (isMonitoring and step->IsLastStepInVolume() and                                                 // is exiting, and make sure has entered before,
+        static_cast<Region*>(track->GetNextVolume()->GetLogicalVolume()->GetRegion())->GetType() != Region::kDefaultSolid) { // but not heading into sense wire!
         // retrive entering time and position
         const auto& enterPoint = monitoring->second;
         const auto tIn = enterPoint.GetGlobalTime();
@@ -105,4 +103,5 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
 
 void SpectrometerSD::EndOfEvent(G4HCofThisEvent*) {
     Analysis::Instance().SubmitSpectrometerHC(fHitsCollection->GetVector());
+    fMonitoringTrackList.clear();
 }

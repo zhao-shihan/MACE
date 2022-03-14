@@ -53,7 +53,7 @@ private:
     std::shared_ptr<Geometry::Entity::Fast::SecondTransportSolenoid> fSecondTransportSolenoid;
     std::shared_ptr<Geometry::Entity::Fast::SelectorField> fSelectorField;
     std::shared_ptr<Geometry::Entity::Fast::Target> fTarget;
-    // std::shared_ptr<Geometry::Entity::Fast::SpectrometerSenseWires>() fSpectrometerSenseWires;
+    std::shared_ptr<Geometry::Entity::Fast::SpectrometerSenseWires> fSpectrometerSenseWires;
     std::shared_ptr<Geometry::Entity::Fast::SpectrometerFieldWires> fSpectrometerFieldWires;
     std::shared_ptr<Geometry::Entity::Fast::SpectrometerSensitiveVolumes> fSpectrometerSensitiveVolumes;
     std::shared_ptr<Geometry::Entity::Fast::SpectrometerCells> fSpectrometerCells;

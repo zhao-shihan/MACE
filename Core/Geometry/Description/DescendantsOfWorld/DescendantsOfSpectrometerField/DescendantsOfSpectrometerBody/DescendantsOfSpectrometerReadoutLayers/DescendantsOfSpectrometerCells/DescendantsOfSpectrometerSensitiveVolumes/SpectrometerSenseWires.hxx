@@ -1,4 +1,4 @@
-/* #pragma once
+#pragma once
 
 #include <vector>
 
@@ -27,14 +27,13 @@ public:
     [[nodiscard]] std::string GetRotationDescription()    const override { return ""; }
 
     [[nodiscard]] const auto& GetDiameter() const { return fDiameter; }
-    /// @return Sense wire's information map. Subscript with cellID and get [ layerID, position ].
+    /// @return Sense wire's information map. Subscript with layerID and get [ position, half length ].
     /// @warning This method constructs a std::vector<...> according to current Description status,
     /// thus may become invalid after some Set..., invoke it after any Set method.
     /// @attention Keep the return value instead of invoke mutiple times if you need to check up the cell info.
     /// Otherwise constructs a std::vector<...> like this for many times could lead to performance problem.
-    [[nodiscard]] std::vector<std::pair<int, G4TwoVector>> GetWireInfoList() const;
+    [[nodiscard]] std::vector<std::pair<G4TwoVector, double>> GetInformationList() const;
 
 private:
     double fDiameter = 25_um;
 };
- */

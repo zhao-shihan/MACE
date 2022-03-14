@@ -29,9 +29,9 @@ std::vector<std::tuple<double, double, double, int>> SpectrometerReadoutLayers::
     auto cellAngularWidth = 2 * sn::pi / cellCount;
     while (layerInnerRadius + trueCellWidth < gasOuterRadius) {
         infoList.emplace_back(
-            layerInnerRadius + trueCellWidth / 2,               // layer center radius
+            layerInnerRadius + trueCellWidth / 2,                                  // layer center radius
             trueCellWidth,
-            gasInnerLength / 2 + layerInnerRadius * sideSlope,  // layer half length
+            gasInnerLength / 2 + (layerInnerRadius - gasInnerRadius) * sideSlope,  // layer half length
             cellCount);
         // update layer parameters
         layerInnerRadius += trueCellWidth;

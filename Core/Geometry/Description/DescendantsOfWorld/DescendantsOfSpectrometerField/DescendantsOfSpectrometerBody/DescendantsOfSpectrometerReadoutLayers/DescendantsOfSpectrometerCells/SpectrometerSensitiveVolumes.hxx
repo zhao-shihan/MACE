@@ -38,5 +38,5 @@ public:
     void SetSensitiveWidth(double val) { fSensitiveWidth = val; }
 
 private:
-    double fSensitiveWidth = 0.95;
+    double fSensitiveWidth = 0.9;
 };
