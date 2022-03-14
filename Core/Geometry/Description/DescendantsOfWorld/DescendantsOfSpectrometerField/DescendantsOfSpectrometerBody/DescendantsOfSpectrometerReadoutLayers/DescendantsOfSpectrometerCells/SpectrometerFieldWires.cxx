@@ -11,7 +11,6 @@ SpectrometerFieldWires& SpectrometerFieldWires::Instance() noexcept {
 
 std::vector<std::pair<double, std::array<G4TwoVector, 3>>> SpectrometerFieldWires::GetInformationList() const {
     const auto& readoutLayersDescription = SpectrometerReadoutLayers::Instance();
-    const auto layerThick = readoutLayersDescription.GetThickness();
     const auto layerInfoList = readoutLayersDescription.GetInformationList();
     const auto layerCount = layerInfoList.size();
 
@@ -22,8 +21,8 @@ std::vector<std::pair<double, std::array<G4TwoVector, 3>>> SpectrometerFieldWire
     infoList.reserve(layerCount);
 
     for (size_t layerID = 0; layerID < layerCount; ++layerID) {
-        auto&& [cellAngle, halfLength, _] = cellInfoList[layerID];
-        const auto layerRadius = layerInfoList[layerID].first;
+        const auto& [cellAngle, halfLength, _0] = cellInfoList[layerID];
+        const auto& [layerRadius, layerThick, _1, _2] = layerInfoList[layerID];
 
         auto ToXY = [](double rho, double phi)->G4TwoVector {
             return G4TwoVector(

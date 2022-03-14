@@ -14,7 +14,6 @@ SpectrometerSensitiveVolumes& SpectrometerSensitiveVolumes::Instance() noexcept 
 
 std::vector<std::tuple<double, double, double, double, double>> SpectrometerSensitiveVolumes::GetInformationList() const {
     const auto& readoutLayersDescription = SpectrometerReadoutLayers::Instance();
-    const auto layerThick = readoutLayersDescription.GetThickness();
     const auto layerInfoList = readoutLayersDescription.GetInformationList();
     const auto layerCount = layerInfoList.size();
 
@@ -28,8 +27,8 @@ std::vector<std::tuple<double, double, double, double, double>> SpectrometerSens
     infoList.reserve(layerCount);
 
     for (size_t layerID = 0; layerID < layerCount; ++layerID) {
-        auto&& [cellAngle, halfLength, _] = cellInfoList[layerID];
-        const auto layerRho = layerInfoList[layerID].first;
+        const auto& [cellAngle, halfLength, _0] = cellInfoList[layerID];
+        const auto& [layerRho, layerThick, _1, _2] = layerInfoList[layerID];
         const auto svRho = layerRho - dFieldWire / 2;
         const auto svThick = fSensitiveWidth * layerThick;
         const auto fieldWireAngle = 2 * std::asin(dFieldWire / (2 * layerRho));

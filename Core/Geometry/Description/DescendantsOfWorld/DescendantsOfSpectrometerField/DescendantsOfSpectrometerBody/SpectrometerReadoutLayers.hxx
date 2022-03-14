@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <tuple>
 
 #include "Geometry/Interface/Description.hxx"
 
@@ -24,16 +25,18 @@ public:
     [[nodiscard]] std::string GetTranslationDescription() const override { return "No translation."; }
     [[nodiscard]] std::string GetRotationDescription()    const override { return "No rotation."; }
 
-    [[nodiscard]] const auto& GetThickness() const { return fLayerThickness; }
-    /// @return Layer's information list. Subscript with layerID and get [ layer center's radius, length/2 ].
+    [[nodiscard]] const auto& GetAllowedDistortion() const { return fAllowedDistortion; }
+    /// @return Layer's information list. Subscript with layerID and get [ layer center radius, thickness(=cellWidth), length/2, nCells ].
     /// @warning This method constructs a std::vector<std::tuple<...>> according to current Description status,
     /// thus may become invalid after some Set..., invoke it after any Set method.
     /// @attention Keep the return value instead of invoke mutiple times if you need to check up the cell info.
     /// Otherwise constructs a std::vector<std::tuple<...>> like this for many times could lead to performance problem.
-    [[nodiscard]] std::vector<std::pair<double, double>> GetInformationList() const;
+    [[nodiscard]] std::vector<std::tuple<double, double, double, int>> GetInformationList() const;
 
-    void SetLayerThickness(double val) { fLayerThickness = val; }
+    void SetMeanCellWidth(double val) { fCellWidth = val; }
+    void SetAllowedDistortion(double val) { fAllowedDistortion = val; }
 
 private:
-    double fLayerThickness = 16.2_mm;
+    double fCellWidth = 16.2_mm;
+    double fAllowedDistortion = 0.1;
 };

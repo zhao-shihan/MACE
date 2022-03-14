@@ -9,7 +9,6 @@ using namespace MACE::Geometry::Entity::Fast;
 
 void SpectrometerCells::ConstructSelf(G4bool checkOverlaps) {
     const auto& layersDescription = Description::SpectrometerReadoutLayers::Instance();
-    const auto layerThick = layersDescription.GetThickness();
     const auto layerInfoList = layersDescription.GetInformationList();
     const auto layerCount = layerInfoList.size();
 
@@ -18,12 +17,12 @@ void SpectrometerCells::ConstructSelf(G4bool checkOverlaps) {
     const auto cellInfoList = cellsDescription.GetInformationList();
 
     for (size_t cellID = 0, layerID = 0; layerID < layerCount; ++layerID) {
-        auto&& [cellAngle, _, rotations] = cellInfoList[layerID];
-        auto&& [layerRadius, halfLength] = layerInfoList[layerID];
+        auto&& [cellRadius, cellWidth, halfLength, _0] = layerInfoList[layerID];
+        auto&& [cellAngle, _1, rotations] = cellInfoList[layerID];
         auto solid = Make<G4Tubs>(
             name,
-            layerRadius - layerThick / 2,
-            layerRadius + layerThick / 2,
+            cellRadius - cellWidth / 2,
+            cellRadius + cellWidth / 2,
             halfLength,
             0,
             cellAngle);
