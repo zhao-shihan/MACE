@@ -41,7 +41,7 @@ int main(int, char**) {
     auto secondTransportSolenoid = std::make_shared<SecondTransportSolenoid>();
     auto selectorField = std::make_shared<SelectorField>();
     auto target = std::make_shared<Target>();
-    // auto spectrometerSenseWires = std::make_shared<SpectrometerSenseWires>();
+    auto spectrometerSenseWires = std::make_shared<SpectrometerSenseWires>();
     auto spectrometerFieldWires = std::make_shared<SpectrometerFieldWires>();
     auto spectrometerSensitiveVolumes = std::make_shared<SpectrometerSensitiveVolumes>();
     auto spectrometerCells = std::make_shared<SpectrometerCells>();
@@ -70,7 +70,7 @@ int main(int, char**) {
     secondTransportField->AddDaughter(secondTransportSolenoid);
     secondTransportField->AddDaughter(selectorField);
     acceleratorField->AddDaughter(target);
-    // spectrometerSensitiveVolumes->AddDaughter(spectrometerSenseWires);
+    spectrometerSensitiveVolumes->AddDaughter(spectrometerSenseWires);
     spectrometerCells->AddDaughter(spectrometerFieldWires);
     spectrometerCells->AddDaughter(spectrometerSensitiveVolumes);
     spectrometerReadoutLayers->AddDaughter(spectrometerCells);
