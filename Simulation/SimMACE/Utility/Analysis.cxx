@@ -44,13 +44,11 @@ void Analysis::Close(Option_t* option) {
 }
 
 int Analysis::Merge(G4bool forced) {
-    if (fMPIFileTools == nullptr) {
-        G4ExceptionDescription description("There is nothing to merge!");
-        G4Exception("MACE::SimMACE::Utility::Analysis::Merge(G4bool)",
-            "MACE_SimMACE_Analysis_W0", JustWarning, description);
-        return -1;
+    if (fMPIFileTools) {
+        return fMPIFileTools->MergeRootFiles(forced);
+    } else {
+        return MPIFileTools::MergeRootFilesViaFilesMap(fResultName, forced);
     }
-    return fMPIFileTools->MergeRootFiles(forced);
 }
 
 void Analysis::WriteEvent(G4int repetitionID) {

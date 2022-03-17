@@ -44,9 +44,9 @@ int main(int, char** argv) {
     auto&& perfectFitter = *perfectReconstructor.GetFitter();
     perfectReconstructor.SetThreshold(threshold);
 
-    std::string outName(nameIn);
-    outName.erase(outName.length() - 5);
-    MPIFileTools mpiFileOut(outName + "_rec", ".root");
+    std::filesystem::path outName(nameIn);
+    outName.replace_extension("");
+    MPIFileTools mpiFileOut(outName.string() + "_rec", ".root");
     TFile fileOut(mpiFileOut.GetFilePath().c_str(), "recreate");
 
     DataHub dataHub;
@@ -62,8 +62,7 @@ int main(int, char** argv) {
         dataHub.SetPrefixFormatOfTreeName("Rep#_");
         std::cout << "Now processing " << dataHub.GetTreeName<Hit_t>(treeIndex) << " ..." << std::endl;
 
-        auto tree = dataHub.GetTree<Hit_t>(fileIn, treeIndex);
-        auto hitData = dataHub.CreateAndFillList<Hit_t>(*tree);
+        auto hitData = dataHub.CreateAndFillList<Hit_t>(fileIn, treeIndex);
 
         if (deltaD > 0) {
             for (auto&& hit : hitData) {

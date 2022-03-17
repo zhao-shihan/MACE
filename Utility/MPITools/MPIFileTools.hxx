@@ -68,7 +68,9 @@ public:
     MPIFileTools& operator=(const MPIFileTools&) = delete;
 
     [[nodiscard]] const auto& GetFilePath() const { return fFilePath; }
+
     int MergeRootFiles(bool forced = false) const;
+    static int MergeRootFilesViaFilesMap(std::string basicName, bool forced = false, const MPI::Comm& comm = MPI::COMM_WORLD);
 
     static void SetOutStream(std::ostream& os) { fgOut = std::addressof(os); }
 

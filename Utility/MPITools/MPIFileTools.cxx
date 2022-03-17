@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <set>
 #include <cstring>
+#include <fstream>
 #include <thread>
 #include <cmath>
 
@@ -38,6 +39,76 @@ int MPIFileTools::MergeRootFiles(bool forced) const {
     } else {
         return MergeRootFilesSerialImpl();
     }
+}
+
+int MPIFileTools::MergeRootFilesViaFilesMap(std::string basicName, bool forced, const MPI::Comm& comm) {
+    int commRank = fgMasterRank;
+    if (MPI::Is_initialized()) {
+        commRank = comm.Get_rank();
+    }
+
+    int retVal = 0;
+    if (commRank == fgMasterRank) {
+        std::filesystem::path basicPath(basicName);
+        // file map
+        std::ifstream fileMapIn(basicPath / (basicName + ".filesmap"), std::ios::in);
+        // if not exists, skipped
+        if (not fileMapIn.is_open()) {
+            return 1;
+        }
+        // skip first 2 lines (annotations)
+        fileMapIn.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        fileMapIn.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        // file paths read
+        std::vector<std::filesystem::path> filePathList;
+        // read paths
+        while (not fileMapIn.eof()) {
+            std::filesystem::path thisPath;
+            fileMapIn >> thisPath;
+            if (thisPath.extension() == ".root") {
+                filePathList.emplace_back(thisPath);
+            }
+        }
+        // if not root, skipped
+        if (filePathList.empty()) {
+            return 1;
+        }
+        // files to be merged
+        const auto fileCount = filePathList.size();
+
+        *fgOut << "Rank" << fgMasterRank << " is merging root files via hadd." << std::endl;
+        // hadd command
+        std::string command = "hadd ";
+        // flag: -j
+        const unsigned int hardwareMax = std::thread::hardware_concurrency();
+        const unsigned int haddRequire = std::ceil(double(fileCount) / 5);
+        const auto haddProcesses = std::min(hardwareMax, haddRequire);
+        if (haddProcesses > 1) {
+            command += ("-j " + std::to_string(haddProcesses) + ' ');
+        }
+        // flag: -f
+        if (forced) { command += "-f "; }
+        // TARGET
+        command += (basicName + ".root");
+        // SOURCE
+        for (auto&& filePath : std::as_const(filePathList)) {
+            command += ' ';
+            command += filePath.string();
+        }
+        // do hadd
+        retVal = std::system(command.c_str());
+        // check hadd return value
+        if (retVal == 0) {
+            *fgOut << "Files merged successfully." << std::endl;
+        } else {
+            *fgOut << "Warning: Detected that hadd is returning non-zero value: " << retVal << "\n"
+                "\tPlease check the infomation provided by hadd.\n"
+                "\tMerge result might be corrupted, you could try to merge again.\n"
+                "\t(Maybe you need to force re-creation of output? Can be done by passing argument <true>.)" << std::endl;
+        }
+    }
+
+    return retVal;
 }
 
 void MPIFileTools::ConstructPathMPIImpl() {
@@ -82,6 +153,7 @@ void MPIFileTools::ConstructPathMPIImpl() {
         };
 
         // construct directory paths and full file paths
+        const std::filesystem::path rootPath(fBasicName);
         std::vector<std::filesystem::path> directoryList(0);
         std::vector<std::filesystem::path> filePathList(0);
         filePathList.reserve(commSize);
@@ -89,18 +161,18 @@ void MPIFileTools::ConstructPathMPIImpl() {
             // construct directory names
             directoryList.reserve(processorNameSet.size());
             for (auto&& uniqueProcessorName : std::as_const(processorNameSet)) {
-                directoryList.emplace_back(std::filesystem::path(fBasicName) / uniqueProcessorName);
+                directoryList.emplace_back(rootPath / uniqueProcessorName);
             }
             // construct full file paths
             for (int rank = 0; rank < commSize; ++rank) {
-                filePathList.emplace_back(std::filesystem::path(fBasicName) / std::as_const(processorNameList[rank]) / FileNameForRank(rank));
+                filePathList.emplace_back(rootPath / std::as_const(processorNameList[rank]) / FileNameForRank(rank));
             }
         } else { // is running on work station!
             // construct directory names
             directoryList.emplace_back(fBasicName);
             // construct full file paths
             for (int rank = 0; rank < commSize; ++rank) {
-                filePathList.emplace_back(std::filesystem::path(fBasicName) / FileNameForRank(rank));
+                filePathList.emplace_back(rootPath / FileNameForRank(rank));
             }
         }
 
@@ -108,6 +180,17 @@ void MPIFileTools::ConstructPathMPIImpl() {
         for (auto&& directory : std::as_const(directoryList)) {
             std::filesystem::create_directories(directory);
         }
+
+        // save files map
+        std::ofstream fileMapOut(rootPath / (fBasicName + ".filesmap"), std::ios::out);
+        fileMapOut <<
+            "# DO NOT EDIT.\n"
+            "# Auto generated by MACE::MPITools::MPIFileTools.\n";
+        for (auto&& filePath : std::as_const(filePathList)) {
+            fileMapOut << filePath << '\n';
+        }
+        fileMapOut << std::flush;
+        fileMapOut.close();
 
         // construct file path to be sent
         filePathsSend.reserve(commSize);
