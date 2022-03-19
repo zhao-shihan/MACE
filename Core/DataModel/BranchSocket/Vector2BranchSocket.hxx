@@ -1,0 +1,32 @@
+#pragma once
+
+#include "TEveVector.h"
+
+#include "DataModel/Interface/BranchSocket.hxx"
+
+template<MACE::DataModel::FundamentalType Fund_t>
+class MACE::DataModel::Vector2BranchSocket final :
+    public MACE::DataModel::Interface::BranchSocket<TEveVector2T<Fund_t>> {
+public:
+    Vector2BranchSocket(const char* branchName, std::array<const char*, 2> leafList, std::array<Fund_t, 2> defaultValues);
+    ~Vector2BranchSocket() noexcept = default;
+    Vector2BranchSocket(const Vector2BranchSocket&) = delete;
+    Vector2BranchSocket& operator=(const Vector2BranchSocket&) = delete;
+
+    [[nodiscard]] const TEveVector2T<Fund_t>& GetValue() const override { return fVector2; }
+    void SetValue(const TEveVector2T<Fund_t>& vector2) override { fVector2 = vector2; }
+
+    virtual void CreateBranch(TTree& tree) { tree.Branch(fBranchName, fVector2.Arr(), fLeafList); }
+    virtual void ConnectToBranch(TTree& tree) { tree.SetBranchAddress(fBranchName, fVector2.Arr()); }
+
+private:
+    const TString        fBranchName;
+    TString              fLeafList;
+    TEveVector2T<Fund_t> fVector2;
+};
+
+#include "DataModel/BranchSocket/Vector2BranchSocket.ixx"
+
+namespace MACE::DataModel::inline BranchSocket{
+    using Vector2FBranchSocket = Vector2BranchSocket<Float_t>;
+}
