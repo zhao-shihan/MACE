@@ -14,8 +14,8 @@ public:
     [[nodiscard]] const char* GetValue() const override { return fString; }
     void SetValue(const char* string) override { fString = string; }
 
-    virtual void CreateBranch(TTree& tree) { tree.Branch(fBranchName, fString, fBranchNameWithType); }
-    virtual void ConnectToBranch(TTree& tree) { tree.SetBranchAddress(fBranchName, fString); }
+    void CreateBranch(TTree& tree) override { tree.Branch(fBranchName, fString, fBranchNameWithType); }
+    void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(fBranchName, fString); }
 
 private:
     const TString fBranchName;

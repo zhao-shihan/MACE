@@ -16,8 +16,8 @@ public:
     [[nodiscard]] const TEveVector2T<Fund_t>& GetValue() const override { return fVector2; }
     void SetValue(const TEveVector2T<Fund_t>& vector2) override { fVector2 = vector2; }
 
-    virtual void CreateBranch(TTree& tree) { tree.Branch(fBranchName, fVector2.Arr(), fLeafList); }
-    virtual void ConnectToBranch(TTree& tree) { tree.SetBranchAddress(fBranchName, fVector2.Arr()); }
+    void CreateBranch(TTree& tree) override { tree.Branch(fBranchName, fVector2.Arr(), fLeafList); }
+    void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(fBranchName, fVector2.Arr()); }
 
 private:
     const TString        fBranchName;

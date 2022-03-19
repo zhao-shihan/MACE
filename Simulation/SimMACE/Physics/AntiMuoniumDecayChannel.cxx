@@ -60,9 +60,9 @@ using MACE::SimMACE::Physics::AntiMuoniumDecayChannel;
 
 AntiMuoniumDecayChannel::AntiMuoniumDecayChannel(const G4String& theParentName, G4double theBR, G4int verbose) :
     G4VDecayChannel("AntiMuoniumDecay", verbose) {
-    if (theParentName == "-M") {
+    if (theParentName == "anti_M") {
         SetBR(theBR);
-        SetParent("-M");
+        SetParent("anti_M");
         SetNumberOfDaughters(4);
         SetDaughter(0, "e-");
         SetDaughter(1, "anti_nu_e");

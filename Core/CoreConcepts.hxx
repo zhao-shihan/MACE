@@ -32,4 +32,6 @@ namespace MACE {
 
     }
 
+    // } // inline namespace Core
+
 }

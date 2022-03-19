@@ -35,7 +35,7 @@ public:
     void SetLayerID(Int_t val) { fLayerID = val; }
     template<typename Vector2_t>
     void SetWirePosition(Vector2_t&& pos) { fWirePosition = std::forward<Vector2_t>(pos); }
-    void SetWirePosition(Double_t x, Double_t y) { fWirePosition = { x, y }; }
+    void SetWirePosition(Double_t x, Double_t y) { fWirePosition.Set(x, y); }
 
 protected:
     static void CreateBranches(TTree& tree);

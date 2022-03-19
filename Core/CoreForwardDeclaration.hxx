@@ -44,6 +44,9 @@ namespace MACE {
             class HelixTrack;
             class PhysicsTrack;
         }
+        inline namespace Vertex {
+            class MuoniumVertex;
+        }
         class DataHub;
     } // inline namespace DataModel
 

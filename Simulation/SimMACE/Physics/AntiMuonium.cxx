@@ -26,7 +26,7 @@ AntiMuonium::AntiMuonium() :
     //    stable         lifetime    decay table
     //    shortlived
     G4ParticleDefinition(
-        "-M", 105.658369_MeV + 511_keV, 2.99591e-16_MeV, 0,
+        "anti_M", 105.658369_MeV + 511_keV, 2.99591e-16_MeV, 0,
         1, 0, 0,
         0, 0, 0,
         "lepton", 0, 0, -1313,
@@ -45,6 +45,6 @@ AntiMuonium::AntiMuonium() :
     // create Decay Table 
     auto table = new G4DecayTable();
     // create a decay channel
-    table->Insert(new AntiMuoniumDecayChannel("-M", 1.00));
+    table->Insert(new AntiMuoniumDecayChannel("anti_M", 1.00));
     this->SetDecayTable(table);
 }

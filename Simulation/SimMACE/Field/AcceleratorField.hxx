@@ -24,4 +24,5 @@ private:
     G4double fBz = 0.1_T;
     G4double fV = 7_kV;
     G4double fEz;
+    G4double fDecayZMean = 13.05_mm;
 };

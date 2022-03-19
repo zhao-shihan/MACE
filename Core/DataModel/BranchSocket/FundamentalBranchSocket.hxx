@@ -14,8 +14,8 @@ public:
     [[nodiscard]] const Fund_t& GetValue() const override { return fValue; }
     void SetValue(const Fund_t& value) override { fValue = value; }
 
-    virtual void CreateBranch(TTree& tree) { tree.Branch(fBranchName, std::addressof(fValue)); }
-    virtual void ConnectToBranch(TTree& tree) { tree.SetBranchAddress(fBranchName, std::addressof(fValue)); }
+    void CreateBranch(TTree& tree) override { tree.Branch(fBranchName, std::addressof(fValue)); }
+    void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(fBranchName, std::addressof(fValue)); }
 
 private:
     const TString fBranchName;

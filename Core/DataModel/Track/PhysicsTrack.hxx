@@ -1,7 +1,5 @@
 #pragma once
 
-#include "TEveVector.h"
-
 #include "DataModel/Interface/Transient.hxx"
 #include "DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "DataModel/BranchSocket/Vector3BranchSocket.hxx"
@@ -60,13 +58,13 @@ private:
     Int_t       fNumberOfFittedPoints;
     Double_t    fChi2;
 
-    static DoubleBranchSocket   fgVertexTime;
-    static Vector3FBranchSocket fgVertexPosition;
-    static FloatBranchSocket    fgVertexEnergy;
-    static Vector3FBranchSocket fgVertexMomentum;
-    static ShortStringBranchSocket   fgParticleName;
-    static IntBranchSocket      fgNumberOfFittedPoints;
-    static FloatBranchSocket    fgChi2;
+    static DoubleBranchSocket      fgVertexTime;
+    static Vector3FBranchSocket    fgVertexPosition;
+    static FloatBranchSocket       fgVertexEnergy;
+    static Vector3FBranchSocket    fgVertexMomentum;
+    static ShortStringBranchSocket fgParticleName;
+    static IntBranchSocket         fgNumberOfFittedPoints;
+    static FloatBranchSocket       fgChi2;
 };
 
 inline void MACE::DataModel::PhysicsTrack::FillBranchSockets() const noexcept {

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "TEveVector.h"
-
 #include "DataModel/Interface/Transient.hxx"
 #include "DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "DataModel/BranchSocket/Vector2BranchSocket.hxx"
@@ -26,10 +24,10 @@ public:
     void SetHitTime(Double_t val) { fHitTime = val; }
     template<typename Vector2_t>
     void SetHitPosition(Vector2_t&& pos) { fHitPosition = std::forward<Vector2_t>(pos); }
-    void SetHitPosition(Double_t x, Double_t y) { fHitPosition = { x, y }; }
+    void SetHitPosition(Double_t x, Double_t y) { fHitPosition.Set(x, y); }
     template<typename Vector2_t>
     void SetHitPositionVariance(Vector2_t&& posVar) { fHitPositionVariance = std::forward<Vector2_t>(posVar); }
-    void SetHitPositionVariance(Double_t xVar, Double_t yVar) { fHitPositionVariance = { xVar, yVar }; }
+    void SetHitPositionVariance(Double_t xVar, Double_t yVar) { fHitPositionVariance.Set(xVar, yVar); }
 
 protected:
     static void CreateBranches(TTree& tree);

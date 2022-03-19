@@ -1,7 +1,5 @@
 #pragma once
 
-#include "TEveVector.h"
-
 #include "DataModel/Interface/Transient.hxx"
 #include "DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "DataModel/BranchSocket/Vector2BranchSocket.hxx"
@@ -30,7 +28,7 @@ public:
     void SetVertexTime(Double_t val) { fVertexTime = val; }
     template<typename Vector2_t>
     void SetCenter(Vector2_t&& val) { fCenter = std::forward<Vector2_t>(val); }
-    void SetCenter(Double_t x, Double_t y) { fCenter = { x, y }; }
+    void SetCenter(Double_t x, Double_t y) { fCenter.Set(x, y); }
     void SetRadius(Double_t val) { fRadius = val; }
     void SetZ0(Double_t val) { fZ0 = val; }
     void SetAlpha(Double_t val) { fAlpha = val; }
