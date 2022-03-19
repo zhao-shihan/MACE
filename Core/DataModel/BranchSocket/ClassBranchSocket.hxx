@@ -2,11 +2,9 @@
 
 #include "DataModel/Interface/BranchSocket.hxx"
 
-template<typename Class_t>
+template<MACE::DataModel::ClassType Class_t>
 class MACE::DataModel::ClassBranchSocket final :
-    public MACE::DataModel::Interface::BranchSocket<Class_t, Class_t**> {
-    static_assert(std::is_class_v<Class_t>,
-        "Class_t should be a class type!");
+    public MACE::DataModel::Interface::BranchSocket<Class_t> {
 public:
     template<typename... Args>
     ClassBranchSocket(const char* branchName, Args&&... args);
@@ -14,20 +12,15 @@ public:
     ClassBranchSocket(const ClassBranchSocket&) = delete;
     ClassBranchSocket& operator=(const ClassBranchSocket&) = delete;
 
-    [[nodiscard]] Class_t& Value() override { return *fObject; }
-    [[nodiscard]] Class_t** Address() override { return std::addressof(fObject); }
+    [[nodiscard]] const Class_t& GetValue() const override { return *fObject; }
+    void SetValue(const Class_t& object) override { *fObject = object; }
 
-    virtual void CreateBranch(TTree& tree) { tree.Branch(this->fBranchName, Address(), 256000, 0); }
+    virtual void CreateBranch(TTree& tree) { tree.Branch(fBranchName, std::addressof(fObject), 256000, 0); }
+    virtual void ConnectToBranch(TTree& tree) { tree.SetBranchAddress(fBranchName, std::addressof(fObject)); }
 
 private:
+    const TString fBranchName;
     Class_t* fObject;
 };
 
 #include "DataModel/BranchSocket/ClassBranchSocket.ixx"
-
-namespace MACE::DataModel {
-    inline namespace BranchSocket {
-        using Vector2FBranchSocket = ClassBranchSocket<TEveVector2F>;
-        using Vector3FBranchSocket = ClassBranchSocket<TEveVectorF>;
-    }
-}
