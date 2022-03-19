@@ -80,4 +80,16 @@ namespace MACE::DataModel {
         return CreateAndFillList<Data_t>(tree, std::make_pair<Long64_t, Long64_t>(0, tree.GetEntries()), connected);
     }
 
+    template<std::derived_from<Interface::Transient> Data_t>
+    inline std::vector<std::shared_ptr<Data_t>> DataHub::CreateAndFillList(TFile& file, Long64_t treeIndex, const std::pair<Long64_t, Long64_t>& entriesRange, bool connected) {
+        auto tree = GetTree<Data_t>(file, treeIndex);
+        return CreateAndFillList<Data_t>(*tree, entriesRange, connected);
+    }
+
+    template<std::derived_from<Interface::Transient> Data_t>
+    inline std::vector<std::shared_ptr<Data_t>> DataHub::CreateAndFillList(TFile& file, Long64_t treeIndex, bool connected) {
+        auto tree = GetTree<Data_t>(file, treeIndex);
+        return CreateAndFillList<Data_t>(*tree, connected);
+    }
+
 }

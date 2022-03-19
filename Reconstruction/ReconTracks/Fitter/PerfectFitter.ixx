@@ -12,7 +12,7 @@ Fit(std::vector<HitPtr>& hitData, Track_t& track) {
     track.SetVertexPosition(firstHit->GetVertexPosition());
     track.SetVertexEnergy(firstHit->GetVertexEnergy());
     track.SetVertexMomentum(firstHit->GetVertexMomentum());
-    track.SetCharge((firstHit->GetPDGCode() > 0) ? (-1) : (1));
+    track.SetParticleName(firstHit->GetParticleName());
     track.SetNumberOfFittedPoints(hitData.size());
     track.SetChi2(0);
     return true;

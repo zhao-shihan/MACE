@@ -46,7 +46,7 @@ int main(int, char** argv) {
 
     std::filesystem::path outName(nameIn);
     outName.replace_extension("");
-    MPIFileTools mpiFileOut(outName.string() + "_rec", ".root");
+    MPIFileTools mpiFileOut(outName.string() + "_recTrk", ".root");
     TFile fileOut(mpiFileOut.GetFilePath().c_str(), "recreate");
 
     DataHub dataHub;
@@ -89,7 +89,7 @@ int main(int, char** argv) {
         std::vector<std::shared_ptr<PhysicsTrack>> physicsTracks;
         physicsTracks.reserve(helixTracks.size());
         for (auto&& track : helixTracks) {
-            physicsTracks.emplace_back(std::make_shared<PhysicsTrack>(*track, 1, 0.1_T, CLHEP::electron_mass_c2));
+            physicsTracks.emplace_back(std::make_shared<PhysicsTrack>(*track, 0.1_T, CLHEP::electron_mass_c2));
         }
 
         std::vector<std::shared_ptr<PhysicsTrack>> errors;
@@ -103,12 +103,12 @@ int main(int, char** argv) {
             const auto positionErr = physicsTrack.GetVertexPosition() - error.GetVertexPosition();
             const auto energyErr = physicsTrack.GetVertexEnergy() - error.GetVertexEnergy();
             const auto momentumErr = physicsTrack.GetVertexMomentum() - error.GetVertexMomentum();
-            const auto chargeErr = physicsTrack.GetCharge() - error.GetCharge();
+            const auto particleErr = error.GetParticleName() + '>' + physicsTrack.GetParticleName();
             error.SetVertexTime(timeErr);
             error.SetVertexPosition(positionErr);
             error.SetVertexEnergy(energyErr);
             error.SetVertexMomentum(momentumErr);
-            error.SetCharge(chargeErr);
+            error.SetParticleName(particleErr);
             error.SetChi2(physicsTrack.GetChi2());
         }
 
