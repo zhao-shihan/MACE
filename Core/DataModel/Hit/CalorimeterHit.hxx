@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DataModel/Interface/Transient.hxx"
-#include "DataModel/BranchSocket/BasicBranchSocket.hxx"
+#include "DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 
 class MACE::DataModel::CalorimeterHit :
     public MACE::DataModel::Interface::Transient {
@@ -44,7 +44,7 @@ private:
 
 inline void MACE::DataModel::CalorimeterHit::FillBranchSockets() const noexcept {
     Base::FillBranchSockets();
-    fgHitTime.Value() = fHitTime;
-    fgEnergy.Value() = fEnergy;
-    fgEnergyVariance.Value() = fEnergyVariance;
+    fgHitTime.SetValue(fHitTime);
+    fgEnergy.SetValue(fEnergy);
+    fgEnergyVariance.SetValue(fEnergyVariance);
 }

@@ -2,8 +2,8 @@
 
 #include "DataModel/Global.hxx"
 #include "DataModel/Hit/SpectrometerHit.hxx"
-#include "DataModel/BranchSocket/BasicBranchSocket.hxx"
-#include "DataModel/BranchSocket/ClassBranchSocket.hxx"
+#include "DataModel/BranchSocket/Vector3BranchSocket.hxx"
+#include "DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 
 class MACE::DataModel::SpectrometerSimHit :
     public MACE::DataModel::SpectrometerHit {
@@ -24,23 +24,24 @@ public:
     [[nodiscard]] const auto& GetVertexPosition() const { return fVertexPosition; }
     [[nodiscard]] const auto& GetVertexEnergy() const { return fVertexEnergy; }
     [[nodiscard]] const auto& GetVertexMomentum() const { return fVertexMomentum; }
-    [[nodiscard]] const auto& GetPDGCode() const { return fPDGCode; }
+    [[nodiscard]] const auto& GetParticleName() const { return fParticleName; }
     [[nodiscard]] const auto& GetEventID() const { return fEventID; }
     [[nodiscard]] const auto& GetTrackID() const { return fTrackID; }
 
     void SetEnergy(Double_t E) { fEnergy = E; }
-    void SetMomentum(const TEveVectorD& mom) { fMomentum = mom; }
-    void SetMomentum(TEveVectorD&& mom) { fMomentum = std::move(mom); }
+    template<typename Vector3_t>
+    void SetMomentum(Vector3_t&& mom) { fMomentum = std::forward<Vector3_t>(mom); }
     void SetMomentum(Double_t pX, Double_t pY, Double_t pZ) { fMomentum.Set(pX, pY, pZ); }
     void SetVertexTime(Double_t val) { fVertexTime = val; }
-    void SetVertexPosition(const TEveVectorD& pos) { fVertexPosition = pos; }
-    void SetVertexPosition(TEveVectorD&& pos) { fVertexPosition = std::move(pos); }
+    template<typename Vector3_t>
+    void SetVertexPosition(Vector3_t&& pos) { fVertexPosition = std::forward<Vector3_t>(pos); }
     void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition.Set(x, y, z); }
     void SetVertexEnergy(Double_t E) { fVertexEnergy = E; }
-    void SetVertexMomentum(const TEveVectorD& mom) { fVertexMomentum = mom; }
-    void SetVertexMomentum(TEveVectorD&& mom) { fVertexMomentum = std::move(mom); }
+    template<typename Vector3_t>
+    void SetVertexMomentum(Vector3_t&& mom) { fVertexMomentum = std::forward<Vector3_t>(mom); }
     void SetVertexMomentum(Double_t pX, Double_t pY, Double_t pZ) { fVertexMomentum.Set(pX, pY, pZ); }
-    void SetPDGCode(Int_t pdgCode) { fPDGCode = pdgCode; }
+    template<typename String_t>
+    void SetParticleName(String_t&& particleName) { fParticleName = std::forward<String_t>(particleName); }
     void SetEventID(Int_t val) { fEventID = val; }
     void SetTrackID(Int_t val) { fTrackID = val; }
 
@@ -59,30 +60,30 @@ private:
     TEveVectorD fVertexPosition;
     Double_t    fVertexEnergy;
     TEveVectorD fVertexMomentum;
-    Int_t       fPDGCode;
+    ShortString fParticleName;
     Int_t       fEventID;
     Int_t       fTrackID;
 
-    static FloatBranchSocket    fgEnergy;
-    static Vector3FBranchSocket fgMomentum;
-    static DoubleBranchSocket   fgVertexTime;
-    static Vector3FBranchSocket fgVertexPosition;
-    static FloatBranchSocket    fgVertexEnergy;
-    static Vector3FBranchSocket fgVertexMomentum;
-    static IntBranchSocket      fgPDGCode;
-    static IntBranchSocket      fgEventID;
-    static IntBranchSocket      fgTrackID;
+    static FloatBranchSocket       fgEnergy;
+    static Vector3FBranchSocket    fgMomentum;
+    static DoubleBranchSocket      fgVertexTime;
+    static Vector3FBranchSocket    fgVertexPosition;
+    static FloatBranchSocket       fgVertexEnergy;
+    static Vector3FBranchSocket    fgVertexMomentum;
+    static ShortStringBranchSocket fgParticleName;
+    static IntBranchSocket         fgEventID;
+    static IntBranchSocket         fgTrackID;
 };
 
 inline void MACE::DataModel::SpectrometerSimHit::FillBranchSockets() const noexcept {
     Base::FillBranchSockets();
-    fgEnergy.Value() = fEnergy;
-    fgMomentum.Value() = fMomentum;
-    fgVertexTime.Value() = fVertexTime;
-    fgVertexPosition.Value() = fVertexPosition;
-    fgVertexEnergy.Value() = fVertexEnergy;
-    fgVertexMomentum.Value() = fVertexMomentum;
-    fgPDGCode.Value() = fPDGCode;
-    fgEventID.Value() = fEventID;
-    fgTrackID.Value() = fTrackID;
+    fgEnergy.SetValue(fEnergy);
+    fgMomentum.SetValue(fMomentum);
+    fgVertexTime.SetValue(fVertexTime);
+    fgVertexPosition.SetValue(fVertexPosition);
+    fgVertexEnergy.SetValue(fVertexEnergy);
+    fgVertexMomentum.SetValue(fVertexMomentum);
+    fgParticleName.SetValue(fParticleName);
+    fgEventID.SetValue(fEventID);
+    fgTrackID.SetValue(fTrackID);
 }

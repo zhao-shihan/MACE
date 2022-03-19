@@ -2,15 +2,15 @@
 
 using namespace MACE::DataModel;
 
-DoubleBranchSocket               VertexDetectorHit::fgHitTime("hitT", 0);
-Vector2FBranchSocket         VertexDetectorHit::fgHitPosition("hitX", 0, 0);
-Vector2FBranchSocket VertexDetectorHit::fgHitPositionVariance("vhitX", 0, 0);
+DoubleBranchSocket               VertexDetectorHit::fgHitTime("hitTime", 0);
+Vector2FBranchSocket         VertexDetectorHit::fgHitPosition("hitPos", { "x", "y" }, { 0, 0 });
+Vector2FBranchSocket VertexDetectorHit::fgHitPositionVariance("hitPosVar", { "x", "y" }, { 0, 0 });
 
 VertexDetectorHit::VertexDetectorHit() noexcept :
     Base(),
-    fHitTime(fgHitTime.Value()),
-    fHitPosition(fgHitPosition.Value()),
-    fHitPositionVariance(fgHitPositionVariance.Value()) {}
+    fHitTime(fgHitTime.GetValue()),
+    fHitPosition(fgHitPosition.GetValue()),
+    fHitPositionVariance(fgHitPositionVariance.GetValue()) {}
 
 void VertexDetectorHit::CreateBranches(TTree& tree) {
     Base::CreateBranches(tree);

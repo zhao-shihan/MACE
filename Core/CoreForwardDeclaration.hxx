@@ -1,16 +1,20 @@
 #pragma once
 
-#include <concepts>
+#include "CoreConcepts.hxx"
 
 namespace MACE {
 
-    // FIXME: using inline namespace at this level (just under MACE) confuses VSCode's C++ extension. Maybe conflicts with the C++ standard? 
+    // FIXME: using inline namespace at this level (just under MACE) confuses VSCode's C++ extension.
     // inline namespace Core {
 
     namespace DataModel {
         inline namespace BranchSocket {
-            template<typename Arith_t> requires std::integral<Arith_t> or std::floating_point<Arith_t> class BasicBranchSocket;
-            template<typename Class_t> class ClassBranchSocket;
+            template<ClassType Class_t> class ClassBranchSocket;
+            template<FundamentalType Fund_t> class FundamentalBranchSocket;
+            class ShortStringBranchSocket;
+            template<FundamentalType Fund_t> class Vector2BranchSocket;
+            template<FundamentalType Fund_t> class Vector3BranchSocket;
+            template<FundamentalType Fund_t, int Size> class VectorBranchSocket;
         }
         inline namespace Hit {
             class CalorimeterHit;
@@ -18,7 +22,7 @@ namespace MACE {
             class SpectrometerHit;
         }
         namespace Interface {
-            template<typename Object_t, typename Address_t> class BranchSocket;
+            template<typename Type, bool UseReferenceInGetAndSet> class BranchSocket;
             class Transient;
         }
         inline namespace RawHit { // no impl yet

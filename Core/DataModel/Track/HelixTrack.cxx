@@ -2,23 +2,23 @@
 
 using namespace MACE::DataModel;
 
-DoubleBranchSocket            HelixTrack::fgVertexTime("vtxT", 0);
-Vector2FBranchSocket              HelixTrack::fgCenter("center", 0, 0);
+DoubleBranchSocket            HelixTrack::fgVertexTime("vtxTime", 0);
+Vector2FBranchSocket              HelixTrack::fgCenter("center", { "x", "y" }, { 0, 0 });
 FloatBranchSocket                 HelixTrack::fgRadius("r", 0);
 FloatBranchSocket                     HelixTrack::fgZ0("z0", 0);
 FloatBranchSocket                  HelixTrack::fgAlpha("alpha", 0);
-IntBranchSocket     HelixTrack::fgNumberOfFittedPoints("nPts", 0);
+IntBranchSocket     HelixTrack::fgNumberOfFittedPoints("nHits", 0);
 FloatBranchSocket                   HelixTrack::fgChi2("chi2", 0);
 
 HelixTrack::HelixTrack() noexcept :
     Base(),
-    fVertexTime(fgVertexTime.Value()),
-    fCenter(fgCenter.Value()),
-    fRadius(fgRadius.Value()),
-    fZ0(fgZ0.Value()),
-    fAlpha(fgAlpha.Value()),
-    fNumberOfFittedPoints(fgNumberOfFittedPoints.Value()),
-    fChi2(fgChi2.Value()) {}
+    fVertexTime(fgVertexTime.GetValue()),
+    fCenter(fgCenter.GetValue()),
+    fRadius(fgRadius.GetValue()),
+    fZ0(fgZ0.GetValue()),
+    fAlpha(fgAlpha.GetValue()),
+    fNumberOfFittedPoints(fgNumberOfFittedPoints.GetValue()),
+    fChi2(fgChi2.GetValue()) {}
 
 void HelixTrack::CreateBranches(TTree& tree) {
     Base::CreateBranches(tree);

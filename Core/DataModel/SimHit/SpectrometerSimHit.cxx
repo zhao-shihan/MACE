@@ -2,27 +2,27 @@
 
 using namespace MACE::DataModel;
 
-FloatBranchSocket            SpectrometerSimHit::fgEnergy("hitE", 0);
-Vector3FBranchSocket       SpectrometerSimHit::fgMomentum("hitP", 0, 0, 0);
-DoubleBranchSocket       SpectrometerSimHit::fgVertexTime("vtxT", 0);
-Vector3FBranchSocket SpectrometerSimHit::fgVertexPosition("vtxX", 0, 0, 0);
-FloatBranchSocket      SpectrometerSimHit::fgVertexEnergy("vtxE", 0);
-Vector3FBranchSocket SpectrometerSimHit::fgVertexMomentum("vtxP", 0, 0, 0);
-IntBranchSocket             SpectrometerSimHit::fgPDGCode("pdgCode", std::numeric_limits<Int_t>::max());
-IntBranchSocket             SpectrometerSimHit::fgEventID("evtID", -1);
-IntBranchSocket             SpectrometerSimHit::fgTrackID("trkID", -1);
+FloatBranchSocket             SpectrometerSimHit::fgEnergy("hitEne", 0);
+Vector3FBranchSocket        SpectrometerSimHit::fgMomentum("hitMom", { "x", "y", "z" }, { 0, 0, 0 });
+DoubleBranchSocket        SpectrometerSimHit::fgVertexTime("vtxTime", 0);
+Vector3FBranchSocket  SpectrometerSimHit::fgVertexPosition("vtxPos", { "x", "y", "z" }, { 0, 0, 0 });
+FloatBranchSocket       SpectrometerSimHit::fgVertexEnergy("vtxEne", 0);
+Vector3FBranchSocket  SpectrometerSimHit::fgVertexMomentum("vtxMom", { "x", "y", "z" }, { 0, 0, 0 });
+ShortStringBranchSocket SpectrometerSimHit::fgParticleName("particle", "");
+IntBranchSocket              SpectrometerSimHit::fgEventID("eventID", -1);
+IntBranchSocket              SpectrometerSimHit::fgTrackID("trackID", -1);
 
 SpectrometerSimHit::SpectrometerSimHit() noexcept :
     Base(),
-    fEnergy(fgEnergy.Value()),
-    fMomentum(fgMomentum.Value()),
-    fVertexTime(fgVertexTime.Value()),
-    fVertexPosition(fgVertexPosition.Value()),
-    fVertexEnergy(fgVertexEnergy.Value()),
-    fVertexMomentum(fgVertexMomentum.Value()),
-    fPDGCode(fgPDGCode.Value()),
-    fEventID(fgEventID.Value()),
-    fTrackID(fgTrackID.Value()) {}
+    fEnergy(fgEnergy.GetValue()),
+    fMomentum(fgMomentum.GetValue()),
+    fVertexTime(fgVertexTime.GetValue()),
+    fVertexPosition(fgVertexPosition.GetValue()),
+    fVertexEnergy(fgVertexEnergy.GetValue()),
+    fVertexMomentum(fgVertexMomentum.GetValue()),
+    fParticleName(fgParticleName.GetValue()),
+    fEventID(fgEventID.GetValue()),
+    fTrackID(fgTrackID.GetValue()) {}
 
 void SpectrometerSimHit::CreateBranches(TTree& tree) {
     Base::CreateBranches(tree);
@@ -32,7 +32,7 @@ void SpectrometerSimHit::CreateBranches(TTree& tree) {
     fgVertexPosition.CreateBranch(tree);
     fgVertexEnergy.CreateBranch(tree);
     fgVertexMomentum.CreateBranch(tree);
-    fgPDGCode.CreateBranch(tree);
+    fgParticleName.CreateBranch(tree);
     fgEventID.CreateBranch(tree);
     fgTrackID.CreateBranch(tree);
 }
@@ -45,7 +45,7 @@ void SpectrometerSimHit::ConnectToBranches(TTree& tree) {
     fgVertexPosition.ConnectToBranch(tree);
     fgVertexEnergy.ConnectToBranch(tree);
     fgVertexMomentum.ConnectToBranch(tree);
-    fgPDGCode.ConnectToBranch(tree);
+    fgParticleName.ConnectToBranch(tree);
     fgEventID.ConnectToBranch(tree);
     fgTrackID.ConnectToBranch(tree);
 }

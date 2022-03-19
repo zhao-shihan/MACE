@@ -5,25 +5,25 @@
 
 using namespace MACE::DataModel;
 
-DoubleBranchSocket            PhysicsTrack::fgVertexTime("vtxT", 0);
-Vector3FBranchSocket      PhysicsTrack::fgVertexPosition("vtxX", 0, 0, 0);
-FloatBranchSocket           PhysicsTrack::fgVertexEnergy("vtxE", 0);
-Vector3FBranchSocket      PhysicsTrack::fgVertexMomentum("vtxP", 0, 0, 0);
-IntBranchSocket                   PhysicsTrack::fgCharge("q", 0);
-IntBranchSocket     PhysicsTrack::fgNumberOfFittedPoints("nPts", 0);
-FloatBranchSocket                   PhysicsTrack::fgChi2("chi2", 0);
+DoubleBranchSocket               PhysicsTrack::fgVertexTime("vtxTime", 0);
+Vector3FBranchSocket         PhysicsTrack::fgVertexPosition("vtxPos", { "x", "y", "z" }, { 0, 0, 0 });
+FloatBranchSocket              PhysicsTrack::fgVertexEnergy("vtxEne", 0);
+Vector3FBranchSocket         PhysicsTrack::fgVertexMomentum("vtxMom", { "x", "y", "z" }, { 0, 0, 0 });
+ShortStringBranchSocket        PhysicsTrack::fgParticleName("particle", "");
+IntBranchSocket        PhysicsTrack::fgNumberOfFittedPoints("nHits", 0);
+FloatBranchSocket                      PhysicsTrack::fgChi2("chi2", 0);
 
 PhysicsTrack::PhysicsTrack() noexcept :
     Base(),
-    fVertexTime(fgVertexTime.Value()),
-    fVertexPosition(fgVertexPosition.Value()),
-    fVertexEnergy(fgVertexEnergy.Value()),
-    fVertexMomentum(fgVertexMomentum.Value()),
-    fCharge(fgCharge.Value()),
-    fNumberOfFittedPoints(fgNumberOfFittedPoints.Value()),
-    fChi2(fgChi2.Value()) {}
+    fVertexTime(fgVertexTime.GetValue()),
+    fVertexPosition(fgVertexPosition.GetValue()),
+    fVertexEnergy(fgVertexEnergy.GetValue()),
+    fVertexMomentum(fgVertexMomentum.GetValue()),
+    fParticleName(fgParticleName.GetValue()),
+    fNumberOfFittedPoints(fgNumberOfFittedPoints.GetValue()),
+    fChi2(fgChi2.GetValue()) {}
 
-PhysicsTrack::PhysicsTrack(const HelixTrack& helix, UInt_t absQ, Double_t B, Double_t mass) :
+PhysicsTrack::PhysicsTrack(const HelixTrack& helix, Double_t B, Double_t mass) :
     fVertexTime(helix.GetVertexTime()),
     fNumberOfFittedPoints(helix.GetNumberOfFittedPoints()),
     fChi2(helix.GetChi2()) {
@@ -39,9 +39,10 @@ PhysicsTrack::PhysicsTrack(const HelixTrack& helix, UInt_t absQ, Double_t B, Dou
     const auto vertexY = (radius - rCenter) * sinPhi0;
     fVertexPosition.Set(vertexX, vertexY, vertexZ);
 
-    fCharge = (alpha > 0) ? (-absQ) : absQ;
+    const auto charge = (alpha > 0) ? (-1) : 1;
+    fParticleName = (charge > 0) ? "e+" : "e-";
 
-    const auto pPhi = -fCharge * B * radius * CLHEP::c_light;
+    const auto pPhi = -charge * B * radius * CLHEP::c_light;
     const auto pX = -pPhi * sinPhi0;
     const auto pY = pPhi * cosPhi0;
     const auto pZ = pPhi / std::tan(alpha);
@@ -55,7 +56,7 @@ void PhysicsTrack::CreateBranches(TTree& tree) {
     fgVertexPosition.CreateBranch(tree);
     fgVertexEnergy.CreateBranch(tree);
     fgVertexMomentum.CreateBranch(tree);
-    fgCharge.CreateBranch(tree);
+    fgParticleName.CreateBranch(tree);
     fgNumberOfFittedPoints.CreateBranch(tree);
     fgChi2.CreateBranch(tree);
 }
@@ -66,7 +67,7 @@ void PhysicsTrack::ConnectToBranches(TTree& tree) {
     fgVertexPosition.ConnectToBranch(tree);
     fgVertexEnergy.ConnectToBranch(tree);
     fgVertexMomentum.ConnectToBranch(tree);
-    fgCharge.ConnectToBranch(tree);
+    fgParticleName.ConnectToBranch(tree);
     fgNumberOfFittedPoints.ConnectToBranch(tree);
     fgChi2.ConnectToBranch(tree);
 }

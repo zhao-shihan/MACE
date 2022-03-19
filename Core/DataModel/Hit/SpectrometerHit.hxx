@@ -1,10 +1,8 @@
 #pragma once
 
-#include "TEveVector.h"
-
 #include "DataModel/Interface/Transient.hxx"
-#include "DataModel/BranchSocket/BasicBranchSocket.hxx"
-#include "DataModel/BranchSocket/ClassBranchSocket.hxx"
+#include "DataModel/BranchSocket/FundamentalBranchSocket.hxx"
+#include "DataModel/BranchSocket/Vector2BranchSocket.hxx"
 
 class MACE::DataModel::SpectrometerHit :
     public MACE::DataModel::Interface::Transient {
@@ -35,9 +33,9 @@ public:
     void SetHitPositionZVariance(Double_t var) { fHitPositionZVariance = var; }
     void SetCellID(Int_t val) { fCellID = val; }
     void SetLayerID(Int_t val) { fLayerID = val; }
-    void SetWirePosition(const TEveVector2D& val) { fWirePosition = val; }
-    void SetWirePosition(TEveVector2D&& val) { fWirePosition = std::move(val); }
-    void SetWirePosition(Double_t x, Double_t y) { fWirePosition.Set(x, y); }
+    template<typename Vector2_t>
+    void SetWirePosition(Vector2_t&& pos) { fWirePosition = std::forward<Vector2_t>(pos); }
+    void SetWirePosition(Double_t x, Double_t y) { fWirePosition = { x, y }; }
 
 protected:
     static void CreateBranches(TTree& tree);
@@ -69,12 +67,12 @@ private:
 
 inline void MACE::DataModel::SpectrometerHit::FillBranchSockets() const noexcept {
     Base::FillBranchSockets();
-    fgHitTime.Value() = fHitTime;
-    fgDriftDistance.Value() = fDriftDistance;
-    fgHitPositionZ.Value() = fHitPositionZ;
-    fgDriftDistanceVariance.Value() = fDriftDistanceVariance;
-    fgHitPositionZVariance.Value() = fHitPositionZVariance;
-    fgCellID.Value() = fCellID;
-    fgLayerID.Value() = fLayerID;
-    fgWirePosition.Value() = fWirePosition;
+    fgHitTime.SetValue(fHitTime);
+    fgDriftDistance.SetValue(fDriftDistance);
+    fgHitPositionZ.SetValue(fHitPositionZ);
+    fgDriftDistanceVariance.SetValue(fDriftDistanceVariance);
+    fgHitPositionZVariance.SetValue(fHitPositionZVariance);
+    fgCellID.SetValue(fCellID);
+    fgLayerID.SetValue(fLayerID);
+    fgWirePosition.SetValue(fWirePosition);
 }

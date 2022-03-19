@@ -3,8 +3,8 @@
 #include "TEveVector.h"
 
 #include "DataModel/Interface/Transient.hxx"
-#include "DataModel/BranchSocket/BasicBranchSocket.hxx"
-#include "DataModel/BranchSocket/ClassBranchSocket.hxx"
+#include "DataModel/BranchSocket/FundamentalBranchSocket.hxx"
+#include "DataModel/BranchSocket/Vector2BranchSocket.hxx"
 
 class MACE::DataModel::VertexDetectorHit :
     public MACE::DataModel::Interface::Transient {
@@ -24,12 +24,12 @@ public:
     [[nodiscard]] const auto& GetHitPositionVariance() const { return fHitPositionVariance; }
 
     void SetHitTime(Double_t val) { fHitTime = val; }
-    void SetHitPosition(const TEveVector2D& val) { fHitPosition = val; }
-    void SetHitPosition(TEveVector2D&& val) { fHitPosition = std::move(val); }
-    void SetHitPosition(Double_t x, Double_t y) { fHitPosition.Set(x, y); }
-    void SetHitPositionVariance(const TEveVector2D& val) { fHitPositionVariance = val; }
-    void SetHitPositionVariance(TEveVector2D&& val) { fHitPositionVariance = std::move(val); }
-    void SetHitPositionVariance(Double_t xVar, Double_t yVar) { fHitPositionVariance.Set(xVar, yVar); }
+    template<typename Vector2_t>
+    void SetHitPosition(Vector2_t&& pos) { fHitPosition = std::forward<Vector2_t>(pos); }
+    void SetHitPosition(Double_t x, Double_t y) { fHitPosition = { x, y }; }
+    template<typename Vector2_t>
+    void SetHitPositionVariance(Vector2_t&& posVar) { fHitPositionVariance = std::forward<Vector2_t>(posVar); }
+    void SetHitPositionVariance(Double_t xVar, Double_t yVar) { fHitPositionVariance = { xVar, yVar }; }
 
 protected:
     static void CreateBranches(TTree& tree);
@@ -51,7 +51,7 @@ private:
 
 inline void MACE::DataModel::VertexDetectorHit::FillBranchSockets() const noexcept {
     Base::FillBranchSockets();
-    fgHitTime.Value() = fHitTime;
-    fgHitPosition.Value() = fHitPosition;
-    fgHitPositionVariance.Value() = fHitPositionVariance;
+    fgHitTime.SetValue(fHitTime);
+    fgHitPosition.SetValue(fHitPosition);
+    fgHitPositionVariance.SetValue(fHitPositionVariance);
 }

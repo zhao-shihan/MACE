@@ -3,8 +3,8 @@
 #include "TEveVector.h"
 
 #include "DataModel/Interface/Transient.hxx"
-#include "DataModel/BranchSocket/BasicBranchSocket.hxx"
-#include "DataModel/BranchSocket/ClassBranchSocket.hxx"
+#include "DataModel/BranchSocket/FundamentalBranchSocket.hxx"
+#include "DataModel/BranchSocket/Vector2BranchSocket.hxx"
 
 class MACE::DataModel::HelixTrack :
     public MACE::DataModel::Interface::Transient {
@@ -28,9 +28,9 @@ public:
     [[nodiscard]] const auto& GetChi2() const { return fChi2; }
 
     void SetVertexTime(Double_t val) { fVertexTime = val; }
-    void SetCenter(const TEveVector2D& val) { fCenter = val; }
-    void SetCenter(TEveVector2D&& val) { fCenter = std::move(val); }
-    void SetCenter(Double_t x, Double_t y) { fCenter.Set(x, y); }
+    template<typename Vector2_t>
+    void SetCenter(Vector2_t&& val) { fCenter = std::forward<Vector2_t>(val); }
+    void SetCenter(Double_t x, Double_t y) { fCenter = { x, y }; }
     void SetRadius(Double_t val) { fRadius = val; }
     void SetZ0(Double_t val) { fZ0 = val; }
     void SetAlpha(Double_t val) { fAlpha = val; }
@@ -65,11 +65,11 @@ private:
 
 inline void MACE::DataModel::HelixTrack::FillBranchSockets() const noexcept {
     Base::FillBranchSockets();
-    fgVertexTime.Value() = fVertexTime;
-    fgCenter.Value() = fCenter;
-    fgRadius.Value() = fRadius;
-    fgZ0.Value() = fZ0;
-    fgAlpha.Value() = fAlpha;
-    fgNumberOfFittedPoints.Value() = fNumberOfFittedPoints;
-    fgChi2.Value() = fChi2;
+    fgVertexTime.SetValue(fVertexTime);
+    fgCenter.SetValue(fCenter);
+    fgRadius.SetValue(fRadius);
+    fgZ0.SetValue(fZ0);
+    fgAlpha.SetValue(fAlpha);
+    fgNumberOfFittedPoints.SetValue(fNumberOfFittedPoints);
+    fgChi2.SetValue(fChi2);
 }
