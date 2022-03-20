@@ -1,7 +1,7 @@
 #include "mpi.h"
 
-#include "G4StateManager.hh"
 #include "G4MPImanager.hh"
+#include "G4StateManager.hh"
 
 #include "MPITools/G4MPIRunManager.hxx"
 
@@ -19,7 +19,8 @@ void G4MPIRunManager::SetG4MPImanager(const G4MPImanager& g4mpi) {
 G4bool G4MPIRunManager::ConfirmBeamOnCondition() {
     if (MPI::Is_initialized() and fG4mpi == nullptr) {
         G4cerr << "G4MPImanager is not set while MPI is initialized - BeamOn() ignored.\n"
-            "Try invoke SetG4MPImanager(const G4MPImanager&) before BeamOn()." << G4endl;
+                  "Try invoke SetG4MPImanager(const G4MPImanager&) before BeamOn()."
+               << G4endl;
         return false;
     }
     return G4RunManager::ConfirmBeamOnCondition();

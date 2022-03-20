@@ -39,12 +39,12 @@
 
 #pragma once
 
-#include "SimMACE/Global.hxx"
 #include "G4VDecayChannel.hh"
+#include "SimMACE/Global.hxx"
 
 // Class Decription
 //  This class describes muon decay kinemtics.
-//  This version neglects muon polarization  
+//  This version neglects muon polarization
 //              assumes the pure V-A coupling
 //              gives incorrect energy spectrum for neutrinos
 //

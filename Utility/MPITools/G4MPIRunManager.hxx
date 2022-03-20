@@ -2,8 +2,8 @@
 
 #include "G4RunManager.hh"
 
-#include "UtilityForwardDeclaration.hxx"
 #include "ObserverPtr.hxx"
+#include "UtilityForwardDeclaration.hxx"
 
 class G4MPImanager;
 

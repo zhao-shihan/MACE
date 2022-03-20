@@ -7,6 +7,7 @@
 class MACE::SimMACE::RunAction final :
     public G4UserRunAction {
     friend ActionInitialization;
+
 private:
     RunAction() = default;
     ~RunAction() noexcept = default;

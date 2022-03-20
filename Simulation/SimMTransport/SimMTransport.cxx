@@ -10,4 +10,3 @@ int main(int argc, char** argv) {
     delete runManager;
     return EXIT_SUCCESS;
 }
-

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "TRandom3.h"
 #include "TF3.h"
+#include "TRandom3.h"
 
 #include "TEveVector.h"
 
@@ -15,9 +15,9 @@ constexpr size_t MonteCarloInitStockSize = MonteCarloInitStockTotalCapacity / (2
 constexpr size_t MonteCarloStockSize = MonteCarloStockTotalCapacity / (sizeof(TEveVectorD) + sizeof(double));
 
 #define MONTE_CARLO_STOCK_DECL(type, name) \
-    type* const name##Stock; \
-    type* const name##StockEnd; \
-    type*       name##Iter
+    type* const name##Stock;               \
+    type* const name##StockEnd;            \
+    type* name##Iter
 
 class MACE::SimMTransport::MonteCarlo {
 private:
@@ -34,9 +34,9 @@ public:
     MonteCarlo(const MonteCarlo&) = delete;
     MonteCarlo& operator=(const MonteCarlo&) = delete;
 
-    double                 VertexTime();
+    double VertexTime();
     const TEveVectorD& VertexPosition();
-    double                 Life();
+    double Life();
     const TEveVectorD& MaxwellBoltzmann();
-    double                 FreePath(const TEveVectorD& pos);
+    double FreePath(const TEveVectorD& pos);
 };

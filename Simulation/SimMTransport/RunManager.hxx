@@ -4,22 +4,23 @@
 #include "Master.hxx"
 #include "Worker.hxx"
 
-namespace MACE {
-    namespace SimMTransport {
-        enum RunStatus {
-            kRunUndefined,
-            kRunInitialized,
-            kRunRunning,
-            kRunStopped,
-            kRunFinalized
-        };
-    }
+namespace MACE::SimMTransport {
+
+enum RunStatus {
+    kRunUndefined,
+    kRunInitialized,
+    kRunRunning,
+    kRunStopped,
+    kRunFinalized
+};
+
 }
 
 class MACE::SimMTransport::RunManager {
 public:
     static RunManager* Instance();
     ~RunManager() noexcept = default;
+
 private:
     static RunManager* fInstance;
     RunManager();

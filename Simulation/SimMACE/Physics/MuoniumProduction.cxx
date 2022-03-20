@@ -1,11 +1,11 @@
 #include "G4MuonPlus.hh"
-#include "G4RunManager.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4RunManager.hh"
 
-#include "SimMACE/Physics/MuoniumProduction.hxx"
+#include "SimMACE/Messenger/PhysicsMessenger.hxx"
 #include "SimMACE/Physics/AntiMuonium.hxx"
 #include "SimMACE/Physics/Muonium.hxx"
-#include "SimMACE/Messenger/PhysicsMessenger.hxx"
+#include "SimMACE/Physics/MuoniumProduction.hxx"
 
 using namespace MACE::SimMACE::Physics;
 

@@ -3,8 +3,8 @@ AllowAllArgumentsOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortBlocksOnASingleLine: Empty
 AllowShortCaseLabelsOnASingleLine: true
-AllowShortEnumsOnASingleLine: false
-AllowShortFunctionsOnASingleLine:	Inline
+AllowShortEnumsOnASingleLine: true
+AllowShortFunctionsOnASingleLine:	All
 AllowShortIfStatementsOnASingleLine: WithoutElse
 AllowShortLoopsOnASingleLine:	true
 AlwaysBreakAfterReturnType: None

@@ -5,6 +5,7 @@
 class MACE::SimMACE::VerticalField final :
     public G4UniformMagField {
     friend DetectorConstruction;
+
 private:
     VerticalField(G4double B);
     ~VerticalField() noexcept = default;

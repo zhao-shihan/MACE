@@ -7,6 +7,7 @@
 class MACE::SimMACE::AcceleratorField final :
     public G4ElectroMagneticField {
     friend DetectorConstruction;
+
 private:
     AcceleratorField();
     ~AcceleratorField() noexcept = default;

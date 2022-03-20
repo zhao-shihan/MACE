@@ -8,6 +8,7 @@
 class MACE::SimMACE::FirstBendField final :
     public G4MagneticField {
     friend DetectorConstruction;
+
 private:
     FirstBendField();
     ~FirstBendField() noexcept = default;

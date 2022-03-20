@@ -8,6 +8,7 @@
 class MACE::SimMACE::SecondBendField final :
     public G4MagneticField {
     friend DetectorConstruction;
+
 private:
     SecondBendField();
     ~SecondBendField() noexcept = default;

@@ -1,32 +1,30 @@
 #pragma once
 
 #include "Global.hxx"
-#include "Step.hxx"
 #include "MonteCarlo.hxx"
+#include "Step.hxx"
 
-namespace MACE {
-    namespace SimMTransport {
-        enum TrackStatus {
-            kTrackUndefined,
-            kTrackInitialized,
-            kTrackAlive,
-            kTrackDecayed
-        };
-    }
-}
+namespace MACE::SimMTransport {
 
-class MACE::SimMTransport::Track {
+enum TrackStatus {
+    kTrackUndefined,
+    kTrackInitialized,
+    kTrackAlive,
+    kTrackDecayed
+};
+
+class Track {
 protected:
-    Step* const       fCurrentStep;
+    Step* const fCurrentStep;
     MonteCarlo* const fMonteCarlo;
 
-    double          fVertexTime;
+    double fVertexTime;
     TEveVectorD fVertexPosition;
-    double          fLife;
+    double fLife;
 
-    bool              fEscaping;
+    bool fEscaping;
 
-    TrackStatus       fStatus;
+    TrackStatus fStatus;
 
     Global* global;
     Analysis* analysis;
@@ -52,3 +50,5 @@ private:
     double MeanFreePath(double x, double y, double z) { return (*global->MeanFreePath())(x, y, z); }
     void EscapingDoIt();
 };
+
+}

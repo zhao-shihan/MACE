@@ -1,9 +1,9 @@
 #include "G4HCofThisEvent.hh"
-#include "G4Step.hh"
 #include "G4SDManager.hh"
+#include "G4Step.hh"
 
-#include "SimMACE/SD/VertexDetectorSD.hxx"
 #include "SimMACE/RunManager.hxx"
+#include "SimMACE/SD/VertexDetectorSD.hxx"
 #include "SimMACE/Utility/Analysis.hxx"
 
 using namespace MACE::SimMACE::SD;
@@ -23,8 +23,8 @@ void VertexDetectorSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
 G4bool VertexDetectorSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     const auto* const track = step->GetTrack();
     const auto* const particle = track->GetDefinition();
-    if (step->IsFirstStepInVolume() and track->GetCurrentStepNumber() > 1 and // is coming from outside, and
-        particle->GetPDGCharge() != 0) {                                      // is a charged particle.
+    if (step->IsFirstStepInVolume() and track->GetCurrentStepNumber() > 1 and  // is coming from outside, and
+        particle->GetPDGCharge() != 0) {                                       // is a charged particle.
         const auto* const preStepPoint = step->GetPreStepPoint();
         const auto* const touchable = preStepPoint->GetTouchable();
         // get detector transform

@@ -1,8 +1,8 @@
 #include "G4MPImanager.hh"
 
-#include "SimMACE/Utility/Analysis.hxx"
 #include "SimMACE/Messenger/AnalysisMessenger.hxx"
 #include "SimMACE/Messenger/FieldMessenger.hxx"
+#include "SimMACE/Utility/Analysis.hxx"
 
 using namespace MACE::SimMACE::Utility;
 
@@ -52,7 +52,7 @@ int Analysis::Merge(G4bool forced) {
 }
 
 void Analysis::WriteEvent(G4int repetitionID) {
-    if (repetitionID != fRepetitionIDOfLastG4Event) { // means a new repetition or the first repetition
+    if (repetitionID != fRepetitionIDOfLastG4Event) {  // means a new repetition or the first repetition
         // last repetition had already come to the end, write its data. If first, skipped inside.
         WriteTrees();
         // create trees for new repetition

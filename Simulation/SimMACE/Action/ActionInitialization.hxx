@@ -7,6 +7,7 @@
 class MACE::SimMACE::ActionInitialization final :
     public G4VUserActionInitialization {
     friend RunManager;
+
 private:
     ActionInitialization() = default;
     ~ActionInitialization() noexcept = default;

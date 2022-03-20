@@ -1,10 +1,10 @@
+#include "G4SystemOfUnits.hh"
 #include "G4UIdirectory.hh"
 #include "G4UnitsTable.hh"
-#include "G4SystemOfUnits.hh"
 
+#include "SimMACE/Action/PrimaryGeneratorAction.hxx"
 #include "SimMACE/Messenger/PrimaryGeneratorMessenger.hxx"
 #include "SimMACE/RunManager.hxx"
-#include "SimMACE/Action/PrimaryGeneratorAction.hxx"
 
 using namespace MACE::SimMACE::Messenger;
 

@@ -2,15 +2,16 @@
 
 #include <map>
 
-#include "G4VSensitiveDetector.hh"
 #include "G4TwoVector.hh"
+#include "G4VSensitiveDetector.hh"
 
-#include "SimMACE/Hit/SpectrometerHit.hxx"
 #include "ObserverPtr.hxx"
+#include "SimMACE/Hit/SpectrometerHit.hxx"
 
 class MACE::SimMACE::SpectrometerSD final :
     public G4VSensitiveDetector {
     friend DetectorConstruction;
+
 private:
     SpectrometerSD(const G4String& sdName);
     ~SpectrometerSD() noexcept = default;

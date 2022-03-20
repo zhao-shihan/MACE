@@ -1,7 +1,7 @@
 #pragma once
 
-#include "G4VRestProcess.hh"
 #include "G4ParticleChange.hh"
+#include "G4VRestProcess.hh"
 
 #include "SimMACE/Global.hxx"
 
@@ -19,6 +19,6 @@ public:
 
 private:
     G4ParticleChange fParticleChange;
-    G4double fMeanLifeTime = 1.46467_us; // 60%
+    G4double fMeanLifeTime = 1.46467_us;  // 60%
     G4double fConversionProbability = 8.3e-11;
 };

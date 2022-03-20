@@ -2,13 +2,13 @@
 
 #include "TFile.h"
 
+#include "DataModel/DataHub.hxx"
+#include "MPITools/MPIFileTools.hxx"
+#include "ObserverPtr.hxx"
 #include "SimMACE/Global.hxx"
 #include "SimMACE/Hit/CalorimeterHit.hxx"
-#include "SimMACE/Hit/VertexDetectorHit.hxx"
 #include "SimMACE/Hit/SpectrometerHit.hxx"
-#include "DataModel/DataHub.hxx"
-#include "ObserverPtr.hxx"
-#include "MPITools/MPIFileTools.hxx"
+#include "SimMACE/Hit/VertexDetectorHit.hxx"
 
 class MACE::SimMACE::Analysis final {
 public:
@@ -39,12 +39,12 @@ private:
     void WriteTrees();
 
 private:
-    std::unique_ptr<TFile>         fFile;
+    std::unique_ptr<TFile> fFile;
     std::unique_ptr<MPIFileTools> fMPIFileTools;
 
     G4String fResultName = "untitled_SimMACE";
-    G4bool   fEnableCoincidenceOfCalorimeter = true;
-    G4bool   fEnableCoincidenceOfVertexDetector = true;
+    G4bool fEnableCoincidenceOfCalorimeter = true;
+    G4bool fEnableCoincidenceOfVertexDetector = true;
 
     DataModel::DataHub fDataHub;
 

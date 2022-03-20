@@ -7,6 +7,7 @@
 class MACE::SimMACE::VertexDetectorSD final :
     public G4VSensitiveDetector {
     friend DetectorConstruction;
+
 private:
     VertexDetectorSD(const G4String& sdName);
     ~VertexDetectorSD() noexcept = default;

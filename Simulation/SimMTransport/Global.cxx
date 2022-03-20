@@ -1,9 +1,9 @@
-#include <map>
 #include <fstream>
+#include <map>
 
 #include "Global.hxx"
-#include "SimMTransport/Analysis.hxx"
 #include "RunManager.hxx"
+#include "SimMTransport/Analysis.hxx"
 
 using namespace MACE::SimMTransport;
 
@@ -17,8 +17,10 @@ static std::map<std::string, std::string> CFGReader(const char* cfgFileName);
 void Global::Initialize(int& argc, char**& argv) {
     MPI_Init(&argc, &argv);
 
-    int commRank; MPI_Comm_rank(MPI_COMM_WORLD, &commRank);
-    int commSize; MPI_Comm_size(MPI_COMM_WORLD, &commSize);
+    int commRank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &commRank);
+    int commSize;
+    MPI_Comm_size(MPI_COMM_WORLD, &commSize);
 
     if (commSize < 2 or argc < 2) {
         delete RunManager::Instance();
@@ -74,8 +76,10 @@ static std::map<std::string, std::string> CFGReader(const char* cfgFileName) {
     std::map<std::string, std::string> cfgMap;
     std::ifstream fin(cfgFileName);
     if (!fin.is_open()) {
-        int commRank; MPI_Comm_rank(MPI_COMM_WORLD, &commRank);
-        int commSize; MPI_Comm_size(MPI_COMM_WORLD, &commSize);
+        int commRank;
+        MPI_Comm_rank(MPI_COMM_WORLD, &commRank);
+        int commSize;
+        MPI_Comm_size(MPI_COMM_WORLD, &commSize);
         if (commRank == commSize - 1) {
             std::cout << "Warning: Cannot open <" << cfgFileName << ">." << std::endl;
         }
@@ -87,11 +91,11 @@ static std::map<std::string, std::string> CFGReader(const char* cfgFileName) {
         if (line.empty()) { continue; }  // Skip if empty.
         auto annotationPos = line.find_first_of('#');
         if (annotationPos != std::string::npos) {  // If there are annotation,
-            line.erase(annotationPos); // drop annotation.
+            line.erase(annotationPos);             // drop annotation.
         }
         if (line.empty()) { continue; }  // Skip if there is only annotation.
         size_t spaceBeginPos, spaceEndPos;
-        do { // drop all spaces.
+        do {  // drop all spaces.
             spaceBeginPos = line.find_first_of(' ');
             if (spaceBeginPos == std::string::npos) { break; }
             spaceEndPos = line.find_first_not_of(' ', spaceBeginPos);

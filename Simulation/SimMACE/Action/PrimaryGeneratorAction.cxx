@@ -16,9 +16,9 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
 }
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
-    const auto muonsForEachReptition = fFlux / fRepetitionRate; // no rounding
-    const auto g4EventsForEachReptition = muonsForEachReptition / fMuonsForEachG4Event; // no rounding
-    fRepetitionID = event->GetEventID() / g4EventsForEachReptition; // rounding here
+    const auto muonsForEachReptition = fFlux / fRepetitionRate;                          // no rounding
+    const auto g4EventsForEachReptition = muonsForEachReptition / fMuonsForEachG4Event;  // no rounding
+    fRepetitionID = event->GetEventID() / g4EventsForEachReptition;                      // rounding here
 
     std::vector<std::tuple<G4double, G4ThreeVector, G4double>> muonStates(fMuonsForEachG4Event);
     auto* const randEngine = G4Random::getTheEngine();

@@ -68,4 +68,3 @@ void Master::ProgressReport(size_t jobSend) const {
         << "ETA: " << etaHr << "h " << etaMin << "m " << etaSec << 's'
         << std::endl;
 }
-

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "G4VHit.hh"
-#include "G4TwoVector.hh"
-#include "G4ThreeVector.hh"
-#include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
+#include "G4THitsCollection.hh"
+#include "G4ThreeVector.hh"
+#include "G4TwoVector.hh"
+#include "G4VHit.hh"
 
-#include "SimMACE/Global.hxx"
 #include "DataModel/SimHit/SpectrometerSimHit.hxx"
 #include "ObserverPtr.hxx"
+#include "SimMACE/Global.hxx"
 
 class MACE::SimMACE::SpectrometerHit final :
     public G4VHit,
@@ -27,25 +27,25 @@ public:
     void SetVertexMomentum(const G4ThreeVector& mom) { DataModel::SpectrometerSimHit::SetVertexMomentum(mom.x(), mom.y(), mom.z()); }
 
     inline void* operator new(size_t);
-    inline void  operator delete(void*);
+    inline void operator delete(void*);
 
 private:
     static ObserverPtr<G4Allocator<SpectrometerHit>> fgSpectrometerHitAllocator;
 };
 
-namespace MACE::SimMACE::Hit {
-    using SpectrometerHitCollection = G4THitsCollection<SpectrometerHit>;
-}
+namespace MACE::SimMACE::inline Hit {
 
-inline void* MACE::SimMACE::SpectrometerHit::
-operator new(size_t) {
+using SpectrometerHitCollection = G4THitsCollection<SpectrometerHit>;
+
+inline void* SpectrometerHit::operator new(size_t) {
     if (fgSpectrometerHitAllocator == nullptr) {
         fgSpectrometerHitAllocator = new G4Allocator<SpectrometerHit>();
     }
     return static_cast<void*>(fgSpectrometerHitAllocator->MallocSingle());
 }
 
-inline void MACE::SimMACE::SpectrometerHit::
-operator delete(void* hit) {
+inline void SpectrometerHit::operator delete(void* hit) {
     fgSpectrometerHitAllocator->FreeSingle(static_cast<SpectrometerHit*>(hit));
+}
+
 }

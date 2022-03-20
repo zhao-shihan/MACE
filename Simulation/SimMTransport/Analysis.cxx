@@ -38,7 +38,7 @@ void Analysis::Open() {
     }
     fOutputTime[fOutputTimeNum - 1] = Global::Instance()->EndTime();
 
-    fTimeNtuples = new TNtuple * [fOutputTimeNum];
+    fTimeNtuples = new TNtuple*[fOutputTimeNum];
     for (size_t timeId = 0; timeId < fOutputTimeNum; ++timeId) {
         std::stringstream ss;
         TString NtupleName;
@@ -47,15 +47,13 @@ void Analysis::Open() {
         fTimeNtuples[timeId] = new TNtuple(
             NtupleName,
             NtupleName,
-            "x:y:z"
-        );
+            "x:y:z");
     }
 
     fEscapedNtuple = new TNtuple(
         "Escaped",
         "Escaped",
-        "x_vertex:y_vertex:z_vertex:t_vertex:x_decay:y_decay:z_decay:t_decay"
-    );
+        "x_vertex:y_vertex:z_vertex:t_vertex:x_decay:y_decay:z_decay:t_decay");
 
     fOpened = true;
 }
@@ -70,8 +68,7 @@ void Analysis::Update(const Track* track) const {
             fTimeNtuples[timeId]->Fill(
                 interPosition.fX,
                 interPosition.fY,
-                interPosition.fZ
-            );
+                interPosition.fZ);
             break;
         }
     }
@@ -84,8 +81,7 @@ void Analysis::Update(const Track* track) const {
             track->GetCurrentStep()->postPosition.fX,
             track->GetCurrentStep()->postPosition.fY,
             track->GetCurrentStep()->postPosition.fZ,
-            track->GetCurrentStep()->postTime
-        );
+            track->GetCurrentStep()->postTime);
     }
 }
 
@@ -100,4 +96,3 @@ void Analysis::WriteAndClose() {
 
     fOpened = false;
 }
-

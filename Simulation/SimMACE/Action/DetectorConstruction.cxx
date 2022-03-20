@@ -2,6 +2,8 @@
 //
 // Entity relevant includes
 //
+#include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterField.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterShield.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfCalorimeterField/Calorimeter.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfCalorimeterField/VertexDetector.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfFirstBendField/FirstBendSolenoid.hxx"
@@ -10,18 +12,16 @@
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/Collimator.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/SecondTransportSolenoid.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/SelectorField.hxx"
+#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/AcceleratorField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfAcceleratorField/Target.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/DescendantsOfSpectrometerCells/DescendantsOfSpectrometerSensitiveVolumes/SpectrometerSenseWires.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/DescendantsOfSpectrometerCells/SpectrometerFieldWires.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/DescendantsOfSpectrometerCells/SpectrometerSensitiveVolumes.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/SpectrometerCells.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/SpectrometerReadoutLayers.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/AcceleratorField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/SpectrometerBody.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/SpectrometerMagnet.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfThirdTransportField/ThirdTransportSolenoid.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterField.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterShield.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/FirstBendField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/FirstTransportField.hxx"
 #include "Geometry/Entity/Fast/DescendantsOfWorld/SecondBendField.hxx"
@@ -41,16 +41,16 @@
 //
 #include "G4SDManager.hh"
 #include "SimMACE/SD/CalorimeterSD.hxx"
-#include "SimMACE/SD/VertexDetectorSD.hxx"
 #include "SimMACE/SD/SpectrometerSD.hxx"
+#include "SimMACE/SD/VertexDetectorSD.hxx"
 //
 // Field relevant includes
 //
-#include "G4TMagFieldEquation.hh"
-#include "G4EqMagElectricField.hh"
-#include "G4TDormandPrince45.hh"
 #include "G4DormandPrince745.hh"
+#include "G4EqMagElectricField.hh"
 #include "G4IntegrationDriver.hh"
+#include "G4TDormandPrince45.hh"
+#include "G4TMagFieldEquation.hh"
 #include "SimMACE/Field/AcceleratorField.hxx"
 #include "SimMACE/Field/FirstBendField.hxx"
 #include "SimMACE/Field/ParallelField.hxx"
@@ -230,62 +230,62 @@ void DetectorConstruction::ConstructFields() {
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
-        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(parallelBField, hMin, 6, true);
+        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>>(
+        parallelBField, hMin, 6, true);
 
     fAcceleratorField->RegisterField<
         AcceleratorField,
         G4EqMagElectricField,
         G4DormandPrince745,
-        G4IntegrationDriver<G4DormandPrince745>
-    >(new AcceleratorField(), hMin, 8, true);
+        G4IntegrationDriver<G4DormandPrince745>>(
+        new AcceleratorField(), hMin, 8, true);
 
     fFirstTransportField->RegisterField<
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
-        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(parallelBField, hMin, 6, true);
+        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>>(
+        parallelBField, hMin, 6, true);
 
     fFirstBendField->RegisterField<
         FirstBendField,
         G4TMagFieldEquation<Field::FirstBendField>,
         G4TDormandPrince45<G4TMagFieldEquation<Field::FirstBendField>>,
-        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<Field::FirstBendField>>>
-    >(new FirstBendField(), hMin, 6, true);
+        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<Field::FirstBendField>>>>(
+        new FirstBendField(), hMin, 6, true);
 
     fSecondTransportField->RegisterField<
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
-        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(verticalBField, hMin, 6, true);
+        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>>(
+        verticalBField, hMin, 6, true);
 
     fSelectorField->RegisterField<
         SelectorField,
         G4EqMagElectricField,
         G4DormandPrince745,
-        G4IntegrationDriver<G4DormandPrince745>
-    >(new SelectorField(), hMin, 8, true);
+        G4IntegrationDriver<G4DormandPrince745>>(
+        new SelectorField(), hMin, 8, true);
 
     fSecondBendField->RegisterField<
         SecondBendField,
         G4TMagFieldEquation<Field::SecondBendField>,
         G4TDormandPrince45<G4TMagFieldEquation<Field::SecondBendField>>,
-        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<Field::SecondBendField>>>
-    >(new SecondBendField(), hMin, 6, true);
+        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<Field::SecondBendField>>>>(
+        new SecondBendField(), hMin, 6, true);
 
     fThirdTransportField->RegisterField<
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
-        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(parallelBField, hMin, 6, true);
+        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>>(
+        parallelBField, hMin, 6, true);
 
     fCalorimeterField->RegisterField<
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
-        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>
-    >(parallelBField, hMin, 6, true);
+        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>>(
+        parallelBField, hMin, 6, true);
 }

@@ -9,37 +9,38 @@
 #include "CoreForwardDeclaration.hxx"
 #include "SimForwardDeclaration.hxx"
 
+namespace MACE::SimMTransport {
+
 // Unit system:
 //  us = 1.0;
 //  um = 1.0;
 //  MeV = 1.0;
 //  kelvin = 1.0;
 //  rad = 1.0;
-namespace MACE {
-    namespace SimMTransport {
-        constexpr double cLight = 299792458.0;
-        constexpr double kBoltzmann = 8.617333262145178152e-11;
-    }
-}
+
+constexpr double cLight = 299792458.0;
+constexpr double kBoltzmann = 8.617333262145178152e-11;
 
 #define MACE_SIMMTRANSPORT_GLOBAL_MEMBER(T, Name, defaultVal) \
-public: \
-    T const& Name() const { return f##Name; } \
-    void Set##Name(T const& val) { f##Name = val; } \
-private: \
+public:                                                       \
+    T const& Name() const { return f##Name; }                 \
+    void Set##Name(T const& val) { f##Name = val; }           \
+                                                              \
+private:                                                      \
     T f##Name = defaultVal
 
 #define MACE_SIMMTRANSPORT_GLOBAL_MEMBER_POINT_TO_OBJ(T, Name, defaultVal) \
-public: \
-    T* Name() const { return f##Name; } \
-    void Set##Name(T* val) { \
-        delete f##Name; \
-        f##Name = val; \
-    } \
-private: \
+public:                                                                    \
+    T* Name() const { return f##Name; }                                    \
+    void Set##Name(T* val) {                                               \
+        delete f##Name;                                                    \
+        f##Name = val;                                                     \
+    }                                                                      \
+                                                                           \
+private:                                                                   \
     T* f##Name = defaultVal
 
-class MACE::SimMTransport::Global {
+class Global {
 private:
     Global() = default;
     ~Global() noexcept = default;
@@ -76,3 +77,5 @@ public:
 
 #undef MACE_SIMMTRANSPORT_GLOBAL_MEMBER
 #undef MACE_SIMMTRANSPORT_GLOBAL_MEMBER_POINT_TO_OBJ
+
+}

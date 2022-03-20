@@ -1,14 +1,14 @@
 #pragma once
 
-#include "G4VHit.hh"
-#include "G4TwoVector.hh"
-#include "G4ThreeVector.hh"
-#include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
+#include "G4THitsCollection.hh"
+#include "G4ThreeVector.hh"
+#include "G4TwoVector.hh"
+#include "G4VHit.hh"
 
-#include "SimMACE/Global.hxx"
 #include "DataModel/SimHit/VertexDetectorSimHit.hxx"
 #include "ObserverPtr.hxx"
+#include "SimMACE/Global.hxx"
 
 class MACE::SimMACE::VertexDetectorHit final :
     public G4VHit,
@@ -25,25 +25,25 @@ public:
     void SetVertexPosition(const G4ThreeVector& pos) { DataModel::VertexDetectorSimHit::SetVertexPosition(pos.x(), pos.y(), pos.z()); }
 
     inline void* operator new(size_t);
-    inline void  operator delete(void*);
+    inline void operator delete(void*);
 
 private:
     static ObserverPtr<G4Allocator<VertexDetectorHit>> fgVertexDetectorAllocator;
 };
 
 namespace MACE::SimMACE::Hit {
-    using VertexDetectorHitCollection = G4THitsCollection<VertexDetectorHit>;
-}
 
-inline void* MACE::SimMACE::VertexDetectorHit::
-operator new(size_t) {
+using VertexDetectorHitCollection = G4THitsCollection<VertexDetectorHit>;
+
+inline void* VertexDetectorHit::operator new(size_t) {
     if (fgVertexDetectorAllocator == nullptr) {
         fgVertexDetectorAllocator = new G4Allocator<VertexDetectorHit>();
     }
     return static_cast<void*>(fgVertexDetectorAllocator->MallocSingle());
 }
 
-inline void MACE::SimMACE::VertexDetectorHit::
-operator delete(void* hit) {
+inline void VertexDetectorHit::operator delete(void* hit) {
     fgVertexDetectorAllocator->FreeSingle(static_cast<VertexDetectorHit*>(hit));
+}
+
 }

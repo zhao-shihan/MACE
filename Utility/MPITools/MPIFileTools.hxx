@@ -1,13 +1,13 @@
 #pragma once
 
-#include <string_view>
 #include <filesystem>
 #include <iostream>
+#include <string_view>
 
 #include "mpi.h"
 
-#include "UtilityForwardDeclaration.hxx"
 #include "ObserverPtr.hxx"
+#include "UtilityForwardDeclaration.hxx"
 
 /// Create directories and file paths to help managing files during mpi processing.
 ///
@@ -57,7 +57,7 @@
 /// xxx
 /// result.root                                      -> (created by MergeRootFiles())
 ///
-/// When just ./xxx (not in MPI mode) : 
+/// When just ./xxx (not in MPI mode) :
 /// Just a single result.root will be created.
 ///
 class MACE::MPIFileTools final {
@@ -83,15 +83,15 @@ private:
     void ReportSuffixNotRoot() const;
 
 private:
-    const std::string                  fBasicName;
-    const std::string                  fSuffix;
+    const std::string fBasicName;
+    const std::string fSuffix;
     const ObserverPtr<const MPI::Comm> fComm;
 
-    std::filesystem::path              fFilePath;
+    std::filesystem::path fFilePath;
 
-    static constexpr int               fgMasterRank = 0;
-    static constexpr int               fgProcessorNameMax = MPI_MAX_PROCESSOR_NAME;
-    static constexpr int               fgFilePathMax = 4 * MPI_MAX_PROCESSOR_NAME;
+    static constexpr int fgMasterRank = 0;
+    static constexpr int fgProcessorNameMax = MPI_MAX_PROCESSOR_NAME;
+    static constexpr int fgFilePathMax = 4 * MPI_MAX_PROCESSOR_NAME;
 
-    static ObserverPtr<std::ostream>   fgOut;
+    static ObserverPtr<std::ostream> fgOut;
 };

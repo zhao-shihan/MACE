@@ -4,12 +4,13 @@
 
 #include "G4VUserDetectorConstruction.hh"
 
-#include "SimMACE/Global.hxx"
 #include "ObserverPtr.hxx"
+#include "SimMACE/Global.hxx"
 
 class MACE::SimMACE::DetectorConstruction final :
     public G4VUserDetectorConstruction {
     friend RunManager;
+
 private:
     DetectorConstruction() = default;
     ~DetectorConstruction() noexcept = default;

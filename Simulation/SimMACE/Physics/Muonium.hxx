@@ -10,6 +10,7 @@ class MACE::SimMACE::Physics::Muonium final :
     public G4ParticleDefinition {
 public:
     static Muonium* Definition();
+
 private:
     static Muonium* fgInstance;
 

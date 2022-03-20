@@ -1,13 +1,13 @@
-#include "Randomize.hh"
-#include "G4UImanager.hh"
-#include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
 #include "G4MPImanager.hh"
 #include "G4MPIsession.hh"
+#include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
+#include "Randomize.hh"
 
-#include "SimMACE/RunManager.hxx"
 #include "SimMACE/Action/DetectorConstruction.hxx"
 #include "SimMACE/Physics/PhysicsList.hxx"
+#include "SimMACE/RunManager.hxx"
 
 using namespace MACE::SimMACE;
 

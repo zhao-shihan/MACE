@@ -1,13 +1,14 @@
 #pragma once
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 
 #include "SimMACE/Global.hxx"
 
 class MACE::SimMACE::PrimaryGeneratorAction final :
     public G4VUserPrimaryGeneratorAction {
     friend ActionInitialization;
+
 private:
     PrimaryGeneratorAction();
     ~PrimaryGeneratorAction() noexcept = default;
@@ -38,6 +39,6 @@ private:
     G4double fEnergySpreadRMS = 0.05 * fEnergy;
     G4double fBeamProfileRMS = 5_mm;
 
-    G4int    fMuonsForEachG4Event = 500;
-    G4int    fRepetitionID;
+    G4int fMuonsForEachG4Event = 500;
+    G4int fRepetitionID;
 };

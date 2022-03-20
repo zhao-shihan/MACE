@@ -1,13 +1,13 @@
-#include "G4UIdirectory.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UIdirectory.hh"
 
-#include "SimMACE/Messenger/FieldMessenger.hxx"
 #include "SimMACE/Field/AcceleratorField.hxx"
 #include "SimMACE/Field/FirstBendField.hxx"
 #include "SimMACE/Field/ParallelField.hxx"
 #include "SimMACE/Field/SecondBendField.hxx"
 #include "SimMACE/Field/SelectorField.hxx"
 #include "SimMACE/Field/VerticalField.hxx"
+#include "SimMACE/Messenger/FieldMessenger.hxx"
 #include "SimMACE/Utility/Analysis.hxx"
 
 using namespace MACE::SimMACE::Messenger;

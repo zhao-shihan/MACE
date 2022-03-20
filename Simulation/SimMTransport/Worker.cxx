@@ -45,4 +45,3 @@ void Worker::Finalize() {
     Analysis::Instance()->WriteAndClose();
     delete Analysis::Instance();
 }
-

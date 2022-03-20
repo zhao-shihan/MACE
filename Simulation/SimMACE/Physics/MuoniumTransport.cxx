@@ -1,8 +1,8 @@
 #include "G4MPImanager.hh"
 #include "G4SystemOfUnits.hh"
 
-#include "SimMACE/Physics/MuoniumTransport.hxx"
 #include "SimMACE/Physics/Muonium.hxx"
+#include "SimMACE/Physics/MuoniumTransport.hxx"
 #include "SimMACE/Utility/Region.hxx"
 
 using namespace MACE::SimMACE::Physics;

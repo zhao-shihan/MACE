@@ -1,12 +1,12 @@
 #pragma once
 
-#include "G4UImessenger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UImessenger.hh"
 
-#include "SimMACE/Global.hxx"
 #include "ObserverPtr.hxx"
+#include "SimMACE/Global.hxx"
 
 class MACE::SimMACE::AnalysisMessenger final :
     public G4UImessenger {

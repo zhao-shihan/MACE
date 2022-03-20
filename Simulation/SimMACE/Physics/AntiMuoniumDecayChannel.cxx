@@ -26,33 +26,33 @@
 // $Id: MuDecayChannel.cc,v 1.17 2006/06/29 19:25:34 gunter Exp $
 // GEANT4 tag $Name: geant4-09-00 $
 //
-// 
+//
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
 //      History: first implementation, based on object model of
 //      30 May  1997 H.Kurashige
 //
-//      Fix bug in calcuration of electron energy in DecayIt 28 Feb. 01 H.Kurashige 
+//      Fix bug in calcuration of electron energy in DecayIt 28 Feb. 01 H.Kurashige
 //
 //  2005
 //      M. Melissas ( melissas AT cppm.in2p3.fr)
-//      J. Brunner ( brunner AT cppm.in2p3.fr) 
-//      Adding V-A fluxes for neutrinos using a new algortithm : 
+//      J. Brunner ( brunner AT cppm.in2p3.fr)
+//      Adding V-A fluxes for neutrinos using a new algortithm :
 //
 //  2008-05
 //      Modified for the muonium decay by Toni SHIROKA, Paul Scherrer Institut, PSI
 // ------------------------------------------------------------
 
-#include "G4ParticleDefinition.hh"
 #include "G4DecayProducts.hh"
-#include "G4VDecayChannel.hh"
-#include "Randomize.hh"
-#include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
+#include "G4LorentzVector.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4RotationMatrix.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4PhysicalConstants.hh"
+#include "G4VDecayChannel.hh"
+#include "Randomize.hh"
 
 #include "SimMACE/Physics/AntiMuoniumDecayChannel.hxx"
 
@@ -71,18 +71,18 @@ AntiMuoniumDecayChannel::AntiMuoniumDecayChannel(const G4String& theParentName, 
     } else {
 #ifdef G4VERBOSE
         if (GetVerboseLevel() > 0) {
-            G4cout <<
-                "AntiMuoniumDecayChannel::(Constructor) says\n"
-                "\tParent particle is not AntiMuonium(-M) but " << theParentName << G4endl;
+            G4cout << "AntiMuoniumDecayChannel::(Constructor) says\n"
+                      "\tParent particle is not AntiMuonium(-M) but "
+                   << theParentName << G4endl;
         }
 #endif
     }
 }
 
 G4DecayProducts* AntiMuoniumDecayChannel::DecayIt(G4double) {
-    // this version neglects muon polarization,and electron mass  
+    // this version neglects muon polarization,and electron mass
     //              assumes the pure V-A coupling
-    //              the Neutrinos are correctly V-A. 
+    //              the Neutrinos are correctly V-A.
 #ifdef G4VERBOSE
     if (GetVerboseLevel() > 1) { G4cout << "AntiMuoniumDecayChannel::DecayIt "; }
 #endif
@@ -116,8 +116,7 @@ G4DecayProducts* AntiMuoniumDecayChannel::DecayIt(G4double) {
     G4double gam;
     G4double EMax = 0.5 * parentMass - daughterMass[0];
 
-
-    //Generating Random Energy
+    // Generating Random Energy
     do {
         Ee = G4UniformRand();
         do {
@@ -128,7 +127,7 @@ G4DecayProducts* AntiMuoniumDecayChannel::DecayIt(G4double) {
     } while (Ene < (1. - Ee));
     auto Enm = (2. - Ee - Ene);
 
-    //initialisation of rotation parameters
+    // initialisation of rotation parameters
 
     G4double costheta, sintheta, rphi, rtheta, rpsi;
     costheta = 1. - 2. / Ee - 2. / Ene + 2. / (Ene * Ee);
@@ -140,7 +139,7 @@ G4DecayProducts* AntiMuoniumDecayChannel::DecayIt(G4double) {
 
     G4RotationMatrix rot(rphi, rtheta, rpsi);
 
-    //eletron 0
+    // eletron 0
 
     daughtermomentum[0] = sqrt((Ee * EMax) * (Ee * EMax) + 2.0 * (Ee * EMax) * daughterMass[0]);
     G4ThreeVector direction0(0.0, 0.0, 1.0);
@@ -148,7 +147,7 @@ G4DecayProducts* AntiMuoniumDecayChannel::DecayIt(G4double) {
     auto daughterparticle = new G4DynamicParticle(G4MT_daughters[0], direction0 * daughtermomentum[0]);
     products->PushProducts(daughterparticle);
 
-    //positronic neutrino  1
+    // positronic neutrino  1
 
     daughtermomentum[1] = sqrt(Ene * Ene * EMax * EMax + 2.0 * Ene * EMax * daughterMass[1]);
     G4ThreeVector direction1(sintheta, 0.0, costheta);
@@ -156,7 +155,7 @@ G4DecayProducts* AntiMuoniumDecayChannel::DecayIt(G4double) {
     auto daughterparticle1 = new G4DynamicParticle(G4MT_daughters[1], direction1 * daughtermomentum[1]);
     products->PushProducts(daughterparticle1);
 
-    //anti muonic neutrino 2
+    // anti muonic neutrino 2
 
     daughtermomentum[2] = sqrt(Enm * Enm * EMax * EMax + 2.0 * Enm * EMax * daughterMass[2]);
     G4ThreeVector direction2(-Ene / Enm * sintheta, 0, -Ee / Enm - Ene / Enm * costheta);
@@ -164,9 +163,9 @@ G4DecayProducts* AntiMuoniumDecayChannel::DecayIt(G4double) {
     auto daughterparticle2 = new G4DynamicParticle(G4MT_daughters[2], direction2 * daughtermomentum[2]);
     products->PushProducts(daughterparticle2);
 
-    //atomic shell positron 3
-    //energy distribution
-    constexpr double ProbTable[100] = { 0.0579448, 0.0820584, 0.0822704, 0.0764795, 0.0690145, 0.0614549, 0.054404, 0.0480648, 0.0424683, 0.0375724, 0.0333076, 0.0295981, 0.0263708, 0.0235596, 0.0211061, 0.0189599, 0.0170777, 0.0154228, 0.0139636, 0.0126736, 0.01153, 0.0105136, 0.0096078, 0.00879855, 0.00807379, 0.00742315, 0.00683769, 0.00630972, 0.00583257, 0.00540044, 0.0050083, 0.00465176, 0.00432698, 0.00403061, 0.00375967, 0.00351158, 0.00328404, 0.00307501, 0.0028827, 0.00270552, 0.00254203, 0.00239098, 0.00225124, 0.00212178, 0.00200171, 0.0018902, 0.00178653, 0.00169004, 0.00160012, 0.00151625, 0.00143793, 0.00136472, 0.00129622, 0.00123207, 0.00117194, 0.00111552, 0.00106253, 0.00101274, 0.000965894, 0.000921796, 0.000880247, 0.000841072, 0.000804106, 0.0007692, 0.000736214, 0.000705023, 0.000675507, 0.00064756, 0.000621079, 0.000595972, 0.000572154, 0.000549544, 0.000528069, 0.000507659, 0.000488251, 0.000469786, 0.000452208, 0.000435466, 0.000419511, 0.0004043, 0.000389789, 0.000375941, 0.000362718, 0.000350087, 0.000338015, 0.000326472, 0.000315431, 0.000304866, 0.00029475, 0.000285062, 0.000275778, 0.00026688, 0.000258347, 0.000250162, 0.000242306, 0.000234765, 0.000227523, 0.000220565, 0.000213878, 0.000207449 };
+    // atomic shell positron 3
+    // energy distribution
+    constexpr double ProbTable[100] = {0.0579448, 0.0820584, 0.0822704, 0.0764795, 0.0690145, 0.0614549, 0.054404, 0.0480648, 0.0424683, 0.0375724, 0.0333076, 0.0295981, 0.0263708, 0.0235596, 0.0211061, 0.0189599, 0.0170777, 0.0154228, 0.0139636, 0.0126736, 0.01153, 0.0105136, 0.0096078, 0.00879855, 0.00807379, 0.00742315, 0.00683769, 0.00630972, 0.00583257, 0.00540044, 0.0050083, 0.00465176, 0.00432698, 0.00403061, 0.00375967, 0.00351158, 0.00328404, 0.00307501, 0.0028827, 0.00270552, 0.00254203, 0.00239098, 0.00225124, 0.00212178, 0.00200171, 0.0018902, 0.00178653, 0.00169004, 0.00160012, 0.00151625, 0.00143793, 0.00136472, 0.00129622, 0.00123207, 0.00117194, 0.00111552, 0.00106253, 0.00101274, 0.000965894, 0.000921796, 0.000880247, 0.000841072, 0.000804106, 0.0007692, 0.000736214, 0.000705023, 0.000675507, 0.00064756, 0.000621079, 0.000595972, 0.000572154, 0.000549544, 0.000528069, 0.000507659, 0.000488251, 0.000469786, 0.000452208, 0.000435466, 0.000419511, 0.0004043, 0.000389789, 0.000375941, 0.000362718, 0.000350087, 0.000338015, 0.000326472, 0.000315431, 0.000304866, 0.00029475, 0.000285062, 0.000275778, 0.00026688, 0.000258347, 0.000250162, 0.000242306, 0.000234765, 0.000227523, 0.000220565, 0.000213878, 0.000207449};
     double probsum3 = 0.;
     double seed3 = G4UniformRand();
     G4double kineticE3 = 0.;
@@ -178,7 +177,7 @@ G4DecayProducts* AntiMuoniumDecayChannel::DecayIt(G4double) {
         }
     }
 
-    //Set Direction
+    // Set Direction
     auto r3 = G4UniformRand();
     auto a3 = 2.0 * sqrt(r3 * (1.0 - r3));
     auto b3 = twopi * G4UniformRand();
@@ -189,9 +188,9 @@ G4DecayProducts* AntiMuoniumDecayChannel::DecayIt(G4double) {
     // output message
 #ifdef G4VERBOSE
     if (GetVerboseLevel() > 1) {
-        G4cout <<
-            "AntiMuoniumDecayChannel::DecayIt\n"
-            "\tCreate decay products in rest frame." << G4endl;
+        G4cout << "AntiMuoniumDecayChannel::DecayIt\n"
+                  "\tCreate decay products in rest frame."
+               << G4endl;
         products->DumpInfo();
     }
 #endif

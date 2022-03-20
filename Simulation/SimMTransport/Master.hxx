@@ -6,8 +6,8 @@ class MACE::SimMTransport::Master {
 private:
     clock_t fBeginCPUTime;
     clock_t fEndCPUTime;
-    time_t  fRunBeginTime;
-    time_t  fRunEndTime;
+    time_t fRunBeginTime;
+    time_t fRunEndTime;
 
 public:
     Master();
@@ -20,8 +20,8 @@ public:
     void Finalize();
 
     [[nodiscard]] clock_t GetUsedCPUTime() const { return fEndCPUTime - fBeginCPUTime; }
-    [[nodiscard]] time_t  GetRunBeginTime() const { return fRunBeginTime; }
-    [[nodiscard]] time_t  GetRunEndTime() const { return fRunEndTime; }
+    [[nodiscard]] time_t GetRunBeginTime() const { return fRunBeginTime; }
+    [[nodiscard]] time_t GetRunEndTime() const { return fRunEndTime; }
 
 private:
     void ProgressReport(size_t jobSend) const;

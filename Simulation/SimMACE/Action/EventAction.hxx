@@ -2,12 +2,13 @@
 
 #include "G4UserEventAction.hh"
 
-#include "SimMACE/Global.hxx"
 #include "ObserverPtr.hxx"
+#include "SimMACE/Global.hxx"
 
 class MACE::SimMACE::EventAction final :
     public G4UserEventAction {
     friend ActionInitialization;
+
 private:
     EventAction() = default;
     ~EventAction() noexcept = default;

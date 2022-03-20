@@ -1,12 +1,12 @@
 #pragma once
 
-#include "G4VContinuousProcess.hh"
 #include "G4ParticleChange.hh"
+#include "G4VContinuousProcess.hh"
 
-#include "SimMACE/Global.hxx"
-#include "SimMACE/Action/DetectorConstruction.hxx"
-#include "SimMTransport/Track.hxx"
 #include "ObserverPtr.hxx"
+#include "SimMACE/Action/DetectorConstruction.hxx"
+#include "SimMACE/Global.hxx"
+#include "SimMTransport/Track.hxx"
 
 class MACE::SimMACE::Physics::MuoniumTransport final :
     public G4VContinuousProcess,

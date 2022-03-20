@@ -1,16 +1,16 @@
-#include "G4EmLivermorePhysics.hh"
+#include "G4DecayPhysics.hh"
 #include "G4EmExtraPhysics.hh"
+#include "G4EmLivermorePhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronPhysicsFTFP_BERT.hh"
-#include "G4StoppingPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
-#include "G4DecayPhysics.hh"
 #include "G4ProductionCuts.hh"
 #include "G4RegionStore.hh"
+#include "G4StoppingPhysics.hh"
 
-#include "SimMACE/Physics/PhysicsList.hxx"
 #include "SimMACE/Physics/MuoniumPhysics.hxx"
+#include "SimMACE/Physics/PhysicsList.hxx"
 
 using namespace MACE::SimMACE::Physics;
 

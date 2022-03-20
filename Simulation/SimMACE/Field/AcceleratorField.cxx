@@ -1,6 +1,6 @@
 #include "SimMACE/Field/AcceleratorField.hxx"
-#include "SimMACE/Messenger/FieldMessenger.hxx"
 #include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/AcceleratorField.hxx"
+#include "SimMACE/Messenger/FieldMessenger.hxx"
 
 using namespace MACE::SimMACE::Field;
 

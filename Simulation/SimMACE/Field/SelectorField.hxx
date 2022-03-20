@@ -8,6 +8,7 @@
 class MACE::SimMACE::SelectorField final :
     public G4ElectroMagneticField {
     friend DetectorConstruction;
+
 private:
     SelectorField();
     ~SelectorField() noexcept = default;
@@ -24,7 +25,6 @@ public:
 
 private:
     G4double fBTransport = 0.1_T;
-
     G4double fSelectEk = 7_keV;
     G4double fESelect = 5_kV_cm;
     G4double fBSelect;

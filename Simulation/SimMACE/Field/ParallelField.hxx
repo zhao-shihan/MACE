@@ -5,6 +5,7 @@
 class MACE::SimMACE::ParallelField final :
     public G4UniformMagField {
     friend DetectorConstruction;
+
 private:
     ParallelField(G4double B);
     ~ParallelField() noexcept = default;

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "G4VHit.hh"
-#include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
+#include "G4THitsCollection.hh"
+#include "G4VHit.hh"
 
-#include "SimMACE/Global.hxx"
 #include "DataModel/SimHit/CalorimeterSimHit.hxx"
 #include "ObserverPtr.hxx"
+#include "SimMACE/Global.hxx"
 
 class MACE::SimMACE::CalorimeterHit final :
     public G4VHit,
@@ -20,25 +20,25 @@ public:
     CalorimeterHit& operator=(CalorimeterHit&& hit) noexcept = default;
 
     inline void* operator new(size_t);
-    inline void  operator delete(void*);
+    inline void operator delete(void*);
 
 private:
     static ObserverPtr<G4Allocator<CalorimeterHit>> fgCalorimeterHitAllocator;
 };
 
-namespace MACE::SimMACE::Hit {
-    using CalorimeterHitCollection = G4THitsCollection<CalorimeterHit>;
-}
+namespace MACE::SimMACE::inline Hit {
 
-inline void* MACE::SimMACE::CalorimeterHit::
-operator new(size_t) {
+using CalorimeterHitCollection = G4THitsCollection<CalorimeterHit>;
+
+inline void* CalorimeterHit::operator new(size_t) {
     if (fgCalorimeterHitAllocator == nullptr) {
         fgCalorimeterHitAllocator = new G4Allocator<CalorimeterHit>();
     }
     return static_cast<void*>(fgCalorimeterHitAllocator->MallocSingle());
 }
 
-inline void MACE::SimMACE::CalorimeterHit::
-operator delete(void* hit) {
+inline void CalorimeterHit::operator delete(void* hit) {
     fgCalorimeterHitAllocator->FreeSingle(static_cast<CalorimeterHit*>(hit));
+}
+
 }

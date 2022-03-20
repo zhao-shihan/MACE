@@ -177,4 +177,3 @@ void Track::EscapingDoIt() {
         center = (fCurrentStep->postPosition + out) * 0.5;
     } while (checkStep > 0.01 * MeanFreePath(center.fX, center.fY, center.fZ));
 }
-
