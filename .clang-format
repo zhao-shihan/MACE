@@ -31,7 +31,7 @@ DeriveLineEnding: true
 DisableFormat: false
 EmptyLineAfterAccessModifier: Never
 EmptyLineBeforeAccessModifier: LogicalBlock
-FixNamespaceComments: false
+FixNamespaceComments: true
 ForEachMacros: ['std::foreach','std::foreach_n']
 IncludeBlocks: Preserve
 IncludeCategories:
@@ -55,6 +55,7 @@ PPIndentWidth: -1
 PointerAlignment: Left
 ReferenceAlignment: Left
 ReflowComments: true
+ShortNamespaceLines: 0
 SortIncludes: CaseInsensitive
 SortUsingDeclarations: true
 SpaceAfterCStyleCast: false
@@ -71,7 +72,7 @@ SpaceBeforeRangeBasedForLoopColon: true
 SpaceBeforeSquareBrackets: false
 SpaceInEmptyBlock: false
 SpaceInEmptyParentheses: false
-SpacesBeforeTrailingComments: 2
+SpacesBeforeTrailingComments: 1
 SpacesInAngles: Never
 SpacesInCStyleCastParentheses: false
 SpacesInConditionalStatement: false

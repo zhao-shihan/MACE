@@ -50,4 +50,4 @@ template<typename Type>
 using VectorX = Matrix<Type, Dynamic, 1>;
 #endif
 
-}
+} // namespace Eigen

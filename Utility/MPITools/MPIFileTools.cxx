@@ -9,7 +9,7 @@
 
 #include "MPITools/MPIFileTools.hxx"
 
-using namespace MACE;
+using namespace MACE::Utility;
 
 ObserverPtr<std::ostream> MPIFileTools::fgOut = std::addressof(std::cout);
 
@@ -158,7 +158,7 @@ void MPIFileTools::ConstructPathMPIImpl() {
         std::vector<std::filesystem::path> directoryList(0);
         std::vector<std::filesystem::path> filePathList(0);
         filePathList.reserve(commSize);
-        if (processorNameSet.size() > 1) {  // is running on cluster or supercomputer!
+        if (processorNameSet.size() > 1) { // is running on cluster or supercomputer!
             // construct directory names
             directoryList.reserve(processorNameSet.size());
             for (auto&& uniqueProcessorName : std::as_const(processorNameSet)) {
@@ -168,7 +168,7 @@ void MPIFileTools::ConstructPathMPIImpl() {
             for (int rank = 0; rank < commSize; ++rank) {
                 filePathList.emplace_back(rootPath / std::as_const(processorNameList[rank]) / FileNameForRank(rank));
             }
-        } else {  // is running on work station!
+        } else { // is running on work station!
             // construct directory names
             directoryList.emplace_back(fBasicName);
             // construct full file paths

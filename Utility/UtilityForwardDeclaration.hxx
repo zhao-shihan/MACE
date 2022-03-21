@@ -9,10 +9,10 @@ inline namespace MPITools {
     class G4MPIRunManager;
     class MPIFileTools;
     class MPIJobsAssigner;
-}
+} // namespace MPITools
 
 class ShortString;
 
 // } // inline namespace Utility
 
-}  // namespace MACE
+} // namespace MACE
