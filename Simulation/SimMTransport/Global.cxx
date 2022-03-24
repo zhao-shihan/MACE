@@ -1,11 +1,11 @@
-#include <fstream>
-#include <map>
-
 #include "Global.hxx"
 #include "RunManager.hxx"
 #include "SimMTransport/Analysis.hxx"
 
-using namespace MACE::SimMTransport;
+#include <fstream>
+#include <map>
+
+using MACE::Simulation::SimMTransport::Global;
 
 Global* Global::Instance() {
     static Global global;
@@ -88,20 +88,20 @@ static std::map<std::string, std::string> CFGReader(const char* cfgFileName) {
     std::string line;
     while (!fin.eof()) {
         std::getline(fin, line);
-        if (line.empty()) { continue; }  // Skip if empty.
+        if (line.empty()) { continue; } // Skip if empty.
         auto annotationPos = line.find_first_of('#');
-        if (annotationPos != std::string::npos) {  // If there are annotation,
-            line.erase(annotationPos);             // drop annotation.
+        if (annotationPos != std::string::npos) { // If there are annotation,
+            line.erase(annotationPos);            // drop annotation.
         }
-        if (line.empty()) { continue; }  // Skip if there is only annotation.
+        if (line.empty()) { continue; } // Skip if there is only annotation.
         size_t spaceBeginPos, spaceEndPos;
-        do {  // drop all spaces.
+        do { // drop all spaces.
             spaceBeginPos = line.find_first_of(' ');
             if (spaceBeginPos == std::string::npos) { break; }
             spaceEndPos = line.find_first_not_of(' ', spaceBeginPos);
             line.erase(spaceBeginPos, spaceEndPos - spaceBeginPos);
         } while (spaceEndPos != spaceBeginPos);
-        if (line.empty()) { continue; }  // Skip if empty.
+        if (line.empty()) { continue; } // Skip if empty.
         auto eqPos = line.find_first_of('=');
         if (eqPos != line.find_last_of('=')) {
             std::cout << "Notice: Multiple = sign found in <" << cfgFileName << ">." << std::endl;

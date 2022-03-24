@@ -1,6 +1,6 @@
 #include "Geometry/Description/World.hxx"
 
-using namespace MACE::Geometry::Description;
+using MACE::Geometry::Description::World;
 
 World& World::Instance() noexcept {
     static World instance;

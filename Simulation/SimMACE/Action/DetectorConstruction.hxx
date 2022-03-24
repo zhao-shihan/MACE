@@ -1,23 +1,58 @@
 #pragma once
 
-#include <memory>
+#include "Geometry/Entity/Fast/AcceleratorField.hxx"
+#include "Geometry/Entity/Fast/Calorimeter.hxx"
+#include "Geometry/Entity/Fast/CalorimeterField.hxx"
+#include "Geometry/Entity/Fast/CalorimeterShield.hxx"
+#include "Geometry/Entity/Fast/Collimator.hxx"
+#include "Geometry/Entity/Fast/FirstBendField.hxx"
+#include "Geometry/Entity/Fast/FirstBendSolenoid.hxx"
+#include "Geometry/Entity/Fast/FirstTransportField.hxx"
+#include "Geometry/Entity/Fast/FirstTransportSolenoid.hxx"
+#include "Geometry/Entity/Fast/SecondBendField.hxx"
+#include "Geometry/Entity/Fast/SecondBendSolenoid.hxx"
+#include "Geometry/Entity/Fast/SecondTransportField.hxx"
+#include "Geometry/Entity/Fast/SecondTransportSolenoid.hxx"
+#include "Geometry/Entity/Fast/SelectorField.hxx"
+#include "Geometry/Entity/Fast/SpectrometerBody.hxx"
+#include "Geometry/Entity/Fast/SpectrometerCells.hxx"
+#include "Geometry/Entity/Fast/SpectrometerField.hxx"
+#include "Geometry/Entity/Fast/SpectrometerFieldWires.hxx"
+#include "Geometry/Entity/Fast/SpectrometerMagnet.hxx"
+#include "Geometry/Entity/Fast/SpectrometerReadoutLayers.hxx"
+#include "Geometry/Entity/Fast/SpectrometerSenseWires.hxx"
+#include "Geometry/Entity/Fast/SpectrometerSensitiveVolumes.hxx"
+#include "Geometry/Entity/Fast/SpectrometerShield.hxx"
+#include "Geometry/Entity/Fast/Target.hxx"
+#include "Geometry/Entity/Fast/ThirdTransportField.hxx"
+#include "Geometry/Entity/Fast/ThirdTransportSolenoid.hxx"
+#include "Geometry/Entity/Fast/VertexDetector.hxx"
+#include "Geometry/Entity/Fast/World.hxx"
+#include "ObserverPtr.hxx"
+#include "SimMACE/Global.hxx"
+#include "SimMACE/SD/CalorimeterSD.hxx"
+#include "SimMACE/SD/SpectrometerSD.hxx"
+#include "SimMACE/SD/VertexDetectorSD.hxx"
+#include "SimMACE/Utility/Region.hxx"
 
 #include "G4VUserDetectorConstruction.hh"
 
-#include "ObserverPtr.hxx"
-#include "SimMACE/Global.hxx"
+#include <memory>
 
-class MACE::SimMACE::DetectorConstruction final :
-    public G4VUserDetectorConstruction {
-    friend RunManager;
+namespace MACE::Simulation::SimMACE::Action {
 
-private:
+using namespace Geometry::Entity::Fast;
+using namespace SD;
+using MACE::Utility::ObserverPtr;
+using Utility::Region;
+
+class DetectorConstruction final : public G4VUserDetectorConstruction {
+public:
     DetectorConstruction() = default;
     ~DetectorConstruction() noexcept = default;
     DetectorConstruction(const DetectorConstruction&) = delete;
     DetectorConstruction& operator=(const DetectorConstruction&) = delete;
 
-public:
     G4VPhysicalVolume* Construct() override;
 
     void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlaps = checkOverlaps; }
@@ -45,34 +80,34 @@ private:
 private:
     G4bool fCheckOverlaps = false;
 
-    std::shared_ptr<Geometry::Entity::Fast::Calorimeter> fCalorimeter;
-    std::shared_ptr<Geometry::Entity::Fast::VertexDetector> fVertexDetector;
-    std::shared_ptr<Geometry::Entity::Fast::FirstBendSolenoid> fFirstBendSolenoid;
-    std::shared_ptr<Geometry::Entity::Fast::FirstTransportSolenoid> fFirstTransportSolenoid;
-    std::shared_ptr<Geometry::Entity::Fast::SecondBendSolenoid> fSecondBendSolenoid;
-    std::shared_ptr<Geometry::Entity::Fast::Collimator> fCollimator;
-    std::shared_ptr<Geometry::Entity::Fast::SecondTransportSolenoid> fSecondTransportSolenoid;
-    std::shared_ptr<Geometry::Entity::Fast::SelectorField> fSelectorField;
-    std::shared_ptr<Geometry::Entity::Fast::Target> fTarget;
-    std::shared_ptr<Geometry::Entity::Fast::SpectrometerSenseWires> fSpectrometerSenseWires;
-    std::shared_ptr<Geometry::Entity::Fast::SpectrometerFieldWires> fSpectrometerFieldWires;
-    std::shared_ptr<Geometry::Entity::Fast::SpectrometerSensitiveVolumes> fSpectrometerSensitiveVolumes;
-    std::shared_ptr<Geometry::Entity::Fast::SpectrometerCells> fSpectrometerCells;
-    std::shared_ptr<Geometry::Entity::Fast::SpectrometerReadoutLayers> fSpectrometerReadoutLayers;
-    std::shared_ptr<Geometry::Entity::Fast::AcceleratorField> fAcceleratorField;
-    std::shared_ptr<Geometry::Entity::Fast::SpectrometerBody> fSpectrometerBody;
-    std::shared_ptr<Geometry::Entity::Fast::SpectrometerMagnet> fSpectrometerMagnet;
-    std::shared_ptr<Geometry::Entity::Fast::ThirdTransportSolenoid> fThirdTransportSolenoid;
-    std::shared_ptr<Geometry::Entity::Fast::CalorimeterField> fCalorimeterField;
-    std::shared_ptr<Geometry::Entity::Fast::CalorimeterShield> fCalorimeterShield;
-    std::shared_ptr<Geometry::Entity::Fast::FirstBendField> fFirstBendField;
-    std::shared_ptr<Geometry::Entity::Fast::FirstTransportField> fFirstTransportField;
-    std::shared_ptr<Geometry::Entity::Fast::SecondBendField> fSecondBendField;
-    std::shared_ptr<Geometry::Entity::Fast::SecondTransportField> fSecondTransportField;
-    std::shared_ptr<Geometry::Entity::Fast::SpectrometerField> fSpectrometerField;
-    std::shared_ptr<Geometry::Entity::Fast::SpectrometerShield> fSpectrometerShield;
-    std::shared_ptr<Geometry::Entity::Fast::ThirdTransportField> fThirdTransportField;
-    std::shared_ptr<Geometry::Entity::Fast::World> fWorld;
+    std::shared_ptr<Calorimeter> fCalorimeter;
+    std::shared_ptr<VertexDetector> fVertexDetector;
+    std::shared_ptr<FirstBendSolenoid> fFirstBendSolenoid;
+    std::shared_ptr<FirstTransportSolenoid> fFirstTransportSolenoid;
+    std::shared_ptr<SecondBendSolenoid> fSecondBendSolenoid;
+    std::shared_ptr<Collimator> fCollimator;
+    std::shared_ptr<SecondTransportSolenoid> fSecondTransportSolenoid;
+    std::shared_ptr<SelectorField> fSelectorField;
+    std::shared_ptr<Target> fTarget;
+    std::shared_ptr<SpectrometerSenseWires> fSpectrometerSenseWires;
+    std::shared_ptr<SpectrometerFieldWires> fSpectrometerFieldWires;
+    std::shared_ptr<SpectrometerSensitiveVolumes> fSpectrometerSensitiveVolumes;
+    std::shared_ptr<SpectrometerCells> fSpectrometerCells;
+    std::shared_ptr<SpectrometerReadoutLayers> fSpectrometerReadoutLayers;
+    std::shared_ptr<AcceleratorField> fAcceleratorField;
+    std::shared_ptr<SpectrometerBody> fSpectrometerBody;
+    std::shared_ptr<SpectrometerMagnet> fSpectrometerMagnet;
+    std::shared_ptr<ThirdTransportSolenoid> fThirdTransportSolenoid;
+    std::shared_ptr<CalorimeterField> fCalorimeterField;
+    std::shared_ptr<CalorimeterShield> fCalorimeterShield;
+    std::shared_ptr<FirstBendField> fFirstBendField;
+    std::shared_ptr<FirstTransportField> fFirstTransportField;
+    std::shared_ptr<SecondBendField> fSecondBendField;
+    std::shared_ptr<SecondTransportField> fSecondTransportField;
+    std::shared_ptr<SpectrometerField> fSpectrometerField;
+    std::shared_ptr<SpectrometerShield> fSpectrometerShield;
+    std::shared_ptr<ThirdTransportField> fThirdTransportField;
+    std::shared_ptr<World> fWorld;
 
     ObserverPtr<Region> fCalorimeterSensitiveRegion;
     ObserverPtr<Region> fDefaultSolidRegion;
@@ -88,3 +123,5 @@ private:
     ObserverPtr<SpectrometerSD> fSpectrometerSD;
     ObserverPtr<VertexDetectorSD> fVertexDetectorSD;
 };
+
+} // namespace MACE::Simulation::SimMACE::Action

@@ -1,9 +1,10 @@
-#include "SimMACE/RunManager.hxx"
 #include "SimMACE/Action/ActionInitialization.hxx"
 #include "SimMACE/Physics/PhysicsList.hxx"
+#include "SimMACE/RunManager.hxx"
 #include "SimMACE/Utility/Analysis.hxx"
 
-using namespace MACE::SimMACE;
+using MACE::Simulation::SimMACE::RunManager;
+using MACE::Simulation::SimMACE::Utility::Analysis;
 
 RunManager::RunManager() :
     G4MPIRunManager() {

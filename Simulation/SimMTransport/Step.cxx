@@ -1,6 +1,6 @@
 #include "Step.hxx"
 
-using namespace MACE::SimMTransport;
+using MACE::Simulation::SimMTransport::Step;
 
 Step::Step() :
     preTime(0.),

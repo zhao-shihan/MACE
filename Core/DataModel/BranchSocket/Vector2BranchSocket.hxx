@@ -1,12 +1,14 @@
 #pragma once
 
+#include "DataModel/IBranchSocket.hxx"
+#include "IsROOTFundamental.hxx"
+
 #include "TEveVector.h"
 
-#include "DataModel/Interface/BranchSocket.hxx"
+namespace MACE::Core::DataModel::BranchSocket {
 
-template<MACE::DataModel::FundamentalType Fund_t>
-class MACE::DataModel::Vector2BranchSocket final :
-    public MACE::DataModel::Interface::BranchSocket<TEveVector2T<Fund_t>> {
+template<IsROOTFundamental Fund_t>
+class Vector2BranchSocket final : public IBranchSocket<TEveVector2T<Fund_t>> {
 public:
     Vector2BranchSocket(const char* branchName, std::array<const char*, 2> leafList, std::array<Fund_t, 2> defaultValues);
     ~Vector2BranchSocket() noexcept = default;
@@ -20,13 +22,13 @@ public:
     void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(fBranchName, fVector2.Arr()); }
 
 private:
-    const TString        fBranchName;
-    TString              fLeafList;
+    const TString fBranchName;
+    TString fLeafList;
     TEveVector2T<Fund_t> fVector2;
 };
 
-#include "DataModel/BranchSocket/Vector2BranchSocket.ixx"
+using Vector2FBranchSocket = Vector2BranchSocket<Float_t>;
 
-namespace MACE::DataModel::inline BranchSocket{
-    using Vector2FBranchSocket = Vector2BranchSocket<Float_t>;
-}
+} // namespace MACE::Core::DataModel::BranchSocket
+
+#include "DataModel/BranchSocket/Vector2BranchSocket.ixx"

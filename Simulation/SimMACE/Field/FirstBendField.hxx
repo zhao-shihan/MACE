@@ -1,25 +1,25 @@
 #pragma once
 
+#include "SimMACE/Global.hxx"
+
 #include "G4MagneticField.hh"
 #include "G4ThreeVector.hh"
 
-#include "SimMACE/Global.hxx"
+namespace MACE::Simulation::SimMACE::Field {
 
-class MACE::SimMACE::FirstBendField final :
-    public G4MagneticField {
-    friend DetectorConstruction;
-
-private:
+class FirstBendField final : public G4MagneticField {
+public:
     FirstBendField();
     ~FirstBendField() noexcept = default;
     FirstBendField(const FirstBendField&) = delete;
     FirstBendField& operator=(const FirstBendField&) = delete;
 
-public:
     void GetFieldValue(const G4double* x, G4double* B) const override;
 
     void SetTransportMagneticField(G4double B) { fB = B; }
 
 private:
-    G4double fB = 0.1_T;
+    G4double fB;
 };
+
+} // namespace MACE::Simulation::SimMACE::Field

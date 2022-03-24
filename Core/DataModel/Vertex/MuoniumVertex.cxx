@@ -1,15 +1,15 @@
 #include "DataModel/Vertex/MuoniumVertex.hxx"
 
-using namespace MACE::DataModel;
+namespace MACE::Core::DataModel::Vertex {
 
-ShortStringBranchSocket     MuoniumVertex::fgParticleName("particle", "");
-DoubleBranchSocket         MuoniumVertex::fgVertexTimeCDC("vtxTimeCDC", 0);
-Vector3FBranchSocket   MuoniumVertex::fgVertexPositionCDC("vtxPosCDC", { "x", "y", "z" }, { 0, 0, 0 });
-DoubleBranchSocket         MuoniumVertex::fgVertexTimeMCP("vtxTimeMCP", 0);
-Vector3FBranchSocket   MuoniumVertex::fgVertexPositionMCP("vtxPosMCP", { "x", "y", "z" }, { 0, 0, 0 });
+ShortStringBranchSocket MuoniumVertex::fgParticleName("particle", "");
+DoubleBranchSocket MuoniumVertex::fgVertexTimeCDC("vtxTimeCDC", 0);
+Vector3FBranchSocket MuoniumVertex::fgVertexPositionCDC("vtxPosCDC", {"x", "y", "z"}, {0, 0, 0});
+DoubleBranchSocket MuoniumVertex::fgVertexTimeMCP("vtxTimeMCP", 0);
+Vector3FBranchSocket MuoniumVertex::fgVertexPositionMCP("vtxPosMCP", {"x", "y", "z"}, {0, 0, 0});
 
 MuoniumVertex::MuoniumVertex() noexcept :
-    Base(),
+    ITransientData(),
     fParticleName(fgParticleName.GetValue()),
     fVertexTimeCDC(fgVertexTimeCDC.GetValue()),
     fVertexPositionCDC(fgVertexPositionCDC.GetValue()),
@@ -17,7 +17,7 @@ MuoniumVertex::MuoniumVertex() noexcept :
     fVertexPositionMCP(fgVertexPositionMCP.GetValue()) {}
 
 void MuoniumVertex::CreateBranches(TTree& tree) {
-    Base::CreateBranches(tree);
+    ITransientData::CreateBranches(tree);
     fgParticleName.CreateBranch(tree);
     fgVertexTimeCDC.CreateBranch(tree);
     fgVertexPositionCDC.CreateBranch(tree);
@@ -26,10 +26,12 @@ void MuoniumVertex::CreateBranches(TTree& tree) {
 }
 
 void MuoniumVertex::ConnectToBranches(TTree& tree) {
-    Base::ConnectToBranches(tree);
+    ITransientData::ConnectToBranches(tree);
     fgParticleName.ConnectToBranch(tree);
     fgVertexTimeCDC.ConnectToBranch(tree);
     fgVertexPositionCDC.ConnectToBranch(tree);
     fgVertexTimeMCP.ConnectToBranch(tree);
     fgVertexPositionMCP.ConnectToBranch(tree);
 }
+
+} // namespace MACE::Core::DataModel::Vertex

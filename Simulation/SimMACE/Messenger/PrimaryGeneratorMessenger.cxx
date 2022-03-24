@@ -1,12 +1,12 @@
-#include "G4SystemOfUnits.hh"
-#include "G4UIdirectory.hh"
-#include "G4UnitsTable.hh"
-
 #include "SimMACE/Action/PrimaryGeneratorAction.hxx"
 #include "SimMACE/Messenger/PrimaryGeneratorMessenger.hxx"
 #include "SimMACE/RunManager.hxx"
 
-using namespace MACE::SimMACE::Messenger;
+#include "G4SystemOfUnits.hh"
+#include "G4UIdirectory.hh"
+#include "G4UnitsTable.hh"
+
+using MACE::Simulation::SimMACE::Messenger::PrimaryGeneratorMessenger;
 
 PrimaryGeneratorMessenger& PrimaryGeneratorMessenger::Instance() {
     static PrimaryGeneratorMessenger instance;

@@ -1,16 +1,8 @@
-#include "G4SystemOfUnits.hh"
+#include "SimMACE/Messenger/FieldMessenger.hxx"
+
 #include "G4UIdirectory.hh"
 
-#include "SimMACE/Field/AcceleratorField.hxx"
-#include "SimMACE/Field/FirstBendField.hxx"
-#include "SimMACE/Field/ParallelField.hxx"
-#include "SimMACE/Field/SecondBendField.hxx"
-#include "SimMACE/Field/SelectorField.hxx"
-#include "SimMACE/Field/VerticalField.hxx"
-#include "SimMACE/Messenger/FieldMessenger.hxx"
-#include "SimMACE/Utility/Analysis.hxx"
-
-using namespace MACE::SimMACE::Messenger;
+using MACE::Simulation::SimMACE::Messenger::FieldMessenger;
 
 FieldMessenger& FieldMessenger::Instance() {
     static FieldMessenger instance;
@@ -31,12 +23,14 @@ FieldMessenger::FieldMessenger() :
     fSetTransportMagneticField.SetUnitCategory("Magnetic flux density");
     fSetTransportMagneticField.AvailableForStates(G4State_Idle);
 
-    fSetAcceleratorPotential.SetGuidance("Set accelerator electric potential. (Selector electric field changes, respectively.)");
+    fSetAcceleratorPotential.SetGuidance(
+        "Set accelerator electric potential. (Selector electric field changes, respectively.)");
     fSetAcceleratorPotential.SetParameterName("V", false);
     fSetAcceleratorPotential.SetUnitCategory("Electric potential");
     fSetAcceleratorPotential.AvailableForStates(G4State_Idle);
 
-    fSetSelectorElectricField.SetGuidance("Set selector electric field. (Selector magnetic field changes, respectively, to ensure the seleted kinetic energy stays the same.)");
+    fSetSelectorElectricField.SetGuidance(
+        "Set selector electric field. (Selector magnetic field changes, respectively, to ensure the seleted kinetic energy stays the same.)");
     fSetSelectorElectricField.SetParameterName("E", false);
     fSetSelectorElectricField.SetUnitCategory("Electric field");
     fSetSelectorElectricField.AvailableForStates(G4State_Idle);
@@ -54,7 +48,7 @@ void FieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     } else if (command == std::addressof(fSetAcceleratorPotential)) {
         const auto V = fSetAcceleratorPotential.GetNewDoubleValue(value);
         fAcceleratorField->SetAcceleratorPotential(V);
-        fSelectorField->SetSelectEnergy(eplus * std::abs(V));
+        fSelectorField->SetSelectEnergy(std::abs(V));
     } else if (command == std::addressof(fSetSelectorElectricField)) {
         fSelectorField->SetSelectorElectricField(fSetSelectorElectricField.GetNewDoubleValue(value));
     }

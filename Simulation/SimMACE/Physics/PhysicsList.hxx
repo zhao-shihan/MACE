@@ -1,12 +1,13 @@
 #pragma once
 
-#include "G4VModularPhysicsList.hh"
-
 #include "SimMACE/Global.hxx"
 #include "SimMACE/RunManager.hxx"
 
-class MACE::SimMACE::Physics::PhysicsList final :
-    public G4VModularPhysicsList {
+#include "G4VModularPhysicsList.hh"
+
+namespace MACE::Simulation::SimMACE::Physics {
+
+class PhysicsList final : public G4VModularPhysicsList {
     friend RunManager;
 
 private:
@@ -17,3 +18,5 @@ public:
     PhysicsList(const PhysicsList&) = delete;
     PhysicsList& operator=(const PhysicsList&) = delete;
 };
+
+} // namespace MACE::Simulation::SimMACE::Physics

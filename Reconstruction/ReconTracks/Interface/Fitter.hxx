@@ -2,8 +2,10 @@
 
 #include "ReconTracks/Global.hxx"
 
+namespace MACE::Reconstruction::ReconTracks::Interface {
+
 template<class SpectrometerHit_t, class Track_t>
-class MACE::ReconTracks::Interface::Fitter {
+class Fitter {
     MACE_RECONSPECTROMETER_SPECTROMETERHIT_CONCEPT(SpectrometerHit_t);
     MACE_RECONSPECTROMETER_TRACK_CONCEPT(Track_t);
 
@@ -27,5 +29,7 @@ protected:
 
     int fVerbose = 1;
 };
+
+} // namespace MACE::Reconstruction::ReconTracks::Interface
 
 #include "ReconTracks/Interface/Fitter.ixx"

@@ -1,13 +1,23 @@
 #pragma once
 
+#include "ObserverPtr.hxx"
+#include "SimMACE/Field/AcceleratorField.hxx"
+#include "SimMACE/Field/FirstBendField.hxx"
+#include "SimMACE/Field/ParallelField.hxx"
+#include "SimMACE/Field/SecondBendField.hxx"
+#include "SimMACE/Field/SelectorField.hxx"
+#include "SimMACE/Field/VerticalField.hxx"
+#include "SimMACE/Global.hxx"
+
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UImessenger.hh"
 
-#include "ObserverPtr.hxx"
-#include "SimMACE/Global.hxx"
+namespace MACE::Simulation::SimMACE::Messenger {
 
-class MACE::SimMACE::FieldMessenger final :
-    public G4UImessenger {
+using Utility::ObserverPtr;
+using namespace Field;
+
+class FieldMessenger final : public G4UImessenger {
 public:
     static FieldMessenger& Instance();
 
@@ -40,3 +50,5 @@ private:
     G4UIcmdWithADoubleAndUnit fSetAcceleratorPotential;
     G4UIcmdWithADoubleAndUnit fSetSelectorElectricField;
 };
+
+} // namespace MACE::Simulation::SimMACE::Messenger

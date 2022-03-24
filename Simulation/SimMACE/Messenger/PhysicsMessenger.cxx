@@ -1,10 +1,9 @@
+#include "SimMACE/Messenger/PhysicsMessenger.hxx"
+
 #include "G4UIdirectory.hh"
 #include "G4UnitsTable.hh"
 
-#include "SimMACE/Messenger/PhysicsMessenger.hxx"
-#include "SimMACE/Physics/MuoniumProduction.hxx"
-
-using namespace MACE::SimMACE::Messenger;
+using MACE::Simulation::SimMACE::Messenger::PhysicsMessenger;
 
 PhysicsMessenger& PhysicsMessenger::Instance() {
     static PhysicsMessenger instance;

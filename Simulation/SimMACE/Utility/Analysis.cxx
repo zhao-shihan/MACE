@@ -1,10 +1,12 @@
-#include "G4MPImanager.hh"
-
 #include "SimMACE/Messenger/AnalysisMessenger.hxx"
 #include "SimMACE/Messenger/FieldMessenger.hxx"
 #include "SimMACE/Utility/Analysis.hxx"
 
-using namespace MACE::SimMACE::Utility;
+#include "G4MPImanager.hh"
+
+namespace MACE::Simulation::SimMACE::Utility {
+
+using Messenger::AnalysisMessenger;
 
 Analysis& Analysis::Instance() {
     static Analysis instance;
@@ -52,18 +54,20 @@ int Analysis::Merge(G4bool forced) {
 }
 
 void Analysis::WriteEvent(G4int repetitionID) {
-    if (repetitionID != fRepetitionIDOfLastG4Event) {  // means a new repetition or the first repetition
+    using namespace Core::DataModel::SimHit;
+
+    if (repetitionID != fRepetitionIDOfLastG4Event) { // means a new repetition or the first repetition
         // last repetition had already come to the end, write its data. If first, skipped inside.
         WriteTrees();
         // create trees for new repetition
-        fCalorimeterHitTree = fDataHub.CreateTree<DataModel::CalorimeterSimHit>(repetitionID);
-        fVertexDetectorHitTree = fDataHub.CreateTree<DataModel::VertexDetectorSimHit>(repetitionID);
-        fSpectrometerHitTree = fDataHub.CreateTree<DataModel::SpectrometerSimHit>(repetitionID);
+        fCalorimeterHitTree = fDataHub.CreateTree<CalorimeterSimHit>(repetitionID);
+        fVertexDetectorHitTree = fDataHub.CreateTree<VertexDetectorSimHit>(repetitionID);
+        fSpectrometerHitTree = fDataHub.CreateTree<SpectrometerSimHit>(repetitionID);
     }
 
-    fDataHub.FillTree<DataModel::CalorimeterSimHit>(*fCalorimeterHitList, *fCalorimeterHitTree, true);
-    fDataHub.FillTree<DataModel::VertexDetectorSimHit>(*fVertexDetectorHitList, *fVertexDetectorHitTree, true);
-    fDataHub.FillTree<DataModel::SpectrometerSimHit>(*fSpectrometerHitList, *fSpectrometerHitTree, true);
+    fDataHub.FillTree<CalorimeterSimHit>(*fCalorimeterHitList, *fCalorimeterHitTree, true);
+    fDataHub.FillTree<VertexDetectorSimHit>(*fVertexDetectorHitList, *fVertexDetectorHitTree, true);
+    fDataHub.FillTree<SpectrometerSimHit>(*fSpectrometerHitList, *fSpectrometerHitTree, true);
 
     // dont forget to update repID!
     fRepetitionIDOfLastG4Event = repetitionID;
@@ -81,3 +85,5 @@ void Analysis::WriteTrees() {
         fSpectrometerHitTree->Write();
     }
 }
+
+} // namespace MACE::Simulation::SimMACE::Utility

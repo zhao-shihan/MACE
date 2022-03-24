@@ -1,10 +1,13 @@
 #pragma once
 
+#include "DataModel/IBranchSocket.hxx"
 #include "ShortString.hxx"
-#include "DataModel/Interface/BranchSocket.hxx"
 
-class MACE::DataModel::ShortStringBranchSocket final :
-    public MACE::DataModel::Interface::BranchSocket<const char*, false> {
+namespace MACE::Core::DataModel::BranchSocket {
+
+using Utility::ShortString;
+
+class ShortStringBranchSocket final : public IBranchSocket<const char*, false> {
 public:
     ShortStringBranchSocket(const char* branchName, const char* defaultString);
     ~ShortStringBranchSocket() noexcept = default;
@@ -20,5 +23,7 @@ public:
 private:
     const TString fBranchName;
     const TString fBranchNameWithType;
-    ShortString   fString;
+    ShortString fString;
 };
+
+} // namespace MACE::Core::DataModel::BranchSocket

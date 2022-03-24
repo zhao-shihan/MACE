@@ -1,14 +1,15 @@
-#include <numbers>
-
 #include "Eigen/LU"
 
+#include <numbers>
+
+namespace MACE::Reconstruction::ReconTracks::Fitter {
+
 template<class SpectrometerHit_t, class Track_t>
-bool MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
-Fit(std::vector<HitPtr>& hitData, Track_t& track) {
+bool DirectLeastSquare<SpectrometerHit_t, Track_t>::Fit(std::vector<HitPtr>& hitData, Track_t& track) {
     Initialize(hitData);
 
-    if (InitialCircleFit() == false) { [[unlikely]] return false; }
-    if (CircleFit() == false) { [[unlikely]] return false; }
+    if (InitialCircleFit() == false) [[unlikely]] { return false; }
+    if (CircleFit() == false) [[unlikely]] { return false; }
     RevolveFit();
 
     Finalize(hitData, track);
@@ -17,14 +18,12 @@ Fit(std::vector<HitPtr>& hitData, Track_t& track) {
 }
 
 template<class SpectrometerHit_t, class Track_t>
-void MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
-Initialize(std::vector<HitPtr>& hitData) {
+void DirectLeastSquare<SpectrometerHit_t, Track_t>::Initialize(std::vector<HitPtr>& hitData) {
     // sort data by layer ID
     std::ranges::sort(hitData,
-        [](const auto& hit1, const auto& hit2)->bool {
-            return hit1->GetLayerID() < hit2->GetLayerID();
-        }
-    );
+                      [](const auto& hit1, const auto& hit2) -> bool {
+                          return hit1->GetLayerID() < hit2->GetLayerID();
+                      });
 
     // constuct valarrays
     fN = hitData.size();
@@ -42,8 +41,7 @@ Initialize(std::vector<HitPtr>& hitData) {
 }
 
 template<class SpectrometerHit_t, class Track_t>
-void MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
-InitialScaling() {
+void DirectLeastSquare<SpectrometerHit_t, Track_t>::InitialScaling() {
     fXcBound.first *= fScalingFactor;
     fXcBound.second *= fScalingFactor;
     fYcBound.first *= fScalingFactor;
@@ -56,8 +54,7 @@ InitialScaling() {
 }
 
 template<class SpectrometerHit_t, class Track_t>
-bool MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
-InitialCircleFit() {
+bool DirectLeastSquare<SpectrometerHit_t, Track_t>::InitialCircleFit() {
     auto& Xc = fCircleParameters[0];
     auto& Yc = fCircleParameters[1];
     auto& R = fCircleParameters[2];
@@ -80,8 +77,7 @@ InitialCircleFit() {
     auto uw2Sum = uw2.sum();
     auto vw2Sum = vw2.sum();
     auto cauchy = u2Sum * v2Sum - uvSum * uvSum;
-    if (std::abs(cauchy) < std::numeric_limits<decltype(cauchy)>::min() / std::numeric_limits<decltype(cauchy)>::epsilon()) {
-        [[unlikely]]
+    if (std::abs(cauchy) < std::numeric_limits<decltype(cauchy)>::min() / std::numeric_limits<decltype(cauchy)>::epsilon()) [[unlikely]] {
         if (this->fVerbose > 0) {
             std::cout << "Warning: denominator is effectively 0, aborted." << std::endl;
         }
@@ -95,21 +91,20 @@ InitialCircleFit() {
     R = std::sqrt((deltaX * deltaX + deltaY * deltaY).sum() / fN);
 
     if (this->fVerbose > 1) {
-        std::cout <<
-            "=============== 2D Fit Initialization ===============\n"
-            " Xc = " << fCircleParameters[0] / fScalingFactor << "\n"
-            " Yc = " << fCircleParameters[1] / fScalingFactor << "\n"
-            " R  = " << fCircleParameters[2] / fScalingFactor << std::endl;
+        std::cout
+            << "=============== 2D Fit Initialization ===============\n"
+            << " Xc = " << fCircleParameters[0] / fScalingFactor << "\n"
+            << " Yc = " << fCircleParameters[1] / fScalingFactor << "\n"
+            << " R  = " << fCircleParameters[2] / fScalingFactor << std::endl;
     }
 
-    if (CircleParametersIsOutOfBound()) { [[unlikely]] return false; }
+    if (CircleParametersIsOutOfBound()) [[unlikely]] { return false; }
 
     return true;
 }
 
 template<class SpectrometerHit_t, class Track_t>
-bool MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
-CircleFit() {
+bool DirectLeastSquare<SpectrometerHit_t, Track_t>::CircleFit() {
     auto initCircleParameters = fCircleParameters;
     if (CircleFitNewtonRaphson() != kSuccess) {
         if (this->fVerbose > 0) {
@@ -124,8 +119,7 @@ CircleFit() {
 }
 
 template<class SpectrometerHit_t, class Track_t>
-void MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
-RevolveFit() {
+void DirectLeastSquare<SpectrometerHit_t, Track_t>::RevolveFit() {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];
     const auto& R = fCircleParameters[2];
@@ -156,8 +150,7 @@ RevolveFit() {
 }
 
 template<class SpectrometerHit_t, class Track_t>
-void MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
-FinalScaling() {
+void DirectLeastSquare<SpectrometerHit_t, Track_t>::FinalScaling() {
     fXcBound.first /= fScalingFactor;
     fXcBound.second /= fScalingFactor;
     fYcBound.first /= fScalingFactor;
@@ -168,8 +161,7 @@ FinalScaling() {
 }
 
 template<class SpectrometerHit_t, class Track_t>
-void MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
-Finalize(const std::vector<HitPtr>& hitData, Track_t& track) {
+void DirectLeastSquare<SpectrometerHit_t, Track_t>::Finalize(const std::vector<HitPtr>& hitData, Track_t& track) {
     track.SetVertexTime(hitData.front()->GetHitTime());
     track.SetCenter(fCircleParameters[0], fCircleParameters[1]);
     track.SetRadius(fCircleParameters[2]);
@@ -180,8 +172,7 @@ Finalize(const std::vector<HitPtr>& hitData, Track_t& track) {
 }
 
 template<class SpectrometerHit_t, class Track_t>
-inline bool MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
-CircleParametersIsOutOfBound() const {
+inline bool DirectLeastSquare<SpectrometerHit_t, Track_t>::CircleParametersIsOutOfBound() const {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];
     const auto& R = fCircleParameters[2];
@@ -189,11 +180,9 @@ CircleParametersIsOutOfBound() const {
     if (fXcBound.first < Xc and Xc < fXcBound.second and
         fYcBound.first < Yc and Yc < fYcBound.second and
         0.0 < R and R < fRBound) {
-        [[likely]]
-        return false;
+        [[likely]] return false;
     } else {
-        [[unlikely]]
-        if (this->fVerbose > 0) {
+        [[unlikely]] if (this->fVerbose > 0) {
             std::cout << "Warning: parameter bound reached." << std::endl;
         }
         return true;
@@ -201,8 +190,7 @@ CircleParametersIsOutOfBound() const {
 }
 
 template<class SpectrometerHit_t, class Track_t>
-inline double MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
-TargetFunction(const double& Xc, const double& Yc, const double& R) const {
+inline double DirectLeastSquare<SpectrometerHit_t, Track_t>::TargetFunction(const double& Xc, const double& Yc, const double& R) const {
     const auto rX = Xc - fWireX;
     const auto rY = Yc - fWireY;
     const auto dca = std::sqrt(rX * rX + rY * rY) - R;
@@ -218,8 +206,7 @@ TargetFunction(const double& Xc, const double& Yc, const double& R) const {
 }
 
 template<class SpectrometerHit_t, class Track_t>
-inline std::pair<double, Eigen::Vector3d> MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
-TargetGrad() const {
+inline std::pair<double, Eigen::Vector3d> DirectLeastSquare<SpectrometerHit_t, Track_t>::TargetGrad() const {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];
     const auto& R = fCircleParameters[2];
@@ -246,8 +233,7 @@ TargetGrad() const {
 }
 
 template<class SpectrometerHit_t, class Track_t>
-inline std::tuple<double, Eigen::Vector3d, Eigen::Matrix3d> MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
-TargetGradHessian() const {
+inline std::tuple<double, Eigen::Vector3d, Eigen::Matrix3d> DirectLeastSquare<SpectrometerHit_t, Track_t>::TargetGradHessian() const {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];
     const auto& R = fCircleParameters[2];
@@ -305,24 +291,22 @@ TargetGradHessian() const {
 }
 
 template<class SpectrometerHit_t, class Track_t>
-MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::MinimizerState
-MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
-CircleFitNewtonRaphson() {
+DirectLeastSquare<SpectrometerHit_t, Track_t>::MinimizerState
+DirectLeastSquare<SpectrometerHit_t, Track_t>::CircleFitNewtonRaphson() {
     double lastFunc;
     auto [thisFunc, grad, hessian] = TargetGradHessian();
     if (this->fVerbose > 1) {
-        std::cout <<
-            "=========== Newton-Raphson iteration 0\t ============\n"
-            " Xc            = " << fCircleParameters[0] / fScalingFactor << "\n"
-            " Yc            = " << fCircleParameters[1] / fScalingFactor << "\n"
-            " R             = " << fCircleParameters[2] / fScalingFactor << "\n"
-            " Square        = " << thisFunc << "\n"
-            " GradDirection = \n" <<
-            grad / grad.norm() << "\n"
-            " Hessian       = \n" <<
-            hessian << "\n"
-            " StepDirection = \n" <<
-            -hessian.inverse() * grad / (hessian.inverse() * grad).norm() << std::endl;
+        std::cout << "=========== Newton-Raphson iteration 0\t ============\n"
+                  << " Xc            = " << fCircleParameters[0] / fScalingFactor << "\n"
+                  << " Yc            = " << fCircleParameters[1] / fScalingFactor << "\n"
+                  << " R             = " << fCircleParameters[2] / fScalingFactor << "\n"
+                  << " Square        = " << thisFunc << "\n"
+                  << " GradDirection = \n"
+                  << grad / grad.norm() << "\n"
+                  << " Hessian       = \n"
+                  << hessian << "\n"
+                  << " StepDirection = \n"
+                  << -hessian.inverse() * grad / (hessian.inverse() * grad).norm() << std::endl;
     }
 
     decltype(fMaxStepsNR) stepCount = 0;
@@ -349,18 +333,17 @@ CircleFitNewtonRaphson() {
         lastFunc = thisFunc;
         std::tie(thisFunc, grad, hessian) = TargetGradHessian();
         if (this->fVerbose > 1) {
-            std::cout <<
-                "=========== Newton-Raphson iteration " << stepCount << "\t ============\n"
-                " Xc            = " << fCircleParameters[0] / fScalingFactor << "\n"
-                " Yc            = " << fCircleParameters[1] / fScalingFactor << "\n"
-                " R             = " << fCircleParameters[2] / fScalingFactor << "\n"
-                " Square        = " << thisFunc << "\n"
-                " GradDirection = \n" <<
-                grad / grad.norm() << "\n"
-                " Hessian       = \n" <<
-                hessian << "\n"
-                " StepDirection = \n" <<
-                (-hessian.inverse() * grad) / (hessian.inverse() * grad).norm() << std::endl;
+            std::cout << "=========== Newton-Raphson iteration " << stepCount << "\t ============\n"
+                      << " Xc            = " << fCircleParameters[0] / fScalingFactor << "\n"
+                      << " Yc            = " << fCircleParameters[1] / fScalingFactor << "\n"
+                      << " R             = " << fCircleParameters[2] / fScalingFactor << "\n"
+                      << " Square        = " << thisFunc << "\n"
+                      << " GradDirection = \n"
+                      << grad / grad.norm() << "\n"
+                      << " Hessian       = \n"
+                      << hessian << "\n"
+                      << " StepDirection = \n"
+                      << (-hessian.inverse() * grad) / (hessian.inverse() * grad).norm() << std::endl;
         }
     } while (std::abs(thisFunc - lastFunc) / thisFunc > fTolerance and stepCount < fMaxStepsNR);
 
@@ -370,8 +353,7 @@ CircleFitNewtonRaphson() {
 
     // check step count
     if (stepCount >= fMaxStepsNR) {
-        [[unlikely]]
-        if (this->fVerbose > 0) {
+        [[unlikely]] if (this->fVerbose > 0) {
             std::cout << "Warning: max step " << fMaxStepsNR << " reached for Newton-Raphson method." << std::endl;
         }
         return kMaxStepsReached;
@@ -381,24 +363,22 @@ CircleFitNewtonRaphson() {
 }
 
 template<class SpectrometerHit_t, class Track_t>
-MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::MinimizerState
-MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
-CircleFitConjugateGrad() {
+DirectLeastSquare<SpectrometerHit_t, Track_t>::MinimizerState
+DirectLeastSquare<SpectrometerHit_t, Track_t>::CircleFitConjugateGrad() {
     double lastFunc;
     Eigen::Vector3d lastGrad;
     auto [thisFunc, thisGrad] = TargetGrad();
     Eigen::Vector3d step = -thisGrad;
     if (this->fVerbose > 1) {
-        std::cout <<
-            "=========== conjugate grad iteration 0\t ============\n"
-            " Xc            = " << fCircleParameters[0] / fScalingFactor << "\n"
-            " Yc            = " << fCircleParameters[1] / fScalingFactor << "\n"
-            " R             = " << fCircleParameters[2] / fScalingFactor << "\n"
-            " Square        = " << thisFunc << "\n"
-            " GradDirection = \n" <<
-            thisGrad / thisGrad.norm() << "\n"
-            " StepDirection = \n" <<
-            step / step.norm() << std::endl;
+        std::cout << "=========== conjugate grad iteration 0\t ============\n"
+                  << " Xc            = " << fCircleParameters[0] / fScalingFactor << "\n"
+                  << " Yc            = " << fCircleParameters[1] / fScalingFactor << "\n"
+                  << " R             = " << fCircleParameters[2] / fScalingFactor << "\n"
+                  << " Square        = " << thisFunc << "\n"
+                  << " GradDirection = \n"
+                  << thisGrad / thisGrad.norm() << "\n"
+                  << " StepDirection = \n"
+                  << step / step.norm() << std::endl;
     }
 
     decltype(fMaxStepsCG) stepCount = 0;
@@ -425,16 +405,15 @@ CircleFitConjugateGrad() {
         std::tie(thisFunc, thisGrad) = TargetGrad();
         step = (-thisGrad + (thisGrad.dot(thisGrad)) / (lastGrad.dot(lastGrad)) * step) * fCircleParameters[2];
         if (this->fVerbose > 1) {
-            std::cout <<
-                "=========== conjugate grad iteration " << stepCount << "\t ============\n"
-                " Xc            = " << fCircleParameters[0] / fScalingFactor << "\n"
-                " Yc            = " << fCircleParameters[1] / fScalingFactor << "\n"
-                " R             = " << fCircleParameters[2] / fScalingFactor << "\n"
-                " Square        = " << thisFunc << "\n"
-                " GradDirection = \n" <<
-                thisGrad / thisGrad.norm() << "\n"
-                " StepDirection = \n" <<
-                step / step.norm() << std::endl;
+            std::cout << "=========== conjugate grad iteration " << stepCount << "\t ============\n"
+                      << " Xc            = " << fCircleParameters[0] / fScalingFactor << "\n"
+                      << " Yc            = " << fCircleParameters[1] / fScalingFactor << "\n"
+                      << " R             = " << fCircleParameters[2] / fScalingFactor << "\n"
+                      << " Square        = " << thisFunc << "\n"
+                      << " GradDirection = \n"
+                      << thisGrad / thisGrad.norm() << "\n"
+                      << " StepDirection = \n"
+                      << step / step.norm() << std::endl;
         }
     } while (std::abs(thisFunc - lastFunc) / thisFunc > fTolerance and stepCount < fMaxStepsCG);
 
@@ -444,8 +423,7 @@ CircleFitConjugateGrad() {
 
     // check step count
     if (stepCount >= fMaxStepsCG) {
-        [[unlikely]]
-        if (this->fVerbose > 0) {
+        [[unlikely]] if (this->fVerbose > 0) {
             std::cout << "Warning: max step " << fMaxStepsCG << " reached for conjugate gradient method." << std::endl;
         }
         return kMaxStepsReached;
@@ -455,8 +433,7 @@ CircleFitConjugateGrad() {
 }
 
 template<class SpectrometerHit_t, class Track_t>
-double MACE::ReconTracks::Fitter::DirectLeastSquare<SpectrometerHit_t, Track_t>::
-CalculateReducedChi2() {
+double DirectLeastSquare<SpectrometerHit_t, Track_t>::CalculateReducedChi2() {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];
     const auto& R = fCircleParameters[2];
@@ -478,3 +455,5 @@ CalculateReducedChi2() {
 
     return (reducedChi2D + reducedChi2Z) / (fN - 5);
 }
+
+} // namespace MACE::Reconstruction::ReconTracks::Fitter

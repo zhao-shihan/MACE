@@ -3,7 +3,7 @@
 #include "SimMACE/Action/PrimaryGeneratorAction.hxx"
 #include "SimMACE/Action/RunAction.hxx"
 
-using namespace MACE::SimMACE::Action;
+using MACE::Simulation::SimMACE::Action::ActionInitialization;
 
 void ActionInitialization::Build() const {
     SetUserAction(new RunAction());

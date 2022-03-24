@@ -1,20 +1,20 @@
 #pragma once
 
-#include "G4VSensitiveDetector.hh"
-
 #include "SimMACE/Hit/VertexDetectorHit.hxx"
 
-class MACE::SimMACE::VertexDetectorSD final :
-    public G4VSensitiveDetector {
-    friend DetectorConstruction;
+#include "G4VSensitiveDetector.hh"
 
-private:
+namespace MACE::Simulation::SimMACE::SD {
+
+using Hit::VertexDetectorHitCollection;
+
+class VertexDetectorSD final : public G4VSensitiveDetector {
+public:
     VertexDetectorSD(const G4String& sdName);
     ~VertexDetectorSD() noexcept = default;
     VertexDetectorSD(const VertexDetectorSD&) = delete;
     VertexDetectorSD& operator=(const VertexDetectorSD&) = delete;
 
-public:
     void Initialize(G4HCofThisEvent* hitsCollection) override;
     G4bool ProcessHits(G4Step* step, G4TouchableHistory*) override;
     void EndOfEvent(G4HCofThisEvent*) override;
@@ -26,3 +26,5 @@ private:
     G4int fEventID;
     VertexDetectorHitCollection* fHitsCollection;
 };
+
+} // namespace MACE::Simulation::SimMACE::SD

@@ -1,25 +1,29 @@
 #pragma once
 
-#include <valarray>
+#include "LiteralUnit.hxx"
+#include "ReconTracks/Interface/Fitter.hxx"
 
 #include "Eigen/Core"
 
-#include "ReconTracks/Interface/Fitter.hxx"
-#include "LiteralUnits.hxx"
+#include <valarray>
+
+namespace MACE::Reconstruction::ReconTracks::Fitter {
+
+using namespace Utility::LiteralUnit::Length;
 
 template<class SpectrometerHit_t, class Track_t>
-class MACE::ReconTracks::Fitter::DirectLeastSquare final :
-    public MACE::ReconTracks::Interface::Fitter<SpectrometerHit_t, Track_t> {
+class DirectLeastSquare final : public Interface::Fitter<SpectrometerHit_t, Track_t> {
     MACE_RECONSPECTROMETER_HELIXTRACK_CONCEPT(Track_t);
+
 protected:
-    using Base = MACE::ReconTracks::Interface::Fitter<SpectrometerHit_t, Track_t>;
+    using Base = Interface::Fitter<SpectrometerHit_t, Track_t>;
     using HitPtr = typename Base::HitPtr;
 
 public:
     DirectLeastSquare() = default;
-    ~DirectLeastSquare() noexcept = default;
     DirectLeastSquare(const DirectLeastSquare&) = delete;
     DirectLeastSquare& operator=(const DirectLeastSquare&) = delete;
+    ~DirectLeastSquare() noexcept = default;
 
     void SetCenterXBound(double low, double up) { fXcBound = std::make_pair(low, up); }
     void SetCenterYBound(double low, double up) { fYcBound = std::make_pair(low, up); }
@@ -70,8 +74,8 @@ private:
 private:
     double fScalingFactor = 1 / 30_cm;
 
-    std::pair<double, double> fXcBound = { -10_m, 10_m };
-    std::pair<double, double> fYcBound = { -10_m, 10_m };
+    std::pair<double, double> fXcBound = {-10_m, 10_m};
+    std::pair<double, double> fYcBound = {-10_m, 10_m};
     double fRBound = 10_m;
 
     double fH = 1e-3;
@@ -93,5 +97,7 @@ private:
     Eigen::Vector3d fCircleParameters;
     Eigen::Vector2d fRevolveParameters;
 };
+
+} // namespace MACE::Reconstruction::ReconTracks::Fitter
 
 #include "ReconTracks/Fitter/DirectLeastSquare.ixx"

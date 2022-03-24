@@ -1,14 +1,14 @@
 #pragma once
 
-#include "G4RunManager.hh"
-
 #include "ObserverPtr.hxx"
-#include "UtilityForwardDeclaration.hxx"
+
+#include "G4RunManager.hh"
 
 class G4MPImanager;
 
-class MACE::G4MPIRunManager :
-    public G4RunManager {
+namespace MACE::Utility::MPITools {
+
+class G4MPIRunManager : public G4RunManager {
 public:
     G4MPIRunManager() = default;
     virtual ~G4MPIRunManager() noexcept = default;
@@ -25,3 +25,5 @@ private:
     ObserverPtr<const G4MPImanager> fG4mpi = nullptr;
     G4int fFirstEventID = 0;
 };
+
+} // namespace MACE::Utility::MPITools

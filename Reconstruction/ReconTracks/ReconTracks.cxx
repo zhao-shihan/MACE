@@ -1,19 +1,25 @@
-#include "CLHEP/Units/PhysicalConstants.h"
-#include "CLHEP/Random/RandGauss.h"
-#include "CLHEP/Random/MTwistEngine.h"
-
 #include "DataModel/DataHub.hxx"
-#include "ReconTracks/Tracker/PerfectFinder.hxx"
-#include "ReconTracks/Tracker/Hough.hxx"
+#include "MPITools/MPIFileTools.hxx"
+#include "MPITools/MPIJobsAssigner.hxx"
+#include "PhysicalConstant.hxx"
 #include "ReconTracks/Fitter/DirectLeastSquare.hxx"
 #include "ReconTracks/Fitter/Dummy.hxx"
 #include "ReconTracks/Fitter/PerfectFitter.hxx"
-#include "MPITools/MPIFileTools.hxx"
-#include "MPITools/MPIJobsAssigner.hxx"
+#include "ReconTracks/Tracker/Hough.hxx"
+#include "ReconTracks/Tracker/PerfectFinder.hxx"
 
-using namespace MACE;
-using namespace MACE::ReconTracks;
-using namespace MACE::DataModel;
+#include "CLHEP/Random/MTwistEngine.h"
+#include "CLHEP/Random/RandGauss.h"
+#include "CLHEP/Units/PhysicalConstants.h"
+
+using namespace MACE::Core::DataModel::SimHit;
+using namespace MACE::Core::DataModel::Track;
+using namespace MACE::Reconstruction::ReconTracks;
+using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
+using namespace MACE::Utility::MPITools;
+using namespace MACE::Utility::PhysicalConstant;
+
+using MACE::Core::DataModel::DataHub;
 
 using Hit_t = SpectrometerSimHit;
 
@@ -89,7 +95,7 @@ int main(int, char** argv) {
         std::vector<std::shared_ptr<PhysicsTrack>> physicsTracks;
         physicsTracks.reserve(helixTracks.size());
         for (auto&& track : helixTracks) {
-            physicsTracks.emplace_back(std::make_shared<PhysicsTrack>(*track, 0.1_T, CLHEP::electron_mass_c2));
+            physicsTracks.emplace_back(std::make_shared<PhysicsTrack>(*track, 0.1_T, electron_mass_c2));
         }
 
         std::vector<std::shared_ptr<PhysicsTrack>> errors;

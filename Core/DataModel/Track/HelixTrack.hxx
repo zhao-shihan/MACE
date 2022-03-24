@@ -1,13 +1,19 @@
 #pragma once
 
-#include "DataModel/Interface/Transient.hxx"
 #include "DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "DataModel/BranchSocket/Vector2BranchSocket.hxx"
+#include "DataModel/DataHub.hxx"
+#include "DataModel/ITransientData.hxx"
 
-class MACE::DataModel::HelixTrack :
-    public MACE::DataModel::Interface::Transient {
-    using Base = MACE::DataModel::Interface::Transient;
-    friend MACE::DataModel::DataHub;
+namespace MACE::Core::DataModel::Track {
+
+using BranchSocket::DoubleBranchSocket;
+using BranchSocket::FloatBranchSocket;
+using BranchSocket::IntBranchSocket;
+using BranchSocket::Vector2FBranchSocket;
+
+class HelixTrack : public ITransientData {
+    friend DataHub;
 
 public:
     HelixTrack() noexcept;
@@ -44,25 +50,25 @@ private:
     static constexpr const char* BasicName() { return "HlxTrk"; }
 
 private:
-    Double_t     fVertexTime;
+    Double_t fVertexTime;
     TEveVector2D fCenter;
-    Double_t     fRadius;
-    Double_t     fZ0;
-    Double_t     fAlpha;
-    Int_t        fNumberOfFittedPoints;
-    Double_t     fChi2;
+    Double_t fRadius;
+    Double_t fZ0;
+    Double_t fAlpha;
+    Int_t fNumberOfFittedPoints;
+    Double_t fChi2;
 
-    static DoubleBranchSocket   fgVertexTime;
+    static DoubleBranchSocket fgVertexTime;
     static Vector2FBranchSocket fgCenter;
-    static FloatBranchSocket    fgRadius;
-    static FloatBranchSocket    fgZ0;
-    static FloatBranchSocket    fgAlpha;
-    static IntBranchSocket      fgNumberOfFittedPoints;
-    static FloatBranchSocket    fgChi2;
+    static FloatBranchSocket fgRadius;
+    static FloatBranchSocket fgZ0;
+    static FloatBranchSocket fgAlpha;
+    static IntBranchSocket fgNumberOfFittedPoints;
+    static FloatBranchSocket fgChi2;
 };
 
-inline void MACE::DataModel::HelixTrack::FillBranchSockets() const noexcept {
-    Base::FillBranchSockets();
+inline void HelixTrack::FillBranchSockets() const noexcept {
+    ITransientData::FillBranchSockets();
     fgVertexTime.SetValue(fVertexTime);
     fgCenter.SetValue(fCenter);
     fgRadius.SetValue(fRadius);
@@ -71,3 +77,5 @@ inline void MACE::DataModel::HelixTrack::FillBranchSockets() const noexcept {
     fgNumberOfFittedPoints.SetValue(fNumberOfFittedPoints);
     fgChi2.SetValue(fChi2);
 }
+
+} // namespace MACE::Core::DataModel::Track

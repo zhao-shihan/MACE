@@ -1,14 +1,19 @@
 #pragma once
 
-#include "DataModel/Global.hxx"
-#include "DataModel/Hit/VertexDetectorHit.hxx"
-#include "DataModel/BranchSocket/Vector3BranchSocket.hxx"
 #include "DataModel/BranchSocket/ShortStringBranchSocket.hxx"
+#include "DataModel/BranchSocket/Vector3BranchSocket.hxx"
+#include "DataModel/Hit/VertexDetectorHit.hxx"
 
-class MACE::DataModel::VertexDetectorSimHit :
-    public MACE::DataModel::VertexDetectorHit {
-    using Base = MACE::DataModel::VertexDetectorHit;
-    friend MACE::DataModel::DataHub;
+namespace MACE::Core::DataModel::SimHit {
+
+using BranchSocket::DoubleBranchSocket;
+using BranchSocket::IntBranchSocket;
+using BranchSocket::ShortStringBranchSocket;
+using BranchSocket::Vector3FBranchSocket;
+using Utility::ShortString;
+
+class VertexDetectorSimHit : public Hit::VertexDetectorHit {
+    friend DataHub;
 
 public:
     VertexDetectorSimHit() noexcept;
@@ -42,24 +47,26 @@ private:
     static constexpr const char* BasicName() { return "MCPSimHit"; }
 
 private:
-    Double_t    fVertexTime;
+    Double_t fVertexTime;
     TEveVectorD fVertexPosition;
     ShortString fParticleName;
-    Int_t       fEventID;
-    Int_t       fTrackID;
+    Int_t fEventID;
+    Int_t fTrackID;
 
-    static DoubleBranchSocket      fgVertexTime;
-    static Vector3FBranchSocket    fgVertexPosition;
+    static DoubleBranchSocket fgVertexTime;
+    static Vector3FBranchSocket fgVertexPosition;
     static ShortStringBranchSocket fgParticleName;
-    static IntBranchSocket         fgEventID;
-    static IntBranchSocket         fgTrackID;
+    static IntBranchSocket fgEventID;
+    static IntBranchSocket fgTrackID;
 };
 
-inline void MACE::DataModel::VertexDetectorSimHit::FillBranchSockets() const noexcept {
-    Base::FillBranchSockets();
+inline void VertexDetectorSimHit::FillBranchSockets() const noexcept {
+    VertexDetectorHit::FillBranchSockets();
     fgVertexTime.SetValue(fVertexTime);
     fgVertexPosition.SetValue(fVertexPosition);
     fgParticleName.SetValue(fParticleName);
     fgEventID.SetValue(fEventID);
     fgTrackID.SetValue(fTrackID);
 }
+
+} // namespace MACE::Core::DataModel::SimHit

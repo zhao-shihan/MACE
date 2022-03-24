@@ -1,7 +1,5 @@
 #pragma once
 
-#include "TFile.h"
-
 #include "DataModel/DataHub.hxx"
 #include "MPITools/MPIFileTools.hxx"
 #include "ObserverPtr.hxx"
@@ -10,7 +8,18 @@
 #include "SimMACE/Hit/SpectrometerHit.hxx"
 #include "SimMACE/Hit/VertexDetectorHit.hxx"
 
-class MACE::SimMACE::Analysis final {
+#include "TFile.h"
+
+namespace MACE::Simulation::SimMACE::Utility {
+
+using Core::DataModel::DataHub;
+using Hit::CalorimeterHit;
+using Hit::SpectrometerHit;
+using Hit::VertexDetectorHit;
+using MACE::Utility::ObserverPtr;
+using MACE::Utility::MPITools::MPIFileTools;
+
+class Analysis final {
 public:
     static Analysis& Instance();
 
@@ -30,9 +39,9 @@ public:
     void Close(Option_t* option = nullptr);
     int Merge(G4bool forced = false);
 
-    void SubmitCalorimeterHC(ObserverPtr<const std::vector<Hit::CalorimeterHit*>> hitList) { fCalorimeterHitList = hitList; }
-    void SubmitVertexDetectorHC(ObserverPtr<const std::vector<Hit::VertexDetectorHit*>> hitList) { fVertexDetectorHitList = hitList; }
-    void SubmitSpectrometerHC(ObserverPtr<const std::vector<Hit::SpectrometerHit*>> hitList) { fSpectrometerHitList = hitList; }
+    void SubmitCalorimeterHC(ObserverPtr<const std::vector<CalorimeterHit*>> hitList) { fCalorimeterHitList = hitList; }
+    void SubmitVertexDetectorHC(ObserverPtr<const std::vector<VertexDetectorHit*>> hitList) { fVertexDetectorHitList = hitList; }
+    void SubmitSpectrometerHC(ObserverPtr<const std::vector<SpectrometerHit*>> hitList) { fSpectrometerHitList = hitList; }
     void WriteEvent(G4int repetitionID);
 
 private:
@@ -46,14 +55,16 @@ private:
     G4bool fEnableCoincidenceOfCalorimeter = true;
     G4bool fEnableCoincidenceOfVertexDetector = true;
 
-    DataModel::DataHub fDataHub;
+    DataHub fDataHub;
 
     G4int fRepetitionIDOfLastG4Event;
     std::shared_ptr<TTree> fCalorimeterHitTree;
     std::shared_ptr<TTree> fVertexDetectorHitTree;
     std::shared_ptr<TTree> fSpectrometerHitTree;
 
-    ObserverPtr<const std::vector<Hit::CalorimeterHit*>> fCalorimeterHitList;
-    ObserverPtr<const std::vector<Hit::VertexDetectorHit*>> fVertexDetectorHitList;
-    ObserverPtr<const std::vector<Hit::SpectrometerHit*>> fSpectrometerHitList;
+    ObserverPtr<const std::vector<CalorimeterHit*>> fCalorimeterHitList;
+    ObserverPtr<const std::vector<VertexDetectorHit*>> fVertexDetectorHitList;
+    ObserverPtr<const std::vector<SpectrometerHit*>> fSpectrometerHitList;
 };
+
+} // namespace MACE::Simulation::SimMACE::Utility

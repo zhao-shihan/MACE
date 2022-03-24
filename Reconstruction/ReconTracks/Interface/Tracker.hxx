@@ -2,14 +2,13 @@
 
 #include "ReconTracks/Global.hxx"
 
+namespace MACE::Reconstruction::ReconTracks::Interface {
+
 template<template<class H, class T> class FitterT_t, class SpectrometerHit_t, class Track_t>
-class MACE::ReconTracks::Interface::Tracker {
+class Tracker {
     MACE_RECONSPECTROMETER_FITTER_CONCEPT(FitterT_t, SpectrometerHit_t, Track_t);
     MACE_RECONSPECTROMETER_SPECTROMETERHIT_CONCEPT(SpectrometerHit_t);
     MACE_RECONSPECTROMETER_TRACK_CONCEPT(Track_t);
-
-    Tracker(const Tracker&) = delete;
-    Tracker& operator=(const Tracker&) = delete;
 
 protected:
     using Fitter_t = FitterT_t<SpectrometerHit_t, Track_t>;
@@ -17,6 +16,8 @@ protected:
     using TrackPtr = std::shared_ptr<Track_t>;
 
     Tracker();
+    Tracker(const Tracker&) = delete;
+    Tracker& operator=(const Tracker&) = delete;
     virtual ~Tracker() noexcept = default;
 
 public:
@@ -35,5 +36,7 @@ protected:
     std::vector<std::vector<HitPtr>> fTrackedHitList;
     std::vector<HitPtr> fOmittedHitList;
 };
+
+} // namespace MACE::Reconstruction::ReconTracks::Interface
 
 #include "ReconTracks/Interface/Tracker.ixx"

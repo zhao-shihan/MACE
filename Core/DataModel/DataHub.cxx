@@ -1,6 +1,6 @@
 #include "DataModel/DataHub.hxx"
 
-using namespace MACE::DataModel;
+using MACE::Core::DataModel::DataHub;
 
 static Bool_t Split(const TString& format, Char_t indexer, std::pair<TString, TString>& result) {
     auto index = format.First(indexer);

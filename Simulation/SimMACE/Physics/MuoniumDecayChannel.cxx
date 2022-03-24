@@ -44,6 +44,8 @@
 //      Modified for the muonium decay by Toni SHIROKA, Paul Scherrer Institut, PSI
 // ------------------------------------------------------------
 
+#include "SimMACE/Physics/MuoniumDecayChannel.hxx"
+
 #include "G4DecayProducts.hh"
 #include "G4LorentzRotation.hh"
 #include "G4LorentzVector.hh"
@@ -53,9 +55,7 @@
 #include "G4VDecayChannel.hh"
 #include "Randomize.hh"
 
-#include "SimMACE/Physics/MuoniumDecayChannel.hxx"
-
-using MACE::SimMACE::Physics::MuoniumDecayChannel;
+using MACE::Simulation::SimMACE::Physics::MuoniumDecayChannel;
 
 MuoniumDecayChannel::MuoniumDecayChannel(const G4String& theParentName, G4double theBR, G4int verbose) :
     G4VDecayChannel("MuoniumDecay", verbose) {

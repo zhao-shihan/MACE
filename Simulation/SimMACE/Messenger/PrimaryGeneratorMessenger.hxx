@@ -1,13 +1,14 @@
 #pragma once
 
+#include "SimMACE/Global.hxx"
+
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UImessenger.hh"
 
-#include "SimMACE/Global.hxx"
+namespace MACE::Simulation::SimMACE::Messenger {
 
-class MACE::SimMACE::PrimaryGeneratorMessenger final :
-    public G4UImessenger {
+class PrimaryGeneratorMessenger final : public G4UImessenger {
 public:
     static PrimaryGeneratorMessenger& Instance();
 
@@ -30,3 +31,5 @@ private:
     G4UIcmdWithADoubleAndUnit fSetBeamProfileRMS;
     G4UIcmdWithAnInteger fSetMuonsForEachG4Event;
 };
+
+} // namespace MACE::Simulation::SimMACE::Messenger

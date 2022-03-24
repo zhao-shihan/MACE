@@ -1,13 +1,14 @@
 #pragma once
 
+#include "SimMACE/Global.hxx"
+
 #include "G4ParticleDefinition.hh"
 
-#include "SimMACE/Global.hxx"
+namespace MACE::Simulation::SimMACE::Physics {
 
 // Muonium Definition
 
-class MACE::SimMACE::Physics::Muonium final :
-    public G4ParticleDefinition {
+class Muonium final : public G4ParticleDefinition {
 public:
     static Muonium* Definition();
 
@@ -20,3 +21,5 @@ private:
 public:
     ~Muonium() noexcept = default;
 };
+
+} // namespace MACE::Simulation::SimMACE::Physics

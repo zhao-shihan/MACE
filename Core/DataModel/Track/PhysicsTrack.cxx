@@ -1,20 +1,20 @@
+#include "DataModel/Track/HelixTrack.hxx"
+#include "DataModel/Track/PhysicsTrack.hxx"
+
 #include "CLHEP/Units/PhysicalConstants.h"
 
-#include "DataModel/Track/PhysicsTrack.hxx"
-#include "DataModel/Track/HelixTrack.hxx"
+namespace MACE::Core::DataModel::Track {
 
-using namespace MACE::DataModel;
-
-DoubleBranchSocket               PhysicsTrack::fgVertexTime("vtxTime", 0);
-Vector3FBranchSocket         PhysicsTrack::fgVertexPosition("vtxPos", { "x", "y", "z" }, { 0, 0, 0 });
-FloatBranchSocket              PhysicsTrack::fgVertexEnergy("vtxEne", 0);
-Vector3FBranchSocket         PhysicsTrack::fgVertexMomentum("vtxMom", { "x", "y", "z" }, { 0, 0, 0 });
-ShortStringBranchSocket        PhysicsTrack::fgParticleName("particle", "");
-IntBranchSocket        PhysicsTrack::fgNumberOfFittedPoints("nHits", 0);
-FloatBranchSocket                      PhysicsTrack::fgChi2("chi2", 0);
+DoubleBranchSocket PhysicsTrack::fgVertexTime("vtxTime", 0);
+Vector3FBranchSocket PhysicsTrack::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
+FloatBranchSocket PhysicsTrack::fgVertexEnergy("vtxEne", 0);
+Vector3FBranchSocket PhysicsTrack::fgVertexMomentum("vtxMom", {"x", "y", "z"}, {0, 0, 0});
+ShortStringBranchSocket PhysicsTrack::fgParticleName("particle", "");
+IntBranchSocket PhysicsTrack::fgNumberOfFittedPoints("nHits", 0);
+FloatBranchSocket PhysicsTrack::fgChi2("chi2", 0);
 
 PhysicsTrack::PhysicsTrack() noexcept :
-    Base(),
+    ITransientData(),
     fVertexTime(fgVertexTime.GetValue()),
     fVertexPosition(fgVertexPosition.GetValue()),
     fVertexEnergy(fgVertexEnergy.GetValue()),
@@ -51,7 +51,7 @@ PhysicsTrack::PhysicsTrack(const HelixTrack& helix, Double_t B, Double_t mass) :
 }
 
 void PhysicsTrack::CreateBranches(TTree& tree) {
-    Base::CreateBranches(tree);
+    ITransientData::CreateBranches(tree);
     fgVertexTime.CreateBranch(tree);
     fgVertexPosition.CreateBranch(tree);
     fgVertexEnergy.CreateBranch(tree);
@@ -62,7 +62,7 @@ void PhysicsTrack::CreateBranches(TTree& tree) {
 }
 
 void PhysicsTrack::ConnectToBranches(TTree& tree) {
-    Base::ConnectToBranches(tree);
+    ITransientData::ConnectToBranches(tree);
     fgVertexTime.ConnectToBranch(tree);
     fgVertexPosition.ConnectToBranch(tree);
     fgVertexEnergy.ConnectToBranch(tree);
@@ -71,3 +71,5 @@ void PhysicsTrack::ConnectToBranches(TTree& tree) {
     fgNumberOfFittedPoints.ConnectToBranch(tree);
     fgChi2.ConnectToBranch(tree);
 }
+
+} // namespace MACE::Core::DataModel::Track

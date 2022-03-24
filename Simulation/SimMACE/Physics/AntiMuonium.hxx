@@ -1,10 +1,12 @@
 #pragma once
 
-#include "G4ParticleDefinition.hh"
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::Physics::AntiMuonium final :
-    public G4ParticleDefinition {
+#include "G4ParticleDefinition.hh"
+
+namespace MACE::Simulation::SimMACE::Physics {
+
+class AntiMuonium final : public G4ParticleDefinition {
 public:
     static AntiMuonium* Definition();
 
@@ -17,3 +19,5 @@ private:
 public:
     ~AntiMuonium() noexcept = default;
 };
+
+} // namespace MACE::Simulation::SimMACE::Physics

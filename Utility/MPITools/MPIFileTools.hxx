@@ -1,13 +1,14 @@
 #pragma once
 
+#include "ObserverPtr.hxx"
+
+#include "mpi.h"
+
 #include <filesystem>
 #include <iostream>
 #include <string_view>
 
-#include "mpi.h"
-
-#include "ObserverPtr.hxx"
-#include "UtilityForwardDeclaration.hxx"
+namespace MACE::Utility::MPITools {
 
 /// Create directories and file paths to help managing files during mpi processing.
 ///
@@ -60,7 +61,7 @@
 /// When just ./xxx (not in MPI mode) :
 /// Just a single result.root will be created.
 ///
-class MACE::MPIFileTools final {
+class MPIFileTools final {
 public:
     MPIFileTools(std::string_view basicName, std::string_view suffix, const MPI::Comm& comm = MPI::COMM_WORLD);
     ~MPIFileTools() noexcept = default;
@@ -95,3 +96,5 @@ private:
 
     static ObserverPtr<std::ostream> fgOut;
 };
+
+} // namespace MACE::Utility::MPITools

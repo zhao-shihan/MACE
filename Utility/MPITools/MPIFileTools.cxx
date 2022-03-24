@@ -1,3 +1,5 @@
+#include "MPITools/MPIFileTools.hxx"
+
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -7,9 +9,7 @@
 #include <thread>
 #include <vector>
 
-#include "MPITools/MPIFileTools.hxx"
-
-using namespace MACE::Utility;
+namespace MACE::Utility::MPITools {
 
 ObserverPtr<std::ostream> MPIFileTools::fgOut = std::addressof(std::cout);
 
@@ -278,3 +278,5 @@ void MPIFileTools::ReportSuffixNotRoot() const {
     *fgOut << "Warning: MACE::MPIFileTools::MergeRootFiles() only supports merging root files with suffix <.root>.\n"
            << "\t<" << fSuffix << "> files are not supported. Nothing was done." << std::endl;
 }
+
+} // namespace MACE::Utility::MPITools

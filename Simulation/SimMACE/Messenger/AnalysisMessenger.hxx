@@ -1,15 +1,16 @@
 #pragma once
 
+#include "ObserverPtr.hxx"
+#include "SimMACE/Global.hxx"
+
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UImessenger.hh"
 
-#include "ObserverPtr.hxx"
-#include "SimMACE/Global.hxx"
+namespace MACE::Simulation::SimMACE::Messenger {
 
-class MACE::SimMACE::AnalysisMessenger final :
-    public G4UImessenger {
+class AnalysisMessenger final : public G4UImessenger {
 public:
     static AnalysisMessenger& Instance();
 
@@ -29,3 +30,5 @@ private:
     G4UIcmdWithAString fSetResultName;
     G4UIcmdWithABool fMergeResult;
 };
+
+} // namespace MACE::Simulation::SimMACE::Messenger

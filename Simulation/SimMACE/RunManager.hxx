@@ -8,8 +8,11 @@
 #include "SimMACE/Action/RunAction.hxx"
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::RunManager final :
-    public MACE::G4MPIRunManager {
+namespace MACE::Simulation::SimMACE {
+
+using namespace MACE::Simulation::SimMACE::Action;
+
+class RunManager final : public MACE::Utility::MPITools::G4MPIRunManager {
 public:
     static auto& Instance() { return *static_cast<RunManager*>(GetRunManager()); }
 
@@ -27,3 +30,5 @@ public:
     // auto& GetTrackingAction()         const { return *static_cast<*>(userTrackingAction); }
     // auto& GetSteppingAction()         const { return *static_cast<*>(userSteppingAction); }
 };
+
+} // namespace MACE::Simulation::SimMACE

@@ -1,21 +1,19 @@
 #pragma once
 
+#include "SimMACE/Global.hxx"
+
 #include "G4ParticleGun.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 
-#include "SimMACE/Global.hxx"
+namespace MACE::Simulation::SimMACE::Action {
 
-class MACE::SimMACE::PrimaryGeneratorAction final :
-    public G4VUserPrimaryGeneratorAction {
-    friend ActionInitialization;
-
-private:
+class PrimaryGeneratorAction final : public G4VUserPrimaryGeneratorAction {
+public:
     PrimaryGeneratorAction();
     ~PrimaryGeneratorAction() noexcept = default;
     PrimaryGeneratorAction(const PrimaryGeneratorAction&) = delete;
     PrimaryGeneratorAction& operator=(const PrimaryGeneratorAction&) = delete;
 
-public:
     void GeneratePrimaries(G4Event* event) override;
 
     void SetFlux(G4double val) { fFlux = val; }
@@ -32,13 +30,15 @@ public:
 private:
     G4ParticleGun fSurfaceMuonBeam;
 
-    G4double fFlux = 5e5_s_1;
-    G4double fRepetitionRate = 2.5_Hz;
-    G4double fTimeWidthRMS = 10_ms;
-    G4double fEnergy = 1.5_MeV;
-    G4double fEnergySpreadRMS = 0.05 * fEnergy;
-    G4double fBeamProfileRMS = 5_mm;
+    G4double fFlux;
+    G4double fRepetitionRate;
+    G4double fTimeWidthRMS;
+    G4double fEnergy;
+    G4double fEnergySpreadRMS;
+    G4double fBeamProfileRMS;
 
-    G4int fMuonsForEachG4Event = 500;
+    G4int fMuonsForEachG4Event;
     G4int fRepetitionID;
 };
+
+} // namespace MACE::Simulation::SimMACE::Action

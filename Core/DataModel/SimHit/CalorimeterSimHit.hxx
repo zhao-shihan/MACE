@@ -1,13 +1,16 @@
 #pragma once
 
-#include "DataModel/Global.hxx"
-#include "DataModel/Hit/CalorimeterHit.hxx"
 #include "DataModel/BranchSocket/ShortStringBranchSocket.hxx"
+#include "DataModel/Hit/CalorimeterHit.hxx"
 
-class MACE::DataModel::CalorimeterSimHit :
-    public MACE::DataModel::CalorimeterHit {
-    using Base = MACE::DataModel::CalorimeterHit;
-    friend MACE::DataModel::DataHub;
+namespace MACE::Core::DataModel::SimHit {
+
+using BranchSocket::IntBranchSocket;
+using BranchSocket::ShortStringBranchSocket;
+using Utility::ShortString;
+
+class CalorimeterSimHit : public Hit::CalorimeterHit {
+    friend DataHub;
 
 public:
     CalorimeterSimHit() noexcept;
@@ -36,17 +39,19 @@ private:
 
 private:
     ShortString fParticleName;
-    Int_t       fEventID;
-    Int_t       fTrackID;
+    Int_t fEventID;
+    Int_t fTrackID;
 
     static ShortStringBranchSocket fgParticleName;
-    static IntBranchSocket         fgEventID;
-    static IntBranchSocket         fgTrackID;
+    static IntBranchSocket fgEventID;
+    static IntBranchSocket fgTrackID;
 };
 
-inline void MACE::DataModel::CalorimeterSimHit::FillBranchSockets() const noexcept {
-    Base::FillBranchSockets();
+inline void CalorimeterSimHit::FillBranchSockets() const noexcept {
+    CalorimeterHit::FillBranchSockets();
     fgParticleName.SetValue(fParticleName);
     fgEventID.SetValue(fEventID);
     fgTrackID.SetValue(fTrackID);
 }
+
+} // namespace MACE::Core::DataModel::SimHit

@@ -1,12 +1,16 @@
 #pragma once
 
-#include "DataModel/Interface/Transient.hxx"
 #include "DataModel/BranchSocket/FundamentalBranchSocket.hxx"
+#include "DataModel/DataHub.hxx"
+#include "DataModel/ITransientData.hxx"
 
-class MACE::DataModel::CalorimeterHit :
-    public MACE::DataModel::Interface::Transient {
-    using Base = MACE::DataModel::Interface::Transient;
-    friend MACE::DataModel::DataHub;
+namespace MACE::Core::DataModel::Hit {
+
+using BranchSocket::DoubleBranchSocket;
+using BranchSocket::FloatBranchSocket;
+
+class CalorimeterHit : public ITransientData {
+    friend DataHub;
 
 public:
     CalorimeterHit() noexcept;
@@ -38,13 +42,15 @@ private:
     Double_t fEnergyVariance;
 
     static DoubleBranchSocket fgHitTime;
-    static FloatBranchSocket  fgEnergy;
-    static FloatBranchSocket  fgEnergyVariance;
+    static FloatBranchSocket fgEnergy;
+    static FloatBranchSocket fgEnergyVariance;
 };
 
-inline void MACE::DataModel::CalorimeterHit::FillBranchSockets() const noexcept {
-    Base::FillBranchSockets();
+inline void CalorimeterHit::FillBranchSockets() const noexcept {
+    ITransientData::FillBranchSockets();
     fgHitTime.SetValue(fHitTime);
     fgEnergy.SetValue(fEnergy);
     fgEnergyVariance.SetValue(fEnergyVariance);
 }
+
+} // namespace MACE::Core::DataModel::Hit

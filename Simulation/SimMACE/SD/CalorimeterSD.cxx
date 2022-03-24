@@ -1,13 +1,16 @@
+#include "SimMACE/RunManager.hxx"
+#include "SimMACE/SD/CalorimeterSD.hxx"
+#include "SimMACE/Utility/Analysis.hxx"
+
 #include "G4Gamma.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4SDManager.hh"
 #include "G4Step.hh"
 
-#include "SimMACE/RunManager.hxx"
-#include "SimMACE/SD/CalorimeterSD.hxx"
-#include "SimMACE/Utility/Analysis.hxx"
+namespace MACE::Simulation::SimMACE::SD {
 
-using namespace MACE::SimMACE::SD;
+using Hit::CalorimeterHit;
+using Utility::Analysis;
 
 CalorimeterSD::CalorimeterSD(const G4String& sdName) :
     G4VSensitiveDetector(sdName),
@@ -24,8 +27,8 @@ void CalorimeterSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
 G4bool CalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     const auto* const track = step->GetTrack();
     const auto* const particle = track->GetDefinition();
-    if (step->IsFirstStepInVolume() and track->GetCurrentStepNumber() > 1 and    // is coming from outside, and
-        (particle->GetPDGCharge() != 0 or particle == G4Gamma::Definition())) {  // is a charged particle or gamma
+    if (step->IsFirstStepInVolume() and track->GetCurrentStepNumber() > 1 and   // is coming from outside, and
+        (particle->GetPDGCharge() != 0 or particle == G4Gamma::Definition())) { // is a charged particle or gamma
         const auto* const preStepPoint = step->GetPreStepPoint();
         // new a hit
         auto* const hit = new CalorimeterHit();
@@ -44,3 +47,5 @@ G4bool CalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
 void CalorimeterSD::EndOfEvent(G4HCofThisEvent*) {
     Analysis::Instance().SubmitCalorimeterHC(fHitsCollection->GetVector());
 }
+
+} // namespace MACE::Simulation::SimMACE::SD

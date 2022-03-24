@@ -1,3 +1,6 @@
+#include "SimMACE/Physics/MuoniumPhysics.hxx"
+#include "SimMACE/Physics/PhysicsList.hxx"
+
 #include "G4DecayPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4EmLivermorePhysics.hh"
@@ -9,10 +12,7 @@
 #include "G4RegionStore.hh"
 #include "G4StoppingPhysics.hh"
 
-#include "SimMACE/Physics/MuoniumPhysics.hxx"
-#include "SimMACE/Physics/PhysicsList.hxx"
-
-using namespace MACE::SimMACE::Physics;
+using MACE::Simulation::SimMACE::Physics::PhysicsList;
 
 PhysicsList::PhysicsList() :
     G4VModularPhysicsList() {

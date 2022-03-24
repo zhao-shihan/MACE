@@ -1,4 +1,4 @@
-namespace MACE::inline Utility {
+namespace MACE::Utility {
 
 inline constexpr ShortString::ShortString() noexcept :
     fString{'\0'} {}
@@ -44,4 +44,4 @@ inline constexpr std::weak_ordering ShortString::operator<=>(const char* rhs) co
     }
 }
 
-} // namespace MACE::inline Utility
+} // namespace MACE::Utility

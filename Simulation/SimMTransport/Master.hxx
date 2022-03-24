@@ -2,7 +2,9 @@
 
 #include "Global.hxx"
 
-class MACE::SimMTransport::Master {
+namespace MACE::Simulation::SimMTransport {
+
+class Master {
 private:
     clock_t fBeginCPUTime;
     clock_t fEndCPUTime;
@@ -26,3 +28,5 @@ public:
 private:
     void ProgressReport(size_t jobSend) const;
 };
+
+} // namespace MACE::Simulation::SimMTransport

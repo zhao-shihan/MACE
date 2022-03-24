@@ -1,11 +1,13 @@
+#include "Geometry/Description/World.hxx"
+#include "Geometry/Entity/Fast/World.hxx"
+
 #include "G4Box.hh"
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 
-#include "Geometry/Entity/Fast/World.hxx"
-#include "Geometry/Description/World.hxx"
-
-using namespace MACE::Geometry::Entity::Fast;
+using MACE::Geometry::Entity::Fast::World;
+using namespace MACE::Utility::LiteralUnit::Density;
+using namespace MACE::Utility::LiteralUnit::Temperature;
 
 void World::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::World::Instance();

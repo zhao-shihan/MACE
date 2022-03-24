@@ -1,18 +1,23 @@
 #pragma once
 
+#include "DataModel/SimHit/VertexDetectorSimHit.hxx"
+#include "ObserverPtr.hxx"
+#include "SimMACE/Global.hxx"
+
 #include "G4Allocator.hh"
 #include "G4THitsCollection.hh"
 #include "G4ThreeVector.hh"
 #include "G4TwoVector.hh"
 #include "G4VHit.hh"
 
-#include "DataModel/SimHit/VertexDetectorSimHit.hxx"
-#include "ObserverPtr.hxx"
-#include "SimMACE/Global.hxx"
+namespace MACE::Simulation::SimMACE::Hit {
 
-class MACE::SimMACE::VertexDetectorHit final :
-    public G4VHit,
-    public MACE::DataModel::VertexDetectorSimHit {
+using Utility::ObserverPtr;
+
+class VertexDetectorHit final : public G4VHit,
+                                public Core::DataModel::SimHit::VertexDetectorSimHit {
+    using Base = VertexDetectorSimHit;
+
 public:
     VertexDetectorHit() noexcept = default;
     VertexDetectorHit(const VertexDetectorHit& hit) noexcept = default;
@@ -21,8 +26,8 @@ public:
     VertexDetectorHit& operator=(const VertexDetectorHit& hit) noexcept = default;
     VertexDetectorHit& operator=(VertexDetectorHit&& hit) noexcept = default;
 
-    void SetHitPosition(const G4TwoVector& pos) { DataModel::VertexDetectorSimHit::SetHitPosition(pos.x(), pos.y()); }
-    void SetVertexPosition(const G4ThreeVector& pos) { DataModel::VertexDetectorSimHit::SetVertexPosition(pos.x(), pos.y(), pos.z()); }
+    void SetHitPosition(const G4TwoVector& pos) { Base::SetHitPosition(pos.x(), pos.y()); }
+    void SetVertexPosition(const G4ThreeVector& pos) { Base::SetVertexPosition(pos.x(), pos.y(), pos.z()); }
 
     inline void* operator new(size_t);
     inline void operator delete(void*);
@@ -30,8 +35,6 @@ public:
 private:
     static ObserverPtr<G4Allocator<VertexDetectorHit>> fgVertexDetectorAllocator;
 };
-
-namespace MACE::SimMACE::Hit {
 
 using VertexDetectorHitCollection = G4THitsCollection<VertexDetectorHit>;
 
@@ -46,4 +49,4 @@ inline void VertexDetectorHit::operator delete(void* hit) {
     fgVertexDetectorAllocator->FreeSingle(static_cast<VertexDetectorHit*>(hit));
 }
 
-}
+} // namespace MACE::Simulation::SimMACE::Hit

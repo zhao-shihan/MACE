@@ -1,14 +1,22 @@
 #pragma once
 
-#include "DataModel/Interface/Transient.hxx"
 #include "DataModel/BranchSocket/FundamentalBranchSocket.hxx"
-#include "DataModel/BranchSocket/Vector3BranchSocket.hxx"
 #include "DataModel/BranchSocket/ShortStringBranchSocket.hxx"
+#include "DataModel/BranchSocket/Vector3BranchSocket.hxx"
+#include "DataModel/DataHub.hxx"
+#include "DataModel/ITransientData.hxx"
 
-class MACE::DataModel::PhysicsTrack :
-    public MACE::DataModel::Interface::Transient {
-    using Base = MACE::DataModel::Interface::Transient;
-    friend MACE::DataModel::DataHub;
+namespace MACE::Core::DataModel::Track {
+
+using BranchSocket::DoubleBranchSocket;
+using BranchSocket::FloatBranchSocket;
+using BranchSocket::IntBranchSocket;
+using BranchSocket::ShortStringBranchSocket;
+using BranchSocket::Vector3FBranchSocket;
+using Utility::ShortString;
+
+class PhysicsTrack : public ITransientData {
+    friend DataHub;
 
 public:
     PhysicsTrack() noexcept;
@@ -50,25 +58,25 @@ private:
     static constexpr const char* BasicName() { return "PhyTrk"; }
 
 private:
-    Double_t    fVertexTime;
+    Double_t fVertexTime;
     TEveVectorD fVertexPosition;
-    Double_t    fVertexEnergy;
+    Double_t fVertexEnergy;
     TEveVectorD fVertexMomentum;
     ShortString fParticleName;
-    Int_t       fNumberOfFittedPoints;
-    Double_t    fChi2;
+    Int_t fNumberOfFittedPoints;
+    Double_t fChi2;
 
-    static DoubleBranchSocket      fgVertexTime;
-    static Vector3FBranchSocket    fgVertexPosition;
-    static FloatBranchSocket       fgVertexEnergy;
-    static Vector3FBranchSocket    fgVertexMomentum;
+    static DoubleBranchSocket fgVertexTime;
+    static Vector3FBranchSocket fgVertexPosition;
+    static FloatBranchSocket fgVertexEnergy;
+    static Vector3FBranchSocket fgVertexMomentum;
     static ShortStringBranchSocket fgParticleName;
-    static IntBranchSocket         fgNumberOfFittedPoints;
-    static FloatBranchSocket       fgChi2;
+    static IntBranchSocket fgNumberOfFittedPoints;
+    static FloatBranchSocket fgChi2;
 };
 
-inline void MACE::DataModel::PhysicsTrack::FillBranchSockets() const noexcept {
-    Base::FillBranchSockets();
+inline void PhysicsTrack::FillBranchSockets() const noexcept {
+    ITransientData::FillBranchSockets();
     fgVertexTime.SetValue(fVertexTime);
     fgVertexPosition.SetValue(fVertexPosition);
     fgVertexEnergy.SetValue(fVertexEnergy);
@@ -77,3 +85,5 @@ inline void MACE::DataModel::PhysicsTrack::FillBranchSockets() const noexcept {
     fgNumberOfFittedPoints.SetValue(fNumberOfFittedPoints);
     fgChi2.SetValue(fChi2);
 }
+
+} // namespace MACE::Core::DataModel::Track

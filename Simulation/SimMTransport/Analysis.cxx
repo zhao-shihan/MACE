@@ -1,8 +1,9 @@
+#include "Analysis.hxx"
+#include "Track.hxx"
+
 #include <sstream>
 
-#include "SimMTransport/Analysis.hxx"
-
-using namespace MACE::SimMTransport;
+using MACE::Simulation::SimMTransport::Analysis;
 
 Analysis* Analysis::fInstance = nullptr;
 

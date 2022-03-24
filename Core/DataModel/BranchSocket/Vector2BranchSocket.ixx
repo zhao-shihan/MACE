@@ -1,7 +1,8 @@
+namespace MACE::Core::DataModel::BranchSocket {
+
 template<typename Fund_t>
-MACE::DataModel::Vector2BranchSocket<Fund_t>::
-Vector2BranchSocket(const char* branchName, std::array<const char*, 2> leafList, std::array<Fund_t, 2> defaultValues) :
-    MACE::DataModel::Interface::BranchSocket<TEveVector2T<Fund_t>>(),
+Vector2BranchSocket<Fund_t>::Vector2BranchSocket(const char* branchName, std::array<const char*, 2> leafList, std::array<Fund_t, 2> defaultValues) :
+    IBranchSocket<TEveVector2T<Fund_t>>(),
     fBranchName(branchName),
     fLeafList(leafList.front()),
     fVector2(defaultValues.data()) {
@@ -35,3 +36,5 @@ Vector2BranchSocket(const char* branchName, std::array<const char*, 2> leafList,
     fLeafList += ':';
     fLeafList += leafList[1];
 }
+
+} // namespace MACE::Core::DataModel::BranchSocket

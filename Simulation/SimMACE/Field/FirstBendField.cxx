@@ -1,12 +1,16 @@
+#include "Geometry/Description/FirstBendField.hxx"
+#include "LiteralUnit.hxx"
 #include "SimMACE/Field/FirstBendField.hxx"
 #include "SimMACE/Messenger/FieldMessenger.hxx"
 
-#include "Geometry/Description/DescendantsOfWorld/FirstBendField.hxx"
+namespace MACE::Simulation::SimMACE::Field {
 
-using namespace MACE::SimMACE::Field;
+using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
+using Messenger::FieldMessenger;
 
 FirstBendField::FirstBendField() :
-    G4MagneticField() {
+    G4MagneticField(),
+    fB(0.1_T) {
     FieldMessenger::Instance().Set(this);
 }
 
@@ -20,3 +24,5 @@ void FirstBendField::GetFieldValue(const G4double* x, G4double* B) const {
     B[1] = 0;
     B[2] = -(x[0] - x0) / r * fB;
 }
+
+} // namespace MACE::Simulation::SimMACE::Field

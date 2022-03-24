@@ -3,7 +3,9 @@
 #include "Global.hxx"
 #include "Track.hxx"
 
-class MACE::SimMTransport::Worker {
+namespace MACE::Simulation::SimMTransport {
+
+class Worker {
 private:
     Track* const fTrack;
     clock_t fBeginCPUTime;
@@ -21,3 +23,5 @@ public:
 
     [[nodiscard]] clock_t GetUsedCPUTime() const { return fEndCPUTime - fBeginCPUTime; }
 };
+
+} // namespace MACE::Simulation::SimMTransport

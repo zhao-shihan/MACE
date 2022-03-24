@@ -1,16 +1,19 @@
-#include "G4HCofThisEvent.hh"
-#include "G4ProductionCuts.hh"
-#include "G4SDManager.hh"
-#include "G4Step.hh"
-
-#include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/DescendantsOfSpectrometerCells/DescendantsOfSpectrometerSensitiveVolumes/SpectrometerSenseWires.hxx"
-#include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/SpectrometerCells.hxx"
+#include "Geometry/Description/SpectrometerCells.hxx"
+#include "Geometry/Description/SpectrometerSenseWires.hxx"
 #include "SimMACE/RunManager.hxx"
 #include "SimMACE/SD/SpectrometerSD.hxx"
 #include "SimMACE/Utility/Analysis.hxx"
 #include "SimMACE/Utility/Region.hxx"
 
-using namespace MACE::SimMACE::SD;
+#include "G4HCofThisEvent.hh"
+#include "G4ProductionCuts.hh"
+#include "G4SDManager.hh"
+#include "G4Step.hh"
+
+namespace MACE::Simulation::SimMACE::SD {
+
+using Hit::SpectrometerHit;
+using Utility::Analysis;
 
 SpectrometerSD::SpectrometerSD(const G4String& sdName) :
     G4VSensitiveDetector(sdName),
@@ -23,7 +26,7 @@ SpectrometerSD::SpectrometerSD(const G4String& sdName) :
     const auto cellInfoList = Geometry::Description::SpectrometerCells::Instance().GetInformationList();
     const auto wireInfoList = Geometry::Description::SpectrometerSenseWires::Instance().GetInformationList();
     const auto layerCount = cellInfoList.size();
-    fSenseWireMap.reserve(3 * layerCount * layerCount);  // just an estimation of cell count (pi*r^2), for optimization.
+    fSenseWireMap.reserve(3 * layerCount * layerCount); // just an estimation of cell count (pi*r^2), for optimization.
     for (size_t layerID = 0; layerID < layerCount; ++layerID) {
         const auto& [wireLocalPosition, _3] = wireInfoList[layerID];
         for (auto&& rotation : std::get<2>(cellInfoList[layerID])) {
@@ -46,13 +49,13 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     if (track->GetCurrentStepNumber() <= 1 or particle->GetPDGCharge() == 0) { return false; }
     auto monitoring = std::as_const(fMonitoringTrackList).find(track);
     auto isMonitoring = (monitoring != fMonitoringTrackList.cend());
-    if (!isMonitoring and step->IsFirstStepInVolume()) {  // is first time entering.
+    if (!isMonitoring and step->IsFirstStepInVolume()) { // is first time entering.
         fMonitoringTrackList.emplace(track, *step->GetPreStepPoint());
         monitoring = std::prev(fMonitoringTrackList.cend());
         isMonitoring = true;
     }
-    if (isMonitoring and step->IsLastStepInVolume() and                                                                       // is exiting, and make sure has entered before,
-        static_cast<Region*>(track->GetNextVolume()->GetLogicalVolume()->GetRegion())->GetType() != Region::kDefaultSolid) {  // but not heading into sense wire!
+    if (isMonitoring and step->IsLastStepInVolume() and                                                                      // is exiting, and make sure has entered before,
+        static_cast<Region*>(track->GetNextVolume()->GetLogicalVolume()->GetRegion())->GetType() != Region::kDefaultSolid) { // but not heading into sense wire!
         // retrive entering time and position
         const auto& enterPoint = monitoring->second;
         const auto tIn = enterPoint.GetGlobalTime();
@@ -105,3 +108,5 @@ void SpectrometerSD::EndOfEvent(G4HCofThisEvent*) {
     Analysis::Instance().SubmitSpectrometerHC(fHitsCollection->GetVector());
     fMonitoringTrackList.clear();
 }
+
+} // namespace MACE::Simulation::SimMACE::SD

@@ -1,5 +1,6 @@
 #include "SimMACE/Hit/VertexDetectorHit.hxx"
 
-using namespace MACE::SimMACE::Hit;
+using MACE::Simulation::SimMACE::Hit::VertexDetectorHit;
+using MACE::Utility::ObserverPtr;
 
-MACE::ObserverPtr<G4Allocator<VertexDetectorHit>> VertexDetectorHit::fgVertexDetectorAllocator = nullptr;
+ObserverPtr<G4Allocator<VertexDetectorHit>> VertexDetectorHit::fgVertexDetectorAllocator = nullptr;

@@ -1,5 +1,6 @@
 #include "SimMACE/Hit/CalorimeterHit.hxx"
 
-using namespace MACE::SimMACE::Hit;
+using MACE::Simulation::SimMACE::Hit::CalorimeterHit;
+using MACE::Utility::ObserverPtr;
 
-MACE::ObserverPtr<G4Allocator<CalorimeterHit>> CalorimeterHit::fgCalorimeterHitAllocator = nullptr;
+ObserverPtr<G4Allocator<CalorimeterHit>> CalorimeterHit::fgCalorimeterHitAllocator = nullptr;

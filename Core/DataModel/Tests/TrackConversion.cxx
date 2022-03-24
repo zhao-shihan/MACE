@@ -1,13 +1,13 @@
-#include "CLHEP/Units/PhysicalConstants.h"
-
 #include "DataModel/DataHub.hxx"
 #include "DataModel/Track/HelixTrack.hxx"
 #include "DataModel/Track/PhysicsTrack.hxx"
-#include "LiteralUnits.hxx"
+#include "LiteralUnit.hxx"
 
-using namespace MACE::DataModel;
-using MACE::operator""_T;
-using MACE::operator""_keV;
+#include "CLHEP/Units/PhysicalConstants.h"
+
+using MACE::Core::DataModel::DataHub;
+using namespace MACE::Core::DataModel::Track;
+using namespace MACE::Utility::LiteralUnit;
 
 int main(int, char** argv) {
     DataHub dataHub;

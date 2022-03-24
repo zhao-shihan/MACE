@@ -1,19 +1,19 @@
 #include "DataModel/SimHit/SpectrometerSimHit.hxx"
 
-using namespace MACE::DataModel;
+namespace MACE::Core::DataModel::SimHit {
 
-FloatBranchSocket             SpectrometerSimHit::fgEnergy("hitEne", 0);
-Vector3FBranchSocket        SpectrometerSimHit::fgMomentum("hitMom", { "x", "y", "z" }, { 0, 0, 0 });
-DoubleBranchSocket        SpectrometerSimHit::fgVertexTime("vtxTime", 0);
-Vector3FBranchSocket  SpectrometerSimHit::fgVertexPosition("vtxPos", { "x", "y", "z" }, { 0, 0, 0 });
-FloatBranchSocket       SpectrometerSimHit::fgVertexEnergy("vtxEne", 0);
-Vector3FBranchSocket  SpectrometerSimHit::fgVertexMomentum("vtxMom", { "x", "y", "z" }, { 0, 0, 0 });
+FloatBranchSocket SpectrometerSimHit::fgEnergy("hitEne", 0);
+Vector3FBranchSocket SpectrometerSimHit::fgMomentum("hitMom", {"x", "y", "z"}, {0, 0, 0});
+DoubleBranchSocket SpectrometerSimHit::fgVertexTime("vtxTime", 0);
+Vector3FBranchSocket SpectrometerSimHit::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
+FloatBranchSocket SpectrometerSimHit::fgVertexEnergy("vtxEne", 0);
+Vector3FBranchSocket SpectrometerSimHit::fgVertexMomentum("vtxMom", {"x", "y", "z"}, {0, 0, 0});
 ShortStringBranchSocket SpectrometerSimHit::fgParticleName("particle", "");
-IntBranchSocket              SpectrometerSimHit::fgEventID("eventID", -1);
-IntBranchSocket              SpectrometerSimHit::fgTrackID("trackID", -1);
+IntBranchSocket SpectrometerSimHit::fgEventID("eventID", -1);
+IntBranchSocket SpectrometerSimHit::fgTrackID("trackID", -1);
 
 SpectrometerSimHit::SpectrometerSimHit() noexcept :
-    Base(),
+    SpectrometerHit(),
     fEnergy(fgEnergy.GetValue()),
     fMomentum(fgMomentum.GetValue()),
     fVertexTime(fgVertexTime.GetValue()),
@@ -25,7 +25,7 @@ SpectrometerSimHit::SpectrometerSimHit() noexcept :
     fTrackID(fgTrackID.GetValue()) {}
 
 void SpectrometerSimHit::CreateBranches(TTree& tree) {
-    Base::CreateBranches(tree);
+    SpectrometerHit::CreateBranches(tree);
     fgEnergy.CreateBranch(tree);
     fgMomentum.CreateBranch(tree);
     fgVertexTime.CreateBranch(tree);
@@ -38,7 +38,7 @@ void SpectrometerSimHit::CreateBranches(TTree& tree) {
 }
 
 void SpectrometerSimHit::ConnectToBranches(TTree& tree) {
-    Base::ConnectToBranches(tree);
+    SpectrometerHit::ConnectToBranches(tree);
     fgEnergy.ConnectToBranch(tree);
     fgMomentum.ConnectToBranch(tree);
     fgVertexTime.ConnectToBranch(tree);
@@ -49,3 +49,5 @@ void SpectrometerSimHit::ConnectToBranches(TTree& tree) {
     fgEventID.ConnectToBranch(tree);
     fgTrackID.ConnectToBranch(tree);
 }
+
+} // namespace MACE::Core::DataModel::SimHit

@@ -1,12 +1,13 @@
+#include "SimMACE/Physics/Muonium.hxx"
+#include "SimMACE/Physics/MuoniumDecayChannel.hxx"
+
 #include "G4DecayTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-#include "SimMACE/Physics/Muonium.hxx"
-#include "SimMACE/Physics/MuoniumDecayChannel.hxx"
-
-using namespace MACE::SimMACE::Physics;
+using MACE::Simulation::SimMACE::Physics::Muonium;
+using namespace MACE::Utility::LiteralUnit;
 
 Muonium* Muonium::fgInstance = nullptr;
 

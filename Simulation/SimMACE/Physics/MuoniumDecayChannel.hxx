@@ -38,8 +38,11 @@
 
 #pragma once
 
-#include "G4VDecayChannel.hh"
 #include "SimMACE/Global.hxx"
+
+#include "G4VDecayChannel.hh"
+
+namespace MACE::Simulation::SimMACE::Physics {
 
 // Class Decription
 //  This class describes muon decay kinemtics.
@@ -47,11 +50,12 @@
 //              assumes the pure V-A coupling
 //              gives incorrect energy spectrum for neutrinos
 //
-class MACE::SimMACE::Physics::MuoniumDecayChannel final :
-    public G4VDecayChannel {
+class MuoniumDecayChannel final : public G4VDecayChannel {
 public:
     MuoniumDecayChannel(const G4String& theParentName, G4double theBR, G4int verbose = 1);
     ~MuoniumDecayChannel() noexcept = default;
 
     G4DecayProducts* DecayIt(G4double) override;
 };
+
+} // namespace MACE::Simulation::SimMACE::Physics

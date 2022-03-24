@@ -4,7 +4,7 @@
 #include "Master.hxx"
 #include "Worker.hxx"
 
-namespace MACE::SimMTransport {
+namespace MACE::Simulation::SimMTransport {
 
 enum RunStatus {
     kRunUndefined,
@@ -14,9 +14,7 @@ enum RunStatus {
     kRunFinalized
 };
 
-}
-
-class MACE::SimMTransport::RunManager {
+class RunManager {
 public:
     static RunManager* Instance();
     ~RunManager() noexcept = default;
@@ -41,3 +39,5 @@ private:
     void InitialReport() const;
     void FinalReport() const;
 };
+
+} // namespace MACE::Simulation::SimMTransport

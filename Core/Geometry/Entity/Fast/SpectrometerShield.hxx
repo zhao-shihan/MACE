@@ -1,0 +1,18 @@
+#pragma once
+
+#include "Geometry/Entity/IEntity.hxx"
+
+namespace MACE::Geometry::Entity::Fast {
+
+class SpectrometerShield final : public IEntity {
+public:
+    SpectrometerShield() = default;
+    ~SpectrometerShield() noexcept = default;
+    SpectrometerShield(const SpectrometerShield&) = delete;
+    SpectrometerShield& operator=(const SpectrometerShield&) = delete;
+
+private:
+    void ConstructSelf(G4bool checkOverlaps) override;
+};
+
+} // namespace MACE::Geometry::Entity::Fast

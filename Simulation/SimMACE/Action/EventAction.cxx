@@ -5,7 +5,7 @@
 #include "SimMACE/SD/VertexDetectorSD.hxx"
 #include "SimMACE/Utility/Analysis.hxx"
 
-using namespace MACE::SimMACE::Action;
+namespace MACE::Simulation::SimMACE::Action {
 
 void EventAction::BeginOfEventAction(const G4Event* event) {
     const auto eventID = event->GetEventID();
@@ -17,5 +17,7 @@ void EventAction::BeginOfEventAction(const G4Event* event) {
 
 void EventAction::EndOfEventAction(const G4Event*) {
     const auto repetitionID = RunManager::Instance().GetPrimaryGeneratorAction().GetRepetitionID();
-    Analysis::Instance().WriteEvent(repetitionID);
+    Utility::Analysis::Instance().WriteEvent(repetitionID);
 }
+
+} // namespace MACE::Simulation::SimMACE::Action

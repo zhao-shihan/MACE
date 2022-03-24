@@ -1,16 +1,17 @@
 #pragma once
 
-#include "G4ParticleChange.hh"
-#include "G4VContinuousProcess.hh"
-
 #include "ObserverPtr.hxx"
 #include "SimMACE/Action/DetectorConstruction.hxx"
 #include "SimMACE/Global.hxx"
 #include "SimMTransport/Track.hxx"
 
-class MACE::SimMACE::Physics::MuoniumTransport final :
-    public G4VContinuousProcess,
-    protected MACE::SimMTransport::Track {
+#include "G4ParticleChange.hh"
+#include "G4VContinuousProcess.hh"
+
+namespace MACE::Simulation::SimMACE::Physics {
+
+class MuoniumTransport final : public G4VContinuousProcess,
+                               protected MACE::Simulation::SimMTransport::Track {
 public:
     MuoniumTransport();
     ~MuoniumTransport() noexcept = default;
@@ -21,3 +22,5 @@ public:
 private:
     G4ParticleChange fParticleChange;
 };
+
+} // namespace MACE::Simulation::SimMACE::Physics

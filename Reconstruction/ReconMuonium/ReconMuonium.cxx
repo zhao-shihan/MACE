@@ -1,31 +1,33 @@
-#include <numbers>
-
-#include "TNtuple.h"
-
-#include "CLHEP/Units/PhysicalConstants.h"
-
 #include "DataModel/DataHub.hxx"
 #include "DataModel/Hit/CalorimeterHit.hxx"
 #include "DataModel/Hit/VertexDetectorHit.hxx"
 #include "DataModel/Track/HelixTrack.hxx"
 #include "DataModel/Vertex/MuoniumVertex.hxx"
-#include "Geometry/Description/DescendantsOfWorld/CalorimeterField.hxx"
-#include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/AcceleratorField.hxx"
-#include "Geometry/Description/DescendantsOfWorld/FirstBendField.hxx"
-#include "Geometry/Description/DescendantsOfWorld/FirstTransportField.hxx"
-#include "Geometry/Description/DescendantsOfWorld/SecondBendField.hxx"
-#include "Geometry/Description/DescendantsOfWorld/SecondTransportField.hxx"
-#include "Geometry/Description/DescendantsOfWorld/SpectrometerField.hxx"
-#include "Geometry/Description/DescendantsOfWorld/ThirdTransportField.hxx"
-#include "LiteralUnits.hxx"
+#include "Geometry/Description/AcceleratorField.hxx"
+#include "Geometry/Description/CalorimeterField.hxx"
+#include "Geometry/Description/FirstBendField.hxx"
+#include "Geometry/Description/FirstTransportField.hxx"
+#include "Geometry/Description/SecondBendField.hxx"
+#include "Geometry/Description/SecondTransportField.hxx"
+#include "Geometry/Description/SpectrometerField.hxx"
+#include "Geometry/Description/ThirdTransportField.hxx"
+#include "LiteralUnit.hxx"
 #include "MPITools/MPIFileTools.hxx"
 #include "MPITools/MPIJobsAssigner.hxx"
+#include "PhysicalConstant.hxx"
 
-namespace sn = std::numbers;
-using namespace CLHEP;
-using namespace MACE;
-using namespace MACE::DataModel;
+#include "TNtuple.h"
+
+#include <numbers>
+
+using namespace MACE::Core::DataModel::Hit;
+using namespace MACE::Core::DataModel::Track;
+using namespace MACE::Core::DataModel::Vertex;
 using namespace MACE::Geometry::Description;
+using namespace MACE::Utility::PhysicalConstant;
+using namespace MACE::Utility::MPITools;
+
+using MACE::Core::DataModel::DataHub;
 
 int main(int, char* argv[]) {
     MPI::Init();
@@ -41,9 +43,9 @@ int main(int, char* argv[]) {
     const auto flightLength =
         SpectrometerField::Instance().GetLength() / 2 - linacLength +
         FirstTransportField::Instance().GetLength() +
-        FirstBendField::Instance().GetBendRadius() * sn::pi / 2 +
+        FirstBendField::Instance().GetBendRadius() * halfpi +
         SecondTransportField::Instance().GetLength() +
-        SecondBendField::Instance().GetBendRadius() * sn::pi / 2 +
+        SecondBendField::Instance().GetBendRadius() * halfpi +
         ThirdTransportField::Instance().GetLength() +
         CalorimeterField::Instance().GetLength() / 2;
     // muonium survival length (5 tau_mu @ 300K)
@@ -141,7 +143,7 @@ int main(int, char* argv[]) {
                 auto coinCount = coinCalHitEnd - coinCalHitBegin;
                 // TODO: discriminate gamma energy.
                 // select the MCP hit if coincident
-                if (coinCount >= /* 2 */ 1) {  // enable 2 gamma after new cal geom :)
+                if (coinCount >= /* 2 */ 1) { // enable 2 gamma after new cal geom :)
                     coinedMCPData.emplace_back(mcpHit);
                 }
                 // update for next loop

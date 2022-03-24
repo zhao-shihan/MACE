@@ -1,12 +1,15 @@
 #pragma once
 
+#include "SimMACE/Global.hxx"
+
 #include "G4ParticleChange.hh"
 #include "G4VRestProcess.hh"
 
-#include "SimMACE/Global.hxx"
+namespace MACE::Simulation::SimMACE::Physics {
 
-class MACE::SimMACE::Physics::MuoniumProduction final :
-    public G4VRestProcess {
+using namespace MACE::Utility::LiteralUnit;
+
+class MuoniumProduction final : public G4VRestProcess {
 public:
     MuoniumProduction();
     ~MuoniumProduction() noexcept = default;
@@ -19,6 +22,8 @@ public:
 
 private:
     G4ParticleChange fParticleChange;
-    G4double fMeanLifeTime = 1.46467_us;  // 60%
+    G4double fMeanLifeTime = 1.46467_us; // 60%
     G4double fConversionProbability = 8.3e-11;
 };
+
+} // namespace MACE::Simulation::SimMACE::Physics

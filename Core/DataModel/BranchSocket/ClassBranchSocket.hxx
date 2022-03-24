@@ -1,10 +1,14 @@
 #pragma once
 
-#include "DataModel/Interface/BranchSocket.hxx"
+#include "DataModel/IBranchSocket.hxx"
 
-template<MACE::DataModel::ClassType Class_t>
-class MACE::DataModel::ClassBranchSocket final :
-    public MACE::DataModel::Interface::BranchSocket<Class_t> {
+namespace MACE::Core::DataModel::BranchSocket {
+
+template<typename Class_t>
+concept ClassType = std::is_class_v<Class_t>;
+
+template<ClassType Class_t>
+class ClassBranchSocket final : public IBranchSocket<Class_t> {
 public:
     template<typename... Args>
     ClassBranchSocket(const char* branchName, Args&&... args);
@@ -22,5 +26,7 @@ private:
     const TString fBranchName;
     Class_t* fObject;
 };
+
+} // namespace MACE::Core::DataModel::BranchSocket
 
 #include "DataModel/BranchSocket/ClassBranchSocket.ixx"

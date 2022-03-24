@@ -3,9 +3,7 @@
 #include <compare>
 #include <cstring>
 
-#include "UtilityForwardDeclaration.hxx"
-
-namespace MACE::inline Utility {
+namespace MACE::Utility {
 
 /// @brief A short string (15 characters) on the stack. Size 16 bytes.
 /// As an option for some known-size cases or aggressive SSO (Short String Optimization). (The latter is not recommended, just use TString.)
@@ -51,6 +49,6 @@ constexpr ShortString operator+(const char* lhs, const ShortString& rhs) { retur
 constexpr ShortString operator+(ShortString lhs, char rhs) { return lhs += rhs; }
 constexpr ShortString operator+(char lhs, const ShortString& rhs) { return ShortString(lhs) += rhs; }
 
-} // namespace MACE::inline Utility
+} // namespace MACE::Utility
 
 #include "ShortString.ixx"

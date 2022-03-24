@@ -1,8 +1,8 @@
-#include <ctime>
-
 #include "Master.hxx"
 
-using namespace MACE::SimMTransport;
+#include <ctime>
+
+using MACE::Simulation::SimMTransport::Master;
 
 Master::Master() :
     fBeginCPUTime(0),

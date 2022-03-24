@@ -1,11 +1,12 @@
-#include "G4MPImanager.hh"
-#include "G4SystemOfUnits.hh"
-
 #include "SimMACE/Physics/Muonium.hxx"
 #include "SimMACE/Physics/MuoniumTransport.hxx"
 #include "SimMACE/Utility/Region.hxx"
 
-using namespace MACE::SimMACE::Physics;
+#include "G4MPImanager.hh"
+#include "G4SystemOfUnits.hh"
+
+using MACE::Simulation::SimMACE::Physics::MuoniumTransport;
+using MACE::Simulation::SimMACE::Utility::Region;
 
 MuoniumTransport::MuoniumTransport() :
     G4VContinuousProcess("MuoniumTransport", fTransportation),

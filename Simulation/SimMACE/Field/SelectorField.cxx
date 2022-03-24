@@ -1,12 +1,18 @@
-#include "G4PhysicalConstants.hh"
-
 #include "SimMACE/Field/SelectorField.hxx"
 #include "SimMACE/Messenger/FieldMessenger.hxx"
 
-using namespace MACE::SimMACE::Field;
+#include "G4PhysicalConstants.hh"
+
+namespace MACE::Simulation::SimMACE::Field {
+
+using namespace Utility::LiteralUnit;
+using Messenger::FieldMessenger;
 
 SelectorField::SelectorField() :
     G4ElectroMagneticField(),
+    fBTransport(0.1_T),
+    fSelectEk(7_keV),
+    fESelect(5_kV_cm),
     fBSelect(fESelect / c_light * std::sqrt(G4Positron::Definition()->GetPDGMass() / (2 * fSelectEk))) {
     FieldMessenger::Instance().Set(this);
 }
@@ -29,3 +35,5 @@ void SelectorField::SetSelectEnergy(G4double Ek) {
     fSelectEk = Ek;
     fESelect = c_light * std::sqrt(2 * fSelectEk / G4Positron::Definition()->GetPDGMass()) * fBSelect;
 }
+
+} // namespace MACE::Simulation::SimMACE::Field

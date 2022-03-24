@@ -1,12 +1,15 @@
 #pragma once
 
+#include "Global.hxx"
+
 #include "TFile.h"
 #include "TNtuple.h"
 
-#include "Global.hxx"
-#include "Track.hxx"
+namespace MACE::Simulation::SimMTransport {
 
-class MACE::SimMTransport::Analysis {
+class Track;
+
+class Analysis {
 public:
     static Analysis* Instance();
     ~Analysis() noexcept = default;
@@ -30,3 +33,5 @@ public:
     void Update(const Track* track) const;
     void WriteAndClose();
 };
+
+} // namespace MACE::Simulation::SimMTransport

@@ -1,6 +1,6 @@
 #include "RunManager.hxx"
 
-using namespace MACE::SimMTransport;
+using namespace MACE::Simulation::SimMTransport;
 
 int main(int argc, char** argv) {
     auto runManager = RunManager::Instance();

@@ -1,5 +1,6 @@
 #include "SimMACE/Hit/SpectrometerHit.hxx"
 
-using namespace MACE::SimMACE::Hit;
+using MACE::Simulation::SimMACE::Hit::SpectrometerHit;
+using MACE::Utility::ObserverPtr;
 
-MACE::ObserverPtr<G4Allocator<SpectrometerHit>> SpectrometerHit::fgSpectrometerHitAllocator = nullptr;
+ObserverPtr<G4Allocator<SpectrometerHit>> SpectrometerHit::fgSpectrometerHitAllocator = nullptr;

@@ -1,13 +1,18 @@
 #pragma once
 
-#include "DataModel/Interface/Transient.hxx"
 #include "DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "DataModel/BranchSocket/Vector2BranchSocket.hxx"
+#include "DataModel/DataHub.hxx"
+#include "DataModel/ITransientData.hxx"
 
-class MACE::DataModel::VertexDetectorHit :
-    public MACE::DataModel::Interface::Transient {
-    using Base = MACE::DataModel::Interface::Transient;
-    friend MACE::DataModel::DataHub;
+namespace MACE::Core::DataModel::Hit {
+
+using BranchSocket::DoubleBranchSocket;
+using BranchSocket::Vector2FBranchSocket;
+
+class VertexDetectorHit : public ITransientData {
+    friend DataHub;
+    using Base = ITransientData;
 
 public:
     VertexDetectorHit() noexcept;
@@ -38,18 +43,20 @@ private:
     static constexpr const char* BasicName() { return "MCPHit"; }
 
 private:
-    Double_t     fHitTime;
+    Double_t fHitTime;
     TEveVector2D fHitPosition;
     TEveVector2D fHitPositionVariance;
 
-    static DoubleBranchSocket   fgHitTime;
+    static DoubleBranchSocket fgHitTime;
     static Vector2FBranchSocket fgHitPosition;
     static Vector2FBranchSocket fgHitPositionVariance;
 };
 
-inline void MACE::DataModel::VertexDetectorHit::FillBranchSockets() const noexcept {
+inline void VertexDetectorHit::FillBranchSockets() const noexcept {
     Base::FillBranchSockets();
     fgHitTime.SetValue(fHitTime);
     fgHitPosition.SetValue(fHitPosition);
     fgHitPositionVariance.SetValue(fHitPositionVariance);
 }
+
+} // namespace MACE::Core::DataModel::Hit

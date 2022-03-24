@@ -1,8 +1,5 @@
 #pragma once
 
+#include "LiteralUnit.hxx"
+
 #include "globals.hh"
-
-#include "CoreForwardDeclaration.hxx"
-#include "SimForwardDeclaration.hxx"
-
-#include "LiteralUnits.hxx"

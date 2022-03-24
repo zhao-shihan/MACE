@@ -1,9 +1,9 @@
 #include "DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 
-using namespace MACE::DataModel;
+using MACE::Core::DataModel::BranchSocket::ShortStringBranchSocket;
 
 ShortStringBranchSocket::ShortStringBranchSocket(const char* branchName, const char* defaultString) :
-    MACE::DataModel::Interface::BranchSocket<const char*, false>(),
+    IBranchSocket<const char*, false>(),
     fBranchName(branchName),
     fBranchNameWithType(fBranchName + "/C"),
     fString(defaultString) {}

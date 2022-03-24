@@ -1,9 +1,9 @@
-#include <thread>
-
 #include "RunManager.hxx"
 #include "SimMTransport/Analysis.hxx"
 
-using namespace MACE::SimMTransport;
+#include <thread>
+
+using MACE::Simulation::SimMTransport::RunManager;
 
 RunManager* RunManager::fInstance = nullptr;
 
@@ -85,58 +85,44 @@ void RunManager::InitialReport() const {
         global->Source()->GetRange(xMin, xMax, yMin, yMax, zMin, zMax);
         auto currentTime = time(nullptr);
 
-        std::cout << "------------------------> Run starting <------------------------\n"
-                     " MTransportMC\n"
-                     "  A muonium transport simulation tool.\n"
-                     "\n"
-                     " This run is named <"
-                  << global->Name() << ">.\n"
-                                       " Running "
-                  << global->CommSize() << " processes in " << commName << ".\n"
-                                                                           "\n"
-                                                                           " Physical parameters and simulation configurations:\n"
-                                                                           "  Target region:\n"
-                                                                           "   "
-                  << global->Target()->GetExpFormula() << "\n"
-                                                          "  Step length of pushing:\n"
-                                                          "   "
-                  << global->StepOfPushing() << " [um]\n"
-                                                "  Periodic boundary:\n"
-                                                "   |x|="
-                  << global->PeriodicBoundaryX() << " [um]   |y|=" << global->PeriodicBoundaryY() << " [um]   |z|=" << global->PeriodicBoundaryZ() << " [um]\n"
-                                                                                                                                                      "  Muonium life:\n"
-                                                                                                                                                      "   "
-                  << global->MuoniumLife() << " [us]\n"
-                                              "  Muonium Mass:\n"
-                                              "   "
-                  << global->MuoniumMass() << " [MeV]\n"
-                                              "  Muonium transportation mean free path:\n"
-                                              "   "
-                  << global->MeanFreePath()->GetExpFormula() << " [um]\n"
-                                                                "  Temperature:\n"
-                                                                "   "
-                  << global->Temperature() << " [K]\n"
-                                              "  Muonium source:\n"
-                                              "   "
-                  << global->Source()->GetExpFormula() << " [1/um^3]\n"
-                                                          "   in range ("
-                  << xMin << "," << xMax << ")x(" << yMin << "," << yMax << ")x(" << zMin << "," << zMax << ") [um^3]\n"
-                                                                                                            "  Total number of muonium:\n"
-                                                                                                            "   "
-                  << global->MuoniumNum() << "\n"
-                                             "  Simulation start time:\n"
-                                             "   "
-                  << global->BeginTime() << " [us]\n"
-                                            "  Result output time step:\n"
-                                            "   "
-                  << global->OutputStep() << " [us]\n"
-                                             "  Simulation end time:\n"
-                                             "   "
-                  << global->EndTime() << " [us]\n"
-                                          "                                       "
-                  << ctime(&currentTime) << "------------------------> Run starting <------------------------\n"
-                                            "Master at "
-                  << processorName << " has initialized." << std::endl;
+        std::cout
+            << "------------------------> Run starting <------------------------\n"
+            << " MTransportMC\n"
+            << "  A muonium transport simulation tool.\n"
+            << "\n"
+            << " This run is named <" << global->Name() << ">.\n"
+            << " Running " << global->CommSize() << " processes in " << commName << ".\n"
+            << "\n"
+            << " Physical parameters and simulation configurations:\n"
+            << "  Target region:\n"
+            << "   " << global->Target()->GetExpFormula() << "\n"
+            << "  Step length of pushing:\n"
+            << "   " << global->StepOfPushing() << " [um]\n"
+            << "  Periodic boundary:\n"
+            << "   |x|=" << global->PeriodicBoundaryX() << " [um]   |y|=" << global->PeriodicBoundaryY() << " [um]   |z|=" << global->PeriodicBoundaryZ() << " [um]\n"
+            << "  Muonium life:\n"
+            << "   " << global->MuoniumLife() << " [us]\n"
+            << "  Muonium Mass:\n"
+            << "   " << global->MuoniumMass() << " [MeV]\n"
+            << "  Muonium transportation mean free path:\n"
+            << "   " << global->MeanFreePath()->GetExpFormula() << " [um]\n"
+            << "  Temperature:\n"
+            << "   " << global->Temperature() << " [K]\n"
+            << "  Muonium source:\n"
+            << "   " << global->Source()->GetExpFormula() << " [1/um^3]\n"
+            << "   in range (" << xMin << "," << xMax << ")x(" << yMin << "," << yMax << ")x(" << zMin << "," << zMax << ") [um^3]\n"
+            << "  Total number of muonium:\n"
+            << "   " << global->MuoniumNum() << "\n"
+            << "  Simulation start time:\n"
+            << "   " << global->BeginTime() << " [us]\n"
+            << "  Result output time step:\n"
+            << "   " << global->OutputStep() << " [us]\n"
+            << "  Simulation end time:\n"
+            << "   " << global->EndTime() << " [us]\n"
+            << "                                       " << ctime(&currentTime)
+            << "------------------------> Run starting <------------------------\n"
+            << "Master at " << processorName << " has initialized."
+            << std::endl;
     }
     MPI_Barrier(MPI_COMM_WORLD);
     if (global->CommRank() != global->MasterRank()) {

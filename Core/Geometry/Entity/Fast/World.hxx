@@ -1,9 +1,10 @@
 #pragma once
 
-#include "Geometry/Interface/Entity.hxx"
+#include "Geometry/Entity/IEntity.hxx"
 
-class MACE::Geometry::Entity::Fast::World final :
-    public MACE::Geometry::Interface::Entity {
+namespace MACE::Geometry::Entity::Fast {
+
+class World final : public IEntity {
 public:
     World() = default;
     ~World() noexcept = default;
@@ -13,3 +14,5 @@ public:
 private:
     void ConstructSelf(G4bool checkOverlaps) override;
 };
+
+} // namespace MACE::Geometry::Entity::Fast

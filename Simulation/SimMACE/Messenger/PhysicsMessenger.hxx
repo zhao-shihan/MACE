@@ -1,13 +1,18 @@
 #pragma once
 
+#include "ObserverPtr.hxx"
+#include "SimMACE/Global.hxx"
+#include "SimMACE/Physics/MuoniumProduction.hxx"
+
 #include "G4UIcmdWithADouble.hh"
 #include "G4UImessenger.hh"
 
-#include "ObserverPtr.hxx"
-#include "SimMACE/Global.hxx"
+namespace MACE::Simulation::SimMACE::Messenger {
 
-class MACE::SimMACE::PhysicsMessenger final :
-    public G4UImessenger {
+using Utility::ObserverPtr;
+using namespace Physics;
+
+class PhysicsMessenger final : public G4UImessenger {
 public:
     static PhysicsMessenger& Instance();
 
@@ -18,13 +23,15 @@ private:
     PhysicsMessenger& operator=(const PhysicsMessenger&) = delete;
 
 public:
-    void Set(ObserverPtr<Physics::MuoniumProduction> muoniumProduction) { fMuoniumProduction = muoniumProduction; }
+    void Set(ObserverPtr<MuoniumProduction> muoniumProduction) { fMuoniumProduction = muoniumProduction; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    ObserverPtr<Physics::MuoniumProduction> fMuoniumProduction = nullptr;
+    ObserverPtr<MuoniumProduction> fMuoniumProduction = nullptr;
 
     G4UIdirectory fDirectory;
     G4UIcmdWithADouble fSetConversionProbability;
 };
+
+} // namespace MACE::Simulation::SimMACE::Messenger

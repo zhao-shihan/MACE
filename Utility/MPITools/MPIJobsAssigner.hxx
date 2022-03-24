@@ -1,12 +1,12 @@
 #pragma once
 
-#include <utility>
-
 #include "mpi.h"
 
-#include "UtilityForwardDeclaration.hxx"
+#include <utility>
 
-class MACE::MPIJobsAssigner final {
+namespace MACE::Utility::MPITools {
+
+class MPIJobsAssigner final {
 public:
     MPIJobsAssigner(int_fast64_t jobsBeginIndex, int_fast64_t jobsEndIndex, const MPI::Comm& comm = MPI::COMM_WORLD);
     MPIJobsAssigner(const std::pair<int_fast64_t, int_fast64_t> jobsIndexRange, const MPI::Comm& comm = MPI::COMM_WORLD);
@@ -19,3 +19,5 @@ public:
 private:
     std::pair<int_fast64_t, int_fast64_t> fJobsIndexRange;
 };
+
+} // namespace MACE::Utility::MPITools

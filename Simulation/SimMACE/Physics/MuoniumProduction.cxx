@@ -1,13 +1,15 @@
-#include "G4MuonPlus.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4RunManager.hh"
-
 #include "SimMACE/Messenger/PhysicsMessenger.hxx"
 #include "SimMACE/Physics/AntiMuonium.hxx"
 #include "SimMACE/Physics/Muonium.hxx"
 #include "SimMACE/Physics/MuoniumProduction.hxx"
 
-using namespace MACE::SimMACE::Physics;
+#include "G4MuonPlus.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4RunManager.hh"
+
+using namespace MACE::Simulation::SimMACE::Physics;
+using namespace MACE::Utility::LiteralUnit;
+using MACE::Simulation::SimMACE::Messenger::PhysicsMessenger;
 
 MuoniumProduction::MuoniumProduction() :
     G4VRestProcess("MuoniumProduction", fElectromagnetic),

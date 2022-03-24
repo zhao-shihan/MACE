@@ -1,10 +1,11 @@
 #pragma once
 
+#include "Analysis.hxx"
 #include "Global.hxx"
 #include "MonteCarlo.hxx"
 #include "Step.hxx"
 
-namespace MACE::SimMTransport {
+namespace MACE::Simulation::SimMTransport {
 
 enum TrackStatus {
     kTrackUndefined,
@@ -51,4 +52,4 @@ private:
     void EscapingDoIt();
 };
 
-}
+} // namespace MACE::Simulation::SimMTransport

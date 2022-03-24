@@ -1,20 +1,19 @@
 #pragma once
 
-#include "G4ElectroMagneticField.hh"
-
+#include "LiteralUnit.hxx"
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::AcceleratorField final :
-    public G4ElectroMagneticField {
-    friend DetectorConstruction;
+#include "G4ElectroMagneticField.hh"
 
-private:
+namespace MACE::Simulation::SimMACE::Field {
+
+class AcceleratorField final : public G4ElectroMagneticField {
+public:
     AcceleratorField();
     ~AcceleratorField() noexcept = default;
     AcceleratorField(const AcceleratorField&) = delete;
     AcceleratorField& operator=(const AcceleratorField&) = delete;
 
-public:
     void GetFieldValue(const G4double*, G4double* F) const override;
     G4bool DoesFieldChangeEnergy() const override { return true; }
 
@@ -22,8 +21,10 @@ public:
     void SetAcceleratorPotential(G4double V);
 
 private:
-    G4double fBz = 0.1_T;
-    G4double fV = 7_kV;
+    G4double fBz;
+    G4double fV;
     G4double fEz;
-    G4double fDecayZMean = 13.05_mm;
+    G4double fDecayZMean;
 };
+
+} // namespace MACE::Simulation::SimMACE::Field

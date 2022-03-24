@@ -1,7 +1,7 @@
-#include "Track.hxx"
 #include "SimMTransport/Analysis.hxx"
+#include "Track.hxx"
 
-using namespace MACE::SimMTransport;
+using MACE::Simulation::SimMTransport::Track;
 
 Track::Track() :
     fCurrentStep(new Step()),

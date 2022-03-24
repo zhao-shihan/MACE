@@ -1,10 +1,12 @@
 #pragma once
 
-#include "DataModel/Interface/BranchSocket.hxx"
+#include "DataModel/IBranchSocket.hxx"
+#include "IsROOTFundamental.hxx"
 
-template<MACE::DataModel::FundamentalType Fund_t>
-class MACE::DataModel::FundamentalBranchSocket final :
-    public MACE::DataModel::Interface::BranchSocket<Fund_t> {
+namespace MACE::Core::DataModel::BranchSocket {
+
+template<IsROOTFundamental Fund_t>
+class FundamentalBranchSocket final : public IBranchSocket<Fund_t> {
 public:
     FundamentalBranchSocket(const char* branchName, Fund_t defaultValue);
     ~FundamentalBranchSocket() noexcept = default;
@@ -19,13 +21,13 @@ public:
 
 private:
     const TString fBranchName;
-    Fund_t        fValue;
+    Fund_t fValue;
 };
 
-#include "DataModel/BranchSocket/FundamentalBranchSocket.ixx"
+using IntBranchSocket = FundamentalBranchSocket<Int_t>;
+using FloatBranchSocket = FundamentalBranchSocket<Float_t>;
+using DoubleBranchSocket = FundamentalBranchSocket<Double_t>;
 
-namespace MACE::DataModel::inline BranchSocket{
-    using IntBranchSocket = FundamentalBranchSocket<Int_t>;
-    using FloatBranchSocket = FundamentalBranchSocket<Float_t>;
-    using DoubleBranchSocket = FundamentalBranchSocket<Double_t>;
-}
+} // namespace MACE::Core::DataModel::BranchSocket
+
+#include "DataModel/BranchSocket/FundamentalBranchSocket.ixx"

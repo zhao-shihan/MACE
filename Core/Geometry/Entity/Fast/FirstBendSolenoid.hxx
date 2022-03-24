@@ -1,0 +1,18 @@
+#pragma once
+
+#include "Geometry/Entity/IEntity.hxx"
+
+namespace MACE::Geometry::Entity::Fast {
+
+class FirstBendSolenoid final : public IEntity {
+public:
+    FirstBendSolenoid() = default;
+    ~FirstBendSolenoid() noexcept = default;
+    FirstBendSolenoid(const FirstBendSolenoid&) = delete;
+    FirstBendSolenoid& operator=(const FirstBendSolenoid&) = delete;
+
+private:
+    void ConstructSelf(G4bool checkOverlaps) override;
+};
+
+} // namespace MACE::Geometry::Entity::Fast

@@ -2,6 +2,8 @@
 
 #include "Geometry/Entity/Fast/World.hxx"
 
-namespace MACE::Geometry::EntityFull {
-    using World = EntityFast::World;
-}
+namespace MACE::Geometry::Entity::Full {
+
+using World = Entity::Fast::World;
+
+} // namespace MACE::Geometry::Entity::Full

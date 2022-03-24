@@ -1,16 +1,19 @@
 #pragma once
 
-#include "G4Allocator.hh"
-#include "G4THitsCollection.hh"
-#include "G4VHit.hh"
-
 #include "DataModel/SimHit/CalorimeterSimHit.hxx"
 #include "ObserverPtr.hxx"
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::CalorimeterHit final :
-    public G4VHit,
-    public MACE::DataModel::CalorimeterSimHit {
+#include "G4Allocator.hh"
+#include "G4THitsCollection.hh"
+#include "G4VHit.hh"
+
+namespace MACE::Simulation::SimMACE::Hit {
+
+using Utility::ObserverPtr;
+
+class CalorimeterHit final : public G4VHit,
+                             public Core::DataModel::SimHit::CalorimeterSimHit {
 public:
     CalorimeterHit() noexcept = default;
     CalorimeterHit(const CalorimeterHit& hit) noexcept = default;
@@ -26,8 +29,6 @@ private:
     static ObserverPtr<G4Allocator<CalorimeterHit>> fgCalorimeterHitAllocator;
 };
 
-namespace MACE::SimMACE::inline Hit {
-
 using CalorimeterHitCollection = G4THitsCollection<CalorimeterHit>;
 
 inline void* CalorimeterHit::operator new(size_t) {
@@ -41,4 +42,4 @@ inline void CalorimeterHit::operator delete(void* hit) {
     fgCalorimeterHitAllocator->FreeSingle(static_cast<CalorimeterHit*>(hit));
 }
 
-}
+} // namespace MACE::Simulation::SimMACE::Hit

@@ -1,14 +1,20 @@
 #pragma once
 
-#include "DataModel/Interface/Transient.hxx"
-#include "DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 #include "DataModel/BranchSocket/FundamentalBranchSocket.hxx"
+#include "DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 #include "DataModel/BranchSocket/Vector3BranchSocket.hxx"
+#include "DataModel/DataHub.hxx"
+#include "DataModel/ITransientData.hxx"
 
-class MACE::DataModel::MuoniumVertex :
-    public MACE::DataModel::Interface::Transient {
-    using Base = MACE::DataModel::Interface::Transient;
-    friend MACE::DataModel::DataHub;
+namespace MACE::Core::DataModel::Vertex {
+
+using BranchSocket::DoubleBranchSocket;
+using BranchSocket::ShortStringBranchSocket;
+using BranchSocket::Vector3FBranchSocket;
+using Utility::ShortString;
+
+class MuoniumVertex : public ITransientData {
+    friend DataHub;
 
 public:
     MuoniumVertex() noexcept;
@@ -17,8 +23,6 @@ public:
     virtual ~MuoniumVertex() noexcept = default;
     MuoniumVertex& operator=(const MuoniumVertex&) noexcept = default;
     MuoniumVertex& operator=(MuoniumVertex&&) noexcept = default;
-
-    MuoniumVertex(const HelixTrack& helix, Double_t B, Double_t mass);
 
     [[nodiscard]] const auto& GetParticleName() const { return fParticleName; }
     [[nodiscard]] const auto& GetVertexTimeCDC() const { return fVertexTimeCDC; }
@@ -47,23 +51,25 @@ private:
 
 private:
     ShortString fParticleName;
-    Double_t    fVertexTimeCDC;
+    Double_t fVertexTimeCDC;
     TEveVectorD fVertexPositionCDC;
-    Double_t    fVertexTimeMCP;
+    Double_t fVertexTimeMCP;
     TEveVectorD fVertexPositionMCP;
 
     static ShortStringBranchSocket fgParticleName;
-    static DoubleBranchSocket      fgVertexTimeCDC;
-    static Vector3FBranchSocket    fgVertexPositionCDC;
-    static DoubleBranchSocket      fgVertexTimeMCP;
-    static Vector3FBranchSocket    fgVertexPositionMCP;
+    static DoubleBranchSocket fgVertexTimeCDC;
+    static Vector3FBranchSocket fgVertexPositionCDC;
+    static DoubleBranchSocket fgVertexTimeMCP;
+    static Vector3FBranchSocket fgVertexPositionMCP;
 };
 
-inline void MACE::DataModel::MuoniumVertex::FillBranchSockets() const noexcept {
-    Base::FillBranchSockets();
+inline void MuoniumVertex::FillBranchSockets() const noexcept {
+    ITransientData::FillBranchSockets();
     fgVertexTimeCDC.SetValue(fVertexTimeCDC);
     fgVertexPositionCDC.SetValue(fVertexPositionCDC);
     fgVertexTimeMCP.SetValue(fVertexTimeMCP);
     fgVertexPositionMCP.SetValue(fVertexPositionMCP);
     fgParticleName.SetValue(fParticleName);
 }
+
+} // namespace MACE::Core::DataModel::Vertex

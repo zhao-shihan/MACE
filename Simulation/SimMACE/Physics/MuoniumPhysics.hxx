@@ -1,11 +1,12 @@
 #pragma once
 
-#include "G4VPhysicsConstructor.hh"
-
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::Physics::MuoniumPhysics final :
-    public G4VPhysicsConstructor {
+#include "G4VPhysicsConstructor.hh"
+
+namespace MACE::Simulation::SimMACE::Physics {
+
+class MuoniumPhysics final : public G4VPhysicsConstructor {
 public:
     MuoniumPhysics(G4int verbose = 1);
     ~MuoniumPhysics() noexcept = default;
@@ -16,3 +17,5 @@ public:
 private:
     G4int fVerbose;
 };
+
+} // namespace MACE::Simulation::SimMACE::Physics

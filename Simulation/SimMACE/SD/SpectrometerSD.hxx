@@ -1,24 +1,25 @@
 #pragma once
 
-#include <map>
+#include "ObserverPtr.hxx"
+#include "SimMACE/Hit/SpectrometerHit.hxx"
 
 #include "G4TwoVector.hh"
 #include "G4VSensitiveDetector.hh"
 
-#include "ObserverPtr.hxx"
-#include "SimMACE/Hit/SpectrometerHit.hxx"
+#include <map>
 
-class MACE::SimMACE::SpectrometerSD final :
-    public G4VSensitiveDetector {
-    friend DetectorConstruction;
+namespace MACE::Simulation::SimMACE::SD {
 
-private:
+using Hit::SpectrometerHitCollection;
+using MACE::Utility::ObserverPtr;
+
+class SpectrometerSD final : public G4VSensitiveDetector {
+public:
     SpectrometerSD(const G4String& sdName);
     ~SpectrometerSD() noexcept = default;
     SpectrometerSD(const SpectrometerSD&) = delete;
     SpectrometerSD& operator=(const SpectrometerSD&) = delete;
 
-public:
     void Initialize(G4HCofThisEvent* hitsCollection) override;
     G4bool ProcessHits(G4Step* step, G4TouchableHistory*) override;
     void EndOfEvent(G4HCofThisEvent*) override;
@@ -32,3 +33,5 @@ private:
     std::map<ObserverPtr<const G4Track>, const G4StepPoint> fMonitoringTrackList;
     std::vector<G4TwoVector> fSenseWireMap;
 };
+
+} // namespace MACE::Simulation::SimMACE::SD

@@ -1,13 +1,13 @@
-#include "G4MuonPlus.hh"
-#include "G4ProcessManager.hh"
-
 #include "SimMACE/Physics/AntiMuonium.hxx"
 #include "SimMACE/Physics/Muonium.hxx"
 #include "SimMACE/Physics/MuoniumPhysics.hxx"
 #include "SimMACE/Physics/MuoniumProduction.hxx"
 #include "SimMACE/Physics/MuoniumTransport.hxx"
 
-using namespace MACE::SimMACE::Physics;
+#include "G4MuonPlus.hh"
+#include "G4ProcessManager.hh"
+
+using MACE::Simulation::SimMACE::Physics::MuoniumPhysics;
 
 MuoniumPhysics::MuoniumPhysics(G4int verbose) :
     G4VPhysicsConstructor("MuoniumPhysics"),

@@ -1,12 +1,13 @@
+#include "SimMACE/Physics/AntiMuonium.hxx"
+#include "SimMACE/Physics/AntiMuoniumDecayChannel.hxx"
+
 #include "G4DecayTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-#include "SimMACE/Physics/AntiMuonium.hxx"
-#include "SimMACE/Physics/AntiMuoniumDecayChannel.hxx"
-
-using namespace MACE::SimMACE::Physics;
+using MACE::Simulation::SimMACE::Physics::AntiMuonium;
+using namespace MACE::Utility::LiteralUnit;
 
 AntiMuonium* AntiMuonium::fgInstance = nullptr;
 

@@ -1,17 +1,19 @@
-#include "G4UniformMagField.hh"
+#pragma once
 
 #include "SimMACE/Global.hxx"
 
-class MACE::SimMACE::ParallelField final :
-    public G4UniformMagField {
-    friend DetectorConstruction;
+#include "G4UniformMagField.hh"
 
-private:
+namespace MACE::Simulation::SimMACE::Field {
+
+class ParallelField final : public G4UniformMagField {
+public:
     ParallelField(G4double B);
     ~ParallelField() noexcept = default;
     ParallelField(const ParallelField&) = delete;
     ParallelField& operator=(const ParallelField&) = delete;
 
-public:
     void SetFieldNorm(G4double B) { SetFieldValue(G4ThreeVector(0, 0, B)); }
 };
+
+} // namespace MACE::Simulation::SimMACE::Field

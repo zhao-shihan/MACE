@@ -1,56 +1,4 @@
 #include "SimMACE/Action/DetectorConstruction.hxx"
-//
-// Entity relevant includes
-//
-#include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterField.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/CalorimeterShield.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfCalorimeterField/Calorimeter.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfCalorimeterField/VertexDetector.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfFirstBendField/FirstBendSolenoid.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfFirstTransportField/FirstTransportSolenoid.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondBendField/SecondBendSolenoid.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/Collimator.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/SecondTransportSolenoid.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSecondTransportField/SelectorField.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/AcceleratorField.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfAcceleratorField/Target.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/DescendantsOfSpectrometerCells/DescendantsOfSpectrometerSensitiveVolumes/SpectrometerSenseWires.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/DescendantsOfSpectrometerCells/SpectrometerFieldWires.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/DescendantsOfSpectrometerCells/SpectrometerSensitiveVolumes.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/DescendantsOfSpectrometerReadoutLayers/SpectrometerCells.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/DescendantsOfSpectrometerBody/SpectrometerReadoutLayers.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/SpectrometerBody.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfSpectrometerField/SpectrometerMagnet.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/DescendantsOfThirdTransportField/ThirdTransportSolenoid.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/FirstBendField.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/FirstTransportField.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/SecondBendField.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/SecondTransportField.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/SpectrometerField.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/SpectrometerShield.hxx"
-#include "Geometry/Entity/Fast/DescendantsOfWorld/ThirdTransportField.hxx"
-#include "Geometry/Entity/Fast/World.hxx"
-//
-// Region relevant includes
-//
-#include "G4ProductionCuts.hh"
-#include "G4ProductionCutsTable.hh"
-#include "SimMACE/Utility/Region.hxx"
-//
-// SD relevant includes
-//
-#include "G4SDManager.hh"
-#include "SimMACE/SD/CalorimeterSD.hxx"
-#include "SimMACE/SD/SpectrometerSD.hxx"
-#include "SimMACE/SD/VertexDetectorSD.hxx"
-//
-// Field relevant includes
-//
-#include "G4DormandPrince745.hh"
-#include "G4EqMagElectricField.hh"
-#include "G4IntegrationDriver.hh"
-#include "G4TDormandPrince45.hh"
-#include "G4TMagFieldEquation.hh"
 #include "SimMACE/Field/AcceleratorField.hxx"
 #include "SimMACE/Field/FirstBendField.hxx"
 #include "SimMACE/Field/ParallelField.hxx"
@@ -58,7 +6,16 @@
 #include "SimMACE/Field/SelectorField.hxx"
 #include "SimMACE/Field/VerticalField.hxx"
 
-using namespace MACE::SimMACE::Action;
+#include "G4DormandPrince745.hh"
+#include "G4EqMagElectricField.hh"
+#include "G4IntegrationDriver.hh"
+#include "G4ProductionCuts.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4SDManager.hh"
+#include "G4TDormandPrince45.hh"
+#include "G4TMagFieldEquation.hh"
+
+namespace MACE::Simulation::SimMACE::Action {
 
 G4VPhysicalVolume* DetectorConstruction::Construct() {
     ConstructVolumes();
@@ -70,34 +27,34 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 
 void DetectorConstruction::ConstructVolumes() {
     // Construct entity objects
-    fCalorimeter = std::make_shared<Geometry::Entity::Fast::Calorimeter>();
-    fVertexDetector = std::make_shared<Geometry::Entity::Fast::VertexDetector>();
-    fFirstBendSolenoid = std::make_shared<Geometry::Entity::Fast::FirstBendSolenoid>();
-    fFirstTransportSolenoid = std::make_shared<Geometry::Entity::Fast::FirstTransportSolenoid>();
-    fSecondBendSolenoid = std::make_shared<Geometry::Entity::Fast::SecondBendSolenoid>();
-    fCollimator = std::make_shared<Geometry::Entity::Fast::Collimator>();
-    fSecondTransportSolenoid = std::make_shared<Geometry::Entity::Fast::SecondTransportSolenoid>();
-    fSelectorField = std::make_shared<Geometry::Entity::Fast::SelectorField>();
-    fTarget = std::make_shared<Geometry::Entity::Fast::Target>();
-    fSpectrometerSenseWires = std::make_shared<Geometry::Entity::Fast::SpectrometerSenseWires>();
-    fSpectrometerFieldWires = std::make_shared<Geometry::Entity::Fast::SpectrometerFieldWires>();
-    fSpectrometerSensitiveVolumes = std::make_shared<Geometry::Entity::Fast::SpectrometerSensitiveVolumes>();
-    fSpectrometerCells = std::make_shared<Geometry::Entity::Fast::SpectrometerCells>();
-    fSpectrometerReadoutLayers = std::make_shared<Geometry::Entity::Fast::SpectrometerReadoutLayers>();
-    fAcceleratorField = std::make_shared<Geometry::Entity::Fast::AcceleratorField>();
-    fSpectrometerBody = std::make_shared<Geometry::Entity::Fast::SpectrometerBody>();
-    fSpectrometerMagnet = std::make_shared<Geometry::Entity::Fast::SpectrometerMagnet>();
-    fThirdTransportSolenoid = std::make_shared<Geometry::Entity::Fast::ThirdTransportSolenoid>();
-    fCalorimeterField = std::make_shared<Geometry::Entity::Fast::CalorimeterField>();
-    fCalorimeterShield = std::make_shared<Geometry::Entity::Fast::CalorimeterShield>();
-    fFirstBendField = std::make_shared<Geometry::Entity::Fast::FirstBendField>();
-    fFirstTransportField = std::make_shared<Geometry::Entity::Fast::FirstTransportField>();
-    fSecondBendField = std::make_shared<Geometry::Entity::Fast::SecondBendField>();
-    fSecondTransportField = std::make_shared<Geometry::Entity::Fast::SecondTransportField>();
-    fSpectrometerField = std::make_shared<Geometry::Entity::Fast::SpectrometerField>();
-    fSpectrometerShield = std::make_shared<Geometry::Entity::Fast::SpectrometerShield>();
-    fThirdTransportField = std::make_shared<Geometry::Entity::Fast::ThirdTransportField>();
-    fWorld = std::make_shared<Geometry::Entity::Fast::World>();
+    fCalorimeter = std::make_shared<Calorimeter>();
+    fVertexDetector = std::make_shared<VertexDetector>();
+    fFirstBendSolenoid = std::make_shared<FirstBendSolenoid>();
+    fFirstTransportSolenoid = std::make_shared<FirstTransportSolenoid>();
+    fSecondBendSolenoid = std::make_shared<SecondBendSolenoid>();
+    fCollimator = std::make_shared<Collimator>();
+    fSecondTransportSolenoid = std::make_shared<SecondTransportSolenoid>();
+    fSelectorField = std::make_shared<SelectorField>();
+    fTarget = std::make_shared<Target>();
+    fSpectrometerSenseWires = std::make_shared<SpectrometerSenseWires>();
+    fSpectrometerFieldWires = std::make_shared<SpectrometerFieldWires>();
+    fSpectrometerSensitiveVolumes = std::make_shared<SpectrometerSensitiveVolumes>();
+    fSpectrometerCells = std::make_shared<SpectrometerCells>();
+    fSpectrometerReadoutLayers = std::make_shared<SpectrometerReadoutLayers>();
+    fAcceleratorField = std::make_shared<AcceleratorField>();
+    fSpectrometerBody = std::make_shared<SpectrometerBody>();
+    fSpectrometerMagnet = std::make_shared<SpectrometerMagnet>();
+    fThirdTransportSolenoid = std::make_shared<ThirdTransportSolenoid>();
+    fCalorimeterField = std::make_shared<CalorimeterField>();
+    fCalorimeterShield = std::make_shared<CalorimeterShield>();
+    fFirstBendField = std::make_shared<FirstBendField>();
+    fFirstTransportField = std::make_shared<FirstTransportField>();
+    fSecondBendField = std::make_shared<SecondBendField>();
+    fSecondTransportField = std::make_shared<SecondTransportField>();
+    fSpectrometerField = std::make_shared<SpectrometerField>();
+    fSpectrometerShield = std::make_shared<SpectrometerShield>();
+    fThirdTransportField = std::make_shared<ThirdTransportField>();
+    fWorld = std::make_shared<World>();
 
     // Construct hierarchy
     fCalorimeterField->AddDaughter(fCalorimeter);
@@ -220,6 +177,9 @@ void DetectorConstruction::ConstructSDs() {
 }
 
 void DetectorConstruction::ConstructFields() {
+    using namespace MACE::Utility::LiteralUnit;
+    using namespace Field;
+
     constexpr G4double hMin = 100_um;
 
     constexpr G4double defaultB = 0.1_T;
@@ -289,3 +249,5 @@ void DetectorConstruction::ConstructFields() {
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>>(
         parallelBField, hMin, 6, true);
 }
+
+} // namespace MACE::Simulation::SimMACE::Action

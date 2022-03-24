@@ -1,14 +1,20 @@
+#include "Geometry/Description/AcceleratorField.hxx"
+#include "LiteralUnit.hxx"
 #include "SimMACE/Field/AcceleratorField.hxx"
-#include "Geometry/Description/DescendantsOfWorld/DescendantsOfSpectrometerField/AcceleratorField.hxx"
 #include "SimMACE/Messenger/FieldMessenger.hxx"
 
-using namespace MACE::SimMACE::Field;
+namespace MACE::Simulation::SimMACE::Field {
 
-using AccFldGeomDscrpt = MACE::Geometry::Description::AcceleratorField;
+using namespace MACE::Utility::LiteralUnit;
+using Messenger::FieldMessenger;
+using LinacDescription = MACE::Geometry::Description::AcceleratorField;
 
 AcceleratorField::AcceleratorField() :
     G4ElectroMagneticField(),
-    fEz(7_kV / (AccFldGeomDscrpt::Instance().GetDownStreamLength() - fDecayZMean)) {
+    fBz(0.1_T),
+    fV(7_kV),
+    fEz(fV / (LinacDescription::Instance().GetDownStreamLength() - fDecayZMean)),
+    fDecayZMean(13.05_mm) {
     FieldMessenger::Instance().Set(this);
 }
 
@@ -23,5 +29,7 @@ void AcceleratorField::GetFieldValue(const G4double*, G4double* F) const {
 
 void AcceleratorField::SetAcceleratorPotential(G4double V) {
     fV = V;
-    fEz = fV / (AccFldGeomDscrpt::Instance().GetDownStreamLength() - fDecayZMean);
+    fEz = fV / (LinacDescription::Instance().GetDownStreamLength() - fDecayZMean);
 }
+
+} // namespace MACE::Simulation::SimMACE::Field

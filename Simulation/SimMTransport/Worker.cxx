@@ -1,8 +1,7 @@
+#include "SimMTransport/Analysis.hxx"
 #include "Worker.hxx"
 
-#include "SimMTransport/Analysis.hxx"
-
-using namespace MACE::SimMTransport;
+using MACE::Simulation::SimMTransport::Worker;
 
 Worker::Worker() :
     fTrack(new Track()),

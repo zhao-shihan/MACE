@@ -1,15 +1,12 @@
 #pragma once
 
-#include <iostream>
-
 #include "TF3.h"
 
 #include "mpi.h"
 
-#include "CoreForwardDeclaration.hxx"
-#include "SimForwardDeclaration.hxx"
+#include <iostream>
 
-namespace MACE::SimMTransport {
+namespace MACE::Simulation::SimMTransport {
 
 // Unit system:
 //  us = 1.0;
@@ -78,4 +75,4 @@ public:
 #undef MACE_SIMMTRANSPORT_GLOBAL_MEMBER
 #undef MACE_SIMMTRANSPORT_GLOBAL_MEMBER_POINT_TO_OBJ
 
-}
+} // namespace MACE::Simulation::SimMTransport

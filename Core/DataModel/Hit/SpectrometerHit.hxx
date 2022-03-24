@@ -1,13 +1,20 @@
 #pragma once
 
-#include "DataModel/Interface/Transient.hxx"
 #include "DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "DataModel/BranchSocket/Vector2BranchSocket.hxx"
+#include "DataModel/DataHub.hxx"
+#include "DataModel/ITransientData.hxx"
 
-class MACE::DataModel::SpectrometerHit :
-    public MACE::DataModel::Interface::Transient {
-    using Base = MACE::DataModel::Interface::Transient;
-    friend MACE::DataModel::DataHub;
+namespace MACE::Core::DataModel::Hit {
+
+using BranchSocket::DoubleBranchSocket;
+using BranchSocket::FloatBranchSocket;
+using BranchSocket::IntBranchSocket;
+using BranchSocket::Vector2FBranchSocket;
+
+class SpectrometerHit : public ITransientData {
+    friend DataHub;
+    using Base = ITransientData;
 
 public:
     SpectrometerHit() noexcept;
@@ -46,26 +53,26 @@ private:
     static constexpr const char* BasicName() { return "CDCHit"; }
 
 private:
-    Double_t     fHitTime;
-    Double_t     fDriftDistance;
-    Double_t     fHitPositionZ;
-    Double_t     fDriftDistanceVariance;
-    Double_t     fHitPositionZVariance;
-    Int_t        fCellID;
-    Int_t        fLayerID;
+    Double_t fHitTime;
+    Double_t fDriftDistance;
+    Double_t fHitPositionZ;
+    Double_t fDriftDistanceVariance;
+    Double_t fHitPositionZVariance;
+    Int_t fCellID;
+    Int_t fLayerID;
     TEveVector2D fWirePosition;
 
-    static DoubleBranchSocket   fgHitTime;
-    static FloatBranchSocket    fgDriftDistance;
-    static FloatBranchSocket    fgHitPositionZ;
-    static FloatBranchSocket    fgDriftDistanceVariance;
-    static FloatBranchSocket    fgHitPositionZVariance;
-    static IntBranchSocket      fgCellID;
-    static IntBranchSocket      fgLayerID;
+    static DoubleBranchSocket fgHitTime;
+    static FloatBranchSocket fgDriftDistance;
+    static FloatBranchSocket fgHitPositionZ;
+    static FloatBranchSocket fgDriftDistanceVariance;
+    static FloatBranchSocket fgHitPositionZVariance;
+    static IntBranchSocket fgCellID;
+    static IntBranchSocket fgLayerID;
     static Vector2FBranchSocket fgWirePosition;
 };
 
-inline void MACE::DataModel::SpectrometerHit::FillBranchSockets() const noexcept {
+inline void SpectrometerHit::FillBranchSockets() const noexcept {
     Base::FillBranchSockets();
     fgHitTime.SetValue(fHitTime);
     fgDriftDistance.SetValue(fDriftDistance);
@@ -76,3 +83,5 @@ inline void MACE::DataModel::SpectrometerHit::FillBranchSockets() const noexcept
     fgLayerID.SetValue(fLayerID);
     fgWirePosition.SetValue(fWirePosition);
 }
+
+} // namespace MACE::Core::DataModel::Hit

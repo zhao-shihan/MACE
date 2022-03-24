@@ -1,9 +1,9 @@
 /* #pragma once
 
-#include "Eigen/Core"
-
 #include "ReconTracks/Global.hxx"
 #include "ReconTracks/Interface/Tracker.hxx"
+
+#include "Eigen/Core"
 
 template<template<class T> class FitterT_t, class SpectrometerHit_t>
 class MACE::ReconTracks::Tracker::Hough final :

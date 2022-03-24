@@ -2,10 +2,9 @@
 
 #include "G4Region.hh"
 
-#include "SimForwardDeclaration.hxx"
+namespace MACE::Simulation::SimMACE::Utility {
 
-class MACE::SimMACE::Region final :
-    public G4Region {
+class Region final : public G4Region {
 public:
     enum RegionType {
         kCalorimeterSensitive,
@@ -30,3 +29,5 @@ public:
 private:
     const RegionType fRegionType;
 };
+
+} // namespace MACE::Simulation::SimMACE::Utility

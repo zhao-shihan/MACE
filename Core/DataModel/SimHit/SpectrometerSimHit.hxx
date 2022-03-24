@@ -1,14 +1,20 @@
 #pragma once
 
-#include "DataModel/Global.hxx"
-#include "DataModel/Hit/SpectrometerHit.hxx"
-#include "DataModel/BranchSocket/Vector3BranchSocket.hxx"
 #include "DataModel/BranchSocket/ShortStringBranchSocket.hxx"
+#include "DataModel/BranchSocket/Vector3BranchSocket.hxx"
+#include "DataModel/Hit/SpectrometerHit.hxx"
 
-class MACE::DataModel::SpectrometerSimHit :
-    public MACE::DataModel::SpectrometerHit {
-    using Base = MACE::DataModel::SpectrometerHit;
-    friend MACE::DataModel::DataHub;
+namespace MACE::Core::DataModel::SimHit {
+
+using BranchSocket::DoubleBranchSocket;
+using BranchSocket::FloatBranchSocket;
+using BranchSocket::IntBranchSocket;
+using BranchSocket::ShortStringBranchSocket;
+using BranchSocket::Vector3FBranchSocket;
+using Utility::ShortString;
+
+class SpectrometerSimHit : public Hit::SpectrometerHit {
+    friend DataHub;
 
 public:
     SpectrometerSimHit() noexcept;
@@ -54,29 +60,29 @@ private:
     static constexpr const char* BasicName() { return "CDCSimHit"; }
 
 private:
-    Double_t    fEnergy;
+    Double_t fEnergy;
     TEveVectorD fMomentum;
-    Double_t    fVertexTime;
+    Double_t fVertexTime;
     TEveVectorD fVertexPosition;
-    Double_t    fVertexEnergy;
+    Double_t fVertexEnergy;
     TEveVectorD fVertexMomentum;
     ShortString fParticleName;
-    Int_t       fEventID;
-    Int_t       fTrackID;
+    Int_t fEventID;
+    Int_t fTrackID;
 
-    static FloatBranchSocket       fgEnergy;
-    static Vector3FBranchSocket    fgMomentum;
-    static DoubleBranchSocket      fgVertexTime;
-    static Vector3FBranchSocket    fgVertexPosition;
-    static FloatBranchSocket       fgVertexEnergy;
-    static Vector3FBranchSocket    fgVertexMomentum;
+    static FloatBranchSocket fgEnergy;
+    static Vector3FBranchSocket fgMomentum;
+    static DoubleBranchSocket fgVertexTime;
+    static Vector3FBranchSocket fgVertexPosition;
+    static FloatBranchSocket fgVertexEnergy;
+    static Vector3FBranchSocket fgVertexMomentum;
     static ShortStringBranchSocket fgParticleName;
-    static IntBranchSocket         fgEventID;
-    static IntBranchSocket         fgTrackID;
+    static IntBranchSocket fgEventID;
+    static IntBranchSocket fgTrackID;
 };
 
-inline void MACE::DataModel::SpectrometerSimHit::FillBranchSockets() const noexcept {
-    Base::FillBranchSockets();
+inline void SpectrometerSimHit::FillBranchSockets() const noexcept {
+    SpectrometerHit::FillBranchSockets();
     fgEnergy.SetValue(fEnergy);
     fgMomentum.SetValue(fMomentum);
     fgVertexTime.SetValue(fVertexTime);
@@ -87,3 +93,5 @@ inline void MACE::DataModel::SpectrometerSimHit::FillBranchSockets() const noexc
     fgEventID.SetValue(fEventID);
     fgTrackID.SetValue(fTrackID);
 }
+
+} // namespace MACE::Core::DataModel::SimHit
