@@ -1,4 +1,5 @@
 #include "DataModel/Track/HelixTrack.hxx"
+#include "DataModel/Track/PhysicsTrack.hxx"
 
 namespace MACE::Core::DataModel::Track {
 
@@ -20,6 +21,39 @@ HelixTrack::HelixTrack() noexcept :
     fNumberOfFittedPoints(fgNumberOfFittedPoints.GetValue()),
     fChi2(fgChi2.GetValue()) {}
 
+HelixTrack::HelixTrack(const PhysicsTrack& physTrack, Double_t B) :
+    fVertexTime(physTrack.GetVertexTime()),
+    fNumberOfFittedPoints(physTrack.GetNumberOfFittedPoints()),
+    fChi2(physTrack.GetChi2()) {
+    using namespace Utility::PhysicalConstant;
+
+    const auto charge = (physTrack.GetParticle().back() == '+') ? 1 : (-1);
+
+    const auto& p = physTrack.GetVertexMomentum();
+    const auto pPhi = (charge > 0) ? (-p.Perp()) : p.Perp();
+    fRadius = -pPhi / (charge * B * c_light);
+    fAlpha = std::atan2(pPhi, p.fZ);
+
+    const auto& [xV, yV, zV] = physTrack.GetVertexPosition();
+    fCenter.Set(xV - fRadius * (p.fY / pPhi),
+                yV - fRadius * (-p.fX / pPhi));
+
+    fZ0 = zV - fRadius * CalcPhi(xV, yV) / std::tan(fAlpha);
+}
+
+TEveVectorD HelixTrack::CalcPoint(Double_t phi, Double_t phi0) const noexcept {
+    return TEveVectorD(fCenter.fX + fRadius * std::cos(phi + phi0),
+                       fCenter.fY + fRadius * std::sin(phi + phi0),
+                       fZ0 + fRadius * phi / std::tan(fAlpha));
+}
+
+Double_t HelixTrack::CalcPhi(Double_t x, Double_t y) const noexcept {
+    const auto xLocal = x - fCenter.fX;
+    const auto yLocal = y - fCenter.fY;
+    const auto absPhi = std::acos(-(fCenter.fX * xLocal + fCenter.fY * yLocal) / std::sqrt(fCenter.Mag2() * (xLocal * xLocal + yLocal * yLocal)));
+    return (fCenter.fY * xLocal - yLocal * fCenter.fX > 0) ? absPhi : (-absPhi);
+}
+
 void HelixTrack::CreateBranches(TTree& tree) {
     ITransientData::CreateBranches(tree);
     fgVertexTime.CreateBranch(tree);
@@ -40,6 +74,17 @@ void HelixTrack::ConnectToBranches(TTree& tree) {
     fgAlpha.ConnectToBranch(tree);
     fgNumberOfFittedPoints.ConnectToBranch(tree);
     fgChi2.ConnectToBranch(tree);
+}
+
+void HelixTrack::FillBranchSockets() const noexcept {
+    ITransientData::FillBranchSockets();
+    fgVertexTime.SetValue(fVertexTime);
+    fgCenter.SetValue(fCenter);
+    fgRadius.SetValue(fRadius);
+    fgZ0.SetValue(fZ0);
+    fgAlpha.SetValue(fAlpha);
+    fgNumberOfFittedPoints.SetValue(fNumberOfFittedPoints);
+    fgChi2.SetValue(fChi2);
 }
 
 } // namespace MACE::Core::DataModel::Track

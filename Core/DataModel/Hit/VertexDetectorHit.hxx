@@ -37,7 +37,7 @@ public:
 protected:
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    inline void FillBranchSockets() const noexcept;
+    void FillBranchSockets() const noexcept;
 
 private:
     static constexpr const char* BasicName() { return "MCPHit"; }
@@ -51,12 +51,5 @@ private:
     static Vector2FBranchSocket fgHitPosition;
     static Vector2FBranchSocket fgHitPositionVariance;
 };
-
-inline void VertexDetectorHit::FillBranchSockets() const noexcept {
-    Base::FillBranchSockets();
-    fgHitTime.SetValue(fHitTime);
-    fgHitPosition.SetValue(fHitPosition);
-    fgHitPositionVariance.SetValue(fHitPositionVariance);
-}
 
 } // namespace MACE::Core::DataModel::Hit

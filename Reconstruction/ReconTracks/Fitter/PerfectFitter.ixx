@@ -11,7 +11,7 @@ bool PerfectFitter<SpectrometerHit_t, Track_t>::Fit(std::vector<HitPtr>& hitData
     track.SetVertexPosition(firstHit->GetVertexPosition());
     track.SetVertexEnergy(firstHit->GetVertexEnergy());
     track.SetVertexMomentum(firstHit->GetVertexMomentum());
-    track.SetParticleName(firstHit->GetParticleName());
+    track.SetParticle(firstHit->GetParticle());
     track.SetNumberOfFittedPoints(hitData.size());
     track.SetChi2(0);
     return true;

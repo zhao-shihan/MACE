@@ -20,7 +20,7 @@ protected:
     // Extend (override & invoke) this in derived classes!
     static void ConnectToBranches(TTree&) {}
     // Extend (override & invoke) this in derived classes!
-    inline void FillBranchSockets() const noexcept {}
+    void FillBranchSockets() const noexcept {}
 
 private:
     // Override this in derived classes at least once!

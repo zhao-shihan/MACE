@@ -5,6 +5,8 @@
 #include "DataModel/BranchSocket/Vector3BranchSocket.hxx"
 #include "DataModel/DataHub.hxx"
 #include "DataModel/ITransientData.hxx"
+#include "LiteralUnit.hxx"
+#include "PhysicalConstant.hxx"
 
 namespace MACE::Core::DataModel::Track {
 
@@ -14,6 +16,10 @@ using BranchSocket::IntBranchSocket;
 using BranchSocket::ShortStringBranchSocket;
 using BranchSocket::Vector3FBranchSocket;
 using Utility::ShortString;
+using Utility::PhysicalConstant::electron_mass_c2;
+using namespace Utility::LiteralUnit::MagneticFluxDensity;
+
+class HelixTrack;
 
 class PhysicsTrack : public ITransientData {
     friend DataHub;
@@ -26,13 +32,13 @@ public:
     PhysicsTrack& operator=(const PhysicsTrack&) noexcept = default;
     PhysicsTrack& operator=(PhysicsTrack&&) noexcept = default;
 
-    PhysicsTrack(const HelixTrack& helix, Double_t B, Double_t mass);
+    PhysicsTrack(const HelixTrack& helix, Double_t phiVertex = 0, Double_t B = 0.1_T, Double_t mass = electron_mass_c2);
 
     [[nodiscard]] const auto& GetVertexTime() const { return fVertexTime; }
     [[nodiscard]] const auto& GetVertexPosition() const { return fVertexPosition; }
     [[nodiscard]] const auto& GetVertexEnergy() const { return fVertexEnergy; }
     [[nodiscard]] const auto& GetVertexMomentum() const { return fVertexMomentum; }
-    [[nodiscard]] const auto& GetParticleName() const { return fParticleName; }
+    [[nodiscard]] const auto& GetParticle() const { return fParticle; }
     [[nodiscard]] const auto& GetNumberOfFittedPoints() const { return fNumberOfFittedPoints; }
     [[nodiscard]] const auto& GetChi2() const { return fChi2; }
 
@@ -45,14 +51,14 @@ public:
     void SetVertexMomentum(Vector3_t&& mom) { fVertexMomentum = std::forward<Vector3_t>(mom); }
     void SetVertexMomentum(Double_t pX, Double_t pY, Double_t pZ) { fVertexMomentum.Set(pX, pY, pZ); }
     template<typename String_t>
-    void SetParticleName(String_t&& particleName) { fParticleName = std::forward<String_t>(particleName); }
+    void SetParticle(String_t&& particleName) { fParticle = std::forward<String_t>(particleName); }
     void SetNumberOfFittedPoints(Int_t n) { fNumberOfFittedPoints = n; }
     void SetChi2(Double_t val) { fChi2 = val; }
 
 protected:
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    inline void FillBranchSockets() const noexcept;
+    void FillBranchSockets() const noexcept;
 
 private:
     static constexpr const char* BasicName() { return "PhyTrk"; }
@@ -62,7 +68,7 @@ private:
     TEveVectorD fVertexPosition;
     Double_t fVertexEnergy;
     TEveVectorD fVertexMomentum;
-    ShortString fParticleName;
+    ShortString fParticle;
     Int_t fNumberOfFittedPoints;
     Double_t fChi2;
 
@@ -70,20 +76,9 @@ private:
     static Vector3FBranchSocket fgVertexPosition;
     static FloatBranchSocket fgVertexEnergy;
     static Vector3FBranchSocket fgVertexMomentum;
-    static ShortStringBranchSocket fgParticleName;
+    static ShortStringBranchSocket fgParticle;
     static IntBranchSocket fgNumberOfFittedPoints;
     static FloatBranchSocket fgChi2;
 };
-
-inline void PhysicsTrack::FillBranchSockets() const noexcept {
-    ITransientData::FillBranchSockets();
-    fgVertexTime.SetValue(fVertexTime);
-    fgVertexPosition.SetValue(fVertexPosition);
-    fgVertexEnergy.SetValue(fVertexEnergy);
-    fgVertexMomentum.SetValue(fVertexMomentum);
-    fgParticleName.SetValue(fParticleName);
-    fgNumberOfFittedPoints.SetValue(fNumberOfFittedPoints);
-    fgChi2.SetValue(fChi2);
-}
 
 } // namespace MACE::Core::DataModel::Track

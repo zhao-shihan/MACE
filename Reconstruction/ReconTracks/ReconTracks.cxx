@@ -10,7 +10,6 @@
 
 #include "CLHEP/Random/MTwistEngine.h"
 #include "CLHEP/Random/RandGauss.h"
-#include "CLHEP/Units/PhysicalConstants.h"
 
 using namespace MACE::Core::DataModel::SimHit;
 using namespace MACE::Core::DataModel::Track;
@@ -95,7 +94,7 @@ int main(int, char** argv) {
         std::vector<std::shared_ptr<PhysicsTrack>> physicsTracks;
         physicsTracks.reserve(helixTracks.size());
         for (auto&& track : helixTracks) {
-            physicsTracks.emplace_back(std::make_shared<PhysicsTrack>(*track, 0.1_T, electron_mass_c2));
+            physicsTracks.emplace_back(std::make_shared<PhysicsTrack>(*track));
         }
 
         std::vector<std::shared_ptr<PhysicsTrack>> errors;
@@ -109,12 +108,12 @@ int main(int, char** argv) {
             const auto positionErr = physicsTrack.GetVertexPosition() - error.GetVertexPosition();
             const auto energyErr = physicsTrack.GetVertexEnergy() - error.GetVertexEnergy();
             const auto momentumErr = physicsTrack.GetVertexMomentum() - error.GetVertexMomentum();
-            const auto particleErr = error.GetParticleName() + '>' + physicsTrack.GetParticleName();
+            const auto particleErr = error.GetParticle() + '>' + physicsTrack.GetParticle();
             error.SetVertexTime(timeErr);
             error.SetVertexPosition(positionErr);
             error.SetVertexEnergy(energyErr);
             error.SetVertexMomentum(momentumErr);
-            error.SetParticleName(particleErr);
+            error.SetParticle(particleErr);
             error.SetChi2(physicsTrack.GetChi2());
         }
 

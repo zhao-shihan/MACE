@@ -4,7 +4,7 @@
 
 #include <type_traits>
 
-namespace MACE::Core::DataModel::BranchSocket {
+namespace MACE::Core::DataModel {
 
 template<typename Type, bool UseReferenceInGetAndSet = true>
 class IBranchSocket {
@@ -21,4 +21,4 @@ public:
     virtual void ConnectToBranch(TTree& tree) = 0;
 };
 
-} // namespace MACE::Core::DataModel::BranchSocket
+} // namespace MACE::Core::DataModel

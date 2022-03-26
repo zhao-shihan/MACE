@@ -47,7 +47,7 @@ public:
 protected:
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    inline void FillBranchSockets() const noexcept;
+    void FillBranchSockets() const noexcept;
 
 private:
     static constexpr const char* BasicName() { return "CDCHit"; }
@@ -71,17 +71,5 @@ private:
     static IntBranchSocket fgLayerID;
     static Vector2FBranchSocket fgWirePosition;
 };
-
-inline void SpectrometerHit::FillBranchSockets() const noexcept {
-    Base::FillBranchSockets();
-    fgHitTime.SetValue(fHitTime);
-    fgDriftDistance.SetValue(fDriftDistance);
-    fgHitPositionZ.SetValue(fHitPositionZ);
-    fgDriftDistanceVariance.SetValue(fDriftDistanceVariance);
-    fgHitPositionZVariance.SetValue(fHitPositionZVariance);
-    fgCellID.SetValue(fCellID);
-    fgLayerID.SetValue(fLayerID);
-    fgWirePosition.SetValue(fWirePosition);
-}
 
 } // namespace MACE::Core::DataModel::Hit

@@ -31,7 +31,7 @@ public:
 protected:
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    inline void FillBranchSockets() const noexcept;
+    void FillBranchSockets() const noexcept;
 
 private:
     static constexpr const char* BasicName() { return "CalHit"; }
@@ -45,12 +45,5 @@ private:
     static FloatBranchSocket fgEnergy;
     static FloatBranchSocket fgEnergyVariance;
 };
-
-inline void CalorimeterHit::FillBranchSockets() const noexcept {
-    ITransientData::FillBranchSockets();
-    fgHitTime.SetValue(fHitTime);
-    fgEnergy.SetValue(fEnergy);
-    fgEnergyVariance.SetValue(fEnergyVariance);
-}
 
 } // namespace MACE::Core::DataModel::Hit

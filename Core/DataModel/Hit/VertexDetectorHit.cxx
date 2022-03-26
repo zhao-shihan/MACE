@@ -26,4 +26,11 @@ void VertexDetectorHit::ConnectToBranches(TTree& tree) {
     fgHitPositionVariance.ConnectToBranch(tree);
 }
 
+void VertexDetectorHit::FillBranchSockets() const noexcept {
+    Base::FillBranchSockets();
+    fgHitTime.SetValue(fHitTime);
+    fgHitPosition.SetValue(fHitPosition);
+    fgHitPositionVariance.SetValue(fHitPositionVariance);
+}
+
 } // namespace MACE::Core::DataModel::Hit

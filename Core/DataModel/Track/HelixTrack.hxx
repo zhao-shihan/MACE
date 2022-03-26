@@ -4,6 +4,8 @@
 #include "DataModel/BranchSocket/Vector2BranchSocket.hxx"
 #include "DataModel/DataHub.hxx"
 #include "DataModel/ITransientData.hxx"
+#include "LiteralUnit.hxx"
+#include "PhysicalConstant.hxx"
 
 namespace MACE::Core::DataModel::Track {
 
@@ -11,6 +13,9 @@ using BranchSocket::DoubleBranchSocket;
 using BranchSocket::FloatBranchSocket;
 using BranchSocket::IntBranchSocket;
 using BranchSocket::Vector2FBranchSocket;
+using namespace Utility::LiteralUnit::MagneticFluxDensity;
+
+class PhysicsTrack;
 
 class HelixTrack : public ITransientData {
     friend DataHub;
@@ -22,6 +27,8 @@ public:
     virtual ~HelixTrack() noexcept = default;
     HelixTrack& operator=(const HelixTrack&) noexcept = default;
     HelixTrack& operator=(HelixTrack&&) noexcept = default;
+
+    HelixTrack(const PhysicsTrack& physTrack, Double_t B = 0.1_T);
 
     [[nodiscard]] const auto& GetVertexTime() const { return fVertexTime; }
     [[nodiscard]] const auto& GetCenter() const { return fCenter; }
@@ -41,10 +48,17 @@ public:
     void SetNumberOfFittedPoints(Int_t n) { fNumberOfFittedPoints = n; }
     void SetChi2(Double_t val) { fChi2 = val; }
 
+    [[nodiscard]] Double_t CalcPhi0() const noexcept { return std::atan2(-fCenter.fY, -fCenter.fX); }
+    [[nodiscard]] TEveVectorD CalcPoint(Double_t phi, Double_t phi0) const noexcept;
+    [[nodiscard]] TEveVectorD CalcPoint(Double_t phi) const noexcept { return CalcPoint(phi, CalcPhi0()); }
+    [[nodiscard]] Double_t CalcPhi(Double_t x, Double_t y) const noexcept;
+    template<typename Vector2_t>
+    [[nodiscard]] Double_t CalcPhi(const Vector2_t& pos) const noexcept { return CalcPhi(pos[0], pos[1]); }
+
 protected:
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    inline void FillBranchSockets() const noexcept;
+    void FillBranchSockets() const noexcept;
 
 private:
     static constexpr const char* BasicName() { return "HlxTrk"; }
@@ -66,16 +80,5 @@ private:
     static IntBranchSocket fgNumberOfFittedPoints;
     static FloatBranchSocket fgChi2;
 };
-
-inline void HelixTrack::FillBranchSockets() const noexcept {
-    ITransientData::FillBranchSockets();
-    fgVertexTime.SetValue(fVertexTime);
-    fgCenter.SetValue(fCenter);
-    fgRadius.SetValue(fRadius);
-    fgZ0.SetValue(fZ0);
-    fgAlpha.SetValue(fAlpha);
-    fgNumberOfFittedPoints.SetValue(fNumberOfFittedPoints);
-    fgChi2.SetValue(fChi2);
-}
 
 } // namespace MACE::Core::DataModel::Track

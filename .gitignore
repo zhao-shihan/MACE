@@ -1,8 +1,8 @@
-.vscode/
-build/
-.ipynb_checkpoints/
-obsolete/
-*/.vscode/
-*/build/
-*/.ipynb_checkpoints/
-*/obsolete/
+**/.vscode/
+**/build/
+**/.ipynb_checkpoints/
+**/obsolete/
+**/tmp/
+**/GPATH
+**/GRTAGS
+**/GTAGS

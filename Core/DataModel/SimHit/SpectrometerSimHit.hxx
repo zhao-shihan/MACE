@@ -30,7 +30,7 @@ public:
     [[nodiscard]] const auto& GetVertexPosition() const { return fVertexPosition; }
     [[nodiscard]] const auto& GetVertexEnergy() const { return fVertexEnergy; }
     [[nodiscard]] const auto& GetVertexMomentum() const { return fVertexMomentum; }
-    [[nodiscard]] const auto& GetParticleName() const { return fParticleName; }
+    [[nodiscard]] const auto& GetParticle() const { return fParticle; }
     [[nodiscard]] const auto& GetEventID() const { return fEventID; }
     [[nodiscard]] const auto& GetTrackID() const { return fTrackID; }
 
@@ -47,14 +47,14 @@ public:
     void SetVertexMomentum(Vector3_t&& mom) { fVertexMomentum = std::forward<Vector3_t>(mom); }
     void SetVertexMomentum(Double_t pX, Double_t pY, Double_t pZ) { fVertexMomentum.Set(pX, pY, pZ); }
     template<typename String_t>
-    void SetParticleName(String_t&& particleName) { fParticleName = std::forward<String_t>(particleName); }
+    void SetParticle(String_t&& particleName) { fParticle = std::forward<String_t>(particleName); }
     void SetEventID(Int_t val) { fEventID = val; }
     void SetTrackID(Int_t val) { fTrackID = val; }
 
 protected:
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    inline void FillBranchSockets() const noexcept;
+    void FillBranchSockets() const noexcept;
 
 private:
     static constexpr const char* BasicName() { return "CDCSimHit"; }
@@ -66,7 +66,7 @@ private:
     TEveVectorD fVertexPosition;
     Double_t fVertexEnergy;
     TEveVectorD fVertexMomentum;
-    ShortString fParticleName;
+    ShortString fParticle;
     Int_t fEventID;
     Int_t fTrackID;
 
@@ -76,22 +76,9 @@ private:
     static Vector3FBranchSocket fgVertexPosition;
     static FloatBranchSocket fgVertexEnergy;
     static Vector3FBranchSocket fgVertexMomentum;
-    static ShortStringBranchSocket fgParticleName;
+    static ShortStringBranchSocket fgParticle;
     static IntBranchSocket fgEventID;
     static IntBranchSocket fgTrackID;
 };
-
-inline void SpectrometerSimHit::FillBranchSockets() const noexcept {
-    SpectrometerHit::FillBranchSockets();
-    fgEnergy.SetValue(fEnergy);
-    fgMomentum.SetValue(fMomentum);
-    fgVertexTime.SetValue(fVertexTime);
-    fgVertexPosition.SetValue(fVertexPosition);
-    fgVertexEnergy.SetValue(fVertexEnergy);
-    fgVertexMomentum.SetValue(fVertexMomentum);
-    fgParticleName.SetValue(fParticleName);
-    fgEventID.SetValue(fEventID);
-    fgTrackID.SetValue(fTrackID);
-}
 
 } // namespace MACE::Core::DataModel::SimHit

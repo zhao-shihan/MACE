@@ -26,4 +26,11 @@ void CalorimeterHit::ConnectToBranches(TTree& tree) {
     fgEnergyVariance.ConnectToBranch(tree);
 }
 
+ void CalorimeterHit::FillBranchSockets() const noexcept {
+    ITransientData::FillBranchSockets();
+    fgHitTime.SetValue(fHitTime);
+    fgEnergy.SetValue(fEnergy);
+    fgEnergyVariance.SetValue(fEnergyVariance);
+}
+
 } // namespace MACE::Core::DataModel::Hit

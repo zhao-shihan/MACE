@@ -8,7 +8,7 @@ DoubleBranchSocket SpectrometerSimHit::fgVertexTime("vtxTime", 0);
 Vector3FBranchSocket SpectrometerSimHit::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
 FloatBranchSocket SpectrometerSimHit::fgVertexEnergy("vtxEne", 0);
 Vector3FBranchSocket SpectrometerSimHit::fgVertexMomentum("vtxMom", {"x", "y", "z"}, {0, 0, 0});
-ShortStringBranchSocket SpectrometerSimHit::fgParticleName("particle", "");
+ShortStringBranchSocket SpectrometerSimHit::fgParticle("particle", "");
 IntBranchSocket SpectrometerSimHit::fgEventID("eventID", -1);
 IntBranchSocket SpectrometerSimHit::fgTrackID("trackID", -1);
 
@@ -20,7 +20,7 @@ SpectrometerSimHit::SpectrometerSimHit() noexcept :
     fVertexPosition(fgVertexPosition.GetValue()),
     fVertexEnergy(fgVertexEnergy.GetValue()),
     fVertexMomentum(fgVertexMomentum.GetValue()),
-    fParticleName(fgParticleName.GetValue()),
+    fParticle(fgParticle.GetValue()),
     fEventID(fgEventID.GetValue()),
     fTrackID(fgTrackID.GetValue()) {}
 
@@ -32,7 +32,7 @@ void SpectrometerSimHit::CreateBranches(TTree& tree) {
     fgVertexPosition.CreateBranch(tree);
     fgVertexEnergy.CreateBranch(tree);
     fgVertexMomentum.CreateBranch(tree);
-    fgParticleName.CreateBranch(tree);
+    fgParticle.CreateBranch(tree);
     fgEventID.CreateBranch(tree);
     fgTrackID.CreateBranch(tree);
 }
@@ -45,9 +45,22 @@ void SpectrometerSimHit::ConnectToBranches(TTree& tree) {
     fgVertexPosition.ConnectToBranch(tree);
     fgVertexEnergy.ConnectToBranch(tree);
     fgVertexMomentum.ConnectToBranch(tree);
-    fgParticleName.ConnectToBranch(tree);
+    fgParticle.ConnectToBranch(tree);
     fgEventID.ConnectToBranch(tree);
     fgTrackID.ConnectToBranch(tree);
+}
+
+void SpectrometerSimHit::FillBranchSockets() const noexcept {
+    SpectrometerHit::FillBranchSockets();
+    fgEnergy.SetValue(fEnergy);
+    fgMomentum.SetValue(fMomentum);
+    fgVertexTime.SetValue(fVertexTime);
+    fgVertexPosition.SetValue(fVertexPosition);
+    fgVertexEnergy.SetValue(fVertexEnergy);
+    fgVertexMomentum.SetValue(fVertexMomentum);
+    fgParticle.SetValue(fParticle);
+    fgEventID.SetValue(fEventID);
+    fgTrackID.SetValue(fTrackID);
 }
 
 } // namespace MACE::Core::DataModel::SimHit

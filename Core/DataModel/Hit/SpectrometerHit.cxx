@@ -46,4 +46,16 @@ void SpectrometerHit::ConnectToBranches(TTree& tree) {
     fgWirePosition.ConnectToBranch(tree);
 }
 
+void SpectrometerHit::FillBranchSockets() const noexcept {
+    Base::FillBranchSockets();
+    fgHitTime.SetValue(fHitTime);
+    fgDriftDistance.SetValue(fDriftDistance);
+    fgHitPositionZ.SetValue(fHitPositionZ);
+    fgDriftDistanceVariance.SetValue(fDriftDistanceVariance);
+    fgHitPositionZVariance.SetValue(fHitPositionZVariance);
+    fgCellID.SetValue(fCellID);
+    fgLayerID.SetValue(fLayerID);
+    fgWirePosition.SetValue(fWirePosition);
+}
+
 } // namespace MACE::Core::DataModel::Hit

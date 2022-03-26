@@ -93,7 +93,7 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         hit->SetVertexPosition(track->GetVertexPosition());
         hit->SetVertexEnergy(vertexTotalEnergy);
         hit->SetVertexMomentum(vertexMomentum);
-        hit->SetParticleName(particle->GetParticleName());
+        hit->SetParticle(particle->GetParticleName());
         hit->SetEventID(fEventID);
         hit->SetTrackID(track->GetTrackID());
         fHitsCollection->insert(hit);
