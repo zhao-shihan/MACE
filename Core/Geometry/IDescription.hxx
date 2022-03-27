@@ -4,7 +4,7 @@
 
 #include <ostream>
 
-namespace MACE::Geometry::Description {
+namespace MACE::Geometry {
 
 using namespace Utility::LiteralUnit;
 

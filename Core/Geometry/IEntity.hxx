@@ -75,4 +75,4 @@ private:
 
 } // namespace MACE::Geometry
 
-#include "Geometry/Entity/IEntity.ixx"
+#include "Geometry/IEntity.ixx"
