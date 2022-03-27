@@ -57,7 +57,7 @@ private:
     [[nodiscard]] bool CircleFit();
     void RevolveFit();
     void FinalScaling();
-    void Finalize(const std::vector<HitPtr>& hitData, Track_t& track);
+    void Finalize(Track_t& track);
 
     [[nodiscard]] inline bool CircleParametersIsOutOfBound() const;
 
@@ -87,6 +87,7 @@ private:
     size_t fMaxStepsCG = 10000;
 
     size_t fN;
+    std::valarray<double> fT;
     std::valarray<double> fWireX;
     std::valarray<double> fWireY;
     std::valarray<double> fD;
@@ -96,6 +97,7 @@ private:
 
     Eigen::Vector3d fCircleParameters;
     Eigen::Vector2d fRevolveParameters;
+    double fVertexTime;
 };
 
 } // namespace MACE::Reconstruction::ReconTracks::Fitter
