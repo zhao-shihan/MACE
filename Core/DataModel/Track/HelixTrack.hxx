@@ -28,7 +28,7 @@ public:
     HelixTrack& operator=(const HelixTrack&) noexcept = default;
     HelixTrack& operator=(HelixTrack&&) noexcept = default;
 
-    HelixTrack(const PhysicsTrack& physTrack, Double_t B = 0.1_T);
+    explicit HelixTrack(const PhysicsTrack& physTrack, Double_t B = 0.1_T);
 
     [[nodiscard]] const auto& GetVertexTime() const { return fVertexTime; }
     [[nodiscard]] const auto& GetCenter() const { return fCenter; }

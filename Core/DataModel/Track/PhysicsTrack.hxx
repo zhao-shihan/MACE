@@ -32,7 +32,7 @@ public:
     PhysicsTrack& operator=(const PhysicsTrack&) noexcept = default;
     PhysicsTrack& operator=(PhysicsTrack&&) noexcept = default;
 
-    PhysicsTrack(const HelixTrack& helix, Double_t phiVertex = 0, Double_t B = 0.1_T, Double_t mass = electron_mass_c2);
+    explicit PhysicsTrack(const HelixTrack& helix, Double_t phiVertex = 0, Double_t B = 0.1_T, Double_t mass = electron_mass_c2);
 
     [[nodiscard]] const auto& GetVertexTime() const { return fVertexTime; }
     [[nodiscard]] const auto& GetVertexPosition() const { return fVertexPosition; }
