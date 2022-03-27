@@ -5,8 +5,6 @@
 
 #include "TFile.h"
 
-#include <concepts>
-
 namespace MACE::Core::DataModel {
 
 using Utility::ObserverPtr;

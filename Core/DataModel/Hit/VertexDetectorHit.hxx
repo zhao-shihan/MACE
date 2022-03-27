@@ -40,7 +40,7 @@ protected:
     void FillBranchSockets() const noexcept;
 
 private:
-    static constexpr const char* BasicName() { return "MCPHit"; }
+    static consteval const char* BasicTreeName() noexcept { return "MCPHit"; }
 
 private:
     Double_t fHitTime;

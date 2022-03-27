@@ -50,7 +50,7 @@ protected:
     void FillBranchSockets() const noexcept;
 
 private:
-    static constexpr const char* BasicName() { return "CDCHit"; }
+    static consteval const char* BasicTreeName() noexcept { return "CDCHit"; }
 
 private:
     Double_t fHitTime;
@@ -71,5 +71,8 @@ private:
     static IntBranchSocket fgLayerID;
     static Vector2FBranchSocket fgWirePosition;
 };
+
+template<class Hit_t>
+concept IsSpectormeterHit = std::derived_from<Hit_t, SpectrometerHit>;
 
 } // namespace MACE::Core::DataModel::Hit

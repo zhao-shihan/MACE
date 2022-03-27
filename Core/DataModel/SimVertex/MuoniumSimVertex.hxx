@@ -48,7 +48,7 @@ protected:
     void FillBranchSockets() const noexcept;
 
 private:
-    static constexpr const char* BasicName() { return "MVtx"; }
+    static consteval const char* BasicTreeName() noexcept { return "MVtx"; }
 
 private:
     Double_t fTrueVertexTime;

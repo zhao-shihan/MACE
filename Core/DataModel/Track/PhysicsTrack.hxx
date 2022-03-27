@@ -61,7 +61,7 @@ protected:
     void FillBranchSockets() const noexcept;
 
 private:
-    static constexpr const char* BasicName() { return "PhyTrk"; }
+    static consteval const char* BasicTreeName() noexcept { return "PhyTrk"; }
 
 private:
     Double_t fVertexTime;
@@ -80,5 +80,8 @@ private:
     static IntBranchSocket fgNumberOfFittedPoints;
     static FloatBranchSocket fgChi2;
 };
+
+template<class Track_t>
+concept IsPhysicsTrack = std::derived_from<Track_t, PhysicsTrack>;
 
 } // namespace MACE::Core::DataModel::Track

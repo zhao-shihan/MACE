@@ -35,7 +35,7 @@ protected:
     void FillBranchSockets() const noexcept;
 
 private:
-    static constexpr const char* BasicName() { return "CalSimHit"; }
+    static consteval const char* BasicTreeName() noexcept { return "CalSimHit"; }
 
 private:
     ShortString fParticle;
