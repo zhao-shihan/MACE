@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Geometry/Entity/IEntity.hxx"
+#include "Geometry/IEntity.hxx"
 
 namespace MACE::Geometry::Entity::Fast {
 

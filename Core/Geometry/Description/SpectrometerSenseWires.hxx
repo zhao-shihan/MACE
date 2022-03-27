@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Geometry/Description/IDescription.hxx"
+#include "Geometry/IDescription.hxx"
 
 #include "G4TwoVector.hh"
 
