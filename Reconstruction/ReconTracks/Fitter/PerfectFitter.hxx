@@ -8,7 +8,7 @@ namespace MACE::Reconstruction::ReconTracks::Fitter {
 template<class SpectrometerHit_t, class Track_t>
 class PerfectFitter final : public Interface::Fitter<SpectrometerHit_t, Track_t> {
     MACE_RECONSPECTROMETER_SPECTROMETERSIMHIT_CONCEPT(SpectrometerHit_t);
-    MACE_RECONSPECTROMETER_PHYSICSTRACK_CONCEPT(Track_t);
+    MACE_RECONSPECTROMETER_TRACK_CONCEPT(Track_t);
 
 protected:
     using Base = Interface::Fitter<SpectrometerHit_t, Track_t>;
