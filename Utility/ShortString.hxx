@@ -6,9 +6,6 @@
 
 namespace MACE::Utility {
 
-template<typename T>
-concept IsArithmeticButNotChar = std::is_arithmetic_v<T> and not std::same_as<std::remove_cvref_t<T>, char>;
-
 /// @brief A short string (15 characters) on the stack. Size 16 bytes.
 /// As an option for some known-size cases or aggressive SSO (Short String Optimization). (The latter is not recommended, just use TString.)
 /// Compatible with C-style string, but more convenient copy constructor and operators are introduced.
@@ -57,8 +54,8 @@ public:
     constexpr ShortString& operator+=(const ShortString& rhs) noexcept { return operator+=(rhs.fString); }
     constexpr ShortString& operator+=(const char* rhs) noexcept;
     constexpr ShortString& operator+=(char rhs) noexcept;
-    template<IsArithmeticButNotChar T>
-    constexpr ShortString& operator+=(T rhs) noexcept;
+    template<typename T>
+    constexpr ShortString& operator+=(T rhs) noexcept requires(std::is_arithmetic_v<T> and not std::same_as<T, char>);
 
     constexpr bool operator==(const char* rhs) const noexcept { return std::strcmp(fString, rhs) == 0; }
     constexpr bool operator!=(const char* rhs) const noexcept { return std::strcmp(fString, rhs) != 0; }
@@ -73,10 +70,10 @@ public:
     constexpr friend ShortString operator+(const char* lhs, const ShortString& rhs) { return ShortString(lhs) += rhs; }
     constexpr friend ShortString operator+(ShortString lhs, char rhs) { return lhs += rhs; }
     constexpr friend ShortString operator+(char lhs, const ShortString& rhs) { return ShortString(lhs) += rhs; }
-    template<IsArithmeticButNotChar T>
-    constexpr friend ShortString operator+(ShortString lhs, T rhs) noexcept { return lhs += rhs; }
-    template<IsArithmeticButNotChar T>
-    constexpr friend ShortString operator+(T lhs, ShortString rhs) noexcept;
+    template<typename T>
+    constexpr friend ShortString operator+(ShortString lhs, T rhs) noexcept requires(std::is_arithmetic_v<T> and not std::same_as<T, char>) { return lhs += rhs; }
+    template<typename T>
+    constexpr friend ShortString operator+(T lhs, ShortString rhs) noexcept requires(std::is_arithmetic_v<T> and not std::same_as<T, char>);
 
 private:
     char fString[16];
