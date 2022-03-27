@@ -13,8 +13,8 @@ AcceleratorField::AcceleratorField() :
     G4ElectroMagneticField(),
     fBz(0.1_T),
     fV(7_kV),
-    fEz(fV / (LinacDescription::Instance().GetDownStreamLength() - fDecayZMean)),
-    fDecayZMean(13.05_mm) {
+    fDecayZMean(13.05_mm),
+    fEz(7_kV / (LinacDescription::Instance().GetDownStreamLength() - 13.05_mm)) {
     FieldMessenger::Instance().Set(this);
 }
 
