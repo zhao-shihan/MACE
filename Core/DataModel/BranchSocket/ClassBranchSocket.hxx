@@ -11,7 +11,7 @@ template<IsClass Class_t>
 class ClassBranchSocket final : public IBranchSocket<Class_t> {
 public:
     template<typename... Args>
-    ClassBranchSocket(const char* branchName, Args&&... args);
+    ClassBranchSocket(const TString& branchName, Args&&... args);
     ~ClassBranchSocket() noexcept;
     ClassBranchSocket(const ClassBranchSocket&) = delete;
     ClassBranchSocket& operator=(const ClassBranchSocket&) = delete;
@@ -19,11 +19,10 @@ public:
     [[nodiscard]] const Class_t& GetValue() const override { return *fObject; }
     void SetValue(const Class_t& object) override { *fObject = object; }
 
-    void CreateBranch(TTree& tree) override { tree.Branch(fBranchName, std::addressof(fObject), 256000, 0); }
-    void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(fBranchName, std::addressof(fObject)); }
+    void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, std::addressof(fObject), 256000, 0); }
+    void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(this->fBranchName, std::addressof(fObject)); }
 
 private:
-    const TString fBranchName;
     Class_t* fObject;
 };
 

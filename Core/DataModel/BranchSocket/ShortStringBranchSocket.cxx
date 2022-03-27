@@ -2,8 +2,7 @@
 
 using MACE::Core::DataModel::BranchSocket::ShortStringBranchSocket;
 
-ShortStringBranchSocket::ShortStringBranchSocket(const char* branchName, const char* defaultString) :
-    IBranchSocket<const char*, false>(),
-    fBranchName(branchName),
-    fBranchNameWithType(fBranchName + "/C"),
+ShortStringBranchSocket::ShortStringBranchSocket(const TString& branchName, const ShortString& defaultString) :
+    IBranchSocket<ShortString>(branchName),
+    fLeafName(branchName + "/C"),
     fString(defaultString) {}
