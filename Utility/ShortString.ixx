@@ -33,8 +33,8 @@ constexpr ShortString& ShortString::operator+=(char rhs) noexcept {
     return *this;
 }
 
-template<IsArithmeticButNotChar T>
-constexpr ShortString& ShortString::operator+=(T rhs) noexcept {
+template<typename T>
+constexpr ShortString& ShortString::operator+=(T rhs) noexcept requires(std::is_arithmetic_v<T> and not std::same_as<T, char>) {
     fgSS << fString << rhs;
     fgSS >> fString;
     fgSS.clear();
@@ -52,8 +52,8 @@ constexpr std::weak_ordering ShortString::operator<=>(const char* rhs) const noe
     }
 }
 
-template<IsArithmeticButNotChar T>
-constexpr ShortString operator+(T lhs, ShortString rhs) noexcept {
+template<typename T>
+constexpr ShortString operator+(T lhs, ShortString rhs) noexcept requires(std::is_arithmetic_v<T> and not std::same_as<T, char>) {
     ShortString::fgSS << lhs << rhs.fString;
     ShortString::fgSS >> rhs.fString;
     ShortString::fgSS.clear();

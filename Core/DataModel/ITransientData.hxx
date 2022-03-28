@@ -50,7 +50,7 @@ concept IsTransientData =
     { Data_t::ConnectToBranches(tree) } -> std::same_as<void>;
     { data.FillBranchSockets() }
     noexcept->std::same_as<void>;
-    { Data_t::BasicName() }
+    { Data_t::BasicTreeName() }
     noexcept->std::same_as<const char*>;
 };
 

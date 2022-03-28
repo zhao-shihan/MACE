@@ -7,22 +7,21 @@ namespace MACE::Core::DataModel::BranchSocket {
 
 using Utility::ShortString;
 
-class ShortStringBranchSocket final : public IBranchSocket<const char*, false> {
+class ShortStringBranchSocket final : public IBranchSocket<ShortString> {
 public:
-    ShortStringBranchSocket(const char* branchName, const char* defaultString);
+    ShortStringBranchSocket(const TString& branchName, const ShortString& defaultString);
     ~ShortStringBranchSocket() noexcept = default;
     ShortStringBranchSocket(const ShortStringBranchSocket&) = delete;
     ShortStringBranchSocket& operator=(const ShortStringBranchSocket&) = delete;
 
-    [[nodiscard]] const char* GetValue() const override { return fString; }
-    void SetValue(const char* string) override { fString = string; }
+    [[nodiscard]] const ShortString& GetValue() const override { return fString; }
+    void SetValue(const ShortString& string) override { fString = string; }
 
-    void CreateBranch(TTree& tree) override { tree.Branch(fBranchName, fString, fBranchNameWithType); }
-    void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(fBranchName, fString); }
+    void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, fString, fLeafName); }
+    void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(this->fBranchName, fString); }
 
 private:
-    const TString fBranchName;
-    const TString fBranchNameWithType;
+    const TString fLeafName;
     ShortString fString;
 };
 
