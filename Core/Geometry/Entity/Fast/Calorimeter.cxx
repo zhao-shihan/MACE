@@ -4,6 +4,7 @@
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
+#include "G4UnionSolid.hh"
 
 using MACE::Geometry::Entity::Fast::Calorimeter;
 
@@ -11,18 +12,47 @@ void Calorimeter::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::Calorimeter::Instance();
     const auto name = description.GetName();
     const auto innerRadius = description.GetInnerRadius();
-    const auto outerRadius = description.GetOuterRadius();
-    const auto length = description.GetLength();
+    const auto innerLength = description.GetInnerLength();
+    const auto windowRadius = description.GetWindowRadius();
+    const auto crystalLength = description.GetCrystalLength();
 
     auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_CESIUM_IODIDE");
 
-    auto solid = Make<G4Tubs>(
-        name,
+    auto body = Make<G4Tubs>(
+        "_temp",
         innerRadius,
-        outerRadius,
-        length / 2,
+        innerRadius + crystalLength,
+        innerLength / 2,
         0,
         2 * M_PI);
+    auto front = Make<G4Tubs>(
+        "_temp",
+        windowRadius,
+        innerRadius + crystalLength,
+        crystalLength / 2,
+        0,
+        2 * M_PI);
+    auto back = Make<G4Tubs>(
+        "_temp",
+        0,
+        innerRadius + crystalLength,
+        crystalLength / 2,
+        0,
+        2 * M_PI);
+    auto temp = Make<G4UnionSolid>(
+        "_temp",
+        body,
+        front,
+        G4Transform3D(
+            G4RotationMatrix(),
+            G4ThreeVector(0, 0, -innerLength / 2 - crystalLength / 2)));
+    auto solid = Make<G4UnionSolid>(
+        name,
+        temp,
+        back,
+        G4Transform3D(
+            G4RotationMatrix(),
+            G4ThreeVector(0, 0, innerLength / 2 + crystalLength / 2)));
     auto logic = Make<G4LogicalVolume>(
         solid,
         material,

@@ -35,8 +35,8 @@ public:
     void SetThickness(double val) { fThickness = val; }
 
 private:
-    double fInnerRadius = 25_cm;
-    double fInnerLength = 60_cm;
+    double fInnerRadius = 30_cm;
+    double fInnerLength = 80_cm;
     double fWindowRadius = 12.7_cm;
     double fThickness = 5_cm;
 };

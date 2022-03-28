@@ -31,8 +31,8 @@ public:
     void SetLength(double val) { fLength = val; }
 
 private:
-    double fRadius = 23_cm;
-    double fLength = 50_cm;
+    double fRadius = 25_cm;
+    double fLength = 70_cm;
 };
 
 } // namespace MACE::Geometry::Description
