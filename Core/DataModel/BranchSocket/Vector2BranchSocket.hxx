@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/DataModel/IBranchSocket.hxx"
-#include "FundamentalROOTTypeTraits.hxx"
+#include "Core/DataModel/BranchSocket/FundamentalROOTTypeTraits.hxx"
 
 #include "TEveVector.h"
 
