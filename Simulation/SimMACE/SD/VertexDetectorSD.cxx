@@ -42,8 +42,8 @@ G4bool VertexDetectorSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
         hit->SetVertexPosition(track->GetVertexPosition());
         hit->SetParticle(particle->GetParticleName());
-        hit->SetEventID(fEventID);
-        hit->SetTrackID(track->GetTrackID());
+        hit->SetG4EventID(fEventID);
+        hit->SetG4TrackID(track->GetTrackID());
         fHitsCollection->insert(hit);
         return true;
     } else {

@@ -35,8 +35,8 @@ G4bool CalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         hit->SetHitTime(preStepPoint->GetGlobalTime());
         hit->SetEnergy(preStepPoint->GetKineticEnergy());
         hit->SetParticle(particle->GetParticleName());
-        hit->SetEventID(fEventID);
-        hit->SetTrackID(track->GetTrackID());
+        hit->SetG4EventID(fEventID);
+        hit->SetG4TrackID(track->GetTrackID());
         fHitsCollection->insert(hit);
         return true;
     } else {

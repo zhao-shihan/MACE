@@ -27,8 +27,8 @@ std::vector<typename PerfectFinder<FitterT_t, SpectrometerHit_t, Track_t>::HitPt
 PerfectFinder<FitterT_t, SpectrometerHit_t, Track_t>::LexicographicalSort(std::vector<HitPtr> hitData) {
     std::ranges::sort(hitData,
                       [](const auto& hit1, const auto& hit2) {
-                          return std::tie(hit1->GetEventID(), hit1->GetTrackID(), hit1->GetHitTime()) <
-                                 std::tie(hit2->GetEventID(), hit2->GetTrackID(), hit2->GetHitTime());
+                          return std::tie(hit1->GetG4EventID(), hit1->GetG4TrackID(), hit1->GetHitTime()) <
+                                 std::tie(hit2->GetG4EventID(), hit2->GetG4TrackID(), hit2->GetHitTime());
                       });
     hitData.shrink_to_fit();
     return hitData;
@@ -43,9 +43,9 @@ PerfectFinder<FitterT_t, SpectrometerHit_t, Track_t>::ClassifyToG4Tracks(const s
     int currentTrackID = -1;
     std::vector<HitPtr>* currentTrack = nullptr;
     for (auto&& hit : sortedHitData) {
-        if (hit->GetTrackID() > currentTrackID or hit->GetEventID() > currentEventID) {
-            currentEventID = hit->GetEventID();
-            currentTrackID = hit->GetTrackID();
+        if (hit->GetG4TrackID() > currentTrackID or hit->GetG4EventID() > currentEventID) {
+            currentEventID = hit->GetG4EventID();
+            currentTrackID = hit->GetG4TrackID();
             if (currentTrack != nullptr) [[likely]] { currentTrack->shrink_to_fit(); }
             currentTrack = std::addressof(g4Tracks.emplace_back());
             currentTrack->reserve(2 * fThreshold);

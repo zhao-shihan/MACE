@@ -31,8 +31,8 @@ public:
     [[nodiscard]] const auto& GetVertexEnergy() const { return fVertexEnergy; }
     [[nodiscard]] const auto& GetVertexMomentum() const { return fVertexMomentum; }
     [[nodiscard]] const auto& GetParticle() const { return fParticle; }
-    [[nodiscard]] const auto& GetEventID() const { return fEventID; }
-    [[nodiscard]] const auto& GetTrackID() const { return fTrackID; }
+    [[nodiscard]] const auto& GetG4EventID() const { return fG4EventID; }
+    [[nodiscard]] const auto& GetG4TrackID() const { return fG4TrackID; }
 
     void SetEnergy(Double_t E) { fEnergy = E; }
     template<typename Vector3_t>
@@ -48,8 +48,8 @@ public:
     void SetVertexMomentum(Double_t pX, Double_t pY, Double_t pZ) { fVertexMomentum.Set(pX, pY, pZ); }
     template<typename String_t>
     void SetParticle(String_t&& particleName) { fParticle = std::forward<String_t>(particleName); }
-    void SetEventID(Int_t val) { fEventID = val; }
-    void SetTrackID(Int_t val) { fTrackID = val; }
+    void SetG4EventID(Int_t val) { fG4EventID = val; }
+    void SetG4TrackID(Int_t val) { fG4TrackID = val; }
 
 protected:
     static void CreateBranches(TTree& tree);
@@ -67,8 +67,8 @@ private:
     Double_t fVertexEnergy;
     TEveVectorD fVertexMomentum;
     ShortString fParticle;
-    Int_t fEventID;
-    Int_t fTrackID;
+    Int_t fG4EventID;
+    Int_t fG4TrackID;
 
     static FloatBranchSocket fgEnergy;
     static Vector3FBranchSocket fgMomentum;
@@ -77,8 +77,8 @@ private:
     static FloatBranchSocket fgVertexEnergy;
     static Vector3FBranchSocket fgVertexMomentum;
     static ShortStringBranchSocket fgParticle;
-    static IntBranchSocket fgEventID;
-    static IntBranchSocket fgTrackID;
+    static IntBranchSocket fgG4EventID;
+    static IntBranchSocket fgG4TrackID;
 };
 
 } // namespace MACE::Core::DataModel::SimHit

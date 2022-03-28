@@ -94,8 +94,8 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         hit->SetVertexEnergy(vertexTotalEnergy);
         hit->SetVertexMomentum(vertexMomentum);
         hit->SetParticle(particle->GetParticleName());
-        hit->SetEventID(fEventID);
-        hit->SetTrackID(track->GetTrackID());
+        hit->SetG4EventID(fEventID);
+        hit->SetG4TrackID(track->GetTrackID());
         fHitsCollection->insert(hit);
         // particle is exiting, remove it from monitoring list
         fMonitoringTrackList.erase(monitoring);

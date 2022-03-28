@@ -5,24 +5,24 @@ namespace MACE::Core::DataModel::SimHit {
 DoubleBranchSocket VertexDetectorSimHit::fgVertexTime("vtxTime", 0);
 Vector3FBranchSocket VertexDetectorSimHit::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
 ShortStringBranchSocket VertexDetectorSimHit::fgParticle("particle", "");
-IntBranchSocket VertexDetectorSimHit::fgEventID("eventID", -1);
-IntBranchSocket VertexDetectorSimHit::fgTrackID("trackID", -1);
+IntBranchSocket VertexDetectorSimHit::fgG4EventID("g4EventID", -1);
+IntBranchSocket VertexDetectorSimHit::fgG4TrackID("g4TrackID", -1);
 
 VertexDetectorSimHit::VertexDetectorSimHit() noexcept :
     VertexDetectorHit(),
     fVertexTime(fgVertexTime.GetValue()),
     fVertexPosition(fgVertexPosition.GetValue()),
     fParticle(fgParticle.GetValue()),
-    fEventID(fgEventID.GetValue()),
-    fTrackID(fgTrackID.GetValue()) {}
+    fG4EventID(fgG4EventID.GetValue()),
+    fG4TrackID(fgG4TrackID.GetValue()) {}
 
 void VertexDetectorSimHit::CreateBranches(TTree& tree) {
     VertexDetectorHit::CreateBranches(tree);
     fgVertexTime.CreateBranch(tree);
     fgVertexPosition.CreateBranch(tree);
     fgParticle.CreateBranch(tree);
-    fgEventID.CreateBranch(tree);
-    fgTrackID.CreateBranch(tree);
+    fgG4EventID.CreateBranch(tree);
+    fgG4TrackID.CreateBranch(tree);
 }
 
 void VertexDetectorSimHit::ConnectToBranches(TTree& tree) {
@@ -30,8 +30,8 @@ void VertexDetectorSimHit::ConnectToBranches(TTree& tree) {
     fgVertexTime.ConnectToBranch(tree);
     fgVertexPosition.ConnectToBranch(tree);
     fgParticle.ConnectToBranch(tree);
-    fgEventID.ConnectToBranch(tree);
-    fgTrackID.ConnectToBranch(tree);
+    fgG4EventID.ConnectToBranch(tree);
+    fgG4TrackID.ConnectToBranch(tree);
 }
 
 void VertexDetectorSimHit::FillBranchSockets() const noexcept {
@@ -39,8 +39,8 @@ void VertexDetectorSimHit::FillBranchSockets() const noexcept {
     fgVertexTime.SetValue(fVertexTime);
     fgVertexPosition.SetValue(fVertexPosition);
     fgParticle.SetValue(fParticle);
-    fgEventID.SetValue(fEventID);
-    fgTrackID.SetValue(fTrackID);
+    fgG4EventID.SetValue(fG4EventID);
+    fgG4TrackID.SetValue(fG4TrackID);
 }
 
 } // namespace MACE::Core::DataModel::SimHit
