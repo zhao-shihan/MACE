@@ -17,6 +17,8 @@
 #include "Utility/MPITools/MPIJobsAssigner.hxx"
 #include "Utility/PhysicalConstant.hxx"
 
+#include "TH2F.h"
+
 using namespace MACE::Utility::PhysicalConstant;
 using namespace MACE::Utility::LiteralUnit;
 using namespace MACE::Utility::MPITools;
@@ -53,12 +55,13 @@ int main(int, char* argv[]) {
         ThirdTransportField::Instance().GetLength() +
         CalorimeterField::Instance().GetLength() / 2;
     // muonium survival length (5 tau_mu @ 300K)
-    const auto maxSurvivalLength = c_light * std::sqrt(3 * k_Boltzmann * 300_K / (511_keV + 105.66_MeV)) * 5 * 2197.03_ns;
-    // Time of flight range
+    const auto maxSurvivalLength = c_light * std::sqrt(3 * k_Boltzmann * 300_K / muonium_mass_c2) * 5 * 2197.03_ns;
     auto CalculateFlightTime = [&accE, &linacLength, &flightLength](double zVertex) {
         const auto velocity = c_light * std::sqrt((2 * eplus * accE / electron_mass_c2) * (linacLength - zVertex));
-        return std::sqrt(2 * linacLength * electron_mass_c2 / (eplus * accE)) / c_light + flightLength / velocity;
+        const auto accTime = velocity / (eplus * accE * c_squared / electron_mass_c2);
+        return accTime + flightLength / velocity + 1.0906_ns; // TODO: figure out the magic 1.0906_ns
     };
+    // Time of flight range
     const auto tofMax = CalculateFlightTime(maxSurvivalLength + 3 * sigmaZCDC);
     const auto tofMin = CalculateFlightTime(-3 * sigmaZCDC);
     std::cout
@@ -98,6 +101,7 @@ int main(int, char* argv[]) {
     // result tree
     dataHub.SetPrefixFormatOfTreeName(TString("Rep") + allRepBegin + "To" + (allRepEnd - 1) + '_');
     auto vertexTree = dataHub.CreateTree<MVertex_t>();
+    TH2F vertexHist("vertex", "(Anti-)Muonium Vertex", 500, -20, 20, 500, -50, 50);
 
     for (auto rep = repBegin; rep < repEnd; ++rep) {
 
@@ -142,12 +146,13 @@ int main(int, char* argv[]) {
                                              return hit->GetHitTime() > timeEnd;
                                          });
             // coincident count
-            const auto coinCount = coinCalHitEnd - coinCalHitBegin;
-            // TODO: discriminate gamma energy.
+            int coinCount = 0;
+            for (; coinCalHitBegin != coinCalHitEnd; ++coinCalHitBegin) {
+                const auto& energy = (*coinCalHitBegin)->GetEnergy();
+                if (480_keV < energy and energy < 540_keV) { ++coinCount; }
+            }
             // select the MCP hit if coincident
             coinedMCPData.emplace_back(mcpHit, coinCount);
-            // update for next loop
-            coinCalHitBegin = coinCalHitEnd;
         }
 
         auto coinCDCHitBegin = trackData.cbegin();
@@ -207,12 +212,14 @@ int main(int, char* argv[]) {
                         return chiSq1 < chiSq2;
                     });
                 vertexResult.emplace_back(theVertex);
+                vertexHist.Fill(theVertex->GetDeltaTCA(), theVertex->GetDCA());
             }
         }
         dataHub.FillTree<MVertex_t>(vertexResult, *vertexTree, true);
     }
 
     vertexTree->Write();
+    vertexHist.Write();
 
     mpiFileOut.MergeRootFiles(true);
 

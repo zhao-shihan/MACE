@@ -44,7 +44,7 @@ protected:
     void FillBranchSockets() const noexcept;
 
 private:
-    static constexpr const char* BasicName() { return "MCPSimHit"; }
+    static consteval const char* BasicTreeName() noexcept { return "MCPSimHit"; }
 
 private:
     Double_t fVertexTime;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Geometry/Description/IDescription.hxx"
+#include "Core/Geometry/IDescription.hxx"
 
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"

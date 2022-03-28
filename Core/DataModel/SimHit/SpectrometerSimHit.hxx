@@ -57,7 +57,7 @@ protected:
     void FillBranchSockets() const noexcept;
 
 private:
-    static constexpr const char* BasicName() { return "CDCSimHit"; }
+    static consteval const char* BasicTreeName() noexcept { return "CDCSimHit"; }
 
 private:
     Double_t fEnergy;

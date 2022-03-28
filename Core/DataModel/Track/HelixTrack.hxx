@@ -28,7 +28,7 @@ public:
     HelixTrack& operator=(const HelixTrack&) noexcept = default;
     HelixTrack& operator=(HelixTrack&&) noexcept = default;
 
-    HelixTrack(const PhysicsTrack& physTrack, Double_t B = 0.1_T);
+    explicit HelixTrack(const PhysicsTrack& physTrack, Double_t B = 0.1_T);
 
     [[nodiscard]] const auto& GetVertexTime() const { return fVertexTime; }
     [[nodiscard]] const auto& GetCenter() const { return fCenter; }
@@ -61,7 +61,7 @@ protected:
     void FillBranchSockets() const noexcept;
 
 private:
-    static constexpr const char* BasicName() { return "HlxTrk"; }
+    static consteval const char* BasicTreeName() noexcept { return "HlxTrk"; }
 
 private:
     Double_t fVertexTime;
@@ -80,5 +80,8 @@ private:
     static IntBranchSocket fgNumberOfFittedPoints;
     static FloatBranchSocket fgChi2;
 };
+
+template<class Track_t>
+concept IsHelixTrack = std::derived_from<Track_t, HelixTrack>;
 
 } // namespace MACE::Core::DataModel::Track

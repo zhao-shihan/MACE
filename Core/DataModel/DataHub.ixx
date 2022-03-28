@@ -2,7 +2,7 @@ namespace MACE::Core::DataModel {
 
 template<IsTransientData Data_t>
 inline TString DataHub::GetTreeName(Long64_t treeIndex) const {
-    return GetPrefixOfTreeName(treeIndex) + static_cast<const char*>(Data_t::BasicName()) + GetSuffixOfTreeName(treeIndex);
+    return GetPrefixOfTreeName(treeIndex) + Data_t::BasicTreeName() + GetSuffixOfTreeName(treeIndex);
 }
 
 template<IsTransientData Data_t>

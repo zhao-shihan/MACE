@@ -1,6 +1,6 @@
-#include "Core/Geometry/Description/IDescription.hxx"
+#include "Core/Geometry/IDescription.hxx"
 
-using MACE::Geometry::Description::IDescription;
+using MACE::Geometry::IDescription;
 
 std::ostream& operator<<(std::ostream& out, const IDescription& geomDescp) {
     out << "Name:\n"

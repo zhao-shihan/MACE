@@ -11,7 +11,7 @@ concept IsArithmeticButNotChar = std::is_arithmetic_v<T> and not std::same_as<st
 
 /// @brief A short string (15 characters) on the stack. Size 16 bytes.
 /// As an option for some known-size cases or aggressive SSO (Short String Optimization). (The latter is not recommended, just use TString.)
-/// Compatible with C-style string, but more convenient copy constructor and operator= are introduced.
+/// Compatible with C-style string, but more convenient copy constructor and operators are introduced.
 /// @warning The size of incoming string is never checked. Please use with EXTREME caution.
 class ShortString final {
 public:

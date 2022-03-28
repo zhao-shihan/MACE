@@ -23,8 +23,8 @@ public:
 private:
     G4double fBz;
     G4double fV;
-    G4double fEz;
     G4double fDecayZMean;
+    G4double fEz;
 };
 
 } // namespace MACE::Simulation::SimMACE::Field

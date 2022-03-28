@@ -34,7 +34,7 @@ protected:
     void FillBranchSockets() const noexcept;
 
 private:
-    static constexpr const char* BasicName() { return "CalHit"; }
+    static consteval const char* BasicTreeName() noexcept { return "CalHit"; }
 
 private:
     Double_t fHitTime;

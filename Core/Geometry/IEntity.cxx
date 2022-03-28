@@ -1,4 +1,4 @@
-#include "Core/Geometry/Entity/IEntity.hxx"
+#include "Core/Geometry/IEntity.hxx"
 
 #include "G4GDMLParser.hh"
 #include "G4SDManager.hh"

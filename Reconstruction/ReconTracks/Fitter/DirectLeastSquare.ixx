@@ -12,7 +12,7 @@ bool DirectLeastSquare<SpectrometerHit_t, Track_t>::Fit(std::vector<HitPtr>& hit
     if (CircleFit() == false) [[unlikely]] { return false; }
     RevolveFit();
 
-    Finalize(hitData, track);
+    Finalize(track);
 
     return true;
 }
@@ -27,12 +27,15 @@ void DirectLeastSquare<SpectrometerHit_t, Track_t>::Initialize(std::vector<HitPt
 
     // constuct valarrays
     fN = hitData.size();
+    fT.resize(fN);
     fWireX.resize(fN);
     fWireY.resize(fN);
     fD.resize(fN);
     fZ.resize(fN);
     fPhi.resize(fN);
+    fS.resize(fN);
     for (size_t i = 0; i < fN; ++i) {
+        fT[i] = hitData[i]->GetHitTime();
         fWireX[i] = hitData[i]->GetWirePosition().fX;
         fWireY[i] = hitData[i]->GetWirePosition().fY;
         fD[i] = hitData[i]->GetDriftDistance();
@@ -135,10 +138,10 @@ void DirectLeastSquare<SpectrometerHit_t, Track_t>::RevolveFit() {
     fS = R * fPhi;
 
     auto sAvg = fS.sum() / fN;
-    auto zAvg = fZ.sum() / fN;
-    auto szAvg = (fS * fZ).sum() / fN;
     auto s2Avg = (fS * fS).sum() / fN;
 
+    auto zAvg = fZ.sum() / fN;
+    auto szAvg = (fS * fZ).sum() / fN;
     auto cotAlpha = (szAvg - sAvg * zAvg) / (s2Avg - sAvg * sAvg);
     Z0 = zAvg - sAvg * cotAlpha;
     Alpha = std::atan(1 / cotAlpha);
@@ -147,6 +150,11 @@ void DirectLeastSquare<SpectrometerHit_t, Track_t>::RevolveFit() {
     } else if (sAvg < 0 and cotAlpha > 0) {
         Alpha -= M_PI;
     }
+
+    auto tAvg = fT.sum() / fN;
+    auto stAvg = (fS * fT).sum() / fN;
+    auto reciV = (stAvg - sAvg * tAvg) / (s2Avg - sAvg * sAvg);
+    fVertexTime = tAvg - sAvg * reciV;
 }
 
 template<class SpectrometerHit_t, class Track_t>
@@ -161,13 +169,13 @@ void DirectLeastSquare<SpectrometerHit_t, Track_t>::FinalScaling() {
 }
 
 template<class SpectrometerHit_t, class Track_t>
-void DirectLeastSquare<SpectrometerHit_t, Track_t>::Finalize(const std::vector<HitPtr>& hitData, Track_t& track) {
-    track.SetVertexTime(hitData.front()->GetHitTime());
+void DirectLeastSquare<SpectrometerHit_t, Track_t>::Finalize(Track_t& track) {
+    track.SetVertexTime(fVertexTime);
     track.SetCenter(fCircleParameters[0], fCircleParameters[1]);
     track.SetRadius(fCircleParameters[2]);
     track.SetZ0(fRevolveParameters[0]);
     track.SetAlpha(fRevolveParameters[1]);
-    track.SetNumberOfFittedPoints(hitData.size());
+    track.SetNumberOfFittedPoints(fN);
     track.SetChi2(CalculateReducedChi2());
 }
 
