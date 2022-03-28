@@ -1,8 +1,8 @@
 #pragma once
 
-#include "DataModel/BranchSocket/ShortStringBranchSocket.hxx"
-#include "DataModel/BranchSocket/Vector3BranchSocket.hxx"
-#include "DataModel/Hit/VertexDetectorHit.hxx"
+#include "Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
+#include "Core/DataModel/BranchSocket/Vector3BranchSocket.hxx"
+#include "Core/DataModel/Hit/VertexDetectorHit.hxx"
 
 namespace MACE::Core::DataModel::SimHit {
 

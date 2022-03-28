@@ -1,5 +1,5 @@
-#include "Geometry/Description/SpectrometerSensitiveVolumes.hxx"
-#include "Geometry/Entity/Fast/SpectrometerSensitiveVolumes.hxx"
+#include "Core/Geometry/Description/SpectrometerSensitiveVolumes.hxx"
+#include "Core/Geometry/Entity/Fast/SpectrometerSensitiveVolumes.hxx"
 
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"

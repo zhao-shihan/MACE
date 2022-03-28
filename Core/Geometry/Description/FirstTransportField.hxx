@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Geometry/Description/SpectrometerField.hxx"
+#include "Core/Geometry/Description/SpectrometerField.hxx"
 
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SimMACE/Global.hxx"
+#include "Simulation/SimMACE/Global.hxx"
 
 #include "G4MagneticField.hh"
 #include "G4ThreeVector.hh"

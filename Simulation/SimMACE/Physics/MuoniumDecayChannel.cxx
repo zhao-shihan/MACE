@@ -44,7 +44,7 @@
 //      Modified for the muonium decay by Toni SHIROKA, Paul Scherrer Institut, PSI
 // ------------------------------------------------------------
 
-#include "SimMACE/Physics/MuoniumDecayChannel.hxx"
+#include "Simulation/SimMACE/Physics/MuoniumDecayChannel.hxx"
 
 #include "G4DecayProducts.hh"
 #include "G4LorentzRotation.hh"

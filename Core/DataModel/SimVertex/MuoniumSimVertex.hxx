@@ -1,10 +1,10 @@
 #pragma once
 
-#include "DataModel/BranchSocket/FundamentalBranchSocket.hxx"
-#include "DataModel/BranchSocket/ShortStringBranchSocket.hxx"
-#include "DataModel/BranchSocket/Vector3BranchSocket.hxx"
-#include "DataModel/DataHub.hxx"
-#include "DataModel/Vertex/MuoniumVertex.hxx"
+#include "Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
+#include "Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
+#include "Core/DataModel/BranchSocket/Vector3BranchSocket.hxx"
+#include "Core/DataModel/DataHub.hxx"
+#include "Core/DataModel/Vertex/MuoniumVertex.hxx"
 
 namespace MACE::Core::DataModel::SimVertex {
 

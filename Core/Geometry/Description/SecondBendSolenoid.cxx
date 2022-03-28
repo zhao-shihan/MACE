@@ -1,4 +1,4 @@
-#include "Geometry/Description/SecondBendSolenoid.hxx"
+#include "Core/Geometry/Description/SecondBendSolenoid.hxx"
 
 using MACE::Geometry::Description::SecondBendSolenoid;
 

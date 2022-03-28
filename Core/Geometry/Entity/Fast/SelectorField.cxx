@@ -1,5 +1,5 @@
-#include "Geometry/Description/SelectorField.hxx"
-#include "Geometry/Entity/Fast/SelectorField.hxx"
+#include "Core/Geometry/Description/SelectorField.hxx"
+#include "Core/Geometry/Entity/Fast/SelectorField.hxx"
 
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"

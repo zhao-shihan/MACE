@@ -1,4 +1,4 @@
-#include "SimMACE/Hit/VertexDetectorHit.hxx"
+#include "Simulation/SimMACE/Hit/VertexDetectorHit.hxx"
 
 using MACE::Simulation::SimMACE::Hit::VertexDetectorHit;
 using MACE::Utility::ObserverPtr;

@@ -1,5 +1,5 @@
-#include "Geometry/Description/SpectrometerBody.hxx"
-#include "Geometry/Entity/Fast/SpectrometerBody.hxx"
+#include "Core/Geometry/Description/SpectrometerBody.hxx"
+#include "Core/Geometry/Entity/Fast/SpectrometerBody.hxx"
 
 #include "G4NistManager.hh"
 #include "G4Polycone.hh"

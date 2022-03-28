@@ -1,4 +1,4 @@
-#include "Geometry/Description/SpectrometerShield.hxx"
+#include "Core/Geometry/Description/SpectrometerShield.hxx"
 
 using MACE::Geometry::Description::SpectrometerShield;
 

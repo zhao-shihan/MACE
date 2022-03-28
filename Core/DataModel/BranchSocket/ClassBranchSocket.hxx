@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DataModel/IBranchSocket.hxx"
+#include "Core/DataModel/IBranchSocket.hxx"
 
 namespace MACE::Core::DataModel::BranchSocket {
 
@@ -29,4 +29,4 @@ private:
 
 } // namespace MACE::Core::DataModel::BranchSocket
 
-#include "DataModel/BranchSocket/ClassBranchSocket.ixx"
+#include "Core/DataModel/BranchSocket/ClassBranchSocket.ixx"

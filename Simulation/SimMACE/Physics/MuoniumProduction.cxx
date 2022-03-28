@@ -1,7 +1,7 @@
-#include "SimMACE/Messenger/PhysicsMessenger.hxx"
-#include "SimMACE/Physics/AntiMuonium.hxx"
-#include "SimMACE/Physics/Muonium.hxx"
-#include "SimMACE/Physics/MuoniumProduction.hxx"
+#include "Simulation/SimMACE/Messenger/PhysicsMessenger.hxx"
+#include "Simulation/SimMACE/Physics/AntiMuonium.hxx"
+#include "Simulation/SimMACE/Physics/Muonium.hxx"
+#include "Simulation/SimMACE/Physics/MuoniumProduction.hxx"
 
 #include "G4MuonPlus.hh"
 #include "G4PhysicalConstants.hh"

@@ -1,4 +1,4 @@
-#include "DataModel/SimHit/CalorimeterSimHit.hxx"
+#include "Core/DataModel/SimHit/CalorimeterSimHit.hxx"
 
 namespace MACE::Core::DataModel::SimHit {
 

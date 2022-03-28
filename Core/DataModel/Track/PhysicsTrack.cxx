@@ -1,6 +1,6 @@
-#include "DataModel/Track/HelixTrack.hxx"
-#include "DataModel/Track/PhysicsTrack.hxx"
-#include "PhysicalConstant.hxx"
+#include "Core/DataModel/Track/HelixTrack.hxx"
+#include "Core/DataModel/Track/PhysicsTrack.hxx"
+#include "Utility/PhysicalConstant.hxx"
 
 namespace MACE::Core::DataModel::Track {
 

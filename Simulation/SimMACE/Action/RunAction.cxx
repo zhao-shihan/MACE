@@ -1,5 +1,5 @@
-#include "SimMACE/Action/RunAction.hxx"
-#include "SimMACE/Utility/Analysis.hxx"
+#include "Simulation/SimMACE/Action/RunAction.hxx"
+#include "Simulation/SimMACE/Utility/Analysis.hxx"
 
 namespace MACE::Simulation::SimMACE::Action {
 

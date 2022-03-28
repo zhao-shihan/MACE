@@ -39,7 +39,7 @@
 
 #pragma once
 
-#include "SimMACE/Global.hxx"
+#include "Simulation/SimMACE/Global.hxx"
 
 #include "G4VDecayChannel.hh"
 

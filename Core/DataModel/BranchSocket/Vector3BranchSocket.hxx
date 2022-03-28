@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DataModel/IBranchSocket.hxx"
+#include "Core/DataModel/IBranchSocket.hxx"
 #include "IsROOTFundamental.hxx"
 
 #include "TEveVector.h"
@@ -31,4 +31,4 @@ using Vector3FBranchSocket = Vector3BranchSocket<Float_t>;
 
 } // namespace MACE::Core::DataModel::BranchSocket
 
-#include "DataModel/BranchSocket/Vector3BranchSocket.ixx"
+#include "Core/DataModel/BranchSocket/Vector3BranchSocket.ixx"

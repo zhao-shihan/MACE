@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SimMACE/Hit/VertexDetectorHit.hxx"
+#include "Simulation/SimMACE/Hit/VertexDetectorHit.hxx"
 
 #include "G4VSensitiveDetector.hh"
 

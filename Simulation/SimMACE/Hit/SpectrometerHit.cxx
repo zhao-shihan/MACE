@@ -1,4 +1,4 @@
-#include "SimMACE/Hit/SpectrometerHit.hxx"
+#include "Simulation/SimMACE/Hit/SpectrometerHit.hxx"
 
 using MACE::Simulation::SimMACE::Hit::SpectrometerHit;
 using MACE::Utility::ObserverPtr;

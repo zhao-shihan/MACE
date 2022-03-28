@@ -1,5 +1,5 @@
-#include "Geometry/Description/Target.hxx"
-#include "Geometry/Entity/Fast/Target.hxx"
+#include "Core/Geometry/Description/Target.hxx"
+#include "Core/Geometry/Entity/Fast/Target.hxx"
 
 #include "G4Box.hh"
 #include "G4NistManager.hh"

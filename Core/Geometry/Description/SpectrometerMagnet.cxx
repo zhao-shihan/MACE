@@ -1,4 +1,4 @@
-#include "Geometry/Description/SpectrometerMagnet.hxx"
+#include "Core/Geometry/Description/SpectrometerMagnet.hxx"
 
 using MACE::Geometry::Description::SpectrometerMagnet;
 

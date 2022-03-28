@@ -1,7 +1,7 @@
-#include "Geometry/Description/SecondBendField.hxx"
-#include "LiteralUnit.hxx"
-#include "SimMACE/Field/SecondBendField.hxx"
-#include "SimMACE/Messenger/FieldMessenger.hxx"
+#include "Core/Geometry/Description/SecondBendField.hxx"
+#include "Utility/LiteralUnit.hxx"
+#include "Simulation/SimMACE/Field/SecondBendField.hxx"
+#include "Simulation/SimMACE/Messenger/FieldMessenger.hxx"
 
 namespace MACE::Simulation::SimMACE::Field {
 

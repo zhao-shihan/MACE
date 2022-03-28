@@ -1,5 +1,5 @@
-#include "Geometry/Description/FirstBendField.hxx"
-#include "Geometry/Entity/Fast/FirstBendField.hxx"
+#include "Core/Geometry/Description/FirstBendField.hxx"
+#include "Core/Geometry/Entity/Fast/FirstBendField.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"

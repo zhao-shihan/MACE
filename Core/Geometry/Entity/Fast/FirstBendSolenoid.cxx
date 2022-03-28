@@ -1,5 +1,5 @@
-#include "Geometry/Description/FirstBendSolenoid.hxx"
-#include "Geometry/Entity/Fast/FirstBendSolenoid.hxx"
+#include "Core/Geometry/Description/FirstBendSolenoid.hxx"
+#include "Core/Geometry/Entity/Fast/FirstBendSolenoid.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"

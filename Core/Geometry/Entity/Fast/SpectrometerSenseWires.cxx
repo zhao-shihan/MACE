@@ -1,5 +1,5 @@
-#include "Geometry/Description/SpectrometerSenseWires.hxx"
-#include "Geometry/Entity/Fast/SpectrometerSenseWires.hxx"
+#include "Core/Geometry/Description/SpectrometerSenseWires.hxx"
+#include "Core/Geometry/Entity/Fast/SpectrometerSenseWires.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"

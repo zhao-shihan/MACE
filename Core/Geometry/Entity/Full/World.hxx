@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Geometry/Entity/Fast/World.hxx"
+#include "Core/Geometry/Entity/Fast/World.hxx"
 
 namespace MACE::Geometry::Entity::Full {
 

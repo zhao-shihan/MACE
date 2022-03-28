@@ -1,4 +1,4 @@
-#include "DataModel/BranchSocket/ShortStringBranchSocket.hxx"
+#include "Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 
 using MACE::Core::DataModel::BranchSocket::ShortStringBranchSocket;
 

@@ -103,8 +103,7 @@ include_directories(${EIGEN3_INCLUDE_DIRS})
 # built-in
 include_directories(${MACE_THIRD_PARTY_DIR}/G4mpi/include)
 # intrinsic
-include_directories(${MACE_PROJECT_ROOT_DIR}/Core)
-include_directories(${MACE_PROJECT_ROOT_DIR}/Utility)
+include_directories(${MACE_PROJECT_ROOT_DIR})
 
 # ================================================================================================================================
 # sub directories

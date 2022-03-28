@@ -1,4 +1,4 @@
-#include "Geometry/Description/VertexDetector.hxx"
+#include "Core/Geometry/Description/VertexDetector.hxx"
 
 using MACE::Geometry::Description::VertexDetector;
 

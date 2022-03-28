@@ -1,6 +1,6 @@
-#include "SimMACE/RunManager.hxx"
-#include "SimMACE/SD/VertexDetectorSD.hxx"
-#include "SimMACE/Utility/Analysis.hxx"
+#include "Simulation/SimMACE/RunManager.hxx"
+#include "Simulation/SimMACE/SD/VertexDetectorSD.hxx"
+#include "Simulation/SimMACE/Utility/Analysis.hxx"
 
 #include "G4HCofThisEvent.hh"
 #include "G4SDManager.hh"

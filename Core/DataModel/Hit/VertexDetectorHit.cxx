@@ -1,4 +1,4 @@
-#include "DataModel/Hit/VertexDetectorHit.hxx"
+#include "Core/DataModel/Hit/VertexDetectorHit.hxx"
 
 namespace MACE::Core::DataModel::Hit {
 

@@ -1,5 +1,5 @@
-#include "SimMACE/Physics/AntiMuonium.hxx"
-#include "SimMACE/Physics/AntiMuoniumDecayChannel.hxx"
+#include "Simulation/SimMACE/Physics/AntiMuonium.hxx"
+#include "Simulation/SimMACE/Physics/AntiMuoniumDecayChannel.hxx"
 
 #include "G4DecayTable.hh"
 #include "G4ParticleTable.hh"

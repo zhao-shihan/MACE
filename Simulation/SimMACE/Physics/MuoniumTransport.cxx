@@ -1,6 +1,6 @@
-#include "SimMACE/Physics/Muonium.hxx"
-#include "SimMACE/Physics/MuoniumTransport.hxx"
-#include "SimMACE/Utility/Region.hxx"
+#include "Simulation/SimMACE/Physics/Muonium.hxx"
+#include "Simulation/SimMACE/Physics/MuoniumTransport.hxx"
+#include "Simulation/SimMACE/Utility/Region.hxx"
 
 #include "G4MPImanager.hh"
 #include "G4SystemOfUnits.hh"

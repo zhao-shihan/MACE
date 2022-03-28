@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ObserverPtr.hxx"
+#include "Utility/ObserverPtr.hxx"
 
 #include "G4LogicalVolume.hh"
 #include "G4Region.hh"
@@ -75,4 +75,4 @@ private:
 
 } // namespace MACE::Geometry
 
-#include "Geometry/Entity/IEntity.ixx"
+#include "Core/Geometry/Entity/IEntity.ixx"

@@ -1,5 +1,5 @@
-#include "Geometry/Description/CalorimeterShield.hxx"
-#include "Geometry/Entity/Fast/CalorimeterShield.hxx"
+#include "Core/Geometry/Description/CalorimeterShield.hxx"
+#include "Core/Geometry/Entity/Fast/CalorimeterShield.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"

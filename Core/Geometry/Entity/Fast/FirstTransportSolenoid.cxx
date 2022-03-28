@@ -1,5 +1,5 @@
-#include "Geometry/Description/FirstTransportSolenoid.hxx"
-#include "Geometry/Entity/Fast/FirstTransportSolenoid.hxx"
+#include "Core/Geometry/Description/FirstTransportSolenoid.hxx"
+#include "Core/Geometry/Entity/Fast/FirstTransportSolenoid.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"

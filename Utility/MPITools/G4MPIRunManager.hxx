@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ObserverPtr.hxx"
+#include "Utility/ObserverPtr.hxx"
 
 #include "G4RunManager.hh"
 

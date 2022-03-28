@@ -1,5 +1,5 @@
-#include "Geometry/Description/SecondBendField.hxx"
-#include "Geometry/Entity/Fast/SecondBendField.hxx"
+#include "Core/Geometry/Description/SecondBendField.hxx"
+#include "Core/Geometry/Entity/Fast/SecondBendField.hxx"
 
 #include "G4PVPlacement.hh"
 #include "G4Torus.hh"

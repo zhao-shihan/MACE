@@ -1,5 +1,5 @@
-#include "Geometry/Description/Collimator.hxx"
-#include "Geometry/Entity/Fast/Collimator.hxx"
+#include "Core/Geometry/Description/Collimator.hxx"
+#include "Core/Geometry/Entity/Fast/Collimator.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"

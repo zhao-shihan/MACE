@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Geometry/Description/CalorimeterField.hxx"
+#include "Core/Geometry/Description/CalorimeterField.hxx"
 
 namespace MACE::Geometry::Description {
 

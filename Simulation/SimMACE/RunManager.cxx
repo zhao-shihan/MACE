@@ -1,7 +1,7 @@
-#include "SimMACE/Action/ActionInitialization.hxx"
-#include "SimMACE/Physics/PhysicsList.hxx"
-#include "SimMACE/RunManager.hxx"
-#include "SimMACE/Utility/Analysis.hxx"
+#include "Simulation/SimMACE/Action/ActionInitialization.hxx"
+#include "Simulation/SimMACE/Physics/PhysicsList.hxx"
+#include "Simulation/SimMACE/RunManager.hxx"
+#include "Simulation/SimMACE/Utility/Analysis.hxx"
 
 using MACE::Simulation::SimMACE::RunManager;
 using MACE::Simulation::SimMACE::Utility::Analysis;

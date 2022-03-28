@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ReconTracks/Global.hxx"
+#include "Reconstruction/ReconTracks/Global.hxx"
 
 namespace MACE::Reconstruction::ReconTracks::Interface {
 
@@ -32,4 +32,4 @@ protected:
 
 } // namespace MACE::Reconstruction::ReconTracks::Interface
 
-#include "ReconTracks/Interface/Fitter.ixx"
+#include "Reconstruction/ReconTracks/Interface/Fitter.ixx"

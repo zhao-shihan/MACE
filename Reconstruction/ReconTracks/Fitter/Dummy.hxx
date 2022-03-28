@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ReconTracks/Global.hxx"
-#include "ReconTracks/Interface/Fitter.hxx"
+#include "Reconstruction/ReconTracks/Global.hxx"
+#include "Reconstruction/ReconTracks/Interface/Fitter.hxx"
 
 namespace MACE::Reconstruction::ReconTracks::Fitter {
 
@@ -22,4 +22,4 @@ public:
 
 } // namespace MACE::Reconstruction::ReconTracks::Fitter
 
-#include "ReconTracks/Fitter/Dummy.ixx"
+#include "Reconstruction/ReconTracks/Fitter/Dummy.ixx"

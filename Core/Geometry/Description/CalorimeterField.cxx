@@ -1,4 +1,4 @@
-#include "Geometry/Description/CalorimeterField.hxx"
+#include "Core/Geometry/Description/CalorimeterField.hxx"
 
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"

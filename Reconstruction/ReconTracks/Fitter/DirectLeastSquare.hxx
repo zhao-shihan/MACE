@@ -1,7 +1,7 @@
 #pragma once
 
-#include "LiteralUnit.hxx"
-#include "ReconTracks/Interface/Fitter.hxx"
+#include "Utility/LiteralUnit.hxx"
+#include "Reconstruction/ReconTracks/Interface/Fitter.hxx"
 
 #include "Eigen/Core"
 
@@ -100,4 +100,4 @@ private:
 
 } // namespace MACE::Reconstruction::ReconTracks::Fitter
 
-#include "ReconTracks/Fitter/DirectLeastSquare.ixx"
+#include "Reconstruction/ReconTracks/Fitter/DirectLeastSquare.ixx"

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ObserverPtr.hxx"
-#include "SimMACE/Action/DetectorConstruction.hxx"
-#include "SimMACE/Global.hxx"
+#include "Utility/ObserverPtr.hxx"
+#include "Simulation/SimMACE/Action/DetectorConstruction.hxx"
+#include "Simulation/SimMACE/Global.hxx"
 #include "SimMTransport/Track.hxx"
 
 #include "G4ParticleChange.hh"

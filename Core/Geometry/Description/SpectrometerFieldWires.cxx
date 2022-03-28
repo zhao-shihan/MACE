@@ -1,6 +1,6 @@
-#include "Geometry/Description/SpectrometerCells.hxx"
-#include "Geometry/Description/SpectrometerFieldWires.hxx"
-#include "Geometry/Description/SpectrometerReadoutLayers.hxx"
+#include "Core/Geometry/Description/SpectrometerCells.hxx"
+#include "Core/Geometry/Description/SpectrometerFieldWires.hxx"
+#include "Core/Geometry/Description/SpectrometerReadoutLayers.hxx"
 
 using MACE::Geometry::Description::SpectrometerFieldWires;
 

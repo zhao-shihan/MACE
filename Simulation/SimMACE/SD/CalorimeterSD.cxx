@@ -1,6 +1,6 @@
-#include "SimMACE/RunManager.hxx"
-#include "SimMACE/SD/CalorimeterSD.hxx"
-#include "SimMACE/Utility/Analysis.hxx"
+#include "Simulation/SimMACE/RunManager.hxx"
+#include "Simulation/SimMACE/SD/CalorimeterSD.hxx"
+#include "Simulation/SimMACE/Utility/Analysis.hxx"
 
 #include "G4Gamma.hh"
 #include "G4HCofThisEvent.hh"

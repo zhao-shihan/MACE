@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Geometry/Description/AcceleratorField.hxx"
+#include "Core/Geometry/Description/AcceleratorField.hxx"
 
 namespace MACE::Geometry::Description {
 

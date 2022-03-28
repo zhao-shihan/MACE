@@ -1,7 +1,7 @@
-#include "Geometry/Description/FirstBendField.hxx"
-#include "LiteralUnit.hxx"
-#include "SimMACE/Field/FirstBendField.hxx"
-#include "SimMACE/Messenger/FieldMessenger.hxx"
+#include "Core/Geometry/Description/FirstBendField.hxx"
+#include "Utility/LiteralUnit.hxx"
+#include "Simulation/SimMACE/Field/FirstBendField.hxx"
+#include "Simulation/SimMACE/Messenger/FieldMessenger.hxx"
 
 namespace MACE::Simulation::SimMACE::Field {
 

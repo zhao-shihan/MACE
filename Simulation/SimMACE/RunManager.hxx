@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MPITools/G4MPIRunManager.hxx"
-#include "ObserverPtr.hxx"
-#include "SimMACE/Action/DetectorConstruction.hxx"
-#include "SimMACE/Action/EventAction.hxx"
-#include "SimMACE/Action/PrimaryGeneratorAction.hxx"
-#include "SimMACE/Action/RunAction.hxx"
-#include "SimMACE/Global.hxx"
+#include "Utility/MPITools/G4MPIRunManager.hxx"
+#include "Utility/ObserverPtr.hxx"
+#include "Simulation/SimMACE/Action/DetectorConstruction.hxx"
+#include "Simulation/SimMACE/Action/EventAction.hxx"
+#include "Simulation/SimMACE/Action/PrimaryGeneratorAction.hxx"
+#include "Simulation/SimMACE/Action/RunAction.hxx"
+#include "Simulation/SimMACE/Global.hxx"
 
 namespace MACE::Simulation::SimMACE {
 

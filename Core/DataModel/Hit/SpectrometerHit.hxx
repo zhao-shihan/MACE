@@ -1,9 +1,9 @@
 #pragma once
 
-#include "DataModel/BranchSocket/FundamentalBranchSocket.hxx"
-#include "DataModel/BranchSocket/Vector2BranchSocket.hxx"
-#include "DataModel/DataHub.hxx"
-#include "DataModel/ITransientData.hxx"
+#include "Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
+#include "Core/DataModel/BranchSocket/Vector2BranchSocket.hxx"
+#include "Core/DataModel/DataHub.hxx"
+#include "Core/DataModel/ITransientData.hxx"
 
 namespace MACE::Core::DataModel::Hit {
 

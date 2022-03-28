@@ -1,5 +1,5 @@
-#include "Geometry/Description/SpectrometerBody.hxx"
-#include "Geometry/Description/SpectrometerReadoutLayers.hxx"
+#include "Core/Geometry/Description/SpectrometerBody.hxx"
+#include "Core/Geometry/Description/SpectrometerReadoutLayers.hxx"
 
 #include <cmath>
 #include <numbers>

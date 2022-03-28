@@ -1,4 +1,4 @@
-#include "SimMACE/Hit/CalorimeterHit.hxx"
+#include "Simulation/SimMACE/Hit/CalorimeterHit.hxx"
 
 using MACE::Simulation::SimMACE::Hit::CalorimeterHit;
 using MACE::Utility::ObserverPtr;

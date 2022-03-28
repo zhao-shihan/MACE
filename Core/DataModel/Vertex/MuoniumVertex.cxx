@@ -1,4 +1,4 @@
-#include "DataModel/Vertex/MuoniumVertex.hxx"
+#include "Core/DataModel/Vertex/MuoniumVertex.hxx"
 
 namespace MACE::Core::DataModel::Vertex {
 

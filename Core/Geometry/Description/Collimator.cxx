@@ -1,4 +1,4 @@
-#include "Geometry/Description/Collimator.hxx"
+#include "Core/Geometry/Description/Collimator.hxx"
 
 using MACE::Geometry::Description::Collimator;
 

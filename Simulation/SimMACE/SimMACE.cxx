@@ -1,6 +1,6 @@
-#include "SimMACE/Action/DetectorConstruction.hxx"
-#include "SimMACE/Physics/PhysicsList.hxx"
-#include "SimMACE/RunManager.hxx"
+#include "Simulation/SimMACE/Action/DetectorConstruction.hxx"
+#include "Simulation/SimMACE/Physics/PhysicsList.hxx"
+#include "Simulation/SimMACE/RunManager.hxx"
 
 #include "G4MPImanager.hh"
 #include "G4MPIsession.hh"

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ReconTracks/Global.hxx"
-#include "ReconTracks/Interface/Tracker.hxx"
+#include "Reconstruction/ReconTracks/Global.hxx"
+#include "Reconstruction/ReconTracks/Interface/Tracker.hxx"
 
 namespace MACE::Reconstruction::ReconTracks::Tracker {
 
@@ -36,4 +36,4 @@ private:
 
 } // namespace MACE::Reconstruction::ReconTracks::Tracker
 
-#include "ReconTracks/Tracker/PerfectFinder.ixx"
+#include "Reconstruction/ReconTracks/Tracker/PerfectFinder.ixx"

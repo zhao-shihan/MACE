@@ -1,4 +1,4 @@
-#include "Geometry/Description/Target.hxx"
+#include "Core/Geometry/Description/Target.hxx"
 
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"

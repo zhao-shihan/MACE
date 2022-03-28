@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SimMACE/Hit/CalorimeterHit.hxx"
+#include "Simulation/SimMACE/Hit/CalorimeterHit.hxx"
 
 #include "G4VSensitiveDetector.hh"
 

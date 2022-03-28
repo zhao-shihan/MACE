@@ -1,7 +1,7 @@
 #pragma once
 
-#include "LiteralUnit.hxx"
-#include "SimMACE/Global.hxx"
+#include "Utility/LiteralUnit.hxx"
+#include "Simulation/SimMACE/Global.hxx"
 
 #include "G4MagneticField.hh"
 #include "G4ThreeVector.hh"

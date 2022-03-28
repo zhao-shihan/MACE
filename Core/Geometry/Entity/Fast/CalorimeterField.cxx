@@ -1,5 +1,5 @@
-#include "Geometry/Description/CalorimeterField.hxx"
-#include "Geometry/Entity/Fast/CalorimeterField.hxx"
+#include "Core/Geometry/Description/CalorimeterField.hxx"
+#include "Core/Geometry/Entity/Fast/CalorimeterField.hxx"
 
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"

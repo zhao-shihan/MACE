@@ -1,7 +1,7 @@
-#include "DataModel/DataHub.hxx"
-#include "DataModel/Track/HelixTrack.hxx"
-#include "DataModel/Track/PhysicsTrack.hxx"
-#include "LiteralUnit.hxx"
+#include "Core/DataModel/DataHub.hxx"
+#include "Core/DataModel/Track/HelixTrack.hxx"
+#include "Core/DataModel/Track/PhysicsTrack.hxx"
+#include "Utility/LiteralUnit.hxx"
 
 #include "CLHEP/Units/PhysicalConstants.h"
 

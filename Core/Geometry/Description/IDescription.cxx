@@ -1,4 +1,4 @@
-#include "Geometry/Description/IDescription.hxx"
+#include "Core/Geometry/Description/IDescription.hxx"
 
 using MACE::Geometry::Description::IDescription;
 

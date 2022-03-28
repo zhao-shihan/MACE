@@ -1,7 +1,7 @@
 #pragma once
 
-#include "DataModel/ITransientData.hxx"
-#include "ObserverPtr.hxx"
+#include "Core/DataModel/ITransientData.hxx"
+#include "Utility/ObserverPtr.hxx"
 
 #include "TFile.h"
 
@@ -115,4 +115,4 @@ private:
 
 } // namespace MACE::Core::DataModel
 
-#include "DataModel/DataHub.ixx"
+#include "Core/DataModel/DataHub.ixx"

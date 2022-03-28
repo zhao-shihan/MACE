@@ -1,5 +1,5 @@
-#include "Geometry/Description/SpectrometerSenseWires.hxx"
-#include "Geometry/Description/SpectrometerSensitiveVolumes.hxx"
+#include "Core/Geometry/Description/SpectrometerSenseWires.hxx"
+#include "Core/Geometry/Description/SpectrometerSensitiveVolumes.hxx"
 
 using MACE::Geometry::Description::SpectrometerSenseWires;
 

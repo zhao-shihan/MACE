@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DataModel/IBranchSocket.hxx"
+#include "Core/DataModel/IBranchSocket.hxx"
 #include "IsROOTFundamental.hxx"
 
 namespace MACE::Core::DataModel::BranchSocket {
@@ -30,4 +30,4 @@ using DoubleBranchSocket = FundamentalBranchSocket<Double_t>;
 
 } // namespace MACE::Core::DataModel::BranchSocket
 
-#include "DataModel/BranchSocket/FundamentalBranchSocket.ixx"
+#include "Core/DataModel/BranchSocket/FundamentalBranchSocket.ixx"

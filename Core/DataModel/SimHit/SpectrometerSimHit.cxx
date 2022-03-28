@@ -1,4 +1,4 @@
-#include "DataModel/SimHit/SpectrometerSimHit.hxx"
+#include "Core/DataModel/SimHit/SpectrometerSimHit.hxx"
 
 namespace MACE::Core::DataModel::SimHit {
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "DataModel/IBranchSocket.hxx"
-#include "ShortString.hxx"
+#include "Core/DataModel/IBranchSocket.hxx"
+#include "Utility/ShortString.hxx"
 
 namespace MACE::Core::DataModel::BranchSocket {
 

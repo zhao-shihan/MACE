@@ -1,12 +1,12 @@
 #pragma once
 
-#include "DataModel/DataHub.hxx"
-#include "MPITools/MPIFileTools.hxx"
-#include "ObserverPtr.hxx"
-#include "SimMACE/Global.hxx"
-#include "SimMACE/Hit/CalorimeterHit.hxx"
-#include "SimMACE/Hit/SpectrometerHit.hxx"
-#include "SimMACE/Hit/VertexDetectorHit.hxx"
+#include "Core/DataModel/DataHub.hxx"
+#include "Utility/MPITools/MPIFileTools.hxx"
+#include "Utility/ObserverPtr.hxx"
+#include "Simulation/SimMACE/Global.hxx"
+#include "Simulation/SimMACE/Hit/CalorimeterHit.hxx"
+#include "Simulation/SimMACE/Hit/SpectrometerHit.hxx"
+#include "Simulation/SimMACE/Hit/VertexDetectorHit.hxx"
 
 #include "TFile.h"
 

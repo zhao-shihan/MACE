@@ -1,8 +1,8 @@
-#include "SimMACE/Physics/AntiMuonium.hxx"
-#include "SimMACE/Physics/Muonium.hxx"
-#include "SimMACE/Physics/MuoniumPhysics.hxx"
-#include "SimMACE/Physics/MuoniumProduction.hxx"
-#include "SimMACE/Physics/MuoniumTransport.hxx"
+#include "Simulation/SimMACE/Physics/AntiMuonium.hxx"
+#include "Simulation/SimMACE/Physics/Muonium.hxx"
+#include "Simulation/SimMACE/Physics/MuoniumPhysics.hxx"
+#include "Simulation/SimMACE/Physics/MuoniumProduction.hxx"
+#include "Simulation/SimMACE/Physics/MuoniumTransport.hxx"
 
 #include "G4MuonPlus.hh"
 #include "G4ProcessManager.hh"

@@ -1,6 +1,6 @@
-#include "Geometry/Description/SpectrometerCells.hxx"
-#include "Geometry/Description/SpectrometerReadoutLayers.hxx"
-#include "Geometry/Entity/Fast/SpectrometerCells.hxx"
+#include "Core/Geometry/Description/SpectrometerCells.hxx"
+#include "Core/Geometry/Description/SpectrometerReadoutLayers.hxx"
+#include "Core/Geometry/Entity/Fast/SpectrometerCells.hxx"
 
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"

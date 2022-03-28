@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ObserverPtr.hxx"
-#include "SimMACE/Global.hxx"
+#include "Utility/ObserverPtr.hxx"
+#include "Simulation/SimMACE/Global.hxx"
 
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "DataModel/Hit/SpectrometerHit.hxx"
-#include "DataModel/SimHit/SpectrometerSimHit.hxx"
-#include "DataModel/Track/HelixTrack.hxx"
-#include "DataModel/Track/PhysicsTrack.hxx"
+#include "Core/DataModel/Hit/SpectrometerHit.hxx"
+#include "Core/DataModel/SimHit/SpectrometerSimHit.hxx"
+#include "Core/DataModel/Track/HelixTrack.hxx"
+#include "Core/DataModel/Track/PhysicsTrack.hxx"
 
 #include <iostream>
 

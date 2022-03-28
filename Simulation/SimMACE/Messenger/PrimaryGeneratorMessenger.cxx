@@ -1,6 +1,6 @@
-#include "SimMACE/Action/PrimaryGeneratorAction.hxx"
-#include "SimMACE/Messenger/PrimaryGeneratorMessenger.hxx"
-#include "SimMACE/RunManager.hxx"
+#include "Simulation/SimMACE/Action/PrimaryGeneratorAction.hxx"
+#include "Simulation/SimMACE/Messenger/PrimaryGeneratorMessenger.hxx"
+#include "Simulation/SimMACE/RunManager.hxx"
 
 #include "G4SystemOfUnits.hh"
 #include "G4UIdirectory.hh"

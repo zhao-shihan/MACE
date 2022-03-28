@@ -1,4 +1,4 @@
-#include "DataModel/Hit/CalorimeterHit.hxx"
+#include "Core/DataModel/Hit/CalorimeterHit.hxx"
 
 namespace MACE::Core::DataModel::Hit {
 

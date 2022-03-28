@@ -1,4 +1,4 @@
-#include "Geometry/Description/AcceleratorField.hxx"
+#include "Core/Geometry/Description/AcceleratorField.hxx"
 
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"

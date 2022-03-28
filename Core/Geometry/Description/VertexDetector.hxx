@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Geometry/Description/IDescription.hxx"
+#include "Core/Geometry/Description/IDescription.hxx"
 
 namespace MACE::Geometry::Description {
 

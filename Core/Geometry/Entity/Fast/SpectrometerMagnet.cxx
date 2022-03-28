@@ -1,5 +1,5 @@
-#include "Geometry/Description/SpectrometerMagnet.hxx"
-#include "Geometry/Entity/Fast/SpectrometerMagnet.hxx"
+#include "Core/Geometry/Description/SpectrometerMagnet.hxx"
+#include "Core/Geometry/Entity/Fast/SpectrometerMagnet.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"

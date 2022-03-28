@@ -1,5 +1,5 @@
-#include "SimMACE/Messenger/AnalysisMessenger.hxx"
-#include "SimMACE/Utility/Analysis.hxx"
+#include "Simulation/SimMACE/Messenger/AnalysisMessenger.hxx"
+#include "Simulation/SimMACE/Utility/Analysis.hxx"
 
 #include "G4UIdirectory.hh"
 

@@ -1,9 +1,9 @@
-#include "SimMACE/Action/EventAction.hxx"
-#include "SimMACE/RunManager.hxx"
-#include "SimMACE/SD/CalorimeterSD.hxx"
-#include "SimMACE/SD/SpectrometerSD.hxx"
-#include "SimMACE/SD/VertexDetectorSD.hxx"
-#include "SimMACE/Utility/Analysis.hxx"
+#include "Simulation/SimMACE/Action/EventAction.hxx"
+#include "Simulation/SimMACE/RunManager.hxx"
+#include "Simulation/SimMACE/SD/CalorimeterSD.hxx"
+#include "Simulation/SimMACE/SD/SpectrometerSD.hxx"
+#include "Simulation/SimMACE/SD/VertexDetectorSD.hxx"
+#include "Simulation/SimMACE/Utility/Analysis.hxx"
 
 namespace MACE::Simulation::SimMACE::Action {
 

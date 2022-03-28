@@ -1,5 +1,5 @@
-#include "Geometry/Description/SecondTransportField.hxx"
-#include "Geometry/Entity/Fast/SecondTransportField.hxx"
+#include "Core/Geometry/Description/SecondTransportField.hxx"
+#include "Core/Geometry/Entity/Fast/SecondTransportField.hxx"
 
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"

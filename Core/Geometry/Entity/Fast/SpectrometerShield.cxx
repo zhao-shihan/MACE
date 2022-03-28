@@ -1,5 +1,5 @@
-#include "Geometry/Description/SpectrometerShield.hxx"
-#include "Geometry/Entity/Fast/SpectrometerShield.hxx"
+#include "Core/Geometry/Description/SpectrometerShield.hxx"
+#include "Core/Geometry/Entity/Fast/SpectrometerShield.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"

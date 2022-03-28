@@ -1,4 +1,4 @@
-#include "Geometry/Description/ThirdTransportSolenoid.hxx"
+#include "Core/Geometry/Description/ThirdTransportSolenoid.hxx"
 
 using MACE::Geometry::Description::ThirdTransportSolenoid;
 

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "DataModel/SimHit/CalorimeterSimHit.hxx"
-#include "ObserverPtr.hxx"
-#include "SimMACE/Global.hxx"
+#include "Core/DataModel/SimHit/CalorimeterSimHit.hxx"
+#include "Utility/ObserverPtr.hxx"
+#include "Simulation/SimMACE/Global.hxx"
 
 #include "G4Allocator.hh"
 #include "G4THitsCollection.hh"

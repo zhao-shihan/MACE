@@ -1,4 +1,4 @@
-#include "Geometry/Description/SpectrometerField.hxx"
+#include "Core/Geometry/Description/SpectrometerField.hxx"
 
 using MACE::Geometry::Description::SpectrometerField;
 

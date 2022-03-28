@@ -1,4 +1,4 @@
-#include "Geometry/Description/SecondBendField.hxx"
+#include "Core/Geometry/Description/SecondBendField.hxx"
 
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"

@@ -1,5 +1,5 @@
-#include "SimMACE/Field/ParallelField.hxx"
-#include "SimMACE/Messenger/FieldMessenger.hxx"
+#include "Simulation/SimMACE/Field/ParallelField.hxx"
+#include "Simulation/SimMACE/Messenger/FieldMessenger.hxx"
 
 using MACE::Simulation::SimMACE::Field::ParallelField;
 using MACE::Simulation::SimMACE::Messenger::FieldMessenger;

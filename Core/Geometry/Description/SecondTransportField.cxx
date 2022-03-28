@@ -1,4 +1,4 @@
-#include "Geometry/Description/SecondTransportField.hxx"
+#include "Core/Geometry/Description/SecondTransportField.hxx"
 
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"

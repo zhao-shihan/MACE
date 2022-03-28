@@ -1,5 +1,5 @@
-#include "Geometry/Description/AcceleratorField.hxx"
-#include "Geometry/Entity/Fast/AcceleratorField.hxx"
+#include "Core/Geometry/Description/AcceleratorField.hxx"
+#include "Core/Geometry/Entity/Fast/AcceleratorField.hxx"
 
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"

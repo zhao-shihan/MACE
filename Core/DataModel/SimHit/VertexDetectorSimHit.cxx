@@ -1,4 +1,4 @@
-#include "DataModel/SimHit/VertexDetectorSimHit.hxx"
+#include "Core/DataModel/SimHit/VertexDetectorSimHit.hxx"
 
 namespace MACE::Core::DataModel::SimHit {
 

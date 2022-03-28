@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Geometry/Description/FirstBendField.hxx"
+#include "Core/Geometry/Description/FirstBendField.hxx"
 
 namespace MACE::Geometry::Description {
 
