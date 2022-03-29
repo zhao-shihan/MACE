@@ -9,8 +9,8 @@ Vector2FBranchSocket VertexDetectorHit::fgHitPositionVariance("hitPosVar", {"x",
 VertexDetectorHit::VertexDetectorHit() noexcept :
     ITransientData(),
     fHitTime(fgHitTime.GetValue()),
-    fHitPosition(fgHitPosition.GetValue()),
-    fHitPositionVariance(fgHitPositionVariance.GetValue()) {}
+    fHitPosition(fgHitPosition.GetValue<Double_t>()),
+    fHitPositionVariance(fgHitPositionVariance.GetValue<Double_t>()) {}
 
 void VertexDetectorHit::CreateBranches(TTree& tree) {
     ITransientData::CreateBranches(tree);

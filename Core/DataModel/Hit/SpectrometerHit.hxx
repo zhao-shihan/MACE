@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
-#include "Core/DataModel/BranchSocket/Vector2BranchSocket.hxx"
+#include "Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "Core/DataModel/DataFactory.hxx"
 #include "Core/DataModel/ITransientData.hxx"
 
@@ -10,7 +10,6 @@ namespace MACE::Core::DataModel::Hit {
 using BranchSocket::DoubleBranchSocket;
 using BranchSocket::FloatBranchSocket;
 using BranchSocket::IntBranchSocket;
-using BranchSocket::Vector2FBranchSocket;
 
 class SpectrometerHit : public ITransientData {
     friend DataFactory;
@@ -31,7 +30,6 @@ public:
     [[nodiscard]] const auto& GetHitPositionZVariance() const { return fHitPositionZVariance; }
     [[nodiscard]] const auto& GetCellID() const { return fCellID; }
     [[nodiscard]] const auto& GetLayerID() const { return fLayerID; }
-    [[nodiscard]] const auto& GetWirePosition() const { return fWirePosition; }
 
     void SetHitTime(Double_t val) { fHitTime = val; }
     void SetDriftDistance(Double_t d) { fDriftDistance = d; }
@@ -40,9 +38,6 @@ public:
     void SetHitPositionZVariance(Double_t var) { fHitPositionZVariance = var; }
     void SetCellID(Int_t val) { fCellID = val; }
     void SetLayerID(Int_t val) { fLayerID = val; }
-    template<typename Vector2_t>
-    void SetWirePosition(Vector2_t&& pos) { fWirePosition = std::forward<Vector2_t>(pos); }
-    void SetWirePosition(Double_t x, Double_t y) { fWirePosition.Set(x, y); }
 
 protected:
     static void CreateBranches(TTree& tree);
@@ -60,7 +55,6 @@ private:
     Double_t fHitPositionZVariance;
     Int_t fCellID;
     Int_t fLayerID;
-    TEveVector2D fWirePosition;
 
     static DoubleBranchSocket fgHitTime;
     static FloatBranchSocket fgDriftDistance;
@@ -69,10 +63,6 @@ private:
     static FloatBranchSocket fgHitPositionZVariance;
     static IntBranchSocket fgCellID;
     static IntBranchSocket fgLayerID;
-    static Vector2FBranchSocket fgWirePosition;
 };
-
-template<class Hit_t>
-concept IsSpectormeterHit = std::derived_from<Hit_t, SpectrometerHit>;
 
 } // namespace MACE::Core::DataModel::Hit

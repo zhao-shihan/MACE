@@ -11,7 +11,7 @@ IntBranchSocket VertexDetectorSimHit::fgG4TrackID("g4TrackID", -1);
 VertexDetectorSimHit::VertexDetectorSimHit() noexcept :
     VertexDetectorHit(),
     fVertexTime(fgVertexTime.GetValue()),
-    fVertexPosition(fgVertexPosition.GetValue()),
+    fVertexPosition(fgVertexPosition.GetValue<Double_t>()),
     fParticle(fgParticle.GetValue()),
     fG4EventID(fgG4EventID.GetValue()),
     fG4TrackID(fgG4TrackID.GetValue()) {}

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
-#include "Core/DataModel/BranchSocket/Vector2BranchSocket.hxx"
+#include "Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "Core/DataModel/DataFactory.hxx"
 #include "Core/DataModel/ITransientData.hxx"
 
@@ -29,10 +29,10 @@ public:
     void SetHitTime(Double_t val) { fHitTime = val; }
     template<typename Vector2_t>
     void SetHitPosition(Vector2_t&& pos) { fHitPosition = std::forward<Vector2_t>(pos); }
-    void SetHitPosition(Double_t x, Double_t y) { fHitPosition.Set(x, y); }
+    void SetHitPosition(Double_t x, Double_t y) { fHitPosition = {x, y}; }
     template<typename Vector2_t>
     void SetHitPositionVariance(Vector2_t&& posVar) { fHitPositionVariance = std::forward<Vector2_t>(posVar); }
-    void SetHitPositionVariance(Double_t xVar, Double_t yVar) { fHitPositionVariance.Set(xVar, yVar); }
+    void SetHitPositionVariance(Double_t xVar, Double_t yVar) { fHitPositionVariance = {xVar, yVar}; }
 
 protected:
     static void CreateBranches(TTree& tree);
@@ -44,8 +44,8 @@ private:
 
 private:
     Double_t fHitTime;
-    TEveVector2D fHitPosition;
-    TEveVector2D fHitPositionVariance;
+    Eigen::Vector2d fHitPosition;
+    Eigen::Vector2d fHitPositionVariance;
 
     static DoubleBranchSocket fgHitTime;
     static Vector2FBranchSocket fgHitPosition;

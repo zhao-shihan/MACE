@@ -2,7 +2,7 @@
 
 #include "Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
-#include "Core/DataModel/BranchSocket/Vector3BranchSocket.hxx"
+#include "Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "Core/DataModel/DataFactory.hxx"
 #include "Core/DataModel/Vertex/MuoniumVertex.hxx"
 
@@ -34,11 +34,11 @@ public:
     void SetTrueVertexTime(Double_t val) { fTrueVertexTime = val; }
     template<typename Vector3_t>
     void SetTrueVertexPosition(Vector3_t&& pos) { fTrueVertexPosition = std::forward<Vector3_t>(pos); }
-    void SetTrueVertexPosition(Double_t x, Double_t y, Double_t z) { fTrueVertexPosition.Set(x, y, z); }
+    void SetTrueVertexPosition(Double_t x, Double_t y, Double_t z) { fTrueVertexPosition = {x, y, z}; }
     void SetTrueVertexEnergy(Double_t val) { fTrueVertexEnergy = val; }
     template<typename Vector3_t>
     void SetTrueVertexMomentum(Vector3_t&& pos) { fTrueVertexMomentum = std::forward<Vector3_t>(pos); }
-    void SetTrueVertexMomentum(Double_t x, Double_t y, Double_t z) { fTrueVertexMomentum.Set(x, y, z); }
+    void SetTrueVertexMomentum(Double_t x, Double_t y, Double_t z) { fTrueVertexMomentum = {x, y, z}; }
     template<typename String_t>
     void SetTrueParticles(String_t&& particleNames) { fTrueParticles = std::forward<String_t>(particleNames); }
 
@@ -52,9 +52,9 @@ private:
 
 private:
     Double_t fTrueVertexTime;
-    TEveVectorD fTrueVertexPosition;
+    Eigen::Vector3d fTrueVertexPosition;
     Double_t fTrueVertexEnergy;
-    TEveVectorD fTrueVertexMomentum;
+    Eigen::Vector3d fTrueVertexMomentum;
     ShortString fTrueParticles;
 
     static DoubleBranchSocket fgTrueVertexTime;
@@ -64,4 +64,4 @@ private:
     static ShortStringBranchSocket fgTrueParticles;
 };
 
-} // namespace MACE::Core::DataModel::Vertex
+} // namespace MACE::Core::DataModel::SimVertex

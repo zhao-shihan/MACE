@@ -2,8 +2,7 @@
 
 #include "Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
-#include "Core/DataModel/BranchSocket/Vector2BranchSocket.hxx"
-#include "Core/DataModel/BranchSocket/Vector3BranchSocket.hxx"
+#include "Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "Core/DataModel/DataFactory.hxx"
 #include "Core/DataModel/ITransientData.hxx"
 
@@ -42,15 +41,15 @@ public:
     void SetDeltaTCA(Double_t val) { fDeltaTCA = val; }
     template<typename Vector3_t>
     void SetCPACDC(Vector3_t&& pos) { fCPACDC = std::forward<Vector3_t>(pos); }
-    void SetCPACDC(Double_t x, Double_t y, Double_t z) { fCPACDC.Set(x, y, z); }
+    void SetCPACDC(Double_t x, Double_t y, Double_t z) { fCPACDC = {x, y, z}; }
     template<typename Vector2_t>
     void SetCPAMCP(Vector2_t&& pos) { fCPAMCP = std::forward<Vector2_t>(pos); }
-    void SetCPAMCP(Double_t x, Double_t y) { fCPAMCP.Set(x, y); }
+    void SetCPAMCP(Double_t x, Double_t y) { fCPAMCP = {x, y}; }
     void SetDCA(Double_t dca) { fDCA = dca; }
     void SetVertexEnergy(Double_t E) { fVertexEnergy = E; }
     template<typename Vector3_t>
     void SetVertexMomentum(Vector3_t&& mom) { fVertexMomentum = std::forward<Vector3_t>(mom); }
-    void SetVertexMomentum(Double_t pX, Double_t pY, Double_t pZ) { fVertexMomentum.Set(pX, pY, pZ); }
+    void SetVertexMomentum(Double_t pX, Double_t pY, Double_t pZ) { fVertexMomentum = {pX, pY, pZ}; }
     template<typename String_t>
     void SetParticles(String_t&& particleNames) { fParticles = std::forward<String_t>(particleNames); }
 
@@ -66,11 +65,11 @@ private:
     Double_t fTCACDC;
     Double_t fTCAMCP;
     Double_t fDeltaTCA;
-    TEveVectorD fCPACDC;
-    TEveVector2D fCPAMCP;
+    Eigen::Vector3d fCPACDC;
+    Eigen::Vector2d fCPAMCP;
     Double_t fDCA;
     Double_t fVertexEnergy;
-    TEveVectorD fVertexMomentum;
+    Eigen::Vector3d fVertexMomentum;
     ShortString fParticles;
 
     static DoubleBranchSocket fgTCACDC;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
-#include "Core/DataModel/BranchSocket/Vector3BranchSocket.hxx"
+#include "Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "Core/DataModel/Hit/SpectrometerHit.hxx"
 
 namespace MACE::Core::DataModel::SimHit {
@@ -37,15 +37,15 @@ public:
     void SetEnergy(Double_t E) { fEnergy = E; }
     template<typename Vector3_t>
     void SetMomentum(Vector3_t&& mom) { fMomentum = std::forward<Vector3_t>(mom); }
-    void SetMomentum(Double_t pX, Double_t pY, Double_t pZ) { fMomentum.Set(pX, pY, pZ); }
+    void SetMomentum(Double_t pX, Double_t pY, Double_t pZ) { fMomentum = {pX, pY, pZ}; }
     void SetVertexTime(Double_t val) { fVertexTime = val; }
     template<typename Vector3_t>
     void SetVertexPosition(Vector3_t&& pos) { fVertexPosition = std::forward<Vector3_t>(pos); }
-    void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition.Set(x, y, z); }
+    void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition = {x, y, z}; }
     void SetVertexEnergy(Double_t E) { fVertexEnergy = E; }
     template<typename Vector3_t>
     void SetVertexMomentum(Vector3_t&& mom) { fVertexMomentum = std::forward<Vector3_t>(mom); }
-    void SetVertexMomentum(Double_t pX, Double_t pY, Double_t pZ) { fVertexMomentum.Set(pX, pY, pZ); }
+    void SetVertexMomentum(Double_t pX, Double_t pY, Double_t pZ) { fVertexMomentum = {pX, pY, pZ}; }
     template<typename String_t>
     void SetParticle(String_t&& particleName) { fParticle = std::forward<String_t>(particleName); }
     void SetG4EventID(Int_t val) { fG4EventID = val; }
@@ -61,11 +61,11 @@ private:
 
 private:
     Double_t fEnergy;
-    TEveVectorD fMomentum;
+    Eigen::Vector3d fMomentum;
     Double_t fVertexTime;
-    TEveVectorD fVertexPosition;
+    Eigen::Vector3d fVertexPosition;
     Double_t fVertexEnergy;
-    TEveVectorD fVertexMomentum;
+    Eigen::Vector3d fVertexMomentum;
     ShortString fParticle;
     Int_t fG4EventID;
     Int_t fG4TrackID;

@@ -9,7 +9,6 @@ FloatBranchSocket SpectrometerHit::fgDriftDistanceVariance("driftVar", 0);
 FloatBranchSocket SpectrometerHit::fgHitPositionZVariance("hitPosZVar", 0);
 IntBranchSocket SpectrometerHit::fgCellID("cellID", -1);
 IntBranchSocket SpectrometerHit::fgLayerID("layerID", -1);
-Vector2FBranchSocket SpectrometerHit::fgWirePosition("wirePos", {"x", "y"}, {0, 0});
 
 SpectrometerHit::SpectrometerHit() noexcept :
     ITransientData(),
@@ -19,8 +18,7 @@ SpectrometerHit::SpectrometerHit() noexcept :
     fDriftDistanceVariance(fgDriftDistanceVariance.GetValue()),
     fHitPositionZVariance(fgHitPositionZVariance.GetValue()),
     fCellID(fgCellID.GetValue()),
-    fLayerID(fgLayerID.GetValue()),
-    fWirePosition(fgWirePosition.GetValue()) {}
+    fLayerID(fgLayerID.GetValue()) {}
 
 void SpectrometerHit::CreateBranches(TTree& tree) {
     ITransientData::CreateBranches(tree);
@@ -31,7 +29,6 @@ void SpectrometerHit::CreateBranches(TTree& tree) {
     fgHitPositionZVariance.CreateBranch(tree);
     fgCellID.CreateBranch(tree);
     fgLayerID.CreateBranch(tree);
-    fgWirePosition.CreateBranch(tree);
 }
 
 void SpectrometerHit::ConnectToBranches(TTree& tree) {
@@ -43,7 +40,6 @@ void SpectrometerHit::ConnectToBranches(TTree& tree) {
     fgHitPositionZVariance.ConnectToBranch(tree);
     fgCellID.ConnectToBranch(tree);
     fgLayerID.ConnectToBranch(tree);
-    fgWirePosition.ConnectToBranch(tree);
 }
 
 void SpectrometerHit::FillBranchSockets() const noexcept {
@@ -55,7 +51,6 @@ void SpectrometerHit::FillBranchSockets() const noexcept {
     fgHitPositionZVariance.SetValue(fHitPositionZVariance);
     fgCellID.SetValue(fCellID);
     fgLayerID.SetValue(fLayerID);
-    fgWirePosition.SetValue(fWirePosition);
 }
 
 } // namespace MACE::Core::DataModel::Hit

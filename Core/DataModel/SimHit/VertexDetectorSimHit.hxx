@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
-#include "Core/DataModel/BranchSocket/Vector3BranchSocket.hxx"
+#include "Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "Core/DataModel/Hit/VertexDetectorHit.hxx"
 
 namespace MACE::Core::DataModel::SimHit {
@@ -32,7 +32,7 @@ public:
     void SetVertexTime(Double_t val) { fVertexTime = val; }
     template<typename Vector3_t>
     void SetVertexPosition(Vector3_t&& pos) { fVertexPosition = std::forward<Vector3_t>(pos); }
-    void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition.Set(x, y, z); }
+    void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition = {x, y, z}; }
     template<typename String_t>
     void SetParticle(String_t&& particleName) { fParticle = std::forward<String_t>(particleName); }
     void SetG4EventID(Int_t val) { fG4EventID = val; }
@@ -48,7 +48,7 @@ private:
 
 private:
     Double_t fVertexTime;
-    TEveVectorD fVertexPosition;
+    Eigen::Vector3d fVertexPosition;
     ShortString fParticle;
     Int_t fG4EventID;
     Int_t fG4TrackID;

@@ -15,11 +15,11 @@ IntBranchSocket SpectrometerSimHit::fgG4TrackID("g4TrackID", -1);
 SpectrometerSimHit::SpectrometerSimHit() noexcept :
     SpectrometerHit(),
     fEnergy(fgEnergy.GetValue()),
-    fMomentum(fgMomentum.GetValue()),
+    fMomentum(fgMomentum.GetValue<Double_t>()),
     fVertexTime(fgVertexTime.GetValue()),
-    fVertexPosition(fgVertexPosition.GetValue()),
+    fVertexPosition(fgVertexPosition.GetValue<Double_t>()),
     fVertexEnergy(fgVertexEnergy.GetValue()),
-    fVertexMomentum(fgVertexMomentum.GetValue()),
+    fVertexMomentum(fgVertexMomentum.GetValue<Double_t>()),
     fParticle(fgParticle.GetValue()),
     fG4EventID(fgG4EventID.GetValue()),
     fG4TrackID(fgG4TrackID.GetValue()) {}
