@@ -6,7 +6,6 @@
 #include <cstring>
 #include <fstream>
 #include <set>
-#include <thread>
 #include <vector>
 
 namespace MACE::Utility::MPITools {
@@ -74,18 +73,18 @@ int MPIFileTools::MergeRootFilesViaFilesMap(std::string basicName, bool forced, 
             return 1;
         }
         // files to be merged
-        const auto fileCount = filePathList.size();
+        // const auto fileCount = filePathList.size();
 
         *fgOut << "Rank" << fgMasterRank << " is merging root files via hadd." << std::endl;
         // hadd command
         std::string command = "hadd ";
         // flag: -j
-        const unsigned int hardwareMax = std::thread::hardware_concurrency();
-        const unsigned int haddRequire = std::ceil(double(fileCount) / 5);
-        const auto haddProcesses = std::min(hardwareMax, haddRequire);
-        if (haddProcesses > 1) {
-            command += ("-j " + std::to_string(haddProcesses) + ' ');
-        }
+        // const unsigned int hardwareMax = std::thread::hardware_concurrency();
+        // const unsigned int haddRequire = std::ceil(double(fileCount) / 5);
+        // const auto haddProcesses = std::min(hardwareMax, haddRequire);
+        // if (haddProcesses > 1) {
+        //     command += ("-j " + std::to_string(haddProcesses) + ' ');
+        // }
         // flag: -f
         if (forced) { command += "-f "; }
         // TARGET
@@ -232,12 +231,12 @@ int MPIFileTools::MergeRootFilesMPIImpl(bool forced) const {
         // hadd command
         std::string command = "hadd ";
         // flag: -j
-        const unsigned int hardwareMax = std::thread::hardware_concurrency();
-        const unsigned int haddRequire = std::ceil(double(commSize) / 5.0);
-        const auto haddProcesses = std::min(hardwareMax, haddRequire);
-        if (haddProcesses > 1) {
-            command += ("-j " + std::to_string(haddProcesses) + ' ');
-        }
+        // const unsigned int hardwareMax = std::thread::hardware_concurrency();
+        // const unsigned int haddRequire = std::ceil(double(commSize) / 5.0);
+        // const auto haddProcesses = std::min(hardwareMax, haddRequire);
+        // if (haddProcesses > 1) {
+        //     command += ("-j " + std::to_string(haddProcesses) + ' ');
+        // }
         // flag: -f
         if (forced) { command += "-f "; }
         // TARGET
