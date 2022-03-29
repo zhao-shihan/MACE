@@ -1,4 +1,4 @@
-#include "Core/DataModel/DataHub.hxx"
+#include "Core/DataModel/DataFactory.hxx"
 #include "Core/DataModel/SimHit/CalorimeterSimHit.hxx"
 #include "Core/DataModel/SimHit/VertexDetectorSimHit.hxx"
 #include "Core/DataModel/SimVertex/MuoniumSimVertex.hxx"
@@ -25,7 +25,7 @@ using namespace MACE::Utility::MPITools;
 using namespace MACE::Geometry::Description;
 using namespace MACE::Core::DataModel;
 
-using MACE::Core::DataModel::DataHub;
+using MACE::Core::DataModel::DataFactory;
 
 using Helix_t = Track::HelixTrack;
 using Track_t = Track::PhysicsTrack;
@@ -86,7 +86,7 @@ int main(int, char* argv[]) {
     // output file of this rank
     TFile fileOut(mpiFileOut.GetFilePath().c_str(), "recreate");
 
-    DataHub dataHub;
+    DataFactory dataHub;
 
     dataHub.SetPrefixFormatOfTreeName("Rep#_");
     unsigned long allRepBegin;

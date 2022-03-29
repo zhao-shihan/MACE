@@ -5,8 +5,9 @@
 #include "mpi.h"
 
 #include <filesystem>
-#include <iostream>
+#include <ostream>
 #include <string_view>
+#include <vector>
 
 namespace MACE::Utility::MPITools {
 
@@ -71,7 +72,9 @@ public:
     [[nodiscard]] const auto& GetFilePath() const { return fFilePath; }
 
     int MergeRootFiles(bool forced = false) const;
-    static int MergeRootFilesViaFilesMap(std::string basicName, bool forced = false, const MPI::Comm& comm = MPI::COMM_WORLD);
+
+    [[nodiscard]] static std::vector<std::filesystem::path> ReadFilesMap(const std::string& basicName);
+    static int MergeRootFilesViaFilesMap(const std::string& basicName, bool forced = false, const MPI::Comm& comm = MPI::COMM_WORLD);
 
     static void SetOutStream(std::ostream& os) { fgOut = std::addressof(os); }
 

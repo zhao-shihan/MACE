@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/DataModel/DataHub.hxx"
+#include "Core/DataModel/DataFactory.hxx"
 #include "Utility/MPITools/MPIFileTools.hxx"
 #include "Utility/ObserverPtr.hxx"
 #include "Simulation/SimMACE/Global.hxx"
@@ -12,7 +12,7 @@
 
 namespace MACE::Simulation::SimMACE::Utility {
 
-using Core::DataModel::DataHub;
+using Core::DataModel::DataFactory;
 using Hit::CalorimeterHit;
 using Hit::SpectrometerHit;
 using Hit::VertexDetectorHit;
@@ -55,7 +55,7 @@ private:
     G4bool fEnableCoincidenceOfCalorimeter = true;
     G4bool fEnableCoincidenceOfVertexDetector = true;
 
-    DataHub fDataHub;
+    DataFactory fDataHub;
 
     G4int fRepetitionIDOfLastG4Event;
     std::shared_ptr<TTree> fCalorimeterHitTree;

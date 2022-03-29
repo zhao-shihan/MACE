@@ -4,7 +4,7 @@
 #include "Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 #include "Core/DataModel/BranchSocket/Vector2BranchSocket.hxx"
 #include "Core/DataModel/BranchSocket/Vector3BranchSocket.hxx"
-#include "Core/DataModel/DataHub.hxx"
+#include "Core/DataModel/DataFactory.hxx"
 #include "Core/DataModel/ITransientData.hxx"
 
 namespace MACE::Core::DataModel::Vertex {
@@ -17,7 +17,7 @@ using BranchSocket::Vector3FBranchSocket;
 using Utility::ShortString;
 
 class MuoniumVertex : public ITransientData {
-    friend DataHub;
+    friend DataFactory;
 
 public:
     MuoniumVertex() noexcept;

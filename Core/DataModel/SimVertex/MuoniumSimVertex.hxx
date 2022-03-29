@@ -3,7 +3,7 @@
 #include "Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 #include "Core/DataModel/BranchSocket/Vector3BranchSocket.hxx"
-#include "Core/DataModel/DataHub.hxx"
+#include "Core/DataModel/DataFactory.hxx"
 #include "Core/DataModel/Vertex/MuoniumVertex.hxx"
 
 namespace MACE::Core::DataModel::SimVertex {
@@ -15,7 +15,7 @@ using BranchSocket::Vector3FBranchSocket;
 using Utility::ShortString;
 
 class MuoniumSimVertex : public Vertex::MuoniumVertex {
-    friend DataHub;
+    friend DataFactory;
 
 public:
     MuoniumSimVertex() noexcept;

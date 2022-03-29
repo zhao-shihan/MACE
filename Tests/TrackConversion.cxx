@@ -1,16 +1,16 @@
-#include "Core/DataModel/DataHub.hxx"
+#include "Core/DataModel/DataFactory.hxx"
 #include "Core/DataModel/Track/HelixTrack.hxx"
 #include "Core/DataModel/Track/PhysicsTrack.hxx"
 #include "Utility/LiteralUnit.hxx"
 
 #include "CLHEP/Units/PhysicalConstants.h"
 
-using MACE::Core::DataModel::DataHub;
+using MACE::Core::DataModel::DataFactory;
 using namespace MACE::Core::DataModel::Track;
 using namespace MACE::Utility::LiteralUnit;
 
 int main(int, char** argv) {
-    DataHub dataHub;
+    DataFactory dataHub;
     dataHub.SetPrefixFormatOfTreeName("Rep#_Exact_");
 
     auto fileIn = TFile::Open(argv[1], "open");

@@ -5,8 +5,9 @@
 #include <cmath>
 #include <cstring>
 #include <fstream>
+#include <iostream>
 #include <set>
-#include <vector>
+#include <thread>
 
 namespace MACE::Utility::MPITools {
 
@@ -40,7 +41,28 @@ int MPIFileTools::MergeRootFiles(bool forced) const {
     }
 }
 
-int MPIFileTools::MergeRootFilesViaFilesMap(std::string basicName, bool forced, const MPI::Comm& comm) {
+std::vector<std::filesystem::path> MPIFileTools::ReadFilesMap(const std::string& basicName) {
+    // the .filesmap
+    std::ifstream fileMapIn(basicName + '/' + basicName + ".filesmap", std::ios::in);
+    // if not exists, skipped
+    if (not fileMapIn.is_open()) {
+        return std::vector<std::filesystem::path>();
+    }
+    // skip first 2 lines (annotations)
+    fileMapIn.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    fileMapIn.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    // file paths read
+    std::vector<std::filesystem::path> filePathList;
+    // read paths
+    while (not fileMapIn.eof()) {
+        std::filesystem::path thisPath;
+        fileMapIn >> thisPath;
+        filePathList.emplace_back(thisPath);
+    }
+    return filePathList;
+}
+
+int MPIFileTools::MergeRootFilesViaFilesMap(const std::string& basicName, bool forced, const MPI::Comm& comm) {
     int commRank = fgMasterRank;
     if (MPI::Is_initialized()) {
         commRank = comm.Get_rank();
@@ -48,43 +70,29 @@ int MPIFileTools::MergeRootFilesViaFilesMap(std::string basicName, bool forced, 
 
     int retVal = 0;
     if (commRank == fgMasterRank) {
-        std::filesystem::path basicPath(basicName);
-        // file map
-        std::ifstream fileMapIn(basicPath / (basicName + ".filesmap"), std::ios::in);
-        // if not exists, skipped
-        if (not fileMapIn.is_open()) {
-            return 1;
-        }
-        // skip first 2 lines (annotations)
-        fileMapIn.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        fileMapIn.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        // file paths read
-        std::vector<std::filesystem::path> filePathList;
-        // read paths
-        while (not fileMapIn.eof()) {
-            std::filesystem::path thisPath;
-            fileMapIn >> thisPath;
-            if (thisPath.extension() == ".root") {
-                filePathList.emplace_back(thisPath);
-            }
-        }
-        // if not root, skipped
+        auto filePathList = ReadFilesMap(basicName);
+        // remove not root
+        std::ranges::remove_if(filePathList,
+                               [](const auto& path) {
+                                   return path.extension() != ".root";
+                               });
+        // if nothing, skipped
         if (filePathList.empty()) {
             return 1;
         }
         // files to be merged
-        // const auto fileCount = filePathList.size();
+        const auto fileCount = filePathList.size();
 
         *fgOut << "Rank" << fgMasterRank << " is merging root files via hadd." << std::endl;
         // hadd command
         std::string command = "hadd ";
         // flag: -j
-        // const unsigned int hardwareMax = std::thread::hardware_concurrency();
-        // const unsigned int haddRequire = std::ceil(double(fileCount) / 5);
-        // const auto haddProcesses = std::min(hardwareMax, haddRequire);
-        // if (haddProcesses > 1) {
-        //     command += ("-j " + std::to_string(haddProcesses) + ' ');
-        // }
+        const unsigned int hardwareMax = std::thread::hardware_concurrency();
+        const unsigned int haddRequire = std::ceil(double(fileCount) / 5);
+        const auto haddProcesses = std::min(hardwareMax, haddRequire);
+        if (haddProcesses > 1) {
+            command += ("-j " + std::to_string(haddProcesses) + ' ');
+        }
         // flag: -f
         if (forced) { command += "-f "; }
         // TARGET
@@ -231,12 +239,12 @@ int MPIFileTools::MergeRootFilesMPIImpl(bool forced) const {
         // hadd command
         std::string command = "hadd ";
         // flag: -j
-        // const unsigned int hardwareMax = std::thread::hardware_concurrency();
-        // const unsigned int haddRequire = std::ceil(double(commSize) / 5.0);
-        // const auto haddProcesses = std::min(hardwareMax, haddRequire);
-        // if (haddProcesses > 1) {
-        //     command += ("-j " + std::to_string(haddProcesses) + ' ');
-        // }
+        const unsigned int hardwareMax = std::thread::hardware_concurrency();
+        const unsigned int haddRequire = std::ceil(double(commSize) / 5.0);
+        const auto haddProcesses = std::min(hardwareMax, haddRequire);
+        if (haddProcesses > 1) {
+            command += ("-j " + std::to_string(haddProcesses) + ' ');
+        }
         // flag: -f
         if (forced) { command += "-f "; }
         // TARGET

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
-#include "Core/DataModel/DataHub.hxx"
+#include "Core/DataModel/DataFactory.hxx"
 #include "Core/DataModel/ITransientData.hxx"
 
 namespace MACE::Core::DataModel::Hit {
@@ -10,7 +10,7 @@ using BranchSocket::DoubleBranchSocket;
 using BranchSocket::FloatBranchSocket;
 
 class CalorimeterHit : public ITransientData {
-    friend DataHub;
+    friend DataFactory;
 
 public:
     CalorimeterHit() noexcept;

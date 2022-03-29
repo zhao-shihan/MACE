@@ -10,7 +10,7 @@ using BranchSocket::ShortStringBranchSocket;
 using Utility::ShortString;
 
 class CalorimeterSimHit : public Hit::CalorimeterHit {
-    friend DataHub;
+    friend DataFactory;
 
 public:
     CalorimeterSimHit() noexcept;

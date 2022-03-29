@@ -1,17 +1,26 @@
 namespace MACE::Core::DataModel {
 
 template<IsTransientData Data_t>
-inline TString DataHub::GetTreeName(Long64_t treeIndex) const {
+TString DataFactory::GetTreeName(Long64_t treeIndex) const {
     return GetPrefixOfTreeName(treeIndex) + Data_t::BasicTreeName() + GetSuffixOfTreeName(treeIndex);
 }
 
 template<IsTransientData Data_t>
-inline ObserverPtr<TTree> DataHub::GetTree(TFile& file, Long64_t treeIndex) {
+ObserverPtr<TTree> DataFactory::GetTree(TFile& file, Long64_t treeIndex) const {
     return file.Get<TTree>(GetTreeName<Data_t>(treeIndex));
 }
 
+template<IsTransientData Data_t, std::convertible_to<std::filesystem::path::string_type> Path_t>
+std::shared_ptr<TChain> DataFactory::CreateChain(const std::vector<Path_t>& fileList, Long64_t treeIndex) const {
+    auto chain = std::make_shared<TChain>(GetTreeName<Data_t>(treeIndex));
+    for (auto&& file : fileList) {
+        chain->Add(file.c_str());
+    }
+    return chain;
+}
+
 template<IsTransientData Data_t>
-std::pair<Long64_t, Long64_t> DataHub::GetTreeIndexRange(TFile& file) {
+std::pair<Long64_t, Long64_t> DataFactory::GetTreeIndexRange(TFile& file) const {
     const auto maxKeys = file.GetNkeys();
     Long64_t beginIndex = 0;
     for (; file.GetKey(GetTreeName<Data_t>(beginIndex)) == nullptr; ++beginIndex) {
@@ -23,7 +32,7 @@ std::pair<Long64_t, Long64_t> DataHub::GetTreeIndexRange(TFile& file) {
 }
 
 template<IsTransientData Data_t>
-inline std::shared_ptr<TTree> DataHub::CreateTree(Long64_t treeIndex) {
+std::shared_ptr<TTree> DataFactory::CreateTree(Long64_t treeIndex) const {
     auto tree = std::make_shared<TTree>();
     tree->SetName(GetTreeName<Data_t>(treeIndex));
     tree->SetDirectory(nullptr);
@@ -32,7 +41,7 @@ inline std::shared_ptr<TTree> DataHub::CreateTree(Long64_t treeIndex) {
 }
 
 template<IsTransientData DataInTree_t, template<class T> typename Pointer_t, std::derived_from<DataInTree_t> DataInList_t>
-void DataHub::FillTree(const std::vector<Pointer_t<DataInList_t>>& dataList, TTree& tree, bool connected) {
+void DataFactory::FillTree(const std::vector<Pointer_t<DataInList_t>>& dataList, TTree& tree, bool connected) {
     if (not connected) { DataInTree_t::ConnectToBranches(tree); }
     for (auto&& data : dataList) {
         static_cast<const DataInTree_t&>(*data).FillBranchSockets();
@@ -41,7 +50,7 @@ void DataHub::FillTree(const std::vector<Pointer_t<DataInList_t>>& dataList, TTr
 }
 
 template<IsTransientData DataInTree_t, std::derived_from<DataInTree_t> DataInList_t>
-inline void DataHub::FillTree(const std::vector<DataInList_t*>& dataList, TTree& tree, bool connected) {
+void DataFactory::FillTree(const std::vector<DataInList_t*>& dataList, TTree& tree, bool connected) {
     //      A Trick, not means dataList should be observer
     //                          |
     //                          V
@@ -49,14 +58,14 @@ inline void DataHub::FillTree(const std::vector<DataInList_t*>& dataList, TTree&
 }
 
 template<IsTransientData DataInTree_t, template<class T> typename Pointer_t, std::derived_from<DataInTree_t> DataInList_t>
-inline std::shared_ptr<TTree> DataHub::CreateAndFillTree(const std::vector<Pointer_t<DataInList_t>>& dataList, Long64_t treeIndex) {
+std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<Pointer_t<DataInList_t>>& dataList, Long64_t treeIndex) const {
     auto tree = CreateTree<DataInTree_t>(treeIndex);
     FillTree<DataInTree_t, Pointer_t, DataInList_t>(dataList, *tree);
     return tree;
 }
 
 template<IsTransientData DataInTree_t, std::derived_from<DataInTree_t> DataInList_t>
-inline std::shared_ptr<TTree> DataHub::CreateAndFillTree(const std::vector<DataInList_t*>& dataList, Long64_t treeIndex) {
+std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<DataInList_t*>& dataList, Long64_t treeIndex) const {
     //                      A Trick, not means dataList should be observer
     //                                          |
     //                                          V
@@ -64,7 +73,7 @@ inline std::shared_ptr<TTree> DataHub::CreateAndFillTree(const std::vector<DataI
 }
 
 template<IsTransientData Data_t>
-std::vector<std::shared_ptr<Data_t>> DataHub::CreateAndFillList(TTree& tree, const std::pair<Long64_t, Long64_t>& entriesRange, bool connected) {
+std::vector<std::shared_ptr<Data_t>> DataFactory::CreateAndFillList(TTree& tree, const std::pair<Long64_t, Long64_t>& entriesRange, bool connected) {
     std::vector<std::shared_ptr<Data_t>> dataList(0);
     dataList.reserve(entriesRange.second - entriesRange.first);
     if (not connected) { Data_t::ConnectToBranches(tree); }
@@ -76,18 +85,18 @@ std::vector<std::shared_ptr<Data_t>> DataHub::CreateAndFillList(TTree& tree, con
 }
 
 template<IsTransientData Data_t>
-inline std::vector<std::shared_ptr<Data_t>> DataHub::CreateAndFillList(TTree& tree, bool connected) {
+std::vector<std::shared_ptr<Data_t>> DataFactory::CreateAndFillList(TTree& tree, bool connected) {
     return CreateAndFillList<Data_t>(tree, std::make_pair<Long64_t, Long64_t>(0, tree.GetEntries()), connected);
 }
 
 template<IsTransientData Data_t>
-inline std::vector<std::shared_ptr<Data_t>> DataHub::CreateAndFillList(TFile& file, const std::pair<Long64_t, Long64_t>& entriesRange, Long64_t treeIndex, bool connected) {
+std::vector<std::shared_ptr<Data_t>> DataFactory::CreateAndFillList(TFile& file, const std::pair<Long64_t, Long64_t>& entriesRange, Long64_t treeIndex, bool connected) const {
     auto tree = GetTree<Data_t>(file, treeIndex);
     return CreateAndFillList<Data_t>(*tree, entriesRange, connected);
 }
 
 template<IsTransientData Data_t>
-inline std::vector<std::shared_ptr<Data_t>> DataHub::CreateAndFillList(TFile& file, Long64_t treeIndex, bool connected) {
+std::vector<std::shared_ptr<Data_t>> DataFactory::CreateAndFillList(TFile& file, Long64_t treeIndex, bool connected) const {
     auto tree = GetTree<Data_t>(file, treeIndex);
     return CreateAndFillList<Data_t>(*tree, connected);
 }

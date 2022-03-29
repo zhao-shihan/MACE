@@ -2,7 +2,7 @@
 
 #include "Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "Core/DataModel/BranchSocket/Vector2BranchSocket.hxx"
-#include "Core/DataModel/DataHub.hxx"
+#include "Core/DataModel/DataFactory.hxx"
 #include "Core/DataModel/ITransientData.hxx"
 #include "Utility/LiteralUnit.hxx"
 #include "Utility/PhysicalConstant.hxx"
@@ -18,7 +18,7 @@ using namespace Utility::LiteralUnit::MagneticFluxDensity;
 class PhysicsTrack;
 
 class HelixTrack : public ITransientData {
-    friend DataHub;
+    friend DataFactory;
 
 public:
     HelixTrack() noexcept;

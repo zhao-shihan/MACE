@@ -14,7 +14,7 @@ using BranchSocket::Vector3FBranchSocket;
 using Utility::ShortString;
 
 class SpectrometerSimHit : public Hit::SpectrometerHit {
-    friend DataHub;
+    friend DataFactory;
 
 public:
     SpectrometerSimHit() noexcept;

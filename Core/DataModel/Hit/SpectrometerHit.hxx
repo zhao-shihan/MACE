@@ -2,7 +2,7 @@
 
 #include "Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "Core/DataModel/BranchSocket/Vector2BranchSocket.hxx"
-#include "Core/DataModel/DataHub.hxx"
+#include "Core/DataModel/DataFactory.hxx"
 #include "Core/DataModel/ITransientData.hxx"
 
 namespace MACE::Core::DataModel::Hit {
@@ -13,7 +13,7 @@ using BranchSocket::IntBranchSocket;
 using BranchSocket::Vector2FBranchSocket;
 
 class SpectrometerHit : public ITransientData {
-    friend DataHub;
+    friend DataFactory;
     using Base = ITransientData;
 
 public:

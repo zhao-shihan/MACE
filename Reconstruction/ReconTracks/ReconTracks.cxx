@@ -1,4 +1,4 @@
-#include "Core/DataModel/DataHub.hxx"
+#include "Core/DataModel/DataFactory.hxx"
 #include "Utility/MPITools/MPIFileTools.hxx"
 #include "Utility/MPITools/MPIJobsAssigner.hxx"
 #include "Utility/PhysicalConstant.hxx"
@@ -18,7 +18,7 @@ using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
 using namespace MACE::Utility::MPITools;
 using namespace MACE::Utility::PhysicalConstant;
 
-using MACE::Core::DataModel::DataHub;
+using MACE::Core::DataModel::DataFactory;
 
 using Hit_t = SpectrometerSimHit;
 
@@ -54,7 +54,7 @@ int main(int, char** argv) {
     MPIFileTools mpiFileOut(outName.string() + "_recTrk", ".root");
     TFile fileOut(mpiFileOut.GetFilePath().c_str(), "recreate");
 
-    DataHub dataHub;
+    DataFactory dataHub;
     dataHub.SetPrefixFormatOfTreeName("Rep#_");
     auto treeIndexRange = dataHub.GetTreeIndexRange<Hit_t>(fileIn);
     auto [treeBegin, treeEnd] = MPIJobsAssigner(treeIndexRange).GetJobsIndexRange();

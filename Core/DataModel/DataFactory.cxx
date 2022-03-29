@@ -1,6 +1,6 @@
-#include "Core/DataModel/DataHub.hxx"
+#include "Core/DataModel/DataFactory.hxx"
 
-using MACE::Core::DataModel::DataHub;
+using MACE::Core::DataModel::DataFactory;
 
 static Bool_t Split(const TString& format, Char_t indexer, std::pair<TString, TString>& result) {
     auto index = format.First(indexer);
@@ -13,18 +13,18 @@ static Bool_t Split(const TString& format, Char_t indexer, std::pair<TString, TS
     }
 }
 
-void DataHub::SetIndexerOfTreeName(Char_t indexer) {
+void DataFactory::SetIndexerOfTreeName(Char_t indexer) {
     fIndexer = indexer;
     fPrefixHasIndexer = Split(fPrefixFormat, fIndexer, fSplitPrefix);
     fSuffixHasIndexer = Split(fSuffixFormat, fIndexer, fSplitSuffix);
 }
 
-void DataHub::SetPrefixFormatOfTreeName(const TString& prefix) {
+void DataFactory::SetPrefixFormatOfTreeName(const TString& prefix) {
     fPrefixFormat = prefix;
     fPrefixHasIndexer = Split(fPrefixFormat, fIndexer, fSplitPrefix);
 }
 
-void DataHub::SetSuffixFormatOfTreeName(const TString& suffix) {
+void DataFactory::SetSuffixFormatOfTreeName(const TString& suffix) {
     fSuffixFormat = suffix;
     fSuffixHasIndexer = Split(fSuffixFormat, fIndexer, fSplitSuffix);
 }

@@ -13,7 +13,7 @@ using BranchSocket::Vector3FBranchSocket;
 using Utility::ShortString;
 
 class VertexDetectorSimHit : public Hit::VertexDetectorHit {
-    friend DataHub;
+    friend DataFactory;
 
 public:
     VertexDetectorSimHit() noexcept;
