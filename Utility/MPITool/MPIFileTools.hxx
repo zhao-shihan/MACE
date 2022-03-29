@@ -69,11 +69,11 @@ public:
     MPIFileTools(const MPIFileTools&) = delete;
     MPIFileTools& operator=(const MPIFileTools&) = delete;
 
-    [[nodiscard]] const auto& GetFilePath() const { return fFilePath; }
+    const auto& GetFilePath() const { return fFilePath; }
 
     int MergeRootFiles(bool forced = false) const;
 
-    [[nodiscard]] static std::vector<std::filesystem::path> ReadFilesMap(const std::string& basicName);
+    static std::vector<std::filesystem::path> ReadFilesMap(const std::string& basicName);
     static int MergeRootFilesViaFilesMap(const std::string& basicName, bool forced = false, const MPI::Comm& comm = MPI::COMM_WORLD);
 
     static void SetOutStream(std::ostream& os) { fgOut = std::addressof(os); }
@@ -82,8 +82,8 @@ private:
     void ConstructPathMPIImpl();
     void ConstructPathSerialImpl() { fFilePath = fBasicName + fSuffix; }
 
-    [[nodiscard]] int MergeRootFilesMPIImpl(bool forced) const;
-    [[nodiscard]] int MergeRootFilesSerialImpl() const;
+    int MergeRootFilesMPIImpl(bool forced) const;
+    int MergeRootFilesSerialImpl() const;
     void ReportSuffixNotRoot() const;
 
 private:

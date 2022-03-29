@@ -57,19 +57,19 @@ public:
 
     void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlaps = checkOverlaps; }
 
-    [[nodiscard]] auto& GetCalorimeterSensitiveRegion() const { return *fCalorimeterSensitiveRegion; }
-    [[nodiscard]] auto& GetDefaultSolidRegion() const { return *fDefaultSolidRegion; }
-    [[nodiscard]] auto& GetDefaultGaseousRegion() const { return *fDefaultGaseousRegion; }
-    [[nodiscard]] auto& GetShieldRegion() const { return *fShieldRegion; }
-    [[nodiscard]] auto& GetSolenoidOrMagnetRegion() const { return *fSolenoidOrMagnetRegion; }
-    [[nodiscard]] auto& GetSpectrometerSensitiveRegion() const { return *fSpectrometerSensitiveRegion; }
-    [[nodiscard]] auto& GetTargetRegion() const { return *fTargetRegion; }
-    [[nodiscard]] auto& GetVacuumRegion() const { return *fVacuumRegion; }
-    [[nodiscard]] auto& GetVertexDetectorSensitiveRegion() const { return *fVertexDetectorSensitiveRegion; }
+    auto& GetCalorimeterSensitiveRegion() const { return *fCalorimeterSensitiveRegion; }
+    auto& GetDefaultSolidRegion() const { return *fDefaultSolidRegion; }
+    auto& GetDefaultGaseousRegion() const { return *fDefaultGaseousRegion; }
+    auto& GetShieldRegion() const { return *fShieldRegion; }
+    auto& GetSolenoidOrMagnetRegion() const { return *fSolenoidOrMagnetRegion; }
+    auto& GetSpectrometerSensitiveRegion() const { return *fSpectrometerSensitiveRegion; }
+    auto& GetTargetRegion() const { return *fTargetRegion; }
+    auto& GetVacuumRegion() const { return *fVacuumRegion; }
+    auto& GetVertexDetectorSensitiveRegion() const { return *fVertexDetectorSensitiveRegion; }
 
-    [[nodiscard]] auto& GetCalorimeterSD() const { return *fCalorimeterSD; }
-    [[nodiscard]] auto& GetSpectrometerSD() const { return *fSpectrometerSD; }
-    [[nodiscard]] auto& GetVertexDetectorSD() const { return *fVertexDetectorSD; }
+    auto& GetCalorimeterSD() const { return *fCalorimeterSD; }
+    auto& GetSpectrometerSD() const { return *fSpectrometerSD; }
+    auto& GetVertexDetectorSD() const { return *fVertexDetectorSD; }
 
 private:
     void ConstructVolumes();

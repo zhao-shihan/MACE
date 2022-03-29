@@ -20,18 +20,18 @@ private:
     AcceleratorField& operator=(const AcceleratorField&) = delete;
 
 public:
-    [[nodiscard]] std::string GetName() const override { return "AcceleratorField"; }
-    [[nodiscard]] std::string GetOverallDescription() const override { return "An accelerator field box inside spectrometer"; }
-    [[nodiscard]] std::string GetMaterialDescription() const override { return "Vacuum."; }
-    [[nodiscard]] std::string GetShapeDescription() const override { return "A box with certain Width(along XY), UpStreamLength(length of z<0), and DownStreamLength(length of z>0)."; }
-    [[nodiscard]] std::string GetMotherDescription() const override { return "SpectrometerField"; }
-    [[nodiscard]] std::string GetTranslationDescription() const override { return "Translation should ensure the center z position satisifies shape description (see above)."; }
-    [[nodiscard]] std::string GetRotationDescription() const override { return "No rotation."; }
+    std::string GetName() const override { return "AcceleratorField"; }
+    std::string GetOverallDescription() const override { return "An accelerator field box inside spectrometer"; }
+    std::string GetMaterialDescription() const override { return "Vacuum."; }
+    std::string GetShapeDescription() const override { return "A box with certain Width(along XY), UpStreamLength(length of z<0), and DownStreamLength(length of z>0)."; }
+    std::string GetMotherDescription() const override { return "SpectrometerField"; }
+    std::string GetTranslationDescription() const override { return "Translation should ensure the center z position satisifies shape description (see above)."; }
+    std::string GetRotationDescription() const override { return "No rotation."; }
 
-    [[nodiscard]] const auto& GetRadius() const { return fRadius; }
-    [[nodiscard]] const auto& GetLength() const { return fLength; }
-    [[nodiscard]] const auto& GetDownStreamLength() const { return fDownStreamLength; }
-    [[nodiscard]] G4Transform3D GetTransform() const;
+    const auto& GetRadius() const { return fRadius; }
+    const auto& GetLength() const { return fLength; }
+    const auto& GetDownStreamLength() const { return fDownStreamLength; }
+    G4Transform3D GetTransform() const;
 
     void SetRadius(double val) { fRadius = val; }
     void SetLength(double val) { fLength = val; }

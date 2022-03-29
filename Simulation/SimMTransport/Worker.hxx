@@ -21,7 +21,7 @@ public:
     void Run();
     void Finalize();
 
-    [[nodiscard]] clock_t GetUsedCPUTime() const { return fEndCPUTime - fBeginCPUTime; }
+    clock_t GetUsedCPUTime() const { return fEndCPUTime - fBeginCPUTime; }
 };
 
 } // namespace MACE::Simulation::SimMTransport

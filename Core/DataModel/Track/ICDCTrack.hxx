@@ -20,9 +20,9 @@ public:
     ICDCTrack& operator=(const ICDCTrack&) noexcept = default;
     ICDCTrack& operator=(ICDCTrack&&) noexcept = default;
 
-    [[nodiscard]] const auto& GetNumHits() const { return fNumHits; }
-    [[nodiscard]] const auto& GetChi2() const { return fChi2; }
-    [[nodiscard]] const auto& GetVertexTime() const { return fVertexTime; }
+    const auto& GetNumHits() const { return fNumHits; }
+    const auto& GetChi2() const { return fChi2; }
+    const auto& GetVertexTime() const { return fVertexTime; }
 
     void SetNumHits(Int_t n) { fNumHits = n; }
     void SetChi2(Double_t val) { fChi2 = val; }

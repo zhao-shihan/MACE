@@ -15,16 +15,16 @@ private:
     VertexDetector& operator=(const VertexDetector&) = delete;
 
 public:
-    [[nodiscard]] std::string GetName() const override { return "VertexDetector"; }
-    [[nodiscard]] std::string GetOverallDescription() const override { return ""; }
-    [[nodiscard]] std::string GetMaterialDescription() const override { return ""; }
-    [[nodiscard]] std::string GetShapeDescription() const override { return ""; }
-    [[nodiscard]] std::string GetMotherDescription() const override { return ""; }
-    [[nodiscard]] std::string GetTranslationDescription() const override { return ""; }
-    [[nodiscard]] std::string GetRotationDescription() const override { return ""; }
+    std::string GetName() const override { return "VertexDetector"; }
+    std::string GetOverallDescription() const override { return ""; }
+    std::string GetMaterialDescription() const override { return ""; }
+    std::string GetShapeDescription() const override { return ""; }
+    std::string GetMotherDescription() const override { return ""; }
+    std::string GetTranslationDescription() const override { return ""; }
+    std::string GetRotationDescription() const override { return ""; }
 
-    [[nodiscard]] const auto& GetWidth() const { return fWidth; }
-    [[nodiscard]] const auto& GetThickness() const { return fThickness; }
+    const auto& GetWidth() const { return fWidth; }
+    const auto& GetThickness() const { return fThickness; }
 
     void SetWidth(double val) { fWidth = val; }
     void SetThickness(double val) { fThickness = val; }

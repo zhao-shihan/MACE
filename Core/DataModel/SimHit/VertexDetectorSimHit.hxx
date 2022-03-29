@@ -23,11 +23,11 @@ public:
     VertexDetectorSimHit& operator=(const VertexDetectorSimHit& hit) noexcept = default;
     VertexDetectorSimHit& operator=(VertexDetectorSimHit&& hit) noexcept = default;
 
-    [[nodiscard]] const auto& GetVertexTime() const { return fVertexTime; }
-    [[nodiscard]] const auto& GetVertexPosition() const { return fVertexPosition; }
-    [[nodiscard]] const auto& GetParticle() const { return fParticle; }
-    [[nodiscard]] const auto& GetG4EventID() const { return fG4EventID; }
-    [[nodiscard]] const auto& GetG4TrackID() const { return fG4TrackID; }
+    const auto& GetVertexTime() const { return fVertexTime; }
+    const auto& GetVertexPosition() const { return fVertexPosition; }
+    const auto& GetParticle() const { return fParticle; }
+    const auto& GetG4EventID() const { return fG4EventID; }
+    const auto& GetG4TrackID() const { return fG4TrackID; }
 
     void SetVertexTime(Double_t val) { fVertexTime = val; }
     template<typename Vector3_t>

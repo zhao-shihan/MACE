@@ -22,9 +22,9 @@ public:
     VertexDetectorHit& operator=(const VertexDetectorHit& hit) noexcept = default;
     VertexDetectorHit& operator=(VertexDetectorHit&& hit) noexcept = default;
 
-    [[nodiscard]] const auto& GetHitTime() const { return fHitTime; }
-    [[nodiscard]] const auto& GetHitPosition() const { return fHitPosition; }
-    [[nodiscard]] const auto& GetHitPositionVariance() const { return fHitPositionVariance; }
+    const auto& GetHitTime() const { return fHitTime; }
+    const auto& GetHitPosition() const { return fHitPosition; }
+    const auto& GetHitPositionVariance() const { return fHitPositionVariance; }
 
     void SetHitTime(Double_t val) { fHitTime = val; }
     template<typename Vector2_t>

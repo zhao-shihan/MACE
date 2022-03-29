@@ -20,7 +20,7 @@ protected:
 
 public:
     virtual bool Fit(std::vector<HitPtr>& hitDataToBeFitted, Track_t& seed) = 0;
-    [[nodiscard]] const auto& GetOmitted() const { return fOmittedList; }
+    const auto& GetOmitted() const { return fOmittedList; }
 
     void SetVerbose(int verbose) { fVerbose = verbose; }
 

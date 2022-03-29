@@ -13,7 +13,7 @@ public:
     FundamentalBranchSocket(const FundamentalBranchSocket&) = delete;
     FundamentalBranchSocket& operator=(const FundamentalBranchSocket&) = delete;
 
-    [[nodiscard]] const Fund_t& GetValue() const override { return fValue; }
+    const Fund_t& GetValue() const override { return fValue; }
     void SetValue(const Fund_t& value) override { fValue = value; }
 
     void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, std::addressof(fValue)); }

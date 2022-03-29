@@ -38,14 +38,14 @@ public:
 
     void WriteSelfAndDesendentsToGDML(std::string_view fileName, size_t volumeIndex = 0) const;
 
-    [[nodiscard]] auto GetLogicalVolumeNum() const { return fLogicalVolumes.size(); }
-    [[nodiscard]] auto GetLogicalVolume(size_t volumeIndex = 0) const { return fLogicalVolumes.at(volumeIndex).get(); }
-    [[nodiscard]] auto&& GetLogicalVolumeName(size_t volumeIndex = 0) const { return GetLogicalVolume(volumeIndex)->GetName(); }
-    [[nodiscard]] auto GetMaterial(size_t volumeIndex = 0) const { return GetLogicalVolume(volumeIndex)->GetMaterial(); }
+    auto GetLogicalVolumeNum() const { return fLogicalVolumes.size(); }
+    auto GetLogicalVolume(size_t volumeIndex = 0) const { return fLogicalVolumes.at(volumeIndex).get(); }
+    auto&& GetLogicalVolumeName(size_t volumeIndex = 0) const { return GetLogicalVolume(volumeIndex)->GetName(); }
+    auto GetMaterial(size_t volumeIndex = 0) const { return GetLogicalVolume(volumeIndex)->GetMaterial(); }
 
-    [[nodiscard]] auto GetPhysicalVolumeNum() const { return fPhysicalVolumes.size(); }
-    [[nodiscard]] auto GetPhysicalVolume(size_t volumeIndex = 0) const { return fPhysicalVolumes.at(volumeIndex).get(); }
-    [[nodiscard]] auto&& GetPhysicalVolumeName(size_t volumeIndex = 0) const { return GetPhysicalVolume(volumeIndex)->GetName(); }
+    auto GetPhysicalVolumeNum() const { return fPhysicalVolumes.size(); }
+    auto GetPhysicalVolume(size_t volumeIndex = 0) const { return fPhysicalVolumes.at(volumeIndex).get(); }
+    auto&& GetPhysicalVolumeName(size_t volumeIndex = 0) const { return GetPhysicalVolume(volumeIndex)->GetName(); }
 
 protected:
     // Make a G4Solid and keep it (just for deleting when Entity deconstructs).

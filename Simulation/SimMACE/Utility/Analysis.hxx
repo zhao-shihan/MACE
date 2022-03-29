@@ -31,7 +31,7 @@ private:
 
 public:
     void SetResultName(const G4String& resultName) { fResultName = resultName; }
-    [[nodiscard]] const G4String& GetResultName() const { return fResultName; }
+    const G4String& GetResultName() const { return fResultName; }
     void SetEnableCoincidenceOfCalorimeter(G4bool val) { fEnableCoincidenceOfCalorimeter = val; }
     void SetEnableCoincidenceOfVertexDetector(G4bool val) { fEnableCoincidenceOfVertexDetector = val; }
 

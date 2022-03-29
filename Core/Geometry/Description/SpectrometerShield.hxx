@@ -15,18 +15,18 @@ private:
     SpectrometerShield& operator=(const SpectrometerShield&) = delete;
 
 public:
-    [[nodiscard]] std::string GetName() const override { return "SpectrometerShield"; }
-    [[nodiscard]] std::string GetOverallDescription() const override { return ""; }
-    [[nodiscard]] std::string GetMaterialDescription() const override { return ""; }
-    [[nodiscard]] std::string GetShapeDescription() const override { return ""; }
-    [[nodiscard]] std::string GetMotherDescription() const override { return ""; }
-    [[nodiscard]] std::string GetTranslationDescription() const override { return ""; }
-    [[nodiscard]] std::string GetRotationDescription() const override { return ""; }
+    std::string GetName() const override { return "SpectrometerShield"; }
+    std::string GetOverallDescription() const override { return ""; }
+    std::string GetMaterialDescription() const override { return ""; }
+    std::string GetShapeDescription() const override { return ""; }
+    std::string GetMotherDescription() const override { return ""; }
+    std::string GetTranslationDescription() const override { return ""; }
+    std::string GetRotationDescription() const override { return ""; }
 
-    [[nodiscard]] const auto& GetInnerRadius() const { return fInnerRadius; }
-    [[nodiscard]] const auto& GetInnerLength() const { return fInnerLength; }
-    [[nodiscard]] const auto& GetWindowRadius() const { return fWindowRadius; }
-    [[nodiscard]] const auto& GetThickness() const { return fThickness; }
+    const auto& GetInnerRadius() const { return fInnerRadius; }
+    const auto& GetInnerLength() const { return fInnerLength; }
+    const auto& GetWindowRadius() const { return fWindowRadius; }
+    const auto& GetThickness() const { return fThickness; }
 
     void SetInnerRadius(double val) { fInnerRadius = val; }
     void SetInnerLength(double val) { fInnerLength = val; }

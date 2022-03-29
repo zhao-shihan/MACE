@@ -29,10 +29,10 @@ public:
 
     explicit CDCPhysicsTrack(const CDCHelixTrack& helix, Double_t phiVertex = 0, Double_t B = 0.1_T, Double_t mass = electron_mass_c2);
 
-    [[nodiscard]] const auto& GetVertexPosition() const { return fVertexPosition; }
-    [[nodiscard]] const auto& GetVertexEnergy() const { return fVertexEnergy; }
-    [[nodiscard]] const auto& GetVertexMomentum() const { return fVertexMomentum; }
-    [[nodiscard]] const auto& GetParticle() const { return fParticle; }
+    const auto& GetVertexPosition() const { return fVertexPosition; }
+    const auto& GetVertexEnergy() const { return fVertexEnergy; }
+    const auto& GetVertexMomentum() const { return fVertexMomentum; }
+    const auto& GetParticle() const { return fParticle; }
 
     template<typename Vector3_t>
     void SetVertexPosition(Vector3_t&& pos) { fVertexPosition = std::forward<Vector3_t>(pos); }

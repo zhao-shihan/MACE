@@ -25,11 +25,11 @@ public:
     MuoniumSimVertex& operator=(const MuoniumSimVertex&) noexcept = default;
     MuoniumSimVertex& operator=(MuoniumSimVertex&&) noexcept = default;
 
-    [[nodiscard]] const auto& GetTrueVertexTime() const { return fTrueVertexTime; }
-    [[nodiscard]] const auto& GetTrueVertexPosition() const { return fTrueVertexPosition; }
-    [[nodiscard]] const auto& GetTrueVertexEnergy() const { return fTrueVertexEnergy; }
-    [[nodiscard]] const auto& GetTrueVertexMomentum() const { return fTrueVertexMomentum; }
-    [[nodiscard]] const auto& GetTrueParticles() const { return fTrueParticles; }
+    const auto& GetTrueVertexTime() const { return fTrueVertexTime; }
+    const auto& GetTrueVertexPosition() const { return fTrueVertexPosition; }
+    const auto& GetTrueVertexEnergy() const { return fTrueVertexEnergy; }
+    const auto& GetTrueVertexMomentum() const { return fTrueVertexMomentum; }
+    const auto& GetTrueParticles() const { return fTrueParticles; }
 
     void SetTrueVertexTime(Double_t val) { fTrueVertexTime = val; }
     template<typename Vector3_t>

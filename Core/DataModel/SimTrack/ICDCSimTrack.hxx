@@ -19,8 +19,8 @@ public:
     ICDCSimTrack& operator=(const ICDCSimTrack&) noexcept = default;
     ICDCSimTrack& operator=(ICDCSimTrack&&) noexcept = default;
 
-    [[nodiscard]] const auto& GetTrueNumHits() const { return fTrueNumHits; }
-    [[nodiscard]] const auto& GetTrueVertexTime() const { return fTrueVertexTime; }
+    const auto& GetTrueNumHits() const { return fTrueNumHits; }
+    const auto& GetTrueVertexTime() const { return fTrueVertexTime; }
 
     void SetTrueNumHits(Int_t n) { fTrueNumHits = n; }
     void SetTrueVertexTime(Double_t val) { fTrueVertexTime = val; }

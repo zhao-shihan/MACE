@@ -23,13 +23,13 @@ public:
     SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept = default;
     SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept = default;
 
-    [[nodiscard]] const auto& GetHitTime() const { return fHitTime; }
-    [[nodiscard]] const auto& GetDriftDistance() const { return fDriftDistance; }
-    [[nodiscard]] const auto& GetHitPositionZ() const { return fHitPositionZ; }
-    [[nodiscard]] const auto& GetDriftDistanceVariance() const { return fDriftDistanceVariance; }
-    [[nodiscard]] const auto& GetHitPositionZVariance() const { return fHitPositionZVariance; }
-    [[nodiscard]] const auto& GetCellID() const { return fCellID; }
-    [[nodiscard]] const auto& GetLayerID() const { return fLayerID; }
+    const auto& GetHitTime() const { return fHitTime; }
+    const auto& GetDriftDistance() const { return fDriftDistance; }
+    const auto& GetHitPositionZ() const { return fHitPositionZ; }
+    const auto& GetDriftDistanceVariance() const { return fDriftDistanceVariance; }
+    const auto& GetHitPositionZVariance() const { return fHitPositionZVariance; }
+    const auto& GetCellID() const { return fCellID; }
+    const auto& GetLayerID() const { return fLayerID; }
 
     void SetHitTime(Double_t val) { fHitTime = val; }
     void SetDriftDistance(Double_t d) { fDriftDistance = d; }

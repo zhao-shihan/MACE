@@ -15,20 +15,20 @@ private:
     Collimator& operator=(const Collimator&) = delete;
 
 public:
-    [[nodiscard]] std::string GetName() const override { return "Collimator"; }
-    [[nodiscard]] std::string GetOverallDescription() const override { return ""; }
-    [[nodiscard]] std::string GetMaterialDescription() const override { return ""; }
-    [[nodiscard]] std::string GetShapeDescription() const override { return ""; }
-    [[nodiscard]] std::string GetMotherDescription() const override { return ""; }
-    [[nodiscard]] std::string GetTranslationDescription() const override { return ""; }
-    [[nodiscard]] std::string GetRotationDescription() const override { return ""; }
+    std::string GetName() const override { return "Collimator"; }
+    std::string GetOverallDescription() const override { return ""; }
+    std::string GetMaterialDescription() const override { return ""; }
+    std::string GetShapeDescription() const override { return ""; }
+    std::string GetMotherDescription() const override { return ""; }
+    std::string GetTranslationDescription() const override { return ""; }
+    std::string GetRotationDescription() const override { return ""; }
 
-    [[nodiscard]] const auto& GetInnerRadius() const { return fInnerRadius; }
-    [[nodiscard]] const auto& GetOuterRadius() const { return fOuterRadius; }
-    [[nodiscard]] const auto& GetLength() const { return fLength; }
-    [[nodiscard]] const auto& GetThickness() const { return fThickness; }
-    [[nodiscard]] const auto& GetZPosition() const { return fZPosition; }
-    [[nodiscard]] const auto& GetCount() const { return fCount; }
+    const auto& GetInnerRadius() const { return fInnerRadius; }
+    const auto& GetOuterRadius() const { return fOuterRadius; }
+    const auto& GetLength() const { return fLength; }
+    const auto& GetThickness() const { return fThickness; }
+    const auto& GetZPosition() const { return fZPosition; }
+    const auto& GetCount() const { return fCount; }
 
     void SetInnerRadius(double val) { fInnerRadius = val; }
     void SetOuterRadius(double val) { fOuterRadius = val; }

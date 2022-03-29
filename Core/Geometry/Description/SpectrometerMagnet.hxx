@@ -15,17 +15,17 @@ private:
     SpectrometerMagnet& operator=(const SpectrometerMagnet&) = delete;
 
 public:
-    [[nodiscard]] std::string GetName() const override { return "SpectrometerMagnet"; }
-    [[nodiscard]] std::string GetOverallDescription() const override { return "The magnet of spectrometer."; }
-    [[nodiscard]] std::string GetMaterialDescription() const override { return ""; }
-    [[nodiscard]] std::string GetShapeDescription() const override { return "G4Tubs."; }
-    [[nodiscard]] std::string GetMotherDescription() const override { return "SpectrometerField"; }
-    [[nodiscard]] std::string GetTranslationDescription() const override { return "No translation."; }
-    [[nodiscard]] std::string GetRotationDescription() const override { return "No rotation."; }
+    std::string GetName() const override { return "SpectrometerMagnet"; }
+    std::string GetOverallDescription() const override { return "The magnet of spectrometer."; }
+    std::string GetMaterialDescription() const override { return ""; }
+    std::string GetShapeDescription() const override { return "G4Tubs."; }
+    std::string GetMotherDescription() const override { return "SpectrometerField"; }
+    std::string GetTranslationDescription() const override { return "No translation."; }
+    std::string GetRotationDescription() const override { return "No rotation."; }
 
-    [[nodiscard]] const auto& GetInnerRadius() const { return fInnerRadius; }
-    [[nodiscard]] const auto& GetOuterRadius() const { return fOuterRadius; }
-    [[nodiscard]] const auto& GetLength() const { return fLength; }
+    const auto& GetInnerRadius() const { return fInnerRadius; }
+    const auto& GetOuterRadius() const { return fOuterRadius; }
+    const auto& GetLength() const { return fLength; }
 
     void SetInnerRadius(double val) { fInnerRadius = val; }
     void SetOuterRadius(double val) { fOuterRadius = val; }

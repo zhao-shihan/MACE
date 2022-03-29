@@ -17,17 +17,17 @@ private:
     SelectorField& operator=(const SelectorField&) = delete;
 
 public:
-    [[nodiscard]] std::string GetName() const override { return "SelectorField"; }
-    [[nodiscard]] std::string GetOverallDescription() const override { return ""; }
-    [[nodiscard]] std::string GetMaterialDescription() const override { return ""; }
-    [[nodiscard]] std::string GetShapeDescription() const override { return ""; }
-    [[nodiscard]] std::string GetMotherDescription() const override { return ""; }
-    [[nodiscard]] std::string GetTranslationDescription() const override { return ""; }
-    [[nodiscard]] std::string GetRotationDescription() const override { return ""; }
+    std::string GetName() const override { return "SelectorField"; }
+    std::string GetOverallDescription() const override { return ""; }
+    std::string GetMaterialDescription() const override { return ""; }
+    std::string GetShapeDescription() const override { return ""; }
+    std::string GetMotherDescription() const override { return ""; }
+    std::string GetTranslationDescription() const override { return ""; }
+    std::string GetRotationDescription() const override { return ""; }
 
-    [[nodiscard]] const auto& GetRadius() const { return fRadius; }
-    [[nodiscard]] const auto& GetLength() const { return fLength; }
-    [[nodiscard]] const auto& GetZPosition() const { return fZPosition; }
+    const auto& GetRadius() const { return fRadius; }
+    const auto& GetLength() const { return fLength; }
+    const auto& GetZPosition() const { return fZPosition; }
 
     void SetRadius(double val) { fRadius = val; }
     void SetLength(double val) { fLength = val; }

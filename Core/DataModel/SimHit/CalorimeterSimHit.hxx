@@ -20,9 +20,9 @@ public:
     CalorimeterSimHit& operator=(const CalorimeterSimHit& hit) noexcept = default;
     CalorimeterSimHit& operator=(CalorimeterSimHit&& hit) noexcept = default;
 
-    [[nodiscard]] const auto& GetParticle() const { return fParticle; }
-    [[nodiscard]] const auto& GetG4EventID() const { return fG4EventID; }
-    [[nodiscard]] const auto& GetG4TrackID() const { return fG4TrackID; }
+    const auto& GetParticle() const { return fParticle; }
+    const auto& GetG4EventID() const { return fG4EventID; }
+    const auto& GetG4TrackID() const { return fG4TrackID; }
 
     template<typename String_t>
     void SetParticle(String_t&& particleName) { fParticle = std::forward<String_t>(particleName); }

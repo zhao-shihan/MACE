@@ -14,7 +14,7 @@ public:
     IBranchSocket& operator=(const IBranchSocket&) = delete;
     virtual ~IBranchSocket() noexcept = default;
 
-    [[nodiscard]] virtual std::conditional_t<UseReferenceInGetSet, const Type&, Type> GetValue() const = 0;
+    virtual std::conditional_t<UseReferenceInGetSet, const Type&, Type> GetValue() const = 0;
     virtual void SetValue(std::conditional_t<UseReferenceInGetSet, const Type&, Type> value) = 0;
 
     virtual void CreateBranch(TTree& tree) = 0;

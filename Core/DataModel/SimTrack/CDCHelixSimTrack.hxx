@@ -19,10 +19,10 @@ public:
 
     explicit CDCHelixSimTrack(const CDCPhysicsSimTrack& physTrack, Double_t B = 0.1_T);
 
-    [[nodiscard]] const auto& GetTrueCenter() const { return fTrueCenter; }
-    [[nodiscard]] const auto& GetTrueRadius() const { return fTrueRadius; }
-    [[nodiscard]] const auto& GetTrueZ0() const { return fTrueZ0; }
-    [[nodiscard]] const auto& GetTrueAlpha() const { return fTrueAlpha; }
+    const auto& GetTrueCenter() const { return fTrueCenter; }
+    const auto& GetTrueRadius() const { return fTrueRadius; }
+    const auto& GetTrueZ0() const { return fTrueZ0; }
+    const auto& GetTrueAlpha() const { return fTrueAlpha; }
 
     template<typename Vector2_t>
     void SetTrueCenter(Vector2_t&& val) { fTrueCenter = std::forward<Vector2_t>(val); }

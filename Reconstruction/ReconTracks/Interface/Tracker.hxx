@@ -21,13 +21,13 @@ protected:
     virtual ~Tracker() noexcept = default;
 
 public:
-    [[nodiscard]] const auto& GetFitter() const { return fFitter; }
+    const auto& GetFitter() const { return fFitter; }
 
     virtual void Reconstruct(const std::vector<HitPtr>& hitData) = 0;
 
-    [[nodiscard]] const auto& GetTrackList() const { return fTrackList; }
-    [[nodiscard]] const auto& GetTrackedHitList() const { return fTrackedHitList; }
-    [[nodiscard]] const auto& GetOmittedHitList() const { return fOmittedHitList; }
+    const auto& GetTrackList() const { return fTrackList; }
+    const auto& GetTrackedHitList() const { return fTrackedHitList; }
+    const auto& GetOmittedHitList() const { return fOmittedHitList; }
 
 protected:
     const std::unique_ptr<Fitter_t> fFitter;

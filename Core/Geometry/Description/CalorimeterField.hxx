@@ -15,17 +15,17 @@ private:
     CalorimeterField& operator=(const CalorimeterField&) = delete;
 
 public:
-    [[nodiscard]] std::string GetName() const override { return "CalorimeterField"; }
-    [[nodiscard]] std::string GetOverallDescription() const override { return ""; }
-    [[nodiscard]] std::string GetMaterialDescription() const override { return ""; }
-    [[nodiscard]] std::string GetShapeDescription() const override { return ""; }
-    [[nodiscard]] std::string GetMotherDescription() const override { return ""; }
-    [[nodiscard]] std::string GetTranslationDescription() const override { return ""; }
-    [[nodiscard]] std::string GetRotationDescription() const override { return ""; }
+    std::string GetName() const override { return "CalorimeterField"; }
+    std::string GetOverallDescription() const override { return ""; }
+    std::string GetMaterialDescription() const override { return ""; }
+    std::string GetShapeDescription() const override { return ""; }
+    std::string GetMotherDescription() const override { return ""; }
+    std::string GetTranslationDescription() const override { return ""; }
+    std::string GetRotationDescription() const override { return ""; }
 
-    [[nodiscard]] const auto& GetRadius() const { return fRadius; }
-    [[nodiscard]] const auto& GetLength() const { return fLength; }
-    [[nodiscard]] G4Transform3D GetTransform() const;
+    const auto& GetRadius() const { return fRadius; }
+    const auto& GetLength() const { return fLength; }
+    G4Transform3D GetTransform() const;
 
     void SetRadius(double val) { fRadius = val; }
     void SetLength(double val) { fLength = val; }

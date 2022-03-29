@@ -21,9 +21,9 @@ public:
     void Run();
     void Finalize();
 
-    [[nodiscard]] clock_t GetUsedCPUTime() const { return fEndCPUTime - fBeginCPUTime; }
-    [[nodiscard]] time_t GetRunBeginTime() const { return fRunBeginTime; }
-    [[nodiscard]] time_t GetRunEndTime() const { return fRunEndTime; }
+    clock_t GetUsedCPUTime() const { return fEndCPUTime - fBeginCPUTime; }
+    time_t GetRunBeginTime() const { return fRunBeginTime; }
+    time_t GetRunEndTime() const { return fRunEndTime; }
 
 private:
     void ProgressReport(size_t jobSend) const;

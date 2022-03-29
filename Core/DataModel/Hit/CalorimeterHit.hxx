@@ -20,9 +20,9 @@ public:
     CalorimeterHit& operator=(const CalorimeterHit& hit) noexcept = default;
     CalorimeterHit& operator=(CalorimeterHit&& hit) noexcept = default;
 
-    [[nodiscard]] const auto& GetHitTime() const { return fHitTime; }
-    [[nodiscard]] const auto& GetEnergy() const { return fEnergy; }
-    [[nodiscard]] const auto& GetEnergyVariance() const { return fEnergyVariance; }
+    const auto& GetHitTime() const { return fHitTime; }
+    const auto& GetEnergy() const { return fEnergy; }
+    const auto& GetEnergyVariance() const { return fEnergyVariance; }
 
     void SetHitTime(Double_t val) { fHitTime = val; }
     void SetEnergy(Double_t val) { fEnergy = val; }

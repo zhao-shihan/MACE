@@ -15,17 +15,17 @@ private:
     ThirdTransportField& operator=(const ThirdTransportField&) = delete;
 
 public:
-    [[nodiscard]] std::string GetName() const override { return "ThirdTransportField"; }
-    [[nodiscard]] std::string GetOverallDescription() const override { return ""; }
-    [[nodiscard]] std::string GetMaterialDescription() const override { return ""; }
-    [[nodiscard]] std::string GetShapeDescription() const override { return ""; }
-    [[nodiscard]] std::string GetMotherDescription() const override { return ""; }
-    [[nodiscard]] std::string GetTranslationDescription() const override { return ""; }
-    [[nodiscard]] std::string GetRotationDescription() const override { return ""; }
+    std::string GetName() const override { return "ThirdTransportField"; }
+    std::string GetOverallDescription() const override { return ""; }
+    std::string GetMaterialDescription() const override { return ""; }
+    std::string GetShapeDescription() const override { return ""; }
+    std::string GetMotherDescription() const override { return ""; }
+    std::string GetTranslationDescription() const override { return ""; }
+    std::string GetRotationDescription() const override { return ""; }
 
-    [[nodiscard]] const auto& GetLength() const { return fLength; }
-    [[nodiscard]] const auto& GetRadius() const { return SecondBendField::Instance().GetRadius(); }
-    [[nodiscard]] G4Transform3D GetTransform() const;
+    const auto& GetLength() const { return fLength; }
+    const auto& GetRadius() const { return SecondBendField::Instance().GetRadius(); }
+    G4Transform3D GetTransform() const;
 
     void SetLength(double val) { fLength = val; }
 

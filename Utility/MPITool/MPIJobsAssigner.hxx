@@ -14,7 +14,7 @@ public:
     MPIJobsAssigner(const MPIJobsAssigner&) = delete;
     MPIJobsAssigner& operator=(const MPIJobsAssigner&) = delete;
 
-    [[nodiscard]] const auto& GetJobsIndexRange() const { return fJobsIndexRange; }
+    const auto& GetJobsIndexRange() const { return fJobsIndexRange; }
 
 private:
     std::pair<int_fast64_t, int_fast64_t> fJobsIndexRange;

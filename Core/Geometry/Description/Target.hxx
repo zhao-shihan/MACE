@@ -15,17 +15,17 @@ private:
     Target& operator=(const Target&) = delete;
 
 public:
-    [[nodiscard]] std::string GetName() const override { return "Target"; }
-    [[nodiscard]] std::string GetOverallDescription() const override { return "Muonium target."; }
-    [[nodiscard]] std::string GetMaterialDescription() const override { return "Silica aerogel."; }
-    [[nodiscard]] std::string GetShapeDescription() const override { return "A box with certain width(along XY) and thickness(along Z)."; }
-    [[nodiscard]] std::string GetMotherDescription() const override { return "AcceleratorField"; }
-    [[nodiscard]] std::string GetTranslationDescription() const override { return "Downstream surface at z=0. (Be aware of AcceleratorField's position)"; }
-    [[nodiscard]] std::string GetRotationDescription() const override { return "No rotation."; }
+    std::string GetName() const override { return "Target"; }
+    std::string GetOverallDescription() const override { return "Muonium target."; }
+    std::string GetMaterialDescription() const override { return "Silica aerogel."; }
+    std::string GetShapeDescription() const override { return "A box with certain width(along XY) and thickness(along Z)."; }
+    std::string GetMotherDescription() const override { return "AcceleratorField"; }
+    std::string GetTranslationDescription() const override { return "Downstream surface at z=0. (Be aware of AcceleratorField's position)"; }
+    std::string GetRotationDescription() const override { return "No rotation."; }
 
-    [[nodiscard]] const auto& GetWidth() const { return fWidth; }
-    [[nodiscard]] const auto& GetThickness() const { return fThickness; }
-    [[nodiscard]] G4Transform3D GetTransform() const;
+    const auto& GetWidth() const { return fWidth; }
+    const auto& GetThickness() const { return fThickness; }
+    G4Transform3D GetTransform() const;
 
     void SetWidth(double val) { fWidth = val; }
     void SetThickness(double val) { fThickness = val; }

@@ -15,17 +15,17 @@ private:
     FirstBendField& operator=(const FirstBendField&) = delete;
 
 public:
-    [[nodiscard]] std::string GetName() const override { return "FirstBendField"; }
-    [[nodiscard]] std::string GetOverallDescription() const override { return ""; }
-    [[nodiscard]] std::string GetMaterialDescription() const override { return ""; }
-    [[nodiscard]] std::string GetShapeDescription() const override { return ""; }
-    [[nodiscard]] std::string GetMotherDescription() const override { return ""; }
-    [[nodiscard]] std::string GetTranslationDescription() const override { return ""; }
-    [[nodiscard]] std::string GetRotationDescription() const override { return ""; }
+    std::string GetName() const override { return "FirstBendField"; }
+    std::string GetOverallDescription() const override { return ""; }
+    std::string GetMaterialDescription() const override { return ""; }
+    std::string GetShapeDescription() const override { return ""; }
+    std::string GetMotherDescription() const override { return ""; }
+    std::string GetTranslationDescription() const override { return ""; }
+    std::string GetRotationDescription() const override { return ""; }
 
-    [[nodiscard]] const auto& GetRadius() const { return FirstTransportField::Instance().GetRadius(); }
-    [[nodiscard]] const auto& GetBendRadius() const { return fBendRadius; }
-    [[nodiscard]] G4Transform3D GetTransform() const;
+    const auto& GetRadius() const { return FirstTransportField::Instance().GetRadius(); }
+    const auto& GetBendRadius() const { return fBendRadius; }
+    G4Transform3D GetTransform() const;
 
     void SetBendRadius(double val) { fBendRadius = val; }
 

@@ -26,15 +26,15 @@ public:
     MuoniumVertex& operator=(const MuoniumVertex&) noexcept = default;
     MuoniumVertex& operator=(MuoniumVertex&&) noexcept = default;
 
-    [[nodiscard]] const auto& GetTCACDC() const { return fTCACDC; }
-    [[nodiscard]] const auto& GetTCAMCP() const { return fTCAMCP; }
-    [[nodiscard]] const auto& GetDeltaTCA() const { return fDeltaTCA; }
-    [[nodiscard]] const auto& GetCPACDC() const { return fCPACDC; }
-    [[nodiscard]] const auto& GetCPAMCP() const { return fCPAMCP; }
-    [[nodiscard]] const auto& GetDCA() const { return fDCA; }
-    [[nodiscard]] const auto& GetVertexEnergy() const { return fVertexEnergy; }
-    [[nodiscard]] const auto& GetVertexMomentum() const { return fVertexMomentum; }
-    [[nodiscard]] const auto& GetParticles() const { return fParticles; }
+    const auto& GetTCACDC() const { return fTCACDC; }
+    const auto& GetTCAMCP() const { return fTCAMCP; }
+    const auto& GetDeltaTCA() const { return fDeltaTCA; }
+    const auto& GetCPACDC() const { return fCPACDC; }
+    const auto& GetCPAMCP() const { return fCPAMCP; }
+    const auto& GetDCA() const { return fDCA; }
+    const auto& GetVertexEnergy() const { return fVertexEnergy; }
+    const auto& GetVertexMomentum() const { return fVertexMomentum; }
+    const auto& GetParticles() const { return fParticles; }
 
     void SetTCACDC(Double_t val) { fTCACDC = val; }
     void SetTCAMCP(Double_t val) { fTCAMCP = val; }

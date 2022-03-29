@@ -14,7 +14,7 @@ public:
     ClassBranchSocket(const ClassBranchSocket&) = delete;
     ClassBranchSocket& operator=(const ClassBranchSocket&) = delete;
 
-    [[nodiscard]] const Class_t& GetValue() const override { return *fObject; }
+    const Class_t& GetValue() const override { return *fObject; }
     void SetValue(const Class_t& object) override { *fObject = object; }
 
     void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, std::addressof(fObject), 256000, 0); }

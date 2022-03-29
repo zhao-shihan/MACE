@@ -24,15 +24,15 @@ public:
     SpectrometerSimHit& operator=(const SpectrometerSimHit& hit) noexcept = default;
     SpectrometerSimHit& operator=(SpectrometerSimHit&& hit) noexcept = default;
 
-    [[nodiscard]] const auto& GetEnergy() const { return fEnergy; }
-    [[nodiscard]] const auto& GetMomentum() const { return fMomentum; }
-    [[nodiscard]] const auto& GetVertexTime() const { return fVertexTime; }
-    [[nodiscard]] const auto& GetVertexPosition() const { return fVertexPosition; }
-    [[nodiscard]] const auto& GetVertexEnergy() const { return fVertexEnergy; }
-    [[nodiscard]] const auto& GetVertexMomentum() const { return fVertexMomentum; }
-    [[nodiscard]] const auto& GetParticle() const { return fParticle; }
-    [[nodiscard]] const auto& GetG4EventID() const { return fG4EventID; }
-    [[nodiscard]] const auto& GetG4TrackID() const { return fG4TrackID; }
+    const auto& GetEnergy() const { return fEnergy; }
+    const auto& GetMomentum() const { return fMomentum; }
+    const auto& GetVertexTime() const { return fVertexTime; }
+    const auto& GetVertexPosition() const { return fVertexPosition; }
+    const auto& GetVertexEnergy() const { return fVertexEnergy; }
+    const auto& GetVertexMomentum() const { return fVertexMomentum; }
+    const auto& GetParticle() const { return fParticle; }
+    const auto& GetG4EventID() const { return fG4EventID; }
+    const auto& GetG4TrackID() const { return fG4TrackID; }
 
     void SetEnergy(Double_t E) { fEnergy = E; }
     template<typename Vector3_t>

@@ -15,21 +15,21 @@ private:
     SpectrometerBody& operator=(const SpectrometerBody&) = delete;
 
 public:
-    [[nodiscard]] std::string GetName() const override { return "SpectrometerBody"; }
-    [[nodiscard]] std::string GetOverallDescription() const override { return "The shell of spectrometer, mother of cells."; }
-    [[nodiscard]] std::string GetMaterialDescription() const override { return "Carbon fiber."; }
-    [[nodiscard]] std::string GetShapeDescription() const override { return "A rotate trapezoid."; }
-    [[nodiscard]] std::string GetMotherDescription() const override { return "SpectrometerField"; }
-    [[nodiscard]] std::string GetTranslationDescription() const override { return "No translation."; }
-    [[nodiscard]] std::string GetRotationDescription() const override { return "No rotation."; }
+    std::string GetName() const override { return "SpectrometerBody"; }
+    std::string GetOverallDescription() const override { return "The shell of spectrometer, mother of cells."; }
+    std::string GetMaterialDescription() const override { return "Carbon fiber."; }
+    std::string GetShapeDescription() const override { return "A rotate trapezoid."; }
+    std::string GetMotherDescription() const override { return "SpectrometerField"; }
+    std::string GetTranslationDescription() const override { return "No translation."; }
+    std::string GetRotationDescription() const override { return "No rotation."; }
 
-    [[nodiscard]] const auto& GetGasInnerRadius() const { return fGasInnerRadius; }
-    [[nodiscard]] const auto& GetGasOuterRadius() const { return fGasOuterRadius; }
-    [[nodiscard]] const auto& GetGasInnerLength() const { return fGasInnerLength; }
-    [[nodiscard]] const auto& GetGasOuterLength() const { return fGasOuterLength; }
-    [[nodiscard]] const auto& GetShellInnerThickness() const { return fShellInnerThickness; }
-    [[nodiscard]] const auto& GetShellSideThickness() const { return fShellSideThickness; }
-    [[nodiscard]] const auto& GetShellOuterThickness() const { return fShellOuterThickness; }
+    const auto& GetGasInnerRadius() const { return fGasInnerRadius; }
+    const auto& GetGasOuterRadius() const { return fGasOuterRadius; }
+    const auto& GetGasInnerLength() const { return fGasInnerLength; }
+    const auto& GetGasOuterLength() const { return fGasOuterLength; }
+    const auto& GetShellInnerThickness() const { return fShellInnerThickness; }
+    const auto& GetShellSideThickness() const { return fShellSideThickness; }
+    const auto& GetShellOuterThickness() const { return fShellOuterThickness; }
 
     void SetGasInnerRadius(double val) { fGasInnerRadius = val; }
     void SetGasOuterRadius(double val) { fGasOuterRadius = val; }

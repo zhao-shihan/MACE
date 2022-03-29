@@ -53,23 +53,23 @@ private:
 private:
     void Initialize(std::vector<HitPtr>& hitData);
     void InitialScaling();
-    [[nodiscard]] bool InitialCircleFit();
-    [[nodiscard]] bool CircleFit();
+    bool InitialCircleFit();
+    bool CircleFit();
     void RevolveFit();
     void FinalScaling();
     void Finalize(Track_t& track);
 
-    [[nodiscard]] inline bool CircleParametersIsOutOfBound() const;
+    inline bool CircleParametersIsOutOfBound() const;
 
-    [[nodiscard]] inline double TargetFunction(const double& Xc, const double& Yc, const double& R) const;
-    [[nodiscard]] inline double TargetFunction() const { return TargetFunction(fCircleParameters[0], fCircleParameters[1], fCircleParameters[2]); }
-    [[nodiscard]] inline std::pair<double, Eigen::Vector3d> TargetGrad() const;
-    [[nodiscard]] inline std::tuple<double, Eigen::Vector3d, Eigen::Matrix3d> TargetGradHessian() const;
+    inline double TargetFunction(const double& Xc, const double& Yc, const double& R) const;
+    inline double TargetFunction() const { return TargetFunction(fCircleParameters[0], fCircleParameters[1], fCircleParameters[2]); }
+    inline std::pair<double, Eigen::Vector3d> TargetGrad() const;
+    inline std::tuple<double, Eigen::Vector3d, Eigen::Matrix3d> TargetGradHessian() const;
 
-    [[nodiscard]] MinimizerState CircleFitNewtonRaphson();
-    [[nodiscard]] MinimizerState CircleFitConjugateGrad();
+    MinimizerState CircleFitNewtonRaphson();
+    MinimizerState CircleFitConjugateGrad();
 
-    [[nodiscard]] double CalculateReducedChi2();
+    double CalculateReducedChi2();
 
 private:
     double fScalingFactor = 1 / 30_cm;

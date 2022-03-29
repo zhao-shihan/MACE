@@ -16,10 +16,10 @@ public:
     VectorBranchSocket(const VectorBranchSocket&) = delete;
     VectorBranchSocket& operator=(const VectorBranchSocket&) = delete;
 
-    [[nodiscard]] const Eigen::Vector<Fund_t, Size>& GetValue() const override { return fVector; }
+    const Eigen::Vector<Fund_t, Size>& GetValue() const override { return fVector; }
     void SetValue(const Eigen::Vector<Fund_t, Size>& vector) override { fVector = vector; }
     template<typename T>
-    [[nodiscard]] Eigen::Vector<T, Size> GetValue() const { return fVector.template cast<T>(); }
+    Eigen::Vector<T, Size> GetValue() const { return fVector.template cast<T>(); }
     template<typename T>
     void SetValue(const Eigen::Vector<T, Size>& vector) { fVector = vector.template cast<Fund_t>(); }
 

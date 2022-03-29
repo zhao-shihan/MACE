@@ -16,14 +16,14 @@ protected:
     IDescription& operator=(const IDescription&) = delete;
 
 public:
-    [[nodiscard]] virtual std::string GetName() const = 0;
-    [[nodiscard]] virtual std::string GetOverallDescription() const = 0;
-    [[nodiscard]] virtual std::string GetMaterialDescription() const = 0;
-    [[nodiscard]] virtual std::string GetShapeDescription() const = 0;
-    [[nodiscard]] virtual std::string GetMotherDescription() const = 0;
-    [[nodiscard]] virtual std::string GetTranslationDescription() const = 0;
-    [[nodiscard]] virtual std::string GetRotationDescription() const = 0;
-    [[nodiscard]] virtual std::string GetOtherDescription() const { return "None."; }
+    virtual std::string GetName() const = 0;
+    virtual std::string GetOverallDescription() const = 0;
+    virtual std::string GetMaterialDescription() const = 0;
+    virtual std::string GetShapeDescription() const = 0;
+    virtual std::string GetMotherDescription() const = 0;
+    virtual std::string GetTranslationDescription() const = 0;
+    virtual std::string GetRotationDescription() const = 0;
+    virtual std::string GetOtherDescription() const { return "None."; }
 
     friend std::ostream& operator<<(std::ostream& out, const IDescription& geomDescp);
 };
