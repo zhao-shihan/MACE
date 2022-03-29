@@ -10,22 +10,22 @@ bool PerfectFitter<SpectrometerHit_t, Track_t>::Fit(std::vector<HitPtr>& hitData
             return hit1->GetHitTime() < hit2->GetHitTime();
         });
 
-    if constexpr (std::same_as<Track_t, PhysicsTrack>) {
+    if constexpr (std::same_as<Track_t, CDCPhysicsTrack>) {
         track.SetVertexTime(firstHit->GetVertexTime());
         track.SetVertexPosition(firstHit->GetVertexPosition());
         track.SetVertexEnergy(firstHit->GetVertexEnergy());
         track.SetVertexMomentum(firstHit->GetVertexMomentum());
         track.SetParticle(firstHit->GetParticle());
-        track.SetNumberOfFittedPoints(hitData.size());
+        track.SetNumHits(hitData.size());
         track.SetChi2(0);
     } else {
-        PhysicsTrack physTrack;
+        CDCPhysicsTrack physTrack;
         physTrack.SetVertexTime(firstHit->GetVertexTime());
         physTrack.SetVertexPosition(firstHit->GetVertexPosition());
         physTrack.SetVertexEnergy(firstHit->GetVertexEnergy());
         physTrack.SetVertexMomentum(firstHit->GetVertexMomentum());
         physTrack.SetParticle(firstHit->GetParticle());
-        physTrack.SetNumberOfFittedPoints(hitData.size());
+        physTrack.SetNumHits(hitData.size());
         physTrack.SetChi2(0);
         track = Track_t(physTrack);
     }

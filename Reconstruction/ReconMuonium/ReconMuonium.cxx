@@ -1,9 +1,10 @@
+#include "Core/DataModel/CDCTrackOperation.hxx"
 #include "Core/DataModel/DataFactory.hxx"
 #include "Core/DataModel/SimHit/CalorimeterSimHit.hxx"
 #include "Core/DataModel/SimHit/VertexDetectorSimHit.hxx"
 #include "Core/DataModel/SimVertex/MuoniumSimVertex.hxx"
-#include "Core/DataModel/Track/HelixTrack.hxx"
-#include "Core/DataModel/Track/PhysicsTrack.hxx"
+#include "Core/DataModel/Track/CDCHelixTrack.hxx"
+#include "Core/DataModel/Track/CDCPhysicsTrack.hxx"
 #include "Core/Geometry/Description/AcceleratorField.hxx"
 #include "Core/Geometry/Description/CalorimeterField.hxx"
 #include "Core/Geometry/Description/FirstBendField.hxx"
@@ -13,22 +14,23 @@
 #include "Core/Geometry/Description/SpectrometerField.hxx"
 #include "Core/Geometry/Description/ThirdTransportField.hxx"
 #include "Utility/LiteralUnit.hxx"
-#include "Utility/MPITools/MPIFileTools.hxx"
-#include "Utility/MPITools/MPIJobsAssigner.hxx"
+#include "Utility/MPITool/MPIFileTools.hxx"
+#include "Utility/MPITool/MPIJobsAssigner.hxx"
 #include "Utility/PhysicalConstant.hxx"
 
 #include "TH2F.h"
 
 using namespace MACE::Utility::PhysicalConstant;
 using namespace MACE::Utility::LiteralUnit;
-using namespace MACE::Utility::MPITools;
+using namespace MACE::Utility::MPITool;
 using namespace MACE::Geometry::Description;
 using namespace MACE::Core::DataModel;
+using namespace MACE::Core::DataModel::CDCTrackOperation;
 
 using MACE::Core::DataModel::DataFactory;
 
-using Helix_t = Track::HelixTrack;
-using Track_t = Track::PhysicsTrack;
+using Helix_t = Track::CDCHelixTrack;
+using Track_t = Track::CDCPhysicsTrack;
 using EMCalHit_t = SimHit::CalorimeterSimHit;
 using MCPHit_t = SimHit::VertexDetectorSimHit;
 using MVertex_t = SimVertex::MuoniumSimVertex;
@@ -180,9 +182,9 @@ int main(int, char* argv[]) {
                 const auto phiMCP = track->CalcPhi(CPAMCP);
                 const auto CPACDC = track->CalcPoint(phiMCP);
                 const auto& TCACDC = track->GetVertexTime();
-                const auto TCAMCP = mcpHit->GetHitTime() - CalculateFlightTime(CPACDC.fZ);
+                const auto TCAMCP = mcpHit->GetHitTime() - CalculateFlightTime(CPACDC.z());
 
-                if (-3 * sigmaZCDC < CPACDC.fZ and CPACDC.fZ < maxSurvivalLength + 3 * sigmaZCDC) {
+                if (-3 * sigmaZCDC < CPACDC.z() and CPACDC.z() < maxSurvivalLength + 3 * sigmaZCDC) {
                     Track_t physTrack(*track, phiMCP);
 
                     auto& possibleVertex = vertexResultOfThisHit.emplace_back(std::make_shared<MVertex_t>());
@@ -191,7 +193,7 @@ int main(int, char* argv[]) {
                     possibleVertex->SetDeltaTCA(TCACDC - TCAMCP);
                     possibleVertex->SetCPACDC(CPACDC);
                     possibleVertex->SetCPAMCP(CPAMCP);
-                    possibleVertex->SetDCA(track->GetRadius() - (track->GetCenter() - CPAMCP).Mag());
+                    possibleVertex->SetDCA(track->GetRadius() - (track->GetCenter() - CPAMCP).norm());
                     possibleVertex->SetVertexEnergy(physTrack.GetVertexEnergy());
                     possibleVertex->SetVertexMomentum(physTrack.GetVertexMomentum());
                     const auto particles = emCalCoinCount + ("y/" + physTrack.GetParticle());
@@ -207,8 +209,8 @@ int main(int, char* argv[]) {
                 const auto theVertex = *std::ranges::min_element(
                     vertexResultOfThisHit,
                     [&sigmaTCA, &sigmaCPA](const auto& vertex1, const auto& vertex2) {
-                        const auto chiSq1 = TEveVector2D(vertex1->GetDeltaTCA() / sigmaTCA, vertex1->GetDCA() / sigmaCPA).Mag2();
-                        const auto chiSq2 = TEveVector2D(vertex2->GetDeltaTCA() / sigmaTCA, vertex2->GetDCA() / sigmaCPA).Mag2();
+                        const auto chiSq1 = Eigen::Vector2d(vertex1->GetDeltaTCA() / sigmaTCA, vertex1->GetDCA() / sigmaCPA).squaredNorm();
+                        const auto chiSq2 = Eigen::Vector2d(vertex2->GetDeltaTCA() / sigmaTCA, vertex2->GetDCA() / sigmaCPA).squaredNorm();
                         return chiSq1 < chiSq2;
                     });
                 vertexResult.emplace_back(theVertex);

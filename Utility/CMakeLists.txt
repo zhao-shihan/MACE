@@ -1,3 +1,3 @@
 project(Utility)
 
-add_subdirectory(MPITools)
+add_subdirectory(MPITool)

@@ -1,8 +1,8 @@
-#include "Utility/MPITools/MPIJobsAssigner.hxx"
+#include "Utility/MPITool/MPIJobsAssigner.hxx"
 
 #include <vector>
 
-namespace MACE::Utility::MPITools {
+namespace MACE::Utility::MPITool {
 
 MPIJobsAssigner::MPIJobsAssigner(int_fast64_t jobsBeginIndex, int_fast64_t jobsEndIndex, const MPI::Comm& comm) :
     fJobsIndexRange(0, 0) {
@@ -27,4 +27,4 @@ MPIJobsAssigner::MPIJobsAssigner(int_fast64_t jobsBeginIndex, int_fast64_t jobsE
 MPIJobsAssigner::MPIJobsAssigner(const std::pair<int_fast64_t, int_fast64_t> jobsIndexRange, const MPI::Comm& comm) :
     MPIJobsAssigner(jobsIndexRange.first, jobsIndexRange.second, comm) {}
 
-} // namespace MACE::Utility::MPITools
+} // namespace MACE::Utility::MPITool

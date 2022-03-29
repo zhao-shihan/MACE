@@ -26,7 +26,6 @@ public:
     SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept = default;
     SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept = default;
 
-    void SetWirePosition(const G4TwoVector& pos) { Base::SetWirePosition(pos.x(), pos.y()); }
     void SetMomentum(const G4ThreeVector& mom) { Base::SetMomentum(mom.x(), mom.y(), mom.z()); }
     void SetVertexPosition(const G4ThreeVector& pos) { Base::SetVertexPosition(pos.x(), pos.y(), pos.z()); }
     void SetVertexMomentum(const G4ThreeVector& mom) { Base::SetVertexMomentum(mom.x(), mom.y(), mom.z()); }

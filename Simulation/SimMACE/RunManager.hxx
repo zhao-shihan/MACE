@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utility/MPITools/G4MPIRunManager.hxx"
+#include "Utility/MPITool/G4MPIRunManager.hxx"
 #include "Utility/ObserverPtr.hxx"
 #include "Simulation/SimMACE/Action/DetectorConstruction.hxx"
 #include "Simulation/SimMACE/Action/EventAction.hxx"
@@ -12,7 +12,7 @@ namespace MACE::Simulation::SimMACE {
 
 using namespace MACE::Simulation::SimMACE::Action;
 
-class RunManager final : public MACE::Utility::MPITools::G4MPIRunManager {
+class RunManager final : public MACE::Utility::MPITool::G4MPIRunManager {
 public:
     static auto& Instance() { return *static_cast<RunManager*>(GetRunManager()); }
 

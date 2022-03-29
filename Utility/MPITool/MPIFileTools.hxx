@@ -9,7 +9,7 @@
 #include <string_view>
 #include <vector>
 
-namespace MACE::Utility::MPITools {
+namespace MACE::Utility::MPITool {
 
 /// Create directories and file paths to help managing files during mpi processing.
 ///
@@ -100,4 +100,4 @@ private:
     static ObserverPtr<std::ostream> fgOut;
 };
 
-} // namespace MACE::Utility::MPITools
+} // namespace MACE::Utility::MPITool

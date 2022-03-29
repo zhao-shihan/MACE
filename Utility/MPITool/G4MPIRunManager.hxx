@@ -6,7 +6,7 @@
 
 class G4MPImanager;
 
-namespace MACE::Utility::MPITools {
+namespace MACE::Utility::MPITool {
 
 class G4MPIRunManager : public G4RunManager {
 public:
@@ -26,4 +26,4 @@ private:
     G4int fFirstEventID = 0;
 };
 
-} // namespace MACE::Utility::MPITools
+} // namespace MACE::Utility::MPITool

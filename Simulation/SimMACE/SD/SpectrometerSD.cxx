@@ -82,7 +82,6 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         // new a hit
         auto* const hit = new SpectrometerHit();
         hit->SetHitTime((tIn + tOut) / 2);
-        hit->SetWirePosition(rWire);
         hit->SetDriftDistance(driftDistance);
         hit->SetHitPositionZ((zIn + zOut) / 2);
         hit->SetCellID(cellID);

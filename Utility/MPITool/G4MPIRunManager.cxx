@@ -1,11 +1,11 @@
-#include "Utility/MPITools/G4MPIRunManager.hxx"
+#include "Utility/MPITool/G4MPIRunManager.hxx"
 
 #include "G4MPImanager.hh"
 #include "G4StateManager.hh"
 
 #include "mpi.h"
 
-namespace MACE::Utility::MPITools {
+namespace MACE::Utility::MPITool {
 
 void G4MPIRunManager::SetG4MPImanager(const G4MPImanager& g4mpi) {
     auto currentState = G4StateManager::GetStateManager()->GetCurrentState();
@@ -38,4 +38,4 @@ void G4MPIRunManager::RunInitialization() {
     G4RunManager::RunInitialization();
 }
 
-} // namespace MACE::Utility::MPITools
+} // namespace MACE::Utility::MPITool

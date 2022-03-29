@@ -36,8 +36,8 @@ void DirectLeastSquare<SpectrometerHit_t, Track_t>::Initialize(std::vector<HitPt
     fS.resize(fN);
     for (size_t i = 0; i < fN; ++i) {
         fT[i] = hitData[i]->GetHitTime();
-        fWireX[i] = hitData[i]->GetWirePosition().fX;
-        fWireY[i] = hitData[i]->GetWirePosition().fY;
+        // fWireX[i] = hitData[i]->GetWirePosition().x();
+        // fWireY[i] = hitData[i]->GetWirePosition().y();
         fD[i] = hitData[i]->GetDriftDistance();
         fZ[i] = hitData[i]->GetHitPositionZ();
     }
@@ -175,7 +175,7 @@ void DirectLeastSquare<SpectrometerHit_t, Track_t>::Finalize(Track_t& track) {
     track.SetRadius(fCircleParameters[2]);
     track.SetZ0(fRevolveParameters[0]);
     track.SetAlpha(fRevolveParameters[1]);
-    track.SetNumberOfFittedPoints(fN);
+    track.SetNumHits(fN);
     track.SetChi2(CalculateReducedChi2());
 }
 

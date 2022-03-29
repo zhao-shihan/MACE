@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Eigen/src/Core/util/Macros.h"
+#include "Eigen/Core"
 
 namespace Eigen {
 
 #if !EIGEN_VERSION_AT_LEAST(3, 4, 0)
 //
-// Eigen before 3.4 does not have these following useful template typedefs:
+// Eigen before 3.4 does not have these following useful template usings:
 //
 template<typename Type>
 using Matrix2 = Matrix<Type, 2, 2>;

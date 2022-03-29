@@ -4,7 +4,7 @@
 
 #include <utility>
 
-namespace MACE::Utility::MPITools {
+namespace MACE::Utility::MPITool {
 
 class MPIJobsAssigner final {
 public:
@@ -20,4 +20,4 @@ private:
     std::pair<int_fast64_t, int_fast64_t> fJobsIndexRange;
 };
 
-} // namespace MACE::Utility::MPITools
+} // namespace MACE::Utility::MPITool

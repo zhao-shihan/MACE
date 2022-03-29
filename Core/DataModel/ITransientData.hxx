@@ -7,7 +7,7 @@
 namespace MACE::Core::DataModel {
 
 class ITransientData {
-protected:
+public:
     ITransientData() noexcept = default;
     ITransientData(const ITransientData& data) noexcept = default;
     ITransientData(ITransientData&& data) noexcept = default;
@@ -23,16 +23,14 @@ protected:
     bool operator>=(const ITransientData&) = delete;
     auto operator<=>(const ITransientData&) = delete;
 
+    // Override this in derived classes at least once!
+    static consteval const char* BasicTreeName() noexcept { return "__Base__"; }
     // Extend (override & invoke) this in derived classes!
     static void CreateBranches(TTree&) {}
     // Extend (override & invoke) this in derived classes!
     static void ConnectToBranches(TTree&) {}
     // Extend (override & invoke) this in derived classes!
     void FillBranchSockets() const noexcept {}
-
-private:
-    // Override this in derived classes at least once!
-    static consteval const char* BasicTreeName() noexcept { return "__Base__"; }
 };
 
 template<class Data_t>

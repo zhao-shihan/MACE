@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/DataModel/DataFactory.hxx"
-#include "Utility/MPITools/MPIFileTools.hxx"
+#include "Utility/MPITool/MPIFileTools.hxx"
 #include "Utility/ObserverPtr.hxx"
 #include "Simulation/SimMACE/Global.hxx"
 #include "Simulation/SimMACE/Hit/CalorimeterHit.hxx"
@@ -17,7 +17,7 @@ using Hit::CalorimeterHit;
 using Hit::SpectrometerHit;
 using Hit::VertexDetectorHit;
 using MACE::Utility::ObserverPtr;
-using MACE::Utility::MPITools::MPIFileTools;
+using MACE::Utility::MPITool::MPIFileTools;
 
 class Analysis final {
 public:
