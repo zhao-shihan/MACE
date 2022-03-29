@@ -4,10 +4,8 @@
 
 namespace MACE::Core::DataModel::BranchSocket {
 
-template<typename Class_t>
-concept IsClass = std::is_class_v<Class_t>;
-
-template<IsClass Class_t>
+template<class Class_t>
+requires std::is_class_v<Class_t>
 class ClassBranchSocket final : public IBranchSocket<Class_t> {
 public:
     template<typename... Args>
