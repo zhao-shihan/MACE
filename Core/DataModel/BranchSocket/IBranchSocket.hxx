@@ -4,7 +4,7 @@
 
 #include <type_traits>
 
-namespace MACE::Core::DataModel {
+namespace MACE::Core::DataModel::BranchSocket {
 
 template<typename Type, bool UseReferenceInGetSet = true>
 class IBranchSocket {
@@ -26,4 +26,4 @@ protected:
 
 } // namespace MACE::Core::DataModel
 
-#include "Core/DataModel/IBranchSocket.ixx"
+#include "Core/DataModel/BranchSocket/IBranchSocket.ixx"

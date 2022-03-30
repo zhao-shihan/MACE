@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/DataModel/IBranchSocket.hxx"
+#include "Core/DataModel/BranchSocket/IBranchSocket.hxx"
 #include "Core/DataModel/BranchSocket/FundamentalROOTTypeTraits.hxx"
 
 namespace MACE::Core::DataModel::BranchSocket {

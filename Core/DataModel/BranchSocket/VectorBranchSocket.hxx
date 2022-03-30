@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/DataModel/BranchSocket/FundamentalROOTTypeTraits.hxx"
-#include "Core/DataModel/IBranchSocket.hxx"
+#include "Core/DataModel/BranchSocket/IBranchSocket.hxx"
 #include "Utility/EigenCompatibility.hxx"
 
 #include "Eigen/Core"
