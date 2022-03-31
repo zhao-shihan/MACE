@@ -1,12 +1,19 @@
 #include "Core/Geometry/Description/SpectrometerSenseWires.hxx"
 #include "Core/Geometry/Description/SpectrometerSensitiveVolumes.hxx"
+#include "Utility/LiteralUnit.hxx"
 
-using MACE::Core::Geometry::Description::SpectrometerSenseWires;
+namespace MACE::Core::Geometry::Description {
+
+using namespace Utility::LiteralUnit::Length;
 
 SpectrometerSenseWires& SpectrometerSenseWires::Instance() noexcept {
     static SpectrometerSenseWires instance;
     return instance;
 }
+
+SpectrometerSenseWires::SpectrometerSenseWires() :
+    IDescription("SpectrometerSenseWires"),
+    fDiameter(25_um) {}
 
 std::vector<std::pair<G4TwoVector, double>> SpectrometerSenseWires::GetInformationList() const {
     const auto& svDescription = SpectrometerSensitiveVolumes::Instance();
@@ -25,3 +32,5 @@ std::vector<std::pair<G4TwoVector, double>> SpectrometerSenseWires::GetInformati
     }
     return localPositionList;
 }
+
+} // namespace MACE::Core::Geometry::Description

@@ -12,20 +12,12 @@ public:
     static SpectrometerReadoutLayers& Instance() noexcept;
 
 private:
-    SpectrometerReadoutLayers() = default;
+    SpectrometerReadoutLayers();
     ~SpectrometerReadoutLayers() noexcept = default;
     SpectrometerReadoutLayers(const SpectrometerReadoutLayers&) = delete;
     SpectrometerReadoutLayers& operator=(const SpectrometerReadoutLayers&) = delete;
 
 public:
-    std::string GetName() const override { return "SpectrometerReadoutLayer"; }
-    std::string GetOverallDescription() const override { return "Readout layer of MWDC. Mother volume of cells and field wires."; }
-    std::string GetMaterialDescription() const override { return "Helium based gas."; }
-    std::string GetShapeDescription() const override { return "Tube."; }
-    std::string GetMotherDescription() const override { return "SpectrometerBody"; }
-    std::string GetTranslationDescription() const override { return "No translation."; }
-    std::string GetRotationDescription() const override { return "No rotation."; }
-
     const auto& GetAllowedDistortion() const { return fAllowedDistortion; }
     /// @return Layer's information list. Subscript with layerID and get [ layer center radius, thickness(=cellWidth), length/2, nCells ].
     /// @warning This method constructs a std::vector<std::tuple<...>> according to current Description status,
@@ -38,8 +30,8 @@ public:
     void SetAllowedDistortion(double val) { fAllowedDistortion = val; }
 
 private:
-    double fCellWidth = 16.2_mm;
-    double fAllowedDistortion = 0.1;
+    double fCellWidth;
+    double fAllowedDistortion;
 };
 
 } // namespace MACE::Core::Geometry::Description

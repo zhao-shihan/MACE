@@ -3,14 +3,16 @@
 #include "Core/Geometry/Description/SpectrometerReadoutLayers.hxx"
 #include "Core/Geometry/Description/SpectrometerSensitiveVolumes.hxx"
 
-#include <cmath>
-
-using MACE::Core::Geometry::Description::SpectrometerSensitiveVolumes;
+namespace MACE::Core::Geometry::Description {
 
 SpectrometerSensitiveVolumes& SpectrometerSensitiveVolumes::Instance() noexcept {
     static SpectrometerSensitiveVolumes instance;
     return instance;
 }
+
+SpectrometerSensitiveVolumes::SpectrometerSensitiveVolumes() :
+    IDescription("SpectrometerSensitiveVolumes"),
+    fSensitiveWidth(0.9) {}
 
 std::vector<std::tuple<double, double, double, double, double>> SpectrometerSensitiveVolumes::GetInformationList() const {
     const auto& readoutLayersDescription = SpectrometerReadoutLayers::Instance();
@@ -39,3 +41,5 @@ std::vector<std::tuple<double, double, double, double, double>> SpectrometerSens
 
     return infoList;
 }
+
+} // namespace MACE::Core::Geometry::Description

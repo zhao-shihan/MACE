@@ -13,20 +13,12 @@ public:
     static SpectrometerSenseWires& Instance() noexcept;
 
 private:
-    SpectrometerSenseWires() = default;
+    SpectrometerSenseWires();
     ~SpectrometerSenseWires() noexcept = default;
     SpectrometerSenseWires(const SpectrometerSenseWires&) = delete;
     SpectrometerSenseWires& operator=(const SpectrometerSenseWires&) = delete;
 
 public:
-    std::string GetName() const override { return "SpectrometerSenseWire"; }
-    std::string GetOverallDescription() const override { return ""; }
-    std::string GetMaterialDescription() const override { return ""; }
-    std::string GetShapeDescription() const override { return ""; }
-    std::string GetMotherDescription() const override { return ""; }
-    std::string GetTranslationDescription() const override { return ""; }
-    std::string GetRotationDescription() const override { return ""; }
-
     const auto& GetDiameter() const { return fDiameter; }
     /// @return Sense wire's information map. Subscript with layerID and get [ position, half length ].
     /// @warning This method constructs a std::vector<...> according to current Description status,
@@ -36,7 +28,7 @@ public:
     std::vector<std::pair<G4TwoVector, double>> GetInformationList() const;
 
 private:
-    double fDiameter = 25_um;
+    double fDiameter;
 };
 
 } // namespace MACE::Core::Geometry::Description

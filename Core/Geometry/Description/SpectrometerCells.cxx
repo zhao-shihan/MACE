@@ -1,16 +1,20 @@
 #include "Core/Geometry/Description/SpectrometerCells.hxx"
 #include "Core/Geometry/Description/SpectrometerReadoutLayers.hxx"
+#include "Utility/PhysicalConstant.hxx"
 
 #include <cmath>
-#include <numbers>
 
-namespace sn = std::numbers;
-using MACE::Core::Geometry::Description::SpectrometerCells;
+namespace MACE::Core::Geometry::Description {
+
+using namespace Utility::PhysicalConstant;
 
 SpectrometerCells& SpectrometerCells::Instance() noexcept {
     static SpectrometerCells instance;
     return instance;
 }
+
+SpectrometerCells::SpectrometerCells() :
+    IDescription("SpectrometerCells") {}
 
 std::vector<std::tuple<double, double, std::vector<G4RotationMatrix>>> SpectrometerCells::GetInformationList() const {
     const auto& readoutLayersDescription = SpectrometerReadoutLayers::Instance();
@@ -23,7 +27,7 @@ std::vector<std::tuple<double, double, std::vector<G4RotationMatrix>>> Spectrome
     for (size_t layerID = 0; layerID < layerCount; ++layerID) {
         auto&& [_0, _1, halfLength, cellCount] = layerInfoList[layerID];
 
-        const auto cellDeltaPhi = 2 * sn::pi / cellCount;
+        const auto cellDeltaPhi = 2 * pi / cellCount;
 
         auto&& infoSubList = std::get<2>(infoList.emplace_back(cellDeltaPhi, halfLength, 0));
         infoSubList.reserve(cellCount);
@@ -37,3 +41,5 @@ std::vector<std::tuple<double, double, std::vector<G4RotationMatrix>>> Spectrome
 
     return infoList;
 }
+
+} // namespace MACE::Core::Geometry::Description

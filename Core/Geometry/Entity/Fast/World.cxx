@@ -1,5 +1,6 @@
 #include "Core/Geometry/Description/World.hxx"
 #include "Core/Geometry/Entity/Fast/World.hxx"
+#include "Utility/LiteralUnit.hxx"
 
 #include "G4Box.hh"
 #include "G4NistManager.hh"

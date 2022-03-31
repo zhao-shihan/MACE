@@ -5,18 +5,22 @@
 namespace MACE::Core::Geometry {
 
 class IDescription {
-protected:
+public:
     IDescription(const std::string& name);
     virtual ~IDescription() noexcept = default;
     IDescription(const IDescription&) = delete;
     IDescription& operator=(const IDescription&) = delete;
 
-public:
     const auto& GetName() const { return fName; }
-    virtual void Read(const YAML::Node& geomYaml) = 0;
-    virtual void Write(YAML::Node& geomYaml) const = 0;
+
+    void Read(const YAML::Node& geomYaml);
+    void Write(YAML::Node& geomYaml) const;
 
 private:
+    virtual void ReadImpl(const YAML::Node& thisNode) = 0;
+    virtual void WriteImpl(YAML::Node& thisNode) const = 0;
+
+protected:
     std::string fName;
 };
 

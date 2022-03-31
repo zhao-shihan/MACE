@@ -1,13 +1,20 @@
 #include "Core/Geometry/Description/SpectrometerCells.hxx"
 #include "Core/Geometry/Description/SpectrometerFieldWires.hxx"
 #include "Core/Geometry/Description/SpectrometerReadoutLayers.hxx"
+#include "Utility/LiteralUnit.hxx"
 
-using MACE::Core::Geometry::Description::SpectrometerFieldWires;
+namespace MACE::Core::Geometry::Description {
+
+using namespace Utility::LiteralUnit::Length;
 
 SpectrometerFieldWires& SpectrometerFieldWires::Instance() noexcept {
     static SpectrometerFieldWires instance;
     return instance;
 }
+
+SpectrometerFieldWires::SpectrometerFieldWires() :
+    IDescription("SpectrometerFieldWires"),
+    fDiameter(110_um) {}
 
 std::vector<std::pair<double, std::array<G4TwoVector, 3>>> SpectrometerFieldWires::GetInformationList() const {
     const auto& readoutLayersDescription = SpectrometerReadoutLayers::Instance();
@@ -44,3 +51,5 @@ std::vector<std::pair<double, std::array<G4TwoVector, 3>>> SpectrometerFieldWire
 
     return infoList;
 }
+
+} // namespace MACE::Core::Geometry::Description

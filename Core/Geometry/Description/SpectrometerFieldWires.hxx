@@ -14,20 +14,12 @@ public:
     static SpectrometerFieldWires& Instance() noexcept;
 
 private:
-    SpectrometerFieldWires() = default;
+    SpectrometerFieldWires();
     ~SpectrometerFieldWires() noexcept = default;
     SpectrometerFieldWires(const SpectrometerFieldWires&) = delete;
     SpectrometerFieldWires& operator=(const SpectrometerFieldWires&) = delete;
 
 public:
-    std::string GetName() const override { return "SpectrometerFieldWire"; }
-    std::string GetOverallDescription() const override { return ""; }
-    std::string GetMaterialDescription() const override { return ""; }
-    std::string GetShapeDescription() const override { return ""; }
-    std::string GetMotherDescription() const override { return ""; }
-    std::string GetTranslationDescription() const override { return ""; }
-    std::string GetRotationDescription() const override { return ""; }
-
     const auto& GetDiameter() const { return fDiameter; }
     /// @return Field wire info list. Subscript with layerID and get [ half length, (sub-list)[ (local) position ] ].
     /// the sub-list contains 3 elements, represents the 3 field wire in a lattice.
@@ -40,7 +32,7 @@ public:
     void SetFieldWireDiameter(double val) { fDiameter = val; }
 
 private:
-    double fDiameter = 110_um;
+    double fDiameter;
 };
 
 } // namespace MACE::Core::Geometry::Description

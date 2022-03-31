@@ -1,5 +1,6 @@
 #include "Core/Geometry/Description/SpectrometerBody.hxx"
 #include "Core/Geometry/Entity/Fast/SpectrometerBody.hxx"
+#include "Utility/LiteralUnit.hxx"
 
 #include "G4NistManager.hh"
 #include "G4Polycone.hh"

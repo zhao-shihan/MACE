@@ -14,20 +14,12 @@ public:
     static SpectrometerCells& Instance() noexcept;
 
 private:
-    SpectrometerCells() = default;
+    SpectrometerCells();
     ~SpectrometerCells() noexcept = default;
     SpectrometerCells(const SpectrometerCells&) = delete;
     SpectrometerCells& operator=(const SpectrometerCells&) = delete;
 
 public:
-    std::string GetName() const override { return "SpectrometerCell"; }
-    std::string GetOverallDescription() const override { return ""; }
-    std::string GetMaterialDescription() const override { return ""; }
-    std::string GetShapeDescription() const override { return ""; }
-    std::string GetMotherDescription() const override { return ""; }
-    std::string GetTranslationDescription() const override { return ""; }
-    std::string GetRotationDescription() const override { return ""; }
-
     /// @return Cell info list. Subscript with layerID and get the list of [ angular width, half length, (sub-list)[ rotation ] ].
     /// @warning This method constructs a std::vector<...> according to current Description status,
     /// thus may become invalid after some Set..., invoke it after any Set method.

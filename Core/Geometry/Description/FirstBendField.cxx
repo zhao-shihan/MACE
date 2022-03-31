@@ -1,14 +1,20 @@
 #include "Core/Geometry/Description/FirstBendField.hxx"
+#include "Utility/LiteralUnit.hxx"
 
 #include "G4RotationMatrix.hh"
-#include "G4Transform3D.hh"
 
-using MACE::Core::Geometry::Description::FirstBendField;
+namespace MACE::Core::Geometry::Description {
+
+using namespace Utility::LiteralUnit::Length;
 
 FirstBendField& FirstBendField::Instance() noexcept {
     static FirstBendField instance;
     return instance;
 }
+
+FirstBendField::FirstBendField() :
+    IDescription("FirstBendField"),
+    fBendRadius(50_cm) {}
 
 G4Transform3D FirstBendField::GetTransform() const {
     auto&& firstTransportField = FirstTransportField::Instance();
@@ -17,3 +23,5 @@ G4Transform3D FirstBendField::GetTransform() const {
     auto transZ = firstTransportField.GetTransform().dz() + firstTransportField.GetLength() / 2;
     return G4Transform3D(G4RotationMatrix(G4ThreeVector(1, 0, 0), M_PI_2), G4ThreeVector(transX, transY, transZ));
 }
+
+} // namespace MACE::Core::Geometry::Description

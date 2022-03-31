@@ -2,6 +2,8 @@
 
 #include "Core/Geometry/Description/SecondTransportField.hxx"
 
+#include "G4Transform3D.hh"
+
 namespace MACE::Core::Geometry::Description {
 
 class SecondBendField final : public IDescription {
@@ -9,20 +11,12 @@ public:
     static SecondBendField& Instance() noexcept;
 
 private:
-    SecondBendField() = default;
+    SecondBendField();
     ~SecondBendField() noexcept = default;
     SecondBendField(const SecondBendField&) = delete;
     SecondBendField& operator=(const SecondBendField&) = delete;
 
 public:
-    std::string GetName() const override { return "SecondBendField"; }
-    std::string GetOverallDescription() const override { return ""; }
-    std::string GetMaterialDescription() const override { return ""; }
-    std::string GetShapeDescription() const override { return ""; }
-    std::string GetMotherDescription() const override { return ""; }
-    std::string GetTranslationDescription() const override { return ""; }
-    std::string GetRotationDescription() const override { return ""; }
-
     const auto& GetRadius() const { return SecondTransportField::Instance().GetRadius(); }
     const auto& GetBendRadius() const { return fBendRadius; }
     G4Transform3D GetTransform() const;
@@ -30,7 +24,7 @@ public:
     void SetBendRadius(double val) { fBendRadius = val; }
 
 private:
-    double fBendRadius = 50_cm;
+    double fBendRadius;
 };
 
 } // namespace MACE::Core::Geometry::Description

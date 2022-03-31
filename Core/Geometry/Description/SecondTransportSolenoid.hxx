@@ -9,20 +9,12 @@ public:
     static SecondTransportSolenoid& Instance() noexcept;
 
 private:
-    SecondTransportSolenoid() = default;
+    SecondTransportSolenoid();
     ~SecondTransportSolenoid() noexcept = default;
     SecondTransportSolenoid(const SecondTransportSolenoid&) = delete;
     SecondTransportSolenoid& operator=(const SecondTransportSolenoid&) = delete;
 
 public:
-    std::string GetName() const override { return "SecondTransportSolenoid"; }
-    std::string GetOverallDescription() const override { return ""; }
-    std::string GetMaterialDescription() const override { return ""; }
-    std::string GetShapeDescription() const override { return ""; }
-    std::string GetMotherDescription() const override { return ""; }
-    std::string GetTranslationDescription() const override { return ""; }
-    std::string GetRotationDescription() const override { return ""; }
-
     const auto& GetOuterRaidus() const { return fOuterRadius; }
     const auto& GetInnerRaidus() const { return fInnerRadius; }
     const auto& GetLength() const { return fLength; }
@@ -32,9 +24,9 @@ public:
     void SetLength(double val) { fLength = val; }
 
 private:
-    double fInnerRadius = 7.5_cm;
-    double fOuterRadius = 12.5_cm;
-    double fLength = 100_cm;
+    double fInnerRadius;
+    double fOuterRadius;
+    double fLength;
 };
 
 } // namespace MACE::Core::Geometry::Description

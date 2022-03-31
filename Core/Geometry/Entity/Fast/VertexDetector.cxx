@@ -1,5 +1,6 @@
 #include "Core/Geometry/Description/VertexDetector.hxx"
 #include "Core/Geometry/Entity/Fast/VertexDetector.hxx"
+#include "Utility/LiteralUnit.hxx"
 
 #include "G4Box.hh"
 #include "G4NistManager.hh"
