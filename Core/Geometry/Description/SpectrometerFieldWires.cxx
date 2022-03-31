@@ -2,7 +2,7 @@
 #include "Core/Geometry/Description/SpectrometerFieldWires.hxx"
 #include "Core/Geometry/Description/SpectrometerReadoutLayers.hxx"
 
-using MACE::Geometry::Description::SpectrometerFieldWires;
+using MACE::Core::Geometry::Description::SpectrometerFieldWires;
 
 SpectrometerFieldWires& SpectrometerFieldWires::Instance() noexcept {
     static SpectrometerFieldWires instance;

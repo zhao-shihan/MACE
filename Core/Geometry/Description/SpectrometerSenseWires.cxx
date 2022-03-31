@@ -1,7 +1,7 @@
 #include "Core/Geometry/Description/SpectrometerSenseWires.hxx"
 #include "Core/Geometry/Description/SpectrometerSensitiveVolumes.hxx"
 
-using MACE::Geometry::Description::SpectrometerSenseWires;
+using MACE::Core::Geometry::Description::SpectrometerSenseWires;
 
 SpectrometerSenseWires& SpectrometerSenseWires::Instance() noexcept {
     static SpectrometerSenseWires instance;

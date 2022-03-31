@@ -29,7 +29,7 @@
 
 #include "TGeoManager.h"
 
-using namespace MACE::Geometry::Entity::Fast;
+using namespace MACE::Core::Geometry::Entity::Fast;
 
 int main(int, char**) {
     auto calorimeter = std::make_shared<Calorimeter>();

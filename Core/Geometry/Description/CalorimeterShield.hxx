@@ -2,7 +2,7 @@
 
 #include "Core/Geometry/Description/CalorimeterField.hxx"
 
-namespace MACE::Geometry::Description {
+namespace MACE::Core::Geometry::Description {
 
 class CalorimeterShield final : public IDescription {
 public:
@@ -41,4 +41,4 @@ private:
     double fThickness = 5_cm;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Core::Geometry::Description

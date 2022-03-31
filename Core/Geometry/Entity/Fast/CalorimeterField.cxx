@@ -4,7 +4,7 @@
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Geometry::Entity::Fast::CalorimeterField;
+using MACE::Core::Geometry::Entity::Fast::CalorimeterField;
 
 void CalorimeterField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::CalorimeterField::Instance();

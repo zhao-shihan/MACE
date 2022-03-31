@@ -6,7 +6,7 @@
 #include "G4Tubs.hh"
 #include "G4UnionSolid.hh"
 
-using MACE::Geometry::Entity::Fast::CalorimeterShield;
+using MACE::Core::Geometry::Entity::Fast::CalorimeterShield;
 
 void CalorimeterShield::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::CalorimeterShield::Instance();

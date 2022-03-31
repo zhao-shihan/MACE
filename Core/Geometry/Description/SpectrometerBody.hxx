@@ -2,7 +2,7 @@
 
 #include "Core/Geometry/IDescription.hxx"
 
-namespace MACE::Geometry::Description {
+namespace MACE::Core::Geometry::Description {
 
 class SpectrometerBody final : public IDescription {
 public:
@@ -49,4 +49,4 @@ private:
     double fShellOuterThickness = 10_mm;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Core::Geometry::Description

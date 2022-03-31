@@ -4,7 +4,7 @@
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Geometry::Entity::Fast::SelectorField;
+using MACE::Core::Geometry::Entity::Fast::SelectorField;
 
 void SelectorField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::SelectorField::Instance();

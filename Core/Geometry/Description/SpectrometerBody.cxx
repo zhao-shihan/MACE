@@ -1,6 +1,6 @@
 #include "Core/Geometry/Description/SpectrometerBody.hxx"
 
-using MACE::Geometry::Description::SpectrometerBody;
+using MACE::Core::Geometry::Description::SpectrometerBody;
 
 SpectrometerBody& SpectrometerBody::Instance() noexcept {
     static SpectrometerBody instance;

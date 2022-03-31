@@ -3,7 +3,7 @@
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"
 
-using MACE::Geometry::Description::FirstBendField;
+using MACE::Core::Geometry::Description::FirstBendField;
 
 FirstBendField& FirstBendField::Instance() noexcept {
     static FirstBendField instance;

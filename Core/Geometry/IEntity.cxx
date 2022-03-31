@@ -3,7 +3,7 @@
 #include "G4GDMLParser.hh"
 #include "G4SDManager.hh"
 
-namespace MACE::Geometry {
+namespace MACE::Core::Geometry {
 
 IEntity::IEntity() :
     std::enable_shared_from_this<IEntity>(),
@@ -65,11 +65,11 @@ void IEntity::RegisterSD(size_t volumeIndex, G4VSensitiveDetector* sd) const {
         G4ExceptionDescription msg;
         msg << "Attempting to register SD multiple times for \"" << logicalVolume->GetName() << "\" is currently not supported "
             << "(G4MultiSensitiveDetector not supported currently), skipping.";
-        G4Exception("MACE::Geometry::IEntity::RegisterSD", "-1", JustWarning, msg);
+        G4Exception("MACE::Core::Geometry::IEntity::RegisterSD", "-1", JustWarning, msg);
     } else {
         G4ExceptionDescription msg;
         msg << "Attempting to register the same SD multiple times for \"" << logicalVolume->GetName() << "\", skipping.";
-        G4Exception("MACE::Geometry::IEntity::RegisterSD", "-1", JustWarning, msg);
+        G4Exception("MACE::Core::Geometry::IEntity::RegisterSD", "-1", JustWarning, msg);
     }
 }
 
@@ -86,4 +86,4 @@ void IEntity::WriteSelfAndDesendentsToGDML(std::string_view fileName, size_t vol
     gdml.Write(fileName.data(), this->GetPhysicalVolume(volumeIndex));
 }
 
-} // namespace MACE::Geometry
+} // namespace MACE::Core::Geometry

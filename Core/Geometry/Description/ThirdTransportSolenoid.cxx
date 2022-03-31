@@ -1,6 +1,6 @@
 #include "Core/Geometry/Description/ThirdTransportSolenoid.hxx"
 
-using MACE::Geometry::Description::ThirdTransportSolenoid;
+using MACE::Core::Geometry::Description::ThirdTransportSolenoid;
 
 ThirdTransportSolenoid& ThirdTransportSolenoid::Instance() noexcept {
     static ThirdTransportSolenoid instance;

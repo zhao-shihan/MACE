@@ -5,7 +5,7 @@
 
 #include <cmath>
 
-using MACE::Geometry::Description::SpectrometerSensitiveVolumes;
+using MACE::Core::Geometry::Description::SpectrometerSensitiveVolumes;
 
 SpectrometerSensitiveVolumes& SpectrometerSensitiveVolumes::Instance() noexcept {
     static SpectrometerSensitiveVolumes instance;

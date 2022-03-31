@@ -2,7 +2,7 @@
 
 #include "Core/Geometry/Description/ThirdTransportField.hxx"
 
-namespace MACE::Geometry::Description {
+namespace MACE::Core::Geometry::Description {
 
 class CalorimeterField final : public IDescription {
 public:
@@ -35,4 +35,4 @@ private:
     double fLength = 70_cm;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Core::Geometry::Description

@@ -7,7 +7,7 @@
 #include <array>
 #include <vector>
 
-namespace MACE::Geometry::Description {
+namespace MACE::Core::Geometry::Description {
 
 class SpectrometerFieldWires final : public IDescription {
 public:
@@ -43,4 +43,4 @@ private:
     double fDiameter = 110_um;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Core::Geometry::Description

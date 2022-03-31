@@ -3,14 +3,14 @@
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"
 
-using MACE::Geometry::Description::CalorimeterField;
+using MACE::Core::Geometry::Description::CalorimeterField;
 
 CalorimeterField& CalorimeterField::Instance() noexcept {
     static CalorimeterField instance;
     return instance;
 }
 
-G4Transform3D MACE::Geometry::Description::CalorimeterField::GetTransform() const {
+G4Transform3D MACE::Core::Geometry::Description::CalorimeterField::GetTransform() const {
     auto&& thirdTransportField = ThirdTransportField::Instance();
     auto transX = thirdTransportField.GetTransform().dx();
     auto transY = thirdTransportField.GetTransform().dy();

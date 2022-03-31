@@ -5,7 +5,7 @@
 #include "G4PVPlacement.hh"
 #include "G4Torus.hh"
 
-using MACE::Geometry::Entity::Fast::FirstBendField;
+using MACE::Core::Geometry::Entity::Fast::FirstBendField;
 
 void FirstBendField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::FirstBendField::Instance();

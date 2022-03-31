@@ -5,7 +5,7 @@
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Geometry::Entity::Fast::SpectrometerSenseWires;
+using MACE::Core::Geometry::Entity::Fast::SpectrometerSenseWires;
 
 void SpectrometerSenseWires::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::SpectrometerSenseWires::Instance();

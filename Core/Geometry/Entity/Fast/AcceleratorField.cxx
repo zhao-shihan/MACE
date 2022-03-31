@@ -4,7 +4,7 @@
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Geometry::Entity::Fast::AcceleratorField;
+using MACE::Core::Geometry::Entity::Fast::AcceleratorField;
 
 void AcceleratorField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::AcceleratorField::Instance();

@@ -2,7 +2,7 @@
 
 #include "Core/Geometry/IDescription.hxx"
 
-namespace MACE::Geometry::Description {
+namespace MACE::Core::Geometry::Description {
 
 class VertexDetector final : public IDescription {
 public:
@@ -34,4 +34,4 @@ private:
     double fThickness = 1_cm;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Core::Geometry::Description

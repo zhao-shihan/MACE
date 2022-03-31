@@ -2,7 +2,7 @@
 
 #include "Core/Geometry/IDescription.hxx"
 
-namespace MACE::Geometry::Description {
+namespace MACE::Core::Geometry::Description {
 
 class SecondBendSolenoid final : public IDescription {
 public:
@@ -37,4 +37,4 @@ private:
     double fBendRadius = 50_cm;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Core::Geometry::Description

@@ -2,7 +2,7 @@
 
 #include "Core/Geometry/Description/AcceleratorField.hxx"
 
-namespace MACE::Geometry::Description {
+namespace MACE::Core::Geometry::Description {
 
 class Target final : public IDescription {
 public:
@@ -35,4 +35,4 @@ private:
     double fThickness = 1_cm;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Core::Geometry::Description

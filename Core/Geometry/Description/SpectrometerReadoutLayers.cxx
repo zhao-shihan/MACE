@@ -5,7 +5,7 @@
 #include <numbers>
 
 namespace sn = std::numbers;
-using MACE::Geometry::Description::SpectrometerReadoutLayers;
+using MACE::Core::Geometry::Description::SpectrometerReadoutLayers;
 
 SpectrometerReadoutLayers& SpectrometerReadoutLayers::Instance() noexcept {
     static SpectrometerReadoutLayers instance;

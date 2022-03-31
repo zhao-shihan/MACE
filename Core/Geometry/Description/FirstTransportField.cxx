@@ -3,7 +3,7 @@
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"
 
-using MACE::Geometry::Description::FirstTransportField;
+using MACE::Core::Geometry::Description::FirstTransportField;
 
 FirstTransportField& FirstTransportField::Instance() noexcept {
     static FirstTransportField instance;

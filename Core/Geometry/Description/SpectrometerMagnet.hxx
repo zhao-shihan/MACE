@@ -2,7 +2,7 @@
 
 #include "Core/Geometry/IDescription.hxx"
 
-namespace MACE::Geometry::Description {
+namespace MACE::Core::Geometry::Description {
 
 class SpectrometerMagnet final : public IDescription {
 public:
@@ -37,4 +37,4 @@ private:
     double fLength = 218_cm;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Core::Geometry::Description

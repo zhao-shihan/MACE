@@ -1,6 +1,6 @@
 #include "Core/Geometry/Description/VertexDetector.hxx"
 
-using MACE::Geometry::Description::VertexDetector;
+using MACE::Core::Geometry::Description::VertexDetector;
 
 VertexDetector& VertexDetector::Instance() noexcept {
     static VertexDetector instance;

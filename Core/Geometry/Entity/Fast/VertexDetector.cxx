@@ -5,7 +5,7 @@
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 
-using MACE::Geometry::Entity::Fast::VertexDetector;
+using MACE::Core::Geometry::Entity::Fast::VertexDetector;
 using namespace MACE::Utility::LiteralUnit::Density;
 
 void VertexDetector::ConstructSelf(G4bool checkOverlaps) {

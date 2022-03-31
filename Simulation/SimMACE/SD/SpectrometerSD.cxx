@@ -23,8 +23,8 @@ SpectrometerSD::SpectrometerSD(const G4String& sdName) :
 
     collectionName.insert(sdName + "HC");
 
-    const auto cellInfoList = Geometry::Description::SpectrometerCells::Instance().GetInformationList();
-    const auto wireInfoList = Geometry::Description::SpectrometerSenseWires::Instance().GetInformationList();
+    const auto cellInfoList = Core::Geometry::Description::SpectrometerCells::Instance().GetInformationList();
+    const auto wireInfoList = Core::Geometry::Description::SpectrometerSenseWires::Instance().GetInformationList();
     const auto layerCount = cellInfoList.size();
     fSenseWireMap.reserve(3 * layerCount * layerCount); // just an estimation of cell count (pi*r^2), for optimization.
     for (size_t layerID = 0; layerID < layerCount; ++layerID) {

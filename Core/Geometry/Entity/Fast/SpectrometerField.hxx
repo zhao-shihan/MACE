@@ -2,7 +2,7 @@
 
 #include "Core/Geometry/IEntity.hxx"
 
-namespace MACE::Geometry::Entity::Fast {
+namespace MACE::Core::Geometry::Entity::Fast {
 
 class SpectrometerField final : public IEntity {
 public:
@@ -15,4 +15,4 @@ private:
     void ConstructSelf(G4bool checkOverlaps) override;
 };
 
-} // namespace MACE::Geometry::Entity::Fast
+} // namespace MACE::Core::Geometry::Entity::Fast

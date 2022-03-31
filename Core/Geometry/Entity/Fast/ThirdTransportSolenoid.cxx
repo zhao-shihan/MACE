@@ -5,7 +5,7 @@
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Geometry::Entity::Fast::ThirdTransportSolenoid;
+using MACE::Core::Geometry::Entity::Fast::ThirdTransportSolenoid;
 
 void ThirdTransportSolenoid::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::ThirdTransportSolenoid::Instance();

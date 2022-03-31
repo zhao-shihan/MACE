@@ -4,7 +4,7 @@
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Geometry::Entity::Fast::SpectrometerSensitiveVolumes;
+using MACE::Core::Geometry::Entity::Fast::SpectrometerSensitiveVolumes;
 
 void SpectrometerSensitiveVolumes::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::SpectrometerSensitiveVolumes::Instance();

@@ -7,7 +7,7 @@
 #include <tuple>
 #include <vector>
 
-namespace MACE::Geometry::Description {
+namespace MACE::Core::Geometry::Description {
 
 class SpectrometerCells final : public IDescription {
 public:
@@ -36,4 +36,4 @@ public:
     std::vector<std::tuple<double, double, std::vector<G4RotationMatrix>>> GetInformationList() const;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Core::Geometry::Description

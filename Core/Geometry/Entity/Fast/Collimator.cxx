@@ -5,7 +5,7 @@
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Geometry::Entity::Fast::Collimator;
+using MACE::Core::Geometry::Entity::Fast::Collimator;
 
 void Collimator::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::Collimator::Instance();

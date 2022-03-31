@@ -5,7 +5,7 @@
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"
 
-namespace MACE::Geometry::Description {
+namespace MACE::Core::Geometry::Description {
 
 class FirstTransportField final : public IDescription {
 public:
@@ -38,4 +38,4 @@ private:
     double fLength = 20_cm;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Core::Geometry::Description

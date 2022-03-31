@@ -2,7 +2,7 @@
 
 #include "Core/Geometry/Description/SecondBendField.hxx"
 
-namespace MACE::Geometry::Description {
+namespace MACE::Core::Geometry::Description {
 
 class ThirdTransportField final : public IDescription {
 public:
@@ -33,4 +33,4 @@ private:
     double fLength = 20_cm;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Core::Geometry::Description

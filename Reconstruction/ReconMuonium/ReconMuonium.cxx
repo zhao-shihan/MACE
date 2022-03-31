@@ -23,7 +23,7 @@
 using namespace MACE::Utility::PhysicalConstant;
 using namespace MACE::Utility::LiteralUnit;
 using namespace MACE::Utility::MPITool;
-using namespace MACE::Geometry::Description;
+using namespace MACE::Core::Geometry::Description;
 using namespace MACE::Core::DataModel;
 using namespace MACE::Core::DataModel::CDCTrackOperation;
 

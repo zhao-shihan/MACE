@@ -2,7 +2,7 @@
 
 #include "Core/Geometry/IDescription.hxx"
 
-namespace MACE::Geometry::Description {
+namespace MACE::Core::Geometry::Description {
 
 class SpectrometerField final : public IDescription {
 public:
@@ -34,4 +34,4 @@ private:
     double fLength = 220_cm;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Core::Geometry::Description

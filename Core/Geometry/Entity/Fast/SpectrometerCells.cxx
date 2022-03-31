@@ -5,7 +5,7 @@
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Geometry::Entity::Fast::SpectrometerCells;
+using MACE::Core::Geometry::Entity::Fast::SpectrometerCells;
 
 void SpectrometerCells::ConstructSelf(G4bool checkOverlaps) {
     const auto& layersDescription = Description::SpectrometerReadoutLayers::Instance();

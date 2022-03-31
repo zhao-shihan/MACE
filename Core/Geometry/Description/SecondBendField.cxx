@@ -3,7 +3,7 @@
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"
 
-using MACE::Geometry::Description::SecondBendField;
+using MACE::Core::Geometry::Description::SecondBendField;
 
 SecondBendField& SecondBendField::Instance() noexcept {
     static SecondBendField instance;

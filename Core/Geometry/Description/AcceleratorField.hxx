@@ -7,7 +7,7 @@
 
 #include <cmath>
 
-namespace MACE::Geometry::Description {
+namespace MACE::Core::Geometry::Description {
 
 class AcceleratorField final : public IDescription {
 public:
@@ -43,4 +43,4 @@ private:
     double fDownStreamLength = 90_cm;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Core::Geometry::Description

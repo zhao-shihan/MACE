@@ -6,7 +6,7 @@
 #include "G4Tubs.hh"
 #include "G4UnionSolid.hh"
 
-using MACE::Geometry::Entity::Fast::SpectrometerShield;
+using MACE::Core::Geometry::Entity::Fast::SpectrometerShield;
 
 void SpectrometerShield::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::SpectrometerShield::Instance();

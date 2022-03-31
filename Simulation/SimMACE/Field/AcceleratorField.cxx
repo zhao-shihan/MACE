@@ -7,7 +7,7 @@ namespace MACE::Simulation::SimMACE::Field {
 
 using namespace MACE::Utility::LiteralUnit;
 using Messenger::FieldMessenger;
-using LinacDescription = MACE::Geometry::Description::AcceleratorField;
+using LinacDescription = MACE::Core::Geometry::Description::AcceleratorField;
 
 AcceleratorField::AcceleratorField() :
     G4ElectroMagneticField(),

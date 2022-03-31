@@ -5,7 +5,7 @@
 #include "G4Polycone.hh"
 #include "G4PVPlacement.hh"
 
-using MACE::Geometry::Entity::Fast::SpectrometerBody;
+using MACE::Core::Geometry::Entity::Fast::SpectrometerBody;
 using namespace MACE::Utility::LiteralUnit::Density;
 
 void SpectrometerBody::ConstructSelf(G4bool checkOverlaps) {

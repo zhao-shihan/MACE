@@ -1,39 +1,12 @@
 #pragma once
 
-#include "Core/Geometry/Entity/Fast/AcceleratorField.hxx"
-#include "Core/Geometry/Entity/Fast/Calorimeter.hxx"
-#include "Core/Geometry/Entity/Fast/CalorimeterField.hxx"
-#include "Core/Geometry/Entity/Fast/CalorimeterShield.hxx"
-#include "Core/Geometry/Entity/Fast/Collimator.hxx"
-#include "Core/Geometry/Entity/Fast/FirstBendField.hxx"
-#include "Core/Geometry/Entity/Fast/FirstBendSolenoid.hxx"
-#include "Core/Geometry/Entity/Fast/FirstTransportField.hxx"
-#include "Core/Geometry/Entity/Fast/FirstTransportSolenoid.hxx"
-#include "Core/Geometry/Entity/Fast/SecondBendField.hxx"
-#include "Core/Geometry/Entity/Fast/SecondBendSolenoid.hxx"
-#include "Core/Geometry/Entity/Fast/SecondTransportField.hxx"
-#include "Core/Geometry/Entity/Fast/SecondTransportSolenoid.hxx"
-#include "Core/Geometry/Entity/Fast/SelectorField.hxx"
-#include "Core/Geometry/Entity/Fast/SpectrometerBody.hxx"
-#include "Core/Geometry/Entity/Fast/SpectrometerCells.hxx"
-#include "Core/Geometry/Entity/Fast/SpectrometerField.hxx"
-#include "Core/Geometry/Entity/Fast/SpectrometerFieldWires.hxx"
-#include "Core/Geometry/Entity/Fast/SpectrometerMagnet.hxx"
-#include "Core/Geometry/Entity/Fast/SpectrometerReadoutLayers.hxx"
-#include "Core/Geometry/Entity/Fast/SpectrometerSenseWires.hxx"
-#include "Core/Geometry/Entity/Fast/SpectrometerSensitiveVolumes.hxx"
-#include "Core/Geometry/Entity/Fast/SpectrometerShield.hxx"
-#include "Core/Geometry/Entity/Fast/Target.hxx"
-#include "Core/Geometry/Entity/Fast/ThirdTransportField.hxx"
-#include "Core/Geometry/Entity/Fast/ThirdTransportSolenoid.hxx"
-#include "Core/Geometry/Entity/Fast/VertexDetector.hxx"
-#include "Core/Geometry/Entity/Fast/World.hxx"
-#include "Utility/ObserverPtr.hxx"
+#include "Core/Geometry/Entity/Fast/All.hxx"
 #include "Simulation/SimMACE/Global.hxx"
 #include "Simulation/SimMACE/SD/CalorimeterSD.hxx"
 #include "Simulation/SimMACE/SD/SpectrometerSD.hxx"
 #include "Simulation/SimMACE/SD/VertexDetectorSD.hxx"
 #include "Simulation/SimMACE/Utility/Region.hxx"
+#include "Utility/ObserverPtr.hxx"
 
 #include "G4VUserDetectorConstruction.hh"
 
@@ -41,7 +14,7 @@
 
 namespace MACE::Simulation::SimMACE::Action {
 
-using namespace Geometry::Entity::Fast;
+using namespace Core::Geometry::Entity::Fast;
 using namespace SD;
 using MACE::Utility::ObserverPtr;
 using Utility::Region;

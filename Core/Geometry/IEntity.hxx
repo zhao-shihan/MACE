@@ -11,7 +11,7 @@
 #include <memory>
 #include <vector>
 
-namespace MACE::Geometry {
+namespace MACE::Core::Geometry {
 
 using Utility::ObserverPtr;
 
@@ -73,6 +73,6 @@ private:
     std::vector<std::unique_ptr<G4VPhysicalVolume>> fPhysicalVolumes;
 };
 
-} // namespace MACE::Geometry
+} // namespace MACE::Core::Geometry
 
 #include "Core/Geometry/IEntity.ixx"

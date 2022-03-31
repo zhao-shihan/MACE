@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-namespace MACE::Geometry::Description {
+namespace MACE::Core::Geometry::Description {
 
 class SelectorField final : public IDescription {
 public:
@@ -39,4 +39,4 @@ private:
     double fZPosition = 20_cm;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Core::Geometry::Description

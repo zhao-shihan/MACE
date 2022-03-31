@@ -38,7 +38,7 @@ To build MACE software from source, there are a few prerequisites.
 4. ROOT    (≥ 6.24.02, ≥ C++17)
 5. Eigen3  (≥ 3.3.9)
 
-G4mpi is bulit in. (in ./ThirdParty)  
+G4mpi, yaml-cpp is bulit in. (in ./ThirdParty)  
 
 ### (Tested) Platform
 

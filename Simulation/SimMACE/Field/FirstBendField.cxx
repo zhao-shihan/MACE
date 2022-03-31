@@ -15,7 +15,7 @@ FirstBendField::FirstBendField() :
 }
 
 void FirstBendField::GetFieldValue(const G4double* x, G4double* B) const {
-    const auto& geom = Geometry::Description::FirstBendField::Instance();
+    const auto& geom = Core::Geometry::Description::FirstBendField::Instance();
     auto x0 = geom.GetTransform().dx();
     auto z0 = geom.GetTransform().dz();
 

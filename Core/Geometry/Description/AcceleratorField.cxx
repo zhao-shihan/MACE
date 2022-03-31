@@ -3,7 +3,7 @@
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"
 
-using MACE::Geometry::Description::AcceleratorField;
+using MACE::Core::Geometry::Description::AcceleratorField;
 
 AcceleratorField& AcceleratorField::Instance() noexcept {
     static AcceleratorField instance;

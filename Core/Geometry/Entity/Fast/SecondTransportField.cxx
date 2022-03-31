@@ -4,7 +4,7 @@
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Geometry::Entity::Fast::SecondTransportField;
+using MACE::Core::Geometry::Entity::Fast::SecondTransportField;
 
 void SecondTransportField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::SecondTransportField::Instance();

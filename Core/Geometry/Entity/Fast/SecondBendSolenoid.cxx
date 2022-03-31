@@ -5,7 +5,7 @@
 #include "G4PVPlacement.hh"
 #include "G4Torus.hh"
 
-using MACE::Geometry::Entity::Fast::SecondBendSolenoid;
+using MACE::Core::Geometry::Entity::Fast::SecondBendSolenoid;
 
 void SecondBendSolenoid::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::SecondBendSolenoid::Instance();

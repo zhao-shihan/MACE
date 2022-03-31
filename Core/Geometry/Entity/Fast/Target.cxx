@@ -5,7 +5,7 @@
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 
-using MACE::Geometry::Entity::Fast::Target;
+using MACE::Core::Geometry::Entity::Fast::Target;
 using namespace MACE::Utility::LiteralUnit::Density;
 
 void Target::ConstructSelf(G4bool checkOverlaps) {

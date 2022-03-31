@@ -5,7 +5,7 @@
 #include <numbers>
 
 namespace sn = std::numbers;
-using MACE::Geometry::Description::SpectrometerCells;
+using MACE::Core::Geometry::Description::SpectrometerCells;
 
 SpectrometerCells& SpectrometerCells::Instance() noexcept {
     static SpectrometerCells instance;

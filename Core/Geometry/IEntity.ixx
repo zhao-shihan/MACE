@@ -2,7 +2,7 @@
 #include "G4Exception.hh"
 #include "G4FieldManager.hh"
 
-namespace MACE::Geometry {
+namespace MACE::Core::Geometry {
 
 template<class Field_t, class Equation_t, class Stepper_t, class Driver_t>
 void IEntity::RegisterField(size_t volumeIndex, Field_t* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const {
@@ -21,7 +21,7 @@ void IEntity::RegisterField(size_t volumeIndex, Field_t* field, G4double hMin, G
     } else {
         G4ExceptionDescription msg;
         msg << "Attempting to register the same field multiple times for \"" << logicalVolume->GetName() << "\", skipping.";
-        G4Exception("MACE::Geometry::IEntity::RegisterSD", "-1", JustWarning, msg);
+        G4Exception("MACE::Core::Geometry::IEntity::RegisterSD", "-1", JustWarning, msg);
     }
 }
 
@@ -53,4 +53,4 @@ std::enable_if_t<std::derived_from<Physical_t, G4VPhysicalVolume>, ObserverPtr<P
     return physics;
 }
 
-} // namespace MACE::Geometry
+} // namespace MACE::Core::Geometry

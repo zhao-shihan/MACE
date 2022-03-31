@@ -5,7 +5,7 @@
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 
-using MACE::Geometry::Entity::Fast::World;
+using MACE::Core::Geometry::Entity::Fast::World;
 using namespace MACE::Utility::LiteralUnit::Density;
 using namespace MACE::Utility::LiteralUnit::Temperature;
 

@@ -3,7 +3,7 @@
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"
 
-using MACE::Geometry::Description::Target;
+using MACE::Core::Geometry::Description::Target;
 
 Target& Target::Instance() noexcept {
     static Target instance;
