@@ -1,6 +1,6 @@
 # MACE
 
-<img align="right" width="100" height="100" src="doc/pics/MACE_logo.png"/>
+<img align="right" src="document/picture/MACE_logo_100x100.png"/>
 
   - [Introduction](#introduction)
   - [How to Build](#how-to-build)
@@ -23,7 +23,7 @@
 This software is designed for MACE experiment.  
 MACE software consists of several modules: SimMACE, SimMTransport, ReconTracks, Geometry, DataModel. "SimMACE" is designed for the simulation of the whole experiment. "SimMTransport" handles the transport of muonium in target after produced, as a physics process in SimMACE. "SimMTransport" can be run independently aim at calculate the yield of a target, see it's README for detail. "ReconTracks" handles track reconstruction in the spectrometer. "Geometry" handles the construction of detector geometry, provides a universial interface of detector geometry. "DataModel" provides a interface for datamodel of each detector, transportable between modules.
 
-![SimMACE](doc/pics/MACE_sim.png)
+![SimMACE](document/picture/MACE_sim.png)
 
 ## How to Build
 
@@ -38,7 +38,7 @@ To build MACE software from source, there are a few prerequisites.
 4. ROOT    (≥ 6.24.02, ≥ C++17)
 5. Eigen3  (≥ 3.3.9)
 
-G4mpi, yaml-cpp is bulit in. (in ./ThirdParty)  
+G4mpi, yaml-cpp is bulit in. (in ./external)  
 
 ### (Tested) Platform
 

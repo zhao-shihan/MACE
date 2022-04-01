@@ -89,29 +89,15 @@ message(STATUS "MACE uses Eigen3 includes from: ${EIGEN3_INCLUDE_DIRS}")
 # Variables
 # ================================================================================================================================
 # Dirs
-set(MACE_PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
-set(MACE_THIRD_PARTY_DIR ${PROJECT_SOURCE_DIR}/ThirdParty)
+set(MACE_ROOT_DIR ${PROJECT_SOURCE_DIR})
+set(MACE_CMAKE_DIR ${PROJECT_SOURCE_DIR}/cmake)
+set(MACE_EXTERNAL_DIR ${PROJECT_SOURCE_DIR}/external)
+set(MACE_SOURCE_DIR ${MACE_ROOT_DIR}/source)
+set(MACE_TEST_DIR ${MACE_ROOT_DIR}/test)
 
 # ================================================================================================================================
-# Global includes
+# Sub-directories
 # ================================================================================================================================
-# external
-include_directories(${MPI_CXX_INCLUDE_DIRS})
-include_directories(${Geant4_INCLUDE_DIRS})
-include_directories(${ROOT_INCLUDE_DIRS})
-include_directories(${EIGEN3_INCLUDE_DIRS})
-# built-in
-include_directories(${MACE_THIRD_PARTY_DIR}/G4mpi/include)
-include_directories(${MACE_THIRD_PARTY_DIR}/yaml-cpp/include)
-# intrinsic
-include_directories(${MACE_PROJECT_ROOT_DIR})
-
-# ================================================================================================================================
-# sub directories
-# ================================================================================================================================
-add_subdirectory(Core)
-add_subdirectory(Reconstruction)
-add_subdirectory(Simulation)
-add_subdirectory(Tests)
-add_subdirectory(ThirdParty)
-add_subdirectory(Utility)
+add_subdirectory(${MACE_EXTERNAL_DIR})
+add_subdirectory(${MACE_SOURCE_DIR})
+add_subdirectory(${MACE_TEST_DIR})

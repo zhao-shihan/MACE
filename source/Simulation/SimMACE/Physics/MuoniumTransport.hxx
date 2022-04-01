@@ -3,7 +3,7 @@
 #include "Utility/ObserverPtr.hxx"
 #include "Simulation/SimMACE/Action/DetectorConstruction.hxx"
 #include "Simulation/SimMACE/Global.hxx"
-#include "SimMTransport/Track.hxx"
+#include "Simulation/SimMTransport/Track.hxx"
 
 #include "G4ParticleChange.hh"
 #include "G4VContinuousProcess.hh"
