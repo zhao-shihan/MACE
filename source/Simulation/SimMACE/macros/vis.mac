@@ -18,37 +18,37 @@
 /vis/viewer/zoom 3
 
 # Colors
-/vis/geometry/set/colour Calorimeter                   0     1     1     1     0.1
-/vis/geometry/set/colour VertexDetector                0     1     1     1     0.1
-/vis/geometry/set/colour FirstBendSolenoid             0     1     1     1     0.05
-/vis/geometry/set/colour FirstTransportSolenoid        0     1     1     1     0.05
-/vis/geometry/set/colour SecondBendSolenoid            0     1     1     1     0.05
-/vis/geometry/set/colour Collimator                    0     1     1     1     0.05
-/vis/geometry/set/colour SecondTransportSolenoid       0     1     1     1     0.05
-/vis/geometry/set/colour SelectorField                 0     1     1     1     0.05
-/vis/geometry/set/colour Target                        0     1     1     1     0.1
-/vis/geometry/set/colour SpectrometerSenseWire         0     1     1     1     0.01
-/vis/geometry/set/colour SpectrometerFieldWire         0     1     1     1     0.01
-/vis/geometry/set/colour SpectrometerSensitiveVolume   0     1     1     1     0.005
-/vis/geometry/set/colour SpectrometerCell              0     1     1     1     0.005
-/vis/geometry/set/colour SpectrometerLayer      0     1     1     1     0.005
 /vis/geometry/set/colour AcceleratorField              0     1     1     1     0.05
-/vis/geometry/set/colour CDCBody              0     1     1     1     0.05
-/vis/geometry/set/colour SpectrometerMagnet            0     1     1     1     0.05
-/vis/geometry/set/colour ThirdTransportSolenoid        0     1     1     1     0.05
+/vis/geometry/set/colour Calorimeter                   0     1     1     1     0.1
 /vis/geometry/set/colour CalorimeterField              0     1     1     1     0.05
 /vis/geometry/set/colour CalorimeterShield             0     1     1     1     0.05
+/vis/geometry/set/colour CDCBody                       0     1     1     1     0.05
+/vis/geometry/set/colour CDCCell                       0     1     1     1     0.005
+/vis/geometry/set/colour CDCFieldWire                  0     1     1     1     0.01
+/vis/geometry/set/colour CDCLayer                      0     1     1     1     0.005
+/vis/geometry/set/colour CDCSenseWire                  0     1     1     1     0.01
+/vis/geometry/set/colour CDCSensitiveVolume            0     1     1     1     0.005
+/vis/geometry/set/colour Collimator                    0     1     1     1     0.05
 /vis/geometry/set/colour FirstBendField                0     1     1     1     0.05
+/vis/geometry/set/colour FirstBendSolenoid             0     1     1     1     0.05
 /vis/geometry/set/colour FirstTransportField           0     1     1     1     0.05
+/vis/geometry/set/colour FirstTransportSolenoid        0     1     1     1     0.05
 /vis/geometry/set/colour SecondBendField               0     1     1     1     0.05
+/vis/geometry/set/colour SecondBendSolenoid            0     1     1     1     0.05
 /vis/geometry/set/colour SecondTransportField          0     1     1     1     0.05
+/vis/geometry/set/colour SecondTransportSolenoid       0     1     1     1     0.05
+/vis/geometry/set/colour SelectorField                 0     1     1     1     0.05
 /vis/geometry/set/colour SpectrometerField             0     1     1     1     0.05
+/vis/geometry/set/colour SpectrometerMagnet            0     1     1     1     0.05
 /vis/geometry/set/colour SpectrometerShield            0     1     1     1     0.05
+/vis/geometry/set/colour Target                        0     1     1     1     0.1
 /vis/geometry/set/colour ThirdTransportField           0     1     1     1     0.05
+/vis/geometry/set/colour ThirdTransportSolenoid        0     1     1     1     0.05
+/vis/geometry/set/colour VertexDetector                0     1     1     1     0.1
 /vis/geometry/set/colour World                         0     1     1     1     0.001
 #/vis/geometry/set/colour BeamCounter                   0     0.0   0.0   1.0   0.5
-#/vis/geometry/set/colour MylarDegrader                 0     0.6   0.1   0.1   0.5
 #/vis/geometry/set/colour CarbonFoil                    80    1.0   1.0   1.0   0.5
+#/vis/geometry/set/colour MylarDegrader                 0     0.6   0.1   0.1   0.5
 
 /vis/scene/add/date
 /vis/scene/add/axes 0 0 0 10 cm

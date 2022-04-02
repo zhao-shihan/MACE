@@ -24,49 +24,71 @@ TransportLine::TransportLine() :
     fSolenoidOuterRadius(12.5_cm),
     fFieldRadius(12.6_cm) {}
 
-G4Transform3D TransportLine::FirstStraightTransform() const {
+HepGeom::Transform3D TransportLine::FirstStraightTransform() const {
     const auto& spectrometerField = SpectrometerField::Instance();
     const auto transX = 0;
     const auto transY = 0;
     const auto transZ = spectrometerField.GetLength() / 2 + fFirstStraightLength / 2;
-    return G4Transform3D(G4RotationMatrix(),
-                         G4ThreeVector(transX, transY, transZ));
+    return HepGeom::Transform3D(CLHEP::HepRotation(),
+                                CLHEP::Hep3Vector(transX, transY, transZ));
 }
 
-G4Transform3D TransportLine::FirstBendTransform() const {
+HepGeom::Transform3D TransportLine::FirstBendTransform() const {
     const auto localTransX = fFirstBendRadius;
     const auto localTransY = 0;
     const auto localTransZ = fFirstStraightLength / 2;
     const auto translation = FirstStraightTransform().getTranslation() +
-                             G4ThreeVector(localTransX, localTransY, localTransZ);
-    return G4Transform3D(G4RotationMatrix(CLHEP::HepXHat, halfpi), translation);
+                             CLHEP::Hep3Vector(localTransX, localTransY, localTransZ);
+    return HepGeom::Transform3D(CLHEP::HepRotation(CLHEP::HepXHat, halfpi), translation);
 }
 
-G4Transform3D TransportLine::SecondStraightTransform() const {
+HepGeom::Transform3D TransportLine::SecondStraightTransform() const {
     const auto localTransX = fSecondStraightLength / 2;
     const auto localTransY = 0;
     const auto localTransZ = fFirstBendRadius;
     const auto translation = FirstBendTransform().getTranslation() +
-                             G4ThreeVector(localTransX, localTransY, localTransZ);
-    return G4Transform3D(G4RotationMatrix(CLHEP::HepYHat, halfpi), translation);
+                             CLHEP::Hep3Vector(localTransX, localTransY, localTransZ);
+    return HepGeom::Transform3D(CLHEP::HepRotation(CLHEP::HepYHat, halfpi), translation);
 }
 
-G4Transform3D TransportLine::SecondBendTransform() const {
+HepGeom::Transform3D TransportLine::SecondBendTransform() const {
     const auto localTransX = fSecondStraightLength / 2;
     const auto localTransY = 0;
     const auto localTransZ = fSecondBendRadius;
     const auto translation = SecondStraightTransform().getTranslation() +
-                             G4ThreeVector(localTransX, localTransY, localTransZ);
-    return G4Transform3D(G4RotationMatrix(CLHEP::HepXHat, halfpi), translation);
+                             CLHEP::Hep3Vector(localTransX, localTransY, localTransZ);
+    return HepGeom::Transform3D(CLHEP::HepRotation(CLHEP::HepXHat, halfpi), translation);
 }
 
-G4Transform3D TransportLine::ThirdStraightTransform() const {
+HepGeom::Transform3D TransportLine::ThirdStraightTransform() const {
     auto localTransX = fSecondBendRadius;
     auto localTransY = 0;
     auto localTransZ = fThirdStraightLength / 2;
     const auto translation = SecondBendTransform().getTranslation() +
-                             G4ThreeVector(localTransX, localTransY, localTransZ);
-    return G4Transform3D(G4RotationMatrix(), translation);
+                             CLHEP::Hep3Vector(localTransX, localTransY, localTransZ);
+    return HepGeom::Transform3D(CLHEP::HepRotation(), translation);
+}
+
+void TransportLine::ReadImpl(const YAML::Node& node) {
+    fFirstStraightLength = node["FirstStraightLength"].as<decltype(fFirstStraightLength)>();
+    fFirstBendRadius = node["FirstBendRadius"].as<decltype(fFirstBendRadius)>();
+    fSecondStraightLength = node["SecondStraightLength"].as<decltype(fSecondStraightLength)>();
+    fSecondBendRadius = node["SecondBendRadius"].as<decltype(fSecondBendRadius)>();
+    fThirdStraightLength = node["ThirdStraightLength"].as<decltype(fThirdStraightLength)>();
+    fSolenoidInnerRadius = node["SolenoidInnerRadius"].as<decltype(fSolenoidInnerRadius)>();
+    fSolenoidOuterRadius = node["SolenoidOuterRadius"].as<decltype(fSolenoidOuterRadius)>();
+    fFieldRadius = node["FieldRadius"].as<decltype(fFieldRadius)>();
+}
+
+void TransportLine::WriteImpl(YAML::Node& node) const {
+    node["FirstStraightLength"] = fFirstStraightLength;
+    node["FirstBendRadius"] = fFirstBendRadius;
+    node["SecondStraightLength"] = fSecondStraightLength;
+    node["SecondBendRadius"] = fSecondBendRadius;
+    node["ThirdStraightLength"] = fThirdStraightLength;
+    node["SolenoidInnerRadius"] = fSolenoidInnerRadius;
+    node["SolenoidOuterRadius"] = fSolenoidOuterRadius;
+    node["FieldRadius"] = fFieldRadius;
 }
 
 } // namespace MACE::Core::Geometry::Description

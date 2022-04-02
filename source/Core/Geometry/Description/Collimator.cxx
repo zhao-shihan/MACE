@@ -19,4 +19,22 @@ Collimator::Collimator() :
     fThickness(0.75_mm),
     fCount(7) {}
 
+void Collimator::ReadImpl(const YAML::Node& node) {
+    fInnerRadius = node["InnerRadius"].as<decltype(fInnerRadius)>();
+    fOuterRadius = node["OuterRadius"].as<decltype(fOuterRadius)>();
+    fLength = node["Length"].as<decltype(fLength)>();
+    fZPosition = node["ZPosition"].as<decltype(fZPosition)>();
+    fThickness = node["Thickness"].as<decltype(fThickness)>();
+    fCount = node["Count"].as<decltype(fCount)>();
+}
+
+void Collimator::WriteImpl(YAML::Node& node) const {
+    node["InnerRadius"] = fInnerRadius;
+    node["OuterRadius"] = fOuterRadius;
+    node["Length"] = fLength;
+    node["ZPosition"] = fZPosition;
+    node["Thickness"] = fThickness;
+    node["Count"] = fCount;
+}
+
 } // namespace MACE::Core::Geometry::Description

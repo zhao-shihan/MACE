@@ -7,6 +7,8 @@
 int main() {
     using namespace MACE::Core::Geometry;
 
+    DescriptionIO::Write("mace_geom.yaml");
+
     auto& linacField = Description::AcceleratorField::Instance();
     std::cout << linacField.GetRadius() << '\n'
               << linacField.GetLength() << '\n'
@@ -17,8 +19,6 @@ int main() {
               << linacField.GetLength() << '\n'
               << linacField.GetDownStreamLength() << '\n'
               << std::endl;
-
-    DescriptionIO::Write("mace_geom.yaml");
 
     return EXIT_SUCCESS;
 }

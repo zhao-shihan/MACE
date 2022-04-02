@@ -19,12 +19,19 @@ public:
     const auto& GetInnerLength() const { return fInnerLength; }
     const auto& GetWindowRadius() const { return fWindowRadius; }
     const auto& GetThickness() const { return fThickness; }
-    auto GetTransform() const { return CalorimeterField::Instance().GetTransform(); }
 
     void SetInnerRadius(double val) { fInnerRadius = val; }
     void SetInnerLength(double val) { fInnerLength = val; }
     void SetWindowRadius(double val) { fWindowRadius = val; }
     void SetThickness(double val) { fThickness = val; }
+
+    // Next 1 method should only use for geometry construction.
+
+    auto GetTransform() const { return CalorimeterField::Instance().GetTransform(); }
+
+private:
+    void ReadImpl(const YAML::Node& node) override;
+    void WriteImpl(YAML::Node& node) const override;
 
 private:
     double fInnerRadius;

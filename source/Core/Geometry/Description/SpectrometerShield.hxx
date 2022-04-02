@@ -26,6 +26,10 @@ public:
     void SetThickness(double val) { fThickness = val; }
 
 private:
+    void ReadImpl(const YAML::Node& node) override;
+    void WriteImpl(YAML::Node& node) const override;
+
+private:
     double fInnerRadius;
     double fInnerLength;
     double fWindowRadius;

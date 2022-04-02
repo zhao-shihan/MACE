@@ -34,10 +34,10 @@ void DetectorConstruction::ConstructVolumes() {
     fCDCBody = std::make_shared<CDCBody>();
     fCDCCell = std::make_shared<CDCCell>();
     fCDCFieldWire = std::make_shared<CDCFieldWire>();
+    fCDCLayer = std::make_shared<CDCLayer>();
     fCDCSenseWire = std::make_shared<CDCSenseWire>();
     fCDCSensitiveVolume = std::make_shared<CDCSensitiveVolume>();
     fCollimator = std::make_shared<Collimator>();
-    fCDCLayer = std::make_shared<CDCLayer>();
     fFirstBendField = std::make_shared<FirstBendField>();
     fFirstBendSolenoid = std::make_shared<FirstBendSolenoid>();
     fFirstTransportField = std::make_shared<FirstTransportField>();

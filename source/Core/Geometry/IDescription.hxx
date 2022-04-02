@@ -17,8 +17,8 @@ public:
     void Write(YAML::Node& geomYaml) const;
 
 private:
-    virtual void ReadImpl(const YAML::Node& thisNode) = 0;
-    virtual void WriteImpl(YAML::Node& thisNode) const = 0;
+    virtual void ReadImpl(const YAML::Node& node) = 0;
+    virtual void WriteImpl(YAML::Node& node) const = 0;
 
 protected:
     std::string fName;

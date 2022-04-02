@@ -85,6 +85,10 @@ public:
     std::vector<std::tuple<double, double, double, double, double>> SensitiveVolumeGeometryDetail() const;
 
 private:
+    void ReadImpl(const YAML::Node& node) override;
+    void WriteImpl(YAML::Node& node) const override;
+
+private:
     double fGasInnerRadius;
     double fGasOuterRadius;
     double fGasInnerLength;

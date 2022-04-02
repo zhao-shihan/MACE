@@ -13,10 +13,10 @@ int main(int, char**) {
     auto fCDCBody = std::make_shared<CDCBody>();
     auto fCDCCell = std::make_shared<CDCCell>();
     auto fCDCFieldWire = std::make_shared<CDCFieldWire>();
+    auto fCDCLayer = std::make_shared<CDCLayer>();
     auto fCDCSenseWire = std::make_shared<CDCSenseWire>();
     auto fCDCSensitiveVolume = std::make_shared<CDCSensitiveVolume>();
     auto fCollimator = std::make_shared<Collimator>();
-    auto fCDCLayer = std::make_shared<CDCLayer>();
     auto fFirstBendField = std::make_shared<FirstBendField>();
     auto fFirstBendSolenoid = std::make_shared<FirstBendSolenoid>();
     auto fFirstTransportField = std::make_shared<FirstTransportField>();

@@ -27,8 +27,8 @@ public:
     void SetDownStreamLength(double val) { fDownStreamLength = val; }
 
 private:
-    void ReadImpl(const YAML::Node& thisNode) override;
-    void WriteImpl(YAML::Node& thisNode) const override;
+    void ReadImpl(const YAML::Node& node) override;
+    void WriteImpl(YAML::Node& node) const override;
 
 private:
     double fRadius;

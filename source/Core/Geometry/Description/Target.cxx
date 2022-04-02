@@ -23,4 +23,14 @@ G4Transform3D Target::GetTransform() const {
     return G4Transform3D(G4RotationMatrix(), G4ThreeVector(0, 0, transZ));
 }
 
+void Target::ReadImpl(const YAML::Node& node) {
+    fWidth = node["Width"].as<decltype(fWidth)>();
+    fThickness = node["Thickness"].as<decltype(fThickness)>();
+}
+
+void Target::WriteImpl(YAML::Node& node) const {
+    node["Width"] = fWidth;
+    node["Thickness"] = fThickness;
+}
+
 } // namespace MACE::Core::Geometry::Description

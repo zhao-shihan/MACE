@@ -24,6 +24,10 @@ public:
     void SetHalfZExtent(double val) { fHalfZExtent = val; }
 
 private:
+    void ReadImpl(const YAML::Node& node) override;
+    void WriteImpl(YAML::Node& node) const override;
+
+private:
     double fHalfXExtent;
     double fHalfYExtent;
     double fHalfZExtent;

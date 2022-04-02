@@ -2,7 +2,7 @@
 
 #include "Core/Geometry/IDescription.hxx"
 
-#include "G4Transform3D.hh"
+#include "CLHEP/Geometry/Transform3D.h"
 
 namespace MACE::Core::Geometry::Description {
 
@@ -37,11 +37,15 @@ public:
 
     // Next 5 methods should only use for geometry construction.
 
-    G4Transform3D FirstStraightTransform() const;
-    G4Transform3D FirstBendTransform() const;
-    G4Transform3D SecondStraightTransform() const;
-    G4Transform3D SecondBendTransform() const;
-    G4Transform3D ThirdStraightTransform() const;
+    HepGeom::Transform3D FirstStraightTransform() const;
+    HepGeom::Transform3D FirstBendTransform() const;
+    HepGeom::Transform3D SecondStraightTransform() const;
+    HepGeom::Transform3D SecondBendTransform() const;
+    HepGeom::Transform3D ThirdStraightTransform() const;
+
+private:
+    void ReadImpl(const YAML::Node& node) override;
+    void WriteImpl(YAML::Node& node) const override;
 
 private:
     double fFirstStraightLength;

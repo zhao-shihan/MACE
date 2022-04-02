@@ -24,6 +24,10 @@ public:
     void SetZPosition(double val) { fZPosition = val; }
 
 private:
+    void ReadImpl(const YAML::Node& node) override;
+    void WriteImpl(YAML::Node& node) const override;
+
+private:
     double fRadius;
     double fLength;
     double fZPosition;
