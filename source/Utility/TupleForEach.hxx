@@ -1,4 +1,4 @@
-/// @brief Traverses a std::tuple or its derived class.
+/// @file Traverses a std::tuple or its derived class.
 /// The usage is similar to std::ranges::for_each, except that the arg is a tuple.
 /// @author Shi-Han Zhao
 

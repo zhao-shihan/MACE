@@ -31,9 +31,9 @@
 /vis/geometry/set/colour SpectrometerFieldWire         0     1     1     1     0.01
 /vis/geometry/set/colour SpectrometerSensitiveVolume   0     1     1     1     0.005
 /vis/geometry/set/colour SpectrometerCell              0     1     1     1     0.005
-/vis/geometry/set/colour SpectrometerReadoutLayer      0     1     1     1     0.005
+/vis/geometry/set/colour SpectrometerLayer      0     1     1     1     0.005
 /vis/geometry/set/colour AcceleratorField              0     1     1     1     0.05
-/vis/geometry/set/colour SpectrometerBody              0     1     1     1     0.05
+/vis/geometry/set/colour CDCBody              0     1     1     1     0.05
 /vis/geometry/set/colour SpectrometerMagnet            0     1     1     1     0.05
 /vis/geometry/set/colour ThirdTransportSolenoid        0     1     1     1     0.05
 /vis/geometry/set/colour CalorimeterField              0     1     1     1     0.05

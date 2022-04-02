@@ -27,33 +27,33 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 
 void DetectorConstruction::ConstructVolumes() {
     // Construct entity objects
-    fCalorimeter = std::make_shared<Calorimeter>();
-    fVertexDetector = std::make_shared<VertexDetector>();
-    fFirstBendSolenoid = std::make_shared<FirstBendSolenoid>();
-    fFirstTransportSolenoid = std::make_shared<FirstTransportSolenoid>();
-    fSecondBendSolenoid = std::make_shared<SecondBendSolenoid>();
-    fCollimator = std::make_shared<Collimator>();
-    fSecondTransportSolenoid = std::make_shared<SecondTransportSolenoid>();
-    fSelectorField = std::make_shared<SelectorField>();
-    fTarget = std::make_shared<Target>();
-    fSpectrometerSenseWires = std::make_shared<SpectrometerSenseWires>();
-    fSpectrometerFieldWires = std::make_shared<SpectrometerFieldWires>();
-    fSpectrometerSensitiveVolumes = std::make_shared<SpectrometerSensitiveVolumes>();
-    fSpectrometerCells = std::make_shared<SpectrometerCells>();
-    fSpectrometerReadoutLayers = std::make_shared<SpectrometerReadoutLayers>();
     fAcceleratorField = std::make_shared<AcceleratorField>();
-    fSpectrometerBody = std::make_shared<SpectrometerBody>();
-    fSpectrometerMagnet = std::make_shared<SpectrometerMagnet>();
-    fThirdTransportSolenoid = std::make_shared<ThirdTransportSolenoid>();
+    fCalorimeter = std::make_shared<Calorimeter>();
     fCalorimeterField = std::make_shared<CalorimeterField>();
     fCalorimeterShield = std::make_shared<CalorimeterShield>();
+    fCDCBody = std::make_shared<CDCBody>();
+    fCDCCell = std::make_shared<CDCCell>();
+    fCDCFieldWire = std::make_shared<CDCFieldWire>();
+    fCDCSenseWire = std::make_shared<CDCSenseWire>();
+    fCDCSensitiveVolume = std::make_shared<CDCSensitiveVolume>();
+    fCollimator = std::make_shared<Collimator>();
+    fCDCLayer = std::make_shared<CDCLayer>();
     fFirstBendField = std::make_shared<FirstBendField>();
+    fFirstBendSolenoid = std::make_shared<FirstBendSolenoid>();
     fFirstTransportField = std::make_shared<FirstTransportField>();
+    fFirstTransportSolenoid = std::make_shared<FirstTransportSolenoid>();
     fSecondBendField = std::make_shared<SecondBendField>();
+    fSecondBendSolenoid = std::make_shared<SecondBendSolenoid>();
     fSecondTransportField = std::make_shared<SecondTransportField>();
+    fSecondTransportSolenoid = std::make_shared<SecondTransportSolenoid>();
+    fSelectorField = std::make_shared<SelectorField>();
     fSpectrometerField = std::make_shared<SpectrometerField>();
+    fSpectrometerMagnet = std::make_shared<SpectrometerMagnet>();
     fSpectrometerShield = std::make_shared<SpectrometerShield>();
+    fTarget = std::make_shared<Target>();
     fThirdTransportField = std::make_shared<ThirdTransportField>();
+    fThirdTransportSolenoid = std::make_shared<ThirdTransportSolenoid>();
+    fVertexDetector = std::make_shared<VertexDetector>();
     fWorld = std::make_shared<World>();
 
     // Construct hierarchy
@@ -66,13 +66,13 @@ void DetectorConstruction::ConstructVolumes() {
     fSecondTransportField->AddDaughter(fSecondTransportSolenoid);
     fSecondTransportField->AddDaughter(fSelectorField);
     fAcceleratorField->AddDaughter(fTarget);
-    fSpectrometerSensitiveVolumes->AddDaughter(fSpectrometerSenseWires);
-    fSpectrometerCells->AddDaughter(fSpectrometerFieldWires);
-    fSpectrometerCells->AddDaughter(fSpectrometerSensitiveVolumes);
-    fSpectrometerReadoutLayers->AddDaughter(fSpectrometerCells);
-    fSpectrometerBody->AddDaughter(fSpectrometerReadoutLayers);
+    fCDCSensitiveVolume->AddDaughter(fCDCSenseWire);
+    fCDCCell->AddDaughter(fCDCFieldWire);
+    fCDCCell->AddDaughter(fCDCSensitiveVolume);
+    fCDCLayer->AddDaughter(fCDCCell);
+    fCDCBody->AddDaughter(fCDCLayer);
     fSpectrometerField->AddDaughter(fAcceleratorField);
-    fSpectrometerField->AddDaughter(fSpectrometerBody);
+    fSpectrometerField->AddDaughter(fCDCBody);
     fSpectrometerField->AddDaughter(fSpectrometerMagnet);
     fThirdTransportField->AddDaughter(fThirdTransportSolenoid);
     fWorld->AddDaughter(fCalorimeterField);
@@ -103,16 +103,16 @@ void DetectorConstruction::ConstructRegions() {
     fDefaultSolidRegion->SetProductionCuts(defaultCuts);
 
     fCollimator->RegisterRegion(fDefaultSolidRegion);
-    fSpectrometerSenseWires->RegisterRegion(fDefaultSolidRegion);
-    fSpectrometerFieldWires->RegisterRegion(fDefaultSolidRegion);
-    fSpectrometerBody->RegisterRegion(fDefaultSolidRegion);
+    fCDCSenseWire->RegisterRegion(fDefaultSolidRegion);
+    fCDCFieldWire->RegisterRegion(fDefaultSolidRegion);
+    fCDCBody->RegisterRegion(fDefaultSolidRegion);
 
     // DefaultGaseousRegion
     fDefaultGaseousRegion = new Region("DefaultGaseous", Region::kDefaultGaseous);
     fDefaultGaseousRegion->SetProductionCuts(defaultCuts);
 
-    fSpectrometerCells->RegisterRegion(fDefaultGaseousRegion);
-    fSpectrometerReadoutLayers->RegisterRegion(fDefaultGaseousRegion);
+    fCDCCell->RegisterRegion(fDefaultGaseousRegion);
+    fCDCLayer->RegisterRegion(fDefaultGaseousRegion);
 
     // ShieldRegion
     fShieldRegion = new Region("Shield", Region::kShield);
@@ -136,7 +136,7 @@ void DetectorConstruction::ConstructRegions() {
     fSpectrometerSensitiveRegion = new Region("SpectrometerSensitive", Region::kSpectrometerSensitive);
     fSpectrometerSensitiveRegion->SetProductionCuts(defaultCuts);
 
-    fSpectrometerSensitiveVolumes->RegisterRegion(fSpectrometerSensitiveRegion);
+    fCDCSensitiveVolume->RegisterRegion(fSpectrometerSensitiveRegion);
 
     // TargetRegion
     fTargetRegion = new Region("Target", Region::kTarget);
@@ -172,8 +172,8 @@ void DetectorConstruction::ConstructSDs() {
     fVertexDetectorSD = new VertexDetectorSD(fVertexDetector->GetLogicalVolumeName());
     fVertexDetector->RegisterSD(fVertexDetectorSD);
 
-    fSpectrometerSD = new SpectrometerSD(fSpectrometerSensitiveVolumes->GetLogicalVolumeName());
-    fSpectrometerSensitiveVolumes->RegisterSD(fSpectrometerSD);
+    fSpectrometerSD = new SpectrometerSD(fCDCSensitiveVolume->GetLogicalVolumeName());
+    fCDCSensitiveVolume->RegisterSD(fSpectrometerSD);
 }
 
 void DetectorConstruction::ConstructFields() {

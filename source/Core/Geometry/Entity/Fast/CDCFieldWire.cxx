@@ -1,23 +1,23 @@
-#include "Core/Geometry/Description/SpectrometerFieldWires.hxx"
-#include "Core/Geometry/Entity/Fast/SpectrometerFieldWires.hxx"
+#include "Core/Geometry/Description/CDC.hxx"
+#include "Core/Geometry/Entity/Fast/CDCFieldWire.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Core::Geometry::Entity::Fast::SpectrometerFieldWires;
+using MACE::Core::Geometry::Entity::Fast::CDCFieldWire;
 
-void SpectrometerFieldWires::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::SpectrometerFieldWires::Instance();
-    const auto name = description.GetName();
-    const auto rFieldWire = description.GetDiameter() / 2;
-    const auto infoList = description.GetInformationList();
-    const auto layerCount = infoList.size();
+void CDCFieldWire::ConstructSelf(G4bool checkOverlaps) {
+    const auto& description = Description::CDC::Instance();
+    const auto name = "CDCFieldWire";
+    const auto rFieldWire = description.GetFieldWireDiameter() / 2;
+    const auto detail = description.FieldWireGeometryDetail();
+    const auto layerCount = detail.size();
 
     auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
 
     for (size_t layerID = 0; layerID < layerCount; ++layerID) {
-        auto&& [halfLength, positionList] = infoList[layerID];
+        auto&& [halfLength, positionList] = detail[layerID];
         auto solid = Make<G4Tubs>(
             name,
             0,

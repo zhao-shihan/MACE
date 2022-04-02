@@ -1,23 +1,23 @@
-#include "Core/Geometry/Description/SpectrometerSenseWires.hxx"
-#include "Core/Geometry/Entity/Fast/SpectrometerSenseWires.hxx"
+#include "Core/Geometry/Description/CDC.hxx"
+#include "Core/Geometry/Entity/Fast/CDCSenseWire.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Core::Geometry::Entity::Fast::SpectrometerSenseWires;
+using MACE::Core::Geometry::Entity::Fast::CDCSenseWire;
 
-void SpectrometerSenseWires::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::SpectrometerSenseWires::Instance();
-    const auto name = description.GetName();
-    const auto rSenseWire = description.GetDiameter() / 2;
-    const auto infoList = description.GetInformationList();
-    const auto layerCount = infoList.size();
+void CDCSenseWire::ConstructSelf(G4bool checkOverlaps) {
+    const auto& description = Description::CDC::Instance();
+    const auto name = "CDCSenseWire";
+    const auto rSenseWire = description.GetSenseWireDiameter() / 2;
+    const auto detail = description.SenseWireGeometryDetail();
+    const auto layerCount = detail.size();
 
     auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_W");
 
     for (size_t layerID = 0; layerID < layerCount; ++layerID) {
-        const auto& [localPositon, halfLength] = infoList[layerID];
+        const auto& [localPositon, halfLength] = detail[layerID];
         auto solid = Make<G4Tubs>(
             name,
             0,

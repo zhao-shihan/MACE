@@ -31,7 +31,7 @@ private:
     G4int fEventID;
     SpectrometerHitCollection* fHitsCollection;
     std::map<ObserverPtr<const G4Track>, const G4StepPoint> fMonitoringTrackList;
-    std::vector<G4TwoVector> fSenseWireMap;
+    std::vector<std::pair<G4TwoVector, G4ThreeVector>> fSenseWireMap;
 };
 
 } // namespace MACE::Simulation::SimMACE::SD

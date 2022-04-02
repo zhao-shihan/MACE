@@ -1,4 +1,4 @@
-/// @brief Read/write the current geometry description configuration from/to a yaml.
+/// @file Read/write the current geometry description configuration from/to a yaml.
 /// @attention If a new geometry description class is added, it needs to be added to
 /// the std::tuple in the source file. Otherwise it wouldn't be covered.
 /// @author Shi-Han Zhao
@@ -25,16 +25,11 @@ static std::tuple<ObserverPtr<AcceleratorField>,
                   ObserverPtr<Calorimeter>,
                   ObserverPtr<CalorimeterField>,
                   ObserverPtr<CalorimeterShield>,
+                  ObserverPtr<CDC>,
                   ObserverPtr<Collimator>,
                   ObserverPtr<SelectorField>,
-                  ObserverPtr<SpectrometerBody>,
-                  ObserverPtr<SpectrometerCells>,
                   ObserverPtr<SpectrometerField>,
-                  ObserverPtr<SpectrometerFieldWires>,
                   ObserverPtr<SpectrometerMagnet>,
-                  ObserverPtr<SpectrometerReadoutLayers>,
-                  ObserverPtr<SpectrometerSenseWires>,
-                  ObserverPtr<SpectrometerSensitiveVolumes>,
                   ObserverPtr<SpectrometerShield>,
                   ObserverPtr<Target>,
                   ObserverPtr<TransportLine>,

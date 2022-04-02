@@ -1,5 +1,4 @@
-#include "Core/Geometry/Description/SpectrometerCells.hxx"
-#include "Core/Geometry/Description/SpectrometerSenseWires.hxx"
+#include "Core/Geometry/Description/CDC.hxx"
 #include "Simulation/SimMACE/RunManager.hxx"
 #include "Simulation/SimMACE/SD/SpectrometerSD.hxx"
 #include "Simulation/SimMACE/Utility/Analysis.hxx"
@@ -23,17 +22,14 @@ SpectrometerSD::SpectrometerSD(const G4String& sdName) :
 
     collectionName.insert(sdName + "HC");
 
-    const auto cellInfoList = Core::Geometry::Description::SpectrometerCells::Instance().GetInformationList();
-    const auto wireInfoList = Core::Geometry::Description::SpectrometerSenseWires::Instance().GetInformationList();
-    const auto layerCount = cellInfoList.size();
-    fSenseWireMap.reserve(3 * layerCount * layerCount); // just an estimation of cell count (pi*r^2), for optimization.
-    for (size_t layerID = 0; layerID < layerCount; ++layerID) {
-        const auto& [wireLocalPosition, _3] = wireInfoList[layerID];
-        for (auto&& rotation : std::get<2>(cellInfoList[layerID])) {
-            fSenseWireMap.emplace_back(rotation * wireLocalPosition);
-        }
+    const auto senseWireMap = Core::Geometry::Description::CDC::Instance().SenseWireMap();
+    fSenseWireMap.resize(senseWireMap.size());
+    for (size_t i = 0; i < senseWireMap.size(); ++i) {
+        auto& [wirePosG4, wireDirG4] = fSenseWireMap[i];
+        const auto& [wirePosEigen, wireDirEigen] = senseWireMap[i];
+        wirePosG4.set(wirePosEigen.x(), wirePosEigen.y());
+        wireDirG4.set(wireDirEigen.x(), wireDirEigen.y(), wireDirEigen.z());
     }
-    fSenseWireMap.shrink_to_fit();
 }
 
 void SpectrometerSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
@@ -71,7 +67,7 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         const auto cellID = svTouchable->GetReplicaNumber(1);
         const auto layerID = svTouchable->GetReplicaNumber(2);
         // retrive wire position
-        const auto& rWire = fSenseWireMap[cellID];
+        const auto& rWire = fSenseWireMap[cellID].first;
         // calculate drift distance
         const auto r1 = rIn - rWire;
         const auto r2 = rOut - rWire;

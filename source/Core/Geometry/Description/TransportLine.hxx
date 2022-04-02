@@ -35,6 +35,8 @@ public:
     void SetSolenoidOuterRadius(double val) { fSolenoidOuterRadius = val; }
     void SetFieldRadius(double val) { fFieldRadius = val; }
 
+    // Next 5 methods should only use for geometry construction.
+
     G4Transform3D FirstStraightTransform() const;
     G4Transform3D FirstBendTransform() const;
     G4Transform3D SecondStraightTransform() const;

@@ -1,19 +1,19 @@
-#include "Core/Geometry/Description/SpectrometerSensitiveVolumes.hxx"
-#include "Core/Geometry/Entity/Fast/SpectrometerSensitiveVolumes.hxx"
+#include "Core/Geometry/Description/CDC.hxx"
+#include "Core/Geometry/Entity/Fast/CDCSensitiveVolume.hxx"
 
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Core::Geometry::Entity::Fast::SpectrometerSensitiveVolumes;
+using MACE::Core::Geometry::Entity::Fast::CDCSensitiveVolume;
 
-void SpectrometerSensitiveVolumes::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::SpectrometerSensitiveVolumes::Instance();
-    const auto name = description.GetName();
-    const auto infoList = description.GetInformationList();
-    const auto layerCount = infoList.size();
+void CDCSensitiveVolume::ConstructSelf(G4bool checkOverlaps) {
+    const auto& description = Description::CDC::Instance();
+    const auto name = "CDCSensitiveVolume";
+    const auto detail = description.SensitiveVolumeGeometryDetail();
+    const auto layerCount = detail.size();
 
     for (size_t layerID = 0; layerID < layerCount; ++layerID) {
-        auto&& [rCenter, thick, halfLength, phiCenter, dPhi] = infoList[layerID];
+        auto&& [rCenter, thick, halfLength, phiCenter, dPhi] = detail[layerID];
         auto solid = Make<G4Tubs>(
             name,
             rCenter - thick / 2,

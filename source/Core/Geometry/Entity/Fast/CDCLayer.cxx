@@ -1,22 +1,22 @@
-#include "Core/Geometry/Description/SpectrometerReadoutLayers.hxx"
-#include "Core/Geometry/Entity/Fast/SpectrometerReadoutLayers.hxx"
+#include "Core/Geometry/Description/CDC.hxx"
+#include "Core/Geometry/Entity/Fast/CDCLayer.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Core::Geometry::Entity::Fast::SpectrometerReadoutLayers;
+using MACE::Core::Geometry::Entity::Fast::CDCLayer;
 
-void SpectrometerReadoutLayers::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::SpectrometerReadoutLayers::Instance();
-    const auto name = description.GetName();
-    const auto infoList = description.GetInformationList();
-    const auto count = infoList.size();
+void CDCLayer::ConstructSelf(G4bool checkOverlaps) {
+    const auto& description = Description::CDC::Instance();
+    const auto name = "CDCLayer";
+    const auto detail = description.LayerGeometryDetail();
+    const auto count = detail.size();
 
     const auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_He");
 
     for (size_t layerID = 0; layerID < count; ++layerID) {
-        const auto& [radius, thick, halfLength, _] = infoList[layerID];
+        const auto& [radius, thick, halfLength, _] = detail[layerID];
         auto solid = Make<G4Tubs>(
             name,
             radius - thick / 2,

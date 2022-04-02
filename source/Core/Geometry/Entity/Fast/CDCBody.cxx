@@ -1,17 +1,18 @@
-#include "Core/Geometry/Description/SpectrometerBody.hxx"
-#include "Core/Geometry/Entity/Fast/SpectrometerBody.hxx"
+#include "Core/Geometry/Description/CDC.hxx"
+#include "Core/Geometry/Entity/Fast/CDCBody.hxx"
 #include "Utility/LiteralUnit.hxx"
 
 #include "G4NistManager.hh"
 #include "G4Polycone.hh"
 #include "G4PVPlacement.hh"
 
-using MACE::Core::Geometry::Entity::Fast::SpectrometerBody;
+namespace MACE::Core::Geometry::Entity::Fast {
+
 using namespace MACE::Utility::LiteralUnit::Density;
 
-void SpectrometerBody::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::SpectrometerBody::Instance();
-    const auto name = description.GetName();
+void CDCBody::ConstructSelf(G4bool checkOverlaps) {
+    const auto& description = Description::CDC::Instance();
+    const auto name = "CDCBody";
     const auto shellInnerThickness = description.GetShellInnerThickness();
     const auto shellSideThickness = description.GetShellSideThickness();
     const auto shellOuterThickness = description.GetShellOuterThickness();
@@ -60,3 +61,5 @@ void SpectrometerBody::ConstructSelf(G4bool checkOverlaps) {
         0,
         checkOverlaps);
 }
+
+} // namespace MACE::Core::Geometry::Entity::Fast
