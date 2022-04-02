@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Simulation/SimMACE/Global.hxx"
-
 #include "G4VPhysicsConstructor.hh"
 
 namespace MACE::Simulation::SimMACE::Physics {

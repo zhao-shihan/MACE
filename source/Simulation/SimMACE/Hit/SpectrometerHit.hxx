@@ -2,7 +2,6 @@
 
 #include "Core/DataModel/SimHit/SpectrometerSimHit.hxx"
 #include "Utility/ObserverPtr.hxx"
-#include "Simulation/SimMACE/Global.hxx"
 
 #include "G4Allocator.hh"
 #include "G4THitsCollection.hh"

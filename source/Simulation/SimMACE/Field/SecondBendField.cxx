@@ -1,28 +1,26 @@
-#include "Core/Geometry/Description/SecondBendField.hxx"
-#include "Utility/LiteralUnit.hxx"
+#include "Core/Geometry/Description/TransportLine.hxx"
 #include "Simulation/SimMACE/Field/SecondBendField.hxx"
 #include "Simulation/SimMACE/Messenger/FieldMessenger.hxx"
+#include "Utility/LiteralUnit.hxx"
 
 namespace MACE::Simulation::SimMACE::Field {
 
 using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
-using Messenger::FieldMessenger;
 
 SecondBendField::SecondBendField() :
     G4MagneticField(),
     fB(0.1_T) {
-    FieldMessenger::Instance().Set(this);
+    Messenger::FieldMessenger::Instance().Set(this);
+    const auto& fieldTransform = Core::Geometry::Description::TransportLine::Instance().SecondBendTransform();
+    fX0 = fieldTransform.dx();
+    fZ0 = fieldTransform.dz();
 }
 
 void SecondBendField::GetFieldValue(const G4double* x, G4double* B) const {
-    const auto& geom = Core::Geometry::Description::SecondBendField::Instance();
-    auto x0 = geom.GetTransform().dx();
-    auto z0 = geom.GetTransform().dz();
-
-    auto r = std::hypot(x[0] - x0, x[2] - z0);
-    B[0] = -(x[2] - z0) / r * fB;
+    const auto r = std::sqrt((x[0] - fX0) * (x[0] - fX0) + (x[2] - fZ0) * (x[2] - fZ0));
+    B[0] = -(x[2] - fZ0) / r * fB;
     B[1] = 0;
-    B[2] = (x[0] - x0) / r * fB;
+    B[2] = (x[0] - fX0) / r * fB;
 }
 
 } // namespace MACE::Simulation::SimMACE::Field

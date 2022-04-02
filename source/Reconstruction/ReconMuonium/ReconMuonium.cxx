@@ -7,12 +7,8 @@
 #include "Core/DataModel/Track/CDCPhysicsTrack.hxx"
 #include "Core/Geometry/Description/AcceleratorField.hxx"
 #include "Core/Geometry/Description/CalorimeterField.hxx"
-#include "Core/Geometry/Description/FirstBendField.hxx"
-#include "Core/Geometry/Description/FirstTransportField.hxx"
-#include "Core/Geometry/Description/SecondBendField.hxx"
-#include "Core/Geometry/Description/SecondTransportField.hxx"
 #include "Core/Geometry/Description/SpectrometerField.hxx"
-#include "Core/Geometry/Description/ThirdTransportField.hxx"
+#include "Core/Geometry/Description/TransportLine.hxx"
 #include "Utility/LiteralUnit.hxx"
 #include "Utility/MPITool/MPIFileTools.hxx"
 #include "Utility/MPITool/MPIJobsAssigner.hxx"
@@ -48,13 +44,14 @@ int main(int, char* argv[]) {
     const auto linacLength = AcceleratorField::Instance().GetDownStreamLength();
     const auto accE = 7_kV / (linacLength - 13.05_mm);
     // flight
+    const auto& transportLine = TransportLine::Instance();
     const auto flightLength =
         SpectrometerField::Instance().GetLength() / 2 - linacLength +
-        FirstTransportField::Instance().GetLength() +
-        FirstBendField::Instance().GetBendRadius() * halfpi +
-        SecondTransportField::Instance().GetLength() +
-        SecondBendField::Instance().GetBendRadius() * halfpi +
-        ThirdTransportField::Instance().GetLength() +
+        transportLine.GetFirstStraightLength() +
+        transportLine.GetFirstBendRadius() * halfpi +
+        transportLine.GetSecondStraightLength() +
+        transportLine.GetSecondBendRadius() * halfpi +
+        transportLine.GetThirdStraightLength() +
         CalorimeterField::Instance().GetLength() / 2;
     // muonium survival length (5 tau_mu @ 300K)
     const auto maxSurvivalLength = c_light * std::sqrt(3 * k_Boltzmann * 300_K / muonium_mass_c2) * 5 * 2197.03_ns;

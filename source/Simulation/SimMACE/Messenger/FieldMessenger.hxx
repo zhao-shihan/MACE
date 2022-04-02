@@ -1,13 +1,12 @@
 #pragma once
 
-#include "Utility/ObserverPtr.hxx"
 #include "Simulation/SimMACE/Field/AcceleratorField.hxx"
 #include "Simulation/SimMACE/Field/FirstBendField.hxx"
 #include "Simulation/SimMACE/Field/ParallelField.hxx"
 #include "Simulation/SimMACE/Field/SecondBendField.hxx"
 #include "Simulation/SimMACE/Field/SelectorField.hxx"
 #include "Simulation/SimMACE/Field/VerticalField.hxx"
-#include "Simulation/SimMACE/Global.hxx"
+#include "Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UImessenger.hh"

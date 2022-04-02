@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Simulation/SimMACE/Global.hxx"
+#include "Utility/LiteralUnit.hxx"
 
 #include "G4ParticleChange.hh"
 #include "G4VRestProcess.hh"

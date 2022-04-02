@@ -1,9 +1,6 @@
 #pragma once
 
-#include "Simulation/SimMACE/Global.hxx"
-
 #include "G4MagneticField.hh"
-#include "G4ThreeVector.hh"
 
 namespace MACE::Simulation::SimMACE::Field {
 
@@ -20,6 +17,8 @@ public:
 
 private:
     G4double fB;
+    G4double fX0;
+    G4double fZ0;
 };
 
 } // namespace MACE::Simulation::SimMACE::Field

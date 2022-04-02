@@ -39,8 +39,6 @@
 
 #pragma once
 
-#include "Simulation/SimMACE/Global.hxx"
-
 #include "G4VDecayChannel.hh"
 
 namespace MACE::Simulation::SimMACE::Physics {

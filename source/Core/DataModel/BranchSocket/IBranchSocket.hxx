@@ -24,6 +24,6 @@ protected:
     const TString fBranchName;
 };
 
-} // namespace MACE::Core::DataModel
+} // namespace MACE::Core::DataModel::BranchSocket
 
 #include "Core/DataModel/BranchSocket/IBranchSocket.ixx"

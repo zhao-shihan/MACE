@@ -1,4 +1,4 @@
-#include "Core/Geometry/Description/SecondBendSolenoid.hxx"
+#include "Core/Geometry/Description/TransportLine.hxx"
 #include "Core/Geometry/Entity/Fast/SecondBendSolenoid.hxx"
 
 #include "G4NistManager.hh"
@@ -8,18 +8,18 @@
 using MACE::Core::Geometry::Entity::Fast::SecondBendSolenoid;
 
 void SecondBendSolenoid::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::SecondBendSolenoid::Instance();
-    auto name = description.GetName();
-    auto innerRadius = description.GetInnerRaidus();
-    auto outerRaidus = description.GetOuterRaidus();
-    auto bendRadius = description.GetBendRadius();
+    const auto& description = Description::TransportLine::Instance();
+    const auto name = "SecondBendSolenoid";
+    const auto innerRadius = description.GetSolenoidInnerRadius();
+    const auto outerRadius = description.GetSolenoidOuterRadius();
+    const auto bendRadius = description.GetSecondBendRadius();
 
     auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu");
 
     auto solid = Make<G4Torus>(
         name,
         innerRadius,
-        outerRaidus,
+        outerRadius,
         bendRadius,
         -M_PI_2,
         M_PI_2);

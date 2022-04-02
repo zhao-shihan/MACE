@@ -1,4 +1,4 @@
-#include "Core/Geometry/Description/FirstTransportSolenoid.hxx"
+#include "Core/Geometry/Description/TransportLine.hxx"
 #include "Core/Geometry/Entity/Fast/FirstTransportSolenoid.hxx"
 
 #include "G4NistManager.hh"
@@ -8,18 +8,18 @@
 using MACE::Core::Geometry::Entity::Fast::FirstTransportSolenoid;
 
 void FirstTransportSolenoid::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::FirstTransportSolenoid::Instance();
-    auto name = description.GetName();
-    auto innerRadius = description.GetInnerRaidus();
-    auto outerRaidus = description.GetOuterRaidus();
-    auto length = description.GetLength();
+    const auto& description = Description::TransportLine::Instance();
+    const auto name = "FirstTransportSolenoid";
+    const auto innerRadius = description.GetSolenoidInnerRadius();
+    const auto outerRadius = description.GetSolenoidOuterRadius();
+    const auto length = description.GetFirstStraightLength();
 
     auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu");
 
     auto solid = Make<G4Tubs>(
         name,
         innerRadius,
-        outerRaidus,
+        outerRadius,
         length / 2,
         0,
         2 * M_PI);

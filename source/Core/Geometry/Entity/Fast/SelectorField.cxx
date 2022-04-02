@@ -9,14 +9,14 @@ using MACE::Core::Geometry::Entity::Fast::SelectorField;
 void SelectorField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::SelectorField::Instance();
     const auto name = description.GetName();
-    const auto raidus = description.GetRadius();
+    const auto radius = description.GetRadius();
     const auto length = description.GetLength();
     const auto zPosition = description.GetZPosition();
 
     auto solid = Make<G4Tubs>(
         name,
         0,
-        raidus,
+        radius,
         length / 2,
         0,
         2 * M_PI);

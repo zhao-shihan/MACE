@@ -1,8 +1,7 @@
 #pragma once
 
-#include "Utility/ObserverPtr.hxx"
-#include "Simulation/SimMACE/Global.hxx"
 #include "Simulation/SimMACE/Physics/MuoniumProduction.hxx"
+#include "Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWithADouble.hh"
 #include "G4UImessenger.hh"

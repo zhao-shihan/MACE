@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Simulation/SimMACE/Global.hxx"
-
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UImessenger.hh"

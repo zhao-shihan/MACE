@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Utility/LiteralUnit.hxx"
 #include "Reconstruction/ReconTracks/Interface/Fitter.hxx"
+#include "Utility/LiteralUnit.hxx"
 
 namespace MACE::Reconstruction::ReconTracks::Fitter {
 

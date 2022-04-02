@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Geometry/Description/ThirdTransportField.hxx"
+#include "Core/Geometry/Description/TransportLine.hxx"
 
 namespace MACE::Core::Geometry::Description {
 

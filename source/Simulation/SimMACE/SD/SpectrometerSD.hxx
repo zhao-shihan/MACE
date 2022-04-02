@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Utility/ObserverPtr.hxx"
 #include "Simulation/SimMACE/Hit/SpectrometerHit.hxx"
+#include "Utility/ObserverPtr.hxx"
 
 #include "G4TwoVector.hh"
 #include "G4VSensitiveDetector.hh"

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Simulation/SimMACE/Global.hxx"
-
 #include "G4ParticleGun.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 

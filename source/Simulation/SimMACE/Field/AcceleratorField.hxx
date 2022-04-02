@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Utility/LiteralUnit.hxx"
-#include "Simulation/SimMACE/Global.hxx"
 
 #include "G4ElectroMagneticField.hh"
 

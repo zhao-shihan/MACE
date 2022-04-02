@@ -1,12 +1,14 @@
 #include "Simulation/SimMACE/Physics/Muonium.hxx"
 #include "Simulation/SimMACE/Physics/MuoniumDecayChannel.hxx"
+#include "Utility/LiteralUnit.hxx"
 
 #include "G4DecayTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-using MACE::Simulation::SimMACE::Physics::Muonium;
+namespace MACE::Simulation::SimMACE::Physics {
+
 using namespace MACE::Utility::LiteralUnit;
 
 Muonium* Muonium::fgInstance = nullptr;
@@ -52,3 +54,5 @@ Muonium::Muonium() :
     table->Insert(new MuoniumDecayChannel("M", 1.00));
     this->SetDecayTable(table);
 }
+
+} // namespace MACE::Simulation::SimMACE::Physics

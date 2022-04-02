@@ -1,6 +1,6 @@
-#include "Utility/LiteralUnit.hxx"
 #include "Simulation/SimMACE/Action/PrimaryGeneratorAction.hxx"
 #include "Simulation/SimMACE/Messenger/PrimaryGeneratorMessenger.hxx"
+#include "Utility/LiteralUnit.hxx"
 
 #include "G4Event.hh"
 #include "G4MuonPlus.hh"

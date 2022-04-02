@@ -1,6 +1,4 @@
 #pragma once
-
-#include "Simulation/SimMACE/Global.hxx"
 #include "Simulation/SimMACE/RunManager.hxx"
 
 #include "G4VModularPhysicsList.hh"

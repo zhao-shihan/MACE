@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Core/Geometry/Entity/Fast/All.hxx"
-#include "Simulation/SimMACE/Global.hxx"
 #include "Simulation/SimMACE/SD/CalorimeterSD.hxx"
 #include "Simulation/SimMACE/SD/SpectrometerSD.hxx"
 #include "Simulation/SimMACE/SD/VertexDetectorSD.hxx"

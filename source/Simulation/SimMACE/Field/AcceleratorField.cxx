@@ -1,7 +1,7 @@
 #include "Core/Geometry/Description/AcceleratorField.hxx"
-#include "Utility/LiteralUnit.hxx"
 #include "Simulation/SimMACE/Field/AcceleratorField.hxx"
 #include "Simulation/SimMACE/Messenger/FieldMessenger.hxx"
+#include "Utility/LiteralUnit.hxx"
 
 namespace MACE::Simulation::SimMACE::Field {
 

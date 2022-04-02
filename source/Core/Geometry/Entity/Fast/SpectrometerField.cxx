@@ -10,12 +10,12 @@ void SpectrometerField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::SpectrometerField::Instance();
     auto name = description.GetName();
     auto length = description.GetLength();
-    auto raidus = description.GetRadius();
+    auto radius = description.GetRadius();
 
     auto solid = Make<G4Tubs>(
         name,
         0,
-        raidus,
+        radius,
         length / 2,
         0,
         2 * M_PI);

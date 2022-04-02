@@ -1,23 +1,23 @@
-#include "Core/Geometry/Description/FirstBendField.hxx"
+#include "Core/Geometry/Description/TransportLine.hxx"
 #include "Core/Geometry/Entity/Fast/FirstBendField.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4Torus.hh"
 
-using MACE::Core::Geometry::Entity::Fast::FirstBendField;
+namespace MACE::Core::Geometry::Entity::Fast {
 
 void FirstBendField::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::FirstBendField::Instance();
-    auto name = description.GetName();
-    auto raidus = description.GetRadius();
-    auto bendRadius = description.GetBendRadius();
-    auto transform = description.GetTransform();
+    const auto& description = Description::TransportLine::Instance();
+    const auto name = "FirstBendField";
+    const auto radius = description.GetFieldRadius();
+    const auto bendRadius = description.GetFirstBendRadius();
+    const auto transform = description.FirstBendTransform();
 
     auto solid = Make<G4Torus>(
         name,
         0,
-        raidus,
+        radius,
         bendRadius,
         M_PI_2,
         M_PI_2);
@@ -34,3 +34,5 @@ void FirstBendField::ConstructSelf(G4bool checkOverlaps) {
         0,
         checkOverlaps);
 }
+
+} // namespace MACE::Core::Geometry::Entity::Fast

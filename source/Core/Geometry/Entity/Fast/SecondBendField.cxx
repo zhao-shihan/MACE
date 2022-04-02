@@ -1,22 +1,22 @@
-#include "Core/Geometry/Description/SecondBendField.hxx"
+#include "Core/Geometry/Description/TransportLine.hxx"
 #include "Core/Geometry/Entity/Fast/SecondBendField.hxx"
 
 #include "G4PVPlacement.hh"
 #include "G4Torus.hh"
 
-using MACE::Core::Geometry::Entity::Fast::SecondBendField;
+namespace MACE::Core::Geometry::Entity::Fast {
 
 void SecondBendField::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::SecondBendField::Instance();
-    auto name = description.GetName();
-    auto raidus = description.GetRadius();
-    auto bendRadius = description.GetBendRadius();
-    auto transform = description.GetTransform();
+    const auto& description = Description::TransportLine::Instance();
+    const auto name = "SecondBendField";
+    const auto radius = description.GetFieldRadius();
+    const auto bendRadius = description.GetSecondBendRadius();
+    const auto transform = description.SecondBendTransform();
 
     auto solid = Make<G4Torus>(
         name,
         0,
-        raidus,
+        radius,
         bendRadius,
         -M_PI_2,
         M_PI_2);
@@ -33,3 +33,5 @@ void SecondBendField::ConstructSelf(G4bool checkOverlaps) {
         0,
         checkOverlaps);
 }
+
+} // namespace MACE::Core::Geometry::Entity::Fast

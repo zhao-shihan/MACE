@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Utility/ObserverPtr.hxx"
-#include "Simulation/SimMACE/Global.hxx"
 
 #include "G4UserEventAction.hh"
 

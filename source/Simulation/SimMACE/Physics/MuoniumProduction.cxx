@@ -7,8 +7,8 @@
 #include "G4PhysicalConstants.hh"
 #include "G4RunManager.hh"
 
-using namespace MACE::Simulation::SimMACE::Physics;
-using namespace MACE::Utility::LiteralUnit;
+namespace MACE::Simulation::SimMACE::Physics {
+
 using MACE::Simulation::SimMACE::Messenger::PhysicsMessenger;
 
 MuoniumProduction::MuoniumProduction() :
@@ -37,3 +37,5 @@ G4VParticleChange* MuoniumProduction::AtRestDoIt(const G4Track& track, const G4S
 
     return std::addressof(fParticleChange);
 }
+
+} // namespace MACE::Simulation::SimMACE::Physics

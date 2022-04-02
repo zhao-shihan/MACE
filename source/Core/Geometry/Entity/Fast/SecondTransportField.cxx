@@ -1,17 +1,18 @@
-#include "Core/Geometry/Description/SecondTransportField.hxx"
+#include "Core/Geometry/Description/SpectrometerField.hxx"
+#include "Core/Geometry/Description/TransportLine.hxx"
 #include "Core/Geometry/Entity/Fast/SecondTransportField.hxx"
 
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Core::Geometry::Entity::Fast::SecondTransportField;
+namespace MACE::Core::Geometry::Entity::Fast {
 
 void SecondTransportField::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::SecondTransportField::Instance();
-    auto name = description.GetName();
-    auto length = description.GetLength();
-    auto radius = description.GetRadius();
-    auto transform = description.GetTransform();
+    const auto& description = Description::TransportLine::Instance();
+    const auto name = "SecondTransportField";
+    const auto length = description.GetSecondStraightLength();
+    const auto radius = description.GetFieldRadius();
+    const auto transform = description.SecondStraightTransform();
 
     auto solid = Make<G4Tubs>(
         name,
@@ -33,3 +34,5 @@ void SecondTransportField::ConstructSelf(G4bool checkOverlaps) {
         0,
         checkOverlaps);
 }
+
+} // namespace MACE::Core::Geometry::Entity::Fast

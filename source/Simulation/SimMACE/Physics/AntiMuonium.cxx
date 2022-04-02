@@ -1,12 +1,14 @@
 #include "Simulation/SimMACE/Physics/AntiMuonium.hxx"
 #include "Simulation/SimMACE/Physics/AntiMuoniumDecayChannel.hxx"
+#include "Utility/LiteralUnit.hxx"
 
 #include "G4DecayTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-using MACE::Simulation::SimMACE::Physics::AntiMuonium;
+namespace MACE::Simulation::SimMACE::Physics {
+
 using namespace MACE::Utility::LiteralUnit;
 
 AntiMuonium* AntiMuonium::fgInstance = nullptr;
@@ -53,3 +55,5 @@ AntiMuonium::AntiMuonium() :
     table->Insert(new AntiMuoniumDecayChannel("anti_M", 1.00));
     this->SetDecayTable(table);
 }
+
+} // namespace MACE::Simulation::SimMACE::Physics

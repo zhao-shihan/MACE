@@ -1,22 +1,22 @@
-#include "Core/Geometry/Description/FirstTransportField.hxx"
+#include "Core/Geometry/Description/TransportLine.hxx"
 #include "Core/Geometry/Entity/Fast/FirstTransportField.hxx"
 
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Core::Geometry::Entity::Fast::FirstTransportField;
+namespace MACE::Core::Geometry::Entity::Fast {
 
 void FirstTransportField::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::FirstTransportField::Instance();
-    auto name = description.GetName();
-    auto raidus = description.GetRadius();
-    auto length = description.GetLength();
-    auto transform = description.GetTransform();
+    const auto& description = Description::TransportLine::Instance();
+    const auto name = "FirstTransportField";
+    const auto radius = description.GetFieldRadius();
+    const auto length = description.GetFirstStraightLength();
+    const auto transform = description.FirstStraightTransform();
 
     auto solid = Make<G4Tubs>(
         name,
         0,
-        raidus,
+        radius,
         length / 2,
         0,
         2 * M_PI);
@@ -33,3 +33,5 @@ void FirstTransportField::ConstructSelf(G4bool checkOverlaps) {
         0,
         checkOverlaps);
 }
+
+} // namespace MACE::Core::Geometry::Entity::Fast
