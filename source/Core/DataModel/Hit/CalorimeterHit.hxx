@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "Core/DataFactory.hxx"
+#include "Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "Core/DataModel/ITransientData.hxx"
 
 namespace MACE::Core::DataModel::Hit {
@@ -10,8 +10,6 @@ using BranchSocket::DoubleBranchSocket;
 using BranchSocket::FloatBranchSocket;
 
 class CalorimeterHit : public ITransientData {
-    friend DataFactory;
-
 public:
     CalorimeterHit() noexcept;
     CalorimeterHit(const CalorimeterHit& hit) noexcept = default;
@@ -28,13 +26,10 @@ public:
     void SetEnergy(Double_t val) { fEnergy = val; }
     void SetEnergyVariance(Double_t val) { fEnergyVariance = val; }
 
-protected:
+    static consteval const char* BasicTreeName() noexcept { return "CalHit"; }
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
     void FillBranchSockets() const noexcept;
-
-private:
-    static consteval const char* BasicTreeName() noexcept { return "CalHit"; }
 
 private:
     Double_t fHitTime;

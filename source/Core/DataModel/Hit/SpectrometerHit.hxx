@@ -1,8 +1,8 @@
 #pragma once
 
+#include "Core/DataFactory.hxx"
 #include "Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
-#include "Core/DataFactory.hxx"
 #include "Core/DataModel/ITransientData.hxx"
 
 namespace MACE::Core::DataModel::Hit {
@@ -14,7 +14,6 @@ using BranchSocket::Vector2FBranchSocket;
 using BranchSocket::Vector3FBranchSocket;
 
 class SpectrometerHit : public ITransientData {
-    friend DataFactory;
     using Base = ITransientData;
 
 public:
@@ -49,13 +48,10 @@ public:
     void SetCellID(Int_t val) { fCellID = val; }
     void SetLayerID(Int_t val) { fLayerID = val; }
 
-protected:
+    static consteval const char* BasicTreeName() noexcept { return "CDCHit"; }
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
     void FillBranchSockets() const noexcept;
-
-private:
-    static consteval const char* BasicTreeName() noexcept { return "CDCHit"; }
 
 private:
     Double_t fHitTime;

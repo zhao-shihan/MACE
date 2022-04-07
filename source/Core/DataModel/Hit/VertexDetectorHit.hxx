@@ -1,8 +1,8 @@
 #pragma once
 
+#include "Core/DataFactory.hxx"
 #include "Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
-#include "Core/DataFactory.hxx"
 #include "Core/DataModel/ITransientData.hxx"
 
 namespace MACE::Core::DataModel::Hit {
@@ -11,7 +11,6 @@ using BranchSocket::DoubleBranchSocket;
 using BranchSocket::Vector2FBranchSocket;
 
 class VertexDetectorHit : public ITransientData {
-    friend DataFactory;
     using Base = ITransientData;
 
 public:
@@ -34,13 +33,10 @@ public:
     void SetHitPositionVariance(Vector2_t&& posVar) { fHitPositionVariance = std::forward<Vector2_t>(posVar); }
     void SetHitPositionVariance(Double_t xVar, Double_t yVar) { fHitPositionVariance = {xVar, yVar}; }
 
-protected:
+    static consteval const char* BasicTreeName() noexcept { return "MCPHit"; }
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
     void FillBranchSockets() const noexcept;
-
-private:
-    static consteval const char* BasicTreeName() noexcept { return "MCPHit"; }
 
 private:
     Double_t fHitTime;

@@ -118,6 +118,6 @@ private:
     std::pair<TString, TString> fSplitSuffix = {"", ""};
 };
 
-} // namespace MACE::Core::DataModel
+} // namespace MACE::Core
 
 #include "Core/DataFactory.ixx"

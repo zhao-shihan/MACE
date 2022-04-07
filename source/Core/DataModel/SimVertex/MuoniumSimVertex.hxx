@@ -1,9 +1,9 @@
 #pragma once
 
+#include "Core/DataFactory.hxx"
 #include "Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 #include "Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
-#include "Core/DataFactory.hxx"
 #include "Core/DataModel/Vertex/MuoniumVertex.hxx"
 
 namespace MACE::Core::DataModel::SimVertex {
@@ -15,8 +15,6 @@ using BranchSocket::Vector3FBranchSocket;
 using Utility::ShortString;
 
 class MuoniumSimVertex : public Vertex::MuoniumVertex {
-    friend DataFactory;
-
 public:
     MuoniumSimVertex() noexcept;
     MuoniumSimVertex(const MuoniumSimVertex&) noexcept = default;
@@ -42,13 +40,10 @@ public:
     template<typename String_t>
     void SetTrueParticles(String_t&& particleNames) { fTrueParticles = std::forward<String_t>(particleNames); }
 
-protected:
+    static consteval const char* BasicTreeName() noexcept { return "MVtx"; }
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
     void FillBranchSockets() const noexcept;
-
-private:
-    static consteval const char* BasicTreeName() noexcept { return "MVtx"; }
 
 private:
     Double_t fTrueVertexTime;

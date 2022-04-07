@@ -13,8 +13,6 @@ using BranchSocket::Vector3FBranchSocket;
 using Utility::ShortString;
 
 class VertexDetectorSimHit : public Hit::VertexDetectorHit {
-    friend DataFactory;
-
 public:
     VertexDetectorSimHit() noexcept;
     VertexDetectorSimHit(const VertexDetectorSimHit& hit) noexcept = default;
@@ -38,13 +36,10 @@ public:
     void SetG4EventID(Int_t val) { fG4EventID = val; }
     void SetG4TrackID(Int_t val) { fG4TrackID = val; }
 
-protected:
+    static consteval const char* BasicTreeName() noexcept { return "MCPSimHit"; }
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
     void FillBranchSockets() const noexcept;
-
-private:
-    static consteval const char* BasicTreeName() noexcept { return "MCPSimHit"; }
 
 private:
     Double_t fVertexTime;

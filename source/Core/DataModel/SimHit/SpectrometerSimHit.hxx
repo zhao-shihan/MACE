@@ -14,8 +14,6 @@ using BranchSocket::Vector3FBranchSocket;
 using Utility::ShortString;
 
 class SpectrometerSimHit : public Hit::SpectrometerHit {
-    friend DataFactory;
-
 public:
     SpectrometerSimHit() noexcept;
     SpectrometerSimHit(const SpectrometerSimHit& hit) noexcept = default;
@@ -51,13 +49,10 @@ public:
     void SetG4EventID(Int_t val) { fG4EventID = val; }
     void SetG4TrackID(Int_t val) { fG4TrackID = val; }
 
-protected:
+    static consteval const char* BasicTreeName() noexcept { return "CDCSimHit"; }
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
     void FillBranchSockets() const noexcept;
-
-private:
-    static consteval const char* BasicTreeName() noexcept { return "CDCSimHit"; }
 
 private:
     Double_t fEnergy;
