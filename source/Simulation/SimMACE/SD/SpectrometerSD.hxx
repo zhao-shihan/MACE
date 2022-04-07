@@ -30,7 +30,7 @@ public:
 private:
     G4int fEventID;
     SpectrometerHitCollection* fHitsCollection;
-    std::map<ObserverPtr<const G4Track>, const G4StepPoint> fMonitoringTrackList;
+    std::map<std::pair<int, int>, const G4StepPoint> fEnteredPointList;
     std::vector<std::pair<G4TwoVector, G4ThreeVector>> fSenseWireMap;
 };
 

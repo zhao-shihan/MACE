@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/DataModel/DataFactory.hxx"
+#include "Core/DataFactory.hxx"
 #include "Simulation/SimMACE/Hit/CalorimeterHit.hxx"
 #include "Simulation/SimMACE/Hit/SpectrometerHit.hxx"
 #include "Simulation/SimMACE/Hit/VertexDetectorHit.hxx"
@@ -11,7 +11,7 @@
 
 namespace MACE::Simulation::SimMACE::Utility {
 
-using Core::DataModel::DataFactory;
+using Core::DataFactory;
 using Hit::CalorimeterHit;
 using Hit::SpectrometerHit;
 using Hit::VertexDetectorHit;

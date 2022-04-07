@@ -1,6 +1,6 @@
-#include "Core/DataModel/DataFactory.hxx"
+#include "Core/DataFactory.hxx"
 
-using MACE::Core::DataModel::DataFactory;
+using MACE::Core::DataFactory;
 
 static Bool_t Split(const TString& format, Char_t indexer, std::pair<TString, TString>& result) {
     auto index = format.First(indexer);

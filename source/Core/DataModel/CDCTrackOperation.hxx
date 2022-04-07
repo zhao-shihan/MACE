@@ -21,7 +21,7 @@ using PhysicsTrackParameters = std::tuple<Eigen::Vector3d, double, Eigen::Vector
 /// @param center The helix center.
 /// @param phi The polar angle.
 /// @return Space point respect to phi.
-inline double CalcHelixPhi0(const Eigen::Vector2d& center) { return std::atan2(-center.x(), -center.y()); }
+inline double CalcHelixPhi0(const Eigen::Vector2d& center) { return std::atan2(-center.y(), -center.x()); }
 
 /// @brief Calculate point <-> helix track CPA's polar angle.
 /// @param helix The helix center.

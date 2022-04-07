@@ -8,8 +8,9 @@
 
 #include <filesystem>
 
-namespace MACE::Core::DataModel {
+namespace MACE::Core {
 
+using DataModel::IsTransientData;
 using Utility::ObserverPtr;
 
 class DataFactory final {
@@ -119,4 +120,4 @@ private:
 
 } // namespace MACE::Core::DataModel
 
-#include "Core/DataModel/DataFactory.ixx"
+#include "Core/DataFactory.ixx"

@@ -11,7 +11,7 @@ namespace MACE::Core::DataModel::BranchSocket {
 template<IsROOTFundamental Fund_t, int Size>
 class VectorBranchSocket final : public IBranchSocket<Eigen::Vector<Fund_t, Size>> {
 public:
-    VectorBranchSocket(const TString& branchName, const std::array<TString, Size>& leafList, const std::array<Fund_t, Size>& defaultValues);
+    VectorBranchSocket(const TString& branchName, const std::array<TString, Size>& leafNames, const std::array<Fund_t, Size>& defaultValues);
     ~VectorBranchSocket() noexcept = default;
     VectorBranchSocket(const VectorBranchSocket&) = delete;
     VectorBranchSocket& operator=(const VectorBranchSocket&) = delete;
