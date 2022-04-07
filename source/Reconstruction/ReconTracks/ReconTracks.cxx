@@ -1,4 +1,4 @@
-#include "Core/DataModel/DataFactory.hxx"
+#include "Core/DataFactory.hxx"
 #include "Reconstruction/ReconTracks/Fitter/DirectLeastSquare.hxx"
 #include "Reconstruction/ReconTracks/Fitter/Dummy.hxx"
 #include "Reconstruction/ReconTracks/Fitter/PerfectFitter.hxx"
@@ -18,7 +18,7 @@ using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
 using namespace MACE::Utility::MPITool;
 using namespace MACE::Utility::PhysicalConstant;
 
-using MACE::Core::DataModel::DataFactory;
+using MACE::Core::DataFactory;
 
 using Hit_t = SpectrometerSimHit;
 

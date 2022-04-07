@@ -14,7 +14,7 @@ Eigen::Vector3d CalcHelixPoint(const HelixTrackParameters& helix, double phi) {
     const auto& [center, radius, z0, alpha] = helix;
     const auto phi0 = CalcHelixPhi0(center);
     return Eigen::Vector3d(center.x() + radius * std::cos(phi + phi0),
-                           center.x() + radius * std::sin(phi + phi0),
+                           center.y() + radius * std::sin(phi + phi0),
                            z0 + radius * phi / std::tan(alpha));
 }
 

@@ -1,11 +1,11 @@
-#include "Core/DataModel/DataFactory.hxx"
+#include "Core/DataFactory.hxx"
 #include "Core/DataModel/Track/CDCHelixTrack.hxx"
 #include "Core/DataModel/Track/CDCPhysicsTrack.hxx"
 #include "Utility/LiteralUnit.hxx"
 
 #include "CLHEP/Units/PhysicalConstants.h"
 
-using MACE::Core::DataModel::DataFactory;
+using MACE::Core::DataFactory;
 using namespace MACE::Core::DataModel::Track;
 using namespace MACE::Utility::LiteralUnit;
 

@@ -1,8 +1,8 @@
 /run/initialize
 
-/MACE/PrimaryGenerator/SetFlux                   5e5 s-1
-/MACE/PrimaryGenerator/SetRepetitionRate         2.5 Hz
-/MACE/PrimaryGenerator/SetTimeWidthRMS           10 ms
+/MACE/PrimaryGenerator/SetFlux                   1e7 s-1
+/MACE/PrimaryGenerator/SetRepetitionRate         50 Hz
+/MACE/PrimaryGenerator/SetTimeWidthRMS           100 us
 /MACE/PrimaryGenerator/SetEnergy                 1.5 MeV
 /MACE/PrimaryGenerator/SetEnergySpreadRMS        0.08 MeV
 /MACE/PrimaryGenerator/SetBeamProfileRMS         5 mm

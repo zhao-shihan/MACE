@@ -1,5 +1,5 @@
 #include "Core/DataModel/CDCTrackOperation.hxx"
-#include "Core/DataModel/DataFactory.hxx"
+#include "Core/DataFactory.hxx"
 #include "Core/DataModel/SimHit/CalorimeterSimHit.hxx"
 #include "Core/DataModel/SimHit/VertexDetectorSimHit.hxx"
 #include "Core/DataModel/SimVertex/MuoniumSimVertex.hxx"
@@ -23,7 +23,7 @@ using namespace MACE::Core::Geometry::Description;
 using namespace MACE::Core::DataModel;
 using namespace MACE::Core::DataModel::CDCTrackOperation;
 
-using MACE::Core::DataModel::DataFactory;
+using MACE::Core::DataFactory;
 
 using Helix_t = Track::CDCHelixTrack;
 using Track_t = Track::CDCPhysicsTrack;

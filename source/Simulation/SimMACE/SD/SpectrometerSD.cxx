@@ -17,7 +17,7 @@ using Utility::Analysis;
 SpectrometerSD::SpectrometerSD(const G4String& sdName) :
     G4VSensitiveDetector(sdName),
     fHitsCollection(nullptr),
-    fMonitoringTrackList(),
+    fEnteredPointList(),
     fSenseWireMap(0) {
 
     collectionName.insert(sdName + "HC");
@@ -43,35 +43,38 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     const auto* const track = step->GetTrack();
     const auto* const particle = track->GetDefinition();
     if (track->GetCurrentStepNumber() <= 1 or particle->GetPDGCharge() == 0) { return false; }
-    auto monitoring = std::as_const(fMonitoringTrackList).find(track);
-    auto isMonitoring = (monitoring != fMonitoringTrackList.cend());
+    // get track ID and cell ID of this hit
+    const auto trackID = track->GetTrackID();
+    const auto* const touchable = track->GetTouchable();
+    const auto cellID = touchable->GetReplicaNumber(1);
+    // find entered point
+    auto monitoring = std::as_const(fEnteredPointList).find({trackID, cellID});
+    auto isMonitoring = (monitoring != fEnteredPointList.cend());
     if (!isMonitoring and step->IsFirstStepInVolume()) { // is first time entering.
-        fMonitoringTrackList.emplace(track, *step->GetPreStepPoint());
-        monitoring = std::prev(fMonitoringTrackList.cend());
+        monitoring = fEnteredPointList.emplace(std::make_pair(trackID, cellID), *step->GetPostStepPoint()).first;
         isMonitoring = true;
     }
     if (isMonitoring and step->IsLastStepInVolume() and                                                                      // is exiting, and make sure has entered before,
-        static_cast<Region*>(track->GetNextVolume()->GetLogicalVolume()->GetRegion())->GetType() != Region::kDefaultSolid) { // but not heading into sense wire!
+        static_cast<Region*>(track->GetNextVolume()->GetLogicalVolume()->GetRegion())->GetType() != Region::kDefaultSolid) { // but the track is not heading into sense wire!
+        // retrive layerID
+        const auto layerID = touchable->GetReplicaNumber(2);
         // retrive entering time and position
         const auto& enterPoint = monitoring->second;
         const auto tIn = enterPoint.GetGlobalTime();
-        const auto rIn = G4TwoVector(enterPoint.GetPosition());
+        const auto rIn = enterPoint.GetPosition();
+        const auto pIn = enterPoint.GetMomentumDirection();
         const auto zIn = enterPoint.GetPosition().z();
         // retrive exiting time and position
-        const auto* const exitPoint = step->GetPostStepPoint();
+        const auto* const exitPoint = step->GetPreStepPoint();
         const auto tOut = exitPoint->GetGlobalTime();
-        const auto rOut = G4TwoVector(exitPoint->GetPosition());
+        const auto rOut = exitPoint->GetPosition();
+        const auto pOut = exitPoint->GetMomentumDirection();
         const auto zOut = exitPoint->GetPosition().z();
-        // retrive cellID and layerID
-        const auto* const svTouchable = track->GetTouchable();
-        const auto cellID = svTouchable->GetReplicaNumber(1);
-        const auto layerID = svTouchable->GetReplicaNumber(2);
         // retrive wire position
-        const auto& rWire = fSenseWireMap[cellID].first;
+        const auto& [rWire, tWire] = fSenseWireMap[cellID];
         // calculate drift distance
-        const auto r1 = rIn - rWire;
-        const auto r2 = rOut - rWire;
-        const auto driftDistance = std::abs(r1.x() * r2.y() - r2.x() * r1.y()) / (r1 - r2).mag();
+        const auto commonNormalVector = tWire.cross((pIn + pOut) / 2);
+        const auto driftDistance = std::abs(((rIn + rOut) / 2 - rWire).dot(commonNormalVector) / commonNormalVector.mag());
         // calculate vertex energy and momentum
         const auto vertexTotalEnergy = track->GetVertexKineticEnergy() + particle->GetPDGMass();
         const auto vertexMomentum = track->GetVertexMomentumDirection() * std::sqrt(track->GetVertexKineticEnergy() * (vertexTotalEnergy + particle->GetPDGMass()));
@@ -80,6 +83,8 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         hit->SetHitTime((tIn + tOut) / 2);
         hit->SetDriftDistance(driftDistance);
         hit->SetHitPositionZ((zIn + zOut) / 2);
+        hit->SetWirePosition(rWire);
+        hit->SetWireDirection(tWire);
         hit->SetCellID(cellID);
         hit->SetLayerID(layerID);
         hit->SetEnergy((enterPoint.GetTotalEnergy() + exitPoint->GetTotalEnergy()) / 2);
@@ -90,10 +95,10 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         hit->SetVertexMomentum(vertexMomentum);
         hit->SetParticle(particle->GetParticleName());
         hit->SetG4EventID(fEventID);
-        hit->SetG4TrackID(track->GetTrackID());
+        hit->SetG4TrackID(trackID);
         fHitsCollection->insert(hit);
         // particle is exiting, remove it from monitoring list
-        fMonitoringTrackList.erase(monitoring);
+        fEnteredPointList.erase(monitoring);
         return true;
     }
     return false;
@@ -101,7 +106,7 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
 
 void SpectrometerSD::EndOfEvent(G4HCofThisEvent*) {
     Analysis::Instance().SubmitSpectrometerHC(fHitsCollection->GetVector());
-    fMonitoringTrackList.clear();
+    fEnteredPointList.clear();
 }
 
 } // namespace MACE::Simulation::SimMACE::SD

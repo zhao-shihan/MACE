@@ -7,6 +7,8 @@ FloatBranchSocket SpectrometerHit::fgDriftDistance("drift", 0);
 FloatBranchSocket SpectrometerHit::fgHitPositionZ("hitPosZ", 0);
 FloatBranchSocket SpectrometerHit::fgDriftDistanceVariance("driftVar", 0);
 FloatBranchSocket SpectrometerHit::fgHitPositionZVariance("hitPosZVar", 0);
+Vector2FBranchSocket SpectrometerHit::fgWirePosition("wirePos", {"x", "y"}, {0, 0});
+Vector3FBranchSocket SpectrometerHit::fgWireDirection("wireDir", {"x", "y", "z"}, {0, 0, 0});
 IntBranchSocket SpectrometerHit::fgCellID("cellID", -1);
 IntBranchSocket SpectrometerHit::fgLayerID("layerID", -1);
 
@@ -17,6 +19,8 @@ SpectrometerHit::SpectrometerHit() noexcept :
     fHitPositionZ(fgHitPositionZ.GetValue()),
     fDriftDistanceVariance(fgDriftDistanceVariance.GetValue()),
     fHitPositionZVariance(fgHitPositionZVariance.GetValue()),
+    fWirePosition(fgWirePosition.GetValue<Double_t>()),
+    fWireDirection(fgWireDirection.GetValue<Double_t>()),
     fCellID(fgCellID.GetValue()),
     fLayerID(fgLayerID.GetValue()) {}
 
@@ -27,6 +31,8 @@ void SpectrometerHit::CreateBranches(TTree& tree) {
     fgHitPositionZ.CreateBranch(tree);
     fgDriftDistanceVariance.CreateBranch(tree);
     fgHitPositionZVariance.CreateBranch(tree);
+    fgWirePosition.CreateBranch(tree);
+    fgWireDirection.CreateBranch(tree);
     fgCellID.CreateBranch(tree);
     fgLayerID.CreateBranch(tree);
 }
@@ -38,6 +44,8 @@ void SpectrometerHit::ConnectToBranches(TTree& tree) {
     fgHitPositionZ.ConnectToBranch(tree);
     fgDriftDistanceVariance.ConnectToBranch(tree);
     fgHitPositionZVariance.ConnectToBranch(tree);
+    fgWirePosition.ConnectToBranch(tree);
+    fgWireDirection.ConnectToBranch(tree);
     fgCellID.ConnectToBranch(tree);
     fgLayerID.ConnectToBranch(tree);
 }
@@ -49,6 +57,8 @@ void SpectrometerHit::FillBranchSockets() const noexcept {
     fgHitPositionZ.SetValue(fHitPositionZ);
     fgDriftDistanceVariance.SetValue(fDriftDistanceVariance);
     fgHitPositionZVariance.SetValue(fHitPositionZVariance);
+    fgWirePosition.SetValue(fWirePosition);
+    fgWireDirection.SetValue(fWireDirection);
     fgCellID.SetValue(fCellID);
     fgLayerID.SetValue(fLayerID);
 }

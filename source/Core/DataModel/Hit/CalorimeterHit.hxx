@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
-#include "Core/DataModel/DataFactory.hxx"
+#include "Core/DataFactory.hxx"
 #include "Core/DataModel/ITransientData.hxx"
 
 namespace MACE::Core::DataModel::Hit {
