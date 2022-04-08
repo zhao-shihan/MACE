@@ -2,7 +2,7 @@
 
 #include "Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 #include "Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
-#include "Core/DataModel/Hit/VertexDetectorHit.hxx"
+#include "Core/DataModel/Hit/MCPHit.hxx"
 
 namespace MACE::Core::DataModel::SimHit {
 
@@ -12,14 +12,14 @@ using BranchSocket::ShortStringBranchSocket;
 using BranchSocket::Vector3FBranchSocket;
 using Utility::ShortString;
 
-class VertexDetectorSimHit : public Hit::VertexDetectorHit {
+class MCPSimHit : public Hit::MCPHit {
 public:
-    VertexDetectorSimHit() noexcept;
-    VertexDetectorSimHit(const VertexDetectorSimHit& hit) noexcept = default;
-    VertexDetectorSimHit(VertexDetectorSimHit&& hit) noexcept = default;
-    virtual ~VertexDetectorSimHit() noexcept = default;
-    VertexDetectorSimHit& operator=(const VertexDetectorSimHit& hit) noexcept = default;
-    VertexDetectorSimHit& operator=(VertexDetectorSimHit&& hit) noexcept = default;
+    MCPSimHit() noexcept;
+    MCPSimHit(const MCPSimHit& hit) noexcept = default;
+    MCPSimHit(MCPSimHit&& hit) noexcept = default;
+    virtual ~MCPSimHit() noexcept = default;
+    MCPSimHit& operator=(const MCPSimHit& hit) noexcept = default;
+    MCPSimHit& operator=(MCPSimHit&& hit) noexcept = default;
 
     const auto& GetVertexTime() const { return fVertexTime; }
     const auto& GetVertexPosition() const { return fVertexPosition; }

@@ -16,5 +16,5 @@
 #include "Core/Geometry/Description/SpectrometerShield.hxx"
 #include "Core/Geometry/Description/Target.hxx"
 #include "Core/Geometry/Description/TransportLine.hxx"
-#include "Core/Geometry/Description/VertexDetector.hxx"
+#include "Core/Geometry/Description/MCP.hxx"
 #include "Core/Geometry/Description/World.hxx"

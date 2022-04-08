@@ -15,7 +15,7 @@ AnalysisMessenger::AnalysisMessenger() :
     G4UImessenger(),
     fDirectory("/MACE/Analysis/"),
     fEnableCoincidenceOfEMCal("/MACE/Analysis/EnableCoincidenceOfEMCal", this),
-    fEnableCoincidenceOfVertexDetector("/MACE/Analysis/EnableCoincidenceOfVertexDetector", this),
+    fEnableCoincidenceOfMCP("/MACE/Analysis/EnableCoincidenceOfMCP", this),
     fSetResultName("/MACE/Analysis/SetResultName", this),
     fMergeResult("/MACE/Analysis/MergeResult", this) {
 
@@ -25,9 +25,9 @@ AnalysisMessenger::AnalysisMessenger() :
     fEnableCoincidenceOfEMCal.SetParameterName("mode", false);
     fEnableCoincidenceOfEMCal.AvailableForStates(G4State_Idle);
 
-    fEnableCoincidenceOfVertexDetector.SetGuidance("Enable atomic shell e-/e+ detector (typically MCP currently) for coincident detection.");
-    fEnableCoincidenceOfVertexDetector.SetParameterName("mode", false);
-    fEnableCoincidenceOfVertexDetector.AvailableForStates(G4State_Idle);
+    fEnableCoincidenceOfMCP.SetGuidance("Enable atomic shell e-/e+ detector (typically MCP currently) for coincident detection.");
+    fEnableCoincidenceOfMCP.SetParameterName("mode", false);
+    fEnableCoincidenceOfMCP.AvailableForStates(G4State_Idle);
 
     fSetResultName.SetGuidance("Set file name.");
     fSetResultName.SetParameterName("file name", false);
@@ -43,8 +43,8 @@ void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     auto&& analysis = Analysis::Instance();
     if (command == std::addressof(fEnableCoincidenceOfEMCal)) {
         analysis.SetEnableCoincidenceOfEMCal(fEnableCoincidenceOfEMCal.GetNewBoolValue(value));
-    } else if (command == std::addressof(fEnableCoincidenceOfVertexDetector)) {
-        analysis.SetEnableCoincidenceOfVertexDetector(fEnableCoincidenceOfVertexDetector.GetNewBoolValue(value));
+    } else if (command == std::addressof(fEnableCoincidenceOfMCP)) {
+        analysis.SetEnableCoincidenceOfMCP(fEnableCoincidenceOfMCP.GetNewBoolValue(value));
     } else if (command == std::addressof(fSetResultName)) {
         analysis.SetResultName(value);
     } else if (command == std::addressof(fMergeResult)) {

@@ -4,15 +4,15 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class VertexDetector final : public IDescription {
+class MCP final : public IDescription {
 public:
-    static VertexDetector& Instance() noexcept;
+    static MCP& Instance() noexcept;
 
 private:
-    VertexDetector();
-    ~VertexDetector() noexcept = default;
-    VertexDetector(const VertexDetector&) = delete;
-    VertexDetector& operator=(const VertexDetector&) = delete;
+    MCP();
+    ~MCP() noexcept = default;
+    MCP(const MCP&) = delete;
+    MCP& operator=(const MCP&) = delete;
 
 public:
     const auto& GetWidth() const { return fWidth; }

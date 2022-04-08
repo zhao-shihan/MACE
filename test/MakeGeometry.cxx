@@ -32,12 +32,12 @@ int main(int, char**) {
     auto fTarget = std::make_shared<Target>();
     auto fThirdTransportField = std::make_shared<ThirdTransportField>();
     auto fThirdTransportSolenoid = std::make_shared<ThirdTransportSolenoid>();
-    auto fVertexDetector = std::make_shared<VertexDetector>();
+    auto fMCP = std::make_shared<MCP>();
     auto fWorld = std::make_shared<World>();
 
     // Construct hierarchy
     fEMCalField->AddDaughter(fEMCal);
-    fEMCalField->AddDaughter(fVertexDetector);
+    fEMCalField->AddDaughter(fMCP);
     fFirstBendField->AddDaughter(fFirstBendSolenoid);
     fFirstTransportField->AddDaughter(fFirstTransportSolenoid);
     fSecondBendField->AddDaughter(fSecondBendSolenoid);

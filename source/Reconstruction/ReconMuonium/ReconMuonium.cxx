@@ -1,7 +1,7 @@
 #include "Core/DataFactory.hxx"
 #include "Core/DataModel/CDCTrackOperation.hxx"
 #include "Core/DataModel/SimHit/EMCalSimHit.hxx"
-#include "Core/DataModel/SimHit/VertexDetectorSimHit.hxx"
+#include "Core/DataModel/SimHit/MCPSimHit.hxx"
 #include "Core/DataModel/Track/CDCHelixTrack.hxx"
 #include "Core/DataModel/Track/CDCPhysicsTrack.hxx"
 #include "Core/Geometry/Description/AcceleratorField.hxx"
@@ -29,7 +29,7 @@ using MACE::Core::DataFactory;
 using Helix_t = Track::CDCHelixTrack;
 using Track_t = Track::CDCPhysicsTrack;
 using EMCalHit_t = SimHit::EMCalSimHit;
-using MCPHit_t = SimHit::VertexDetectorSimHit;
+using MCPHit_t = SimHit::MCPSimHit;
 using MVertex_t = MuoniumSimVertex;
 
 int main(int, char* argv[]) {

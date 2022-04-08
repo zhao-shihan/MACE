@@ -33,7 +33,7 @@ static std::tuple<ObserverPtr<AcceleratorField>,
                   ObserverPtr<SpectrometerShield>,
                   ObserverPtr<Target>,
                   ObserverPtr<TransportLine>,
-                  ObserverPtr<VertexDetector>,
+                  ObserverPtr<MCP>,
                   ObserverPtr<World>>
     descriptionTuple;
 

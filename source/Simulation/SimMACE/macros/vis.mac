@@ -44,7 +44,7 @@
 /vis/geometry/set/colour Target                        0     1     1     1     0.1
 /vis/geometry/set/colour ThirdTransportField           0     1     1     1     0.05
 /vis/geometry/set/colour ThirdTransportSolenoid        0     1     1     1     0.05
-/vis/geometry/set/colour VertexDetector                0     1     1     1     0.1
+/vis/geometry/set/colour MCP                0     1     1     1     0.1
 /vis/geometry/set/colour World                         0     1     1     1     0.001
 #/vis/geometry/set/colour BeamCounter                   0     0.0   0.0   1.0   0.5
 #/vis/geometry/set/colour CarbonFoil                    80    1.0   1.0   1.0   0.5

@@ -10,16 +10,16 @@ namespace MACE::Core::DataModel::Hit {
 using BranchSocket::DoubleBranchSocket;
 using BranchSocket::Vector2FBranchSocket;
 
-class VertexDetectorHit : public ITransientData {
+class MCPHit : public ITransientData {
     using Base = ITransientData;
 
 public:
-    VertexDetectorHit() noexcept;
-    VertexDetectorHit(const VertexDetectorHit& hit) noexcept = default;
-    VertexDetectorHit(VertexDetectorHit&& hit) noexcept = default;
-    virtual ~VertexDetectorHit() noexcept = default;
-    VertexDetectorHit& operator=(const VertexDetectorHit& hit) noexcept = default;
-    VertexDetectorHit& operator=(VertexDetectorHit&& hit) noexcept = default;
+    MCPHit() noexcept;
+    MCPHit(const MCPHit& hit) noexcept = default;
+    MCPHit(MCPHit&& hit) noexcept = default;
+    virtual ~MCPHit() noexcept = default;
+    MCPHit& operator=(const MCPHit& hit) noexcept = default;
+    MCPHit& operator=(MCPHit&& hit) noexcept = default;
 
     const auto& GetHitTime() const { return fHitTime; }
     const auto& GetHitPosition() const { return fHitPosition; }

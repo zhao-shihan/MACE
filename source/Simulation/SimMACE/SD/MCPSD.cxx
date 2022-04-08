@@ -1,5 +1,5 @@
 #include "Simulation/SimMACE/RunManager.hxx"
-#include "Simulation/SimMACE/SD/VertexDetectorSD.hxx"
+#include "Simulation/SimMACE/SD/MCPSD.hxx"
 #include "Simulation/SimMACE/Utility/Analysis.hxx"
 
 #include "G4HCofThisEvent.hh"
@@ -8,22 +8,22 @@
 
 namespace MACE::Simulation::SimMACE::SD {
 
-using Hit::VertexDetectorHit;
+using Hit::MCPHit;
 using Utility::Analysis;
 
-VertexDetectorSD::VertexDetectorSD(const G4String& sdName) :
+MCPSD::MCPSD(const G4String& sdName) :
     G4VSensitiveDetector(sdName),
     fHitsCollection(nullptr) {
     collectionName.insert(sdName + "HC");
 }
 
-void VertexDetectorSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
-    fHitsCollection = new VertexDetectorHitCollection(SensitiveDetectorName, collectionName[0]);
+void MCPSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
+    fHitsCollection = new MCPHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-G4bool VertexDetectorSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
+G4bool MCPSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     const auto* const track = step->GetTrack();
     const auto* const particle = track->GetDefinition();
     if (step->IsFirstStepInVolume() and track->GetCurrentStepNumber() > 1 and // is coming from outside, and
@@ -36,7 +36,7 @@ G4bool VertexDetectorSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         // transform hit position to local coordinate
         const auto hitPosition = G4TwoVector(detectorRotation * (preStepPoint->GetPosition() - detectorPosition));
         // new a hit
-        auto* const hit = new VertexDetectorHit();
+        auto* const hit = new MCPHit();
         hit->SetHitTime(preStepPoint->GetGlobalTime());
         hit->SetHitPosition(hitPosition);
         hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
@@ -51,8 +51,8 @@ G4bool VertexDetectorSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     }
 }
 
-void VertexDetectorSD::EndOfEvent(G4HCofThisEvent*) {
-    Analysis::Instance().SubmitVertexDetectorHC(fHitsCollection->GetVector());
+void MCPSD::EndOfEvent(G4HCofThisEvent*) {
+    Analysis::Instance().SubmitMCPHC(fHitsCollection->GetVector());
 }
 
 } // namespace MACE::Simulation::SimMACE::SD

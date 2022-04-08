@@ -15,7 +15,7 @@ public:
         kSpectrometerSensitive,
         kTarget,
         kVacuum,
-        kVertexDetectorSensitive
+        kMCPSensitive
     };
 
 public:

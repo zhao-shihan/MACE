@@ -19,10 +19,10 @@ Analysis::Analysis() :
     fDataHub(),
     fRepetitionIDOfLastG4Event(std::numeric_limits<decltype(fRepetitionIDOfLastG4Event)>::max()),
     fEMCalHitTree(nullptr),
-    fVertexDetectorHitTree(nullptr),
+    fMCPHitTree(nullptr),
     fCDCHitTree(nullptr),
     fEMCalHitList(nullptr),
-    fVertexDetectorHitList(nullptr),
+    fMCPHitList(nullptr),
     fCDCHitList(nullptr) {
     AnalysisMessenger::Instance();
     MPIFileTools::SetOutStream(G4cout);
@@ -61,12 +61,12 @@ void Analysis::WriteEvent(G4int repetitionID) {
         WriteTrees();
         // create trees for new repetition
         fEMCalHitTree = fDataHub.CreateTree<EMCalSimHit>(repetitionID);
-        fVertexDetectorHitTree = fDataHub.CreateTree<VertexDetectorSimHit>(repetitionID);
+        fMCPHitTree = fDataHub.CreateTree<MCPSimHit>(repetitionID);
         fCDCHitTree = fDataHub.CreateTree<CDCSimHit>(repetitionID);
     }
 
     fDataHub.FillTree<EMCalSimHit>(*fEMCalHitList, *fEMCalHitTree, true);
-    fDataHub.FillTree<VertexDetectorSimHit>(*fVertexDetectorHitList, *fVertexDetectorHitTree, true);
+    fDataHub.FillTree<MCPSimHit>(*fMCPHitList, *fMCPHitTree, true);
     fDataHub.FillTree<CDCSimHit>(*fCDCHitList, *fCDCHitTree, true);
 
     // dont forget to update repID!
@@ -74,14 +74,14 @@ void Analysis::WriteEvent(G4int repetitionID) {
 }
 
 void Analysis::WriteTrees() {
-    if (fEMCalHitTree == nullptr or fVertexDetectorHitTree == nullptr or fCDCHitTree == nullptr) { return; }
+    if (fEMCalHitTree == nullptr or fMCPHitTree == nullptr or fCDCHitTree == nullptr) { return; }
     const auto emCalTriggered = !fEnableCoincidenceOfEMCal or fEMCalHitTree->GetEntries() != 0;
-    const auto vertexDetectorTriggered = !fEnableCoincidenceOfVertexDetector or fVertexDetectorHitTree->GetEntries() != 0;
-    const auto spectrometerTriggered = fCDCHitTree->GetEntries() != 0;
+    const auto mcpTriggered = !fEnableCoincidenceOfMCP or fMCPHitTree->GetEntries() != 0;
+    const auto cdcTriggered = fCDCHitTree->GetEntries() != 0;
     // if all coincident then write their data
-    if (emCalTriggered and vertexDetectorTriggered and spectrometerTriggered) {
+    if (emCalTriggered and mcpTriggered and cdcTriggered) {
         fEMCalHitTree->Write();
-        fVertexDetectorHitTree->Write();
+        fMCPHitTree->Write();
         fCDCHitTree->Write();
     }
 }

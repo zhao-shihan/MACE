@@ -1,23 +1,23 @@
-#include "Core/DataModel/SimHit/VertexDetectorSimHit.hxx"
+#include "Core/DataModel/SimHit/MCPSimHit.hxx"
 
 namespace MACE::Core::DataModel::SimHit {
 
-DoubleBranchSocket VertexDetectorSimHit::fgVertexTime("vtxTime", 0);
-Vector3FBranchSocket VertexDetectorSimHit::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
-ShortStringBranchSocket VertexDetectorSimHit::fgParticle("particle", "");
-IntBranchSocket VertexDetectorSimHit::fgG4EventID("g4EventID", -1);
-IntBranchSocket VertexDetectorSimHit::fgG4TrackID("g4TrackID", -1);
+DoubleBranchSocket MCPSimHit::fgVertexTime("vtxTime", 0);
+Vector3FBranchSocket MCPSimHit::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
+ShortStringBranchSocket MCPSimHit::fgParticle("particle", "");
+IntBranchSocket MCPSimHit::fgG4EventID("g4EventID", -1);
+IntBranchSocket MCPSimHit::fgG4TrackID("g4TrackID", -1);
 
-VertexDetectorSimHit::VertexDetectorSimHit() noexcept :
-    VertexDetectorHit(),
+MCPSimHit::MCPSimHit() noexcept :
+    MCPHit(),
     fVertexTime(fgVertexTime.GetValue()),
     fVertexPosition(fgVertexPosition.GetValue<Double_t>()),
     fParticle(fgParticle.GetValue()),
     fG4EventID(fgG4EventID.GetValue()),
     fG4TrackID(fgG4TrackID.GetValue()) {}
 
-void VertexDetectorSimHit::CreateBranches(TTree& tree) {
-    VertexDetectorHit::CreateBranches(tree);
+void MCPSimHit::CreateBranches(TTree& tree) {
+    MCPHit::CreateBranches(tree);
     fgVertexTime.CreateBranch(tree);
     fgVertexPosition.CreateBranch(tree);
     fgParticle.CreateBranch(tree);
@@ -25,8 +25,8 @@ void VertexDetectorSimHit::CreateBranches(TTree& tree) {
     fgG4TrackID.CreateBranch(tree);
 }
 
-void VertexDetectorSimHit::ConnectToBranches(TTree& tree) {
-    VertexDetectorHit::ConnectToBranches(tree);
+void MCPSimHit::ConnectToBranches(TTree& tree) {
+    MCPHit::ConnectToBranches(tree);
     fgVertexTime.ConnectToBranch(tree);
     fgVertexPosition.ConnectToBranch(tree);
     fgParticle.ConnectToBranch(tree);
@@ -34,8 +34,8 @@ void VertexDetectorSimHit::ConnectToBranches(TTree& tree) {
     fgG4TrackID.ConnectToBranch(tree);
 }
 
-void VertexDetectorSimHit::FillBranchSockets() const noexcept {
-    VertexDetectorHit::FillBranchSockets();
+void MCPSimHit::FillBranchSockets() const noexcept {
+    MCPHit::FillBranchSockets();
     fgVertexTime.SetValue(fVertexTime);
     fgVertexPosition.SetValue(fVertexPosition);
     fgParticle.SetValue(fParticle);

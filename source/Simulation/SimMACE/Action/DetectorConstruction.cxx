@@ -53,12 +53,12 @@ void DetectorConstruction::ConstructVolumes() {
     fTarget = std::make_shared<Target>();
     fThirdTransportField = std::make_shared<ThirdTransportField>();
     fThirdTransportSolenoid = std::make_shared<ThirdTransportSolenoid>();
-    fVertexDetector = std::make_shared<VertexDetector>();
+    fMCP = std::make_shared<MCP>();
     fWorld = std::make_shared<World>();
 
     // Construct hierarchy
     fEMCalField->AddDaughter(fEMCal);
-    fEMCalField->AddDaughter(fVertexDetector);
+    fEMCalField->AddDaughter(fMCP);
     fFirstBendField->AddDaughter(fFirstBendSolenoid);
     fFirstTransportField->AddDaughter(fFirstTransportSolenoid);
     fSecondBendField->AddDaughter(fSecondBendSolenoid);
@@ -158,19 +158,19 @@ void DetectorConstruction::ConstructRegions() {
     fSpectrometerField->RegisterRegion(fVacuumRegion);
     fThirdTransportField->RegisterRegion(fVacuumRegion);
 
-    // VertexDetectorSensitiveRegion
-    fVertexDetectorSensitiveRegion = new Region("VertexDetectorSensitive", Region::kVertexDetectorSensitive);
-    fVertexDetectorSensitiveRegion->SetProductionCuts(defaultCuts);
+    // MCPSensitiveRegion
+    fMCPSensitiveRegion = new Region("MCPSensitive", Region::kMCPSensitive);
+    fMCPSensitiveRegion->SetProductionCuts(defaultCuts);
 
-    fVertexDetector->RegisterRegion(fVertexDetectorSensitiveRegion);
+    fMCP->RegisterRegion(fMCPSensitiveRegion);
 }
 
 void DetectorConstruction::ConstructSDs() {
     fEMCalSD = new EMCalSD(fEMCal->GetLogicalVolumeName());
     fEMCal->RegisterSD(fEMCalSD);
 
-    fVertexDetectorSD = new VertexDetectorSD(fVertexDetector->GetLogicalVolumeName());
-    fVertexDetector->RegisterSD(fVertexDetectorSD);
+    fMCPSD = new MCPSD(fMCP->GetLogicalVolumeName());
+    fMCP->RegisterSD(fMCPSD);
 
     fCDCSD = new CDCSD(fCDCSensitiveVolume->GetLogicalVolumeName());
     fCDCSensitiveVolume->RegisterSD(fCDCSD);

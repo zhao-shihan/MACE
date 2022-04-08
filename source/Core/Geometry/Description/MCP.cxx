@@ -1,26 +1,26 @@
-#include "Core/Geometry/Description/VertexDetector.hxx"
+#include "Core/Geometry/Description/MCP.hxx"
 #include "Utility/LiteralUnit.hxx"
 
 namespace MACE::Core::Geometry::Description {
 
 using namespace Utility::LiteralUnit::Length;
 
-VertexDetector& VertexDetector::Instance() noexcept {
-    static VertexDetector instance;
+MCP& MCP::Instance() noexcept {
+    static MCP instance;
     return instance;
 }
 
-VertexDetector::VertexDetector() :
-    IDescription("VertexDetector"),
+MCP::MCP() :
+    IDescription("MCP"),
     fWidth(15_cm),
     fThickness(1_cm) {}
 
-void VertexDetector::ReadImpl(const YAML::Node& node) {
+void MCP::ReadImpl(const YAML::Node& node) {
     fWidth = node["Width"].as<decltype(fWidth)>();
     fThickness = node["Thickness"].as<decltype(fThickness)>();
 }
 
-void VertexDetector::WriteImpl(YAML::Node& node) const {
+void MCP::WriteImpl(YAML::Node& node) const {
     node["Width"] = fWidth;
     node["Thickness"] = fThickness;
 }

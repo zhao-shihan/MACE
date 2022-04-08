@@ -1,16 +1,16 @@
-#include "Core/Geometry/Description/VertexDetector.hxx"
-#include "Core/Geometry/Entity/Fast/VertexDetector.hxx"
+#include "Core/Geometry/Description/MCP.hxx"
+#include "Core/Geometry/Entity/Fast/MCP.hxx"
 #include "Utility/LiteralUnit.hxx"
 
 #include "G4Box.hh"
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 
-using MACE::Core::Geometry::Entity::Fast::VertexDetector;
+using MACE::Core::Geometry::Entity::Fast::MCP;
 using namespace MACE::Utility::LiteralUnit::Density;
 
-void VertexDetector::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::VertexDetector::Instance();
+void MCP::ConstructSelf(G4bool checkOverlaps) {
+    const auto& description = Description::MCP::Instance();
     const auto name = description.GetName();
     const auto width = description.GetWidth();
     const auto thickness = description.GetThickness();

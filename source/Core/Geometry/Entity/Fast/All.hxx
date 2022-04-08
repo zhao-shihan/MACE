@@ -30,5 +30,5 @@
 #include "Core/Geometry/Entity/Fast/Target.hxx"
 #include "Core/Geometry/Entity/Fast/ThirdTransportField.hxx"
 #include "Core/Geometry/Entity/Fast/ThirdTransportSolenoid.hxx"
-#include "Core/Geometry/Entity/Fast/VertexDetector.hxx"
+#include "Core/Geometry/Entity/Fast/MCP.hxx"
 #include "Core/Geometry/Entity/Fast/World.hxx"

@@ -3,7 +3,7 @@
 #include "Core/Geometry/Entity/Fast/All.hxx"
 #include "Simulation/SimMACE/SD/EMCalSD.hxx"
 #include "Simulation/SimMACE/SD/CDCSD.hxx"
-#include "Simulation/SimMACE/SD/VertexDetectorSD.hxx"
+#include "Simulation/SimMACE/SD/MCPSD.hxx"
 #include "Simulation/SimMACE/Utility/Region.hxx"
 #include "Utility/ObserverPtr.hxx"
 
@@ -37,11 +37,11 @@ public:
     auto& GetSpectrometerSensitiveRegion() const { return *fSpectrometerSensitiveRegion; }
     auto& GetTargetRegion() const { return *fTargetRegion; }
     auto& GetVacuumRegion() const { return *fVacuumRegion; }
-    auto& GetVertexDetectorSensitiveRegion() const { return *fVertexDetectorSensitiveRegion; }
+    auto& GetMCPSensitiveRegion() const { return *fMCPSensitiveRegion; }
 
     auto& GetEMCalSD() const { return *fEMCalSD; }
     auto& GetCDCSD() const { return *fCDCSD; }
-    auto& GetVertexDetectorSD() const { return *fVertexDetectorSD; }
+    auto& GetMCPSD() const { return *fMCPSD; }
 
 private:
     void ConstructVolumes();
@@ -78,7 +78,7 @@ private:
     std::shared_ptr<Target> fTarget;
     std::shared_ptr<ThirdTransportField> fThirdTransportField;
     std::shared_ptr<ThirdTransportSolenoid> fThirdTransportSolenoid;
-    std::shared_ptr<VertexDetector> fVertexDetector;
+    std::shared_ptr<MCP> fMCP;
     std::shared_ptr<World> fWorld;
 
     ObserverPtr<Region> fEMCalSensitiveRegion;
@@ -89,11 +89,11 @@ private:
     ObserverPtr<Region> fSpectrometerSensitiveRegion;
     ObserverPtr<Region> fTargetRegion;
     ObserverPtr<Region> fVacuumRegion;
-    ObserverPtr<Region> fVertexDetectorSensitiveRegion;
+    ObserverPtr<Region> fMCPSensitiveRegion;
 
     ObserverPtr<EMCalSD> fEMCalSD;
     ObserverPtr<CDCSD> fCDCSD;
-    ObserverPtr<VertexDetectorSD> fVertexDetectorSD;
+    ObserverPtr<MCPSD> fMCPSD;
 };
 
 } // namespace MACE::Simulation::SimMACE::Action
