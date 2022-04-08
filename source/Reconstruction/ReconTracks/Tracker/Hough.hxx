@@ -5,15 +5,15 @@
 
 #include "Eigen/Core"
 
-template<template<class T> class FitterT_t, class SpectrometerHit_t>
+template<template<class T> class FitterT_t, class CDCHit_t>
 class MACE::ReconTracks::Tracker::Hough final :
-    public MACE::ReconTracks::Interface::Tracker<FitterT_t, SpectrometerHit_t> {
+    public MACE::ReconTracks::Interface::Tracker<FitterT_t, CDCHit_t> {
 
     Hough(const Hough&) = delete;
     Hough& operator=(const Hough&) = delete;
 
 protected:
-    using Base = MACE::ReconTracks::Interface::Tracker<FitterT_t, SpectrometerHit_t>;
+    using Base = MACE::ReconTracks::Interface::Tracker<FitterT_t, CDCHit_t>;
     using HitPtr = typename Base::HitPtr;
 
 public:

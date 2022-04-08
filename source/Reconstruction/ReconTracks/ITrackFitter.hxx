@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DataModel/Hit/SpectrometerHit.hxx"
+#include "DataModel/Hit/CDCHit.hxx"
 #include "DataModel/Track/IsTrack.hxx"
 #include "VerboseLevel.hxx"
 

@@ -28,9 +28,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 void DetectorConstruction::ConstructVolumes() {
     // Construct entity objects
     fAcceleratorField = std::make_shared<AcceleratorField>();
-    fCalorimeter = std::make_shared<Calorimeter>();
-    fCalorimeterField = std::make_shared<CalorimeterField>();
-    fCalorimeterShield = std::make_shared<CalorimeterShield>();
     fCDCBody = std::make_shared<CDCBody>();
     fCDCCell = std::make_shared<CDCCell>();
     fCDCFieldWire = std::make_shared<CDCFieldWire>();
@@ -38,10 +35,14 @@ void DetectorConstruction::ConstructVolumes() {
     fCDCSenseWire = std::make_shared<CDCSenseWire>();
     fCDCSensitiveVolume = std::make_shared<CDCSensitiveVolume>();
     fCollimator = std::make_shared<Collimator>();
+    fEMCal = std::make_shared<EMCal>();
+    fEMCalField = std::make_shared<EMCalField>();
+    fEMCalShield = std::make_shared<EMCalShield>();
     fFirstBendField = std::make_shared<FirstBendField>();
     fFirstBendSolenoid = std::make_shared<FirstBendSolenoid>();
     fFirstTransportField = std::make_shared<FirstTransportField>();
     fFirstTransportSolenoid = std::make_shared<FirstTransportSolenoid>();
+    fMCP = std::make_shared<MCP>();
     fSecondBendField = std::make_shared<SecondBendField>();
     fSecondBendSolenoid = std::make_shared<SecondBendSolenoid>();
     fSecondTransportField = std::make_shared<SecondTransportField>();
@@ -53,12 +54,11 @@ void DetectorConstruction::ConstructVolumes() {
     fTarget = std::make_shared<Target>();
     fThirdTransportField = std::make_shared<ThirdTransportField>();
     fThirdTransportSolenoid = std::make_shared<ThirdTransportSolenoid>();
-    fVertexDetector = std::make_shared<VertexDetector>();
     fWorld = std::make_shared<World>();
 
     // Construct hierarchy
-    fCalorimeterField->AddDaughter(fCalorimeter);
-    fCalorimeterField->AddDaughter(fVertexDetector);
+    fEMCalField->AddDaughter(fEMCal);
+    fEMCalField->AddDaughter(fMCP);
     fFirstBendField->AddDaughter(fFirstBendSolenoid);
     fFirstTransportField->AddDaughter(fFirstTransportSolenoid);
     fSecondBendField->AddDaughter(fSecondBendSolenoid);
@@ -75,8 +75,8 @@ void DetectorConstruction::ConstructVolumes() {
     fSpectrometerField->AddDaughter(fCDCBody);
     fSpectrometerField->AddDaughter(fSpectrometerMagnet);
     fThirdTransportField->AddDaughter(fThirdTransportSolenoid);
-    fWorld->AddDaughter(fCalorimeterField);
-    fWorld->AddDaughter(fCalorimeterShield);
+    fWorld->AddDaughter(fEMCalField);
+    fWorld->AddDaughter(fEMCalShield);
     fWorld->AddDaughter(fFirstBendField);
     fWorld->AddDaughter(fFirstTransportField);
     fWorld->AddDaughter(fSecondBendField);
@@ -92,11 +92,11 @@ void DetectorConstruction::ConstructVolumes() {
 void DetectorConstruction::ConstructRegions() {
     auto defaultCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts();
 
-    // CalorimeterSensitiveRegion
-    fCalorimeterSensitiveRegion = new Region("CalorimeterSensitive", Region::kCalorimeterSensitive);
-    fCalorimeterSensitiveRegion->SetProductionCuts(defaultCuts);
+    // EMCalSensitiveRegion
+    fEMCalSensitiveRegion = new Region("EMCalSensitive", Region::kEMCalSensitive);
+    fEMCalSensitiveRegion->SetProductionCuts(defaultCuts);
 
-    fCalorimeter->RegisterRegion(fCalorimeterSensitiveRegion);
+    fEMCal->RegisterRegion(fEMCalSensitiveRegion);
 
     // DefaultSolidRegion
     fDefaultSolidRegion = new Region("DefaultSolid", Region::kDefaultSolid);
@@ -119,7 +119,7 @@ void DetectorConstruction::ConstructRegions() {
     fShieldRegion->SetProductionCuts(defaultCuts);
 
     fSpectrometerShield->RegisterRegion(fShieldRegion);
-    fCalorimeterShield->RegisterRegion(fShieldRegion);
+    fEMCalShield->RegisterRegion(fShieldRegion);
 
     // SolenoidOrMagnetRegion
     fSolenoidOrMagnetRegion = new Region("SolenoidOrMagnet", Region::kSolenoidOrMagnet);
@@ -150,7 +150,7 @@ void DetectorConstruction::ConstructRegions() {
 
     fSelectorField->RegisterRegion(fVacuumRegion);
     fAcceleratorField->RegisterRegion(fVacuumRegion);
-    fCalorimeterField->RegisterRegion(fVacuumRegion);
+    fEMCalField->RegisterRegion(fVacuumRegion);
     fFirstBendField->RegisterRegion(fVacuumRegion);
     fFirstTransportField->RegisterRegion(fVacuumRegion);
     fSecondBendField->RegisterRegion(fVacuumRegion);
@@ -158,22 +158,22 @@ void DetectorConstruction::ConstructRegions() {
     fSpectrometerField->RegisterRegion(fVacuumRegion);
     fThirdTransportField->RegisterRegion(fVacuumRegion);
 
-    // VertexDetectorSensitiveRegion
-    fVertexDetectorSensitiveRegion = new Region("VertexDetectorSensitive", Region::kVertexDetectorSensitive);
-    fVertexDetectorSensitiveRegion->SetProductionCuts(defaultCuts);
+    // MCPSensitiveRegion
+    fMCPSensitiveRegion = new Region("MCPSensitive", Region::kMCPSensitive);
+    fMCPSensitiveRegion->SetProductionCuts(defaultCuts);
 
-    fVertexDetector->RegisterRegion(fVertexDetectorSensitiveRegion);
+    fMCP->RegisterRegion(fMCPSensitiveRegion);
 }
 
 void DetectorConstruction::ConstructSDs() {
-    fCalorimeterSD = new CalorimeterSD(fCalorimeter->GetLogicalVolumeName());
-    fCalorimeter->RegisterSD(fCalorimeterSD);
+    fCDCSD = new CDCSD(fCDCSensitiveVolume->GetLogicalVolumeName());
+    fCDCSensitiveVolume->RegisterSD(fCDCSD);
 
-    fVertexDetectorSD = new VertexDetectorSD(fVertexDetector->GetLogicalVolumeName());
-    fVertexDetector->RegisterSD(fVertexDetectorSD);
+    fEMCalSD = new EMCalSD(fEMCal->GetLogicalVolumeName());
+    fEMCal->RegisterSD(fEMCalSD);
 
-    fSpectrometerSD = new SpectrometerSD(fCDCSensitiveVolume->GetLogicalVolumeName());
-    fCDCSensitiveVolume->RegisterSD(fSpectrometerSD);
+    fMCPSD = new MCPSD(fMCP->GetLogicalVolumeName());
+    fMCP->RegisterSD(fMCPSD);
 }
 
 void DetectorConstruction::ConstructFields() {
@@ -242,7 +242,7 @@ void DetectorConstruction::ConstructFields() {
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>>(
         parallelBField, hMin, 6, true);
 
-    fCalorimeterField->RegisterField<
+    fEMCalField->RegisterField<
         G4UniformMagField,
         G4TMagFieldEquation<G4UniformMagField>,
         G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,

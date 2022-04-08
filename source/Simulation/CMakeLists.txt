@@ -1,6 +1,6 @@
 project(Simulation)
 
-add_subdirectory(SimCalorimeter)
+add_subdirectory(SimEMCal)
 add_subdirectory(SimMACE)
 add_subdirectory(SimMTransport)
-add_subdirectory(SimSpectrometer)
+add_subdirectory(SimCDC)

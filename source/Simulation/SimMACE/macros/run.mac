@@ -14,8 +14,8 @@
 /MACE/Field/SetAcceleratorPotential              7 kilovolt
 /MACE/Field/SetSelectorElectricField             500 kilovolt/m
 
-/MACE/Analysis/EnableCoincidenceOfCalorimeter    true
-/MACE/Analysis/EnableCoincidenceOfVertexDetector true
+/MACE/Analysis/EnableCoincidenceOfEMCal    true
+/MACE/Analysis/EnableCoincidenceOfMCP true
 
 /MACE/Analysis/SetResultName                     test
 

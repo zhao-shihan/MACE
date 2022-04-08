@@ -101,4 +101,4 @@ std::vector<std::shared_ptr<Data_t>> DataFactory::CreateAndFillList(TFile& file,
     return CreateAndFillList<Data_t>(*tree, connected);
 }
 
-} // namespace MACE::Core::DataModel
+} // namespace MACE::Core

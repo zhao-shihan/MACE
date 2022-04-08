@@ -1,7 +1,7 @@
 namespace MACE::Reconstruction::ReconTracks::Fitter {
 
-template<class SpectrometerHit_t, class Track_t>
-bool PerfectFitter<SpectrometerHit_t, Track_t>::Fit(std::vector<HitPtr>& hitData, Track_t& track) {
+template<class CDCHit_t, class Track_t>
+bool PerfectFitter<CDCHit_t, Track_t>::Fit(std::vector<HitPtr>& hitData, Track_t& track) {
     using namespace Core::DataModel::Track;
 
     const auto& firstHit = *std::ranges::min_element(

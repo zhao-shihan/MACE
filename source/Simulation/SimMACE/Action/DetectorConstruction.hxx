@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Core/Geometry/Entity/Fast/All.hxx"
-#include "Simulation/SimMACE/SD/CalorimeterSD.hxx"
-#include "Simulation/SimMACE/SD/SpectrometerSD.hxx"
-#include "Simulation/SimMACE/SD/VertexDetectorSD.hxx"
+#include "Simulation/SimMACE/SD/CDCSD.hxx"
+#include "Simulation/SimMACE/SD/EMCalSD.hxx"
+#include "Simulation/SimMACE/SD/MCPSD.hxx"
 #include "Simulation/SimMACE/Utility/Region.hxx"
 #include "Utility/ObserverPtr.hxx"
 
@@ -29,7 +29,7 @@ public:
 
     void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlaps = checkOverlaps; }
 
-    auto& GetCalorimeterSensitiveRegion() const { return *fCalorimeterSensitiveRegion; }
+    auto& GetEMCalSensitiveRegion() const { return *fEMCalSensitiveRegion; }
     auto& GetDefaultSolidRegion() const { return *fDefaultSolidRegion; }
     auto& GetDefaultGaseousRegion() const { return *fDefaultGaseousRegion; }
     auto& GetShieldRegion() const { return *fShieldRegion; }
@@ -37,11 +37,11 @@ public:
     auto& GetSpectrometerSensitiveRegion() const { return *fSpectrometerSensitiveRegion; }
     auto& GetTargetRegion() const { return *fTargetRegion; }
     auto& GetVacuumRegion() const { return *fVacuumRegion; }
-    auto& GetVertexDetectorSensitiveRegion() const { return *fVertexDetectorSensitiveRegion; }
+    auto& GetMCPSensitiveRegion() const { return *fMCPSensitiveRegion; }
 
-    auto& GetCalorimeterSD() const { return *fCalorimeterSD; }
-    auto& GetSpectrometerSD() const { return *fSpectrometerSD; }
-    auto& GetVertexDetectorSD() const { return *fVertexDetectorSD; }
+    auto& GetEMCalSD() const { return *fEMCalSD; }
+    auto& GetCDCSD() const { return *fCDCSD; }
+    auto& GetMCPSD() const { return *fMCPSD; }
 
 private:
     void ConstructVolumes();
@@ -53,20 +53,21 @@ private:
     G4bool fCheckOverlaps = false;
 
     std::shared_ptr<AcceleratorField> fAcceleratorField;
-    std::shared_ptr<Calorimeter> fCalorimeter;
-    std::shared_ptr<CalorimeterField> fCalorimeterField;
-    std::shared_ptr<CalorimeterShield> fCalorimeterShield;
     std::shared_ptr<CDCBody> fCDCBody;
     std::shared_ptr<CDCCell> fCDCCell;
     std::shared_ptr<CDCFieldWire> fCDCFieldWire;
+    std::shared_ptr<CDCLayer> fCDCLayer;
     std::shared_ptr<CDCSenseWire> fCDCSenseWire;
     std::shared_ptr<CDCSensitiveVolume> fCDCSensitiveVolume;
     std::shared_ptr<Collimator> fCollimator;
-    std::shared_ptr<CDCLayer> fCDCLayer;
+    std::shared_ptr<EMCal> fEMCal;
+    std::shared_ptr<EMCalField> fEMCalField;
+    std::shared_ptr<EMCalShield> fEMCalShield;
     std::shared_ptr<FirstBendField> fFirstBendField;
     std::shared_ptr<FirstBendSolenoid> fFirstBendSolenoid;
     std::shared_ptr<FirstTransportField> fFirstTransportField;
     std::shared_ptr<FirstTransportSolenoid> fFirstTransportSolenoid;
+    std::shared_ptr<MCP> fMCP;
     std::shared_ptr<SecondBendField> fSecondBendField;
     std::shared_ptr<SecondBendSolenoid> fSecondBendSolenoid;
     std::shared_ptr<SecondTransportField> fSecondTransportField;
@@ -78,10 +79,9 @@ private:
     std::shared_ptr<Target> fTarget;
     std::shared_ptr<ThirdTransportField> fThirdTransportField;
     std::shared_ptr<ThirdTransportSolenoid> fThirdTransportSolenoid;
-    std::shared_ptr<VertexDetector> fVertexDetector;
     std::shared_ptr<World> fWorld;
 
-    ObserverPtr<Region> fCalorimeterSensitiveRegion;
+    ObserverPtr<Region> fEMCalSensitiveRegion;
     ObserverPtr<Region> fDefaultSolidRegion;
     ObserverPtr<Region> fDefaultGaseousRegion;
     ObserverPtr<Region> fShieldRegion;
@@ -89,11 +89,11 @@ private:
     ObserverPtr<Region> fSpectrometerSensitiveRegion;
     ObserverPtr<Region> fTargetRegion;
     ObserverPtr<Region> fVacuumRegion;
-    ObserverPtr<Region> fVertexDetectorSensitiveRegion;
+    ObserverPtr<Region> fMCPSensitiveRegion;
 
-    ObserverPtr<CalorimeterSD> fCalorimeterSD;
-    ObserverPtr<SpectrometerSD> fSpectrometerSD;
-    ObserverPtr<VertexDetectorSD> fVertexDetectorSD;
+    ObserverPtr<CDCSD> fCDCSD;
+    ObserverPtr<EMCalSD> fEMCalSD;
+    ObserverPtr<MCPSD> fMCPSD;
 };
 
 } // namespace MACE::Simulation::SimMACE::Action
