@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Simulation/SimMACE/Hit/SpectrometerHit.hxx"
+#include "Simulation/SimMACE/Hit/CDCHit.hxx"
 #include "Utility/ObserverPtr.hxx"
 
 #include "G4TwoVector.hh"
@@ -10,15 +10,15 @@
 
 namespace MACE::Simulation::SimMACE::SD {
 
-using Hit::SpectrometerHitCollection;
+using Hit::CDCHitCollection;
 using MACE::Utility::ObserverPtr;
 
-class SpectrometerSD final : public G4VSensitiveDetector {
+class CDCSD final : public G4VSensitiveDetector {
 public:
-    SpectrometerSD(const G4String& sdName);
-    ~SpectrometerSD() noexcept = default;
-    SpectrometerSD(const SpectrometerSD&) = delete;
-    SpectrometerSD& operator=(const SpectrometerSD&) = delete;
+    CDCSD(const G4String& sdName);
+    ~CDCSD() noexcept = default;
+    CDCSD(const CDCSD&) = delete;
+    CDCSD& operator=(const CDCSD&) = delete;
 
     void Initialize(G4HCofThisEvent* hitsCollection) override;
     G4bool ProcessHits(G4Step* step, G4TouchableHistory*) override;
@@ -29,7 +29,7 @@ public:
 
 private:
     G4int fEventID;
-    SpectrometerHitCollection* fHitsCollection;
+    CDCHitCollection* fHitsCollection;
     std::map<std::pair<int, int>, const G4StepPoint> fEnteredPointList;
     std::vector<std::pair<G4TwoVector, G4ThreeVector>> fSenseWireMap;
 };

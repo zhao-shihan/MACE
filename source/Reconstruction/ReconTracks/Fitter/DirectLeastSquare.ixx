@@ -4,8 +4,8 @@
 
 namespace MACE::Reconstruction::ReconTracks::Fitter {
 
-template<class SpectrometerHit_t, class Track_t>
-bool DirectLeastSquare<SpectrometerHit_t, Track_t>::Fit(std::vector<HitPtr>& hitData, Track_t& track) {
+template<class CDCHit_t, class Track_t>
+bool DirectLeastSquare<CDCHit_t, Track_t>::Fit(std::vector<HitPtr>& hitData, Track_t& track) {
     Initialize(hitData);
 
     if (InitialCircleFit() == false) [[unlikely]] { return false; }
@@ -17,8 +17,8 @@ bool DirectLeastSquare<SpectrometerHit_t, Track_t>::Fit(std::vector<HitPtr>& hit
     return true;
 }
 
-template<class SpectrometerHit_t, class Track_t>
-void DirectLeastSquare<SpectrometerHit_t, Track_t>::Initialize(std::vector<HitPtr>& hitData) {
+template<class CDCHit_t, class Track_t>
+void DirectLeastSquare<CDCHit_t, Track_t>::Initialize(std::vector<HitPtr>& hitData) {
     // sort data by layer ID
     std::ranges::sort(hitData,
                       [](const auto& hit1, const auto& hit2) -> bool {
@@ -43,8 +43,8 @@ void DirectLeastSquare<SpectrometerHit_t, Track_t>::Initialize(std::vector<HitPt
     }
 }
 
-template<class SpectrometerHit_t, class Track_t>
-void DirectLeastSquare<SpectrometerHit_t, Track_t>::InitialScaling() {
+template<class CDCHit_t, class Track_t>
+void DirectLeastSquare<CDCHit_t, Track_t>::InitialScaling() {
     fXcBound.first *= fScalingFactor;
     fXcBound.second *= fScalingFactor;
     fYcBound.first *= fScalingFactor;
@@ -56,8 +56,8 @@ void DirectLeastSquare<SpectrometerHit_t, Track_t>::InitialScaling() {
     fZ *= fScalingFactor;
 }
 
-template<class SpectrometerHit_t, class Track_t>
-bool DirectLeastSquare<SpectrometerHit_t, Track_t>::InitialCircleFit() {
+template<class CDCHit_t, class Track_t>
+bool DirectLeastSquare<CDCHit_t, Track_t>::InitialCircleFit() {
     auto& Xc = fCircleParameters[0];
     auto& Yc = fCircleParameters[1];
     auto& R = fCircleParameters[2];
@@ -106,8 +106,8 @@ bool DirectLeastSquare<SpectrometerHit_t, Track_t>::InitialCircleFit() {
     return true;
 }
 
-template<class SpectrometerHit_t, class Track_t>
-bool DirectLeastSquare<SpectrometerHit_t, Track_t>::CircleFit() {
+template<class CDCHit_t, class Track_t>
+bool DirectLeastSquare<CDCHit_t, Track_t>::CircleFit() {
     auto initCircleParameters = fCircleParameters;
     if (CircleFitNewtonRaphson() != kSuccess) {
         if (this->fVerbose > 0) {
@@ -121,8 +121,8 @@ bool DirectLeastSquare<SpectrometerHit_t, Track_t>::CircleFit() {
     return true;
 }
 
-template<class SpectrometerHit_t, class Track_t>
-void DirectLeastSquare<SpectrometerHit_t, Track_t>::RevolveFit() {
+template<class CDCHit_t, class Track_t>
+void DirectLeastSquare<CDCHit_t, Track_t>::RevolveFit() {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];
     const auto& R = fCircleParameters[2];
@@ -157,8 +157,8 @@ void DirectLeastSquare<SpectrometerHit_t, Track_t>::RevolveFit() {
     fVertexTime = tAvg - sAvg * reciV;
 }
 
-template<class SpectrometerHit_t, class Track_t>
-void DirectLeastSquare<SpectrometerHit_t, Track_t>::FinalScaling() {
+template<class CDCHit_t, class Track_t>
+void DirectLeastSquare<CDCHit_t, Track_t>::FinalScaling() {
     fXcBound.first /= fScalingFactor;
     fXcBound.second /= fScalingFactor;
     fYcBound.first /= fScalingFactor;
@@ -168,8 +168,8 @@ void DirectLeastSquare<SpectrometerHit_t, Track_t>::FinalScaling() {
     fRevolveParameters[0] /= fScalingFactor;
 }
 
-template<class SpectrometerHit_t, class Track_t>
-void DirectLeastSquare<SpectrometerHit_t, Track_t>::Finalize(Track_t& track) {
+template<class CDCHit_t, class Track_t>
+void DirectLeastSquare<CDCHit_t, Track_t>::Finalize(Track_t& track) {
     track.SetVertexTime(fVertexTime);
     track.SetCenter(fCircleParameters[0], fCircleParameters[1]);
     track.SetRadius(fCircleParameters[2]);
@@ -179,8 +179,8 @@ void DirectLeastSquare<SpectrometerHit_t, Track_t>::Finalize(Track_t& track) {
     track.SetChi2(CalculateReducedChi2());
 }
 
-template<class SpectrometerHit_t, class Track_t>
-inline bool DirectLeastSquare<SpectrometerHit_t, Track_t>::CircleParametersIsOutOfBound() const {
+template<class CDCHit_t, class Track_t>
+inline bool DirectLeastSquare<CDCHit_t, Track_t>::CircleParametersIsOutOfBound() const {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];
     const auto& R = fCircleParameters[2];
@@ -197,8 +197,8 @@ inline bool DirectLeastSquare<SpectrometerHit_t, Track_t>::CircleParametersIsOut
     }
 }
 
-template<class SpectrometerHit_t, class Track_t>
-inline double DirectLeastSquare<SpectrometerHit_t, Track_t>::TargetFunction(const double& Xc, const double& Yc, const double& R) const {
+template<class CDCHit_t, class Track_t>
+inline double DirectLeastSquare<CDCHit_t, Track_t>::TargetFunction(const double& Xc, const double& Yc, const double& R) const {
     const auto rX = Xc - fWireX;
     const auto rY = Yc - fWireY;
     const auto dca = std::sqrt(rX * rX + rY * rY) - R;
@@ -213,8 +213,8 @@ inline double DirectLeastSquare<SpectrometerHit_t, Track_t>::TargetFunction(cons
     return variance / (R * R * fN);
 }
 
-template<class SpectrometerHit_t, class Track_t>
-inline std::pair<double, Eigen::Vector3d> DirectLeastSquare<SpectrometerHit_t, Track_t>::TargetGrad() const {
+template<class CDCHit_t, class Track_t>
+inline std::pair<double, Eigen::Vector3d> DirectLeastSquare<CDCHit_t, Track_t>::TargetGrad() const {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];
     const auto& R = fCircleParameters[2];
@@ -240,8 +240,8 @@ inline std::pair<double, Eigen::Vector3d> DirectLeastSquare<SpectrometerHit_t, T
     return std::make_pair(h000, grad);
 }
 
-template<class SpectrometerHit_t, class Track_t>
-inline std::tuple<double, Eigen::Vector3d, Eigen::Matrix3d> DirectLeastSquare<SpectrometerHit_t, Track_t>::TargetGradHessian() const {
+template<class CDCHit_t, class Track_t>
+inline std::tuple<double, Eigen::Vector3d, Eigen::Matrix3d> DirectLeastSquare<CDCHit_t, Track_t>::TargetGradHessian() const {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];
     const auto& R = fCircleParameters[2];
@@ -298,9 +298,9 @@ inline std::tuple<double, Eigen::Vector3d, Eigen::Matrix3d> DirectLeastSquare<Sp
     return std::make_tuple(h000, grad, hessian);
 }
 
-template<class SpectrometerHit_t, class Track_t>
-DirectLeastSquare<SpectrometerHit_t, Track_t>::MinimizerState
-DirectLeastSquare<SpectrometerHit_t, Track_t>::CircleFitNewtonRaphson() {
+template<class CDCHit_t, class Track_t>
+DirectLeastSquare<CDCHit_t, Track_t>::MinimizerState
+DirectLeastSquare<CDCHit_t, Track_t>::CircleFitNewtonRaphson() {
     double lastFunc;
     auto [thisFunc, grad, hessian] = TargetGradHessian();
     if (this->fVerbose > 1) {
@@ -370,9 +370,9 @@ DirectLeastSquare<SpectrometerHit_t, Track_t>::CircleFitNewtonRaphson() {
     return kSuccess;
 }
 
-template<class SpectrometerHit_t, class Track_t>
-DirectLeastSquare<SpectrometerHit_t, Track_t>::MinimizerState
-DirectLeastSquare<SpectrometerHit_t, Track_t>::CircleFitConjugateGrad() {
+template<class CDCHit_t, class Track_t>
+DirectLeastSquare<CDCHit_t, Track_t>::MinimizerState
+DirectLeastSquare<CDCHit_t, Track_t>::CircleFitConjugateGrad() {
     double lastFunc;
     Eigen::Vector3d lastGrad;
     auto [thisFunc, thisGrad] = TargetGrad();
@@ -440,8 +440,8 @@ DirectLeastSquare<SpectrometerHit_t, Track_t>::CircleFitConjugateGrad() {
     return kSuccess;
 }
 
-template<class SpectrometerHit_t, class Track_t>
-double DirectLeastSquare<SpectrometerHit_t, Track_t>::CalculateReducedChi2() {
+template<class CDCHit_t, class Track_t>
+double DirectLeastSquare<CDCHit_t, Track_t>::CalculateReducedChi2() {
     const auto& Xc = fCircleParameters[0];
     const auto& Yc = fCircleParameters[1];
     const auto& R = fCircleParameters[2];

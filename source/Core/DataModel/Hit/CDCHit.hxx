@@ -13,16 +13,16 @@ using BranchSocket::IntBranchSocket;
 using BranchSocket::Vector2FBranchSocket;
 using BranchSocket::Vector3FBranchSocket;
 
-class SpectrometerHit : public ITransientData {
+class CDCHit : public ITransientData {
     using Base = ITransientData;
 
 public:
-    SpectrometerHit() noexcept;
-    SpectrometerHit(const SpectrometerHit& hit) noexcept = default;
-    SpectrometerHit(SpectrometerHit&& hit) noexcept = default;
-    virtual ~SpectrometerHit() noexcept = default;
-    SpectrometerHit& operator=(const SpectrometerHit& hit) noexcept = default;
-    SpectrometerHit& operator=(SpectrometerHit&& hit) noexcept = default;
+    CDCHit() noexcept;
+    CDCHit(const CDCHit& hit) noexcept = default;
+    CDCHit(CDCHit&& hit) noexcept = default;
+    virtual ~CDCHit() noexcept = default;
+    CDCHit& operator=(const CDCHit& hit) noexcept = default;
+    CDCHit& operator=(CDCHit&& hit) noexcept = default;
 
     const auto& GetHitTime() const { return fHitTime; }
     const auto& GetDriftDistance() const { return fDriftDistance; }

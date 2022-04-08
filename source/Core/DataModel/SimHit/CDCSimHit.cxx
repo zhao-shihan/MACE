@@ -1,19 +1,19 @@
-#include "Core/DataModel/SimHit/SpectrometerSimHit.hxx"
+#include "Core/DataModel/SimHit/CDCSimHit.hxx"
 
 namespace MACE::Core::DataModel::SimHit {
 
-FloatBranchSocket SpectrometerSimHit::fgEnergy("hitEne", 0);
-Vector3FBranchSocket SpectrometerSimHit::fgMomentum("hitMom", {"x", "y", "z"}, {0, 0, 0});
-DoubleBranchSocket SpectrometerSimHit::fgVertexTime("vtxTime", 0);
-Vector3FBranchSocket SpectrometerSimHit::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
-FloatBranchSocket SpectrometerSimHit::fgVertexEnergy("vtxEne", 0);
-Vector3FBranchSocket SpectrometerSimHit::fgVertexMomentum("vtxMom", {"x", "y", "z"}, {0, 0, 0});
-ShortStringBranchSocket SpectrometerSimHit::fgParticle("particle", "");
-IntBranchSocket SpectrometerSimHit::fgG4EventID("g4EventID", -1);
-IntBranchSocket SpectrometerSimHit::fgG4TrackID("g4TrackID", -1);
+FloatBranchSocket CDCSimHit::fgEnergy("hitEne", 0);
+Vector3FBranchSocket CDCSimHit::fgMomentum("hitMom", {"x", "y", "z"}, {0, 0, 0});
+DoubleBranchSocket CDCSimHit::fgVertexTime("vtxTime", 0);
+Vector3FBranchSocket CDCSimHit::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
+FloatBranchSocket CDCSimHit::fgVertexEnergy("vtxEne", 0);
+Vector3FBranchSocket CDCSimHit::fgVertexMomentum("vtxMom", {"x", "y", "z"}, {0, 0, 0});
+ShortStringBranchSocket CDCSimHit::fgParticle("particle", "");
+IntBranchSocket CDCSimHit::fgG4EventID("g4EventID", -1);
+IntBranchSocket CDCSimHit::fgG4TrackID("g4TrackID", -1);
 
-SpectrometerSimHit::SpectrometerSimHit() noexcept :
-    SpectrometerHit(),
+CDCSimHit::CDCSimHit() noexcept :
+    CDCHit(),
     fEnergy(fgEnergy.GetValue()),
     fMomentum(fgMomentum.GetValue<Double_t>()),
     fVertexTime(fgVertexTime.GetValue()),
@@ -24,8 +24,8 @@ SpectrometerSimHit::SpectrometerSimHit() noexcept :
     fG4EventID(fgG4EventID.GetValue()),
     fG4TrackID(fgG4TrackID.GetValue()) {}
 
-void SpectrometerSimHit::CreateBranches(TTree& tree) {
-    SpectrometerHit::CreateBranches(tree);
+void CDCSimHit::CreateBranches(TTree& tree) {
+    CDCHit::CreateBranches(tree);
     fgEnergy.CreateBranch(tree);
     fgMomentum.CreateBranch(tree);
     fgVertexTime.CreateBranch(tree);
@@ -37,8 +37,8 @@ void SpectrometerSimHit::CreateBranches(TTree& tree) {
     fgG4TrackID.CreateBranch(tree);
 }
 
-void SpectrometerSimHit::ConnectToBranches(TTree& tree) {
-    SpectrometerHit::ConnectToBranches(tree);
+void CDCSimHit::ConnectToBranches(TTree& tree) {
+    CDCHit::ConnectToBranches(tree);
     fgEnergy.ConnectToBranch(tree);
     fgMomentum.ConnectToBranch(tree);
     fgVertexTime.ConnectToBranch(tree);
@@ -50,8 +50,8 @@ void SpectrometerSimHit::ConnectToBranches(TTree& tree) {
     fgG4TrackID.ConnectToBranch(tree);
 }
 
-void SpectrometerSimHit::FillBranchSockets() const noexcept {
-    SpectrometerHit::FillBranchSockets();
+void CDCSimHit::FillBranchSockets() const noexcept {
+    CDCHit::FillBranchSockets();
     fgEnergy.SetValue(fEnergy);
     fgMomentum.SetValue(fMomentum);
     fgVertexTime.SetValue(fVertexTime);

@@ -11,12 +11,12 @@ namespace MACE::Reconstruction::ReconTracks::Fitter {
 
 using namespace Utility::LiteralUnit::Length;
 
-template<class SpectrometerHit_t, class Track_t>
-class DirectLeastSquare final : public Interface::Fitter<SpectrometerHit_t, Track_t> {
+template<class CDCHit_t, class Track_t>
+class DirectLeastSquare final : public Interface::Fitter<CDCHit_t, Track_t> {
     MACE_RECONSPECTROMETER_HELIXTRACK_CONCEPT(Track_t);
 
 protected:
-    using Base = Interface::Fitter<SpectrometerHit_t, Track_t>;
+    using Base = Interface::Fitter<CDCHit_t, Track_t>;
     using HitPtr = typename Base::HitPtr;
 
 public:

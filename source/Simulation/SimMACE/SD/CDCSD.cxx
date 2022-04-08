@@ -1,6 +1,6 @@
 #include "Core/Geometry/Description/CDC.hxx"
 #include "Simulation/SimMACE/RunManager.hxx"
-#include "Simulation/SimMACE/SD/SpectrometerSD.hxx"
+#include "Simulation/SimMACE/SD/CDCSD.hxx"
 #include "Simulation/SimMACE/Utility/Analysis.hxx"
 #include "Simulation/SimMACE/Utility/Region.hxx"
 
@@ -11,10 +11,10 @@
 
 namespace MACE::Simulation::SimMACE::SD {
 
-using Hit::SpectrometerHit;
+using Hit::CDCHit;
 using Utility::Analysis;
 
-SpectrometerSD::SpectrometerSD(const G4String& sdName) :
+CDCSD::CDCSD(const G4String& sdName) :
     G4VSensitiveDetector(sdName),
     fHitsCollection(nullptr),
     fEnteredPointList(),
@@ -32,13 +32,13 @@ SpectrometerSD::SpectrometerSD(const G4String& sdName) :
     }
 }
 
-void SpectrometerSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
-    fHitsCollection = new SpectrometerHitCollection(SensitiveDetectorName, collectionName[0]);
+void CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
+    fHitsCollection = new CDCHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
+G4bool CDCSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     if (!step->IsFirstStepInVolume() and !step->IsLastStepInVolume()) { return false; }
     const auto* const track = step->GetTrack();
     const auto* const particle = track->GetDefinition();
@@ -79,7 +79,7 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         const auto vertexTotalEnergy = track->GetVertexKineticEnergy() + particle->GetPDGMass();
         const auto vertexMomentum = track->GetVertexMomentumDirection() * std::sqrt(track->GetVertexKineticEnergy() * (vertexTotalEnergy + particle->GetPDGMass()));
         // new a hit
-        auto* const hit = new SpectrometerHit();
+        auto* const hit = new CDCHit();
         hit->SetHitTime((tIn + tOut) / 2);
         hit->SetDriftDistance(driftDistance);
         hit->SetHitPositionZ((zIn + zOut) / 2);
@@ -104,7 +104,7 @@ G4bool SpectrometerSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     return false;
 }
 
-void SpectrometerSD::EndOfEvent(G4HCofThisEvent*) {
+void CDCSD::EndOfEvent(G4HCofThisEvent*) {
     Analysis::Instance().SubmitSpectrometerHC(fHitsCollection->GetVector());
     fEnteredPointList.clear();
 }

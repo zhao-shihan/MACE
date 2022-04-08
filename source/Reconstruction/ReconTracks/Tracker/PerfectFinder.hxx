@@ -5,12 +5,12 @@
 
 namespace MACE::Reconstruction::ReconTracks::Tracker {
 
-template<template<class H, class T> class FitterT_t, class SpectrometerHit_t, class Track_t>
-class PerfectFinder final : public Interface::Tracker<FitterT_t, SpectrometerHit_t, Track_t> {
-    MACE_RECONSPECTROMETER_SPECTROMETERSIMHIT_CONCEPT(SpectrometerHit_t);
+template<template<class H, class T> class FitterT_t, class CDCHit_t, class Track_t>
+class PerfectFinder final : public Interface::Tracker<FitterT_t, CDCHit_t, Track_t> {
+    MACE_RECONSPECTROMETER_SPECTROMETERSIMHIT_CONCEPT(CDCHit_t);
 
 protected:
-    using Base = Interface::Tracker<FitterT_t, SpectrometerHit_t, Track_t>;
+    using Base = Interface::Tracker<FitterT_t, CDCHit_t, Track_t>;
     using HitPtr = typename Base::HitPtr;
     using TrackPtr = typename Base::TrackPtr;
 

@@ -1,7 +1,7 @@
 #include "Simulation/SimMACE/Action/EventAction.hxx"
 #include "Simulation/SimMACE/RunManager.hxx"
 #include "Simulation/SimMACE/SD/CalorimeterSD.hxx"
-#include "Simulation/SimMACE/SD/SpectrometerSD.hxx"
+#include "Simulation/SimMACE/SD/CDCSD.hxx"
 #include "Simulation/SimMACE/SD/VertexDetectorSD.hxx"
 #include "Simulation/SimMACE/Utility/Analysis.hxx"
 
@@ -11,7 +11,7 @@ void EventAction::BeginOfEventAction(const G4Event* event) {
     const auto eventID = event->GetEventID();
     const auto& detectors = RunManager::Instance().GetDetectorConstruction();
     detectors.GetCalorimeterSD().SetEventID(eventID);
-    detectors.GetSpectrometerSD().SetEventID(eventID);
+    detectors.GetCDCSD().SetEventID(eventID);
     detectors.GetVertexDetectorSD().SetEventID(eventID);
 }
 

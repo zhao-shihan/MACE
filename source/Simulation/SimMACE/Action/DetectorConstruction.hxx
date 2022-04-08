@@ -2,7 +2,7 @@
 
 #include "Core/Geometry/Entity/Fast/All.hxx"
 #include "Simulation/SimMACE/SD/CalorimeterSD.hxx"
-#include "Simulation/SimMACE/SD/SpectrometerSD.hxx"
+#include "Simulation/SimMACE/SD/CDCSD.hxx"
 #include "Simulation/SimMACE/SD/VertexDetectorSD.hxx"
 #include "Simulation/SimMACE/Utility/Region.hxx"
 #include "Utility/ObserverPtr.hxx"
@@ -40,7 +40,7 @@ public:
     auto& GetVertexDetectorSensitiveRegion() const { return *fVertexDetectorSensitiveRegion; }
 
     auto& GetCalorimeterSD() const { return *fCalorimeterSD; }
-    auto& GetSpectrometerSD() const { return *fSpectrometerSD; }
+    auto& GetCDCSD() const { return *fCDCSD; }
     auto& GetVertexDetectorSD() const { return *fVertexDetectorSD; }
 
 private:
@@ -92,7 +92,7 @@ private:
     ObserverPtr<Region> fVertexDetectorSensitiveRegion;
 
     ObserverPtr<CalorimeterSD> fCalorimeterSD;
-    ObserverPtr<SpectrometerSD> fSpectrometerSD;
+    ObserverPtr<CDCSD> fCDCSD;
     ObserverPtr<VertexDetectorSD> fVertexDetectorSD;
 };
 

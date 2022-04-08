@@ -1,7 +1,7 @@
 namespace MACE::Reconstruction::ReconTracks::Fitter {
 
-template<class SpectrometerHit_t, class Track_t>
-bool Dummy<SpectrometerHit_t, Track_t>::Fit(std::vector<HitPtr>&, Track_t&) {
+template<class CDCHit_t, class Track_t>
+bool Dummy<CDCHit_t, Track_t>::Fit(std::vector<HitPtr>&, Track_t&) {
     return true;
 }
 

@@ -20,7 +20,7 @@ using namespace MACE::Utility::PhysicalConstant;
 
 using MACE::Core::DataFactory;
 
-using Hit_t = SpectrometerSimHit;
+using Hit_t = CDCSimHit;
 
 int main(int, char** argv) {
     MPI::Init();

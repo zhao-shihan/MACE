@@ -1,21 +1,21 @@
 #pragma once
 
-#include "Core/DataModel/Hit/SpectrometerHit.hxx"
-#include "Core/DataModel/SimHit/SpectrometerSimHit.hxx"
+#include "Core/DataModel/Hit/CDCHit.hxx"
+#include "Core/DataModel/SimHit/CDCSimHit.hxx"
 #include "Core/DataModel/Track/CDCHelixTrack.hxx"
 #include "Core/DataModel/Track/CDCPhysicsTrack.hxx"
 
 #include <iostream>
 
 #define MACE_RECONSPECTROMETER_SPECTROMETERHIT_CONCEPT(Hit_t)                            \
-    static_assert(std::is_base_of_v<MACE::Core::DataModel::Hit::SpectrometerHit, Hit_t>, \
+    static_assert(std::is_base_of_v<MACE::Core::DataModel::Hit::CDCHit, Hit_t>, \
                   "The hit type should be or derived from "                              \
-                  "MACE::Core::DataModel::SpectrometerHit")
+                  "MACE::Core::DataModel::CDCHit")
 
 #define MACE_RECONSPECTROMETER_SPECTROMETERSIMHIT_CONCEPT(Hit_t)                               \
-    static_assert(std::is_base_of_v<MACE::Core::DataModel::SimHit::SpectrometerSimHit, Hit_t>, \
+    static_assert(std::is_base_of_v<MACE::Core::DataModel::SimHit::CDCSimHit, Hit_t>, \
                   "The hit type should be or derived from "                                    \
-                  "MACE::Core::DataModel::SpectrometerSimHit")
+                  "MACE::Core::DataModel::CDCSimHit")
 
 #define MACE_RECONSPECTROMETER_TRACK_CONCEPT(Track_t)                                            \
     static_assert(std::is_base_of_v<MACE::Core::DataModel::Track::CDCHelixTrack, Track_t> or     \

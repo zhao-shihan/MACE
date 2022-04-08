@@ -4,16 +4,16 @@
 
 namespace MACE::Reconstruction::ReconTracks::Interface {
 
-template<class SpectrometerHit_t, class Track_t>
+template<class CDCHit_t, class Track_t>
 class Fitter {
-    MACE_RECONSPECTROMETER_SPECTROMETERHIT_CONCEPT(SpectrometerHit_t);
+    MACE_RECONSPECTROMETER_SPECTROMETERHIT_CONCEPT(CDCHit_t);
     MACE_RECONSPECTROMETER_TRACK_CONCEPT(Track_t);
 
     Fitter(const Fitter&) = delete;
     Fitter& operator=(const Fitter&) = delete;
 
 protected:
-    using HitPtr = std::shared_ptr<SpectrometerHit_t>;
+    using HitPtr = std::shared_ptr<CDCHit_t>;
 
     Fitter();
     virtual ~Fitter() noexcept = default;

@@ -172,8 +172,8 @@ void DetectorConstruction::ConstructSDs() {
     fVertexDetectorSD = new VertexDetectorSD(fVertexDetector->GetLogicalVolumeName());
     fVertexDetector->RegisterSD(fVertexDetectorSD);
 
-    fSpectrometerSD = new SpectrometerSD(fCDCSensitiveVolume->GetLogicalVolumeName());
-    fCDCSensitiveVolume->RegisterSD(fSpectrometerSD);
+    fCDCSD = new CDCSD(fCDCSensitiveVolume->GetLogicalVolumeName());
+    fCDCSensitiveVolume->RegisterSD(fCDCSD);
 }
 
 void DetectorConstruction::ConstructFields() {

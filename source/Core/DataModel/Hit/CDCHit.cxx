@@ -1,18 +1,18 @@
-#include "Core/DataModel/Hit/SpectrometerHit.hxx"
+#include "Core/DataModel/Hit/CDCHit.hxx"
 
 namespace MACE::Core::DataModel::Hit {
 
-DoubleBranchSocket SpectrometerHit::fgHitTime("hitTime", 0);
-FloatBranchSocket SpectrometerHit::fgDriftDistance("drift", 0);
-FloatBranchSocket SpectrometerHit::fgHitPositionZ("hitPosZ", 0);
-FloatBranchSocket SpectrometerHit::fgDriftDistanceVariance("driftVar", 0);
-FloatBranchSocket SpectrometerHit::fgHitPositionZVariance("hitPosZVar", 0);
-Vector2FBranchSocket SpectrometerHit::fgWirePosition("wirePos", {"x", "y"}, {0, 0});
-Vector3FBranchSocket SpectrometerHit::fgWireDirection("wireDir", {"x", "y", "z"}, {0, 0, 0});
-IntBranchSocket SpectrometerHit::fgCellID("cellID", -1);
-IntBranchSocket SpectrometerHit::fgLayerID("layerID", -1);
+DoubleBranchSocket CDCHit::fgHitTime("hitTime", 0);
+FloatBranchSocket CDCHit::fgDriftDistance("drift", 0);
+FloatBranchSocket CDCHit::fgHitPositionZ("hitPosZ", 0);
+FloatBranchSocket CDCHit::fgDriftDistanceVariance("driftVar", 0);
+FloatBranchSocket CDCHit::fgHitPositionZVariance("hitPosZVar", 0);
+Vector2FBranchSocket CDCHit::fgWirePosition("wirePos", {"x", "y"}, {0, 0});
+Vector3FBranchSocket CDCHit::fgWireDirection("wireDir", {"x", "y", "z"}, {0, 0, 0});
+IntBranchSocket CDCHit::fgCellID("cellID", -1);
+IntBranchSocket CDCHit::fgLayerID("layerID", -1);
 
-SpectrometerHit::SpectrometerHit() noexcept :
+CDCHit::CDCHit() noexcept :
     ITransientData(),
     fHitTime(fgHitTime.GetValue()),
     fDriftDistance(fgDriftDistance.GetValue()),
@@ -24,7 +24,7 @@ SpectrometerHit::SpectrometerHit() noexcept :
     fCellID(fgCellID.GetValue()),
     fLayerID(fgLayerID.GetValue()) {}
 
-void SpectrometerHit::CreateBranches(TTree& tree) {
+void CDCHit::CreateBranches(TTree& tree) {
     ITransientData::CreateBranches(tree);
     fgHitTime.CreateBranch(tree);
     fgDriftDistance.CreateBranch(tree);
@@ -37,7 +37,7 @@ void SpectrometerHit::CreateBranches(TTree& tree) {
     fgLayerID.CreateBranch(tree);
 }
 
-void SpectrometerHit::ConnectToBranches(TTree& tree) {
+void CDCHit::ConnectToBranches(TTree& tree) {
     ITransientData::ConnectToBranches(tree);
     fgHitTime.ConnectToBranch(tree);
     fgDriftDistance.ConnectToBranch(tree);
@@ -50,7 +50,7 @@ void SpectrometerHit::ConnectToBranches(TTree& tree) {
     fgLayerID.ConnectToBranch(tree);
 }
 
-void SpectrometerHit::FillBranchSockets() const noexcept {
+void CDCHit::FillBranchSockets() const noexcept {
     Base::FillBranchSockets();
     fgHitTime.SetValue(fHitTime);
     fgDriftDistance.SetValue(fDriftDistance);

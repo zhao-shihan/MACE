@@ -2,7 +2,7 @@
 
 #include "Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 #include "Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
-#include "Core/DataModel/Hit/SpectrometerHit.hxx"
+#include "Core/DataModel/Hit/CDCHit.hxx"
 
 namespace MACE::Core::DataModel::SimHit {
 
@@ -13,14 +13,14 @@ using BranchSocket::ShortStringBranchSocket;
 using BranchSocket::Vector3FBranchSocket;
 using Utility::ShortString;
 
-class SpectrometerSimHit : public Hit::SpectrometerHit {
+class CDCSimHit : public Hit::CDCHit {
 public:
-    SpectrometerSimHit() noexcept;
-    SpectrometerSimHit(const SpectrometerSimHit& hit) noexcept = default;
-    SpectrometerSimHit(SpectrometerSimHit&& hit) noexcept = default;
-    virtual ~SpectrometerSimHit() noexcept = default;
-    SpectrometerSimHit& operator=(const SpectrometerSimHit& hit) noexcept = default;
-    SpectrometerSimHit& operator=(SpectrometerSimHit&& hit) noexcept = default;
+    CDCSimHit() noexcept;
+    CDCSimHit(const CDCSimHit& hit) noexcept = default;
+    CDCSimHit(CDCSimHit&& hit) noexcept = default;
+    virtual ~CDCSimHit() noexcept = default;
+    CDCSimHit& operator=(const CDCSimHit& hit) noexcept = default;
+    CDCSimHit& operator=(CDCSimHit&& hit) noexcept = default;
 
     const auto& GetEnergy() const { return fEnergy; }
     const auto& GetMomentum() const { return fMomentum; }

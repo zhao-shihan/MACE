@@ -2,7 +2,7 @@
 
 #include "Core/DataFactory.hxx"
 #include "Simulation/SimMACE/Hit/CalorimeterHit.hxx"
-#include "Simulation/SimMACE/Hit/SpectrometerHit.hxx"
+#include "Simulation/SimMACE/Hit/CDCHit.hxx"
 #include "Simulation/SimMACE/Hit/VertexDetectorHit.hxx"
 #include "Utility/MPITool/MPIFileTools.hxx"
 #include "Utility/ObserverPtr.hxx"
@@ -13,7 +13,7 @@ namespace MACE::Simulation::SimMACE::Utility {
 
 using Core::DataFactory;
 using Hit::CalorimeterHit;
-using Hit::SpectrometerHit;
+using Hit::CDCHit;
 using Hit::VertexDetectorHit;
 using MACE::Utility::ObserverPtr;
 using MACE::Utility::MPITool::MPIFileTools;
@@ -40,7 +40,7 @@ public:
 
     void SubmitCalorimeterHC(ObserverPtr<const std::vector<CalorimeterHit*>> hitList) { fCalorimeterHitList = hitList; }
     void SubmitVertexDetectorHC(ObserverPtr<const std::vector<VertexDetectorHit*>> hitList) { fVertexDetectorHitList = hitList; }
-    void SubmitSpectrometerHC(ObserverPtr<const std::vector<SpectrometerHit*>> hitList) { fSpectrometerHitList = hitList; }
+    void SubmitSpectrometerHC(ObserverPtr<const std::vector<CDCHit*>> hitList) { fCDCHitList = hitList; }
     void WriteEvent(G4int repetitionID);
 
 private:
@@ -59,11 +59,11 @@ private:
     G4int fRepetitionIDOfLastG4Event;
     std::shared_ptr<TTree> fCalorimeterHitTree;
     std::shared_ptr<TTree> fVertexDetectorHitTree;
-    std::shared_ptr<TTree> fSpectrometerHitTree;
+    std::shared_ptr<TTree> fCDCHitTree;
 
     ObserverPtr<const std::vector<CalorimeterHit*>> fCalorimeterHitList;
     ObserverPtr<const std::vector<VertexDetectorHit*>> fVertexDetectorHitList;
-    ObserverPtr<const std::vector<SpectrometerHit*>> fSpectrometerHitList;
+    ObserverPtr<const std::vector<CDCHit*>> fCDCHitList;
 };
 
 } // namespace MACE::Simulation::SimMACE::Utility
