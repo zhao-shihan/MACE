@@ -12,7 +12,7 @@ namespace MACE::Simulation::SimMACE::Hit {
 using Utility::ObserverPtr;
 
 class EMCalHit final : public G4VHit,
-                             public Core::DataModel::SimHit::EMCalSimHit {
+                       public Core::DataModel::SimHit::EMCalSimHit {
 public:
     EMCalHit() noexcept = default;
     EMCalHit(const EMCalHit& hit) noexcept = default;

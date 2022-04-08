@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Core/Geometry/Entity/Fast/All.hxx"
-#include "Simulation/SimMACE/SD/EMCalSD.hxx"
 #include "Simulation/SimMACE/SD/CDCSD.hxx"
+#include "Simulation/SimMACE/SD/EMCalSD.hxx"
 #include "Simulation/SimMACE/SD/MCPSD.hxx"
 #include "Simulation/SimMACE/Utility/Region.hxx"
 #include "Utility/ObserverPtr.hxx"
@@ -53,20 +53,21 @@ private:
     G4bool fCheckOverlaps = false;
 
     std::shared_ptr<AcceleratorField> fAcceleratorField;
-    std::shared_ptr<EMCal> fEMCal;
-    std::shared_ptr<EMCalField> fEMCalField;
-    std::shared_ptr<EMCalShield> fEMCalShield;
     std::shared_ptr<CDCBody> fCDCBody;
     std::shared_ptr<CDCCell> fCDCCell;
     std::shared_ptr<CDCFieldWire> fCDCFieldWire;
+    std::shared_ptr<CDCLayer> fCDCLayer;
     std::shared_ptr<CDCSenseWire> fCDCSenseWire;
     std::shared_ptr<CDCSensitiveVolume> fCDCSensitiveVolume;
     std::shared_ptr<Collimator> fCollimator;
-    std::shared_ptr<CDCLayer> fCDCLayer;
+    std::shared_ptr<EMCal> fEMCal;
+    std::shared_ptr<EMCalField> fEMCalField;
+    std::shared_ptr<EMCalShield> fEMCalShield;
     std::shared_ptr<FirstBendField> fFirstBendField;
     std::shared_ptr<FirstBendSolenoid> fFirstBendSolenoid;
     std::shared_ptr<FirstTransportField> fFirstTransportField;
     std::shared_ptr<FirstTransportSolenoid> fFirstTransportSolenoid;
+    std::shared_ptr<MCP> fMCP;
     std::shared_ptr<SecondBendField> fSecondBendField;
     std::shared_ptr<SecondBendSolenoid> fSecondBendSolenoid;
     std::shared_ptr<SecondTransportField> fSecondTransportField;
@@ -78,7 +79,6 @@ private:
     std::shared_ptr<Target> fTarget;
     std::shared_ptr<ThirdTransportField> fThirdTransportField;
     std::shared_ptr<ThirdTransportSolenoid> fThirdTransportSolenoid;
-    std::shared_ptr<MCP> fMCP;
     std::shared_ptr<World> fWorld;
 
     ObserverPtr<Region> fEMCalSensitiveRegion;
@@ -91,8 +91,8 @@ private:
     ObserverPtr<Region> fVacuumRegion;
     ObserverPtr<Region> fMCPSensitiveRegion;
 
-    ObserverPtr<EMCalSD> fEMCalSD;
     ObserverPtr<CDCSD> fCDCSD;
+    ObserverPtr<EMCalSD> fEMCalSD;
     ObserverPtr<MCPSD> fMCPSD;
 };
 

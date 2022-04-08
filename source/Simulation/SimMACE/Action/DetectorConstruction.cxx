@@ -28,9 +28,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 void DetectorConstruction::ConstructVolumes() {
     // Construct entity objects
     fAcceleratorField = std::make_shared<AcceleratorField>();
-    fEMCal = std::make_shared<EMCal>();
-    fEMCalField = std::make_shared<EMCalField>();
-    fEMCalShield = std::make_shared<EMCalShield>();
     fCDCBody = std::make_shared<CDCBody>();
     fCDCCell = std::make_shared<CDCCell>();
     fCDCFieldWire = std::make_shared<CDCFieldWire>();
@@ -38,10 +35,14 @@ void DetectorConstruction::ConstructVolumes() {
     fCDCSenseWire = std::make_shared<CDCSenseWire>();
     fCDCSensitiveVolume = std::make_shared<CDCSensitiveVolume>();
     fCollimator = std::make_shared<Collimator>();
+    fEMCal = std::make_shared<EMCal>();
+    fEMCalField = std::make_shared<EMCalField>();
+    fEMCalShield = std::make_shared<EMCalShield>();
     fFirstBendField = std::make_shared<FirstBendField>();
     fFirstBendSolenoid = std::make_shared<FirstBendSolenoid>();
     fFirstTransportField = std::make_shared<FirstTransportField>();
     fFirstTransportSolenoid = std::make_shared<FirstTransportSolenoid>();
+    fMCP = std::make_shared<MCP>();
     fSecondBendField = std::make_shared<SecondBendField>();
     fSecondBendSolenoid = std::make_shared<SecondBendSolenoid>();
     fSecondTransportField = std::make_shared<SecondTransportField>();
@@ -53,7 +54,6 @@ void DetectorConstruction::ConstructVolumes() {
     fTarget = std::make_shared<Target>();
     fThirdTransportField = std::make_shared<ThirdTransportField>();
     fThirdTransportSolenoid = std::make_shared<ThirdTransportSolenoid>();
-    fMCP = std::make_shared<MCP>();
     fWorld = std::make_shared<World>();
 
     // Construct hierarchy
@@ -166,14 +166,14 @@ void DetectorConstruction::ConstructRegions() {
 }
 
 void DetectorConstruction::ConstructSDs() {
+    fCDCSD = new CDCSD(fCDCSensitiveVolume->GetLogicalVolumeName());
+    fCDCSensitiveVolume->RegisterSD(fCDCSD);
+
     fEMCalSD = new EMCalSD(fEMCal->GetLogicalVolumeName());
     fEMCal->RegisterSD(fEMCalSD);
 
     fMCPSD = new MCPSD(fMCP->GetLogicalVolumeName());
     fMCP->RegisterSD(fMCPSD);
-
-    fCDCSD = new CDCSD(fCDCSensitiveVolume->GetLogicalVolumeName());
-    fCDCSensitiveVolume->RegisterSD(fCDCSD);
 }
 
 void DetectorConstruction::ConstructFields() {

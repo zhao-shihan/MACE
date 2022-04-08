@@ -7,14 +7,14 @@
 
 #include <iostream>
 
-#define MACE_RECONSPECTROMETER_SPECTROMETERHIT_CONCEPT(Hit_t)                            \
+#define MACE_RECONSPECTROMETER_SPECTROMETERHIT_CONCEPT(Hit_t)                   \
     static_assert(std::is_base_of_v<MACE::Core::DataModel::Hit::CDCHit, Hit_t>, \
-                  "The hit type should be or derived from "                              \
+                  "The hit type should be or derived from "                     \
                   "MACE::Core::DataModel::CDCHit")
 
-#define MACE_RECONSPECTROMETER_SPECTROMETERSIMHIT_CONCEPT(Hit_t)                               \
+#define MACE_RECONSPECTROMETER_SPECTROMETERSIMHIT_CONCEPT(Hit_t)                      \
     static_assert(std::is_base_of_v<MACE::Core::DataModel::SimHit::CDCSimHit, Hit_t>, \
-                  "The hit type should be or derived from "                                    \
+                  "The hit type should be or derived from "                           \
                   "MACE::Core::DataModel::CDCSimHit")
 
 #define MACE_RECONSPECTROMETER_TRACK_CONCEPT(Track_t)                                            \

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Core/DataFactory.hxx"
-#include "Simulation/SimMACE/Hit/EMCalHit.hxx"
 #include "Simulation/SimMACE/Hit/CDCHit.hxx"
+#include "Simulation/SimMACE/Hit/EMCalHit.hxx"
 #include "Simulation/SimMACE/Hit/MCPHit.hxx"
 #include "Utility/MPITool/MPIFileTools.hxx"
 #include "Utility/ObserverPtr.hxx"
@@ -12,8 +12,8 @@
 namespace MACE::Simulation::SimMACE::Utility {
 
 using Core::DataFactory;
-using Hit::EMCalHit;
 using Hit::CDCHit;
+using Hit::EMCalHit;
 using Hit::MCPHit;
 using MACE::Utility::ObserverPtr;
 using MACE::Utility::MPITool::MPIFileTools;

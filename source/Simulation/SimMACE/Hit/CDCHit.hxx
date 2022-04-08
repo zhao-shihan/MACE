@@ -14,7 +14,7 @@ namespace MACE::Simulation::SimMACE::Hit {
 using Utility::ObserverPtr;
 
 class CDCHit final : public G4VHit,
-                              public Core::DataModel::SimHit::CDCSimHit {
+                     public Core::DataModel::SimHit::CDCSimHit {
     using Base = CDCSimHit;
 
 public:

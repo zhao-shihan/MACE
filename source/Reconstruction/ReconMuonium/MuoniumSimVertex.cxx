@@ -43,4 +43,4 @@ void MuoniumSimVertex::FillBranchSockets() const noexcept {
     fgTrueParticles.SetValue(fTrueParticles);
 }
 
-} // namespace MACE::Core::DataModel::SimVertex
+} // namespace MACE::Reconstruction::ReconMuonium
