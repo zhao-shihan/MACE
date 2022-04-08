@@ -14,16 +14,16 @@ AnalysisMessenger& AnalysisMessenger::Instance() {
 AnalysisMessenger::AnalysisMessenger() :
     G4UImessenger(),
     fDirectory("/MACE/Analysis/"),
-    fEnableCoincidenceOfCalorimeter("/MACE/Analysis/EnableCoincidenceOfCalorimeter", this),
+    fEnableCoincidenceOfEMCal("/MACE/Analysis/EnableCoincidenceOfEMCal", this),
     fEnableCoincidenceOfVertexDetector("/MACE/Analysis/EnableCoincidenceOfVertexDetector", this),
     fSetResultName("/MACE/Analysis/SetResultName", this),
     fMergeResult("/MACE/Analysis/MergeResult", this) {
 
     fDirectory.SetGuidance("MACE::Simulation::SimMACE::Utility::Analysis controller.");
 
-    fEnableCoincidenceOfCalorimeter.SetGuidance("Enable calorimeter for coincident detection.");
-    fEnableCoincidenceOfCalorimeter.SetParameterName("mode", false);
-    fEnableCoincidenceOfCalorimeter.AvailableForStates(G4State_Idle);
+    fEnableCoincidenceOfEMCal.SetGuidance("Enable EMCal for coincident detection.");
+    fEnableCoincidenceOfEMCal.SetParameterName("mode", false);
+    fEnableCoincidenceOfEMCal.AvailableForStates(G4State_Idle);
 
     fEnableCoincidenceOfVertexDetector.SetGuidance("Enable atomic shell e-/e+ detector (typically MCP currently) for coincident detection.");
     fEnableCoincidenceOfVertexDetector.SetParameterName("mode", false);
@@ -41,8 +41,8 @@ AnalysisMessenger::AnalysisMessenger() :
 
 void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     auto&& analysis = Analysis::Instance();
-    if (command == std::addressof(fEnableCoincidenceOfCalorimeter)) {
-        analysis.SetEnableCoincidenceOfCalorimeter(fEnableCoincidenceOfCalorimeter.GetNewBoolValue(value));
+    if (command == std::addressof(fEnableCoincidenceOfEMCal)) {
+        analysis.SetEnableCoincidenceOfEMCal(fEnableCoincidenceOfEMCal.GetNewBoolValue(value));
     } else if (command == std::addressof(fEnableCoincidenceOfVertexDetector)) {
         analysis.SetEnableCoincidenceOfVertexDetector(fEnableCoincidenceOfVertexDetector.GetNewBoolValue(value));
     } else if (command == std::addressof(fSetResultName)) {

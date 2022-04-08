@@ -7,9 +7,9 @@ using namespace MACE::Core::Geometry::Entity::Fast;
 int main(int, char**) {
     // Construct entity objects
     auto fAcceleratorField = std::make_shared<AcceleratorField>();
-    auto fCalorimeter = std::make_shared<Calorimeter>();
-    auto fCalorimeterField = std::make_shared<CalorimeterField>();
-    auto fCalorimeterShield = std::make_shared<CalorimeterShield>();
+    auto fEMCal = std::make_shared<EMCal>();
+    auto fEMCalField = std::make_shared<EMCalField>();
+    auto fEMCalShield = std::make_shared<EMCalShield>();
     auto fCDCBody = std::make_shared<CDCBody>();
     auto fCDCCell = std::make_shared<CDCCell>();
     auto fCDCFieldWire = std::make_shared<CDCFieldWire>();
@@ -36,8 +36,8 @@ int main(int, char**) {
     auto fWorld = std::make_shared<World>();
 
     // Construct hierarchy
-    fCalorimeterField->AddDaughter(fCalorimeter);
-    fCalorimeterField->AddDaughter(fVertexDetector);
+    fEMCalField->AddDaughter(fEMCal);
+    fEMCalField->AddDaughter(fVertexDetector);
     fFirstBendField->AddDaughter(fFirstBendSolenoid);
     fFirstTransportField->AddDaughter(fFirstTransportSolenoid);
     fSecondBendField->AddDaughter(fSecondBendSolenoid);
@@ -54,8 +54,8 @@ int main(int, char**) {
     fSpectrometerField->AddDaughter(fCDCBody);
     fSpectrometerField->AddDaughter(fSpectrometerMagnet);
     fThirdTransportField->AddDaughter(fThirdTransportSolenoid);
-    fWorld->AddDaughter(fCalorimeterField);
-    fWorld->AddDaughter(fCalorimeterShield);
+    fWorld->AddDaughter(fEMCalField);
+    fWorld->AddDaughter(fEMCalShield);
     fWorld->AddDaughter(fFirstBendField);
     fWorld->AddDaughter(fFirstTransportField);
     fWorld->AddDaughter(fSecondBendField);

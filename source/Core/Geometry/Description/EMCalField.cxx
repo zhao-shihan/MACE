@@ -1,21 +1,21 @@
-#include "Core/Geometry/Description/CalorimeterField.hxx"
+#include "Core/Geometry/Description/EMCalField.hxx"
 #include "Utility/LiteralUnit.hxx"
 
 namespace MACE::Core::Geometry::Description {
 
 using namespace Utility::LiteralUnit::Length;
 
-CalorimeterField& CalorimeterField::Instance() noexcept {
-    static CalorimeterField instance;
+EMCalField& EMCalField::Instance() noexcept {
+    static EMCalField instance;
     return instance;
 }
 
-CalorimeterField::CalorimeterField() :
-    IDescription("CalorimeterField"),
+EMCalField::EMCalField() :
+    IDescription("EMCalField"),
     fRadius(25_cm),
     fLength(70_cm) {}
 
-HepGeom::Transform3D CalorimeterField::GetTransform() const {
+HepGeom::Transform3D EMCalField::GetTransform() const {
     const auto& transportLine = TransportLine::Instance();
     const auto localTransX = 0;
     const auto localTransY = 0;
@@ -25,12 +25,12 @@ HepGeom::Transform3D CalorimeterField::GetTransform() const {
     return HepGeom::Transform3D(CLHEP::HepRotation(), translation);
 }
 
-void CalorimeterField::ReadImpl(const YAML::Node& node) {
+void EMCalField::ReadImpl(const YAML::Node& node) {
     fRadius = node["Radius"].as<decltype(fRadius)>();
     fLength = node["Length"].as<decltype(fLength)>();
 }
 
-void CalorimeterField::WriteImpl(YAML::Node& node) const {
+void EMCalField::WriteImpl(YAML::Node& node) const {
     node["Radius"] = fRadius;
     node["Length"] = fLength;
 }

@@ -7,7 +7,7 @@ namespace MACE::Simulation::SimMACE::Utility {
 class Region final : public G4Region {
 public:
     enum RegionType {
-        kCalorimeterSensitive,
+        kEMCalSensitive,
         kDefaultSolid,
         kDefaultGaseous,
         kShield,

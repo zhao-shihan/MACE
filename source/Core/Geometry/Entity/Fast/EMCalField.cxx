@@ -1,13 +1,13 @@
-#include "Core/Geometry/Description/CalorimeterField.hxx"
-#include "Core/Geometry/Entity/Fast/CalorimeterField.hxx"
+#include "Core/Geometry/Description/EMCalField.hxx"
+#include "Core/Geometry/Entity/Fast/EMCalField.hxx"
 
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Core::Geometry::Entity::Fast::CalorimeterField;
+using MACE::Core::Geometry::Entity::Fast::EMCalField;
 
-void CalorimeterField::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::CalorimeterField::Instance();
+void EMCalField::ConstructSelf(G4bool checkOverlaps) {
+    const auto& description = Description::EMCalField::Instance();
     auto name = description.GetName();
     auto radius = description.GetRadius();
     auto length = description.GetLength();

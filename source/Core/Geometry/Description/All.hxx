@@ -5,9 +5,9 @@
 #pragma once
 
 #include "Core/Geometry/Description/AcceleratorField.hxx"
-#include "Core/Geometry/Description/Calorimeter.hxx"
-#include "Core/Geometry/Description/CalorimeterField.hxx"
-#include "Core/Geometry/Description/CalorimeterShield.hxx"
+#include "Core/Geometry/Description/EMCal.hxx"
+#include "Core/Geometry/Description/EMCalField.hxx"
+#include "Core/Geometry/Description/EMCalShield.hxx"
 #include "Core/Geometry/Description/CDC.hxx"
 #include "Core/Geometry/Description/Collimator.hxx"
 #include "Core/Geometry/Description/SelectorField.hxx"

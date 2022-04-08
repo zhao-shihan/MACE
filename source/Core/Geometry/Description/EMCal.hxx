@@ -4,15 +4,15 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class Calorimeter final : public IDescription {
+class EMCal final : public IDescription {
 public:
-    static Calorimeter& Instance() noexcept;
+    static EMCal& Instance() noexcept;
 
 private:
-    Calorimeter();
-    ~Calorimeter() noexcept = default;
-    Calorimeter(const Calorimeter&) = delete;
-    Calorimeter& operator=(const Calorimeter&) = delete;
+    EMCal();
+    ~EMCal() noexcept = default;
+    EMCal(const EMCal&) = delete;
+    EMCal& operator=(const EMCal&) = delete;
 
 public:
     const auto& GetInnerRadius() const { return fInnerRadius; }

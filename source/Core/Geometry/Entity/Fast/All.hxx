@@ -5,9 +5,9 @@
 #pragma once
 
 #include "Core/Geometry/Entity/Fast/AcceleratorField.hxx"
-#include "Core/Geometry/Entity/Fast/Calorimeter.hxx"
-#include "Core/Geometry/Entity/Fast/CalorimeterField.hxx"
-#include "Core/Geometry/Entity/Fast/CalorimeterShield.hxx"
+#include "Core/Geometry/Entity/Fast/EMCal.hxx"
+#include "Core/Geometry/Entity/Fast/EMCalField.hxx"
+#include "Core/Geometry/Entity/Fast/EMCalShield.hxx"
 #include "Core/Geometry/Entity/Fast/CDCBody.hxx"
 #include "Core/Geometry/Entity/Fast/CDCCell.hxx"
 #include "Core/Geometry/Entity/Fast/CDCFieldWire.hxx"

@@ -1,15 +1,15 @@
-#include "Core/Geometry/Description/CalorimeterShield.hxx"
-#include "Core/Geometry/Entity/Fast/CalorimeterShield.hxx"
+#include "Core/Geometry/Description/EMCalShield.hxx"
+#include "Core/Geometry/Entity/Fast/EMCalShield.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 #include "G4UnionSolid.hh"
 
-using MACE::Core::Geometry::Entity::Fast::CalorimeterShield;
+using MACE::Core::Geometry::Entity::Fast::EMCalShield;
 
-void CalorimeterShield::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::CalorimeterShield::Instance();
+void EMCalShield::ConstructSelf(G4bool checkOverlaps) {
+    const auto& description = Description::EMCalShield::Instance();
     auto name = description.GetName();
     auto innerRadius = description.GetInnerRadius();
     auto innerLength = description.GetInnerLength();

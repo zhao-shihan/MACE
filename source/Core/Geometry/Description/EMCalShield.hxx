@@ -1,18 +1,18 @@
 #pragma once
 
-#include "Core/Geometry/Description/CalorimeterField.hxx"
+#include "Core/Geometry/Description/EMCalField.hxx"
 
 namespace MACE::Core::Geometry::Description {
 
-class CalorimeterShield final : public IDescription {
+class EMCalShield final : public IDescription {
 public:
-    static CalorimeterShield& Instance() noexcept;
+    static EMCalShield& Instance() noexcept;
 
 private:
-    CalorimeterShield();
-    ~CalorimeterShield() noexcept = default;
-    CalorimeterShield(const CalorimeterShield&) = delete;
-    CalorimeterShield& operator=(const CalorimeterShield&) = delete;
+    EMCalShield();
+    ~EMCalShield() noexcept = default;
+    EMCalShield(const EMCalShield&) = delete;
+    EMCalShield& operator=(const EMCalShield&) = delete;
 
 public:
     const auto& GetInnerRadius() const { return fInnerRadius; }
@@ -27,7 +27,7 @@ public:
 
     // Next 1 method should only use for geometry construction.
 
-    auto GetTransform() const { return CalorimeterField::Instance().GetTransform(); }
+    auto GetTransform() const { return EMCalField::Instance().GetTransform(); }
 
 private:
     void ReadImpl(const YAML::Node& node) override;

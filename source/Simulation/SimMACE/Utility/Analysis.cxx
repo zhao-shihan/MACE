@@ -18,10 +18,10 @@ Analysis::Analysis() :
     fMPIFileTools(nullptr),
     fDataHub(),
     fRepetitionIDOfLastG4Event(std::numeric_limits<decltype(fRepetitionIDOfLastG4Event)>::max()),
-    fCalorimeterHitTree(nullptr),
+    fEMCalHitTree(nullptr),
     fVertexDetectorHitTree(nullptr),
     fCDCHitTree(nullptr),
-    fCalorimeterHitList(nullptr),
+    fEMCalHitList(nullptr),
     fVertexDetectorHitList(nullptr),
     fCDCHitList(nullptr) {
     AnalysisMessenger::Instance();
@@ -60,12 +60,12 @@ void Analysis::WriteEvent(G4int repetitionID) {
         // last repetition had already come to the end, write its data. If first, skipped inside.
         WriteTrees();
         // create trees for new repetition
-        fCalorimeterHitTree = fDataHub.CreateTree<CalorimeterSimHit>(repetitionID);
+        fEMCalHitTree = fDataHub.CreateTree<EMCalSimHit>(repetitionID);
         fVertexDetectorHitTree = fDataHub.CreateTree<VertexDetectorSimHit>(repetitionID);
         fCDCHitTree = fDataHub.CreateTree<CDCSimHit>(repetitionID);
     }
 
-    fDataHub.FillTree<CalorimeterSimHit>(*fCalorimeterHitList, *fCalorimeterHitTree, true);
+    fDataHub.FillTree<EMCalSimHit>(*fEMCalHitList, *fEMCalHitTree, true);
     fDataHub.FillTree<VertexDetectorSimHit>(*fVertexDetectorHitList, *fVertexDetectorHitTree, true);
     fDataHub.FillTree<CDCSimHit>(*fCDCHitList, *fCDCHitTree, true);
 
@@ -74,13 +74,13 @@ void Analysis::WriteEvent(G4int repetitionID) {
 }
 
 void Analysis::WriteTrees() {
-    if (fCalorimeterHitTree == nullptr or fVertexDetectorHitTree == nullptr or fCDCHitTree == nullptr) { return; }
-    const auto calorimeterTriggered = !fEnableCoincidenceOfCalorimeter or fCalorimeterHitTree->GetEntries() != 0;
+    if (fEMCalHitTree == nullptr or fVertexDetectorHitTree == nullptr or fCDCHitTree == nullptr) { return; }
+    const auto emCalTriggered = !fEnableCoincidenceOfEMCal or fEMCalHitTree->GetEntries() != 0;
     const auto vertexDetectorTriggered = !fEnableCoincidenceOfVertexDetector or fVertexDetectorHitTree->GetEntries() != 0;
     const auto spectrometerTriggered = fCDCHitTree->GetEntries() != 0;
     // if all coincident then write their data
-    if (calorimeterTriggered and vertexDetectorTriggered and spectrometerTriggered) {
-        fCalorimeterHitTree->Write();
+    if (emCalTriggered and vertexDetectorTriggered and spectrometerTriggered) {
+        fEMCalHitTree->Write();
         fVertexDetectorHitTree->Write();
         fCDCHitTree->Write();
     }

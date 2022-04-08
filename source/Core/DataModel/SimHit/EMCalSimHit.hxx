@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
-#include "Core/DataModel/Hit/CalorimeterHit.hxx"
+#include "Core/DataModel/Hit/EMCalHit.hxx"
 
 namespace MACE::Core::DataModel::SimHit {
 
@@ -9,14 +9,14 @@ using BranchSocket::IntBranchSocket;
 using BranchSocket::ShortStringBranchSocket;
 using Utility::ShortString;
 
-class CalorimeterSimHit : public Hit::CalorimeterHit {
+class EMCalSimHit : public Hit::EMCalHit {
 public:
-    CalorimeterSimHit() noexcept;
-    CalorimeterSimHit(const CalorimeterSimHit& hit) noexcept = default;
-    CalorimeterSimHit(CalorimeterSimHit&& hit) noexcept = default;
-    virtual ~CalorimeterSimHit() noexcept = default;
-    CalorimeterSimHit& operator=(const CalorimeterSimHit& hit) noexcept = default;
-    CalorimeterSimHit& operator=(CalorimeterSimHit&& hit) noexcept = default;
+    EMCalSimHit() noexcept;
+    EMCalSimHit(const EMCalSimHit& hit) noexcept = default;
+    EMCalSimHit(EMCalSimHit&& hit) noexcept = default;
+    virtual ~EMCalSimHit() noexcept = default;
+    EMCalSimHit& operator=(const EMCalSimHit& hit) noexcept = default;
+    EMCalSimHit& operator=(EMCalSimHit&& hit) noexcept = default;
 
     const auto& GetParticle() const { return fParticle; }
     const auto& GetG4EventID() const { return fG4EventID; }

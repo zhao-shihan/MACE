@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/Geometry/Entity/Fast/All.hxx"
-#include "Simulation/SimMACE/SD/CalorimeterSD.hxx"
+#include "Simulation/SimMACE/SD/EMCalSD.hxx"
 #include "Simulation/SimMACE/SD/CDCSD.hxx"
 #include "Simulation/SimMACE/SD/VertexDetectorSD.hxx"
 #include "Simulation/SimMACE/Utility/Region.hxx"
@@ -29,7 +29,7 @@ public:
 
     void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlaps = checkOverlaps; }
 
-    auto& GetCalorimeterSensitiveRegion() const { return *fCalorimeterSensitiveRegion; }
+    auto& GetEMCalSensitiveRegion() const { return *fEMCalSensitiveRegion; }
     auto& GetDefaultSolidRegion() const { return *fDefaultSolidRegion; }
     auto& GetDefaultGaseousRegion() const { return *fDefaultGaseousRegion; }
     auto& GetShieldRegion() const { return *fShieldRegion; }
@@ -39,7 +39,7 @@ public:
     auto& GetVacuumRegion() const { return *fVacuumRegion; }
     auto& GetVertexDetectorSensitiveRegion() const { return *fVertexDetectorSensitiveRegion; }
 
-    auto& GetCalorimeterSD() const { return *fCalorimeterSD; }
+    auto& GetEMCalSD() const { return *fEMCalSD; }
     auto& GetCDCSD() const { return *fCDCSD; }
     auto& GetVertexDetectorSD() const { return *fVertexDetectorSD; }
 
@@ -53,9 +53,9 @@ private:
     G4bool fCheckOverlaps = false;
 
     std::shared_ptr<AcceleratorField> fAcceleratorField;
-    std::shared_ptr<Calorimeter> fCalorimeter;
-    std::shared_ptr<CalorimeterField> fCalorimeterField;
-    std::shared_ptr<CalorimeterShield> fCalorimeterShield;
+    std::shared_ptr<EMCal> fEMCal;
+    std::shared_ptr<EMCalField> fEMCalField;
+    std::shared_ptr<EMCalShield> fEMCalShield;
     std::shared_ptr<CDCBody> fCDCBody;
     std::shared_ptr<CDCCell> fCDCCell;
     std::shared_ptr<CDCFieldWire> fCDCFieldWire;
@@ -81,7 +81,7 @@ private:
     std::shared_ptr<VertexDetector> fVertexDetector;
     std::shared_ptr<World> fWorld;
 
-    ObserverPtr<Region> fCalorimeterSensitiveRegion;
+    ObserverPtr<Region> fEMCalSensitiveRegion;
     ObserverPtr<Region> fDefaultSolidRegion;
     ObserverPtr<Region> fDefaultGaseousRegion;
     ObserverPtr<Region> fShieldRegion;
@@ -91,7 +91,7 @@ private:
     ObserverPtr<Region> fVacuumRegion;
     ObserverPtr<Region> fVertexDetectorSensitiveRegion;
 
-    ObserverPtr<CalorimeterSD> fCalorimeterSD;
+    ObserverPtr<EMCalSD> fEMCalSD;
     ObserverPtr<CDCSD> fCDCSD;
     ObserverPtr<VertexDetectorSD> fVertexDetectorSD;
 };

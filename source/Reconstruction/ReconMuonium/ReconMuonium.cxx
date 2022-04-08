@@ -1,11 +1,11 @@
 #include "Core/DataFactory.hxx"
 #include "Core/DataModel/CDCTrackOperation.hxx"
-#include "Core/DataModel/SimHit/CalorimeterSimHit.hxx"
+#include "Core/DataModel/SimHit/EMCalSimHit.hxx"
 #include "Core/DataModel/SimHit/VertexDetectorSimHit.hxx"
 #include "Core/DataModel/Track/CDCHelixTrack.hxx"
 #include "Core/DataModel/Track/CDCPhysicsTrack.hxx"
 #include "Core/Geometry/Description/AcceleratorField.hxx"
-#include "Core/Geometry/Description/CalorimeterField.hxx"
+#include "Core/Geometry/Description/EMCalField.hxx"
 #include "Core/Geometry/Description/SpectrometerField.hxx"
 #include "Core/Geometry/Description/TransportLine.hxx"
 #include "Reconstruction/ReconMuonium/MuoniumSimVertex.hxx"
@@ -28,7 +28,7 @@ using MACE::Core::DataFactory;
 
 using Helix_t = Track::CDCHelixTrack;
 using Track_t = Track::CDCPhysicsTrack;
-using EMCalHit_t = SimHit::CalorimeterSimHit;
+using EMCalHit_t = SimHit::EMCalSimHit;
 using MCPHit_t = SimHit::VertexDetectorSimHit;
 using MVertex_t = MuoniumSimVertex;
 
@@ -53,7 +53,7 @@ int main(int, char* argv[]) {
         transportLine.GetSecondStraightLength() +
         transportLine.GetSecondBendRadius() * halfpi +
         transportLine.GetThirdStraightLength() +
-        CalorimeterField::Instance().GetLength() / 2;
+        EMCalField::Instance().GetLength() / 2;
     // muonium survival length (5 tau_mu @ 300K)
     const auto maxSurvivalLength = c_light * std::sqrt(3 * k_Boltzmann * 300_K / muonium_mass_c2) * 5 * 2197.03_ns;
     auto CalculateFlightTime = [&accE, &linacLength, &flightLength](double zVertex) {
@@ -120,7 +120,7 @@ int main(int, char* argv[]) {
         // Get MCP data
         auto mcpData = dataHub.CreateAndFillList<MCPHit_t>(hitFileIn, rep);
         std::ranges::sort(mcpData, SortByHitTime);
-        // Get calorimeter data
+        // Get EMCal data
         std::vector<std::shared_ptr<EMCalHit_t>> calData;
         calData = dataHub.CreateAndFillList<EMCalHit_t>(hitFileIn, rep);
         std::ranges::sort(calData, SortByHitTime);
@@ -128,7 +128,7 @@ int main(int, char* argv[]) {
         // result list
         std::vector<std::shared_ptr<MVertex_t>> vertexResult;
 
-        // coincidence with calorimeter
+        // coincidence with EMCal
         std::vector<std::pair<std::shared_ptr<MCPHit_t>, int>> coinedMCPData;
         auto coinCalHitBegin = calData.cbegin();
         auto coinCalHitEnd = coinCalHitBegin;

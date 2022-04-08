@@ -1,19 +1,19 @@
 #pragma once
 
-#include "Simulation/SimMACE/Hit/CalorimeterHit.hxx"
+#include "Simulation/SimMACE/Hit/EMCalHit.hxx"
 
 #include "G4VSensitiveDetector.hh"
 
 namespace MACE::Simulation::SimMACE::SD {
 
-using Hit::CalorimeterHitCollection;
+using Hit::EMCalHitCollection;
 
-class CalorimeterSD final : public G4VSensitiveDetector {
+class EMCalSD final : public G4VSensitiveDetector {
 public:
-    CalorimeterSD(const G4String& sdName);
-    ~CalorimeterSD() noexcept = default;
-    CalorimeterSD(const CalorimeterSD&) = delete;
-    CalorimeterSD& operator=(const CalorimeterSD&) = delete;
+    EMCalSD(const G4String& sdName);
+    ~EMCalSD() noexcept = default;
+    EMCalSD(const EMCalSD&) = delete;
+    EMCalSD& operator=(const EMCalSD&) = delete;
 
     void Initialize(G4HCofThisEvent* hitsCollection) override;
     G4bool ProcessHits(G4Step* step, G4TouchableHistory*) override;
@@ -24,7 +24,7 @@ public:
 
 private:
     G4int fEventID;
-    CalorimeterHitCollection* fHitsCollection;
+    EMCalHitCollection* fHitsCollection;
 };
 
 } // namespace MACE::Simulation::SimMACE::SD

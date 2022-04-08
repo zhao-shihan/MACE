@@ -19,9 +19,9 @@
 
 # Colors
 /vis/geometry/set/colour AcceleratorField              0     1     1     1     0.05
-/vis/geometry/set/colour Calorimeter                   0     1     1     1     0.1
-/vis/geometry/set/colour CalorimeterField              0     1     1     1     0.05
-/vis/geometry/set/colour CalorimeterShield             0     1     1     1     0.05
+/vis/geometry/set/colour EMCal                   0     1     1     1     0.1
+/vis/geometry/set/colour EMCalField              0     1     1     1     0.05
+/vis/geometry/set/colour EMCalShield             0     1     1     1     0.05
 /vis/geometry/set/colour CDCBody                       0     1     1     1     0.05
 /vis/geometry/set/colour CDCCell                       0     1     1     1     0.005
 /vis/geometry/set/colour CDCFieldWire                  0     1     1     1     0.01

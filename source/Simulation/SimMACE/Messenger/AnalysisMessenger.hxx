@@ -24,7 +24,7 @@ public:
 
 private:
     G4UIdirectory fDirectory;
-    G4UIcmdWithABool fEnableCoincidenceOfCalorimeter;
+    G4UIcmdWithABool fEnableCoincidenceOfEMCal;
     G4UIcmdWithABool fEnableCoincidenceOfVertexDetector;
     G4UIcmdWithAString fSetResultName;
     G4UIcmdWithABool fMergeResult;

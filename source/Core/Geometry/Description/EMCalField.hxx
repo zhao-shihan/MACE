@@ -6,15 +6,15 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class CalorimeterField final : public IDescription {
+class EMCalField final : public IDescription {
 public:
-    static CalorimeterField& Instance() noexcept;
+    static EMCalField& Instance() noexcept;
 
 private:
-    CalorimeterField();
-    ~CalorimeterField() noexcept = default;
-    CalorimeterField(const CalorimeterField&) = delete;
-    CalorimeterField& operator=(const CalorimeterField&) = delete;
+    EMCalField();
+    ~EMCalField() noexcept = default;
+    EMCalField(const EMCalField&) = delete;
+    EMCalField& operator=(const EMCalField&) = delete;
 
 public:
     const auto& GetRadius() const { return fRadius; }

@@ -13,7 +13,7 @@
   - [How to Run](#how-to-run)
     - [SimMACE](#simmace)
     - [SimMTransport](#simmtransport)
-    - [SimCalorimeter](#simcalorimeter)
+    - [SimEMCal](#simemcal)
     - [SimCDC](#simcdc)
     - [ReconTracks](#recontracks)
     - [Geometry](#geometry)
@@ -106,7 +106,7 @@ mpirun -n N ./SimMTransport sample.cfg
 
 Note that N=1 or without mpirun is not supported, because there should always a master process.
 
-### SimCalorimeter
+### SimEMCal
 
 (Development in progess.)
 
