@@ -37,7 +37,7 @@ To build MACE software from source, there are a few prerequisites.
 2. MPI-3   (MPICH, OpenMPI, Intel MPI, etc. On your frequency.)
 3. Geant4  (≥ 4.11.0, with ≥ C++17, gdml enabled)
 4. ROOT    (≥ 6.24.02, ≥ C++17)
-5. Eigen3  (≥ 3.3.9)
+5. Eigen3  (≥ 3.3.0)
 
 G4mpi, yaml-cpp is bulit in. (in ./external)  
 
