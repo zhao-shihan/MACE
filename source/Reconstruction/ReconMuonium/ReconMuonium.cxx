@@ -2,13 +2,13 @@
 #include "Core/DataModel/CDCTrackOperation.hxx"
 #include "Core/DataModel/SimHit/CalorimeterSimHit.hxx"
 #include "Core/DataModel/SimHit/VertexDetectorSimHit.hxx"
-#include "Core/DataModel/SimVertex/MuoniumSimVertex.hxx"
 #include "Core/DataModel/Track/CDCHelixTrack.hxx"
 #include "Core/DataModel/Track/CDCPhysicsTrack.hxx"
 #include "Core/Geometry/Description/AcceleratorField.hxx"
 #include "Core/Geometry/Description/CalorimeterField.hxx"
 #include "Core/Geometry/Description/SpectrometerField.hxx"
 #include "Core/Geometry/Description/TransportLine.hxx"
+#include "Reconstruction/ReconMuonium/MuoniumSimVertex.hxx"
 #include "Utility/LiteralUnit.hxx"
 #include "Utility/MPITool/MPIFileTools.hxx"
 #include "Utility/MPITool/MPIJobsAssigner.hxx"
@@ -22,6 +22,7 @@ using namespace MACE::Utility::MPITool;
 using namespace MACE::Core::Geometry::Description;
 using namespace MACE::Core::DataModel;
 using namespace MACE::Core::DataModel::CDCTrackOperation;
+using namespace MACE::Reconstruction::ReconMuonium;
 
 using MACE::Core::DataFactory;
 
@@ -29,7 +30,7 @@ using Helix_t = Track::CDCHelixTrack;
 using Track_t = Track::CDCPhysicsTrack;
 using EMCalHit_t = SimHit::CalorimeterSimHit;
 using MCPHit_t = SimHit::VertexDetectorSimHit;
-using MVertex_t = SimVertex::MuoniumSimVertex;
+using MVertex_t = MuoniumSimVertex;
 
 int main(int, char* argv[]) {
     MPI::Init();

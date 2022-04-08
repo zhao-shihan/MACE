@@ -1,6 +1,6 @@
-#include "Core/DataModel/Vertex/MuoniumVertex.hxx"
+#include "Reconstruction/ReconMuonium/MuoniumVertex.hxx"
 
-namespace MACE::Core::DataModel::Vertex {
+namespace MACE::Reconstruction::ReconMuonium {
 
 DoubleBranchSocket MuoniumVertex::fgTCACDC("TCACDC", 0);
 DoubleBranchSocket MuoniumVertex::fgTCAMCP("TCAMCP", 0);
@@ -63,4 +63,4 @@ void MuoniumVertex::FillBranchSockets() const noexcept {
     fgParticles.SetValue(fParticles);
 }
 
-} // namespace MACE::Core::DataModel::Vertex
+} // namespace MACE::Reconstruction::ReconMuonium

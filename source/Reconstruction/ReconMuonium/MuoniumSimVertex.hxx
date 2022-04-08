@@ -4,17 +4,17 @@
 #include "Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 #include "Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
-#include "Core/DataModel/Vertex/MuoniumVertex.hxx"
+#include "Reconstruction/ReconMuonium/MuoniumVertex.hxx"
 
-namespace MACE::Core::DataModel::SimVertex {
+namespace MACE::Reconstruction::ReconMuonium {
 
-using BranchSocket::DoubleBranchSocket;
-using BranchSocket::FloatBranchSocket;
-using BranchSocket::ShortStringBranchSocket;
-using BranchSocket::Vector3FBranchSocket;
+using Core::DataModel::BranchSocket::DoubleBranchSocket;
+using Core::DataModel::BranchSocket::FloatBranchSocket;
+using Core::DataModel::BranchSocket::ShortStringBranchSocket;
+using Core::DataModel::BranchSocket::Vector3FBranchSocket;
 using Utility::ShortString;
 
-class MuoniumSimVertex : public Vertex::MuoniumVertex {
+class MuoniumSimVertex : public MuoniumVertex {
 public:
     MuoniumSimVertex() noexcept;
     MuoniumSimVertex(const MuoniumSimVertex&) noexcept = default;
@@ -59,4 +59,4 @@ private:
     static ShortStringBranchSocket fgTrueParticles;
 };
 
-} // namespace MACE::Core::DataModel::SimVertex
+} // namespace MACE::Reconstruction::ReconMuonium

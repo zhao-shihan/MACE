@@ -6,16 +6,16 @@
 #include "Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "Core/DataModel/ITransientData.hxx"
 
-namespace MACE::Core::DataModel::Vertex {
+namespace MACE::Reconstruction::ReconMuonium {
 
-using BranchSocket::DoubleBranchSocket;
-using BranchSocket::FloatBranchSocket;
-using BranchSocket::ShortStringBranchSocket;
-using BranchSocket::Vector2FBranchSocket;
-using BranchSocket::Vector3FBranchSocket;
+using Core::DataModel::BranchSocket::DoubleBranchSocket;
+using Core::DataModel::BranchSocket::FloatBranchSocket;
+using Core::DataModel::BranchSocket::ShortStringBranchSocket;
+using Core::DataModel::BranchSocket::Vector2FBranchSocket;
+using Core::DataModel::BranchSocket::Vector3FBranchSocket;
 using Utility::ShortString;
 
-class MuoniumVertex : public ITransientData {
+class MuoniumVertex : public Core::DataModel::ITransientData {
 public:
     MuoniumVertex() noexcept;
     MuoniumVertex(const MuoniumVertex&) noexcept = default;
@@ -78,4 +78,4 @@ private:
     static ShortStringBranchSocket fgParticles;
 };
 
-} // namespace MACE::Core::DataModel::Vertex
+} // namespace MACE::Reconstruction::ReconMuonium

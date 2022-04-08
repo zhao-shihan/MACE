@@ -1,6 +1,6 @@
-#include "Core/DataModel/SimVertex/MuoniumSimVertex.hxx"
+#include "Reconstruction/ReconMuonium/MuoniumSimVertex.hxx"
 
-namespace MACE::Core::DataModel::SimVertex {
+namespace MACE::Reconstruction::ReconMuonium {
 
 DoubleBranchSocket MuoniumSimVertex::fgTrueVertexTime("trueVtxTime", 0);
 Vector3FBranchSocket MuoniumSimVertex::fgTrueVertexPosition("trueVtxPos", {"x", "y", "z"}, {0, 0, 0});
