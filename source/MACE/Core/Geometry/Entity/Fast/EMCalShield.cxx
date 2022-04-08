@@ -15,7 +15,7 @@ void EMCalShield::ConstructSelf(G4bool checkOverlaps) {
     auto innerLength = description.GetInnerLength();
     auto windowRadius = description.GetWindowRadius();
     auto thickness = description.GetThickness();
-    auto transform = description.GetTransform();
+    auto transform = description.CalcTransform();
 
     auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Pb");
 

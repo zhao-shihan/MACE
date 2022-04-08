@@ -11,7 +11,7 @@ void EMCalField::ConstructSelf(G4bool checkOverlaps) {
     auto name = description.GetName();
     auto radius = description.GetRadius();
     auto length = description.GetLength();
-    auto transform = description.GetTransform();
+    auto transform = description.CalcTransform();
 
     auto solid = Make<G4Tubs>(
         name,

@@ -14,7 +14,7 @@ void Target::ConstructSelf(G4bool checkOverlaps) {
     const auto name = description.GetName();
     const auto width = description.GetWidth();
     const auto thickness = description.GetThickness();
-    const auto transform = description.GetTransform();
+    const auto transform = description.CalcTransform();
 
     auto material = G4NistManager::Instance()->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30_mg_cm3);
 

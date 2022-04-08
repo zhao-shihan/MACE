@@ -25,7 +25,7 @@ public:
 
     // Next 1 method should only use for geometry construction.
 
-    HepGeom::Transform3D GetTransform() const;
+    HepGeom::Transform3D CalcTransform() const;
 
 private:
     void ReadImpl(const YAML::Node& node) override;

@@ -11,7 +11,7 @@ void AcceleratorField::ConstructSelf(G4bool checkOverlaps) {
     const auto name = description.GetName();
     const auto radius = description.GetRadius();
     const auto length = description.GetLength();
-    const auto transform = description.GetTransform();
+    const auto transform = description.CalcTransform();
 
     auto solid = Make<G4Tubs>(
         name,

@@ -2,7 +2,9 @@
 
 #include "MACE/Core/Geometry/Description/AcceleratorField.hxx"
 
-#include "G4Transform3D.hh"
+#include "CLHEP/Geometry/Transform3D.h"
+
+#include "TFormula.h"
 
 namespace MACE::Core::Geometry::Description {
 
@@ -19,18 +21,28 @@ private:
 public:
     const auto& GetWidth() const { return fWidth; }
     const auto& GetThickness() const { return fThickness; }
-    G4Transform3D GetTransform() const;
+    /// Return true if inside the exact target geometry (considering fine structure).
+    bool Contains(const Double_t* pos) const noexcept;
+    bool Contains(const CLHEP::Hep3Vector& pos) const noexcept { return Contains(reinterpret_cast<const Double_t*>(std::addressof(pos))); }
 
     void SetWidth(double val) { fWidth = val; }
     void SetThickness(double val) { fThickness = val; }
+    void SetFineStructure(const char* booleanExpression) { fFineStructure = ConstructFormula(booleanExpression); }
+
+    // Next 1 method should only use for geometry construction.
+
+    HepGeom::Transform3D CalcTransform() const;
 
 private:
     void ReadImpl(const YAML::Node& node) override;
     void WriteImpl(YAML::Node& node) const override;
 
+    static TFormula ConstructFormula(const char* booleanExpression) { return TFormula("TargetFineStructure", booleanExpression, false); }
+
 private:
     double fWidth;
     double fThickness;
+    TFormula fFineStructure;
 };
 
 } // namespace MACE::Core::Geometry::Description
