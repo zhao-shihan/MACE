@@ -90,14 +90,9 @@ message(STATUS "MACE uses Eigen3 includes from: ${EIGEN3_INCLUDE_DIRS}")
 # ================================================================================================================================
 # Dirs
 set(MACE_ROOT_DIR ${PROJECT_SOURCE_DIR})
-set(MACE_CMAKE_DIR ${PROJECT_SOURCE_DIR}/cmake)
-set(MACE_EXTERNAL_DIR ${PROJECT_SOURCE_DIR}/external)
+set(MACE_CMAKE_DIR ${MACE_ROOT_DIR}/cmake)
 set(MACE_SOURCE_DIR ${MACE_ROOT_DIR}/source)
-set(MACE_TEST_DIR ${MACE_ROOT_DIR}/test)
+set(MACE_EXTERNAL_DIR ${MACE_SOURCE_DIR}/external)
+set(MACE_TEST_DIR ${MACE_SOURCE_DIR}/test)
 
-# ================================================================================================================================
-# Sub-directories
-# ================================================================================================================================
-add_subdirectory(${MACE_EXTERNAL_DIR})
 add_subdirectory(${MACE_SOURCE_DIR})
-add_subdirectory(${MACE_TEST_DIR})
