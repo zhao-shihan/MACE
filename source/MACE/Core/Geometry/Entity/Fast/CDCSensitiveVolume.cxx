@@ -23,7 +23,7 @@ void CDCSensitiveVolume::ConstructSelf(G4bool checkOverlaps) {
             dPhi);
         auto logic = Make<G4LogicalVolume>(
             solid,
-            Mother()->GetMaterial(layerID),
+            nullptr,
             name);
         Make<G4PVPlacement>(
             G4Transform3D(),

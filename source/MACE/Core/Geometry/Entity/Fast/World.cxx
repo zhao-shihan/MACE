@@ -17,8 +17,6 @@ void World::ConstructSelf(G4bool checkOverlaps) {
     auto halfY = description.GetHalfYExtent();
     auto halfZ = description.GetHalfZExtent();
 
-    auto material = G4NistManager::Instance()->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3, 293.145_K);
-
     auto solid = Make<G4Box>(
         name,
         halfX,
@@ -26,12 +24,12 @@ void World::ConstructSelf(G4bool checkOverlaps) {
         halfZ);
     auto logic = Make<G4LogicalVolume>(
         solid,
-        material,
+        nullptr,
         name);
     Make<G4PVPlacement>(
         G4Transform3D(),
-        name,
         logic,
+        name,
         nullptr,
         false,
         0,

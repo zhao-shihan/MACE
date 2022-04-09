@@ -14,8 +14,6 @@ void CDCFieldWire::ConstructSelf(G4bool checkOverlaps) {
     const auto detail = description.FieldWireGeometryDetail();
     const auto layerCount = detail.size();
 
-    auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
-
     for (size_t layerID = 0; layerID < layerCount; ++layerID) {
         auto&& [halfLength, positionList] = detail[layerID];
         auto solid = Make<G4Tubs>(
@@ -27,7 +25,7 @@ void CDCFieldWire::ConstructSelf(G4bool checkOverlaps) {
             2 * M_PI);
         auto logic = Make<G4LogicalVolume>(
             solid,
-            material,
+            nullptr,
             name);
         for (size_t wireID = 0; wireID < positionList.size(); ++wireID) {
             Make<G4PVPlacement>(

@@ -45,6 +45,7 @@ public:
 
 private:
     void ConstructVolumes();
+    void ConstructMaterials();
     void ConstructRegions();
     void ConstructSDs();
     void ConstructFields();

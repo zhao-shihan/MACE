@@ -14,8 +14,6 @@ void FirstBendSolenoid::ConstructSelf(G4bool checkOverlaps) {
     const auto outerRadius = description.GetSolenoidOuterRadius();
     const auto bendRadius = description.GetFirstBendRadius();
 
-    auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu");
-
     auto solid = Make<G4Torus>(
         name,
         innerRadius,
@@ -25,13 +23,13 @@ void FirstBendSolenoid::ConstructSelf(G4bool checkOverlaps) {
         M_PI_2);
     auto logic = Make<G4LogicalVolume>(
         solid,
-        material,
+        nullptr,
         name);
     Make<G4PVPlacement>(
         G4Transform3D(),
-        name,
         logic,
-        Mother()->GetPhysicalVolume(),
+        name,
+        Mother()->GetLogicalVolume(),
         false,
         0,
         checkOverlaps);

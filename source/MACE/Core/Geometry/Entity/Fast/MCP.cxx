@@ -15,8 +15,6 @@ void MCP::ConstructSelf(G4bool checkOverlaps) {
     const auto width = description.GetWidth();
     const auto thickness = description.GetThickness();
 
-    auto material = G4NistManager::Instance()->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4_g_cm3);
-
     auto solid = Make<G4Box>(
         name,
         width / 2,
@@ -24,15 +22,15 @@ void MCP::ConstructSelf(G4bool checkOverlaps) {
         thickness / 2);
     auto logic = Make<G4LogicalVolume>(
         solid,
-        material,
+        nullptr,
         name);
     Make<G4PVPlacement>(
         G4Transform3D(
             G4RotationMatrix(),
             G4ThreeVector(0, 0, thickness / 2)),
-        name,
         logic,
-        Mother()->GetPhysicalVolume(),
+        name,
+        Mother()->GetLogicalVolume(),
         false,
         0,
         checkOverlaps);

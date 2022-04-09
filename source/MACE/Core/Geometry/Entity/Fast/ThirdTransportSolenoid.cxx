@@ -14,8 +14,6 @@ void ThirdTransportSolenoid::ConstructSelf(G4bool checkOverlaps) {
     const auto outerRadius = description.GetSolenoidOuterRadius();
     const auto length = description.GetThirdStraightLength();
 
-    auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu");
-
     auto solid = Make<G4Tubs>(
         name,
         innerRadius,
@@ -25,13 +23,13 @@ void ThirdTransportSolenoid::ConstructSelf(G4bool checkOverlaps) {
         2 * M_PI);
     auto logic = Make<G4LogicalVolume>(
         solid,
-        material,
+        nullptr,
         name);
     Make<G4PVPlacement>(
         G4Transform3D(),
-        name,
         logic,
-        Mother()->GetPhysicalVolume(),
+        name,
+        Mother()->GetLogicalVolume(),
         false,
         0,
         checkOverlaps);

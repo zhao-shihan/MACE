@@ -22,15 +22,15 @@ void SelectorField::ConstructSelf(G4bool checkOverlaps) {
         2 * M_PI);
     auto logic = Make<G4LogicalVolume>(
         solid,
-        Mother()->GetMaterial(),
+        nullptr,
         name);
     Make<G4PVPlacement>(
         G4Transform3D(
             G4RotationMatrix(),
             G4ThreeVector(0, 0, zPosition)),
-        name,
         logic,
-        Mother()->GetPhysicalVolume(),
+        name,
+        Mother()->GetLogicalVolume(),
         false,
         0,
         checkOverlaps);

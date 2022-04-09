@@ -5,13 +5,14 @@
 #include "MACE/Simulation/SimMACE/Field/SecondBendField.hxx"
 #include "MACE/Simulation/SimMACE/Field/SelectorField.hxx"
 #include "MACE/Simulation/SimMACE/Field/VerticalField.hxx"
+#include "MACE/Utility/LiteralUnit.hxx"
 
 #include "G4DormandPrince745.hh"
 #include "G4EqMagElectricField.hh"
 #include "G4IntegrationDriver.hh"
+#include "G4NistManager.hh"
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
-#include "G4SDManager.hh"
 #include "G4TDormandPrince45.hh"
 #include "G4TMagFieldEquation.hh"
 
@@ -19,6 +20,7 @@ namespace MACE::Simulation::SimMACE::Action {
 
 G4VPhysicalVolume* DetectorConstruction::Construct() {
     ConstructVolumes();
+    ConstructMaterials();
     ConstructRegions();
     ConstructSDs();
     ConstructFields();
@@ -87,6 +89,62 @@ void DetectorConstruction::ConstructVolumes() {
 
     // Construct volumes
     fWorld->ConstructSelfAndDescendants(fCheckOverlaps);
+}
+
+void DetectorConstruction::ConstructMaterials() {
+    using namespace MACE::Utility::LiteralUnit::Density;
+
+    auto nist = G4NistManager::Instance();
+
+    auto aluminium = nist->FindOrBuildMaterial("G4_Al");
+    fCDCFieldWire->RegisterMaterial(aluminium);
+
+    auto cdcGas = nist->FindOrBuildMaterial("G4_He");
+    fCDCCell->RegisterMaterial(cdcGas);
+    fCDCLayer->RegisterMaterial(cdcGas);
+    fCDCSensitiveVolume->RegisterMaterial(cdcGas);
+
+    auto cdcShell = nist->BuildMaterialWithNewDensity("CarbonFiber", "G4_C", 1.7_g_cm3);
+    fCDCBody->RegisterMaterial(cdcShell);
+
+    auto copper = nist->FindOrBuildMaterial("G4_Cu");
+    fCollimator->RegisterMaterial(copper);
+    fFirstBendSolenoid->RegisterMaterial(copper);
+    fFirstTransportSolenoid->RegisterMaterial(copper);
+    fSecondBendSolenoid->RegisterMaterial(copper);
+    fSecondTransportSolenoid->RegisterMaterial(copper);
+    fThirdTransportSolenoid->RegisterMaterial(copper);
+
+    auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
+    fEMCal->RegisterMaterial(csI);
+
+    auto iron = nist->FindOrBuildMaterial("G4_Fe");
+    fSpectrometerMagnet->RegisterMaterial(iron);
+
+    auto lead = nist->FindOrBuildMaterial("G4_Pb");
+    fEMCalShield->RegisterMaterial(lead);
+    fSpectrometerShield->RegisterMaterial(lead);
+
+    auto mcpMaterial = nist->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4_g_cm3);
+    fMCP->RegisterMaterial(mcpMaterial);
+
+    auto silicaAerogel = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30_mg_cm3);
+    fTarget->RegisterMaterial(silicaAerogel);
+
+    auto tungsten = nist->FindOrBuildMaterial("G4_W");
+    fCDCSenseWire->RegisterMaterial(tungsten);
+
+    auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
+    fAcceleratorField->RegisterMaterial(vacuum);
+    fEMCalField->RegisterMaterial(vacuum);
+    fFirstBendField->RegisterMaterial(vacuum);
+    fFirstTransportField->RegisterMaterial(vacuum);
+    fSecondBendField->RegisterMaterial(vacuum);
+    fSecondTransportField->RegisterMaterial(vacuum);
+    fSelectorField->RegisterMaterial(vacuum);
+    fSpectrometerField->RegisterMaterial(vacuum);
+    fThirdTransportField->RegisterMaterial(vacuum);
+    fWorld->RegisterMaterial(vacuum);
 }
 
 void DetectorConstruction::ConstructRegions() {
@@ -166,13 +224,13 @@ void DetectorConstruction::ConstructRegions() {
 }
 
 void DetectorConstruction::ConstructSDs() {
-    fCDCSD = new CDCSD(fCDCSensitiveVolume->GetLogicalVolumeName());
+    fCDCSD = new CDCSD(fCDCSensitiveVolume->GetLogicalVolume()->GetName());
     fCDCSensitiveVolume->RegisterSD(fCDCSD);
 
-    fEMCalSD = new EMCalSD(fEMCal->GetLogicalVolumeName());
+    fEMCalSD = new EMCalSD(fEMCal->GetLogicalVolume()->GetName());
     fEMCal->RegisterSD(fEMCalSD);
 
-    fMCPSD = new MCPSD(fMCP->GetLogicalVolumeName());
+    fMCPSD = new MCPSD(fMCP->GetLogicalVolume()->GetName());
     fMCP->RegisterSD(fMCPSD);
 }
 

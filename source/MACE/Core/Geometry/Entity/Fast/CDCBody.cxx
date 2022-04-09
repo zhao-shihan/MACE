@@ -21,8 +21,6 @@ void CDCBody::ConstructSelf(G4bool checkOverlaps) {
     const auto gasInnerLength = description.GetGasInnerLength();
     const auto gasOuterLength = description.GetGasOuterLength();
 
-    auto shellMaterial = G4NistManager::Instance()->BuildMaterialWithNewDensity("CarbonFiber", "G4_C", 1.7_g_cm3);
-
     constexpr auto numZPlane = 4;
     const G4double zPlane[numZPlane] = {
         -gasOuterLength / 2 - shellSideThickness,
@@ -50,13 +48,13 @@ void CDCBody::ConstructSelf(G4bool checkOverlaps) {
         rOuter);
     auto logic = Make<G4LogicalVolume>(
         solid,
-        shellMaterial,
+        nullptr,
         name);
     Make<G4PVPlacement>(
         G4Transform3D(),
-        name,
         logic,
-        Mother()->GetPhysicalVolume(),
+        name,
+        Mother()->GetLogicalVolume(),
         false,
         0,
         checkOverlaps);

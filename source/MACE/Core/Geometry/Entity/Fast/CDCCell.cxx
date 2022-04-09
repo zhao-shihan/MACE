@@ -25,7 +25,7 @@ void CDCCell::ConstructSelf(G4bool checkOverlaps) {
             cellAngle);
         auto logic = Make<G4LogicalVolume>(
             solid,
-            Mother()->GetMaterial(layerID),
+            nullptr,
             name);
         for (auto&& rotation : rotations) {
             Make<G4PVPlacement>(
