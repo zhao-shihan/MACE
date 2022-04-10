@@ -4,8 +4,17 @@
 
 namespace MACE::Simulation::SimTarget {
 
-G4VPhysicalVolume* Construct() {
-    
+G4VPhysicalVolume* DetectorConstruction::Construct() {
+    using namespace MACE::Core::Geometry;
+
+    fTarget = std::make_shared<Target>();
+    fWorld = std::make_shared<World>();
+
+    fWorld->AddDaughter(fTarget);
+
+    fWorld->ConstructSelfAndDescendants(fCheckOverlaps);
+
+    return fWorld->GetPhysicalVolume();
 }
 
 } // namespace MACE::Simulation::SimTarget
