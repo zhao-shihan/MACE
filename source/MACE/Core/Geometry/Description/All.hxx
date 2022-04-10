@@ -4,12 +4,12 @@
 
 #pragma once
 
-#include "MACE/Core/Geometry/Description/AcceleratorField.hxx"
 #include "MACE/Core/Geometry/Description/CDC.hxx"
 #include "MACE/Core/Geometry/Description/Collimator.hxx"
 #include "MACE/Core/Geometry/Description/EMCal.hxx"
 #include "MACE/Core/Geometry/Description/EMCalField.hxx"
 #include "MACE/Core/Geometry/Description/EMCalShield.hxx"
+#include "MACE/Core/Geometry/Description/LinacField.hxx"
 #include "MACE/Core/Geometry/Description/MCP.hxx"
 #include "MACE/Core/Geometry/Description/SelectorField.hxx"
 #include "MACE/Core/Geometry/Description/SpectrometerField.hxx"

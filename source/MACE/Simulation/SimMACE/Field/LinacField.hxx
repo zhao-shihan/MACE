@@ -6,12 +6,12 @@
 
 namespace MACE::Simulation::SimMACE::Field {
 
-class AcceleratorField final : public G4ElectroMagneticField {
+class LinacField final : public G4ElectroMagneticField {
 public:
-    AcceleratorField();
-    ~AcceleratorField() noexcept = default;
-    AcceleratorField(const AcceleratorField&) = delete;
-    AcceleratorField& operator=(const AcceleratorField&) = delete;
+    LinacField();
+    ~LinacField() noexcept = default;
+    LinacField(const LinacField&) = delete;
+    LinacField& operator=(const LinacField&) = delete;
 
     void GetFieldValue(const G4double*, G4double* F) const override;
     G4bool DoesFieldChangeEnergy() const override { return true; }

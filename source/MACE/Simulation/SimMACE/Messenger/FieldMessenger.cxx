@@ -39,7 +39,7 @@ FieldMessenger::FieldMessenger() :
 void FieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     if (command == std::addressof(fSetTransportMagneticField)) {
         const auto B = fSetTransportMagneticField.GetNewDoubleValue(value);
-        fAcceleratorField->SetTransportBField(B);
+        fLinacField->SetTransportBField(B);
         fFirstBendField->SetTransportMagneticField(B);
         fParallelField->SetFieldNorm(B);
         fSecondBendField->SetTransportMagneticField(B);
@@ -47,7 +47,7 @@ void FieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
         fVerticalField->SetFieldNorm(B);
     } else if (command == std::addressof(fSetAcceleratorPotential)) {
         const auto V = fSetAcceleratorPotential.GetNewDoubleValue(value);
-        fAcceleratorField->SetAcceleratorPotential(V);
+        fLinacField->SetAcceleratorPotential(V);
         fSelectorField->SetSelectEnergy(std::abs(V));
     } else if (command == std::addressof(fSetSelectorElectricField)) {
         fSelectorField->SetSelectorElectricField(fSetSelectorElectricField.GetNewDoubleValue(value));

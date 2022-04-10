@@ -9,7 +9,7 @@ int main() {
 
     DescriptionIO::Write("mace_geom.yaml");
 
-    auto& linacField = Description::AcceleratorField::Instance();
+    auto& linacField = Description::LinacField::Instance();
     std::cout << linacField.GetRadius() << '\n'
               << linacField.GetLength() << '\n'
               << linacField.GetDownStreamLength() << '\n'

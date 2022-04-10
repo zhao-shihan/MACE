@@ -1,5 +1,5 @@
 #include "MACE/Simulation/SimMACE/Action/DetectorConstruction.hxx"
-#include "MACE/Simulation/SimMACE/Field/AcceleratorField.hxx"
+#include "MACE/Simulation/SimMACE/Field/LinacField.hxx"
 #include "MACE/Simulation/SimMACE/Field/FirstBendField.hxx"
 #include "MACE/Simulation/SimMACE/Field/ParallelField.hxx"
 #include "MACE/Simulation/SimMACE/Field/SecondBendField.hxx"
@@ -29,7 +29,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 
 void DetectorConstruction::ConstructVolumes() {
     // Construct entity objects
-    fAcceleratorField = std::make_shared<AcceleratorField>();
+    fLinacField = std::make_shared<LinacField>();
     fCDCBody = std::make_shared<CDCBody>();
     fCDCCell = std::make_shared<CDCCell>();
     fCDCFieldWire = std::make_shared<CDCFieldWire>();
@@ -67,13 +67,13 @@ void DetectorConstruction::ConstructVolumes() {
     fSecondTransportField->AddDaughter(fCollimator);
     fSecondTransportField->AddDaughter(fSecondTransportSolenoid);
     fSecondTransportField->AddDaughter(fSelectorField);
-    fAcceleratorField->AddDaughter(fTarget);
+    fLinacField->AddDaughter(fTarget);
     fCDCSensitiveVolume->AddDaughter(fCDCSenseWire);
     fCDCCell->AddDaughter(fCDCFieldWire);
     fCDCCell->AddDaughter(fCDCSensitiveVolume);
     fCDCLayer->AddDaughter(fCDCCell);
     fCDCBody->AddDaughter(fCDCLayer);
-    fSpectrometerField->AddDaughter(fAcceleratorField);
+    fSpectrometerField->AddDaughter(fLinacField);
     fSpectrometerField->AddDaughter(fCDCBody);
     fSpectrometerField->AddDaughter(fSpectrometerMagnet);
     fThirdTransportField->AddDaughter(fThirdTransportSolenoid);
@@ -135,10 +135,10 @@ void DetectorConstruction::ConstructMaterials() {
     fCDCSenseWire->RegisterMaterial(tungsten);
 
     auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
-    fAcceleratorField->RegisterMaterial(vacuum);
     fEMCalField->RegisterMaterial(vacuum);
     fFirstBendField->RegisterMaterial(vacuum);
     fFirstTransportField->RegisterMaterial(vacuum);
+    fLinacField->RegisterMaterial(vacuum);
     fSecondBendField->RegisterMaterial(vacuum);
     fSecondTransportField->RegisterMaterial(vacuum);
     fSelectorField->RegisterMaterial(vacuum);
@@ -207,7 +207,7 @@ void DetectorConstruction::ConstructRegions() {
     fVacuumRegion->SetProductionCuts(defaultCuts);
 
     fSelectorField->RegisterRegion(fVacuumRegion);
-    fAcceleratorField->RegisterRegion(fVacuumRegion);
+    fLinacField->RegisterRegion(fVacuumRegion);
     fEMCalField->RegisterRegion(fVacuumRegion);
     fFirstBendField->RegisterRegion(fVacuumRegion);
     fFirstTransportField->RegisterRegion(fVacuumRegion);
@@ -251,12 +251,12 @@ void DetectorConstruction::ConstructFields() {
         G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>>(
         parallelBField, hMin, 6, true);
 
-    fAcceleratorField->RegisterField<
-        AcceleratorField,
+    fLinacField->RegisterField<
+        LinacField,
         G4EqMagElectricField,
         G4DormandPrince745,
         G4IntegrationDriver<G4DormandPrince745>>(
-        new AcceleratorField(), hMin, 8, true);
+        new LinacField(), hMin, 8, true);
 
     fFirstTransportField->RegisterField<
         G4UniformMagField,

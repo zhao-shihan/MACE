@@ -18,10 +18,6 @@
 /vis/viewer/zoom 3
 
 # Colors
-/vis/geometry/set/colour AcceleratorField              0     1     1     1     0.05
-/vis/geometry/set/colour EMCal                   0     1     1     1     0.1
-/vis/geometry/set/colour EMCalField              0     1     1     1     0.05
-/vis/geometry/set/colour EMCalShield             0     1     1     1     0.05
 /vis/geometry/set/colour CDCBody                       0     1     1     1     0.05
 /vis/geometry/set/colour CDCCell                       0     1     1     1     0.005
 /vis/geometry/set/colour CDCFieldWire                  0     1     1     1     0.01
@@ -29,10 +25,15 @@
 /vis/geometry/set/colour CDCSenseWire                  0     1     1     1     0.01
 /vis/geometry/set/colour CDCSensitiveVolume            0     1     1     1     0.005
 /vis/geometry/set/colour Collimator                    0     1     1     1     0.05
+/vis/geometry/set/colour EMCal                         0     1     1     1     0.1
+/vis/geometry/set/colour EMCalField                    0     1     1     1     0.05
+/vis/geometry/set/colour EMCalShield                   0     1     1     1     0.05
 /vis/geometry/set/colour FirstBendField                0     1     1     1     0.05
 /vis/geometry/set/colour FirstBendSolenoid             0     1     1     1     0.05
 /vis/geometry/set/colour FirstTransportField           0     1     1     1     0.05
 /vis/geometry/set/colour FirstTransportSolenoid        0     1     1     1     0.05
+/vis/geometry/set/colour LinacField                    0     1     1     1     0.05
+/vis/geometry/set/colour MCP                           0     1     1     1     0.1
 /vis/geometry/set/colour SecondBendField               0     1     1     1     0.05
 /vis/geometry/set/colour SecondBendSolenoid            0     1     1     1     0.05
 /vis/geometry/set/colour SecondTransportField          0     1     1     1     0.05
@@ -44,7 +45,6 @@
 /vis/geometry/set/colour Target                        0     1     1     1     0.1
 /vis/geometry/set/colour ThirdTransportField           0     1     1     1     0.05
 /vis/geometry/set/colour ThirdTransportSolenoid        0     1     1     1     0.05
-/vis/geometry/set/colour MCP                0     1     1     1     0.1
 /vis/geometry/set/colour World                         0     1     1     1     0.001
 #/vis/geometry/set/colour BeamCounter                   0     0.0   0.0   1.0   0.5
 #/vis/geometry/set/colour CarbonFoil                    80    1.0   1.0   1.0   0.5

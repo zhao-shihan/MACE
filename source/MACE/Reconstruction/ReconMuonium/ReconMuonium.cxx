@@ -4,7 +4,7 @@
 #include "MACE/Core/DataModel/SimHit/MCPSimHit.hxx"
 #include "MACE/Core/DataModel/Track/CDCHelixTrack.hxx"
 #include "MACE/Core/DataModel/Track/CDCPhysicsTrack.hxx"
-#include "MACE/Core/Geometry/Description/AcceleratorField.hxx"
+#include "MACE/Core/Geometry/Description/LinacField.hxx"
 #include "MACE/Core/Geometry/Description/EMCalField.hxx"
 #include "MACE/Core/Geometry/Description/SpectrometerField.hxx"
 #include "MACE/Core/Geometry/Description/TransportLine.hxx"
@@ -42,7 +42,7 @@ int main(int, char* argv[]) {
     const auto sigmaZCDC = std::stod(argv[5]);
 
     // linac
-    const auto linacLength = AcceleratorField::Instance().GetDownStreamLength();
+    const auto linacLength = LinacField::Instance().GetDownStreamLength();
     const auto accE = 7_kV / (linacLength - 13.05_mm);
     // flight
     const auto& transportLine = TransportLine::Instance();

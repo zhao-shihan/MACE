@@ -1,5 +1,5 @@
-#include "MACE/Core/Geometry/Description/AcceleratorField.hxx"
-#include "MACE/Simulation/SimMACE/Field/AcceleratorField.hxx"
+#include "MACE/Core/Geometry/Description/LinacField.hxx"
+#include "MACE/Simulation/SimMACE/Field/LinacField.hxx"
 #include "MACE/Simulation/SimMACE/Messenger/FieldMessenger.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
@@ -7,9 +7,9 @@ namespace MACE::Simulation::SimMACE::Field {
 
 using namespace MACE::Utility::LiteralUnit;
 using Messenger::FieldMessenger;
-using LinacDescription = MACE::Core::Geometry::Description::AcceleratorField;
+using LinacDescription = MACE::Core::Geometry::Description::LinacField;
 
-AcceleratorField::AcceleratorField() :
+LinacField::LinacField() :
     G4ElectroMagneticField(),
     fBz(0.1_T),
     fV(7_kV),
@@ -18,7 +18,7 @@ AcceleratorField::AcceleratorField() :
     FieldMessenger::Instance().Set(this);
 }
 
-void AcceleratorField::GetFieldValue(const G4double*, G4double* F) const {
+void LinacField::GetFieldValue(const G4double*, G4double* F) const {
     F[0] = 0.;
     F[1] = 0.;
     F[2] = fBz;
@@ -27,7 +27,7 @@ void AcceleratorField::GetFieldValue(const G4double*, G4double* F) const {
     F[5] = fEz;
 }
 
-void AcceleratorField::SetAcceleratorPotential(G4double V) {
+void LinacField::SetAcceleratorPotential(G4double V) {
     fV = V;
     fEz = fV / (LinacDescription::Instance().GetDownStreamLength() - fDecayZMean);
 }

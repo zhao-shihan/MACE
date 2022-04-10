@@ -6,10 +6,6 @@ using namespace MACE::Core::Geometry::Entity::Fast;
 
 int main(int, char**) {
     // Construct entity objects
-    auto fAcceleratorField = std::make_shared<AcceleratorField>();
-    auto fEMCal = std::make_shared<EMCal>();
-    auto fEMCalField = std::make_shared<EMCalField>();
-    auto fEMCalShield = std::make_shared<EMCalShield>();
     auto fCDCBody = std::make_shared<CDCBody>();
     auto fCDCCell = std::make_shared<CDCCell>();
     auto fCDCFieldWire = std::make_shared<CDCFieldWire>();
@@ -17,10 +13,15 @@ int main(int, char**) {
     auto fCDCSenseWire = std::make_shared<CDCSenseWire>();
     auto fCDCSensitiveVolume = std::make_shared<CDCSensitiveVolume>();
     auto fCollimator = std::make_shared<Collimator>();
+    auto fEMCal = std::make_shared<EMCal>();
+    auto fEMCalField = std::make_shared<EMCalField>();
+    auto fEMCalShield = std::make_shared<EMCalShield>();
     auto fFirstBendField = std::make_shared<FirstBendField>();
     auto fFirstBendSolenoid = std::make_shared<FirstBendSolenoid>();
     auto fFirstTransportField = std::make_shared<FirstTransportField>();
     auto fFirstTransportSolenoid = std::make_shared<FirstTransportSolenoid>();
+    auto fLinacField = std::make_shared<LinacField>();
+    auto fMCP = std::make_shared<MCP>();
     auto fSecondBendField = std::make_shared<SecondBendField>();
     auto fSecondBendSolenoid = std::make_shared<SecondBendSolenoid>();
     auto fSecondTransportField = std::make_shared<SecondTransportField>();
@@ -32,7 +33,6 @@ int main(int, char**) {
     auto fTarget = std::make_shared<Target>();
     auto fThirdTransportField = std::make_shared<ThirdTransportField>();
     auto fThirdTransportSolenoid = std::make_shared<ThirdTransportSolenoid>();
-    auto fMCP = std::make_shared<MCP>();
     auto fWorld = std::make_shared<World>();
 
     // Construct hierarchy
@@ -44,13 +44,13 @@ int main(int, char**) {
     fSecondTransportField->AddDaughter(fCollimator);
     fSecondTransportField->AddDaughter(fSecondTransportSolenoid);
     fSecondTransportField->AddDaughter(fSelectorField);
-    fAcceleratorField->AddDaughter(fTarget);
+    fLinacField->AddDaughter(fTarget);
     fCDCSensitiveVolume->AddDaughter(fCDCSenseWire);
     fCDCCell->AddDaughter(fCDCFieldWire);
     fCDCCell->AddDaughter(fCDCSensitiveVolume);
     fCDCLayer->AddDaughter(fCDCCell);
     fCDCBody->AddDaughter(fCDCLayer);
-    fSpectrometerField->AddDaughter(fAcceleratorField);
+    fSpectrometerField->AddDaughter(fLinacField);
     fSpectrometerField->AddDaughter(fCDCBody);
     fSpectrometerField->AddDaughter(fSpectrometerMagnet);
     fThirdTransportField->AddDaughter(fThirdTransportSolenoid);

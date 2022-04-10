@@ -6,15 +6,15 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class AcceleratorField final : public IDescription {
+class LinacField final : public IDescription {
 public:
-    static AcceleratorField& Instance() noexcept;
+    static LinacField& Instance() noexcept;
 
 private:
-    AcceleratorField();
-    ~AcceleratorField() noexcept = default;
-    AcceleratorField(const AcceleratorField&) = delete;
-    AcceleratorField& operator=(const AcceleratorField&) = delete;
+    LinacField();
+    ~LinacField() noexcept = default;
+    LinacField(const LinacField&) = delete;
+    LinacField& operator=(const LinacField&) = delete;
 
 public:
     const auto& GetRadius() const { return fRadius; }

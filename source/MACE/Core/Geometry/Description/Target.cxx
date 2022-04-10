@@ -26,8 +26,8 @@ bool Target::Contains(const Double_t* pos) const noexcept {
 }
 
 HepGeom::Transform3D Target::CalcTransform() const {
-    const auto& acceleratorField = AcceleratorField::Instance();
-    auto transZ = acceleratorField.GetLength() / 2 - acceleratorField.GetDownStreamLength() - fThickness / 2;
+    const auto& LinacField = LinacField::Instance();
+    auto transZ = LinacField.GetLength() / 2 - LinacField.GetDownStreamLength() - fThickness / 2;
     return HepGeom::Transform3D(CLHEP::HepRotation(), CLHEP::Hep3Vector(0, 0, transZ));
 }
 

@@ -1,13 +1,13 @@
-#include "MACE/Core/Geometry/Description/AcceleratorField.hxx"
-#include "MACE/Core/Geometry/Entity/Fast/AcceleratorField.hxx"
+#include "MACE/Core/Geometry/Description/LinacField.hxx"
+#include "MACE/Core/Geometry/Entity/Fast/LinacField.hxx"
 
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Core::Geometry::Entity::Fast::AcceleratorField;
+using MACE::Core::Geometry::Entity::Fast::LinacField;
 
-void AcceleratorField::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::AcceleratorField::Instance();
+void LinacField::ConstructSelf(G4bool checkOverlaps) {
+    const auto& description = Description::LinacField::Instance();
     const auto name = description.GetName();
     const auto radius = description.GetRadius();
     const auto length = description.GetLength();

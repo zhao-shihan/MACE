@@ -21,7 +21,7 @@ using namespace Description;
 
 /// @brief A std::tuple holding pointers to all geometry descriptions that will be read and written.
 /// @attention If there is a new geometry description class, add to this.
-static std::tuple<ObserverPtr<AcceleratorField>,
+static std::tuple<ObserverPtr<LinacField>,
                   ObserverPtr<EMCal>,
                   ObserverPtr<EMCalField>,
                   ObserverPtr<EMCalShield>,
