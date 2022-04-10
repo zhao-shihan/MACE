@@ -1,5 +1,5 @@
 #include "MACE/Simulation/Physics/MuoniumPhysics.hxx"
-#include "MACE/Simulation/SimMACE/Action/PhysicsList.hxx"
+#include "MACE/Simulation/SimTarget/PhysicsList.hxx"
 
 #include "G4DecayPhysics.hh"
 #include "G4EmExtraPhysics.hh"
@@ -12,7 +12,7 @@
 #include "G4RegionStore.hh"
 #include "G4StoppingPhysics.hh"
 
-namespace MACE::Simulation::SimMACE::Action {
+namespace MACE::Simulation::SimTarget {
 
 using namespace MACE::Simulation::Physics;
 
@@ -23,12 +23,8 @@ PhysicsList::PhysicsList() :
     RegisterPhysics(new G4EmLivermorePhysics(defaultVerbose));
     RegisterPhysics(new G4EmExtraPhysics(defaultVerbose));
     RegisterPhysics(new G4DecayPhysics(defaultVerbose));
-    RegisterPhysics(new G4HadronElasticPhysics(defaultVerbose));
-    RegisterPhysics(new G4HadronPhysicsFTFP_BERT(defaultVerbose));
     RegisterPhysics(new G4StoppingPhysics(defaultVerbose));
-    RegisterPhysics(new G4IonPhysics(defaultVerbose));
-    RegisterPhysics(new G4NeutronTrackingCut(defaultVerbose));
-    RegisterPhysics(new MuoniumPhysics(defaultVerbose));
+    // RegisterPhysics(new MuoniumPhysics(defaultVerbose));
 }
 
-} // namespace MACE::Simulation::SimMACE::Action
+} // namespace MACE::Simulation::SimTarget
