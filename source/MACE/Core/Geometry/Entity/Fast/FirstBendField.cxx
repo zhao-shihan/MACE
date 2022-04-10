@@ -23,13 +23,13 @@ void FirstBendField::ConstructSelf(G4bool checkOverlaps) {
         M_PI_2);
     auto logic = Make<G4LogicalVolume>(
         solid,
-        Mother()->GetMaterial(),
+        nullptr,
         name);
     Make<G4PVPlacement>(
         transform,
-        name,
         logic,
-        Mother()->GetPhysicalVolume(),
+        name,
+        Mother()->GetLogicalVolume(),
         false,
         0,
         checkOverlaps);

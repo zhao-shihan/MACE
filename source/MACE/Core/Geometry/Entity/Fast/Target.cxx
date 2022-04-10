@@ -14,9 +14,7 @@ void Target::ConstructSelf(G4bool checkOverlaps) {
     const auto name = description.GetName();
     const auto width = description.GetWidth();
     const auto thickness = description.GetThickness();
-    const auto transform = description.GetTransform();
-
-    auto material = G4NistManager::Instance()->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30_mg_cm3);
+    const auto transform = description.CalcTransform();
 
     auto solid = Make<G4Box>(
         name,
@@ -25,13 +23,13 @@ void Target::ConstructSelf(G4bool checkOverlaps) {
         thickness / 2);
     auto logic = Make<G4LogicalVolume>(
         solid,
-        material,
+        nullptr,
         name);
     Make<G4PVPlacement>(
         transform,
-        name,
         logic,
-        Mother()->GetPhysicalVolume(),
+        name,
+        Mother()->GetLogicalVolume(),
         false,
         0,
         checkOverlaps);

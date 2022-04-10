@@ -11,7 +11,7 @@ void EMCalField::ConstructSelf(G4bool checkOverlaps) {
     auto name = description.GetName();
     auto radius = description.GetRadius();
     auto length = description.GetLength();
-    auto transform = description.GetTransform();
+    auto transform = description.CalcTransform();
 
     auto solid = Make<G4Tubs>(
         name,
@@ -22,13 +22,13 @@ void EMCalField::ConstructSelf(G4bool checkOverlaps) {
         2 * M_PI);
     auto logic = Make<G4LogicalVolume>(
         solid,
-        Mother()->GetMaterial(),
+        nullptr,
         name);
     Make<G4PVPlacement>(
         transform,
-        name,
         logic,
-        Mother()->GetPhysicalVolume(),
+        name,
+        Mother()->GetLogicalVolume(),
         false,
         0,
         checkOverlaps);

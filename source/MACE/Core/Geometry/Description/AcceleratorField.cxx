@@ -1,7 +1,7 @@
 #include "MACE/Core/Geometry/Description/AcceleratorField.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
-#include "G4RotationMatrix.hh"
+#include "CLHEP/Vector/Rotation.h"
 
 namespace MACE::Core::Geometry::Description {
 
@@ -18,8 +18,8 @@ AcceleratorField::AcceleratorField() :
     fLength(100_cm),
     fDownStreamLength(90_cm) {}
 
-G4Transform3D AcceleratorField::GetTransform() const {
-    return G4Transform3D(G4RotationMatrix(), G4ThreeVector(0, 0, fDownStreamLength - fLength / 2));
+HepGeom::Transform3D AcceleratorField::CalcTransform() const {
+    return HepGeom::Transform3D(CLHEP::HepRotation(), CLHEP::Hep3Vector(0, 0, fDownStreamLength - fLength / 2));
 }
 
 void AcceleratorField::ReadImpl(const YAML::Node& node) {

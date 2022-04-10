@@ -16,8 +16,7 @@ IEntity::IEntity() :
 void IEntity::AddDaughter(const std::shared_ptr<IEntity>& daughter) {
     if (daughter->fMother) {
         std::cerr << "Error: Entity " << daughter << " already registered to " << daughter->fMother << " as a daughter,\n"
-                                                                                                       "\tbut now trying again to register to "
-                  << this << " as a daughter. Please check the geometry hierarchy." << std::endl;
+                  << "\tbut now trying again to register to " << this << " as a daughter. Please check the geometry hierarchy." << std::endl;
         return;
     }
     try {
@@ -34,6 +33,16 @@ void IEntity::ConstructSelfAndDescendants(G4bool checkOverlaps) {
     this->ConstructSelf(checkOverlaps);
     for (auto&& daughter : fDaughters) {
         daughter.lock()->ConstructSelfAndDescendants(checkOverlaps);
+    }
+}
+
+void IEntity::RegisterMaterial(size_t volumeIndex, G4Material* region) const {
+    GetLogicalVolume(volumeIndex)->SetMaterial(region);
+}
+
+void IEntity::RegisterMaterial(G4Material* region) const {
+    for (size_t i = 0; i < GetLogicalVolumeNum(); ++i) {
+        RegisterMaterial(i, region);
     }
 }
 

@@ -13,8 +13,6 @@ void CDCLayer::ConstructSelf(G4bool checkOverlaps) {
     const auto detail = description.LayerGeometryDetail();
     const auto count = detail.size();
 
-    const auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_He");
-
     for (size_t layerID = 0; layerID < count; ++layerID) {
         const auto& [radius, thick, halfLength, _] = detail[layerID];
         auto solid = Make<G4Tubs>(
@@ -26,7 +24,7 @@ void CDCLayer::ConstructSelf(G4bool checkOverlaps) {
             2 * M_PI);
         auto logic = Make<G4LogicalVolume>(
             solid,
-            material,
+            nullptr,
             name);
         Make<G4PVPlacement>(
             G4Transform3D(),

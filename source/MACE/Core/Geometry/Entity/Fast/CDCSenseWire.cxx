@@ -14,8 +14,6 @@ void CDCSenseWire::ConstructSelf(G4bool checkOverlaps) {
     const auto detail = description.SenseWireGeometryDetail();
     const auto layerCount = detail.size();
 
-    auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_W");
-
     for (size_t layerID = 0; layerID < layerCount; ++layerID) {
         const auto& [localPositon, halfLength] = detail[layerID];
         auto solid = Make<G4Tubs>(
@@ -27,7 +25,7 @@ void CDCSenseWire::ConstructSelf(G4bool checkOverlaps) {
             2 * M_PI);
         auto logic = Make<G4LogicalVolume>(
             solid,
-            material,
+            nullptr,
             name);
         Make<G4PVPlacement>(
             G4Transform3D(

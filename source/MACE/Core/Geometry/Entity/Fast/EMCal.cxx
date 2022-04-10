@@ -16,8 +16,6 @@ void EMCal::ConstructSelf(G4bool checkOverlaps) {
     const auto windowRadius = description.GetWindowRadius();
     const auto crystalLength = description.GetCrystalLength();
 
-    auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_CESIUM_IODIDE");
-
     auto body = Make<G4Tubs>(
         "_temp",
         innerRadius,
@@ -55,13 +53,13 @@ void EMCal::ConstructSelf(G4bool checkOverlaps) {
             G4ThreeVector(0, 0, innerLength / 2 + crystalLength / 2)));
     auto logic = Make<G4LogicalVolume>(
         solid,
-        material,
+        nullptr,
         name);
     Make<G4PVPlacement>(
         G4Transform3D(),
-        name,
         logic,
-        Mother()->GetPhysicalVolume(),
+        name,
+        Mother()->GetLogicalVolume(),
         false,
         0,
         checkOverlaps);

@@ -15,7 +15,7 @@ EMCalField::EMCalField() :
     fRadius(25_cm),
     fLength(70_cm) {}
 
-HepGeom::Transform3D EMCalField::GetTransform() const {
+HepGeom::Transform3D EMCalField::CalcTransform() const {
     const auto& transportLine = TransportLine::Instance();
     const auto localTransX = 0;
     const auto localTransY = 0;

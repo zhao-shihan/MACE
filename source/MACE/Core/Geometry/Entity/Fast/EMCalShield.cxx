@@ -15,9 +15,7 @@ void EMCalShield::ConstructSelf(G4bool checkOverlaps) {
     auto innerLength = description.GetInnerLength();
     auto windowRadius = description.GetWindowRadius();
     auto thickness = description.GetThickness();
-    auto transform = description.GetTransform();
-
-    auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Pb");
+    auto transform = description.CalcTransform();
 
     auto body = Make<G4Tubs>(
         "_temp",
@@ -49,13 +47,13 @@ void EMCalShield::ConstructSelf(G4bool checkOverlaps) {
             G4ThreeVector(0, 0, innerLength / 2 + thickness / 2)));
     auto logic = Make<G4LogicalVolume>(
         solid,
-        material,
+        nullptr,
         name);
     Make<G4PVPlacement>(
         transform,
-        name,
         logic,
-        Mother()->GetPhysicalVolume(),
+        name,
+        Mother()->GetLogicalVolume(),
         false,
         0,
         checkOverlaps);

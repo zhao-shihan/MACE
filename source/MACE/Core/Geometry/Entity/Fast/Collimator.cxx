@@ -17,8 +17,6 @@ void Collimator::ConstructSelf(G4bool checkOverlaps) {
     const auto zPosition = description.GetZPosition();
     const auto count = description.GetCount();
 
-    auto material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu");
-
     for (int i = 0; i < count; ++i) {
         auto radii = innerRadius + i * (outerRadius - innerRadius) / (count - 1);
         auto solid = Make<G4Tubs>(
@@ -30,15 +28,15 @@ void Collimator::ConstructSelf(G4bool checkOverlaps) {
             2 * M_PI);
         auto logic = Make<G4LogicalVolume>(
             solid,
-            material,
+            nullptr,
             name);
         Make<G4PVPlacement>(
             G4Transform3D(
                 G4RotationMatrix(),
                 G4ThreeVector(0.0, 0.0, zPosition)),
-            name,
             logic,
-            Mother()->GetPhysicalVolume(),
+            name,
+            Mother()->GetLogicalVolume(),
             false,
             0,
             checkOverlaps);

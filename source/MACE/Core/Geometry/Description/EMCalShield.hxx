@@ -27,7 +27,7 @@ public:
 
     // Next 1 method should only use for geometry construction.
 
-    auto GetTransform() const { return EMCalField::Instance().GetTransform(); }
+    auto CalcTransform() const { return EMCalField::Instance().CalcTransform(); }
 
 private:
     void ReadImpl(const YAML::Node& node) override;

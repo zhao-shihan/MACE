@@ -11,7 +11,7 @@ void AcceleratorField::ConstructSelf(G4bool checkOverlaps) {
     const auto name = description.GetName();
     const auto radius = description.GetRadius();
     const auto length = description.GetLength();
-    const auto transform = description.GetTransform();
+    const auto transform = description.CalcTransform();
 
     auto solid = Make<G4Tubs>(
         name,
@@ -22,13 +22,13 @@ void AcceleratorField::ConstructSelf(G4bool checkOverlaps) {
         2 * M_PI);
     auto logic = Make<G4LogicalVolume>(
         solid,
-        Mother()->GetMaterial(),
+        nullptr,
         name);
     Make<G4PVPlacement>(
         transform,
-        name,
         logic,
-        Mother()->GetPhysicalVolume(),
+        name,
+        Mother()->GetLogicalVolume(),
         false,
         0,
         checkOverlaps);
