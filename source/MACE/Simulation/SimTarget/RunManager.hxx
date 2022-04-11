@@ -1,9 +1,9 @@
 #pragma once
 
 #include "MACE/Simulation/SimTarget/DetectorConstruction.hxx"
-#include "MACE/Simulation/SimTarget/EventAction.hxx"
 #include "MACE/Simulation/SimTarget/PrimaryGeneratorAction.hxx"
 #include "MACE/Simulation/SimTarget/RunAction.hxx"
+#include "MACE/Simulation/SimTarget/TrackingAction.hxx"
 #include "MACE/Utility/MPITool/G4MPIRunManager.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
@@ -20,12 +20,9 @@ public:
 
     auto& GetDetectorConstruction() const { return *static_cast<DetectorConstruction*>(userDetector); }
     auto& GetPhysicsList() const { return *physicsList; }
-    auto& GetRunAction() const { return *static_cast<RunAction*>(userRunAction); }
     auto& GetPrimaryGeneratorAction() const { return *static_cast<PrimaryGeneratorAction*>(userPrimaryGeneratorAction); }
-    auto& GetEventAction() const { return *static_cast<EventAction*>(userEventAction); }
-    // auto& GetStackingAction()         const { return *static_cast<*>(userStackingAction); }
-    // auto& GetTrackingAction()         const { return *static_cast<*>(userTrackingAction); }
-    // auto& GetSteppingAction()         const { return *static_cast<*>(userSteppingAction); }
+    auto& GetRunAction() const { return *static_cast<RunAction*>(userRunAction); }
+    auto& GetTrackingAction() const { return *static_cast<TrackingAction*>(userTrackingAction); }
 };
 
 } // namespace MACE::Simulation::SimTarget

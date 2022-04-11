@@ -1,10 +1,9 @@
 #include "MACE/Simulation/SimTarget/ActionInitialization.hxx"
+#include "MACE/Simulation/SimTarget/Analysis.hxx"
 #include "MACE/Simulation/SimTarget/PhysicsList.hxx"
 #include "MACE/Simulation/SimTarget/RunManager.hxx"
-#include "MACE/Simulation/SimTarget/Utility/Analysis.hxx"
 
-using MACE::Simulation::SimTarget::RunManager;
-using MACE::Simulation::SimTarget::Utility::Analysis;
+namespace MACE::Simulation::SimTarget {
 
 RunManager::RunManager() :
     G4MPIRunManager() {
@@ -15,3 +14,5 @@ RunManager::RunManager() :
     // otherwise AnalysisMessenger won't work!
     Analysis::Instance();
 }
+
+} // namespace MACE::Simulation::SimTarget
