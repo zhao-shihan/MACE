@@ -1,7 +1,7 @@
 #include "MACE/Simulation/SimTarget/Analysis.hxx"
-#include "MACE/Simulation/SimTarget/RunAction.hxx"
+#include "MACE/Simulation/SimTarget/Action/RunAction.hxx"
 
-namespace MACE::Simulation::SimTarget {
+namespace MACE::Simulation::SimTarget::Action {
 
 void RunAction::BeginOfRunAction(const G4Run*) {
     Analysis::Instance().Open();

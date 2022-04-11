@@ -11,9 +11,9 @@ ShortStringBranchSocket CDCPhysicsSimTrack::fgTrueParticle("trueParticle", "");
 CDCPhysicsSimTrack::CDCPhysicsSimTrack() noexcept :
     CDCPhysicsTrack(),
     ICDCSimTrack(),
-    fTrueVertexPosition(fgTrueVertexPosition.GetValue<Double_t>()),
+    fTrueVertexPosition(fgTrueVertexPosition.GetValue<double>()),
     fTrueVertexEnergy(fgTrueVertexEnergy.GetValue()),
-    fTrueVertexMomentum(fgTrueVertexMomentum.GetValue<Double_t>()),
+    fTrueVertexMomentum(fgTrueVertexMomentum.GetValue<double>()),
     fTrueParticle(fgTrueParticle.GetValue()) {}
 
 CDCPhysicsSimTrack::CDCPhysicsSimTrack(const CDCHelixSimTrack& helix, Double_t phiVertex, Double_t B, Double_t mass) :

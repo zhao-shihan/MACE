@@ -1,8 +1,8 @@
-#include "MACE/Simulation/SimTarget/TrackingAction.hxx"
+#include "MACE/Simulation/SimTarget/Action/TrackingAction.hxx"
 
 #include "G4Track.hh"
 
-namespace MACE::Simulation::SimTarget {
+namespace MACE::Simulation::SimTarget::Action {
 
 TrackingAction::TrackingAction() :
     fAnalysis(std::addressof(Analysis::Instance())) {}

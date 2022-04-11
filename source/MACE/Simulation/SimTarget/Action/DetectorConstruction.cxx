@@ -1,8 +1,8 @@
-#include "MACE/Simulation/SimTarget/DetectorConstruction.hxx"
+#include "MACE/Simulation/SimTarget/Action/DetectorConstruction.hxx"
 
 #include "G4Box.hh"
 
-namespace MACE::Simulation::SimTarget {
+namespace MACE::Simulation::SimTarget::Action {
 
 G4VPhysicalVolume* DetectorConstruction::Construct() {
     using namespace MACE::Core::Geometry;

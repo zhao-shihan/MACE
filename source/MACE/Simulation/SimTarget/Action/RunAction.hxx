@@ -2,7 +2,7 @@
 
 #include "G4UserRunAction.hh"
 
-namespace MACE::Simulation::SimTarget {
+namespace MACE::Simulation::SimTarget::Action {
 
 class RunAction final : public G4UserRunAction {
 public:

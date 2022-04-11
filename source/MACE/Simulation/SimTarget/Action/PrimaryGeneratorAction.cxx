@@ -1,7 +1,7 @@
-#include "MACE/Simulation/SimTarget/PrimaryGeneratorAction.hxx"
+#include "MACE/Simulation/SimTarget/Action/PrimaryGeneratorAction.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
-namespace MACE::Simulation::SimTarget {
+namespace MACE::Simulation::SimTarget::Action {
 
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
     fSurfaceMuonPGA() {

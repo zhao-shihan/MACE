@@ -5,6 +5,8 @@
 #include "MACE/Utility/MPITool/MPIFileTools.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
+#include "globals.hh"
+
 #include "TFile.h"
 
 namespace MACE::Simulation::SimTarget {
@@ -50,4 +52,4 @@ private:
     ObserverPtr<const std::vector<EMCalHit*>> fEMCalHitList;
 };
 
-} // namespace MACE::Simulation::SimMACE::Utility
+} // namespace MACE::Simulation::SimTarget

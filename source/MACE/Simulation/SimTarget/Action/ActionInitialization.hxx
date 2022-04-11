@@ -2,7 +2,7 @@
 
 #include "G4VUserActionInitialization.hh"
 
-namespace MACE::Simulation::SimTarget {
+namespace MACE::Simulation::SimTarget::Action {
 
 class ActionInitialization final : public G4VUserActionInitialization {
 public:

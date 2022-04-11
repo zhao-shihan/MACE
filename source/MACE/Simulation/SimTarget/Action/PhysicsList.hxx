@@ -2,7 +2,7 @@
 
 #include "G4VModularPhysicsList.hh"
 
-namespace MACE::Simulation::SimTarget {
+namespace MACE::Simulation::SimTarget::Action {
 
 class PhysicsList final : public G4VModularPhysicsList {
 public:

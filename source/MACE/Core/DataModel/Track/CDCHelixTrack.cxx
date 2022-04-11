@@ -11,7 +11,7 @@ FloatBranchSocket CDCHelixTrack::fgAlpha("alpha", 0);
 
 CDCHelixTrack::CDCHelixTrack() noexcept :
     ICDCTrack(),
-    fCenter(fgCenter.GetValue<Double_t>()),
+    fCenter(fgCenter.GetValue<double>()),
     fRadius(fgRadius.GetValue()),
     fZ0(fgZ0.GetValue()),
     fAlpha(fgAlpha.GetValue()) {}

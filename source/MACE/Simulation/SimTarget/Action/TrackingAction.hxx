@@ -4,7 +4,7 @@
 
 #include "G4UserTrackingAction.hh"
 
-namespace MACE::Simulation::SimTarget {
+namespace MACE::Simulation::SimTarget::Action {
 
 class TrackingAction final : public G4UserTrackingAction {
 public:

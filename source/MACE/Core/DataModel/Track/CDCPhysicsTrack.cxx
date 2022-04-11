@@ -11,9 +11,9 @@ ShortStringBranchSocket CDCPhysicsTrack::fgParticle("particle", "");
 
 CDCPhysicsTrack::CDCPhysicsTrack() noexcept :
     ICDCTrack(),
-    fVertexPosition(fgVertexPosition.GetValue<Double_t>()),
+    fVertexPosition(fgVertexPosition.GetValue<double>()),
     fVertexEnergy(fgVertexEnergy.GetValue()),
-    fVertexMomentum(fgVertexMomentum.GetValue<Double_t>()),
+    fVertexMomentum(fgVertexMomentum.GetValue<double>()),
     fParticle(fgParticle.GetValue()) {}
 
 CDCPhysicsTrack::CDCPhysicsTrack(const CDCHelixTrack& helix, Double_t phiVertex, Double_t B, Double_t mass) :

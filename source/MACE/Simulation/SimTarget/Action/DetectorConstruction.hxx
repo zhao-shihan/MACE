@@ -7,7 +7,7 @@
 
 #include <memory>
 
-namespace MACE::Simulation::SimTarget {
+namespace MACE::Simulation::SimTarget::Action {
 
 using namespace MACE::Core::Geometry::Entity::Fast;
 

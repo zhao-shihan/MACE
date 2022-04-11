@@ -2,7 +2,7 @@
 
 #include "MACE/Simulation/Generator/SurfaceMuon/PrimaryGeneratorAction.hxx"
 
-namespace MACE::Simulation::SimTarget {
+namespace MACE::Simulation::SimTarget::Action {
 
 using namespace Generator;
 

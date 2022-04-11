@@ -15,11 +15,11 @@ IntBranchSocket CDCSimHit::fgG4TrackID("g4TrackID", -1);
 CDCSimHit::CDCSimHit() noexcept :
     CDCHit(),
     fEnergy(fgEnergy.GetValue()),
-    fMomentum(fgMomentum.GetValue<Double_t>()),
+    fMomentum(fgMomentum.GetValue<double>()),
     fVertexTime(fgVertexTime.GetValue()),
-    fVertexPosition(fgVertexPosition.GetValue<Double_t>()),
+    fVertexPosition(fgVertexPosition.GetValue<double>()),
     fVertexEnergy(fgVertexEnergy.GetValue()),
-    fVertexMomentum(fgVertexMomentum.GetValue<Double_t>()),
+    fVertexMomentum(fgVertexMomentum.GetValue<double>()),
     fParticle(fgParticle.GetValue()),
     fG4EventID(fgG4EventID.GetValue()),
     fG4TrackID(fgG4TrackID.GetValue()) {}

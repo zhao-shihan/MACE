@@ -1,13 +1,15 @@
 #pragma once
 
-#include "MACE/Simulation/SimTarget/DetectorConstruction.hxx"
-#include "MACE/Simulation/SimTarget/PrimaryGeneratorAction.hxx"
-#include "MACE/Simulation/SimTarget/RunAction.hxx"
-#include "MACE/Simulation/SimTarget/TrackingAction.hxx"
+#include "MACE/Simulation/SimTarget/Action/DetectorConstruction.hxx"
+#include "MACE/Simulation/SimTarget/Action/PrimaryGeneratorAction.hxx"
+#include "MACE/Simulation/SimTarget/Action/RunAction.hxx"
+#include "MACE/Simulation/SimTarget/Action/TrackingAction.hxx"
 #include "MACE/Utility/MPITool/G4MPIRunManager.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 namespace MACE::Simulation::SimTarget {
+
+using namespace Action;
 
 class RunManager final : public MACE::Utility::MPITool::G4MPIRunManager {
 public:

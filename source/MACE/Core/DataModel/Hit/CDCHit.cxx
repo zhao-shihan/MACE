@@ -19,8 +19,8 @@ CDCHit::CDCHit() noexcept :
     fHitPositionZ(fgHitPositionZ.GetValue()),
     fDriftDistanceVariance(fgDriftDistanceVariance.GetValue()),
     fHitPositionZVariance(fgHitPositionZVariance.GetValue()),
-    fWirePosition(fgWirePosition.GetValue<Double_t>()),
-    fWireDirection(fgWireDirection.GetValue<Double_t>()),
+    fWirePosition(fgWirePosition.GetValue<double>()),
+    fWireDirection(fgWireDirection.GetValue<double>()),
     fCellID(fgCellID.GetValue()),
     fLayerID(fgLayerID.GetValue()) {}
 
