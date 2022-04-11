@@ -11,8 +11,7 @@ public:
     RunAction(const RunAction&) = delete;
     RunAction& operator=(const RunAction&) = delete;
 
-    void BeginOfRunAction(const G4Run*) override;
     void EndOfRunAction(const G4Run*) override;
 };
 
-} // namespace MACE::Simulation::SimTarget
+} // namespace MACE::Simulation::SimTarget::Action

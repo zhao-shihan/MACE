@@ -16,7 +16,7 @@ public:
     static auto& Instance() { return *static_cast<RunManager*>(GetRunManager()); }
 
     RunManager();
-    ~RunManager() noexcept = default;
+    ~RunManager() noexcept;
     RunManager(const RunManager&) = delete;
     RunManager& operator=(const RunManager&) = delete;
 

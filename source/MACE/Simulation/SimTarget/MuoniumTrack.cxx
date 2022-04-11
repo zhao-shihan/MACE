@@ -16,18 +16,18 @@ MuoniumTrack::MuoniumTrack() noexcept :
 
 void MuoniumTrack::CreateBranches(TTree& tree) {
     ITransientData::CreateBranches(tree);
-    fVertexTime.CreateBranch(tree);
-    fVertexPosition.CreateBranch(tree);
-    fDecayTime.CreateBranch(tree);
-    fDecayPosition.CreateBranch(tree);
+    fgVertexTime.CreateBranch(tree);
+    fgVertexPosition.CreateBranch(tree);
+    fgDecayTime.CreateBranch(tree);
+    fgDecayPosition.CreateBranch(tree);
 }
 
 void MuoniumTrack::ConnectToBranches(TTree& tree) {
     ITransientData::ConnectToBranches(tree);
-    fVertexTime.ConnectToBranches(tree);
-    fVertexPosition.ConnectToBranches(tree);
-    fDecayTime.ConnectToBranches(tree);
-    fDecayPosition.ConnectToBranches(tree);
+    fgVertexTime.ConnectToBranch(tree);
+    fgVertexPosition.ConnectToBranch(tree);
+    fgDecayTime.ConnectToBranch(tree);
+    fgDecayPosition.ConnectToBranch(tree);
 }
 
 void MuoniumTrack::FillBranchSockets() const noexcept {

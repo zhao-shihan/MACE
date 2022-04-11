@@ -1,14 +1,12 @@
-#include "MACE/Simulation/SimTarget/Analysis.hxx"
 #include "MACE/Simulation/SimTarget/Action/RunAction.hxx"
+#include "MACE/Simulation/SimTarget/Analysis.hxx"
+
+#include "G4Run.hh"
 
 namespace MACE::Simulation::SimTarget::Action {
 
-void RunAction::BeginOfRunAction(const G4Run*) {
-    Analysis::Instance().Open();
+void RunAction::EndOfRunAction(const G4Run* run) {
+    Analysis::Instance().Write(run->GetRunID());
 }
 
-void RunAction::EndOfRunAction(const G4Run*) {
-    Analysis::Instance().Close();
-}
-
-} // namespace MACE::Simulation::SimTarget
+} // namespace MACE::Simulation::SimTarget::Action

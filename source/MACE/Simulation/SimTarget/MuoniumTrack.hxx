@@ -7,10 +7,10 @@
 
 namespace MACE::Simulation::SimTarget {
 
-using BranchSocket::DoubleBranchSocket;
-using BranchSocket::Vector3FBranchSocket;
+using Core::DataModel::BranchSocket::DoubleBranchSocket;
+using Core::DataModel::BranchSocket::Vector3FBranchSocket;
 
-class MuoniumTrack : public ITransientData {
+class MuoniumTrack : public Core::DataModel::ITransientData {
 public:
     MuoniumTrack() noexcept;
     MuoniumTrack(const MuoniumTrack& trk) noexcept = default;
@@ -24,11 +24,11 @@ public:
     const auto& GetDecayTime() const { return fDecayTime; }
     const auto& GetDecayPosition() const { return fDecayPosition; }
 
-    void SetVertexTime() const { return fVertexTime; }
+    void SetVertexTime(Double_t val) { fVertexTime = val; }
     template<typename Vector3_t>
     void SetVertexPosition(Vector3_t&& pos) { fVertexPosition = std::forward<Vector3_t>(pos); }
     void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition = {x, y, z}; }
-    void SetDecayTime() const { return fDecayTime; }
+    void SetDecayTime(Double_t val) { fDecayTime = val; }
     template<typename Vector3_t>
     void SetDecayPosition(Vector3_t&& pos) { fDecayPosition = std::forward<Vector3_t>(pos); }
     void SetDecayPosition(Double_t x, Double_t y, Double_t z) { fDecayPosition = {x, y, z}; }

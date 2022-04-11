@@ -10,9 +10,11 @@ RunManager::RunManager() :
     SetUserInitialization(new DetectorConstruction());
     SetUserInitialization(new PhysicsList());
     SetUserInitialization(new ActionInitialization());
-    // need to create an instance of Analysis ahead of time,
-    // otherwise AnalysisMessenger won't work!
-    Analysis::Instance();
+    Analysis::Instance().Open();
+}
+
+RunManager::~RunManager() {
+    Analysis::Instance().Close();
 }
 
 } // namespace MACE::Simulation::SimTarget

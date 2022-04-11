@@ -9,7 +9,7 @@ namespace MACE::Simulation::SimTarget::Action {
 class TrackingAction final : public G4UserTrackingAction {
 public:
     TrackingAction();
-    ~TrackingAction() noexcept;
+    ~TrackingAction() noexcept = default;
 
     void PostUserTrackingAction(const G4Track*) override;
 
@@ -17,4 +17,4 @@ private:
     ObserverPtr<Analysis> fAnalysis;
 };
 
-} // namespace MACE::Simulation::SimTarget
+} // namespace MACE::Simulation::SimTarget::Action
