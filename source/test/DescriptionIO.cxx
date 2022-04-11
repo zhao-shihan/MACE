@@ -1,5 +1,4 @@
 /// @brief The test of MACE::Geometry::DescriptionIO.
-/// @author Shihan Zhao
 
 #include "MACE/Core/Geometry/Description/All.hxx"
 #include "MACE/Core/Geometry/DescriptionIO.hxx"

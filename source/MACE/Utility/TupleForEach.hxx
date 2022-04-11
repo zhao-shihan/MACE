@@ -1,8 +1,5 @@
-// -*- C++ -*-
-
 /// Traverses a std::tuple or its derived class.
 /// The usage is similar to std::ranges::for_each, except that the arg is a tuple.
-/// @author Shihan Zhao
 
 #pragma once
 

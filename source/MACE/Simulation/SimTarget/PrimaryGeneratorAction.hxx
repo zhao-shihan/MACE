@@ -2,7 +2,7 @@
 
 #include "MACE/Simulation/Generator/SurfaceMuon/PrimaryGeneratorAction.hxx"
 
-namespace MACE::Simulation::SimMACE::Action {
+namespace MACE::Simulation::SimTarget {
 
 using namespace Generator;
 
@@ -19,7 +19,6 @@ public:
 
 private:
     SurfaceMuon::PrimaryGeneratorAction fSurfaceMuonPGA;
-    // CosmicRayMuon::PrimaryGeneratorAction fCosmicRayMuonPGA;
 };
 
-} // namespace MACE::Simulation::SimMACE::Action
+} // namespace MACE::Simulation::SimTarget

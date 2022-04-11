@@ -1,6 +1,4 @@
-// -*- C++ -*-
 /// A generator generates surface muon beam.
-/// @author Shihan Zhao
 
 #pragma once
 

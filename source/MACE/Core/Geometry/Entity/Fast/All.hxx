@@ -1,6 +1,5 @@
 /// @file Includes all fast geomerties.
 /// @warning Don't overuse. Include only where needed. Otherwise it will definitely prolong the compilation time.
-/// @author Shihan Zhao
 
 #pragma once
 

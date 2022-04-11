@@ -1,5 +1,5 @@
-#include "MACE/Simulation/SimTarget/Action/ActionInitialization.hxx"
-#include "MACE/Simulation/SimTarget/Action/PhysicsList.hxx"
+#include "MACE/Simulation/SimTarget/ActionInitialization.hxx"
+#include "MACE/Simulation/SimTarget/PhysicsList.hxx"
 #include "MACE/Simulation/SimTarget/RunManager.hxx"
 #include "MACE/Simulation/SimTarget/Utility/Analysis.hxx"
 
