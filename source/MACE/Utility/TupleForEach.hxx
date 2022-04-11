@@ -1,6 +1,8 @@
-/// @file Traverses a std::tuple or its derived class.
+// -*- C++ -*-
+
+/// Traverses a std::tuple or its derived class.
 /// The usage is similar to std::ranges::for_each, except that the arg is a tuple.
-/// @author Shi-Han Zhao
+/// @author Shihan Zhao
 
 #pragma once
 

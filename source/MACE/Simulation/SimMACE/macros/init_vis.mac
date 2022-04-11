@@ -9,13 +9,14 @@
 /run/initialize
 
 # Some customized properties
-/MACE/PrimaryGenerator/SetFlux                   5e5 s-1
-/MACE/PrimaryGenerator/SetRepetitionRate         2.5 Hz
-/MACE/PrimaryGenerator/SetTimeWidthRMS           10 ms
-/MACE/PrimaryGenerator/SetEnergy                 1.5 MeV
-/MACE/PrimaryGenerator/SetEnergySpreadRMS        0.08 MeV
-/MACE/PrimaryGenerator/SetBeamProfileRMS         5 mm
-/MACE/PrimaryGenerator/SetMuonsForEachG4Event    200
+/MACE/Generator/SurfaceMuon/SetFlux                   1e7 s-1
+/MACE/Generator/SurfaceMuon/SetRepetitionRate         50 Hz
+/MACE/Generator/SurfaceMuon/SetTimeWidthRMS           100 us
+/MACE/Generator/SurfaceMuon/SetEnergy                 1.5 MeV
+/MACE/Generator/SurfaceMuon/SetEnergySpreadRMS        0.12 MeV
+/MACE/Generator/SurfaceMuon/SetBeamProfileRMS         5 mm
+/MACE/Generator/SurfaceMuon/SetVertexZ                -1.5 m
+/MACE/Generator/SurfaceMuon/SetMuonsForEachG4Event    500
 
 /MACE/Physics/SetConversionProbability           1.0          # high :) 
 
@@ -23,8 +24,8 @@
 /MACE/Field/SetAcceleratorPotential              7 kilovolt
 /MACE/Field/SetSelectorElectricField             500 kilovolt/m
 
-/MACE/Analysis/EnableCoincidenceOfEMCal    true
-/MACE/Analysis/EnableCoincidenceOfMCP true
+/MACE/Analysis/EnableCoincidenceOfEMCal          true
+/MACE/Analysis/EnableCoincidenceOfMCP            true
 
 /MACE/Analysis/SetResultName                     test
 

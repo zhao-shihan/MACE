@@ -1,7 +1,7 @@
 /// @file Read/write the current geometry description configuration from/to a yaml.
 /// @attention If a new geometry description class is added, it needs to be added to
 /// the std::tuple in the source file. Otherwise it wouldn't be covered.
-/// @author Shi-Han Zhao
+/// @author Shihan Zhao
 
 #pragma once
 

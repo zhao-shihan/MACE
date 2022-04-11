@@ -36,6 +36,7 @@ private:
     G4UIcmdWithADoubleAndUnit fSetEnergy;
     G4UIcmdWithADoubleAndUnit fSetEnergySpreadRMS;
     G4UIcmdWithADoubleAndUnit fSetBeamProfileRMS;
+    G4UIcmdWithADoubleAndUnit fSetVertexZ;
     G4UIcmdWithAnInteger fSetMuonsForEachG4Event;
 };
 

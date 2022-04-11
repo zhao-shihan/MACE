@@ -13,12 +13,13 @@ using namespace Utility::LiteralUnit;
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
     G4VUserPrimaryGeneratorAction(),
     fSurfaceMuonBeam(G4MuonPlus::Definition()),
-    fFlux(5e5_s_1),
-    fRepetitionRate(2.5_Hz),
-    fTimeWidthRMS(10_ms),
+    fFlux(1e7_s_1),
+    fRepetitionRate(50_Hz),
+    fTimeWidthRMS(100_us),
     fEnergy(1.5_MeV),
     fEnergySpreadRMS(0.05 * fEnergy),
     fBeamProfileRMS(5_mm),
+    fVertexZ(-1.5_m),
     fSurfaceMuonsOfThisG4Event(500),
     fRepetitionID(-1) {
     fSurfaceMuonBeam.SetParticleMomentumDirection(CLHEP::HepZHat);
@@ -34,7 +35,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
         time = G4RandGauss::shoot(0, fTimeWidthRMS);
         position.set(G4RandGauss::shoot(0, fBeamProfileRMS),
                      G4RandGauss::shoot(0, fBeamProfileRMS),
-                     -1.5_m);
+                     fVertexZ);
         energy = G4RandGauss::shoot(fEnergy, fEnergySpreadRMS);
     }
     for (auto&& [time, position, energy] : std::as_const(fSurfaceMuonsOfThisG4Event)) {

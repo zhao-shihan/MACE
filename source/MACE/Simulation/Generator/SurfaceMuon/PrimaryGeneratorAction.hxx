@@ -1,3 +1,7 @@
+// -*- C++ -*-
+/// A generator generates surface muon beam.
+/// @author Shihan Zhao
+
 #pragma once
 
 #include "G4ParticleGun.hh"
@@ -20,6 +24,7 @@ public:
     void SetEnergy(G4double val) { fEnergy = val; }
     void SetEnergySpreadRMS(G4double val) { fEnergySpreadRMS = val; }
     void SetBeamProfileRMS(G4double val) { fBeamProfileRMS = val; }
+    void SetVertexZ(G4double val) { fVertexZ = val; }
 
     void SetMuonsForEachG4Event(size_t n) { fSurfaceMuonsOfThisG4Event.resize(n); }
 
@@ -34,10 +39,11 @@ private:
     G4double fEnergy;
     G4double fEnergySpreadRMS;
     G4double fBeamProfileRMS;
+    G4double fVertexZ;
 
     std::vector<std::tuple<G4double, G4ThreeVector, G4double>> fSurfaceMuonsOfThisG4Event;
 
     G4int fRepetitionID;
 };
 
-} // namespace MACE::Simulation::SimTarget
+} // namespace MACE::Simulation::Generator::SurfaceMuon

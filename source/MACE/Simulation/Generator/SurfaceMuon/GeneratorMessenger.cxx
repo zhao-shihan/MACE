@@ -21,6 +21,7 @@ GeneratorMessenger::GeneratorMessenger() :
     fSetEnergy("/MACE/Generator/SurfaceMuon/SetEnergy", this),
     fSetEnergySpreadRMS("/MACE/Generator/SurfaceMuon/SetEnergySpreadRMS", this),
     fSetBeamProfileRMS("/MACE/Generator/SurfaceMuon/SetBeamProfileRMS", this),
+    fSetVertexZ("/MACE/Generator/SurfaceMuon/SetVertexZ", this),
     fSetMuonsForEachG4Event("/MACE/Generator/SurfaceMuon/SetMuonsForEachG4Event", this) {
 
     // Introduce some useful units.
@@ -61,7 +62,12 @@ GeneratorMessenger::GeneratorMessenger() :
     fSetBeamProfileRMS.SetUnitCategory("Length");
     fSetBeamProfileRMS.AvailableForStates(G4State_Idle);
 
-    fSetMuonsForEachG4Event.SetGuidance("Set muons generated for each G4 event. Beam properties are not affected if the value is proper.");
+    fSetVertexZ.SetGuidance("It does what you think it does.");
+    fSetVertexZ.SetParameterName("z position", false);
+    fSetVertexZ.SetUnitCategory("Length");
+    fSetVertexZ.AvailableForStates(G4State_Idle);
+
+    fSetMuonsForEachG4Event.SetGuidance("Set muons generated for each G4 event. Beam properties won't be affected unless the value is greater than muons per repetition. In common case, a few hundred to thousand is OK.");
     fSetMuonsForEachG4Event.SetParameterName("n", false);
     fSetMuonsForEachG4Event.AvailableForStates(G4State_Idle);
 }
@@ -79,6 +85,8 @@ void GeneratorMessenger::SetNewValue(G4UIcommand* command, G4String value) {
         fPrimaryGeneratorAction->SetEnergySpreadRMS(fSetEnergySpreadRMS.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetBeamProfileRMS)) {
         fPrimaryGeneratorAction->SetBeamProfileRMS(fSetBeamProfileRMS.GetNewDoubleValue(value));
+    } else if (command == std::addressof(fSetVertexZ)) {
+        fPrimaryGeneratorAction->SetVertexZ(fSetVertexZ.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetMuonsForEachG4Event)) {
         fPrimaryGeneratorAction->SetMuonsForEachG4Event(fSetMuonsForEachG4Event.GetNewIntValue(value));
     }
