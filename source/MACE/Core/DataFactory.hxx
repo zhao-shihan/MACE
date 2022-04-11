@@ -20,15 +20,15 @@ public:
     DataFactory(const DataFactory&) = delete;
     DataFactory& operator=(const DataFactory&) = delete;
 
-    void SetIndexerOfTreeName(Char_t indexer);
-    void SetPrefixFormatOfTreeName(const TString& prefix);
-    void SetSuffixFormatOfTreeName(const TString& suffix);
+    void SetTreeNameIndexer(Char_t indexer);
+    void SetTreeNamePrefixFormat(const TString& prefix);
+    void SetTreeNameSuffixFormat(const TString& suffix);
 
-    Char_t GetIndexerOfTreeName() const { return fIndexer; }
-    const TString& GetPrefixFormatOfTreeName() const { return fPrefixFormat; }
-    const TString& GetSuffixFormatOfTreeName() const { return fSuffixFormat; }
-    TString GetPrefixOfTreeName(Long64_t i) const { return fPrefixHasIndexer ? (fSplitPrefix.first + i + fSplitPrefix.second) : fPrefixFormat; }
-    TString GetSuffixOfTreeName(Long64_t i) const { return fSuffixHasIndexer ? (fSplitSuffix.first + i + fSplitSuffix.second) : fSuffixFormat; }
+    Char_t GetTreeNameIndexer() const { return fIndexer; }
+    const TString& GetTreeNamePrefixFormat() const { return fPrefixFormat; }
+    const TString& GetTreeNameSuffixFormat() const { return fSuffixFormat; }
+    TString GetTreeNamePrefix(Long64_t i) const { return fPrefixHasIndexer ? (fSplitPrefix.first + i + fSplitPrefix.second) : fPrefixFormat; }
+    TString GetTreeNameSuffix(Long64_t i) const { return fSuffixHasIndexer ? (fSplitSuffix.first + i + fSplitSuffix.second) : fSuffixFormat; }
     template<IsTransientData Data_t>
     TString GetTreeName(Long64_t treeIndex) const;
 

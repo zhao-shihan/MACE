@@ -1,9 +1,9 @@
 #pragma once
 
-#include "MACE/Simulation/SimTarget/Action/DetectorConstruction.hxx"
-#include "MACE/Simulation/SimTarget/Action/EventAction.hxx"
-#include "MACE/Simulation/SimTarget/Action/PrimaryGeneratorAction.hxx"
-#include "MACE/Simulation/SimTarget/Action/RunAction.hxx"
+#include "MACE/Simulation/SimTarget/DetectorConstruction.hxx"
+#include "MACE/Simulation/SimTarget/EventAction.hxx"
+#include "MACE/Simulation/SimTarget/PrimaryGeneratorAction.hxx"
+#include "MACE/Simulation/SimTarget/RunAction.hxx"
 #include "MACE/Utility/MPITool/G4MPIRunManager.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 

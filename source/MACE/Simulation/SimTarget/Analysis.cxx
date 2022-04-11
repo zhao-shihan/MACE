@@ -4,7 +4,7 @@
 
 #include "G4MPImanager.hh"
 
-namespace MACE::Simulation::SimMACE::Utility {
+namespace MACE::Simulation::SimTarget {
 
 using Messenger::AnalysisMessenger;
 
@@ -26,7 +26,7 @@ Analysis::Analysis() :
     fCDCHitList(nullptr) {
     AnalysisMessenger::Instance();
     MPIFileTools::SetOutStream(G4cout);
-    fDataHub.SetTreeNamePrefixFormat("Rep#_");
+    fDataFactory.SetTreeNamePrefixFormat("Run#_");
 }
 
 void Analysis::Open(Option_t* option) {
