@@ -2,7 +2,9 @@
 
 #include "MACE/Core/Geometry/Entity/Fast/Target.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/World.hxx"
+#include "MACE/Utility/ObserverPtr.hxx"
 
+#include "G4Material.hh"
 #include "G4VUserDetectorConstruction.hh"
 
 #include <memory>
@@ -10,6 +12,7 @@
 namespace MACE::Simulation::SimTarget::Action {
 
 using namespace MACE::Core::Geometry::Entity::Fast;
+using MACE::Utility::ObserverPtr;
 
 class DetectorConstruction final : public G4VUserDetectorConstruction {
 public:
@@ -26,7 +29,9 @@ private:
     std::shared_ptr<Target> fTarget;
     std::shared_ptr<World> fWorld;
 
+    ObserverPtr<G4Material> fTargetMaterial;
+
     G4bool fCheckOverlaps = false;
 };
 
-} // namespace MACE::Simulation::SimTarget
+} // namespace MACE::Simulation::SimTarget::Action

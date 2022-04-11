@@ -1,0 +1,23 @@
+# macro file for the initialization of SimTarget in interactive session
+
+# Set some default verbose
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+
+# Initialize kernel
+/run/initialize
+
+# Some customized properties
+/MACE/Generator/SurfaceMuon/SetFlux                   1e7 s-1
+/MACE/Generator/SurfaceMuon/SetRepetitionRate         50 Hz
+/MACE/Generator/SurfaceMuon/SetTimeWidthRMS           100 us
+/MACE/Generator/SurfaceMuon/SetEnergy                 1.5 MeV
+/MACE/Generator/SurfaceMuon/SetEnergySpreadRMS        0.12 MeV
+/MACE/Generator/SurfaceMuon/SetBeamProfileRMS         5 mm
+/MACE/Generator/SurfaceMuon/SetVertexZ                -15 cm
+
+#/MACE/Analysis/SetResultName                          SimTarget_result
+
+# Visualization setting
+/control/execute vis.mac
