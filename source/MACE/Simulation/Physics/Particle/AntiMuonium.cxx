@@ -1,6 +1,5 @@
 #include "MACE/Simulation/Physics/DecayChannel/MuoniumDecayChannel.hxx"
 #include "MACE/Simulation/Physics/Particle/AntiMuonium.hxx"
-#include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4DecayTable.hh"
@@ -8,7 +7,6 @@
 
 namespace MACE::Simulation::Physics::Particle {
 
-using namespace MACE::Utility::LiteralUnit;
 using namespace MACE::Utility::PhysicalConstant;
 
 AntiMuonium* AntiMuonium::fgInstance = nullptr;
