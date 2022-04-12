@@ -17,8 +17,8 @@
 /vis/viewer/set/lineSegmentsPerCircle 100
 
 # Colors
-/vis/geometry/set/colour Target                        0     1     1     1     0.5
-/vis/geometry/set/colour World                         0     1     1     1     0.001
+/vis/geometry/set/colour Target    0     1     1     1     0.5
+/vis/geometry/set/colour World     0     1     1     1     0.01
 
 /vis/scene/add/date
 /vis/scene/add/axes 0 0 0 1 cm

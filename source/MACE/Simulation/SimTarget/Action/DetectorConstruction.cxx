@@ -2,7 +2,6 @@
 #include "MACE/Simulation/SimTarget/Action/DetectorConstruction.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
-#include "G4Box.hh"
 #include "G4NistManager.hh"
 
 namespace MACE::Simulation::SimTarget::Action {

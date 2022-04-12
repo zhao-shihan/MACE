@@ -8,6 +8,11 @@
 # Name of output
 /MACE/Analysis/SetResultName                          SimTarget_result
 
+# Geometry
+/MACE/Geometry/SetWorldHalfExtent                     25 25 25 cm
+/MACE/Geometry/SetTargetWidth                         6 cm
+/MACE/Geometry/SetTargetThickness                     1 cm
+
 # Initialize kernel
 /run/initialize
 

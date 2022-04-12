@@ -5,9 +5,11 @@
 
 namespace MACE::Simulation::SimMACE::Field {
 
-using namespace MACE::Utility::LiteralUnit;
-using Messenger::FieldMessenger;
 using LinacDescription = MACE::Core::Geometry::Description::LinacField;
+using Messenger::FieldMessenger;
+using namespace MACE::Utility::LiteralUnit::ElectricPotential;
+using namespace MACE::Utility::LiteralUnit::Length;
+using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
 
 LinacField::LinacField() :
     G4ElectroMagneticField(),
