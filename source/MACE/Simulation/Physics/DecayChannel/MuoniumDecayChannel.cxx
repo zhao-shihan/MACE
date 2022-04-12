@@ -185,26 +185,29 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
     // atomic shell electron 3
 
     // momentum distribution
-    constexpr std::array<std::pair<G4double, G4double>, 501> atomicShellMomentumInverseCDF = {
-#include "AtomicShellMomentumInverseCDF.dat"
+    constexpr std::array<G4double, 501> atomicShellMomentumCDF = {
+#include "AtomicShellMomentumCDF.dat"
     };
+    constexpr G4double asmCDFBinWidth = 0.0001 * MeV;
 
     // momentum magnitude
     x = G4UniformRand();
-    const auto right = std::ranges::upper_bound(atomicShellMomentumInverseCDF, std::make_pair(x, 0),
-                                                [](const auto& f1, const auto& f2) {
-                                                    return f1.first < f2.first;
-                                                });
+    const auto right = std::ranges::upper_bound(atomicShellMomentumCDF, x);
     G4double atomicShellMomentum;
-    if (right != atomicShellMomentumInverseCDF.cend()) [[likely]] {
-        const auto& [x1, p1] = *std::prev(right);
-        const auto& [x2, p2] = *right;
+    if (right != atomicShellMomentumCDF.cend()) [[likely]] {
+        const auto x2 = *right;
+        const auto p2 = asmCDFBinWidth * std::distance(atomicShellMomentumCDF.cbegin(), right);
+        const auto x1 = *std::prev(right);
+        const auto p1 = p2 - asmCDFBinWidth;
         atomicShellMomentum = p1 + (p2 - p1) / (x2 - x1) * (x - x1);
     } else [[unlikely]] {
-        constexpr auto cdfSize = atomicShellMomentumInverseCDF.size();
-        const auto& [x0, p0] = atomicShellMomentumInverseCDF[cdfSize - 3];
-        const auto& [x1, p1] = atomicShellMomentumInverseCDF[cdfSize - 2];
-        const auto& [x2, p2] = atomicShellMomentumInverseCDF[cdfSize - 1];
+        constexpr auto cdfSize = atomicShellMomentumCDF.size();
+        constexpr auto x0 = atomicShellMomentumCDF[cdfSize - 3];
+        constexpr auto p0 = asmCDFBinWidth * (cdfSize - 3);
+        constexpr auto x1 = atomicShellMomentumCDF[cdfSize - 2];
+        constexpr auto p1 = asmCDFBinWidth * (cdfSize - 2);
+        constexpr auto x2 = atomicShellMomentumCDF[cdfSize - 1];
+        constexpr auto p2 = asmCDFBinWidth * (cdfSize - 1);
         const auto k0 = (x - x1) / (x0 - x1) * (x - x2) / (x0 - x2);
         const auto k1 = (x - x0) / (x1 - x0) * (x - x2) / (x1 - x2);
         const auto k2 = (x - x0) / (x2 - x0) * (x - x1) / (x2 - x1);
