@@ -2,20 +2,20 @@
 
 #include "G4ParticleDefinition.hh"
 
-namespace MACE::Simulation::Physics {
+namespace MACE::Simulation::Physics::Particle {
 
 class AntiMuonium final : public G4ParticleDefinition {
 public:
     static AntiMuonium* Definition();
-
-private:
-    static AntiMuonium* fgInstance;
+    ~AntiMuonium() noexcept = default;
 
 private:
     AntiMuonium();
+    AntiMuonium(const AntiMuonium&) = delete;
+    AntiMuonium& operator=(const AntiMuonium&) = delete;
 
-public:
-    ~AntiMuonium() noexcept = default;
+private:
+    static AntiMuonium* fgInstance;
 };
 
-} // namespace MACE::Simulation::Physics
+} // namespace MACE::Simulation::Physics::Particle

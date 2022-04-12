@@ -2,22 +2,20 @@
 
 #include "G4ParticleDefinition.hh"
 
-namespace MACE::Simulation::Physics {
-
-// Muonium Definition
+namespace MACE::Simulation::Physics::Particle {
 
 class Muonium final : public G4ParticleDefinition {
 public:
     static Muonium* Definition();
-
-private:
-    static Muonium* fgInstance;
+    ~Muonium() noexcept = default;
 
 private:
     Muonium();
+    Muonium(const Muonium&) = delete;
+    Muonium& operator=(const Muonium&) = delete;
 
-public:
-    ~Muonium() noexcept = default;
+private:
+    static Muonium* fgInstance;
 };
 
-} // namespace MACE::Simulation::Physics
+} // namespace MACE::Simulation::Physics::Particle

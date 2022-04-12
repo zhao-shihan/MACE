@@ -1,12 +1,12 @@
-#include "MACE/Simulation/Physics/AntiMuonium.hxx"
-#include "MACE/Simulation/Physics/AntiMuoniumDecayChannel.hxx"
+#include "MACE/Simulation/Physics/DecayChannel/MuoniumDecayChannel.hxx"
+#include "MACE/Simulation/Physics/Particle/AntiMuonium.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4DecayTable.hh"
 #include "G4ParticleTable.hh"
 
-namespace MACE::Simulation::Physics {
+namespace MACE::Simulation::Physics::Particle {
 
 using namespace MACE::Utility::LiteralUnit;
 using namespace MACE::Utility::PhysicalConstant;
@@ -52,8 +52,8 @@ AntiMuonium::AntiMuonium() :
     // create Decay Table
     auto table = new G4DecayTable();
     // create a decay channel
-    table->Insert(new AntiMuoniumDecayChannel("anti_M", 1.00));
+    table->Insert(new DecayChannel::MuoniumDecayChannel("anti_M", 1.00));
     this->SetDecayTable(table);
 }
 
-} // namespace MACE::Simulation::Physics
+} // namespace MACE::Simulation::Physics::Particle
