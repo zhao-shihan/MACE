@@ -6,9 +6,17 @@
 
 namespace MACE::Simulation::SimTarget::Action {
 
+using namespace MACE::Utility::LiteralUnit::Density;
+using namespace MACE::Utility::LiteralUnit::Temperature;
+
+DetectorConstruction::DetectorConstruction() :
+    fTarget(nullptr),
+    fWorld(nullptr),
+    fDensity(30_mg_cm3),
+    fTemperature(293.15_K) {}
+
 G4VPhysicalVolume* DetectorConstruction::Construct() {
     using namespace MACE::Core::Geometry;
-    using namespace MACE::Utility::LiteralUnit::Density;
 
     // LinacField is target's mother by default, modified it to adapt global frame
     Description::LinacField::Instance().SetLength(0);
@@ -20,9 +28,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     fWorld->ConstructSelfAndDescendants(fCheckOverlaps);
 
     auto nist = G4NistManager::Instance();
-    fTargetMaterial = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30_mg_cm3);
-    fTarget->RegisterMaterial(fTargetMaterial);
-    fWorld->RegisterMaterial(nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3));
+    fTarget->RegisterMaterial(nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", fDensity, fTemperature));
+    fWorld->RegisterMaterial(nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3, fTemperature));
 
     return fWorld->GetPhysicalVolume();
 }

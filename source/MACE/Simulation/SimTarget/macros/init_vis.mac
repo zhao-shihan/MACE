@@ -12,6 +12,8 @@
 /MACE/Geometry/SetWorldHalfExtent                     25 25 25 cm
 /MACE/Geometry/SetTargetWidth                         6 cm
 /MACE/Geometry/SetTargetThickness                     1 cm
+/MACE/Geometry/SetTargetDensity                       30 mg/cm3
+/MACE/Geometry/SetTemperature                         293.15 K
 
 # Initialize kernel
 /run/initialize
@@ -24,6 +26,9 @@
 /MACE/Generator/SurfaceMuon/SetEnergySpreadRMS        0.12 MeV
 /MACE/Generator/SurfaceMuon/SetBeamProfileRMS         5 mm
 /MACE/Generator/SurfaceMuon/SetVertexZ                -15 cm
+
+# Ablated target with pitch 101um, diameter 86um
+/MACE/Geometry/SetFineStructure (z<-5 || x<-20||x>20 || y<-20||y>20) || ((x-(round((x-0.577350269189626*y)/0.101)+round(1.154700538379251*y/0.101)/2)*0.101)^2+(y-0.866025403784439*round(1.154700538379251*y/0.101)*0.101)^2>0.086*0.086/4)
 
 # Visualization setting
 /control/execute vis.mac

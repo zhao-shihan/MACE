@@ -16,12 +16,15 @@ using MACE::Utility::ObserverPtr;
 
 class DetectorConstruction final : public G4VUserDetectorConstruction {
 public:
-    DetectorConstruction() = default;
+    DetectorConstruction();
     ~DetectorConstruction() noexcept = default;
     DetectorConstruction(const DetectorConstruction&) = delete;
     DetectorConstruction& operator=(const DetectorConstruction&) = delete;
 
     G4VPhysicalVolume* Construct() override;
+
+    void SetTargetDensity(G4double val) { fDensity = val; }
+    void SetTemperature(G4double val) { fTemperature = val; }
 
     void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlaps = checkOverlaps; }
 
@@ -29,7 +32,8 @@ private:
     std::shared_ptr<Target> fTarget;
     std::shared_ptr<World> fWorld;
 
-    ObserverPtr<G4Material> fTargetMaterial;
+    G4double fDensity;
+    G4double fTemperature;
 
     G4bool fCheckOverlaps = false;
 };

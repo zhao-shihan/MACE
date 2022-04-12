@@ -25,6 +25,9 @@ private:
     G4UIcmdWith3VectorAndUnit fSetWorldHalfExtent;
     G4UIcmdWithADoubleAndUnit fSetTargetWidth;
     G4UIcmdWithADoubleAndUnit fSetTargetThickness;
+    G4UIcmdWithADoubleAndUnit fSetTargetDensity;
+    G4UIcmdWithADoubleAndUnit fSetTemperature;
+    G4UIcmdWithAString fSetFineStructure;
 };
 
 } // namespace MACE::Simulation::SimTarget::Messenger
