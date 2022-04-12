@@ -1,11 +1,12 @@
 // #include "MACE/Simulation/SimTarget/Messenger/AnalysisMessenger.hxx"
 #include "MACE/Simulation/SimTarget/Analysis.hxx"
+#include "MACE/Simulation/SimTarget/Messenger/AnalysisMessenger.hxx"
 
 #include "G4MPImanager.hh"
 
 namespace MACE::Simulation::SimTarget {
 
-// using Messenger::AnalysisMessenger;
+using Messenger::AnalysisMessenger;
 
 Analysis& Analysis::Instance() {
     static Analysis instance;
@@ -17,7 +18,7 @@ Analysis::Analysis() :
     fMPIFileTools(nullptr),
     fMuoniumTrackList(0),
     fDataFactory() {
-    // AnalysisMessenger::Instance();
+    AnalysisMessenger::Instance();
     MPIFileTools::SetOutStream(G4cout);
     fDataFactory.SetTreeNamePrefixFormat("Run#_");
 }
