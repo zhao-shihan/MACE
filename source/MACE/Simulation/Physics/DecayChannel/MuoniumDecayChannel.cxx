@@ -186,7 +186,7 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
 
     // momentum distribution
     constexpr std::array<G4double, 501> atomicShellMomentumCDF = {
-#include "AtomicShellMomentumCDF.dat"
+#include "MuoniumAtomicShellMomentumCDF.dat"
     };
     constexpr G4double asmCDFBinWidth = 0.0001 * MeV;
 

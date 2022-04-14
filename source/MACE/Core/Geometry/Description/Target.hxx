@@ -21,6 +21,9 @@ private:
 public:
     const auto& GetWidth() const { return fWidth; }
     const auto& GetThickness() const { return fThickness; }
+    /// Return true if inside the target volume (do not consider fine structure).
+    bool VolumeContains(const Double_t* pos) const noexcept;
+    bool VolumeContains(const CLHEP::Hep3Vector& pos) const noexcept { return VolumeContains(reinterpret_cast<const Double_t*>(std::addressof(pos))); }
     /// Return true if inside the exact target geometry (considering fine structure).
     bool Contains(const Double_t* pos) const noexcept;
     bool Contains(const CLHEP::Hep3Vector& pos) const noexcept { return Contains(reinterpret_cast<const Double_t*>(std::addressof(pos))); }

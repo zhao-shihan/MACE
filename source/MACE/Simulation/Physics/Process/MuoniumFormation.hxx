@@ -1,9 +1,15 @@
 #pragma once
 
+#include "MACE/Core/Geometry/Description/Target.hxx"
+#include "MACE/Utility/ObserverPtr.hxx"
+
 #include "G4ParticleChange.hh"
 #include "G4VRestProcess.hh"
 
 namespace MACE::Simulation::Physics::Process {
+
+using Core::Geometry::Description::Target;
+using Utility::ObserverPtr;
 
 class MuoniumFormation final : public G4VRestProcess {
 public:
@@ -17,6 +23,8 @@ public:
     void SetConversionProbability(G4double val) { fConversionProbability = val; }
 
 private:
+    const ObserverPtr<const Target> fTarget;
+
     G4ParticleChange fParticleChange;
     G4double fMeanLifeTime;
     G4double fConversionProbability;
