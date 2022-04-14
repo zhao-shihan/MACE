@@ -20,28 +20,23 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
     fEnergySpreadRMS(0.05 * fEnergy),
     fBeamProfileRMS(5_mm),
     fVertexZ(-1.5_m),
-    fSurfaceMuonsOfThisG4Event(500),
+    fMuonsForEachG4Event(500),
     fRepetitionID(-1) {
     fSurfaceMuonBeam.SetParticleMomentumDirection(CLHEP::HepZHat);
     GeneratorMessenger::Instance().SetTo(this);
 }
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
-    const auto muonsForEachReptition = fFlux / fRepetitionRate;                                      // no rounding
-    const auto g4EventsForEachReptition = muonsForEachReptition / fSurfaceMuonsOfThisG4Event.size(); // no rounding
-    fRepetitionID = event->GetEventID() / g4EventsForEachReptition;                                  // rounding here
+    const auto muonsForEachReptition = fFlux / fRepetitionRate;                         // no rounding
+    const auto g4EventsForEachReptition = muonsForEachReptition / fMuonsForEachG4Event; // no rounding
+    fRepetitionID = event->GetEventID() / g4EventsForEachReptition;                     // rounding here
 
-    for (auto&& [time, position, energy] : fSurfaceMuonsOfThisG4Event) {
-        time = G4RandGauss::shoot(0, fTimeWidthRMS);
-        position.set(G4RandGauss::shoot(0, fBeamProfileRMS),
-                     G4RandGauss::shoot(0, fBeamProfileRMS),
-                     fVertexZ);
-        energy = G4RandGauss::shoot(fEnergy, fEnergySpreadRMS);
-    }
-    for (auto&& [time, position, energy] : std::as_const(fSurfaceMuonsOfThisG4Event)) {
-        fSurfaceMuonBeam.SetParticleTime(time);
-        fSurfaceMuonBeam.SetParticlePosition(position);
-        fSurfaceMuonBeam.SetParticleEnergy(energy);
+    for (G4int i = 0; i < fMuonsForEachG4Event; ++i) {
+        fSurfaceMuonBeam.SetParticleTime(G4RandGauss::shoot(0, fTimeWidthRMS));
+        fSurfaceMuonBeam.SetParticlePosition(G4ThreeVector(G4RandGauss::shoot(0, fBeamProfileRMS),
+                                                           G4RandGauss::shoot(0, fBeamProfileRMS),
+                                                           fVertexZ));
+        fSurfaceMuonBeam.SetParticleEnergy(G4RandGauss::shoot(fEnergy, fEnergySpreadRMS));
         fSurfaceMuonBeam.GeneratePrimaryVertex(event);
     }
 }

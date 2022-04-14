@@ -15,12 +15,16 @@ class MuoniumFormation final : public G4VRestProcess {
 public:
     MuoniumFormation();
     ~MuoniumFormation() noexcept = default;
+    MuoniumFormation(const MuoniumFormation&) = delete;
+    MuoniumFormation& operator=(const MuoniumFormation&) = delete;
 
     G4VParticleChange* AtRestDoIt(const G4Track& track, const G4Step&) override;
-    G4double GetMeanLifeTime(const G4Track&, G4ForceCondition*) override { return fMeanLifeTime; }
 
     void SetMeanLifeTime(G4double val) { fMeanLifeTime = val; }
     void SetConversionProbability(G4double val) { fConversionProbability = val; }
+
+protected:
+    G4double GetMeanLifeTime(const G4Track& track, G4ForceCondition*) override { return fTarget->Contains(track.GetPosition()) ? fMeanLifeTime : DBL_MAX; }
 
 private:
     const ObserverPtr<const Target> fTarget;

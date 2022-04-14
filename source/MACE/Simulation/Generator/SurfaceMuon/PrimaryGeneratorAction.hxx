@@ -24,7 +24,7 @@ public:
     void SetBeamProfileRMS(G4double val) { fBeamProfileRMS = val; }
     void SetVertexZ(G4double val) { fVertexZ = val; }
 
-    void SetMuonsForEachG4Event(size_t n) { fSurfaceMuonsOfThisG4Event.resize(n); }
+    void SetMuonsForEachG4Event(size_t n) { fMuonsForEachG4Event = n; }
 
     auto GetRepetitionID() const { return fRepetitionID; }
 
@@ -38,8 +38,7 @@ private:
     G4double fEnergySpreadRMS;
     G4double fBeamProfileRMS;
     G4double fVertexZ;
-
-    std::vector<std::tuple<G4double, G4ThreeVector, G4double>> fSurfaceMuonsOfThisG4Event;
+    G4int fMuonsForEachG4Event;
 
     G4int fRepetitionID;
 };

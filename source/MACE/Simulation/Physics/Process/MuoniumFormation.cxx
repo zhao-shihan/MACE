@@ -25,29 +25,24 @@ MuoniumFormation::MuoniumFormation() :
 
 G4VParticleChange* MuoniumFormation::AtRestDoIt(const G4Track& track, const G4Step&) {
     fParticleChange.Initialize(track);
-
-    const auto& position = track.GetPosition();
-    if (fTarget->Contains(position)) {
-        // The dynamic particle
-        auto muoniumDynamicParticle = new G4DynamicParticle(*track.GetDynamicParticle());
-        // Determine whether the muonium is converted
-        muoniumDynamicParticle->SetDefinition(
-            (G4UniformRand() < fConversionProbability) ?
-                static_cast<G4ParticleDefinition*>(Particle::AntiMuonium::Definition()) :
-                static_cast<G4ParticleDefinition*>(Particle::Muonium::Definition()));
-        // Sampling momentum according to boltzmann distribution
-        const auto temperature = track.GetVolume()->GetLogicalVolume()->GetMaterial()->GetTemperature();
-        muoniumDynamicParticle->SetMomentum(std::sqrt(muonium_mass_c2 * k_Boltzmann * temperature) *
-                                            G4ThreeVector(G4RandGauss::shoot(),
-                                                          G4RandGauss::shoot(),
-                                                          G4RandGauss::shoot()));
-        // Pre-assign the decay time
-        muoniumDynamicParticle->SetPreAssignedDecayProperTime(G4RandExponential::shoot(muonium_lifetime));
-        // Kill the muon, form the (anti-)muonium
-        fParticleChange.ProposeTrackStatus(fStopAndKill);
-        fParticleChange.AddSecondary(new G4Track(muoniumDynamicParticle, track.GetGlobalTime(), position));
-    }
-
+    // The dynamic particle
+    auto muoniumDynamicParticle = new G4DynamicParticle(*track.GetDynamicParticle());
+    // Determine whether the muonium is converted
+    muoniumDynamicParticle->SetDefinition(
+        (G4UniformRand() < fConversionProbability) ?
+            static_cast<G4ParticleDefinition*>(Particle::AntiMuonium::Definition()) :
+            static_cast<G4ParticleDefinition*>(Particle::Muonium::Definition()));
+    // Sampling momentum according to boltzmann distribution
+    const auto temperature = track.GetVolume()->GetLogicalVolume()->GetMaterial()->GetTemperature();
+    muoniumDynamicParticle->SetMomentum(std::sqrt(muonium_mass_c2 * k_Boltzmann * temperature) *
+                                        G4ThreeVector(G4RandGauss::shoot(),
+                                                      G4RandGauss::shoot(),
+                                                      G4RandGauss::shoot()));
+    // Pre-assign the decay time
+    muoniumDynamicParticle->SetPreAssignedDecayProperTime(G4RandExponential::shoot(muonium_lifetime));
+    // Kill the muon, form the (anti-)muonium
+    fParticleChange.ProposeTrackStatus(fStopAndKill);
+    fParticleChange.AddSecondary(new G4Track(muoniumDynamicParticle, track.GetGlobalTime(), track.GetPosition()));
     return std::addressof(fParticleChange);
 }
 

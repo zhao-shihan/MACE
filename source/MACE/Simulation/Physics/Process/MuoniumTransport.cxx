@@ -16,32 +16,13 @@ MuoniumTransport::MuoniumTransport() :
     fTarget(std::addressof(Target::Instance())),
     fParticleChange(),
     fMeanFreePath(226_nm),
-    fStepLimit(1_mm),
+    fStepLimit(100_um),
     fVacuumStepScale(2),
     fCase(-1) {}
 
-G4double MuoniumTransport::GetContinuousStepLimit(const G4Track& track, G4double, G4double, G4double& safety) {
-    // if (track.GetProperTime() >= track.GetDynamicParticle()->GetPreAssignedDecayProperTime()) {
-    //     fCase = 0;
-    //     SetGPILSelection(NotCandidateForSelection);
-    //     return safety;
-    // }
-    if (fTarget->VolumeContains(track.GetPosition())) {
-        fCase = 1;
-        return std::min(fStepLimit, safety);
-    } else if (track.GetMaterial()->GetState() == kStateGas) {
-        fCase = 2;
-        SetGPILSelection(NotCandidateForSelection);
-        return safety;
-    } else {
-        fCase = 3;
-        return 0;
-    }
-}
-
 G4VParticleChange* MuoniumTransport::AlongStepDoIt(const G4Track& track, const G4Step& step) {
     fParticleChange.Initialize(track);
-    if (fCase == 1) {
+    if (fCase == 0) {
         const auto trueStepLimit = step.GetStepLength();
         if (trueStepLimit > 0) {
             ProposeRandomFlight(track.GetProperTime(),
@@ -51,10 +32,24 @@ G4VParticleChange* MuoniumTransport::AlongStepDoIt(const G4Track& track, const G
                                 track.GetMaterial()->GetTemperature(),
                                 trueStepLimit);
         }
-    } else if (fCase == 3) {
+    } else if (fCase == 2) {
         fParticleChange.ProposeTrackStatus(fStopButAlive);
     }
     return std::addressof(fParticleChange);
+}
+
+G4double MuoniumTransport::GetContinuousStepLimit(const G4Track& track, G4double, G4double, G4double& safety) {
+    if (fTarget->VolumeContains(track.GetPosition())) {
+        fCase = 0;
+        return std::min(fStepLimit, safety);
+    } else if (track.GetMaterial()->GetState() == kStateGas) {
+        fCase = 1;
+        SetGPILSelection(NotCandidateForSelection);
+        return safety;
+    } else {
+        fCase = 2;
+        return 0;
+    }
 }
 
 void MuoniumTransport::ProposeRandomFlight(const G4double& initialTime,

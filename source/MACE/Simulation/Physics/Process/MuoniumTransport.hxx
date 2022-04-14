@@ -15,11 +15,13 @@ class MuoniumTransport final : public G4VContinuousProcess {
 public:
     MuoniumTransport();
     ~MuoniumTransport() noexcept = default;
+    MuoniumTransport(const MuoniumTransport&) = delete;
+    MuoniumTransport& operator=(const MuoniumTransport&) = delete;
 
-    G4double GetContinuousStepLimit(const G4Track& track, G4double, G4double, G4double& safety) override;
     G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step& step) override;
 
 private:
+    G4double GetContinuousStepLimit(const G4Track& track, G4double, G4double, G4double& safety) override;
     void ProposeRandomFlight(const G4double& initialTime,
                              const G4ThreeVector& initialPosition,
                              const G4double& initialVelocity,
