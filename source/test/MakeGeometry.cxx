@@ -1,10 +1,17 @@
 #include "MACE/Core/Geometry/Entity/Fast/All.hxx"
+#include "MACE/Utility/LiteralUnit.hxx"
+
+#include "G4NistManager.hh"
 
 #include "TGeoManager.h"
 
 using namespace MACE::Core::Geometry::Entity::Fast;
 
 int main(int, char**) {
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
     // Construct entity objects
     auto fCDCBody = std::make_shared<CDCBody>();
     auto fCDCCell = std::make_shared<CDCCell>();
@@ -67,11 +74,81 @@ int main(int, char**) {
     // Construct volumes
     fWorld->ConstructSelfAndDescendants(true);
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    using namespace MACE::Utility::LiteralUnit;
+
+    auto nist = G4NistManager::Instance();
+
+    auto aluminium = nist->FindOrBuildMaterial("G4_Al");
+    fCDCFieldWire->RegisterMaterial(aluminium);
+
+    auto cdcGas = nist->FindOrBuildMaterial("G4_He");
+    fCDCCell->RegisterMaterial(cdcGas);
+    fCDCLayer->RegisterMaterial(cdcGas);
+    fCDCSensitiveVolume->RegisterMaterial(cdcGas);
+
+    auto cdcShell = nist->BuildMaterialWithNewDensity("CarbonFiber", "G4_C", 1.7_g_cm3);
+    fCDCBody->RegisterMaterial(cdcShell);
+
+    auto copper = nist->FindOrBuildMaterial("G4_Cu");
+    fCollimator->RegisterMaterial(copper);
+    fFirstBendSolenoid->RegisterMaterial(copper);
+    fFirstTransportSolenoid->RegisterMaterial(copper);
+    fSecondBendSolenoid->RegisterMaterial(copper);
+    fSecondTransportSolenoid->RegisterMaterial(copper);
+    fThirdTransportSolenoid->RegisterMaterial(copper);
+
+    auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
+    fEMCal->RegisterMaterial(csI);
+
+    auto iron = nist->FindOrBuildMaterial("G4_Fe");
+    fSpectrometerMagnet->RegisterMaterial(iron);
+
+    auto lead = nist->FindOrBuildMaterial("G4_Pb");
+    fEMCalShield->RegisterMaterial(lead);
+    fSpectrometerShield->RegisterMaterial(lead);
+
+    auto mcpMaterial = nist->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4_g_cm3);
+    fMCP->RegisterMaterial(mcpMaterial);
+
+    auto silicaAerogel = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30_mg_cm3);
+    fTarget->RegisterMaterial(silicaAerogel);
+
+    auto tungsten = nist->FindOrBuildMaterial("G4_W");
+    fCDCSenseWire->RegisterMaterial(tungsten);
+
+    auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
+    fEMCalField->RegisterMaterial(vacuum);
+    fFirstBendField->RegisterMaterial(vacuum);
+    fFirstTransportField->RegisterMaterial(vacuum);
+    fLinacField->RegisterMaterial(vacuum);
+    fSecondBendField->RegisterMaterial(vacuum);
+    fSecondTransportField->RegisterMaterial(vacuum);
+    fSelectorField->RegisterMaterial(vacuum);
+    fSpectrometerField->RegisterMaterial(vacuum);
+    fThirdTransportField->RegisterMaterial(vacuum);
+    fWorld->RegisterMaterial(vacuum);
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
     fWorld->WriteSelfAndDesendentsToGDML("test.gdml");
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
 
     auto geoManager = std::make_unique<TGeoManager>("MACEGeom", "MACE Geometry");
     geoManager->Import("test.gdml");
     geoManager->Export("test.root");
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
 
     return EXIT_SUCCESS;
 }
