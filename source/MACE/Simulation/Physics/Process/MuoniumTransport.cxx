@@ -15,9 +15,8 @@ MuoniumTransport::MuoniumTransport() :
     G4VContinuousProcess("MuoniumTransport", fTransportation),
     fTarget(std::addressof(Target::Instance())),
     fParticleChange(),
-    fMeanFreePath(226_nm),
-    fStepLimit(100_um),
-    fVacuumStepScale(2),
+    fMeanFreePath(0.226_um),
+    fFlightLimit(100_um),
     fCase(-1) {}
 
 G4VParticleChange* MuoniumTransport::AlongStepDoIt(const G4Track& track, const G4Step& step) {
@@ -38,10 +37,66 @@ G4VParticleChange* MuoniumTransport::AlongStepDoIt(const G4Track& track, const G
     return std::addressof(fParticleChange);
 }
 
+void MuoniumTransport::ProposeRandomFlight(const G4double& initialTime,
+                                           const G4ThreeVector& initialPosition,
+                                           const G4double& initialVelocity,
+                                           const G4ThreeVector& initialDirection,
+                                           const G4double& temperature,
+                                           const G4double& trueStepLimit) {
+    // elapsed time of the flight
+    G4double flightTime = 0;
+    // displacement of the flight
+    G4ThreeVector displacement(0, 0, 0);
+    // velocity magnitude
+    auto velocity = initialVelocity;
+    // velocity direction
+    auto direction = initialDirection;
+    // std dev of velocity of single direction
+    const auto sigmaV = std::sqrt((k_Boltzmann * c_squared / muon_mass_c2) * temperature);
+    // the random engine in use
+    auto* const theRandEng = CLHEP::HepRandom::getTheEngine();
+    // the total flight length in this G4Step
+    G4double flightLength = 0;
+    // flight length of the single flight step
+    G4double freePath;
+
+    do {
+        if (fTarget->Contains(initialPosition + displacement)) {
+            // sampling free path
+            freePath = -std::log(theRandEng->flat()) * fMeanFreePath;
+            // set a gauss vector of sigma=1
+            direction.set(G4RandGauss::shoot(theRandEng),
+                          G4RandGauss::shoot(theRandEng),
+                          G4RandGauss::shoot(theRandEng));
+            // get its length before multiply sigmaV
+            velocity = direction.mag();
+            // normalize direction vector
+            direction /= velocity;
+            // get the exact velocity
+            velocity *= sigmaV;
+        } else {
+            // inside vacuum region of target fine structure,
+            // stepping with mean free path at same velocity
+            freePath = fMeanFreePath;
+        }
+        // update time
+        flightTime += freePath / velocity;
+        // update displacement
+        displacement += freePath * direction;
+        // update flight length
+        flightLength += freePath;
+    } while (flightLength < trueStepLimit);
+
+    fParticleChange.ProposeProperTime(initialTime + flightTime);
+    fParticleChange.ProposePosition(initialPosition + displacement);
+    fParticleChange.ProposeVelocity(velocity);
+    fParticleChange.ProposeMomentumDirection(direction);
+}
+
 G4double MuoniumTransport::GetContinuousStepLimit(const G4Track& track, G4double, G4double, G4double& safety) {
     if (fTarget->VolumeContains(track.GetPosition())) {
         fCase = 0;
-        return std::min(fStepLimit, safety);
+        return std::min(fFlightLimit, safety);
     } else if (track.GetMaterial()->GetState() == kStateGas) {
         fCase = 1;
         SetGPILSelection(NotCandidateForSelection);
@@ -50,53 +105,6 @@ G4double MuoniumTransport::GetContinuousStepLimit(const G4Track& track, G4double
         fCase = 2;
         return 0;
     }
-}
-
-void MuoniumTransport::ProposeRandomFlight(const G4double& initialTime,
-                                           const G4ThreeVector& initialPosition,
-                                           const G4double& initialVelocity,
-                                           const G4ThreeVector& initialDirection,
-                                           const G4double& temperature,
-                                           const G4double& trueStepLimit) {
-    G4double deltaTime = 0;
-    G4ThreeVector displacement(0, 0, 0);
-    G4double velocity = initialVelocity;
-    G4ThreeVector direction = initialDirection;
-    const auto sigmaV = std::sqrt((k_Boltzmann * c_squared / muon_mass_c2) * temperature);
-
-    G4double freePath;
-    const auto vacuumStep = fVacuumStepScale * fMeanFreePath;
-
-    do {
-        if (fTarget->Contains(initialPosition + displacement)) {
-            // sampling free path
-            freePath = G4RandExponential::shoot(fMeanFreePath);
-            // set a gauss vector of sigma=1
-            direction.set(G4RandGauss::shoot(),
-                          G4RandGauss::shoot(),
-                          G4RandGauss::shoot());
-            // get its length before multiply sigmaV
-            velocity = direction.mag();
-            // normalize direction vector
-            direction /= velocity;
-            // get the exact velocity
-            velocity *= sigmaV;
-            // update time
-            deltaTime += freePath / velocity;
-            // update displacement
-            displacement += freePath * direction;
-        } else {
-            // inside vacuum region of target fine structure,
-            // stepping with (fVacuumStepScale)*(fMeanFreePath) at same velocity
-            deltaTime += vacuumStep / velocity;
-            displacement += vacuumStep * direction;
-        }
-    } while (displacement.mag() < trueStepLimit);
-
-    fParticleChange.ProposeProperTime(initialTime + deltaTime);
-    fParticleChange.ProposePosition(initialPosition + displacement);
-    fParticleChange.ProposeVelocity(velocity);
-    fParticleChange.ProposeMomentumDirection(direction);
 }
 
 } // namespace MACE::Simulation::Physics::Process
