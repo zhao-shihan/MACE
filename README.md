@@ -12,7 +12,7 @@
     - [Build](#build)
   - [How to Run](#how-to-run)
     - [SimMACE](#simmace)
-    - [SimMTransport](#simmtransport)
+    - [SimTarget](#simtarget)
     - [ReconTracks](#recontracks)
 
 ## Introduction
@@ -91,15 +91,9 @@ In parallel mode with a macro:
 mpirun -n N ./SimMACE run.mac
 ```
 
-### SimMTransport
+### SimTarget
 
-With a configuation file sample.cfg, parallely:
 
-```shell
-mpirun -n N ./SimMTransport sample.cfg
-```
-
-Note that N=1 or without mpirun is not supported, because there should always a master process.
 
 ### ReconTracks
 
