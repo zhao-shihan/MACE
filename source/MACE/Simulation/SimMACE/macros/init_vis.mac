@@ -18,7 +18,7 @@
 /MACE/Generator/SurfaceMuon/SetVertexZ                -1.5 m
 /MACE/Generator/SurfaceMuon/SetMuonsForEachG4Event    500
 
-/MACE/Physics/SetConversionProbability           1.0          # high :) 
+#/MACE/Physics/SetConversionProbability           1.0          # high :) 
 
 /MACE/Field/SetTransportMagneticField            0.1 tesla
 /MACE/Field/SetAcceleratorPotential              7 kilovolt

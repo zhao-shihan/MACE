@@ -1,4 +1,4 @@
-#include "MACE/Simulation/Physics/MuoniumPhysics.hxx"
+#include "MACE/Simulation/Physics/MuoniumPhysics2.hxx"
 #include "MACE/Simulation/SimMACE/Action/PhysicsList.hxx"
 
 #include "G4DecayPhysics.hh"
@@ -28,7 +28,7 @@ PhysicsList::PhysicsList() :
     RegisterPhysics(new G4StoppingPhysics(defaultVerbose));
     RegisterPhysics(new G4IonPhysics(defaultVerbose));
     RegisterPhysics(new G4NeutronTrackingCut(defaultVerbose));
-    RegisterPhysics(new MuoniumPhysics(defaultVerbose));
+    RegisterPhysics(new MuoniumPhysics2(defaultVerbose));
 }
 
 } // namespace MACE::Simulation::SimMACE::Action
