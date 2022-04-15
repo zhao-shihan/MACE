@@ -1,4 +1,4 @@
-#include "MACE/Simulation/Physics/MuoniumPhysics2.hxx"
+#include "MACE/Simulation/Physics/MuoniumPhysics.hxx"
 #include "MACE/Simulation/Physics/Particle/AntiMuonium.hxx"
 #include "MACE/Simulation/Physics/Particle/Muonium.hxx"
 #include "MACE/Simulation/Physics/Process/MuoniumFormation.hxx"
@@ -12,17 +12,17 @@ namespace MACE::Simulation::Physics {
 using namespace Particle;
 using namespace Process;
 
-MuoniumPhysics2::MuoniumPhysics2(G4int verbose) :
-    G4VPhysicsConstructor("MuoniumPhysics2"),
+MuoniumPhysics::MuoniumPhysics(G4int verbose) :
+    G4VPhysicsConstructor("MuoniumPhysics"),
     fVerbose(verbose) {}
 
-void MuoniumPhysics2::ConstructParticle() {
+void MuoniumPhysics::ConstructParticle() {
     G4MuonPlus::Definition();
     Muonium::Definition();
     AntiMuonium::Definition();
 }
 
-void MuoniumPhysics2::ConstructProcess() {
+void MuoniumPhysics::ConstructProcess() {
     auto muoniumFormation = new MuoniumFormation();
     auto muoniumTransport = new MuoniumTransport();
 
