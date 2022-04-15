@@ -21,4 +21,4 @@ private:
     SurfaceMuon::PrimaryGeneratorAction fSurfaceMuonPGA;
 };
 
-} // namespace MACE::Simulation::SimTarget
+} // namespace MACE::Simulation::SimTarget::Action

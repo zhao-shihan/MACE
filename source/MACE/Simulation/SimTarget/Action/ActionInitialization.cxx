@@ -11,4 +11,4 @@ void ActionInitialization::Build() const {
     SetUserAction(new TrackingAction());
 }
 
-} // namespace MACE::Simulation::SimTarget
+} // namespace MACE::Simulation::SimTarget::Action

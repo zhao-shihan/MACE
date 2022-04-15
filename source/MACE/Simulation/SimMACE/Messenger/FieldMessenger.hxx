@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/Simulation/SimMACE/Field/LinacField.hxx"
 #include "MACE/Simulation/SimMACE/Field/FirstBendField.hxx"
+#include "MACE/Simulation/SimMACE/Field/LinacField.hxx"
 #include "MACE/Simulation/SimMACE/Field/ParallelField.hxx"
 #include "MACE/Simulation/SimMACE/Field/SecondBendField.hxx"
 #include "MACE/Simulation/SimMACE/Field/SelectorField.hxx"

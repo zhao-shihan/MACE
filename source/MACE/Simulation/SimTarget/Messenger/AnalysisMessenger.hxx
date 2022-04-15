@@ -25,4 +25,4 @@ private:
     G4UIcmdWithABool fMergeResult;
 };
 
-} // namespace MACE::Simulation::SimMACE::Messenger
+} // namespace MACE::Simulation::SimTarget::Messenger

@@ -14,4 +14,4 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
     fSurfaceMuonPGA.GeneratePrimaries(event);
 }
 
-} // namespace MACE::Simulation::SimTarget
+} // namespace MACE::Simulation::SimTarget::Action

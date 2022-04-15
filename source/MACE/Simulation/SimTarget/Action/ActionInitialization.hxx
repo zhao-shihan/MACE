@@ -14,4 +14,4 @@ public:
     void Build() const override;
 };
 
-} // namespace MACE::Simulation::SimTarget
+} // namespace MACE::Simulation::SimTarget::Action

@@ -58,4 +58,4 @@ public:
     G4DecayProducts* DecayIt(G4double) override;
 };
 
-} // namespace MACE::Simulation::Physics
+} // namespace MACE::Simulation::Physics::DecayChannel

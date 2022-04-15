@@ -12,4 +12,4 @@ public:
     PhysicsList& operator=(const PhysicsList&) = delete;
 };
 
-} // namespace MACE::Simulation::SimTarget
+} // namespace MACE::Simulation::SimTarget::Action

@@ -10,4 +10,4 @@ TrackingAction::TrackingAction() :
 void TrackingAction::PostUserTrackingAction(const G4Track* track) {
 }
 
-} // namespace MACE::Simulation::SimTarget
+} // namespace MACE::Simulation::SimTarget::Action
