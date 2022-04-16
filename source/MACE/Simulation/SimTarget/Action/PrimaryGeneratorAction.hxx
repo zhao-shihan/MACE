@@ -8,7 +8,7 @@ using namespace Generator;
 
 class PrimaryGeneratorAction final : public G4VUserPrimaryGeneratorAction {
 public:
-    PrimaryGeneratorAction();
+    PrimaryGeneratorAction() = default;
     ~PrimaryGeneratorAction() noexcept = default;
     PrimaryGeneratorAction(const PrimaryGeneratorAction&) = delete;
     PrimaryGeneratorAction& operator=(const PrimaryGeneratorAction&) = delete;

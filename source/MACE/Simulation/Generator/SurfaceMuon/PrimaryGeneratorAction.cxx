@@ -31,12 +31,13 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
     const auto g4EventsForEachReptition = muonsForEachReptition / fMuonsForEachG4Event; // no rounding
     fRepetitionID = event->GetEventID() / g4EventsForEachReptition;                     // rounding here
 
+    auto* const randEng = G4Random::getTheEngine();
     for (G4int i = 0; i < fMuonsForEachG4Event; ++i) {
-        fSurfaceMuonBeam.SetParticleTime(G4RandGauss::shoot(0, fTimeWidthRMS));
-        fSurfaceMuonBeam.SetParticlePosition(G4ThreeVector(G4RandGauss::shoot(0, fBeamProfileRMS),
-                                                           G4RandGauss::shoot(0, fBeamProfileRMS),
+        fSurfaceMuonBeam.SetParticleTime(G4RandGauss::shoot(randEng, 0, fTimeWidthRMS));
+        fSurfaceMuonBeam.SetParticlePosition(G4ThreeVector(G4RandGauss::shoot(randEng, 0, fBeamProfileRMS),
+                                                           G4RandGauss::shoot(randEng, 0, fBeamProfileRMS),
                                                            fVertexZ));
-        fSurfaceMuonBeam.SetParticleEnergy(G4RandGauss::shoot(fEnergy, fEnergySpreadRMS));
+        fSurfaceMuonBeam.SetParticleEnergy(G4RandGauss::shoot(randEng, fEnergy, fEnergySpreadRMS));
         fSurfaceMuonBeam.GeneratePrimaryVertex(event);
     }
 }

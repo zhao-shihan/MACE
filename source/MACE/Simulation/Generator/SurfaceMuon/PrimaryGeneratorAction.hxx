@@ -23,10 +23,18 @@ public:
     void SetEnergySpreadRMS(G4double val) { fEnergySpreadRMS = val; }
     void SetBeamProfileRMS(G4double val) { fBeamProfileRMS = val; }
     void SetVertexZ(G4double val) { fVertexZ = val; }
-
     void SetMuonsForEachG4Event(size_t n) { fMuonsForEachG4Event = n; }
 
-    auto GetRepetitionID() const { return fRepetitionID; }
+    const auto& GetFlux() const { return fFlux; }
+    const auto& GetRepetitionRate() const { return fRepetitionRate; }
+    const auto& GetTimeWidthRMS() const { return fTimeWidthRMS; }
+    const auto& GetEnergy() const { return fEnergy; }
+    const auto& GetEnergySpreadRMS() const { return fEnergySpreadRMS; }
+    const auto& GetBeamProfileRMS() const { return fBeamProfileRMS; }
+    const auto& GetVertexZ() const { return fVertexZ; }
+    const auto& GetMuonsForEachG4Event() const { return fMuonsForEachG4Event; }
+
+    const auto& GetRepetitionID() const { return fRepetitionID; }
 
 private:
     G4ParticleGun fSurfaceMuonBeam;
