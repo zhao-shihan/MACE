@@ -33,13 +33,14 @@ G4VParticleChange* MuoniumFormation::AtRestDoIt(const G4Track& track, const G4St
             static_cast<G4ParticleDefinition*>(Particle::AntiMuonium::Definition()) :
             static_cast<G4ParticleDefinition*>(Particle::Muonium::Definition()));
     // Sampling momentum according to boltzmann distribution
+    auto* const randEng = G4Random::getTheEngine();
     const auto temperature = track.GetVolume()->GetLogicalVolume()->GetMaterial()->GetTemperature();
     muoniumDynamicParticle->SetMomentum(std::sqrt(muonium_mass_c2 * k_Boltzmann * temperature) *
-                                        G4ThreeVector(G4RandGauss::shoot(),
-                                                      G4RandGauss::shoot(),
-                                                      G4RandGauss::shoot()));
-    // Pre-assign the decay time
-    muoniumDynamicParticle->SetPreAssignedDecayProperTime(G4RandExponential::shoot(muonium_lifetime));
+                                        G4ThreeVector(G4RandGauss::shoot(randEng),
+                                                      G4RandGauss::shoot(randEng),
+                                                      G4RandGauss::shoot(randEng)));
+    // Pre-assign the decay time for better performance
+    muoniumDynamicParticle->SetPreAssignedDecayProperTime(G4RandExponential::shoot(randEng, muonium_lifetime));
     // Kill the muon, form the (anti-)muonium
     fParticleChange.ProposeTrackStatus(fStopAndKill);
     fParticleChange.AddSecondary(new G4Track(muoniumDynamicParticle, track.GetGlobalTime(), track.GetPosition()));

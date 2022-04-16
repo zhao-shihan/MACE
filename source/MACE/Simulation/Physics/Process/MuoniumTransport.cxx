@@ -4,8 +4,6 @@
 
 #include "Randomize.hh"
 
-#include "Eigen/Core"
-
 namespace MACE::Simulation::Physics::Process {
 
 using namespace Utility::PhysicalConstant;
@@ -15,22 +13,19 @@ MuoniumTransport::MuoniumTransport() :
     G4VContinuousProcess("MuoniumTransport", fTransportation),
     fTarget(std::addressof(Target::Instance())),
     fParticleChange(),
-    fMeanFreePath(0.226_um),
-    fFlightLimit(100_um),
+    fMeanFreePath(0.2_um),
+    fFlightLimit(50_um),
     fCase(-1) {}
 
 G4VParticleChange* MuoniumTransport::AlongStepDoIt(const G4Track& track, const G4Step& step) {
     fParticleChange.Initialize(track);
     if (fCase == 0) {
-        const auto trueStepLimit = step.GetStepLength();
-        if (trueStepLimit > 0) {
-            ProposeRandomFlight(track.GetProperTime(),
-                                track.GetPosition(),
-                                track.GetVelocity(),
-                                track.GetMomentumDirection(),
-                                track.GetMaterial()->GetTemperature(),
-                                trueStepLimit);
-        }
+        ProposeRandomFlight(track.GetProperTime(),
+                            track.GetPosition(),
+                            track.GetVelocity(),
+                            track.GetMomentumDirection(),
+                            track.GetMaterial()->GetTemperature(),
+                            step.GetStepLength());
     } else if (fCase == 2) {
         fParticleChange.ProposeTrackStatus(fStopButAlive);
     }
@@ -54,20 +49,20 @@ void MuoniumTransport::ProposeRandomFlight(const G4double& initialTime,
     // std dev of velocity of single direction
     const auto sigmaV = std::sqrt((k_Boltzmann * c_squared / muon_mass_c2) * temperature);
     // the random engine in use
-    auto* const theRandEng = CLHEP::HepRandom::getTheEngine();
+    auto* const randEng = G4Random::getTheEngine();
     // the total flight length in this G4Step
     G4double flightLength = 0;
     // flight length of the single flight step
     G4double freePath;
 
-    do {
+    while (flightLength < trueStepLimit and fTarget->VolumeContains(initialPosition + displacement)) {
         if (fTarget->Contains(initialPosition + displacement)) {
             // sampling free path
-            freePath = -std::log(theRandEng->flat()) * fMeanFreePath;
+            freePath = G4RandExponential::shoot(randEng, fMeanFreePath);
             // set a gauss vector of sigma=1
-            direction.set(G4RandGauss::shoot(theRandEng),
-                          G4RandGauss::shoot(theRandEng),
-                          G4RandGauss::shoot(theRandEng));
+            direction.set(G4RandGauss::shoot(randEng),
+                          G4RandGauss::shoot(randEng),
+                          G4RandGauss::shoot(randEng));
             // get its length before multiply sigmaV
             velocity = direction.mag();
             // normalize direction vector
@@ -85,7 +80,7 @@ void MuoniumTransport::ProposeRandomFlight(const G4double& initialTime,
         displacement += freePath * direction;
         // update flight length
         flightLength += freePath;
-    } while (flightLength < trueStepLimit);
+    }
 
     fParticleChange.ProposeProperTime(initialTime + flightTime);
     fParticleChange.ProposePosition(initialPosition + displacement);
