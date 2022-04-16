@@ -5,8 +5,12 @@
 
 namespace MACE::Simulation::SimTarget::Action {
 
-void RunAction::EndOfRunAction(const G4Run* run) {
-    Analysis::Instance().Write(run->GetRunID());
+void RunAction::BeginOfRunAction(const G4Run* run) {
+    Analysis::Instance().SetThisRun(run);
+}
+
+void RunAction::EndOfRunAction(const G4Run*) {
+    Analysis::Instance().Write();
 }
 
 } // namespace MACE::Simulation::SimTarget::Action

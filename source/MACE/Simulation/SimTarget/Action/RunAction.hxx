@@ -11,6 +11,7 @@ public:
     RunAction(const RunAction&) = delete;
     RunAction& operator=(const RunAction&) = delete;
 
+    void BeginOfRunAction(const G4Run* run) override;
     void EndOfRunAction(const G4Run*) override;
 };
 
