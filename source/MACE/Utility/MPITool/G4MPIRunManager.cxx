@@ -7,10 +7,10 @@
 
 namespace MACE::Utility::MPITool {
 
-void G4MPIRunManager::SetG4MPImanager(const G4MPImanager& g4mpi) {
+void G4MPIRunManager::SetG4MPImanager(ObserverPtr<const G4MPImanager> g4mpi) {
     auto currentState = G4StateManager::GetStateManager()->GetCurrentState();
     if (currentState == G4State_PreInit or currentState == G4State_Idle) {
-        fG4mpi = std::addressof(g4mpi);
+        fG4mpi = g4mpi;
     } else {
         G4cerr << "Illegal application state - SetG4MPImanager() ignored." << G4endl;
     }

@@ -30,7 +30,7 @@ int main(int argc, char** argv) {
         uiExecutive->SessionStart();
     } else {
         auto g4MPIManager = std::make_unique<G4MPImanager>(argc, argv);
-        runManager->SetG4MPImanager(*g4MPIManager);
+        runManager->SetG4MPImanager(g4MPIManager.get());
         g4MPIManager->GetMPIsession()->SessionStart();
     }
 

@@ -15,7 +15,7 @@ public:
     G4MPIRunManager(const G4MPIRunManager&) = delete;
     G4MPIRunManager& operator=(const G4MPIRunManager&) = delete;
 
-    void SetG4MPImanager(const G4MPImanager& g4mpi);
+    void SetG4MPImanager(ObserverPtr<const G4MPImanager> g4mpi);
 
     G4bool ConfirmBeamOnCondition() override;
     void RunInitialization() override;
