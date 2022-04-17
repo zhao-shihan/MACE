@@ -1,5 +1,13 @@
+# macro file for the test of SimTarget in batch session
+
+# Set some default verbose
+/control/verbose 0
+/run/verbose 0
+
+# Initialize kernel
 /run/initialize
 
+# Muon beam properties
 /MACE/Generator/SurfaceMuon/SetFlux                   1e7 s-1
 /MACE/Generator/SurfaceMuon/SetRepetitionRate         50 Hz
 /MACE/Generator/SurfaceMuon/SetTimeWidthRMS           100 us
@@ -18,10 +26,12 @@
 /MACE/Analysis/EnableCoincidenceOfEMCal          true
 /MACE/Analysis/EnableCoincidenceOfMCP            true
 
+# Name of output
 /MACE/Analysis/SetResultName                     test
 
 /run/printProgress 1
 /run/beamOn 80
 /mpi/status
 
+# Merge the result
 /MACE/Analysis/MergeResult true
