@@ -12,14 +12,14 @@ RunManager::RunManager() :
     SetUserInitialization(new DetectorConstruction());
     SetUserInitialization(new PhysicsList());
     SetUserInitialization(new ActionInitialization());
-    // Instantiate analysis, and open file
-    Analysis::Instance().Open();
+    // Instantiate analysis
+    Analysis::Instance();
     // Instantiate geometry messenger
     Messenger::GeometryMessenger::Instance();
 }
 
-RunManager::~RunManager() {
-    Analysis::Instance().Close();
+RunManager::~RunManager() noexcept {
+    Analysis::Instance().G4Quit();
 }
 
 } // namespace MACE::Simulation::SimTarget

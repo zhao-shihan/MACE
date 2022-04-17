@@ -30,16 +30,18 @@ private:
 public:
     void SetResultName(std::string_view resultName) { fResultName = resultName; }
     void EnableYieldAnalysis(G4bool val) { fEnableYieldAnalysis = val; }
+    void EnableResultMerge(G4bool val) { fEnableResultMerge = val; }
 
-    void SetThisRun(ObserverPtr<const G4Run> run) { fThisRun = run; }
-    void SubmitMuoniumTrack(std::unique_ptr<MuoniumTrack>&& newTrack) { fMuoniumTrackList.emplace_back(std::move(newTrack)); }
+    void RunBegin(ObserverPtr<const G4Run> run);
+    const auto& NewMuoniumTrack() { return fMuoniumTrackList.emplace_back(std::make_unique<MuoniumTrack>()); }
+    void RunEnd();
+    void G4Quit();
 
+private:
     void Open();
     void Write();
     void Close();
-    int Merge(G4bool forced = false);
 
-private:
     void OpenResultFile();
     void WriteResult();
     void CloseResultFile();
@@ -52,6 +54,7 @@ private:
     const ObserverPtr<const Target> fTarget;
     std::string fResultName;
     G4bool fEnableYieldAnalysis;
+    G4bool fEnableResultMerge;
 
     ObserverPtr<const G4Run> fThisRun;
     std::vector<std::unique_ptr<MuoniumTrack>> fMuoniumTrackList;

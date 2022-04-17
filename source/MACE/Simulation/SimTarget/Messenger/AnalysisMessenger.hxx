@@ -22,7 +22,8 @@ public:
 private:
     G4UIdirectory fDirectory;
     G4UIcmdWithAString fSetResultName;
-    G4UIcmdWithABool fMergeResult;
+    G4UIcmdWithABool fEnableYieldAnalysis;
+    G4UIcmdWithABool fEnableResultMerge;
 };
 
 } // namespace MACE::Simulation::SimTarget::Messenger

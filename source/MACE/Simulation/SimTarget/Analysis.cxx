@@ -17,6 +17,7 @@ Analysis::Analysis() :
     fTarget(std::addressof(Target::Instance())),
     fResultName("SimTarget_result"),
     fEnableYieldAnalysis(true),
+    fEnableResultMerge(false),
     fThisRun(nullptr),
     fMuoniumTrackList(0),
     fMPIFileTools(nullptr),
@@ -26,6 +27,24 @@ Analysis::Analysis() :
     AnalysisMessenger::Instance();
     MPIFileTools::SetOutStream(G4cout);
     fDataFactory.SetTreeNamePrefixFormat("Run#_");
+}
+
+void Analysis::RunBegin(ObserverPtr<const G4Run> run) {
+    fThisRun = run;
+    if (fThisRun->GetRunID() == 0) {
+        Open();
+    }
+}
+
+void Analysis::RunEnd() {
+    Write();
+}
+
+void Analysis::G4Quit() {
+    Close();
+    if (fEnableResultMerge and fMPIFileTools != nullptr) {
+        fMPIFileTools->MergeRootFiles(true);
+    }
 }
 
 void Analysis::Open() {
@@ -41,20 +60,13 @@ void Analysis::Write() {
     if (fEnableYieldAnalysis) {
         AnalysisAndWriteYield();
     }
+    fMuoniumTrackList.clear();
 }
 
 void Analysis::Close() {
     CloseResultFile();
     if (fEnableYieldAnalysis) {
         CloseYieldFile();
-    }
-}
-
-int Analysis::Merge(G4bool forced) {
-    if (fMPIFileTools) {
-        return fMPIFileTools->MergeRootFiles(forced);
-    } else {
-        return MPIFileTools::MergeRootFilesViaFilesMap(fResultName, forced);
     }
 }
 
@@ -69,7 +81,6 @@ void Analysis::OpenResultFile() {
 
 void Analysis::WriteResult() {
     fDataFactory.CreateAndFillTree<MuoniumTrack>(fMuoniumTrackList, fThisRun->GetRunID())->Write();
-    fMuoniumTrackList.clear();
 }
 
 void Analysis::CloseResultFile() {
@@ -79,7 +90,7 @@ void Analysis::CloseResultFile() {
 }
 
 void Analysis::OpenYieldFile() {
-    const auto commRank = MPI::Is_initialized() ? MPI::COMM_WORLD.Get_rank() : 0;
+    const auto commRank = MPI::Is_initialized() ? G4MPImanager::GetManager()->GetComm()->Get_rank() : 0;
     if (commRank == 0) {
         fYieldFile = std::make_unique<std::ofstream>(fResultName + "_yield.csv", std::ios::out);
         *fYieldFile << "runID,nMuon,nMFormed,nMTargetDecay,nMVacuumDecay,nMDetectableDecay" << std::endl;
@@ -111,6 +122,7 @@ void Analysis::AnalysisAndWriteYield() {
         }
     }
 
+    int commRank = 0;
     G4int nMuonTotal = nMuon;
     G4int nFormedTotal = nFormed;
     G4int nTargetDecayTotal = nTargetDecay;
@@ -118,13 +130,16 @@ void Analysis::AnalysisAndWriteYield() {
     G4int nDetectableDecayTotal = nDetectableDecay;
     if (MPI::Is_initialized()) {
         const auto* const comm = G4MPImanager::GetManager()->GetComm();
+        commRank = comm->Get_rank();
         comm->Reduce(std::addressof(nMuon), std::addressof(nMuonTotal), 1, MPI::INT, MPI::SUM, 0);
         comm->Reduce(std::addressof(nFormed), std::addressof(nFormedTotal), 1, MPI::INT, MPI::SUM, 0);
         comm->Reduce(std::addressof(nTargetDecay), std::addressof(nTargetDecayTotal), 1, MPI::INT, MPI::SUM, 0);
         comm->Reduce(std::addressof(nVacuumDecay), std::addressof(nVacuumDecayTotal), 1, MPI::INT, MPI::SUM, 0);
         comm->Reduce(std::addressof(nDetectableDecay), std::addressof(nDetectableDecayTotal), 1, MPI::INT, MPI::SUM, 0);
     }
-    *fYieldFile << fThisRun->GetRunID() << ',' << nMuonTotal << ',' << nFormedTotal << ',' << nTargetDecayTotal << ',' << nVacuumDecayTotal << ',' << nDetectableDecayTotal << std::endl;
+    if (commRank == 0) {
+        *fYieldFile << fThisRun->GetRunID() << ',' << nMuonTotal << ',' << nFormedTotal << ',' << nTargetDecayTotal << ',' << nVacuumDecayTotal << ',' << nDetectableDecayTotal << std::endl;
+    }
 }
 
 void Analysis::CloseYieldFile() {
