@@ -8,8 +8,6 @@
 #include "G4HadronPhysicsFTFP_BERT.hh"
 #include "G4IonPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
-#include "G4ProductionCuts.hh"
-#include "G4RegionStore.hh"
 #include "G4StoppingPhysics.hh"
 
 namespace MACE::Simulation::SimMACE::Action {
