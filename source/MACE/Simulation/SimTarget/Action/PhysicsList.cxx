@@ -2,15 +2,7 @@
 #include "MACE/Simulation/SimTarget/Action/PhysicsList.hxx"
 
 #include "G4DecayPhysics.hh"
-#include "G4EmExtraPhysics.hh"
 #include "G4EmLivermorePhysics.hh"
-#include "G4HadronElasticPhysics.hh"
-#include "G4HadronPhysicsFTFP_BERT.hh"
-#include "G4IonPhysics.hh"
-#include "G4NeutronTrackingCut.hh"
-#include "G4ProductionCuts.hh"
-#include "G4RegionStore.hh"
-#include "G4StoppingPhysics.hh"
 
 namespace MACE::Simulation::SimTarget::Action {
 
@@ -21,9 +13,7 @@ PhysicsList::PhysicsList() :
     constexpr G4int defaultVerbose = 0;
     SetVerboseLevel(defaultVerbose);
     RegisterPhysics(new G4EmLivermorePhysics(defaultVerbose));
-    RegisterPhysics(new G4EmExtraPhysics(defaultVerbose));
     RegisterPhysics(new G4DecayPhysics(defaultVerbose));
-    RegisterPhysics(new G4StoppingPhysics(defaultVerbose));
     RegisterPhysics(new MuoniumPhysics(defaultVerbose));
 }
 
