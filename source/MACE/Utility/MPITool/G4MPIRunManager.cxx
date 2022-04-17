@@ -1,18 +1,17 @@
 #include "MACE/Utility/MPITool/G4MPIRunManager.hxx"
 
-#include "G4MPImanager.hh"
 #include "G4StateManager.hh"
-
-#include "mpi.h"
 
 namespace MACE::Utility::MPITool {
 
-void G4MPIRunManager::SetG4MPImanager(ObserverPtr<const G4MPImanager> g4mpi) {
+ObserverPtr<G4MPImanager> G4MPIRunManager::InitializeG4MPI(int argc, char** argv) {
     auto currentState = G4StateManager::GetStateManager()->GetCurrentState();
     if (currentState == G4State_PreInit or currentState == G4State_Idle) {
-        fG4mpi = g4mpi;
+        fG4mpi = std::make_unique<G4MPImanager>(argc, argv);
+        return fG4mpi.get();
     } else {
-        G4cerr << "Illegal application state - SetG4MPImanager() ignored." << G4endl;
+        G4cerr << "Illegal application state - InitializeG4MPI() ignored." << G4endl;
+        return nullptr;
     }
 }
 

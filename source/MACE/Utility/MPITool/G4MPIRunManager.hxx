@@ -2,9 +2,8 @@
 
 #include "MACE/Utility/ObserverPtr.hxx"
 
+#include "G4MPImanager.hh"
 #include "G4RunManager.hh"
-
-class G4MPImanager;
 
 namespace MACE::Utility::MPITool {
 
@@ -15,14 +14,14 @@ public:
     G4MPIRunManager(const G4MPIRunManager&) = delete;
     G4MPIRunManager& operator=(const G4MPIRunManager&) = delete;
 
-    void SetG4MPImanager(ObserverPtr<const G4MPImanager> g4mpi);
+    ObserverPtr<G4MPImanager> InitializeG4MPI(int argc, char** argv);
 
     G4bool ConfirmBeamOnCondition() override;
     void RunInitialization() override;
     void ProcessOneEvent(G4int eventID) override { G4RunManager::ProcessOneEvent(fFirstEventID + eventID); }
 
 private:
-    ObserverPtr<const G4MPImanager> fG4mpi = nullptr;
+    std::unique_ptr<G4MPImanager> fG4mpi = nullptr;
     G4int fFirstEventID = 0;
 };
 
