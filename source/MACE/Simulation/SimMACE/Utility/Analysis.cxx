@@ -49,7 +49,7 @@ int Analysis::Merge(G4bool forced) {
     if (fMPIFileTools) {
         return fMPIFileTools->MergeRootFiles(forced);
     } else {
-        return MPIFileTools::MergeRootFilesViaFilesMap(fResultName, forced);
+        G4cout << "Nothing to merge, skipped." << G4endl;
     }
 }
 
