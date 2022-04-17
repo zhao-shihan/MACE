@@ -238,7 +238,7 @@ void DetectorConstruction::ConstructFields() {
     using namespace MACE::Utility::LiteralUnit;
     using namespace Field;
 
-    constexpr G4double hMin = 100_um;
+    constexpr G4double hMin = 1_um;
 
     constexpr G4double defaultB = 0.1_T;
     auto parallelBField = new ParallelField(defaultB);
