@@ -5,6 +5,8 @@
 #include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "MACE/Core/DataModel/ITransientData.hxx"
 
+#include "G4ThreeVector.hh"
+
 namespace MACE::Simulation::SimTarget {
 
 using Core::DataModel::BranchSocket::DoubleBranchSocket;
@@ -28,10 +30,12 @@ public:
     template<typename Vector3_t>
     void SetVertexPosition(Vector3_t&& pos) { fVertexPosition = std::forward<Vector3_t>(pos); }
     void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition = {x, y, z}; }
+    void SetVertexPosition(const G4ThreeVector& pos) { SetVertexPosition(pos.x(), pos.y(), pos.z()); }
     void SetDecayTime(Double_t val) { fDecayTime = val; }
     template<typename Vector3_t>
     void SetDecayPosition(Vector3_t&& pos) { fDecayPosition = std::forward<Vector3_t>(pos); }
     void SetDecayPosition(Double_t x, Double_t y, Double_t z) { fDecayPosition = {x, y, z}; }
+    void SetDecayPosition(const G4ThreeVector& pos) { SetDecayPosition(pos.x(), pos.y(), pos.z()); }
 
     static consteval const char* BasicTreeName() noexcept { return "MTrk"; }
     static void CreateBranches(TTree& tree);
