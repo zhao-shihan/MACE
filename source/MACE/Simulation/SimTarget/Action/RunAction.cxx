@@ -6,11 +6,11 @@
 namespace MACE::Simulation::SimTarget::Action {
 
 void RunAction::BeginOfRunAction(const G4Run* run) {
-    Analysis::Instance().SetThisRun(run);
+    Analysis::Instance().RunBegin(run);
 }
 
 void RunAction::EndOfRunAction(const G4Run*) {
-    Analysis::Instance().Write();
+    Analysis::Instance().RunEnd();
 }
 
 } // namespace MACE::Simulation::SimTarget::Action

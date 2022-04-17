@@ -14,7 +14,9 @@ public:
     void PostUserTrackingAction(const G4Track*) override;
 
 private:
-    ObserverPtr<Analysis> fAnalysis;
+    const ObserverPtr<const G4ParticleDefinition> fMuonium;
+    const ObserverPtr<const G4ParticleDefinition> fAntiMuonium;
+    const ObserverPtr<Analysis> fAnalysis;
 };
 
 } // namespace MACE::Simulation::SimTarget::Action
