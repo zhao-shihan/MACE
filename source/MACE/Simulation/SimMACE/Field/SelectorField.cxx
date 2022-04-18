@@ -5,8 +5,10 @@
 
 namespace MACE::Simulation::SimMACE::Field {
 
-using namespace Utility::LiteralUnit;
 using Messenger::FieldMessenger;
+using namespace MACE::Utility::LiteralUnit::ElectricFieldStrength;
+using namespace MACE::Utility::LiteralUnit::Energy;
+using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
 
 SelectorField::SelectorField() :
     G4ElectroMagneticField(),

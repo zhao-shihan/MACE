@@ -17,11 +17,11 @@ MuoniumVertex::MuoniumVertex() noexcept :
     fTCACDC(fgTCACDC.GetValue()),
     fTCAMCP(fgTCAMCP.GetValue()),
     fDeltaTCA(fgDeltaTCA.GetValue()),
-    fCPACDC(fgCPACDC.GetValue<Double_t>()),
-    fCPAMCP(fgCPAMCP.GetValue<Double_t>()),
+    fCPACDC(fgCPACDC.GetValue<double>()),
+    fCPAMCP(fgCPAMCP.GetValue<double>()),
     fDCA(fgDCA.GetValue()),
     fVertexEnergy(fgVertexEnergy.GetValue()),
-    fVertexMomentum(fgVertexMomentum.GetValue<Double_t>()),
+    fVertexMomentum(fgVertexMomentum.GetValue<double>()),
     fParticles(fgParticles.GetValue()) {}
 
 void MuoniumVertex::CreateBranches(TTree& tree) {

@@ -13,18 +13,18 @@ static Bool_t Split(const TString& format, Char_t indexer, std::pair<TString, TS
     }
 }
 
-void DataFactory::SetIndexerOfTreeName(Char_t indexer) {
+void DataFactory::SetTreeNameIndexer(Char_t indexer) {
     fIndexer = indexer;
     fPrefixHasIndexer = Split(fPrefixFormat, fIndexer, fSplitPrefix);
     fSuffixHasIndexer = Split(fSuffixFormat, fIndexer, fSplitSuffix);
 }
 
-void DataFactory::SetPrefixFormatOfTreeName(const TString& prefix) {
+void DataFactory::SetTreeNamePrefixFormat(const TString& prefix) {
     fPrefixFormat = prefix;
     fPrefixHasIndexer = Split(fPrefixFormat, fIndexer, fSplitPrefix);
 }
 
-void DataFactory::SetSuffixFormatOfTreeName(const TString& suffix) {
+void DataFactory::SetTreeNameSuffixFormat(const TString& suffix) {
     fSuffixFormat = suffix;
     fSuffixHasIndexer = Split(fSuffixFormat, fIndexer, fSplitSuffix);
 }

@@ -1,0 +1,42 @@
+# macro file for the initialization of SimTarget in interactive session
+
+# Set some default verbose
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+
+# I/O & Analysis
+/MACE/Analysis/SetResultName                          SimTarget_result
+/MACE/Analysis/EnableYieldAnalysis                    true
+
+# Geometry
+/MACE/Geometry/SetWorldHalfExtent                     25 25 25 cm
+/MACE/Geometry/SetTargetWidth                         6 cm
+/MACE/Geometry/SetTargetThickness                     1 cm
+/MACE/Geometry/SetTargetDensity                       30 mg/cm3
+/MACE/Geometry/SetTemperature                         293.15 K
+
+# Initialize kernel
+/run/initialize
+
+# Muon beam properties
+/MACE/Generator/SurfaceMuon/SetFlux                   1e7 s-1
+/MACE/Generator/SurfaceMuon/SetRepetitionRate         50 Hz
+/MACE/Generator/SurfaceMuon/SetTimeWidthRMS           100 us
+/MACE/Generator/SurfaceMuon/SetEnergy                 1.5 MeV
+/MACE/Generator/SurfaceMuon/SetEnergySpreadRMS        0.12 MeV
+/MACE/Generator/SurfaceMuon/SetBeamProfileRMS         5 mm
+/MACE/Generator/SurfaceMuon/SetVertexZ                -15 cm
+/MACE/Generator/SurfaceMuon/SetMuonsForEachG4Event    10
+
+# Set physics
+/MACE/Physics/MuoniumPhysics/Formation/SetFormationProbability     0.6
+/MACE/Physics/MuoniumPhysics/Formation/SetConversionProbability    0
+/MACE/Physics/MuoniumPhysics/Transport/SetMeanFreePath             0.2 um
+/MACE/Physics/MuoniumPhysics/Transport/SetFlightLimit              100 um
+
+# Ablated target with pitch 15um, diameter 86um
+/MACE/Geometry/SetFineStructure (z<-5 || x<-20||x>20 || y<-20||y>20) || ((x-(round((x-y/sqrt(3))/0.101)+round(2/sqrt(3)*y/0.101)/2)*0.101)^2+(y-sqrt(3)/2*round(2/sqrt(3)*y/0.101)*0.101)^2>0.086*0.086/4)
+
+# Visualization setting
+/control/execute vis.mac

@@ -1,26 +1,40 @@
+# macro file for the test of SimTarget in batch session
+
+# Set some default verbose
+/control/verbose 0
+/run/verbose 0
+
+# Initialize kernel
 /run/initialize
 
-/MACE/PrimaryGenerator/SetFlux                   1e7 s-1
-/MACE/PrimaryGenerator/SetRepetitionRate         50 Hz
-/MACE/PrimaryGenerator/SetTimeWidthRMS           100 us
-/MACE/PrimaryGenerator/SetEnergy                 1.5 MeV
-/MACE/PrimaryGenerator/SetEnergySpreadRMS        0.08 MeV
-/MACE/PrimaryGenerator/SetBeamProfileRMS         5 mm
-/MACE/PrimaryGenerator/SetMuonsForEachG4Event    500
+# Customized properties
+/MACE/Generator/SurfaceMuon/SetFlux                   1e7 s-1
+/MACE/Generator/SurfaceMuon/SetRepetitionRate         50 Hz
+/MACE/Generator/SurfaceMuon/SetTimeWidthRMS           100 us
+/MACE/Generator/SurfaceMuon/SetEnergy                 1.5 MeV
+/MACE/Generator/SurfaceMuon/SetEnergySpreadRMS        0.12 MeV
+/MACE/Generator/SurfaceMuon/SetBeamProfileRMS         5 mm
+/MACE/Generator/SurfaceMuon/SetVertexZ                -1.5 m
+/MACE/Generator/SurfaceMuon/SetMuonsForEachG4Event    500
 
-/MACE/Physics/SetConversionProbability           1.0          # high :) 
+/MACE/Physics/MuoniumPhysics/Formation/SetFormationProbability     0.6
+/MACE/Physics/MuoniumPhysics/Formation/SetConversionProbability    0.5    # very high :) 
+/MACE/Physics/MuoniumPhysics/Transport/SetMeanFreePath             0.2 um
+/MACE/Physics/MuoniumPhysics/Transport/SetFlightLimit              100 um
 
-/MACE/Field/SetTransportMagneticField            0.1 tesla
-/MACE/Field/SetAcceleratorPotential              7 kilovolt
-/MACE/Field/SetSelectorElectricField             500 kilovolt/m
+/MACE/Field/SetTransportMagneticField     0.1 tesla
+/MACE/Field/SetAcceleratorPotential       7 kilovolt
+/MACE/Field/SetSelectorElectricField      500 kilovolt/m
 
-/MACE/Analysis/EnableCoincidenceOfEMCal    true
-/MACE/Analysis/EnableCoincidenceOfMCP true
+/MACE/Analysis/EnableCoincidenceOfEMCal   true
+/MACE/Analysis/EnableCoincidenceOfMCP     true
 
-/MACE/Analysis/SetResultName                     test
+# Name of output
+/MACE/Analysis/SetResultName              SimMACE_result
 
 /run/printProgress 1
 /run/beamOn 80
 /mpi/status
 
+# Merge the result
 /MACE/Analysis/MergeResult true

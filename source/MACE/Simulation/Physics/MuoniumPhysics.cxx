@@ -1,30 +1,34 @@
-#include "MACE/Simulation/Physics/AntiMuonium.hxx"
-#include "MACE/Simulation/Physics/Muonium.hxx"
 #include "MACE/Simulation/Physics/MuoniumPhysics.hxx"
-#include "MACE/Simulation/Physics/MuoniumProduction.hxx"
-#include "MACE/Simulation/Physics/MuoniumTransport.hxx"
+#include "MACE/Simulation/Physics/Particle/AntiMuonium.hxx"
+#include "MACE/Simulation/Physics/Particle/Muonium.hxx"
+#include "MACE/Simulation/Physics/Process/MuoniumFormation.hxx"
+#include "MACE/Simulation/Physics/Process/MuoniumTransport.hxx"
 
 #include "G4MuonPlus.hh"
 #include "G4ProcessManager.hh"
 
-using MACE::Simulation::Physics::MuoniumPhysics;
+namespace MACE::Simulation::Physics {
+
+using namespace Particle;
+using namespace Process;
 
 MuoniumPhysics::MuoniumPhysics(G4int verbose) :
-    G4VPhysicsConstructor("MuoniumPhysics"),
-    fVerbose(verbose) {}
+    G4VPhysicsConstructor("MuoniumPhysics") {
+    SetVerboseLevel(verbose);
+}
 
 void MuoniumPhysics::ConstructParticle() {
     G4MuonPlus::Definition();
-    AntiMuonium::Definition();
     Muonium::Definition();
+    AntiMuonium::Definition();
 }
 
 void MuoniumPhysics::ConstructProcess() {
-    auto muoniumProduction = new MuoniumProduction();
+    auto muoniumFormation = new MuoniumFormation();
     auto muoniumTransport = new MuoniumTransport();
 
     auto muonPlus = G4MuonPlus::Definition()->GetProcessManager();
-    muonPlus->AddRestProcess(muoniumProduction);
+    muonPlus->AddRestProcess(muoniumFormation);
 
     auto muonium = Muonium::Definition()->GetProcessManager();
     muonium->AddContinuousProcess(muoniumTransport);
@@ -32,3 +36,5 @@ void MuoniumPhysics::ConstructProcess() {
     auto antiMuonium = AntiMuonium::Definition()->GetProcessManager();
     antiMuonium->AddContinuousProcess(muoniumTransport);
 }
+
+} // namespace MACE::Simulation::Physics

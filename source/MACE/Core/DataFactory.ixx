@@ -2,7 +2,7 @@ namespace MACE::Core {
 
 template<IsTransientData Data_t>
 TString DataFactory::GetTreeName(Long64_t treeIndex) const {
-    return GetPrefixOfTreeName(treeIndex) + Data_t::BasicTreeName() + GetSuffixOfTreeName(treeIndex);
+    return GetTreeNamePrefix(treeIndex) + Data_t::BasicTreeName() + GetTreeNameSuffix(treeIndex);
 }
 
 template<IsTransientData Data_t>

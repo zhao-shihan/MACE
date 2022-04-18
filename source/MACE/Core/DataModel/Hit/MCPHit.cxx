@@ -9,8 +9,8 @@ Vector2FBranchSocket MCPHit::fgHitPositionVariance("hitPosVar", {"x", "y"}, {0, 
 MCPHit::MCPHit() noexcept :
     ITransientData(),
     fHitTime(fgHitTime.GetValue()),
-    fHitPosition(fgHitPosition.GetValue<Double_t>()),
-    fHitPositionVariance(fgHitPositionVariance.GetValue<Double_t>()) {}
+    fHitPosition(fgHitPosition.GetValue<double>()),
+    fHitPositionVariance(fgHitPositionVariance.GetValue<double>()) {}
 
 void MCPHit::CreateBranches(TTree& tree) {
     ITransientData::CreateBranches(tree);

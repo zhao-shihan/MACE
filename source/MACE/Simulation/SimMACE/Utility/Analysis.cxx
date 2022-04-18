@@ -26,7 +26,7 @@ Analysis::Analysis() :
     fCDCHitList(nullptr) {
     AnalysisMessenger::Instance();
     MPIFileTools::SetOutStream(G4cout);
-    fDataHub.SetPrefixFormatOfTreeName("Rep#_");
+    fDataHub.SetTreeNamePrefixFormat("Rep#_");
 }
 
 void Analysis::Open(Option_t* option) {
@@ -49,7 +49,7 @@ int Analysis::Merge(G4bool forced) {
     if (fMPIFileTools) {
         return fMPIFileTools->MergeRootFiles(forced);
     } else {
-        return MPIFileTools::MergeRootFilesViaFilesMap(fResultName, forced);
+        G4cout << "Nothing to merge, skipped." << G4endl;
     }
 }
 

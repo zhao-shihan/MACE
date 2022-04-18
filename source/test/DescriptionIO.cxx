@@ -1,5 +1,4 @@
 /// @brief The test of MACE::Geometry::DescriptionIO.
-/// @author Shi-Han Zhao
 
 #include "MACE/Core/Geometry/Description/All.hxx"
 #include "MACE/Core/Geometry/DescriptionIO.hxx"
@@ -9,7 +8,7 @@ int main() {
 
     DescriptionIO::Write("mace_geom.yaml");
 
-    auto& linacField = Description::AcceleratorField::Instance();
+    auto& linacField = Description::LinacField::Instance();
     std::cout << linacField.GetRadius() << '\n'
               << linacField.GetLength() << '\n'
               << linacField.GetDownStreamLength() << '\n'

@@ -1,4 +1,4 @@
-include(${MACE_CMAKE_DIR}/IncludeDirectories.cmake)
+include(${MACE_CMAKE_DIR}/MACEIncludes.cmake)
 
 add_subdirectory(Core)
 add_subdirectory(Reconstruction)

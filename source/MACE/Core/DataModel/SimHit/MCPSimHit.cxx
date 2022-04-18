@@ -11,7 +11,7 @@ IntBranchSocket MCPSimHit::fgG4TrackID("g4TrackID", -1);
 MCPSimHit::MCPSimHit() noexcept :
     MCPHit(),
     fVertexTime(fgVertexTime.GetValue()),
-    fVertexPosition(fgVertexPosition.GetValue<Double_t>()),
+    fVertexPosition(fgVertexPosition.GetValue<double>()),
     fParticle(fgParticle.GetValue()),
     fG4EventID(fgG4EventID.GetValue()),
     fG4TrackID(fgG4TrackID.GetValue()) {}

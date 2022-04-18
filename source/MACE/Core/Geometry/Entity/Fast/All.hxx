@@ -1,10 +1,8 @@
 /// @file Includes all fast geomerties.
 /// @warning Don't overuse. Include only where needed. Otherwise it will definitely prolong the compilation time.
-/// @author Shi-Han Zhao
 
 #pragma once
 
-#include "MACE/Core/Geometry/Entity/Fast/AcceleratorField.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/CDCBody.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/CDCCell.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/CDCFieldWire.hxx"
@@ -19,6 +17,7 @@
 #include "MACE/Core/Geometry/Entity/Fast/FirstBendSolenoid.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/FirstTransportField.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/FirstTransportSolenoid.hxx"
+#include "MACE/Core/Geometry/Entity/Fast/LinacField.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/MCP.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/SecondBendField.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/SecondBendSolenoid.hxx"

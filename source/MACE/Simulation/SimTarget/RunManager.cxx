@@ -1,17 +1,25 @@
 #include "MACE/Simulation/SimTarget/Action/ActionInitialization.hxx"
 #include "MACE/Simulation/SimTarget/Action/PhysicsList.hxx"
+#include "MACE/Simulation/SimTarget/Analysis.hxx"
+#include "MACE/Simulation/SimTarget/Messenger/GeometryMessenger.hxx"
 #include "MACE/Simulation/SimTarget/RunManager.hxx"
-#include "MACE/Simulation/SimTarget/Utility/Analysis.hxx"
 
-using MACE::Simulation::SimTarget::RunManager;
-using MACE::Simulation::SimTarget::Utility::Analysis;
+namespace MACE::Simulation::SimTarget {
 
 RunManager::RunManager() :
     G4MPIRunManager() {
+    // Instantiate actions
     SetUserInitialization(new DetectorConstruction());
     SetUserInitialization(new PhysicsList());
     SetUserInitialization(new ActionInitialization());
-    // need to create an instance of Analysis ahead of time,
-    // otherwise AnalysisMessenger won't work!
+    // Instantiate analysis
     Analysis::Instance();
+    // Instantiate geometry messenger
+    Messenger::GeometryMessenger::Instance();
 }
+
+RunManager::~RunManager() noexcept {
+    Analysis::Instance().G4Quit();
+}
+
+} // namespace MACE::Simulation::SimTarget

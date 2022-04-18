@@ -1,6 +1,6 @@
 project(Test)
 
-include(${MACE_CMAKE_DIR}/IncludeDirectories.cmake)
+include(${MACE_CMAKE_DIR}/MACEIncludes.cmake)
 
 add_executable(DescriptionIO DescriptionIO.cxx)
 target_link_libraries(DescriptionIO Core)

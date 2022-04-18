@@ -55,7 +55,7 @@ int main(int, char** argv) {
     TFile fileOut(mpiFileOut.GetFilePath().c_str(), "recreate");
 
     DataFactory dataHub;
-    dataHub.SetPrefixFormatOfTreeName("Rep#_");
+    dataHub.SetTreeNamePrefixFormat("Rep#_");
     auto treeIndexRange = dataHub.GetTreeIndexRange<Hit_t>(fileIn);
     auto [treeBegin, treeEnd] = MPIJobsAssigner(treeIndexRange).GetJobsIndexRange();
 
@@ -64,7 +64,7 @@ int main(int, char** argv) {
     std::cout << "Rank" << MPI::COMM_WORLD.Get_rank() << " is ready to process data of repetition " << treeBegin << " to " << treeEnd - 1 << std::endl;
 
     for (Long64_t treeIndex = treeBegin; treeIndex < treeEnd; ++treeIndex) {
-        dataHub.SetPrefixFormatOfTreeName("Rep#_");
+        dataHub.SetTreeNamePrefixFormat("Rep#_");
         std::cout << "Now processing " << dataHub.GetTreeName<Hit_t>(treeIndex) << " ..." << std::endl;
 
         auto hitData = dataHub.CreateAndFillList<Hit_t>(fileIn, treeIndex);
@@ -117,14 +117,14 @@ int main(int, char** argv) {
             error.SetChi2(physicsTrack.GetChi2());
         }
 
-        dataHub.SetPrefixFormatOfTreeName("Rep#_Omitted_");
+        dataHub.SetTreeNamePrefixFormat("Rep#_Omitted_");
         dataHub.CreateAndFillTree<Hit_t>(ommitedHits, treeIndex)->Write();
-        dataHub.SetPrefixFormatOfTreeName("Rep#_Perfect_");
+        dataHub.SetTreeNamePrefixFormat("Rep#_Perfect_");
         dataHub.CreateAndFillTree<CDCPhysicsTrack>(perfectTracks, treeIndex)->Write();
-        dataHub.SetPrefixFormatOfTreeName("Rep#_Exact_");
+        dataHub.SetTreeNamePrefixFormat("Rep#_Exact_");
         dataHub.CreateAndFillTree<CDCHelixTrack>(helixTracks, treeIndex)->Write();
         dataHub.CreateAndFillTree<CDCPhysicsTrack>(physicsTracks, treeIndex)->Write();
-        dataHub.SetPrefixFormatOfTreeName("Rep#_Error_");
+        dataHub.SetTreeNamePrefixFormat("Rep#_Error_");
         dataHub.CreateAndFillTree<CDCPhysicsTrack>(errors, treeIndex)->Write();
     }
 

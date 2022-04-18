@@ -4,8 +4,8 @@
 #include "MACE/Core/DataModel/SimHit/MCPSimHit.hxx"
 #include "MACE/Core/DataModel/Track/CDCHelixTrack.hxx"
 #include "MACE/Core/DataModel/Track/CDCPhysicsTrack.hxx"
-#include "MACE/Core/Geometry/Description/AcceleratorField.hxx"
 #include "MACE/Core/Geometry/Description/EMCalField.hxx"
+#include "MACE/Core/Geometry/Description/LinacField.hxx"
 #include "MACE/Core/Geometry/Description/SpectrometerField.hxx"
 #include "MACE/Core/Geometry/Description/TransportLine.hxx"
 #include "MACE/Reconstruction/ReconMuonium/MuoniumSimVertex.hxx"
@@ -42,7 +42,7 @@ int main(int, char* argv[]) {
     const auto sigmaZCDC = std::stod(argv[5]);
 
     // linac
-    const auto linacLength = AcceleratorField::Instance().GetDownStreamLength();
+    const auto linacLength = LinacField::Instance().GetDownStreamLength();
     const auto accE = 7_kV / (linacLength - 13.05_mm);
     // flight
     const auto& transportLine = TransportLine::Instance();
@@ -88,7 +88,7 @@ int main(int, char* argv[]) {
 
     DataFactory dataHub;
 
-    dataHub.SetPrefixFormatOfTreeName("Rep#_");
+    dataHub.SetTreeNamePrefixFormat("Rep#_");
     unsigned long allRepBegin;
     unsigned long allRepEnd;
     if (MPI::COMM_WORLD.Get_rank() == 0) {
@@ -99,7 +99,7 @@ int main(int, char* argv[]) {
     const auto [repBegin, repEnd] = MPIJobsAssigner(allRepBegin, allRepEnd).GetJobsIndexRange();
 
     // result tree
-    dataHub.SetPrefixFormatOfTreeName(TString("Rep") + allRepBegin + "To" + (allRepEnd - 1) + '_');
+    dataHub.SetTreeNamePrefixFormat(TString("Rep") + allRepBegin + "To" + (allRepEnd - 1) + '_');
     auto vertexTree = dataHub.CreateTree<MVertex_t>();
     TH2F vertexHist("vertex", "(Anti-)Muonium Vertex", 500, -20, 20, 500, -50, 50);
 
@@ -109,10 +109,10 @@ int main(int, char* argv[]) {
             return track1->GetVertexTime() < track2->GetVertexTime();
         };
         // Get CDC track
-        dataHub.SetPrefixFormatOfTreeName("Rep#_Exact_");
+        dataHub.SetTreeNamePrefixFormat("Rep#_Exact_");
         auto trackData = dataHub.CreateAndFillList<Helix_t>(trackFileIn, rep);
         std::ranges::sort(trackData, SortByVertexTime);
-        dataHub.SetPrefixFormatOfTreeName("Rep#_");
+        dataHub.SetTreeNamePrefixFormat("Rep#_");
 
         auto SortByHitTime = [](const auto& hit1, const auto& hit2) {
             return hit1->GetHitTime() < hit2->GetHitTime();

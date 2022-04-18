@@ -53,7 +53,6 @@ private:
 private:
     G4bool fCheckOverlaps = false;
 
-    std::shared_ptr<AcceleratorField> fAcceleratorField;
     std::shared_ptr<CDCBody> fCDCBody;
     std::shared_ptr<CDCCell> fCDCCell;
     std::shared_ptr<CDCFieldWire> fCDCFieldWire;
@@ -68,6 +67,7 @@ private:
     std::shared_ptr<FirstBendSolenoid> fFirstBendSolenoid;
     std::shared_ptr<FirstTransportField> fFirstTransportField;
     std::shared_ptr<FirstTransportSolenoid> fFirstTransportSolenoid;
+    std::shared_ptr<LinacField> fLinacField;
     std::shared_ptr<MCP> fMCP;
     std::shared_ptr<SecondBendField> fSecondBendField;
     std::shared_ptr<SecondBendSolenoid> fSecondBendSolenoid;

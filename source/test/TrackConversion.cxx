@@ -11,7 +11,7 @@ using namespace MACE::Utility::LiteralUnit;
 
 int main(int, char** argv) {
     DataFactory dataHub;
-    dataHub.SetPrefixFormatOfTreeName("Rep#_Exact_");
+    dataHub.SetTreeNamePrefixFormat("Rep#_Exact_");
 
     auto fileIn = TFile::Open(argv[1], "open");
     auto helixTree = dataHub.GetTree<CDCHelixTrack>(*fileIn, 0);
@@ -39,10 +39,10 @@ int main(int, char** argv) {
     }
 
     auto fileOut = TFile::Open(argv[2], "recreate");
-    dataHub.SetPrefixFormatOfTreeName("Rep#_Conv_");
+    dataHub.SetTreeNamePrefixFormat("Rep#_Conv_");
     dataHub.CreateAndFillTree<CDCPhysicsTrack>(trackList, 0)->Write();
     dataHub.CreateAndFillTree<CDCHelixTrack>(revTrackList, 0)->Write();
-    dataHub.SetPrefixFormatOfTreeName("Rep#_Diff_");
+    dataHub.SetTreeNamePrefixFormat("Rep#_Diff_");
     dataHub.CreateAndFillTree<CDCHelixTrack>(diffList, 0)->Write();
     fileOut->Close();
     delete fileOut;

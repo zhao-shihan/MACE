@@ -15,13 +15,9 @@
 /vis/viewer/set/style s
 /vis/viewer/set/auxiliaryEdge false
 /vis/viewer/set/lineSegmentsPerCircle 100
-/vis/viewer/zoom 3
+/vis/viewer/zoom 2.5
 
 # Colors
-/vis/geometry/set/colour AcceleratorField              0     1     1     1     0.05
-/vis/geometry/set/colour EMCal                   0     1     1     1     0.1
-/vis/geometry/set/colour EMCalField              0     1     1     1     0.05
-/vis/geometry/set/colour EMCalShield             0     1     1     1     0.05
 /vis/geometry/set/colour CDCBody                       0     1     1     1     0.05
 /vis/geometry/set/colour CDCCell                       0     1     1     1     0.005
 /vis/geometry/set/colour CDCFieldWire                  0     1     1     1     0.01
@@ -29,10 +25,15 @@
 /vis/geometry/set/colour CDCSenseWire                  0     1     1     1     0.01
 /vis/geometry/set/colour CDCSensitiveVolume            0     1     1     1     0.005
 /vis/geometry/set/colour Collimator                    0     1     1     1     0.05
+/vis/geometry/set/colour EMCal                         0     1     1     1     0.1
+/vis/geometry/set/colour EMCalField                    0     1     1     1     0.05
+/vis/geometry/set/colour EMCalShield                   0     1     1     1     0.05
 /vis/geometry/set/colour FirstBendField                0     1     1     1     0.05
 /vis/geometry/set/colour FirstBendSolenoid             0     1     1     1     0.05
 /vis/geometry/set/colour FirstTransportField           0     1     1     1     0.05
 /vis/geometry/set/colour FirstTransportSolenoid        0     1     1     1     0.05
+/vis/geometry/set/colour LinacField                    0     1     1     1     0.05
+/vis/geometry/set/colour MCP                           0     1     1     1     0.1
 /vis/geometry/set/colour SecondBendField               0     1     1     1     0.05
 /vis/geometry/set/colour SecondBendSolenoid            0     1     1     1     0.05
 /vis/geometry/set/colour SecondTransportField          0     1     1     1     0.05
@@ -44,7 +45,6 @@
 /vis/geometry/set/colour Target                        0     1     1     1     0.1
 /vis/geometry/set/colour ThirdTransportField           0     1     1     1     0.05
 /vis/geometry/set/colour ThirdTransportSolenoid        0     1     1     1     0.05
-/vis/geometry/set/colour MCP                0     1     1     1     0.1
 /vis/geometry/set/colour World                         0     1     1     1     0.001
 #/vis/geometry/set/colour BeamCounter                   0     0.0   0.0   1.0   0.5
 #/vis/geometry/set/colour CarbonFoil                    80    1.0   1.0   1.0   0.5
@@ -60,7 +60,7 @@
 /vis/filtering/trajectories/particleFilter-0/add e-
 /vis/filtering/trajectories/particleFilter-0/add gamma
 /vis/filtering/trajectories/particleFilter-0/add M
-/vis/filtering/trajectories/particleFilter-0/add -M
+/vis/filtering/trajectories/particleFilter-0/add anti_M
 /vis/filtering/trajectories/particleFilter-0/add mu+
 
 /vis/modeling/trajectories/create/drawByParticleID
@@ -74,6 +74,9 @@
 /vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSize 2
 /vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSizeType screen
 /vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsType dots
+
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA M 1 0 1 1
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA anti_M 1 0 1 1
 
 /vis/scene/endOfEventAction refresh -1
 

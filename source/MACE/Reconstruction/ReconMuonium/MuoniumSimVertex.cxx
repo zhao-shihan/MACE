@@ -11,9 +11,9 @@ ShortStringBranchSocket MuoniumSimVertex::fgTrueParticles("trueParticles", "");
 MuoniumSimVertex::MuoniumSimVertex() noexcept :
     MuoniumVertex(),
     fTrueVertexTime(fgTrueVertexTime.GetValue()),
-    fTrueVertexPosition(fgTrueVertexPosition.GetValue<Double_t>()),
+    fTrueVertexPosition(fgTrueVertexPosition.GetValue<double>()),
     fTrueVertexEnergy(fgTrueVertexEnergy.GetValue()),
-    fTrueVertexMomentum(fgTrueVertexMomentum.GetValue<Double_t>()),
+    fTrueVertexMomentum(fgTrueVertexMomentum.GetValue<double>()),
     fTrueParticles(fgTrueParticles.GetValue()) {}
 
 void MuoniumSimVertex::CreateBranches(TTree& tree) {

@@ -2,8 +2,7 @@
 
 namespace MACE::Utility {
 
-// mainly for class member holding pointer reference to an exist object which is not owned by the class.
-// or, as the type of pointer owned by std::unique_ptr.
+/// Represents non-owning pointer semantic.
 template<typename T>
 using ObserverPtr = T*;
 

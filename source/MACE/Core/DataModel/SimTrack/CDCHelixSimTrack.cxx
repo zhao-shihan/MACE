@@ -11,7 +11,7 @@ FloatBranchSocket CDCHelixSimTrack::fgTrueAlpha("trueAlpha", 0);
 CDCHelixSimTrack::CDCHelixSimTrack() noexcept :
     CDCHelixTrack(),
     ICDCSimTrack() {
-    SetTrueCenter(fgTrueCenter.GetValue<Double_t>());
+    SetTrueCenter(fgTrueCenter.GetValue<double>());
     SetTrueRadius(fgTrueRadius.GetValue());
     SetTrueZ0(fgTrueZ0.GetValue());
     SetTrueAlpha(fgTrueAlpha.GetValue());
