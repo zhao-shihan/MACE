@@ -15,7 +15,7 @@
 /vis/viewer/set/style s
 /vis/viewer/set/auxiliaryEdge false
 /vis/viewer/set/lineSegmentsPerCircle 100
-/vis/viewer/zoom 3
+/vis/viewer/zoom 2.5
 
 # Colors
 /vis/geometry/set/colour CDCBody                       0     1     1     1     0.05
