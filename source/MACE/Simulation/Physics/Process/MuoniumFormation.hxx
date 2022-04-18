@@ -20,7 +20,7 @@ public:
 
     G4VParticleChange* AtRestDoIt(const G4Track& track, const G4Step&) override;
 
-    void SetMeanLifeTime(G4double val) { fMeanLifeTime = val; }
+    void SetFormationProbability(G4double val) { fFormationProbability = val; }
     void SetConversionProbability(G4double val) { fConversionProbability = val; }
 
 private:
@@ -28,10 +28,13 @@ private:
 
 private:
     const ObserverPtr<const Target> fTarget;
+    const ObserverPtr<G4ParticleDefinition> fMuonium;
+    const ObserverPtr<G4ParticleDefinition> fAntiMuonium;
+
+    G4double fFormationProbability;
+    G4double fConversionProbability;
 
     G4ParticleChange fParticleChange;
-    G4double fMeanLifeTime;
-    G4double fConversionProbability;
 };
 
 } // namespace MACE::Simulation::Physics::Process

@@ -3,7 +3,7 @@
 
 #include "G4DecayPhysics.hh"
 #include "G4EmExtraPhysics.hh"
-#include "G4EmLivermorePhysics.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronPhysicsFTFP_BERT.hh"
 #include "G4IonPhysics.hh"
@@ -18,7 +18,7 @@ PhysicsList::PhysicsList() :
     G4VModularPhysicsList() {
     constexpr G4int defaultVerbose = 0;
     SetVerboseLevel(defaultVerbose);
-    RegisterPhysics(new G4EmLivermorePhysics(defaultVerbose));
+    RegisterPhysics(new G4EmStandardPhysics_option4(defaultVerbose));
     RegisterPhysics(new G4EmExtraPhysics(defaultVerbose));
     RegisterPhysics(new G4DecayPhysics(defaultVerbose));
     RegisterPhysics(new G4HadronElasticPhysics(defaultVerbose));

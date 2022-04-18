@@ -13,8 +13,9 @@ using namespace Particle;
 using namespace Process;
 
 MuoniumPhysics::MuoniumPhysics(G4int verbose) :
-    G4VPhysicsConstructor("MuoniumPhysics"),
-    fVerbose(verbose) {}
+    G4VPhysicsConstructor("MuoniumPhysics") {
+    SetVerboseLevel(verbose);
+}
 
 void MuoniumPhysics::ConstructParticle() {
     G4MuonPlus::Definition();

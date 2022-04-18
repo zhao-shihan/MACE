@@ -13,9 +13,6 @@ public:
 
     void ConstructParticle() override;
     void ConstructProcess() override;
-
-private:
-    G4int fVerbose;
 };
 
 } // namespace MACE::Simulation::Physics

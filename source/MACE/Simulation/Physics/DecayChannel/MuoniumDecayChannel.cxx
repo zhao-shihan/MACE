@@ -192,9 +192,9 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
 
     // momentum magnitude
     x = G4UniformRand();
-    const auto right = std::ranges::upper_bound(atomicShellMomentumCDF, x);
     G4double atomicShellMomentum;
-    if (right != atomicShellMomentumCDF.cend()) [[likely]] {
+    if (const auto right = std::ranges::upper_bound(atomicShellMomentumCDF, x);
+        right != atomicShellMomentumCDF.cend()) [[likely]] {
         const auto x2 = *right;
         const auto p2 = asmCDFBinWidth * std::distance(atomicShellMomentumCDF.cbegin(), right);
         const auto x1 = *std::prev(right);
@@ -214,12 +214,12 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
         atomicShellMomentum = k0 * p0 + k1 * p1 + k2 * p2;
     }
     // momentum direction
-    const auto r3 = G4UniformRand();
-    const auto a3 = 2 * std::sqrt(r3 * (1 - r3));
-    const auto b3 = twopi * G4UniformRand();
-    G4ThreeVector atomicShellDirection(a3 * std::cos(b3),
-                                       a3 * std::sin(b3),
-                                       1 - 2 * r3);
+    const auto cosTheta3 = 2 * G4UniformRand() - 1;
+    const auto sinTheta3 = std::sqrt(1 - cosTheta3 * cosTheta3);
+    const auto phi3 = twopi * G4UniformRand();
+    G4ThreeVector atomicShellDirection(sinTheta3 * std::cos(phi3),
+                                       sinTheta3 * std::sin(phi3),
+                                       cosTheta3);
     auto daughterparticle3 = new G4DynamicParticle(G4MT_daughters[3], atomicShellDirection * atomicShellMomentum);
     products->PushProducts(daughterparticle3);
 

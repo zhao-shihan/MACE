@@ -1,4 +1,5 @@
 // #include "MACE/Simulation/SimMACE/Messenger/PhysicsMessenger.hxx"
+#include "MACE/Simulation/Physics/Messenger/MuoniumPhysicsMessenger.hxx"
 #include "MACE/Simulation/Physics/Particle/AntiMuonium.hxx"
 #include "MACE/Simulation/Physics/Particle/Muonium.hxx"
 #include "MACE/Simulation/Physics/Process/MuoniumFormation.hxx"
@@ -10,28 +11,26 @@
 
 namespace MACE::Simulation::Physics::Process {
 
-// using MACE::Simulation::SimMACE::Messenger::PhysicsMessenger;
 using namespace Utility::LiteralUnit::Time;
 using namespace Utility::PhysicalConstant;
 
 MuoniumFormation::MuoniumFormation() :
     G4VRestProcess("MuoniumFormation", fElectromagnetic),
     fTarget(std::addressof(Target::Instance())),
-    fParticleChange(),
-    fMeanLifeTime(1.46467_us), // 60%
-    fConversionProbability(8.3e-11) {
-    // PhysicsMessenger::Instance().Set(this);
+    fMuonium(Particle::Muonium::Definition()),
+    fAntiMuonium(Particle::AntiMuonium::Definition()),
+    fFormationProbability(0.6),
+    fConversionProbability(0),
+    fParticleChange() {
+    Messenger::MuoniumPhysicsMessenger::Instance().SetTo(this);
 }
 
 G4VParticleChange* MuoniumFormation::AtRestDoIt(const G4Track& track, const G4Step&) {
     fParticleChange.Initialize(track);
     // The dynamic particle
     auto muoniumDynamicParticle = new G4DynamicParticle(*track.GetDynamicParticle());
-    // Determine whether the muonium is converted
-    muoniumDynamicParticle->SetDefinition(
-        (G4UniformRand() < fConversionProbability) ?
-            static_cast<G4ParticleDefinition*>(Particle::AntiMuonium::Definition()) :
-            static_cast<G4ParticleDefinition*>(Particle::Muonium::Definition()));
+    // Determine whether the transition can be observed
+    muoniumDynamicParticle->SetDefinition(G4UniformRand() < fConversionProbability ? fAntiMuonium : fMuonium);
     // Sampling momentum according to boltzmann distribution
     auto* const randEng = G4Random::getTheEngine();
     const auto temperature = track.GetVolume()->GetLogicalVolume()->GetMaterial()->GetTemperature();
@@ -49,8 +48,16 @@ G4VParticleChange* MuoniumFormation::AtRestDoIt(const G4Track& track, const G4St
     return std::addressof(fParticleChange);
 }
 
-G4double MuoniumFormation::GetMeanLifeTime(const G4Track& track, G4ForceCondition*) override {
-    return fTarget->Contains(track.GetPosition()) ? fMeanLifeTime : DBL_MAX;
+G4double MuoniumFormation::GetMeanLifeTime(const G4Track& track, G4ForceCondition*) {
+    if (fTarget->Contains(track.GetPosition())) {
+        if (G4UniformRand() < fFormationProbability) {
+            return 0;
+        } else {
+            return DBL_MAX;
+        }
+    } else {
+        return DBL_MAX;
+    }
 }
 
 } // namespace MACE::Simulation::Physics::Process

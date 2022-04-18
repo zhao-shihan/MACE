@@ -1,3 +1,4 @@
+#include "MACE/Simulation/Physics/Messenger/MuoniumPhysicsMessenger.hxx"
 #include "MACE/Simulation/Physics/Process/MuoniumTransport.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
@@ -15,7 +16,9 @@ MuoniumTransport::MuoniumTransport() :
     fMeanFreePath(0.2_um),
     fFlightLimit(100_um),
     fCase(fUnknown),
-    fParticleChange() {}
+    fParticleChange() {
+    Messenger::MuoniumPhysicsMessenger::Instance().SetTo(this);
+}
 
 G4VParticleChange* MuoniumTransport::AlongStepDoIt(const G4Track& track, const G4Step& step) {
     fParticleChange.Initialize(track);
