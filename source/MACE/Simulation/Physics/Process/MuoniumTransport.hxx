@@ -24,23 +24,26 @@ public:
     G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step& step) override;
 
 private:
-    void ProposeRandomFlight(const G4double& initialTime,
-                             const G4ThreeVector& initialPosition,
-                             const G4double& initialVelocity,
-                             const G4ThreeVector& initialDirection,
-                             const G4double& temperature,
-                             const G4double& trueStepLimit);
+    void ProposeRandomFlight(const G4Track& track, const G4Step& step);
 
     G4double GetContinuousStepLimit(const G4Track& track, G4double, G4double, G4double& safety) override;
 
 private:
+    enum TransportCondition {
+        fUnknown = -1,
+        fInTargetVolume,
+        fInVacuum,
+        fInCondensedMatter,
+    };
+
+private:
     const ObserverPtr<const Target> fTarget;
 
-    G4ParticleChange fParticleChange;
     G4double fMeanFreePath;
     G4double fFlightLimit;
 
-    G4int fCase;
+    TransportCondition fCase;
+    G4ParticleChange fParticleChange;
 };
 
 } // namespace MACE::Simulation::Physics::Process

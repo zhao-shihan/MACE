@@ -44,7 +44,13 @@ G4VParticleChange* MuoniumFormation::AtRestDoIt(const G4Track& track, const G4St
     // Kill the muon, form the (anti-)muonium
     fParticleChange.ProposeTrackStatus(fStopAndKill);
     fParticleChange.AddSecondary(new G4Track(muoniumDynamicParticle, track.GetGlobalTime(), track.GetPosition()));
+    // Clean
+    ClearNumberOfInteractionLengthLeft();
     return std::addressof(fParticleChange);
+}
+
+G4double MuoniumFormation::GetMeanLifeTime(const G4Track& track, G4ForceCondition*) override {
+    return fTarget->Contains(track.GetPosition()) ? fMeanLifeTime : DBL_MAX;
 }
 
 } // namespace MACE::Simulation::Physics::Process

@@ -23,8 +23,8 @@ public:
     void SetMeanLifeTime(G4double val) { fMeanLifeTime = val; }
     void SetConversionProbability(G4double val) { fConversionProbability = val; }
 
-protected:
-    G4double GetMeanLifeTime(const G4Track& track, G4ForceCondition*) override { return fTarget->Contains(track.GetPosition()) ? fMeanLifeTime : DBL_MAX; }
+private:
+    G4double GetMeanLifeTime(const G4Track& track, G4ForceCondition*) override;
 
 private:
     const ObserverPtr<const Target> fTarget;
