@@ -17,6 +17,7 @@ MuoniumTransport::MuoniumTransport() :
     fFlightLimit(100_um),
     fCase(fUnknown),
     fParticleChange() {
+    pParticleChange = std::addressof(fParticleChange);
     Messenger::MuoniumPhysicsMessenger::Instance().SetTo(this);
 }
 

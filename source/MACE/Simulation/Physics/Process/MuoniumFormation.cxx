@@ -15,13 +15,14 @@ using namespace Utility::LiteralUnit::Time;
 using namespace Utility::PhysicalConstant;
 
 MuoniumFormation::MuoniumFormation() :
-    G4VRestProcess("MuoniumFormation", fElectromagnetic),
+    G4VRestProcess("MuoniumFormation", fUserDefined),
     fTarget(std::addressof(Target::Instance())),
     fMuonium(Particle::Muonium::Definition()),
     fAntiMuonium(Particle::AntiMuonium::Definition()),
     fFormationProbability(0.6),
     fConversionProbability(0),
     fParticleChange() {
+    pParticleChange = std::addressof(fParticleChange);
     Messenger::MuoniumPhysicsMessenger::Instance().SetTo(this);
 }
 
@@ -29,15 +30,19 @@ G4VParticleChange* MuoniumFormation::AtRestDoIt(const G4Track& track, const G4St
     fParticleChange.Initialize(track);
     // The dynamic particle
     auto muoniumDynamicParticle = new G4DynamicParticle(*track.GetDynamicParticle());
-    // Determine whether the transition can be observed
-    muoniumDynamicParticle->SetDefinition(G4UniformRand() < fConversionProbability ? fAntiMuonium : fMuonium);
-    // Sampling momentum according to boltzmann distribution
+    // Get the engine ahead of time
     auto* const randEng = G4Random::getTheEngine();
+    // Determine whether the transition can be observed
+    muoniumDynamicParticle->SetDefinition(G4RandFlat::shoot(randEng) < fConversionProbability ? fAntiMuonium : fMuonium);
+    // Sampling momentum according to boltzmann distribution
     const auto temperature = track.GetVolume()->GetLogicalVolume()->GetMaterial()->GetTemperature();
-    muoniumDynamicParticle->SetMomentum(std::sqrt(muonium_mass_c2 * k_Boltzmann * temperature) *
-                                        G4ThreeVector(G4RandGauss::shoot(randEng),
-                                                      G4RandGauss::shoot(randEng),
-                                                      G4RandGauss::shoot(randEng)));
+    const auto momentum = std::sqrt(muonium_mass_c2 * k_Boltzmann * temperature) *
+                          G4ThreeVector(G4RandGauss::shoot(randEng),
+                                        G4RandGauss::shoot(randEng),
+                                        G4RandGauss::shoot(randEng));
+    // Set momentum and energy
+    muoniumDynamicParticle->SetMomentum(momentum);
+    muoniumDynamicParticle->SetKineticEnergy(momentum.mag2() / (2 * muonium_mass_c2));
     // Pre-assign the decay time for better performance
     muoniumDynamicParticle->SetPreAssignedDecayProperTime(G4RandExponential::shoot(randEng, muonium_lifetime));
     // Kill the muon, form the (anti-)muonium
