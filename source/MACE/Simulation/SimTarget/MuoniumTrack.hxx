@@ -27,15 +27,15 @@ public:
     const auto& GetDecayPosition() const { return fDecayPosition; }
 
     void SetVertexTime(Double_t val) { fVertexTime = val; }
-    template<typename Vector3_t>
-    void SetVertexPosition(Vector3_t&& pos) { fVertexPosition = std::forward<Vector3_t>(pos); }
     void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition = {x, y, z}; }
     void SetVertexPosition(const G4ThreeVector& pos) { SetVertexPosition(pos.x(), pos.y(), pos.z()); }
+    void SetVertexMomentum(Double_t px, Double_t py, Double_t pz) { fVertexMomentum = {px, py, pz}; }
+    void SetVertexMomentum(const G4ThreeVector& mom) { SetVertexMomentum(mom.x(), mom.y(), mom.z()); }
     void SetDecayTime(Double_t val) { fDecayTime = val; }
-    template<typename Vector3_t>
-    void SetDecayPosition(Vector3_t&& pos) { fDecayPosition = std::forward<Vector3_t>(pos); }
     void SetDecayPosition(Double_t x, Double_t y, Double_t z) { fDecayPosition = {x, y, z}; }
     void SetDecayPosition(const G4ThreeVector& pos) { SetDecayPosition(pos.x(), pos.y(), pos.z()); }
+    void SetDecayMomentum(Double_t px, Double_t py, Double_t pz) { fDecayMomentum = {px, py, pz}; }
+    void SetDecayMomentum(const G4ThreeVector& mom) { SetDecayMomentum(mom.x(), mom.y(), mom.z()); }
 
     static consteval const char* BasicTreeName() noexcept { return "MTrk"; }
     static void CreateBranches(TTree& tree);
@@ -45,13 +45,17 @@ public:
 private:
     Double_t fVertexTime;
     Eigen::Vector3d fVertexPosition;
+    Eigen::Vector3d fVertexMomentum;
     Double_t fDecayTime;
     Eigen::Vector3d fDecayPosition;
+    Eigen::Vector3d fDecayMomentum;
 
     static DoubleBranchSocket fgVertexTime;
     static Vector3FBranchSocket fgVertexPosition;
+    static Vector3FBranchSocket fgVertexMomentum;
     static DoubleBranchSocket fgDecayTime;
     static Vector3FBranchSocket fgDecayPosition;
+    static Vector3FBranchSocket fgDecayMomentum;
 };
 
 } // namespace MACE::Simulation::SimTarget

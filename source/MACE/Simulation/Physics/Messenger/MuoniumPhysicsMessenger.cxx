@@ -17,8 +17,7 @@ MuoniumPhysicsMessenger::MuoniumPhysicsMessenger() :
     fSetFormationProbability("/MACE/Physics/MuoniumPhysics/Formation/SetFormationProbability", this),
     fSetConversionProbability("/MACE/Physics/MuoniumPhysics/Formation/SetConversionProbability", this),
     fTransportProcessDirectory("/MACE/Physics/MuoniumPhysics/Transport/"),
-    fSetMeanFreePath("/MACE/Physics/MuoniumPhysics/Transport/SetMeanFreePath", this),
-    fSetFlightLimit("/MACE/Physics/MuoniumPhysics/Transport/SetFlightLimit", this) {
+    fSetMeanFreePath("/MACE/Physics/MuoniumPhysics/Transport/SetMeanFreePath", this) {
 
     fMuoniumPhysicsDirectory.SetGuidance("Physics of muonium and anti-muonium.");
 
@@ -38,11 +37,6 @@ MuoniumPhysicsMessenger::MuoniumPhysicsMessenger() :
     fSetMeanFreePath.SetParameterName("lambda", false);
     fSetMeanFreePath.SetUnitCategory("Length");
     fSetMeanFreePath.AvailableForStates(G4State_Idle);
-
-    fSetFlightLimit.SetGuidance("Set max flight length (true physical length) in a single G4Step allowed by the muonium transport process.");
-    fSetFlightLimit.SetParameterName("max path", false);
-    fSetFlightLimit.SetUnitCategory("Length");
-    fSetFlightLimit.AvailableForStates(G4State_Idle);
 }
 
 void MuoniumPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String value) {
@@ -52,8 +46,6 @@ void MuoniumPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String value) 
         fMuoniumFormation->SetConversionProbability(fSetConversionProbability.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetMeanFreePath)) {
         fMuoniumTransport->SetMeanFreePath(fSetMeanFreePath.GetNewDoubleValue(value));
-    } else if (command == std::addressof(fSetFlightLimit)) {
-        fMuoniumTransport->SetFlightLimit(fSetFlightLimit.GetNewDoubleValue(value));
     }
 }
 

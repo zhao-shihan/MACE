@@ -32,7 +32,6 @@
 /MACE/Physics/MuoniumPhysics/Formation/SetFormationProbability     0.6
 /MACE/Physics/MuoniumPhysics/Formation/SetConversionProbability    0
 /MACE/Physics/MuoniumPhysics/Transport/SetMeanFreePath             0.2 um
-/MACE/Physics/MuoniumPhysics/Transport/SetFlightLimit              100 um
 
 # print progress
 /run/printProgress 10

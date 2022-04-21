@@ -11,12 +11,14 @@ public:
     TrackingAction();
     ~TrackingAction() noexcept = default;
 
-    void PostUserTrackingAction(const G4Track*) override;
+    void PreUserTrackingAction(const G4Track* track) override;
+    void PostUserTrackingAction(const G4Track* track) override;
 
 private:
     const ObserverPtr<const G4ParticleDefinition> fMuonium;
     const ObserverPtr<const G4ParticleDefinition> fAntiMuonium;
     const ObserverPtr<Analysis> fAnalysis;
+    ObserverPtr<MuoniumTrack> fMuoniumTrack;
 };
 
 } // namespace MACE::Simulation::SimTarget::Action
