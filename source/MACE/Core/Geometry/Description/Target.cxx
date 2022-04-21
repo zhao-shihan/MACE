@@ -20,9 +20,9 @@ Target::Target() :
                                     "((x-(round((x-y/sqrt(3))/0.101)+round(2/sqrt(3)*y/0.101)/2)*0.101)^2+(y-sqrt(3)/2*round(2/sqrt(3)*y/0.101)*0.101)^2>0.086*0.086/4)")) {}
 
 bool Target::VolumeContains(const Double_t* pos) const noexcept {
-    return std::abs(pos[0]) < fWidth / 2 and
-           std::abs(pos[1]) < fWidth / 2 and
-           -fThickness < pos[2] and pos[2] < 0;
+    return std::abs(pos[0]) <= fWidth / 2 and
+           std::abs(pos[1]) <= fWidth / 2 and
+           -fThickness <= pos[2] and pos[2] <= 0;
 }
 
 bool Target::Contains(const Double_t* pos) const noexcept {

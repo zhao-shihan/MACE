@@ -43,7 +43,9 @@ G4VParticleChange* MuoniumFormation::AtRestDoIt(const G4Track& track, const G4St
     // Set momentum and energy
     muoniumDynamicParticle->SetMomentum(momentum);
     muoniumDynamicParticle->SetKineticEnergy(momentum.mag2() / (2 * muonium_mass_c2));
-    // Pre-assign the decay time for better performance
+    // Must pre-assign the decay time to ensure correct behaviour of transport and decay
+    // (transport process use this to determine when to stop flight,
+    //  instead of relying on G4 tracking mechanism. See MuoniumTransport process for detail.)
     muoniumDynamicParticle->SetPreAssignedDecayProperTime(G4RandExponential::shoot(randEng, muonium_lifetime));
     // Kill the muon, form the (anti-)muonium
     fParticleChange.ProposeTrackStatus(fStopAndKill);
@@ -56,7 +58,7 @@ G4VParticleChange* MuoniumFormation::AtRestDoIt(const G4Track& track, const G4St
 G4double MuoniumFormation::GetMeanLifeTime(const G4Track& track, G4ForceCondition*) {
     if (fTarget->Contains(track.GetPosition())) {
         if (G4UniformRand() < fFormationProbability) {
-            return 0;
+            return DBL_MIN;
         } else {
             return DBL_MAX;
         }
