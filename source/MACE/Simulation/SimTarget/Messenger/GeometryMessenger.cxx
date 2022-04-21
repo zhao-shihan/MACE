@@ -62,9 +62,9 @@ void GeometryMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     } else if (command == std::addressof(fSetTargetThickness)) {
         Description::Target::Instance().SetThickness(fSetTargetThickness.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetTargetDensity)) {
-        RunManager::Instance().GetDetectorConstruction().SetTargetDensity(fSetTargetDensity.GetNewDoubleValue(value));
+        fDetectorConstruction->SetTargetDensity(fSetTargetDensity.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetTemperature)) {
-        RunManager::Instance().GetDetectorConstruction().SetTemperature(fSetTemperature.GetNewDoubleValue(value));
+        fDetectorConstruction->SetTemperature(fSetTemperature.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetFineStructure)) {
         Description::Target::Instance().SetFineStructure(value);
     }

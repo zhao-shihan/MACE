@@ -3,6 +3,7 @@
 #include "MACE/Simulation/SimTarget/Action/DetectorConstruction.hxx"
 #include "MACE/Simulation/SimTarget/Action/PrimaryGeneratorAction.hxx"
 #include "MACE/Simulation/SimTarget/Action/RunAction.hxx"
+#include "MACE/Simulation/SimTarget/Action/SteppingAction.hxx"
 #include "MACE/Simulation/SimTarget/Action/TrackingAction.hxx"
 #include "MACE/Utility/MPITool/G4MPIRunManager.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
@@ -24,6 +25,7 @@ public:
     auto& GetPhysicsList() const { return *physicsList; }
     auto& GetPrimaryGeneratorAction() const { return *static_cast<PrimaryGeneratorAction*>(userPrimaryGeneratorAction); }
     auto& GetRunAction() const { return *static_cast<RunAction*>(userRunAction); }
+    auto& GetSteppingAction() const { return *static_cast<SteppingAction*>(userSteppingAction); }
     auto& GetTrackingAction() const { return *static_cast<TrackingAction*>(userTrackingAction); }
 };
 

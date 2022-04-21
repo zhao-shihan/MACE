@@ -1,5 +1,6 @@
 #include "MACE/Core/Geometry/Description/LinacField.hxx"
 #include "MACE/Simulation/SimTarget/Action/DetectorConstruction.hxx"
+#include "MACE/Simulation/SimTarget/Messenger/GeometryMessenger.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
 #include "G4NistManager.hh"
@@ -13,7 +14,9 @@ DetectorConstruction::DetectorConstruction() :
     fTarget(nullptr),
     fWorld(nullptr),
     fDensity(30_mg_cm3),
-    fTemperature(293.15_K) {}
+    fTemperature(293.15_K) {
+    Messenger::GeometryMessenger::Instance().SetTo(this);
+}
 
 G4VPhysicalVolume* DetectorConstruction::Construct() {
     using namespace MACE::Core::Geometry;

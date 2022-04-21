@@ -1,6 +1,7 @@
 #include "MACE/Simulation/SimTarget/Action/ActionInitialization.hxx"
 #include "MACE/Simulation/SimTarget/Action/PrimaryGeneratorAction.hxx"
 #include "MACE/Simulation/SimTarget/Action/RunAction.hxx"
+#include "MACE/Simulation/SimTarget/Action/SteppingAction.hxx"
 #include "MACE/Simulation/SimTarget/Action/TrackingAction.hxx"
 
 namespace MACE::Simulation::SimTarget::Action {
@@ -8,6 +9,7 @@ namespace MACE::Simulation::SimTarget::Action {
 void ActionInitialization::Build() const {
     SetUserAction(new PrimaryGeneratorAction());
     SetUserAction(new RunAction());
+    SetUserAction(new SteppingAction());
     SetUserAction(new TrackingAction());
 }
 

@@ -10,6 +10,8 @@ class TrackingAction final : public G4UserTrackingAction {
 public:
     TrackingAction();
     ~TrackingAction() noexcept = default;
+    TrackingAction(const TrackingAction&) = delete;
+    TrackingAction& operator=(const TrackingAction&) = delete;
 
     void PreUserTrackingAction(const G4Track* track) override;
     void PostUserTrackingAction(const G4Track* track) override;
