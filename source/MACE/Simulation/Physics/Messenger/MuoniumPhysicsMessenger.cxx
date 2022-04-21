@@ -17,7 +17,8 @@ MuoniumPhysicsMessenger::MuoniumPhysicsMessenger() :
     fSetFormationProbability("/MACE/Physics/MuoniumPhysics/Formation/SetFormationProbability", this),
     fSetConversionProbability("/MACE/Physics/MuoniumPhysics/Formation/SetConversionProbability", this),
     fTransportProcessDirectory("/MACE/Physics/MuoniumPhysics/Transport/"),
-    fSetMeanFreePath("/MACE/Physics/MuoniumPhysics/Transport/SetMeanFreePath", this) {
+    fSetMeanFreePath("/MACE/Physics/MuoniumPhysics/Transport/SetMeanFreePath", this),
+    fSetManipulateEachStepOfFlight("/MACE/Physics/MuoniumPhysics/Transport/SetManipulateEachStepOfFlight", this) {
 
     fMuoniumPhysicsDirectory.SetGuidance("Physics of muonium and anti-muonium.");
 
@@ -37,6 +38,12 @@ MuoniumPhysicsMessenger::MuoniumPhysicsMessenger() :
     fSetMeanFreePath.SetParameterName("lambda", false);
     fSetMeanFreePath.SetUnitCategory("Length");
     fSetMeanFreePath.AvailableForStates(G4State_Idle);
+
+    fSetManipulateEachStepOfFlight.SetGuidance(
+        "Set whether show each step of thermal random flight of muonium in the target or not.\n"
+        "Warning: This can be time consuming if set to true.");
+    fSetManipulateEachStepOfFlight.SetParameterName("b", false);
+    fSetManipulateEachStepOfFlight.AvailableForStates(G4State_Idle);
 }
 
 void MuoniumPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String value) {
@@ -46,6 +53,8 @@ void MuoniumPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String value) 
         fMuoniumFormation->SetConversionProbability(fSetConversionProbability.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetMeanFreePath)) {
         fMuoniumTransport->SetMeanFreePath(fSetMeanFreePath.GetNewDoubleValue(value));
+    } else if (command == std::addressof(fSetManipulateEachStepOfFlight)) {
+        fMuoniumTransport->SetManipulateEachStepOfFlight(fSetManipulateEachStepOfFlight.GetNewBoolValue(value));
     }
 }
 

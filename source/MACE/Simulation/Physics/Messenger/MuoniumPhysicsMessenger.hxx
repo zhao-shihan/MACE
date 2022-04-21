@@ -4,6 +4,7 @@
 #include "MACE/Simulation/Physics/Process/MuoniumTransport.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
+#include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UImessenger.hh"
@@ -41,6 +42,7 @@ private:
 
     G4UIdirectory fTransportProcessDirectory;
     G4UIcmdWithADoubleAndUnit fSetMeanFreePath;
+    G4UIcmdWithABool fSetManipulateEachStepOfFlight;
 };
 
 } // namespace MACE::Simulation::Physics::Messenger

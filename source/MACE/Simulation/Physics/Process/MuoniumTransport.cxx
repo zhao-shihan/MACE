@@ -17,6 +17,7 @@ MuoniumTransport::MuoniumTransport() :
     fRandEng(nullptr),
     fMeanFreePath(0.2_um),
     fTolerance(fToleranceScale * fMeanFreePath),
+    fManipulateEachStepOfFlight(false),
     fParticleChange(),
     fCase(kUnknown),
     fIsExitingTargetVolume(false) {
@@ -92,7 +93,7 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     // pre step point position
     const auto& initialPosition = track.GetPosition();
     // get the pre-assigned decay time to determine when the flight stops and then let G4 decay it
-    const auto timeLimit = track.GetDynamicParticle()->GetPreAssignedDecayProperTime();
+    const auto timeLimit = track.GetDynamicParticle()->GetPreAssignedDecayProperTime() - track.GetProperTime();
     // std dev of velocity of single direction
     const auto sigmaV = std::sqrt((k_Boltzmann * c_squared / muon_mass_c2) * track.GetMaterial()->GetTemperature());
 
@@ -113,6 +114,10 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     G4double freePath;
     // the free time of single flight step
     G4double freeTime;
+    // flag indicate that the flight was terminated by decay
+    G4bool timeUp;
+    // flag indicate that the flight was terminated by target boundary
+    G4bool escaped;
 
     // do random flight
 
@@ -145,17 +150,16 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
         displacement += freePath * direction;
         // update current position
         position = initialPosition + displacement;
-        // do the flight until time up or out of target volume
-    } while (flightTime < timeLimit and fTarget->VolumeContains(position));
-
-    // flag indicate that the flight was stopped by decay
-    const G4bool timeUp = flightTime > timeLimit;
+        // do the flight until time up or escaped the target volume
+        timeUp = flightTime >= timeLimit;
+        escaped = not fTarget->VolumeContains(position);
+    } while (not(timeUp or escaped or fManipulateEachStepOfFlight));
 
     // then step back to fulfill the limit
 
     // the free time and free path correction of last step
-    G4double finalStepFreePathCorrection;
-    G4double finalStepFreeTimeCorrection;
+    G4double finalStepFreePathCorrection = 0;
+    G4double finalStepFreeTimeCorrection = 0;
 
     // do the back stepping
     if (timeUp) {
@@ -163,7 +167,7 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
         // a tiny bit smaller correction ensuring the final value is little bit larger than decay time
         finalStepFreeTimeCorrection = std::nextafter(flightTime - timeLimit, -1.0);
         finalStepFreePathCorrection = velocity * finalStepFreeTimeCorrection;
-    } else {
+    } else if (escaped) {
         // flight is break by target boundary
         const auto tolerance2 = fTolerance * fTolerance;
         auto moreDisplacement = displacement;
