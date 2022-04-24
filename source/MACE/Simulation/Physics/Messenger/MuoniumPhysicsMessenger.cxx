@@ -18,7 +18,7 @@ MuoniumPhysicsMessenger::MuoniumPhysicsMessenger() :
     fSetConversionProbability("/MACE/Physics/MuoniumPhysics/Formation/SetConversionProbability", this),
     fTransportProcessDirectory("/MACE/Physics/MuoniumPhysics/Transport/"),
     fSetMeanFreePath("/MACE/Physics/MuoniumPhysics/Transport/SetMeanFreePath", this),
-    fSetManipulateEachStepOfFlight("/MACE/Physics/MuoniumPhysics/Transport/SetManipulateEachStepOfFlight", this) {
+    fSetManipulateAllStepInFlight("/MACE/Physics/MuoniumPhysics/Transport/SetManipulateAllStepInFlight", this) {
 
     fMuoniumPhysicsDirectory.SetGuidance("Physics of muonium and anti-muonium.");
 
@@ -39,11 +39,11 @@ MuoniumPhysicsMessenger::MuoniumPhysicsMessenger() :
     fSetMeanFreePath.SetUnitCategory("Length");
     fSetMeanFreePath.AvailableForStates(G4State_Idle);
 
-    fSetManipulateEachStepOfFlight.SetGuidance(
+    fSetManipulateAllStepInFlight.SetGuidance(
         "Set whether show each step of thermal random flight of muonium in the target or not.\n"
         "Warning: This can be time consuming if set to true.");
-    fSetManipulateEachStepOfFlight.SetParameterName("b", false);
-    fSetManipulateEachStepOfFlight.AvailableForStates(G4State_Idle);
+    fSetManipulateAllStepInFlight.SetParameterName("b", false);
+    fSetManipulateAllStepInFlight.AvailableForStates(G4State_Idle);
 }
 
 void MuoniumPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String value) {
@@ -53,8 +53,8 @@ void MuoniumPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String value) 
         fMuoniumFormation->SetConversionProbability(fSetConversionProbability.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetMeanFreePath)) {
         fMuoniumTransport->SetMeanFreePath(fSetMeanFreePath.GetNewDoubleValue(value));
-    } else if (command == std::addressof(fSetManipulateEachStepOfFlight)) {
-        fMuoniumTransport->SetManipulateEachStepOfFlight(fSetManipulateEachStepOfFlight.GetNewBoolValue(value));
+    } else if (command == std::addressof(fSetManipulateAllStepInFlight)) {
+        fMuoniumTransport->SetManipulateAllStepInFlight(fSetManipulateAllStepInFlight.GetNewBoolValue(value));
     }
 }
 

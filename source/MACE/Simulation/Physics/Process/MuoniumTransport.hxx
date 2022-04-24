@@ -20,7 +20,7 @@ public:
     MuoniumTransport& operator=(const MuoniumTransport&) = delete;
 
     void SetMeanFreePath(G4double val);
-    void SetManipulateEachStepOfFlight(G4bool val) { fManipulateEachStepOfFlight = val; }
+    void SetManipulateAllStepInFlight(G4bool val) { fManipulateAllStepInFlight = val; }
 
     void StartTracking(G4Track* track) override;
     G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step&) override;
@@ -43,9 +43,9 @@ private:
     ObserverPtr<CLHEP::HepRandomEngine> fRandEng;
 
     G4double fMeanFreePath;
-    static constexpr G4double fToleranceScale = 0.01;
+    static constexpr G4double fgToleranceScale = 0.01;
     G4double fTolerance;
-    G4bool fManipulateEachStepOfFlight;
+    G4bool fManipulateAllStepInFlight;
 
     G4ParticleChange fParticleChange;
     TransportCondition fCase;

@@ -14,10 +14,10 @@ using namespace Utility::LiteralUnit;
 MuoniumTransport::MuoniumTransport() :
     G4VContinuousProcess("MuoniumTransport", fTransportation),
     fTarget(std::addressof(Target::Instance())),
-    fRandEng(nullptr),
+    fRandEng(G4Random::getTheEngine()),
     fMeanFreePath(0.2_um),
-    fTolerance(fToleranceScale * fMeanFreePath),
-    fManipulateEachStepOfFlight(false),
+    fTolerance(fgToleranceScale * fMeanFreePath),
+    fManipulateAllStepInFlight(false),
     fParticleChange(),
     fCase(kUnknown),
     fIsExitingTargetVolume(false) {
@@ -28,7 +28,7 @@ MuoniumTransport::MuoniumTransport() :
 void MuoniumTransport::SetMeanFreePath(G4double val) {
     fMeanFreePath = val;
     // try to prevent bad tolerance
-    fTolerance = std::max(fToleranceScale * fMeanFreePath, 1000 * DBL_EPSILON);
+    fTolerance = std::max(fgToleranceScale * fMeanFreePath, 1000 * DBL_EPSILON);
 }
 
 void MuoniumTransport::StartTracking(G4Track* track) {
@@ -153,7 +153,7 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
         // do the flight until time up or escaped the target volume
         timeUp = flightTime >= timeLimit;
         escaped = not fTarget->VolumeContains(position);
-    } while (not(timeUp or escaped or fManipulateEachStepOfFlight));
+    } while (not(timeUp or escaped or fManipulateAllStepInFlight));
 
     // then step back to fulfill the limit
 
