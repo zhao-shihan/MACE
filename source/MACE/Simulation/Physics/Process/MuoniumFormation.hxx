@@ -18,10 +18,11 @@ public:
     MuoniumFormation(const MuoniumFormation&) = delete;
     MuoniumFormation& operator=(const MuoniumFormation&) = delete;
 
-    G4VParticleChange* AtRestDoIt(const G4Track& track, const G4Step&) override;
-
     void SetFormationProbability(G4double val) { fFormationProbability = val; }
     void SetConversionProbability(G4double val) { fConversionProbability = val; }
+
+    void StartTracking(G4Track* track) override;
+    G4VParticleChange* AtRestDoIt(const G4Track& track, const G4Step&) override;
 
 private:
     G4double GetMeanLifeTime(const G4Track& track, G4ForceCondition*) override;
@@ -30,6 +31,7 @@ private:
     const ObserverPtr<const Target> fTarget;
     const ObserverPtr<G4ParticleDefinition> fMuonium;
     const ObserverPtr<G4ParticleDefinition> fAntiMuonium;
+    ObserverPtr<CLHEP::HepRandomEngine> fRandEng;
 
     G4double fFormationProbability;
     G4double fConversionProbability;
