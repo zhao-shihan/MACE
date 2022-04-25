@@ -15,20 +15,14 @@ MuoniumTransport::MuoniumTransport() :
     G4VContinuousProcess("MuoniumTransport", fTransportation),
     fTarget(std::addressof(Target::Instance())),
     fRandEng(G4Random::getTheEngine()),
-    fMeanFreePath(0.2_um),
-    fTolerance(fgToleranceScale * fMeanFreePath),
+    fMeanFreePath(200_nm),
+    fTrialStepInVacuum(fMeanFreePath),
     fManipulateAllStepInFlight(false),
     fParticleChange(),
     fCase(kUnknown),
     fIsExitingTargetVolume(false) {
     pParticleChange = std::addressof(fParticleChange);
     Messenger::MuoniumPhysicsMessenger::Instance().SetTo(this);
-}
-
-void MuoniumTransport::SetMeanFreePath(G4double val) {
-    fMeanFreePath = val;
-    // try to prevent bad tolerance
-    fTolerance = std::max(fgToleranceScale * fMeanFreePath, 1000 * DBL_EPSILON);
 }
 
 void MuoniumTransport::StartTracking(G4Track* track) {
@@ -97,6 +91,12 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     // std dev of velocity of single direction
     const auto sigmaV = std::sqrt((k_Boltzmann * c_squared / muon_mass_c2) * track.GetMaterial()->GetTemperature());
 
+    // helpers to be used in binary search
+    G4ThreeVector binaryMore;
+    G4ThreeVector binaryLess;
+    G4ThreeVector binaryMid;
+    G4double binaryStep;
+
     // the total flight length in this G4Step
     G4double trueStepLength = 0;
     // velocity magnitude
@@ -114,10 +114,16 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     G4double freePath;
     // the free time of single flight step
     G4double freeTime;
+    // the temp parameter to store the original displacement which is used in stepping in vacuum
+    G4ThreeVector lastDisplacementInVacuum;
+    // the exact trial step in vacuum regions of target volume
+    G4double trueTrialStepInVacuum;
+    // the trial step vector in vacuum regions of target volume
+    G4ThreeVector trueTrialStepVectorInVacuum;
     // flag indicate that the flight was terminated by decay
-    G4bool timeUp;
+    G4bool timeUp = false;
     // flag indicate that the flight was terminated by target boundary
-    G4bool escaped;
+    G4bool escaped = false;
 
     // do random flight
 
@@ -135,64 +141,122 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
             direction /= velocity;
             // get the exact velocity
             velocity *= sigmaV;
+            // calculate free time
+            freeTime = freePath / velocity;
+            // update flight length
+            trueStepLength += freePath;
+            // update time
+            flightTime += freeTime;
+            // update displacement
+            displacement += freePath * direction;
+            // update current position
+            position = initialPosition + displacement;
+            // check time
+            timeUp = flightTime >= timeLimit;
+            // check position
+            escaped = not fTarget->VolumeContains(position);
         } else {
-            // inside vacuum region of target fine structure,
-            // stepping with mean free path at same velocity
-            freePath = fMeanFreePath;
+            // inside vacuum region of target fine structure, first stepping with pre-set trial step until reach the material
+            // (the recommended value of fTrialStepInVacuum is slightly smaller than the distance of closest vacuum regions inside target volume
+            //  to ensure not to miss the boundary but step into another vacuum region in volume)
+            lastDisplacementInVacuum = displacement;
+            trueTrialStepInVacuum = fTrialStepInVacuum;
+            trueTrialStepVectorInVacuum = trueTrialStepInVacuum * direction;
+            do {
+                displacement += trueTrialStepVectorInVacuum;
+                position = initialPosition + displacement;
+                if (not fTarget->VolumeContains(position)) {
+                    displacement -= trueTrialStepVectorInVacuum;
+                    trueTrialStepInVacuum = fMeanFreePath;
+                    trueTrialStepVectorInVacuum = trueTrialStepInVacuum * direction;
+                    freePath = 0;
+                    escaped = true;
+                    do {
+                        displacement += trueTrialStepVectorInVacuum;
+                        position = initialPosition + displacement;
+                        freePath += trueTrialStepInVacuum;
+                        if (fTarget->Contains(position)) {
+                            escaped = false;
+                            break;
+                        }
+                    } while (freePath < fTrialStepInVacuum);
+                    break;
+                }
+            } while (not fTarget->Contains(position));
+            // then binary search the exact boundary if needed
+            if (not escaped and trueTrialStepInVacuum > fMeanFreePath) {
+                binaryMore = displacement;
+                binaryLess = displacement - trueTrialStepVectorInVacuum;
+                binaryMid = (binaryMore + binaryLess) / 2;
+                position = initialPosition + binaryMid;
+                do {
+                    if (fTarget->Contains(position)) {
+                        binaryMore = binaryMid;
+                    } else {
+                        binaryLess = binaryMid;
+                    }
+                    binaryMid = (binaryMore + binaryLess) / 2;
+                    position = initialPosition + binaryMid;
+                    trueTrialStepInVacuum /= 2;
+                } while (trueTrialStepInVacuum > fMeanFreePath);
+                // update displacement, use a larger displacement to ensure final point is inside target
+                displacement = binaryMore;
+                position = initialPosition + displacement;
+            }
+            // calculate free path
+            freePath = (displacement - lastDisplacementInVacuum).mag();
+            // calculate free time
+            freeTime = freePath / velocity;
+            // update flight length
+            trueStepLength += freePath;
+            // update time
+            flightTime += freeTime;
+            // check time
+            timeUp = flightTime >= timeLimit;
         }
-        // the free time
-        freeTime = freePath / velocity;
-        // update flight length
-        trueStepLength += freePath;
-        // update time
-        flightTime += freeTime;
-        // update displacement
-        displacement += freePath * direction;
-        // update current position
-        position = initialPosition + displacement;
-        // do the flight until time up or escaped the target volume
-        timeUp = flightTime >= timeLimit;
-        escaped = not fTarget->VolumeContains(position);
     } while (not(timeUp or escaped or fManipulateAllStepInFlight));
 
-    // then step back to fulfill the limit
+    // then do the final correction to fulfill the limit
 
-    // the free time and free path correction of last step
-    G4double finalStepFreePathCorrection = 0;
-    G4double finalStepFreeTimeCorrection = 0;
-
-    // do the back stepping
+    G4double finalStepFreePathCorrectionFromDecay = 0;
+    G4double finalStepFreeTimeCorrectionFromDecay = 0;
+    // evaluate the correction from time if needed
     if (timeUp) {
         // flight is break by decay
         // a tiny bit smaller correction ensuring the final value is little bit larger than decay time
-        finalStepFreeTimeCorrection = std::nextafter(flightTime - timeLimit, -1.0);
-        finalStepFreePathCorrection = velocity * finalStepFreeTimeCorrection;
-    } else if (escaped) {
+        finalStepFreeTimeCorrectionFromDecay = std::nextafter(flightTime - timeLimit, -1.0);
+        finalStepFreePathCorrectionFromDecay = velocity * finalStepFreeTimeCorrectionFromDecay;
+    }
+
+    G4double finalStepFreePathCorrectionFromEscape = 0;
+    G4double finalStepFreeTimeCorrectionFromEscape = 0;
+    // evaluate the correction from space if needed
+    if (escaped) {
         // flight is break by target boundary
-        const auto tolerance2 = fTolerance * fTolerance;
-        auto moreDisplacement = displacement;
-        auto lessDisplacement = displacement - freePath * direction;
-        auto midDisplacement = (moreDisplacement + lessDisplacement) / 2;
-        // prevent dead loop in case of really bad tolerance
-        constexpr int maxLoop = 50;
-        int nLoop = 0;
+        binaryMore = displacement;
+        binaryLess = displacement - freePath * direction;
+        binaryMid = (binaryMore + binaryLess) / 2;
+        binaryStep = freePath;
         do {
-            if (fTarget->VolumeContains(initialPosition + midDisplacement)) {
-                lessDisplacement = midDisplacement;
+            if (fTarget->VolumeContains(initialPosition + binaryMid)) {
+                binaryLess = binaryMid;
             } else {
-                moreDisplacement = midDisplacement;
+                binaryMore = binaryMid;
             }
-            midDisplacement = (moreDisplacement + lessDisplacement) / 2;
-            ++nLoop;
-        } while ((moreDisplacement - lessDisplacement).mag2() > tolerance2 and nLoop < maxLoop);
-        // a tiny bit smaller correction ensuring the final position is outside the volume
-        finalStepFreePathCorrection = (displacement - moreDisplacement).mag();
-        finalStepFreeTimeCorrection = finalStepFreePathCorrection / velocity;
+            binaryMid = (binaryMore + binaryLess) / 2;
+            binaryStep /= 2;
+        } while (binaryStep > 1_nm);
+        // a bit smaller correction ensuring the final position is outside the volume
+        // the std::nextafter ensures robustness under case of bad accuracy
+        finalStepFreePathCorrectionFromEscape = std::nextafter((displacement - binaryMore).mag(), -1.0);
+        finalStepFreeTimeCorrectionFromEscape = finalStepFreePathCorrectionFromEscape / velocity;
         // remember to inform the next step that we are at the boundary of target
         fIsExitingTargetVolume = true;
     }
 
-    // the final update
+    // the free time and free path correction of last step
+    const auto finalStepFreePathCorrection = std::max(finalStepFreePathCorrectionFromDecay, finalStepFreePathCorrectionFromEscape);
+    const auto finalStepFreeTimeCorrection = std::max(finalStepFreeTimeCorrectionFromDecay, finalStepFreeTimeCorrectionFromEscape);
 
     // update flight length
     trueStepLength -= finalStepFreePathCorrection;

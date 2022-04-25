@@ -42,6 +42,7 @@ private:
 
     G4UIdirectory fTransportProcessDirectory;
     G4UIcmdWithADoubleAndUnit fSetMeanFreePath;
+    G4UIcmdWithADoubleAndUnit fSetTrialStepInVacuum;
     G4UIcmdWithABool fSetManipulateAllStepInFlight;
 };
 

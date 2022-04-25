@@ -25,11 +25,6 @@ bool Target::VolumeContains(const Double_t* pos) const noexcept {
            -fThickness <= pos[2] and pos[2] <= 0;
 }
 
-bool Target::Contains(const Double_t* pos) const noexcept {
-    return VolumeContains(pos) and
-           fFineStructure.EvalPar(pos) > 0.5;
-}
-
 HepGeom::Transform3D Target::CalcTransform() const {
     const auto& LinacField = LinacField::Instance();
     auto transZ = LinacField.GetLength() / 2 - LinacField.GetDownStreamLength() - fThickness / 2;

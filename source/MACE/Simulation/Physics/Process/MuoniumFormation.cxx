@@ -19,6 +19,7 @@ MuoniumFormation::MuoniumFormation() :
     fTarget(std::addressof(Target::Instance())),
     fMuonium(Particle::Muonium::Definition()),
     fAntiMuonium(Particle::AntiMuonium::Definition()),
+    fRandEng(G4Random::getTheEngine()),
     fFormationProbability(0.6),
     fConversionProbability(0),
     fParticleChange() {
@@ -26,27 +27,31 @@ MuoniumFormation::MuoniumFormation() :
     Messenger::MuoniumPhysicsMessenger::Instance().SetTo(this);
 }
 
+void MuoniumFormation::StartTracking(G4Track* track) {
+    G4VRestProcess::StartTracking(track);
+    // the random engine in use
+    fRandEng = G4Random::getTheEngine();
+}
+
 G4VParticleChange* MuoniumFormation::AtRestDoIt(const G4Track& track, const G4Step&) {
     fParticleChange.Initialize(track);
     // The dynamic particle
     auto muoniumDynamicParticle = new G4DynamicParticle(*track.GetDynamicParticle());
-    // Get the engine ahead of time
-    auto* const randEng = G4Random::getTheEngine();
     // Determine whether the transition can be observed
-    muoniumDynamicParticle->SetDefinition(G4RandFlat::shoot(randEng) < fConversionProbability ? fAntiMuonium : fMuonium);
+    muoniumDynamicParticle->SetDefinition(G4RandFlat::shoot(fRandEng) < fConversionProbability ? fAntiMuonium : fMuonium);
     // Sampling momentum according to boltzmann distribution
     const auto temperature = track.GetVolume()->GetLogicalVolume()->GetMaterial()->GetTemperature();
     const auto momentum = std::sqrt(muonium_mass_c2 * k_Boltzmann * temperature) *
-                          G4ThreeVector(G4RandGauss::shoot(randEng),
-                                        G4RandGauss::shoot(randEng),
-                                        G4RandGauss::shoot(randEng));
+                          G4ThreeVector(G4RandGauss::shoot(fRandEng),
+                                        G4RandGauss::shoot(fRandEng),
+                                        G4RandGauss::shoot(fRandEng));
     // Set momentum and energy
     muoniumDynamicParticle->SetMomentum(momentum);
     muoniumDynamicParticle->SetKineticEnergy(momentum.mag2() / (2 * muonium_mass_c2));
     // Must pre-assign the decay time to ensure correct behaviour of transport and decay
     // (transport process use this to determine when to stop flight,
     //  instead of relying on G4 tracking mechanism. See MuoniumTransport process for detail.)
-    muoniumDynamicParticle->SetPreAssignedDecayProperTime(G4RandExponential::shoot(randEng, muonium_lifetime));
+    muoniumDynamicParticle->SetPreAssignedDecayProperTime(G4RandExponential::shoot(fRandEng, muonium_lifetime));
     // Kill the muon, form the (anti-)muonium
     fParticleChange.ProposeTrackStatus(fStopAndKill);
     fParticleChange.AddSecondary(new G4Track(muoniumDynamicParticle, track.GetGlobalTime(), track.GetPosition()));
@@ -57,7 +62,7 @@ G4VParticleChange* MuoniumFormation::AtRestDoIt(const G4Track& track, const G4St
 
 G4double MuoniumFormation::GetMeanLifeTime(const G4Track& track, G4ForceCondition*) {
     if (fTarget->Contains(track.GetPosition())) {
-        if (G4UniformRand() < fFormationProbability) {
+        if (G4RandFlat::shoot(fRandEng) < fFormationProbability) {
             return DBL_MIN;
         } else {
             return DBL_MAX;
