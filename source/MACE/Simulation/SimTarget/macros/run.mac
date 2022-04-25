@@ -40,16 +40,19 @@
 /MACE/Action/SetKillDecayProducts    true
 
 # Run 0: Ablated target with pitch 15um, diameter 86um
+/MACE/Physics/MuoniumPhysics/Transport/SetTrialStepInVacuum 14 um
 /MACE/Geometry/SetFineStructure (z<-5 || x<-20||x>20 || y<-20||y>20) || ((x-(round((x-y/sqrt(3))/0.101)+round(2/sqrt(3)*y/0.101)/2)*0.101)^2+(y-sqrt(3)/2*round(2/sqrt(3)*y/0.101)*0.101)^2>0.086*0.086/4)
 /run/beamOn 80
 /mpi/status
 
 # Run 1: Ablated target with pitch 25um, diameter 86um
+/MACE/Physics/MuoniumPhysics/Transport/SetTrialStepInVacuum 24 um
 /MACE/Geometry/SetFineStructure (z<-5 || x<-20||x>20 || y<-20||y>20) || ((x-(round((x-y/sqrt(3))/0.111)+round(2/sqrt(3)*y/0.111)/2)*0.111)^2+(y-sqrt(3)/2*round(2/sqrt(3)*y/0.111)*0.111)^2>0.086*0.086/4)
 /run/beamOn 80
 /mpi/status
 
 # Run 2: Ablated target with pitch 15um, diameter 96um
+/MACE/Physics/MuoniumPhysics/Transport/SetTrialStepInVacuum 14 um
 /MACE/Geometry/SetFineStructure (z<-5 || x<-20||x>20 || y<-20||y>20) || ((x-(round((x-y/sqrt(3))/0.111)+round(2/sqrt(3)*y/0.111)/2)*0.111)^2+(y-sqrt(3)/2*round(2/sqrt(3)*y/0.111)*0.111)^2>0.096*0.096/4)
 /run/beamOn 80
 /mpi/status
