@@ -29,7 +29,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 
 void DetectorConstruction::ConstructVolumes() {
     // Construct entity objects
-    fLinacField = std::make_shared<LinacField>();
+    fBeamDegrader = std::make_shared<BeamDegrader>();
     fCDCBody = std::make_shared<CDCBody>();
     fCDCCell = std::make_shared<CDCCell>();
     fCDCFieldWire = std::make_shared<CDCFieldWire>();
@@ -44,6 +44,7 @@ void DetectorConstruction::ConstructVolumes() {
     fFirstBendSolenoid = std::make_shared<FirstBendSolenoid>();
     fFirstTransportField = std::make_shared<FirstTransportField>();
     fFirstTransportSolenoid = std::make_shared<FirstTransportSolenoid>();
+    fLinacField = std::make_shared<LinacField>();
     fMCP = std::make_shared<MCP>();
     fSecondBendField = std::make_shared<SecondBendField>();
     fSecondBendSolenoid = std::make_shared<SecondBendSolenoid>();
@@ -59,22 +60,23 @@ void DetectorConstruction::ConstructVolumes() {
     fWorld = std::make_shared<World>();
 
     // Construct hierarchy
+    fCDCBody->AddDaughter(fCDCLayer);
+    fCDCCell->AddDaughter(fCDCFieldWire);
+    fCDCCell->AddDaughter(fCDCSensitiveVolume);
+    fCDCLayer->AddDaughter(fCDCCell);
+    fCDCSensitiveVolume->AddDaughter(fCDCSenseWire);
     fEMCalField->AddDaughter(fEMCal);
     fEMCalField->AddDaughter(fMCP);
     fFirstBendField->AddDaughter(fFirstBendSolenoid);
     fFirstTransportField->AddDaughter(fFirstTransportSolenoid);
+    fLinacField->AddDaughter(fBeamDegrader);
+    fLinacField->AddDaughter(fTarget);
     fSecondBendField->AddDaughter(fSecondBendSolenoid);
     fSecondTransportField->AddDaughter(fCollimator);
     fSecondTransportField->AddDaughter(fSecondTransportSolenoid);
     fSecondTransportField->AddDaughter(fSelectorField);
-    fLinacField->AddDaughter(fTarget);
-    fCDCSensitiveVolume->AddDaughter(fCDCSenseWire);
-    fCDCCell->AddDaughter(fCDCFieldWire);
-    fCDCCell->AddDaughter(fCDCSensitiveVolume);
-    fCDCLayer->AddDaughter(fCDCCell);
-    fCDCBody->AddDaughter(fCDCLayer);
-    fSpectrometerField->AddDaughter(fLinacField);
     fSpectrometerField->AddDaughter(fCDCBody);
+    fSpectrometerField->AddDaughter(fLinacField);
     fSpectrometerField->AddDaughter(fSpectrometerMagnet);
     fThirdTransportField->AddDaughter(fThirdTransportSolenoid);
     fWorld->AddDaughter(fEMCalField);
@@ -97,6 +99,7 @@ void DetectorConstruction::ConstructMaterials() {
     auto nist = G4NistManager::Instance();
 
     auto aluminium = nist->FindOrBuildMaterial("G4_Al");
+    fBeamDegrader->RegisterMaterial(aluminium);
     fCDCFieldWire->RegisterMaterial(aluminium);
 
     auto cdcGas = nist->FindOrBuildMaterial("G4_He");
@@ -160,10 +163,11 @@ void DetectorConstruction::ConstructRegions() {
     fDefaultSolidRegion = new Region("DefaultSolid", Region::kDefaultSolid);
     fDefaultSolidRegion->SetProductionCuts(defaultCuts);
 
-    fCollimator->RegisterRegion(fDefaultSolidRegion);
-    fCDCSenseWire->RegisterRegion(fDefaultSolidRegion);
-    fCDCFieldWire->RegisterRegion(fDefaultSolidRegion);
+    fBeamDegrader->RegisterRegion(fDefaultSolidRegion);
     fCDCBody->RegisterRegion(fDefaultSolidRegion);
+    fCDCFieldWire->RegisterRegion(fDefaultSolidRegion);
+    fCDCSenseWire->RegisterRegion(fDefaultSolidRegion);
+    fCollimator->RegisterRegion(fDefaultSolidRegion);
 
     // DefaultGaseousRegion
     fDefaultGaseousRegion = new Region("DefaultGaseous", Region::kDefaultGaseous);
@@ -176,8 +180,8 @@ void DetectorConstruction::ConstructRegions() {
     fShieldRegion = new Region("Shield", Region::kShield);
     fShieldRegion->SetProductionCuts(defaultCuts);
 
-    fSpectrometerShield->RegisterRegion(fShieldRegion);
     fEMCalShield->RegisterRegion(fShieldRegion);
+    fSpectrometerShield->RegisterRegion(fShieldRegion);
 
     // SolenoidOrMagnetRegion
     fSolenoidOrMagnetRegion = new Region("SolenoidOrMagnet", Region::kSolenoidOrMagnet);
@@ -206,13 +210,13 @@ void DetectorConstruction::ConstructRegions() {
     fVacuumRegion = new Region("Vacuum", Region::kVacuum);
     fVacuumRegion->SetProductionCuts(defaultCuts);
 
-    fSelectorField->RegisterRegion(fVacuumRegion);
-    fLinacField->RegisterRegion(fVacuumRegion);
     fEMCalField->RegisterRegion(fVacuumRegion);
     fFirstBendField->RegisterRegion(fVacuumRegion);
     fFirstTransportField->RegisterRegion(fVacuumRegion);
+    fLinacField->RegisterRegion(fVacuumRegion);
     fSecondBendField->RegisterRegion(fVacuumRegion);
     fSecondTransportField->RegisterRegion(fVacuumRegion);
+    fSelectorField->RegisterRegion(fVacuumRegion);
     fSpectrometerField->RegisterRegion(fVacuumRegion);
     fThirdTransportField->RegisterRegion(fVacuumRegion);
 

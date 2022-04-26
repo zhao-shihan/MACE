@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Core/Geometry/Description/LinacField.hxx"
+#include "MACE/Core/Geometry/IDescription.hxx"
 
 #include "CLHEP/Geometry/Transform3D.h"
 

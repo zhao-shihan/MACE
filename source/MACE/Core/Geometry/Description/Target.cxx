@@ -1,3 +1,4 @@
+#include "MACE/Core/Geometry/Description/LinacField.hxx"
 #include "MACE/Core/Geometry/Description/Target.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
@@ -26,8 +27,8 @@ bool Target::VolumeContains(const Double_t* pos) const noexcept {
 }
 
 HepGeom::Transform3D Target::CalcTransform() const {
-    const auto& LinacField = LinacField::Instance();
-    auto transZ = LinacField.GetLength() / 2 - LinacField.GetDownStreamLength() - fThickness / 2;
+    const auto& linacField = LinacField::Instance();
+    const auto transZ = linacField.GetLength() / 2 - linacField.GetDownStreamLength() - fThickness / 2;
     return HepGeom::Transform3D(CLHEP::HepRotation(), CLHEP::Hep3Vector(0, 0, transZ));
 }
 

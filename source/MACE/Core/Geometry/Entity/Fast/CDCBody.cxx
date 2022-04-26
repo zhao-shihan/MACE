@@ -22,21 +22,18 @@ void CDCBody::ConstructSelf(G4bool checkOverlaps) {
     const auto gasOuterLength = description.GetGasOuterLength();
 
     constexpr auto numZPlane = 4;
-    const G4double zPlane[numZPlane] = {
-        -gasOuterLength / 2 - shellSideThickness,
-        -gasInnerLength / 2 - shellSideThickness,
-        gasInnerLength / 2 + shellSideThickness,
-        gasOuterLength / 2 + shellSideThickness};
-    const G4double rInner[numZPlane] = {
-        gasOuterRadius - shellInnerThickness,
-        gasInnerRadius - shellInnerThickness,
-        gasInnerRadius - shellInnerThickness,
-        gasOuterRadius - shellInnerThickness};
-    const G4double rOuter[numZPlane] = {
-        gasOuterRadius + shellOuterThickness,
-        gasOuterRadius + shellOuterThickness,
-        gasOuterRadius + shellOuterThickness,
-        gasOuterRadius + shellOuterThickness};
+    const G4double zPlane[numZPlane] = {-gasOuterLength / 2 - shellSideThickness,
+                                        -gasInnerLength / 2 - shellSideThickness,
+                                        gasInnerLength / 2 + shellSideThickness,
+                                        gasOuterLength / 2 + shellSideThickness};
+    const G4double rInner[numZPlane] = {gasOuterRadius - shellInnerThickness,
+                                        gasInnerRadius - shellInnerThickness,
+                                        gasInnerRadius - shellInnerThickness,
+                                        gasOuterRadius - shellInnerThickness};
+    const G4double rOuter[numZPlane] = {gasOuterRadius + shellOuterThickness,
+                                        gasOuterRadius + shellOuterThickness,
+                                        gasOuterRadius + shellOuterThickness,
+                                        gasOuterRadius + shellOuterThickness};
 
     auto solid = Make<G4Polycone>(
         name,

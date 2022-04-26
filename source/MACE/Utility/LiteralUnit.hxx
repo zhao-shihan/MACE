@@ -3,8 +3,8 @@
 #include "CLHEP/Units/SystemOfUnits.h"
 
 #define MACE_UTILITY_LITERAL_UNIT(suffix, unit)                                        \
-    constexpr long double operator""##suffix(long double val) { return val * (unit); } \
-    constexpr long double operator""##suffix(unsigned long long val) { return val * (unit); }
+    consteval long double operator""##suffix(long double val) { return val * (unit); } \
+    consteval long double operator""##suffix(unsigned long long val) { return val * (unit); }
 
 namespace MACE::Utility::LiteralUnit {
 

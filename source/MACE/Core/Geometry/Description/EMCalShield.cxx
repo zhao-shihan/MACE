@@ -1,4 +1,5 @@
 #include "MACE/Core/Geometry/Description/EMCalShield.hxx"
+#include "MACE/Core/Geometry/Description/TransportLine.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
 namespace MACE::Core::Geometry::Description {
