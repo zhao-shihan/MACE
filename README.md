@@ -27,18 +27,18 @@ To build MACE software from source, there are a few prerequisites.
 
 ### External dependencies
 
-0. C/C++ compiler that supports ≥ C++20. (gcc-10/11 recommended)
-1. CMake   (≥ 3.16)
-2. MPI-3   (MPICH, OpenMPI, Intel MPI, etc. On your frequency.)
-3. Geant4  (≥ 4.11.0, with ≥ C++17, gdml enabled)
-4. ROOT    (≥ 6.24.02, ≥ C++17)
-5. Eigen3  (≥ 3.3.0)
+1. C/C++ compiler that supports ≥ C++20. (gcc ≥ 10)
+2. CMake   (≥ 3.16)
+3. MPI-3   (MPICH, OpenMPI, Intel MPI, etc. On your frequency.)
+4. Geant4  (≥ 4.11.0, with ≥ C++17, gdml enabled)
+5. ROOT    (≥ 6.24.02, ≥ C++17)
+6. Eigen3  (≥ 3.3.0)
 
 G4mpi, yaml-cpp are bulit in. (in ./external)  
 
 ### (Tested) Platform
 
-Linux with gcc10, gcc11
+x86-64 linux with gcc10, gcc11
 
 ### Prepare for your PC  
 
