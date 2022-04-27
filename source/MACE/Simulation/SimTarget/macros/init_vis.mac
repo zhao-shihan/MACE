@@ -10,7 +10,10 @@
 /MACE/Analysis/EnableYieldAnalysis                    true
 
 # Geometry
-/MACE/Geometry/SetWorldHalfExtent                     25 25 25 cm
+/MACE/Geometry/SetWorldHalfExtent                     50 50 50 cm
+/MACE/Geometry/SetDegraderWidth                       6 cm
+/MACE/Geometry/SetDegraderThickness                   500 um
+/MACE/Geometry/SetDistanceBetweenDegraderAndTarget    5 mm
 /MACE/Geometry/SetTargetWidth                         6 cm
 /MACE/Geometry/SetTargetThickness                     1 cm
 /MACE/Geometry/SetTargetDensity                       30 mg/cm3
@@ -23,7 +26,7 @@
 /MACE/Generator/SurfaceMuon/SetMomentum               28 MeV
 /MACE/Generator/SurfaceMuon/SetMomentumSpreadRMS      1.4 MeV
 /MACE/Generator/SurfaceMuon/SetBeamProfileRMS         5 mm
-/MACE/Generator/SurfaceMuon/SetVertexZ                -15 cm
+/MACE/Generator/SurfaceMuon/SetVertexZ                -5 cm
 /MACE/Generator/SurfaceMuon/SetMuonsForEachG4Event    10
 
 # Set physics
@@ -33,7 +36,7 @@
 /MACE/Physics/MuoniumPhysics/Transport/SetTrialStepInVacuum        14.9 um
 
 # kill secondaries
-/MACE/Action/SetKillDecayProducts    true
+/MACE/Action/SetKillIrrelevants    true
 
 # Ablated target with pitch 15um, diameter 86um
 /MACE/Geometry/SetFineStructure (z<-5 || x<-20||x>20 || y<-20||y>20) || ((x-(round((x-y/sqrt(3))/0.101)+round(2/sqrt(3)*y/0.101)/2)*0.101)^2+(y-sqrt(3)/2*round(2/sqrt(3)*y/0.101)*0.101)^2>0.086*0.086/4)

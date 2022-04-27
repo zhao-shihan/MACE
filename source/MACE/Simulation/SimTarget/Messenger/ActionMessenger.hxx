@@ -30,7 +30,7 @@ private:
     ObserverPtr<SteppingAction> fSteppingAction = nullptr;
 
     G4UIdirectory fDirectory;
-    G4UIcmdWithABool fSetKillDecayProducts;
+    G4UIcmdWithABool fSetKillIrrelevants;
 };
 
 } // namespace MACE::Simulation::SimTarget::Messenger

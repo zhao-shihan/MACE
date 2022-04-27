@@ -19,7 +19,7 @@ TrackingAction::TrackingAction() :
 void TrackingAction::PreUserTrackingAction(const G4Track* track) {
     const auto* const particle = track->GetParticleDefinition();
     if (particle == fMuonium or particle == fAntiMuonium) {
-        fMuoniumTrack = fAnalysis->NewMuoniumTrack().get();
+        fMuoniumTrack = fAnalysis->NewMuoniumTrack();
         fMuoniumTrack->SetVertexTime(track->GetGlobalTime());
         fMuoniumTrack->SetVertexPosition(track->GetPosition());
         fMuoniumTrack->SetVertexMomentum(track->GetMomentum());

@@ -14,12 +14,12 @@ SteppingAction::SteppingAction() :
     fMuonPlus(G4MuonPlus::Definition()),
     fMuonium(Muonium::Definition()),
     fAntiMuonium(AntiMuonium::Definition()),
-    fKillDecayProducts(true) {
+    fKillIrrelevants(false) {
     Messenger::ActionMessenger::Instance().SetTo(this);
 }
 
 void SteppingAction::UserSteppingAction(const G4Step* step) {
-    if (fKillDecayProducts) {
+    if (fKillIrrelevants) {
         const auto* const particle = step->GetTrack()->GetParticleDefinition();
         if (particle != fMuonPlus and particle != fMuonium and particle != fAntiMuonium) {
             step->GetTrack()->SetTrackStatus(fStopAndKill);

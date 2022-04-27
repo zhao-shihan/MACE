@@ -1,3 +1,4 @@
+#include "MACE/Core/Geometry/Description/BeamDegrader.hxx"
 #include "MACE/Core/Geometry/Description/Target.hxx"
 #include "MACE/Core/Geometry/Description/World.hxx"
 #include "MACE/Simulation/SimTarget/Messenger/GeometryMessenger.hxx"
@@ -16,6 +17,9 @@ GeometryMessenger::GeometryMessenger() :
     G4UImessenger(),
     fDirectory("/MACE/Geometry/"),
     fSetWorldHalfExtent("/MACE/Geometry/SetWorldHalfExtent", this),
+    fSetDegraderWidth("/MACE/Geometry/SetDegraderWidth", this),
+    fSetDegraderThickness("/MACE/Geometry/SetDegraderThickness", this),
+    fSetDistanceBetweenDegraderAndTarget("/MACE/Geometry/SetDistanceBetweenDegraderAndTarget", this),
     fSetTargetWidth("/MACE/Geometry/SetTargetWidth", this),
     fSetTargetThickness("/MACE/Geometry/SetTargetThickness", this),
     fSetTargetDensity("/MACE/Geometry/SetTargetDensity", this),
@@ -24,23 +28,43 @@ GeometryMessenger::GeometryMessenger() :
 
     fDirectory.SetGuidance("SimTarget geometry controller.");
 
-    fSetWorldHalfExtent.SetParameterName("half x", "half y", "half z", false);
+    fSetWorldHalfExtent.SetGuidance("Set half extents of the world.");
+    fSetWorldHalfExtent.SetParameterName("x", "y", "z", false);
     fSetWorldHalfExtent.SetUnitCategory("Length");
     fSetWorldHalfExtent.AvailableForStates(G4State_PreInit);
 
-    fSetTargetWidth.SetParameterName("Target width", false);
+    fSetDegraderWidth.SetGuidance("Set beam degrader width.");
+    fSetDegraderWidth.SetParameterName("w", false);
+    fSetDegraderWidth.SetUnitCategory("Length");
+    fSetDegraderWidth.AvailableForStates(G4State_PreInit);
+
+    fSetDegraderThickness.SetGuidance("Set beam degrader thickness.");
+    fSetDegraderThickness.SetParameterName("t", false);
+    fSetDegraderThickness.SetUnitCategory("Length");
+    fSetDegraderThickness.AvailableForStates(G4State_PreInit);
+
+    fSetDistanceBetweenDegraderAndTarget.SetGuidance("Set distance between degrader downstream surface and target upstream surface.");
+    fSetDistanceBetweenDegraderAndTarget.SetParameterName("d", false);
+    fSetDistanceBetweenDegraderAndTarget.SetUnitCategory("Length");
+    fSetDistanceBetweenDegraderAndTarget.AvailableForStates(G4State_PreInit);
+
+    fSetTargetWidth.SetGuidance("Set target width.");
+    fSetTargetWidth.SetParameterName("w", false);
     fSetTargetWidth.SetUnitCategory("Length");
     fSetTargetWidth.AvailableForStates(G4State_PreInit);
 
-    fSetTargetThickness.SetParameterName("Target thickness", false);
+    fSetTargetThickness.SetGuidance("Set target thickness.");
+    fSetTargetThickness.SetParameterName("t", false);
     fSetTargetThickness.SetUnitCategory("Length");
     fSetTargetThickness.AvailableForStates(G4State_PreInit);
 
-    fSetTargetDensity.SetParameterName("density", false);
+    fSetTargetDensity.SetGuidance("Set target density.");
+    fSetTargetDensity.SetParameterName("rho", false);
     fSetTargetDensity.SetUnitCategory("Volumic Mass");
     fSetTargetDensity.AvailableForStates(G4State_PreInit);
 
-    fSetTemperature.SetParameterName("temperature", false);
+    fSetTemperature.SetGuidance("Set environment temperature.");
+    fSetTemperature.SetParameterName("T", false);
     fSetTemperature.SetUnitCategory("Temperature");
     fSetTemperature.AvailableForStates(G4State_PreInit);
 
@@ -57,6 +81,12 @@ void GeometryMessenger::SetNewValue(G4UIcommand* command, G4String value) {
         world.SetHalfXExtent(halfExtent.x());
         world.SetHalfYExtent(halfExtent.y());
         world.SetHalfZExtent(halfExtent.z());
+    } else if (command == std::addressof(fSetDegraderWidth)) {
+        Description::BeamDegrader::Instance().SetWidth(fSetDegraderWidth.GetNewDoubleValue(value));
+    } else if (command == std::addressof(fSetDegraderThickness)) {
+        Description::BeamDegrader::Instance().SetThickness(fSetDegraderThickness.GetNewDoubleValue(value));
+    } else if (command == std::addressof(fSetDistanceBetweenDegraderAndTarget)) {
+        Description::BeamDegrader::Instance().SetDistanceToTargetSurface(fSetDistanceBetweenDegraderAndTarget.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetTargetWidth)) {
         Description::Target::Instance().SetWidth(fSetTargetWidth.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetTargetThickness)) {
