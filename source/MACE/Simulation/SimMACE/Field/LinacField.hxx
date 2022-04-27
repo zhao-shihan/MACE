@@ -17,7 +17,7 @@ public:
     G4bool DoesFieldChangeEnergy() const override { return true; }
 
     void SetTransportBField(G4double B) { fBz = B; }
-    void SetAcceleratorPotential(G4double V);
+    void SetLinacPotential(G4double V);
 
 private:
     G4double fBz;

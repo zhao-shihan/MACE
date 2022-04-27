@@ -24,7 +24,7 @@
 /MACE/Physics/MuoniumPhysics/Transport/SetTrialStepInVacuum        14.9 um
 
 /MACE/Field/SetTransportMagneticField     0.1 tesla
-/MACE/Field/SetAcceleratorPotential       7 kilovolt
+/MACE/Field/SetLinacPotential             7 kilovolt
 /MACE/Field/SetSelectorElectricField      500 kilovolt/m
 
 /MACE/Analysis/EnableCoincidenceOfEMCal   true
