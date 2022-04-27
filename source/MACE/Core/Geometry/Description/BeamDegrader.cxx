@@ -16,7 +16,7 @@ BeamDegrader& BeamDegrader::Instance() noexcept {
 BeamDegrader::BeamDegrader() :
     IDescription("BeamDegrader"),
     fWidth(6_cm),
-    fThickness(100_um),
+    fThickness(500_um),
     fDistanceToTargetSurface(5_mm) {}
 
 HepGeom::Transform3D BeamDegrader::CalcTransform() const {

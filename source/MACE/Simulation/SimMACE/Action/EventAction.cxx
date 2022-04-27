@@ -16,7 +16,7 @@ void EventAction::BeginOfEventAction(const G4Event* event) {
 }
 
 void EventAction::EndOfEventAction(const G4Event*) {
-    const auto repetitionID = RunManager::Instance().GetPrimaryGeneratorAction().GetSurfaceMuonPGA().GetRepetitionID();
+    const auto repetitionID = RunManager::Instance().GetPrimaryGeneratorAction().GetRepetitionID();
     Utility::Analysis::Instance().WriteEvent(repetitionID);
 }
 

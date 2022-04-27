@@ -1,24 +1,27 @@
 #pragma once
 
-#include "MACE/Simulation/Generator/SurfaceMuon/PrimaryGeneratorAction.hxx"
+#include "MACE/Simulation/Generator/SurfaceMuon.hxx"
+
+#include "G4VUserPrimaryGeneratorAction.hh"
 
 namespace MACE::Simulation::SimTarget::Action {
 
-using namespace Generator;
-
 class PrimaryGeneratorAction final : public G4VUserPrimaryGeneratorAction {
 public:
-    PrimaryGeneratorAction() = default;
+    PrimaryGeneratorAction();
     ~PrimaryGeneratorAction() noexcept = default;
     PrimaryGeneratorAction(const PrimaryGeneratorAction&) = delete;
     PrimaryGeneratorAction& operator=(const PrimaryGeneratorAction&) = delete;
 
+    void SetMuonsForEachG4Event(G4int n) { fMuonsForEachG4Event = n; }
+    const auto& GetMuonsForEachG4Event() const { return fMuonsForEachG4Event; }
+
     void GeneratePrimaries(G4Event* event) override;
 
-    const auto& GetSurfaceMuonPGA() const { return fSurfaceMuonPGA; }
-
 private:
-    SurfaceMuon::PrimaryGeneratorAction fSurfaceMuonPGA;
+    Generator::SurfaceMuon fSurfaceMuonGenerator;
+
+    G4int fMuonsForEachG4Event;
 };
 
 } // namespace MACE::Simulation::SimTarget::Action
