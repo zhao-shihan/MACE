@@ -25,14 +25,14 @@ public:
     CDCHit& operator=(const CDCHit& hit) noexcept = default;
     CDCHit& operator=(CDCHit&& hit) noexcept = default;
 
+    inline void* operator new(size_t);
+    inline void operator delete(void*);
+
     void SetWirePosition(const G4TwoVector& pos) { Base::SetWirePosition(pos.x(), pos.y()); }
     void SetWireDirection(const G4ThreeVector& dir) { Base::SetWireDirection(dir.x(), dir.y(), dir.z()); }
     void SetMomentum(const G4ThreeVector& mom) { Base::SetMomentum(mom.x(), mom.y(), mom.z()); }
     void SetVertexPosition(const G4ThreeVector& pos) { Base::SetVertexPosition(pos.x(), pos.y(), pos.z()); }
     void SetVertexMomentum(const G4ThreeVector& mom) { Base::SetVertexMomentum(mom.x(), mom.y(), mom.z()); }
-
-    inline void* operator new(size_t);
-    inline void operator delete(void*);
 
 private:
     static ObserverPtr<G4Allocator<CDCHit>> fgCDCHitAllocator;
@@ -40,15 +40,6 @@ private:
 
 using CDCHitCollection = G4THitsCollection<CDCHit>;
 
-inline void* CDCHit::operator new(size_t) {
-    if (fgCDCHitAllocator == nullptr) {
-        fgCDCHitAllocator = new G4Allocator<CDCHit>();
-    }
-    return static_cast<void*>(fgCDCHitAllocator->MallocSingle());
-}
-
-inline void CDCHit::operator delete(void* hit) {
-    fgCDCHitAllocator->FreeSingle(static_cast<CDCHit*>(hit));
-}
-
 } // namespace MACE::Simulation::SimMACE::Hit
+
+#include "MACE/Simulation/SimMACE/Hit/CDCHit.ixx"

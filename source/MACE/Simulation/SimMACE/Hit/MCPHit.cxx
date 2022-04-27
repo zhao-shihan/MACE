@@ -1,6 +1,7 @@
 #include "MACE/Simulation/SimMACE/Hit/MCPHit.hxx"
 
-using MACE::Simulation::SimMACE::Hit::MCPHit;
-using MACE::Utility::ObserverPtr;
+namespace MACE::Simulation::SimMACE::Hit {
 
-ObserverPtr<G4Allocator<MCPHit>> MCPHit::fgMCPAllocator = nullptr;
+ObserverPtr<G4Allocator<MCPHit>> MCPHit::fgMCPHitAllocator = nullptr;
+
+} // namespace MACE::Simulation::SimMACE::Hit
