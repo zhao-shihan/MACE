@@ -13,6 +13,7 @@ using namespace MACE::Simulation::SimTarget;
 int main(int argc, char** argv) {
     bool visMode = (argc == 1);
 
+    // Known issue: use CLHEP::HepJamesRandom may cause dead lock!
     const auto randEng = std::make_unique<CLHEP::MTwistEngine>(4357L);
     G4Random::setTheEngine(randEng.get());
 
