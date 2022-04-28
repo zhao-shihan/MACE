@@ -13,7 +13,7 @@ FieldMessenger::FieldMessenger() :
     G4UImessenger(),
     fDirectory("/MACE/Field/"),
     fSetTransportMagneticField("/MACE/Field/SetTransportMagneticField", this),
-    fSetAcceleratorPotential("/MACE/Field/SetAcceleratorPotential", this),
+    fSetLinacPotential("/MACE/Field/SetLinacPotential", this),
     fSetSelectorElectricField("/MACE/Field/SetSelectorElectricField", this) {
 
     fDirectory.SetGuidance("Detector field controller.");
@@ -23,11 +23,11 @@ FieldMessenger::FieldMessenger() :
     fSetTransportMagneticField.SetUnitCategory("Magnetic flux density");
     fSetTransportMagneticField.AvailableForStates(G4State_Idle);
 
-    fSetAcceleratorPotential.SetGuidance(
-        "Set accelerator electric potential. (Selector electric field changes, respectively.)");
-    fSetAcceleratorPotential.SetParameterName("V", false);
-    fSetAcceleratorPotential.SetUnitCategory("Electric potential");
-    fSetAcceleratorPotential.AvailableForStates(G4State_Idle);
+    fSetLinacPotential.SetGuidance(
+        "Set linac electric potential. (Selector electric field changes, respectively.)");
+    fSetLinacPotential.SetParameterName("V", false);
+    fSetLinacPotential.SetUnitCategory("Electric potential");
+    fSetLinacPotential.AvailableForStates(G4State_Idle);
 
     fSetSelectorElectricField.SetGuidance(
         "Set selector electric field. (Selector magnetic field changes, respectively, to ensure the seleted kinetic energy stays the same.)");
@@ -45,9 +45,9 @@ void FieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
         fSecondBendField->SetTransportMagneticField(B);
         fSelectorField->SetTransportField(B);
         fVerticalField->SetFieldNorm(B);
-    } else if (command == std::addressof(fSetAcceleratorPotential)) {
-        const auto V = fSetAcceleratorPotential.GetNewDoubleValue(value);
-        fLinacField->SetAcceleratorPotential(V);
+    } else if (command == std::addressof(fSetLinacPotential)) {
+        const auto V = fSetLinacPotential.GetNewDoubleValue(value);
+        fLinacField->SetLinacPotential(V);
         fSelectorField->SetSelectEnergy(std::abs(V));
     } else if (command == std::addressof(fSetSelectorElectricField)) {
         fSelectorField->SetSelectorElectricField(fSetSelectorElectricField.GetNewDoubleValue(value));

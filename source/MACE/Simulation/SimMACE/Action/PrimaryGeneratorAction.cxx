@@ -1,18 +1,35 @@
 #include "MACE/Simulation/SimMACE/Action/PrimaryGeneratorAction.hxx"
+#include "MACE/Simulation/SimMACE/Messenger/PrimaryGeneratorActionMessenger.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
+
+#include "G4Event.hh"
+#include "Randomize.hh"
 
 namespace MACE::Simulation::SimMACE::Action {
 
+using namespace Utility::LiteralUnit::Frequency;
+using namespace Utility::LiteralUnit::Time;
+
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
-    fSurfaceMuonPGA() //,
-/* fCosmicRayMuonPGA() */ {
-    using namespace MACE::Utility::LiteralUnit::Length;
-    fSurfaceMuonPGA.SetVertexZ(-1.5_m);
+    fSurfaceMuonGenerator(),
+    fFlux(1e7_s_1),
+    fRepetitionRate(50_Hz),
+    fTimeWidthRMS(100_us),
+    fMuonsForEachG4Event(500),
+    fRepetitionID(-1) {
+    Messenger::PrimaryGeneratorActionMessenger::Instance().SetTo(this);
 }
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
-    fSurfaceMuonPGA.GeneratePrimaries(event);
-    // fCosmicRayMuonPGA.GeneratePrimaries(event);
+    const auto muonsForEachReptition = fFlux / fRepetitionRate;                         // no rounding
+    const auto g4EventsForEachReptition = muonsForEachReptition / fMuonsForEachG4Event; // no rounding
+    fRepetitionID = event->GetEventID() / g4EventsForEachReptition;                     // rounding here
+
+    auto* const randEng = G4Random::getTheEngine();
+    for (G4int i = 0; i < fMuonsForEachG4Event; ++i) {
+        fSurfaceMuonGenerator.SetVertexTime(G4RandGauss::shoot(randEng, 0, fTimeWidthRMS));
+        fSurfaceMuonGenerator.GeneratePrimaryVertex(event);
+    }
 }
 
 } // namespace MACE::Simulation::SimMACE::Action

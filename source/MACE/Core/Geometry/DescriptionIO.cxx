@@ -20,20 +20,21 @@ using namespace Description;
 
 /// @brief A std::tuple holding pointers to all geometry descriptions that will be read and written.
 /// @attention If there is a new geometry description class, add to this.
-static std::tuple<ObserverPtr<LinacField>,
+static std::tuple<ObserverPtr<CDC>,
+                  ObserverPtr<Collimator>,
+                  ObserverPtr<BeamDegrader>,
                   ObserverPtr<EMCal>,
                   ObserverPtr<EMCalField>,
                   ObserverPtr<EMCalShield>,
-                  ObserverPtr<CDC>,
-                  ObserverPtr<Collimator>,
+                  ObserverPtr<MCP>,
                   ObserverPtr<SelectorField>,
                   ObserverPtr<SpectrometerField>,
                   ObserverPtr<SpectrometerMagnet>,
                   ObserverPtr<SpectrometerShield>,
                   ObserverPtr<Target>,
                   ObserverPtr<TransportLine>,
-                  ObserverPtr<MCP>,
-                  ObserverPtr<World>>
+                  ObserverPtr<World>,
+                  ObserverPtr<LinacField>>
     descriptionTuple;
 
 static void InitializeDescriptionTuple() {
@@ -61,6 +62,7 @@ void Write(const std::string& yamlFileName) {
     TupleForEach(std::as_const(descriptionTuple), WriteDescription);
     std::ofstream yamlOut(yamlFileName, std::ios::out);
     yamlOut << geomYaml;
+    yamlOut.close();
 }
 
 } // namespace MACE::Core::Geometry::DescriptionIO

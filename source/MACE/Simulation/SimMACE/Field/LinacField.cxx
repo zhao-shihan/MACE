@@ -29,7 +29,7 @@ void LinacField::GetFieldValue(const G4double*, G4double* F) const {
     F[5] = fEz;
 }
 
-void LinacField::SetAcceleratorPotential(G4double V) {
+void LinacField::SetLinacPotential(G4double V) {
     fV = V;
     fEz = fV / (LinacDescription::Instance().GetDownStreamLength() - fDecayZMean);
 }

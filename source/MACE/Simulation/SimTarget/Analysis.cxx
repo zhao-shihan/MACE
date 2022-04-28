@@ -98,7 +98,7 @@ void Analysis::OpenYieldFile() {
 }
 
 void Analysis::AnalysisAndWriteYield() {
-    G4int nMuon = RunManager::Instance().GetPrimaryGeneratorAction().GetSurfaceMuonPGA().GetMuonsForEachG4Event() * fThisRun->GetNumberOfEvent();
+    G4int nMuon = RunManager::Instance().GetPrimaryGeneratorAction().GetMuonsForEachG4Event() * fThisRun->GetNumberOfEvent();
     G4int nFormed = fMuoniumTrackList.size();
     G4int nTargetDecay = 0;
     G4int nVacuumDecay = 0;

@@ -33,7 +33,7 @@ public:
     void EnableResultMerge(G4bool val) { fEnableResultMerge = val; }
 
     void RunBegin(ObserverPtr<const G4Run> run);
-    const auto& NewMuoniumTrack() { return fMuoniumTrackList.emplace_back(std::make_unique<MuoniumTrack>()); }
+    auto NewMuoniumTrack() { return fMuoniumTrackList.emplace_back(std::make_unique<MuoniumTrack>()).get(); }
     void RunEnd();
     void G4Quit();
 

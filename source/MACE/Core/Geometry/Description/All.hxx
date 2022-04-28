@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "MACE/Core/Geometry/Description/BeamDegrader.hxx"
 #include "MACE/Core/Geometry/Description/CDC.hxx"
 #include "MACE/Core/Geometry/Description/Collimator.hxx"
 #include "MACE/Core/Geometry/Description/EMCal.hxx"

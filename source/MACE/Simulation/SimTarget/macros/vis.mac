@@ -15,11 +15,12 @@
 /vis/viewer/set/style s
 /vis/viewer/set/auxiliaryEdge false
 /vis/viewer/set/lineSegmentsPerCircle 100
-/vis/viewer/zoom 5
+/vis/viewer/zoom 10
 
 # Colors
-/vis/geometry/set/colour Target    0     1     1     1     0.5
-/vis/geometry/set/colour World     0     1     1     1     0.01
+/vis/geometry/set/colour BeamDegrader    0     1     1     1     0.5
+/vis/geometry/set/colour Target          0     1     1     1     0.5
+/vis/geometry/set/colour World           0     1     1     1     0.01
 
 /vis/scene/add/date
 /vis/scene/add/axes 0 0 0 1 cm

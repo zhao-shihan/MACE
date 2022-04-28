@@ -9,16 +9,16 @@ ActionMessenger& ActionMessenger::Instance() {
 
 ActionMessenger::ActionMessenger() :
     fDirectory("/MACE/Action/"),
-    fSetKillDecayProducts("/MACE/Action/SetKillDecayProducts", this) {
+    fSetKillIrrelevants("/MACE/Action/SetKillIrrelevants", this) {
 
-    fSetKillDecayProducts.SetGuidance("Kill decay products of muon and muonium for better performance.");
-    fSetKillDecayProducts.SetParameterName("b", false);
-    fSetKillDecayProducts.AvailableForStates(G4State_Idle);
+    fSetKillIrrelevants.SetGuidance("Kill decay products of muon and muonium for better performance.");
+    fSetKillIrrelevants.SetParameterName("b", false);
+    fSetKillIrrelevants.AvailableForStates(G4State_Idle);
 }
 
 void ActionMessenger::SetNewValue(G4UIcommand* command, G4String value) {
-    if (command == std::addressof(fSetKillDecayProducts)) {
-        fSteppingAction->SetKillDecayProducts(fSetKillDecayProducts.GetNewBoolValue(value));
+    if (command == std::addressof(fSetKillIrrelevants)) {
+        fSteppingAction->SetKillIrrelevants(fSetKillIrrelevants.GetNewBoolValue(value));
     }
 }
 

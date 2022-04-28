@@ -13,6 +13,7 @@ int main(int, char**) {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Construct entity objects
+    auto fBeamDegrader = std::make_shared<BeamDegrader>();
     auto fCDCBody = std::make_shared<CDCBody>();
     auto fCDCCell = std::make_shared<CDCCell>();
     auto fCDCFieldWire = std::make_shared<CDCFieldWire>();
@@ -43,22 +44,23 @@ int main(int, char**) {
     auto fWorld = std::make_shared<World>();
 
     // Construct hierarchy
+    fCDCBody->AddDaughter(fCDCLayer);
+    fCDCCell->AddDaughter(fCDCFieldWire);
+    fCDCCell->AddDaughter(fCDCSensitiveVolume);
+    fCDCLayer->AddDaughter(fCDCCell);
+    fCDCSensitiveVolume->AddDaughter(fCDCSenseWire);
     fEMCalField->AddDaughter(fEMCal);
     fEMCalField->AddDaughter(fMCP);
     fFirstBendField->AddDaughter(fFirstBendSolenoid);
     fFirstTransportField->AddDaughter(fFirstTransportSolenoid);
+    fLinacField->AddDaughter(fBeamDegrader);
+    fLinacField->AddDaughter(fTarget);
     fSecondBendField->AddDaughter(fSecondBendSolenoid);
     fSecondTransportField->AddDaughter(fCollimator);
     fSecondTransportField->AddDaughter(fSecondTransportSolenoid);
     fSecondTransportField->AddDaughter(fSelectorField);
-    fLinacField->AddDaughter(fTarget);
-    fCDCSensitiveVolume->AddDaughter(fCDCSenseWire);
-    fCDCCell->AddDaughter(fCDCFieldWire);
-    fCDCCell->AddDaughter(fCDCSensitiveVolume);
-    fCDCLayer->AddDaughter(fCDCCell);
-    fCDCBody->AddDaughter(fCDCLayer);
-    fSpectrometerField->AddDaughter(fLinacField);
     fSpectrometerField->AddDaughter(fCDCBody);
+    fSpectrometerField->AddDaughter(fLinacField);
     fSpectrometerField->AddDaughter(fSpectrometerMagnet);
     fThirdTransportField->AddDaughter(fThirdTransportSolenoid);
     fWorld->AddDaughter(fEMCalField);
@@ -83,6 +85,7 @@ int main(int, char**) {
     auto nist = G4NistManager::Instance();
 
     auto aluminium = nist->FindOrBuildMaterial("G4_Al");
+    fBeamDegrader->RegisterMaterial(aluminium);
     fCDCFieldWire->RegisterMaterial(aluminium);
 
     auto cdcGas = nist->FindOrBuildMaterial("G4_He");

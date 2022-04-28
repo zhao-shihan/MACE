@@ -16,7 +16,7 @@ public:
     SteppingAction(const SteppingAction&) = delete;
     SteppingAction& operator=(const SteppingAction&) = delete;
 
-    void SetKillDecayProducts(G4bool val) { fKillDecayProducts = val; }
+    void SetKillIrrelevants(G4bool val) { fKillIrrelevants = val; }
 
     void UserSteppingAction(const G4Step* step) override;
 
@@ -24,7 +24,7 @@ private:
     const ObserverPtr<const G4ParticleDefinition> fMuonPlus;
     const ObserverPtr<const G4ParticleDefinition> fMuonium;
     const ObserverPtr<const G4ParticleDefinition> fAntiMuonium;
-    G4bool fKillDecayProducts;
+    G4bool fKillIrrelevants;
 };
 
 } // namespace MACE::Simulation::SimTarget::Action

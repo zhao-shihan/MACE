@@ -32,6 +32,9 @@ private:
 
     G4UIdirectory fDirectory;
     G4UIcmdWith3VectorAndUnit fSetWorldHalfExtent;
+    G4UIcmdWithADoubleAndUnit fSetDegraderWidth;
+    G4UIcmdWithADoubleAndUnit fSetDegraderThickness;
+    G4UIcmdWithADoubleAndUnit fSetDistanceBetweenDegraderAndTarget;
     G4UIcmdWithADoubleAndUnit fSetTargetWidth;
     G4UIcmdWithADoubleAndUnit fSetTargetThickness;
     G4UIcmdWithADoubleAndUnit fSetTargetDensity;
