@@ -35,6 +35,3 @@
 /run/printProgress 1
 /run/beamOn 80
 /mpi/status
-
-# Merge the result
-/MACE/Analysis/MergeResult true

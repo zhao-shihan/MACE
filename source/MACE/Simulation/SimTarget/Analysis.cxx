@@ -1,6 +1,7 @@
 #include "MACE/Simulation/SimTarget/Analysis.hxx"
 #include "MACE/Simulation/SimTarget/Messenger/AnalysisMessenger.hxx"
 #include "MACE/Simulation/SimTarget/RunManager.hxx"
+#include "MACE/Utility/MPITool/MakeMPIFilePath.hxx"
 
 #include "G4MPImanager.hh"
 
@@ -17,15 +18,12 @@ Analysis::Analysis() :
     fTarget(std::addressof(Target::Instance())),
     fResultName("SimTarget_result"),
     fEnableYieldAnalysis(true),
-    fEnableResultMerge(false),
     fThisRun(nullptr),
     fMuoniumTrackList(0),
-    fMPIFileTools(nullptr),
     fResultFile(nullptr),
     fYieldFile(nullptr),
     fDataFactory() {
     AnalysisMessenger::Instance();
-    MPIFileTools::SetOutStream(G4cout);
     fDataFactory.SetTreeNamePrefixFormat("Run#_");
 }
 
@@ -42,9 +40,6 @@ void Analysis::RunEnd() {
 
 void Analysis::G4Quit() {
     Close();
-    if (fEnableResultMerge and fMPIFileTools != nullptr) {
-        fMPIFileTools->MergeRootFiles(true);
-    }
 }
 
 void Analysis::Open() {
@@ -71,12 +66,13 @@ void Analysis::Close() {
 }
 
 void Analysis::OpenResultFile() {
+    std::string filePath;
     if (MPI::Is_initialized()) {
-        fMPIFileTools = std::make_unique<MPIFileTools>(fResultName, ".root", *G4MPImanager::GetManager()->GetComm());
+        filePath = MACE::Utility::MPITool::MakeMPIFilePath(fResultName, ".root", *G4MPImanager::GetManager()->GetComm());
     } else {
-        fMPIFileTools = std::make_unique<MPIFileTools>(fResultName, ".root");
+        filePath = fResultName + ".root";
     }
-    fResultFile = std::make_unique<TFile>(fMPIFileTools->GetFilePath().c_str(), "recreate");
+    fResultFile = std::make_unique<TFile>(filePath.c_str(), "recreate");
 }
 
 void Analysis::WriteResult() {
