@@ -4,7 +4,6 @@
 #include "MACE/Simulation/SimMACE/Hit/CDCHit.hxx"
 #include "MACE/Simulation/SimMACE/Hit/EMCalHit.hxx"
 #include "MACE/Simulation/SimMACE/Hit/MCPHit.hxx"
-#include "MACE/Utility/MPITool/MPIFileTools.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "TFile.h"
@@ -16,7 +15,6 @@ using Hit::CDCHit;
 using Hit::EMCalHit;
 using Hit::MCPHit;
 using MACE::Utility::ObserverPtr;
-using MACE::Utility::MPITool::MPIFileTools;
 
 class Analysis final {
 public:
@@ -36,7 +34,6 @@ public:
 
     void Open(Option_t* option = "recreate");
     void Close(Option_t* option = nullptr);
-    int Merge(G4bool forced = false);
 
     void SubmitEMCalHC(ObserverPtr<const std::vector<EMCalHit*>> hitList) { fEMCalHitList = hitList; }
     void SubmitMCPHC(ObserverPtr<const std::vector<MCPHit*>> hitList) { fMCPHitList = hitList; }
@@ -48,7 +45,6 @@ private:
 
 private:
     std::unique_ptr<TFile> fFile;
-    std::unique_ptr<MPIFileTools> fMPIFileTools;
 
     G4String fResultName = "untitled_SimMACE";
     G4bool fEnableCoincidenceOfEMCal = true;

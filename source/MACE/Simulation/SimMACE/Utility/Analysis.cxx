@@ -1,6 +1,7 @@
 #include "MACE/Simulation/SimMACE/Messenger/AnalysisMessenger.hxx"
 #include "MACE/Simulation/SimMACE/Messenger/FieldMessenger.hxx"
 #include "MACE/Simulation/SimMACE/Utility/Analysis.hxx"
+#include "MACE/Utility/MPITool/MakeMPIFilePath.hxx"
 
 #include "G4MPImanager.hh"
 
@@ -15,7 +16,6 @@ Analysis& Analysis::Instance() {
 
 Analysis::Analysis() :
     fFile(nullptr),
-    fMPIFileTools(nullptr),
     fDataHub(),
     fRepetitionIDOfLastG4Event(std::numeric_limits<decltype(fRepetitionIDOfLastG4Event)>::max()),
     fEMCalHitTree(nullptr),
@@ -25,17 +25,17 @@ Analysis::Analysis() :
     fMCPHitList(nullptr),
     fCDCHitList(nullptr) {
     AnalysisMessenger::Instance();
-    MPIFileTools::SetOutStream(G4cout);
     fDataHub.SetTreeNamePrefixFormat("Rep#_");
 }
 
 void Analysis::Open(Option_t* option) {
+    std::string filePath;
     if (MPI::Is_initialized()) {
-        fMPIFileTools = std::make_unique<MPIFileTools>(fResultName, ".root", *G4MPImanager::GetManager()->GetComm());
+        filePath = MACE::Utility::MPITool::MakeMPIFilePath(fResultName, ".root", *G4MPImanager::GetManager()->GetComm());
     } else {
-        fMPIFileTools = std::make_unique<MPIFileTools>(fResultName, ".root");
+        filePath = fResultName + ".root";
     }
-    fFile.reset(TFile::Open(fMPIFileTools->GetFilePath().c_str(), option));
+    fFile = std::make_unique<TFile>(filePath.c_str(), option);
 }
 
 void Analysis::Close(Option_t* option) {
@@ -43,14 +43,6 @@ void Analysis::Close(Option_t* option) {
     fFile->Close(option);
     // must delete the file object otherwise segmentation violation.
     fFile.reset();
-}
-
-int Analysis::Merge(G4bool forced) {
-    if (fMPIFileTools) {
-        return fMPIFileTools->MergeRootFiles(forced);
-    } else {
-        G4cout << "Nothing to merge, skipped." << G4endl;
-    }
 }
 
 void Analysis::WriteEvent(G4int repetitionID) {

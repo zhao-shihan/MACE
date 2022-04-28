@@ -10,27 +10,27 @@
 #include "MACE/Core/Geometry/Description/TransportLine.hxx"
 #include "MACE/Reconstruction/ReconMuonium/MuoniumSimVertex.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
-#include "MACE/Utility/MPITool/MPIFileTools.hxx"
+#include "MACE/Utility/MPITool/MakeMPIFilePath.hxx"
 #include "MACE/Utility/MPITool/MPIJobsAssigner.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "TH2F.h"
 
-using namespace MACE::Utility::PhysicalConstant;
-using namespace MACE::Utility::LiteralUnit;
-using namespace MACE::Utility::MPITool;
-using namespace MACE::Core::Geometry::Description;
 using namespace MACE::Core::DataModel;
 using namespace MACE::Core::DataModel::CDCTrackOperation;
+using namespace MACE::Core::Geometry::Description;
 using namespace MACE::Reconstruction::ReconMuonium;
+using namespace MACE::Utility::LiteralUnit;
+using namespace MACE::Utility::MPITool;
+using namespace MACE::Utility::PhysicalConstant;
 
 using MACE::Core::DataFactory;
 
-using Helix_t = Track::CDCHelixTrack;
-using Track_t = Track::CDCPhysicsTrack;
 using EMCalHit_t = SimHit::EMCalSimHit;
+using Helix_t = Track::CDCHelixTrack;
 using MCPHit_t = SimHit::MCPSimHit;
 using MVertex_t = MuoniumSimVertex;
+using Track_t = Track::CDCPhysicsTrack;
 
 int main(int, char* argv[]) {
     MPI::Init();
@@ -82,9 +82,9 @@ int main(int, char* argv[]) {
 
     std::filesystem::path pathOut(argv[1]);
     pathOut.replace_extension("");
-    MPIFileTools mpiFileOut(pathOut.string() + "_recM", ".root");
+    const auto fileNameOut = MakeMPIFilePath(pathOut.string() + "_recM", ".root");
     // output file of this rank
-    TFile fileOut(mpiFileOut.GetFilePath().c_str(), "recreate");
+    TFile fileOut(fileNameOut.c_str(), "recreate");
 
     DataFactory dataHub;
 
@@ -220,8 +220,6 @@ int main(int, char* argv[]) {
 
     vertexTree->Write();
     vertexHist.Write();
-
-    mpiFileOut.MergeRootFiles(true);
 
     MPI::Finalize();
     return EXIT_SUCCESS;

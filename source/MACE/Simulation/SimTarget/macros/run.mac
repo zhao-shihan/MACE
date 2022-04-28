@@ -56,6 +56,3 @@
 /MACE/Geometry/SetFineStructure (z<-5 || x<-20||x>20 || y<-20||y>20) || ((x-(round((x-y/sqrt(3))/0.111)+round(2/sqrt(3)*y/0.111)/2)*0.111)^2+(y-sqrt(3)/2*round(2/sqrt(3)*y/0.111)*0.111)^2>0.096*0.096/4)
 /run/beamOn 80
 /mpi/status
-
-# Enable result merge
-/MACE/Analysis/EnableResultMerge true

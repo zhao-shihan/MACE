@@ -4,7 +4,7 @@
 #include "MACE/Reconstruction/ReconTracks/Fitter/PerfectFitter.hxx"
 #include "MACE/Reconstruction/ReconTracks/Tracker/Hough.hxx"
 #include "MACE/Reconstruction/ReconTracks/Tracker/PerfectFinder.hxx"
-#include "MACE/Utility/MPITool/MPIFileTools.hxx"
+#include "MACE/Utility/MPITool/MakeMPIFilePath.hxx"
 #include "MACE/Utility/MPITool/MPIJobsAssigner.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
@@ -51,8 +51,8 @@ int main(int, char** argv) {
 
     std::filesystem::path outName(nameIn);
     outName.replace_extension("");
-    MPIFileTools mpiFileOut(outName.string() + "_recTrk", ".root");
-    TFile fileOut(mpiFileOut.GetFilePath().c_str(), "recreate");
+    const auto fileNameOut = MakeMPIFilePath(outName.string() + "_recTrk", ".root");
+    TFile fileOut(fileNameOut.c_str(), "recreate");
 
     DataFactory dataHub;
     dataHub.SetTreeNamePrefixFormat("Rep#_");
@@ -130,8 +130,6 @@ int main(int, char** argv) {
 
     fileOut.Close();
     fileIn.Close();
-
-    mpiFileOut.MergeRootFiles(true);
 
     MPI::Finalize();
     return EXIT_SUCCESS;

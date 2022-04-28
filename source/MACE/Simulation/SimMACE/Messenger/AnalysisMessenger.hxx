@@ -27,7 +27,6 @@ private:
     G4UIcmdWithABool fEnableCoincidenceOfEMCal;
     G4UIcmdWithABool fEnableCoincidenceOfMCP;
     G4UIcmdWithAString fSetResultName;
-    G4UIcmdWithABool fMergeResult;
 };
 
 } // namespace MACE::Simulation::SimMACE::Messenger
