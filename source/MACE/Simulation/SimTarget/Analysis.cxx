@@ -94,11 +94,13 @@ void Analysis::OpenYieldFile() {
 }
 
 void Analysis::AnalysisAndWriteYield() {
-    G4int nMuon = RunManager::Instance().GetPrimaryGeneratorAction().GetMuonsForEachG4Event() * fThisRun->GetNumberOfEvent();
-    G4int nFormed = fMuoniumTrackList.size();
-    G4int nTargetDecay = 0;
-    G4int nVacuumDecay = 0;
-    G4int nDetectableDecay = 0;
+    std::array<int, 5> yieldData;
+    auto& [nMuon, nFormed, nTargetDecay, nVacuumDecay, nDetectableDecay] = yieldData;
+    nMuon = RunManager::Instance().GetPrimaryGeneratorAction().GetMuonsForEachG4Event() * fThisRun->GetNumberOfEvent();
+    nFormed = fMuoniumTrackList.size();
+    nTargetDecay = 0;
+    nVacuumDecay = 0;
+    nDetectableDecay = 0;
 
     auto Detectable = [this](const Eigen::Vector3d& pos) {
         return std::abs(pos.x()) > fTarget->GetWidth() / 2 or
@@ -118,23 +120,31 @@ void Analysis::AnalysisAndWriteYield() {
         }
     }
 
-    int commRank = 0;
-    G4int nMuonTotal = nMuon;
-    G4int nFormedTotal = nFormed;
-    G4int nTargetDecayTotal = nTargetDecay;
-    G4int nVacuumDecayTotal = nVacuumDecay;
-    G4int nDetectableDecayTotal = nDetectableDecay;
     if (MPI::Is_initialized()) {
         const auto* const comm = G4MPImanager::GetManager()->GetComm();
-        commRank = comm->Get_rank();
-        comm->Reduce(std::addressof(nMuon), std::addressof(nMuonTotal), 1, MPI::INT, MPI::SUM, 0);
-        comm->Reduce(std::addressof(nFormed), std::addressof(nFormedTotal), 1, MPI::INT, MPI::SUM, 0);
-        comm->Reduce(std::addressof(nTargetDecay), std::addressof(nTargetDecayTotal), 1, MPI::INT, MPI::SUM, 0);
-        comm->Reduce(std::addressof(nVacuumDecay), std::addressof(nVacuumDecayTotal), 1, MPI::INT, MPI::SUM, 0);
-        comm->Reduce(std::addressof(nDetectableDecay), std::addressof(nDetectableDecayTotal), 1, MPI::INT, MPI::SUM, 0);
-    }
-    if (commRank == 0) {
-        *fYieldFile << fThisRun->GetRunID() << ',' << nMuonTotal << ',' << nFormedTotal << ',' << nTargetDecayTotal << ',' << nVacuumDecayTotal << ',' << nDetectableDecayTotal << std::endl;
+        int commRank = comm->Get_rank();
+
+        std::vector<decltype(yieldData)> yieldDataRecv;
+        if (commRank == 0) { yieldDataRecv.resize(comm->Get_size()); }
+        comm->Gather(yieldData.data(), yieldData.size(), MPI::INT, yieldDataRecv.data(), yieldData.size(), MPI::INT, 0);
+
+        if (commRank == 0) {
+            int nMuonTotal = 0;
+            int nFormedTotal = 0;
+            int nTargetDecayTotal = 0;
+            int nVacuumDecayTotal = 0;
+            int nDetectableDecayTotal = 0;
+            for (auto&& [nMuonRecv, nFormedRecv, nTargetDecayRecv, nVacuumDecayRecv, nDetectableDecayRecv] : std::as_const(yieldDataRecv)) {
+                nMuonTotal += nMuonRecv;
+                nFormedTotal += nFormedRecv;
+                nTargetDecayTotal += nTargetDecayRecv;
+                nVacuumDecayTotal += nVacuumDecayRecv;
+                nDetectableDecayTotal += nDetectableDecayRecv;
+            }
+            *fYieldFile << fThisRun->GetRunID() << ',' << nMuonTotal << ',' << nFormedTotal << ',' << nTargetDecayTotal << ',' << nVacuumDecayTotal << ',' << nDetectableDecayTotal << std::endl;
+        }
+    } else {
+        *fYieldFile << fThisRun->GetRunID() << ',' << nMuon << ',' << nFormed << ',' << nTargetDecay << ',' << nVacuumDecay << ',' << nDetectableDecay << std::endl;
     }
 }
 
