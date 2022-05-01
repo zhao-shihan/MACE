@@ -78,7 +78,7 @@ public:
 private:
     char fString[16];
 
-    inline static std::stringstream fgSS = std::stringstream();
+    static std::stringstream fgSS;
 };
 
 } // namespace MACE::Utility
