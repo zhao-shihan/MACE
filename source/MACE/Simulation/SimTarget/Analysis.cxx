@@ -50,7 +50,6 @@ void Analysis::Open() {
 }
 
 void Analysis::Write() {
-    if (fMuoniumTrackList.empty()) { return; }
     WriteResult();
     if (fEnableYieldAnalysis) {
         AnalysisAndWriteYield();
@@ -76,6 +75,7 @@ void Analysis::OpenResultFile() {
 }
 
 void Analysis::WriteResult() {
+    if (fMuoniumTrackList.empty()) { return; }
     fDataFactory.CreateAndFillTree<MuoniumTrack>(fMuoniumTrackList, fThisRun->GetRunID())->Write();
 }
 
@@ -94,9 +94,9 @@ void Analysis::OpenYieldFile() {
 }
 
 void Analysis::AnalysisAndWriteYield() {
-    std::array<int, 5> yieldData;
+    std::array<unsigned long, 5> yieldData;
     auto& [nMuon, nFormed, nTargetDecay, nVacuumDecay, nDetectableDecay] = yieldData;
-    nMuon = RunManager::Instance().GetPrimaryGeneratorAction().GetMuonsForEachG4Event() * fThisRun->GetNumberOfEvent();
+    nMuon = (unsigned long)RunManager::Instance().GetPrimaryGeneratorAction().GetMuonsForEachG4Event() * (unsigned long)fThisRun->GetNumberOfEvent();
     nFormed = fMuoniumTrackList.size();
     nTargetDecay = 0;
     nVacuumDecay = 0;
@@ -126,14 +126,14 @@ void Analysis::AnalysisAndWriteYield() {
 
         std::vector<decltype(yieldData)> yieldDataRecv;
         if (commRank == 0) { yieldDataRecv.resize(comm->Get_size()); }
-        comm->Gather(yieldData.data(), yieldData.size(), MPI::INT, yieldDataRecv.data(), yieldData.size(), MPI::INT, 0);
+        comm->Gather(yieldData.data(), yieldData.size(), MPI::UNSIGNED_LONG, yieldDataRecv.data(), yieldData.size(), MPI::UNSIGNED_LONG, 0);
 
         if (commRank == 0) {
-            int nMuonTotal = 0;
-            int nFormedTotal = 0;
-            int nTargetDecayTotal = 0;
-            int nVacuumDecayTotal = 0;
-            int nDetectableDecayTotal = 0;
+            unsigned long nMuonTotal = 0;
+            unsigned long nFormedTotal = 0;
+            unsigned long nTargetDecayTotal = 0;
+            unsigned long nVacuumDecayTotal = 0;
+            unsigned long nDetectableDecayTotal = 0;
             for (auto&& [nMuonRecv, nFormedRecv, nTargetDecayRecv, nVacuumDecayRecv, nDetectableDecayRecv] : std::as_const(yieldDataRecv)) {
                 nMuonTotal += nMuonRecv;
                 nFormedTotal += nFormedRecv;
