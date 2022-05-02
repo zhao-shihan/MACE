@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Core/Geometry/Entity/Fast/BeamCounter.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/BeamDegrader.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/Target.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/World.hxx"
@@ -30,6 +31,7 @@ public:
     void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlaps = checkOverlaps; }
 
 private:
+    std::shared_ptr<BeamCounter> fBeamCounter;
     std::shared_ptr<BeamDegrader> fBeamDegrader;
     std::shared_ptr<Target> fTarget;
     std::shared_ptr<World> fWorld;
