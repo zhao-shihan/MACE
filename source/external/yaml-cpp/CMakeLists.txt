@@ -4,7 +4,7 @@
 # 2. MACE_EDIT_BEGIN - MACE_EDIT_END blocks
 #----------------------------------------------------------------------------------------------------------------
 
-message(STATUS "YAML_CPP will be built with C++${CMAKE_CXX_STANDARD}") ##MACE_EDIT##
+message(STATUS "YAML_CPP will be compiled with C++${CMAKE_CXX_STANDARD}") ##MACE_EDIT##
 
 ##MACE_EDIT## # 3.5 is actually available almost everywhere, but this a good minimum
 ##MACE_EDIT## cmake_minimum_required(VERSION 3.4)

@@ -10,7 +10,7 @@ if(NOT DEFINED CMAKE_CXX_STANDARD)
 elseif(CMAKE_CXX_STANDARD LESS 20)
     message(FATAL_ERROR "MACE should be built, at least, with C++20")
 endif()
-message(STATUS "MACE will be built with C++${CMAKE_CXX_STANDARD}")
+message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
 
 # ================================================================================================================================
 # About compile warnings
