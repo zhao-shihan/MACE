@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "MACE/Core/Geometry/Entity/Fast/BeamCounter.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/BeamDegrader.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/CDCBody.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/CDCCell.hxx"

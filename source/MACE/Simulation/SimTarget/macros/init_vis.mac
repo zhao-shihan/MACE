@@ -12,7 +12,7 @@
 # Geometry
 /MACE/Geometry/SetWorldHalfExtent                     50 50 50 cm
 /MACE/Geometry/SetDegraderWidth                       6 cm
-/MACE/Geometry/SetDegraderThickness                   500 um
+/MACE/Geometry/SetDegraderThickness                   440 um
 /MACE/Geometry/SetDistanceBetweenDegraderAndTarget    5 mm
 /MACE/Geometry/SetTargetWidth                         6 cm
 /MACE/Geometry/SetTargetThickness                     1 cm
