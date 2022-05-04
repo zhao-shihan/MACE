@@ -187,10 +187,10 @@ inline bool DirectLeastSquare<CDCHit_t, Track_t>::CircleParametersIsOutOfBound()
 
     if (fXcBound.first < Xc and Xc < fXcBound.second and
         fYcBound.first < Yc and Yc < fYcBound.second and
-        0.0 < R and R < fRBound) {
-        [[likely]] return false;
-    } else {
-        [[unlikely]] if (this->fVerbose > 0) {
+        0.0 < R and R < fRBound) [[likely]] {
+        return false;
+    } else [[unlikely]] {
+        if (this->fVerbose > 0) {
             std::cout << "Warning: parameter bound reached." << std::endl;
         }
         return true;
@@ -299,7 +299,7 @@ inline std::tuple<double, Eigen::Vector3d, Eigen::Matrix3d> DirectLeastSquare<CD
 }
 
 template<class CDCHit_t, class Track_t>
-DirectLeastSquare<CDCHit_t, Track_t>::MinimizerState
+typename DirectLeastSquare<CDCHit_t, Track_t>::MinimizerState
 DirectLeastSquare<CDCHit_t, Track_t>::CircleFitNewtonRaphson() {
     double lastFunc;
     auto [thisFunc, grad, hessian] = TargetGradHessian();
@@ -333,8 +333,8 @@ DirectLeastSquare<CDCHit_t, Track_t>::CircleFitNewtonRaphson() {
         fCircleParameters -= hessian.inverse() * grad;
 
         // bound check
-        if (CircleParametersIsOutOfBound()) {
-            [[unlikely]] return kParameterBoundsReached;
+        if (CircleParametersIsOutOfBound()) [[unlikely]] {
+            return kParameterBoundsReached;
         }
 
         // update function value, gradient, and hessian
@@ -360,8 +360,8 @@ DirectLeastSquare<CDCHit_t, Track_t>::CircleFitNewtonRaphson() {
     }
 
     // check step count
-    if (stepCount >= fMaxStepsNR) {
-        [[unlikely]] if (this->fVerbose > 0) {
+    if (stepCount >= fMaxStepsNR) [[unlikely]] {
+        if (this->fVerbose > 0) {
             std::cout << "Warning: max step " << fMaxStepsNR << " reached for Newton-Raphson method." << std::endl;
         }
         return kMaxStepsReached;
@@ -371,7 +371,7 @@ DirectLeastSquare<CDCHit_t, Track_t>::CircleFitNewtonRaphson() {
 }
 
 template<class CDCHit_t, class Track_t>
-DirectLeastSquare<CDCHit_t, Track_t>::MinimizerState
+typename DirectLeastSquare<CDCHit_t, Track_t>::MinimizerState
 DirectLeastSquare<CDCHit_t, Track_t>::CircleFitConjugateGrad() {
     double lastFunc;
     Eigen::Vector3d lastGrad;
@@ -403,8 +403,8 @@ DirectLeastSquare<CDCHit_t, Track_t>::CircleFitConjugateGrad() {
         }
 
         // bound check
-        if (CircleParametersIsOutOfBound()) {
-            [[unlikely]] return kParameterBoundsReached;
+        if (CircleParametersIsOutOfBound()) [[unlikely]] {
+            return kParameterBoundsReached;
         }
 
         // update function value and gradient
@@ -430,8 +430,8 @@ DirectLeastSquare<CDCHit_t, Track_t>::CircleFitConjugateGrad() {
     }
 
     // check step count
-    if (stepCount >= fMaxStepsCG) {
-        [[unlikely]] if (this->fVerbose > 0) {
+    if (stepCount >= fMaxStepsCG) [[unlikely]] {
+        if (this->fVerbose > 0) {
             std::cout << "Warning: max step " << fMaxStepsCG << " reached for conjugate gradient method." << std::endl;
         }
         return kMaxStepsReached;

@@ -3,57 +3,14 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(MACE)
 
 # ================================================================================================================================
-# MACE at C++20
+# Variables
 # ================================================================================================================================
-if(NOT DEFINED CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD 20)
-elseif(CMAKE_CXX_STANDARD LESS 20)
-    message(FATAL_ERROR "MACE should be built, at least, with C++20")
-endif()
-message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
-
-# ================================================================================================================================
-# About compile warnings
-# ================================================================================================================================
-# More warnings
-add_definitions(-Wall -Wextra)
-# Suppress external warnings:
-#
-# TStorage.h:133:12: warning: compound assignment with ‘volatile’-qualified left operand is deprecated [-Wvolatile]
-#   133 |       bits |= kIsOnHeap;
-#       |       ~~~~~^~~~~~~~~~~~
-# TStorage.h:135:12: warning: compound assignment with ‘volatile’-qualified left operand is deprecated [-Wvolatile]
-#   135 |       bits &= ~kIsOnHeap;
-#       |       ~~~~~^~~~~~~~~~~~~
-#
-add_definitions(-Wno-volatile)
-if(CMAKE_COMPILER_IS_GNUCXX)
-    if(GCC_VERSION GREATER_EQUAL 11)
-        #
-        # PlainObjectBase.h:905:102: warning: bitwise operation between different enumeration types ‘Eigen::PlainObjectBase<Eigen::Matrix<double, 3, 1> >::<unnamed enum>’ and ‘Eigen::StorageOptions’ is deprecated [-Wdeprecated-enum-enum-conversion]
-        #   905 |       EIGEN_STATIC_ASSERT((EIGEN_IMPLIES(MaxRowsAtCompileTime==1 && MaxColsAtCompileTime!=1, (Options&RowMajor)==RowMajor)
-        #       |                                                                                              ~~~~~~~~^~~~~~~~~~
-        # util/StaticAssert.h:33:54: note: in definition of macro ‘EIGEN_STATIC_ASSERT’
-        #    33 |     #define EIGEN_STATIC_ASSERT(X,MSG) static_assert(X,#MSG);
-        #       |                                                      ^
-        # PlainObjectBase.h:905:28: note: in expansion of macro ‘EIGEN_IMPLIES’
-        #   905 |       EIGEN_STATIC_ASSERT((EIGEN_IMPLIES(MaxRowsAtCompileTime==1 && MaxColsAtCompileTime!=1, (Options&RowMajor)==RowMajor)
-        #       |                            ^~~~~~~~~~~~~
-        # PlainObjectBase.h:906:102: warning: bitwise operation between different enumeration types ‘Eigen::PlainObjectBase<Eigen::Matrix<double, 3, 1> >::<unnamed enum>’ and ‘Eigen::StorageOptions’ is deprecated [-Wdeprecated-enum-enum-conversion]
-        #   906 |                         && EIGEN_IMPLIES(MaxColsAtCompileTime==1 && MaxRowsAtCompileTime!=1, (Options&RowMajor)==0)
-        #       |                                                                                              ~~~~~~~~^~~~~~~~~~
-        # util/StaticAssert.h:33:54: note: in definition of macro ‘EIGEN_STATIC_ASSERT’
-        #    33 |     #define EIGEN_STATIC_ASSERT(X,MSG) static_assert(X,#MSG);
-        #       |                                                      ^
-        # PlainObjectBase.h:906:28: note: in expansion of macro ‘EIGEN_IMPLIES’
-        #   906 |                         && EIGEN_IMPLIES(MaxColsAtCompileTime==1 && MaxRowsAtCompileTime!=1, (Options&RowMajor)==0)
-        #       |                            ^~~~~~~~~~~~~
-        #
-        # ...
-        #
-        add_definitions(-Wno-deprecated-enum-enum-conversion)
-    endif()
-endif()
+# Dirs
+set(MACE_ROOT_DIR ${PROJECT_SOURCE_DIR})
+set(MACE_CMAKE_DIR ${MACE_ROOT_DIR}/cmake)
+set(MACE_SOURCE_DIR ${MACE_ROOT_DIR}/source)
+set(MACE_EXTERNAL_DIR ${MACE_SOURCE_DIR}/external)
+set(MACE_TEST_DIR ${MACE_SOURCE_DIR}/test)
 
 # ================================================================================================================================
 # Dependencies
@@ -86,13 +43,33 @@ find_package(Eigen3 3.3.0 REQUIRED)
 message(STATUS "MACE uses Eigen3 includes from: ${EIGEN3_INCLUDE_DIRS}")
 
 # ================================================================================================================================
-# Variables
+# MACE at C++20
 # ================================================================================================================================
-# Dirs
-set(MACE_ROOT_DIR ${PROJECT_SOURCE_DIR})
-set(MACE_CMAKE_DIR ${MACE_ROOT_DIR}/cmake)
-set(MACE_SOURCE_DIR ${MACE_ROOT_DIR}/source)
-set(MACE_EXTERNAL_DIR ${MACE_SOURCE_DIR}/external)
-set(MACE_TEST_DIR ${MACE_SOURCE_DIR}/test)
+if(NOT DEFINED CMAKE_CXX_STANDARD)
+    set(CMAKE_CXX_STANDARD 20)
+elseif(CMAKE_CXX_STANDARD LESS 20)
+    message(FATAL_ERROR "MACE should be built, at least, with C++20")
+endif()
+message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
+
+# ================================================================================================================================
+# About compile warnings
+# ================================================================================================================================
+# More warnings
+add_definitions(-Wall -Wextra)
+# Surpress those from external
+if(CMAKE_COMPILER_IS_GNUCXX)
+    # ROOT
+    add_definitions(-Wno-volatile)
+    if(GCC_VERSION GREATER_EQUAL 11)
+        # Eigen3
+        add_definitions(-Wno-deprecated-enum-enum-conversion)
+    endif()
+elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+    # ROOT
+    add_definitions(-Wno-deprecated-volatile)
+    # Eigen3
+    add_definitions(-Wno-deprecated-anon-enum-enum-conversion)
+endif()
 
 add_subdirectory(${MACE_SOURCE_DIR})
