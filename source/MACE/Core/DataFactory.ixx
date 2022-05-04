@@ -40,7 +40,7 @@ std::shared_ptr<TTree> DataFactory::CreateTree(Long64_t treeIndex) const {
     return tree;
 }
 
-template<IsTransientData DataInTree_t, template<class T> typename Pointer_t, std::derived_from<DataInTree_t> DataInList_t>
+template<IsTransientData DataInTree_t, template<class T, class... _> typename Pointer_t, std::derived_from<DataInTree_t> DataInList_t>
 void DataFactory::FillTree(const std::vector<Pointer_t<DataInList_t>>& dataList, TTree& tree, bool connected) {
     if (not connected) { DataInTree_t::ConnectToBranches(tree); }
     for (auto&& data : dataList) {
@@ -57,7 +57,7 @@ void DataFactory::FillTree(const std::vector<DataInList_t*>& dataList, TTree& tr
     FillTree<DataInTree_t, ObserverPtr, DataInList_t>(dataList, tree, connected);
 }
 
-template<IsTransientData DataInTree_t, template<class T> typename Pointer_t, std::derived_from<DataInTree_t> DataInList_t>
+template<IsTransientData DataInTree_t, template<class T, class... _> typename Pointer_t, std::derived_from<DataInTree_t> DataInList_t>
 std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<Pointer_t<DataInList_t>>& dataList, Long64_t treeIndex) const {
     auto tree = CreateTree<DataInTree_t>(treeIndex);
     FillTree<DataInTree_t, Pointer_t, DataInList_t>(dataList, *tree);

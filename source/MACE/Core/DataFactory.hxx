@@ -53,7 +53,7 @@ public:
     ///   Note: this feature allows to fill the tree with less but exact columns that the data vector has.
     /// Note: there is no static branch infomation for the tree, so
     /// user should make sure that DataInTree_t represents exactly the same branches as the tree.
-    template<IsTransientData DataInTree_t, template<class T> typename Pointer_t, std::derived_from<DataInTree_t> DataInList_t>
+    template<IsTransientData DataInTree_t, template<class T, class... _> typename Pointer_t, std::derived_from<DataInTree_t> DataInList_t>
     static void FillTree(const std::vector<Pointer_t<DataInList_t>>& dataList, TTree& tree, bool connected = false);
     /// The raw pointer version of FillTree.
     /// Fill an existed tree with a data vector.
@@ -65,7 +65,7 @@ public:
     template<IsTransientData DataInTree_t, std::derived_from<DataInTree_t> DataInList_t>
     static void FillTree(const std::vector<DataInList_t*>& dataList, TTree& tree, bool connected = false);
     /// Same effect as invoke CreateTree<DataInTree_t>(treeIndex) and FillTree<DataInTree_t>(dataList, tree, true).
-    template<IsTransientData DataInTree_t, template<class T> typename Pointer_t, std::derived_from<DataInTree_t> DataInList_t>
+    template<IsTransientData DataInTree_t, template<class T, class... _> typename Pointer_t, std::derived_from<DataInTree_t> DataInList_t>
     std::shared_ptr<TTree> CreateAndFillTree(const std::vector<Pointer_t<DataInList_t>>& dataList, Long64_t treeIndex = 0) const;
     /// The raw pointer version of CreateAndFillTree.
     /// Same effect as invoke CreateTree<DataInTree_t>(treeIndex) and FillTree<DataInTree_t>(dataList, tree, true).

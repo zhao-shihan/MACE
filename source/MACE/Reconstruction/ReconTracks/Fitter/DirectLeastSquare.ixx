@@ -299,7 +299,7 @@ inline std::tuple<double, Eigen::Vector3d, Eigen::Matrix3d> DirectLeastSquare<CD
 }
 
 template<class CDCHit_t, class Track_t>
-DirectLeastSquare<CDCHit_t, Track_t>::MinimizerState
+typename DirectLeastSquare<CDCHit_t, Track_t>::MinimizerState
 DirectLeastSquare<CDCHit_t, Track_t>::CircleFitNewtonRaphson() {
     double lastFunc;
     auto [thisFunc, grad, hessian] = TargetGradHessian();
@@ -371,7 +371,7 @@ DirectLeastSquare<CDCHit_t, Track_t>::CircleFitNewtonRaphson() {
 }
 
 template<class CDCHit_t, class Track_t>
-DirectLeastSquare<CDCHit_t, Track_t>::MinimizerState
+typename DirectLeastSquare<CDCHit_t, Track_t>::MinimizerState
 DirectLeastSquare<CDCHit_t, Track_t>::CircleFitConjugateGrad() {
     double lastFunc;
     Eigen::Vector3d lastGrad;
