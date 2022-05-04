@@ -1,5 +1,9 @@
 project(Utility)
 
+if(CMAKE_COMPILER_IS_GNUCXX)
+    add_definitions(-Wno-stringop-truncation)
+endif()
+
 file(GLOB_RECURSE Utility_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
 
 add_library(Utility ${Utility_srcs})

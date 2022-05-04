@@ -5,32 +5,29 @@
 # 3. {message("-- G4 Examples:} -> {message(STATUS "${_projname}:}
 #----------------------------------------------------------------------------------------------------------------
 
-# - CmakeLists.txt for G4mpi interface
-
-#------------------------------------------------------------------------------
-set(_projname libG4mpi)
-set(_targetname G4mpi)
-project(${_projname})
-
 #########################
 #### MACE_EDIT_BEGIN ####
 #########################
 if(CMAKE_CXX_STANDARD GREATER 17)
     set(CMAKE_CXX_STANDARD 17)
 endif()
-message(STATUS "${_projname} will be compiled with C++${CMAKE_CXX_STANDARD}")
-#
-# Suppress warning:
-#
-# ../ThirdParty/G4mpi/src/G4MPImanager.cc: In member function ‘void G4MPImanager::ExecuteBeamOnThread(const G4String&)’:
-# ../ThirdParty/G4mpi/src/G4MPImanager.cc:496:31: warning: cast between incompatible function types from ‘void (*)(const G4String*)’ to ‘Func_t’ {aka ‘void* (*)(void*)’} [-Wcast-function-type]
-#   496 |                               (Func_t)thread_ExecuteThreadCommand,
-#       |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
-add_definitions(-Wno-cast-function-type)
+message(STATUS "G4mpi will be compiled with C++${CMAKE_CXX_STANDARD}")
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+    add_definitions(-Wno-cast-function-type)
+elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+    add_definitions(-Wno-implicit-const-int-float-conversion)
+endif()
 #########################
 ####  MACE_EDIT_END  ####
 #########################
+
+# - CmakeLists.txt for G4mpi interface
+
+#------------------------------------------------------------------------------
+set(_projname libG4mpi)
+set(_targetname G4mpi)
+project(${_projname})
 
 #------------------------------------------------------------------------------
 #Manadatory dependencies

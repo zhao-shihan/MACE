@@ -102,22 +102,8 @@ endif()
 
 target_compile_options(yaml-cpp
   PRIVATE
-    #########################
-    #### MACE_EDIT_BEGIN ####
-    #########################
-    #
-    # Suppress warning:
-    #
-    # ../ThirdParty/yaml-cpp/include/yaml-cpp/node/impl.h: In member function ‘YAML::Node& YAML::Node::operator=(const T&)’:
-    # ../ThirdParty/yaml-cpp/include/yaml-cpp/node/impl.h:206:10: warning: ‘operator=’ should return a reference to ‘*this’ [-Weffc++]
-    #   206 |   return *this;
-    #       |          ^~~~~
-    #
-    #########################
-    ####  MACE_EDIT_END  ####
-    #########################
     ##MACE_EDIT## $<${not-msvc}:-Wall -Wextra -Wshadow -Weffc++ -Wno-long-long>
-    $<${not-msvc}:-Wall -Wextra -Wshadow -Wno-long-long> ##MACE_EDIT##
+    $<${not-msvc}:-Wall -Wextra -Wno-long-long> ##MACE_EDIT##
     $<${not-msvc}:-pedantic -pedantic-errors>
 
     $<$<AND:${backport-msvc-runtime},${msvc-rt-mtd-static}>:-MTd>
