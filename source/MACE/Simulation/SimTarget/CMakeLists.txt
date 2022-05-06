@@ -14,5 +14,5 @@ endforeach()
 
 install(TARGETS SimTarget DESTINATION bin)
 foreach(_macros ${SimTarget_MACROS})
-    install(FILES ${_macros} DESTINATION ${PROJECT_BINARY_DIR})
+    install(FILES ${_macros} DESTINATION share/SimMACE)
 endforeach()

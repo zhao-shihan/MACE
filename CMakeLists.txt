@@ -59,6 +59,8 @@ message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
 add_definitions(-Wall -Wextra)
 # Surpress those from external
 if(CMAKE_COMPILER_IS_GNUCXX)
+    # Open MPI
+    add_definitions(-Wno-cast-function-type)
     # ROOT
     add_definitions(-Wno-volatile)
     if(GCC_VERSION GREATER_EQUAL 11)

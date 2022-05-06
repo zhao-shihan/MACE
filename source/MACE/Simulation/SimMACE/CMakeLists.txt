@@ -16,4 +16,3 @@ install(TARGETS SimMACE DESTINATION bin)
 foreach(_macros ${SimMACE_MACROS})
     install(FILES ${_macros} DESTINATION share/SimMACE)
 endforeach()
-
