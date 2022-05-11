@@ -25,18 +25,18 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     Description::LinacField::Instance().SetLength(0);
     Description::LinacField::Instance().SetDownStreamLength(0);
 
-    fBeamCounter = std::make_shared<BeamCounter>();
+    // fBeamCounter = std::make_shared<BeamCounter>();
     fBeamDegrader = std::make_shared<BeamDegrader>();
     fTarget = std::make_shared<Target>();
     fWorld = std::make_shared<World>();
-    fWorld->AddDaughter(fBeamCounter);
+    // fWorld->AddDaughter(fBeamCounter);
     fWorld->AddDaughter(fBeamDegrader);
     fWorld->AddDaughter(fTarget);
     fWorld->ConstructSelfAndDescendants(fCheckOverlaps);
 
     auto nist = G4NistManager::Instance();
-    fBeamCounter->RegisterMaterial(nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE"));
-    fBeamDegrader->RegisterMaterial(nist->FindOrBuildMaterial("G4_MYLAR"));
+    // fBeamCounter->RegisterMaterial(nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE"));
+    fBeamDegrader->RegisterMaterial(nist->FindOrBuildMaterial("G4_Al"));
     fTarget->RegisterMaterial(nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", fDensity, fTemperature));
     fWorld->RegisterMaterial(nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3, fTemperature));
 
