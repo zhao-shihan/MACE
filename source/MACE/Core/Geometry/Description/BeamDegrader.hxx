@@ -17,10 +17,12 @@ private:
     BeamDegrader& operator=(const BeamDegrader&) = delete;
 
 public:
+    const auto& IsEnabled() const { return fIsEnabled; }
     const auto& GetWidth() const { return fWidth; }
     const auto& GetThickness() const { return fThickness; }
     const auto& GetDistanceToTargetSurface() const { return fDistanceToTargetSurface; }
 
+    void SetEnabled(bool val) { fIsEnabled = val; }
     void SetWidth(double val) { fWidth = val; }
     void SetThickness(double val) { fThickness = val; }
     void SetDistanceToTargetSurface(double val) { fDistanceToTargetSurface = val; }
@@ -34,6 +36,7 @@ private:
     void WriteImpl(YAML::Node& node) const override;
 
 private:
+    bool fIsEnabled;
     double fWidth;
     double fThickness;
     double fDistanceToTargetSurface;

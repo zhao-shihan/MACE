@@ -22,6 +22,11 @@ public:
     IEntity(const IEntity&) = delete;
     IEntity& operator=(const IEntity&) = delete;
 
+    /// @brief Determines whether we will construct this entity.
+    /// Entities could override this function to control whether construct this.
+    /// A typical usage is to get the information of whether to enable this from description in the override function.
+    virtual bool IsEnabled() const { return true; }
+
     void AddDaughter(const std::shared_ptr<IEntity>& daughter);
     void ConstructSelfAndDescendants(G4bool checkOverlaps);
 

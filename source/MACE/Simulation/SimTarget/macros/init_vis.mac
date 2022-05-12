@@ -15,7 +15,7 @@
 /MACE/Geometry/SetBeamCounterThickness                500 um
 /MACE/Geometry/SetDistanceBetweenBeamCounterAndTarget 15 mm
 /MACE/Geometry/SetDegraderWidth                       6 cm
-/MACE/Geometry/SetDegraderThickness                   440 um
+/MACE/Geometry/SetDegraderThickness                   420 um
 /MACE/Geometry/SetDistanceBetweenDegraderAndTarget    5 mm
 /MACE/Geometry/SetTargetWidth                         6 cm
 /MACE/Geometry/SetTargetThickness                     1 cm

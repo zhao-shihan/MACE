@@ -10,6 +10,10 @@ namespace MACE::Core::Geometry::Entity::Fast {
 
 using namespace MACE::Utility::LiteralUnit::Density;
 
+bool BeamDegrader::IsEnabled() const {
+    return Description::BeamDegrader::Instance().IsEnabled();
+}
+
 void BeamDegrader::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::BeamDegrader::Instance();
     const auto name = description.GetName();

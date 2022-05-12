@@ -15,8 +15,9 @@ BeamDegrader& BeamDegrader::Instance() noexcept {
 
 BeamDegrader::BeamDegrader() :
     IDescription("BeamDegrader"),
+    fIsEnabled(true),
     fWidth(6_cm),
-    fThickness(440_um),
+    fThickness(420_um),
     fDistanceToTargetSurface(5_mm) {}
 
 HepGeom::Transform3D BeamDegrader::CalcTransform() const {
@@ -26,12 +27,14 @@ HepGeom::Transform3D BeamDegrader::CalcTransform() const {
 }
 
 void BeamDegrader::ReadImpl(const YAML::Node& node) {
+    fIsEnabled = node["IsEnabled"].as<decltype(fIsEnabled)>();
     fWidth = node["Width"].as<decltype(fWidth)>();
     fThickness = node["Thickness"].as<decltype(fThickness)>();
     fDistanceToTargetSurface = node["DistanceToTargetSurface"].as<decltype(fDistanceToTargetSurface)>();
 }
 
 void BeamDegrader::WriteImpl(YAML::Node& node) const {
+    node["IsEnabled"] = fIsEnabled;
     node["Width"] = fWidth;
     node["Thickness"] = fThickness;
     node["DistanceToTargetSurface"] = fDistanceToTargetSurface;

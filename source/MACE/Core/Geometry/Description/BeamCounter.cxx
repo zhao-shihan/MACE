@@ -15,6 +15,7 @@ BeamCounter& BeamCounter::Instance() noexcept {
 
 BeamCounter::BeamCounter() :
     IDescription("BeamCounter"),
+    fIsEnabled(false),
     fWidth(4_cm),
     fThickness(500_um),
     fDistanceToTargetSurface(15_mm) {}
@@ -26,12 +27,14 @@ HepGeom::Transform3D BeamCounter::CalcTransform() const {
 }
 
 void BeamCounter::ReadImpl(const YAML::Node& node) {
+    fIsEnabled = node["IsEnabled"].as<decltype(fIsEnabled)>();
     fWidth = node["Width"].as<decltype(fWidth)>();
     fThickness = node["Thickness"].as<decltype(fThickness)>();
     fDistanceToTargetSurface = node["DistanceToTargetSurface"].as<decltype(fDistanceToTargetSurface)>();
 }
 
 void BeamCounter::WriteImpl(YAML::Node& node) const {
+    node["IsEnabled"] = fIsEnabled;
     node["Width"] = fWidth;
     node["Thickness"] = fThickness;
     node["DistanceToTargetSurface"] = fDistanceToTargetSurface;

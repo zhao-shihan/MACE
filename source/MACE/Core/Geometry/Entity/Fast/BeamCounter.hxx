@@ -11,6 +11,8 @@ public:
     BeamCounter(const BeamCounter&) = delete;
     BeamCounter& operator=(const BeamCounter&) = delete;
 
+    bool IsEnabled() const override;
+
 private:
     void ConstructSelf(G4bool checkOverlaps) override;
 };
