@@ -13,8 +13,8 @@ int main(int, char**) {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Construct entity objects
-    auto fBeamCounter = std::make_shared<BeamCounter>();
     auto fBeamDegrader = std::make_shared<BeamDegrader>();
+    auto fBeamMonitor = std::make_shared<BeamMonitor>();
     auto fCDCBody = std::make_shared<CDCBody>();
     auto fCDCCell = std::make_shared<CDCCell>();
     auto fCDCFieldWire = std::make_shared<CDCFieldWire>();
@@ -54,8 +54,8 @@ int main(int, char**) {
     fEMCalField->AddDaughter(fMCP);
     fFirstBendField->AddDaughter(fFirstBendSolenoid);
     fFirstTransportField->AddDaughter(fFirstTransportSolenoid);
-    fLinacField->AddDaughter(fBeamCounter);
     fLinacField->AddDaughter(fBeamDegrader);
+    fLinacField->AddDaughter(fBeamMonitor);
     fLinacField->AddDaughter(fTarget);
     fSecondBendField->AddDaughter(fSecondBendSolenoid);
     fSecondTransportField->AddDaughter(fCollimator);
@@ -123,7 +123,7 @@ int main(int, char**) {
     fBeamDegrader->RegisterMaterial(mylar);
 
     auto plasticScitillator = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
-    fBeamCounter->RegisterMaterial(plasticScitillator);
+    fBeamMonitor->RegisterMaterial(plasticScitillator);
 
     auto silicaAerogel = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30_mg_cm3);
     fTarget->RegisterMaterial(silicaAerogel);

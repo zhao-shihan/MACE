@@ -6,15 +6,15 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class BeamCounter final : public IDescription {
+class BeamMonitor final : public IDescription {
 public:
-    static BeamCounter& Instance() noexcept;
+    static BeamMonitor& Instance() noexcept;
 
 private:
-    BeamCounter();
-    ~BeamCounter() noexcept = default;
-    BeamCounter(const BeamCounter&) = delete;
-    BeamCounter& operator=(const BeamCounter&) = delete;
+    BeamMonitor();
+    ~BeamMonitor() noexcept = default;
+    BeamMonitor(const BeamMonitor&) = delete;
+    BeamMonitor& operator=(const BeamMonitor&) = delete;
 
 public:
     const auto& IsEnabled() const { return fIsEnabled; }

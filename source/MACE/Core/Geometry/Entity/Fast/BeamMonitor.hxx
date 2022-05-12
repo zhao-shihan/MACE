@@ -4,12 +4,12 @@
 
 namespace MACE::Core::Geometry::Entity::Fast {
 
-class BeamCounter final : public IEntity {
+class BeamMonitor final : public IEntity {
 public:
-    BeamCounter() = default;
-    ~BeamCounter() noexcept = default;
-    BeamCounter(const BeamCounter&) = delete;
-    BeamCounter& operator=(const BeamCounter&) = delete;
+    BeamMonitor() = default;
+    ~BeamMonitor() noexcept = default;
+    BeamMonitor(const BeamMonitor&) = delete;
+    BeamMonitor& operator=(const BeamMonitor&) = delete;
 
     bool IsEnabled() const override;
 

@@ -1,4 +1,4 @@
-#include "MACE/Core/Geometry/Description/BeamCounter.hxx"
+#include "MACE/Core/Geometry/Description/BeamMonitor.hxx"
 #include "MACE/Core/Geometry/Description/BeamDegrader.hxx"
 #include "MACE/Core/Geometry/Description/Target.hxx"
 #include "MACE/Core/Geometry/Description/World.hxx"
@@ -18,9 +18,9 @@ GeometryMessenger::GeometryMessenger() :
     G4UImessenger(),
     fDirectory("/MACE/Geometry/"),
     fSetWorldHalfExtent("/MACE/Geometry/SetWorldHalfExtent", this),
-    fSetBeamCounterWidth("/MACE/Geometry/SetBeamCounterWidth", this),
-    fSetBeamCounterThickness("/MACE/Geometry/SetBeamCounterThickness", this),
-    fSetDistanceBetweenBeamCounterAndTarget("/MACE/Geometry/SetDistanceBetweenBeamCounterAndTarget", this),
+    fSetBeamMonitorWidth("/MACE/Geometry/SetBeamMonitorWidth", this),
+    fSetBeamMonitorThickness("/MACE/Geometry/SetBeamMonitorThickness", this),
+    fSetDistanceBetweenBeamMonitorAndTarget("/MACE/Geometry/SetDistanceBetweenBeamMonitorAndTarget", this),
     fSetDegraderWidth("/MACE/Geometry/SetDegraderWidth", this),
     fSetDegraderThickness("/MACE/Geometry/SetDegraderThickness", this),
     fSetDistanceBetweenDegraderAndTarget("/MACE/Geometry/SetDistanceBetweenDegraderAndTarget", this),
@@ -37,15 +37,15 @@ GeometryMessenger::GeometryMessenger() :
     fSetWorldHalfExtent.SetUnitCategory("Length");
     fSetWorldHalfExtent.AvailableForStates(G4State_PreInit);
 
-    fSetBeamCounterWidth.SetGuidance("Set beam counter width.");
-    fSetBeamCounterWidth.SetParameterName("w", false);
-    fSetBeamCounterWidth.SetUnitCategory("Length");
-    fSetBeamCounterWidth.AvailableForStates(G4State_PreInit);
+    fSetBeamMonitorWidth.SetGuidance("Set beam counter width.");
+    fSetBeamMonitorWidth.SetParameterName("w", false);
+    fSetBeamMonitorWidth.SetUnitCategory("Length");
+    fSetBeamMonitorWidth.AvailableForStates(G4State_PreInit);
 
-    fSetBeamCounterThickness.SetGuidance("Set beam counter thickness.");
-    fSetBeamCounterThickness.SetParameterName("t", false);
-    fSetBeamCounterThickness.SetUnitCategory("Length");
-    fSetBeamCounterThickness.AvailableForStates(G4State_PreInit);
+    fSetBeamMonitorThickness.SetGuidance("Set beam counter thickness.");
+    fSetBeamMonitorThickness.SetParameterName("t", false);
+    fSetBeamMonitorThickness.SetUnitCategory("Length");
+    fSetBeamMonitorThickness.AvailableForStates(G4State_PreInit);
 
     fSetDistanceBetweenDegraderAndTarget.SetGuidance("Set distance between degrader downstream surface and target upstream surface.");
     fSetDistanceBetweenDegraderAndTarget.SetParameterName("d", false);
@@ -106,12 +106,12 @@ void GeometryMessenger::SetNewValue(G4UIcommand* command, G4String value) {
         Description::BeamDegrader::Instance().SetThickness(fSetDegraderThickness.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetDistanceBetweenDegraderAndTarget)) {
         Description::BeamDegrader::Instance().SetDistanceToTargetSurface(fSetDistanceBetweenDegraderAndTarget.GetNewDoubleValue(value));
-    } else if (command == std::addressof(fSetBeamCounterWidth)) {
-        Description::BeamCounter::Instance().SetWidth(fSetBeamCounterWidth.GetNewDoubleValue(value));
-    } else if (command == std::addressof(fSetBeamCounterThickness)) {
-        Description::BeamCounter::Instance().SetThickness(fSetBeamCounterThickness.GetNewDoubleValue(value));
-    } else if (command == std::addressof(fSetDistanceBetweenBeamCounterAndTarget)) {
-        Description::BeamCounter::Instance().SetDistanceToTargetSurface(fSetDistanceBetweenBeamCounterAndTarget.GetNewDoubleValue(value));
+    } else if (command == std::addressof(fSetBeamMonitorWidth)) {
+        Description::BeamMonitor::Instance().SetWidth(fSetBeamMonitorWidth.GetNewDoubleValue(value));
+    } else if (command == std::addressof(fSetBeamMonitorThickness)) {
+        Description::BeamMonitor::Instance().SetThickness(fSetBeamMonitorThickness.GetNewDoubleValue(value));
+    } else if (command == std::addressof(fSetDistanceBetweenBeamMonitorAndTarget)) {
+        Description::BeamMonitor::Instance().SetDistanceToTargetSurface(fSetDistanceBetweenBeamMonitorAndTarget.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetTargetWidth)) {
         Description::Target::Instance().SetWidth(fSetTargetWidth.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetTargetThickness)) {

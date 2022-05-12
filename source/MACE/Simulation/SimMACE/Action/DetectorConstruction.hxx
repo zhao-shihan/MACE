@@ -53,8 +53,8 @@ private:
 private:
     G4bool fCheckOverlaps = false;
 
-    std::shared_ptr<BeamCounter> fBeamCounter;
     std::shared_ptr<BeamDegrader> fBeamDegrader;
+    std::shared_ptr<BeamMonitor> fBeamMonitor;
     std::shared_ptr<CDCBody> fCDCBody;
     std::shared_ptr<CDCCell> fCDCCell;
     std::shared_ptr<CDCFieldWire> fCDCFieldWire;
