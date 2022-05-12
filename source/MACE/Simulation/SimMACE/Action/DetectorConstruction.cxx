@@ -101,6 +101,7 @@ void DetectorConstruction::ConstructMaterials() {
     auto nist = G4NistManager::Instance();
 
     auto aluminium = nist->FindOrBuildMaterial("G4_Al");
+    fBeamDegrader->RegisterMaterial(aluminium);
     fCDCFieldWire->RegisterMaterial(aluminium);
 
     auto cdcGas = nist->FindOrBuildMaterial("G4_He");
@@ -131,9 +132,6 @@ void DetectorConstruction::ConstructMaterials() {
 
     auto mcpMaterial = nist->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4_g_cm3);
     fMCP->RegisterMaterial(mcpMaterial);
-
-    auto mylar = nist->FindOrBuildMaterial("G4_MYLAR");
-    fBeamDegrader->RegisterMaterial(mylar);
 
     auto plasticScitillator = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
     fBeamCounter->RegisterMaterial(plasticScitillator);

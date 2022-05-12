@@ -10,6 +10,10 @@ namespace MACE::Core::Geometry::Entity::Fast {
 
 using namespace MACE::Utility::LiteralUnit::Density;
 
+bool BeamCounter::IsEnabled() const {
+    return Description::BeamCounter::Instance().IsEnabled();
+}
+
 void BeamCounter::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::BeamCounter::Instance();
     const auto name = description.GetName();

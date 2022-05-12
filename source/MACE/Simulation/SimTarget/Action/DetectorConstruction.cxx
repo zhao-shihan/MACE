@@ -36,7 +36,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 
     auto nist = G4NistManager::Instance();
     fBeamCounter->RegisterMaterial(nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE"));
-    fBeamDegrader->RegisterMaterial(nist->FindOrBuildMaterial("G4_MYLAR"));
+    fBeamDegrader->RegisterMaterial(nist->FindOrBuildMaterial("G4_Al"));
     fTarget->RegisterMaterial(nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", fDensity, fTemperature));
     fWorld->RegisterMaterial(nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3, fTemperature));
 

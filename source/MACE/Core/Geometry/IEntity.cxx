@@ -30,8 +30,8 @@ void IEntity::AddDaughter(const std::shared_ptr<IEntity>& daughter) {
 }
 
 void IEntity::ConstructSelfAndDescendants(G4bool checkOverlaps) {
-    this->ConstructSelf(checkOverlaps);
-    for (auto&& daughter : fDaughters) {
+    if (this->IsEnabled()) { this->ConstructSelf(checkOverlaps); }
+    for (auto&& daughter : std::as_const(fDaughters)) {
         daughter.lock()->ConstructSelfAndDescendants(checkOverlaps);
     }
 }

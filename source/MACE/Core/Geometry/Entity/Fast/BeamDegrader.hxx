@@ -11,6 +11,8 @@ public:
     BeamDegrader(const BeamDegrader&) = delete;
     BeamDegrader& operator=(const BeamDegrader&) = delete;
 
+    bool IsEnabled() const override;
+
 private:
     void ConstructSelf(G4bool checkOverlaps) override;
 };
