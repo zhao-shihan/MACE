@@ -99,7 +99,7 @@ GeometryMessenger::GeometryMessenger() :
 
     fSetFineStructure.SetGuidance("Set boolean expression to represent the target fine structure. Where the expression evaluate to true is solid region.");
     fSetFineStructure.SetParameterName("expr", false);
-    fSetFineStructure.AvailableForStates(G4State_Idle);
+    fSetFineStructure.AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 void GeometryMessenger::SetNewValue(G4UIcommand* command, G4String value) {
