@@ -1,5 +1,5 @@
-#include "MACE/Core/Geometry/Description/BeamCounter.hxx"
-#include "MACE/Core/Geometry/Entity/Fast/BeamCounter.hxx"
+#include "MACE/Core/Geometry/Description/BeamMonitor.hxx"
+#include "MACE/Core/Geometry/Entity/Fast/BeamMonitor.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
 #include "G4Box.hh"
@@ -10,12 +10,12 @@ namespace MACE::Core::Geometry::Entity::Fast {
 
 using namespace MACE::Utility::LiteralUnit::Density;
 
-bool BeamCounter::IsEnabled() const {
-    return Description::BeamCounter::Instance().IsEnabled();
+bool BeamMonitor::IsEnabled() const {
+    return Description::BeamMonitor::Instance().IsEnabled();
 }
 
-void BeamCounter::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::BeamCounter::Instance();
+void BeamMonitor::ConstructSelf(G4bool checkOverlaps) {
+    const auto& description = Description::BeamMonitor::Instance();
     const auto name = description.GetName();
     const auto width = description.GetWidth();
     const auto thickness = description.GetThickness();

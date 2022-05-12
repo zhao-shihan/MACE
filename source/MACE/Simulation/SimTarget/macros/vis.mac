@@ -18,7 +18,7 @@
 /vis/viewer/zoom 10
 
 # Colors
-/vis/geometry/set/colour BeamCounter     0     1     1     1     0.5
+/vis/geometry/set/colour BeamMonitor     0     1     1     1     0.5
 /vis/geometry/set/colour BeamDegrader    0     1     1     1     0.5
 /vis/geometry/set/colour Target          0     1     1     1     0.5
 /vis/geometry/set/colour World           0     1     1     1     0.01

@@ -6,15 +6,15 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class BeamCounter final : public IDescription {
+class BeamMonitor final : public IDescription {
 public:
-    static BeamCounter& Instance() noexcept;
+    static BeamMonitor& Instance() noexcept;
 
 private:
-    BeamCounter();
-    ~BeamCounter() noexcept = default;
-    BeamCounter(const BeamCounter&) = delete;
-    BeamCounter& operator=(const BeamCounter&) = delete;
+    BeamMonitor();
+    ~BeamMonitor() noexcept = default;
+    BeamMonitor(const BeamMonitor&) = delete;
+    BeamMonitor& operator=(const BeamMonitor&) = delete;
 
 public:
     const auto& IsEnabled() const { return fIsEnabled; }
@@ -22,7 +22,7 @@ public:
     const auto& GetThickness() const { return fThickness; }
     const auto& GetDistanceToTargetSurface() const { return fDistanceToTargetSurface; }
 
-    void SetEnabled(bool val) { fIsEnabled = val; }
+    void SetEnable(bool val) { fIsEnabled = val; }
     void SetWidth(double val) { fWidth = val; }
     void SetThickness(double val) { fThickness = val; }
     void SetDistanceToTargetSurface(double val) { fDistanceToTargetSurface = val; }

@@ -29,8 +29,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 
 void DetectorConstruction::ConstructVolumes() {
     // Construct entity objects
-    fBeamCounter = std::make_shared<BeamCounter>();
     fBeamDegrader = std::make_shared<BeamDegrader>();
+    fBeamMonitor = std::make_shared<BeamMonitor>();
     fCDCBody = std::make_shared<CDCBody>();
     fCDCCell = std::make_shared<CDCCell>();
     fCDCFieldWire = std::make_shared<CDCFieldWire>();
@@ -70,8 +70,8 @@ void DetectorConstruction::ConstructVolumes() {
     fEMCalField->AddDaughter(fMCP);
     fFirstBendField->AddDaughter(fFirstBendSolenoid);
     fFirstTransportField->AddDaughter(fFirstTransportSolenoid);
-    fLinacField->AddDaughter(fBeamCounter);
     fLinacField->AddDaughter(fBeamDegrader);
+    fLinacField->AddDaughter(fBeamMonitor);
     fLinacField->AddDaughter(fTarget);
     fSecondBendField->AddDaughter(fSecondBendSolenoid);
     fSecondTransportField->AddDaughter(fCollimator);
@@ -134,7 +134,7 @@ void DetectorConstruction::ConstructMaterials() {
     fMCP->RegisterMaterial(mcpMaterial);
 
     auto plasticScitillator = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
-    fBeamCounter->RegisterMaterial(plasticScitillator);
+    fBeamMonitor->RegisterMaterial(plasticScitillator);
 
     auto silicaAerogel = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30_mg_cm3);
     fTarget->RegisterMaterial(silicaAerogel);
@@ -168,8 +168,8 @@ void DetectorConstruction::ConstructRegions() {
     fDefaultSolidRegion = new Region("DefaultSolid", Region::kDefaultSolid);
     fDefaultSolidRegion->SetProductionCuts(defaultCuts);
 
-    fBeamCounter->RegisterRegion(fDefaultSolidRegion);
     fBeamDegrader->RegisterRegion(fDefaultSolidRegion);
+    fBeamMonitor->RegisterRegion(fDefaultSolidRegion);
     fCDCBody->RegisterRegion(fDefaultSolidRegion);
     fCDCFieldWire->RegisterRegion(fDefaultSolidRegion);
     fCDCSenseWire->RegisterRegion(fDefaultSolidRegion);

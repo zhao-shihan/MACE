@@ -10,12 +10,14 @@
 
 # Geometry
 /MACE/Geometry/SetWorldHalfExtent                     50 50 50 cm
-/MACE/Geometry/SetBeamCounterWidth                    4 cm
-/MACE/Geometry/SetBeamCounterThickness                500 um
-/MACE/Geometry/SetDistanceBetweenBeamCounterAndTarget 15 mm
+/MACE/Geometry/SetEnableDegrader                      true
 /MACE/Geometry/SetDegraderWidth                       6 cm
 /MACE/Geometry/SetDegraderThickness                   420 um
 /MACE/Geometry/SetDistanceBetweenDegraderAndTarget    5 mm
+/MACE/Geometry/SetEnableBeamMonitor                   false
+/MACE/Geometry/SetBeamMonitorWidth                    4 cm
+/MACE/Geometry/SetBeamMonitorThickness                500 um
+/MACE/Geometry/SetDistanceBetweenBeamMonitorAndTarget 15 mm
 /MACE/Geometry/SetTargetWidth                         6 cm
 /MACE/Geometry/SetTargetThickness                     1 cm
 /MACE/Geometry/SetTargetDensity                       30 mg/cm3
