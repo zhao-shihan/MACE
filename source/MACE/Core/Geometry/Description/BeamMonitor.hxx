@@ -22,7 +22,7 @@ public:
     const auto& GetThickness() const { return fThickness; }
     const auto& GetDistanceToTargetSurface() const { return fDistanceToTargetSurface; }
 
-    void SetEnabled(bool val) { fIsEnabled = val; }
+    void SetEnable(bool val) { fIsEnabled = val; }
     void SetWidth(double val) { fWidth = val; }
     void SetThickness(double val) { fThickness = val; }
     void SetDistanceToTargetSurface(double val) { fDistanceToTargetSurface = val; }
