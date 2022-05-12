@@ -20,12 +20,14 @@ using namespace Description;
 
 /// @brief A std::tuple holding pointers to all geometry descriptions that will be read and written.
 /// @attention If there is a new geometry description class, add to this.
-static std::tuple<ObserverPtr<CDC>,
+static std::tuple<ObserverPtr<BeamDegrader>,
+                  ObserverPtr<BeamMonitor>,
+                  ObserverPtr<CDC>,
                   ObserverPtr<Collimator>,
-                  ObserverPtr<BeamDegrader>,
                   ObserverPtr<EMCal>,
                   ObserverPtr<EMCalField>,
                   ObserverPtr<EMCalShield>,
+                  ObserverPtr<LinacField>,
                   ObserverPtr<MCP>,
                   ObserverPtr<SelectorField>,
                   ObserverPtr<SpectrometerField>,
@@ -33,8 +35,7 @@ static std::tuple<ObserverPtr<CDC>,
                   ObserverPtr<SpectrometerShield>,
                   ObserverPtr<Target>,
                   ObserverPtr<TransportLine>,
-                  ObserverPtr<World>,
-                  ObserverPtr<LinacField>>
+                  ObserverPtr<World>>
     descriptionTuple;
 
 static void InitializeDescriptionTuple() {
