@@ -32,9 +32,9 @@ private:
 
     G4UIdirectory fDirectory;
     G4UIcmdWith3VectorAndUnit fSetWorldHalfExtent;
-    // G4UIcmdWithADoubleAndUnit fSetBeamCounterWidth;
-    // G4UIcmdWithADoubleAndUnit fSetBeamCounterThickness;
-    // G4UIcmdWithADoubleAndUnit fSetDistanceBetweenBeamCounterAndTarget;
+    G4UIcmdWithADoubleAndUnit fSetBeamCounterWidth;
+    G4UIcmdWithADoubleAndUnit fSetBeamCounterThickness;
+    G4UIcmdWithADoubleAndUnit fSetDistanceBetweenBeamCounterAndTarget;
     G4UIcmdWithADoubleAndUnit fSetDegraderWidth;
     G4UIcmdWithADoubleAndUnit fSetDegraderThickness;
     G4UIcmdWithADoubleAndUnit fSetDistanceBetweenDegraderAndTarget;

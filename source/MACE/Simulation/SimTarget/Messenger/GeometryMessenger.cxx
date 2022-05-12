@@ -18,9 +18,9 @@ GeometryMessenger::GeometryMessenger() :
     G4UImessenger(),
     fDirectory("/MACE/Geometry/"),
     fSetWorldHalfExtent("/MACE/Geometry/SetWorldHalfExtent", this),
-    // fSetBeamCounterWidth("/MACE/Geometry/SetBeamCounterWidth", this),
-    // fSetBeamCounterThickness("/MACE/Geometry/SetBeamCounterThickness", this),
-    // fSetDistanceBetweenBeamCounterAndTarget("/MACE/Geometry/SetDistanceBetweenBeamCounterAndTarget", this),
+    fSetBeamCounterWidth("/MACE/Geometry/SetBeamCounterWidth", this),
+    fSetBeamCounterThickness("/MACE/Geometry/SetBeamCounterThickness", this),
+    fSetDistanceBetweenBeamCounterAndTarget("/MACE/Geometry/SetDistanceBetweenBeamCounterAndTarget", this),
     fSetDegraderWidth("/MACE/Geometry/SetDegraderWidth", this),
     fSetDegraderThickness("/MACE/Geometry/SetDegraderThickness", this),
     fSetDistanceBetweenDegraderAndTarget("/MACE/Geometry/SetDistanceBetweenDegraderAndTarget", this),
@@ -37,20 +37,20 @@ GeometryMessenger::GeometryMessenger() :
     fSetWorldHalfExtent.SetUnitCategory("Length");
     fSetWorldHalfExtent.AvailableForStates(G4State_PreInit);
 
-    // fSetBeamCounterWidth.SetGuidance("Set beam counter width.");
-    // fSetBeamCounterWidth.SetParameterName("w", false);
-    // fSetBeamCounterWidth.SetUnitCategory("Length");
-    // fSetBeamCounterWidth.AvailableForStates(G4State_PreInit);
+    fSetBeamCounterWidth.SetGuidance("Set beam counter width.");
+    fSetBeamCounterWidth.SetParameterName("w", false);
+    fSetBeamCounterWidth.SetUnitCategory("Length");
+    fSetBeamCounterWidth.AvailableForStates(G4State_PreInit);
 
-    // fSetBeamCounterThickness.SetGuidance("Set beam counter thickness.");
-    // fSetBeamCounterThickness.SetParameterName("t", false);
-    // fSetBeamCounterThickness.SetUnitCategory("Length");
-    // fSetBeamCounterThickness.AvailableForStates(G4State_PreInit);
+    fSetBeamCounterThickness.SetGuidance("Set beam counter thickness.");
+    fSetBeamCounterThickness.SetParameterName("t", false);
+    fSetBeamCounterThickness.SetUnitCategory("Length");
+    fSetBeamCounterThickness.AvailableForStates(G4State_PreInit);
 
-    // fSetDistanceBetweenDegraderAndTarget.SetGuidance("Set distance between degrader downstream surface and target upstream surface.");
-    // fSetDistanceBetweenDegraderAndTarget.SetParameterName("d", false);
-    // fSetDistanceBetweenDegraderAndTarget.SetUnitCategory("Length");
-    // fSetDistanceBetweenDegraderAndTarget.AvailableForStates(G4State_PreInit);
+    fSetDistanceBetweenDegraderAndTarget.SetGuidance("Set distance between degrader downstream surface and target upstream surface.");
+    fSetDistanceBetweenDegraderAndTarget.SetParameterName("d", false);
+    fSetDistanceBetweenDegraderAndTarget.SetUnitCategory("Length");
+    fSetDistanceBetweenDegraderAndTarget.AvailableForStates(G4State_PreInit);
 
     fSetDegraderWidth.SetGuidance("Set beam degrader width.");
     fSetDegraderWidth.SetParameterName("w", false);
@@ -106,12 +106,12 @@ void GeometryMessenger::SetNewValue(G4UIcommand* command, G4String value) {
         Description::BeamDegrader::Instance().SetThickness(fSetDegraderThickness.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetDistanceBetweenDegraderAndTarget)) {
         Description::BeamDegrader::Instance().SetDistanceToTargetSurface(fSetDistanceBetweenDegraderAndTarget.GetNewDoubleValue(value));
-    // } else if (command == std::addressof(fSetBeamCounterWidth)) {
-    //     Description::BeamCounter::Instance().SetWidth(fSetBeamCounterWidth.GetNewDoubleValue(value));
-    // } else if (command == std::addressof(fSetBeamCounterThickness)) {
-    //     Description::BeamCounter::Instance().SetThickness(fSetBeamCounterThickness.GetNewDoubleValue(value));
-    // } else if (command == std::addressof(fSetDistanceBetweenBeamCounterAndTarget)) {
-    //     Description::BeamCounter::Instance().SetDistanceToTargetSurface(fSetDistanceBetweenBeamCounterAndTarget.GetNewDoubleValue(value));
+    } else if (command == std::addressof(fSetBeamCounterWidth)) {
+        Description::BeamCounter::Instance().SetWidth(fSetBeamCounterWidth.GetNewDoubleValue(value));
+    } else if (command == std::addressof(fSetBeamCounterThickness)) {
+        Description::BeamCounter::Instance().SetThickness(fSetBeamCounterThickness.GetNewDoubleValue(value));
+    } else if (command == std::addressof(fSetDistanceBetweenBeamCounterAndTarget)) {
+        Description::BeamCounter::Instance().SetDistanceToTargetSurface(fSetDistanceBetweenBeamCounterAndTarget.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetTargetWidth)) {
         Description::Target::Instance().SetWidth(fSetTargetWidth.GetNewDoubleValue(value));
     } else if (command == std::addressof(fSetTargetThickness)) {
