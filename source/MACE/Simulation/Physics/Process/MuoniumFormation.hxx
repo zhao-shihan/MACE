@@ -21,6 +21,7 @@ public:
     void SetFormationProbability(G4double val) { fFormationProbability = val; }
     void SetConversionProbability(G4double val) { fConversionProbability = val; }
 
+    G4bool IsApplicable(const G4ParticleDefinition&) override;
     void StartTracking(G4Track* track) override;
     G4VParticleChange* AtRestDoIt(const G4Track& track, const G4Step&) override;
 

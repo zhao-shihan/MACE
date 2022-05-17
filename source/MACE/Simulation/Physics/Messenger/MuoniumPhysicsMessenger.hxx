@@ -42,7 +42,7 @@ private:
 
     G4UIdirectory fTransportProcessDirectory;
     G4UIcmdWithADoubleAndUnit fSetMeanFreePath;
-    G4UIcmdWithABool fSetManipulateAllStepInFlight;
+    G4UIcmdWithABool fSetManipulateAllSteps;
 };
 
 } // namespace MACE::Simulation::Physics::Messenger

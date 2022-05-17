@@ -1,4 +1,6 @@
 #include "MACE/Simulation/Physics/Messenger/MuoniumPhysicsMessenger.hxx"
+#include "MACE/Simulation/Physics/Particle/AntiMuonium.hxx"
+#include "MACE/Simulation/Physics/Particle/Muonium.hxx"
 #include "MACE/Simulation/Physics/Process/MuoniumTransport.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
@@ -15,12 +17,16 @@ MuoniumTransport::MuoniumTransport() :
     G4VContinuousProcess("MuoniumTransport", fTransportation),
     fTarget(std::addressof(Target::Instance())),
     fMeanFreePath(200_nm),
-    fManipulateAllStepInFlight(false),
+    fManipulateAllSteps(false),
     fParticleChange(),
     fCase(kUnknown),
     fIsExitingTargetVolume(false) {
     pParticleChange = std::addressof(fParticleChange);
     Messenger::MuoniumPhysicsMessenger::Instance().SetTo(this);
+}
+
+G4bool MuoniumTransport::IsApplicable(const G4ParticleDefinition& particle) {
+    return std::addressof(particle) == Particle::Muonium::Definition() or std::addressof(particle) == Particle::AntiMuonium::Definition();
 }
 
 G4VParticleChange* MuoniumTransport::AlongStepDoIt(const G4Track& track, const G4Step&) {
@@ -143,7 +149,7 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
         timeUp = flightTime >= timeLimit;
         // check position
         escaped = not fTarget->VolumeContains(position);
-    } while (not(timeUp or escaped or fManipulateAllStepInFlight));
+    } while (not(timeUp or escaped or fManipulateAllSteps));
 
     // then do the final correction to fulfill the limit
 
