@@ -20,10 +20,8 @@ public:
     MuoniumTransport& operator=(const MuoniumTransport&) = delete;
 
     void SetMeanFreePath(G4double val) { fMeanFreePath = val; }
-    void SetTrialStepInVacuum(G4double val) { fTrialStepInVacuum = val; }
     void SetManipulateAllStepInFlight(G4bool val) { fManipulateAllStepInFlight = val; }
 
-    void StartTracking(G4Track* track) override;
     G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step&) override;
 
 private:
@@ -41,10 +39,8 @@ private:
 
 private:
     const ObserverPtr<const Target> fTarget;
-    ObserverPtr<CLHEP::HepRandomEngine> fRandEng;
 
     G4double fMeanFreePath;
-    G4double fTrialStepInVacuum; // In most case, the recommended value is slightly smaller than the distance of closest vacuum regions inside target volume
     G4bool fManipulateAllStepInFlight;
 
     G4ParticleChange fParticleChange;
