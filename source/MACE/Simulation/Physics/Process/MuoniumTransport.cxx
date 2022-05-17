@@ -1,4 +1,6 @@
 #include "MACE/Simulation/Physics/Messenger/MuoniumPhysicsMessenger.hxx"
+#include "MACE/Simulation/Physics/Particle/AntiMuonium.hxx"
+#include "MACE/Simulation/Physics/Particle/Muonium.hxx"
 #include "MACE/Simulation/Physics/Process/MuoniumTransport.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
@@ -14,10 +16,8 @@ using namespace Utility::LiteralUnit;
 MuoniumTransport::MuoniumTransport() :
     G4VContinuousProcess("MuoniumTransport", fTransportation),
     fTarget(std::addressof(Target::Instance())),
-    fRandEng(G4Random::getTheEngine()),
     fMeanFreePath(200_nm),
-    fTrialStepInVacuum(fMeanFreePath),
-    fManipulateAllStepInFlight(false),
+    fManipulateAllSteps(false),
     fParticleChange(),
     fCase(kUnknown),
     fIsExitingTargetVolume(false) {
@@ -25,10 +25,8 @@ MuoniumTransport::MuoniumTransport() :
     Messenger::MuoniumPhysicsMessenger::Instance().SetTo(this);
 }
 
-void MuoniumTransport::StartTracking(G4Track* track) {
-    G4VContinuousProcess::StartTracking(track);
-    // the random engine in use
-    fRandEng = G4Random::getTheEngine();
+G4bool MuoniumTransport::IsApplicable(const G4ParticleDefinition& particle) {
+    return std::addressof(particle) == Particle::Muonium::Definition() or std::addressof(particle) == Particle::AntiMuonium::Definition();
 }
 
 G4VParticleChange* MuoniumTransport::AlongStepDoIt(const G4Track& track, const G4Step&) {
@@ -84,18 +82,16 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     // 'cause the momentum, position, etc. violates much in this process, no easy way of using G4 tracking mechanism to manage this process.
     // Thus we do that ourselves. The decay time is pre-assigned and used for limiting the flight time, and the "true safety" is ensured by bool expr.
 
+    // the random engine in use
+    auto* const randEng = G4Random::getTheEngine();
     // pre step point position
     const auto& initialPosition = track.GetPosition();
     // get the pre-assigned decay time to determine when the flight stops and then let G4 decay it
     const auto timeLimit = track.GetDynamicParticle()->GetPreAssignedDecayProperTime() - track.GetProperTime();
     // std dev of velocity of single direction
     const auto sigmaV = std::sqrt((k_Boltzmann * c_squared / muon_mass_c2) * track.GetMaterial()->GetTemperature());
-
-    // helpers to be used in binary search
-    G4ThreeVector binaryMore;
-    G4ThreeVector binaryLess;
-    G4ThreeVector binaryMid;
-    G4double binaryStep;
+    // the trial step in vacuum regions of target fine structure
+    const auto stepInVacuum = 2 * fMeanFreePath;
 
     // the total flight length in this G4Step
     G4double trueStepLength = 0;
@@ -114,12 +110,6 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     G4double freePath;
     // the free time of single flight step
     G4double freeTime;
-    // the temp parameter to store the original displacement which is used in stepping in vacuum
-    G4ThreeVector lastDisplacementInVacuum;
-    // the exact trial step in vacuum regions of target volume
-    G4double trueTrialStepInVacuum;
-    // the trial step vector in vacuum regions of target volume
-    G4ThreeVector trueTrialStepVectorInVacuum;
     // flag indicate that the flight was terminated by decay
     G4bool timeUp = false;
     // flag indicate that the flight was terminated by target boundary
@@ -130,91 +120,36 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     do {
         if (fTarget->Contains(position)) {
             // sampling free path
-            freePath = G4RandExponential::shoot(fRandEng, fMeanFreePath);
+            freePath = G4RandExponential::shoot(randEng, fMeanFreePath);
             // set a gauss vector of sigma=1
-            direction.set(G4RandGauss::shoot(fRandEng),
-                          G4RandGauss::shoot(fRandEng),
-                          G4RandGauss::shoot(fRandEng));
+            direction.set(G4RandGauss::shoot(randEng),
+                          G4RandGauss::shoot(randEng),
+                          G4RandGauss::shoot(randEng));
             // get its length before multiply sigmaV
             velocity = direction.mag();
             // normalize direction vector
             direction /= velocity;
             // get the exact velocity
             velocity *= sigmaV;
-            // calculate free time
-            freeTime = freePath / velocity;
-            // update flight length
-            trueStepLength += freePath;
-            // update time
-            flightTime += freeTime;
-            // update displacement
-            displacement += freePath * direction;
-            // update current position
-            position = initialPosition + displacement;
-            // check time
-            timeUp = flightTime >= timeLimit;
-            // check position
-            escaped = not fTarget->VolumeContains(position);
         } else {
-            // inside vacuum region of target fine structure, first stepping with pre-set trial step until reach the material
-            // (the recommended value of fTrialStepInVacuum is slightly smaller than the distance of closest vacuum regions inside target volume
-            //  to ensure not to miss the boundary but step into another vacuum region in volume)
-            lastDisplacementInVacuum = displacement;
-            trueTrialStepInVacuum = fTrialStepInVacuum;
-            trueTrialStepVectorInVacuum = trueTrialStepInVacuum * direction;
-            do {
-                displacement += trueTrialStepVectorInVacuum;
-                position = initialPosition + displacement;
-                if (not fTarget->VolumeContains(position)) {
-                    displacement -= trueTrialStepVectorInVacuum;
-                    trueTrialStepInVacuum = fMeanFreePath;
-                    trueTrialStepVectorInVacuum = trueTrialStepInVacuum * direction;
-                    freePath = 0;
-                    escaped = true;
-                    do {
-                        displacement += trueTrialStepVectorInVacuum;
-                        position = initialPosition + displacement;
-                        freePath += trueTrialStepInVacuum;
-                        if (fTarget->Contains(position)) {
-                            escaped = false;
-                            break;
-                        }
-                    } while (freePath < fTrialStepInVacuum);
-                    break;
-                }
-            } while (not fTarget->Contains(position));
-            // then binary search the exact boundary if needed
-            if (not escaped and trueTrialStepInVacuum > fMeanFreePath) {
-                binaryMore = displacement;
-                binaryLess = displacement - trueTrialStepVectorInVacuum;
-                binaryMid = (binaryMore + binaryLess) / 2;
-                position = initialPosition + binaryMid;
-                do {
-                    if (fTarget->Contains(position)) {
-                        binaryMore = binaryMid;
-                    } else {
-                        binaryLess = binaryMid;
-                    }
-                    binaryMid = (binaryMore + binaryLess) / 2;
-                    position = initialPosition + binaryMid;
-                    trueTrialStepInVacuum /= 2;
-                } while (trueTrialStepInVacuum > fMeanFreePath);
-                // update displacement, use a larger displacement to ensure final point is inside target
-                displacement = binaryMore;
-                position = initialPosition + displacement;
-            }
-            // calculate free path
-            freePath = (displacement - lastDisplacementInVacuum).mag();
-            // calculate free time
-            freeTime = freePath / velocity;
-            // update flight length
-            trueStepLength += freePath;
-            // update time
-            flightTime += freeTime;
-            // check time
-            timeUp = flightTime >= timeLimit;
+            // inside vacuum region of target fine structure
+            freePath = stepInVacuum;
         }
-    } while (not(timeUp or escaped or fManipulateAllStepInFlight));
+        // calculate free time
+        freeTime = freePath / velocity;
+        // update flight length
+        trueStepLength += freePath;
+        // update time
+        flightTime += freeTime;
+        // update displacement
+        displacement += freePath * direction;
+        // update current position
+        position = initialPosition + displacement;
+        // check time
+        timeUp = flightTime >= timeLimit;
+        // check position
+        escaped = not fTarget->VolumeContains(position);
+    } while (not(timeUp or escaped or fManipulateAllSteps));
 
     // then do the final correction to fulfill the limit
 
@@ -233,17 +168,18 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     // evaluate the correction from space if needed
     if (escaped) {
         // flight is break by target boundary
-        binaryMore = displacement;
-        binaryLess = displacement - freePath * direction;
-        binaryMid = (binaryMore + binaryLess) / 2;
-        binaryStep = freePath;
+        G4ThreeVector binaryMore = displacement;
+        G4ThreeVector binaryMid;
+        G4ThreeVector binaryLess = displacement - freePath * direction;
+        G4double binaryStep = freePath;
         do {
-            if (fTarget->VolumeContains(initialPosition + binaryMid)) {
+            binaryMid = (binaryMore + binaryLess) / 2;
+            position = initialPosition + binaryMid;
+            if (fTarget->VolumeContains(position)) {
                 binaryLess = binaryMid;
             } else {
                 binaryMore = binaryMid;
             }
-            binaryMid = (binaryMore + binaryLess) / 2;
             binaryStep /= 2;
         } while (binaryStep > 1_nm);
         // a bit smaller correction ensuring the final position is outside the volume

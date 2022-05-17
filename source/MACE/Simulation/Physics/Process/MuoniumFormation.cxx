@@ -1,4 +1,3 @@
-// #include "MACE/Simulation/SimMACE/Messenger/PhysicsMessenger.hxx"
 #include "MACE/Simulation/Physics/Messenger/MuoniumPhysicsMessenger.hxx"
 #include "MACE/Simulation/Physics/Particle/AntiMuonium.hxx"
 #include "MACE/Simulation/Physics/Particle/Muonium.hxx"
@@ -7,7 +6,6 @@
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4MuonPlus.hh"
-#include "G4RunManager.hh"
 
 namespace MACE::Simulation::Physics::Process {
 
@@ -27,6 +25,10 @@ MuoniumFormation::MuoniumFormation() :
     Messenger::MuoniumPhysicsMessenger::Instance().SetTo(this);
 }
 
+G4bool MuoniumFormation::IsApplicable(const G4ParticleDefinition& particle) {
+    return std::addressof(particle) == G4MuonPlus::Definition();
+}
+
 void MuoniumFormation::StartTracking(G4Track* track) {
     G4VRestProcess::StartTracking(track);
     // the random engine in use
@@ -38,7 +40,7 @@ G4VParticleChange* MuoniumFormation::AtRestDoIt(const G4Track& track, const G4St
     // The dynamic particle
     auto muoniumDynamicParticle = new G4DynamicParticle(*track.GetDynamicParticle());
     // Determine whether the transition can be observed
-    muoniumDynamicParticle->SetDefinition(G4RandFlat::shoot(fRandEng) < fConversionProbability ? fAntiMuonium : fMuonium);
+    muoniumDynamicParticle->SetDefinition(fRandEng->flat() < fConversionProbability ? fAntiMuonium : fMuonium);
     // Sampling momentum according to boltzmann distribution
     const auto temperature = track.GetVolume()->GetLogicalVolume()->GetMaterial()->GetTemperature();
     const auto momentum = std::sqrt(muonium_mass_c2 * k_Boltzmann * temperature) *
@@ -61,12 +63,8 @@ G4VParticleChange* MuoniumFormation::AtRestDoIt(const G4Track& track, const G4St
 }
 
 G4double MuoniumFormation::GetMeanLifeTime(const G4Track& track, G4ForceCondition*) {
-    if (fTarget->Contains(track.GetPosition())) {
-        if (G4RandFlat::shoot(fRandEng) < fFormationProbability) {
-            return DBL_MIN;
-        } else {
-            return DBL_MAX;
-        }
+    if (fRandEng->flat() < fFormationProbability) {
+        return fTarget->Contains(track.GetPosition()) ? DBL_MIN : DBL_MAX;
     } else {
         return DBL_MAX;
     }
