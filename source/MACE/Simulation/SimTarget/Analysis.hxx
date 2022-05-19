@@ -28,6 +28,7 @@ private:
 public:
     void SetResultName(std::string_view resultName) { fResultName = resultName; }
     void EnableYieldAnalysis(G4bool val) { fEnableYieldAnalysis = val; }
+    void SetDetectableRegion(const char* booleanExpression) { fDetectableRegion = ConstructFormula(booleanExpression); }
 
     void RunBegin(ObserverPtr<const G4Run> run);
     auto NewMuoniumTrack() { return fMuoniumTrackList.emplace_back(std::make_unique<MuoniumTrack>()).get(); }
@@ -47,10 +48,14 @@ private:
     void AnalysisAndWriteYield();
     void CloseYieldFile();
 
+    static TFormula ConstructFormula(const char* booleanExpression) { return TFormula("DetectableRegion", booleanExpression, false); }
+    bool IsDetectable(const Double_t* pos) const noexcept { return fDetectableRegion.EvalPar(pos) > 0.5; }
+
 private:
     const ObserverPtr<const Target> fTarget;
     std::string fResultName;
     G4bool fEnableYieldAnalysis;
+    TFormula fDetectableRegion;
 
     ObserverPtr<const G4Run> fThisRun;
     std::vector<std::unique_ptr<MuoniumTrack>> fMuoniumTrackList;

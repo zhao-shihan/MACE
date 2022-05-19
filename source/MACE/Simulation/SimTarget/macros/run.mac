@@ -7,6 +7,7 @@
 # I/O & Analysis
 /MACE/Analysis/SetResultName                          SimTarget_result
 /MACE/Analysis/EnableYieldAnalysis                    true
+/MACE/Analysis/SetDetectableRegion                    abs(x)>30 || abs(y)>30 || z>0
 
 # Geometry
 /MACE/Geometry/SetWorldHalfExtent                     50 50 50 cm

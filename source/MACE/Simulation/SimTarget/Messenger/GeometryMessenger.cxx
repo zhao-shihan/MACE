@@ -18,14 +18,14 @@ GeometryMessenger::GeometryMessenger() :
     G4UImessenger(),
     fDirectory("/MACE/Geometry/"),
     fSetWorldHalfExtent("/MACE/Geometry/SetWorldHalfExtent", this),
-    fSetEnableDegrader("/MACE/Geometry/SetEnableDegrader", this),
-    fSetDegraderWidth("/MACE/Geometry/SetDegraderWidth", this),
-    fSetDegraderThickness("/MACE/Geometry/SetDegraderThickness", this),
-    fSetDistanceBetweenDegraderAndTarget("/MACE/Geometry/SetDistanceBetweenDegraderAndTarget", this),
     fSetEnableBeamMonitor("/MACE/Geometry/SetEnableBeamMonitor", this),
     fSetBeamMonitorWidth("/MACE/Geometry/SetBeamMonitorWidth", this),
     fSetBeamMonitorThickness("/MACE/Geometry/SetBeamMonitorThickness", this),
     fSetDistanceBetweenBeamMonitorAndTarget("/MACE/Geometry/SetDistanceBetweenBeamMonitorAndTarget", this),
+    fSetEnableDegrader("/MACE/Geometry/SetEnableDegrader", this),
+    fSetDegraderWidth("/MACE/Geometry/SetDegraderWidth", this),
+    fSetDegraderThickness("/MACE/Geometry/SetDegraderThickness", this),
+    fSetDistanceBetweenDegraderAndTarget("/MACE/Geometry/SetDistanceBetweenDegraderAndTarget", this),
     fSetTargetWidth("/MACE/Geometry/SetTargetWidth", this),
     fSetTargetThickness("/MACE/Geometry/SetTargetThickness", this),
     fSetTargetDensity("/MACE/Geometry/SetTargetDensity", this),
@@ -38,25 +38,6 @@ GeometryMessenger::GeometryMessenger() :
     fSetWorldHalfExtent.SetParameterName("x", "y", "z", false);
     fSetWorldHalfExtent.SetUnitCategory("Length");
     fSetWorldHalfExtent.AvailableForStates(G4State_PreInit);
-
-    fSetEnableDegrader.SetGuidance("Set true to enable placement of beam degrader, and vice versa.");
-    fSetEnableDegrader.SetParameterName("b", false);
-    fSetEnableDegrader.AvailableForStates(G4State_PreInit);
-
-    fSetDegraderWidth.SetGuidance("Set beam degrader width.");
-    fSetDegraderWidth.SetParameterName("w", false);
-    fSetDegraderWidth.SetUnitCategory("Length");
-    fSetDegraderWidth.AvailableForStates(G4State_PreInit);
-
-    fSetDegraderThickness.SetGuidance("Set beam degrader thickness.");
-    fSetDegraderThickness.SetParameterName("t", false);
-    fSetDegraderThickness.SetUnitCategory("Length");
-    fSetDegraderThickness.AvailableForStates(G4State_PreInit);
-
-    fSetDistanceBetweenDegraderAndTarget.SetGuidance("Set distance between degrader downstream surface and target upstream surface.");
-    fSetDistanceBetweenDegraderAndTarget.SetParameterName("d", false);
-    fSetDistanceBetweenDegraderAndTarget.SetUnitCategory("Length");
-    fSetDistanceBetweenDegraderAndTarget.AvailableForStates(G4State_PreInit);
 
     fSetEnableBeamMonitor.SetGuidance("Set true to enable placement of beam monitor, and vice versa.");
     fSetEnableBeamMonitor.SetParameterName("b", false);
@@ -76,6 +57,25 @@ GeometryMessenger::GeometryMessenger() :
     fSetDistanceBetweenBeamMonitorAndTarget.SetParameterName("d", false);
     fSetDistanceBetweenBeamMonitorAndTarget.SetUnitCategory("Length");
     fSetDistanceBetweenBeamMonitorAndTarget.AvailableForStates(G4State_PreInit);
+
+    fSetEnableDegrader.SetGuidance("Set true to enable placement of beam degrader, and vice versa.");
+    fSetEnableDegrader.SetParameterName("b", false);
+    fSetEnableDegrader.AvailableForStates(G4State_PreInit);
+
+    fSetDegraderWidth.SetGuidance("Set beam degrader width.");
+    fSetDegraderWidth.SetParameterName("w", false);
+    fSetDegraderWidth.SetUnitCategory("Length");
+    fSetDegraderWidth.AvailableForStates(G4State_PreInit);
+
+    fSetDegraderThickness.SetGuidance("Set beam degrader thickness.");
+    fSetDegraderThickness.SetParameterName("t", false);
+    fSetDegraderThickness.SetUnitCategory("Length");
+    fSetDegraderThickness.AvailableForStates(G4State_PreInit);
+
+    fSetDistanceBetweenDegraderAndTarget.SetGuidance("Set distance between degrader downstream surface and target upstream surface.");
+    fSetDistanceBetweenDegraderAndTarget.SetParameterName("d", false);
+    fSetDistanceBetweenDegraderAndTarget.SetUnitCategory("Length");
+    fSetDistanceBetweenDegraderAndTarget.AvailableForStates(G4State_PreInit);
 
     fSetTargetWidth.SetGuidance("Set target width.");
     fSetTargetWidth.SetParameterName("w", false);
