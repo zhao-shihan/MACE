@@ -23,10 +23,10 @@ public:
     const auto& GetThickness() const { return fThickness; }
     /// Return true if inside the target volume (include boundary (closed region), don't consider fine structure).
     bool VolumeContains(const Double_t* pos) const noexcept;
-    bool VolumeContains(const CLHEP::Hep3Vector& pos) const noexcept { return VolumeContains(reinterpret_cast<const Double_t*>(std::addressof(pos))); }
+    bool VolumeContains(const CLHEP::Hep3Vector& pos) const noexcept;
     /// Return true if inside the exact target geometry (include boundary (closed region), considering fine structure).
     bool Contains(const Double_t* pos) const noexcept { return VolumeContains(pos) and fFineStructure.EvalPar(pos) > 0.5; }
-    bool Contains(const CLHEP::Hep3Vector& pos) const noexcept { return Contains(reinterpret_cast<const Double_t*>(std::addressof(pos))); }
+    bool Contains(const CLHEP::Hep3Vector& pos) const noexcept;
 
     void SetWidth(double val) { fWidth = val; }
     void SetThickness(double val) { fThickness = val; }

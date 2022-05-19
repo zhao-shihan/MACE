@@ -26,6 +26,16 @@ bool Target::VolumeContains(const Double_t* pos) const noexcept {
            -fThickness <= pos[2] and pos[2] <= 0;
 }
 
+bool Target::VolumeContains(const CLHEP::Hep3Vector& pos) const noexcept {
+    static_assert(sizeof(CLHEP::Hep3Vector) == 3 * sizeof(double), "CLHEP::Hep3Vector on this platform has incorrect alignment, please contact developers.");
+    return VolumeContains(reinterpret_cast<const Double_t*>(std::addressof(pos)));
+}
+
+bool Target::Contains(const CLHEP::Hep3Vector& pos) const noexcept {
+    static_assert(sizeof(CLHEP::Hep3Vector) == 3 * sizeof(double), "CLHEP::Hep3Vector on this platform has incorrect alignment, please contact developers.");
+    return Contains(reinterpret_cast<const Double_t*>(std::addressof(pos)));
+}
+
 HepGeom::Transform3D Target::CalcTransform() const {
     const auto& linacField = LinacField::Instance();
     const auto transZ = linacField.GetLength() / 2 - linacField.GetDownStreamLength() - fThickness / 2;
