@@ -16,7 +16,8 @@ AnalysisMessenger::AnalysisMessenger() :
     G4UImessenger(),
     fDirectory("/MACE/Analysis/"),
     fSetResultName("/MACE/Analysis/SetResultName", this),
-    fEnableYieldAnalysis("/MACE/Analysis/EnableYieldAnalysis", this) {
+    fEnableYieldAnalysis("/MACE/Analysis/EnableYieldAnalysis", this),
+    fSetDetectableRegion("/MACE/Analysis/SetDetectableRegion", this) {
 
     fDirectory.SetGuidance("MACE::Simulation::SimTarget::Analysis controller.");
 
@@ -27,6 +28,10 @@ AnalysisMessenger::AnalysisMessenger() :
     fEnableYieldAnalysis.SetGuidance("Enable auto analysis of yield.");
     fEnableYieldAnalysis.SetParameterName("bool", false);
     fEnableYieldAnalysis.AvailableForStates(G4State_PreInit);
+
+    fSetDetectableRegion.SetGuidance("Set boolean expression to represent the region where the muonium decay is detectable. Where the expression evaluate to true is the region.");
+    fSetDetectableRegion.SetParameterName("expr", false);
+    fSetDetectableRegion.AvailableForStates(G4State_PreInit);
 }
 
 void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
@@ -35,6 +40,8 @@ void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
         analysis.SetResultName(value);
     } else if (command == std::addressof(fEnableYieldAnalysis)) {
         analysis.EnableYieldAnalysis(fEnableYieldAnalysis.GetNewBoolValue(value));
+    } else if (command == std::addressof(fSetDetectableRegion)) {
+        analysis.SetDetectableRegion(value);
     }
 }
 

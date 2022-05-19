@@ -18,6 +18,7 @@ Analysis::Analysis() :
     fTarget(std::addressof(Target::Instance())),
     fResultName("SimTarget_result"),
     fEnableYieldAnalysis(true),
+    fDetectableRegion(ConstructFormula("abs(x)>30 || abs(y)>30 || z>0")),
     fThisRun(nullptr),
     fMuoniumTrackList(0),
     fResultFile(nullptr),
@@ -102,19 +103,13 @@ void Analysis::AnalysisAndWriteYield() {
     nVacuumDecay = 0;
     nDetectableDecay = 0;
 
-    auto Detectable = [this](const Eigen::Vector3d& pos) {
-        return std::abs(pos.x()) > fTarget->GetWidth() / 2 or
-               std::abs(pos.y()) > fTarget->GetWidth() / 2 or
-               pos.z() > 0;
-    };
-
     for (auto&& track : std::as_const(fMuoniumTrackList)) {
         const auto& decayPosition = track->GetDecayPosition();
         if (fTarget->Contains(decayPosition.data())) {
             ++nTargetDecay;
         } else {
             ++nVacuumDecay;
-            if (Detectable(decayPosition)) {
+            if (IsDetectable(decayPosition.data())) {
                 ++nDetectableDecay;
             }
         }

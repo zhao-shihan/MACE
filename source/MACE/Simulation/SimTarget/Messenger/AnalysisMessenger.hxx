@@ -23,6 +23,7 @@ private:
     G4UIdirectory fDirectory;
     G4UIcmdWithAString fSetResultName;
     G4UIcmdWithABool fEnableYieldAnalysis;
+    G4UIcmdWithAString fSetDetectableRegion;
 };
 
 } // namespace MACE::Simulation::SimTarget::Messenger
