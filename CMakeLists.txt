@@ -13,6 +13,15 @@ set(MACE_EXTERNAL_DIR ${MACE_SOURCE_DIR}/external)
 set(MACE_TEST_DIR ${MACE_SOURCE_DIR}/test)
 
 # ================================================================================================================================
+# Options
+# ================================================================================================================================
+# Basic options
+option(MACE_ENABLE_VIS "Build MACE with visualization" ON)
+option(MACE_BUILD_TEST "Build MACE with test module" ON)
+# Advance options
+option(MACE_SHOW_ALL_COMPILER_WARNINGS "Do not surpress any compiler warnings, even they are raised from external dependencies." OFF)
+
+# ================================================================================================================================
 # Dependencies
 # ================================================================================================================================
 # MPI
@@ -23,13 +32,11 @@ message(STATUS "MACE uses MPI_CXX includes from: ${MPI_CXX_INCLUDE_DIRS}")
 message(STATUS "MACE uses MPI_CXX libraries: ${MPI_CXX_LIBRARIES}")
 
 # Geant4
-# ?? not very sure about this if
-#option(MACE_WITH_VIS "Build MACE with visualization" ON)
-#if(MACE_WITH_VIS)
-find_package(Geant4 11.0.0 REQUIRED ui_all vis_all)
-#else()
-#    find_package(Geant4 11.0.0 REQUIRED)
-#endif()
+if(MACE_ENABLE_VIS)
+    find_package(Geant4 11.0.0 REQUIRED ui_all vis_all)
+else()
+    find_package(Geant4 11.0.0 REQUIRED)
+endif()
 message(STATUS "MACE uses Geant4 includes from: ${Geant4_INCLUDE_DIRS}")
 message(STATUS "MACE uses Geant4 libraries: ${Geant4_LIBRARIES}")
 
@@ -58,20 +65,22 @@ message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
 # More warnings
 add_definitions(-Wall -Wextra)
 # Surpress those from external
-if(CMAKE_COMPILER_IS_GNUCXX)
-    # Open MPI
-    add_definitions(-Wno-cast-function-type)
-    # ROOT
-    add_definitions(-Wno-volatile)
-    if(GCC_VERSION GREATER_EQUAL 11)
+if(NOT MACE_SHOW_ALL_COMPILER_WARNINGS)
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        # Open MPI
+        add_definitions(-Wno-cast-function-type)
+        # ROOT
+        add_definitions(-Wno-volatile)
+        if(GCC_VERSION GREATER_EQUAL 11)
+            # Eigen3
+            add_definitions(-Wno-deprecated-enum-enum-conversion)
+        endif()
+    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+        # ROOT
+        add_definitions(-Wno-deprecated-volatile)
         # Eigen3
-        add_definitions(-Wno-deprecated-enum-enum-conversion)
+        add_definitions(-Wno-deprecated-anon-enum-enum-conversion)
     endif()
-elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
-    # ROOT
-    add_definitions(-Wno-deprecated-volatile)
-    # Eigen3
-    add_definitions(-Wno-deprecated-anon-enum-enum-conversion)
 endif()
 
 add_subdirectory(${MACE_SOURCE_DIR})

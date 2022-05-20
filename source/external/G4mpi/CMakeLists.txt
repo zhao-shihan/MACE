@@ -13,8 +13,10 @@ if(CMAKE_CXX_STANDARD GREATER 17)
 endif()
 message(STATUS "G4mpi will be compiled with C++${CMAKE_CXX_STANDARD}")
 
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
-    add_definitions(-Wno-implicit-const-int-float-conversion)
+if(NOT MACE_SHOW_ALL_COMPILER_WARNINGS)
+    if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+        add_definitions(-Wno-implicit-const-int-float-conversion)
+    endif()
 endif()
 #########################
 ####  MACE_EDIT_END  ####

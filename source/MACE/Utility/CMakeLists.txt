@@ -1,7 +1,9 @@
 project(Utility)
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-    add_definitions(-Wno-stringop-truncation)
+if(NOT MACE_SHOW_ALL_COMPILER_WARNINGS)
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        add_definitions(-Wno-stringop-truncation)
+    endif()
 endif()
 
 file(GLOB_RECURSE Utility_srcs ${PROJECT_SOURCE_DIR}/*.cxx)

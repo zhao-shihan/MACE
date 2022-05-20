@@ -1,3 +1,5 @@
 add_subdirectory(external)
 add_subdirectory(MACE)
-add_subdirectory(test)
+if(MACE_BUILD_TEST)
+    add_subdirectory(test)
+endif()
