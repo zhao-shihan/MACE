@@ -1,1 +1,2 @@
-project(ReconEMCal)
+project(MACE)
+

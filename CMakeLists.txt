@@ -1,16 +1,16 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
-project(MACE)
+project(MACE_PROJECT)
 
 # ================================================================================================================================
 # Variables
 # ================================================================================================================================
 # Dirs
-set(MACE_ROOT_DIR ${PROJECT_SOURCE_DIR})
-set(MACE_CMAKE_DIR ${MACE_ROOT_DIR}/cmake)
-set(MACE_SOURCE_DIR ${MACE_ROOT_DIR}/source)
-set(MACE_EXTERNAL_DIR ${MACE_SOURCE_DIR}/external)
-set(MACE_TEST_DIR ${MACE_SOURCE_DIR}/test)
+set(MACE_PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
+set(MACE_PROJECT_CMAKE_DIR ${MACE_PROJECT_ROOT_DIR}/cmake)
+set(MACE_PROJECT_SRC_DIR ${MACE_PROJECT_ROOT_DIR}/source)
+set(MACE_BUILDIN_G4MPI_DIR ${MACE_PROJECT_SRC_DIR}/external/G4mpi)
+set(MACE_BUILDIN_YAML_CPP_DIR ${MACE_PROJECT_SRC_DIR}/external/yaml-cpp)
 
 # ================================================================================================================================
 # Options
@@ -60,27 +60,11 @@ endif()
 message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
 
 # ================================================================================================================================
-# About compile warnings
+# Let's go!
 # ================================================================================================================================
-# More warnings
-add_definitions(-Wall -Wextra)
-# Surpress those from external
-if(NOT MACE_SHOW_ALL_COMPILER_WARNINGS)
-    if(CMAKE_COMPILER_IS_GNUCXX)
-        # Open MPI
-        add_definitions(-Wno-cast-function-type)
-        # ROOT
-        add_definitions(-Wno-volatile)
-        if(GCC_VERSION GREATER_EQUAL 11)
-            # Eigen3
-            add_definitions(-Wno-deprecated-enum-enum-conversion)
-        endif()
-    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
-        # ROOT
-        add_definitions(-Wno-deprecated-volatile)
-        # Eigen3
-        add_definitions(-Wno-deprecated-anon-enum-enum-conversion)
-    endif()
+add_subdirectory(${MACE_BUILDIN_G4MPI_DIR})
+add_subdirectory(${MACE_BUILDIN_YAML_CPP_DIR})
+add_subdirectory(${MACE_PROJECT_SRC_DIR}/MACE)
+if(MACE_BUILD_TEST)
+    add_subdirectory(${MACE_PROJECT_SRC_DIR}/test)
 endif()
-
-add_subdirectory(${MACE_SOURCE_DIR})

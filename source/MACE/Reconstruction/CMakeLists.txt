@@ -1,4 +1,4 @@
-project(Reconstruction)
+project(MACE)
 
 add_subdirectory(ReconEMCal)
 add_subdirectory(ReconMuonium)

@@ -5,29 +5,31 @@
 # 3. {message("-- G4 Examples:} -> {message(STATUS "${_projname}:}
 #----------------------------------------------------------------------------------------------------------------
 
-#########################
-#### MACE_EDIT_BEGIN ####
-#########################
-if(CMAKE_CXX_STANDARD GREATER 17)
-    set(CMAKE_CXX_STANDARD 17)
-endif()
-message(STATUS "G4mpi will be compiled with C++${CMAKE_CXX_STANDARD}")
-
-if(NOT MACE_SHOW_ALL_COMPILER_WARNINGS)
-    if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
-        add_definitions(-Wno-implicit-const-int-float-conversion)
-    endif()
-endif()
-#########################
-####  MACE_EDIT_END  ####
-#########################
-
 # - CmakeLists.txt for G4mpi interface
 
 #------------------------------------------------------------------------------
 set(_projname libG4mpi)
 set(_targetname G4mpi)
 project(${_projname})
+
+#########################
+#### MACE_EDIT_BEGIN ####
+#########################
+if(CMAKE_CXX_STANDARD GREATER 17)
+    set(CMAKE_CXX_STANDARD 17)
+endif()
+message(STATUS "${_projname} will be compiled with C++${CMAKE_CXX_STANDARD}")
+
+if(NOT MACE_SHOW_ALL_COMPILER_WARNINGS)
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        add_definitions(-Wno-cast-function-type)
+    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+        add_definitions(-Wno-implicit-const-int-float-conversion)
+    endif()
+endif()
+#########################
+####  MACE_EDIT_END  ####
+#########################
 
 #------------------------------------------------------------------------------
 #Manadatory dependencies
