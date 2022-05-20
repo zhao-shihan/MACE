@@ -1,11 +1,11 @@
+#include "MACE/Simulation/SimMACE/Analysis.hxx"
 #include "MACE/Simulation/SimMACE/Messenger/AnalysisMessenger.hxx"
 #include "MACE/Simulation/SimMACE/Messenger/FieldMessenger.hxx"
-#include "MACE/Simulation/SimMACE/Utility/Analysis.hxx"
 #include "MACE/Utility/MPITool/MakeMPIFilePath.hxx"
 
 #include "G4MPImanager.hh"
 
-namespace MACE::Simulation::SimMACE::Utility {
+namespace MACE::Simulation::SimMACE {
 
 using Messenger::AnalysisMessenger;
 
@@ -78,4 +78,4 @@ void Analysis::WriteTrees() {
     }
 }
 
-} // namespace MACE::Simulation::SimMACE::Utility
+} // namespace MACE::Simulation::SimMACE

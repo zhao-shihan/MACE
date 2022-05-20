@@ -8,7 +8,7 @@
 
 #include "TFile.h"
 
-namespace MACE::Simulation::SimMACE::Utility {
+namespace MACE::Simulation::SimMACE {
 
 using Core::DataFactory;
 using Hit::CDCHit;
@@ -62,4 +62,4 @@ private:
     ObserverPtr<const std::vector<CDCHit*>> fCDCHitList;
 };
 
-} // namespace MACE::Simulation::SimMACE::Utility
+} // namespace MACE::Simulation::SimMACE

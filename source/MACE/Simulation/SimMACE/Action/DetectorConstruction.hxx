@@ -1,10 +1,10 @@
 #pragma once
 
 #include "MACE/Core/Geometry/Entity/Fast/All.hxx"
+#include "MACE/Simulation/SimMACE/Region.hxx"
 #include "MACE/Simulation/SimMACE/SD/CDCSD.hxx"
 #include "MACE/Simulation/SimMACE/SD/EMCalSD.hxx"
 #include "MACE/Simulation/SimMACE/SD/MCPSD.hxx"
-#include "MACE/Simulation/SimMACE/Utility/Region.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4VUserDetectorConstruction.hh"
@@ -16,7 +16,6 @@ namespace MACE::Simulation::SimMACE::Action {
 using namespace Core::Geometry::Entity::Fast;
 using namespace SD;
 using MACE::Utility::ObserverPtr;
-using Utility::Region;
 
 class DetectorConstruction final : public G4VUserDetectorConstruction {
 public:

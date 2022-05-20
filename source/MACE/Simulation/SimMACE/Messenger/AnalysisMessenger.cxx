@@ -1,10 +1,9 @@
+#include "MACE/Simulation/SimMACE/Analysis.hxx"
 #include "MACE/Simulation/SimMACE/Messenger/AnalysisMessenger.hxx"
-#include "MACE/Simulation/SimMACE/Utility/Analysis.hxx"
 
 #include "G4UIdirectory.hh"
 
-using MACE::Simulation::SimMACE::Messenger::AnalysisMessenger;
-using MACE::Simulation::SimMACE::Utility::Analysis;
+namespace MACE::Simulation::SimMACE::Messenger {
 
 AnalysisMessenger& AnalysisMessenger::Instance() {
     static AnalysisMessenger instance;
@@ -18,7 +17,7 @@ AnalysisMessenger::AnalysisMessenger() :
     fEnableCoincidenceOfMCP("/MACE/Analysis/EnableCoincidenceOfMCP", this),
     fSetResultName("/MACE/Analysis/SetResultName", this) {
 
-    fDirectory.SetGuidance("MACE::Simulation::SimMACE::Utility::Analysis controller.");
+    fDirectory.SetGuidance("MACE::Simulation::SimMACE::Analysis controller.");
 
     fEnableCoincidenceOfEMCal.SetGuidance("Enable EMCal for coincident detection.");
     fEnableCoincidenceOfEMCal.SetParameterName("mode", false);
@@ -43,3 +42,5 @@ void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
         analysis.SetResultName(value);
     }
 }
+
+} // namespace MACE::Simulation::SimMACE::Messenger

@@ -1,6 +1,6 @@
 #include "MACE/Simulation/SimMACE/RunManager.hxx"
 #include "MACE/Simulation/SimMACE/SD/MCPSD.hxx"
-#include "MACE/Simulation/SimMACE/Utility/Analysis.hxx"
+#include "MACE/Simulation/SimMACE/Analysis.hxx"
 
 #include "G4HCofThisEvent.hh"
 #include "G4SDManager.hh"
@@ -9,7 +9,6 @@
 namespace MACE::Simulation::SimMACE::SD {
 
 using Hit::MCPHit;
-using Utility::Analysis;
 
 MCPSD::MCPSD(const G4String& sdName) :
     G4VSensitiveDetector(sdName),

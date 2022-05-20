@@ -2,7 +2,7 @@
 
 #include "G4Region.hh"
 
-namespace MACE::Simulation::SimMACE::Utility {
+namespace MACE::Simulation::SimMACE {
 
 class Region final : public G4Region {
 public:
@@ -30,4 +30,4 @@ private:
     const RegionType fRegionType;
 };
 
-} // namespace MACE::Simulation::SimMACE::Utility
+} // namespace MACE::Simulation::SimMACE
