@@ -30,11 +30,7 @@ Analysis::Analysis() :
 
 void Analysis::Open(Option_t* option) {
     std::string filePath;
-    if (MPI::Is_initialized()) {
-        filePath = MACE::Utility::MPITool::MakeMPIFilePath(fResultName, ".root", *G4MPImanager::GetManager()->GetComm());
-    } else {
-        filePath = fResultName + ".root";
-    }
+    filePath = MACE::Utility::MPITool::MakeMPIFilePath(fResultName, ".root");
     fFile = std::make_unique<TFile>(filePath.c_str(), option);
 }
 
@@ -67,8 +63,8 @@ void Analysis::WriteEvent(G4int repetitionID) {
 
 void Analysis::WriteTrees() {
     if (fEMCalHitTree == nullptr or fMCPHitTree == nullptr or fCDCHitTree == nullptr) { return; }
-    const auto emCalTriggered = !fEnableCoincidenceOfEMCal or fEMCalHitTree->GetEntries() != 0;
-    const auto mcpTriggered = !fEnableCoincidenceOfMCP or fMCPHitTree->GetEntries() != 0;
+    const auto emCalTriggered = not fEnableCoincidenceOfEMCal or fEMCalHitTree->GetEntries() != 0;
+    const auto mcpTriggered = not fEnableCoincidenceOfMCP or fMCPHitTree->GetEntries() != 0;
     const auto cdcTriggered = fCDCHitTree->GetEntries() != 0;
     // if all coincident then write their data
     if (emCalTriggered and mcpTriggered and cdcTriggered) {

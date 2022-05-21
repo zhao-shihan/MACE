@@ -5,7 +5,7 @@ file(GLOB_RECURSE SimMACE_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
 
 # targets
 add_executable(SimMACE ${SimMACE_srcs})
-target_link_libraries(SimMACE ${Geant4_LIBRARIES} G4mpi MACESimulationPhysics MACESimulationGenerator MACECore MACEUtility)
+target_link_libraries(SimMACE ${Geant4_LIBRARIES} MACESimulationUtility MACESimulationPhysics MACESimulationGenerator MACECore MACEUtility)
 
 file(GLOB SimMACE_MACROS ${PROJECT_SOURCE_DIR}/macros/*.mac)
 foreach(_macros ${SimMACE_MACROS})

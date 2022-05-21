@@ -29,7 +29,7 @@ public:
 
 private:
     G4int fEventID;
-    CDCHitCollection* fHitsCollection;
+    ObserverPtr<CDCHitCollection> fHitsCollection;
     std::map<std::pair<int, int>, const G4StepPoint> fEnteredPointList;
     std::vector<std::pair<G4TwoVector, G4ThreeVector>> fSenseWireMap;
 };

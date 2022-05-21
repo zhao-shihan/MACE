@@ -4,14 +4,14 @@
 #include "MACE/Simulation/SimMACE/Action/EventAction.hxx"
 #include "MACE/Simulation/SimMACE/Action/PrimaryGeneratorAction.hxx"
 #include "MACE/Simulation/SimMACE/Action/RunAction.hxx"
-#include "MACE/Utility/MPITool/G4MPIRunManager.hxx"
+#include "MACE/Simulation/Utility/MPIRunManager.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 namespace MACE::Simulation::SimMACE {
 
 using namespace MACE::Simulation::SimMACE::Action;
 
-class RunManager final : public MACE::Utility::MPITool::G4MPIRunManager {
+class RunManager final : public Simulation::Utility::MPIRunManager {
 public:
     static auto& Instance() { return *static_cast<RunManager*>(GetRunManager()); }
 
