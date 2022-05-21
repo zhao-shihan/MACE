@@ -5,7 +5,7 @@ file(GLOB_RECURSE SimTarget_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
 
 # targets
 add_executable(SimTarget ${SimTarget_srcs})
-target_link_libraries(SimTarget ${Geant4_LIBRARIES} G4mpi MACESimulationPhysics MACESimulationGenerator MACECore MACEUtility)
+target_link_libraries(SimTarget ${Geant4_LIBRARIES} MACESimulationUtility MACESimulationPhysics MACESimulationGenerator MACECore MACEUtility)
 
 file(GLOB SimTarget_MACROS ${PROJECT_SOURCE_DIR}/macros/*.mac)
 foreach(_macros ${SimTarget_MACROS})

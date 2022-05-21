@@ -12,17 +12,25 @@
 namespace MACE::Simulation::Utility {
 
 MPIRunManager::MPIRunManager() :
-    fCommRank(0),
-    fCommSize(1) {
-    CheckMPI();
-    MPI_Comm_rank(MPI_COMM_WORLD, &fCommRank);
-    MPI_Comm_size(MPI_COMM_WORLD, &fCommSize);
-}
+    fCommRank(ConstructorGetMPICommRank()),
+    fCommSize(ConstructorGetMPICommSize()) {}
 
 void MPIRunManager::BeamOn(G4int nEvent, const char* macroFile, G4int nSelect) {
     CheckMPI();
+    CheckNEventIsAtLeastCommSize(nEvent);
     DistributeSeed();
     G4RunManager::BeamOn(DistributeEvent(nEvent), macroFile, nSelect);
+}
+
+void MPIRunManager::CheckNEventIsAtLeastCommSize(G4int nEvent) const {
+    if (nEvent < fCommSize) {
+        G4Exception("MACE::Simulation::Utility::MPIRunManager::CheckNEventIsAtLeastCommSize(...)",
+                    "TooFewNEventOrTooMuchRank",
+                    FatalException,
+                    "The number of G4Event must be greater or equal to the number of MPI ranks,\n"
+                    "otherwise deadlock could raise in execution code.\n"
+                    "Please be careful.");
+    }
 }
 
 void MPIRunManager::DistributeSeed() const {
@@ -62,11 +70,25 @@ void MPIRunManager::CheckMPI() {
     int finalized;
     MPI_Finalized(&finalized);
     if (not initialized or finalized) {
-        G4Exception("MACE::Simulation::Utility::CheckMPI()",
+        G4Exception("MACE::Simulation::Utility::MPIRunManager::CheckMPI()",
                     "MPINotAvailable",
                     FatalException,
                     "MPI must be initialized and not finalized.");
     }
+}
+
+int MPIRunManager::ConstructorGetMPICommRank() {
+    CheckMPI();
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    return rank;
+}
+
+int MPIRunManager::ConstructorGetMPICommSize() {
+    CheckMPI();
+    int size;
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+    return size;
 }
 
 } // namespace MACE::Simulation::Utility

@@ -9,7 +9,6 @@ project(MACE_PROJECT)
 set(MACE_PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
 set(MACE_PROJECT_CMAKE_DIR ${MACE_PROJECT_ROOT_DIR}/cmake)
 set(MACE_PROJECT_SRC_DIR ${MACE_PROJECT_ROOT_DIR}/source)
-set(MACE_BUILDIN_G4MPI_DIR ${MACE_PROJECT_SRC_DIR}/external/G4mpi)
 set(MACE_BUILDIN_YAML_CPP_DIR ${MACE_PROJECT_SRC_DIR}/external/yaml-cpp)
 
 # ================================================================================================================================
@@ -62,7 +61,6 @@ message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
 # ================================================================================================================================
 # Let's go!
 # ================================================================================================================================
-add_subdirectory(${MACE_BUILDIN_G4MPI_DIR})
 add_subdirectory(${MACE_BUILDIN_YAML_CPP_DIR})
 add_subdirectory(${MACE_PROJECT_SRC_DIR}/MACE)
 if(MACE_BUILD_TEST)

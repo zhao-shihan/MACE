@@ -3,11 +3,7 @@
 #include "MACE/Simulation/SimMACE/Messenger/FieldMessenger.hxx"
 #include "MACE/Utility/MPITool/MakeMPIFilePath.hxx"
 
-#include "G4MPImanager.hh"
-
 namespace MACE::Simulation::SimMACE {
-
-using Messenger::AnalysisMessenger;
 
 Analysis& Analysis::Instance() {
     static Analysis instance;
@@ -24,7 +20,7 @@ Analysis::Analysis() :
     fEMCalHitList(nullptr),
     fMCPHitList(nullptr),
     fCDCHitList(nullptr) {
-    AnalysisMessenger::Instance();
+    Messenger::AnalysisMessenger::Instance();
     fDataHub.SetTreeNamePrefixFormat("Rep#_");
 }
 

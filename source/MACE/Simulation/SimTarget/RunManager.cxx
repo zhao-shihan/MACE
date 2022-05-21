@@ -7,7 +7,7 @@
 namespace MACE::Simulation::SimTarget {
 
 RunManager::RunManager() :
-    G4MPIRunManager() {
+    MPIRunManager() {
     // Instantiate actions
     SetUserInitialization(new DetectorConstruction());
     SetUserInitialization(new PhysicsList());

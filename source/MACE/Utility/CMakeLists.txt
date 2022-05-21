@@ -9,4 +9,4 @@ endif()
 file(GLOB_RECURSE MACEUtility_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
 
 add_library(MACEUtility ${MACEUtility_srcs})
-target_link_libraries(MACEUtility ${MPI_CXX_LIBRARIES} ${Geant4_LIBRARIES} G4mpi)
+target_link_libraries(MACEUtility ${MPI_CXX_LIBRARIES} ${Geant4_LIBRARIES})
