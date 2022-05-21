@@ -20,11 +20,10 @@ public:
     virtual void ProcessOneEvent(G4int eventID) override { G4RunManager::ProcessOneEvent(fCommSize * eventID + fCommRank); }
 
 private:
-    void CheckNEventIsAtLeastCommSize(G4int nEvent) const;
+    G4bool CheckNEventIsAtLeastCommSize(G4int nEvent) const;
     void DistributeSeed() const;
-    int DistributeEvent(G4int nEvent) const;
+    G4int DistributeEvent(G4int nEvent) const;
 
-    static void CheckMPI();
     static int ConstructorGetMPICommRank();
     static int ConstructorGetMPICommSize();
 

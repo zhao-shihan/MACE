@@ -1,8 +1,8 @@
+#include "MACE/Simulation/Utility/CheckMPIAvailability.hxx"
 #include "MACE/Simulation/Utility/MPIRunManager.hxx"
 #include "MACE/Utility/AllocJobs.hxx"
 
 #include "G4Exception.hh"
-#include "G4StateManager.hh"
 #include "Randomize.hh"
 
 #include "mpi.h"
@@ -16,21 +16,24 @@ MPIRunManager::MPIRunManager() :
     fCommSize(ConstructorGetMPICommSize()) {}
 
 void MPIRunManager::BeamOn(G4int nEvent, const char* macroFile, G4int nSelect) {
-    CheckMPI();
-    CheckNEventIsAtLeastCommSize(nEvent);
-    DistributeSeed();
-    G4RunManager::BeamOn(DistributeEvent(nEvent), macroFile, nSelect);
+    CheckMPIAvailability();
+    if (CheckNEventIsAtLeastCommSize(nEvent)) {
+        DistributeSeed();
+        G4RunManager::BeamOn(DistributeEvent(nEvent), macroFile, nSelect);
+    }
 }
 
-void MPIRunManager::CheckNEventIsAtLeastCommSize(G4int nEvent) const {
+G4bool MPIRunManager::CheckNEventIsAtLeastCommSize(G4int nEvent) const {
     if (nEvent < fCommSize) {
         G4Exception("MACE::Simulation::Utility::MPIRunManager::CheckNEventIsAtLeastCommSize(...)",
                     "TooFewNEventOrTooMuchRank",
-                    FatalException,
+                    JustWarning,
                     "The number of G4Event must be greater or equal to the number of MPI ranks,\n"
                     "otherwise deadlock could raise in execution code.\n"
                     "Please be careful.");
+        return false;
     }
+    return true;
 }
 
 void MPIRunManager::DistributeSeed() const {
@@ -58,34 +61,21 @@ void MPIRunManager::DistributeSeed() const {
     G4Random::setTheSeed(seedRecv);
 }
 
-int MPIRunManager::DistributeEvent(G4int nEvent) const {
+G4int MPIRunManager::DistributeEvent(G4int nEvent) const {
     if (fCommSize == 1) { return nEvent; }
     const auto nEventList = MACE::Utility::AllocJobs<G4int, int>(nEvent, fCommSize);
     return nEventList[fCommRank];
 }
 
-void MPIRunManager::CheckMPI() {
-    int initialized;
-    MPI_Initialized(&initialized);
-    int finalized;
-    MPI_Finalized(&finalized);
-    if (not initialized or finalized) {
-        G4Exception("MACE::Simulation::Utility::MPIRunManager::CheckMPI()",
-                    "MPINotAvailable",
-                    FatalException,
-                    "MPI must be initialized and not finalized.");
-    }
-}
-
 int MPIRunManager::ConstructorGetMPICommRank() {
-    CheckMPI();
+    CheckMPIAvailability();
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     return rank;
 }
 
 int MPIRunManager::ConstructorGetMPICommSize() {
-    CheckMPI();
+    CheckMPIAvailability();
     int size;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     return size;
