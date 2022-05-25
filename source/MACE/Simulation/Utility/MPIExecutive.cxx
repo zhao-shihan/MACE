@@ -1,5 +1,6 @@
 #include "MACE/Simulation/Utility/CheckMPIAvailability.hxx"
 #include "MACE/Simulation/Utility/MPIExecutive.hxx"
+#include "MACE/Utility/MPITool/CommonMPIWrapper.hxx"
 
 #include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
@@ -9,28 +10,23 @@
 
 namespace MACE::Simulation::Utility {
 
-MPIExecutive& MPIExecutive::Instance() {
-    static MPIExecutive instance;
-    return instance;
-}
-
-MPIExecutive::MPIExecutive() {
+MPIExecutive::MPIExecutive(int argc, char** argv) :
+    fArgc(argc),
+    fArgv(argv) {
     CheckMPIAvailability();
 }
 
-void MPIExecutive::StartInteractiveSession(const int& argc, char** const& argv, const char* initializeMacro) {
+void MPIExecutive::StartInteractiveSession(const char* initializeMacro) {
     CheckMPIAvailability();
 
-    int commSize;
-    MPI_Comm_size(MPI_COMM_WORLD, &commSize);
-    if (commSize > 1) {
+    if (MACE::Utility::MPITool::MPICommSize(MPI_COMM_WORLD) > 1) {
         G4Exception("MACE::Simulation::Utility::MPIExecutive::StartInteractiveSession(...)",
                     "InteractiveSessionMustBeSerial",
                     FatalException,
                     "Interactive session must be run with only 1 process.");
     }
 
-    const auto uiExecutive = std::make_unique<G4UIExecutive>(argc, argv);
+    const auto uiExecutive = std::make_unique<G4UIExecutive>(fArgc, fArgv);
     const auto visExecutive = std::make_unique<G4VisExecutive>();
     visExecutive->Initialize();
     if (initializeMacro != nullptr) {

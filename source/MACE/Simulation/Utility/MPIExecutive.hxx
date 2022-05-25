@@ -2,19 +2,19 @@
 
 namespace MACE::Simulation::Utility {
 
-class MPIExecutive final {
+class MPIExecutive {
 public:
-    static MPIExecutive& Instance();
-
-private:
-    MPIExecutive();
-    ~MPIExecutive() = default;
+    MPIExecutive(int argc, char** argv);
+    virtual ~MPIExecutive() = default;
     MPIExecutive(const MPIExecutive&) = delete;
     MPIExecutive& operator=(const MPIExecutive&) = delete;
 
-public:
-    void StartInteractiveSession(const int& argc, char** const& argv, const char* initializeMacro = nullptr);
-    void StartBatchSession(const char* macro);
+    virtual void StartInteractiveSession(const char* initializeMacro = nullptr);
+    virtual void StartBatchSession(const char* macro);
+
+protected:
+    int fArgc;
+    char** fArgv;
 };
 
 } // namespace MACE::Simulation::Utility

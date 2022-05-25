@@ -1,4 +1,5 @@
 #include "MACE/Simulation/Utility/CheckMPIAvailability.hxx"
+#include "MACE/Utility/MPITool/CommonMPIWrapper.hxx"
 
 #include "G4Exception.hh"
 
@@ -6,12 +7,10 @@
 
 namespace MACE::Simulation::Utility {
 
+using namespace MACE::Utility::MPITool;
+
 void CheckMPIAvailability() {
-    int initialized;
-    MPI_Initialized(&initialized);
-    int finalized;
-    MPI_Finalized(&finalized);
-    if (not initialized or finalized) {
+    if (not MPIInitialized() or MPIFinalized()) {
         G4Exception("MACE::Simulation::Utility::MPIRunManager::CheckMPI()",
                     "MPINotAvailable",
                     FatalException,
