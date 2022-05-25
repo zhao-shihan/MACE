@@ -4,8 +4,9 @@
 #include "MACE/Reconstruction/ReconTracks/Fitter/PerfectFitter.hxx"
 #include "MACE/Reconstruction/ReconTracks/Tracker/Hough.hxx"
 #include "MACE/Reconstruction/ReconTracks/Tracker/PerfectFinder.hxx"
+#include "MACE/Utility/MPITool/AllocMPIJobs.hxx"
+#include "MACE/Utility/MPITool/CommonMPIWrapper.hxx"
 #include "MACE/Utility/MPITool/MakeMPIFilePath.hxx"
-#include "MACE/Utility/MPITool/MPIJobsAssigner.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "CLHEP/Random/MTwistEngine.h"
@@ -22,8 +23,9 @@ using MACE::Core::DataFactory;
 
 using Hit_t = CDCSimHit;
 
-int main(int, char** argv) {
-    MPI::Init();
+int main(int argc, char* argv[]) {
+    MPI_Init(&argc, &argv);
+    const int commRank = MPICommRank(MPI_COMM_WORLD);
 
     const char* nameIn = argv[1];
     const auto threshold = std::stoi(argv[2]);
@@ -57,13 +59,13 @@ int main(int, char** argv) {
     DataFactory dataHub;
     dataHub.SetTreeNamePrefixFormat("Rep#_");
     auto treeIndexRange = dataHub.GetTreeIndexRange<Hit_t>(fileIn);
-    auto [treeBegin, treeEnd] = MPIJobsAssigner(treeIndexRange).GetJobsIndexRange();
+    auto [treeBegin, treeEnd, treeStep, _] = AllocMPIJobsJobWise(treeIndexRange, MPI_COMM_WORLD);
 
     CLHEP::MTwistEngine mtEng;
 
-    std::cout << "Rank" << MPI::COMM_WORLD.Get_rank() << " is ready to process data of repetition " << treeBegin << " to " << treeEnd - 1 << std::endl;
+    std::cout << "Rank" << commRank << " is ready to process data of repetition " << treeBegin << " to " << treeEnd - 1 << std::endl;
 
-    for (Long64_t treeIndex = treeBegin; treeIndex < treeEnd; ++treeIndex) {
+    for (auto treeIndex = treeBegin; treeIndex < treeEnd; treeIndex += treeStep) {
         dataHub.SetTreeNamePrefixFormat("Rep#_");
         std::cout << "Now processing " << dataHub.GetTreeName<Hit_t>(treeIndex) << " ..." << std::endl;
 
@@ -131,6 +133,6 @@ int main(int, char** argv) {
     fileOut.Close();
     fileIn.Close();
 
-    MPI::Finalize();
+    MPI_Finalize();
     return EXIT_SUCCESS;
 }

@@ -9,7 +9,7 @@
 
 using namespace MACE::Simulation;
 
-int main(int argc, char** argv) {
+int main(int argc, char* argv[]) {
     MPI_Init(&argc, &argv);
 
     bool interactive = (argc == 1);
@@ -22,11 +22,11 @@ int main(int argc, char** argv) {
     runManager->GetDetectorConstruction().SetCheckOverlaps(interactive ? true : false);
     runManager->GetPhysicsList().SetVerboseLevel(interactive ? 1 : 0);
 
-    auto& mpiExecutive = Utility::MPIExecutive::Instance();
+    const auto mpiExecutive = std::make_unique<Utility::MPIExecutive>(argc, argv);
     if (interactive) {
-        mpiExecutive.StartInteractiveSession(argc, argv, "init_vis.mac");
+        mpiExecutive->StartInteractiveSession("init_vis.mac");
     } else {
-        mpiExecutive.StartBatchSession(argv[1]);
+        mpiExecutive->StartBatchSession(argv[1]);
     }
 
     MPI_Finalize();

@@ -10,8 +10,9 @@
 #include "MACE/Core/Geometry/Description/TransportLine.hxx"
 #include "MACE/Reconstruction/ReconMuonium/MuoniumSimVertex.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
+#include "MACE/Utility/MPITool/AllocMPIJobs.hxx"
+#include "MACE/Utility/MPITool/CommonMPIWrapper.hxx"
 #include "MACE/Utility/MPITool/MakeMPIFilePath.hxx"
-#include "MACE/Utility/MPITool/MPIJobsAssigner.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "TH2F.h"
@@ -20,6 +21,7 @@ using namespace MACE::Core::DataModel;
 using namespace MACE::Core::DataModel::CDCTrackOperation;
 using namespace MACE::Core::Geometry::Description;
 using namespace MACE::Reconstruction::ReconMuonium;
+using namespace MACE::Utility;
 using namespace MACE::Utility::LiteralUnit;
 using namespace MACE::Utility::MPITool;
 using namespace MACE::Utility::PhysicalConstant;
@@ -32,8 +34,8 @@ using MCPHit_t = SimHit::MCPSimHit;
 using MVertex_t = MuoniumSimVertex;
 using Track_t = Track::CDCPhysicsTrack;
 
-int main(int, char* argv[]) {
-    MPI::Init();
+int main(int argc, char* argv[]) {
+    MPI_Init(&argc, &argv);
 
     std::filesystem::path pathIn = argv[1];
     const auto calTimeWindow = std::stod(argv[2]);
@@ -89,21 +91,15 @@ int main(int, char* argv[]) {
     DataFactory dataHub;
 
     dataHub.SetTreeNamePrefixFormat("Rep#_");
-    unsigned long allRepBegin;
-    unsigned long allRepEnd;
-    if (MPI::COMM_WORLD.Get_rank() == 0) {
-        std::tie(allRepBegin, allRepEnd) = dataHub.GetTreeIndexRange<MCPHit_t>(hitFileIn);
-    }
-    MPI::COMM_WORLD.Bcast(std::addressof(allRepBegin), 1, MPI::UNSIGNED_LONG, 0);
-    MPI::COMM_WORLD.Bcast(std::addressof(allRepEnd), 1, MPI::UNSIGNED_LONG, 0);
-    const auto [repBegin, repEnd] = MPIJobsAssigner(allRepBegin, allRepEnd).GetJobsIndexRange();
+    auto [allRepBegin, allRepEnd] = dataHub.GetTreeIndexRange<MCPHit_t>(hitFileIn);
+    auto [repBegin, repEnd, repStep, _] = AllocMPIJobsJobWise(allRepBegin, allRepEnd, MPI_COMM_WORLD);
 
     // result tree
     dataHub.SetTreeNamePrefixFormat(TString("Rep") + allRepBegin + "To" + (allRepEnd - 1) + '_');
     auto vertexTree = dataHub.CreateTree<MVertex_t>();
     TH2F vertexHist("vertex", "(Anti-)Muonium Vertex", 500, -20, 20, 500, -50, 50);
 
-    for (auto rep = repBegin; rep < repEnd; ++rep) {
+    for (auto rep = repBegin; rep < repEnd; rep += repStep) {
 
         auto SortByVertexTime = [](const auto& track1, const auto& track2) {
             return track1->GetVertexTime() < track2->GetVertexTime();
@@ -221,6 +217,6 @@ int main(int, char* argv[]) {
     vertexTree->Write();
     vertexHist.Write();
 
-    MPI::Finalize();
+    MPI_Finalize();
     return EXIT_SUCCESS;
 }
