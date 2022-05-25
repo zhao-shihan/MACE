@@ -13,9 +13,9 @@ namespace MACE::Utility::MPITool {
 ///
 /// An executable xxx do something like this:
 ///
-///   MPI::Init(argc, argv);
+///   MPI_Init(argc, argv);
 ///     ...
-///   auto filePath = MPIFileTool::MakeMPIFilePath("result", ".root");
+///   auto filePath = MACE::Utility::MPITool::MakeMPIFilePath("result", ".root");
 ///   SomeFileHandler::Open(filePath);
 ///     ...
 ///
@@ -52,6 +52,6 @@ namespace MACE::Utility::MPITool {
 /// When just ./xxx (not in MPI mode) :
 /// Just a single result.root will be created.
 ///
-std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_view suffix, const MPI::Comm& comm = MPI::COMM_WORLD);
+std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_view suffix, MPI_Comm comm = MPI_COMM_WORLD);
 
 } // namespace MACE::Utility::MPITool
