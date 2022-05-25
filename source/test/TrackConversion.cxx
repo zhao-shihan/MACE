@@ -9,7 +9,7 @@ using MACE::Core::DataFactory;
 using namespace MACE::Core::DataModel::Track;
 using namespace MACE::Utility::LiteralUnit;
 
-int main(int, char** argv) {
+int main(int, char* argv[]) {
     DataFactory dataHub;
     dataHub.SetTreeNamePrefixFormat("Rep#_Exact_");
 
