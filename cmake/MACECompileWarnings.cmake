@@ -1,7 +1,7 @@
 # More warnings
 add_definitions(-Wall -Wextra)
 # Surpress those from external
-if(NOT MACE_SHOW_ALL_COMPILER_WARNINGS)
+if(NOT MACE_SHOW_ALL_COMPILE_WARNINGS)
     if(CMAKE_COMPILER_IS_GNUCXX)
         # Open MPI
         add_definitions(-Wno-cast-function-type)

@@ -1,6 +1,6 @@
 project(MACE)
 
-if(NOT MACE_SHOW_ALL_COMPILER_WARNINGS)
+if(NOT MACE_SHOW_ALL_COMPILE_WARNINGS)
     if(CMAKE_COMPILER_IS_GNUCXX)
         add_definitions(-Wno-stringop-truncation)
     endif()
