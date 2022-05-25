@@ -24,11 +24,9 @@ option(MACE_SHOW_ALL_COMPILER_WARNINGS "Do not surpress any compiler warnings, e
 # Dependencies
 # ================================================================================================================================
 # MPI
-find_package(MPI 3.0 REQUIRED)
+find_package(MPI 3.0 REQUIRED C)
 message(STATUS "MACE uses MPI_C includes from: ${MPI_C_INCLUDE_DIRS}")
 message(STATUS "MACE uses MPI_C libraries: ${MPI_C_LIBRARIES}")
-message(STATUS "MACE uses MPI_CXX includes from: ${MPI_CXX_INCLUDE_DIRS}")
-message(STATUS "MACE uses MPI_CXX libraries: ${MPI_CXX_LIBRARIES}")
 
 # Geant4
 if(MACE_ENABLE_VIS)
