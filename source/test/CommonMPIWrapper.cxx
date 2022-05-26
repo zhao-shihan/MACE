@@ -1,8 +1,8 @@
-#include "MACE/Utility/MPITool/CommonMPIWrapper.hxx"
+#include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
 
 #include <iostream>
 
-using namespace MACE::Utility::MPITool;
+using namespace MACE::Utility::MPIUtil;
 
 int main(int argc, char* argv[]) {
     std::cout << "MPIInitialized(): " << MPIInitialized() << std::endl;

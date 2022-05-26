@@ -1,6 +1,6 @@
 #include "MACE/Simulation/Utility/CheckMPIAvailability.hxx"
 #include "MACE/Simulation/Utility/MPIExecutive.hxx"
-#include "MACE/Utility/MPITool/CommonMPIWrapper.hxx"
+#include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
 
 #include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
@@ -19,7 +19,7 @@ MPIExecutive::MPIExecutive(int argc, char** argv) :
 void MPIExecutive::StartInteractiveSession(const char* initializeMacro) {
     CheckMPIAvailability();
 
-    if (MACE::Utility::MPITool::MPICommSize(MPI_COMM_WORLD) > 1) {
+    if (MACE::Utility::MPIUtil::MPICommSize(MPI_COMM_WORLD) > 1) {
         G4Exception("MACE::Simulation::Utility::MPIExecutive::StartInteractiveSession(...)",
                     "InteractiveSessionMustBeSerial",
                     FatalException,

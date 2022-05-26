@@ -6,7 +6,7 @@
 #include <string>
 #include <utility>
 
-namespace MACE::Utility::MPITool {
+namespace MACE::Utility::MPIUtil {
 
 // These are some simple but convenient wrappers of corresponding MPI_C functions that returns values via pointer parameters,
 // a little bit like the MPI C++ binding which has been removed in MPI2.2 for the reason "not very C++".
@@ -23,6 +23,6 @@ template<size_t MaxLength_v> // hint: MPI_MAX_PROCESSOR_NAME
 std::pair<std::array<char, MaxLength_v>, int> MPIGetProcessorName();
 std::string MPIGetProcessorNameString();
 
-} // namespace MACE::Utility::MPITool
+} // namespace MACE::Utility::MPIUtil
 
-#include "MACE/Utility/MPITool/CommonMPIWrapper.ixx"
+#include "MACE/Utility/MPIUtil/CommonMPIWrapper.ixx"

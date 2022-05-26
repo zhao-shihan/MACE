@@ -1,4 +1,4 @@
-namespace MACE::Utility::MPITool {
+namespace MACE::Utility::MPIUtil {
 
 template<size_t MaxLength_v>
 std::pair<std::array<char, MaxLength_v>, int> MPIGetProcessorName() {
@@ -7,4 +7,4 @@ std::pair<std::array<char, MaxLength_v>, int> MPIGetProcessorName() {
     return result;
 }
 
-} // namespace MACE::Utility::MPITool
+} // namespace MACE::Utility::MPIUtil

@@ -1,12 +1,12 @@
 #pragma once
 
 #include "MACE/Utility/DivideIndices.hxx"
-#include "MACE/Utility/MPITool/CommonMPIWrapper.hxx"
+#include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
 
 #include <concepts>
 #include <utility>
 
-namespace MACE::Utility::MPITool {
+namespace MACE::Utility::MPIUtil {
 
 template<std::integral Index_t>
 DividedIndexRange<Index_t> AllocMPIJobsJobWise(Index_t jobBegin, Index_t jobEnd, MPI_Comm comm);
@@ -26,6 +26,6 @@ DividedIndexRange<Index_t> AllocMPIJobsWorkerWise(std::pair<Index_t, Index_t> jo
 template<std::integral Index_t>
 DividedIndexRange<Index_t> AllocMPIJobsWorkerWise(std::pair<Index_t, Index_t> jobBeginEnd, int commSize, int commRank);
 
-} // namespace MACE::Utility::MPITool
+} // namespace MACE::Utility::MPIUtil
 
-#include "MACE/Utility/MPITool/AllocMPIJobs.ixx"
+#include "MACE/Utility/MPIUtil/AllocMPIJobs.ixx"

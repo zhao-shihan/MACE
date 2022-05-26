@@ -1,5 +1,5 @@
-#include "MACE/Utility/MPITool/CommonMPIWrapper.hxx"
-#include "MACE/Utility/MPITool/MakeMPIFilePath.hxx"
+#include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
+#include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
 #include <algorithm>
 #include <array>
@@ -10,7 +10,7 @@
 #include <set>
 #include <vector>
 
-namespace MACE::Utility::MPITool {
+namespace MACE::Utility::MPIUtil {
 
 std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_view suffix, MPI_Comm comm) {
     constexpr int masterRank = 0;
@@ -111,4 +111,4 @@ std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_vi
     }
 }
 
-} // namespace MACE::Utility::MPITool
+} // namespace MACE::Utility::MPIUtil

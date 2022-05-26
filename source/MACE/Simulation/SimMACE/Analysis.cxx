@@ -1,7 +1,7 @@
 #include "MACE/Simulation/SimMACE/Analysis.hxx"
 #include "MACE/Simulation/SimMACE/Messenger/AnalysisMessenger.hxx"
 #include "MACE/Simulation/SimMACE/Messenger/FieldMessenger.hxx"
-#include "MACE/Utility/MPITool/MakeMPIFilePath.hxx"
+#include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
 namespace MACE::Simulation::SimMACE {
 
@@ -26,7 +26,7 @@ Analysis::Analysis() :
 
 void Analysis::Open(Option_t* option) {
     std::string filePath;
-    filePath = MACE::Utility::MPITool::MakeMPIFilePath(fResultName, ".root");
+    filePath = MACE::Utility::MPIUtil::MakeMPIFilePath(fResultName, ".root");
     fFile = std::make_unique<TFile>(filePath.c_str(), option);
 }
 

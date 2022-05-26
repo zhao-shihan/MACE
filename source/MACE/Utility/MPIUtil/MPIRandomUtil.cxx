@@ -1,5 +1,5 @@
-#include "MACE/Utility/MPITool/CommonMPIWrapper.hxx"
-#include "MACE/Utility/MPITool/MPIRandomUtil.hxx"
+#include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
+#include "MACE/Utility/MPIUtil/MPIRandomUtil.hxx"
 
 #include "CLHEP/Random/RandomEngine.h"
 
@@ -7,7 +7,7 @@
 #include <set>
 #include <vector>
 
-namespace MACE::Utility::MPITool {
+namespace MACE::Utility::MPIUtil {
 
 void MPIReSeedCLHEPRandom(CLHEP::HepRandomEngine* randEng) {
     const auto commSize = MPICommSize(MPI_COMM_WORLD);
@@ -38,4 +38,4 @@ void MPIReSeedCLHEPRandom(CLHEP::HepRandomEngine* randEng) {
     randEng->setSeed(seedRecv, 3);
 }
 
-} // namespace MACE::Utility::MPITool
+} // namespace MACE::Utility::MPIUtil

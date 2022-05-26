@@ -1,4 +1,4 @@
-namespace MACE::Utility::MPITool {
+namespace MACE::Utility::MPIUtil {
 
 template<std::integral Index_t>
 DividedIndexRange<Index_t> AllocMPIJobsJobWise(Index_t jobBegin, Index_t jobEnd, MPI_Comm comm) {
@@ -40,4 +40,4 @@ DividedIndexRange<Index_t> AllocMPIJobsWorkerWise(std::pair<Index_t, Index_t> jo
     return AllocMPIJobsWorkerWise<Index_t>(jobBeginEnd.first, jobBeginEnd.second, commSize, commRank);
 }
 
-} // namespace MACE::Utility::MPITool
+} // namespace MACE::Utility::MPIUtil

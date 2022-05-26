@@ -10,9 +10,9 @@
 #include "MACE/Core/Geometry/Description/TransportLine.hxx"
 #include "MACE/Reconstruction/ReconMuonium/MuoniumSimVertex.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
-#include "MACE/Utility/MPITool/AllocMPIJobs.hxx"
-#include "MACE/Utility/MPITool/CommonMPIWrapper.hxx"
-#include "MACE/Utility/MPITool/MakeMPIFilePath.hxx"
+#include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
+#include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
+#include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "TH2F.h"
@@ -23,7 +23,7 @@ using namespace MACE::Core::Geometry::Description;
 using namespace MACE::Reconstruction::ReconMuonium;
 using namespace MACE::Utility;
 using namespace MACE::Utility::LiteralUnit;
-using namespace MACE::Utility::MPITool;
+using namespace MACE::Utility::MPIUtil;
 using namespace MACE::Utility::PhysicalConstant;
 
 using MACE::Core::DataFactory;

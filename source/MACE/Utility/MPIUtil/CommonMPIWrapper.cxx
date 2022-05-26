@@ -1,6 +1,6 @@
-#include "MACE/Utility/MPITool/CommonMPIWrapper.hxx"
+#include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
 
-namespace MACE::Utility::MPITool {
+namespace MACE::Utility::MPIUtil {
 
 int MPICommRank(MPI_Comm comm) {
     int commRank;
@@ -31,4 +31,4 @@ std::string MPIGetProcessorNameString() {
     return std::string(processorName.data(), nameLength);
 }
 
-} // namespace MACE::Utility::MPITool
+} // namespace MACE::Utility::MPIUtil

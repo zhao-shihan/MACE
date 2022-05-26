@@ -1,7 +1,7 @@
 #include "MACE/Simulation/SimTarget/Analysis.hxx"
 #include "MACE/Simulation/SimTarget/Messenger/AnalysisMessenger.hxx"
 #include "MACE/Simulation/SimTarget/RunManager.hxx"
-#include "MACE/Utility/MPITool/MakeMPIFilePath.hxx"
+#include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
 namespace MACE::Simulation::SimTarget {
 
@@ -62,7 +62,7 @@ void Analysis::Close() {
 }
 
 void Analysis::OpenResultFile() {
-    const auto filePath = MACE::Utility::MPITool::MakeMPIFilePath(fResultName, ".root");
+    const auto filePath = MACE::Utility::MPIUtil::MakeMPIFilePath(fResultName, ".root");
     fResultFile = std::make_unique<TFile>(filePath.c_str(), "recreate");
 }
 
