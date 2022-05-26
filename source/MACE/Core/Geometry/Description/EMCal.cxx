@@ -17,18 +17,18 @@ EMCal::EMCal() :
     fWindowRadius(8_cm),
     fCrystalLength(5_cm) {}
 
-void EMCal::ReadImpl(const YAML::Node& node) {
-    fInnerRadius = node["InnerRadius"].as<decltype(fInnerRadius)>();
-    fInnerLength = node["InnerRadius"].as<decltype(fInnerLength)>();
-    fWindowRadius = node["WindowRadius"].as<decltype(fWindowRadius)>();
-    fCrystalLength = node["CrystalLength"].as<decltype(fCrystalLength)>();
+void EMCal::ReadDescriptionNode(const YAML::Node& node) {
+    ReadValueNode(node, "InnerRadius", fInnerRadius);
+    ReadValueNode(node, "InnerLength", fInnerLength);
+    ReadValueNode(node, "WindowRadius", fWindowRadius);
+    ReadValueNode(node, "CrystalLength", fCrystalLength);
 }
 
-void EMCal::WriteImpl(YAML::Node& node) const {
-    node["InnerRadius"] = fInnerRadius;
-    node["InnerLength"] = fInnerLength;
-    node["WindowRadius"] = fWindowRadius;
-    node["CrystalLength"] = fCrystalLength;
+void EMCal::WriteDescriptionNode(YAML::Node& node) const {
+    WriteValueNode(node, "InnerRadius", fInnerRadius);
+    WriteValueNode(node, "InnerLength", fInnerLength);
+    WriteValueNode(node, "WindowRadius", fWindowRadius);
+    WriteValueNode(node, "CrystalLength", fCrystalLength);
 }
 
 } // namespace MACE::Core::Geometry::Description

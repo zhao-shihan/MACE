@@ -1,17 +1,30 @@
-/// @file Read/write the current geometry description configuration from/to a yaml.
-/// @attention If a new geometry description class is added, it needs to be added to
-/// the std::tuple in the source file. Otherwise it wouldn't be covered.
-
 #pragma once
 
+#include "MACE/Utility/ObserverPtr.hxx"
+
+#include <vector>
 #include <string>
 
-namespace MACE::Core::Geometry::DescriptionIO {
+namespace MACE::Core::Geometry {
 
-/// @brief Read the current geometry description configuration from a yaml.
-void Read(const std::string& yamlFileName);
+using MACE::Utility::ObserverPtr;
 
-/// @brief Write the current geometry description configuration to a yaml.
-void Write(const std::string& yamlFileName);
+class IDescription;
 
-} // namespace MACE::Core::Geometry::DescriptionIO
+class DescriptionIO {
+    friend class IDescription;
+
+public:
+    DescriptionIO() = delete;
+
+    static void ReadInstantiated(const std::string& yamlFileName);
+    static void WriteInstantiated(const std::string& yamlFileName);
+
+private:
+    static void AddInstance(ObserverPtr<IDescription> instance);
+
+private:
+    static std::vector<ObserverPtr<IDescription>> fgInstantiatedDescriptionList;
+};
+
+} // namespace MACE::Core::Geometry

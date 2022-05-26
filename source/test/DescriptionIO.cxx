@@ -6,17 +6,37 @@
 int main() {
     using namespace MACE::Core::Geometry;
 
-    DescriptionIO::Write("mace_geom.yaml");
-
-    auto& linacField = Description::LinacField::Instance();
-    std::cout << linacField.GetRadius() << '\n'
-              << linacField.GetLength() << '\n'
-              << linacField.GetDownStreamLength() << '\n'
+    auto& transportLine = Description::TransportLine::Instance();
+    std::cout << transportLine.GetFirstStraightLength() << '\n'
+              << transportLine.GetFirstBendRadius() << '\n'
+              << transportLine.GetSecondStraightLength() << '\n'
+              << transportLine.GetSecondBendRadius() << '\n'
+              << transportLine.GetThirdStraightLength() << '\n'
+              << transportLine.GetSolenoidInnerRadius() << '\n'
+              << transportLine.GetSolenoidOuterRadius() << '\n'
+              << transportLine.GetFieldRadius() << '\n'
               << std::endl;
-    DescriptionIO::Read("mace_geom.yaml");
-    std::cout << linacField.GetRadius() << '\n'
-              << linacField.GetLength() << '\n'
-              << linacField.GetDownStreamLength() << '\n'
+
+    DescriptionIO::WriteInstantiated("mace_geom.yaml");
+    std::cout << transportLine.GetFirstStraightLength() << '\n'
+              << transportLine.GetFirstBendRadius() << '\n'
+              << transportLine.GetSecondStraightLength() << '\n'
+              << transportLine.GetSecondBendRadius() << '\n'
+              << transportLine.GetThirdStraightLength() << '\n'
+              << transportLine.GetSolenoidInnerRadius() << '\n'
+              << transportLine.GetSolenoidOuterRadius() << '\n'
+              << transportLine.GetFieldRadius() << '\n'
+              << std::endl;
+
+    DescriptionIO::ReadInstantiated("mace_geom.yaml");
+    std::cout << transportLine.GetFirstStraightLength() << '\n'
+              << transportLine.GetFirstBendRadius() << '\n'
+              << transportLine.GetSecondStraightLength() << '\n'
+              << transportLine.GetSecondBendRadius() << '\n'
+              << transportLine.GetThirdStraightLength() << '\n'
+              << transportLine.GetSolenoidInnerRadius() << '\n'
+              << transportLine.GetSolenoidOuterRadius() << '\n'
+              << transportLine.GetFieldRadius() << '\n'
               << std::endl;
 
     return EXIT_SUCCESS;

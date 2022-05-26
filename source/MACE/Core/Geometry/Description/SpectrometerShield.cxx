@@ -17,18 +17,18 @@ SpectrometerShield::SpectrometerShield() :
     fWindowRadius(12.7_cm),
     fThickness(5_cm) {}
 
-void SpectrometerShield::ReadImpl(const YAML::Node& node) {
-    fInnerRadius = node["InnerRadius"].as<decltype(fInnerRadius)>();
-    fInnerLength = node["InnerLength"].as<decltype(fInnerLength)>();
-    fWindowRadius = node["WindowRadius"].as<decltype(fWindowRadius)>();
-    fThickness = node["Thickness"].as<decltype(fThickness)>();
+void SpectrometerShield::ReadDescriptionNode(const YAML::Node& node) {
+    ReadValueNode(node, "InnerRadius", fInnerRadius);
+    ReadValueNode(node, "InnerLength", fInnerLength);
+    ReadValueNode(node, "WindowRadius", fWindowRadius);
+    ReadValueNode(node, "Thickness", fThickness);
 }
 
-void SpectrometerShield::WriteImpl(YAML::Node& node) const {
-    node["InnerRadius"] = fInnerRadius;
-    node["InnerLength"] = fInnerLength;
-    node["WindowRadius"] = fWindowRadius;
-    node["Thickness"] = fThickness;
+void SpectrometerShield::WriteDescriptionNode(YAML::Node& node) const {
+    WriteValueNode(node, "InnerRadius", fInnerRadius);
+    WriteValueNode(node, "InnerLength", fInnerLength);
+    WriteValueNode(node, "WindowRadius", fWindowRadius);
+    WriteValueNode(node, "Thickness", fThickness);
 }
 
 } // namespace MACE::Core::Geometry::Description

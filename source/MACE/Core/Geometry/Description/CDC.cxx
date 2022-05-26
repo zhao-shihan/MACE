@@ -181,34 +181,34 @@ std::vector<std::tuple<double, double, double, double, double>> CDC::SensitiveVo
     return svGeometeryDetail;
 }
 
-void CDC::ReadImpl(const YAML::Node& node) {
-    fGasInnerRadius = node["GasInnerRadius"].as<decltype(fGasInnerRadius)>();
-    fGasOuterRadius = node["GasOuterRadius"].as<decltype(fGasOuterRadius)>();
-    fGasInnerLength = node["GasInnerLength"].as<decltype(fGasInnerLength)>();
-    fGasOuterLength = node["GasOuterLength"].as<decltype(fGasOuterLength)>();
-    fCellWidth = node["CellWidth"].as<decltype(fCellWidth)>();
-    fCellWidthDistortionAllowed = node["CellWidthDistortionAllowed"].as<decltype(fCellWidthDistortionAllowed)>();
-    fFieldWireDiameter = node["FieldWireDiameter"].as<decltype(fFieldWireDiameter)>();
-    fSenseWireDiameter = node["SenseWireDiameter"].as<decltype(fSenseWireDiameter)>();
-    fSensitiveVolumeRelativeWidth = node["SensitiveVolumeRelativeWidth"].as<decltype(fSensitiveVolumeRelativeWidth)>();
-    fShellInnerThickness = node["ShellInnerThickness"].as<decltype(fShellInnerThickness)>();
-    fShellSideThickness = node["ShellSideThickness"].as<decltype(fShellSideThickness)>();
-    fShellOuterThickness = node["ShellOuterThickness"].as<decltype(fShellOuterThickness)>();
+void CDC::ReadDescriptionNode(const YAML::Node& node) {
+    ReadValueNode(node, "GasInnerRadius", fGasInnerRadius);
+    ReadValueNode(node, "GasOuterRadius", fGasOuterRadius);
+    ReadValueNode(node, "GasInnerLength", fGasInnerLength);
+    ReadValueNode(node, "GasOuterLength", fGasOuterLength);
+    ReadValueNode(node, "CellWidth", fCellWidth);
+    ReadValueNode(node, "CellWidthDistortionAllowed", fCellWidthDistortionAllowed);
+    ReadValueNode(node, "FieldWireDiameter", fFieldWireDiameter);
+    ReadValueNode(node, "SenseWireDiameter", fSenseWireDiameter);
+    ReadValueNode(node, "SensitiveVolumeRelativeWidth", fSensitiveVolumeRelativeWidth);
+    ReadValueNode(node, "ShellInnerThickness", fShellInnerThickness);
+    ReadValueNode(node, "ShellSideThickness", fShellSideThickness);
+    ReadValueNode(node, "ShellOuterThickness", fShellOuterThickness);
 }
 
-void CDC::WriteImpl(YAML::Node& node) const {
-    node["GasInnerRadius"] = fGasInnerRadius;
-    node["GasOuterRadius"] = fGasOuterRadius;
-    node["GasInnerLength"] = fGasInnerLength;
-    node["GasOuterLength"] = fGasOuterLength;
-    node["CellWidth"] = fCellWidth;
-    node["CellWidthDistortionAllowed"] = fCellWidthDistortionAllowed;
-    node["FieldWireDiameter"] = fFieldWireDiameter;
-    node["SenseWireDiameter"] = fSenseWireDiameter;
-    node["SensitiveVolumeRelativeWidth"] = fSensitiveVolumeRelativeWidth;
-    node["ShellInnerThickness"] = fShellInnerThickness;
-    node["ShellSideThickness"] = fShellSideThickness;
-    node["ShellOuterThickness"] = fShellOuterThickness;
+void CDC::WriteDescriptionNode(YAML::Node& node) const {
+    WriteValueNode(node, "GasInnerRadius", fGasInnerRadius);
+    WriteValueNode(node, "GasOuterRadius", fGasOuterRadius);
+    WriteValueNode(node, "GasInnerLength", fGasInnerLength);
+    WriteValueNode(node, "GasOuterLength", fGasOuterLength);
+    WriteValueNode(node, "CellWidth", fCellWidth);
+    WriteValueNode(node, "CellWidthDistortionAllowed", fCellWidthDistortionAllowed);
+    WriteValueNode(node, "FieldWireDiameter", fFieldWireDiameter);
+    WriteValueNode(node, "SenseWireDiameter", fSenseWireDiameter);
+    WriteValueNode(node, "SensitiveVolumeRelativeWidth", fSensitiveVolumeRelativeWidth);
+    WriteValueNode(node, "ShellInnerThickness", fShellInnerThickness);
+    WriteValueNode(node, "ShellSideThickness", fShellSideThickness);
+    WriteValueNode(node, "ShellOuterThickness", fShellOuterThickness);
 }
 
 } // namespace MACE::Core::Geometry::Description

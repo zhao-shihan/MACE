@@ -42,16 +42,18 @@ HepGeom::Transform3D Target::CalcTransform() const {
     return HepGeom::Transform3D(CLHEP::HepRotation(), CLHEP::Hep3Vector(0, 0, transZ));
 }
 
-void Target::ReadImpl(const YAML::Node& node) {
-    fWidth = node["Width"].as<decltype(fWidth)>();
-    fThickness = node["Thickness"].as<decltype(fThickness)>();
-    fFineStructure = ConstructFormula(node["FineStructure"].as<std::string>().c_str());
+void Target::ReadDescriptionNode(const YAML::Node& node) {
+    ReadValueNode(node, "Width", fWidth);
+    ReadValueNode(node, "Thickness", fThickness);
+    auto fineStructureFormula = fFineStructure.GetExpFormula();
+    ReadValueNode<TString, std::string>(node, "FineStructure", fineStructureFormula);
+    fFineStructure = ConstructFormula(fineStructureFormula);
 }
 
-void Target::WriteImpl(YAML::Node& node) const {
-    node["Width"] = fWidth;
-    node["Thickness"] = fThickness;
-    node["FineStructure"] = fFineStructure.GetExpFormula().Data();
+void Target::WriteDescriptionNode(YAML::Node& node) const {
+    WriteValueNode(node, "Width", fWidth);
+    WriteValueNode(node, "Thickness", fThickness);
+    WriteValueNode(node, "FineStructure", fFineStructure.GetExpFormula().Data());
 }
 
 } // namespace MACE::Core::Geometry::Description

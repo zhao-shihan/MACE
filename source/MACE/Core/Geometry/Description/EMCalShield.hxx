@@ -30,8 +30,8 @@ public:
     auto CalcTransform() const { return EMCalField::Instance().CalcTransform(); }
 
 private:
-    void ReadImpl(const YAML::Node& node) override;
-    void WriteImpl(YAML::Node& node) const override;
+    void ReadDescriptionNode(const YAML::Node& node) override;
+    void WriteDescriptionNode(YAML::Node& node) const override;
 
 private:
     double fInnerRadius;
