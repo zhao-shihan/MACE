@@ -19,8 +19,9 @@ int MPICommRank(MPI_Comm comm);
 int MPICommSize(MPI_Comm comm);
 bool MPIInitialized();
 bool MPIFinalized();
-template<size_t MaxLength_v> // hint: MPI_MAX_PROCESSOR_NAME
+template<size_t MaxLength_v = MPI_MAX_PROCESSOR_NAME>
 std::pair<std::array<char, MaxLength_v>, int> MPIGetProcessorName();
+template<size_t MaxLength_v = MPI_MAX_PROCESSOR_NAME>
 std::string MPIGetProcessorNameString();
 
 } // namespace MACE::Utility::MPIUtil

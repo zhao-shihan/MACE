@@ -7,4 +7,10 @@ std::pair<std::array<char, MaxLength_v>, int> MPIGetProcessorName() {
     return result;
 }
 
+template<size_t MaxLength_v>
+std::string MPIGetProcessorNameString() {
+    const auto [processorName, nameLength] = MPIGetProcessorName<MaxLength_v>();
+    return std::string(processorName.data(), nameLength);
+}
+
 } // namespace MACE::Utility::MPIUtil

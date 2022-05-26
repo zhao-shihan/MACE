@@ -26,9 +26,4 @@ bool MPIFinalized() {
     return finalized;
 }
 
-std::string MPIGetProcessorNameString() {
-    const auto [processorName, nameLength] = MPIGetProcessorName<MPI_MAX_PROCESSOR_NAME>();
-    return std::string(processorName.data(), nameLength);
-}
-
 } // namespace MACE::Utility::MPIUtil
