@@ -1,8 +1,6 @@
 #include "MACE/Simulation/SimMACE/Analysis.hxx"
 #include "MACE/Simulation/SimMACE/Messenger/AnalysisMessenger.hxx"
 
-#include "G4UIdirectory.hh"
-
 namespace MACE::Simulation::SimMACE::Messenger {
 
 AnalysisMessenger& AnalysisMessenger::Instance() {

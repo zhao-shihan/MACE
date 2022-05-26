@@ -1,10 +1,6 @@
 #include "MACE/Simulation/SimTarget/Action/PrimaryGeneratorAction.hxx"
 #include "MACE/Simulation/SimTarget/Messenger/PrimaryGeneratorActionMessenger.hxx"
 
-#include "G4SystemOfUnits.hh"
-#include "G4UIdirectory.hh"
-#include "G4UnitsTable.hh"
-
 namespace MACE::Simulation::SimTarget::Messenger {
 
 PrimaryGeneratorActionMessenger& PrimaryGeneratorActionMessenger::Instance() {

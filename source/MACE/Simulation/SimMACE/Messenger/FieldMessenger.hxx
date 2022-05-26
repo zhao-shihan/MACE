@@ -9,6 +9,7 @@
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
 namespace MACE::Simulation::SimMACE::Messenger {
