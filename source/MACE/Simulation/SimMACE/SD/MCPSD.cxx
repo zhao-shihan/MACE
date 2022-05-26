@@ -1,6 +1,6 @@
+#include "MACE/Simulation/SimMACE/Analysis.hxx"
 #include "MACE/Simulation/SimMACE/RunManager.hxx"
 #include "MACE/Simulation/SimMACE/SD/MCPSD.hxx"
-#include "MACE/Simulation/SimMACE/Analysis.hxx"
 
 #include "G4HCofThisEvent.hh"
 #include "G4SDManager.hh"

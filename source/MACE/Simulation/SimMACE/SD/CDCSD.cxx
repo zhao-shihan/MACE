@@ -1,8 +1,8 @@
 #include "MACE/Core/Geometry/Description/CDC.hxx"
-#include "MACE/Simulation/SimMACE/RunManager.hxx"
-#include "MACE/Simulation/SimMACE/SD/CDCSD.hxx"
 #include "MACE/Simulation/SimMACE/Analysis.hxx"
 #include "MACE/Simulation/SimMACE/Region.hxx"
+#include "MACE/Simulation/SimMACE/RunManager.hxx"
+#include "MACE/Simulation/SimMACE/SD/CDCSD.hxx"
 
 #include "G4HCofThisEvent.hh"
 #include "G4ProductionCuts.hh"
