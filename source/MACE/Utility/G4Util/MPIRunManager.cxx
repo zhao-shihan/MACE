@@ -1,5 +1,5 @@
-#include "MACE/Simulation/Utility/CheckMPIAvailability.hxx"
-#include "MACE/Simulation/Utility/MPIRunManager.hxx"
+#include "MACE/Utility/G4Util/CheckMPIAvailability.hxx"
+#include "MACE/Utility/G4Util/MPIRunManager.hxx"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
 #include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
 #include "MACE/Utility/MPIUtil/MPIRandomUtil.hxx"
@@ -11,7 +11,7 @@
 
 #include <set>
 
-namespace MACE::Simulation::Utility {
+namespace MACE::Utility::G4Util {
 
 using namespace MACE::Utility::MPIUtil;
 
@@ -33,7 +33,7 @@ void MPIRunManager::BeamOn(G4int nEvent, const char* macroFile, G4int nSelect) {
 
 G4bool MPIRunManager::CheckNEventIsAtLeastCommSize(G4int nEvent) const {
     if (nEvent < fCommSize) {
-        G4Exception("MACE::Simulation::Utility::MPIRunManager::CheckNEventIsAtLeastCommSize(...)",
+        G4Exception("MACE::Utility::G4Util::MPIRunManager::CheckNEventIsAtLeastCommSize(...)",
                     "TooFewNEventOrTooMuchRank",
                     JustWarning,
                     "The number of G4Event must be greater or equal to the number of MPI ranks,\n"
@@ -45,4 +45,4 @@ G4bool MPIRunManager::CheckNEventIsAtLeastCommSize(G4int nEvent) const {
     }
 }
 
-} // namespace MACE::Simulation::Utility
+} // namespace MACE::Utility::G4Util

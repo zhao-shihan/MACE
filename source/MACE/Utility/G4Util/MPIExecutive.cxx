@@ -1,5 +1,5 @@
-#include "MACE/Simulation/Utility/CheckMPIAvailability.hxx"
-#include "MACE/Simulation/Utility/MPIExecutive.hxx"
+#include "MACE/Utility/G4Util/CheckMPIAvailability.hxx"
+#include "MACE/Utility/G4Util/MPIExecutive.hxx"
 #include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
 
 #include "G4UIExecutive.hh"
@@ -8,7 +8,7 @@
 
 #include "mpi.h"
 
-namespace MACE::Simulation::Utility {
+namespace MACE::Utility::G4Util {
 
 MPIExecutive::MPIExecutive(int argc, char** argv) :
     fArgc(argc),
@@ -19,8 +19,8 @@ MPIExecutive::MPIExecutive(int argc, char** argv) :
 void MPIExecutive::StartInteractiveSession(const char* initializeMacro) {
     CheckMPIAvailability();
 
-    if (MACE::Utility::MPIUtil::MPICommSize(MPI_COMM_WORLD) > 1) {
-        G4Exception("MACE::Simulation::Utility::MPIExecutive::StartInteractiveSession(...)",
+    if (MPIUtil::MPICommSize(MPI_COMM_WORLD) > 1) {
+        G4Exception("MACE::Utility::G4Util::MPIExecutive::StartInteractiveSession(...)",
                     "InteractiveSessionMustBeSerial",
                     FatalException,
                     "Interactive session must be run with only 1 process.");
@@ -40,4 +40,4 @@ void MPIExecutive::StartBatchSession(const char* macro) {
     G4UImanager::GetUIpointer()->ExecuteMacroFile(macro);
 }
 
-} // namespace MACE::Simulation::Utility
+} // namespace MACE::Utility::G4Util

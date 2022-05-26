@@ -1,6 +1,6 @@
 #pragma once
 
-namespace MACE::Simulation::Utility {
+namespace MACE::Utility::G4Util {
 
 class MPIExecutive {
 public:
@@ -17,4 +17,4 @@ protected:
     char** fArgv;
 };
 
-} // namespace MACE::Simulation::Utility
+} // namespace MACE::Utility::G4Util

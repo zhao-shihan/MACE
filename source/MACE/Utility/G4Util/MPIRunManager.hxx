@@ -4,7 +4,7 @@
 
 #include "G4RunManager.hh"
 
-namespace MACE::Simulation::Utility {
+namespace MACE::Utility::G4Util {
 
 class MPIRunManager : public G4RunManager {
 public:
@@ -30,7 +30,7 @@ private:
     const int fCommSize;
 
     G4int fTotalNumberOfEventsToBeProcessed;
-    MACE::Utility::DividedIndexRange<G4int> fEventIDRange;
+    DividedIndexRange<G4int> fEventIDRange;
 };
 
-} // namespace MACE::Simulation::Utility
+} // namespace MACE::Utility::G4Util

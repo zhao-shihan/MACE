@@ -69,11 +69,11 @@ public:
     bool operator>=(const char* rhs) const noexcept { return std::strncmp(fString, rhs, fgMaxLength) >= 0; }
     std::weak_ordering operator<=>(const char* rhs) const noexcept;
 
-    friend ShortString operator+(ShortString lhs, const ShortString& rhs) { return lhs += rhs; }
-    friend ShortString operator+(ShortString lhs, const char* rhs) { return lhs += rhs; }
-    friend ShortString operator+(const char* lhs, const ShortString& rhs) { return ShortString(lhs) += rhs; }
-    friend ShortString operator+(ShortString lhs, char rhs) { return lhs += rhs; }
-    friend ShortString operator+(char lhs, const ShortString& rhs) { return ShortString(lhs) += rhs; }
+    friend ShortString operator+(ShortString lhs, const ShortString& rhs) noexcept { return lhs += rhs; }
+    friend ShortString operator+(ShortString lhs, const char* rhs) noexcept { return lhs += rhs; }
+    friend ShortString operator+(const char* lhs, const ShortString& rhs) noexcept { return ShortString(lhs) += rhs; }
+    friend ShortString operator+(ShortString lhs, char rhs) noexcept { return lhs += rhs; }
+    friend ShortString operator+(char lhs, const ShortString& rhs) noexcept { return ShortString(lhs) += rhs; }
     template<typename T>
     friend ShortString operator+(ShortString lhs, T rhs) noexcept requires(std::is_arithmetic_v<T> and not std::same_as<T, char>) { return lhs += rhs; }
     template<typename T>

@@ -1,17 +1,17 @@
-#include "MACE/Simulation/Utility/CheckMPIAvailability.hxx"
+#include "MACE/Utility/G4Util/CheckMPIAvailability.hxx"
 #include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
 
 #include "G4Exception.hh"
 
 #include "mpi.h"
 
-namespace MACE::Simulation::Utility {
+namespace MACE::Utility::G4Util {
 
 using namespace MACE::Utility::MPIUtil;
 
 void CheckMPIAvailability() {
     if (not MPIInitialized() or MPIFinalized()) {
-        G4Exception("MACE::Simulation::Utility::MPIRunManager::CheckMPI()",
+        G4Exception("MACE::Utility::G4Util::MPIRunManager::CheckMPI()",
                     "MPINotAvailable",
                     FatalException,
                     "MPI must be initialized and not finalized."
@@ -19,4 +19,4 @@ void CheckMPIAvailability() {
     }
 }
 
-} // namespace MACE::Simulation::Utility
+} // namespace MACE::Utility::G4Util
