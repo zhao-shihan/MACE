@@ -7,11 +7,11 @@
 
 namespace MACE::Utility {
 
-template<template<typename... T> class Tuple_Tt, class Functor_t, typename... Element_t>
-requires std::derived_from<Tuple_Tt<Element_t...>, std::tuple<Element_t...>>
+template<template<typename... T> class Tuple_tt, class Functor_t, typename... Element_t>
+requires std::derived_from<Tuple_tt<Element_t...>, std::tuple<Element_t...>>
 class TupleForEachImpl {
     using TupleSize = std::integral_constant<std::size_t, sizeof...(Element_t)>;
-    using Tuple_t = Tuple_Tt<Element_t...>;
+    using Tuple_t = Tuple_tt<Element_t...>;
 
     template<typename TupleCVRef_t, std::size_t... Index>
     requires std::same_as<std::remove_cvref_t<TupleCVRef_t>, Tuple_t>
@@ -29,23 +29,23 @@ public:
 
 /// @brief Traverses a std::tuple or its derived class.
 /// The usage is similar to std::ranges::for_each, except that a tuple is passed in.
-template<template<typename... T> class Tuple_Tt, class Functor_t, typename... Element_t>
-constexpr void TupleForEach(const Tuple_Tt<Element_t...>& tuple, Functor_t&& func) {
-    TupleForEachImpl<Tuple_Tt, Functor_t, Element_t...>()(tuple, std::forward<Functor_t>(func));
+template<template<typename... T> class Tuple_tt, class Functor_t, typename... Element_t>
+constexpr void TupleForEach(const Tuple_tt<Element_t...>& tuple, Functor_t&& func) {
+    TupleForEachImpl<Tuple_tt, Functor_t, Element_t...>()(tuple, std::forward<Functor_t>(func));
 }
 
 /// @brief Traverses a std::tuple or its derived class.
 /// The usage is similar to std::ranges::for_each, except that a tuple is passed in.
-template<template<typename... T> class Tuple_Tt, class Functor_t, typename... Element_t>
-constexpr void TupleForEach(Tuple_Tt<Element_t...>& tuple, Functor_t&& func) {
-    TupleForEachImpl<Tuple_Tt, Functor_t, Element_t...>()(tuple, std::forward<Functor_t>(func));
+template<template<typename... T> class Tuple_tt, class Functor_t, typename... Element_t>
+constexpr void TupleForEach(Tuple_tt<Element_t...>& tuple, Functor_t&& func) {
+    TupleForEachImpl<Tuple_tt, Functor_t, Element_t...>()(tuple, std::forward<Functor_t>(func));
 }
 
 /// @brief Traverses a std::tuple or its derived class.
 /// The usage is similar to std::ranges::for_each, except that a tuple is passed in.
-template<template<typename... T> class Tuple_Tt, class Functor_t, typename... Element_t>
-constexpr void TupleForEach(Tuple_Tt<Element_t...>&& tuple, Functor_t&& func) {
-    TupleForEachImpl<Tuple_Tt, Functor_t, Element_t...>()(tuple, std::forward<Functor_t>(func));
+template<template<typename... T> class Tuple_tt, class Functor_t, typename... Element_t>
+constexpr void TupleForEach(Tuple_tt<Element_t...>&& tuple, Functor_t&& func) {
+    TupleForEachImpl<Tuple_tt, Functor_t, Element_t...>()(tuple, std::forward<Functor_t>(func));
 }
 
 } // namespace MACE::Utility
