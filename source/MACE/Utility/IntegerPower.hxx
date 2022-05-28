@@ -50,7 +50,7 @@ constexpr T PowInt(T x) noexcept(NoexceptMultipliable<T>) {
 template<intmax_t N, std::floating_point FP>
     requires (N < 0)
 constexpr FP PowInt(FP x) noexcept {
-    return PowInt<-N, FP>(1 / x);
+    return 1 / PowInt<-N, FP>(x);
 }
 
 // clang-format on
