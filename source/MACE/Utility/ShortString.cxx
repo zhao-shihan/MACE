@@ -2,8 +2,6 @@
 
 namespace MACE::Utility {
 
-std::stringstream ShortString::fgSS{};
-
 ShortString::ShortString() noexcept :
     fString{'\0'} {}
 

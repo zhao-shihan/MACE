@@ -58,10 +58,8 @@ std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_vi
             // Second: create directories, construct full file paths
 
             auto FileNameForRank = [&](int rank) {
-                std::string fileName;
-                std::stringstream ss;
-                ss << basicName << "_rank" << rank << suffix;
-                ss >> fileName;
+                std::string fileName(basicName);
+                fileName.append("_rank").append(std::to_string(rank)).append(suffix);
                 return fileName;
             };
 
