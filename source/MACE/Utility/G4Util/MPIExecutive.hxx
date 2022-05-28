@@ -13,6 +13,8 @@ public:
     virtual void StartBatchSession(const char* macro);
 
 protected:
+    const int fCommRank;
+    const int fCommSize;
     int fArgc;
     char** fArgv;
 };
