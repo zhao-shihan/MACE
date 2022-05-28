@@ -1,10 +1,12 @@
-project(Utility)
+project(MACE)
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-    add_definitions(-Wno-stringop-truncation)
+if(NOT MACE_SHOW_ALL_COMPILE_WARNINGS)
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        add_definitions(-Wno-stringop-truncation)
+    endif()
 endif()
 
-file(GLOB_RECURSE Utility_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
+file(GLOB_RECURSE MACEUtility_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
 
-add_library(Utility ${Utility_srcs})
-target_link_libraries(Utility ${MPI_CXX_LIBRARIES} ${Geant4_LIBRARIES} G4mpi)
+add_library(MACEUtility ${MACEUtility_srcs})
+target_link_libraries(MACEUtility ${MPI_C_LIBRARIES} ${Geant4_LIBRARIES})

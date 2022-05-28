@@ -1,11 +1,13 @@
 #pragma once
 
 #include "MACE/Simulation/SimTarget/Action/DetectorConstruction.hxx"
+#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
 namespace MACE::Simulation::SimTarget::Messenger {

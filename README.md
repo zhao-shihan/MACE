@@ -6,7 +6,7 @@
   - [Introduction](#introduction)
   - [How to Build](#how-to-build)
     - [External dependencies](#external-dependencies)
-    - [(Tested) Platform](#tested-platform)
+    - [Tested platform](#tested-platform)
     - [Prepare for your PC](#prepare-for-your-pc)
     - [Prepare for cluster/supercomputer](#prepare-for-clustersupercomputer)
     - [Build](#build)
@@ -28,15 +28,14 @@ To build MACE software from source, there are a few prerequisites.
 ### External dependencies
 
 1. C/C++ compiler that supports ≥ C++20. (gcc ≥ 10, Clang ≥ 10)
-2. CMake   (≥ 3.16)
-3. MPI-3   (MPICH, OpenMPI, Intel MPI, etc. On your frequency.)
-4. Geant4  (≥ 4.11.0, with ≥ C++17, gdml enabled)
-5. ROOT    (≥ 6.24.02, ≥ C++17)
-6. Eigen3  (≥ 3.3.0)
+2. CMake    (≥ 3.16)
+3. MPI-3    (MPICH, OpenMPI, Intel MPI, etc. On your frequency.)
+4. Geant4   (≥ 4.11.0, with ≥ C++17, gdml enabled)
+5. ROOT     (≥ 6.24.02, ≥ C++17)
+6. Eigen3   (≥ 3.3.0)
+7. yaml-cpp (≥ 0.6.0, optional. Build-in if not found.)
 
-G4mpi, yaml-cpp are bulit in. (in ./external)  
-
-### (Tested) Platform
+### Tested platform
 
 x86-64 linux with gcc10, gcc11
 
@@ -63,7 +62,7 @@ MACE software follows a classical cmake & make procedure, as
 ```shell
 mkdir build
 cd build
-cmake <MACE_ROOT_DIR>
+cmake <MACE_PROJECT_ROOT_DIR>
 make
 ```
 

@@ -48,4 +48,4 @@ void MuoniumTrack::FillBranchSockets() const noexcept {
     fgDecayMomentum.SetValue(fDecayMomentum);
 }
 
-} // namespace MACE::Simulation::SimTarget
+} // namespace MACE::Core::DataModel::SimTrack

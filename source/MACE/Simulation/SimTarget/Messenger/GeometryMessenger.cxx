@@ -5,8 +5,6 @@
 #include "MACE/Simulation/SimTarget/Messenger/GeometryMessenger.hxx"
 #include "MACE/Simulation/SimTarget/RunManager.hxx"
 
-#include "G4UIdirectory.hh"
-
 namespace MACE::Simulation::SimTarget::Messenger {
 
 GeometryMessenger& GeometryMessenger::Instance() {

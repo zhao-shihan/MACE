@@ -1,36 +1,34 @@
 #include "MACE/Simulation/SimTarget/Action/DetectorConstruction.hxx"
 #include "MACE/Simulation/SimTarget/Action/PhysicsList.hxx"
 #include "MACE/Simulation/SimTarget/RunManager.hxx"
+#include "MACE/Utility/G4Util/MPIExecutive.hxx"
 
-#include "G4MPIsession.hh"
-#include "G4UIExecutive.hh"
-#include "G4UImanager.hh"
-#include "G4VisExecutive.hh"
 #include "Randomize.hh"
 
-using namespace MACE::Simulation::SimTarget;
+#include "mpi.h"
 
-int main(int argc, char** argv) {
-    bool visMode = (argc == 1);
+using namespace MACE::Simulation;
+
+int main(int argc, char* argv[]) {
+    MPI_Init(&argc, &argv);
+
+    bool interactive = (argc == 1);
 
     const auto randEng = std::make_unique<CLHEP::MTwistEngine>(4357L);
     G4Random::setTheEngine(randEng.get());
 
     // DetectorConstruction, PhysicsList, ActionInitialization are instantiated in RunManager constructor.
-    const auto runManager = std::make_unique<RunManager>();
-    runManager->GetDetectorConstruction().SetCheckOverlaps(visMode ? true : false);
-    runManager->GetPhysicsList().SetVerboseLevel(visMode ? 1 : 0);
+    const auto runManager = std::make_unique<SimTarget::RunManager>();
+    runManager->GetDetectorConstruction().SetCheckOverlaps(interactive ? true : false);
+    runManager->GetPhysicsList().SetVerboseLevel(interactive ? 1 : 0);
 
-    if (visMode) {
-        const auto uiExecutive = std::make_unique<G4UIExecutive>(argc, argv);
-        const auto visExecutive = std::make_unique<G4VisExecutive>();
-        visExecutive->Initialize();
-        G4UImanager::GetUIpointer()->ExecuteMacroFile("init_vis.mac");
-        uiExecutive->SessionStart();
+    const auto mpiExecutive = std::make_unique<MACE::Utility::G4Util::MPIExecutive>(argc, argv);
+    if (interactive) {
+        mpiExecutive->StartInteractiveSession("init_vis.mac");
     } else {
-        const auto g4mpi = runManager->InitializeG4MPI(argc, argv);
-        g4mpi->GetMPIsession()->SessionStart();
+        mpiExecutive->StartBatchSession(argv[1]);
     }
 
+    MPI_Finalize();
     return EXIT_SUCCESS;
 }

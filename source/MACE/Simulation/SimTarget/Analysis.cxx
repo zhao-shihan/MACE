@@ -1,13 +1,9 @@
 #include "MACE/Simulation/SimTarget/Analysis.hxx"
 #include "MACE/Simulation/SimTarget/Messenger/AnalysisMessenger.hxx"
 #include "MACE/Simulation/SimTarget/RunManager.hxx"
-#include "MACE/Utility/MPITool/MakeMPIFilePath.hxx"
-
-#include "G4MPImanager.hh"
+#include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
 namespace MACE::Simulation::SimTarget {
-
-using Messenger::AnalysisMessenger;
 
 Analysis& Analysis::Instance() {
     static Analysis instance;
@@ -24,7 +20,7 @@ Analysis::Analysis() :
     fResultFile(nullptr),
     fYieldFile(nullptr),
     fDataFactory() {
-    AnalysisMessenger::Instance();
+    Messenger::AnalysisMessenger::Instance();
     fDataFactory.SetTreeNamePrefixFormat("Run#_");
 }
 
@@ -66,12 +62,7 @@ void Analysis::Close() {
 }
 
 void Analysis::OpenResultFile() {
-    std::string filePath;
-    if (MPI::Is_initialized()) {
-        filePath = MACE::Utility::MPITool::MakeMPIFilePath(fResultName, ".root", *G4MPImanager::GetManager()->GetComm());
-    } else {
-        filePath = fResultName + ".root";
-    }
+    const auto filePath = MACE::Utility::MPIUtil::MakeMPIFilePath(fResultName, ".root");
     fResultFile = std::make_unique<TFile>(filePath.c_str(), "recreate");
 }
 
@@ -87,8 +78,7 @@ void Analysis::CloseResultFile() {
 }
 
 void Analysis::OpenYieldFile() {
-    const auto commRank = MPI::Is_initialized() ? G4MPImanager::GetManager()->GetComm()->Get_rank() : 0;
-    if (commRank == 0) {
+    if (RunManager::GetRunManager()->GetCommRank() == 0) {
         fYieldFile = std::make_unique<std::ofstream>(fResultName + "_yield.csv", std::ios::out);
         *fYieldFile << "runID,nMuon,nMFormed,nMTargetDecay,nMVacuumDecay,nMDetectableDecay" << std::endl;
     }
@@ -115,13 +105,13 @@ void Analysis::AnalysisAndWriteYield() {
         }
     }
 
-    if (MPI::Is_initialized()) {
-        const auto* const comm = G4MPImanager::GetManager()->GetComm();
-        int commRank = comm->Get_rank();
+    const auto commSize = RunManager::GetRunManager()->GetCommSize();
+    if (commSize > 1) {
+        const auto commRank = RunManager::GetRunManager()->GetCommRank();
 
         std::vector<decltype(yieldData)> yieldDataRecv;
-        if (commRank == 0) { yieldDataRecv.resize(comm->Get_size()); }
-        comm->Gather(yieldData.data(), yieldData.size(), MPI::UNSIGNED_LONG, yieldDataRecv.data(), yieldData.size(), MPI::UNSIGNED_LONG, 0);
+        if (commRank == 0) { yieldDataRecv.resize(commSize); }
+        MPI_Gather(yieldData.data(), yieldData.size(), MPI_UNSIGNED_LONG, yieldDataRecv.data(), yieldData.size(), MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD);
 
         if (commRank == 0) {
             unsigned long nMuonTotal = 0;

@@ -22,16 +22,16 @@ HepGeom::Transform3D LinacField::CalcTransform() const {
     return HepGeom::Transform3D(CLHEP::HepRotation(), CLHEP::Hep3Vector(0, 0, fDownStreamLength - fLength / 2));
 }
 
-void LinacField::ReadImpl(const YAML::Node& node) {
-    fRadius = node["Radius"].as<decltype(fRadius)>();
-    fLength = node["Length"].as<decltype(fLength)>();
-    fDownStreamLength = node["DownStreamLength"].as<decltype(fDownStreamLength)>();
+void LinacField::ReadDescriptionNode(const YAML::Node& node) {
+    ReadValueNode(node, "Radius", fRadius);
+    ReadValueNode(node, "Length", fLength);
+    ReadValueNode(node, "DownStreamLength", fDownStreamLength);
 }
 
-void LinacField::WriteImpl(YAML::Node& node) const {
-    node["Radius"] = fRadius;
-    node["Length"] = fLength;
-    node["DownStreamLength"] = fDownStreamLength;
+void LinacField::WriteDescriptionNode(YAML::Node& node) const {
+    WriteValueNode(node, "Radius", fRadius);
+    WriteValueNode(node, "Length", fLength);
+    WriteValueNode(node, "DownStreamLength", fDownStreamLength);
 }
 
 } // namespace MACE::Core::Geometry::Description

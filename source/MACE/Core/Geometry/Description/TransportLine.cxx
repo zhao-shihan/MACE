@@ -69,26 +69,26 @@ HepGeom::Transform3D TransportLine::ThirdStraightTransform() const {
     return HepGeom::Transform3D(CLHEP::HepRotation(), translation);
 }
 
-void TransportLine::ReadImpl(const YAML::Node& node) {
-    fFirstStraightLength = node["FirstStraightLength"].as<decltype(fFirstStraightLength)>();
-    fFirstBendRadius = node["FirstBendRadius"].as<decltype(fFirstBendRadius)>();
-    fSecondStraightLength = node["SecondStraightLength"].as<decltype(fSecondStraightLength)>();
-    fSecondBendRadius = node["SecondBendRadius"].as<decltype(fSecondBendRadius)>();
-    fThirdStraightLength = node["ThirdStraightLength"].as<decltype(fThirdStraightLength)>();
-    fSolenoidInnerRadius = node["SolenoidInnerRadius"].as<decltype(fSolenoidInnerRadius)>();
-    fSolenoidOuterRadius = node["SolenoidOuterRadius"].as<decltype(fSolenoidOuterRadius)>();
-    fFieldRadius = node["FieldRadius"].as<decltype(fFieldRadius)>();
+void TransportLine::ReadDescriptionNode(const YAML::Node& node) {
+    ReadValueNode(node, "FirstStraightLength", fFirstStraightLength);
+    ReadValueNode(node, "FirstBendRadius", fFirstBendRadius);
+    ReadValueNode(node, "SecondStraightLength", fSecondStraightLength);
+    ReadValueNode(node, "SecondBendRadius", fSecondBendRadius);
+    ReadValueNode(node, "ThirdStraightLength", fThirdStraightLength);
+    ReadValueNode(node, "SolenoidInnerRadius", fSolenoidInnerRadius);
+    ReadValueNode(node, "SolenoidOuterRadius", fSolenoidOuterRadius);
+    ReadValueNode(node, "FieldRadius", fFieldRadius);
 }
 
-void TransportLine::WriteImpl(YAML::Node& node) const {
-    node["FirstStraightLength"] = fFirstStraightLength;
-    node["FirstBendRadius"] = fFirstBendRadius;
-    node["SecondStraightLength"] = fSecondStraightLength;
-    node["SecondBendRadius"] = fSecondBendRadius;
-    node["ThirdStraightLength"] = fThirdStraightLength;
-    node["SolenoidInnerRadius"] = fSolenoidInnerRadius;
-    node["SolenoidOuterRadius"] = fSolenoidOuterRadius;
-    node["FieldRadius"] = fFieldRadius;
+void TransportLine::WriteDescriptionNode(YAML::Node& node) const {
+    WriteValueNode(node, "FirstStraightLength", fFirstStraightLength);
+    WriteValueNode(node, "FirstBendRadius", fFirstBendRadius);
+    WriteValueNode(node, "SecondStraightLength", fSecondStraightLength);
+    WriteValueNode(node, "SecondBendRadius", fSecondBendRadius);
+    WriteValueNode(node, "ThirdStraightLength", fThirdStraightLength);
+    WriteValueNode(node, "SolenoidInnerRadius", fSolenoidInnerRadius);
+    WriteValueNode(node, "SolenoidOuterRadius", fSolenoidOuterRadius);
+    WriteValueNode(node, "FieldRadius", fFieldRadius);
 }
 
 } // namespace MACE::Core::Geometry::Description

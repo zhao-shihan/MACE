@@ -1,8 +1,6 @@
 #include "MACE/Simulation/SimMACE/Messenger/FieldMessenger.hxx"
 
-#include "G4UIdirectory.hh"
-
-using MACE::Simulation::SimMACE::Messenger::FieldMessenger;
+namespace MACE::Simulation::SimMACE::Messenger {
 
 FieldMessenger& FieldMessenger::Instance() {
     static FieldMessenger instance;
@@ -53,3 +51,5 @@ void FieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
         fSelectorField->SetSelectorElectricField(fSetSelectorElectricField.GetNewDoubleValue(value));
     }
 }
+
+} // namespace MACE::Simulation::SimMACE::Messenger

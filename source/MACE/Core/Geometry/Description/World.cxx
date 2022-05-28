@@ -16,16 +16,16 @@ World::World() :
     fHalfYExtent(1_m),
     fHalfZExtent(4_m) {}
 
-void World::ReadImpl(const YAML::Node& node) {
-    fHalfXExtent = node["HalfXExtent"].as<decltype(fHalfXExtent)>();
-    fHalfYExtent = node["HalfYExtent"].as<decltype(fHalfYExtent)>();
-    fHalfZExtent = node["HalfZExtent"].as<decltype(fHalfZExtent)>();
+void World::ReadDescriptionNode(const YAML::Node& node) {
+    ReadValueNode(node, "HalfXExtent", fHalfXExtent);
+    ReadValueNode(node, "HalfYExtent", fHalfYExtent);
+    ReadValueNode(node, "HalfZExtent", fHalfZExtent);
 }
 
-void World::WriteImpl(YAML::Node& node) const {
-    node["HalfXExtent"] = fHalfXExtent;
-    node["HalfYExtent"] = fHalfYExtent;
-    node["HalfZExtent"] = fHalfZExtent;
+void World::WriteDescriptionNode(YAML::Node& node) const {
+    WriteValueNode(node, "HalfXExtent", fHalfXExtent);
+    WriteValueNode(node, "HalfYExtent", fHalfYExtent);
+    WriteValueNode(node, "HalfZExtent", fHalfZExtent);
 }
 
 } // namespace MACE::Core::Geometry::Description

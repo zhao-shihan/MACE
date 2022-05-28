@@ -1,6 +1,6 @@
-project(Generator)
+project(MACE)
 
-file(GLOB_RECURSE Generator_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
+file(GLOB_RECURSE MACESimulationGenerator_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
 
-add_library(Generator ${Generator_srcs})
-target_link_libraries(Generator ${Geant4_LIBRARIES})
+add_library(MACESimulationGenerator ${MACESimulationGenerator_srcs})
+target_link_libraries(MACESimulationGenerator ${Geant4_LIBRARIES})

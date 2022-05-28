@@ -15,14 +15,14 @@ MCP::MCP() :
     fWidth(15_cm),
     fThickness(1_cm) {}
 
-void MCP::ReadImpl(const YAML::Node& node) {
-    fWidth = node["Width"].as<decltype(fWidth)>();
-    fThickness = node["Thickness"].as<decltype(fThickness)>();
+void MCP::ReadDescriptionNode(const YAML::Node& node) {
+    ReadValueNode(node, "Width", fWidth);
+    ReadValueNode(node, "Thickness", fThickness);
 }
 
-void MCP::WriteImpl(YAML::Node& node) const {
-    node["Width"] = fWidth;
-    node["Thickness"] = fThickness;
+void MCP::WriteDescriptionNode(YAML::Node& node) const {
+    WriteValueNode(node, "Width", fWidth);
+    WriteValueNode(node, "Thickness", fThickness);
 }
 
 } // namespace MACE::Core::Geometry::Description

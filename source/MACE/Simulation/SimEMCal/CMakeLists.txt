@@ -1,1 +1,2 @@
-project(SimEMCal)
+project(MACE)
+

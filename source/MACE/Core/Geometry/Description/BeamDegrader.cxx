@@ -26,18 +26,18 @@ HepGeom::Transform3D BeamDegrader::CalcTransform() const {
     return HepGeom::Transform3D(CLHEP::HepRotation(), CLHEP::Hep3Vector(0, 0, transZ));
 }
 
-void BeamDegrader::ReadImpl(const YAML::Node& node) {
-    fIsEnabled = node["IsEnabled"].as<decltype(fIsEnabled)>();
-    fWidth = node["Width"].as<decltype(fWidth)>();
-    fThickness = node["Thickness"].as<decltype(fThickness)>();
-    fDistanceToTargetSurface = node["DistanceToTargetSurface"].as<decltype(fDistanceToTargetSurface)>();
+void BeamDegrader::ReadDescriptionNode(const YAML::Node& node) {
+    ReadValueNode(node, "IsEnabled", fIsEnabled);
+    ReadValueNode(node, "Width", fWidth);
+    ReadValueNode(node, "Thickness", fThickness);
+    ReadValueNode(node, "DistanceToTargetSurface", fDistanceToTargetSurface);
 }
 
-void BeamDegrader::WriteImpl(YAML::Node& node) const {
-    node["IsEnabled"] = fIsEnabled;
-    node["Width"] = fWidth;
-    node["Thickness"] = fThickness;
-    node["DistanceToTargetSurface"] = fDistanceToTargetSurface;
+void BeamDegrader::WriteDescriptionNode(YAML::Node& node) const {
+    WriteValueNode(node, "IsEnabled", fIsEnabled);
+    WriteValueNode(node, "Width", fWidth);
+    WriteValueNode(node, "Thickness", fThickness);
+    WriteValueNode(node, "DistanceToTargetSurface", fDistanceToTargetSurface);
 }
 
 } // namespace MACE::Core::Geometry::Description

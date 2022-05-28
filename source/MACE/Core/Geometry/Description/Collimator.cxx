@@ -19,22 +19,22 @@ Collimator::Collimator() :
     fThickness(0.75_mm),
     fCount(7) {}
 
-void Collimator::ReadImpl(const YAML::Node& node) {
-    fInnerRadius = node["InnerRadius"].as<decltype(fInnerRadius)>();
-    fOuterRadius = node["OuterRadius"].as<decltype(fOuterRadius)>();
-    fLength = node["Length"].as<decltype(fLength)>();
-    fZPosition = node["ZPosition"].as<decltype(fZPosition)>();
-    fThickness = node["Thickness"].as<decltype(fThickness)>();
-    fCount = node["Count"].as<decltype(fCount)>();
+void Collimator::ReadDescriptionNode(const YAML::Node& node) {
+    ReadValueNode(node, "InnerRadius", fInnerRadius);
+    ReadValueNode(node, "OuterRadius", fOuterRadius);
+    ReadValueNode(node, "Length", fLength);
+    ReadValueNode(node, "ZPosition", fZPosition);
+    ReadValueNode(node, "Thickness", fThickness);
+    ReadValueNode(node, "Count", fCount);
 }
 
-void Collimator::WriteImpl(YAML::Node& node) const {
-    node["InnerRadius"] = fInnerRadius;
-    node["OuterRadius"] = fOuterRadius;
-    node["Length"] = fLength;
-    node["ZPosition"] = fZPosition;
-    node["Thickness"] = fThickness;
-    node["Count"] = fCount;
+void Collimator::WriteDescriptionNode(YAML::Node& node) const {
+    WriteValueNode(node, "InnerRadius", fInnerRadius);
+    WriteValueNode(node, "OuterRadius", fOuterRadius);
+    WriteValueNode(node, "Length", fLength);
+    WriteValueNode(node, "ZPosition", fZPosition);
+    WriteValueNode(node, "Thickness", fThickness);
+    WriteValueNode(node, "Count", fCount);
 }
 
 } // namespace MACE::Core::Geometry::Description

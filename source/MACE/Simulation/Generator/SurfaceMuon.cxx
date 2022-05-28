@@ -1,5 +1,5 @@
-#include "MACE/Simulation/Generator/SurfaceMuonMessenger.hxx"
 #include "MACE/Simulation/Generator/SurfaceMuon.hxx"
+#include "MACE/Simulation/Generator/SurfaceMuonMessenger.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 

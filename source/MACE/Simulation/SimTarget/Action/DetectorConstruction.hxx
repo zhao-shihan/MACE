@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/Core/Geometry/Entity/Fast/BeamMonitor.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/BeamDegrader.hxx"
+#include "MACE/Core/Geometry/Entity/Fast/BeamMonitor.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/Target.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/World.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"

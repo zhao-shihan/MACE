@@ -1,69 +1,33 @@
-/// @file Read/write the current geometry description configuration from/to a yaml.
-/// @attention If a new geometry description class is added, it needs to be added to
-/// the std::tuple in the source file. Otherwise it wouldn't be covered.
-
-#include "MACE/Core/Geometry/Description/All.hxx"
 #include "MACE/Core/Geometry/DescriptionIO.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
-#include "MACE/Utility/TupleForEach.hxx"
+#include "MACE/Core/Geometry/IDescription.hxx"
 
 #include "yaml-cpp/yaml.h"
 
 #include <fstream>
-#include <tuple>
 
-namespace MACE::Core::Geometry::DescriptionIO {
+namespace MACE::Core::Geometry {
 
-using Utility::ObserverPtr;
-using Utility::TupleForEach;
-using namespace Description;
+std::vector<ObserverPtr<IDescription>> DescriptionIO::fgInstantiatedDescriptionList;
 
-/// @brief A std::tuple holding pointers to all geometry descriptions that will be read and written.
-/// @attention If there is a new geometry description class, add to this.
-static std::tuple<ObserverPtr<BeamDegrader>,
-                  ObserverPtr<BeamMonitor>,
-                  ObserverPtr<CDC>,
-                  ObserverPtr<Collimator>,
-                  ObserverPtr<EMCal>,
-                  ObserverPtr<EMCalField>,
-                  ObserverPtr<EMCalShield>,
-                  ObserverPtr<LinacField>,
-                  ObserverPtr<MCP>,
-                  ObserverPtr<SelectorField>,
-                  ObserverPtr<SpectrometerField>,
-                  ObserverPtr<SpectrometerMagnet>,
-                  ObserverPtr<SpectrometerShield>,
-                  ObserverPtr<Target>,
-                  ObserverPtr<TransportLine>,
-                  ObserverPtr<World>>
-    descriptionTuple;
-
-static void InitializeDescriptionTuple() {
-    auto GetDescriptionInstance = []<IsDescription T>(ObserverPtr<T>& descriptionPtr) {
-        descriptionPtr = std::addressof(T::Instance());
-    };
-    TupleForEach(descriptionTuple, GetDescriptionInstance);
-}
-
-void Read(const std::string& yamlFileName) {
-    InitializeDescriptionTuple();
+void DescriptionIO::ReadInstantiated(const std::string& yamlFileName) {
     const auto geomYaml = YAML::LoadFile(yamlFileName);
-    auto ReadDescription = [&geomYaml]<IsDescription T>(ObserverPtr<T> descriptionPtr) {
-        descriptionPtr->Read(geomYaml);
-    };
-    TupleForEach(std::as_const(descriptionTuple), ReadDescription);
+    for (auto&& description : std::as_const(fgInstantiatedDescriptionList)) {
+        description->Read(geomYaml);
+    }
 }
 
-void Write(const std::string& yamlFileName) {
-    InitializeDescriptionTuple();
+void DescriptionIO::WriteInstantiated(const std::string& yamlFileName) {
     YAML::Node geomYaml;
-    auto WriteDescription = [&geomYaml]<IsDescription T>(ObserverPtr<const T> descriptionPtr) {
-        descriptionPtr->Write(geomYaml);
-    };
-    TupleForEach(std::as_const(descriptionTuple), WriteDescription);
+    for (auto&& description : std::as_const(fgInstantiatedDescriptionList)) {
+        description->Write(geomYaml);
+    }
     std::ofstream yamlOut(yamlFileName, std::ios::out);
     yamlOut << geomYaml;
     yamlOut.close();
 }
 
-} // namespace MACE::Core::Geometry::DescriptionIO
+void DescriptionIO::AddInstance(ObserverPtr<IDescription> instance) {
+    fgInstantiatedDescriptionList.emplace_back(instance);
+}
+
+} // namespace MACE::Core::Geometry

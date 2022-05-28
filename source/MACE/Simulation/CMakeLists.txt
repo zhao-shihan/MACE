@@ -1,4 +1,4 @@
-project(Simulation)
+project(MACE)
 
 add_subdirectory(Generator)
 add_subdirectory(Physics)

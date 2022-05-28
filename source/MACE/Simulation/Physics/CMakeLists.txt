@@ -1,6 +1,6 @@
-project(Physics)
+project(MACE)
 
-file(GLOB_RECURSE Physics_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
+file(GLOB_RECURSE MACESimulationPhysics_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
 
-add_library(Physics ${Physics_srcs})
-target_link_libraries(Physics ${Geant4_LIBRARIES} Core Utility)
+add_library(MACESimulationPhysics ${MACESimulationPhysics_srcs})
+target_link_libraries(MACESimulationPhysics ${Geant4_LIBRARIES} MACECore MACEUtility)

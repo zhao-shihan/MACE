@@ -16,16 +16,16 @@ SelectorField::SelectorField() :
     fLength(30_cm),
     fZPosition(20_cm) {}
 
-void SelectorField::ReadImpl(const YAML::Node& node) {
-    fRadius = node["Radius"].as<decltype(fRadius)>();
-    fLength = node["Length"].as<decltype(fLength)>();
-    fZPosition = node["ZPosition"].as<decltype(fZPosition)>();
+void SelectorField::ReadDescriptionNode(const YAML::Node& node) {
+    ReadValueNode(node, "Radius", fRadius);
+    ReadValueNode(node, "Length", fLength);
+    ReadValueNode(node, "ZPosition", fZPosition);
 }
 
-void SelectorField::WriteImpl(YAML::Node& node) const {
-    node["Radius"] = fRadius;
-    node["Length"] = fLength;
-    node["ZPosition"] = fZPosition;
+void SelectorField::WriteDescriptionNode(YAML::Node& node) const {
+    WriteValueNode(node, "Radius", fRadius);
+    WriteValueNode(node, "Length", fLength);
+    WriteValueNode(node, "ZPosition", fZPosition);
 }
 
 } // namespace MACE::Core::Geometry::Description

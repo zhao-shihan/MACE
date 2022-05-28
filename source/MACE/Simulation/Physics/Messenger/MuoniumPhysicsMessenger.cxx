@@ -1,8 +1,5 @@
 #include "MACE/Simulation/Physics/Messenger/MuoniumPhysicsMessenger.hxx"
 
-#include "G4UIdirectory.hh"
-#include "G4UnitsTable.hh"
-
 namespace MACE::Simulation::Physics::Messenger {
 
 MuoniumPhysicsMessenger& MuoniumPhysicsMessenger::Instance() {

@@ -1,6 +1,6 @@
-project(Core)
+project(MACE)
 
-file(GLOB_RECURSE Core_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
+file(GLOB_RECURSE MACECore_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
 
-add_library(Core ${Core_srcs})
-target_link_libraries(Core ${ROOT_LIBRARIES} ${Geant4_LIBRARIES} yaml-cpp Utility)
+add_library(MACECore ${MACECore_srcs})
+target_link_libraries(MACECore ${ROOT_LIBRARIES} ${Geant4_LIBRARIES} ${YAML_CPP_LIBRARIES} MACEUtility)

@@ -37,8 +37,8 @@ public:
     HepGeom::Transform3D CalcTransform() const;
 
 private:
-    void ReadImpl(const YAML::Node& node) override;
-    void WriteImpl(YAML::Node& node) const override;
+    void ReadDescriptionNode(const YAML::Node& node) override;
+    void WriteDescriptionNode(YAML::Node& node) const override;
 
     static TFormula ConstructFormula(const char* booleanExpression) { return TFormula("TargetFineStructure", booleanExpression, false); }
 

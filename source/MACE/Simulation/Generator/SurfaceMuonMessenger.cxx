@@ -1,9 +1,7 @@
-#include "MACE/Simulation/Generator/SurfaceMuonMessenger.hxx"
 #include "MACE/Simulation/Generator/SurfaceMuon.hxx"
+#include "MACE/Simulation/Generator/SurfaceMuonMessenger.hxx"
 
 #include "G4SystemOfUnits.hh"
-#include "G4UIdirectory.hh"
-#include "G4UnitsTable.hh"
 
 namespace MACE::Simulation::Generator {
 

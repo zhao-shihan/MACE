@@ -1,11 +1,12 @@
 #include "MACE/Simulation/SimMACE/Action/PrimaryGeneratorAction.hxx"
 #include "MACE/Simulation/SimMACE/Messenger/PrimaryGeneratorActionMessenger.hxx"
+#include "MACE/Utility/LiteralUnit.hxx"
 
-#include "G4SystemOfUnits.hh"
-#include "G4UIdirectory.hh"
 #include "G4UnitsTable.hh"
 
 namespace MACE::Simulation::SimMACE::Messenger {
+
+using namespace MACE::Utility::LiteralUnit::Frequency;
 
 PrimaryGeneratorActionMessenger& PrimaryGeneratorActionMessenger::Instance() {
     static PrimaryGeneratorActionMessenger instance;
@@ -21,9 +22,9 @@ PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger() :
 
     // Introduce some useful units.
     // per unit time (for beam flux)
-    new G4UnitDefinition("second-1", "s-1", "Time-1", 1 / second);
-    new G4UnitDefinition("millisecond-1", "ms-1", "Time-1", 1 / millisecond);
-    new G4UnitDefinition("microsecond-1", "us-1", "Time-1", 1 / microsecond);
+    new G4UnitDefinition("second-1", "s-1", "Time-1", 1_s_1);
+    new G4UnitDefinition("millisecond-1", "ms-1", "Time-1", 1_ms_1);
+    new G4UnitDefinition("microsecond-1", "us-1", "Time-1", 1_us_1);
 
     fSetFlux.SetGuidance("Set muon flux.");
     fSetFlux.SetParameterName("flux", false);

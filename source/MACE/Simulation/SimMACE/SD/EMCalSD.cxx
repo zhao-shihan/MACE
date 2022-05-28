@@ -1,6 +1,6 @@
+#include "MACE/Simulation/SimMACE/Analysis.hxx"
 #include "MACE/Simulation/SimMACE/RunManager.hxx"
 #include "MACE/Simulation/SimMACE/SD/EMCalSD.hxx"
-#include "MACE/Simulation/SimMACE/Utility/Analysis.hxx"
 
 #include "G4Gamma.hh"
 #include "G4HCofThisEvent.hh"
@@ -10,7 +10,6 @@
 namespace MACE::Simulation::SimMACE::SD {
 
 using Hit::EMCalHit;
-using Utility::Analysis;
 
 EMCalSD::EMCalSD(const G4String& sdName) :
     G4VSensitiveDetector(sdName),

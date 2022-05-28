@@ -1,2 +1,2 @@
-project(SimCDC)
+project(MACE)
 

@@ -5,14 +5,14 @@
 #include "MACE/Simulation/SimTarget/Action/RunAction.hxx"
 #include "MACE/Simulation/SimTarget/Action/SteppingAction.hxx"
 #include "MACE/Simulation/SimTarget/Action/TrackingAction.hxx"
-#include "MACE/Utility/MPITool/G4MPIRunManager.hxx"
+#include "MACE/Utility/G4Util/MPIRunManager.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 namespace MACE::Simulation::SimTarget {
 
 using namespace Action;
 
-class RunManager final : public MACE::Utility::MPITool::G4MPIRunManager {
+class RunManager final : public Utility::G4Util::MPIRunManager {
 public:
     static auto& Instance() { return *static_cast<RunManager*>(GetRunManager()); }
 
