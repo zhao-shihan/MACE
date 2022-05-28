@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/Simulation/SimTarget/Action/DetectorConstruction.hxx"
+#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWithABool.hh"
@@ -11,6 +12,7 @@
 
 namespace MACE::Simulation::SimTarget::Messenger {
 
+using Action::DetectorConstruction;
 using Utility::ObserverPtr;
 
 class GeometryMessenger final : public G4UImessenger {
@@ -24,12 +26,12 @@ private:
     GeometryMessenger& operator=(const GeometryMessenger&) = delete;
 
 public:
-    void SetTo(ObserverPtr<Action::DetectorConstruction> dc) { fDetectorConstruction = dc; }
+    void SetTo(ObserverPtr<DetectorConstruction> dc) { fDetectorConstruction = dc; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    ObserverPtr<Action::DetectorConstruction> fDetectorConstruction = nullptr;
+    ObserverPtr<DetectorConstruction> fDetectorConstruction = nullptr;
 
     G4UIdirectory fDirectory;
     G4UIcmdWith3VectorAndUnit fSetWorldHalfExtent;

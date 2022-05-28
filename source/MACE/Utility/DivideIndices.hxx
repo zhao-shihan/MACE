@@ -36,13 +36,13 @@ struct DividedIndexRange {
 /// @param nTakers Number of workers
 /// @return [job index begin, job index end, job index step] for each worker.
 /// e.g. nJobs = 74, nWorkers = 7,
-///   taker 0: [0, 71, 7, 11]
-///   taker 1: [1, 72, 7, 11]
-///   taker 2: [2, 73, 7, 11]
-///   taker 3: [3, 74, 7, 11]
-///   taker 4: [4, 68, 7, 10]
-///   taker 5: [5, 69, 7, 10]
-///   taker 6: [6, 70, 7, 10]
+///   taker 0: [0, 77, 7, 11]
+///   taker 1: [1, 78, 7, 11]
+///   taker 2: [2, 79, 7, 11]
+///   taker 3: [3, 80, 7, 11]
+///   taker 4: [4, 74, 7, 10]
+///   taker 5: [5, 75, 7, 10]
+///   taker 6: [6, 76, 7, 10]
 template<std::integral Index_t>
 std::vector<DividedIndexRange<Index_t>> DivideIndexRangeIndexWise(Index_t begin, Index_t end, Index_t nTakers);
 template<std::integral Index_t>
