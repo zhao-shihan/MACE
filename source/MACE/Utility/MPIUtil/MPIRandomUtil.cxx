@@ -23,7 +23,7 @@ void MPIReSeedCLHEPRandom(CLHEP::HepRandomEngine* randEng) {
         do {
             long newSeed;
             do {
-                newSeed = seedMaxLD * std::nextafter((long double)randEng->flat(), -1.0L);
+                newSeed = seedMaxLD * std::nextafter((long double)randEng->flat(), -1.0L) - uniqueSeeds.size();
             } while (newSeed <= 0);
             uniqueSeeds.emplace(newSeed);
         } while (uniqueSeeds.size() < (size_t)commSize);
