@@ -74,17 +74,9 @@ public:
     friend ShortString operator+(const char* lhs, const ShortString& rhs) noexcept { return ShortString(lhs) += rhs; }
     friend ShortString operator+(ShortString lhs, char rhs) noexcept { return lhs += rhs; }
     friend ShortString operator+(char lhs, const ShortString& rhs) noexcept { return ShortString(lhs) += rhs; }
-    template<typename T>
-    friend ShortString operator+(ShortString lhs, T rhs) noexcept requires(std::is_arithmetic_v<T> and not std::same_as<T, char>) { return lhs += rhs; }
-    template<typename T>
-    friend ShortString operator+(T lhs, ShortString rhs) noexcept requires(std::is_arithmetic_v<T> and not std::same_as<T, char>);
 
 private:
     char fString[fgCapacity];
-
-    static std::stringstream fgSS;
 };
 
 } // namespace MACE::Utility
-
-#include "MACE/Utility/ShortString.ixx"
