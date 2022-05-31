@@ -3,7 +3,7 @@ project(Test)
 include(${MACE_PROJECT_CMAKE_DIR}/MACECompileWarnings.cmake)
 include(${MACE_PROJECT_CMAKE_DIR}/MACEIncludes.cmake)
 
-add_subdirectory(PowInt)
+add_subdirectory(PowZ)
 
 add_executable(CommonMPIWrapper CommonMPIWrapper.cxx)
 target_link_libraries(CommonMPIWrapper MACEUtility ${MPI_C_LIBRARIES})

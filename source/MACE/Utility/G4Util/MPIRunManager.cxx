@@ -88,7 +88,7 @@ void MPIRunManager::TerminateOneEvent() {
     // stop the event timer
     fEventWallTime = std::chrono::steady_clock::now() - fEventBeginWallTime;
     fNAvgEventWallTime += fEventWallTime.count();
-    fNDevEventWallTime += PowInt<2>(fEventWallTime.count() - fNAvgEventWallTime / numberOfEventProcessed);
+    fNDevEventWallTime += PowZ<2>(fEventWallTime.count() - fNAvgEventWallTime / numberOfEventProcessed);
     // report
     EventEndReport();
 }
