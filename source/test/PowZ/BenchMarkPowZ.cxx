@@ -11,29 +11,27 @@ using namespace std::chrono;
 using std::complex;
 
 template<typename T, int N>
-void BenchmarkPowZ(T common) {
-    constexpr int warmUpCycle = 10000;
+T BenchmarkPowZ(T common) {
+    constexpr int warmUpCycle = 100000;
     constexpr int benchmarkCycle = 100000;
 
-    std::vector<T> dummy;
-    dummy.reserve(benchmarkCycle);
-    steady_clock::time_point begin, end;
+    volatile T dummy; // "volatile": prevent optimization
+    steady_clock::time_point begin;
+    steady_clock::time_point end;
 
     // background
     // warm up
     begin = steady_clock::now();
     for (int i = 0; i < warmUpCycle; ++i) {
-        dummy.emplace_back(common + i);
+        dummy = common + i; // "+i": prevent optimization
     }
     end = steady_clock::now();
-    dummy.clear();
     // benchmark
     begin = steady_clock::now();
     for (int i = 0; i < benchmarkCycle; ++i) {
-        dummy.emplace_back(common + i);
+        dummy = common + i;
     }
     end = steady_clock::now();
-    dummy.clear();
 
     std::cout << "Background: " << duration<double, std::milli>(end - begin).count() << " ms\t\t";
 
@@ -41,17 +39,15 @@ void BenchmarkPowZ(T common) {
     // warm up
     begin = steady_clock::now();
     for (int i = 0; i < warmUpCycle; ++i) {
-        dummy.emplace_back(PowZ<N>(common + i));
+        dummy = PowZ<N>(common + i);
     }
     end = steady_clock::now();
-    dummy.clear();
     // benchmark
     begin = steady_clock::now();
     for (int i = 0; i < benchmarkCycle; ++i) {
-        dummy.emplace_back(PowZ<N>(common + i));
+        dummy = PowZ<N>(common + i);
     }
     end = steady_clock::now();
-    dummy.clear();
 
     const duration<double, std::milli> powIntTime = end - begin;
     std::cout << "PowZ<" << N << ">(x):\t" << powIntTime.count() << " ms\t";
@@ -60,24 +56,24 @@ void BenchmarkPowZ(T common) {
     // warm up
     begin = steady_clock::now();
     for (int i = 0; i < warmUpCycle; ++i) {
-        dummy.emplace_back(std::pow(common + i, N));
+        dummy = std::pow(common + i, N);
     }
     end = steady_clock::now();
-    dummy.clear();
     // benchmark
     begin = steady_clock::now();
     for (int i = 0; i < benchmarkCycle; ++i) {
-        dummy.emplace_back(std::pow(common + i, N));
+        dummy = std::pow(common + i, N);
     }
     end = steady_clock::now();
-    dummy.clear();
 
     const duration<double, std::milli> powTime = end - begin;
     std::cout << "pow(x, " << N << "):\t" << powTime.count() << " ms\tspeedup = " << powTime.count() / powIntTime.count() << std::endl;
+
+    return dummy; // surpress "unused-but-set"
 }
 
 int main(int argc, char* argv[]) {
-    const auto common = (argc == 1) ? 0 : std::stoi(argv[1]);
+    const auto common = (argc == 1) ? 2 : std::stoi(argv[1]);
 
 #define MACE_BENCHMARK_POWZ_INT(Type)                       \
     std::cout << #Type << ", power zero:" << std::endl;     \
@@ -135,10 +131,12 @@ int main(int argc, char* argv[]) {
     BenchmarkPowZ<Type, -500>(common)
 
     MACE_BENCHMARK_POWZ_INT(char);
+    MACE_BENCHMARK_POWZ_INT(signed char);
     MACE_BENCHMARK_POWZ_INT(unsigned char);
-    MACE_BENCHMARK_POWZ_INT(wchar_t);
+    MACE_BENCHMARK_POWZ_INT(char8_t);
     MACE_BENCHMARK_POWZ_INT(char16_t);
     MACE_BENCHMARK_POWZ_INT(char32_t);
+    MACE_BENCHMARK_POWZ_INT(wchar_t);
     MACE_BENCHMARK_POWZ_INT(short);
     MACE_BENCHMARK_POWZ_INT(unsigned short);
     MACE_BENCHMARK_POWZ_INT(int);
