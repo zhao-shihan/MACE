@@ -2,10 +2,12 @@
 #include "MACE/Simulation/SimMACE/Field/SecondBendField.hxx"
 #include "MACE/Simulation/SimMACE/Messenger/FieldMessenger.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
+#include "MACE/Utility/Math/Hypot.hxx"
 
 namespace MACE::Simulation::SimMACE::Field {
 
 using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
+using namespace MACE::Utility::Math;
 
 SecondBendField::SecondBendField() :
     G4MagneticField(),
@@ -17,7 +19,7 @@ SecondBendField::SecondBendField() :
 }
 
 void SecondBendField::GetFieldValue(const G4double* x, G4double* B) const {
-    const auto r = std::sqrt((x[0] - fX0) * (x[0] - fX0) + (x[2] - fZ0) * (x[2] - fZ0));
+    const auto r = Hypot(x[0] - fX0, x[2] - fZ0);
     B[0] = -(x[2] - fZ0) / r * fB;
     B[1] = 0;
     B[2] = (x[0] - fX0) / r * fB;
