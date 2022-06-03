@@ -1,7 +1,7 @@
 #include "MACE/Utility/G4Util/CheckMPIAvailability.hxx"
 #include "MACE/Utility/G4Util/MPIRunManager.hxx"
 #include "MACE/Utility/G4Util/MPIRunMessenger.hxx"
-#include "MACE/Utility/IntegerPower.hxx"
+#include "MACE/Utility/Math/IntegerPower.hxx"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
 #include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
 #include "MACE/Utility/MPIUtil/MPIRandomUtil.hxx"
@@ -16,6 +16,7 @@
 
 namespace MACE::Utility::G4Util {
 
+using namespace MACE::Utility::Math;
 using namespace MACE::Utility::MPIUtil;
 
 MPIRunManager::MPIRunManager() :
