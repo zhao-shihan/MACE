@@ -19,7 +19,7 @@ set(MACE_BUILDIN_YAML_CPP_DIR ${MACE_PROJECT_SRC_DIR}/external/yaml-cpp)
 # Basic options
 option(MACE_ENABLE_VIS "Build MACE with visualization." ON)
 option(MACE_BUILDIN_YAML_CPP "Use build-in yaml-cpp." OFF)
-option(MACE_BUILD_TEST "Build MACE with test module." ON)
+option(MACE_BUILD_TEST "Build MACE with test programs." ON)
 
 # Advance options
 option(MACE_SHOW_ALL_COMPILE_WARNINGS "Do not surpress any compile warnings, even if they are raised from external dependencies." OFF)
