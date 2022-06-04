@@ -75,151 +75,85 @@ T BenchmarkPowZ(T common) {
 int main(int argc, char* argv[]) {
     const auto common = (argc == 1) ? 1 : std::stoi(argv[1]);
 
-#define MACE_BENCHMARK_POWZ(Type)                           \
-    std::cout << #Type << ", power zero:" << std::endl;     \
-    BenchmarkPowZ<Type, 0>(common);                         \
-    std::cout << #Type << ", positive power:" << std::endl; \
-    BenchmarkPowZ<Type, (1 << 0)>(common);                  \
-    BenchmarkPowZ<Type, (1 << 0) + 1>(common);              \
-    BenchmarkPowZ<Type, (1 << 1)>(common);                  \
-    BenchmarkPowZ<Type, (1 << 1) + 1>(common);              \
-    BenchmarkPowZ<Type, (1 << 2)>(common);                  \
-    BenchmarkPowZ<Type, (1 << 2) + 1>(common);              \
-    BenchmarkPowZ<Type, (1 << 3)>(common);                  \
-    BenchmarkPowZ<Type, (1 << 3) + 1>(common);              \
-    BenchmarkPowZ<Type, (1 << 4)>(common);                  \
-    BenchmarkPowZ<Type, (1 << 4) + 1>(common);              \
-    BenchmarkPowZ<Type, (1 << 5)>(common);                  \
-    BenchmarkPowZ<Type, (1 << 5) + 1>(common);              \
-    BenchmarkPowZ<Type, (1 << 6)>(common);                  \
-    BenchmarkPowZ<Type, (1 << 6) + 1>(common);              \
-    BenchmarkPowZ<Type, (1 << 7)>(common);                  \
-    BenchmarkPowZ<Type, (1 << 7) + 1>(common);              \
-    BenchmarkPowZ<Type, (1 << 8)>(common);                  \
-    BenchmarkPowZ<Type, (1 << 8) + 1>(common);              \
-    BenchmarkPowZ<Type, (1 << 9)>(common);                  \
-    BenchmarkPowZ<Type, (1 << 9) + 1>(common);              \
-    BenchmarkPowZ<Type, (1 << 10)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 10) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 11)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 11) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 12)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 12) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 13)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 13) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 14)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 14) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 15)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 15) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 16)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 16) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 17)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 17) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 18)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 18) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 19)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 19) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 20)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 20) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 21)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 21) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 22)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 22) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 23)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 23) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 24)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 24) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 25)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 25) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 26)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 26) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 27)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 27) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 28)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 28) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 29)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 29) + 1>(common);             \
-    BenchmarkPowZ<Type, (1 << 30)>(common);                 \
-    BenchmarkPowZ<Type, (1 << 30) + 1>(common);             \
-    std::cout << #Type << ", negative power:" << std::endl; \
-    BenchmarkPowZ<Type, -(1 << 0)>(common);                 \
-    BenchmarkPowZ<Type, -(1 << 0) - 1>(common);             \
-    BenchmarkPowZ<Type, -(1 << 1)>(common);                 \
-    BenchmarkPowZ<Type, -(1 << 1) - 1>(common);             \
-    BenchmarkPowZ<Type, -(1 << 2)>(common);                 \
-    BenchmarkPowZ<Type, -(1 << 2) - 1>(common);             \
-    BenchmarkPowZ<Type, -(1 << 3)>(common);                 \
-    BenchmarkPowZ<Type, -(1 << 3) - 1>(common);             \
-    BenchmarkPowZ<Type, -(1 << 4)>(common);                 \
-    BenchmarkPowZ<Type, -(1 << 4) - 1>(common);             \
-    BenchmarkPowZ<Type, -(1 << 5)>(common);                 \
-    BenchmarkPowZ<Type, -(1 << 5) - 1>(common);             \
-    BenchmarkPowZ<Type, -(1 << 6)>(common);                 \
-    BenchmarkPowZ<Type, -(1 << 6) - 1>(common);             \
-    BenchmarkPowZ<Type, -(1 << 7)>(common);                 \
-    BenchmarkPowZ<Type, -(1 << 7) - 1>(common);             \
-    BenchmarkPowZ<Type, -(1 << 8)>(common);                 \
-    BenchmarkPowZ<Type, -(1 << 8) - 1>(common);             \
-    BenchmarkPowZ<Type, -(1 << 9)>(common);                 \
-    BenchmarkPowZ<Type, -(1 << 9) - 1>(common);             \
-    BenchmarkPowZ<Type, -(1 << 10)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 10) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 11)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 11) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 12)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 12) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 13)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 13) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 14)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 14) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 15)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 15) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 16)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 16) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 17)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 17) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 18)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 18) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 19)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 19) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 20)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 20) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 21)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 21) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 22)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 22) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 23)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 23) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 24)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 24) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 25)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 25) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 26)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 26) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 27)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 27) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 28)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 28) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 29)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 29) - 1>(common);            \
-    BenchmarkPowZ<Type, -(1 << 30)>(common);                \
-    BenchmarkPowZ<Type, -(1 << 30) - 1>(common);
+#define MACE_BENCHMARK_POWZ(Type)                       \
+    std::cout << #Type << ", power zero:" << std::endl; \
+    BenchmarkPowZ<Type, 0>(common);                     \
+    std::cout << #Type << ", power 4^n:" << std::endl;  \
+    BenchmarkPowZ<Type, PowI<4, 0>()>(common);          \
+    BenchmarkPowZ<Type, PowI<4, 1>()>(common);          \
+    BenchmarkPowZ<Type, PowI<4, 2>()>(common);          \
+    BenchmarkPowZ<Type, PowI<4, 3>()>(common);          \
+    BenchmarkPowZ<Type, PowI<4, 4>()>(common);          \
+    BenchmarkPowZ<Type, PowI<4, 5>()>(common);          \
+    BenchmarkPowZ<Type, PowI<4, 6>()>(common);          \
+    BenchmarkPowZ<Type, PowI<4, 7>()>(common);          \
+    BenchmarkPowZ<Type, PowI<4, 8>()>(common);          \
+    BenchmarkPowZ<Type, PowI<4, 9>()>(common);          \
+    BenchmarkPowZ<Type, PowI<4, 10>()>(common);         \
+    BenchmarkPowZ<Type, PowI<4, 11>()>(common);         \
+    BenchmarkPowZ<Type, PowI<4, 12>()>(common);         \
+    BenchmarkPowZ<Type, PowI<4, 13>()>(common);         \
+    BenchmarkPowZ<Type, PowI<4, 14>()>(common);         \
+    BenchmarkPowZ<Type, PowI<4, 15>()>(common);         \
+    std::cout << #Type << ", power -4^n:" << std::endl; \
+    BenchmarkPowZ<Type, -PowI<4, 0>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<4, 1>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<4, 2>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<4, 3>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<4, 4>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<4, 5>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<4, 6>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<4, 7>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<4, 8>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<4, 9>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<4, 10>()>(common);        \
+    BenchmarkPowZ<Type, -PowI<4, 11>()>(common);        \
+    BenchmarkPowZ<Type, -PowI<4, 12>()>(common);        \
+    BenchmarkPowZ<Type, -PowI<4, 13>()>(common);        \
+    BenchmarkPowZ<Type, -PowI<4, 14>()>(common);        \
+    BenchmarkPowZ<Type, -PowI<4, 15>()>(common);        \
+    std::cout << #Type << ", power 7^n:" << std::endl;  \
+    BenchmarkPowZ<Type, PowI<7, 0>()>(common);          \
+    BenchmarkPowZ<Type, PowI<7, 1>()>(common);          \
+    BenchmarkPowZ<Type, PowI<7, 2>()>(common);          \
+    BenchmarkPowZ<Type, PowI<7, 3>()>(common);          \
+    BenchmarkPowZ<Type, PowI<7, 4>()>(common);          \
+    BenchmarkPowZ<Type, PowI<7, 5>()>(common);          \
+    BenchmarkPowZ<Type, PowI<7, 6>()>(common);          \
+    BenchmarkPowZ<Type, PowI<7, 7>()>(common);          \
+    BenchmarkPowZ<Type, PowI<7, 8>()>(common);          \
+    BenchmarkPowZ<Type, PowI<7, 9>()>(common);          \
+    BenchmarkPowZ<Type, PowI<7, 10>()>(common);         \
+    BenchmarkPowZ<Type, PowI<7, 11>()>(common);         \
+    std::cout << #Type << ", power -7^n:" << std::endl; \
+    BenchmarkPowZ<Type, -PowI<7, 0>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<7, 1>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<7, 2>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<7, 3>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<7, 4>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<7, 5>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<7, 6>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<7, 7>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<7, 8>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<7, 9>()>(common);         \
+    BenchmarkPowZ<Type, -PowI<7, 10>()>(common);        \
+    BenchmarkPowZ<Type, -PowI<7, 11>()>(common);
 
-    MACE_BENCHMARK_POWZ(char);
-    MACE_BENCHMARK_POWZ(signed char);
-    MACE_BENCHMARK_POWZ(unsigned char);
-    MACE_BENCHMARK_POWZ(char8_t);
-    MACE_BENCHMARK_POWZ(char16_t);
-    MACE_BENCHMARK_POWZ(char32_t);
-    MACE_BENCHMARK_POWZ(wchar_t);
-    MACE_BENCHMARK_POWZ(short);
-    MACE_BENCHMARK_POWZ(unsigned short);
-    MACE_BENCHMARK_POWZ(int);
-    MACE_BENCHMARK_POWZ(unsigned int);
-    MACE_BENCHMARK_POWZ(long);
-    MACE_BENCHMARK_POWZ(unsigned long);
-    MACE_BENCHMARK_POWZ(long long);
-    MACE_BENCHMARK_POWZ(unsigned long long);
+    // MACE_BENCHMARK_POWZ(char);
+    // MACE_BENCHMARK_POWZ(signed char);
+    // MACE_BENCHMARK_POWZ(unsigned char);
+    // MACE_BENCHMARK_POWZ(char8_t);
+    // MACE_BENCHMARK_POWZ(char16_t);
+    // MACE_BENCHMARK_POWZ(char32_t);
+    // MACE_BENCHMARK_POWZ(wchar_t);
+    // MACE_BENCHMARK_POWZ(short);
+    // MACE_BENCHMARK_POWZ(unsigned short);
+    // MACE_BENCHMARK_POWZ(int);
+    // MACE_BENCHMARK_POWZ(unsigned int);
+    // MACE_BENCHMARK_POWZ(long);
+    // MACE_BENCHMARK_POWZ(unsigned long);
+    // MACE_BENCHMARK_POWZ(long long);
+    // MACE_BENCHMARK_POWZ(unsigned long long);
     MACE_BENCHMARK_POWZ(float);
     MACE_BENCHMARK_POWZ(double);
     MACE_BENCHMARK_POWZ(long double);

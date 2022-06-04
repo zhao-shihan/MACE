@@ -15,7 +15,7 @@ constexpr bool IsEven(std::integral auto n) {
 
 template<intmax_t N>
 consteval bool IsOdd() {
-    return N & 1;
+    return IsOdd(N);
 }
 
 template<intmax_t N>

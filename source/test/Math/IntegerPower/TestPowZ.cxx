@@ -11,9 +11,12 @@
 using namespace MACE::Utility::Math;
 
 std::string TestEqual(auto a, auto real, auto tolerance) {
+    if (std::abs(real) <= std::numeric_limits<decltype(real)>::min() or std::isinf(real)) {
+        return "OVERFLOW";
+    }
     const auto relErr = a / real - 1;
     if (std::abs(relErr) > tolerance) {
-        return std::string("***FAIL/OVERFLOW***, relErr = ").append(std::to_string(relErr * 1e16)).append("e-16");
+        return std::string("***FAIL***, relErr = ").append(std::to_string(relErr * 1e16)).append("e-16");
     }
     return "PASS";
 };
@@ -21,14 +24,14 @@ std::string TestEqual(auto a, auto real, auto tolerance) {
 template<int N>
 void TestPowZ(auto xI, auto xL, auto xLL, auto xUL, auto xULL, auto xF, auto xD, auto xLD) {
     std::cout << std::setprecision(18)
-              << "(int)                 " << TestEqual(PowZ<N>(xI), std::pow(xI, N), 128 * std::numeric_limits<double>::epsilon()) << " --> PowZ<" << N << ">(x) = " << PowZ<N>(xI) << ", pow(x, " << N << ") = " << std::pow(xI, N) << '\n'
-              << "(long)                " << TestEqual(PowZ<N>(xL), std::pow(xL, N), 128 * std::numeric_limits<double>::epsilon()) << " --> PowZ<" << N << ">(x) = " << PowZ<N>(xL) << ", pow(x, " << N << ") = " << std::pow(xL, N) << '\n'
-              << "(long long)           " << TestEqual(PowZ<N>(xLL), std::pow(xLL, N), 128 * std::numeric_limits<double>::epsilon()) << " --> PowZ<" << N << ">(x) = " << PowZ<N>(xLL) << ", pow(x, " << N << ") = " << std::pow(xLL, N) << '\n'
-              << "(unsigned long)       " << TestEqual(PowZ<N>(xUL), std::pow(xUL, N), 128 * std::numeric_limits<double>::epsilon()) << " --> PowZ<" << N << ">(x) = " << PowZ<N>(xUL) << ", pow(x, " << N << ") = " << std::pow(xUL, N) << '\n'
-              << "(unsigned long long)  " << TestEqual(PowZ<N>(xULL), std::pow(xULL, N), 128 * std::numeric_limits<double>::epsilon()) << " --> PowZ<" << N << ">(x) = " << PowZ<N>(xULL) << ", pow(x, " << N << ") = " << std::pow(xULL, N) << '\n'
-              << "(float)               " << TestEqual(PowZ<N>(xF), std::pow(xF, N), 128 * std::numeric_limits<float>::epsilon()) << " --> PowZ<" << N << ">(x) = " << PowZ<N>(xF) << ", pow(x, " << N << ") = " << std::pow(xF, N) << '\n'
-              << "(double)              " << TestEqual(PowZ<N>(xD), std::pow(xD, N), 128 * std::numeric_limits<double>::epsilon()) << " --> PowZ<" << N << ">(x) = " << PowZ<N>(xD) << ", pow(x, " << N << ") = " << std::pow(xD, N) << '\n'
-              << "(long double)         " << TestEqual(PowZ<N>(xLD), std::pow(xLD, N), 128 * std::numeric_limits<long double>::epsilon()) << " --> PowZ<" << N << ">(x) = " << PowZ<N>(xLD) << ", pow(x, " << N << ") = " << std::pow(xLD, N) << '\n'
+              << "(int)                 " << TestEqual(PowZ<N>(xI), std::pow(xI, N), std::abs(N) * std::numeric_limits<double>::epsilon()) << " --> PowZ<" << N << ">(x) = " << PowZ<N>(xI) << ", pow(x, " << N << ") = " << std::pow(xI, N) << '\n'
+              << "(long)                " << TestEqual(PowZ<N>(xL), std::pow(xL, N), std::abs(N) * std::numeric_limits<double>::epsilon()) << " --> PowZ<" << N << ">(x) = " << PowZ<N>(xL) << ", pow(x, " << N << ") = " << std::pow(xL, N) << '\n'
+              << "(long long)           " << TestEqual(PowZ<N>(xLL), std::pow(xLL, N), std::abs(N) * std::numeric_limits<double>::epsilon()) << " --> PowZ<" << N << ">(x) = " << PowZ<N>(xLL) << ", pow(x, " << N << ") = " << std::pow(xLL, N) << '\n'
+              << "(unsigned long)       " << TestEqual(PowZ<N>(xUL), std::pow(xUL, N), std::abs(N) * std::numeric_limits<double>::epsilon()) << " --> PowZ<" << N << ">(x) = " << PowZ<N>(xUL) << ", pow(x, " << N << ") = " << std::pow(xUL, N) << '\n'
+              << "(unsigned long long)  " << TestEqual(PowZ<N>(xULL), std::pow(xULL, N), std::abs(N) * std::numeric_limits<double>::epsilon()) << " --> PowZ<" << N << ">(x) = " << PowZ<N>(xULL) << ", pow(x, " << N << ") = " << std::pow(xULL, N) << '\n'
+              << "(float)               " << TestEqual(PowZ<N>(xF), std::pow(xF, (float)N), std::abs(N) * std::numeric_limits<float>::epsilon()) << " --> PowZ<" << N << ">(x) = " << PowZ<N>(xF) << ", pow(x, " << N << ") = " << std::pow(xF, (float)N) << '\n'
+              << "(double)              " << TestEqual(PowZ<N>(xD), std::pow(xD, N), std::abs(N) * std::numeric_limits<double>::epsilon()) << " --> PowZ<" << N << ">(x) = " << PowZ<N>(xD) << ", pow(x, " << N << ") = " << std::pow(xD, N) << '\n'
+              << "(long double)         " << TestEqual(PowZ<N>(xLD), std::pow(xLD, (long double)N), std::abs(N) * std::numeric_limits<long double>::epsilon()) << " --> PowZ<" << N << ">(x) = " << PowZ<N>(xLD) << ", pow(x, " << N << ") = " << std::pow(xLD, (long double)N) << '\n'
               << std::endl;
 }
 
