@@ -37,7 +37,7 @@ constexpr auto PowI(std::integral auto m) {
 // Pure compile-time version:
 
 template<intmax_t M, unsigned N>
-consteval intmax_t PowI() {
+consteval auto PowI() {
     return PowI<N>(M);
 }
 
@@ -73,7 +73,7 @@ constexpr auto PowZ(std::floating_point auto x) {
 // Intergral version:
 
 template<int N, std::floating_point F = double>
-constexpr F PowZ(std::integral auto x) {
+constexpr auto PowZ(std::integral auto x) {
     return PowZ<N>(F(x));
 }
 
