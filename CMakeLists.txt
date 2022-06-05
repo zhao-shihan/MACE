@@ -32,7 +32,8 @@ option(MACE_SHOW_ALL_COMPILE_WARNINGS "Do not surpress any compile warnings, eve
 find_package(MPI 3.0 REQUIRED C)
 message(STATUS "MACE uses MPI_C includes from: ${MPI_C_INCLUDE_DIRS}")
 message(STATUS "MACE uses MPI_C libraries: ${MPI_C_LIBRARIES}")
-add_definitions(-DOMPI_SKIP_MPICXX) # inform OpenMPI not to bring mpicxx in
+add_definitions(-DOMPI_SKIP_MPICXX) # inform OpenMPI not to bring mpicxx in, it's necessary for most cases.
+add_definitions(-DMPICH_SKIP_MPICXX) # inform MPICH/IntelMPI not to bring mpicxx in, seems unnecessary but more consistent.
 
 # Geant4
 if(MACE_ENABLE_VIS)
