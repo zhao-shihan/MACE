@@ -31,6 +31,6 @@
 # Name of output
 /MACE/Analysis/SetResultName              SimMACE_result
 
-/run/printProgress 1
+/MPIRun/SetPrintProgress 1
 /run/beamOn 80
 #/mpi/status
