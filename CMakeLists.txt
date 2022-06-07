@@ -67,6 +67,20 @@ message(STATUS "MACE uses yaml-cpp includes from: ${YAML_CPP_INCLUDE_DIR}")
 message(STATUS "MACE uses yaml-cpp libraries: ${YAML_CPP_LIBRARIES}")
 
 # ================================================================================================================================
+# MACE build type
+# ================================================================================================================================
+
+if(CMAKE_CONFIGURATION_TYPES)
+    message(STATUS "MACE build type: ${CMAKE_CONFIGURATION_TYPES}")
+else()
+    if(NOT CMAKE_BUILD_TYPE)
+        # Default to "release"
+        set(CMAKE_BUILD_TYPE "Release")
+    endif()
+    message(STATUS "MACE build type: ${CMAKE_BUILD_TYPE}")
+endif()
+
+# ================================================================================================================================
 # MACE at C++20
 # ================================================================================================================================
 
