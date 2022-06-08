@@ -22,7 +22,15 @@ option(MACE_BUILDIN_YAML_CPP "Use build-in yaml-cpp." OFF)
 option(MACE_BUILD_TEST "Build MACE with test programs." ON)
 
 # Advance options
-option(MACE_SHOW_ALL_COMPILE_WARNINGS "Do not surpress any compile warnings, even if they are raised from external dependencies." OFF)
+option(MACE_SURPRESS_COMPILE_WARNINGS "Surpress compile warnings raise from external dependencies." ON)
+option(MACE_SHOW_EFFCXX_COMPILE_WARNINGS "Show -Weffc++ compile warnings. (gcc only)" OFF)
+option(MACE_SHOW_ALL_COMPILE_WARNINGS "Show all compile warnings. Once turned on, MACE_SURPRESS_COMPILE_WARNINGS will be turned off, and MACE_SHOW_EFFCXX_COMPILE_WARNINGS will be turned on" OFF)
+
+# Option relationships
+if(MACE_SHOW_ALL_COMPILE_WARNINGS)
+    set(MACE_SURPRESS_COMPILE_WARNINGS OFF)
+    set(MACE_SHOW_EFFCXX_COMPILE_WARNINGS ON)
+endif()
 
 # ================================================================================================================================
 # Dependencies
