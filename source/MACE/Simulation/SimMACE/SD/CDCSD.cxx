@@ -15,6 +15,7 @@ using Hit::CDCHit;
 
 CDCSD::CDCSD(const G4String& sdName) :
     G4VSensitiveDetector(sdName),
+    fEventID(-1),
     fHitsCollection(nullptr),
     fEnteredPointList(),
     fSenseWireMap(0) {

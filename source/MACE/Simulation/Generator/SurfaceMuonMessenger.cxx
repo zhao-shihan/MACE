@@ -12,6 +12,7 @@ SurfaceMuonMessenger& SurfaceMuonMessenger::Instance() {
 
 SurfaceMuonMessenger::SurfaceMuonMessenger() :
     G4UImessenger(),
+    fSurfaceMuonGenerator(nullptr),
     fDirectory("/MACE/Generator/SurfaceMuon/"),
     fSetMomentum("/MACE/Generator/SurfaceMuon/SetMomentum", this),
     fSetMomentumSpreadRMS("/MACE/Generator/SurfaceMuon/SetMomentumSpreadRMS", this),

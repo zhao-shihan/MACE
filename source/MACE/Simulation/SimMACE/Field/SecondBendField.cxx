@@ -11,7 +11,9 @@ using namespace MACE::Utility::Math;
 
 SecondBendField::SecondBendField() :
     G4MagneticField(),
-    fB(0.1_T) {
+    fB(0.1_T),
+    fX0(),
+    fZ0() {
     Messenger::FieldMessenger::Instance().Set(this);
     const auto& fieldTransform = Core::Geometry::Description::TransportLine::Instance().SecondBendTransform();
     fX0 = fieldTransform.dx();

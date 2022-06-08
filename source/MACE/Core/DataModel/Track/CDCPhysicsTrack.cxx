@@ -17,7 +17,11 @@ CDCPhysicsTrack::CDCPhysicsTrack() noexcept :
     fParticle(fgParticle.GetValue()) {}
 
 CDCPhysicsTrack::CDCPhysicsTrack(const CDCHelixTrack& helix, Double_t phiVertex, Double_t B, Double_t mass) :
-    ICDCTrack(static_cast<const ICDCTrack&>(helix)) {
+    ICDCTrack(static_cast<const ICDCTrack&>(helix)),
+    fVertexPosition(),
+    fVertexEnergy(),
+    fVertexMomentum(),
+    fParticle() {
     std::tie(fVertexPosition,
              fVertexEnergy,
              fVertexMomentum,

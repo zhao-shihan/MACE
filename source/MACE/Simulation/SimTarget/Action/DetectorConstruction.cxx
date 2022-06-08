@@ -11,6 +11,8 @@ using namespace MACE::Utility::LiteralUnit::Density;
 using namespace MACE::Utility::LiteralUnit::Temperature;
 
 DetectorConstruction::DetectorConstruction() :
+    fBeamDegrader(nullptr),
+    fBeamMonitor(nullptr),
     fTarget(nullptr),
     fWorld(nullptr),
     fDensity(30_mg_cm3),

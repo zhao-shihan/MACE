@@ -10,16 +10,19 @@ FloatBranchSocket CDCHelixSimTrack::fgTrueAlpha("trueAlpha", 0);
 
 CDCHelixSimTrack::CDCHelixSimTrack() noexcept :
     CDCHelixTrack(),
-    ICDCSimTrack() {
-    SetTrueCenter(fgTrueCenter.GetValue<double>());
-    SetTrueRadius(fgTrueRadius.GetValue());
-    SetTrueZ0(fgTrueZ0.GetValue());
-    SetTrueAlpha(fgTrueAlpha.GetValue());
-}
+    ICDCSimTrack(),
+    fTrueCenter(fgTrueCenter.GetValue<double>()),
+    fTrueRadius(fgTrueRadius.GetValue()),
+    fTrueZ0(fgTrueZ0.GetValue()),
+    fTrueAlpha(fgTrueAlpha.GetValue()) {}
 
 CDCHelixSimTrack::CDCHelixSimTrack(const CDCPhysicsSimTrack& physTrack, Double_t B) :
     CDCHelixTrack(static_cast<const CDCPhysicsTrack&>(physTrack), B),
-    ICDCSimTrack(static_cast<const ICDCSimTrack&>(physTrack)) {
+    ICDCSimTrack(static_cast<const ICDCSimTrack&>(physTrack)),
+    fTrueCenter(),
+    fTrueRadius(),
+    fTrueZ0(),
+    fTrueAlpha() {
     std::tie(fTrueCenter,
              fTrueRadius,
              fTrueZ0,

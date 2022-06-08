@@ -13,6 +13,7 @@ using Hit::EMCalHit;
 
 EMCalSD::EMCalSD(const G4String& sdName) :
     G4VSensitiveDetector(sdName),
+    fEventID(-1),
     fHitsCollection(nullptr) {
     collectionName.insert(sdName + "HC");
 }
