@@ -1,13 +1,13 @@
 namespace MACE::Core::DataModel::BranchSocket {
 
-template<IsClass Class_t>
+template<IsClass ClassT>
 template<typename... Args>
-ClassBranchSocket<Class_t>::ClassBranchSocket(const TString& branchName, Args&&... args) :
-    IBranchSocket<Class_t>(branchName),
-    fObject(new Class_t(std::forward<Args>(args)...)) {}
+ClassBranchSocket<ClassT>::ClassBranchSocket(const TString& branchName, Args&&... args) :
+    IBranchSocket<ClassT>(branchName),
+    fObject(new ClassT(std::forward<Args>(args)...)) {}
 
-template<IsClass Class_t>
-ClassBranchSocket<Class_t>::~ClassBranchSocket() noexcept {
+template<IsClass ClassT>
+ClassBranchSocket<ClassT>::~ClassBranchSocket() noexcept {
     delete fObject;
 }
 

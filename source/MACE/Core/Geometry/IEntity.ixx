@@ -4,20 +4,20 @@
 
 namespace MACE::Core::Geometry {
 
-template<class Field_t, class Equation_t, class Stepper_t, class Driver_t>
-void IEntity::RegisterField(size_t volumeIndex, Field_t* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const {
+template<std::derived_from<G4Field> FieldT, std::derived_from<G4EquationOfMotion> EquationT, class StepperT, std::derived_from<G4VIntegrationDriver> DriverT>
+void IEntity::RegisterField(size_t volumeIndex, FieldT* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const {
     auto logicalVolume = GetLogicalVolume(volumeIndex);
-    auto DoRegister = [&field, &hMin, &nVal, &logicalVolume, &propagateToDescendants] {
-        auto equation = new Equation_t(field);
-        auto stepper = new Stepper_t(equation, nVal);
-        auto driver = new Driver_t(hMin, stepper, nVal);
+    auto DoRegistration = [&field, &hMin, &nVal, &logicalVolume, &propagateToDescendants] {
+        auto equation = new EquationT(field);
+        auto stepper = new StepperT(equation, nVal);
+        auto driver = new DriverT(hMin, stepper, nVal);
         auto chordFinder = new G4ChordFinder(driver);
         logicalVolume->SetFieldManager(new G4FieldManager(field, chordFinder), propagateToDescendants);
     };
     if (logicalVolume->GetFieldManager() == nullptr) {
-        DoRegister();
+        DoRegistration();
     } else if (logicalVolume->GetFieldManager()->GetDetectorField() != field) {
-        DoRegister();
+        DoRegistration();
     } else {
         G4ExceptionDescription msg;
         msg << "Attempting to register the same field multiple times for \"" << logicalVolume->GetName() << "\", skipping.";
@@ -25,30 +25,30 @@ void IEntity::RegisterField(size_t volumeIndex, Field_t* field, G4double hMin, G
     }
 }
 
-template<class Field_t, class Equation_t, class Stepper_t, class Driver_t>
-void IEntity::RegisterField(Field_t* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const {
+template<std::derived_from<G4Field> FieldT, std::derived_from<G4EquationOfMotion> EquationT, class StepperT, std::derived_from<G4VIntegrationDriver> DriverT>
+void IEntity::RegisterField(FieldT* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const {
     for (size_t i = 0; i < GetLogicalVolumeNum(); ++i) {
-        RegisterField<Field_t, Equation_t, Stepper_t, Driver_t>(i, field, hMin, nVal, propagateToDescendants);
+        RegisterField<FieldT, EquationT, StepperT, DriverT>(i, field, hMin, nVal, propagateToDescendants);
     }
 }
 
-template<class Solid_t, typename... Args>
-std::enable_if_t<std::derived_from<Solid_t, G4VSolid>, ObserverPtr<Solid_t>> IEntity::Make(Args&&... args) {
-    auto solid = new Solid_t(std::forward<Args>(args)...);
+template<std::derived_from<G4VSolid> SolidT, typename... Args>
+ObserverPtr<SolidT> IEntity::Make(Args&&... args) {
+    auto solid = new SolidT(std::forward<Args>(args)...);
     fSolidStore.emplace_back(static_cast<G4VSolid*>(solid));
     return solid;
 }
 
-template<class Logical_t, typename... Args>
-std::enable_if_t<std::derived_from<Logical_t, G4LogicalVolume>, ObserverPtr<Logical_t>> IEntity::Make(Args&&... args) {
-    auto logic = new Logical_t(std::forward<Args>(args)...);
+template<std::derived_from<G4LogicalVolume> LogicalT, typename... Args>
+ObserverPtr<LogicalT> IEntity::Make(Args&&... args) {
+    auto logic = new LogicalT(std::forward<Args>(args)...);
     fLogicalVolumes.emplace_back(static_cast<G4LogicalVolume*>(logic));
     return logic;
 }
 
-template<class Physical_t, typename... Args>
-std::enable_if_t<std::derived_from<Physical_t, G4VPhysicalVolume>, ObserverPtr<Physical_t>> IEntity::Make(Args&&... args) {
-    auto physics = new Physical_t(std::forward<Args>(args)...);
+template<std::derived_from<G4VPhysicalVolume> PhysicalT, typename... Args>
+ObserverPtr<PhysicalT> IEntity::Make(Args&&... args) {
+    auto physics = new PhysicalT(std::forward<Args>(args)...);
     fPhysicalVolumes.emplace_back(static_cast<G4VPhysicalVolume*>(physics));
     return physics;
 }

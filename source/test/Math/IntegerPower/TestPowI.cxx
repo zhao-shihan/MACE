@@ -11,7 +11,7 @@
 using namespace MACE::Utility::Math;
 
 std::string TestEqual(auto a, auto real, auto tolerance) {
-    if (real <= std::numeric_limits<decltype(a)>::lowest() or real >= std::numeric_limits<decltype(a)>::max() or
+    if (real <= std::numeric_limits<decltype(a)>::lowest() or real >= decltype(real)(std::numeric_limits<decltype(a)>::max()) or
         std::abs(real) <= std::numeric_limits<decltype(real)>::min() or std::isinf(real)) {
         return "OVERFLOW";
     }

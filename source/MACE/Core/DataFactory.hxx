@@ -29,84 +29,84 @@ public:
     const TString& GetTreeNameSuffixFormat() const { return fSuffixFormat; }
     TString GetTreeNamePrefix(Long64_t i) const { return fPrefixHasIndexer ? (fSplitPrefix.first + i + fSplitPrefix.second) : fPrefixFormat; }
     TString GetTreeNameSuffix(Long64_t i) const { return fSuffixHasIndexer ? (fSplitSuffix.first + i + fSplitSuffix.second) : fSuffixFormat; }
-    template<IsTransientData Data_t>
+    template<IsTransientData DataT>
     TString GetTreeName(Long64_t treeIndex) const;
 
-    /// Find a tree in a root file with name provided by Data_t and DataFactory settings.
+    /// Find a tree in a root file with name provided by DataT and DataFactory settings.
     /// The tree is owned by the file.
     /// If not found, the return value is defined by ROOT (usually nullptr).
-    template<IsTransientData Data_t>
+    template<IsTransientData DataT>
     ObserverPtr<TTree> GetTree(TFile& file, Long64_t treeIndex = 0) const;
     /// Create a TChain of the list of ROOT files.
-    template<IsTransientData Data_t, std::convertible_to<std::filesystem::path::string_type> Path_t>
-    std::shared_ptr<TChain> CreateChain(const std::vector<Path_t>& fileList, Long64_t treeIndex = 0) const;
+    template<IsTransientData DataT, std::convertible_to<std::filesystem::path::string_type> PathT>
+    std::shared_ptr<TChain> CreateChain(const std::vector<PathT>& fileList, Long64_t treeIndex = 0) const;
     /// Get the range of tree index in current tree name setting.
-    template<IsTransientData Data_t>
+    template<IsTransientData DataT>
     std::pair<Long64_t, Long64_t> GetTreeIndexRange(TFile& file) const;
-    /// Create an empty tree with name provided by Data_t and DataFactory settings.
+    /// Create an empty tree with name provided by DataT and DataFactory settings.
     /// The tree is owned by shared_ptr.
-    template<IsTransientData Data_t>
+    template<IsTransientData DataT>
     std::shared_ptr<TTree> CreateTree(Long64_t treeIndex = 0) const;
     /// Fill an existed tree with a data vector.
-    /// The data type to be written in tree is specfied by DataInTree_t.
-    /// DataInTree_t can be shrunken, which means just a part of column in the data vector will be written.
+    /// The data type to be written in tree is specfied by DataInTreeT.
+    /// DataInTreeT can be shrunken, which means just a part of column in the data vector will be written.
     ///   Note: this feature allows to fill the tree with less but exact columns that the data vector has.
     /// Note: there is no static branch infomation for the tree, so
-    /// user should make sure that DataInTree_t represents exactly the same branches as the tree.
-    template<IsTransientData DataInTree_t, template<class T, class... _> typename Pointer_t, std::derived_from<DataInTree_t> DataInList_t>
-    static void FillTree(const std::vector<Pointer_t<DataInList_t>>& dataList, TTree& tree, bool connected = false);
+    /// user should make sure that DataInTreeT represents exactly the same branches as the tree.
+    template<IsTransientData DataInTreeT, template<class T, class... _> typename PointerT, std::derived_from<DataInTreeT> DataInListT>
+    static void FillTree(const std::vector<PointerT<DataInListT>>& dataList, TTree& tree, bool connected = false);
     /// The raw pointer version of FillTree.
     /// Fill an existed tree with a data vector.
-    /// The data type to be written in tree is specfied by DataInTree_t.
-    /// DataInTree_t can be shrunken, which means just a part of column in the data vector will be written.
+    /// The data type to be written in tree is specfied by DataInTreeT.
+    /// DataInTreeT can be shrunken, which means just a part of column in the data vector will be written.
     ///   Note: this feature allows to fill the tree with less but exact columns that the data vector has.
     /// Note: there is no static branch infomation for the tree, so
-    /// user should make sure that DataInTree_t represents exactly the same branches as the tree.
-    template<IsTransientData DataInTree_t, std::derived_from<DataInTree_t> DataInList_t>
-    static void FillTree(const std::vector<DataInList_t*>& dataList, TTree& tree, bool connected = false);
-    /// Same effect as invoke CreateTree<DataInTree_t>(treeIndex) and FillTree<DataInTree_t>(dataList, tree, true).
-    template<IsTransientData DataInTree_t, template<class T, class... _> typename Pointer_t, std::derived_from<DataInTree_t> DataInList_t>
-    std::shared_ptr<TTree> CreateAndFillTree(const std::vector<Pointer_t<DataInList_t>>& dataList, Long64_t treeIndex = 0) const;
+    /// user should make sure that DataInTreeT represents exactly the same branches as the tree.
+    template<IsTransientData DataInTreeT, std::derived_from<DataInTreeT> DataInListT>
+    static void FillTree(const std::vector<DataInListT*>& dataList, TTree& tree, bool connected = false);
+    /// Same effect as invoke CreateTree<DataInTreeT>(treeIndex) and FillTree<DataInTreeT>(dataList, tree, true).
+    template<IsTransientData DataInTreeT, template<class T, class... _> typename PointerT, std::derived_from<DataInTreeT> DataInListT>
+    std::shared_ptr<TTree> CreateAndFillTree(const std::vector<PointerT<DataInListT>>& dataList, Long64_t treeIndex = 0) const;
     /// The raw pointer version of CreateAndFillTree.
-    /// Same effect as invoke CreateTree<DataInTree_t>(treeIndex) and FillTree<DataInTree_t>(dataList, tree, true).
-    template<IsTransientData DataInTree_t, std::derived_from<DataInTree_t> DataInList_t>
-    std::shared_ptr<TTree> CreateAndFillTree(const std::vector<DataInList_t*>& dataList, Long64_t treeIndex = 0) const;
+    /// Same effect as invoke CreateTree<DataInTreeT>(treeIndex) and FillTree<DataInTreeT>(dataList, tree, true).
+    template<IsTransientData DataInTreeT, std::derived_from<DataInTreeT> DataInListT>
+    std::shared_ptr<TTree> CreateAndFillTree(const std::vector<DataInListT*>& dataList, Long64_t treeIndex = 0) const;
     /// Create a data vector and fill it with a tree.
     /// Entries to be filled are determined by [entriesRange.first, entriesRange.second).
-    /// The data type stores in the data vector is specfied by Data_t.
-    /// Data_t can be shrunken, which means just a part of branch in the tree will be read.
+    /// The data type stores in the data vector is specfied by DataT.
+    /// DataT can be shrunken, which means just a part of branch in the tree will be read.
     ///   Note: this feature allows to create a data vector with less but exact columns that the tree has.
     /// Note: there is no static branch infomation for the tree, so
-    /// user should ensure that the tree contains branches which Data_t needs.
+    /// user should ensure that the tree contains branches which DataT needs.
     /// It's user's responsibility to ensure the availability of entriesRange.
-    template<IsTransientData Data_t>
-    static std::vector<std::shared_ptr<Data_t>> CreateAndFillList(TTree& tree, const std::pair<Long64_t, Long64_t>& entriesRange, bool connected = false);
+    template<IsTransientData DataT>
+    static std::vector<std::shared_ptr<DataT>> CreateAndFillList(TTree& tree, const std::pair<Long64_t, Long64_t>& entriesRange, bool connected = false);
     /// Create a data vector and fill it with a tree.
-    /// The data type stores in the data vector is specfied by Data_t.
-    /// Data_t can be shrunken, which means just a part of branch in the tree will be read.
+    /// The data type stores in the data vector is specfied by DataT.
+    /// DataT can be shrunken, which means just a part of branch in the tree will be read.
     ///   Note: this feature allows to create a data vector with less but exact columns that the tree has.
     /// Note: there is no static branch infomation for the tree, so
-    /// user should ensure that the tree contains branches which Data_t needs.
-    template<IsTransientData Data_t>
-    static std::vector<std::shared_ptr<Data_t>> CreateAndFillList(TTree& tree, bool connected = false);
+    /// user should ensure that the tree contains branches which DataT needs.
+    template<IsTransientData DataT>
+    static std::vector<std::shared_ptr<DataT>> CreateAndFillList(TTree& tree, bool connected = false);
     /// Create a data vector and fill it with a tree. The tree is get via GetTree(TFile& file, Long64_t treeIndex).
     /// Entries to be filled are determined by [entriesRange.first, entriesRange.second).
-    /// The data type stores in the data vector is specfied by Data_t.
-    /// Data_t can be shrunken, which means just a part of branch in the tree will be read.
+    /// The data type stores in the data vector is specfied by DataT.
+    /// DataT can be shrunken, which means just a part of branch in the tree will be read.
     ///   Note: this feature allows to create a data vector with less but exact columns that the tree has.
     /// Note: there is no static branch infomation for the tree, so
-    /// user should ensure that the tree contains branches which Data_t needs.
+    /// user should ensure that the tree contains branches which DataT needs.
     /// It's user's responsibility to ensure the availability of entriesRange.
-    template<IsTransientData Data_t>
-    std::vector<std::shared_ptr<Data_t>> CreateAndFillList(TFile& file, const std::pair<Long64_t, Long64_t>& entriesRange, Long64_t treeIndex = 0, bool connected = false) const;
+    template<IsTransientData DataT>
+    std::vector<std::shared_ptr<DataT>> CreateAndFillList(TFile& file, const std::pair<Long64_t, Long64_t>& entriesRange, Long64_t treeIndex = 0, bool connected = false) const;
     /// Create a data vector and fill it with a tree. The tree is get via GetTree(TFile& file, Long64_t treeIndex).
-    /// The data type stores in the data vector is specfied by Data_t.
-    /// Data_t can be shrunken, which means just a part of branch in the tree will be read.
+    /// The data type stores in the data vector is specfied by DataT.
+    /// DataT can be shrunken, which means just a part of branch in the tree will be read.
     ///   Note: this feature allows to create a data vector with less but exact columns that the tree has.
     /// Note: there is no static branch infomation for the tree, so
-    /// user should ensure that the tree contains branches which Data_t needs.
-    template<IsTransientData Data_t>
-    std::vector<std::shared_ptr<Data_t>> CreateAndFillList(TFile& file, Long64_t treeIndex = 0, bool connected = false) const;
+    /// user should ensure that the tree contains branches which DataT needs.
+    template<IsTransientData DataT>
+    std::vector<std::shared_ptr<DataT>> CreateAndFillList(TFile& file, Long64_t treeIndex = 0, bool connected = false) const;
 
 private:
     Char_t fIndexer = '#';

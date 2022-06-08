@@ -19,8 +19,8 @@ ShortString& ShortString::operator=(const char* rhs) noexcept {
 }
 
 ShortString& ShortString::operator=(char rhs) noexcept {
-    const char temp[2] = {rhs, '\0'};
-    std::strncpy(fString, temp, fgkMaxLength);
+    fString[0] = rhs;
+    fString[1] = '\0';
     return *this;
 }
 
@@ -30,8 +30,9 @@ ShortString& ShortString::operator+=(const char* rhs) noexcept {
 }
 
 ShortString& ShortString::operator+=(char rhs) noexcept {
-    const char temp[2] = {rhs, '\0'};
-    std::strncat(fString, temp, 1);
+    auto tail = fString + this->length();
+    *tail = rhs;
+    *++tail = '\0';
     return *this;
 }
 

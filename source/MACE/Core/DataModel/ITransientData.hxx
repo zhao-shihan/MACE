@@ -33,22 +33,22 @@ public:
     void FillBranchSockets() const noexcept {}
 };
 
-template<class Data_t>
+template<class DataT>
 concept IsTransientData =
-    std::derived_from<Data_t, ITransientData> and
-    std::semiregular<Data_t> and
-    std::movable<Data_t> and
-    std::is_nothrow_constructible_v<Data_t> and
-    std::is_nothrow_copy_constructible_v<Data_t> and
-    std::is_nothrow_move_constructible_v<Data_t> and
-    std::is_nothrow_copy_assignable_v<Data_t> and
-    std::is_nothrow_move_assignable_v<Data_t> and
-    requires(const Data_t data, TTree tree) {
-    { Data_t::CreateBranches(tree) } -> std::same_as<void>;
-    { Data_t::ConnectToBranches(tree) } -> std::same_as<void>;
+    std::derived_from<DataT, ITransientData> and
+    std::semiregular<DataT> and
+    std::movable<DataT> and
+    std::is_nothrow_constructible_v<DataT> and
+    std::is_nothrow_copy_constructible_v<DataT> and
+    std::is_nothrow_move_constructible_v<DataT> and
+    std::is_nothrow_copy_assignable_v<DataT> and
+    std::is_nothrow_move_assignable_v<DataT> and
+    requires(const DataT data, TTree tree) {
+    { DataT::CreateBranches(tree) } -> std::same_as<void>;
+    { DataT::ConnectToBranches(tree) } -> std::same_as<void>;
     { data.FillBranchSockets() }
     noexcept->std::same_as<void>;
-    { Data_t::BasicTreeName() }
+    { DataT::BasicTreeName() }
     noexcept->std::same_as<const char*>;
 };
 

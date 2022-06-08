@@ -54,8 +54,6 @@ public:
     ShortString& operator+=(const ShortString& rhs) noexcept { return operator+=(rhs.fString); }
     ShortString& operator+=(const char* rhs) noexcept;
     ShortString& operator+=(char rhs) noexcept;
-    template<typename T>
-    ShortString& operator+=(T rhs) noexcept requires(std::is_arithmetic_v<T> and not std::same_as<T, char>);
 
     bool operator==(const char* rhs) const noexcept { return std::strncmp(fString, rhs, fgkMaxLength) == 0; }
     bool operator!=(const char* rhs) const noexcept { return std::strncmp(fString, rhs, fgkMaxLength) != 0; }

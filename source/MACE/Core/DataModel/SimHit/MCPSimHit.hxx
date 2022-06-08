@@ -28,11 +28,11 @@ public:
     const auto& GetG4TrackID() const { return fG4TrackID; }
 
     void SetVertexTime(Double_t val) { fVertexTime = val; }
-    template<typename Vector3_t>
-    void SetVertexPosition(Vector3_t&& pos) { fVertexPosition = std::forward<Vector3_t>(pos); }
+    template<typename Vector3T>
+    void SetVertexPosition(Vector3T&& pos) { fVertexPosition = std::forward<Vector3T>(pos); }
     void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition = {x, y, z}; }
-    template<typename String_t>
-    void SetParticle(String_t&& particleName) { fParticle = std::forward<String_t>(particleName); }
+    template<typename StringT>
+    void SetParticle(StringT&& particleName) { fParticle = std::forward<StringT>(particleName); }
     void SetG4EventID(Int_t val) { fG4EventID = val; }
     void SetG4TrackID(Int_t val) { fG4TrackID = val; }
 

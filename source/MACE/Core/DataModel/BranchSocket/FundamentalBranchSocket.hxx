@@ -5,22 +5,22 @@
 
 namespace MACE::Core::DataModel::BranchSocket {
 
-template<IsROOTFundamental Fund_t>
-class FundamentalBranchSocket final : public IBranchSocket<Fund_t> {
+template<IsROOTFundamental ROOTFundamentalT>
+class FundamentalBranchSocket final : public IBranchSocket<ROOTFundamentalT> {
 public:
-    FundamentalBranchSocket(const TString& branchName, Fund_t defaultValue);
+    FundamentalBranchSocket(const TString& branchName, ROOTFundamentalT defaultValue);
     ~FundamentalBranchSocket() noexcept = default;
     FundamentalBranchSocket(const FundamentalBranchSocket&) = delete;
     FundamentalBranchSocket& operator=(const FundamentalBranchSocket&) = delete;
 
-    const Fund_t& GetValue() const override { return fValue; }
-    void SetValue(const Fund_t& value) override { fValue = value; }
+    const ROOTFundamentalT& GetValue() const override { return fValue; }
+    void SetValue(const ROOTFundamentalT& value) override { fValue = value; }
 
     void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, std::addressof(fValue)); }
     void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(this->fBranchName, std::addressof(fValue)); }
 
 private:
-    Fund_t fValue;
+    ROOTFundamentalT fValue;
 };
 
 using IntBranchSocket = FundamentalBranchSocket<Int_t>;

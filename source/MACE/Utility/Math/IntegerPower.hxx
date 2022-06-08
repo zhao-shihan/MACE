@@ -72,9 +72,9 @@ constexpr auto PowZ(std::floating_point auto x) {
 
 // Intergral version:
 
-template<int N, std::floating_point F = double>
+template<int N, std::floating_point FloatT = double>
 constexpr auto PowZ(std::integral auto x) {
-    return PowZ<N>(F(x));
+    return PowZ<N>(FloatT(x));
 }
 
 } // namespace MACE::Utility::Math

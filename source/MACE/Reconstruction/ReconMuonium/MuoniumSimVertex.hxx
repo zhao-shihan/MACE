@@ -30,15 +30,15 @@ public:
     const auto& GetTrueParticles() const { return fTrueParticles; }
 
     void SetTrueVertexTime(Double_t val) { fTrueVertexTime = val; }
-    template<typename Vector3_t>
-    void SetTrueVertexPosition(Vector3_t&& pos) { fTrueVertexPosition = std::forward<Vector3_t>(pos); }
+    template<typename Vector3T>
+    void SetTrueVertexPosition(Vector3T&& pos) { fTrueVertexPosition = std::forward<Vector3T>(pos); }
     void SetTrueVertexPosition(Double_t x, Double_t y, Double_t z) { fTrueVertexPosition = {x, y, z}; }
     void SetTrueVertexEnergy(Double_t val) { fTrueVertexEnergy = val; }
-    template<typename Vector3_t>
-    void SetTrueVertexMomentum(Vector3_t&& pos) { fTrueVertexMomentum = std::forward<Vector3_t>(pos); }
+    template<typename Vector3T>
+    void SetTrueVertexMomentum(Vector3T&& pos) { fTrueVertexMomentum = std::forward<Vector3T>(pos); }
     void SetTrueVertexMomentum(Double_t x, Double_t y, Double_t z) { fTrueVertexMomentum = {x, y, z}; }
-    template<typename String_t>
-    void SetTrueParticles(String_t&& particleNames) { fTrueParticles = std::forward<String_t>(particleNames); }
+    template<typename StringT>
+    void SetTrueParticles(StringT&& particleNames) { fTrueParticles = std::forward<StringT>(particleNames); }
 
     static consteval const char* BasicTreeName() noexcept { return "MVtx"; }
     static void CreateBranches(TTree& tree);
