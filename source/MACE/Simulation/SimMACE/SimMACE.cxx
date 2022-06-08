@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
 /MACE/Generator/SurfaceMuon/SetMuonsForEachG4Event    500
 
 /MACE/Physics/MuoniumPhysics/Formation/SetFormationProbability     0.6
-/MACE/Physics/MuoniumPhysics/Formation/SetConversionProbability    0.5    # very high :) 
+/MACE/Physics/MuoniumPhysics/Formation/SetConversionProbability    0.5    # very high :)
 /MACE/Physics/MuoniumPhysics/Transport/SetMeanFreePath             0.2 um
 
 /MACE/Field/SetTransportMagneticField     0.1 tesla
@@ -71,4 +71,3 @@ int main(int argc, char* argv[]) {
 
 # Visualization setting
 /control/execute vis.mac */
-
