@@ -7,14 +7,10 @@
 namespace MACE::Utility {
 
 /// @brief A short string (15 characters) on the stack. Size 16 bytes.
-/// As an option for some known-size cases or aggressive SSO (Short String Optimization). (The latter is not recommended, just use TString.)
+/// As an option for some known-size cases or aggressive SSO (Short String Optimization).
 /// Compatible with C-style string, but more convenient copy constructor and operators are introduced.
-/// @warning The size of incoming string is never checked. Please use with EXTREME caution.
+/// @warning The size of incoming string is never checked. Use with caution.
 class ShortString final {
-private:
-    static constexpr size_t fgCapacity = 16;
-    static constexpr size_t fgMaxLength = fgCapacity - 1;
-
 public:
     operator char*() noexcept { return fString; }
     operator const char*() const noexcept { return fString; }
@@ -22,7 +18,7 @@ public:
     ShortString() noexcept;
     ShortString(const ShortString& rhs) noexcept;
     ShortString(ShortString&& rhs) noexcept = default;
-    ShortString(const char* rhs) noexcept { std::strncpy(fString, rhs, fgMaxLength); }
+    ShortString(const char* rhs) noexcept { std::strncpy(fString, rhs, fgkMaxLength); }
     ShortString(char ch) noexcept;
 
     ~ShortString() noexcept = default;
@@ -51,8 +47,8 @@ public:
 
     size_t length() const noexcept { return std::strlen(fString); }
     size_t size() const noexcept { return length(); }
-    size_t capacity() const noexcept { return fgCapacity; }
-    size_t max_size() const noexcept { return fgMaxLength; }
+    size_t capacity() const noexcept { return fgkCapacity; }
+    size_t max_size() const noexcept { return fgkMaxLength; }
     bool empty() const noexcept { return front() == '\0'; }
 
     ShortString& operator+=(const ShortString& rhs) noexcept { return operator+=(rhs.fString); }
@@ -61,12 +57,12 @@ public:
     template<typename T>
     ShortString& operator+=(T rhs) noexcept requires(std::is_arithmetic_v<T> and not std::same_as<T, char>);
 
-    bool operator==(const char* rhs) const noexcept { return std::strncmp(fString, rhs, fgMaxLength) == 0; }
-    bool operator!=(const char* rhs) const noexcept { return std::strncmp(fString, rhs, fgMaxLength) != 0; }
-    bool operator<(const char* rhs) const noexcept { return std::strncmp(fString, rhs, fgMaxLength) < 0; }
-    bool operator<=(const char* rhs) const noexcept { return std::strncmp(fString, rhs, fgMaxLength) <= 0; }
-    bool operator>(const char* rhs) const noexcept { return std::strncmp(fString, rhs, fgMaxLength) > 0; }
-    bool operator>=(const char* rhs) const noexcept { return std::strncmp(fString, rhs, fgMaxLength) >= 0; }
+    bool operator==(const char* rhs) const noexcept { return std::strncmp(fString, rhs, fgkMaxLength) == 0; }
+    bool operator!=(const char* rhs) const noexcept { return std::strncmp(fString, rhs, fgkMaxLength) != 0; }
+    bool operator<(const char* rhs) const noexcept { return std::strncmp(fString, rhs, fgkMaxLength) < 0; }
+    bool operator<=(const char* rhs) const noexcept { return std::strncmp(fString, rhs, fgkMaxLength) <= 0; }
+    bool operator>(const char* rhs) const noexcept { return std::strncmp(fString, rhs, fgkMaxLength) > 0; }
+    bool operator>=(const char* rhs) const noexcept { return std::strncmp(fString, rhs, fgkMaxLength) >= 0; }
     std::weak_ordering operator<=>(const char* rhs) const noexcept;
 
     friend ShortString operator+(ShortString lhs, const ShortString& rhs) noexcept { return lhs += rhs; }
@@ -76,7 +72,10 @@ public:
     friend ShortString operator+(char lhs, const ShortString& rhs) noexcept { return ShortString(lhs) += rhs; }
 
 private:
-    char fString[fgCapacity];
+    static constexpr size_t fgkCapacity = 16;
+    static constexpr size_t fgkMaxLength = fgkCapacity - 1;
+
+    char fString[fgkCapacity];
 };
 
 } // namespace MACE::Utility

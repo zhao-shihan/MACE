@@ -13,19 +13,19 @@ ShortString::ShortString(char ch) noexcept :
 
 ShortString& ShortString::operator=(const char* rhs) noexcept {
     if (rhs != fString) {
-        std::strncpy(fString, rhs, fgMaxLength);
+        std::strncpy(fString, rhs, fgkMaxLength);
     }
     return *this;
 }
 
 ShortString& ShortString::operator=(char rhs) noexcept {
     const char temp[2] = {rhs, '\0'};
-    std::strncpy(fString, temp, fgMaxLength);
+    std::strncpy(fString, temp, fgkMaxLength);
     return *this;
 }
 
 ShortString& ShortString::operator+=(const char* rhs) noexcept {
-    std::strncat(fString, rhs, fgMaxLength);
+    std::strncat(fString, rhs, fgkMaxLength);
     return *this;
 }
 
@@ -36,7 +36,7 @@ ShortString& ShortString::operator+=(char rhs) noexcept {
 }
 
 std::weak_ordering ShortString::operator<=>(const char* rhs) const noexcept {
-    const auto cmpResult = std::strncmp(fString, rhs, fgMaxLength);
+    const auto cmpResult = std::strncmp(fString, rhs, fgkMaxLength);
     if (cmpResult < 0) {
         return std::weak_ordering::less;
     } else if (cmpResult > 0) {
