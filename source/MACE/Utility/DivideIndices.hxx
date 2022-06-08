@@ -7,9 +7,9 @@ namespace MACE::Utility {
 
 /// @brief Distribute numbers uniformly to takers.
 /// @param nIndices Total number of index
-/// @param nTaker Number of takers
+/// @param nTakers Number of takers
 /// @return Number of indices allocate for each takers.
-/// e.g. nIndices = 74, nTaker = 7,
+/// e.g. nIndices = 74, nTakers = 7,
 ///   taker 0: 11
 ///   taker 1: 11
 ///   taker 2: 11
@@ -18,7 +18,7 @@ namespace MACE::Utility {
 ///   taker 5: 10
 ///   taker 6: 10
 template<std::integral Index_t>
-std::vector<Index_t> DivideIndexNum(Index_t nIndices, Index_t nTaker);
+std::vector<Index_t> DivideIndexNum(Index_t nIndices, Index_t nTakers);
 
 /// @brief The return struct of DivideIndexRange... functions.
 template<std::integral Index_t>
@@ -35,7 +35,7 @@ struct DividedIndexRange {
 /// @param end Index after the last job
 /// @param nTakers Number of workers
 /// @return [job index begin, job index end, job index step] for each worker.
-/// e.g. nJobs = 74, nWorkers = 7,
+/// e.g. nIndices = 74, nTakers = 7,
 ///   taker 0: [0, 77, 7, 11]
 ///   taker 1: [1, 78, 7, 11]
 ///   taker 2: [2, 79, 7, 11]
@@ -53,7 +53,7 @@ std::vector<DividedIndexRange<Index_t>> DivideIndexRangeIndexWise(std::pair<Inde
 /// @param end Index after the last job
 /// @param nTakers Number of workers
 /// @return [job index begin, job index end, job index step] for each worker.
-/// e.g. nJobs = 74, nWorkers = 7,
+/// e.g. nIndices = 74, nTakers = 7,
 ///   taker 0: [0, 11, 1, 11]
 ///   taker 1: [11, 22, 1, 11]
 ///   taker 2: [22, 33, 1, 11]

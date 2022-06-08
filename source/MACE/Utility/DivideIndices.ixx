@@ -1,10 +1,10 @@
 namespace MACE::Utility {
 
 template<std::integral Index_t>
-std::vector<Index_t> DivideIndexNum(Index_t nIndices, Index_t nTaker) {
-    const auto basicDivision = nIndices / nTaker;
-    const auto remainder = nIndices % nTaker;
-    std::vector<Index_t> dividedIndexNums(nTaker, basicDivision);
+std::vector<Index_t> DivideIndexNum(Index_t nIndices, Index_t nTakers) {
+    const auto basicDivision = nIndices / nTakers;
+    const auto remainder = nIndices % nTakers;
+    std::vector<Index_t> dividedIndexNums(nTakers, basicDivision);
     for (Index_t i = 0; i < remainder; ++i) {
         ++dividedIndexNums[i];
     }
@@ -12,13 +12,13 @@ std::vector<Index_t> DivideIndexNum(Index_t nIndices, Index_t nTaker) {
 }
 
 template<std::integral Index_t>
-std::vector<DividedIndexRange<Index_t>> DivideIndexRangeIndexWise(Index_t begin, Index_t end, Index_t nTaker) {
-    const auto dividedIndexNums = DivideIndexNum<Index_t>(end - begin, nTaker);
-    std::vector<DividedIndexRange<Index_t>> dividedIndexRanges(nTaker);
-    for (Index_t i = 0; i < nTaker; ++i) {
+std::vector<DividedIndexRange<Index_t>> DivideIndexRangeIndexWise(Index_t begin, Index_t end, Index_t nTakers) {
+    const auto dividedIndexNums = DivideIndexNum<Index_t>(end - begin, nTakers);
+    std::vector<DividedIndexRange<Index_t>> dividedIndexRanges(nTakers);
+    for (Index_t i = 0; i < nTakers; ++i) {
         dividedIndexRanges[i] = {i,
-                                 i + dividedIndexNums[i] * nTaker,
-                                 nTaker,
+                                 i + dividedIndexNums[i] * nTakers,
+                                 nTakers,
                                  dividedIndexNums[i]};
     }
     return dividedIndexRanges;
@@ -30,14 +30,14 @@ std::vector<DividedIndexRange<Index_t>> DivideIndexRangeIndexWise(std::pair<Inde
 }
 
 template<std::integral Index_t>
-std::vector<DividedIndexRange<Index_t>> DivideIndexRangeTakerWise(Index_t begin, Index_t end, Index_t nTaker) {
-    const auto dividedIndexNums = DivideIndexNum<Index_t>(end - begin, nTaker);
-    std::vector<DividedIndexRange<Index_t>> dividedIndexRanges(nTaker);
+std::vector<DividedIndexRange<Index_t>> DivideIndexRangeTakerWise(Index_t begin, Index_t end, Index_t nTakers) {
+    const auto dividedIndexNums = DivideIndexNum<Index_t>(end - begin, nTakers);
+    std::vector<DividedIndexRange<Index_t>> dividedIndexRanges(nTakers);
     dividedIndexRanges[0] = {(Index_t)0,
                              dividedIndexNums[0],
                              (Index_t)1,
                              dividedIndexNums[0]};
-    for (Index_t i = 1; i < nTaker; ++i) {
+    for (Index_t i = 1; i < nTakers; ++i) {
         dividedIndexRanges[i] = {dividedIndexRanges[i - 1].end,
                                  dividedIndexRanges[i - 1].end + dividedIndexNums[i],
                                  (Index_t)1,
