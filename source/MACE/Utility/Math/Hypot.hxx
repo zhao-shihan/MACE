@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Utility/Concept/Arithmetic.hxx"
+#include "MACE/Utility/Concept/FundamentalType.hxx"
 
 #include <cmath>
 #include <concepts>
