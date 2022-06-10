@@ -1,7 +1,10 @@
 # More warnings
 add_definitions(-Wall -Wextra)
+if(MACE_SHOW_EFFCXX_COMPILE_WARNINGS)
+    add_definitions(-Weffc++)
+endif()
 # Surpress those from external
-if(NOT MACE_SHOW_ALL_COMPILE_WARNINGS)
+if(MACE_SURPRESS_COMPILE_WARNINGS)
     if(CMAKE_COMPILER_IS_GNUCXX)
         # OpenMPI
         add_definitions(-Wno-cast-function-type)

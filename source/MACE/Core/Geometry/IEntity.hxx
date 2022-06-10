@@ -2,8 +2,11 @@
 
 #include "MACE/Utility/ObserverPtr.hxx"
 
+#include "G4EquationOfMotion.hh"
+#include "G4Field.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Region.hh"
+#include "G4VIntegrationDriver.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4VSensitiveDetector.hh"
 #include "G4VSolid.hh"
@@ -23,7 +26,7 @@ public:
     IEntity& operator=(const IEntity&) = delete;
 
     /// @brief Determines whether we will construct this entity.
-    /// Entities could override this function to control whether construct this.
+    /// Entities could override this function to control whether this will be constructed.
     /// A typical usage is to get the information of whether to enable this from description in the override function.
     virtual bool IsEnabled() const { return true; }
 
@@ -39,10 +42,10 @@ public:
     void RegisterSD(size_t volumeIndex, G4VSensitiveDetector* sd) const;
     void RegisterSD(G4VSensitiveDetector* sd) const;
 
-    template<class Field_t, class Equation_t, class Stepper_t, class Driver_t>
-    void RegisterField(size_t volumeIndex, Field_t* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const;
-    template<class Field_t, class Equation_t, class Stepper_t, class Driver_t>
-    void RegisterField(Field_t* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const;
+    template<std::derived_from<G4Field> FieldT, std::derived_from<G4EquationOfMotion> EquationT, class StepperT, std::derived_from<G4VIntegrationDriver> DriverT>
+    void RegisterField(size_t volumeIndex, FieldT* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const;
+    template<std::derived_from<G4Field> FieldT, std::derived_from<G4EquationOfMotion> EquationT, class StepperT, std::derived_from<G4VIntegrationDriver> DriverT>
+    void RegisterField(FieldT* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const;
 
     void WriteSelfAndDesendentsToGDML(std::string_view fileName, size_t volumeIndex = 0) const;
 
@@ -54,14 +57,14 @@ public:
 
 protected:
     // Make a G4Solid and keep it (just for deleting when Entity deconstructs).
-    template<class Solid_t, typename... Args>
-    std::enable_if_t<std::derived_from<Solid_t, G4VSolid>, ObserverPtr<Solid_t>> Make(Args&&... args);
+    template<std::derived_from<G4VSolid> SolidT, typename... Args>
+    ObserverPtr<SolidT> Make(Args&&... args);
     // Make a G4LogicalVolume and keep it for futher access. Will be deleted when Entity deconstructed.
-    template<class Logical_t, typename... Args>
-    std::enable_if_t<std::derived_from<Logical_t, G4LogicalVolume>, ObserverPtr<Logical_t>> Make(Args&&... args);
+    template<std::derived_from<G4LogicalVolume> LogicalT, typename... Args>
+    ObserverPtr<LogicalT> Make(Args&&... args);
     // Make a G4PhysicalVolume and keep it for futher access. Will be deleted when Entity deconstructed.
-    template<class Physical_t, typename... Args>
-    std::enable_if_t<std::derived_from<Physical_t, G4VPhysicalVolume>, ObserverPtr<Physical_t>> Make(Args&&... args);
+    template<std::derived_from<G4VPhysicalVolume> PhysicalT, typename... Args>
+    ObserverPtr<PhysicalT> Make(Args&&... args);
 
     // shared_ptr points to the mother Entity.
     auto Mother() const { return std::const_pointer_cast<const IEntity>(fMother); }

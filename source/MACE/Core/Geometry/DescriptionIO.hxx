@@ -2,8 +2,8 @@
 
 #include "MACE/Utility/ObserverPtr.hxx"
 
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace MACE::Core::Geometry {
 

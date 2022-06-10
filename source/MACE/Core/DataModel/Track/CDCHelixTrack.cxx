@@ -17,7 +17,11 @@ CDCHelixTrack::CDCHelixTrack() noexcept :
     fAlpha(fgAlpha.GetValue()) {}
 
 CDCHelixTrack::CDCHelixTrack(const CDCPhysicsTrack& physTrack, Double_t B) :
-    ICDCTrack(static_cast<const ICDCTrack&>(physTrack)) {
+    ICDCTrack(static_cast<const ICDCTrack&>(physTrack)),
+    fCenter(),
+    fRadius(),
+    fZ0(),
+    fAlpha() {
     std::tie(fCenter,
              fRadius,
              fZ0,

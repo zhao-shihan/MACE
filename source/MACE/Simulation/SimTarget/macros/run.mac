@@ -40,7 +40,7 @@
 /MACE/Physics/MuoniumPhysics/Transport/SetMeanFreePath             0.2 um
 
 # print progress
-/run/printProgress 10
+/MPIRun/SetPrintProgress 10
 
 # kill secondaries
 /MACE/Action/SetKillIrrelevants    true

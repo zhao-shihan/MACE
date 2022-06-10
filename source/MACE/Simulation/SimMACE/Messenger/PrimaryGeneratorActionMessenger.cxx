@@ -15,6 +15,7 @@ PrimaryGeneratorActionMessenger& PrimaryGeneratorActionMessenger::Instance() {
 
 PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger() :
     G4UImessenger(),
+    fPrimaryGeneratorAction(nullptr),
     fSetFlux("/MACE/Generator/SurfaceMuon/SetFlux", this),
     fSetRepetitionRate("/MACE/Generator/SurfaceMuon/SetRepetitionRate", this),
     fSetTimeWidthRMS("/MACE/Generator/SurfaceMuon/SetTimeWidthRMS", this),

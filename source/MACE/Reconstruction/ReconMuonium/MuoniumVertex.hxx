@@ -37,19 +37,19 @@ public:
     void SetTCACDC(Double_t val) { fTCACDC = val; }
     void SetTCAMCP(Double_t val) { fTCAMCP = val; }
     void SetDeltaTCA(Double_t val) { fDeltaTCA = val; }
-    template<typename Vector3_t>
-    void SetCPACDC(Vector3_t&& pos) { fCPACDC = std::forward<Vector3_t>(pos); }
+    template<typename Vector3T>
+    void SetCPACDC(Vector3T&& pos) { fCPACDC = std::forward<Vector3T>(pos); }
     void SetCPACDC(Double_t x, Double_t y, Double_t z) { fCPACDC = {x, y, z}; }
-    template<typename Vector2_t>
-    void SetCPAMCP(Vector2_t&& pos) { fCPAMCP = std::forward<Vector2_t>(pos); }
+    template<typename Vector2T>
+    void SetCPAMCP(Vector2T&& pos) { fCPAMCP = std::forward<Vector2T>(pos); }
     void SetCPAMCP(Double_t x, Double_t y) { fCPAMCP = {x, y}; }
     void SetDCA(Double_t dca) { fDCA = dca; }
     void SetVertexEnergy(Double_t E) { fVertexEnergy = E; }
-    template<typename Vector3_t>
-    void SetVertexMomentum(Vector3_t&& mom) { fVertexMomentum = std::forward<Vector3_t>(mom); }
+    template<typename Vector3T>
+    void SetVertexMomentum(Vector3T&& mom) { fVertexMomentum = std::forward<Vector3T>(mom); }
     void SetVertexMomentum(Double_t pX, Double_t pY, Double_t pZ) { fVertexMomentum = {pX, pY, pZ}; }
-    template<typename String_t>
-    void SetParticles(String_t&& particleNames) { fParticles = std::forward<String_t>(particleNames); }
+    template<typename StringT>
+    void SetParticles(StringT&& particleNames) { fParticles = std::forward<StringT>(particleNames); }
 
     static consteval const char* BasicTreeName() noexcept { return "MVtx"; }
     static void CreateBranches(TTree& tree);

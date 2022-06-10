@@ -23,13 +23,13 @@ T BenchmarkPowZ(T common) {
     // warm up
     begin = steady_clock::now();
     for (int i = 0; i < warmUpCycle; ++i) {
-        dummy = T(common + 0.001 * i); // "+i": prevent optimization
+        dummy = T(common + 1e-5 * i); // "+i": prevent optimization
     }
     end = steady_clock::now();
     // benchmark
     begin = steady_clock::now();
     for (int i = 0; i < benchmarkCycle; ++i) {
-        dummy = T(common + 0.001 * i);
+        dummy = T(common + 1e-5 * i);
     }
     end = steady_clock::now();
 
@@ -39,13 +39,13 @@ T BenchmarkPowZ(T common) {
     // warm up
     begin = steady_clock::now();
     for (int i = 0; i < warmUpCycle; ++i) {
-        dummy = PowZ<N>(T(common + 0.001 * i));
+        dummy = PowZ<N>(T(common + 1e-5 * i));
     }
     end = steady_clock::now();
     // benchmark
     begin = steady_clock::now();
     for (int i = 0; i < benchmarkCycle; ++i) {
-        dummy = PowZ<N>(T(common + 0.001 * i));
+        dummy = PowZ<N>(T(common + 1e-5 * i));
     }
     end = steady_clock::now();
 
@@ -56,13 +56,13 @@ T BenchmarkPowZ(T common) {
     // warm up
     begin = steady_clock::now();
     for (int i = 0; i < warmUpCycle; ++i) {
-        dummy = std::pow(T(common + 0.001 * i), N);
+        dummy = std::pow(T(common + 1e-5 * i), N);
     }
     end = steady_clock::now();
     // benchmark
     begin = steady_clock::now();
     for (int i = 0; i < benchmarkCycle; ++i) {
-        dummy = std::pow(T(common + 0.001 * i), N);
+        dummy = std::pow(T(common + 1e-5 * i), N);
     }
     end = steady_clock::now();
 

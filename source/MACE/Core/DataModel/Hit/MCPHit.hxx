@@ -26,11 +26,11 @@ public:
     const auto& GetHitPositionVariance() const { return fHitPositionVariance; }
 
     void SetHitTime(Double_t val) { fHitTime = val; }
-    template<typename Vector2_t>
-    void SetHitPosition(Vector2_t&& pos) { fHitPosition = std::forward<Vector2_t>(pos); }
+    template<typename Vector2T>
+    void SetHitPosition(Vector2T&& pos) { fHitPosition = std::forward<Vector2T>(pos); }
     void SetHitPosition(Double_t x, Double_t y) { fHitPosition = {x, y}; }
-    template<typename Vector2_t>
-    void SetHitPositionVariance(Vector2_t&& posVar) { fHitPositionVariance = std::forward<Vector2_t>(posVar); }
+    template<typename Vector2T>
+    void SetHitPositionVariance(Vector2T&& posVar) { fHitPositionVariance = std::forward<Vector2T>(posVar); }
     void SetHitPositionVariance(Double_t xVar, Double_t yVar) { fHitPositionVariance = {xVar, yVar}; }
 
     static consteval const char* BasicTreeName() noexcept { return "MCPHit"; }

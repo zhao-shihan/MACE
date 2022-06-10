@@ -8,23 +8,23 @@
 
 namespace MACE::Utility::MPIUtil {
 
-template<std::integral Index_t>
-DividedIndexRange<Index_t> AllocMPIJobsJobWise(Index_t jobBegin, Index_t jobEnd, MPI_Comm comm);
-template<std::integral Index_t>
-DividedIndexRange<Index_t> AllocMPIJobsJobWise(Index_t jobBegin, Index_t jobEnd, int commSize, int commRank);
-template<std::integral Index_t>
-DividedIndexRange<Index_t> AllocMPIJobsJobWise(std::pair<Index_t, Index_t> jobBeginEnd, MPI_Comm comm);
-template<std::integral Index_t>
-DividedIndexRange<Index_t> AllocMPIJobsJobWise(std::pair<Index_t, Index_t> jobBeginEnd, int commSize, int commRank);
+template<std::integral IndexT>
+DividedIndexRange<IndexT> AllocMPIJobsJobWise(IndexT jobBegin, IndexT jobEnd, MPI_Comm comm);
+template<std::integral IndexT>
+DividedIndexRange<IndexT> AllocMPIJobsJobWise(IndexT jobBegin, IndexT jobEnd, int commSize, int commRank);
+template<std::integral IndexT>
+DividedIndexRange<IndexT> AllocMPIJobsJobWise(std::pair<IndexT, IndexT> jobBeginEnd, MPI_Comm comm);
+template<std::integral IndexT>
+DividedIndexRange<IndexT> AllocMPIJobsJobWise(std::pair<IndexT, IndexT> jobBeginEnd, int commSize, int commRank);
 
-template<std::integral Index_t>
-DividedIndexRange<Index_t> AllocMPIJobsWorkerWise(Index_t jobBegin, Index_t jobEnd, MPI_Comm comm);
-template<std::integral Index_t>
-DividedIndexRange<Index_t> AllocMPIJobsWorkerWise(Index_t jobBegin, Index_t jobEnd, int commSize, int commRank);
-template<std::integral Index_t>
-DividedIndexRange<Index_t> AllocMPIJobsWorkerWise(std::pair<Index_t, Index_t> jobBeginEnd, MPI_Comm comm);
-template<std::integral Index_t>
-DividedIndexRange<Index_t> AllocMPIJobsWorkerWise(std::pair<Index_t, Index_t> jobBeginEnd, int commSize, int commRank);
+template<std::integral IndexT>
+DividedIndexRange<IndexT> AllocMPIJobsWorkerWise(IndexT jobBegin, IndexT jobEnd, MPI_Comm comm);
+template<std::integral IndexT>
+DividedIndexRange<IndexT> AllocMPIJobsWorkerWise(IndexT jobBegin, IndexT jobEnd, int commSize, int commRank);
+template<std::integral IndexT>
+DividedIndexRange<IndexT> AllocMPIJobsWorkerWise(std::pair<IndexT, IndexT> jobBeginEnd, MPI_Comm comm);
+template<std::integral IndexT>
+DividedIndexRange<IndexT> AllocMPIJobsWorkerWise(std::pair<IndexT, IndexT> jobBeginEnd, int commSize, int commRank);
 
 } // namespace MACE::Utility::MPIUtil
 

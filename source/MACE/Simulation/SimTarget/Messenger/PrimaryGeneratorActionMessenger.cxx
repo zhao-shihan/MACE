@@ -10,6 +10,7 @@ PrimaryGeneratorActionMessenger& PrimaryGeneratorActionMessenger::Instance() {
 
 PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger() :
     G4UImessenger(),
+    fPrimaryGeneratorAction(nullptr),
     fSetMuonsForEachG4Event("/MACE/Generator/SurfaceMuon/SetMuonsForEachG4Event", this) {
 
     fSetMuonsForEachG4Event.SetGuidance("Set muons generated for each G4 event.");

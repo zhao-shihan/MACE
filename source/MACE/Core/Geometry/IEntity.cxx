@@ -22,8 +22,8 @@ void IEntity::AddDaughter(const std::shared_ptr<IEntity>& daughter) {
     try {
         daughter->fMother = shared_from_this();
     } catch (const std::bad_weak_ptr& exception) {
-        std::cerr << "Exception from (...)::IEntity<Volume_t>::AddDaughter(...): " << exception.what() << '\n'
-                  << "Notice: Objects of IEntity<Volume_t> derivations should be managed by std::shared_ptr<...>!" << std::endl;
+        std::cerr << "Exception from (...)::IEntity::AddDaughter(...): " << exception.what() << '\n'
+                  << "Notice: Objects of IEntity derivations should be managed by std::shared_ptr<...>!" << std::endl;
         throw exception;
     }
     fDaughters.emplace_back(daughter);

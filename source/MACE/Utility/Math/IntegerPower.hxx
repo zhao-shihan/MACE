@@ -1,7 +1,5 @@
 #pragma once
 
-#include "MACE/Utility/Math/Parity.hxx"
-
 #include <cinttypes>
 #include <cmath>
 #include <concepts>
@@ -23,9 +21,12 @@ constexpr auto PowI(std::integral auto m) {
     } else if constexpr (N == 1) {
         return m;
     } else {
-        if constexpr (IsEven<N>()) {
+        if constexpr (N % 2 == 0) {
             const auto k = PowI<N / 2>(m);
             return k * k;
+        } else if constexpr (N % 3 == 0) {
+            const auto k = PowI<N / 3>(m);
+            return k * k * k;
         } else {
             const auto k = PowI<(N - 1) / 2>(m);
             return k * m * k;
@@ -36,20 +37,8 @@ constexpr auto PowI(std::integral auto m) {
 // Pure compile-time version:
 
 template<intmax_t M, unsigned N>
-consteval intmax_t PowI() {
-    if constexpr (N == 0) {
-        return (intmax_t)1;
-    } else if constexpr (N == 1) {
-        return M;
-    } else {
-        if constexpr (IsEven<N>()) {
-            constexpr auto k = PowI<M, N / 2>();
-            return k * k;
-        } else {
-            constexpr auto k = PowI<M, (N - 1) / 2>();
-            return k * M * k;
-        }
-    }
+consteval auto PowI() {
+    return PowI<N>(M);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -68,9 +57,12 @@ constexpr auto PowZ(std::floating_point auto x) {
     } else if constexpr (N == 1) {
         return x;
     } else {
-        if constexpr (IsEven<N>()) {
+        if constexpr (N % 2 == 0) {
             const auto u = PowZ<N / 2>(x);
             return u * u;
+        } else if constexpr (N % 3 == 0) {
+            const auto u = PowZ<N / 3>(x);
+            return u * u * u;
         } else {
             const auto u = PowZ<(N - 1) / 2>(x);
             return u * x * u;
@@ -80,9 +72,9 @@ constexpr auto PowZ(std::floating_point auto x) {
 
 // Intergral version:
 
-template<int N, std::floating_point F = double>
-constexpr F PowZ(std::integral auto x) {
-    return PowZ<N>(F(x));
+template<int N, std::floating_point FloatT = double>
+constexpr auto PowZ(std::integral auto x) {
+    return PowZ<N>(FloatT(x));
 }
 
 } // namespace MACE::Utility::Math

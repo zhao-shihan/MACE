@@ -18,7 +18,11 @@ CDCPhysicsSimTrack::CDCPhysicsSimTrack() noexcept :
 
 CDCPhysicsSimTrack::CDCPhysicsSimTrack(const CDCHelixSimTrack& helix, Double_t phiVertex, Double_t B, Double_t mass) :
     CDCPhysicsTrack(static_cast<const CDCHelixTrack&>(helix)),
-    ICDCSimTrack(static_cast<const ICDCSimTrack&>(helix)) {
+    ICDCSimTrack(static_cast<const ICDCSimTrack&>(helix)),
+    fTrueVertexPosition(),
+    fTrueVertexEnergy(),
+    fTrueVertexMomentum(),
+    fTrueParticle() {
     std::tie(fTrueVertexPosition,
              fTrueVertexEnergy,
              fTrueVertexMomentum,

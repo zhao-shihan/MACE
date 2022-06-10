@@ -1,8 +1,8 @@
 namespace MACE::Core::DataModel::BranchSocket {
 
-template<IsROOTFundamental Fund_t>
-FundamentalBranchSocket<Fund_t>::FundamentalBranchSocket(const TString& branchName, Fund_t defaultValue) :
-    IBranchSocket<Fund_t>(branchName),
+template<IsROOTFundamental ROOTFundamentalT>
+FundamentalBranchSocket<ROOTFundamentalT>::FundamentalBranchSocket(const TString& branchName, ROOTFundamentalT defaultValue) :
+    IBranchSocket<ROOTFundamentalT>(branchName),
     fValue(defaultValue) {}
 
 } // namespace MACE::Core::DataModel::BranchSocket
