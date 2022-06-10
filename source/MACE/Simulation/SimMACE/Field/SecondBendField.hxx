@@ -1,8 +1,7 @@
 #pragma once
 
-#include "MACE/Utility/LiteralUnit.hxx"
-
 #include "G4MagneticField.hh"
+#include "G4Transform3D.hh"
 
 namespace MACE::Simulation::SimMACE::Field {
 
@@ -15,12 +14,12 @@ public:
 
     void GetFieldValue(const G4double* x, G4double* B) const override;
 
-    void SetTransportMagneticField(G4double B) { fB = B; }
+    void SetTransportMagneticField(G4double B) { fB0R0 = B * fBendRadius; }
 
 private:
-    G4double fB;
-    G4double fX0;
-    G4double fZ0;
+    const G4Transform3D fGeomTransform;
+    const G4double fBendRadius;
+    G4double fB0R0;
 };
 
 } // namespace MACE::Simulation::SimMACE::Field
