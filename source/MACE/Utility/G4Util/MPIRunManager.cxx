@@ -12,8 +12,6 @@
 
 #include "mpi.h"
 
-#include <set>
-
 namespace MACE::Utility::G4Util {
 
 using namespace MACE::Utility::Math;
