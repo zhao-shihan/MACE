@@ -58,7 +58,7 @@ message(STATUS "MACE uses ROOT includes from: ${ROOT_INCLUDE_DIRS}")
 message(STATUS "MACE uses ROOT libraries: ${ROOT_LIBRARIES}")
 
 # EIGEN3
-find_package(Eigen3 3.3.0 REQUIRED)
+find_package(Eigen3 3.0.0 REQUIRED)
 message(STATUS "MACE uses Eigen3 includes from: ${EIGEN3_INCLUDE_DIRS}")
 
 # yaml-cpp
