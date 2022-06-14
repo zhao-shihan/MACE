@@ -1,9 +1,11 @@
 **/.ipynb_checkpoints/
+**/.vs/
 **/.vscode/
 **/build/
 **/GPATH
 **/GRTAGS
 **/GTAGS
+**/out/
 **/temp/
 **/tmp/
 document/doxygen/html/
