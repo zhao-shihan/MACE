@@ -36,4 +36,4 @@ private:
 
 } // namespace MACE::Reconstruction::ReconTracks::Tracker
 
-#include "MACE/Reconstruction/ReconTracks/Tracker/PerfectFinder.ixx"
+#include "MACE/Reconstruction/ReconTracks/Tracker/PerfectFinder.inl"

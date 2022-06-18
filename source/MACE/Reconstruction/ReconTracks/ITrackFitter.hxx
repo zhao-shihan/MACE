@@ -42,4 +42,4 @@ protected:
 
 } // namespace MACE::Reconstruction::ReconTracks
 
-#include "ReconTracks/Interface/ITrackFitter.ixx"
+#include "ReconTracks/Interface/ITrackFitter.inl"

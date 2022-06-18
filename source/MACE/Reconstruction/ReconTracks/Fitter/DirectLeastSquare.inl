@@ -146,9 +146,9 @@ void DirectLeastSquare<CDCHit_t, Track_t>::RevolveFit() {
     Z0 = zAvg - sAvg * cotAlpha;
     Alpha = std::atan(1 / cotAlpha);
     if (sAvg > 0 and cotAlpha < 0) {
-        Alpha += M_PI;
+        Alpha += std::numbers::pi;
     } else if (sAvg < 0 and cotAlpha > 0) {
-        Alpha -= M_PI;
+        Alpha -= std::numbers::pi;
     }
 
     auto tAvg = fT.sum() / fN;

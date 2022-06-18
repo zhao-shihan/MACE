@@ -32,4 +32,4 @@ using EMCalHitCollection = G4THitsCollection<EMCalHit>;
 
 } // namespace MACE::Simulation::SimMACE::Hit
 
-#include "MACE/Simulation/SimMACE/Hit/EMCalHit.ixx"
+#include "MACE/Simulation/SimMACE/Hit/EMCalHit.inl"

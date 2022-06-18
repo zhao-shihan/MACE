@@ -102,4 +102,4 @@ private:
 
 } // namespace MACE::Reconstruction::ReconTracks::Fitter
 
-#include "MACE/Reconstruction/ReconTracks/Fitter/DirectLeastSquare.ixx"
+#include "MACE/Reconstruction/ReconTracks/Fitter/DirectLeastSquare.inl"

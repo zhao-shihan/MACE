@@ -37,4 +37,4 @@ using Vector4FBranchSocket = VectorBranchSocket<Float_t, 4>;
 
 } // namespace MACE::Core::DataModel::BranchSocket
 
-#include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.ixx"
+#include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.inl"

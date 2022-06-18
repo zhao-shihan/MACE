@@ -26,4 +26,4 @@ std::string MPIGetProcessorNameString();
 
 } // namespace MACE::Utility::MPIUtil
 
-#include "MACE/Utility/MPIUtil/CommonMPIWrapper.ixx"
+#include "MACE/Utility/MPIUtil/CommonMPIWrapper.inl"

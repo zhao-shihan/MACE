@@ -68,4 +68,4 @@ std::vector<DividedIndexRange<IndexT>> DivideIndexRangeTakerWise(std::pair<Index
 
 } // namespace MACE::Utility
 
-#include "MACE/Utility/DivideIndices.ixx"
+#include "MACE/Utility/DivideIndices.inl"
