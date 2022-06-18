@@ -1,10 +1,13 @@
 #include "MACE/Core/Geometry/Description/TransportLine.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/FirstTransportField.hxx"
+#include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
 namespace MACE::Core::Geometry::Entity::Fast {
+
+using namespace MACE::Utility::PhysicalConstant;
 
 void FirstTransportField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::TransportLine::Instance();
@@ -19,7 +22,7 @@ void FirstTransportField::ConstructSelf(G4bool checkOverlaps) {
         radius,
         length / 2,
         0,
-        2 * M_PI);
+        twopi);
     auto logic = Make<G4LogicalVolume>(
         solid,
         nullptr,

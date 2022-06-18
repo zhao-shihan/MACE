@@ -1,10 +1,13 @@
 #include "MACE/Core/Geometry/Description/EMCalField.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/EMCalField.hxx"
+#include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Core::Geometry::Entity::Fast::EMCalField;
+namespace MACE::Core::Geometry::Entity::Fast {
+
+using namespace MACE::Utility::PhysicalConstant;
 
 void EMCalField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::EMCalField::Instance();
@@ -19,7 +22,7 @@ void EMCalField::ConstructSelf(G4bool checkOverlaps) {
         radius,
         length / 2,
         0,
-        2 * M_PI);
+        twopi);
     auto logic = Make<G4LogicalVolume>(
         solid,
         nullptr,
@@ -33,3 +36,5 @@ void EMCalField::ConstructSelf(G4bool checkOverlaps) {
         0,
         checkOverlaps);
 }
+
+} // namespace MACE::Core::Geometry::Entity::Fast
