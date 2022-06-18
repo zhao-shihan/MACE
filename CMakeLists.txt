@@ -21,7 +21,7 @@ endif()
 set(MACE_PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
 set(MACE_PROJECT_CMAKE_DIR ${MACE_PROJECT_ROOT_DIR}/cmake)
 set(MACE_PROJECT_SRC_DIR ${MACE_PROJECT_ROOT_DIR}/source)
-set(MACE_BUILDIN_YAML_CPP_DIR ${MACE_PROJECT_SRC_DIR}/external/yaml-cpp)
+set(MACE_BUILDIN_YAML_CPP_DIR ${MACE_PROJECT_ROOT_DIR}/thirdparty/yaml-cpp)
 
 # ================================================================================================================================
 # Options
