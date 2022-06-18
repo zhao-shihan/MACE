@@ -25,9 +25,9 @@ Analysis::Analysis() :
 }
 
 void Analysis::Open(Option_t* option) {
-    std::string filePath;
-    filePath = MACE::Utility::MPIUtil::MakeMPIFilePath(fResultName, ".root");
-    fFile = std::make_unique<TFile>(filePath.c_str(), option);
+    fFile = std::make_unique<TFile>(
+        MACE::Utility::MPIUtil::MakeMPIFilePath(fResultName, ".root").generic_string().c_str(),
+        option);
 }
 
 void Analysis::Close(Option_t* option) {

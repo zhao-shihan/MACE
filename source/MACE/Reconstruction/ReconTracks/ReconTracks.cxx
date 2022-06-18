@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
     std::filesystem::path outName(nameIn);
     outName.replace_extension("");
     const auto fileNameOut = MakeMPIFilePath(outName.string() + "_recTrk", ".root");
-    TFile fileOut(fileNameOut.c_str(), "recreate");
+    TFile fileOut(fileNameOut.generic_string().c_str(), "recreate");
 
     DataFactory dataHub;
     dataHub.SetTreeNamePrefixFormat("Rep#_");

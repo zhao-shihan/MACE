@@ -1,25 +1,24 @@
 #include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
-#include <algorithm>
 #include <array>
-#include <climits>
-#include <cmath>
 #include <cstring>
-#include <iostream>
 #include <set>
 #include <vector>
 
 namespace MACE::Utility::MPIUtil {
 
 std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_view suffix, MPI_Comm comm) {
-    constexpr int masterRank = 0;
     constexpr size_t maxProcessorName = MPI_MAX_PROCESSOR_NAME;
 #ifdef PATH_MAX
     constexpr size_t pathMax = PATH_MAX;
+#elif defined(_MAX_PATH)
+    constexpr size_t pathMax = _MAX_PATH;
 #else
-    constexpr size_t pathMax = 4096;
+    constexpr size_t pathMax = 260;
 #endif
+
+    constexpr int masterRank = 0;
     const auto commSize = MPICommSize(comm);
 
     if (commSize == 1) {
@@ -42,22 +41,15 @@ std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_vi
 
         std::vector<std::array<char, pathMax>> filePathsSend;
         if (commRank == masterRank) {
-            // master rank converts recieved char array to std::string_view
-            std::vector<std::string_view> processorNameList;
-            processorNameList.reserve(commSize);
-            for (auto&& processorNameData : std::as_const(processorNamesRecv)) {
-                processorNameList.emplace_back(processorNameData.data());
-            }
-
             // find all unique processor names
             std::set<std::string_view> processorNameSet;
-            for (auto&& processorName : std::as_const(processorNameList)) {
-                processorNameSet.emplace(processorName);
+            for (auto&& processorName : std::as_const(processorNamesRecv)) {
+                processorNameSet.emplace(processorName.data());
             }
 
             // Second: create directories, construct full file paths
 
-            auto FileNameForRank = [&](int rank) {
+            auto FileNameOfRank = [&](int rank) {
                 std::string fileName(basicName);
                 fileName.append("_rank").append(std::to_string(rank)).append(suffix);
                 return fileName;
@@ -73,7 +65,7 @@ std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_vi
                 directoryList.emplace_back(basicName);
                 // construct full file paths
                 for (int rank = 0; rank < commSize; ++rank) {
-                    filePathList.emplace_back(rootPath / FileNameForRank(rank));
+                    filePathList.emplace_back(rootPath / FileNameOfRank(rank));
                 }
             } else { // running on cluster!
                 // construct directory names
@@ -83,7 +75,7 @@ std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_vi
                 }
                 // construct full file paths
                 for (int rank = 0; rank < commSize; ++rank) {
-                    filePathList.emplace_back(rootPath / std::as_const(processorNameList[rank]) / FileNameForRank(rank));
+                    filePathList.emplace_back(rootPath / std::as_const(processorNamesRecv)[rank].data() / FileNameOfRank(rank));
                 }
             }
 
@@ -96,14 +88,14 @@ std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_vi
             filePathsSend.reserve(commSize);
             for (auto&& filePath : std::as_const(filePathList)) {
                 auto& filePathSend = filePathsSend.emplace_back();
-                std::strcpy(filePathSend.data(), filePath.c_str());
+                std::strcpy(filePathSend.data(), filePath.generic_string().c_str());
             }
         }
 
         // Third: Scatter file paths
 
         char filePathRecv[pathMax];
-        MPI_Scatter(filePathsSend.data(), pathMax, MPI_CHAR, filePathRecv, pathMax, MPI_CHAR, masterRank, comm);
+        MPI_Scatter(std::as_const(filePathsSend).data(), pathMax, MPI_CHAR, filePathRecv, pathMax, MPI_CHAR, masterRank, comm);
 
         return std::filesystem::path(filePathRecv);
     }
