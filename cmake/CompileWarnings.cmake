@@ -1,11 +1,11 @@
 # More warnings
-if(CMAKE_COMPILER_IS_GNUCXX OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     add_definitions(-Wall -Wextra)
     # GCC -Weffc++
     if(MACE_SHOW_GCC_EFFCXX_COMPILE_WARNINGS AND CMAKE_COMPILER_IS_GNUCXX)
         add_definitions(-Weffc++)   
     endif()
-elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # add_definitions(/Wall)
     # /Wall will make MSVC commit suicide, just use /W4
     add_definitions(/W4)
@@ -21,12 +21,12 @@ if(MACE_SURPRESS_COMPILE_WARNINGS)
             # Eigen3
             add_definitions(-Wno-deprecated-enum-enum-conversion)
         endif()
-    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
         # ROOT
         add_definitions(-Wno-deprecated-volatile)
         # Eigen3
         add_definitions(-Wno-deprecated-anon-enum-enum-conversion)
-    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
+    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         
     endif()
 endif()

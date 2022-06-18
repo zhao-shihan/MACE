@@ -39,6 +39,7 @@ set(YAML_CPP_BUILD_CONTRIB ON) ##MACE_EDIT##
 ##MACE_EDIT## cmake_dependent_option(YAML_MSVC_SHARED_RT
 ##MACE_EDIT##   "MSVC: Build yaml-cpp with shared runtime libs (/MD)" ON
 ##MACE_EDIT##   "MSVC" OFF)
+set(YAML_MSVC_SHARED_RT OFF) ##MACE_EDIT##
 
 set(yaml-cpp-type STATIC)
 set(yaml-cpp-label-postfix "static")
