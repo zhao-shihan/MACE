@@ -1,6 +1,19 @@
+**/.cache/
 **/.ipynb_checkpoints/
+**/.temp/
+**/.tmp/
 **/.vs/
 **/.vscode/
+**/*.a
+**/*.bin
+**/*.dll
+**/*.dylib
+**/*.exe
+**/*.lib
+**/*.o
+**/*.obj
+**/*.out
+**/*.so*
 **/build/
 **/GPATH
 **/GRTAGS
@@ -14,3 +27,4 @@ document/doxygen/latex/
 document/doxygen/man/
 document/doxygen/rtf/
 document/doxygen/xml/
+source/external/eigen*
