@@ -1,0 +1,7 @@
+if(MACE_ENABLE_VIS)
+    find_package(Geant4 11.0.0 REQUIRED ui_all vis_all)
+else()
+    find_package(Geant4 11.0.0 REQUIRED)
+endif()
+message(STATUS "MACE will use Geant4 headers from: ${Geant4_INCLUDE_DIRS}")
+message(STATUS "MACE will use Geant4 libraries: ${Geant4_LIBRARIES}")

@@ -49,41 +49,16 @@ endif()
 # Dependencies
 # ================================================================================================================================
 
-# MPI
-find_package(MPI 2.0 REQUIRED C)
-message(STATUS "MACE will use MPI_C headers from: ${MPI_C_INCLUDE_DIRS}")
-message(STATUS "MACE will use MPI_C libraries: ${MPI_C_LIBRARIES}")
-
-# Geant4
-if(MACE_ENABLE_VIS)
-    find_package(Geant4 11.0.0 REQUIRED ui_all vis_all)
-else()
-    find_package(Geant4 11.0.0 REQUIRED)
-endif()
-message(STATUS "MACE will use Geant4 headers from: ${Geant4_INCLUDE_DIRS}")
-message(STATUS "MACE will use Geant4 libraries: ${Geant4_LIBRARIES}")
-
-# ROOT
-find_package(ROOT 6.24.02 REQUIRED COMPONENTS Geom)
-message(STATUS "MACE will use ROOT headers from: ${ROOT_INCLUDE_DIRS}")
-message(STATUS "MACE will use ROOT libraries: ${ROOT_LIBRARIES}")
-
-# EIGEN3
-find_package(Eigen3 3.0.0 REQUIRED)
-message(STATUS "MACE will use Eigen3 headers from: ${EIGEN3_INCLUDE_DIRS}")
-
+# Eigen
+include(${MACE_PROJECT_CMAKE_DIR}/FindEigen.cmake)
 # yaml-cpp
-if(NOT MACE_BUILDIN_YAML_CPP)
-    find_package(yaml-cpp 0.6.0 QUIET)
-    if(NOT yaml-cpp_FOUND)
-        message(NOTICE "***Notice: yaml-cpp not found. Turning on MACE_BUILDIN_YAML_CPP")
-        set(MACE_BUILDIN_YAML_CPP ON)
-        set(YAML_CPP_INCLUDE_DIR ${MACE_BUILDIN_YAML_CPP_DIR}/include)
-        set(YAML_CPP_LIBRARIES yaml-cpp)
-    endif()
-endif()
-message(STATUS "MACE will use yaml-cpp headers from: ${YAML_CPP_INCLUDE_DIR}")
-message(STATUS "MACE will use yaml-cpp libraries: ${YAML_CPP_LIBRARIES}")
+include(${MACE_PROJECT_CMAKE_DIR}/FindOrBuildYamlCpp.cmake)
+# MPI
+include(${MACE_PROJECT_CMAKE_DIR}/FindMPI.cmake)
+# ROOT
+include(${MACE_PROJECT_CMAKE_DIR}/FindROOT.cmake)
+# Geant4
+include(${MACE_PROJECT_CMAKE_DIR}/FindGeant4.cmake)
 
 # ================================================================================================================================
 # Some global compiler options
