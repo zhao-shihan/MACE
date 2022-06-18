@@ -10,11 +10,20 @@ ObserverPtr<TTree> DataFactory::GetTree(TFile& file, Long64_t treeIndex) const {
     return file.Get<TTree>(GetTreeName<DataT>(treeIndex));
 }
 
-template<IsTransientData DataT, std::convertible_to<std::filesystem::path::string_type> PathT>
+template<IsTransientData DataT, std::convertible_to<const char*> PathT>
 std::shared_ptr<TChain> DataFactory::CreateChain(const std::vector<PathT>& fileList, Long64_t treeIndex) const {
     auto chain = std::make_shared<TChain>(GetTreeName<DataT>(treeIndex));
     for (auto&& file : fileList) {
-        chain->Add(file.c_str());
+        chain->AddFile(file);
+    }
+    return chain;
+}
+
+template<IsTransientData DataT, std::convertible_to<decltype(std::declval<PathT>().c_str()), const char*> PathT>
+std::shared_ptr<TChain> DataFactory::CreateChain(const std::vector<PathT>& fileList, Long64_t treeIndex) const {
+    auto chain = std::make_shared<TChain>(GetTreeName<DataT>(treeIndex));
+    for (auto&& file : fileList) {
+        chain->AddFile(file.c_str());
     }
     return chain;
 }
@@ -40,8 +49,9 @@ std::shared_ptr<TTree> DataFactory::CreateTree(Long64_t treeIndex) const {
     return tree;
 }
 
-template<IsTransientData DataInTreeT, template<class T, class... _> typename PointerT, std::derived_from<DataInTreeT> DataInListT>
-void DataFactory::FillTree(const std::vector<PointerT<DataInListT>>& dataList, TTree& tree, bool connected) {
+template<IsTransientData DataInTreeT, Dereferenceable DataInListPointerT>
+requires std::derived_from<ReferencedType<DataInListPointerT>, DataInTreeT>
+void DataFactory::FillTree(const std::vector<DataInListPointerT>& dataList, TTree& tree, bool connected) {
     if (not connected) { DataInTreeT::ConnectToBranches(tree); }
     for (auto&& data : dataList) {
         static_cast<const DataInTreeT&>(*data).FillBranchSockets();
@@ -49,27 +59,24 @@ void DataFactory::FillTree(const std::vector<PointerT<DataInListT>>& dataList, T
     }
 }
 
-template<IsTransientData DataInTreeT, std::derived_from<DataInTreeT> DataInListT>
-void DataFactory::FillTree(const std::vector<DataInListT*>& dataList, TTree& tree, bool connected) {
-    //      A Trick, not means dataList should be observer
-    //                          |
-    //                          V
-    FillTree<DataInTreeT, ObserverPtr, DataInListT>(dataList, tree, connected);
+template<Dereferenceable DataInListPointerT>
+static void FillTree(const std::vector<DataInListPointerT>& dataList, TTree& tree, bool connected) {
+    FillTree<ReferencedType<DataInListPointerT>, DataInListPointerT>(dataList, tree, connected);
 }
 
-template<IsTransientData DataInTreeT, template<class T, class... _> typename PointerT, std::derived_from<DataInTreeT> DataInListT>
-std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<PointerT<DataInListT>>& dataList, Long64_t treeIndex) const {
+template<IsTransientData DataInTreeT, Dereferenceable DataInListPointerT>
+// clang-format off
+requires std::derived_from<ReferencedType<DataInListPointerT>, DataInTreeT>
+std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<DataInListPointerT>& dataList, Long64_t treeIndex) const {
+    // clang-format on
     auto tree = CreateTree<DataInTreeT>(treeIndex);
-    FillTree<DataInTreeT, PointerT, DataInListT>(dataList, *tree);
+    FillTree<DataInTreeT, DataInListPointerT>(dataList, *tree, false);
     return tree;
 }
 
-template<IsTransientData DataInTreeT, std::derived_from<DataInTreeT> DataInListT>
-std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<DataInListT*>& dataList, Long64_t treeIndex) const {
-    //                      A Trick, not means dataList should be observer
-    //                                          |
-    //                                          V
-    return CreateAndFillTree<DataInTreeT, ObserverPtr, DataInListT>(dataList, treeIndex);
+template<Dereferenceable DataInListPointerT>
+std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<DataInListPointerT>& dataList, Long64_t treeIndex) const {
+    CreateAndFillTree<ReferencedType<DataInListPointerT>, DataInListPointerT>(dataList, treeIndex);
 }
 
 template<IsTransientData DataT>
