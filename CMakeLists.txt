@@ -1,17 +1,11 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+
+# enable MSVC_RUNTIME_LIBRARY target property, see https://cmake.org/cmake/help/latest/policy/CMP0091.html
+cmake_policy(SET CMP0091 NEW)
+
 include(CMakeDependentOption)
 
 project(MACE_PROJECT)
-
-# ================================================================================================================================
-# CMPs
-# ================================================================================================================================
-
-# enable MSVC_RUNTIME_LIBRARY target property
-# see https://cmake.org/cmake/help/latest/policy/CMP0091.html
-if(POLICY CMP0091)
-    cmake_policy(SET CMP0091 NEW)
-endif()
 
 # ================================================================================================================================
 # Variables
@@ -46,7 +40,45 @@ if("${MACE_DOWNLOAD_EIGEN_VERSION}" STREQUAL "")
     set(MACE_DOWNLOAD_EIGEN_VERSION 3.4.0)
 endif()
 
-# Set for MACE_USE_SHARED_MSVC_RT
+# ================================================================================================================================
+# MACE at C++20
+# ================================================================================================================================
+
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+if("${CMAKE_CXX_STANDARD}" STREQUAL "")
+    set(CMAKE_CXX_STANDARD 20)
+elseif(CMAKE_CXX_STANDARD LESS 20)
+    message(FATAL_ERROR "MACE should be built, at least, with C++20")
+endif()
+message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
+
+# ================================================================================================================================
+# MACE build type
+# ================================================================================================================================
+
+if(DEFINED CMAKE_CONFIGURATION_TYPES)
+    # multi-config generator
+    message(STATUS "Using multi-config generator \"${CMAKE_GENERATOR}\"")
+    message(STATUS "It provides the following build types: ${CMAKE_CONFIGURATION_TYPES}")
+    if(DEFINED CMAKE_BUILD_TYPE)
+        message(NOTICE "***Notice: Detected that CMAKE_BUILD_TYPE is defined while using the multi-config generator \"${CMAKE_GENERATOR}\".")
+        message(NOTICE "           When using a multi-config generator, CMAKE_BUILD_TYPE is ignored and the build type should be specified at build time")
+    endif()
+else()
+    # single-config generator
+    message(STATUS "Using single-config generator \"${CMAKE_GENERATOR}\"")
+    if(NOT DEFINED CMAKE_BUILD_TYPE)
+        # Default to "Release"
+        set(CMAKE_BUILD_TYPE "Release")
+    endif()
+    message(STATUS "MACE build type: ${CMAKE_BUILD_TYPE}")
+endif()
+
+# ================================================================================================================================
+# Select MSVC runtime library
+# ================================================================================================================================
+
+# Respect to MACE_USE_SHARED_MSVC_RT
 if(MACE_USE_SHARED_MSVC_RT)
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
 else()
@@ -72,13 +104,6 @@ include(${MACE_PROJECT_CMAKE_DIR}/FindGeant4.cmake)
 # Some global compiler options
 # ================================================================================================================================
 
-# Check consistency
-message(STATUS "C compiler ID: ${CMAKE_C_COMPILER_ID}")
-message(STATUS "C++ compiler ID: ${CMAKE_CXX_COMPILER_ID}")
-if(NOT "${CMAKE_C_COMPILER_ID}" STREQUAL "${CMAKE_CXX_COMPILER_ID}")
-    message(NOTICE "***Warning: The compiler ID of C compiler (${CMAKE_C_COMPILER_ID}) is inconsistent with that of C++ compiler (${CMAKE_CXX_COMPILER_ID}). Ignore this warning if this is expected")
-endif()
-
 # inform OpenMPI not to bring mpicxx in, it's necessary for most cases.
 add_definitions(-DOMPI_SKIP_MPICXX)
 # inform MPICH and derivatives not to bring mpicxx in, seems unnecessary but more consistent.
@@ -96,31 +121,6 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         add_definitions(/D__uint128_t=float)
     endif()
 endif()
-
-# ================================================================================================================================
-# MACE build type
-# ================================================================================================================================
-
-if(CMAKE_CONFIGURATION_TYPES)
-    message(STATUS "MACE build type: ${CMAKE_CONFIGURATION_TYPES}")
-else()
-    if(NOT CMAKE_BUILD_TYPE)
-        # Default to "Release"
-        set(CMAKE_BUILD_TYPE "Release")
-    endif()
-    message(STATUS "MACE build type: ${CMAKE_BUILD_TYPE}")
-endif()
-
-# ================================================================================================================================
-# MACE at C++20
-# ================================================================================================================================
-
-if(NOT DEFINED CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD 20)
-elseif(CMAKE_CXX_STANDARD LESS 20)
-    message(FATAL_ERROR "MACE should be built, at least, with C++20")
-endif()
-message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
 
 # ================================================================================================================================
 # Let's go!
