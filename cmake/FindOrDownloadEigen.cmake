@@ -1,11 +1,10 @@
+message(STATUS "Looking for Eigen")
+
 set(MACE_EIGEN_MINIMUM_REQUIRE 3.3.0)
 
 if(NOT MACE_BUILTIN_EIGEN)
-    message(STATUS "Looking for Eigen")
     find_package(Eigen3 ${MACE_EIGEN_MINIMUM_REQUIRE} QUIET)
-    if(EIGEN3_FOUND)
-        message(STATUS "Looking for Eigen - found")
-    else()
+    if(NOT EIGEN3_FOUND)
         message(NOTICE "***Notice: Eigen not found (minimum required is ${MACE_EIGEN_MINIMUM_REQUIRE}). Turning on MACE_BUILTIN_EIGEN")
         set(MACE_BUILTIN_EIGEN ON)
     endif()
@@ -69,12 +68,14 @@ include(${MACE_PROJECT_CMAKE_DIR}/UnpackSmallTar.cmake)
 
 if(MACE_BUILTIN_EIGEN)
     message(STATUS "MACE will use built-in Eigen")
-    message(STATUS "Looking for Eigen in directory of 3rd-party dependencies")
+    cmake_path(RELATIVE_PATH MACE_PROJECT_3RDPARTY_DIR BASE_DIRECTORY "${CMAKE_BINARY_DIR}"
+               OUTPUT_VARIABLE MACE_PROJECT_3RDPARTY_DIR_RELATIVE)
+    message(STATUS "Looking for Eigen in ${MACE_PROJECT_3RDPARTY_DIR_RELATIVE}")
     # looking for eigen in MACE_PROJECT_3RDPARTY_DIR
     mace_find_built_in_eigen(MACE_BUILTIN_EIGEN_FOUND MACE_BUILTIN_EIGEN_DIR MACE_BUILTIN_EIGEN_VERSION)
     # if found in MACE_PROJECT_3RDPARTY_DIR, use it. otherwise download it
     if(MACE_BUILTIN_EIGEN_FOUND)
-        message(STATUS "Looking for Eigen in directory of 3rd-party dependencies - found (version: ${MACE_BUILTIN_EIGEN_VERSION})")
+        message(STATUS "Looking for Eigen in ${MACE_PROJECT_3RDPARTY_DIR_RELATIVE} - found (version: ${MACE_BUILTIN_EIGEN_VERSION})")
         # set env
         set(EIGEN3_INCLUDE_DIR "${MACE_BUILTIN_EIGEN_DIR}")
     else()
@@ -94,9 +95,6 @@ if(MACE_BUILTIN_EIGEN)
         message(STATUS "Unpacking Eigen archive")
         mace_unpack_small_tar("${MACE_BUILTIN_EIGEN_ARCHIVE_DEST}" "${MACE_PROJECT_3RDPARTY_DIR}")
         message(STATUS "Unpacking Eigen archive - done")
-        # unset some crap
-        unset(MACE_BUILTIN_EIGEN_ARCHIVE_DEST)
-        unset(MACE_BUILTIN_EIGEN_ARCHIVE_DEST_NAME)
         # check again for safety
         mace_find_built_in_eigen(MACE_BUILTIN_EIGEN_FOUND MACE_BUILTIN_EIGEN_DIR MACE_BUILTIN_EIGEN_VERSION)
         if(MACE_BUILTIN_EIGEN_FOUND)
@@ -106,6 +104,15 @@ if(MACE_BUILTIN_EIGEN)
             message(FATAL_ERROR "Eigen still remains invalid, even after the download procedure. This may be caused by an incomplete download, or by a corrupted directory structure. You can try to clean the build tree, delete all eigen-* directories under ${MACE_PROJECT_3RDPARTY_DIR}, then re-run CMake.")
         endif()
     endif()
+    # unset crap
+    unset(MACE_BUILTIN_EIGEN_ARCHIVE_DEST)
+    unset(MACE_PROJECT_3RDPARTY_DIR_RELATIVE)
 endif()
 
-message(STATUS "MACE will use Eigen3 headers from: ${EIGEN3_INCLUDE_DIR}")
+message(STATUS "MACE will use Eigen headers from: ${EIGEN3_INCLUDE_DIR}")
+
+if(NOT MACE_BUILTIN_EIGEN)
+    message(STATUS "Looking for Eigen - found (version: ${EIGEN3_VERSION_STRING})")
+else()
+    message(STATUS "Looking for Eigen - builtin (version: ${MACE_BUILTIN_EIGEN_VERSION})")
+endif()
