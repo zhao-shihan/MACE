@@ -15,7 +15,18 @@
 
 project(YAML_CPP VERSION 0.7.0 LANGUAGES CXX)
 
-message(STATUS "YAML_CPP will be compiled with C++${CMAKE_CXX_STANDARD}") ##MACE_EDIT##
+#####################
+## MACE_EDIT_BEGIN ##
+#####################
+message(STATUS "yaml-cpp will be compiled with C++${CMAKE_CXX_STANDARD}")
+if(NOT "${CMAKE_CONFIGURATION_TYPES}" STREQUAL "")
+    message(STATUS "yaml-cpp build type: ${CMAKE_CONFIGURATION_TYPES}")
+elseif(NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
+    message(STATUS "yaml-cpp build type: ${CMAKE_BUILD_TYPE}")
+endif()
+#####################
+##  MACE_EDIT_END  ##
+#####################
 
 ##MACE_EDIT## include(CMakePackageConfigHelpers)
 ##MACE_EDIT## include(CMakeDependentOption)
@@ -39,7 +50,6 @@ set(YAML_CPP_BUILD_CONTRIB ON) ##MACE_EDIT##
 ##MACE_EDIT## cmake_dependent_option(YAML_MSVC_SHARED_RT
 ##MACE_EDIT##   "MSVC: Build yaml-cpp with shared runtime libs (/MD)" ON
 ##MACE_EDIT##   "MSVC" OFF)
-set(YAML_MSVC_SHARED_RT OFF) ##MACE_EDIT##
 
 set(yaml-cpp-type STATIC)
 set(yaml-cpp-label-postfix "static")
@@ -51,12 +61,12 @@ endif()
 set(build-shared $<BOOL:${YAML_BUILD_SHARED_LIBS}>)
 set(build-windows-dll $<AND:$<BOOL:${CMAKE_HOST_WIN32}>,${build-shared}>)
 set(not-msvc $<NOT:$<CXX_COMPILER_ID:MSVC>>)
-set(msvc-shared_rt $<BOOL:${YAML_MSVC_SHARED_RT}>)
+##MACE_EDIT## set(msvc-shared_rt $<BOOL:${YAML_MSVC_SHARED_RT}>)
 
-if (NOT DEFINED CMAKE_MSVC_RUNTIME_LIBRARY)
-  set(CMAKE_MSVC_RUNTIME_LIBRARY
-    MultiThreaded$<$<CONFIG:Debug>:Debug>$<${msvc-shared_rt}:DLL>)
-endif()
+##MACE_EDIT## if (NOT DEFINED CMAKE_MSVC_RUNTIME_LIBRARY)
+##MACE_EDIT##   set(CMAKE_MSVC_RUNTIME_LIBRARY
+##MACE_EDIT##     MultiThreaded$<$<CONFIG:Debug>:Debug>$<${msvc-shared_rt}:DLL>)
+##MACE_EDIT## endif()
 
 set(contrib-pattern "src/contrib/*.cpp")
 set(src-pattern "src/*.cpp")
