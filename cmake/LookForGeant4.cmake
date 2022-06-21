@@ -30,10 +30,15 @@ endif()
 find_package(Geant4 ${MACE_G4_MINIMUM_REQUIRED} REQUIRED ${MACE_G4_REQUIRED_COMPONENTS})
 unset(MACE_G4_REQUIRED_COMPONENTS)
 
-# remove possible Geant4::G4gdml from Geant4_LIBRARIES if use built-in G4gdml
 if(MACE_BUILTIN_G4GDML)
+    # remove possible Geant4::G4gdml from Geant4_LIBRARIES if use built-in G4gdml
     list(REMOVE_ITEM Geant4_LIBRARIES Geant4::G4gdml)
     list(REMOVE_ITEM Geant4_LIBRARIES Geant4::G4gdml-static)
+    # set env for G4gdml and its dependencies
+    message(STATUS "MACE will use built-in Xerces-C++ and G4gdml")
+
+    message(STATUS "MACE will use Xerces-C++ headers from: ${}")
+    message(STATUS "MACE will use G4gdml headers from: ${}")
 endif()
 
 message(STATUS "MACE will use Geant4 headers from: ${Geant4_INCLUDE_DIRS}")
