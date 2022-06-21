@@ -1,11 +1,11 @@
 message(STATUS "Looking for yaml-cpp")
 
-set(MACE_YAML_CPP_MINIMUM_REQUIRE 0.6.0)
+set(MACE_YAML_CPP_MINIMUM_REQUIRED 0.6.0)
 
 if(NOT MACE_BUILTIN_YAML_CPP)
-    find_package(yaml-cpp ${MACE_YAML_CPP_MINIMUM_REQUIRE} QUIET)
+    find_package(yaml-cpp ${MACE_YAML_CPP_MINIMUM_REQUIRED} QUIET)
     if(NOT yaml-cpp_FOUND)
-        message(NOTICE "***Notice: yaml-cpp not found (minimum required is ${MACE_YAML_CPP_MINIMUM_REQUIRE}). Turning on MACE_BUILTIN_YAML_CPP")
+        message(NOTICE "***Notice: yaml-cpp not found (minimum required is ${MACE_YAML_CPP_MINIMUM_REQUIRED}). Turning on MACE_BUILTIN_YAML_CPP")
         set(MACE_BUILTIN_YAML_CPP ON)
     endif()
 endif()
