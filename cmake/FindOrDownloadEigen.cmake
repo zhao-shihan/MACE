@@ -17,7 +17,7 @@ function(mace_find_built_in_eigen EIGEN_FOUND EIGEN_DIR_IF_FOUND EIGEN_VERSION_I
     if("${MACE_BUILTIN_EIGEN3_SIGNATURE_FILE_LIST}" STREQUAL "")
         # if nothing found then we need to download it
         message(VERBOSE "Could not find any Eigen in ${MACE_PROJECT_3RDPARTY_DIR}")
-        set(${EIGEN_FOUND} 0 PARENT_SCOPE)
+        set(${EIGEN_FOUND} FALSE PARENT_SCOPE)
         set(${EIGEN_DIR_IF_FOUND} "" PARENT_SCOPE)
         set(${EIGEN_VERSION_IF_FOUND} 0 PARENT_SCOPE)
     else()
@@ -51,12 +51,12 @@ function(mace_find_built_in_eigen EIGEN_FOUND EIGEN_DIR_IF_FOUND EIGEN_VERSION_I
         # if fulfill the requirement then need not to download, else download.
         if(EIGEN_VERSION_BEST VERSION_GREATER_EQUAL MACE_EIGEN_MINIMUM_REQUIRED)
             message(VERBOSE "Eigen found in ${MACE_PROJECT_3RDPARTY_DIR} (version: ${EIGEN_VERSION_BEST})")
-            set(${EIGEN_FOUND} 1 PARENT_SCOPE)
+            set(${EIGEN_FOUND} TRUE PARENT_SCOPE)
             set(${EIGEN_DIR_IF_FOUND} "${EIGEN_DIR_BEST}" PARENT_SCOPE)
             set(${EIGEN_VERSION_IF_FOUND} ${EIGEN_VERSION_BEST} PARENT_SCOPE)
         else()
             message(VERBOSE "Eigen found in ${MACE_PROJECT_3RDPARTY_DIR} (version: ${EIGEN_VERSION_BEST}), but not reach the minimum requirement (${MACE_EIGEN_MINIMUM_REQUIRED})")
-            set(${EIGEN_FOUND} 0 PARENT_SCOPE)
+            set(${EIGEN_FOUND} FALSE PARENT_SCOPE)
             set(${EIGEN_DIR_IF_FOUND} "" PARENT_SCOPE)
             set(${EIGEN_VERSION_IF_FOUND} 0 PARENT_SCOPE)
         endif()
