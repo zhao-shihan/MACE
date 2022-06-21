@@ -18,13 +18,13 @@ if(MACE_SURPRESS_COMPILE_WARNINGS)
         # ROOT
         add_definitions(-Wno-volatile)
         if(GCC_VERSION GREATER_EQUAL 11)
-            # Eigen3
+            # Eigen
             add_definitions(-Wno-deprecated-enum-enum-conversion)
         endif()
     elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
         # ROOT
         add_definitions(-Wno-deprecated-volatile)
-        # Eigen3
+        # Eigen
         add_definitions(-Wno-deprecated-anon-enum-enum-conversion)
     elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         
