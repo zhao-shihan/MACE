@@ -18,25 +18,33 @@ endif()
 # ================================================================================================================================
 
 # Dirs
-set(MACE_PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
-set(MACE_PROJECT_CMAKE_DIR ${MACE_PROJECT_ROOT_DIR}/cmake)
-set(MACE_PROJECT_SRC_DIR ${MACE_PROJECT_ROOT_DIR}/source)
-set(MACE_BUILDIN_YAML_CPP_DIR ${MACE_PROJECT_ROOT_DIR}/thirdparty/yaml-cpp)
+set(MACE_PROJECT_ROOT_DIR "${PROJECT_SOURCE_DIR}")
+set(MACE_PROJECT_CMAKE_DIR "${MACE_PROJECT_ROOT_DIR}/cmake")
+set(MACE_PROJECT_SRC_DIR "${MACE_PROJECT_ROOT_DIR}/source")
+set(MACE_PROJECT_3RDPARTY_DIR "${MACE_PROJECT_ROOT_DIR}/thirdparty")
+set(MACE_BUILTIN_YAML_CPP_DIR "${MACE_PROJECT_3RDPARTY_DIR}/yaml-cpp")
 
 # ================================================================================================================================
 # Options
 # ================================================================================================================================
 
-# Basic options
-option(MACE_ENABLE_VIS "Build MACE with visualization." ON)
-option(MACE_BUILDIN_YAML_CPP "Use build-in yaml-cpp." OFF)
+# Basic
+# Options (ON/OFF)
 option(MACE_BUILD_TEST "Build MACE with test programs." ON)
+option(MACE_BUILTIN_EIGEN "Use built-in Eigen (pre-downloaded source or network required)" OFF)
+option(MACE_BUILTIN_YAML_CPP "Use built-in yaml-cpp." OFF)
+option(MACE_ENABLE_VIS "Build MACE with visualization." ON)
 option(MACE_USE_SHARED_MSVC_RT "Select the MSVC runtime library for use (MSVC only). ON for shared (.dll), OFF for static (.lib). If you run into link error related to MSVC runtime, you can try to flip this." ON)
 
-# Advance options
+# Advance
+# Options (ON/OFF)
 option(MACE_SHOW_ALL_COMPILE_WARNINGS "Show all compile warnings. Once turned on, MACE_SURPRESS_COMPILE_WARNINGS will be turned off, and MACE_SHOW_GCC_EFFCXX_COMPILE_WARNINGS will be turned on" OFF)
-cmake_dependent_option(MACE_SURPRESS_COMPILE_WARNINGS "Surpress compile warnings raise from external dependencies." ON "NOT MACE_SHOW_ALL_COMPILE_WARNINGS" OFF)
 cmake_dependent_option(MACE_SHOW_GCC_EFFCXX_COMPILE_WARNINGS "Show -Weffc++ compile warnings. (gcc only)" OFF "NOT MACE_SHOW_ALL_COMPILE_WARNINGS" ON)
+cmake_dependent_option(MACE_SURPRESS_COMPILE_WARNINGS "Surpress compile warnings raise from external dependencies." ON "NOT MACE_SHOW_ALL_COMPILE_WARNINGS" OFF)
+# Definitions
+if("${MACE_DOWNLOAD_EIGEN_VERSION}" STREQUAL "")
+    set(MACE_DOWNLOAD_EIGEN_VERSION 3.4.0)
+endif()
 
 # Set for MACE_USE_SHARED_MSVC_RT
 if(MACE_USE_SHARED_MSVC_RT)
@@ -49,12 +57,12 @@ endif()
 # Dependencies
 # ================================================================================================================================
 
-# Eigen
-include(${MACE_PROJECT_CMAKE_DIR}/FindEigen.cmake)
-# yaml-cpp
-include(${MACE_PROJECT_CMAKE_DIR}/FindOrBuildYamlCpp.cmake)
 # MPI
 include(${MACE_PROJECT_CMAKE_DIR}/FindMPI.cmake)
+# Eigen
+include(${MACE_PROJECT_CMAKE_DIR}/FindOrDownloadEigen.cmake)
+# yaml-cpp
+include(${MACE_PROJECT_CMAKE_DIR}/FindOrBuildYamlCpp.cmake)
 # ROOT
 include(${MACE_PROJECT_CMAKE_DIR}/FindROOT.cmake)
 # Geant4
@@ -83,7 +91,7 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # Be permissive to standard cstring
     add_definitions(/D_CRT_SECURE_NO_WARNINGS)
     # See https://root-forum.cern.ch/t/preprocessor-macro-x86-64-problem-with-clhep-on-windows/50431/2
-    if(${ROOT_VERSION} LESS_EQUAL 6.26.04)
+    if(${ROOT_VERSION} VERSION_LESS_EQUAL 6.26.04)
         # We simply define the accidentally involved __uint128_t to a random type and pray that it won't actually be used.
         add_definitions(/D__uint128_t=float)
     endif()
@@ -97,7 +105,7 @@ if(CMAKE_CONFIGURATION_TYPES)
     message(STATUS "MACE build type: ${CMAKE_CONFIGURATION_TYPES}")
 else()
     if(NOT CMAKE_BUILD_TYPE)
-        # Default to "release"
+        # Default to "Release"
         set(CMAKE_BUILD_TYPE "Release")
     endif()
     message(STATUS "MACE build type: ${CMAKE_BUILD_TYPE}")
@@ -118,9 +126,9 @@ message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
 # Let's go!
 # ================================================================================================================================
 
-# Build-in yaml-cpp
-if(MACE_BUILDIN_YAML_CPP)
-    add_subdirectory(${MACE_BUILDIN_YAML_CPP_DIR})
+# Built-in yaml-cpp
+if(MACE_BUILTIN_YAML_CPP)
+    add_subdirectory(${MACE_BUILTIN_YAML_CPP_DIR})
 endif()
 
 # MACE
