@@ -27,12 +27,14 @@ set(MACE_BUILTIN_YAML_CPP_DIR "${MACE_PROJECT_3RDPARTY_DIR}/yaml-cpp")
 option(MACE_BUILD_TEST "Build MACE with test programs." ON)
 option(MACE_BUILTIN_EIGEN "Use built-in Eigen (pre-downloaded source or network required)" OFF)
 option(MACE_BUILTIN_YAML_CPP "Use built-in yaml-cpp." OFF)
-option(MACE_ENABLE_VIS "Build MACE with visualization." ON)
-option(MACE_USE_SHARED_MSVC_RT "Select the MSVC runtime library for use (MSVC only). ON for shared (.dll), OFF for static (.lib). If you run into link error related to MSVC runtime, you can try to flip this." ON)
+option(MACE_ENABLE_VIS "Build MACE with visualization. Note that whether Geant4 supports visualization is determined by the options when Geant4 is built. MACE does not, and cannot, affect whether G4 enables visualization." ON)
+option(MACE_USE_STATIC_G4 "Attempt to link Geant4 static libraries if available, by finding the \"static\" component of G4. There may be some performance gains if successful (depending on the compiler options), but MACE needs to be recompiled to use the new G4 if the G4 library is upgraded or replaced. If cannot find \"static\", dynamic libraries will be linked." ON)
 
 # Advance
 # Options (ON/OFF)
+option(MACE_BUILTIN_G4GDML "Use built-in Xerces-C++ and G4gdml. This option will be automatically turned ON if Geant4::G4gdml is not found. It is strongly unrecommended to manually turn ON this switch, leave it be unless you know what you are doing." OFF)
 option(MACE_SHOW_ALL_COMPILE_WARNINGS "Show all compile warnings. Once turned on, MACE_SURPRESS_COMPILE_WARNINGS will be turned off, and MACE_SHOW_GCC_EFFCXX_COMPILE_WARNINGS will be turned on" OFF)
+option(MACE_USE_SHARED_MSVC_RT "Select the MSVC runtime library for use (MSVC only). ON for shared (.dll), OFF for static (.lib). If you run into link error related to MSVC runtime, you can try to flip this." ON)
 cmake_dependent_option(MACE_SHOW_GCC_EFFCXX_COMPILE_WARNINGS "Show -Weffc++ compile warnings. (gcc only)" OFF "NOT MACE_SHOW_ALL_COMPILE_WARNINGS" ON)
 cmake_dependent_option(MACE_SURPRESS_COMPILE_WARNINGS "Surpress compile warnings raise from external dependencies." ON "NOT MACE_SHOW_ALL_COMPILE_WARNINGS" OFF)
 # Definitions
@@ -90,15 +92,15 @@ endif()
 # ================================================================================================================================
 
 # MPI
-include(${MACE_PROJECT_CMAKE_DIR}/FindMPI.cmake)
-# Eigen
-include(${MACE_PROJECT_CMAKE_DIR}/FindOrDownloadEigen.cmake)
-# yaml-cpp
-include(${MACE_PROJECT_CMAKE_DIR}/FindOrBuildYamlCpp.cmake)
+include(${MACE_PROJECT_CMAKE_DIR}/LookForMPI.cmake)
 # ROOT
-include(${MACE_PROJECT_CMAKE_DIR}/FindROOT.cmake)
+include(${MACE_PROJECT_CMAKE_DIR}/LookForROOT.cmake)
+# Eigen
+include(${MACE_PROJECT_CMAKE_DIR}/LookForEigen.cmake)
+# yaml-cpp
+include(${MACE_PROJECT_CMAKE_DIR}/LookForYamlCpp.cmake)
 # Geant4
-include(${MACE_PROJECT_CMAKE_DIR}/FindGeant4.cmake)
+include(${MACE_PROJECT_CMAKE_DIR}/LookForGeant4.cmake)
 
 # ================================================================================================================================
 # Some global compiler options
@@ -129,6 +131,12 @@ endif()
 # Built-in yaml-cpp
 if(MACE_BUILTIN_YAML_CPP)
     add_subdirectory(${MACE_BUILTIN_YAML_CPP_DIR})
+endif()
+
+# Built-in Xerces-C++ and G4gdml
+if(MACE_BUILTIN_G4GDML)
+    # add_subdirectory()
+    # add_subdirectory()
 endif()
 
 # MACE
