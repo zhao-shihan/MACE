@@ -36,13 +36,8 @@ option(MACE_SHOW_ALL_COMPILE_WARNINGS "Show all compile warnings. Once turned on
 option(MACE_USE_SHARED_MSVC_RT "Select the MSVC runtime library for use (MSVC only). ON for shared (.dll), OFF for static (.lib). If you run into link error related to MSVC runtime, you can try to flip this." ON)
 cmake_dependent_option(MACE_SHOW_GCC_EFFCXX_COMPILE_WARNINGS "Show -Weffc++ compile warnings. (gcc only)" OFF "NOT MACE_SHOW_ALL_COMPILE_WARNINGS" ON)
 cmake_dependent_option(MACE_SURPRESS_COMPILE_WARNINGS "Surpress compile warnings raise from external dependencies." ON "NOT MACE_SHOW_ALL_COMPILE_WARNINGS" OFF)
-# Definitions
-if("${MACE_DOWNLOAD_EIGEN_VERSION}" STREQUAL "")
-    set(MACE_DOWNLOAD_EIGEN_VERSION 3.4.0)
-endif()
-if("${MACE_DOWNLOAD_YAML_CPP_VERSION}" STREQUAL "")
-    set(MACE_DOWNLOAD_YAML_CPP_VERSION 0.7.0)
-endif()
+set(MACE_DOWNLOAD_EIGEN_VERSION 3.4.0 CACHE STRING "Set Eigen version to be downloaded (if necessary).")
+set(MACE_DOWNLOAD_YAML_CPP_VERSION 0.7.0 CACHE STRING "Set yaml-cpp version to be downloaded (if necessary).")
 
 # ================================================================================================================================
 # MACE at C++20
@@ -129,17 +124,6 @@ endif()
 # ================================================================================================================================
 # Let's go!
 # ================================================================================================================================
-
-# # Built-in yaml-cpp
-# if(MACE_BUILTIN_YAML_CPP)
-#     add_subdirectory(${MACE_BUILTIN_YAML_CPP_DIR})
-# endif()
-
-# # Built-in Xerces-C++ and G4gdml
-# if(MACE_BUILTIN_G4GDML)
-#     # add_subdirectory()
-#     # add_subdirectory()
-# endif()
 
 # MACE
 add_subdirectory(${MACE_PROJECT_SRC_DIR}/MACE)

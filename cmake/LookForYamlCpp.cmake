@@ -106,7 +106,7 @@ if(MACE_BUILTIN_YAML_CPP)
     unset(MACE_BUILTIN_YAML_CPP_ARCHIVE_SRC)
     unset(MACE_PROJECT_3RDPARTY_DIR_RELATIVE)
     # configure yaml-cpp
-    # include()
+    include(${MACE_PROJECT_CMAKE_DIR}/ConfigureBuiltInYamlCpp.cmake)
     # set env
     set(YAML_CPP_INCLUDE_DIR "${MACE_BUILTIN_YAML_CPP_DIR}/include")
     set(YAML_CPP_LIBRARIES yaml-cpp)
