@@ -60,6 +60,7 @@ function(mace_find_built_in_yaml_cpp YAML_CPP_FOUND YAML_CPP_DIR_IF_FOUND YAML_C
     endif()
 endfunction()
 
+include(${MACE_PROJECT_CMAKE_DIR}/ConfigureBuiltInYamlCpp.cmake)
 include(${MACE_PROJECT_CMAKE_DIR}/DownloadSmallFile.cmake)
 include(${MACE_PROJECT_CMAKE_DIR}/UnpackSmallTar.cmake)
 
@@ -106,7 +107,7 @@ if(MACE_BUILTIN_YAML_CPP)
     unset(MACE_BUILTIN_YAML_CPP_ARCHIVE_SRC)
     unset(MACE_PROJECT_3RDPARTY_DIR_RELATIVE)
     # configure yaml-cpp
-    include(${MACE_PROJECT_CMAKE_DIR}/ConfigureBuiltInYamlCpp.cmake)
+    mace_configure_built_in_yaml_cpp("${MACE_BUILTIN_YAML_CPP_DIR}")
     # set env
     set(YAML_CPP_INCLUDE_DIR "${MACE_BUILTIN_YAML_CPP_DIR}/include")
     set(YAML_CPP_LIBRARIES yaml-cpp)
