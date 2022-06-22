@@ -55,7 +55,7 @@ function(mace_find_built_in_eigen EIGEN_FOUND EIGEN_DIR_IF_FOUND EIGEN_VERSION_I
             set(${EIGEN_DIR_IF_FOUND} "${EIGEN_DIR_BEST}" PARENT_SCOPE)
             set(${EIGEN_VERSION_IF_FOUND} ${EIGEN_VERSION_BEST} PARENT_SCOPE)
         else()
-            message(VERBOSE "Eigen found in ${MACE_PROJECT_3RDPARTY_DIR} (version: ${EIGEN_VERSION_BEST}), but not reach the minimum requirement (${MACE_EIGEN_MINIMUM_REQUIRED})")
+            message(VERBOSE "Eigen found in ${MACE_PROJECT_3RDPARTY_DIR} (version: ${EIGEN_VERSION_BEST}), but does not reach the minimum requirement (${MACE_EIGEN_MINIMUM_REQUIRED})")
             set(${EIGEN_FOUND} FALSE PARENT_SCOPE)
             set(${EIGEN_DIR_IF_FOUND} "" PARENT_SCOPE)
             set(${EIGEN_VERSION_IF_FOUND} 0 PARENT_SCOPE)
@@ -74,22 +74,19 @@ if(MACE_BUILTIN_EIGEN)
     # looking for eigen in MACE_PROJECT_3RDPARTY_DIR
     mace_find_built_in_eigen(MACE_BUILTIN_EIGEN_FOUND MACE_BUILTIN_EIGEN_DIR MACE_BUILTIN_EIGEN_VERSION)
     # if found in MACE_PROJECT_3RDPARTY_DIR, use it. otherwise download it
-    if(MACE_BUILTIN_EIGEN_FOUND)
-        message(STATUS "Looking for Eigen in ${MACE_PROJECT_3RDPARTY_DIR_RELATIVE} - found (version: ${MACE_BUILTIN_EIGEN_VERSION})")
-        # set env
-        set(EIGEN3_INCLUDE_DIR "${MACE_BUILTIN_EIGEN_DIR}")
-    else()
+    if(NOT MACE_BUILTIN_EIGEN_FOUND)
         message(NOTICE "***Notice: Eigen not found in directory of 3rd-party dependencies (minimum required is ${MACE_EIGEN_MINIMUM_REQUIRED}). It will be downloaded")
         # check download version
         if(MACE_DOWNLOAD_EIGEN_VERSION VERSION_LESS MACE_EIGEN_MINIMUM_REQUIRED)
             message(NOTICE "***Notice: Provided MACE_DOWNLOAD_EIGEN_VERSION is ${MACE_DOWNLOAD_EIGEN_VERSION}, which is less than the requirement (${MACE_EIGEN_MINIMUM_REQUIRED}). Changing to ${MACE_EIGEN_MINIMUM_REQUIRED}")
             set(MACE_DOWNLOAD_EIGEN_VERSION ${MACE_EIGEN_MINIMUM_REQUIRED})
         endif()
-        # set download dest
+        # set download src and dest
+        set(MACE_BUILTIN_EIGEN_ARCHIVE_SRC "https://gitlab.com/libeigen/eigen/-/archive/${MACE_DOWNLOAD_EIGEN_VERSION}/eigen-${MACE_DOWNLOAD_EIGEN_VERSION}.tar.gz")
         set(MACE_BUILTIN_EIGEN_ARCHIVE_DEST "${CMAKE_BINARY_DIR}/.cache/eigen-${MACE_DOWNLOAD_EIGEN_VERSION}.tar.gz")
         # download Eigen
         message(STATUS "Downloading Eigen archive")
-        mace_download_small_file("https://gitlab.com/libeigen/eigen/-/archive/${MACE_DOWNLOAD_EIGEN_VERSION}/eigen-${MACE_DOWNLOAD_EIGEN_VERSION}.tar.gz" "${MACE_BUILTIN_EIGEN_ARCHIVE_DEST}")
+        mace_download_small_file("${MACE_BUILTIN_EIGEN_ARCHIVE_SRC}" "${MACE_BUILTIN_EIGEN_ARCHIVE_DEST}")
         message(STATUS "Downloading Eigen archive - done")
         # untar Eigen
         message(STATUS "Unpacking Eigen archive")
@@ -97,16 +94,22 @@ if(MACE_BUILTIN_EIGEN)
         message(STATUS "Unpacking Eigen archive - done")
         # check again for safety
         mace_find_built_in_eigen(MACE_BUILTIN_EIGEN_FOUND MACE_BUILTIN_EIGEN_DIR MACE_BUILTIN_EIGEN_VERSION)
-        if(MACE_BUILTIN_EIGEN_FOUND)
-            # set env
-            set(EIGEN3_INCLUDE_DIR "${MACE_BUILTIN_EIGEN_DIR}")
-        else()
-            message(FATAL_ERROR "Eigen still remains invalid, even after the download procedure. This may be caused by an incomplete download, or by a corrupted directory structure. You can try to clean the build tree, delete all eigen-* directories under ${MACE_PROJECT_3RDPARTY_DIR}, then re-run CMake.")
+        if(NOT MACE_BUILTIN_EIGEN_FOUND)
+            message(FATAL_ERROR "Eigen still remains invalid, even after the download procedure. This may be caused by an incomplete download, or by a corrupted directory structure. You can try to clean the build tree, delete all eigen-* directories under ${MACE_PROJECT_3RDPARTY_DIR}, then re-run CMake. If the download always fails, you can manually download Eigen from ${MACE_BUILTIN_EIGEN_ARCHIVE_SRC} and copy it to ${MACE_BUILTIN_EIGEN_ARCHIVE_DEST} (and keep the file name), or directly unpack it to ${MACE_PROJECT_3RDPARTY_DIR} (and keep the directory structure).")
         endif()
+    endif()
+    # report
+    if(NOT DEFINED MACE_BUILTIN_EIGEN_ARCHIVE_DEST)
+        message(STATUS "Looking for Eigen in ${MACE_PROJECT_3RDPARTY_DIR_RELATIVE} - found (version: ${MACE_BUILTIN_EIGEN_VERSION})")
+    else()
+        message(STATUS "Looking for Eigen in ${MACE_PROJECT_3RDPARTY_DIR_RELATIVE} - downloaded (version: ${MACE_BUILTIN_EIGEN_VERSION})")
     endif()
     # unset crap
     unset(MACE_BUILTIN_EIGEN_ARCHIVE_DEST)
+    unset(MACE_BUILTIN_EIGEN_ARCHIVE_SRC)
     unset(MACE_PROJECT_3RDPARTY_DIR_RELATIVE)
+    # set env
+    set(EIGEN3_INCLUDE_DIR "${MACE_BUILTIN_EIGEN_DIR}")
 endif()
 
 message(STATUS "MACE will use Eigen headers from: ${EIGEN3_INCLUDE_DIR}")
