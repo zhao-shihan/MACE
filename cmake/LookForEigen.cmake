@@ -95,7 +95,7 @@ if(MACE_BUILTIN_EIGEN)
         # check again for safety
         mace_find_built_in_eigen(MACE_BUILTIN_EIGEN_FOUND MACE_BUILTIN_EIGEN_DIR MACE_BUILTIN_EIGEN_VERSION)
         if(NOT MACE_BUILTIN_EIGEN_FOUND)
-            message(FATAL_ERROR "Eigen still remains invalid, even after the download procedure. This may be caused by an incomplete download, or by a corrupted directory structure. You can try to clean the build tree, delete all eigen-* directories under ${MACE_PROJECT_3RDPARTY_DIR}, then re-run CMake. If the download always fails, you can manually download Eigen from ${MACE_BUILTIN_EIGEN_ARCHIVE_SRC} and copy it to ${MACE_BUILTIN_EIGEN_ARCHIVE_DEST} (and keep the file name), or directly unpack it to ${MACE_PROJECT_3RDPARTY_DIR} (and keep the directory structure).")
+            message(FATAL_ERROR "Eigen still remains invalid, even after the download procedure. This may be caused by an incomplete download, or by a corrupted directory structure.  If you encountered problem in downloading, you can manually download Eigen from ${MACE_BUILTIN_EIGEN_ARCHIVE_SRC} and copy it to ${CMAKE_BINARY_DIR}/.cache (and keep the file name) (and keep the file name), or directly unpack it to ${MACE_PROJECT_3RDPARTY_DIR} (and keep the directory structure). If the error persists, you can try to clean the build tree, delete all eigen-* directories under ${MACE_PROJECT_3RDPARTY_DIR}, then re-run CMake.")
         endif()
     endif()
     # report
