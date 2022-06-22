@@ -16,7 +16,6 @@ set(MACE_PROJECT_ROOT_DIR "${PROJECT_SOURCE_DIR}")
 set(MACE_PROJECT_CMAKE_DIR "${MACE_PROJECT_ROOT_DIR}/cmake")
 set(MACE_PROJECT_SRC_DIR "${MACE_PROJECT_ROOT_DIR}/source")
 set(MACE_PROJECT_3RDPARTY_DIR "${MACE_PROJECT_ROOT_DIR}/thirdparty")
-set(MACE_BUILTIN_YAML_CPP_DIR "${MACE_PROJECT_3RDPARTY_DIR}/yaml-cpp")
 
 # ================================================================================================================================
 # Options
@@ -40,6 +39,9 @@ cmake_dependent_option(MACE_SURPRESS_COMPILE_WARNINGS "Surpress compile warnings
 # Definitions
 if("${MACE_DOWNLOAD_EIGEN_VERSION}" STREQUAL "")
     set(MACE_DOWNLOAD_EIGEN_VERSION 3.4.0)
+endif()
+if("${MACE_DOWNLOAD_YAML_CPP_VERSION}" STREQUAL "")
+    set(MACE_DOWNLOAD_YAML_CPP_VERSION 0.7.0)
 endif()
 
 # ================================================================================================================================
@@ -128,16 +130,16 @@ endif()
 # Let's go!
 # ================================================================================================================================
 
-# Built-in yaml-cpp
-if(MACE_BUILTIN_YAML_CPP)
-    add_subdirectory(${MACE_BUILTIN_YAML_CPP_DIR})
-endif()
+# # Built-in yaml-cpp
+# if(MACE_BUILTIN_YAML_CPP)
+#     add_subdirectory(${MACE_BUILTIN_YAML_CPP_DIR})
+# endif()
 
-# Built-in Xerces-C++ and G4gdml
-if(MACE_BUILTIN_G4GDML)
-    # add_subdirectory()
-    # add_subdirectory()
-endif()
+# # Built-in Xerces-C++ and G4gdml
+# if(MACE_BUILTIN_G4GDML)
+#     # add_subdirectory()
+#     # add_subdirectory()
+# endif()
 
 # MACE
 add_subdirectory(${MACE_PROJECT_SRC_DIR}/MACE)
