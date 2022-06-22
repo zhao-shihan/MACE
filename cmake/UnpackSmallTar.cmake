@@ -20,6 +20,6 @@ function(mace_unpack_small_tar TAR_PATH DEST_DIR)
                     RESULT_VARIABLE TAR_RETURN)
     # check return
     if(NOT ${TAR_RETURN} EQUAL 0)
-        message(FATAL_ERROR "Failed to unpack ${TAR_PATH} to ${DEST_DIR}")
+        message(SEND_ERROR "Failed to unpack ${TAR_PATH} to ${DEST_DIR}")
     endif()
 endfunction()

@@ -22,7 +22,7 @@ function(mace_download_small_file SRC_URL DEST_PATH)
                         RESULT_VARIABLE CURL_RETURN)
         # check return
         if(NOT ${CURL_RETURN} EQUAL 0)
-            message(FATAL_ERROR "Failed to download from ${SRC_URL} to ${DEST_PATH}")
+            message(SEND_ERROR "Failed to download from ${SRC_URL} to ${DEST_PATH}")
         endif()
     endif()
 endfunction()
