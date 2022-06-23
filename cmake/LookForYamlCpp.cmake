@@ -15,7 +15,7 @@ function(mace_find_built_in_yaml_cpp YAML_CPP_FOUND YAML_CPP_DIR_IF_FOUND YAML_C
     # find possible yaml-cpp
     file(GLOB MACE_BUILTIN_YAML_CPP_CMAKELISTS_LIST "${MACE_PROJECT_3RDPARTY_DIR}/yaml-cpp-yaml-cpp-*/CMakeLists.txt")
     if("${MACE_BUILTIN_YAML_CPP_CMAKELISTS_LIST}" STREQUAL "")
-        # if nothing found then we need to download it
+        # if nothing found then we say not found
         message(VERBOSE "Could not find any yaml-cpp in ${MACE_PROJECT_3RDPARTY_DIR}")
         set(${YAML_CPP_FOUND} FALSE PARENT_SCOPE)
         set(${YAML_CPP_DIR_IF_FOUND} "" PARENT_SCOPE)
@@ -45,7 +45,7 @@ function(mace_find_built_in_yaml_cpp YAML_CPP_FOUND YAML_CPP_DIR_IF_FOUND YAML_C
                 set(YAML_CPP_VERSION_BEST ${YAML_CPP_VERSION})
             endif()
         endforeach()
-        # if fulfill the requirement then need not to download, else download.
+        # if fulfill the requirement then we say found, else not found.
         if(YAML_CPP_VERSION_BEST VERSION_GREATER_EQUAL MACE_YAML_CPP_MINIMUM_REQUIRED)
             message(VERBOSE "yaml-cpp found in ${MACE_PROJECT_3RDPARTY_DIR} (version: ${YAML_CPP_VERSION_BEST})")
             set(${YAML_CPP_FOUND} TRUE PARENT_SCOPE)
@@ -62,7 +62,7 @@ endfunction()
 
 include(${MACE_PROJECT_CMAKE_DIR}/ConfigureBuiltInYamlCpp.cmake)
 include(${MACE_PROJECT_CMAKE_DIR}/DownloadSmallFile.cmake)
-include(${MACE_PROJECT_CMAKE_DIR}/UnpackSmallTar.cmake)
+include(${MACE_PROJECT_CMAKE_DIR}/ExtractSmallTar.cmake)
 
 if(MACE_BUILTIN_YAML_CPP)
     message(STATUS "MACE will use built-in yaml-cpp")
@@ -73,7 +73,7 @@ if(MACE_BUILTIN_YAML_CPP)
     mace_find_built_in_yaml_cpp(MACE_BUILTIN_YAML_CPP_FOUND MACE_BUILTIN_YAML_CPP_DIR MACE_BUILTIN_YAML_CPP_VERSION)
     # if found in MACE_PROJECT_3RDPARTY_DIR, use it. otherwise download it
     if(NOT MACE_BUILTIN_YAML_CPP_FOUND)
-        message(NOTICE "***Notice: yaml-cpp not found in directory of 3rd-party dependencies (minimum required is ${MACE_YAML_CPP_MINIMUM_REQUIRED}). It will be downloaded")
+        message(NOTICE "***Notice: yaml-cpp not found in ${MACE_PROJECT_3RDPARTY_DIR_RELATIVE} (minimum required is ${MACE_YAML_CPP_MINIMUM_REQUIRED}). It will be downloaded")
         # check download version
         if(MACE_DOWNLOAD_YAML_CPP_VERSION VERSION_LESS MACE_YAML_CPP_MINIMUM_REQUIRED)
             message(NOTICE "***Notice: Provided MACE_DOWNLOAD_YAML_CPP_VERSION is ${MACE_DOWNLOAD_YAML_CPP_VERSION}, which is less than the requirement (${MACE_YAML_CPP_MINIMUM_REQUIRED}). Changing to ${MACE_YAML_CPP_MINIMUM_REQUIRED}")
@@ -87,13 +87,13 @@ if(MACE_BUILTIN_YAML_CPP)
         mace_download_small_file("${MACE_BUILTIN_YAML_CPP_ARCHIVE_SRC}" "${MACE_BUILTIN_YAML_CPP_ARCHIVE_DEST}")
         message(STATUS "Downloading yaml-cpp archive - done")
         # untar yaml-cpp
-        message(STATUS "Unpacking yaml-cpp archive")
-        mace_unpack_small_tar("${MACE_BUILTIN_YAML_CPP_ARCHIVE_DEST}" "${MACE_PROJECT_3RDPARTY_DIR}")
-        message(STATUS "Unpacking yaml-cpp archive - done")
+        message(STATUS "Extracting yaml-cpp archive")
+        mace_extract_small_tar("${MACE_BUILTIN_YAML_CPP_ARCHIVE_DEST}" "${MACE_PROJECT_3RDPARTY_DIR}")
+        message(STATUS "Extracting yaml-cpp archive - done")
         # check again for safety
         mace_find_built_in_yaml_cpp(MACE_BUILTIN_YAML_CPP_FOUND MACE_BUILTIN_YAML_CPP_DIR MACE_BUILTIN_YAML_CPP_VERSION)
         if(NOT MACE_BUILTIN_YAML_CPP_FOUND)
-            message(FATAL_ERROR "yaml-cpp still remains invalid, even after the download procedure. This may be caused by an incomplete download, or by a corrupted directory structure. If you encountered problem in downloading, you can manually download yaml-cpp from ${MACE_BUILTIN_YAML_CPP_ARCHIVE_SRC} and copy it to ${CMAKE_BINARY_DIR}/.cache (and keep the file name), or directly unpack it to ${MACE_PROJECT_3RDPARTY_DIR} (and keep the directory structure). If the error persists, you can try to clean the build tree, delete all yaml-cpp-yaml-cpp-* directories under ${MACE_PROJECT_3RDPARTY_DIR}, then re-run CMake.")
+            message(FATAL_ERROR "yaml-cpp still remains invalid, even after the download procedure. This may be caused by an incomplete download, or by a corrupted directory structure. If you encountered problem in downloading, you can manually download yaml-cpp from ${MACE_BUILTIN_YAML_CPP_ARCHIVE_SRC} and extract it to ${MACE_PROJECT_3RDPARTY_DIR} (and keep the directory structure). If the error persists, you can try to clean the build tree, delete all yaml-cpp-yaml-cpp-* directories under ${MACE_PROJECT_3RDPARTY_DIR}, then re-run CMake.")
         endif()
     endif()
     # report

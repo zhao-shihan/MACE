@@ -1,5 +1,7 @@
 function(mace_configure_built_in_yaml_cpp BUILTIN_YAML_CPP_DIR)
+    message(STATUS "---------------------------------------------------------------------------")
     message(STATUS "Configuring built-in yaml-cpp")
+    message(STATUS "---------------------------------------------------------------------------")
 
     # set yaml-cpp options
     set(YAML_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
@@ -9,8 +11,11 @@ function(mace_configure_built_in_yaml_cpp BUILTIN_YAML_CPP_DIR)
     else()
         set(YAML_MSVC_SHARED_RT OFF CACHE BOOL "" FORCE)
     endif()
+
     # configure it
     add_subdirectory(${BUILTIN_YAML_CPP_DIR})
 
+    message(STATUS "---------------------------------------------------------------------------")
     message(STATUS "Configuring built-in yaml-cpp - done")
+    message(STATUS "---------------------------------------------------------------------------")
 endfunction()
