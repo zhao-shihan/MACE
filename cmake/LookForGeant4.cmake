@@ -1,6 +1,6 @@
 message(STATUS "Looking for Geant4")
 
-set(MACE_G4_MINIMUM_REQUIRED 0.6.0)
+set(MACE_G4_MINIMUM_REQUIRED 11.0.0)
 
 find_package(Geant4 ${MACE_G4_MINIMUM_REQUIRED} REQUIRED) # to load Geant4Config.cmake
 
@@ -34,11 +34,8 @@ if(MACE_BUILTIN_G4GDML)
     # remove possible Geant4::G4gdml from Geant4_LIBRARIES if use built-in G4gdml
     list(REMOVE_ITEM Geant4_LIBRARIES Geant4::G4gdml)
     list(REMOVE_ITEM Geant4_LIBRARIES Geant4::G4gdml-static)
-    # set env for G4gdml and its dependencies
-    message(STATUS "MACE will use built-in Xerces-C++ and G4gdml")
-
-    message(STATUS "MACE will use Xerces-C++ headers from: ${}")
-    message(STATUS "MACE will use G4gdml headers from: ${}")
+    # configure G4gdml and possibly Xerces-C++
+    include(${MACE_PROJECT_CMAKE_DIR}/UseBuiltInG4gdml.cmake)
 endif()
 
 message(STATUS "MACE will use Geant4 headers from: ${Geant4_INCLUDE_DIRS}")
