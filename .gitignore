@@ -29,4 +29,5 @@ document/doxygen/man/
 document/doxygen/rtf/
 document/doxygen/xml/
 thirdparty/eigen-*/
+thirdparty/xerces-c-*/
 thirdparty/yaml-cpp-yaml-cpp-*/
