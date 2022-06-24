@@ -12,8 +12,6 @@
 
 #include "mpi.h"
 
-#include <set>
-
 namespace MACE::Utility::G4Util {
 
 using namespace MACE::Utility::Math;
@@ -89,7 +87,7 @@ void MPIRunManager::TerminateOneEvent() {
     // stop the event timer
     fEventWallTime = std::chrono::steady_clock::now() - fEventBeginWallTime;
     fNAvgEventWallTime += fEventWallTime.count();
-    fNDevEventWallTime += PowZ<2>(fEventWallTime.count() - fNAvgEventWallTime / numberOfEventProcessed);
+    fNDevEventWallTime += Pow2(fEventWallTime.count() - fNAvgEventWallTime / numberOfEventProcessed);
     // report
     EventEndReport();
 }

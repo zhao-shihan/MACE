@@ -23,4 +23,4 @@ constexpr void TupleForEach(TupleTT<ElementT...>&& tuple, FunctorT&& func);
 
 } // namespace MACE::Utility
 
-#include "MACE/Utility/TupleForEach.ixx"
+#include "MACE/Utility/TupleForEach.inl"

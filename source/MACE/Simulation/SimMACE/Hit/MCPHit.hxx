@@ -39,4 +39,4 @@ using MCPHitCollection = G4THitsCollection<MCPHit>;
 
 } // namespace MACE::Simulation::SimMACE::Hit
 
-#include "MACE/Simulation/SimMACE/Hit/MCPHit.ixx"
+#include "MACE/Simulation/SimMACE/Hit/MCPHit.inl"

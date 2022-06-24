@@ -42,4 +42,4 @@ using CDCHitCollection = G4THitsCollection<CDCHit>;
 
 } // namespace MACE::Simulation::SimMACE::Hit
 
-#include "MACE/Simulation/SimMACE/Hit/CDCHit.ixx"
+#include "MACE/Simulation/SimMACE/Hit/CDCHit.inl"

@@ -28,4 +28,4 @@ DividedIndexRange<IndexT> AllocMPIJobsWorkerWise(std::pair<IndexT, IndexT> jobBe
 
 } // namespace MACE::Utility::MPIUtil
 
-#include "MACE/Utility/MPIUtil/AllocMPIJobs.ixx"
+#include "MACE/Utility/MPIUtil/AllocMPIJobs.inl"

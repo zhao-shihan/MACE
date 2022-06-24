@@ -83,4 +83,4 @@ private:
 
 } // namespace MACE::Core::Geometry
 
-#include "MACE/Core/Geometry/IEntity.ixx"
+#include "MACE/Core/Geometry/IEntity.inl"

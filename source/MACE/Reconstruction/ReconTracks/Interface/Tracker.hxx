@@ -39,4 +39,4 @@ protected:
 
 } // namespace MACE::Reconstruction::ReconTracks::Interface
 
-#include "MACE/Reconstruction/ReconTracks/Interface/Tracker.ixx"
+#include "MACE/Reconstruction/ReconTracks/Interface/Tracker.inl"

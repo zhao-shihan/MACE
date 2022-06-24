@@ -35,4 +35,4 @@ private:
 
 } // namespace MACE::Simulation::SimTarget
 
-#include "MACE/Simulation/SimTarget/MuoniumTrack.ixx"
+#include "MACE/Simulation/SimTarget/MuoniumTrack.inl"

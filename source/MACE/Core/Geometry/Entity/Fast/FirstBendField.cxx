@@ -1,11 +1,14 @@
 #include "MACE/Core/Geometry/Description/TransportLine.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/FirstBendField.hxx"
+#include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4Torus.hh"
 
 namespace MACE::Core::Geometry::Entity::Fast {
+
+using namespace MACE::Utility::PhysicalConstant;
 
 void FirstBendField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::TransportLine::Instance();
@@ -19,8 +22,8 @@ void FirstBendField::ConstructSelf(G4bool checkOverlaps) {
         0,
         radius,
         bendRadius,
-        M_PI_2,
-        M_PI_2);
+        halfpi,
+        halfpi);
     auto logic = Make<G4LogicalVolume>(
         solid,
         nullptr,

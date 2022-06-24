@@ -1,12 +1,15 @@
 #include "MACE/Core/Geometry/Description/SpectrometerShield.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/SpectrometerShield.hxx"
+#include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 #include "G4UnionSolid.hh"
 
-using MACE::Core::Geometry::Entity::Fast::SpectrometerShield;
+namespace MACE::Core::Geometry::Entity::Fast {
+
+using namespace MACE::Utility::PhysicalConstant;
 
 void SpectrometerShield::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::SpectrometerShield::Instance();
@@ -22,14 +25,14 @@ void SpectrometerShield::ConstructSelf(G4bool checkOverlaps) {
         innerRadius + thickness,
         innerLength / 2,
         0,
-        2 * M_PI);
+        twopi);
     auto cap = Make<G4Tubs>(
         "_temp",
         windowRadius,
         innerRadius + thickness,
         thickness / 2,
         0,
-        2 * M_PI);
+        twopi);
     auto temp = Make<G4UnionSolid>(
         "_temp",
         body,
@@ -57,3 +60,5 @@ void SpectrometerShield::ConstructSelf(G4bool checkOverlaps) {
         0,
         checkOverlaps);
 }
+
+} // namespace MACE::Core::Geometry::Entity::Fast

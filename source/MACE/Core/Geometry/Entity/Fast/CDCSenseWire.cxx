@@ -1,11 +1,14 @@
 #include "MACE/Core/Geometry/Description/CDC.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/CDCSenseWire.hxx"
+#include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Core::Geometry::Entity::Fast::CDCSenseWire;
+namespace MACE::Core::Geometry::Entity::Fast {
+
+using namespace MACE::Utility::PhysicalConstant;
 
 void CDCSenseWire::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::CDC::Instance();
@@ -22,7 +25,7 @@ void CDCSenseWire::ConstructSelf(G4bool checkOverlaps) {
             rSenseWire,
             halfLength,
             0,
-            2 * M_PI);
+            twopi);
         auto logic = Make<G4LogicalVolume>(
             solid,
             nullptr,
@@ -39,3 +42,5 @@ void CDCSenseWire::ConstructSelf(G4bool checkOverlaps) {
             checkOverlaps);
     }
 }
+
+} // namespace MACE::Core::Geometry::Entity::Fast

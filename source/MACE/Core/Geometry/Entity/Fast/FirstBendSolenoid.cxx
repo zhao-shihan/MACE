@@ -1,11 +1,14 @@
 #include "MACE/Core/Geometry/Description/TransportLine.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/FirstBendSolenoid.hxx"
+#include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4Torus.hh"
 
-using MACE::Core::Geometry::Entity::Fast::FirstBendSolenoid;
+namespace MACE::Core::Geometry::Entity::Fast {
+
+using namespace MACE::Utility::PhysicalConstant;
 
 void FirstBendSolenoid::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::TransportLine::Instance();
@@ -19,8 +22,8 @@ void FirstBendSolenoid::ConstructSelf(G4bool checkOverlaps) {
         innerRadius,
         outerRadius,
         bendRadius,
-        M_PI_2,
-        M_PI_2);
+        halfpi,
+        halfpi);
     auto logic = Make<G4LogicalVolume>(
         solid,
         nullptr,
@@ -34,3 +37,5 @@ void FirstBendSolenoid::ConstructSelf(G4bool checkOverlaps) {
         0,
         checkOverlaps);
 }
+
+} // namespace MACE::Core::Geometry::Entity::Fast

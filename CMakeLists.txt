@@ -1,117 +1,78 @@
-cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
+
+# enable MSVC_RUNTIME_LIBRARY target property, see https://cmake.org/cmake/help/latest/policy/CMP0091.html
+cmake_policy(SET CMP0091 NEW)
+
+include(CMakeDependentOption)
 
 project(MACE_PROJECT)
 
-# ================================================================================================================================
+# =============================================================================
 # Variables
-# ================================================================================================================================
+# =============================================================================
 
 # Dirs
-set(MACE_PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
-set(MACE_PROJECT_CMAKE_DIR ${MACE_PROJECT_ROOT_DIR}/cmake)
-set(MACE_PROJECT_SRC_DIR ${MACE_PROJECT_ROOT_DIR}/source)
-set(MACE_BUILDIN_YAML_CPP_DIR ${MACE_PROJECT_SRC_DIR}/external/yaml-cpp)
+set(MACE_PROJECT_ROOT_DIR "${PROJECT_SOURCE_DIR}")
+set(MACE_PROJECT_CMAKE_DIR "${MACE_PROJECT_ROOT_DIR}/cmake")
+set(MACE_PROJECT_SRC_DIR "${MACE_PROJECT_ROOT_DIR}/source")
+set(MACE_PROJECT_3RDPARTY_DIR "${MACE_PROJECT_ROOT_DIR}/thirdparty")
 
-# ================================================================================================================================
+# =============================================================================
 # Options
-# ================================================================================================================================
+# =============================================================================
 
-# Basic options
-option(MACE_ENABLE_VIS "Build MACE with visualization." ON)
-option(MACE_BUILDIN_YAML_CPP "Use build-in yaml-cpp." OFF)
+# Basic
+# Options (ON/OFF)
 option(MACE_BUILD_TEST "Build MACE with test programs." ON)
+option(MACE_BUILTIN_EIGEN "Use built-in Eigen (network or pre-downloaded source is required)." OFF)
+option(MACE_BUILTIN_G4GDML "Use built-in and G4gdml. This option will be automatically turned ON if Geant4::G4gdml is not found. It is unrecommended to manually turn ON this switch, leave it be unless you know what you are doing." OFF)
+option(MACE_BUILTIN_XERCES_C "Use built-in Xerces-C++ (network or pre-downloaded source is required). This option is ignored if need not to build built-in G4gdml." OFF)
+option(MACE_BUILTIN_YAML_CPP "Use built-in yaml-cpp (network or pre-downloaded source is required)." OFF)
+option(MACE_ENABLE_VIS "Build MACE with visualization. Note that whether Geant4 supports visualization is determined by the options when Geant4 is built. MACE does not, and cannot, affect whether G4 enables visualization." ON)
+option(MACE_USE_STATIC_G4 "Attempt to link Geant4 static libraries if available, by finding the \"static\" component of G4. There may be some performance gains if successful (depending on the compiler options), but MACE needs to be recompiled to use the new G4 if the G4 library is upgraded or replaced. If cannot find \"static\", dynamic libraries will be linked." ON)
 
-# Advance options
-option(MACE_SURPRESS_COMPILE_WARNINGS "Surpress compile warnings raise from external dependencies." ON)
-option(MACE_SHOW_EFFCXX_COMPILE_WARNINGS "Show -Weffc++ compile warnings. (gcc only)" OFF)
-option(MACE_SHOW_ALL_COMPILE_WARNINGS "Show all compile warnings. Once turned on, MACE_SURPRESS_COMPILE_WARNINGS will be turned off, and MACE_SHOW_EFFCXX_COMPILE_WARNINGS will be turned on" OFF)
+# Advance
+# Options (ON/OFF)
+option(MACE_SHOW_ALL_COMPILE_WARNINGS "Show all compile warnings. Once turned on, MACE_SURPRESS_COMPILE_WARNINGS will be turned off, and MACE_SHOW_GCC_EFFCXX_COMPILE_WARNINGS will be turned on" OFF)
+option(MACE_USE_SHARED_MSVC_RT "Select the MSVC runtime library for use (MSVC only). ON for shared (.dll), OFF for static (.lib). If you run into link error related to MSVC runtime, you can try to flip this." ON)
+cmake_dependent_option(MACE_SHOW_GCC_EFFCXX_COMPILE_WARNINGS "Show -Weffc++ compile warnings. (gcc only)" OFF "NOT MACE_SHOW_ALL_COMPILE_WARNINGS" ON)
+cmake_dependent_option(MACE_SURPRESS_COMPILE_WARNINGS "Surpress compile warnings raise from external dependencies." ON "NOT MACE_SHOW_ALL_COMPILE_WARNINGS" OFF)
+set(MACE_DOWNLOAD_EIGEN_VERSION 3.4.0 CACHE STRING "Set Eigen version to be downloaded (if necessary).")
+set(MACE_DOWNLOAD_YAML_CPP_VERSION 0.7.0 CACHE STRING "Set yaml-cpp version to be downloaded (if necessary).")
 
-# Option relationships
-if(MACE_SHOW_ALL_COMPILE_WARNINGS)
-    set(MACE_SURPRESS_COMPILE_WARNINGS OFF)
-    set(MACE_SHOW_EFFCXX_COMPILE_WARNINGS ON)
-endif()
+# =============================================================================
+# Global compile options
+# =============================================================================
 
-# ================================================================================================================================
+include(${MACE_PROJECT_CMAKE_DIR}/GlobalCompileOptions.cmake)
+
+# =============================================================================
 # Dependencies
-# ================================================================================================================================
+# =============================================================================
 
 # MPI
-find_package(MPI 2.2 REQUIRED C)
-message(STATUS "MACE uses MPI_C includes from: ${MPI_C_INCLUDE_DIRS}")
-message(STATUS "MACE uses MPI_C libraries: ${MPI_C_LIBRARIES}")
-add_definitions(-DOMPI_SKIP_MPICXX) # inform OpenMPI not to bring mpicxx in, it's necessary for most cases.
-add_definitions(-DMPICH_SKIP_MPICXX) # inform MPICH/IntelMPI not to bring mpicxx in, seems unnecessary but more consistent.
-
-# Geant4
-if(MACE_ENABLE_VIS)
-    find_package(Geant4 11.0.0 REQUIRED ui_all vis_all)
-else()
-    find_package(Geant4 11.0.0 REQUIRED)
-endif()
-message(STATUS "MACE uses Geant4 includes from: ${Geant4_INCLUDE_DIRS}")
-message(STATUS "MACE uses Geant4 libraries: ${Geant4_LIBRARIES}")
-
+include(${MACE_PROJECT_CMAKE_DIR}/LookForMPI.cmake)
 # ROOT
-find_package(ROOT 6.24.02 REQUIRED COMPONENTS Geom)
-message(STATUS "MACE uses ROOT includes from: ${ROOT_INCLUDE_DIRS}")
-message(STATUS "MACE uses ROOT libraries: ${ROOT_LIBRARIES}")
-
-# EIGEN3
-find_package(Eigen3 3.0.0 REQUIRED)
-message(STATUS "MACE uses Eigen3 includes from: ${EIGEN3_INCLUDE_DIRS}")
-
+include(${MACE_PROJECT_CMAKE_DIR}/LookForROOT.cmake)
+# Geant4
+include(${MACE_PROJECT_CMAKE_DIR}/LookForGeant4.cmake)
+# Eigen
+include(${MACE_PROJECT_CMAKE_DIR}/LookForEigen.cmake)
 # yaml-cpp
-if(NOT MACE_BUILDIN_YAML_CPP)
-    find_package(yaml-cpp 0.6.0 QUIET)
-    if(NOT yaml-cpp_FOUND)
-        message("Notice: yaml-cpp not found. Turning on MACE_BUILDIN_YAML_CPP.")
-        set(MACE_BUILDIN_YAML_CPP ON)
-        set(YAML_CPP_INCLUDE_DIR ${MACE_BUILDIN_YAML_CPP_DIR}/include)
-        set(YAML_CPP_LIBRARIES yaml-cpp)
-    endif()
-endif()
-message(STATUS "MACE uses yaml-cpp includes from: ${YAML_CPP_INCLUDE_DIR}")
-message(STATUS "MACE uses yaml-cpp libraries: ${YAML_CPP_LIBRARIES}")
+include(${MACE_PROJECT_CMAKE_DIR}/LookForYamlCpp.cmake)
 
-# ================================================================================================================================
-# MACE build type
-# ================================================================================================================================
-
-if(CMAKE_CONFIGURATION_TYPES)
-    message(STATUS "MACE build type: ${CMAKE_CONFIGURATION_TYPES}")
-else()
-    if(NOT CMAKE_BUILD_TYPE)
-        # Default to "release"
-        set(CMAKE_BUILD_TYPE "Release")
-    endif()
-    message(STATUS "MACE build type: ${CMAKE_BUILD_TYPE}")
-endif()
-
-# ================================================================================================================================
-# MACE at C++20
-# ================================================================================================================================
-
-if(NOT DEFINED CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD 20)
-elseif(CMAKE_CXX_STANDARD LESS 20)
-    message(FATAL_ERROR "MACE should be built, at least, with C++20")
-endif()
-message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
-
-# ================================================================================================================================
+# =============================================================================
 # Let's go!
-# ================================================================================================================================
+# =============================================================================
 
-# Build-in yaml-cpp
-if(MACE_BUILDIN_YAML_CPP)
-    add_subdirectory(${MACE_BUILDIN_YAML_CPP_DIR})
-endif()
+# Config for MACE
+include(${MACE_PROJECT_CMAKE_DIR}/MACECompileOptions.cmake)
+include(${MACE_PROJECT_CMAKE_DIR}/IncludeDirectories.cmake)
 
 # MACE
-add_subdirectory(${MACE_PROJECT_SRC_DIR}/MACE)
+add_subdirectory("${MACE_PROJECT_SRC_DIR}/MACE")
 
 # Test
 if(MACE_BUILD_TEST)
-    add_subdirectory(${MACE_PROJECT_SRC_DIR}/test)
+    add_subdirectory("${MACE_PROJECT_SRC_DIR}/test")
 endif()

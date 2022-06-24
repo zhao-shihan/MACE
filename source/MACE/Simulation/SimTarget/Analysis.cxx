@@ -62,8 +62,9 @@ void Analysis::Close() {
 }
 
 void Analysis::OpenResultFile() {
-    const auto filePath = MACE::Utility::MPIUtil::MakeMPIFilePath(fResultName, ".root");
-    fResultFile = std::make_unique<TFile>(filePath.c_str(), "recreate");
+    fResultFile = std::make_unique<TFile>(
+        MACE::Utility::MPIUtil::MakeMPIFilePath(fResultName, ".root").generic_string().c_str(),
+        "recreate");
 }
 
 void Analysis::WriteResult() {

@@ -15,4 +15,4 @@ std::vector<StringT> SplitString(std::string_view string, char delimiter);
 
 } // namespace MACE::Utility
 
-#include "MACE/Utility/StringUtil.ixx"
+#include "MACE/Utility/StringUtil.inl"

@@ -1,6 +1,7 @@
 #include "MACE/Core/Geometry/Description/CDC.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/CDCBody.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
+#include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4NistManager.hh"
 #include "G4Polycone.hh"
@@ -9,6 +10,7 @@
 namespace MACE::Core::Geometry::Entity::Fast {
 
 using namespace MACE::Utility::LiteralUnit::Density;
+using namespace MACE::Utility::PhysicalConstant;
 
 void CDCBody::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::CDC::Instance();
@@ -38,7 +40,7 @@ void CDCBody::ConstructSelf(G4bool checkOverlaps) {
     auto solid = Make<G4Polycone>(
         name,
         0,
-        2 * M_PI,
+        twopi,
         numZPlane,
         zPlane,
         rInner,

@@ -77,11 +77,11 @@ Language: Cpp
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: None
 PPIndentWidth: -1
-PackConstructorInitializers: Never
+# PackConstructorInitializers: Never
 PointerAlignment: Left
 ReferenceAlignment: Left
 ReflowComments: true
-SeparateDefinitionBlocks: Leave
+# SeparateDefinitionBlocks: Leave
 ShortNamespaceLines: 0
 SortIncludes: CaseInsensitive
 SortUsingDeclarations: true
