@@ -75,5 +75,5 @@ private:
     std::vector<std::pair<HelixParameters, const std::vector<HitPtr*>*>> fTrackList;
 };
 
-#include "MACE/Reconstruction/ReconTracks/Tracker/Hough.ixx"
+#include "MACE/Reconstruction/ReconTracks/Tracker/Hough.inl"
 */

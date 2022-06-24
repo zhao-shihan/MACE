@@ -29,4 +29,4 @@ using DoubleBranchSocket = FundamentalBranchSocket<Double_t>;
 
 } // namespace MACE::Core::DataModel::BranchSocket
 
-#include "MACE/Core/DataModel/BranchSocket/FundamentalBranchSocket.ixx"
+#include "MACE/Core/DataModel/BranchSocket/FundamentalBranchSocket.inl"

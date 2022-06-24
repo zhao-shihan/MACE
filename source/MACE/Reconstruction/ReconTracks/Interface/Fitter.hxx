@@ -32,4 +32,4 @@ protected:
 
 } // namespace MACE::Reconstruction::ReconTracks::Interface
 
-#include "MACE/Reconstruction/ReconTracks/Interface/Fitter.ixx"
+#include "MACE/Reconstruction/ReconTracks/Interface/Fitter.inl"

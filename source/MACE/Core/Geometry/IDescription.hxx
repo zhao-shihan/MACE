@@ -45,4 +45,4 @@ concept IsDescription =
 
 } // namespace MACE::Core::Geometry
 
-#include "MACE/Core/Geometry/IDescription.ixx"
+#include "MACE/Core/Geometry/IDescription.inl"

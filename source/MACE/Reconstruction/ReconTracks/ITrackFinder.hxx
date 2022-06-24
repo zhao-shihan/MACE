@@ -49,4 +49,4 @@ protected:
 
 } // namespace MACE::Reconstruction::ReconTracks
 
-#include "ReconTracks/Interface/ITrackFinder.ixx"
+#include "ReconTracks/Interface/ITrackFinder.inl"

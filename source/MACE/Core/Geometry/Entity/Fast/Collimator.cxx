@@ -1,11 +1,14 @@
 #include "MACE/Core/Geometry/Description/Collimator.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/Collimator.hxx"
+#include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-using MACE::Core::Geometry::Entity::Fast::Collimator;
+namespace MACE::Core::Geometry::Entity::Fast {
+
+using namespace MACE::Utility::PhysicalConstant;
 
 void Collimator::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::Collimator::Instance();
@@ -25,7 +28,7 @@ void Collimator::ConstructSelf(G4bool checkOverlaps) {
             radii + thickness,
             length / 2,
             0,
-            2 * M_PI);
+            twopi);
         auto logic = Make<G4LogicalVolume>(
             solid,
             nullptr,
@@ -42,3 +45,5 @@ void Collimator::ConstructSelf(G4bool checkOverlaps) {
             checkOverlaps);
     }
 }
+
+} // namespace MACE::Core::Geometry::Entity::Fast

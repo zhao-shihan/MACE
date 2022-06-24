@@ -26,4 +26,4 @@ private:
 
 } // namespace MACE::Core::DataModel::BranchSocket
 
-#include "MACE/Core/DataModel/BranchSocket/ClassBranchSocket.ixx"
+#include "MACE/Core/DataModel/BranchSocket/ClassBranchSocket.inl"

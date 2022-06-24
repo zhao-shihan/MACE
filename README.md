@@ -26,13 +26,20 @@ To build MACE software from source, there are a few prerequisites.
 
 ### External dependencies
 
-1. C/C++ compiler that supports ≥ C++20. (gcc ≥ 10, Clang ≥ 10)
-2. CMake    (≥ 3.16)
-3. MPI      (≥ 2.2, MPICH, OpenMPI, Intel MPI, etc. On your frequency.)
-4. Geant4   (≥ 4.11.0, with ≥ C++17, gdml enabled)
-5. ROOT     (≥ 6.24.02, ≥ C++17)
-6. Eigen    (≥ 3.0.0)
-7. yaml-cpp (≥ 0.6.0, optional. Build-in if not found.)
+Required:
+
+1. C/C++ compiler that supports ≥ C++20. ([GCC](https://gcc.gnu.org/) ≥ 10, [Clang](https://clang.llvm.org/) ≥ 10, MSVC ≥ 19.30 ([Visual Studio](https://visualstudio.microsoft.com/) 2022))
+2. [CMake](https://cmake.org/) (≥ 3.16)
+3. [MPI](https://www.mpi-forum.org/) (≥ 2.0, [MPICH](https://www.mpich.org/), [OpenMPI](https://www.open-mpi.org/), [Intel MPI](https://www.intel.cn/content/www/cn/zh/developer/tools/oneapi/mpi-library.html), [Microsoft MPI](https://github.com/Microsoft/Microsoft-MPI), etc. On your frequency)
+4. [ROOT](https://root.cern/) (≥ 6.24.02, ≥ C++17)
+5. [Geant4](https://geant4.web.cern.ch/) (≥ 4.11.0)
+
+Required, built-in if not found:
+
+1. [Eigen](https://eigen.tuxfamily.org/) (≥ 3.3.0, built-in if not found (network or pre-downloaded source is required))
+2. [yaml-cpp](https://github.com/jbeder/yaml-cpp) (≥ 0.6.0, built-in if not found (network or pre-downloaded source is required))
+3. Geant4::G4gdml (Geant4 optional component, built-in if not found)
+4. [Xerces-C++](https://xerces.apache.org/xerces-c/) (not required if G4gdml is not required, ≥ 3.2.0, built-in if not found (network or pre-downloaded source is required))
 
 ### Prepare for your PC  
 

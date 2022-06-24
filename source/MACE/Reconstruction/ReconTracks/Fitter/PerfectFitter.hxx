@@ -25,4 +25,4 @@ public:
 
 } // namespace MACE::Reconstruction::ReconTracks::Fitter
 
-#include "MACE/Reconstruction/ReconTracks/Fitter/PerfectFitter.ixx"
+#include "MACE/Reconstruction/ReconTracks/Fitter/PerfectFitter.inl"

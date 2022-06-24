@@ -22,4 +22,4 @@ public:
 
 } // namespace MACE::Reconstruction::ReconTracks::Fitter
 
-#include "MACE/Reconstruction/ReconTracks/Fitter/Dummy.ixx"
+#include "MACE/Reconstruction/ReconTracks/Fitter/Dummy.inl"
