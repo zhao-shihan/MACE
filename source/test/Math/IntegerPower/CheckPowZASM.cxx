@@ -7,7 +7,7 @@ using namespace MACE::Utility::Math;
 
 #define MACE_TEST_GENERATE_POWZ_FUNC(FPType, Prefix)                   \
     FPType Prefix##__DoConstPowZImAlmostEmpty() {                      \
-        return PowZ<4>(3);                                             \
+        return Pow4(3);                                                \
     }                                                                  \
     FPType Prefix##__DoConstMultiplyImAlmostEmpty() {                  \
         return 3 * 3 * 3 * 3;                                          \
@@ -16,7 +16,7 @@ using namespace MACE::Utility::Math;
         return std::pow(3, 4);                                         \
     }                                                                  \
     FPType Prefix##__DoPowZSquareImEquivlentToMultiply(FPType a) {     \
-        return PowZ<2>(a);                                             \
+        return Pow2(a);                                                \
     }                                                                  \
     FPType Prefix##__DoMultiplySquare(FPType a) {                      \
         return a * a;                                                  \
@@ -25,7 +25,7 @@ using namespace MACE::Utility::Math;
         return std::pow(a, 2);                                         \
     }                                                                  \
     FPType Prefix##__DoPowZCubicImEquivlentToMultiply(FPType a) {      \
-        return PowZ<3>(a);                                             \
+        return Pow3(a);                                                \
     }                                                                  \
     FPType Prefix##__DoMultiplyCubic(FPType a) {                       \
         return a * a * a;                                              \
@@ -34,7 +34,7 @@ using namespace MACE::Utility::Math;
         return std::pow(a, 3);                                         \
     }                                                                  \
     FPType Prefix##__DoPowZ5ImEquivlentToMultiply(FPType a) {          \
-        return PowZ<5>(a);                                             \
+        return Pow5(a);                                                \
     }                                                                  \
     FPType Prefix##__DoMultiply5th(FPType a) {                         \
         return (a * a) * (a * a) * a;                                  \

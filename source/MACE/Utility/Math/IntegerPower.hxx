@@ -77,4 +77,21 @@ constexpr auto PowZ(std::integral auto x) {
     return PowZ<N>(FloatT(x));
 }
 
+// Useful shorthands:
+
+#define MACE_UTILITY_SMALL_INTEGER_FP_POWER(N) \
+    template<typename T>                       \
+    constexpr auto Pow##N(T&& x) {             \
+        return PowZ<N>(std::forward<T>(x));    \
+    }
+MACE_UTILITY_SMALL_INTEGER_FP_POWER(2)
+MACE_UTILITY_SMALL_INTEGER_FP_POWER(3)
+MACE_UTILITY_SMALL_INTEGER_FP_POWER(4)
+MACE_UTILITY_SMALL_INTEGER_FP_POWER(5)
+MACE_UTILITY_SMALL_INTEGER_FP_POWER(6)
+MACE_UTILITY_SMALL_INTEGER_FP_POWER(7)
+MACE_UTILITY_SMALL_INTEGER_FP_POWER(8)
+MACE_UTILITY_SMALL_INTEGER_FP_POWER(9)
+#undef MACE_UTILITY_SMALL_INTEGER_FP_POWER
+
 } // namespace MACE::Utility::Math
