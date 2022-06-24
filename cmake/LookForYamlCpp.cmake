@@ -117,7 +117,7 @@ message(STATUS "MACE will use yaml-cpp headers from: ${YAML_CPP_INCLUDE_DIR}")
 message(STATUS "MACE will use yaml-cpp libraries: ${YAML_CPP_LIBRARIES}")
 
 if(NOT MACE_BUILTIN_YAML_CPP)
-    message(STATUS "Looking for yaml-cpp - found (version: ${YAML_CPP_VERSION})")
+    message(STATUS "Looking for yaml-cpp - found (version: ${yaml-cpp_VERSION})")
 else()
     message(STATUS "Looking for yaml-cpp - built-in (version: ${MACE_BUILTIN_YAML_CPP_VERSION})")
 endif()
