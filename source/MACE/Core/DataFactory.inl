@@ -19,8 +19,11 @@ std::shared_ptr<TChain> DataFactory::CreateChain(const std::vector<PathT>& fileL
     return chain;
 }
 
-template<IsTransientData DataT, std::convertible_to<decltype(std::declval<PathT>().c_str()), const char*> PathT>
+// clang-format off
+template<IsTransientData DataT, typename PathT>
+    requires std::convertible_to<decltype(std::declval<PathT>().c_str()), const char*>
 std::shared_ptr<TChain> DataFactory::CreateChain(const std::vector<PathT>& fileList, Long64_t treeIndex) const {
+    // clang-format on
     auto chain = std::make_shared<TChain>(GetTreeName<DataT>(treeIndex));
     for (auto&& file : fileList) {
         chain->AddFile(file.c_str());
@@ -76,7 +79,7 @@ std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<DataInLi
 
 template<Dereferenceable DataInListPointerT>
 std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<DataInListPointerT>& dataList, Long64_t treeIndex) const {
-    CreateAndFillTree<ReferencedType<DataInListPointerT>, DataInListPointerT>(dataList, treeIndex);
+    return CreateAndFillTree<ReferencedType<DataInListPointerT>, DataInListPointerT>(dataList, treeIndex);
 }
 
 template<IsTransientData DataT>

@@ -45,8 +45,11 @@ public:
     /// Create a TChain of the list of ROOT files.
     template<IsTransientData DataT, std::convertible_to<const char*> PathT>
     std::shared_ptr<TChain> CreateChain(const std::vector<PathT>& fileList, Long64_t treeIndex = 0) const;
-    template<IsTransientData DataT, std::convertible_to<decltype(std::declval<PathT>().c_str()), const char*> PathT>
+    template<IsTransientData DataT, typename PathT>
+    // clang-format off
+        requires std::convertible_to<decltype(std::declval<PathT>().c_str()), const char*>
     std::shared_ptr<TChain> CreateChain(const std::vector<PathT>& fileList, Long64_t treeIndex = 0) const;
+    // clang-format on
     /// Get the range of tree index in current tree name setting.
     template<IsTransientData DataT>
     std::pair<Long64_t, Long64_t> GetTreeIndexRange(TFile& file) const;
