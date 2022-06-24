@@ -6,6 +6,7 @@ function(mace_configure_built_in_yaml_cpp BUILTIN_YAML_CPP_DIR)
     # set yaml-cpp options
     set(YAML_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
     set(YAML_CPP_INSTALL OFF CACHE BOOL "" FORCE)
+    set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
     if(MACE_USE_SHARED_MSVC_RT)
         set(YAML_MSVC_SHARED_RT ON CACHE BOOL "" FORCE)
     else()
