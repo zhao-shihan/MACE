@@ -38,7 +38,7 @@ option(MACE_USE_SHARED_MSVC_RT "Select the MSVC runtime library for use (MSVC on
 cmake_dependent_option(MACE_SHOW_GCC_EFFCXX_COMPILE_WARNINGS "Show -Weffc++ compile warnings. (gcc only)" OFF "NOT MACE_SHOW_ALL_COMPILE_WARNINGS" ON)
 cmake_dependent_option(MACE_SURPRESS_COMPILE_WARNINGS "Surpress compile warnings raise from external dependencies." ON "NOT MACE_SHOW_ALL_COMPILE_WARNINGS" OFF)
 set(MACE_BUILTIN_EIGEN_VERSION 3.4.0 CACHE STRING "Set built-in Eigen version (if required).")
-set(MACE_DOWNLOAD_YAML_CPP_VERSION 0.7.0 CACHE STRING "Set yaml-cpp version to be downloaded (if necessary).")
+set(MACE_BUILTIN_YAML_CPP_VERSION 0.7.0 CACHE STRING "Set built-in yaml-cpp version (if required).")
 
 # =============================================================================
 # Global compile options
