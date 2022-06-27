@@ -13,5 +13,5 @@ file(GLOB G4gdml_srcs "${PROJECT_SOURCE_DIR}/src/*.cc")
 
 # target
 add_library(G4gdml STATIC ${G4gdml_srcs})
-target_include_directories(G4gdml PRIVATE ${XercesC_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/include)
+target_include_directories(G4gdml PUBLIC ${XercesC_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(G4gdml ${Geant4_LIBRARIES} ${XercesC_LIBRARIES})
