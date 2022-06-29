@@ -9,7 +9,22 @@
 
 namespace MACE::Utility::G4Util {
 
-class MPIRunManager : public G4RunManager {
+namespace Detail {
+
+/// @attention This should only be firstly privately inherited by MPIRunManager. It's not intended to be used elsewhere.
+class MPIRunManagerInitializeHelper {
+protected:
+    MPIRunManagerInitializeHelper();
+    void PrintStartupMessage();
+
+private:
+    static void FlipG4cout();
+};
+
+} // namespace Detail
+
+class MPIRunManager : private Detail::MPIRunManagerInitializeHelper,
+                      public G4RunManager {
 public:
     MPIRunManager();
     virtual ~MPIRunManager() noexcept = default;
