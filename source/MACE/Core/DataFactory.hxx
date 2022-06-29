@@ -45,11 +45,9 @@ public:
     /// Create a TChain of the list of ROOT files.
     template<IsTransientData DataT, std::convertible_to<const char*> PathT>
     std::shared_ptr<TChain> CreateChain(const std::vector<PathT>& fileList, Long64_t treeIndex = 0) const;
-    template<IsTransientData DataT, typename PathT>
-    // clang-format off
+    template<IsTransientData DataT, typename PathT> // clang-format off
         requires std::convertible_to<decltype(std::declval<PathT>().c_str()), const char*>
-    std::shared_ptr<TChain> CreateChain(const std::vector<PathT>& fileList, Long64_t treeIndex = 0) const;
-    // clang-format on
+    std::shared_ptr<TChain> CreateChain(const std::vector<PathT>& fileList, Long64_t treeIndex = 0) const; // clang-format on
     /// Get the range of tree index in current tree name setting.
     template<IsTransientData DataT>
     std::pair<Long64_t, Long64_t> GetTreeIndexRange(TFile& file) const;
@@ -64,16 +62,15 @@ public:
     ///   Note: this feature allows to fill the tree with less but exact columns that the data vector has.
     /// Note: there is no static branch infomation for the tree, so
     /// user should make sure that DataInTreeT represents exactly the same branches as the tree.
-    template<IsTransientData DataInTreeT, Dereferenceable DataInListPointerT>
-    requires std::derived_from<ReferencedType<DataInListPointerT>, DataInTreeT>
-    static void FillTree(const std::vector<DataInListPointerT>& dataList, TTree& tree, bool connected = false);
+    template<IsTransientData DataInTreeT, Dereferenceable DataInListPointerT> // clang-format off
+        requires std::derived_from<ReferencedType<DataInListPointerT>, DataInTreeT>
+    static void FillTree(const std::vector<DataInListPointerT>& dataList, TTree& tree, bool connected = false); // clang-format on
     template<Dereferenceable DataInListPointerT>
     static void FillTree(const std::vector<DataInListPointerT>& dataList, TTree& tree, bool connected = false);
     /// Same effect as invoke CreateTree<DataInTreeT>(treeIndex) and FillTree<DataInTreeT>(dataList, tree, true).
-    template<IsTransientData DataInTreeT, Dereferenceable DataInListPointerT>
-    requires std::derived_from<ReferencedType<DataInListPointerT>, DataInTreeT>
-        std::shared_ptr<TTree> CreateAndFillTree(const std::vector<DataInListPointerT>& dataList, Long64_t treeIndex = 0)
-    const;
+    template<IsTransientData DataInTreeT, Dereferenceable DataInListPointerT> // clang-format off
+        requires std::derived_from<ReferencedType<DataInListPointerT>, DataInTreeT>
+    std::shared_ptr<TTree> CreateAndFillTree(const std::vector<DataInListPointerT>& dataList, Long64_t treeIndex = 0) const; // clang-format on
     template<Dereferenceable DataInListPointerT>
     std::shared_ptr<TTree> CreateAndFillTree(const std::vector<DataInListPointerT>& dataList, Long64_t treeIndex = 0) const;
     /// Create a data vector and fill it with a tree.
