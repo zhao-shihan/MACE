@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Core/DataModel/BranchSocket/IBranchSocket.hxx"
-#include "MACE/Utility/ShortString.hxx"
+#include "MACE/Utility/FixedCapacityString.hxx"
 
 namespace MACE::Core::DataModel::BranchSocket {
 
