@@ -12,6 +12,7 @@
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
 #include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
+#include "MACE/Utility/MPIUtil/MainMPI.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
@@ -34,9 +35,7 @@ using MCPHit_t = SimHit::MCPSimHit;
 using MVertex_t = MuoniumSimVertex;
 using Track_t = Track::CDCPhysicsTrack;
 
-int main(int argc, char* argv[]) {
-    MPI_Init(&argc, &argv);
-
+int main_MPI(int, char* argv[]) {
     std::filesystem::path pathIn = argv[1];
     const auto calTimeWindow = std::stod(argv[2]);
     const auto sigmaTCA = std::stod(argv[3]);
@@ -217,6 +216,5 @@ int main(int argc, char* argv[]) {
     vertexTree->Write();
     vertexHist.Write();
 
-    MPI_Finalize();
     return EXIT_SUCCESS;
 }
