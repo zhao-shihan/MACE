@@ -1,3 +1,5 @@
+# This file is included before "find_package"s and "LookFor"s.
+
 # =============================================================================
 # MACE build type
 # =============================================================================
@@ -36,9 +38,9 @@ endif()
 # =============================================================================
 
 # inform OpenMPI not to bring mpicxx in, it's necessary for most cases.
-add_compile_definitions(OMPI_SKIP_MPICXX)
+add_compile_definitions(OMPI_SKIP_MPICXX=1)
 # inform MPICH and derivatives not to bring mpicxx in, seems unnecessary but more consistent.
-add_compile_definitions(MPICH_SKIP_MPICXX)
+add_compile_definitions(MPICH_SKIP_MPICXX=1)
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # Build concurrently
