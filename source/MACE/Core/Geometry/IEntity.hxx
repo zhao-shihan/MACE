@@ -47,7 +47,9 @@ public:
     template<std::derived_from<G4Field> FieldT, std::derived_from<G4EquationOfMotion> EquationT, class StepperT, std::derived_from<G4VIntegrationDriver> DriverT>
     void RegisterField(FieldT* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const;
 
+#if MACE_WITH_G4GDML
     void WriteSelfAndDesendentsToGDML(std::string_view fileName, size_t volumeIndex = 0) const;
+#endif
 
     auto GetLogicalVolumeNum() const { return fLogicalVolumes.size(); }
     auto GetLogicalVolume(size_t volumeIndex = 0) const { return fLogicalVolumes.at(volumeIndex).get(); }

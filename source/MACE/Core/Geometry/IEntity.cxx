@@ -1,7 +1,10 @@
 #include "MACE/Core/Geometry/IEntity.hxx"
 
-#include "G4GDMLParser.hh"
 #include "G4SDManager.hh"
+
+#if MACE_WITH_G4GDML
+#    include "G4GDMLParser.hh"
+#endif
 
 namespace MACE::Core::Geometry {
 
@@ -88,11 +91,13 @@ void IEntity::RegisterSD(G4VSensitiveDetector* sd) const {
     }
 }
 
+#if MACE_WITH_G4GDML
 void IEntity::WriteSelfAndDesendentsToGDML(std::string_view fileName, size_t volumeIndex) const {
     G4GDMLParser gdml;
     gdml.SetAddPointerToName(false);
     gdml.SetOutputFileOverwrite(true);
     gdml.Write(fileName.data(), this->GetPhysicalVolume(volumeIndex));
 }
+#endif
 
 } // namespace MACE::Core::Geometry
