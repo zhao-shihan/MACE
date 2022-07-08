@@ -54,18 +54,17 @@ elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # /Wall will make MSVC commit suicide, just use /W4
     add_compile_options(/W4)
 endif()
-
-# Surpress warnings raised from external headers
+# Surpress those stupid or from external
 if(MACE_SURPRESS_COMPILE_WARNINGS)
     if(CMAKE_COMPILER_IS_GNUCXX)
         # OpenMPI
         add_compile_options(-Wno-cast-function-type)
         # ROOT
         add_compile_options(-Wno-volatile)
-        if(GCC_VERSION GREATER_EQUAL 11)
-            # Eigen
-            add_compile_options(-Wno-deprecated-enum-enum-conversion)
-        endif()
+        # Eigen
+        add_compile_options(-Wno-deprecated-enum-enum-conversion)
+        # strncpy, strncat, etc.
+        add_compile_options(-Wno-stringop-truncation)
     elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
         # ROOT
         add_compile_options(-Wno-deprecated-volatile)

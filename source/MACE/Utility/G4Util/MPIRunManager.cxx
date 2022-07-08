@@ -14,10 +14,37 @@
 
 namespace MACE::Utility::G4Util {
 
-using namespace MACE::Utility::Math;
 using namespace MACE::Utility::MPIUtil;
+using MACE::Utility::Math::Pow2;
+
+namespace Detail {
+
+MPIRunManagerInitializeHelper::MPIRunManagerInitializeHelper() {
+    if (MPICommRank(MPI_COMM_WORLD) != 0) {
+        FlipG4cout();
+    }
+}
+
+void MPIRunManagerInitializeHelper::PrintStartupMessage() {
+    if (MPICommRank(MPI_COMM_WORLD) == 0) {
+        G4cout << " Running on " << MPICommSize(MPI_COMM_WORLD) << " processes.\n\n"
+               << "**************************************************************\n"
+               << G4endl;
+    } else {
+        FlipG4cout();
+    }
+}
+
+void MPIRunManagerInitializeHelper::FlipG4cout() {
+    static ObserverPtr<std::streambuf> fgG4coutBufKeeper = nullptr;
+    fgG4coutBufKeeper = G4cout.rdbuf(fgG4coutBufKeeper);
+}
+
+} // namespace Detail
 
 MPIRunManager::MPIRunManager() :
+    Detail::MPIRunManagerInitializeHelper(),
+    G4RunManager(),
     fCommRank((CheckMPIAvailability(), MPICommRank(MPI_COMM_WORLD))),
     fCommSize(MPICommSize(MPI_COMM_WORLD)),
     fTotalNumberOfEventsToBeProcessed(0),
@@ -33,6 +60,7 @@ MPIRunManager::MPIRunManager() :
     fNDevEventWallTime(std::numeric_limits<decltype(fNDevEventWallTime)>::epsilon()),
     fRunWallTime(),
     fRunCPUTime(0) {
+    PrintStartupMessage();
     MPIRunMessenger::Instance().SetTo(this);
 }
 

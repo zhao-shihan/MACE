@@ -2,6 +2,7 @@
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
 #include <array>
+#include <climits>
 #include <cstring>
 #include <set>
 #include <vector>
