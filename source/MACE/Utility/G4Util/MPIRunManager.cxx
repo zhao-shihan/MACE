@@ -19,15 +19,21 @@ using MACE::Utility::Math::Pow2;
 
 namespace Detail {
 
-MPIRunManagerInitializeHelper::MPIRunManagerInitializeHelper() {
+static void FlipG4cout() {
+    static thread_local ObserverPtr<std::streambuf> g4coutBufExchanger = nullptr;
+    g4coutBufExchanger = G4cout.rdbuf(g4coutBufExchanger);
+}
+
+MPIRunManagerInitializeHelper1::MPIRunManagerInitializeHelper1() {
     if (MPICommRank(MPI_COMM_WORLD) != 0) {
         FlipG4cout();
     }
 }
 
-void MPIRunManagerInitializeHelper::PrintStartupMessage() {
+MPIRunManagerInitializeHelper2::MPIRunManagerInitializeHelper2() {
     if (MPICommRank(MPI_COMM_WORLD) == 0) {
-        G4cout << " Running on " << MPICommSize(MPI_COMM_WORLD) << " processes.\n\n"
+        G4cout << " Running on " << MPICommSize(MPI_COMM_WORLD) << " processes via MPI " << MPI_VERSION << '.' << MPI_SUBVERSION << '\n'
+               << '\n'
                << "**************************************************************\n"
                << G4endl;
     } else {
@@ -35,16 +41,12 @@ void MPIRunManagerInitializeHelper::PrintStartupMessage() {
     }
 }
 
-void MPIRunManagerInitializeHelper::FlipG4cout() {
-    static ObserverPtr<std::streambuf> fgG4coutBufKeeper = nullptr;
-    fgG4coutBufKeeper = G4cout.rdbuf(fgG4coutBufKeeper);
-}
-
 } // namespace Detail
 
 MPIRunManager::MPIRunManager() :
-    Detail::MPIRunManagerInitializeHelper(),
+    Detail::MPIRunManagerInitializeHelper1(),
     G4RunManager(),
+    Detail::MPIRunManagerInitializeHelper2(),
     fCommRank((CheckMPIAvailability(), MPICommRank(MPI_COMM_WORLD))),
     fCommSize(MPICommSize(MPI_COMM_WORLD)),
     fTotalNumberOfEventsToBeProcessed(0),
@@ -60,7 +62,6 @@ MPIRunManager::MPIRunManager() :
     fNDevEventWallTime(std::numeric_limits<decltype(fNDevEventWallTime)>::epsilon()),
     fRunWallTime(),
     fRunCPUTime(0) {
-    PrintStartupMessage();
     MPIRunMessenger::Instance().SetTo(this);
 }
 
