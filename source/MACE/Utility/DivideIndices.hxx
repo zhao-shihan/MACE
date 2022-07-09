@@ -22,7 +22,7 @@ std::vector<IndexT> DivideIndexNum(IndexT nIndices, IndexT nTakers);
 
 /// @brief The return struct of DivideIndexRange... functions.
 template<std::integral IndexT>
-struct DividedIndexRange {
+struct IntegralIndexRange {
     IndexT begin; // the first index
     IndexT end;   // index after the last index
     IndexT step;  // increment of index
@@ -44,9 +44,9 @@ struct DividedIndexRange {
 ///   taker 5: [5, 75, 7, 10]
 ///   taker 6: [6, 76, 7, 10]
 template<std::integral IndexT>
-std::vector<DividedIndexRange<IndexT>> DivideIndexRangeIndexWise(IndexT begin, IndexT end, IndexT nTakers);
+std::vector<IntegralIndexRange<IndexT>> DivideIndexRangeIndexWise(IndexT begin, IndexT end, IndexT nTakers);
 template<std::integral IndexT>
-std::vector<DividedIndexRange<IndexT>> DivideIndexRangeIndexWise(std::pair<IndexT, IndexT> beginEnd, IndexT nTakers);
+std::vector<IntegralIndexRange<IndexT>> DivideIndexRangeIndexWise(std::pair<IndexT, IndexT> beginEnd, IndexT nTakers);
 
 /// @brief Distribute index range uniformly to takers. The range assigned to each taker are continuous.
 /// @param begin Index of first job
@@ -62,9 +62,9 @@ std::vector<DividedIndexRange<IndexT>> DivideIndexRangeIndexWise(std::pair<Index
 ///   taker 5: [54, 64, 1, 10]
 ///   taker 6: [64, 74, 1, 10]
 template<std::integral IndexT>
-std::vector<DividedIndexRange<IndexT>> DivideIndexRangeTakerWise(IndexT begin, IndexT end, IndexT nTakers);
+std::vector<IntegralIndexRange<IndexT>> DivideIndexRangeTakerWise(IndexT begin, IndexT end, IndexT nTakers);
 template<std::integral IndexT>
-std::vector<DividedIndexRange<IndexT>> DivideIndexRangeTakerWise(std::pair<IndexT, IndexT> beginEnd, IndexT nTakers);
+std::vector<IntegralIndexRange<IndexT>> DivideIndexRangeTakerWise(std::pair<IndexT, IndexT> beginEnd, IndexT nTakers);
 
 } // namespace MACE::Utility
 

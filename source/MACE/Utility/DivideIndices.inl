@@ -12,9 +12,9 @@ std::vector<IndexT> DivideIndexNum(IndexT nIndices, IndexT nTakers) {
 }
 
 template<std::integral IndexT>
-std::vector<DividedIndexRange<IndexT>> DivideIndexRangeIndexWise(IndexT begin, IndexT end, IndexT nTakers) {
+std::vector<IntegralIndexRange<IndexT>> DivideIndexRangeIndexWise(IndexT begin, IndexT end, IndexT nTakers) {
     const auto dividedIndexNums = DivideIndexNum<IndexT>(end - begin, nTakers);
-    std::vector<DividedIndexRange<IndexT>> dividedIndexRanges(nTakers);
+    std::vector<IntegralIndexRange<IndexT>> dividedIndexRanges(nTakers);
     for (IndexT i = 0; i < nTakers; ++i) {
         dividedIndexRanges[i] = {i,
                                  i + dividedIndexNums[i] * nTakers,
@@ -25,14 +25,14 @@ std::vector<DividedIndexRange<IndexT>> DivideIndexRangeIndexWise(IndexT begin, I
 }
 
 template<std::integral IndexT>
-std::vector<DividedIndexRange<IndexT>> DivideIndexRangeIndexWise(std::pair<IndexT, IndexT> beginEnd, IndexT nTakers) {
+std::vector<IntegralIndexRange<IndexT>> DivideIndexRangeIndexWise(std::pair<IndexT, IndexT> beginEnd, IndexT nTakers) {
     return DivideIndexRangeIndexWise<IndexT>(beginEnd.first, beginEnd.second, nTakers);
 }
 
 template<std::integral IndexT>
-std::vector<DividedIndexRange<IndexT>> DivideIndexRangeTakerWise(IndexT begin, IndexT end, IndexT nTakers) {
+std::vector<IntegralIndexRange<IndexT>> DivideIndexRangeTakerWise(IndexT begin, IndexT end, IndexT nTakers) {
     const auto dividedIndexNums = DivideIndexNum<IndexT>(end - begin, nTakers);
-    std::vector<DividedIndexRange<IndexT>> dividedIndexRanges(nTakers);
+    std::vector<IntegralIndexRange<IndexT>> dividedIndexRanges(nTakers);
     dividedIndexRanges[0] = {(IndexT)0,
                              dividedIndexNums[0],
                              (IndexT)1,
@@ -47,7 +47,7 @@ std::vector<DividedIndexRange<IndexT>> DivideIndexRangeTakerWise(IndexT begin, I
 }
 
 template<std::integral IndexT>
-std::vector<DividedIndexRange<IndexT>> DivideIndexRangeTakerWise(std::pair<IndexT, IndexT> beginEnd, IndexT nTakers) {
+std::vector<IntegralIndexRange<IndexT>> DivideIndexRangeTakerWise(std::pair<IndexT, IndexT> beginEnd, IndexT nTakers) {
     return DivideIndexRangeTakerWise<IndexT>(beginEnd.first, beginEnd.second, nTakers);
 }
 
