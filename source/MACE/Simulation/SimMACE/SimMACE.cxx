@@ -2,18 +2,15 @@
 #include "MACE/Simulation/SimMACE/Action/PhysicsList.hxx"
 #include "MACE/Simulation/SimMACE/RunManager.hxx"
 #include "MACE/Utility/G4Util/MPIExecutive.hxx"
+#include "MACE/Utility/MPIUtil/MainMPI.hxx"
 
 #include "Randomize.hh"
-
-#include "mpi.h"
 
 using namespace MACE::Simulation;
 
 // constexpr const char* InitVisMac;
 
-int main(int argc, char* argv[]) {
-    MPI_Init(&argc, &argv);
-
+int main_MPI(int argc, char* argv[]) {
     bool interactive = (argc == 1);
 
     const auto randEng = std::make_unique<CLHEP::MTwistEngine>(4357L);
@@ -31,7 +28,6 @@ int main(int argc, char* argv[]) {
         mpiExecutive->StartBatchSession(argv[1]);
     }
 
-    MPI_Finalize();
     return EXIT_SUCCESS;
 }
 

@@ -3,28 +3,30 @@
 <img align="right" src="document/picture/MACE_logo_100x100.png"/>
 
 - [MACE](#mace)
-  - [Introduction](#introduction)
-  - [How to Build](#how-to-build)
-    - [External dependencies](#external-dependencies)
-    - [Prepare for your PC](#prepare-for-your-pc)
-    - [Prepare for cluster/supercomputer](#prepare-for-clustersupercomputer)
-    - [Build](#build)
-  - [How to Run](#how-to-run)
-    - [SimMACE](#simmace)
-    - [SimTarget](#simtarget)
-    - [ReconTracks](#recontracks)
+- [Introduction](#introduction)
+- [How to Install](#how-to-install)
+  - [External dependencies](#external-dependencies)
+  - [Prepare for your PC](#prepare-for-your-pc)
+    - [Linux](#linux)
+    - [Windows](#windows)
+  - [Prepare for public cluster/supercomputer](#prepare-for-public-clustersupercomputer)
+  - [Build](#build)
+- [How to Run](#how-to-run)
+  - [SimMACE](#simmace)
+  - [SimTarget](#simtarget)
+  - [ReconTracks](#recontracks)
 
-## Introduction
+# Introduction
 
 This software is designed for MACE experiment. It consists of several modules: Core, Reconstruction, Simulation, and Utility. The "Simulation" module implements the simulation part of the experiment based on GEANT4, including the simulation of the whole experiment (SimMACE) and the simulation of each subsystem (SimEMCal, SimMCP, SimCDC, etc.). The "Reconstruction" module implements the event reconstruction of the experiment. The "Core" module includes three sub modules: "Datamodel", "Geometry" and "Field", which implement the event data model required by mace (and the interface required for expansion), detector geometry, and electromagnetic field, respectively. The "Utility" module provides some common practicle tools that may be used in programming.
 
 ![SimMACE](document/picture/MACE_sim.png)
 
-## How to Build
+# How to Install
 
 To build MACE software from source, there are a few prerequisites.
 
-### External dependencies
+## External dependencies
 
 Required:
 
@@ -38,24 +40,37 @@ Required, built-in if not found:
 
 1. [Eigen](https://eigen.tuxfamily.org/) (≥ 3.3.0, built-in if not found (network or pre-downloaded source is required))
 2. [yaml-cpp](https://github.com/jbeder/yaml-cpp) (≥ 0.6.0, built-in if not found (network or pre-downloaded source is required))
-3. Geant4::G4gdml (Geant4 optional component, built-in if not found)
-4. [Xerces-C++](https://xerces.apache.org/xerces-c/) (not required if G4gdml is not required, ≥ 3.2.0, built-in if not found (network or pre-downloaded source is required))
 
-### Prepare for your PC  
+Optional:
 
-Geant4 and ROOT can be installed on your PC following the official guides. They should be built at least with C++17.  
-On your PC, MPI and Eigen can be installed via package manager (apt, yum, etc.) respect to your linux distrbution. For example, you can install MPICH and Eigen on Ubuntu with
+1. Geant4::G4gdml (Geant4 optional component. The requirement is controlled by CMake option MACE_WITH_G4GDML. It supports the export of G4 geometry.)
+
+## Prepare for your PC  
+
+### Linux
+
+[Geant4](https://geant4.web.cern.ch/) and [ROOT](https://root.cern/) need to be installed on your PC following the official guides. They need to be compiled with at least C++17.
+
+[MPI](https://www.mpi-forum.org/) ([MPICH](https://www.mpich.org/), or [OpenMPI](https://www.open-mpi.org/), or [Intel MPI](https://www.intel.cn/content/www/cn/zh/developer/tools/oneapi/mpi-library.html), or [Microsoft MPI](https://github.com/Microsoft/Microsoft-MPI), or etc.), [Eigen](https://eigen.tuxfamily.org/), and [yaml-cpp](https://github.com/jbeder/yaml-cpp) can be installed via package manager (apt, yum, etc.) respect to your Linux distrbution. For example, you can install MPICH, Eigen, and yaml-cpp on Ubuntu (at least focal (20.04)) with following commands
 
 ```shell
 sudo apt update
-sudo apt install mpich libeigen3-dev
+sudo apt install mpich libeigen3-dev libyaml-cpp-dev
 ```
 
-### Prepare for cluster/supercomputer  
+The earlier distribution (e.g. Ubuntu earlier than focal) may not be able to obtain Eigen or yaml-cpp of the matching version through the package manager. At this time, it is good to use the built-in libraries. MPI is generally not a problem because the requirement for it is quite low (2.0). But if this does become a problem, it is worthwhile to spend some time compiling one for yourself. There are not many obstacles in compiling it.
 
-You cannot work as root in most case, which means package manager won't work. Thus, you might use MPI and Eigen pre-installed on the cluster/supercomputer. That's great if they provides both, but in most scene MPI is pre-installed while Eigen not. In this case just install Eigen manually.
+### Windows
 
-### Build
+Although it is supported to run on Windows, it is indeed not very recommended. On the one hand, Windows itself does not fit well with HPC applications: it has relatively poor file system performance (compared with Linux), and its support for NUMA is also not good (before Windows 10 build 20348, see [here](https://docs.microsoft.com/en-us/Windows/win32/procthread/numa-support#numa-support-on-systems-with-more-than-64-logical-processors)). On the other hand, it is difficult to install "good-looking" G4 on Windows (the default Win32 visualization has nothing to do with good-looking), which is largely due to the slight trouble of installing Qt.
+
+But it doesn't really matter - only if you can tolerate relatively poor performance and less pretty visualization (very likely). To install on windows, the first thing you need to do is to install [Visual Studio](https://visualstudio.microsoft.com/) 2022 (and its C++ components), and [CMake](https://cmake.org/). Then you can either directly install the precompiled version of [ROOT](https://root.cern/) and [Geant4](https://geant4.web.cern.ch/) (Note: using the precompiled version of GEANT4 means that there is no support for gdml. If you need gdml, please compile a G4 with gdml. This is relatively troublesome, because you need to compile a dsafsd before this), or compile them manually. Then you need to add Geant4, ROOT and CMake (if you don't choose to add environment variables when installing) to the environment variables. The rest of the dependencies only need to depend on the built-ins, unless you are able to install them all.
+
+## Prepare for public cluster/supercomputer  
+
+Unless you use container (e.g. [Apptainer](http://apptainer.org/)), you may need to do everything yourself - at this time, it is usually a more efficient option to turn to an expert of environment configuring to help you. It is not easy to build a complete and stable tool chain from scratch on a supercomputer that often lacks many libraries. If you are a master of environment building, we don't have to say much. You just need to confidently configure the environment following what we described above. In addition, if you choose to use container, it should be noted that some supercomputers have their own MPI implementation, which is likely to be optimized based on the cluster topology, and may have better performance when used. If a container is used, the linked MPI may be inside the container, always a universal version that not optimized for a specific machine. If so, then this potential performance gain may be lost.
+
+## Build
 
 After everything prepared, it's time to build.  
 
@@ -70,9 +85,9 @@ make
 
 That's ok to use ninja or other make tools, respect to your preference.  
 
-## How to Run
+# How to Run
 
-### SimMACE
+## SimMACE
 
 In sequential mode with graphics:
 
@@ -92,11 +107,11 @@ In parallel mode with a macro:
 mpirun -n N ./SimMACE run.mac
 ```
 
-### SimTarget
+## SimTarget
 
 
 
-### ReconTracks
+## ReconTracks
 
 Run as
 

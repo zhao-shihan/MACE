@@ -1,3 +1,5 @@
+# This file is included after "find_package"s and "LookFor"s.
+
 # =============================================================================
 # MACE at C++20
 # =============================================================================
@@ -14,10 +16,14 @@ message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
 # MACE compile options
 # =============================================================================
 
+if(MACE_WITH_G4GDML)
+    add_compile_definitions(MACE_WITH_G4GDML=1)
+endif()
+
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # Enable standard-conformance
     add_compile_options(/permissive- /Zc:__cplusplus /Zc:inline)
-    message(STATUS "MSVC standard-conformance mode enabled")
+    message(STATUS "MSVC standard-conformance mode enabled (/permissive- /Zc:__cplusplus /Zc:inline)")
     # Be permissive to standard cfunctions
     add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 endif()

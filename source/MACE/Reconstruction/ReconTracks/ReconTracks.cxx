@@ -6,6 +6,7 @@
 #include "MACE/Reconstruction/ReconTracks/Tracker/PerfectFinder.hxx"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
 #include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
+#include "MACE/Utility/MPIUtil/MainMPI.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
@@ -23,8 +24,7 @@ using MACE::Core::DataFactory;
 
 using Hit_t = CDCSimHit;
 
-int main(int argc, char* argv[]) {
-    MPI_Init(&argc, &argv);
+int main_MPI(int, char* argv[]) {
     const int commRank = MPICommRank(MPI_COMM_WORLD);
 
     const char* nameIn = argv[1];
@@ -133,6 +133,5 @@ int main(int argc, char* argv[]) {
     fileOut.Close();
     fileIn.Close();
 
-    MPI_Finalize();
     return EXIT_SUCCESS;
 }
