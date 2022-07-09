@@ -1,8 +1,8 @@
 #pragma once
 
+#include "MACE/Utility/FixedCapacityString.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
-#include "MACE/Utility/FixedCapacityString.hxx"
 
 #include "Eigen/Core"
 
