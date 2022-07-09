@@ -11,7 +11,6 @@
 #include "MACE/Reconstruction/ReconMuonium/MuoniumSimVertex.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
-#include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
 #include "MACE/Utility/MPIUtil/MainMPI.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"

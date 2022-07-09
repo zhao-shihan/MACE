@@ -35,8 +35,6 @@ public:
 
     static auto GetRunManager() { return static_cast<MPIRunManager*>(G4RunManager::GetRunManager()); }
 
-    const auto& GetCommRank() const { return fCommRank; }
-    const auto& GetCommSize() const { return fCommSize; }
     const auto& GetTotalNumberOfEventToBeProcessed() const { return fTotalNumberOfEventsToBeProcessed; }
     const auto& GetPrintProgress() const { return fPrintProgress; }
 
@@ -56,11 +54,8 @@ private:
     void RunEndReport() const;
 
 private:
-    const int fCommRank;
-    const int fCommSize;
-
     G4int fTotalNumberOfEventsToBeProcessed;
-    DividedIndexRange<G4int> fEventIDRange;
+    IntegralIndexRange<G4int> fEventIDRange;
     G4int fEventIDCounter;
 
     G4int fPrintProgress;

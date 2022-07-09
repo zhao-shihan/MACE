@@ -1,16 +1,14 @@
 #include "MACE/Utility/G4Util/CheckMPIAvailability.hxx"
-#include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
+#include "MACE/Utility/MPIUtil/MPIEnvironment.hxx"
 
 #include "G4Exception.hh"
-
-#include "mpi.h"
 
 namespace MACE::Utility::G4Util {
 
 using namespace MACE::Utility::MPIUtil;
 
 void CheckMPIAvailability() {
-    if (not MPIInitialized() or MPIFinalized()) {
+    if (not MPIEnvironment::Available()) {
         G4Exception("MACE::Utility::G4Util::MPIRunManager::CheckMPI()",
                     "MPINotAvailable",
                     FatalException,

@@ -3,7 +3,7 @@
 #include "MACE/Utility/G4Util/MPIRunMessenger.hxx"
 #include "MACE/Utility/Math/IntegerPower.hxx"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
-#include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
+#include "MACE/Utility/MPIUtil/MPIEnvironment.hxx"
 #include "MACE/Utility/MPIUtil/MPIRandomUtil.hxx"
 
 #include "G4Exception.hh"
@@ -14,8 +14,8 @@
 
 namespace MACE::Utility::G4Util {
 
-using namespace MACE::Utility::MPIUtil;
 using MACE::Utility::Math::Pow2;
+using MACE::Utility::MPIUtil::MPIEnvironment;
 
 namespace Detail {
 
@@ -25,14 +25,14 @@ static void FlipG4cout() {
 }
 
 MPIRunManagerInitializeHelper1::MPIRunManagerInitializeHelper1() {
-    if (MPICommRank(MPI_COMM_WORLD) != 0) {
+    if (MPIEnvironment::IsWorldWorker()) {
         FlipG4cout();
     }
 }
 
 MPIRunManagerInitializeHelper2::MPIRunManagerInitializeHelper2() {
-    if (MPICommRank(MPI_COMM_WORLD) == 0) {
-        G4cout << " Running on " << MPICommSize(MPI_COMM_WORLD) << " processes via MPI " << MPI_VERSION << '.' << MPI_SUBVERSION << '\n'
+    if (MPIEnvironment::IsWorldMaster()) {
+        G4cout << " Running on " << MPIEnvironment::WorldCommSize() << " processes via MPI " << MPI_VERSION << '.' << MPI_SUBVERSION << '\n'
                << '\n'
                << "**************************************************************\n"
                << G4endl;
@@ -47,8 +47,6 @@ MPIRunManager::MPIRunManager() :
     Detail::MPIRunManagerInitializeHelper1(),
     G4RunManager(),
     Detail::MPIRunManagerInitializeHelper2(),
-    fCommRank((CheckMPIAvailability(), MPICommRank(MPI_COMM_WORLD))),
-    fCommSize(MPICommSize(MPI_COMM_WORLD)),
     fTotalNumberOfEventsToBeProcessed(0),
     fEventIDRange(),
     fEventIDCounter(-1),
@@ -73,9 +71,9 @@ void MPIRunManager::SetPrintProgress(G4int val) {
 void MPIRunManager::BeamOn(G4int nEvent, const char* macroFile, G4int nSelect) {
     CheckMPIAvailability();
     if (CheckNEventIsAtLeastCommSize(nEvent)) {
-        MPIReSeedCLHEPRandom(G4Random::getTheEngine());
+        MPIUtil::MPIReSeedCLHEPRandom(G4Random::getTheEngine());
         fTotalNumberOfEventsToBeProcessed = nEvent;
-        fEventIDRange = AllocMPIJobsJobWise(0, nEvent, fCommSize, fCommRank);
+        fEventIDRange = MPIUtil::AllocMPIJobsJobWise(0, nEvent, MPIEnvironment::WorldCommSize(), MPIEnvironment::WorldCommRank());
         G4RunManager::BeamOn(fEventIDRange.count, macroFile, nSelect);
     }
 }
@@ -134,8 +132,8 @@ void MPIRunManager::RunTermination() {
 }
 
 G4bool MPIRunManager::CheckNEventIsAtLeastCommSize(G4int nEvent) const {
-    if (nEvent < fCommSize) {
-        if (fCommRank == 0) {
+    if (nEvent < MPIEnvironment::WorldCommSize()) {
+        if (MPIEnvironment::IsWorldMaster()) {
             G4Exception("MACE::Utility::G4Util::MPIRunManager::CheckNEventIsAtLeastCommSize(...)",
                         "TooFewNEventOrTooMuchRank",
                         JustWarning,
@@ -150,10 +148,10 @@ G4bool MPIRunManager::CheckNEventIsAtLeastCommSize(G4int nEvent) const {
 }
 
 void MPIRunManager::RunBeginReport() const {
-    if (fCommRank == 0 and fPrintProgress >= 0) {
+    if (MPIEnvironment::IsWorldMaster() and fPrintProgress >= 0) {
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         G4cout << "----------------------------> Run Starts <----------------------------\n"
-               << std::put_time(std::localtime(&now), "%c (UTC%z) > Run ") << runIDCounter << " starts on " << fCommSize << " ranks.\n"
+               << std::put_time(std::localtime(&now), "%c (UTC%z) > Run ") << runIDCounter << " starts on " << MPIEnvironment::WorldCommSize() << " ranks.\n"
                << "----------------------------> Run Starts <----------------------------" << G4endl;
     }
 }
@@ -169,19 +167,19 @@ void MPIRunManager::EventEndReport() const {
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         const auto precisionOfG4cout = G4cout.precision(); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
         G4cout << std::setprecision(3)
-               << std::put_time(std::localtime(&now), "%c (UTC%z) > Event ") << endedEventID << " finished in rank " << fCommRank << ".\n"
+               << std::put_time(std::localtime(&now), "%c (UTC%z) > Event ") << endedEventID << " finished in rank " << MPIEnvironment::WorldCommRank() << ".\n"
                << "  ETA: " << eta << " +/- " << etaError << " s. Progress of the rank: " << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " (" << 100 * (float)numberOfEventProcessed / (float)numberOfEventToBeProcessed << "%)." << G4endl
                << std::setprecision(precisionOfG4cout);
     }
 }
 
 void MPIRunManager::RunEndReport() const {
-    if (fCommRank == 0 and fPrintProgress >= 0) {
+    if (MPIEnvironment::IsWorldMaster() and fPrintProgress >= 0) {
         const auto endedRunID = runIDCounter - 1;
         const auto beginTime = std::chrono::system_clock::to_time_t(fRunBeginSystemTime);
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         G4cout << "---------------------------> Run Finished <---------------------------\n"
-               << std::put_time(std::localtime(&now), "%c (UTC%z) > Run ") << endedRunID << " finished on " << fCommSize << " ranks.\n"
+               << std::put_time(std::localtime(&now), "%c (UTC%z) > Run ") << endedRunID << " finished on " << MPIEnvironment::WorldCommSize() << " ranks.\n"
                << "  Start time: " << std::put_time(std::localtime(&beginTime), "%c (UTC%z).\n")
                << "   Wall time: " << fRunWallTime.count() << " s.\n"
                << "---------------------------> Run Finished <---------------------------" << G4endl;

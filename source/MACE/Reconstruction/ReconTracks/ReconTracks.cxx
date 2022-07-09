@@ -5,7 +5,6 @@
 #include "MACE/Reconstruction/ReconTracks/Tracker/Hough.hxx"
 #include "MACE/Reconstruction/ReconTracks/Tracker/PerfectFinder.hxx"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
-#include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
 #include "MACE/Utility/MPIUtil/MainMPI.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
@@ -25,8 +24,6 @@ using MACE::Core::DataFactory;
 using Hit_t = CDCSimHit;
 
 int main_MPI(int, char* argv[]) {
-    const int commRank = MPICommRank(MPI_COMM_WORLD);
-
     const char* nameIn = argv[1];
     const auto threshold = std::stoi(argv[2]);
     const auto fitterVerbose = std::stoi(argv[3]);
@@ -63,7 +60,7 @@ int main_MPI(int, char* argv[]) {
 
     CLHEP::MTwistEngine mtEng;
 
-    std::cout << "Rank" << commRank << " is ready to process data of repetition " << treeBegin << " to " << treeEnd - 1 << std::endl;
+    std::cout << "Rank" << MPIEnvironment::WorldCommRank() << " is ready to process data of repetition " << treeBegin << " to " << treeEnd - 1 << std::endl;
 
     for (auto treeIndex = treeBegin; treeIndex < treeEnd; treeIndex += treeStep) {
         dataHub.SetTreeNamePrefixFormat("Rep#_");

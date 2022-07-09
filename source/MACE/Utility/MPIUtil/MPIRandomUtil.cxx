@@ -1,7 +1,9 @@
-#include "MACE/Utility/MPIUtil/CommonMPIWrapper.hxx"
+#include "MACE/Utility/MPIUtil/MPIEnvironment.hxx"
 #include "MACE/Utility/MPIUtil/MPIRandomUtil.hxx"
 
 #include "CLHEP/Random/RandomEngine.h"
+
+#include "mpi.h"
 
 #include <numeric>
 #include <set>
@@ -10,14 +12,14 @@
 namespace MACE::Utility::MPIUtil {
 
 void MPIReSeedCLHEPRandom(CLHEP::HepRandomEngine* randEng) {
-    const auto commSize = MPICommSize(MPI_COMM_WORLD);
-    if (commSize == 1) { return; }
-    const auto commRank = MPICommRank(MPI_COMM_WORLD);
+    if (MPIEnvironment::IsSerialized()) { return; }
 
     std::vector<long> seedSend;
     long seedRecv = 0;
 
-    if (commRank == 0) {
+    if (MPIEnvironment::IsWorldMaster()) {
+        const size_t commSize = MPIEnvironment::WorldCommSize();
+
         std::set<long> uniqueSeeds;
         static const auto seedMaxLD = std::nextafter((long double)std::numeric_limits<long>::max(), -1.0L);
         do {
@@ -26,7 +28,7 @@ void MPIReSeedCLHEPRandom(CLHEP::HepRandomEngine* randEng) {
                 newSeed = seedMaxLD * std::nextafter((long double)randEng->flat(), -1.0L) - uniqueSeeds.size();
             } while (newSeed <= 0);
             uniqueSeeds.emplace(newSeed);
-        } while (uniqueSeeds.size() < (size_t)commSize);
+        } while (uniqueSeeds.size() < commSize);
 
         seedSend.reserve(commSize);
         for (auto&& seed : std::as_const(uniqueSeeds)) {

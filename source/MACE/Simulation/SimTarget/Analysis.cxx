@@ -2,8 +2,11 @@
 #include "MACE/Simulation/SimTarget/Messenger/AnalysisMessenger.hxx"
 #include "MACE/Simulation/SimTarget/RunManager.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
+#include "MACE/Utility/MPIUtil/MPIEnvironment.hxx"
 
 namespace MACE::Simulation::SimTarget {
+
+using MACE::Utility::MPIUtil::MPIEnvironment;
 
 Analysis& Analysis::Instance() {
     static Analysis instance;
@@ -79,7 +82,7 @@ void Analysis::CloseResultFile() {
 }
 
 void Analysis::OpenYieldFile() {
-    if (RunManager::GetRunManager()->GetCommRank() == 0) {
+    if (MPIEnvironment::IsWorldMaster()) {
         fYieldFile = std::make_unique<std::ofstream>(fResultName + "_yield.csv", std::ios::out);
         *fYieldFile << "runID,nMuon,nMFormed,nMTargetDecay,nMVacuumDecay,nMDetectableDecay" << std::endl;
     }
@@ -106,15 +109,12 @@ void Analysis::AnalysisAndWriteYield() {
         }
     }
 
-    const auto commSize = RunManager::GetRunManager()->GetCommSize();
-    if (commSize > 1) {
-        const auto commRank = RunManager::GetRunManager()->GetCommRank();
-
+    if (MPIEnvironment::IsParallelized()) {
         std::vector<decltype(yieldData)> yieldDataRecv;
-        if (commRank == 0) { yieldDataRecv.resize(commSize); }
+        if (MPIEnvironment::IsWorldMaster()) { yieldDataRecv.resize(MPIEnvironment::WorldCommSize()); }
         MPI_Gather(yieldData.data(), yieldData.size(), MPI_UNSIGNED_LONG, yieldDataRecv.data(), yieldData.size(), MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD);
 
-        if (commRank == 0) {
+        if (MPIEnvironment::IsWorldMaster()) {
             unsigned long nMuonTotal = 0;
             unsigned long nFormedTotal = 0;
             unsigned long nTargetDecayTotal = 0;
