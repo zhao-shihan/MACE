@@ -19,9 +19,9 @@ int main_MPI(int argc, char* argv[]) {
     runManager->GetDetectorConstruction().SetCheckOverlaps(interactive ? true : false);
     runManager->GetPhysicsList().SetVerboseLevel(interactive ? 1 : 0);
 
-    const auto mpiExecutive = std::make_unique<MACE::Utility::G4Util::MPIExecutive>(argc, argv);
+    const auto mpiExecutive = std::make_unique<MACE::Utility::G4Util::MPIExecutive>();
     if (interactive) {
-        mpiExecutive->StartInteractiveSession("init_vis.mac");
+        mpiExecutive->StartInteractiveSession(argc, argv, "init_vis.mac");
     } else {
         mpiExecutive->StartBatchSession(argv[1]);
     }
