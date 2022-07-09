@@ -3,20 +3,19 @@
 #include "MACE/Core/DataModel/ITransientData.hxx"
 #include "MACE/Utility/Concept/Pointer.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
-#include "MACE/Utility/TypeTrait/PointerTrait.hxx"
 
 #include "TChain.h"
 #include "TFile.h"
 
 #include <concepts>
 #include <filesystem>
+#include <memory>
 
 namespace MACE::Core {
 
 using DataModel::IsTransientData;
 using Utility::ObserverPtr;
 using namespace Utility::Concept;
-using namespace Utility::TypeTrait;
 
 class DataFactory final {
 public:
@@ -63,13 +62,13 @@ public:
     /// Note: there is no static branch infomation for the tree, so
     /// user should make sure that DataInTreeT represents exactly the same branches as the tree.
     template<IsTransientData DataInTreeT, Dereferenceable DataInListPointerT> // clang-format off
-        requires std::derived_from<ReferencedType<DataInListPointerT>, DataInTreeT>
+        requires std::derived_from<typename std::pointer_traits<DataInListPointerT>::element_type, DataInTreeT>
     static void FillTree(const std::vector<DataInListPointerT>& dataList, TTree& tree, bool connected = false); // clang-format on
     template<Dereferenceable DataInListPointerT>
     static void FillTree(const std::vector<DataInListPointerT>& dataList, TTree& tree, bool connected = false);
     /// Same effect as invoke CreateTree<DataInTreeT>(treeIndex) and FillTree<DataInTreeT>(dataList, tree, true).
     template<IsTransientData DataInTreeT, Dereferenceable DataInListPointerT> // clang-format off
-        requires std::derived_from<ReferencedType<DataInListPointerT>, DataInTreeT>
+        requires std::derived_from<typename std::pointer_traits<DataInListPointerT>::element_type, DataInTreeT>
     std::shared_ptr<TTree> CreateAndFillTree(const std::vector<DataInListPointerT>& dataList, Long64_t treeIndex = 0) const; // clang-format on
     template<Dereferenceable DataInListPointerT>
     std::shared_ptr<TTree> CreateAndFillTree(const std::vector<DataInListPointerT>& dataList, Long64_t treeIndex = 0) const;

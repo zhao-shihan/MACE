@@ -51,7 +51,7 @@ std::shared_ptr<TTree> DataFactory::CreateTree(Long64_t treeIndex) const {
 }
 
 template<IsTransientData DataInTreeT, Dereferenceable DataInListPointerT> // clang-format off
-    requires std::derived_from<ReferencedType<DataInListPointerT>, DataInTreeT>
+    requires std::derived_from<typename std::pointer_traits<DataInListPointerT>::element_type, DataInTreeT>
 void DataFactory::FillTree(const std::vector<DataInListPointerT>& dataList, TTree& tree, bool connected) { // clang-format on
     if (not connected) { DataInTreeT::ConnectToBranches(tree); }
     for (auto&& data : dataList) {
@@ -62,11 +62,11 @@ void DataFactory::FillTree(const std::vector<DataInListPointerT>& dataList, TTre
 
 template<Dereferenceable DataInListPointerT>
 void DataFactory::FillTree(const std::vector<DataInListPointerT>& dataList, TTree& tree, bool connected) {
-    FillTree<ReferencedType<DataInListPointerT>, DataInListPointerT>(dataList, tree, connected);
+    FillTree<std::pointer_traits<DataInListPointerT>::element_type, DataInListPointerT>(dataList, tree, connected);
 }
 
 template<IsTransientData DataInTreeT, Dereferenceable DataInListPointerT> // clang-format off
-    requires std::derived_from<ReferencedType<DataInListPointerT>, DataInTreeT>
+    requires std::derived_from<typename std::pointer_traits<DataInListPointerT>::element_type, DataInTreeT>
 std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<DataInListPointerT>& dataList, Long64_t treeIndex) const { // clang-format on
     auto tree = CreateTree<DataInTreeT>(treeIndex);
     FillTree<DataInTreeT, DataInListPointerT>(dataList, *tree, false);
@@ -75,7 +75,7 @@ std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<DataInLi
 
 template<Dereferenceable DataInListPointerT>
 std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<DataInListPointerT>& dataList, Long64_t treeIndex) const {
-    return CreateAndFillTree<ReferencedType<DataInListPointerT>, DataInListPointerT>(dataList, treeIndex);
+    return CreateAndFillTree<std::pointer_traits<DataInListPointerT>::element_type, DataInListPointerT>(dataList, treeIndex);
 }
 
 template<IsTransientData DataT>
