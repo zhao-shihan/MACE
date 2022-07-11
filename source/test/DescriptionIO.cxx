@@ -7,7 +7,8 @@ int main() {
     using namespace MACE::Core::Geometry;
 
     auto& transportLine = Description::TransportLine::Instance();
-    std::cout << transportLine.GetFirstStraightLength() << '\n'
+    std::cout << "Default:\n"
+              << transportLine.GetFirstStraightLength() << '\n'
               << transportLine.GetFirstBendRadius() << '\n'
               << transportLine.GetSecondStraightLength() << '\n'
               << transportLine.GetSecondBendRadius() << '\n'
@@ -18,7 +19,8 @@ int main() {
               << std::endl;
 
     DescriptionIO::WriteInstantiated("mace_geom.yaml");
-    std::cout << transportLine.GetFirstStraightLength() << '\n'
+    std::cout << "After write into yaml:\n"
+              << transportLine.GetFirstStraightLength() << '\n'
               << transportLine.GetFirstBendRadius() << '\n'
               << transportLine.GetSecondStraightLength() << '\n'
               << transportLine.GetSecondBendRadius() << '\n'
@@ -29,7 +31,8 @@ int main() {
               << std::endl;
 
     DescriptionIO::ReadInstantiated("mace_geom.yaml");
-    std::cout << transportLine.GetFirstStraightLength() << '\n'
+    std::cout << "After read from yaml:\n"
+              << transportLine.GetFirstStraightLength() << '\n'
               << transportLine.GetFirstBendRadius() << '\n'
               << transportLine.GetSecondStraightLength() << '\n'
               << transportLine.GetSecondBendRadius() << '\n'
