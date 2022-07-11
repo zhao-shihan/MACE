@@ -2,6 +2,8 @@
 
 #include "CLHEP/Units/SystemOfUnits.h"
 
+namespace MACE::Utility::LiteralUnit {
+
 #define MACE_UTILITY_LITERAL_UNIT(suffix, unit)                        \
     constexpr long double operator""##suffix(long double val) {        \
         return val * (unit);                                           \
@@ -9,8 +11,6 @@
     constexpr long double operator""##suffix(unsigned long long val) { \
         return val * (unit);                                           \
     }
-
-namespace MACE::Utility::LiteralUnit {
 
 // Length [L] symbols
 inline namespace Length {
@@ -323,6 +323,6 @@ MACE_UTILITY_LITERAL_UNIT(_kV_cm, CLHEP::kilovolt / CLHEP::cm);
 
 } // namespace ElectricFieldStrength
 
-} // namespace MACE::Utility::LiteralUnit
-
 #undef MACE_UTILITY_LITERAL_UNIT
+
+} // namespace MACE::Utility::LiteralUnit
