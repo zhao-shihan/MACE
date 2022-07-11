@@ -14,11 +14,7 @@ void IDescription::ReadValueNode(const YAML::Node& node, const char* valueName, 
 
 template<typename ValueT, typename WriteAsT>
 void IDescription::WriteValueNode(YAML::Node& node, const char* valueName, const ValueT& value) const {
-    if constexpr (std::same_as<ValueT, WriteAsT>) {
-        node[valueName] = value;
-    } else {
-        node[valueName] = WriteAsT(value);
-    }
+    node[valueName] = WriteAsT(value);
 }
 
 } // namespace MACE::Core::Geometry

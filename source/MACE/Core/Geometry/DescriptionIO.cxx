@@ -7,26 +7,26 @@
 
 namespace MACE::Core::Geometry {
 
-std::vector<ObserverPtr<IDescription>> DescriptionIO::fgInstantiatedDescriptionList;
+std::vector<std::reference_wrapper<IDescription>> DescriptionIO::fgInstantiatedDescriptionList;
 
 void DescriptionIO::ReadInstantiated(const std::string& yamlFileName) {
     const auto geomYaml = YAML::LoadFile(yamlFileName);
     for (auto&& description : std::as_const(fgInstantiatedDescriptionList)) {
-        description->Read(geomYaml);
+        description.get().Read(geomYaml);
     }
 }
 
 void DescriptionIO::WriteInstantiated(const std::string& yamlFileName) {
     YAML::Node geomYaml;
     for (auto&& description : std::as_const(fgInstantiatedDescriptionList)) {
-        description->Write(geomYaml);
+        description.get().Write(geomYaml);
     }
     std::ofstream yamlOut(yamlFileName, std::ios::out);
     yamlOut << geomYaml;
     yamlOut.close();
 }
 
-void DescriptionIO::AddInstance(ObserverPtr<IDescription> instance) {
+void DescriptionIO::AddInstance(IDescription& instance) {
     fgInstantiatedDescriptionList.emplace_back(instance);
 }
 

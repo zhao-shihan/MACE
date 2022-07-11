@@ -1,17 +1,14 @@
 #pragma once
 
-#include "MACE/Utility/ObserverPtr.hxx"
-
+#include <functional>
 #include <string>
 #include <vector>
 
 namespace MACE::Core::Geometry {
 
-using MACE::Utility::ObserverPtr;
-
 class IDescription;
 
-class DescriptionIO {
+class DescriptionIO final {
     friend class IDescription;
 
 public:
@@ -21,10 +18,10 @@ public:
     static void WriteInstantiated(const std::string& yamlFileName);
 
 private:
-    static void AddInstance(ObserverPtr<IDescription> instance);
+    static void AddInstance(IDescription& instance);
 
 private:
-    static std::vector<ObserverPtr<IDescription>> fgInstantiatedDescriptionList;
+    static std::vector<std::reference_wrapper<IDescription>> fgInstantiatedDescriptionList;
 };
 
 } // namespace MACE::Core::Geometry

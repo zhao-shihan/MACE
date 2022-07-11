@@ -5,7 +5,7 @@ namespace MACE::Core::Geometry {
 
 IDescription::IDescription(const std::string& name) :
     fName(name) {
-    DescriptionIO::AddInstance(this);
+    DescriptionIO::AddInstance(*this);
 }
 
 void IDescription::Read(const YAML::Node& geomYaml) {
