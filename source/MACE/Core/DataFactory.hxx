@@ -15,7 +15,7 @@ namespace MACE::Core {
 
 using DataModel::IsTransientData;
 using Utility::ObserverPtr;
-using namespace Utility::Concept;
+using Utility::Concept::WeaklyBehaveLikePointer;
 
 class DataFactory final {
 public:
