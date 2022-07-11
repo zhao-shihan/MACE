@@ -1,20 +1,21 @@
 #pragma once
 
+#include "MACE/Utility/Singleton.hxx"
+
 #include "yaml-cpp/yaml.h"
 
-#include <optional>
 #include <string>
-#include <string_view>
 
 namespace MACE::Core::Geometry {
 
 class IDescription {
-public:
+protected:
     IDescription(const std::string& name);
     virtual ~IDescription() noexcept = default;
     IDescription(const IDescription&) = delete;
     IDescription& operator=(const IDescription&) = delete;
 
+public:
     const auto& GetName() const { return fName; }
 
     void Read(const YAML::Node& geomYaml);
@@ -34,9 +35,17 @@ protected:
     std::string fName;
 };
 
+template<class DerivedT>
+class IDescriptionSingleton : public IDescription,
+                              public Utility::Singleton<DerivedT> {
+protected:
+    using typename Utility::Singleton<DerivedT>::Signature;
+    using IDescription::IDescription;
+};
+
 template<class T>
 concept IsDescription =
-    std::derived_from<T, IDescription> and
+    std::derived_from<T, IDescriptionSingleton<T>> and
     std::is_final_v<T> and
     not std::copyable<T> and
     requires {

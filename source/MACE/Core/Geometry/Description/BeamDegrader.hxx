@@ -6,9 +6,8 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class BeamDegrader final : public IDescription {
-public:
-    static BeamDegrader& Instance() noexcept;
+class BeamDegrader final : public IDescriptionSingleton<BeamDegrader> {
+    friend Singleton<BeamDegrader>::Signature;
 
 private:
     BeamDegrader();

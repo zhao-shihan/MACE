@@ -8,13 +8,8 @@ namespace MACE::Core::Geometry::Description {
 using namespace Utility::LiteralUnit::Length;
 using namespace Utility::PhysicalConstant;
 
-TransportLine& TransportLine::Instance() noexcept {
-    static TransportLine instance;
-    return instance;
-}
-
 TransportLine::TransportLine() :
-    IDescription("TransportLine"),
+    IDescriptionSingleton<TransportLine>("TransportLine"),
     fFirstStraightLength(20_cm),
     fFirstBendRadius(50_cm),
     fSecondStraightLength(100_cm),

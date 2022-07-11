@@ -8,13 +8,8 @@ namespace MACE::Core::Geometry::Description {
 
 using namespace Utility::LiteralUnit::Length;
 
-BeamDegrader& BeamDegrader::Instance() noexcept {
-    static BeamDegrader instance;
-    return instance;
-}
-
 BeamDegrader::BeamDegrader() :
-    IDescription("BeamDegrader"),
+    IDescriptionSingleton<BeamDegrader>("BeamDegrader"),
     fIsEnabled(true),
     fWidth(6_cm),
     fThickness(420_um),

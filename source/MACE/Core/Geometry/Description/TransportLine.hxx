@@ -6,9 +6,8 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class TransportLine final : public IDescription {
-public:
-    static TransportLine& Instance() noexcept;
+class TransportLine final : public IDescriptionSingleton<TransportLine> {
+    friend Singleton<TransportLine>::Signature;
 
 private:
     TransportLine();
