@@ -15,15 +15,15 @@ concept Dereferenceable = requires(T&& pointer) {
 };
 
 template<typename T>
-concept WeaklyBehaveLikePointer = requires(T&& pointer, std::ptrdiff_t i) {
+concept WeaklyBehaveLikePointer = IsPointer<T> or requires(T&& pointer) {
     requires Dereferenceable<T>;
-    pointer[i];
+    pointer.operator->();
 };
 
-template<typename P, typename T>
-concept BehaveLikePointer = requires(P&& pointer) {
+template<typename T>
+concept BehaveLikePointer = requires(T&& pointer, std::ptrdiff_t i) {
     requires WeaklyBehaveLikePointer<T>;
-    pointer.operator->();
+    pointer[i];
 };
 
 template<typename P, typename T>
@@ -37,15 +37,15 @@ concept DereferenceableTo = requires(P&& pointer) {
 };
 
 template<typename P, typename T>
-concept WeaklyBehaveLikePointerOf = requires(P&& pointer, std::ptrdiff_t i) {
+concept WeaklyBehaveLikePointerOf = IsPointerOf<P, T> or requires(P&& pointer) {
     requires DereferenceableTo<P, T>;
-    { pointer[i] } -> std::same_as<std::add_lvalue_reference_t<T>>;
+    { pointer.operator->() } -> std::same_as<std::add_pointer_t<T>>;
 };
 
 template<typename P, typename T>
-concept BehaveLikePointerOf = requires(P&& pointer) {
+concept BehaveLikePointerOf = requires(P&& pointer, std::ptrdiff_t i) {
     requires WeaklyBehaveLikePointerOf<P, T>;
-    { pointer.operator->() } -> std::same_as<std::add_pointer_t<T>>;
+    { pointer[i] } -> std::same_as<std::add_lvalue_reference_t<T>>;
 };
 
 #define MACE_UTILITY_CONCEPT_IS_POINTER_OF_MAYBE(stdTypeTraitsQualifier)                                     \
@@ -55,14 +55,11 @@ concept BehaveLikePointerOf = requires(P&& pointer) {
         (IsPointerOf<P, std::add_##stdTypeTraitsQualifier##_t<T>> and                                        \
          IsPointerOf<std::add_pointer_t<std::remove_##stdTypeTraitsQualifier##_t<std::remove_pointer_t<P>>>, T>)
 template<typename P, typename T>
-concept IsPointerOfMaybeConst =
-    MACE_UTILITY_CONCEPT_IS_POINTER_OF_MAYBE(const);
+concept IsPointerOfMaybeConst = MACE_UTILITY_CONCEPT_IS_POINTER_OF_MAYBE(const);
 template<typename P, typename T>
-concept IsPointerOfMaybeVolatile =
-    MACE_UTILITY_CONCEPT_IS_POINTER_OF_MAYBE(volatile);
+concept IsPointerOfMaybeVolatile = MACE_UTILITY_CONCEPT_IS_POINTER_OF_MAYBE(volatile);
 template<typename P, typename T>
-concept IsPointerOfMaybeConstVolatile =
-    MACE_UTILITY_CONCEPT_IS_POINTER_OF_MAYBE(cv);
+concept IsPointerOfMaybeConstVolatile = MACE_UTILITY_CONCEPT_IS_POINTER_OF_MAYBE(cv);
 #undef MACE_UTILITY_CONCEPT_IS_POINTER_OF_MAYBE
 
 #define MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST(MotherConcept) \

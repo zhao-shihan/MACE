@@ -50,7 +50,7 @@ std::shared_ptr<TTree> DataFactory::CreateTree(Long64_t treeIndex) const {
     return tree;
 }
 
-template<IsTransientData DataInTreeT, Dereferenceable DataInListPointerT> // clang-format off
+template<IsTransientData DataInTreeT, WeaklyBehaveLikePointer DataInListPointerT> // clang-format off
     requires std::derived_from<typename std::pointer_traits<DataInListPointerT>::element_type, DataInTreeT>
 void DataFactory::FillTree(const std::vector<DataInListPointerT>& dataList, TTree& tree, bool connected) { // clang-format on
     if (not connected) { DataInTreeT::ConnectToBranches(tree); }
@@ -60,12 +60,12 @@ void DataFactory::FillTree(const std::vector<DataInListPointerT>& dataList, TTre
     }
 }
 
-template<Dereferenceable DataInListPointerT>
+template<WeaklyBehaveLikePointer DataInListPointerT>
 void DataFactory::FillTree(const std::vector<DataInListPointerT>& dataList, TTree& tree, bool connected) {
     FillTree<std::pointer_traits<DataInListPointerT>::element_type, DataInListPointerT>(dataList, tree, connected);
 }
 
-template<IsTransientData DataInTreeT, Dereferenceable DataInListPointerT> // clang-format off
+template<IsTransientData DataInTreeT, WeaklyBehaveLikePointer DataInListPointerT> // clang-format off
     requires std::derived_from<typename std::pointer_traits<DataInListPointerT>::element_type, DataInTreeT>
 std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<DataInListPointerT>& dataList, Long64_t treeIndex) const { // clang-format on
     auto tree = CreateTree<DataInTreeT>(treeIndex);
@@ -73,7 +73,7 @@ std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<DataInLi
     return tree;
 }
 
-template<Dereferenceable DataInListPointerT>
+template<WeaklyBehaveLikePointer DataInListPointerT>
 std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<DataInListPointerT>& dataList, Long64_t treeIndex) const {
     return CreateAndFillTree<std::pointer_traits<DataInListPointerT>::element_type, DataInListPointerT>(dataList, treeIndex);
 }

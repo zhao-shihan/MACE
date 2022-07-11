@@ -61,16 +61,16 @@ public:
     ///   Note: this feature allows to fill the tree with less but exact columns that the data vector has.
     /// Note: there is no static branch infomation for the tree, so
     /// user should make sure that DataInTreeT represents exactly the same branches as the tree.
-    template<IsTransientData DataInTreeT, Dereferenceable DataInListPointerT> // clang-format off
+    template<IsTransientData DataInTreeT, WeaklyBehaveLikePointer DataInListPointerT> // clang-format off
         requires std::derived_from<typename std::pointer_traits<DataInListPointerT>::element_type, DataInTreeT>
     static void FillTree(const std::vector<DataInListPointerT>& dataList, TTree& tree, bool connected = false); // clang-format on
-    template<Dereferenceable DataInListPointerT>
+    template<WeaklyBehaveLikePointer DataInListPointerT>
     static void FillTree(const std::vector<DataInListPointerT>& dataList, TTree& tree, bool connected = false);
     /// Same effect as invoke CreateTree<DataInTreeT>(treeIndex) and FillTree<DataInTreeT>(dataList, tree, true).
-    template<IsTransientData DataInTreeT, Dereferenceable DataInListPointerT> // clang-format off
+    template<IsTransientData DataInTreeT, WeaklyBehaveLikePointer DataInListPointerT> // clang-format off
         requires std::derived_from<typename std::pointer_traits<DataInListPointerT>::element_type, DataInTreeT>
     std::shared_ptr<TTree> CreateAndFillTree(const std::vector<DataInListPointerT>& dataList, Long64_t treeIndex = 0) const; // clang-format on
-    template<Dereferenceable DataInListPointerT>
+    template<WeaklyBehaveLikePointer DataInListPointerT>
     std::shared_ptr<TTree> CreateAndFillTree(const std::vector<DataInListPointerT>& dataList, Long64_t treeIndex = 0) const;
     /// Create a data vector and fill it with a tree.
     /// Entries to be filled are determined by [entriesRange.first, entriesRange.second).
