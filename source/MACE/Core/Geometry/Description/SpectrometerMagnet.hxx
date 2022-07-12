@@ -4,9 +4,8 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class SpectrometerMagnet final : public IDescription {
-public:
-    static SpectrometerMagnet& Instance() noexcept;
+class SpectrometerMagnet final : public IDescriptionSingleton<SpectrometerMagnet> {
+    friend Singleton<SpectrometerMagnet>::Signature;
 
 private:
     SpectrometerMagnet();

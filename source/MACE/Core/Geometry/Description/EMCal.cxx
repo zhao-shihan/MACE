@@ -5,13 +5,8 @@ namespace MACE::Core::Geometry::Description {
 
 using namespace Utility::LiteralUnit::Length;
 
-EMCal& EMCal::Instance() noexcept {
-    static EMCal instance;
-    return instance;
-}
-
 EMCal::EMCal() :
-    IDescription("EMCal"),
+    IDescriptionSingleton<EMCal>(__func__),
     fInnerRadius(15_cm),
     fInnerLength(50_cm),
     fWindowRadius(8_cm),

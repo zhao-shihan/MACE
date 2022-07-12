@@ -8,13 +8,8 @@ namespace MACE::Core::Geometry::Description {
 
 using namespace Utility::LiteralUnit::Length;
 
-Target& Target::Instance() noexcept {
-    static Target instance;
-    return instance;
-}
-
 Target::Target() :
-    IDescription("Target"),
+    IDescriptionSingleton<Target>(__func__),
     fWidth(6_cm),
     fThickness(1_cm),
     fFineStructure(ConstructFormula("(z<-5 || x<-20||x>20 || y<-20||y>20) || "

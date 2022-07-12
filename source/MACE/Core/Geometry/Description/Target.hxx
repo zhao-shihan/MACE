@@ -8,9 +8,8 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class Target final : public IDescription {
-public:
-    static Target& Instance() noexcept;
+class Target final : public IDescriptionSingleton<Target> {
+    friend Singleton<Target>::Signature;
 
 private:
     Target();

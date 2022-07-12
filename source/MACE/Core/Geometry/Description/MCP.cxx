@@ -5,13 +5,8 @@ namespace MACE::Core::Geometry::Description {
 
 using namespace Utility::LiteralUnit::Length;
 
-MCP& MCP::Instance() noexcept {
-    static MCP instance;
-    return instance;
-}
-
 MCP::MCP() :
-    IDescription("MCP"),
+    IDescriptionSingleton<MCP>(__func__),
     fWidth(15_cm),
     fThickness(1_cm) {}
 

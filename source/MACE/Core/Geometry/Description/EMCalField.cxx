@@ -6,13 +6,8 @@ namespace MACE::Core::Geometry::Description {
 
 using namespace Utility::LiteralUnit::Length;
 
-EMCalField& EMCalField::Instance() noexcept {
-    static EMCalField instance;
-    return instance;
-}
-
 EMCalField::EMCalField() :
-    IDescription("EMCalField"),
+    IDescriptionSingleton<EMCalField>(__func__),
     fRadius(25_cm),
     fLength(70_cm) {}
 

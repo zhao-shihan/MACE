@@ -5,13 +5,8 @@ namespace MACE::Core::Geometry::Description {
 
 using namespace Utility::LiteralUnit::Length;
 
-SpectrometerMagnet& SpectrometerMagnet::Instance() noexcept {
-    static SpectrometerMagnet instance;
-    return instance;
-}
-
 SpectrometerMagnet::SpectrometerMagnet() :
-    IDescription("SpectrometerMagnet"),
+    IDescriptionSingleton<SpectrometerMagnet>(__func__),
     fInnerRadius(50_cm),
     fOuterRadius(70_cm),
     fLength(218_cm) {}

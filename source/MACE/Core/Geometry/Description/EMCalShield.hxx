@@ -4,9 +4,8 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class EMCalShield final : public IDescription {
-public:
-    static EMCalShield& Instance() noexcept;
+class EMCalShield final : public IDescriptionSingleton<EMCalShield> {
+    friend Singleton<EMCalShield>::Signature;
 
 private:
     EMCalShield();

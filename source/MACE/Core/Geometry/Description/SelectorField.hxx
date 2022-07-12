@@ -4,9 +4,8 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class SelectorField final : public IDescription {
-public:
-    static SelectorField& Instance() noexcept;
+class SelectorField final : public IDescriptionSingleton<SelectorField> {
+    friend Singleton<SelectorField>::Signature;
 
 private:
     SelectorField();

@@ -5,13 +5,8 @@ namespace MACE::Core::Geometry::Description {
 
 using namespace Utility::LiteralUnit::Length;
 
-Collimator& Collimator::Instance() noexcept {
-    static Collimator instance;
-    return instance;
-}
-
 Collimator::Collimator() :
-    IDescription("Collimator"),
+    IDescriptionSingleton<Collimator>(__func__),
     fInnerRadius(5_mm),
     fOuterRadius(65_mm),
     fLength(30_cm),

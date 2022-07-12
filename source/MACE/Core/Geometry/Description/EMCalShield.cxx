@@ -6,13 +6,8 @@ namespace MACE::Core::Geometry::Description {
 
 using namespace Utility::LiteralUnit::Length;
 
-EMCalShield& EMCalShield::Instance() noexcept {
-    static EMCalShield instance;
-    return instance;
-}
-
 EMCalShield::EMCalShield() :
-    IDescription("EMCalShield"),
+    IDescriptionSingleton<EMCalShield>(__func__),
     fInnerRadius(30_cm),
     fInnerLength(80_cm),
     fWindowRadius(12.7_cm),

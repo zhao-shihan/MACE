@@ -4,9 +4,8 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class SpectrometerField final : public IDescription {
-public:
-    static SpectrometerField& Instance() noexcept;
+class SpectrometerField final : public IDescriptionSingleton<SpectrometerField> {
+    friend Singleton<SpectrometerField>::Signature;
 
 private:
     SpectrometerField();

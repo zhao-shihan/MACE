@@ -5,13 +5,8 @@ namespace MACE::Core::Geometry::Description {
 
 using namespace Utility::LiteralUnit::Length;
 
-World& World::Instance() noexcept {
-    static World instance;
-    return instance;
-}
-
 World::World() :
-    IDescription("World"),
+    IDescriptionSingleton<World>(__func__),
     fHalfXExtent(3_m),
     fHalfYExtent(1_m),
     fHalfZExtent(4_m) {}

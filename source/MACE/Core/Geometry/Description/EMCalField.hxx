@@ -6,9 +6,8 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class EMCalField final : public IDescription {
-public:
-    static EMCalField& Instance() noexcept;
+class EMCalField final : public IDescriptionSingleton<EMCalField> {
+    friend Singleton<EMCalField>::Signature;
 
 private:
     EMCalField();

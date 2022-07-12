@@ -5,13 +5,8 @@ namespace MACE::Core::Geometry::Description {
 
 using namespace Utility::LiteralUnit::Length;
 
-SpectrometerField& SpectrometerField::Instance() noexcept {
-    static SpectrometerField instance;
-    return instance;
-}
-
 SpectrometerField::SpectrometerField() :
-    IDescription("SpectrometerField"),
+    IDescriptionSingleton<SpectrometerField>(__func__),
     fRadius(71_cm),
     fLength(220_cm) {}
 

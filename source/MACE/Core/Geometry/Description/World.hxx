@@ -4,9 +4,8 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class World final : public IDescription {
-public:
-    static World& Instance() noexcept;
+class World final : public IDescriptionSingleton<World> {
+    friend Singleton<World>::Signature;
 
 private:
     World();

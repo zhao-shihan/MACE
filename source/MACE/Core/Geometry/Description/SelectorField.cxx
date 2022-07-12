@@ -5,13 +5,8 @@ namespace MACE::Core::Geometry::Description {
 
 using namespace Utility::LiteralUnit::Length;
 
-SelectorField& SelectorField::Instance() noexcept {
-    static SelectorField instance;
-    return instance;
-}
-
 SelectorField::SelectorField() :
-    IDescription("SelectorField"),
+    IDescriptionSingleton<SelectorField>(__func__),
     fRadius(7.5_cm),
     fLength(30_cm),
     fZPosition(20_cm) {}

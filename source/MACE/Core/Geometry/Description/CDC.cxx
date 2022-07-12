@@ -7,13 +7,8 @@ namespace MACE::Core::Geometry::Description {
 using namespace Utility::LiteralUnit::Length;
 using namespace Utility::PhysicalConstant;
 
-CDC& CDC::Instance() noexcept {
-    static CDC instance;
-    return instance;
-}
-
 CDC::CDC() :
-    IDescription("CDC"),
+    IDescriptionSingleton<CDC>(__func__),
     fGasInnerRadius(15_cm),
     fGasOuterRadius(45_cm),
     fGasInnerLength(90_cm),

@@ -4,9 +4,8 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class Collimator final : public IDescription {
-public:
-    static Collimator& Instance() noexcept;
+class Collimator final : public IDescriptionSingleton<Collimator> {
+    friend Singleton<Collimator>::Signature;
 
 private:
     Collimator();
