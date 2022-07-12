@@ -36,7 +36,7 @@ namespace MACE::Utility {
 /// explicitly by you, or by other external libraries. This requires the
 /// destructor visible to the public domain. Note that once the instance is
 /// deleted, any following call to YourSingletonClass::Instance() has undefined
-/// behavior (dereferencing nullptr).
+/// behavior (null pointer dereference).
 ///
 /// Example1 (Typical usage):
 ///
