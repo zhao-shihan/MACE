@@ -8,7 +8,6 @@
 #include "TFile.h"
 
 #include <concepts>
-#include <filesystem>
 #include <memory>
 
 namespace MACE::Core {
