@@ -61,15 +61,11 @@ if(MACE_SURPRESS_COMPILE_WARNINGS)
         add_compile_options(-Wno-cast-function-type)
         # ROOT
         add_compile_options(-Wno-volatile)
-        # Eigen
-        add_compile_options(-Wno-deprecated-enum-enum-conversion)
         # strncpy, strncat, etc.
         add_compile_options(-Wno-stringop-truncation)
     elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
         # ROOT
         add_compile_options(-Wno-deprecated-volatile)
-        # Eigen
-        add_compile_options(-Wno-deprecated-anon-enum-enum-conversion)
     elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         
     endif()
