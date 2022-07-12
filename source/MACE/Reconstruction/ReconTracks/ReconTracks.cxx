@@ -5,8 +5,8 @@
 #include "MACE/Reconstruction/ReconTracks/Tracker/Hough.hxx"
 #include "MACE/Reconstruction/ReconTracks/Tracker/PerfectFinder.hxx"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
-#include "MACE/Utility/MPIUtil/MainMPI.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
+#include "MACE/Utility/MPIUtil/MPIEnvironment.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "CLHEP/Random/MTwistEngine.h"
@@ -23,7 +23,9 @@ using MACE::Core::DataFactory;
 
 using Hit_t = CDCSimHit;
 
-int main_MPI(int, char* argv[]) {
+int main(int argc, char* argv[]) {
+    MPIEnvironment mpiEnvironment(argc, argv);
+
     const char* nameIn = argv[1];
     const auto threshold = std::stoi(argv[2]);
     const auto fitterVerbose = std::stoi(argv[3]);

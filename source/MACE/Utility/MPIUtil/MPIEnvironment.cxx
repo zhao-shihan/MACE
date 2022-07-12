@@ -8,7 +8,7 @@ namespace MACE::Utility::MPIUtil {
 
 ObserverPtr<MPIEnvironment> MPIEnvironment::fgInstance = nullptr;
 
-MPIEnvironment::MPIEnvironment(int argc, char* argv[]) :
+MPIEnvironment::MPIEnvironment(int& argc, char**& argv) :
     fWorldCommRank(-1),
     fWorldCommSize(-1),
     fProcessorName() {

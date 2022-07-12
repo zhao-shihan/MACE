@@ -11,8 +11,8 @@
 #include "MACE/Reconstruction/ReconMuonium/MuoniumSimVertex.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
-#include "MACE/Utility/MPIUtil/MainMPI.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
+#include "MACE/Utility/MPIUtil/MPIEnvironment.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "TH2F.h"
@@ -34,7 +34,9 @@ using MCPHit_t = SimHit::MCPSimHit;
 using MVertex_t = MuoniumSimVertex;
 using Track_t = Track::CDCPhysicsTrack;
 
-int main_MPI(int, char* argv[]) {
+int main(int argc, char* argv[]) {
+    MPIEnvironment mpiEnvironment(argc, argv);
+
     std::filesystem::path pathIn = argv[1];
     const auto calTimeWindow = std::stod(argv[2]);
     const auto sigmaTCA = std::stod(argv[3]);
