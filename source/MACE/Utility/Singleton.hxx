@@ -1,8 +1,48 @@
 #pragma once
 
+#include "MACE/Utility/ObserverPtr.hxx"
+
 #include <mutex>
+#include <vector>
 
 namespace MACE::Utility {
+
+namespace Detail {
+
+class ISingletonBase; // Just a kawaii forward declaration
+
+/// @brief Implementation detail of Singleton<T>. Not API.
+class SingletonGC final {
+    friend class ISingletonBase;
+
+private:
+    SingletonGC();
+    ~SingletonGC() = default;
+    SingletonGC(const SingletonGC&) = delete;
+    SingletonGC& operator=(const SingletonGC&) = delete;
+
+    static void AddInstance(ObserverPtr<ISingletonBase*> ptrToStaticInstancePtr);
+    static void DoSingletonGC();
+
+private:
+    static std::vector<ObserverPtr<ISingletonBase*>> fgInstancesCollection;
+};
+
+/// @brief Implementation detail of Singleton<T>. Not API.
+/// @details The direct base of Singleton<T>. Allow to delete instances using
+/// polymorphism mechanism early (early: lazy registration of SingletonEarlyGC
+/// to std::atexit).
+class ISingletonBase {
+    friend void SingletonGC::DoSingletonGC();
+
+protected:
+    ISingletonBase(ObserverPtr<ISingletonBase*> ptrToStaticInstancePtr);
+    virtual ~ISingletonBase() = 0;
+    ISingletonBase(const ISingletonBase&) = delete;
+    ISingletonBase& operator=(const ISingletonBase&) = delete;
+};
+
+} // namespace Detail
 
 /// @brief A helper base class for constructing singleton classes via CRTP.
 /// @attention Singleton constructed by this method will create many
@@ -20,13 +60,13 @@ namespace MACE::Utility {
 /// and declare the constructor as private/protected. If you don't except
 /// the singleton object to be deleted, also declare the destructor as
 /// private/protected.
-/// Step2 (Signature): Declare Singleton<YourSingletonClass>::Signature
+/// Step2 (Confirmation): Declare Singleton<YourSingletonClass>
 /// as friend.
 /// Step3 (Use the instance): YourSingletonClass::Instance(). This call (thread
 /// safely) creates an instance of YourSingletonClass and returns the reference
 /// to it.
 /// Step4a (RAII delete, nothing need to do by you): The instance is stored in
-/// a static manager object Singleton<YourSingletonClass>::Signature. When it
+/// a static manager object Singleton<YourSingletonClass>. When it
 /// destructs (at the end of the program), the instance of YourSingletonClass
 /// is deleted. If you need to delete manually (not recommended), see below.
 /// Step4b (Explicitly delete): Call (anything equivalent to)
@@ -43,7 +83,7 @@ namespace MACE::Utility {
 ///   In Example1.hxx:
 ///
 ///     class Example1 : public Singleton<Example1> {
-///         friend Singleton<Example1>::Signature;
+///         friend Singleton<Example1>;
 ///     private:
 ///         Example1();
 ///         ~Example1();
@@ -68,7 +108,7 @@ namespace MACE::Utility {
 ///     };
 ///
 ///     class Example2 : public Example2Base<Example2> {
-///         friend Singleton<Example2>::Signature;
+///         friend Singleton<Example2>;
 ///     private:
 ///         Example2();
 ///         ~Example2();
@@ -102,12 +142,12 @@ namespace MACE::Utility {
 ///     class Example3SingletonBase : public Example3Base
 ///                                   public Singleton<T> {
 ///     protected:
-///         // using Singleton<T>::Signature // useful when at another namespace
+///         // using Singleton<T> // useful when at another namespace
 ///         using Example3Base::Example3Base;
 ///     };
 ///
 ///     class Example3a : public Example3SingletonBase<Example3a> {
-///         friend Singleton<Example3a>::Signature;
+///         friend Singleton<Example3a>;
 ///     private:
 ///         Example3a();
 ///         ~Example3a();
@@ -118,7 +158,7 @@ namespace MACE::Utility {
 ///     };
 ///
 ///     class Example3b : public Example3SingletonBase<Example3b> {
-///         friend Singleton<Example3b>::Signature;
+///         friend Singleton<Example3b>;
 ///     private:
 ///         Example3b();
 ///         ~Example3b();
@@ -136,38 +176,18 @@ namespace MACE::Utility {
 ///     Foo(Example3b::Instance()) // Hello from 3b!
 ///
 template<class DerivedT>
-class Singleton {
+class Singleton : public Detail::ISingletonBase {
 protected:
-    constexpr Singleton() = default;
-    constexpr ~Singleton() { fgSignature.Reset(); }
-    constexpr Singleton(const Singleton&) = delete;
-    constexpr Singleton& operator=(const Singleton&) = delete;
+    Singleton();
+    ~Singleton() { fgInstance = nullptr; }
 
 public:
+    static bool Instantiated() { return fgInstance != nullptr; }
     static DerivedT& Instance();
 
-protected:
-    class Signature final {
-        friend Singleton<DerivedT>;
-
-    private:
-        constexpr Signature() = default;
-        constexpr ~Signature() { delete fInstance; }
-        constexpr Signature(const Signature&) = delete;
-        constexpr Signature& operator=(const Signature&) = delete;
-
-        constexpr bool NotInstantiated() const { return fInstance == nullptr; }
-        void Instantiate();
-        constexpr DerivedT& GetInstance() const { return *fInstance; }
-        constexpr void Reset() { fInstance = nullptr; }
-
-    private:
-        DerivedT* fInstance = nullptr;
-        std::once_flag fInstantiateOnceFlag;
-    };
-
 private:
-    static Signature fgSignature;
+    static std::once_flag fgInstantiateOnceFlag;
+    static DerivedT* fgInstance;
 };
 
 } // namespace MACE::Utility

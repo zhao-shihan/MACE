@@ -1,21 +1,22 @@
 namespace MACE::Utility {
 
 template<class DerivedT>
-typename Singleton<DerivedT>::Signature Singleton<DerivedT>::fgSignature;
+std::once_flag Singleton<DerivedT>::fgInstantiateOnceFlag;
+template<class DerivedT>
+DerivedT* Singleton<DerivedT>::fgInstance = nullptr;
 
 template<class DerivedT>
-void Singleton<DerivedT>::Signature::Instantiate() {
-    std::call_once(fInstantiateOnceFlag, [this] {
-        fInstance = new DerivedT();
-    });
-}
+Singleton<DerivedT>::Singleton() :
+    Detail::ISingletonBase(reinterpret_cast<ObserverPtr<Detail::ISingletonBase*>>(&fgInstance)) {}
 
 template<class DerivedT>
 DerivedT& Singleton<DerivedT>::Instance() {
-    if (fgSignature.NotInstantiated()) [[unlikely]] {
-        fgSignature.Instantiate();
+    if (not Instantiated()) [[unlikely]] {
+        std::call_once(fgInstantiateOnceFlag, [] {
+            fgInstance = new DerivedT();
+        });
     }
-    return fgSignature.GetInstance();
+    return *fgInstance;
 }
 
 } // namespace MACE::Utility

@@ -9,7 +9,7 @@
 namespace MACE::Core::Geometry::Description {
 
 class Target final : public IDescriptionSingleton<Target> {
-    friend Singleton<Target>::Signature;
+    friend Singleton<Target>;
 
 private:
     Target();

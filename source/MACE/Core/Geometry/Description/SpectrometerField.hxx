@@ -5,7 +5,7 @@
 namespace MACE::Core::Geometry::Description {
 
 class SpectrometerField final : public IDescriptionSingleton<SpectrometerField> {
-    friend Singleton<SpectrometerField>::Signature;
+    friend Singleton<SpectrometerField>;
 
 private:
     SpectrometerField();

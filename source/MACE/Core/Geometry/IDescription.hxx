@@ -39,7 +39,6 @@ template<class DerivedT>
 class IDescriptionSingleton : public IDescription,
                               public Utility::Singleton<DerivedT> {
 protected:
-    using typename Utility::Singleton<DerivedT>::Signature;
     using IDescription::IDescription;
 };
 

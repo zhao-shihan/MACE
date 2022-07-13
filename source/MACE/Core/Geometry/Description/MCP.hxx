@@ -5,7 +5,7 @@
 namespace MACE::Core::Geometry::Description {
 
 class MCP final : public IDescriptionSingleton<MCP> {
-    friend Singleton<MCP>::Signature;
+    friend Singleton<MCP>;
 
 private:
     MCP();

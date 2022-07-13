@@ -7,7 +7,7 @@
 namespace MACE::Core::Geometry::Description {
 
 class EMCalField final : public IDescriptionSingleton<EMCalField> {
-    friend Singleton<EMCalField>::Signature;
+    friend Singleton<EMCalField>;
 
 private:
     EMCalField();

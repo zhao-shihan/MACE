@@ -7,7 +7,7 @@
 namespace MACE::Core::Geometry::Description {
 
 class TransportLine final : public IDescriptionSingleton<TransportLine> {
-    friend Singleton<TransportLine>::Signature;
+    friend Singleton<TransportLine>;
 
 private:
     TransportLine();
