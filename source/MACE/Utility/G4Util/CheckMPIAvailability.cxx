@@ -1,13 +1,12 @@
+#include "MACE/Environment/MPIEnvironment.hxx"
 #include "MACE/Utility/G4Util/CheckMPIAvailability.hxx"
-#include "MACE/Utility/MPIUtil/MPIEnvironment.hxx"
 
 #include "G4Exception.hh"
 
 namespace MACE::Utility::G4Util {
 
-using namespace MACE::Utility::MPIUtil;
-
 void CheckMPIAvailability() {
+    using MACE::Environment::MPIEnvironment;
     if (not MPIEnvironment::Available()) {
         G4Exception("MACE::Utility::G4Util::MPIRunManager::CheckMPI()",
                     "MPINotAvailable",

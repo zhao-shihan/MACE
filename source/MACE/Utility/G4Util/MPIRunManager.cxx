@@ -1,9 +1,9 @@
+#include "MACE/Environment/MPIEnvironment.hxx"
 #include "MACE/Utility/G4Util/CheckMPIAvailability.hxx"
 #include "MACE/Utility/G4Util/MPIRunManager.hxx"
 #include "MACE/Utility/G4Util/MPIRunMessenger.hxx"
 #include "MACE/Utility/Math/IntegerPower.hxx"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
-#include "MACE/Utility/MPIUtil/MPIEnvironment.hxx"
 #include "MACE/Utility/MPIUtil/MPIRandomUtil.hxx"
 
 #include "G4Exception.hh"
@@ -14,8 +14,8 @@
 
 namespace MACE::Utility::G4Util {
 
+using MACE::Environment::MPIEnvironment;
 using MACE::Utility::Math::Pow2;
-using MACE::Utility::MPIUtil::MPIEnvironment;
 
 namespace Detail {
 
