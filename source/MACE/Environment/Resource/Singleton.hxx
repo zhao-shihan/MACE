@@ -1,48 +1,11 @@
 #pragma once
 
+#include "MACE/Environment/Environment.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
-#include <mutex>
-#include <vector>
+namespace MACE::Environment::Resource {
 
-namespace MACE::Utility {
-
-namespace Detail {
-
-class ISingletonBase; // Just a kawaii forward declaration
-
-/// @brief Implementation detail of Singleton<T>. Not API.
-class SingletonGC final {
-    friend class ISingletonBase;
-
-private:
-    SingletonGC();
-    ~SingletonGC() = default;
-    SingletonGC(const SingletonGC&) = delete;
-    SingletonGC& operator=(const SingletonGC&) = delete;
-
-    static void AddInstance(ObserverPtr<ISingletonBase*> ptrToStaticInstancePtr);
-    static void DoSingletonGC();
-
-private:
-    static std::vector<ObserverPtr<ISingletonBase*>> fgInstancesCollection;
-};
-
-/// @brief Implementation detail of Singleton<T>. Not API.
-/// @details The direct base of Singleton<T>. Allow to delete instances using
-/// polymorphism mechanism early (early: lazy registration of SingletonEarlyGC
-/// to std::atexit).
-class ISingletonBase {
-    friend void SingletonGC::DoSingletonGC();
-
-protected:
-    ISingletonBase(ObserverPtr<ISingletonBase*> ptrToStaticInstancePtr);
-    virtual ~ISingletonBase() = 0;
-    ISingletonBase(const ISingletonBase&) = delete;
-    ISingletonBase& operator=(const ISingletonBase&) = delete;
-};
-
-} // namespace Detail
+using MACE::Utility::ObserverPtr;
 
 /// @brief A helper base class for constructing singleton classes via CRTP.
 /// @attention Singleton constructed by this method will create many
@@ -175,21 +138,21 @@ protected:
 ///     Foo(Example3a::Instance()) // Hello from 3a!
 ///     Foo(Example3b::Instance()) // Hello from 3b!
 ///
-template<class DerivedT>
-class Singleton : public Detail::ISingletonBase {
+template<class ADerived>
+class Singleton : public ISingletonBase {
+    friend class SingletonFactory;
+
 protected:
-    Singleton();
-    ~Singleton() { fgInstance = nullptr; }
+    Singleton() = default;
+    virtual ~Singleton();
 
 public:
-    static bool Instantiated() { return fgInstance != nullptr; }
-    static DerivedT& Instance();
+    static ADerived& Instance();
 
 private:
-    static std::once_flag fgInstantiateOnceFlag;
-    static DerivedT* fgInstance;
+    static ObserverPtr<ObserverPtr<void>> fgInstanceObjectNodePtr;
 };
 
-} // namespace MACE::Utility
+} // namespace MACE::Environment::Resource
 
-#include "MACE/Utility/Singleton.inl"
+#include "MACE/Environment/Resource/Singleton.inl"
