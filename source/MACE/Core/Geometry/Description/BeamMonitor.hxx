@@ -7,7 +7,7 @@
 namespace MACE::Core::Geometry::Description {
 
 class BeamMonitor final : public IDescriptionSingleton<BeamMonitor> {
-    friend Singleton<BeamMonitor>;
+    friend Environment::Resource::SingletonFactory;
 
 private:
     BeamMonitor();

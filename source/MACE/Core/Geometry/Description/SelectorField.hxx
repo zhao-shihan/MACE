@@ -5,7 +5,7 @@
 namespace MACE::Core::Geometry::Description {
 
 class SelectorField final : public IDescriptionSingleton<SelectorField> {
-    friend Singleton<SelectorField>;
+    friend Environment::Resource::SingletonFactory;
 
 private:
     SelectorField();

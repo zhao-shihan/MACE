@@ -5,7 +5,7 @@
 namespace MACE::Core::Geometry::Description {
 
 class SpectrometerShield final : public IDescriptionSingleton<SpectrometerShield> {
-    friend Singleton<SpectrometerShield>;
+    friend Environment::Resource::SingletonFactory;
 
 private:
     SpectrometerShield();

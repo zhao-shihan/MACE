@@ -7,7 +7,7 @@
 namespace MACE::Core::Geometry::Description {
 
 class BeamDegrader final : public IDescriptionSingleton<BeamDegrader> {
-    friend Singleton<BeamDegrader>;
+    friend Environment::Resource::SingletonFactory;
 
 private:
     BeamDegrader();

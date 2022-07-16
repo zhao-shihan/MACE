@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Utility/Singleton.hxx"
+#include "MACE/Environment/Resource/Singleton.hxx"
 
 #include "yaml-cpp/yaml.h"
 
@@ -35,9 +35,9 @@ protected:
     std::string fName;
 };
 
-template<class DerivedT>
-class IDescriptionSingleton : public IDescription,
-                              public Utility::Singleton<DerivedT> {
+template<class ADerived>
+class IDescriptionSingleton : public Environment::Resource::Singleton<ADerived>,
+                              public IDescription {
 protected:
     using IDescription::IDescription;
 };
