@@ -1,12 +1,12 @@
+#include "MACE/Environment/MPIEnvironment.hxx"
 #include "MACE/Simulation/SimTarget/Analysis.hxx"
 #include "MACE/Simulation/SimTarget/Messenger/AnalysisMessenger.hxx"
 #include "MACE/Simulation/SimTarget/RunManager.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
-#include "MACE/Utility/MPIUtil/MPIEnvironment.hxx"
 
 namespace MACE::Simulation::SimTarget {
 
-using MACE::Utility::MPIUtil::MPIEnvironment;
+using MACE::Environment::MPIEnvironment;
 
 Analysis& Analysis::Instance() {
     static Analysis instance;

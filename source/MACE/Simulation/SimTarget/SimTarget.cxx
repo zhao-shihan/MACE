@@ -1,15 +1,15 @@
+#include "MACE/Environment/MPIEnvironment.hxx"
 #include "MACE/Simulation/SimTarget/Action/DetectorConstruction.hxx"
 #include "MACE/Simulation/SimTarget/Action/PhysicsList.hxx"
 #include "MACE/Simulation/SimTarget/RunManager.hxx"
 #include "MACE/Utility/G4Util/MPIExecutive.hxx"
-#include "MACE/Utility/MPIUtil/MPIEnvironment.hxx"
 
 #include "Randomize.hh"
 
 using namespace MACE::Simulation;
 
 int main(int argc, char* argv[]) {
-    MACE::Utility::MPIUtil::MPIEnvironment mpiEnvironment(argc, argv);
+    MACE::Environment::MPIEnvironment mpiEnvironment(argc, argv);
 
     bool interactive = (argc == 1);
 

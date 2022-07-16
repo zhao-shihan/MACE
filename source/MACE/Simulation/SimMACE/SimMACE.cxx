@@ -1,8 +1,8 @@
+#include "MACE/Environment/MPIEnvironment.hxx"
 #include "MACE/Simulation/SimMACE/Action/DetectorConstruction.hxx"
 #include "MACE/Simulation/SimMACE/Action/PhysicsList.hxx"
 #include "MACE/Simulation/SimMACE/RunManager.hxx"
 #include "MACE/Utility/G4Util/MPIExecutive.hxx"
-#include "MACE/Utility/MPIUtil/MPIEnvironment.hxx"
 
 #include "Randomize.hh"
 
@@ -11,7 +11,7 @@ using namespace MACE::Simulation;
 // constexpr const char* InitVisMac;
 
 int main(int argc, char* argv[]) {
-    MACE::Utility::MPIUtil::MPIEnvironment mpiEnvironment(argc, argv);
+    MACE::Environment::MPIEnvironment mpiEnvironment(argc, argv);
 
     bool interactive = (argc == 1);
 
