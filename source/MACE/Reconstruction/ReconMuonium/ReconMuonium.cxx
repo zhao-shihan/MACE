@@ -8,11 +8,11 @@
 #include "MACE/Core/Geometry/Description/LinacField.hxx"
 #include "MACE/Core/Geometry/Description/SpectrometerField.hxx"
 #include "MACE/Core/Geometry/Description/TransportLine.hxx"
+#include "MACE/Environment/MPIEnvironment.hxx"
 #include "MACE/Reconstruction/ReconMuonium/MuoniumSimVertex.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
-#include "MACE/Utility/MPIUtil/MPIEnvironment.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "TH2F.h"
@@ -27,6 +27,7 @@ using namespace MACE::Utility::MPIUtil;
 using namespace MACE::Utility::PhysicalConstant;
 
 using MACE::Core::DataFactory;
+using MACE::Environment::MPIEnvironment;
 
 using EMCalHit_t = SimHit::EMCalSimHit;
 using Helix_t = Track::CDCHelixTrack;

@@ -1,4 +1,5 @@
 #include "MACE/Core/DataFactory.hxx"
+#include "MACE/Environment/MPIEnvironment.hxx"
 #include "MACE/Reconstruction/ReconTracks/Fitter/DirectLeastSquare.hxx"
 #include "MACE/Reconstruction/ReconTracks/Fitter/Dummy.hxx"
 #include "MACE/Reconstruction/ReconTracks/Fitter/PerfectFitter.hxx"
@@ -6,7 +7,6 @@
 #include "MACE/Reconstruction/ReconTracks/Tracker/PerfectFinder.hxx"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
-#include "MACE/Utility/MPIUtil/MPIEnvironment.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "CLHEP/Random/MTwistEngine.h"
@@ -20,6 +20,7 @@ using namespace MACE::Utility::MPIUtil;
 using namespace MACE::Utility::PhysicalConstant;
 
 using MACE::Core::DataFactory;
+using MACE::Environment::MPIEnvironment;
 
 using Hit_t = CDCSimHit;
 

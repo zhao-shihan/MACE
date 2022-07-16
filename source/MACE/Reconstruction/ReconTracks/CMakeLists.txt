@@ -3,7 +3,7 @@ project(MACE)
 file(GLOB_RECURSE ReconTracks_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
 
 add_executable(ReconTracks ${ReconTracks_srcs})
-target_link_libraries(ReconTracks MACECore MACEUtility)
+target_link_libraries(ReconTracks MACECore MACEEnvironment MACEUtility)
 
 install(TARGETS ReconTracks DESTINATION bin)
 
