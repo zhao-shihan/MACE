@@ -919,7 +919,6 @@ RECURSIVE              = YES
 EXCLUDE                = ../../build \
                          ../../document \
                          ../../cmake \
-                         ../../source/test \
                          ../../thirdparty \
                          ../../out
 

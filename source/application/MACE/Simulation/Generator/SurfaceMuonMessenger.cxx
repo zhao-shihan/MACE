@@ -5,12 +5,8 @@
 
 namespace MACE::Simulation::Generator {
 
-SurfaceMuonMessenger& SurfaceMuonMessenger::Instance() {
-    static SurfaceMuonMessenger instance;
-    return instance;
-}
-
 SurfaceMuonMessenger::SurfaceMuonMessenger() :
+    MACE::Environment::Resource::Singleton<SurfaceMuonMessenger>(),
     G4UImessenger(),
     fSurfaceMuonGenerator(nullptr),
     fDirectory("/MACE/Generator/SurfaceMuon/"),

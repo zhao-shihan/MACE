@@ -1,4 +1,4 @@
-project(Test)
+project(MACE)
 
 add_subdirectory(Math)
 

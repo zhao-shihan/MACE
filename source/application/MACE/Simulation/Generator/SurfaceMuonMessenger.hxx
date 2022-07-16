@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Environment/Resource/Singleton.hxx"
 #include "MACE/Simulation/Generator/SurfaceMuon.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
@@ -11,7 +12,10 @@ namespace MACE::Simulation::Generator {
 
 using Utility::ObserverPtr;
 
-class SurfaceMuonMessenger final : public G4UImessenger {
+class SurfaceMuonMessenger final : public MACE::Environment::Resource::Singleton<SurfaceMuonMessenger>,
+                                   public G4UImessenger {
+    friend class MACE::Environment::Resource::SingletonFactory;
+
 public:
     static SurfaceMuonMessenger& Instance();
 

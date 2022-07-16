@@ -16,9 +16,9 @@ public:
     static auto Available() { return Initialized() and not Finalized(); }
     static auto& Instance() { return *fgMPIEnvironmentInstance; }
 
-    static const auto& WorldCommRank() { return Instance().fWorldCommRank; }
-    static const auto& WorldCommSize() { return Instance().fWorldCommSize; }
-    static const auto& ProcessorName() { return Instance().fProcessorName; }
+    static const auto& WorldCommRank() { return fgMPIEnvironmentInstance->fWorldCommRank; }
+    static const auto& WorldCommSize() { return fgMPIEnvironmentInstance->fWorldCommSize; }
+    static const auto& ProcessorName() { return fgMPIEnvironmentInstance->fProcessorName; }
     static auto IsWorldMaster() { return WorldCommRank() == 0; }
     static auto IsWorldWorker() { return WorldCommRank() > 0; }
     static auto IsSerialized() { return WorldCommSize() == 1; }
