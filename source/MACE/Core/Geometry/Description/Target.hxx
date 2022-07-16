@@ -9,7 +9,7 @@
 namespace MACE::Core::Geometry::Description {
 
 class Target final : public IDescriptionSingleton<Target> {
-    friend Environment::Resource::SingletonFactory;
+    friend class Environment::Resource::SingletonFactory;
 
 private:
     Target();

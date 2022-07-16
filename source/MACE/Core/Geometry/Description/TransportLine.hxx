@@ -7,7 +7,7 @@
 namespace MACE::Core::Geometry::Description {
 
 class TransportLine final : public IDescriptionSingleton<TransportLine> {
-    friend Environment::Resource::SingletonFactory;
+    friend class Environment::Resource::SingletonFactory;
 
 private:
     TransportLine();
