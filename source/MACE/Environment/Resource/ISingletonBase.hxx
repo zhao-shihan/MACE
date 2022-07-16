@@ -17,7 +17,7 @@ protected:
     ISingletonBase& operator=(const ISingletonBase&) = delete;
 
 private:
-    ObserverPtr<ISingletonBase*> fInstanceBaseNodePtr;
+    ObserverPtr<ISingletonBase*> fInstanceBaseNodePtr; // Points to a node of instance list in SingletFactory
 };
 
 } // namespace MACE::Environment::Resource

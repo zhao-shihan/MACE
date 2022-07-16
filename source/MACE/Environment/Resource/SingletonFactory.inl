@@ -28,6 +28,11 @@ void SingletonFactory::Instantiate() {
         // base class" below)), as far as concerned, this branch covers
         // possible 2 unusual cases:
         //
+        // 1. The instance is deleted, so the static pointer stored in
+        // "singleton base class" became null. But someone is not careful
+        // enough to prevent further call to Instance() of that. In this case
+        // we can recognize it and throw an instance of std::logic_error.
+        //
         // 2. (Not confirmed) Static members of "singleton base class" has many
         // instances in memory. This might happend when there is dynamic
         // libraries contains "singleton base class" while the executable also
