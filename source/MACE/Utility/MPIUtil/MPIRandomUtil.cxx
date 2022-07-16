@@ -1,4 +1,4 @@
-#include "MACE/Utility/MPIUtil/MPIEnvironment.hxx"
+#include "MACE/Environment/MPIEnvironment.hxx"
 #include "MACE/Utility/MPIUtil/MPIRandomUtil.hxx"
 
 #include "CLHEP/Random/RandomEngine.h"
@@ -12,6 +12,8 @@
 namespace MACE::Utility::MPIUtil {
 
 void MPIReSeedCLHEPRandom(CLHEP::HepRandomEngine* randEng) {
+    using MACE::Environment::MPIEnvironment;
+
     if (MPIEnvironment::IsSerialized()) { return; }
 
     std::vector<long> seedSend;

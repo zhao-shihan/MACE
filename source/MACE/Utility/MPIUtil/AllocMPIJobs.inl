@@ -1,5 +1,3 @@
-#include "MACE/Utility/MPIUtil/MPIEnvironment.hxx"
-
 namespace MACE::Utility::MPIUtil {
 
 template<std::integral IndexT>
@@ -9,6 +7,7 @@ IntegralIndexRange<IndexT> AllocMPIJobsJobWise(IndexT jobBegin, IndexT jobEnd, i
 
 template<std::integral IndexT>
 IntegralIndexRange<IndexT> AllocMPIJobsJobWise(IndexT jobBegin, IndexT jobEnd, MPI_Comm comm) {
+    using MACE::Environment::MPIEnvironment;
     if (comm == MPI_COMM_WORLD) {
         return AllocMPIJobsJobWise<IndexT>(jobBegin, jobEnd,
                                            MPIEnvironment::WorldCommSize(), MPIEnvironment::WorldCommRank());
@@ -39,6 +38,7 @@ IntegralIndexRange<IndexT> AllocMPIJobsWorkerWise(IndexT jobBegin, IndexT jobEnd
 
 template<std::integral IndexT>
 IntegralIndexRange<IndexT> AllocMPIJobsWorkerWise(IndexT jobBegin, IndexT jobEnd, MPI_Comm comm) {
+    using MACE::Environment::MPIEnvironment;
     if (comm == MPI_COMM_WORLD) {
         return AllocMPIJobsWorkerWise<IndexT>(jobBegin, jobEnd,
                                               MPIEnvironment::WorldCommSize(), MPIEnvironment::WorldCommRank());

@@ -1,5 +1,5 @@
+#include "MACE/Environment/MPIEnvironment.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
-#include "MACE/Utility/MPIUtil/MPIEnvironment.hxx"
 
 #include <array>
 #include <climits>
@@ -17,6 +17,8 @@ std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_vi
 #else
     constexpr size_t pathMax = 260; // ???
 #endif
+
+    using Environment::MPIEnvironment;
 
     if (MPIEnvironment::IsSerialized()) {
 
