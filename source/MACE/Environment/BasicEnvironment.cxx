@@ -13,7 +13,7 @@ bool BasicEnvironment::fgBasicEnvironmentFinalized = false;
 
 BasicEnvironment::BasicEnvironment(int argc, char* argv[], VerboseLevel verboseLevel, bool printStartupMessage) :
     fVerboseLevel(verboseLevel),
-    fSingletonFactory(nullptr) {
+    fSingletonFactory() {
     if (not Initialized()) {
         fgBasicEnvironmentInstance = this;
     } else {
@@ -24,13 +24,6 @@ BasicEnvironment::BasicEnvironment(int argc, char* argv[], VerboseLevel verboseL
         PrintStartupMessageBody(argc, argv);
         PrintStartupMessageSplitLine();
     }
-}
-
-Resource::SingletonFactory& BasicEnvironment::GetSingletonFactory() {
-    if (fSingletonFactory == nullptr) [[unlikely]] {
-        fSingletonFactory = std::make_unique<Resource::SingletonFactory>();
-    }
-    return *fSingletonFactory;
 }
 
 void BasicEnvironment::PrintStartupMessageSplitLine() const {

@@ -2,14 +2,15 @@
 
 namespace MACE::Environment::Resource {
 
+ObserverPtr<SingletonFactory> SingletonFactory::fgInstance = nullptr;
+
 SingletonFactory::SingletonFactory() :
     fSingletonInstanceList(),
     fSingletonTypeCollection() {
-    static ObserverPtr<SingletonFactory> gInstance = nullptr;
-    if (gInstance == nullptr) {
-        gInstance = this;
+    if (fgInstance == nullptr) {
+        fgInstance = this;
     } else {
-        throw std::logic_error("MACE::Environment::Resource::SingletonFactory constructed twice");
+        throw std::logic_error("MACE::Environment::Resource::SingletonFactory: Trying to construct twice");
     }
 }
 

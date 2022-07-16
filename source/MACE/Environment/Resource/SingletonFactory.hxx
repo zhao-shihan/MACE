@@ -11,26 +11,39 @@
 #include <typeinfo>
 #include <utility>
 
-namespace MACE::Environment::Resource {
+namespace MACE::Environment {
+
+class BasicEnvironment; // Just a kawaii forward declaration
+
+namespace Resource {
 
 using MACE::Utility::ObserverPtr;
 
-/// @brief Implementation detail of Singleton<T>. Not API.
+/// @brief Implementation detail of MACE::Environment::Resource::Singleton.
+/// Not API.
 class SingletonFactory final {
-public:
+    friend class MACE::Environment::BasicEnvironment;
+
+private:
     SingletonFactory();
     ~SingletonFactory();
     SingletonFactory(const SingletonFactory&) = delete;
     SingletonFactory& operator=(const SingletonFactory&) = delete;
 
+public: // Expose to MACE::Environment::Resource::Singleton
+    static auto& Instance() { return *fgInstance; }
     template<class ASingleton>
     void Instantiate();
 
 private:
     std::forward_list<std::pair<ISingletonBase*, ObserverPtr<void>>> fSingletonInstanceList;
     std::map<std::type_index, decltype(fSingletonInstanceList)::iterator> fSingletonTypeCollection;
+
+    static ObserverPtr<SingletonFactory> fgInstance;
 };
 
-} // namespace MACE::Environment::Resource
+} // namespace Resource
+
+} // namespace MACE::Environment
 
 #include "MACE/Environment/Resource/SingletonFactory.inl"

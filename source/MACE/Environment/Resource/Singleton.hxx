@@ -1,6 +1,7 @@
 #pragma once
 
-#include "MACE/Environment/BasicEnvironment.hxx"
+#include "MACE/Environment/Resource/ISingletonBase.hxx"
+#include "MACE/Environment/Resource/SingletonFactory.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 namespace MACE::Environment::Resource {
@@ -17,8 +18,8 @@ using MACE::Utility::ObserverPtr;
 /// Usage:
 /// Step1 (Inheritance): Inherit this class once (directly or indirectly)
 /// and declare the constructor as private/protected. If you don't except
-/// the singleton object to be deleted, also declare the destructor as
-/// private/protected.
+/// the singleton object to be wxplicitly deleted, also declare the destructor
+/// as private/protected.
 /// Step2 (Confirmation): Declare MACE::Environment::Resource::SingletonFactory
 /// as a friend of your singleton class.
 /// Step3 (Use the instance): YourSingletonClass::Instance(). This call (thread
@@ -35,16 +36,16 @@ using MACE::Utility::ObserverPtr;
 /// explicitly deletes the instance of YourSingletonClass and sets the internal
 /// pointer to nullptr (prevent RAII double free). This explicit delete action
 /// might be done manually by you, or by other external libraries (G4, ROOT,
-/// etc.). This requires a public destructor. Note that once the instance is
-/// deleted, any following call to YourSingletonClass::Instance() will raise
-/// an exception.
+/// etc.). This requires a public destructor if virtual destuct not performs.
+/// Note that once the instance is deleted, any following call to
+/// YourSingletonClass::Instance() will throw an exception.
 ///
 /// Example1 (Typical usage):
 ///
 ///   In Example1.hxx:
 ///
 ///     class Example1 : public Singleton<Example1> {
-///         friend SingletonFactory;
+///         friend class SingletonFactory;
 ///     private:
 ///         Example1();
 ///         ~Example1();
@@ -69,7 +70,7 @@ using MACE::Utility::ObserverPtr;
 ///     };
 ///
 ///     class Example2 : public Example2Base<Example2> {
-///         friend SingletonFactory;
+///         friend class SingletonFactory;
 ///     private:
 ///         Example2();
 ///         ~Example2();
@@ -107,7 +108,7 @@ using MACE::Utility::ObserverPtr;
 ///     };
 ///
 ///     class Example3a : public Example3SingletonBase<Example3a> {
-///         friend SingletonFactory;
+///         friend class SingletonFactory;
 ///     private:
 ///         Example3a();
 ///         ~Example3a();
@@ -118,7 +119,7 @@ using MACE::Utility::ObserverPtr;
 ///     };
 ///
 ///     class Example3b : public Example3SingletonBase<Example3b> {
-///         friend SingletonFactory;
+///         friend class SingletonFactory;
 ///     private:
 ///         Example3b();
 ///         ~Example3b();

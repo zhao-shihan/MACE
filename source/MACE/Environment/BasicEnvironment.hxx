@@ -4,8 +4,6 @@
 #include "MACE/Utility/ObserverPtr.hxx"
 #include "MACE/Utility/VerboseLevel.hxx"
 
-#include <memory>
-
 namespace MACE::Environment {
 
 using MACE::Utility::ObserverPtr;
@@ -13,7 +11,7 @@ using Utility::VerboseLevel;
 
 class BasicEnvironment {
 public:
-    BasicEnvironment(int argc, char* argv[], VerboseLevel verboseLevel = VerboseLevel::Undefined, bool printStartupMessage = true);
+    BasicEnvironment(int argc, char* argv[], VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
     virtual ~BasicEnvironment() { fgBasicEnvironmentFinalized = true; }
     BasicEnvironment(const BasicEnvironment&) = delete;
     BasicEnvironment& operator=(const BasicEnvironment&) = delete;
@@ -24,7 +22,6 @@ public:
     static auto& Instance() { return *fgBasicEnvironmentInstance; }
 
     const auto& GetVerboseLevel() const { return fVerboseLevel; }
-    Resource::SingletonFactory& GetSingletonFactory();
 
 protected:
     void PrintStartupMessageSplitLine() const;
@@ -32,7 +29,7 @@ protected:
 
 private:
     VerboseLevel fVerboseLevel;
-    std::unique_ptr<Resource::SingletonFactory> fSingletonFactory;
+    Resource::SingletonFactory fSingletonFactory;
 
     static ObserverPtr<BasicEnvironment> fgBasicEnvironmentInstance;
     static bool fgBasicEnvironmentFinalized;

@@ -8,7 +8,7 @@ namespace MACE::Environment {
 
 class MPIEnvironment : public BasicEnvironment {
 public:
-    MPIEnvironment(int& argc, char**& argv, VerboseLevel verboseLevel = VerboseLevel::Undefined, bool printStartupMessage = true);
+    MPIEnvironment(int& argc, char**& argv, VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
     virtual ~MPIEnvironment();
 
     static auto Initialized() { return fgMPIEnvironmentInstance != nullptr; }
