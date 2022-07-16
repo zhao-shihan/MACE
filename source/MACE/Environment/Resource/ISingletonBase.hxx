@@ -1,12 +1,15 @@
+#pragma once
+
 #include "MACE/Utility/ObserverPtr.hxx"
 
 namespace MACE::Environment::Resource {
 
 using MACE::Utility::ObserverPtr;
 
-/// @brief Implementation detail of Singleton<T>. Not API.
-/// @details The direct base of Singleton<T>. This allow us to
-/// manage instances using polymorphism mechanism.
+/// @brief Implementation detail of MACE::Environment::Resource::Singleton.
+/// Not API.
+/// @details The direct base of Singleton<T>. This allow us to manage instances
+/// using polymorphism mechanism.
 class ISingletonBase {
     friend class SingletonFactory;
 
