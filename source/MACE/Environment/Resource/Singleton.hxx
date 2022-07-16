@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Environment.hxx"
+#include "MACE/Environment/BasicEnvironment.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 namespace MACE::Environment::Resource {
