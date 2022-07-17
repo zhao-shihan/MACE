@@ -16,9 +16,6 @@ class SurfaceMuonMessenger final : public MACE::Environment::Resource::Singleton
                                    public G4UImessenger {
     friend class MACE::Environment::Resource::SingletonFactory;
 
-public:
-    static SurfaceMuonMessenger& Instance();
-
 private:
     SurfaceMuonMessenger();
     ~SurfaceMuonMessenger() noexcept = default;
