@@ -64,5 +64,4 @@ include(${MACE_PROJECT_CMAKE_DIR}/LookForEigen.cmake)
 # Let's go!
 # =============================================================================
 
-# Framework
 add_subdirectory("${MACE_PROJECT_SRC_DIR}")

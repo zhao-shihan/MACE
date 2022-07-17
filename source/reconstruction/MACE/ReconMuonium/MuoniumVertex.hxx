@@ -1,0 +1,81 @@
+#pragma once
+
+#include "MACE/Core/DataFactory.hxx"
+#include "MACE/Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
+#include "MACE/Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
+#include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
+#include "MACE/Core/DataModel/ITransientData.hxx"
+
+namespace MACE::ReconMuonium {
+
+using Core::DataModel::BranchSocket::DoubleBranchSocket;
+using Core::DataModel::BranchSocket::FloatBranchSocket;
+using Core::DataModel::BranchSocket::ShortStringBranchSocket;
+using Core::DataModel::BranchSocket::Vector2FBranchSocket;
+using Core::DataModel::BranchSocket::Vector3FBranchSocket;
+using Utility::ShortString;
+
+class MuoniumVertex : public Core::DataModel::ITransientData {
+public:
+    MuoniumVertex() noexcept;
+    MuoniumVertex(const MuoniumVertex&) noexcept = default;
+    MuoniumVertex(MuoniumVertex&&) noexcept = default;
+    virtual ~MuoniumVertex() noexcept = default;
+    MuoniumVertex& operator=(const MuoniumVertex&) noexcept = default;
+    MuoniumVertex& operator=(MuoniumVertex&&) noexcept = default;
+
+    const auto& GetTCACDC() const { return fTCACDC; }
+    const auto& GetTCAMCP() const { return fTCAMCP; }
+    const auto& GetDeltaTCA() const { return fDeltaTCA; }
+    const auto& GetCPACDC() const { return fCPACDC; }
+    const auto& GetCPAMCP() const { return fCPAMCP; }
+    const auto& GetDCA() const { return fDCA; }
+    const auto& GetVertexEnergy() const { return fVertexEnergy; }
+    const auto& GetVertexMomentum() const { return fVertexMomentum; }
+    const auto& GetParticles() const { return fParticles; }
+
+    void SetTCACDC(Double_t val) { fTCACDC = val; }
+    void SetTCAMCP(Double_t val) { fTCAMCP = val; }
+    void SetDeltaTCA(Double_t val) { fDeltaTCA = val; }
+    template<typename Vector3T>
+    void SetCPACDC(Vector3T&& pos) { fCPACDC = std::forward<Vector3T>(pos); }
+    void SetCPACDC(Double_t x, Double_t y, Double_t z) { fCPACDC = {x, y, z}; }
+    template<typename Vector2T>
+    void SetCPAMCP(Vector2T&& pos) { fCPAMCP = std::forward<Vector2T>(pos); }
+    void SetCPAMCP(Double_t x, Double_t y) { fCPAMCP = {x, y}; }
+    void SetDCA(Double_t dca) { fDCA = dca; }
+    void SetVertexEnergy(Double_t E) { fVertexEnergy = E; }
+    template<typename Vector3T>
+    void SetVertexMomentum(Vector3T&& mom) { fVertexMomentum = std::forward<Vector3T>(mom); }
+    void SetVertexMomentum(Double_t pX, Double_t pY, Double_t pZ) { fVertexMomentum = {pX, pY, pZ}; }
+    template<typename StringT>
+    void SetParticles(StringT&& particleNames) { fParticles = std::forward<StringT>(particleNames); }
+
+    static consteval const char* BasicTreeName() noexcept { return "MVtx"; }
+    static void CreateBranches(TTree& tree);
+    static void ConnectToBranches(TTree& tree);
+    void FillBranchSockets() const noexcept;
+
+private:
+    Double_t fTCACDC;
+    Double_t fTCAMCP;
+    Double_t fDeltaTCA;
+    Eigen::Vector3d fCPACDC;
+    Eigen::Vector2d fCPAMCP;
+    Double_t fDCA;
+    Double_t fVertexEnergy;
+    Eigen::Vector3d fVertexMomentum;
+    ShortString fParticles;
+
+    static DoubleBranchSocket fgTCACDC;
+    static DoubleBranchSocket fgTCAMCP;
+    static DoubleBranchSocket fgDeltaTCA;
+    static Vector3FBranchSocket fgCPACDC;
+    static Vector2FBranchSocket fgCPAMCP;
+    static FloatBranchSocket fgDCA;
+    static FloatBranchSocket fgVertexEnergy;
+    static Vector3FBranchSocket fgVertexMomentum;
+    static ShortStringBranchSocket fgParticles;
+};
+
+} // namespace MACE::ReconMuonium

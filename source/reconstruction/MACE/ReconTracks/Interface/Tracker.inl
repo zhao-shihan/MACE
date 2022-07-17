@@ -1,0 +1,11 @@
+namespace MACE::ReconTracks::Interface {
+
+template<template<class H, class T> class FitterT_t, class CDCHit_t, class Track_t>
+Tracker<FitterT_t, CDCHit_t, Track_t>::
+    Tracker() :
+    fFitter(std::make_unique<Fitter_t>()),
+    fTrackList(0),
+    fTrackedHitList(0),
+    fOmittedHitList(0) {}
+
+} // namespace MACE::ReconTracks::Interface
