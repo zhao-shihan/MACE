@@ -3,10 +3,6 @@ project(MACE)
 # Config for MACE
 include(${MACE_PROJECT_CMAKE_DIR}/MACECompileOptions.cmake)
 
-# external
-include_directories(${MPI_C_INCLUDE_DIRS})
-include_directories(${ROOT_INCLUDE_DIRS})
-
 # Framework
 add_subdirectory(framework)
 # Simulation

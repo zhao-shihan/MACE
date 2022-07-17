@@ -64,4 +64,4 @@ include(${MACE_PROJECT_CMAKE_DIR}/LookForEigen.cmake)
 # Let's go!
 # =============================================================================
 
-add_subdirectory("${MACE_PROJECT_SRC_DIR}")
+add_subdirectory(${MACE_PROJECT_SRC_DIR})
