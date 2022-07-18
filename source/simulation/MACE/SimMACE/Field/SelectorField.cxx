@@ -1,22 +1,22 @@
 #include "MACE/SimMACE/Field/SelectorField.hxx"
 #include "MACE/SimMACE/Messenger/FieldMessenger.hxx"
-
-#include "G4PhysicalConstants.hh"
+#include "MACE/Utility/LiteralUnit.hxx"
+#include "MACE/Utility/PhysicalConstant.hxx"
 
 namespace MACE::SimMACE::Field {
 
-using Messenger::FieldMessenger;
 using namespace MACE::Utility::LiteralUnit::ElectricFieldStrength;
 using namespace MACE::Utility::LiteralUnit::Energy;
 using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
+using namespace MACE::Utility::PhysicalConstant;
 
 SelectorField::SelectorField() :
     G4ElectroMagneticField(),
     fBTransport(0.1_T),
     fSelectEk(7_keV),
     fESelect(5_kV_cm),
-    fBSelect(fESelect / c_light * std::sqrt(G4Positron::Definition()->GetPDGMass() / (2 * fSelectEk))) {
-    FieldMessenger::Instance().Set(this);
+    fBSelect(fESelect / c_light * std::sqrt(electron_mass_c2 / (2 * fSelectEk))) {
+    Messenger::FieldMessenger::Instance().SetTo(this);
 }
 
 void SelectorField::GetFieldValue(const G4double*, G4double* F) const {
@@ -30,12 +30,12 @@ void SelectorField::GetFieldValue(const G4double*, G4double* F) const {
 
 void SelectorField::SetSelectorElectricField(G4double E) {
     fESelect = E;
-    fBSelect = E / c_light * std::sqrt(G4Positron::Definition()->GetPDGMass() / (2 * fSelectEk));
+    fBSelect = E / c_light * std::sqrt(electron_mass_c2 / (2 * fSelectEk));
 }
 
 void SelectorField::SetSelectEnergy(G4double Ek) {
     fSelectEk = Ek;
-    fESelect = c_light * std::sqrt(2 * fSelectEk / G4Positron::Definition()->GetPDGMass()) * fBSelect;
+    fESelect = c_light * std::sqrt(2 * fSelectEk / electron_mass_c2) * fBSelect;
 }
 
 } // namespace MACE::SimMACE::Field

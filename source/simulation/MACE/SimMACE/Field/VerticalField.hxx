@@ -7,7 +7,7 @@ namespace MACE::SimMACE::Field {
 class VerticalField final : public G4UniformMagField {
 public:
     VerticalField(G4double B);
-    ~VerticalField() noexcept = default;
+    ~VerticalField() = default;
     VerticalField(const VerticalField&) = delete;
     VerticalField& operator=(const VerticalField&) = delete;
 

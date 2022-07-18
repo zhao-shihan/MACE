@@ -9,7 +9,7 @@ namespace MACE::SimMACE::Field {
 class LinacField final : public G4ElectroMagneticField {
 public:
     LinacField();
-    ~LinacField() noexcept = default;
+    ~LinacField() = default;
     LinacField(const LinacField&) = delete;
     LinacField& operator=(const LinacField&) = delete;
 

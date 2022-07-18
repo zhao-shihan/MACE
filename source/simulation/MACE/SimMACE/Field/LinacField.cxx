@@ -17,7 +17,7 @@ LinacField::LinacField() :
     fV(7_kV),
     fDecayZMean(13.05_mm),
     fEz(7_kV / (LinacDescription::Instance().GetDownStreamLength() - 13.05_mm)) {
-    FieldMessenger::Instance().Set(this);
+    FieldMessenger::Instance().SetTo(this);
 }
 
 void LinacField::GetFieldValue(const G4double*, G4double* F) const {

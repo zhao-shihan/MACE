@@ -7,7 +7,7 @@
 namespace MACE::SimMACE::Field {
 
 using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
-using namespace MACE::Utility::Math;
+using MACE::Utility::Math::Hypot2;
 using TransportLineDescription = Core::Geometry::Description::TransportLine;
 
 FirstBendField::FirstBendField() :
@@ -15,7 +15,7 @@ FirstBendField::FirstBendField() :
     fGeomTransform(TransportLineDescription::Instance().FirstBendTransform()),
     fBendRadius(TransportLineDescription::Instance().GetFirstBendRadius()),
     fB0R0(0.1_T * fBendRadius) {
-    Messenger::FieldMessenger::Instance().Set(this);
+    Messenger::FieldMessenger::Instance().SetTo(this);
 }
 
 void FirstBendField::GetFieldValue(const G4double* x, G4double* B) const {

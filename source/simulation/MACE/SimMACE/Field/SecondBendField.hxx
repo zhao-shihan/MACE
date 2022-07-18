@@ -8,7 +8,7 @@ namespace MACE::SimMACE::Field {
 class SecondBendField final : public G4MagneticField {
 public:
     SecondBendField();
-    ~SecondBendField() noexcept = default;
+    ~SecondBendField() = default;
     SecondBendField(const SecondBendField&) = delete;
     SecondBendField& operator=(const SecondBendField&) = delete;
 

@@ -1,16 +1,13 @@
 #pragma once
 
-#include "MACE/Utility/LiteralUnit.hxx"
-
 #include "G4ElectroMagneticField.hh"
-#include "G4Positron.hh"
 
 namespace MACE::SimMACE::Field {
 
 class SelectorField final : public G4ElectroMagneticField {
 public:
     SelectorField();
-    ~SelectorField() noexcept = default;
+    ~SelectorField() = default;
     SelectorField(const SelectorField&) = delete;
     SelectorField& operator=(const SelectorField&) = delete;
 

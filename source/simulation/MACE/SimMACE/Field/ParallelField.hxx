@@ -7,7 +7,7 @@ namespace MACE::SimMACE::Field {
 class ParallelField final : public G4UniformMagField {
 public:
     ParallelField(G4double B);
-    ~ParallelField() noexcept = default;
+    ~ParallelField() = default;
     ParallelField(const ParallelField&) = delete;
     ParallelField& operator=(const ParallelField&) = delete;
 
