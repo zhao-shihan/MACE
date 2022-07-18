@@ -22,8 +22,8 @@ public:
     const auto& GetG4EventID() const { return fG4EventID; }
     const auto& GetG4TrackID() const { return fG4TrackID; }
 
-    template<typename StringT>
-    void SetParticle(StringT&& particleName) { fParticle = std::forward<StringT>(particleName); }
+    template<typename AString>
+    void SetParticle(AString&& particleName) { fParticle = std::forward<AString>(particleName); }
     void SetG4EventID(Int_t val) { fG4EventID = val; }
     void SetG4TrackID(Int_t val) { fG4TrackID = val; }
 

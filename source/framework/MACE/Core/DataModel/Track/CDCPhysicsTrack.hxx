@@ -34,15 +34,15 @@ public:
     const auto& GetVertexMomentum() const { return fVertexMomentum; }
     const auto& GetParticle() const { return fParticle; }
 
-    template<typename Vector3T>
-    void SetVertexPosition(Vector3T&& pos) { fVertexPosition = std::forward<Vector3T>(pos); }
+    template<typename A3Vector>
+    void SetVertexPosition(A3Vector&& pos) { fVertexPosition = std::forward<A3Vector>(pos); }
     void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition = {x, y, z}; }
     void SetVertexEnergy(Double_t E) { fVertexEnergy = E; }
-    template<typename Vector3T>
-    void SetVertexMomentum(Vector3T&& mom) { fVertexMomentum = std::forward<Vector3T>(mom); }
+    template<typename A3Vector>
+    void SetVertexMomentum(A3Vector&& mom) { fVertexMomentum = std::forward<A3Vector>(mom); }
     void SetVertexMomentum(Double_t pX, Double_t pY, Double_t pZ) { fVertexMomentum = {pX, pY, pZ}; }
-    template<typename StringT>
-    void SetParticle(StringT&& particleName) { fParticle = std::forward<StringT>(particleName); }
+    template<typename AString>
+    void SetParticle(AString&& particleName) { fParticle = std::forward<AString>(particleName); }
 
     static consteval const char* BasicTreeName() noexcept { return "PhyTrk"; }
     static void CreateBranches(TTree& tree);

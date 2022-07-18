@@ -22,10 +22,10 @@ public:
     void Write(YAML::Node& geomYaml) const;
 
 protected:
-    template<typename ValueT, typename ReadAsT = ValueT>
-    void ReadValueNode(const YAML::Node& node, const char* valueName, ValueT& value);
-    template<typename ValueT, typename WriteAsT = ValueT>
-    void WriteValueNode(YAML::Node& node, const char* valueName, const ValueT& value) const;
+    template<typename AValue, typename AReadAs = AValue>
+    void ReadValueNode(const YAML::Node& node, const char* valueName, AValue& value);
+    template<typename AValue, typename AWriteAs = AValue>
+    void WriteValueNode(YAML::Node& node, const char* valueName, const AValue& value) const;
 
 private:
     virtual void ReadDescriptionNode(const YAML::Node& node) = 0;

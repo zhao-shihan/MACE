@@ -4,9 +4,9 @@
 
 namespace MACE::Core::DataModel::BranchSocket {
 
-template<class ClassT>
-requires std::is_class_v<ClassT>
-class ClassBranchSocket final : public IBranchSocket<ClassT> {
+template<class AClass>
+requires std::is_class_v<AClass>
+class ClassBranchSocket final : public IBranchSocket<AClass> {
 public:
     template<typename... Args>
     ClassBranchSocket(const TString& branchName, Args&&... args);
@@ -14,14 +14,14 @@ public:
     ClassBranchSocket(const ClassBranchSocket&) = delete;
     ClassBranchSocket& operator=(const ClassBranchSocket&) = delete;
 
-    const ClassT& GetValue() const override { return *fObject; }
-    void SetValue(const ClassT& object) override { *fObject = object; }
+    const AClass& GetValue() const override { return *fObject; }
+    void SetValue(const AClass& object) override { *fObject = object; }
 
     void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, std::addressof(fObject), 256000, 0); }
     void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(this->fBranchName, std::addressof(fObject)); }
 
 private:
-    ClassT* fObject;
+    AClass* fObject;
 };
 
 } // namespace MACE::Core::DataModel::BranchSocket

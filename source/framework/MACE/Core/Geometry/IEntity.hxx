@@ -42,10 +42,10 @@ public:
     void RegisterSD(size_t volumeIndex, G4VSensitiveDetector* sd) const;
     void RegisterSD(G4VSensitiveDetector* sd) const;
 
-    template<std::derived_from<G4Field> FieldT, std::derived_from<G4EquationOfMotion> EquationT, class StepperT, std::derived_from<G4VIntegrationDriver> DriverT>
-    void RegisterField(size_t volumeIndex, FieldT* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const;
-    template<std::derived_from<G4Field> FieldT, std::derived_from<G4EquationOfMotion> EquationT, class StepperT, std::derived_from<G4VIntegrationDriver> DriverT>
-    void RegisterField(FieldT* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const;
+    template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, class AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
+    void RegisterField(size_t volumeIndex, AField* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const;
+    template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, class AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
+    void RegisterField(AField* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const;
 
 #if MACE_WITH_G4GDML
     void WriteSelfAndDesendentsToGDML(std::string_view fileName, size_t volumeIndex = 0) const;
@@ -59,14 +59,14 @@ public:
 
 protected:
     // Make a G4Solid and keep it (just for deleting when Entity deconstructs).
-    template<std::derived_from<G4VSolid> SolidT, typename... Args>
-    ObserverPtr<SolidT> Make(Args&&... args);
+    template<std::derived_from<G4VSolid> ASolid, typename... Args>
+    ObserverPtr<ASolid> Make(Args&&... args);
     // Make a G4LogicalVolume and keep it for futher access. Will be deleted when Entity deconstructed.
-    template<std::derived_from<G4LogicalVolume> LogicalT, typename... Args>
-    ObserverPtr<LogicalT> Make(Args&&... args);
+    template<std::derived_from<G4LogicalVolume> ALogical, typename... Args>
+    ObserverPtr<ALogical> Make(Args&&... args);
     // Make a G4PhysicalVolume and keep it for futher access. Will be deleted when Entity deconstructed.
-    template<std::derived_from<G4VPhysicalVolume> PhysicalT, typename... Args>
-    ObserverPtr<PhysicalT> Make(Args&&... args);
+    template<std::derived_from<G4VPhysicalVolume> APhysical, typename... Args>
+    ObserverPtr<APhysical> Make(Args&&... args);
 
     // shared_ptr points to the mother Entity.
     auto Mother() const { return std::const_pointer_cast<const IEntity>(fMother); }

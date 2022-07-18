@@ -39,11 +39,11 @@ public:
     void SetHitPositionZ(Double_t z) { fHitPositionZ = z; }
     void SetDriftDistanceVariance(Double_t val) { fDriftDistanceVariance = val; }
     void SetHitPositionZVariance(Double_t val) { fHitPositionZVariance = val; }
-    template<typename Vector2T>
-    void SetWirePosition(Vector2T&& pos) { fWirePosition = std::forward<Vector2T>(pos); }
+    template<typename A2Vector>
+    void SetWirePosition(A2Vector&& pos) { fWirePosition = std::forward<A2Vector>(pos); }
     void SetWirePosition(Double_t x, Double_t y) { fWirePosition = {x, y}; }
-    template<typename Vector3T>
-    void SetWireDirection(Vector3T&& dir) { fWireDirection = std::forward<Vector3T>(dir); }
+    template<typename A3Vector>
+    void SetWireDirection(A3Vector&& dir) { fWireDirection = std::forward<A3Vector>(dir); }
     void SetWireDirection(Double_t tx, Double_t ty, Double_t tz) { fWireDirection = {tx, ty, tz}; }
     void SetCellID(Int_t val) { fCellID = val; }
     void SetLayerID(Int_t val) { fLayerID = val; }

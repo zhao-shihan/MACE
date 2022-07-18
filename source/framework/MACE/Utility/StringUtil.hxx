@@ -10,8 +10,8 @@ namespace MACE::Utility {
 enum SplitStringOption { kAll,
                          kFirst,
                          kLast };
-template<std::constructible_from<std::string_view> StringT = std::string_view, SplitStringOption OptionV = kFirst>
-std::vector<StringT> SplitString(std::string_view string, char delimiter);
+template<std::constructible_from<std::string_view> AString = std::string_view, SplitStringOption OptionV = kFirst>
+std::vector<AString> SplitString(std::string_view string, char delimiter);
 
 } // namespace MACE::Utility
 

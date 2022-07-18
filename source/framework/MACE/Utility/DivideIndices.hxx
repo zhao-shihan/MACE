@@ -17,16 +17,16 @@ namespace MACE::Utility {
 ///   taker 4: 10
 ///   taker 5: 10
 ///   taker 6: 10
-template<std::integral IndexT>
-std::vector<IndexT> DivideIndexNum(IndexT nIndices, IndexT nTakers);
+template<std::integral AIndex>
+std::vector<AIndex> DivideIndexNum(AIndex nIndices, AIndex nTakers);
 
 /// @brief The return struct of DivideIndexRange... functions.
-template<std::integral IndexT>
+template<std::integral AIndex>
 struct IntegralIndexRange {
-    IndexT begin; // the first index
-    IndexT end;   // index after the last index
-    IndexT step;  // increment of index
-    IndexT count; // total num of indices of this division
+    AIndex begin; // the first index
+    AIndex end;   // index after the last index
+    AIndex step;  // increment of index
+    AIndex count; // total num of indices of this division
 };
 
 /// @brief Distribute index range uniformly to workers.
@@ -43,10 +43,10 @@ struct IntegralIndexRange {
 ///   taker 4: [4, 74, 7, 10]
 ///   taker 5: [5, 75, 7, 10]
 ///   taker 6: [6, 76, 7, 10]
-template<std::integral IndexT>
-std::vector<IntegralIndexRange<IndexT>> DivideIndexRangeIndexWise(IndexT begin, IndexT end, IndexT nTakers);
-template<std::integral IndexT>
-std::vector<IntegralIndexRange<IndexT>> DivideIndexRangeIndexWise(std::pair<IndexT, IndexT> beginEnd, IndexT nTakers);
+template<std::integral AIndex>
+std::vector<IntegralIndexRange<AIndex>> DivideIndexRangeIndexWise(AIndex begin, AIndex end, AIndex nTakers);
+template<std::integral AIndex>
+std::vector<IntegralIndexRange<AIndex>> DivideIndexRangeIndexWise(std::pair<AIndex, AIndex> beginEnd, AIndex nTakers);
 
 /// @brief Distribute index range uniformly to takers. The range assigned to each taker are continuous.
 /// @param begin Index of first job
@@ -61,10 +61,10 @@ std::vector<IntegralIndexRange<IndexT>> DivideIndexRangeIndexWise(std::pair<Inde
 ///   taker 4: [44, 54, 1, 10]
 ///   taker 5: [54, 64, 1, 10]
 ///   taker 6: [64, 74, 1, 10]
-template<std::integral IndexT>
-std::vector<IntegralIndexRange<IndexT>> DivideIndexRangeTakerWise(IndexT begin, IndexT end, IndexT nTakers);
-template<std::integral IndexT>
-std::vector<IntegralIndexRange<IndexT>> DivideIndexRangeTakerWise(std::pair<IndexT, IndexT> beginEnd, IndexT nTakers);
+template<std::integral AIndex>
+std::vector<IntegralIndexRange<AIndex>> DivideIndexRangeTakerWise(AIndex begin, AIndex end, AIndex nTakers);
+template<std::integral AIndex>
+std::vector<IntegralIndexRange<AIndex>> DivideIndexRangeTakerWise(std::pair<AIndex, AIndex> beginEnd, AIndex nTakers);
 
 } // namespace MACE::Utility
 

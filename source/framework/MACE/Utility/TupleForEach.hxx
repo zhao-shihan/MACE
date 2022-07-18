@@ -7,19 +7,19 @@ namespace MACE::Utility {
 
 /// @brief Traverses a std::tuple or its derived class.
 /// The usage is similar to std::ranges::for_each, except that a tuple is passed in.
-template<template<typename... T> class TupleTT, class FunctorT, typename... ElementT>
-requires std::derived_from<std::tuple<ElementT...>, TupleTT<ElementT...>>
-constexpr void TupleForEach(const TupleTT<ElementT...>& tuple, FunctorT&& func);
+template<template<typename... T> class AATuple, class AFunctor, typename... AElement>
+requires std::derived_from<std::tuple<AElement...>, AATuple<AElement...>>
+constexpr void TupleForEach(const AATuple<AElement...>& tuple, AFunctor&& func);
 /// @brief Traverses a std::tuple or its derived class.
 /// The usage is similar to std::ranges::for_each, except that a tuple is passed in.
-template<template<typename... T> class TupleTT, class FunctorT, typename... ElementT>
-requires std::derived_from<std::tuple<ElementT...>, TupleTT<ElementT...>>
-constexpr void TupleForEach(TupleTT<ElementT...>& tuple, FunctorT&& func);
+template<template<typename... T> class AATuple, class AFunctor, typename... AElement>
+requires std::derived_from<std::tuple<AElement...>, AATuple<AElement...>>
+constexpr void TupleForEach(AATuple<AElement...>& tuple, AFunctor&& func);
 /// @brief Traverses a std::tuple or its derived class.
 /// The usage is similar to std::ranges::for_each, except that a tuple is passed in.
-template<template<typename... T> class TupleTT, class FunctorT, typename... ElementT>
-requires std::derived_from<std::tuple<ElementT...>, TupleTT<ElementT...>>
-constexpr void TupleForEach(TupleTT<ElementT...>&& tuple, FunctorT&& func);
+template<template<typename... T> class AATuple, class AFunctor, typename... AElement>
+requires std::derived_from<std::tuple<AElement...>, AATuple<AElement...>>
+constexpr void TupleForEach(AATuple<AElement...>&& tuple, AFunctor&& func);
 
 } // namespace MACE::Utility
 

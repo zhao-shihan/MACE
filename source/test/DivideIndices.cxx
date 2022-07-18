@@ -4,8 +4,8 @@
 
 using namespace MACE::Utility;
 
-template<std::integral IntegralT>
-void DoTest(IntegralT begin, IntegralT end, IntegralT nTakers) {
+template<std::integral AInt>
+void DoTest(AInt begin, AInt end, AInt nTakers) {
     const auto dividedIndexNum = DivideIndexNum(end - begin, nTakers);
     std::cout << "DivideIndexNum(...):\n";
     for (size_t i = 0; i < dividedIndexNum.size(); ++i) {

@@ -24,8 +24,8 @@ public:
     const auto& GetTrueZ0() const { return fTrueZ0; }
     const auto& GetTrueAlpha() const { return fTrueAlpha; }
 
-    template<typename Vector2T>
-    void SetTrueCenter(Vector2T&& val) { fTrueCenter = std::forward<Vector2T>(val); }
+    template<typename A2Vector>
+    void SetTrueCenter(A2Vector&& val) { fTrueCenter = std::forward<A2Vector>(val); }
     void SetTrueCenter(Double_t x, Double_t y) { fTrueCenter = {x, y}; }
     void SetTrueRadius(Double_t val) { fTrueRadius = val; }
     void SetTrueZ0(Double_t val) { fTrueZ0 = val; }

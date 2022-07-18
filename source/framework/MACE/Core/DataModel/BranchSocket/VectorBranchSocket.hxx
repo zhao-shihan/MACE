@@ -2,33 +2,36 @@
 
 #include "MACE/Core/DataModel/BranchSocket/FundamentalROOTTypeTraits.hxx"
 #include "MACE/Core/DataModel/BranchSocket/IBranchSocket.hxx"
+#include "MACE/Utility/Concept/FundamentalType.hxx"
 #include "MACE/Utility/EigenCompatibility.hxx"
 
 #include "Eigen/Core"
 
 namespace MACE::Core::DataModel::BranchSocket {
 
-template<IsROOTFundamental ROOTFundamentalT, int Size>
-class VectorBranchSocket final : public IBranchSocket<Eigen::Vector<ROOTFundamentalT, Size>> {
+using MACE::Utility::Concept::ArithmeticExcludeBoolChar;
+
+template<IsROOTFundamental AROOTFundamental, int Size>
+class VectorBranchSocket final : public IBranchSocket<Eigen::Vector<AROOTFundamental, Size>> {
 public:
-    VectorBranchSocket(const TString& branchName, const std::array<TString, Size>& leafNames, const std::array<ROOTFundamentalT, Size>& defaultValues);
-    ~VectorBranchSocket() noexcept = default;
+    VectorBranchSocket(const TString& branchName, const std::array<TString, Size>& leafNames, const std::array<AROOTFundamental, Size>& defaultValues);
+    ~VectorBranchSocket() = default;
     VectorBranchSocket(const VectorBranchSocket&) = delete;
     VectorBranchSocket& operator=(const VectorBranchSocket&) = delete;
 
-    const Eigen::Vector<ROOTFundamentalT, Size>& GetValue() const override { return fVector; }
-    void SetValue(const Eigen::Vector<ROOTFundamentalT, Size>& vector) override { fVector = vector; }
-    template<typename T>
+    const Eigen::Vector<AROOTFundamental, Size>& GetValue() const override { return fVector; }
+    void SetValue(const Eigen::Vector<AROOTFundamental, Size>& vector) override { fVector = vector; }
+    template<ArithmeticExcludeBoolChar T>
     Eigen::Vector<T, Size> GetValue() const { return fVector.template cast<T>(); }
-    template<typename T>
-    void SetValue(const Eigen::Vector<T, Size>& vector) { fVector = vector.template cast<ROOTFundamentalT>(); }
+    template<ArithmeticExcludeBoolChar T>
+    void SetValue(const Eigen::Vector<T, Size>& vector) { fVector = vector.template cast<AROOTFundamental>(); }
 
     void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, fVector.data(), fLeafList); }
     void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(this->fBranchName, fVector.data()); }
 
 private:
     TString fLeafList;
-    Eigen::Vector<ROOTFundamentalT, Size> fVector;
+    Eigen::Vector<AROOTFundamental, Size> fVector;
 };
 
 using Vector2FBranchSocket = VectorBranchSocket<Float_t, 2>;

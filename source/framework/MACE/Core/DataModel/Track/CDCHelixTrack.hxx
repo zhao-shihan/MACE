@@ -30,8 +30,8 @@ public:
     const auto& GetZ0() const { return fZ0; }
     const auto& GetAlpha() const { return fAlpha; }
 
-    template<typename Vector2T>
-    void SetCenter(Vector2T&& val) { fCenter = std::forward<Vector2T>(val); }
+    template<typename A2Vector>
+    void SetCenter(A2Vector&& val) { fCenter = std::forward<A2Vector>(val); }
     void SetCenter(Double_t x, Double_t y) { fCenter = {x, y}; }
     void SetRadius(Double_t val) { fRadius = val; }
     void SetZ0(Double_t val) { fZ0 = val; }
