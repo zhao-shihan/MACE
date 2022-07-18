@@ -1,6 +1,6 @@
 #include "MACE/Core/DataFactory.hxx"
 
-using MACE::Core::DataFactory;
+namespace MACE::Core {
 
 static Bool_t Split(const TString& format, Char_t indexer, std::pair<TString, TString>& result) {
     auto index = format.First(indexer);
@@ -28,3 +28,5 @@ void DataFactory::SetTreeNameSuffixFormat(const TString& suffix) {
     fSuffixFormat = suffix;
     fSuffixHasIndexer = Split(fSuffixFormat, fIndexer, fSplitSuffix);
 }
+
+} // namespace MACE::Core

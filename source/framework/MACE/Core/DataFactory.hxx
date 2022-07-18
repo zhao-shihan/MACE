@@ -19,7 +19,7 @@ using Utility::Concept::WeaklyBehaveLikePointer;
 class DataFactory final {
 public:
     DataFactory() = default;
-    ~DataFactory() noexcept = default;
+    ~DataFactory() = default;
     DataFactory(const DataFactory&) = delete;
     DataFactory& operator=(const DataFactory&) = delete;
 

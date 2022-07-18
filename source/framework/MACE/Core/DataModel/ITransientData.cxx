@@ -1,5 +1,7 @@
 #include "MACE/Core/DataModel/ITransientData.hxx"
 
-using MACE::Core::DataModel::ITransientData;
+namespace MACE::Core::DataModel {
 
 ITransientData::~ITransientData() noexcept = default;
+
+} // namespace MACE::Core::DataModel

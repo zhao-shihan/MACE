@@ -1,8 +1,8 @@
 #pragma once
 
-#include "TTree.h"
-
 #include <concepts>
+
+class TTree;
 
 namespace MACE::Core::DataModel {
 
