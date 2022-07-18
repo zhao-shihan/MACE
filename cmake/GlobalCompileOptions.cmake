@@ -15,7 +15,7 @@ if(DEFINED CMAKE_CONFIGURATION_TYPES)
 else()
     # single-config generator
     message(STATUS "Using single-config generator \"${CMAKE_GENERATOR}\"")
-    if(NOT DEFINED CMAKE_BUILD_TYPE)
+    if("${CMAKE_BUILD_TYPE}" STREQUAL "")
         # Default to "Release"
         set(CMAKE_BUILD_TYPE "Release")
     endif()
