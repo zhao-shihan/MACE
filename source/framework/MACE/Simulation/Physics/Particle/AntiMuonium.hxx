@@ -1,21 +1,22 @@
 #pragma once
 
+#include "MACE/Environment/Resource/Singleton.hxx"
+
 #include "G4ParticleDefinition.hh"
 
 namespace MACE::Simulation::Physics::Particle {
 
-class AntiMuonium final : public G4ParticleDefinition {
-public:
-    static AntiMuonium* Definition();
-    ~AntiMuonium() noexcept = default;
+class AntiMuonium final : public Environment::Resource::Singleton<AntiMuonium>,
+                          public G4ParticleDefinition {
+    friend Environment::Resource::SingletonFactory;
 
 private:
     AntiMuonium();
-    AntiMuonium(const AntiMuonium&) = delete;
-    AntiMuonium& operator=(const AntiMuonium&) = delete;
 
-private:
-    static AntiMuonium* fgInstance;
+public:
+    ~AntiMuonium() = default;
+
+    static auto Definition() { return std::addressof(Instance()); }
 };
 
 } // namespace MACE::Simulation::Physics::Particle

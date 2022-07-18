@@ -9,15 +9,6 @@ namespace MACE::Simulation::Physics::Particle {
 
 using namespace MACE::Utility::PhysicalConstant;
 
-AntiMuonium* AntiMuonium::fgInstance = nullptr;
-
-AntiMuonium* AntiMuonium::Definition() {
-    if (fgInstance == nullptr) {
-        fgInstance = new AntiMuonium();
-    }
-    return fgInstance;
-}
-
 AntiMuonium::AntiMuonium() :
     G4ParticleDefinition("anti_M",
                          muonium_mass_c2,

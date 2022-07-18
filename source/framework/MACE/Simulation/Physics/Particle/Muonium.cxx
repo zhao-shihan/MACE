@@ -9,15 +9,6 @@ namespace MACE::Simulation::Physics::Particle {
 
 using namespace MACE::Utility::PhysicalConstant;
 
-Muonium* Muonium::fgInstance = nullptr;
-
-Muonium* Muonium::Definition() {
-    if (fgInstance == nullptr) {
-        fgInstance = new Muonium();
-    }
-    return fgInstance;
-}
-
 Muonium::Muonium() :
     G4ParticleDefinition("M",
                          muonium_mass_c2,
