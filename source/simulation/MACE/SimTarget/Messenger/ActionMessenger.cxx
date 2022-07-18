@@ -1,13 +1,11 @@
+#include "MACE/SimTarget/Action/SteppingAction.hxx"
 #include "MACE/SimTarget/Messenger/ActionMessenger.hxx"
 
 namespace MACE::SimTarget::Messenger {
 
-ActionMessenger& ActionMessenger::Instance() {
-    static ActionMessenger instance;
-    return instance;
-}
-
 ActionMessenger::ActionMessenger() :
+    MACE::Environment::Resource::Singleton<ActionMessenger>(),
+    fSteppingAction(nullptr),
     fDirectory("/MACE/Action/"),
     fSetKillIrrelevants("/MACE/Action/SetKillIrrelevants", this) {
 

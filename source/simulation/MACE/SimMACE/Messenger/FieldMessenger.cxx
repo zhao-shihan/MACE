@@ -1,14 +1,22 @@
+#include "MACE/SimMACE/Field/FirstBendField.hxx"
+#include "MACE/SimMACE/Field/LinacField.hxx"
+#include "MACE/SimMACE/Field/ParallelField.hxx"
+#include "MACE/SimMACE/Field/SecondBendField.hxx"
+#include "MACE/SimMACE/Field/SelectorField.hxx"
+#include "MACE/SimMACE/Field/VerticalField.hxx"
 #include "MACE/SimMACE/Messenger/FieldMessenger.hxx"
 
 namespace MACE::SimMACE::Messenger {
 
-FieldMessenger& FieldMessenger::Instance() {
-    static FieldMessenger instance;
-    return instance;
-}
-
 FieldMessenger::FieldMessenger() :
+    Environment::Resource::Singleton<FieldMessenger>(),
     G4UImessenger(),
+    fFirstBendField(nullptr),
+    fLinacField(nullptr),
+    fParallelField(nullptr),
+    fSecondBendField(nullptr),
+    fSelectorField(nullptr),
+    fVerticalField(nullptr),
     fDirectory("/MACE/Field/"),
     fSetTransportMagneticField("/MACE/Field/SetTransportMagneticField", this),
     fSetLinacPotential("/MACE/Field/SetLinacPotential", this),

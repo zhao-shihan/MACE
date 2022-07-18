@@ -1,14 +1,14 @@
 #include "MACE/Simulation/Physics/Messenger/MuoniumPhysicsMessenger.hxx"
+#include "MACE/Simulation/Physics/Process/MuoniumFormation.hxx"
+#include "MACE/Simulation/Physics/Process/MuoniumTransport.hxx"
 
 namespace MACE::Simulation::Physics::Messenger {
 
-MuoniumPhysicsMessenger& MuoniumPhysicsMessenger::Instance() {
-    static MuoniumPhysicsMessenger instance;
-    return instance;
-}
-
 MuoniumPhysicsMessenger::MuoniumPhysicsMessenger() :
+    Environment::Resource::Singleton<MuoniumPhysicsMessenger>(),
     G4UImessenger(),
+    fMuoniumFormation(nullptr),
+    fMuoniumTransport(nullptr),
     fMuoniumPhysicsDirectory("/MACE/Physics/MuoniumPhysics/"),
     fFormationProcessDirectory("/MACE/Physics/MuoniumPhysics/Formation/"),
     fSetFormationProbability("/MACE/Physics/MuoniumPhysics/Formation/SetFormationProbability", this),

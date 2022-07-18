@@ -1,36 +1,43 @@
 #pragma once
 
-#include "MACE/SimTarget/Action/SteppingAction.hxx"
+#include "MACE/Environment/Resource/Singleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWithABool.hh"
 #include "G4UImessenger.hh"
 
-namespace MACE::SimTarget::Messenger {
+namespace MACE::SimTarget {
 
-using Action::SteppingAction;
+namespace Action {
+
+class SteppingAction;
+
+} // namespace Action
+
+namespace Messenger {
+
 using Utility::ObserverPtr;
 
-class ActionMessenger final : public G4UImessenger {
-public:
-    static ActionMessenger& Instance();
+class ActionMessenger final : public MACE::Environment::Resource::Singleton<ActionMessenger>,
+                              public G4UImessenger {
+    friend MACE::Environment::Resource::SingletonFactory;
 
 private:
     ActionMessenger();
-    ~ActionMessenger() noexcept = default;
-    ActionMessenger(const ActionMessenger&) = delete;
-    ActionMessenger& operator=(const ActionMessenger&) = delete;
+    ~ActionMessenger() = default;
 
 public:
-    void SetTo(ObserverPtr<SteppingAction> sa) { fSteppingAction = sa; }
+    void SetTo(ObserverPtr<Action::SteppingAction> sa) { fSteppingAction = sa; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    ObserverPtr<SteppingAction> fSteppingAction = nullptr;
+    ObserverPtr<Action::SteppingAction> fSteppingAction;
 
     G4UIdirectory fDirectory;
     G4UIcmdWithABool fSetKillIrrelevants;
 };
 
-} // namespace MACE::SimTarget::Messenger
+} // namespace Messenger
+
+} // namespace MACE::SimTarget

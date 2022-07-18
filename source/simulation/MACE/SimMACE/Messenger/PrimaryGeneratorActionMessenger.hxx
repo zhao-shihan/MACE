@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/SimMACE/Action/PrimaryGeneratorAction.hxx"
+#include "MACE/Environment/Resource/Singleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
@@ -8,19 +8,25 @@
 #include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
-namespace MACE::SimMACE::Messenger {
+namespace MACE::SimMACE {
+
+namespace Action {
+
+class PrimaryGeneratorAction;
+
+} // namespace Action
+
+namespace Messenger {
 
 using Utility::ObserverPtr;
 
-class PrimaryGeneratorActionMessenger final : public G4UImessenger {
-public:
-    static PrimaryGeneratorActionMessenger& Instance();
+class PrimaryGeneratorActionMessenger final : public Environment::Resource::Singleton<PrimaryGeneratorActionMessenger>,
+                                              public G4UImessenger {
+    friend class Environment::Resource::SingletonFactory;
 
 private:
     PrimaryGeneratorActionMessenger();
-    ~PrimaryGeneratorActionMessenger() noexcept = default;
-    PrimaryGeneratorActionMessenger(const PrimaryGeneratorActionMessenger&) = delete;
-    PrimaryGeneratorActionMessenger& operator=(const PrimaryGeneratorActionMessenger&) = delete;
+    ~PrimaryGeneratorActionMessenger() = default;
 
 public:
     void SetTo(ObserverPtr<Action::PrimaryGeneratorAction> pga) { fPrimaryGeneratorAction = pga; }
@@ -36,4 +42,6 @@ private:
     G4UIcmdWithAnInteger fSetMuonsForEachG4Event;
 };
 
-} // namespace MACE::SimMACE::Messenger
+} // namespace Messenger
+
+} // namespace MACE::SimMACE

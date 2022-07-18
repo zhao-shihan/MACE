@@ -3,13 +3,10 @@
 
 namespace MACE::SimMACE::Messenger {
 
-AnalysisMessenger& AnalysisMessenger::Instance() {
-    static AnalysisMessenger instance;
-    return instance;
-}
-
 AnalysisMessenger::AnalysisMessenger() :
+    Environment::Resource::Singleton<AnalysisMessenger>(),
     G4UImessenger(),
+    fAnalysis(nullptr),
     fDirectory("/MACE/Analysis/"),
     fEnableCoincidenceOfEMCal("/MACE/Analysis/EnableCoincidenceOfEMCal", this),
     fEnableCoincidenceOfMCP("/MACE/Analysis/EnableCoincidenceOfMCP", this),
@@ -31,13 +28,12 @@ AnalysisMessenger::AnalysisMessenger() :
 }
 
 void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
-    auto&& analysis = Analysis::Instance();
     if (command == std::addressof(fEnableCoincidenceOfEMCal)) {
-        analysis.SetEnableCoincidenceOfEMCal(fEnableCoincidenceOfEMCal.GetNewBoolValue(value));
+        fAnalysis->SetEnableCoincidenceOfEMCal(fEnableCoincidenceOfEMCal.GetNewBoolValue(value));
     } else if (command == std::addressof(fEnableCoincidenceOfMCP)) {
-        analysis.SetEnableCoincidenceOfMCP(fEnableCoincidenceOfMCP.GetNewBoolValue(value));
+        fAnalysis->SetEnableCoincidenceOfMCP(fEnableCoincidenceOfMCP.GetNewBoolValue(value));
     } else if (command == std::addressof(fSetResultName)) {
-        analysis.SetResultName(value);
+        fAnalysis->SetResultName(value);
     }
 }
 

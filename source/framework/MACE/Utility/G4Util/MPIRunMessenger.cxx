@@ -3,13 +3,10 @@
 
 namespace MACE::Utility::G4Util {
 
-MPIRunMessenger& MPIRunMessenger::Instance() {
-    static MPIRunMessenger instance;
-    return instance;
-}
-
 MPIRunMessenger::MPIRunMessenger() :
+    Environment::Resource::Singleton<MPIRunMessenger>(),
     G4UImessenger(),
+    fMPIRunManager(nullptr),
     fDirectory("/MPIRun/"),
     fSetPrintProgress("/MPIRun/SetPrintProgress", this) {
 

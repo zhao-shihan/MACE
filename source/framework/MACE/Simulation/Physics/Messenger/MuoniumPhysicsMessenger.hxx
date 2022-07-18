@@ -1,7 +1,6 @@
 #pragma once
 
-#include "MACE/Simulation/Physics/Process/MuoniumFormation.hxx"
-#include "MACE/Simulation/Physics/Process/MuoniumTransport.hxx"
+#include "MACE/Environment/Resource/Singleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWithABool.hh"
@@ -10,30 +9,36 @@
 #include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
-namespace MACE::Simulation::Physics::Messenger {
+namespace MACE::Simulation::Physics {
 
-using namespace Process;
+namespace Process {
+
+class MuoniumFormation;
+class MuoniumTransport;
+
+} // namespace Process
+
+namespace Messenger {
+
 using Utility::ObserverPtr;
 
-class MuoniumPhysicsMessenger final : public G4UImessenger {
-public:
-    static MuoniumPhysicsMessenger& Instance();
+class MuoniumPhysicsMessenger final : public Environment::Resource::Singleton<MuoniumPhysicsMessenger>,
+                                      public G4UImessenger {
+    friend class Environment::Resource::SingletonFactory;
 
 private:
     MuoniumPhysicsMessenger();
-    ~MuoniumPhysicsMessenger() noexcept = default;
-    MuoniumPhysicsMessenger(const MuoniumPhysicsMessenger&) = delete;
-    MuoniumPhysicsMessenger& operator=(const MuoniumPhysicsMessenger&) = delete;
+    ~MuoniumPhysicsMessenger() = default;
 
 public:
-    void SetTo(ObserverPtr<MuoniumFormation> mf) { fMuoniumFormation = mf; }
-    void SetTo(ObserverPtr<MuoniumTransport> mt) { fMuoniumTransport = mt; }
+    void SetTo(ObserverPtr<Process::MuoniumFormation> mf) { fMuoniumFormation = mf; }
+    void SetTo(ObserverPtr<Process::MuoniumTransport> mt) { fMuoniumTransport = mt; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    ObserverPtr<MuoniumFormation> fMuoniumFormation = nullptr;
-    ObserverPtr<MuoniumTransport> fMuoniumTransport = nullptr;
+    ObserverPtr<Process::MuoniumFormation> fMuoniumFormation;
+    ObserverPtr<Process::MuoniumTransport> fMuoniumTransport;
 
     G4UIdirectory fMuoniumPhysicsDirectory;
 
@@ -46,4 +51,6 @@ private:
     G4UIcmdWithABool fSetManipulateAllSteps;
 };
 
-} // namespace MACE::Simulation::Physics::Messenger
+} // namespace Messenger
+
+} // namespace MACE::Simulation::Physics

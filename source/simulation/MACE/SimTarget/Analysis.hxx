@@ -1,33 +1,34 @@
 #pragma once
 
 #include "MACE/Core/DataFactory.hxx"
-#include "MACE/Core/Geometry/Description/Target.hxx"
+#include "MACE/Environment/Resource/Singleton.hxx"
 #include "MACE/SimTarget/MuoniumTrack.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
-#include "G4Run.hh"
+#include "TFormula.h"
 
-#include "TFile.h"
+#include <fstream>
+#include <memory>
+
+class G4Run;
+
+class TFile;
 
 namespace MACE::SimTarget {
 
 using Core::DataFactory;
-using Core::Geometry::Description::Target;
 using Utility::ObserverPtr;
 
-class Analysis final {
-public:
-    static Analysis& Instance();
+class Analysis final : public Environment::Resource::Singleton<Analysis> {
+    friend class Environment::Resource::SingletonFactory;
 
 private:
     Analysis();
-    ~Analysis() noexcept = default;
-    Analysis(const Analysis&) = delete;
-    Analysis& operator=(const Analysis&) = delete;
+    ~Analysis() = default;
 
 public:
     void SetResultName(std::string_view resultName) { fResultName = resultName; }
-    void EnableYieldAnalysis(G4bool val) { fEnableYieldAnalysis = val; }
+    void EnableYieldAnalysis(bool val) { fEnableYieldAnalysis = val; }
     void SetDetectableRegion(const char* booleanExpression) { fDetectableRegion = ConstructFormula(booleanExpression); }
 
     void RunBegin(ObserverPtr<const G4Run> run);
@@ -49,12 +50,11 @@ private:
     void CloseYieldFile();
 
     static TFormula ConstructFormula(const char* booleanExpression) { return TFormula("DetectableRegion", booleanExpression, false); }
-    bool IsDetectable(const Double_t* pos) const noexcept { return fDetectableRegion.EvalPar(pos) > 0.5; }
+    bool IsDetectable(const Double_t* pos) const noexcept { return fDetectableRegion.EvalPar(pos); }
 
 private:
-    const ObserverPtr<const Target> fTarget;
     std::string fResultName;
-    G4bool fEnableYieldAnalysis;
+    bool fEnableYieldAnalysis;
     TFormula fDetectableRegion;
 
     ObserverPtr<const G4Run> fThisRun;

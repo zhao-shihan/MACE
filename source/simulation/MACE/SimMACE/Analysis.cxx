@@ -1,17 +1,21 @@
 #include "MACE/SimMACE/Analysis.hxx"
+#include "MACE/SimMACE/Hit/CDCHit.hxx"
+#include "MACE/SimMACE/Hit/EMCalHit.hxx"
+#include "MACE/SimMACE/Hit/MCPHit.hxx"
 #include "MACE/SimMACE/Messenger/AnalysisMessenger.hxx"
 #include "MACE/SimMACE/Messenger/FieldMessenger.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
+#include "TFile.h"
+
 namespace MACE::SimMACE {
 
-Analysis& Analysis::Instance() {
-    static Analysis instance;
-    return instance;
-}
-
 Analysis::Analysis() :
+    Environment::Resource::Singleton<Analysis>(),
     fFile(nullptr),
+    fResultName("untitled_SimMACE"),
+    fEnableCoincidenceOfEMCal(true),
+    fEnableCoincidenceOfMCP(true),
     fDataHub(),
     fRepetitionIDOfLastG4Event(std::numeric_limits<decltype(fRepetitionIDOfLastG4Event)>::max()),
     fEMCalHitTree(nullptr),
@@ -20,7 +24,7 @@ Analysis::Analysis() :
     fEMCalHitList(nullptr),
     fMCPHitList(nullptr),
     fCDCHitList(nullptr) {
-    Messenger::AnalysisMessenger::Instance();
+    Messenger::AnalysisMessenger::Instance().SetTo(this);
     fDataHub.SetTreeNamePrefixFormat("Rep#_");
 }
 

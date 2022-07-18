@@ -3,15 +3,10 @@
 
 namespace MACE::SimTarget::Messenger {
 
-using MACE::SimTarget::Analysis;
-
-AnalysisMessenger& AnalysisMessenger::Instance() {
-    static AnalysisMessenger instance;
-    return instance;
-}
-
 AnalysisMessenger::AnalysisMessenger() :
+    MACE::Environment::Resource::Singleton<AnalysisMessenger>(),
     G4UImessenger(),
+    fAnalysis(nullptr),
     fDirectory("/MACE/Analysis/"),
     fSetResultName("/MACE/Analysis/SetResultName", this),
     fEnableYieldAnalysis("/MACE/Analysis/EnableYieldAnalysis", this),
@@ -33,13 +28,12 @@ AnalysisMessenger::AnalysisMessenger() :
 }
 
 void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
-    auto&& analysis = Analysis::Instance();
     if (command == std::addressof(fSetResultName)) {
-        analysis.SetResultName(value);
+        fAnalysis->SetResultName(value);
     } else if (command == std::addressof(fEnableYieldAnalysis)) {
-        analysis.EnableYieldAnalysis(fEnableYieldAnalysis.GetNewBoolValue(value));
+        fAnalysis->EnableYieldAnalysis(fEnableYieldAnalysis.GetNewBoolValue(value));
     } else if (command == std::addressof(fSetDetectableRegion)) {
-        analysis.SetDetectableRegion(value);
+        fAnalysis->SetDetectableRegion(value);
     }
 }
 

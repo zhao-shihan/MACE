@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Environment/Resource/Singleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWithAnInteger.hh"
@@ -8,19 +9,17 @@
 
 namespace MACE::Utility::G4Util {
 
-using Utility::ObserverPtr;
-
 class MPIRunManager;
 
-class MPIRunMessenger final : public G4UImessenger {
-public:
-    static MPIRunMessenger& Instance();
+using Utility::ObserverPtr;
+
+class MPIRunMessenger final : public Environment::Resource::Singleton<MPIRunMessenger>,
+                              public G4UImessenger {
+    friend class Environment::Resource::SingletonFactory;
 
 private:
     MPIRunMessenger();
-    ~MPIRunMessenger() noexcept = default;
-    MPIRunMessenger(const MPIRunMessenger&) = delete;
-    MPIRunMessenger& operator=(const MPIRunMessenger&) = delete;
+    ~MPIRunMessenger() = default;
 
 public:
     void SetTo(ObserverPtr<MPIRunManager> mpirunManager) { fMPIRunManager = mpirunManager; }
@@ -28,7 +27,7 @@ public:
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    ObserverPtr<MPIRunManager> fMPIRunManager = nullptr;
+    ObserverPtr<MPIRunManager> fMPIRunManager;
 
     G4UIdirectory fDirectory;
     G4UIcmdWithAnInteger fSetPrintProgress;

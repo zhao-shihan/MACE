@@ -1,49 +1,54 @@
 #pragma once
 
-#include "MACE/SimMACE/Field/FirstBendField.hxx"
-#include "MACE/SimMACE/Field/LinacField.hxx"
-#include "MACE/SimMACE/Field/ParallelField.hxx"
-#include "MACE/SimMACE/Field/SecondBendField.hxx"
-#include "MACE/SimMACE/Field/SelectorField.hxx"
-#include "MACE/SimMACE/Field/VerticalField.hxx"
+#include "MACE/Environment/Resource/Singleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
-namespace MACE::SimMACE::Messenger {
+namespace MACE::SimMACE {
+
+namespace Field {
+
+class FirstBendField;
+class LinacField;
+class ParallelField;
+class SecondBendField;
+class SelectorField;
+class VerticalField;
+
+} // namespace Field
+
+namespace Messenger {
 
 using Utility::ObserverPtr;
-using namespace Field;
 
-class FieldMessenger final : public G4UImessenger {
-public:
-    static FieldMessenger& Instance();
+class FieldMessenger final : public Environment::Resource::Singleton<FieldMessenger>,
+                             public G4UImessenger {
+    friend class Environment::Resource::SingletonFactory;
 
 private:
     FieldMessenger();
-    ~FieldMessenger() noexcept = default;
-    FieldMessenger(const FieldMessenger&) = delete;
-    FieldMessenger& operator=(const FieldMessenger&) = delete;
+    ~FieldMessenger() = default;
 
 public:
-    void Set(ObserverPtr<FirstBendField> field) { fFirstBendField = field; }
-    void Set(ObserverPtr<LinacField> field) { fLinacField = field; }
-    void Set(ObserverPtr<ParallelField> field) { fParallelField = field; }
-    void Set(ObserverPtr<SecondBendField> field) { fSecondBendField = field; }
-    void Set(ObserverPtr<SelectorField> field) { fSelectorField = field; }
-    void Set(ObserverPtr<VerticalField> field) { fVerticalField = field; }
+    void SetTo(ObserverPtr<Field::FirstBendField> field) { fFirstBendField = field; }
+    void SetTo(ObserverPtr<Field::LinacField> field) { fLinacField = field; }
+    void SetTo(ObserverPtr<Field::ParallelField> field) { fParallelField = field; }
+    void SetTo(ObserverPtr<Field::SecondBendField> field) { fSecondBendField = field; }
+    void SetTo(ObserverPtr<Field::SelectorField> field) { fSelectorField = field; }
+    void SetTo(ObserverPtr<Field::VerticalField> field) { fVerticalField = field; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    ObserverPtr<FirstBendField> fFirstBendField = nullptr;
-    ObserverPtr<LinacField> fLinacField = nullptr;
-    ObserverPtr<ParallelField> fParallelField = nullptr;
-    ObserverPtr<SecondBendField> fSecondBendField = nullptr;
-    ObserverPtr<SelectorField> fSelectorField = nullptr;
-    ObserverPtr<VerticalField> fVerticalField = nullptr;
+    ObserverPtr<Field::FirstBendField> fFirstBendField;
+    ObserverPtr<Field::LinacField> fLinacField;
+    ObserverPtr<Field::ParallelField> fParallelField;
+    ObserverPtr<Field::SecondBendField> fSecondBendField;
+    ObserverPtr<Field::SelectorField> fSelectorField;
+    ObserverPtr<Field::VerticalField> fVerticalField;
 
     G4UIdirectory fDirectory;
     G4UIcmdWithADoubleAndUnit fSetTransportMagneticField;
@@ -51,4 +56,6 @@ private:
     G4UIcmdWithADoubleAndUnit fSetSelectorElectricField;
 };
 
-} // namespace MACE::SimMACE::Messenger
+} // namespace Messenger
+
+} // namespace MACE::SimMACE

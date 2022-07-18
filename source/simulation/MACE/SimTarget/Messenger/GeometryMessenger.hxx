@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/SimTarget/Action/DetectorConstruction.hxx"
+#include "MACE/Environment/Resource/Singleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWith3VectorAndUnit.hh"
@@ -10,28 +10,35 @@
 #include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
-namespace MACE::SimTarget::Messenger {
+namespace MACE::SimTarget {
 
-using Action::DetectorConstruction;
+namespace Action {
+
+class DetectorConstruction;
+
+} // namespace Action
+
+namespace Messenger {
+
 using Utility::ObserverPtr;
 
-class GeometryMessenger final : public G4UImessenger {
-public:
-    static GeometryMessenger& Instance();
+class GeometryMessenger final : public Environment::Resource::Singleton<GeometryMessenger>,
+                                public G4UImessenger {
+    friend class Environment::Resource::SingletonFactory;
 
 private:
     GeometryMessenger();
-    ~GeometryMessenger() noexcept = default;
+    ~GeometryMessenger() = default;
     GeometryMessenger(const GeometryMessenger&) = delete;
     GeometryMessenger& operator=(const GeometryMessenger&) = delete;
 
 public:
-    void SetTo(ObserverPtr<DetectorConstruction> dc) { fDetectorConstruction = dc; }
+    void SetTo(ObserverPtr<Action::DetectorConstruction> dc) { fDetectorConstruction = dc; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    ObserverPtr<DetectorConstruction> fDetectorConstruction = nullptr;
+    ObserverPtr<Action::DetectorConstruction> fDetectorConstruction;
 
     G4UIdirectory fDirectory;
     G4UIcmdWith3VectorAndUnit fSetWorldHalfExtent;
@@ -50,4 +57,6 @@ private:
     G4UIcmdWithAString fSetFineStructure;
 };
 
-} // namespace MACE::SimTarget::Messenger
+} // namespace Messenger
+
+} // namespace MACE::SimTarget

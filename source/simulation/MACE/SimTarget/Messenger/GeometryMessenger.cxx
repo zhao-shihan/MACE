@@ -2,18 +2,15 @@
 #include "MACE/Core/Geometry/Description/BeamMonitor.hxx"
 #include "MACE/Core/Geometry/Description/Target.hxx"
 #include "MACE/Core/Geometry/Description/World.hxx"
+#include "MACE/SimTarget/Action/DetectorConstruction.hxx"
 #include "MACE/SimTarget/Messenger/GeometryMessenger.hxx"
 #include "MACE/SimTarget/RunManager.hxx"
 
 namespace MACE::SimTarget::Messenger {
 
-GeometryMessenger& GeometryMessenger::Instance() {
-    static GeometryMessenger instance;
-    return instance;
-}
-
 GeometryMessenger::GeometryMessenger() :
     G4UImessenger(),
+    fDetectorConstruction(nullptr),
     fDirectory("/MACE/Geometry/"),
     fSetWorldHalfExtent("/MACE/Geometry/SetWorldHalfExtent", this),
     fSetEnableBeamMonitor("/MACE/Geometry/SetEnableBeamMonitor", this),

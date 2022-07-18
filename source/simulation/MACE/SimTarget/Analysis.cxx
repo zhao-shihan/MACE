@@ -1,20 +1,20 @@
+#include "MACE/Core/Geometry/Description/Target.hxx"
 #include "MACE/Environment/MPIEnvironment.hxx"
 #include "MACE/SimTarget/Analysis.hxx"
 #include "MACE/SimTarget/Messenger/AnalysisMessenger.hxx"
 #include "MACE/SimTarget/RunManager.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
+#include "G4Run.hh"
+
+#include "TFile.h"
+
 namespace MACE::SimTarget {
 
 using MACE::Environment::MPIEnvironment;
 
-Analysis& Analysis::Instance() {
-    static Analysis instance;
-    return instance;
-}
-
 Analysis::Analysis() :
-    fTarget(std::addressof(Target::Instance())),
+    Environment::Resource::Singleton<Analysis>(),
     fResultName("SimTarget_result"),
     fEnableYieldAnalysis(true),
     fDetectableRegion(ConstructFormula("abs(x)>30 || abs(y)>30 || z>0")),
@@ -23,7 +23,7 @@ Analysis::Analysis() :
     fResultFile(nullptr),
     fYieldFile(nullptr),
     fDataFactory() {
-    Messenger::AnalysisMessenger::Instance();
+    Messenger::AnalysisMessenger::Instance().SetTo(this);
     fDataFactory.SetTreeNamePrefixFormat("Run#_");
 }
 
@@ -97,9 +97,10 @@ void Analysis::AnalysisAndWriteYield() {
     nVacuumDecay = 0;
     nDetectableDecay = 0;
 
+    const auto& target = Core::Geometry::Description::Target::Instance();
     for (auto&& track : std::as_const(fMuoniumTrackList)) {
         const auto& decayPosition = track->GetDecayPosition();
-        if (fTarget->Contains(decayPosition.data())) {
+        if (target.Contains(decayPosition.data())) {
             ++nTargetDecay;
         } else {
             ++nVacuumDecay;
