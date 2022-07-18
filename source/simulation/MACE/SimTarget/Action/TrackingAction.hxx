@@ -1,15 +1,23 @@
 #pragma once
 
-#include "MACE/SimTarget/Analysis.hxx"
+#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UserTrackingAction.hh"
 
-namespace MACE::SimTarget::Action {
+class G4ParticleDefinition;
+
+namespace MACE::SimTarget {
+
+class MuoniumTrack;
+
+namespace Action {
+
+using Utility::ObserverPtr;
 
 class TrackingAction final : public G4UserTrackingAction {
 public:
     TrackingAction();
-    ~TrackingAction() noexcept = default;
+    ~TrackingAction() = default;
     TrackingAction(const TrackingAction&) = delete;
     TrackingAction& operator=(const TrackingAction&) = delete;
 
@@ -19,8 +27,9 @@ public:
 private:
     const ObserverPtr<const G4ParticleDefinition> fMuonium;
     const ObserverPtr<const G4ParticleDefinition> fAntiMuonium;
-    const ObserverPtr<Analysis> fAnalysis;
     ObserverPtr<MuoniumTrack> fMuoniumTrack;
 };
 
-} // namespace MACE::SimTarget::Action
+} // namespace Action
+
+} // namespace MACE::SimTarget
