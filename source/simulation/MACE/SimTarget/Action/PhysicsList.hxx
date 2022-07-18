@@ -7,7 +7,7 @@ namespace MACE::SimTarget::Action {
 class PhysicsList final : public G4VModularPhysicsList {
 public:
     PhysicsList();
-    ~PhysicsList() noexcept = default;
+    ~PhysicsList() = default;
     PhysicsList(const PhysicsList&) = delete;
     PhysicsList& operator=(const PhysicsList&) = delete;
 };

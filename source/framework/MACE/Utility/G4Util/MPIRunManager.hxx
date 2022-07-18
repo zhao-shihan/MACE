@@ -16,6 +16,7 @@ class MPIRunManagerInitializeHelper1 {
 protected:
     MPIRunManagerInitializeHelper1();
 };
+
 /// @attention This should only be inherited by MPIRunManager. It's not intended to be used elsewhere.
 class MPIRunManagerInitializeHelper2 {
 protected:
@@ -29,7 +30,7 @@ class MPIRunManager : private Detail::MPIRunManagerInitializeHelper1,
                       private Detail::MPIRunManagerInitializeHelper2 {
 public:
     MPIRunManager();
-    virtual ~MPIRunManager() noexcept = default;
+    virtual ~MPIRunManager() = default;
     MPIRunManager(const MPIRunManager&) = delete;
     MPIRunManager& operator=(const MPIRunManager&) = delete;
 

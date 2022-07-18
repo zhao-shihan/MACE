@@ -7,7 +7,7 @@
 namespace MACE::Environment {
 
 using MACE::Utility::ObserverPtr;
-using Utility::VerboseLevel;
+using MACE::Utility::VerboseLevel;
 
 class BasicEnvironment {
 public:
