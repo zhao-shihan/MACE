@@ -1,4 +1,8 @@
 #include "MACE/Core/Geometry/Description/LinacField.hxx"
+#include "MACE/Core/Geometry/Entity/Fast/BeamDegrader.hxx"
+#include "MACE/Core/Geometry/Entity/Fast/BeamMonitor.hxx"
+#include "MACE/Core/Geometry/Entity/Fast/Target.hxx"
+#include "MACE/Core/Geometry/Entity/Fast/World.hxx"
 #include "MACE/SimTarget/Action/DetectorConstruction.hxx"
 #include "MACE/SimTarget/Messenger/GeometryMessenger.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
@@ -22,6 +26,7 @@ DetectorConstruction::DetectorConstruction() :
 
 G4VPhysicalVolume* DetectorConstruction::Construct() {
     using namespace MACE::Core::Geometry;
+    using namespace MACE::Core::Geometry::Entity::Fast;
 
     // LinacField is target's mother by default, modified it to adapt global frame
     Description::LinacField::Instance().SetLength(0);

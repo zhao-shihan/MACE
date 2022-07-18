@@ -1,25 +1,23 @@
 #pragma once
 
-#include "MACE/Core/Geometry/Entity/Fast/BeamDegrader.hxx"
-#include "MACE/Core/Geometry/Entity/Fast/BeamMonitor.hxx"
-#include "MACE/Core/Geometry/Entity/Fast/Target.hxx"
-#include "MACE/Core/Geometry/Entity/Fast/World.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
-
-#include "G4Material.hh"
 #include "G4VUserDetectorConstruction.hh"
 
 #include <memory>
 
-namespace MACE::SimTarget::Action {
+namespace MACE {
 
-using namespace MACE::Core::Geometry::Entity::Fast;
-using MACE::Utility::ObserverPtr;
+namespace Core::Geometry {
+
+class IEntity;
+
+} // namespace Core::Geometry
+
+namespace SimTarget::Action {
 
 class DetectorConstruction final : public G4VUserDetectorConstruction {
 public:
     DetectorConstruction();
-    ~DetectorConstruction() noexcept = default;
+    ~DetectorConstruction() = default;
     DetectorConstruction(const DetectorConstruction&) = delete;
     DetectorConstruction& operator=(const DetectorConstruction&) = delete;
 
@@ -31,10 +29,10 @@ public:
     void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlaps = checkOverlaps; }
 
 private:
-    std::shared_ptr<BeamDegrader> fBeamDegrader;
-    std::shared_ptr<BeamMonitor> fBeamMonitor;
-    std::shared_ptr<Target> fTarget;
-    std::shared_ptr<World> fWorld;
+    std::shared_ptr<Core::Geometry::IEntity> fBeamDegrader;
+    std::shared_ptr<Core::Geometry::IEntity> fBeamMonitor;
+    std::shared_ptr<Core::Geometry::IEntity> fTarget;
+    std::shared_ptr<Core::Geometry::IEntity> fWorld;
 
     G4double fDensity;
     G4double fTemperature;
@@ -42,4 +40,6 @@ private:
     G4bool fCheckOverlaps = false;
 };
 
-} // namespace MACE::SimTarget::Action
+} // namespace SimTarget::Action
+
+} // namespace MACE
