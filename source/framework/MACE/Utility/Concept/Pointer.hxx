@@ -1,13 +1,11 @@
 #pragma once
 
+#include "detail/IsPointer.hxx"
+
 #include <concepts>
 #include <type_traits>
 
 namespace MACE::Utility::Concept {
-
-template<typename T>
-concept IsPointer =
-    std::is_pointer_v<T>;
 
 template<typename T>
 concept Dereferenceable = requires(T&& pointer) {

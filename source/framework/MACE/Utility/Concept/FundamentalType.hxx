@@ -1,5 +1,7 @@
 #pragma once
 
+#include "detail/IsPointer.hxx"
+
 #include <concepts>
 #include <type_traits>
 
