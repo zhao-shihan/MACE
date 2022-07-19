@@ -1,6 +1,6 @@
-#include "MACE/Environment/Resource/SingletonFactory.hxx"
+#include "MACE/Environment/Resource/detail/SingletonFactory.hxx"
 
-namespace MACE::Environment::Resource {
+namespace MACE::Environment::Resource::Detail {
 
 ObserverPtr<SingletonFactory> SingletonFactory::fgInstance = nullptr;
 

@@ -7,7 +7,7 @@
 namespace MACE::Core::Geometry::Description {
 
 class EMCalField final : public IDescriptionSingleton<EMCalField> {
-    friend class Environment::Resource::SingletonFactory;
+    friend Environment::Resource::SingletonFactory;
 
 private:
     EMCalField();

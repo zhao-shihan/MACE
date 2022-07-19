@@ -23,7 +23,7 @@ using Core::DataFactory;
 using MACE::Utility::ObserverPtr;
 
 class Analysis final : public Environment::Resource::Singleton<Analysis> {
-    friend class Environment::Resource::SingletonFactory;
+    friend Environment::Resource::SingletonFactory;
 
 private:
     Analysis();

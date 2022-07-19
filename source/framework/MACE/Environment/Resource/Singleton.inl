@@ -14,7 +14,7 @@ Singleton<ADerived>::~Singleton() {
 template<class ADerived>
 ADerived& Singleton<ADerived>::Instance() {
     if (fgInstanceObjectNodePtr == nullptr) [[unlikely]] {
-        SingletonFactory::Instance().Instantiate<ADerived>();
+        Detail::SingletonFactory::Instance().Instantiate<ADerived>();
     }
     return *static_cast<ObserverPtr<ADerived>>(*fgInstanceObjectNodePtr);
 }

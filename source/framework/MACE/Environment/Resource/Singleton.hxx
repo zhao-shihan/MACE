@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/Environment/Resource/ISingletonBase.hxx"
-#include "MACE/Environment/Resource/SingletonFactory.hxx"
+#include "MACE/Environment/Resource/detail/ISingletonBase.hxx"
+#include "MACE/Environment/Resource/detail/SingletonFactory.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 namespace MACE::Environment::Resource {
@@ -18,7 +18,7 @@ using MACE::Utility::ObserverPtr;
 /// Usage:
 /// Step1 (Inheritance): Inherit this class once (directly or indirectly)
 /// and declare the constructor as private/protected. If you don't except
-/// the singleton object to be wxplicitly deleted, also declare the destructor
+/// the singleton object to be explicitly deleted, also declare the destructor
 /// as private/protected.
 /// Step2 (Confirmation): Declare MACE::Environment::Resource::SingletonFactory
 /// as a friend of your singleton class.
@@ -141,8 +141,8 @@ using MACE::Utility::ObserverPtr;
 /// MACE::Environment. Call to an Instance() without initialize an environment
 /// has undefined behaviour. Use wisely, think wisely!
 template<class ADerived>
-class Singleton : public ISingletonBase {
-    friend class SingletonFactory;
+class Singleton : public Detail::ISingletonBase {
+    friend class Detail::SingletonFactory;
 
 protected:
     Singleton() = default;
@@ -154,6 +154,8 @@ public:
 private:
     static ObserverPtr<ObserverPtr<void>> fgInstanceObjectNodePtr; // Points to a node of instance list in SingletFactory
 };
+
+using SingletonFactory = Detail::SingletonFactory;
 
 } // namespace MACE::Environment::Resource
 

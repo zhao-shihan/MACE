@@ -24,7 +24,7 @@ using Utility::ObserverPtr;
 
 class MuoniumPhysicsMessenger final : public Environment::Resource::Singleton<MuoniumPhysicsMessenger>,
                                       public G4UImessenger {
-    friend class Environment::Resource::SingletonFactory;
+    friend Environment::Resource::SingletonFactory;
 
 private:
     MuoniumPhysicsMessenger();

@@ -21,7 +21,7 @@ using Utility::ObserverPtr;
 
 class PrimaryGeneratorActionMessenger final : public Environment::Resource::Singleton<PrimaryGeneratorActionMessenger>,
                                               public G4UImessenger {
-    friend class Environment::Resource::SingletonFactory;
+    friend Environment::Resource::SingletonFactory;
 
 private:
     PrimaryGeneratorActionMessenger();

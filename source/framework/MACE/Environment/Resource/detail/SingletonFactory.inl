@@ -1,4 +1,4 @@
-namespace MACE::Environment::Resource {
+namespace MACE::Environment::Resource::Detail {
 
 template<class ASingleton>
 void SingletonFactory::Instantiate() {

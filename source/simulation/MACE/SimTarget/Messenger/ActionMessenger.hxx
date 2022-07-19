@@ -18,9 +18,9 @@ namespace Messenger {
 
 using Utility::ObserverPtr;
 
-class ActionMessenger final : public MACE::Environment::Resource::Singleton<ActionMessenger>,
+class ActionMessenger final : public Environment::Resource::Singleton<ActionMessenger>,
                               public G4UImessenger {
-    friend MACE::Environment::Resource::SingletonFactory;
+    friend Environment::Resource::SingletonFactory;
 
 private:
     ActionMessenger();

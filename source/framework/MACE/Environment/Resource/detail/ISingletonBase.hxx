@@ -2,7 +2,7 @@
 
 #include "MACE/Utility/ObserverPtr.hxx"
 
-namespace MACE::Environment::Resource {
+namespace MACE::Environment::Resource::Detail {
 
 using MACE::Utility::ObserverPtr;
 

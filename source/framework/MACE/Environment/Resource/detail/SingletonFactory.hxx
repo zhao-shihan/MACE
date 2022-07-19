@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Resource/ISingletonBase.hxx"
+#include "MACE/Environment/Resource/detail/ISingletonBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include <forward_list>
@@ -15,7 +15,7 @@ namespace MACE::Environment {
 
 class BasicEnvironment; // Just a kawaii forward declaration
 
-namespace Resource {
+namespace Resource::Detail {
 
 using MACE::Utility::ObserverPtr;
 
@@ -46,4 +46,4 @@ private:
 
 } // namespace MACE::Environment
 
-#include "MACE/Environment/Resource/SingletonFactory.inl"
+#include "MACE/Environment/Resource/detail/SingletonFactory.inl"

@@ -7,7 +7,7 @@
 namespace MACE::Core::Geometry::Description {
 
 class LinacField final : public IDescriptionSingleton<LinacField> {
-    friend class Environment::Resource::SingletonFactory;
+    friend Environment::Resource::SingletonFactory;
 
 private:
     LinacField();

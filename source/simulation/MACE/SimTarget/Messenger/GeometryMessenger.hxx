@@ -24,7 +24,7 @@ using Utility::ObserverPtr;
 
 class GeometryMessenger final : public Environment::Resource::Singleton<GeometryMessenger>,
                                 public G4UImessenger {
-    friend class Environment::Resource::SingletonFactory;
+    friend Environment::Resource::SingletonFactory;
 
 private:
     GeometryMessenger();

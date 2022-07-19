@@ -7,11 +7,11 @@
 namespace MACE::Core::Geometry::Description {
 
 class BeamMonitor final : public IDescriptionSingleton<BeamMonitor> {
-    friend class Environment::Resource::SingletonFactory;
+    friend Environment::Resource::SingletonFactory;
 
 private:
     BeamMonitor();
-    ~BeamMonitor() noexcept = default;
+    ~BeamMonitor() = default;
     BeamMonitor(const BeamMonitor&) = delete;
     BeamMonitor& operator=(const BeamMonitor&) = delete;
 

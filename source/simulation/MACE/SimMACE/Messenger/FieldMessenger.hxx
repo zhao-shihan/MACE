@@ -26,7 +26,7 @@ using Utility::ObserverPtr;
 
 class FieldMessenger final : public Environment::Resource::Singleton<FieldMessenger>,
                              public G4UImessenger {
-    friend class Environment::Resource::SingletonFactory;
+    friend Environment::Resource::SingletonFactory;
 
 private:
     FieldMessenger();

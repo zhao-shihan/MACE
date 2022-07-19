@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Resource/SingletonFactory.hxx"
+#include "MACE/Environment/Resource/detail/SingletonFactory.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 #include "MACE/Utility/VerboseLevel.hxx"
 
@@ -29,7 +29,7 @@ protected:
 
 private:
     VerboseLevel fVerboseLevel;
-    Resource::SingletonFactory fSingletonFactory;
+    Resource::Detail::SingletonFactory fSingletonFactory;
 
     static ObserverPtr<BasicEnvironment> fgBasicEnvironmentInstance;
     static bool fgBasicEnvironmentFinalized;

@@ -7,11 +7,11 @@
 namespace MACE::Core::Geometry::Description {
 
 class BeamDegrader final : public IDescriptionSingleton<BeamDegrader> {
-    friend class Environment::Resource::SingletonFactory;
+    friend Environment::Resource::SingletonFactory;
 
 private:
     BeamDegrader();
-    ~BeamDegrader() noexcept = default;
+    ~BeamDegrader() = default;
     BeamDegrader(const BeamDegrader&) = delete;
     BeamDegrader& operator=(const BeamDegrader&) = delete;
 

@@ -19,7 +19,7 @@ using Utility::ObserverPtr;
 
 class AnalysisMessenger final : public Environment::Resource::Singleton<AnalysisMessenger>,
                                 public G4UImessenger {
-    friend class Environment::Resource::SingletonFactory;
+    friend Environment::Resource::SingletonFactory;
 
 private:
     AnalysisMessenger();

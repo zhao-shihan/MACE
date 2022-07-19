@@ -1,6 +1,6 @@
-#include "MACE/Environment/Resource/ISingletonBase.hxx"
+#include "MACE/Environment/Resource/detail/ISingletonBase.hxx"
 
-namespace MACE::Environment::Resource {
+namespace MACE::Environment::Resource::Detail {
 
 ISingletonBase::ISingletonBase() :
     fInstanceBaseNodePtr(nullptr) {}
