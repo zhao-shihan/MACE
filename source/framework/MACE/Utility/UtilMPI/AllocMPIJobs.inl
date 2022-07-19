@@ -1,4 +1,4 @@
-namespace MACE::Utility::MPIUtil {
+namespace MACE::Utility::UtilMPI {
 
 template<std::integral AIndex>
 IntegralIndexRange<AIndex> AllocMPIJobsJobWise(AIndex jobBegin, AIndex jobEnd, int commSize, int commRank) {

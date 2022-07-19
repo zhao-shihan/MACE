@@ -3,8 +3,8 @@
 #include "MACE/Utility/G4Util/MPIRunManager.hxx"
 #include "MACE/Utility/G4Util/MPIRunMessenger.hxx"
 #include "MACE/Utility/Math/IntegerPower.hxx"
-#include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
-#include "MACE/Utility/MPIUtil/MPIRandomUtil.hxx"
+#include "MACE/Utility/UtilMPI/AllocMPIJobs.hxx"
+#include "MACE/Utility/UtilMPI/MPIRandomUtil.hxx"
 
 #include "G4Exception.hh"
 #include "G4Run.hh"
@@ -71,9 +71,9 @@ void MPIRunManager::SetPrintProgress(G4int val) {
 void MPIRunManager::BeamOn(G4int nEvent, const char* macroFile, G4int nSelect) {
     CheckMPIAvailability();
     if (CheckNEventIsAtLeastCommSize(nEvent)) {
-        MPIUtil::MPIReSeedCLHEPRandom(G4Random::getTheEngine());
+        UtilMPI::MPIReSeedCLHEPRandom(G4Random::getTheEngine());
         fTotalNumberOfEventsToBeProcessed = nEvent;
-        fEventIDRange = MPIUtil::AllocMPIJobsJobWise(0, nEvent, MPIEnvironment::WorldCommSize(), MPIEnvironment::WorldCommRank());
+        fEventIDRange = UtilMPI::AllocMPIJobsJobWise(0, nEvent, MPIEnvironment::WorldCommSize(), MPIEnvironment::WorldCommRank());
         G4RunManager::BeamOn(fEventIDRange.count, macroFile, nSelect);
     }
 }

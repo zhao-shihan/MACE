@@ -4,7 +4,7 @@
 #include "MACE/SimMACE/Hit/MCPHit.hxx"
 #include "MACE/SimMACE/Messenger/AnalysisMessenger.hxx"
 #include "MACE/SimMACE/Messenger/FieldMessenger.hxx"
-#include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
+#include "MACE/Utility/UtilMPI/MakeMPIFilePath.hxx"
 
 #include "TFile.h"
 
@@ -30,7 +30,7 @@ Analysis::Analysis() :
 
 void Analysis::Open(Option_t* option) {
     fFile = std::make_unique<TFile>(
-        MACE::Utility::MPIUtil::MakeMPIFilePath(fResultName, ".root").generic_string().c_str(),
+        MACE::Utility::UtilMPI::MakeMPIFilePath(fResultName, ".root").generic_string().c_str(),
         option);
 }
 

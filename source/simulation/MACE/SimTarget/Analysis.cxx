@@ -3,7 +3,7 @@
 #include "MACE/SimTarget/Analysis.hxx"
 #include "MACE/SimTarget/Messenger/AnalysisMessenger.hxx"
 #include "MACE/SimTarget/RunManager.hxx"
-#include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
+#include "MACE/Utility/UtilMPI/MakeMPIFilePath.hxx"
 
 #include "G4Run.hh"
 
@@ -66,7 +66,7 @@ void Analysis::Close() {
 
 void Analysis::OpenResultFile() {
     fResultFile = std::make_unique<TFile>(
-        MACE::Utility::MPIUtil::MakeMPIFilePath(fResultName, ".root").generic_string().c_str(),
+        MACE::Utility::UtilMPI::MakeMPIFilePath(fResultName, ".root").generic_string().c_str(),
         "recreate");
 }
 

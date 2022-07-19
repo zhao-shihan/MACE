@@ -4,7 +4,7 @@ namespace CLHEP {
 class HepRandomEngine;
 } // namespace CLHEP
 
-namespace MACE::Utility::MPIUtil {
+namespace MACE::Utility::UtilMPI {
 
 void MPIReSeedCLHEPRandom(CLHEP::HepRandomEngine* randEng);
 

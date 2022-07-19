@@ -1,5 +1,5 @@
 #include "MACE/Environment/MPIEnvironment.hxx"
-#include "MACE/Utility/MPIUtil/MPIRandomUtil.hxx"
+#include "MACE/Utility/UtilMPI/MPIRandomUtil.hxx"
 
 #include "CLHEP/Random/RandomEngine.h"
 
@@ -9,7 +9,7 @@
 #include <set>
 #include <vector>
 
-namespace MACE::Utility::MPIUtil {
+namespace MACE::Utility::UtilMPI {
 
 void MPIReSeedCLHEPRandom(CLHEP::HepRandomEngine* randEng) {
     using MACE::Environment::MPIEnvironment;

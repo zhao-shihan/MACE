@@ -8,7 +8,7 @@
 #include <concepts>
 #include <utility>
 
-namespace MACE::Utility::MPIUtil {
+namespace MACE::Utility::UtilMPI {
 
 template<std::integral AIndex>
 IntegralIndexRange<AIndex> AllocMPIJobsJobWise(AIndex jobBegin, AIndex jobEnd, int commSize, int commRank);
@@ -30,4 +30,4 @@ IntegralIndexRange<AIndex> AllocMPIJobsWorkerWise(std::pair<AIndex, AIndex> jobB
 
 } // namespace MACE::Utility::MPIUtil
 
-#include "MACE/Utility/MPIUtil/AllocMPIJobs.inl"
+#include "MACE/Utility/UtilMPI/AllocMPIJobs.inl"

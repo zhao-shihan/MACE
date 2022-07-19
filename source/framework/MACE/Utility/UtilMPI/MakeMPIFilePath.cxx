@@ -1,5 +1,5 @@
 #include "MACE/Environment/MPIEnvironment.hxx"
-#include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
+#include "MACE/Utility/UtilMPI/MakeMPIFilePath.hxx"
 
 #include <array>
 #include <climits>
@@ -7,7 +7,7 @@
 #include <set>
 #include <vector>
 
-namespace MACE::Utility::MPIUtil {
+namespace MACE::Utility::UtilMPI {
 
 std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_view suffix, MPI_Comm comm) {
 #ifdef PATH_MAX
