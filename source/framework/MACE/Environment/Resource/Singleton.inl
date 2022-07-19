@@ -4,6 +4,15 @@ template<class ADerived>
 ObserverPtr<ObserverPtr<void>> Singleton<ADerived>::fgInstanceObjectNodePtr = nullptr;
 
 template<class ADerived>
+Singleton<ADerived>::Singleton() {
+    if (fgInstanceObjectNodePtr != nullptr) {
+        throw std::logic_error(std::string("MACE::Environment::Resource::Singleton: Trying to construct ")
+                                   .append(typeid(ADerived).name())
+                                   .append(" (environmental singleton) twice"));
+    }
+}
+
+template<class ADerived>
 Singleton<ADerived>::~Singleton() {
     if (fgInstanceObjectNodePtr != nullptr) {
         *fgInstanceObjectNodePtr = nullptr;

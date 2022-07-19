@@ -4,6 +4,10 @@
 #include "MACE/Environment/Resource/detail/SingletonFactory.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
+#include <stdexcept>
+#include <string>
+#include <typeinfo>
+
 namespace MACE::Environment::Resource {
 
 using MACE::Utility::ObserverPtr;
@@ -145,7 +149,7 @@ class Singleton : public Detail::ISingletonBase {
     friend class Detail::SingletonFactory;
 
 protected:
-    Singleton() = default;
+    Singleton();
     virtual ~Singleton();
 
 public:
