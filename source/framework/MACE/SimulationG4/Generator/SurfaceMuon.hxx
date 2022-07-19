@@ -6,7 +6,7 @@
 
 class G4MuonPlus;
 
-namespace MACE::Simulation::Generator {
+namespace MACE::SimulationG4::Generator {
 
 using Utility::ObserverPtr;
 

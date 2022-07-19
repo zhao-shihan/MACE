@@ -1,5 +1,5 @@
-#include "MACE/Simulation/Physics/Particle/AntiMuonium.hxx"
-#include "MACE/Simulation/Physics/Particle/Muonium.hxx"
+#include "MACE/SimulationG4/Physics/Particle/AntiMuonium.hxx"
+#include "MACE/SimulationG4/Physics/Particle/Muonium.hxx"
 #include "MACE/SimTarget/Action/SteppingAction.hxx"
 #include "MACE/SimTarget/Messenger/ActionMessenger.hxx"
 
@@ -8,7 +8,7 @@
 
 namespace MACE::SimTarget::Action {
 
-using namespace Simulation::Physics::Particle;
+using namespace SimulationG4::Physics::Particle;
 
 SteppingAction::SteppingAction() :
     fMuonPlus(G4MuonPlus::Definition()),

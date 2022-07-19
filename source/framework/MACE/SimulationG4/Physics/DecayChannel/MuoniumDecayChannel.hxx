@@ -40,7 +40,7 @@
 
 #include "G4VDecayChannel.hh"
 
-namespace MACE::Simulation::Physics::DecayChannel {
+namespace MACE::SimulationG4::Physics::DecayChannel {
 
 // Class Decription
 //  This class describes muon decay kinemtics.

@@ -1,11 +1,11 @@
-#include "MACE/Simulation/Physics/DecayChannel/MuoniumDecayChannel.hxx"
-#include "MACE/Simulation/Physics/Particle/Muonium.hxx"
+#include "MACE/SimulationG4/Physics/DecayChannel/MuoniumDecayChannel.hxx"
+#include "MACE/SimulationG4/Physics/Particle/Muonium.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4DecayTable.hh"
 #include "G4ParticleTable.hh"
 
-namespace MACE::Simulation::Physics::Particle {
+namespace MACE::SimulationG4::Physics::Particle {
 
 using namespace MACE::Utility::PhysicalConstant;
 

@@ -1,5 +1,5 @@
-#include "MACE/Simulation/Generator/SurfaceMuon.hxx"
-#include "MACE/Simulation/Generator/SurfaceMuonMessenger.hxx"
+#include "MACE/SimulationG4/Generator/SurfaceMuon.hxx"
+#include "MACE/SimulationG4/Generator/SurfaceMuonMessenger.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
@@ -7,7 +7,7 @@
 #include "G4MuonPlus.hh"
 #include "Randomize.hh"
 
-namespace MACE::Simulation::Generator {
+namespace MACE::SimulationG4::Generator {
 
 using namespace Utility::LiteralUnit::Energy;
 using namespace Utility::LiteralUnit::Length;

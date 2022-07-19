@@ -1,13 +1,13 @@
-#include "MACE/Simulation/Physics/MuoniumPhysics.hxx"
-#include "MACE/Simulation/Physics/Particle/AntiMuonium.hxx"
-#include "MACE/Simulation/Physics/Particle/Muonium.hxx"
-#include "MACE/Simulation/Physics/Process/MuoniumFormation.hxx"
-#include "MACE/Simulation/Physics/Process/MuoniumTransport.hxx"
+#include "MACE/SimulationG4/Physics/MuoniumPhysics.hxx"
+#include "MACE/SimulationG4/Physics/Particle/AntiMuonium.hxx"
+#include "MACE/SimulationG4/Physics/Particle/Muonium.hxx"
+#include "MACE/SimulationG4/Physics/Process/MuoniumFormation.hxx"
+#include "MACE/SimulationG4/Physics/Process/MuoniumTransport.hxx"
 
 #include "G4MuonPlus.hh"
 #include "G4ProcessManager.hh"
 
-namespace MACE::Simulation::Physics {
+namespace MACE::SimulationG4::Physics {
 
 using namespace Particle;
 using namespace Process;

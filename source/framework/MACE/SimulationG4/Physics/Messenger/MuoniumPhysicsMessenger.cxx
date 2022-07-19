@@ -1,8 +1,8 @@
-#include "MACE/Simulation/Physics/Messenger/MuoniumPhysicsMessenger.hxx"
-#include "MACE/Simulation/Physics/Process/MuoniumFormation.hxx"
-#include "MACE/Simulation/Physics/Process/MuoniumTransport.hxx"
+#include "MACE/SimulationG4/Physics/Messenger/MuoniumPhysicsMessenger.hxx"
+#include "MACE/SimulationG4/Physics/Process/MuoniumFormation.hxx"
+#include "MACE/SimulationG4/Physics/Process/MuoniumTransport.hxx"
 
-namespace MACE::Simulation::Physics::Messenger {
+namespace MACE::SimulationG4::Physics::Messenger {
 
 MuoniumPhysicsMessenger::MuoniumPhysicsMessenger() :
     Environment::Resource::Singleton<MuoniumPhysicsMessenger>(),

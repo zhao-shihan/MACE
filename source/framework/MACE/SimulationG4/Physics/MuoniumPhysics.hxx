@@ -2,7 +2,7 @@
 
 #include "G4VPhysicsConstructor.hh"
 
-namespace MACE::Simulation::Physics {
+namespace MACE::SimulationG4::Physics {
 
 class MuoniumPhysics final : public G4VPhysicsConstructor {
 public:

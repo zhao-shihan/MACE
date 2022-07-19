@@ -1,9 +1,9 @@
-#include "MACE/Simulation/Generator/SurfaceMuon.hxx"
-#include "MACE/Simulation/Generator/SurfaceMuonMessenger.hxx"
+#include "MACE/SimulationG4/Generator/SurfaceMuon.hxx"
+#include "MACE/SimulationG4/Generator/SurfaceMuonMessenger.hxx"
 
 #include "G4SystemOfUnits.hh"
 
-namespace MACE::Simulation::Generator {
+namespace MACE::SimulationG4::Generator {
 
 SurfaceMuonMessenger::SurfaceMuonMessenger() :
     Environment::Resource::Singleton<SurfaceMuonMessenger>(),

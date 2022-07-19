@@ -1,14 +1,14 @@
 #pragma once
 
 #include "MACE/Environment/Resource/Singleton.hxx"
-#include "MACE/Simulation/Generator/SurfaceMuon.hxx"
+#include "MACE/SimulationG4/Generator/SurfaceMuon.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
-namespace MACE::Simulation::Generator {
+namespace MACE::SimulationG4::Generator {
 
 using Utility::ObserverPtr;
 

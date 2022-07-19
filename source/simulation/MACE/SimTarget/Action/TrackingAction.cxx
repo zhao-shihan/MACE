@@ -1,15 +1,15 @@
 #include "MACE/SimTarget/Action/TrackingAction.hxx"
 #include "MACE/SimTarget/Analysis.hxx"
 #include "MACE/SimTarget/MuoniumTrack.hxx"
-#include "MACE/Simulation/Physics/Particle/AntiMuonium.hxx"
-#include "MACE/Simulation/Physics/Particle/Muonium.hxx"
+#include "MACE/SimulationG4/Physics/Particle/AntiMuonium.hxx"
+#include "MACE/SimulationG4/Physics/Particle/Muonium.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4Track.hh"
 
 namespace MACE::SimTarget::Action {
 
-using namespace Simulation::Physics::Particle;
+using namespace SimulationG4::Physics::Particle;
 using namespace Utility::PhysicalConstant;
 
 TrackingAction::TrackingAction() :

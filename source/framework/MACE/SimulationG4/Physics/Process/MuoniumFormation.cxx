@@ -1,13 +1,13 @@
-#include "MACE/Simulation/Physics/Messenger/MuoniumPhysicsMessenger.hxx"
-#include "MACE/Simulation/Physics/Particle/AntiMuonium.hxx"
-#include "MACE/Simulation/Physics/Particle/Muonium.hxx"
-#include "MACE/Simulation/Physics/Process/MuoniumFormation.hxx"
+#include "MACE/SimulationG4/Physics/Messenger/MuoniumPhysicsMessenger.hxx"
+#include "MACE/SimulationG4/Physics/Particle/AntiMuonium.hxx"
+#include "MACE/SimulationG4/Physics/Particle/Muonium.hxx"
+#include "MACE/SimulationG4/Physics/Process/MuoniumFormation.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4MuonPlus.hh"
 
-namespace MACE::Simulation::Physics::Process {
+namespace MACE::SimulationG4::Physics::Process {
 
 using namespace Utility::LiteralUnit::Time;
 using namespace Utility::PhysicalConstant;

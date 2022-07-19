@@ -1,4 +1,4 @@
-#include "MACE/Simulation/Physics/MuoniumPhysics.hxx"
+#include "MACE/SimulationG4/Physics/MuoniumPhysics.hxx"
 #include "MACE/SimTarget/Action/PhysicsList.hxx"
 
 #include "G4DecayPhysics.hh"
@@ -6,7 +6,7 @@
 
 namespace MACE::SimTarget::Action {
 
-using namespace MACE::Simulation::Physics;
+using namespace MACE::SimulationG4::Physics;
 
 PhysicsList::PhysicsList() :
     G4VModularPhysicsList() {

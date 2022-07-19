@@ -4,7 +4,7 @@
 
 #include "G4ParticleDefinition.hh"
 
-namespace MACE::Simulation::Physics::Particle {
+namespace MACE::SimulationG4::Physics::Particle {
 
 class Muonium final : public Environment::Resource::Singleton<Muonium>,
                       public G4ParticleDefinition {

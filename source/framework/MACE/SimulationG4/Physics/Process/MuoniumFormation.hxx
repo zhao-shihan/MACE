@@ -6,7 +6,7 @@
 #include "G4ParticleChange.hh"
 #include "G4VRestProcess.hh"
 
-namespace MACE::Simulation::Physics::Process {
+namespace MACE::SimulationG4::Physics::Process {
 
 using Core::Geometry::Description::Target;
 using Utility::ObserverPtr;

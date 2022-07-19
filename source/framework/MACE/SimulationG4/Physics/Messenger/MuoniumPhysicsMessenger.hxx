@@ -9,7 +9,7 @@
 #include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
-namespace MACE::Simulation::Physics {
+namespace MACE::SimulationG4::Physics {
 
 namespace Process {
 
