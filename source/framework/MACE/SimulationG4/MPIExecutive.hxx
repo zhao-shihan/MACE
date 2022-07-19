@@ -13,4 +13,4 @@ public:
     virtual void StartBatchSession(const char* macro);
 };
 
-} // namespace MACE::Utility::G4Util
+} // namespace MACE::SimulationG4

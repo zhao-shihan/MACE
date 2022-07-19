@@ -98,4 +98,4 @@ std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_vi
     }
 }
 
-} // namespace MACE::Utility::MPIUtil
+} // namespace MACE::Utility::UtilMPI

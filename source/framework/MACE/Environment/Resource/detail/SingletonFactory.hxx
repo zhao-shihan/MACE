@@ -42,7 +42,7 @@ private:
     static ObserverPtr<SingletonFactory> fgInstance;
 };
 
-} // namespace Resource
+} // namespace Resource::Detail
 
 } // namespace MACE::Environment
 

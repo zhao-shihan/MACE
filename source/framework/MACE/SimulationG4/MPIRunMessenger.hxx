@@ -33,4 +33,4 @@ private:
     G4UIcmdWithAnInteger fSetPrintProgress;
 };
 
-} // namespace MACE::Utility::G4Util
+} // namespace MACE::SimulationG4

@@ -9,4 +9,4 @@ ISingletonBase::~ISingletonBase() {
     *fInstanceBaseNodePtr = nullptr;
 }
 
-} // namespace MACE::Environment::Resource
+} // namespace MACE::Environment::Resource::Detail

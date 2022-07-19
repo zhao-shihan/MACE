@@ -186,4 +186,4 @@ void MPIRunManager::RunEndReport() const {
     }
 }
 
-} // namespace MACE::Utility::G4Util
+} // namespace MACE::SimulationG4

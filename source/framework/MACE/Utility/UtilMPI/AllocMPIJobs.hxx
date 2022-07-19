@@ -28,6 +28,6 @@ IntegralIndexRange<AIndex> AllocMPIJobsWorkerWise(std::pair<AIndex, AIndex> jobB
 template<std::integral AIndex>
 IntegralIndexRange<AIndex> AllocMPIJobsWorkerWise(std::pair<AIndex, AIndex> jobBeginEnd, MPI_Comm comm);
 
-} // namespace MACE::Utility::MPIUtil
+} // namespace MACE::Utility::UtilMPI
 
 #include "MACE/Utility/UtilMPI/AllocMPIJobs.inl"

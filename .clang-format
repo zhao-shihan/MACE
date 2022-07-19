@@ -31,42 +31,40 @@ FixNamespaceComments: true
 IncludeBlocks: Regroup
 IncludeCategories: 
   - Regex: '<.*>'
-    Priority: 8
-  - Regex: '"mpi.*\.h"'
     Priority: 7
-    CaseSensitive: true
-  - Regex: '"Eigen/.*"'
+  - Regex: '"mpi.*\.h"'
     Priority: 6
     CaseSensitive: true
-  - Regex: '"yaml-cpp/.*"'
+  - Regex: '"Eigen/.*"'
     Priority: 5
     CaseSensitive: true
-  - Regex: '"ROOT/.*"'
+  - Regex: '"yaml-cpp/.*"'
     Priority: 4
+    CaseSensitive: true
+  - Regex: '"ROOT/.*"'
+    Priority: 3
     CaseSensitive: true
   - Regex: '"R.*\.h"'
-    Priority: 4
+    Priority: 3
     CaseSensitive: true
   - Regex: '"T.*\.h"'
-    Priority: 4
+    Priority: 3
     CaseSensitive: true
   - Regex: '"G4.*"'
-    Priority: 3
-    CaseSensitive: true
-  - Regex: '"globals.hh"'
-    Priority: 3
-    CaseSensitive: true
-  - Regex: '"Randomize.hh"'
-    Priority: 3
-    CaseSensitive: true
-  - Regex: '"CLHEP/.*"'
     Priority: 2
     CaseSensitive: true
-  - Regex: '"MACE/.*"'
+  - Regex: '"globals.hh"'
+    Priority: 2
+    CaseSensitive: true
+  - Regex: '"Randomize.hh"'
+    Priority: 2
+    CaseSensitive: true
+  - Regex: '"CLHEP/.*"'
     Priority: 1
     CaseSensitive: true
-  - Regex: '".*"'
+  - Regex: '"MACE/.*"'
     Priority: 0
+    CaseSensitive: true
 IndentAccessModifiers: false
 IndentCaseBlocks: false
 IndentCaseLabels: false

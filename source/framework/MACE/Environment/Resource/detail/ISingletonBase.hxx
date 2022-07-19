@@ -23,4 +23,4 @@ private:
     ObserverPtr<ISingletonBase*> fInstanceBaseNodePtr; // Points to a node of instance list in SingletFactory
 };
 
-} // namespace MACE::Environment::Resource
+} // namespace MACE::Environment::Resource::Detail

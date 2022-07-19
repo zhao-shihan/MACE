@@ -19,4 +19,4 @@ public:
     static auto Definition() { return std::addressof(Instance()); }
 };
 
-} // namespace MACE::Simulation::Physics::Particle
+} // namespace MACE::SimulationG4::Physics::Particle

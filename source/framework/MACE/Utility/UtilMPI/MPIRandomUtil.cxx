@@ -42,4 +42,4 @@ void MPIReSeedCLHEPRandom(CLHEP::HepRandomEngine* randEng) {
     randEng->setSeed(seedRecv, 3);
 }
 
-} // namespace MACE::Utility::MPIUtil
+} // namespace MACE::Utility::UtilMPI

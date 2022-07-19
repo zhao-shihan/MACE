@@ -43,4 +43,4 @@ void MPIExecutive::StartBatchSession(const char* macro) {
     G4UImanager::GetUIpointer()->ExecuteMacroFile(macro);
 }
 
-} // namespace MACE::Utility::G4Util
+} // namespace MACE::SimulationG4

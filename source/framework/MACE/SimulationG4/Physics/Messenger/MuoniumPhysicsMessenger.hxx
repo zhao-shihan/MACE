@@ -53,4 +53,4 @@ private:
 
 } // namespace Messenger
 
-} // namespace MACE::Simulation::Physics
+} // namespace MACE::SimulationG4::Physics

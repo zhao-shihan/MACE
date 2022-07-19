@@ -42,4 +42,4 @@ private:
     G4double fVertexZ;
 };
 
-} // namespace MACE::Simulation::Generator
+} // namespace MACE::SimulationG4::Generator

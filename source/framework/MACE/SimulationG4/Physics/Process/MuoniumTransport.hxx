@@ -48,4 +48,4 @@ private:
     G4bool fIsExitingTargetVolume;
 };
 
-} // namespace MACE::Simulation::Physics::Process
+} // namespace MACE::SimulationG4::Physics::Process

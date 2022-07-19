@@ -54,4 +54,4 @@ namespace MACE::Utility::UtilMPI {
 ///
 std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_view suffix, MPI_Comm comm = MPI_COMM_WORLD);
 
-} // namespace MACE::Utility::MPIUtil
+} // namespace MACE::Utility::UtilMPI

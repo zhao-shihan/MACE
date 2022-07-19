@@ -62,4 +62,4 @@ void SingletonFactory::Instantiate() {
     }
 }
 
-} // namespace MACE::Environment::Resource
+} // namespace MACE::Environment::Resource::Detail

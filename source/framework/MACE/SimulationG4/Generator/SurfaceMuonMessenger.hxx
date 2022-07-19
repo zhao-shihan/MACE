@@ -37,4 +37,4 @@ private:
     G4UIcmdWithADoubleAndUnit fSetVertexZ;
 };
 
-} // namespace MACE::Simulation::Generator
+} // namespace MACE::SimulationG4::Generator

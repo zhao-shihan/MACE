@@ -1,7 +1,7 @@
-#include "MACE/SimulationG4/Physics/Particle/AntiMuonium.hxx"
-#include "MACE/SimulationG4/Physics/Particle/Muonium.hxx"
 #include "MACE/SimTarget/Action/SteppingAction.hxx"
 #include "MACE/SimTarget/Messenger/ActionMessenger.hxx"
+#include "MACE/SimulationG4/Physics/Particle/AntiMuonium.hxx"
+#include "MACE/SimulationG4/Physics/Particle/Muonium.hxx"
 
 #include "G4MuonPlus.hh"
 #include "G4Step.hh"

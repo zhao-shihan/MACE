@@ -16,4 +16,4 @@ void CheckMPIAvailability() {
     }
 }
 
-} // namespace MACE::Utility::G4Util
+} // namespace MACE::SimulationG4::Detail

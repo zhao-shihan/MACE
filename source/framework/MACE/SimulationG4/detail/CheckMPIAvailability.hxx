@@ -7,4 +7,4 @@ namespace MACE::SimulationG4::Detail {
 /// @attention This function should only be used in G4 routine.
 void CheckMPIAvailability();
 
-} // namespace MACE::Utility::G4Util
+} // namespace MACE::SimulationG4::Detail

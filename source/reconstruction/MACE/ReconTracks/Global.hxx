@@ -40,14 +40,14 @@
     static_assert(std::is_default_constructible_v<Track_t>,                                  \
                   "The track type should be default constructible")
 
-#define MACE_RECONSPECTROMETER_FITTER_CONCEPT(FitterT_t, Hit_t, Track_t)                                                              \
+#define MACE_RECONSPECTROMETER_FITTER_CONCEPT(FitterT_t, Hit_t, Track_t)                                              \
     static_assert(std::is_base_of_v<MACE::ReconTracks::Interface::Fitter<Hit_t, Track_t>, FitterT_t<Hit_t, Track_t>>, \
-                  "The fitter type should derived from "                                                                              \
+                  "The fitter type should derived from "                                                              \
                   "MACE::ReconTracks::Interface::Fitter");                                                            \
-    static_assert(std::is_default_constructible_v<FitterT_t<Hit_t, Track_t>>,                                                         \
+    static_assert(std::is_default_constructible_v<FitterT_t<Hit_t, Track_t>>,                                         \
                   "The fitter type should be default constructible")
 
-#define MACE_RECONSPECTROMETER_RECONSTRUCTOR_CONCEPT(Tracker_t, FitterT_t, Hit_t, Track_t)                                                                   \
+#define MACE_RECONSPECTROMETER_RECONSTRUCTOR_CONCEPT(Tracker_t, FitterT_t, Hit_t, Track_t)                                                   \
     static_assert(std::is_base_of_v<MACE::ReconTracks::Interface::Tracker<FitterT_t, Hit_t, Track_t>, Tracker_t<FitterT_t, Hit_t, Track_t>>, \
-                  "The reconstructor type should derived from "                                                                                              \
+                  "The reconstructor type should derived from "                                                                              \
                   "MACE::ReconTracks::Interface::Tracker")

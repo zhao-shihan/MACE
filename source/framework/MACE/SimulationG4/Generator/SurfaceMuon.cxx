@@ -45,4 +45,4 @@ void SurfaceMuon::GeneratePrimaryVertex(G4Event* event) {
     event->AddPrimaryVertex(primaryVertex);
 }
 
-} // namespace MACE::Simulation::Generator
+} // namespace MACE::SimulationG4::Generator

@@ -62,4 +62,4 @@ IntegralIndexRange<AIndex> AllocMPIJobsWorkerWise(std::pair<AIndex, AIndex> jobB
     return AllocMPIJobsWorkerWise<AIndex>(jobBeginEnd.first, jobBeginEnd.second, commSize, commRank);
 }
 
-} // namespace MACE::Utility::MPIUtil
+} // namespace MACE::Utility::UtilMPI

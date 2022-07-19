@@ -24,4 +24,4 @@ void MPIRunMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     }
 }
 
-} // namespace MACE::Utility::G4Util
+} // namespace MACE::SimulationG4
