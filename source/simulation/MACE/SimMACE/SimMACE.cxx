@@ -2,7 +2,7 @@
 #include "MACE/SimMACE/Action/DetectorConstruction.hxx"
 #include "MACE/SimMACE/Action/PhysicsList.hxx"
 #include "MACE/SimMACE/RunManager.hxx"
-#include "MACE/Utility/G4Util/MPIExecutive.hxx"
+#include "MACE/SimulationG4/MPIExecutive.hxx"
 
 #include "Randomize.hh"
 
@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
     runManager->GetDetectorConstruction().SetCheckOverlaps(interactive ? true : false);
     runManager->GetPhysicsList().SetVerboseLevel(interactive ? 1 : 0);
 
-    const auto mpiExecutive = std::make_unique<MACE::Utility::G4Util::MPIExecutive>();
+    const auto mpiExecutive = std::make_unique<MACE::SimulationG4::MPIExecutive>();
     if (interactive) {
         mpiExecutive->StartInteractiveSession(argc, argv, "init_vis.mac");
     } else {

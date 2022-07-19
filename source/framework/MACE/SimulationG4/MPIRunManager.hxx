@@ -7,7 +7,7 @@
 #include <chrono>
 #include <ctime>
 
-namespace MACE::Utility::G4Util {
+namespace MACE::SimulationG4 {
 
 namespace Detail {
 
@@ -56,7 +56,7 @@ private:
 
 private:
     G4int fTotalNumberOfEventsToBeProcessed;
-    IntegralIndexRange<G4int> fEventIDRange;
+    Utility::IntegralIndexRange<G4int> fEventIDRange;
     G4int fEventIDCounter;
 
     G4int fPrintProgress;

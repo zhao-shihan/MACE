@@ -1,6 +1,6 @@
 #include "MACE/Environment/MPIEnvironment.hxx"
-#include "MACE/Utility/G4Util/CheckMPIAvailability.hxx"
-#include "MACE/Utility/G4Util/MPIExecutive.hxx"
+#include "MACE/SimulationG4/detail/CheckMPIAvailability.hxx"
+#include "MACE/SimulationG4/MPIExecutive.hxx"
 
 #include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
@@ -8,16 +8,16 @@
 
 #include <stdexcept>
 
-namespace MACE::Utility::G4Util {
+namespace MACE::SimulationG4 {
 
 using MACE::Environment::MPIEnvironment;
 
 MPIExecutive::MPIExecutive() {
-    CheckMPIAvailability();
+    Detail::CheckMPIAvailability();
 }
 
 void MPIExecutive::StartInteractiveSession(int argc, char* argv[], const char* initializeMacro) {
-    CheckMPIAvailability();
+    Detail::CheckMPIAvailability();
     if (MPIEnvironment::IsParallelized()) {
         auto where = std::string(typeid(*this).name()).append("::").append(__func__);
         if (MPIEnvironment::IsWorldMaster()) {
@@ -39,7 +39,7 @@ void MPIExecutive::StartInteractiveSession(int argc, char* argv[], const char* i
 }
 
 void MPIExecutive::StartBatchSession(const char* macro) {
-    CheckMPIAvailability();
+    Detail::CheckMPIAvailability();
     G4UImanager::GetUIpointer()->ExecuteMacroFile(macro);
 }
 

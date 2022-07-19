@@ -1,6 +1,6 @@
 #pragma once
 
-namespace MACE::Utility::G4Util {
+namespace MACE::SimulationG4 {
 
 class MPIExecutive {
 public:

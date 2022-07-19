@@ -1,7 +1,7 @@
-#include "MACE/Utility/G4Util/MPIRunManager.hxx"
-#include "MACE/Utility/G4Util/MPIRunMessenger.hxx"
+#include "MACE/SimulationG4/MPIRunManager.hxx"
+#include "MACE/SimulationG4/MPIRunMessenger.hxx"
 
-namespace MACE::Utility::G4Util {
+namespace MACE::SimulationG4 {
 
 MPIRunMessenger::MPIRunMessenger() :
     Environment::Resource::Singleton<MPIRunMessenger>(),

@@ -7,7 +7,7 @@
 #include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
-namespace MACE::Utility::G4Util {
+namespace MACE::SimulationG4 {
 
 class MPIRunManager;
 

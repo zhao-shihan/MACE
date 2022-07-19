@@ -1,6 +1,6 @@
 #pragma once
 
-namespace MACE::Utility::G4Util {
+namespace MACE::SimulationG4::Detail {
 
 /// Check the availability of MPI environment through MPIEnviroment::Available.
 /// If not available, raise a G4Exception of fatal. Thus should only be used in G4 routine.

@@ -1,9 +1,9 @@
 #include "MACE/Environment/MPIEnvironment.hxx"
-#include "MACE/Utility/G4Util/CheckMPIAvailability.hxx"
+#include "MACE/SimulationG4/detail/CheckMPIAvailability.hxx"
 
 #include "G4Exception.hh"
 
-namespace MACE::Utility::G4Util {
+namespace MACE::SimulationG4::Detail {
 
 void CheckMPIAvailability() {
     using MACE::Environment::MPIEnvironment;
