@@ -1,3 +1,5 @@
+#include "MACE/Environment/BasicEnvironment.hxx"
+
 #include "MACE/Core/Geometry/DescriptionIO.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/All.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
@@ -8,10 +10,12 @@
 
 using namespace MACE::Core::Geometry::Entity::Fast;
 
-int main(int, char**) {
+int main(int argc, char** argv) {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    MACE::Environment::BasicEnvironment env(argc, argv);
 
     // Construct entity objects
     auto fBeamDegrader = std::make_shared<BeamDegrader>();
