@@ -7,7 +7,7 @@
 #include "Randomize.hh"
 
 int main(int argc, char* argv[]) {
-    MACE::Environment::MPIEnvironment mpiEnvironment(argc, argv);
+    MACE::Environment::MPIEnvironment mpiEnvironment(argc, argv, std::nullopt);
 
     bool interactive = (argc == 1);
 

@@ -13,7 +13,7 @@
 
 namespace MACE::Environment {
 
-class BasicEnvironment; // Just a kawaii forward declaration
+class BasicEnvironment;
 
 namespace Resource::Detail {
 
@@ -22,7 +22,7 @@ using MACE::Utility::ObserverPtr;
 /// @brief Implementation detail of MACE::Environment::Resource::Singleton.
 /// Not API.
 class SingletonFactory final {
-    friend class MACE::Environment::BasicEnvironment;
+    friend class Environment::BasicEnvironment;
 
 private:
     SingletonFactory();

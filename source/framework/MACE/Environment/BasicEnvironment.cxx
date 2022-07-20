@@ -1,4 +1,5 @@
 #include "MACE/Environment/BasicEnvironment.hxx"
+#include "MACE/Environment/CLI/BasicCLI.hxx"
 #include "MACE/Version.hxx"
 
 #include <filesystem>
@@ -11,19 +12,30 @@ namespace MACE::Environment {
 ObserverPtr<BasicEnvironment> BasicEnvironment::fgBasicEnvironmentInstance = nullptr;
 bool BasicEnvironment::fgBasicEnvironmentFinalized = false;
 
-BasicEnvironment::BasicEnvironment(int argc, char* argv[], VerboseLevel verboseLevel, bool printStartupMessage) :
+BasicEnvironment::BasicEnvironment(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> optCLI,
+                                   VerboseLevel verboseLevel, bool printStartupMessage) :
     fVerboseLevel(verboseLevel),
     fSingletonFactory() {
-    if (not Initialized()) {
-        fgBasicEnvironmentInstance = this;
-    } else {
+    // Check double construction
+    if (Initialized()) {
         throw std::logic_error("MACE::Environment::BasicEnvironment: Trying to initialize environment twice");
     }
+    // CLI: do parse and get args
+    if (optCLI.has_value()) {
+        auto& cli = optCLI->get();
+        // Parse
+        DoCLIParse(argc, argv, cli);
+        // Get args
+        fVerboseLevel = static_cast<VerboseLevel>(cli.get<int>("--verbose"));
+    }
+    // Print startup message after parse
     if (printStartupMessage) {
         PrintStartupMessageSplitLine();
         PrintStartupMessageBody(argc, argv);
         PrintStartupMessageSplitLine();
     }
+    // Set instance pointer
+    fgBasicEnvironmentInstance = this;
 }
 
 void BasicEnvironment::PrintStartupMessageSplitLine() const {
@@ -50,6 +62,16 @@ void BasicEnvironment::PrintStartupMessageBody(int argc, char* argv[]) const {
             std::cout << "  argv[" << i << "]: " << argv[i] << '\n';
         }
         std::cout << std::flush;
+    }
+}
+
+void BasicEnvironment::DoCLIParse(int argc, const char* const argv[], CLI::BasicCLI& cli) {
+    try {
+        cli.parse_args(argc, argv);
+    } catch (const std::runtime_error& exception) {
+        std::cerr << exception.what() << '\n'
+                  << "Try: " << argv[0] << " --help" << std::endl;
+        std::exit(EXIT_FAILURE);
     }
 }
 

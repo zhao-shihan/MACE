@@ -4,14 +4,24 @@
 #include "MACE/Utility/ObserverPtr.hxx"
 #include "MACE/Utility/VerboseLevel.hxx"
 
+#include <functional>
+#include <optional>
+
 namespace MACE::Environment {
+
+namespace CLI {
+
+class BasicCLI;
+
+} // namespace CLI
 
 using MACE::Utility::ObserverPtr;
 using MACE::Utility::VerboseLevel;
 
 class BasicEnvironment {
 public:
-    BasicEnvironment(int argc, char* argv[], VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
+    BasicEnvironment(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> optCLI,
+                     VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
     virtual ~BasicEnvironment() { fgBasicEnvironmentFinalized = true; }
     BasicEnvironment(const BasicEnvironment&) = delete;
     BasicEnvironment& operator=(const BasicEnvironment&) = delete;
@@ -26,6 +36,9 @@ public:
 protected:
     void PrintStartupMessageSplitLine() const;
     void PrintStartupMessageBody(int argc, char* argv[]) const;
+
+private:
+    static void DoCLIParse(int argc, const char* const argv[], CLI::BasicCLI& cli);
 
 private:
     VerboseLevel fVerboseLevel;

@@ -1,3 +1,4 @@
+#include "MACE/Environment/CLI/BasicCLI.hxx"
 #include "MACE/Environment/MPIEnvironment.hxx"
 #include "MACE/SimMACE/Action/DetectorConstruction.hxx"
 #include "MACE/SimMACE/Action/PhysicsList.hxx"
@@ -9,7 +10,8 @@
 // constexpr const char* InitVisMac;
 
 int main(int argc, char* argv[]) {
-    MACE::Environment::MPIEnvironment mpiEnvironment(argc, argv);
+    MACE::Environment::CLI::BasicCLI cli;
+    MACE::Environment::MPIEnvironment mpiEnvironment(argc, argv, cli);
 
     bool interactive = (argc == 1);
 

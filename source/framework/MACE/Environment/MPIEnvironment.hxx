@@ -2,13 +2,17 @@
 
 #include "MACE/Environment/BasicEnvironment.hxx"
 
+#include <stdexcept>
 #include <string>
+#include <type_traits>
+#include <utility>
 
 namespace MACE::Environment {
 
 class MPIEnvironment : public BasicEnvironment {
 public:
-    MPIEnvironment(int& argc, char**& argv, VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
+    MPIEnvironment(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> optCLI,
+                   VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
     virtual ~MPIEnvironment();
 
     static auto Initialized() { return fgMPIEnvironmentInstance != nullptr; }
@@ -28,6 +32,11 @@ protected:
     void PrintStartupMessageBody(int argc, char* argv[]) const;
 
 private:
+    template<typename... Args>
+    void CheckedMPICall(const char* funcName, int (*MPIFunc)(std::decay_t<Args>...), Args&&... args);
+    void InitializeMPIAndWorldProperties(int& argc, char**& argv);
+
+private:
     int fWorldCommRank;
     int fWorldCommSize;
     std::string fProcessorName;
@@ -37,3 +46,5 @@ private:
 };
 
 } // namespace MACE::Environment
+
+#include "MACE/Environment/MPIEnvironment.inl"

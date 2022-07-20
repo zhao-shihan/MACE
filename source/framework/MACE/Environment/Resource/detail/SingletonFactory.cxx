@@ -7,11 +7,10 @@ ObserverPtr<SingletonFactory> SingletonFactory::fgInstance = nullptr;
 SingletonFactory::SingletonFactory() :
     fSingletonInstanceList(),
     fSingletonTypeCollection() {
-    if (fgInstance == nullptr) {
-        fgInstance = this;
-    } else {
+    if (fgInstance != nullptr) {
         throw std::logic_error("MACE::Environment::Resource::SingletonFactory: Trying to construct twice");
     }
+    fgInstance = this;
 }
 
 SingletonFactory::~SingletonFactory() {
