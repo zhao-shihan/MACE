@@ -20,25 +20,19 @@ using MACE::Utility::Math::Pow2;
 namespace Detail {
 
 static void FlipG4cout() {
-    static thread_local ObserverPtr<std::streambuf> g4coutBufExchanger = nullptr;
-    g4coutBufExchanger = G4cout.rdbuf(g4coutBufExchanger);
+    if (MPIEnvironment::IsWorldWorker()) {
+        static ObserverPtr<std::streambuf> gG4coutBufExchanger = nullptr;
+        gG4coutBufExchanger = G4cout.rdbuf(gG4coutBufExchanger);
+    }
 }
 
 MPIRunManagerInitializeHelper1::MPIRunManagerInitializeHelper1() {
-    if (MPIEnvironment::IsWorldWorker()) {
-        FlipG4cout();
-    }
+    CheckMPIAvailability();
+    FlipG4cout();
 }
 
 MPIRunManagerInitializeHelper2::MPIRunManagerInitializeHelper2() {
-    if (MPIEnvironment::IsWorldMaster()) {
-        G4cout << " Running on " << MPIEnvironment::WorldCommSize() << " processes via MPI " << MPI_VERSION << '.' << MPI_SUBVERSION << '\n'
-               << '\n'
-               << "**************************************************************\n"
-               << G4endl;
-    } else {
-        FlipG4cout();
-    }
+    FlipG4cout();
 }
 
 } // namespace Detail
