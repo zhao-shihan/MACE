@@ -9,7 +9,7 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class CDC final : public IDescriptionSingleton<CDC> {
+class CDC final : public ISingletonDescription<CDC> {
     friend Environment::Resource::SingletonFactory;
 
 private:

@@ -4,7 +4,7 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class MCP final : public IDescriptionSingleton<MCP> {
+class MCP final : public ISingletonDescription<MCP> {
     friend Environment::Resource::SingletonFactory;
 
 private:

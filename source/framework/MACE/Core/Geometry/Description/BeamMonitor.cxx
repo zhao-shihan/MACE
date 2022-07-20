@@ -9,7 +9,7 @@ namespace MACE::Core::Geometry::Description {
 using namespace Utility::LiteralUnit::Length;
 
 BeamMonitor::BeamMonitor() :
-    IDescriptionSingleton<BeamMonitor>(__func__),
+    ISingletonDescription<BeamMonitor>(__func__),
     fIsEnabled(false),
     fWidth(4_cm),
     fThickness(500_um),

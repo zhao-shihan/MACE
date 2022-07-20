@@ -11,7 +11,7 @@ namespace MACE::Core::Geometry {
 class IDescription {
 protected:
     IDescription(const std::string& name);
-    virtual ~IDescription() noexcept = default;
+    ~IDescription() noexcept = default;
     IDescription(const IDescription&) = delete;
     IDescription& operator=(const IDescription&) = delete;
 
@@ -36,7 +36,7 @@ protected:
 };
 
 template<class ADerived>
-class IDescriptionSingleton : public Environment::Resource::Singleton<ADerived>,
+class ISingletonDescription : public Environment::Resource::Singleton<ADerived>,
                               public IDescription {
 protected:
     using IDescription::IDescription;
@@ -44,7 +44,7 @@ protected:
 
 template<class T>
 concept IsDescription =
-    std::derived_from<T, IDescriptionSingleton<T>> and
+    std::derived_from<T, ISingletonDescription<T>> and
     std::is_final_v<T> and
     not std::copyable<T> and
     requires {

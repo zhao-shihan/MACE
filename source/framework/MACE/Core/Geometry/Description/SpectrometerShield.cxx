@@ -6,7 +6,7 @@ namespace MACE::Core::Geometry::Description {
 using namespace Utility::LiteralUnit::Length;
 
 SpectrometerShield::SpectrometerShield() :
-    IDescriptionSingleton<SpectrometerShield>(__func__),
+    ISingletonDescription<SpectrometerShield>(__func__),
     fInnerRadius(72_cm),
     fInnerLength(222_cm),
     fWindowRadius(12.7_cm),

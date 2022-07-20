@@ -8,7 +8,7 @@ namespace MACE::Core::Geometry::Description {
 using namespace Utility::LiteralUnit::Length;
 
 LinacField::LinacField() :
-    IDescriptionSingleton<LinacField>(__func__),
+    ISingletonDescription<LinacField>(__func__),
     fRadius(75_mm),
     fLength(100_cm),
     fDownStreamLength(90_cm) {}

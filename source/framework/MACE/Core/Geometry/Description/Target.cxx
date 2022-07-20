@@ -9,7 +9,7 @@ namespace MACE::Core::Geometry::Description {
 using namespace Utility::LiteralUnit::Length;
 
 Target::Target() :
-    IDescriptionSingleton<Target>(__func__),
+    ISingletonDescription<Target>(__func__),
     fWidth(6_cm),
     fThickness(1_cm),
     fFineStructure(ConstructFormula("(z<-5 || x<-20||x>20 || y<-20||y>20) || "

@@ -4,7 +4,7 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class SpectrometerMagnet final : public IDescriptionSingleton<SpectrometerMagnet> {
+class SpectrometerMagnet final : public ISingletonDescription<SpectrometerMagnet> {
     friend Environment::Resource::SingletonFactory;
 
 private:

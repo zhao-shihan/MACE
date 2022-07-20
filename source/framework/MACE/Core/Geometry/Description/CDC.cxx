@@ -8,7 +8,7 @@ using namespace Utility::LiteralUnit::Length;
 using namespace Utility::PhysicalConstant;
 
 CDC::CDC() :
-    IDescriptionSingleton<CDC>(__func__),
+    ISingletonDescription<CDC>(__func__),
     fGasInnerRadius(15_cm),
     fGasOuterRadius(45_cm),
     fGasInnerLength(90_cm),

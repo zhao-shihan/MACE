@@ -4,7 +4,7 @@
 
 namespace MACE::Core::Geometry::Description {
 
-class World final : public IDescriptionSingleton<World> {
+class World final : public ISingletonDescription<World> {
     friend Environment::Resource::SingletonFactory;
 
 private:
