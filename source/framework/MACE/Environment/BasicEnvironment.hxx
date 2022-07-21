@@ -2,7 +2,7 @@
 
 #include "MACE/Environment/Resource/detail/SingletonFactory.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
-#include "MACE/Utility/VerboseLevel.hxx"
+#include "MACE/Environment/VerboseLevel.hxx"
 
 #include <functional>
 #include <optional>
@@ -16,7 +16,6 @@ class BasicCLI;
 } // namespace CLI
 
 using MACE::Utility::ObserverPtr;
-using MACE::Utility::VerboseLevel;
 
 class BasicEnvironment {
 public:

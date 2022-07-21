@@ -36,7 +36,7 @@ MPIEnvironment::~MPIEnvironment() {
 
 void MPIEnvironment::PrintStartupMessageBody(int argc, char* argv[]) const {
     BasicEnvironment::PrintStartupMessageBody(argc, argv);
-    MACE_VERBOSE_LEVEL_CONTROLLED_OUT(std::cout, Error, GetVerboseLevel())
+    MACE_VERBOSE_LEVEL_CONTROLLED_OUT(GetVerboseLevel(), Error, std::cout)
         << '\n'
         << " Parallelized by MPI " << MPI_VERSION << '.' << MPI_SUBVERSION << '\n'
         << " Size of the MPI world communicator: " << fWorldCommSize << std::endl;

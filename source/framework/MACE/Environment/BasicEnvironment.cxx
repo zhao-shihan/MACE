@@ -26,7 +26,7 @@ BasicEnvironment::BasicEnvironment(int argc, char* argv[], std::optional<std::re
         // Parse
         DoCLIParse(argc, argv, cli);
         // Get args
-        fVerboseLevel = static_cast<VerboseLevel>(cli.get<int>("--verbose"));
+        fVerboseLevel = cli.GetVerboseLevel();
     }
     // Print startup message after parse
     if (printStartupMessage) {
@@ -39,7 +39,7 @@ BasicEnvironment::BasicEnvironment(int argc, char* argv[], std::optional<std::re
 }
 
 void BasicEnvironment::PrintStartupMessageSplitLine() const {
-    MACE_VERBOSE_LEVEL_CONTROLLED_OUT(std::cout, Error, fVerboseLevel)
+    MACE_VERBOSE_LEVEL_CONTROLLED_OUT(fVerboseLevel, Error, std::cout)
         << "\n===============================================================================\n"
         << std::endl;
 }
@@ -50,7 +50,7 @@ void BasicEnvironment::PrintStartupMessageBody(int argc, char* argv[]) const {
     if (cwdError) {
         cwd.assign("<Error getting current working directory>");
     }
-    MACE_VERBOSE_LEVEL_CONTROLLED_OUT(std::cout, Error, fVerboseLevel)
+    MACE_VERBOSE_LEVEL_CONTROLLED_OUT(fVerboseLevel, Error, std::cout)
         << " xxxx framework (MACE offline software system) " << MACE_VERSION_STRING << '\n'
         << " Copyright (c) 2020-2022 MACE software working group \n"
         << '\n'
