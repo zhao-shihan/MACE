@@ -8,7 +8,7 @@
 #include <system_error>
 
 #if MACE_SIGNAL_HANDLER
-#    include "MACE/Environment/detail/SignalHandler.hxx"
+    #include "MACE/Environment/detail/SignalHandler.hxx"
 #endif
 
 namespace MACE::Environment {
