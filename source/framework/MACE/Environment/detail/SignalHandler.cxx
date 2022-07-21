@@ -1,45 +1,65 @@
 #if MACE_SIGNAL_HANDLER
 
-#    include "MACE/Environment/detail/SignalHandler.hxx"
+    #include "MACE/Environment/detail/SignalHandler.hxx"
 
-#    include "TSystem.h"
+    #include <csignal>
+    #include <cstdlib>
+    #include <iostream>
+    #include <version>
 
-#    include <csignal>
-#    include <cstdlib>
+    #ifdef __cpp_lib_stacktrace // C++23
+        #include <stacktrace>
+    #else // fallback to ROOT stacktrace
+        #include "TSystem.h"
+    #endif
 
 namespace MACE::Environment::Detail {
 
 extern "C" {
 
 [[noreturn]] void MACESignalSIGABRTHandler(int) {
-    std::puts("\n *** ABORT ***\n");
-    gSystem->StackTrace();
+    std::cerr << "\n *** ABORT ***\n"
+              << std::endl;
+    #ifdef __cpp_lib_stacktrace // C++23
+    std::clog << std::stacktrace::current() << std::endl;
+    #else // fallback to ROOT stacktrace
+    if (gSystem != nullptr) { // not destructed
+        gSystem->StackTrace();
+    }
+    #endif
     std::_Exit(EXIT_FAILURE);
 }
 
 [[noreturn]] void MACESignalSIGFPEHandler(int) {
-    std::puts("\n *** ERRONEOUS ARITHMETIC OPERATION ***");
+    std::cerr << "\n *** ERRONEOUS ARITHMETIC OPERATION ***" << std::endl;
     std::abort();
 }
 
 [[noreturn]] void MACESignalSIGILLHandler(int) {
-    std::puts("\n *** ILLEGAL INSTRUCTION ***");
+    std::cerr << "\n *** ILLEGAL INSTRUCTION ***" << std::endl;
     std::abort();
 }
 
 [[noreturn]] void MACESignalSIGINTHandler(int) {
-    std::puts("\n *** INTERRUPT ***\n");
-    gSystem->StackTrace();
+    std::cerr << "\n *** INTERRUPT ***\n"
+              << std::endl;
+    #ifdef __cpp_lib_stacktrace // C++23
+    std::clog << std::stacktrace::current() << std::endl;
+    #else // fallback to ROOT stacktrace
+    if (gSystem != nullptr) { // not destructed
+        gSystem->StackTrace();
+    }
+    #endif
     std::quick_exit(EXIT_FAILURE);
 }
 
 [[noreturn]] void MACESignalSIGSEGVHandler(int) {
-    std::puts("\n *** SEGMENTATION VIOLATION ***");
+    std::cerr << "\n *** SEGMENTATION VIOLATION ***" << std::endl;
     std::abort();
 }
 
 [[noreturn]] void MACESignalSIGTERMHandler(int) {
-    std::puts("\n *** TERMINATE ***");
+    std::cerr << "\n *** TERMINATE ***" << std::endl;
     std::terminate();
 }
 
