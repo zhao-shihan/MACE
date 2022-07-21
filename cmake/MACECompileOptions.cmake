@@ -20,6 +20,10 @@ if(MACE_WITH_G4GDML)
     add_compile_definitions(MACE_WITH_G4GDML=1)
 endif()
 
+if(MACE_SIGNAL_HANDLER)
+    add_compile_definitions(MACE_SIGNAL_HANDLER=1)
+endif()
+
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # Enable standard-conformance
     add_compile_options(/permissive- /Zc:__cplusplus /Zc:inline)

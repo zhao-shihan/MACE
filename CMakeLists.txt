@@ -28,6 +28,7 @@ option(MACE_BUILTIN_ARGPARSE "Use built-in argparse (network or pre-downloaded s
 option(MACE_BUILTIN_EIGEN "Use built-in Eigen (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_YAML_CPP "Use built-in yaml-cpp (network or pre-downloaded source is required)." OFF)
 option(MACE_ENABLE_VIS "Build MACE with visualization. Note that whether Geant4 supports visualization is determined by the options when Geant4 is built. MACE does not, and cannot, affect whether G4 enables visualization." ON)
+option(MACE_SIGNAL_HANDLER "Build with signal handling. Signal handlers are registered at the construction of environment." ON)
 option(MACE_USE_STATIC_G4 "Attempt to link Geant4 static libraries if available, by finding the \"static\" component of G4. There may be some performance gains if successful (depending on the compiler options), but some other (originally) possible dynamic linkages becomes impossible. If cannot find \"static\", dynamic libraries will be linked." ON)
 option(MACE_WITH_G4GDML "Build with G4gdml support. This option will be automatically turned OFF if Geant4::G4gdml is not found. If turned off, you are not able to export geometry (to ROOT or other)." ON)
 

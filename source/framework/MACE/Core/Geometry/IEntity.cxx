@@ -3,9 +3,7 @@
 #include "G4SDManager.hh"
 
 #if MACE_WITH_G4GDML
-// clang-format off
-#include "G4GDMLParser.hh"
-// clang-format on
+#    include "G4GDMLParser.hh"
 #endif
 
 namespace MACE::Core::Geometry {
