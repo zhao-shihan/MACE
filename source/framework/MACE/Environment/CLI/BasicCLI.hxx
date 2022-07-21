@@ -10,7 +10,7 @@ class BasicCLI : public argparse::ArgumentParser {
 public:
     BasicCLI();
 
-    VerboseLevel GetVerboseLevel();
+    auto GetVerboseLevel() { return static_cast<VerboseLevel>(get<int>("-V")); }
 
 private:
     static bool fgInstantiated;
