@@ -20,7 +20,9 @@ using MACE::Utility::Math::Pow2;
 namespace Detail {
 
 static void FlipG4cout() {
-    if (MPIEnvironment::IsWorldWorker()) {
+    const auto& mpiEnv = MPIEnvironment::Instance();
+    if (mpiEnv.IsWorldWorker() or
+        mpiEnv.GetVerboseLevel() == Environment::VerboseLevel::Quiet) {
         static ObserverPtr<std::streambuf> gG4coutBufExchanger = nullptr;
         gG4coutBufExchanger = G4cout.rdbuf(gG4coutBufExchanger);
     }
