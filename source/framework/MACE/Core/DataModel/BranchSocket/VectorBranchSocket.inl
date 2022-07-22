@@ -14,7 +14,7 @@ VectorBranchSocket<AROOTFundamental, ASize>::VectorBranchSocket(const TString& b
         fLeafList.Append(leafNames[i]);
     }
     // Initialize vector
-    for (int i = 1; i < ASize; ++i) {
+    for (int i = 0; i < ASize; ++i) {
         fVector[i] = defaultValues[i];
     }
 }

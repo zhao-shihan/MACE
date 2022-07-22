@@ -6,49 +6,49 @@
 
 namespace MACE::Core::DataModel::BranchSocket {
 
-template<typename AROOTFundamental>
+template<typename T>
 concept IsROOTFundamental =
-    std::same_as<std::remove_cv_t<AROOTFundamental>, Char_t> or
-    std::same_as<std::remove_cv_t<AROOTFundamental>, UChar_t> or
-    std::same_as<std::remove_cv_t<AROOTFundamental>, Short_t> or
-    std::same_as<std::remove_cv_t<AROOTFundamental>, UShort_t> or
-    std::same_as<std::remove_cv_t<AROOTFundamental>, Int_t> or
-    std::same_as<std::remove_cv_t<AROOTFundamental>, UInt_t> or
-    std::same_as<std::remove_cv_t<AROOTFundamental>, Float_t> or
-    std::same_as<std::remove_cv_t<AROOTFundamental>, Double_t> or
-    std::same_as<std::remove_cv_t<AROOTFundamental>, Long64_t> or
-    std::same_as<std::remove_cv_t<AROOTFundamental>, ULong64_t> or
-    std::same_as<std::remove_cv_t<AROOTFundamental>, Long_t> or
-    std::same_as<std::remove_cv_t<AROOTFundamental>, ULong_t> or
-    std::same_as<std::remove_cv_t<AROOTFundamental>, Bool_t>;
+    std::same_as<T, Char_t> or
+    std::same_as<T, UChar_t> or
+    std::same_as<T, Short_t> or
+    std::same_as<T, UShort_t> or
+    std::same_as<T, Int_t> or
+    std::same_as<T, UInt_t> or
+    std::same_as<T, Float_t> or
+    std::same_as<T, Double_t> or
+    std::same_as<T, Long64_t> or
+    std::same_as<T, ULong64_t> or
+    std::same_as<T, Long_t> or
+    std::same_as<T, ULong_t> or
+    std::same_as<T, Bool_t>;
 
-template<IsROOTFundamental AROOTFundamental>
+template<IsROOTFundamental T>
 consteval char GetBranchTypeName() {
-    if constexpr (std::is_same_v<AROOTFundamental, Char_t>) {
+    if constexpr (std::is_same_v<T, Char_t>) {
         return 'B';
-    } else if constexpr (std::is_same_v<AROOTFundamental, UChar_t>) {
+    } else if constexpr (std::is_same_v<T, UChar_t>) {
         return 'b';
-    } else if constexpr (std::is_same_v<AROOTFundamental, Short_t>) {
+    } else if constexpr (std::is_same_v<T, Short_t>) {
         return 'S';
-    } else if constexpr (std::is_same_v<AROOTFundamental, UShort_t>) {
+    } else if constexpr (std::is_same_v<T, UShort_t>) {
         return 's';
-    } else if constexpr (std::is_same_v<AROOTFundamental, Int_t>) {
+    } else if constexpr (std::is_same_v<T, Int_t>) {
         return 'I';
-    } else if constexpr (std::is_same_v<AROOTFundamental, UInt_t>) {
+    } else if constexpr (std::is_same_v<T, UInt_t>) {
         return 'i';
-    } else if constexpr (std::is_same_v<AROOTFundamental, Float_t>) {
+    } else if constexpr (std::is_same_v<T, Float_t>) {
         return 'F';
-    } else if constexpr (std::is_same_v<AROOTFundamental, Double_t>) {
+    } else if constexpr (std::is_same_v<T, Double_t>) {
         return 'D';
-    } else if constexpr (std::is_same_v<AROOTFundamental, Long64_t>) {
+    } else if constexpr (std::is_same_v<T, Long64_t>) {
         return 'L';
-    } else if constexpr (std::is_same_v<AROOTFundamental, ULong64_t>) {
+    } else if constexpr (std::is_same_v<T, ULong64_t>) {
         return 'l';
-    } else if constexpr (std::is_same_v<AROOTFundamental, Long_t>) {
+    } else if constexpr (std::is_same_v<T, Long_t>) {
         return 'G';
-    } else if constexpr (std::is_same_v<AROOTFundamental, ULong_t>) {
+    } else if constexpr (std::is_same_v<T, ULong_t>) {
         return 'g';
-    } else if constexpr (std::is_same_v<AROOTFundamental, Bool_t>) {
+    } else if constexpr (std::is_same_v<T, Bool_t>) {
         return 'O';
     }
 }

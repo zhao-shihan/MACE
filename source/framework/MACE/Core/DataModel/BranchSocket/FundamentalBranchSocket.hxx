@@ -16,8 +16,8 @@ public:
     const AROOTFundamental& GetValue() const override { return fValue; }
     void SetValue(const AROOTFundamental& value) override { fValue = value; }
 
-    void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, std::addressof(fValue)); }
-    void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(this->fBranchName, std::addressof(fValue)); }
+    void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, &fValue); }
+    void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(this->fBranchName, &fValue); }
 
 private:
     AROOTFundamental fValue;

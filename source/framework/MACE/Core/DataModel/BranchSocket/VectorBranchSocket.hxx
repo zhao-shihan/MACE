@@ -11,27 +11,27 @@ namespace MACE::Core::DataModel::BranchSocket {
 
 using MACE::Utility::Concept::ArithmeticExcludeBoolChar;
 
-template<IsROOTFundamental AROOTFundamental, int Size>
-class VectorBranchSocket final : public IBranchSocket<Eigen::Vector<AROOTFundamental, Size>> {
+template<IsROOTFundamental AROOTFundamental, int ASize>
+class VectorBranchSocket final : public IBranchSocket<Eigen::Vector<AROOTFundamental, ASize>> {
 public:
-    VectorBranchSocket(const TString& branchName, const std::array<TString, Size>& leafNames, const std::array<AROOTFundamental, Size>& defaultValues);
+    VectorBranchSocket(const TString& branchName, const std::array<TString, ASize>& leafNames, const std::array<AROOTFundamental, ASize>& defaultValues);
     ~VectorBranchSocket() = default;
     VectorBranchSocket(const VectorBranchSocket&) = delete;
     VectorBranchSocket& operator=(const VectorBranchSocket&) = delete;
 
-    const Eigen::Vector<AROOTFundamental, Size>& GetValue() const override { return fVector; }
-    void SetValue(const Eigen::Vector<AROOTFundamental, Size>& vector) override { fVector = vector; }
+    const Eigen::Vector<AROOTFundamental, ASize>& GetValue() const override { return fVector; }
+    void SetValue(const Eigen::Vector<AROOTFundamental, ASize>& vector) override { fVector = vector; }
     template<ArithmeticExcludeBoolChar T>
-    Eigen::Vector<T, Size> GetValue() const { return fVector.template cast<T>(); }
+    Eigen::Vector<T, ASize> GetValue() const { return fVector.template cast<T>(); }
     template<ArithmeticExcludeBoolChar T>
-    void SetValue(const Eigen::Vector<T, Size>& vector) { fVector = vector.template cast<AROOTFundamental>(); }
+    void SetValue(const Eigen::Vector<T, ASize>& vector) { fVector = vector.template cast<AROOTFundamental>(); }
 
     void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, fVector.data(), fLeafList); }
     void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(this->fBranchName, fVector.data()); }
 
 private:
     TString fLeafList;
-    Eigen::Vector<AROOTFundamental, Size> fVector;
+    Eigen::Vector<AROOTFundamental, ASize> fVector;
 };
 
 using Vector2FBranchSocket = VectorBranchSocket<Float_t, 2>;
