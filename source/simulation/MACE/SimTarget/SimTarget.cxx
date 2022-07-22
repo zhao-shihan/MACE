@@ -11,8 +11,8 @@ int main(int argc, char* argv[]) {
 
     bool interactive = (argc == 1);
 
-    const auto randEng = std::make_unique<CLHEP::MTwistEngine>(4357L);
-    G4Random::setTheEngine(randEng.get());
+    CLHEP::MTwistEngine randEng(4357);
+    G4Random::setTheEngine(&randEng);
 
     // DetectorConstruction, PhysicsList, ActionInitialization are instantiated in RunManager constructor.
     const auto runManager = std::make_unique<MACE::SimTarget::RunManager>();
