@@ -6,14 +6,17 @@
 
 namespace MACE::Environment::CLI {
 
-class BasicCLI : public argparse::ArgumentParser {
+class BasicCLI {
 public:
     BasicCLI();
 
-    auto GetVerboseLevel() { return static_cast<VerboseLevel>(get<int>("-V")); }
+    const auto& GetArgParser() const { return fArgParser; }
+    void ParseArgs(int argc, const char* const argv[]);
 
-private:
-    static bool fgInstantiated;
+    auto GetVerboseLevel() { return static_cast<VerboseLevel>(fArgParser.get<int>("-V")); }
+
+protected:
+    argparse::ArgumentParser fArgParser;
 };
 
 } // namespace MACE::Environment::CLI

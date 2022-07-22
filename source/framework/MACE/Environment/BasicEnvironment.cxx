@@ -7,10 +7,6 @@
 #include <stdexcept>
 #include <system_error>
 
-#if MACE_SIGNAL_HANDLER
-    #include "MACE/Environment/detail/SignalHandler.hxx"
-#endif
-
 namespace MACE::Environment {
 
 ObserverPtr<BasicEnvironment> BasicEnvironment::fgBasicEnvironmentInstance = nullptr;
@@ -18,12 +14,8 @@ bool BasicEnvironment::fgBasicEnvironmentFinalized = false;
 
 BasicEnvironment::BasicEnvironment(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> optCLI,
                                    VerboseLevel verboseLevel, bool printStartupMessage) :
+    fSignalHandler(),
     fVerboseLevel(verboseLevel),
-#if MACE_SIGNAL_HANDLER
-    fSignalHandler(std::make_unique<Detail::SignalHandler>()),
-#else
-    fSignalHandler(nullptr),
-#endif
     fSingletonFactory() {
     // Check double construction
     if (Initialized()) {
@@ -33,7 +25,7 @@ BasicEnvironment::BasicEnvironment(int argc, char* argv[], std::optional<std::re
     if (optCLI.has_value()) {
         auto& cli = optCLI->get();
         // Parse
-        DoCLIParse(argc, argv, cli);
+        cli.ParseArgs(argc, argv);
         // Get args
         fVerboseLevel = cli.GetVerboseLevel();
     }
@@ -75,16 +67,6 @@ void BasicEnvironment::PrintStartupMessageBody(int argc, char* argv[]) const {
             std::cout << "  argv[" << i << "]: " << argv[i] << '\n';
         }
         std::cout << std::flush;
-    }
-}
-
-void BasicEnvironment::DoCLIParse(int argc, const char* const argv[], CLI::BasicCLI& cli) {
-    try {
-        cli.parse_args(argc, argv);
-    } catch (const std::runtime_error& exception) {
-        std::cerr << exception.what() << '\n'
-                  << "Try: " << argv[0] << " --help" << std::endl;
-        std::exit(EXIT_FAILURE);
     }
 }
 

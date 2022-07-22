@@ -1,19 +1,20 @@
 #pragma once
 
-#if MACE_SIGNAL_HANDLER
+namespace MACE::Environment {
 
-namespace MACE::Environment::Detail {
+class BasicEnvironment;
+
+namespace Detail {
 
 class SignalHandler final {
-public:
+    friend class Environment::BasicEnvironment;
+
+private:
     SignalHandler();
     SignalHandler(const SignalHandler&) = delete;
     SignalHandler& operator=(const SignalHandler&) = delete;
-
-private:
-    static bool fgInstantiated;
 };
 
-} // namespace MACE::Environment::Detail
+} // namespace Detail
 
-#endif
+} // namespace MACE::Environment

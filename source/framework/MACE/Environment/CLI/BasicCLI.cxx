@@ -6,16 +6,15 @@
 
 namespace MACE::Environment::CLI {
 
-bool BasicCLI::fgInstantiated = false;
-
 BasicCLI::BasicCLI() :
-    argparse::ArgumentParser({}, MACE_VERSION_STRING) {
-    if (fgInstantiated) {
+    fArgParser({}, MACE_VERSION_STRING) {
+    if (static bool gInstantiated = false; gInstantiated) {
         throw std::logic_error("MACE::Environment::CLI::BasicCLI: Trying to construct CLI twice");
+    } else {
+        gInstantiated = true;
     }
-    fgInstantiated = true;
 
-    add_argument("-V", "--verbose")
+    fArgParser.add_argument("-V", "--verbose")
         .scan<'i', int>()
         .default_value(static_cast<int>(VerboseLevel::Warning))
         .required()
@@ -36,6 +35,16 @@ BasicCLI::BasicCLI() :
             }
             return parsedVerbose;
         });
+}
+
+void BasicCLI::ParseArgs(int argc, const char* const argv[]) {
+    try {
+        fArgParser.parse_args(argc, argv);
+    } catch (const std::runtime_error& exception) {
+        std::cerr << exception.what() << '\n'
+                  << "Try: " << argv[0] << " --help" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
 }
 
 } // namespace MACE::Environment::CLI

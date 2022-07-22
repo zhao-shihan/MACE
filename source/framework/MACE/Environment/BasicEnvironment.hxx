@@ -1,11 +1,11 @@
 #pragma once
 
+#include "MACE/Environment/detail/SignalHandler.hxx"
 #include "MACE/Environment/Resource/detail/SingletonFactory.hxx"
 #include "MACE/Environment/VerboseLevel.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include <functional>
-#include <memory>
 #include <optional>
 
 namespace MACE::Environment {
@@ -15,16 +15,6 @@ namespace CLI {
 class BasicCLI;
 
 } // namespace CLI
-
-#if MACE_SIGNAL_HANDLER
-
-namespace Detail {
-
-class SignalHandler;
-
-} // namespace Detail
-
-#endif
 
 using MACE::Utility::ObserverPtr;
 
@@ -48,11 +38,8 @@ protected:
     void PrintStartupMessageBody(int argc, char* argv[]) const;
 
 private:
-    static void DoCLIParse(int argc, const char* const argv[], CLI::BasicCLI& cli);
-
-private:
+    Detail::SignalHandler fSignalHandler;
     VerboseLevel fVerboseLevel;
-    std::unique_ptr<Detail::SignalHandler> fSignalHandler;
     Resource::Detail::SingletonFactory fSingletonFactory;
 
     static ObserverPtr<BasicEnvironment> fgBasicEnvironmentInstance;
