@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Environment/detail/SignalHandler.hxx"
-#include "MACE/Environment/Resource/detail/SingletonFactory.hxx"
+#include "MACE/Environment/Memory/detail/SingletonFactory.hxx"
 #include "MACE/Environment/VerboseLevel.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 

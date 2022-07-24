@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Core/DataFactory.hxx"
-#include "MACE/Environment/Resource/Singleton.hxx"
+#include "MACE/Environment/Memory/Singleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4String.hh"

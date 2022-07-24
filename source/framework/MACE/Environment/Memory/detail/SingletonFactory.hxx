@@ -50,4 +50,4 @@ private:
 
 } // namespace MACE::Environment
 
-#include "MACE/Environment/Resource/detail/SingletonFactory.inl"
+#include "MACE/Environment/Memory/detail/SingletonFactory.inl"

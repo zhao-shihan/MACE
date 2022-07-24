@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Resource/Singleton.hxx"
+#include "MACE/Environment/Memory/Singleton.hxx"
 #include "MACE/SimulationG4/Generator/SurfaceMuon.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 

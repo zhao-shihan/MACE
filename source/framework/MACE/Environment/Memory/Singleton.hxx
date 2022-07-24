@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/Environment/Resource/detail/ISingletonBase.hxx"
-#include "MACE/Environment/Resource/detail/SingletonFactory.hxx"
+#include "MACE/Environment/Memory/detail/ISingletonBase.hxx"
+#include "MACE/Environment/Memory/detail/SingletonFactory.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include <stdexcept>
@@ -167,4 +167,4 @@ using SingletonFactory = Detail::SingletonFactory;
 
 } // namespace MACE::Environment::Memory
 
-#include "MACE/Environment/Resource/Singleton.inl"
+#include "MACE/Environment/Memory/Singleton.inl"

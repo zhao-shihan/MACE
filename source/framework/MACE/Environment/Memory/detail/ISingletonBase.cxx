@@ -1,4 +1,4 @@
-#include "MACE/Environment/Resource/detail/ISingletonBase.hxx"
+#include "MACE/Environment/Memory/detail/ISingletonBase.hxx"
 
 namespace MACE::Environment::Memory::Detail {
 

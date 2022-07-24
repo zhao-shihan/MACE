@@ -1,5 +1,5 @@
-#include "MACE/Environment/Resource/detail/ISingletonBase.hxx"
-#include "MACE/Environment/Resource/detail/SingletonFactory.hxx"
+#include "MACE/Environment/Memory/detail/ISingletonBase.hxx"
+#include "MACE/Environment/Memory/detail/SingletonFactory.hxx"
 
 namespace MACE::Environment::Memory::Detail {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Resource/Singleton.hxx"
+#include "MACE/Environment/Memory/Singleton.hxx"
 
 #include "G4ParticleDefinition.hh"
 
