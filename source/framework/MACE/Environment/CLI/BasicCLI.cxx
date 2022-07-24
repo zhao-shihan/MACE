@@ -7,6 +7,7 @@
 namespace MACE::Environment::CLI {
 
 BasicCLI::BasicCLI() :
+    NonCopyableBase(),
     fArgParser({}, MACE_VERSION_STRING) {
     if (static bool gInstantiated = false; gInstantiated) {
         throw std::logic_error("MACE::Environment::CLI::BasicCLI: Trying to construct CLI twice");

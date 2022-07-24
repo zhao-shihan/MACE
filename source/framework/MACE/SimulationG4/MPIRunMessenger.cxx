@@ -4,7 +4,7 @@
 namespace MACE::SimulationG4 {
 
 MPIRunMessenger::MPIRunMessenger() :
-    Environment::Memory::Singleton<MPIRunMessenger>(),
+    Singleton<MPIRunMessenger>(),
     G4UImessenger(),
     fMPIRunManager(nullptr),
     fDirectory("/MPIRun/"),

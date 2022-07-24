@@ -6,7 +6,7 @@
 namespace MACE::SimulationG4::Generator {
 
 SurfaceMuonMessenger::SurfaceMuonMessenger() :
-    Environment::Memory::Singleton<SurfaceMuonMessenger>(),
+    Singleton<SurfaceMuonMessenger>(),
     G4UImessenger(),
     fSurfaceMuonGenerator(nullptr),
     fDirectory("/MACE/Generator/SurfaceMuon/"),

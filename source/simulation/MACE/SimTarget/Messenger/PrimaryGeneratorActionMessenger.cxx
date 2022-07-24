@@ -4,7 +4,7 @@
 namespace MACE::SimTarget::Messenger {
 
 PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger() :
-    Environment::Memory::Singleton<PrimaryGeneratorActionMessenger>(),
+    Singleton<PrimaryGeneratorActionMessenger>(),
     G4UImessenger(),
     fPrimaryGeneratorAction(nullptr),
     fSetMuonsForEachG4Event("/MACE/Generator/SurfaceMuon/SetMuonsForEachG4Event", this) {

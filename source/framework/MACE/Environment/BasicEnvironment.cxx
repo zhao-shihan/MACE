@@ -14,6 +14,7 @@ bool BasicEnvironment::fgBasicEnvironmentFinalized = false;
 
 BasicEnvironment::BasicEnvironment(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> optCLI,
                                    VerboseLevel verboseLevel, bool printStartupMessage) :
+    NonCopyableBase(),
     fSignalHandler(),
     fVerboseLevel(verboseLevel),
     fSingletonFactory() {

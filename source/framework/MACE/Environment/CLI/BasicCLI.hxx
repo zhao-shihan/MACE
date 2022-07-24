@@ -1,12 +1,13 @@
 #pragma once
 
 #include "MACE/Environment/VerboseLevel.hxx"
+#include "MACE/Utility/NonCopyableBase.hxx"
 
 #include "argparse/argparse.hpp"
 
 namespace MACE::Environment::CLI {
 
-class BasicCLI {
+class BasicCLI : public Utility::NonCopyableBase {
 public:
     BasicCLI();
 
