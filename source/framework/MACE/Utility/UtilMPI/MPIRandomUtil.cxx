@@ -1,4 +1,5 @@
 #include "MACE/Environment/MPIEnvironment.hxx"
+#include "MACE/Utility/UtilMPI/CheckedMPICall.hxx"
 #include "MACE/Utility/UtilMPI/MPIRandomUtil.hxx"
 
 #include "CLHEP/Random/RandomEngine.h"
@@ -38,7 +39,7 @@ void MPIReSeedCLHEPRandom(CLHEP::HepRandomEngine* randEng) {
         }
     }
 
-    MPI_Scatter(seedSend.data(), 1, MPI_LONG, &seedRecv, 1, MPI_LONG, 0, MPI_COMM_WORLD);
+    MACE_CHECKED_MPI_CALL(MPI_Scatter, seedSend.data(), 1, MPI_LONG, &seedRecv, 1, MPI_LONG, 0, MPI_COMM_WORLD)
     randEng->setSeed(seedRecv, 3);
 }
 

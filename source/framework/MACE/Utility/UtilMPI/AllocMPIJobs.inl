@@ -13,9 +13,9 @@ IntegralIndexRange<AIndex> AllocMPIJobsJobWise(AIndex jobBegin, AIndex jobEnd, M
                                            MPIEnvironment::WorldCommSize(), MPIEnvironment::WorldCommRank());
     } else {
         int commRank;
-        MPI_Comm_rank(comm, &commRank);
+        MACE_CHECKED_MPI_CALL(MPI_Comm_rank, comm, &commRank)
         int commSize;
-        MPI_Comm_size(comm, &commSize);
+        MACE_CHECKED_MPI_CALL(MPI_Comm_size, comm, &commSize)
         return AllocMPIJobsJobWise<AIndex>(jobBegin, jobEnd,
                                            commSize, commRank);
     }
@@ -44,9 +44,9 @@ IntegralIndexRange<AIndex> AllocMPIJobsWorkerWise(AIndex jobBegin, AIndex jobEnd
                                               MPIEnvironment::WorldCommSize(), MPIEnvironment::WorldCommRank());
     } else {
         int commRank;
-        MPI_Comm_rank(comm, &commRank);
+        MACE_CHECKED_MPI_CALL(MPI_Comm_rank, comm, &commRank)
         int commSize;
-        MPI_Comm_size(comm, &commSize);
+        MACE_CHECKED_MPI_CALL(MPI_Comm_size, comm, &commSize)
         return AllocMPIJobsWorkerWise<AIndex>(jobBegin, jobEnd,
                                               commSize, commRank);
     }

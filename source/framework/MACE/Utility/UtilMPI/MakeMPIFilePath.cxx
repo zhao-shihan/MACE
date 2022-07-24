@@ -1,4 +1,5 @@
 #include "MACE/Environment/MPIEnvironment.hxx"
+#include "MACE/Utility/UtilMPI/CheckedMPICall.hxx"
 #include "MACE/Utility/UtilMPI/MakeMPIFilePath.hxx"
 
 #include <array>
@@ -34,7 +35,7 @@ std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_vi
         // master rank collects processor names
         std::vector<std::array<char, MPI_MAX_PROCESSOR_NAME>> processorNamesRecv;
         if (MPIEnvironment::IsWorldMaster()) { processorNamesRecv.resize(MPIEnvironment::WorldCommSize()); }
-        MPI_Gather(processorNameSend, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, processorNamesRecv.data(), MPI_MAX_PROCESSOR_NAME, MPI_CHAR, 0, comm);
+        MACE_CHECKED_MPI_CALL(MPI_Gather, processorNameSend, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, processorNamesRecv.data(), MPI_MAX_PROCESSOR_NAME, MPI_CHAR, 0, comm)
 
         std::vector<std::array<char, pathMax>> filePathsSend;
         if (MPIEnvironment::IsWorldMaster()) {
@@ -92,7 +93,7 @@ std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_vi
         // Third: Scatter file paths
 
         char filePathRecv[pathMax];
-        MPI_Scatter(std::as_const(filePathsSend).data(), pathMax, MPI_CHAR, filePathRecv, pathMax, MPI_CHAR, 0, comm);
+        MACE_CHECKED_MPI_CALL(MPI_Scatter, std::as_const(filePathsSend).data(), pathMax, MPI_CHAR, filePathRecv, pathMax, MPI_CHAR, 0, comm)
 
         return std::filesystem::path(filePathRecv);
     }

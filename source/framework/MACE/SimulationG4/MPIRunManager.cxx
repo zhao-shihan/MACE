@@ -4,6 +4,7 @@
 #include "MACE/SimulationG4/MPIRunMessenger.hxx"
 #include "MACE/Utility/Math/IntegerPower.hxx"
 #include "MACE/Utility/UtilMPI/AllocMPIJobs.hxx"
+#include "MACE/Utility/UtilMPI/CheckedMPICall.hxx"
 #include "MACE/Utility/UtilMPI/MPIRandomUtil.hxx"
 
 #include "G4Exception.hh"
@@ -76,7 +77,7 @@ void MPIRunManager::BeamOn(G4int nEvent, const char* macroFile, G4int nSelect) {
 
 void MPIRunManager::RunInitialization() {
     // wait for everyone to start
-    MPI_Barrier(MPI_COMM_WORLD);
+    MACE_CHECKED_MPI_CALL(MPI_Barrier, MPI_COMM_WORLD)
     // start the run timer
     fRunBeginSystemTime = std::chrono::system_clock::now();
     fRunBeginWallTime = std::chrono::steady_clock::now();
@@ -122,7 +123,7 @@ void MPIRunManager::RunTermination() {
     fRunWallTime = std::chrono::steady_clock::now() - fRunBeginWallTime;
     fRunCPUTime = std::clock() - fRunBeginCPUTime;
     // wait for everyone to finish
-    MPI_Barrier(MPI_COMM_WORLD);
+    MACE_CHECKED_MPI_CALL(MPI_Barrier, MPI_COMM_WORLD)
     // run end report
     RunEndReport();
 }
@@ -161,11 +162,10 @@ void MPIRunManager::EventEndReport() const {
         const auto eta = avgEventWallTime * nEventRemain;
         const auto etaError = 1.959963984540054 * std::sqrt(fNDevEventWallTime / (numberOfEventProcessed - 1)) * nEventRemain; // 95% C.L. (assuming gaussian)
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-        const auto precisionOfG4cout = G4cout.precision(); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
-        G4cout << std::setprecision(3)
-               << std::put_time(std::localtime(&now), "%c (UTC%z) > Event ") << endedEventID << " finished in rank " << MPIEnvironment::WorldCommRank() << ".\n"
-               << "  ETA: " << eta << " +/- " << etaError << " s. Progress of the rank: " << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " (" << 100 * (float)numberOfEventProcessed / (float)numberOfEventToBeProcessed << "%)." << G4endl
-               << std::setprecision(precisionOfG4cout);
+        const auto precisionOfG4cout = G4cout.precision(3); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
+        G4cout << std::put_time(std::localtime(&now), "%c (UTC%z) > Event ") << endedEventID << " finished in rank " << MPIEnvironment::WorldCommRank() << ".\n"
+               << "  ETA: " << eta << " +/- " << etaError << " s. Progress of the rank: " << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " (" << 100 * (float)numberOfEventProcessed / (float)numberOfEventToBeProcessed << "%)." << G4endl;
+        G4cout.precision(precisionOfG4cout);
     }
 }
 

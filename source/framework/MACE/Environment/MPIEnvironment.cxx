@@ -1,4 +1,5 @@
 #include "MACE/Environment/MPIEnvironment.hxx"
+#include "MACE/Utility/UtilMPI/CheckedMPICall.hxx"
 
 #include "mpi.h"
 
@@ -29,7 +30,7 @@ MPIEnvironment::MPIEnvironment(int argc, char* argv[], std::optional<std::refere
 
 MPIEnvironment::~MPIEnvironment() {
     // Finalize MPI
-    MPI_Finalize();
+    MACE_CHECKED_MPI_CALL_NOEXCEPT(MPI_Finalize)
     // Update status
     fgMPIEnvironmentFinalized = true;
 }
@@ -42,23 +43,23 @@ void MPIEnvironment::PrintStartupMessageBody(int argc, char* argv[]) const {
         << " Size of the MPI world communicator: " << fWorldCommSize << std::endl;
 }
 
-void MPIEnvironment::InitializeMPIAndWorldProperties(int& argc, char**& argv) {
+void MPIEnvironment::InitializeMPIAndWorldProperties(int argc, char** argv) {
     // Confirm MPI condition
     int mpiInitialized;
-    CheckedMPICall("MPI_Initialized", MPI_Initialized, &mpiInitialized);
+    MACE_CHECKED_MPI_CALL(MPI_Initialized, &mpiInitialized)
     if (mpiInitialized) {
         throw std::logic_error("MACE::Environment::MPIEnvironment: Trying to call MPI_Init twice");
     }
     // Initialize MPI
-    CheckedMPICall("MPI_Init", MPI_Init, &argc, &argv);
+    MACE_CHECKED_MPI_CALL(MPI_Init, &argc, &argv)
     // Initialize fWorldCommRank
-    CheckedMPICall("MPI_Comm_rank", MPI_Comm_rank, MPI_COMM_WORLD, &fWorldCommRank);
+    MACE_CHECKED_MPI_CALL(MPI_Comm_rank, MPI_COMM_WORLD, &fWorldCommRank)
     // Initialize fWorldCommSize
-    CheckedMPICall("MPI_Comm_size", MPI_Comm_size, MPI_COMM_WORLD, &fWorldCommSize);
+    MACE_CHECKED_MPI_CALL(MPI_Comm_size, MPI_COMM_WORLD, &fWorldCommSize)
     // Initialize fProcessorName
     char processorName[MPI_MAX_PROCESSOR_NAME];
     int processorNameLength;
-    CheckedMPICall("MPI_Get_processor_name", MPI_Get_processor_name, processorName, &processorNameLength);
+    MACE_CHECKED_MPI_CALL(MPI_Get_processor_name, processorName, &processorNameLength)
     fProcessorName.assign(processorName, processorNameLength);
     fProcessorName.shrink_to_fit();
 }

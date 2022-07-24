@@ -32,9 +32,7 @@ protected:
     void PrintStartupMessageBody(int argc, char* argv[]) const;
 
 private:
-    template<typename... Args>
-    void CheckedMPICall(const char* funcName, int (*MPIFunc)(std::decay_t<Args>...), Args&&... args);
-    void InitializeMPIAndWorldProperties(int& argc, char**& argv);
+    void InitializeMPIAndWorldProperties(int argc, char** argv);
 
 private:
     int fWorldCommRank;
@@ -46,5 +44,3 @@ private:
 };
 
 } // namespace MACE::Environment
-
-#include "MACE/Environment/MPIEnvironment.inl"
