@@ -4,7 +4,7 @@
 namespace MACE::SimTarget::Messenger {
 
 AnalysisMessenger::AnalysisMessenger() :
-    Environment::Resource::Singleton<AnalysisMessenger>(),
+    Environment::Memory::Singleton<AnalysisMessenger>(),
     G4UImessenger(),
     fAnalysis(nullptr),
     fDirectory("/MACE/Analysis/"),

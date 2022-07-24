@@ -22,8 +22,8 @@ class MCPHit;
 using Core::DataFactory;
 using MACE::Utility::ObserverPtr;
 
-class Analysis final : public Environment::Resource::Singleton<Analysis> {
-    friend Environment::Resource::SingletonFactory;
+class Analysis final : public Environment::Memory::Singleton<Analysis> {
+    friend Environment::Memory::SingletonFactory;
 
 private:
     Analysis();

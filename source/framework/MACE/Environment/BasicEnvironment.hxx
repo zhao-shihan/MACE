@@ -40,7 +40,7 @@ protected:
 private:
     Detail::SignalHandler fSignalHandler;
     VerboseLevel fVerboseLevel;
-    Resource::Detail::SingletonFactory fSingletonFactory;
+    Memory::Detail::SingletonFactory fSingletonFactory;
 
     static ObserverPtr<BasicEnvironment> fgBasicEnvironmentInstance;
     static bool fgBasicEnvironmentFinalized;

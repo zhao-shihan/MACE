@@ -1,12 +1,20 @@
-namespace MACE::Environment::Resource {
+namespace MACE::Environment::Memory {
 
 template<class ADerived>
-ObserverPtr<ObserverPtr<void>> Singleton<ADerived>::fgInstanceObjectNodePtr = nullptr;
+ObserverPtr<Detail::SingletonFactory::InstanceNode> Singleton<ADerived>::fgInstanceNode = nullptr;
+
+template<class ADerived>
+ADerived& Singleton<ADerived>::Instance() {
+    if (fgInstanceNode == nullptr) [[unlikely]] {
+        Detail::SingletonFactory::Instance().Instantiate<ADerived>();
+    }
+    return *static_cast<ObserverPtr<ADerived>>(fgInstanceNode->first);
+}
 
 template<class ADerived>
 Singleton<ADerived>::Singleton() {
-    if (fgInstanceObjectNodePtr != nullptr) {
-        throw std::logic_error(std::string("MACE::Environment::Resource::Singleton: Trying to construct ")
+    if (fgInstanceNode != nullptr) {
+        throw std::logic_error(std::string("MACE::Environment::Memory::Singleton: Trying to construct ")
                                    .append(typeid(ADerived).name())
                                    .append(" (environmental singleton) twice"));
     }
@@ -14,18 +22,10 @@ Singleton<ADerived>::Singleton() {
 
 template<class ADerived>
 Singleton<ADerived>::~Singleton() {
-    if (fgInstanceObjectNodePtr != nullptr) {
-        *fgInstanceObjectNodePtr = nullptr;
-        fgInstanceObjectNodePtr = nullptr;
+    if (fgInstanceNode != nullptr) {
+        *fgInstanceNode = {nullptr, nullptr};
+        fgInstanceNode = nullptr;
     }
 }
 
-template<class ADerived>
-ADerived& Singleton<ADerived>::Instance() {
-    if (fgInstanceObjectNodePtr == nullptr) [[unlikely]] {
-        Detail::SingletonFactory::Instance().Instantiate<ADerived>();
-    }
-    return *static_cast<ObserverPtr<ADerived>>(*fgInstanceObjectNodePtr);
-}
-
-} // namespace MACE::Environment::Resource
+} // namespace MACE::Environment::Memory

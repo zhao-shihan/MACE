@@ -36,7 +36,7 @@ protected:
 };
 
 template<class ADerived>
-class ISingletonDescription : public Environment::Resource::Singleton<ADerived>,
+class ISingletonDescription : public Environment::Memory::Singleton<ADerived>,
                               public IDescription {
 protected:
     using IDescription::IDescription;

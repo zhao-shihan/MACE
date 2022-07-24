@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MACE/Environment/Resource/detail/ISingletonBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include <forward_list>
@@ -15,11 +14,13 @@ namespace MACE::Environment {
 
 class BasicEnvironment;
 
-namespace Resource::Detail {
+namespace Memory::Detail {
+
+class ISingletonBase;
 
 using MACE::Utility::ObserverPtr;
 
-/// @brief Implementation detail of MACE::Environment::Resource::Singleton.
+/// @brief Implementation detail of MACE::Environment::Memory::Singleton.
 /// Not API.
 class SingletonFactory final {
     friend class Environment::BasicEnvironment;
@@ -30,19 +31,22 @@ private:
     SingletonFactory(const SingletonFactory&) = delete;
     SingletonFactory& operator=(const SingletonFactory&) = delete;
 
-public: // Expose to MACE::Environment::Resource::Singleton
+public: // Expose to MACE::Environment::Memory::Singleton
+    using InstanceList = std::forward_list<std::pair<ObserverPtr<void>, ISingletonBase*>>;
+    using InstanceNode = InstanceList::value_type;
+
     static auto& Instance() { return *fgInstance; }
     template<class ASingleton>
     void Instantiate();
 
 private:
-    std::forward_list<std::pair<ISingletonBase*, ObserverPtr<void>>> fSingletonInstanceList;
-    std::map<std::type_index, decltype(fSingletonInstanceList)::iterator> fSingletonTypeCollection;
+    InstanceList fSingletonInstanceList;
+    std::map<std::type_index, InstanceList::iterator> fSingletonTypeCollection;
 
     static ObserverPtr<SingletonFactory> fgInstance;
 };
 
-} // namespace Resource::Detail
+} // namespace Memory::Detail
 
 } // namespace MACE::Environment
 

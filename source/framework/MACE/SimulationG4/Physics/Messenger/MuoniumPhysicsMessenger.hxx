@@ -22,9 +22,9 @@ namespace Messenger {
 
 using Utility::ObserverPtr;
 
-class MuoniumPhysicsMessenger final : public Environment::Resource::Singleton<MuoniumPhysicsMessenger>,
+class MuoniumPhysicsMessenger final : public Environment::Memory::Singleton<MuoniumPhysicsMessenger>,
                                       public G4UImessenger {
-    friend Environment::Resource::SingletonFactory;
+    friend Environment::Memory::SingletonFactory;
 
 private:
     MuoniumPhysicsMessenger();

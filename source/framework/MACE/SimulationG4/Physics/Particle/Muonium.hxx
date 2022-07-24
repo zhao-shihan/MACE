@@ -6,9 +6,9 @@
 
 namespace MACE::SimulationG4::Physics::Particle {
 
-class Muonium final : public Environment::Resource::Singleton<Muonium>,
+class Muonium final : public Environment::Memory::Singleton<Muonium>,
                       public G4ParticleDefinition {
-    friend Environment::Resource::SingletonFactory;
+    friend Environment::Memory::SingletonFactory;
 
 private:
     Muonium();

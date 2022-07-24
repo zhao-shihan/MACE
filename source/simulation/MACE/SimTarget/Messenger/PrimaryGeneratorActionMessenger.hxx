@@ -19,9 +19,9 @@ namespace Messenger {
 
 using Utility::ObserverPtr;
 
-class PrimaryGeneratorActionMessenger final : public Environment::Resource::Singleton<PrimaryGeneratorActionMessenger>,
+class PrimaryGeneratorActionMessenger final : public Environment::Memory::Singleton<PrimaryGeneratorActionMessenger>,
                                               public G4UImessenger {
-    friend Environment::Resource::SingletonFactory;
+    friend Environment::Memory::SingletonFactory;
 
 private:
     PrimaryGeneratorActionMessenger();

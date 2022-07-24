@@ -12,9 +12,9 @@ namespace MACE::SimulationG4::Generator {
 
 using Utility::ObserverPtr;
 
-class SurfaceMuonMessenger final : public Environment::Resource::Singleton<SurfaceMuonMessenger>,
+class SurfaceMuonMessenger final : public Environment::Memory::Singleton<SurfaceMuonMessenger>,
                                    public G4UImessenger {
-    friend Environment::Resource::SingletonFactory;
+    friend Environment::Memory::SingletonFactory;
 
 private:
     SurfaceMuonMessenger();

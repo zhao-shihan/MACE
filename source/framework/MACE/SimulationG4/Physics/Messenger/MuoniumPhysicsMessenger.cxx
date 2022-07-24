@@ -5,7 +5,7 @@
 namespace MACE::SimulationG4::Physics::Messenger {
 
 MuoniumPhysicsMessenger::MuoniumPhysicsMessenger() :
-    Environment::Resource::Singleton<MuoniumPhysicsMessenger>(),
+    Environment::Memory::Singleton<MuoniumPhysicsMessenger>(),
     G4UImessenger(),
     fMuoniumFormation(nullptr),
     fMuoniumTransport(nullptr),

@@ -10,7 +10,7 @@
 namespace MACE::Core::Geometry::Description {
 
 class CDC final : public ISingletonDescription<CDC> {
-    friend Environment::Resource::SingletonFactory;
+    friend Environment::Memory::SingletonFactory;
 
 private:
     CDC();

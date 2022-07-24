@@ -22,9 +22,9 @@ namespace Messenger {
 
 using Utility::ObserverPtr;
 
-class GeometryMessenger final : public Environment::Resource::Singleton<GeometryMessenger>,
+class GeometryMessenger final : public Environment::Memory::Singleton<GeometryMessenger>,
                                 public G4UImessenger {
-    friend Environment::Resource::SingletonFactory;
+    friend Environment::Memory::SingletonFactory;
 
 private:
     GeometryMessenger();

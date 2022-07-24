@@ -16,9 +16,9 @@ namespace Messenger {
 
 using Utility::ObserverPtr;
 
-class AnalysisMessenger final : public Environment::Resource::Singleton<AnalysisMessenger>,
+class AnalysisMessenger final : public Environment::Memory::Singleton<AnalysisMessenger>,
                                 public G4UImessenger {
-    friend Environment::Resource::SingletonFactory;
+    friend Environment::Memory::SingletonFactory;
 
 private:
     AnalysisMessenger();

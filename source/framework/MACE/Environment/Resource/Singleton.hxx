@@ -8,7 +8,7 @@
 #include <string>
 #include <typeinfo>
 
-namespace MACE::Environment::Resource {
+namespace MACE::Environment::Memory {
 
 using MACE::Utility::ObserverPtr;
 
@@ -17,20 +17,20 @@ using MACE::Utility::ObserverPtr;
 /// @details This singleton provides a light weight, totally lazy (object
 /// on heap), and high performance (Instance() call faster than magic static
 /// pattern) method of constructing a (maybe series of) singleton class(es).
-/// However it's not a traditional singleton but correlated to environment.
-/// The MACE environment handles its object RAII-ly.
+/// However it's not a traditional singleton which correlates to environment.
+/// The MACE environment handles its object in RAII style.
 /// Usage:
 /// Step1 (Inheritance): Inherit this class once (directly or indirectly)
 /// and declare the constructor as private/protected. If you don't except
 /// the singleton object to be explicitly deleted, also declare the destructor
 /// as private/protected.
-/// Step2 (Confirmation): Declare MACE::Environment::Resource::SingletonFactory
+/// Step2 (Confirmation): Declare MACE::Environment::Memory::SingletonFactory
 /// as a friend of your singleton class.
 /// Step3 (Use the instance): YourSingletonClass::Instance(). This call (thread
 /// unsafely) creates an instance of YourSingletonClass and returns the
 /// reference to it.
 /// Step4a (RAII delete, nothing need to do by you): The instance is stored in
-/// an instance of MACE::Environment::Resource::SingletonFactory which is owned
+/// an instance of MACE::Environment::Memory::SingletonFactory which is owned
 /// by the instance of MACE::Environment::BasicEnvironment. When it destructs
 /// (shoulde at the end of main function), the instance of YourSingletonClass
 /// is deleted together with the deletion of singleton factory. If you need to
@@ -141,26 +141,30 @@ using MACE::Utility::ObserverPtr;
 ///     Foo(Example3b::Instance()) // Hello from 3b!
 ///
 /// @attention Singleton constructed by this method is managed by
-/// MACE::Environment::Resource::SingletonFactory, and shares lifetime with
+/// MACE::Environment::Memory::SingletonFactory, and shares lifetime with
 /// MACE::Environment. Call to an Instance() without initialize an environment
 /// has undefined behaviour. Use wisely, think wisely!
 template<class ADerived>
 class Singleton : public Detail::ISingletonBase {
-    friend class Detail::SingletonFactory;
+    friend void Detail::SingletonFactory::Instantiate<ADerived>();
+
+public:
+    static ADerived& Instance();
 
 protected:
     Singleton();
     virtual ~Singleton();
 
-public:
-    static ADerived& Instance();
+private:
+    static bool SingletonFactoryTestInstanceNodePtrNotNull() { return fgInstanceNode != nullptr; }
+    static void SingletonFactorySetInstanceNode(Detail::SingletonFactory::InstanceNode& node) { fgInstanceNode = std::addressof(node); }
 
 private:
-    static ObserverPtr<ObserverPtr<void>> fgInstanceObjectNodePtr; // Points to a node of instance list in SingletFactory
+    static ObserverPtr<Detail::SingletonFactory::InstanceNode> fgInstanceNode; // Points to a node of instance list in SingletFactory
 };
 
 using SingletonFactory = Detail::SingletonFactory;
 
-} // namespace MACE::Environment::Resource
+} // namespace MACE::Environment::Memory
 
 #include "MACE/Environment/Resource/Singleton.inl"

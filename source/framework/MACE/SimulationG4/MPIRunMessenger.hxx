@@ -13,9 +13,9 @@ class MPIRunManager;
 
 using Utility::ObserverPtr;
 
-class MPIRunMessenger final : public Environment::Resource::Singleton<MPIRunMessenger>,
+class MPIRunMessenger final : public Environment::Memory::Singleton<MPIRunMessenger>,
                               public G4UImessenger {
-    friend Environment::Resource::SingletonFactory;
+    friend Environment::Memory::SingletonFactory;
 
 private:
     MPIRunMessenger();

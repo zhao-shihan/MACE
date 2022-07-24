@@ -11,7 +11,7 @@
 namespace MACE::SimMACE {
 
 Analysis::Analysis() :
-    Environment::Resource::Singleton<Analysis>(),
+    Environment::Memory::Singleton<Analysis>(),
     fFile(nullptr),
     fResultName("untitled_SimMACE"),
     fEnableCoincidenceOfEMCal(true),

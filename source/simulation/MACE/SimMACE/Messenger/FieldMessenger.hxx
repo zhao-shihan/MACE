@@ -24,9 +24,9 @@ namespace Messenger {
 
 using Utility::ObserverPtr;
 
-class FieldMessenger final : public Environment::Resource::Singleton<FieldMessenger>,
+class FieldMessenger final : public Environment::Memory::Singleton<FieldMessenger>,
                              public G4UImessenger {
-    friend Environment::Resource::SingletonFactory;
+    friend Environment::Memory::SingletonFactory;
 
 private:
     FieldMessenger();

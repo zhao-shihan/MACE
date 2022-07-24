@@ -5,7 +5,7 @@
 namespace MACE::Core::Geometry::Description {
 
 class Collimator final : public ISingletonDescription<Collimator> {
-    friend Environment::Resource::SingletonFactory;
+    friend Environment::Memory::SingletonFactory;
 
 private:
     Collimator();
