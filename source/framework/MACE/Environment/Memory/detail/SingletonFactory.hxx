@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Utility/NonCopyableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include <forward_list>
@@ -14,7 +15,12 @@ namespace MACE::Environment {
 
 class BasicEnvironment;
 
-namespace Memory::Detail {
+namespace Memory {
+
+template<class T>
+class Singleton;
+
+namespace Detail {
 
 class ISingletonBase;
 
@@ -22,18 +28,18 @@ using MACE::Utility::ObserverPtr;
 
 /// @brief Implementation detail of MACE::Environment::Memory::Singleton.
 /// Not API.
-class SingletonFactory final {
+class SingletonFactory final : public Utility::NonCopyableBase {
     friend class Environment::BasicEnvironment;
+    template<class T>
+    friend class Environment::Memory::Singleton;
+
+private:
+    using InstanceList = std::forward_list<std::pair<ObserverPtr<void>, ISingletonBase*>>;
+    using InstanceNode = InstanceList::value_type;
 
 private:
     SingletonFactory();
     ~SingletonFactory();
-    SingletonFactory(const SingletonFactory&) = delete;
-    SingletonFactory& operator=(const SingletonFactory&) = delete;
-
-public: // Expose to MACE::Environment::Memory::Singleton
-    using InstanceList = std::forward_list<std::pair<ObserverPtr<void>, ISingletonBase*>>;
-    using InstanceNode = InstanceList::value_type;
 
     static auto& Instance() { return *fgInstance; }
     template<class ASingleton>
@@ -46,7 +52,9 @@ private:
     static ObserverPtr<SingletonFactory> fgInstance;
 };
 
-} // namespace Memory::Detail
+} // namespace Detail
+
+} // namespace Memory
 
 } // namespace MACE::Environment
 

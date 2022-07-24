@@ -6,6 +6,7 @@ namespace MACE::Environment::Memory::Detail {
 ObserverPtr<SingletonFactory> SingletonFactory::fgInstance = nullptr;
 
 SingletonFactory::SingletonFactory() :
+    NonCopyableBase(),
     fSingletonInstanceList(),
     fSingletonTypeCollection() {
     if (fgInstance != nullptr) {
