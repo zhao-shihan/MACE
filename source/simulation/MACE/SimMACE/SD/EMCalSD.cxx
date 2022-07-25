@@ -1,4 +1,3 @@
-#include "MACE/SimMACE/Analysis.hxx"
 #include "MACE/SimMACE/RunManager.hxx"
 #include "MACE/SimMACE/SD/EMCalSD.hxx"
 
@@ -12,6 +11,7 @@ namespace MACE::SimMACE::SD {
 using Hit::EMCalHit;
 
 EMCalSD::EMCalSD(const G4String& sdName) :
+    NonCopyableBase(),
     G4VSensitiveDetector(sdName),
     fEventID(-1),
     fHitsCollection(nullptr) {
@@ -45,7 +45,7 @@ G4bool EMCalSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
 }
 
 void EMCalSD::EndOfEvent(G4HCofThisEvent*) {
-    Analysis::Instance().SubmitEMCalHC(fHitsCollection->GetVector());
+    RunManager::Instance().GetAnalysis().SubmitEMCalHC(fHitsCollection->GetVector());
 }
 
 } // namespace MACE::SimMACE::SD

@@ -1,5 +1,4 @@
 #include "MACE/Core/Geometry/Description/CDC.hxx"
-#include "MACE/SimMACE/Analysis.hxx"
 #include "MACE/SimMACE/Region.hxx"
 #include "MACE/SimMACE/RunManager.hxx"
 #include "MACE/SimMACE/SD/CDCSD.hxx"
@@ -14,6 +13,7 @@ namespace MACE::SimMACE::SD {
 using Hit::CDCHit;
 
 CDCSD::CDCSD(const G4String& sdName) :
+    NonCopyableBase(),
     G4VSensitiveDetector(sdName),
     fEventID(-1),
     fHitsCollection(nullptr),
@@ -54,8 +54,8 @@ G4bool CDCSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         monitoring = fEnteredPointList.emplace(std::make_pair(trackID, cellID), *step->GetPostStepPoint()).first;
         isMonitoring = true;
     }
-    if (isMonitoring and step->IsLastStepInVolume() and                                                                      // is exiting, and make sure has entered before,
-        static_cast<Region*>(track->GetNextVolume()->GetLogicalVolume()->GetRegion())->GetType() != Region::kDefaultSolid) { // but the track is not heading into sense wire!
+    if (isMonitoring and step->IsLastStepInVolume() and                                                                         // is exiting, and make sure has entered before,
+        static_cast<Region*>(track->GetNextVolume()->GetLogicalVolume()->GetRegion())->GetType() != RegionType::DefaultSolid) { // but the track is not heading into sense wire!
         // retrive layerID
         const auto layerID = touchable->GetReplicaNumber(2);
         // retrive entering time and position
@@ -105,7 +105,7 @@ G4bool CDCSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
 }
 
 void CDCSD::EndOfEvent(G4HCofThisEvent*) {
-    Analysis::Instance().SubmitSpectrometerHC(fHitsCollection->GetVector());
+    RunManager::Instance().GetAnalysis().SubmitSpectrometerHC(fHitsCollection->GetVector());
     fEnteredPointList.clear();
 }
 

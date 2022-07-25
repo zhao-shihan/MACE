@@ -11,7 +11,7 @@
 namespace MACE::SimMACE {
 
 Analysis::Analysis() :
-    Singleton<Analysis>(),
+    NonCopyableBase(),
     fFile(nullptr),
     fResultName("untitled_SimMACE"),
     fEnableCoincidenceOfEMCal(true),
@@ -53,9 +53,9 @@ void Analysis::WriteEvent(G4int repetitionID) {
         fCDCHitTree = fDataHub.CreateTree<CDCSimHit>(repetitionID);
     }
 
-    fDataHub.FillTree<EMCalSimHit>(*fEMCalHitList, *fEMCalHitTree, true);
-    fDataHub.FillTree<MCPSimHit>(*fMCPHitList, *fMCPHitTree, true);
-    fDataHub.FillTree<CDCSimHit>(*fCDCHitList, *fCDCHitTree, true);
+    fDataHub.FillTree(*fEMCalHitList, *fEMCalHitTree, true);
+    fDataHub.FillTree(*fMCPHitList, *fMCPHitTree, true);
+    fDataHub.FillTree(*fCDCHitList, *fCDCHitTree, true);
 
     // dont forget to update repID!
     fRepetitionIDOfLastG4Event = repetitionID;

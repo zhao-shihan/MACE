@@ -1,16 +1,16 @@
 #pragma once
 
+#include "MACE/Utility/NonCopyableBase.hxx"
+
 #include "G4MagneticField.hh"
 #include "G4Transform3D.hh"
 
 namespace MACE::SimMACE::Field {
 
-class SecondBendField final : public G4MagneticField {
+class SecondBendField final : public Utility::NonCopyableBase,
+                              public G4MagneticField {
 public:
     SecondBendField();
-    ~SecondBendField() = default;
-    SecondBendField(const SecondBendField&) = delete;
-    SecondBendField& operator=(const SecondBendField&) = delete;
 
     void GetFieldValue(const G4double* x, G4double* B) const override;
 

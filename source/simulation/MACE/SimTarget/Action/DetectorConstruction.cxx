@@ -17,6 +17,7 @@ using namespace MACE::Utility::LiteralUnit::Temperature;
 DetectorConstruction::DetectorConstruction() :
     NonCopyableBase(),
     G4VUserDetectorConstruction(),
+    fCheckOverlap(false),
     fBeamDegrader(nullptr),
     fBeamMonitor(nullptr),
     fTarget(nullptr),
@@ -41,7 +42,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     fWorld->AddDaughter(fBeamMonitor);
     fWorld->AddDaughter(fBeamDegrader);
     fWorld->AddDaughter(fTarget);
-    fWorld->ConstructSelfAndDescendants(fCheckOverlaps);
+    fWorld->ConstructSelfAndDescendants(fCheckOverlap);
 
     auto nist = G4NistManager::Instance();
     fBeamDegrader->RegisterMaterial(nist->FindOrBuildMaterial("G4_Al"));

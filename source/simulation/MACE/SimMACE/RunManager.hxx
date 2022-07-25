@@ -2,32 +2,37 @@
 
 #include "MACE/SimMACE/Action/DetectorConstruction.hxx"
 #include "MACE/SimMACE/Action/EventAction.hxx"
+#include "MACE/SimMACE/Action/PhysicsList.hxx"
 #include "MACE/SimMACE/Action/PrimaryGeneratorAction.hxx"
 #include "MACE/SimMACE/Action/RunAction.hxx"
+#include "MACE/SimMACE/Analysis.hxx"
 #include "MACE/SimulationG4/MPIRunManager.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
+#include <memory>
+
 namespace MACE::SimMACE {
 
-using namespace MACE::SimMACE::Action;
+using Utility::ObserverPtr;
 
 class RunManager final : public SimulationG4::MPIRunManager {
 public:
-    static auto& Instance() { return *static_cast<RunManager*>(GetRunManager()); }
+    static auto& Instance() { return static_cast<RunManager&>(*GetRunManager()); }
 
     RunManager();
-    ~RunManager() noexcept = default;
     RunManager(const RunManager&) = delete;
     RunManager& operator=(const RunManager&) = delete;
 
-    auto& GetDetectorConstruction() const { return *static_cast<DetectorConstruction*>(userDetector); }
-    auto& GetEventAction() const { return *static_cast<EventAction*>(userEventAction); }
-    auto& GetPhysicsList() const { return *physicsList; }
-    auto& GetPrimaryGeneratorAction() const { return *static_cast<PrimaryGeneratorAction*>(userPrimaryGeneratorAction); }
-    auto& GetRunAction() const { return *static_cast<RunAction*>(userRunAction); }
-    // auto& GetStackingAction()         const { return *static_cast<*>(userStackingAction); }
-    // auto& GetTrackingAction()         const { return *static_cast<*>(userTrackingAction); }
-    // auto& GetSteppingAction()         const { return *static_cast<*>(userSteppingAction); }
+    auto& GetDetectorConstruction() const { return static_cast<Action::DetectorConstruction&>(*userDetector); }
+    auto& GetEventAction() const { return static_cast<Action::EventAction&>(*userEventAction); }
+    auto& GetPhysicsList() const { return *fPhysicsList; }
+    auto& GetPrimaryGeneratorAction() const { return static_cast<Action::PrimaryGeneratorAction&>(*userPrimaryGeneratorAction); }
+    auto& GetRunAction() const { return static_cast<Action::RunAction&>(*userRunAction); }
+    auto& GetAnalysis() const { return *fAnalysis; }
+
+private:
+    ObserverPtr<Action::PhysicsList> fPhysicsList;
+    std::unique_ptr<Analysis> fAnalysis;
 };
 
 } // namespace MACE::SimMACE

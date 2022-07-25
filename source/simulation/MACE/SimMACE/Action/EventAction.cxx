@@ -1,5 +1,4 @@
 #include "MACE/SimMACE/Action/EventAction.hxx"
-#include "MACE/SimMACE/Analysis.hxx"
 #include "MACE/SimMACE/RunManager.hxx"
 #include "MACE/SimMACE/SD/CDCSD.hxx"
 #include "MACE/SimMACE/SD/EMCalSD.hxx"
@@ -17,7 +16,7 @@ void EventAction::BeginOfEventAction(const G4Event* event) {
 
 void EventAction::EndOfEventAction(const G4Event*) {
     const auto repetitionID = RunManager::Instance().GetPrimaryGeneratorAction().GetRepetitionID();
-    Analysis::Instance().WriteEvent(repetitionID);
+    RunManager::Instance().GetAnalysis().WriteEvent(repetitionID);
 }
 
 } // namespace MACE::SimMACE::Action

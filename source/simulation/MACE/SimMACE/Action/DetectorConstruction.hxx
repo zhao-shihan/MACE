@@ -5,28 +5,35 @@
 #include "MACE/SimMACE/SD/CDCSD.hxx"
 #include "MACE/SimMACE/SD/EMCalSD.hxx"
 #include "MACE/SimMACE/SD/MCPSD.hxx"
+#include "MACE/Utility/NonCopyableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4VUserDetectorConstruction.hh"
 
 #include <memory>
 
-namespace MACE::SimMACE::Action {
+namespace MACE::SimMACE {
 
-using namespace Core::Geometry::Entity::Fast;
-using namespace SD;
+namespace SD {
+
+class CDCSD;
+class EMCalSD;
+class MCPSD;
+
+} // namespace SD
+
+namespace Action {
+
 using MACE::Utility::ObserverPtr;
 
-class DetectorConstruction final : public G4VUserDetectorConstruction {
+class DetectorConstruction final : public Utility::NonCopyableBase,
+                                   public G4VUserDetectorConstruction {
 public:
-    DetectorConstruction() = default;
-    ~DetectorConstruction() noexcept = default;
-    DetectorConstruction(const DetectorConstruction&) = delete;
-    DetectorConstruction& operator=(const DetectorConstruction&) = delete;
+    DetectorConstruction();
 
     G4VPhysicalVolume* Construct() override;
 
-    void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlaps = checkOverlaps; }
+    void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlap = checkOverlaps; }
 
     auto& GetEMCalSensitiveRegion() const { return *fEMCalSensitiveRegion; }
     auto& GetDefaultSolidRegion() const { return *fDefaultSolidRegion; }
@@ -50,38 +57,38 @@ private:
     void ConstructFields();
 
 private:
-    G4bool fCheckOverlaps = false;
+    G4bool fCheckOverlap;
 
-    std::shared_ptr<BeamDegrader> fBeamDegrader;
-    std::shared_ptr<BeamMonitor> fBeamMonitor;
-    std::shared_ptr<CDCBody> fCDCBody;
-    std::shared_ptr<CDCCell> fCDCCell;
-    std::shared_ptr<CDCFieldWire> fCDCFieldWire;
-    std::shared_ptr<CDCLayer> fCDCLayer;
-    std::shared_ptr<CDCSenseWire> fCDCSenseWire;
-    std::shared_ptr<CDCSensitiveVolume> fCDCSensitiveVolume;
-    std::shared_ptr<Collimator> fCollimator;
-    std::shared_ptr<EMCal> fEMCal;
-    std::shared_ptr<EMCalField> fEMCalField;
-    std::shared_ptr<EMCalShield> fEMCalShield;
-    std::shared_ptr<FirstBendField> fFirstBendField;
-    std::shared_ptr<FirstBendSolenoid> fFirstBendSolenoid;
-    std::shared_ptr<FirstTransportField> fFirstTransportField;
-    std::shared_ptr<FirstTransportSolenoid> fFirstTransportSolenoid;
-    std::shared_ptr<LinacField> fLinacField;
-    std::shared_ptr<MCP> fMCP;
-    std::shared_ptr<SecondBendField> fSecondBendField;
-    std::shared_ptr<SecondBendSolenoid> fSecondBendSolenoid;
-    std::shared_ptr<SecondTransportField> fSecondTransportField;
-    std::shared_ptr<SecondTransportSolenoid> fSecondTransportSolenoid;
-    std::shared_ptr<SelectorField> fSelectorField;
-    std::shared_ptr<SpectrometerField> fSpectrometerField;
-    std::shared_ptr<SpectrometerMagnet> fSpectrometerMagnet;
-    std::shared_ptr<SpectrometerShield> fSpectrometerShield;
-    std::shared_ptr<Target> fTarget;
-    std::shared_ptr<ThirdTransportField> fThirdTransportField;
-    std::shared_ptr<ThirdTransportSolenoid> fThirdTransportSolenoid;
-    std::shared_ptr<World> fWorld;
+    std::shared_ptr<Core::Geometry::IEntity> fBeamDegrader;
+    std::shared_ptr<Core::Geometry::IEntity> fBeamMonitor;
+    std::shared_ptr<Core::Geometry::IEntity> fCDCBody;
+    std::shared_ptr<Core::Geometry::IEntity> fCDCCell;
+    std::shared_ptr<Core::Geometry::IEntity> fCDCFieldWire;
+    std::shared_ptr<Core::Geometry::IEntity> fCDCLayer;
+    std::shared_ptr<Core::Geometry::IEntity> fCDCSenseWire;
+    std::shared_ptr<Core::Geometry::IEntity> fCDCSensitiveVolume;
+    std::shared_ptr<Core::Geometry::IEntity> fCollimator;
+    std::shared_ptr<Core::Geometry::IEntity> fEMCal;
+    std::shared_ptr<Core::Geometry::IEntity> fEMCalField;
+    std::shared_ptr<Core::Geometry::IEntity> fEMCalShield;
+    std::shared_ptr<Core::Geometry::IEntity> fFirstBendField;
+    std::shared_ptr<Core::Geometry::IEntity> fFirstBendSolenoid;
+    std::shared_ptr<Core::Geometry::IEntity> fFirstTransportField;
+    std::shared_ptr<Core::Geometry::IEntity> fFirstTransportSolenoid;
+    std::shared_ptr<Core::Geometry::IEntity> fLinacField;
+    std::shared_ptr<Core::Geometry::IEntity> fMCP;
+    std::shared_ptr<Core::Geometry::IEntity> fSecondBendField;
+    std::shared_ptr<Core::Geometry::IEntity> fSecondBendSolenoid;
+    std::shared_ptr<Core::Geometry::IEntity> fSecondTransportField;
+    std::shared_ptr<Core::Geometry::IEntity> fSecondTransportSolenoid;
+    std::shared_ptr<Core::Geometry::IEntity> fSelectorField;
+    std::shared_ptr<Core::Geometry::IEntity> fSpectrometerField;
+    std::shared_ptr<Core::Geometry::IEntity> fSpectrometerMagnet;
+    std::shared_ptr<Core::Geometry::IEntity> fSpectrometerShield;
+    std::shared_ptr<Core::Geometry::IEntity> fTarget;
+    std::shared_ptr<Core::Geometry::IEntity> fThirdTransportField;
+    std::shared_ptr<Core::Geometry::IEntity> fThirdTransportSolenoid;
+    std::shared_ptr<Core::Geometry::IEntity> fWorld;
 
     ObserverPtr<Region> fEMCalSensitiveRegion;
     ObserverPtr<Region> fDefaultSolidRegion;
@@ -93,9 +100,11 @@ private:
     ObserverPtr<Region> fVacuumRegion;
     ObserverPtr<Region> fMCPSensitiveRegion;
 
-    ObserverPtr<CDCSD> fCDCSD;
-    ObserverPtr<EMCalSD> fEMCalSD;
-    ObserverPtr<MCPSD> fMCPSD;
+    ObserverPtr<SD::CDCSD> fCDCSD;
+    ObserverPtr<SD::EMCalSD> fEMCalSD;
+    ObserverPtr<SD::MCPSD> fMCPSD;
 };
 
-} // namespace MACE::SimMACE::Action
+} // namespace Action
+
+} // namespace MACE::SimMACE

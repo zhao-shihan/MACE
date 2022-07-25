@@ -1,14 +1,14 @@
 #include "MACE/SimMACE/Action/RunAction.hxx"
-#include "MACE/SimMACE/Analysis.hxx"
+#include "MACE/SimMACE/RunManager.hxx"
 
 namespace MACE::SimMACE::Action {
 
 void RunAction::BeginOfRunAction(const G4Run*) {
-    Analysis::Instance().Open();
+    RunManager::Instance().GetAnalysis().Open();
 }
 
 void RunAction::EndOfRunAction(const G4Run*) {
-    Analysis::Instance().Close();
+    RunManager::Instance().GetAnalysis().Close();
 }
 
 } // namespace MACE::SimMACE::Action

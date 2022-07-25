@@ -1,15 +1,15 @@
 #pragma once
 
+#include "MACE/Utility/NonCopyableBase.hxx"
+
 #include "G4VModularPhysicsList.hh"
 
 namespace MACE::SimMACE::Action {
 
-class PhysicsList final : public G4VModularPhysicsList {
+class PhysicsList final : public Utility::NonCopyableBase,
+                          public G4VModularPhysicsList {
 public:
     PhysicsList();
-    ~PhysicsList() noexcept = default;
-    PhysicsList(const PhysicsList&) = delete;
-    PhysicsList& operator=(const PhysicsList&) = delete;
 };
 
 } // namespace MACE::SimMACE::Action

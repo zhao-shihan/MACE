@@ -1,15 +1,15 @@
 #pragma once
 
+#include "MACE/Utility/NonCopyableBase.hxx"
+
 #include "G4ElectroMagneticField.hh"
 
 namespace MACE::SimMACE::Field {
 
-class SelectorField final : public G4ElectroMagneticField {
+class SelectorField final : public Utility::NonCopyableBase,
+                            public G4ElectroMagneticField {
 public:
     SelectorField();
-    ~SelectorField() = default;
-    SelectorField(const SelectorField&) = delete;
-    SelectorField& operator=(const SelectorField&) = delete;
 
     void GetFieldValue(const G4double*, G4double* F) const override;
     G4bool DoesFieldChangeEnergy() const override { return true; }

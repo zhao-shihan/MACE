@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Core/DataFactory.hxx"
-#include "MACE/Environment/Memory/Singleton.hxx"
+#include "MACE/Utility/NonCopyableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4String.hh"
@@ -22,14 +22,10 @@ class MCPHit;
 using Core::DataFactory;
 using MACE::Utility::ObserverPtr;
 
-class Analysis final : public Environment::Memory::Singleton<Analysis> {
-    friend Environment::Memory::SingletonFactory;
-
-private:
-    Analysis();
-    ~Analysis() = default;
-
+class Analysis final : public Utility::NonCopyableBase {
 public:
+    Analysis();
+
     void SetResultName(const G4String& resultName) { fResultName = resultName; }
     const G4String& GetResultName() const { return fResultName; }
     void SetEnableCoincidenceOfEMCal(G4bool val) { fEnableCoincidenceOfEMCal = val; }

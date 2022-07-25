@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/SimMACE/Hit/CDCHit.hxx"
+#include "MACE/Utility/NonCopyableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4TwoVector.hh"
@@ -13,12 +14,10 @@ namespace MACE::SimMACE::SD {
 using Hit::CDCHitCollection;
 using MACE::Utility::ObserverPtr;
 
-class CDCSD final : public G4VSensitiveDetector {
+class CDCSD final : public Utility::NonCopyableBase,
+                    public G4VSensitiveDetector {
 public:
     CDCSD(const G4String& sdName);
-    ~CDCSD() noexcept = default;
-    CDCSD(const CDCSD&) = delete;
-    CDCSD& operator=(const CDCSD&) = delete;
 
     void Initialize(G4HCofThisEvent* hitsCollection) override;
     G4bool ProcessHits(G4Step* step, G4TouchableHistory*) override;

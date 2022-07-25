@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/SimMACE/Hit/EMCalHit.hxx"
+#include "MACE/Utility/NonCopyableBase.hxx"
 
 #include "G4VSensitiveDetector.hh"
 
@@ -8,12 +9,10 @@ namespace MACE::SimMACE::SD {
 
 using Hit::EMCalHitCollection;
 
-class EMCalSD final : public G4VSensitiveDetector {
+class EMCalSD final : public Utility::NonCopyableBase,
+                      public G4VSensitiveDetector {
 public:
     EMCalSD(const G4String& sdName);
-    ~EMCalSD() noexcept = default;
-    EMCalSD(const EMCalSD&) = delete;
-    EMCalSD& operator=(const EMCalSD&) = delete;
 
     void Initialize(G4HCofThisEvent* hitsCollection) override;
     G4bool ProcessHits(G4Step* step, G4TouchableHistory*) override;

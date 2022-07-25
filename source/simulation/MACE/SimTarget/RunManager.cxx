@@ -1,5 +1,4 @@
 #include "MACE/SimTarget/Action/ActionInitialization.hxx"
-#include "MACE/SimTarget/Messenger/GeometryMessenger.hxx"
 #include "MACE/SimTarget/RunManager.hxx"
 
 namespace MACE::SimTarget {

@@ -1,17 +1,16 @@
 #pragma once
 
 #include "MACE/Utility/LiteralUnit.hxx"
+#include "MACE/Utility/NonCopyableBase.hxx"
 
 #include "G4ElectroMagneticField.hh"
 
 namespace MACE::SimMACE::Field {
 
-class LinacField final : public G4ElectroMagneticField {
+class LinacField final : public Utility::NonCopyableBase,
+                         public G4ElectroMagneticField {
 public:
     LinacField();
-    ~LinacField() = default;
-    LinacField(const LinacField&) = delete;
-    LinacField& operator=(const LinacField&) = delete;
 
     void GetFieldValue(const G4double*, G4double* F) const override;
     G4bool DoesFieldChangeEnergy() const override { return true; }

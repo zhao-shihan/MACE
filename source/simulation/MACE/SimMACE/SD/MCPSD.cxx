@@ -1,4 +1,3 @@
-#include "MACE/SimMACE/Analysis.hxx"
 #include "MACE/SimMACE/RunManager.hxx"
 #include "MACE/SimMACE/SD/MCPSD.hxx"
 
@@ -11,6 +10,7 @@ namespace MACE::SimMACE::SD {
 using Hit::MCPHit;
 
 MCPSD::MCPSD(const G4String& sdName) :
+    NonCopyableBase(),
     G4VSensitiveDetector(sdName),
     fEventID(-1),
     fHitsCollection(nullptr) {
@@ -52,7 +52,7 @@ G4bool MCPSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
 }
 
 void MCPSD::EndOfEvent(G4HCofThisEvent*) {
-    Analysis::Instance().SubmitMCPHC(fHitsCollection->GetVector());
+    RunManager::Instance().GetAnalysis().SubmitMCPHC(fHitsCollection->GetVector());
 }
 
 } // namespace MACE::SimMACE::SD

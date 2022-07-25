@@ -62,7 +62,7 @@ void DataFactory::FillTree(const std::vector<ADataInListPointer>& dataList, TTre
 
 template<WeaklyBehaveLikePointer ADataInListPointer>
 void DataFactory::FillTree(const std::vector<ADataInListPointer>& dataList, TTree& tree, bool connected) {
-    FillTree<std::pointer_traits<ADataInListPointer>::element_type, ADataInListPointer>(dataList, tree, connected);
+    FillTree<typename std::pointer_traits<ADataInListPointer>::element_type, ADataInListPointer>(dataList, tree, connected);
 }
 
 template<IsTransientData ADataInTree, WeaklyBehaveLikePointer ADataInListPointer> // clang-format off
@@ -75,7 +75,7 @@ std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<ADataInL
 
 template<WeaklyBehaveLikePointer ADataInListPointer>
 std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<ADataInListPointer>& dataList, Long64_t treeIndex) const {
-    return CreateAndFillTree<std::pointer_traits<ADataInListPointer>::element_type, ADataInListPointer>(dataList, treeIndex);
+    return CreateAndFillTree<typename std::pointer_traits<ADataInListPointer>::element_type, ADataInListPointer>(dataList, treeIndex);
 }
 
 template<IsTransientData AData>

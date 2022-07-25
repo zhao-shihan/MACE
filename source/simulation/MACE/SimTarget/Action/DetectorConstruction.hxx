@@ -26,9 +26,11 @@ public:
     void SetTargetDensity(G4double val) { fDensity = val; }
     void SetTemperature(G4double val) { fTemperature = val; }
 
-    void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlaps = checkOverlaps; }
+    void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlap = checkOverlaps; }
 
 private:
+    G4bool fCheckOverlap;
+
     std::shared_ptr<Core::Geometry::IEntity> fBeamDegrader;
     std::shared_ptr<Core::Geometry::IEntity> fBeamMonitor;
     std::shared_ptr<Core::Geometry::IEntity> fTarget;
@@ -36,8 +38,6 @@ private:
 
     G4double fDensity;
     G4double fTemperature;
-
-    G4bool fCheckOverlaps = false;
 };
 
 } // namespace SimTarget::Action

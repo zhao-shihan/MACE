@@ -12,6 +12,7 @@ using namespace MACE::Utility::LiteralUnit::Length;
 using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
 
 LinacField::LinacField() :
+    NonCopyableBase(),
     G4ElectroMagneticField(),
     fBz(0.1_T),
     fV(7_kV),

@@ -18,17 +18,17 @@ using Utility::ObserverPtr;
 
 class RunManager final : public SimulationG4::MPIRunManager {
 public:
-    static auto& Instance() { return *static_cast<RunManager*>(GetRunManager()); }
+    static auto& Instance() { return static_cast<RunManager&>(*GetRunManager()); }
 
     RunManager();
     ~RunManager();
 
-    auto& GetDetectorConstruction() const { return *static_cast<Action::DetectorConstruction*>(userDetector); }
+    auto& GetDetectorConstruction() const { return static_cast<Action::DetectorConstruction&>(*userDetector); }
     auto& GetPhysicsList() const { return *fPhysicsList; }
-    auto& GetPrimaryGeneratorAction() const { return *static_cast<Action::PrimaryGeneratorAction*>(userPrimaryGeneratorAction); }
-    auto& GetRunAction() const { return *static_cast<Action::RunAction*>(userRunAction); }
-    auto& GetSteppingAction() const { return *static_cast<Action::SteppingAction*>(userSteppingAction); }
-    auto& GetTrackingAction() const { return *static_cast<Action::TrackingAction*>(userTrackingAction); }
+    auto& GetPrimaryGeneratorAction() const { return static_cast<Action::PrimaryGeneratorAction&>(*userPrimaryGeneratorAction); }
+    auto& GetRunAction() const { return static_cast<Action::RunAction&>(*userRunAction); }
+    auto& GetSteppingAction() const { return static_cast<Action::SteppingAction&>(*userSteppingAction); }
+    auto& GetTrackingAction() const { return static_cast<Action::TrackingAction&>(*userTrackingAction); }
     auto& GetAnalysis() const { return *fAnalysis; }
 
 private:
