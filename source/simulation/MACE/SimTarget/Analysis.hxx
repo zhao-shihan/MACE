@@ -1,8 +1,8 @@
 #pragma once
 
 #include "MACE/Core/DataFactory.hxx"
-#include "MACE/Environment/Resource/Singleton.hxx"
 #include "MACE/SimTarget/MuoniumTrack.hxx"
+#include "MACE/Utility/NonCopyableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "TFormula.h"
@@ -19,14 +19,11 @@ namespace MACE::SimTarget {
 using Core::DataFactory;
 using Utility::ObserverPtr;
 
-class Analysis final : public Environment::Resource::Singleton<Analysis> {
-    friend Environment::Resource::SingletonFactory;
-
-private:
-    Analysis();
-    ~Analysis() = default;
-
+class Analysis final : public Utility::NonCopyableBase {
 public:
+    Analysis();
+    ~Analysis();
+
     void SetResultName(std::string_view resultName) { fResultName = resultName; }
     void EnableYieldAnalysis(bool val) { fEnableYieldAnalysis = val; }
     void SetDetectableRegion(const char* booleanExpression) { fDetectableRegion = ConstructFormula(booleanExpression); }
@@ -34,7 +31,6 @@ public:
     void RunBegin(ObserverPtr<const G4Run> run);
     auto NewMuoniumTrack() { return fMuoniumTrackList.emplace_back(std::make_unique<MuoniumTrack>()).get(); }
     void RunEnd();
-    void G4Quit();
 
 private:
     void Open();

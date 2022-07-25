@@ -7,6 +7,8 @@ namespace MACE::SimTarget::Action {
 using namespace Utility::LiteralUnit::Length;
 
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
+    NonCopyableBase(),
+    G4VUserPrimaryGeneratorAction(),
     fSurfaceMuonGenerator(),
     fMuonsForEachG4Event(0) {
     fSurfaceMuonGenerator.SetVertexZ(-5_cm);

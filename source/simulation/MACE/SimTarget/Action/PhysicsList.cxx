@@ -9,6 +9,7 @@ namespace MACE::SimTarget::Action {
 using namespace MACE::SimulationG4::Physics;
 
 PhysicsList::PhysicsList() :
+    NonCopyableBase(),
     G4VModularPhysicsList() {
     constexpr G4int defaultVerbose = 0;
     SetVerboseLevel(defaultVerbose);

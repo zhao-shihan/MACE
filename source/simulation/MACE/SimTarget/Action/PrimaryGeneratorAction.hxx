@@ -1,17 +1,16 @@
 #pragma once
 
 #include "MACE/SimulationG4/Generator/SurfaceMuon.hxx"
+#include "MACE/Utility/NonCopyableBase.hxx"
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 
 namespace MACE::SimTarget::Action {
 
-class PrimaryGeneratorAction final : public G4VUserPrimaryGeneratorAction {
+class PrimaryGeneratorAction final : public Utility::NonCopyableBase,
+                                     public G4VUserPrimaryGeneratorAction {
 public:
     PrimaryGeneratorAction();
-    ~PrimaryGeneratorAction() noexcept = default;
-    PrimaryGeneratorAction(const PrimaryGeneratorAction&) = delete;
-    PrimaryGeneratorAction& operator=(const PrimaryGeneratorAction&) = delete;
 
     void SetMuonsForEachG4Event(G4int n) { fMuonsForEachG4Event = n; }
     const auto& GetMuonsForEachG4Event() const { return fMuonsForEachG4Event; }

@@ -15,15 +15,15 @@ int main(int argc, char* argv[]) {
     G4Random::setTheEngine(&randEng);
 
     // DetectorConstruction, PhysicsList, ActionInitialization are instantiated in RunManager constructor.
-    const auto runManager = std::make_unique<MACE::SimTarget::RunManager>();
-    runManager->GetDetectorConstruction().SetCheckOverlaps(interactive ? true : false);
-    runManager->GetPhysicsList().SetVerboseLevel(interactive ? 1 : 0);
+    MACE::SimTarget::RunManager runManager;
+    runManager.GetDetectorConstruction().SetCheckOverlaps(interactive ? true : false);
+    runManager.GetPhysicsList().SetVerboseLevel(interactive ? 1 : 0);
 
-    const auto mpiExecutive = std::make_unique<MACE::SimulationG4::MPIExecutive>();
+    MACE::SimulationG4::MPIExecutive mpiExecutive;
     if (interactive) {
-        mpiExecutive->StartInteractiveSession(argc, argv, "init_vis.mac");
+        mpiExecutive.StartInteractiveSession(argc, argv, "init_vis.mac");
     } else {
-        mpiExecutive->StartBatchSession(argv[1]);
+        mpiExecutive.StartBatchSession(argv[1]);
     }
 
     return EXIT_SUCCESS;

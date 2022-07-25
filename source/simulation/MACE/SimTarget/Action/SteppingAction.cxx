@@ -11,6 +11,8 @@ namespace MACE::SimTarget::Action {
 using namespace SimulationG4::Physics::Particle;
 
 SteppingAction::SteppingAction() :
+    NonCopyableBase(),
+    G4UserSteppingAction(),
     fMuonPlus(G4MuonPlus::Definition()),
     fMuonium(Muonium::Definition()),
     fAntiMuonium(AntiMuonium::Definition()),

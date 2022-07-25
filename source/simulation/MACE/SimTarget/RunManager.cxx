@@ -1,25 +1,21 @@
 #include "MACE/SimTarget/Action/ActionInitialization.hxx"
-#include "MACE/SimTarget/Action/PhysicsList.hxx"
-#include "MACE/SimTarget/Analysis.hxx"
 #include "MACE/SimTarget/Messenger/GeometryMessenger.hxx"
 #include "MACE/SimTarget/RunManager.hxx"
 
 namespace MACE::SimTarget {
 
+using namespace Action;
+
 RunManager::RunManager() :
-    MPIRunManager() {
-    // Instantiate actions
+    MPIRunManager(),
+    fPhysicsList(new PhysicsList()),
+    fAnalysis(std::make_unique<Analysis>()) {
+    // Set actions
     SetUserInitialization(new DetectorConstruction());
-    SetUserInitialization(new PhysicsList());
+    SetUserInitialization(fPhysicsList);
     SetUserInitialization(new ActionInitialization());
-    // Instantiate analysis
-    Analysis::Instance();
-    // Instantiate geometry messenger
-    Messenger::GeometryMessenger::Instance();
 }
 
-RunManager::~RunManager() noexcept {
-    Analysis::Instance().G4Quit();
-}
+RunManager::~RunManager() = default;
 
 } // namespace MACE::SimTarget

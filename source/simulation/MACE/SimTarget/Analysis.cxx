@@ -3,6 +3,7 @@
 #include "MACE/SimTarget/Analysis.hxx"
 #include "MACE/SimTarget/Messenger/AnalysisMessenger.hxx"
 #include "MACE/SimTarget/RunManager.hxx"
+#include "MACE/Utility/UtilMPI/CheckedMPICall.hxx"
 #include "MACE/Utility/UtilMPI/MakeMPIFilePath.hxx"
 
 #include "G4Run.hh"
@@ -14,7 +15,7 @@ namespace MACE::SimTarget {
 using MACE::Environment::MPIEnvironment;
 
 Analysis::Analysis() :
-    Environment::Resource::Singleton<Analysis>(),
+    NonCopyableBase(),
     fResultName("SimTarget_result"),
     fEnableYieldAnalysis(true),
     fDetectableRegion(ConstructFormula("abs(x)>30 || abs(y)>30 || z>0")),
@@ -27,6 +28,10 @@ Analysis::Analysis() :
     fDataFactory.SetTreeNamePrefixFormat("Run#_");
 }
 
+Analysis::~Analysis() {
+    Close();
+}
+
 void Analysis::RunBegin(ObserverPtr<const G4Run> run) {
     fThisRun = run;
     if (fThisRun->GetRunID() == 0) {
@@ -36,10 +41,6 @@ void Analysis::RunBegin(ObserverPtr<const G4Run> run) {
 
 void Analysis::RunEnd() {
     Write();
-}
-
-void Analysis::G4Quit() {
-    Close();
 }
 
 void Analysis::Open() {
@@ -113,7 +114,7 @@ void Analysis::AnalysisAndWriteYield() {
     if (MPIEnvironment::IsParallelized()) {
         std::vector<decltype(yieldData)> yieldDataRecv;
         if (MPIEnvironment::IsWorldMaster()) { yieldDataRecv.resize(MPIEnvironment::WorldCommSize()); }
-        MPI_Gather(yieldData.data(), yieldData.size(), MPI_UNSIGNED_LONG, yieldDataRecv.data(), yieldData.size(), MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD);
+        MACE_CHECKED_MPI_CALL(MPI_Gather, yieldData.data(), yieldData.size(), MPI_UNSIGNED_LONG, yieldDataRecv.data(), yieldData.size(), MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD)
 
         if (MPIEnvironment::IsWorldMaster()) {
             unsigned long nMuonTotal = 0;

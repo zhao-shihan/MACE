@@ -1,6 +1,6 @@
 #include "MACE/SimTarget/Action/TrackingAction.hxx"
-#include "MACE/SimTarget/Analysis.hxx"
 #include "MACE/SimTarget/MuoniumTrack.hxx"
+#include "MACE/SimTarget/RunManager.hxx"
 #include "MACE/SimulationG4/Physics/Particle/AntiMuonium.hxx"
 #include "MACE/SimulationG4/Physics/Particle/Muonium.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
@@ -13,6 +13,8 @@ using namespace SimulationG4::Physics::Particle;
 using namespace Utility::PhysicalConstant;
 
 TrackingAction::TrackingAction() :
+    NonCopyableBase(),
+    G4UserTrackingAction(),
     fMuonium(Muonium::Definition()),
     fAntiMuonium(AntiMuonium::Definition()),
     fMuoniumTrack(nullptr) {}
@@ -20,7 +22,7 @@ TrackingAction::TrackingAction() :
 void TrackingAction::PreUserTrackingAction(const G4Track* track) {
     const auto* const particle = track->GetParticleDefinition();
     if (particle == fMuonium or particle == fAntiMuonium) {
-        fMuoniumTrack = Analysis::Instance().NewMuoniumTrack();
+        fMuoniumTrack = RunManager::Instance().GetAnalysis().NewMuoniumTrack();
         fMuoniumTrack->SetVertexTime(track->GetGlobalTime());
         fMuoniumTrack->SetVertexPosition(track->GetPosition());
         fMuoniumTrack->SetVertexMomentum(track->GetMomentum());

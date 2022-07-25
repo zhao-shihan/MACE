@@ -1,5 +1,7 @@
 #pragma once
 
+#include "MACE/Utility/NonCopyableBase.hxx"
+
 #include "G4VUserDetectorConstruction.hh"
 
 #include <memory>
@@ -14,12 +16,10 @@ class IEntity;
 
 namespace SimTarget::Action {
 
-class DetectorConstruction final : public G4VUserDetectorConstruction {
+class DetectorConstruction final : public Utility::NonCopyableBase,
+                                   public G4VUserDetectorConstruction {
 public:
     DetectorConstruction();
-    ~DetectorConstruction() = default;
-    DetectorConstruction(const DetectorConstruction&) = delete;
-    DetectorConstruction& operator=(const DetectorConstruction&) = delete;
 
     G4VPhysicalVolume* Construct() override;
 

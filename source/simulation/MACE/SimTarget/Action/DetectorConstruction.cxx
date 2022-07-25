@@ -15,6 +15,8 @@ using namespace MACE::Utility::LiteralUnit::Density;
 using namespace MACE::Utility::LiteralUnit::Temperature;
 
 DetectorConstruction::DetectorConstruction() :
+    NonCopyableBase(),
+    G4VUserDetectorConstruction(),
     fBeamDegrader(nullptr),
     fBeamMonitor(nullptr),
     fTarget(nullptr),

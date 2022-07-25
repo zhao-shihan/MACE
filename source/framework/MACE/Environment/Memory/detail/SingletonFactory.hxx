@@ -31,7 +31,7 @@ using MACE::Utility::ObserverPtr;
 class SingletonFactory final : public Utility::NonCopyableBase {
     friend class Environment::BasicEnvironment;
     template<class T>
-    friend class Environment::Memory::Singleton;
+    friend class Memory::Singleton;
 
 private:
     using InstanceList = std::forward_list<std::pair<ObserverPtr<void>, ISingletonBase*>>;

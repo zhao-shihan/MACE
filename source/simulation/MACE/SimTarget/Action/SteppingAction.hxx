@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Utility/NonCopyableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4ParticleDefinition.hh"
@@ -9,12 +10,10 @@ namespace MACE::SimTarget::Action {
 
 using Utility::ObserverPtr;
 
-class SteppingAction final : public G4UserSteppingAction {
+class SteppingAction final : public Utility::NonCopyableBase,
+                             public G4UserSteppingAction {
 public:
     SteppingAction();
-    ~SteppingAction() noexcept = default;
-    SteppingAction(const SteppingAction&) = delete;
-    SteppingAction& operator=(const SteppingAction&) = delete;
 
     void SetKillIrrelevants(G4bool val) { fKillIrrelevants = val; }
 
