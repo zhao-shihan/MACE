@@ -20,8 +20,6 @@ public:
     static auto& Instance() { return static_cast<RunManager&>(*GetRunManager()); }
 
     RunManager();
-    RunManager(const RunManager&) = delete;
-    RunManager& operator=(const RunManager&) = delete;
 
     auto& GetDetectorConstruction() const { return static_cast<Action::DetectorConstruction&>(*userDetector); }
     auto& GetEventAction() const { return static_cast<Action::EventAction&>(*userEventAction); }

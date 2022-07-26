@@ -21,7 +21,6 @@ public:
     static auto& Instance() { return static_cast<RunManager&>(*GetRunManager()); }
 
     RunManager();
-    ~RunManager();
 
     auto& GetDetectorConstruction() const { return static_cast<Action::DetectorConstruction&>(*userDetector); }
     auto& GetPhysicsList() const { return *fPhysicsList; }
