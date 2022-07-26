@@ -8,19 +8,15 @@
 
 namespace MACE::Environment {
 
-ObserverPtr<MPIEnvironment> MPIEnvironment::fgMPIEnvironmentInstance = nullptr;
-bool MPIEnvironment::fgMPIEnvironmentFinalized = false;
-
 MPIEnvironment::MPIEnvironment(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> optCLI,
                                VerboseLevel verboseLevel, bool printStartupMessage) :
     BasicEnvironment(argc, argv, optCLI, verboseLevel, false),
+    FreeSingleton<MPIEnvironment>(),
     fWorldCommRank(-1),
     fWorldCommSize(-1),
     fProcessorName() {
     // Initialize MPI and properties of MPI_COMM_WORLD
     InitializeMPIAndWorldProperties(argc, argv);
-    // Set instance pointer, initialize check has been performed at BasicEnvironment constructor
-    fgMPIEnvironmentInstance = this;
     // Print startup message
     if (printStartupMessage and IsWorldMaster()) {
         PrintStartupMessageSplitLine();
@@ -32,8 +28,6 @@ MPIEnvironment::MPIEnvironment(int argc, char* argv[], std::optional<std::refere
 MPIEnvironment::~MPIEnvironment() {
     // Finalize MPI
     MACE_CHECKED_MPI_CALL_NOEXCEPT(MPI_Finalize)
-    // Update status
-    fgMPIEnvironmentFinalized = true;
 }
 
 void MPIEnvironment::PrintStartupMessageBody(int argc, char* argv[]) const {

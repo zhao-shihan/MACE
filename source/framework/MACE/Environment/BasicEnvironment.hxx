@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/Environment/detail/SignalHandler.hxx"
+#include "MACE/Environment/Memory/detail/FreeSingletonPool.hxx"
 #include "MACE/Environment/Memory/detail/SingletonFactory.hxx"
 #include "MACE/Environment/VerboseLevel.hxx"
 #include "MACE/Utility/NonCopyableBase.hxx"
@@ -23,12 +24,9 @@ class BasicEnvironment : public Utility::NonCopyableBase {
 public:
     BasicEnvironment(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> optCLI,
                      VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
-    virtual ~BasicEnvironment();
+    virtual ~BasicEnvironment() { fgInstance = nullptr; }
 
-    static auto Initialized() { return fgBasicEnvironmentInstance != nullptr; }
-    static auto Finalized() { return fgBasicEnvironmentFinalized; }
-    static auto Available() { return Initialized() and not Finalized(); }
-    static auto& Instance() { return *fgBasicEnvironmentInstance; }
+    static auto& Instance() { return *fgInstance; }
 
     const auto& GetVerboseLevel() const { return fVerboseLevel; }
 
@@ -39,10 +37,10 @@ protected:
 private:
     Detail::SignalHandler fSignalHandler;
     VerboseLevel fVerboseLevel;
+    Memory::Detail::FreeSingletonPool fFreeSingletonPool;
     Memory::Detail::SingletonFactory fSingletonFactory;
 
-    static ObserverPtr<BasicEnvironment> fgBasicEnvironmentInstance;
-    static bool fgBasicEnvironmentFinalized;
+    static ObserverPtr<BasicEnvironment> fgInstance;
 };
 
 } // namespace MACE::Environment
