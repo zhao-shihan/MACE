@@ -4,8 +4,10 @@
 #include "MACE/Environment/Memory/detail/SingletonFactory.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
+#include <concepts>
 #include <stdexcept>
 #include <string>
+#include <type_traits>
 #include <typeinfo>
 
 namespace MACE::Environment::Memory {
@@ -156,11 +158,11 @@ protected:
     virtual ~Singleton();
 
 private:
-    static bool SingletonFactoryTestInstanceNodePtrNotNull() { return fgInstanceNode != nullptr; }
-    static void SingletonFactorySetInstanceNode(Detail::SingletonFactory::InstanceNode& node) { fgInstanceNode = std::addressof(node); }
+    static bool SingletonFactoryTestInstanceNodePointerNotNull() { return fgInstanceNode != nullptr; }
+    static void SingletonFactorySetInstanceNode(Detail::SingletonPool::Node& node) { fgInstanceNode = std::addressof(node); }
 
 private:
-    static ObserverPtr<Detail::SingletonFactory::InstanceNode> fgInstanceNode; // Points to a node of instance list in SingletFactory
+    static ObserverPtr<Detail::SingletonPool::Node> fgInstanceNode; // Points to a node of instance list in SingletFactory
 };
 
 using SingletonFactory = Detail::SingletonFactory;

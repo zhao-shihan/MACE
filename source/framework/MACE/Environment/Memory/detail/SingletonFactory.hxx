@@ -1,43 +1,22 @@
 #pragma once
 
+#include "MACE/Environment/Memory/detail/SingletonPool.hxx"
 #include "MACE/Utility/NonCopyableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
-#include <forward_list>
-#include <map>
-#include <stdexcept>
+#include <concepts>
 #include <string>
-#include <typeindex>
+#include <type_traits>
 #include <typeinfo>
-#include <utility>
 
-namespace MACE::Environment {
-
-class BasicEnvironment;
-
-namespace Memory {
-
-template<class T>
-class Singleton;
-
-namespace Detail {
-
-class ISingletonBase;
+namespace MACE::Environment::Memory::Detail {
 
 using MACE::Utility::ObserverPtr;
 
 /// @brief Implementation detail of MACE::Environment::Memory::Singleton.
 /// Not API.
 class SingletonFactory final : public Utility::NonCopyableBase {
-    friend class Environment::BasicEnvironment;
-    template<class T>
-    friend class Memory::Singleton;
-
-private:
-    using InstanceList = std::forward_list<std::pair<ObserverPtr<void>, ISingletonBase*>>;
-    using InstanceNode = InstanceList::value_type;
-
-private:
+public:
     SingletonFactory();
     ~SingletonFactory();
 
@@ -46,16 +25,11 @@ private:
     void Instantiate();
 
 private:
-    InstanceList fSingletonInstanceList;
-    std::map<std::type_index, InstanceList::iterator> fSingletonTypeCollection;
+    SingletonPool fInstancePool;
 
     static ObserverPtr<SingletonFactory> fgInstance;
 };
 
-} // namespace Detail
-
-} // namespace Memory
-
-} // namespace MACE::Environment
+} // namespace MACE::Environment::Memory::Detail
 
 #include "MACE/Environment/Memory/detail/SingletonFactory.inl"

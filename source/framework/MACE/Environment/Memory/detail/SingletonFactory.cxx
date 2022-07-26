@@ -7,8 +7,7 @@ ObserverPtr<SingletonFactory> SingletonFactory::fgInstance = nullptr;
 
 SingletonFactory::SingletonFactory() :
     NonCopyableBase(),
-    fSingletonInstanceList(),
-    fSingletonTypeCollection() {
+    fInstancePool() {
     if (fgInstance != nullptr) {
         throw std::logic_error("MACE::Environment::Memory::SingletonFactory: Trying to construct twice");
     }
@@ -16,7 +15,7 @@ SingletonFactory::SingletonFactory() :
 }
 
 SingletonFactory::~SingletonFactory() {
-    for (auto&& [_, singletonBase] : std::as_const(fSingletonInstanceList)) {
+    for (auto&& [_, singletonBase] : fInstancePool) {
         delete singletonBase;
     }
 }

@@ -1,7 +1,7 @@
 namespace MACE::Environment::Memory {
 
 template<class ADerived>
-ObserverPtr<Detail::SingletonFactory::InstanceNode> Singleton<ADerived>::fgInstanceNode = nullptr;
+ObserverPtr<Detail::SingletonPool::Node> Singleton<ADerived>::fgInstanceNode = nullptr;
 
 template<class ADerived>
 ADerived& Singleton<ADerived>::Instance() {
@@ -13,6 +13,9 @@ ADerived& Singleton<ADerived>::Instance() {
 
 template<class ADerived>
 Singleton<ADerived>::Singleton() {
+    static_assert(std::is_base_of_v<Singleton<ADerived>, ADerived>);
+    static_assert(not std::default_initializable<ADerived>); // private or protected constructor
+
     if (fgInstanceNode != nullptr) {
         throw std::logic_error(std::string("MACE::Environment::Memory::Singleton: Trying to construct ")
                                    .append(typeid(ADerived).name())
