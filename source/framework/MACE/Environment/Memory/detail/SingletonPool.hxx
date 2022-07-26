@@ -1,5 +1,7 @@
 #pragma once
 
+#include "MACE/Environment/Memory/Concept/Singletonized.hxx"
+#include "MACE/Environment/Memory/FreeSingleton.hxx"
 #include "MACE/Utility/NonCopyableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
@@ -8,16 +10,11 @@
 #include <map>
 #include <optional>
 #include <stdexcept>
-#include <type_traits>
 #include <typeindex>
 #include <typeinfo>
+#include <utility>
 
-namespace MACE::Environment::Memory {
-
-template<class ADerived>
-class Singleton;
-
-namespace Detail {
+namespace MACE::Environment::Memory::Detail {
 
 class ISingletonBase;
 
@@ -25,34 +22,31 @@ using MACE::Utility::ObserverPtr;
 
 /// @brief Implementation detail of MACE::Environment::Memory::Singleton.
 /// Not API.
-class SingletonPool final : public Utility::NonCopyableBase {
-public:
+class SingletonPool final : public FreeSingleton<SingletonPool> {
+private:
     using InstanceList = std::forward_list<std::pair<ObserverPtr<void>, ISingletonBase*>>;
+
+public:
     using Node = InstanceList::value_type;
     using Iterator = InstanceList::iterator;
     using ConstIterator = InstanceList::const_iterator;
 
 public:
-    SingletonPool() = default;
-    ~SingletonPool() = default;
-
-    template<class ASingleton> // clang-format off
-        requires std::is_base_of_v<Singleton<ASingleton>, ASingleton>
-    std::optional<std::reference_wrapper<Node>> Find() const;                                // clang-format on
-    template<class ASingleton> // clang-format off
-        requires std::is_base_of_v<Singleton<ASingleton>, ASingleton>
-    Node& Push(ASingleton* instance); // clang-format on
+    template<Concept::Singletonized ASingleton>
+    [[nodiscard]] std::optional<std::reference_wrapper<Node>> Find();
+    template<Concept::Singletonized ASingleton>
+    [[nodiscard]] auto Contains() const { return fTypeMap.contains(typeid(ASingleton)); }
+    template<Concept::Singletonized ASingleton>
+    [[nodiscard]] Node& Push(ASingleton* instance);
 
     auto begin() const { return fInstanceList.cbegin(); }
     auto end() const { return fInstanceList.cend(); }
 
 private:
     InstanceList fInstanceList;
-    std::map<std::type_index, Iterator> fTypeMap;
+    std::map<const std::type_index, const Iterator> fTypeMap;
 };
 
-} // namespace Detail
-
-} // namespace MACE::Environment::Memory
+} // namespace MACE::Environment::Memory::Detail
 
 #include "MACE/Environment/Memory/detail/SingletonPool.inl"

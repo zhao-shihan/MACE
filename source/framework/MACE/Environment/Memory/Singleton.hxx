@@ -1,13 +1,12 @@
 #pragma once
 
+#include "MACE/Environment/Memory/Concept/Singletonized.hxx"
 #include "MACE/Environment/Memory/detail/ISingletonBase.hxx"
 #include "MACE/Environment/Memory/detail/SingletonFactory.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
-#include <concepts>
 #include <stdexcept>
 #include <string>
-#include <type_traits>
 #include <typeinfo>
 
 namespace MACE::Environment::Memory {
@@ -148,21 +147,18 @@ using MACE::Utility::ObserverPtr;
 /// has undefined behaviour. Use wisely, think wisely!
 template<class ADerived>
 class Singleton : public Detail::ISingletonBase {
-    friend void Detail::SingletonFactory::Instantiate<ADerived>();
-
-public:
-    static ADerived& Instance();
-
 protected:
     Singleton();
     virtual ~Singleton();
 
-private:
-    static bool SingletonFactoryTestInstanceNodePointerNotNull() { return fgInstanceNode != nullptr; }
-    static void SingletonFactorySetInstanceNode(Detail::SingletonPool::Node& node) { fgInstanceNode = std::addressof(node); }
+public:
+    static ADerived& Instance();
 
 private:
-    static ObserverPtr<Detail::SingletonPool::Node> fgInstanceNode; // Points to a node of instance list in SingletFactory
+    static void InstantiateOrFindInstance();
+
+private:
+    static ObserverPtr<Detail::SingletonPool::Node> fgInstanceNode;
 };
 
 using SingletonFactory = Detail::SingletonFactory;

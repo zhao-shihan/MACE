@@ -1,27 +1,12 @@
-namespace MACE::Environment::Memory {
+namespace MACE::Environment::Memory::Detail {
 
-template<class ADerived>
-class Singleton;
-
-namespace Detail {
-
-template<class ASingleton>
-void SingletonFactory::Instantiate() {
-    static_assert(std::is_base_of_v<Singleton<ASingleton>, ASingleton>);
-    static_assert(not std::default_initializable<ASingleton>); // private or protected constructor
-
-    if (ASingleton::SingletonFactoryTestInstanceNodePointerNotNull()) {
-        throw std::logic_error(
-            std::string("MACE::Environment::Memory::SingletonFactory::Instantiate(...): Instance node pointer handled by ")
-                .append(typeid(ASingleton).name())
-                .append(" is not null"));
-    }
-
+template<Concept::Singletonized ASingleton>
+[[nodiscard]] SingletonPool::Node& SingletonFactory::InstantiateOrFind() {
     if (const auto existedNode = fInstancePool.Find<ASingleton>();
         not existedNode.has_value()) [[likely]] {
-        ASingleton::SingletonFactorySetInstanceNode(fInstancePool.Push(new ASingleton()));
+        return fInstancePool.Push(new ASingleton());
     } else {
-        ASingleton::SingletonFactorySetInstanceNode(existedNode.value());
+        return existedNode.value();
     }
     // About the above "if" statement:
     //
@@ -53,6 +38,4 @@ void SingletonFactory::Instantiate() {
     //   look up for the type and return the corresponding pointer value.
 }
 
-} // namespace Detail
-
-} // namespace MACE::Environment::Memory
+} // namespace MACE::Environment::Memory::Detail

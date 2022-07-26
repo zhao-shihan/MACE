@@ -1,9 +1,8 @@
 namespace MACE::Environment::Memory::Detail {
 
-template<class ASingleton> // clang-format off
-    requires std::is_base_of_v<Singleton<ASingleton>, ASingleton>
-std::optional<std::reference_wrapper<SingletonPool::Node>> SingletonPool::Find() const { // clang-format on
-    if (const auto existed = fTypeMap.find(typeid(ASingleton));
+template<Concept::Singletonized ASingleton>
+[[nodiscard]] std::optional<std::reference_wrapper<SingletonPool::Node>> SingletonPool::Find() {
+    if (const auto existed = std::as_const(fTypeMap).find(typeid(ASingleton));
         existed == fTypeMap.cend()) {
         return std::nullopt;
     } else {
@@ -11,17 +10,17 @@ std::optional<std::reference_wrapper<SingletonPool::Node>> SingletonPool::Find()
     }
 }
 
-template<class ASingleton> // clang-format off
-    requires std::is_base_of_v<Singleton<ASingleton>, ASingleton>
-SingletonPool::Node& SingletonPool::Push(ASingleton* instance) { // clang-format on
-    auto& pushed = fInstanceList.emplace_front(instance, static_cast<ISingletonBase*>(instance));
-    if (not fTypeMap.emplace(typeid(ASingleton), fInstanceList.begin()).second) {
+template<Concept::Singletonized ASingleton>
+[[nodiscard]] SingletonPool::Node& SingletonPool::Push(ASingleton* instance) {
+    auto& node = fInstanceList.emplace_front(instance, static_cast<ISingletonBase*>(instance));
+    if (fTypeMap.emplace(typeid(ASingleton), fInstanceList.begin()).second) {
+        return node;
+    } else {
         fInstanceList.pop_front();
         throw std::logic_error(std::string("MACE::Environment::Memory::Detail::SingletonPool::Push: Instance of type ")
                                    .append(typeid(ASingleton).name())
                                    .append(" already exists"));
     }
-    return pushed;
 }
 
 } // namespace MACE::Environment::Memory::Detail
