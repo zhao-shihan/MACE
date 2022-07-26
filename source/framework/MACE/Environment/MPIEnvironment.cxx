@@ -1,5 +1,6 @@
 #include "MACE/Environment/MPIEnvironment.hxx"
 #include "MACE/Utility/UtilMPI/CheckedMPICall.hxx"
+#include "MACE/Utility/UtilMPI/CheckedMPICallNoExcept.hxx"
 
 #include "mpi.h"
 
