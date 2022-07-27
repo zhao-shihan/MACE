@@ -16,7 +16,7 @@ public:
                    VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
     virtual ~MPIEnvironment();
 
-    static auto& Instance() { return FreeSingleton<MPIEnvironment>::Instance(); }
+    using FreeSingleton<MPIEnvironment>::Instance;
 
     static const auto& WorldCommRank() { return Instance().fWorldCommRank; }
     static const auto& WorldCommSize() { return Instance().fWorldCommSize; }

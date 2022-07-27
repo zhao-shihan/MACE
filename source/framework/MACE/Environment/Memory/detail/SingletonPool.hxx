@@ -37,7 +37,7 @@ public:
     template<Concept::Singletonized ASingleton>
     [[nodiscard]] auto Contains() const { return fTypeMap.contains(typeid(ASingleton)); }
     template<Concept::Singletonized ASingleton>
-    [[nodiscard]] Node& Push(ASingleton* instance);
+    [[nodiscard]] Node& Insert(ASingleton* instance);
 
     auto begin() const { return fInstanceList.cbegin(); }
     auto end() const { return fInstanceList.cend(); }

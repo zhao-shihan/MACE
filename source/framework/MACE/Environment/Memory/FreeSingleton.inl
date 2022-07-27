@@ -5,7 +5,7 @@ ObserverPtr<Detail::FreeSingletonPool::Node> FreeSingleton<ADerived>::fgInstance
 
 template<class ADerived>
 FreeSingleton<ADerived>::FreeSingleton() :
-    NonCopyableBase() {
+    FreeSingletonBase() {
     static_assert(Concept::FreeSingletonized<ADerived>);
     if (not Detail::FreeSingletonPool::Instance().Contains<ADerived>()) {
         fgInstanceNode = std::addressof(Detail::FreeSingletonPool::Instance().Insert(static_cast<ADerived*>(this)));

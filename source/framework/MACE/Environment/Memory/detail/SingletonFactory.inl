@@ -4,7 +4,7 @@ template<Concept::Singletonized ASingleton>
 [[nodiscard]] SingletonPool::Node& SingletonFactory::InstantiateOrFind() {
     if (const auto existedNode = fInstancePool.Find<ASingleton>();
         not existedNode.has_value()) [[likely]] {
-        return fInstancePool.Push(new ASingleton());
+        return fInstancePool.Insert(new ASingleton());
     } else {
         return existedNode.value();
     }

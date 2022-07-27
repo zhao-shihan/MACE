@@ -12,7 +12,7 @@ template<Concept::FreeSingletonized AFreeSingleton>
 
 template<Concept::FreeSingletonized AFreeSingleton>
 [[nodiscard]] FreeSingletonPool::Node& FreeSingletonPool::Insert(AFreeSingleton* instance) {
-    auto&& [nodePair, inserted] = fInstanceMap.emplace(typeid(AFreeSingleton), instance);
+    auto&& [nodePair, inserted] = fInstanceMap.try_emplace(typeid(AFreeSingleton), instance);
     if (inserted) {
         return nodePair->second;
     } else {

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "MACE/Environment/Memory/Concept/FreeSingletonized.hxx"
+#include "MACE/Environment/Memory/detail/FreeSingletonBase.hxx"
 #include "MACE/Environment/Memory/detail/FreeSingletonPool.hxx"
-#include "MACE/Utility/NonCopyableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include <stdexcept>
@@ -14,7 +14,7 @@ namespace MACE::Environment::Memory {
 using MACE::Utility::ObserverPtr;
 
 template<class ADerived>
-class FreeSingleton : public Utility::NonCopyableBase {
+class FreeSingleton : public Detail::FreeSingletonBase {
 protected:
     FreeSingleton();
     ~FreeSingleton();

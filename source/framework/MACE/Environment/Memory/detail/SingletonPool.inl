@@ -11,13 +11,13 @@ template<Concept::Singletonized ASingleton>
 }
 
 template<Concept::Singletonized ASingleton>
-[[nodiscard]] SingletonPool::Node& SingletonPool::Push(ASingleton* instance) {
+[[nodiscard]] SingletonPool::Node& SingletonPool::Insert(ASingleton* instance) {
     auto& node = fInstanceList.emplace_front(instance, static_cast<ISingletonBase*>(instance));
-    if (fTypeMap.emplace(typeid(ASingleton), fInstanceList.begin()).second) {
+    if (fTypeMap.try_emplace(typeid(ASingleton), fInstanceList.begin()).second) {
         return node;
     } else {
         fInstanceList.pop_front();
-        throw std::logic_error(std::string("MACE::Environment::Memory::Detail::SingletonPool::Push: Instance of type ")
+        throw std::logic_error(std::string("MACE::Environment::Memory::Detail::SingletonPool::Insert: Instance of type ")
                                    .append(typeid(ASingleton).name())
                                    .append(" already exists"));
     }
