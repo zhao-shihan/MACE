@@ -21,7 +21,7 @@ std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_vi
 
     using Environment::MPIEnvironment;
 
-    if (MPIEnvironment::IsSerialized()) {
+    if (MPIEnvironment::IsSequential()) {
 
         return std::string(basicName).append(suffix);
 

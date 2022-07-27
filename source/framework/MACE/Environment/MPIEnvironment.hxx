@@ -22,8 +22,8 @@ public:
     static const auto& ProcessorName() { return Instance().fProcessorName; }
     static auto IsWorldMaster() { return WorldCommRank() == 0; }
     static auto IsWorldWorker() { return WorldCommRank() > 0; }
-    static auto IsSerialized() { return WorldCommSize() == 1; }
-    static auto IsParallelized() { return WorldCommSize() > 1; }
+    static auto IsSequential() { return WorldCommSize() == 1; }
+    static auto IsParallel() { return WorldCommSize() > 1; }
 
 protected:
     void PrintStartupMessageBody(int argc, char* argv[]) const;

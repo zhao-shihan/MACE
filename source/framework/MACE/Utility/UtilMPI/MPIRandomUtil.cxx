@@ -15,7 +15,7 @@ namespace MACE::Utility::UtilMPI {
 void MPIReSeedCLHEPRandom(CLHEP::HepRandomEngine* randEng) {
     using MACE::Environment::MPIEnvironment;
 
-    if (MPIEnvironment::IsSerialized()) { return; }
+    if (MPIEnvironment::IsSequential()) { return; }
 
     std::vector<long> seedSend;
     long seedRecv = 0;

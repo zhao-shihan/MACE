@@ -111,7 +111,7 @@ void Analysis::AnalysisAndWriteYield() {
         }
     }
 
-    if (MPIEnvironment::IsParallelized()) {
+    if (MPIEnvironment::IsParallel()) {
         std::vector<decltype(yieldData)> yieldDataRecv;
         if (MPIEnvironment::IsWorldMaster()) { yieldDataRecv.resize(MPIEnvironment::WorldCommSize()); }
         MACE_CHECKED_MPI_CALL(MPI_Gather, yieldData.data(), yieldData.size(), MPI_UNSIGNED_LONG, yieldDataRecv.data(), yieldData.size(), MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD)
