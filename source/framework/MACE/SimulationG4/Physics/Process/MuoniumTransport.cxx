@@ -4,7 +4,7 @@
 #include "MACE/SimulationG4/Physics/Process/MuoniumTransport.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
-#include "MACE/Utility/Unreachable.hxx"
+#include "MACE/Cxx2b/Unreachable.hxx"
 
 #include "G4TransportationManager.hh"
 #include "Randomize.hh"
@@ -35,7 +35,7 @@ G4VParticleChange* MuoniumTransport::AlongStepDoIt(const G4Track& track, const G
     fParticleChange.Initialize(track);
     switch (fCase) {
     case kUnknown:
-        Utility::Unreachable();
+        Cxx2b::Unreachable();
         break;
     case kDecaying:
         // Do nothing

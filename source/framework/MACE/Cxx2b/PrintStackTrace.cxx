@@ -1,24 +1,24 @@
-#include "MACE/Utility/PrintStackTrace.hxx"
+#include "MACE/Cxx2b/PrintStackTrace.hxx"
 
 #include <version>
 
-#ifdef __cpp_lib_stacktrace // C++23
+#ifdef __cpp_lib_stacktrace // C++2b
     #include <iostream>
     #include <stacktrace>
-#else // fallback to ROOT stacktrace
+#else // fallback: ROOT stacktrace
     #include "TSystem.h"
 #endif
 
-namespace MACE::Utility {
+namespace MACE::Cxx2b {
 
 void PrintStackTrace() {
-#ifdef __cpp_lib_stacktrace // C++23
+#ifdef __cpp_lib_stacktrace // C++2b
     std::cout << std::stacktrace::current() << std::endl;
-#else // fallback to ROOT stacktrace
+#else // fallback: ROOT stacktrace
     if (gSystem != nullptr) { // not destructed
         gSystem->StackTrace();
     }
 #endif
 }
 
-} // namespace MACE::Utility
+} // namespace MACE::Cxx2b

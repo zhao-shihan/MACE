@@ -1,3 +1,4 @@
+#include "MACE/Cxx2b/ToUnderlying.hxx"
 #include "MACE/Environment/CLI/BasicCLI.hxx"
 #include "MACE/Environment/VerboseLevel.hxx"
 #include "MACE/Version.hxx"
@@ -17,13 +18,13 @@ BasicCLI::BasicCLI() :
 
     fArgParser.add_argument("-V", "--verbose")
         .scan<'i', int>()
-        .default_value(static_cast<int>(VerboseLevel::Warning))
+        .default_value(Cxx2b::ToUnderlying(VerboseLevel::Warning))
         .required()
         .help("sets verbose level")
         .action([](const std::string& argVerbose) {
-            constexpr auto low = static_cast<int>(VerboseLevel::Quiet);
-            constexpr auto up = static_cast<int>(VerboseLevel::MoreVerbose);
-            auto parsedVerbose = static_cast<int>(VerboseLevel::Undefined);
+            constexpr auto low = Cxx2b::ToUnderlying(VerboseLevel::Quiet);
+            constexpr auto up = Cxx2b::ToUnderlying(VerboseLevel::MoreVerbose);
+            auto parsedVerbose = Cxx2b::ToUnderlying(VerboseLevel::Undefined);
             std::from_chars(argVerbose.data(), argVerbose.data() + argVerbose.size(), parsedVerbose);
             if (parsedVerbose < low or parsedVerbose > up) {
                 throw std::runtime_error(std::string("-V --verbose: '")
