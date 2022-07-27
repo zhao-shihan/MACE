@@ -1,7 +1,7 @@
 #if MACE_SIGNAL_HANDLER
 
-    #include "MACE/Environment/detail/SignalHandler.hxx"
     #include "MACE/Cxx2b/PrintStackTrace.hxx"
+    #include "MACE/Environment/detail/SignalHandler.hxx"
 
     #include <csignal>
     #include <cstdlib>

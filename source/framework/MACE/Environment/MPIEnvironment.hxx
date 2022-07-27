@@ -9,14 +9,13 @@
 
 namespace MACE::Environment {
 
-class MPIEnvironment : public BasicEnvironment,
-                       public Memory::FreeSingleton<MPIEnvironment> {
+class MPIEnvironment : public BasicEnvironment {
 public:
     MPIEnvironment(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> optCLI,
                    VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
     virtual ~MPIEnvironment();
 
-    using FreeSingleton<MPIEnvironment>::Instance;
+    static auto& Instance() { return static_cast<MPIEnvironment&>(BasicEnvironment::Instance()); }
 
     static const auto& WorldCommRank() { return Instance().fWorldCommRank; }
     static const auto& WorldCommSize() { return Instance().fWorldCommSize; }
@@ -30,7 +29,7 @@ protected:
     void PrintStartupMessageBody(int argc, char* argv[]) const;
 
 private:
-    void InitializeMPIAndWorldProperties(int argc, char** argv);
+    void InitializeMPIAndWorldProperties(int argc, char* argv[]);
 
 private:
     int fWorldCommRank;

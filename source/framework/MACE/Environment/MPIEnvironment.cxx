@@ -11,7 +11,6 @@ namespace MACE::Environment {
 MPIEnvironment::MPIEnvironment(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> optCLI,
                                VerboseLevel verboseLevel, bool printStartupMessage) :
     BasicEnvironment(argc, argv, optCLI, verboseLevel, false),
-    FreeSingleton<MPIEnvironment>(),
     fWorldCommRank(-1),
     fWorldCommSize(-1),
     fProcessorName() {
@@ -38,7 +37,7 @@ void MPIEnvironment::PrintStartupMessageBody(int argc, char* argv[]) const {
         << " Size of the MPI world communicator: " << fWorldCommSize << std::endl;
 }
 
-void MPIEnvironment::InitializeMPIAndWorldProperties(int argc, char** argv) {
+void MPIEnvironment::InitializeMPIAndWorldProperties(int argc, char* argv[]) {
     // Confirm MPI condition
     int mpiInitialized;
     MACE_CHECKED_MPI_CALL(MPI_Initialized, &mpiInitialized)
