@@ -6,6 +6,8 @@
 
 #include "Randomize.hh"
 
+#include <array>
+
 int main(int argc, char* argv[]) {
     MACE::Environment::MPIEnvironment mpiEnvironment(argc, argv, std::nullopt);
 
@@ -21,7 +23,9 @@ int main(int argc, char* argv[]) {
 
     MACE::SimulationG4::MPIExecutive mpiExecutive;
     if (interactive) {
-        mpiExecutive.StartInteractiveSession(argc, argv, "init_vis.mac");
+        mpiExecutive.StartInteractiveSession(argc, argv, std::array{
+#include "MACE/SimTarget/DefaultInteractiveSessionCommandList.macinl"
+                                                         });
     } else {
         mpiExecutive.StartBatchSession(argv[1]);
     }
