@@ -1,4 +1,8 @@
-# macro file for the test of SimTarget in batch session
+#############################################################################
+#
+# Macro file demo for SimMACE in batch session
+#
+#############################################################################
 
 # Set some default verbose
 /control/verbose 0
@@ -33,4 +37,3 @@
 
 /MPIRun/SetPrintProgress 1
 /run/beamOn 80
-#/mpi/status
