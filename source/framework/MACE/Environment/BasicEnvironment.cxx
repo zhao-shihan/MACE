@@ -9,19 +9,11 @@
 
 namespace MACE::Environment {
 
-ObserverPtr<BasicEnvironment> BasicEnvironment::fgInstance = nullptr;
-
 BasicEnvironment::BasicEnvironment(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> optCLI,
                                    VerboseLevel verboseLevel, bool printStartupMessage) :
-    NonCopyableBase(),
-    fSignalHandler(),
-    fVerboseLevel(verboseLevel),
-    fFreeSingletonPool(),
-    fSingletonFactory() {
-    // Check double construction
-    if (fgInstance != nullptr) {
-        throw std::logic_error("MACE::Environment::BasicEnvironment: Trying to initialize environment twice");
-    }
+    EnvironmentBase(),
+    FreeSingleton<BasicEnvironment>(),
+    fVerboseLevel(verboseLevel) {
     // CLI: do parse and get args
     if (optCLI.has_value()) {
         auto& cli = optCLI->get();
@@ -36,8 +28,6 @@ BasicEnvironment::BasicEnvironment(int argc, char* argv[], std::optional<std::re
         PrintStartupMessageBody(argc, argv);
         PrintStartupMessageSplitLine();
     }
-    // Set instance pointer
-    fgInstance = this;
 }
 
 void BasicEnvironment::PrintStartupMessageSplitLine() const {

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MACE/Environment/BasicEnvironment.hxx"
-#include "MACE/Environment/Memory/FreeSingleton.hxx"
 
 #include <stdexcept>
 #include <string>

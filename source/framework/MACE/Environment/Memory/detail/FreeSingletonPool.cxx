@@ -1,4 +1,3 @@
-#include "MACE/Environment/BasicEnvironment.hxx"
 #include "MACE/Environment/Memory/detail/FreeSingletonPool.hxx"
 
 #include <iostream>
@@ -21,8 +20,7 @@ FreeSingletonPool::FreeSingletonPool() :
 FreeSingletonPool::~FreeSingletonPool() {
     for (auto&& [type, instance] : std::as_const(fInstanceMap)) {
         if (instance != nullptr) [[unlikely]] {
-            MACE_VERBOSE_LEVEL_CONTROLLED_OUT(BasicEnvironment::Instance().GetVerboseLevel(), Error, std::clog)
-                << "MACE::Environment::Memory::Detail::FreeSingletonPool::~FreeSingletonPool(): Instance of type " << type.name() << " (free singleton in environment) still survives, implies memory leak or following undefined behavior" << std::endl;
+            std::clog << "MACE::Environment::Memory::Detail::FreeSingletonPool::~FreeSingletonPool(): Instance of type " << type.name() << " (free singleton in environment) still survives, implies memory leak or following undefined behavior" << std::endl;
         }
     }
     fgInstance = nullptr;

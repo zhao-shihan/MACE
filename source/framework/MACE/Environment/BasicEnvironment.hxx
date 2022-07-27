@@ -1,10 +1,8 @@
 #pragma once
 
-#include "MACE/Environment/detail/SignalHandler.hxx"
-#include "MACE/Environment/Memory/detail/FreeSingletonPool.hxx"
-#include "MACE/Environment/Memory/detail/SingletonFactory.hxx"
+#include "MACE/Environment/detail/EnvironmentBase.hxx"
+#include "MACE/Environment/Memory/FreeSingleton.hxx"
 #include "MACE/Environment/VerboseLevel.hxx"
-#include "MACE/Utility/NonCopyableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include <functional>
@@ -20,13 +18,12 @@ class BasicCLI;
 
 using MACE::Utility::ObserverPtr;
 
-class BasicEnvironment : public Utility::NonCopyableBase {
+class BasicEnvironment : public Detail::EnvironmentBase,
+                         public Memory::FreeSingleton<BasicEnvironment> {
 public:
     BasicEnvironment(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> optCLI,
                      VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
-    virtual ~BasicEnvironment() { fgInstance = nullptr; }
-
-    static auto& Instance() { return *fgInstance; }
+    virtual ~BasicEnvironment() = default;
 
     const auto& GetVerboseLevel() const { return fVerboseLevel; }
 
@@ -35,12 +32,7 @@ protected:
     void PrintStartupMessageBody(int argc, char* argv[]) const;
 
 private:
-    Detail::SignalHandler fSignalHandler;
     VerboseLevel fVerboseLevel;
-    Memory::Detail::FreeSingletonPool fFreeSingletonPool;
-    Memory::Detail::SingletonFactory fSingletonFactory;
-
-    static ObserverPtr<BasicEnvironment> fgInstance;
 };
 
 } // namespace MACE::Environment

@@ -10,7 +10,7 @@ FreeSingleton<ADerived>::FreeSingleton() :
     if (not Detail::FreeSingletonPool::Instance().Contains<ADerived>()) {
         fgInstanceNode = std::addressof(Detail::FreeSingletonPool::Instance().Insert(static_cast<ADerived*>(this)));
     } else {
-        throw std::logic_error(std::string("MACE::Environment::Memory::FreeSingleton: Trying to construct ")
+        throw std::logic_error(std::string("MACE::Environment::Memory::FreeSingleton::FreeSingleton(): Trying to construct ")
                                    .append(typeid(ADerived).name())
                                    .append(" (free singleton in environment) twice"));
     }

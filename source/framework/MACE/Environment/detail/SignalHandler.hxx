@@ -1,20 +1,21 @@
 #pragma once
+#if MACE_SIGNAL_HANDLER
 
-namespace MACE::Environment {
+namespace MACE::Environment::Detail {
 
-class BasicEnvironment;
+extern "C" {
 
-namespace Detail {
+/// @brief Handles: SIGINT
+[[noreturn]] void MACE_ISOC99_SIGINT_Handler(int);
+/// @brief Handles: SIGTERM
+[[noreturn]] void MACE_ISOC99_SIGTERM_Handler(int);
+/// @brief Handles: SIGABRT
+[[noreturn]] void MACE_ISOC99_SIGABRT_Handler(int);
+/// @brief Handles: SIGFPE, SIGILL, SIGSEGV
+[[noreturn]] void MACE_ISOC99_SIGFPE_SIGILL_SIGSEGV_Handler(int sig);
 
-class SignalHandler final {
-    friend class Environment::BasicEnvironment;
+} // extern "C"
 
-private:
-    SignalHandler();
-    SignalHandler(const SignalHandler&) = delete;
-    SignalHandler& operator=(const SignalHandler&) = delete;
-};
+} // namespace MACE::Environment::Detail
 
-} // namespace Detail
-
-} // namespace MACE::Environment
+#endif
