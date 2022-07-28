@@ -1,26 +1,31 @@
 #include "MACE/Cxx2b/ToUnderlying.hxx"
 #include "MACE/Environment/CLI/BasicCLI.hxx"
-#include "MACE/Environment/VerboseLevel.hxx"
 #include "MACE/Version.hxx"
 
+#include <iostream>
 #include <stdexcept>
 
 namespace MACE::Environment::CLI {
 
 BasicCLI::BasicCLI() :
-    NonMoveableBase(),
-    fArgParser({}, MACE_VERSION_STRING) {
-    if (static bool gInstantiated = false; gInstantiated) {
-        throw std::logic_error("MACE::Environment::CLI::BasicCLI: Trying to construct CLI twice");
-    } else {
-        gInstantiated = true;
-    }
-
+    CLIBase() {
+    fArgParser.add_argument("-h", "--help")
+        .help("Show help message and exit.")
+        .nargs(0)
+        .action([this](const auto&) {
+            std::cout << fArgParser << std::flush;
+            std::exit(EXIT_SUCCESS);
+        });
+    fArgParser.add_argument("-v", "--version")
+        .help("Print version and exit.")
+        .nargs(0)
+        .action([](const auto&) {
+            std::cout << MACE_VERSION_STRING << std::endl;
+            std::exit(EXIT_SUCCESS);
+        });
     fArgParser.add_argument("-V", "--verbose")
         .scan<'i', int>()
-        .default_value(Cxx2b::ToUnderlying(VerboseLevel::Warning))
-        .required()
-        .help("sets verbose level (-1: quiet, 0: error, 1: warning, 2: verbose, 3: more verbose)")
+        .help("Set verbose level. (-1: quiet, 0: error, 1: warning, 2: verbose, 3: more verbose)")
         .action([](const std::string& argVerbose) {
             constexpr auto low = Cxx2b::ToUnderlying(VerboseLevel::Quiet);
             constexpr auto up = Cxx2b::ToUnderlying(VerboseLevel::MoreVerbose);
@@ -39,13 +44,12 @@ BasicCLI::BasicCLI() :
         });
 }
 
-void BasicCLI::ParseArgs(int argc, const char* const argv[]) {
-    try {
-        fArgParser.parse_args(argc, argv);
-    } catch (const std::runtime_error& exception) {
-        std::cerr << exception.what() << '\n'
-                  << "Try: " << argv[0] << " --help" << std::endl;
-        std::exit(EXIT_FAILURE);
+std::optional<VerboseLevel> BasicCLI::GetVerboseLevel() const {
+    if (const auto optionalVerbose = fArgParser.present<std::underlying_type_t<VerboseLevel>>("-V");
+        optionalVerbose.has_value()) {
+        return static_cast<VerboseLevel>(optionalVerbose.value());
+    } else {
+        return std::nullopt;
     }
 }
 

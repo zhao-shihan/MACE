@@ -20,7 +20,7 @@ BasicEnvironment::BasicEnvironment(int argc, char* argv[], std::optional<std::re
         // Parse
         cli.ParseArgs(argc, argv);
         // Get args
-        fVerboseLevel = cli.GetVerboseLevel();
+        fVerboseLevel = cli.GetVerboseLevel().value_or(verboseLevel);
     }
     // Print startup message after parse
     if (printStartupMessage) {
@@ -47,14 +47,14 @@ void BasicEnvironment::PrintStartupMessageBody(int argc, char* argv[]) const {
         << " Copyright (c) 2020-2022 MACE software working group \n"
         << '\n'
         << " Exe: " << argv[0] << '\n'
-        << " CWD: " << cwd << std::endl;
+        << " CWD: " << cwd << '\n';
     if (fVerboseLevel >= VerboseLevel::Verbose) {
-        std::cout << "\n List of all " << argc << " command line args:\n";
+        std::cout << "\n List of all " << argc << " command line arguments:\n";
         for (int i = 0; i < argc; ++i) {
             std::cout << "  argv[" << i << "]: " << argv[i] << '\n';
         }
-        std::cout << std::flush;
     }
+    MACE_VERBOSE_LEVEL_CONTROLLED_OUT(fVerboseLevel, Error, std::cout) << std::flush;
 }
 
 } // namespace MACE::Environment
