@@ -19,7 +19,7 @@ namespace MACE::SimTarget {
 using Core::DataFactory;
 using Utility::ObserverPtr;
 
-class Analysis final : public Utility::NonMoveableBase {
+class Analysis final : private Utility::NonMoveableBase {
 public:
     Analysis();
     ~Analysis();

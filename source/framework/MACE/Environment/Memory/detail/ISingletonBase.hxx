@@ -9,7 +9,7 @@ namespace MACE::Environment::Memory::Detail {
 /// Not API.
 /// @details The direct base of Singleton<T>. This allow us to manage instances
 /// using polymorphism mechanism.
-class ISingletonBase : public Utility::NonMoveableBase {
+class ISingletonBase : private Utility::NonMoveableBase {
     friend SingletonFactory::~SingletonFactory();
 
 protected:

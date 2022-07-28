@@ -7,7 +7,7 @@
 
 namespace MACE::Environment::CLI {
 
-class BasicCLI : public Utility::NonMoveableBase {
+class BasicCLI : private Utility::NonMoveableBase {
 public:
     BasicCLI();
 

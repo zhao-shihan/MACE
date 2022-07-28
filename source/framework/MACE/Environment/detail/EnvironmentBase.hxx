@@ -15,7 +15,7 @@ class SingletonFactory;
 
 namespace Detail {
 
-class EnvironmentBase : public Utility::NonMoveableBase {
+class EnvironmentBase : private Utility::NonMoveableBase {
 protected:
     EnvironmentBase();
     ~EnvironmentBase();

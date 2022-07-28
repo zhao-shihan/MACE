@@ -6,7 +6,7 @@ namespace MACE::Environment::Memory::Detail {
 
 /// @brief Implementation detail of MACE::Environment::Memory::FreeSingleton.
 /// Not API. Just a signature of free singleton.
-class FreeSingletonBase : public Utility::NonMoveableBase {
+class FreeSingletonBase : private Utility::NonMoveableBase {
 protected:
     FreeSingletonBase() = default;
     ~FreeSingletonBase() = default;
