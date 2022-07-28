@@ -12,8 +12,15 @@ void MPIExecutive::StartInteractiveSession(int argc, char* argv[], const std::ra
 template<std::ranges::range ARange> // clang-format off
     requires std::convertible_to<typename ARange::value_type, std::string>
 void MPIExecutive::Execute(const ARange& commandList) const { // clang-format on
-    for (auto&& command : commandList) {
-        if (fG4UIManager->ApplyCommand(command) != 0) [[unlikely]] { break; }
+    for (const std::string& command : commandList) {
+        if (command.empty()) { continue; }
+        if (command[command.find_first_not_of(' ')] == '#') { continue; }
+        if (const auto commandStatus = fG4UIManager->ApplyCommand(command);
+            commandStatus != fCommandSucceeded) [[unlikely]] {
+            MACE_ENVIRONMENT_CONTROLLED_OUT(Error, std::cerr)
+                << "MACE::SimulationG4::MPIExecutive::Execute: Command \"" << command << "\" failed (G4UIcommandStatus: " << commandStatus << ')' << std::endl;
+            break;
+        }
     }
 }
 

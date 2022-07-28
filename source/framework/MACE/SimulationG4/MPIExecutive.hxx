@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Environment/BasicEnvironment.hxx"
 #include "MACE/Environment/Memory/FreeSingleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
@@ -7,6 +8,7 @@
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 
+#include <iostream>
 #include <ranges>
 #include <string>
 
