@@ -17,7 +17,7 @@ void CDCSenseWire::ConstructSelf(G4bool checkOverlaps) {
     const auto detail = description.SenseWireGeometryDetail();
     const auto layerCount = detail.size();
 
-    for (size_t layerID = 0; layerID < layerCount; ++layerID) {
+    for (std::size_t layerID = 0; layerID < layerCount; ++layerID) {
         const auto& [localPositon, halfLength] = detail[layerID];
         auto solid = Make<G4Tubs>(
             name,

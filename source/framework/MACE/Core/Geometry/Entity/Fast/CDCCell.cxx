@@ -13,7 +13,7 @@ void CDCCell::ConstructSelf(G4bool checkOverlaps) {
     const auto cellDetail = description.CellGeometryDetail();
     const auto layerCount = layerDetail.size();
 
-    for (size_t cellID = 0, layerID = 0; layerID < layerCount; ++layerID) {
+    for (std::size_t cellID = 0, layerID = 0; layerID < layerCount; ++layerID) {
         auto&& [cellRadius, cellWidth, halfLength, _0] = layerDetail[layerID];
         auto&& [cellAngle, _1, rotations] = cellDetail[layerID];
         auto solid = Make<G4Tubs>(

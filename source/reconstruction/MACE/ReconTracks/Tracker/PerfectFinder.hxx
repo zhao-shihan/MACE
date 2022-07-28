@@ -22,7 +22,7 @@ public:
 
     void Reconstruct(const std::vector<HitPtr>& hitData) override;
 
-    void SetThreshold(size_t val) { fThreshold = val; }
+    void SetThreshold(std::size_t val) { fThreshold = val; }
 
 private:
     static std::vector<HitPtr> LexicographicalSort(std::vector<HitPtr> hitData);
@@ -31,7 +31,7 @@ private:
     void FitAndDumpToResult(std::vector<HitPtr>& candidate);
 
 private:
-    size_t fThreshold = 10;
+    std::size_t fThreshold = 10;
 };
 
 } // namespace MACE::ReconTracks::Tracker

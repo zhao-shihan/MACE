@@ -22,8 +22,8 @@ public:
 
     void Reconstruct(const std::vector<HitPtr>& hitData) override;
 
-    void SetThresholdXY(size_t threshold) { fThresholdXY = threshold; }
-    void SetThresholdSZ(size_t threshold) { fThresholdSZ = threshold; }
+    void SetThresholdXY(std::size_t threshold) { fThresholdXY = threshold; }
+    void SetThresholdSZ(std::size_t threshold) { fThresholdSZ = threshold; }
 
 private:
     // Step 1: 2D pattern recognition
@@ -53,7 +53,7 @@ private:
     Eigen::Index ToZ0Index(double z0) const { return (z0 - fZ0Low) / fZ0Resolution; }
     Eigen::Index ToAlphaIndex(double alpha) const { return (alpha + M_PI) / fAlphaResolution; }
 
-    static size_t EffectiveSizeOf(const std::vector<HitPtr*>& hitPtrPtrList) { return std::count_if(hitPtrPtrList.begin(), hitPtrPtrList.end(), [](auto hitPtrPtr) { return !(*hitPtrPtr == nullptr); }); }
+    static std::size_t EffectiveSizeOf(const std::vector<HitPtr*>& hitPtrPtrList) { return std::count_if(hitPtrPtrList.begin(), hitPtrPtrList.end(), [](auto hitPtrPtr) { return !(*hitPtrPtr == nullptr); }); }
 
 private:
     std::vector<HitPtr> fHitData;
@@ -62,7 +62,7 @@ private:
     const double fRhoUp;
     const double fPhiResolution;
     const double fRhoResolution;
-    size_t fThresholdXY = 20;
+    std::size_t fThresholdXY = 20;
     Eigen::Matrix<std::vector<HitPtr*>, Eigen::Dynamic, Eigen::Dynamic> fHoughSpaceXY;
     std::vector<std::pair<std::pair<double, double>, const std::vector<HitPtr*>*>> fPiledTrackList;
 
@@ -70,7 +70,7 @@ private:
     const double fZ0Up;
     const double fZ0Resolution;
     const double fAlphaResolution;
-    size_t fThresholdSZ = 20;
+    std::size_t fThresholdSZ = 20;
     Eigen::Matrix<std::vector<HitPtr*>, Eigen::Dynamic, Eigen::Dynamic> fHoughSpaceSZ;
     std::vector<std::pair<HelixParameters, const std::vector<HitPtr*>*>> fTrackList;
 };

@@ -39,17 +39,17 @@ void IEntity::ConstructSelfAndDescendants(G4bool checkOverlaps) {
     }
 }
 
-void IEntity::RegisterMaterial(size_t volumeIndex, G4Material* region) const {
+void IEntity::RegisterMaterial(std::size_t volumeIndex, G4Material* region) const {
     GetLogicalVolume(volumeIndex)->SetMaterial(region);
 }
 
 void IEntity::RegisterMaterial(G4Material* region) const {
-    for (size_t i = 0; i < GetLogicalVolumeNum(); ++i) {
+    for (std::size_t i = 0; i < GetLogicalVolumeNum(); ++i) {
         RegisterMaterial(i, region);
     }
 }
 
-void IEntity::RegisterRegion(size_t volumeIndex, G4Region* region) const {
+void IEntity::RegisterRegion(std::size_t volumeIndex, G4Region* region) const {
     auto logicalVolume = GetLogicalVolume(volumeIndex);
     if (logicalVolume->GetRegion() != region) {
         logicalVolume->SetRegion(region);
@@ -58,12 +58,12 @@ void IEntity::RegisterRegion(size_t volumeIndex, G4Region* region) const {
 }
 
 void IEntity::RegisterRegion(G4Region* region) const {
-    for (size_t i = 0; i < GetLogicalVolumeNum(); ++i) {
+    for (std::size_t i = 0; i < GetLogicalVolumeNum(); ++i) {
         RegisterRegion(i, region);
     }
 }
 
-void IEntity::RegisterSD(size_t volumeIndex, G4VSensitiveDetector* sd) const {
+void IEntity::RegisterSD(std::size_t volumeIndex, G4VSensitiveDetector* sd) const {
     auto logicalVolume = GetLogicalVolume(volumeIndex);
     if (logicalVolume->GetSensitiveDetector() == nullptr) {
         // Register to logicalVolume
@@ -86,13 +86,13 @@ void IEntity::RegisterSD(size_t volumeIndex, G4VSensitiveDetector* sd) const {
 }
 
 void IEntity::RegisterSD(G4VSensitiveDetector* sd) const {
-    for (size_t i = 0; i < GetLogicalVolumeNum(); ++i) {
+    for (std::size_t i = 0; i < GetLogicalVolumeNum(); ++i) {
         RegisterSD(i, sd);
     }
 }
 
 #if MACE_WITH_G4GDML
-void IEntity::WriteSelfAndDesendentsToGDML(std::string_view fileName, size_t volumeIndex) const {
+void IEntity::WriteSelfAndDesendentsToGDML(std::string_view fileName, std::size_t volumeIndex) const {
     G4GDMLParser gdml;
     gdml.SetAddPointerToName(false);
     gdml.SetOutputFileOverwrite(true);

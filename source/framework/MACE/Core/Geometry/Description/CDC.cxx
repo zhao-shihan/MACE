@@ -31,7 +31,7 @@ std::vector<std::pair<Eigen::Vector2d, Eigen::Vector3d>> CDC::SenseWireMap() con
     std::vector<std::pair<Eigen::Vector2d, Eigen::Vector3d>> senseWireMap;
     senseWireMap.reserve(3 * layerCount * layerCount); // just an estimation of cell count (pi*r^2), for optimization.
 
-    for (size_t layerID = 0; layerID < layerCount; ++layerID) {
+    for (std::size_t layerID = 0; layerID < layerCount; ++layerID) {
         const auto& wireLocalPosition = senseWireGeometryDetail[layerID].first;
         for (auto&& rotation : std::get<2>(cellGeometryDetail[layerID])) {
             const auto wirePosition = G4TwoVector(rotation * wireLocalPosition);
@@ -85,7 +85,7 @@ std::vector<std::tuple<double, double, std::vector<G4RotationMatrix>>> CDC::Cell
     std::vector<std::tuple<double, double, std::vector<G4RotationMatrix>>> cellGeometryDetail;
     cellGeometryDetail.reserve(layerCount);
 
-    for (size_t layerID = 0; layerID < layerCount; ++layerID) {
+    for (std::size_t layerID = 0; layerID < layerCount; ++layerID) {
         auto&& [_0, _1, halfLength, cellCount] = layerGeometryDetail[layerID];
 
         const auto cellDeltaPhi = 2 * pi / cellCount;
@@ -112,7 +112,7 @@ std::vector<std::pair<double, std::array<G4TwoVector, 3>>> CDC::FieldWireGeometr
     std::vector<std::pair<double, std::array<G4TwoVector, 3>>> fieldWireGeometryDetail;
     fieldWireGeometryDetail.reserve(layerCount);
 
-    for (size_t layerID = 0; layerID < layerCount; ++layerID) {
+    for (std::size_t layerID = 0; layerID < layerCount; ++layerID) {
         const auto& [cellAngle, halfLength, _0] = cellGeometryDetail[layerID];
         const auto& [layerRadius, layerThick, _1, _2] = layerGeometryDetail[layerID];
 
@@ -143,7 +143,7 @@ std::vector<std::pair<G4TwoVector, double>> CDC::SenseWireGeometryDetail() const
     std::vector<std::pair<G4TwoVector, double>> senseWireGeometryDetail;
     senseWireGeometryDetail.reserve(layerCount);
 
-    for (size_t layerID = 0; layerID < layerCount; ++layerID) {
+    for (std::size_t layerID = 0; layerID < layerCount; ++layerID) {
         const auto& [svCenterR, _0, halfLength, svCenterPhi, _1] = svGeometryDetail[layerID];
         senseWireGeometryDetail.emplace_back(G4TwoVector(svCenterR * std::cos(svCenterPhi),
                                                          svCenterR * std::sin(svCenterPhi)),
@@ -162,7 +162,7 @@ std::vector<std::tuple<double, double, double, double, double>> CDC::SensitiveVo
     std::vector<std::tuple<double, double, double, double, double>> svGeometeryDetail(0);
     svGeometeryDetail.reserve(layerCount);
 
-    for (size_t layerID = 0; layerID < layerCount; ++layerID) {
+    for (std::size_t layerID = 0; layerID < layerCount; ++layerID) {
         const auto& [cellAngle, halfLength, _0] = cellGeometryDetail[layerID];
         const auto& [layerRho, layerThick, _1, _2] = layerGeometryDetail[layerID];
         const auto svRho = layerRho - fFieldWireDiameter / 2;

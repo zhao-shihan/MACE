@@ -8,12 +8,12 @@ template<std::integral AInt>
 void DoTest(AInt begin, AInt end, AInt nTakers) {
     const auto dividedIndexNum = DivideIndexNum(end - begin, nTakers);
     std::cout << "DivideIndexNum(...):\n";
-    for (size_t i = 0; i < dividedIndexNum.size(); ++i) {
+    for (std::size_t i = 0; i < dividedIndexNum.size(); ++i) {
         std::cout << i << ": " << dividedIndexNum[i] << '\n';
     }
 
     auto PrintResult = [](const auto& result) {
-        for (size_t i = 0; i < result.size(); ++i) {
+        for (std::size_t i = 0; i < result.size(); ++i) {
             std::cout << i << ": [" << result[i].begin << ", " << result[i].end << ", " << result[i].step << ", " << result[i].count << "]\n";
         }
     };

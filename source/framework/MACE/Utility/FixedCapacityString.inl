@@ -1,22 +1,22 @@
 namespace MACE::Utility {
 
-template<size_t ACapacity> // clang-format off
+template<std::size_t ACapacity> // clang-format off
     requires (ACapacity >= 2)
 FixedCapacityString<ACapacity>::FixedCapacityString() noexcept :
     fString{'\0'} {} // clang-format on
 
-template<size_t ACapacity> // clang-format off
+template<std::size_t ACapacity> // clang-format off
     requires (ACapacity >= 2)
 FixedCapacityString<ACapacity>::FixedCapacityString(char ch) noexcept :
     fString{ch, '\0'} {} // clang-format on
 
-template<size_t ACapacity> // clang-format off
+template<std::size_t ACapacity> // clang-format off
     requires (ACapacity >= 2)
 FixedCapacityString<ACapacity>::FixedCapacityString(const char* rhs) noexcept { // clang-format on
     std::strncpy(fString, rhs, max_size());
 }
 
-template<size_t ACapacity> // clang-format off
+template<std::size_t ACapacity> // clang-format off
     requires (ACapacity >= 2)
 FixedCapacityString<ACapacity>& FixedCapacityString<ACapacity>::operator=(char rhs) & noexcept { // clang-format on
     fString[0] = rhs;
@@ -24,7 +24,7 @@ FixedCapacityString<ACapacity>& FixedCapacityString<ACapacity>::operator=(char r
     return *this;
 }
 
-template<size_t ACapacity> // clang-format off
+template<std::size_t ACapacity> // clang-format off
     requires (ACapacity >= 2)
 FixedCapacityString<ACapacity>& FixedCapacityString<ACapacity>::operator=(const char* rhs) & noexcept { // clang-format on
     if (fString != rhs) {
@@ -39,7 +39,7 @@ FixedCapacityString<ACapacity>& FixedCapacityString<ACapacity>::operator=(const 
     return *this;
 }
 
-template<size_t ACapacity> // clang-format off
+template<std::size_t ACapacity> // clang-format off
     requires (ACapacity >= 2)
 FixedCapacityString<ACapacity>& FixedCapacityString<ACapacity>::operator+=(char rhs) noexcept { // clang-format on
     auto tail = fString + this->length();
@@ -48,7 +48,7 @@ FixedCapacityString<ACapacity>& FixedCapacityString<ACapacity>::operator+=(char 
     return *this;
 }
 
-template<size_t ACapacity> // clang-format off
+template<std::size_t ACapacity> // clang-format off
     requires (ACapacity >= 2)
 FixedCapacityString<ACapacity>& FixedCapacityString<ACapacity>::operator+=(const char* rhs) noexcept { // clang-format on
     if (std::ptrdiff_t diff = fString - rhs;
@@ -61,7 +61,7 @@ FixedCapacityString<ACapacity>& FixedCapacityString<ACapacity>::operator+=(const
     return *this;
 }
 
-template<size_t ACapacity> // clang-format off
+template<std::size_t ACapacity> // clang-format off
     requires (ACapacity >= 2)
 std::weak_ordering FixedCapacityString<ACapacity>::operator<=>(const char* rhs) const noexcept { // clang-format on
     const auto cmpResult = std::strncmp(fString, rhs, max_size());

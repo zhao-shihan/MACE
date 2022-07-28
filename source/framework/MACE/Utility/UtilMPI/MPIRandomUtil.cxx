@@ -21,7 +21,7 @@ void MPIReSeedCLHEPRandom(CLHEP::HepRandomEngine* randEng) {
     long seedRecv = 0;
 
     if (MPIEnvironment::IsWorldMaster()) {
-        const size_t commSize = MPIEnvironment::WorldCommSize();
+        const std::size_t commSize = MPIEnvironment::WorldCommSize();
 
         std::set<long> uniqueSeeds;
         static const auto seedMaxLD = std::nextafter((long double)std::numeric_limits<long>::max(), -1.0L);

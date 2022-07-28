@@ -24,7 +24,7 @@ CDCSD::CDCSD(const G4String& sdName) :
 
     const auto senseWireMap = Core::Geometry::Description::CDC::Instance().SenseWireMap();
     fSenseWireMap.resize(senseWireMap.size());
-    for (size_t i = 0; i < senseWireMap.size(); ++i) {
+    for (std::size_t i = 0; i < senseWireMap.size(); ++i) {
         auto& [wirePosG4, wireDirG4] = fSenseWireMap[i];
         const auto& [wirePosEigen, wireDirEigen] = senseWireMap[i];
         wirePosG4.set(wirePosEigen.x(), wirePosEigen.y());

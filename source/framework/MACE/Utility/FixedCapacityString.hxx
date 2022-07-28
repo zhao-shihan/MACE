@@ -9,7 +9,7 @@ namespace MACE::Utility {
 /// As an option for some known-size cases or aggressive SSO (Short String Optimization).
 /// Compatible with C-style string, but more convenient copy constructor and operators are introduced.
 /// @attention The size of incoming string is never checked. Use with caution.
-template<size_t ACapacity> // clang-format off
+template<std::size_t ACapacity> // clang-format off
     requires (ACapacity >= 2)
 class FixedCapacityString final { // clang-format on
 public:
@@ -29,8 +29,8 @@ public:
     FixedCapacityString& operator=(const FixedCapacityString& rhs) & noexcept = default;
     FixedCapacityString& operator=(FixedCapacityString&& rhs) & noexcept = default;
 
-    size_t length() const noexcept { return std::strlen(fString); }
-    size_t size() const noexcept { return length(); }
+    std::size_t length() const noexcept { return std::strlen(fString); }
+    std::size_t size() const noexcept { return length(); }
     bool empty() const noexcept { return front() == '\0'; }
 
     char* begin() noexcept { return fString; }
@@ -64,8 +64,8 @@ public:
     bool operator>=(const char* rhs) const noexcept { return std::strncmp(fString, rhs, max_size()) >= 0; }
     std::weak_ordering operator<=>(const char* rhs) const noexcept;
 
-    static constexpr size_t capacity() noexcept { return ACapacity; }
-    static constexpr size_t max_size() noexcept { return ACapacity - 1; }
+    static constexpr std::size_t capacity() noexcept { return ACapacity; }
+    static constexpr std::size_t max_size() noexcept { return ACapacity - 1; }
 
     friend FixedCapacityString operator+(const FixedCapacityString& lhs, const FixedCapacityString& rhs) noexcept { return FixedCapacityString(lhs) += rhs; }
     friend FixedCapacityString operator+(const FixedCapacityString& lhs, const char* rhs) noexcept { return FixedCapacityString(lhs) += rhs; }

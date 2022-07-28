@@ -17,7 +17,7 @@ void CDCFieldWire::ConstructSelf(G4bool checkOverlaps) {
     const auto detail = description.FieldWireGeometryDetail();
     const auto layerCount = detail.size();
 
-    for (size_t layerID = 0; layerID < layerCount; ++layerID) {
+    for (std::size_t layerID = 0; layerID < layerCount; ++layerID) {
         auto&& [halfLength, positionList] = detail[layerID];
         auto solid = Make<G4Tubs>(
             name,
@@ -30,7 +30,7 @@ void CDCFieldWire::ConstructSelf(G4bool checkOverlaps) {
             solid,
             nullptr,
             name);
-        for (size_t wireID = 0; wireID < positionList.size(); ++wireID) {
+        for (std::size_t wireID = 0; wireID < positionList.size(); ++wireID) {
             Make<G4PVPlacement>(
                 G4Transform3D(
                     G4RotationMatrix(),

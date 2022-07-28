@@ -34,7 +34,7 @@ void DirectLeastSquare<CDCHit_t, Track_t>::Initialize(std::vector<HitPtr>& hitDa
     fZ.resize(fN);
     fPhi.resize(fN);
     fS.resize(fN);
-    for (size_t i = 0; i < fN; ++i) {
+    for (std::size_t i = 0; i < fN; ++i) {
         fT[i] = hitData[i]->GetHitTime();
         fWireX[i] = hitData[i]->GetWirePosition().x();
         fWireY[i] = hitData[i]->GetWirePosition().y();
@@ -132,7 +132,7 @@ void DirectLeastSquare<CDCHit_t, Track_t>::RevolveFit() {
     auto deltaX = fWireX - Xc;
     auto deltaY = fWireY - Yc;
     fPhi[0] = std::asin((-Xc * deltaY[0] + deltaX[0] * Yc) / std::sqrt((deltaX[0] * deltaX[0] + deltaY[0] * deltaY[0]) * (Xc * Xc + Yc * Yc)));
-    for (size_t i = 1; i < fN; ++i) {
+    for (std::size_t i = 1; i < fN; ++i) {
         fPhi[i] = fPhi[i - 1] + std::asin((deltaX[i - 1] * deltaY[i] - deltaX[i] * deltaY[i - 1]) / std::sqrt((deltaX[i - 1] * deltaX[i - 1] + deltaY[i - 1] * deltaY[i - 1]) * (deltaX[i] * deltaX[i] + deltaY[i] * deltaY[i])));
     }
     fS = R * fPhi;
@@ -207,7 +207,7 @@ inline double DirectLeastSquare<CDCHit_t, Track_t>::TargetFunction(const double&
     const auto deltaPlus = dca + fD;
     const auto varPlus = deltaPlus * deltaPlus;
     double variance = 0;
-    for (size_t i = 0; i < fN; ++i) {
+    for (std::size_t i = 0; i < fN; ++i) {
         variance += std::min(varMinus[i], varPlus[i]);
     }
     return variance / (R * R * fN);

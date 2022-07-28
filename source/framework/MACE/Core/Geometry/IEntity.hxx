@@ -33,29 +33,29 @@ public:
     void AddDaughter(const std::shared_ptr<IEntity>& daughter);
     void ConstructSelfAndDescendants(G4bool checkOverlaps);
 
-    void RegisterMaterial(size_t volumeIndex, G4Material* region) const;
+    void RegisterMaterial(std::size_t volumeIndex, G4Material* region) const;
     void RegisterMaterial(G4Material* region) const;
 
-    void RegisterRegion(size_t volumeIndex, G4Region* region) const;
+    void RegisterRegion(std::size_t volumeIndex, G4Region* region) const;
     void RegisterRegion(G4Region* region) const;
 
-    void RegisterSD(size_t volumeIndex, G4VSensitiveDetector* sd) const;
+    void RegisterSD(std::size_t volumeIndex, G4VSensitiveDetector* sd) const;
     void RegisterSD(G4VSensitiveDetector* sd) const;
 
     template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, class AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
-    void RegisterField(size_t volumeIndex, AField* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const;
+    void RegisterField(std::size_t volumeIndex, AField* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const;
     template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, class AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
     void RegisterField(AField* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const;
 
 #if MACE_WITH_G4GDML
-    void WriteSelfAndDesendentsToGDML(std::string_view fileName, size_t volumeIndex = 0) const;
+    void WriteSelfAndDesendentsToGDML(std::string_view fileName, std::size_t volumeIndex = 0) const;
 #endif
 
     auto GetLogicalVolumeNum() const { return fLogicalVolumes.size(); }
-    auto GetLogicalVolume(size_t volumeIndex = 0) const { return fLogicalVolumes.at(volumeIndex).get(); }
+    auto GetLogicalVolume(std::size_t volumeIndex = 0) const { return fLogicalVolumes.at(volumeIndex).get(); }
 
     auto GetPhysicalVolumeNum() const { return fPhysicalVolumes.size(); }
-    auto GetPhysicalVolume(size_t volumeIndex = 0) const { return fPhysicalVolumes.at(volumeIndex).get(); }
+    auto GetPhysicalVolume(std::size_t volumeIndex = 0) const { return fPhysicalVolumes.at(volumeIndex).get(); }
 
 protected:
     // Make a G4Solid and keep it (just for deleting when Entity deconstructs).

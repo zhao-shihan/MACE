@@ -12,7 +12,7 @@ void CDCSensitiveVolume::ConstructSelf(G4bool checkOverlaps) {
     const auto detail = description.SensitiveVolumeGeometryDetail();
     const auto layerCount = detail.size();
 
-    for (size_t layerID = 0; layerID < layerCount; ++layerID) {
+    for (std::size_t layerID = 0; layerID < layerCount; ++layerID) {
         auto&& [rCenter, thick, halfLength, phiCenter, dPhi] = detail[layerID];
         auto solid = Make<G4Tubs>(
             name,

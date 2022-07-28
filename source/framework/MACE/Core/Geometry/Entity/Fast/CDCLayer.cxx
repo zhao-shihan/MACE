@@ -16,7 +16,7 @@ void CDCLayer::ConstructSelf(G4bool checkOverlaps) {
     const auto detail = description.LayerGeometryDetail();
     const auto count = detail.size();
 
-    for (size_t layerID = 0; layerID < count; ++layerID) {
+    for (std::size_t layerID = 0; layerID < count; ++layerID) {
         const auto& [radius, thick, halfLength, _] = detail[layerID];
         auto solid = Make<G4Tubs>(
             name,

@@ -35,11 +35,11 @@ public:
     void SetTolerance(double val) { fTolerance = val; }
 
     // Stop condition for Newton-Raphson method
-    void SetMaxStepsForNewtonRaphson(size_t val) { fMaxStepsNR = val; }
+    void SetMaxStepsForNewtonRaphson(std::size_t val) { fMaxStepsNR = val; }
     // Settings for conjugate gradient method
     void SetSufficientDecreaseCoefficient(double val) { fSufficentCoeff = val; }
     void SetBackTrackingLength(double val) { fBackTrackingLength = val; }
-    void SetMaxStepsForConjugateGrad(size_t val) { fMaxStepsCG = val; }
+    void SetMaxStepsForConjugateGrad(std::size_t val) { fMaxStepsCG = val; }
 
     bool Fit(std::vector<HitPtr>& hitData, Track_t& track) override;
 
@@ -81,12 +81,12 @@ private:
     double fH = 1e-3;
 
     double fTolerance = 1e-6;
-    size_t fMaxStepsNR = 100;
+    std::size_t fMaxStepsNR = 100;
     double fSufficentCoeff = 1e-4;
     double fBackTrackingLength = 0.09;
-    size_t fMaxStepsCG = 10000;
+    std::size_t fMaxStepsCG = 10000;
 
-    size_t fN;
+    std::size_t fN;
     std::valarray<double> fT;
     std::valarray<double> fWireX;
     std::valarray<double> fWireY;
