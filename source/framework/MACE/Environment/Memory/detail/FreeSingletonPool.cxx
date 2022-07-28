@@ -20,7 +20,7 @@ FreeSingletonPool::FreeSingletonPool() :
 FreeSingletonPool::~FreeSingletonPool() {
     for (auto&& [type, instance] : std::as_const(fInstanceMap)) {
         if (instance != nullptr) [[unlikely]] {
-            std::clog << "MACE::Environment::Memory::Detail::FreeSingletonPool::~FreeSingletonPool(): Instance of type " << type.name() << " (free singleton in environment) still survives, implies memory leak or following undefined behavior" << std::endl;
+            std::cerr << "MACE::Environment::Memory::Detail::FreeSingletonPool::~FreeSingletonPool(): Instance of type " << type.name() << " (free singleton in environment) still survives, implies memory leak or following undefined behavior" << std::endl;
         }
     }
     fgInstance = nullptr;

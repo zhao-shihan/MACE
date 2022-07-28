@@ -14,13 +14,13 @@ static_assert(not Concept::NonCopyable<TrivialClass>);
 static_assert(not Concept::MerelyMoveable<TrivialClass>);
 static_assert(not Concept::NonMoveable<TrivialClass>);
 
-class MerelyMoveableClass : public MerelyMoveableBase {};
+class MerelyMoveableClass : private MerelyMoveableBase {};
 
 static_assert(Concept::NonCopyable<MerelyMoveableClass>);
 static_assert(Concept::MerelyMoveable<MerelyMoveableClass>);
 static_assert(not Concept::NonMoveable<MerelyMoveableClass>);
 
-class NonMoveableClass : public NonMoveableBase {};
+class NonMoveableClass : private NonMoveableBase {};
 
 static_assert(Concept::NonCopyable<NonMoveableClass>);
 static_assert(not Concept::MerelyMoveable<NonMoveableClass>);

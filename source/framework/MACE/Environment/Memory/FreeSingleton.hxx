@@ -14,7 +14,7 @@ namespace MACE::Environment::Memory {
 using MACE::Utility::ObserverPtr;
 
 template<class ADerived>
-class FreeSingleton : public Detail::FreeSingletonBase {
+class FreeSingleton : private Detail::FreeSingletonBase {
 protected:
     FreeSingleton();
     ~FreeSingleton();
