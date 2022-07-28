@@ -13,7 +13,7 @@ namespace MACE::Utility::UtilMPI {
 std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_view suffix, MPI_Comm comm) {
 #ifdef PATH_MAX
     constexpr size_t pathMax = PATH_MAX; // Unix
-#elif defined(_MAX_PATH)
+#elif defined _MAX_PATH
     constexpr size_t pathMax = _MAX_PATH; // Windows
 #else
     constexpr size_t pathMax = 260; // ???
