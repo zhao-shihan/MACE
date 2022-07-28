@@ -11,17 +11,16 @@ namespace MACE::Environment::Detail {
 
 extern "C" {
 
-[[noreturn]] void MACE_ISOC99_SIGINT_Handler(int) {
-    std::cerr << "\n *** INTERRUPT (SIGINT) ***\n"
-              << std::endl;
-    Cxx2b::PrintStackTrace();
+[[noreturn]] void MACE_ISOC99_SIGINT_SIGTERM_Handler(int sig) {
+    switch (sig) {
+    case SIGINT:
+        std::cerr << "\n *** INTERRUPT (SIGINT) ***\n";
+        break;
+    case SIGTERM:
+        std::cerr << "\n *** TERMINATE (SIGTERM) ***\n";
+        break;
+    }
     std::cerr << std::endl;
-    std::exit(EXIT_FAILURE);
-}
-
-[[noreturn]] void MACE_ISOC99_SIGTERM_Handler(int) {
-    std::cerr << "\n *** TERMINATE (SIGTERM) ***\n"
-              << std::endl;
     Cxx2b::PrintStackTrace();
     std::cerr << std::endl;
     std::quick_exit(EXIT_FAILURE);

@@ -5,10 +5,8 @@ namespace MACE::Environment::Detail {
 
 extern "C" {
 
-/// @brief Handles: SIGINT
-[[noreturn]] void MACE_ISOC99_SIGINT_Handler(int);
-/// @brief Handles: SIGTERM
-[[noreturn]] void MACE_ISOC99_SIGTERM_Handler(int);
+/// @brief Handles: SIGINT, SIGTERM
+[[noreturn]] void MACE_ISOC99_SIGINT_SIGTERM_Handler(int);
 /// @brief Handles: SIGABRT
 [[noreturn]] void MACE_ISOC99_SIGABRT_Handler(int);
 /// @brief Handles: SIGFPE, SIGILL, SIGSEGV

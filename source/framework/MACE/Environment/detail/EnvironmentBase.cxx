@@ -18,9 +18,9 @@ EnvironmentBase::EnvironmentBase() :
     std::signal(SIGABRT, MACE_ISOC99_SIGABRT_Handler);
     std::signal(SIGFPE, MACE_ISOC99_SIGFPE_SIGILL_SIGSEGV_Handler);
     std::signal(SIGILL, MACE_ISOC99_SIGFPE_SIGILL_SIGSEGV_Handler);
-    std::signal(SIGINT, MACE_ISOC99_SIGINT_Handler);
+    std::signal(SIGINT, MACE_ISOC99_SIGINT_SIGTERM_Handler);
     std::signal(SIGSEGV, MACE_ISOC99_SIGFPE_SIGILL_SIGSEGV_Handler);
-    std::signal(SIGTERM, MACE_ISOC99_SIGTERM_Handler);
+    std::signal(SIGTERM, MACE_ISOC99_SIGINT_SIGTERM_Handler);
 #endif
 
     if (static bool gInstantiated = false; gInstantiated) {
