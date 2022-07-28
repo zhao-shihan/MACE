@@ -1,4 +1,3 @@
-#include "MACE/Environment/CLI/SimulationG4CLI.hxx"
 #include "MACE/Environment/MPIEnvironment.hxx"
 #include "MACE/SimMACE/Action/DetectorConstruction.hxx"
 #include "MACE/SimMACE/Action/PhysicsList.hxx"

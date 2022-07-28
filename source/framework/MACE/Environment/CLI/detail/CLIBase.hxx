@@ -4,6 +4,7 @@
 
 #include "argparse/argparse.hpp"
 
+#include <memory>
 #include <optional>
 
 namespace MACE::Environment::CLI::Detail {
@@ -18,10 +19,10 @@ public:
     auto Parsed() const { return fArguments.has_value(); }
     int GetArgc() const;
     char** GetArgv() const;
-    const auto& GetArgParser() const { return fArgParser; }
+    const auto& GetArgParser() const { return *fArgParser; }
 
 protected:
-    argparse::ArgumentParser fArgParser;
+    std::unique_ptr<argparse::ArgumentParser> fArgParser;
 
 private:
     std::optional<std::pair<int, char**>> fArguments;
