@@ -33,7 +33,7 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     add_compile_options(/permissive- /Zc:__cplusplus /Zc:inline)
     message(STATUS "MSVC standard-conformance mode enabled (/permissive- /Zc:__cplusplus /Zc:inline)")
     # Be permissive to standard cfunctions
-    add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
+    add_compile_definitions(_CRT_SECURE_NO_WARNINGS=1)
 endif()
 
 # =============================================================================
