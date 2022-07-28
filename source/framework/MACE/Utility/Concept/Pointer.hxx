@@ -8,50 +8,74 @@
 namespace MACE::Utility::Concept {
 
 template<typename T>
-concept Dereferenceable = requires(T&& pointer) {
+concept Indirectable = requires(T&& pointer) {
     *pointer;
 };
 
 template<typename T>
-concept WeaklyBehaveLikePointer = IsPointer<T> or requires(T&& pointer) {
-    requires Dereferenceable<T>;
+concept PointerAccessible = IsPointer<T> or requires(T&& pointer) {
     pointer.operator->();
 };
 
 template<typename T>
-concept BehaveLikePointer = requires(T&& pointer, std::ptrdiff_t i) {
-    requires WeaklyBehaveLikePointer<T>;
+concept Subscriptable = requires(T&& pointer, std::ptrdiff_t i) {
     pointer[i];
 };
 
-template<typename P, typename T>
-concept IsPointerOf =
-    std::same_as<std::remove_pointer_t<P>, T> and
-    std::same_as<P, std::add_pointer_t<T>>;
+template<typename T>
+concept WeaklyBehaveLikePointer = requires {
+    requires Indirectable<T>;
+    requires PointerAccessible<T>;
+};
+
+template<typename T>
+concept BehaveLikePointer = requires {
+    requires WeaklyBehaveLikePointer<T>;
+    requires Subscriptable<T>;
+};
 
 template<typename P, typename T>
-concept DereferenceableTo = requires(P&& pointer) {
+concept IsPointerOf = requires {
+    requires std::same_as<std::remove_pointer_t<P>, T>;
+    requires std::same_as<P, std::add_pointer_t<T>>;
+};
+
+template<typename P, typename T>
+concept IndirectableTo = requires(P&& pointer) {
     { *pointer } -> std::same_as<std::add_lvalue_reference_t<T>>;
 };
 
 template<typename P, typename T>
-concept WeaklyBehaveLikePointerOf = IsPointerOf<P, T> or requires(P&& pointer) {
-    requires DereferenceableTo<P, T>;
+concept PointerAccessibleTo = IsPointerOf<P, T> or requires(P&& pointer) {
     { pointer.operator->() } -> std::same_as<std::add_pointer_t<T>>;
+};
+
+template<typename P, typename T>
+concept SubscriptableTo = requires(P&& pointer, std::ptrdiff_t i) {
+    { pointer[i] } -> std::same_as<std::add_lvalue_reference_t<T>>;
+};
+
+template<typename P, typename T>
+concept WeaklyBehaveLikePointerOf = requires(P&& pointer) {
+    requires IndirectableTo<P, T>;
+    requires PointerAccessibleTo<P, T>;
 };
 
 template<typename P, typename T>
 concept BehaveLikePointerOf = requires(P&& pointer, std::ptrdiff_t i) {
     requires WeaklyBehaveLikePointerOf<P, T>;
-    { pointer[i] } -> std::same_as<std::add_lvalue_reference_t<T>>;
+    requires SubscriptableTo<P, T>;
 };
 
-#define MACE_UTILITY_CONCEPT_IS_POINTER_OF_MAYBE(stdTypeTraitsQualifier)                                     \
-    (IsPointerOf<P, std::remove_##stdTypeTraitsQualifier##_t<T>> and                                         \
-     IsPointerOf<std::add_pointer_t<std::add_##stdTypeTraitsQualifier##_t<std::remove_pointer_t<P>>>, T>) or \
-        IsPointerOf<P, T> or                                                                                 \
-        (IsPointerOf<P, std::add_##stdTypeTraitsQualifier##_t<T>> and                                        \
-         IsPointerOf<std::add_pointer_t<std::remove_##stdTypeTraitsQualifier##_t<std::remove_pointer_t<P>>>, T>)
+#define MACE_UTILITY_CONCEPT_IS_POINTER_OF_MAYBE(qualifier)                                                 \
+    requires {                                                                                              \
+        requires IsPointerOf<P, std::remove_##qualifier##_t<T>>;                                            \
+        requires IsPointerOf<std::add_pointer_t<std::add_##qualifier##_t<std::remove_pointer_t<P>>>, T>;    \
+    }                                                                                                       \
+    or IsPointerOf<P, T> or requires {                                                                      \
+        requires IsPointerOf<P, std::add_##qualifier##_t<T>>;                                               \
+        requires IsPointerOf<std::add_pointer_t<std::remove_##qualifier##_t<std::remove_pointer_t<P>>>, T>; \
+    }
 template<typename P, typename T>
 concept IsPointerOfMaybeConst = MACE_UTILITY_CONCEPT_IS_POINTER_OF_MAYBE(const);
 template<typename P, typename T>
@@ -66,7 +90,9 @@ concept IsPointerOfMaybeConstVolatile = MACE_UTILITY_CONCEPT_IS_POINTER_OF_MAYBE
         MotherConcept<P, std::add_const_t<T>> or                            \
         MotherConcept<P, T> or                                              \
         MotherConcept<P, std::remove_const_t<T>>
-MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST(DereferenceableTo);
+MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST(IndirectableTo);
+MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST(PointerAccessibleTo);
+MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST(SubscriptableTo);
 MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST(WeaklyBehaveLikePointerOf);
 MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST(BehaveLikePointerOf);
 #undef MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST
@@ -77,22 +103,28 @@ MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST(BehaveLikePointerOf);
         MotherConcept<P, std::add_volatile_t<T>> or                            \
         MotherConcept<P, T> or                                                 \
         MotherConcept<P, std::remove_volatile_t<T>>
-MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_VOLATILE(DereferenceableTo);
+MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_VOLATILE(IndirectableTo);
+MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_VOLATILE(PointerAccessibleTo);
+MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_VOLATILE(SubscriptableTo);
 MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_VOLATILE(WeaklyBehaveLikePointerOf);
 MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_VOLATILE(BehaveLikePointerOf);
 #undef MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_VOLATILE
 
 #define MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST_VOLATILE(MotherConcept) \
     template<typename P, typename T>                                                 \
-    concept MotherConcept##MaybeConstVolatile =                                      \
-        (MotherConcept<P, std::add_cv_t<T>> and                                      \
-         not MotherConcept<P, std::add_const_t<T>> and                               \
-         not MotherConcept<P, std::add_volatile_t<T>>) or                            \
-        MotherConcept<P, T> or                                                       \
-        (MotherConcept<P, std::remove_cv_t<T>> and                                   \
-         not MotherConcept<P, std::remove_const_t<T>> and                            \
-         not MotherConcept<P, std::remove_volatile_t<T>>)
-MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST_VOLATILE(DereferenceableTo);
+    concept MotherConcept##MaybeConstVolatile = requires {                           \
+        requires MotherConcept<P, std::add_cv_t<T>>;                                 \
+        requires not MotherConcept<P, std::add_const_t<T>>;                          \
+        requires not MotherConcept<P, std::add_volatile_t<T>>;                       \
+    }                                                                                \
+    or MotherConcept<P, T> or requires {                                             \
+        requires MotherConcept<P, std::remove_cv_t<T>>;                              \
+        requires not MotherConcept<P, std::remove_const_t<T>>;                       \
+        requires not MotherConcept<P, std::remove_volatile_t<T>>;                    \
+    }
+MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST_VOLATILE(IndirectableTo);
+MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST_VOLATILE(PointerAccessibleTo);
+MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST_VOLATILE(SubscriptableTo);
 MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST_VOLATILE(WeaklyBehaveLikePointerOf);
 MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST_VOLATILE(BehaveLikePointerOf);
 #undef MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST_VOLATILE
@@ -103,7 +135,9 @@ MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST_VOLATILE(BehaveLikePointerO
         MotherConcept##MaybeConst<P, T> or                                              \
         MotherConcept##MaybeVolatile<P, T>
 MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST_OR_VOLATILE(IsPointerOf);
-MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST_OR_VOLATILE(DereferenceableTo);
+MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST_OR_VOLATILE(PointerAccessibleTo);
+MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST_OR_VOLATILE(SubscriptableTo);
+MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST_OR_VOLATILE(IndirectableTo);
 MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST_OR_VOLATILE(WeaklyBehaveLikePointerOf);
 MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST_OR_VOLATILE(BehaveLikePointerOf);
 #undef MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST_OR_VOLATILE
@@ -114,7 +148,9 @@ MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_CONST_OR_VOLATILE(BehaveLikePoint
         MotherConcept##MaybeConstOrVolatile<P, T> or                            \
         MotherConcept##MaybeConstVolatile<P, T>
 MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_QUALIFIED(IsPointerOf);
-MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_QUALIFIED(DereferenceableTo);
+MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_QUALIFIED(PointerAccessibleTo);
+MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_QUALIFIED(SubscriptableTo);
+MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_QUALIFIED(IndirectableTo);
 MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_QUALIFIED(WeaklyBehaveLikePointerOf);
 MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_QUALIFIED(BehaveLikePointerOf);
 #undef MACE_UTILITY_CONCEPT_POINTER_ANALOGUE_OF_MAYBE_QUALIFIED
