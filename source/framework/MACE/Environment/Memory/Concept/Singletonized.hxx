@@ -1,5 +1,7 @@
 #pragma once
 
+#include "MACE/Utility/Concept/NonMoveable.hxx"
+
 #include <type_traits>
 
 namespace MACE::Environment::Memory {
@@ -19,20 +21,8 @@ template<class ASingleton>
 concept Singletonized = requires {
     requires std::is_base_of_v<Singleton<ASingleton>, ASingleton>;
     requires not std::is_base_of_v<Detail::FreeSingletonBase, ASingleton>;
-    requires not std::is_default_constructible_v<ASingleton>; // private or protected constructor
-    requires not std::is_constructible_v<ASingleton, const ASingleton&>;
-    requires not std::is_convertible_v<const ASingleton&, ASingleton>;
-    requires not std::is_constructible_v<ASingleton, ASingleton&>;
-    requires not std::is_convertible_v<ASingleton&, ASingleton>;
-    requires not std::is_constructible_v<ASingleton, const ASingleton>;
-    requires not std::is_convertible_v<const ASingleton, ASingleton>;
-    requires not std::is_constructible_v<ASingleton, ASingleton>;
-    requires not std::is_convertible_v<ASingleton, ASingleton>;
-    requires not std::is_assignable_v<ASingleton&, const ASingleton&>;
-    requires not std::is_assignable_v<ASingleton&, ASingleton&>;
-    requires not std::is_assignable_v<ASingleton&, const ASingleton>;
-    requires not std::is_assignable_v<ASingleton&, ASingleton>;
-    requires not std::is_swappable_v<ASingleton>;
+    requires not std::is_default_constructible_v<ASingleton>; // try to constrain to private or protected constructor
+    requires Utility::Concept::NonMoveable<ASingleton>;
 };
 
 } // namespace Concept

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "MACE/Utility/Concept/NonMoveable.hxx"
+
 #include <type_traits>
 
 namespace MACE::Environment::Memory {
@@ -19,19 +21,7 @@ template<class AFreeSingleton>
 concept FreeSingletonized = requires {
     requires std::is_base_of_v<FreeSingleton<AFreeSingleton>, AFreeSingleton>;
     requires not std::is_base_of_v<Detail::ISingletonBase, AFreeSingleton>;
-    requires not std::is_constructible_v<AFreeSingleton, const AFreeSingleton&>;
-    requires not std::is_convertible_v<const AFreeSingleton&, AFreeSingleton>;
-    requires not std::is_constructible_v<AFreeSingleton, AFreeSingleton&>;
-    requires not std::is_convertible_v<AFreeSingleton&, AFreeSingleton>;
-    requires not std::is_constructible_v<AFreeSingleton, const AFreeSingleton>;
-    requires not std::is_convertible_v<const AFreeSingleton, AFreeSingleton>;
-    requires not std::is_constructible_v<AFreeSingleton, AFreeSingleton>;
-    requires not std::is_convertible_v<AFreeSingleton, AFreeSingleton>;
-    requires not std::is_assignable_v<AFreeSingleton&, const AFreeSingleton&>;
-    requires not std::is_assignable_v<AFreeSingleton&, AFreeSingleton&>;
-    requires not std::is_assignable_v<AFreeSingleton&, const AFreeSingleton>;
-    requires not std::is_assignable_v<AFreeSingleton&, AFreeSingleton>;
-    requires not std::is_swappable_v<AFreeSingleton>;
+    requires Utility::Concept::NonMoveable<AFreeSingleton>;
 };
 
 } // namespace Concept
