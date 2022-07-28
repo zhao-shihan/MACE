@@ -1,5 +1,17 @@
 namespace MACE::SimulationG4 {
 
+void MPIExecutive::StartSession(const SimulationG4CLI& cli, const std::ranges::range auto& macroOrCommands) const {
+    if (cli.IsInteractive()) {
+        if (cli.GetMacro().empty()) {
+            StartInteractiveSession(cli.GetArgc(), cli.GetArgv(), macroOrCommands);
+        } else {
+            StartInteractiveSession(cli.GetArgc(), cli.GetArgv(), cli.GetMacro());
+        }
+    } else {
+        StartBatchSession(cli.GetMacro());
+    }
+}
+
 void MPIExecutive::StartInteractiveSession(int argc, char* argv[], const std::ranges::range auto& macroOrCommands) const {
     CheckSequential();
     const auto uiExecutive = std::make_unique<G4UIExecutive>(argc, argv);
@@ -15,7 +27,7 @@ void MPIExecutive::Execute(const ARange& commandList) const { // clang-format on
     for (const std::string& command : commandList) {
         if (command.empty()) { continue; }
         if (command[command.find_first_not_of(' ')] == '#') { continue; }
-        if (const auto commandStatus = fG4UIManager->ApplyCommand(command);
+        if (const auto commandStatus = G4UImanager::GetUIpointer()->ApplyCommand(command);
             commandStatus != fCommandSucceeded) [[unlikely]] {
             MACE_ENVIRONMENT_CONTROLLED_OUT(Error, std::cerr)
                 << "MACE::SimulationG4::MPIExecutive::Execute: Command \"" << command << "\" failed (G4UIcommandStatus: " << commandStatus << ')' << std::endl;

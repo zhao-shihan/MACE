@@ -7,19 +7,16 @@ namespace MACE::SimulationG4 {
 
 using MACE::Environment::MPIEnvironment;
 
-MPIExecutive::MPIExecutive() :
-    fG4UIManager(G4UImanager::GetUIpointer()) {}
-
 void MPIExecutive::CheckSequential() const {
     if (MPIEnvironment::IsParallel()) {
-        auto where = std::string(typeid(*this).name()).append("::").append(__func__);
+        std::string where("MACE::SimulationG4::MPIExecutive::CheckSequential");
         if (MPIEnvironment::IsWorldMaster()) {
             G4Exception(where.c_str(),
-                        "InteractiveSessionMustBeSerial",
+                        "InteractiveSessionMustBeSequential",
                         JustWarning,
                         "Interactive session must be run with only 1 process.\nThrowing an instance of std::logic_error.");
         }
-        throw std::logic_error(where.append(": Interactive session must be serial"));
+        throw std::logic_error(where.append(": Interactive session must be sequential"));
     }
 }
 
