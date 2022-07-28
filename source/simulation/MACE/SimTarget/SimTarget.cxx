@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
     MACE::SimulationG4::MPIExecutive mpiExecutive;
     if (interactive) {
         mpiExecutive.StartInteractiveSession(argc, argv, std::array{
-#include "MACE/SimTarget/DefaultInteractiveSessionCommandList.macinl"
+#include "MACE/SimTarget/DefaultInteractiveSessionInitialization.inlmac"
                                                          });
     } else {
         mpiExecutive.StartBatchSession(argv[1]);
