@@ -9,26 +9,21 @@
 #include <array>
 
 int main(int argc, char* argv[]) {
-    MACE::Environment::MPIEnvironment mpiEnvironment(argc, argv, std::nullopt);
-
-    bool interactive = (argc == 1);
+    MACE::Environment::CLI::SimulationG4CLI cli;
+    MACE::Environment::MPIEnvironment mpiEnvironment(argc, argv, cli);
 
     CLHEP::MTwistEngine randEng(4357);
     G4Random::setTheEngine(&randEng);
 
     // DetectorConstruction, PhysicsList, ActionInitialization are instantiated in RunManager constructor.
     MACE::SimTarget::RunManager runManager;
-    runManager.GetDetectorConstruction().SetCheckOverlaps(interactive ? true : false);
-    runManager.GetPhysicsList().SetVerboseLevel(interactive ? 1 : 0);
+    runManager.GetDetectorConstruction().SetCheckOverlaps(cli.IsInteractive() ? true : false);
+    runManager.GetPhysicsList().SetVerboseLevel(cli.IsInteractive() ? 1 : 0);
 
     MACE::SimulationG4::MPIExecutive mpiExecutive;
-    if (interactive) {
-        mpiExecutive.StartInteractiveSession(argc, argv, std::array{
+    mpiExecutive.StartSession(cli, std::array{
 #include "MACE/SimTarget/DefaultInteractiveSessionInitialization.inlmac"
-                                                         });
-    } else {
-        mpiExecutive.StartBatchSession(argv[1]);
-    }
+                                   });
 
     return EXIT_SUCCESS;
 }
