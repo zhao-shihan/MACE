@@ -18,7 +18,7 @@ class BasicCLI;
 
 using MACE::Utility::ObserverPtr;
 
-class BasicEnvironment : public Detail::EnvironmentBase,
+class BasicEnvironment : private Detail::EnvironmentBase,
                          public Memory::FreeSingleton<BasicEnvironment> {
 public:
     BasicEnvironment(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> optCLI,
@@ -36,3 +36,7 @@ private:
 };
 
 } // namespace MACE::Environment
+
+#define MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out) \
+    MACE_VERBOSE_LEVEL_CONTROLLED_OUT(                  \
+        MACE::Environment::BasicEnvironment::Instance().GetVerboseLevel(), Threshold, out)

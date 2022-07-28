@@ -24,4 +24,5 @@ enum class VerboseLevel {
                   "Threshold should at least be 'Error'");                                             \
     static_assert(std::derived_from<std::remove_cvref_t<decltype(out)>,                                \
                                     std::ostream>);                                                    \
-    if (verboseLevel >= MACE::Environment::VerboseLevel::Threshold) out
+    if (verboseLevel >= MACE::Environment::VerboseLevel::Threshold) [[unlikely]]                       \
+    out
