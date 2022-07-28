@@ -19,7 +19,7 @@
 namespace MACE::SimMACE::Action {
 
 DetectorConstruction::DetectorConstruction() :
-    NonCopyableBase(),
+    NonMoveableBase(),
     G4VUserDetectorConstruction(),
     fCheckOverlap(false),
     fBeamDegrader(nullptr),

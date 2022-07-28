@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 
 #include <memory>
 
@@ -15,7 +15,7 @@ class SingletonFactory;
 
 namespace Detail {
 
-class EnvironmentBase : public Utility::NonCopyableBase {
+class EnvironmentBase : public Utility::NonMoveableBase {
 protected:
     EnvironmentBase();
     ~EnvironmentBase();

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Core/DataFactory.hxx"
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4String.hh"
@@ -22,7 +22,7 @@ class MCPHit;
 using Core::DataFactory;
 using MACE::Utility::ObserverPtr;
 
-class Analysis final : public Utility::NonCopyableBase {
+class Analysis final : public Utility::NonMoveableBase {
 public:
     Analysis();
 

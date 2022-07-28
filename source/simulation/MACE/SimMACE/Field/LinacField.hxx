@@ -1,13 +1,13 @@
 #pragma once
 
 #include "MACE/Utility/LiteralUnit.hxx"
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 
 #include "G4ElectroMagneticField.hh"
 
 namespace MACE::SimMACE::Field {
 
-class LinacField final : public Utility::NonCopyableBase,
+class LinacField final : public Utility::NonMoveableBase,
                          public G4ElectroMagneticField {
 public:
     LinacField();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 
 #include "G4Region.hh"
 
@@ -18,7 +18,7 @@ enum class RegionType {
     MCPSensitive
 };
 
-class Region final : public Utility::NonCopyableBase,
+class Region final : public Utility::NonMoveableBase,
                      public G4Region {
 public:
     Region(const G4String& name, RegionType type);

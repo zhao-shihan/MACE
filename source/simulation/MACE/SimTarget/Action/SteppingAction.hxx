@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4ParticleDefinition.hh"
@@ -10,7 +10,7 @@ namespace MACE::SimTarget::Action {
 
 using Utility::ObserverPtr;
 
-class SteppingAction final : public Utility::NonCopyableBase,
+class SteppingAction final : public Utility::NonMoveableBase,
                              public G4UserSteppingAction {
 public:
     SteppingAction();

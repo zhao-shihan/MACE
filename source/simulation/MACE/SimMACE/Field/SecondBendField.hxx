@@ -1,13 +1,13 @@
 #pragma once
 
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 
 #include "G4MagneticField.hh"
 #include "G4Transform3D.hh"
 
 namespace MACE::SimMACE::Field {
 
-class SecondBendField final : public Utility::NonCopyableBase,
+class SecondBendField final : public Utility::NonMoveableBase,
                               public G4MagneticField {
 public:
     SecondBendField();

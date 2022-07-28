@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/SimMACE/Hit/MCPHit.hxx"
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 
 #include "G4VSensitiveDetector.hh"
 
@@ -9,7 +9,7 @@ namespace MACE::SimMACE::SD {
 
 using Hit::MCPHitCollection;
 
-class MCPSD final : public Utility::NonCopyableBase,
+class MCPSD final : public Utility::NonMoveableBase,
                     public G4VSensitiveDetector {
 public:
     MCPSD(const G4String& sdName);

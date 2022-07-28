@@ -11,7 +11,7 @@ namespace MACE::SimMACE::SD {
 using Hit::EMCalHit;
 
 EMCalSD::EMCalSD(const G4String& sdName) :
-    NonCopyableBase(),
+    NonMoveableBase(),
     G4VSensitiveDetector(sdName),
     fEventID(-1),
     fHitsCollection(nullptr) {

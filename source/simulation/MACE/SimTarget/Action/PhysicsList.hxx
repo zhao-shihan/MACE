@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 
 #include "G4VModularPhysicsList.hh"
 
 namespace MACE::SimTarget::Action {
 
-class PhysicsList final : public Utility::NonCopyableBase,
+class PhysicsList final : public Utility::NonMoveableBase,
                           public G4VModularPhysicsList {
 public:
     PhysicsList();

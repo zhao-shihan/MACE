@@ -11,7 +11,7 @@ using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
 using namespace MACE::Utility::PhysicalConstant;
 
 SelectorField::SelectorField() :
-    NonCopyableBase(),
+    NonMoveableBase(),
     G4ElectroMagneticField(),
     fBTransport(0.1_T),
     fSelectEk(7_keV),

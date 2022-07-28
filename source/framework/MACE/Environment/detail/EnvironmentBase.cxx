@@ -10,7 +10,7 @@
 namespace MACE::Environment::Detail {
 
 EnvironmentBase::EnvironmentBase() :
-    NonCopyableBase(),
+    NonMoveableBase(),
     fFreeSingletonPool(nullptr),
     fSingletonFactory(nullptr) {
 

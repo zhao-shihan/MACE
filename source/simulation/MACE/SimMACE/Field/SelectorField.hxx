@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 
 #include "G4ElectroMagneticField.hh"
 
 namespace MACE::SimMACE::Field {
 
-class SelectorField final : public Utility::NonCopyableBase,
+class SelectorField final : public Utility::NonMoveableBase,
                             public G4ElectroMagneticField {
 public:
     SelectorField();

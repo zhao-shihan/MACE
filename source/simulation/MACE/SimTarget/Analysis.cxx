@@ -15,7 +15,7 @@ namespace MACE::SimTarget {
 using MACE::Environment::MPIEnvironment;
 
 Analysis::Analysis() :
-    NonCopyableBase(),
+    NonMoveableBase(),
     fResultName("SimTarget_result"),
     fEnableYieldAnalysis(true),
     fDetectableRegion(ConstructFormula("abs(x)>30 || abs(y)>30 || z>0")),

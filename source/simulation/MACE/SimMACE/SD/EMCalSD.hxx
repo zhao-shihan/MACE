@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/SimMACE/Hit/EMCalHit.hxx"
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 
 #include "G4VSensitiveDetector.hh"
 
@@ -9,7 +9,7 @@ namespace MACE::SimMACE::SD {
 
 using Hit::EMCalHitCollection;
 
-class EMCalSD final : public Utility::NonCopyableBase,
+class EMCalSD final : public Utility::NonMoveableBase,
                       public G4VSensitiveDetector {
 public:
     EMCalSD(const G4String& sdName);

@@ -13,7 +13,7 @@ using namespace SimulationG4::Physics::Particle;
 using namespace Utility::PhysicalConstant;
 
 TrackingAction::TrackingAction() :
-    NonCopyableBase(),
+    NonMoveableBase(),
     G4UserTrackingAction(),
     fMuonium(Muonium::Definition()),
     fAntiMuonium(AntiMuonium::Definition()),

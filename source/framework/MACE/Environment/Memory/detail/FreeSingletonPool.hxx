@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Environment/Memory/Concept/FreeSingletonized.hxx"
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include <functional>
@@ -22,7 +22,7 @@ using MACE::Utility::ObserverPtr;
 
 /// @brief Implementation detail of MACE::Environment::Memory::FreeSingleton.
 /// Not API.
-class FreeSingletonPool final : public Utility::NonCopyableBase {
+class FreeSingletonPool final : public Utility::NonMoveableBase {
 private:
     using InstanceMap = std::map<const std::type_index, ObserverPtr<void>>;
 

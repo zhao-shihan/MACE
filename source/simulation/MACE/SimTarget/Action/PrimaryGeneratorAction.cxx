@@ -7,7 +7,7 @@ namespace MACE::SimTarget::Action {
 using namespace Utility::LiteralUnit::Length;
 
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
-    NonCopyableBase(),
+    NonMoveableBase(),
     G4VUserPrimaryGeneratorAction(),
     fSurfaceMuonGenerator(),
     fMuonsForEachG4Event(0) {

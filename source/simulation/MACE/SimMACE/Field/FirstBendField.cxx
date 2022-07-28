@@ -11,7 +11,7 @@ using MACE::Utility::Math::Hypot2;
 using TransportLineDescription = Core::Geometry::Description::TransportLine;
 
 FirstBendField::FirstBendField() :
-    NonCopyableBase(),
+    NonMoveableBase(),
     G4MagneticField(),
     fGeomTransform(TransportLineDescription::Instance().FirstBendTransform()),
     fBendRadius(TransportLineDescription::Instance().GetFirstBendRadius()),

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 
 #include "G4VUserDetectorConstruction.hh"
 
@@ -16,7 +16,7 @@ class IEntity;
 
 namespace SimTarget::Action {
 
-class DetectorConstruction final : public Utility::NonCopyableBase,
+class DetectorConstruction final : public Utility::NonMoveableBase,
                                    public G4VUserDetectorConstruction {
 public:
     DetectorConstruction();

@@ -8,7 +8,7 @@ namespace MACE::Environment::Memory::Detail {
 ObserverPtr<FreeSingletonPool> FreeSingletonPool::fgInstance = nullptr;
 
 FreeSingletonPool::FreeSingletonPool() :
-    NonCopyableBase(),
+    NonMoveableBase(),
     fInstanceMap() {
     if (fgInstance == nullptr) {
         fgInstance = this;

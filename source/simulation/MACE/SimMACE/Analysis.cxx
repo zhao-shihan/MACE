@@ -11,7 +11,7 @@
 namespace MACE::SimMACE {
 
 Analysis::Analysis() :
-    NonCopyableBase(),
+    NonMoveableBase(),
     fFile(nullptr),
     fResultName("untitled_SimMACE"),
     fEnableCoincidenceOfEMCal(true),

@@ -2,7 +2,7 @@
 
 #include "MACE/Core/DataFactory.hxx"
 #include "MACE/SimTarget/MuoniumTrack.hxx"
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "TFormula.h"
@@ -19,7 +19,7 @@ namespace MACE::SimTarget {
 using Core::DataFactory;
 using Utility::ObserverPtr;
 
-class Analysis final : public Utility::NonCopyableBase {
+class Analysis final : public Utility::NonMoveableBase {
 public:
     Analysis();
     ~Analysis();

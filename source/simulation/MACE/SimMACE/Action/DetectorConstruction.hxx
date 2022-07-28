@@ -5,7 +5,7 @@
 #include "MACE/SimMACE/SD/CDCSD.hxx"
 #include "MACE/SimMACE/SD/EMCalSD.hxx"
 #include "MACE/SimMACE/SD/MCPSD.hxx"
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4VUserDetectorConstruction.hh"
@@ -26,7 +26,7 @@ namespace Action {
 
 using MACE::Utility::ObserverPtr;
 
-class DetectorConstruction final : public Utility::NonCopyableBase,
+class DetectorConstruction final : public Utility::NonMoveableBase,
                                    public G4VUserDetectorConstruction {
 public:
     DetectorConstruction();

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/SimMACE/Hit/CDCHit.hxx"
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4TwoVector.hh"
@@ -14,7 +14,7 @@ namespace MACE::SimMACE::SD {
 using Hit::CDCHitCollection;
 using MACE::Utility::ObserverPtr;
 
-class CDCSD final : public Utility::NonCopyableBase,
+class CDCSD final : public Utility::NonMoveableBase,
                     public G4VSensitiveDetector {
 public:
     CDCSD(const G4String& sdName);

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Environment/Memory/detail/SingletonFactory.hxx"
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 
 namespace MACE::Environment::Memory::Detail {
 
@@ -9,7 +9,7 @@ namespace MACE::Environment::Memory::Detail {
 /// Not API.
 /// @details The direct base of Singleton<T>. This allow us to manage instances
 /// using polymorphism mechanism.
-class ISingletonBase : public Utility::NonCopyableBase {
+class ISingletonBase : public Utility::NonMoveableBase {
     friend SingletonFactory::~SingletonFactory();
 
 protected:

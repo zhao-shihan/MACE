@@ -2,7 +2,7 @@
 
 #include "MACE/Environment/Memory/Concept/Singletonized.hxx"
 #include "MACE/Environment/Memory/FreeSingleton.hxx"
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include <forward_list>

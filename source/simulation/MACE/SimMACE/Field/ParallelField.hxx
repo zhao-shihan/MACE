@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 
 #include "G4UniformMagField.hh"
 
 namespace MACE::SimMACE::Field {
 
-class ParallelField final : public Utility::NonCopyableBase,
+class ParallelField final : public Utility::NonMoveableBase,
                             public G4UniformMagField {
 public:
     ParallelField(G4double B);

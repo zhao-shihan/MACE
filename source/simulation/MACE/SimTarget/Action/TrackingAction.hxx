@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Utility/NonCopyableBase.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UserTrackingAction.hh"
@@ -15,7 +15,7 @@ namespace Action {
 
 using Utility::ObserverPtr;
 
-class TrackingAction final : public Utility::NonCopyableBase,
+class TrackingAction final : public Utility::NonMoveableBase,
                              public G4UserTrackingAction {
 public:
     TrackingAction();
