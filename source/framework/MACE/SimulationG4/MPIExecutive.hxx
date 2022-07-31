@@ -2,7 +2,7 @@
 
 #include "MACE/Environment/BasicEnvironment.hxx"
 #include "MACE/Environment/CLI/SimulationG4CLI.hxx"
-#include "MACE/Environment/Memory/FreeSingleton.hxx"
+#include "MACE/Environment/Memory/MuteSingleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 #include "MACE/Utility/TupleForEach.hxx"
 
@@ -28,7 +28,7 @@ class SimulationG4CLI;
 using Environment::CLI::SimulationG4CLI;
 using Utility::ObserverPtr;
 
-class MPIExecutive final : public Environment::Memory::FreeSingleton<MPIExecutive> {
+class MPIExecutive final : public Environment::Memory::MuteSingleton<MPIExecutive> {
 public:
     MPIExecutive() = default;
 

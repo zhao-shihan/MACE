@@ -1,6 +1,6 @@
 #include "MACE/Environment/detail/EnvironmentBase.hxx"
 #include "MACE/Environment/detail/SignalHandler.hxx"
-#include "MACE/Environment/Memory/detail/FreeSingletonPool.hxx"
+#include "MACE/Environment/Memory/detail/MuteSingletonPool.hxx"
 #include "MACE/Environment/Memory/detail/SingletonFactory.hxx"
 
 #if MACE_SIGNAL_HANDLER
@@ -11,7 +11,7 @@ namespace MACE::Environment::Detail {
 
 EnvironmentBase::EnvironmentBase() :
     NonMoveableBase(),
-    fFreeSingletonPool(nullptr),
+    fMuteSingletonPool(nullptr),
     fSingletonFactory(nullptr) {
 
 #if MACE_SIGNAL_HANDLER
@@ -29,7 +29,7 @@ EnvironmentBase::EnvironmentBase() :
         gInstantiated = true;
     }
 
-    fFreeSingletonPool = std::make_unique<Memory::Detail::FreeSingletonPool>();
+    fMuteSingletonPool = std::make_unique<Memory::Detail::MuteSingletonPool>();
     fSingletonFactory = std::make_unique<Memory::Detail::SingletonFactory>();
 }
 

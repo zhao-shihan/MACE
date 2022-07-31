@@ -2,31 +2,28 @@
 
 #include "MACE/Environment/Memory/Concept/FreeSingletonized.hxx"
 #include "MACE/Environment/Memory/detail/FreeSingletonBase.hxx"
-#include "MACE/Environment/Memory/detail/FreeSingletonPool.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
+#include "MACE/Environment/Memory/detail/MuteSingletonPool.hxx"
+#include "MACE/Environment/Memory/MuteSingleton.hxx"
 
 #include <stdexcept>
 #include <string>
+#include <type_traits>
 #include <typeinfo>
 
 namespace MACE::Environment::Memory {
 
-using MACE::Utility::ObserverPtr;
-
 template<class ADerived>
-class FreeSingleton : private Detail::FreeSingletonBase {
+class FreeSingleton : private Detail::FreeSingletonBase,
+                      public MuteSingleton<ADerived> {
 protected:
     FreeSingleton();
-    ~FreeSingleton();
+    ~FreeSingleton() = default;
 
 public:
     static ADerived& Instance();
 
 private:
     static void FindInstance();
-
-private:
-    static ObserverPtr<Detail::FreeSingletonPool::Node> fgInstanceNode;
 };
 
 } // namespace MACE::Environment::Memory

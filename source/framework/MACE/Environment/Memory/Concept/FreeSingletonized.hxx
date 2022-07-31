@@ -8,6 +8,7 @@ namespace MACE::Environment::Memory {
 
 namespace Detail {
 
+class FreeSingletonBase;
 class ISingletonBase;
 
 } // namespace Detail
@@ -19,7 +20,7 @@ namespace Concept {
 
 template<class AFreeSingleton>
 concept FreeSingletonized = requires {
-    requires std::is_base_of_v<FreeSingleton<AFreeSingleton>, AFreeSingleton>;
+    requires std::is_base_of_v<Detail::FreeSingletonBase, AFreeSingleton>;
     requires not std::is_base_of_v<Detail::ISingletonBase, AFreeSingleton>;
     requires Utility::Concept::NonMoveable<AFreeSingleton>;
 };
