@@ -4,15 +4,18 @@
 #include "MACE/Environment/CLI/SimulationG4CLI.hxx"
 #include "MACE/Environment/Memory/FreeSingleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
+#include "MACE/Utility/TupleForEach.hxx"
 
 #include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 
+#include <algorithm>
 #include <iostream>
 #include <memory>
-#include <ranges>
 #include <string>
+#include <tuple>
+#include <utility>
 
 namespace MACE::SimulationG4 {
 
@@ -27,20 +30,26 @@ using Utility::ObserverPtr;
 
 class MPIExecutive final : public Environment::Memory::FreeSingleton<MPIExecutive> {
 public:
-    void StartSession(const SimulationG4CLI& cli, const char* macro = "") const { StartSession(cli, std::string(macro)); }
-    void StartSession(const SimulationG4CLI& cli, const std::ranges::range auto& macroOrCommands) const;
-    void StartInteractiveSession(int argc, char* argv[], const char* macro = "") const { StartInteractiveSession(argc, argv, std::string(macro)); }
-    void StartInteractiveSession(int argc, char* argv[], const std::ranges::range auto& macroOrCommands) const;
-    void StartBatchSession(const char* macro) const { StartBatchSession(std::string(macro)); }
-    void StartBatchSession(const std::ranges::range auto& macroOrCommands) const { Execute(macroOrCommands); }
+    MPIExecutive() = default;
+
+    template<class AMacroOrCommand>
+    void StartSession(const SimulationG4CLI& cli, AMacroOrCommand&& macroOrCommands = std::string()) const;
+    template<class AMacroOrCommand>
+    void StartInteractiveSession(int argc, char* argv[], AMacroOrCommand&& macroOrCommands = std::string()) const;
+    template<class AMacroOrCommand>
+    void StartBatchSession(AMacroOrCommand&& macroOrCommands) const { Execute(std::forward<AMacroOrCommand>(macroOrCommands)); }
 
 private:
-    void Execute(const std::convertible_to<std::string> auto& macro) const { G4UImanager::GetUIpointer()->ExecuteMacroFile(std::string(macro).c_str()); }
+    void CheckSequential() const;
+
+    static void Execute(const std::string& macro);
     template<std::ranges::range ARange> // clang-format off
         requires std::convertible_to<typename ARange::value_type, std::string>
-    void Execute(const ARange& commandList) const; // clang-format on
+    static void Execute(const ARange& commandList) ; // clang-format on
+    template<std::convertible_to<std::string>... AStrings>
+    static void Execute(const std::tuple<AStrings...>& commandList);
 
-    void CheckSequential() const;
+    static bool ExecuteCommand(const std::string& command);
 };
 
 } // namespace MACE::SimulationG4
