@@ -2,9 +2,10 @@ namespace MACE::Environment::Memory::Detail {
 
 template<Concept::Singletonized ASingleton>
 [[nodiscard]] SingletonPool::Node& SingletonFactory::InstantiateOrFind() {
-    if (const auto existedNode = fInstancePool.Find<ASingleton>();
+    auto& instancePool = SingletonPool::Instance();
+    if (const auto existedNode = instancePool.Find<ASingleton>();
         not existedNode.has_value()) [[likely]] {
-        return fInstancePool.Insert(new ASingleton());
+        return instancePool.Insert(new ASingleton());
     } else {
         return existedNode.value();
     }

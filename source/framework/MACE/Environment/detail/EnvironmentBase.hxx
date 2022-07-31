@@ -9,7 +9,9 @@ namespace MACE::Environment {
 namespace Memory::Detail {
 
 class MuteSingletonPool;
+class SingletonDeleter;
 class SingletonFactory;
+class SingletonPool;
 
 } // namespace Memory::Detail
 
@@ -22,7 +24,9 @@ protected:
 
 private:
     std::unique_ptr<Memory::Detail::MuteSingletonPool> fMuteSingletonPool;
+    std::unique_ptr<Memory::Detail::SingletonPool> fSingletonPool;
     std::unique_ptr<Memory::Detail::SingletonFactory> fSingletonFactory;
+    std::unique_ptr<Memory::Detail::SingletonDeleter> fSingletonDeleter;
 };
 
 } // namespace Detail

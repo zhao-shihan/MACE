@@ -17,15 +17,8 @@ using MACE::Utility::ObserverPtr;
 /// Not API.
 class SingletonFactory final : public FreeSingleton<SingletonFactory> {
 public:
-    ~SingletonFactory();
-
-    template<Concept::Singletonized ASingleton>
-    [[nodiscard]] auto Instantiated() const { return fInstancePool.Contains<ASingleton>(); }
     template<Concept::Singletonized ASingleton>
     [[nodiscard]] SingletonPool::Node& InstantiateOrFind();
-
-private:
-    SingletonPool fInstancePool;
 };
 
 } // namespace MACE::Environment::Memory::Detail
