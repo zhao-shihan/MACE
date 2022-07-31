@@ -83,7 +83,7 @@ void Analysis::CloseResultFile() {
 }
 
 void Analysis::OpenYieldFile() {
-    if (MPIEnvironment::IsWorldMaster()) {
+    if (MPIEnvironment::IsMaster()) {
         fYieldFile = std::make_unique<std::ofstream>(fResultName + "_yield.csv", std::ios::out);
         *fYieldFile << "runID,nMuon,nMFormed,nMTargetDecay,nMVacuumDecay,nMDetectableDecay" << std::endl;
     }
@@ -113,10 +113,10 @@ void Analysis::AnalysisAndWriteYield() {
 
     if (MPIEnvironment::IsParallel()) {
         std::vector<decltype(yieldData)> yieldDataRecv;
-        if (MPIEnvironment::IsWorldMaster()) { yieldDataRecv.resize(MPIEnvironment::WorldCommSize()); }
+        if (MPIEnvironment::IsMaster()) { yieldDataRecv.resize(MPIEnvironment::WorldCommSize()); }
         MACE_CHECKED_MPI_CALL(MPI_Gather, yieldData.data(), yieldData.size(), MPI_UNSIGNED_LONG, yieldDataRecv.data(), yieldData.size(), MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD)
 
-        if (MPIEnvironment::IsWorldMaster()) {
+        if (MPIEnvironment::IsMaster()) {
             unsigned long nMuonTotal = 0;
             unsigned long nFormedTotal = 0;
             unsigned long nTargetDecayTotal = 0;

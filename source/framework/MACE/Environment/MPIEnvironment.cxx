@@ -17,7 +17,7 @@ MPIEnvironment::MPIEnvironment(int argc, char* argv[], std::optional<std::refere
     // Initialize MPI and properties of MPI_COMM_WORLD
     InitializeMPIAndWorldProperties(argc, argv);
     // Print startup message
-    if (printStartupMessage and IsWorldMaster()) {
+    if (printStartupMessage and IsMaster()) {
         PrintStartupMessageSplitLine();
         PrintStartupMessageBody(argc, argv);
         PrintStartupMessageSplitLine();

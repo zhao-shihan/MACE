@@ -34,11 +34,11 @@ std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_vi
 
         // master rank collects processor names
         std::vector<std::array<char, MPI_MAX_PROCESSOR_NAME>> processorNamesRecv;
-        if (MPIEnvironment::IsWorldMaster()) { processorNamesRecv.resize(MPIEnvironment::WorldCommSize()); }
+        if (MPIEnvironment::IsMaster()) { processorNamesRecv.resize(MPIEnvironment::WorldCommSize()); }
         MACE_CHECKED_MPI_CALL(MPI_Gather, processorNameSend, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, processorNamesRecv.data(), MPI_MAX_PROCESSOR_NAME, MPI_CHAR, 0, comm)
 
         std::vector<std::array<char, pathMax>> filePathsSend;
-        if (MPIEnvironment::IsWorldMaster()) {
+        if (MPIEnvironment::IsMaster()) {
             // find all unique processor names
             std::set<std::string_view> processorNameSet;
             for (auto&& processorName : std::as_const(processorNamesRecv)) {

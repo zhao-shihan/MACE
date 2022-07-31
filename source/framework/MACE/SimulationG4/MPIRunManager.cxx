@@ -21,7 +21,7 @@ namespace Detail {
 
 static void FlipG4cout() {
     const auto& mpiEnv = MPIEnvironment::Instance();
-    if (mpiEnv.IsWorldWorker() or
+    if (mpiEnv.IsWorker() or
         mpiEnv.GetVerboseLevel() == Environment::VerboseLevel::Quiet) {
         static ObserverPtr<std::streambuf> gG4coutBufExchanger = nullptr;
         gG4coutBufExchanger = G4cout.rdbuf(gG4coutBufExchanger);
@@ -127,7 +127,7 @@ void MPIRunManager::RunTermination() {
 
 G4bool MPIRunManager::CheckNEventIsAtLeastCommSize(G4int nEvent) const {
     if (nEvent < MPIEnvironment::WorldCommSize()) {
-        if (MPIEnvironment::IsWorldMaster()) {
+        if (MPIEnvironment::IsMaster()) {
             G4Exception("MACE::Utility::G4Util::MPIRunManager::CheckNEventIsAtLeastCommSize(...)",
                         "TooFewNEventOrTooMuchRank",
                         JustWarning,
@@ -142,7 +142,7 @@ G4bool MPIRunManager::CheckNEventIsAtLeastCommSize(G4int nEvent) const {
 }
 
 void MPIRunManager::RunBeginReport() const {
-    if (MPIEnvironment::IsWorldMaster() and fPrintProgress >= 0) {
+    if (MPIEnvironment::IsMaster() and fPrintProgress >= 0) {
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         G4cout << "----------------------------> Run Starts <----------------------------\n"
                << std::put_time(std::localtime(&now), "%c (UTC%z) > Run ") << runIDCounter << " starts on " << MPIEnvironment::WorldCommSize() << " ranks.\n"
@@ -167,7 +167,7 @@ void MPIRunManager::EventEndReport() const {
 }
 
 void MPIRunManager::RunEndReport() const {
-    if (MPIEnvironment::IsWorldMaster() and fPrintProgress >= 0) {
+    if (MPIEnvironment::IsMaster() and fPrintProgress >= 0) {
         const auto endedRunID = runIDCounter - 1;
         const auto beginTime = std::chrono::system_clock::to_time_t(fRunBeginSystemTime);
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());

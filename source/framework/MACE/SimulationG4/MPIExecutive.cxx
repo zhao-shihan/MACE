@@ -10,7 +10,7 @@ using MACE::Environment::MPIEnvironment;
 void MPIExecutive::CheckSequential() const {
     if (MPIEnvironment::IsParallel()) {
         std::string where("MACE::SimulationG4::MPIExecutive::CheckSequential");
-        if (MPIEnvironment::IsWorldMaster()) {
+        if (MPIEnvironment::IsMaster()) {
             G4Exception(where.c_str(),
                         "InteractiveSessionMustBeSequential",
                         JustWarning,

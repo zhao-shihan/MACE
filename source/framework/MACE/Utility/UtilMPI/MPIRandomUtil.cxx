@@ -20,7 +20,7 @@ void MPIReSeedCLHEPRandom(CLHEP::HepRandomEngine* randEng) {
     std::vector<long> seedSend;
     long seedRecv = 0;
 
-    if (MPIEnvironment::IsWorldMaster()) {
+    if (MPIEnvironment::IsMaster()) {
         const std::size_t commSize = MPIEnvironment::WorldCommSize();
 
         std::set<long> uniqueSeeds;
