@@ -4,7 +4,7 @@
 namespace MACE::Environment::Memory::Detail {
 
 SingletonFactory::~SingletonFactory() {
-    for (auto&& [_, singletonBase] : fInstancePool) {
+    for (auto&& singletonBase : fInstancePool.GetUndeletedInReverseInsertionOrder()) {
         delete singletonBase;
     }
 }

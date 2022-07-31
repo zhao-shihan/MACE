@@ -23,11 +23,8 @@ using MACE::Utility::ObserverPtr;
 /// @brief Implementation detail of MACE::Environment::Memory::FreeSingleton.
 /// Not API.
 class FreeSingletonPool final : private Utility::NonMoveableBase {
-private:
-    using InstanceMap = std::map<const std::type_index, ObserverPtr<void>>;
-
 public:
-    using Node = InstanceMap::value_type::second_type;
+    using Node = ObserverPtr<void>;
 
 public:
     FreeSingletonPool();
@@ -43,7 +40,7 @@ public:
     [[nodiscard]] Node& Insert(AFreeSingleton* instance);
 
 private:
-    InstanceMap fInstanceMap;
+    std::map<const std::type_index, Node> fInstanceMap;
 
     static ObserverPtr<FreeSingletonPool> fgInstance;
 };

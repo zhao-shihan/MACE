@@ -12,9 +12,9 @@ template<Concept::FreeSingletonized AFreeSingleton>
 
 template<Concept::FreeSingletonized AFreeSingleton>
 [[nodiscard]] FreeSingletonPool::Node& FreeSingletonPool::Insert(AFreeSingleton* instance) {
-    auto&& [nodePair, inserted] = fInstanceMap.try_emplace(typeid(AFreeSingleton), instance);
+    const auto [iter, inserted] = fInstanceMap.try_emplace(typeid(AFreeSingleton), instance);
     if (inserted) {
-        return nodePair->second;
+        return iter->second;
     } else {
         throw std::logic_error(std::string("MACE::Environment::Memory::Detail::FreeSingletonPool::Insert: Instance of type ")
                                    .append(typeid(AFreeSingleton).name())

@@ -16,7 +16,7 @@ Singleton<ADerived>::Singleton() {
 template<class ADerived>
 Singleton<ADerived>::~Singleton() {
     if (fgInstanceNode != nullptr) {
-        *fgInstanceNode = {nullptr, nullptr};
+        *fgInstanceNode = nullptr;
         fgInstanceNode = nullptr;
     }
 }
@@ -26,22 +26,19 @@ ADerived& Singleton<ADerived>::Instance() {
     if (fgInstanceNode == nullptr) [[unlikely]] {
         InstantiateOrFindInstance();
     }
-    return *static_cast<ObserverPtr<ADerived>>(fgInstanceNode->first);
+    return *static_cast<ObserverPtr<ADerived>>(*fgInstanceNode);
 }
 
 template<class ADerived>
 void Singleton<ADerived>::InstantiateOrFindInstance() {
-    fgInstanceNode = std::addressof(Detail::SingletonFactory::Instance().InstantiateOrFind<ADerived>());
-    if (fgInstanceNode->first == nullptr and fgInstanceNode->second == nullptr) {
+    if (auto& node = Detail::SingletonFactory::Instance().InstantiateOrFind<ADerived>();
+        node != nullptr) {
+        fgInstanceNode = std::addressof(node);
+    } else {
         throw std::logic_error(
             std::string("MACE::Environment::Memory::Singleton::Instance(): The instance of ")
                 .append(typeid(ADerived).name())
                 .append(" has been deleted"));
-    } else if (fgInstanceNode->first == nullptr or fgInstanceNode->second == nullptr) {
-        throw std::logic_error(
-            std::string("MACE::Environment::Memory::Singleton::Instance(): The instance node of ")
-                .append(typeid(ADerived).name())
-                .append(" is corrupted (partially null)"));
     }
 }
 
