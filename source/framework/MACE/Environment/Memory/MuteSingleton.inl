@@ -6,7 +6,6 @@ ObserverPtr<Detail::MuteSingletonPool::Node> MuteSingleton<ADerived>::fgInstance
 template<class ADerived>
 MuteSingleton<ADerived>::MuteSingleton() :
     MuteSingletonBase() {
-    static_assert(std::is_base_of_v<MuteSingleton<ADerived>, ADerived>);
     static_assert(Concept::MuteSingletonized<ADerived>);
     if (not Detail::MuteSingletonPool::Instance().Contains<ADerived>()) {
         fgInstanceNode = std::addressof(Detail::MuteSingletonPool::Instance().Insert(static_cast<ADerived*>(this)));

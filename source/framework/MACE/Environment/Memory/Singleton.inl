@@ -6,7 +6,7 @@ ObserverPtr<Detail::SingletonPool::Node> Singleton<ADerived>::fgInstanceNode = n
 template<class ADerived>
 Singleton<ADerived>::Singleton() {
     static_assert(Concept::Singletonized<ADerived>);
-    if (Detail::SingletonFactory::Instance().Instantiated<ADerived>()) {
+    if (Detail::SingletonPool::Instance().Contains<ADerived>()) {
         throw std::logic_error(std::string("MACE::Environment::Memory::Singleton: Trying to construct ")
                                    .append(typeid(ADerived).name())
                                    .append(" (environmental singleton) twice"));

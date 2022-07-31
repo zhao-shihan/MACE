@@ -7,7 +7,6 @@
 
 #include <stdexcept>
 #include <string>
-#include <type_traits>
 #include <typeinfo>
 
 namespace MACE::Environment::Memory {

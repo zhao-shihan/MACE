@@ -3,6 +3,7 @@
 #include "MACE/Environment/Memory/Concept/Singletonized.hxx"
 #include "MACE/Environment/Memory/detail/ISingletonBase.hxx"
 #include "MACE/Environment/Memory/detail/SingletonFactory.hxx"
+#include "MACE/Environment/Memory/detail/SingletonPool.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include <stdexcept>

@@ -4,7 +4,6 @@ template<class ADerived>
 FreeSingleton<ADerived>::FreeSingleton() :
     FreeSingletonBase(),
     MuteSingleton<ADerived>() {
-    static_assert(std::is_base_of_v<FreeSingleton<ADerived>, ADerived>);
     static_assert(Concept::FreeSingletonized<ADerived>);
 }
 
