@@ -9,8 +9,8 @@ public:
     SimulationG4CLI();
     virtual ~SimulationG4CLI() = default;
 
-    auto GetMacro() const { return fArgParser->get("macro"); }
-    auto IsInteractive() const { return GetMacro().empty() or fArgParser->is_used("-i"); }
+    auto GetMacro() const { return GetArgParser().get("macro"); }
+    auto IsInteractive() const { return GetMacro().empty() or GetArgParser().is_used("-i"); }
 };
 
 } // namespace MACE::Environment::CLI

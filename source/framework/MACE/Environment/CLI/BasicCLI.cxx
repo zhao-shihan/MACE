@@ -9,21 +9,21 @@ namespace MACE::Environment::CLI {
 
 BasicCLI::BasicCLI() :
     CLIBase() {
-    fArgParser->add_argument("-h", "--help")
+    AddArgument("-h", "--help")
         .help("Show help message and exit.")
         .nargs(0)
         .action([this](const auto&) {
-            std::cout << *fArgParser << std::flush;
+            std::cout << GetArgParser() << std::flush;
             std::exit(EXIT_SUCCESS);
         });
-    fArgParser->add_argument("-v", "--version")
+    AddArgument("-v", "--version")
         .help("Print version and exit.")
         .nargs(0)
         .action([](const auto&) {
             std::cout << MACE_VERSION_STRING << std::endl;
             std::exit(EXIT_SUCCESS);
         });
-    fArgParser->add_argument("-V", "--verbose")
+    AddArgument("-V", "--verbose")
         .scan<'i', int>()
         .help("Set verbose level. (-1: quiet, 0: error, 1: warning, 2: verbose, 3: more verbose)")
         .action([](const std::string& argVerbose) {
@@ -45,7 +45,7 @@ BasicCLI::BasicCLI() :
 }
 
 std::optional<VerboseLevel> BasicCLI::GetVerboseLevel() const {
-    if (const auto optionalVerbose = fArgParser->present<std::underlying_type_t<VerboseLevel>>("-V");
+    if (const auto optionalVerbose = GetArgParser().present<std::underlying_type_t<VerboseLevel>>("-V");
         optionalVerbose.has_value()) {
         return static_cast<VerboseLevel>(optionalVerbose.value());
     } else {

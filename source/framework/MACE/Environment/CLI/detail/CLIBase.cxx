@@ -7,8 +7,8 @@ namespace MACE::Environment::CLI::Detail {
 
 CLIBase::CLIBase() :
     NonMoveableBase(),
-    fArgParser(std::make_unique<argparse::ArgumentParser>("", MACE_VERSION_STRING, argparse::default_arguments::none)),
-    fArguments(std::nullopt) {
+    fArguments(std::nullopt),
+    fArgParser({}, MACE_VERSION_STRING, argparse::default_arguments::none) {
     if (static bool gInstantiated = false; gInstantiated) {
         throw std::logic_error("MACE::Environment::CLI::Detail::CLIBase: Trying to construct CLI twice");
     } else {
@@ -19,7 +19,7 @@ CLIBase::CLIBase() :
 void CLIBase::ParseArgs(int argc, char* argv[]) {
     if (not Parsed()) {
         try {
-            fArgParser->parse_args(argc, argv);
+            fArgParser.parse_args(argc, argv);
         } catch (const std::runtime_error& exception) {
             std::cerr << exception.what() << '\n'
                       << "Try: " << argv[0] << " --help" << std::endl;
@@ -27,24 +27,24 @@ void CLIBase::ParseArgs(int argc, char* argv[]) {
         }
         fArguments = {argc, argv};
     } else {
-        throw std::logic_error("MACE::Environment::CLI::Detail::CLIBase::ParseArgs: Command line arguments has been parsed");
+        ThrowParsed();
     }
 }
 
-int CLIBase::GetArgc() const {
+const std::pair<int, char**>& CLIBase::GetArgcArgv() const {
     if (Parsed()) {
-        return fArguments->first;
+        return fArguments.value();
     } else {
-        throw std::logic_error("MACE::Environment::CLI::Detail::CLIBase::GetArgc: Command line arguments has not been parsed");
+        ThrowNotParsed();
     }
 }
 
-char** CLIBase::GetArgv() const {
-    if (Parsed()) {
-        return fArguments->second;
-    } else {
-        throw std::logic_error("MACE::Environment::CLI::Detail::CLIBase::GetArgv: Command line arguments has not been parsed");
-    }
+[[noreturn]] void CLIBase::ThrowParsed() {
+    throw std::logic_error("MACE::Environment::CLI: Command line arguments has been parsed");
+}
+
+[[noreturn]] void CLIBase::ThrowNotParsed() {
+    throw std::logic_error("MACE::Environment::CLI: Command line arguments has not been parsed");
 }
 
 } // namespace MACE::Environment::CLI::Detail
