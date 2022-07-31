@@ -38,3 +38,29 @@ private:
 };
 
 } // namespace MACE::Environment
+
+#define MACE_MPI_MASTER_OUT(out)                                        \
+    static_assert(std::derived_from<std::remove_cvref_t<decltype(out)>, \
+                                    std::ostream>);                     \
+    if (MACE::Environment::MPIEnvironment::IsWorldMaster()) out
+
+#define MACE_VERBOSE_LEVEL_CONTROLLED_MPI_MASTER_OUT(verboseLevel, Threshold, out) \
+    if (MACE::Environment::MPIEnvironment::IsWorldMaster())                        \
+    MACE_VERBOSE_LEVEL_CONTROLLED_OUT(verboseLevel, Threshold, out)
+
+#define MACE_ENVIRONMENT_CONTROLLED_MPI_MASTER_OUT(Threshold, out) \
+    if (MACE::Environment::MPIEnvironment::IsWorldMaster())        \
+    MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)
+
+#define MACE_MPI_WORKER_OUT(out)                                        \
+    static_assert(std::derived_from<std::remove_cvref_t<decltype(out)>, \
+                                    std::ostream>);                     \
+    if (MACE::Environment::MPIEnvironment::IsWorldWorker()) out
+
+#define MACE_VERBOSE_LEVEL_CONTROLLED_MPI_WORKER_OUT(verboseLevel, Threshold, out) \
+    if (MACE::Environment::MPIEnvironment::IsWorldWorker())                        \
+    MACE_VERBOSE_LEVEL_CONTROLLED_OUT(verboseLevel, Threshold, out)
+
+#define MACE_ENVIRONMENT_CONTROLLED_MPI_WORKER_OUT(Threshold, out) \
+    if (MACE::Environment::MPIEnvironment::IsWorldWorker())        \
+    MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)

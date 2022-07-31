@@ -1,7 +1,6 @@
 #pragma once
 
 #include <concepts>
-#include <ostream>
 #include <type_traits>
 
 namespace MACE::Environment {
