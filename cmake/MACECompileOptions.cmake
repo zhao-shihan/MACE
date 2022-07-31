@@ -41,12 +41,12 @@ endif()
 # =============================================================================
 
 if("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Windows")
-    # See https://root-forum.cern.ch/t/preprocessor-macro-x86-64-problem-with-clhep-on-windows/50431/2
+    # See https://root-forum.cern.ch/t/preprocessor-macro-x86-64-problem-with-clhep-on-windows/50431
     if(${ROOT_VERSION} VERSION_LESS_EQUAL 6.26.04)
         # We simply define the accidentally involved __uint128_t to a random type and pray that it won't actually be used.
         add_compile_definitions(__uint128_t=float)
         message(NOTICE "***Notice: Building on Windows with ROOT ${ROOT_VERSION}. Defining __uint128_t to another random type.")
-        message(NOTICE "           See https://root-forum.cern.ch/t/preprocessor-macro-x86-64-problem-with-clhep-on-windows/50431/2")
+        message(NOTICE "           See https://root-forum.cern.ch/t/preprocessor-macro-x86-64-problem-with-clhep-on-windows/50431")
     endif()
 endif()
 
