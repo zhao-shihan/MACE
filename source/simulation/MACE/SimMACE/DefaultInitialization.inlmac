@@ -39,6 +39,7 @@
 ,""
 ,"# Name of output"
 ,"/MACE/Analysis/SetResultName              SimMACE_result"
+,""
 
 #if MACE_WITH_G4VIS
 
@@ -127,5 +128,6 @@
 ,""
 ,"/vis/verbose warnings"
 ,"/vis/viewer/set/autoRefresh true"
+,""
 
 #endif

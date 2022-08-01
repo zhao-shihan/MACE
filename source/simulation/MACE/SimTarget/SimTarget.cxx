@@ -6,7 +6,7 @@
 
 #include "Randomize.hh"
 
-#include <tuple>
+#include <array>
 
 int main(int argc, char* argv[]) {
     MACE::Environment::CLI::SimulationG4CLI cli;
@@ -20,9 +20,9 @@ int main(int argc, char* argv[]) {
     runManager.GetDetectorConstruction().SetCheckOverlaps(cli.IsInteractive() ? true : false);
     runManager.GetPhysicsList().SetVerboseLevel(cli.IsInteractive() ? 1 : 0);
 
-    MACE::SimulationG4::MPIExecutive().StartSession(cli, std::tuple(
+    MACE::SimulationG4::MPIExecutive().StartSession(cli, std::array{
 #include "MACE/SimTarget/DefaultInitialization.inlmac"
-                                                             ));
+                                                         });
 
     return EXIT_SUCCESS;
 }
