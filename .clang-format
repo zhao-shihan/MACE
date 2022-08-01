@@ -2,7 +2,7 @@ AccessModifierOffset: -4
 AllowShortBlocksOnASingleLine: Always
 AllowShortCaseLabelsOnASingleLine: true
 AllowShortEnumsOnASingleLine: true
-AllowShortFunctionsOnASingleLine: Inline
+AllowShortFunctionsOnASingleLine: All
 AllowShortIfStatementsOnASingleLine: WithoutElse
 AllowShortLambdasOnASingleLine: All
 AllowShortLoopsOnASingleLine: true
@@ -31,11 +31,14 @@ FixNamespaceComments: true
 IncludeBlocks: Regroup
 IncludeCategories: 
   - Regex: '<.*>'
-    Priority: 7
+    Priority: 8
   - Regex: '"mpi.*\.h"'
-    Priority: 6
+    Priority: 7
     CaseSensitive: true
   - Regex: '"Eigen/.*"'
+    Priority: 6
+    CaseSensitive: true
+  - Regex: '"argparse/.*"'
     Priority: 5
     CaseSensitive: true
   - Regex: '"yaml-cpp/.*"'
@@ -62,14 +65,15 @@ IncludeCategories:
   - Regex: '"CLHEP/.*"'
     Priority: 1
     CaseSensitive: true
-  - Regex: '".*"'
+  - Regex: '"MACE/.*"'
     Priority: 0
+    CaseSensitive: true
 IndentAccessModifiers: false
 IndentCaseBlocks: false
 IndentCaseLabels: false
-IndentExternBlock: AfterExternBlock
+IndentExternBlock: NoIndent
 IndentGotoLabels: false
-IndentPPDirectives: AfterHash
+IndentPPDirectives: BeforeHash
 IndentWidth: 4
 IndentWrappedFunctionNames: false
 KeepEmptyLinesAtTheStartOfBlocks: true

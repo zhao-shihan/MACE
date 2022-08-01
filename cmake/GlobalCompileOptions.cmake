@@ -1,3 +1,5 @@
+# This file is included before "find_package"s and "LookFor"s.
+
 # =============================================================================
 # MACE build type
 # =============================================================================
@@ -13,7 +15,7 @@ if(DEFINED CMAKE_CONFIGURATION_TYPES)
 else()
     # single-config generator
     message(STATUS "Using single-config generator \"${CMAKE_GENERATOR}\"")
-    if(NOT DEFINED CMAKE_BUILD_TYPE)
+    if("${CMAKE_BUILD_TYPE}" STREQUAL "")
         # Default to "Release"
         set(CMAKE_BUILD_TYPE "Release")
     endif()
@@ -35,11 +37,13 @@ endif()
 # Global compiler options
 # =============================================================================
 
-# inform OpenMPI not to bring mpicxx in, it's necessary for most cases.
-add_compile_definitions(OMPI_SKIP_MPICXX)
-# inform MPICH and derivatives not to bring mpicxx in, seems unnecessary but more consistent.
-add_compile_definitions(MPICH_SKIP_MPICXX)
-
+# Inform OpenMPI not to bring mpicxx in, it's necessary for most cases.
+add_compile_definitions(OMPI_SKIP_MPICXX=1)
+# Inform MPICH and derivatives not to bring mpicxx in, seems unnecessary but more consistent.
+add_compile_definitions(MPICH_SKIP_MPICXX=1)
+# Inform Eigen not to enable multithreading, though we are not using OpenMP. It is safer to do so.
+add_compile_definitions(EIGEN_DONT_PARALLELIZE=1)
+# Concurrently build with MSVC
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # Build concurrently
     add_compile_options(/MP)
