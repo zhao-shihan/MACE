@@ -40,7 +40,7 @@
 ,"# Name of output"
 ,"/MACE/Analysis/SetResultName              SimMACE_result"
 
-#if MACE_ENABLE_VIS
+#if MACE_WITH_G4VIS
 
 ,"#############################################################################"
 ,"# Visualization settings"

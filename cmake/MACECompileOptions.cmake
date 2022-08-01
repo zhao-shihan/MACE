@@ -16,16 +16,16 @@ message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
 # MACE compile options
 # =============================================================================
 
-if(MACE_ENABLE_VIS)
-    add_compile_definitions(MACE_ENABLE_VIS=1)
-endif()
-
 if(MACE_SIGNAL_HANDLER)
     add_compile_definitions(MACE_SIGNAL_HANDLER=1)
 endif()
 
 if(MACE_WITH_G4GDML)
     add_compile_definitions(MACE_WITH_G4GDML=1)
+endif()
+
+if(MACE_WITH_G4VIS)
+    add_compile_definitions(MACE_WITH_G4VIS=1)
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")

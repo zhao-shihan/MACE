@@ -17,11 +17,15 @@ void MPIExecutive::StartSession(const SimulationG4CLI& cli, AMacroOrCommand&& ma
 template<class AMacroOrCommand>
 void MPIExecutive::StartInteractiveSession(int argc, char* argv[], AMacroOrCommand&& macroOrCommands) const {
     CheckSequential();
-    const auto uiExecutive = std::make_unique<G4UIExecutive>(argc, argv);
-    const auto visExecutive = std::make_unique<G4VisExecutive>();
-    visExecutive->Initialize();
+#if MACE_WITH_VIS
+    G4UIExecutive uiExecutive(argc, argv);
+    G4VisExecutive visExecutive;
+    visExecutive.Initialize();
+#else
+    G4UIExecutive uiExecutive(argc, argv, "tcsh");
+#endif
     Execute(std::forward<AMacroOrCommand>(macroOrCommands));
-    uiExecutive->SessionStart();
+    uiExecutive.SessionStart();
 }
 
 template<std::ranges::range ARange> // clang-format off
