@@ -144,9 +144,9 @@ G4bool MPIRunManager::CheckNEventIsAtLeastCommSize(G4int nEvent) const {
 void MPIRunManager::RunBeginReport() const {
     if (MPIEnvironment::IsMaster() and fPrintProgress >= 0) {
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-        G4cout << "----------------------------> Run Starts <----------------------------\n"
+        G4cout << "--------------------------------> Run Starts <--------------------------------\n"
                << std::put_time(std::localtime(&now), "%c (UTC%z) > Run ") << runIDCounter << " starts on " << MPIEnvironment::WorldCommSize() << " ranks.\n"
-               << "----------------------------> Run Starts <----------------------------" << G4endl;
+               << "--------------------------------> Run Starts <--------------------------------" << G4endl;
     }
 }
 
@@ -171,11 +171,11 @@ void MPIRunManager::RunEndReport() const {
         const auto endedRunID = runIDCounter - 1;
         const auto beginTime = std::chrono::system_clock::to_time_t(fRunBeginSystemTime);
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-        G4cout << "---------------------------> Run Finished <---------------------------\n"
+        G4cout << "-------------------------------> Run Finished <-------------------------------\n"
                << std::put_time(std::localtime(&now), "%c (UTC%z) > Run ") << endedRunID << " finished on " << MPIEnvironment::WorldCommSize() << " ranks.\n"
                << "  Start time: " << std::put_time(std::localtime(&beginTime), "%c (UTC%z).\n")
                << "   Wall time: " << fRunWallTime.count() << " s.\n"
-               << "---------------------------> Run Finished <---------------------------" << G4endl;
+               << "-------------------------------> Run Finished <-------------------------------" << G4endl;
     }
 }
 
