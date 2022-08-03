@@ -135,7 +135,7 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
         insideVolume = fTarget->VolumeContains(position);
         if (timeUp or not insideVolume) { break; }
         // check whether the end point inside material
-        insideMaterial = fTarget->Contains(position, insideVolume);
+        insideMaterial = fTarget->Contains(position, true);
         if (not insideMaterial) { continue; }
         // if inside material update its velocity
         // set a gauss vector of sigma=1
