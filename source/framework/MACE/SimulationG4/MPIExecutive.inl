@@ -17,7 +17,7 @@ void MPIExecutive::StartSession(const SimulationG4CLI& cli, AMacroOrCommand&& ma
 template<class AMacroOrCommand>
 void MPIExecutive::StartInteractiveSession(int argc, char* argv[], AMacroOrCommand&& macroOrCommands) const {
     CheckSequential();
-#if MACE_WITH_VIS
+#if MACE_WITH_G4VIS
     G4UIExecutive uiExecutive(argc, argv);
     G4VisExecutive visExecutive;
     visExecutive.Initialize();
