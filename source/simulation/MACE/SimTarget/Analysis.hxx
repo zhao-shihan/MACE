@@ -5,8 +5,6 @@
 #include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
-#include "TFormula.h"
-
 #include <fstream>
 #include <memory>
 
@@ -26,7 +24,6 @@ public:
 
     void SetResultName(std::string_view resultName) { fResultName = resultName; }
     void EnableYieldAnalysis(bool val) { fEnableYieldAnalysis = val; }
-    void SetDetectableRegion(const char* booleanExpression) { fDetectableRegion = ConstructFormula(booleanExpression); }
 
     void RunBegin(ObserverPtr<const G4Run> run);
     auto NewMuoniumTrack() { return fMuoniumTrackList.emplace_back(std::make_unique<MuoniumTrack>()).get(); }
@@ -45,13 +42,9 @@ private:
     void AnalysisAndWriteYield();
     void CloseYieldFile();
 
-    static TFormula ConstructFormula(const char* booleanExpression) { return TFormula("DetectableRegion", booleanExpression, false); }
-    bool IsDetectable(const Double_t* pos) const noexcept { return fDetectableRegion.EvalPar(pos); }
-
 private:
     std::string fResultName;
     bool fEnableYieldAnalysis;
-    TFormula fDetectableRegion;
 
     ObserverPtr<const G4Run> fThisRun;
     std::vector<std::unique_ptr<MuoniumTrack>> fMuoniumTrackList;

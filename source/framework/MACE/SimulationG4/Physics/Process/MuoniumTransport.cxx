@@ -11,8 +11,8 @@
 
 namespace MACE::SimulationG4::Physics::Process {
 
-using namespace Utility::PhysicalConstant;
 using namespace Utility::LiteralUnit;
+using namespace Utility::PhysicalConstant;
 
 MuoniumTransport::MuoniumTransport() :
     G4VContinuousProcess("MuoniumTransport", fTransportation),
@@ -85,7 +85,7 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     // Thus we do that ourselves. The decay time is pre-assigned and used for limiting the flight time, and the "true safety" is ensured by bool expr.
 
     // the random engine in use
-    auto* const randEng = G4Random::getTheEngine();
+    const auto randEng = G4Random::getTheEngine();
     // pre step point position
     const auto& initialPosition = track.GetPosition();
     // get the pre-assigned decay time to determine when the flight stops and then let G4 decay it
@@ -98,9 +98,9 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     // the total flight length in this G4Step
     G4double trueStepLength = 0;
     // momentum direction
-    G4ThreeVector direction = track.GetMomentumDirection();
+    auto direction = track.GetMomentumDirection();
     // velocity magnitude
-    G4double velocity = track.GetVelocity();
+    auto velocity = track.GetVelocity();
     // elapsed time of this flight
     G4double flightTime = 0;
     // current position in flight
@@ -113,15 +113,15 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     // flag indicate that the flight was terminated by decay
     G4bool timeUp;
     // flag indicate that the flight was terminated by target boundary
-    G4bool outsideVolume;
+    auto insideVolume = fTarget->VolumeContains(initialPosition);
     // flag indicate that the muonium is not inside the material
-    G4bool outsideMaterial = not fTarget->Contains(position);
+    auto insideMaterial = fTarget->Contains(initialPosition, insideVolume);
 
     // do random flight
 
     do {
         // set free path
-        freePath = outsideMaterial ? stepInVacuum : G4RandExponential::shoot(randEng, fMeanFreePath);
+        freePath = insideMaterial ? G4RandExponential::shoot(randEng, fMeanFreePath) : stepInVacuum;
         // update flight length
         trueStepLength += freePath;
         // update time
@@ -132,11 +132,11 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
         position = initialPosition + displacement;
         // check space-time limit
         timeUp = (flightTime >= timeLimit);
-        outsideVolume = not fTarget->VolumeContains(position);
-        if (timeUp or outsideVolume) { break; }
+        insideVolume = fTarget->VolumeContains(position);
+        if (timeUp or not insideVolume) { break; }
         // check whether the end point inside material
-        outsideMaterial = not fTarget->Contains(position);
-        if (outsideMaterial) { continue; }
+        insideMaterial = fTarget->Contains(position, insideVolume);
+        if (not insideMaterial) { continue; }
         // if inside material update its velocity
         // set a gauss vector of sigma=1
         direction.set(G4RandGauss::shoot(randEng),
@@ -165,14 +165,13 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     // Correction (dt, dl) contributed from space
     std::pair<G4double, G4double> finalStepCorrectionFromEscape(0, 0);
     // evaluate the correction from space if needed
-    if (outsideVolume) {
+    if (not insideVolume) {
         // flight is break by target boundary
-        G4ThreeVector binaryMore = displacement;
-        G4ThreeVector binaryMid;
-        G4ThreeVector binaryLess = displacement - freePath * direction;
-        G4double binaryStep = freePath;
+        auto binaryMore = displacement;
+        auto binaryLess = displacement - freePath * direction;
+        auto binaryStep = freePath;
         do {
-            binaryMid = (binaryMore + binaryLess) / 2;
+            auto binaryMid = (binaryMore + binaryLess) / 2;
             position = initialPosition + binaryMid;
             if (fTarget->VolumeContains(position)) {
                 binaryLess = binaryMid;

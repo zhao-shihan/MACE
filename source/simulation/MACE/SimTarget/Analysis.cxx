@@ -18,7 +18,6 @@ Analysis::Analysis() :
     NonMoveableBase(),
     fResultName("SimTarget_result"),
     fEnableYieldAnalysis(true),
-    fDetectableRegion(ConstructFormula("abs(x)>30 || abs(y)>30 || z>0")),
     fThisRun(nullptr),
     fMuoniumTrackList(0),
     fResultFile(nullptr),
@@ -101,11 +100,11 @@ void Analysis::AnalysisAndWriteYield() {
     const auto& target = Core::Geometry::Description::Target::Instance();
     for (auto&& track : std::as_const(fMuoniumTrackList)) {
         const auto& decayPosition = track->GetDecayPosition();
-        if (target.Contains(decayPosition.data())) {
+        if (target.Contains(decayPosition)) {
             ++nTargetDecay;
         } else {
             ++nVacuumDecay;
-            if (IsDetectable(decayPosition.data())) {
+            if (target.TestDetectable(decayPosition)) {
                 ++nDetectableDecay;
             }
         }
