@@ -12,7 +12,7 @@
 namespace MACE::Environment::Memory {
 
 template<class ADerived>
-class FreeSingleton : private Detail::FreeSingletonBase,
+class FreeSingleton : public Detail::FreeSingletonBase,
                       public MuteSingleton<ADerived> {
 protected:
     FreeSingleton();

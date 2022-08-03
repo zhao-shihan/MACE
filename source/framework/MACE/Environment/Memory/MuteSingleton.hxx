@@ -17,7 +17,7 @@ class FreeSingleton;
 using Utility::ObserverPtr;
 
 template<class ADerived>
-class MuteSingleton : private Detail::MuteSingletonBase {
+class MuteSingleton : public Detail::MuteSingletonBase {
     friend class FreeSingleton<ADerived>;
 
 protected:
