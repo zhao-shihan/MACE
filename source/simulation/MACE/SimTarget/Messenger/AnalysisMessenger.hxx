@@ -3,10 +3,13 @@
 #include "MACE/Environment/Memory/Singleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
-#include "G4UIcmdWithABool.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
+
+#include <memory>
+
+class G4UIcmdWithABool;
+class G4UIcmdWithAString;
+class G4UIdirectory;
 
 namespace MACE::SimTarget {
 
@@ -22,20 +25,19 @@ class AnalysisMessenger final : public Environment::Memory::Singleton<AnalysisMe
 
 private:
     AnalysisMessenger();
-    ~AnalysisMessenger() = default;
+    ~AnalysisMessenger();
 
 public:
     void SetTo(ObserverPtr<Analysis> ana) { fAnalysis = ana; }
 
-    void SetNewValue(G4UIcommand* command, G4String value) override;
+    void SetNewValue(ObserverPtr<G4UIcommand> command, G4String value) override;
 
 private:
     ObserverPtr<Analysis> fAnalysis;
 
-    G4UIdirectory fDirectory;
-    G4UIcmdWithAString fSetResultName;
-    G4UIcmdWithABool fEnableYieldAnalysis;
-    G4UIcmdWithAString fSetDetectableRegion;
+    std::unique_ptr<G4UIdirectory> fDirectory;
+    std::unique_ptr<G4UIcmdWithAString> fSetResultName;
+    std::unique_ptr<G4UIcmdWithABool> fEnableYieldAnalysis;
 };
 
 } // namespace Messenger
