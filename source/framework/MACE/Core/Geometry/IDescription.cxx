@@ -18,8 +18,8 @@ void IDescription::Read(const YAML::Node& geomYaml) {
 }
 
 void IDescription::Write(YAML::Node& geomYaml) const {
-    auto thisNode = geomYaml[fName];
-    WriteDescriptionNode(thisNode);
+    auto nodeForThis = geomYaml[fName];
+    WriteDescriptionNode(nodeForThis);
 }
 
 } // namespace MACE::Core::Geometry
