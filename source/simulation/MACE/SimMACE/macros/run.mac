@@ -4,6 +4,10 @@
 #
 #############################################################################
 
+#############################################################################
+# Initialization settings
+#############################################################################
+
 # Set some default verbose
 /control/verbose 0
 /run/verbose 0
@@ -32,8 +36,11 @@
 /MACE/Analysis/EnableCoincidenceOfEMCal   true
 /MACE/Analysis/EnableCoincidenceOfMCP     true
 
-# Name of output
-/MACE/Analysis/SetResultName              SimMACE_result
 
+#############################################################################
+# Run
+#############################################################################
+
+/MACE/Analysis/SetResultName SimMACE_result
 /MPIRun/SetPrintProgress 1
 /run/beamOn 80
