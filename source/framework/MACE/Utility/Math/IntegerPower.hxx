@@ -17,7 +17,7 @@ namespace MACE::Utility::Math {
 template<unsigned N>
 constexpr auto PowI(std::integral auto m) {
     if constexpr (N == 0) {
-        return decltype(m)(1);
+        return static_cast<decltype(m)>(1);
     } else if constexpr (N == 1) {
         return m;
     } else {
@@ -53,7 +53,7 @@ constexpr auto PowZ(std::floating_point auto x) {
     if constexpr (N < 0) {
         return PowZ<-N>(1 / x);
     } else if constexpr (N == 0) {
-        return decltype(x)(1);
+        return static_cast<decltype(x)>(1);
     } else if constexpr (N == 1) {
         return x;
     } else {
