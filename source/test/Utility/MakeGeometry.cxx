@@ -164,29 +164,24 @@ int main(int argc, char** argv) {
     auto geoManager = std::make_unique<TGeoManager>("MACEGeom", "MACE Geometry");
     geoManager->Import("test.gdml");
 
-
-    // noraml export
-    geoManager->Export("test.root");
-
     // set transparency for jsroot display
     // see form https://github.com/root-project/jsroot/blob/master/docs/JSROOT.md#geometry-viewer
-    geoManager = nullptr;
-    // geoManager.reset();
-    geoManager = std::make_unique<TGeoManager>("MACEGeom", "MACE Geometry");
-    Char_t transparency = 60; //set the transparency
-    geoManager->Import("test.gdml");
     geoManager->GetVolume(fWorld->GetLogicalVolume()->GetName())->SetInvisible();
-
-    std::vector<std::shared_ptr<MACE::Core::Geometry::IEntity>> volumesToSetTransparency =
-        {
-            fEMCalShield, fEMCal, fSpectrometerMagnet, fSpectrometerShield, fFirstBendSolenoid,
-            fFirstTransportSolenoid, fSecondBendSolenoid, fSecondTransportSolenoid, fThirdTransportSolenoid};
+    std::vector<std::shared_ptr<MACE::Core::Geometry::IEntity>> volumesToSetTransparency{
+        fEMCalShield,
+        fEMCal,
+        fSpectrometerMagnet,
+        fSpectrometerShield,
+        fFirstBendSolenoid,
+        fFirstTransportSolenoid,
+        fSecondBendSolenoid,
+        fSecondTransportSolenoid,
+        fThirdTransportSolenoid};
     for (auto&& volume : std::as_const(volumesToSetTransparency)) {
-        geoManager->GetVolume(volume->GetLogicalVolume()->GetName())->SetTransparency(transparency);
+        geoManager->GetVolume(volume->GetLogicalVolume()->GetName())->SetTransparency(60);
     }
 
-    geoManager->Export("test_set_transp.root");
-
+    geoManager->Export("test.root");
 
 #endif
 
