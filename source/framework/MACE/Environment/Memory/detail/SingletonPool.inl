@@ -12,14 +12,17 @@ template<Concept::Singletonized ASingleton>
 
 template<Concept::Singletonized ASingleton>
 [[nodiscard]] SingletonPool::Node& SingletonPool::Insert(ASingleton* instance) {
-    const auto [iter, inserted] = fInstanceMap.try_emplace(
-        typeid(ASingleton), instance, std::make_pair(fInstanceMap.size(), static_cast<ISingletonBase*>(instance)));
-    if (inserted) {
+    if (const auto [iter, inserted] = fInstanceMap.try_emplace(
+            typeid(ASingleton), instance,
+            std::make_pair(fInstanceMap.size(), static_cast<ISingletonBase*>(instance)));
+        inserted) {
         return iter->second.first;
     } else {
-        throw std::logic_error(std::string("MACE::Environment::Memory::Detail::SingletonPool::Insert: Instance of type ")
-                                   .append(typeid(ASingleton).name())
-                                   .append(" already exists"));
+        throw std::logic_error(
+            std::string("MACE::Environment::Memory::Detail::SingletonPool::Insert: "
+                        "Instance of type ")
+                .append(typeid(ASingleton).name())
+                .append(" already exists"));
     }
 }
 

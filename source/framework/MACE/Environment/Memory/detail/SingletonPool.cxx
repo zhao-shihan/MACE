@@ -1,10 +1,8 @@
 #include "MACE/Environment/Memory/detail/SingletonPool.hxx"
 
-#include <algorithm>
-
 namespace MACE::Environment::Memory::Detail {
 
-[[nodiscard]] const std::vector<SingletonPool::BaseNode> SingletonPool::GetUndeletedInReverseInsertionOrder() const {
+[[nodiscard]] std::vector<SingletonPool::BaseNode> SingletonPool::GetUndeletedInReverseInsertionOrder() const {
     std::vector<std::pair<std::size_t, BaseNode>> undeletedListWithId;
     undeletedListWithId.reserve(fInstanceMap.size());
     for (auto&& [_, nodePair] : fInstanceMap) {
@@ -13,18 +11,12 @@ namespace MACE::Environment::Memory::Detail {
             undeletedListWithId.emplace_back(baseNodePair);
         }
     }
+    const auto undeletedCount = undeletedListWithId.size();
 
-    std::ranges::sort(undeletedListWithId,
-                      [](const auto& lhs, const auto& rhs) {
-                          return lhs.first > rhs.first;
-                      });
-
-    std::vector<BaseNode> undeletedList;
-    undeletedList.reserve(undeletedListWithId.size());
-    for (auto&& [_, baseNode] : undeletedListWithId) {
-        undeletedList.emplace_back(baseNode);
+    std::vector<BaseNode> undeletedList(undeletedCount);
+    for (auto&& [id, baseNode] : std::as_const(undeletedListWithId)) {
+        undeletedList[undeletedCount - id - 1] = baseNode;
     }
-
     return undeletedList;
 }
 

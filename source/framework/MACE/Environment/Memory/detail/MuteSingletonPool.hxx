@@ -11,12 +11,7 @@
 #include <typeindex>
 #include <typeinfo>
 
-namespace MACE::Environment::Memory {
-
-template<class ADerived>
-class MuteSingleton;
-
-namespace Detail {
+namespace MACE::Environment::Memory::Detail {
 
 using MACE::Utility::ObserverPtr;
 
@@ -45,8 +40,6 @@ private:
     static ObserverPtr<MuteSingletonPool> fgInstance;
 };
 
-} // namespace Detail
-
-} // namespace MACE::Environment::Memory
+} // namespace MACE::Environment::Memory::Detail
 
 #include "MACE/Environment/Memory/detail/MuteSingletonPool.inl"
