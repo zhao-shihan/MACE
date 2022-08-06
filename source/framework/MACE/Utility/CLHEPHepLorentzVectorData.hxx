@@ -2,6 +2,7 @@
 
 #include "CLHEP/Vector/LorentzVector.h"
 
+#include <memory>
 #include <new>
 #include <type_traits>
 

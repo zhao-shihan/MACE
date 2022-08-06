@@ -22,7 +22,7 @@ inline double* operator&(CLHEP::Hep3Vector& threeVector) noexcept {
     static_assert(alignof(Detail::Hep3VectorImitator) == alignof(double));
     static_assert(std::is_layout_compatible_v<CLHEP::Hep3Vector, Detail::Hep3VectorImitator>);
 #endif
-    return std::launder(reinterpret_cast<double*>(&threeVector));
+    return std::launder(reinterpret_cast<double*>(std::addressof(threeVector)));
 }
 
 inline const double* operator&(const CLHEP::Hep3Vector& threeVector) noexcept {
@@ -35,7 +35,7 @@ inline const double* operator&(const CLHEP::Hep3Vector& threeVector) noexcept {
     static_assert(alignof(Detail::Hep3VectorImitator) == alignof(double));
     static_assert(std::is_layout_compatible_v<CLHEP::Hep3Vector, Detail::Hep3VectorImitator>);
 #endif
-    return std::launder(reinterpret_cast<const double*>(&threeVector));
+    return std::launder(reinterpret_cast<const double*>(std::addressof(threeVector)));
 }
 
 } // namespace MACE::Utility::CLHEPHep3VectorData

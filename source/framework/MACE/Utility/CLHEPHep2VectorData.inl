@@ -23,7 +23,7 @@ inline double* operator&(CLHEP::Hep2Vector& twoVector) noexcept {
     static_assert(alignof(Detail::Hep2VectorImitator) == alignof(double));
     static_assert(std::is_layout_compatible_v<CLHEP::Hep2Vector, Detail::Hep2VectorImitator>);
 #endif
-    return std::launder(reinterpret_cast<double*>(&twoVector));
+    return std::launder(reinterpret_cast<double*>(std::addressof(twoVector)));
 }
 
 inline const double* operator&(const CLHEP::Hep2Vector& twoVector) noexcept {
@@ -36,7 +36,7 @@ inline const double* operator&(const CLHEP::Hep2Vector& twoVector) noexcept {
     static_assert(alignof(Detail::Hep2VectorImitator) == alignof(double));
     static_assert(std::is_layout_compatible_v<CLHEP::Hep2Vector, Detail::Hep2VectorImitator>);
 #endif
-    return std::launder(reinterpret_cast<const double*>(&twoVector));
+    return std::launder(reinterpret_cast<const double*>(std::addressof(twoVector)));
 }
 
 } // namespace MACE::Utility::CLHEPHep2VectorData

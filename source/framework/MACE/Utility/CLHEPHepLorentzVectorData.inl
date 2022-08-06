@@ -25,7 +25,7 @@ inline double* operator&(CLHEP::HepLorentzVector& fourVector) noexcept {
     static_assert(alignof(Detail::HepLorentzVectorImitator) == alignof(double));
     static_assert(std::is_layout_compatible_v<CLHEP::HepLorentzVector, Detail::HepLorentzVectorImitator>);
 #endif
-    return std::launder(reinterpret_cast<double*>(&fourVector));
+    return std::launder(reinterpret_cast<double*>(std::addressof(fourVector)));
 }
 
 inline const double* operator&(const CLHEP::HepLorentzVector& fourVector) noexcept {
@@ -38,7 +38,7 @@ inline const double* operator&(const CLHEP::HepLorentzVector& fourVector) noexce
     static_assert(alignof(Detail::HepLorentzVectorImitator) == alignof(double));
     static_assert(std::is_layout_compatible_v<CLHEP::HepLorentzVector, Detail::HepLorentzVectorImitator>);
 #endif
-    return std::launder(reinterpret_cast<const double*>(&fourVector));
+    return std::launder(reinterpret_cast<const double*>(std::addressof(fourVector)));
 }
 
 } // namespace MACE::Utility::CLHEPHepLorentzVectorData

@@ -2,6 +2,7 @@
 
 #include "CLHEP/Vector/TwoVector.h"
 
+#include <memory>
 #include <new>
 #include <type_traits>
 
