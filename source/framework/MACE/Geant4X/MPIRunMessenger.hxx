@@ -3,9 +3,12 @@
 #include "MACE/Environment/Memory/Singleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
-#include "G4UIcmdWithAnInteger.hh"
-#include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
+
+#include <memory>
+
+class G4UIcmdWithAnInteger;
+class G4UIdirectory;
 
 namespace MACE::Geant4X {
 
@@ -29,8 +32,8 @@ public:
 private:
     ObserverPtr<MPIRunManager> fMPIRunManager;
 
-    G4UIdirectory fDirectory;
-    G4UIcmdWithAnInteger fSetPrintProgress;
+    std::unique_ptr<G4UIdirectory> fDirectory;
+    std::unique_ptr<G4UIcmdWithAnInteger> fSetPrintProgress;
 };
 
-} // namespace MACE::SimulationG4
+} // namespace MACE::Geant4X

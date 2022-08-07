@@ -14,13 +14,13 @@ protected:
     ~UseG4Allocator() = default;
 
 public:
-    void* operator new(std::size_t) { return SingletonG4Allocator<ADerived>::Instance().MallocSingle(); }
-    void* operator new[](std::size_t) = delete;
+    [[nodiscard]] void* operator new(std::size_t);
+    [[nodiscard]] void* operator new[](std::size_t) = delete;
 
-    void operator delete(void* ptr) { SingletonG4Allocator<ADerived>::Instance().FreeSingle(static_cast<ADerived*>(ptr)); }
+    void operator delete(void* ptr);
     void operator delete[](void*) = delete;
 };
 
-} // namespace MACE::SimulationG4
+} // namespace MACE::Geant4X
 
 #include "MACE/Geant4X/UseG4Allocator.inl"

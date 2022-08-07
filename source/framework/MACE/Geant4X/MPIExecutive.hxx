@@ -18,12 +18,6 @@
 
 namespace MACE::Geant4X {
 
-namespace Envirionment::CLI {
-
-class Geant4CLI;
-
-} // namespace Envirionment::CLI
-
 using Environment::CLI::Geant4CLI;
 using Utility::ObserverPtr;
 
@@ -51,6 +45,6 @@ private:
     static bool ExecuteCommand(const std::string& command);
 };
 
-} // namespace MACE::SimulationG4
+} // namespace MACE::Geant4X
 
 #include "MACE/Geant4X/MPIExecutive.inl"

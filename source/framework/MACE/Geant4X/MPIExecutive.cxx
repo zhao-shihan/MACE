@@ -45,4 +45,4 @@ bool MPIExecutive::ExecuteCommand(const std::string& command) {
     }
 }
 
-} // namespace MACE::SimulationG4
+} // namespace MACE::Geant4X
