@@ -2,14 +2,14 @@
 
 #include "MACE/Environment/MPIEnvironment.hxx"
 #include "MACE/Utility/DivideIndices.hxx"
-#include "MACE/Utility/UtilMPI/CheckedMPICall.hxx"
+#include "MACE/Utility/MPIUtil/CheckedMPICall.hxx"
 
 #include "mpi.h"
 
 #include <concepts>
 #include <utility>
 
-namespace MACE::Utility::UtilMPI {
+namespace MACE::Utility::MPIUtil {
 
 template<std::integral AIndex>
 IntegralIndexRange<AIndex> AllocMPIJobsJobWise(AIndex jobBegin, AIndex jobEnd, int commSize, int commRank);
@@ -29,6 +29,6 @@ IntegralIndexRange<AIndex> AllocMPIJobsWorkerWise(std::pair<AIndex, AIndex> jobB
 template<std::integral AIndex>
 IntegralIndexRange<AIndex> AllocMPIJobsWorkerWise(std::pair<AIndex, AIndex> jobBeginEnd, MPI_Comm comm);
 
-} // namespace MACE::Utility::UtilMPI
+} // namespace MACE::Utility::MPIUtil
 
-#include "MACE/Utility/UtilMPI/AllocMPIJobs.inl"
+#include "MACE/Utility/MPIUtil/AllocMPIJobs.inl"

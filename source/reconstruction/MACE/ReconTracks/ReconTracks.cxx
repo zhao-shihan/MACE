@@ -6,8 +6,8 @@
 #include "MACE/ReconTracks/Tracker/Hough.hxx"
 #include "MACE/ReconTracks/Tracker/PerfectFinder.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
-#include "MACE/Utility/UtilMPI/AllocMPIJobs.hxx"
-#include "MACE/Utility/UtilMPI/MakeMPIFilePath.hxx"
+#include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
+#include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
 #include "CLHEP/Random/MTwistEngine.h"
 #include "CLHEP/Random/RandGauss.h"
@@ -16,7 +16,7 @@ using namespace MACE::Core::DataModel::SimHit;
 using namespace MACE::Core::DataModel::Track;
 using namespace MACE::ReconTracks;
 using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
-using namespace MACE::Utility::UtilMPI;
+using namespace MACE::Utility::MPIUtil;
 using namespace MACE::Utility::PhysicalConstant;
 
 using MACE::Core::DataFactory;

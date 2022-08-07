@@ -2,9 +2,9 @@
 #include "MACE/SimulationG4/MPIRunManager.hxx"
 #include "MACE/SimulationG4/MPIRunMessenger.hxx"
 #include "MACE/Utility/Math/IntegerPower.hxx"
-#include "MACE/Utility/UtilMPI/AllocMPIJobs.hxx"
-#include "MACE/Utility/UtilMPI/CheckedMPICall.hxx"
-#include "MACE/Utility/UtilMPI/MPIRandomUtil.hxx"
+#include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
+#include "MACE/Utility/MPIUtil/CheckedMPICall.hxx"
+#include "MACE/Utility/MPIUtil/MPIRandomUtil.hxx"
 
 #include "G4Exception.hh"
 #include "G4Run.hh"
@@ -65,9 +65,9 @@ void MPIRunManager::SetPrintProgress(G4int val) {
 
 void MPIRunManager::BeamOn(G4int nEvent, const char* macroFile, G4int nSelect) {
     if (CheckNEventIsAtLeastCommSize(nEvent)) {
-        Utility::UtilMPI::MPIReSeedCLHEPRandom(G4Random::getTheEngine());
+        Utility::MPIUtil::MPIReSeedCLHEPRandom(G4Random::getTheEngine());
         fTotalNumberOfEventsToBeProcessed = nEvent;
-        fEventIDRange = Utility::UtilMPI::AllocMPIJobsJobWise(0, nEvent, MPIEnvironment::WorldCommSize(), MPIEnvironment::WorldCommRank());
+        fEventIDRange = Utility::MPIUtil::AllocMPIJobsJobWise(0, nEvent, MPIEnvironment::WorldCommSize(), MPIEnvironment::WorldCommRank());
         G4RunManager::BeamOn(fEventIDRange.count, macroFile, nSelect);
     }
 }

@@ -5,7 +5,7 @@
 #include <filesystem>
 #include <string_view>
 
-namespace MACE::Utility::UtilMPI {
+namespace MACE::Utility::MPIUtil {
 
 /// Create directories and file paths to help managing files during mpi processing.
 ///
@@ -54,4 +54,4 @@ namespace MACE::Utility::UtilMPI {
 ///
 std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_view suffix, MPI_Comm comm = MPI_COMM_WORLD);
 
-} // namespace MACE::Utility::UtilMPI
+} // namespace MACE::Utility::MPIUtil

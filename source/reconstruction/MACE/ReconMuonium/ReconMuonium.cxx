@@ -12,8 +12,8 @@
 #include "MACE/ReconMuonium/MuoniumSimVertex.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
-#include "MACE/Utility/UtilMPI/AllocMPIJobs.hxx"
-#include "MACE/Utility/UtilMPI/MakeMPIFilePath.hxx"
+#include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
+#include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
 #include "TH2F.h"
 
@@ -23,7 +23,7 @@ using namespace MACE::Core::Geometry::Description;
 using namespace MACE::ReconMuonium;
 using namespace MACE::Utility;
 using namespace MACE::Utility::LiteralUnit;
-using namespace MACE::Utility::UtilMPI;
+using namespace MACE::Utility::MPIUtil;
 using namespace MACE::Utility::PhysicalConstant;
 
 using MACE::Core::DataFactory;
