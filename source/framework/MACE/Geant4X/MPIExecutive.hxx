@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Environment/BasicEnvironment.hxx"
-#include "MACE/Environment/CLI/SimulationG4CLI.hxx"
+#include "MACE/Environment/CLI/Geant4CLI.hxx"
 #include "MACE/Environment/Memory/MuteSingleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 #include "MACE/Utility/TupleForEach.hxx"
@@ -20,11 +20,11 @@ namespace MACE::Geant4X {
 
 namespace Envirionment::CLI {
 
-class SimulationG4CLI;
+class Geant4CLI;
 
 } // namespace Envirionment::CLI
 
-using Environment::CLI::SimulationG4CLI;
+using Environment::CLI::Geant4CLI;
 using Utility::ObserverPtr;
 
 class MPIExecutive final : public Environment::Memory::MuteSingleton<MPIExecutive> {
@@ -32,7 +32,7 @@ public:
     MPIExecutive() = default;
 
     template<class AMacroOrCommand>
-    void StartSession(const SimulationG4CLI& cli, AMacroOrCommand&& macroOrCommands = std::string()) const;
+    void StartSession(const Geant4CLI& cli, AMacroOrCommand&& macroOrCommands = std::string()) const;
     template<class AMacroOrCommand>
     void StartInteractiveSession(int argc, char* argv[], AMacroOrCommand&& macroOrCommands = std::string()) const;
     template<class AMacroOrCommand>

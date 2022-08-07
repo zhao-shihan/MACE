@@ -1,7 +1,7 @@
 namespace MACE::Geant4X {
 
 template<class AMacroOrCommand>
-void MPIExecutive::StartSession(const SimulationG4CLI& cli, AMacroOrCommand&& macroOrCommands) const {
+void MPIExecutive::StartSession(const Geant4CLI& cli, AMacroOrCommand&& macroOrCommands) const {
     if (cli.IsInteractive()) {
         auto&& [argc, argv] = cli.GetArgcArgv();
         if (cli.GetMacro().empty()) {

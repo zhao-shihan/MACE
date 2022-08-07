@@ -1,8 +1,8 @@
-#include "MACE/Environment/CLI/SimulationG4CLI.hxx"
+#include "MACE/Environment/CLI/Geant4CLI.hxx"
 
 namespace MACE::Environment::CLI {
 
-SimulationG4CLI::SimulationG4CLI() :
+Geant4CLI::Geant4CLI() :
     BasicCLI() {
     AddArgument("macro")
         .help("Run the program with it. If not provided or empty, run in interactive session with default initialization.")

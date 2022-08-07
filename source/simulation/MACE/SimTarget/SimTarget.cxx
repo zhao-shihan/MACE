@@ -9,7 +9,7 @@
 #include <array>
 
 int main(int argc, char* argv[]) {
-    MACE::Environment::CLI::SimulationG4CLI cli;
+    MACE::Environment::CLI::Geant4CLI cli;
     MACE::Environment::MPIEnvironment mpiEnvironment(argc, argv, cli);
 
     CLHEP::MTwistEngine randEng(4357);
