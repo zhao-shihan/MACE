@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/SimulationG4/Generator/SurfaceMuon.hxx"
+#include "MACE/Geant4X/Generator/SurfaceMuon.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 
 #include "G4VUserPrimaryGeneratorAction.hh"
@@ -27,7 +27,7 @@ public:
     const auto& GetRepetitionID() const { return fRepetitionID; }
 
 private:
-    SimulationG4::Generator::SurfaceMuon fSurfaceMuonGenerator;
+    Geant4X::Generator::SurfaceMuon fSurfaceMuonGenerator;
 
     G4double fFlux;
     G4double fRepetitionRate;

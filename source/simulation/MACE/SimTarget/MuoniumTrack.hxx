@@ -1,13 +1,13 @@
 #pragma once
 
 #include "MACE/Core/DataModel/SimTrack/MuoniumSimTrack.hxx"
-#include "MACE/SimulationG4/UseG4Allocator.hxx"
+#include "MACE/Geant4X/UseG4Allocator.hxx"
 
 #include "G4ThreeVector.hh"
 
 namespace MACE::SimTarget {
 
-class MuoniumTrack final : public SimulationG4::UseG4Allocator<MuoniumTrack>,
+class MuoniumTrack final : public Geant4X::UseG4Allocator<MuoniumTrack>,
                            public Core::DataModel::SimTrack::MuoniumTrack {
     using Base = Core::DataModel::SimTrack::MuoniumTrack;
 

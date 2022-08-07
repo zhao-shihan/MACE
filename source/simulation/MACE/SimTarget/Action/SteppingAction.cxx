@@ -1,14 +1,14 @@
 #include "MACE/SimTarget/Action/SteppingAction.hxx"
 #include "MACE/SimTarget/Messenger/ActionMessenger.hxx"
-#include "MACE/SimulationG4/Physics/Particle/AntiMuonium.hxx"
-#include "MACE/SimulationG4/Physics/Particle/Muonium.hxx"
+#include "MACE/Geant4X/Physics/Particle/AntiMuonium.hxx"
+#include "MACE/Geant4X/Physics/Particle/Muonium.hxx"
 
 #include "G4MuonPlus.hh"
 #include "G4Step.hh"
 
 namespace MACE::SimTarget::Action {
 
-using namespace SimulationG4::Physics::Particle;
+using namespace Geant4X::Physics::Particle;
 
 SteppingAction::SteppingAction() :
     NonMoveableBase(),

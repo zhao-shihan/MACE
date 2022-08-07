@@ -2,7 +2,7 @@
 #include "MACE/SimMACE/Action/DetectorConstruction.hxx"
 #include "MACE/SimMACE/Action/PhysicsList.hxx"
 #include "MACE/SimMACE/RunManager.hxx"
-#include "MACE/SimulationG4/MPIExecutive.hxx"
+#include "MACE/Geant4X/MPIExecutive.hxx"
 
 #include "Randomize.hh"
 
@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     runManager.GetDetectorConstruction().SetCheckOverlaps(cli.IsInteractive() ? true : false);
     runManager.GetPhysicsList().SetVerboseLevel(cli.IsInteractive() ? 1 : 0);
 
-    MACE::SimulationG4::MPIExecutive().StartSession(cli, std::array{
+    MACE::Geant4X::MPIExecutive().StartSession(cli, std::array{
 #include "MACE/SimMACE/DefaultInitialization.inlmac"
                                                          });
 

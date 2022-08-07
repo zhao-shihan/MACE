@@ -1,12 +1,12 @@
 #include "MACE/SimTarget/Action/PhysicsList.hxx"
-#include "MACE/SimulationG4/Physics/MuoniumPhysics.hxx"
+#include "MACE/Geant4X/Physics/MuoniumPhysics.hxx"
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics_option4.hh"
 
 namespace MACE::SimTarget::Action {
 
-using namespace MACE::SimulationG4::Physics;
+using namespace MACE::Geant4X::Physics;
 
 PhysicsList::PhysicsList() :
     NonMoveableBase(),

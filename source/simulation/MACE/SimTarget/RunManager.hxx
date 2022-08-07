@@ -7,7 +7,7 @@
 #include "MACE/SimTarget/Action/SteppingAction.hxx"
 #include "MACE/SimTarget/Action/TrackingAction.hxx"
 #include "MACE/SimTarget/Analysis.hxx"
-#include "MACE/SimulationG4/MPIRunManager.hxx"
+#include "MACE/Geant4X/MPIRunManager.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include <memory>
@@ -16,7 +16,7 @@ namespace MACE::SimTarget {
 
 using Utility::ObserverPtr;
 
-class RunManager final : public SimulationG4::MPIRunManager {
+class RunManager final : public Geant4X::MPIRunManager {
 public:
     static auto& Instance() { return static_cast<RunManager&>(*GetRunManager()); }
 
