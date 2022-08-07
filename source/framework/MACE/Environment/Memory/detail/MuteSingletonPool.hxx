@@ -8,6 +8,7 @@
 #include <map>
 #include <optional>
 #include <stdexcept>
+#include <string>
 #include <typeindex>
 #include <typeinfo>
 
