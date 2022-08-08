@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Geant4X/MPIRunManager.hxx"
 #include "MACE/SimTarget/Action/DetectorConstruction.hxx"
 #include "MACE/SimTarget/Action/PhysicsList.hxx"
 #include "MACE/SimTarget/Action/PrimaryGeneratorAction.hxx"
@@ -7,7 +8,6 @@
 #include "MACE/SimTarget/Action/SteppingAction.hxx"
 #include "MACE/SimTarget/Action/TrackingAction.hxx"
 #include "MACE/SimTarget/Analysis.hxx"
-#include "MACE/Geant4X/MPIRunManager.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include <memory>

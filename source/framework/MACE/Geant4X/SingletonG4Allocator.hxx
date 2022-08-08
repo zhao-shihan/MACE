@@ -16,4 +16,4 @@ private:
     ~SingletonG4Allocator() = default;
 };
 
-} // namespace MACE::SimulationG4
+} // namespace MACE::Geant4X

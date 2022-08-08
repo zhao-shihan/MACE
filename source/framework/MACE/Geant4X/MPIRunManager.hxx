@@ -71,4 +71,4 @@ private:
     clock_t fRunCPUTime;
 };
 
-} // namespace MACE::SimulationG4
+} // namespace MACE::Geant4X

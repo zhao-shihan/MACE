@@ -213,4 +213,4 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     fParticleChange.ProposeLocalTime(track.GetLocalTime() + flightTime);
 }
 
-} // namespace MACE::SimulationG4::Physics::Process
+} // namespace MACE::Geant4X::Physics::Process

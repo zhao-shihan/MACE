@@ -45,4 +45,4 @@ AntiMuonium::AntiMuonium() :
     this->SetDecayTable(table);
 }
 
-} // namespace MACE::SimulationG4::Physics::Particle
+} // namespace MACE::Geant4X::Physics::Particle

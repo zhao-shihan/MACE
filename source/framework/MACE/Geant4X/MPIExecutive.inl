@@ -47,4 +47,4 @@ void MPIExecutive::Execute(const std::tuple<AStrings...>& commandList) {
                           });
 }
 
-} // namespace MACE::SimulationG4
+} // namespace MACE::Geant4X

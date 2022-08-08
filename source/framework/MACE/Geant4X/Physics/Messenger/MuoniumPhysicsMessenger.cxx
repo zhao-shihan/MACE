@@ -55,4 +55,4 @@ void MuoniumPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String value) 
     }
 }
 
-} // namespace MACE::SimulationG4::Physics::Messenger
+} // namespace MACE::Geant4X::Physics::Messenger

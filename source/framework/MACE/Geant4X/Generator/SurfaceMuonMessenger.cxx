@@ -50,4 +50,4 @@ void SurfaceMuonMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     }
 }
 
-} // namespace MACE::SimulationG4::Generator
+} // namespace MACE::Geant4X::Generator

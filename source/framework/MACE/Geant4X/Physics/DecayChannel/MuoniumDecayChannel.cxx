@@ -235,4 +235,4 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
     return products;
 }
 
-} // namespace MACE::SimulationG4::Physics::DecayChannel
+} // namespace MACE::Geant4X::Physics::DecayChannel

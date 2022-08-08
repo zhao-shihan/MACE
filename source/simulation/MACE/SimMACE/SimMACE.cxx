@@ -1,8 +1,8 @@
 #include "MACE/Environment/MPIEnvironment.hxx"
+#include "MACE/Geant4X/MPIExecutive.hxx"
 #include "MACE/SimMACE/Action/DetectorConstruction.hxx"
 #include "MACE/SimMACE/Action/PhysicsList.hxx"
 #include "MACE/SimMACE/RunManager.hxx"
-#include "MACE/Geant4X/MPIExecutive.hxx"
 
 #include "Randomize.hh"
 
@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
 
     MACE::Geant4X::MPIExecutive().StartSession(cli, std::array{
 #include "MACE/SimMACE/DefaultInitialization.inlmac"
-                                                         });
+                                                    });
 
     return EXIT_SUCCESS;
 }

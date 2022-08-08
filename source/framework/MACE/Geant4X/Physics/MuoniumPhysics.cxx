@@ -37,4 +37,4 @@ void MuoniumPhysics::ConstructProcess() {
     antiMuonium->AddContinuousProcess(muoniumTransport);
 }
 
-} // namespace MACE::SimulationG4::Physics
+} // namespace MACE::Geant4X::Physics

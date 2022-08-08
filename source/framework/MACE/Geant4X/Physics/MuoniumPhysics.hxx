@@ -15,4 +15,4 @@ public:
     void ConstructProcess() override;
 };
 
-} // namespace MACE::SimulationG4::Physics
+} // namespace MACE::Geant4X::Physics

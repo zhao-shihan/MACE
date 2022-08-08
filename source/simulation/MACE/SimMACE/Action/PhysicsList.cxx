@@ -1,5 +1,5 @@
-#include "MACE/SimMACE/Action/PhysicsList.hxx"
 #include "MACE/Geant4X/Physics/MuoniumPhysics.hxx"
+#include "MACE/SimMACE/Action/PhysicsList.hxx"
 
 #include "G4DecayPhysics.hh"
 #include "G4EmExtraPhysics.hh"

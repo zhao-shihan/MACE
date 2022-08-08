@@ -70,4 +70,4 @@ G4double MuoniumFormation::GetMeanLifeTime(const G4Track& track, G4ForceConditio
     }
 }
 
-} // namespace MACE::SimulationG4::Physics::Process
+} // namespace MACE::Geant4X::Physics::Process

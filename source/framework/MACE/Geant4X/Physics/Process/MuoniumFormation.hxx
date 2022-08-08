@@ -40,4 +40,4 @@ private:
     G4ParticleChange fParticleChange;
 };
 
-} // namespace MACE::SimulationG4::Physics::Process
+} // namespace MACE::Geant4X::Physics::Process
