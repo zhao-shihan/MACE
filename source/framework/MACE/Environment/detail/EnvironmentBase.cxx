@@ -3,6 +3,7 @@
 #include "MACE/Environment/Memory/detail/MuteSingletonPool.hxx"
 #include "MACE/Environment/Memory/detail/SingletonDeleter.hxx"
 #include "MACE/Environment/Memory/detail/SingletonFactory.hxx"
+#include "MACE/Environment/Memory/detail/SingletonPool.hxx"
 
 #if MACE_SIGNAL_HANDLER
     #include <csignal>
@@ -26,7 +27,8 @@ EnvironmentBase::EnvironmentBase() :
     std::signal(SIGTERM, MACE_ISOC99_SIGINT_SIGTERM_Handler);
 #endif
 
-    if (static bool gInstantiated = false; gInstantiated) {
+    if (static bool gInstantiated = false;
+        gInstantiated) {
         throw std::logic_error("MACE::Environment::Detail::EnvironmentBase: Trying to construct environment twice");
     } else {
         gInstantiated = true;

@@ -12,8 +12,6 @@
 
 namespace MACE::SimTarget {
 
-using MACE::Environment::MPIEnvironment;
-
 Analysis::Analysis() :
     NonMoveableBase(),
     fResultName("SimTarget_result"),
@@ -66,7 +64,7 @@ void Analysis::Close() {
 
 void Analysis::OpenResultFile() {
     fResultFile = std::make_unique<TFile>(
-        MACE::Utility::MPIUtil::MakeMPIFilePath(fResultName, ".root").generic_string().c_str(),
+        Utility::MPIUtil::MakeMPIFilePath(fResultName, ".root").c_str(),
         "recreate");
 }
 
@@ -82,7 +80,8 @@ void Analysis::CloseResultFile() {
 }
 
 void Analysis::OpenYieldFile() {
-    if (MPIEnvironment::IsMaster()) {
+    if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+        mpiEnv.IsMaster()) {
         fYieldFile = std::make_unique<std::ofstream>(fResultName + "_yield.csv", std::ios::out);
         *fYieldFile << "runID,nMuon,nMFormed,nMTargetDecay,nMVacuumDecay,nMDetectableDecay" << std::endl;
     }
@@ -110,12 +109,21 @@ void Analysis::AnalysisAndWriteYield() {
         }
     }
 
-    if (MPIEnvironment::IsParallel()) {
+    if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+        mpiEnv.IsParallel()) {
         std::vector<decltype(yieldData)> yieldDataRecv;
-        if (MPIEnvironment::IsMaster()) { yieldDataRecv.resize(MPIEnvironment::WorldCommSize()); }
-        MACE_CHECKED_MPI_CALL(MPI_Gather, yieldData.data(), yieldData.size(), MPI_UNSIGNED_LONG, yieldDataRecv.data(), yieldData.size(), MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD)
+        if (mpiEnv.IsMaster()) { yieldDataRecv.resize(mpiEnv.WorldCommSize()); }
+        MACE_CHECKED_MPI_CALL(MPI_Gather,
+                              yieldData.data(),
+                              yieldData.size(),
+                              MPI_UNSIGNED_LONG,
+                              yieldDataRecv.data(),
+                              yieldData.size(),
+                              MPI_UNSIGNED_LONG,
+                              0,
+                              MPI_COMM_WORLD)
 
-        if (MPIEnvironment::IsMaster()) {
+        if (mpiEnv.IsMaster()) {
             unsigned long nMuonTotal = 0;
             unsigned long nFormedTotal = 0;
             unsigned long nTargetDecayTotal = 0;

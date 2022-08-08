@@ -14,14 +14,13 @@
 
 namespace MACE::Geant4X {
 
-using MACE::Environment::MPIEnvironment;
 using MACE::Utility::Math::Pow2;
 
 namespace Detail {
 
 static void FlipG4cout() {
-    const auto& mpiEnv = MPIEnvironment::Instance();
-    if (mpiEnv.IsWorker() or
+    if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+        mpiEnv.IsWorker() or
         mpiEnv.GetVerboseLevel() == Environment::VerboseLevel::Quiet) {
         static ObserverPtr<std::streambuf> gG4coutBufExchanger = nullptr;
         gG4coutBufExchanger = G4cout.rdbuf(gG4coutBufExchanger);
@@ -67,14 +66,16 @@ void MPIRunManager::BeamOn(G4int nEvent, const char* macroFile, G4int nSelect) {
     if (CheckNEventIsAtLeastCommSize(nEvent)) {
         Utility::MPIUtil::MPIReSeedCLHEPRandom(G4Random::getTheEngine());
         fTotalNumberOfEventsToBeProcessed = nEvent;
-        fEventIDRange = Utility::MPIUtil::AllocMPIJobsJobWise(0, nEvent, MPIEnvironment::WorldCommSize(), MPIEnvironment::WorldCommRank());
+        const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+        fEventIDRange = Utility::MPIUtil::AllocMPIJobsJobWise(0, nEvent, mpiEnv.WorldCommSize(), mpiEnv.WorldCommRank());
         G4RunManager::BeamOn(fEventIDRange.count, macroFile, nSelect);
     }
 }
 
 void MPIRunManager::RunInitialization() {
     // wait for everyone to start
-    MACE_CHECKED_MPI_CALL(MPI_Barrier, MPI_COMM_WORLD)
+    MACE_CHECKED_MPI_CALL(MPI_Barrier,
+                          MPI_COMM_WORLD)
     // start the run timer
     fRunBeginSystemTime = std::chrono::system_clock::now();
     fRunBeginWallTime = std::chrono::steady_clock::now();
@@ -120,14 +121,16 @@ void MPIRunManager::RunTermination() {
     fRunWallTime = std::chrono::steady_clock::now() - fRunBeginWallTime;
     fRunCPUTime = std::clock() - fRunBeginCPUTime;
     // wait for everyone to finish
-    MACE_CHECKED_MPI_CALL(MPI_Barrier, MPI_COMM_WORLD)
+    MACE_CHECKED_MPI_CALL(MPI_Barrier,
+                          MPI_COMM_WORLD)
     // run end report
     RunEndReport();
 }
 
 G4bool MPIRunManager::CheckNEventIsAtLeastCommSize(G4int nEvent) const {
-    if (nEvent < MPIEnvironment::WorldCommSize()) {
-        if (MPIEnvironment::IsMaster()) {
+    if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+        nEvent < mpiEnv.WorldCommSize()) {
+        if (mpiEnv.IsMaster()) {
             G4Exception("MACE::Utility::G4Util::MPIRunManager::CheckNEventIsAtLeastCommSize(...)",
                         "TooFewNEventOrTooMuchRank",
                         JustWarning,
@@ -142,11 +145,13 @@ G4bool MPIRunManager::CheckNEventIsAtLeastCommSize(G4int nEvent) const {
 }
 
 void MPIRunManager::RunBeginReport() const {
-    if (MPIEnvironment::IsMaster() and fPrintProgress >= 0) {
+    if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+        mpiEnv.IsMaster() and fPrintProgress >= 0) {
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-        G4cout << "--------------------------------> Run Starts <--------------------------------\n"
-               << std::put_time(std::localtime(&now), "%c (UTC%z) > Run ") << runIDCounter << " starts on " << MPIEnvironment::WorldCommSize() << " ranks.\n"
-               << "--------------------------------> Run Starts <--------------------------------" << G4endl;
+        MACE_VERBOSE_LEVEL_CONTROLLED_OUT(mpiEnv.GetVerboseLevel(), Error, G4cout)
+            << "--------------------------------> Run Starts <--------------------------------\n"
+            << std::put_time(std::localtime(&now), "%c (UTC%z) > Run ") << runIDCounter << " starts on " << mpiEnv.WorldCommSize() << " ranks.\n"
+            << "--------------------------------> Run Starts <--------------------------------" << G4endl;
     }
 }
 
@@ -160,23 +165,27 @@ void MPIRunManager::EventEndReport() const {
         const auto etaError = 1.959963984540054 * std::sqrt(fNDevEventWallTime / (numberOfEventProcessed - 1)) * nEventRemain; // 95% C.L. (assuming gaussian)
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         const auto precisionOfG4cout = G4cout.precision(3); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
-        G4cout << std::put_time(std::localtime(&now), "%c (UTC%z) > Event ") << endedEventID << " finished in rank " << MPIEnvironment::WorldCommRank() << ".\n"
-               << "  ETA: " << eta << " +/- " << etaError << " s. Progress of the rank: " << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " (" << 100 * (float)numberOfEventProcessed / (float)numberOfEventToBeProcessed << "%)." << G4endl;
+        const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+        MACE_VERBOSE_LEVEL_CONTROLLED_OUT(mpiEnv.GetVerboseLevel(), Error, G4cout)
+            << std::put_time(std::localtime(&now), "%c (UTC%z) > Event ") << endedEventID << " finished in rank " << mpiEnv.WorldCommRank() << ".\n"
+            << "  ETA: " << eta << " +/- " << etaError << " s. Progress of the rank: " << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " (" << 100 * (float)numberOfEventProcessed / (float)numberOfEventToBeProcessed << "%)." << G4endl;
         G4cout.precision(precisionOfG4cout);
     }
 }
 
 void MPIRunManager::RunEndReport() const {
-    if (MPIEnvironment::IsMaster() and fPrintProgress >= 0) {
+    if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+        mpiEnv.IsMaster() and fPrintProgress >= 0) {
         const auto endedRunID = runIDCounter - 1;
         const auto beginTime = std::chrono::system_clock::to_time_t(fRunBeginSystemTime);
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-        G4cout << "-------------------------------> Run Finished <-------------------------------\n"
-               << std::put_time(std::localtime(&now), "%c (UTC%z) > Run ") << endedRunID << " finished on " << MPIEnvironment::WorldCommSize() << " ranks.\n"
-               << "  Start time: " << std::put_time(std::localtime(&beginTime), "%c (UTC%z).\n")
-               << "   Wall time: " << fRunWallTime.count() << " s.\n"
-               << "-------------------------------> Run Finished <-------------------------------" << G4endl;
+        MACE_VERBOSE_LEVEL_CONTROLLED_OUT(mpiEnv.GetVerboseLevel(), Error, G4cout)
+            << "-------------------------------> Run Finished <-------------------------------\n"
+            << std::put_time(std::localtime(&now), "%c (UTC%z) > Run ") << endedRunID << " finished on " << mpiEnv.WorldCommSize() << " ranks.\n"
+            << "  Start time: " << std::put_time(std::localtime(&beginTime), "%c (UTC%z).\n")
+            << "   Wall time: " << fRunWallTime.count() << " s.\n"
+            << "-------------------------------> Run Finished <-------------------------------" << G4endl;
     }
 }
 
-} // namespace MACE::SimulationG4
+} // namespace MACE::Geant4X

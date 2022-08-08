@@ -1,5 +1,7 @@
 #include "MACE/Environment/Memory/detail/SingletonPool.hxx"
 
+#include <algorithm>
+
 namespace MACE::Environment::Memory::Detail {
 
 [[nodiscard]] std::vector<SingletonPool::BaseNode> SingletonPool::GetUndeletedInReverseInsertionOrder() const {
@@ -11,11 +13,16 @@ namespace MACE::Environment::Memory::Detail {
             undeletedListWithId.emplace_back(baseNodePair);
         }
     }
-    const auto undeletedCount = undeletedListWithId.size();
 
-    std::vector<BaseNode> undeletedList(undeletedCount);
+    std::ranges::sort(undeletedListWithId,
+                      [](const auto& lhs, const auto& rhs) {
+                          return lhs.first > rhs.first;
+                      });
+
+    std::vector<BaseNode> undeletedList;
+    undeletedList.reserve(undeletedListWithId.size());
     for (auto&& [id, baseNode] : std::as_const(undeletedListWithId)) {
-        undeletedList[undeletedCount - id - 1] = baseNode;
+        undeletedList.emplace_back(baseNode);
     }
     return undeletedList;
 }

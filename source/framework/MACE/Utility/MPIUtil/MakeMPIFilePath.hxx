@@ -1,8 +1,6 @@
 #pragma once
 
-#include "mpi.h"
-
-#include <filesystem>
+#include <string>
 #include <string_view>
 
 namespace MACE::Utility::MPIUtil {
@@ -52,6 +50,6 @@ namespace MACE::Utility::MPIUtil {
 /// When just ./xxx (not in MPI mode) :
 /// Just a single result.root will be created.
 ///
-std::filesystem::path MakeMPIFilePath(std::string_view basicName, std::string_view suffix, MPI_Comm comm = MPI_COMM_WORLD);
+std::string MakeMPIFilePath(std::string_view basicName, std::string_view suffix);
 
 } // namespace MACE::Utility::MPIUtil

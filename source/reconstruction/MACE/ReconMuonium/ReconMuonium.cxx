@@ -11,11 +11,13 @@
 #include "MACE/Environment/MPIEnvironment.hxx"
 #include "MACE/ReconMuonium/MuoniumSimVertex.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
-#include "MACE/Utility/PhysicalConstant.hxx"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
+#include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "TH2F.h"
+
+#include <filesystem>
 
 using namespace MACE::Core::DataModel;
 using namespace MACE::Core::DataModel::CDCTrackOperation;
@@ -87,7 +89,7 @@ int main(int argc, char* argv[]) {
     pathOut.replace_extension("");
     const auto fileNameOut = MakeMPIFilePath(pathOut.string() + "_recM", ".root");
     // output file of this rank
-    TFile fileOut(fileNameOut.generic_string().c_str(), "recreate");
+    TFile fileOut(fileNameOut.c_str(), "recreate");
 
     DataFactory dataHub;
 

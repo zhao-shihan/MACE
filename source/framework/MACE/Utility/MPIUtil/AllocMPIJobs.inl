@@ -7,18 +7,24 @@ IntegralIndexRange<AIndex> AllocMPIJobsJobWise(AIndex jobBegin, AIndex jobEnd, i
 
 template<std::integral AIndex>
 IntegralIndexRange<AIndex> AllocMPIJobsJobWise(AIndex jobBegin, AIndex jobEnd, MPI_Comm comm) {
-    using MACE::Environment::MPIEnvironment;
-    if (comm == MPI_COMM_WORLD) {
-        return AllocMPIJobsJobWise<AIndex>(jobBegin, jobEnd,
-                                           MPIEnvironment::WorldCommSize(), MPIEnvironment::WorldCommRank());
+    int commSize;
+    int commRank;
+    if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+        comm == MPI_COMM_WORLD) {
+        commSize = mpiEnv.WorldCommSize();
+        commRank = mpiEnv.WorldCommRank();
+    } else if (comm == mpiEnv.NodeComm()) {
+        commSize = mpiEnv.NodeCommSize();
+        commRank = mpiEnv.NodeCommRank();
     } else {
-        int commRank;
-        MACE_CHECKED_MPI_CALL(MPI_Comm_rank, comm, &commRank)
-        int commSize;
-        MACE_CHECKED_MPI_CALL(MPI_Comm_size, comm, &commSize)
-        return AllocMPIJobsJobWise<AIndex>(jobBegin, jobEnd,
-                                           commSize, commRank);
+        MACE_CHECKED_MPI_CALL(MPI_Comm_size,
+                              comm,
+                              &commSize)
+        MACE_CHECKED_MPI_CALL(MPI_Comm_rank,
+                              comm,
+                              &commRank)
     }
+    return AllocMPIJobsJobWise<AIndex>(jobBegin, jobEnd, commSize, commRank);
 }
 
 template<std::integral AIndex>
@@ -38,18 +44,24 @@ IntegralIndexRange<AIndex> AllocMPIJobsWorkerWise(AIndex jobBegin, AIndex jobEnd
 
 template<std::integral AIndex>
 IntegralIndexRange<AIndex> AllocMPIJobsWorkerWise(AIndex jobBegin, AIndex jobEnd, MPI_Comm comm) {
-    using MACE::Environment::MPIEnvironment;
-    if (comm == MPI_COMM_WORLD) {
-        return AllocMPIJobsWorkerWise<AIndex>(jobBegin, jobEnd,
-                                              MPIEnvironment::WorldCommSize(), MPIEnvironment::WorldCommRank());
+    int commSize;
+    int commRank;
+    if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+        comm == MPI_COMM_WORLD) {
+        commSize = mpiEnv.WorldCommSize();
+        commRank = mpiEnv.WorldCommRank();
+    } else if (comm == mpiEnv.NodeComm()) {
+        commSize = mpiEnv.NodeCommSize();
+        commRank = mpiEnv.NodeCommRank();
     } else {
-        int commRank;
-        MACE_CHECKED_MPI_CALL(MPI_Comm_rank, comm, &commRank)
-        int commSize;
-        MACE_CHECKED_MPI_CALL(MPI_Comm_size, comm, &commSize)
-        return AllocMPIJobsWorkerWise<AIndex>(jobBegin, jobEnd,
-                                              commSize, commRank);
+        MACE_CHECKED_MPI_CALL(MPI_Comm_size,
+                              comm,
+                              &commSize)
+        MACE_CHECKED_MPI_CALL(MPI_Comm_rank,
+                              comm,
+                              &commRank)
     }
+    return AllocMPIJobsWorkerWise<AIndex>(jobBegin, jobEnd, commSize, commRank);
 }
 
 template<std::integral AIndex>
