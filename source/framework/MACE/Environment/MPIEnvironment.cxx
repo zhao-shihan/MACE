@@ -3,6 +3,7 @@
 #include "MACE/Utility/MPIUtil/CheckedMPICallNoExcept.hxx"
 
 #include <algorithm>
+#include <array>
 #include <cstring>
 #include <iostream>
 #include <string_view>
@@ -59,7 +60,7 @@ void MPIEnvironment::PrintStartupMessageBody(int argc, char* argv[]) const {
             << " Compiled with MPI " << MPI_VERSION << '.' << MPI_SUBVERSION << ", running with MPI " << mpiRuntimeVersion.first << '.' << mpiRuntimeVersion.second << '\n';
         MACE_VERBOSE_LEVEL_CONTROLLED_OUT(GetVerboseLevel(), MoreVerbose, std::cout)
             << "----------------------> MPI library information (begin) <----------------------\n"
-            << mpiLibVersion
+            << mpiLibVersion << '\n'
             << "---------------------->  MPI library information (end)  <----------------------\n";
         std::cout << " Size of the MPI world communicator: " << fWorldCommSize << '\n';
         if (OnSingleNode()) {
