@@ -10,27 +10,6 @@
 
 namespace MACE::Environment {
 
-MPIEnvironment::MPIEnvironment(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> optCLI,
-                               VerboseLevel verboseLevel, bool printStartupMessage) :
-    BasicEnvironment(argc, argv, optCLI, verboseLevel, false),
-    fWorldCommRank(-1),
-    fWorldCommSize(-1),
-    fNodeInfoList(),
-    fLocalNodeInfo(fNodeInfoList.cend()),
-    fNodeId(-1),
-    fNodeComm(MPI_COMM_NULL),
-    fNodeCommRank(-1),
-    fNodeCommSize(-1) {
-    // Initialize MPI and properties of MPI_COMM_WORLD
-    InitializeMPI(argc, argv);
-    // Print startup message
-    if (printStartupMessage and IsMaster()) {
-        PrintStartupMessageSplitLine();
-        PrintStartupMessageBody(argc, argv);
-        PrintStartupMessageSplitLine();
-    }
-}
-
 MPIEnvironment::~MPIEnvironment() {
     // Destructs the shared communicator
     MACE_CHECKED_MPI_CALL_NOEXCEPT(MPI_Comm_free,

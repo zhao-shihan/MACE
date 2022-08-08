@@ -13,8 +13,8 @@ namespace MACE::Environment {
 
 class MPIEnvironment : public BasicEnvironment {
 public:
-    MPIEnvironment(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> optCLI,
-                   VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
+    template<class ACLI = Detail::NoCLI>
+    MPIEnvironment(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
     virtual ~MPIEnvironment();
 
     static auto& Instance() { return static_cast<MPIEnvironment&>(BasicEnvironment::Instance()); }
@@ -117,3 +117,5 @@ private:
 #define MACE_ENVIRONMENT_CONTROLLED_MPI_NODE_WORKER_OUT(Threshold, out) \
     if (MACE::Environment::MPIEnvironment::Instance().IsNodeWorker())   \
     MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)
+
+#include "MACE/Environment/MPIEnvironment.inl"

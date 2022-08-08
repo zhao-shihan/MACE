@@ -27,7 +27,7 @@ using MACE::Environment::MPIEnvironment;
 using Hit_t = CDCSimHit;
 
 int main(int argc, char* argv[]) {
-    MPIEnvironment mpiEnvironment(argc, argv, std::nullopt);
+    MPIEnvironment mpiEnvironment(argc, argv, {});
 
     const char* nameIn = argv[1];
     const auto threshold = std::stoi(argv[2]);

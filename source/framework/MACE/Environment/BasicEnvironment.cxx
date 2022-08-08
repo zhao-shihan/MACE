@@ -9,27 +9,6 @@
 
 namespace MACE::Environment {
 
-BasicEnvironment::BasicEnvironment(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> optCLI,
-                                   VerboseLevel verboseLevel, bool printStartupMessage) :
-    EnvironmentBase(),
-    FreeSingleton<BasicEnvironment>(),
-    fVerboseLevel(verboseLevel) {
-    // CLI: do parse and get args
-    if (optCLI.has_value()) {
-        auto& cli = optCLI->get();
-        // Parse
-        cli.ParseArgs(argc, argv);
-        // Get args
-        fVerboseLevel = cli.GetVerboseLevel().value_or(verboseLevel);
-    }
-    // Print startup message after parse
-    if (printStartupMessage) {
-        PrintStartupMessageSplitLine();
-        PrintStartupMessageBody(argc, argv);
-        PrintStartupMessageSplitLine();
-    }
-}
-
 void BasicEnvironment::PrintStartupMessageSplitLine() const {
     MACE_VERBOSE_LEVEL_CONTROLLED_OUT(fVerboseLevel, Error, std::cout)
         << "\n===============================================================================\n"
