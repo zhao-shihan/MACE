@@ -38,23 +38,29 @@ void BasicEnvironment::PrintStartupMessageSplitLine() const {
 
 void BasicEnvironment::PrintStartupMessageBody(int argc, char* argv[]) const {
     std::error_code cwdError;
+    const auto exe = std::filesystem::path(argv[0]).filename().generic_string();
     auto cwd = std::filesystem::current_path(cwdError).generic_string();
     if (cwdError) {
         cwd.assign("<Error getting current working directory>");
     }
-    MACE_VERBOSE_LEVEL_CONTROLLED_OUT(fVerboseLevel, Error, std::cout)
-        << " xxxx framework (MACE offline software system) " << MACE_VERSION_STRING << '\n'
-        << " Copyright (c) 2020-2022 MACE software working group \n"
-        << '\n'
-        << " Exe: " << argv[0] << '\n'
-        << " CWD: " << cwd << '\n';
+    if (fVerboseLevel >= VerboseLevel::Error) {
+        std::cout << " ARMOR framework (MACE offline software system) " << MACE_VERSION_STRING << '\n'
+                  << " Copyright (c) 2020-2022 MACE software working group \n"
+                  << '\n'
+                  << " Exe: " << exe;
+        for (int i = 1; i < argc; ++i) {
+            std::cout << ' ' << argv[i];
+        }
+        std::cout << '\n'
+                  << " CWD: " << cwd << '\n';
+    }
     if (fVerboseLevel >= VerboseLevel::Verbose) {
         std::cout << "\n List of all " << argc << " command line arguments:\n";
         for (int i = 0; i < argc; ++i) {
             std::cout << "  argv[" << i << "]: " << argv[i] << '\n';
         }
     }
-    MACE_VERBOSE_LEVEL_CONTROLLED_OUT(fVerboseLevel, Error, std::cout) << std::flush;
+    std::cout << std::flush;
 }
 
 } // namespace MACE::Environment
