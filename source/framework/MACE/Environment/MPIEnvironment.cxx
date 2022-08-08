@@ -59,12 +59,12 @@ void MPIEnvironment::PrintStartupMessageBody(int argc, char* argv[]) const {
         MACE_VERBOSE_LEVEL_CONTROLLED_OUT(GetVerboseLevel(), Verbose, std::cout)
             << " Compiled with MPI " << MPI_VERSION << '.' << MPI_SUBVERSION << ", running with MPI " << mpiRuntimeVersion.first << '.' << mpiRuntimeVersion.second << '\n';
         MACE_VERBOSE_LEVEL_CONTROLLED_OUT(GetVerboseLevel(), MoreVerbose, std::cout)
-            << "----------------------> MPI library information (begin) <----------------------\n"
+            << "--------------------> MPI library information (begin) <--------------------\n"
             << mpiLibVersion << '\n'
-            << "---------------------->  MPI library information (end)  <----------------------\n";
+            << "-------------------->  MPI library information (end)  <--------------------\n";
         std::cout << " Size of the MPI world communicator: " << fWorldCommSize << '\n';
         if (OnSingleNode()) {
-            std::cout << " Running on " << NodeName() << '\n';
+            std::cout << " Running on \"" << NodeName() << "\"\n";
         } else {
             std::cout << " Running on cluster with " << NumberOfNodes() << " nodes:\n";
             for (auto&& [nodeSize, nodeName] : std::as_const(fNodeInfoList)) {
