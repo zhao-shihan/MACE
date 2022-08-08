@@ -3,7 +3,7 @@ message(STATUS "Looking for argparse")
 set(MACE_ARGPARSE_MINIMUM_REQUIRED 2.6)
 
 if(NOT MACE_BUILTIN_ARGPARSE)
-    find_package(argparse ${MACE_ARGPARSE_MINIMUM_REQUIRED} QUIET)
+    find_package(argparse "${MACE_ARGPARSE_MINIMUM_REQUIRED}.0" QUIET)
     if(NOT argparse_FOUND)
         set(MACE_BUILTIN_ARGPARSE ON)
         message(NOTICE "***Notice: argparse not found (minimum required is ${MACE_ARGPARSE_MINIMUM_REQUIRED}). Turning on MACE_BUILTIN_ARGPARSE")
