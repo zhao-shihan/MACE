@@ -90,8 +90,9 @@ void Analysis::OpenYieldFile() {
 void Analysis::AnalysisAndWriteYield() {
     std::array<unsigned long, 5> yieldData;
     auto& [nMuon, nFormed, nTargetDecay, nVacuumDecay, nDetectableDecay] = yieldData;
-    nMuon = (unsigned long)RunManager::Instance().GetPrimaryGeneratorAction().GetMuonsForEachG4Event() * (unsigned long)fThisRun->GetNumberOfEvent();
-    nFormed = fMuoniumTrackList.size();
+    nMuon = static_cast<unsigned long>(RunManager::Instance().GetPrimaryGeneratorAction().GetMuonsForEachG4Event()) *
+            static_cast<unsigned long>(fThisRun->GetNumberOfEvent());
+    nFormed = static_cast<unsigned long>(fMuoniumTrackList.size());
     nTargetDecay = 0;
     nVacuumDecay = 0;
     nDetectableDecay = 0;
