@@ -6,7 +6,7 @@
 namespace MACE::Environment {
 
 enum class VerboseLevel {
-    Quiet = -1,
+    Quiet = -2,
     Error,
     Warning,
     Verbose,

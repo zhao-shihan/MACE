@@ -25,7 +25,7 @@ BasicCLI::BasicCLI() :
         });
     AddArgument("-V", "--verbose")
         .scan<'i', int>()
-        .help("Set verbose level. (-1: quiet, 0: error, 1: warning, 2: verbose, 3: more verbose)")
+        .help("Set verbose level. (-2: quiet, -1: error, 0: warning, 1: verbose, 2: more verbose)")
         .action([](const std::string& argVerbose) {
             constexpr auto low = Cxx2b::ToUnderlying(VerboseLevel::Quiet);
             constexpr auto up = Cxx2b::ToUnderlying(VerboseLevel::MoreVerbose);
