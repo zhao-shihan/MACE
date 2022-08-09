@@ -6,12 +6,12 @@ namespace MACE::Utility {
 /// MACE::Utility::Concept::MerelyMoveable.
 class MerelyMoveableBase {
 protected:
-    constexpr MerelyMoveableBase() = default;
-    constexpr ~MerelyMoveableBase() = default;
-    constexpr MerelyMoveableBase(const MerelyMoveableBase&) = delete;
-    constexpr MerelyMoveableBase& operator=(const MerelyMoveableBase&) = delete;
-    constexpr MerelyMoveableBase(MerelyMoveableBase&&) = default;
-    constexpr MerelyMoveableBase& operator=(MerelyMoveableBase&&) = default;
+    constexpr MerelyMoveableBase() noexcept = default;
+    constexpr ~MerelyMoveableBase() noexcept = default;
+    constexpr MerelyMoveableBase(const MerelyMoveableBase&) noexcept = delete;
+    constexpr MerelyMoveableBase& operator=(const MerelyMoveableBase&) noexcept = delete;
+    constexpr MerelyMoveableBase(MerelyMoveableBase&&) noexcept = default;
+    constexpr MerelyMoveableBase& operator=(MerelyMoveableBase&&) noexcept = default;
 };
 
 } // namespace MACE::Utility

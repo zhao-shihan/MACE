@@ -6,12 +6,12 @@ namespace MACE::Utility {
 /// MACE::Utility::Concept::NonMoveable.
 class NonMoveableBase {
 protected:
-    constexpr NonMoveableBase() = default;
-    constexpr ~NonMoveableBase() = default;
-    constexpr NonMoveableBase(const NonMoveableBase&) = delete;
-    constexpr NonMoveableBase& operator=(const NonMoveableBase&) = delete;
-    constexpr NonMoveableBase(NonMoveableBase&&) = delete;
-    constexpr NonMoveableBase& operator=(NonMoveableBase&&) = delete;
+    constexpr NonMoveableBase() noexcept = default;
+    constexpr ~NonMoveableBase() noexcept = default;
+    constexpr NonMoveableBase(const NonMoveableBase&) noexcept = delete;
+    constexpr NonMoveableBase& operator=(const NonMoveableBase&) noexcept = delete;
+    constexpr NonMoveableBase(NonMoveableBase&&) noexcept = delete;
+    constexpr NonMoveableBase& operator=(NonMoveableBase&&) noexcept = delete;
 };
 
 } // namespace MACE::Utility

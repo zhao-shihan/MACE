@@ -18,7 +18,7 @@ using MACE::Utility::ObserverPtr;
 
 /// @brief Implementation detail of MACE::Environment::Memory::MuteSingleton.
 /// Not API.
-class MuteSingletonPool final : private Utility::NonMoveableBase {
+class MuteSingletonPool final : public Utility::NonMoveableBase {
 public:
     using Node = ObserverPtr<void>;
 

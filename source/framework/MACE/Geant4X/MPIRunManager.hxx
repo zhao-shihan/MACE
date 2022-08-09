@@ -11,17 +11,14 @@ namespace MACE::Geant4X {
 
 namespace Detail {
 
-/// @attention This should only be inherited by MPIRunManager. It's not intended to be used elsewhere.
-class MPIRunManagerInitializeHelper1 {
+class MPIRunManagerInitializeHelper {
 protected:
-    MPIRunManagerInitializeHelper1();
+    MPIRunManagerInitializeHelper();
 };
 
-/// @attention This should only be inherited by MPIRunManager. It's not intended to be used elsewhere.
-class MPIRunManagerInitializeHelper2 {
-protected:
-    MPIRunManagerInitializeHelper2();
-};
+class MPIRunManagerInitializeHelper1 : private MPIRunManagerInitializeHelper {};
+
+class MPIRunManagerInitializeHelper2 : private MPIRunManagerInitializeHelper {};
 
 } // namespace Detail
 

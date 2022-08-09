@@ -18,21 +18,13 @@ using MACE::Utility::Math::Pow2;
 
 namespace Detail {
 
-static void FlipG4cout() {
+MPIRunManagerInitializeHelper::MPIRunManagerInitializeHelper() {
     if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
         mpiEnv.IsWorker() or
         mpiEnv.GetVerboseLevel() == Environment::VerboseLevel::Quiet) {
         static ObserverPtr<std::streambuf> gG4coutBufExchanger = nullptr;
         gG4coutBufExchanger = G4cout.rdbuf(gG4coutBufExchanger);
     }
-}
-
-MPIRunManagerInitializeHelper1::MPIRunManagerInitializeHelper1() {
-    FlipG4cout();
-}
-
-MPIRunManagerInitializeHelper2::MPIRunManagerInitializeHelper2() {
-    FlipG4cout();
 }
 
 } // namespace Detail

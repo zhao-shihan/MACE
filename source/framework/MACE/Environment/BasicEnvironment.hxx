@@ -23,7 +23,7 @@ class NoCLI {};
 
 using MACE::Utility::ObserverPtr;
 
-class BasicEnvironment : private Detail::EnvironmentBase,
+class BasicEnvironment : public Detail::EnvironmentBase,
                          public Memory::FreeSingleton<BasicEnvironment> {
 public:
     template<class ACLI = Detail::NoCLI>

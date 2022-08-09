@@ -22,7 +22,7 @@ class MCPHit;
 using Core::DataFactory;
 using MACE::Utility::ObserverPtr;
 
-class Analysis final : private Utility::NonMoveableBase {
+class Analysis final : public Utility::NonMoveableBase {
 public:
     Analysis();
 
