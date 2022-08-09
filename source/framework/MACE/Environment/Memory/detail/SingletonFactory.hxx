@@ -4,14 +4,11 @@
 #include "MACE/Environment/Memory/detail/SingletonPool.hxx"
 #include "MACE/Environment/Memory/FreeSingleton.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include <string>
 #include <typeinfo>
 
 namespace MACE::Environment::Memory::Detail {
-
-using MACE::Utility::ObserverPtr;
 
 /// @brief Implementation detail of MACE::Environment::Memory::Singleton.
 /// Not API.

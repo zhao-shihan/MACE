@@ -31,7 +31,7 @@ public:
     [[nodiscard]] auto Contains() const { return fInstanceMap.contains(typeid(ASingleton)); }
     template<Concept::Singletonized ASingleton>
     [[nodiscard]] Node& Insert(ASingleton* instance);
-    [[nodiscard]] const std::vector<BaseNode> GetUndeletedInReverseInsertionOrder() const;
+    [[nodiscard]] std::vector<BaseNode> GetUndeletedInReverseInsertionOrder() const;
 
 private:
     std::map<const std::type_index, std::pair<Node, const std::pair<std::size_t, BaseNode>>> fInstanceMap;

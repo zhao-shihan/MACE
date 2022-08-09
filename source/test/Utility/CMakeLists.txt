@@ -1,5 +1,8 @@
 project(MACE)
 
+add_executable(CLHEPVectorData CLHEPVectorData.cxx)
+target_link_libraries(CLHEPVectorData MACE)
+
 add_executable(CopyableOrMoveable CopyableOrMoveable.cxx)
 target_link_libraries(CopyableOrMoveable MACE)
 

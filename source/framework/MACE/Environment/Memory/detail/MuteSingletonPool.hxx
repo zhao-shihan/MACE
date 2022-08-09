@@ -8,21 +8,17 @@
 #include <map>
 #include <optional>
 #include <stdexcept>
+#include <string>
 #include <typeindex>
 #include <typeinfo>
 
-namespace MACE::Environment::Memory {
-
-template<class ADerived>
-class MuteSingleton;
-
-namespace Detail {
+namespace MACE::Environment::Memory::Detail {
 
 using MACE::Utility::ObserverPtr;
 
 /// @brief Implementation detail of MACE::Environment::Memory::MuteSingleton.
 /// Not API.
-class MuteSingletonPool final : private Utility::NonMoveableBase {
+class MuteSingletonPool final : public Utility::NonMoveableBase {
 public:
     using Node = ObserverPtr<void>;
 
@@ -45,8 +41,6 @@ private:
     static ObserverPtr<MuteSingletonPool> fgInstance;
 };
 
-} // namespace Detail
-
-} // namespace MACE::Environment::Memory
+} // namespace MACE::Environment::Memory::Detail
 
 #include "MACE/Environment/Memory/detail/MuteSingletonPool.inl"

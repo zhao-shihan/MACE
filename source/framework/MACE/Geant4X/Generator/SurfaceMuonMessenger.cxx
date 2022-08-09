@@ -1,0 +1,53 @@
+#include "MACE/Geant4X/Generator/SurfaceMuon.hxx"
+#include "MACE/Geant4X/Generator/SurfaceMuonMessenger.hxx"
+
+#include "G4SystemOfUnits.hh"
+
+namespace MACE::Geant4X::Generator {
+
+SurfaceMuonMessenger::SurfaceMuonMessenger() :
+    Singleton<SurfaceMuonMessenger>(),
+    G4UImessenger(),
+    fSurfaceMuonGenerator(nullptr),
+    fDirectory("/MACE/Generator/SurfaceMuon/"),
+    fSetMomentum("/MACE/Generator/SurfaceMuon/SetMomentum", this),
+    fSetMomentumSpreadRMS("/MACE/Generator/SurfaceMuon/SetMomentumSpreadRMS", this),
+    fSetBeamProfileRMS("/MACE/Generator/SurfaceMuon/SetBeamProfileRMS", this),
+    fSetVertexZ("/MACE/Generator/SurfaceMuon/SetVertexZ", this) {
+
+    fDirectory.SetGuidance("MACE muon beam.");
+
+    fSetMomentum.SetGuidance("Set mean beam momentum.");
+    fSetMomentum.SetParameterName("p", false);
+    fSetMomentum.SetUnitCategory("Energy");
+    fSetMomentum.AvailableForStates(G4State_Idle);
+
+    fSetMomentumSpreadRMS.SetGuidance("Set beam momentum spread (RMS).");
+    fSetMomentumSpreadRMS.SetParameterName("sigma_p", false);
+    fSetMomentumSpreadRMS.SetUnitCategory("Energy");
+    fSetMomentumSpreadRMS.AvailableForStates(G4State_Idle);
+
+    fSetBeamProfileRMS.SetGuidance("Set beam profile width (RMS).");
+    fSetBeamProfileRMS.SetParameterName("sigma", false);
+    fSetBeamProfileRMS.SetUnitCategory("Length");
+    fSetBeamProfileRMS.AvailableForStates(G4State_Idle);
+
+    fSetVertexZ.SetGuidance("It does what you think it does.");
+    fSetVertexZ.SetParameterName("z", false);
+    fSetVertexZ.SetUnitCategory("Length");
+    fSetVertexZ.AvailableForStates(G4State_Idle);
+}
+
+void SurfaceMuonMessenger::SetNewValue(G4UIcommand* command, G4String value) {
+    if (command == std::addressof(fSetMomentum)) {
+        fSurfaceMuonGenerator->SetMomentum(fSetMomentum.GetNewDoubleValue(value));
+    } else if (command == std::addressof(fSetMomentumSpreadRMS)) {
+        fSurfaceMuonGenerator->SetMomentumSpreadRMS(fSetMomentumSpreadRMS.GetNewDoubleValue(value));
+    } else if (command == std::addressof(fSetBeamProfileRMS)) {
+        fSurfaceMuonGenerator->SetBeamProfileRMS(fSetBeamProfileRMS.GetNewDoubleValue(value));
+    } else if (command == std::addressof(fSetVertexZ)) {
+        fSurfaceMuonGenerator->SetVertexZ(fSetVertexZ.GetNewDoubleValue(value));
+    }
+}
+
+} // namespace MACE::Geant4X::Generator

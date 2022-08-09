@@ -2,6 +2,7 @@
 
 #include "MACE/Utility/Concept/NonMoveable.hxx"
 
+#include <concepts>
 #include <type_traits>
 
 namespace MACE::Environment::Memory {
@@ -18,18 +19,17 @@ class MuteSingleton;
 
 namespace Concept {
 
-template<class AMuteSingleton>
-concept MuteSingletonized = requires {
-    requires std::is_base_of_v<MuteSingleton<AMuteSingleton>, AMuteSingleton>;
-    requires not std::is_base_of_v<Detail::ISingletonBase, AMuteSingleton>;
-    requires Utility::Concept::NonMoveable<AMuteSingleton>;
+template<class T>
+concept IndirectlyMuteSingletonized = requires {
+    requires std::is_base_of_v<Detail::MuteSingletonBase, T>;
+    requires not std::is_base_of_v<Detail::ISingletonBase, T>;
+    requires Utility::Concept::NonMoveable<T>;
 };
 
-template<class AMuteSingleton>
-concept WeaklyMuteSingletonized = requires {
-    requires std::is_base_of_v<Detail::MuteSingletonBase, AMuteSingleton>;
-    requires not std::is_base_of_v<Detail::ISingletonBase, AMuteSingleton>;
-    requires Utility::Concept::NonMoveable<AMuteSingleton>;
+template<class T>
+concept MuteSingletonized = requires {
+    requires std::derived_from<T, MuteSingleton<T>>;
+    requires IndirectlyMuteSingletonized<T>;
 };
 
 } // namespace Concept

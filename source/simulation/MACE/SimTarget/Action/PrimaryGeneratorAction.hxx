@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/SimulationG4/Generator/SurfaceMuon.hxx"
+#include "MACE/Geant4X/Generator/SurfaceMuon.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 
 #include "G4VUserPrimaryGeneratorAction.hh"
@@ -18,7 +18,7 @@ public:
     void GeneratePrimaries(G4Event* event) override;
 
 private:
-    SimulationG4::Generator::SurfaceMuon fSurfaceMuonGenerator;
+    Geant4X::Generator::SurfaceMuon fSurfaceMuonGenerator;
 
     G4int fMuonsForEachG4Event;
 };

@@ -3,8 +3,8 @@
 #include "MACE/SimTarget/Analysis.hxx"
 #include "MACE/SimTarget/Messenger/AnalysisMessenger.hxx"
 #include "MACE/SimTarget/RunManager.hxx"
-#include "MACE/Utility/UtilMPI/CheckedMPICall.hxx"
-#include "MACE/Utility/UtilMPI/MakeMPIFilePath.hxx"
+#include "MACE/Utility/MPIUtil/CheckedMPICall.hxx"
+#include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
 #include "G4Run.hh"
 
@@ -12,13 +12,10 @@
 
 namespace MACE::SimTarget {
 
-using MACE::Environment::MPIEnvironment;
-
 Analysis::Analysis() :
     NonMoveableBase(),
     fResultName("SimTarget_result"),
     fEnableYieldAnalysis(true),
-    fDetectableRegion(ConstructFormula("abs(x)>30 || abs(y)>30 || z>0")),
     fThisRun(nullptr),
     fMuoniumTrackList(0),
     fResultFile(nullptr),
@@ -67,7 +64,7 @@ void Analysis::Close() {
 
 void Analysis::OpenResultFile() {
     fResultFile = std::make_unique<TFile>(
-        MACE::Utility::UtilMPI::MakeMPIFilePath(fResultName, ".root").generic_string().c_str(),
+        Utility::MPIUtil::MakeMPIFilePath(fResultName, ".root").c_str(),
         "recreate");
 }
 
@@ -83,7 +80,8 @@ void Analysis::CloseResultFile() {
 }
 
 void Analysis::OpenYieldFile() {
-    if (MPIEnvironment::IsMaster()) {
+    if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+        mpiEnv.IsMaster()) {
         fYieldFile = std::make_unique<std::ofstream>(fResultName + "_yield.csv", std::ios::out);
         *fYieldFile << "runID,nMuon,nMFormed,nMTargetDecay,nMVacuumDecay,nMDetectableDecay" << std::endl;
     }
@@ -92,8 +90,9 @@ void Analysis::OpenYieldFile() {
 void Analysis::AnalysisAndWriteYield() {
     std::array<unsigned long, 5> yieldData;
     auto& [nMuon, nFormed, nTargetDecay, nVacuumDecay, nDetectableDecay] = yieldData;
-    nMuon = (unsigned long)RunManager::Instance().GetPrimaryGeneratorAction().GetMuonsForEachG4Event() * (unsigned long)fThisRun->GetNumberOfEvent();
-    nFormed = fMuoniumTrackList.size();
+    nMuon = static_cast<unsigned long>(RunManager::Instance().GetPrimaryGeneratorAction().GetMuonsForEachG4Event()) *
+            static_cast<unsigned long>(fThisRun->GetNumberOfEvent());
+    nFormed = static_cast<unsigned long>(fMuoniumTrackList.size());
     nTargetDecay = 0;
     nVacuumDecay = 0;
     nDetectableDecay = 0;
@@ -101,22 +100,31 @@ void Analysis::AnalysisAndWriteYield() {
     const auto& target = Core::Geometry::Description::Target::Instance();
     for (auto&& track : std::as_const(fMuoniumTrackList)) {
         const auto& decayPosition = track->GetDecayPosition();
-        if (target.Contains(decayPosition.data())) {
+        if (target.Contains(decayPosition)) {
             ++nTargetDecay;
         } else {
             ++nVacuumDecay;
-            if (IsDetectable(decayPosition.data())) {
+            if (target.TestDetectable(decayPosition)) {
                 ++nDetectableDecay;
             }
         }
     }
 
-    if (MPIEnvironment::IsParallel()) {
+    if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+        mpiEnv.IsParallel()) {
         std::vector<decltype(yieldData)> yieldDataRecv;
-        if (MPIEnvironment::IsMaster()) { yieldDataRecv.resize(MPIEnvironment::WorldCommSize()); }
-        MACE_CHECKED_MPI_CALL(MPI_Gather, yieldData.data(), yieldData.size(), MPI_UNSIGNED_LONG, yieldDataRecv.data(), yieldData.size(), MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD)
+        if (mpiEnv.IsMaster()) { yieldDataRecv.resize(mpiEnv.WorldCommSize()); }
+        MACE_CHECKED_MPI_CALL(MPI_Gather,
+                              yieldData.data(),
+                              yieldData.size(),
+                              MPI_UNSIGNED_LONG,
+                              yieldDataRecv.data(),
+                              yieldData.size(),
+                              MPI_UNSIGNED_LONG,
+                              0,
+                              MPI_COMM_WORLD)
 
-        if (MPIEnvironment::IsMaster()) {
+        if (mpiEnv.IsMaster()) {
             unsigned long nMuonTotal = 0;
             unsigned long nFormedTotal = 0;
             unsigned long nTargetDecayTotal = 0;

@@ -5,18 +5,20 @@
 #include "MACE/ReconTracks/Fitter/PerfectFitter.hxx"
 #include "MACE/ReconTracks/Tracker/Hough.hxx"
 #include "MACE/ReconTracks/Tracker/PerfectFinder.hxx"
+#include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
+#include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
-#include "MACE/Utility/UtilMPI/AllocMPIJobs.hxx"
-#include "MACE/Utility/UtilMPI/MakeMPIFilePath.hxx"
 
 #include "CLHEP/Random/MTwistEngine.h"
 #include "CLHEP/Random/RandGauss.h"
+
+#include <filesystem>
 
 using namespace MACE::Core::DataModel::SimHit;
 using namespace MACE::Core::DataModel::Track;
 using namespace MACE::ReconTracks;
 using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
-using namespace MACE::Utility::UtilMPI;
+using namespace MACE::Utility::MPIUtil;
 using namespace MACE::Utility::PhysicalConstant;
 
 using MACE::Core::DataFactory;
@@ -25,7 +27,7 @@ using MACE::Environment::MPIEnvironment;
 using Hit_t = CDCSimHit;
 
 int main(int argc, char* argv[]) {
-    MPIEnvironment mpiEnvironment(argc, argv, std::nullopt);
+    MPIEnvironment mpiEnvironment(argc, argv, {});
 
     const char* nameIn = argv[1];
     const auto threshold = std::stoi(argv[2]);
@@ -54,7 +56,7 @@ int main(int argc, char* argv[]) {
     std::filesystem::path outName(nameIn);
     outName.replace_extension("");
     const auto fileNameOut = MakeMPIFilePath(outName.string() + "_recTrk", ".root");
-    TFile fileOut(fileNameOut.generic_string().c_str(), "recreate");
+    TFile fileOut(fileNameOut.c_str(), "recreate");
 
     DataFactory dataHub;
     dataHub.SetTreeNamePrefixFormat("Rep#_");
@@ -63,7 +65,7 @@ int main(int argc, char* argv[]) {
 
     CLHEP::MTwistEngine mtEng;
 
-    std::cout << "Rank" << MPIEnvironment::WorldCommRank() << " is ready to process data of repetition " << treeBegin << " to " << treeEnd - 1 << std::endl;
+    std::cout << "Rank" << mpiEnvironment.WorldCommRank() << " is ready to process data of repetition " << treeBegin << " to " << treeEnd - 1 << std::endl;
 
     for (auto treeIndex = treeBegin; treeIndex < treeEnd; treeIndex += treeStep) {
         dataHub.SetTreeNamePrefixFormat("Rep#_");

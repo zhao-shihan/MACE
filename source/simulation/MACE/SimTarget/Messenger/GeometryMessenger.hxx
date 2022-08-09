@@ -3,12 +3,15 @@
 #include "MACE/Environment/Memory/Singleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
-#include "G4UIcmdWith3VectorAndUnit.hh"
-#include "G4UIcmdWithABool.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
+
+#include <memory>
+
+class G4UIcmdWith3VectorAndUnit;
+class G4UIcmdWithABool;
+class G4UIcmdWithADoubleAndUnit;
+class G4UICommand;
+class G4UIdirectory;
 
 namespace MACE::SimTarget {
 
@@ -35,26 +38,29 @@ private:
 public:
     void SetTo(ObserverPtr<Action::DetectorConstruction> dc) { fDetectorConstruction = dc; }
 
-    void SetNewValue(G4UIcommand* command, G4String value) override;
+    void SetNewValue(ObserverPtr<G4UIcommand> command, G4String value) override;
 
 private:
     ObserverPtr<Action::DetectorConstruction> fDetectorConstruction;
 
-    G4UIdirectory fDirectory;
-    G4UIcmdWith3VectorAndUnit fSetWorldHalfExtent;
-    G4UIcmdWithABool fSetEnableBeamMonitor;
-    G4UIcmdWithADoubleAndUnit fSetBeamMonitorWidth;
-    G4UIcmdWithADoubleAndUnit fSetBeamMonitorThickness;
-    G4UIcmdWithADoubleAndUnit fSetDistanceBetweenBeamMonitorAndTarget;
-    G4UIcmdWithABool fSetEnableDegrader;
-    G4UIcmdWithADoubleAndUnit fSetDegraderWidth;
-    G4UIcmdWithADoubleAndUnit fSetDegraderThickness;
-    G4UIcmdWithADoubleAndUnit fSetDistanceBetweenDegraderAndTarget;
-    G4UIcmdWithADoubleAndUnit fSetTargetWidth;
-    G4UIcmdWithADoubleAndUnit fSetTargetThickness;
-    G4UIcmdWithADoubleAndUnit fSetTargetDensity;
-    G4UIcmdWithADoubleAndUnit fSetTemperature;
-    G4UIcmdWithAString fSetFineStructure;
+    std::unique_ptr<G4UIdirectory> fDirectory;
+    std::unique_ptr<G4UIcmdWith3VectorAndUnit> fSetWorldHalfExtent;
+    std::unique_ptr<G4UIcmdWithABool> fSetEnableBeamMonitor;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetBeamMonitorWidth;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetBeamMonitorThickness;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetDistanceBetweenBeamMonitorAndTarget;
+    std::unique_ptr<G4UIcmdWithABool> fSetEnableDegrader;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetDegraderWidth;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetDegraderThickness;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetDistanceBetweenDegraderAndTarget;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetTargetWidth;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetTargetThickness;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetTargetDensity;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetTemperature;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetAblationExtent;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetHoleSpacing;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetHoleDiameter;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetHoleDepth;
 };
 
 } // namespace Messenger

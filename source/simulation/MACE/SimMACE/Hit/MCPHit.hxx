@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Core/DataModel/SimHit/MCPSimHit.hxx"
-#include "MACE/SimulationG4/UseG4Allocator.hxx"
+#include "MACE/Geant4X/UseG4Allocator.hxx"
 
 #include "G4THitsCollection.hh"
 #include "G4ThreeVector.hh"
@@ -10,7 +10,7 @@
 
 namespace MACE::SimMACE::Hit {
 
-class MCPHit final : public SimulationG4::UseG4Allocator<MCPHit>,
+class MCPHit final : public Geant4X::UseG4Allocator<MCPHit>,
                      public G4VHit,
                      public Core::DataModel::SimHit::MCPSimHit {
 public:

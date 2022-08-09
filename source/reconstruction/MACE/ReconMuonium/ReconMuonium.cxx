@@ -11,11 +11,13 @@
 #include "MACE/Environment/MPIEnvironment.hxx"
 #include "MACE/ReconMuonium/MuoniumSimVertex.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
+#include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
+#include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
-#include "MACE/Utility/UtilMPI/AllocMPIJobs.hxx"
-#include "MACE/Utility/UtilMPI/MakeMPIFilePath.hxx"
 
 #include "TH2F.h"
+
+#include <filesystem>
 
 using namespace MACE::Core::DataModel;
 using namespace MACE::Core::DataModel::CDCTrackOperation;
@@ -23,7 +25,7 @@ using namespace MACE::Core::Geometry::Description;
 using namespace MACE::ReconMuonium;
 using namespace MACE::Utility;
 using namespace MACE::Utility::LiteralUnit;
-using namespace MACE::Utility::UtilMPI;
+using namespace MACE::Utility::MPIUtil;
 using namespace MACE::Utility::PhysicalConstant;
 
 using MACE::Core::DataFactory;
@@ -36,7 +38,7 @@ using MVertex_t = MuoniumSimVertex;
 using Track_t = Track::CDCPhysicsTrack;
 
 int main(int argc, char* argv[]) {
-    MPIEnvironment mpiEnvironment(argc, argv, std::nullopt);
+    MPIEnvironment mpiEnvironment(argc, argv, {});
 
     std::filesystem::path pathIn = argv[1];
     const auto calTimeWindow = std::stod(argv[2]);
@@ -87,7 +89,7 @@ int main(int argc, char* argv[]) {
     pathOut.replace_extension("");
     const auto fileNameOut = MakeMPIFilePath(pathOut.string() + "_recM", ".root");
     // output file of this rank
-    TFile fileOut(fileNameOut.generic_string().c_str(), "recreate");
+    TFile fileOut(fileNameOut.c_str(), "recreate");
 
     DataFactory dataHub;
 

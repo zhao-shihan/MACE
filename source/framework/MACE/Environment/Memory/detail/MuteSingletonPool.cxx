@@ -13,14 +13,20 @@ MuteSingletonPool::MuteSingletonPool() :
     if (fgInstance == nullptr) {
         fgInstance = this;
     } else {
-        throw std::logic_error("MACE::Environment::Memory::Detail::MuteSingletonPool::MuteSingletonPool(): Trying to instantiate the pool twice");
+        throw std::logic_error(
+            "MACE::Environment::Memory::Detail::MuteSingletonPool::MuteSingletonPool(): "
+            "Trying to instantiate the pool twice");
     }
 }
 
 MuteSingletonPool::~MuteSingletonPool() {
     for (auto&& [type, instance] : std::as_const(fInstanceMap)) {
         if (instance != nullptr) [[unlikely]] {
-            std::cerr << "MACE::Environment::Memory::Detail::MuteSingletonPool::~MuteSingletonPool(): Instance of type " << type.name() << " (mute singleton in environment) still survives, implies memory leak or following undefined behavior" << std::endl;
+            std::cerr << "MACE::Environment::Memory::Detail::MuteSingletonPool::~MuteSingletonPool(): "
+                         "Instance of type "
+                      << type.name() << " (mute singleton in environment) still survives, "
+                                        "implies memory leak or following undefined behavior"
+                      << std::endl;
         }
     }
     fgInstance = nullptr;
@@ -30,7 +36,10 @@ MuteSingletonPool& MuteSingletonPool::Instance() {
     if (fgInstance != nullptr) {
         return *fgInstance;
     } else {
-        throw std::logic_error("MACE::Environment::Memory::Detail::MuteSingletonPool::Instance(): The pool has not been instantiated or has been destructed");
+        throw std::logic_error(
+            "MACE::Environment::Memory::Detail::MuteSingletonPool::Instance(): "
+            "The pool has not been instantiated or has been destructed "
+            "(Maybe you forgot to instantiate an environment?)");
     }
 }
 

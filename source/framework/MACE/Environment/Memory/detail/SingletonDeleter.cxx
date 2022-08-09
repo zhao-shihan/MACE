@@ -5,7 +5,8 @@
 namespace MACE::Environment::Memory::Detail {
 
 SingletonDeleter::~SingletonDeleter() {
-    for (auto&& singletonBase : SingletonPool::Instance().GetUndeletedInReverseInsertionOrder()) {
+    const auto instancesToBeDeleted = SingletonPool::Instance().GetUndeletedInReverseInsertionOrder();
+    for (auto&& singletonBase : instancesToBeDeleted) {
         delete singletonBase;
     }
 }

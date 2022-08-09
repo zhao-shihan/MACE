@@ -1,5 +1,7 @@
+#include "MACE/Cxx2b/ToUnderlying.hxx"
+#include "MACE/Environment/BasicEnvironment.hxx"
+#include "MACE/Geant4X/Physics/MuoniumPhysics.hxx"
 #include "MACE/SimMACE/Action/PhysicsList.hxx"
-#include "MACE/SimulationG4/Physics/MuoniumPhysics.hxx"
 
 #include "G4DecayPhysics.hh"
 #include "G4EmExtraPhysics.hh"
@@ -12,21 +14,20 @@
 
 namespace MACE::SimMACE::Action {
 
-using namespace MACE::SimulationG4::Physics;
+using namespace MACE::Geant4X::Physics;
 
 PhysicsList::PhysicsList() :
     G4VModularPhysicsList() {
-    constexpr G4int defaultVerbose = 0;
-    SetVerboseLevel(defaultVerbose);
-    RegisterPhysics(new G4EmStandardPhysics_option4(defaultVerbose));
-    RegisterPhysics(new G4EmExtraPhysics(defaultVerbose));
-    RegisterPhysics(new G4DecayPhysics(defaultVerbose));
-    RegisterPhysics(new G4HadronElasticPhysics(defaultVerbose));
-    RegisterPhysics(new G4HadronPhysicsFTFP_BERT(defaultVerbose));
-    RegisterPhysics(new G4StoppingPhysics(defaultVerbose));
-    RegisterPhysics(new G4IonPhysics(defaultVerbose));
-    RegisterPhysics(new G4NeutronTrackingCut(defaultVerbose));
-    RegisterPhysics(new MuoniumPhysics(defaultVerbose));
+    verboseLevel = Cxx2b::ToUnderlying(Environment::BasicEnvironment::Instance().GetVerboseLevel());
+    RegisterPhysics(new G4EmStandardPhysics_option4(verboseLevel));
+    RegisterPhysics(new G4EmExtraPhysics(verboseLevel));
+    RegisterPhysics(new G4DecayPhysics(verboseLevel));
+    RegisterPhysics(new G4HadronElasticPhysics(verboseLevel));
+    RegisterPhysics(new G4HadronPhysicsFTFP_BERT(verboseLevel));
+    RegisterPhysics(new G4StoppingPhysics(verboseLevel));
+    RegisterPhysics(new G4IonPhysics(verboseLevel));
+    RegisterPhysics(new G4NeutronTrackingCut(verboseLevel));
+    RegisterPhysics(new MuoniumPhysics(verboseLevel));
 }
 
 } // namespace MACE::SimMACE::Action

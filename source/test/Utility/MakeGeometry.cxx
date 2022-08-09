@@ -10,7 +10,7 @@
 using namespace MACE::Core::Geometry::Entity::Fast;
 
 int main(int argc, char** argv) {
-    MACE::Environment::BasicEnvironment env(argc, argv, std::nullopt);
+    MACE::Environment::BasicEnvironment env(argc, argv, {});
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -163,6 +163,24 @@ int main(int argc, char** argv) {
 
     auto geoManager = std::make_unique<TGeoManager>("MACEGeom", "MACE Geometry");
     geoManager->Import("test.gdml");
+
+    // set transparency for jsroot display
+    // see form https://github.com/root-project/jsroot/blob/master/docs/JSROOT.md#geometry-viewer
+    geoManager->GetVolume(fWorld->GetLogicalVolume()->GetName())->SetInvisible();
+    std::vector<std::shared_ptr<MACE::Core::Geometry::IEntity>> volumesToSetTransparency{
+        fEMCalShield,
+        fEMCal,
+        fSpectrometerMagnet,
+        fSpectrometerShield,
+        fFirstBendSolenoid,
+        fFirstTransportSolenoid,
+        fSecondBendSolenoid,
+        fSecondTransportSolenoid,
+        fThirdTransportSolenoid};
+    for (auto&& volume : std::as_const(volumesToSetTransparency)) {
+        geoManager->GetVolume(volume->GetLogicalVolume()->GetName())->SetTransparency(60);
+    }
+
     geoManager->Export("test.root");
 
 #endif

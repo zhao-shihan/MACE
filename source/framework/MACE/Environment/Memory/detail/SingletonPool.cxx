@@ -4,7 +4,7 @@
 
 namespace MACE::Environment::Memory::Detail {
 
-[[nodiscard]] const std::vector<SingletonPool::BaseNode> SingletonPool::GetUndeletedInReverseInsertionOrder() const {
+[[nodiscard]] std::vector<SingletonPool::BaseNode> SingletonPool::GetUndeletedInReverseInsertionOrder() const {
     std::vector<std::pair<std::size_t, BaseNode>> undeletedListWithId;
     undeletedListWithId.reserve(fInstanceMap.size());
     for (auto&& [_, nodePair] : fInstanceMap) {
@@ -21,10 +21,9 @@ namespace MACE::Environment::Memory::Detail {
 
     std::vector<BaseNode> undeletedList;
     undeletedList.reserve(undeletedListWithId.size());
-    for (auto&& [_, baseNode] : undeletedListWithId) {
+    for (auto&& [id, baseNode] : std::as_const(undeletedListWithId)) {
         undeletedList.emplace_back(baseNode);
     }
-
     return undeletedList;
 }
 
