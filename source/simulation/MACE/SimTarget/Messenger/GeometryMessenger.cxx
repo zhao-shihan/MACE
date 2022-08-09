@@ -160,21 +160,21 @@ void GeometryMessenger::SetNewValue(ObserverPtr<G4UIcommand> command, G4String v
     } else if (command == fSetDistanceBetweenDegraderAndTarget.get()) {
         Description::BeamDegrader::Instance().SetDistanceToTargetSurface(fSetDistanceBetweenDegraderAndTarget->GetNewDoubleValue(value));
     } else if (command == fSetTargetWidth.get()) {
-        Description::Target::Instance().SetWidth(fSetTargetWidth->GetNewDoubleValue(value));
+        Description::Target::Instance().GetCuboid().SetWidth(fSetTargetWidth->GetNewDoubleValue(value));
     } else if (command == fSetTargetThickness.get()) {
-        Description::Target::Instance().SetThickness(fSetTargetThickness->GetNewDoubleValue(value));
+        Description::Target::Instance().GetCuboid().SetThickness(fSetTargetThickness->GetNewDoubleValue(value));
     } else if (command == fSetTargetDensity.get()) {
         fDetectorConstruction->SetTargetDensity(fSetTargetDensity->GetNewDoubleValue(value));
     } else if (command == fSetTemperature.get()) {
         fDetectorConstruction->SetTemperature(fSetTemperature->GetNewDoubleValue(value));
     } else if (command == fSetAblationExtent.get()) {
-        Description::Target::Instance().GetExtraStructure().SetExtent(fSetAblationExtent->GetNewDoubleValue(value));
+        Description::Target::Instance().GetCuboid().GetHole().SetExtent(fSetAblationExtent->GetNewDoubleValue(value));
     } else if (command == fSetHoleSpacing.get()) {
-        Description::Target::Instance().GetExtraStructure().SetSpacing(fSetHoleSpacing->GetNewDoubleValue(value));
+        Description::Target::Instance().GetCuboid().GetHole().SetSpacing(fSetHoleSpacing->GetNewDoubleValue(value));
     } else if (command == fSetHoleDiameter.get()) {
-        Description::Target::Instance().GetExtraStructure().SetDiameter(fSetHoleDiameter->GetNewDoubleValue(value));
+        Description::Target::Instance().GetCuboid().GetHole().SetDiameter(fSetHoleDiameter->GetNewDoubleValue(value));
     } else if (command == fSetHoleDepth.get()) {
-        Description::Target::Instance().GetExtraStructure().SetDepth(fSetHoleDepth->GetNewDoubleValue(value));
+        Description::Target::Instance().GetCuboid().GetHole().SetDepth(fSetHoleDepth->GetNewDoubleValue(value));
     }
 }
 

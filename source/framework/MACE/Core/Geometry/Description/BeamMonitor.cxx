@@ -1,5 +1,6 @@
 #include "MACE/Core/Geometry/Description/BeamMonitor.hxx"
 #include "MACE/Core/Geometry/Description/Target.hxx"
+#include "MACE/Cxx2b/Unreachable.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
 #include "CLHEP/Vector/Rotation.h"
@@ -16,9 +17,14 @@ BeamMonitor::BeamMonitor() :
     fDistanceToTargetSurface(15_mm) {}
 
 HepGeom::Transform3D BeamMonitor::CalcTransform() const {
-    const auto& target = Target::Instance();
-    const auto transZ = target.CalcTransform().getTranslation().z() - target.GetThickness() / 2 - fThickness / 2 - fDistanceToTargetSurface;
-    return HepGeom::Transform3D(CLHEP::HepRotation(), CLHEP::Hep3Vector(0, 0, transZ));
+    switch (const auto& target = Target::Instance();
+            target.GetShapeType()) {
+    case Target::ShapeType::Cuboid:
+        const auto& cuboidTarget = target.GetCuboid();
+        const auto transZ = cuboidTarget.CalcTransform().getTranslation().z() - cuboidTarget.GetThickness() / 2 - fThickness / 2 - fDistanceToTargetSurface;
+        return HepGeom::Transform3D(CLHEP::HepRotation(), CLHEP::Hep3Vector(0, 0, transZ));
+    }
+    Cxx2b::Unreachable();
 }
 
 void BeamMonitor::ReadDescriptionNode(const YAML::Node& node) {
