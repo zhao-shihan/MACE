@@ -21,7 +21,7 @@ namespace Concept {
 
 template<class T>
 concept IndirectlyMuteSingletonized = requires {
-    requires std::derived_from<T, Detail::MuteSingletonBase>;
+    requires std::is_base_of_v<Detail::MuteSingletonBase, T>;
     requires not std::is_base_of_v<Detail::ISingletonBase, T>;
     requires Utility::Concept::NonMoveable<T>;
 };

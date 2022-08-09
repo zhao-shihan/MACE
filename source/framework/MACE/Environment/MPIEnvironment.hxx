@@ -11,13 +11,14 @@
 
 namespace MACE::Environment {
 
-class MPIEnvironment : public BasicEnvironment {
+class MPIEnvironment : public BasicEnvironment,
+                       public Memory::FreeSingleton<MPIEnvironment> {
 public:
     template<class ACLI = Detail::NoCLI>
     MPIEnvironment(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
     virtual ~MPIEnvironment();
 
-    static auto& Instance() { return static_cast<MPIEnvironment&>(BasicEnvironment::Instance()); }
+    using FreeSingleton<MPIEnvironment>::Instance;
 
     const auto& WorldCommRank() const { return fWorldCommRank; }
     const auto& WorldCommSize() const { return fWorldCommSize; }
