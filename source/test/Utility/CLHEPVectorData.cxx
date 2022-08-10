@@ -1,6 +1,6 @@
-#include "MACE/Utility/CLHEPHep2VectorData.hxx"
-#include "MACE/Utility/CLHEPHep3VectorData.hxx"
-#include "MACE/Utility/CLHEPHepLorentzVectorData.hxx"
+#include "MACE/Utility/CLHEPVectorX/Hep2VectorData.hxx"
+#include "MACE/Utility/CLHEPVectorX/Hep3VectorData.hxx"
+#include "MACE/Utility/CLHEPVectorX/HepLorentzVectorData.hxx"
 
 #include "CLHEP/Vector/LorentzVector.h"
 #include "CLHEP/Vector/ThreeVector.h"
@@ -13,9 +13,9 @@
 
 int main() {
     using namespace CLHEP;
-    using namespace MACE::Utility::CLHEPHep2VectorData;
-    using namespace MACE::Utility::CLHEPHep3VectorData;
-    using namespace MACE::Utility::CLHEPHepLorentzVectorData;
+    using namespace MACE::Utility::CLHEPVectorX::Hep2VectorData;
+    using namespace MACE::Utility::CLHEPVectorX::Hep3VectorData;
+    using namespace MACE::Utility::CLHEPVectorX::HepLorentzVectorData;
 
 #define MACE_CLHEP_VECTOR_DATA_TEST_OUT(Arrange)                                                                                                                                                                                               \
                                                                                                                                                                                                                                                \

@@ -1,4 +1,4 @@
-namespace MACE::Utility::CLHEPHep2VectorData {
+namespace MACE::Utility::CLHEPVectorX::Hep2VectorData {
 
 #ifdef __cpp_lib_is_layout_compatible
 

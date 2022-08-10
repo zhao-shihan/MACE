@@ -6,13 +6,13 @@
 #include <new>
 #include <type_traits>
 
-namespace MACE::Utility::CLHEPHep3VectorData {
+namespace MACE::Utility::CLHEPVectorX::Hep3VectorData {
 
 inline double* operator&(CLHEP::Hep3Vector& threeVector) noexcept;
 inline const double* operator&(const CLHEP::Hep3Vector& threeVector) noexcept;
 inline double* operator&(CLHEP::Hep3Vector&& threeVector) noexcept = delete;
 inline const double* operator&(const CLHEP::Hep3Vector&& threeVector) noexcept = delete;
 
-} // namespace MACE::Utility::CLHEPHep3VectorData
+} // namespace MACE::Utility::CLHEPVectorX::Hep3VectorData
 
-#include "MACE/Utility/CLHEPHep3VectorData.inl"
+#include "MACE/Utility/CLHEPVectorX/Hep3VectorData.inl"
