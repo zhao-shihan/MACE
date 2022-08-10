@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Core/DataModel/ITransientData.hxx"
-#include "MACE/Utility/Concept/Pointer.hxx"
+#include "MACE/Utility/Concept/PointerImitator.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "TChain.h"
@@ -14,7 +14,7 @@ namespace MACE::Core {
 
 using DataModel::IsTransientData;
 using Utility::ObserverPtr;
-using Utility::Concept::WeaklyBehaveLikePointer;
+using Utility::Concept::WeakPointerImitator;
 
 class DataFactory final {
 public:
@@ -60,16 +60,16 @@ public:
     ///   Note: this feature allows to fill the tree with less but exact columns that the data vector has.
     /// Note: there is no static branch infomation for the tree, so
     /// user should make sure that ADataInTree represents exactly the same branches as the tree.
-    template<IsTransientData ADataInTree, WeaklyBehaveLikePointer ADataInListPointer> // clang-format off
+    template<IsTransientData ADataInTree, WeakPointerImitator ADataInListPointer> // clang-format off
         requires std::derived_from<typename std::pointer_traits<ADataInListPointer>::element_type, ADataInTree>
     static void FillTree(const std::vector<ADataInListPointer>& dataList, TTree& tree, bool connected = false); // clang-format on
-    template<WeaklyBehaveLikePointer ADataInListPointer>
+    template<WeakPointerImitator ADataInListPointer>
     static void FillTree(const std::vector<ADataInListPointer>& dataList, TTree& tree, bool connected = false);
     /// Same effect as invoke CreateTree<ADataInTree>(treeIndex) and FillTree<ADataInTree>(dataList, tree, true).
-    template<IsTransientData ADataInTree, WeaklyBehaveLikePointer ADataInListPointer> // clang-format off
+    template<IsTransientData ADataInTree, WeakPointerImitator ADataInListPointer> // clang-format off
         requires std::derived_from<typename std::pointer_traits<ADataInListPointer>::element_type, ADataInTree>
     std::shared_ptr<TTree> CreateAndFillTree(const std::vector<ADataInListPointer>& dataList, Long64_t treeIndex = 0) const; // clang-format on
-    template<WeaklyBehaveLikePointer ADataInListPointer>
+    template<WeakPointerImitator ADataInListPointer>
     std::shared_ptr<TTree> CreateAndFillTree(const std::vector<ADataInListPointer>& dataList, Long64_t treeIndex = 0) const;
     /// Create a data vector and fill it with a tree.
     /// Entries to be filled are determined by [entriesRange.first, entriesRange.second).
