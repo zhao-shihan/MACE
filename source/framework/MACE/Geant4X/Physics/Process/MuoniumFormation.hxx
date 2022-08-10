@@ -29,9 +29,9 @@ private:
     G4double GetMeanLifeTime(const G4Track& track, G4ForceCondition*) override;
 
 private:
-    const ObserverPtr<const Target> fTarget;
     const ObserverPtr<G4ParticleDefinition> fMuonium;
     const ObserverPtr<G4ParticleDefinition> fAntiMuonium;
+    const ObserverPtr<const Target> fTarget;
     ObserverPtr<CLHEP::HepRandomEngine> fRandEng;
 
     G4double fFormationProbability;

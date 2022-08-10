@@ -14,11 +14,11 @@ using namespace Utility::PhysicalConstant;
 
 MuoniumFormation::MuoniumFormation() :
     G4VRestProcess("MuoniumFormation", fUserDefined),
-    fTarget(std::addressof(Target::Instance())),
     fMuonium(Particle::Muonium::Definition()),
     fAntiMuonium(Particle::AntiMuonium::Definition()),
+    fTarget(std::addressof(Target::Instance())),
     fRandEng(G4Random::getTheEngine()),
-    fFormationProbability(0.6),
+    fFormationProbability(0.52),
     fConversionProbability(0),
     fParticleChange() {
     pParticleChange = std::addressof(fParticleChange);
