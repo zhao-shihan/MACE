@@ -6,7 +6,6 @@
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
-#include "G4TransportationManager.hh"
 #include "Randomize.hh"
 
 namespace MACE::Geant4X::Physics::Process {
@@ -48,7 +47,7 @@ G4VParticleChange* MuoniumTransport::AlongStepDoIt(const G4Track& track, const G
         // just reset the flag
         fIsExitingTargetVolume = false;
         break;
-    case TransportStatus::ExitedTargetVolume:
+    case TransportStatus::OutsideTargetVolume:
         if (track.GetMaterial()->GetState() != kStateGas) {
             fParticleChange.ProposeTrackStatus(fStopButAlive);
         }
@@ -69,7 +68,7 @@ G4double MuoniumTransport::GetContinuousStepLimit(const G4Track& track, G4double
         fTransportStatus = TransportStatus::ExitingTargetVolume;
         return DBL_MIN;
     } else {
-        fTransportStatus = TransportStatus::ExitedTargetVolume;
+        fTransportStatus = TransportStatus::OutsideTargetVolume;
         // in other material, could be extracted to another process in future
         if (track.GetMaterial()->GetState() == kStateGas) {
             SetGPILSelection(NotCandidateForSelection);

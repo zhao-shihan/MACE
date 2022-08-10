@@ -11,20 +11,20 @@ namespace MACE::Geant4X {
 
 namespace Detail {
 
-class MPIRunManagerInitializeHelper {
+class FlipG4cout {
 protected:
-    MPIRunManagerInitializeHelper();
+    FlipG4cout();
 };
 
-class MPIRunManagerInitializeHelper1 : private MPIRunManagerInitializeHelper {};
+class PreG4RunManagerInitFlipG4cout : private FlipG4cout {};
 
-class MPIRunManagerInitializeHelper2 : private MPIRunManagerInitializeHelper {};
+class PostG4RunManagerInitFlipG4cout : private FlipG4cout {};
 
 } // namespace Detail
 
-class MPIRunManager : private Detail::MPIRunManagerInitializeHelper1,
+class MPIRunManager : private Detail::PreG4RunManagerInitFlipG4cout,
                       public G4RunManager,
-                      private Detail::MPIRunManagerInitializeHelper2 {
+                      private Detail::PostG4RunManagerInitFlipG4cout {
 public:
     MPIRunManager();
     virtual ~MPIRunManager() = default;

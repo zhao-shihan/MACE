@@ -18,7 +18,7 @@ using MACE::Utility::Math::Pow2;
 
 namespace Detail {
 
-MPIRunManagerInitializeHelper::MPIRunManagerInitializeHelper() {
+FlipG4cout::FlipG4cout() {
     if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
         mpiEnv.IsWorker() or
         mpiEnv.GetVerboseLevel() == Environment::VerboseLevel::Quiet) {
@@ -30,9 +30,9 @@ MPIRunManagerInitializeHelper::MPIRunManagerInitializeHelper() {
 } // namespace Detail
 
 MPIRunManager::MPIRunManager() :
-    Detail::MPIRunManagerInitializeHelper1(),
+    Detail::PreG4RunManagerInitFlipG4cout(),
     G4RunManager(),
-    Detail::MPIRunManagerInitializeHelper2(),
+    Detail::PostG4RunManagerInitFlipG4cout(),
     fTotalNumberOfEventsToBeProcessed(0),
     fEventIDRange(),
     fEventIDCounter(-1),

@@ -34,7 +34,7 @@ private:
         Decaying,
         InsideTargetVolume,
         ExitingTargetVolume,
-        ExitedTargetVolume
+        OutsideTargetVolume
     };
 
 private:
