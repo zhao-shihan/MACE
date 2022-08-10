@@ -1,15 +1,15 @@
 #pragma once
 
+#include "MACE/Utility/Concept/NumericVector.hxx"
+
 #include <concepts>
 #include <cstddef>
-#include <type_traits>
 
-namespace MACE::Utility::Math::Concept {
+namespace MACE::Utility::Concept {
 
 template<class T, typename F, std::size_t S>
-concept RealVectorSpace = requires(T&& u, T&& v, const T& w, F&& k, const F& c, std::size_t i) { // clang-format off
-    requires S > 0; // clang-format on
-    requires std::floating_point<F>;
+concept MathVector = requires(T&& u, T&& v, const T& w, F&& k, const F& c) {
+    requires NumericVector<T, F, S>;
     { -u } -> std::convertible_to<T>;
     { -w } -> std::convertible_to<T>;
     { u + v } -> std::convertible_to<T>;
@@ -30,17 +30,24 @@ concept RealVectorSpace = requires(T&& u, T&& v, const T& w, F&& k, const F& c, 
     { w / k } -> std::convertible_to<T>;
     { u / c } -> std::convertible_to<T>;
     { w / c } -> std::convertible_to<T>;
-    { u[i] } -> std::convertible_to<F&>;
-    { w[i] } -> std::convertible_to<const F&>;
 };
 
 template<class T>
-concept R2VectorSpace = RealVectorSpace<T, double, 2>;
+concept MathVector2D = MathVector<T, double, 2>;
 
 template<class T>
-concept R3VectorSpace = RealVectorSpace<T, double, 3>;
+concept MathVector3D = MathVector<T, double, 3>;
 
 template<class T>
-concept R4VectorSpace = RealVectorSpace<T, double, 4>;
+concept MathVector4D = MathVector<T, double, 4>;
 
-} // namespace MACE::Utility::Math::Concept
+template<class T>
+concept MathVector2F = MathVector<T, float, 2>;
+
+template<class T>
+concept MathVector3F = MathVector<T, float, 3>;
+
+template<class T>
+concept MathVector4F = MathVector<T, float, 4>;
+
+} // namespace MACE::Utility::Concept
