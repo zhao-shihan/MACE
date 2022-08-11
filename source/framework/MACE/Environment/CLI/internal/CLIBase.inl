@@ -9,4 +9,4 @@ argparse::Argument& CLIBase::AddArgument(Args&&... args) {
     }
 }
 
-} // namespace MACE::Environment::CLI::Detail
+} // namespace MACE::Environment::CLI::Internal

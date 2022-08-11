@@ -31,6 +31,6 @@ private:
     argparse::ArgumentParser fArgParser;
 };
 
-} // namespace MACE::Environment::CLI::Detail
+} // namespace MACE::Environment::CLI::Internal
 
 #include "MACE/Environment/CLI/internal/CLIBase.inl"

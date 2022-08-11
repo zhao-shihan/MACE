@@ -41,4 +41,4 @@ inline const double* operator&(const CLHEP::HepLorentzVector& fourVector) noexce
     return std::launder(reinterpret_cast<const double*>(std::addressof(fourVector)));
 }
 
-} // namespace MACE::Utility::CLHEPHepLorentzVectorData
+} // namespace MACE::Utility::CLHEPVectorX::HepLorentzVectorData

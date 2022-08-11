@@ -41,6 +41,6 @@ private:
     static ObserverPtr<MuteSingletonPool> fgInstance;
 };
 
-} // namespace MACE::Environment::Memory::Detail
+} // namespace MACE::Environment::Memory::Internal
 
 #include "MACE/Environment/Memory/internal/MuteSingletonPool.inl"

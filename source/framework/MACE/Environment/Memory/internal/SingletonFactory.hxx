@@ -1,8 +1,8 @@
 #pragma once
 
 #include "MACE/Environment/Memory/Concept/Singletonized.hxx"
-#include "MACE/Environment/Memory/internal/SingletonPool.hxx"
 #include "MACE/Environment/Memory/FreeSingleton.hxx"
+#include "MACE/Environment/Memory/internal/SingletonPool.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 
 #include <string>
@@ -18,6 +18,6 @@ public:
     [[nodiscard]] SingletonPool::Node& InstantiateOrFind();
 };
 
-} // namespace MACE::Environment::Memory::Detail
+} // namespace MACE::Environment::Memory::Internal
 
 #include "MACE/Environment/Memory/internal/SingletonFactory.inl"

@@ -27,4 +27,4 @@ namespace MACE::Environment::Memory::Internal {
     return undeletedList;
 }
 
-} // namespace MACE::Environment::Memory::Detail
+} // namespace MACE::Environment::Memory::Internal

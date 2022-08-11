@@ -42,4 +42,4 @@ EnvironmentBase::EnvironmentBase() :
 
 EnvironmentBase::~EnvironmentBase() = default;
 
-} // namespace MACE::Environment::Detail
+} // namespace MACE::Environment::Internal

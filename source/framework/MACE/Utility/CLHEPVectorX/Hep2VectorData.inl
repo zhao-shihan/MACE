@@ -39,4 +39,4 @@ inline const double* operator&(const CLHEP::Hep2Vector& twoVector) noexcept {
     return std::launder(reinterpret_cast<const double*>(std::addressof(twoVector)));
 }
 
-} // namespace MACE::Utility::CLHEPHep2VectorData
+} // namespace MACE::Utility::CLHEPVectorX::Hep2VectorData

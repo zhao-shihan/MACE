@@ -14,6 +14,6 @@ extern "C" {
 
 } // extern "C"
 
-} // namespace MACE::Environment::Detail
+} // namespace MACE::Environment::Internal
 
 #endif

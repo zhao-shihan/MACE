@@ -16,4 +16,4 @@ protected:
     virtual ~ISingletonBase() = 0;
 };
 
-} // namespace MACE::Environment::Memory::Detail
+} // namespace MACE::Environment::Memory::Internal

@@ -39,4 +39,4 @@ template<Concept::Singletonized ASingleton>
     //   look up for the type and return the corresponding pointer value.
 }
 
-} // namespace MACE::Environment::Memory::Detail
+} // namespace MACE::Environment::Memory::Internal

@@ -26,4 +26,4 @@ template<Concept::Singletonized ASingleton>
     }
 }
 
-} // namespace MACE::Environment::Memory::Detail
+} // namespace MACE::Environment::Memory::Internal

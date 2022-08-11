@@ -47,4 +47,4 @@ const std::pair<int, char**>& CLIBase::GetArgcArgv() const {
     throw std::logic_error("MACE::Environment::CLI: Command line arguments has not been parsed");
 }
 
-} // namespace MACE::Environment::CLI::Detail
+} // namespace MACE::Environment::CLI::Internal

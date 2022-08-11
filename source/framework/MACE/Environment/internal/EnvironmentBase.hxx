@@ -13,7 +13,7 @@ class SingletonDeleter;
 class SingletonFactory;
 class SingletonPool;
 
-} // namespace Memory::Detail
+} // namespace Memory::Internal
 
 namespace Internal {
 

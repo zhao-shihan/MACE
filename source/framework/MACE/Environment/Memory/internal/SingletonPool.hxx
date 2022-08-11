@@ -37,6 +37,6 @@ private:
     std::map<const std::type_index, std::pair<Node, const std::pair<std::size_t, BaseNode>>> fInstanceMap;
 };
 
-} // namespace MACE::Environment::Memory::Detail
+} // namespace MACE::Environment::Memory::Internal
 
 #include "MACE/Environment/Memory/internal/SingletonPool.inl"

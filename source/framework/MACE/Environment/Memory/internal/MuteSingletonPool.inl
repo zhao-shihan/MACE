@@ -24,4 +24,4 @@ template<Concept::MuteSingletonized AMuteSingleton>
     }
 }
 
-} // namespace MACE::Environment::Memory::Detail
+} // namespace MACE::Environment::Memory::Internal
