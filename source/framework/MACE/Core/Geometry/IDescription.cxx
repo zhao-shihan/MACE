@@ -8,18 +8,18 @@ IDescription::IDescription(const std::string& name) :
     DescriptionIO::AddInstance(*this);
 }
 
-void IDescription::Read(const YAML::Node& geomYaml) {
-    const auto thisNode = geomYaml[fName];
-    if (geomYaml.IsDefined()) {
-        ReadDescriptionNode(thisNode);
+void IDescription::Import(const YAML::Node& rootNode) {
+    const auto node = rootNode[fName];
+    if (node.IsDefined()) {
+        ImportValues(node);
     } else {
-        std::cout << "Node <" << fName << "> not defined, skipping." << std::endl;
+        PrintNodeNotFoundWarning();
     }
 }
 
-void IDescription::Write(YAML::Node& geomYaml) const {
-    auto nodeForThis = geomYaml[fName];
-    WriteDescriptionNode(nodeForThis);
+void IDescription::Export(YAML::Node& rootNode) const {
+    auto node = rootNode[fName];
+    ExportValues(node);
 }
 
 } // namespace MACE::Core::Geometry

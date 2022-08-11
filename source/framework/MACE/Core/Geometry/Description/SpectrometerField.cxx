@@ -10,14 +10,14 @@ SpectrometerField::SpectrometerField() :
     fRadius(71_cm),
     fLength(220_cm) {}
 
-void SpectrometerField::ReadDescriptionNode(const YAML::Node& node) {
-    ReadValueNode(node, "Radius", fRadius);
-    ReadValueNode(node, "Length", fLength);
+void SpectrometerField::ImportValues(const YAML::Node& node) {
+    ImportValue(node, fRadius, "Radius");
+    ImportValue(node, fLength, "Length");
 }
 
-void SpectrometerField::WriteDescriptionNode(YAML::Node& node) const {
-    WriteValueNode(node, "Radius", fRadius);
-    WriteValueNode(node, "Length", fLength);
+void SpectrometerField::ExportValues(YAML::Node& node) const {
+    ExportValue(node, fRadius, "Radius");
+    ExportValue(node, fLength, "Length");
 }
 
 } // namespace MACE::Core::Geometry::Description

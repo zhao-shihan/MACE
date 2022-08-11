@@ -16,20 +16,20 @@ private:
 public:
     const auto& GetRadius() const { return fRadius; }
     const auto& GetLength() const { return fLength; }
-    const auto& GetZPosition() const { return fZPosition; }
+    const auto& GetAxialPosition() const { return fAxialPosition; }
 
     void SetRadius(double val) { fRadius = val; }
     void SetLength(double val) { fLength = val; }
-    void SetZPosition(double val) { fZPosition = val; }
+    void SetAxialPosition(double val) { fAxialPosition = val; }
 
 private:
-    void ReadDescriptionNode(const YAML::Node& node) override;
-    void WriteDescriptionNode(YAML::Node& node) const override;
+    void ImportValues(const YAML::Node& node) override;
+    void ExportValues(YAML::Node& node) const override;
 
 private:
     double fRadius;
     double fLength;
-    double fZPosition;
+    double fAxialPosition;
 };
 
 } // namespace MACE::Core::Geometry::Description

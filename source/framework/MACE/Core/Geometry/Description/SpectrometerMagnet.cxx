@@ -11,16 +11,16 @@ SpectrometerMagnet::SpectrometerMagnet() :
     fOuterRadius(70_cm),
     fLength(218_cm) {}
 
-void SpectrometerMagnet::ReadDescriptionNode(const YAML::Node& node) {
-    ReadValueNode(node, "InnerRadius", fInnerRadius);
-    ReadValueNode(node, "OuterRadius", fOuterRadius);
-    ReadValueNode(node, "Length", fLength);
+void SpectrometerMagnet::ImportValues(const YAML::Node& node) {
+    ImportValue(node, fInnerRadius, "InnerRadius");
+    ImportValue(node, fOuterRadius, "OuterRadius");
+    ImportValue(node, fLength, "Length");
 }
 
-void SpectrometerMagnet::WriteDescriptionNode(YAML::Node& node) const {
-    WriteValueNode(node, "InnerRadius", fInnerRadius);
-    WriteValueNode(node, "OuterRadius", fOuterRadius);
-    WriteValueNode(node, "Length", fLength);
+void SpectrometerMagnet::ExportValues(YAML::Node& node) const {
+    ExportValue(node, fInnerRadius, "InnerRadius");
+    ExportValue(node, fOuterRadius, "OuterRadius");
+    ExportValue(node, fLength, "Length");
 }
 
 } // namespace MACE::Core::Geometry::Description

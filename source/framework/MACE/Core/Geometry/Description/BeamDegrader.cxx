@@ -27,18 +27,18 @@ HepGeom::Transform3D BeamDegrader::CalcTransform() const {
     Cxx2b::Unreachable();
 }
 
-void BeamDegrader::ReadDescriptionNode(const YAML::Node& node) {
-    ReadValueNode(node, "IsEnabled", fIsEnabled);
-    ReadValueNode(node, "Width", fWidth);
-    ReadValueNode(node, "Thickness", fThickness);
-    ReadValueNode(node, "DistanceToTargetSurface", fDistanceToTargetSurface);
+void BeamDegrader::ImportValues(const YAML::Node& node) {
+    ImportValue(node, fIsEnabled, "IsEnabled");
+    ImportValue(node, fWidth, "Width");
+    ImportValue(node, fThickness, "Thickness");
+    ImportValue(node, fDistanceToTargetSurface, "DistanceToTargetSurface");
 }
 
-void BeamDegrader::WriteDescriptionNode(YAML::Node& node) const {
-    WriteValueNode(node, "IsEnabled", fIsEnabled);
-    WriteValueNode(node, "Width", fWidth);
-    WriteValueNode(node, "Thickness", fThickness);
-    WriteValueNode(node, "DistanceToTargetSurface", fDistanceToTargetSurface);
+void BeamDegrader::ExportValues(YAML::Node& node) const {
+    ExportValue(node, fIsEnabled, "IsEnabled");
+    ExportValue(node, fWidth, "Width");
+    ExportValue(node, fThickness, "Thickness");
+    ExportValue(node, fDistanceToTargetSurface, "DistanceToTargetSurface");
 }
 
 } // namespace MACE::Core::Geometry::Description

@@ -13,18 +13,18 @@ EMCalShield::EMCalShield() :
     fWindowRadius(12.7_cm),
     fThickness(5_cm) {}
 
-void EMCalShield::ReadDescriptionNode(const YAML::Node& node) {
-    ReadValueNode(node, "InnerRadius", fInnerRadius);
-    ReadValueNode(node, "InnerLength", fInnerLength);
-    ReadValueNode(node, "WindowRadius", fWindowRadius);
-    ReadValueNode(node, "Thickness", fThickness);
+void EMCalShield::ImportValues(const YAML::Node& node) {
+    ImportValue(node, fInnerRadius, "InnerRadius");
+    ImportValue(node, fInnerLength, "InnerLength");
+    ImportValue(node, fWindowRadius, "WindowRadius");
+    ImportValue(node, fThickness, "Thickness");
 }
 
-void EMCalShield::WriteDescriptionNode(YAML::Node& node) const {
-    WriteValueNode(node, "InnerRadius", fInnerRadius);
-    WriteValueNode(node, "InnerLength", fInnerLength);
-    WriteValueNode(node, "WindowRadius", fWindowRadius);
-    WriteValueNode(node, "Thickness", fThickness);
+void EMCalShield::ExportValues(YAML::Node& node) const {
+    ExportValue(node, fInnerRadius, "InnerRadius");
+    ExportValue(node, fInnerLength, "InnerLength");
+    ExportValue(node, fWindowRadius, "WindowRadius");
+    ExportValue(node, fThickness, "Thickness");
 }
 
 } // namespace MACE::Core::Geometry::Description

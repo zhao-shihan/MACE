@@ -64,26 +64,26 @@ HepGeom::Transform3D TransportLine::ThirdStraightTransform() const {
     return HepGeom::Transform3D(CLHEP::HepRotation(), translation);
 }
 
-void TransportLine::ReadDescriptionNode(const YAML::Node& node) {
-    ReadValueNode(node, "FirstStraightLength", fFirstStraightLength);
-    ReadValueNode(node, "FirstBendRadius", fFirstBendRadius);
-    ReadValueNode(node, "SecondStraightLength", fSecondStraightLength);
-    ReadValueNode(node, "SecondBendRadius", fSecondBendRadius);
-    ReadValueNode(node, "ThirdStraightLength", fThirdStraightLength);
-    ReadValueNode(node, "SolenoidInnerRadius", fSolenoidInnerRadius);
-    ReadValueNode(node, "SolenoidOuterRadius", fSolenoidOuterRadius);
-    ReadValueNode(node, "FieldRadius", fFieldRadius);
+void TransportLine::ImportValues(const YAML::Node& node) {
+    ImportValue(node, fFirstStraightLength, "FirstStraightLength");
+    ImportValue(node, fFirstBendRadius, "FirstBendRadius");
+    ImportValue(node, fSecondStraightLength, "SecondStraightLength");
+    ImportValue(node, fSecondBendRadius, "SecondBendRadius");
+    ImportValue(node, fThirdStraightLength, "ThirdStraightLength");
+    ImportValue(node, fSolenoidInnerRadius, "SolenoidInnerRadius");
+    ImportValue(node, fSolenoidOuterRadius, "SolenoidOuterRadius");
+    ImportValue(node, fFieldRadius, "FieldRadius");
 }
 
-void TransportLine::WriteDescriptionNode(YAML::Node& node) const {
-    WriteValueNode(node, "FirstStraightLength", fFirstStraightLength);
-    WriteValueNode(node, "FirstBendRadius", fFirstBendRadius);
-    WriteValueNode(node, "SecondStraightLength", fSecondStraightLength);
-    WriteValueNode(node, "SecondBendRadius", fSecondBendRadius);
-    WriteValueNode(node, "ThirdStraightLength", fThirdStraightLength);
-    WriteValueNode(node, "SolenoidInnerRadius", fSolenoidInnerRadius);
-    WriteValueNode(node, "SolenoidOuterRadius", fSolenoidOuterRadius);
-    WriteValueNode(node, "FieldRadius", fFieldRadius);
+void TransportLine::ExportValues(YAML::Node& node) const {
+    ExportValue(node, fFirstStraightLength, "FirstStraightLength");
+    ExportValue(node, fFirstBendRadius, "FirstBendRadius");
+    ExportValue(node, fSecondStraightLength, "SecondStraightLength");
+    ExportValue(node, fSecondBendRadius, "SecondBendRadius");
+    ExportValue(node, fThirdStraightLength, "ThirdStraightLength");
+    ExportValue(node, fSolenoidInnerRadius, "SolenoidInnerRadius");
+    ExportValue(node, fSolenoidOuterRadius, "SolenoidOuterRadius");
+    ExportValue(node, fFieldRadius, "FieldRadius");
 }
 
 } // namespace MACE::Core::Geometry::Description

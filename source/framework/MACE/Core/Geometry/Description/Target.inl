@@ -1,7 +1,7 @@
 namespace MACE::Core::Geometry::Description {
 
 bool Target::VolumeContains(const MathVector3D auto& x) const noexcept {
-    switch (fShape) {
+    switch (fShapeType) {
     case ShapeType::Cuboid:
         return fCuboid.VolumeContains(x);
     }
@@ -9,7 +9,7 @@ bool Target::VolumeContains(const MathVector3D auto& x) const noexcept {
 }
 
 bool Target::Contains(const MathVector3D auto& x, bool insideVolume) const noexcept {
-    switch (fShape) {
+    switch (fShapeType) {
     case ShapeType::Cuboid:
         return fCuboid.Contains(x, insideVolume);
     }
@@ -17,7 +17,7 @@ bool Target::Contains(const MathVector3D auto& x, bool insideVolume) const noexc
 }
 
 bool Target::TestDetectable(const MathVector3D auto& x) const noexcept {
-    switch (fShape) {
+    switch (fShapeType) {
     case ShapeType::Cuboid:
         return fCuboid.TestDetectable(x);
     }
@@ -56,7 +56,7 @@ bool Target::Cuboid::VolumeContains(const MathVector3D auto& x) const noexcept {
 }
 
 bool Target::Cuboid::Contains(const MathVector3D auto& x, bool insideVolume) const noexcept {
-    switch (fDetail) {
+    switch (fDetailType) {
     case DetailType::Flat:
         return insideVolume;
     case DetailType::Hole:
@@ -70,7 +70,7 @@ bool Target::Cuboid::TestDetectable(const MathVector3D auto& x) const noexcept {
     const auto notShadowed = x[2] > 0 or
                              std::abs(x[0]) > fWidth / 2 or
                              std::abs(x[1]) > fWidth / 2;
-    switch (fDetail) {
+    switch (fDetailType) {
     case DetailType::Flat:
         return notShadowed;
     case DetailType::Hole:

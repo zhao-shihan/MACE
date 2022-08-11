@@ -25,29 +25,6 @@ public:
         Cuboid
     };
 
-private:
-    Target();
-    ~Target() = default;
-
-public:
-    const auto& GetShapeType() const { return fShape; }
-    void SetShapeType(ShapeType val) { fShape = val; }
-    const auto& GetCuboid() const { return fCuboid; }
-    auto& GetCuboid() { return fCuboid; }
-
-    /// @brief Return true if inside the target volume (include boundary (closed region), don't consider fine structure).
-    bool VolumeContains(const MathVector3D auto& x) const noexcept;
-    /// @brief Return true if inside the exact target geometry (considering fine structure).
-    bool Contains(const MathVector3D auto& x, bool insideVolume) const noexcept;
-    bool Contains(const MathVector3D auto& x) const noexcept { return Contains(x, VolumeContains(x)); }
-    /// @brief Return true if the decay position x is detectable (i.e. is not shadowed by target).
-    bool TestDetectable(const MathVector3D auto& x) const noexcept;
-
-private:
-    void ReadDescriptionNode(const YAML::Node& node) override;
-    void WriteDescriptionNode(YAML::Node& node) const override;
-
-private:
     template<class ADerivedShape>
     class ShapeBase : public Environment::Memory::MuteSingleton<ADerivedShape> {
     protected:
@@ -82,8 +59,8 @@ private:
         /// @attention Should only be used for geometry construction.
         HepGeom::Transform3D CalcTransform() const;
 
-        const auto& GetDetailType() const { return fDetail; }
-        void SetDetailType(DetailType val) { fDetail = val; }
+        const auto& GetDetailType() const { return fDetailType; }
+        void SetDetailType(DetailType val) { fDetailType = val; }
         const auto& GetHole() const { return fHole; }
         auto& GetHole() { return fHole; }
 
@@ -124,12 +101,34 @@ private:
         double fWidth;
         double fThickness;
 
-        DetailType fDetail;
+        DetailType fDetailType;
         Hole fHole;
     };
 
 private:
-    ShapeType fShape;
+    Target();
+    ~Target() = default;
+
+public:
+    const auto& GetShapeType() const { return fShapeType; }
+    void SetShapeType(ShapeType val) { fShapeType = val; }
+    const auto& GetCuboid() const { return fCuboid; }
+    auto& GetCuboid() { return fCuboid; }
+
+    /// @brief Return true if inside the target volume (include boundary (closed region), don't consider fine structure).
+    bool VolumeContains(const MathVector3D auto& x) const noexcept;
+    /// @brief Return true if inside the exact target geometry (considering fine structure).
+    bool Contains(const MathVector3D auto& x, bool insideVolume) const noexcept;
+    bool Contains(const MathVector3D auto& x) const noexcept { return Contains(x, VolumeContains(x)); }
+    /// @brief Return true if the decay position x is detectable (i.e. is not shadowed by target).
+    bool TestDetectable(const MathVector3D auto& x) const noexcept;
+
+private:
+    void ImportValues(const YAML::Node& node) override;
+    void ExportValues(YAML::Node& node) const override;
+
+private:
+    ShapeType fShapeType;
     Cuboid fCuboid;
 };
 

@@ -9,18 +9,18 @@ SelectorField::SelectorField() :
     ISingletonDescription<SelectorField>(__func__),
     fRadius(7.5_cm),
     fLength(30_cm),
-    fZPosition(20_cm) {}
+    fAxialPosition(20_cm) {}
 
-void SelectorField::ReadDescriptionNode(const YAML::Node& node) {
-    ReadValueNode(node, "Radius", fRadius);
-    ReadValueNode(node, "Length", fLength);
-    ReadValueNode(node, "ZPosition", fZPosition);
+void SelectorField::ImportValues(const YAML::Node& node) {
+    ImportValue(node, fRadius, "Radius");
+    ImportValue(node, fLength, "Length");
+    ImportValue(node, fAxialPosition, "AxialPosition");
 }
 
-void SelectorField::WriteDescriptionNode(YAML::Node& node) const {
-    WriteValueNode(node, "Radius", fRadius);
-    WriteValueNode(node, "Length", fLength);
-    WriteValueNode(node, "ZPosition", fZPosition);
+void SelectorField::ExportValues(YAML::Node& node) const {
+    ExportValue(node, fRadius, "Radius");
+    ExportValue(node, fLength, "Length");
+    ExportValue(node, fAxialPosition, "AxialPosition");
 }
 
 } // namespace MACE::Core::Geometry::Description

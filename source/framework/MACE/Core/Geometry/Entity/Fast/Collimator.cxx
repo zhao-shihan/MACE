@@ -17,7 +17,7 @@ void Collimator::ConstructSelf(G4bool checkOverlaps) {
     const auto outerRadius = description.GetOuterRadius();
     const auto length = description.GetLength();
     const auto thickness = description.GetThickness();
-    const auto zPosition = description.GetZPosition();
+    const auto axialPosition = description.GetAxialPosition();
     const auto count = description.GetCount();
 
     for (int i = 0; i < count; ++i) {
@@ -36,7 +36,7 @@ void Collimator::ConstructSelf(G4bool checkOverlaps) {
         Make<G4PVPlacement>(
             G4Transform3D(
                 G4RotationMatrix(),
-                G4ThreeVector(0.0, 0.0, zPosition)),
+                G4ThreeVector(0.0, 0.0, axialPosition)),
             logic,
             name,
             Mother()->GetLogicalVolume(),

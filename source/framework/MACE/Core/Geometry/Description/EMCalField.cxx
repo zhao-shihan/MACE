@@ -21,14 +21,14 @@ HepGeom::Transform3D EMCalField::CalcTransform() const {
     return HepGeom::Transform3D(CLHEP::HepRotation(), translation);
 }
 
-void EMCalField::ReadDescriptionNode(const YAML::Node& node) {
-    ReadValueNode(node, "Radius", fRadius);
-    ReadValueNode(node, "Length", fLength);
+void EMCalField::ImportValues(const YAML::Node& node) {
+    ImportValue(node, fRadius, "Radius");
+    ImportValue(node, fLength, "Length");
 }
 
-void EMCalField::WriteDescriptionNode(YAML::Node& node) const {
-    WriteValueNode(node, "Radius", fRadius);
-    WriteValueNode(node, "Length", fLength);
+void EMCalField::ExportValues(YAML::Node& node) const {
+    ExportValue(node, fRadius, "Radius");
+    ExportValue(node, fLength, "Length");
 }
 
 } // namespace MACE::Core::Geometry::Description

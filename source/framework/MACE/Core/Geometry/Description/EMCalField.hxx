@@ -27,8 +27,8 @@ public:
     HepGeom::Transform3D CalcTransform() const;
 
 private:
-    void ReadDescriptionNode(const YAML::Node& node) override;
-    void WriteDescriptionNode(YAML::Node& node) const override;
+    void ImportValues(const YAML::Node& node) override;
+    void ExportValues(YAML::Node& node) const override;
 
 private:
     double fRadius;
