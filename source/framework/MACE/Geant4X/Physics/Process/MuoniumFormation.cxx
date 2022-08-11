@@ -18,7 +18,7 @@ MuoniumFormation::MuoniumFormation() :
     fAntiMuonium(Particle::AntiMuonium::Definition()),
     fTarget(std::addressof(Target::Instance())),
     fRandEng(G4Random::getTheEngine()),
-    fFormationProbability(0.52),
+    fFormationProbability(0.65),
     fConversionProbability(0),
     fParticleChange() {
     pParticleChange = std::addressof(fParticleChange);
