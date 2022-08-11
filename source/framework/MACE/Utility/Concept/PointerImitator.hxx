@@ -34,7 +34,7 @@ concept PointerImitatorOf = requires(P&& pointer) {
     requires SubscriptableTo<P, std::add_lvalue_reference_t<T>>;
 };
 
-#include "MACE/Utility/Concept/detail/AccessToMaybeCVConceptMacro.inl"
+#include "MACE/Utility/Concept/internal/AccessToMaybeCVConceptMacro.inl"
 
 MACE_UTILITY_CONCEPT_ACCESS_TO_MAYBE_CONST(WeakPointerImitatorOf);
 MACE_UTILITY_CONCEPT_ACCESS_TO_MAYBE_CONST(PointerImitatorOf);

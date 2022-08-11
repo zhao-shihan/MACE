@@ -1,8 +1,8 @@
-#include "MACE/Environment/Memory/detail/SingletonPool.hxx"
+#include "MACE/Environment/Memory/internal/SingletonPool.hxx"
 
 #include <algorithm>
 
-namespace MACE::Environment::Memory::Detail {
+namespace MACE::Environment::Memory::Internal {
 
 [[nodiscard]] std::vector<SingletonPool::BaseNode> SingletonPool::GetUndeletedInReverseInsertionOrder() const {
     std::vector<std::pair<std::size_t, BaseNode>> undeletedListWithId;

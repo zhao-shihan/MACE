@@ -1,15 +1,15 @@
-#include "MACE/Environment/detail/EnvironmentBase.hxx"
-#include "MACE/Environment/detail/SignalHandler.hxx"
-#include "MACE/Environment/Memory/detail/MuteSingletonPool.hxx"
-#include "MACE/Environment/Memory/detail/SingletonDeleter.hxx"
-#include "MACE/Environment/Memory/detail/SingletonFactory.hxx"
-#include "MACE/Environment/Memory/detail/SingletonPool.hxx"
+#include "MACE/Environment/internal/EnvironmentBase.hxx"
+#include "MACE/Environment/internal/SignalHandler.hxx"
+#include "MACE/Environment/Memory/internal/MuteSingletonPool.hxx"
+#include "MACE/Environment/Memory/internal/SingletonDeleter.hxx"
+#include "MACE/Environment/Memory/internal/SingletonFactory.hxx"
+#include "MACE/Environment/Memory/internal/SingletonPool.hxx"
 
 #if MACE_SIGNAL_HANDLER
     #include <csignal>
 #endif
 
-namespace MACE::Environment::Detail {
+namespace MACE::Environment::Internal {
 
 EnvironmentBase::EnvironmentBase() :
     NonMoveableBase(),
@@ -29,15 +29,15 @@ EnvironmentBase::EnvironmentBase() :
 
     if (static bool gInstantiated = false;
         gInstantiated) {
-        throw std::logic_error("MACE::Environment::Detail::EnvironmentBase: Trying to construct environment twice");
+        throw std::logic_error("MACE::Environment::Internal::EnvironmentBase: Trying to construct environment twice");
     } else {
         gInstantiated = true;
     }
 
-    fMuteSingletonPool = std::make_unique<Memory::Detail::MuteSingletonPool>();
-    fSingletonPool = std::make_unique<Memory::Detail::SingletonPool>();
-    fSingletonFactory = std::make_unique<Memory::Detail::SingletonFactory>();
-    fSingletonDeleter = std::make_unique<Memory::Detail::SingletonDeleter>();
+    fMuteSingletonPool = std::make_unique<Memory::Internal::MuteSingletonPool>();
+    fSingletonPool = std::make_unique<Memory::Internal::SingletonPool>();
+    fSingletonFactory = std::make_unique<Memory::Internal::SingletonFactory>();
+    fSingletonDeleter = std::make_unique<Memory::Internal::SingletonDeleter>();
 }
 
 EnvironmentBase::~EnvironmentBase() = default;

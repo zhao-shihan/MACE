@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/detail/EnvironmentBase.hxx"
+#include "MACE/Environment/internal/EnvironmentBase.hxx"
 #include "MACE/Environment/Memory/FreeSingleton.hxx"
 #include "MACE/Environment/VerboseLevel.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
@@ -15,18 +15,18 @@ class BasicCLI;
 
 } // namespace CLI
 
-namespace Detail {
+namespace Internal {
 
 class NoCLI {};
 
-} // namespace Detail
+} // namespace Internal
 
 using MACE::Utility::ObserverPtr;
 
-class BasicEnvironment : public Detail::EnvironmentBase,
+class BasicEnvironment : public Internal::EnvironmentBase,
                          public Memory::FreeSingleton<BasicEnvironment> {
 public:
-    template<class ACLI = Detail::NoCLI>
+    template<class ACLI = Internal::NoCLI>
     BasicEnvironment(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
     virtual ~BasicEnvironment() = default;
 

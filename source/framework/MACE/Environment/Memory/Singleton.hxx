@@ -1,9 +1,9 @@
 #pragma once
 
 #include "MACE/Environment/Memory/Concept/Singletonized.hxx"
-#include "MACE/Environment/Memory/detail/ISingletonBase.hxx"
-#include "MACE/Environment/Memory/detail/SingletonFactory.hxx"
-#include "MACE/Environment/Memory/detail/SingletonPool.hxx"
+#include "MACE/Environment/Memory/internal/ISingletonBase.hxx"
+#include "MACE/Environment/Memory/internal/SingletonFactory.hxx"
+#include "MACE/Environment/Memory/internal/SingletonPool.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include <stdexcept>
@@ -147,7 +147,7 @@ using MACE::Utility::ObserverPtr;
 /// MACE::Environment. Call to an Instance() without initialize an environment
 /// has undefined behaviour. Use wisely, think wisely!
 template<class ADerived>
-class Singleton : public Detail::ISingletonBase {
+class Singleton : public Internal::ISingletonBase {
 protected:
     Singleton();
     virtual ~Singleton();
@@ -159,10 +159,10 @@ private:
     static void InstantiateOrFindInstance();
 
 private:
-    static ObserverPtr<Detail::SingletonPool::Node> fgInstanceNode;
+    static ObserverPtr<Internal::SingletonPool::Node> fgInstanceNode;
 };
 
-using SingletonFactory = Detail::SingletonFactory;
+using SingletonFactory = Internal::SingletonFactory;
 
 } // namespace MACE::Environment::Memory
 

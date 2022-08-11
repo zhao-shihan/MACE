@@ -12,7 +12,7 @@
 #include <typeindex>
 #include <typeinfo>
 
-namespace MACE::Environment::Memory::Detail {
+namespace MACE::Environment::Memory::Internal {
 
 using MACE::Utility::ObserverPtr;
 
@@ -43,4 +43,4 @@ private:
 
 } // namespace MACE::Environment::Memory::Detail
 
-#include "MACE/Environment/Memory/detail/MuteSingletonPool.inl"
+#include "MACE/Environment/Memory/internal/MuteSingletonPool.inl"

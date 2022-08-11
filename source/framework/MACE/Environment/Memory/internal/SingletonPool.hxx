@@ -13,7 +13,7 @@
 #include <typeinfo>
 #include <utility>
 
-namespace MACE::Environment::Memory::Detail {
+namespace MACE::Environment::Memory::Internal {
 
 class ISingletonBase;
 
@@ -39,4 +39,4 @@ private:
 
 } // namespace MACE::Environment::Memory::Detail
 
-#include "MACE/Environment/Memory/detail/SingletonPool.inl"
+#include "MACE/Environment/Memory/internal/SingletonPool.inl"

@@ -16,7 +16,7 @@ namespace MACE::Geant4X {
 
 using MACE::Utility::Math::Pow2;
 
-namespace Detail {
+namespace Internal {
 
 FlipG4cout::FlipG4cout() {
     if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
@@ -27,12 +27,12 @@ FlipG4cout::FlipG4cout() {
     }
 }
 
-} // namespace Detail
+} // namespace Internal
 
 MPIRunManager::MPIRunManager() :
-    Detail::PreG4RunManagerInitFlipG4cout(),
+    Internal::PreG4RunManagerInitFlipG4cout(),
     G4RunManager(),
-    Detail::PostG4RunManagerInitFlipG4cout(),
+    Internal::PostG4RunManagerInitFlipG4cout(),
     fTotalNumberOfEventsToBeProcessed(0),
     fEventIDRange(),
     fEventIDCounter(-1),

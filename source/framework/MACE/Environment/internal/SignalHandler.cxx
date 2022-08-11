@@ -1,13 +1,13 @@
 #if MACE_SIGNAL_HANDLER
 
     #include "MACE/Cxx2b/PrintStackTrace.hxx"
-    #include "MACE/Environment/detail/SignalHandler.hxx"
+    #include "MACE/Environment/internal/SignalHandler.hxx"
 
     #include <csignal>
     #include <cstdlib>
     #include <iostream>
 
-namespace MACE::Environment::Detail {
+namespace MACE::Environment::Internal {
 
 extern "C" {
 

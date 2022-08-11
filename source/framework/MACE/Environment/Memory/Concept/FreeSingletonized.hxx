@@ -7,12 +7,12 @@
 
 namespace MACE::Environment::Memory {
 
-namespace Detail {
+namespace Internal {
 
 class FreeSingletonBase;
 class ISingletonBase;
 
-} // namespace Detail
+} // namespace Internal
 
 template<class ADerived>
 class FreeSingleton;
@@ -23,7 +23,7 @@ template<class T>
 concept FreeSingletonized = requires {
     { T::Instance() } -> std::same_as<T&>;
     requires std::derived_from<T, FreeSingleton<T>>;
-    requires not std::is_base_of_v<Detail::ISingletonBase, T>;
+    requires not std::is_base_of_v<Internal::ISingletonBase, T>;
     requires Utility::Concept::NonMoveable<T>;
 };
 

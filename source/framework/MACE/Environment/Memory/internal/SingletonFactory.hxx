@@ -1,14 +1,14 @@
 #pragma once
 
 #include "MACE/Environment/Memory/Concept/Singletonized.hxx"
-#include "MACE/Environment/Memory/detail/SingletonPool.hxx"
+#include "MACE/Environment/Memory/internal/SingletonPool.hxx"
 #include "MACE/Environment/Memory/FreeSingleton.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 
 #include <string>
 #include <typeinfo>
 
-namespace MACE::Environment::Memory::Detail {
+namespace MACE::Environment::Memory::Internal {
 
 /// @brief Implementation detail of MACE::Environment::Memory::Singleton.
 /// Not API.
@@ -20,4 +20,4 @@ public:
 
 } // namespace MACE::Environment::Memory::Detail
 
-#include "MACE/Environment/Memory/detail/SingletonFactory.inl"
+#include "MACE/Environment/Memory/internal/SingletonFactory.inl"

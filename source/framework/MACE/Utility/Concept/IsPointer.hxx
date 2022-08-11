@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Utility/Concept/detail/IsPointer.hxx"
+#include "MACE/Utility/Concept/internal/IsPointer.hxx"
 
 #include <concepts>
 #include <type_traits>
@@ -35,7 +35,7 @@ concept IsPointerOfMaybeConstVolatile = MACE_UTILITY_CONCEPT_IS_POINTER_OF_MAYBE
 
 #undef MACE_UTILITY_CONCEPT_IS_POINTER_OF_MAYBE
 
-#include "MACE/Utility/Concept/detail/AccessToMaybeCVConceptMacro.inl"
+#include "MACE/Utility/Concept/internal/AccessToMaybeCVConceptMacro.inl"
 
 #undef MACE_UTILITY_CONCEPT_ACCESS_TO_MAYBE_CONST
 #undef MACE_UTILITY_CONCEPT_ACCESS_TO_MAYBE_VOLATILE

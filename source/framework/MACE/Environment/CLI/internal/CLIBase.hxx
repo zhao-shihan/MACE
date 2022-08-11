@@ -7,7 +7,7 @@
 #include <optional>
 #include <utility>
 
-namespace MACE::Environment::CLI::Detail {
+namespace MACE::Environment::CLI::Internal {
 
 class CLIBase : public Utility::NonMoveableBase {
 protected:
@@ -33,4 +33,4 @@ private:
 
 } // namespace MACE::Environment::CLI::Detail
 
-#include "MACE/Environment/CLI/detail/CLIBase.inl"
+#include "MACE/Environment/CLI/internal/CLIBase.inl"

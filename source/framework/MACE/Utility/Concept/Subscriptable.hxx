@@ -16,7 +16,7 @@ concept SubscriptableTo = requires(T&& v, std::ptrdiff_t i) {
     { v[i] } -> std::same_as<U>;
 };
 
-#include "MACE/Utility/Concept/detail/AccessToMaybeCVConceptMacro.inl"
+#include "MACE/Utility/Concept/internal/AccessToMaybeCVConceptMacro.inl"
 
 MACE_UTILITY_CONCEPT_ACCESS_TO_MAYBE_CONST(SubscriptableTo)
 #undef MACE_UTILITY_CONCEPT_ACCESS_TO_MAYBE_CONST

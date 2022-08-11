@@ -1,4 +1,4 @@
-namespace MACE::Environment::Memory::Detail {
+namespace MACE::Environment::Memory::Internal {
 
 template<Concept::Singletonized ASingleton>
 [[nodiscard]] SingletonPool::Node& SingletonFactory::InstantiateOrFind() {
