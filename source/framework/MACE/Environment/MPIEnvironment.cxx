@@ -10,7 +10,12 @@
 
 namespace MACE::Environment {
 
+bool MPIEnvironment::fgInitialized = false;
+bool MPIEnvironment::fgFinalized = false;
+
 MPIEnvironment::~MPIEnvironment() {
+    // Update status
+    fgFinalized = true;
     // Destructs the shared communicator
     MACE_CHECKED_MPI_CALL_NOEXCEPT(MPI_Comm_free,
                                    &fNodeComm);
@@ -41,11 +46,11 @@ void MPIEnvironment::PrintStartupMessageBody(int argc, char* argv[]) const {
             << "--------------------> MPI library information (begin) <--------------------\n"
             << mpiLibVersion << '\n'
             << "-------------------->  MPI library information (end)  <--------------------\n";
-        std::cout << " Size of the MPI world communicator: " << fWorldCommSize << '\n';
+        std::cout << " Size of the MPI world communicator: " << fWorldSize << '\n';
         if (OnSingleNode()) {
-            std::cout << " Running on \"" << NodeName() << "\"\n";
+            std::cout << " Running on \"" << GetNodeName() << "\"\n";
         } else {
-            std::cout << " Running on cluster with " << NumberOfNodes() << " nodes:\n";
+            std::cout << " Running on cluster with " << GetNumberOfNodes() << " nodes:\n";
             for (auto&& [nodeSize, nodeName] : std::as_const(fNodeInfoList)) {
                 std::cout << "  Name: " << nodeName << '\t' << " Size: " << nodeSize << '\n';
             }
@@ -69,11 +74,11 @@ void MPIEnvironment::InitializeMPI(int argc, char* argv[]) {
     // Initialize rank id in the world communicator
     MACE_CHECKED_MPI_CALL(MPI_Comm_rank,
                           MPI_COMM_WORLD,
-                          &fWorldCommRank)
+                          &fWorldRank)
     // Initialize size of the world communicator
     MACE_CHECKED_MPI_CALL(MPI_Comm_size,
                           MPI_COMM_WORLD,
-                          &fWorldCommSize)
+                          &fWorldSize)
     // Initialize informations of all nodes
     InitializeNodeInfos();
     // Constructs shared communicator
@@ -85,11 +90,11 @@ void MPIEnvironment::InitializeMPI(int argc, char* argv[]) {
     // Initialize rank id in the local communicator
     MACE_CHECKED_MPI_CALL(MPI_Comm_rank,
                           fNodeComm,
-                          &fNodeCommRank)
+                          &fNodeRank)
     // Initialize size of the local communicator
     MACE_CHECKED_MPI_CALL(MPI_Comm_size,
                           fNodeComm,
-                          &fNodeCommSize)
+                          &fNodeSize)
 }
 
 void MPIEnvironment::InitializeNodeInfos() {
@@ -100,7 +105,7 @@ void MPIEnvironment::InitializeNodeInfos() {
     MACE_CHECKED_MPI_CALL(MPI_Get_processor_name, nodeNameSend.data(), &nameLength)
     // Master collects processor names
     std::vector<NameArray> nodeNamesRecv;
-    if (IsMaster()) { nodeNamesRecv.resize(fWorldCommSize); }
+    if (IsMaster()) { nodeNamesRecv.resize(fWorldSize); }
     MACE_CHECKED_MPI_CALL(MPI_Gather,
                           nodeNameSend.data(),
                           MPI_MAX_PROCESSOR_NAME,
@@ -116,8 +121,8 @@ void MPIEnvironment::InitializeNodeInfos() {
     std::vector<std::pair<int, NameArray>> nodeInfoList;
     // Master find all unique processor names and assign node id and count
     if (IsMaster()) {
-        nodeIdAndCountSend.reserve(fWorldCommSize);
-        nodeInfoList.reserve(fWorldCommSize);
+        nodeIdAndCountSend.reserve(fWorldSize);
+        nodeInfoList.reserve(fWorldSize);
         // Find unique name and assign node id
         int currentNodeId = 0;
         auto currentName = nodeNamesRecv.cbegin();
@@ -166,8 +171,6 @@ void MPIEnvironment::InitializeNodeInfos() {
         nodeInfo.second.shrink_to_fit();
     }
     fNodeInfoList.shrink_to_fit();
-    // Assign local processor information iterator
-    fLocalNodeInfo = std::next(fNodeInfoList.cbegin(), nodeId);
     // Assign local processor id
     fNodeId = nodeId;
 }
