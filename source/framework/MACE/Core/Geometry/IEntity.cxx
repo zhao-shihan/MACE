@@ -1,4 +1,6 @@
 #include "MACE/Core/Geometry/IEntity.hxx"
+#include "MACE/Environment/MPIEnvironment.hxx"
+#include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
 #include "G4SDManager.hh"
 
@@ -92,11 +94,14 @@ void IEntity::RegisterSD(G4VSensitiveDetector* sd) const {
 }
 
 #if MACE_WITH_G4GDML
-void IEntity::WriteSelfAndDesendentsToGDML(std::string_view fileName, std::size_t volumeIndex) const {
+void IEntity::Export(std::filesystem::path gdmlFile, std::size_t volumeIndex) const {
+    if (Environment::MPIEnvironment::Available()) {
+        Utility::MPIUtil::MakeMPIFilePathInPlace(gdmlFile);
+    }
     G4GDMLParser gdml;
     gdml.SetAddPointerToName(false);
     gdml.SetOutputFileOverwrite(true);
-    gdml.Write(fileName.data(), this->GetPhysicalVolume(volumeIndex));
+    gdml.Write(gdmlFile.generic_string(), this->GetPhysicalVolume(volumeIndex));
 }
 #endif
 
