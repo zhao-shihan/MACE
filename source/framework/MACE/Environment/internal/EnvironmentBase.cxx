@@ -1,12 +1,15 @@
 #include "MACE/Environment/internal/EnvironmentBase.hxx"
-#include "MACE/Environment/internal/SignalHandler.hxx"
 #include "MACE/Environment/Memory/internal/MuteSingletonPool.hxx"
 #include "MACE/Environment/Memory/internal/SingletonDeleter.hxx"
 #include "MACE/Environment/Memory/internal/SingletonFactory.hxx"
 #include "MACE/Environment/Memory/internal/SingletonPool.hxx"
 
 #if MACE_SIGNAL_HANDLER
+
+    #include "MACE/Environment/internal/ISOC99SignalHandler.hxx"
+
     #include <csignal>
+
 #endif
 
 namespace MACE::Environment::Internal {
