@@ -13,7 +13,7 @@
 /run/verbose 0
 
 # I/O & Analysis
-/MACE/Analysis/SetResultName                          SimTarget_result
+/MACE/Analysis/SetResultPath                          SimTarget_result
 /MACE/Analysis/EnableYieldAnalysis                    true
 
 # Geometry
@@ -26,7 +26,7 @@
 
 # Muon beam properties
 /MACE/Generator/SurfaceMuon/SetMomentum               28 MeV
-/MACE/Generator/SurfaceMuon/SetMomentumSpreadRMS      1.4 MeV
+/MACE/Generator/SurfaceMuon/SetMomentumSpreadRMS      0.7 MeV
 /MACE/Generator/SurfaceMuon/SetBeamProfileRMS         5 mm
 /MACE/Generator/SurfaceMuon/SetVertexZ                -5 cm
 /MACE/Generator/SurfaceMuon/SetMuonsForEachG4Event    1000
@@ -46,23 +46,14 @@
 # Run
 #############################################################################
 
-# Run 0: Ablated target with spacing 15um, diameter 86um
-/MACE/Geometry/SetAblationExtent 4 cm
-/MACE/Geometry/SetHoleSpacing    15 um
-/MACE/Geometry/SetHoleDiameter   86 um
-/MACE/Geometry/SetHoleDepth      5 mm
-/run/beamOn 80
+# Run 0: Flat target
+/MACE/Geometry/Description/Import flat.yaml
+/run/beamOn                       80
 
-# Run 1: Ablated target with spacing 25um, diameter 86um
-/MACE/Geometry/SetAblationExtent 4 cm
-/MACE/Geometry/SetHoleSpacing    25 um
-/MACE/Geometry/SetHoleDiameter   86 um
-/MACE/Geometry/SetHoleDepth      5 mm
-/run/beamOn 80
+# Run 1: Ablated target with spacing 49.5um, diameter 175um
+/MACE/Geometry/Description/Import hole_0.yaml
+/run/beamOn                       80
 
-# Run 2: Ablated target with spacing 15um, diameter 96um
-/MACE/Geometry/SetAblationExtent 4 cm
-/MACE/Geometry/SetHoleSpacing    15 um
-/MACE/Geometry/SetHoleDiameter   96 um
-/MACE/Geometry/SetHoleDepth      5 mm
-/run/beamOn 80
+# Run 2: Ablated target with spacing 60um, diameter 300um
+/MACE/Geometry/Description/Import hole_1.yaml
+/run/beamOn                       80

@@ -7,7 +7,7 @@ file(GLOB_RECURSE SimTarget_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
 add_executable(SimTarget ${SimTarget_srcs})
 target_link_libraries(SimTarget MACE)
 
-file(GLOB SimTarget_MACROS ${PROJECT_SOURCE_DIR}/macros/*.mac)
+file(GLOB SimTarget_MACROS ${PROJECT_SOURCE_DIR}/macros/*)
 foreach(_macros ${SimTarget_MACROS})
     configure_file(${_macros} ${PROJECT_BINARY_DIR} COPYONLY)
 endforeach()

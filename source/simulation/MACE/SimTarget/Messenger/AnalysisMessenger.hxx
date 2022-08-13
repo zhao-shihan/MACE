@@ -36,7 +36,7 @@ private:
     ObserverPtr<Analysis> fAnalysis;
 
     std::unique_ptr<G4UIdirectory> fDirectory;
-    std::unique_ptr<G4UIcmdWithAString> fSetResultName;
+    std::unique_ptr<G4UIcmdWithAString> fSetResultPath;
     std::unique_ptr<G4UIcmdWithABool> fEnableYieldAnalysis;
 };
 

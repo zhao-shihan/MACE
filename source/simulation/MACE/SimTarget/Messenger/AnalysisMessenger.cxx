@@ -5,6 +5,8 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIdirectory.hh"
 
+#include <string_view>
+
 namespace MACE::SimTarget::Messenger {
 
 AnalysisMessenger::AnalysisMessenger() :
@@ -12,16 +14,16 @@ AnalysisMessenger::AnalysisMessenger() :
     G4UImessenger(),
     fAnalysis(nullptr),
     fDirectory(nullptr),
-    fSetResultName(nullptr),
+    fSetResultPath(nullptr),
     fEnableYieldAnalysis(nullptr) {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Analysis/");
     fDirectory->SetGuidance("MACE::SimTarget::Analysis controller.");
 
-    fSetResultName = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/SetResultName", this),
-    fSetResultName->SetGuidance("Set result name.");
-    fSetResultName->SetParameterName("result name", false);
-    fSetResultName->AvailableForStates(G4State_PreInit);
+    fSetResultPath = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/SetResultPath", this),
+    fSetResultPath->SetGuidance("Set result name.");
+    fSetResultPath->SetParameterName("result name", false);
+    fSetResultPath->AvailableForStates(G4State_PreInit);
 
     fEnableYieldAnalysis = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/EnableYieldAnalysis", this),
     fEnableYieldAnalysis->SetGuidance("Enable auto analysis of yield.");
@@ -32,8 +34,8 @@ AnalysisMessenger::AnalysisMessenger() :
 AnalysisMessenger::~AnalysisMessenger() = default;
 
 void AnalysisMessenger::SetNewValue(ObserverPtr<G4UIcommand> command, G4String value) {
-    if (command == fSetResultName.get()) {
-        fAnalysis->SetResultName(value);
+    if (command == fSetResultPath.get()) {
+        fAnalysis->SetResultPath(std::string_view(value));
     } else if (command == fEnableYieldAnalysis.get()) {
         fAnalysis->EnableYieldAnalysis(fEnableYieldAnalysis->GetNewBoolValue(value));
     }

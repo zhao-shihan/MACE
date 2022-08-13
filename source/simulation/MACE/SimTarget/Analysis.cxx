@@ -13,8 +13,8 @@
 namespace MACE::SimTarget {
 
 Analysis::Analysis() :
-    NonMoveableBase(),
-    fResultName("SimTarget_result"),
+    FreeSingleton<Analysis>(),
+    fResultPath("SimTarget_result"),
     fEnableYieldAnalysis(true),
     fThisRun(nullptr),
     fMuoniumTrackList(0),
@@ -64,7 +64,7 @@ void Analysis::Close() {
 
 void Analysis::OpenResultFile() {
     fResultFile = std::make_unique<TFile>(
-        Utility::MPIUtil::MakeMPIFilePath(fResultName, ".root").c_str(),
+        Utility::MPIUtil::MakeMPIFilePath(fResultPath, ".root").c_str(),
         "recreate");
 }
 
@@ -80,9 +80,9 @@ void Analysis::CloseResultFile() {
 }
 
 void Analysis::OpenYieldFile() {
-    if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
-        mpiEnv.IsMaster()) {
-        fYieldFile = std::make_unique<std::ofstream>(fResultName + "_yield.csv", std::ios::out);
+    if (Environment::MPIEnvironment::Instance().IsMaster()) {
+        const auto yieldPath = std::filesystem::path(fResultPath).concat("_yield.csv");
+        fYieldFile = std::make_unique<std::ofstream>(yieldPath, std::ios::out);
         *fYieldFile << "runID,nMuon,nMFormed,nMTargetDecay,nMVacuumDecay,nMDetectableDecay" << std::endl;
     }
 }
@@ -113,7 +113,7 @@ void Analysis::AnalysisAndWriteYield() {
     if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
         mpiEnv.IsParallel()) {
         std::vector<decltype(yieldData)> yieldDataRecv;
-        if (mpiEnv.IsMaster()) { yieldDataRecv.resize(mpiEnv.WorldCommSize()); }
+        if (mpiEnv.IsMaster()) { yieldDataRecv.resize(mpiEnv.GetWorldSize()); }
         MACE_CHECKED_MPI_CALL(MPI_Gather,
                               yieldData.data(),
                               yieldData.size(),

@@ -1,10 +1,11 @@
 #pragma once
 
 #include "MACE/Core/DataFactory.hxx"
+#include "MACE/Environment/Memory/FreeSingleton.hxx"
 #include "MACE/SimTarget/MuoniumTrack.hxx"
-#include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
+#include <filesystem>
 #include <fstream>
 #include <memory>
 
@@ -17,12 +18,12 @@ namespace MACE::SimTarget {
 using Core::DataFactory;
 using Utility::ObserverPtr;
 
-class Analysis final : public Utility::NonMoveableBase {
+class Analysis final : public Environment::Memory::FreeSingleton<Analysis> {
 public:
     Analysis();
     ~Analysis();
 
-    void SetResultName(std::string_view resultName) { fResultName = resultName; }
+    void SetResultPath(const auto& path) { (fResultPath = std::forward<decltype(path)>(path)).replace_extension(); }
     void EnableYieldAnalysis(bool val) { fEnableYieldAnalysis = val; }
 
     void RunBegin(ObserverPtr<const G4Run> run);
@@ -43,7 +44,7 @@ private:
     void CloseYieldFile();
 
 private:
-    std::string fResultName;
+    std::filesystem::path fResultPath;
     bool fEnableYieldAnalysis;
 
     ObserverPtr<const G4Run> fThisRun;
