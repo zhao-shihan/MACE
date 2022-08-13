@@ -17,7 +17,7 @@ ADerived& FreeSingleton<ADerived>::Instance() {
 
 template<class ADerived>
 void FreeSingleton<ADerived>::FindInstance() {
-    if (const auto optionalNode = Detail::MuteSingletonPool::Instance().Find<ADerived>();
+    if (const auto optionalNode = Internal::MuteSingletonPool::Instance().Find<ADerived>();
         optionalNode.has_value()) {
         if (optionalNode.value() != nullptr) {
             MuteSingleton<ADerived>::fgInstanceNode = std::addressof(optionalNode.value().get());

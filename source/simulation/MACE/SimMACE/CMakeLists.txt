@@ -7,7 +7,7 @@ file(GLOB_RECURSE SimMACE_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
 add_executable(SimMACE ${SimMACE_srcs})
 target_link_libraries(SimMACE MACE)
 
-file(GLOB SimMACE_MACROS ${PROJECT_SOURCE_DIR}/macros/*.mac)
+file(GLOB SimMACE_MACROS ${PROJECT_SOURCE_DIR}/macros/*)
 foreach(_macros ${SimMACE_MACROS})
     configure_file(${_macros} ${PROJECT_BINARY_DIR} COPYONLY)
 endforeach()

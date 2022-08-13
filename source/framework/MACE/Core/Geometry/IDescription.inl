@@ -1,23 +1,71 @@
 namespace MACE::Core::Geometry {
 
-template<typename AValue, typename AReadAs> // clang-format off
+template<typename AValue, typename AReadAs, std::convertible_to<std::string>... AStrings> // clang-format off
     requires std::assignable_from<AValue&, AReadAs>
-void IDescription::ReadValueNode(const YAML::Node& node, const std::string& valueName, AValue& value) { // clang-format on
-    if (const auto valueNode = node[valueName];
-        valueNode.IsDefined()) {
-        value = valueNode.as<AReadAs>();
+void IDescription::ImportValue(const YAML::Node& node, AValue& value, AStrings&&... nodeNames) { // clang-format on
+    const std::optional<const YAML::Node> leaf = UnpackToLeafNodeForImporting(node, nodeNames...);
+    if (leaf.has_value()) {
+        value = leaf->as<AReadAs>();
     } else {
-        std::cout << "Node <" << fName << "::" << valueName << "> not defined, skipping." << std::endl;
+        PrintNodeNotFoundWarning(nodeNames...);
     }
 }
 
-template<typename AReadAs>
-void IDescription::ReadValueNode(const YAML::Node& node, const std::string& valueName, const std::regular_invocable<AReadAs> auto& ReadAction) {
-    if (const auto valueNode = node[valueName];
-        valueNode.IsDefined()) {
-        ReadAction(valueNode.as<AReadAs>());
+template<typename AReadAs, std::convertible_to<std::string>... AStrings>
+void IDescription::ImportValue(const YAML::Node& node, const std::regular_invocable<AReadAs> auto& ImportAction, AStrings&&... nodeNames) {
+    const std::optional<const YAML::Node> leaf = UnpackToLeafNodeForImporting(node, nodeNames...);
+    if (leaf.has_value()) {
+        ImportAction(leaf->as<AReadAs>());
     } else {
-        std::cout << "Node <" << fName << "::" << valueName << "> not defined, skipping." << std::endl;
+        PrintNodeNotFoundWarning(nodeNames...);
+    }
+}
+
+template<typename AValue, typename AWriteAs, std::convertible_to<std::string>... AStrings> // clang-format off
+    requires std::convertible_to<const AValue&, AWriteAs>
+void IDescription::ExportValue(YAML::Node& node, const AValue& value, AStrings&&... nodeNames) const { // clang-format on
+    UnpackToLeafNodeForExporting(node, nodeNames...) = static_cast<AWriteAs>(value);
+}
+
+template<std::convertible_to<std::string>... AStrings>
+std::optional<const YAML::Node> IDescription::UnpackToLeafNodeForImporting(const YAML::Node& node, AStrings&&... nodeNames) {
+    try {
+        std::array<YAML::Node, sizeof...(nodeNames)> leafNodes;
+        std::size_t i = 0;
+        Utility::TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
+                              [&node, &leafNodes, &i](auto&& name) {
+                                  leafNodes[i] = (i == 0 ? node : leafNodes[i - 1])[name];
+                                  ++i;
+                              });
+        return leafNodes.back();
+    } catch (const YAML::InvalidNode&) {
+        return std::nullopt;
+    }
+}
+
+template<std::convertible_to<std::string>... AStrings>
+YAML::Node IDescription::UnpackToLeafNodeForExporting(YAML::Node& node, AStrings&&... nodeNames) const {
+    std::array<YAML::Node, sizeof...(nodeNames)> leafNodes;
+    std::size_t i = 0;
+    Utility::TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
+                          [&node, &leafNodes, &i](auto&& name) {
+                              leafNodes[i] = (i == 0 ? node : leafNodes[i - 1])[name];
+                              ++i;
+                          });
+    return leafNodes.back();
+}
+
+template<std::convertible_to<std::string>... AStrings>
+void IDescription::PrintNodeNotFoundWarning(AStrings&&... nodeNames) const {
+    using namespace Environment;
+    if (const auto& env = Environment::BasicEnvironment::Instance();
+        env.GetVerboseLevel() >= VerboseLevel::Warning) {
+        std::cout << "MACE::Core::Geometry::IDescription: YAML node \"" << fName;
+        Utility::TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
+                              [](auto&& name) {
+                                  std::cout << '/' << name;
+                              });
+        std::cout << "\" not defined, skipping" << std::endl;
     }
 }
 

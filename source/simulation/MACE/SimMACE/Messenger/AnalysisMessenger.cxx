@@ -1,6 +1,8 @@
 #include "MACE/SimMACE/Analysis.hxx"
 #include "MACE/SimMACE/Messenger/AnalysisMessenger.hxx"
 
+#include <string_view>
+
 namespace MACE::SimMACE::Messenger {
 
 AnalysisMessenger::AnalysisMessenger() :
@@ -10,7 +12,7 @@ AnalysisMessenger::AnalysisMessenger() :
     fDirectory("/MACE/Analysis/"),
     fEnableCoincidenceOfEMCal("/MACE/Analysis/EnableCoincidenceOfEMCal", this),
     fEnableCoincidenceOfMCP("/MACE/Analysis/EnableCoincidenceOfMCP", this),
-    fSetResultName("/MACE/Analysis/SetResultName", this) {
+    fSetResultPath("/MACE/Analysis/SetResultPath", this) {
 
     fDirectory.SetGuidance("MACE::SimMACE::Analysis controller.");
 
@@ -22,18 +24,18 @@ AnalysisMessenger::AnalysisMessenger() :
     fEnableCoincidenceOfMCP.SetParameterName("mode", false);
     fEnableCoincidenceOfMCP.AvailableForStates(G4State_Idle);
 
-    fSetResultName.SetGuidance("Set file name.");
-    fSetResultName.SetParameterName("file name", false);
-    fSetResultName.AvailableForStates(G4State_Idle);
+    fSetResultPath.SetGuidance("Set file name.");
+    fSetResultPath.SetParameterName("file name", false);
+    fSetResultPath.AvailableForStates(G4State_Idle);
 }
 
-void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
+void AnalysisMessenger::SetNewValue(ObserverPtr<G4UIcommand> command, G4String value) {
     if (command == std::addressof(fEnableCoincidenceOfEMCal)) {
         fAnalysis->SetEnableCoincidenceOfEMCal(fEnableCoincidenceOfEMCal.GetNewBoolValue(value));
     } else if (command == std::addressof(fEnableCoincidenceOfMCP)) {
         fAnalysis->SetEnableCoincidenceOfMCP(fEnableCoincidenceOfMCP.GetNewBoolValue(value));
-    } else if (command == std::addressof(fSetResultName)) {
-        fAnalysis->SetResultName(value);
+    } else if (command == std::addressof(fSetResultPath)) {
+        fAnalysis->SetResultPath(std::string_view(value));
     }
 }
 

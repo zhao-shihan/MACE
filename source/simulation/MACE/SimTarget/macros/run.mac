@@ -13,40 +13,26 @@
 /run/verbose 0
 
 # I/O & Analysis
-/MACE/Analysis/SetResultName                          SimTarget_result
+/MACE/Analysis/SetResultPath                          SimTarget_result
 /MACE/Analysis/EnableYieldAnalysis                    true
 
 # Geometry
-/MACE/Geometry/SetWorldHalfExtent                     50 50 50 cm
-/MACE/Geometry/SetEnableDegrader                      true
-/MACE/Geometry/SetDegraderWidth                       6 cm
-/MACE/Geometry/SetDegraderThickness                   420 um
-/MACE/Geometry/SetDistanceBetweenDegraderAndTarget    5 mm
-/MACE/Geometry/SetEnableBeamMonitor                   false
-/MACE/Geometry/SetBeamMonitorWidth                    4 cm
-/MACE/Geometry/SetBeamMonitorThickness                500 um
-/MACE/Geometry/SetDistanceBetweenBeamMonitorAndTarget 15 mm
-/MACE/Geometry/SetTargetWidth                         6 cm
-/MACE/Geometry/SetTargetThickness                     1 cm
+#/MACE/Geometry/Description/Import                     geom.yaml
 /MACE/Geometry/SetTargetDensity                       30 mg/cm3
 /MACE/Geometry/SetTemperature                         293.15 K
-/MACE/Geometry/SetAblationExtent                      4 cm
-/MACE/Geometry/SetHoleSpacing                         175 um
-/MACE/Geometry/SetHoleDiameter                        49.5 um
-/MACE/Geometry/SetHoleDepth                           3 mm
 
 # Initialize kernel
 /run/initialize
 
 # Muon beam properties
 /MACE/Generator/SurfaceMuon/SetMomentum               28 MeV
-/MACE/Generator/SurfaceMuon/SetMomentumSpreadRMS      1.4 MeV
+/MACE/Generator/SurfaceMuon/SetMomentumSpreadRMS      0.7 MeV
 /MACE/Generator/SurfaceMuon/SetBeamProfileRMS         5 mm
 /MACE/Generator/SurfaceMuon/SetVertexZ                -5 cm
 /MACE/Generator/SurfaceMuon/SetMuonsForEachG4Event    1000
 
 # Set physics
-/MACE/Physics/MuoniumPhysics/Formation/SetFormationProbability     0.6
+/MACE/Physics/MuoniumPhysics/Formation/SetFormationProbability     0.65
 /MACE/Physics/MuoniumPhysics/Formation/SetConversionProbability    0
 /MACE/Physics/MuoniumPhysics/Transport/SetMeanFreePath             0.2 um
 
@@ -60,23 +46,14 @@
 # Run
 #############################################################################
 
-# Run 0: Ablated target with spacing 15um, diameter 86um
-/MACE/Geometry/SetAblationExtent 4 cm
-/MACE/Geometry/SetHoleSpacing    15 um
-/MACE/Geometry/SetHoleDiameter   86 um
-/MACE/Geometry/SetHoleDepth      5 mm
-/run/beamOn 80
+# Run 0: Flat target
+/MACE/Geometry/Description/Import flat.yaml
+/run/beamOn                       80
 
-# Run 1: Ablated target with spacing 25um, diameter 86um
-/MACE/Geometry/SetAblationExtent 4 cm
-/MACE/Geometry/SetHoleSpacing    25 um
-/MACE/Geometry/SetHoleDiameter   86 um
-/MACE/Geometry/SetHoleDepth      5 mm
-/run/beamOn 80
+# Run 1: Ablated target with spacing 49.5um, diameter 175um
+/MACE/Geometry/Description/Import hole_0.yaml
+/run/beamOn                       80
 
-# Run 2: Ablated target with spacing 15um, diameter 96um
-/MACE/Geometry/SetAblationExtent 4 cm
-/MACE/Geometry/SetHoleSpacing    15 um
-/MACE/Geometry/SetHoleDiameter   96 um
-/MACE/Geometry/SetHoleDepth      5 mm
-/run/beamOn 80
+# Run 2: Ablated target with spacing 60um, diameter 300um
+/MACE/Geometry/Description/Import hole_1.yaml
+/run/beamOn                       80

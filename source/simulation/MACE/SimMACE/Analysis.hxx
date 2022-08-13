@@ -1,11 +1,13 @@
 #pragma once
 
 #include "MACE/Core/DataFactory.hxx"
-#include "MACE/Utility/NonMoveableBase.hxx"
+#include "MACE/Environment/Memory/FreeSingleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
-#include "G4String.hh"
 #include "G4Types.hh"
+
+#include <filesystem>
+#include <utility>
 
 class TFile;
 
@@ -22,12 +24,11 @@ class MCPHit;
 using Core::DataFactory;
 using MACE::Utility::ObserverPtr;
 
-class Analysis final : public Utility::NonMoveableBase {
+class Analysis final : public Environment::Memory::FreeSingleton<Analysis> {
 public:
     Analysis();
 
-    void SetResultName(const G4String& resultName) { fResultName = resultName; }
-    const G4String& GetResultName() const { return fResultName; }
+    void SetResultPath(const auto& path) { (fResultPath = std::forward<decltype(path)>(path)).replace_extension(); }
     void SetEnableCoincidenceOfEMCal(G4bool val) { fEnableCoincidenceOfEMCal = val; }
     void SetEnableCoincidenceOfMCP(G4bool val) { fEnableCoincidenceOfMCP = val; }
 
@@ -37,7 +38,7 @@ public:
     void SubmitEMCalHC(ObserverPtr<const std::vector<Hit::EMCalHit*>> hitList) { fEMCalHitList = hitList; }
     void SubmitMCPHC(ObserverPtr<const std::vector<Hit::MCPHit*>> hitList) { fMCPHitList = hitList; }
     void SubmitSpectrometerHC(ObserverPtr<const std::vector<Hit::CDCHit*>> hitList) { fCDCHitList = hitList; }
-    void WriteEvent(G4int repetitionID);
+    void WriteEvent(G4int repetitionId);
 
 private:
     void WriteTrees();
@@ -45,13 +46,13 @@ private:
 private:
     std::unique_ptr<TFile> fFile;
 
-    G4String fResultName;
+    std::filesystem::path fResultPath;
     G4bool fEnableCoincidenceOfEMCal;
     G4bool fEnableCoincidenceOfMCP;
 
     DataFactory fDataHub;
 
-    G4int fRepetitionIDOfLastG4Event;
+    G4int fRepetitionIdOfLastG4Event;
     std::shared_ptr<TTree> fEMCalHitTree;
     std::shared_ptr<TTree> fMCPHitTree;
     std::shared_ptr<TTree> fCDCHitTree;

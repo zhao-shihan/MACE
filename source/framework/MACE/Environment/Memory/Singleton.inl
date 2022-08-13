@@ -1,12 +1,12 @@
 namespace MACE::Environment::Memory {
 
 template<class ADerived>
-ObserverPtr<Detail::SingletonPool::Node> Singleton<ADerived>::fgInstanceNode = nullptr;
+ObserverPtr<Internal::SingletonPool::Node> Singleton<ADerived>::fgInstanceNode = nullptr;
 
 template<class ADerived>
 Singleton<ADerived>::Singleton() {
     static_assert(Concept::Singletonized<ADerived>);
-    if (Detail::SingletonPool::Instance().Contains<ADerived>()) {
+    if (Internal::SingletonPool::Instance().Contains<ADerived>()) {
         throw std::logic_error(
             std::string("MACE::Environment::Memory::Singleton: Trying to construct ")
                 .append(typeid(ADerived).name())
@@ -32,7 +32,7 @@ ADerived& Singleton<ADerived>::Instance() {
 
 template<class ADerived>
 void Singleton<ADerived>::InstantiateOrFindInstance() {
-    if (auto& node = Detail::SingletonFactory::Instance().InstantiateOrFind<ADerived>();
+    if (auto& node = Internal::SingletonFactory::Instance().InstantiateOrFind<ADerived>();
         node != nullptr) {
         fgInstanceNode = std::addressof(node);
     } else {

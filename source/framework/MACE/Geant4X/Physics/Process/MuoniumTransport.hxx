@@ -29,12 +29,12 @@ private:
     void ProposeRandomFlight(const G4Track& track);
 
 private:
-    enum TransportCondition {
-        kUnknown = -1,
-        kDecaying,
-        kInsideTargetVolume,
-        kExitingTargetVolume,
-        kExitedTargetVolume
+    enum class TransportStatus {
+        Unknown = -1,
+        Decaying,
+        InsideTargetVolume,
+        ExitingTargetVolume,
+        OutsideTargetVolume
     };
 
 private:
@@ -44,7 +44,7 @@ private:
     G4bool fManipulateAllSteps;
 
     G4ParticleChange fParticleChange;
-    TransportCondition fCase;
+    TransportStatus fTransportStatus;
     G4bool fIsExitingTargetVolume;
 };
 

@@ -14,7 +14,7 @@ void SelectorField::ConstructSelf(G4bool checkOverlaps) {
     const auto name = description.GetName();
     const auto radius = description.GetRadius();
     const auto length = description.GetLength();
-    const auto zPosition = description.GetZPosition();
+    const auto zPosition = description.GetAxialPosition();
 
     auto solid = Make<G4Tubs>(
         name,

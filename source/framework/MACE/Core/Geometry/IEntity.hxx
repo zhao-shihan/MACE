@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4EquationOfMotion.hh"
@@ -14,16 +15,19 @@
 #include <memory>
 #include <vector>
 
+#if MACE_WITH_G4GDML
+    #include <filesystem>
+#endif
+
 namespace MACE::Core::Geometry {
 
 using Utility::ObserverPtr;
 
-class IEntity : public std::enable_shared_from_this<IEntity> {
+class IEntity : public Utility::NonMoveableBase,
+                public std::enable_shared_from_this<IEntity> {
 public:
     IEntity();
-    virtual ~IEntity() noexcept = default;
-    IEntity(const IEntity&) = delete;
-    IEntity& operator=(const IEntity&) = delete;
+    virtual ~IEntity() = default;
 
     /// @brief Determines whether we will construct this entity.
     /// Entities could override this function to control whether this will be constructed.
@@ -48,7 +52,7 @@ public:
     void RegisterField(AField* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const;
 
 #if MACE_WITH_G4GDML
-    void WriteSelfAndDesendentsToGDML(std::string_view fileName, std::size_t volumeIndex = 0) const;
+    void Export(std::filesystem::path gdmlFile, std::size_t volumeIndex = 0) const;
 #endif
 
     auto GetLogicalVolumeNum() const { return fLogicalVolumes.size(); }
@@ -69,7 +73,7 @@ protected:
     ObserverPtr<APhysical> Make(Args&&... args);
 
     // shared_ptr points to the mother Entity.
-    auto Mother() const { return std::const_pointer_cast<const IEntity>(fMother); }
+    auto Mother() const { return std::static_pointer_cast<const IEntity>(fMother); }
 
 private:
     virtual void ConstructSelf(G4bool checkOverlaps) = 0;

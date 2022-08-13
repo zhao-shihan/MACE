@@ -1,8 +1,8 @@
 #pragma once
 
 #include "MACE/Environment/Memory/Concept/MuteSingletonized.hxx"
-#include "MACE/Environment/Memory/detail/MuteSingletonBase.hxx"
-#include "MACE/Environment/Memory/detail/MuteSingletonPool.hxx"
+#include "MACE/Environment/Memory/internal/MuteSingletonBase.hxx"
+#include "MACE/Environment/Memory/internal/MuteSingletonPool.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include <stdexcept>
@@ -17,7 +17,7 @@ class FreeSingleton;
 using Utility::ObserverPtr;
 
 template<class ADerived>
-class MuteSingleton : public Detail::MuteSingletonBase {
+class MuteSingleton : public Internal::MuteSingletonBase {
     friend class FreeSingleton<ADerived>;
 
 protected:
@@ -25,7 +25,7 @@ protected:
     ~MuteSingleton();
 
 private:
-    static ObserverPtr<Detail::MuteSingletonPool::Node> fgInstanceNode;
+    static ObserverPtr<Internal::MuteSingletonPool::Node> fgInstanceNode;
 };
 
 } // namespace MACE::Environment::Memory

@@ -11,13 +11,13 @@
 namespace MACE::SimMACE {
 
 Analysis::Analysis() :
-    NonMoveableBase(),
+    FreeSingleton<Analysis>(),
     fFile(nullptr),
-    fResultName("untitled_SimMACE"),
+    fResultPath("untitled_SimMACE"),
     fEnableCoincidenceOfEMCal(true),
     fEnableCoincidenceOfMCP(true),
     fDataHub(),
-    fRepetitionIDOfLastG4Event(std::numeric_limits<decltype(fRepetitionIDOfLastG4Event)>::max()),
+    fRepetitionIdOfLastG4Event(std::numeric_limits<decltype(fRepetitionIdOfLastG4Event)>::max()),
     fEMCalHitTree(nullptr),
     fMCPHitTree(nullptr),
     fCDCHitTree(nullptr),
@@ -30,7 +30,7 @@ Analysis::Analysis() :
 
 void Analysis::Open(Option_t* option) {
     fFile = std::make_unique<TFile>(
-        MACE::Utility::MPIUtil::MakeMPIFilePath(fResultName, ".root").c_str(),
+        Utility::MPIUtil::MakeMPIFilePath(fResultPath, ".root").c_str(),
         option);
 }
 
@@ -41,24 +41,24 @@ void Analysis::Close(Option_t* option) {
     fFile.reset();
 }
 
-void Analysis::WriteEvent(G4int repetitionID) {
+void Analysis::WriteEvent(G4int repetitionId) {
     using namespace Core::DataModel::SimHit;
 
-    if (repetitionID != fRepetitionIDOfLastG4Event) { // means a new repetition or the first repetition
+    if (repetitionId != fRepetitionIdOfLastG4Event) { // means a new repetition or the first repetition
         // last repetition had already come to the end, write its data. If first, skipped inside.
         WriteTrees();
         // create trees for new repetition
-        fEMCalHitTree = fDataHub.CreateTree<EMCalSimHit>(repetitionID);
-        fMCPHitTree = fDataHub.CreateTree<MCPSimHit>(repetitionID);
-        fCDCHitTree = fDataHub.CreateTree<CDCSimHit>(repetitionID);
+        fEMCalHitTree = fDataHub.CreateTree<EMCalSimHit>(repetitionId);
+        fMCPHitTree = fDataHub.CreateTree<MCPSimHit>(repetitionId);
+        fCDCHitTree = fDataHub.CreateTree<CDCSimHit>(repetitionId);
     }
 
     fDataHub.FillTree(*fEMCalHitList, *fEMCalHitTree, true);
     fDataHub.FillTree(*fMCPHitList, *fMCPHitTree, true);
     fDataHub.FillTree(*fCDCHitList, *fCDCHitTree, true);
 
-    // dont forget to update repID!
-    fRepetitionIDOfLastG4Event = repetitionID;
+    // dont forget to update repId!
+    fRepetitionIdOfLastG4Event = repetitionId;
 }
 
 void Analysis::WriteTrees() {

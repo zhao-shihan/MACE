@@ -21,7 +21,7 @@
 /MACE/Generator/SurfaceMuon/SetRepetitionRate         50 Hz
 /MACE/Generator/SurfaceMuon/SetTimeWidthRMS           100 us
 /MACE/Generator/SurfaceMuon/SetMomentum               28 MeV
-/MACE/Generator/SurfaceMuon/SetMomentumSpreadRMS      1.4 MeV
+/MACE/Generator/SurfaceMuon/SetMomentumSpreadRMS      0.7 MeV
 /MACE/Generator/SurfaceMuon/SetBeamProfileRMS         5 mm
 /MACE/Generator/SurfaceMuon/SetVertexZ                -1.5 m
 /MACE/Generator/SurfaceMuon/SetMuonsForEachG4Event    500
@@ -38,7 +38,7 @@
 /MACE/Analysis/EnableCoincidenceOfMCP     true
 
 # Name of output
-/MACE/Analysis/SetResultName              SimMACE_result
+/MACE/Analysis/SetResultPath              SimMACE_result
 
 #############################################################################
 # Visualization settings

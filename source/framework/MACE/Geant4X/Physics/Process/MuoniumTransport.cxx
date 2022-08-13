@@ -6,7 +6,6 @@
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
-#include "G4TransportationManager.hh"
 #include "Randomize.hh"
 
 namespace MACE::Geant4X::Physics::Process {
@@ -20,7 +19,7 @@ MuoniumTransport::MuoniumTransport() :
     fMeanFreePath(200_nm),
     fManipulateAllSteps(false),
     fParticleChange(),
-    fCase(kUnknown),
+    fTransportStatus(TransportStatus::Unknown),
     fIsExitingTargetVolume(false) {
     pParticleChange = std::addressof(fParticleChange);
     Messenger::MuoniumPhysicsMessenger::Instance().SetTo(this);
@@ -33,22 +32,22 @@ G4bool MuoniumTransport::IsApplicable(const G4ParticleDefinition& particle) {
 
 G4VParticleChange* MuoniumTransport::AlongStepDoIt(const G4Track& track, const G4Step&) {
     fParticleChange.Initialize(track);
-    switch (fCase) {
-    case kUnknown:
+    switch (fTransportStatus) {
+    case TransportStatus::Unknown:
         Cxx2b::Unreachable();
         break;
-    case kDecaying:
+    case TransportStatus::Decaying:
         // Do nothing
         break;
-    case kInsideTargetVolume:
+    case TransportStatus::InsideTargetVolume:
         ProposeRandomFlight(track);
         break;
-    case kExitingTargetVolume:
+    case TransportStatus::ExitingTargetVolume:
         // Don't do anything, wait for G4Navigator to update
         // just reset the flag
         fIsExitingTargetVolume = false;
         break;
-    case kExitedTargetVolume:
+    case TransportStatus::OutsideTargetVolume:
         if (track.GetMaterial()->GetState() != kStateGas) {
             fParticleChange.ProposeTrackStatus(fStopButAlive);
         }
@@ -59,17 +58,17 @@ G4VParticleChange* MuoniumTransport::AlongStepDoIt(const G4Track& track, const G
 
 G4double MuoniumTransport::GetContinuousStepLimit(const G4Track& track, G4double, G4double, G4double& safety) {
     if (track.GetProperTime() >= track.GetDynamicParticle()->GetPreAssignedDecayProperTime()) {
-        fCase = kDecaying;
+        fTransportStatus = TransportStatus::Decaying;
         SetGPILSelection(NotCandidateForSelection);
         return safety;
     } else if (fTarget->VolumeContains(track.GetPosition())) {
-        fCase = kInsideTargetVolume;
+        fTransportStatus = TransportStatus::InsideTargetVolume;
         return DBL_MIN;
     } else if (fIsExitingTargetVolume) {
-        fCase = kExitingTargetVolume;
+        fTransportStatus = TransportStatus::ExitingTargetVolume;
         return DBL_MIN;
     } else {
-        fCase = kExitedTargetVolume;
+        fTransportStatus = TransportStatus::OutsideTargetVolume;
         // in other material, could be extracted to another process in future
         if (track.GetMaterial()->GetState() == kStateGas) {
             SetGPILSelection(NotCandidateForSelection);
