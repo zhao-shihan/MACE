@@ -28,7 +28,7 @@ private:
 public:
     void SetTo(ObserverPtr<Analysis> ana) { fAnalysis = ana; }
 
-    void SetNewValue(G4UIcommand* command, G4String value) override;
+    void SetNewValue(ObserverPtr<G4UIcommand> command, G4String value) override;
 
 private:
     ObserverPtr<Analysis> fAnalysis;
@@ -36,7 +36,7 @@ private:
     G4UIdirectory fDirectory;
     G4UIcmdWithABool fEnableCoincidenceOfEMCal;
     G4UIcmdWithABool fEnableCoincidenceOfMCP;
-    G4UIcmdWithAString fSetResultName;
+    G4UIcmdWithAString fSetResultPath;
 };
 
 } // namespace Messenger
