@@ -13,6 +13,8 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIdirectory.hh"
 
+#include <string_view>
+
 namespace MACE::SimTarget::Messenger {
 
 GeometryMessenger::GeometryMessenger() :
@@ -20,18 +22,24 @@ GeometryMessenger::GeometryMessenger() :
     fDetectorConstruction(nullptr),
     fImportDescription(),
     fExportDescription(),
+    fIxportDescription(),
     fSetTargetDensity(),
     fSetTemperature() {
 
     fImportDescription = std::make_unique<G4UIcmdWithAString>("/MACE/Geometry/Description/Import", this);
     fImportDescription->SetGuidance("Import geometry descriptions required by this program from a yaml file.");
     fImportDescription->SetParameterName("yaml", false);
-    fImportDescription->AvailableForStates(G4State_PreInit);
+    fImportDescription->AvailableForStates(G4State_PreInit, G4State_Idle);
 
     fExportDescription = std::make_unique<G4UIcmdWithAString>("/MACE/Geometry/Description/Export", this);
     fExportDescription->SetGuidance("Export geometry descriptions used by this program to a yaml file.");
     fExportDescription->SetParameterName("yaml", false);
     fExportDescription->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+    fIxportDescription = std::make_unique<G4UIcmdWithAString>("/MACE/Geometry/Description/Ixport", this);
+    fIxportDescription->SetGuidance("Import, then immediately export geometry descriptions used by this program.");
+    fIxportDescription->SetParameterName("yaml", false);
+    fIxportDescription->AvailableForStates(G4State_PreInit, G4State_Idle);
 
     fSetTargetDensity = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Geometry/SetTargetDensity", this);
     fSetTargetDensity->SetGuidance("Set target density.");
@@ -46,16 +54,17 @@ GeometryMessenger::GeometryMessenger() :
     fSetTemperature->AvailableForStates(G4State_PreInit);
 }
 
+GeometryMessenger::~GeometryMessenger() = default;
+
 void GeometryMessenger::SetNewValue(ObserverPtr<G4UIcommand> command, G4String value) {
-    using namespace Core::Geometry;
-    using DescriptionsToBeUsed = std::tuple<Description::BeamDegrader,
-                                            Description::BeamMonitor,
-                                            Description::Target,
-                                            Description::World>;
+    using UsedDescriptions = Action::DetectorConstruction::UsedDescriptions;
+    using Core::Geometry::DescriptionIO;
     if (command == fImportDescription.get()) {
-        DescriptionIO::Import<DescriptionsToBeUsed>(value);
+        DescriptionIO::Import<UsedDescriptions>(std::string_view(value));
     } else if (command == fExportDescription.get()) {
-        DescriptionIO::Export<DescriptionsToBeUsed>(value, "SimTarget: geometry description");
+        DescriptionIO::Export<UsedDescriptions>(std::string_view(value), "SimTarget: geometry description");
+    } else if (command == fIxportDescription.get()) {
+        DescriptionIO::Ixport<UsedDescriptions>(std::string_view(value), "SimTarget: geometry description");
     } else if (command == fSetTargetDensity.get()) {
         fDetectorConstruction->SetTargetDensity(fSetTargetDensity->GetNewDoubleValue(value));
     } else if (command == fSetTemperature.get()) {

@@ -32,7 +32,7 @@ class GeometryMessenger final : public Environment::Memory::Singleton<GeometryMe
 
 private:
     GeometryMessenger();
-    ~GeometryMessenger() = default;
+    ~GeometryMessenger();
     GeometryMessenger(const GeometryMessenger&) = delete;
     GeometryMessenger& operator=(const GeometryMessenger&) = delete;
 
@@ -46,6 +46,7 @@ private:
 
     std::unique_ptr<G4UIcmdWithAString> fImportDescription;
     std::unique_ptr<G4UIcmdWithAString> fExportDescription;
+    std::unique_ptr<G4UIcmdWithAString> fIxportDescription;
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetTargetDensity;
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetTemperature;
 };

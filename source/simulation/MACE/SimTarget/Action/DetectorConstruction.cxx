@@ -1,4 +1,9 @@
+#include "MACE/Core/Geometry/Description/BeamDegrader.hxx"
+#include "MACE/Core/Geometry/Description/BeamMonitor.hxx"
 #include "MACE/Core/Geometry/Description/LinacField.hxx"
+#include "MACE/Core/Geometry/Description/Target.hxx"
+#include "MACE/Core/Geometry/Description/World.hxx"
+#include "MACE/Core/Geometry/DescriptionIO.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/BeamDegrader.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/BeamMonitor.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/Target.hxx"
@@ -15,7 +20,7 @@ using namespace MACE::Utility::LiteralUnit::Density;
 using namespace MACE::Utility::LiteralUnit::Temperature;
 
 DetectorConstruction::DetectorConstruction() :
-    NonMoveableBase(),
+    FreeSingleton<DetectorConstruction>(),
     G4VUserDetectorConstruction(),
     fCheckOverlap(false),
     fBeamDegrader(nullptr),
@@ -24,6 +29,9 @@ DetectorConstruction::DetectorConstruction() :
     fWorld(nullptr),
     fDensity(30_mg_cm3),
     fTemperature(293.15_K) {
+    Core::Geometry::DescriptionIO::Import<UsedDescriptions>(std::tuple{
+#include "MACE/SimTarget/DefaultGeometry.inlyaml"
+    });
     Messenger::GeometryMessenger::Instance().SetTo(this);
 }
 
