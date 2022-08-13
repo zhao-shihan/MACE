@@ -1,15 +1,12 @@
 #include "MACE/Environment/internal/EnvironmentBase.hxx"
+#include "MACE/Environment/internal/SignalHandler.hxx"
 #include "MACE/Environment/Memory/internal/MuteSingletonPool.hxx"
 #include "MACE/Environment/Memory/internal/SingletonDeleter.hxx"
 #include "MACE/Environment/Memory/internal/SingletonFactory.hxx"
 #include "MACE/Environment/Memory/internal/SingletonPool.hxx"
 
 #if MACE_SIGNAL_HANDLER
-
-    #include "MACE/Environment/internal/ISOC99SignalHandler.hxx"
-
     #include <csignal>
-
 #endif
 
 namespace MACE::Environment::Internal {
@@ -22,12 +19,12 @@ EnvironmentBase::EnvironmentBase() :
     fSingletonDeleter(nullptr) {
 
 #if MACE_SIGNAL_HANDLER
-    std::signal(SIGABRT, MACE_ISOC99SignalHandler);
-    std::signal(SIGFPE, MACE_ISOC99SignalHandler);
-    std::signal(SIGILL, MACE_ISOC99SignalHandler);
-    std::signal(SIGINT, MACE_ISOC99SignalHandler);
-    std::signal(SIGSEGV, MACE_ISOC99SignalHandler);
-    std::signal(SIGTERM, MACE_ISOC99SignalHandler);
+    std::signal(SIGABRT, MACE_ISOC99_SIGABRT_Handler);
+    std::signal(SIGFPE, MACE_ISOC99_SIGFPE_SIGILL_SIGSEGV_Handler);
+    std::signal(SIGILL, MACE_ISOC99_SIGFPE_SIGILL_SIGSEGV_Handler);
+    std::signal(SIGINT, MACE_ISOC99_SIGINT_SIGTERM_Handler);
+    std::signal(SIGSEGV, MACE_ISOC99_SIGFPE_SIGILL_SIGSEGV_Handler);
+    std::signal(SIGTERM, MACE_ISOC99_SIGINT_SIGTERM_Handler);
 #endif
 
     if (static bool gInstantiated = false;
