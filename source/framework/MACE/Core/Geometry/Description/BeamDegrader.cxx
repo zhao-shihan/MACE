@@ -13,7 +13,7 @@ BeamDegrader::BeamDegrader() :
     ISingletonDescription<BeamDegrader>(__func__),
     fIsEnabled(true),
     fWidth(6_cm),
-    fThickness(420_um),
+    fThickness(430_um),
     fDistanceToTargetSurface(5_mm) {}
 
 HepGeom::Transform3D BeamDegrader::CalcTransform() const {

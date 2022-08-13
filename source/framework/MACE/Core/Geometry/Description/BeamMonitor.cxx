@@ -14,7 +14,7 @@ BeamMonitor::BeamMonitor() :
     fIsEnabled(false),
     fWidth(4_cm),
     fThickness(500_um),
-    fDistanceToTargetSurface(15_mm) {}
+    fDistanceToTargetSurface(5_mm) {}
 
 HepGeom::Transform3D BeamMonitor::CalcTransform() const {
     switch (const auto& target = Target::Instance();

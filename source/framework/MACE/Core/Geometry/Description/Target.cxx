@@ -105,8 +105,8 @@ HepGeom::Transform3D Target::Cuboid::CalcTransform() const {
 Target::Cuboid::Hole::Hole() :
     DetailBase<Hole>(),
     fHalfExtent(4_cm / 2),
-    fSpacing(175_um),
-    fRadius(49.5_um / 2),
+    fSpacing(49.5_um),
+    fRadius(175_um / 2),
     fDepth(3_mm),
     fPitch(fSpacing + 2 * fRadius) {}
 
