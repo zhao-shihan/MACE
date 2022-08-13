@@ -159,7 +159,7 @@ int main(int argc, char** argv) {
 
 #if MACE_WITH_G4GDML
 
-    fWorld->WriteSelfAndDesendentsToGDML("test.gdml");
+    fWorld->Export("test.gdml");
 
     auto geoManager = std::make_unique<TGeoManager>("MACEGeom", "MACE Geometry");
     geoManager->Import("test.gdml");
