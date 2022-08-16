@@ -2,7 +2,7 @@ namespace MACE::Core::DataModel::BranchSocket {
 
 template<IsROOTFundamental AROOTFundamental, int ASize>
 VectorBranchSocket<AROOTFundamental, ASize>::VectorBranchSocket(const TString& branchName, const std::array<TString, ASize>& leafNames, const std::array<AROOTFundamental, ASize>& defaultValues) :
-    IBranchSocket<Eigen::Vector<AROOTFundamental, ASize>>(branchName),
+    IBranchSocket<Eigen34::Vector<AROOTFundamental, ASize>>(branchName),
     fLeafList(""),
     fVector() {
     // Construct leaf list
