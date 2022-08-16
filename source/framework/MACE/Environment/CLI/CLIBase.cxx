@@ -1,16 +1,16 @@
-#include "MACE/Environment/CLI/internal/CLIBase.hxx"
+#include "MACE/Environment/CLI/CLIBase.hxx"
 #include "MACE/Version.hxx"
 
 #include <stdexcept>
 
-namespace MACE::Environment::CLI::internal {
+namespace MACE::Environment::CLI {
 
 CLIBase::CLIBase() :
     NonMoveableBase(),
     fArguments(std::nullopt),
     fArgParser({}, MACE_VERSION_STRING, argparse::default_arguments::none) {
     if (static bool gInstantiated = false; gInstantiated) {
-        throw std::logic_error("MACE::Environment::CLI::internal::CLIBase: Trying to construct CLI twice");
+        throw std::logic_error("MACE::Environment::CLI::CLIBase: Trying to construct CLI twice");
     } else {
         gInstantiated = true;
     }
@@ -47,4 +47,4 @@ const std::pair<int, char**>& CLIBase::GetArgcArgv() const {
     throw std::logic_error("MACE::Environment::CLI: Command line arguments has not been parsed");
 }
 
-} // namespace MACE::Environment::CLI::internal
+} // namespace MACE::Environment::CLI

@@ -1,13 +1,13 @@
 #pragma once
 
-#include "MACE/Environment/CLI/internal/CLIBase.hxx"
+#include "MACE/Environment/CLI/CLIBase.hxx"
 #include "MACE/Environment/VerboseLevel.hxx"
 
 #include <optional>
 
 namespace MACE::Environment::CLI {
 
-class BasicCLI : public internal::CLIBase {
+class BasicCLI : public CLIBase {
 public:
     BasicCLI();
     virtual ~BasicCLI() = default;
