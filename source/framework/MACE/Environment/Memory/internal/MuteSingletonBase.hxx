@@ -2,7 +2,7 @@
 
 #include "MACE/Utility/NonMoveableBase.hxx"
 
-namespace MACE::Environment::Memory::Internal {
+namespace MACE::Environment::Memory::internal {
 
 /// @brief Implementation detail of MACE::Environment::Memory::MuteSingleton.
 /// Not API. Just a signature of mute singleton.
@@ -12,4 +12,4 @@ protected:
     ~MuteSingletonBase() = default;
 };
 
-} // namespace MACE::Environment::Memory::Internal
+} // namespace MACE::Environment::Memory::internal

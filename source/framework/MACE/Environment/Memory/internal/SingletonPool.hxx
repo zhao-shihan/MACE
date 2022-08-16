@@ -13,7 +13,7 @@
 #include <typeinfo>
 #include <utility>
 
-namespace MACE::Environment::Memory::Internal {
+namespace MACE::Environment::Memory::internal {
 
 class ISingletonBase;
 
@@ -37,6 +37,6 @@ private:
     std::map<const std::type_index, std::pair<Node, const std::pair<std::size_t, BaseNode>>> fInstanceMap;
 };
 
-} // namespace MACE::Environment::Memory::Internal
+} // namespace MACE::Environment::Memory::internal
 
 #include "MACE/Environment/Memory/internal/SingletonPool.inl"

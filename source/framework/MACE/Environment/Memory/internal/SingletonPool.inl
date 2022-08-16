@@ -1,4 +1,4 @@
-namespace MACE::Environment::Memory::Internal {
+namespace MACE::Environment::Memory::internal {
 
 template<Concept::Singletonized ASingleton>
 [[nodiscard]] std::optional<std::reference_wrapper<SingletonPool::Node>> SingletonPool::Find() {
@@ -19,11 +19,11 @@ template<Concept::Singletonized ASingleton>
         return iter->second.first;
     } else {
         throw std::logic_error(
-            std::string("MACE::Environment::Memory::Internal::SingletonPool::Insert: "
+            std::string("MACE::Environment::Memory::internal::SingletonPool::Insert: "
                         "Instance of type ")
                 .append(typeid(ASingleton).name())
                 .append(" already exists"));
     }
 }
 
-} // namespace MACE::Environment::Memory::Internal
+} // namespace MACE::Environment::Memory::internal

@@ -12,7 +12,7 @@
 
 #endif
 
-namespace MACE::Environment::Internal {
+namespace MACE::Environment::internal {
 
 EnvironmentBase::EnvironmentBase() :
     NonMoveableBase(),
@@ -32,17 +32,17 @@ EnvironmentBase::EnvironmentBase() :
 
     if (static bool gInstantiated = false;
         gInstantiated) {
-        throw std::logic_error("MACE::Environment::Internal::EnvironmentBase: Trying to construct environment twice");
+        throw std::logic_error("MACE::Environment::internal::EnvironmentBase: Trying to construct environment twice");
     } else {
         gInstantiated = true;
     }
 
-    fMuteSingletonPool = std::make_unique<Memory::Internal::MuteSingletonPool>();
-    fSingletonPool = std::make_unique<Memory::Internal::SingletonPool>();
-    fSingletonFactory = std::make_unique<Memory::Internal::SingletonFactory>();
-    fSingletonDeleter = std::make_unique<Memory::Internal::SingletonDeleter>();
+    fMuteSingletonPool = std::make_unique<Memory::internal::MuteSingletonPool>();
+    fSingletonPool = std::make_unique<Memory::internal::SingletonPool>();
+    fSingletonFactory = std::make_unique<Memory::internal::SingletonFactory>();
+    fSingletonDeleter = std::make_unique<Memory::internal::SingletonDeleter>();
 }
 
 EnvironmentBase::~EnvironmentBase() = default;
 
-} // namespace MACE::Environment::Internal
+} // namespace MACE::Environment::internal

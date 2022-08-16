@@ -7,7 +7,7 @@
 #include <optional>
 #include <utility>
 
-namespace MACE::Environment::CLI::Internal {
+namespace MACE::Environment::CLI::internal {
 
 class CLIBase : public Utility::NonMoveableBase {
 protected:
@@ -31,6 +31,6 @@ private:
     argparse::ArgumentParser fArgParser;
 };
 
-} // namespace MACE::Environment::CLI::Internal
+} // namespace MACE::Environment::CLI::internal
 
 #include "MACE/Environment/CLI/internal/CLIBase.inl"

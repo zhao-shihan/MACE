@@ -1,4 +1,4 @@
-namespace MACE::Environment::Memory::Internal {
+namespace MACE::Environment::Memory::internal {
 
 template<Concept::Singletonized ASingleton>
 [[nodiscard]] SingletonPool::Node& SingletonFactory::InstantiateOrFind() {
@@ -39,4 +39,4 @@ template<Concept::Singletonized ASingleton>
     //   look up for the type and return the corresponding pointer value.
 }
 
-} // namespace MACE::Environment::Memory::Internal
+} // namespace MACE::Environment::Memory::internal

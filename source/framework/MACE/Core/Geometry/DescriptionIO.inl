@@ -1,6 +1,6 @@
 namespace MACE::Core::Geometry {
 
-namespace Internal {
+namespace internal {
 
 template<std::intmax_t i, class ADescriptionTuple>
 struct FillDescriptionArray {
@@ -9,13 +9,13 @@ struct FillDescriptionArray {
     }
 };
 
-} // namespace Internal
+} // namespace internal
 
 template<InstantiatedFrom<std::tuple> ADescriptionTuple>
 void DescriptionIO::Import(const std::filesystem::path& yamlFile) {
     std::array<ObserverPtr<IDescription>, std::tuple_size_v<ADescriptionTuple>> descriptions;
     Utility::StaticForEach<0, descriptions.size(),
-                           Internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
+                           internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
     ImportImpl(yamlFile, descriptions);
 }
 
@@ -23,7 +23,7 @@ template<InstantiatedFrom<std::tuple> ADescriptionTuple>
 void DescriptionIO::Export(const std::filesystem::path& yamlFile, const std::string& fileComment) {
     std::array<ObserverPtr<IDescription>, std::tuple_size_v<ADescriptionTuple>> descriptions;
     Utility::StaticForEach<0, descriptions.size(),
-                           Internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
+                           internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
     ExportImpl(yamlFile, fileComment, descriptions);
 }
 
@@ -31,7 +31,7 @@ template<InstantiatedFrom<std::tuple> ADescriptionTuple>
 void DescriptionIO::Ixport(const std::filesystem::path& yamlFile, const std::string& fileComment) {
     std::array<ObserverPtr<IDescription>, std::tuple_size_v<ADescriptionTuple>> descriptions;
     Utility::StaticForEach<0, descriptions.size(),
-                           Internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
+                           internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
     IxportImpl(yamlFile, fileComment, descriptions);
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 #if MACE_SIGNAL_HANDLER
 
-namespace MACE::Environment::Internal {
+namespace MACE::Environment::internal {
 
 extern "C" {
 
@@ -14,6 +14,6 @@ extern "C" {
 
 } // extern "C"
 
-} // namespace MACE::Environment::Internal
+} // namespace MACE::Environment::internal
 
 #endif

@@ -14,7 +14,7 @@ namespace MACE::Environment {
 class MPIEnvironment : public BasicEnvironment,
                        public Memory::FreeSingleton<MPIEnvironment> {
 public:
-    template<class ACLI = Internal::NoCLI>
+    template<class ACLI = internal::NoCLI>
     MPIEnvironment(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
     virtual ~MPIEnvironment();
 

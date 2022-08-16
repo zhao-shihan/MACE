@@ -1,4 +1,4 @@
-namespace MACE::Environment::Memory::Internal {
+namespace MACE::Environment::Memory::internal {
 
 template<Concept::MuteSingletonized AMuteSingleton>
 [[nodiscard]] std::optional<std::reference_wrapper<MuteSingletonPool::Node>> MuteSingletonPool::Find() {
@@ -17,11 +17,11 @@ template<Concept::MuteSingletonized AMuteSingleton>
         return iter->second;
     } else {
         throw std::logic_error(
-            std::string("MACE::Environment::Memory::Internal::MuteSingletonPool::Insert: "
+            std::string("MACE::Environment::Memory::internal::MuteSingletonPool::Insert: "
                         "Instance of type ")
                 .append(typeid(AMuteSingleton).name())
                 .append(" already exists"));
     }
 }
 
-} // namespace MACE::Environment::Memory::Internal
+} // namespace MACE::Environment::Memory::internal

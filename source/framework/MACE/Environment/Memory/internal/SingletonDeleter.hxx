@@ -2,7 +2,7 @@
 
 #include "MACE/Environment/Memory/MuteSingleton.hxx"
 
-namespace MACE::Environment::Memory::Internal {
+namespace MACE::Environment::Memory::internal {
 
 /// @brief Implementation detail of MACE::Environment::Memory::Singleton.
 /// Not API.
@@ -11,4 +11,4 @@ public:
     ~SingletonDeleter();
 };
 
-} // namespace MACE::Environment::Memory::Internal
+} // namespace MACE::Environment::Memory::internal

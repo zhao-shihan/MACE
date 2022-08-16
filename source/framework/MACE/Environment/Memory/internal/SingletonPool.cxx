@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-namespace MACE::Environment::Memory::Internal {
+namespace MACE::Environment::Memory::internal {
 
 [[nodiscard]] std::vector<SingletonPool::BaseNode> SingletonPool::GetUndeletedInReverseInsertionOrder() const {
     std::vector<std::pair<std::size_t, BaseNode>> undeletedListWithId;
@@ -27,4 +27,4 @@ namespace MACE::Environment::Memory::Internal {
     return undeletedList;
 }
 
-} // namespace MACE::Environment::Memory::Internal
+} // namespace MACE::Environment::Memory::internal

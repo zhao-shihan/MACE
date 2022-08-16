@@ -1,4 +1,4 @@
-namespace MACE::Environment::CLI::Internal {
+namespace MACE::Environment::CLI::internal {
 
 template<typename... Args>
 argparse::Argument& CLIBase::AddArgument(Args&&... args) {
@@ -9,4 +9,4 @@ argparse::Argument& CLIBase::AddArgument(Args&&... args) {
     }
 }
 
-} // namespace MACE::Environment::CLI::Internal
+} // namespace MACE::Environment::CLI::internal

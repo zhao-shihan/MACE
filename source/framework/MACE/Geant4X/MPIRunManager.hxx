@@ -9,7 +9,7 @@
 
 namespace MACE::Geant4X {
 
-namespace Internal {
+namespace internal {
 
 class FlipG4cout {
 protected:
@@ -20,11 +20,11 @@ class PreG4RunManagerInitFlipG4cout : private FlipG4cout {};
 
 class PostG4RunManagerInitFlipG4cout : private FlipG4cout {};
 
-} // namespace Internal
+} // namespace internal
 
-class MPIRunManager : private Internal::PreG4RunManagerInitFlipG4cout,
+class MPIRunManager : private internal::PreG4RunManagerInitFlipG4cout,
                       public G4RunManager,
-                      private Internal::PostG4RunManagerInitFlipG4cout {
+                      private internal::PostG4RunManagerInitFlipG4cout {
 public:
     MPIRunManager();
     virtual ~MPIRunManager() = default;

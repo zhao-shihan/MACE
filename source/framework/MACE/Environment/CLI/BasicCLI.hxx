@@ -7,7 +7,7 @@
 
 namespace MACE::Environment::CLI {
 
-class BasicCLI : public Internal::CLIBase {
+class BasicCLI : public internal::CLIBase {
 public:
     BasicCLI();
     virtual ~BasicCLI() = default;

@@ -6,16 +6,16 @@
 
 namespace MACE::Environment {
 
-namespace Memory::Internal {
+namespace Memory::internal {
 
 class MuteSingletonPool;
 class SingletonDeleter;
 class SingletonFactory;
 class SingletonPool;
 
-} // namespace Memory::Internal
+} // namespace Memory::internal
 
-namespace Internal {
+namespace internal {
 
 class EnvironmentBase : public Utility::NonMoveableBase {
 protected:
@@ -23,12 +23,12 @@ protected:
     ~EnvironmentBase();
 
 private:
-    std::unique_ptr<Memory::Internal::MuteSingletonPool> fMuteSingletonPool;
-    std::unique_ptr<Memory::Internal::SingletonPool> fSingletonPool;
-    std::unique_ptr<Memory::Internal::SingletonFactory> fSingletonFactory;
-    std::unique_ptr<Memory::Internal::SingletonDeleter> fSingletonDeleter;
+    std::unique_ptr<Memory::internal::MuteSingletonPool> fMuteSingletonPool;
+    std::unique_ptr<Memory::internal::SingletonPool> fSingletonPool;
+    std::unique_ptr<Memory::internal::SingletonFactory> fSingletonFactory;
+    std::unique_ptr<Memory::internal::SingletonDeleter> fSingletonDeleter;
 };
 
-} // namespace Internal
+} // namespace internal
 
 } // namespace MACE::Environment

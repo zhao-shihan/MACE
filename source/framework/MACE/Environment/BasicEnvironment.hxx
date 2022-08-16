@@ -15,18 +15,18 @@ class BasicCLI;
 
 } // namespace CLI
 
-namespace Internal {
+namespace internal {
 
 class NoCLI {};
 
-} // namespace Internal
+} // namespace internal
 
 using MACE::Utility::ObserverPtr;
 
-class BasicEnvironment : public Internal::EnvironmentBase,
+class BasicEnvironment : public internal::EnvironmentBase,
                          public Memory::FreeSingleton<BasicEnvironment> {
 public:
-    template<class ACLI = Internal::NoCLI>
+    template<class ACLI = internal::NoCLI>
     BasicEnvironment(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
     virtual ~BasicEnvironment() = default;
 

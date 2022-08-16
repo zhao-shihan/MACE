@@ -8,7 +8,7 @@
 #include <string>
 #include <typeinfo>
 
-namespace MACE::Environment::Memory::Internal {
+namespace MACE::Environment::Memory::internal {
 
 /// @brief Implementation detail of MACE::Environment::Memory::Singleton.
 /// Not API.
@@ -18,6 +18,6 @@ public:
     [[nodiscard]] SingletonPool::Node& InstantiateOrFind();
 };
 
-} // namespace MACE::Environment::Memory::Internal
+} // namespace MACE::Environment::Memory::internal
 
 #include "MACE/Environment/Memory/internal/SingletonFactory.inl"

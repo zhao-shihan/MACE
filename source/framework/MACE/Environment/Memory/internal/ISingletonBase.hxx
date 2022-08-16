@@ -2,7 +2,7 @@
 
 #include "MACE/Utility/NonMoveableBase.hxx"
 
-namespace MACE::Environment::Memory::Internal {
+namespace MACE::Environment::Memory::internal {
 
 /// @brief Implementation detail of MACE::Environment::Memory::Singleton.
 /// Not API.
@@ -16,4 +16,4 @@ protected:
     virtual ~ISingletonBase() = 0;
 };
 
-} // namespace MACE::Environment::Memory::Internal
+} // namespace MACE::Environment::Memory::internal

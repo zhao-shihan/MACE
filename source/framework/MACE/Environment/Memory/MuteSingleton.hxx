@@ -17,7 +17,7 @@ class FreeSingleton;
 using Utility::ObserverPtr;
 
 template<class ADerived>
-class MuteSingleton : public Internal::MuteSingletonBase {
+class MuteSingleton : public internal::MuteSingletonBase {
     friend class FreeSingleton<ADerived>;
 
 protected:
@@ -25,7 +25,7 @@ protected:
     ~MuteSingleton();
 
 private:
-    static ObserverPtr<Internal::MuteSingletonPool::Node> fgInstanceNode;
+    static ObserverPtr<internal::MuteSingletonPool::Node> fgInstanceNode;
 };
 
 } // namespace MACE::Environment::Memory

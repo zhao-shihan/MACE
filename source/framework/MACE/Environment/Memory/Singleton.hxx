@@ -147,7 +147,7 @@ using MACE::Utility::ObserverPtr;
 /// MACE::Environment. Call to an Instance() without initialize an environment
 /// has undefined behaviour. Use wisely, think wisely!
 template<class ADerived>
-class Singleton : public Internal::ISingletonBase {
+class Singleton : public internal::ISingletonBase {
 protected:
     Singleton();
     virtual ~Singleton();
@@ -159,10 +159,10 @@ private:
     static void InstantiateOrFindInstance();
 
 private:
-    static ObserverPtr<Internal::SingletonPool::Node> fgInstanceNode;
+    static ObserverPtr<internal::SingletonPool::Node> fgInstanceNode;
 };
 
-using SingletonFactory = Internal::SingletonFactory;
+using SingletonFactory = internal::SingletonFactory;
 
 } // namespace MACE::Environment::Memory
 

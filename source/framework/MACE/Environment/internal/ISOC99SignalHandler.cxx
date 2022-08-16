@@ -7,7 +7,7 @@
     #include <cstdlib>
     #include <iostream>
 
-namespace MACE::Environment::Internal {
+namespace MACE::Environment::internal {
 
 extern "C" {
 
@@ -56,6 +56,6 @@ extern "C" {
 
 } // extern "C"
 
-} // namespace MACE::Environment::Internal
+} // namespace MACE::Environment::internal
 
 #endif

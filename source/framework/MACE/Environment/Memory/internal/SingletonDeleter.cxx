@@ -2,7 +2,7 @@
 #include "MACE/Environment/Memory/internal/SingletonDeleter.hxx"
 #include "MACE/Environment/Memory/internal/SingletonPool.hxx"
 
-namespace MACE::Environment::Memory::Internal {
+namespace MACE::Environment::Memory::internal {
 
 SingletonDeleter::~SingletonDeleter() {
     const auto instancesToBeDeleted = SingletonPool::Instance().GetUndeletedInReverseInsertionOrder();
@@ -11,4 +11,4 @@ SingletonDeleter::~SingletonDeleter() {
     }
 }
 
-} // namespace MACE::Environment::Memory::Internal
+} // namespace MACE::Environment::Memory::internal
