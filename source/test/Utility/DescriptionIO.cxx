@@ -1,6 +1,6 @@
+#include "MACE/Compatibility/Std2b/ToUnderlying.hxx"
 #include "MACE/Core/Geometry/Description/All.hxx"
 #include "MACE/Core/Geometry/DescriptionIO.hxx"
-#include "MACE/Compatibility/Std2b/ToUnderlying.hxx"
 #include "MACE/Environment/BasicEnvironment.hxx"
 
 #include <random>

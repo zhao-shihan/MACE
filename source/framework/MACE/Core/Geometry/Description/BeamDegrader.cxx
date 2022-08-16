@@ -1,6 +1,6 @@
+#include "MACE/Compatibility/Std2b/Unreachable.hxx"
 #include "MACE/Core/Geometry/Description/BeamDegrader.hxx"
 #include "MACE/Core/Geometry/Description/Target.hxx"
-#include "MACE/Compatibility/Std2b/Unreachable.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
 #include "CLHEP/Vector/Rotation.h"
