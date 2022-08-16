@@ -1,6 +1,6 @@
 #include "MACE/Core/Geometry/Description/BeamDegrader.hxx"
 #include "MACE/Core/Geometry/Description/Target.hxx"
-#include "MACE/Cxx2b/Unreachable.hxx"
+#include "MACE/Compatibility/Std2b/Unreachable.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
 #include "CLHEP/Vector/Rotation.h"
@@ -24,7 +24,7 @@ HepGeom::Transform3D BeamDegrader::CalcTransform() const {
         const auto transZ = cuboidTarget.CalcTransform().getTranslation().z() - cuboidTarget.GetThickness() / 2 - fThickness / 2 - fDistanceToTargetSurface;
         return HepGeom::Transform3D(CLHEP::HepRotation(), CLHEP::Hep3Vector(0, 0, transZ));
     }
-    Cxx2b::Unreachable();
+    Std2b::Unreachable();
 }
 
 void BeamDegrader::ImportValues(const YAML::Node& node) {

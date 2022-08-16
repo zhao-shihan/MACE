@@ -6,7 +6,7 @@
     #include <utility>
 #endif
 
-namespace MACE::Cxx2b {
+namespace MACE::Compatibility::Std2b {
 
 [[noreturn]] inline void Unreachable() {
 #ifdef __cpp_lib_unreachable // C++2b
@@ -20,4 +20,4 @@ namespace MACE::Cxx2b {
 #endif
 }
 
-} // namespace MACE::Cxx2b
+} // namespace MACE::Compatibility::Std2b

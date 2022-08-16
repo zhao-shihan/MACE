@@ -8,7 +8,7 @@
     #include <type_traits>
 #endif
 
-namespace MACE::Cxx2b {
+namespace MACE::Compatibility::Std2b {
 
 template<class AEnum>
 constexpr std::underlying_type_t<AEnum> ToUnderlying(AEnum enumValue) noexcept {
@@ -19,4 +19,4 @@ constexpr std::underlying_type_t<AEnum> ToUnderlying(AEnum enumValue) noexcept {
 #endif
 }
 
-} // namespace MACE::Cxx2b
+} // namespace MACE::Compatibility::Std2b

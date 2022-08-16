@@ -1,4 +1,4 @@
-#include "MACE/Cxx2b/PrintStackTrace.hxx"
+#include "MACE/Utility/PrintStackTrace.hxx"
 
 #include <version>
 
@@ -9,7 +9,7 @@
     #include "TSystem.h"
 #endif
 
-namespace MACE::Cxx2b {
+namespace MACE::Utility {
 
 void PrintStackTrace() {
 #ifdef __cpp_lib_stacktrace // C++2b
@@ -21,4 +21,4 @@ void PrintStackTrace() {
 #endif
 }
 
-} // namespace MACE::Cxx2b
+} // namespace MACE::Utility

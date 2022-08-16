@@ -1,4 +1,4 @@
-#include "MACE/Cxx2b/ToUnderlying.hxx"
+#include "MACE/Compatibility/Std2b/ToUnderlying.hxx"
 #include "MACE/Environment/CLI/BasicCLI.hxx"
 #include "MACE/Version.hxx"
 
@@ -6,6 +6,8 @@
 #include <stdexcept>
 
 namespace MACE::Environment::CLI {
+
+namespace Std2b = Compatibility::Std2b;
 
 BasicCLI::BasicCLI() :
     CLIBase() {
@@ -27,9 +29,9 @@ BasicCLI::BasicCLI() :
         .scan<'i', int>()
         .help("Set verbose level. (-2: quiet, -1: error, 0: warning, 1: verbose, 2: more verbose)")
         .action([](const std::string& argVerbose) {
-            constexpr auto low = Cxx2b::ToUnderlying(VerboseLevel::Quiet);
-            constexpr auto up = Cxx2b::ToUnderlying(VerboseLevel::MoreVerbose);
-            auto parsedVerbose = Cxx2b::ToUnderlying(VerboseLevel::Undefined);
+            constexpr auto low = Std2b::ToUnderlying(VerboseLevel::Quiet);
+            constexpr auto up = Std2b::ToUnderlying(VerboseLevel::MoreVerbose);
+            auto parsedVerbose = Std2b::ToUnderlying(VerboseLevel::Undefined);
             std::from_chars(argVerbose.data(), argVerbose.data() + argVerbose.size(), parsedVerbose);
             if (parsedVerbose < low or parsedVerbose > up) {
                 throw std::runtime_error(std::string("-V --verbose: '")

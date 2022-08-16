@@ -1,6 +1,6 @@
 #if MACE_SIGNAL_HANDLER
 
-    #include "MACE/Cxx2b/PrintStackTrace.hxx"
+    #include "MACE/Utility/PrintStackTrace.hxx"
     #include "MACE/Environment/internal/ISOC99SignalHandler.hxx"
 
     #include <csignal>
@@ -21,7 +21,7 @@ extern "C" {
         break;
     }
     std::cerr << std::endl;
-    Cxx2b::PrintStackTrace();
+    Utility::PrintStackTrace();
     std::cerr << std::endl;
     std::quick_exit(EXIT_FAILURE);
 }
@@ -30,7 +30,7 @@ extern "C" {
     std::signal(SIGABRT, SIG_DFL);
     std::cerr << "\n ***** ABORT (SIGABRT) *****\n"
               << std::endl;
-    Cxx2b::PrintStackTrace();
+    Utility::PrintStackTrace();
     std::cerr << std::endl;
     std::abort();
 }
@@ -49,7 +49,7 @@ extern "C" {
         break;
     }
     std::cerr << std::endl;
-    Cxx2b::PrintStackTrace();
+    Utility::PrintStackTrace();
     std::cerr << std::endl;
     std::abort();
 }

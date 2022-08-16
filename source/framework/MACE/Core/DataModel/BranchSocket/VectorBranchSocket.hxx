@@ -3,7 +3,7 @@
 #include "MACE/Core/DataModel/BranchSocket/FundamentalROOTTypeTraits.hxx"
 #include "MACE/Core/DataModel/BranchSocket/IBranchSocket.hxx"
 #include "MACE/Utility/Concept/FundamentalType.hxx"
-#include "MACE/Utility/EigenCompatibility.hxx"
+#include "MACE/Compatibility/Eigen34/TemplateAlias.hxx"
 
 #include "Eigen/Core"
 
