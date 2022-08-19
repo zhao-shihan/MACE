@@ -12,6 +12,7 @@
 
 #include <cmath>
 #include <concepts>
+#include <numbers>
 
 namespace MACE::Core::Geometry::Description {
 

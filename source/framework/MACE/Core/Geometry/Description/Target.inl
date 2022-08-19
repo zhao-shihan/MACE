@@ -86,9 +86,9 @@ bool Target::Cuboid::Hole::TestDetailedShape(const MathVector3D auto& x) const n
     if (x[2] < -fDepth or std::abs(x[0]) > fHalfExtent or std::abs(x[1]) > fHalfExtent) {
         return true;
     } else {
+        using std::numbers::sqrt3;
         using Utility::Math::Hypot2;
         using Utility::Math::Pow2;
-        constexpr auto sqrt3 = 1.732050807568877294;
         const auto u = std::round((x[0] - (1 / sqrt3) * x[1]) / fPitch) * fPitch;
         const auto v = std::round((2 / sqrt3) * x[1] / fPitch) * fPitch;
         return Hypot2(x[0] - (u + v / 2), x[1] - (sqrt3 / 2) * v) > Pow2(fRadius);
