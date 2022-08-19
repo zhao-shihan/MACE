@@ -29,7 +29,8 @@ FixedString<AMaxSize>::FixedString(const std::derived_from<std::string> auto& st
 template<std::size_t AMaxSize> // clang-format off
     requires (AMaxSize >= 1)
 FixedString<AMaxSize>::FixedString(const auto& str) noexcept // clang-format on
-    requires(std::convertible_to<decltype(str), std::string_view> and not std::convertible_to<decltype(str), ConstPointer>) :
+    requires(std::convertible_to<decltype(str), std::string_view> and
+             not std::convertible_to<decltype(str), ShortString::ConstPointer>) :
     fString{} {
     const std::string_view view = str;
     const auto len = view.length();
@@ -71,7 +72,8 @@ FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(const std::derived_from<
 template<std::size_t AMaxSize> // clang-format off
     requires (AMaxSize >= 1)
 FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(const auto& rhs) & noexcept // clang-format on
-    requires(std::convertible_to<decltype(rhs), std::string_view> and not std::convertible_to<decltype(rhs), ConstPointer>) {
+    requires(std::convertible_to<decltype(rhs), std::string_view> and
+             not std::convertible_to<decltype(rhs), ShortString::ConstPointer>) {
     const std::string_view view = rhs;
     const auto len = view.length();
     std::memmove(fString, view.data(), len);
@@ -113,7 +115,8 @@ FixedString<AMaxSize>& FixedString<AMaxSize>::Append(const std::derived_from<std
 template<std::size_t AMaxSize> // clang-format off
     requires (AMaxSize >= 1)
 FixedString<AMaxSize>& FixedString<AMaxSize>::Append(const auto& str) noexcept // clang-format on
-    requires(std::convertible_to<decltype(str), std::string_view> and not std::convertible_to<decltype(str), ConstPointer>) {
+    requires(std::convertible_to<decltype(str), std::string_view> and
+             not std::convertible_to<decltype(str), ShortString::ConstPointer>) {
     const std::string_view view = str;
     const auto tail = End();
     const auto count = view.length();
@@ -125,7 +128,8 @@ FixedString<AMaxSize>& FixedString<AMaxSize>::Append(const auto& str) noexcept /
 template<std::size_t AMaxSize> // clang-format off
     requires (AMaxSize >= 1)
 bool FixedString<AMaxSize>::operator==(const auto& rhs) const noexcept // clang-format on
-    requires(std::convertible_to<decltype(rhs), std::string_view> and not std::convertible_to<decltype(rhs), ConstPointer>) {
+    requires(std::convertible_to<decltype(rhs), std::string_view> and
+             not std::convertible_to<decltype(rhs), ShortString::ConstPointer>) {
     const std::string_view view = rhs;
     const auto len = view.length();
     if (Length() != len) { return false; }
@@ -144,7 +148,8 @@ std::strong_ordering FixedString<AMaxSize>::operator<=>(FixedString<AMaxSize>::C
 template<std::size_t AMaxSize> // clang-format off
     requires (AMaxSize >= 1)
 std::strong_ordering FixedString<AMaxSize>::operator<=>(const auto& rhs) const noexcept // clang-format on
-    requires(std::convertible_to<decltype(rhs), std::string_view> and not std::convertible_to<decltype(rhs), ConstPointer>) {
+    requires(std::convertible_to<decltype(rhs), std::string_view> and
+             not std::convertible_to<decltype(rhs), ShortString::ConstPointer>) {
     const std::string_view view = rhs;
     const auto thisLen = Length();
     const auto rhsLen = view.length();
