@@ -1,13 +1,22 @@
-namespace MACE::Utility::CLHEPVectorX::HepLorentzVectorData {
+namespace MACE::Utility::CLHEPVectorX {
+
+namespace internal {
+
+template class ForbiddenLore<&CLHEP::HepLorentzVector::pp>;
+
+constexpr CLHEP::Hep3Vector& ForbiddenGet(CLHEP::HepLorentzVector&);
+constexpr const CLHEP::Hep3Vector& ForbiddenGet(const CLHEP::HepLorentzVector&);
+
+} // namespace internal
+
+namespace HepLorentzVectorData {
 
 #ifdef __cpp_lib_is_layout_compatible
 
 namespace internal {
 
 class HepLorentzVectorImitator {
-    class Hep3VectorImitator {
-        double data[3];
-    } pp;
+    Hep3VectorImitator pp;
     double ee;
 };
 
@@ -15,7 +24,7 @@ class HepLorentzVectorImitator {
 
 #endif
 
-inline double* operator&(CLHEP::HepLorentzVector& fourVector) noexcept {
+constexpr double* operator&(CLHEP::HepLorentzVector& vector) noexcept {
     static_assert(std::is_standard_layout_v<CLHEP::HepLorentzVector>);
     static_assert(sizeof(CLHEP::HepLorentzVector) == 4 * sizeof(double));
     static_assert(alignof(CLHEP::HepLorentzVector) == alignof(double));
@@ -25,10 +34,11 @@ inline double* operator&(CLHEP::HepLorentzVector& fourVector) noexcept {
     static_assert(alignof(internal::HepLorentzVectorImitator) == alignof(double));
     static_assert(std::is_layout_compatible_v<CLHEP::HepLorentzVector, internal::HepLorentzVectorImitator>);
 #endif
-    return std::launder(reinterpret_cast<double*>(std::addressof(fourVector)));
+    using Hep3VectorData::operator&;
+    return std::launder(&internal::ForbiddenGet(vector));
 }
 
-inline const double* operator&(const CLHEP::HepLorentzVector& fourVector) noexcept {
+constexpr const double* operator&(const CLHEP::HepLorentzVector& vector) noexcept {
     static_assert(std::is_standard_layout_v<CLHEP::HepLorentzVector>);
     static_assert(sizeof(CLHEP::HepLorentzVector) == 4 * sizeof(double));
     static_assert(alignof(CLHEP::HepLorentzVector) == alignof(double));
@@ -38,7 +48,10 @@ inline const double* operator&(const CLHEP::HepLorentzVector& fourVector) noexce
     static_assert(alignof(internal::HepLorentzVectorImitator) == alignof(double));
     static_assert(std::is_layout_compatible_v<CLHEP::HepLorentzVector, internal::HepLorentzVectorImitator>);
 #endif
-    return std::launder(reinterpret_cast<const double*>(std::addressof(fourVector)));
+    using Hep3VectorData::operator&;
+    return std::launder(&internal::ForbiddenGet(vector));
 }
 
-} // namespace MACE::Utility::CLHEPVectorX::HepLorentzVectorData
+} // namespace HepLorentzVectorData
+
+} // namespace MACE::Utility::CLHEPVectorX

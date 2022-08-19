@@ -1,17 +1,19 @@
 #pragma once
 
+#include "MACE/Utility/CLHEPVectorX/Hep3VectorData.hxx"
+#include "MACE/Utility/CLHEPVectorX/internal/ForbiddenLore.hxx"
+
 #include "CLHEP/Vector/LorentzVector.h"
 
-#include <memory>
 #include <new>
 #include <type_traits>
 
 namespace MACE::Utility::CLHEPVectorX::HepLorentzVectorData {
 
-inline double* operator&(CLHEP::HepLorentzVector& fourVector) noexcept;
-inline const double* operator&(const CLHEP::HepLorentzVector& fourVector) noexcept;
-inline double* operator&(CLHEP::HepLorentzVector&& fourVector) noexcept = delete;
-inline const double* operator&(const CLHEP::HepLorentzVector&& fourVector) noexcept = delete;
+constexpr double* operator&(CLHEP::HepLorentzVector& vector) noexcept;
+constexpr const double* operator&(const CLHEP::HepLorentzVector& vector) noexcept;
+constexpr double* operator&(CLHEP::HepLorentzVector&& vector) noexcept = delete;
+constexpr const double* operator&(const CLHEP::HepLorentzVector&& vector) noexcept = delete;
 
 } // namespace MACE::Utility::CLHEPVectorX::HepLorentzVectorData
 

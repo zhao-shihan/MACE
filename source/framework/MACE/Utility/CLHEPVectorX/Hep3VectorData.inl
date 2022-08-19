@@ -1,4 +1,15 @@
-namespace MACE::Utility::CLHEPVectorX::Hep3VectorData {
+namespace MACE::Utility::CLHEPVectorX {
+
+namespace internal {
+
+template class ForbiddenLore<&CLHEP::Hep3Vector::data>;
+
+constexpr double (&ForbiddenGet(CLHEP::Hep3Vector&))[3];
+constexpr const double (&ForbiddenGet(const CLHEP::Hep3Vector&))[3];
+
+} // namespace internal
+
+namespace Hep3VectorData {
 
 #ifdef __cpp_lib_is_layout_compatible
 
@@ -12,7 +23,7 @@ class Hep3VectorImitator {
 
 #endif
 
-inline double* operator&(CLHEP::Hep3Vector& threeVector) noexcept {
+constexpr double* operator&(CLHEP::Hep3Vector& vector) noexcept {
     static_assert(std::is_standard_layout_v<CLHEP::Hep3Vector>);
     static_assert(sizeof(CLHEP::Hep3Vector) == 3 * sizeof(double));
     static_assert(alignof(CLHEP::Hep3Vector) == alignof(double));
@@ -22,10 +33,10 @@ inline double* operator&(CLHEP::Hep3Vector& threeVector) noexcept {
     static_assert(alignof(internal::Hep3VectorImitator) == alignof(double));
     static_assert(std::is_layout_compatible_v<CLHEP::Hep3Vector, internal::Hep3VectorImitator>);
 #endif
-    return std::launder(reinterpret_cast<double*>(std::addressof(threeVector)));
+    return internal::ForbiddenGet(vector);
 }
 
-inline const double* operator&(const CLHEP::Hep3Vector& threeVector) noexcept {
+constexpr const double* operator&(const CLHEP::Hep3Vector& vector) noexcept {
     static_assert(std::is_standard_layout_v<CLHEP::Hep3Vector>);
     static_assert(sizeof(CLHEP::Hep3Vector) == 3 * sizeof(double));
     static_assert(alignof(CLHEP::Hep3Vector) == alignof(double));
@@ -35,7 +46,9 @@ inline const double* operator&(const CLHEP::Hep3Vector& threeVector) noexcept {
     static_assert(alignof(internal::Hep3VectorImitator) == alignof(double));
     static_assert(std::is_layout_compatible_v<CLHEP::Hep3Vector, internal::Hep3VectorImitator>);
 #endif
-    return std::launder(reinterpret_cast<const double*>(std::addressof(threeVector)));
+    return internal::ForbiddenGet(vector);
 }
 
-} // namespace MACE::Utility::CLHEPVectorX::Hep3VectorData
+} // namespace Hep3VectorData
+
+} // namespace MACE::Utility::CLHEPVectorX

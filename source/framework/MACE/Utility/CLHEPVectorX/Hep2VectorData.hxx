@@ -1,17 +1,18 @@
 #pragma once
 
+#include "MACE/Utility/CLHEPVectorX/internal/ForbiddenLore.hxx"
+
 #include "CLHEP/Vector/TwoVector.h"
 
-#include <memory>
 #include <new>
 #include <type_traits>
 
 namespace MACE::Utility::CLHEPVectorX::Hep2VectorData {
 
-inline double* operator&(CLHEP::Hep2Vector& twoVector) noexcept;
-inline const double* operator&(const CLHEP::Hep2Vector& twoVector) noexcept;
-inline double* operator&(CLHEP::Hep2Vector&& twoVector) noexcept = delete;
-inline const double* operator&(const CLHEP::Hep2Vector&& twoVector) noexcept = delete;
+constexpr double* operator&(CLHEP::Hep2Vector& vector) noexcept;
+constexpr const double* operator&(const CLHEP::Hep2Vector& vector) noexcept;
+constexpr double* operator&(CLHEP::Hep2Vector&& vector) noexcept = delete;
+constexpr const double* operator&(const CLHEP::Hep2Vector&& vector) noexcept = delete;
 
 } // namespace MACE::Utility::CLHEPVectorX::Hep2VectorData
 

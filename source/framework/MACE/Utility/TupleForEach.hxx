@@ -8,13 +8,12 @@ namespace MACE::Utility {
 /// @brief Traverses a tuple (e.g. std::tuple, std::pair, std::array, etc.).
 /// The "tuple" can be anything acceptable by std::apply.
 /// The usage is similar to std::ranges::for_each, except that a tuple is passed in.
-template<class ATuple, class AFunctor>
-constexpr void TupleForEach(ATuple&& tuple, AFunctor&& func) {
+constexpr void TupleForEach(auto&& tuple, auto&& func) {
     std::apply(
-        [&func]<typename... Args>(Args&&... args) {
-            (func(std::forward<Args>(args)), ...);
+        [&func](auto&&... args) {
+            (func(std::forward<decltype(args)>(args)), ...);
         },
-        std::forward<ATuple>(tuple));
+        std::forward<decltype(tuple)>(tuple));
 }
 
 } // namespace MACE::Utility
