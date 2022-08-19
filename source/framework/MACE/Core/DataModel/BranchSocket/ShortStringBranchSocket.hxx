@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Core/DataModel/BranchSocket/IBranchSocket.hxx"
-#include "MACE/Utility/FixedCapacityString.hxx"
+#include "MACE/Utility/FixedString.hxx"
 
 namespace MACE::Core::DataModel::BranchSocket {
 
@@ -17,8 +17,8 @@ public:
     const ShortString& GetValue() const override { return fString; }
     void SetValue(const ShortString& string) override { fString = string; }
 
-    void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, fString, fLeafName); }
-    void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(this->fBranchName, fString); }
+    void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, fString.Data(), fLeafName); }
+    void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(this->fBranchName, fString.Data()); }
 
 private:
     const TString fLeafName;
