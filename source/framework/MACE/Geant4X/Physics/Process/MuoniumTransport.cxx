@@ -206,7 +206,6 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
 
     fParticleChange.ProposeTrueStepLength(trueStepLength);
     fParticleChange.ProposeMomentumDirection(direction);
-    fParticleChange.ProposeEnergy((muon_mass_c2 / c_squared) / 2 * velocity * velocity);
     fParticleChange.ProposeVelocity(velocity);
     fParticleChange.ProposeProperTime(track.GetProperTime() + flightTime);
     fParticleChange.ProposePosition(position);
