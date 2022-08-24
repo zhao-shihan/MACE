@@ -155,7 +155,7 @@ void MPIRunManager::EventEndReport(G4int event) const {
     const auto avgEventWallTime = fNAvgEventWallTime / numberOfEventProcessed;
     const auto nEventRemain = numberOfEventToBeProcessed - numberOfEventProcessed;
     const auto eta = FormatSecondToDHMS(std::lround(avgEventWallTime * nEventRemain));
-    const auto etaError = numberOfEventProcessed < 5 ?
+    const auto etaError = numberOfEventProcessed < 10 ?
                               std::string("N/A") :
                               FormatSecondToDHMS(std::lround(1.959963984540054 * std::sqrt(fNDevEventWallTime / (numberOfEventProcessed - 1)) * nEventRemain)); // 95% C.L. (assuming gaussian)
     const auto progress = 100 * static_cast<double>(numberOfEventProcessed) / numberOfEventToBeProcessed;
@@ -170,12 +170,17 @@ void MPIRunManager::RunEndReport(G4int run) const {
     const auto& mpiEnv = Environment::MPIEnvironment::Instance();
     if (mpiEnv.IsWorker() or mpiEnv.GetVerboseLevel() < Environment::VerboseLevel::Error) { return; }
     const auto beginTime = std::chrono::system_clock::to_time_t(fRunBeginSystemTime);
+    const auto wallTime = fRunWallTime.count();
+    const auto wallTimeDHMS = FormatSecondToDHMS(std::lround(wallTime));
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     G4cout << "-------------------------------> Run Finished <-------------------------------\n"
            << std::put_time(std::localtime(&now), "%c (UTC%z) > Run ") << run << " finished on " << mpiEnv.GetWorldSize() << " ranks.\n"
            << "  Start time: " << std::put_time(std::localtime(&beginTime), "%c (UTC%z).\n")
-           << "   Wall time: " << fRunWallTime.count() << " s.\n"
-           << "-------------------------------> Run Finished <-------------------------------" << G4endl;
+           << "   Wall time: " << wallTime << " seconds";
+    if (wallTime > 60) { G4cout << " (" << wallTimeDHMS << ')'; }
+    G4cout << ".\n"
+              "-------------------------------> Run Finished <-------------------------------"
+           << G4endl;
 }
 
 void MPIRunManager::RunBeginReport(G4int run) {
