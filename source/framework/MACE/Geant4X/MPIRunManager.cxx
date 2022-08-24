@@ -155,7 +155,7 @@ void MPIRunManager::EventEndReport(G4int event) const {
     const auto avgEventWallTime = fNAvgEventWallTime / numberOfEventProcessed;
     const auto nEventRemain = numberOfEventToBeProcessed - numberOfEventProcessed;
     const auto eta = FormatSecondToDHMS(std::lround(avgEventWallTime * nEventRemain));
-    const auto etaError = numberOfEventProcessed == 1 ?
+    const auto etaError = numberOfEventProcessed < 5 ?
                               std::string("N/A") :
                               FormatSecondToDHMS(std::lround(1.959963984540054 * std::sqrt(fNDevEventWallTime / (numberOfEventProcessed - 1)) * nEventRemain)); // 95% C.L. (assuming gaussian)
     const auto progress = 100 * static_cast<double>(numberOfEventProcessed) / numberOfEventToBeProcessed;
