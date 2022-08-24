@@ -47,9 +47,11 @@ public:
 
 private:
     G4bool CheckNEventIsAtLeastCommSize(G4int nEvent) const;
-    void RunBeginReport() const;
-    void EventEndReport() const;
-    void RunEndReport() const;
+    void EventEndReport(G4int event) const;
+    void RunEndReport(G4int run) const;
+
+    static void RunBeginReport(G4int run);
+    static std::string FormatSecondToDHMS(long secondsInTotal);
 
 private:
     G4int fTotalNumberOfEventsToBeProcessed;
