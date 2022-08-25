@@ -157,12 +157,12 @@ void MPIRunManager::EventEndReport(G4int event) const {
     const auto eta = FormatSecondToDHMS(std::lround(avgEventWallTime * nEventRemain));
     const auto etaError = numberOfEventProcessed < 10 ?
                               std::string("N/A") :
-                              FormatSecondToDHMS(std::lround(1.959963984540054 * std::sqrt(fNDevEventWallTime / (numberOfEventProcessed - 1)) * nEventRemain)); // 95% C.L. (assuming gaussian)
-    const auto progress = 100 * static_cast<double>(numberOfEventProcessed) / numberOfEventToBeProcessed;
-    const auto precisionOfG4cout = G4cout.precision(6); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
+                              FormatSecondToDHMS(std::lround(1.96 * std::sqrt(fNDevEventWallTime / (numberOfEventProcessed - 1)) * nEventRemain)); // 95% C.L. (assuming gaussian)
+    const auto progress = 100 * static_cast<float>(numberOfEventProcessed) / numberOfEventToBeProcessed;
+    const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     G4cout << std::put_time(std::localtime(&now), "%c (UTC%z) > Event ") << event << " finished in rank " << mpiEnv.GetWorldRank() << ".\n"
-           << "  ETA: " << eta << " +/- " << etaError << ". Progress of the rank: " << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " (" << progress << "%)." << G4endl;
+           << "  ETA: " << eta << " +/- " << etaError << ". Progress of the rank: " << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " (" << std::fixed << progress << std::defaultfloat << "%)." << G4endl;
     G4cout.precision(precisionOfG4cout);
 }
 
