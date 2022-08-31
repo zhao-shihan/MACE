@@ -28,12 +28,25 @@ if(MACE_WITH_G4VIS)
     add_compile_definitions(MACE_WITH_G4VIS=1)
 endif()
 
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    # Enable standard-conformance
-    add_compile_options(/permissive- /Zc:__cplusplus /Zc:inline)
-    message(STATUS "MSVC standard-conformance mode enabled (/permissive- /Zc:__cplusplus /Zc:inline)")
-    # Be permissive to standard cfunctions
-    add_compile_definitions(_CRT_SECURE_NO_WARNINGS=1)
+if(MACE_ENABLE_LTO)
+    if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        add_compile_options(-flto)
+        add_link_options(-flto)
+        message(STATUS "LTO enabled for MACE (-flto)")
+    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+        add_link_options(/LTCG)
+        message(STATUS "LTO enabled for MACE (/LTCG)")
+    endif()
+endif()
+
+if(MACE_ENABLE_MSVC_STD_CONFORMANCE)
+    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+        # Enable standard-conformance
+        add_compile_options(/permissive- /Zc:__cplusplus /Zc:inline)
+        message(STATUS "MSVC standard-conformance mode enabled (/permissive- /Zc:__cplusplus /Zc:inline)")
+        # Be permissive to standard cfunctions
+        add_compile_definitions(_CRT_SECURE_NO_WARNINGS=1)
+    endif()
 endif()
 
 # =============================================================================

@@ -34,9 +34,11 @@ option(MACE_WITH_G4VIS "Build Geant4 applications of MACE with available visuali
 
 # Advance
 # Options (ON/OFF)
+option(MACE_ENABLE_LTO "Build MACE with link-time optimizations (GCC/Clang: -flto, MSVC: /LTCG)." ON)
+option(MACE_ENABLE_MSVC_STD_CONFORMANCE "Build MACE with standard-conformance mode (/permissive- /Zc:__cplusplus /Zc:inline) enabled (MSVC only)." ON)
 option(MACE_SHOW_ALL_COMPILE_WARNINGS "Show all compile warnings. Once turned on, MACE_SURPRESS_COMPILE_WARNINGS will be turned off, and MACE_SHOW_GCC_EFFCXX_COMPILE_WARNINGS will be turned on." OFF)
 option(MACE_USE_SHARED_MSVC_RT "Select the MSVC runtime library for use (MSVC only). ON for shared (.dll), OFF for static (.lib). If you run into link error related to MSVC runtime, you can try to flip this." ON)
-cmake_dependent_option(MACE_SHOW_GCC_EFFCXX_COMPILE_WARNINGS "Show -Weffc++ compile warnings. (gcc only)" OFF "NOT MACE_SHOW_ALL_COMPILE_WARNINGS" ON)
+cmake_dependent_option(MACE_SHOW_GCC_EFFCXX_COMPILE_WARNINGS "Show -Weffc++ compile warnings. (GCC only)" OFF "NOT MACE_SHOW_ALL_COMPILE_WARNINGS" ON)
 cmake_dependent_option(MACE_SURPRESS_COMPILE_WARNINGS "Surpress compile warnings raise from external dependencies." ON "NOT MACE_SHOW_ALL_COMPILE_WARNINGS" OFF)
 set(MACE_BUILTIN_ARGPARSE_VERSION 2.6 CACHE STRING "Set built-in argparse version (if required).")
 set(MACE_BUILTIN_EIGEN_VERSION 3.4.0 CACHE STRING "Set built-in Eigen version (if required).")
