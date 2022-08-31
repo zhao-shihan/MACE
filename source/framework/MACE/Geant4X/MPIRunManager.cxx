@@ -159,10 +159,12 @@ void MPIRunManager::EventEndReport(G4int event) const {
                               std::string("N/A") :
                               FormatSecondToDHMS(std::lround(1.96 * std::sqrt(fNDevEventWallTime / (numberOfEventProcessed - 1)) * nEventRemain)); // 95% C.L. (assuming gaussian)
     const auto progress = 100 * static_cast<float>(numberOfEventProcessed) / numberOfEventToBeProcessed;
-    const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    G4cout << std::put_time(std::localtime(&now), "%c (UTC%z) > Event ") << event << " finished in rank " << mpiEnv.GetWorldRank() << ".\n"
-           << "  ETA: " << eta << " +/- " << etaError << ". Progress of the rank: " << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " (" << std::fixed << progress << std::defaultfloat << "%)." << G4endl;
+    char nowString[64];
+    std::strftime(nowString, std::size(nowString), "%c (UTC%z)", std::localtime(&now));
+    const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
+    G4cout << nowString << " > Event " << event << " finished in rank " << mpiEnv.GetWorldRank() << '\n'
+           << "  ETA: " << eta << " ± " << etaError << "  Progress of the rank: " << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " (" << std::fixed << progress << std::defaultfloat << "%)" << G4endl;
     G4cout.precision(precisionOfG4cout);
 }
 
@@ -173,22 +175,30 @@ void MPIRunManager::RunEndReport(G4int run) const {
     const auto wallTime = fRunWallTime.count();
     const auto wallTimeDHMS = FormatSecondToDHMS(std::lround(wallTime));
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    char nowString[64];
+    std::strftime(nowString, std::size(nowString), "%c (UTC%z)", std::localtime(&now));
+    char beginTimeString[64];
+    std::strftime(beginTimeString, std::size(beginTimeString), "%c (UTC%z)", std::localtime(&beginTime));
+    const auto precisionOfG4cout = G4cout.precision(8); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
     G4cout << "-------------------------------> Run Finished <-------------------------------\n"
-           << std::put_time(std::localtime(&now), "%c (UTC%z) > Run ") << run << " finished on " << mpiEnv.GetWorldSize() << " ranks.\n"
-           << "  Start time: " << std::put_time(std::localtime(&beginTime), "%c (UTC%z).\n")
+           << nowString << " > Run " << run << " finished on " << mpiEnv.GetWorldSize() << " ranks\n"
+           << "  Start time: " << beginTimeString << '\n'
            << "   Wall time: " << wallTime << " seconds";
     if (wallTime > 60) { G4cout << " (" << wallTimeDHMS << ')'; }
-    G4cout << ".\n"
+    G4cout << "\n"
               "-------------------------------> Run Finished <-------------------------------"
            << G4endl;
+    G4cout.precision(precisionOfG4cout);
 }
 
 void MPIRunManager::RunBeginReport(G4int run) {
     const auto& mpiEnv = Environment::MPIEnvironment::Instance();
     if (mpiEnv.IsWorker() or mpiEnv.GetVerboseLevel() < Environment::VerboseLevel::Error) { return; }
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    char nowString[64];
+    std::strftime(nowString, std::size(nowString), "%c (UTC%z)", std::localtime(&now));
     G4cout << "--------------------------------> Run Starts <--------------------------------\n"
-           << std::put_time(std::localtime(&now), "%c (UTC%z) > Run ") << run << " starts on " << mpiEnv.GetWorldSize() << " ranks.\n"
+           << nowString << " > Run " << run << " starts on " << mpiEnv.GetWorldSize() << " ranks\n"
            << "--------------------------------> Run Starts <--------------------------------" << G4endl;
 }
 
