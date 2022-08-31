@@ -6,6 +6,7 @@
 #include "MACE/Environment/Memory/internal/SingletonPool.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
+#include <cassert>
 #include <stdexcept>
 #include <string>
 #include <typeinfo>
@@ -159,6 +160,7 @@ private:
     static void InstantiateOrFindInstance();
 
 private:
+    static ObserverPtr<ADerived> fgInstance;
     static ObserverPtr<internal::SingletonPool::Node> fgInstanceNode;
 };
 

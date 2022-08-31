@@ -1,26 +1,41 @@
 namespace MACE::Environment::Memory {
 
 template<class ADerived>
+ObserverPtr<ADerived> FreeSingleton<ADerived>::fgInstance = nullptr;
+
+template<class ADerived>
 FreeSingleton<ADerived>::FreeSingleton() :
     FreeSingletonBase(),
     MuteSingleton<ADerived>() {
     static_assert(Concept::FreeSingletonized<ADerived>);
+    fgInstance = static_cast<ObserverPtr<ADerived>>(*MuteSingleton<ADerived>::fgInstanceNode);
+}
+
+template<class ADerived>
+FreeSingleton<ADerived>::~FreeSingleton() {
+    assert((fgInstance == nullptr and MuteSingleton<ADerived>::fgInstanceNode == nullptr) or
+           fgInstance == *MuteSingleton<ADerived>::fgInstanceNode);
+    fgInstance = nullptr;
 }
 
 template<class ADerived>
 ADerived& FreeSingleton<ADerived>::Instance() {
-    if (MuteSingleton<ADerived>::fgInstanceNode == nullptr) [[unlikely]] {
+    if (fgInstance == nullptr) [[unlikely]] {
+        assert(MuteSingleton<ADerived>::fgInstanceNode == nullptr);
         FindInstance();
     }
-    return *static_cast<ObserverPtr<ADerived>>(*MuteSingleton<ADerived>::fgInstanceNode);
+    assert(fgInstance == *MuteSingleton<ADerived>::fgInstanceNode);
+    return *fgInstance;
 }
 
 template<class ADerived>
 void FreeSingleton<ADerived>::FindInstance() {
     if (const auto optionalNode = internal::MuteSingletonPool::Instance().Find<ADerived>();
         optionalNode.has_value()) {
-        if (optionalNode.value() != nullptr) {
-            MuteSingleton<ADerived>::fgInstanceNode = std::addressof(optionalNode.value().get());
+        if (auto& node = optionalNode->get();
+            node != nullptr) {
+            MuteSingleton<ADerived>::fgInstanceNode = std::addressof(node);
+            fgInstance = static_cast<ObserverPtr<ADerived>>(node);
         } else {
             throw std::logic_error(
                 std::string("MACE::Environment::Memory::FreeSingleton::Instance(): The instance of ")

@@ -9,7 +9,7 @@ MuteSingleton<ADerived>::MuteSingleton() :
     static_assert(Concept::MuteSingletonized<ADerived>);
     if (auto& muteSingletonPool = internal::MuteSingletonPool::Instance();
         not muteSingletonPool.Contains<ADerived>()) {
-        fgInstanceNode = std::addressof(muteSingletonPool.Insert(static_cast<ADerived*>(this)));
+        fgInstanceNode = std::addressof(muteSingletonPool.Insert(static_cast<ObserverPtr<ADerived>>(this)));
     } else {
         throw std::logic_error(
             std::string("MACE::Environment::Memory::MuteSingleton::MuteSingleton(): "

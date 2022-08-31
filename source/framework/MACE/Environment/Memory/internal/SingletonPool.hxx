@@ -29,8 +29,7 @@ public:
     [[nodiscard]] std::optional<std::reference_wrapper<Node>> Find();
     template<Concept::Singletonized ASingleton>
     [[nodiscard]] auto Contains() const { return fInstanceMap.contains(typeid(ASingleton)); }
-    template<Concept::Singletonized ASingleton>
-    [[nodiscard]] Node& Insert(ASingleton* instance);
+    [[nodiscard]] Node& Insert(Concept::Singletonized auto* instance);
     [[nodiscard]] std::vector<BaseNode> GetUndeletedInReverseInsertionOrder() const;
 
 private:

@@ -1,6 +1,8 @@
 namespace MACE::Environment::Memory {
 
 template<class ADerived>
+ObserverPtr<ADerived> Singleton<ADerived>::fgInstance = nullptr;
+template<class ADerived>
 ObserverPtr<internal::SingletonPool::Node> Singleton<ADerived>::fgInstanceNode = nullptr;
 
 template<class ADerived>
@@ -16,7 +18,10 @@ Singleton<ADerived>::Singleton() {
 
 template<class ADerived>
 Singleton<ADerived>::~Singleton() {
-    if (fgInstanceNode != nullptr) {
+    assert((fgInstance == nullptr and fgInstanceNode == nullptr) or
+           fgInstance == *fgInstanceNode);
+    if (fgInstance != nullptr) {
+        fgInstance = nullptr;
         *fgInstanceNode = nullptr;
         fgInstanceNode = nullptr;
     }
@@ -24,16 +29,19 @@ Singleton<ADerived>::~Singleton() {
 
 template<class ADerived>
 ADerived& Singleton<ADerived>::Instance() {
-    if (fgInstanceNode == nullptr) [[unlikely]] {
+    if (fgInstance == nullptr) [[unlikely]] {
+        assert(fgInstanceNode == nullptr);
         InstantiateOrFindInstance();
     }
-    return *static_cast<ObserverPtr<ADerived>>(*fgInstanceNode);
+    assert(fgInstance == *fgInstanceNode);
+    return *fgInstance;
 }
 
 template<class ADerived>
 void Singleton<ADerived>::InstantiateOrFindInstance() {
     if (auto& node = internal::SingletonFactory::Instance().InstantiateOrFind<ADerived>();
         node != nullptr) {
+        fgInstance = static_cast<ObserverPtr<ADerived>>(node);
         fgInstanceNode = std::addressof(node);
     } else {
         throw std::logic_error(

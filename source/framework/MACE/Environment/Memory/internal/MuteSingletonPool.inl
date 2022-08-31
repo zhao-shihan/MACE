@@ -10,16 +10,15 @@ template<Concept::MuteSingletonized AMuteSingleton>
     }
 }
 
-template<Concept::MuteSingletonized AMuteSingleton>
-[[nodiscard]] MuteSingletonPool::Node& MuteSingletonPool::Insert(AMuteSingleton* instance) {
-    if (const auto [iter, inserted] = fInstanceMap.try_emplace(typeid(AMuteSingleton), instance);
+[[nodiscard]] MuteSingletonPool::Node& MuteSingletonPool::Insert(Concept::MuteSingletonized auto* instance) {
+    if (const auto [iter, inserted] = fInstanceMap.try_emplace(typeid(decltype(*instance)), instance);
         inserted) {
         return iter->second;
     } else {
         throw std::logic_error(
             std::string("MACE::Environment::Memory::internal::MuteSingletonPool::Insert: "
                         "Instance of type ")
-                .append(typeid(AMuteSingleton).name())
+                .append(typeid(decltype(*instance)).name())
                 .append(" already exists"));
     }
 }

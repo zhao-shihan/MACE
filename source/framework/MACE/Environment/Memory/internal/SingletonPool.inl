@@ -10,10 +10,9 @@ template<Concept::Singletonized ASingleton>
     }
 }
 
-template<Concept::Singletonized ASingleton>
-[[nodiscard]] SingletonPool::Node& SingletonPool::Insert(ASingleton* instance) {
+[[nodiscard]] SingletonPool::Node& SingletonPool::Insert(Concept::Singletonized auto* instance) {
     if (const auto [iter, inserted] = fInstanceMap.try_emplace(
-            typeid(ASingleton), instance,
+            typeid(decltype(*instance)), instance,
             std::make_pair(fInstanceMap.size(), static_cast<ISingletonBase*>(instance)));
         inserted) {
         return iter->second.first;
@@ -21,7 +20,7 @@ template<Concept::Singletonized ASingleton>
         throw std::logic_error(
             std::string("MACE::Environment::Memory::internal::SingletonPool::Insert: "
                         "Instance of type ")
-                .append(typeid(ASingleton).name())
+                .append(typeid(decltype(*instance)).name())
                 .append(" already exists"));
     }
 }

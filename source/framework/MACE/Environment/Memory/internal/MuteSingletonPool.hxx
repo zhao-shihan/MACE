@@ -32,8 +32,7 @@ public:
     [[nodiscard]] std::optional<std::reference_wrapper<Node>> Find();
     template<Concept::MuteSingletonized AMuteSingleton>
     [[nodiscard]] auto Contains() const { return fInstanceMap.contains(typeid(AMuteSingleton)); }
-    template<Concept::MuteSingletonized AMuteSingleton>
-    [[nodiscard]] Node& Insert(AMuteSingleton* instance);
+    [[nodiscard]] Node& Insert(Concept::MuteSingletonized auto* instance);
 
 private:
     std::map<const std::type_index, Node> fInstanceMap;
