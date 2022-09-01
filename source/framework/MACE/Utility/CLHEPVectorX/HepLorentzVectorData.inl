@@ -16,7 +16,7 @@ namespace HepLorentzVectorData {
 namespace internal {
 
 class HepLorentzVectorImitator {
-    Hep3VectorImitator pp;
+    Hep3VectorData::internal::Hep3VectorImitator pp;
     double ee;
 };
 
