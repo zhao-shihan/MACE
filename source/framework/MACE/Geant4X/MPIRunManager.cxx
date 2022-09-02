@@ -164,7 +164,7 @@ void MPIRunManager::EventEndReport(G4int event) const {
     std::strftime(nowString, std::size(nowString), "%c (UTC%z)", std::localtime(&now));
     const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
     G4cout << nowString << " > Event " << event << " finished in rank " << mpiEnv.GetWorldRank() << '\n'
-           << "  ETA: " << eta << " ± " << etaError << "  Progress of the rank: " << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " (" << std::fixed << progress << std::defaultfloat << "%)" << G4endl;
+           << "  ETA: " << eta << " +/- " << etaError << "  Progress of the rank: " << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " (" << std::fixed << progress << std::defaultfloat << "%)" << G4endl;
     G4cout.precision(precisionOfG4cout);
 }
 
@@ -179,11 +179,11 @@ void MPIRunManager::RunEndReport(G4int run) const {
     std::strftime(nowString, std::size(nowString), "%c (UTC%z)", std::localtime(&now));
     char beginTimeString[64];
     std::strftime(beginTimeString, std::size(beginTimeString), "%c (UTC%z)", std::localtime(&beginTime));
-    const auto precisionOfG4cout = G4cout.precision(8); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
+    const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
     G4cout << "-------------------------------> Run Finished <-------------------------------\n"
            << nowString << " > Run " << run << " finished on " << mpiEnv.GetWorldSize() << " ranks\n"
            << "  Start time: " << beginTimeString << '\n'
-           << "   Wall time: " << wallTime << " seconds";
+           << "   Wall time: " << std::fixed << wallTime << std::defaultfloat << " seconds";
     if (wallTime > 60) { G4cout << " (" << wallTimeDHMS << ')'; }
     G4cout << "\n"
               "-------------------------------> Run Finished <-------------------------------"
@@ -211,24 +211,23 @@ std::string MPIRunManager::FormatSecondToDHMS(long secondsInTotal) {
     const auto addHour = addDay or hour > 0;
     const auto addMinute = addDay or addHour or minute > 0;
 
-    std::array<char, std::numeric_limits<long>::digits10 + 3> buffer; // long enough to store a "long"
-    const auto bufferFirst = buffer.data();
-    const auto bufferLast = buffer.data() + buffer.size();
+    char buffer[std::numeric_limits<long>::digits10 + 3]; // long enough to store a "long"
+    const auto bufferEnd = buffer + std::size(buffer);
     std::string dhms;
     if (addDay) {
-        const auto charLast = std::to_chars(bufferFirst, bufferLast, day).ptr;
-        dhms.append(std::string_view(bufferFirst, charLast)).append("d ");
+        const auto charLast = std::to_chars(buffer, bufferEnd, day).ptr;
+        dhms.append(std::string_view(buffer, charLast)).append("d ");
     }
     if (addHour) {
-        const auto charLast = std::to_chars(bufferFirst, bufferLast, hour).ptr;
-        dhms.append(std::string_view(bufferFirst, charLast)).append("h ");
+        const auto charLast = std::to_chars(buffer, bufferEnd, hour).ptr;
+        dhms.append(std::string_view(buffer, charLast)).append("h ");
     }
     if (addMinute) {
-        const auto charLast = std::to_chars(bufferFirst, bufferLast, minute).ptr;
-        dhms.append(std::string_view(bufferFirst, charLast)).append("m ");
+        const auto charLast = std::to_chars(buffer, bufferEnd, minute).ptr;
+        dhms.append(std::string_view(buffer, charLast)).append("m ");
     }
-    const auto charLast = std::to_chars(bufferFirst, bufferLast, second).ptr;
-    dhms.append(std::string_view(bufferFirst, charLast)).append("s");
+    const auto charLast = std::to_chars(buffer, bufferEnd, second).ptr;
+    dhms.append(std::string_view(buffer, charLast)).append("s");
     return dhms;
 }
 
