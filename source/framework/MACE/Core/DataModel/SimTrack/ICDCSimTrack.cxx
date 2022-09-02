@@ -6,7 +6,6 @@ IntBranchSocket ICDCSimTrack::fgTrueNumHits("trueNumHits", 0);
 DoubleBranchSocket ICDCSimTrack::fgTrueVertexTime("trueVtxTime", 0);
 
 ICDCSimTrack::ICDCSimTrack() noexcept :
-    ITransientData(),
     fTrueNumHits(fgTrueNumHits.GetValue()),
     fTrueVertexTime(fgTrueVertexTime.GetValue()) {}
 

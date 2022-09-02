@@ -7,7 +7,6 @@ FloatBranchSocket ICDCTrack::fgChi2("chi2", 0);
 DoubleBranchSocket ICDCTrack::fgVertexTime("vtxTime", 0);
 
 ICDCTrack::ICDCTrack() noexcept :
-    ITransientData(),
     fNumHits(fgNumHits.GetValue()),
     fChi2(fgChi2.GetValue()),
     fVertexTime(fgVertexTime.GetValue()) {}
