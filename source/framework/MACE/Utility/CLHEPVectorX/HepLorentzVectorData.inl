@@ -35,7 +35,7 @@ constexpr double* operator&(CLHEP::HepLorentzVector& vector) noexcept {
     static_assert(std::is_layout_compatible_v<CLHEP::HepLorentzVector, internal::HepLorentzVectorImitator>);
 #endif
     using Hep3VectorData::operator&;
-    return std::launder(&internal::ForbiddenGet(vector));
+    return std::launder(&CLHEPVectorX::internal::ForbiddenGet(vector));
 }
 
 constexpr const double* operator&(const CLHEP::HepLorentzVector& vector) noexcept {
@@ -49,7 +49,7 @@ constexpr const double* operator&(const CLHEP::HepLorentzVector& vector) noexcep
     static_assert(std::is_layout_compatible_v<CLHEP::HepLorentzVector, internal::HepLorentzVectorImitator>);
 #endif
     using Hep3VectorData::operator&;
-    return std::launder(&internal::ForbiddenGet(vector));
+    return std::launder(&CLHEPVectorX::internal::ForbiddenGet(vector));
 }
 
 } // namespace HepLorentzVectorData

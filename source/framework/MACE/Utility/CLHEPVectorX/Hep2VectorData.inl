@@ -34,7 +34,7 @@ constexpr double* operator&(CLHEP::Hep2Vector& vector) noexcept {
     static_assert(alignof(internal::Hep2VectorImitator) == alignof(double));
     static_assert(std::is_layout_compatible_v<CLHEP::Hep2Vector, internal::Hep2VectorImitator>);
 #endif
-    return std::launder(&internal::ForbiddenGet(vector));
+    return std::launder(&CLHEPVectorX::internal::ForbiddenGet(vector));
 }
 
 constexpr const double* operator&(const CLHEP::Hep2Vector& vector) noexcept {
@@ -47,7 +47,7 @@ constexpr const double* operator&(const CLHEP::Hep2Vector& vector) noexcept {
     static_assert(alignof(internal::Hep2VectorImitator) == alignof(double));
     static_assert(std::is_layout_compatible_v<CLHEP::Hep2Vector, internal::Hep2VectorImitator>);
 #endif
-    return std::launder(&internal::ForbiddenGet(vector));
+    return std::launder(&CLHEPVectorX::internal::ForbiddenGet(vector));
 }
 
 } // namespace Hep2VectorData

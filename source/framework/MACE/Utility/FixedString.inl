@@ -12,7 +12,7 @@ FixedString<AMaxSize>::FixedString(char ch) noexcept :
 
 template<std::size_t AMaxSize> // clang-format off
     requires (AMaxSize >= 1)
-FixedString<AMaxSize>::FixedString(FixedString<AMaxSize>::ConstPointer str) noexcept :
+FixedString<AMaxSize>::FixedString(const char* str) noexcept :
     fString{} { // clang-format on
     std::strncpy(fString, str, AMaxSize);
 }
@@ -30,7 +30,7 @@ template<std::size_t AMaxSize> // clang-format off
     requires (AMaxSize >= 1)
 FixedString<AMaxSize>::FixedString(const auto& str) noexcept // clang-format on
     requires(std::convertible_to<decltype(str), std::string_view> and
-             not std::convertible_to<decltype(str), ShortString::ConstPointer>) :
+             not std::convertible_to<decltype(str), const char*>) :
     fString{} {
     const std::string_view view = str;
     const auto len = view.length();
@@ -48,7 +48,7 @@ FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(char ch) & noexcept { //
 
 template<std::size_t AMaxSize> // clang-format off
     requires (AMaxSize >= 1)
-FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(FixedString<AMaxSize>::ConstPointer rhs) & noexcept { // clang-format on
+FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(const char* rhs) & noexcept { // clang-format on
     if (fString != rhs) {
         if (std::cmp_greater_equal(std::distance(CBegin(), rhs), Capacity())) {
             std::strncpy(fString, rhs, AMaxSize);
@@ -73,7 +73,7 @@ template<std::size_t AMaxSize> // clang-format off
     requires (AMaxSize >= 1)
 FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(const auto& rhs) & noexcept // clang-format on
     requires(std::convertible_to<decltype(rhs), std::string_view> and
-             not std::convertible_to<decltype(rhs), ShortString::ConstPointer>) {
+             not std::convertible_to<decltype(rhs), const char*>) {
     const std::string_view view = rhs;
     const auto len = view.length();
     std::memmove(fString, view.data(), len);
@@ -92,7 +92,7 @@ FixedString<AMaxSize>& FixedString<AMaxSize>::Append(char ch) noexcept { // clan
 
 template<std::size_t AMaxSize> // clang-format off
     requires (AMaxSize >= 1)
-FixedString<AMaxSize>& FixedString<AMaxSize>::Append(FixedString<AMaxSize>::ConstPointer str) noexcept { // clang-format on
+FixedString<AMaxSize>& FixedString<AMaxSize>::Append(const char* str) noexcept { // clang-format on
     if (std::cmp_greater_equal(std::distance(CBegin(), str), Capacity())) {
         std::strncat(fString, str, AMaxSize);
     } else {
@@ -116,7 +116,7 @@ template<std::size_t AMaxSize> // clang-format off
     requires (AMaxSize >= 1)
 FixedString<AMaxSize>& FixedString<AMaxSize>::Append(const auto& str) noexcept // clang-format on
     requires(std::convertible_to<decltype(str), std::string_view> and
-             not std::convertible_to<decltype(str), ShortString::ConstPointer>) {
+             not std::convertible_to<decltype(str), const char*>) {
     const std::string_view view = str;
     const auto tail = End();
     const auto count = view.length();
@@ -129,7 +129,7 @@ template<std::size_t AMaxSize> // clang-format off
     requires (AMaxSize >= 1)
 bool FixedString<AMaxSize>::operator==(const auto& rhs) const noexcept // clang-format on
     requires(std::convertible_to<decltype(rhs), std::string_view> and
-             not std::convertible_to<decltype(rhs), ShortString::ConstPointer>) {
+             not std::convertible_to<decltype(rhs), const char*>) {
     const std::string_view view = rhs;
     const auto len = view.length();
     if (Length() != len) { return false; }
@@ -138,7 +138,7 @@ bool FixedString<AMaxSize>::operator==(const auto& rhs) const noexcept // clang-
 
 template<std::size_t AMaxSize> // clang-format off
     requires (AMaxSize >= 1)
-std::strong_ordering FixedString<AMaxSize>::operator<=>(FixedString<AMaxSize>::ConstPointer rhs) const noexcept { // clang-format on
+std::strong_ordering FixedString<AMaxSize>::operator<=>(const char* rhs) const noexcept { // clang-format on
     const auto cmp = std::strncmp(fString, rhs, AMaxSize);
     return cmp == 0 ? std::strong_ordering::equal :
            cmp < 0  ? std::strong_ordering::less :
@@ -149,7 +149,7 @@ template<std::size_t AMaxSize> // clang-format off
     requires (AMaxSize >= 1)
 std::strong_ordering FixedString<AMaxSize>::operator<=>(const auto& rhs) const noexcept // clang-format on
     requires(std::convertible_to<decltype(rhs), std::string_view> and
-             not std::convertible_to<decltype(rhs), ShortString::ConstPointer>) {
+             not std::convertible_to<decltype(rhs), const char*>) {
     const std::string_view view = rhs;
     const auto thisLen = Length();
     const auto rhsLen = view.length();

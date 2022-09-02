@@ -89,7 +89,7 @@ int main(int argc, char* argv[]) {
     pathOut.replace_extension("");
     const auto fileNameOut = MakeMPIFilePath(pathOut.string() + "_recM", ".root");
     // output file of this rank
-    TFile fileOut(fileNameOut.c_str(), "recreate");
+    TFile fileOut(fileNameOut.generic_string().c_str(), "recreate");
 
     DataFactory dataHub;
 

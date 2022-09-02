@@ -64,7 +64,7 @@ void Analysis::Close() {
 
 void Analysis::OpenResultFile() {
     fResultFile = std::make_unique<TFile>(
-        Utility::MPIUtil::MakeMPIFilePath(fResultPath, ".root").c_str(),
+        Utility::MPIUtil::MakeMPIFilePath(fResultPath, ".root").generic_string().c_str(),
         "recreate");
 }
 

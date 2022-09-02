@@ -35,26 +35,26 @@ public:
 public:
     FixedString() noexcept;
     FixedString(char ch) noexcept;
-    FixedString(ConstPointer str) noexcept;
+    FixedString(const char* str) noexcept;
     FixedString(const FixedString& str) noexcept = default;
     FixedString(FixedString&& str) noexcept = default;
     FixedString(const std::derived_from<std::string> auto& str) noexcept;
     explicit FixedString(const auto& str) noexcept
         requires(std::convertible_to<decltype(str), std::string_view> and
-                 not std::convertible_to<decltype(str), ConstPointer>);
+                 not std::convertible_to<decltype(str), const char*>);
     FixedString(std::nullptr_t) noexcept = delete;
 
     operator std::string() & noexcept { return fString; }
     operator std::string_view() & noexcept { return fString; }
 
     FixedString& operator=(char ch) & noexcept;
-    FixedString& operator=(ConstPointer rhs) & noexcept;
+    FixedString& operator=(const char* rhs) & noexcept;
     FixedString& operator=(const FixedString& rhs) & noexcept = default;
     FixedString& operator=(FixedString&& rhs) & noexcept = default;
     FixedString& operator=(const std::derived_from<std::string> auto& rhs) & noexcept;
     FixedString& operator=(const auto& rhs) & noexcept
         requires(std::convertible_to<decltype(rhs), std::string_view> and
-                 not std::convertible_to<decltype(rhs), ConstPointer>);
+                 not std::convertible_to<decltype(rhs), const char*>);
     FixedString& operator=(std::nullptr_t) & noexcept = delete;
 
     std::size_t Length() const noexcept { return std::strlen(fString); }
@@ -93,15 +93,15 @@ public:
     const_pointer c_str() const noexcept { return CString(); }
 
     FixedString& Append(char ch) noexcept;
-    FixedString& Append(ConstPointer str) noexcept;
+    FixedString& Append(const char* str) noexcept;
     FixedString& Append(const FixedString& str) noexcept { return Append(str.fString); }
     FixedString& Append(const std::derived_from<std::string> auto& str) noexcept;
     FixedString& Append(const auto& str) noexcept
         requires(std::convertible_to<decltype(str), std::string_view> and
-                 not std::convertible_to<decltype(str), ConstPointer>);
+                 not std::convertible_to<decltype(str), const char*>);
     FixedString& Append(std::nullptr_t) noexcept = delete;
     FixedString& append(char ch) noexcept { return Append(ch); }
-    FixedString& append(const_pointer str) noexcept { return Append(str); }
+    FixedString& append(const char* str) noexcept { return Append(str); }
     FixedString& append(const FixedString& str) noexcept { return Append(str); }
     FixedString& append(const std::derived_from<std::string> auto& str) noexcept { return Append(str); }
     FixedString& append(const auto& str) noexcept
@@ -110,7 +110,7 @@ public:
     FixedString& append(std::nullptr_t) noexcept = delete;
 
     FixedString& operator+=(char rhs) noexcept { return Append(rhs); }
-    FixedString& operator+=(ConstPointer rhs) noexcept { return Append(rhs); }
+    FixedString& operator+=(const char* rhs) noexcept { return Append(rhs); }
     FixedString& operator+=(const FixedString& rhs) noexcept { return Append(rhs); }
     FixedString& operator+=(const std::derived_from<std::string> auto& rhs) noexcept { return Append(rhs); }
     FixedString& operator+=(const auto& rhs) noexcept
@@ -118,19 +118,19 @@ public:
                  not std::convertible_to<decltype(rhs), ConstPointer>) { return Append(rhs); }
     FixedString& operator+=(std::nullptr_t) noexcept = delete;
 
-    bool operator==(ConstPointer rhs) const noexcept { return std::strncmp(fString, rhs, AMaxSize) == 0; }
+    bool operator==(const char* rhs) const noexcept { return std::strncmp(fString, rhs, AMaxSize) == 0; }
     bool operator==(const FixedString& rhs) const noexcept { return operator==(rhs.fString); }
     bool operator==(const std::derived_from<std::string> auto& rhs) const noexcept { return operator==(rhs.std::string::c_str()); }
     bool operator==(const auto& rhs) const noexcept
         requires(std::convertible_to<decltype(rhs), std::string_view> and
-                 not std::convertible_to<decltype(rhs), ConstPointer>);
+                 not std::convertible_to<decltype(rhs), const char*>);
     bool operator==(std::nullptr_t) const noexcept = delete;
-    std::strong_ordering operator<=>(ConstPointer rhs) const noexcept;
+    std::strong_ordering operator<=>(const char* rhs) const noexcept;
     std::strong_ordering operator<=>(const FixedString& rhs) const noexcept { return operator<=>(rhs.fString); }
     std::strong_ordering operator<=>(const std::derived_from<std::string> auto& rhs) const noexcept { return operator<=>(rhs.std::string::c_str()); }
     std::strong_ordering operator<=>(const auto& rhs) const noexcept
         requires(std::convertible_to<decltype(rhs), std::string_view> and
-                 not std::convertible_to<decltype(rhs), ConstPointer>);
+                 not std::convertible_to<decltype(rhs), const char*>);
     std::strong_ordering operator<=>(std::nullptr_t) const noexcept = delete;
 
     static constexpr std::size_t Capacity() noexcept { return AMaxSize + 1; }
@@ -148,7 +148,7 @@ public:
     friend FixedString operator+(const FixedString&, std::nullptr_t) noexcept = delete;
 
     friend FixedString operator+(char lhs, const FixedString& rhs) noexcept { return FixedString(lhs) += rhs; }
-    friend FixedString operator+(ConstPointer lhs, const FixedString& rhs) noexcept { return FixedString(lhs) += rhs; }
+    friend FixedString operator+(const char* lhs, const FixedString& rhs) noexcept { return FixedString(lhs) += rhs; }
     friend FixedString operator+(const std::derived_from<std::string> auto& lhs, const FixedString& rhs) noexcept { return FixedString(lhs) += rhs; }
     friend FixedString operator+(const auto& lhs, const FixedString& rhs) noexcept
         requires(std::convertible_to<decltype(lhs), std::string_view> and

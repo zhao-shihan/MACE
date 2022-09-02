@@ -33,8 +33,8 @@ int main(int argc, char* argv[]) {
     const auto threshold = std::stoi(argv[2]);
     const auto fitterVerbose = std::stoi(argv[3]);
     const auto tolerance = std::stod(argv[4]);
-    const auto maxStepNR = std::stod(argv[5]);
-    const auto maxStepCG = std::stod(argv[6]);
+    const auto maxStepNR = std::stoi(argv[5]);
+    const auto maxStepCG = std::stoi(argv[6]);
     const auto deltaD = std::stod(argv[7]);
     const auto deltaZ = std::stod(argv[8]);
 
@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
     std::filesystem::path outName(nameIn);
     outName.replace_extension("");
     const auto fileNameOut = MakeMPIFilePath(outName.string() + "_recTrk", ".root");
-    TFile fileOut(fileNameOut.c_str(), "recreate");
+    TFile fileOut(fileNameOut.generic_string().c_str(), "recreate");
 
     DataFactory dataHub;
     dataHub.SetTreeNamePrefixFormat("Rep#_");

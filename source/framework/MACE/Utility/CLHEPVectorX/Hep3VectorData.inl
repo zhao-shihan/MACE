@@ -33,7 +33,7 @@ constexpr double* operator&(CLHEP::Hep3Vector& vector) noexcept {
     static_assert(alignof(internal::Hep3VectorImitator) == alignof(double));
     static_assert(std::is_layout_compatible_v<CLHEP::Hep3Vector, internal::Hep3VectorImitator>);
 #endif
-    return internal::ForbiddenGet(vector);
+    return CLHEPVectorX::internal::ForbiddenGet(vector);
 }
 
 constexpr const double* operator&(const CLHEP::Hep3Vector& vector) noexcept {
@@ -46,7 +46,7 @@ constexpr const double* operator&(const CLHEP::Hep3Vector& vector) noexcept {
     static_assert(alignof(internal::Hep3VectorImitator) == alignof(double));
     static_assert(std::is_layout_compatible_v<CLHEP::Hep3Vector, internal::Hep3VectorImitator>);
 #endif
-    return internal::ForbiddenGet(vector);
+    return CLHEPVectorX::internal::ForbiddenGet(vector);
 }
 
 } // namespace Hep3VectorData

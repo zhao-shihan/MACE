@@ -61,7 +61,7 @@ void DescriptionIO::Import(const InstantiatedFrom<std::tuple> auto& yamlText) {
 }
 
 void DescriptionIO::ImportImpl(const std::filesystem::path& yamlFile, std::ranges::range auto& descriptions) {
-    const auto geomYaml = YAML::LoadFile(yamlFile);
+    const auto geomYaml = YAML::LoadFile(yamlFile.generic_string());
     for (auto&& description : std::as_const(descriptions)) {
         description->Import(geomYaml);
     }
