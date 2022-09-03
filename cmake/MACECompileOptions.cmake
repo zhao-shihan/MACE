@@ -39,11 +39,11 @@ if(MACE_ENABLE_LTO)
     endif()
 endif()
 
-if(MACE_ENABLE_MSVC_STD_CONFORMANCE)
+if(MACE_ENABLE_MSVC_STD_CONFORMITY)
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-        # Enable standard-conformance
+        # Enable standard-conformity
         add_compile_options(/permissive- /Zc:__cplusplus /Zc:inline)
-        message(STATUS "MSVC standard-conformance mode enabled (/permissive- /Zc:__cplusplus /Zc:inline)")
+        message(STATUS "MSVC standard-conformity enabled (/permissive- /Zc:__cplusplus /Zc:inline)")
         # Be permissive to standard cfunctions
         add_compile_definitions(_CRT_SECURE_NO_WARNINGS=1)
     endif()
@@ -62,6 +62,9 @@ if("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Windows")
         message(NOTICE "           See https://root-forum.cern.ch/t/preprocessor-macro-x86-64-problem-with-clhep-on-windows/50431")
     endif()
 endif()
+
+# Solve conflict between <span> and "ROOT/RSpan.hxx"
+add_compile_definitions(R__HAS_STD_SPAN=1)
 
 # =============================================================================
 # Set compile warnings for MACE

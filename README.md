@@ -33,7 +33,7 @@ Required:
 1. C/C++ compiler that supports ≥ C++20. ([GCC](https://gcc.gnu.org/) ≥ 10, [Clang](https://clang.llvm.org/) ≥ 10, MSVC ≥ 19.30 ([Visual Studio](https://visualstudio.microsoft.com/) 2022))
 2. [CMake](https://cmake.org/) (≥ 3.16)
 3. [MPI](https://www.mpi-forum.org/) (≥ 2.0, [MPICH](https://www.mpich.org/), [OpenMPI](https://www.open-mpi.org/), [Intel MPI](https://www.intel.cn/content/www/cn/zh/developer/tools/oneapi/mpi-library.html), [Microsoft MPI](https://github.com/Microsoft/Microsoft-MPI), etc. On your frequency)
-4. [ROOT](https://root.cern/) (≥ 6.24.02, ≥ C++17)
+4. [ROOT](https://root.cern/) (≥ 6.26.00)
 5. [Geant4](https://geant4.web.cern.ch/) (≥ 4.11.0)
 
 Required, built-in if not found:
