@@ -30,9 +30,9 @@ if(MACE_BUILTIN_EIGEN)
                                     URL "${MACE_BUILTIN_EIGEN_URL}")
     endif()
     # configure it
-    message(STATUS ">>>>>>>> Downloading (if required) and configuring built-in Eigen (version: ${MACE_BUILTIN_EIGEN_VERSION})")
+    message(STATUS "Downloading (if required) and configuring built-in Eigen (version: ${MACE_BUILTIN_EIGEN_VERSION})")
     FetchContent_MakeAvailable(Eigen3)
-    message(STATUS "<<<<<<<< Downloading (if required) and configuring built-in Eigen (version: ${MACE_BUILTIN_EIGEN_VERSION}) - done")
+    message(STATUS "Downloading (if required) and configuring built-in Eigen (version: ${MACE_BUILTIN_EIGEN_VERSION}) - done")
     # check download
     if(NOT EXISTS "${MACE_BUILTIN_EIGEN_SRC_DIR}/CMakeLists.txt")
         file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/eigen3-subbuild")

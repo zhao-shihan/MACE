@@ -30,9 +30,9 @@ if(MACE_BUILTIN_YAML_CPP)
                                       URL "${MACE_BUILTIN_YAML_CPP_URL}")
     endif()
     # configure it
-    message(STATUS ">>>>>>>> Downloading (if required) and configuring built-in yaml-cpp (version: ${MACE_BUILTIN_YAML_CPP_VERSION})")
+    message(STATUS "Downloading (if required) and configuring built-in yaml-cpp (version: ${MACE_BUILTIN_YAML_CPP_VERSION})")
     FetchContent_MakeAvailable(yaml-cpp)
-    message(STATUS "<<<<<<<< Downloading (if required) and configuring built-in yaml-cpp (version: ${MACE_BUILTIN_YAML_CPP_VERSION}) - done")
+    message(STATUS "Downloading (if required) and configuring built-in yaml-cpp (version: ${MACE_BUILTIN_YAML_CPP_VERSION}) - done")
     # check download
     if(NOT EXISTS "${MACE_BUILTIN_YAML_CPP_SRC_DIR}/CMakeLists.txt")
         file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/yaml-cpp-subbuild")
