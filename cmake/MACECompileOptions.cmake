@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
 
 # =============================================================================
-# MACE compile options
+# CMake controllable compile options for MACE
 # =============================================================================
 
 if(MACE_SIGNAL_HANDLER)
@@ -50,10 +50,33 @@ if(MACE_ENABLE_MSVC_STD_CONFORMITY)
 endif()
 
 # =============================================================================
-# Some dependencies specific compile options for MACE
+# MPI-induced compile options for MACE
 # =============================================================================
 
-if("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Windows")
+# Inform OpenMPI not to bring mpicxx in, it's necessary for most cases.
+add_compile_definitions(OMPI_SKIP_MPICXX=1)
+
+# Inform MPICH and derivatives not to bring mpicxx in, seems unnecessary but more consistent.
+add_compile_definitions(MPICH_SKIP_MPICXX=1)
+
+# =============================================================================
+# Eigen-induced compile options for MACE
+# =============================================================================
+
+# Inform Eigen not to enable multithreading, though we are not using OpenMP. It is safer to do so.
+add_compile_definitions(EIGEN_DONT_PARALLELIZE=1)
+
+if("${CMAKE_CXX_PLATFORM_ID}" STREQUAL "MinGW")
+    # 
+    add_compile_definitions(EIGEN_DONT_VECTORIZE=1)
+    message(NOTICE "***Notice: Building on Windows with MinGW, disabling vectorization of Eigen")
+endif()
+
+# =============================================================================
+# ROOT-induced compile options for MACE
+# =============================================================================
+
+if("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
     # See https://root-forum.cern.ch/t/preprocessor-macro-x86-64-problem-with-clhep-on-windows/50431
     if(${ROOT_VERSION} VERSION_LESS_EQUAL 6.26.04)
         # We simply define the accidentally involved __uint128_t to a random type and pray that it won't actually be used.
@@ -67,7 +90,7 @@ endif()
 add_compile_definitions(R__HAS_STD_SPAN=1)
 
 # =============================================================================
-# Set compile warnings for MACE
+# Compile warnings for MACE
 # =============================================================================
 
 # More warnings

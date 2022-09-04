@@ -23,7 +23,11 @@ extern "C" {
     std::cerr << std::endl;
     Utility::PrintStackTrace();
     std::cerr << std::endl;
+    #ifndef __MINGW32__
     std::quick_exit(EXIT_FAILURE);
+    #else
+    std::_Exit(EXIT_FAILURE);
+    #endif
 }
 
 [[noreturn]] void MACE_ISOC99_SIGABRT_Handler(int) {

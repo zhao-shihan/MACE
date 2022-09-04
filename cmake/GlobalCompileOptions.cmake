@@ -34,16 +34,10 @@ else()
 endif()
 
 # =============================================================================
-# Global compiler options
+# Global compile options
 # =============================================================================
 
-# Inform OpenMPI not to bring mpicxx in, it's necessary for most cases.
-add_compile_definitions(OMPI_SKIP_MPICXX=1)
-# Inform MPICH and derivatives not to bring mpicxx in, seems unnecessary but more consistent.
-add_compile_definitions(MPICH_SKIP_MPICXX=1)
-# Inform Eigen not to enable multithreading, though we are not using OpenMP. It is safer to do so.
-add_compile_definitions(EIGEN_DONT_PARALLELIZE=1)
-# Concurrently build with MSVC
+# MSVC concurrently build
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # Build concurrently
     add_compile_options(/MP)
