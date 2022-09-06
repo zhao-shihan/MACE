@@ -67,7 +67,7 @@ add_compile_definitions(MPICH_SKIP_MPICXX=1)
 add_compile_definitions(EIGEN_DONT_PARALLELIZE=1)
 
 if("${CMAKE_CXX_PLATFORM_ID}" STREQUAL "MinGW")
-    # 
+    # MinGW and GCC 12.2 have issues with explitic vectorization
     add_compile_definitions(EIGEN_DONT_VECTORIZE=1)
     message(NOTICE "***Notice: Building on Windows with MinGW, disabling vectorization of Eigen")
 endif()
