@@ -6,9 +6,9 @@
 
 #if MACE_SIGNAL_HANDLER
 
-    #include "MACE/Environment/internal/ISOC99SignalHandler.hxx"
+#    include "MACE/Environment/internal/ISOC99SignalHandler.hxx"
 
-    #include <csignal>
+#    include <csignal>
 
 #endif
 

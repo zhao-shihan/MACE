@@ -3,9 +3,9 @@
 #include <version>
 
 #ifdef __cpp_lib_to_underlying // C++2b
-    #include <utility>
+#    include <utility>
 #else // fallback: manual implementation
-    #include <type_traits>
+#    include <type_traits>
 #endif
 
 namespace MACE::Compatibility::Std2b {

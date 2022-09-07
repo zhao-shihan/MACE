@@ -16,7 +16,7 @@
 #include <vector>
 
 #if MACE_USE_G4GDML
-    #include <filesystem>
+#    include <filesystem>
 #endif
 
 namespace MACE::Core::Geometry {

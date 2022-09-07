@@ -3,10 +3,10 @@
 #include <version>
 
 #ifdef __cpp_lib_stacktrace // C++2b
-    #include <iostream>
-    #include <stacktrace>
+#    include <iostream>
+#    include <stacktrace>
 #else // fallback: ROOT stacktrace
-    #include "TSystem.h"
+#    include "TSystem.h"
 #endif
 
 namespace MACE::Utility {

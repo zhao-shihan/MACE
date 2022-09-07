@@ -1,11 +1,11 @@
 #if MACE_SIGNAL_HANDLER
 
-    #include "MACE/Environment/internal/ISOC99SignalHandler.hxx"
-    #include "MACE/Utility/PrintStackTrace.hxx"
+#    include "MACE/Environment/internal/ISOC99SignalHandler.hxx"
+#    include "MACE/Utility/PrintStackTrace.hxx"
 
-    #include <csignal>
-    #include <cstdlib>
-    #include <iostream>
+#    include <csignal>
+#    include <cstdlib>
+#    include <iostream>
 
 namespace MACE::Environment::internal {
 
@@ -23,11 +23,11 @@ extern "C" {
     std::cerr << std::endl;
     Utility::PrintStackTrace();
     std::cerr << std::endl;
-    #ifndef __MINGW32__
+#    ifndef __MINGW32__
     std::quick_exit(EXIT_FAILURE);
-    #else
+#    else
     std::_Exit(EXIT_FAILURE);
-    #endif
+#    endif
 }
 
 [[noreturn]] void MACE_ISOC99_SIGABRT_Handler(int) {

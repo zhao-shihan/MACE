@@ -3,7 +3,7 @@
 #include <version>
 
 #ifdef __cpp_lib_unreachable // C++2b
-    #include <utility>
+#    include <utility>
 #endif
 
 namespace MACE::Compatibility::Std2b {
@@ -12,11 +12,11 @@ namespace MACE::Compatibility::Std2b {
 #ifdef __cpp_lib_unreachable // C++2b
     std::unreachable();
 #else // fallback: compiler extensions
-    #ifdef __GNUC__
+#    ifdef __GNUC__
     __builtin_unreachable();
-    #elif defined _MSC_VER
+#    elif defined _MSC_VER
     __assume(false);
-    #endif
+#    endif
 #endif
 }
 

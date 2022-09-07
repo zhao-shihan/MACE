@@ -54,4 +54,4 @@ constexpr const double* operator&(const CLHEP::HepLorentzVector& vector) noexcep
 
 } // namespace HepLorentzVectorData
 
-} // namespace MACE::CLHEPX
+} // namespace MACE::CLHEPX::Vector
