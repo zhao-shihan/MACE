@@ -20,12 +20,12 @@ if(MACE_SIGNAL_HANDLER)
     add_compile_definitions(MACE_SIGNAL_HANDLER=1)
 endif()
 
-if(MACE_WITH_G4GDML)
-    add_compile_definitions(MACE_WITH_G4GDML=1)
+if(MACE_USE_G4GDML)
+    add_compile_definitions(MACE_USE_G4GDML=1)
 endif()
 
-if(MACE_WITH_G4VIS)
-    add_compile_definitions(MACE_WITH_G4VIS=1)
+if(MACE_USE_G4VIS)
+    add_compile_definitions(MACE_USE_G4VIS=1)
 endif()
 
 if(MACE_ENABLE_LTO)

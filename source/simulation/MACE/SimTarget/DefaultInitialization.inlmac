@@ -44,7 +44,7 @@
 ,"/MACE/Action/SetKillIrrelevants    true"
 ,""
 
-#if MACE_WITH_G4VIS
+#if MACE_USE_G4VIS
 
 ,"#############################################################################"
 ,"# Visualization settings"

@@ -15,7 +15,7 @@
 #include <memory>
 #include <vector>
 
-#if MACE_WITH_G4GDML
+#if MACE_USE_G4GDML
     #include <filesystem>
 #endif
 
@@ -51,7 +51,7 @@ public:
     template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, class AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
     void RegisterField(AField* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const;
 
-#if MACE_WITH_G4GDML
+#if MACE_USE_G4GDML
     void Export(std::filesystem::path gdmlFile, std::size_t volumeIndex = 0) const;
 #endif
 

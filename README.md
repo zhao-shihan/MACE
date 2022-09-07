@@ -44,7 +44,7 @@ Required, built-in if not found:
 
 Optional:
 
-1. Geant4::G4gdml (Geant4 optional component. The requirement is controlled by CMake option MACE_WITH_G4GDML. It supports the export of G4 geometry.)
+1. Geant4::G4gdml (Geant4 optional component. The requirement is controlled by CMake option MACE_USE_G4GDML. It supports the export of G4 geometry.)
 
 ## Prepare for your PC  
 
