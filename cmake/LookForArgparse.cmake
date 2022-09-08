@@ -30,9 +30,9 @@ if(MACE_BUILTIN_ARGPARSE)
                                       URL "${MACE_BUILTIN_ARGPARSE_URL}")
     endif()
     # configure it
-    message(STATUS "Downloading (if required) and configuring built-in argparse (version: ${MACE_BUILTIN_ARGPARSE_VERSION})")
+    message(STATUS "Downloading (if required) and configuring argparse (version: ${MACE_BUILTIN_ARGPARSE_VERSION})")
     FetchContent_MakeAvailable(argparse)
-    message(STATUS "Downloading (if required) and configuring built-in argparse (version: ${MACE_BUILTIN_ARGPARSE_VERSION}) - done")
+    message(STATUS "Downloading (if required) and configuring argparse (version: ${MACE_BUILTIN_ARGPARSE_VERSION}) - done")
     # check download
     if(NOT EXISTS "${MACE_BUILTIN_ARGPARSE_SRC_DIR}/CMakeLists.txt")
         file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/argparse-subbuild")
