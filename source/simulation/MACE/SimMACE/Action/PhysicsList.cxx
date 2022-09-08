@@ -1,4 +1,4 @@
-#include "MACE/Compatibility/Std2b/ToUnderlying.hxx"
+#include "MACE/Compatibility/std2b/to_underlying.hxx"
 #include "MACE/Environment/BasicEnvironment.hxx"
 #include "MACE/Geant4X/Physics/MuoniumPhysics.hxx"
 #include "MACE/SimMACE/Action/PhysicsList.hxx"
@@ -14,12 +14,12 @@
 
 namespace MACE::SimMACE::Action {
 
-namespace Std2b = Compatibility::Std2b;
+namespace std2b = Compatibility::std2b;
 using namespace MACE::Geant4X::Physics;
 
 PhysicsList::PhysicsList() :
     G4VModularPhysicsList() {
-    verboseLevel = Std2b::ToUnderlying(Environment::BasicEnvironment::Instance().GetVerboseLevel());
+    verboseLevel = std2b::to_underlying(Environment::BasicEnvironment::Instance().GetVerboseLevel());
     RegisterPhysics(new G4EmStandardPhysics_option4(verboseLevel));
     RegisterPhysics(new G4EmExtraPhysics(verboseLevel));
     RegisterPhysics(new G4DecayPhysics(verboseLevel));

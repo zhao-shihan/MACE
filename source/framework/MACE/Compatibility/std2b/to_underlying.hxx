@@ -8,10 +8,10 @@
 #    include <type_traits>
 #endif
 
-namespace MACE::Compatibility::Std2b {
+namespace MACE::Compatibility::std2b {
 
 template<class AEnum>
-constexpr std::underlying_type_t<AEnum> ToUnderlying(AEnum enumValue) noexcept {
+constexpr std::underlying_type_t<AEnum> to_underlying(AEnum enumValue) noexcept {
 #ifdef __cpp_lib_to_underlying // C++2b
     return std::to_underlying<AEnum>(enumValue);
 #else // fallback: manual implementation
@@ -19,4 +19,4 @@ constexpr std::underlying_type_t<AEnum> ToUnderlying(AEnum enumValue) noexcept {
 #endif
 }
 
-} // namespace MACE::Compatibility::Std2b
+} // namespace MACE::Compatibility::std2b

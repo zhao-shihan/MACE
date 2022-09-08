@@ -1,11 +1,11 @@
-#include "MACE/Compatibility/Std2b/ToUnderlying.hxx"
+#include "MACE/Compatibility/std2b/to_underlying.hxx"
 #include "MACE/Core/Geometry/Description/All.hxx"
 #include "MACE/Core/Geometry/DescriptionIO.hxx"
 #include "MACE/Environment/BasicEnvironment.hxx"
 
 #include <random>
 
-namespace Std2b = MACE::Compatibility::Std2b;
+namespace std2b = MACE::Compatibility::std2b;
 using namespace MACE::Core::Geometry;
 using namespace MACE::Environment;
 
@@ -73,10 +73,10 @@ int main(int argc, char* argv[]) {
 
     auto& target = Description::Target::Instance();
     std::cout << "Default:\n"
-              << Std2b::ToUnderlying(target.GetShapeType()) << '\n'
+              << std2b::to_underlying(target.GetShapeType()) << '\n'
               << target.GetCuboid().GetWidth() << '\n'
               << target.GetCuboid().GetThickness() << '\n'
-              << Std2b::ToUnderlying(target.GetCuboid().GetDetailType()) << '\n'
+              << std2b::to_underlying(target.GetCuboid().GetDetailType()) << '\n'
               << target.GetCuboid().GetHole().GetExtent() << '\n'
               << target.GetCuboid().GetHole().GetSpacing() << '\n'
               << target.GetCuboid().GetHole().GetDiameter() << '\n'
@@ -95,10 +95,10 @@ int main(int argc, char* argv[]) {
 
     DescriptionIO::Export<Description::Target>("tg.yaml");
     std::cout << "After write into yaml:\n"
-              << Std2b::ToUnderlying(target.GetShapeType()) << '\n'
+              << std2b::to_underlying(target.GetShapeType()) << '\n'
               << target.GetCuboid().GetWidth() << '\n'
               << target.GetCuboid().GetThickness() << '\n'
-              << Std2b::ToUnderlying(target.GetCuboid().GetDetailType()) << '\n'
+              << std2b::to_underlying(target.GetCuboid().GetDetailType()) << '\n'
               << target.GetCuboid().GetHole().GetExtent() << '\n'
               << target.GetCuboid().GetHole().GetSpacing() << '\n'
               << target.GetCuboid().GetHole().GetDiameter() << '\n'
@@ -117,10 +117,10 @@ int main(int argc, char* argv[]) {
 
     DescriptionIO::ImportInstantiated("tg.yaml");
     std::cout << "After read from yaml:\n"
-              << Std2b::ToUnderlying(target.GetShapeType()) << '\n'
+              << std2b::to_underlying(target.GetShapeType()) << '\n'
               << target.GetCuboid().GetWidth() << '\n'
               << target.GetCuboid().GetThickness() << '\n'
-              << Std2b::ToUnderlying(target.GetCuboid().GetDetailType()) << '\n'
+              << std2b::to_underlying(target.GetCuboid().GetDetailType()) << '\n'
               << target.GetCuboid().GetHole().GetExtent() << '\n'
               << target.GetCuboid().GetHole().GetSpacing() << '\n'
               << target.GetCuboid().GetHole().GetDiameter() << '\n'

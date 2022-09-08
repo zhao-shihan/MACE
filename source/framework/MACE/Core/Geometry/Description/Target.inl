@@ -1,13 +1,13 @@
 namespace MACE::Core::Geometry::Description {
 
-namespace Std2b = Compatibility::Std2b;
+namespace std2b = Compatibility::std2b;
 
 bool Target::VolumeContains(const MathVector3D auto& x) const noexcept {
     switch (fShapeType) {
     case ShapeType::Cuboid:
         return fCuboid.VolumeContains(x);
     }
-    Std2b::Unreachable();
+    std2b::unreachable();
 }
 
 bool Target::Contains(const MathVector3D auto& x, bool insideVolume) const noexcept {
@@ -15,7 +15,7 @@ bool Target::Contains(const MathVector3D auto& x, bool insideVolume) const noexc
     case ShapeType::Cuboid:
         return fCuboid.Contains(x, insideVolume);
     }
-    Std2b::Unreachable();
+    std2b::unreachable();
 }
 
 bool Target::TestDetectable(const MathVector3D auto& x) const noexcept {
@@ -23,7 +23,7 @@ bool Target::TestDetectable(const MathVector3D auto& x) const noexcept {
     case ShapeType::Cuboid:
         return fCuboid.TestDetectable(x);
     }
-    Std2b::Unreachable();
+    std2b::unreachable();
 }
 
 template<class ADerivedShape>
@@ -65,7 +65,7 @@ bool Target::Cuboid::Contains(const MathVector3D auto& x, bool insideVolume) con
         return insideVolume and
                fHole.TestDetailedShape(x);
     }
-    Std2b::Unreachable();
+    std2b::unreachable();
 }
 
 bool Target::Cuboid::TestDetectable(const MathVector3D auto& x) const noexcept {
@@ -79,7 +79,7 @@ bool Target::Cuboid::TestDetectable(const MathVector3D auto& x) const noexcept {
         return notShadowed or
                fHole.TestDetailedDetectable(x);
     }
-    Std2b::Unreachable();
+    std2b::unreachable();
 }
 
 bool Target::Cuboid::Hole::TestDetailedShape(const MathVector3D auto& x) const noexcept {

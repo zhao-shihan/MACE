@@ -1,4 +1,4 @@
-#include "MACE/Compatibility/Std2b/Unreachable.hxx"
+#include "MACE/Compatibility/std2b/unreachable.hxx"
 #include "MACE/Core/Geometry/Description/BeamMonitor.hxx"
 #include "MACE/Core/Geometry/Description/Target.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
@@ -24,7 +24,7 @@ HepGeom::Transform3D BeamMonitor::CalcTransform() const {
         const auto transZ = cuboidTarget.CalcTransform().getTranslation().z() - cuboidTarget.GetThickness() / 2 - fThickness / 2 - fDistanceToTargetSurface;
         return HepGeom::Transform3D(CLHEP::HepRotation(), CLHEP::Hep3Vector(0, 0, transZ));
     }
-    Std2b::Unreachable();
+    std2b::unreachable();
 }
 
 void BeamMonitor::ImportValues(const YAML::Node& node) {

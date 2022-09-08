@@ -1,4 +1,4 @@
-#include "MACE/Compatibility/Std2b/Unreachable.hxx"
+#include "MACE/Compatibility/std2b/unreachable.hxx"
 #include "MACE/Geant4X/Physics/Messenger/MuoniumPhysicsMessenger.hxx"
 #include "MACE/Geant4X/Physics/Particle/AntiMuonium.hxx"
 #include "MACE/Geant4X/Physics/Particle/Muonium.hxx"
@@ -10,7 +10,7 @@
 
 namespace MACE::Geant4X::Physics::Process {
 
-namespace Std2b = Compatibility::Std2b;
+namespace std2b = Compatibility::std2b;
 using namespace Utility::LiteralUnit;
 using namespace Utility::PhysicalConstant;
 
@@ -35,7 +35,7 @@ G4VParticleChange* MuoniumTransport::AlongStepDoIt(const G4Track& track, const G
     fParticleChange.Initialize(track);
     switch (fTransportStatus) {
     case TransportStatus::Unknown:
-        Std2b::Unreachable();
+        std2b::unreachable();
         break;
     case TransportStatus::Decaying:
         // Do nothing

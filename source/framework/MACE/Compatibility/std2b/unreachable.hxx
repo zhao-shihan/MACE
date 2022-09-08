@@ -6,9 +6,9 @@
 #    include <utility>
 #endif
 
-namespace MACE::Compatibility::Std2b {
+namespace MACE::Compatibility::std2b {
 
-[[noreturn]] inline void Unreachable() {
+[[noreturn]] inline void unreachable() {
 #ifdef __cpp_lib_unreachable // C++2b
     std::unreachable();
 #else // fallback: compiler extensions
@@ -20,4 +20,4 @@ namespace MACE::Compatibility::Std2b {
 #endif
 }
 
-} // namespace MACE::Compatibility::Std2b
+} // namespace MACE::Compatibility::std2b
