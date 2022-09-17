@@ -2,7 +2,7 @@
 
 #include <type_traits>
 
-namespace MACE::Utility::Concept {
+namespace MACE::Concept {
 
 /// @brief Not copyable but can be moveable
 template<typename T>
@@ -15,4 +15,4 @@ concept NonCopyable = requires {
     requires not std::is_assignable_v<T&, T&>;
 };
 
-} // namespace MACE::Utility::Concept
+} // namespace MACE::Concept

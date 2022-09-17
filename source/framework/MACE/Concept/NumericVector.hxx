@@ -1,14 +1,14 @@
 #pragma once
 
-#include "MACE/Utility/Concept/FundamentalType.hxx"
-#include "MACE/Utility/Concept/IsPointer.hxx"
-#include "MACE/Utility/Concept/Subscriptable.hxx"
+#include "MACE/Concept/FundamentalType.hxx"
+#include "MACE/Concept/IsPointer.hxx"
+#include "MACE/Concept/Subscriptable.hxx"
 
 #include <concepts>
 #include <cstddef>
 #include <type_traits>
 
-namespace MACE::Utility::Concept {
+namespace MACE::Concept {
 
 template<class T, typename F, std::size_t S>
 concept NumericVector = requires { // clang-format off
@@ -39,4 +39,4 @@ concept NumericVector3F = NumericVector<T, float, 3>;
 template<class T>
 concept NumericVector4F = NumericVector<T, float, 4>;
 
-} // namespace MACE::Utility::Concept
+} // namespace MACE::Concept

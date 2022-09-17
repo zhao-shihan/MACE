@@ -1,10 +1,10 @@
 #pragma once
 
-#include "MACE/Utility/Concept/NonCopyable.hxx"
+#include "MACE/Concept/NonCopyable.hxx"
 
 #include <concepts>
 
-namespace MACE::Utility::Concept {
+namespace MACE::Concept {
 
 /// @brief Merely moveable and not copyable
 template<typename T>
@@ -13,4 +13,4 @@ concept MerelyMoveable = requires {
     requires std::movable<T>;
 };
 
-} // namespace MACE::Utility::Concept
+} // namespace MACE::Concept

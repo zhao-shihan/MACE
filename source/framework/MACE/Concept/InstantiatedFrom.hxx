@@ -2,7 +2,7 @@
 
 #include <type_traits>
 
-namespace MACE::Utility::Concept {
+namespace MACE::Concept {
 
 namespace internal {
 
@@ -17,4 +17,4 @@ struct IsTemplateOf<ATemplate, ATemplate<Args...>> : std::true_type {};
 template<class T, template<typename...> class ATemplate>
 concept InstantiatedFrom = internal::IsTemplateOf<ATemplate, T>::value;
 
-} // namespace MACE::Utility::Concept
+} // namespace MACE::Concept

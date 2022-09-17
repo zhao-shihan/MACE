@@ -3,9 +3,9 @@
 #include "MACE/Compatibility/std2b/unreachable.hxx"
 #include "MACE/Core/Geometry/IDescription.hxx"
 #include "MACE/Environment/Memory/MuteSingleton.hxx"
-#include "MACE/Utility/Concept/MathVector.hxx"
-#include "MACE/Utility/Math/Hypot.hxx"
-#include "MACE/Utility/Math/IntegerPower.hxx"
+#include "MACE/Concept/MathVector.hxx"
+#include "MACE/Math/Hypot.hxx"
+#include "MACE/Math/IntegerPower.hxx"
 
 #include "CLHEP/Geometry/Transform3D.h"
 #include "CLHEP/Vector/ThreeVector.h"
@@ -15,8 +15,6 @@
 #include <numbers>
 
 namespace MACE::Core::Geometry::Description {
-
-using Utility::Concept::MathVector3D;
 
 class Target final : public ISingletonDescription<Target> {
     friend Environment::Memory::SingletonFactory;
@@ -65,9 +63,9 @@ public:
         const auto& GetHole() const { return fHole; }
         auto& GetHole() { return fHole; }
 
-        bool VolumeContains(const MathVector3D auto& x) const noexcept;
-        bool Contains(const MathVector3D auto& x, bool insideVolume) const noexcept;
-        bool TestDetectable(const MathVector3D auto& x) const noexcept;
+        bool VolumeContains(const Concept::MathVector3D auto& x) const noexcept;
+        bool Contains(const Concept::MathVector3D auto& x, bool insideVolume) const noexcept;
+        bool TestDetectable(const Concept::MathVector3D auto& x) const noexcept;
 
     private:
         class Hole final : public DetailBase<Hole> {
@@ -87,8 +85,8 @@ public:
             auto GetDepth() const { return fDepth; }
             auto GetPitch() const { return fPitch; }
 
-            bool TestDetailedShape(const MathVector3D auto& x) const noexcept;
-            bool TestDetailedDetectable(const MathVector3D auto&) const noexcept { return false; }
+            bool TestDetailedShape(const Concept::MathVector3D auto& x) const noexcept;
+            bool TestDetailedDetectable(const Concept::MathVector3D auto&) const noexcept { return false; }
 
         private:
             double fHalfExtent;
@@ -117,12 +115,12 @@ public:
     auto& GetCuboid() { return fCuboid; }
 
     /// @brief Return true if inside the target volume (include boundary (closed region), don't consider fine structure).
-    bool VolumeContains(const MathVector3D auto& x) const noexcept;
+    bool VolumeContains(const Concept::MathVector3D auto& x) const noexcept;
     /// @brief Return true if inside the exact target geometry (considering fine structure).
-    bool Contains(const MathVector3D auto& x, bool insideVolume) const noexcept;
-    bool Contains(const MathVector3D auto& x) const noexcept { return Contains(x, VolumeContains(x)); }
+    bool Contains(const Concept::MathVector3D auto& x, bool insideVolume) const noexcept;
+    bool Contains(const Concept::MathVector3D auto& x) const noexcept { return Contains(x, VolumeContains(x)); }
     /// @brief Return true if the decay position x is detectable (i.e. is not shadowed by target).
-    bool TestDetectable(const MathVector3D auto& x) const noexcept;
+    bool TestDetectable(const Concept::MathVector3D auto& x) const noexcept;
 
 private:
     void ImportValues(const YAML::Node& node) override;

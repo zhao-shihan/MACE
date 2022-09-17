@@ -1,11 +1,11 @@
 #pragma once
 
-#include "MACE/Utility/Concept/internal/IsPointer.hxx"
+#include "MACE/Concept/internal/IsPointer.hxx"
 
 #include <concepts>
 #include <type_traits>
 
-namespace MACE::Utility::Concept {
+namespace MACE::Concept {
 
 template<typename P, typename T>
 concept IsPointerOf = requires {
@@ -35,7 +35,7 @@ concept IsPointerOfMaybeConstVolatile = MACE_UTILITY_CONCEPT_IS_POINTER_OF_MAYBE
 
 #undef MACE_UTILITY_CONCEPT_IS_POINTER_OF_MAYBE
 
-#include "MACE/Utility/Concept/internal/AccessToMaybeCVConceptMacro.inl"
+#include "MACE/Concept/internal/AccessToMaybeCVConceptMacro.inl"
 
 #undef MACE_UTILITY_CONCEPT_ACCESS_TO_MAYBE_CONST
 #undef MACE_UTILITY_CONCEPT_ACCESS_TO_MAYBE_VOLATILE
@@ -47,4 +47,4 @@ MACE_UTILITY_CONCEPT_ACCESS_TO_MAYBE_CONST_OR_VOLATILE(IsPointerOf)
 MACE_UTILITY_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED(IsPointerOf)
 #undef MACE_UTILITY_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED
 
-} // namespace MACE::Utility::Concept
+} // namespace MACE::Concept

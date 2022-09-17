@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Utility/Concept/NonMoveable.hxx"
+#include "MACE/Concept/NonMoveable.hxx"
 
 #include <concepts>
 #include <type_traits>
@@ -24,7 +24,7 @@ concept FreeSingletonized = requires {
     { T::Instance() } -> std::same_as<T&>;
     requires std::derived_from<T, FreeSingleton<T>>;
     requires not std::is_base_of_v<internal::ISingletonBase, T>;
-    requires Utility::Concept::NonMoveable<T>;
+    requires MACE::Concept::NonMoveable<T>;
 };
 
 } // namespace Concept

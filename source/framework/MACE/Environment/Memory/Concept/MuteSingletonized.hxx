@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Utility/Concept/NonMoveable.hxx"
+#include "MACE/Concept/NonMoveable.hxx"
 
 #include <concepts>
 #include <type_traits>
@@ -23,7 +23,7 @@ template<class T>
 concept IndirectlyMuteSingletonized = requires {
     requires std::is_base_of_v<internal::MuteSingletonBase, T>;
     requires not std::is_base_of_v<internal::ISingletonBase, T>;
-    requires Utility::Concept::NonMoveable<T>;
+    requires MACE::Concept::NonMoveable<T>;
 };
 
 template<class T>

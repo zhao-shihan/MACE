@@ -2,7 +2,7 @@
 
 #include "MACE/Core/Geometry/IDescription.hxx"
 #include "MACE/Environment/MPIEnvironment.hxx"
-#include "MACE/Utility/Concept/InstantiatedFrom.hxx"
+#include "MACE/Concept/InstantiatedFrom.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 #include "MACE/Utility/StaticForEach.hxx"
@@ -26,7 +26,6 @@
 namespace MACE::Core::Geometry {
 
 using Utility::ObserverPtr;
-using Utility::Concept::InstantiatedFrom;
 
 class DescriptionIO final {
 public:
@@ -38,15 +37,15 @@ public:
     static void Export(const std::filesystem::path& yamlFile, const std::string& fileComment = "") { Export<std::tuple<ADescriptions...>>(yamlFile, fileComment); }
     template<IsDescription... ADescriptions>
     static void Ixport(const std::filesystem::path& yamlFile, const std::string& fileComment = "") { Ixport<std::tuple<ADescriptions...>>(yamlFile, fileComment); }
-    template<InstantiatedFrom<std::tuple> ADescriptionTuple>
+    template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
     static void Import(const std::filesystem::path& yamlFile);
-    template<InstantiatedFrom<std::tuple> ADescriptionTuple>
+    template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
     static void Export(const std::filesystem::path& yamlFile, const std::string& fileComment = "");
-    template<InstantiatedFrom<std::tuple> ADescriptionTuple>
+    template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
     static void Ixport(const std::filesystem::path& yamlFile, const std::string& fileComment = "");
 
     template<typename... ArgsOfImport>
-    static void Import(const InstantiatedFrom<std::tuple> auto& yamlText);
+    static void Import(const Concept::InstantiatedFrom<std::tuple> auto& yamlText);
 
     static void AddInstance(IDescription& instance) { fgInstanceSet.emplace(std::addressof(instance)); }
     static void ImportInstantiated(const std::filesystem::path& yamlFile) { ImportImpl(yamlFile, fgInstanceSet); }

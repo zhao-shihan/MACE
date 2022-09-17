@@ -1,11 +1,11 @@
 #pragma once
 
-#include "MACE/Utility/Concept/NumericVector.hxx"
+#include "MACE/Concept/NumericVector.hxx"
 
 #include <concepts>
 #include <cstddef>
 
-namespace MACE::Utility::Concept {
+namespace MACE::Concept {
 
 template<class T, typename F, std::size_t S>
 concept MathVector = requires(T&& u, T&& v, const T& w, F&& k, const F& c) {
@@ -50,4 +50,4 @@ concept MathVector3F = MathVector<T, float, 3>;
 template<class T>
 concept MathVector4F = MathVector<T, float, 4>;
 
-} // namespace MACE::Utility::Concept
+} // namespace MACE::Concept

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "MACE/Utility/Concept/Indirectable.hxx"
-#include "MACE/Utility/Concept/IsPointer.hxx"
-#include "MACE/Utility/Concept/PointerAccessible.hxx"
-#include "MACE/Utility/Concept/Subscriptable.hxx"
+#include "MACE/Concept/Indirectable.hxx"
+#include "MACE/Concept/IsPointer.hxx"
+#include "MACE/Concept/PointerAccessible.hxx"
+#include "MACE/Concept/Subscriptable.hxx"
 
 #include <concepts>
 #include <type_traits>
 
-namespace MACE::Utility::Concept {
+namespace MACE::Concept {
 
 template<typename T>
 concept WeakPointerImitator = requires {
@@ -34,7 +34,7 @@ concept PointerImitatorOf = requires(P&& pointer) {
     requires SubscriptableTo<P, std::add_lvalue_reference_t<T>>;
 };
 
-#include "MACE/Utility/Concept/internal/AccessToMaybeCVConceptMacro.inl"
+#include "MACE/Concept/internal/AccessToMaybeCVConceptMacro.inl"
 
 MACE_UTILITY_CONCEPT_ACCESS_TO_MAYBE_CONST(WeakPointerImitatorOf)
 MACE_UTILITY_CONCEPT_ACCESS_TO_MAYBE_CONST(PointerImitatorOf)
@@ -56,4 +56,4 @@ MACE_UTILITY_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED(WeakPointerImitatorOf)
 MACE_UTILITY_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED(PointerImitatorOf)
 #undef MACE_UTILITY_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED
 
-} // namespace MACE::Utility::Concept
+} // namespace MACE::Concept

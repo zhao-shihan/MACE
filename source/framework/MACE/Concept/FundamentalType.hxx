@@ -1,11 +1,11 @@
 #pragma once
 
-#include "MACE/Utility/Concept/internal/IsPointer.hxx"
+#include "MACE/Concept/internal/IsPointer.hxx"
 
 #include <concepts>
 #include <type_traits>
 
-namespace MACE::Utility::Concept {
+namespace MACE::Concept {
 
 template<typename T>
 concept Arithmetic =
@@ -35,4 +35,4 @@ concept ArithmeticExcludeBoolChar =
     not std::same_as<T, bool> and
     not IsCharType<T>;
 
-} // namespace MACE::Utility::Concept
+} // namespace MACE::Concept
