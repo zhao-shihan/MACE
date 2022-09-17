@@ -6,7 +6,7 @@ ObserverPtr<internal::MuteSingletonPool::Node> MuteSingleton<ADerived>::fgInstan
 template<class ADerived>
 MuteSingleton<ADerived>::MuteSingleton() :
     MuteSingletonBase() {
-    static_assert(Concept::MuteSingletonized<ADerived>);
+    static_assert(MuteSingletonized<ADerived>);
     if (auto& muteSingletonPool = internal::MuteSingletonPool::Instance();
         not muteSingletonPool.Contains<ADerived>()) {
         fgInstanceNode = std::addressof(muteSingletonPool.Insert(static_cast<ObserverPtr<ADerived>>(this)));

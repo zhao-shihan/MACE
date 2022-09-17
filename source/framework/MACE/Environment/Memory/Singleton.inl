@@ -7,7 +7,7 @@ ObserverPtr<internal::SingletonPool::Node> Singleton<ADerived>::fgInstanceNode =
 
 template<class ADerived>
 Singleton<ADerived>::Singleton() {
-    static_assert(Concept::Singletonized<ADerived>);
+    static_assert(Singletonized<ADerived>);
     if (internal::SingletonPool::Instance().Contains<ADerived>()) {
         throw std::logic_error(
             std::string("MACE::Environment::Memory::Singleton: Trying to construct ")

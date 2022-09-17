@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Memory/Concept/MuteSingletonized.hxx"
+#include "MACE/Environment/Memory/MuteSingletonized.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
@@ -28,11 +28,11 @@ public:
 
     static MuteSingletonPool& Instance();
 
-    template<Concept::MuteSingletonized AMuteSingleton>
+    template<MuteSingletonized AMuteSingleton>
     [[nodiscard]] std::optional<std::reference_wrapper<Node>> Find();
-    template<Concept::MuteSingletonized AMuteSingleton>
+    template<MuteSingletonized AMuteSingleton>
     [[nodiscard]] auto Contains() const { return fInstanceMap.contains(typeid(AMuteSingleton)); }
-    [[nodiscard]] Node& Insert(Concept::MuteSingletonized auto* instance);
+    [[nodiscard]] Node& Insert(MuteSingletonized auto* instance);
 
 private:
     std::map<const std::type_index, Node> fInstanceMap;

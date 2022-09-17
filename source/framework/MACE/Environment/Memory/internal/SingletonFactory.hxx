@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Memory/Concept/Singletonized.hxx"
+#include "MACE/Environment/Memory/Singletonized.hxx"
 #include "MACE/Environment/Memory/FreeSingleton.hxx"
 #include "MACE/Environment/Memory/internal/SingletonPool.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
@@ -14,7 +14,7 @@ namespace MACE::Environment::Memory::internal {
 /// Not API.
 class SingletonFactory final : public FreeSingleton<SingletonFactory> {
 public:
-    template<Concept::Singletonized ASingleton>
+    template<Singletonized ASingleton>
     [[nodiscard]] SingletonPool::Node& InstantiateOrFind();
 };
 

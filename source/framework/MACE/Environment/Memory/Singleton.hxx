@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Memory/Concept/Singletonized.hxx"
+#include "MACE/Environment/Memory/Singletonized.hxx"
 #include "MACE/Environment/Memory/internal/ISingletonBase.hxx"
 #include "MACE/Environment/Memory/internal/SingletonFactory.hxx"
 #include "MACE/Environment/Memory/internal/SingletonPool.hxx"
