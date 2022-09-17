@@ -3,7 +3,7 @@
 #include <cinttypes>
 #include <concepts>
 
-namespace MACE::Utility::Math {
+namespace MACE::Math {
 
 constexpr bool IsOdd(std::integral auto n) {
     return n & 1;
@@ -23,4 +23,4 @@ consteval bool IsEven() {
     return not IsOdd<N>();
 }
 
-} // namespace MACE::Utility::Math
+} // namespace MACE::Math

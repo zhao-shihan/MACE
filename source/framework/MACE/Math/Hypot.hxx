@@ -1,11 +1,11 @@
 #pragma once
 
-#include "MACE/Utility/Concept/FundamentalType.hxx"
+#include "MACE/Concept/FundamentalType.hxx"
 
 #include <cmath>
 #include <concepts>
 
-namespace MACE::Utility::Math {
+namespace MACE::Math {
 
 constexpr auto Hypot2(Concept::Arithmetic auto x, Concept::Arithmetic auto y) {
     return x * x + y * y;
@@ -19,4 +19,4 @@ auto Hypot(std::floating_point auto... x) {
     return std::sqrt(Hypot2(x...));
 }
 
-} // namespace MACE::Utility::Math
+} // namespace MACE::Math

@@ -1,9 +1,9 @@
-#include "MACE/Utility/Math/IntegerPower.hxx"
+#include "MACE/Math/IntegerPower.hxx"
 
 #include <cmath>
 #include <complex>
 
-using namespace MACE::Utility::Math;
+using namespace MACE::Math;
 
 #define MACE_TEST_GENERATE_POWZ_FUNC(FPType, Prefix)                   \
     FPType Prefix##__DoConstPowZImAlmostEmpty() {                      \
