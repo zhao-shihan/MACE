@@ -13,6 +13,21 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
 
 # =============================================================================
+# Compile warnings for MACE
+# =============================================================================
+
+# More warnings
+if(CMAKE_COMPILER_IS_GNUCXX)
+    add_compile_options(-Wall -Wextra -Wpedantic -Wduplicated-cond -Wundef -Wunused-macros -Wnon-virtual-dtor)
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    add_compile_options(-Wall -Wextra -Wpedantic -Wundef -Wunused-macros -Wnon-virtual-dtor
+                        -Wno-gnu-zero-variadic-macro-arguments)
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    # /Wall will make MSVC commit suicide, just use /W4
+    add_compile_options(/W4)
+endif()
+
+# =============================================================================
 # CMake controllable compile options for MACE
 # =============================================================================
 
@@ -29,23 +44,54 @@ if(MACE_USE_G4VIS)
 endif()
 
 if(MACE_ENABLE_LTO)
-    if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        add_compile_options(-flto)
-        add_link_options(-flto)
-        message(STATUS "LTO enabled for MACE (-flto)")
-    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-        add_link_options(/LTCG)
-        message(STATUS "LTO enabled for MACE (/LTCG)")
+    include(CheckIPOSupported)
+    check_ipo_supported(RESULT MACE_ENABLE_LTO_SUPPORTED
+                        OUTPUT MACE_LTO_SUPPORTED_ERROR)
+    if(MACE_ENABLE_LTO_SUPPORTED)
+        set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE ON)
+        message(STATUS "LTO enabled for MACE")
+    else()
+        set(MACE_ENABLE_LTO OFF)
+        message(NOTICE "***Notice: LTO not supported: <${MACE_LTO_SUPPORTED_ERROR}>. Turning off MACE_ENABLE_LTO")
     endif()
 endif()
 
-if(MACE_ENABLE_MSVC_STD_CONFORMITY)
-    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-        # Enable standard-conformity
-        add_compile_options(/permissive- /Zc:__cplusplus /Zc:inline)
-        message(STATUS "MSVC standard-conformity enabled (/permissive- /Zc:__cplusplus /Zc:inline)")
-        # Be permissive to standard cfunctions
-        add_compile_definitions(_CRT_SECURE_NO_WARNINGS=1)
+if(MACE_ENABLE_MSVC_STD_CONFORMITY AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    # Enable standard-conformity
+    add_compile_options(/permissive- /Zc:__cplusplus /Zc:inline)
+    message(STATUS "MSVC standard-conformity enabled (/permissive- /Zc:__cplusplus /Zc:inline)")
+    # Be permissive to standard cfunctions
+    add_compile_definitions(_CRT_SECURE_NO_WARNINGS=1)
+endif()
+
+if(MACE_SHOW_GCC_EFFCXX_COMPILE_WARNINGS AND CMAKE_COMPILER_IS_GNUCXX)
+    add_compile_options(-Weffc++)
+endif()
+
+if(MACE_SURPRESS_COMPILE_WARNINGS)
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        # OpenMPI
+        add_compile_options(-Wno-cast-function-type)
+        # ROOT
+        add_compile_options(-Wno-volatile)
+    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        # ROOT
+        add_compile_options(-Wno-deprecated-volatile)
+    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+        # ROOT (conditional expression is constant)
+        add_compile_options(/wd4127)
+        # Common ('argument': conversion from 'type1' to 'type2', possible loss of data)
+        add_compile_options(/wd4244)
+        # Common ('var': conversion from 'size_t' to 'type', possible loss of data)
+        add_compile_options(/wd4267)
+        # MSVC std::tuple ('derived class' : destructor was implicitly defined as deleted because a base class destructor is inaccessible or deleted)
+        add_compile_options(/wd4624)
+        # Common (The file contains a character that cannot be represented in the current code page (number). Save the file in Unicode format to prevent data loss)
+        add_compile_options(/wd4819)
+        # ROOT (using a function, class member, variable, or typedef that's marked deprecated)
+        add_compile_options(/wd4996)
+        # Eigen (operator 'operator-name': deprecated between enumerations of different types)
+        add_compile_options(/wd5054)
     endif()
 endif()
 
@@ -88,48 +134,3 @@ endif()
 
 # Solve conflict between <span> and "ROOT/RSpan.hxx"
 add_compile_definitions(R__HAS_STD_SPAN=1)
-
-# =============================================================================
-# Compile warnings for MACE
-# =============================================================================
-
-# More warnings
-if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    add_compile_options(-Wall -Wextra)
-    # GCC -Weffc++
-    if(MACE_SHOW_GCC_EFFCXX_COMPILE_WARNINGS AND CMAKE_COMPILER_IS_GNUCXX)
-        add_compile_options(-Weffc++)   
-    endif()
-elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    # /Wall will make MSVC commit suicide, just use /W4
-    add_compile_options(/W4)
-endif()
-# Surpress those stupid or from external
-if(MACE_SURPRESS_COMPILE_WARNINGS)
-    if(CMAKE_COMPILER_IS_GNUCXX)
-        # OpenMPI
-        add_compile_options(-Wno-cast-function-type)
-        # ROOT
-        add_compile_options(-Wno-volatile)
-        # strncpy, strncat, etc.
-        add_compile_options(-Wno-stringop-truncation)
-    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        # ROOT
-        add_compile_options(-Wno-deprecated-volatile)
-    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-        # ROOT (conditional expression is constant)
-        add_compile_options(/wd4127)
-        # Common ('argument': conversion from 'type1' to 'type2', possible loss of data)
-        add_compile_options(/wd4244)
-        # Common ('var': conversion from 'size_t' to 'type', possible loss of data)
-        add_compile_options(/wd4267)
-        # MSVC std::tuple ('derived class' : destructor was implicitly defined as deleted because a base class destructor is inaccessible or deleted)
-        add_compile_options(/wd4624)
-        # Common (The file contains a character that cannot be represented in the current code page (number). Save the file in Unicode format to prevent data loss)
-        add_compile_options(/wd4819)
-        # ROOT (using a function, class member, variable, or typedef that's marked deprecated)
-        add_compile_options(/wd4996)
-        # Eigen (operator 'operator-name': deprecated between enumerations of different types)
-        add_compile_options(/wd5054)
-    endif()
-endif()

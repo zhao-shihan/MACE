@@ -20,7 +20,7 @@ std::string TestEqual(auto a, auto real, auto tolerance) {
         return std::string("***FAIL***, relErr = ").append(std::to_string(relErr * 1e16)).append("e-16");
     }
     return "PASS";
-};
+}
 
 template<int N>
 void TestPowI(auto xI, auto xL, auto xLL, auto xUL, auto xULL) {
