@@ -6,7 +6,7 @@ namespace MACE::Core::Geometry {
 
 template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, class AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
 void IEntity::RegisterField(std::size_t volumeIndex, AField* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const {
-    auto logicalVolume = GetLogicalVolume(volumeIndex);
+    auto logicalVolume = LogicalVolume(volumeIndex);
     auto DoRegistration = [&field, &hMin, &nVal, &logicalVolume, &propagateToDescendants] {
         auto equation = new AEquation(field);
         auto stepper = new AStepper(equation, nVal);
@@ -27,7 +27,7 @@ void IEntity::RegisterField(std::size_t volumeIndex, AField* field, G4double hMi
 
 template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, class AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
 void IEntity::RegisterField(AField* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const {
-    for (std::size_t i = 0; i < GetLogicalVolumeNum(); ++i) {
+    for (std::size_t i = 0; i < LogicalVolumeNum(); ++i) {
         RegisterField<AField, AEquation, AStepper, ADriver>(i, field, hMin, nVal, propagateToDescendants);
     }
 }

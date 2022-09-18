@@ -14,13 +14,13 @@ private:
     SpectrometerMagnet& operator=(const SpectrometerMagnet&) = delete;
 
 public:
-    const auto& GetInnerRadius() const { return fInnerRadius; }
-    const auto& GetOuterRadius() const { return fOuterRadius; }
-    const auto& GetLength() const { return fLength; }
+    const auto& InnerRadius() const { return fInnerRadius; }
+    const auto& OuterRadius() const { return fOuterRadius; }
+    const auto& Length() const { return fLength; }
 
-    void SetInnerRadius(double val) { fInnerRadius = val; }
-    void SetOuterRadius(double val) { fOuterRadius = val; }
-    void SetLength(double val) { fLength = val; }
+    void InnerRadius(double val) { fInnerRadius = val; }
+    void OuterRadius(double val) { fOuterRadius = val; }
+    void Length(double val) { fLength = val; }
 
 private:
     void ImportValues(const YAML::Node& node) override;

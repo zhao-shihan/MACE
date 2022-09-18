@@ -2,25 +2,25 @@ namespace MACE::Core::Geometry::Description {
 
 namespace std2b = Compatibility::std2b;
 
-bool Target::VolumeContains(const MathVector3D auto& x) const noexcept {
+bool Target::VolumeContain(const MathVector3D auto& x) const noexcept {
     switch (fShapeType) {
-    case ShapeType::Cuboid:
-        return fCuboid.VolumeContains(x);
+    case TargetShapeType::Cuboid:
+        return fCuboid.VolumeContain(x);
     }
     std2b::unreachable();
 }
 
-bool Target::Contains(const MathVector3D auto& x, bool insideVolume) const noexcept {
+bool Target::Contain(const MathVector3D auto& x, bool insideVolume) const noexcept {
     switch (fShapeType) {
-    case ShapeType::Cuboid:
-        return fCuboid.Contains(x, insideVolume);
+    case TargetShapeType::Cuboid:
+        return fCuboid.Contain(x, insideVolume);
     }
     std2b::unreachable();
 }
 
 bool Target::TestDetectable(const MathVector3D auto& x) const noexcept {
     switch (fShapeType) {
-    case ShapeType::Cuboid:
+    case TargetShapeType::Cuboid:
         return fCuboid.TestDetectable(x);
     }
     std2b::unreachable();
@@ -33,8 +33,8 @@ Target::ShapeBase<ADerivedShape>::ShapeBase() {
             requires std::is_base_of_v<ShapeBase<ADerivedShape>, ADerivedShape>;
             requires std::is_final_v<ADerivedShape>;
             { shape.CalcTransform() } -> std::same_as<HepGeom::Transform3D>;
-            { shape.VolumeContains(x) } -> std::same_as<bool>;
-            { shape.Contains(x, inside) } -> std::same_as<bool>;
+            { shape.VolumeContain(x) } -> std::same_as<bool>;
+            { shape.Contain(x, inside) } -> std::same_as<bool>;
             { shape.TestDetectable(x) } -> std::same_as<bool>;
         });
 }
@@ -46,43 +46,43 @@ Target::ShapeBase<ADerivedShape>::DetailBase<ADerivedDetail>::DetailBase() {
         requires(const ADerivedDetail& detail, CLHEP::Hep3Vector&& x) { // clang-format on
             requires std::is_base_of_v<DetailBase<ADerivedDetail>, ADerivedDetail>;
             requires std::is_final_v<ADerivedDetail>;
-            { detail.TestDetailedShape(x) } -> std::same_as<bool>;
-            { detail.TestDetailedDetectable(x) } -> std::same_as<bool>;
+            { detail.DetailContain(x) } -> std::same_as<bool>;
+            { detail.DetailDetectable(x) } -> std::same_as<bool>;
         });
 }
 
-bool Target::Cuboid::VolumeContains(const MathVector3D auto& x) const noexcept {
+bool Target::CuboidTarget::VolumeContain(const MathVector3D auto& x) const noexcept {
     return -fThickness <= x[2] and x[2] <= 0 and
            std::abs(x[0]) <= fWidth / 2 and
            std::abs(x[1]) <= fWidth / 2;
 }
 
-bool Target::Cuboid::Contains(const MathVector3D auto& x, bool insideVolume) const noexcept {
+bool Target::CuboidTarget::Contain(const MathVector3D auto& x, bool insideVolume) const noexcept {
     switch (fDetailType) {
-    case DetailType::Flat:
+    case ShapeDetailType::Flat:
         return insideVolume;
-    case DetailType::Hole:
+    case ShapeDetailType::Hole:
         return insideVolume and
-               fHole.TestDetailedShape(x);
+               fHole.DetailContain(x);
     }
     std2b::unreachable();
 }
 
-bool Target::Cuboid::TestDetectable(const MathVector3D auto& x) const noexcept {
+bool Target::CuboidTarget::TestDetectable(const MathVector3D auto& x) const noexcept {
     const auto notShadowed = x[2] > 0 or
                              std::abs(x[0]) > fWidth / 2 or
                              std::abs(x[1]) > fWidth / 2;
     switch (fDetailType) {
-    case DetailType::Flat:
+    case ShapeDetailType::Flat:
         return notShadowed;
-    case DetailType::Hole:
+    case ShapeDetailType::Hole:
         return notShadowed or
-               fHole.TestDetailedDetectable(x);
+               fHole.DetailDetectable(x);
     }
     std2b::unreachable();
 }
 
-bool Target::Cuboid::Hole::TestDetailedShape(const MathVector3D auto& x) const noexcept {
+bool Target::CuboidTarget::HoledCuboid::DetailContain(const MathVector3D auto& x) const noexcept {
     if (x[2] < -fDepth or std::abs(x[0]) > fHalfExtent or std::abs(x[1]) > fHalfExtent) {
         return true;
     } else {

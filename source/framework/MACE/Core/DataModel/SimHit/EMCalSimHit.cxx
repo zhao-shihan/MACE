@@ -8,9 +8,9 @@ IntBranchSocket EMCalSimHit::fgG4TrackID("g4TrackID", -1);
 
 EMCalSimHit::EMCalSimHit() noexcept :
     EMCalHit(),
-    fParticle(fgParticle.GetValue()),
-    fG4EventID(fgG4EventID.GetValue()),
-    fG4TrackID(fgG4TrackID.GetValue()) {}
+    fParticle(fgParticle.Value()),
+    fG4EventID(fgG4EventID.Value()),
+    fG4TrackID(fgG4TrackID.Value()) {}
 
 void EMCalSimHit::CreateBranches(TTree& tree) {
     EMCalHit::CreateBranches(tree);
@@ -28,9 +28,9 @@ void EMCalSimHit::ConnectToBranches(TTree& tree) {
 
 void EMCalSimHit::FillBranchSockets() const noexcept {
     EMCalHit::FillBranchSockets();
-    fgParticle.SetValue(fParticle);
-    fgG4EventID.SetValue(fG4EventID);
-    fgG4TrackID.SetValue(fG4TrackID);
+    fgParticle.Value(fParticle);
+    fgG4EventID.Value(fG4EventID);
+    fgG4TrackID.Value(fG4TrackID);
 }
 
 } // namespace MACE::Core::DataModel::SimHit

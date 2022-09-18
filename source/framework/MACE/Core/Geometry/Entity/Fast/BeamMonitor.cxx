@@ -10,15 +10,15 @@ namespace MACE::Core::Geometry::Entity::Fast {
 
 using namespace MACE::Utility::LiteralUnit::Density;
 
-bool BeamMonitor::IsEnabled() const {
-    return Description::BeamMonitor::Instance().IsEnabled();
+bool BeamMonitor::Enabled() const {
+    return Description::BeamMonitor::Instance().Enabled();
 }
 
 void BeamMonitor::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::BeamMonitor::Instance();
     const auto name = description.GetName();
-    const auto width = description.GetWidth();
-    const auto thickness = description.GetThickness();
+    const auto width = description.Width();
+    const auto thickness = description.Thickness();
     const auto transform = description.CalcTransform();
 
     auto solid = Make<G4Box>(
@@ -34,7 +34,7 @@ void BeamMonitor::ConstructSelf(G4bool checkOverlaps) {
         transform,
         logic,
         name,
-        Mother()->GetLogicalVolume(),
+        Mother()->LogicalVolume(),
         false,
         0,
         checkOverlaps);

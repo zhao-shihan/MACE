@@ -7,9 +7,9 @@ FloatBranchSocket ICDCTrack::fgChi2("chi2", 0);
 DoubleBranchSocket ICDCTrack::fgVertexTime("vtxTime", 0);
 
 ICDCTrack::ICDCTrack() noexcept :
-    fNumHits(fgNumHits.GetValue()),
-    fChi2(fgChi2.GetValue()),
-    fVertexTime(fgVertexTime.GetValue()) {}
+    fNumHits(fgNumHits.Value()),
+    fChi2(fgChi2.Value()),
+    fVertexTime(fgVertexTime.Value()) {}
 
 ICDCTrack::~ICDCTrack() noexcept = default;
 
@@ -29,9 +29,9 @@ void ICDCTrack::ConnectToBranches(TTree& tree) {
 
 void ICDCTrack::FillBranchSockets() const noexcept {
     ITransientData::FillBranchSockets();
-    fgNumHits.SetValue(fNumHits);
-    fgChi2.SetValue(fChi2);
-    fgVertexTime.SetValue(fVertexTime);
+    fgNumHits.Value(fNumHits);
+    fgChi2.Value(fChi2);
+    fgVertexTime.Value(fVertexTime);
 }
 
 } // namespace MACE::Core::DataModel::Track

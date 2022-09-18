@@ -13,9 +13,9 @@ using namespace MACE::Utility::PhysicalConstant;
 void FirstBendSolenoid::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::TransportLine::Instance();
     const auto name = "FirstBendSolenoid";
-    const auto innerRadius = description.GetSolenoidInnerRadius();
-    const auto outerRadius = description.GetSolenoidOuterRadius();
-    const auto bendRadius = description.GetFirstBendRadius();
+    const auto innerRadius = description.SolenoidInnerRadius();
+    const auto outerRadius = description.SolenoidOuterRadius();
+    const auto bendRadius = description.FirstBendRadius();
 
     auto solid = Make<G4Torus>(
         name,
@@ -32,7 +32,7 @@ void FirstBendSolenoid::ConstructSelf(G4bool checkOverlaps) {
         G4Transform3D(),
         logic,
         name,
-        Mother()->GetLogicalVolume(),
+        Mother()->LogicalVolume(),
         false,
         0,
         checkOverlaps);

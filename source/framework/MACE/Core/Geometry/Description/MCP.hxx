@@ -14,11 +14,11 @@ private:
     MCP& operator=(const MCP&) = delete;
 
 public:
-    const auto& GetWidth() const { return fWidth; }
-    const auto& GetThickness() const { return fThickness; }
+    const auto& Width() const { return fWidth; }
+    const auto& Thickness() const { return fThickness; }
 
-    void SetWidth(double val) { fWidth = val; }
-    void SetThickness(double val) { fThickness = val; }
+    void Width(double val) { fWidth = val; }
+    void Thickness(double val) { fThickness = val; }
 
 private:
     void ImportValues(const YAML::Node& node) override;

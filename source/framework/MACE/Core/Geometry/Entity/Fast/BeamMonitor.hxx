@@ -11,7 +11,7 @@ public:
     BeamMonitor(const BeamMonitor&) = delete;
     BeamMonitor& operator=(const BeamMonitor&) = delete;
 
-    bool IsEnabled() const override;
+    bool Enabled() const override;
 
 private:
     void ConstructSelf(G4bool checkOverlaps) override;

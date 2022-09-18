@@ -14,13 +14,13 @@ private:
     SelectorField& operator=(const SelectorField&) = delete;
 
 public:
-    const auto& GetRadius() const { return fRadius; }
-    const auto& GetLength() const { return fLength; }
-    const auto& GetAxialPosition() const { return fAxialPosition; }
+    const auto& Radius() const { return fRadius; }
+    const auto& Length() const { return fLength; }
+    const auto& AxialPosition() const { return fAxialPosition; }
 
-    void SetRadius(double val) { fRadius = val; }
-    void SetLength(double val) { fLength = val; }
-    void SetAxialPosition(double val) { fAxialPosition = val; }
+    void Radius(double val) { fRadius = val; }
+    void Length(double val) { fLength = val; }
+    void AxialPosition(double val) { fAxialPosition = val; }
 
 private:
     void ImportValues(const YAML::Node& node) override;

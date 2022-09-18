@@ -16,15 +16,15 @@ private:
     BeamMonitor& operator=(const BeamMonitor&) = delete;
 
 public:
-    const auto& IsEnabled() const { return fIsEnabled; }
-    const auto& GetWidth() const { return fWidth; }
-    const auto& GetThickness() const { return fThickness; }
-    const auto& GetDistanceToTargetSurface() const { return fDistanceToTargetSurface; }
+    const auto& Enabled() const { return fIsEnabled; }
+    const auto& Width() const { return fWidth; }
+    const auto& Thickness() const { return fThickness; }
+    const auto& DistanceToTargetSurface() const { return fDistanceToTargetSurface; }
 
-    void SetEnable(bool val) { fIsEnabled = val; }
-    void SetWidth(double val) { fWidth = val; }
-    void SetThickness(double val) { fThickness = val; }
-    void SetDistanceToTargetSurface(double val) { fDistanceToTargetSurface = val; }
+    void Enabled(bool val) { fIsEnabled = val; }
+    void Width(double val) { fWidth = val; }
+    void Thickness(double val) { fThickness = val; }
+    void DistanceToTargetSurface(double val) { fDistanceToTargetSurface = val; }
 
     // Next 1 method should only use for geometry construction.
 

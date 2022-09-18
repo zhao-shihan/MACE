@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
     TFile fileOut(fileNameOut.generic_string().c_str(), "recreate");
 
     DataFactory dataHub;
-    dataHub.SetTreeNamePrefixFormat("Rep#_");
+    dataHub.TreeNamePrefixFormat("Rep#_");
     auto treeIndexRange = dataHub.GetTreeIndexRange<Hit_t>(fileIn);
     auto [treeBegin, treeEnd, treeStep, _] = AllocMPIJobsJobWise(treeIndexRange, MPI_COMM_WORLD);
 
@@ -68,23 +68,23 @@ int main(int argc, char* argv[]) {
     std::cout << "Rank" << mpiEnvironment.GetWorldRank() << " is ready to process data of repetition " << treeBegin << " to " << treeEnd - 1 << std::endl;
 
     for (auto treeIndex = treeBegin; treeIndex < treeEnd; treeIndex += treeStep) {
-        dataHub.SetTreeNamePrefixFormat("Rep#_");
-        std::cout << "Now processing " << dataHub.GetTreeName<Hit_t>(treeIndex) << " ..." << std::endl;
+        dataHub.TreeNamePrefixFormat("Rep#_");
+        std::cout << "Now processing " << dataHub.TreeName<Hit_t>(treeIndex) << " ..." << std::endl;
 
         auto hitData = dataHub.CreateAndFillList<Hit_t>(fileIn, treeIndex);
 
         if (deltaD > 0) {
             for (auto&& hit : hitData) {
-                hit->SetDriftDistanceVariance(deltaD);
+                hit->DriftDistanceVariance(deltaD);
                 const auto smearD = CLHEP::RandGauss::shoot(std::addressof(mtEng), 0, deltaD);
-                hit->SetDriftDistance(smearD + hit->GetDriftDistance());
+                hit->DriftDistance(smearD + hit->DriftDistance());
             }
         }
         if (deltaZ > 0) {
             for (auto&& hit : hitData) {
-                hit->SetHitPositionZVariance(deltaZ);
+                hit->HitPositionZVariance(deltaZ);
                 const auto smearZ = CLHEP::RandGauss::shoot(std::addressof(mtEng), 0, deltaZ);
-                hit->SetHitPositionZ(smearZ + hit->GetHitPositionZ());
+                hit->HitPositionZ(smearZ + hit->HitPositionZ());
             }
         }
 
@@ -121,14 +121,14 @@ int main(int argc, char* argv[]) {
             error.SetChi2(physicsTrack.GetChi2());
         }
 
-        dataHub.SetTreeNamePrefixFormat("Rep#_Omitted_");
+        dataHub.TreeNamePrefixFormat("Rep#_Omitted_");
         dataHub.CreateAndFillTree<Hit_t>(ommitedHits, treeIndex)->Write();
-        dataHub.SetTreeNamePrefixFormat("Rep#_Perfect_");
+        dataHub.TreeNamePrefixFormat("Rep#_Perfect_");
         dataHub.CreateAndFillTree<CDCPhysicsTrack>(perfectTracks, treeIndex)->Write();
-        dataHub.SetTreeNamePrefixFormat("Rep#_Exact_");
+        dataHub.TreeNamePrefixFormat("Rep#_Exact_");
         dataHub.CreateAndFillTree<CDCHelixTrack>(helixTracks, treeIndex)->Write();
         dataHub.CreateAndFillTree<CDCPhysicsTrack>(physicsTracks, treeIndex)->Write();
-        dataHub.SetTreeNamePrefixFormat("Rep#_Error_");
+        dataHub.TreeNamePrefixFormat("Rep#_Error_");
         dataHub.CreateAndFillTree<CDCPhysicsTrack>(errors, treeIndex)->Write();
     }
 

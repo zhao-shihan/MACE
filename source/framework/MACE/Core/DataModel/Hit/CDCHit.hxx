@@ -24,26 +24,24 @@ public:
     CDCHit& operator=(const CDCHit& hit) noexcept = default;
     CDCHit& operator=(CDCHit&& hit) noexcept = default;
 
-    const auto& GetHitTime() const { return fHitTime; }
-    const auto& GetDriftDistance() const { return fDriftDistance; }
-    const auto& GetHitPositionZ() const { return fHitPositionZ; }
-    const auto& GetDriftDistanceVariance() const { return fDriftDistanceVariance; }
-    const auto& GetHitPositionZVariance() const { return fHitPositionZVariance; }
-    const auto& GetWirePosition() const { return fWirePosition; }
-    const auto& GetWireDirection() const { return fWireDirection; }
-    const auto& GetCellID() const { return fCellID; }
-    const auto& GetLayerID() const { return fLayerID; }
+    const auto& HitTime() const { return fHitTime; }
+    const auto& DriftDistance() const { return fDriftDistance; }
+    const auto& HitPositionZ() const { return fHitPositionZ; }
+    const auto& DriftDistanceVariance() const { return fDriftDistanceVariance; }
+    const auto& HitPositionZVariance() const { return fHitPositionZVariance; }
+    const auto& WirePosition() const { return fWirePosition; }
+    const auto& WireDirection() const { return fWireDirection; }
+    const auto& CellID() const { return fCellID; }
+    const auto& LayerID() const { return fLayerID; }
 
-    void SetHitTime(Double_t val) { fHitTime = val; }
-    void SetDriftDistance(Double_t d) { fDriftDistance = d; }
-    void SetHitPositionZ(Double_t z) { fHitPositionZ = z; }
-    void SetDriftDistanceVariance(Double_t val) { fDriftDistanceVariance = val; }
-    void SetHitPositionZVariance(Double_t val) { fHitPositionZVariance = val; }
-    template<typename A2Vector>
-    void SetWirePosition(A2Vector&& pos) { fWirePosition = std::forward<A2Vector>(pos); }
-    void SetWirePosition(Double_t x, Double_t y) { fWirePosition = {x, y}; }
-    template<typename A3Vector>
-    void SetWireDirection(A3Vector&& dir) { fWireDirection = std::forward<A3Vector>(dir); }
+    void HitTime(Double_t val) { fHitTime = val; }
+    void DriftDistance(Double_t d) { fDriftDistance = d; }
+    void HitPositionZ(Double_t z) { fHitPositionZ = z; }
+    void DriftDistanceVariance(Double_t val) { fDriftDistanceVariance = val; }
+    void HitPositionZVariance(Double_t val) { fHitPositionZVariance = val; }
+    void WirePosition(auto&& pos) { fWirePosition = std::forward<decltype(pos)>(pos); }
+    void WirePosition(Double_t x, Double_t y) { fWirePosition = {x, y}; }
+    void SetWireDirection(auto&& dir) { fWireDirection = std::forward<decltype(dir)>(dir); }
     void SetWireDirection(Double_t tx, Double_t ty, Double_t tz) { fWireDirection = {tx, ty, tz}; }
     void SetCellID(Int_t val) { fCellID = val; }
     void SetLayerID(Int_t val) { fLayerID = val; }

@@ -12,11 +12,11 @@ using namespace MACE::Utility::LiteralUnit::Density;
 void Target::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::Target::Instance();
     const auto& name = description.GetName();
-    switch (description.GetShapeType()) {
-    case Description::Target::ShapeType::Cuboid:
-        const auto& cuboidDescription = description.GetCuboid();
-        const auto width = cuboidDescription.GetWidth();
-        const auto thickness = cuboidDescription.GetThickness();
+    switch (description.ShapeType()) {
+    case Description::Target::TargetShapeType::Cuboid:
+        const auto& cuboidDescription = description.Cuboid();
+        const auto width = cuboidDescription.Width();
+        const auto thickness = cuboidDescription.Thickness();
         const auto transform = cuboidDescription.CalcTransform();
         auto solid = Make<G4Box>(
             name,
@@ -31,7 +31,7 @@ void Target::ConstructSelf(G4bool checkOverlaps) {
             transform,
             logic,
             name,
-            Mother()->GetLogicalVolume(),
+            Mother()->LogicalVolume(),
             false,
             0,
             checkOverlaps);

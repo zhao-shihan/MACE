@@ -14,7 +14,7 @@ SecondBendField::SecondBendField() :
     NonMoveableBase(),
     G4MagneticField(),
     fGeomTransform(TransportLineDescription::Instance().SecondBendTransform()),
-    fBendRadius(TransportLineDescription::Instance().GetSecondBendRadius()),
+    fBendRadius(TransportLineDescription::Instance().SecondBendRadius()),
     fB0R0(0.1_T * fBendRadius) {
     Messenger::FieldMessenger::Instance().SetTo(this);
 }

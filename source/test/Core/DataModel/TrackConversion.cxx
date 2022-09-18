@@ -11,10 +11,10 @@ using namespace MACE::Utility::LiteralUnit;
 
 int main(int, char* argv[]) {
     DataFactory dataHub;
-    dataHub.SetTreeNamePrefixFormat("Rep#_Exact_");
+    dataHub.TreeNamePrefixFormat("Rep#_Exact_");
 
     auto fileIn = TFile::Open(argv[1], "open");
-    auto helixTree = dataHub.GetTree<CDCHelixTrack>(*fileIn, 0);
+    auto helixTree = dataHub.FindTree<CDCHelixTrack>(*fileIn, 0);
     auto helixList = dataHub.CreateAndFillList<CDCHelixTrack>(*helixTree);
     fileIn->Close();
     delete fileIn;
@@ -31,7 +31,7 @@ int main(int, char* argv[]) {
         auto& diff = diffList.emplace_back(std::make_shared<CDCHelixTrack>());
         diff->SetVertexTime(revTrack->GetVertexTime() - helix->GetVertexTime());
         diff->SetCenter(revTrack->GetCenter() - helix->GetCenter());
-        diff->SetRadius(revTrack->GetRadius() - helix->GetRadius());
+        diff->Radius(revTrack->Radius() - helix->Radius());
         diff->SetZ0(revTrack->GetZ0() - helix->GetZ0());
         diff->SetAlpha(revTrack->GetAlpha() - helix->GetAlpha());
         diff->SetNumHits(revTrack->GetNumHits() - helix->GetNumHits());
@@ -39,10 +39,10 @@ int main(int, char* argv[]) {
     }
 
     auto fileOut = TFile::Open(argv[2], "recreate");
-    dataHub.SetTreeNamePrefixFormat("Rep#_Conv_");
+    dataHub.TreeNamePrefixFormat("Rep#_Conv_");
     dataHub.CreateAndFillTree<CDCPhysicsTrack>(trackList, 0)->Write();
     dataHub.CreateAndFillTree<CDCHelixTrack>(revTrackList, 0)->Write();
-    dataHub.SetTreeNamePrefixFormat("Rep#_Diff_");
+    dataHub.TreeNamePrefixFormat("Rep#_Diff_");
     dataHub.CreateAndFillTree<CDCHelixTrack>(diffList, 0)->Write();
     fileOut->Close();
     delete fileOut;

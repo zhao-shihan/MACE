@@ -15,13 +15,13 @@ using namespace MACE::Utility::PhysicalConstant;
 void CDCBody::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::CDC::Instance();
     const auto name = "CDCBody";
-    const auto shellInnerThickness = description.GetShellInnerThickness();
-    const auto shellSideThickness = description.GetShellSideThickness();
-    const auto shellOuterThickness = description.GetShellOuterThickness();
-    const auto gasInnerRadius = description.GetGasInnerRadius();
-    const auto gasOuterRadius = description.GetGasOuterRadius();
-    const auto gasInnerLength = description.GetGasInnerLength();
-    const auto gasOuterLength = description.GetGasOuterLength();
+    const auto shellInnerThickness = description.ShellInnerThickness();
+    const auto shellSideThickness = description.ShellSideThickness();
+    const auto shellOuterThickness = description.ShellOuterThickness();
+    const auto gasInnerRadius = description.GasInnerRadius();
+    const auto gasOuterRadius = description.GasOuterRadius();
+    const auto gasInnerLength = description.GasInnerLength();
+    const auto gasOuterLength = description.GasOuterLength();
 
     constexpr auto numZPlane = 4;
     const G4double zPlane[numZPlane] = {-gasOuterLength / 2 - shellSideThickness,
@@ -53,7 +53,7 @@ void CDCBody::ConstructSelf(G4bool checkOverlaps) {
         G4Transform3D(),
         logic,
         name,
-        Mother()->GetLogicalVolume(),
+        Mother()->LogicalVolume(),
         false,
         0,
         checkOverlaps);

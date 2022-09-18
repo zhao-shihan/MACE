@@ -13,25 +13,24 @@ namespace MACE::Core::DataModel::BranchSocket {
 namespace Eigen34 = Compatibility::Eigen34;
 using MACE::Utility::Concept::ArithmeticExcludeBoolChar;
 
-template<IsROOTFundamental AROOTFundamental, int ASize>
-class VectorBranchSocket final : public Utility::NonMoveableBase,
-                                 public IBranchSocket<Eigen34::Vector<AROOTFundamental, ASize>> {
+template<ROOTFundamental T, int N>
+class VectorBranchSocket final : public IBranchSocket<Eigen34::Vector<T, N>> {
 public:
-    VectorBranchSocket(const TString& branchName, const std::array<TString, ASize>& leafNames, const std::array<AROOTFundamental, ASize>& defaultValues);
+    VectorBranchSocket(const TString& branchName, const std::array<TString, N>& leafNames, const std::array<T, N>& defaultValues);
 
-    const Eigen34::Vector<AROOTFundamental, ASize>& GetValue() const override { return fVector; }
-    void SetValue(const Eigen34::Vector<AROOTFundamental, ASize>& vector) override { fVector = vector; }
-    template<ArithmeticExcludeBoolChar T>
-    Eigen34::Vector<T, ASize> GetValue() const { return fVector.template cast<T>(); }
-    template<ArithmeticExcludeBoolChar T>
-    void SetValue(const Eigen34::Vector<T, ASize>& vector) { fVector = vector.template cast<AROOTFundamental>(); }
+    const Eigen34::Vector<T, N>& Value() const override { return fVector; }
+    template<ArithmeticExcludeBoolChar U>
+    auto Value() const { return fVector.template cast<U>(); }
+    void Value(const Eigen34::Vector<T, N>& vector) override { fVector = vector; }
+    template<ArithmeticExcludeBoolChar U>
+    void Value(const Eigen34::Vector<U, N>& vector) { fVector = vector.template cast<T>(); }
 
     void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, fVector.data(), fLeafList); }
     void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(this->fBranchName, fVector.data()); }
 
 private:
     TString fLeafList;
-    Eigen34::Vector<AROOTFundamental, ASize> fVector;
+    Eigen34::Vector<T, N> fVector;
 };
 
 using Vector2FBranchSocket = VectorBranchSocket<Float_t, 2>;

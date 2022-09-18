@@ -14,19 +14,19 @@ private:
     Collimator& operator=(const Collimator&) = delete;
 
 public:
-    const auto& GetInnerRadius() const { return fInnerRadius; }
-    const auto& GetOuterRadius() const { return fOuterRadius; }
-    const auto& GetLength() const { return fLength; }
-    const auto& GetThickness() const { return fThickness; }
-    const auto& GetAxialPosition() const { return fAxialPosition; }
-    const auto& GetCount() const { return fCount; }
+    const auto& InnerRadius() const { return fInnerRadius; }
+    const auto& OuterRadius() const { return fOuterRadius; }
+    const auto& Length() const { return fLength; }
+    const auto& Thickness() const { return fThickness; }
+    const auto& AxialPosition() const { return fAxialPosition; }
+    const auto& Count() const { return fCount; }
 
-    void SetInnerRadius(double val) { fInnerRadius = val; }
-    void SetOuterRadius(double val) { fOuterRadius = val; }
-    void SetLength(double val) { fLength = val; }
-    void SetThickness(double val) { fThickness = val; }
-    void SetAxialPosition(double val) { fAxialPosition = val; }
-    void SetCount(int val) { fCount = val; }
+    void InnerRadius(double val) { fInnerRadius = val; }
+    void OuterRadius(double val) { fOuterRadius = val; }
+    void Length(double val) { fLength = val; }
+    void Thickness(double val) { fThickness = val; }
+    void AxialPosition(double val) { fAxialPosition = val; }
+    void Count(int val) { fCount = val; }
 
 private:
     void ImportValues(const YAML::Node& node) override;

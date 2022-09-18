@@ -26,14 +26,14 @@ public:
     explicit CDCHelixTrack(const CDCPhysicsTrack& physTrack, Double_t B = 0.1_T);
 
     const auto& GetCenter() const { return fCenter; }
-    const auto& GetRadius() const { return fRadius; }
+    const auto& Radius() const { return fRadius; }
     const auto& GetZ0() const { return fZ0; }
     const auto& GetAlpha() const { return fAlpha; }
 
     template<typename A2Vector>
     void SetCenter(A2Vector&& val) { fCenter = std::forward<A2Vector>(val); }
     void SetCenter(Double_t x, Double_t y) { fCenter = {x, y}; }
-    void SetRadius(Double_t val) { fRadius = val; }
+    void Radius(Double_t val) { fRadius = val; }
     void SetZ0(Double_t val) { fZ0 = val; }
     void SetAlpha(Double_t val) { fAlpha = val; }
 

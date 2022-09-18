@@ -40,8 +40,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     using namespace MACE::Core::Geometry::Entity::Fast;
 
     // LinacField is target's mother by default, modified it to adapt global frame
-    Description::LinacField::Instance().SetLength(0);
-    Description::LinacField::Instance().SetDownStreamLength(0);
+    Description::LinacField::Instance().Length(0);
+    Description::LinacField::Instance().DownStreamLength(0);
 
     fBeamDegrader = std::make_shared<BeamDegrader>();
     fBeamMonitor = std::make_shared<BeamMonitor>();
@@ -58,7 +58,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     fTarget->RegisterMaterial(nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", fDensity, fTemperature));
     fWorld->RegisterMaterial(nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3, fTemperature));
 
-    return fWorld->GetPhysicalVolume();
+    return fWorld->PhysicalVolume();
 }
 
 } // namespace MACE::SimTarget::Action

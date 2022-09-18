@@ -16,11 +16,11 @@ private:
     EMCalField& operator=(const EMCalField&) = delete;
 
 public:
-    const auto& GetRadius() const { return fRadius; }
-    const auto& GetLength() const { return fLength; }
+    const auto& Radius() const { return fRadius; }
+    const auto& Length() const { return fLength; }
 
-    void SetRadius(double val) { fRadius = val; }
-    void SetLength(double val) { fLength = val; }
+    void Radius(double val) { fRadius = val; }
+    void Length(double val) { fLength = val; }
 
     // Next 1 method should only use for geometry construction.
 

@@ -15,7 +15,7 @@ HepGeom::Transform3D EMCalField::CalcTransform() const {
     const auto& transportLine = TransportLine::Instance();
     const auto localTransX = 0;
     const auto localTransY = 0;
-    const auto localTransZ = transportLine.GetThirdStraightLength() / 2 + fLength / 2;
+    const auto localTransZ = transportLine.ThirdStraightLength() / 2 + fLength / 2;
     const auto translation = transportLine.ThirdStraightTransform().getTranslation() +
                              CLHEP::Hep3Vector(localTransX, localTransY, localTransZ);
     return HepGeom::Transform3D(CLHEP::HepRotation(), translation);

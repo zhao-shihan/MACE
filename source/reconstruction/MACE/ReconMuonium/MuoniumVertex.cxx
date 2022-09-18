@@ -14,15 +14,15 @@ ShortStringBranchSocket MuoniumVertex::fgParticles("particles", "");
 
 MuoniumVertex::MuoniumVertex() noexcept :
     ITransientData(),
-    fTCACDC(fgTCACDC.GetValue()),
-    fTCAMCP(fgTCAMCP.GetValue()),
-    fDeltaTCA(fgDeltaTCA.GetValue()),
-    fCPACDC(fgCPACDC.GetValue<double>()),
-    fCPAMCP(fgCPAMCP.GetValue<double>()),
-    fDCA(fgDCA.GetValue()),
-    fVertexEnergy(fgVertexEnergy.GetValue()),
-    fVertexMomentum(fgVertexMomentum.GetValue<double>()),
-    fParticles(fgParticles.GetValue()) {}
+    fTCACDC(fgTCACDC.Value()),
+    fTCAMCP(fgTCAMCP.Value()),
+    fDeltaTCA(fgDeltaTCA.Value()),
+    fCPACDC(fgCPACDC.Value<double>()),
+    fCPAMCP(fgCPAMCP.Value<double>()),
+    fDCA(fgDCA.Value()),
+    fVertexEnergy(fgVertexEnergy.Value()),
+    fVertexMomentum(fgVertexMomentum.Value<double>()),
+    fParticles(fgParticles.Value()) {}
 
 void MuoniumVertex::CreateBranches(TTree& tree) {
     ITransientData::CreateBranches(tree);
@@ -52,15 +52,15 @@ void MuoniumVertex::ConnectToBranches(TTree& tree) {
 
 void MuoniumVertex::FillBranchSockets() const noexcept {
     ITransientData::FillBranchSockets();
-    fgTCACDC.SetValue(fTCACDC);
-    fgTCAMCP.SetValue(fTCAMCP);
-    fgDeltaTCA.SetValue(fDeltaTCA);
-    fgCPACDC.SetValue(fCPACDC);
-    fgCPAMCP.SetValue(fCPAMCP);
-    fgDCA.SetValue(fDCA);
-    fgVertexEnergy.SetValue(fVertexEnergy);
-    fgVertexMomentum.SetValue(fVertexMomentum);
-    fgParticles.SetValue(fParticles);
+    fgTCACDC.Value(fTCACDC);
+    fgTCAMCP.Value(fTCAMCP);
+    fgDeltaTCA.Value(fDeltaTCA);
+    fgCPACDC.Value(fCPACDC);
+    fgCPAMCP.Value(fCPAMCP);
+    fgDCA.Value(fDCA);
+    fgVertexEnergy.Value(fVertexEnergy);
+    fgVertexMomentum.Value(fVertexMomentum);
+    fgParticles.Value(fParticles);
 }
 
 } // namespace MACE::ReconMuonium

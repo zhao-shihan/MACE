@@ -61,9 +61,9 @@ HoughTransformXY() {
     std::for_each_n(fHoughSpaceXY.data(), fHoughSpaceXY.rows() * fHoughSpaceXY.cols(), [](auto& elem) { elem.clear(); });
     // for each hit
     for (auto&& hit : fHitData) {
-        const auto x = hit->GetWirePosition().fX;
-        const auto y = hit->GetWirePosition().fY;
-        const auto d = hit->GetDriftDistance();
+        const auto x = hit->WirePosition().fX;
+        const auto y = hit->WirePosition().fY;
+        const auto d = hit->DriftDistance();
         const auto r2 = x * x + y * y - d * d;
         const auto X = 2 * x / r2;
         const auto Y = 2 * y / r2;
@@ -190,13 +190,13 @@ HoughTransformSZ(const std::pair<double, double>& center, const std::vector<HitP
         if (*hitPtrPtr == nullptr) { continue; }
 
         const auto* hit = hitPtrPtr->get();
-        const auto x = hit->GetWirePosition().fX;
-        const auto y = hit->GetWirePosition().fY;
+        const auto x = hit->WirePosition().fX;
+        const auto y = hit->WirePosition().fY;
         const auto [x0, y0] = center;
         const auto r2 = (x - x0) * (x - x0) + (y - y0) * (y - y0);
         const auto r02 = x0 * x0 + y0 * y0;
         const auto s = std::sqrt(r02) * std::asin((x0 * y - y0 * x) / std::sqrt(r2 * r02));
-        const auto z = hit->GetHitPositionZ();
+        const auto z = hit->HitPositionZ();
 
         // do hough transform
         auto z0 = ToZ0Real(0);

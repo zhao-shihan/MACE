@@ -34,7 +34,7 @@ void CDCCell::ConstructSelf(G4bool checkOverlaps) {
                     G4ThreeVector()),
                 logic,
                 name,
-                Mother()->GetLogicalVolume(layerID),
+                Mother()->LogicalVolume(layerID),
                 false,
                 cellID,
                 checkOverlaps);

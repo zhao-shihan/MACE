@@ -23,23 +23,23 @@ public:
     DataFactory(const DataFactory&) = delete;
     DataFactory& operator=(const DataFactory&) = delete;
 
-    void SetTreeNameIndexer(Char_t indexer);
-    void SetTreeNamePrefixFormat(const TString& prefix);
-    void SetTreeNameSuffixFormat(const TString& suffix);
+    void TreeNameIndexer(Char_t indexer);
+    void TreeNamePrefixFormat(const TString& prefix);
+    void TreeNameSuffixFormat(const TString& suffix);
 
-    Char_t GetTreeNameIndexer() const { return fIndexer; }
-    const TString& GetTreeNamePrefixFormat() const { return fPrefixFormat; }
-    const TString& GetTreeNameSuffixFormat() const { return fSuffixFormat; }
-    TString GetTreeNamePrefix(Long64_t i) const { return fPrefixHasIndexer ? (fSplitPrefix.first + i + fSplitPrefix.second) : fPrefixFormat; }
-    TString GetTreeNameSuffix(Long64_t i) const { return fSuffixHasIndexer ? (fSplitSuffix.first + i + fSplitSuffix.second) : fSuffixFormat; }
+    Char_t TreeNameIndexer() const { return fIndexer; }
+    const TString& TreeNamePrefixFormat() const { return fPrefixFormat; }
+    const TString& TreeNameSuffixFormat() const { return fSuffixFormat; }
+    TString TreeNamePrefix(Long64_t i) const { return fPrefixHasIndexer ? (fSplitPrefix.first + i + fSplitPrefix.second) : fPrefixFormat; }
+    TString TreeNameSuffix(Long64_t i) const { return fSuffixHasIndexer ? (fSplitSuffix.first + i + fSplitSuffix.second) : fSuffixFormat; }
     template<IsTransientData AData>
-    TString GetTreeName(Long64_t treeIndex) const;
+    TString TreeName(Long64_t treeIndex) const;
 
     /// Find a tree in a root file with name provided by AData and DataFactory settings.
     /// The tree is owned by the file.
     /// If not found, the return value is defined by ROOT (usually nullptr).
     template<IsTransientData AData>
-    ObserverPtr<TTree> GetTree(TFile& file, Long64_t treeIndex = 0) const;
+    ObserverPtr<TTree> FindTree(TFile& file, Long64_t treeIndex = 0) const;
     /// Create a TChain of the list of ROOT files.
     template<IsTransientData AData, std::convertible_to<const char*> APath>
     std::shared_ptr<TChain> CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex = 0) const;
@@ -89,7 +89,7 @@ public:
     /// user should ensure that the tree contains branches which AData needs.
     template<IsTransientData AData>
     static std::vector<std::shared_ptr<AData>> CreateAndFillList(TTree& tree, bool connected = false);
-    /// Create a data vector and fill it with a tree. The tree is get via GetTree(TFile& file, Long64_t treeIndex).
+    /// Create a data vector and fill it with a tree. The tree is get via FindTree(TFile& file, Long64_t treeIndex).
     /// Entries to be filled are determined by [entriesRange.first, entriesRange.second).
     /// The data type stores in the data vector is specfied by AData.
     /// AData can be shrunken, which means just a part of branch in the tree will be read.
@@ -99,7 +99,7 @@ public:
     /// It's user's responsibility to ensure the availability of entriesRange.
     template<IsTransientData AData>
     std::vector<std::shared_ptr<AData>> CreateAndFillList(TFile& file, const std::pair<Long64_t, Long64_t>& entriesRange, Long64_t treeIndex = 0, bool connected = false) const;
-    /// Create a data vector and fill it with a tree. The tree is get via GetTree(TFile& file, Long64_t treeIndex).
+    /// Create a data vector and fill it with a tree. The tree is get via FindTree(TFile& file, Long64_t treeIndex).
     /// The data type stores in the data vector is specfied by AData.
     /// AData can be shrunken, which means just a part of branch in the tree will be read.
     ///   Note: this feature allows to create a data vector with less but exact columns that the tree has.

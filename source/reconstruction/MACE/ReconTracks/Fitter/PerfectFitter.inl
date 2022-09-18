@@ -7,7 +7,7 @@ bool PerfectFitter<CDCHit_t, Track_t>::Fit(std::vector<HitPtr>& hitData, Track_t
     const auto& firstHit = *std::ranges::min_element(
         std::as_const(hitData),
         [](const auto& hit1, const auto& hit2) {
-            return hit1->GetHitTime() < hit2->GetHitTime();
+            return hit1->HitTime() < hit2->HitTime();
         });
 
     if constexpr (std::same_as<Track_t, CDCPhysicsTrack>) {

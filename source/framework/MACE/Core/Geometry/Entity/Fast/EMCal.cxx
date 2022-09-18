@@ -14,10 +14,10 @@ using namespace MACE::Utility::PhysicalConstant;
 void EMCal::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::EMCal::Instance();
     const auto name = description.GetName();
-    const auto innerRadius = description.GetInnerRadius();
-    const auto innerLength = description.GetInnerLength();
-    const auto windowRadius = description.GetWindowRadius();
-    const auto crystalLength = description.GetCrystalLength();
+    const auto innerRadius = description.InnerRadius();
+    const auto innerLength = description.InnerLength();
+    const auto windowRadius = description.WindowRadius();
+    const auto crystalLength = description.CrystalLength();
 
     auto body = Make<G4Tubs>(
         "_temp",
@@ -62,7 +62,7 @@ void EMCal::ConstructSelf(G4bool checkOverlaps) {
         G4Transform3D(),
         logic,
         name,
-        Mother()->GetLogicalVolume(),
+        Mother()->LogicalVolume(),
         false,
         0,
         checkOverlaps);

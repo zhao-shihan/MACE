@@ -35,24 +35,24 @@ void IEntity::AddDaughter(const std::shared_ptr<IEntity>& daughter) {
 }
 
 void IEntity::ConstructSelfAndDescendants(G4bool checkOverlaps) {
-    if (this->IsEnabled()) { this->ConstructSelf(checkOverlaps); }
+    if (this->Enabled()) { this->ConstructSelf(checkOverlaps); }
     for (auto&& daughter : std::as_const(fDaughters)) {
         daughter.lock()->ConstructSelfAndDescendants(checkOverlaps);
     }
 }
 
 void IEntity::RegisterMaterial(std::size_t volumeIndex, G4Material* region) const {
-    GetLogicalVolume(volumeIndex)->SetMaterial(region);
+    LogicalVolume(volumeIndex)->SetMaterial(region);
 }
 
 void IEntity::RegisterMaterial(G4Material* region) const {
-    for (std::size_t i = 0; i < GetLogicalVolumeNum(); ++i) {
+    for (std::size_t i = 0; i < LogicalVolumeNum(); ++i) {
         RegisterMaterial(i, region);
     }
 }
 
 void IEntity::RegisterRegion(std::size_t volumeIndex, G4Region* region) const {
-    auto logicalVolume = GetLogicalVolume(volumeIndex);
+    auto logicalVolume = LogicalVolume(volumeIndex);
     if (logicalVolume->GetRegion() != region) {
         logicalVolume->SetRegion(region);
         region->AddRootLogicalVolume(logicalVolume);
@@ -60,13 +60,13 @@ void IEntity::RegisterRegion(std::size_t volumeIndex, G4Region* region) const {
 }
 
 void IEntity::RegisterRegion(G4Region* region) const {
-    for (std::size_t i = 0; i < GetLogicalVolumeNum(); ++i) {
+    for (std::size_t i = 0; i < LogicalVolumeNum(); ++i) {
         RegisterRegion(i, region);
     }
 }
 
 void IEntity::RegisterSD(std::size_t volumeIndex, G4VSensitiveDetector* sd) const {
-    auto logicalVolume = GetLogicalVolume(volumeIndex);
+    auto logicalVolume = LogicalVolume(volumeIndex);
     if (logicalVolume->GetSensitiveDetector() == nullptr) {
         // Register to logicalVolume
         logicalVolume->SetSensitiveDetector(sd);
@@ -88,7 +88,7 @@ void IEntity::RegisterSD(std::size_t volumeIndex, G4VSensitiveDetector* sd) cons
 }
 
 void IEntity::RegisterSD(G4VSensitiveDetector* sd) const {
-    for (std::size_t i = 0; i < GetLogicalVolumeNum(); ++i) {
+    for (std::size_t i = 0; i < LogicalVolumeNum(); ++i) {
         RegisterSD(i, sd);
     }
 }
@@ -101,7 +101,7 @@ void IEntity::Export(std::filesystem::path gdmlFile, std::size_t volumeIndex) co
     G4GDMLParser gdml;
     gdml.SetAddPointerToName(false);
     gdml.SetOutputFileOverwrite(true);
-    gdml.Write(gdmlFile.generic_string(), this->GetPhysicalVolume(volumeIndex));
+    gdml.Write(gdmlFile.generic_string(), this->PhysicalVolume(volumeIndex));
 }
 #endif
 

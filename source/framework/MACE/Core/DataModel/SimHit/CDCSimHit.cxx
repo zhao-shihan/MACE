@@ -14,15 +14,15 @@ IntBranchSocket CDCSimHit::fgG4TrackID("g4TrackID", -1);
 
 CDCSimHit::CDCSimHit() noexcept :
     CDCHit(),
-    fEnergy(fgEnergy.GetValue()),
-    fMomentum(fgMomentum.GetValue<double>()),
-    fVertexTime(fgVertexTime.GetValue()),
-    fVertexPosition(fgVertexPosition.GetValue<double>()),
-    fVertexEnergy(fgVertexEnergy.GetValue()),
-    fVertexMomentum(fgVertexMomentum.GetValue<double>()),
-    fParticle(fgParticle.GetValue()),
-    fG4EventID(fgG4EventID.GetValue()),
-    fG4TrackID(fgG4TrackID.GetValue()) {}
+    fEnergy(fgEnergy.Value()),
+    fMomentum(fgMomentum.Value<double>()),
+    fVertexTime(fgVertexTime.Value()),
+    fVertexPosition(fgVertexPosition.Value<double>()),
+    fVertexEnergy(fgVertexEnergy.Value()),
+    fVertexMomentum(fgVertexMomentum.Value<double>()),
+    fParticle(fgParticle.Value()),
+    fG4EventID(fgG4EventID.Value()),
+    fG4TrackID(fgG4TrackID.Value()) {}
 
 void CDCSimHit::CreateBranches(TTree& tree) {
     CDCHit::CreateBranches(tree);
@@ -52,15 +52,15 @@ void CDCSimHit::ConnectToBranches(TTree& tree) {
 
 void CDCSimHit::FillBranchSockets() const noexcept {
     CDCHit::FillBranchSockets();
-    fgEnergy.SetValue(fEnergy);
-    fgMomentum.SetValue(fMomentum);
-    fgVertexTime.SetValue(fVertexTime);
-    fgVertexPosition.SetValue(fVertexPosition);
-    fgVertexEnergy.SetValue(fVertexEnergy);
-    fgVertexMomentum.SetValue(fVertexMomentum);
-    fgParticle.SetValue(fParticle);
-    fgG4EventID.SetValue(fG4EventID);
-    fgG4TrackID.SetValue(fG4TrackID);
+    fgEnergy.Value(fEnergy);
+    fgMomentum.Value(fMomentum);
+    fgVertexTime.Value(fVertexTime);
+    fgVertexPosition.Value(fVertexPosition);
+    fgVertexEnergy.Value(fVertexEnergy);
+    fgVertexMomentum.Value(fVertexMomentum);
+    fgParticle.Value(fParticle);
+    fgG4EventID.Value(fG4EventID);
+    fgG4TrackID.Value(fG4TrackID);
 }
 
 } // namespace MACE::Core::DataModel::SimHit

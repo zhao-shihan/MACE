@@ -1,18 +1,18 @@
 namespace MACE::Core {
 
 template<IsTransientData AData>
-TString DataFactory::GetTreeName(Long64_t treeIndex) const {
-    return GetTreeNamePrefix(treeIndex) + AData::BasicTreeName() + GetTreeNameSuffix(treeIndex);
+TString DataFactory::TreeName(Long64_t treeIndex) const {
+    return TreeNamePrefix(treeIndex) + AData::BasicTreeName() + TreeNameSuffix(treeIndex);
 }
 
 template<IsTransientData AData>
-ObserverPtr<TTree> DataFactory::GetTree(TFile& file, Long64_t treeIndex) const {
-    return file.Get<TTree>(GetTreeName<AData>(treeIndex));
+ObserverPtr<TTree> DataFactory::FindTree(TFile& file, Long64_t treeIndex) const {
+    return file.Get<TTree>(TreeName<AData>(treeIndex));
 }
 
 template<IsTransientData AData, std::convertible_to<const char*> APath>
 std::shared_ptr<TChain> DataFactory::CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex) const {
-    auto chain = std::make_shared<TChain>(GetTreeName<AData>(treeIndex));
+    auto chain = std::make_shared<TChain>(TreeName<AData>(treeIndex));
     for (auto&& file : fileList) {
         chain->AddFile(file);
     }
@@ -22,7 +22,7 @@ std::shared_ptr<TChain> DataFactory::CreateChain(const std::vector<APath>& fileL
 template<IsTransientData AData, typename APath> // clang-format off
     requires std::convertible_to<decltype(std::declval<APath>().c_str()), const char*>
 std::shared_ptr<TChain> DataFactory::CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex) const { // clang-format on
-    auto chain = std::make_shared<TChain>(GetTreeName<AData>(treeIndex));
+    auto chain = std::make_shared<TChain>(TreeName<AData>(treeIndex));
     for (auto&& file : fileList) {
         chain->AddFile(file.c_str());
     }
@@ -33,18 +33,18 @@ template<IsTransientData AData>
 std::pair<Long64_t, Long64_t> DataFactory::GetTreeIndexRange(TFile& file) const {
     const auto maxKeys = file.GetNkeys();
     Long64_t beginIndex = 0;
-    for (; file.GetKey(GetTreeName<AData>(beginIndex)) == nullptr; ++beginIndex) {
+    for (; file.GetKey(TreeName<AData>(beginIndex)) == nullptr; ++beginIndex) {
         if (beginIndex + 1 >= maxKeys) { return std::pair<Long64_t, Long64_t>(0, 0); }
     }
     Long64_t endIndex = beginIndex + 1;
-    for (; file.GetKey(GetTreeName<AData>(endIndex)) != nullptr; ++endIndex) {}
+    for (; file.GetKey(TreeName<AData>(endIndex)) != nullptr; ++endIndex) {}
     return std::make_pair(beginIndex, endIndex);
 }
 
 template<IsTransientData AData>
 std::shared_ptr<TTree> DataFactory::CreateTree(Long64_t treeIndex) const {
     auto tree = std::make_shared<TTree>();
-    tree->SetName(GetTreeName<AData>(treeIndex));
+    tree->SetName(TreeName<AData>(treeIndex));
     tree->SetDirectory(nullptr);
     AData::CreateBranches(*tree);
     return tree;
@@ -97,13 +97,13 @@ std::vector<std::shared_ptr<AData>> DataFactory::CreateAndFillList(TTree& tree, 
 
 template<IsTransientData AData>
 std::vector<std::shared_ptr<AData>> DataFactory::CreateAndFillList(TFile& file, const std::pair<Long64_t, Long64_t>& entriesRange, Long64_t treeIndex, bool connected) const {
-    auto tree = GetTree<AData>(file, treeIndex);
+    auto tree = FindTree<AData>(file, treeIndex);
     return CreateAndFillList<AData>(*tree, entriesRange, connected);
 }
 
 template<IsTransientData AData>
 std::vector<std::shared_ptr<AData>> DataFactory::CreateAndFillList(TFile& file, Long64_t treeIndex, bool connected) const {
-    auto tree = GetTree<AData>(file, treeIndex);
+    auto tree = FindTree<AData>(file, treeIndex);
     return CreateAndFillList<AData>(*tree, connected);
 }
 

@@ -11,10 +11,10 @@ ShortStringBranchSocket CDCPhysicsTrack::fgParticle("particle", "");
 
 CDCPhysicsTrack::CDCPhysicsTrack() noexcept :
     ICDCTrack(),
-    fVertexPosition(fgVertexPosition.GetValue<double>()),
-    fVertexEnergy(fgVertexEnergy.GetValue()),
-    fVertexMomentum(fgVertexMomentum.GetValue<double>()),
-    fParticle(fgParticle.GetValue()) {}
+    fVertexPosition(fgVertexPosition.Value<double>()),
+    fVertexEnergy(fgVertexEnergy.Value()),
+    fVertexMomentum(fgVertexMomentum.Value<double>()),
+    fParticle(fgParticle.Value()) {}
 
 CDCPhysicsTrack::CDCPhysicsTrack(const CDCHelixTrack& helix, Double_t phiVertex, Double_t B, Double_t mass) :
     ICDCTrack(static_cast<const ICDCTrack&>(helix)),
@@ -26,7 +26,7 @@ CDCPhysicsTrack::CDCPhysicsTrack(const CDCHelixTrack& helix, Double_t phiVertex,
              fVertexEnergy,
              fVertexMomentum,
              fParticle) = CDCTrackOperation::ConvertToPhysicsParameters(std::tie(helix.GetCenter(),
-                                                                                 helix.GetRadius(),
+                                                                                 helix.Radius(),
                                                                                  helix.GetZ0(),
                                                                                  helix.GetAlpha()),
                                                                         phiVertex, B, mass);
@@ -50,10 +50,10 @@ void CDCPhysicsTrack::ConnectToBranches(TTree& tree) {
 
 void CDCPhysicsTrack::FillBranchSockets() const noexcept {
     ICDCTrack::FillBranchSockets();
-    fgVertexPosition.SetValue(fVertexPosition);
-    fgVertexEnergy.SetValue(fVertexEnergy);
-    fgVertexMomentum.SetValue(fVertexMomentum);
-    fgParticle.SetValue(fParticle);
+    fgVertexPosition.Value(fVertexPosition);
+    fgVertexEnergy.Value(fVertexEnergy);
+    fgVertexMomentum.Value(fVertexMomentum);
+    fgParticle.Value(fParticle);
 }
 
 } // namespace MACE::Core::DataModel::Track

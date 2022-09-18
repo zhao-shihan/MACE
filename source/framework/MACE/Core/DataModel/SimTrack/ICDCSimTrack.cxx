@@ -6,8 +6,8 @@ IntBranchSocket ICDCSimTrack::fgTrueNumHits("trueNumHits", 0);
 DoubleBranchSocket ICDCSimTrack::fgTrueVertexTime("trueVtxTime", 0);
 
 ICDCSimTrack::ICDCSimTrack() noexcept :
-    fTrueNumHits(fgTrueNumHits.GetValue()),
-    fTrueVertexTime(fgTrueVertexTime.GetValue()) {}
+    fTrueNumHits(fgTrueNumHits.Value()),
+    fTrueVertexTime(fgTrueVertexTime.Value()) {}
 
 ICDCSimTrack::~ICDCSimTrack() noexcept = default;
 
@@ -25,8 +25,8 @@ void ICDCSimTrack::ConnectToBranches(TTree& tree) {
 
 void ICDCSimTrack::FillBranchSockets() const noexcept {
     ITransientData::FillBranchSockets();
-    fgTrueNumHits.SetValue(fTrueNumHits);
-    fgTrueVertexTime.SetValue(fTrueVertexTime);
+    fgTrueNumHits.Value(fTrueNumHits);
+    fgTrueVertexTime.Value(fTrueVertexTime);
 }
 
 } // namespace MACE::Core::DataModel::Track

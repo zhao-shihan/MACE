@@ -21,11 +21,11 @@ public:
     MCPHit& operator=(const MCPHit& hit) noexcept = default;
     MCPHit& operator=(MCPHit&& hit) noexcept = default;
 
-    const auto& GetHitTime() const { return fHitTime; }
+    const auto& HitTime() const { return fHitTime; }
     const auto& GetHitPosition() const { return fHitPosition; }
     const auto& GetHitPositionVariance() const { return fHitPositionVariance; }
 
-    void SetHitTime(Double_t val) { fHitTime = val; }
+    void HitTime(Double_t val) { fHitTime = val; }
     template<typename A2Vector>
     void SetHitPosition(A2Vector&& pos) { fHitPosition = std::forward<A2Vector>(pos); }
     void SetHitPosition(Double_t x, Double_t y) { fHitPosition = {x, y}; }

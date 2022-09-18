@@ -14,15 +14,15 @@ private:
     EMCalShield& operator=(const EMCalShield&) = delete;
 
 public:
-    const auto& GetInnerRadius() const { return fInnerRadius; }
-    const auto& GetInnerLength() const { return fInnerLength; }
-    const auto& GetWindowRadius() const { return fWindowRadius; }
-    const auto& GetThickness() const { return fThickness; }
+    const auto& InnerRadius() const { return fInnerRadius; }
+    const auto& InnerLength() const { return fInnerLength; }
+    const auto& WindowRadius() const { return fWindowRadius; }
+    const auto& Thickness() const { return fThickness; }
 
-    void SetInnerRadius(double val) { fInnerRadius = val; }
-    void SetInnerLength(double val) { fInnerLength = val; }
-    void SetWindowRadius(double val) { fWindowRadius = val; }
-    void SetThickness(double val) { fThickness = val; }
+    void InnerRadius(double val) { fInnerRadius = val; }
+    void InnerLength(double val) { fInnerLength = val; }
+    void WindowRadius(double val) { fWindowRadius = val; }
+    void Thickness(double val) { fThickness = val; }
 
     // Next 1 method should only use for geometry construction.
 

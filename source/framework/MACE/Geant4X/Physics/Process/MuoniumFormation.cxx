@@ -64,7 +64,7 @@ G4VParticleChange* MuoniumFormation::AtRestDoIt(const G4Track& track, const G4St
 
 G4double MuoniumFormation::GetMeanLifeTime(const G4Track& track, G4ForceCondition*) {
     if (fRandEng->flat() < fFormationProbability) {
-        return fTarget->Contains(track.GetPosition()) ? DBL_MIN : DBL_MAX;
+        return fTarget->Contain(track.GetPosition()) ? DBL_MIN : DBL_MAX;
     } else {
         return DBL_MAX;
     }

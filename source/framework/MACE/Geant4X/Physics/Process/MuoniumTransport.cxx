@@ -62,7 +62,7 @@ G4double MuoniumTransport::GetContinuousStepLimit(const G4Track& track, G4double
         fTransportStatus = TransportStatus::Decaying;
         SetGPILSelection(NotCandidateForSelection);
         return safety;
-    } else if (fTarget->VolumeContains(track.GetPosition())) {
+    } else if (fTarget->VolumeContain(track.GetPosition())) {
         fTransportStatus = TransportStatus::InsideTargetVolume;
         return DBL_MIN;
     } else if (fIsExitingTargetVolume) {
@@ -113,9 +113,9 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     // flag indicate that the flight was terminated by decay
     G4bool timeUp;
     // flag indicate that the flight was terminated by target boundary
-    auto insideVolume = fTarget->VolumeContains(initialPosition);
+    auto insideVolume = fTarget->VolumeContain(initialPosition);
     // flag indicate that the muonium is not inside the material
-    auto insideMaterial = fTarget->Contains(initialPosition, insideVolume);
+    auto insideMaterial = fTarget->Contain(initialPosition, insideVolume);
 
     // do random flight
 
@@ -132,10 +132,10 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
         position = initialPosition + displacement;
         // check space-time limit
         timeUp = (flightTime >= timeLimit);
-        insideVolume = fTarget->VolumeContains(position);
+        insideVolume = fTarget->VolumeContain(position);
         if (timeUp or not insideVolume) { break; }
         // check whether the end point inside material
-        insideMaterial = fTarget->Contains(position, true);
+        insideMaterial = fTarget->Contain(position, true);
         if (not insideMaterial) { continue; }
         // if inside material update its velocity
         // set a gauss vector of sigma=1
@@ -173,7 +173,7 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
         do {
             auto binaryMid = (binaryMore + binaryLess) / 2;
             position = initialPosition + binaryMid;
-            if (fTarget->VolumeContains(position)) {
+            if (fTarget->VolumeContain(position)) {
                 binaryLess = binaryMid;
             } else {
                 binaryMore = binaryMid;

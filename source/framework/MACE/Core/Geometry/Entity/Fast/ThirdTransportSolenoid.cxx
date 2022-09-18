@@ -13,9 +13,9 @@ using namespace MACE::Utility::PhysicalConstant;
 void ThirdTransportSolenoid::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::TransportLine::Instance();
     const auto name = "ThirdTransportSolenoid";
-    const auto innerRadius = description.GetSolenoidInnerRadius();
-    const auto outerRadius = description.GetSolenoidOuterRadius();
-    const auto length = description.GetThirdStraightLength();
+    const auto innerRadius = description.SolenoidInnerRadius();
+    const auto outerRadius = description.SolenoidOuterRadius();
+    const auto length = description.ThirdStraightLength();
 
     auto solid = Make<G4Tubs>(
         name,
@@ -32,7 +32,7 @@ void ThirdTransportSolenoid::ConstructSelf(G4bool checkOverlaps) {
         G4Transform3D(),
         logic,
         name,
-        Mother()->GetLogicalVolume(),
+        Mother()->LogicalVolume(),
         false,
         0,
         checkOverlaps);

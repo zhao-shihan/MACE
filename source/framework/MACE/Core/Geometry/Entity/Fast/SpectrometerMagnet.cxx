@@ -13,9 +13,9 @@ using namespace MACE::Utility::PhysicalConstant;
 void SpectrometerMagnet::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::SpectrometerMagnet::Instance();
     const auto name = description.GetName();
-    const auto innerRadius = description.GetInnerRadius();
-    const auto outerRadius = description.GetOuterRadius();
-    const auto length = description.GetLength();
+    const auto innerRadius = description.InnerRadius();
+    const auto outerRadius = description.OuterRadius();
+    const auto length = description.Length();
 
     auto solid = Make<G4Tubs>(
         name,
@@ -32,7 +32,7 @@ void SpectrometerMagnet::ConstructSelf(G4bool checkOverlaps) {
         G4Transform3D(),
         logic,
         name,
-        Mother()->GetLogicalVolume(),
+        Mother()->LogicalVolume(),
         false,
         0,
         checkOverlaps);

@@ -22,7 +22,7 @@ Analysis::Analysis() :
     fYieldFile(nullptr),
     fDataFactory() {
     Messenger::AnalysisMessenger::Instance().SetTo(this);
-    fDataFactory.SetTreeNamePrefixFormat("Run#_");
+    fDataFactory.TreeNamePrefixFormat("Run#_");
 }
 
 Analysis::~Analysis() {
@@ -100,7 +100,7 @@ void Analysis::AnalysisAndWriteYield() {
     const auto& target = Core::Geometry::Description::Target::Instance();
     for (auto&& track : std::as_const(fMuoniumTrackList)) {
         const auto& decayPosition = track->GetDecayPosition();
-        if (target.Contains(decayPosition)) {
+        if (target.Contain(decayPosition)) {
             ++nTargetDecay;
         } else {
             ++nVacuumDecay;

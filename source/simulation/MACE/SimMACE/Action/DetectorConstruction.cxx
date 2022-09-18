@@ -71,7 +71,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     ConstructRegions();
     ConstructSDs();
     ConstructFields();
-    return fWorld->GetPhysicalVolume();
+    return fWorld->PhysicalVolume();
 }
 
 void DetectorConstruction::ConstructVolumes() {
@@ -283,13 +283,13 @@ void DetectorConstruction::ConstructRegions() {
 }
 
 void DetectorConstruction::ConstructSDs() {
-    fCDCSD = new SD::CDCSD(fCDCSensitiveVolume->GetLogicalVolume()->GetName());
+    fCDCSD = new SD::CDCSD(fCDCSensitiveVolume->LogicalVolume()->GetName());
     fCDCSensitiveVolume->RegisterSD(fCDCSD);
 
-    fEMCalSD = new SD::EMCalSD(fEMCal->GetLogicalVolume()->GetName());
+    fEMCalSD = new SD::EMCalSD(fEMCal->LogicalVolume()->GetName());
     fEMCal->RegisterSD(fEMCalSD);
 
-    fMCPSD = new SD::MCPSD(fMCP->GetLogicalVolume()->GetName());
+    fMCPSD = new SD::MCPSD(fMCP->LogicalVolume()->GetName());
     fMCP->RegisterSD(fMCPSD);
 }
 

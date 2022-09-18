@@ -13,9 +13,9 @@ using namespace MACE::Utility::LiteralUnit::Temperature;
 void World::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::World::Instance();
     auto name = description.GetName();
-    auto halfX = description.GetHalfXExtent();
-    auto halfY = description.GetHalfYExtent();
-    auto halfZ = description.GetHalfZExtent();
+    auto halfX = description.HalfXExtent();
+    auto halfY = description.HalfYExtent();
+    auto halfZ = description.HalfZExtent();
 
     auto solid = Make<G4Box>(
         name,

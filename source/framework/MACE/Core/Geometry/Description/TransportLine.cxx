@@ -23,7 +23,7 @@ HepGeom::Transform3D TransportLine::FirstStraightTransform() const {
     const auto& spectrometerField = SpectrometerField::Instance();
     const auto transX = 0;
     const auto transY = 0;
-    const auto transZ = spectrometerField.GetLength() / 2 + fFirstStraightLength / 2;
+    const auto transZ = spectrometerField.Length() / 2 + fFirstStraightLength / 2;
     return HepGeom::Transform3D(CLHEP::HepRotation(),
                                 CLHEP::Hep3Vector(transX, transY, transZ));
 }

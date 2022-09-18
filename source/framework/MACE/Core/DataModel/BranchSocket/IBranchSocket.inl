@@ -1,7 +1,8 @@
 namespace MACE::Core::DataModel::BranchSocket {
 
-template<typename Type, bool UseReferenceInGetSet>
-IBranchSocket<Type, UseReferenceInGetSet>::IBranchSocket(const TString& branchName) :
+template<typename T, bool PassByReference>
+IBranchSocket<T, PassByReference>::IBranchSocket(const TString& branchName) :
+    NonMoveableBase(),
     fBranchName(branchName) {}
 
 } // namespace MACE::Core::DataModel::BranchSocket

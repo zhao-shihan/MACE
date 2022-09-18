@@ -10,12 +10,9 @@ using Utility::ShortString;
 class ShortStringBranchSocket final : public IBranchSocket<ShortString> {
 public:
     ShortStringBranchSocket(const TString& branchName, const ShortString& defaultString);
-    ~ShortStringBranchSocket() noexcept = default;
-    ShortStringBranchSocket(const ShortStringBranchSocket&) = delete;
-    ShortStringBranchSocket& operator=(const ShortStringBranchSocket&) = delete;
 
-    const ShortString& GetValue() const override { return fString; }
-    void SetValue(const ShortString& string) override { fString = string; }
+    const ShortString& Value() const override { return fString; }
+    void Value(const ShortString& string) override { fString = string; }
 
     void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, fString.Data(), fLeafName); }
     void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(this->fBranchName, fString.Data()); }

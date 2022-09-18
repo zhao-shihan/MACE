@@ -17,7 +17,7 @@ LinacField::LinacField() :
     fBz(0.1_T),
     fV(7_kV),
     fDecayZMean(13.05_mm),
-    fEz(7_kV / (LinacDescription::Instance().GetDownStreamLength() - 13.05_mm)) {
+    fEz(7_kV / (LinacDescription::Instance().DownStreamLength() - 13.05_mm)) {
     FieldMessenger::Instance().SetTo(this);
 }
 
@@ -32,7 +32,7 @@ void LinacField::GetFieldValue(const G4double*, G4double* F) const {
 
 void LinacField::SetLinacPotential(G4double V) {
     fV = V;
-    fEz = fV / (LinacDescription::Instance().GetDownStreamLength() - fDecayZMean);
+    fEz = fV / (LinacDescription::Instance().DownStreamLength() - fDecayZMean);
 }
 
 } // namespace MACE::SimMACE::Field

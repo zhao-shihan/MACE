@@ -8,9 +8,9 @@ FloatBranchSocket EMCalHit::fgEnergyVariance("hitEneVar", 0);
 
 EMCalHit::EMCalHit() noexcept :
     ITransientData(),
-    fHitTime(fgHitTime.GetValue()),
-    fEnergy(fgEnergy.GetValue()),
-    fEnergyVariance(fgEnergyVariance.GetValue()) {}
+    fHitTime(fgHitTime.Value()),
+    fEnergy(fgEnergy.Value()),
+    fEnergyVariance(fgEnergyVariance.Value()) {}
 
 void EMCalHit::CreateBranches(TTree& tree) {
     ITransientData::CreateBranches(tree);
@@ -28,9 +28,9 @@ void EMCalHit::ConnectToBranches(TTree& tree) {
 
 void EMCalHit::FillBranchSockets() const noexcept {
     ITransientData::FillBranchSockets();
-    fgHitTime.SetValue(fHitTime);
-    fgEnergy.SetValue(fEnergy);
-    fgEnergyVariance.SetValue(fEnergyVariance);
+    fgHitTime.Value(fHitTime);
+    fgEnergy.Value(fEnergy);
+    fgEnergyVariance.Value(fEnergyVariance);
 }
 
 } // namespace MACE::Core::DataModel::Hit

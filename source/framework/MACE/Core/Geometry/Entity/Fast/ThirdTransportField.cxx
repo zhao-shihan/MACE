@@ -12,8 +12,8 @@ using namespace MACE::Utility::PhysicalConstant;
 void ThirdTransportField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::TransportLine::Instance();
     const auto name = "ThirdTransportField";
-    const auto length = description.GetThirdStraightLength();
-    const auto radius = description.GetFieldRadius();
+    const auto length = description.ThirdStraightLength();
+    const auto radius = description.FieldRadius();
     const auto transform = description.ThirdStraightTransform();
 
     auto solid = Make<G4Tubs>(
@@ -31,7 +31,7 @@ void ThirdTransportField::ConstructSelf(G4bool checkOverlaps) {
         transform,
         logic,
         name,
-        Mother()->GetLogicalVolume(),
+        Mother()->LogicalVolume(),
         false,
         0,
         checkOverlaps);

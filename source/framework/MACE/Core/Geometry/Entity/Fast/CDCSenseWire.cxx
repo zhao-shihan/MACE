@@ -13,7 +13,7 @@ using namespace MACE::Utility::PhysicalConstant;
 void CDCSenseWire::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::CDC::Instance();
     const auto name = "CDCSenseWire";
-    const auto rSenseWire = description.GetSenseWireDiameter() / 2;
+    const auto rSenseWire = description.SenseWireDiameter() / 2;
     const auto detail = description.SenseWireGeometryDetail();
     const auto layerCount = detail.size();
 
@@ -36,7 +36,7 @@ void CDCSenseWire::ConstructSelf(G4bool checkOverlaps) {
                 localPositon),
             logic,
             name,
-            Mother()->GetLogicalVolume(layerID),
+            Mother()->LogicalVolume(layerID),
             false,
             0,
             checkOverlaps);

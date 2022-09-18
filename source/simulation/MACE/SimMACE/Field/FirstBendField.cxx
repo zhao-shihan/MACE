@@ -14,7 +14,7 @@ FirstBendField::FirstBendField() :
     NonMoveableBase(),
     G4MagneticField(),
     fGeomTransform(TransportLineDescription::Instance().FirstBendTransform()),
-    fBendRadius(TransportLineDescription::Instance().GetFirstBendRadius()),
+    fBendRadius(TransportLineDescription::Instance().FirstBendRadius()),
     fB0R0(0.1_T * fBendRadius) {
     Messenger::FieldMessenger::Instance().SetTo(this);
 }

@@ -22,7 +22,7 @@ void DirectLeastSquare<CDCHit_t, Track_t>::Initialize(std::vector<HitPtr>& hitDa
     // sort data by layer ID
     std::ranges::sort(hitData,
                       [](const auto& hit1, const auto& hit2) -> bool {
-                          return hit1->GetLayerID() < hit2->GetLayerID();
+                          return hit1->LayerID() < hit2->LayerID();
                       });
 
     // constuct valarrays
@@ -35,11 +35,11 @@ void DirectLeastSquare<CDCHit_t, Track_t>::Initialize(std::vector<HitPtr>& hitDa
     fPhi.resize(fN);
     fS.resize(fN);
     for (std::size_t i = 0; i < fN; ++i) {
-        fT[i] = hitData[i]->GetHitTime();
-        fWireX[i] = hitData[i]->GetWirePosition().x();
-        fWireY[i] = hitData[i]->GetWirePosition().y();
-        fD[i] = hitData[i]->GetDriftDistance();
-        fZ[i] = hitData[i]->GetHitPositionZ();
+        fT[i] = hitData[i]->HitTime();
+        fWireX[i] = hitData[i]->WirePosition().x();
+        fWireY[i] = hitData[i]->WirePosition().y();
+        fD[i] = hitData[i]->DriftDistance();
+        fZ[i] = hitData[i]->HitPositionZ();
     }
 }
 
@@ -172,7 +172,7 @@ template<class CDCHit_t, class Track_t>
 void DirectLeastSquare<CDCHit_t, Track_t>::Finalize(Track_t& track) {
     track.SetVertexTime(fVertexTime);
     track.SetCenter(fCircleParameters[0], fCircleParameters[1]);
-    track.SetRadius(fCircleParameters[2]);
+    track.Radius(fCircleParameters[2]);
     track.SetZ0(fRevolveParameters[0]);
     track.SetAlpha(fRevolveParameters[1]);
     track.SetNumHits(fN);

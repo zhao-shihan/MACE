@@ -32,7 +32,7 @@ public:
     /// @brief Determines whether we will construct this entity.
     /// Entities could override this function to control whether this will be constructed.
     /// A typical usage is to get the information of whether to enable this from description in the override function.
-    virtual bool IsEnabled() const { return true; }
+    virtual bool Enabled() const { return true; }
 
     void AddDaughter(const std::shared_ptr<IEntity>& daughter);
     void ConstructSelfAndDescendants(G4bool checkOverlaps);
@@ -55,11 +55,11 @@ public:
     void Export(std::filesystem::path gdmlFile, std::size_t volumeIndex = 0) const;
 #endif
 
-    auto GetLogicalVolumeNum() const { return fLogicalVolumes.size(); }
-    auto GetLogicalVolume(std::size_t volumeIndex = 0) const { return fLogicalVolumes.at(volumeIndex).get(); }
+    auto LogicalVolumeNum() const { return fLogicalVolumes.size(); }
+    auto LogicalVolume(std::size_t volumeIndex = 0) const { return fLogicalVolumes.at(volumeIndex).get(); }
 
-    auto GetPhysicalVolumeNum() const { return fPhysicalVolumes.size(); }
-    auto GetPhysicalVolume(std::size_t volumeIndex = 0) const { return fPhysicalVolumes.at(volumeIndex).get(); }
+    auto PhysicalVolumeNum() const { return fPhysicalVolumes.size(); }
+    auto PhysicalVolume(std::size_t volumeIndex = 0) const { return fPhysicalVolumes.at(volumeIndex).get(); }
 
 protected:
     // Make a G4Solid and keep it (just for deleting when Entity deconstructs).

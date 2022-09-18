@@ -13,7 +13,7 @@ using namespace MACE::Utility::PhysicalConstant;
 void CDCFieldWire::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::CDC::Instance();
     const auto name = "CDCFieldWire";
-    const auto rFieldWire = description.GetFieldWireDiameter() / 2;
+    const auto rFieldWire = description.FieldWireDiameter() / 2;
     const auto detail = description.FieldWireGeometryDetail();
     const auto layerCount = detail.size();
 
@@ -37,7 +37,7 @@ void CDCFieldWire::ConstructSelf(G4bool checkOverlaps) {
                     positionList[wireID]),
                 logic,
                 name,
-                Mother()->GetLogicalVolume(layerID),
+                Mother()->LogicalVolume(layerID),
                 false,
                 wireID,
                 checkOverlaps);

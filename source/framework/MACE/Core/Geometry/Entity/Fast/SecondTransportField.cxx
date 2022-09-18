@@ -13,8 +13,8 @@ using namespace MACE::Utility::PhysicalConstant;
 void SecondTransportField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::TransportLine::Instance();
     const auto name = "SecondTransportField";
-    const auto length = description.GetSecondStraightLength();
-    const auto radius = description.GetFieldRadius();
+    const auto length = description.SecondStraightLength();
+    const auto radius = description.FieldRadius();
     const auto transform = description.SecondStraightTransform();
 
     auto solid = Make<G4Tubs>(
@@ -32,7 +32,7 @@ void SecondTransportField::ConstructSelf(G4bool checkOverlaps) {
         transform,
         logic,
         name,
-        Mother()->GetLogicalVolume(),
+        Mother()->LogicalVolume(),
         false,
         0,
         checkOverlaps);

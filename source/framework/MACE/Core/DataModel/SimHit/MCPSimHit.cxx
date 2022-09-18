@@ -10,11 +10,11 @@ IntBranchSocket MCPSimHit::fgG4TrackID("g4TrackID", -1);
 
 MCPSimHit::MCPSimHit() noexcept :
     MCPHit(),
-    fVertexTime(fgVertexTime.GetValue()),
-    fVertexPosition(fgVertexPosition.GetValue<double>()),
-    fParticle(fgParticle.GetValue()),
-    fG4EventID(fgG4EventID.GetValue()),
-    fG4TrackID(fgG4TrackID.GetValue()) {}
+    fVertexTime(fgVertexTime.Value()),
+    fVertexPosition(fgVertexPosition.Value<double>()),
+    fParticle(fgParticle.Value()),
+    fG4EventID(fgG4EventID.Value()),
+    fG4TrackID(fgG4TrackID.Value()) {}
 
 void MCPSimHit::CreateBranches(TTree& tree) {
     MCPHit::CreateBranches(tree);
@@ -36,11 +36,11 @@ void MCPSimHit::ConnectToBranches(TTree& tree) {
 
 void MCPSimHit::FillBranchSockets() const noexcept {
     MCPHit::FillBranchSockets();
-    fgVertexTime.SetValue(fVertexTime);
-    fgVertexPosition.SetValue(fVertexPosition);
-    fgParticle.SetValue(fParticle);
-    fgG4EventID.SetValue(fG4EventID);
-    fgG4TrackID.SetValue(fG4TrackID);
+    fgVertexTime.Value(fVertexTime);
+    fgVertexPosition.Value(fVertexPosition);
+    fgParticle.Value(fParticle);
+    fgG4EventID.Value(fG4EventID);
+    fgG4TrackID.Value(fG4TrackID);
 }
 
 } // namespace MACE::Core::DataModel::SimHit

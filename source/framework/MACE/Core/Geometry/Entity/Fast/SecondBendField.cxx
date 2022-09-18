@@ -12,8 +12,8 @@ using namespace MACE::Utility::PhysicalConstant;
 void SecondBendField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::TransportLine::Instance();
     const auto name = "SecondBendField";
-    const auto radius = description.GetFieldRadius();
-    const auto bendRadius = description.GetSecondBendRadius();
+    const auto radius = description.FieldRadius();
+    const auto bendRadius = description.SecondBendRadius();
     const auto transform = description.SecondBendTransform();
 
     auto solid = Make<G4Torus>(
@@ -31,7 +31,7 @@ void SecondBendField::ConstructSelf(G4bool checkOverlaps) {
         transform,
         logic,
         name,
-        Mother()->GetLogicalVolume(),
+        Mother()->LogicalVolume(),
         false,
         0,
         checkOverlaps);

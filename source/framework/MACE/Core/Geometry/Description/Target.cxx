@@ -10,14 +10,14 @@ using namespace Utility::LiteralUnit::Length;
 
 Target::Target() :
     ISingletonDescription<Target>(__func__),
-    fShapeType(ShapeType::Cuboid),
+    fShapeType(TargetShapeType::Cuboid),
     fCuboid() {}
 
 void Target::ImportValues(const YAML::Node& node) {
     ImportValue<std::string>(
         node, [this](auto&& shape) {
             if (shape == "Cuboid") {
-                fShapeType = ShapeType::Cuboid;
+                fShapeType = TargetShapeType::Cuboid;
             } else {
                 MACE_ENVIRONMENT_CONTROLLED_OUT(Warning, std::cout)
                     << "MACE::Core::Geometry::Description::Target::ImportValues: Unknown target shape \"" << shape << "\", skipping" << std::endl;
@@ -26,17 +26,17 @@ void Target::ImportValues(const YAML::Node& node) {
         "ShapeType");
     {
         ImportValue<double>(
-            node, [this](auto value) { fCuboid.SetWidth(value); },
+            node, [this](auto value) { fCuboid.Width(value); },
             "Cuboid", "Width");
         ImportValue<double>(
-            node, [this](auto value) { fCuboid.SetThickness(value); },
+            node, [this](auto value) { fCuboid.Thickness(value); },
             "Cuboid", "Thickness");
         ImportValue<std::string>(
             node, [this](auto&& detail) {
                 if (detail == "Flat") {
-                    fCuboid.SetDetailType(Cuboid::DetailType::Flat);
+                    fCuboid.DetailType(CuboidTarget::ShapeDetailType::Flat);
                 } else if (detail == "Hole") {
-                    fCuboid.SetDetailType(Cuboid::DetailType::Hole);
+                    fCuboid.DetailType(CuboidTarget::ShapeDetailType::Hole);
                 } else {
                     MACE_ENVIRONMENT_CONTROLLED_OUT(Warning, std::cout)
                         << "MACE::Core::Geometry::Description::Target::ImportValues: Unknown cuboid target detail \"" << detail << "\", skipping" << std::endl;
@@ -45,16 +45,16 @@ void Target::ImportValues(const YAML::Node& node) {
             "Cuboid", "DetailType");
         {
             ImportValue<double>(
-                node, [this](auto value) { fCuboid.GetHole().SetExtent(value); },
+                node, [this](auto value) { fCuboid.Hole().Extent(value); },
                 "Cuboid", "Hole", "AblationExtent");
             ImportValue<double>(
-                node, [this](auto value) { fCuboid.GetHole().SetSpacing(value); },
+                node, [this](auto value) { fCuboid.Hole().Spacing(value); },
                 "Cuboid", "Hole", "Spacing");
             ImportValue<double>(
-                node, [this](auto value) { fCuboid.GetHole().SetDiameter(value); },
+                node, [this](auto value) { fCuboid.Hole().Diameter(value); },
                 "Cuboid", "Hole", "Diameter");
             ImportValue<double>(
-                node, [this](auto value) { fCuboid.GetHole().SetDepth(value); },
+                node, [this](auto value) { fCuboid.Hole().Depth(value); },
                 "Cuboid", "Hole", "Depth");
         }
     }
@@ -63,59 +63,59 @@ void Target::ImportValues(const YAML::Node& node) {
 void Target::ExportValues(YAML::Node& node) const {
     std::string shapeString;
     switch (fShapeType) {
-    case ShapeType::Cuboid:
+    case TargetShapeType::Cuboid:
         shapeString = "Cuboid";
         break;
     }
     ExportValue(node, shapeString, "ShapeType");
     {
-        ExportValue(node, fCuboid.GetWidth(), "Cuboid", "Width");
-        ExportValue(node, fCuboid.GetThickness(), "Cuboid", "Thickness");
+        ExportValue(node, fCuboid.Width(), "Cuboid", "Width");
+        ExportValue(node, fCuboid.Thickness(), "Cuboid", "Thickness");
         std::string detailString;
-        switch (fCuboid.GetDetailType()) {
-        case Cuboid::DetailType::Flat:
+        switch (fCuboid.DetailType()) {
+        case CuboidTarget::ShapeDetailType::Flat:
             detailString = "Flat";
             break;
-        case Cuboid::DetailType::Hole:
+        case CuboidTarget::ShapeDetailType::Hole:
             detailString = "Hole";
             break;
         }
         ExportValue(node, detailString, "Cuboid", "DetailType");
         {
-            ExportValue(node, fCuboid.GetHole().GetExtent(), "Cuboid", "Hole", "AblationExtent");
-            ExportValue(node, fCuboid.GetHole().GetSpacing(), "Cuboid", "Hole", "Spacing");
-            ExportValue(node, fCuboid.GetHole().GetDiameter(), "Cuboid", "Hole", "Diameter");
-            ExportValue(node, fCuboid.GetHole().GetDepth(), "Cuboid", "Hole", "Depth");
+            ExportValue(node, fCuboid.Hole().Extent(), "Cuboid", "Hole", "AblationExtent");
+            ExportValue(node, fCuboid.Hole().Spacing(), "Cuboid", "Hole", "Spacing");
+            ExportValue(node, fCuboid.Hole().Diameter(), "Cuboid", "Hole", "Diameter");
+            ExportValue(node, fCuboid.Hole().Depth(), "Cuboid", "Hole", "Depth");
         }
     }
 }
 
-Target::Cuboid::Cuboid() :
+Target::CuboidTarget::CuboidTarget() :
     fWidth(6_cm),
     fThickness(1_cm),
-    fDetailType(DetailType::Hole),
+    fDetailType(ShapeDetailType::Hole),
     fHole() {}
 
-HepGeom::Transform3D Target::Cuboid::CalcTransform() const {
+HepGeom::Transform3D Target::CuboidTarget::CalcTransform() const {
     const auto& linacField = LinacField::Instance();
-    const auto transZ = linacField.GetLength() / 2 - linacField.GetDownStreamLength() - fThickness / 2;
+    const auto transZ = linacField.Length() / 2 - linacField.DownStreamLength() - fThickness / 2;
     return HepGeom::Transform3D(CLHEP::HepRotation(), CLHEP::Hep3Vector(0, 0, transZ));
 }
 
-Target::Cuboid::Hole::Hole() :
-    DetailBase<Hole>(),
+Target::CuboidTarget::HoledCuboid::HoledCuboid() :
+    DetailBase<HoledCuboid>(),
     fHalfExtent(4_cm / 2),
     fSpacing(49.5_um),
     fRadius(175_um / 2),
     fDepth(3_mm),
     fPitch(fSpacing + 2 * fRadius) {}
 
-void Target::Cuboid::Hole::SetSpacing(double spacing) {
+void Target::CuboidTarget::HoledCuboid::Spacing(double spacing) {
     fSpacing = spacing;
     fPitch = spacing + 2 * fRadius;
 }
 
-void Target::Cuboid::Hole::SetDiameter(double diameter) {
+void Target::CuboidTarget::HoledCuboid::Diameter(double diameter) {
     fRadius = diameter / 2;
     fPitch = fSpacing + diameter;
 }

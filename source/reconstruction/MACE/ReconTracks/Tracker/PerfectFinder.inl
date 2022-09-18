@@ -27,8 +27,8 @@ std::vector<typename PerfectFinder<FitterT_t, CDCHit_t, Track_t>::HitPtr>
 PerfectFinder<FitterT_t, CDCHit_t, Track_t>::LexicographicalSort(std::vector<HitPtr> hitData) {
     std::ranges::sort(hitData,
                       [](const auto& hit1, const auto& hit2) {
-                          return std::tie(hit1->GetG4EventID(), hit1->GetG4TrackID(), hit1->GetHitTime()) <
-                                 std::tie(hit2->GetG4EventID(), hit2->GetG4TrackID(), hit2->GetHitTime());
+                          return std::tie(hit1->GetG4EventID(), hit1->GetG4TrackID(), hit1->HitTime()) <
+                                 std::tie(hit2->GetG4EventID(), hit2->GetG4TrackID(), hit2->HitTime());
                       });
     hitData.shrink_to_fit();
     return hitData;
@@ -62,7 +62,7 @@ void PerfectFinder<FitterT_t, CDCHit_t, Track_t>::CutByLayerID(std::vector<HitPt
     for (auto hitIter = g4Track.cbegin(); hitIter != lastHitIter; ++hitIter) {
         const auto& hit = *hitIter;
         const auto& nextHit = *std::next(hitIter);
-        if (nextHit->GetLayerID() < hit->GetLayerID()) {
+        if (nextHit->LayerID() < hit->LayerID()) {
             this->fOmittedHitList.insert(this->fOmittedHitList.cend(), hitIter, g4Track.cend());
             g4Track.erase(hitIter, g4Track.cend());
             return;

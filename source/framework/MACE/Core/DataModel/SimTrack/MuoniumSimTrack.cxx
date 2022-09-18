@@ -11,12 +11,12 @@ Vector3FBranchSocket MuoniumTrack::fgDecayMomentum("dcyMom", {"x", "y", "z"}, {0
 
 MuoniumTrack::MuoniumTrack() noexcept :
     ITransientData(),
-    fVertexTime(fgVertexTime.GetValue()),
-    fVertexPosition(fgVertexPosition.GetValue<double>()),
-    fVertexMomentum(fgVertexMomentum.GetValue<double>()),
-    fDecayTime(fgDecayTime.GetValue()),
-    fDecayPosition(fgDecayPosition.GetValue<double>()),
-    fDecayMomentum(fgVertexMomentum.GetValue<double>()) {}
+    fVertexTime(fgVertexTime.Value()),
+    fVertexPosition(fgVertexPosition.Value<double>()),
+    fVertexMomentum(fgVertexMomentum.Value<double>()),
+    fDecayTime(fgDecayTime.Value()),
+    fDecayPosition(fgDecayPosition.Value<double>()),
+    fDecayMomentum(fgVertexMomentum.Value<double>()) {}
 
 void MuoniumTrack::CreateBranches(TTree& tree) {
     ITransientData::CreateBranches(tree);
@@ -40,12 +40,12 @@ void MuoniumTrack::ConnectToBranches(TTree& tree) {
 
 void MuoniumTrack::FillBranchSockets() const noexcept {
     ITransientData::FillBranchSockets();
-    fgVertexTime.SetValue(fVertexTime);
-    fgVertexPosition.SetValue(fVertexPosition);
-    fgVertexMomentum.SetValue(fVertexMomentum);
-    fgDecayTime.SetValue(fDecayTime);
-    fgDecayPosition.SetValue(fDecayPosition);
-    fgDecayMomentum.SetValue(fDecayMomentum);
+    fgVertexTime.Value(fVertexTime);
+    fgVertexPosition.Value(fVertexPosition);
+    fgVertexMomentum.Value(fVertexMomentum);
+    fgDecayTime.Value(fDecayTime);
+    fgDecayPosition.Value(fDecayPosition);
+    fgDecayMomentum.Value(fDecayMomentum);
 }
 
 } // namespace MACE::Core::DataModel::SimTrack

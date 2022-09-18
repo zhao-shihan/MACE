@@ -12,8 +12,8 @@ using namespace MACE::Utility::PhysicalConstant;
 void EMCalField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::EMCalField::Instance();
     auto name = description.GetName();
-    auto radius = description.GetRadius();
-    auto length = description.GetLength();
+    auto radius = description.Radius();
+    auto length = description.Length();
     auto transform = description.CalcTransform();
 
     auto solid = Make<G4Tubs>(
@@ -31,7 +31,7 @@ void EMCalField::ConstructSelf(G4bool checkOverlaps) {
         transform,
         logic,
         name,
-        Mother()->GetLogicalVolume(),
+        Mother()->LogicalVolume(),
         false,
         0,
         checkOverlaps);

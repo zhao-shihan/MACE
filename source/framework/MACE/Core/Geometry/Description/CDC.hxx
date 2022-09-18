@@ -19,31 +19,31 @@ private:
     CDC& operator=(const CDC&) = delete;
 
 public:
-    const auto& GetGasInnerRadius() const { return fGasInnerRadius; }
-    const auto& GetGasOuterRadius() const { return fGasOuterRadius; }
-    const auto& GetGasInnerLength() const { return fGasInnerLength; }
-    const auto& GetGasOuterLength() const { return fGasOuterLength; }
-    const auto& GetCellWidth() const { return fCellWidth; }
-    const auto& GetCellWidthDistortionAllowed() const { return fCellWidthDistortionAllowed; }
-    const auto& GetFieldWireDiameter() const { return fFieldWireDiameter; }
-    const auto& GetSenseWireDiameter() const { return fSenseWireDiameter; }
-    const auto& GetSensitiveVolumeRelativeWidth() const { return fSensitiveVolumeRelativeWidth; }
-    const auto& GetShellInnerThickness() const { return fShellInnerThickness; }
-    const auto& GetShellSideThickness() const { return fShellSideThickness; }
-    const auto& GetShellOuterThickness() const { return fShellOuterThickness; }
+    const auto& GasInnerRadius() const { return fGasInnerRadius; }
+    const auto& GasOuterRadius() const { return fGasOuterRadius; }
+    const auto& GasInnerLength() const { return fGasInnerLength; }
+    const auto& GasOuterLength() const { return fGasOuterLength; }
+    const auto& CellWidth() const { return fCellWidth; }
+    const auto& CellWidthDistortionAllowed() const { return fCellWidthDistortionAllowed; }
+    const auto& FieldWireDiameter() const { return fFieldWireDiameter; }
+    const auto& SenseWireDiameter() const { return fSenseWireDiameter; }
+    const auto& SensitiveVolumeRelativeWidth() const { return fSensitiveVolumeRelativeWidth; }
+    const auto& ShellInnerThickness() const { return fShellInnerThickness; }
+    const auto& ShellSideThickness() const { return fShellSideThickness; }
+    const auto& ShellOuterThickness() const { return fShellOuterThickness; }
 
-    void SetGasInnerRadius(double val) { fGasInnerRadius = val; }
-    void SetGasOuterRadius(double val) { fGasOuterRadius = val; }
-    void SetGasInnerLength(double val) { fGasInnerLength = val; }
-    void SetGasOuterLength(double val) { fGasOuterLength = val; }
-    void SetCellWidth(double val) { fCellWidth = val; }
-    void SetCellWidthDistortionAllowed(double val) { fCellWidthDistortionAllowed = val; }
-    void SetFieldWireDiameter(double val) { fFieldWireDiameter = val; }
-    void SetSenseWireDiameter(double val) { fSenseWireDiameter = val; }
-    void SetSensitiveVolumeRelativeWidth(double val) { fSensitiveVolumeRelativeWidth = val; }
-    void SetShellInnerThickness(double val) { fShellInnerThickness = val; }
-    void SetShellSideThickness(double val) { fShellSideThickness = val; }
-    void SetShellOuterThickness(double val) { fShellOuterThickness = val; }
+    void GasInnerRadius(double val) { fGasInnerRadius = val; }
+    void GasOuterRadius(double val) { fGasOuterRadius = val; }
+    void GasInnerLength(double val) { fGasInnerLength = val; }
+    void GasOuterLength(double val) { fGasOuterLength = val; }
+    void CellWidth(double val) { fCellWidth = val; }
+    void CellWidthDistortionAllowed(double val) { fCellWidthDistortionAllowed = val; }
+    void FieldWireDiameter(double val) { fFieldWireDiameter = val; }
+    void SenseWireDiameter(double val) { fSenseWireDiameter = val; }
+    void SensitiveVolumeRelativeWidth(double val) { fSensitiveVolumeRelativeWidth = val; }
+    void ShellInnerThickness(double val) { fShellInnerThickness = val; }
+    void ShellSideThickness(double val) { fShellSideThickness = val; }
+    void ShellOuterThickness(double val) { fShellOuterThickness = val; }
 
     /// @return CDC sense wire map. A list of [ wire position @ z=0, wire direction ].
     std::vector<std::pair<Eigen::Vector2d, Eigen::Vector3d>> SenseWireMap() const;

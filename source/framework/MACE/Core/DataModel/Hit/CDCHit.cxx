@@ -14,15 +14,15 @@ IntBranchSocket CDCHit::fgLayerID("layerID", -1);
 
 CDCHit::CDCHit() noexcept :
     ITransientData(),
-    fHitTime(fgHitTime.GetValue()),
-    fDriftDistance(fgDriftDistance.GetValue()),
-    fHitPositionZ(fgHitPositionZ.GetValue()),
-    fDriftDistanceVariance(fgDriftDistanceVariance.GetValue()),
-    fHitPositionZVariance(fgHitPositionZVariance.GetValue()),
-    fWirePosition(fgWirePosition.GetValue<double>()),
-    fWireDirection(fgWireDirection.GetValue<double>()),
-    fCellID(fgCellID.GetValue()),
-    fLayerID(fgLayerID.GetValue()) {}
+    fHitTime(fgHitTime.Value()),
+    fDriftDistance(fgDriftDistance.Value()),
+    fHitPositionZ(fgHitPositionZ.Value()),
+    fDriftDistanceVariance(fgDriftDistanceVariance.Value()),
+    fHitPositionZVariance(fgHitPositionZVariance.Value()),
+    fWirePosition(fgWirePosition.Value<double>()),
+    fWireDirection(fgWireDirection.Value<double>()),
+    fCellID(fgCellID.Value()),
+    fLayerID(fgLayerID.Value()) {}
 
 void CDCHit::CreateBranches(TTree& tree) {
     ITransientData::CreateBranches(tree);
@@ -52,15 +52,15 @@ void CDCHit::ConnectToBranches(TTree& tree) {
 
 void CDCHit::FillBranchSockets() const noexcept {
     Base::FillBranchSockets();
-    fgHitTime.SetValue(fHitTime);
-    fgDriftDistance.SetValue(fDriftDistance);
-    fgHitPositionZ.SetValue(fHitPositionZ);
-    fgDriftDistanceVariance.SetValue(fDriftDistanceVariance);
-    fgHitPositionZVariance.SetValue(fHitPositionZVariance);
-    fgWirePosition.SetValue(fWirePosition);
-    fgWireDirection.SetValue(fWireDirection);
-    fgCellID.SetValue(fCellID);
-    fgLayerID.SetValue(fLayerID);
+    fgHitTime.Value(fHitTime);
+    fgDriftDistance.Value(fDriftDistance);
+    fgHitPositionZ.Value(fHitPositionZ);
+    fgDriftDistanceVariance.Value(fDriftDistanceVariance);
+    fgHitPositionZVariance.Value(fHitPositionZVariance);
+    fgWirePosition.Value(fWirePosition);
+    fgWireDirection.Value(fWireDirection);
+    fgCellID.Value(fCellID);
+    fgLayerID.Value(fLayerID);
 }
 
 } // namespace MACE::Core::DataModel::Hit

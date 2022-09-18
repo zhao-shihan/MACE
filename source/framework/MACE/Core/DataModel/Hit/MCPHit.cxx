@@ -8,9 +8,9 @@ Vector2FBranchSocket MCPHit::fgHitPositionVariance("hitPosVar", {"x", "y"}, {0, 
 
 MCPHit::MCPHit() noexcept :
     ITransientData(),
-    fHitTime(fgHitTime.GetValue()),
-    fHitPosition(fgHitPosition.GetValue<double>()),
-    fHitPositionVariance(fgHitPositionVariance.GetValue<double>()) {}
+    fHitTime(fgHitTime.Value()),
+    fHitPosition(fgHitPosition.Value<double>()),
+    fHitPositionVariance(fgHitPositionVariance.Value<double>()) {}
 
 void MCPHit::CreateBranches(TTree& tree) {
     ITransientData::CreateBranches(tree);
@@ -28,9 +28,9 @@ void MCPHit::ConnectToBranches(TTree& tree) {
 
 void MCPHit::FillBranchSockets() const noexcept {
     Base::FillBranchSockets();
-    fgHitTime.SetValue(fHitTime);
-    fgHitPosition.SetValue(fHitPosition);
-    fgHitPositionVariance.SetValue(fHitPositionVariance);
+    fgHitTime.Value(fHitTime);
+    fgHitPosition.Value(fHitPosition);
+    fgHitPositionVariance.Value(fHitPositionVariance);
 }
 
 } // namespace MACE::Core::DataModel::Hit

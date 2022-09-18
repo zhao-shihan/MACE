@@ -14,15 +14,15 @@ private:
     EMCal& operator=(const EMCal&) = delete;
 
 public:
-    const auto& GetInnerRadius() const { return fInnerRadius; }
-    const auto& GetInnerLength() const { return fInnerLength; }
-    const auto& GetWindowRadius() const { return fWindowRadius; }
-    const auto& GetCrystalLength() const { return fCrystalLength; }
+    const auto& InnerRadius() const { return fInnerRadius; }
+    const auto& InnerLength() const { return fInnerLength; }
+    const auto& WindowRadius() const { return fWindowRadius; }
+    const auto& CrystalLength() const { return fCrystalLength; }
 
-    void SetInnerRadius(double val) { fInnerRadius = val; }
-    void SetInnerLength(double val) { fInnerLength = val; }
-    void SetWindowRadius(double val) { fWindowRadius = val; }
-    void SetCrystalLength(double val) { fCrystalLength = val; }
+    void InnerRadius(double val) { fInnerRadius = val; }
+    void InnerLength(double val) { fInnerLength = val; }
+    void WindowRadius(double val) { fWindowRadius = val; }
+    void CrystalLength(double val) { fCrystalLength = val; }
 
 private:
     void ImportValues(const YAML::Node& node) override;

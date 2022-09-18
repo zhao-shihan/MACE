@@ -13,8 +13,8 @@ using namespace MACE::Utility::PhysicalConstant;
 void FirstBendField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::TransportLine::Instance();
     const auto name = "FirstBendField";
-    const auto radius = description.GetFieldRadius();
-    const auto bendRadius = description.GetFirstBendRadius();
+    const auto radius = description.FieldRadius();
+    const auto bendRadius = description.FirstBendRadius();
     const auto transform = description.FirstBendTransform();
 
     auto solid = Make<G4Torus>(
@@ -32,7 +32,7 @@ void FirstBendField::ConstructSelf(G4bool checkOverlaps) {
         transform,
         logic,
         name,
-        Mother()->GetLogicalVolume(),
+        Mother()->LogicalVolume(),
         false,
         0,
         checkOverlaps);

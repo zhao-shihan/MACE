@@ -11,10 +11,10 @@ ShortStringBranchSocket CDCPhysicsSimTrack::fgTrueParticle("trueParticle", "");
 CDCPhysicsSimTrack::CDCPhysicsSimTrack() noexcept :
     CDCPhysicsTrack(),
     ICDCSimTrack(),
-    fTrueVertexPosition(fgTrueVertexPosition.GetValue<double>()),
-    fTrueVertexEnergy(fgTrueVertexEnergy.GetValue()),
-    fTrueVertexMomentum(fgTrueVertexMomentum.GetValue<double>()),
-    fTrueParticle(fgTrueParticle.GetValue()) {}
+    fTrueVertexPosition(fgTrueVertexPosition.Value<double>()),
+    fTrueVertexEnergy(fgTrueVertexEnergy.Value()),
+    fTrueVertexMomentum(fgTrueVertexMomentum.Value<double>()),
+    fTrueParticle(fgTrueParticle.Value()) {}
 
 CDCPhysicsSimTrack::CDCPhysicsSimTrack(const CDCHelixSimTrack& helix, Double_t phiVertex, Double_t B, Double_t mass) :
     CDCPhysicsTrack(static_cast<const CDCHelixTrack&>(helix)),
@@ -54,10 +54,10 @@ void CDCPhysicsSimTrack::ConnectToBranches(TTree& tree) {
 void CDCPhysicsSimTrack::FillBranchSockets() const noexcept {
     CDCPhysicsTrack::FillBranchSockets();
     ICDCSimTrack::FillBranchSockets();
-    fgTrueVertexPosition.SetValue(fTrueVertexPosition);
-    fgTrueVertexEnergy.SetValue(fTrueVertexEnergy);
-    fgTrueVertexMomentum.SetValue(fTrueVertexMomentum);
-    fgTrueParticle.SetValue(fTrueParticle);
+    fgTrueVertexPosition.Value(fTrueVertexPosition);
+    fgTrueVertexEnergy.Value(fTrueVertexEnergy);
+    fgTrueVertexMomentum.Value(fTrueVertexMomentum);
+    fgTrueParticle.Value(fTrueParticle);
 }
 
 } // namespace MACE::Core::DataModel::Track

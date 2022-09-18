@@ -25,7 +25,7 @@ Analysis::Analysis() :
     fMCPHitList(nullptr),
     fCDCHitList(nullptr) {
     Messenger::AnalysisMessenger::Instance().SetTo(this);
-    fDataHub.SetTreeNamePrefixFormat("Rep#_");
+    fDataHub.TreeNamePrefixFormat("Rep#_");
 }
 
 void Analysis::Open(Option_t* option) {

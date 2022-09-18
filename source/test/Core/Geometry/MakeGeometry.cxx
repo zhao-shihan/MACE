@@ -166,7 +166,7 @@ int main(int argc, char** argv) {
 
     // set transparency for jsroot display
     // see form https://github.com/root-project/jsroot/blob/master/docs/JSROOT.md#geometry-viewer
-    geoManager->GetVolume(fWorld->GetLogicalVolume()->GetName())->SetInvisible();
+    geoManager->GetVolume(fWorld->LogicalVolume()->GetName())->SetInvisible();
     std::vector<std::shared_ptr<MACE::Core::Geometry::IEntity>> volumesToSetTransparency{
         fEMCalShield,
         fEMCal,
@@ -178,7 +178,7 @@ int main(int argc, char** argv) {
         fSecondTransportSolenoid,
         fThirdTransportSolenoid};
     for (auto&& volume : std::as_const(volumesToSetTransparency)) {
-        geoManager->GetVolume(volume->GetLogicalVolume()->GetName())->SetTransparency(60);
+        geoManager->GetVolume(volume->LogicalVolume()->GetName())->SetTransparency(60);
     }
 
     geoManager->Export("test.root");

@@ -14,11 +14,11 @@ private:
     SpectrometerField& operator=(const SpectrometerField&) = delete;
 
 public:
-    const auto& GetRadius() const { return fRadius; }
-    const auto& GetLength() const { return fLength; }
+    const auto& Radius() const { return fRadius; }
+    const auto& Length() const { return fLength; }
 
-    void SetRadius(double val) { fRadius = val; }
-    void SetLength(double val) { fLength = val; }
+    void Radius(double val) { fRadius = val; }
+    void Length(double val) { fLength = val; }
 
 private:
     void ImportValues(const YAML::Node& node) override;

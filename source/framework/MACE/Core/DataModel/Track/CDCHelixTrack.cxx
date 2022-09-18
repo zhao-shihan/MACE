@@ -11,10 +11,10 @@ FloatBranchSocket CDCHelixTrack::fgAlpha("alpha", 0);
 
 CDCHelixTrack::CDCHelixTrack() noexcept :
     ICDCTrack(),
-    fCenter(fgCenter.GetValue<double>()),
-    fRadius(fgRadius.GetValue()),
-    fZ0(fgZ0.GetValue()),
-    fAlpha(fgAlpha.GetValue()) {}
+    fCenter(fgCenter.Value<double>()),
+    fRadius(fgRadius.Value()),
+    fZ0(fgZ0.Value()),
+    fAlpha(fgAlpha.Value()) {}
 
 CDCHelixTrack::CDCHelixTrack(const CDCPhysicsTrack& physTrack, Double_t B) :
     ICDCTrack(static_cast<const ICDCTrack&>(physTrack)),
@@ -50,10 +50,10 @@ void CDCHelixTrack::ConnectToBranches(TTree& tree) {
 
 void CDCHelixTrack::FillBranchSockets() const noexcept {
     ICDCTrack::FillBranchSockets();
-    fgCenter.SetValue(fCenter);
-    fgRadius.SetValue(fRadius);
-    fgZ0.SetValue(fZ0);
-    fgAlpha.SetValue(fAlpha);
+    fgCenter.Value(fCenter);
+    fgRadius.Value(fRadius);
+    fgZ0.Value(fZ0);
+    fgAlpha.Value(fAlpha);
 }
 
 } // namespace MACE::Core::DataModel::Track

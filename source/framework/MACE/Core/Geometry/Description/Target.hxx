@@ -22,7 +22,7 @@ class Target final : public ISingletonDescription<Target> {
     friend Environment::Memory::SingletonFactory;
 
 public:
-    enum class ShapeType {
+    enum class TargetShapeType {
         Cuboid
     };
 
@@ -41,54 +41,54 @@ public:
         };
     };
 
-    class Cuboid final : public ShapeBase<Cuboid> {
+    class CuboidTarget final : public ShapeBase<CuboidTarget> {
     public:
-        enum class DetailType {
+        enum class ShapeDetailType {
             Flat,
             Hole
         };
 
     public:
-        Cuboid();
+        CuboidTarget();
 
-        const auto& GetWidth() const { return fWidth; }
-        const auto& GetThickness() const { return fThickness; }
+        const auto& Width() const { return fWidth; }
+        const auto& Thickness() const { return fThickness; }
 
-        void SetWidth(double val) { fWidth = val; }
-        void SetThickness(double val) { fThickness = val; }
+        void Width(double val) { fWidth = val; }
+        void Thickness(double val) { fThickness = val; }
 
         /// @attention Should only be used for geometry construction.
         HepGeom::Transform3D CalcTransform() const;
 
-        const auto& GetDetailType() const { return fDetailType; }
-        void SetDetailType(DetailType val) { fDetailType = val; }
-        const auto& GetHole() const { return fHole; }
-        auto& GetHole() { return fHole; }
+        const auto& DetailType() const { return fDetailType; }
+        void DetailType(ShapeDetailType val) { fDetailType = val; }
+        const auto& Hole() const { return fHole; }
+        auto& Hole() { return fHole; }
 
-        bool VolumeContains(const MathVector3D auto& x) const noexcept;
-        bool Contains(const MathVector3D auto& x, bool insideVolume) const noexcept;
+        bool VolumeContain(const MathVector3D auto& x) const noexcept;
+        bool Contain(const MathVector3D auto& x, bool insideVolume) const noexcept;
         bool TestDetectable(const MathVector3D auto& x) const noexcept;
 
     private:
-        class Hole final : public DetailBase<Hole> {
+        class HoledCuboid final : public DetailBase<HoledCuboid> {
         public:
-            Hole();
+            HoledCuboid();
 
-            void SetExtent(double ex) { fHalfExtent = ex / 2; }
-            void SetSpacing(double spacing);
-            void SetDiameter(double diameter);
-            void SetDepth(double d) { fDepth = d; }
+            void Extent(double ex) { fHalfExtent = ex / 2; }
+            void Spacing(double spacing);
+            void Diameter(double diameter);
+            void Depth(double d) { fDepth = d; }
 
-            auto GetHalfExtent() const { return fHalfExtent; }
-            auto GetExtent() const { return 2 * fHalfExtent; }
-            auto GetSpacing() const { return fSpacing; }
-            auto GetRadius() const { return fRadius; }
-            auto GetDiameter() const { return 2 * fRadius; }
-            auto GetDepth() const { return fDepth; }
-            auto GetPitch() const { return fPitch; }
+            auto HalfExtent() const { return fHalfExtent; }
+            auto Extent() const { return 2 * fHalfExtent; }
+            auto Spacing() const { return fSpacing; }
+            auto Radius() const { return fRadius; }
+            auto Diameter() const { return 2 * fRadius; }
+            auto Depth() const { return fDepth; }
+            auto Pitch() const { return fPitch; }
 
-            bool TestDetailedShape(const MathVector3D auto& x) const noexcept;
-            bool TestDetailedDetectable(const MathVector3D auto&) const noexcept { return false; }
+            bool DetailContain(const MathVector3D auto& x) const noexcept;
+            bool DetailDetectable(const MathVector3D auto&) const noexcept { return false; }
 
         private:
             double fHalfExtent;
@@ -102,8 +102,8 @@ public:
         double fWidth;
         double fThickness;
 
-        DetailType fDetailType;
-        Hole fHole;
+        ShapeDetailType fDetailType;
+        HoledCuboid fHole;
     };
 
 private:
@@ -111,16 +111,16 @@ private:
     ~Target() = default;
 
 public:
-    const auto& GetShapeType() const { return fShapeType; }
-    void SetShapeType(ShapeType val) { fShapeType = val; }
-    const auto& GetCuboid() const { return fCuboid; }
-    auto& GetCuboid() { return fCuboid; }
+    const auto& ShapeType() const { return fShapeType; }
+    void ShapeType(TargetShapeType val) { fShapeType = val; }
+    const auto& Cuboid() const { return fCuboid; }
+    auto& Cuboid() { return fCuboid; }
 
     /// @brief Return true if inside the target volume (include boundary (closed region), don't consider fine structure).
-    bool VolumeContains(const MathVector3D auto& x) const noexcept;
+    bool VolumeContain(const MathVector3D auto& x) const noexcept;
     /// @brief Return true if inside the exact target geometry (considering fine structure).
-    bool Contains(const MathVector3D auto& x, bool insideVolume) const noexcept;
-    bool Contains(const MathVector3D auto& x) const noexcept { return Contains(x, VolumeContains(x)); }
+    bool Contain(const MathVector3D auto& x, bool insideVolume) const noexcept;
+    bool Contain(const MathVector3D auto& x) const noexcept { return Contain(x, VolumeContain(x)); }
     /// @brief Return true if the decay position x is detectable (i.e. is not shadowed by target).
     bool TestDetectable(const MathVector3D auto& x) const noexcept;
 
@@ -129,8 +129,8 @@ private:
     void ExportValues(YAML::Node& node) const override;
 
 private:
-    ShapeType fShapeType;
-    Cuboid fCuboid;
+    TargetShapeType fShapeType;
+    CuboidTarget fCuboid;
 };
 
 } // namespace MACE::Core::Geometry::Description

@@ -14,11 +14,9 @@ public:
     template<typename... Args>
     ClassBranchSocket(const TString& branchName, std::tuple<Args&&...> argTuple);
     ~ClassBranchSocket();
-    ClassBranchSocket(const ClassBranchSocket&) = delete;
-    ClassBranchSocket& operator=(const ClassBranchSocket&) = delete;
 
-    const AClass& GetValue() const override { return *fObject; }
-    void SetValue(const AClass& object) override { *fObject = object; }
+    const AClass& Value() const override { return *fObject; }
+    void Value(const AClass& object) override { *fObject = object; }
 
     void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, &fObject, 256000, 0); }
     void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(this->fBranchName, &fObject); }

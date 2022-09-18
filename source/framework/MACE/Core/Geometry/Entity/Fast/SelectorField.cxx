@@ -12,9 +12,9 @@ using namespace MACE::Utility::PhysicalConstant;
 void SelectorField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::SelectorField::Instance();
     const auto name = description.GetName();
-    const auto radius = description.GetRadius();
-    const auto length = description.GetLength();
-    const auto zPosition = description.GetAxialPosition();
+    const auto radius = description.Radius();
+    const auto length = description.Length();
+    const auto zPosition = description.AxialPosition();
 
     auto solid = Make<G4Tubs>(
         name,
@@ -33,7 +33,7 @@ void SelectorField::ConstructSelf(G4bool checkOverlaps) {
             G4ThreeVector(0, 0, zPosition)),
         logic,
         name,
-        Mother()->GetLogicalVolume(),
+        Mother()->LogicalVolume(),
         false,
         0,
         checkOverlaps);

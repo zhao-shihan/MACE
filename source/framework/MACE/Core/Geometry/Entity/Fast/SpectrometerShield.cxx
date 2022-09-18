@@ -14,10 +14,10 @@ using namespace MACE::Utility::PhysicalConstant;
 void SpectrometerShield::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::SpectrometerShield::Instance();
     auto name = description.GetName();
-    auto innerRadius = description.GetInnerRadius();
-    auto innerLength = description.GetInnerLength();
-    auto windowRadius = description.GetWindowRadius();
-    auto thickness = description.GetThickness();
+    auto innerRadius = description.InnerRadius();
+    auto innerLength = description.InnerLength();
+    auto windowRadius = description.WindowRadius();
+    auto thickness = description.Thickness();
 
     auto body = Make<G4Tubs>(
         "_temp",
@@ -55,7 +55,7 @@ void SpectrometerShield::ConstructSelf(G4bool checkOverlaps) {
         G4Transform3D(),
         logic,
         name,
-        Mother()->GetLogicalVolume(),
+        Mother()->LogicalVolume(),
         false,
         0,
         checkOverlaps);

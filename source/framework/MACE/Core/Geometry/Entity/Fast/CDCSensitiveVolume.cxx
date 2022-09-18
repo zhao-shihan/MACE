@@ -29,7 +29,7 @@ void CDCSensitiveVolume::ConstructSelf(G4bool checkOverlaps) {
             G4Transform3D(),
             logic,
             name,
-            Mother()->GetLogicalVolume(layerID),
+            Mother()->LogicalVolume(layerID),
             false,
             0,
             checkOverlaps);

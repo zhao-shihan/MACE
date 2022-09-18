@@ -18,11 +18,11 @@ public:
     EMCalHit& operator=(const EMCalHit& hit) noexcept = default;
     EMCalHit& operator=(EMCalHit&& hit) noexcept = default;
 
-    const auto& GetHitTime() const { return fHitTime; }
+    const auto& HitTime() const { return fHitTime; }
     const auto& GetEnergy() const { return fEnergy; }
     const auto& GetEnergyVariance() const { return fEnergyVariance; }
 
-    void SetHitTime(Double_t val) { fHitTime = val; }
+    void HitTime(Double_t val) { fHitTime = val; }
     void SetEnergy(Double_t val) { fEnergy = val; }
     void SetEnergyVariance(Double_t val) { fEnergyVariance = val; }
 

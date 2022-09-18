@@ -12,8 +12,8 @@ using namespace MACE::Utility::PhysicalConstant;
 void FirstTransportField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::TransportLine::Instance();
     const auto name = "FirstTransportField";
-    const auto radius = description.GetFieldRadius();
-    const auto length = description.GetFirstStraightLength();
+    const auto radius = description.FieldRadius();
+    const auto length = description.FirstStraightLength();
     const auto transform = description.FirstStraightTransform();
 
     auto solid = Make<G4Tubs>(
@@ -31,7 +31,7 @@ void FirstTransportField::ConstructSelf(G4bool checkOverlaps) {
         transform,
         logic,
         name,
-        Mother()->GetLogicalVolume(),
+        Mother()->LogicalVolume(),
         false,
         0,
         checkOverlaps);

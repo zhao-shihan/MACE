@@ -47,18 +47,18 @@ int main(int argc, char* argv[]) {
     const auto sigmaZCDC = std::stod(argv[5]);
 
     // linac
-    const auto linacLength = LinacField::Instance().GetDownStreamLength();
+    const auto linacLength = LinacField::Instance().DownStreamLength();
     const auto accE = 7_kV / (linacLength - 13.05_mm);
     // flight
     const auto& transportLine = TransportLine::Instance();
     const auto flightLength =
-        SpectrometerField::Instance().GetLength() / 2 - linacLength +
-        transportLine.GetFirstStraightLength() +
-        transportLine.GetFirstBendRadius() * halfpi +
-        transportLine.GetSecondStraightLength() +
-        transportLine.GetSecondBendRadius() * halfpi +
-        transportLine.GetThirdStraightLength() +
-        EMCalField::Instance().GetLength() / 2;
+        SpectrometerField::Instance().Length() / 2 - linacLength +
+        transportLine.FirstStraightLength() +
+        transportLine.FirstBendRadius() * halfpi +
+        transportLine.SecondStraightLength() +
+        transportLine.SecondBendRadius() * halfpi +
+        transportLine.ThirdStraightLength() +
+        EMCalField::Instance().Length() / 2;
     // muonium survival length (5 tau_mu @ 300K)
     const auto maxSurvivalLength = c_light * std::sqrt(3 * k_Boltzmann * 300_K / muonium_mass_c2) * 5 * 2197.03_ns;
     auto CalculateFlightTime = [&accE, &linacLength, &flightLength](double zVertex) {
@@ -93,12 +93,12 @@ int main(int argc, char* argv[]) {
 
     DataFactory dataHub;
 
-    dataHub.SetTreeNamePrefixFormat("Rep#_");
+    dataHub.TreeNamePrefixFormat("Rep#_");
     auto [allRepBegin, allRepEnd] = dataHub.GetTreeIndexRange<MCPHit_t>(hitFileIn);
     auto [repBegin, repEnd, repStep, _] = AllocMPIJobsJobWise(allRepBegin, allRepEnd, MPI_COMM_WORLD);
 
     // result tree
-    dataHub.SetTreeNamePrefixFormat(TString("Rep") + allRepBegin + "To" + (allRepEnd - 1) + '_');
+    dataHub.TreeNamePrefixFormat(TString("Rep") + allRepBegin + "To" + (allRepEnd - 1) + '_');
     auto vertexTree = dataHub.CreateTree<MVertex_t>();
     TH2F vertexHist("vertex", "(Anti-)Muonium Vertex", 500, -20, 20, 500, -50, 50);
 
@@ -108,13 +108,13 @@ int main(int argc, char* argv[]) {
             return track1->GetVertexTime() < track2->GetVertexTime();
         };
         // Get CDC track
-        dataHub.SetTreeNamePrefixFormat("Rep#_Exact_");
+        dataHub.TreeNamePrefixFormat("Rep#_Exact_");
         auto trackData = dataHub.CreateAndFillList<Helix_t>(trackFileIn, rep);
         std::ranges::sort(trackData, SortByVertexTime);
-        dataHub.SetTreeNamePrefixFormat("Rep#_");
+        dataHub.TreeNamePrefixFormat("Rep#_");
 
         auto SortByHitTime = [](const auto& hit1, const auto& hit2) {
-            return hit1->GetHitTime() < hit2->GetHitTime();
+            return hit1->HitTime() < hit2->HitTime();
         };
         // Get MCP data
         auto mcpData = dataHub.CreateAndFillList<MCPHit_t>(hitFileIn, rep);
@@ -133,16 +133,16 @@ int main(int argc, char* argv[]) {
         auto coinCalHitEnd = coinCalHitBegin;
         for (auto&& mcpHit : mcpData) {
             // coincidence time window for this MCP hit
-            const auto timeBegin = mcpHit->GetHitTime() - calTimeWindow / 2;
+            const auto timeBegin = mcpHit->HitTime() - calTimeWindow / 2;
             const auto timeEnd = timeBegin + calTimeWindow;
             // find coincident
             coinCalHitBegin = std::find_if(coinCalHitBegin, calData.cend(),
                                            [&timeBegin](const auto& hit) {
-                                               return hit->GetHitTime() > timeBegin;
+                                               return hit->HitTime() > timeBegin;
                                            });
             coinCalHitEnd = std::find_if(coinCalHitBegin, calData.cend(),
                                          [&timeEnd](const auto& hit) {
-                                             return hit->GetHitTime() > timeEnd;
+                                             return hit->HitTime() > timeEnd;
                                          });
             // coincident count
             int coinCount = 0;
@@ -160,8 +160,8 @@ int main(int argc, char* argv[]) {
             // result list
             std::vector<std::shared_ptr<MVertex_t>> vertexResultOfThisHit;
             // coincidence time window for this MCP hit
-            const auto timeBegin = mcpHit->GetHitTime() - tofMax;
-            const auto timeEnd = mcpHit->GetHitTime() - tofMin;
+            const auto timeBegin = mcpHit->HitTime() - tofMax;
+            const auto timeEnd = mcpHit->HitTime() - tofMin;
             // find time coincident
             std::vector<std::shared_ptr<Helix_t>> timeCoinTrack;
             coinCDCHitBegin = std::find_if(coinCDCHitBegin, trackData.cend(),
@@ -179,7 +179,7 @@ int main(int argc, char* argv[]) {
                 const auto phiMCP = track->CalcPhi(CPAMCP);
                 const auto CPACDC = track->CalcPoint(phiMCP);
                 const auto& TCACDC = track->GetVertexTime();
-                const auto TCAMCP = mcpHit->GetHitTime() - CalculateFlightTime(CPACDC.z());
+                const auto TCAMCP = mcpHit->HitTime() - CalculateFlightTime(CPACDC.z());
 
                 if (-3 * sigmaZCDC < CPACDC.z() and CPACDC.z() < maxSurvivalLength + 3 * sigmaZCDC) {
                     Track_t physTrack(*track, phiMCP);
@@ -190,7 +190,7 @@ int main(int argc, char* argv[]) {
                     possibleVertex->SetDeltaTCA(TCACDC - TCAMCP);
                     possibleVertex->SetCPACDC(CPACDC);
                     possibleVertex->SetCPAMCP(CPAMCP);
-                    possibleVertex->SetDCA(track->GetRadius() - (track->GetCenter() - CPAMCP).norm());
+                    possibleVertex->SetDCA(track->Radius() - (track->GetCenter() - CPAMCP).norm());
                     possibleVertex->SetVertexEnergy(physTrack.GetVertexEnergy());
                     possibleVertex->SetVertexMomentum(physTrack.GetVertexMomentum());
                     const auto particles = emCalCoinCount + ("y/" + physTrack.GetParticle());

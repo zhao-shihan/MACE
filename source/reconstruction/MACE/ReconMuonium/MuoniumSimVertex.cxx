@@ -10,11 +10,11 @@ ShortStringBranchSocket MuoniumSimVertex::fgTrueParticles("trueParticles", "");
 
 MuoniumSimVertex::MuoniumSimVertex() noexcept :
     MuoniumVertex(),
-    fTrueVertexTime(fgTrueVertexTime.GetValue()),
-    fTrueVertexPosition(fgTrueVertexPosition.GetValue<double>()),
-    fTrueVertexEnergy(fgTrueVertexEnergy.GetValue()),
-    fTrueVertexMomentum(fgTrueVertexMomentum.GetValue<double>()),
-    fTrueParticles(fgTrueParticles.GetValue()) {}
+    fTrueVertexTime(fgTrueVertexTime.Value()),
+    fTrueVertexPosition(fgTrueVertexPosition.Value<double>()),
+    fTrueVertexEnergy(fgTrueVertexEnergy.Value()),
+    fTrueVertexMomentum(fgTrueVertexMomentum.Value<double>()),
+    fTrueParticles(fgTrueParticles.Value()) {}
 
 void MuoniumSimVertex::CreateBranches(TTree& tree) {
     MuoniumVertex::CreateBranches(tree);
@@ -36,11 +36,11 @@ void MuoniumSimVertex::ConnectToBranches(TTree& tree) {
 
 void MuoniumSimVertex::FillBranchSockets() const noexcept {
     MuoniumVertex::FillBranchSockets();
-    fgTrueVertexTime.SetValue(fTrueVertexTime);
-    fgTrueVertexPosition.SetValue(fTrueVertexPosition);
-    fgTrueVertexEnergy.SetValue(fTrueVertexEnergy);
-    fgTrueVertexMomentum.SetValue(fTrueVertexMomentum);
-    fgTrueParticles.SetValue(fTrueParticles);
+    fgTrueVertexTime.Value(fTrueVertexTime);
+    fgTrueVertexPosition.Value(fTrueVertexPosition);
+    fgTrueVertexEnergy.Value(fTrueVertexEnergy);
+    fgTrueVertexMomentum.Value(fTrueVertexMomentum);
+    fgTrueParticles.Value(fTrueParticles);
 }
 
 } // namespace MACE::ReconMuonium

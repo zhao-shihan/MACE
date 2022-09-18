@@ -13,12 +13,12 @@ using namespace MACE::Utility::PhysicalConstant;
 void Collimator::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::Collimator::Instance();
     const auto name = description.GetName();
-    const auto innerRadius = description.GetInnerRadius();
-    const auto outerRadius = description.GetOuterRadius();
-    const auto length = description.GetLength();
-    const auto thickness = description.GetThickness();
-    const auto axialPosition = description.GetAxialPosition();
-    const auto count = description.GetCount();
+    const auto innerRadius = description.InnerRadius();
+    const auto outerRadius = description.OuterRadius();
+    const auto length = description.Length();
+    const auto thickness = description.Thickness();
+    const auto axialPosition = description.AxialPosition();
+    const auto count = description.Count();
 
     for (int i = 0; i < count; ++i) {
         auto radii = innerRadius + i * (outerRadius - innerRadius) / (count - 1);
@@ -39,7 +39,7 @@ void Collimator::ConstructSelf(G4bool checkOverlaps) {
                 G4ThreeVector(0.0, 0.0, axialPosition)),
             logic,
             name,
-            Mother()->GetLogicalVolume(),
+            Mother()->LogicalVolume(),
             false,
             0,
             checkOverlaps);

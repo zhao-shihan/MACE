@@ -16,13 +16,13 @@ private:
     LinacField& operator=(const LinacField&) = delete;
 
 public:
-    const auto& GetRadius() const { return fRadius; }
-    const auto& GetLength() const { return fLength; }
-    const auto& GetDownStreamLength() const { return fDownStreamLength; }
+    const auto& Radius() const { return fRadius; }
+    const auto& Length() const { return fLength; }
+    const auto& DownStreamLength() const { return fDownStreamLength; }
 
-    void SetRadius(double val) { fRadius = val; }
-    void SetLength(double val) { fLength = val; }
-    void SetDownStreamLength(double val) { fDownStreamLength = val; }
+    void Radius(double val) { fRadius = val; }
+    void Length(double val) { fLength = val; }
+    void DownStreamLength(double val) { fDownStreamLength = val; }
 
     HepGeom::Transform3D CalcTransform() const;
 

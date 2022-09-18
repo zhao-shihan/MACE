@@ -33,7 +33,7 @@ void CDCLayer::ConstructSelf(G4bool checkOverlaps) {
             G4Transform3D(),
             logic,
             name,
-            Mother()->GetLogicalVolume(),
+            Mother()->LogicalVolume(),
             false,
             layerID,
             checkOverlaps);

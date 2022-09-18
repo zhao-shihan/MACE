@@ -12,8 +12,8 @@ using namespace MACE::Utility::LiteralUnit::Density;
 void MCP::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::MCP::Instance();
     const auto name = description.GetName();
-    const auto width = description.GetWidth();
-    const auto thickness = description.GetThickness();
+    const auto width = description.Width();
+    const auto thickness = description.Thickness();
 
     auto solid = Make<G4Box>(
         name,
@@ -30,7 +30,7 @@ void MCP::ConstructSelf(G4bool checkOverlaps) {
             G4ThreeVector(0, 0, thickness / 2)),
         logic,
         name,
-        Mother()->GetLogicalVolume(),
+        Mother()->LogicalVolume(),
         false,
         0,
         checkOverlaps);

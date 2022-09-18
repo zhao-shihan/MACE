@@ -80,10 +80,10 @@ G4bool CDCSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         const auto vertexMomentum = track->GetVertexMomentumDirection() * std::sqrt(track->GetVertexKineticEnergy() * (vertexTotalEnergy + particle->GetPDGMass()));
         // new a hit
         auto* const hit = new CDCHit();
-        hit->SetHitTime((tIn + tOut) / 2);
-        hit->SetDriftDistance(driftDistance);
-        hit->SetHitPositionZ((zIn + zOut) / 2);
-        hit->SetWirePosition(rWire);
+        hit->HitTime((tIn + tOut) / 2);
+        hit->DriftDistance(driftDistance);
+        hit->HitPositionZ((zIn + zOut) / 2);
+        hit->WirePosition(rWire);
         hit->SetWireDirection(tWire);
         hit->SetCellID(cellID);
         hit->SetLayerID(layerID);

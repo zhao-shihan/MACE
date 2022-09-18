@@ -12,8 +12,8 @@ using namespace MACE::Utility::PhysicalConstant;
 void SpectrometerField::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::SpectrometerField::Instance();
     auto name = description.GetName();
-    auto length = description.GetLength();
-    auto radius = description.GetRadius();
+    auto length = description.Length();
+    auto radius = description.Radius();
 
     auto solid = Make<G4Tubs>(
         name,
@@ -30,7 +30,7 @@ void SpectrometerField::ConstructSelf(G4bool checkOverlaps) {
         G4Transform3D(),
         logic,
         name,
-        Mother()->GetLogicalVolume(),
+        Mother()->LogicalVolume(),
         false,
         0,
         checkOverlaps);

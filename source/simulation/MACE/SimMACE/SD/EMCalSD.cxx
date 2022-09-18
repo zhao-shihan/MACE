@@ -32,7 +32,7 @@ G4bool EMCalSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         const auto* const preStepPoint = step->GetPreStepPoint();
         // new a hit
         auto* const hit = new EMCalHit();
-        hit->SetHitTime(preStepPoint->GetGlobalTime());
+        hit->HitTime(preStepPoint->GetGlobalTime());
         hit->SetEnergy(preStepPoint->GetKineticEnergy());
         hit->SetParticle(particle->GetParticleName());
         hit->SetG4EventID(fEventID);
