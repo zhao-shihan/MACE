@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/Environment/Memory/Singletonized.hxx"
 #include "MACE/Environment/Memory/FreeSingleton.hxx"
+#include "MACE/Environment/Memory/Singletonized.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 

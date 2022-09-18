@@ -34,6 +34,6 @@ private:
     StateType fState;
 };
 
-} // namespace MACE::Math::Random
+} // namespace MACE::Math::Random::Generator
 
 #include "MACE/Math/Random/Generator/PCGXSHRR6432.inl"

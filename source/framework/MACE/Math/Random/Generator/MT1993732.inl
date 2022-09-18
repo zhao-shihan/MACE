@@ -59,4 +59,4 @@ constexpr void MT1993732::Regenerate() {
     fTemperedIterator = fTempered;
 }
 
-} // namespace MACE::Math::Random
+} // namespace MACE::Math::Random::Generator

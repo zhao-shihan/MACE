@@ -1,9 +1,9 @@
 #pragma once
 
 #include "MACE/Compatibility/Eigen34/TemplateAlias.hxx"
+#include "MACE/Concept/FundamentalType.hxx"
 #include "MACE/Core/DataModel/BranchSocket/FundamentalROOTTypeTraits.hxx"
 #include "MACE/Core/DataModel/BranchSocket/IBranchSocket.hxx"
-#include "MACE/Concept/FundamentalType.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 
 #include "Eigen/Core"

@@ -1,8 +1,8 @@
 #include "MACE/Core/Geometry/Description/TransportLine.hxx"
+#include "MACE/Math/Hypot.hxx"
 #include "MACE/SimMACE/Field/FirstBendField.hxx"
 #include "MACE/SimMACE/Messenger/FieldMessenger.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
-#include "MACE/Math/Hypot.hxx"
 
 namespace MACE::SimMACE::Field {
 

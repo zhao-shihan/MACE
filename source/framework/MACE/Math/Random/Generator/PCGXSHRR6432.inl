@@ -40,4 +40,4 @@ constexpr void PCGXSHRR6432::Discard(PCGXSHRR6432::StateType n) {
     fState = accelerateMultipiler * fState + accelerateIncrement;
 }
 
-} // namespace MACE::Math::Random
+} // namespace MACE::Math::Random::Generator

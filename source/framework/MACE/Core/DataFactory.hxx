@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/Core/DataModel/ITransientData.hxx"
 #include "MACE/Concept/PointerImitator.hxx"
+#include "MACE/Core/DataModel/ITransientData.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "TChain.h"

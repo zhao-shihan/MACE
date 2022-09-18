@@ -1,8 +1,8 @@
 #pragma once
 
 #include "MACE/Environment/BasicEnvironment.hxx"
-#include "MACE/Environment/Memory/Singletonized.hxx"
 #include "MACE/Environment/Memory/Singleton.hxx"
+#include "MACE/Environment/Memory/Singletonized.hxx"
 #include "MACE/Utility/TupleForEach.hxx"
 
 #include "yaml-cpp/yaml.h"
