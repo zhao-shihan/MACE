@@ -1,9 +1,9 @@
 #pragma once
 
-#include "MACE/Environment/Memory/Singletonized.hxx"
 #include "MACE/Environment/Memory/internal/ISingletonBase.hxx"
 #include "MACE/Environment/Memory/internal/SingletonFactory.hxx"
 #include "MACE/Environment/Memory/internal/SingletonPool.hxx"
+#include "MACE/Environment/Memory/Singletonized.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include <cassert>
@@ -160,8 +160,10 @@ private:
     static void InstantiateOrFindInstance();
 
 private:
-    static ObserverPtr<ADerived> fgInstance;
-    static ObserverPtr<internal::SingletonPool::Node> fgInstanceNode;
+    static struct InstanceKeeper {
+        ObserverPtr<ADerived> object;
+        ObserverPtr<internal::SingletonPool::Node> node;
+    } fgInstance;
 };
 
 using SingletonFactory = internal::SingletonFactory;

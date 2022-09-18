@@ -8,7 +8,7 @@ FreeSingleton<ADerived>::FreeSingleton() :
     FreeSingletonBase(),
     MuteSingleton<ADerived>() {
     static_assert(FreeSingletonized<ADerived>);
-    fgInstance = static_cast<ObserverPtr<ADerived>>(*MuteSingleton<ADerived>::fgInstanceNode);
+    fgInstance = static_cast<ObserverPtr<ADerived>>(this);
 }
 
 template<class ADerived>

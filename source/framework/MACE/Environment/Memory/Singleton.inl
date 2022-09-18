@@ -1,9 +1,7 @@
 namespace MACE::Environment::Memory {
 
 template<class ADerived>
-ObserverPtr<ADerived> Singleton<ADerived>::fgInstance = nullptr;
-template<class ADerived>
-ObserverPtr<internal::SingletonPool::Node> Singleton<ADerived>::fgInstanceNode = nullptr;
+Singleton<ADerived>::InstanceKeeper Singleton<ADerived>::fgInstance = {nullptr, nullptr};
 
 template<class ADerived>
 Singleton<ADerived>::Singleton() {
@@ -18,31 +16,31 @@ Singleton<ADerived>::Singleton() {
 
 template<class ADerived>
 Singleton<ADerived>::~Singleton() {
-    assert((fgInstance == nullptr and fgInstanceNode == nullptr) or
-           fgInstance == *fgInstanceNode);
-    if (fgInstance != nullptr) {
-        fgInstance = nullptr;
-        *fgInstanceNode = nullptr;
-        fgInstanceNode = nullptr;
+    assert((fgInstance.object == nullptr and fgInstance.node == nullptr) or
+           fgInstance.object == *fgInstance.node);
+    if (fgInstance.object != nullptr) {
+        fgInstance.object = nullptr;
+        *fgInstance.node = nullptr;
+        fgInstance.node = nullptr;
     }
 }
 
 template<class ADerived>
 ADerived& Singleton<ADerived>::Instance() {
-    if (fgInstance == nullptr) [[unlikely]] {
-        assert(fgInstanceNode == nullptr);
+    if (fgInstance.object == nullptr) [[unlikely]] {
+        assert(fgInstance.node == nullptr);
         InstantiateOrFindInstance();
     }
-    assert(fgInstance == *fgInstanceNode);
-    return *fgInstance;
+    assert(fgInstance.object == *fgInstance.node);
+    return *fgInstance.object;
 }
 
 template<class ADerived>
 void Singleton<ADerived>::InstantiateOrFindInstance() {
     if (auto& node = internal::SingletonFactory::Instance().InstantiateOrFind<ADerived>();
         node != nullptr) {
-        fgInstance = static_cast<ObserverPtr<ADerived>>(node);
-        fgInstanceNode = std::addressof(node);
+        fgInstance.object = static_cast<ObserverPtr<ADerived>>(node);
+        fgInstance.node = std::addressof(node);
     } else {
         throw std::logic_error(
             std::string("MACE::Environment::Memory::Singleton::Instance(): The instance of ")
