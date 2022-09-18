@@ -11,7 +11,7 @@ struct FillDescriptionArray {
 
 } // namespace internal
 
-template<InstantiatedFrom<std::tuple> ADescriptionTuple>
+template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
 void DescriptionIO::Import(const std::filesystem::path& yamlFile) {
     std::array<ObserverPtr<IDescription>, std::tuple_size_v<ADescriptionTuple>> descriptions;
     Utility::StaticForEach<0, descriptions.size(),
@@ -19,7 +19,7 @@ void DescriptionIO::Import(const std::filesystem::path& yamlFile) {
     ImportImpl(yamlFile, descriptions);
 }
 
-template<InstantiatedFrom<std::tuple> ADescriptionTuple>
+template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
 void DescriptionIO::Export(const std::filesystem::path& yamlFile, const std::string& fileComment) {
     std::array<ObserverPtr<IDescription>, std::tuple_size_v<ADescriptionTuple>> descriptions;
     Utility::StaticForEach<0, descriptions.size(),
@@ -27,7 +27,7 @@ void DescriptionIO::Export(const std::filesystem::path& yamlFile, const std::str
     ExportImpl(yamlFile, fileComment, descriptions);
 }
 
-template<InstantiatedFrom<std::tuple> ADescriptionTuple>
+template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
 void DescriptionIO::Ixport(const std::filesystem::path& yamlFile, const std::string& fileComment) {
     std::array<ObserverPtr<IDescription>, std::tuple_size_v<ADescriptionTuple>> descriptions;
     Utility::StaticForEach<0, descriptions.size(),
@@ -36,7 +36,7 @@ void DescriptionIO::Ixport(const std::filesystem::path& yamlFile, const std::str
 }
 
 template<typename... ArgsOfImport>
-void DescriptionIO::Import(const InstantiatedFrom<std::tuple> auto& yamlText) {
+void DescriptionIO::Import(const Concept::InstantiatedFrom<std::tuple> auto& yamlText) {
     auto yamlPath = std::filesystem::temp_directory_path() / "tmp_mace_geom.yaml";
     if (Environment::MPIEnvironment::Available()) {
         Utility::MPIUtil::MakeMPIFilePathInPlace(yamlPath);

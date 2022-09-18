@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/Environment/Memory/Concept/Singletonized.hxx"
 #include "MACE/Environment/Memory/FreeSingleton.hxx"
+#include "MACE/Environment/Memory/Singletonized.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
@@ -25,11 +25,11 @@ public:
     using BaseNode = const ISingletonBase*;
 
 public:
-    template<Concept::Singletonized ASingleton>
+    template<Singletonized ASingleton>
     [[nodiscard]] std::optional<std::reference_wrapper<Node>> Find();
-    template<Concept::Singletonized ASingleton>
+    template<Singletonized ASingleton>
     [[nodiscard]] auto Contains() const { return fInstanceMap.contains(typeid(ASingleton)); }
-    [[nodiscard]] Node& Insert(Concept::Singletonized auto* instance);
+    [[nodiscard]] Node& Insert(Singletonized auto* instance);
     [[nodiscard]] std::vector<BaseNode> GetUndeletedInReverseInsertionOrder() const;
 
 private:

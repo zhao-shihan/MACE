@@ -2,7 +2,7 @@ namespace MACE::Core::Geometry::Description {
 
 namespace std2b = Compatibility::std2b;
 
-bool Target::VolumeContain(const MathVector3D auto& x) const noexcept {
+bool Target::VolumeContain(const Concept::MathVector3D auto& x) const noexcept {
     switch (fShapeType) {
     case TargetShapeType::Cuboid:
         return fCuboid.VolumeContain(x);
@@ -10,7 +10,7 @@ bool Target::VolumeContain(const MathVector3D auto& x) const noexcept {
     std2b::unreachable();
 }
 
-bool Target::Contain(const MathVector3D auto& x, bool insideVolume) const noexcept {
+bool Target::Contain(const Concept::MathVector3D auto& x, bool insideVolume) const noexcept {
     switch (fShapeType) {
     case TargetShapeType::Cuboid:
         return fCuboid.Contain(x, insideVolume);
@@ -18,7 +18,7 @@ bool Target::Contain(const MathVector3D auto& x, bool insideVolume) const noexce
     std2b::unreachable();
 }
 
-bool Target::TestDetectable(const MathVector3D auto& x) const noexcept {
+bool Target::TestDetectable(const Concept::MathVector3D auto& x) const noexcept {
     switch (fShapeType) {
     case TargetShapeType::Cuboid:
         return fCuboid.TestDetectable(x);
@@ -51,13 +51,13 @@ Target::ShapeBase<ADerivedShape>::DetailBase<ADerivedDetail>::DetailBase() {
         });
 }
 
-bool Target::CuboidTarget::VolumeContain(const MathVector3D auto& x) const noexcept {
+bool Target::CuboidTarget::VolumeContain(const Concept::MathVector3D auto& x) const noexcept {
     return -fThickness <= x[2] and x[2] <= 0 and
            std::abs(x[0]) <= fWidth / 2 and
            std::abs(x[1]) <= fWidth / 2;
 }
 
-bool Target::CuboidTarget::Contain(const MathVector3D auto& x, bool insideVolume) const noexcept {
+bool Target::CuboidTarget::Contain(const Concept::MathVector3D auto& x, bool insideVolume) const noexcept {
     switch (fDetailType) {
     case ShapeDetailType::Flat:
         return insideVolume;
@@ -68,7 +68,7 @@ bool Target::CuboidTarget::Contain(const MathVector3D auto& x, bool insideVolume
     std2b::unreachable();
 }
 
-bool Target::CuboidTarget::TestDetectable(const MathVector3D auto& x) const noexcept {
+bool Target::CuboidTarget::TestDetectable(const Concept::MathVector3D auto& x) const noexcept {
     const auto notShadowed = x[2] > 0 or
                              std::abs(x[0]) > fWidth / 2 or
                              std::abs(x[1]) > fWidth / 2;
@@ -82,16 +82,14 @@ bool Target::CuboidTarget::TestDetectable(const MathVector3D auto& x) const noex
     std2b::unreachable();
 }
 
-bool Target::CuboidTarget::HoledCuboid::DetailContain(const MathVector3D auto& x) const noexcept {
+bool Target::CuboidTarget::HoledCuboid::DetailContain(const Concept::MathVector3D auto& x) const noexcept {
     if (x[2] < -fDepth or std::abs(x[0]) > fHalfExtent or std::abs(x[1]) > fHalfExtent) {
         return true;
     } else {
         using std::numbers::sqrt3;
-        using Utility::Math::Hypot2;
-        using Utility::Math::Pow2;
         const auto u = std::round((x[0] - (1 / sqrt3) * x[1]) / fPitch) * fPitch;
         const auto v = std::round((2 / sqrt3) * x[1] / fPitch) * fPitch;
-        return Hypot2(x[0] - (u + v / 2), x[1] - (sqrt3 / 2) * v) > Pow2(fRadius);
+        return Math::Hypot2(x[0] - (u + v / 2), x[1] - (sqrt3 / 2) * v) > Math::Pow2(fRadius);
     }
 }
 

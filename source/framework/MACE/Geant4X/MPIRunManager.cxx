@@ -1,7 +1,7 @@
 #include "MACE/Environment/MPIEnvironment.hxx"
 #include "MACE/Geant4X/MPIRunManager.hxx"
 #include "MACE/Geant4X/MPIRunMessenger.hxx"
-#include "MACE/Utility/Math/IntegerPower.hxx"
+#include "MACE/Math/IntegerPower.hxx"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
 #include "MACE/Utility/MPIUtil/CheckedMPICall.hxx"
 #include "MACE/Utility/MPIUtil/MPIRandomUtil.hxx"
@@ -18,8 +18,6 @@
 #include <string>
 
 namespace MACE::Geant4X {
-
-using MACE::Utility::Math::Pow2;
 
 namespace internal {
 
@@ -109,7 +107,7 @@ void MPIRunManager::TerminateOneEvent() {
     // stop the event timer
     fEventWallTime = std::chrono::steady_clock::now() - fEventBeginWallTime;
     fNAvgEventWallTime += fEventWallTime.count();
-    fNDevEventWallTime += Pow2(fEventWallTime.count() - fNAvgEventWallTime / numberOfEventProcessed);
+    fNDevEventWallTime += Math::Pow2(fEventWallTime.count() - fNAvgEventWallTime / numberOfEventProcessed);
     // report
     if (fPrintProgress > 0 and endedEvent % fPrintProgress == 0) {
         EventEndReport(endedEvent);

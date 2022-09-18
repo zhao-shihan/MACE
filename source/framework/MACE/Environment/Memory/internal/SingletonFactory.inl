@@ -1,6 +1,6 @@
 namespace MACE::Environment::Memory::internal {
 
-template<Concept::Singletonized ASingleton>
+template<Singletonized ASingleton>
 [[nodiscard]] SingletonPool::Node& SingletonFactory::InstantiateOrFind() {
     auto& instancePool = SingletonPool::Instance();
     if (const auto existedNode = instancePool.Find<ASingleton>();

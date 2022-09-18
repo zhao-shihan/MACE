@@ -1,9 +1,9 @@
 #pragma once
 
 #include "MACE/Compatibility/Eigen34/TemplateAlias.hxx"
+#include "MACE/Concept/FundamentalType.hxx"
 #include "MACE/Core/DataModel/BranchSocket/FundamentalROOTTypeTraits.hxx"
 #include "MACE/Core/DataModel/BranchSocket/IBranchSocket.hxx"
-#include "MACE/Utility/Concept/FundamentalType.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 
 #include "Eigen/Core"
@@ -11,7 +11,6 @@
 namespace MACE::Core::DataModel::BranchSocket {
 
 namespace Eigen34 = Compatibility::Eigen34;
-using MACE::Utility::Concept::ArithmeticExcludeBoolChar;
 
 template<ROOTFundamental T, int N>
 class VectorBranchSocket final : public IBranchSocket<Eigen34::Vector<T, N>> {
@@ -19,10 +18,10 @@ public:
     VectorBranchSocket(const TString& branchName, const std::array<TString, N>& leafNames, const std::array<T, N>& defaultValues);
 
     const Eigen34::Vector<T, N>& Value() const override { return fVector; }
-    template<ArithmeticExcludeBoolChar U>
+    template<Concept::ArithmeticExcludeBoolChar U>
     auto Value() const { return fVector.template cast<U>(); }
     void Value(const Eigen34::Vector<T, N>& vector) override { fVector = vector; }
-    template<ArithmeticExcludeBoolChar U>
+    template<Concept::ArithmeticExcludeBoolChar U>
     void Value(const Eigen34::Vector<U, N>& vector) { fVector = vector.template cast<T>(); }
 
     void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, fVector.data(), fLeafList); }

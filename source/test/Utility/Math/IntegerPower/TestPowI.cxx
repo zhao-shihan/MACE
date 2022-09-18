@@ -1,4 +1,4 @@
-#include "MACE/Utility/Math/IntegerPower.hxx"
+#include "MACE/Math/IntegerPower.hxx"
 
 #include <cmath>
 #include <complex>
@@ -8,7 +8,7 @@
 #include <sstream>
 #include <string>
 
-using namespace MACE::Utility::Math;
+using namespace MACE::Math;
 
 std::string TestEqual(auto a, auto real, auto tolerance) {
     if (real <= std::numeric_limits<decltype(a)>::lowest() or real >= decltype(real)(std::numeric_limits<decltype(a)>::max()) or

@@ -50,7 +50,7 @@ std::shared_ptr<TTree> DataFactory::CreateTree(Long64_t treeIndex) const {
     return tree;
 }
 
-template<IsTransientData ADataInTree, WeakPointerImitator ADataInListPointer> // clang-format off
+template<IsTransientData ADataInTree, Concept::WeakPointerImitator ADataInListPointer> // clang-format off
     requires std::derived_from<typename std::pointer_traits<ADataInListPointer>::element_type, ADataInTree>
 void DataFactory::FillTree(const std::vector<ADataInListPointer>& dataList, TTree& tree, bool connected) { // clang-format on
     if (not connected) { ADataInTree::ConnectToBranches(tree); }
@@ -60,12 +60,12 @@ void DataFactory::FillTree(const std::vector<ADataInListPointer>& dataList, TTre
     }
 }
 
-template<WeakPointerImitator ADataInListPointer>
+template<Concept::WeakPointerImitator ADataInListPointer>
 void DataFactory::FillTree(const std::vector<ADataInListPointer>& dataList, TTree& tree, bool connected) {
     FillTree<typename std::pointer_traits<ADataInListPointer>::element_type, ADataInListPointer>(dataList, tree, connected);
 }
 
-template<IsTransientData ADataInTree, WeakPointerImitator ADataInListPointer> // clang-format off
+template<IsTransientData ADataInTree, Concept::WeakPointerImitator ADataInListPointer> // clang-format off
     requires std::derived_from<typename std::pointer_traits<ADataInListPointer>::element_type, ADataInTree>
 std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<ADataInListPointer>& dataList, Long64_t treeIndex) const { // clang-format on
     auto tree = CreateTree<ADataInTree>(treeIndex);
@@ -73,7 +73,7 @@ std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<ADataInL
     return tree;
 }
 
-template<WeakPointerImitator ADataInListPointer>
+template<Concept::WeakPointerImitator ADataInListPointer>
 std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<ADataInListPointer>& dataList, Long64_t treeIndex) const {
     return CreateAndFillTree<typename std::pointer_traits<ADataInListPointer>::element_type, ADataInListPointer>(dataList, treeIndex);
 }

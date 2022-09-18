@@ -1,8 +1,8 @@
 #pragma once
 
 #include "MACE/Environment/BasicEnvironment.hxx"
-#include "MACE/Environment/Memory/Concept/Singletonized.hxx"
 #include "MACE/Environment/Memory/Singleton.hxx"
+#include "MACE/Environment/Memory/Singletonized.hxx"
 #include "MACE/Utility/TupleForEach.hxx"
 
 #include "yaml-cpp/yaml.h"
@@ -64,7 +64,7 @@ template<class T>
 concept IsDescription = requires {
     requires std::derived_from<T, IDescription>;
     requires std::derived_from<T, ISingletonDescription<T>>;
-    requires Environment::Memory::Concept::Singletonized<T>;
+    requires Environment::Memory::Singletonized<T>;
 };
 
 } // namespace MACE::Core::Geometry

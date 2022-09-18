@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Memory/Concept/FreeSingletonized.hxx"
+#include "MACE/Environment/Memory/FreeSingletonized.hxx"
 #include "MACE/Environment/Memory/internal/FreeSingletonBase.hxx"
 #include "MACE/Environment/Memory/internal/MuteSingletonPool.hxx"
 #include "MACE/Environment/Memory/MuteSingleton.hxx"

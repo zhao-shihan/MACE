@@ -1,6 +1,6 @@
 namespace MACE::Environment::Memory::internal {
 
-template<Concept::MuteSingletonized AMuteSingleton>
+template<MuteSingletonized AMuteSingleton>
 [[nodiscard]] std::optional<std::reference_wrapper<MuteSingletonPool::Node>> MuteSingletonPool::Find() {
     if (const auto existed = fInstanceMap.find(typeid(AMuteSingleton));
         existed == fInstanceMap.cend()) {
@@ -10,7 +10,7 @@ template<Concept::MuteSingletonized AMuteSingleton>
     }
 }
 
-[[nodiscard]] MuteSingletonPool::Node& MuteSingletonPool::Insert(Concept::MuteSingletonized auto* instance) {
+[[nodiscard]] MuteSingletonPool::Node& MuteSingletonPool::Insert(MuteSingletonized auto* instance) {
     if (const auto [iter, inserted] = fInstanceMap.try_emplace(typeid(decltype(*instance)), instance);
         inserted) {
         return iter->second;

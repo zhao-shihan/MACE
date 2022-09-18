@@ -1,4 +1,4 @@
-#include "MACE/Utility/Math/IntegerPower.hxx"
+#include "MACE/Math/IntegerPower.hxx"
 
 #include <chrono>
 #include <complex>
@@ -6,7 +6,7 @@
 #include <random>
 #include <type_traits>
 
-using namespace MACE::Utility::Math;
+using namespace MACE::Math;
 using namespace std::chrono;
 using std::complex;
 

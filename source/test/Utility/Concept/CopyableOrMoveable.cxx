@@ -1,12 +1,12 @@
-#include "MACE/Utility/Concept/MerelyMoveable.hxx"
-#include "MACE/Utility/Concept/NonCopyable.hxx"
-#include "MACE/Utility/Concept/NonMoveable.hxx"
+#include "MACE/Concept/MerelyMoveable.hxx"
+#include "MACE/Concept/NonCopyable.hxx"
+#include "MACE/Concept/NonMoveable.hxx"
 #include "MACE/Utility/MerelyMoveableBase.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 
 #include <iostream>
 
-using namespace MACE::Utility;
+using namespace MACE;
 
 class TrivialClass {};
 
@@ -14,13 +14,13 @@ static_assert(not Concept::NonCopyable<TrivialClass>);
 static_assert(not Concept::MerelyMoveable<TrivialClass>);
 static_assert(not Concept::NonMoveable<TrivialClass>);
 
-class MerelyMoveableClass : public MerelyMoveableBase {};
+class MerelyMoveableClass : public Utility::MerelyMoveableBase {};
 
 static_assert(Concept::NonCopyable<MerelyMoveableClass>);
 static_assert(Concept::MerelyMoveable<MerelyMoveableClass>);
 static_assert(not Concept::NonMoveable<MerelyMoveableClass>);
 
-class NonMoveableClass : public NonMoveableBase {};
+class NonMoveableClass : public Utility::NonMoveableBase {};
 
 static_assert(Concept::NonCopyable<NonMoveableClass>);
 static_assert(not Concept::MerelyMoveable<NonMoveableClass>);

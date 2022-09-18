@@ -1,5 +1,5 @@
-#include "MACE/Utility/Concept/MathVector.hxx"
-#include "MACE/Utility/Concept/NumericVector.hxx"
+#include "MACE/Concept/MathVector.hxx"
+#include "MACE/Concept/NumericVector.hxx"
 
 #include "CLHEP/Vector/LorentzVector.h"
 #include "CLHEP/Vector/ThreeVector.h"
@@ -13,7 +13,7 @@
 #include <iostream>
 #include <vector>
 
-using namespace MACE::Utility::Concept;
+using namespace MACE::Concept;
 
 static_assert(NumericVector<float*, float, 3>);
 static_assert(NumericVector<double*, double, 3>);
