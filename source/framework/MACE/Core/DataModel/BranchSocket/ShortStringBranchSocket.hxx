@@ -1,24 +1,26 @@
 #pragma once
 
-#include "MACE/Core/DataModel/BranchSocket/IBranchSocket.hxx"
+#include "MACE/Core/DataModel/BranchSocketBase.hxx"
 #include "MACE/Utility/FixedString.hxx"
+
+#include <string>
 
 namespace MACE::Core::DataModel::BranchSocket {
 
 using Utility::ShortString;
 
-class ShortStringBranchSocket final : public IBranchSocket<ShortString> {
+class ShortStringBranchSocket final : public BranchSocketBase<ShortStringBranchSocket, ShortString> {
 public:
-    ShortStringBranchSocket(const TString& branchName, const ShortString& defaultString);
+    ShortStringBranchSocket(const std::string& branchName, const ShortString& defaultString);
 
-    const ShortString& Value() const override { return fString; }
-    void Value(const ShortString& string) override { fString = string; }
+    const auto& Value() const { return fString; }
+    void Value(auto&& string) { fString = std::forward<decltype(string)>(string); }
 
-    void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, fString.Data(), fLeafName); }
-    void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(this->fBranchName, fString.Data()); }
+    void CreateBranch(TTree& tree) { tree.Branch(this->fBranchName.c_str(), fString.Data(), fLeafName.c_str()); }
+    void ConnectToBranch(TTree& tree) { tree.SetBranchAddress(this->fBranchName.c_str(), fString.Data()); }
 
 private:
-    const TString fLeafName;
+    const std::string fLeafName;
     ShortString fString;
 };
 

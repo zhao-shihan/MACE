@@ -34,7 +34,7 @@ option(MACE_USE_STATIC_G4 "Attempt to link Geant4 static libraries if available,
 
 # Advance
 # Options (ON/OFF)
-option(MACE_ENABLE_LTO "Build MACE with link-time optimizations (GCC/Clang: -flto, MSVC: /LTCG)." ON)
+option(MACE_ENABLE_LTO "Build MACE with link-time optimizations." ON)
 option(MACE_ENABLE_MSVC_STD_CONFORMITY "Build MACE with standard-conformity (MSVC only: /permissive- /Zc:__cplusplus /Zc:inline)." ON)
 option(MACE_SHOW_ALL_COMPILE_WARNINGS "Show all compile warnings. Once turned on, MACE_SURPRESS_COMPILE_WARNINGS will be turned off, and MACE_SHOW_GCC_EFFCXX_COMPILE_WARNINGS will be turned on." OFF)
 option(MACE_USE_SHARED_MSVC_RT "Select the MSVC runtime library for use (MSVC only). ON for shared (.dll), OFF for static (.lib). If you run into link error related to MSVC runtime, you can try to flip this." ON)

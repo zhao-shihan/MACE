@@ -1,30 +1,10 @@
-#pragma once
+namespace MACE::Utility::ROOTUtil {
 
-#include "RtypesCore.h"
-
-#include <concepts>
-
-namespace MACE::Core::DataModel::BranchSocket {
-
-template<typename T>
-concept ROOTFundamental =
-    std::same_as<T, Char_t> or
-    std::same_as<T, UChar_t> or
-    std::same_as<T, Short_t> or
-    std::same_as<T, UShort_t> or
-    std::same_as<T, Int_t> or
-    std::same_as<T, UInt_t> or
-    std::same_as<T, Float_t> or
-    std::same_as<T, Double_t> or
-    std::same_as<T, Long64_t> or
-    std::same_as<T, ULong64_t> or
-    std::same_as<T, Long_t> or
-    std::same_as<T, ULong_t> or
-    std::same_as<T, Bool_t>;
-
-template<ROOTFundamental T>
-consteval char LeafTypeCode() {
-    if constexpr (std::same_as<T, Char_t>) {
+template<Concept::ROOTFundamental T>
+constexpr char LeafType<T>::Code() {
+    if constexpr (std::same_as<std::decay_t<T>, const char*>) {
+        return 'C';
+    } else if constexpr (std::same_as<T, Char_t>) {
         return 'B';
     } else if constexpr (std::same_as<T, UChar_t>) {
         return 'b';
@@ -53,4 +33,4 @@ consteval char LeafTypeCode() {
     }
 }
 
-} // namespace MACE::Core::DataModel::BranchSocket
+} // namespace MACE::Utility::ROOTUtil

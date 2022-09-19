@@ -1,8 +1,10 @@
 #include "MACE/Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 
-using MACE::Core::DataModel::BranchSocket::ShortStringBranchSocket;
+namespace MACE::Core::DataModel::BranchSocket {
 
-ShortStringBranchSocket::ShortStringBranchSocket(const TString& branchName, const ShortString& defaultString) :
-    IBranchSocket<ShortString>(branchName),
+ShortStringBranchSocket::ShortStringBranchSocket(const std::string& branchName, const ShortString& defaultString) :
+    BranchSocketBase<ShortStringBranchSocket, ShortString>(branchName),
     fLeafName(branchName + "/C"),
     fString(defaultString) {}
+
+} // namespace MACE::Core::DataModel::BranchSocket

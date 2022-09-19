@@ -2,39 +2,48 @@
 
 #include "MACE/Compatibility/Eigen34/TemplateAlias.hxx"
 #include "MACE/Concept/FundamentalType.hxx"
-#include "MACE/Core/DataModel/BranchSocket/FundamentalROOTTypeTraits.hxx"
-#include "MACE/Core/DataModel/BranchSocket/IBranchSocket.hxx"
+#include "MACE/Concept/ROOTFundamental.hxx"
+#include "MACE/Core/DataModel/BranchSocketBase.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
+#include "MACE/Utility/ROOTUtil/LeafType.hxx"
 
 #include "Eigen/Core"
+
+#include <string>
 
 namespace MACE::Core::DataModel::BranchSocket {
 
 namespace Eigen34 = Compatibility::Eigen34;
 
-template<ROOTFundamental T, int N>
-class VectorBranchSocket final : public IBranchSocket<Eigen34::Vector<T, N>> {
+template<Concept::ArithmeticExcludeBoolChar T, int N>
+class VectorBranchSocket final : public BranchSocketBase<VectorBranchSocket<T, N>, Eigen34::Vector<T, N>> {
 public:
-    VectorBranchSocket(const TString& branchName, const std::array<TString, N>& leafNames, const std::array<T, N>& defaultValues);
+    VectorBranchSocket(const std::string& branchName, const std::array<std::string, N>& leafNames, const std::array<T, N>& defaultValues);
 
-    const Eigen34::Vector<T, N>& Value() const override { return fVector; }
+    const auto& Value() const { return fVector; }
     template<Concept::ArithmeticExcludeBoolChar U>
     auto Value() const { return fVector.template cast<U>(); }
-    void Value(const Eigen34::Vector<T, N>& vector) override { fVector = vector; }
+    void Value(auto&& vector) { fVector = std::forward<decltype(vector)>(vector); }
     template<Concept::ArithmeticExcludeBoolChar U>
     void Value(const Eigen34::Vector<U, N>& vector) { fVector = vector.template cast<T>(); }
 
-    void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, fVector.data(), fLeafList); }
-    void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(this->fBranchName, fVector.data()); }
+    void CreateBranch(TTree& tree) { tree.Branch(this->fBranchName.c_str(), fVector.data(), fLeafList.c_str()); }
+    void ConnectToBranch(TTree& tree) { tree.SetBranchAddress(this->fBranchName.c_str(), fVector.data()); }
 
 private:
-    TString fLeafList;
+    static std::string LeafListInitializer(const std::array<std::string, N>& leafNames);
+
+private:
+    const std::string fLeafList;
     Eigen34::Vector<T, N> fVector;
 };
 
 using Vector2FBranchSocket = VectorBranchSocket<Float_t, 2>;
 using Vector3FBranchSocket = VectorBranchSocket<Float_t, 3>;
 using Vector4FBranchSocket = VectorBranchSocket<Float_t, 4>;
+using Vector2DBranchSocket = VectorBranchSocket<Double_t, 2>;
+using Vector3DBranchSocket = VectorBranchSocket<Double_t, 3>;
+using Vector4DBranchSocket = VectorBranchSocket<Double_t, 4>;
 
 } // namespace MACE::Core::DataModel::BranchSocket
 

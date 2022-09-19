@@ -1,25 +1,26 @@
 #pragma once
 
-#include "MACE/Core/DataModel/BranchSocket/IBranchSocket.hxx"
+#include "MACE/Core/DataModel/BranchSocketBase.hxx"
 
 #include <concepts>
+#include <string>
 #include <tuple>
 
 namespace MACE::Core::DataModel::BranchSocket {
 
 template<class AClass> // clang-format off
     requires std::assignable_from<AClass, AClass>
-class ClassBranchSocket final : public IBranchSocket<AClass> { // clang-format on
+class ClassBranchSocket final : public BranchSocketBase<ClassBranchSocket<AClass>, AClass> { // clang-format on
 public:
     template<typename... Args>
-    ClassBranchSocket(const TString& branchName, std::tuple<Args&&...> argTuple);
+    ClassBranchSocket(const std::string& branchName, std::tuple<Args&&...> argTuple);
     ~ClassBranchSocket();
 
-    const AClass& Value() const override { return *fObject; }
-    void Value(const AClass& object) override { *fObject = object; }
+    const auto& Value() const { return *fObject; }
+    void Value(const AClass& object) { *fObject = object; }
 
-    void CreateBranch(TTree& tree) override { tree.Branch(this->fBranchName, &fObject, 256000, 0); }
-    void ConnectToBranch(TTree& tree) override { tree.SetBranchAddress(this->fBranchName, &fObject); }
+    void CreateBranch(TTree& tree) { tree.Branch(this->fBranchName.c_str(), &fObject, 256000, 0); }
+    void ConnectToBranch(TTree& tree) { tree.SetBranchAddress(this->fBranchName.c_str(), &fObject); }
 
 private:
     AClass* fObject;
