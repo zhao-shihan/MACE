@@ -4,20 +4,20 @@
 
 namespace MACE::Core::DataModel::Track {
 
-Vector2FBranchSocket CDCHelixTrack::fgCenter("center", {"x", "y"}, {0, 0});
-FloatBranchSocket CDCHelixTrack::fgRadius("r", 0);
-FloatBranchSocket CDCHelixTrack::fgZ0("z0", 0);
-FloatBranchSocket CDCHelixTrack::fgAlpha("alpha", 0);
+BranchSocket::Vector2FBranchSocket CDCHelixTrack::fgCenter("center", {"x", "y"}, {0, 0});
+BranchSocket::FloatBranchSocket CDCHelixTrack::fgRadius("r", 0);
+BranchSocket::FloatBranchSocket CDCHelixTrack::fgZ0("z0", 0);
+BranchSocket::FloatBranchSocket CDCHelixTrack::fgAlpha("alpha", 0);
 
 CDCHelixTrack::CDCHelixTrack() noexcept :
-    ICDCTrack(),
+    CDCTrackBase(),
     fCenter(fgCenter.Value<double>()),
     fRadius(fgRadius.Value()),
     fZ0(fgZ0.Value()),
     fAlpha(fgAlpha.Value()) {}
 
 CDCHelixTrack::CDCHelixTrack(const CDCPhysicsTrack& physTrack, Double_t B) :
-    ICDCTrack(static_cast<const ICDCTrack&>(physTrack)),
+    CDCTrackBase(static_cast<const CDCTrackBase&>(physTrack)),
     fCenter(),
     fRadius(),
     fZ0(),
@@ -25,15 +25,24 @@ CDCHelixTrack::CDCHelixTrack(const CDCPhysicsTrack& physTrack, Double_t B) :
     std::tie(fCenter,
              fRadius,
              fZ0,
-             fAlpha) = CDCTrackOperation::ConvertToHelixParameters(std::tie(physTrack.GetVertexPosition(),
-                                                                            physTrack.GetVertexEnergy(),
-                                                                            physTrack.GetVertexMomentum(),
-                                                                            physTrack.GetParticle()),
-                                                                   B);
+             fAlpha) =
+        CDCTrackOperation::ConvertToHelixParameters(std::tie(physTrack.GetVertexPosition(),
+                                                             physTrack.GetVertexEnergy(),
+                                                             physTrack.GetVertexMomentum(),
+                                                             physTrack.GetParticle()),
+                                                    B);
+}
+
+void CDCHelixTrack::FillBranchSockets() const noexcept {
+    CDCTrackBase::FillBranchSockets();
+    fgCenter.Value(fCenter);
+    fgRadius.Value(fRadius);
+    fgZ0.Value(fZ0);
+    fgAlpha.Value(fAlpha);
 }
 
 void CDCHelixTrack::CreateBranches(TTree& tree) {
-    ICDCTrack::CreateBranches(tree);
+    CDCTrackBase::CreateBranches(tree);
     fgCenter.CreateBranch(tree);
     fgRadius.CreateBranch(tree);
     fgZ0.CreateBranch(tree);
@@ -41,19 +50,11 @@ void CDCHelixTrack::CreateBranches(TTree& tree) {
 }
 
 void CDCHelixTrack::ConnectToBranches(TTree& tree) {
-    ICDCTrack::ConnectToBranches(tree);
+    CDCTrackBase::ConnectToBranches(tree);
     fgCenter.ConnectToBranch(tree);
     fgRadius.ConnectToBranch(tree);
     fgZ0.ConnectToBranch(tree);
     fgAlpha.ConnectToBranch(tree);
-}
-
-void CDCHelixTrack::FillBranchSockets() const noexcept {
-    ICDCTrack::FillBranchSockets();
-    fgCenter.Value(fCenter);
-    fgRadius.Value(fRadius);
-    fgZ0.Value(fZ0);
-    fgAlpha.Value(fAlpha);
 }
 
 } // namespace MACE::Core::DataModel::Track

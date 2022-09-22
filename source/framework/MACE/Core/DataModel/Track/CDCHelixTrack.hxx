@@ -3,60 +3,64 @@
 #include "MACE/Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "MACE/Core/DataModel/CDCTrackOperation.hxx"
-#include "MACE/Core/DataModel/Track/ICDCTrack.hxx"
+#include "MACE/Core/DataModel/Track/CDCTrackBase.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
+#include "MACE/Core/DataModel/TransientData.hxx"
+#include "MACE/Utility/AssignVector.hxx"
+
+#include <string_view>
+#include <utility>
 
 namespace MACE::Core::DataModel::Track {
 
-using BranchSocket::FloatBranchSocket;
-using BranchSocket::Vector2FBranchSocket;
+using namespace std::string_view_literals;
 using namespace Utility::LiteralUnit::MagneticFluxDensity;
 
 class CDCPhysicsTrack;
 
-class CDCHelixTrack : public ICDCTrack {
+class CDCHelixTrack : public CDCTrackBase {
 public:
     CDCHelixTrack() noexcept;
+    virtual ~CDCHelixTrack() = default;
+
     CDCHelixTrack(const CDCHelixTrack&) noexcept = default;
     CDCHelixTrack(CDCHelixTrack&&) noexcept = default;
-    virtual ~CDCHelixTrack() noexcept = default;
     CDCHelixTrack& operator=(const CDCHelixTrack&) noexcept = default;
     CDCHelixTrack& operator=(CDCHelixTrack&&) noexcept = default;
 
-    explicit CDCHelixTrack(const CDCPhysicsTrack& physTrack, Double_t B = 0.1_T);
+    explicit CDCHelixTrack(const CDCPhysicsTrack& physTrack, double B = 0.1_T);
 
     const auto& GetCenter() const { return fCenter; }
     const auto& Radius() const { return fRadius; }
     const auto& GetZ0() const { return fZ0; }
     const auto& GetAlpha() const { return fAlpha; }
 
-    template<typename A2Vector>
-    void SetCenter(A2Vector&& val) { fCenter = std::forward<A2Vector>(val); }
-    void SetCenter(Double_t x, Double_t y) { fCenter = {x, y}; }
-    void Radius(Double_t val) { fRadius = val; }
-    void SetZ0(Double_t val) { fZ0 = val; }
-    void SetAlpha(Double_t val) { fAlpha = val; }
+    void SetCenter(auto&&... c) requires(sizeof...(c) > 0) { Utility::AssignVector2D(fCenter, std::forward<decltype(c)>(c)...); }
+    void Radius(double val) { fRadius = val; }
+    void SetZ0(double val) { fZ0 = val; }
+    void SetAlpha(double val) { fAlpha = val; }
 
-    double CalcPhi0() const { return CDCTrackOperation::CalcHelixPhi0(fCenter); }
-    double CalcPhi(const Eigen::Vector2d& point) const { return CDCTrackOperation::CalcHelixPhi(fCenter, point); }
-    double CalcPhi(double x, double y) const { return CDCTrackOperation::CalcHelixPhi(fCenter, x, y); }
-    Eigen::Vector3d CalcPoint(double phi) { return CDCTrackOperation::CalcHelixPoint(std::tie(fCenter, fRadius, fZ0, fAlpha), phi); }
+    auto CalcPhi0() const { return CDCTrackOperation::CalcHelixPhi0(fCenter); }
+    auto CalcPhi(const Eigen::Vector2d& point) const { return CDCTrackOperation::CalcHelixPhi(fCenter, point); }
+    auto CalcPhi(double x, double y) const { return CDCTrackOperation::CalcHelixPhi(fCenter, x, y); }
+    auto CalcPoint(double phi) { return CDCTrackOperation::CalcHelixPoint(std::tie(fCenter, fRadius, fZ0, fAlpha), phi); }
 
-    static consteval const char* BasicTreeName() noexcept { return "HlxTrk"; }
+    void FillBranchSockets() const noexcept;
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    void FillBranchSockets() const noexcept;
+    static constexpr auto BasicTreeName() noexcept { return "HlxTrk"sv; }
 
 private:
     Eigen::Vector2d fCenter;
-    Double_t fRadius;
-    Double_t fZ0;
-    Double_t fAlpha;
+    double fRadius;
+    double fZ0;
+    double fAlpha;
 
-    static Vector2FBranchSocket fgCenter;
-    static FloatBranchSocket fgRadius;
-    static FloatBranchSocket fgZ0;
-    static FloatBranchSocket fgAlpha;
+    static BranchSocket::Vector2FBranchSocket fgCenter;
+    static BranchSocket::FloatBranchSocket fgRadius;
+    static BranchSocket::FloatBranchSocket fgZ0;
+    static BranchSocket::FloatBranchSocket fgAlpha;
 };
+static_assert(TransientData<CDCHelixTrack>);
 
 } // namespace MACE::Core::DataModel::Track
