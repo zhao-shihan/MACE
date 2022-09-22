@@ -15,21 +15,33 @@
 
 using namespace MACE::Concept;
 
-static_assert(NumericVector<float*, float, 3>);
-static_assert(NumericVector<double*, double, 3>);
-static_assert(NumericVector<long double*, long double, 3>);
+static_assert(WeakNumericVector<float*, float, 3>);
+static_assert(WeakNumericVector<double*, double, 3>);
+static_assert(WeakNumericVector<long double*, long double, 3>);
+static_assert(not NumericVector<float*, float, 3>);
+static_assert(not NumericVector<double*, double, 3>);
+static_assert(not NumericVector<long double*, long double, 3>);
 
-static_assert(NumericVector<const float*, float, 3>);
-static_assert(NumericVector<const double*, double, 3>);
-static_assert(NumericVector<const long double*, long double, 3>);
+static_assert(WeakNumericVector<const float*, float, 3>);
+static_assert(WeakNumericVector<const double*, double, 3>);
+static_assert(WeakNumericVector<const long double*, long double, 3>);
+static_assert(not NumericVector<const float*, float, 3>);
+static_assert(not NumericVector<const double*, double, 3>);
+static_assert(not NumericVector<const long double*, long double, 3>);
 
-static_assert(NumericVector<float[3], float, 3>);
-static_assert(NumericVector<double[3], double, 3>);
-static_assert(NumericVector<long double[3], long double, 3>);
+static_assert(WeakNumericVector<float[3], float, 3>);
+static_assert(WeakNumericVector<double[3], double, 3>);
+static_assert(WeakNumericVector<long double[3], long double, 3>);
+static_assert(not NumericVector<float[3], float, 3>);
+static_assert(not NumericVector<double[3], double, 3>);
+static_assert(not NumericVector<long double[3], long double, 3>);
 
-static_assert(NumericVector<const float[3], float, 3>);
-static_assert(NumericVector<const double[3], double, 3>);
-static_assert(NumericVector<const long double[3], long double, 3>);
+static_assert(WeakNumericVector<const float[3], float, 3>);
+static_assert(WeakNumericVector<const double[3], double, 3>);
+static_assert(WeakNumericVector<const long double[3], long double, 3>);
+static_assert(not NumericVector<const float[3], float, 3>);
+static_assert(not NumericVector<const double[3], double, 3>);
+static_assert(not NumericVector<const long double[3], long double, 3>);
 
 static_assert(NumericVector<std::array<float, 2>, float, 2>);
 static_assert(NumericVector<std::array<float, 3>, float, 3>);
