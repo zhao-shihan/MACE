@@ -33,7 +33,7 @@ concept WeakNumericVector4F = WeakNumericVector<T, float, 4>;
 template<class T, typename F, std::size_t N>
 concept NumericVector = requires {
     requires WeakNumericVector<T, F, N>;
-    requires not std::is_pointer_v<T>;
+    requires std::is_class_v<T>;
     requires std::regular<std::remove_const_t<T>>;
 };
 
