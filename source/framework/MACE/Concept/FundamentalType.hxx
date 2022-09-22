@@ -1,7 +1,5 @@
 #pragma once
 
-#include "MACE/Concept/internal/IsPointer.hxx"
-
 #include <concepts>
 #include <type_traits>
 
