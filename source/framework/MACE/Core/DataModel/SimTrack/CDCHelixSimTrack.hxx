@@ -1,56 +1,62 @@
 #pragma once
 
-#include "MACE/Core/DataModel/SimTrack/ICDCSimTrack.hxx"
+#include "MACE/Core/DataModel/SimTrack/CDCSimTrackBase.hxx"
 #include "MACE/Core/DataModel/Track/CDCHelixTrack.hxx"
+#include "MACE/Utility/AssignVector.hxx"
+
+#include <utility>
+#include <string_view>
 
 namespace MACE::Core::DataModel::Track {
+
+using namespace std::string_view_literals;
 
 class CDCPhysicsSimTrack;
 
 class CDCHelixSimTrack : public CDCHelixTrack,
-                         public ICDCSimTrack {
+                         public CDCSimTrackBase {
 public:
     CDCHelixSimTrack() noexcept;
+    virtual ~CDCHelixSimTrack()  = default;
+
     CDCHelixSimTrack(const CDCHelixSimTrack&) noexcept = default;
     CDCHelixSimTrack(CDCHelixSimTrack&&) noexcept = default;
-    virtual ~CDCHelixSimTrack() noexcept = default;
     CDCHelixSimTrack& operator=(const CDCHelixSimTrack&) noexcept = default;
     CDCHelixSimTrack& operator=(CDCHelixSimTrack&&) noexcept = default;
 
-    explicit CDCHelixSimTrack(const CDCPhysicsSimTrack& physTrack, Double_t B = 0.1_T);
+    explicit CDCHelixSimTrack(const CDCPhysicsSimTrack& physTrack, double B = 0.1_T);
 
     const auto& GetTrueCenter() const { return fTrueCenter; }
     const auto& GetTrueRadius() const { return fTrueRadius; }
     const auto& GetTrueZ0() const { return fTrueZ0; }
     const auto& GetTrueAlpha() const { return fTrueAlpha; }
 
-    template<typename A2Vector>
-    void SetTrueCenter(A2Vector&& val) { fTrueCenter = std::forward<A2Vector>(val); }
-    void SetTrueCenter(Double_t x, Double_t y) { fTrueCenter = {x, y}; }
-    void SetTrueRadius(Double_t val) { fTrueRadius = val; }
-    void SetTrueZ0(Double_t val) { fTrueZ0 = val; }
-    void SetTrueAlpha(Double_t val) { fTrueAlpha = val; }
+    void SetTrueCenter(auto&&... c) requires(sizeof...(c) > 0) { Utility::AssignVector2D(fTrueCenter, std::forward<decltype(c)>(c)...); }
+    void SetTrueRadius(double val) { fTrueRadius = val; }
+    void SetTrueZ0(double val) { fTrueZ0 = val; }
+    void SetTrueAlpha(double val) { fTrueAlpha = val; }
 
-    double CalcTruePhi0() const { return CDCTrackOperation::CalcHelixPhi0(fTrueCenter); }
-    double CalcTruePhi(const Eigen::Vector2d& point) const { return CDCTrackOperation::CalcHelixPhi(fTrueCenter, point); }
-    double CalcTruePhi(double x, double y) const { return CDCTrackOperation::CalcHelixPhi(fTrueCenter, x, y); }
-    Eigen::Vector3d CalcTruePoint(double phi) { return CDCTrackOperation::CalcHelixPoint(std::tie(fTrueCenter, fTrueRadius, fTrueZ0, fTrueAlpha), phi); }
+    auto CalcTruePhi0() const { return CDCTrackOperation::CalcHelixPhi0(fTrueCenter); }
+    auto CalcTruePhi(const Eigen::Vector2d& point) const { return CDCTrackOperation::CalcHelixPhi(fTrueCenter, point); }
+    auto CalcTruePhi(double x, double y) const { return CDCTrackOperation::CalcHelixPhi(fTrueCenter, x, y); }
+    auto CalcTruePoint(double phi) { return CDCTrackOperation::CalcHelixPoint(std::tie(fTrueCenter, fTrueRadius, fTrueZ0, fTrueAlpha), phi); }
 
-    static consteval const char* BasicTreeName() noexcept { return "HlxSimTrk"; }
+    void FillBranchSockets() const noexcept;
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    void FillBranchSockets() const noexcept;
+    static constexpr auto BasicTreeName() noexcept { return "HlxSimTrk"sv; }
 
 private:
     Eigen::Vector2d fTrueCenter;
-    Double_t fTrueRadius;
-    Double_t fTrueZ0;
-    Double_t fTrueAlpha;
+    double fTrueRadius;
+    double fTrueZ0;
+    double fTrueAlpha;
 
-    static Vector2FBranchSocket fgTrueCenter;
-    static FloatBranchSocket fgTrueRadius;
-    static FloatBranchSocket fgTrueZ0;
-    static FloatBranchSocket fgTrueAlpha;
+    static BranchSocket::Vector2FBranchSocket fgTrueCenter;
+    static BranchSocket::FloatBranchSocket fgTrueRadius;
+    static BranchSocket::FloatBranchSocket fgTrueZ0;
+    static BranchSocket::FloatBranchSocket fgTrueAlpha;
 };
+static_assert(TransientData<CDCHelixSimTrack>);
 
 } // namespace MACE::Core::DataModel::Track

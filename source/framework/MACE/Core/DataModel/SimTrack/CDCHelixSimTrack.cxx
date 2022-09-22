@@ -3,14 +3,14 @@
 
 namespace MACE::Core::DataModel::Track {
 
-Vector2FBranchSocket CDCHelixSimTrack::fgTrueCenter("trueCenter", {"x", "y"}, {0, 0});
-FloatBranchSocket CDCHelixSimTrack::fgTrueRadius("trueR", 0);
-FloatBranchSocket CDCHelixSimTrack::fgTrueZ0("trueZ0", 0);
-FloatBranchSocket CDCHelixSimTrack::fgTrueAlpha("trueAlpha", 0);
+BranchSocket::Vector2FBranchSocket CDCHelixSimTrack::fgTrueCenter("trueCenter", {"x", "y"}, {0, 0});
+BranchSocket::FloatBranchSocket CDCHelixSimTrack::fgTrueRadius("trueR", 0);
+BranchSocket::FloatBranchSocket CDCHelixSimTrack::fgTrueZ0("trueZ0", 0);
+BranchSocket::FloatBranchSocket CDCHelixSimTrack::fgTrueAlpha("trueAlpha", 0);
 
 CDCHelixSimTrack::CDCHelixSimTrack() noexcept :
     CDCHelixTrack(),
-    ICDCSimTrack(),
+    CDCSimTrackBase(),
     fTrueCenter(fgTrueCenter.Value<double>()),
     fTrueRadius(fgTrueRadius.Value()),
     fTrueZ0(fgTrueZ0.Value()),
@@ -18,7 +18,7 @@ CDCHelixSimTrack::CDCHelixSimTrack() noexcept :
 
 CDCHelixSimTrack::CDCHelixSimTrack(const CDCPhysicsSimTrack& physTrack, Double_t B) :
     CDCHelixTrack(static_cast<const CDCPhysicsTrack&>(physTrack), B),
-    ICDCSimTrack(static_cast<const ICDCSimTrack&>(physTrack)),
+    CDCSimTrackBase(static_cast<const CDCSimTrackBase&>(physTrack)),
     fTrueCenter(),
     fTrueRadius(),
     fTrueZ0(),
@@ -26,16 +26,26 @@ CDCHelixSimTrack::CDCHelixSimTrack(const CDCPhysicsSimTrack& physTrack, Double_t
     std::tie(fTrueCenter,
              fTrueRadius,
              fTrueZ0,
-             fTrueAlpha) = CDCTrackOperation::ConvertToHelixParameters(std::tie(physTrack.GetTrueVertexPosition(),
-                                                                                physTrack.GetTrueVertexEnergy(),
-                                                                                physTrack.GetTrueVertexMomentum(),
-                                                                                physTrack.GetTrueParticle()),
-                                                                       B);
+             fTrueAlpha) =
+        CDCTrackOperation::ConvertToHelixParameters(std::tie(physTrack.GetTrueVertexPosition(),
+                                                             physTrack.GetTrueVertexEnergy(),
+                                                             physTrack.GetTrueVertexMomentum(),
+                                                             physTrack.GetTrueParticle()),
+                                                    B);
+}
+
+void CDCHelixSimTrack::FillBranchSockets() const noexcept {
+    CDCHelixTrack::FillBranchSockets();
+    CDCSimTrackBase::FillBranchSockets();
+    fgTrueCenter.Value(fTrueCenter);
+    fgTrueRadius.Value(fTrueRadius);
+    fgTrueZ0.Value(fTrueZ0);
+    fgTrueAlpha.Value(fTrueAlpha);
 }
 
 void CDCHelixSimTrack::CreateBranches(TTree& tree) {
     CDCHelixTrack::CreateBranches(tree);
-    ICDCSimTrack::CreateBranches(tree);
+    CDCSimTrackBase::CreateBranches(tree);
     fgTrueCenter.CreateBranch(tree);
     fgTrueRadius.CreateBranch(tree);
     fgTrueZ0.CreateBranch(tree);
@@ -44,20 +54,11 @@ void CDCHelixSimTrack::CreateBranches(TTree& tree) {
 
 void CDCHelixSimTrack::ConnectToBranches(TTree& tree) {
     CDCHelixTrack::ConnectToBranches(tree);
-    ICDCSimTrack::ConnectToBranches(tree);
+    CDCSimTrackBase::ConnectToBranches(tree);
     fgTrueCenter.ConnectToBranch(tree);
     fgTrueRadius.ConnectToBranch(tree);
     fgTrueZ0.ConnectToBranch(tree);
     fgTrueAlpha.ConnectToBranch(tree);
-}
-
-void CDCHelixSimTrack::FillBranchSockets() const noexcept {
-    CDCHelixTrack::FillBranchSockets();
-    ICDCSimTrack::FillBranchSockets();
-    fgTrueCenter.Value(fTrueCenter);
-    fgTrueRadius.Value(fTrueRadius);
-    fgTrueZ0.Value(fTrueZ0);
-    fgTrueAlpha.Value(fTrueAlpha);
 }
 
 } // namespace MACE::Core::DataModel::Track
