@@ -6,13 +6,13 @@
 namespace MACE::Concept {
 
 template<typename T>
-concept StreamInputable = requires(const std::istream& in, const T& obj) {
-    in >> obj;
+concept StreamInputable = requires(std::istream& is, T& obj) {
+    { is >> obj } -> std::same_as<std::ostream&>;
 };
 
 template<typename T>
-concept StreamOutputable = requires(const std::ostream& out, const T& obj) {
-    out << obj;
+concept StreamOutputable = requires(std::ostream& os, const T& obj) {
+    { os << obj } -> std::same_as<std::ostream&>;
 };
 
 template<typename T>
