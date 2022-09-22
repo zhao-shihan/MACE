@@ -3,26 +3,25 @@
 #include "MACE/Core/DataFactory.hxx"
 #include "MACE/Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
-#include "MACE/Core/DataModel/ITransientData.hxx"
+#include "MACE/Core/DataModel/TransientData.hxx"
+#include "MACE/Utility/AssignVector.hxx"
+
+#include <string_view>
+#include <utility>
 
 namespace MACE::Core::DataModel::Hit {
 
-using BranchSocket::DoubleBranchSocket;
-using BranchSocket::FloatBranchSocket;
-using BranchSocket::IntBranchSocket;
-using BranchSocket::Vector2FBranchSocket;
-using BranchSocket::Vector3FBranchSocket;
+using namespace std::string_view_literals;
 
-class CDCHit : public ITransientData {
-    using Base = ITransientData;
-
+class CDCHit {
 public:
     CDCHit() noexcept;
-    CDCHit(const CDCHit& hit) noexcept = default;
-    CDCHit(CDCHit&& hit) noexcept = default;
-    virtual ~CDCHit() noexcept = default;
-    CDCHit& operator=(const CDCHit& hit) noexcept = default;
-    CDCHit& operator=(CDCHit&& hit) noexcept = default;
+    virtual ~CDCHit() = default;
+
+    CDCHit(const CDCHit&) noexcept = default;
+    CDCHit(CDCHit&&) noexcept = default;
+    CDCHit& operator=(const CDCHit&) noexcept = default;
+    CDCHit& operator=(CDCHit&&) noexcept = default;
 
     const auto& HitTime() const { return fHitTime; }
     const auto& DriftDistance() const { return fDriftDistance; }
@@ -34,43 +33,42 @@ public:
     const auto& CellID() const { return fCellID; }
     const auto& LayerID() const { return fLayerID; }
 
-    void HitTime(Double_t val) { fHitTime = val; }
-    void DriftDistance(Double_t d) { fDriftDistance = d; }
-    void HitPositionZ(Double_t z) { fHitPositionZ = z; }
-    void DriftDistanceVariance(Double_t val) { fDriftDistanceVariance = val; }
-    void HitPositionZVariance(Double_t val) { fHitPositionZVariance = val; }
-    void WirePosition(auto&& pos) { fWirePosition = std::forward<decltype(pos)>(pos); }
-    void WirePosition(Double_t x, Double_t y) { fWirePosition = {x, y}; }
-    void SetWireDirection(auto&& dir) { fWireDirection = std::forward<decltype(dir)>(dir); }
-    void SetWireDirection(Double_t tx, Double_t ty, Double_t tz) { fWireDirection = {tx, ty, tz}; }
-    void SetCellID(Int_t val) { fCellID = val; }
-    void SetLayerID(Int_t val) { fLayerID = val; }
+    void HitTime(double val) { fHitTime = val; }
+    void DriftDistance(double d) { fDriftDistance = d; }
+    void HitPositionZ(double z) { fHitPositionZ = z; }
+    void DriftDistanceVariance(double val) { fDriftDistanceVariance = val; }
+    void HitPositionZVariance(double val) { fHitPositionZVariance = val; }
+    void WirePosition(auto&&... x) requires(sizeof...(x) > 0) { Utility::AssignVector2D(fWirePosition, std::forward<decltype(x)>(x)...); }
+    void WireDirection(auto&&... t) requires(sizeof...(t) > 0) { Utility::AssignVector3D(fWireDirection, std::forward<decltype(t)>(t)...); }
+    void CellID(int val) { fCellID = val; }
+    void LayerID(int val) { fLayerID = val; }
 
-    static consteval const char* BasicTreeName() noexcept { return "CDCHit"; }
+    void FillBranchSockets() const noexcept;
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    void FillBranchSockets() const noexcept;
+    static constexpr auto BasicTreeName() noexcept { return "CDCHit"sv; }
 
 private:
-    Double_t fHitTime;
-    Double_t fDriftDistance;
-    Double_t fHitPositionZ;
-    Double_t fDriftDistanceVariance;
-    Double_t fHitPositionZVariance;
+    double fHitTime;
+    double fDriftDistance;
+    double fHitPositionZ;
+    double fDriftDistanceVariance;
+    double fHitPositionZVariance;
     Eigen::Vector2d fWirePosition;
     Eigen::Vector3d fWireDirection;
-    Int_t fCellID;
-    Int_t fLayerID;
+    int fCellID;
+    int fLayerID;
 
-    static DoubleBranchSocket fgHitTime;
-    static FloatBranchSocket fgDriftDistance;
-    static FloatBranchSocket fgHitPositionZ;
-    static FloatBranchSocket fgDriftDistanceVariance;
-    static FloatBranchSocket fgHitPositionZVariance;
-    static Vector2FBranchSocket fgWirePosition;
-    static Vector3FBranchSocket fgWireDirection;
-    static IntBranchSocket fgCellID;
-    static IntBranchSocket fgLayerID;
+    static BranchSocket::DoubleBranchSocket fgHitTime;
+    static BranchSocket::FloatBranchSocket fgDriftDistance;
+    static BranchSocket::FloatBranchSocket fgHitPositionZ;
+    static BranchSocket::FloatBranchSocket fgDriftDistanceVariance;
+    static BranchSocket::FloatBranchSocket fgHitPositionZVariance;
+    static BranchSocket::Vector2FBranchSocket fgWirePosition;
+    static BranchSocket::Vector3FBranchSocket fgWireDirection;
+    static BranchSocket::IntBranchSocket fgCellID;
+    static BranchSocket::IntBranchSocket fgLayerID;
 };
+static_assert(TransientData<CDCHit>);
 
 } // namespace MACE::Core::DataModel::Hit

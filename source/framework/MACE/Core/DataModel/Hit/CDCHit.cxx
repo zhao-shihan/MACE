@@ -2,18 +2,17 @@
 
 namespace MACE::Core::DataModel::Hit {
 
-DoubleBranchSocket CDCHit::fgHitTime("hitTime", 0);
-FloatBranchSocket CDCHit::fgDriftDistance("drift", 0);
-FloatBranchSocket CDCHit::fgHitPositionZ("hitPosZ", 0);
-FloatBranchSocket CDCHit::fgDriftDistanceVariance("driftVar", 0);
-FloatBranchSocket CDCHit::fgHitPositionZVariance("hitPosZVar", 0);
-Vector2FBranchSocket CDCHit::fgWirePosition("wirePos", {"x", "y"}, {0, 0});
-Vector3FBranchSocket CDCHit::fgWireDirection("wireDir", {"x", "y", "z"}, {0, 0, 0});
-IntBranchSocket CDCHit::fgCellID("cellID", -1);
-IntBranchSocket CDCHit::fgLayerID("layerID", -1);
+BranchSocket::DoubleBranchSocket CDCHit::fgHitTime("hitTime", 0);
+BranchSocket::FloatBranchSocket CDCHit::fgDriftDistance("drift", 0);
+BranchSocket::FloatBranchSocket CDCHit::fgHitPositionZ("hitPosZ", 0);
+BranchSocket::FloatBranchSocket CDCHit::fgDriftDistanceVariance("driftVar", 0);
+BranchSocket::FloatBranchSocket CDCHit::fgHitPositionZVariance("hitPosZVar", 0);
+BranchSocket::Vector2FBranchSocket CDCHit::fgWirePosition("wirePos", {"x", "y"}, {0, 0});
+BranchSocket::Vector3FBranchSocket CDCHit::fgWireDirection("wireDir", {"x", "y", "z"}, {0, 0, 0});
+BranchSocket::IntBranchSocket CDCHit::fgCellID("cellID", -1);
+BranchSocket::IntBranchSocket CDCHit::fgLayerID("layerID", -1);
 
 CDCHit::CDCHit() noexcept :
-    ITransientData(),
     fHitTime(fgHitTime.Value()),
     fDriftDistance(fgDriftDistance.Value()),
     fHitPositionZ(fgHitPositionZ.Value()),
@@ -24,8 +23,19 @@ CDCHit::CDCHit() noexcept :
     fCellID(fgCellID.Value()),
     fLayerID(fgLayerID.Value()) {}
 
+void CDCHit::FillBranchSockets() const noexcept {
+    fgHitTime.Value(fHitTime);
+    fgDriftDistance.Value(fDriftDistance);
+    fgHitPositionZ.Value(fHitPositionZ);
+    fgDriftDistanceVariance.Value(fDriftDistanceVariance);
+    fgHitPositionZVariance.Value(fHitPositionZVariance);
+    fgWirePosition.Value(fWirePosition);
+    fgWireDirection.Value(fWireDirection);
+    fgCellID.Value(fCellID);
+    fgLayerID.Value(fLayerID);
+}
+
 void CDCHit::CreateBranches(TTree& tree) {
-    ITransientData::CreateBranches(tree);
     fgHitTime.CreateBranch(tree);
     fgDriftDistance.CreateBranch(tree);
     fgHitPositionZ.CreateBranch(tree);
@@ -38,7 +48,6 @@ void CDCHit::CreateBranches(TTree& tree) {
 }
 
 void CDCHit::ConnectToBranches(TTree& tree) {
-    ITransientData::ConnectToBranches(tree);
     fgHitTime.ConnectToBranch(tree);
     fgDriftDistance.ConnectToBranch(tree);
     fgHitPositionZ.ConnectToBranch(tree);
@@ -48,19 +57,6 @@ void CDCHit::ConnectToBranches(TTree& tree) {
     fgWireDirection.ConnectToBranch(tree);
     fgCellID.ConnectToBranch(tree);
     fgLayerID.ConnectToBranch(tree);
-}
-
-void CDCHit::FillBranchSockets() const noexcept {
-    Base::FillBranchSockets();
-    fgHitTime.Value(fHitTime);
-    fgDriftDistance.Value(fDriftDistance);
-    fgHitPositionZ.Value(fHitPositionZ);
-    fgDriftDistanceVariance.Value(fDriftDistanceVariance);
-    fgHitPositionZVariance.Value(fHitPositionZVariance);
-    fgWirePosition.Value(fWirePosition);
-    fgWireDirection.Value(fWireDirection);
-    fgCellID.Value(fCellID);
-    fgLayerID.Value(fLayerID);
 }
 
 } // namespace MACE::Core::DataModel::Hit
