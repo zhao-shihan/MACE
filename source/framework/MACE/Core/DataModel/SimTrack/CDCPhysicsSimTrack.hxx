@@ -1,61 +1,59 @@
 #pragma once
 
-#include "MACE/Core/DataModel/SimTrack/ICDCSimTrack.hxx"
+#include "MACE/Core/DataModel/SimTrack/CDCSimTrackBase.hxx"
 #include "MACE/Core/DataModel/Track/CDCPhysicsTrack.hxx"
+#include "MACE/Utility/AssignVector.hxx"
+
+#include <string_view>
+#include <utility>
 
 namespace MACE::Core::DataModel::Track {
 
-using BranchSocket::FloatBranchSocket;
-using BranchSocket::ShortStringBranchSocket;
-using BranchSocket::Vector3FBranchSocket;
-using Utility::ShortString;
-using Utility::PhysicalConstant::electron_mass_c2;
+using namespace std::string_view_literals;
 using namespace Utility::LiteralUnit::MagneticFluxDensity;
+using Utility::PhysicalConstant::electron_mass_c2;
 
 class CDCHelixSimTrack;
 
 class CDCPhysicsSimTrack : public CDCPhysicsTrack,
-                           public ICDCSimTrack {
+                           public CDCSimTrackBase {
 public:
     CDCPhysicsSimTrack() noexcept;
+    virtual ~CDCPhysicsSimTrack() = default;
+
     CDCPhysicsSimTrack(const CDCPhysicsSimTrack&) noexcept = default;
     CDCPhysicsSimTrack(CDCPhysicsSimTrack&&) noexcept = default;
-    virtual ~CDCPhysicsSimTrack() noexcept = default;
     CDCPhysicsSimTrack& operator=(const CDCPhysicsSimTrack&) noexcept = default;
     CDCPhysicsSimTrack& operator=(CDCPhysicsSimTrack&&) noexcept = default;
 
-    explicit CDCPhysicsSimTrack(const CDCHelixSimTrack& helix, Double_t phiVertex = 0, Double_t B = 0.1_T, Double_t mass = electron_mass_c2);
+    explicit CDCPhysicsSimTrack(const CDCHelixSimTrack& helix, double phiVertex = 0, double B = 0.1_T, double mass = electron_mass_c2);
 
     const auto& GetTrueVertexPosition() const { return fTrueVertexPosition; }
     const auto& GetTrueVertexEnergy() const { return fTrueVertexEnergy; }
     const auto& GetTrueVertexMomentum() const { return fTrueVertexMomentum; }
     const auto& GetTrueParticle() const { return fTrueParticle; }
 
-    template<typename A3Vector>
-    void SetTrueVertexPosition(A3Vector&& pos) { fTrueVertexPosition = std::forward<A3Vector>(pos); }
-    void SetTrueVertexPosition(Double_t x, Double_t y, Double_t z) { fTrueVertexPosition = {x, y, z}; }
-    void SetTrueVertexEnergy(Double_t E) { fTrueVertexEnergy = E; }
-    template<typename A3Vector>
-    void SetTrueVertexMomentum(A3Vector&& mom) { fTrueVertexMomentum = std::forward<A3Vector>(mom); }
-    void SetTrueVertexMomentum(Double_t pX, Double_t pY, Double_t pZ) { fTrueVertexMomentum = {pX, pY, pZ}; }
-    template<typename AString>
-    void SetTrueParticle(AString&& particleName) { fTrueParticle = std::forward<AString>(particleName); }
+    void SetTrueVertexPosition(auto&&... x) requires(sizeof...(x) > 0) { Utility::AssignVector3D(fTrueVertexPosition, std::forward<decltype(x)>(x)...); }
+    void SetTrueVertexEnergy(double E) { fTrueVertexEnergy = E; }
+    void SetTrueVertexMomentum(auto&&... p) requires(sizeof...(p) > 0) { Utility::AssignVector3D(fTrueVertexMomentum, std::forward<decltype(p)>(p)...); }
+    void SetTrueParticle(auto&& p) { fTrueParticle = std::forward<decltype(p)>(p); }
 
-    static consteval const char* BasicTreeName() noexcept { return "PhyTrk"; }
+    void FillBranchSockets() const noexcept;
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    void FillBranchSockets() const noexcept;
+    static constexpr auto BasicTreeName() noexcept { return "PhyTrk"sv; }
 
 private:
     Eigen::Vector3d fTrueVertexPosition;
-    Double_t fTrueVertexEnergy;
+    double fTrueVertexEnergy;
     Eigen::Vector3d fTrueVertexMomentum;
-    ShortString fTrueParticle;
+    Utility::ShortString fTrueParticle;
 
-    static Vector3FBranchSocket fgTrueVertexPosition;
-    static FloatBranchSocket fgTrueVertexEnergy;
-    static Vector3FBranchSocket fgTrueVertexMomentum;
-    static ShortStringBranchSocket fgTrueParticle;
+    static BranchSocket::Vector3FBranchSocket fgTrueVertexPosition;
+    static BranchSocket::FloatBranchSocket fgTrueVertexEnergy;
+    static BranchSocket::Vector3FBranchSocket fgTrueVertexMomentum;
+    static BranchSocket::ShortStringBranchSocket fgTrueParticle;
 };
+static_assert(TransientData<CDCPhysicsSimTrack>);
 
 } // namespace MACE::Core::DataModel::Track
