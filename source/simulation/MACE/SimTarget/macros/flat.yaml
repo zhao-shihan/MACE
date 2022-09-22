@@ -1,12 +1,12 @@
 # SimTarget: geometry description
 
 BeamDegrader:
-  IsEnabled: true
+  Enabled: true
   Width: 60
   Thickness: 0.43
   DistanceToTargetSurface: 5
 BeamMonitor:
-  IsEnabled: false
+  Enabled: false
   Width: 40
   Thickness: 0.5
   DistanceToTargetSurface: 5
