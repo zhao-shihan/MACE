@@ -2,19 +2,21 @@
 
 #include "MACE/Core/DataFactory.hxx"
 #include "MACE/Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
-#include "MACE/Core/DataModel/ITransientData.hxx"
+#include "MACE/Core/DataModel/TransientData.hxx"
+
+#include <string_view>
 
 namespace MACE::Core::DataModel::Hit {
 
-using BranchSocket::DoubleBranchSocket;
-using BranchSocket::FloatBranchSocket;
+using namespace std::string_view_literals;
 
-class EMCalHit : public ITransientData {
+class EMCalHit {
 public:
     EMCalHit() noexcept;
+    virtual ~EMCalHit() = default;
+
     EMCalHit(const EMCalHit& hit) noexcept = default;
     EMCalHit(EMCalHit&& hit) noexcept = default;
-    virtual ~EMCalHit() noexcept = default;
     EMCalHit& operator=(const EMCalHit& hit) noexcept = default;
     EMCalHit& operator=(EMCalHit&& hit) noexcept = default;
 
@@ -22,23 +24,24 @@ public:
     const auto& GetEnergy() const { return fEnergy; }
     const auto& GetEnergyVariance() const { return fEnergyVariance; }
 
-    void HitTime(Double_t val) { fHitTime = val; }
-    void SetEnergy(Double_t val) { fEnergy = val; }
-    void SetEnergyVariance(Double_t val) { fEnergyVariance = val; }
+    void HitTime(double val) { fHitTime = val; }
+    void SetEnergy(double val) { fEnergy = val; }
+    void SetEnergyVariance(double val) { fEnergyVariance = val; }
 
-    static consteval const char* BasicTreeName() noexcept { return "CalHit"; }
+    void FillBranchSockets() const noexcept;
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    void FillBranchSockets() const noexcept;
+    static constexpr auto BasicTreeName() noexcept { return "CalHit"sv; }
 
 private:
-    Double_t fHitTime;
-    Double_t fEnergy;
-    Double_t fEnergyVariance;
+    double fHitTime;
+    double fEnergy;
+    double fEnergyVariance;
 
-    static DoubleBranchSocket fgHitTime;
-    static FloatBranchSocket fgEnergy;
-    static FloatBranchSocket fgEnergyVariance;
+    static BranchSocket::DoubleBranchSocket fgHitTime;
+    static BranchSocket::FloatBranchSocket fgEnergy;
+    static BranchSocket::FloatBranchSocket fgEnergyVariance;
 };
+static_assert(TransientData<EMCalHit>);
 
 } // namespace MACE::Core::DataModel::Hit
