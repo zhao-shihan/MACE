@@ -6,8 +6,8 @@ template<typename... Args> // clang-format on
 ClassBranchSocket<AClass>::ClassBranchSocket(const std::string& branchName, std::tuple<Args&&...> argTuple) :
     BranchSocketBase<ClassBranchSocket<AClass>, AClass>(branchName),
     fObject(std::apply(
-        []<typename... Ts>(Ts&&... args) {
-            return new AClass(std::forward<Ts>(args)...);
+        [](auto&&... args) {
+            return new AClass(std::forward<decltype(args)>(args)...);
         },
         argTuple)) {}
 

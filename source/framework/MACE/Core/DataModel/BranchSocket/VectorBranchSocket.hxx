@@ -2,10 +2,10 @@
 
 #include "MACE/Compatibility/Eigen34/TemplateAlias.hxx"
 #include "MACE/Concept/FundamentalType.hxx"
-#include "MACE/Concept/ROOTFundamental.hxx"
 #include "MACE/Core/DataModel/BranchSocketBase.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/ROOTUtil/LeafType.hxx"
+#include "MACE/Utility/AssignVector.hxx"
 
 #include "Eigen/Core"
 
@@ -23,7 +23,7 @@ public:
     const auto& Value() const { return fVector; }
     template<Concept::ArithmeticExcludeBoolChar U>
     auto Value() const { return fVector.template cast<U>(); }
-    void Value(auto&& vector) { fVector = std::forward<decltype(vector)>(vector); }
+    void Value(auto&& vector) { Utility::AssignVector<T, N>(fVector, std::forward<decltype(vector)>(vector)); }
     template<Concept::ArithmeticExcludeBoolChar U>
     void Value(const Eigen34::Vector<U, N>& vector) { fVector = vector.template cast<T>(); }
 
