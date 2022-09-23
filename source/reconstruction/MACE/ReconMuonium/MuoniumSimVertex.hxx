@@ -5,21 +5,23 @@
 #include "MACE/Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 #include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "MACE/ReconMuonium/MuoniumVertex.hxx"
+#include "MACE/Utility/AssignVector.hxx"
+
+#include <string_view>
+#include <utility>
 
 namespace MACE::ReconMuonium {
 
-using Core::DataModel::BranchSocket::DoubleBranchSocket;
-using Core::DataModel::BranchSocket::FloatBranchSocket;
-using Core::DataModel::BranchSocket::ShortStringBranchSocket;
-using Core::DataModel::BranchSocket::Vector3FBranchSocket;
-using Utility::ShortString;
+namespace BranchSocket = Core::DataModel::BranchSocket;
+using namespace std::string_view_literals;
 
 class MuoniumSimVertex : public MuoniumVertex {
 public:
     MuoniumSimVertex() noexcept;
+    virtual ~MuoniumSimVertex() = default;
+
     MuoniumSimVertex(const MuoniumSimVertex&) noexcept = default;
     MuoniumSimVertex(MuoniumSimVertex&&) noexcept = default;
-    virtual ~MuoniumSimVertex() noexcept = default;
     MuoniumSimVertex& operator=(const MuoniumSimVertex&) noexcept = default;
     MuoniumSimVertex& operator=(MuoniumSimVertex&&) noexcept = default;
 
@@ -29,34 +31,30 @@ public:
     const auto& GetTrueVertexMomentum() const { return fTrueVertexMomentum; }
     const auto& GetTrueParticles() const { return fTrueParticles; }
 
-    void SetTrueVertexTime(Double_t val) { fTrueVertexTime = val; }
-    template<typename A3Vector>
-    void SetTrueVertexPosition(A3Vector&& pos) { fTrueVertexPosition = std::forward<A3Vector>(pos); }
-    void SetTrueVertexPosition(Double_t x, Double_t y, Double_t z) { fTrueVertexPosition = {x, y, z}; }
-    void SetTrueVertexEnergy(Double_t val) { fTrueVertexEnergy = val; }
-    template<typename A3Vector>
-    void SetTrueVertexMomentum(A3Vector&& pos) { fTrueVertexMomentum = std::forward<A3Vector>(pos); }
-    void SetTrueVertexMomentum(Double_t x, Double_t y, Double_t z) { fTrueVertexMomentum = {x, y, z}; }
-    template<typename AString>
-    void SetTrueParticles(AString&& particleNames) { fTrueParticles = std::forward<AString>(particleNames); }
+    void SetTrueVertexTime(double val) { fTrueVertexTime = val; }
+    void SetTrueVertexPosition(auto&&... x) requires(sizeof...(x) > 0) { Utility::AssignVector3D(fTrueVertexPosition, std::forward<decltype(x)>(x)...); }
+    void SetTrueVertexEnergy(double val) { fTrueVertexEnergy = val; }
+    void SetTrueVertexMomentum(auto&&... p) requires(sizeof...(p) > 0) { Utility::AssignVector3D(fTrueVertexMomentum, std::forward<decltype(p)>(p)...); }
+    void SetTrueParticles(auto&& p) { fTrueParticles = std::forward<decltype(p)>(p); }
 
-    static consteval const char* BasicTreeName() noexcept { return "MVtx"; }
+    void FillBranchSockets() const noexcept;
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    void FillBranchSockets() const noexcept;
+    static constexpr auto BasicTreeName() noexcept { return "MVtx"sv; }
 
 private:
-    Double_t fTrueVertexTime;
+    double fTrueVertexTime;
     Eigen::Vector3d fTrueVertexPosition;
-    Double_t fTrueVertexEnergy;
+    double fTrueVertexEnergy;
     Eigen::Vector3d fTrueVertexMomentum;
-    ShortString fTrueParticles;
+    Utility::ShortString fTrueParticles;
 
-    static DoubleBranchSocket fgTrueVertexTime;
-    static Vector3FBranchSocket fgTrueVertexPosition;
-    static FloatBranchSocket fgTrueVertexEnergy;
-    static Vector3FBranchSocket fgTrueVertexMomentum;
-    static ShortStringBranchSocket fgTrueParticles;
+    static BranchSocket::DoubleBranchSocket fgTrueVertexTime;
+    static BranchSocket::Vector3FBranchSocket fgTrueVertexPosition;
+    static BranchSocket::FloatBranchSocket fgTrueVertexEnergy;
+    static BranchSocket::Vector3FBranchSocket fgTrueVertexMomentum;
+    static BranchSocket::ShortStringBranchSocket fgTrueParticles;
 };
+static_assert(Core::DataModel::TransientData<MuoniumSimVertex>);
 
 } // namespace MACE::ReconMuonium

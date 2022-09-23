@@ -2,11 +2,11 @@
 
 namespace MACE::ReconMuonium {
 
-DoubleBranchSocket MuoniumSimVertex::fgTrueVertexTime("trueVtxTime", 0);
-Vector3FBranchSocket MuoniumSimVertex::fgTrueVertexPosition("trueVtxPos", {"x", "y", "z"}, {0, 0, 0});
-FloatBranchSocket MuoniumSimVertex::fgTrueVertexEnergy("trueVtxEne", 0);
-Vector3FBranchSocket MuoniumSimVertex::fgTrueVertexMomentum("trueVtxMom", {"x", "y", "z"}, {0, 0, 0});
-ShortStringBranchSocket MuoniumSimVertex::fgTrueParticles("trueParticles", "");
+BranchSocket::DoubleBranchSocket MuoniumSimVertex::fgTrueVertexTime("trueVtxTime", 0);
+BranchSocket::Vector3FBranchSocket MuoniumSimVertex::fgTrueVertexPosition("trueVtxPos", {"x", "y", "z"}, {0, 0, 0});
+BranchSocket::FloatBranchSocket MuoniumSimVertex::fgTrueVertexEnergy("trueVtxEne", 0);
+BranchSocket::Vector3FBranchSocket MuoniumSimVertex::fgTrueVertexMomentum("trueVtxMom", {"x", "y", "z"}, {0, 0, 0});
+BranchSocket::ShortStringBranchSocket MuoniumSimVertex::fgTrueParticles("trueParticles", "");
 
 MuoniumSimVertex::MuoniumSimVertex() noexcept :
     MuoniumVertex(),
@@ -15,6 +15,15 @@ MuoniumSimVertex::MuoniumSimVertex() noexcept :
     fTrueVertexEnergy(fgTrueVertexEnergy.Value()),
     fTrueVertexMomentum(fgTrueVertexMomentum.Value<double>()),
     fTrueParticles(fgTrueParticles.Value()) {}
+
+void MuoniumSimVertex::FillBranchSockets() const noexcept {
+    MuoniumVertex::FillBranchSockets();
+    fgTrueVertexTime.Value(fTrueVertexTime);
+    fgTrueVertexPosition.Value(fTrueVertexPosition);
+    fgTrueVertexEnergy.Value(fTrueVertexEnergy);
+    fgTrueVertexMomentum.Value(fTrueVertexMomentum);
+    fgTrueParticles.Value(fTrueParticles);
+}
 
 void MuoniumSimVertex::CreateBranches(TTree& tree) {
     MuoniumVertex::CreateBranches(tree);
@@ -32,15 +41,6 @@ void MuoniumSimVertex::ConnectToBranches(TTree& tree) {
     fgTrueVertexEnergy.ConnectToBranch(tree);
     fgTrueVertexMomentum.ConnectToBranch(tree);
     fgTrueParticles.ConnectToBranch(tree);
-}
-
-void MuoniumSimVertex::FillBranchSockets() const noexcept {
-    MuoniumVertex::FillBranchSockets();
-    fgTrueVertexTime.Value(fTrueVertexTime);
-    fgTrueVertexPosition.Value(fTrueVertexPosition);
-    fgTrueVertexEnergy.Value(fTrueVertexEnergy);
-    fgTrueVertexMomentum.Value(fTrueVertexMomentum);
-    fgTrueParticles.Value(fTrueParticles);
 }
 
 } // namespace MACE::ReconMuonium
