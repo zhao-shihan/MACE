@@ -84,9 +84,9 @@ G4bool CDCSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         hit->DriftDistance(driftDistance);
         hit->HitPositionZ((zIn + zOut) / 2);
         hit->WirePosition(rWire);
-        hit->SetWireDirection(tWire);
-        hit->SetCellID(cellID);
-        hit->SetLayerID(layerID);
+        hit->WireDirection(tWire);
+        hit->CellID(cellID);
+        hit->LayerID(layerID);
         hit->SetEnergy((enterPoint.GetTotalEnergy() + exitPoint->GetTotalEnergy()) / 2);
         hit->SetMomentum((enterPoint.GetMomentum() + exitPoint->GetMomentum()) / 2);
         hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
