@@ -8,6 +8,8 @@
 
 namespace MACE::Math::Random::Generator {
 
+using Utility::ObserverPtr;
+
 class MT1993732 final : public UniformRandomBitGeneratorBase<MT1993732, std::uint32_t> {
 public:
     constexpr MT1993732();
