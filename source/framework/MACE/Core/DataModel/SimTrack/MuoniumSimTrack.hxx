@@ -1,61 +1,47 @@
 #pragma once
 
-#include "MACE/Core/DataFactory.hxx"
-#include "MACE/Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
-#include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
-#include "MACE/Core/DataModel/ITransientData.hxx"
+#include "MACE/Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
+#include "MACE/Core/DataModel/Track/MuoniumTrack.hxx"
 
-#include "G4ThreeVector.hh"
+#include <string_view>
+#include <utility>
 
 namespace MACE::Core::DataModel::SimTrack {
 
-using Core::DataModel::BranchSocket::DoubleBranchSocket;
-using Core::DataModel::BranchSocket::Vector3FBranchSocket;
+using namespace std::string_view_literals;
 
-class MuoniumTrack : public Core::DataModel::ITransientData {
+class MuoniumSimTrack : public Track::MuoniumTrack {
 public:
-    MuoniumTrack() noexcept;
-    MuoniumTrack(const MuoniumTrack&) noexcept = default;
-    MuoniumTrack(MuoniumTrack&&) noexcept = default;
-    virtual ~MuoniumTrack() noexcept = default;
-    MuoniumTrack& operator=(const MuoniumTrack&) noexcept = default;
-    MuoniumTrack& operator=(MuoniumTrack&&) noexcept = default;
+    MuoniumSimTrack() noexcept;
+    virtual ~MuoniumSimTrack() = default;
 
-    const auto& GetVertexTime() const { return fVertexTime; }
-    const auto& GetVertexPosition() const { return fVertexPosition; }
-    const auto& GetDecayTime() const { return fDecayTime; }
-    const auto& GetDecayPosition() const { return fDecayPosition; }
+    MuoniumSimTrack(const MuoniumSimTrack& hit) noexcept = default;
+    MuoniumSimTrack(MuoniumSimTrack&& hit) noexcept = default;
+    MuoniumSimTrack& operator=(const MuoniumSimTrack& hit) noexcept = default;
+    MuoniumSimTrack& operator=(MuoniumSimTrack&& hit) noexcept = default;
 
-    void SetVertexTime(Double_t val) { fVertexTime = val; }
-    void SetVertexPosition(Double_t x, Double_t y, Double_t z) { fVertexPosition = {x, y, z}; }
-    void SetVertexPosition(const G4ThreeVector& pos) { SetVertexPosition(pos.x(), pos.y(), pos.z()); }
-    void SetVertexMomentum(Double_t px, Double_t py, Double_t pz) { fVertexMomentum = {px, py, pz}; }
-    void SetVertexMomentum(const G4ThreeVector& mom) { SetVertexMomentum(mom.x(), mom.y(), mom.z()); }
-    void SetDecayTime(Double_t val) { fDecayTime = val; }
-    void SetDecayPosition(Double_t x, Double_t y, Double_t z) { fDecayPosition = {x, y, z}; }
-    void SetDecayPosition(const G4ThreeVector& pos) { SetDecayPosition(pos.x(), pos.y(), pos.z()); }
-    void SetDecayMomentum(Double_t px, Double_t py, Double_t pz) { fDecayMomentum = {px, py, pz}; }
-    void SetDecayMomentum(const G4ThreeVector& mom) { SetDecayMomentum(mom.x(), mom.y(), mom.z()); }
+    const auto& Particle() const { return fParticle; }
+    const auto& G4EventID() const { return fG4EventID; }
+    const auto& G4TrackID() const { return fG4TrackID; }
 
-    static consteval const char* BasicTreeName() noexcept { return "MTrk"; }
+    void Particle(auto&& p) { fParticle = std::forward<decltype(p)>(p); }
+    void G4EventID(int val) { fG4EventID = val; }
+    void G4TrackID(int val) { fG4TrackID = val; }
+
+    void FillBranchSockets() const noexcept;
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    void FillBranchSockets() const noexcept;
+    static constexpr auto BasicTreeName() noexcept { return "MSimTrk"sv; }
 
 private:
-    Double_t fVertexTime;
-    Eigen::Vector3d fVertexPosition;
-    Eigen::Vector3d fVertexMomentum;
-    Double_t fDecayTime;
-    Eigen::Vector3d fDecayPosition;
-    Eigen::Vector3d fDecayMomentum;
+    Utility::ShortString fParticle;
+    int fG4EventID;
+    int fG4TrackID;
 
-    static DoubleBranchSocket fgVertexTime;
-    static Vector3FBranchSocket fgVertexPosition;
-    static Vector3FBranchSocket fgVertexMomentum;
-    static DoubleBranchSocket fgDecayTime;
-    static Vector3FBranchSocket fgDecayPosition;
-    static Vector3FBranchSocket fgDecayMomentum;
+    static BranchSocket::ShortStringBranchSocket fgParticle;
+    static BranchSocket::IntBranchSocket fgG4EventID;
+    static BranchSocket::IntBranchSocket fgG4TrackID;
 };
+static_assert(TransientData<MuoniumSimTrack>);
 
 } // namespace MACE::Core::DataModel::SimTrack

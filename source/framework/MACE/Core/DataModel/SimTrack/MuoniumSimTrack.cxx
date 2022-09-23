@@ -2,50 +2,35 @@
 
 namespace MACE::Core::DataModel::SimTrack {
 
-DoubleBranchSocket MuoniumTrack::fgVertexTime("vtxTime", 0);
-Vector3FBranchSocket MuoniumTrack::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
-Vector3FBranchSocket MuoniumTrack::fgVertexMomentum("vtxMom", {"x", "y", "z"}, {0, 0, 0});
-DoubleBranchSocket MuoniumTrack::fgDecayTime("dcyTime", 0);
-Vector3FBranchSocket MuoniumTrack::fgDecayPosition("dcyPos", {"x", "y", "z"}, {0, 0, 0});
-Vector3FBranchSocket MuoniumTrack::fgDecayMomentum("dcyMom", {"x", "y", "z"}, {0, 0, 0});
+BranchSocket::ShortStringBranchSocket MuoniumSimTrack::fgParticle("particle", "");
+BranchSocket::IntBranchSocket MuoniumSimTrack::fgG4EventID("g4EventID", -1);
+BranchSocket::IntBranchSocket MuoniumSimTrack::fgG4TrackID("g4TrackID", -1);
 
-MuoniumTrack::MuoniumTrack() noexcept :
-    ITransientData(),
-    fVertexTime(fgVertexTime.Value()),
-    fVertexPosition(fgVertexPosition.Value<double>()),
-    fVertexMomentum(fgVertexMomentum.Value<double>()),
-    fDecayTime(fgDecayTime.Value()),
-    fDecayPosition(fgDecayPosition.Value<double>()),
-    fDecayMomentum(fgVertexMomentum.Value<double>()) {}
+MuoniumSimTrack::MuoniumSimTrack() noexcept :
+    MuoniumTrack(),
+    fParticle(fgParticle.Value()),
+    fG4EventID(fgG4EventID.Value()),
+    fG4TrackID(fgG4TrackID.Value()) {}
 
-void MuoniumTrack::CreateBranches(TTree& tree) {
-    ITransientData::CreateBranches(tree);
-    fgVertexTime.CreateBranch(tree);
-    fgVertexPosition.CreateBranch(tree);
-    fgVertexMomentum.CreateBranch(tree);
-    fgDecayTime.CreateBranch(tree);
-    fgDecayPosition.CreateBranch(tree);
-    fgDecayMomentum.CreateBranch(tree);
+void MuoniumSimTrack::FillBranchSockets() const noexcept {
+    MuoniumTrack::FillBranchSockets();
+    fgParticle.Value(fParticle);
+    fgG4EventID.Value(fG4EventID);
+    fgG4TrackID.Value(fG4TrackID);
 }
 
-void MuoniumTrack::ConnectToBranches(TTree& tree) {
-    ITransientData::ConnectToBranches(tree);
-    fgVertexTime.ConnectToBranch(tree);
-    fgVertexPosition.ConnectToBranch(tree);
-    fgVertexMomentum.ConnectToBranch(tree);
-    fgDecayTime.ConnectToBranch(tree);
-    fgDecayPosition.ConnectToBranch(tree);
-    fgDecayMomentum.ConnectToBranch(tree);
+void MuoniumSimTrack::CreateBranches(TTree& tree) {
+    MuoniumTrack::CreateBranches(tree);
+    fgParticle.CreateBranch(tree);
+    fgG4EventID.CreateBranch(tree);
+    fgG4TrackID.CreateBranch(tree);
 }
 
-void MuoniumTrack::FillBranchSockets() const noexcept {
-    ITransientData::FillBranchSockets();
-    fgVertexTime.Value(fVertexTime);
-    fgVertexPosition.Value(fVertexPosition);
-    fgVertexMomentum.Value(fVertexMomentum);
-    fgDecayTime.Value(fDecayTime);
-    fgDecayPosition.Value(fDecayPosition);
-    fgDecayMomentum.Value(fDecayMomentum);
+void MuoniumSimTrack::ConnectToBranches(TTree& tree) {
+    MuoniumTrack::ConnectToBranches(tree);
+    fgParticle.ConnectToBranch(tree);
+    fgG4EventID.ConnectToBranch(tree);
+    fgG4TrackID.ConnectToBranch(tree);
 }
 
 } // namespace MACE::Core::DataModel::SimTrack
