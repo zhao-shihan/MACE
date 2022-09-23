@@ -38,13 +38,14 @@ void MPIExecutive::Execute(const ARange& commandList)  { // clang-format on
 
 template<std::convertible_to<std::string>... AStrings>
 void MPIExecutive::Execute(const std::tuple<AStrings...>& commandList) {
-    auto breaked = false;
-    Utility::TupleForEach(commandList,
-                          [&breaked](const auto& command) {
-                              if (not breaked) {
-                                  if (not ExecuteCommand(command)) { breaked = true; }
-                              }
-                          });
+    auto good = true;
+    Utility::TupleForEach(
+        commandList,
+        [&good](auto&& command) {
+            if (good) {
+                good = ExecuteCommand(std::forward<decltype(command)>(command));
+            }
+        });
 }
 
 } // namespace MACE::Geant4X
