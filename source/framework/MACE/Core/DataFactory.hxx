@@ -1,56 +1,55 @@
 #pragma once
 
 #include "MACE/Concept/PointerImitator.hxx"
-#include "MACE/Core/DataModel/ITransientData.hxx"
+#include "MACE/Core/DataModel/TransientData.hxx"
+#include "MACE/Utility/MerelyMoveableBase.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "TChain.h"
 #include "TFile.h"
+#include "TTree.h"
 
 #include <concepts>
 #include <memory>
+#include <string>
+#include <string_view>
+#include <utility>
 
 namespace MACE::Core {
 
-using DataModel::IsTransientData;
 using Utility::ObserverPtr;
 
-class DataFactory final {
+class DataFactory final : public Utility::MerelyMoveableBase {
 public:
-    DataFactory() = default;
-    ~DataFactory() = default;
-    DataFactory(const DataFactory&) = delete;
-    DataFactory& operator=(const DataFactory&) = delete;
+    DataFactory();
 
-    void TreeNameIndexer(Char_t indexer);
-    void TreeNamePrefixFormat(const TString& prefix);
-    void TreeNameSuffixFormat(const TString& suffix);
+    void TreeNamePrefixFormat(std::string_view prefix);
+    void TreeNameSuffixFormat(std::string_view suffix);
 
-    Char_t TreeNameIndexer() const { return fIndexer; }
-    const TString& TreeNamePrefixFormat() const { return fPrefixFormat; }
-    const TString& TreeNameSuffixFormat() const { return fSuffixFormat; }
-    TString TreeNamePrefix(Long64_t i) const { return fPrefixHasIndexer ? (fSplitPrefix.first + i + fSplitPrefix.second) : fPrefixFormat; }
-    TString TreeNameSuffix(Long64_t i) const { return fSuffixHasIndexer ? (fSplitSuffix.first + i + fSplitSuffix.second) : fSuffixFormat; }
-    template<IsTransientData AData>
-    TString TreeName(Long64_t treeIndex) const;
+    const auto& TreeNamePrefixFormat() const { return fPrefixFormat; }
+    const auto& TreeNameSuffixFormat() const { return fSuffixFormat; }
+    auto TreeNamePrefix(Long64_t i) const { return fPrefixHasIndex ? (fPrefix.first + std::to_string(i) + fPrefix.second) : fPrefix.first; }
+    auto TreeNameSuffix(Long64_t i) const { return fSuffixHasIndex ? (fSuffix.first + std::to_string(i) + fSuffix.second) : fSuffix.first; }
+    template<DataModel::TransientData AData>
+    auto TreeName(Long64_t treeIndex) const { return TreeNamePrefix(treeIndex) + std::string(AData::BasicTreeName()) + TreeNameSuffix(treeIndex); }
 
     /// Find a tree in a root file with name provided by AData and DataFactory settings.
     /// The tree is owned by the file.
     /// If not found, the return value is defined by ROOT (usually nullptr).
-    template<IsTransientData AData>
-    ObserverPtr<TTree> FindTree(TFile& file, Long64_t treeIndex = 0) const;
+    template<DataModel::TransientData AData>
+    ObserverPtr<TTree> FindTree(TFile& file, Long64_t treeIndex = 0) const { return file.Get<TTree>(TreeName<AData>(treeIndex).c_str()); }
     /// Create a TChain of the list of ROOT files.
-    template<IsTransientData AData, std::convertible_to<const char*> APath>
+    template<DataModel::TransientData AData, std::convertible_to<const char*> APath>
     std::shared_ptr<TChain> CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex = 0) const;
-    template<IsTransientData AData, typename APath> // clang-format off
+    template<DataModel::TransientData AData, typename APath> // clang-format off
         requires std::convertible_to<decltype(std::declval<APath>().c_str()), const char*>
     std::shared_ptr<TChain> CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex = 0) const; // clang-format on
     /// Get the range of tree index in current tree name setting.
-    template<IsTransientData AData>
+    template<DataModel::TransientData AData>
     std::pair<Long64_t, Long64_t> GetTreeIndexRange(TFile& file) const;
     /// Create an empty tree with name provided by AData and DataFactory settings.
     /// The tree is owned by shared_ptr.
-    template<IsTransientData AData>
+    template<DataModel::TransientData AData>
     std::shared_ptr<TTree> CreateTree(Long64_t treeIndex = 0) const;
     /// Fill an existed tree with a data vector.
     /// The data type to be written in tree is specfied by ADataInTree. If not specfied, default to the
@@ -59,13 +58,13 @@ public:
     ///   Note: this feature allows to fill the tree with less but exact columns that the data vector has.
     /// Note: there is no static branch infomation for the tree, so
     /// user should make sure that ADataInTree represents exactly the same branches as the tree.
-    template<IsTransientData ADataInTree, Concept::WeakPointerImitator ADataInListPointer> // clang-format off
+    template<DataModel::TransientData ADataInTree, Concept::WeakPointerImitator ADataInListPointer> // clang-format off
         requires std::derived_from<typename std::pointer_traits<ADataInListPointer>::element_type, ADataInTree>
     static void FillTree(const std::vector<ADataInListPointer>& dataList, TTree& tree, bool connected = false); // clang-format on
     template<Concept::WeakPointerImitator ADataInListPointer>
     static void FillTree(const std::vector<ADataInListPointer>& dataList, TTree& tree, bool connected = false);
     /// Same effect as invoke CreateTree<ADataInTree>(treeIndex) and FillTree<ADataInTree>(dataList, tree, true).
-    template<IsTransientData ADataInTree, Concept::WeakPointerImitator ADataInListPointer> // clang-format off
+    template<DataModel::TransientData ADataInTree, Concept::WeakPointerImitator ADataInListPointer> // clang-format off
         requires std::derived_from<typename std::pointer_traits<ADataInListPointer>::element_type, ADataInTree>
     std::shared_ptr<TTree> CreateAndFillTree(const std::vector<ADataInListPointer>& dataList, Long64_t treeIndex = 0) const; // clang-format on
     template<Concept::WeakPointerImitator ADataInListPointer>
@@ -78,7 +77,7 @@ public:
     /// Note: there is no static branch infomation for the tree, so
     /// user should ensure that the tree contains branches which AData needs.
     /// It's user's responsibility to ensure the availability of entriesRange.
-    template<IsTransientData AData>
+    template<DataModel::TransientData AData>
     static std::vector<std::shared_ptr<AData>> CreateAndFillList(TTree& tree, const std::pair<Long64_t, Long64_t>& entriesRange, bool connected = false);
     /// Create a data vector and fill it with a tree.
     /// The data type stores in the data vector is specfied by AData.
@@ -86,7 +85,7 @@ public:
     ///   Note: this feature allows to create a data vector with less but exact columns that the tree has.
     /// Note: there is no static branch infomation for the tree, so
     /// user should ensure that the tree contains branches which AData needs.
-    template<IsTransientData AData>
+    template<DataModel::TransientData AData>
     static std::vector<std::shared_ptr<AData>> CreateAndFillList(TTree& tree, bool connected = false);
     /// Create a data vector and fill it with a tree. The tree is get via FindTree(TFile& file, Long64_t treeIndex).
     /// Entries to be filled are determined by [entriesRange.first, entriesRange.second).
@@ -96,7 +95,7 @@ public:
     /// Note: there is no static branch infomation for the tree, so
     /// user should ensure that the tree contains branches which AData needs.
     /// It's user's responsibility to ensure the availability of entriesRange.
-    template<IsTransientData AData>
+    template<DataModel::TransientData AData>
     std::vector<std::shared_ptr<AData>> CreateAndFillList(TFile& file, const std::pair<Long64_t, Long64_t>& entriesRange, Long64_t treeIndex = 0, bool connected = false) const;
     /// Create a data vector and fill it with a tree. The tree is get via FindTree(TFile& file, Long64_t treeIndex).
     /// The data type stores in the data vector is specfied by AData.
@@ -104,17 +103,21 @@ public:
     ///   Note: this feature allows to create a data vector with less but exact columns that the tree has.
     /// Note: there is no static branch infomation for the tree, so
     /// user should ensure that the tree contains branches which AData needs.
-    template<IsTransientData AData>
+    template<DataModel::TransientData AData>
     std::vector<std::shared_ptr<AData>> CreateAndFillList(TFile& file, Long64_t treeIndex = 0, bool connected = false) const;
 
 private:
-    Char_t fIndexer = '#';
-    TString fPrefixFormat = "#_";
-    TString fSuffixFormat = "";
-    Bool_t fPrefixHasIndexer = true;
-    Bool_t fSuffixHasIndexer = false;
-    std::pair<TString, TString> fSplitPrefix = {"", "_"};
-    std::pair<TString, TString> fSplitSuffix = {"", ""};
+    static std::pair<bool, std::pair<std::string, std::string>> SplitPrefixOrSuffixFormat(std::string_view format);
+
+private:
+    bool fPrefixHasIndex;
+    bool fSuffixHasIndex;
+    std::pair<std::string, std::string> fPrefix;
+    std::pair<std::string, std::string> fSuffix;
+    std::string fPrefixFormat;
+    std::string fSuffixFormat;
+
+    static constexpr std::string_view fgIndexer = "{}";
 };
 
 } // namespace MACE::Core
