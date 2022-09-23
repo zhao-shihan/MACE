@@ -9,7 +9,7 @@ namespace MACE::SimMACE::Messenger {
 using namespace MACE::Utility::LiteralUnit::Frequency;
 
 PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger() :
-    Singleton<PrimaryGeneratorActionMessenger>(),
+    Singleton(),
     G4UImessenger(),
     fPrimaryGeneratorAction(nullptr),
     fSetFlux("/MACE/Generator/SurfaceMuon/SetFlux", this),

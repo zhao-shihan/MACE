@@ -17,7 +17,7 @@ SelectorField::SelectorField() :
     fSelectEk(7_keV),
     fESelect(5_kV_cm),
     fBSelect(fESelect / c_light * std::sqrt(electron_mass_c2 / (2 * fSelectEk))) {
-    Messenger::FieldMessenger::Instance().SetTo(this);
+    Messenger::FieldMessenger::Instance().AssignTo(this);
 }
 
 void SelectorField::GetFieldValue(const G4double*, G4double* F) const {

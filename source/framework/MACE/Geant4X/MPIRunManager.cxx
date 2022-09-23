@@ -49,7 +49,7 @@ MPIRunManager::MPIRunManager() :
     fNDevEventWallTime(std::numeric_limits<decltype(fNDevEventWallTime)>::epsilon()),
     fRunWallTime(),
     fRunCPUTime(0) {
-    MPIRunMessenger::Instance().SetTo(this);
+    MPIRunMessenger::Instance().AssignTo(this);
 }
 
 void MPIRunManager::SetPrintProgress(G4int val) {

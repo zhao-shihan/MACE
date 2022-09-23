@@ -15,7 +15,7 @@ SecondBendField::SecondBendField() :
     fGeomTransform(TransportLineDescription::Instance().SecondBendTransform()),
     fBendRadius(TransportLineDescription::Instance().SecondBendRadius()),
     fB0R0(0.1_T * fBendRadius) {
-    Messenger::FieldMessenger::Instance().SetTo(this);
+    Messenger::FieldMessenger::Instance().AssignTo(this);
 }
 
 void SecondBendField::GetFieldValue(const G4double* x, G4double* B) const {

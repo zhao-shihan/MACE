@@ -5,7 +5,7 @@
 namespace MACE::Geant4X::Physics::Messenger {
 
 MuoniumPhysicsMessenger::MuoniumPhysicsMessenger() :
-    Singleton<MuoniumPhysicsMessenger>(),
+    Singleton(),
     G4UImessenger(),
     fMuoniumFormation(nullptr),
     fMuoniumTransport(nullptr),

@@ -9,7 +9,7 @@
 namespace MACE::SimMACE::Messenger {
 
 FieldMessenger::FieldMessenger() :
-    Singleton<FieldMessenger>(),
+    Singleton(),
     G4UImessenger(),
     fFirstBendField(nullptr),
     fLinacField(nullptr),

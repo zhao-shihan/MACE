@@ -22,7 +22,7 @@ MuoniumFormation::MuoniumFormation() :
     fConversionProbability(0),
     fParticleChange() {
     pParticleChange = std::addressof(fParticleChange);
-    Messenger::MuoniumPhysicsMessenger::Instance().SetTo(this);
+    Messenger::MuoniumPhysicsMessenger::Instance().AssignTo(this);
 }
 
 G4bool MuoniumFormation::IsApplicable(const G4ParticleDefinition& particle) {

@@ -33,12 +33,12 @@ private:
     ~FieldMessenger() = default;
 
 public:
-    void SetTo(ObserverPtr<Field::FirstBendField> field) { fFirstBendField = field; }
-    void SetTo(ObserverPtr<Field::LinacField> field) { fLinacField = field; }
-    void SetTo(ObserverPtr<Field::ParallelField> field) { fParallelField = field; }
-    void SetTo(ObserverPtr<Field::SecondBendField> field) { fSecondBendField = field; }
-    void SetTo(ObserverPtr<Field::SelectorField> field) { fSelectorField = field; }
-    void SetTo(ObserverPtr<Field::VerticalField> field) { fVerticalField = field; }
+    void AssignTo(ObserverPtr<Field::FirstBendField> field) { fFirstBendField = field; }
+    void AssignTo(ObserverPtr<Field::LinacField> field) { fLinacField = field; }
+    void AssignTo(ObserverPtr<Field::ParallelField> field) { fParallelField = field; }
+    void AssignTo(ObserverPtr<Field::SecondBendField> field) { fSecondBendField = field; }
+    void AssignTo(ObserverPtr<Field::SelectorField> field) { fSelectorField = field; }
+    void AssignTo(ObserverPtr<Field::VerticalField> field) { fVerticalField = field; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 

@@ -31,8 +31,8 @@ private:
     ~MuoniumPhysicsMessenger() = default;
 
 public:
-    void SetTo(ObserverPtr<Process::MuoniumFormation> mf) { fMuoniumFormation = mf; }
-    void SetTo(ObserverPtr<Process::MuoniumTransport> mt) { fMuoniumTransport = mt; }
+    void AssignTo(ObserverPtr<Process::MuoniumFormation> mf) { fMuoniumFormation = mf; }
+    void AssignTo(ObserverPtr<Process::MuoniumTransport> mt) { fMuoniumTransport = mt; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 

@@ -6,7 +6,7 @@
 namespace MACE::Geant4X::Generator {
 
 SurfaceMuonMessenger::SurfaceMuonMessenger() :
-    Singleton<SurfaceMuonMessenger>(),
+    Singleton(),
     G4UImessenger(),
     fSurfaceMuonGenerator(nullptr),
     fDirectory("/MACE/Generator/SurfaceMuon/"),

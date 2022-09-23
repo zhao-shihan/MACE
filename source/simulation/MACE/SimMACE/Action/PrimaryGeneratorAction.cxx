@@ -17,7 +17,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
     fTimeWidthRMS(100_us),
     fMuonsForEachG4Event(500),
     fRepetitionID(-1) {
-    Messenger::PrimaryGeneratorActionMessenger::Instance().SetTo(this);
+    Messenger::PrimaryGeneratorActionMessenger::Instance().AssignTo(this);
 }
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {

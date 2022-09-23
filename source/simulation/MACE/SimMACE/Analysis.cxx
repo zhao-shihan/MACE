@@ -11,7 +11,7 @@
 namespace MACE::SimMACE {
 
 Analysis::Analysis() :
-    FreeSingleton<Analysis>(),
+    FreeSingleton(),
     fFile(nullptr),
     fResultPath("untitled_SimMACE"),
     fEnableCoincidenceOfEMCal(true),
@@ -24,7 +24,7 @@ Analysis::Analysis() :
     fEMCalHitList(nullptr),
     fMCPHitList(nullptr),
     fCDCHitList(nullptr) {
-    Messenger::AnalysisMessenger::Instance().SetTo(this);
+    Messenger::AnalysisMessenger::Instance().AssignTo(this);
     fDataHub.TreeNamePrefixFormat("Rep{}_");
 }
 

@@ -25,7 +25,7 @@ private:
     ~MPIRunMessenger() = default;
 
 public:
-    void SetTo(ObserverPtr<MPIRunManager> mpirunManager) { fMPIRunManager = mpirunManager; }
+    void AssignTo(ObserverPtr<MPIRunManager> mpirunManager) { fMPIRunManager = mpirunManager; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 

@@ -21,7 +21,7 @@ SurfaceMuon::SurfaceMuon() :
     fBeamProfileRMS(5_mm),
     fVertexTime(0),
     fVertexZ(-1.5_m) {
-    SurfaceMuonMessenger::Instance().SetTo(this);
+    SurfaceMuonMessenger::Instance().AssignTo(this);
 }
 
 void SurfaceMuon::GeneratePrimaryVertex(G4Event* event) {

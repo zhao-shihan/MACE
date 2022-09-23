@@ -23,7 +23,7 @@ MuoniumTransport::MuoniumTransport() :
     fTransportStatus(TransportStatus::Unknown),
     fIsExitingTargetVolume(false) {
     pParticleChange = std::addressof(fParticleChange);
-    Messenger::MuoniumPhysicsMessenger::Instance().SetTo(this);
+    Messenger::MuoniumPhysicsMessenger::Instance().AssignTo(this);
 }
 
 G4bool MuoniumTransport::IsApplicable(const G4ParticleDefinition& particle) {

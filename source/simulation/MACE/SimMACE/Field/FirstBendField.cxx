@@ -15,7 +15,7 @@ FirstBendField::FirstBendField() :
     fGeomTransform(TransportLineDescription::Instance().FirstBendTransform()),
     fBendRadius(TransportLineDescription::Instance().FirstBendRadius()),
     fB0R0(0.1_T * fBendRadius) {
-    Messenger::FieldMessenger::Instance().SetTo(this);
+    Messenger::FieldMessenger::Instance().AssignTo(this);
 }
 
 void FirstBendField::GetFieldValue(const G4double* x, G4double* B) const {

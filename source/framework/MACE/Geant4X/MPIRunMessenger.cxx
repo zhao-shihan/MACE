@@ -7,7 +7,7 @@
 namespace MACE::Geant4X {
 
 MPIRunMessenger::MPIRunMessenger() :
-    Singleton<MPIRunMessenger>(),
+    Singleton(),
     G4UImessenger(),
     fMPIRunManager(nullptr),
     fDirectory(nullptr),

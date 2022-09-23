@@ -23,7 +23,7 @@ private:
     SurfaceMuonMessenger& operator=(const SurfaceMuonMessenger&) = delete;
 
 public:
-    void SetTo(ObserverPtr<SurfaceMuon> gen) { fSurfaceMuonGenerator = gen; }
+    void AssignTo(ObserverPtr<SurfaceMuon> gen) { fSurfaceMuonGenerator = gen; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 

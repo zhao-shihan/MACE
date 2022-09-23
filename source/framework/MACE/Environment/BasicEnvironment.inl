@@ -3,7 +3,7 @@ namespace MACE::Environment {
 template<class ACLI>
 BasicEnvironment::BasicEnvironment(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel, bool printStartupMessage) :
     EnvironmentBase(),
-    FreeSingleton<BasicEnvironment>(),
+    FreeSingleton(),
     fVerboseLevel(verboseLevel) {
     // CLI: do parse and get args
     if constexpr (not std::is_same_v<std::remove_cvref_t<ACLI>, internal::NoCLI>) {
