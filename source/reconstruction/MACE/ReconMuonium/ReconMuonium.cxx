@@ -93,12 +93,12 @@ int main(int argc, char* argv[]) {
 
     DataFactory dataHub;
 
-    dataHub.TreeNamePrefixFormat("Rep#_");
+    dataHub.TreeNamePrefixFormat("Rep{}_");
     auto [allRepBegin, allRepEnd] = dataHub.GetTreeIndexRange<MCPHit_t>(hitFileIn);
     auto [repBegin, repEnd, repStep, _] = AllocMPIJobsJobWise(allRepBegin, allRepEnd, MPI_COMM_WORLD);
 
     // result tree
-    dataHub.TreeNamePrefixFormat(TString("Rep") + allRepBegin + "To" + (allRepEnd - 1) + '_');
+    dataHub.TreeNamePrefixFormat("Rep" + std::to_string(allRepBegin) + "To" + std::to_string(allRepEnd - 1) + '_');
     auto vertexTree = dataHub.CreateTree<MVertex_t>();
     TH2F vertexHist("vertex", "(Anti-)Muonium Vertex", 500, -20, 20, 500, -50, 50);
 
@@ -108,10 +108,10 @@ int main(int argc, char* argv[]) {
             return track1->GetVertexTime() < track2->GetVertexTime();
         };
         // Get CDC track
-        dataHub.TreeNamePrefixFormat("Rep#_Exact_");
+        dataHub.TreeNamePrefixFormat("Rep{}_Exact_");
         auto trackData = dataHub.CreateAndFillList<Helix_t>(trackFileIn, rep);
         std::ranges::sort(trackData, SortByVertexTime);
-        dataHub.TreeNamePrefixFormat("Rep#_");
+        dataHub.TreeNamePrefixFormat("Rep{}_");
 
         auto SortByHitTime = [](const auto& hit1, const auto& hit2) {
             return hit1->HitTime() < hit2->HitTime();
