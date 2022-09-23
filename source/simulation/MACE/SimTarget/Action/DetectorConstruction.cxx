@@ -20,7 +20,7 @@ using namespace MACE::Utility::LiteralUnit::Density;
 using namespace MACE::Utility::LiteralUnit::Temperature;
 
 DetectorConstruction::DetectorConstruction() :
-    FreeSingleton<DetectorConstruction>(),
+    FreeSingleton(),
     G4VUserDetectorConstruction(),
     fCheckOverlap(false),
     fBeamDegrader(nullptr),
@@ -32,7 +32,7 @@ DetectorConstruction::DetectorConstruction() :
     Core::Geometry::DescriptionIO::Import<UsedDescriptions>(std::tuple{
 #include "MACE/SimTarget/DefaultGeometry.inlyaml"
     });
-    Messenger::GeometryMessenger::Instance().SetTo(this);
+    Messenger::GeometryMessenger::Instance().AssignTo(this);
 }
 
 G4VPhysicalVolume* DetectorConstruction::Construct() {

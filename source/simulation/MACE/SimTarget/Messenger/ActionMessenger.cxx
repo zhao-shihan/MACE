@@ -4,7 +4,7 @@
 namespace MACE::SimTarget::Messenger {
 
 ActionMessenger::ActionMessenger() :
-    Singleton<ActionMessenger>(),
+    Singleton(),
     fSteppingAction(nullptr),
     fDirectory("/MACE/Action/"),
     fSetKillIrrelevants("/MACE/Action/SetKillIrrelevants", this) {

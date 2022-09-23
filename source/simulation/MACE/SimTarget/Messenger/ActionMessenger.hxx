@@ -27,7 +27,7 @@ private:
     ~ActionMessenger() = default;
 
 public:
-    void SetTo(ObserverPtr<Action::SteppingAction> sa) { fSteppingAction = sa; }
+    void AssignTo(ObserverPtr<Action::SteppingAction> sa) { fSteppingAction = sa; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 

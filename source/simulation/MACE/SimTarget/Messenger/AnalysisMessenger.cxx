@@ -10,7 +10,7 @@
 namespace MACE::SimTarget::Messenger {
 
 AnalysisMessenger::AnalysisMessenger() :
-    Singleton<AnalysisMessenger>(),
+    Singleton(),
     G4UImessenger(),
     fAnalysis(nullptr),
     fDirectory(nullptr),

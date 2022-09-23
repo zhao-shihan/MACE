@@ -17,8 +17,10 @@ int main(int argc, char* argv[]) {
 
     // DetectorConstruction, PhysicsList, ActionInitialization are instantiated in RunManager constructor.
     MACE::SimTarget::RunManager runManager;
-    runManager.GetDetectorConstruction().SetCheckOverlaps(cli.IsInteractive() ? true : false);
-    runManager.GetPhysicsList().SetVerboseLevel(cli.IsInteractive() ? 1 : 0);
+    MACE::SimTarget::Action::PhysicsList::Instance()
+        .SetVerboseLevel(cli.IsInteractive() ? 1 : 0);
+    MACE::SimTarget::Action::DetectorConstruction::Instance()
+        .SetCheckOverlaps(cli.IsInteractive() ? true : false);
 
     MACE::Geant4X::MPIExecutive().StartSession(cli, std::array{
 #include "MACE/SimTarget/DefaultInitialization.inlmac"

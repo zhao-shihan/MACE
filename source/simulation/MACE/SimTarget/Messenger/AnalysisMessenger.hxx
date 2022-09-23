@@ -28,7 +28,7 @@ private:
     ~AnalysisMessenger();
 
 public:
-    void SetTo(ObserverPtr<Analysis> ana) { fAnalysis = ana; }
+    void AssignTo(ObserverPtr<Analysis> ana) { fAnalysis = ana; }
 
     void SetNewValue(ObserverPtr<G4UIcommand> command, G4String value) override;
 

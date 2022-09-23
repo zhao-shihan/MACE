@@ -7,12 +7,12 @@ namespace MACE::SimTarget::Action {
 using namespace Utility::LiteralUnit::Length;
 
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
-    NonMoveableBase(),
+    FreeSingleton(),
     G4VUserPrimaryGeneratorAction(),
     fSurfaceMuonGenerator(),
     fMuonsForEachG4Event(0) {
     fSurfaceMuonGenerator.SetVertexZ(-5_cm);
-    Messenger::PrimaryGeneratorActionMessenger::Instance().SetTo(this);
+    Messenger::PrimaryGeneratorActionMessenger::Instance().AssignTo(this);
 }
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {

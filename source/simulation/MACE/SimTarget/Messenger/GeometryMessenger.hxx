@@ -37,7 +37,7 @@ private:
     GeometryMessenger& operator=(const GeometryMessenger&) = delete;
 
 public:
-    void SetTo(ObserverPtr<Action::DetectorConstruction> dc) { fDetectorConstruction = dc; }
+    void AssignTo(ObserverPtr<Action::DetectorConstruction> dc) { fDetectorConstruction = dc; }
 
     void SetNewValue(ObserverPtr<G4UIcommand> command, G4String value) override;
 

@@ -12,7 +12,7 @@ namespace std2b = Compatibility::std2b;
 using namespace MACE::Geant4X::Physics;
 
 PhysicsList::PhysicsList() :
-    NonMoveableBase(),
+    FreeSingleton(),
     G4VModularPhysicsList() {
     verboseLevel = std2b::to_underlying(Environment::BasicEnvironment::Instance().GetVerboseLevel());
     RegisterPhysics(new G4EmStandardPhysics_option4(verboseLevel));

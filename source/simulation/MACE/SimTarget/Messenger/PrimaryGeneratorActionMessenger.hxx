@@ -30,7 +30,7 @@ private:
     PrimaryGeneratorActionMessenger& operator=(const PrimaryGeneratorActionMessenger&) = delete;
 
 public:
-    void SetTo(ObserverPtr<Action::PrimaryGeneratorAction> pga) { fPrimaryGeneratorAction = pga; }
+    void AssignTo(ObserverPtr<Action::PrimaryGeneratorAction> pga) { fPrimaryGeneratorAction = pga; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 

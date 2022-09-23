@@ -2,7 +2,7 @@
 #include "MACE/Environment/MPIEnvironment.hxx"
 #include "MACE/SimTarget/Analysis.hxx"
 #include "MACE/SimTarget/Messenger/AnalysisMessenger.hxx"
-#include "MACE/SimTarget/RunManager.hxx"
+#include "MACE/SimTarget/Action/PrimaryGeneratorAction.hxx"
 #include "MACE/Utility/MPIUtil/CheckedMPICall.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
@@ -13,7 +13,7 @@
 namespace MACE::SimTarget {
 
 Analysis::Analysis() :
-    FreeSingleton<Analysis>(),
+    FreeSingleton(),
     fResultPath("SimTarget_result"),
     fEnableYieldAnalysis(true),
     fThisRun(nullptr),
@@ -21,8 +21,8 @@ Analysis::Analysis() :
     fResultFile(nullptr),
     fYieldFile(nullptr),
     fDataFactory() {
-    Messenger::AnalysisMessenger::Instance().SetTo(this);
-    fDataFactory.TreeNamePrefixFormat("Run#_");
+    Messenger::AnalysisMessenger::Instance().AssignTo(this);
+    fDataFactory.TreeNamePrefixFormat("Run{}_");
 }
 
 Analysis::~Analysis() {
@@ -90,7 +90,7 @@ void Analysis::OpenYieldFile() {
 void Analysis::AnalysisAndWriteYield() {
     std::array<unsigned long, 5> yieldData;
     auto& [nMuon, nFormed, nTargetDecay, nVacuumDecay, nDetectableDecay] = yieldData;
-    nMuon = static_cast<unsigned long>(RunManager::Instance().GetPrimaryGeneratorAction().GetMuonsForEachG4Event()) *
+    nMuon = static_cast<unsigned long>(Action::PrimaryGeneratorAction::Instance().GetMuonsForEachG4Event()) *
             static_cast<unsigned long>(fThisRun->GetNumberOfEvent());
     nFormed = static_cast<unsigned long>(fMuoniumTrackList.size());
     nTargetDecay = 0;

@@ -1,8 +1,9 @@
 #pragma once
 
-#include "MACE/Utility/NonMoveableBase.hxx"
+#include "MACE/Environment/Memory/FreeSingleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
+#include "G4Types.hh"
 #include "G4UserTrackingAction.hh"
 
 class G4ParticleDefinition;
@@ -15,10 +16,12 @@ namespace Action {
 
 using Utility::ObserverPtr;
 
-class TrackingAction final : public Utility::NonMoveableBase,
+class TrackingAction final : public Environment::Memory::FreeSingleton<TrackingAction>,
                              public G4UserTrackingAction {
 public:
     TrackingAction();
+
+    void EventID(G4int id) { fEventID = id; }
 
     void PreUserTrackingAction(const G4Track* track) override;
     void PostUserTrackingAction(const G4Track* track) override;
@@ -27,6 +30,7 @@ private:
     const ObserverPtr<const G4ParticleDefinition> fMuonium;
     const ObserverPtr<const G4ParticleDefinition> fAntiMuonium;
     ObserverPtr<MuoniumTrack> fMuoniumTrack;
+    G4int fEventID;
 };
 
 } // namespace Action

@@ -11,13 +11,13 @@ namespace MACE::SimTarget::Action {
 using namespace Geant4X::Physics::Particle;
 
 SteppingAction::SteppingAction() :
-    NonMoveableBase(),
+    FreeSingleton(),
     G4UserSteppingAction(),
     fMuonPlus(G4MuonPlus::Definition()),
     fMuonium(Muonium::Definition()),
     fAntiMuonium(AntiMuonium::Definition()),
     fKillIrrelevants(false) {
-    Messenger::ActionMessenger::Instance().SetTo(this);
+    Messenger::ActionMessenger::Instance().AssignTo(this);
 }
 
 void SteppingAction::UserSteppingAction(const G4Step* step) {
