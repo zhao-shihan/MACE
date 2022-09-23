@@ -1,7 +1,9 @@
 #pragma once
 
+#include "MACE/"
 #include "MACE/Concept/CopyAssignable.hxx"
 #include "MACE/Concept/FundamentalType.hxx"
+#include "MACE/Concept/StreamIOable.hxx"
 #include "MACE/Math/Random/Generator/PCGXSHRR6432.hxx"
 
 #include <concepts>
@@ -122,9 +124,6 @@ concept STDRandomNumberDistribution = requires(D d, const D x) {
     // os. Expression os << x writes a textual representation of the
     // distribution parameters and internal state to os. The formatting flags
     // and fill character of os are unchanged."
-    requires requires(std::ostream & os) {
-        { os << x } -> std::same_as<std::ostream&>;
-    };
     // 16. They said: "Given d, a value of type D, given is, a lvalue of a
     // specialization of std::basic_istream, expression is >> d must be valid.
     // Expression is >> d returns a reference to the type of is. Expression
@@ -134,10 +133,11 @@ concept STDRandomNumberDistribution = requires(D d, const D x) {
     // Traits stream template parameters, otherwise the behavior is undefined.
     // If bad input is encountered, is.setstate(std::ios::failbit) is called,
     // which may throw std::ios_base::failure. d is unchanged in that case."
-    requires requires(std::istream & is) {
-        { is >> d } -> std::same_as<std::istream&>;
-    };
+    requires Concept::StreamIOable<D>;
 };
+
+template<class ADerived, class ADistribution>
+class DistributionParameterBase;
 
 template<class P, class D>
 concept DistributionParameterOf = requires {
@@ -153,32 +153,33 @@ concept DistributionParameterOf = requires {
     // must be valid.". It's clear that D::param_type should be the same as P.
     typename D::ParameterType;
     requires std::same_as<P, typename D::ParameterType>;
+    // 3. Extra requirements.
+    requires std::derived_from<P, DistributionParameterBase<P, D>>;
+    requires std::is_final_v<P>;
 };
 
+template<class ADerived, Concept::Arithmetic AResult, class AParameter>
+class RandomNumberDistributionBase;
+
 template<class D>
-concept RandomNumberDistribution = requires(D d, const D x, const D y) {
+concept RandomNumberDistribution = requires(D d, const D x) {
     // 1. C++ named requirements: RandomNumberDistribution.
     requires STDRandomNumberDistribution<D>;
     // 2. Same as the C++ named requirements but in our convention.
-    // 2.1. D satisfies CopyConstructible.
-    requires std::copy_constructible<D>;
-    // 2.2. D satisfies CopyAssignable.
-    requires Concept::CopyAssignable<D>;
-    // 2.3. D::ResultType must be valid, it is an arithmetic type.
+    // 2.1. D satisfies CopyConstructible. -- OK
+    // 2.2. D satisfies CopyAssignable. -- OK
+    // 2.3. D::ResultType must be valid, it is same as D::result_type.
     typename D::ResultType;
-    requires Concept::Arithmetic<typename D::ResultType>;
-    // 2.4. D::ParameterType must be valid, it satisfies 'some requirements'.
+    requires std::same_as<typename D::ResultType, typename D::result_type>;
+    // 2.4. D::ParameterType must be valid, it is same as D::param_type.
     typename D::ParameterType;
+    requires std::same_as<typename D::ParameterType, typename D::param_type>;
     requires DistributionParameterOf<typename D::ParameterType, D>;
     // 2.5. D() must be valid and creates a distribution
-    // indistinguishable from any other default-constructed D.
-    D();
+    // indistinguishable from any other default-constructed D. -- OK
     // 2.6. Given p, a (possibly const) value of type D::ParameterType,
     // D(p) must be valid and creates a distribution indistinguishable from D
-    // constructed directly from the values used to construct p.
-    requires requires(const typename D::ParameterType p) {
-        D(p);
-    };
+    // constructed directly from the values used to construct p. -- OK
     // 2.7. Given d, a value of D, expression d.Reset() must be
     // valid and its value type is void. Expression d.Reset() resets the
     // internal state of the distribution. The next call to operator() on
@@ -200,18 +201,12 @@ concept RandomNumberDistribution = requires(D d, const D x, const D y) {
     // expression d(g) has type of D::ResultType. The sequence of numbers
     // returned by successive invocations of expression d(g) with the same g
     // are randomly distributed according to the distribution parametrized by
-    // d.Parameter().
-    requires requires(Generator::PCGXSHRR6432 & g) {
-        { d(g) } -> std::same_as<typename D::ResultType>;
-    };
+    // d.Parameter(). -- OK
     // 2.11. Given g, lvalues of a type satisfying
     // UniformRandomBitGenerator, and given p, a (possibly const) value of type
     // D::ParameterType, expression d(g, p) must be valid. The sequence of numbers
     // returned by successive invocations of d(g, p) with the same g are
-    // randomly distributed according to the distribution parametrized by p.
-    requires requires(Generator::PCGXSHRR6432 & g, const typename D::ParameterType p) {
-        { d(g, p) } -> std::same_as<typename D::ResultType>;
-    };
+    // randomly distributed according to the distribution parametrized by p. -- OK
     // 2.12. Given x, a (possibly const) value of D, expression
     // x.Min() must be valid. It returns the greatest lower bound on the values
     // potentially returned by x’s operator(), as determined by the current
@@ -229,17 +224,13 @@ concept RandomNumberDistribution = requires(D d, const D x, const D y) {
     // sequences of values that would be generated by repeated invocations of
     // x(g1) and y(g2) would be equal as long as g1 == g2. Futhermore, Given x
     // and y, (possibly const) values of type D, expression x == y must be
-    // valid. It returns a bool such that (x == y) == !(x != y).
-    requires std::equality_comparable<D>;
+    // valid. It returns a bool such that (x == y) == !(x != y). -- OK
     // 2.16. Given x, a (possibly const) value of D, given os, a
     // lvalue of a specialization of std::basic_ostream, expression os << x
     // must be valid. Expression os << x returns a reference to the type of
     // os. Expression os << x writes a textual representation of the
     // distribution parameters and internal state to os. The formatting flags
-    // and fill character of os are unchanged.
-    requires requires(std::ostream & os) {
-        { os << x } -> std::same_as<std::ostream&>;
-    };
+    // and fill character of os are unchanged. -- OK
     // 2.17. Given d, a value of type D, given is, a lvalue of a
     // specialization of std::basic_istream, expression is >> d must be valid.
     // Expression is >> x returns a reference to the type of is. Expression
@@ -249,10 +240,10 @@ concept RandomNumberDistribution = requires(D d, const D x, const D y) {
     // Traits stream template parameters, otherwise the behavior is undefined.
     // If bad input is encountered, is.setstate(std::ios::failbit) is called,
     // which may throw std::ios_base::failure. d is unchanged in that case.
-    requires requires(std::istream & is) {
-        { is >> d } -> std::same_as<std::istream&>;
-    };
+    // -- OK
     // 3. Extra requirements.
+    requires std::derived_from<D, RandomNumberDistributionBase<D, typename D::ResultType, typename D::ParameterType>>;
+    requires std::is_final_v<D>;
 };
 
 } // namespace MACE::Math::Random

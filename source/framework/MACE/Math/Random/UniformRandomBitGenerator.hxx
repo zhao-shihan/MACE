@@ -30,8 +30,8 @@ concept UniformRandomBitGenerator = requires(G g) {
     // 2.3 Has operator(). It returns a value of ResultType.
     { g() } -> std::same_as<typename G::ResultType>;
     // 3. Extra requirements.
-    requires std::is_final_v<G>;
     requires std::derived_from<G, UniformRandomBitGeneratorBase<G, typename G::ResultType>>;
+    requires std::is_final_v<G>;
     requires std::equality_comparable<G>;
 };
 
