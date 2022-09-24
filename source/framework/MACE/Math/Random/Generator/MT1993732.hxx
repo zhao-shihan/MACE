@@ -1,36 +1,24 @@
 #pragma once
 
 #include "MACE/Math/Random/UniformRandomBitGeneratorBase.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
-#include <cstdint>
-#include <limits>
+#include <random>
 
 namespace MACE::Math::Random::Generator {
 
-using Utility::ObserverPtr;
-
-class MT1993732 final : public UniformRandomBitGeneratorBase<MT1993732, std::uint32_t> {
+class MT1993732 final : public UniformRandomBitGeneratorBase<MT1993732, std::mt19937::result_type> {
 public:
-    constexpr MT1993732();
-    constexpr MT1993732(ResultType seed);
+    MT1993732();
+    MT1993732(ResultType seed);
 
-    constexpr ResultType operator()();
-    constexpr bool operator==(const MT1993732&) const = default;
+    auto operator()() { return fMT(); }
+    void Seed(ResultType seed) { fMT.seed(seed); }
 
-    constexpr void Seed(ResultType seed);
-
-    static constexpr auto Min() { return std::numeric_limits<ResultType>::min(); }
-    static constexpr auto Max() { return std::numeric_limits<ResultType>::max() - 1; }
+    static constexpr auto Min() { return std::mt19937::min(); }
+    static constexpr auto Max() { return std::mt19937::max(); }
 
 private:
-    constexpr void Regenerate();
-
-private:
-    ResultType fMT[624];
-    ResultType fTempered[624];
-    const ObserverPtr<const ResultType> fTemperedEnd;
-    ObserverPtr<const ResultType> fTemperedIterator;
+    std::mt19937 fMT;
 };
 
 } // namespace MACE::Math::Random::Generator
