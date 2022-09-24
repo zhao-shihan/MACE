@@ -18,36 +18,28 @@
 
 #pragma once
 
+// Linux/BSD implementation:
+#if (defined linux or defined __linux__ or defined __linux) or \
+    (defined __DragonFly__ or defined __FreeBSD__ or defined __NetBSD__ or defined __OpenBSD__)
+#    include "MACE/Utility/internal/WallTimer/WallTimer4LinuxBSD.hxx"
+// Mac OSX implementation:
+#elif defined __MACH__
+#    include "MACE/Utility/internal/WallTimer/WallTimer4MacOSX.hxx"
+// Windows implementation:
+#elif defined _WIN32
+#    include "MACE/Utility/internal/WallTimer/WallTimer4Windows.hxx"
+#else
+#    include "MACE/Utility/internal/WallTimer/WallTimer4Fallback.hxx"
+#endif
+
 #include <concepts>
 #include <limits>
 
-#ifndef WIN32_LEAN_AND_MEAN
-#    define WIN32_LEAN_AND_MEAN
-#    include <windows.h>
-#    undef WIN32_LEAN_AND_MEAN
-#else
-#    include <windows.h>
-#endif
+namespace MACE::Utility {
 
-namespace MACE::Utility::internal {
-
-template<std::floating_point ATime>
+/// @brief high-precision cross-platform (linux/bsd/mac/windows) simple timer class
+template<std::floating_point ATime = double>
     requires(std::numeric_limits<ATime>::digits >= std::numeric_limits<double>::digits)
-class Timer {
-public:
-    Timer() noexcept;
+class WallTimer final : public internal::WallTimer<ATime> {};
 
-    void Reset() noexcept { QueryPerformanceCounter(&fT0); }
-    ATime SecondsElapsed() noexcept;
-    auto MillisecondsElapsed() noexcept { return SecondsElapsed() * 1'000; }
-    auto MicrosecondsElapsed() noexcept { return SecondsElapsed() * 1'000'000; }
-    auto NanosecondsElapsed() noexcept { return SecondsElapsed() * 1'000'000'000; }
-
-private:
-    LARGE_INTEGER fFrequency;
-    LARGE_INTEGER fT0;
-};
-
-} // namespace MACE::Utility::internal
-
-#include "MACE/Utility/internal/Timer/Timer4Windows.inl"
+} // namespace MACE::Utility

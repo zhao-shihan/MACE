@@ -18,31 +18,26 @@
 
 #pragma once
 
-#include <concepts>
-#include <limits>
-#include <mach/clock.h>
-#include <mach/mach.h>
+#include <sys/time.h>
+#include <time.h>
 
 namespace MACE::Utility::internal {
 
-template<std::floating_point ATime>
-    requires(std::numeric_limits<ATime>::digits >= std::numeric_limits<double>::digits)
-class Timer {
+template<typename ATime>
+class WallTimer {
 public:
-    Timer() noexcept;
-    ~Timer() noexcept { mach_port_deallocate(mach_task_self(), fSystemClock); }
+    WallTimer() noexcept;
 
-    void Reset() noexcept { clock_get_time(fSystemClock, &fT0); }
+    void Reset() noexcept { clock_gettime(CLOCK_MONOTONIC, &fT0); }
     auto SecondsElapsed() noexcept { return NanosecondsElapsed() / 1'000'000'000; }
     auto MillisecondsElapsed() noexcept { return NanosecondsElapsed() / 1'000'000; }
     auto MicrosecondsElapsed() noexcept { return NanosecondsElapsed() / 1'000; }
     ATime NanosecondsElapsed() noexcept;
 
 private:
-    clock_serv_t fSystemClock;
-    mach_timespec_t fT0;
+    struct timespec fT0;
 };
 
 } // namespace MACE::Utility::internal
 
-#include "MACE/Utility/internal/Timer/Timer4MacOSX.inl"
+#include "MACE/Utility/internal/WallTimer/WallTimer4LinuxBSD.inl"

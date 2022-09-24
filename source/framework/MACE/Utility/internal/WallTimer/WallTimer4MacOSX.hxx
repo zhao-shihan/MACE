@@ -16,24 +16,30 @@
 //    misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
+#pragma once
+
+#include <mach/clock.h>
+#include <mach/mach.h>
+
 namespace MACE::Utility::internal {
 
-template<std::floating_point ATime>
-    requires(std::numeric_limits<ATime>::digits >= std::numeric_limits<double>::digits) // clang-format off
-Timer<ATime>::Timer() noexcept :
-    fSystemClock(), // clang-format on
-    fT0() {
-    host_get_clock_service(mach_host_self(), SYSTEM_CLOCK, &fSystemClock);
-    Reset();
-}
+template<typename ATime>
+class WallTimer {
+public:
+    WallTimer() noexcept;
+    ~WallTimer() noexcept { mach_port_deallocate(mach_task_self(), fSystemClock); }
 
-template<std::floating_point ATime>
-    requires(std::numeric_limits<ATime>::digits >= std::numeric_limits<double>::digits) // clang-format off
-ATime Timer<ATime>::NanosecondsElapsed() noexcept {
-    mach_timespec_t t; // clang-format on
-    clock_get_time(fSystemClock, &t);
-    return static_cast<ATime>(t.tv_sec - fT0.tv_sec) * 1'000'000'000 +
-           static_cast<ATime>(t.tv_nsec - fT0.tv_nsec);
-}
+    void Reset() noexcept { clock_get_time(fSystemClock, &fT0); }
+    auto SecondsElapsed() noexcept { return NanosecondsElapsed() / 1'000'000'000; }
+    auto MillisecondsElapsed() noexcept { return NanosecondsElapsed() / 1'000'000; }
+    auto MicrosecondsElapsed() noexcept { return NanosecondsElapsed() / 1'000; }
+    ATime NanosecondsElapsed() noexcept;
+
+private:
+    clock_serv_t fSystemClock;
+    mach_timespec_t fT0;
+};
 
 } // namespace MACE::Utility::internal
+
+#include "MACE/Utility/internal/WallTimer/WallTimer4MacOSX.inl"

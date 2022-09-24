@@ -1,6 +1,8 @@
 #pragma once
 
+#include "MACE/Utility/CPUTimer.hxx"
 #include "MACE/Utility/DivideIndices.hxx"
+#include "MACE/Utility/WallTimer.hxx"
 
 #include "G4RunManager.hh"
 

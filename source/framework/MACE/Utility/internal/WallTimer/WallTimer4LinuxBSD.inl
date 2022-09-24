@@ -18,17 +18,15 @@
 
 namespace MACE::Utility::internal {
 
-template<std::floating_point ATime>
-    requires(std::numeric_limits<ATime>::digits >= std::numeric_limits<double>::digits) // clang-format off
-Timer<ATime>::Timer() noexcept :
-    fT0() { // clang-format on
+template<typename ATime>
+WallTimer<ATime>::WallTimer() noexcept :
+    fT0() {
     Reset();
 }
 
-template<std::floating_point ATime>
-    requires(std::numeric_limits<ATime>::digits >= std::numeric_limits<double>::digits) // clang-format off
-ATime Timer<ATime>::NanosecondsElapsed() noexcept {
-    struct timespec t; // clang-format on
+template<typename ATime>
+ATime WallTimer<ATime>::NanosecondsElapsed() noexcept {
+    struct timespec t;
     clock_gettime(CLOCK_MONOTONIC, &t);
     return static_cast<ATime>(t.tv_sec - fT0.tv_sec) * 1'000'000'000 +
            static_cast<ATime>(t.tv_nsec - fT0.tv_nsec);

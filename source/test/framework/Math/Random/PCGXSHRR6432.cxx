@@ -1,7 +1,7 @@
 #include "MACE/Math/Random/Distribution/Uniform.hxx"
 #include "MACE/Math/Random/Generator/MT1993732.hxx"
 #include "MACE/Math/Random/Generator/PCGXSHRR6432.hxx"
-#include "MACE/Utility/Timer.hxx"
+#include "MACE/Utility/WallTimer.hxx"
 
 #include "Eigen/Core"
 
@@ -11,7 +11,7 @@
 #include <numeric>
 #include <random>
 
-using MACE::Utility::Timer;
+using MACE::Utility::WallTimer;
 using namespace MACE::Math::Random;
 
 int main() {
@@ -22,7 +22,7 @@ int main() {
 
     auto r = mt1993732();
     for (int i = 0; i < 1000; ++i) { r = mt1993732(); }
-    Timer timer;
+    WallTimer timer;
     for (int i = 0; i < 10'000'000; ++i) { r = mt1993732(); }
     auto time = timer.MillisecondsElapsed();
     std::cout << "          MT19937-32 : " << time << " ms (last integer: " << r << ')' << std::endl;

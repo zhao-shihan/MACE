@@ -1,5 +1,5 @@
 #include "MACE/Math/Random/Generator/MT1993764.hxx"
-#include "MACE/Utility/Timer.hxx"
+#include "MACE/Utility/WallTimer.hxx"
 
 #include "Eigen/Core"
 
@@ -9,7 +9,7 @@
 #include <numeric>
 #include <random>
 
-using MACE::Utility::Timer;
+using MACE::Utility::WallTimer;
 using namespace MACE::Math::Random;
 
 int main() {
@@ -20,7 +20,7 @@ int main() {
 
     uintmax_t r;
     for (int i = 0; i < 1'000'000; ++i) { r = stdMT1993764(); }
-    Timer timer;
+    WallTimer timer;
     for (int i = 0; i < 10'000'000; ++i) { r = stdMT1993764(); }
     auto time = timer.MillisecondsElapsed();
     std::cout << "    std::mt19937_64 : " << time << " ms (last integer: " << r << ')' << std::endl;

@@ -16,23 +16,34 @@
 //    misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
+#pragma once
+
+#ifndef WIN32_LEAN_AND_MEAN
+#    define WIN32_LEAN_AND_MEAN
+#    include <windows.h>
+#    undef WIN32_LEAN_AND_MEAN
+#else
+#    include <windows.h>
+#endif
+
 namespace MACE::Utility::internal {
 
-template<std::floating_point ATime>
-    requires(std::numeric_limits<ATime>::digits >= std::numeric_limits<double>::digits) // clang-format off
-Timer<ATime>::Timer() noexcept :
-    fFrequency(), // clang-format on
-    fT0() {
-    QueryPerformanceFrequency(&fFrequency);
-    Reset();
-}
+template<typename ATime>
+class WallTimer {
+public:
+    WallTimer() noexcept;
 
-template<std::floating_point ATime>
-    requires(std::numeric_limits<ATime>::digits >= std::numeric_limits<double>::digits) // clang-format off
-ATime Timer<ATime>::SecondsElapsed() noexcept {
-    LARGE_INTEGER t; // clang-format on
-    QueryPerformanceCounter(&t);
-    return static_cast<ATime>(t.QuadPart - fT0.QuadPart) / fFrequency.QuadPart;
-}
+    void Reset() noexcept { QueryPerformanceCounter(&fT0); }
+    ATime SecondsElapsed() noexcept;
+    auto MillisecondsElapsed() noexcept { return SecondsElapsed() * 1'000; }
+    auto MicrosecondsElapsed() noexcept { return SecondsElapsed() * 1'000'000; }
+    auto NanosecondsElapsed() noexcept { return SecondsElapsed() * 1'000'000'000; }
+
+private:
+    LARGE_INTEGER fFrequency;
+    LARGE_INTEGER fT0;
+};
 
 } // namespace MACE::Utility::internal
+
+#include "MACE/Utility/internal/WallTimer/WallTimer4Windows.inl"

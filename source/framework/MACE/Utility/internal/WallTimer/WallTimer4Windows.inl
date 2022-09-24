@@ -16,31 +16,21 @@
 //    misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#pragma once
-
-#include <concepts>
-#include <limits>
-#include <sys/time.h>
-#include <time.h>
-
 namespace MACE::Utility::internal {
 
-template<std::floating_point ATime>
-    requires(std::numeric_limits<ATime>::digits >= std::numeric_limits<double>::digits)
-class Timer {
-public:
-    Timer() noexcept;
+template<typename ATime>
+WallTimer<ATime>::WallTimer() noexcept :
+    fFrequency(),
+    fT0() {
+    QueryPerformanceFrequency(&fFrequency);
+    Reset();
+}
 
-    void Reset() noexcept { clock_gettime(CLOCK_MONOTONIC, &fT0); }
-    auto SecondsElapsed() noexcept { return NanosecondsElapsed() / 1'000'000'000; }
-    auto MillisecondsElapsed() noexcept { return NanosecondsElapsed() / 1'000'000; }
-    auto MicrosecondsElapsed() noexcept { return NanosecondsElapsed() / 1'000; }
-    ATime NanosecondsElapsed() noexcept;
-
-private:
-    struct timespec fT0;
-};
+template<typename ATime>
+ATime WallTimer<ATime>::SecondsElapsed() noexcept {
+    LARGE_INTEGER t;
+    QueryPerformanceCounter(&t);
+    return static_cast<ATime>(t.QuadPart - fT0.QuadPart) / fFrequency.QuadPart;
+}
 
 } // namespace MACE::Utility::internal
-
-#include "MACE/Utility/internal/Timer/Timer4LinuxBSD.inl"

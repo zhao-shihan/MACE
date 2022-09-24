@@ -16,26 +16,22 @@
 //    misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#pragma once
+namespace MACE::Utility::internal {
 
-// Linux/BSD implementation:
-#if (defined linux or defined __linux__ or defined __linux) or \
-    (defined __DragonFly__ or defined __FreeBSD__ or defined __NetBSD__ or defined __OpenBSD__)
-#    include "MACE/Utility/internal/Timer/Timer4LinuxBSD.hxx"
-// Mac OSX implementation:
-#elif defined __MACH__
-#    include "MACE/Utility/internal/Timer/Timer4MacOSX.hxx"
-// Windows implementation:
-#elif defined _WIN32
-#    include "MACE/Utility/internal/Timer/Timer4Windows.hxx"
-#else
-#    include "MACE/Utility/internal/Timer/Timer4Fallback.hxx"
-#endif
+template<typename ATime>
+WallTimer<ATime>::WallTimer() noexcept :
+    fSystemClock(),
+    fT0() {
+    host_get_clock_service(mach_host_self(), SYSTEM_CLOCK, &fSystemClock);
+    Reset();
+}
 
-namespace MACE::Utility {
+template<typename ATime>
+ATime WallTimer<ATime>::NanosecondsElapsed() noexcept {
+    mach_timespec_t t;
+    clock_get_time(fSystemClock, &t);
+    return static_cast<ATime>(t.tv_sec - fT0.tv_sec) * 1'000'000'000 +
+           static_cast<ATime>(t.tv_nsec - fT0.tv_nsec);
+}
 
-/// @brief high-precision cross-platform (linux/bsd/mac/windows) simple timer class
-template<typename ATime = double>
-class Timer final : public internal::Timer<ATime> {};
-
-} // namespace MACE::Utility
+} // namespace MACE::Utility::internal
