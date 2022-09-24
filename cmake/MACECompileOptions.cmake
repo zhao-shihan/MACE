@@ -19,10 +19,10 @@ message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
 # More warnings
 if(CMAKE_COMPILER_IS_GNUCXX)
     add_compile_options(-Wall -Wextra -Wpedantic -Wduplicated-cond -Wundef -Wunused-macros -Wnon-virtual-dtor)
-elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     add_compile_options(-Wall -Wextra -Wpedantic -Wundef -Wunused-macros -Wnon-virtual-dtor
                         -Wno-gnu-zero-variadic-macro-arguments)
-elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     # /Wall will make MSVC commit suicide, just use /W4
     add_compile_options(/W4)
 endif()
@@ -33,14 +33,20 @@ endif()
 
 if(MACE_SIGNAL_HANDLER)
     add_compile_definitions(MACE_SIGNAL_HANDLER=1)
+else()
+    add_compile_definitions(MACE_SIGNAL_HANDLER=0)
 endif()
 
 if(MACE_USE_G4GDML)
     add_compile_definitions(MACE_USE_G4GDML=1)
+else()
+    add_compile_definitions(MACE_USE_G4GDML=0)
 endif()
 
 if(MACE_USE_G4VIS)
     add_compile_definitions(MACE_USE_G4VIS=1)
+else()
+    add_compile_definitions(MACE_USE_G4VIS=0)
 endif()
 
 if(MACE_ENABLE_LTO)
@@ -56,7 +62,7 @@ if(MACE_ENABLE_LTO)
     endif()
 endif()
 
-if(MACE_ENABLE_MSVC_STD_CONFORMITY AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+if(MACE_ENABLE_MSVC_STD_CONFORMITY AND CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     # Enable standard-conformity
     add_compile_options(/permissive- /Zc:__cplusplus /Zc:inline)
     message(STATUS "MSVC standard-conformity enabled (/permissive- /Zc:__cplusplus /Zc:inline)")
@@ -74,10 +80,10 @@ if(MACE_SURPRESS_COMPILE_WARNINGS)
         add_compile_options(-Wno-cast-function-type)
         # ROOT
         add_compile_options(-Wno-volatile)
-    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
         # ROOT
         add_compile_options(-Wno-deprecated-volatile)
-    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         # ROOT (conditional expression is constant)
         add_compile_options(/wd4127)
         # Common ('argument': conversion from 'type1' to 'type2', possible loss of data)
@@ -112,7 +118,7 @@ add_compile_definitions(MPICH_SKIP_MPICXX=1)
 # Inform Eigen not to enable multithreading, though we are not using OpenMP. It is safer to do so.
 add_compile_definitions(EIGEN_DONT_PARALLELIZE=1)
 
-if("${CMAKE_CXX_PLATFORM_ID}" STREQUAL "MinGW")
+if(CMAKE_CXX_PLATFORM_ID STREQUAL "MinGW")
     # MinGW and GCC 12.2 have issues with explitic vectorization
     add_compile_definitions(EIGEN_DONT_VECTORIZE=1)
     message(NOTICE "***Notice: Building on Windows with MinGW, disabling vectorization of Eigen")
@@ -122,7 +128,7 @@ endif()
 # ROOT-induced compile options for MACE
 # =============================================================================
 
-if("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     # See https://root-forum.cern.ch/t/preprocessor-macro-x86-64-problem-with-clhep-on-windows/50431
     if(${ROOT_VERSION} VERSION_LESS_EQUAL 6.26.04)
         # We simply define the accidentally involved __uint128_t to a random type and pray that it won't actually be used.
@@ -133,4 +139,36 @@ if("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
 endif()
 
 # Solve conflict between <span> and "ROOT/RSpan.hxx"
-add_compile_definitions(R__HAS_STD_SPAN=1)
+include(CheckCXXSourceCompiles)
+if(DEFINED CMAKE_REQUIRED_INCLUDES)
+    set(THE_CMAKE_REQUIRED_INCLUDES_HAS_DEFINED_BEFORE TRUE)
+    set(PREVIOUS_CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES})
+endif()
+set(CMAKE_REQUIRED_INCLUDES ${ROOT_INCLUDE_DIRS})
+if(DEFINED CMAKE_REQUIRED_LIBRARIES)
+    set(THE_CMAKE_REQUIRED_LIBRARIES_HAS_DEFINED_BEFORE TRUE)
+    set(PREVIOUS_CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES})
+endif()
+set(CMAKE_REQUIRED_LIBRARIES ${ROOT_LIBRARIES})
+check_cxx_source_compiles("
+    #include \"ROOT/RSpan.hxx\"
+    #include <span>
+    int main() { return 0; }
+    " MACE_ROOT_HAS_NO_CONFLICT_WITH_SPAN)
+if(THE_CMAKE_REQUIRED_INCLUDES_HAS_DEFINED_BEFORE)
+    set(CMAKE_REQUIRED_INCLUDES ${PREVIOUS_CMAKE_REQUIRED_INCLUDES})
+    unset(PREVIOUS_CMAKE_REQUIRED_INCLUDES)
+else()
+    unset(CMAKE_REQUIRED_INCLUDES)
+endif()
+unset(THE_CMAKE_REQUIRED_INCLUDES_HAS_DEFINED_BEFORE)
+if(THE_CMAKE_REQUIRED_LIBRARIES_HAS_DEFINED_BEFORE)
+    set(CMAKE_REQUIRED_LIBRARIES ${PREVIOUS_CMAKE_REQUIRED_LIBRARIES})
+    unset(PREVIOUS_CMAKE_REQUIRED_LIBRARIES)
+else()
+    unset(CMAKE_REQUIRED_LIBRARIES)
+endif()
+unset(THE_CMAKE_REQUIRED_LIBRARIES_HAS_DEFINED_BEFORE)
+if(NOT MACE_ROOT_HAS_NO_CONFLICT_WITH_SPAN)
+    add_compile_definitions(R__HAS_STD_SPAN=1)
+endif()

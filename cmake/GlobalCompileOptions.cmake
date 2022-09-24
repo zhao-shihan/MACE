@@ -15,7 +15,7 @@ if(DEFINED CMAKE_CONFIGURATION_TYPES)
 else()
     # single-config generator
     message(STATUS "Using single-config generator \"${CMAKE_GENERATOR}\"")
-    if("${CMAKE_BUILD_TYPE}" STREQUAL "")
+    if(CMAKE_BUILD_TYPE STREQUAL "")
         # Default to "Release"
         set(CMAKE_BUILD_TYPE "Release")
     endif()
@@ -38,7 +38,7 @@ endif()
 # =============================================================================
 
 # MSVC concurrently build
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     # Build concurrently
     add_compile_options(/MP)
 endif()
