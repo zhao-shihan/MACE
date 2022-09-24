@@ -43,4 +43,4 @@ private:
 
 } // namespace MACE::Utility::internal
 
-#include "MACE/Utility/internal/Timer/Timer4LinuxBSD.hxx"
+#include "MACE/Utility/internal/Timer/Timer4LinuxBSD.inl"
