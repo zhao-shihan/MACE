@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MACE/"
 #include "MACE/Concept/CopyAssignable.hxx"
 #include "MACE/Concept/FundamentalType.hxx"
 #include "MACE/Concept/StreamIOable.hxx"
