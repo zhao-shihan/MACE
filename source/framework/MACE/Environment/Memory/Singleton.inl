@@ -1,7 +1,7 @@
 namespace MACE::Environment::Memory {
 
 template<class ADerived>
-Singleton<ADerived>::InstanceKeeper Singleton<ADerived>::fgInstance = {nullptr, nullptr};
+typename Singleton<ADerived>::InstanceKeeper Singleton<ADerived>::fgInstance = {nullptr, nullptr};
 
 template<class ADerived>
 Singleton<ADerived>::Singleton() {
