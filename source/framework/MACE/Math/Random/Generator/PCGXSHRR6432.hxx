@@ -17,10 +17,8 @@ public:
     constexpr PCGXSHRR6432();
     constexpr PCGXSHRR6432(StateType seed);
 
-    constexpr ResultType operator()();
-    constexpr bool operator==(const PCGXSHRR6432&) const = default;
-
     constexpr void Step() { fState = Multipiler() * fState + Increment(); }
+    constexpr ResultType operator()();
     constexpr void Seed(StateType seed);
     constexpr void Discard(StateType n);
 
