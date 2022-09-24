@@ -1,6 +1,5 @@
 #include "MACE/Core/DataFactory.hxx"
 
-#include <ranges>
 #include <stdexcept>
 
 namespace MACE::Core {
@@ -25,26 +24,22 @@ void DataFactory::TreeNameSuffixFormat(std::string_view suffix) {
 }
 
 std::pair<bool, std::pair<std::string, std::string>> DataFactory::SplitPrefixOrSuffixFormat(std::string_view format) {
-    auto splitFormatView = std::views::split(format, fgIndexer);
-    std::string_view first;
-    std::string_view second;
-    int splitCount = 0;
-    for (auto&& part : splitFormatView) {
-        switch (++splitCount) {
-        case 1:
-            first = {part.begin(), part.end()};
-            break;
-        case 2:
-            second = {part.begin(), part.end()};
-            break;
-        default:
-            throw std::logic_error(std::string("DataFactory::SplitPrefixOrSuffixFormat: "
-                                               "Two or more indexer (the \"{}\") found in the tree name format \"")
-                                       .append(format)
-                                       .append("\""));
-        };
+    if (const auto index = format.find_first_of(fgIndexer);
+        index == std::string_view::npos) {
+        return {false,
+                std::pair(std::string(format),
+                          std::string())};
+    } else if (const auto indexEnd = index + fgIndexer.length();
+               format.find_first_of(fgIndexer, indexEnd) == std::string_view::npos) {
+        return {true,
+                std::pair(std::string(format.begin(), format.begin() + index),
+                          std::string(format.begin() + indexEnd, format.end()))};
+    } else {
+        throw std::logic_error(std::string("DataFactory::SplitPrefixOrSuffixFormat: "
+                                           "Two or more indexer (the \"{}\") found in the tree name format \"")
+                                   .append(format)
+                                   .append("\""));
     }
-    return {splitCount == 2, std::pair<std::string, std::string>(first, second)};
 }
 
 } // namespace MACE::Core

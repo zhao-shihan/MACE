@@ -17,6 +17,7 @@
 
 namespace MACE::Core {
 
+using namespace std::string_view_literals;
 using Utility::ObserverPtr;
 
 class DataFactory final : public Utility::MerelyMoveableBase {
@@ -117,7 +118,7 @@ private:
     std::string fPrefixFormat;
     std::string fSuffixFormat;
 
-    static constexpr std::string_view fgIndexer = "{}";
+    static constexpr auto fgIndexer = "{}"sv;
 };
 
 } // namespace MACE::Core
