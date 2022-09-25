@@ -28,6 +28,7 @@
 // Windows implementation:
 #elif defined _WIN32
 #    include "MACE/Utility/internal/WallTimer/WallTimer4Windows.hxx"
+// Fallback implementation:
 #else
 #    include "MACE/Utility/internal/WallTimer/WallTimer4Fallback.hxx"
 #endif

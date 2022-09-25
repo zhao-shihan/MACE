@@ -1,0 +1,21 @@
+namespace MACE::Utility::internal {
+
+template<typename ATime>
+CPUTimer<ATime>::CPUTimer() noexcept :
+    fCurrentProcess(GetCurrentProcess()),
+    fT0(ClockIn100ns()) {}
+
+template<typename ATime>
+ULARGE_INTEGER CPUTimer<ATime>::ClockIn100ns() noexcept {
+    FILETIME tCreation;
+    FILETIME tExit;
+    FILETIME tKernel;
+    FILETIME tUser;
+    GetProcessTimes(fCurrentProcess, &tCreation, &tExit, &tKernel, &tUser);
+    ULARGE_INTEGER t;
+    static_assert(sizeof(FILETIME) == sizeof(ULARGE_INTEGER));
+    std::memcpy(&t, &tUser, sizeof(FILETIME));
+    return t;
+}
+
+} // namespace MACE::Utility::internal
