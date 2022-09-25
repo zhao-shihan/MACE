@@ -7,7 +7,7 @@ CPUTimer<ATime>::CPUTimer() noexcept :
 }
 
 template<typename ATime>
-ATime CPUTimer<ATime>::NanosecondsUsed() noexcept {
+ATime CPUTimer<ATime>::NanosecondsUsed() const noexcept {
     struct timespec t;
     clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &t);
     return static_cast<ATime>(t.tv_sec - fT0.tv_sec) * 1'000'000'000 +

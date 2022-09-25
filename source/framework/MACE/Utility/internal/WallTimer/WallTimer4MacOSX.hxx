@@ -30,10 +30,10 @@ public:
     ~WallTimer() noexcept { mach_port_deallocate(mach_task_self(), fSystemClock); }
 
     void Reset() noexcept { clock_get_time(fSystemClock, &fT0); }
-    auto SecondsElapsed() noexcept { return NanosecondsElapsed() / 1'000'000'000; }
-    auto MillisecondsElapsed() noexcept { return NanosecondsElapsed() / 1'000'000; }
-    auto MicrosecondsElapsed() noexcept { return NanosecondsElapsed() / 1'000; }
-    ATime NanosecondsElapsed() noexcept;
+    auto SecondsElapsed() const noexcept { return NanosecondsElapsed() / 1'000'000'000; }
+    auto MillisecondsElapsed() const noexcept { return NanosecondsElapsed() / 1'000'000; }
+    auto MicrosecondsElapsed() const noexcept { return NanosecondsElapsed() / 1'000; }
+    ATime NanosecondsElapsed() const noexcept;
 
 private:
     clock_serv_t fSystemClock;

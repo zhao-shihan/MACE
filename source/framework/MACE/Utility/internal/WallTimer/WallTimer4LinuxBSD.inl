@@ -25,7 +25,7 @@ WallTimer<ATime>::WallTimer() noexcept :
 }
 
 template<typename ATime>
-ATime WallTimer<ATime>::NanosecondsElapsed() noexcept {
+ATime WallTimer<ATime>::NanosecondsElapsed() const noexcept {
     struct timespec t;
     clock_gettime(CLOCK_MONOTONIC, &t);
     return static_cast<ATime>(t.tv_sec - fT0.tv_sec) * 1'000'000'000 +

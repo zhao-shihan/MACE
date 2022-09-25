@@ -39,7 +39,7 @@
 namespace MACE::Utility {
 
 /// @brief high-precision cross-platform (linux/bsd/mac/windows) simple timer class
-template<std::floating_point ATime = double>
+template<std::floating_point ATime>
     requires(std::numeric_limits<ATime>::digits >= std::numeric_limits<double>::digits)
 class WallTimer final : public internal::WallTimer<ATime> {};
 

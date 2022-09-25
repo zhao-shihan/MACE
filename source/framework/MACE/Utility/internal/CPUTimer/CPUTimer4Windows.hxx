@@ -18,14 +18,14 @@ public:
     CPUTimer() noexcept;
 
     void Reset() noexcept { fT0 = ClockIn100ns(); }
-    auto SecondsUsed() noexcept { HectonanosecondsUsed() / 10'000'000; }
-    auto MillisecondsUsed() noexcept { return HectonanosecondsUsed() / 10'000; }
-    auto MicrosecondsUsed() noexcept { return HectonanosecondsUsed() / 10; }
-    auto NanosecondsUsed() noexcept { return HectonanosecondsUsed() * 100; }
+    auto SecondsUsed() const noexcept { HectonanosecondsUsed() / 10'000'000; }
+    auto MillisecondsUsed() const noexcept { return HectonanosecondsUsed() / 10'000; }
+    auto MicrosecondsUsed() const noexcept { return HectonanosecondsUsed() / 10; }
+    auto NanosecondsUsed() const noexcept { return HectonanosecondsUsed() * 100; }
 
 private:
-    auto HectonanosecondsUsed() noexcept { return static_cast<ATime>(ClockIn100ns().QuadPart - fT0.QuadPart); }
-    ULARGE_INTEGER ClockIn100ns() noexcept;
+    auto HectonanosecondsUsed() const noexcept { return static_cast<ATime>(ClockIn100ns().QuadPart - fT0.QuadPart); }
+    ULARGE_INTEGER ClockIn100ns() const noexcept;
 
 private:
     const HANDLE fCurrentProcess;

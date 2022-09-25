@@ -22,7 +22,7 @@ int main() {
 
     auto r = mt1993732();
     for (int i = 0; i < 1000; ++i) { r = mt1993732(); }
-    WallTimer timer;
+    WallTimer<double> timer;
     for (int i = 0; i < 10'000'000; ++i) { r = mt1993732(); }
     auto time = timer.MillisecondsElapsed();
     std::cout << "          MT19937-32 : " << time << " ms (last integer: " << r << ')' << std::endl;

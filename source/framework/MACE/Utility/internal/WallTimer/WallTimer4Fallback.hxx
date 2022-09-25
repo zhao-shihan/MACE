@@ -17,10 +17,10 @@ public:
     WallTimer() noexcept;
 
     void Reset() noexcept { fT0 = sc::now(); }
-    auto SecondsElapsed() noexcept { s(sc::now() - fT0).count(); }
-    auto MillisecondsElapsed() noexcept { ms(sc::now() - fT0).count(); }
-    auto MicrosecondsElapsed() noexcept { us(sc::now() - fT0).count(); }
-    auto NanosecondsElapsed() noexcept { ns(sc::now() - fT0).count(); }
+    auto SecondsElapsed() const noexcept { s(sc::now() - fT0).count(); }
+    auto MillisecondsElapsed() const noexcept { ms(sc::now() - fT0).count(); }
+    auto MicrosecondsElapsed() const noexcept { us(sc::now() - fT0).count(); }
+    auto NanosecondsElapsed() const noexcept { ns(sc::now() - fT0).count(); }
 
 private:
     sc::time_point fT0;

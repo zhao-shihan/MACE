@@ -34,10 +34,10 @@ public:
     WallTimer() noexcept;
 
     void Reset() noexcept { QueryPerformanceCounter(&fT0); }
-    ATime SecondsElapsed() noexcept;
-    auto MillisecondsElapsed() noexcept { return SecondsElapsed() * 1'000; }
-    auto MicrosecondsElapsed() noexcept { return SecondsElapsed() * 1'000'000; }
-    auto NanosecondsElapsed() noexcept { return SecondsElapsed() * 1'000'000'000; }
+    ATime SecondsElapsed() const noexcept;
+    auto MillisecondsElapsed() const noexcept { return SecondsElapsed() * 1'000; }
+    auto MicrosecondsElapsed() const noexcept { return SecondsElapsed() * 1'000'000; }
+    auto NanosecondsElapsed() const noexcept { return SecondsElapsed() * 1'000'000'000; }
 
 private:
     LARGE_INTEGER fFrequency;

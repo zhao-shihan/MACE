@@ -10,10 +10,10 @@ public:
     CPUTimer() noexcept;
 
     void Reset() noexcept { fT0 = std::clock(); }
-    auto SecondsUsed() noexcept { static_cast<ATime>(std::clock() - fT0) / CLOCKS_PER_SEC; }
-    auto MillisecondsUsed() noexcept { return SecondsUsed() * 1'000; }
-    auto MicrosecondsUsed() noexcept { return SecondsUsed() * 1'000'000; }
-    auto NanosecondsUsed() noexcept { return SecondsUsed() * 1'000'000'000; }
+    auto SecondsUsed() const noexcept { static_cast<ATime>(std::clock() - fT0) / CLOCKS_PER_SEC; }
+    auto MillisecondsUsed() const noexcept { return SecondsUsed() * 1'000; }
+    auto MicrosecondsUsed() const noexcept { return SecondsUsed() * 1'000'000; }
+    auto NanosecondsUsed() const noexcept { return SecondsUsed() * 1'000'000'000; }
 
 private:
     std::clock_t fT0;

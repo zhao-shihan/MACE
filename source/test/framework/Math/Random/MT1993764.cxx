@@ -20,7 +20,7 @@ int main() {
 
     uintmax_t r;
     for (int i = 0; i < 1'000'000; ++i) { r = stdMT1993764(); }
-    WallTimer timer;
+    WallTimer<double> timer;
     for (int i = 0; i < 10'000'000; ++i) { r = stdMT1993764(); }
     auto time = timer.MillisecondsElapsed();
     std::cout << "    std::mt19937_64 : " << time << " ms (last integer: " << r << ')' << std::endl;

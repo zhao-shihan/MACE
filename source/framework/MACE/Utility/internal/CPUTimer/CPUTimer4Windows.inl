@@ -6,7 +6,7 @@ CPUTimer<ATime>::CPUTimer() noexcept :
     fT0(ClockIn100ns()) {}
 
 template<typename ATime>
-ULARGE_INTEGER CPUTimer<ATime>::ClockIn100ns() noexcept {
+ULARGE_INTEGER CPUTimer<ATime>::ClockIn100ns() const noexcept {
     FILETIME tCreation;
     FILETIME tExit;
     FILETIME tKernel;

@@ -27,7 +27,7 @@ WallTimer<ATime>::WallTimer() noexcept :
 }
 
 template<typename ATime>
-ATime WallTimer<ATime>::SecondsElapsed() noexcept {
+ATime WallTimer<ATime>::SecondsElapsed() const noexcept {
     LARGE_INTEGER t;
     QueryPerformanceCounter(&t);
     return static_cast<ATime>(t.QuadPart - fT0.QuadPart) / fFrequency.QuadPart;
