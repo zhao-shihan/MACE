@@ -40,15 +40,16 @@ MPIRunManager::MPIRunManager() :
     fEventIDRange(),
     fEventIDCounter(-1),
     fPrintProgress(-1),
-    fRunBeginSystemTime(),
-    fRunBeginWallTime(),
-    fRunBeginCPUTime(0),
-    fEventBeginWallTime(),
+    fEventWallTimer(),
     fEventWallTime(),
     fNAvgEventWallTime(0),
     fNDevEventWallTime(std::numeric_limits<decltype(fNDevEventWallTime)>::epsilon()),
+    fRunCPUTimer(),
+    fRunCPUTime(),
+    fRunWallTimer(),
     fRunWallTime(),
-    fRunCPUTime(0) {
+    fRunBeginSystemTime(),
+    fRunEndSystemTime() {
     MPIRunMessenger::Instance().AssignTo(this);
 }
 
@@ -73,8 +74,8 @@ void MPIRunManager::RunInitialization() {
                           MPI_COMM_WORLD)
     // start the run timer
     fRunBeginSystemTime = std::chrono::system_clock::now();
-    fRunBeginWallTime = std::chrono::steady_clock::now();
-    fRunBeginCPUTime = std::clock();
+    fRunCPUTimer.Reset();
+    fRunWallTimer.Reset();
     // initialize run
     G4RunManager::RunInitialization();
     // report
@@ -94,7 +95,7 @@ void MPIRunManager::InitializeEventLoop(G4int nEvent, const char* macroFile, G4i
 
 void MPIRunManager::ProcessOneEvent(G4int) {
     // start the event timer
-    fEventBeginWallTime = std::chrono::steady_clock::now();
+    fEventWallTimer.Reset();
     // process the event
     G4RunManager::ProcessOneEvent(fEventIDCounter);
 }
@@ -105,9 +106,9 @@ void MPIRunManager::TerminateOneEvent() {
     const auto endedEvent = fEventIDCounter;
     fEventIDCounter += fEventIDRange.step;
     // stop the event timer
-    fEventWallTime = std::chrono::steady_clock::now() - fEventBeginWallTime;
-    fNAvgEventWallTime += fEventWallTime.count();
-    fNDevEventWallTime += Math::Pow2(fEventWallTime.count() - fNAvgEventWallTime / numberOfEventProcessed);
+    fEventWallTime = fEventWallTimer.SecondsElapsed();
+    fNAvgEventWallTime += fEventWallTime;
+    fNDevEventWallTime += Math::Pow2(fEventWallTime - fNAvgEventWallTime / numberOfEventProcessed);
     // report
     if (fPrintProgress > 0 and endedEvent % fPrintProgress == 0) {
         EventEndReport(endedEvent);
@@ -119,8 +120,8 @@ void MPIRunManager::RunTermination() {
     const auto endedRun = runIDCounter;
     G4RunManager::RunTermination();
     // stop the run timer
-    fRunWallTime = std::chrono::steady_clock::now() - fRunBeginWallTime;
-    fRunCPUTime = std::clock() - fRunBeginCPUTime;
+    fRunWallTime = fRunWallTimer.SecondsElapsed();
+    fRunCPUTime = fRunCPUTimer.SecondsUsed();
     // wait for everyone to finish
     MACE_CHECKED_MPI_CALL(MPI_Barrier,
                           MPI_COMM_WORLD)
@@ -158,10 +159,8 @@ void MPIRunManager::EventEndReport(G4int event) const {
                               FormatSecondToDHMS(std::lround(1.96 * std::sqrt(fNDevEventWallTime / (numberOfEventProcessed - 1)) * nEventRemain)); // 95% C.L. (assuming gaussian)
     const auto progress = 100 * static_cast<float>(numberOfEventProcessed) / numberOfEventToBeProcessed;
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    char nowString[64];
-    std::strftime(nowString, std::size(nowString), "%c (UTC%z)", std::localtime(&now));
     const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
-    G4cout << nowString << " > Event " << event << " finished in rank " << mpiEnv.GetWorldRank() << '\n'
+    G4cout << std::put_time(std::localtime(&now), "%FT%T%z") << " > Event " << event << " finished in rank " << mpiEnv.GetWorldRank() << '\n'
            << "  ETA: " << eta << " +/- " << etaError << "  Progress of the rank: " << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " (" << std::fixed << progress << std::defaultfloat << "%)" << G4endl;
     G4cout.precision(precisionOfG4cout);
 }
@@ -169,20 +168,15 @@ void MPIRunManager::EventEndReport(G4int event) const {
 void MPIRunManager::RunEndReport(G4int run) const {
     const auto& mpiEnv = Environment::MPIEnvironment::Instance();
     if (mpiEnv.IsWorker() or mpiEnv.GetVerboseLevel() < Environment::VerboseLevel::Error) { return; }
+    const auto wallTimeDHMS = FormatSecondToDHMS(std::lround(fRunWallTime));
     const auto beginTime = std::chrono::system_clock::to_time_t(fRunBeginSystemTime);
-    const auto wallTime = fRunWallTime.count();
-    const auto wallTimeDHMS = FormatSecondToDHMS(std::lround(wallTime));
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    char nowString[64];
-    std::strftime(nowString, std::size(nowString), "%c (UTC%z)", std::localtime(&now));
-    char beginTimeString[64];
-    std::strftime(beginTimeString, std::size(beginTimeString), "%c (UTC%z)", std::localtime(&beginTime));
     const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
     G4cout << "-------------------------------> Run Finished <-------------------------------\n"
-           << nowString << " > Run " << run << " finished on " << mpiEnv.GetWorldSize() << " ranks\n"
-           << "  Start time: " << beginTimeString << '\n'
-           << "   Wall time: " << std::fixed << wallTime << std::defaultfloat << " seconds";
-    if (wallTime > 60) { G4cout << " (" << wallTimeDHMS << ')'; }
+           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run " << run << " finished on " << mpiEnv.GetWorldSize() << " ranks\n"
+           << "  Start time: " << std::put_time(std::localtime(&beginTime), "%FT%T%z") << '\n'
+           << "   Wall time: " << std::fixed << fRunWallTime << std::defaultfloat << " seconds";
+    if (fRunWallTime > 60) { G4cout << " (" << wallTimeDHMS << ')'; }
     G4cout << "\n"
               "-------------------------------> Run Finished <-------------------------------"
            << G4endl;
@@ -193,10 +187,8 @@ void MPIRunManager::RunBeginReport(G4int run) {
     const auto& mpiEnv = Environment::MPIEnvironment::Instance();
     if (mpiEnv.IsWorker() or mpiEnv.GetVerboseLevel() < Environment::VerboseLevel::Error) { return; }
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    char nowString[64];
-    std::strftime(nowString, std::size(nowString), "%c (UTC%z)", std::localtime(&now));
     G4cout << "--------------------------------> Run Starts <--------------------------------\n"
-           << nowString << " > Run " << run << " starts on " << mpiEnv.GetWorldSize() << " ranks\n"
+           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run " << run << " starts on " << mpiEnv.GetWorldSize() << " ranks\n"
            << "--------------------------------> Run Starts <--------------------------------" << G4endl;
 }
 
@@ -212,20 +204,21 @@ std::string MPIRunManager::FormatSecondToDHMS(long secondsInTotal) {
     char buffer[std::numeric_limits<long>::digits10 + 3]; // long enough to store a "long"
     const auto bufferEnd = buffer + std::size(buffer);
     std::string dhms;
+    using namespace std::string_view_literals;
     if (addDay) {
         const auto charLast = std::to_chars(buffer, bufferEnd, day).ptr;
-        dhms.append(std::string_view(buffer, charLast)).append("d ");
+        dhms.append(std::string_view(buffer, charLast)).append("d "sv);
     }
     if (addHour) {
         const auto charLast = std::to_chars(buffer, bufferEnd, hour).ptr;
-        dhms.append(std::string_view(buffer, charLast)).append("h ");
+        dhms.append(std::string_view(buffer, charLast)).append("h "sv);
     }
     if (addMinute) {
         const auto charLast = std::to_chars(buffer, bufferEnd, minute).ptr;
-        dhms.append(std::string_view(buffer, charLast)).append("m ");
+        dhms.append(std::string_view(buffer, charLast)).append("m "sv);
     }
     const auto charLast = std::to_chars(buffer, bufferEnd, second).ptr;
-    dhms.append(std::string_view(buffer, charLast)).append("s");
+    dhms.append(std::string_view(buffer, charLast)).append("s"sv);
     return dhms;
 }
 

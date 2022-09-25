@@ -8,6 +8,7 @@
 
 #include <chrono>
 #include <ctime>
+#include <string_view>
 
 namespace MACE::Geant4X {
 
@@ -61,15 +62,16 @@ private:
     G4int fEventIDCounter;
 
     G4int fPrintProgress;
+    Utility::WallTimer<double> fEventWallTimer;
+    double fEventWallTime;
+    double fNAvgEventWallTime;
+    double fNDevEventWallTime;
+    Utility::CPUTimer<double> fRunCPUTimer;
+    double fRunCPUTime;
+    Utility::WallTimer<double> fRunWallTimer;
+    double fRunWallTime;
     std::chrono::system_clock::time_point fRunBeginSystemTime;
-    std::chrono::steady_clock::time_point fRunBeginWallTime;
-    clock_t fRunBeginCPUTime;
-    std::chrono::steady_clock::time_point fEventBeginWallTime;
-    std::chrono::duration<G4double> fEventWallTime;
-    G4double fNAvgEventWallTime;
-    G4double fNDevEventWallTime;
-    std::chrono::duration<G4double> fRunWallTime;
-    clock_t fRunCPUTime;
+    std::chrono::system_clock::time_point fRunEndSystemTime;
 };
 
 } // namespace MACE::Geant4X
