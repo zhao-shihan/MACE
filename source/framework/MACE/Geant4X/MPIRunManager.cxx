@@ -40,7 +40,7 @@ MPIRunManager::MPIRunManager() :
     G4RunManager(),
     internal::PostG4RunManagerInitFlipG4cout(),
     fTotalNumberOfEventsToBeProcessed(0),
-    fEventIDRange(-1, -1),
+    fEventIDRange(-1, -1, 0, 0),
     fEventIDCounter(-1),
     fPrintProgress(-1),
     fEventWallTimer(),
