@@ -18,7 +18,7 @@ public:
     CPUTimer() noexcept;
 
     void Reset() noexcept { fT0 = ClockIn100ns(); }
-    auto SecondsUsed() const noexcept { HectonanosecondsUsed() / 10'000'000; }
+    auto SecondsUsed() const noexcept { return HectonanosecondsUsed() / 10'000'000; }
     auto MillisecondsUsed() const noexcept { return HectonanosecondsUsed() / 10'000; }
     auto MicrosecondsUsed() const noexcept { return HectonanosecondsUsed() / 10; }
     auto NanosecondsUsed() const noexcept { return HectonanosecondsUsed() * 100; }
