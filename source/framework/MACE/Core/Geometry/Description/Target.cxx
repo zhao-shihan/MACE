@@ -1,3 +1,4 @@
+#include "MACE/Compatibility/std2b/unreachable.hxx"
 #include "MACE/Core/Geometry/Description/LinacField.hxx"
 #include "MACE/Core/Geometry/Description/Target.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
@@ -7,8 +8,6 @@
 #include <string>
 
 namespace MACE::Core::Geometry::Description {
-
-using namespace Utility::LiteralUnit::Length;
 
 Target::Target() :
     ISingletonDescription<Target>(__func__),
@@ -64,12 +63,14 @@ void Target::ImportValues(const YAML::Node& node) {
 
 void Target::ExportValues(YAML::Node& node) const {
     using namespace std::string_literals;
+    using namespace Compatibility;
     ExportValue(
         node, [this] {
             switch (fShapeType) {
             case TargetShapeType::Cuboid:
                 return "Cuboid"s;
             }
+            std2b::unreachable();
         }(),
         "ShapeType");
     {
@@ -83,6 +84,7 @@ void Target::ExportValues(YAML::Node& node) const {
                 case CuboidTarget::ShapeDetailType::Hole:
                     return "Hole"s;
                 }
+                std2b::unreachable();
             }(),
             "Cuboid", "DetailType");
         {
@@ -93,6 +95,8 @@ void Target::ExportValues(YAML::Node& node) const {
         }
     }
 }
+
+using namespace Utility::LiteralUnit::Length;
 
 Target::CuboidTarget::CuboidTarget() :
     fWidth(6_cm),

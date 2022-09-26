@@ -13,6 +13,25 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
 
 # =============================================================================
+# LTO/IPO for MACE
+# =============================================================================
+
+if(NOT DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE)
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE ON)
+endif()
+if(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE)
+    include(CheckIPOSupported)
+    check_ipo_supported(RESULT MACE_ENABLE_IPO_SUPPORTED
+                        OUTPUT MACE_IPO_SUPPORTED_ERROR)
+    if(MACE_ENABLE_IPO_SUPPORTED)
+        message(STATUS "LTO/IPO enabled for MACE")
+    else()
+        set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE OFF)
+        message(NOTICE "***Notice: LTO/IPO not supported: \"${MACE_IPO_SUPPORTED_ERROR}\". Turning off CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE")
+    endif()
+endif()
+
+# =============================================================================
 # Compile warnings for MACE
 # =============================================================================
 
@@ -47,19 +66,6 @@ if(MACE_USE_G4VIS)
     add_compile_definitions(MACE_USE_G4VIS=1)
 else()
     add_compile_definitions(MACE_USE_G4VIS=0)
-endif()
-
-if(MACE_ENABLE_LTO)
-    include(CheckIPOSupported)
-    check_ipo_supported(RESULT MACE_ENABLE_LTO_SUPPORTED
-                        OUTPUT MACE_LTO_SUPPORTED_ERROR)
-    if(MACE_ENABLE_LTO_SUPPORTED)
-        set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE ON)
-        message(STATUS "LTO enabled for MACE")
-    else()
-        set(MACE_ENABLE_LTO OFF)
-        message(NOTICE "***Notice: LTO not supported: <${MACE_LTO_SUPPORTED_ERROR}>. Turning off MACE_ENABLE_LTO")
-    endif()
 endif()
 
 if(MACE_ENABLE_MSVC_STD_CONFORMITY AND CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
