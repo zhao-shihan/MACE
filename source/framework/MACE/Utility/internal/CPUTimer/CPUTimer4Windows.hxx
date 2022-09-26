@@ -1,5 +1,8 @@
 #pragma once
 
+#if defined _MSC_VER and not defined __clang__ and not defined __GNUC__ and not defined NOMINMAX
+#    define NOMINMAX // Otherwise MS compilers act like idiots when using std::numeric_limits<>::max() and including windows.h
+#endif
 #ifndef WIN32_LEAN_AND_MEAN
 #    define WIN32_LEAN_AND_MEAN
 #    include <windows.h>
@@ -18,7 +21,7 @@ public:
     CPUTimer() noexcept;
 
     void Reset() noexcept { fT0 = ClockIn100ns(); }
-    auto SecondsUsed() const noexcept { HectonanosecondsUsed() / 10'000'000; }
+    auto SecondsUsed() const noexcept { return HectonanosecondsUsed() / 10'000'000; }
     auto MillisecondsUsed() const noexcept { return HectonanosecondsUsed() / 10'000; }
     auto MicrosecondsUsed() const noexcept { return HectonanosecondsUsed() / 10; }
     auto NanosecondsUsed() const noexcept { return HectonanosecondsUsed() * 100; }
