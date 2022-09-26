@@ -44,7 +44,6 @@ public:
     virtual void BeamOn(G4int nEvent, const char* macroFile = nullptr, G4int nSelect = -1) override;
     virtual void RunInitialization() override;
     virtual void InitializeEventLoop(G4int nEvent, const char* macroFile = nullptr, G4int nSelect = -1) override;
-    virtual void ProcessOneEvent(G4int) override;
     virtual void TerminateOneEvent() override;
     virtual void RunTermination() override;
 

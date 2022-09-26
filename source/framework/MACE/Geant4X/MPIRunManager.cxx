@@ -20,6 +20,8 @@
 
 namespace MACE::Geant4X {
 
+using namespace std::string_view_literals;
+
 namespace internal {
 
 FlipG4cout::FlipG4cout() {
@@ -38,17 +40,17 @@ MPIRunManager::MPIRunManager() :
     G4RunManager(),
     internal::PostG4RunManagerInitFlipG4cout(),
     fTotalNumberOfEventsToBeProcessed(0),
-    fEventIDRange(),
+    fEventIDRange(-1, -1),
     fEventIDCounter(-1),
     fPrintProgress(-1),
     fEventWallTimer(),
-    fEventWallTime(),
+    fEventWallTime(0),
     fNAvgEventWallTime(0),
-    fNDevEventWallTime(std::numeric_limits<decltype(fNDevEventWallTime)>::epsilon()),
+    fNDevEventWallTime(0),
     fRunCPUTimer(),
-    fRunCPUTime(),
+    fRunCPUTime(0),
     fRunWallTimer(),
-    fRunWallTime(),
+    fRunWallTime(0),
     fRunBeginSystemTime(),
     fRunEndSystemTime() {
     MPIRunMessenger::Instance().AssignTo(this);
@@ -88,17 +90,12 @@ void MPIRunManager::RunInitialization() {
 void MPIRunManager::InitializeEventLoop(G4int nEvent, const char* macroFile, G4int nSelect) {
     // reset event time statistic
     fNAvgEventWallTime = 0;
-    fNDevEventWallTime = std::numeric_limits<decltype(fNDevEventWallTime)>::epsilon();
+    fNDevEventWallTime = 0;
     // initialize event loop
     fEventIDCounter = fEventIDRange.begin;
     G4RunManager::InitializeEventLoop(nEvent, macroFile, nSelect);
-}
-
-void MPIRunManager::ProcessOneEvent(G4int) {
-    // start the event timer
+    // restart the event timer just before the first event begins
     fEventWallTimer.Reset();
-    // process the event
-    G4RunManager::ProcessOneEvent(fEventIDCounter);
 }
 
 void MPIRunManager::TerminateOneEvent() {
@@ -106,8 +103,9 @@ void MPIRunManager::TerminateOneEvent() {
     G4RunManager::TerminateOneEvent();
     const auto endedEvent = fEventIDCounter;
     fEventIDCounter += fEventIDRange.step;
-    // stop the event timer
+    // read & restart the event timer
     fEventWallTime = fEventWallTimer.SecondsElapsed();
+    fEventWallTimer.Reset();
     fNAvgEventWallTime += fEventWallTime;
     fNDevEventWallTime += Math::Pow2(fEventWallTime - fNAvgEventWallTime / numberOfEventProcessed);
     // report
@@ -156,13 +154,13 @@ void MPIRunManager::EventEndReport(G4int event) const {
     const auto nEventRemain = numberOfEventToBeProcessed - numberOfEventProcessed;
     const auto eta = FormatSecondToDHMS(std::lround(avgEventWallTime * nEventRemain));
     const auto etaError = numberOfEventProcessed < 10 ?
-                              std::string("N/A") :
+                              std::string("N/A"sv) :
                               FormatSecondToDHMS(std::lround(1.96 * std::sqrt(fNDevEventWallTime / (numberOfEventProcessed - 1)) * nEventRemain)); // 95% C.L. (assuming gaussian)
     const auto progress = 100 * static_cast<float>(numberOfEventProcessed) / numberOfEventToBeProcessed;
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
-    G4cout << std::put_time(std::localtime(&now), "%FT%T%z") << " > Event " << event << " finished in rank " << mpiEnv.GetWorldRank() << '\n'
-           << "  ETA: " << eta << " +/- " << etaError << "  Progress of the rank: " << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " (" << std::fixed << progress << std::defaultfloat << "%)" << G4endl;
+    G4cout << std::put_time(std::localtime(&now), "%FT%T%z") << " > Event "sv << event << " finished in rank "sv << mpiEnv.GetWorldRank() << '\n'
+           << "  ETA: "sv << eta << " +/- "sv << etaError << "  Progress of the rank: "sv << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " ("sv << std::fixed << progress << std::defaultfloat << "%)"sv << G4endl;
     G4cout.precision(precisionOfG4cout);
 }
 
@@ -173,13 +171,13 @@ void MPIRunManager::RunEndReport(G4int run) const {
     const auto beginTime = std::chrono::system_clock::to_time_t(fRunBeginSystemTime);
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
-    G4cout << "-------------------------------> Run Finished <-------------------------------\n"
-           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run " << run << " finished on " << mpiEnv.GetWorldSize() << " ranks\n"
-           << "  Start time: " << std::put_time(std::localtime(&beginTime), "%FT%T%z") << '\n'
-           << "   Wall time: " << std::fixed << fRunWallTime << std::defaultfloat << " seconds";
-    if (fRunWallTime > 60) { G4cout << " (" << wallTimeDHMS << ')'; }
-    G4cout << "\n"
-              "-------------------------------> Run Finished <-------------------------------"
+    G4cout << "-------------------------------> Run Finished <-------------------------------\n"sv
+           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run "sv << run << " finished on "sv << mpiEnv.GetWorldSize() << " ranks\n"sv
+           << "  Start time: "sv << std::put_time(std::localtime(&beginTime), "%FT%T%z") << '\n'
+           << "   Wall time: "sv << std::fixed << fRunWallTime << std::defaultfloat << " seconds"sv;
+    if (fRunWallTime > 60) { G4cout << " ("sv << wallTimeDHMS << ')'; }
+    G4cout << "\n"sv
+              "-------------------------------> Run Finished <-------------------------------"sv
            << G4endl;
     G4cout.precision(precisionOfG4cout);
 }
@@ -188,9 +186,9 @@ void MPIRunManager::RunBeginReport(G4int run) {
     const auto& mpiEnv = Environment::MPIEnvironment::Instance();
     if (mpiEnv.IsWorker() or mpiEnv.GetVerboseLevel() < Environment::VerboseLevel::Error) { return; }
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    G4cout << "--------------------------------> Run Starts <--------------------------------\n"
-           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run " << run << " starts on " << mpiEnv.GetWorldSize() << " ranks\n"
-           << "--------------------------------> Run Starts <--------------------------------" << G4endl;
+    G4cout << "--------------------------------> Run Starts <--------------------------------\n"sv
+           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run "sv << run << " starts on "sv << mpiEnv.GetWorldSize() << " ranks\n"sv
+           << "--------------------------------> Run Starts <--------------------------------"sv << G4endl;
 }
 
 std::string MPIRunManager::FormatSecondToDHMS(long secondsInTotal) {
@@ -205,7 +203,6 @@ std::string MPIRunManager::FormatSecondToDHMS(long secondsInTotal) {
     char buffer[std::numeric_limits<long>::digits10 + 3]; // long enough to store a "long"
     const auto bufferEnd = buffer + std::size(buffer);
     std::string dhms;
-    using namespace std::string_view_literals;
     if (addDay) {
         const auto charLast = std::to_chars(buffer, bufferEnd, day).ptr;
         dhms.append(std::string_view(buffer, charLast)).append("d "sv);

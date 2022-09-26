@@ -46,7 +46,7 @@ extern "C" {
     using namespace std::string_view_literals;
     std::signal(SIGABRT, SIG_DFL);
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    std::cerr << "\n"
+    std::cerr << "\n"sv
                  " ***** ABORT (SIGABRT) received\n"sv;
     if (MPIEnvironment::Available()) {
         std::cerr << " ***** on "sv << MPIEnvironment::Instance().GetNodeName() << '\n';
