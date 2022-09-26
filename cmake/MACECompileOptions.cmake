@@ -13,6 +13,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
 
 # =============================================================================
+# By default, no C++ extensions available for MACE
+# =============================================================================
+
+if(NOT DEFINED CMAKE_CXX_EXTENSIONS)
+    set(CMAKE_CXX_EXTENSIONS OFF)
+endif()
+
+# =============================================================================
 # LTO/IPO for MACE
 # =============================================================================
 
@@ -145,6 +153,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
 endif()
 
 # Solve conflict between <span> and "ROOT/RSpan.hxx"
+# See https://github.com/root-project/root/pull/11311
 include(CheckCXXSourceCompiles)
 if(DEFINED CMAKE_REQUIRED_INCLUDES)
     set(THE_CMAKE_REQUIRED_INCLUDES_HAS_DEFINED_BEFORE TRUE)
