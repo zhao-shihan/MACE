@@ -14,6 +14,8 @@
 
 #include "G4NistManager.hh"
 
+#include <array>
+
 namespace MACE::SimTarget::Action {
 
 using namespace MACE::Utility::LiteralUnit::Density;
@@ -29,7 +31,7 @@ DetectorConstruction::DetectorConstruction() :
     fWorld(nullptr),
     fDensity(30_mg_cm3),
     fTemperature(293.15_K) {
-    Core::Geometry::DescriptionIO::Import<UsedDescriptions>(std::tuple{
+    Core::Geometry::DescriptionIO::Import<UsedDescriptions>(std::array{
 #include "MACE/SimTarget/DefaultGeometry.inlyaml"
     });
     Messenger::GeometryMessenger::Instance().AssignTo(this);

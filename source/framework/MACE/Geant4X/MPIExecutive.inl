@@ -1,11 +1,10 @@
 namespace MACE::Geant4X {
 
-template<class AMacroOrCommand>
-void MPIExecutive::StartSession(const Geant4CLI& cli, AMacroOrCommand&& macroOrCommands) const {
+void MPIExecutive::StartSession(const Geant4CLI& cli, auto&& macOrCMDs) const {
     if (cli.IsInteractive()) {
         auto&& [argc, argv] = cli.GetArgcArgv();
         if (cli.GetMacro().empty()) {
-            StartInteractiveSession(argc, argv, std::forward<AMacroOrCommand>(macroOrCommands));
+            StartInteractiveSession(argc, argv, std::forward<decltype(macOrCMDs)>(macOrCMDs));
         } else {
             StartInteractiveSession(argc, argv, cli.GetMacro());
         }
@@ -14,8 +13,7 @@ void MPIExecutive::StartSession(const Geant4CLI& cli, AMacroOrCommand&& macroOrC
     }
 }
 
-template<class AMacroOrCommand>
-void MPIExecutive::StartInteractiveSession(int argc, char* argv[], AMacroOrCommand&& macroOrCommands) const {
+void MPIExecutive::StartInteractiveSession(int argc, char* argv[], auto&& macOrCMDs) const {
     CheckSequential();
 #if MACE_USE_G4VIS
     G4UIExecutive uiExecutive(argc, argv);
@@ -24,28 +22,15 @@ void MPIExecutive::StartInteractiveSession(int argc, char* argv[], AMacroOrComma
 #else
     G4UIExecutive uiExecutive(argc, argv, "tcsh");
 #endif
-    Execute(std::forward<AMacroOrCommand>(macroOrCommands));
+    Execute(std::forward<decltype(macOrCMDs)>(macOrCMDs));
     uiExecutive.SessionStart();
 }
 
-template<std::ranges::range ARange> // clang-format off
-    requires std::convertible_to<typename ARange::value_type, std::string>
-void MPIExecutive::Execute(const ARange& commandList)  { // clang-format on
-    for (auto&& command : commandList) {
-        if (not ExecuteCommand(command)) { break; }
+void MPIExecutive::Execute(const std::ranges::range auto& cmdText) requires
+    std::convertible_to<typename std::remove_cvref_t<decltype(cmdText)>::value_type, std::string> {
+    for (auto&& command : cmdText) {
+        if (not ExecuteCommand(std::forward<decltype(command)>(command))) { break; }
     }
-}
-
-template<std::convertible_to<std::string>... AStrings>
-void MPIExecutive::Execute(const std::tuple<AStrings...>& commandList) {
-    auto good = true;
-    Utility::TupleForEach(
-        commandList,
-        [&good](auto&& command) {
-            if (good) {
-                good = ExecuteCommand(std::forward<decltype(command)>(command));
-            }
-        });
 }
 
 } // namespace MACE::Geant4X

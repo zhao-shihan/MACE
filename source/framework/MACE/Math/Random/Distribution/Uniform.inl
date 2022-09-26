@@ -35,16 +35,16 @@ constexpr T Uniform<T>::operator()(UniformRandomBitGenerator auto& g, const Unif
     return x;
 }
 
-template<std::floating_point T>
-auto operator<<(Concept::InstantiatedFrom<std::basic_ostream> auto& os, const Uniform<T>& d) -> decltype(os) {
+template<Concept::Character AChar, std::floating_point T>
+auto operator<<(std::basic_ostream<AChar>& os, const Uniform<T>& d) -> decltype(os) {
     const auto oldPrecision = os.precision(std::numeric_limits<T>::max_digits10);
     os << d.Infimum() << ' ' << d.Supremum();
     os.precision(oldPrecision);
     return os;
 }
 
-template<std::floating_point T>
-auto operator>>(Concept::InstantiatedFrom<std::basic_istream> auto& is, Uniform<T>& d) -> decltype(is) {
+template<Concept::Character AChar, std::floating_point T>
+auto operator>>(std::basic_istream<AChar>& is, Uniform<T>& d) -> decltype(is) {
     T inf;
     T sup;
     is >> inf >> ' ' >> sup;

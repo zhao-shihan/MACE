@@ -12,7 +12,7 @@ struct FillDescriptionArray {
 } // namespace internal
 
 template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
-void DescriptionIO::Import(const std::filesystem::path& yamlFile) {
+void DescriptionIO::Import(const std::filesystem::path& yamlFile) requires(not IsDescription<ADescriptionTuple>) {
     std::array<ObserverPtr<IDescription>, std::tuple_size_v<ADescriptionTuple>> descriptions;
     Utility::StaticForEach<0, descriptions.size(),
                            internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
@@ -20,7 +20,7 @@ void DescriptionIO::Import(const std::filesystem::path& yamlFile) {
 }
 
 template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
-void DescriptionIO::Export(const std::filesystem::path& yamlFile, const std::string& fileComment) {
+void DescriptionIO::Export(const std::filesystem::path& yamlFile, const std::string& fileComment) requires(not IsDescription<ADescriptionTuple>) {
     std::array<ObserverPtr<IDescription>, std::tuple_size_v<ADescriptionTuple>> descriptions;
     Utility::StaticForEach<0, descriptions.size(),
                            internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
@@ -28,7 +28,7 @@ void DescriptionIO::Export(const std::filesystem::path& yamlFile, const std::str
 }
 
 template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
-void DescriptionIO::Ixport(const std::filesystem::path& yamlFile, const std::string& fileComment) {
+void DescriptionIO::Ixport(const std::filesystem::path& yamlFile, const std::string& fileComment) requires(not IsDescription<ADescriptionTuple>) {
     std::array<ObserverPtr<IDescription>, std::tuple_size_v<ADescriptionTuple>> descriptions;
     Utility::StaticForEach<0, descriptions.size(),
                            internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
@@ -36,7 +36,8 @@ void DescriptionIO::Ixport(const std::filesystem::path& yamlFile, const std::str
 }
 
 template<typename... ArgsOfImport>
-void DescriptionIO::Import(const Concept::InstantiatedFrom<std::tuple> auto& yamlText) {
+void DescriptionIO::Import(const std::ranges::range auto& yamlText) requires
+    std::convertible_to<typename std::remove_cvref_t<decltype(yamlText)>::value_type, std::string> {
     auto yamlPath = std::filesystem::temp_directory_path() / "tmp_mace_geom.yaml";
     if (Environment::MPIEnvironment::Available()) {
         Utility::MPIUtil::MakeMPIFilePathInPlace(yamlPath);
@@ -45,10 +46,9 @@ void DescriptionIO::Import(const Concept::InstantiatedFrom<std::tuple> auto& yam
 
     std::fstream yamlOut(yamlPath, std::ios::out);
     if (yamlOut.is_open()) {
-        Utility::TupleForEach(yamlText,
-                              [&yamlOut](const auto& line) {
-                                  yamlOut << line << '\n';
-                              });
+        for (auto&& line : yamlText) {
+            yamlOut << line << '\n';
+        }
         yamlOut << std::endl;
         yamlOut.close();
         Import<ArgsOfImport...>(yamlPath);

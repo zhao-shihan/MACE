@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Concept/FundamentalType.hxx"
 #include "MACE/Concept/InstantiatedFrom.hxx"
 #include "MACE/Math/Random/RandomNumberDistributionBase.hxx"
 
@@ -51,12 +52,14 @@ public:
     constexpr auto Min() const { return Infimum(); }
     constexpr auto Max() const { return Supremum(); }
 
-    friend auto operator<<(Concept::InstantiatedFrom<std::basic_ostream> auto& os, const Uniform& d) -> decltype(os);
-    friend auto operator>>(Concept::InstantiatedFrom<std::basic_istream> auto& is, Uniform& d) -> decltype(is);
-
 private:
     UniformParameter<T> fParameter;
 };
+
+template<Concept::Character AChar, std::floating_point T>
+auto operator<<(std::basic_ostream<AChar>& os, const Uniform<T>& d) -> decltype(os);
+template<Concept::Character AChar, std::floating_point T>
+auto operator>>(std::basic_istream<AChar>& is, Uniform<T>& d) -> decltype(is);
 
 } // namespace MACE::Math::Random::Distribution
 

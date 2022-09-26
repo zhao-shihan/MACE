@@ -14,6 +14,7 @@
 #include <iostream>
 #include <string>
 #include <tuple>
+#include <type_traits>
 #include <utility>
 
 namespace MACE::Geant4X {
@@ -25,24 +26,18 @@ class MPIExecutive final : public Environment::Memory::MuteSingleton<MPIExecutiv
 public:
     MPIExecutive() = default;
 
-    template<class AMacroOrCommand>
-    void StartSession(const Geant4CLI& cli, AMacroOrCommand&& macroOrCommands = std::string()) const;
-    template<class AMacroOrCommand>
-    void StartInteractiveSession(int argc, char* argv[], AMacroOrCommand&& macroOrCommands = std::string()) const;
-    template<class AMacroOrCommand>
-    void StartBatchSession(AMacroOrCommand&& macroOrCommands) const { Execute(std::forward<AMacroOrCommand>(macroOrCommands)); }
+    void StartSession(const Geant4CLI& cli, auto&& macOrCMDs = {}) const;
+    void StartInteractiveSession(int argc, char* argv[], auto&& macOrCMDs = {}) const;
+    void StartBatchSession(auto&& macOrCMDs) const { Execute(std::forward<decltype(macOrCMDs)>(macOrCMDs)); }
 
 private:
     void CheckSequential() const;
 
-    static void Execute(const std::string& macro);
-    template<std::ranges::range ARange> // clang-format off
-        requires std::convertible_to<typename ARange::value_type, std::string>
-    static void Execute(const ARange& commandList) ; // clang-format on
-    template<std::convertible_to<std::string>... AStrings>
-    static void Execute(const std::tuple<AStrings...>& commandList);
-
     static bool ExecuteCommand(const std::string& command);
+
+    static void Execute(const std::string& macro);
+    static void Execute(const std::ranges::range auto& cmdText) requires
+        std::convertible_to<typename std::remove_cvref_t<decltype(cmdText)>::value_type, std::string>;
 };
 
 } // namespace MACE::Geant4X
