@@ -4,6 +4,8 @@
 
 #include "CLHEP/Vector/Rotation.h"
 
+#include <string>
+
 namespace MACE::Core::Geometry::Description {
 
 using namespace Utility::LiteralUnit::Length;
@@ -61,26 +63,28 @@ void Target::ImportValues(const YAML::Node& node) {
 }
 
 void Target::ExportValues(YAML::Node& node) const {
-    std::string shapeString;
-    switch (fShapeType) {
-    case TargetShapeType::Cuboid:
-        shapeString = "Cuboid";
-        break;
-    }
-    ExportValue(node, shapeString, "ShapeType");
+    using namespace std::string_literals;
+    ExportValue(
+        node, [this] {
+            switch (fShapeType) {
+            case TargetShapeType::Cuboid:
+                return "Cuboid"s;
+            }
+        }(),
+        "ShapeType");
     {
         ExportValue(node, fCuboid.Width(), "Cuboid", "Width");
         ExportValue(node, fCuboid.Thickness(), "Cuboid", "Thickness");
-        std::string detailString;
-        switch (fCuboid.DetailType()) {
-        case CuboidTarget::ShapeDetailType::Flat:
-            detailString = "Flat";
-            break;
-        case CuboidTarget::ShapeDetailType::Hole:
-            detailString = "Hole";
-            break;
-        }
-        ExportValue(node, detailString, "Cuboid", "DetailType");
+        ExportValue(
+            node, [this] {
+                switch (fCuboid.DetailType()) {
+                case CuboidTarget::ShapeDetailType::Flat:
+                    return "Flat"s;
+                case CuboidTarget::ShapeDetailType::Hole:
+                    return "Hole"s;
+                }
+            }(),
+            "Cuboid", "DetailType");
         {
             ExportValue(node, fCuboid.Hole().Extent(), "Cuboid", "Hole", "AblationExtent");
             ExportValue(node, fCuboid.Hole().Spacing(), "Cuboid", "Hole", "Spacing");
