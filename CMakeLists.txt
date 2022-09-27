@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
-# enable MSVC_RUNTIME_LIBRARY target property, see https://cmake.org/cmake/help/latest/policy/CMP0091.html
+# Enable MSVC_RUNTIME_LIBRARY target property, see https://cmake.org/cmake/help/latest/policy/CMP0091.html
 cmake_policy(SET CMP0091 NEW)
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
+    # ExternalProject_Add sets the timestamps of extracted contents to the time of extraction, see https://cmake.org/cmake/help/latest/policy/CMP0135.html
+    cmake_policy(SET CMP0135 NEW)
+endif()
 
 include(CMakeDependentOption)
 
