@@ -14,7 +14,7 @@ VectorBranchSocket<T, N>::VectorBranchSocket(const std::string& branchName, cons
 template<Concept::ArithmeticExcludeBoolChar T, int N>
 std::string VectorBranchSocket<T, N>::LeafListInitializer(const std::array<std::string, N>& leafNames) {
     std::string leafList;
-    leafList.append(leafNames[0]).append(Utility::ROOTUtil::LeafType<T>().Suffix());
+    leafList.append(leafNames[0]).append(Utility::ROOTUtil::LeafType<T>::Suffix());
     for (int i = 1; i < N; ++i) {
         leafList.append(":").append(leafNames[i]);
     }

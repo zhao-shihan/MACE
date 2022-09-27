@@ -16,6 +16,7 @@
 #include <charconv>
 #include <cstdlib>
 #include <iomanip>
+#include <ios>
 #include <string>
 
 namespace MACE::Geant4X {

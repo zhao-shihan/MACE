@@ -12,8 +12,9 @@ namespace MACE::Utility::ROOTUtil {
 
 template<Concept::ROOTFundamental T>
 struct LeafType {
-    constexpr char Code();
-    auto Suffix() { return std::string{'/', Code()}; }
+    LeafType() = delete;
+    static constexpr char Code();
+    static auto Suffix() { return std::string{'/', Code()}; }
 };
 
 } // namespace MACE::Utility::ROOTUtil
