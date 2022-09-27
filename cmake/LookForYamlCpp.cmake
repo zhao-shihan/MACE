@@ -17,17 +17,18 @@ if(MACE_BUILTIN_YAML_CPP)
         message(NOTICE "***Notice: Provided MACE_BUILTIN_YAML_CPP_VERSION is ${MACE_BUILTIN_YAML_CPP_VERSION}, which is less than the requirement (${MACE_YAML_CPP_MINIMUM_REQUIRED}). Changing to ${MACE_YAML_CPP_MINIMUM_REQUIRED}")
         set(MACE_BUILTIN_YAML_CPP_VERSION ${MACE_YAML_CPP_MINIMUM_REQUIRED})
     endif()
-    # set download src and dest
-    include(FetchContent)
+    # set download dest and URL
     set(MACE_BUILTIN_YAML_CPP_SRC_DIR "${MACE_PROJECT_3RDPARTY_DIR}/yaml-cpp-yaml-cpp-${MACE_BUILTIN_YAML_CPP_VERSION}")
     set(MACE_BUILTIN_YAML_CPP_URL "https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-${MACE_BUILTIN_YAML_CPP_VERSION}.tar.gz")
+    # reuse or download
+    include(FetchContent)
     if(EXISTS "${MACE_BUILTIN_YAML_CPP_SRC_DIR}/CMakeLists.txt")
-        message(STATUS "Reusing yaml-cpp source ${MACE_BUILTIN_YAML_CPP_SRC_DIR}")
         FetchContent_Declare(yaml-cpp SOURCE_DIR "${MACE_BUILTIN_YAML_CPP_SRC_DIR}")
+        message(STATUS "Reusing yaml-cpp source ${MACE_BUILTIN_YAML_CPP_SRC_DIR}")
     else()
-        message(STATUS "yaml-cpp will be downloaded from ${MACE_BUILTIN_YAML_CPP_URL} to ${MACE_BUILTIN_YAML_CPP_SRC_DIR}")
         FetchContent_Declare(yaml-cpp SOURCE_DIR "${MACE_BUILTIN_YAML_CPP_SRC_DIR}"
                                       URL "${MACE_BUILTIN_YAML_CPP_URL}")
+        message(STATUS "yaml-cpp will be downloaded from ${MACE_BUILTIN_YAML_CPP_URL} to ${MACE_BUILTIN_YAML_CPP_SRC_DIR}")
     endif()
     # configure it
     message(STATUS "Downloading (if required) and configuring yaml-cpp (version: ${MACE_BUILTIN_YAML_CPP_VERSION})")

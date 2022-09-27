@@ -45,17 +45,20 @@ FixNamespaceComments: true
 IncludeBlocks: Regroup
 IncludeCategories: 
   - Regex: '<.*>'
-    Priority: 8
+    Priority: 9
   - Regex: '"mpi.*\.h"'
-    Priority: 7
+    Priority: 8
     CaseSensitive: true
   - Regex: '"Eigen/.*"'
-    Priority: 6
+    Priority: 7
     CaseSensitive: true
   - Regex: '"argparse/.*"'
-    Priority: 5
+    Priority: 6
     CaseSensitive: true
   - Regex: '"yaml-cpp/.*"'
+    Priority: 5
+    CaseSensitive: true
+  - Regex: '"backward.hpp"'
     Priority: 4
     CaseSensitive: true
   - Regex: '"ROOT/.*"'

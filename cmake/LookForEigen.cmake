@@ -17,17 +17,18 @@ if(MACE_BUILTIN_EIGEN)
         message(NOTICE "***Notice: Provided MACE_BUILTIN_EIGEN_VERSION is ${MACE_BUILTIN_EIGEN_VERSION}, which is less than the requirement (${MACE_EIGEN_MINIMUM_REQUIRED}). Changing to ${MACE_EIGEN_MINIMUM_REQUIRED}")
         set(MACE_BUILTIN_EIGEN_VERSION ${MACE_EIGEN_MINIMUM_REQUIRED})
     endif()
-    # set download src and dest
-    include(FetchContent)
+    # set download dest and URL
     set(MACE_BUILTIN_EIGEN_SRC_DIR "${MACE_PROJECT_3RDPARTY_DIR}/eigen-${MACE_BUILTIN_EIGEN_VERSION}")
     set(MACE_BUILTIN_EIGEN_URL "https://gitlab.com/libeigen/eigen/-/archive/${MACE_BUILTIN_EIGEN_VERSION}/eigen-${MACE_BUILTIN_EIGEN_VERSION}.tar.bz2")
+    # reuse or download
+    include(FetchContent)
     if(EXISTS "${MACE_BUILTIN_EIGEN_SRC_DIR}/CMakeLists.txt")
-        message(STATUS "Reusing Eigen source ${MACE_BUILTIN_EIGEN_SRC_DIR}")
         FetchContent_Declare(Eigen3 SOURCE_DIR "${MACE_BUILTIN_EIGEN_SRC_DIR}")
+        message(STATUS "Reusing Eigen source ${MACE_BUILTIN_EIGEN_SRC_DIR}")
     else()
-        message(STATUS "Eigen will be downloaded from ${MACE_BUILTIN_EIGEN_URL} to ${MACE_BUILTIN_EIGEN_SRC_DIR}")
         FetchContent_Declare(Eigen3 SOURCE_DIR "${MACE_BUILTIN_EIGEN_SRC_DIR}"
                                     URL "${MACE_BUILTIN_EIGEN_URL}")
+        message(STATUS "Eigen will be downloaded from ${MACE_BUILTIN_EIGEN_URL} to ${MACE_BUILTIN_EIGEN_SRC_DIR}")
     endif()
     # configure it
     message(STATUS "Downloading (if required) and configuring Eigen (version: ${MACE_BUILTIN_EIGEN_VERSION})")
