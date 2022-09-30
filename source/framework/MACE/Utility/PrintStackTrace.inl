@@ -21,21 +21,16 @@ void PrintStackTrace(backward::StackTrace& stack, std::basic_ostream<AChar>& os)
            << ' ' << std::setw(sizeof(void*) * CHAR_BIT / 4 + 2) << std::setfill('0') << std::internal << trace.addr
            << " in "sv << (function.empty() ? "??"sv : function)
            << " from "sv << (binary.empty() ? "??"sv : binary);
-        if (source.filename.empty()) {
-            os << '\n';
-        } else {
-            constexpr unsigned int maxSnippetLines = 5;
-            if (const auto snippet = snippetFactory.get_snippet(source.filename, source.line, maxSnippetLines);
-                snippet.empty()) {
-                os << " at "sv << source.filename << ':' << source.line << '\n';
-            } else {
-                os << "\n    at "sv << source.filename << ':' << source.line << '\n';
-                const auto numberWidth = Math::GetDigits10(source.line + maxSnippetLines / 2);
-                for (auto&& [line, content] : snippet) {
-                    os << "    "sv << std::setw(numberWidth) << std::setfill(' ') << std::right << line << (line == source.line ? '>' : ' ') << '|' << content << '\n';
-                }
+        if (not source.filename.empty()) {
+            os << " at "sv << source.filename << ':' << source.line;
+            if (source.col > 0) { os << ':' << source.col; }
+            if (const auto snippet = snippetFactory.get_snippet(source.filename, source.line, 1);
+                not snippet.empty()) {
+                auto&& [line, content] = snippet.front();
+                os << "\n    "sv << std::setw(Math::GetDigits10(line)) << std::setfill(' ') << std::right << line << " |"sv << content;
             }
         }
+        os << '\n';
     }
     os << std::flush
        << std::setfill(prevFill)
