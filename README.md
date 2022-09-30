@@ -15,12 +15,15 @@
   - [SimMACE](#simmace)
   - [SimTarget](#simtarget)
   - [ReconTracks](#recontracks)
+- [Cite](#cite)
+  - [The offline software system](#the-offline-software-system)
+  - [The experiment](#the-experiment)
 
 # Introduction
 
 This software is designed for MACE experiment. It consists of several modules: Core, Reconstruction, Simulation, and Utility. The "Simulation" module implements the simulation part of the experiment based on Geant4, including the simulation of the whole experiment (SimMACE) and the simulation of each subsystem (SimEMCal, SimMCP, SimCDC, etc.). The "Reconstruction" module implements the event reconstruction of the experiment. The "Core" module includes three sub modules: "Datamodel", "Geometry" and "Field", which implement the event data model required by mace (and the interface required for expansion), detector geometry, and electromagnetic field, respectively. The "Utility" module provides some common practicle tools that may be used in programming.
 
-![SimMACE](document/picture/MACE_sim.png)
+![SimMACE](document/picture/SimMACE-20220930.png)
 
 # How to Install
 
@@ -76,16 +79,24 @@ Unless you use container (e.g. [Apptainer](http://apptainer.org/)), you may need
 
 After everything prepared, it's time to build.  
 
-MACE software follows a classical cmake & make procedure, as
+MACE software follows a classical cmake & build procedure, for example,
 
+(with [Ninja](https://ninja-build.org))
+```shell
+mkdir build
+cd build
+cmake -G Ninja <MACE_PROJECT_ROOT_DIR>
+ninja
+```
+or, (with [GNU Make](https://www.gnu.org/software/make/))
 ```shell
 mkdir build
 cd build
 cmake <MACE_PROJECT_ROOT_DIR>
-make
+make -j
 ```
 
-That's ok to use ninja or other make tools, respect to your preference.  
+That's ok to use other generators, respect to your preference.  
 
 # How to Run
 
@@ -122,3 +133,13 @@ Run as
 ```
 
 (Development in progess.)
+
+# Cite
+
+## The offline software system
+
+1. *En attendant Godot*...
+
+## The experiment
+
+1. [Snowmass2021 Whitepaper: Muonium to antimuonium conversion. In 2022 Snowmass Summer Study, 3 2022.](https://arxiv.org/pdf/2203.11406)
