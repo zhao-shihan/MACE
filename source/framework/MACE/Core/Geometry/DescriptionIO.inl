@@ -20,7 +20,7 @@ void DescriptionIO::Import(const std::filesystem::path& yamlFile) requires(not I
 }
 
 template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
-void DescriptionIO::Export(const std::filesystem::path& yamlFile, const std::string& fileComment) requires(not IsDescription<ADescriptionTuple>) {
+void DescriptionIO::Export(const std::filesystem::path& yamlFile, std::string_view fileComment) requires(not IsDescription<ADescriptionTuple>) {
     std::array<ObserverPtr<IDescription>, std::tuple_size_v<ADescriptionTuple>> descriptions;
     Utility::StaticForEach<0, descriptions.size(),
                            internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
@@ -28,7 +28,7 @@ void DescriptionIO::Export(const std::filesystem::path& yamlFile, const std::str
 }
 
 template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
-void DescriptionIO::Ixport(const std::filesystem::path& yamlFile, const std::string& fileComment) requires(not IsDescription<ADescriptionTuple>) {
+void DescriptionIO::Ixport(const std::filesystem::path& yamlFile, std::string_view fileComment) requires(not IsDescription<ADescriptionTuple>) {
     std::array<ObserverPtr<IDescription>, std::tuple_size_v<ADescriptionTuple>> descriptions;
     Utility::StaticForEach<0, descriptions.size(),
                            internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
@@ -38,7 +38,7 @@ void DescriptionIO::Ixport(const std::filesystem::path& yamlFile, const std::str
 template<typename... ArgsOfImport>
 void DescriptionIO::Import(const std::ranges::range auto& yamlText) requires
     std::convertible_to<typename std::remove_cvref_t<decltype(yamlText)>::value_type, std::string> {
-    auto yamlPath = std::filesystem::temp_directory_path() / "tmp_mace_geom.yaml";
+    auto yamlPath = std::filesystem::temp_directory_path() / "tmp_mace_geom.yaml"sv;
     if (Environment::MPIEnvironment::Available()) {
         Utility::MPIUtil::MakeMPIFilePathInPlace(yamlPath);
     }
@@ -67,7 +67,7 @@ void DescriptionIO::ImportImpl(const std::filesystem::path& yamlFile, std::range
     }
 }
 
-void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::string fileComment, const std::ranges::range auto& descriptions) {
+void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::range auto& descriptions) {
     std::vector<std::pair<std::string_view, ObserverPtr<IDescription>>> sortedDescriptions;
     sortedDescriptions.reserve(descriptions.size());
     for (auto&& description : descriptions) {
@@ -98,21 +98,21 @@ void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::strin
 
         if (not fileComment.empty()) {
             const auto firstLineFeed = fileComment.find_first_of('\n');
-            const auto begin = fileComment.cbegin();
-            const auto end = (firstLineFeed == std::string::npos) ? fileComment.cend() : std::next(begin, firstLineFeed);
-            yamlOut << "# " << std::string_view(begin, end) << "\n\n";
+            const auto begin = fileComment.begin();
+            const auto end = (firstLineFeed == std::string_view::npos) ? fileComment.end() : std::next(begin, firstLineFeed);
+            yamlOut << "# "sv << std::string_view(begin, end) << "\n\n"sv;
         }
         yamlOut << geomYaml << std::endl;
         yamlOut.close();
     } catch (const InvalidFile&) {
         MACE_ENVIRONMENT_CONTROLLED_OUT(Error, std::cout)
-            << "MACE::Core::Geometry::DescriptionIO::ExportImpl: Cannot open yaml file, export failed" << std::endl;
+            << "MACE::Core::Geometry::DescriptionIO::ExportImpl: Cannot open yaml file, export failed"sv << std::endl;
     }
 }
 
-void DescriptionIO::IxportImpl(const std::filesystem::path& yamlFile, std::string fileComment, const std::ranges::range auto& descriptions) {
+void DescriptionIO::IxportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::range auto& descriptions) {
     ImportImpl(yamlFile, descriptions);
-    ExportImpl(std::filesystem::path(yamlFile).replace_extension(".out.yaml"), fileComment, descriptions);
+    ExportImpl(std::filesystem::path(yamlFile).replace_extension(".out.yaml"sv), fileComment, descriptions);
 }
 
 } // namespace MACE::Core::Geometry
