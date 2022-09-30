@@ -18,9 +18,8 @@ namespace MACE::Math::Random {
 template<class P, class D>
 concept STDDistributionParameterOf = requires {
     // 1. They said: "D::param_type (aka P) satisfies CopyConstructible."
-    requires std::copy_constructible<P>;
     // 2. They said: "D::param_type (aka P) satisfies CopyAssignable."
-    requires Concept::CopyAssignable<P>;
+    requires std::copyable<P>;
     // 3. They said: "D::param_type (aka P) satisfies EqualityComparable."
     requires std::equality_comparable<P>;
     // 4. They said: "D::param_type (aka P) has a constructor taking identical
@@ -46,9 +45,8 @@ concept STDDistributionParameterOf = requires {
 template<class D>
 concept STDRandomNumberDistribution = requires(D d, const D x) {
     // 1. They said: "D satisfies CopyConstructible."
-    requires std::copy_constructible<D>;
     // 2. They said: "D satisfies CopyAssignable."
-    requires Concept::CopyAssignable<D>;
+    requires std::copyable<D>;
     // 3. They said: "D::result_type must be valid, it is an arithmetic type."
     typename D::result_type;
     requires Concept::Arithmetic<typename D::result_type>;
@@ -58,13 +56,11 @@ concept STDRandomNumberDistribution = requires(D d, const D x) {
     requires STDDistributionParameterOf<typename D::param_type, D>;
     // 5. They said: "D() must be valid and creates a distribution
     // indistinguishable from any other default-constructed D."
-    D();
+    requires std::default_initializable<D>;
     // 6. They said: "Given p, a (possibly const) value of type D::param_type,
     // D(p) must be valid and creates a distribution indistinguishable from D
     // constructed directly from the values used to construct p."
-    requires requires(const typename D::param_type p) {
-        D(p);
-    };
+    requires std::constructible_from<const typename D::param_type>;
     // 7. They said: "Given d, a value of D, expression d.reset() must be
     // valid and its value type is void. Expression d.reset() resets the
     // internal state of the distribution. The next call to operator() on
