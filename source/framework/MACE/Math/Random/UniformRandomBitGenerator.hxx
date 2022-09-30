@@ -6,15 +6,15 @@
 
 namespace MACE::Math::Random {
 
-template<class ADerived, std::unsigned_integral AResult>
-class UniformRandomBitGeneratorBase;
-
 /// @brief C++ named requirements: UniformRandomBitGenerator.
 /// See also: https://en.cppreference.com/w/cpp/named_req/UniformRandomBitGenerator
 template<class G>
 concept STDUniformRandomBitGenerator = std::uniform_random_bit_generator<G>;
 
-/// @brief Concept of random number generator.
+template<class ADerived, std::unsigned_integral AResult>
+class UniformRandomBitGeneratorBase;
+
+/// @brief Concept of uniform random bit generator.
 template<class G>
 concept UniformRandomBitGenerator = requires(G g) {
     // 1. C++ named requirements: UniformRandomBitGenerator.
@@ -32,14 +32,7 @@ concept UniformRandomBitGenerator = requires(G g) {
     // 3. Extra requirements.
     requires std::derived_from<G, UniformRandomBitGeneratorBase<G, typename G::ResultType>>;
     requires std::is_final_v<G>;
-    requires std::equality_comparable<G>;
-};
-
-/// @brief Concept of seedable random number generator.
-template<class G>
-concept SeedableUniformRandomBitGenerator = requires(G& g, int&& seed) {
-    requires UniformRandomBitGenerator<G>;
-    g.Seed(seed);
+    requires std::default_initializable<G>;
 };
 
 } // namespace MACE::Math::Random
