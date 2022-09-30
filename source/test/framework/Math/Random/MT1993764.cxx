@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <array>
+#include <iomanip>
 #include <iostream>
 #include <numeric>
 #include <random>
@@ -81,7 +82,7 @@ int main() {
         v2d += delta2d;
     }
     time = timer.MillisecondsElapsed();
-    std::cout << "    std::mt19937_64 : " << time << " ms (last displacement: " << v2d << ')' << std::endl;
+    std::cout << "    std::mt19937_64 : " << time << " ms (last displacement: " << std::setprecision(18) << v2d << std::setprecision(6) << ')' << std::endl;
 
     v2d = {0, 0};
     for (int i = 0; i < 1'000'000; ++i) {
@@ -96,7 +97,7 @@ int main() {
         v2d += delta2d;
     }
     time = timer.MillisecondsElapsed();
-    std::cout << "    MACE MT19937-64 : " << time << " ms (last displacement: " << v2d << ')' << std::endl;
+    std::cout << "    MACE MT19937-64 : " << time << " ms (last displacement: " << std::setprecision(18) << v2d << std::setprecision(6) << ')' << std::endl;
 
     std::cout << "3D random walk, 10 million steps:" << std::endl;
     Eigen::RowVector3d v3d = {0, 0, 0};
@@ -116,7 +117,7 @@ int main() {
         v3d += delta3d;
     }
     time = timer.MillisecondsElapsed();
-    std::cout << "    std::mt19937_64 : " << time << " ms (last displacement: " << v3d << ')' << std::endl;
+    std::cout << "    std::mt19937_64 : " << time << " ms (last displacement: " << std::setprecision(18) << v3d << std::setprecision(6) << ')' << std::endl;
 
     v3d = {0, 0, 0};
     for (int i = 0; i < 1'000'000; ++i) {
@@ -133,7 +134,7 @@ int main() {
         v3d += delta3d;
     }
     time = timer.MillisecondsElapsed();
-    std::cout << "    MACE MT19937-64 : " << time << " ms (last displacement: " << v3d << ')' << std::endl;
+    std::cout << "    MACE MT19937-64 : " << time << " ms (last displacement: " << std::setprecision(18) << v3d << std::setprecision(6) << ')' << std::endl;
 
     std::cout << "4D random walk, 10 million steps:" << std::endl;
     Eigen::RowVector4d v4d = {0, 0, 0, 0};
@@ -155,7 +156,7 @@ int main() {
         v4d += delta4d;
     }
     time = timer.MillisecondsElapsed();
-    std::cout << "    std::mt19937_64 : " << time << " ms (last displacement: " << v4d << ')' << std::endl;
+    std::cout << "    std::mt19937_64 : " << time << " ms (last displacement: " << std::setprecision(18) << v4d << std::setprecision(6) << ')' << std::endl;
 
     v4d = {0, 0, 0, 0};
     for (int i = 0; i < 1'000'000; ++i) {
@@ -174,7 +175,7 @@ int main() {
         v4d += delta4d;
     }
     time = timer.MillisecondsElapsed();
-    std::cout << "    MACE MT19937-64 : " << time << " ms (last displacement: " << v4d << ')' << std::endl;
+    std::cout << "    MACE MT19937-64 : " << time << " ms (last displacement: " << std::setprecision(18) << v4d << std::setprecision(6) << ')' << std::endl;
 
     return 0;
 }
