@@ -3,8 +3,7 @@
 #include "MACE/SimTarget/Action/DetectorConstruction.hxx"
 #include "MACE/SimTarget/Action/PhysicsList.hxx"
 #include "MACE/SimTarget/RunManager.hxx"
-
-#include "Randomize.hh"
+#include "MACE/CLHEPX/Random/PCG32Engine.hxx"
 
 #include <array>
 
@@ -12,8 +11,8 @@ int main(int argc, char* argv[]) {
     MACE::Environment::CLI::Geant4CLI cli;
     MACE::Environment::MPIEnvironment mpiEnvironment(argc, argv, cli);
 
-    CLHEP::MTwistEngine randEng(4357);
-    G4Random::setTheEngine(&randEng);
+    MACE::CLHEPX::Random::PCG32Engine randomEngine(114514);
+    G4Random::setTheEngine(&randomEngine);
 
     // DetectorConstruction, PhysicsList, ActionInitialization are instantiated in RunManager constructor.
     MACE::SimTarget::RunManager runManager;
