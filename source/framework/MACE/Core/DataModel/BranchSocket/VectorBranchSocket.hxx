@@ -15,16 +15,16 @@ namespace MACE::Core::DataModel::BranchSocket {
 
 namespace Eigen34 = Compatibility::Eigen34;
 
-template<Concept::ArithmeticExcludeBoolChar T, int N>
+template<Concept::Arithmetic T, int N>
 class VectorBranchSocket final : public BranchSocketBase<VectorBranchSocket<T, N>, Eigen34::Vector<T, N>> {
 public:
     VectorBranchSocket(const std::string& branchName, const std::array<std::string, N>& leafNames, const std::array<T, N>& defaultValues);
 
     const auto& Value() const { return fVector; }
-    template<Concept::ArithmeticExcludeBoolChar U>
+    template<Concept::Arithmetic U>
     auto Value() const { return fVector.template cast<U>(); }
     void Value(auto&& vector) { Utility::AssignVector<T, N>(fVector, std::forward<decltype(vector)>(vector)); }
-    template<Concept::ArithmeticExcludeBoolChar U>
+    template<Concept::Arithmetic U>
     void Value(const Eigen34::Vector<U, N>& vector) { fVector = vector.template cast<T>(); }
 
     void CreateBranch(TTree& tree) { tree.Branch(this->fBranchName.c_str(), fVector.data(), fLeafList.c_str()); }
