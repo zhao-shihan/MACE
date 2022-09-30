@@ -24,18 +24,17 @@ extern "C" {
     std::cerr << std::endl;
     switch (sig) {
     case SIGINT:
-        std::clog << " ***** INTERRUPT (SIGINT) received\n"sv;
+        std::clog << "***** INTERRUPT (SIGINT) received\n"sv;
         break;
     case SIGTERM:
-        std::clog << " ***** TERMINATE (SIGTERM) received\n"sv;
+        std::clog << "***** TERMINATE (SIGTERM) received\n"sv;
         break;
     }
     if (MPIEnvironment::Available()) {
         const auto& mpi = MPIEnvironment::Instance();
-        std::clog << " ***** on rank "sv << mpi.GetWorldRank() << " (host: "sv << mpi.GetNodeName() << ")\n"sv;
+        std::clog << "***** on rank "sv << mpi.GetWorldRank() << " (host: "sv << mpi.GetNodeName() << ")\n"sv;
     }
-    std::clog << " ***** at "sv << std::put_time(std::localtime(&now), "%FT%T%z") << '\n'
-              << std::endl;
+    std::clog << "***** at "sv << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
     backward::StackTrace stack;
     stack.load_here(64);
     Utility::PrintStackTrace(stack);
@@ -52,13 +51,12 @@ extern "C" {
     std::signal(SIGABRT, SIG_DFL);
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     std::cerr << std::endl;
-    std::clog << " ***** ABORT (SIGABRT) received\n"sv;
+    std::clog << "***** ABORT (SIGABRT) received\n"sv;
     if (MPIEnvironment::Available()) {
         const auto& mpi = MPIEnvironment::Instance();
-        std::clog << " ***** on rank "sv << mpi.GetWorldRank() << " (host: "sv << mpi.GetNodeName() << ")\n"sv;
+        std::clog << "***** on rank "sv << mpi.GetWorldRank() << " (host: "sv << mpi.GetNodeName() << ")\n"sv;
     }
-    std::clog << " ***** at "sv << std::put_time(std::localtime(&now), "%FT%T%z") << '\n'
-              << std::endl;
+    std::clog << "***** at "sv << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
     backward::StackTrace stack;
     stack.load_here(64);
     Utility::PrintStackTrace(stack);
@@ -73,21 +71,20 @@ extern "C" {
     std::cerr << std::endl;
     switch (sig) {
     case SIGFPE:
-        std::clog << " ***** ERRONEOUS ARITHMETIC OPERATION (SIGFPE) received\n"sv;
+        std::clog << "***** ERRONEOUS ARITHMETIC OPERATION (SIGFPE) received\n"sv;
         break;
     case SIGILL:
-        std::clog << " ***** ILLEGAL INSTRUCTION (SIGILL) received\n"sv;
+        std::clog << "***** ILLEGAL INSTRUCTION (SIGILL) received\n"sv;
         break;
     case SIGSEGV:
-        std::clog << " ***** SEGMENTATION VIOLATION (SIGSEGV) received\n"sv;
+        std::clog << "***** SEGMENTATION VIOLATION (SIGSEGV) received\n"sv;
         break;
     }
     if (MPIEnvironment::Available()) {
         const auto& mpi = MPIEnvironment::Instance();
-        std::clog << " ***** on rank "sv << mpi.GetWorldRank() << " (host: "sv << mpi.GetNodeName() << ")\n"sv;
+        std::clog << "***** on rank "sv << mpi.GetWorldRank() << " (host: "sv << mpi.GetNodeName() << ")\n"sv;
     }
-    std::clog << " ***** at "sv << std::put_time(std::localtime(&now), "%FT%T%z") << '\n'
-              << std::endl;
+    std::clog << "***** at "sv << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
     backward::StackTrace stack;
     stack.load_here(64);
     Utility::PrintStackTrace(stack);
