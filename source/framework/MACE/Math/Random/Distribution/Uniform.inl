@@ -1,29 +1,51 @@
 namespace MACE::Math::Random::Distribution {
 
-template<std::floating_point T>
+template<Concept::Arithmetic T>
 constexpr UniformParameter<T>::UniformParameter() :
-    DistributionParameterBase<UniformParameter<T>, Uniform<T>>(),
-    fInfimum(0),
-    fSupremum(1) {}
+    UniformParameter(0, 1) {}
 
-template<std::floating_point T>
+template<Concept::Arithmetic T>
 constexpr UniformParameter<T>::UniformParameter(T inf, T sup) :
     DistributionParameterBase<UniformParameter<T>, Uniform<T>>(),
     fInfimum(inf),
     fSupremum(sup) {}
 
-template<std::floating_point T>
-constexpr Uniform<T>::Uniform(T inf, T sup) :
+namespace internal {
+
+template<Concept::Arithmetic T>
+constexpr UniformBase<T>::UniformBase(T inf, T sup) :
     RandomNumberDistributionBase<Uniform<T>, T, UniformParameter<T>>(),
     fParameter(inf, sup) {}
 
-template<std::floating_point T>
-constexpr Uniform<T>::Uniform(const UniformParameter<T>& p) :
+template<Concept::Arithmetic T>
+constexpr UniformBase<T>::UniformBase(const UniformParameter<T>& p) :
     RandomNumberDistributionBase<Uniform<T>, T, UniformParameter<T>>(),
     fParameter(p) {}
 
+template<Concept::Character AChar, Concept::Arithmetic T>
+auto operator<<(std::basic_ostream<AChar>& os, const UniformBase<T>& u) -> decltype(os) {
+    if constexpr (std::integral<T>) {
+        return os << u.Infimum() << ' ' << u.Supremum();
+    } else {
+        const auto oldPrecision = os.precision(std::numeric_limits<T>::max_digits10);
+        return os << u.Infimum() << ' ' << u.Supremum() << std::setprecision(oldPrecision);
+    }
+}
+
+template<Concept::Character AChar, Concept::Arithmetic T>
+auto operator>>(std::basic_istream<AChar>& is, UniformBase<T>& u) -> decltype(is) {
+    T inf;
+    T sup;
+    is >> inf >> sup;
+    u.Infimum(inf);
+    u.Supremum(sup);
+    return is;
+}
+
+} // namespace internal
+
 template<std::floating_point T>
-constexpr T Uniform<T>::operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p) {
+constexpr T UniformReal<T>::operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p) {
     const auto inf = p.Infimum();
     const auto sup = p.Supremum();
     T x;
@@ -35,22 +57,10 @@ constexpr T Uniform<T>::operator()(UniformRandomBitGenerator auto& g, const Unif
     return x;
 }
 
-template<Concept::Character AChar, std::floating_point T>
-auto operator<<(std::basic_ostream<AChar>& os, const Uniform<T>& d) -> decltype(os) {
-    const auto oldPrecision = os.precision(std::numeric_limits<T>::max_digits10);
-    os << d.Infimum() << ' ' << d.Supremum();
-    os.precision(oldPrecision);
-    return os;
-}
-
-template<Concept::Character AChar, std::floating_point T>
-auto operator>>(std::basic_istream<AChar>& is, Uniform<T>& d) -> decltype(is) {
-    T inf;
-    T sup;
-    is >> inf >> ' ' >> sup;
-    d.Infimum(inf);
-    d.Supremum(sup);
-    return is;
+template<std::integral T>
+constexpr T UniformInteger<T>::operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p) {
+    // TODO: a better implementation
+    return std::uniform_int_distribution<T>(p.Infimum(), p.Supremum())(g);
 }
 
 } // namespace MACE::Math::Random::Distribution
