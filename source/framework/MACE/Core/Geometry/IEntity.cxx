@@ -19,16 +19,17 @@ IEntity::IEntity() :
     fPhysicalVolumes(0) {}
 
 void IEntity::AddDaughter(const std::shared_ptr<IEntity>& daughter) {
-    if (daughter->fMother) {
-        std::cerr << "Error: Entity " << daughter << " already registered to " << daughter->fMother << " as a daughter,\n"
-                  << "\tbut now trying again to register to " << this << " as a daughter. Please check the geometry hierarchy." << std::endl;
+    if (daughter->fMother != nullptr) {
+        std::cerr << "Error: Entity " << daughter << " already registered to " << daughter->fMother
+                  << " as a daughter, but now trying again to register to " << this
+                  << " as a daughter. Please check the geometry hierarchy.\n";
         return;
     }
     try {
         daughter->fMother = shared_from_this();
     } catch (const std::bad_weak_ptr& exception) {
         std::cerr << "Exception from (...)::IEntity::AddDaughter(...): " << exception.what() << '\n'
-                  << "Notice: Objects of IEntity derivations should be managed by std::shared_ptr<...>!" << std::endl;
+                  << "  Notice: Objects of IEntity derivations should be managed by std::shared_ptr\n";
         throw exception;
     }
     fDaughters.emplace_back(daughter);
