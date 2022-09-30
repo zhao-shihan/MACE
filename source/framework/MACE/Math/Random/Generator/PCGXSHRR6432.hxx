@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Math/Parity.hxx"
-#include "MACE/Math/Random/UniformRandomBitGeneratorBase.hxx"
+#include "MACE/Math/Random/UniformPseudoRandomBitGeneratorBase.hxx"
 
 #include <bit>
 #include <cstdint>
@@ -9,7 +9,7 @@
 
 namespace MACE::Math::Random::Generator {
 
-class PCGXSHRR6432 final : public UniformRandomBitGeneratorBase<PCGXSHRR6432, std::uint32_t> {
+class PCGXSHRR6432 final : public UniformPseudoRandomBitGeneratorBase<PCGXSHRR6432, std::uint32_t> {
 public:
     using StateType = std::uint64_t;
 
@@ -27,6 +27,11 @@ public:
 
     static constexpr StateType Multipiler() { return 6364136223846793005ULL; }
     static constexpr StateType Increment() { return 0xda3e39cb94b95bdbULL; }
+
+    template<Concept::Character AChar>
+    friend auto& operator<<(std::basic_ostream<AChar>& os, const PCGXSHRR6432& self) { return os << self.fState; }
+    template<Concept::Character AChar>
+    friend auto& operator>>(std::basic_istream<AChar>& is, PCGXSHRR6432& self) { return is >> self.fState; }
 
 private:
     StateType fState;

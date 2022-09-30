@@ -1,11 +1,11 @@
 namespace MACE::Math::Random::Generator {
 
 constexpr PCGXSHRR6432::PCGXSHRR6432() :
-    UniformRandomBitGeneratorBase(),
+    UniformPseudoRandomBitGeneratorBase(),
     fState(0x853c49e6748fea9bULL) {}
 
 constexpr PCGXSHRR6432::PCGXSHRR6432(PCGXSHRR6432::StateType seed) :
-    UniformRandomBitGeneratorBase(),
+    UniformPseudoRandomBitGeneratorBase(),
     fState() {
     Seed(seed);
 }
