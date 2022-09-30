@@ -112,7 +112,7 @@ int main(int argc, char* argv[]) {
             const auto positionErr = physicsTrack.GetVertexPosition() - error.GetVertexPosition();
             const auto energyErr = physicsTrack.GetVertexEnergy() - error.GetVertexEnergy();
             const auto momentumErr = physicsTrack.GetVertexMomentum() - error.GetVertexMomentum();
-            const auto particleErr = error.GetParticle() + '>' + physicsTrack.GetParticle();
+            const auto particleErr = error.GetParticle() + ">" + physicsTrack.GetParticle();
             error.SetVertexTime(timeErr);
             error.SetVertexPosition(positionErr);
             error.SetVertexEnergy(energyErr);

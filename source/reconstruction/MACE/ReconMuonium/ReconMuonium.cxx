@@ -18,6 +18,7 @@
 #include "TH2F.h"
 
 #include <filesystem>
+#include <string>
 
 using namespace MACE::Core::DataModel;
 using namespace MACE::Core::DataModel::CDCTrackOperation;
@@ -193,12 +194,12 @@ int main(int argc, char* argv[]) {
                     possibleVertex->SetDCA(track->Radius() - (track->GetCenter() - CPAMCP).norm());
                     possibleVertex->SetVertexEnergy(physTrack.GetVertexEnergy());
                     possibleVertex->SetVertexMomentum(physTrack.GetVertexMomentum());
-                    const auto particles = emCalCoinCount + ("y/" + physTrack.GetParticle());
+                    const auto particles = std::to_string(emCalCoinCount) + "y/" + physTrack.GetParticle();
                     possibleVertex->SetParticles(particles);
 
                     possibleVertex->SetTrueVertexTime(mcpHit->GetVertexTime());
                     possibleVertex->SetTrueVertexPosition(mcpHit->GetVertexPosition());
-                    const auto trueParticles = mcpHit->GetParticle() + '/' + physTrack.GetParticle();
+                    const auto trueParticles = mcpHit->GetParticle() + "/" + physTrack.GetParticle();
                     possibleVertex->SetTrueParticles(trueParticles);
                 }
             }
