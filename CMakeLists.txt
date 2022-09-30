@@ -35,7 +35,7 @@ option(MACE_BUILTIN_YAML_CPP "Use built-in yaml-cpp (network or pre-downloaded s
 option(MACE_SIGNAL_HANDLER "Build with signal handling. Signal handlers are registered at the construction of environment." ON)
 option(MACE_USE_G4GDML "Build with G4gdml support. This option will be automatically turned OFF if Geant4::G4gdml is not found. Once turned off, you are not able to export geometry (to ROOT or other)." ON)
 option(MACE_USE_G4VIS "Build Geant4 applications of MACE with available visualization. Note that whether Geant4 supports visualization is determined by options with which Geant4 is built. MACE does not, and cannot, affect whether G4 enables visualization." ON)
-option(MACE_USE_STATIC_G4 "Attempt to link Geant4 static libraries if available, by finding the \"static\" component of G4. There may be some performance gains if successful (depending on the compiler options), but some other (originally) possible dynamic linkages becomes impossible. If cannot find \"static\", dynamic libraries will be linked." OFF)
+option(MACE_USE_STATIC_G4 "Attempt to link Geant4 static libraries if available, by finding the \"static\" component of G4. There may be some performance gains if successful (depending on the compiler options), but some other (originally) possible dynamic linkages becomes impossible. If cannot find \"static\", dynamic libraries will be linked." ON)
 
 # Advance
 # Options (ON/OFF)
