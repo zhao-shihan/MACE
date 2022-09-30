@@ -13,7 +13,7 @@ namespace MACE::Concept {
 template<class T, typename F, std::size_t N>
 concept WeakNumericVector = requires {
     requires(N > 0);
-    requires ArithmeticExcludeBool<F>;
+    requires Arithmetic<F>;
     requires WeaklySubscriptableToMaybeConst<T, F>;
 };
 
