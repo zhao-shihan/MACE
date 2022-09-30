@@ -9,7 +9,8 @@ endif()
 
 include(CMakeDependentOption)
 
-project(MACE_PROJECT)
+project(MACE VERSION 0.0.0
+             LANGUAGES C CXX)
 
 # =============================================================================
 # Variables
