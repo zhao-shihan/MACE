@@ -36,7 +36,7 @@ if(MACE_BUILTIN_BACKWARD)
     message(STATUS "Downloading (if required) and configuring backward-cpp (version: ${MACE_BUILTIN_BACKWARD_VERSION}) - done")
     # check download
     if(NOT EXISTS "${MACE_BUILTIN_BACKWARD_SRC_DIR}/CMakeLists.txt")
-        file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/Backward-subbuild")
+        file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/backward-subbuild")
         message(FATAL_ERROR "It seems that the download of backward-cpp is not successful. You can try to run cmake again, or manually download backward-cpp from ${MACE_BUILTIN_BACKWARD_URL} and extract it to ${MACE_PROJECT_3RDPARTY_DIR} (and keep the directory structure). If the error persists, you can try to clean the build tree and restart the build.")
     endif()
 endif()

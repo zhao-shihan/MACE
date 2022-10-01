@@ -39,10 +39,6 @@ if(MACE_BUILTIN_YAML_CPP)
         file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/yaml-cpp-subbuild")
         message(FATAL_ERROR "It seems that the download of yaml-cpp is not successful. You can try to run cmake again, or manually download yaml-cpp from ${MACE_BUILTIN_YAML_CPP_URL} and extract it to ${MACE_PROJECT_3RDPARTY_DIR} (and keep the directory structure). If the error persists, you can try to clean the build tree and restart the build.")
     endif()
-    # trash
-    unset(MACE_BUILTIN_YAML_CPP_CMAKE_ARGS)
-    unset(MACE_BUILTIN_YAML_CPP_URL)
-    unset(MACE_BUILTIN_YAML_CPP_SRC_DIR)
 endif()
 
 if(NOT MACE_BUILTIN_YAML_CPP)
