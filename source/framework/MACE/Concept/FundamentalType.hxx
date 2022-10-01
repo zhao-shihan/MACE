@@ -6,6 +6,10 @@
 namespace MACE::Concept {
 
 template<typename T>
+concept Fundamental =
+    std::is_fundamental_v<T>;
+
+template<typename T>
 concept Character =
     std::same_as<T, signed char> or
     std::same_as<T, unsigned char> or

@@ -19,9 +19,7 @@ void BasicEnvironment::PrintStartupMessageBody(int argc, char* argv[]) const {
     std::error_code cwdError;
     const auto exe = std::filesystem::path(argv[0]).filename().generic_string();
     auto cwd = std::filesystem::current_path(cwdError).generic_string();
-    if (cwdError) {
-        cwd.assign("<Error getting current working directory>");
-    }
+    if (cwdError) { cwd = "<Error getting current working directory>"; }
     if (fVerboseLevel >= VerboseLevel::Error) {
         std::cout << " ARMOR framework (MACE offline software system) " << MACE_VERSION_STRING << '\n'
                   << " Copyright (c) 2020-2022 MACE software working group \n"
@@ -39,7 +37,6 @@ void BasicEnvironment::PrintStartupMessageBody(int argc, char* argv[]) const {
             std::cout << "  argv[" << i << "]: " << argv[i] << '\n';
         }
     }
-    std::cout << std::flush;
 }
 
 } // namespace MACE::Environment

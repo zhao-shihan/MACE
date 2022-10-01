@@ -10,10 +10,9 @@ void PrintStackTrace(backward::StackTrace& stack, std::basic_ostream<AChar>& os)
     const auto prevFlag = os.flags();
     const auto prevFill = os.fill();
     os << "Stack trace (most recent call last):\n"sv;
-    backward::ResolvedTrace trace;
     backward::SnippetFactory snippetFactory;
     for (int frame = static_cast<int>(stack.size()) - 1; frame >= 0; --frame) {
-        trace = resolver.resolve(stack[frame]);
+        const auto trace = resolver.resolve(stack[frame]);
         const auto& function = trace.object_function;
         const auto& binary = trace.object_filename;
         const auto& source = trace.source;
