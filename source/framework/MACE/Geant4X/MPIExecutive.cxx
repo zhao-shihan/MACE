@@ -7,9 +7,9 @@ namespace MACE::Geant4X {
 
 void MPIExecutive::CheckSequential() const {
     const auto& mpiEnv = Environment::MPIEnvironment::Instance();
-    if (mpiEnv.IsParallel()) {
+    if (mpiEnv.Parallel()) {
         std::string where("MACE::Geant4X::MPIExecutive::CheckSequential");
-        if (mpiEnv.IsMaster()) {
+        if (mpiEnv.AtWorldMaster()) {
             G4Exception(where.c_str(),
                         "InteractiveSessionMustBeSequential",
                         JustWarning,

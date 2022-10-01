@@ -17,22 +17,22 @@ void MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extens
     }
 
     if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
-        mpiEnv.IsParallel()) {
+        mpiEnv.Parallel()) {
         // root directory
         if (mpiEnv.OnCluster()) {
-            path /= mpiEnv.GetNodeName();
+            path /= mpiEnv.LocalHostName();
         }
         // create root directory
-        if (mpiEnv.IsNodeMaster()) {
+        if (mpiEnv.AtLocalMaster()) {
             std::filesystem::create_directories(path);
         }
         // construct full path
         path /= fileName.concat(".rank")
-                    .concat(std::to_string(mpiEnv.GetWorldRank()))
+                    .concat(std::to_string(mpiEnv.WorldCommRank()))
                     .concat(extension);
         // wait for create_directories
         MACE_CHECKED_MPI_CALL(MPI_Barrier,
-                              mpiEnv.GetNodeComm());
+                              mpiEnv.LocalComm());
     } else {
         path.concat(extension);
     }

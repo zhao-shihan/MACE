@@ -27,7 +27,7 @@ namespace internal {
 
 FlipG4cout::FlipG4cout() {
     if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
-        mpiEnv.IsWorker() or
+        mpiEnv.AtWorldWorker() or
         mpiEnv.GetVerboseLevel() == Environment::VerboseLevel::Quiet) {
         static ObserverPtr<std::streambuf> gG4coutBufExchanger = nullptr;
         gG4coutBufExchanger = G4cout.rdbuf(gG4coutBufExchanger);
@@ -67,7 +67,7 @@ void MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect)
         Utility::MPIUtil::MPIReSeedCLHEPRandom(G4Random::getTheEngine());
         fTotalNumberOfEventsToBeProcessed = nEvent;
         const auto& mpiEnv = Environment::MPIEnvironment::Instance();
-        fEventIDRange = Utility::MPIUtil::AllocMPIJobsJobWise(0, nEvent, mpiEnv.GetWorldSize(), mpiEnv.GetWorldRank());
+        fEventIDRange = Utility::MPIUtil::AllocMPIJobsJobWise(0, nEvent, mpiEnv.WorldCommSize(), mpiEnv.WorldCommRank());
         G4RunManager::BeamOn(fEventIDRange.count, macroFile, nSelect);
     }
 }
@@ -133,8 +133,8 @@ void MPIRunManager::RunTermination() {
 
 G4bool MPIRunManager::CheckNEventIsAtLeastCommSize(G4int nEvent) const {
     if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
-        nEvent < mpiEnv.GetWorldSize()) {
-        if (mpiEnv.IsMaster()) {
+        nEvent < mpiEnv.WorldCommSize()) {
+        if (mpiEnv.AtWorldMaster()) {
             G4Exception("MACE::Utility::G4Util::MPIRunManager::CheckNEventIsAtLeastCommSize(...)",
                         "TooFewNEventOrTooMuchRank",
                         JustWarning,
@@ -160,20 +160,20 @@ void MPIRunManager::EventEndReport(G4int event) const {
     const auto progress = 100 * static_cast<float>(numberOfEventProcessed) / numberOfEventToBeProcessed;
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
-    G4cout << std::put_time(std::localtime(&now), "%FT%T%z") << " > Event "sv << event << " finished in rank "sv << mpiEnv.GetWorldRank() << '\n'
+    G4cout << std::put_time(std::localtime(&now), "%FT%T%z") << " > Event "sv << event << " finished in rank "sv << mpiEnv.WorldCommRank() << '\n'
            << "  ETA: "sv << eta << " +/- "sv << etaError << "  Progress of the rank: "sv << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " ("sv << std::fixed << progress << std::defaultfloat << "%)"sv << G4endl;
     G4cout.precision(precisionOfG4cout);
 }
 
 void MPIRunManager::RunEndReport(G4int run) const {
     const auto& mpiEnv = Environment::MPIEnvironment::Instance();
-    if (mpiEnv.IsWorker() or mpiEnv.GetVerboseLevel() < Environment::VerboseLevel::Error) { return; }
+    if (mpiEnv.AtWorldWorker() or mpiEnv.GetVerboseLevel() < Environment::VerboseLevel::Error) { return; }
     const auto wallTimeDHMS = FormatSecondToDHMS(std::lround(fRunWallTime));
     const auto beginTime = std::chrono::system_clock::to_time_t(fRunBeginSystemTime);
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
     G4cout << "-------------------------------> Run Finished <-------------------------------\n"sv
-           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run "sv << run << " finished on "sv << mpiEnv.GetWorldSize() << " ranks\n"sv
+           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run "sv << run << " finished on "sv << mpiEnv.WorldCommSize() << " ranks\n"sv
            << "  Start time: "sv << std::put_time(std::localtime(&beginTime), "%FT%T%z") << '\n'
            << "   Wall time: "sv << std::fixed << fRunWallTime << std::defaultfloat << " seconds"sv;
     if (fRunWallTime > 60) { G4cout << " ("sv << wallTimeDHMS << ')'; }
@@ -185,10 +185,10 @@ void MPIRunManager::RunEndReport(G4int run) const {
 
 void MPIRunManager::RunBeginReport(G4int run) {
     const auto& mpiEnv = Environment::MPIEnvironment::Instance();
-    if (mpiEnv.IsWorker() or mpiEnv.GetVerboseLevel() < Environment::VerboseLevel::Error) { return; }
+    if (mpiEnv.AtWorldWorker() or mpiEnv.GetVerboseLevel() < Environment::VerboseLevel::Error) { return; }
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     G4cout << "--------------------------------> Run Starts <--------------------------------\n"sv
-           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run "sv << run << " starts on "sv << mpiEnv.GetWorldSize() << " ranks\n"sv
+           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run "sv << run << " starts on "sv << mpiEnv.WorldCommSize() << " ranks\n"sv
            << "--------------------------------> Run Starts <--------------------------------"sv << G4endl;
 }
 

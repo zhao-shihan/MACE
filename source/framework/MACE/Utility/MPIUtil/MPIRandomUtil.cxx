@@ -15,15 +15,15 @@ namespace MACE::Utility::MPIUtil {
 void MPIReSeedCLHEPRandom(ObserverPtr<CLHEP::HepRandomEngine> randEng) {
     const auto& mpiEnv = Environment::MPIEnvironment::Instance();
 
-    if (mpiEnv.IsSequential()) { return; }
+    if (mpiEnv.Sequential()) { return; }
 
     std::vector<long> seedSend;
     long seedRecv = 0;
 
-    if (mpiEnv.IsMaster()) {
+    if (mpiEnv.AtWorldMaster()) {
         static const auto seedMaxLD = std::nextafter(
             static_cast<long double>(std::numeric_limits<long>::max()), -1.0L);
-        const std::size_t worldSize = mpiEnv.GetWorldSize();
+        const std::size_t worldSize = mpiEnv.WorldCommSize();
         std::set<long> uniqueSeeds;
         do {
             long newSeed;

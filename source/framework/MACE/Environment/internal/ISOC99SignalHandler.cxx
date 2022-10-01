@@ -32,7 +32,7 @@ extern "C" {
     }
     if (MPIEnvironment::Available()) {
         const auto& mpi = MPIEnvironment::Instance();
-        std::clog << "***** on rank "sv << mpi.GetWorldRank() << " (host: "sv << mpi.GetNodeName() << ")\n"sv;
+        std::clog << "***** on rank "sv << mpi.WorldCommRank() << " (host: "sv << mpi.LocalHostName() << ")\n"sv;
     }
     std::clog << "***** at "sv << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
     backward::StackTrace stack;
@@ -54,7 +54,7 @@ extern "C" {
     std::clog << "***** ABORT (SIGABRT) received\n"sv;
     if (MPIEnvironment::Available()) {
         const auto& mpi = MPIEnvironment::Instance();
-        std::clog << "***** on rank "sv << mpi.GetWorldRank() << " (host: "sv << mpi.GetNodeName() << ")\n"sv;
+        std::clog << "***** on rank "sv << mpi.WorldCommRank() << " (host: "sv << mpi.LocalHostName() << ")\n"sv;
     }
     std::clog << "***** at "sv << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
     backward::StackTrace stack;
@@ -82,7 +82,7 @@ extern "C" {
     }
     if (MPIEnvironment::Available()) {
         const auto& mpi = MPIEnvironment::Instance();
-        std::clog << "***** on rank "sv << mpi.GetWorldRank() << " (host: "sv << mpi.GetNodeName() << ")\n"sv;
+        std::clog << "***** on rank "sv << mpi.WorldCommRank() << " (host: "sv << mpi.LocalHostName() << ")\n"sv;
     }
     std::clog << "***** at "sv << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
     backward::StackTrace stack;

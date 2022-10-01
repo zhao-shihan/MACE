@@ -23,47 +23,54 @@ public:
     static auto Finalized() { return fgFinalized; }
     static auto Available() { return Initialized() and not Finalized(); }
 
-    const auto& GetWorldRank() const { return fWorldRank; }
-    const auto& GetWorldSize() const { return fWorldSize; }
-    auto IsMaster() const { return GetWorldRank() == 0; }
-    auto IsWorker() const { return GetWorldRank() > 0; }
-    auto IsSequential() const { return GetWorldSize() == 1; }
-    auto IsParallel() const { return GetWorldSize() > 1; }
+    const auto& WorldCommSize() const { return fWorldCommSize; }
+    const auto& WorldCommRank() const { return fWorldCommRank; }
+    auto AtWorldMaster() const { return WorldCommRank() == 0; }
+    auto AtWorldWorker() const { return WorldCommRank() > 0; }
+    auto Sequential() const { return WorldCommSize() == 1; }
+    auto Parallel() const { return WorldCommSize() > 1; }
 
-    const auto& GetNodeInfoList() const { return fNodeInfoList; }
-    const auto& GetNodeInfo(std::size_t id) const { return fNodeInfoList[id]; }
-    const auto& GetNodeSize(std::size_t id) const { return GetNodeInfo(id).first; }
-    const auto& GetNodeName(std::size_t id) const { return GetNodeInfo(id).second; }
-    const auto& GetNodeInfo() const { return GetNodeInfo(fNodeId); }
-    const auto& GetNodeName() const { return GetNodeName(fNodeId); }
-    const auto& GetNodeId() const { return fNodeId; }
-    auto GetNumberOfNodes() const { return GetNodeInfoList().size(); }
-    auto OnSingleNode() const { return GetNumberOfNodes() == 1; }
-    auto OnCluster() const { return GetNumberOfNodes() > 1; }
+    const auto& LocalComm() const { return fLocalComm; }
+    const auto& LocalCommSize() const { return fLocalCommSize; }
+    const auto& LocalCommRank() const { return fLocalCommRank; }
+    auto AtLocalMaster() const { return LocalCommRank() == 0; }
+    auto AtLocalWorker() const { return LocalCommRank() > 0; }
 
-    const auto& GetNodeComm() const { return fNodeComm; }
-    const auto& GetNodeRank() const { return fNodeRank; }
-    const auto& GetNodeSize() const { return fNodeSize; }
-    auto IsNodeMaster() const { return GetNodeRank() == 0; }
-    auto IsNodeWorker() const { return GetNodeRank() > 0; }
+    auto NumberOfHosts() const { return fHostInfoList.size(); }
+    auto OnSingleHost() const { return NumberOfHosts() == 1; }
+    auto OnCluster() const { return NumberOfHosts() > 1; }
+    const auto& HostInfoList() const { return fHostInfoList; }
+    const auto& HostInfo(int id) const { return fHostInfoList[id]; }
+    const auto& HostSize(int id) const { return HostInfo(id).size; }
+    const auto& HostName(int id) const { return HostInfo(id).name; }
+    auto LocalHostID() const { return fLocalHostID; }
+    const auto& LocalHostInfo() const { return HostInfo(fLocalHostID); }
+    const auto& LocalHostSize() const { return HostSize(fLocalHostID); }
+    const auto& LocalHostName() const { return HostName(fLocalHostID); }
 
 protected:
     void PrintStartupMessageBody(int argc, char* argv[]) const;
 
 private:
     void InitializeMPI(int argc, char* argv[]);
-    void InitializeNodeInfos();
+    void InitializeHostInfos();
 
 private:
-    int fWorldRank;
-    int fWorldSize;
+    struct Host {
+        int size;
+        std::string name;
+    };
 
-    std::vector<std::pair<int, std::string>> fNodeInfoList;
-    int fNodeId;
+private:
+    int fWorldCommRank;
+    int fWorldCommSize;
 
-    MPI_Comm fNodeComm;
-    int fNodeRank;
-    int fNodeSize;
+    MPI_Comm fLocalComm;
+    int fLocalCommRank;
+    int fLocalCommSize;
+
+    int fLocalHostID;
+    std::vector<Host> fHostInfoList;
 
     static bool fgInitialized;
     static bool fgFinalized;
@@ -75,64 +82,64 @@ private:
     static_assert(std::derived_from<std::remove_cvref_t<decltype(out)>, \
                                     std::ostream>);                     \
     if (not MACE::Environment::MPIEnvironment::Available() or           \
-        MACE::Environment::MPIEnvironment::Instance().IsMaster()) out
+        MACE::Environment::MPIEnvironment::Instance().AtWorldMaster()) out
 
 #define MACE_VERBOSE_LEVEL_CONTROLLED_MPI_MASTER_OUT(verboseLevel, Threshold, out) \
     if (not MACE::Environment::MPIEnvironment::Available() or                      \
-        MACE::Environment::MPIEnvironment::Instance().IsMaster())                  \
+        MACE::Environment::MPIEnvironment::Instance().AtWorldMaster())             \
     MACE_VERBOSE_LEVEL_CONTROLLED_OUT(verboseLevel, Threshold, out)
 
-#define MACE_ENVIRONMENT_CONTROLLED_MPI_MASTER_OUT(Threshold, out) \
-    if (not MACE::Environment::MPIEnvironment::Available() or      \
-        MACE::Environment::MPIEnvironment::Instance().IsMaster())  \
+#define MACE_ENVIRONMENT_CONTROLLED_MPI_MASTER_OUT(Threshold, out)     \
+    if (not MACE::Environment::MPIEnvironment::Available() or          \
+        MACE::Environment::MPIEnvironment::Instance().AtWorldMaster()) \
     MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)
 
 #define MACE_MPI_WORKER_OUT(out)                                        \
     static_assert(std::derived_from<std::remove_cvref_t<decltype(out)>, \
                                     std::ostream>);                     \
     if (not MACE::Environment::MPIEnvironment::Available() or           \
-        MACE::Environment::MPIEnvironment::Instance().IsWorker()) out
+        MACE::Environment::MPIEnvironment::Instance().AtWorldWorker()) out
 
 #define MACE_VERBOSE_LEVEL_CONTROLLED_MPI_WORKER_OUT(verboseLevel, Threshold, out) \
     if (not MACE::Environment::MPIEnvironment::Available() or                      \
-        MACE::Environment::MPIEnvironment::Instance().IsWorker())                  \
+        MACE::Environment::MPIEnvironment::Instance().AtWorldWorker())             \
     MACE_VERBOSE_LEVEL_CONTROLLED_OUT(verboseLevel, Threshold, out)
 
-#define MACE_ENVIRONMENT_CONTROLLED_MPI_WORKER_OUT(Threshold, out) \
-    if (not MACE::Environment::MPIEnvironment::Available() or      \
-        MACE::Environment::MPIEnvironment::Instance().IsWorker())  \
+#define MACE_ENVIRONMENT_CONTROLLED_MPI_WORKER_OUT(Threshold, out)     \
+    if (not MACE::Environment::MPIEnvironment::Available() or          \
+        MACE::Environment::MPIEnvironment::Instance().AtWorldWorker()) \
     MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)
 
 #define MACE_MPI_NODE_MASTER_OUT(out)                                   \
     static_assert(std::derived_from<std::remove_cvref_t<decltype(out)>, \
                                     std::ostream>);                     \
     if (not MACE::Environment::MPIEnvironment::Available() or           \
-        MACE::Environment::MPIEnvironment::Instance().IsNodeMaster()) out
+        MACE::Environment::MPIEnvironment::Instance().AtLocalMaster()) out
 
 #define MACE_VERBOSE_LEVEL_CONTROLLED_MPI_NODE_MASTER_OUT(verboseLevel, Threshold, out) \
     if (not MACE::Environment::MPIEnvironment::Available() or                           \
-        MACE::Environment::MPIEnvironment::Instance().IsNodeMaster())                   \
+        MACE::Environment::MPIEnvironment::Instance().AtLocalMaster())                  \
     MACE_VERBOSE_LEVEL_CONTROLLED_OUT(verboseLevel, Threshold, out)
 
 #define MACE_ENVIRONMENT_CONTROLLED_MPI_NODE_MASTER_OUT(Threshold, out) \
     if (not MACE::Environment::MPIEnvironment::Available() or           \
-        MACE::Environment::MPIEnvironment::Instance().IsNodeMaster())   \
+        MACE::Environment::MPIEnvironment::Instance().AtLocalMaster())  \
     MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)
 
 #define MACE_MPI_NODE_WORKER_OUT(out)                                   \
     static_assert(std::derived_from<std::remove_cvref_t<decltype(out)>, \
                                     std::ostream>);                     \
     if (not MACE::Environment::MPIEnvironment::Available() or           \
-        MACE::Environment::MPIEnvironment::Instance().IsNodeWorker()) out
+        MACE::Environment::MPIEnvironment::Instance().AtLocalWorker()) out
 
 #define MACE_VERBOSE_LEVEL_CONTROLLED_MPI_NODE_WORKER_OUT(verboseLevel, Threshold, out) \
     if (not MACE::Environment::MPIEnvironment::Available() or                           \
-        MACE::Environment::MPIEnvironment::Instance().IsNodeWorker())                   \
+        MACE::Environment::MPIEnvironment::Instance().AtLocalWorker())                  \
     MACE_VERBOSE_LEVEL_CONTROLLED_OUT(verboseLevel, Threshold, out)
 
 #define MACE_ENVIRONMENT_CONTROLLED_MPI_NODE_WORKER_OUT(Threshold, out) \
     if (not MACE::Environment::MPIEnvironment::Available() or           \
-        MACE::Environment::MPIEnvironment::Instance().IsNodeWorker())   \
+        MACE::Environment::MPIEnvironment::Instance().AtLocalWorker())  \
     MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)
 
 #include "MACE/Environment/MPIEnvironment.inl"

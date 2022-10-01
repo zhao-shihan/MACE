@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
 
     CLHEP::MTwistEngine mtEng;
 
-    std::cout << "Rank" << mpiEnvironment.GetWorldRank() << " is ready to process data of repetition " << treeBegin << " to " << treeEnd - 1 << std::endl;
+    std::cout << "Rank" << mpiEnvironment.WorldCommRank() << " is ready to process data of repetition " << treeBegin << " to " << treeEnd - 1 << std::endl;
 
     for (auto treeIndex = treeBegin; treeIndex < treeEnd; treeIndex += treeStep) {
         dataHub.TreeNamePrefixFormat("Rep{}_");
