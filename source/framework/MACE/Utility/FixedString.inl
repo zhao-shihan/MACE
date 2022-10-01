@@ -39,8 +39,9 @@ FixedString<AMaxSize>::FixedString(std::string_view str) noexcept :
 template<std::size_t AMaxSize>
     requires((AMaxSize + 1) % alignof(void*) == 0) // clang-format off
 FixedString<AMaxSize>::FixedString(auto&& str) noexcept // clang-format on
-    requires(Concept::PointerOfMaybeConst<std::remove_cvref_t<decltype(str)>, char> or
-             (std::convertible_to<decltype(str), const char*> and
+    requires(std::same_as<std::remove_cvref_t<decltype(str)>, gsl::zstring> or
+             std::same_as<std::remove_cvref_t<decltype(str)>, gsl::czstring> or
+             (std::convertible_to<decltype(str), gsl::czstring> and
               not std::convertible_to<decltype(str), std::string_view>)) :
     fData{} {
     std::strncpy(fData, str, AMaxSize);
@@ -52,7 +53,7 @@ template<std::size_t AMaxSize>
 FixedString<AMaxSize>::FixedString(auto&& str) noexcept // clang-format on
     requires(std::convertible_to<decltype(str), std::string> and
              not std::convertible_to<decltype(str), std::string_view> and
-             not std::convertible_to<decltype(str), const char*>) :
+             not std::convertible_to<decltype(str), gsl::czstring>) :
     fData{} {
     const std::string string = std::forward<decltype(str)>(str);
     const auto length = std::min(string.length(), AMaxSize);
@@ -91,10 +92,11 @@ FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(std::string_view rhs) & 
 template<std::size_t AMaxSize>
     requires((AMaxSize + 1) % alignof(void*) == 0) // clang-format off
 FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(auto&& rhs) & noexcept // clang-format on
-    requires(Concept::PointerOfMaybeConst<std::remove_cvref_t<decltype(rhs)>, char> or
-             (std::convertible_to<decltype(rhs), const char*> and
+    requires(std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::zstring> or
+             std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::czstring> or
+             (std::convertible_to<decltype(rhs), gsl::czstring> and
               not std::convertible_to<decltype(rhs), std::string_view>)) {
-    const char* const cstr = std::forward<decltype(rhs)>(rhs);
+    const gsl::czstring cstr = std::forward<decltype(rhs)>(rhs);
     if (fData != cstr) {
         if (std::cmp_greater(std::distance(ConstBegin(), cstr), AMaxSize)) {
             std::strncpy(fData, cstr, AMaxSize);
@@ -112,7 +114,7 @@ template<std::size_t AMaxSize>
 FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(auto&& rhs) & noexcept // clang-format on
     requires(std::convertible_to<decltype(rhs), std::string> and
              not std::convertible_to<decltype(rhs), std::string_view> and
-             not std::convertible_to<decltype(rhs), const char*>) {
+             not std::convertible_to<decltype(rhs), gsl::czstring>) {
     const std::string string = std::forward<decltype(rhs)>(rhs);
     const auto length = std::min(string.length(), AMaxSize);
     std::memcpy(fData, string.c_str(), length);
@@ -155,10 +157,11 @@ FixedString<AMaxSize>& FixedString<AMaxSize>::Append(std::string_view str) noexc
 template<std::size_t AMaxSize>
     requires((AMaxSize + 1) % alignof(void*) == 0) // clang-format off
 FixedString<AMaxSize>& FixedString<AMaxSize>::Append(auto&& str) noexcept // clang-format on
-    requires(Concept::PointerOfMaybeConst<std::remove_cvref_t<decltype(str)>, char> or
-             (std::convertible_to<decltype(str), const char*> and
+    requires(std::same_as<std::remove_cvref_t<decltype(str)>, gsl::zstring> or
+             std::same_as<std::remove_cvref_t<decltype(str)>, gsl::czstring> or
+             (std::convertible_to<decltype(str), gsl::czstring> and
               not std::convertible_to<decltype(str), std::string_view>)) {
-    const char* const cstr = std::forward<decltype(str)>(str);
+    const gsl::czstring cstr = std::forward<decltype(str)>(str);
     const auto length = Length();
     if (std::cmp_greater(std::distance(ConstBegin(), cstr), AMaxSize)) {
         std::strncat(Begin() + length, cstr, AMaxSize - length);
@@ -174,7 +177,7 @@ template<std::size_t AMaxSize>
 FixedString<AMaxSize>& FixedString<AMaxSize>::Append(auto&& str) noexcept // clang-format on
     requires(std::convertible_to<decltype(str), std::string> and
              not std::convertible_to<decltype(str), std::string_view> and
-             not std::convertible_to<decltype(str), const char*>) {
+             not std::convertible_to<decltype(str), gsl::czstring>) {
     const std::string string = std::forward<decltype(str)>(str);
     const auto length = Length();
     const auto end = Begin() + length;
@@ -197,10 +200,11 @@ std::strong_ordering FixedString<AMaxSize>::operator<=>(const char (&rhs)[N]) co
 template<std::size_t AMaxSize>
     requires((AMaxSize + 1) % alignof(void*) == 0) // clang-format off
 std::strong_ordering FixedString<AMaxSize>::operator<=>(auto&& rhs) const noexcept // clang-format on
-    requires(Concept::PointerOfMaybeConst<std::remove_cvref_t<decltype(rhs)>, char> or
-             (std::convertible_to<decltype(rhs), const char*> and
+    requires(std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::zstring> or
+             std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::czstring> or
+             (std::convertible_to<decltype(rhs), gsl::czstring> and
               not std::convertible_to<decltype(rhs), std::string_view>)) {
-    const char* const cstr = std::forward<decltype(rhs)>(rhs);
+    const gsl::czstring cstr = std::forward<decltype(rhs)>(rhs);
     const auto cmp = std::strncmp(fData, cstr, AMaxSize + 1);
     return cmp == 0 ? std::strong_ordering::equal :
            cmp < 0  ? std::strong_ordering::less :
