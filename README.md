@@ -44,7 +44,8 @@ Required, built-in if not found:
 1. [argparse](https://github.com/p-ranav/argparse) (≥ 2.6, built-in if not found (network or pre-downloaded source is required))
 2. [backward-cpp](https://github.com/bombela/backward-cpp) (≥ 1.6, built-in if not found (network or pre-downloaded source is required))
 3. [Eigen](https://eigen.tuxfamily.org/) (≥ 3.3.0, built-in if not found (network or pre-downloaded source is required))
-4. [yaml-cpp](https://github.com/jbeder/yaml-cpp) (≥ 0.6.0, built-in if not found (network or pre-downloaded source is required))
+4. [Microsoft.GSL](https://github.com/Microsoft/GSL) ([ISO C++ guidelines support library](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#gsl-guidelines-support-library)) (≥ 4.0.0, built-in if not found (network or pre-downloaded source is required))
+5. [yaml-cpp](https://github.com/jbeder/yaml-cpp) (≥ 0.6.0, built-in if not found (network or pre-downloaded source is required))
 
 Optional:
 

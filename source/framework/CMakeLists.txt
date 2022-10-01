@@ -6,8 +6,7 @@ add_library(MACE STATIC ${MACE_FRAMEWORK_SRC})
 target_include_directories(MACE PUBLIC ${MACE_PROJECT_SRC_DIR}/framework)
 # argparse
 target_link_libraries(MACE argparse::argparse)
-# backward-cpp
-# Note: DO NOT link to Backward::Backward, just include the header and include/link to its dependencies
+# backward-cpp (Note: DO NOT link to Backward::Backward, just include the header and include/link to its dependencies)
 target_compile_definitions(MACE PUBLIC ${BACKWARD_DEFINITIONS})
 target_include_directories(MACE PUBLIC ${BACKWARD_INCLUDE_DIRS})
 if(LIBDW_INCLUDE_DIR AND LIBDW_LIBRARY)
@@ -24,10 +23,12 @@ if(LIBDWARF_INCLUDE_DIR AND LIBELF_INCLUDE_DIR AND LIBDWARF_LIBRARY AND LIBELF_L
     target_link_libraries(MACE ${LIBDWARF_LIBRARY}
                                ${LIBELF_LIBRARY})
 endif()
-# yaml-cpp
-target_link_libraries(MACE yaml-cpp)
 # Eigen
 target_link_libraries(MACE Eigen3::Eigen)
+# Microsoft.GSL
+target_link_libraries(MACE Microsoft.GSL::GSL)
+# yaml-cpp
+target_link_libraries(MACE yaml-cpp)
 # MPI
 target_link_libraries(MACE MPI::MPI_C)
 # Geant4

@@ -45,8 +45,14 @@ FixNamespaceComments: true
 IncludeBlocks: Regroup
 IncludeCategories: 
   - Regex: '<.*>'
-    Priority: 9
+    Priority: 11
+  - Regex: '"gsl/gsl"'
+    Priority: 10
+    CaseSensitive: true
   - Regex: '"mpi.*\.h"'
+    Priority: 9
+    CaseSensitive: true
+  - Regex: '"gsl.*\.h"'
     Priority: 8
     CaseSensitive: true
   - Regex: '"Eigen/.*"'
@@ -82,7 +88,7 @@ IncludeCategories:
   - Regex: '"CLHEP/.*"'
     Priority: 1
     CaseSensitive: true
-  - Regex: '"MACE/.*"'
+  - Regex: '"MACE/.*\.hxx"'
     Priority: 0
     CaseSensitive: true
 IndentAccessModifiers: false

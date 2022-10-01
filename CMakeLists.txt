@@ -7,8 +7,6 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
     cmake_policy(SET CMP0135 NEW)
 endif()
 
-include(CMakeDependentOption)
-
 project(MACE VERSION 0.0.0
              LANGUAGES C CXX)
 
@@ -26,12 +24,15 @@ set(MACE_PROJECT_3RDPARTY_DIR "${MACE_PROJECT_ROOT_DIR}/thirdparty")
 # Options
 # =============================================================================
 
+include(CMakeDependentOption)
+
 # Basic
 # Options (ON/OFF)
 option(MACE_BUILD_TEST "Build MACE with test programs." ON)
 option(MACE_BUILTIN_ARGPARSE "Use built-in argparse (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_BACKWARD "Use built-in backward-cpp (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_EIGEN "Use built-in Eigen (network or pre-downloaded source is required)." OFF)
+option(MACE_BUILTIN_MSGSL "Use built-in Microsoft.GSL (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_YAML_CPP "Use built-in yaml-cpp (network or pre-downloaded source is required)." OFF)
 option(MACE_SIGNAL_HANDLER "Build with signal handling. Signal handlers are registered at the construction of environment." ON)
 option(MACE_USE_G4GDML "Build with G4gdml support. This option will be automatically turned OFF if Geant4::G4gdml is not found. Once turned off, you are not able to export geometry (to ROOT or other)." ON)
@@ -48,6 +49,7 @@ cmake_dependent_option(MACE_SURPRESS_COMPILE_WARNINGS "Surpress compile warnings
 set(MACE_BUILTIN_ARGPARSE_VERSION 2.6 CACHE STRING "Set built-in argparse version (if required).")
 set(MACE_BUILTIN_BACKWARD_VERSION 1.6 CACHE STRING "Set built-in backward-cpp version (if required).")
 set(MACE_BUILTIN_EIGEN_VERSION 3.4.0 CACHE STRING "Set built-in Eigen version (if required).")
+set(MACE_BUILTIN_MSGSL_VERSION 4.0.0 CACHE STRING "Set built-in Microsoft.GSL version (if required).")
 set(MACE_BUILTIN_YAML_CPP_VERSION 0.7.0 CACHE STRING "Set built-in yaml-cpp version (if required).")
 
 # =============================================================================
@@ -60,19 +62,24 @@ include(${MACE_PROJECT_CMAKE_DIR}/GlobalCompileOptions.cmake)
 # Dependencies
 # =============================================================================
 
+# Required:
 # MPI
 include(${MACE_PROJECT_CMAKE_DIR}/LookForMPI.cmake)
 # ROOT
 include(${MACE_PROJECT_CMAKE_DIR}/LookForROOT.cmake)
 # Geant4
 include(${MACE_PROJECT_CMAKE_DIR}/LookForGeant4.cmake)
-# argparse (if built-in it's possibly hard to download at sino-mainland, put it ahead)
+
+# Required, built-in if not found:
+# argparse
 include(${MACE_PROJECT_CMAKE_DIR}/LookForArgparse.cmake)
-# backward-cpp (if built-in it's possibly hard to download at sino-mainland, put it ahead)
+# backward-cpp
 include(${MACE_PROJECT_CMAKE_DIR}/LookForBackward.cmake)
-# yaml-cpp (if built-in it's possibly hard to download at sino-mainland, put it ahead)
+# Microsoft.GSL
+include(${MACE_PROJECT_CMAKE_DIR}/LookForMicrosoftGSL.cmake)
+# yaml-cpp
 include(${MACE_PROJECT_CMAKE_DIR}/LookForYamlCpp.cmake)
-# Eigen (should be the last otherwise might run into problem if previous steps raises error)
+# Eigen (should be the last otherwise might run into problem if other download steps raise error)
 include(${MACE_PROJECT_CMAKE_DIR}/LookForEigen.cmake)
 
 # =============================================================================
