@@ -1,6 +1,6 @@
 namespace MACE::Core {
 
-template<DataModel::TransientData AData, std::convertible_to<const char*> APath>
+template<DataModel::TransientData AData, std::convertible_to<gsl::czstring> APath>
 std::shared_ptr<TChain> DataFactory::CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex) const {
     const auto chain = std::make_shared<TChain>(TreeName<AData>(treeIndex).c_str());
     for (auto&& file : fileList) {
@@ -10,7 +10,7 @@ std::shared_ptr<TChain> DataFactory::CreateChain(const std::vector<APath>& fileL
 }
 
 template<DataModel::TransientData AData, typename APath> // clang-format off
-    requires std::convertible_to<decltype(std::declval<APath>().c_str()), const char*>
+    requires std::convertible_to<decltype(std::declval<APath>().c_str()), gsl::czstring>
 std::shared_ptr<TChain> DataFactory::CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex) const { // clang-format on
     const auto chain = std::make_shared<TChain>(TreeName<AData>(treeIndex).c_str());
     for (auto&& file : fileList) {

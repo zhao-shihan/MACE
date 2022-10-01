@@ -62,7 +62,7 @@ void MPIRunManager::SetPrintProgress(G4int val) {
     fPrintProgress = val;
 }
 
-void MPIRunManager::BeamOn(G4int nEvent, const char* macroFile, G4int nSelect) {
+void MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect) {
     if (CheckNEventIsAtLeastCommSize(nEvent)) {
         Utility::MPIUtil::MPIReSeedCLHEPRandom(G4Random::getTheEngine());
         fTotalNumberOfEventsToBeProcessed = nEvent;
@@ -88,7 +88,7 @@ void MPIRunManager::RunInitialization() {
     }
 }
 
-void MPIRunManager::InitializeEventLoop(G4int nEvent, const char* macroFile, G4int nSelect) {
+void MPIRunManager::InitializeEventLoop(G4int nEvent, gsl::czstring macroFile, G4int nSelect) {
     // reset event time statistic
     fNAvgEventWallTime = 0;
     fNDevEventWallTime = 0;

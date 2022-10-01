@@ -9,6 +9,8 @@
 #include "TFile.h"
 #include "TTree.h"
 
+#include "gsl/gsl"
+
 #include <concepts>
 #include <memory>
 #include <string>
@@ -40,10 +42,10 @@ public:
     template<DataModel::TransientData AData>
     ObserverPtr<TTree> FindTree(TFile& file, Long64_t treeIndex = 0) const { return file.Get<TTree>(TreeName<AData>(treeIndex).c_str()); }
     /// Create a TChain of the list of ROOT files.
-    template<DataModel::TransientData AData, std::convertible_to<const char*> APath>
+    template<DataModel::TransientData AData, std::convertible_to<gsl::czstring> APath>
     std::shared_ptr<TChain> CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex = 0) const;
     template<DataModel::TransientData AData, typename APath> // clang-format off
-        requires std::convertible_to<decltype(std::declval<APath>().c_str()), const char*>
+        requires std::convertible_to<decltype(std::declval<APath>().c_str()), gsl::czstring>
     std::shared_ptr<TChain> CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex = 0) const; // clang-format on
     /// Get the range of tree index in current tree name setting.
     template<DataModel::TransientData AData>

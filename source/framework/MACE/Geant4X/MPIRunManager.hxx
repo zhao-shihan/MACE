@@ -6,6 +6,8 @@
 
 #include "G4RunManager.hh"
 
+#include "gsl/gsl"
+
 #include <chrono>
 #include <ctime>
 #include <string_view>
@@ -41,9 +43,9 @@ public:
 
     void SetPrintProgress(G4int val);
 
-    virtual void BeamOn(G4int nEvent, const char* macroFile = nullptr, G4int nSelect = -1) override;
+    virtual void BeamOn(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) override;
     virtual void RunInitialization() override;
-    virtual void InitializeEventLoop(G4int nEvent, const char* macroFile = nullptr, G4int nSelect = -1) override;
+    virtual void InitializeEventLoop(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) override;
     virtual void TerminateOneEvent() override;
     virtual void RunTermination() override;
 

@@ -2,6 +2,8 @@
 
 #include "RtypesCore.h"
 
+#include "gsl/gsl"
+
 #include <concepts>
 #include <type_traits>
 
@@ -9,7 +11,7 @@ namespace MACE::Concept {
 
 template<typename T>
 concept ROOTFundamental = // clang-format off
-    std::same_as<std::decay_t<T>, const char*> or // clang-format on
+    std::same_as<std::decay_t<T>, gsl::czstring> or // clang-format on
     std::same_as<T, Char_t> or
     std::same_as<T, UChar_t> or
     std::same_as<T, Short_t> or

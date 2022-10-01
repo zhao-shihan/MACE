@@ -4,6 +4,8 @@
 
 #include "RtypesCore.h"
 
+#include "gsl/gsl"
+
 #include <concepts>
 #include <string>
 #include <type_traits>

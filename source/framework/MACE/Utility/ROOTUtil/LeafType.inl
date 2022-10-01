@@ -2,7 +2,7 @@ namespace MACE::Utility::ROOTUtil {
 
 template<Concept::ROOTFundamental T>
 constexpr char LeafType<T>::Code() {
-    if constexpr (std::same_as<std::decay_t<T>, const char*>) {
+    if constexpr (std::same_as<std::decay_t<T>, gsl::czstring>) {
         return 'C';
     } else if constexpr (std::same_as<T, Char_t>) {
         return 'B';
