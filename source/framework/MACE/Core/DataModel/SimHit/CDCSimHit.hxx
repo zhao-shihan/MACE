@@ -5,8 +5,8 @@
 #include "MACE/Core/DataModel/Hit/CDCHit.hxx"
 #include "MACE/Utility/AssignVector.hxx"
 
-#include <utility>
 #include <string_view>
+#include <utility>
 
 namespace MACE::Core::DataModel::SimHit {
 

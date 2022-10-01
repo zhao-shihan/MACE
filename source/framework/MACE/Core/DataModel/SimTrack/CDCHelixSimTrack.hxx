@@ -4,8 +4,8 @@
 #include "MACE/Core/DataModel/Track/CDCHelixTrack.hxx"
 #include "MACE/Utility/AssignVector.hxx"
 
-#include <utility>
 #include <string_view>
+#include <utility>
 
 namespace MACE::Core::DataModel::Track {
 
@@ -17,7 +17,7 @@ class CDCHelixSimTrack : public CDCHelixTrack,
                          public CDCSimTrackBase {
 public:
     CDCHelixSimTrack() noexcept;
-    virtual ~CDCHelixSimTrack()  = default;
+    virtual ~CDCHelixSimTrack() = default;
 
     CDCHelixSimTrack(const CDCHelixSimTrack&) noexcept = default;
     CDCHelixSimTrack(CDCHelixSimTrack&&) noexcept = default;

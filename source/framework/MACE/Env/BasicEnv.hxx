@@ -24,7 +24,7 @@ class NoCLI {};
 using MACE::Utility::ObserverPtr;
 
 class BasicEnv : public internal::EnvBase,
-                         public Memory::FreeSingleton<BasicEnv> {
+                 public Memory::FreeSingleton<BasicEnv> {
 public:
     template<class ACLI = internal::NoCLI>
     BasicEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);

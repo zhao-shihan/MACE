@@ -3,9 +3,9 @@
 #include "MACE/Compatibility/Eigen34/TemplateAlias.hxx"
 #include "MACE/Concept/FundamentalType.hxx"
 #include "MACE/Core/DataModel/BranchSocketBase.hxx"
+#include "MACE/Utility/AssignVector.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/ROOTUtil/LeafType.hxx"
-#include "MACE/Utility/AssignVector.hxx"
 
 #include "Eigen/Core"
 

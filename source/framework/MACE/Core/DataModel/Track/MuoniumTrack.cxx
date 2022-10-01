@@ -44,4 +44,4 @@ void MuoniumTrack::ConnectToBranches(TTree& tree) {
     fgDecayMomentum.ConnectToBranch(tree);
 }
 
-} // namespace MACE::Core::DataModel::SimTrack
+} // namespace MACE::Core::DataModel::Track

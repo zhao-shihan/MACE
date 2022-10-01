@@ -3,8 +3,8 @@
 #include "MACE/Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 #include "MACE/Core/DataModel/Hit/EMCalHit.hxx"
 
-#include <utility>
 #include <string_view>
+#include <utility>
 
 namespace MACE::Core::DataModel::SimHit {
 

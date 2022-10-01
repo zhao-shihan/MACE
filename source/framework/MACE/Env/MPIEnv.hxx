@@ -12,7 +12,7 @@
 namespace MACE::Env {
 
 class MPIEnv : public BasicEnv,
-                       public Memory::FreeSingleton<MPIEnv> {
+               public Memory::FreeSingleton<MPIEnv> {
 public:
     template<class ACLI = internal::NoCLI>
     MPIEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
@@ -81,65 +81,65 @@ private:
 #define MACE_MPI_MASTER_OUT(out)                                        \
     static_assert(std::derived_from<std::remove_cvref_t<decltype(out)>, \
                                     std::ostream>);                     \
-    if (not MACE::Env::MPIEnv::Available() or           \
+    if (not MACE::Env::MPIEnv::Available() or                           \
         MACE::Env::MPIEnv::Instance().AtWorldMaster()) out
 
 #define MACE_VERBOSE_LEVEL_CONTROLLED_MPI_MASTER_OUT(verboseLevel, Threshold, out) \
-    if (not MACE::Env::MPIEnv::Available() or                      \
-        MACE::Env::MPIEnv::Instance().AtWorldMaster())             \
+    if (not MACE::Env::MPIEnv::Available() or                                      \
+        MACE::Env::MPIEnv::Instance().AtWorldMaster())                             \
     MACE_VERBOSE_LEVEL_CONTROLLED_OUT(verboseLevel, Threshold, out)
 
-#define MACE_ENVIRONMENT_CONTROLLED_MPI_MASTER_OUT(Threshold, out)     \
-    if (not MACE::Env::MPIEnv::Available() or          \
-        MACE::Env::MPIEnv::Instance().AtWorldMaster()) \
+#define MACE_ENVIRONMENT_CONTROLLED_MPI_MASTER_OUT(Threshold, out) \
+    if (not MACE::Env::MPIEnv::Available() or                      \
+        MACE::Env::MPIEnv::Instance().AtWorldMaster())             \
     MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)
 
 #define MACE_MPI_WORKER_OUT(out)                                        \
     static_assert(std::derived_from<std::remove_cvref_t<decltype(out)>, \
                                     std::ostream>);                     \
-    if (not MACE::Env::MPIEnv::Available() or           \
+    if (not MACE::Env::MPIEnv::Available() or                           \
         MACE::Env::MPIEnv::Instance().AtWorldWorker()) out
 
 #define MACE_VERBOSE_LEVEL_CONTROLLED_MPI_WORKER_OUT(verboseLevel, Threshold, out) \
-    if (not MACE::Env::MPIEnv::Available() or                      \
-        MACE::Env::MPIEnv::Instance().AtWorldWorker())             \
+    if (not MACE::Env::MPIEnv::Available() or                                      \
+        MACE::Env::MPIEnv::Instance().AtWorldWorker())                             \
     MACE_VERBOSE_LEVEL_CONTROLLED_OUT(verboseLevel, Threshold, out)
 
-#define MACE_ENVIRONMENT_CONTROLLED_MPI_WORKER_OUT(Threshold, out)     \
-    if (not MACE::Env::MPIEnv::Available() or          \
-        MACE::Env::MPIEnv::Instance().AtWorldWorker()) \
+#define MACE_ENVIRONMENT_CONTROLLED_MPI_WORKER_OUT(Threshold, out) \
+    if (not MACE::Env::MPIEnv::Available() or                      \
+        MACE::Env::MPIEnv::Instance().AtWorldWorker())             \
     MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)
 
 #define MACE_MPI_NODE_MASTER_OUT(out)                                   \
     static_assert(std::derived_from<std::remove_cvref_t<decltype(out)>, \
                                     std::ostream>);                     \
-    if (not MACE::Env::MPIEnv::Available() or           \
+    if (not MACE::Env::MPIEnv::Available() or                           \
         MACE::Env::MPIEnv::Instance().AtLocalMaster()) out
 
 #define MACE_VERBOSE_LEVEL_CONTROLLED_MPI_NODE_MASTER_OUT(verboseLevel, Threshold, out) \
-    if (not MACE::Env::MPIEnv::Available() or                           \
-        MACE::Env::MPIEnv::Instance().AtLocalMaster())                  \
+    if (not MACE::Env::MPIEnv::Available() or                                           \
+        MACE::Env::MPIEnv::Instance().AtLocalMaster())                                  \
     MACE_VERBOSE_LEVEL_CONTROLLED_OUT(verboseLevel, Threshold, out)
 
 #define MACE_ENVIRONMENT_CONTROLLED_MPI_NODE_MASTER_OUT(Threshold, out) \
-    if (not MACE::Env::MPIEnv::Available() or           \
-        MACE::Env::MPIEnv::Instance().AtLocalMaster())  \
+    if (not MACE::Env::MPIEnv::Available() or                           \
+        MACE::Env::MPIEnv::Instance().AtLocalMaster())                  \
     MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)
 
 #define MACE_MPI_NODE_WORKER_OUT(out)                                   \
     static_assert(std::derived_from<std::remove_cvref_t<decltype(out)>, \
                                     std::ostream>);                     \
-    if (not MACE::Env::MPIEnv::Available() or           \
+    if (not MACE::Env::MPIEnv::Available() or                           \
         MACE::Env::MPIEnv::Instance().AtLocalWorker()) out
 
 #define MACE_VERBOSE_LEVEL_CONTROLLED_MPI_NODE_WORKER_OUT(verboseLevel, Threshold, out) \
-    if (not MACE::Env::MPIEnv::Available() or                           \
-        MACE::Env::MPIEnv::Instance().AtLocalWorker())                  \
+    if (not MACE::Env::MPIEnv::Available() or                                           \
+        MACE::Env::MPIEnv::Instance().AtLocalWorker())                                  \
     MACE_VERBOSE_LEVEL_CONTROLLED_OUT(verboseLevel, Threshold, out)
 
 #define MACE_ENVIRONMENT_CONTROLLED_MPI_NODE_WORKER_OUT(Threshold, out) \
-    if (not MACE::Env::MPIEnv::Available() or           \
-        MACE::Env::MPIEnv::Instance().AtLocalWorker())  \
+    if (not MACE::Env::MPIEnv::Available() or                           \
+        MACE::Env::MPIEnv::Instance().AtLocalWorker())                  \
     MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)
 
 #include "MACE/Env/MPIEnv.inl"

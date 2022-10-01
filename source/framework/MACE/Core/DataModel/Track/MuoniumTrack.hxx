@@ -58,4 +58,4 @@ private:
 };
 static_assert(TransientData<MuoniumTrack>);
 
-} // namespace MACE::Core::DataModel::SimTrack
+} // namespace MACE::Core::DataModel::Track

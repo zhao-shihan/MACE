@@ -1,10 +1,10 @@
-#include "MACE/Utility/Math/Random/RandomNumberDistribution.hxx"
-#include "MACE/Utility/Math/Random/Generator/MT1993732.hxx"
-#include "MACE/Utility/Math/Random/Generator/PCGXSHRR6432.hxx"
-#include "MACE/Utility/Math/Random/RandomNumberDistributionBase.hxx"
-#include "MACE/Utility/Math/Random/Distribution/Uniform.hxx"
 #include "MACE/CLHEPX/Random/OptimizedMTEngine.hxx"
 #include "MACE/CLHEPX/Random/PCGEngine.hxx"
+#include "MACE/Utility/Math/Random/Distribution/Uniform.hxx"
+#include "MACE/Utility/Math/Random/Generator/MT1993732.hxx"
+#include "MACE/Utility/Math/Random/Generator/PCGXSHRR6432.hxx"
+#include "MACE/Utility/Math/Random/RandomNumberDistribution.hxx"
+#include "MACE/Utility/Math/Random/RandomNumberDistributionBase.hxx"
 
 #include <iostream>
 #include <random>
@@ -18,8 +18,8 @@ int main(int, char* argv[]) {
 
     using RNG = decltype(rng);
 
-    auto x1 = 0.0/* std::stod(argv[1]) */;
-    auto x2 = 1.0/* std::stod(argv[2]) */;
+    auto x1 = 0.0 /* std::stod(argv[1]) */;
+    auto x2 = 1.0 /* std::stod(argv[2]) */;
     auto a = x1;
     for (auto i = 0ULL; i < 2000000000ULL; ++i) {
         // do {

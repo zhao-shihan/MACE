@@ -44,4 +44,4 @@ static_assert(GetDigits10(-114514, true) == 7);
 static_assert(GetDigits10<-114514>() == 6);
 static_assert(GetDigits10<-114514, true>() == 7);
 
-} // namespace MACE::Utility
+} // namespace MACE::Utility::Math

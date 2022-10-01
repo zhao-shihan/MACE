@@ -1,8 +1,8 @@
 #include "MACE/Core/Geometry/Description/Target.hxx"
 #include "MACE/Env/MPIEnv.hxx"
+#include "MACE/SimTarget/Action/PrimaryGeneratorAction.hxx"
 #include "MACE/SimTarget/Analysis.hxx"
 #include "MACE/SimTarget/Messenger/AnalysisMessenger.hxx"
-#include "MACE/SimTarget/Action/PrimaryGeneratorAction.hxx"
 #include "MACE/Utility/MPIUtil/CheckedMPICall.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
