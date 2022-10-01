@@ -1,8 +1,8 @@
 #pragma once
 
-#include "MACE/Environment/BasicEnvironment.hxx"
-#include "MACE/Environment/CLI/Geant4CLI.hxx"
-#include "MACE/Environment/Memory/MuteSingleton.hxx"
+#include "MACE/Env/BasicEnv.hxx"
+#include "MACE/Env/CLI/Geant4CLI.hxx"
+#include "MACE/Env/Memory/MuteSingleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 #include "MACE/Utility/TupleForEach.hxx"
 
@@ -19,10 +19,10 @@
 
 namespace MACE::Geant4X {
 
-using Environment::CLI::Geant4CLI;
+using Env::CLI::Geant4CLI;
 using Utility::ObserverPtr;
 
-class MPIExecutive final : public Environment::Memory::MuteSingleton<MPIExecutive> {
+class MPIExecutive final : public Env::Memory::MuteSingleton<MPIExecutive> {
 public:
     MPIExecutive() = default;
 

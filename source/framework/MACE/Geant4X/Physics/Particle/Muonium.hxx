@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Memory/Singleton.hxx"
+#include "MACE/Env/Memory/Singleton.hxx"
 
 #include "G4ParticleDefinition.hh"
 
@@ -8,9 +8,9 @@
 
 namespace MACE::Geant4X::Physics::Particle {
 
-class Muonium final : public Environment::Memory::Singleton<Muonium>,
+class Muonium final : public Env::Memory::Singleton<Muonium>,
                       public G4ParticleDefinition {
-    friend Environment::Memory::SingletonFactory;
+    friend Env::Memory::SingletonFactory;
 
 private:
     Muonium();

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "MACE/Environment/BasicEnvironment.hxx"
-#include "MACE/Environment/Memory/Singleton.hxx"
-#include "MACE/Environment/Memory/Singletonized.hxx"
+#include "MACE/Env/BasicEnv.hxx"
+#include "MACE/Env/Memory/Singleton.hxx"
+#include "MACE/Env/Memory/Singletonized.hxx"
 #include "MACE/Utility/TupleForEach.hxx"
 
 #include "yaml-cpp/yaml.h"
@@ -54,7 +54,7 @@ private:
 };
 
 template<class ADerived>
-class ISingletonDescription : public Environment::Memory::Singleton<ADerived>,
+class ISingletonDescription : public Env::Memory::Singleton<ADerived>,
                               public IDescription {
 protected:
     using IDescription::IDescription;
@@ -64,7 +64,7 @@ template<class T>
 concept IsDescription = requires {
     requires std::derived_from<T, IDescription>;
     requires std::derived_from<T, ISingletonDescription<T>>;
-    requires Environment::Memory::Singletonized<T>;
+    requires Env::Memory::Singletonized<T>;
 };
 
 } // namespace MACE::Core::Geometry

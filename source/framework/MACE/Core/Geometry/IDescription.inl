@@ -57,9 +57,8 @@ YAML::Node IDescription::UnpackToLeafNodeForExporting(YAML::Node& node, AStrings
 
 template<std::convertible_to<std::string>... AStrings>
 void IDescription::PrintNodeNotFoundWarning(AStrings&&... nodeNames) const {
-    using namespace Environment;
-    if (const auto& env = Environment::BasicEnvironment::Instance();
-        env.GetVerboseLevel() >= VerboseLevel::Warning) {
+    if (const auto& env = Env::BasicEnv::Instance();
+        env.GetVerboseLevel() >= Env::VerboseLevel::Warning) {
         std::cout << "MACE::Core::Geometry::IDescription: YAML node \"" << fName;
         Utility::TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
                               [](auto&& name) {

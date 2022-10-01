@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Memory/Singleton.hxx"
+#include "MACE/Env/Memory/Singleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UImessenger.hh"
@@ -26,9 +26,9 @@ namespace Messenger {
 
 using Utility::ObserverPtr;
 
-class GeometryMessenger final : public Environment::Memory::Singleton<GeometryMessenger>,
+class GeometryMessenger final : public Env::Memory::Singleton<GeometryMessenger>,
                                 public G4UImessenger {
-    friend Environment::Memory::SingletonFactory;
+    friend Env::Memory::SingletonFactory;
 
 private:
     GeometryMessenger();

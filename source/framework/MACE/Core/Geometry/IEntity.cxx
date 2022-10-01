@@ -1,5 +1,5 @@
 #include "MACE/Core/Geometry/IEntity.hxx"
-#include "MACE/Environment/MPIEnvironment.hxx"
+#include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
 #include "G4SDManager.hh"
@@ -96,7 +96,7 @@ void IEntity::RegisterSD(G4VSensitiveDetector* sd) const {
 
 #if MACE_USE_G4GDML
 void IEntity::Export(std::filesystem::path gdmlFile, std::size_t volumeIndex) const {
-    if (Environment::MPIEnvironment::Available()) {
+    if (Env::MPIEnv::Available()) {
         Utility::MPIUtil::MakeMPIFilePathInPlace(gdmlFile);
     }
     G4GDMLParser gdml;

@@ -8,7 +8,7 @@
 #include "MACE/Core/Geometry/Description/LinacField.hxx"
 #include "MACE/Core/Geometry/Description/SpectrometerField.hxx"
 #include "MACE/Core/Geometry/Description/TransportLine.hxx"
-#include "MACE/Environment/MPIEnvironment.hxx"
+#include "MACE/Env/MPIEnv.hxx"
 #include "MACE/ReconMuonium/MuoniumSimVertex.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
@@ -30,7 +30,7 @@ using namespace MACE::Utility::MPIUtil;
 using namespace MACE::Utility::PhysicalConstant;
 
 using MACE::Core::DataFactory;
-using MACE::Environment::MPIEnvironment;
+using MACE::Env::MPIEnv;
 
 using EMCalHit_t = SimHit::EMCalSimHit;
 using Helix_t = Track::CDCHelixTrack;
@@ -39,7 +39,7 @@ using MVertex_t = MuoniumSimVertex;
 using Track_t = Track::CDCPhysicsTrack;
 
 int main(int argc, char* argv[]) {
-    MPIEnvironment mpiEnvironment(argc, argv, {});
+    MPIEnv mpiEnv(argc, argv, {});
 
     std::filesystem::path pathIn = argv[1];
     const auto calTimeWindow = std::stod(argv[2]);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Memory/Singleton.hxx"
+#include "MACE/Env/Memory/Singleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UImessenger.hh"
@@ -16,9 +16,9 @@ class MPIRunManager;
 
 using Utility::ObserverPtr;
 
-class MPIRunMessenger final : public Environment::Memory::Singleton<MPIRunMessenger>,
+class MPIRunMessenger final : public Env::Memory::Singleton<MPIRunMessenger>,
                               public G4UImessenger {
-    friend Environment::Memory::SingletonFactory;
+    friend Env::Memory::SingletonFactory;
 
 private:
     MPIRunMessenger();

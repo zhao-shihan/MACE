@@ -5,7 +5,7 @@
 namespace MACE::Core::Geometry::Description {
 
 class EMCal final : public ISingletonDescription<EMCal> {
-    friend Environment::Memory::SingletonFactory;
+    friend Env::Memory::SingletonFactory;
 
 private:
     EMCal();

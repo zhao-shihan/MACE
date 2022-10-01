@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MACE/Environment/Memory/FreeSingleton.hxx"
+#include "MACE/Env/Memory/FreeSingleton.hxx"
 
 #include "G4VUserActionInitialization.hh"
 
 namespace MACE::SimTarget::Action {
 
-class ActionInitialization final : public Environment::Memory::FreeSingleton<ActionInitialization>,
+class ActionInitialization final : public Env::Memory::FreeSingleton<ActionInitialization>,
                                    public G4VUserActionInitialization {
 public:
     void Build() const override;

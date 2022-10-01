@@ -1,16 +1,16 @@
 #include "MACE/Compatibility/std2b/to_underlying.hxx"
 #include "MACE/Core/Geometry/Description/All.hxx"
 #include "MACE/Core/Geometry/DescriptionIO.hxx"
-#include "MACE/Environment/BasicEnvironment.hxx"
+#include "MACE/Env/BasicEnv.hxx"
 
 #include <random>
 
 namespace std2b = MACE::Compatibility::std2b;
 using namespace MACE::Core::Geometry;
-using namespace MACE::Environment;
+using namespace MACE::Env;
 
 int main(int argc, char* argv[]) {
-    BasicEnvironment environment(argc, argv, {});
+    BasicEnv environment(argc, argv, {});
 
     std::mt19937 rand;
     std::uniform_real_distribution<double> flat;

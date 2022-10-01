@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Memory/Singleton.hxx"
+#include "MACE/Env/Memory/Singleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWithAnInteger.hh"
@@ -19,9 +19,9 @@ namespace Messenger {
 
 using Utility::ObserverPtr;
 
-class PrimaryGeneratorActionMessenger final : public Environment::Memory::Singleton<PrimaryGeneratorActionMessenger>,
+class PrimaryGeneratorActionMessenger final : public Env::Memory::Singleton<PrimaryGeneratorActionMessenger>,
                                               public G4UImessenger {
-    friend Environment::Memory::SingletonFactory;
+    friend Env::Memory::SingletonFactory;
 
 private:
     PrimaryGeneratorActionMessenger();

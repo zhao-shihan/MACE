@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Memory/Singleton.hxx"
+#include "MACE/Env/Memory/Singleton.hxx"
 #include "MACE/Geant4X/Generator/SurfaceMuon.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
@@ -12,9 +12,9 @@ namespace MACE::Geant4X::Generator {
 
 using Utility::ObserverPtr;
 
-class SurfaceMuonMessenger final : public Environment::Memory::Singleton<SurfaceMuonMessenger>,
+class SurfaceMuonMessenger final : public Env::Memory::Singleton<SurfaceMuonMessenger>,
                                    public G4UImessenger {
-    friend Environment::Memory::SingletonFactory;
+    friend Env::Memory::SingletonFactory;
 
 private:
     SurfaceMuonMessenger();

@@ -1,5 +1,5 @@
 #include "MACE/Core/Geometry/Description/Target.hxx"
-#include "MACE/Environment/MPIEnvironment.hxx"
+#include "MACE/Env/MPIEnv.hxx"
 #include "MACE/SimTarget/Analysis.hxx"
 #include "MACE/SimTarget/Messenger/AnalysisMessenger.hxx"
 #include "MACE/SimTarget/Action/PrimaryGeneratorAction.hxx"
@@ -80,7 +80,7 @@ void Analysis::CloseResultFile() {
 }
 
 void Analysis::OpenYieldFile() {
-    if (Environment::MPIEnvironment::Instance().AtWorldMaster()) {
+    if (Env::MPIEnv::Instance().AtWorldMaster()) {
         const auto yieldPath = std::filesystem::path(fResultPath).concat("_yield.csv");
         fYieldFile = std::make_unique<std::ofstream>(yieldPath, std::ios::out);
         *fYieldFile << "runID,nMuon,nMFormed,nMTargetDecay,nMVacuumDecay,nMDetectableDecay" << std::endl;
@@ -110,7 +110,7 @@ void Analysis::AnalysisAndWriteYield() {
         }
     }
 
-    if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+    if (const auto& mpiEnv = Env::MPIEnv::Instance();
         mpiEnv.Parallel()) {
         std::vector<decltype(yieldData)> yieldDataRecv;
         if (mpiEnv.AtWorldMaster()) { yieldDataRecv.resize(mpiEnv.WorldCommSize()); }

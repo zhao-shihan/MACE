@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Memory/Singleton.hxx"
+#include "MACE/Env/Memory/Singleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWithABool.hh"
@@ -22,9 +22,9 @@ namespace Messenger {
 
 using Utility::ObserverPtr;
 
-class MuoniumPhysicsMessenger final : public Environment::Memory::Singleton<MuoniumPhysicsMessenger>,
+class MuoniumPhysicsMessenger final : public Env::Memory::Singleton<MuoniumPhysicsMessenger>,
                                       public G4UImessenger {
-    friend Environment::Memory::SingletonFactory;
+    friend Env::Memory::SingletonFactory;
 
 private:
     MuoniumPhysicsMessenger();

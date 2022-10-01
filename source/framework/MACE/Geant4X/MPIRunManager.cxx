@@ -1,4 +1,4 @@
-#include "MACE/Environment/MPIEnvironment.hxx"
+#include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Geant4X/MPIRunManager.hxx"
 #include "MACE/Geant4X/MPIRunMessenger.hxx"
 #include "MACE/Math/IntegerPower.hxx"
@@ -26,9 +26,9 @@ using namespace std::string_view_literals;
 namespace internal {
 
 FlipG4cout::FlipG4cout() {
-    if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+    if (const auto& mpiEnv = Env::MPIEnv::Instance();
         mpiEnv.AtWorldWorker() or
-        mpiEnv.GetVerboseLevel() == Environment::VerboseLevel::Quiet) {
+        mpiEnv.GetVerboseLevel() == Env::VerboseLevel::Quiet) {
         static ObserverPtr<std::streambuf> gG4coutBufExchanger = nullptr;
         gG4coutBufExchanger = G4cout.rdbuf(gG4coutBufExchanger);
     }
@@ -66,7 +66,7 @@ void MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect)
     if (CheckNEventIsAtLeastCommSize(nEvent)) {
         Utility::MPIUtil::MPIReSeedCLHEPRandom(G4Random::getTheEngine());
         fTotalNumberOfEventsToBeProcessed = nEvent;
-        const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+        const auto& mpiEnv = Env::MPIEnv::Instance();
         fEventIDRange = Utility::MPIUtil::AllocMPIJobsJobWise(0, nEvent, mpiEnv.WorldCommSize(), mpiEnv.WorldCommRank());
         G4RunManager::BeamOn(fEventIDRange.count, macroFile, nSelect);
     }
@@ -132,7 +132,7 @@ void MPIRunManager::RunTermination() {
 }
 
 G4bool MPIRunManager::CheckNEventIsAtLeastCommSize(G4int nEvent) const {
-    if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+    if (const auto& mpiEnv = Env::MPIEnv::Instance();
         nEvent < mpiEnv.WorldCommSize()) {
         if (mpiEnv.AtWorldMaster()) {
             G4Exception("MACE::Utility::G4Util::MPIRunManager::CheckNEventIsAtLeastCommSize(...)",
@@ -149,8 +149,8 @@ G4bool MPIRunManager::CheckNEventIsAtLeastCommSize(G4int nEvent) const {
 }
 
 void MPIRunManager::EventEndReport(G4int event) const {
-    const auto& mpiEnv = Environment::MPIEnvironment::Instance();
-    if (mpiEnv.GetVerboseLevel() < Environment::VerboseLevel::Error) { return; }
+    const auto& mpiEnv = Env::MPIEnv::Instance();
+    if (mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
     const auto avgEventWallTime = fNAvgEventWallTime / numberOfEventProcessed;
     const auto nEventRemain = numberOfEventToBeProcessed - numberOfEventProcessed;
     const auto eta = FormatSecondToDHMS(std::lround(avgEventWallTime * nEventRemain));
@@ -166,8 +166,8 @@ void MPIRunManager::EventEndReport(G4int event) const {
 }
 
 void MPIRunManager::RunEndReport(G4int run) const {
-    const auto& mpiEnv = Environment::MPIEnvironment::Instance();
-    if (mpiEnv.AtWorldWorker() or mpiEnv.GetVerboseLevel() < Environment::VerboseLevel::Error) { return; }
+    const auto& mpiEnv = Env::MPIEnv::Instance();
+    if (mpiEnv.AtWorldWorker() or mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
     const auto wallTimeDHMS = FormatSecondToDHMS(std::lround(fRunWallTime));
     const auto beginTime = std::chrono::system_clock::to_time_t(fRunBeginSystemTime);
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
@@ -184,8 +184,8 @@ void MPIRunManager::RunEndReport(G4int run) const {
 }
 
 void MPIRunManager::RunBeginReport(G4int run) {
-    const auto& mpiEnv = Environment::MPIEnvironment::Instance();
-    if (mpiEnv.AtWorldWorker() or mpiEnv.GetVerboseLevel() < Environment::VerboseLevel::Error) { return; }
+    const auto& mpiEnv = Env::MPIEnv::Instance();
+    if (mpiEnv.AtWorldWorker() or mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     G4cout << "--------------------------------> Run Starts <--------------------------------\n"sv
            << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run "sv << run << " starts on "sv << mpiEnv.WorldCommSize() << " ranks\n"sv

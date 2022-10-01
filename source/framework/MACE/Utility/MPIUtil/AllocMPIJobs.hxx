@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/MPIEnvironment.hxx"
+#include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Utility/DivideIndices.hxx"
 #include "MACE/Utility/MPIUtil/CheckedMPICall.hxx"
 

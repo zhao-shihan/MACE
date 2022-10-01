@@ -1,15 +1,15 @@
 #pragma once
 
-#include "MACE/Environment/Memory/Singleton.hxx"
+#include "MACE/Env/Memory/Singleton.hxx"
 
 #include "G4Allocator.hh"
 
 namespace MACE::Geant4X {
 
 template<class T>
-class SingletonG4Allocator final : public Environment::Memory::Singleton<SingletonG4Allocator<T>>,
+class SingletonG4Allocator final : public Env::Memory::Singleton<SingletonG4Allocator<T>>,
                                    public G4Allocator<T> {
-    friend Environment::Memory::SingletonFactory;
+    friend Env::Memory::SingletonFactory;
 
 private:
     SingletonG4Allocator() = default;

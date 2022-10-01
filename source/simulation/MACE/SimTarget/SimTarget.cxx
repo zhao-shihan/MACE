@@ -1,4 +1,4 @@
-#include "MACE/Environment/MPIEnvironment.hxx"
+#include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Geant4X/MPIExecutive.hxx"
 #include "MACE/SimTarget/Action/DetectorConstruction.hxx"
 #include "MACE/SimTarget/Action/PhysicsList.hxx"
@@ -8,8 +8,8 @@
 #include <array>
 
 int main(int argc, char* argv[]) {
-    MACE::Environment::CLI::Geant4CLI cli;
-    MACE::Environment::MPIEnvironment mpiEnvironment(argc, argv, cli);
+    MACE::Env::CLI::Geant4CLI cli;
+    MACE::Env::MPIEnv mpiEnv(argc, argv, cli);
 
     MACE::CLHEPX::Random::PCG32Engine randomEngine(114514);
     G4Random::setTheEngine(&randomEngine);

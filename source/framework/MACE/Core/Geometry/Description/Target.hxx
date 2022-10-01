@@ -3,7 +3,7 @@
 #include "MACE/Compatibility/std2b/unreachable.hxx"
 #include "MACE/Concept/MathVector.hxx"
 #include "MACE/Core/Geometry/IDescription.hxx"
-#include "MACE/Environment/Memory/MuteSingleton.hxx"
+#include "MACE/Env/Memory/MuteSingleton.hxx"
 #include "MACE/Math/Hypot.hxx"
 #include "MACE/Math/IntegerPower.hxx"
 
@@ -17,7 +17,7 @@
 namespace MACE::Core::Geometry::Description {
 
 class Target final : public ISingletonDescription<Target> {
-    friend Environment::Memory::SingletonFactory;
+    friend Env::Memory::SingletonFactory;
 
 public:
     enum class TargetShapeType {
@@ -25,14 +25,14 @@ public:
     };
 
     template<class ADerivedShape>
-    class ShapeBase : public Environment::Memory::MuteSingleton<ADerivedShape> {
+    class ShapeBase : public Env::Memory::MuteSingleton<ADerivedShape> {
     protected:
         ShapeBase();
         ~ShapeBase() = default;
 
     protected:
         template<class ADerivedDetail>
-        class DetailBase : public Environment::Memory::MuteSingleton<ADerivedDetail> {
+        class DetailBase : public Env::Memory::MuteSingleton<ADerivedDetail> {
         protected:
             DetailBase();
             ~DetailBase() = default;

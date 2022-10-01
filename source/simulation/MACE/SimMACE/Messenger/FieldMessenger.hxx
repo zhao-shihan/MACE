@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Memory/Singleton.hxx"
+#include "MACE/Env/Memory/Singleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
@@ -24,9 +24,9 @@ namespace Messenger {
 
 using Utility::ObserverPtr;
 
-class FieldMessenger final : public Environment::Memory::Singleton<FieldMessenger>,
+class FieldMessenger final : public Env::Memory::Singleton<FieldMessenger>,
                              public G4UImessenger {
-    friend Environment::Memory::SingletonFactory;
+    friend Env::Memory::SingletonFactory;
 
 private:
     FieldMessenger();

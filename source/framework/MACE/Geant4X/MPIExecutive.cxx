@@ -1,4 +1,4 @@
-#include "MACE/Environment/MPIEnvironment.hxx"
+#include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Geant4X/MPIExecutive.hxx"
 
 #include <stdexcept>
@@ -6,7 +6,7 @@
 namespace MACE::Geant4X {
 
 void MPIExecutive::CheckSequential() const {
-    const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+    const auto& mpiEnv = Env::MPIEnv::Instance();
     if (mpiEnv.Parallel()) {
         std::string where("MACE::Geant4X::MPIExecutive::CheckSequential");
         if (mpiEnv.AtWorldMaster()) {

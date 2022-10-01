@@ -1,4 +1,4 @@
-#include "MACE/Environment/MPIEnvironment.hxx"
+#include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Utility/MPIUtil/CheckedMPICall.hxx"
 #include "MACE/Utility/MPIUtil/MPIRandomUtil.hxx"
 
@@ -13,7 +13,7 @@
 namespace MACE::Utility::MPIUtil {
 
 void MPIReSeedCLHEPRandom(ObserverPtr<CLHEP::HepRandomEngine> randEng) {
-    const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+    const auto& mpiEnv = Env::MPIEnv::Instance();
 
     if (mpiEnv.Sequential()) { return; }
 

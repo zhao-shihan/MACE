@@ -2,7 +2,7 @@
 
 #include "MACE/Concept/InstantiatedFrom.hxx"
 #include "MACE/Core/Geometry/IDescription.hxx"
-#include "MACE/Environment/MPIEnvironment.hxx"
+#include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 #include "MACE/Utility/StaticForEach.hxx"

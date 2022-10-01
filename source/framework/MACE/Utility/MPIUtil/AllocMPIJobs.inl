@@ -9,7 +9,7 @@ template<std::integral AIndex>
 IntegralIndexRange<AIndex> AllocMPIJobsJobWise(AIndex jobBegin, AIndex jobEnd, MPI_Comm comm) {
     int commSize;
     int commRank;
-    if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+    if (const auto& mpiEnv = Env::MPIEnv::Instance();
         comm == MPI_COMM_WORLD) {
         commSize = mpiEnv.WorldCommSize();
         commRank = mpiEnv.WorldCommRank();
@@ -46,7 +46,7 @@ template<std::integral AIndex>
 IntegralIndexRange<AIndex> AllocMPIJobsWorkerWise(AIndex jobBegin, AIndex jobEnd, MPI_Comm comm) {
     int commSize;
     int commRank;
-    if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+    if (const auto& mpiEnv = Env::MPIEnv::Instance();
         comm == MPI_COMM_WORLD) {
         commSize = mpiEnv.WorldCommSize();
         commRank = mpiEnv.WorldCommRank();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Memory/FreeSingleton.hxx"
+#include "MACE/Env/Memory/FreeSingleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4Types.hh"
@@ -16,7 +16,7 @@ namespace Action {
 
 using Utility::ObserverPtr;
 
-class TrackingAction final : public Environment::Memory::FreeSingleton<TrackingAction>,
+class TrackingAction final : public Env::Memory::FreeSingleton<TrackingAction>,
                              public G4UserTrackingAction {
 public:
     TrackingAction();

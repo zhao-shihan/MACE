@@ -1,4 +1,4 @@
-#include "MACE/Environment/MPIEnvironment.hxx"
+#include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Utility/MPIUtil/CheckedMPICall.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
@@ -16,7 +16,7 @@ void MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extens
         throw std::logic_error("MACE::Utility::MPIUtil::MakeMPIFilePathInPlace: Empty name");
     }
 
-    if (const auto& mpiEnv = Environment::MPIEnvironment::Instance();
+    if (const auto& mpiEnv = Env::MPIEnv::Instance();
         mpiEnv.Parallel()) {
         // root directory
         if (mpiEnv.OnCluster()) {

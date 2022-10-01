@@ -39,7 +39,7 @@ template<typename... ArgsOfImport>
 void DescriptionIO::Import(const std::ranges::range auto& yamlText) requires
     std::convertible_to<typename std::remove_cvref_t<decltype(yamlText)>::value_type, std::string> {
     auto yamlPath = std::filesystem::temp_directory_path() / "tmp_mace_geom.yaml"sv;
-    if (Environment::MPIEnvironment::Available()) {
+    if (Env::MPIEnv::Available()) {
         Utility::MPIUtil::MakeMPIFilePathInPlace(yamlPath);
     }
     yamlPath.concat(std::to_string(std::chrono::steady_clock::now().time_since_epoch().count()));
@@ -86,7 +86,7 @@ void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::strin
 
         std::ofstream yamlOut;
         try {
-            if (Environment::MPIEnvironment::Available()) {
+            if (Env::MPIEnv::Available()) {
                 yamlOut.open(Utility::MPIUtil::MakeMPIFilePath(yamlFile), std::ios::out);
             } else {
                 const auto parent = yamlFile.parent_path();

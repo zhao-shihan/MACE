@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Core/DataFactory.hxx"
-#include "MACE/Environment/Memory/FreeSingleton.hxx"
+#include "MACE/Env/Memory/FreeSingleton.hxx"
 #include "MACE/SimTarget/MuoniumTrack.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
@@ -18,7 +18,7 @@ namespace MACE::SimTarget {
 using Core::DataFactory;
 using Utility::ObserverPtr;
 
-class Analysis final : public Environment::Memory::FreeSingleton<Analysis> {
+class Analysis final : public Env::Memory::FreeSingleton<Analysis> {
 public:
     Analysis();
     ~Analysis();

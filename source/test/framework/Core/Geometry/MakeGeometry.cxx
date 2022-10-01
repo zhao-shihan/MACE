@@ -1,6 +1,6 @@
 #include "MACE/Core/Geometry/DescriptionIO.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/All.hxx"
-#include "MACE/Environment/BasicEnvironment.hxx"
+#include "MACE/Env/BasicEnv.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
 #include "G4NistManager.hh"
@@ -10,7 +10,7 @@
 using namespace MACE::Core::Geometry::Entity::Fast;
 
 int main(int argc, char** argv) {
-    MACE::Environment::BasicEnvironment env(argc, argv, {});
+    MACE::Env::BasicEnv env(argc, argv, {});
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////

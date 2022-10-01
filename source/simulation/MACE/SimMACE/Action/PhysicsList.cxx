@@ -1,5 +1,5 @@
 #include "MACE/Compatibility/std2b/to_underlying.hxx"
-#include "MACE/Environment/BasicEnvironment.hxx"
+#include "MACE/Env/BasicEnv.hxx"
 #include "MACE/Geant4X/Physics/MuoniumPhysics.hxx"
 #include "MACE/SimMACE/Action/PhysicsList.hxx"
 
@@ -19,7 +19,7 @@ using namespace MACE::Geant4X::Physics;
 
 PhysicsList::PhysicsList() :
     G4VModularPhysicsList() {
-    verboseLevel = std2b::to_underlying(Environment::BasicEnvironment::Instance().GetVerboseLevel());
+    verboseLevel = std2b::to_underlying(Env::BasicEnv::Instance().GetVerboseLevel());
     RegisterPhysics(new G4EmStandardPhysics_option4(verboseLevel));
     RegisterPhysics(new G4EmExtraPhysics(verboseLevel));
     RegisterPhysics(new G4DecayPhysics(verboseLevel));

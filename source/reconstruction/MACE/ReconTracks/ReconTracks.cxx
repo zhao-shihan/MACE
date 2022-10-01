@@ -1,5 +1,5 @@
 #include "MACE/Core/DataFactory.hxx"
-#include "MACE/Environment/MPIEnvironment.hxx"
+#include "MACE/Env/MPIEnv.hxx"
 #include "MACE/ReconTracks/Fitter/DirectLeastSquare.hxx"
 #include "MACE/ReconTracks/Fitter/Dummy.hxx"
 #include "MACE/ReconTracks/Fitter/PerfectFitter.hxx"
@@ -22,12 +22,12 @@ using namespace MACE::Utility::MPIUtil;
 using namespace MACE::Utility::PhysicalConstant;
 
 using MACE::Core::DataFactory;
-using MACE::Environment::MPIEnvironment;
+using MACE::Env::MPIEnv;
 
 using Hit_t = CDCSimHit;
 
 int main(int argc, char* argv[]) {
-    MPIEnvironment mpiEnvironment(argc, argv, {});
+    MPIEnv mpiEnv(argc, argv, {});
 
     const char* nameIn = argv[1];
     const auto threshold = std::stoi(argv[2]);
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
 
     CLHEP::MTwistEngine mtEng;
 
-    std::cout << "Rank" << mpiEnvironment.WorldCommRank() << " is ready to process data of repetition " << treeBegin << " to " << treeEnd - 1 << std::endl;
+    std::cout << "Rank" << mpiEnv.WorldCommRank() << " is ready to process data of repetition " << treeBegin << " to " << treeEnd - 1 << std::endl;
 
     for (auto treeIndex = treeBegin; treeIndex < treeEnd; treeIndex += treeStep) {
         dataHub.TreeNamePrefixFormat("Rep{}_");

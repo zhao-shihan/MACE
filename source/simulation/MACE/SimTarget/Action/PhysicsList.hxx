@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MACE/Environment/Memory/FreeSingleton.hxx"
+#include "MACE/Env/Memory/FreeSingleton.hxx"
 
 #include "G4VModularPhysicsList.hh"
 
 namespace MACE::SimTarget::Action {
 
-class PhysicsList final : public Environment::Memory::FreeSingleton<PhysicsList>,
+class PhysicsList final : public Env::Memory::FreeSingleton<PhysicsList>,
                           public G4VModularPhysicsList {
 public:
     PhysicsList();

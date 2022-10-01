@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Memory/FreeSingleton.hxx"
+#include "MACE/Env/Memory/FreeSingleton.hxx"
 #include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4ParticleDefinition.hh"
@@ -10,7 +10,7 @@ namespace MACE::SimTarget::Action {
 
 using Utility::ObserverPtr;
 
-class SteppingAction final : public Environment::Memory::FreeSingleton<SteppingAction>,
+class SteppingAction final : public Env::Memory::FreeSingleton<SteppingAction>,
                              public G4UserSteppingAction {
 public:
     SteppingAction();

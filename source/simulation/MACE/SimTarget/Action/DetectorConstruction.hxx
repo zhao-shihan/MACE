@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Environment/Memory/FreeSingleton.hxx"
+#include "MACE/Env/Memory/FreeSingleton.hxx"
 
 #include "G4VUserDetectorConstruction.hh"
 
@@ -26,7 +26,7 @@ class IEntity;
 
 namespace SimTarget::Action {
 
-class DetectorConstruction final : public Environment::Memory::FreeSingleton<DetectorConstruction>,
+class DetectorConstruction final : public Env::Memory::FreeSingleton<DetectorConstruction>,
                                    public G4VUserDetectorConstruction {
 public:
     DetectorConstruction();
