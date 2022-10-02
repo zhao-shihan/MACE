@@ -25,7 +25,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
     const auto g4EventsForEachReptition = muonsForEachReptition / fMuonsForEachG4Event; // no rounding
     fRepetitionID = event->GetEventID() / g4EventsForEachReptition;                     // rounding here
 
-    auto* const randEng = G4Random::getTheEngine();
+    const auto randEng = G4Random::getTheEngine();
     for (G4int i = 0; i < fMuonsForEachG4Event; ++i) {
         fSurfaceMuonGenerator.SetVertexTime(G4RandGauss::shoot(randEng, 0, fTimeWidthRMS));
         fSurfaceMuonGenerator.GeneratePrimaryVertex(event);

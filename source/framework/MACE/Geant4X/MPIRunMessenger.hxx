@@ -1,9 +1,10 @@
 #pragma once
 
 #include "MACE/Env/Memory/Singleton.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UImessenger.hh"
+
+#include "gsl/gsl"
 
 #include <memory>
 
@@ -14,7 +15,6 @@ namespace MACE::Geant4X {
 
 class MPIRunManager;
 
-using Utility::ObserverPtr;
 
 class MPIRunMessenger final : public Env::Memory::Singleton<MPIRunMessenger>,
                               public G4UImessenger {
@@ -25,12 +25,12 @@ private:
     ~MPIRunMessenger() = default;
 
 public:
-    void AssignTo(ObserverPtr<MPIRunManager> mpirunManager) { fMPIRunManager = mpirunManager; }
+    void AssignTo(gsl::not_null<MPIRunManager*> mpirunManager) { fMPIRunManager = mpirunManager; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    ObserverPtr<MPIRunManager> fMPIRunManager;
+    MPIRunManager* fMPIRunManager;
 
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithAnInteger> fSetPrintProgress;

@@ -4,7 +4,6 @@
 #include "MACE/Env/Memory/internal/SingletonFactory.hxx"
 #include "MACE/Env/Memory/internal/SingletonPool.hxx"
 #include "MACE/Env/Memory/Singletonized.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include <cassert>
 #include <stdexcept>
@@ -13,7 +12,6 @@
 
 namespace MACE::Env::Memory {
 
-using MACE::Utility::ObserverPtr;
 
 /// @brief A helper base class for constructing environmental singleton
 /// classes via CRTP (Environmental: singleton in MACE environment).
@@ -161,8 +159,8 @@ private:
 
 private:
     static struct InstanceKeeper {
-        ObserverPtr<ADerived> object;
-        ObserverPtr<internal::SingletonPool::Node> node;
+        ADerived* object;
+        internal::SingletonPool::Node* node;
     } fgInstance;
 };
 

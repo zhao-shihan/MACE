@@ -3,7 +3,6 @@
 #include "MACE/Concept/PointerImitator.hxx"
 #include "MACE/Core/DataModel/TransientData.hxx"
 #include "MACE/Utility/MerelyMoveableBase.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "TChain.h"
 #include "TFile.h"
@@ -20,7 +19,6 @@
 namespace MACE::Core {
 
 using namespace std::string_view_literals;
-using Utility::ObserverPtr;
 
 class DataFactory final : public Utility::MerelyMoveableBase {
 public:
@@ -40,7 +38,7 @@ public:
     /// The tree is owned by the file.
     /// If not found, the return value is defined by ROOT (usually nullptr).
     template<DataModel::TransientData AData>
-    ObserverPtr<TTree> FindTree(TFile& file, Long64_t treeIndex = 0) const { return file.Get<TTree>(TreeName<AData>(treeIndex).c_str()); }
+    TTree* FindTree(TFile& file, Long64_t treeIndex = 0) const { return file.Get<TTree>(TreeName<AData>(treeIndex).c_str()); }
     /// Create a TChain of the list of ROOT files.
     template<DataModel::TransientData AData, std::convertible_to<gsl::czstring> APath>
     std::shared_ptr<TChain> CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex = 0) const;

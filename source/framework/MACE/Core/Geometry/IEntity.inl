@@ -5,7 +5,7 @@
 namespace MACE::Core::Geometry {
 
 template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, class AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
-void IEntity::RegisterField(std::size_t volumeIndex, AField* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const {
+void IEntity::RegisterField(gsl::index volumeIndex, gsl::not_null<AField*> field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const {
     auto logicalVolume = LogicalVolume(volumeIndex);
     auto DoRegistration = [&field, &hMin, &nVal, &logicalVolume, &propagateToDescendants] {
         auto equation = new AEquation(field);
@@ -26,30 +26,30 @@ void IEntity::RegisterField(std::size_t volumeIndex, AField* field, G4double hMi
 }
 
 template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, class AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
-void IEntity::RegisterField(AField* field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const {
-    for (std::size_t i = 0; i < LogicalVolumeNum(); ++i) {
+void IEntity::RegisterField(gsl::not_null<AField*> field, G4double hMin, G4int nVal, G4bool propagateToDescendants) const {
+    for (gsl::index i = 0; i < LogicalVolumeNum(); ++i) {
         RegisterField<AField, AEquation, AStepper, ADriver>(i, field, hMin, nVal, propagateToDescendants);
     }
 }
 
-template<std::derived_from<G4VSolid> ASolid, typename... Args>
-ObserverPtr<ASolid> IEntity::Make(Args&&... args) {
-    auto solid = new ASolid(std::forward<Args>(args)...);
-    fSolidStore.emplace_back(static_cast<G4VSolid*>(solid));
+template<std::derived_from<G4VSolid> ASolid>
+gsl::not_null<ASolid*> IEntity::Make(auto&&... args) {
+    const auto solid = new ASolid(std::forward<decltype(args)>(args)...);
+    fSolidStore.emplace_back(solid);
     return solid;
 }
 
-template<std::derived_from<G4LogicalVolume> ALogical, typename... Args>
-ObserverPtr<ALogical> IEntity::Make(Args&&... args) {
-    auto logic = new ALogical(std::forward<Args>(args)...);
-    fLogicalVolumes.emplace_back(static_cast<G4LogicalVolume*>(logic));
+template<std::derived_from<G4LogicalVolume> ALogical>
+gsl::not_null<ALogical*> IEntity::Make(auto&&... args) {
+    const auto logic = new ALogical(std::forward<decltype(args)>(args)...);
+    fLogicalVolumes.emplace_back(logic);
     return logic;
 }
 
-template<std::derived_from<G4VPhysicalVolume> APhysical, typename... Args>
-ObserverPtr<APhysical> IEntity::Make(Args&&... args) {
-    auto physics = new APhysical(std::forward<Args>(args)...);
-    fPhysicalVolumes.emplace_back(static_cast<G4VPhysicalVolume*>(physics));
+template<std::derived_from<G4VPhysicalVolume> APhysical>
+gsl::not_null<APhysical*> IEntity::Make(auto&&... args) {
+    const auto physics = new APhysical(std::forward<decltype(args)>(args)...);
+    fPhysicalVolumes.emplace_back(physics);
     return physics;
 }
 

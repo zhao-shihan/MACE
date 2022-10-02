@@ -8,6 +8,8 @@
 #include "G4SDManager.hh"
 #include "G4Step.hh"
 
+#include "gsl/gsl"
+
 namespace MACE::SimMACE::SD {
 
 using Hit::CDCHit;
@@ -24,7 +26,7 @@ CDCSD::CDCSD(const G4String& sdName) :
 
     const auto senseWireMap = Core::Geometry::Description::CDC::Instance().SenseWireMap();
     fSenseWireMap.resize(senseWireMap.size());
-    for (std::size_t i = 0; i < senseWireMap.size(); ++i) {
+    for (gsl::index i = 0; i < senseWireMap.size(); ++i) {
         auto& [wirePosG4, wireDirG4] = fSenseWireMap[i];
         const auto& [wirePosEigen, wireDirEigen] = senseWireMap[i];
         wirePosG4.set(wirePosEigen.x(), wirePosEigen.y());
@@ -40,12 +42,12 @@ void CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
 
 G4bool CDCSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
     if (!step->IsFirstStepInVolume() and !step->IsLastStepInVolume()) { return false; }
-    const auto* const track = step->GetTrack();
-    const auto* const particle = track->GetDefinition();
+    const auto track = step->GetTrack();
+    const auto particle = track->GetDefinition();
     if (track->GetCurrentStepNumber() <= 1 or particle->GetPDGCharge() == 0) { return false; }
     // get track ID and cell ID of this hit
     const auto trackID = track->GetTrackID();
-    const auto* const touchable = track->GetTouchable();
+    const auto touchable = track->GetTouchable();
     const auto cellID = touchable->GetReplicaNumber(1);
     // find entered point
     auto monitoring = std::as_const(fEnteredPointList).find({trackID, cellID});
@@ -65,7 +67,7 @@ G4bool CDCSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         const auto pIn = enterPoint.GetMomentumDirection();
         const auto zIn = enterPoint.GetPosition().z();
         // retrive exiting time and position
-        const auto* const exitPoint = step->GetPreStepPoint();
+        const auto exitPoint = step->GetPreStepPoint();
         const auto tOut = exitPoint->GetGlobalTime();
         const auto rOut = exitPoint->GetPosition();
         const auto pOut = exitPoint->GetMomentumDirection();
@@ -79,7 +81,7 @@ G4bool CDCSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         const auto vertexTotalEnergy = track->GetVertexKineticEnergy() + particle->GetPDGMass();
         const auto vertexMomentum = track->GetVertexMomentumDirection() * std::sqrt(track->GetVertexKineticEnergy() * (vertexTotalEnergy + particle->GetPDGMass()));
         // new a hit
-        auto* const hit = new CDCHit();
+        const auto hit = new CDCHit();
         hit->HitTime((tIn + tOut) / 2);
         hit->DriftDistance(driftDistance);
         hit->HitPositionZ((zIn + zOut) / 2);

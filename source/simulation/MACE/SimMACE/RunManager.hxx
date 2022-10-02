@@ -7,13 +7,11 @@
 #include "MACE/SimMACE/Action/PrimaryGeneratorAction.hxx"
 #include "MACE/SimMACE/Action/RunAction.hxx"
 #include "MACE/SimMACE/Analysis.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include <memory>
 
 namespace MACE::SimMACE {
 
-using Utility::ObserverPtr;
 
 class RunManager final : public Geant4X::MPIRunManager {
 public:
@@ -29,7 +27,7 @@ public:
     auto& GetAnalysis() const { return *fAnalysis; }
 
 private:
-    ObserverPtr<Action::PhysicsList> fPhysicsList;
+    Action::PhysicsList* const fPhysicsList;
     std::unique_ptr<Analysis> fAnalysis;
 };
 

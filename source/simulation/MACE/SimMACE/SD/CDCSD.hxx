@@ -2,7 +2,6 @@
 
 #include "MACE/SimMACE/Hit/CDCHit.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4TwoVector.hh"
 #include "G4VSensitiveDetector.hh"
@@ -12,7 +11,6 @@
 namespace MACE::SimMACE::SD {
 
 using Hit::CDCHitCollection;
-using MACE::Utility::ObserverPtr;
 
 class CDCSD final : public Utility::NonMoveableBase,
                     public G4VSensitiveDetector {
@@ -28,7 +26,7 @@ public:
 
 private:
     G4int fEventID;
-    ObserverPtr<CDCHitCollection> fHitsCollection;
+    CDCHitCollection* fHitsCollection;
     std::map<std::pair<int, int>, const G4StepPoint> fEnteredPointList;
     std::vector<std::pair<G4TwoVector, G4ThreeVector>> fSenseWireMap;
 };

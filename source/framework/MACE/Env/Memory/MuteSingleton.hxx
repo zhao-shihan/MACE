@@ -3,7 +3,6 @@
 #include "MACE/Env/Memory/internal/MuteSingletonBase.hxx"
 #include "MACE/Env/Memory/internal/MuteSingletonPool.hxx"
 #include "MACE/Env/Memory/MuteSingletonized.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include <stdexcept>
 #include <string>
@@ -14,7 +13,6 @@ namespace MACE::Env::Memory {
 template<class ADerived>
 class FreeSingleton;
 
-using Utility::ObserverPtr;
 
 template<class ADerived>
 class MuteSingleton : public internal::MuteSingletonBase {
@@ -25,7 +23,7 @@ protected:
     ~MuteSingleton();
 
 private:
-    static ObserverPtr<internal::MuteSingletonPool::Node> fgInstanceNode;
+    static internal::MuteSingletonPool::Node* fgInstanceNode;
 };
 
 } // namespace MACE::Env::Memory

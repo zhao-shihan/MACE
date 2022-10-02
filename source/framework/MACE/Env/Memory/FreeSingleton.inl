@@ -1,14 +1,14 @@
 namespace MACE::Env::Memory {
 
 template<class ADerived>
-ObserverPtr<ADerived> FreeSingleton<ADerived>::fgInstance = nullptr;
+ADerived* FreeSingleton<ADerived>::fgInstance = nullptr;
 
 template<class ADerived>
 FreeSingleton<ADerived>::FreeSingleton() :
     FreeSingletonBase(),
     MuteSingleton<ADerived>() {
     static_assert(FreeSingletonized<ADerived>);
-    fgInstance = static_cast<ObserverPtr<ADerived>>(this);
+    fgInstance = static_cast<ADerived*>(this);
 }
 
 template<class ADerived>
@@ -35,7 +35,7 @@ void FreeSingleton<ADerived>::FindInstance() {
         if (auto& node = optionalNode->get();
             node != nullptr) {
             MuteSingleton<ADerived>::fgInstanceNode = std::addressof(node);
-            fgInstance = static_cast<ObserverPtr<ADerived>>(node);
+            fgInstance = static_cast<ADerived*>(node);
         } else {
             throw std::logic_error(
                 std::string("MACE::Env::Memory::FreeSingleton::Instance(): The instance of ")

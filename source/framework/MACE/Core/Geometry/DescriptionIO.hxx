@@ -4,12 +4,12 @@
 #include "MACE/Core/Geometry/IDescription.hxx"
 #include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 #include "MACE/Utility/StaticForEach.hxx"
 
 #include "yaml-cpp/yaml.h"
 
 #include <algorithm>
+#include "gsl/gsl"
 #include <array>
 #include <chrono>
 #include <concepts>
@@ -26,7 +26,6 @@
 namespace MACE::Core::Geometry {
 
 using namespace std::string_view_literals;
-using Utility::ObserverPtr;
 
 class DescriptionIO final {
 public:
@@ -59,7 +58,7 @@ private:
     static void IxportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::range auto& descriptions);
 
 private:
-    static std::set<ObserverPtr<IDescription>> fgInstanceSet;
+    static std::set<IDescription*> fgInstanceSet;
 };
 
 } // namespace MACE::Core::Geometry

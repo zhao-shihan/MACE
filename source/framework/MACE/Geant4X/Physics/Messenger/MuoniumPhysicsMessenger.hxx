@@ -1,13 +1,14 @@
 #pragma once
 
 #include "MACE/Env/Memory/Singleton.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
+
+#include "gsl/gsl"
 
 namespace MACE::Geant4X::Physics {
 
@@ -20,7 +21,6 @@ class MuoniumTransport;
 
 namespace Messenger {
 
-using Utility::ObserverPtr;
 
 class MuoniumPhysicsMessenger final : public Env::Memory::Singleton<MuoniumPhysicsMessenger>,
                                       public G4UImessenger {
@@ -31,14 +31,14 @@ private:
     ~MuoniumPhysicsMessenger() = default;
 
 public:
-    void AssignTo(ObserverPtr<Process::MuoniumFormation> mf) { fMuoniumFormation = mf; }
-    void AssignTo(ObserverPtr<Process::MuoniumTransport> mt) { fMuoniumTransport = mt; }
+    void AssignTo(gsl::not_null<Process::MuoniumFormation*> mf) { fMuoniumFormation = mf; }
+    void AssignTo(gsl::not_null<Process::MuoniumTransport*> mt) { fMuoniumTransport = mt; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    ObserverPtr<Process::MuoniumFormation> fMuoniumFormation;
-    ObserverPtr<Process::MuoniumTransport> fMuoniumTransport;
+    Process::MuoniumFormation* fMuoniumFormation;
+    Process::MuoniumTransport* fMuoniumTransport;
 
     G4UIdirectory fMuoniumPhysicsDirectory;
 

@@ -12,7 +12,7 @@
 
 namespace MACE::Utility::MPIUtil {
 
-void MPIReSeedCLHEPRandom(ObserverPtr<CLHEP::HepRandomEngine> randEng) {
+void MPIReSeedCLHEPRandom(gsl::not_null<CLHEP::HepRandomEngine*> randEng) {
     const auto& mpiEnv = Env::MPIEnv::Instance();
 
     if (mpiEnv.Sequential()) { return; }

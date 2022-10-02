@@ -31,7 +31,7 @@ template<std::convertible_to<std::string>... AStrings>
 std::optional<const YAML::Node> IDescription::UnpackToLeafNodeForImporting(const YAML::Node& node, AStrings&&... nodeNames) {
     try {
         std::array<YAML::Node, sizeof...(nodeNames)> leafNodes;
-        std::size_t i = 0;
+        gsl::index i = 0;
         Utility::TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
                               [&node, &leafNodes, &i](auto&& name) {
                                   leafNodes[i] = (i == 0 ? node : leafNodes[i - 1])[name];
@@ -46,7 +46,7 @@ std::optional<const YAML::Node> IDescription::UnpackToLeafNodeForImporting(const
 template<std::convertible_to<std::string>... AStrings>
 YAML::Node IDescription::UnpackToLeafNodeForExporting(YAML::Node& node, AStrings&&... nodeNames) const {
     std::array<YAML::Node, sizeof...(nodeNames)> leafNodes;
-    std::size_t i = 0;
+    gsl::index i = 0;
     Utility::TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
                           [&node, &leafNodes, &i](auto&& name) {
                               leafNodes[i] = (i == 0 ? node : leafNodes[i - 1])[name];

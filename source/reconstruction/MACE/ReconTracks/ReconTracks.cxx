@@ -12,6 +12,8 @@
 #include "CLHEP/Random/MTwistEngine.h"
 #include "CLHEP/Random/RandGauss.h"
 
+#include "gsl/gsl"
+
 #include <filesystem>
 
 using namespace MACE::Core::DataModel::SimHit;
@@ -29,7 +31,7 @@ using Hit_t = CDCSimHit;
 int main(int argc, char* argv[]) {
     MPIEnv mpiEnv(argc, argv, {});
 
-    const char* nameIn = argv[1];
+    gsl::czstring nameIn = argv[1];
     const auto threshold = std::stoi(argv[2]);
     const auto fitterVerbose = std::stoi(argv[3]);
     const auto tolerance = std::stod(argv[4]);
@@ -103,7 +105,7 @@ int main(int argc, char* argv[]) {
 
         std::vector<std::shared_ptr<CDCPhysicsTrack>> errors;
         errors.reserve(physicsTracks.size());
-        for (std::size_t i = 0; i < physicsTracks.size(); ++i) {
+        for (gsl::index i = 0; i < physicsTracks.size(); ++i) {
             auto hits = trackedHits[i];
             const auto& physicsTrack = *physicsTracks[i];
             auto& error = *errors.emplace_back(std::make_shared<CDCPhysicsTrack>());

@@ -24,19 +24,19 @@ void MCPSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
 }
 
 G4bool MCPSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
-    const auto* const track = step->GetTrack();
-    const auto* const particle = track->GetDefinition();
+    const auto track = step->GetTrack();
+    const auto particle = track->GetDefinition();
     if (step->IsFirstStepInVolume() and track->GetCurrentStepNumber() > 1 and // is coming from outside, and
         particle->GetPDGCharge() != 0) {                                      // is a charged particle.
-        const auto* const preStepPoint = step->GetPreStepPoint();
-        const auto* const touchable = preStepPoint->GetTouchable();
+        const auto preStepPoint = step->GetPreStepPoint();
+        const auto touchable = preStepPoint->GetTouchable();
         // get detector transform
         const auto& detectorPosition = touchable->GetTranslation();
         const auto& detectorRotation = *touchable->GetRotation();
         // transform hit position to local coordinate
         const auto hitPosition = G4TwoVector(detectorRotation * (preStepPoint->GetPosition() - detectorPosition));
         // new a hit
-        auto* const hit = new MCPHit();
+        const auto hit = new MCPHit();
         hit->HitTime(preStepPoint->GetGlobalTime());
         hit->SetHitPosition(hitPosition);
         hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());

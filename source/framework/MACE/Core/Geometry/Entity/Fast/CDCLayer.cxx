@@ -6,6 +6,8 @@
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
+#include "gsl/gsl"
+
 namespace MACE::Core::Geometry::Entity::Fast {
 
 using namespace MACE::Utility::PhysicalConstant;
@@ -16,7 +18,7 @@ void CDCLayer::ConstructSelf(G4bool checkOverlaps) {
     const auto detail = description.LayerGeometryDetail();
     const auto count = detail.size();
 
-    for (std::size_t layerID = 0; layerID < count; ++layerID) {
+    for (gsl::index layerID = 0; layerID < count; ++layerID) {
         const auto& [radius, thick, halfLength, _] = detail[layerID];
         auto solid = Make<G4Tubs>(
             name,

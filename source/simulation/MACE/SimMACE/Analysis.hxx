@@ -2,9 +2,10 @@
 
 #include "MACE/Core/DataFactory.hxx"
 #include "MACE/Env/Memory/FreeSingleton.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4Types.hh"
+
+#include "gsl/gsl"
 
 #include <filesystem>
 #include <utility>
@@ -21,9 +22,6 @@ class MCPHit;
 
 } // namespace Hit
 
-using Core::DataFactory;
-using MACE::Utility::ObserverPtr;
-
 class Analysis final : public Env::Memory::FreeSingleton<Analysis> {
 public:
     Analysis();
@@ -35,9 +33,9 @@ public:
     void Open(Option_t* option = "recreate");
     void Close(Option_t* option = nullptr);
 
-    void SubmitEMCalHC(ObserverPtr<const std::vector<Hit::EMCalHit*>> hitList) { fEMCalHitList = hitList; }
-    void SubmitMCPHC(ObserverPtr<const std::vector<Hit::MCPHit*>> hitList) { fMCPHitList = hitList; }
-    void SubmitSpectrometerHC(ObserverPtr<const std::vector<Hit::CDCHit*>> hitList) { fCDCHitList = hitList; }
+    void SubmitEMCalHC(gsl::not_null<const std::vector<gsl::owner<Hit::EMCalHit*>>*> hitList) { fEMCalHitList = hitList; }
+    void SubmitMCPHC(gsl::not_null<const std::vector<gsl::owner<Hit::MCPHit*>>*> hitList) { fMCPHitList = hitList; }
+    void SubmitSpectrometerHC(gsl::not_null<const std::vector<gsl::owner<Hit::CDCHit*>>*> hitList) { fCDCHitList = hitList; }
     void WriteEvent(G4int repetitionId);
 
 private:
@@ -50,16 +48,16 @@ private:
     G4bool fEnableCoincidenceOfEMCal;
     G4bool fEnableCoincidenceOfMCP;
 
-    DataFactory fDataHub;
+    Core::DataFactory fDataHub;
 
     G4int fRepetitionIdOfLastG4Event;
     std::shared_ptr<TTree> fEMCalHitTree;
     std::shared_ptr<TTree> fMCPHitTree;
     std::shared_ptr<TTree> fCDCHitTree;
 
-    ObserverPtr<const std::vector<Hit::EMCalHit*>> fEMCalHitList;
-    ObserverPtr<const std::vector<Hit::MCPHit*>> fMCPHitList;
-    ObserverPtr<const std::vector<Hit::CDCHit*>> fCDCHitList;
+    const std::vector<gsl::owner<Hit::EMCalHit*>>* fEMCalHitList;
+    const std::vector<gsl::owner<Hit::MCPHit*>>* fMCPHitList;
+    const std::vector<gsl::owner<Hit::CDCHit*>>* fCDCHitList;
 };
 
 } // namespace MACE::SimMACE

@@ -5,7 +5,7 @@ template<Singletonized ASingleton>
     auto& instancePool = SingletonPool::Instance();
     if (const auto existedNode = instancePool.Find<ASingleton>();
         not existedNode.has_value()) [[likely]] {
-        return instancePool.Insert(new ASingleton());
+        return instancePool.Insert<ASingleton>(new ASingleton());
     } else {
         return existedNode.value();
     }

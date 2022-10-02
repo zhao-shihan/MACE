@@ -1,7 +1,7 @@
 namespace MACE::Env::Memory {
 
 template<class ADerived>
-ObserverPtr<internal::MuteSingletonPool::Node> MuteSingleton<ADerived>::fgInstanceNode = nullptr;
+internal::MuteSingletonPool::Node* MuteSingleton<ADerived>::fgInstanceNode = nullptr;
 
 template<class ADerived>
 MuteSingleton<ADerived>::MuteSingleton() :
@@ -9,7 +9,7 @@ MuteSingleton<ADerived>::MuteSingleton() :
     static_assert(MuteSingletonized<ADerived>);
     if (auto& muteSingletonPool = internal::MuteSingletonPool::Instance();
         not muteSingletonPool.Contains<ADerived>()) {
-        fgInstanceNode = std::addressof(muteSingletonPool.Insert(static_cast<ObserverPtr<ADerived>>(this)));
+        fgInstanceNode = std::addressof(muteSingletonPool.Insert<ADerived>(static_cast<ADerived*>(this)));
     } else {
         throw std::logic_error(
             std::string("MACE::Env::Memory::MuteSingleton::MuteSingleton(): "

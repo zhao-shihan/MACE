@@ -1,9 +1,10 @@
 #pragma once
 
 #include "MACE/Env/Memory/Singleton.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UImessenger.hh"
+
+#include "gsl/gsl"
 
 #include <memory>
 
@@ -24,7 +25,6 @@ class DetectorConstruction;
 
 namespace Messenger {
 
-using Utility::ObserverPtr;
 
 class GeometryMessenger final : public Env::Memory::Singleton<GeometryMessenger>,
                                 public G4UImessenger {
@@ -37,12 +37,12 @@ private:
     GeometryMessenger& operator=(const GeometryMessenger&) = delete;
 
 public:
-    void AssignTo(ObserverPtr<Action::DetectorConstruction> dc) { fDetectorConstruction = dc; }
+    void AssignTo(gsl::not_null<Action::DetectorConstruction*> dc) { fDetectorConstruction = dc; }
 
-    void SetNewValue(ObserverPtr<G4UIcommand> command, G4String value) override;
+    void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    ObserverPtr<Action::DetectorConstruction> fDetectorConstruction;
+    Action::DetectorConstruction* fDetectorConstruction;
 
     std::unique_ptr<G4UIcmdWithAString> fImportDescription;
     std::unique_ptr<G4UIcmdWithAString> fExportDescription;

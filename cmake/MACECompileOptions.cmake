@@ -90,11 +90,15 @@ endif()
 
 if(MACE_SURPRESS_COMPILE_WARNINGS)
     if(CMAKE_COMPILER_IS_GNUCXX)
+        # gsl::index
+        add_compile_options(-Wno-sign-compare)
         # OpenMPI
         add_compile_options(-Wno-cast-function-type)
         # ROOT
         add_compile_options(-Wno-volatile)
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        # gsl::index
+        add_compile_options(-Wno-sign-compare)
         # ROOT
         add_compile_options(-Wno-deprecated-volatile)
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")

@@ -3,7 +3,8 @@
 #include "MACE/Core/DataFactory.hxx"
 #include "MACE/Env/Memory/FreeSingleton.hxx"
 #include "MACE/SimTarget/MuoniumTrack.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
+
+#include "gsl/gsl"
 
 #include <filesystem>
 #include <fstream>
@@ -16,7 +17,6 @@ class TFile;
 namespace MACE::SimTarget {
 
 using Core::DataFactory;
-using Utility::ObserverPtr;
 
 class Analysis final : public Env::Memory::FreeSingleton<Analysis> {
 public:
@@ -26,7 +26,7 @@ public:
     void SetResultPath(const auto& path) { (fResultPath = std::forward<decltype(path)>(path)).replace_extension(); }
     void EnableYieldAnalysis(bool val) { fEnableYieldAnalysis = val; }
 
-    void RunBegin(ObserverPtr<const G4Run> run);
+    void RunBegin(gsl::not_null<const G4Run*> run);
     auto NewMuoniumTrack() { return fMuoniumTrackList.emplace_back(std::make_unique<MuoniumTrack>()).get(); }
     void RunEnd();
 
@@ -47,7 +47,7 @@ private:
     std::filesystem::path fResultPath;
     bool fEnableYieldAnalysis;
 
-    ObserverPtr<const G4Run> fThisRun;
+    const G4Run* fThisRun;
     std::vector<std::unique_ptr<MuoniumTrack>> fMuoniumTrackList;
 
     std::unique_ptr<TFile> fResultFile;

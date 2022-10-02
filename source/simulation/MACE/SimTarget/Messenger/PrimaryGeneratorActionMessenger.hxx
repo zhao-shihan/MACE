@@ -1,11 +1,12 @@
 #pragma once
 
 #include "MACE/Env/Memory/Singleton.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
+
+#include "gsl/gsl"
 
 namespace MACE::SimTarget {
 
@@ -17,7 +18,6 @@ class PrimaryGeneratorAction;
 
 namespace Messenger {
 
-using Utility::ObserverPtr;
 
 class PrimaryGeneratorActionMessenger final : public Env::Memory::Singleton<PrimaryGeneratorActionMessenger>,
                                               public G4UImessenger {
@@ -30,12 +30,12 @@ private:
     PrimaryGeneratorActionMessenger& operator=(const PrimaryGeneratorActionMessenger&) = delete;
 
 public:
-    void AssignTo(ObserverPtr<Action::PrimaryGeneratorAction> pga) { fPrimaryGeneratorAction = pga; }
+    void AssignTo(gsl::not_null<Action::PrimaryGeneratorAction*> pga) { fPrimaryGeneratorAction = pga; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    ObserverPtr<Action::PrimaryGeneratorAction> fPrimaryGeneratorAction;
+    Action::PrimaryGeneratorAction* fPrimaryGeneratorAction;
 
     G4UIcmdWithAnInteger fSetMuonsForEachG4Event;
 };

@@ -26,7 +26,7 @@ private:
     static void FindInstance();
 
 private:
-    static ObserverPtr<ADerived> fgInstance;
+    static ADerived* fgInstance;
 };
 
 } // namespace MACE::Env::Memory

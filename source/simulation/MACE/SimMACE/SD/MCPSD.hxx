@@ -23,7 +23,7 @@ public:
 
 private:
     G4int fEventID;
-    ObserverPtr<MCPHitCollection> fHitsCollection;
+    MCPHitCollection* fHitsCollection;
 };
 
 } // namespace MACE::SimMACE::SD

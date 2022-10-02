@@ -7,6 +7,8 @@
 
 #include "G4MuonPlus.hh"
 
+#include "gsl/gsl"
+
 namespace MACE::Geant4X::Physics::Process {
 
 using namespace Utility::LiteralUnit::Time;
@@ -14,8 +16,8 @@ using namespace Utility::PhysicalConstant;
 
 MuoniumFormation::MuoniumFormation() :
     G4VRestProcess("MuoniumFormation", fUserDefined),
-    fMuonium(Particle::Muonium::Definition()),
-    fAntiMuonium(Particle::AntiMuonium::Definition()),
+    fMuonium(gsl::not_null(Particle::Muonium::Definition())),
+    fAntiMuonium(gsl::not_null(Particle::AntiMuonium::Definition())),
     fTarget(std::addressof(Target::Instance())),
     fRandEng(G4Random::getTheEngine()),
     fFormationProbability(0.65),
@@ -32,7 +34,7 @@ G4bool MuoniumFormation::IsApplicable(const G4ParticleDefinition& particle) {
 void MuoniumFormation::StartTracking(G4Track* track) {
     G4VRestProcess::StartTracking(track);
     // the random engine in use
-    fRandEng = G4Random::getTheEngine();
+    fRandEng = gsl::not_null(G4Random::getTheEngine());
 }
 
 G4VParticleChange* MuoniumFormation::AtRestDoIt(const G4Track& track, const G4Step&) {

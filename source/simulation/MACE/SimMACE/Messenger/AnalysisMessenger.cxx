@@ -29,7 +29,7 @@ AnalysisMessenger::AnalysisMessenger() :
     fSetResultPath.AvailableForStates(G4State_Idle);
 }
 
-void AnalysisMessenger::SetNewValue(ObserverPtr<G4UIcommand> command, G4String value) {
+void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     if (command == std::addressof(fEnableCoincidenceOfEMCal)) {
         fAnalysis->SetEnableCoincidenceOfEMCal(fEnableCoincidenceOfEMCal.GetNewBoolValue(value));
     } else if (command == std::addressof(fEnableCoincidenceOfMCP)) {

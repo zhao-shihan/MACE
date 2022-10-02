@@ -2,15 +2,15 @@
 
 #include "MACE/Env/Memory/Singleton.hxx"
 #include "MACE/Geant4X/Generator/SurfaceMuon.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
+#include "gsl/gsl"
+
 namespace MACE::Geant4X::Generator {
 
-using Utility::ObserverPtr;
 
 class SurfaceMuonMessenger final : public Env::Memory::Singleton<SurfaceMuonMessenger>,
                                    public G4UImessenger {
@@ -23,12 +23,12 @@ private:
     SurfaceMuonMessenger& operator=(const SurfaceMuonMessenger&) = delete;
 
 public:
-    void AssignTo(ObserverPtr<SurfaceMuon> gen) { fSurfaceMuonGenerator = gen; }
+    void AssignTo(gsl::not_null<SurfaceMuon*> gen) { fSurfaceMuonGenerator = gen; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    ObserverPtr<SurfaceMuon> fSurfaceMuonGenerator;
+    SurfaceMuon* fSurfaceMuonGenerator;
 
     G4UIdirectory fDirectory;
     G4UIcmdWithADoubleAndUnit fSetMomentum;

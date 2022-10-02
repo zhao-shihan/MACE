@@ -4,6 +4,8 @@
 #include "MACE/Concept/NumericVector.hxx"
 #include "MACE/Concept/Subscriptable.hxx"
 
+#include "gsl/gsl"
+
 #include <concepts>
 #include <cstddef>
 #include <utility>
@@ -37,7 +39,7 @@ decltype(auto) AssignVector(Concept::NumericVector<T, N> auto& lhs, auto&& rhs) 
 template<Concept::Arithmetic T, std::size_t N>
 decltype(auto) AssignVector(Concept::NumericVector<T, N> auto& lhs, Concept::Subscriptable auto&& rhs) requires(
     not std::assignable_from<decltype(lhs), decltype(rhs)>) {
-    for (std::size_t i = 0; i < N; ++i) {
+    for (gsl::index i = 0; i < N; ++i) {
         lhs[i] = rhs[i];
     }
     return lhs;

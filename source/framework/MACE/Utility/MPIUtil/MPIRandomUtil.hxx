@@ -1,6 +1,7 @@
 #pragma once
 
-#include "MACE/Utility/ObserverPtr.hxx"
+
+#include "gsl/gsl"
 
 namespace CLHEP {
 
@@ -10,6 +11,6 @@ class HepRandomEngine;
 
 namespace MACE::Utility::MPIUtil {
 
-void MPIReSeedCLHEPRandom(ObserverPtr<CLHEP::HepRandomEngine> randEng);
+void MPIReSeedCLHEPRandom(gsl::not_null<CLHEP::HepRandomEngine*> randEng);
 
 } // namespace MACE::Utility::MPIUtil

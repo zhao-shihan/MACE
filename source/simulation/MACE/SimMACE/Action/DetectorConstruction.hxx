@@ -6,7 +6,6 @@
 #include "MACE/SimMACE/SD/EMCalSD.hxx"
 #include "MACE/SimMACE/SD/MCPSD.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4VUserDetectorConstruction.hh"
 
@@ -24,7 +23,6 @@ class MCPSD;
 
 namespace Action {
 
-using MACE::Utility::ObserverPtr;
 
 class DetectorConstruction final : public Utility::NonMoveableBase,
                                    public G4VUserDetectorConstruction {
@@ -90,19 +88,19 @@ private:
     std::shared_ptr<Core::Geometry::IEntity> fThirdTransportSolenoid;
     std::shared_ptr<Core::Geometry::IEntity> fWorld;
 
-    ObserverPtr<Region> fEMCalSensitiveRegion;
-    ObserverPtr<Region> fDefaultSolidRegion;
-    ObserverPtr<Region> fDefaultGaseousRegion;
-    ObserverPtr<Region> fShieldRegion;
-    ObserverPtr<Region> fSolenoidOrMagnetRegion;
-    ObserverPtr<Region> fSpectrometerSensitiveRegion;
-    ObserverPtr<Region> fTargetRegion;
-    ObserverPtr<Region> fVacuumRegion;
-    ObserverPtr<Region> fMCPSensitiveRegion;
+    Region* fEMCalSensitiveRegion;
+    Region* fDefaultSolidRegion;
+    Region* fDefaultGaseousRegion;
+    Region* fShieldRegion;
+    Region* fSolenoidOrMagnetRegion;
+    Region* fSpectrometerSensitiveRegion;
+    Region* fTargetRegion;
+    Region* fVacuumRegion;
+    Region* fMCPSensitiveRegion;
 
-    ObserverPtr<SD::CDCSD> fCDCSD;
-    ObserverPtr<SD::EMCalSD> fEMCalSD;
-    ObserverPtr<SD::MCPSD> fMCPSD;
+    SD::CDCSD* fCDCSD;
+    SD::EMCalSD* fEMCalSD;
+    SD::MCPSD* fMCPSD;
 };
 
 } // namespace Action

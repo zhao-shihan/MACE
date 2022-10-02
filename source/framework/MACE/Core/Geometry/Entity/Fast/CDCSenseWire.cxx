@@ -6,6 +6,8 @@
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
+#include "gsl/gsl"
+
 namespace MACE::Core::Geometry::Entity::Fast {
 
 using namespace MACE::Utility::PhysicalConstant;
@@ -17,7 +19,7 @@ void CDCSenseWire::ConstructSelf(G4bool checkOverlaps) {
     const auto detail = description.SenseWireGeometryDetail();
     const auto layerCount = detail.size();
 
-    for (std::size_t layerID = 0; layerID < layerCount; ++layerID) {
+    for (gsl::index layerID = 0; layerID < layerCount; ++layerID) {
         const auto& [localPositon, halfLength] = detail[layerID];
         auto solid = Make<G4Tubs>(
             name,

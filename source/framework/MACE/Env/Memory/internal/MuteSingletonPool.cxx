@@ -5,7 +5,7 @@
 
 namespace MACE::Env::Memory::internal {
 
-ObserverPtr<MuteSingletonPool> MuteSingletonPool::fgInstance = nullptr;
+MuteSingletonPool* MuteSingletonPool::fgInstance = nullptr;
 
 MuteSingletonPool::MuteSingletonPool() :
     NonMoveableBase(),

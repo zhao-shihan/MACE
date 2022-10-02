@@ -36,9 +36,9 @@ public:
     auto AtLocalMaster() const { return LocalCommRank() == 0; }
     auto AtLocalWorker() const { return LocalCommRank() > 0; }
 
-    auto NumberOfHosts() const { return fHostInfoList.size(); }
-    auto OnSingleHost() const { return NumberOfHosts() == 1; }
-    auto OnCluster() const { return NumberOfHosts() > 1; }
+    auto HostNum() const { return fHostInfoList.size(); }
+    auto OnSingleHost() const { return HostNum() == 1; }
+    auto OnCluster() const { return HostNum() > 1; }
     const auto& HostInfoList() const { return fHostInfoList; }
     const auto& HostInfo(int id) const { return fHostInfoList[id]; }
     const auto& HostSize(int id) const { return HostInfo(id).size; }

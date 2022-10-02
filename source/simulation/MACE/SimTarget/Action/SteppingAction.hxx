@@ -1,14 +1,11 @@
 #pragma once
 
 #include "MACE/Env/Memory/FreeSingleton.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4ParticleDefinition.hh"
 #include "G4UserSteppingAction.hh"
 
 namespace MACE::SimTarget::Action {
-
-using Utility::ObserverPtr;
 
 class SteppingAction final : public Env::Memory::FreeSingleton<SteppingAction>,
                              public G4UserSteppingAction {
@@ -20,9 +17,9 @@ public:
     void UserSteppingAction(const G4Step* step) override;
 
 private:
-    const ObserverPtr<const G4ParticleDefinition> fMuonPlus;
-    const ObserverPtr<const G4ParticleDefinition> fMuonium;
-    const ObserverPtr<const G4ParticleDefinition> fAntiMuonium;
+    const G4ParticleDefinition* const fMuonPlus;
+    const G4ParticleDefinition* const fMuonium;
+    const G4ParticleDefinition* const fAntiMuonium;
     G4bool fKillIrrelevants;
 };
 

@@ -42,17 +42,17 @@ void IEntity::ConstructSelfAndDescendants(G4bool checkOverlaps) {
     }
 }
 
-void IEntity::RegisterMaterial(std::size_t volumeIndex, G4Material* region) const {
-    LogicalVolume(volumeIndex)->SetMaterial(region);
+void IEntity::RegisterMaterial(gsl::index volumeIndex, gsl::not_null<G4Material*> material) const {
+    LogicalVolume(volumeIndex)->SetMaterial(material);
 }
 
-void IEntity::RegisterMaterial(G4Material* region) const {
-    for (std::size_t i = 0; i < LogicalVolumeNum(); ++i) {
-        RegisterMaterial(i, region);
+void IEntity::RegisterMaterial(gsl::not_null<G4Material*> material) const {
+    for (gsl::index i = 0; i < LogicalVolumeNum(); ++i) {
+        RegisterMaterial(i, material);
     }
 }
 
-void IEntity::RegisterRegion(std::size_t volumeIndex, G4Region* region) const {
+void IEntity::RegisterRegion(gsl::index volumeIndex, gsl::not_null<G4Region*> region) const {
     auto logicalVolume = LogicalVolume(volumeIndex);
     if (logicalVolume->GetRegion() != region) {
         logicalVolume->SetRegion(region);
@@ -60,13 +60,13 @@ void IEntity::RegisterRegion(std::size_t volumeIndex, G4Region* region) const {
     }
 }
 
-void IEntity::RegisterRegion(G4Region* region) const {
-    for (std::size_t i = 0; i < LogicalVolumeNum(); ++i) {
+void IEntity::RegisterRegion(gsl::not_null<G4Region*> region) const {
+    for (gsl::index i = 0; i < LogicalVolumeNum(); ++i) {
         RegisterRegion(i, region);
     }
 }
 
-void IEntity::RegisterSD(std::size_t volumeIndex, G4VSensitiveDetector* sd) const {
+void IEntity::RegisterSD(gsl::index volumeIndex, gsl::not_null<G4VSensitiveDetector*> sd) const {
     auto logicalVolume = LogicalVolume(volumeIndex);
     if (logicalVolume->GetSensitiveDetector() == nullptr) {
         // Register to logicalVolume
@@ -88,17 +88,15 @@ void IEntity::RegisterSD(std::size_t volumeIndex, G4VSensitiveDetector* sd) cons
     }
 }
 
-void IEntity::RegisterSD(G4VSensitiveDetector* sd) const {
-    for (std::size_t i = 0; i < LogicalVolumeNum(); ++i) {
+void IEntity::RegisterSD(gsl::not_null<G4VSensitiveDetector*> sd) const {
+    for (gsl::index i = 0; i < LogicalVolumeNum(); ++i) {
         RegisterSD(i, sd);
     }
 }
 
 #if MACE_USE_G4GDML
-void IEntity::Export(std::filesystem::path gdmlFile, std::size_t volumeIndex) const {
-    if (Env::MPIEnv::Available()) {
-        Utility::MPIUtil::MakeMPIFilePathInPlace(gdmlFile);
-    }
+void IEntity::Export(std::filesystem::path gdmlFile, gsl::index volumeIndex) const {
+    if (Env::MPIEnv::Available()) { Utility::MPIUtil::MakeMPIFilePathInPlace(gdmlFile); }
     G4GDMLParser gdml;
     gdml.SetAddPointerToName(false);
     gdml.SetOutputFileOverwrite(true);

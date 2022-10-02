@@ -10,7 +10,8 @@ template<MuteSingletonized AMuteSingleton>
     }
 }
 
-[[nodiscard]] MuteSingletonPool::Node& MuteSingletonPool::Insert(MuteSingletonized auto* instance) {
+template<MuteSingletonized AMuteSingleton>
+[[nodiscard]] MuteSingletonPool::Node& MuteSingletonPool::Insert(gsl::not_null<AMuteSingleton*> instance) {
     if (const auto [iter, inserted] = fInstanceMap.try_emplace(typeid(decltype(*instance)), instance);
         inserted) {
         return iter->second;

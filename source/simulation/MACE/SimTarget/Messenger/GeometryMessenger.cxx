@@ -56,7 +56,7 @@ GeometryMessenger::GeometryMessenger() :
 
 GeometryMessenger::~GeometryMessenger() = default;
 
-void GeometryMessenger::SetNewValue(ObserverPtr<G4UIcommand> command, G4String value) {
+void GeometryMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     using UsedDescriptions = Action::DetectorConstruction::UsedDescriptions;
     using Core::Geometry::DescriptionIO;
     if (command == fImportDescription.get()) {

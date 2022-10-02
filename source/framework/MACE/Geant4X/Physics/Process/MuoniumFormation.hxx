@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MACE/Core/Geometry/Description/Target.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4ParticleChange.hh"
 #include "G4VRestProcess.hh"
@@ -9,7 +8,6 @@
 namespace MACE::Geant4X::Physics::Process {
 
 using Core::Geometry::Description::Target;
-using Utility::ObserverPtr;
 
 class MuoniumFormation final : public G4VRestProcess {
 public:
@@ -29,10 +27,10 @@ private:
     G4double GetMeanLifeTime(const G4Track& track, G4ForceCondition*) override;
 
 private:
-    const ObserverPtr<G4ParticleDefinition> fMuonium;
-    const ObserverPtr<G4ParticleDefinition> fAntiMuonium;
-    const ObserverPtr<const Target> fTarget;
-    ObserverPtr<CLHEP::HepRandomEngine> fRandEng;
+    const G4ParticleDefinition* const fMuonium;
+    const G4ParticleDefinition* const fAntiMuonium;
+    const Target* const fTarget;
+    CLHEP::HepRandomEngine* fRandEng;
 
     G4double fFormationProbability;
     G4double fConversionProbability;

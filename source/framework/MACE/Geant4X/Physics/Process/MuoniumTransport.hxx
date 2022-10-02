@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MACE/Core/Geometry/Description/Target.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4ParticleChange.hh"
 #include "G4VContinuousProcess.hh"
@@ -9,7 +8,6 @@
 namespace MACE::Geant4X::Physics::Process {
 
 using Core::Geometry::Description::Target;
-using Utility::ObserverPtr;
 
 class MuoniumTransport final : public G4VContinuousProcess {
 public:
@@ -38,7 +36,7 @@ private:
     };
 
 private:
-    const ObserverPtr<const Target> fTarget;
+    const Target* const fTarget;
 
     G4double fMeanFreePath;
     G4bool fManipulateAllSteps;

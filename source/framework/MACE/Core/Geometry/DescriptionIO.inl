@@ -4,7 +4,7 @@ namespace internal {
 
 template<std::intmax_t i, class ADescriptionTuple>
 struct FillDescriptionArray {
-    constexpr void operator()(std::array<ObserverPtr<IDescription>, std::tuple_size_v<ADescriptionTuple>>& descriptions) const {
+    constexpr void operator()(std::array<IDescription*, std::tuple_size_v<ADescriptionTuple>>& descriptions) const {
         std::get<i>(descriptions) = std::addressof(std::tuple_element_t<i, ADescriptionTuple>::Instance());
     }
 };
@@ -13,7 +13,7 @@ struct FillDescriptionArray {
 
 template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
 void DescriptionIO::Import(const std::filesystem::path& yamlFile) requires(not IsDescription<ADescriptionTuple>) {
-    std::array<ObserverPtr<IDescription>, std::tuple_size_v<ADescriptionTuple>> descriptions;
+    std::array<IDescription*, std::tuple_size_v<ADescriptionTuple>> descriptions;
     Utility::StaticForEach<0, descriptions.size(),
                            internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
     ImportImpl(yamlFile, descriptions);
@@ -21,7 +21,7 @@ void DescriptionIO::Import(const std::filesystem::path& yamlFile) requires(not I
 
 template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
 void DescriptionIO::Export(const std::filesystem::path& yamlFile, std::string_view fileComment) requires(not IsDescription<ADescriptionTuple>) {
-    std::array<ObserverPtr<IDescription>, std::tuple_size_v<ADescriptionTuple>> descriptions;
+    std::array<IDescription*, std::tuple_size_v<ADescriptionTuple>> descriptions;
     Utility::StaticForEach<0, descriptions.size(),
                            internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
     ExportImpl(yamlFile, fileComment, descriptions);
@@ -29,7 +29,7 @@ void DescriptionIO::Export(const std::filesystem::path& yamlFile, std::string_vi
 
 template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
 void DescriptionIO::Ixport(const std::filesystem::path& yamlFile, std::string_view fileComment) requires(not IsDescription<ADescriptionTuple>) {
-    std::array<ObserverPtr<IDescription>, std::tuple_size_v<ADescriptionTuple>> descriptions;
+    std::array<IDescription*, std::tuple_size_v<ADescriptionTuple>> descriptions;
     Utility::StaticForEach<0, descriptions.size(),
                            internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
     IxportImpl(yamlFile, fileComment, descriptions);
@@ -68,7 +68,7 @@ void DescriptionIO::ImportImpl(const std::filesystem::path& yamlFile, std::range
 }
 
 void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::range auto& descriptions) {
-    std::vector<std::pair<std::string_view, ObserverPtr<IDescription>>> sortedDescriptions;
+    std::vector<std::pair<std::string_view, IDescription*>> sortedDescriptions;
     sortedDescriptions.reserve(descriptions.size());
     for (auto&& description : descriptions) {
         sortedDescriptions.emplace_back(description->GetName(), description);

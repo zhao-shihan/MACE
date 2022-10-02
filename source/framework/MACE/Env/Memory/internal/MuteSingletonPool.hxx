@@ -2,7 +2,8 @@
 
 #include "MACE/Env/Memory/MuteSingletonized.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
+
+#include "gsl/gsl"
 
 #include <functional>
 #include <map>
@@ -14,13 +15,12 @@
 
 namespace MACE::Env::Memory::internal {
 
-using MACE::Utility::ObserverPtr;
 
 /// @brief Implementation detail of MACE::Env::Memory::MuteSingleton.
 /// Not API.
 class MuteSingletonPool final : public Utility::NonMoveableBase {
 public:
-    using Node = ObserverPtr<void>;
+    using Node = void*;
 
 public:
     MuteSingletonPool();
@@ -32,12 +32,13 @@ public:
     [[nodiscard]] std::optional<std::reference_wrapper<Node>> Find();
     template<MuteSingletonized AMuteSingleton>
     [[nodiscard]] auto Contains() const { return fInstanceMap.contains(typeid(AMuteSingleton)); }
-    [[nodiscard]] Node& Insert(MuteSingletonized auto* instance);
+    template<MuteSingletonized AMuteSingleton>
+    [[nodiscard]] Node& Insert(gsl::not_null<AMuteSingleton*> instance);
 
 private:
     std::map<const std::type_index, Node> fInstanceMap;
 
-    static ObserverPtr<MuteSingletonPool> fgInstance;
+    static MuteSingletonPool* fgInstance;
 };
 
 } // namespace MACE::Env::Memory::internal

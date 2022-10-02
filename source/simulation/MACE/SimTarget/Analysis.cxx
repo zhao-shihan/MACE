@@ -29,7 +29,7 @@ Analysis::~Analysis() {
     Close();
 }
 
-void Analysis::RunBegin(ObserverPtr<const G4Run> run) {
+void Analysis::RunBegin(gsl::not_null<const G4Run*> run) {
     fThisRun = run;
     if (fThisRun->GetRunID() == 0) {
         Open();

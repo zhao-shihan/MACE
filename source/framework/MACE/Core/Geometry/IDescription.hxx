@@ -7,6 +7,8 @@
 
 #include "yaml-cpp/yaml.h"
 
+#include "gsl/gsl"
+
 #include <array>
 #include <concepts>
 #include <iostream>

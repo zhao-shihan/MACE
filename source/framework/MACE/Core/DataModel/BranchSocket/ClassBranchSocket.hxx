@@ -2,6 +2,8 @@
 
 #include "MACE/Core/DataModel/BranchSocketBase.hxx"
 
+#include "gsl/gsl"
+
 #include <concepts>
 #include <string>
 #include <tuple>
@@ -23,7 +25,7 @@ public:
     void ConnectToBranch(TTree& tree) { tree.SetBranchAddress(this->fBranchName.c_str(), &fObject); }
 
 private:
-    AClass* fObject;
+    const gsl::owner<AClass*> fObject;
 };
 
 } // namespace MACE::Core::DataModel::BranchSocket

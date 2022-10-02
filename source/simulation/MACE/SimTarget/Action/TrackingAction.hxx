@@ -1,10 +1,11 @@
 #pragma once
 
 #include "MACE/Env/Memory/FreeSingleton.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4Types.hh"
 #include "G4UserTrackingAction.hh"
+
+#include "gsl/gsl"
 
 class G4ParticleDefinition;
 
@@ -14,7 +15,6 @@ class MuoniumTrack;
 
 namespace Action {
 
-using Utility::ObserverPtr;
 
 class TrackingAction final : public Env::Memory::FreeSingleton<TrackingAction>,
                              public G4UserTrackingAction {
@@ -27,9 +27,9 @@ public:
     void PostUserTrackingAction(const G4Track* track) override;
 
 private:
-    const ObserverPtr<const G4ParticleDefinition> fMuonium;
-    const ObserverPtr<const G4ParticleDefinition> fAntiMuonium;
-    ObserverPtr<MuoniumTrack> fMuoniumTrack;
+    const gsl::not_null<const G4ParticleDefinition*> fMuonium;
+    const gsl::not_null<const G4ParticleDefinition*> fAntiMuonium;
+    MuoniumTrack* fMuoniumTrack;
     G4int fEventID;
 };
 

@@ -1,9 +1,10 @@
 #pragma once
 
 #include "MACE/Env/Memory/Singleton.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UImessenger.hh"
+
+#include "gsl/gsl"
 
 #include <memory>
 
@@ -17,7 +18,6 @@ class Analysis;
 
 namespace Messenger {
 
-using Utility::ObserverPtr;
 
 class AnalysisMessenger final : public Env::Memory::Singleton<AnalysisMessenger>,
                                 public G4UImessenger {
@@ -28,12 +28,12 @@ private:
     ~AnalysisMessenger();
 
 public:
-    void AssignTo(ObserverPtr<Analysis> ana) { fAnalysis = ana; }
+    void AssignTo(gsl::not_null<Analysis*> ana) { fAnalysis = ana; }
 
-    void SetNewValue(ObserverPtr<G4UIcommand> command, G4String value) override;
+    void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    ObserverPtr<Analysis> fAnalysis;
+    Analysis* fAnalysis;
 
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithAString> fSetResultPath;

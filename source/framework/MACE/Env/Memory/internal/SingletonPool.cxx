@@ -5,7 +5,7 @@
 namespace MACE::Env::Memory::internal {
 
 [[nodiscard]] std::vector<SingletonPool::BaseNode> SingletonPool::GetUndeletedInReverseInsertionOrder() const {
-    std::vector<std::pair<std::size_t, BaseNode>> undeletedListWithId;
+    std::vector<std::pair<gsl::index, BaseNode>> undeletedListWithId;
     undeletedListWithId.reserve(fInstanceMap.size());
     for (auto&& [_, nodePair] : fInstanceMap) {
         const auto& [node, baseNodePair] = nodePair;

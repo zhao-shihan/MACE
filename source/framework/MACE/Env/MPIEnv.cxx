@@ -52,7 +52,7 @@ void MPIEnv::PrintStartupMessageBody(int argc, char* argv[]) const {
         if (OnSingleHost()) {
             std::cout << " Running on \"" << LocalHostName() << "\"\n";
         } else {
-            std::cout << " Running on cluster with " << NumberOfHosts() << " hosts:\n";
+            std::cout << " Running on cluster with " << HostNum() << " hosts:\n";
             const auto maxNameWidth = std::ranges::max_element(
                                           std::as_const(fHostInfoList),
                                           [](auto&& a, auto&& b) { return a.name.size() < b.name.size(); })
@@ -178,7 +178,7 @@ void MPIEnv::InitializeHostInfos() {
     // Assign to the list, convert host names to std::string
     fHostInfoList.reserve(hostCount);
     for (auto&& [hostSize, hostName] : std::as_const(hostInfoList)) {
-        auto& hostInfo = fHostInfoList.emplace_back(hostSize, hostName.data());
+        auto& hostInfo = fHostInfoList.emplace_back(Host{hostSize, hostName.data()});
         hostInfo.name.shrink_to_fit();
     }
     fHostInfoList.shrink_to_fit();

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4VPrimaryGenerator.hh"
 
@@ -8,7 +7,6 @@ class G4MuonPlus;
 
 namespace MACE::Geant4X::Generator {
 
-using Utility::ObserverPtr;
 
 /// @brief brief description A generator generates surface muon beam.
 class SurfaceMuon final : public G4VPrimaryGenerator {
@@ -33,7 +31,7 @@ public:
     const auto& GetVertexTime() const { return fVertexTime; }
 
 private:
-    const ObserverPtr<const G4MuonPlus> fMuonPlus;
+    const G4MuonPlus* const fMuonPlus;
 
     G4double fMomentum;
     G4double fMomentumSpreadRMS;

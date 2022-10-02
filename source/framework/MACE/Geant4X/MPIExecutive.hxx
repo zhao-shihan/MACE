@@ -3,7 +3,6 @@
 #include "MACE/Env/BasicEnv.hxx"
 #include "MACE/Env/CLI/Geant4CLI.hxx"
 #include "MACE/Env/Memory/MuteSingleton.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 #include "MACE/Utility/TupleForEach.hxx"
 
 #include "G4UIExecutive.hh"
@@ -20,7 +19,6 @@
 namespace MACE::Geant4X {
 
 using Env::CLI::Geant4CLI;
-using Utility::ObserverPtr;
 
 class MPIExecutive final : public Env::Memory::MuteSingleton<MPIExecutive> {
 public:

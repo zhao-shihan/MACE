@@ -29,7 +29,7 @@ FlipG4cout::FlipG4cout() {
     if (const auto& mpiEnv = Env::MPIEnv::Instance();
         mpiEnv.AtWorldWorker() or
         mpiEnv.GetVerboseLevel() == Env::VerboseLevel::Quiet) {
-        static ObserverPtr<std::streambuf> gG4coutBufExchanger = nullptr;
+        static std::streambuf* gG4coutBufExchanger = nullptr;
         gG4coutBufExchanger = G4cout.rdbuf(gG4coutBufExchanger);
     }
 }

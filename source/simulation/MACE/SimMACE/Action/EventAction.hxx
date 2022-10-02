@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MACE/Utility/NonMoveableBase.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UserEventAction.hh"
 

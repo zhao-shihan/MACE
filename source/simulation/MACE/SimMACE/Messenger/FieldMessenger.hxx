@@ -1,11 +1,12 @@
 #pragma once
 
 #include "MACE/Env/Memory/Singleton.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
+
+#include "gsl/gsl"
 
 namespace MACE::SimMACE {
 
@@ -22,7 +23,6 @@ class VerticalField;
 
 namespace Messenger {
 
-using Utility::ObserverPtr;
 
 class FieldMessenger final : public Env::Memory::Singleton<FieldMessenger>,
                              public G4UImessenger {
@@ -33,22 +33,22 @@ private:
     ~FieldMessenger() = default;
 
 public:
-    void AssignTo(ObserverPtr<Field::FirstBendField> field) { fFirstBendField = field; }
-    void AssignTo(ObserverPtr<Field::LinacField> field) { fLinacField = field; }
-    void AssignTo(ObserverPtr<Field::ParallelField> field) { fParallelField = field; }
-    void AssignTo(ObserverPtr<Field::SecondBendField> field) { fSecondBendField = field; }
-    void AssignTo(ObserverPtr<Field::SelectorField> field) { fSelectorField = field; }
-    void AssignTo(ObserverPtr<Field::VerticalField> field) { fVerticalField = field; }
+    void AssignTo(gsl::not_null<Field::FirstBendField*> field) { fFirstBendField = field; }
+    void AssignTo(gsl::not_null<Field::LinacField*> field) { fLinacField = field; }
+    void AssignTo(gsl::not_null<Field::ParallelField*> field) { fParallelField = field; }
+    void AssignTo(gsl::not_null<Field::SecondBendField*> field) { fSecondBendField = field; }
+    void AssignTo(gsl::not_null<Field::SelectorField*> field) { fSelectorField = field; }
+    void AssignTo(gsl::not_null<Field::VerticalField*> field) { fVerticalField = field; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    ObserverPtr<Field::FirstBendField> fFirstBendField;
-    ObserverPtr<Field::LinacField> fLinacField;
-    ObserverPtr<Field::ParallelField> fParallelField;
-    ObserverPtr<Field::SecondBendField> fSecondBendField;
-    ObserverPtr<Field::SelectorField> fSelectorField;
-    ObserverPtr<Field::VerticalField> fVerticalField;
+    Field::FirstBendField* fFirstBendField;
+    Field::LinacField* fLinacField;
+    Field::ParallelField* fParallelField;
+    Field::SecondBendField* fSecondBendField;
+    Field::SelectorField* fSelectorField;
+    Field::VerticalField* fVerticalField;
 
     G4UIdirectory fDirectory;
     G4UIcmdWithADoubleAndUnit fSetTransportMagneticField;

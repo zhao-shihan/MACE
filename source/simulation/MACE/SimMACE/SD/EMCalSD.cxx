@@ -25,13 +25,13 @@ void EMCalSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
 }
 
 G4bool EMCalSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
-    const auto* const track = step->GetTrack();
-    const auto* const particle = track->GetDefinition();
+    const auto track = step->GetTrack();
+    const auto particle = track->GetDefinition();
     if (step->IsFirstStepInVolume() and track->GetCurrentStepNumber() > 1 and   // is coming from outside, and
         (particle->GetPDGCharge() != 0 or particle == G4Gamma::Definition())) { // is a charged particle or gamma
-        const auto* const preStepPoint = step->GetPreStepPoint();
+        const auto preStepPoint = step->GetPreStepPoint();
         // new a hit
-        auto* const hit = new EMCalHit();
+        const auto hit = new EMCalHit();
         hit->HitTime(preStepPoint->GetGlobalTime());
         hit->SetEnergy(preStepPoint->GetKineticEnergy());
         hit->SetParticle(particle->GetParticleName());

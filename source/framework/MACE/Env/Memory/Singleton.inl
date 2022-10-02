@@ -39,7 +39,7 @@ template<class ADerived>
 void Singleton<ADerived>::InstantiateOrFindInstance() {
     if (auto& node = internal::SingletonFactory::Instance().InstantiateOrFind<ADerived>();
         node != nullptr) {
-        fgInstance.object = static_cast<ObserverPtr<ADerived>>(node);
+        fgInstance.object = static_cast<ADerived*>(node);
         fgInstance.node = std::addressof(node);
     } else {
         throw std::logic_error(

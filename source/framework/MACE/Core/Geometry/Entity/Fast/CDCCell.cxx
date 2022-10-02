@@ -4,6 +4,8 @@
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
+#include "gsl/gsl"
+
 namespace MACE::Core::Geometry::Entity::Fast {
 
 void CDCCell::ConstructSelf(G4bool checkOverlaps) {
@@ -13,7 +15,7 @@ void CDCCell::ConstructSelf(G4bool checkOverlaps) {
     const auto cellDetail = description.CellGeometryDetail();
     const auto layerCount = layerDetail.size();
 
-    for (std::size_t cellID = 0, layerID = 0; layerID < layerCount; ++layerID) {
+    for (gsl::index cellID = 0, layerID = 0; layerID < layerCount; ++layerID) {
         auto&& [cellRadius, cellWidth, halfLength, _0] = layerDetail[layerID];
         auto&& [cellAngle, _1, rotations] = cellDetail[layerID];
         auto solid = Make<G4Tubs>(

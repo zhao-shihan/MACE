@@ -10,7 +10,8 @@ template<Singletonized ASingleton>
     }
 }
 
-[[nodiscard]] SingletonPool::Node& SingletonPool::Insert(Singletonized auto* instance) {
+template<Singletonized ASingleton>
+[[nodiscard]] SingletonPool::Node& SingletonPool::Insert(gsl::not_null<ASingleton*> instance) {
     if (const auto [iter, inserted] = fInstanceMap.try_emplace(
             typeid(decltype(*instance)), instance,
             std::make_pair(fInstanceMap.size(), static_cast<ISingletonBase*>(instance)));

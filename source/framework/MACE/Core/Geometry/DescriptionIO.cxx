@@ -2,6 +2,6 @@
 
 namespace MACE::Core::Geometry {
 
-std::set<ObserverPtr<IDescription>> DescriptionIO::fgInstanceSet;
+std::set<IDescription*> DescriptionIO::fgInstanceSet;
 
 } // namespace MACE::Core::Geometry

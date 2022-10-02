@@ -1,10 +1,11 @@
 #pragma once
 
 #include "MACE/Env/Memory/Singleton.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include "G4UIcmdWithABool.hh"
 #include "G4UImessenger.hh"
+
+#include "gsl/gsl"
 
 namespace MACE::SimTarget {
 
@@ -16,7 +17,6 @@ class SteppingAction;
 
 namespace Messenger {
 
-using Utility::ObserverPtr;
 
 class ActionMessenger final : public Env::Memory::Singleton<ActionMessenger>,
                               public G4UImessenger {
@@ -27,12 +27,12 @@ private:
     ~ActionMessenger() = default;
 
 public:
-    void AssignTo(ObserverPtr<Action::SteppingAction> sa) { fSteppingAction = sa; }
+    void AssignTo(gsl::not_null<Action::SteppingAction*> sa) { fSteppingAction = sa; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    ObserverPtr<Action::SteppingAction> fSteppingAction;
+    Action::SteppingAction* fSteppingAction;
 
     G4UIdirectory fDirectory;
     G4UIcmdWithABool fSetKillIrrelevants;

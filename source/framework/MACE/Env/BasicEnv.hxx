@@ -3,17 +3,10 @@
 #include "MACE/Env/internal/EnvBase.hxx"
 #include "MACE/Env/Memory/FreeSingleton.hxx"
 #include "MACE/Env/VerboseLevel.hxx"
-#include "MACE/Utility/ObserverPtr.hxx"
 
 #include <type_traits>
 
 namespace MACE::Env {
-
-namespace CLI {
-
-class BasicCLI;
-
-} // namespace CLI
 
 namespace internal {
 
@@ -21,7 +14,6 @@ class NoCLI {};
 
 } // namespace internal
 
-using MACE::Utility::ObserverPtr;
 
 class BasicEnv : public internal::EnvBase,
                  public Memory::FreeSingleton<BasicEnv> {
