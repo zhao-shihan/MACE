@@ -25,7 +25,7 @@ protected:
 
 public:
     double flat() override final { return Math::Random::Distribution::Uniform<double>()(fPRBG); }
-    void flatArray(const int size, double* vect) override final;
+    virtual void flatArray(const int size, double* vect) override;
 
     void setSeed(long seed, int = 0) override final;
     void setSeeds(const long* seeds, int = 0) override final;

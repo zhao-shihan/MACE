@@ -3,10 +3,16 @@
 #include "MACE/Geant4X/Physics/Particle/AntiMuonium.hxx"
 #include "MACE/Geant4X/Physics/Particle/Muonium.hxx"
 #include "MACE/Geant4X/Physics/Process/MuoniumTransport.hxx"
+#include "MACE/Math/Random/Distribution/Exponential.hxx"
+#include "MACE/Math/Random/Distribution/Gaussian.hxx"
+#include "MACE/Math/Random/Generator/PCGXSHRR6432.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
+#include "G4ThreeVector.hh"
 #include "Randomize.hh"
+
+#include <random>
 
 namespace MACE::Geant4X::Physics::Process {
 
@@ -84,8 +90,6 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     // 'cause the momentum, position, etc. violates much in this process, no easy way of using G4 tracking mechanism to manage this process.
     // Thus we do that ourselves. The decay time is pre-assigned and used for limiting the flight time, and the "true safety" is ensured by bool expr.
 
-    // the random engine in use
-    const auto randEng = G4Random::getTheEngine();
     // pre step point position
     const auto& initialPosition = track.GetPosition();
     // get the pre-assigned decay time to determine when the flight stops and then let G4 decay it
@@ -117,11 +121,12 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     // flag indicate that the muonium is not inside the material
     auto insideMaterial = fTarget->Contain(initialPosition, insideVolume);
 
+    // a much faster and good random engine
+    Math::Random::Generator::PCGXSHRR6432 pcg32((unsigned int)(*G4Random::getTheEngine()));
     // do random flight
-
     do {
         // set free path
-        freePath = insideMaterial ? G4RandExponential::shoot(randEng, fMeanFreePath) : stepInVacuum;
+        freePath = insideMaterial ? Math::Random::Distribution::Exponential(fMeanFreePath)(pcg32) : stepInVacuum;
         // update flight length
         trueStepLength += freePath;
         // update time
@@ -139,13 +144,15 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
         if (not insideMaterial) { continue; }
         // if inside material update its velocity
         // set a gauss vector of sigma=1
-        direction.set(G4RandGauss::shoot(randEng),
-                      G4RandGauss::shoot(randEng),
-                      G4RandGauss::shoot(randEng));
+        direction.set(std::normal_distribution()(pcg32),
+                      std::normal_distribution()(pcg32),
+                      std::normal_distribution()(pcg32));
         // get its length before multiply sigmaV
         velocity = direction.mag();
         // normalize direction vector
-        direction /= velocity;
+        direction[G4ThreeVector::X] /= velocity; // do not use CLHEP::Hep3Vector::operator/=(double),
+        direction[G4ThreeVector::Y] /= velocity; // which might includes check
+        direction[G4ThreeVector::Z] /= velocity; // and not even inlined
         // get the exact velocity
         velocity *= sigmaV;
     } while (not fManipulateAllSteps);

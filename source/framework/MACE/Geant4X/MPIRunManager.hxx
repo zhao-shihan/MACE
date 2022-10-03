@@ -63,13 +63,13 @@ private:
     G4int fEventIDCounter;
 
     G4int fPrintProgress;
-    Utility::WallTimer<double> fEventWallTimer;
+    Utility::WallTimer<> fEventWallTimer;
     double fEventWallTime;
     double fNAvgEventWallTime;
     double fNDevEventWallTime;
-    Utility::CPUTimer<double> fRunCPUTimer;
+    Utility::CPUTimer<> fRunCPUTimer;
     double fRunCPUTime;
-    Utility::WallTimer<double> fRunWallTimer;
+    Utility::WallTimer<> fRunWallTimer;
     double fRunWallTime;
     std::chrono::system_clock::time_point fRunBeginSystemTime;
     std::chrono::system_clock::time_point fRunEndSystemTime;
