@@ -21,7 +21,7 @@ int main() {
 
     unsigned int r;
     for (int i = 0; i < 1000; ++i) { r = mt64(); }
-    WallTimer<double> timer;
+    WallTimer<> timer;
     for (int i = 0; i < 10'000'000; ++i) { r = mt64(); }
     auto time = timer.MillisecondsElapsed();
     std::cout << "    CLHEPX::...::MT64Engine : " << time << " ms (last integer: " << r << ')' << std::endl;

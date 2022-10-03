@@ -18,7 +18,7 @@
 namespace MACE::Utility {
 
 /// @brief CPU timer better than std::clock() when available.
-template<std::floating_point ATime>
+template<std::floating_point ATime = double>
     requires(std::numeric_limits<ATime>::digits >= std::numeric_limits<double>::digits)
 class CPUTimer final : public internal::CPUTimer<ATime> {};
 

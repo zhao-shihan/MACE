@@ -21,7 +21,7 @@ int main() {
 
     unsigned int r;
     for (int i = 0; i < 1000; ++i) { r = pcg32(); }
-    WallTimer<double> timer;
+    WallTimer<> timer;
     for (int i = 0; i < 10'000'000; ++i) { r = pcg32(); }
     auto time = timer.MillisecondsElapsed();
     std::cout << "    CLHEPX::...::PCG32Engine : " << time << " ms (last integer: " << r << ')' << std::endl;
