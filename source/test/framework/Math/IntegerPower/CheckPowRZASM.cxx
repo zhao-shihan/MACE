@@ -43,7 +43,7 @@ using namespace MACE::Math;
         return std::pow(a, 5);                                         \
     }                                                                  \
     FPType Prefix##__DoPowZNeg4ImEquivlentToDivideMultiply(FPType a) { \
-        return PowZ<-4>(a);                                            \
+        return PowRZ<-4>(a);                                            \
     }                                                                  \
     FPType Prefix##__DoDivideMultiply4th(FPType a) {                   \
         return (FPType)(1) / ((a * a) * (a * a));                      \

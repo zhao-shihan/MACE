@@ -1,16 +1,16 @@
 project(MACE)
 
-add_executable(BenchMarkPowZ BenchMarkPowZ.cxx)
-target_link_libraries(BenchMarkPowZ MACE)
+add_executable(BenchMarkPowRZ BenchMarkPowRZ.cxx)
+target_link_libraries(BenchMarkPowRZ MACE)
 
-add_library(CheckPowZASM OBJECT CheckPowZASM.cxx)
-target_link_libraries(CheckPowZASM MACE)
+add_library(CheckPowRZASM OBJECT CheckPowRZASM.cxx)
+target_link_libraries(CheckPowRZASM MACE)
 
-add_executable(TestPowZ TestPowZ.cxx)
-target_link_libraries(TestPowZ MACE)
+add_library(CheckPowZNASM OBJECT CheckPowZNASM.cxx)
+target_link_libraries(CheckPowZNASM MACE)
 
-add_library(CheckPowIASM OBJECT CheckPowIASM.cxx)
-target_link_libraries(CheckPowIASM MACE)
+add_executable(TestPowRZ TestPowRZ.cxx)
+target_link_libraries(TestPowRZ MACE)
 
-add_executable(TestPowI TestPowI.cxx)
-target_link_libraries(TestPowI MACE)
+add_executable(TestPowZN TestPowZN.cxx)
+target_link_libraries(TestPowZN MACE)
