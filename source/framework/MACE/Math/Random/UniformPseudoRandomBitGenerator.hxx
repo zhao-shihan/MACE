@@ -30,9 +30,11 @@ concept UniformPseudoRandomBitGenerator = requires(G& g) {
     // 5. It is copyable. Given a UniformPseudoRandomBitGenerator g, G(g) == g
     // always hold.
     requires std::copyable<G>;
-    // 5. Its state can be saved and restored.
+    // 6. It is TriviallyCopyable (a C++ named requirements).
+    requires std::is_trivially_copyable_v<G>;
+    // 7. Its state can be saved and restored.
     requires Concept::StreamIOable<G>;
-    // 6. Extra requirements.
+    // 8. Extra requirements.
     requires std::derived_from<G, UniformPseudoRandomBitGeneratorBase<G, typename G::ResultType>>;
     requires std::is_final_v<G>;
 };
