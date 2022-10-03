@@ -148,7 +148,11 @@ concept DistributionParameterOf = requires {
     // must be valid.". It's clear that D::param_type should be the same as P.
     typename D::ParameterType;
     requires std::same_as<P, typename D::ParameterType>;
-    // 3. Extra requirements.
+    // 3. It is copyable.
+    requires std::copyable<D>;
+    // 4. It is TriviallyCopyable (a C++ named requirements).
+    requires std::is_trivially_copyable_v<D>;
+    // 5. Extra requirements.
     requires std::derived_from<P, DistributionParameterBase<P, D>>;
     requires std::is_final_v<P>;
 };
@@ -236,7 +240,13 @@ concept RandomNumberDistribution = requires(D d, const D x) {
     // If bad input is encountered, is.setstate(std::ios::failbit) is called,
     // which may throw std::ios_base::failure. d is unchanged in that case.
     // -- OK
-    // 3. Extra requirements.
+    // 3. D::ParameterType cannot implicitly convertible to D.
+    requires not std::convertible_to<typename D::ParameterType, D>;
+    // 4. It is copyable.
+    requires std::copyable<D>;
+    // 5. It is TriviallyCopyable (a C++ named requirements).
+    requires std::is_trivially_copyable_v<D>;
+    // 6. Extra requirements.
     requires std::derived_from<D, RandomNumberDistributionBase<D, typename D::ResultType, typename D::ParameterType>>;
     requires std::is_final_v<D>;
 };
