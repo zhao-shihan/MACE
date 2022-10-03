@@ -65,10 +65,10 @@ include(${MACE_PROJECT_CMAKE_DIR}/GlobalCompileOptions.cmake)
 # Required:
 # MPI
 include(${MACE_PROJECT_CMAKE_DIR}/LookForMPI.cmake)
-# ROOT
-include(${MACE_PROJECT_CMAKE_DIR}/LookForROOT.cmake)
 # Geant4
 include(${MACE_PROJECT_CMAKE_DIR}/LookForGeant4.cmake)
+# ROOT
+include(${MACE_PROJECT_CMAKE_DIR}/LookForROOT.cmake)
 
 # Required, built-in if not found:
 # argparse

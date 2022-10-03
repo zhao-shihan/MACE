@@ -68,7 +68,7 @@ public:
     FixedString& operator=(const char (&rhs)[N]) noexcept;
     template<std::size_t N>
         requires(N != AMaxSize)
-    FixedString& operator=(const FixedString<N>& rhs) noexcept { return *this = rhs.fData; }
+    FixedString& operator=(const FixedString<N>& rhs) noexcept { return *this = rhs.Data(); }
     FixedString& operator=(std::string_view rhs) & noexcept;
     FixedString& operator=(auto&& rhs) & noexcept
         requires(std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::zstring> or
@@ -119,7 +119,7 @@ public:
     template<std::size_t N>
     FixedString& Append(const char (&str)[N]) noexcept;
     template<std::size_t N>
-    FixedString& Append(const FixedString<N>& str) noexcept { return Append(str.fData); }
+    FixedString& Append(const FixedString<N>& str) noexcept { return Append(str.Data()); }
     FixedString& Append(std::string_view str) noexcept;
     FixedString& Append(auto&& str) noexcept
         requires(std::same_as<std::remove_cvref_t<decltype(str)>, gsl::zstring> or
@@ -140,7 +140,7 @@ public:
     template<std::size_t N>
     bool operator==(const char (&rhs)[N]) const noexcept { return std::strncmp(fData, rhs, std::min(N, AMaxSize + 1)) == 0; }
     template<std::size_t N>
-    bool operator==(const FixedString<N>& rhs) const noexcept { return *this == rhs.fData; }
+    bool operator==(const FixedString<N>& rhs) const noexcept { return *this == rhs.Data(); }
     bool operator==(std::string_view rhs) const noexcept { return std::string_view(*this) == rhs; }
     bool operator==(auto&& rhs) const noexcept
         requires(std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::zstring> or
@@ -156,7 +156,7 @@ public:
     template<std::size_t N>
     std::strong_ordering operator<=>(const char (&rhs)[N]) const noexcept;
     template<std::size_t N>
-    std::strong_ordering operator<=>(const FixedString<N>& rhs) const noexcept { return *this <=> rhs.fData; }
+    std::strong_ordering operator<=>(const FixedString<N>& rhs) const noexcept { return *this <=> rhs.Data(); }
     std::strong_ordering operator<=>(std::string_view rhs) const noexcept { return std::string_view(*this) <=> rhs; }
     std::strong_ordering operator<=>(auto&& rhs) const noexcept
         requires(std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::zstring> or

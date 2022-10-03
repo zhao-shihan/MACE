@@ -25,7 +25,7 @@ template<std::size_t AMaxSize>
 template<std::size_t N>
     requires(N != AMaxSize) // clang-format off
 FixedString<AMaxSize>::FixedString(const FixedString<N>& str) noexcept :
-    FixedString(str.fData) {} // clang-format on
+    FixedString(str.Data()) {} // clang-format on
 
 template<std::size_t AMaxSize>
     requires((AMaxSize + 1) % alignof(void*) == 0) // clang-format off
@@ -98,11 +98,12 @@ FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(auto&& rhs) & noexcept /
               not std::convertible_to<decltype(rhs), std::string_view>)) {
     const gsl::czstring cstr = std::forward<decltype(rhs)>(rhs);
     if (fData != cstr) {
-        if (std::cmp_greater(std::distance(ConstBegin(), cstr), AMaxSize)) {
+        if (std::abs(ConstBegin() - cstr) > AMaxSize) {
             std::strncpy(fData, cstr, AMaxSize);
         } else {
-            const FixedString<AMaxSize> copy = cstr;
-            std::strncpy(fData, copy.fData, AMaxSize);
+            char copy[AMaxSize + 1];
+            std::strncpy(copy, cstr, AMaxSize);
+            std::strncpy(fData, copy, AMaxSize);
         }
         fData[AMaxSize] = '\0';
     }
@@ -163,11 +164,12 @@ FixedString<AMaxSize>& FixedString<AMaxSize>::Append(auto&& str) noexcept // cla
               not std::convertible_to<decltype(str), std::string_view>)) {
     const gsl::czstring cstr = std::forward<decltype(str)>(str);
     const auto length = Length();
-    if (std::cmp_greater(std::distance(ConstBegin(), cstr), AMaxSize)) {
+    if (std::abs(ConstBegin() - cstr) > AMaxSize) {
         std::strncat(Begin() + length, cstr, AMaxSize - length);
     } else {
-        const FixedString<AMaxSize> copy = cstr;
-        std::strncat(Begin() + length, copy.fData, AMaxSize - length);
+        char copy[AMaxSize + 1];
+        std::strncpy(copy, cstr, AMaxSize);
+        std::strncat(Begin() + length, copy, AMaxSize - length);
     }
     return *this;
 }
