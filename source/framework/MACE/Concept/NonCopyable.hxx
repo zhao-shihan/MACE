@@ -4,7 +4,7 @@
 
 namespace MACE::Concept {
 
-/// @brief Not copyable but can be moveable
+/// @brief Not copyable but can be moved.
 template<typename T>
 concept NonCopyable = requires {
     requires not std::is_constructible_v<T, const T&>;
