@@ -10,12 +10,12 @@ template<std::integral AInt>
 void DoTest(AInt begin, AInt end, AInt nTakers) {
     const auto dividedIndexNum = DivideIndexNum(end - begin, nTakers);
     std::cout << "DivideIndexNum(...):\n";
-    for (gsl::index i = 0; i < dividedIndexNum.size(); ++i) {
+    for (gsl::index i = 0; i < std::ssize(dividedIndexNum); ++i) {
         std::cout << i << ": " << dividedIndexNum[i] << '\n';
     }
 
     auto PrintResult = [](const auto& result) {
-        for (gsl::index i = 0; i < result.size(); ++i) {
+        for (gsl::index i = 0; i < std::ssize(result); ++i) {
             std::cout << i << ": [" << result[i].begin << ", " << result[i].end << ", " << result[i].step << ", " << result[i].count << "]\n";
         }
     };
