@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Concept/NonMoveable.hxx"
 #include "MACE/Concept/ROOTFundamental.hxx"
 
 #include <concepts>
@@ -25,6 +26,8 @@ concept BranchSocketable = requires(S& s, const S& cs, const T v, TTree& tree) {
     { s.ConnectToBranch(tree) } -> std::same_as<void>;
     requires std::derived_from<S, BranchSocketBase<S, T>>;
     requires std::is_final_v<S>;
+    requires Concept::NonMoveable<S>;
+    requires not std::is_polymorphic_v<S>;
     requires not std::is_default_constructible_v<S>; // Constructor should need the branch name, at least.
 };
 
