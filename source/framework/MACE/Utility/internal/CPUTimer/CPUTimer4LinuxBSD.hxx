@@ -1,7 +1,7 @@
 #pragma once
 
+#include <ctime>
 #include <sys/time.h>
-#include <time.h>
 
 namespace MACE::Utility::internal {
 
@@ -17,7 +17,7 @@ public:
     ATime NanosecondsUsed() const noexcept;
 
 private:
-    struct timespec fT0;
+    std::timespec fT0;
 };
 
 } // namespace MACE::Utility::internal
