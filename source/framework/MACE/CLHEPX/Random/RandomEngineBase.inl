@@ -42,7 +42,7 @@ void RandomEngineBase<PRBG>::setSeeds(const long* seeds, int) {
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-void RandomEngineBase<PRBG>::saveStatus(const char filename[]) const {
+void RandomEngineBase<PRBG>::saveStatus(gsl::czstring filename) const {
     std::ofstream os(filename, std::ios::out);
     if (os.is_open()) {
         put(os);
@@ -53,7 +53,7 @@ void RandomEngineBase<PRBG>::saveStatus(const char filename[]) const {
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-void RandomEngineBase<PRBG>::restoreStatus(const char filename[]) {
+void RandomEngineBase<PRBG>::restoreStatus(gsl::czstring filename) {
     std::ifstream is(filename, std::ios::in);
     if (is.is_open()) {
         get(is);

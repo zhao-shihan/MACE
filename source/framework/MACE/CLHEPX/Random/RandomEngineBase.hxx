@@ -6,6 +6,8 @@
 
 #include "CLHEP/Random/RandomEngine.h"
 
+#include "gsl/gsl"
+
 #include <fstream>
 #include <limits>
 #include <string>
@@ -30,8 +32,8 @@ public:
     void setSeed(long seed, int = 0) override final;
     void setSeeds(const long* seeds, int = 0) override final;
 
-    void saveStatus(const char filename[]) const override final;
-    void restoreStatus(const char filename[]) override final;
+    void saveStatus(gsl::czstring filename) const override final;
+    void restoreStatus(gsl::czstring filename) override final;
     void showStatus() const override final;
 
     std::ostream& put(std::ostream& os) const override final;
