@@ -8,7 +8,6 @@
 
 namespace MACE::SimTarget::Action {
 
-namespace std2b = Compatibility::std2b;
 using namespace MACE::Geant4X::Physics;
 
 PhysicsList::PhysicsList() :

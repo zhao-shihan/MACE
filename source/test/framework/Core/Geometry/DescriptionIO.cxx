@@ -5,9 +5,9 @@
 
 #include <random>
 
-namespace std2b = MACE::Compatibility::std2b;
 using namespace MACE::Core::Geometry;
 using namespace MACE::Env;
+using namespace MACE::Compatibility;
 
 int main(int argc, char* argv[]) {
     BasicEnv environment(argc, argv, {});

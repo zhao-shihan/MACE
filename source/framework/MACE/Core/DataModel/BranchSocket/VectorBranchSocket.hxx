@@ -13,8 +13,6 @@
 
 namespace MACE::Core::DataModel::BranchSocket {
 
-namespace Eigen34 = Compatibility::Eigen34;
-
 template<Concept::Arithmetic T, int N>
 class VectorBranchSocket final : public BranchSocketBase<VectorBranchSocket<T, N>, Eigen34::Vector<T, N>> {
 public:

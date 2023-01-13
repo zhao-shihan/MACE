@@ -4,7 +4,7 @@
 #include "MACE/Geant4X/Physics/Particle/Muonium.hxx"
 #include "MACE/Geant4X/Physics/Process/MuoniumTransport.hxx"
 #include "MACE/Math/Random/Distribution/Exponential.hxx"
-#include "MACE/Math/Random/Distribution/Gaussian.hxx"
+#include "MACE/Math/Random/Distribution/Gaussian3DDiagnoal.hxx"
 #include "MACE/Math/Random/Generator/PCGXSHRR6432.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
@@ -16,7 +16,6 @@
 
 namespace MACE::Geant4X::Physics::Process {
 
-namespace std2b = Compatibility::std2b;
 using namespace Utility::LiteralUnit;
 using namespace Utility::PhysicalConstant;
 
@@ -121,41 +120,43 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     // flag indicate that the muonium is not inside the material
     auto insideMaterial = fTarget->Contain(initialPosition, insideVolume);
 
-    // a much faster and good random engine
-    Math::Random::Generator::PCGXSHRR6432 pcg32((unsigned int)(*G4Random::getTheEngine()));
-    // do random flight
-    do {
-        // set free path
-        freePath = insideMaterial ? Math::Random::Distribution::Exponential(fMeanFreePath)(pcg32) : stepInVacuum;
-        // update flight length
-        trueStepLength += freePath;
-        // update time
-        flightTime += freePath / velocity;
-        // update displacement
-        displacement += freePath * direction;
-        // update current position
-        position = initialPosition + displacement;
-        // check space-time limit
-        timeUp = (flightTime >= timeLimit);
-        insideVolume = fTarget->VolumeContain(position);
-        if (timeUp or not insideVolume) { break; }
-        // check whether the end point inside material
-        insideMaterial = fTarget->Contain(position, true);
-        if (not insideMaterial) { continue; }
-        // if inside material update its velocity
-        // set a gauss vector of sigma=1
-        direction.set(std::normal_distribution()(pcg32),
-                      std::normal_distribution()(pcg32),
-                      std::normal_distribution()(pcg32));
-        // get its length before multiply sigmaV
-        velocity = direction.mag();
-        // normalize direction vector
-        direction[G4ThreeVector::X] /= velocity; // do not use CLHEP::Hep3Vector::operator/=(double),
-        direction[G4ThreeVector::Y] /= velocity; // which might includes check
-        direction[G4ThreeVector::Z] /= velocity; // and not even inlined
-        // get the exact velocity
-        velocity *= sigmaV;
-    } while (not fManipulateAllSteps);
+    {
+        // a much faster and good random engine
+        Math::Random::Generator::PCGXSHRR6432 pcg32(G4Random::getTheEngine()->operator unsigned int());
+        // standard 3D Gaussian distribution
+        Math::Random::Distribution::Gaussian3DDiagnoalFast<G4ThreeVector> standardGaussian3D;
+        // do random flight
+        do {
+            // set free path
+            freePath = insideMaterial ?
+                           Math::Random::Distribution::ExponentialFast(fMeanFreePath)(pcg32) :
+                           stepInVacuum;
+            // update flight length
+            trueStepLength += freePath;
+            // update time
+            flightTime += freePath / velocity;
+            // update displacement
+            displacement += freePath * direction;
+            // update current position
+            position = initialPosition + displacement;
+            // check space-time limit
+            timeUp = (flightTime >= timeLimit);
+            insideVolume = fTarget->VolumeContain(position);
+            if (timeUp or not insideVolume) { break; }
+            // check whether the end point inside material
+            insideMaterial = fTarget->Contain(position, true);
+            if (not insideMaterial) { continue; }
+            // if inside material update its velocity
+            // set a gauss vector of sigma=1
+            direction = standardGaussian3D(pcg32);
+            // get its length before multiply sigmaV
+            velocity = direction.mag();
+            // normalize direction vector
+            direction *= 1 / velocity; // do not use CLHEP::Hep3Vector::operator/=(double).
+            // get the exact velocity
+            velocity *= sigmaV;
+        } while (not fManipulateAllSteps);
+    }
 
     // then do the final correction to fulfill the limit
 

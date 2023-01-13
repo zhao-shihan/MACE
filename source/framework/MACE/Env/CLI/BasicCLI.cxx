@@ -7,8 +7,6 @@
 
 namespace MACE::Env::CLI {
 
-namespace std2b = Compatibility::std2b;
-
 BasicCLI::BasicCLI() :
     CLIBase() {
     AddArgument("-h", "--help")

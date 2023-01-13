@@ -63,7 +63,6 @@ void Target::ImportValues(const YAML::Node& node) {
 
 void Target::ExportValues(YAML::Node& node) const {
     using namespace std::string_literals;
-    using namespace Compatibility;
     ExportValue(
         node, [this] {
             switch (fShapeType) {

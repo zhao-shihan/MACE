@@ -1,7 +1,5 @@
 namespace MACE::Core::Geometry::Description {
 
-namespace std2b = Compatibility::std2b;
-
 bool Target::VolumeContain(const Concept::MathVector3D auto& x) const noexcept {
     switch (fShapeType) {
     case TargetShapeType::Cuboid:

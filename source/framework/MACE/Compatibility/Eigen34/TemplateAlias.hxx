@@ -2,7 +2,7 @@
 
 #include "Eigen/Core"
 
-namespace MACE::Compatibility::Eigen34 {
+namespace MACE::inline Compatibility::Eigen34 {
 
 // Eigen before 3.4 does not have these following useful template aliases:
 
@@ -76,4 +76,4 @@ using Vector4 = Eigen::Matrix<T, 4, 1>;
 template<typename T>
 using VectorX = Eigen::Matrix<T, Eigen::Dynamic, 1>;
 
-} // namespace MACE::Compatibility::Eigen34
+} // namespace MACE::inline Compatibility::Eigen34
