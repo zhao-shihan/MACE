@@ -5,7 +5,7 @@
 namespace MACE::Concept {
 
 // Work around LLVM issue #57142 (https://github.com/llvm/llvm-project/issues/57142)
-#if defined __clang__ and __clang_major__ <= 12
+#if not defined __clang__ or __clang_major__ <= 12
 
 namespace internal {
 
