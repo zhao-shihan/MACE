@@ -1,5 +1,7 @@
 #pragma once
 
+#include "MACE/Concept/InstantiatedFrom.hxx"
+
 #include <concepts>
 #include <type_traits>
 
@@ -21,7 +23,7 @@ enum class VerboseLevel {
                                MACE::Env::VerboseLevel>);                              \
     static_assert(MACE::Env::VerboseLevel::Threshold > MACE::Env::VerboseLevel::Quiet, \
                   "Threshold should at least be 'Error'");                             \
-    static_assert(std::derived_from<std::remove_cvref_t<decltype(out)>,                \
-                                    std::ostream>);                                    \
+    static_assert(MACE::Concept::InstantiatedFrom<std::remove_cvref_t<decltype(out)>,  \
+                                                  std::basic_ostream>);                \
     if (verboseLevel >= MACE::Env::VerboseLevel::Threshold) [[unlikely]]               \
     out
