@@ -17,7 +17,7 @@ void CDCSenseWire::ConstructSelf(G4bool checkOverlaps) {
     const auto name = "CDCSenseWire";
     const auto rSenseWire = description.SenseWireDiameter() / 2;
     const auto detail = description.SenseWireGeometryDetail();
-    const auto layerCount = detail.size();
+    const auto layerCount = std::ssize(detail);
 
     for (gsl::index layerID = 0; layerID < layerCount; ++layerID) {
         const auto& [localPositon, halfLength] = detail[layerID];

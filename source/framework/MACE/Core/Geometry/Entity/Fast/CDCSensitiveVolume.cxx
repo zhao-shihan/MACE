@@ -12,7 +12,7 @@ void CDCSensitiveVolume::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::CDC::Instance();
     const auto name = "CDCSensitiveVolume";
     const auto detail = description.SensitiveVolumeGeometryDetail();
-    const auto layerCount = detail.size();
+    const auto layerCount = std::ssize(detail);
 
     for (gsl::index layerID = 0; layerID < layerCount; ++layerID) {
         auto&& [rCenter, thick, halfLength, phiCenter, dPhi] = detail[layerID];

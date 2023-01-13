@@ -28,7 +28,7 @@ std::vector<std::pair<Eigen::Vector2d, Eigen::Vector3d>> CDC::SenseWireMap() con
     const auto cellGeometryDetail = CellGeometryDetail();
     const auto senseWireGeometryDetail = SenseWireGeometryDetail();
 
-    const auto layerCount = cellGeometryDetail.size();
+    const auto layerCount = std::ssize(cellGeometryDetail);
 
     std::vector<std::pair<Eigen::Vector2d, Eigen::Vector3d>> senseWireMap;
     senseWireMap.reserve(3 * layerCount * layerCount); // just an estimation of cell count (pi*r^2), for optimization.
@@ -82,7 +82,7 @@ std::vector<std::tuple<double, double, double, int>> CDC::LayerGeometryDetail() 
 std::vector<std::tuple<double, double, std::vector<G4RotationMatrix>>> CDC::CellGeometryDetail() const {
     const auto layerGeometryDetail = LayerGeometryDetail();
 
-    const auto layerCount = layerGeometryDetail.size();
+    const auto layerCount = std::ssize(layerGeometryDetail);
 
     std::vector<std::tuple<double, double, std::vector<G4RotationMatrix>>> cellGeometryDetail;
     cellGeometryDetail.reserve(layerCount);
@@ -109,7 +109,7 @@ std::vector<std::pair<double, std::array<G4TwoVector, 3>>> CDC::FieldWireGeometr
     const auto layerGeometryDetail = LayerGeometryDetail();
     const auto cellGeometryDetail = CellGeometryDetail();
 
-    const auto layerCount = layerGeometryDetail.size();
+    const auto layerCount = std::ssize(layerGeometryDetail);
 
     std::vector<std::pair<double, std::array<G4TwoVector, 3>>> fieldWireGeometryDetail;
     fieldWireGeometryDetail.reserve(layerCount);
@@ -140,7 +140,7 @@ std::vector<std::pair<double, std::array<G4TwoVector, 3>>> CDC::FieldWireGeometr
 std::vector<std::pair<G4TwoVector, double>> CDC::SenseWireGeometryDetail() const {
     const auto svGeometryDetail = SensitiveVolumeGeometryDetail();
 
-    const auto layerCount = svGeometryDetail.size();
+    const auto layerCount = std::ssize(svGeometryDetail);
 
     std::vector<std::pair<G4TwoVector, double>> senseWireGeometryDetail;
     senseWireGeometryDetail.reserve(layerCount);
@@ -159,7 +159,7 @@ std::vector<std::tuple<double, double, double, double, double>> CDC::SensitiveVo
     const auto layerGeometryDetail = LayerGeometryDetail();
     const auto cellGeometryDetail = CellGeometryDetail();
 
-    const auto layerCount = layerGeometryDetail.size();
+    const auto layerCount = std::ssize(layerGeometryDetail);
 
     std::vector<std::tuple<double, double, double, double, double>> svGeometeryDetail(0);
     svGeometeryDetail.reserve(layerCount);

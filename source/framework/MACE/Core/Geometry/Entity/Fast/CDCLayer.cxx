@@ -16,7 +16,7 @@ void CDCLayer::ConstructSelf(G4bool checkOverlaps) {
     const auto& description = Description::CDC::Instance();
     const auto name = "CDCLayer";
     const auto detail = description.LayerGeometryDetail();
-    const auto count = detail.size();
+    const auto count = std::ssize(detail);
 
     for (gsl::index layerID = 0; layerID < count; ++layerID) {
         const auto& [radius, thick, halfLength, _] = detail[layerID];

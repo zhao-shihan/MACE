@@ -54,10 +54,10 @@ public:
     void Export(std::filesystem::path gdmlFile, gsl::index volumeIndex = 0) const;
 #endif
 
-    auto LogicalVolumeNum() const { return fLogicalVolumes.size(); }
+    auto LogicalVolumeNum() const { return std::ssize(fLogicalVolumes); }
     auto LogicalVolume(gsl::index volumeIndex = 0) const { return fLogicalVolumes.at(volumeIndex).get(); }
 
-    auto PhysicalVolumeNum() const { return fPhysicalVolumes.size(); }
+    auto PhysicalVolumeNum() const { return std::ssize(fPhysicalVolumes); }
     auto PhysicalVolume(gsl::index volumeIndex = 0) const { return fPhysicalVolumes.at(volumeIndex).get(); }
 
 protected:

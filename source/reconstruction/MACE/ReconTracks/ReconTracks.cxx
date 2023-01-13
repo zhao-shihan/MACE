@@ -105,7 +105,7 @@ int main(int argc, char* argv[]) {
 
         std::vector<std::shared_ptr<CDCPhysicsTrack>> errors;
         errors.reserve(physicsTracks.size());
-        for (gsl::index i = 0; i < physicsTracks.size(); ++i) {
+        for (gsl::index i = 0; i < std::ssize(physicsTracks); ++i) {
             auto hits = trackedHits[i];
             const auto& physicsTrack = *physicsTracks[i];
             auto& error = *errors.emplace_back(std::make_shared<CDCPhysicsTrack>());

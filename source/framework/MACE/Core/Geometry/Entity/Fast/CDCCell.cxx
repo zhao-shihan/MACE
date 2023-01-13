@@ -13,7 +13,7 @@ void CDCCell::ConstructSelf(G4bool checkOverlaps) {
     const auto name = "CDCCell";
     const auto layerDetail = description.LayerGeometryDetail();
     const auto cellDetail = description.CellGeometryDetail();
-    const auto layerCount = layerDetail.size();
+    const auto layerCount = std::ssize(layerDetail);
 
     for (gsl::index cellID = 0, layerID = 0; layerID < layerCount; ++layerID) {
         auto&& [cellRadius, cellWidth, halfLength, _0] = layerDetail[layerID];
