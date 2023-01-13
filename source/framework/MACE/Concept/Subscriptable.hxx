@@ -1,5 +1,7 @@
 #pragma once
 
+#include "gsl/gsl"
+
 #include <concepts>
 #include <cstddef>
 #include <type_traits>
@@ -7,12 +9,12 @@
 namespace MACE::Concept {
 
 template<typename T>
-concept Subscriptable = requires(T v, std::ptrdiff_t i) {
+concept Subscriptable = requires(T v, gsl::index i) {
     v[i];
 };
 
 template<typename T, typename U>
-concept SubscriptableTo = requires(T v, std::ptrdiff_t i) {
+concept SubscriptableTo = requires(T v, gsl::index i) {
     { v[i] } -> std::same_as<U>;
 };
 
