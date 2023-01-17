@@ -8,41 +8,53 @@ constexpr BasicGaussianParameter<T, AGaussian>::BasicGaussianParameter() :
 
 template<std::floating_point T, template<typename> class AGaussian>
 constexpr BasicGaussianParameter<T, AGaussian>::BasicGaussianParameter(T mu, T sigma) :
-    DistributionParameterBase<BasicGaussianParameter<T, AGaussian>, AGaussian<T>>(),
+    Base(),
     fMu(mu),
     fSigma(sigma) {}
 
+template<std::floating_point T, template<typename> class AGaussian, Concept::Character AChar>
+auto operator<<(std::basic_ostream<AChar>& os, BasicGaussianParameter<T, AGaussian> self) -> decltype(os) {
+    const auto oldPrecision = os.precision(std::numeric_limits<T>::max_digits10);
+    return os << self.fMu << ' ' << self.fSigma << std::setprecision(oldPrecision);
+}
+
+template<std::floating_point T, template<typename> class AGaussian, Concept::Character AChar>
+auto operator>>(std::basic_istream<AChar>& is, BasicGaussianParameter<T, AGaussian>& self) -> decltype(is) {
+    return is >> self.fMu >> self.fSigma;
+}
+
 template<std::floating_point T, template<typename> class AGaussian>
 constexpr GaussianBase<T, AGaussian>::GaussianBase(T mu, T sigma) :
-    RandomNumberDistributionBase<AGaussian<T>, T, BasicGaussianParameter<T, AGaussian>>(),
+    Base(),
     fParameter(mu, sigma) {}
 
 template<std::floating_point T, template<typename> class AGaussian>
-constexpr GaussianBase<T, AGaussian>::GaussianBase(const BasicGaussianParameter<T, AGaussian>& p) :
-    RandomNumberDistributionBase<AGaussian<T>, T, BasicGaussianParameter<T, AGaussian>>(),
+constexpr GaussianBase<T, AGaussian>::GaussianBase(const typename Base::ParameterType& p) :
+    Base(),
     fParameter(p) {}
-
-template<Concept::Character AChar, std::floating_point T, template<typename> class AGaussian>
-auto operator<<(std::basic_ostream<AChar>& os, const GaussianBase<T, AGaussian>& g) -> decltype(os) {
-    const auto oldPrecision = os.precision(std::numeric_limits<T>::max_digits10);
-    return os << g.Mu() << ' ' << g.Sigma() << std::setprecision(oldPrecision);
-}
-
-template<Concept::Character AChar, Concept::Arithmetic T, template<typename> class AGaussian>
-auto operator>>(std::basic_istream<AChar>& is, GaussianBase<T, AGaussian>& g) -> decltype(is) {
-    T mu;
-    T sigma;
-    is >> mu >> sigma;
-    g.Mu(mu);
-    g.Sigma(sigma);
-    return is;
-}
 
 } // namespace internal
 
-template<std::floating_point T>
-constexpr T Gaussian<T>::operator()(UniformRandomBitGenerator auto& g, const GaussianParameter<T>& p) {
+#define MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_GENERATOR_SNIPPET(Suffix)          \
+    if ((fSaved = not fSaved)) {                                                  \
+        static_assert(Gaussian2DDiagnoal##Suffix<std::array<T, 2>>::Stateless()); \
+        const auto&& [u, v] = Gaussian2DDiagnoal##Suffix<std::array<T, 2>>()(g);  \
+        fSavedValue = v;                                                          \
+        return p.Sigma() * u + p.Mu();                                            \
+    } else {                                                                      \
+        return p.Sigma() * fSavedValue + p.Mu();                                  \
+    }
 
+template<std::floating_point T>
+T Gaussian<T>::operator()(UniformRandomBitGenerator auto& g, const GaussianParameter<T>& p) {
+    MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_GENERATOR_SNIPPET()
 }
+
+template<std::floating_point T>
+T GaussianFast<T>::operator()(UniformRandomBitGenerator auto& g, const GaussianFastParameter<T>& p) {
+    MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_GENERATOR_SNIPPET(Fast)
+}
+
+#undef MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_GENERATOR_SNIPPET
 
 } // namespace MACE::Math::Random::Distribution
