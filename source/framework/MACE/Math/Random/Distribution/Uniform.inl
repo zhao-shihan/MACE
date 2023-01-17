@@ -12,58 +12,48 @@ constexpr BasicUniformParameter<T, AUniform>::BasicUniformParameter(T inf, T sup
     fInfimum(inf),
     fSupremum(sup) {}
 
-template<Concept::Arithmetic T, template<typename> class AUniform>
-constexpr UniformBase<T, AUniform>::UniformBase(T inf, T sup) :
-    RandomNumberDistributionBase<AUniform<T>, T, BasicUniformParameter<T, AUniform>>(),
+template<template<typename> class ADerived, Concept::Arithmetic T>
+constexpr UniformBase<ADerived, T>::UniformBase(T inf, T sup) :
+    Base(),
     fParameter(inf, sup) {}
 
-template<Concept::Arithmetic T, template<typename> class AUniform>
-constexpr UniformBase<T, AUniform>::UniformBase(BasicUniformParameter<T, AUniform> p) :
-    RandomNumberDistributionBase<AUniform<T>, T, BasicUniformParameter<T, AUniform>>(),
+template<template<typename> class ADerived, Concept::Arithmetic T>
+constexpr UniformBase<ADerived, T>::UniformBase(const typename Base::ParameterType& p) :
+    Base(),
     fParameter(p) {}
 
-template<Concept::Character AChar, Concept::Arithmetic T, template<typename> class AUniform>
-auto operator<<(std::basic_ostream<AChar>& os, const UniformBase<T, AUniform>& u) -> decltype(os) {
+template<template<typename> class ADerived, Concept::Arithmetic T, Concept::Character AChar>
+auto operator<<(std::basic_ostream<AChar>& os, const UniformBase<ADerived, T>& self) -> decltype(os) {
     if constexpr (std::integral<T>) {
-        return os << u.Infimum() << ' ' << u.Supremum();
+        return os << self.fParameter;
     } else {
         const auto oldPrecision = os.precision(std::numeric_limits<T>::max_digits10);
-        return os << u.Infimum() << ' ' << u.Supremum() << std::setprecision(oldPrecision);
+        return os << self.fParameter << std::setprecision(oldPrecision);
     }
-}
-
-template<Concept::Character AChar, Concept::Arithmetic T, template<typename> class AUniform>
-auto operator>>(std::basic_istream<AChar>& is, UniformBase<T, AUniform>& u) -> decltype(is) {
-    T inf;
-    T sup;
-    is >> inf >> sup;
-    u.Infimum(inf);
-    u.Supremum(sup);
-    return is;
 }
 
 } // namespace internal
 
 template<std::floating_point T>
-constexpr T CompactUniform<T>::operator()(UniformRandomBitGenerator auto& g, CompactUniformParameter<T> p) {
+constexpr T UniformCompact<T>::operator()(UniformRandomBitGenerator auto& g, const UniformCompactParameter<T>& p) {
     const auto u = (g() - g.Min()) * static_cast<T>(1 / static_cast<long double>(g.Max() - g.Min()));
-    return p.Infimum() * (1 - u) + p.Supremum() * u;
+    std2b::assume(0 <= u and u <= 1);
+    return p.Infimum() + u * (p.Supremum() - p.Infimum());
 }
 
 template<std::floating_point T>
-constexpr T UniformReal<T>::operator()(UniformRandomBitGenerator auto& g, UniformParameter<T> p) {
-    const auto inf = p.Infimum();
-    const auto sup = p.Supremum();
-    T x;
+constexpr T UniformReal<T>::operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p) {
+    T u;
     do {
-        x = CompactUniform(inf, sup)(g);
-    } while (x <= inf || sup <= x);
-    return x;
+        u = UniformCompact()(g);
+        std2b::assume(0 <= u and u <= 1);
+    } while (u <= 0 or 1 <= u);
+    return p.Infimum() + u * (p.Supremum() - p.Infimum());
 }
 
 template<std::integral T>
-constexpr T UniformInteger<T>::operator()(UniformRandomBitGenerator auto& g, UniformParameter<T> p) {
-    // TODO: a better implementation
+constexpr T UniformInteger<T>::operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p) {
+    // Do we need an independent implementation?
     return std::uniform_int_distribution<T>(p.Infimum(), p.Supremum())(g);
 }
 

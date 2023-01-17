@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Compatibility/std2b/assume.hxx"
 #include "MACE/Concept/FundamentalType.hxx"
 #include "MACE/Math/Random/RandomNumberDistributionBase.hxx"
 
@@ -24,17 +25,29 @@ public:
     constexpr void Infimum(T inf) { fInfimum = inf; }
     constexpr void Supremum(T sup) { fSupremum = sup; }
 
+    template<Concept::Character AChar>
+    friend auto& operator<<(std::basic_ostream<AChar>& os, const BasicUniformParameter& self) { return os << self.fInfimum << ' ' << self.fSupremum; }
+    template<Concept::Character AChar>
+    friend auto& operator>>(std::basic_istream<AChar>& is, BasicUniformParameter& self) { return is >> self.fInfimum >> self.fSupremum; }
+
 private:
     T fInfimum;
     T fSupremum;
 };
 
-template<Concept::Arithmetic T, template<typename> class AUniform>
-class UniformBase : public RandomNumberDistributionBase<AUniform<T>, T, BasicUniformParameter<T, AUniform>> {
+template<template<typename> class ADerived, Concept::Arithmetic T>
+class UniformBase : public RandomNumberDistributionBase<ADerived<T>,
+                                                        BasicUniformParameter<T, ADerived>,
+                                                        T> {
+private:
+    using Base = RandomNumberDistributionBase<ADerived<T>,
+                                              BasicUniformParameter<T, ADerived>,
+                                              T>;
+
 public:
     constexpr UniformBase() = default;
     constexpr UniformBase(T inf, T sup);
-    explicit constexpr UniformBase(BasicUniformParameter<T, AUniform> p);
+    constexpr explicit UniformBase(const typename Base::ParameterType& p);
 
 protected:
     constexpr ~UniformBase() = default;
@@ -46,48 +59,58 @@ public:
     constexpr auto Infimum() const { return fParameter.Infimum(); }
     constexpr auto Supremum() const { return fParameter.Supremum(); }
 
-    constexpr void Parameter(BasicUniformParameter<T, AUniform> p) { fParameter = p; }
+    constexpr void Parameter(const typename Base::ParameterType& p) { fParameter = p; }
     constexpr void Infimum(T inf) { fParameter.Infimum(inf); }
     constexpr void Supremum(T sup) { fParameter.Supremum(sup); }
 
     constexpr auto Min() const { return Infimum(); }
     constexpr auto Max() const { return Supremum(); }
 
-protected:
-    BasicUniformParameter<T, AUniform> fParameter;
-};
+    static constexpr auto Stateless() { return true; }
 
-template<Concept::Character AChar, Concept::Arithmetic T, template<typename> class AUniform>
-auto operator<<(std::basic_ostream<AChar>& os, const UniformBase<T, AUniform>& u) -> decltype(os);
-template<Concept::Character AChar, Concept::Arithmetic T, template<typename> class AUniform>
-auto operator>>(std::basic_istream<AChar>& is, UniformBase<T, AUniform>& u) -> decltype(is);
+    template<Concept::Character AChar>
+    friend auto operator<<(std::basic_ostream<AChar>& os, const UniformBase& self) -> decltype(os);
+    template<Concept::Character AChar>
+    friend auto& operator>>(std::basic_istream<AChar>& is, UniformBase& self) { return is >> self.fParameter; }
+
+protected:
+    typename Base::ParameterType fParameter;
+};
 
 } // namespace internal
 
+/// @brief Generates uniform random floating-point value on a compact (including end-point) interval.
+/// @tparam T The value type.
 template<std::floating_point T = double>
-class CompactUniform;
+class UniformCompact;
 
 template<std::floating_point T>
-using CompactUniformParameter = internal::BasicUniformParameter<T, CompactUniform>;
+using UniformCompactParameter = internal::BasicUniformParameter<T, UniformCompact>;
 
 template<std::floating_point T>
-class CompactUniform final : public internal::UniformBase<T, CompactUniform> {
+class UniformCompact final : public internal::UniformBase<UniformCompact, T> {
 public:
-    using internal::UniformBase<T, CompactUniform>::UniformBase;
+    using internal::UniformBase<UniformCompact, T>::UniformBase;
 
     constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    constexpr T operator()(UniformRandomBitGenerator auto& g, CompactUniformParameter<T> p);
+    constexpr T operator()(UniformRandomBitGenerator auto& g, const UniformCompactParameter<T>& p);
 };
 
 template<typename T, typename U>
-CompactUniform(T, U) -> CompactUniform<std::common_type_t<T, U>>;
+UniformCompact(T, U) -> UniformCompact<std::common_type_t<T, U>>;
 
+/// @brief Generates uniform random floating-point value on an open (excluding end-point) interval.
+/// @tparam T The value type.
 template<std::floating_point T = double>
 class UniformReal;
 
+/// @brief Generates uniform random integral value on a interval.
+/// @tparam T The value type.
 template<std::integral T = int>
 class UniformInteger;
 
+/// @brief Generates uniform random value on a interval.
+/// @tparam T The value type.
 template<Concept::Arithmetic T>
 using Uniform = std::conditional_t<std::floating_point<T>,
                                    UniformReal<std::conditional_t<std::floating_point<T>, T, double>>,
@@ -96,25 +119,29 @@ using Uniform = std::conditional_t<std::floating_point<T>,
 template<Concept::Arithmetic T>
 using UniformParameter = internal::BasicUniformParameter<T, Uniform>;
 
+/// @brief Generates uniform random floating-point value on an open (excluding end-point) interval.
+/// @tparam T The value type.
 template<std::floating_point T>
-class UniformReal final : public internal::UniformBase<T, Uniform> {
+class UniformReal final : public internal::UniformBase<Uniform, T> {
 public:
-    using internal::UniformBase<T, Uniform>::UniformBase;
+    using internal::UniformBase<Uniform, T>::UniformBase;
 
     constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    constexpr T operator()(UniformRandomBitGenerator auto& g, UniformParameter<T> p);
+    constexpr T operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p);
 };
 
 template<typename T, typename U>
 UniformReal(T, U) -> UniformReal<std::common_type_t<T, U>>;
 
+/// @brief Generates uniform random integral value on a interval.
+/// @tparam T The value type.
 template<std::integral T>
-class UniformInteger final : public internal::UniformBase<T, Uniform> {
+class UniformInteger final : public internal::UniformBase<Uniform, T> {
 public:
-    using internal::UniformBase<T, Uniform>::UniformBase;
+    using internal::UniformBase<Uniform, T>::UniformBase;
 
     constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    constexpr T operator()(UniformRandomBitGenerator auto& g, UniformParameter<T> p);
+    constexpr T operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p);
 };
 
 template<typename T, typename U>
