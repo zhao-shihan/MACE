@@ -45,7 +45,7 @@ option(MACE_ENABLE_MSVC_STD_CONFORMITY "Build MACE with standard-conformity (MSV
 option(MACE_SURPRESS_USELESS_COMPILE_WARNINGS "Surpress compile warnings raise from external dependencies." ON)
 option(MACE_USE_SHARED_MSVC_RT "Select the MSVC runtime library for use (MSVC only). ON for shared (.dll), OFF for static (.lib). If you run into link error related to MSVC runtime, you can try to flip this." ON)
 cmake_dependent_option(MACE_SHOW_EVEN_MORE_COMPILE_WARNINGS "Add compile flag to show even more compile warnings (GCC: -Weffc++, Clang: -Weverything, MSVC: /Wall)." OFF NOT MACE_SURPRESS_USELESS_COMPILE_WARNINGS OFF)
-set(MACE_BUILTIN_ARGPARSE_VERSION 2.6 CACHE STRING "Set built-in argparse version (if required).")
+set(MACE_BUILTIN_ARGPARSE_VERSION 2.9 CACHE STRING "Set built-in argparse version (if required).")
 set(MACE_BUILTIN_BACKWARD_VERSION 1.6 CACHE STRING "Set built-in backward-cpp version (if required).")
 set(MACE_BUILTIN_EIGEN_VERSION 3.4.0 CACHE STRING "Set built-in Eigen version (if required).")
 set(MACE_BUILTIN_MSGSL_VERSION 4.0.0 CACHE STRING "Set built-in Microsoft.GSL version (if required).")
