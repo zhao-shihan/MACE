@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Concept/FundamentalType.hxx"
-#include "MACE/Math/GetDigits10.hxx"
+#include "MACE/Math/GetDigits.hxx"
 
 #include "backward.hpp"
 
