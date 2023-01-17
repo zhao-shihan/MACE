@@ -5,8 +5,9 @@ constexpr DistributionParameterBase<ADerived, ADistribution>::DistributionParame
     static_assert(DistributionParameterOf<ADerived, ADistribution>);
 }
 
-template<class ADerived, Concept::Arithmetic AResult, class AParameter>
-constexpr RandomNumberDistributionBase<ADerived, AResult, AParameter>::RandomNumberDistributionBase() {
+template<class ADerived, class AParameter, class T>
+    requires(std::is_arithmetic_v<T> or Concept::NumericVectorAny<T>)
+constexpr RandomNumberDistributionBase<ADerived, AParameter, T>::RandomNumberDistributionBase() {
     static_assert(RandomNumberDistribution<ADerived>);
 }
 

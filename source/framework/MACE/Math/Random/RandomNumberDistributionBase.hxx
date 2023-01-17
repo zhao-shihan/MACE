@@ -1,7 +1,9 @@
 #pragma once
 
-#include "MACE/Concept/FundamentalType.hxx"
+#include "MACE/Concept/NumericVector.hxx"
 #include "MACE/Math/Random/RandomNumberDistribution.hxx"
+
+#include <type_traits>
 
 namespace MACE::Math::Random {
 
@@ -19,10 +21,11 @@ public:
     constexpr bool operator==(const DistributionParameterBase&) const = default;
 };
 
-template<class ADerived, Concept::Arithmetic AResult, class AParameter>
+template<class ADerived, class AParameter, class T>
+    requires(std::is_arithmetic_v<T> or Concept::NumericVectorAny<T>)
 class RandomNumberDistributionBase {
 public:
-    using ResultType = AResult;
+    using ResultType = T;
     using ParameterType = AParameter;
     using result_type = ResultType;
     using param_type = ParameterType;
