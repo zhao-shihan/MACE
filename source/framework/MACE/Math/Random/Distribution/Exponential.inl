@@ -8,38 +8,35 @@ constexpr BasicExponentialParameter<T, AExponential>::BasicExponentialParameter(
 
 template<std::floating_point T, template<typename> class AExponential>
 constexpr BasicExponentialParameter<T, AExponential>::BasicExponentialParameter(T expectation) :
-    DistributionParameterBase<BasicExponentialParameter<T, AExponential>, AExponential<T>>(),
+    Base(),
     fExpectation(expectation) {}
 
-template<std::floating_point T, template<typename> class AExponential>
-constexpr ExponentialBase<T, AExponential>::ExponentialBase(T expectation) :
-    RandomNumberDistributionBase<AExponential<T>, T, BasicExponentialParameter<T, AExponential>>(),
+template<std::floating_point T, template<typename> class AExponential, Concept::Character AChar>
+auto operator<<(std::basic_ostream<AChar>& os, const BasicExponentialParameter<T, AExponential>& self) -> decltype(os) {
+    const auto oldPrecision = os.precision(std::numeric_limits<T>::max_digits10);
+    return os << self.fExpectation << std::setprecision(oldPrecision);
+}
+
+template<template<typename> class ADerived, std::floating_point T>
+constexpr ExponentialBase<ADerived, T>::ExponentialBase(T expectation) :
+    Base(),
     fParameter(expectation) {}
 
-template<std::floating_point T, template<typename> class AExponential>
-constexpr ExponentialBase<T, AExponential>::ExponentialBase(BasicExponentialParameter<T, AExponential> p) :
-    RandomNumberDistributionBase<AExponential<T>, T, BasicExponentialParameter<T, AExponential>>(),
+template<template<typename> class ADerived, std::floating_point T>
+constexpr ExponentialBase<ADerived, T>::ExponentialBase(const typename Base::ParameterType& p) :
+    Base(),
     fParameter(p) {}
-
-template<Concept::Character AChar, std::floating_point T, template<typename> class AExponential>
-auto operator<<(std::basic_ostream<AChar>& os, const ExponentialBase<T, AExponential>& e) -> decltype(os) {
-    const auto oldPrecision = os.precision(std::numeric_limits<T>::max_digits10);
-    return os << e.Expectation() << std::setprecision(oldPrecision);
-}
-
-template<Concept::Character AChar, std::floating_point T, template<typename> class AExponential>
-auto operator>>(std::basic_istream<AChar>& is, ExponentialBase<T, AExponential>& e) -> decltype(is) {
-    T expectation;
-    is >> expectation;
-    e.Expectation(expectation);
-    return is;
-}
 
 } // namespace internal
 
 template<std::floating_point T>
-constexpr T Exponential<T>::operator()(UniformRandomBitGenerator auto& g, ExponentialParameter<T> p) {
-    return -std::log(CompactUniform()(g)) * p.Expectation();
+constexpr T Exponential<T>::operator()(UniformRandomBitGenerator auto& g, const ExponentialParameter<T>& p) {
+    return -p.Expectation() * Math::Log(Uniform<T>()(g));
+}
+
+template<std::floating_point T>
+constexpr T ExponentialFast<T>::operator()(UniformRandomBitGenerator auto& g, const ExponentialFastParameter<T>& p) {
+    return -p.Expectation() * Math::RA2Log(Uniform<T>()(g));
 }
 
 } // namespace MACE::Math::Random::Distribution
