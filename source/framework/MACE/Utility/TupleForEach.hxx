@@ -11,7 +11,7 @@ namespace MACE::Utility {
 constexpr void TupleForEach(auto&& tuple, auto&& func) {
     std::apply(
         [&func](auto&&... args) {
-            (func(std::forward<decltype(args)>(args)), ...);
+            (..., func(std::forward<decltype(args)>(args)));
         },
         std::forward<decltype(tuple)>(tuple));
 }
