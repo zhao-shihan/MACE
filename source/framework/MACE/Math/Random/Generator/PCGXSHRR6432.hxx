@@ -25,8 +25,8 @@ public:
     static constexpr auto Min() { return std::numeric_limits<ResultType>::min(); }
     static constexpr auto Max() { return std::numeric_limits<ResultType>::max(); }
 
-    static constexpr StateType Multipiler() { return 6364136223846793005ULL; }
-    static constexpr StateType Increment() { return 0xda3e39cb94b95bdbULL; }
+    static constexpr StateType Multipiler() { return 6364136223846793005ull; }
+    static constexpr StateType Increment() { return 0xDA3E39CB94B95BDBull; }
 
     template<Concept::Character AChar>
     friend auto& operator<<(std::basic_ostream<AChar>& os, const PCGXSHRR6432& self) { return os << self.fState; }
