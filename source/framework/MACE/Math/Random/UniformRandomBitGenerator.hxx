@@ -23,7 +23,8 @@ concept UniformRandomBitGenerator = requires(G g) {
     // 2.1 Has ResultType. It is an unsigned integer.
     typename G::ResultType;
     requires std::unsigned_integral<typename G::ResultType>;
-    // 2.2 Has Min() and Max(), and Min() < Max(). They are constexpr.
+    // 2.2 Has static member functions Min() and Max(), and Min() < Max().
+    // They are constexpr.
     { G::Min() } -> std::same_as<typename G::ResultType>;
     { G::Max() } -> std::same_as<typename G::ResultType>;
     requires(G::Min() < G::Max());
