@@ -64,9 +64,9 @@ constexpr auto PowRZ(std::floating_point auto x) {
 
 // Intergral version:
 
-template<int N, std::floating_point AFloat = double>
+template<int N, std::floating_point F = double>
 constexpr auto PowRZ(std::integral auto x) {
-    return PowRZ<N>(static_cast<AFloat>(x));
+    return PowRZ<N>(static_cast<F>(x));
 }
 
 // Useful shorthands:
