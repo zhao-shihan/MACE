@@ -17,11 +17,12 @@ template<class ADerived>
 class FreeSingleton;
 
 template<class T>
-concept FreeSingletonized = requires {
-    { T::Instance() } -> std::same_as<T&>;
-    requires std::derived_from<T, FreeSingleton<T>>;
-    requires not std::is_base_of_v<internal::ISingletonBase, T>;
-    requires Concept::NonMoveable<T>;
-};
+concept FreeSingletonized =
+    requires {
+        { T::Instance() } -> std::same_as<T&>;
+        requires std::derived_from<T, FreeSingleton<T>>;
+        requires not std::is_base_of_v<internal::ISingletonBase, T>;
+        requires Concept::NonMoveable<T>;
+    };
 
 } // namespace MACE::Env::Memory

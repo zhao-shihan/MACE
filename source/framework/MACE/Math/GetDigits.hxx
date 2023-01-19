@@ -114,4 +114,4 @@ static_assert(GetDigits<16>(0x114514u) == 6);
 static_assert(GetDigits<16>(-0x114514) == 6);
 static_assert(GetDigits<16>(-0x114514, true) == 7);
 
-} // namespace MACE::Utility::Math
+} // namespace MACE::Math

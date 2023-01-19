@@ -37,11 +37,17 @@ public:
     void SetTCACDC(double val) { fTCACDC = val; }
     void SetTCAMCP(double val) { fTCAMCP = val; }
     void SetDeltaTCA(double val) { fDeltaTCA = val; }
-    void SetCPACDC(auto&&... x) requires(sizeof...(x) > 0) { Utility::AssignVector3D(fCPACDC, std::forward<decltype(x)>(x)...); }
-    void SetCPAMCP(auto&&... x) requires(sizeof...(x) > 0) { Utility::AssignVector2D(fCPAMCP, std::forward<decltype(x)>(x)...); }
+    void SetCPACDC(auto&&... x)
+        requires(sizeof...(x) > 0)
+    { Utility::AssignVector3D(fCPACDC, std::forward<decltype(x)>(x)...); }
+    void SetCPAMCP(auto&&... x)
+        requires(sizeof...(x) > 0)
+    { Utility::AssignVector2D(fCPAMCP, std::forward<decltype(x)>(x)...); }
     void SetDCA(double dca) { fDCA = dca; }
     void SetVertexEnergy(double E) { fVertexEnergy = E; }
-    void SetVertexMomentum(auto&&... p) requires(sizeof...(p) > 0) { Utility::AssignVector3D(fVertexMomentum, std::forward<decltype(p)>(p)...); }
+    void SetVertexMomentum(auto&&... p)
+        requires(sizeof...(p) > 0)
+    { Utility::AssignVector3D(fVertexMomentum, std::forward<decltype(p)>(p)...); }
     void SetParticles(auto&& p) { fParticles = std::forward<decltype(p)>(p); }
 
     void FillBranchSockets() const noexcept;

@@ -1,8 +1,8 @@
 namespace MACE::Core::Geometry {
 
-template<typename AValue, typename AReadAs, std::convertible_to<std::string>... AStrings> // clang-format off
+template<typename AValue, typename AReadAs, std::convertible_to<std::string>... AStrings>
     requires std::assignable_from<AValue&, AReadAs>
-void IDescription::ImportValue(const YAML::Node& node, AValue& value, AStrings&&... nodeNames) { // clang-format on
+void IDescription::ImportValue(const YAML::Node& node, AValue& value, AStrings&&... nodeNames) {
     const std::optional<const YAML::Node> leaf = UnpackToLeafNodeForImporting(node, nodeNames...);
     if (leaf.has_value()) {
         value = leaf->as<AReadAs>();
@@ -21,9 +21,9 @@ void IDescription::ImportValue(const YAML::Node& node, const std::regular_invoca
     }
 }
 
-template<typename AValue, typename AWriteAs, std::convertible_to<std::string>... AStrings> // clang-format off
+template<typename AValue, typename AWriteAs, std::convertible_to<std::string>... AStrings>
     requires std::convertible_to<const AValue&, AWriteAs>
-void IDescription::ExportValue(YAML::Node& node, const AValue& value, AStrings&&... nodeNames) const { // clang-format on
+void IDescription::ExportValue(YAML::Node& node, const AValue& value, AStrings&&... nodeNames) const {
     UnpackToLeafNodeForExporting(node, nodeNames...) = static_cast<AWriteAs>(value);
 }
 

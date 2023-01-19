@@ -31,21 +31,22 @@ struct ListInitialization {
 } // namespace internal
 
 template<class T, typename F, std::size_t N = std::numeric_limits<std::size_t>::max()>
-concept NumericVector = requires {
-    requires GeneralNumericVector<T, F, N>;
-    requires std::is_standard_layout_v<T>;
-    requires std::is_class_v<T>;
-    requires std::regular<T>;
-    requires(N == std::numeric_limits<std::size_t>::max() or
-             requires(std::array<F, N> u) {
-                 requires sizeof(T) == N * sizeof(F);
-                 std::apply(internal::ListInitialization<T>::Direct, u);
-                 std::apply(internal::ListInitialization<T>::Copy, u);
-             });
-    requires SubscriptableTo<T, F&>;
-    requires(SubscriptableTo<std::add_const_t<T>, const F&> or
-             SubscriptableTo<std::add_const_t<T>, F>);
-};
+concept NumericVector =
+    requires {
+        requires GeneralNumericVector<T, F, N>;
+        requires std::is_standard_layout_v<T>;
+        requires std::is_class_v<T>;
+        requires std::regular<T>;
+        requires(N == std::numeric_limits<std::size_t>::max() or
+                 requires(std::array<F, N> u) {
+                     requires sizeof(T) == N * sizeof(F);
+                     std::apply(internal::ListInitialization<T>::Direct, u);
+                     std::apply(internal::ListInitialization<T>::Copy, u);
+                 });
+        requires SubscriptableTo<T, F&>;
+        requires(SubscriptableTo<std::add_const_t<T>, const F&> or
+                 SubscriptableTo<std::add_const_t<T>, F>);
+    };
 
 template<class T, typename F>
 concept NumericVector2 = NumericVector<T, F, 2>;

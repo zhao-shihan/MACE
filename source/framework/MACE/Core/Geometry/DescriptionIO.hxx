@@ -8,8 +8,9 @@
 
 #include "yaml-cpp/yaml.h"
 
-#include <algorithm>
 #include "gsl/gsl"
+
+#include <algorithm>
 #include <array>
 #include <chrono>
 #include <concepts>
@@ -38,15 +39,18 @@ public:
     template<IsDescription... ADescriptions>
     static void Ixport(const std::filesystem::path& yamlFile, std::string_view fileComment = ""sv) { Ixport<std::tuple<ADescriptions...>>(yamlFile, fileComment); }
     template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
-    static void Import(const std::filesystem::path& yamlFile) requires(not IsDescription<ADescriptionTuple>);
+    static void Import(const std::filesystem::path& yamlFile)
+        requires(not IsDescription<ADescriptionTuple>);
     template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
-    static void Export(const std::filesystem::path& yamlFile, std::string_view fileComment = ""sv) requires(not IsDescription<ADescriptionTuple>);
+    static void Export(const std::filesystem::path& yamlFile, std::string_view fileComment = ""sv)
+        requires(not IsDescription<ADescriptionTuple>);
     template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
-    static void Ixport(const std::filesystem::path& yamlFile, std::string_view fileComment = ""sv) requires(not IsDescription<ADescriptionTuple>);
+    static void Ixport(const std::filesystem::path& yamlFile, std::string_view fileComment = ""sv)
+        requires(not IsDescription<ADescriptionTuple>);
 
     template<typename... ArgsOfImport>
-    static void Import(const std::ranges::range auto& yamlText) requires
-        std::convertible_to<typename std::remove_cvref_t<decltype(yamlText)>::value_type, std::string>;
+    static void Import(const std::ranges::range auto& yamlText)
+        requires std::convertible_to<typename std::remove_cvref_t<decltype(yamlText)>::value_type, std::string>;
 
     static void AddInstance(IDescription& instance) { fgInstanceSet.emplace(std::addressof(instance)); }
     static void ImportInstantiated(const std::filesystem::path& yamlFile) { ImportImpl(yamlFile, fgInstanceSet); }

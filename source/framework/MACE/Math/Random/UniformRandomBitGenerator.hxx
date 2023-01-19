@@ -16,24 +16,25 @@ class UniformRandomBitGeneratorBase;
 
 /// @brief Concept of uniform random bit generator.
 template<class G>
-concept UniformRandomBitGenerator = requires(G g) {
-    // 1. C++ named requirements: UniformRandomBitGenerator.
-    requires STDUniformRandomBitGenerator<G>;
-    // 2. Same as the C++ named requirements but in our convention.
-    // 2.1 Has ResultType. It is an unsigned integer.
-    typename G::ResultType;
-    requires std::unsigned_integral<typename G::ResultType>;
-    // 2.2 Has static member functions Min() and Max(), and Min() < Max().
-    // They are constexpr.
-    { G::Min() } -> std::same_as<typename G::ResultType>;
-    { G::Max() } -> std::same_as<typename G::ResultType>;
-    requires(G::Min() < G::Max());
-    // 2.3 Has operator(). It returns a value of ResultType.
-    { g() } -> std::same_as<typename G::ResultType>;
-    // 3. Extra requirements.
-    requires std::derived_from<G, UniformRandomBitGeneratorBase<G, typename G::ResultType>>;
-    requires std::is_final_v<G>;
-    requires std::default_initializable<G>;
-};
+concept UniformRandomBitGenerator =
+    requires(G g) {
+        // 1. C++ named requirements: UniformRandomBitGenerator.
+        requires STDUniformRandomBitGenerator<G>;
+        // 2. Same as the C++ named requirements but in our convention.
+        // 2.1 Has ResultType. It is an unsigned integer.
+        typename G::ResultType;
+        requires std::unsigned_integral<typename G::ResultType>;
+        // 2.2 Has static member functions Min() and Max(), and Min() < Max().
+        // They are constexpr.
+        { G::Min() } -> std::same_as<typename G::ResultType>;
+        { G::Max() } -> std::same_as<typename G::ResultType>;
+        requires(G::Min() < G::Max());
+        // 2.3 Has operator(). It returns a value of ResultType.
+        { g() } -> std::same_as<typename G::ResultType>;
+        // 3. Extra requirements.
+        requires std::derived_from<G, UniformRandomBitGeneratorBase<G, typename G::ResultType>>;
+        requires std::is_final_v<G>;
+        requires std::default_initializable<G>;
+    };
 
 } // namespace MACE::Math::Random

@@ -33,11 +33,17 @@ public:
     const auto& GetG4TrackID() const { return fG4TrackID; }
 
     void SetEnergy(double E) { fEnergy = E; }
-    void SetMomentum(auto&&... p) requires(sizeof...(p) > 0) { Utility::AssignVector3D(fMomentum, std::forward<decltype(p)>(p)...); }
+    void SetMomentum(auto&&... p)
+        requires(sizeof...(p) > 0)
+    { Utility::AssignVector3D(fMomentum, std::forward<decltype(p)>(p)...); }
     void SetVertexTime(double val) { fVertexTime = val; }
-    void SetVertexPosition(auto&&... x) requires(sizeof...(x) > 0) { Utility::AssignVector3D(fVertexPosition, std::forward<decltype(x)>(x)...); }
+    void SetVertexPosition(auto&&... x)
+        requires(sizeof...(x) > 0)
+    { Utility::AssignVector3D(fVertexPosition, std::forward<decltype(x)>(x)...); }
     void SetVertexEnergy(double E) { fVertexEnergy = E; }
-    void SetVertexMomentum(auto&&... p) requires(sizeof...(p) > 0) { Utility::AssignVector3D(fVertexMomentum, std::forward<decltype(p)>(p)...); }
+    void SetVertexMomentum(auto&&... p)
+        requires(sizeof...(p) > 0)
+    { Utility::AssignVector3D(fVertexMomentum, std::forward<decltype(p)>(p)...); }
     void SetParticle(auto&& p) { fParticle = std::forward<decltype(p)>(p); }
     void SetG4EventID(int val) { fG4EventID = val; }
     void SetG4TrackID(int val) { fG4TrackID = val; }

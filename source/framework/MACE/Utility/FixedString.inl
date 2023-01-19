@@ -1,14 +1,14 @@
 namespace MACE::Utility {
 
 template<std::size_t AMaxSize>
-    requires((AMaxSize + 1) % alignof(void*) == 0) // clang-format off
+    requires((AMaxSize + 1) % alignof(void*) == 0)
 FixedString<AMaxSize>::FixedString() noexcept :
-    fData{'\0'} {} // clang-format on
+    fData{'\0'} {}
 
 // template<std::size_t AMaxSize>
-//     requires((AMaxSize + 1) % alignof(void*) == 0) // clang-format off
+//     requires((AMaxSize + 1) % alignof(void*) == 0)
 // FixedString<AMaxSize>::FixedString(char ch) noexcept :
-//     fData{ch, '\0'} {} // clang-format on
+//     fData{ch, '\0'} {}
 
 template<std::size_t AMaxSize>
     requires((AMaxSize + 1) % alignof(void*) == 0)
@@ -23,37 +23,39 @@ FixedString<AMaxSize>::FixedString(const char (&str)[N]) noexcept :
 template<std::size_t AMaxSize>
     requires((AMaxSize + 1) % alignof(void*) == 0)
 template<std::size_t N>
-    requires(N != AMaxSize) // clang-format off
+    requires(N != AMaxSize)
 FixedString<AMaxSize>::FixedString(const FixedString<N>& str) noexcept :
-    FixedString(str.Data()) {} // clang-format on
+    FixedString(str.Data()) {}
 
 template<std::size_t AMaxSize>
-    requires((AMaxSize + 1) % alignof(void*) == 0) // clang-format off
+    requires((AMaxSize + 1) % alignof(void*) == 0)
 FixedString<AMaxSize>::FixedString(std::string_view str) noexcept :
-    fData{} { // clang-format on
+    fData{} {
     const auto length = std::min(str.length(), AMaxSize);
     std::memcpy(fData, str.data(), length);
     fData[length] = '\0';
 }
 
 template<std::size_t AMaxSize>
-    requires((AMaxSize + 1) % alignof(void*) == 0) // clang-format off
-FixedString<AMaxSize>::FixedString(auto&& str) noexcept // clang-format on
+    requires((AMaxSize + 1) % alignof(void*) == 0)
+FixedString<AMaxSize>::FixedString(auto&& str) noexcept
     requires(std::same_as<std::remove_cvref_t<decltype(str)>, gsl::zstring> or
              std::same_as<std::remove_cvref_t<decltype(str)>, gsl::czstring> or
              (std::convertible_to<decltype(str), gsl::czstring> and
-              not std::convertible_to<decltype(str), std::string_view>)) :
+              not std::convertible_to<decltype(str), std::string_view>))
+    :
     fData{} {
     std::strncpy(fData, str, AMaxSize);
     fData[AMaxSize] = '\0';
 }
 
 template<std::size_t AMaxSize>
-    requires((AMaxSize + 1) % alignof(void*) == 0) // clang-format off
-FixedString<AMaxSize>::FixedString(auto&& str) noexcept // clang-format on
+    requires((AMaxSize + 1) % alignof(void*) == 0)
+FixedString<AMaxSize>::FixedString(auto&& str) noexcept
     requires(std::convertible_to<decltype(str), std::string> and
              not std::convertible_to<decltype(str), std::string_view> and
-             not std::convertible_to<decltype(str), gsl::czstring>) :
+             not std::convertible_to<decltype(str), gsl::czstring>)
+    :
     fData{} {
     const std::string string = std::forward<decltype(str)>(str);
     const auto length = std::min(string.length(), AMaxSize);
@@ -61,9 +63,9 @@ FixedString<AMaxSize>::FixedString(auto&& str) noexcept // clang-format on
     fData[length] = '\0';
 }
 
-// template<std::size_t AMaxSize> // clang-format off
+// template<std::size_t AMaxSize>
 //     requires((AMaxSize + 1) % alignof(void*) == 0)
-// FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(char ch) & noexcept { // clang-format on
+// FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(char ch) & noexcept {
 //     fData = {ch, '\0'};
 //     return *this;
 // }
@@ -81,8 +83,8 @@ FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(const char (&rhs)[N]) no
 }
 
 template<std::size_t AMaxSize>
-    requires((AMaxSize + 1) % alignof(void*) == 0) // clang-format off
-FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(std::string_view rhs) & noexcept { // clang-format on
+    requires((AMaxSize + 1) % alignof(void*) == 0)
+FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(std::string_view rhs) & noexcept {
     const auto length = std::min(rhs.length(), AMaxSize);
     std::memmove(fData, rhs.data(), length);
     fData[length] = '\0';
@@ -90,12 +92,13 @@ FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(std::string_view rhs) & 
 }
 
 template<std::size_t AMaxSize>
-    requires((AMaxSize + 1) % alignof(void*) == 0) // clang-format off
-FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(auto&& rhs) & noexcept // clang-format on
+    requires((AMaxSize + 1) % alignof(void*) == 0)
+FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(auto&& rhs) & noexcept
     requires(std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::zstring> or
              std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::czstring> or
              (std::convertible_to<decltype(rhs), gsl::czstring> and
-              not std::convertible_to<decltype(rhs), std::string_view>)) {
+              not std::convertible_to<decltype(rhs), std::string_view>))
+{
     const gsl::czstring cstr = std::forward<decltype(rhs)>(rhs);
     if (fData != cstr) {
         if (std::abs(ConstBegin() - cstr) > AMaxSize) {
@@ -111,11 +114,12 @@ FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(auto&& rhs) & noexcept /
 }
 
 template<std::size_t AMaxSize>
-    requires((AMaxSize + 1) % alignof(void*) == 0) // clang-format off
-FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(auto&& rhs) & noexcept // clang-format on
+    requires((AMaxSize + 1) % alignof(void*) == 0)
+FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(auto&& rhs) & noexcept
     requires(std::convertible_to<decltype(rhs), std::string> and
              not std::convertible_to<decltype(rhs), std::string_view> and
-             not std::convertible_to<decltype(rhs), gsl::czstring>) {
+             not std::convertible_to<decltype(rhs), gsl::czstring>)
+{
     const std::string string = std::forward<decltype(rhs)>(rhs);
     const auto length = std::min(string.length(), AMaxSize);
     std::memcpy(fData, string.c_str(), length);
@@ -123,9 +127,9 @@ FixedString<AMaxSize>& FixedString<AMaxSize>::operator=(auto&& rhs) & noexcept /
     return *this;
 }
 
-// template<std::size_t AMaxSize> // clang-format off
+// template<std::size_t AMaxSize>
 //     requires((AMaxSize + 1) % alignof(void*) == 0)
-// FixedString<AMaxSize>& FixedString<AMaxSize>::Append(char ch) noexcept { // clang-format on
+// FixedString<AMaxSize>& FixedString<AMaxSize>::Append(char ch) noexcept {
 //     auto tail = End();
 //     *tail = ch;
 //     *++tail = '\0';
@@ -145,8 +149,8 @@ FixedString<AMaxSize>& FixedString<AMaxSize>::Append(const char (&str)[N]) noexc
 }
 
 template<std::size_t AMaxSize>
-    requires((AMaxSize + 1) % alignof(void*) == 0) // clang-format off
-FixedString<AMaxSize>& FixedString<AMaxSize>::Append(std::string_view str) noexcept { // clang-format on
+    requires((AMaxSize + 1) % alignof(void*) == 0)
+FixedString<AMaxSize>& FixedString<AMaxSize>::Append(std::string_view str) noexcept {
     const auto length = Length();
     const auto end = Begin() + length;
     const auto count = std::min(str.length(), AMaxSize - length);
@@ -156,12 +160,13 @@ FixedString<AMaxSize>& FixedString<AMaxSize>::Append(std::string_view str) noexc
 }
 
 template<std::size_t AMaxSize>
-    requires((AMaxSize + 1) % alignof(void*) == 0) // clang-format off
-FixedString<AMaxSize>& FixedString<AMaxSize>::Append(auto&& str) noexcept // clang-format on
+    requires((AMaxSize + 1) % alignof(void*) == 0)
+FixedString<AMaxSize>& FixedString<AMaxSize>::Append(auto&& str) noexcept
     requires(std::same_as<std::remove_cvref_t<decltype(str)>, gsl::zstring> or
              std::same_as<std::remove_cvref_t<decltype(str)>, gsl::czstring> or
              (std::convertible_to<decltype(str), gsl::czstring> and
-              not std::convertible_to<decltype(str), std::string_view>)) {
+              not std::convertible_to<decltype(str), std::string_view>))
+{
     const gsl::czstring cstr = std::forward<decltype(str)>(str);
     const auto length = Length();
     if (std::abs(ConstBegin() - cstr) > AMaxSize) {
@@ -175,11 +180,12 @@ FixedString<AMaxSize>& FixedString<AMaxSize>::Append(auto&& str) noexcept // cla
 }
 
 template<std::size_t AMaxSize>
-    requires((AMaxSize + 1) % alignof(void*) == 0) // clang-format off
-FixedString<AMaxSize>& FixedString<AMaxSize>::Append(auto&& str) noexcept // clang-format on
+    requires((AMaxSize + 1) % alignof(void*) == 0)
+FixedString<AMaxSize>& FixedString<AMaxSize>::Append(auto&& str) noexcept
     requires(std::convertible_to<decltype(str), std::string> and
              not std::convertible_to<decltype(str), std::string_view> and
-             not std::convertible_to<decltype(str), gsl::czstring>) {
+             not std::convertible_to<decltype(str), gsl::czstring>)
+{
     const std::string string = std::forward<decltype(str)>(str);
     const auto length = Length();
     const auto end = Begin() + length;
@@ -200,12 +206,13 @@ std::strong_ordering FixedString<AMaxSize>::operator<=>(const char (&rhs)[N]) co
 }
 
 template<std::size_t AMaxSize>
-    requires((AMaxSize + 1) % alignof(void*) == 0) // clang-format off
-std::strong_ordering FixedString<AMaxSize>::operator<=>(auto&& rhs) const noexcept // clang-format on
+    requires((AMaxSize + 1) % alignof(void*) == 0)
+std::strong_ordering FixedString<AMaxSize>::operator<=>(auto&& rhs) const noexcept
     requires(std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::zstring> or
              std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::czstring> or
              (std::convertible_to<decltype(rhs), gsl::czstring> and
-              not std::convertible_to<decltype(rhs), std::string_view>)) {
+              not std::convertible_to<decltype(rhs), std::string_view>))
+{
     const gsl::czstring cstr = std::forward<decltype(rhs)>(rhs);
     const auto cmp = std::strncmp(fData, cstr, AMaxSize + 1);
     return cmp == 0 ? std::strong_ordering::equal :

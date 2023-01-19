@@ -11,7 +11,6 @@
 
 namespace MACE::Geant4X::Generator {
 
-
 class SurfaceMuonMessenger final : public Env::Memory::Singleton<SurfaceMuonMessenger>,
                                    public G4UImessenger {
     friend Env::Memory::SingletonFactory;

@@ -21,7 +21,6 @@ class MuoniumTransport;
 
 namespace Messenger {
 
-
 class MuoniumPhysicsMessenger final : public Env::Memory::Singleton<MuoniumPhysicsMessenger>,
                                       public G4UImessenger {
     friend Env::Memory::SingletonFactory;

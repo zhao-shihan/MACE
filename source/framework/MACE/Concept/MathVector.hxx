@@ -13,26 +13,28 @@ namespace MACE::Concept {
 namespace internal {
 
 template<class T>
-concept ExtraRequirementsForMathVector = requires(T u, const T v, const T w, const Utility::ValueTypeOf<T> c) {
-    { u += v } -> std::same_as<T&>;
-    { u -= v } -> std::same_as<T&>;
-    { u *= c } -> std::same_as<T&>;
-    { u /= c } -> std::same_as<T&>;
-    { -v } -> std::convertible_to<T>;
-    { v + w } -> std::convertible_to<T>;
-    { v - w } -> std::convertible_to<T>; // clang-format off
-    { c * v } -> std::convertible_to<T>;
-    { v * c } -> std::convertible_to<T>; // clang-format on
-    { v / c } -> std::convertible_to<T>;
-};
+concept ExtraRequirementsForMathVector =
+    requires(T u, const T v, const T w, const Utility::ValueTypeOf<T> c) {
+        { u += v } -> std::same_as<T&>;
+        { u -= v } -> std::same_as<T&>;
+        { u *= c } -> std::same_as<T&>;
+        { u /= c } -> std::same_as<T&>;
+        { -v } -> std::convertible_to<T>;
+        { v + w } -> std::convertible_to<T>;
+        { v - w } -> std::convertible_to<T>;
+        { c* v } -> std::convertible_to<T>;
+        { v* c } -> std::convertible_to<T>;
+        { v / c } -> std::convertible_to<T>;
+    };
 
 } // namespace internal
 
 template<class T, typename F, std::size_t N = std::numeric_limits<std::size_t>::max()>
-concept MathVector = requires {
-    requires NumericVector<T, F, N>;
-    requires internal::ExtraRequirementsForMathVector<T>;
-};
+concept MathVector =
+    requires {
+        requires NumericVector<T, F, N>;
+        requires internal::ExtraRequirementsForMathVector<T>;
+    };
 
 template<class T, typename F>
 concept MathVector2 = MathVector<T, F, 2>;
@@ -54,10 +56,11 @@ template<class T>
 concept MathVector4D = MathVector4<T, double>;
 
 template<class T, std::size_t N = std::numeric_limits<std::size_t>::max()>
-concept MathVectorIntegral = requires {
-    requires NumericVectorIntegral<T, N>;
-    requires internal::ExtraRequirementsForMathVector<T>;
-};
+concept MathVectorIntegral =
+    requires {
+        requires NumericVectorIntegral<T, N>;
+        requires internal::ExtraRequirementsForMathVector<T>;
+    };
 
 template<class T>
 concept MathVector2Integral = MathVectorIntegral<T, 2>;
@@ -67,10 +70,11 @@ template<class T>
 concept MathVector4Integral = MathVectorIntegral<T, 4>;
 
 template<class T, std::size_t N = std::numeric_limits<std::size_t>::max()>
-concept MathVectorFloatingPoint = requires {
-    requires NumericVectorFloatingPoint<T, N>;
-    requires internal::ExtraRequirementsForMathVector<T>;
-};
+concept MathVectorFloatingPoint =
+    requires {
+        requires NumericVectorFloatingPoint<T, N>;
+        requires internal::ExtraRequirementsForMathVector<T>;
+    };
 
 template<class T>
 concept MathVector2FloatingPoint = MathVectorFloatingPoint<T, 2>;
@@ -80,10 +84,11 @@ template<class T>
 concept MathVector4FloatingPoint = MathVectorFloatingPoint<T, 4>;
 
 template<class T, std::size_t N = std::numeric_limits<std::size_t>::max()>
-concept MathVectorAny = requires {
-    requires NumericVectorAny<T, N>;
-    requires internal::ExtraRequirementsForMathVector<T>;
-};
+concept MathVectorAny =
+    requires {
+        requires NumericVectorAny<T, N>;
+        requires internal::ExtraRequirementsForMathVector<T>;
+    };
 
 template<class T>
 concept MathVector2Any = MathVectorAny<T, 2>;

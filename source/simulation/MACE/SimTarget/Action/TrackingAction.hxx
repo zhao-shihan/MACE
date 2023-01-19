@@ -15,7 +15,6 @@ class MuoniumTrack;
 
 namespace Action {
 
-
 class TrackingAction final : public Env::Memory::FreeSingleton<TrackingAction>,
                              public G4UserTrackingAction {
 public:

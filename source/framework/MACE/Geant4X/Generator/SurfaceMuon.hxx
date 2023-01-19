@@ -1,12 +1,10 @@
 #pragma once
 
-
 #include "G4VPrimaryGenerator.hh"
 
 class G4MuonPlus;
 
 namespace MACE::Geant4X::Generator {
-
 
 /// @brief brief description A generator generates surface muon beam.
 class SurfaceMuon final : public G4VPrimaryGenerator {

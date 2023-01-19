@@ -10,8 +10,8 @@
 namespace MACE::Concept {
 
 template<typename T>
-concept ROOTFundamental = // clang-format off
-    std::same_as<std::decay_t<T>, gsl::czstring> or // clang-format on
+concept ROOTFundamental =
+    std::same_as<std::decay_t<T>, gsl::czstring> or
     std::same_as<T, Char_t> or
     std::same_as<T, UChar_t> or
     std::same_as<T, Short_t> or

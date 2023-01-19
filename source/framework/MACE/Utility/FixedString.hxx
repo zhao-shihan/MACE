@@ -45,8 +45,8 @@ public:
     template<std::size_t N>
     FixedString(const char (&str)[N]) noexcept;
     template<std::size_t N>
-        requires(N != AMaxSize) // clang-format off
-    FixedString(const FixedString<N>& str) noexcept; // clang-format on
+        requires(N != AMaxSize)
+    FixedString(const FixedString<N>& str) noexcept;
     FixedString(std::string_view str) noexcept;
     FixedString(auto&& str) noexcept
         requires(std::same_as<std::remove_cvref_t<decltype(str)>, gsl::zstring> or
@@ -132,10 +132,12 @@ public:
                  not std::convertible_to<decltype(str), gsl::czstring>);
     FixedString& Append(std::nullptr_t) noexcept = delete;
     FixedString& append(auto&& str) noexcept
-        requires(requires(FixedString self) { self.Append(std::forward<decltype(str)>(str)); }) { return Append(std::forward<decltype(str)>(str)); }
+        requires(requires(FixedString self) { self.Append(std::forward<decltype(str)>(str)); })
+    { return Append(std::forward<decltype(str)>(str)); }
 
     FixedString& operator+=(auto&& rhs) noexcept
-        requires(requires(FixedString self) { self.Append(std::forward<decltype(rhs)>(rhs)); }) { return Append(std::forward<decltype(rhs)>(rhs)); }
+        requires(requires(FixedString self) { self.Append(std::forward<decltype(rhs)>(rhs)); })
+    { return Append(std::forward<decltype(rhs)>(rhs)); }
 
     template<std::size_t N>
     bool operator==(const char (&rhs)[N]) const noexcept { return std::strncmp(fData, rhs, std::min(N, AMaxSize + 1)) == 0; }
@@ -146,11 +148,13 @@ public:
         requires(std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::zstring> or
                  std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::czstring> or
                  (std::convertible_to<decltype(rhs), gsl::czstring> and
-                  not std::convertible_to<decltype(rhs), std::string_view>)) { return std::strncmp(fData, std::forward<decltype(rhs)>(rhs), AMaxSize + 1) == 0; }
+                  not std::convertible_to<decltype(rhs), std::string_view>))
+    { return std::strncmp(fData, std::forward<decltype(rhs)>(rhs), AMaxSize + 1) == 0; }
     bool operator==(auto&& rhs) const noexcept
         requires(std::convertible_to<decltype(rhs), std::string> and
                  not std::convertible_to<decltype(rhs), std::string_view> and
-                 not std::convertible_to<decltype(rhs), gsl::czstring>) { return *this == std::string(std::forward<decltype(rhs)>(rhs)).c_str(); }
+                 not std::convertible_to<decltype(rhs), gsl::czstring>)
+    { return *this == std::string(std::forward<decltype(rhs)>(rhs)).c_str(); }
     bool operator==(std::nullptr_t) const noexcept = delete;
 
     template<std::size_t N>
@@ -166,7 +170,8 @@ public:
     std::strong_ordering operator<=>(auto&& rhs) const noexcept
         requires(std::convertible_to<decltype(rhs), std::string> and
                  not std::convertible_to<decltype(rhs), std::string_view> and
-                 not std::convertible_to<decltype(rhs), gsl::czstring>) { return *this <=> std::string(std::forward<decltype(rhs)>(rhs)).c_str(); }
+                 not std::convertible_to<decltype(rhs), gsl::czstring>)
+    { return *this <=> std::string(std::forward<decltype(rhs)>(rhs)).c_str(); }
     std::strong_ordering operator<=>(std::nullptr_t) const noexcept = delete;
 
     static constexpr std::size_t Capacity() noexcept { return AMaxSize; }
@@ -176,9 +181,11 @@ public:
 
     friend FixedString operator+(FixedString lhs, const FixedString& rhs) noexcept { return lhs += rhs; }
     friend FixedString operator+(FixedString lhs, auto&& rhs) noexcept
-        requires(requires { lhs += std::forward<decltype(rhs)>(rhs); }) { return lhs += std::forward<decltype(rhs)>(rhs); }
+        requires(requires { lhs += std::forward<decltype(rhs)>(rhs); })
+    { return lhs += std::forward<decltype(rhs)>(rhs); }
     friend FixedString operator+(auto&& lhs, const FixedString& rhs) noexcept
-        requires(requires { FixedString(std::forward<decltype(lhs)>(lhs)) += rhs; }) { return FixedString(std::forward<decltype(lhs)>(lhs)) += rhs; }
+        requires(requires { FixedString(std::forward<decltype(lhs)>(lhs)) += rhs; })
+    { return FixedString(std::forward<decltype(lhs)>(lhs)) += rhs; }
 
     /* template<std::size_t N>
     FixedString& operator+=(const char (&rhs)[N]) noexcept { return Append(rhs); }

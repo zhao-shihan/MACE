@@ -23,7 +23,6 @@ class MCPSD;
 
 namespace Action {
 
-
 class DetectorConstruction final : public Utility::NonMoveableBase,
                                    public G4VUserDetectorConstruction {
 public:

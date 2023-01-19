@@ -15,7 +15,6 @@
 
 namespace MACE::Env::Memory::internal {
 
-
 /// @brief Implementation detail of MACE::Env::Memory::MuteSingleton.
 /// Not API.
 class MuteSingletonPool final : public Utility::NonMoveableBase {

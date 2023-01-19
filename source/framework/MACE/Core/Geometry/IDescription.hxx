@@ -31,14 +31,14 @@ public:
     void Export(YAML::Node& rootNode) const;
 
 protected:
-    template<typename AValue, typename AReadAs = AValue, std::convertible_to<std::string>... AStrings> // clang-format off
+    template<typename AValue, typename AReadAs = AValue, std::convertible_to<std::string>... AStrings>
         requires std::assignable_from<AValue&, AReadAs>
-    void ImportValue(const YAML::Node& node, AValue& value, AStrings&&... nodeNames); // clang-format on
+    void ImportValue(const YAML::Node& node, AValue& value, AStrings&&... nodeNames);
     template<typename AReadAs, std::convertible_to<std::string>... AStrings>
     void ImportValue(const YAML::Node& node, const std::regular_invocable<AReadAs> auto& ImportAction, AStrings&&... nodeNames);
-    template<typename AValue, typename AWriteAs = AValue, std::convertible_to<std::string>... AStrings> // clang-format off
+    template<typename AValue, typename AWriteAs = AValue, std::convertible_to<std::string>... AStrings>
         requires std::convertible_to<const AValue&, AWriteAs>
-    void ExportValue(YAML::Node& node, const AValue& value, AStrings&&... nodeNames) const; // clang-format on
+    void ExportValue(YAML::Node& node, const AValue& value, AStrings&&... nodeNames) const;
 
 private:
     virtual void ImportValues(const YAML::Node& node) = 0;
@@ -63,11 +63,12 @@ protected:
 };
 
 template<class T>
-concept IsDescription = requires {
-    requires std::derived_from<T, IDescription>;
-    requires std::derived_from<T, ISingletonDescription<T>>;
-    requires Env::Memory::Singletonized<T>;
-};
+concept IsDescription =
+    requires {
+        requires std::derived_from<T, IDescription>;
+        requires std::derived_from<T, ISingletonDescription<T>>;
+        requires Env::Memory::Singletonized<T>;
+    };
 
 } // namespace MACE::Core::Geometry
 

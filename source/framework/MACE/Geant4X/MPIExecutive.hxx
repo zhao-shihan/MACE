@@ -34,8 +34,8 @@ private:
     static bool ExecuteCommand(const std::string& command);
 
     static void Execute(const std::string& macro);
-    static void Execute(const std::ranges::range auto& cmdText) requires
-        std::convertible_to<typename std::remove_cvref_t<decltype(cmdText)>::value_type, std::string>;
+    static void Execute(const std::ranges::range auto& cmdText)
+        requires std::convertible_to<typename std::remove_cvref_t<decltype(cmdText)>::value_type, std::string>;
 };
 
 } // namespace MACE::Geant4X

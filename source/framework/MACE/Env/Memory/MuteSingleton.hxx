@@ -13,7 +13,6 @@ namespace MACE::Env::Memory {
 template<class ADerived>
 class FreeSingleton;
 
-
 template<class ADerived>
 class MuteSingleton : public internal::MuteSingletonBase {
     friend class FreeSingleton<ADerived>;

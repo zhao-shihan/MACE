@@ -35,7 +35,9 @@ public:
     const auto& GetZ0() const { return fZ0; }
     const auto& GetAlpha() const { return fAlpha; }
 
-    void SetCenter(auto&&... c) requires(sizeof...(c) > 0) { Utility::AssignVector2D(fCenter, std::forward<decltype(c)>(c)...); }
+    void SetCenter(auto&&... c)
+        requires(sizeof...(c) > 0)
+    { Utility::AssignVector2D(fCenter, std::forward<decltype(c)>(c)...); }
     void Radius(double val) { fRadius = val; }
     void SetZ0(double val) { fZ0 = val; }
     void SetAlpha(double val) { fAlpha = val; }

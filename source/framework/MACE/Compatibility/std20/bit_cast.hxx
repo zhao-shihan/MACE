@@ -30,8 +30,8 @@ template<class To, class From>
     requires(sizeof(To) == sizeof(From) and
              std::is_trivially_copyable_v<From> and
              std::is_trivially_copyable_v<To> and
-             std::is_trivially_constructible_v<To>) // clang-format off
-[[nodiscard]] To bit_cast(const From& from) noexcept { // clang-format on
+             std::is_trivially_constructible_v<To>)
+[[nodiscard]] To bit_cast(const From& from) noexcept {
     To to;
     std::memcpy(&to, &from, sizeof(To));
     return to;

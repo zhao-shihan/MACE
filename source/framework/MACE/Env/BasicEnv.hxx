@@ -14,7 +14,6 @@ class NoCLI {};
 
 } // namespace internal
 
-
 class BasicEnv : public internal::EnvBase,
                  public Memory::FreeSingleton<BasicEnv> {
 public:

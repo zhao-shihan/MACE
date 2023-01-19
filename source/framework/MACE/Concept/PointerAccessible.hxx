@@ -8,14 +8,18 @@
 namespace MACE::Concept {
 
 template<typename P>
-concept PointerAccessible = std::is_pointer_v<P> or requires(P p) {
-    p.operator->();
-};
+concept PointerAccessible =
+    std::is_pointer_v<P> or
+    requires(P p) {
+        p.operator->();
+    };
 
 template<typename P, typename T>
-concept PointerAccessibleTo = PointerOf<P, T> or requires(P p) {
-    { p.operator->() } -> std::same_as<std::add_pointer_t<T>>;
-};
+concept PointerAccessibleTo =
+    PointerOf<P, T> or
+    requires(P p) {
+        { p.operator->() } -> std::same_as<std::add_pointer_t<T>>;
+    };
 
 #include "MACE/Concept/internal/AccessToMaybeCVConceptMacro.inl"
 

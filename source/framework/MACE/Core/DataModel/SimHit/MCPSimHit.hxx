@@ -28,7 +28,9 @@ public:
     const auto& GetG4TrackID() const { return fG4TrackID; }
 
     void SetVertexTime(double val) { fVertexTime = val; }
-    void SetVertexPosition(auto&&... x) requires(sizeof...(x) > 0) { Utility::AssignVector3D(fVertexPosition, std::forward<decltype(x)>(x)...); }
+    void SetVertexPosition(auto&&... x)
+        requires(sizeof...(x) > 0)
+    { Utility::AssignVector3D(fVertexPosition, std::forward<decltype(x)>(x)...); }
     void SetParticle(auto&& p) { fParticle = std::forward<decltype(p)>(p); }
     void SetG4EventID(int val) { fG4EventID = val; }
     void SetG4TrackID(int val) { fG4TrackID = val; }

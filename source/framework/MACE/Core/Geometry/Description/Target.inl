@@ -26,8 +26,8 @@ bool Target::TestDetectable(const Concept::MathVector3D auto& x) const noexcept 
 
 template<class ADerivedShape>
 Target::ShapeBase<ADerivedShape>::ShapeBase() {
-    static_assert( // clang-format off
-        requires(const ADerivedShape& shape, CLHEP::Hep3Vector&& x, bool&& inside) { // clang-format on
+    static_assert(
+        requires(const ADerivedShape& shape, CLHEP::Hep3Vector&& x, bool&& inside) {
             requires std::is_base_of_v<ShapeBase<ADerivedShape>, ADerivedShape>;
             requires std::is_final_v<ADerivedShape>;
             { shape.CalcTransform() } -> std::same_as<HepGeom::Transform3D>;
@@ -40,8 +40,8 @@ Target::ShapeBase<ADerivedShape>::ShapeBase() {
 template<class ADerivedShape>
 template<class ADerivedDetail>
 Target::ShapeBase<ADerivedShape>::DetailBase<ADerivedDetail>::DetailBase() {
-    static_assert( // clang-format off
-        requires(const ADerivedDetail& detail, CLHEP::Hep3Vector&& x) { // clang-format on
+    static_assert(
+        requires(const ADerivedDetail& detail, CLHEP::Hep3Vector&& x) {
             requires std::is_base_of_v<DetailBase<ADerivedDetail>, ADerivedDetail>;
             requires std::is_final_v<ADerivedDetail>;
             { detail.DetailContain(x) } -> std::same_as<bool>;

@@ -6,11 +6,12 @@
 namespace MACE::Concept {
 
 template<typename P, typename T>
-concept PointerOf = requires {
-    requires std::is_pointer_v<P>;
-    requires std::same_as<std::remove_pointer_t<P>, std::remove_reference_t<T>>;
-    requires std::same_as<P, std::add_pointer_t<T>>;
-};
+concept PointerOf =
+    requires {
+        requires std::is_pointer_v<P>;
+        requires std::same_as<std::remove_pointer_t<P>, std::remove_reference_t<T>>;
+        requires std::same_as<P, std::add_pointer_t<T>>;
+    };
 
 #include "MACE/Concept/internal/AccessToMaybeCVConceptMacro.inl"
 

@@ -32,9 +32,13 @@ public:
     const auto& GetTrueParticles() const { return fTrueParticles; }
 
     void SetTrueVertexTime(double val) { fTrueVertexTime = val; }
-    void SetTrueVertexPosition(auto&&... x) requires(sizeof...(x) > 0) { Utility::AssignVector3D(fTrueVertexPosition, std::forward<decltype(x)>(x)...); }
+    void SetTrueVertexPosition(auto&&... x)
+        requires(sizeof...(x) > 0)
+    { Utility::AssignVector3D(fTrueVertexPosition, std::forward<decltype(x)>(x)...); }
     void SetTrueVertexEnergy(double val) { fTrueVertexEnergy = val; }
-    void SetTrueVertexMomentum(auto&&... p) requires(sizeof...(p) > 0) { Utility::AssignVector3D(fTrueVertexMomentum, std::forward<decltype(p)>(p)...); }
+    void SetTrueVertexMomentum(auto&&... p)
+        requires(sizeof...(p) > 0)
+    { Utility::AssignVector3D(fTrueVertexMomentum, std::forward<decltype(p)>(p)...); }
     void SetTrueParticles(auto&& p) { fTrueParticles = std::forward<decltype(p)>(p); }
 
     void FillBranchSockets() const noexcept;

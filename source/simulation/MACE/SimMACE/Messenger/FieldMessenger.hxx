@@ -23,7 +23,6 @@ class VerticalField;
 
 namespace Messenger {
 
-
 class FieldMessenger final : public Env::Memory::Singleton<FieldMessenger>,
                              public G4UImessenger {
     friend Env::Memory::SingletonFactory;

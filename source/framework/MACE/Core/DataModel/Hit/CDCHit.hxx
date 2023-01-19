@@ -38,8 +38,12 @@ public:
     void HitPositionZ(double z) { fHitPositionZ = z; }
     void DriftDistanceVariance(double val) { fDriftDistanceVariance = val; }
     void HitPositionZVariance(double val) { fHitPositionZVariance = val; }
-    void WirePosition(auto&&... x) requires(sizeof...(x) > 0) { Utility::AssignVector2D(fWirePosition, std::forward<decltype(x)>(x)...); }
-    void WireDirection(auto&&... t) requires(sizeof...(t) > 0) { Utility::AssignVector3D(fWireDirection, std::forward<decltype(t)>(t)...); }
+    void WirePosition(auto&&... x)
+        requires(sizeof...(x) > 0)
+    { Utility::AssignVector2D(fWirePosition, std::forward<decltype(x)>(x)...); }
+    void WireDirection(auto&&... t)
+        requires(sizeof...(t) > 0)
+    { Utility::AssignVector3D(fWireDirection, std::forward<decltype(t)>(t)...); }
     void CellID(int val) { fCellID = val; }
     void LayerID(int val) { fLayerID = val; }
 

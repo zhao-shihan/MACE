@@ -26,8 +26,9 @@ void MPIExecutive::StartInteractiveSession(int argc, char* argv[], auto&& macOrC
     uiExecutive.SessionStart();
 }
 
-void MPIExecutive::Execute(const std::ranges::range auto& cmdText) requires
-    std::convertible_to<typename std::remove_cvref_t<decltype(cmdText)>::value_type, std::string> {
+void MPIExecutive::Execute(const std::ranges::range auto& cmdText)
+    requires std::convertible_to<typename std::remove_cvref_t<decltype(cmdText)>::value_type, std::string>
+{
     for (auto&& command : cmdText) {
         if (not ExecuteCommand(std::forward<decltype(command)>(command))) { break; }
     }

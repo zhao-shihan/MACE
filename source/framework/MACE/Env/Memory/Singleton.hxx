@@ -12,7 +12,6 @@
 
 namespace MACE::Env::Memory {
 
-
 /// @brief A helper base class for constructing environmental singleton
 /// classes via CRTP (Environmental: singleton in MACE environment).
 /// @details This singleton provides a light weight, totally lazy (object

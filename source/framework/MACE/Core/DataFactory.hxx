@@ -42,9 +42,9 @@ public:
     /// Create a TChain of the list of ROOT files.
     template<DataModel::TransientData AData, std::convertible_to<gsl::czstring> APath>
     std::shared_ptr<TChain> CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex = 0) const;
-    template<DataModel::TransientData AData, typename APath> // clang-format off
+    template<DataModel::TransientData AData, typename APath>
         requires std::convertible_to<decltype(std::declval<APath>().c_str()), gsl::czstring>
-    std::shared_ptr<TChain> CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex = 0) const; // clang-format on
+    std::shared_ptr<TChain> CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex = 0) const;
     /// Get the range of tree index in current tree name setting.
     template<DataModel::TransientData AData>
     std::pair<Long64_t, Long64_t> GetTreeIndexRange(TFile& file) const;
@@ -59,15 +59,15 @@ public:
     ///   Note: this feature allows to fill the tree with less but exact columns that the data vector has.
     /// Note: there is no static branch infomation for the tree, so
     /// user should make sure that ADataInTree represents exactly the same branches as the tree.
-    template<DataModel::TransientData ADataInTree, Concept::WeakPointerImitator ADataInListPointer> // clang-format off
+    template<DataModel::TransientData ADataInTree, Concept::WeakPointerImitator ADataInListPointer>
         requires std::derived_from<typename std::pointer_traits<ADataInListPointer>::element_type, ADataInTree>
-    static void FillTree(const std::vector<ADataInListPointer>& dataList, TTree& tree, bool connected = false); // clang-format on
+    static void FillTree(const std::vector<ADataInListPointer>& dataList, TTree& tree, bool connected = false);
     template<Concept::WeakPointerImitator ADataInListPointer>
     static void FillTree(const std::vector<ADataInListPointer>& dataList, TTree& tree, bool connected = false);
     /// Same effect as invoke CreateTree<ADataInTree>(treeIndex) and FillTree<ADataInTree>(dataList, tree, true).
-    template<DataModel::TransientData ADataInTree, Concept::WeakPointerImitator ADataInListPointer> // clang-format off
+    template<DataModel::TransientData ADataInTree, Concept::WeakPointerImitator ADataInListPointer>
         requires std::derived_from<typename std::pointer_traits<ADataInListPointer>::element_type, ADataInTree>
-    std::shared_ptr<TTree> CreateAndFillTree(const std::vector<ADataInListPointer>& dataList, Long64_t treeIndex = 0) const; // clang-format on
+    std::shared_ptr<TTree> CreateAndFillTree(const std::vector<ADataInListPointer>& dataList, Long64_t treeIndex = 0) const;
     template<Concept::WeakPointerImitator ADataInListPointer>
     std::shared_ptr<TTree> CreateAndFillTree(const std::vector<ADataInListPointer>& dataList, Long64_t treeIndex = 0) const;
     /// Create a data vector and fill it with a tree.

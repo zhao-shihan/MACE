@@ -31,7 +31,9 @@ public:
     const auto& GetTrueZ0() const { return fTrueZ0; }
     const auto& GetTrueAlpha() const { return fTrueAlpha; }
 
-    void SetTrueCenter(auto&&... c) requires(sizeof...(c) > 0) { Utility::AssignVector2D(fTrueCenter, std::forward<decltype(c)>(c)...); }
+    void SetTrueCenter(auto&&... c)
+        requires(sizeof...(c) > 0)
+    { Utility::AssignVector2D(fTrueCenter, std::forward<decltype(c)>(c)...); }
     void SetTrueRadius(double val) { fTrueRadius = val; }
     void SetTrueZ0(double val) { fTrueZ0 = val; }
     void SetTrueAlpha(double val) { fTrueAlpha = val; }

@@ -1,8 +1,8 @@
 namespace MACE::Core::DataModel::BranchSocket {
 
-template<class AClass> // clang-format off
+template<class AClass>
     requires std::assignable_from<AClass, AClass>
-template<typename... Args> // clang-format on
+template<typename... Args>
 ClassBranchSocket<AClass>::ClassBranchSocket(const std::string& branchName, std::tuple<Args&&...> argTuple) :
     BranchSocketBase<ClassBranchSocket<AClass>, AClass>(branchName),
     fObject(std::apply(
@@ -11,9 +11,9 @@ ClassBranchSocket<AClass>::ClassBranchSocket(const std::string& branchName, std:
         },
         argTuple)) {}
 
-template<class AClass> // clang-format off
+template<class AClass>
     requires std::assignable_from<AClass, AClass>
-ClassBranchSocket<AClass>::~ClassBranchSocket() { // clang-format on
+ClassBranchSocket<AClass>::~ClassBranchSocket() {
     delete fObject;
 }
 

@@ -28,8 +28,12 @@ public:
     const auto& GetHitPositionVariance() const { return fHitPositionVariance; }
 
     void HitTime(double val) { fHitTime = val; }
-    void SetHitPosition(auto&&... x) requires(sizeof...(x) > 0) { Utility::AssignVector2D(fHitPosition, std::forward<decltype(x)>(x)...); }
-    void SetHitPositionVariance(auto&&... s) requires(sizeof...(s) > 0) { Utility::AssignVector2D(fHitPositionVariance, std::forward<decltype(s)>(s)...); }
+    void SetHitPosition(auto&&... x)
+        requires(sizeof...(x) > 0)
+    { Utility::AssignVector2D(fHitPosition, std::forward<decltype(x)>(x)...); }
+    void SetHitPositionVariance(auto&&... s)
+        requires(sizeof...(s) > 0)
+    { Utility::AssignVector2D(fHitPositionVariance, std::forward<decltype(s)>(s)...); }
 
     void FillBranchSockets() const noexcept;
     static void CreateBranches(TTree& tree);

@@ -12,7 +12,6 @@
 
 namespace MACE::SimMACE {
 
-
 class RunManager final : public Geant4X::MPIRunManager {
 public:
     static auto& Instance() { return static_cast<RunManager&>(*GetRunManager()); }

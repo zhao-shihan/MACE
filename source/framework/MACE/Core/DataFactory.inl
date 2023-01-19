@@ -9,9 +9,9 @@ std::shared_ptr<TChain> DataFactory::CreateChain(const std::vector<APath>& fileL
     return chain;
 }
 
-template<DataModel::TransientData AData, typename APath> // clang-format off
+template<DataModel::TransientData AData, typename APath>
     requires std::convertible_to<decltype(std::declval<APath>().c_str()), gsl::czstring>
-std::shared_ptr<TChain> DataFactory::CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex) const { // clang-format on
+std::shared_ptr<TChain> DataFactory::CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex) const {
     const auto chain = std::make_shared<TChain>(TreeName<AData>(treeIndex).c_str());
     for (auto&& file : fileList) {
         chain->AddFile(file.c_str());
@@ -40,9 +40,9 @@ std::shared_ptr<TTree> DataFactory::CreateTree(Long64_t treeIndex) const {
     return tree;
 }
 
-template<DataModel::TransientData ADataInTree, Concept::WeakPointerImitator ADataInListPointer> // clang-format off
+template<DataModel::TransientData ADataInTree, Concept::WeakPointerImitator ADataInListPointer>
     requires std::derived_from<typename std::pointer_traits<ADataInListPointer>::element_type, ADataInTree>
-void DataFactory::FillTree(const std::vector<ADataInListPointer>& dataList, TTree& tree, bool connected) { // clang-format on
+void DataFactory::FillTree(const std::vector<ADataInListPointer>& dataList, TTree& tree, bool connected) {
     if (not connected) { ADataInTree::ConnectToBranches(tree); }
     for (auto&& data : dataList) {
         static_cast<const ADataInTree&>(*data).FillBranchSockets();
@@ -55,9 +55,9 @@ void DataFactory::FillTree(const std::vector<ADataInListPointer>& dataList, TTre
     FillTree<typename std::pointer_traits<ADataInListPointer>::element_type, ADataInListPointer>(dataList, tree, connected);
 }
 
-template<DataModel::TransientData ADataInTree, Concept::WeakPointerImitator ADataInListPointer> // clang-format off
+template<DataModel::TransientData ADataInTree, Concept::WeakPointerImitator ADataInListPointer>
     requires std::derived_from<typename std::pointer_traits<ADataInListPointer>::element_type, ADataInTree>
-std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<ADataInListPointer>& dataList, Long64_t treeIndex) const { // clang-format on
+std::shared_ptr<TTree> DataFactory::CreateAndFillTree(const std::vector<ADataInListPointer>& dataList, Long64_t treeIndex) const {
     const auto tree = CreateTree<ADataInTree>(treeIndex);
     FillTree<ADataInTree, ADataInListPointer>(dataList, *tree, false);
     return tree;

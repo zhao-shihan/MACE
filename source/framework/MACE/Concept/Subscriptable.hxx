@@ -9,14 +9,16 @@
 namespace MACE::Concept {
 
 template<typename T>
-concept Subscriptable = requires(T v, gsl::index i) {
-    v[i];
-};
+concept Subscriptable =
+    requires(T v, gsl::index i) {
+        v[i];
+    };
 
 template<typename T, typename U>
-concept SubscriptableTo = requires(T v, gsl::index i) {
-    { v[i] } -> std::same_as<U>;
-};
+concept SubscriptableTo =
+    requires(T v, gsl::index i) {
+        { v[i] } -> std::same_as<U>;
+    };
 
 template<typename T, typename U>
 concept WeaklySubscriptableTo =

@@ -11,28 +11,32 @@
 namespace MACE::Concept {
 
 template<typename T>
-concept WeakPointerImitator = requires {
-    requires Indirectable<T>;
-    requires PointerAccessible<T>;
-};
+concept WeakPointerImitator =
+    requires {
+        requires Indirectable<T>;
+        requires PointerAccessible<T>;
+    };
 
 template<typename T>
-concept PointerImitator = requires {
-    requires WeakPointerImitator<T>;
-    requires Subscriptable<T>;
-};
+concept PointerImitator =
+    requires {
+        requires WeakPointerImitator<T>;
+        requires Subscriptable<T>;
+    };
 
 template<typename P, typename T>
-concept WeakPointerImitatorOf = requires {
-    requires WeaklyIndirectableTo<P, T>;
-    requires PointerAccessibleTo<P, T>;
-};
+concept WeakPointerImitatorOf =
+    requires {
+        requires WeaklyIndirectableTo<P, T>;
+        requires PointerAccessibleTo<P, T>;
+    };
 
 template<typename P, typename T>
-concept PointerImitatorOf = requires {
-    requires WeakPointerImitatorOf<P, T>;
-    requires WeaklySubscriptableTo<P, T>;
-};
+concept PointerImitatorOf =
+    requires {
+        requires WeakPointerImitatorOf<P, T>;
+        requires WeaklySubscriptableTo<P, T>;
+    };
 
 #include "MACE/Concept/internal/AccessToMaybeCVConceptMacro.inl"
 

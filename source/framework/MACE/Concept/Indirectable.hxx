@@ -6,14 +6,16 @@
 namespace MACE::Concept {
 
 template<typename T>
-concept Indirectable = requires(T p) {
-    *p;
-};
+concept Indirectable =
+    requires(T p) {
+        *p;
+    };
 
 template<typename T, typename U>
-concept IndirectableTo = requires(T p) {
-    { *p } -> std::same_as<U>;
-};
+concept IndirectableTo =
+    requires(T p) {
+        { *p } -> std::same_as<U>;
+    };
 
 template<typename T, typename U>
 concept WeaklyIndirectableTo =
