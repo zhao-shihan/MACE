@@ -100,29 +100,39 @@ using UniformCompactRectangleParameter = internal::BasicUniformRectangleParamete
 /// @brief Generates 2D uniform random vector on a open (excluding boundary) rectangular region.
 /// @tparam T The result vector type. It must be 2-dimensional and has floating-point type.
 template<Concept::NumericVector2FloatingPoint T = std::array<double, 2>>
-class UniformRealRectangle final : public internal::UniformRectangleBase<UniformRealRectangle, T, UniformReal> {
+class UniformRealRectangle;
+
+/// @brief Generates 2D uniform random integral vector on a rectangular region.
+/// @tparam T The result vector type. It must be 2-dimensional and has integral type.
+template<Concept::NumericVector2Integral T = std::array<int, 2>>
+class UniformIntegerRectangle;
+
+/// @brief Generates 2D uniform random vector on a rectangular region.
+/// @tparam T The result vector type.
+template<Concept::NumericVector2Any T>
+using UniformRectangle = std::conditional_t<std::floating_point<Utility::ValueTypeOf<T>>,
+                                            UniformRealRectangle<std::conditional_t<std::floating_point<Utility::ValueTypeOf<T>>, T, std::array<double, 2>>>,
+                                            UniformIntegerRectangle<std::conditional_t<std::integral<Utility::ValueTypeOf<T>>, T, std::array<int, 2>>>>;
+
+template<Concept::NumericVector2Any T>
+using UniformRectangleParameter = internal::BasicUniformRectangleParameter<T, UniformRectangle, Uniform>;
+
+template<Concept::NumericVector2FloatingPoint T>
+class UniformRealRectangle final : public internal::UniformRectangleBase<UniformRealRectangle, T, Uniform> {
 public:
-    using internal::UniformRectangleBase<UniformRealRectangle, T, UniformReal>::UniformRectangleBase;
+    using internal::UniformRectangleBase<UniformRealRectangle, T, Uniform>::UniformRectangleBase;
 };
 
 template<typename T, typename U>
 UniformRealRectangle(std::initializer_list<T>, std::initializer_list<U>) -> UniformRealRectangle<std::array<std::common_type_t<T, U>, 2>>;
 
-template<std::floating_point T>
-using UniformRealRectangleParameter = internal::BasicUniformRectangleParameter<T, UniformRealRectangle, UniformReal>;
-
-/// @brief Generates 2D uniform random integral vector on a rectangular region.
-/// @tparam T The result vector type. It must be 2-dimensional and has integral type.
-template<Concept::NumericVector2Integral T = std::array<int, 2>>
-class UniformIntegerRectangle final : public internal::UniformRectangleBase<UniformIntegerRectangle, T, UniformInteger> {
+template<Concept::NumericVector2Integral T>
+class UniformIntegerRectangle final : public internal::UniformRectangleBase<UniformIntegerRectangle, T, Uniform> {
 public:
-    using internal::UniformRectangleBase<UniformIntegerRectangle, T, UniformInteger>::UniformRectangleBase;
+    using internal::UniformRectangleBase<UniformIntegerRectangle, T, Uniform>::UniformRectangleBase;
 };
 
 template<typename T, typename U>
 UniformIntegerRectangle(std::initializer_list<T>, std::initializer_list<U>) -> UniformIntegerRectangle<std::array<std::common_type_t<T, U>, 2>>;
-
-template<std::integral T>
-using UniformIntegerRectangleParameter = internal::BasicUniformRectangleParameter<T, UniformIntegerRectangle, UniformInteger>;
 
 } // namespace MACE::Math::Random::Distribution

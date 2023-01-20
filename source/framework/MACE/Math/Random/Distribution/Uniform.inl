@@ -36,7 +36,7 @@ auto operator<<(std::basic_ostream<AChar>& os, const UniformBase<ADerived, T>& s
 
 template<std::floating_point T>
 constexpr T UniformCompact<T>::operator()(UniformRandomBitGenerator auto& g, const UniformCompactParameter<T>& p) {
-    const auto u = (g() - g.Min()) * static_cast<T>(1 / static_cast<long double>(g.Max() - g.Min()));
+    const auto u = static_cast<T>(g() - g.Min()) / (g.Max() - g.Min());
     std2b::assume(0 <= u and u <= 1);
     return p.Infimum() + u * (p.Supremum() - p.Infimum());
 }
