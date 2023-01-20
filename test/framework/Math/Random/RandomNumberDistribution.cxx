@@ -1,16 +1,15 @@
-#include "MACE/CLHEPX/Random/OptimizedMTEngine.hxx"
-#include "MACE/CLHEPX/Random/PCGEngine.hxx"
-#include "MACE/Utility/Math/Random/Distribution/Uniform.hxx"
-#include "MACE/Utility/Math/Random/Generator/MT1993732.hxx"
-#include "MACE/Utility/Math/Random/Generator/PCGXSHRR6432.hxx"
-#include "MACE/Utility/Math/Random/RandomNumberDistribution.hxx"
-#include "MACE/Utility/Math/Random/RandomNumberDistributionBase.hxx"
+// #include "MACE/CLHEPX/Random/MT32Engine.hxx"
+// #include "MACE/CLHEPX/Random/PCG32Engine.hxx"
+#include "MACE/Math/Random/Distribution/Uniform.hxx"
+#include "MACE/Math/Random/Generator/MT1993732.hxx"
+#include "MACE/Math/Random/Generator/PCGXSHRR6432.hxx"
+#include "MACE/Math/Random/RandomNumberDistribution.hxx"
+#include "MACE/Math/Random/RandomNumberDistributionBase.hxx"
 
 #include <iostream>
 #include <random>
 
-// namespace stdts = MACE::Compatibility::stdts;
-using namespace MACE::Utility::Math::Random;
+using namespace MACE::Math::Random;
 
 int main(int, char* argv[]) {
     Generator::PCGXSHRR6432 rng;
@@ -18,19 +17,19 @@ int main(int, char* argv[]) {
 
     using RNG = decltype(rng);
 
-    auto x1 = 0.0 /* std::stod(argv[1]) */;
-    auto x2 = 1.0 /* std::stod(argv[2]) */;
+    auto x1 = std::stod(argv[1]);
+    auto x2 = std::stod(argv[2]);
     auto a = x1;
     for (auto i = 0ULL; i < 2000000000ULL; ++i) {
-        // do {
-        //     const auto u = static_cast<decltype(a)>(1 / static_cast<long double>(RNG::Max() - RNG::Min())) *
-        //                    (rng() - RNG::Min());
-        //     a = x1 * (1 - u) + x2 * u;
-        // } while (a <= x1 || a >= x2);
-        // if (a <= x1 || a >= x2) {
-        //     std::cout << a << std::endl;
-        //     throw "Failed";
-        // }
+        do {
+            const auto u = static_cast<decltype(a)>(1 / static_cast<long double>(RNG::Max() - RNG::Min())) *
+                           (rng() - RNG::Min());
+            a = x1 * (1 - u) + x2 * u;
+        } while (a <= x1 || a >= x2);
+        if (a <= x1 || a >= x2) {
+            std::cout << a << std::endl;
+            throw "Failed";
+        }
         a = Distribution::Uniform<double>()(rng);
     }
     Distribution::Uniform<double>().Reset();

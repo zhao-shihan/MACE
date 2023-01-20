@@ -85,4 +85,11 @@ include(${MACE_PROJECT_CMAKE_DIR}/LookForEigen.cmake)
 # Let's go!
 # =============================================================================
 
+# Config for MACE
+include(${MACE_PROJECT_CMAKE_DIR}/MACECompileOptions.cmake)
+# main content
 add_subdirectory(${MACE_PROJECT_SRC_DIR})
+# test
+if(MACE_BUILD_TEST)
+    add_subdirectory(test)
+endif()
