@@ -52,7 +52,7 @@ public:
     static void Import(const std::ranges::range auto& yamlText)
         requires std::convertible_to<typename std::remove_cvref_t<decltype(yamlText)>::value_type, std::string>;
 
-    static void AddInstance(IDescription& instance) { fgInstanceSet.emplace(std::addressof(instance)); }
+    static void AddInstance(gsl::not_null<IDescription*> instance) { fgInstanceSet.emplace(instance); }
     static void ImportInstantiated(const std::filesystem::path& yamlFile) { ImportImpl(yamlFile, fgInstanceSet); }
     static void ExportInstantiated(const std::filesystem::path& yamlFile, std::string_view fileComment = ""sv) { ExportImpl(yamlFile, fileComment, fgInstanceSet); }
 
@@ -62,7 +62,7 @@ private:
     static void IxportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::range auto& descriptions);
 
 private:
-    static std::set<IDescription*> fgInstanceSet;
+    static std::set<gsl::not_null<IDescription*>> fgInstanceSet;
 };
 
 } // namespace MACE::Core::Geometry
