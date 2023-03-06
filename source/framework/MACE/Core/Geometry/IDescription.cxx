@@ -4,8 +4,9 @@
 namespace MACE::Core::Geometry {
 
 IDescription::IDescription(const std::string& name) :
+    NonMoveableBase(),
     fName(name) {
-    DescriptionIO::AddInstance(*this);
+    DescriptionIO::AddInstance(this);
 }
 
 void IDescription::Import(const YAML::Node& rootNode) {

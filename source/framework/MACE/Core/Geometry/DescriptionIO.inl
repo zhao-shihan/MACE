@@ -67,14 +67,14 @@ void DescriptionIO::Import(const std::ranges::range auto& yamlText)
     std::filesystem::remove(yamlPath, muteRemoveError);
 }
 
-void DescriptionIO::ImportImpl(const std::filesystem::path& yamlFile, std::ranges::range auto& descriptions) {
+void DescriptionIO::ImportImpl(const std::filesystem::path& yamlFile, std::ranges::input_range auto& descriptions) {
     const auto geomYaml = YAML::LoadFile(yamlFile.generic_string());
     for (auto&& description : std::as_const(descriptions)) {
         description->Import(geomYaml);
     }
 }
 
-void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::range auto& descriptions) {
+void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::input_range auto& descriptions) {
     std::vector<std::pair<std::string_view, IDescription*>> sortedDescriptions;
     sortedDescriptions.reserve(descriptions.size());
     for (auto&& description : descriptions) {
@@ -117,7 +117,7 @@ void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::strin
     }
 }
 
-void DescriptionIO::IxportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::range auto& descriptions) {
+void DescriptionIO::IxportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::input_range auto& descriptions) {
     ImportImpl(yamlFile, descriptions);
     ExportImpl(std::filesystem::path(yamlFile).replace_extension(".out.yaml"sv), fileComment, descriptions);
 }

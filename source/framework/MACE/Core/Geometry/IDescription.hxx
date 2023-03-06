@@ -3,6 +3,7 @@
 #include "MACE/Env/BasicEnv.hxx"
 #include "MACE/Env/Memory/Singleton.hxx"
 #include "MACE/Env/Memory/Singletonized.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/TupleForEach.hxx"
 
 #include "yaml-cpp/yaml.h"
@@ -17,12 +18,10 @@
 
 namespace MACE::Core::Geometry {
 
-class IDescription {
+class IDescription : public Utility::NonMoveableBase {
 protected:
     IDescription(const std::string& name);
     ~IDescription() = default;
-    IDescription(const IDescription&) = delete;
-    IDescription& operator=(const IDescription&) = delete;
 
 public:
     const auto& GetName() const { return fName; }

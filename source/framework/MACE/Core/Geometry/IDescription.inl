@@ -3,9 +3,9 @@ namespace MACE::Core::Geometry {
 template<typename AValue, typename AReadAs, std::convertible_to<std::string>... AStrings>
     requires std::assignable_from<AValue&, AReadAs>
 void IDescription::ImportValue(const YAML::Node& node, AValue& value, AStrings&&... nodeNames) {
-    const std::optional<const YAML::Node> leaf = UnpackToLeafNodeForImporting(node, nodeNames...);
-    if (leaf.has_value()) {
-        value = leaf->as<AReadAs>();
+    if (const auto leaf = UnpackToLeafNodeForImporting(node, nodeNames...);
+        leaf.has_value()) {
+        value = leaf->template as<AReadAs>();
     } else {
         PrintNodeNotFoundWarning(nodeNames...);
     }
@@ -13,9 +13,9 @@ void IDescription::ImportValue(const YAML::Node& node, AValue& value, AStrings&&
 
 template<typename AReadAs, std::convertible_to<std::string>... AStrings>
 void IDescription::ImportValue(const YAML::Node& node, const std::regular_invocable<AReadAs> auto& ImportAction, AStrings&&... nodeNames) {
-    const std::optional<const YAML::Node> leaf = UnpackToLeafNodeForImporting(node, nodeNames...);
-    if (leaf.has_value()) {
-        ImportAction(leaf->as<AReadAs>());
+    if (const auto leaf = UnpackToLeafNodeForImporting(node, nodeNames...);
+        leaf.has_value()) {
+        ImportAction(leaf->template as<AReadAs>());
     } else {
         PrintNodeNotFoundWarning(nodeNames...);
     }

@@ -57,9 +57,9 @@ public:
     static void ExportInstantiated(const std::filesystem::path& yamlFile, std::string_view fileComment = ""sv) { ExportImpl(yamlFile, fileComment, fgInstanceSet); }
 
 private:
-    static void ImportImpl(const std::filesystem::path& yamlFile, std::ranges::range auto& descriptions);
-    static void ExportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::range auto& descriptions);
-    static void IxportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::range auto& descriptions);
+    static void ImportImpl(const std::filesystem::path& yamlFile, std::ranges::input_range auto& descriptions);
+    static void ExportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::input_range auto& descriptions);
+    static void IxportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::input_range auto& descriptions);
 
 private:
     static std::set<gsl::not_null<IDescription*>> fgInstanceSet;
