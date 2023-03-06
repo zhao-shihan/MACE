@@ -2,10 +2,14 @@
 
 #include "MACE/Env/Memory/Singleton.hxx"
 
-#include "G4UIcmdWithABool.hh"
 #include "G4UImessenger.hh"
 
 #include "gsl/gsl"
+
+#include <memory>
+
+class G4UIcmdWithABool;
+class G4UIdirectory;
 
 namespace MACE::SimTarget {
 
@@ -23,7 +27,7 @@ class ActionMessenger final : public Env::Memory::Singleton<ActionMessenger>,
 
 private:
     ActionMessenger();
-    ~ActionMessenger() = default;
+    ~ActionMessenger();
 
 public:
     void AssignTo(gsl::not_null<Action::SteppingAction*> sa) { fSteppingAction = sa; }
@@ -33,8 +37,8 @@ public:
 private:
     Action::SteppingAction* fSteppingAction;
 
-    G4UIdirectory fDirectory;
-    G4UIcmdWithABool fSetKillIrrelevants;
+    std::unique_ptr<G4UIdirectory> fDirectory;
+    std::unique_ptr<G4UIcmdWithABool> fSetKillIrrelevants;
 };
 
 } // namespace Messenger

@@ -2,13 +2,16 @@
 
 #include "MACE/Env/Memory/Singleton.hxx"
 
-#include "G4UIcmdWithABool.hh"
-#include "G4UIcmdWithADouble.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
 #include "gsl/gsl"
+
+#include <memory>
+
+class G4UIcmdWithABool;
+class G4UIcmdWithADouble;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIdirectory;
 
 namespace MACE::Geant4X::Physics {
 
@@ -27,7 +30,7 @@ class MuoniumPhysicsMessenger final : public Env::Memory::Singleton<MuoniumPhysi
 
 private:
     MuoniumPhysicsMessenger();
-    ~MuoniumPhysicsMessenger() = default;
+    ~MuoniumPhysicsMessenger();
 
 public:
     void AssignTo(gsl::not_null<Process::MuoniumFormation*> mf) { fMuoniumFormation = mf; }
@@ -39,15 +42,15 @@ private:
     Process::MuoniumFormation* fMuoniumFormation;
     Process::MuoniumTransport* fMuoniumTransport;
 
-    G4UIdirectory fMuoniumPhysicsDirectory;
+    std::unique_ptr<G4UIdirectory> fMuoniumPhysicsDirectory;
 
-    G4UIdirectory fFormationProcessDirectory;
-    G4UIcmdWithADouble fSetFormationProbability;
-    G4UIcmdWithADouble fSetConversionProbability;
+    std::unique_ptr<G4UIdirectory> fFormationProcessDirectory;
+    std::unique_ptr<G4UIcmdWithADouble> fSetFormationProbability;
+    std::unique_ptr<G4UIcmdWithADouble> fSetConversionProbability;
 
-    G4UIdirectory fTransportProcessDirectory;
-    G4UIcmdWithADoubleAndUnit fSetMeanFreePath;
-    G4UIcmdWithABool fSetManipulateAllSteps;
+    std::unique_ptr<G4UIdirectory> fTransportProcessDirectory;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetMeanFreePath;
+    std::unique_ptr<G4UIcmdWithABool> fSetManipulateAllSteps;
 };
 
 } // namespace Messenger

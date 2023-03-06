@@ -2,11 +2,14 @@
 
 #include "MACE/Env/Memory/Singleton.hxx"
 
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
 #include "gsl/gsl"
+
+#include <memory>
+
+class G4UIcmdWithADoubleAndUnit;
+class G4UIdirectory;
 
 namespace MACE::SimMACE {
 
@@ -29,7 +32,7 @@ class FieldMessenger final : public Env::Memory::Singleton<FieldMessenger>,
 
 private:
     FieldMessenger();
-    ~FieldMessenger() = default;
+    ~FieldMessenger();
 
 public:
     void AssignTo(gsl::not_null<Field::FirstBendField*> field) { fFirstBendField = field; }
@@ -49,10 +52,10 @@ private:
     Field::SelectorField* fSelectorField;
     Field::VerticalField* fVerticalField;
 
-    G4UIdirectory fDirectory;
-    G4UIcmdWithADoubleAndUnit fSetTransportMagneticField;
-    G4UIcmdWithADoubleAndUnit fSetLinacPotential;
-    G4UIcmdWithADoubleAndUnit fSetSelectorElectricField;
+    std::unique_ptr<G4UIdirectory> fDirectory;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetTransportMagneticField;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetLinacPotential;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetSelectorElectricField;
 };
 
 } // namespace Messenger

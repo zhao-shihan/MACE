@@ -32,8 +32,6 @@ class GeometryMessenger final : public Env::Memory::Singleton<GeometryMessenger>
 private:
     GeometryMessenger();
     ~GeometryMessenger();
-    GeometryMessenger(const GeometryMessenger&) = delete;
-    GeometryMessenger& operator=(const GeometryMessenger&) = delete;
 
 public:
     void AssignTo(gsl::not_null<Action::DetectorConstruction*> dc) { fDetectorConstruction = dc; }
@@ -43,6 +41,7 @@ public:
 private:
     Action::DetectorConstruction* fDetectorConstruction;
 
+    std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithAString> fImportDescription;
     std::unique_ptr<G4UIcmdWithAString> fExportDescription;
     std::unique_ptr<G4UIcmdWithAString> fIxportDescription;

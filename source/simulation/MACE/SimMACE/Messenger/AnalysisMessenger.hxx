@@ -2,13 +2,16 @@
 
 #include "MACE/Env/Memory/Singleton.hxx"
 
-#include "G4UIcmdWithABool.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
 #include "gsl/gsl"
+
+#include <memory>
+
+class G4UIcmdWithABool;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithAString;
+class G4UIdirectory;
 
 namespace MACE::SimMACE {
 
@@ -22,7 +25,7 @@ class AnalysisMessenger final : public Env::Memory::Singleton<AnalysisMessenger>
 
 private:
     AnalysisMessenger();
-    ~AnalysisMessenger() = default;
+    ~AnalysisMessenger();
 
 public:
     void AssignTo(gsl::not_null<Analysis*> ana) { fAnalysis = ana; }
@@ -32,10 +35,10 @@ public:
 private:
     Analysis* fAnalysis;
 
-    G4UIdirectory fDirectory;
-    G4UIcmdWithABool fEnableCoincidenceOfEMCal;
-    G4UIcmdWithABool fEnableCoincidenceOfMCP;
-    G4UIcmdWithAString fSetResultPath;
+    std::unique_ptr<G4UIdirectory> fDirectory;
+    std::unique_ptr<G4UIcmdWithABool> fEnableCoincidenceOfEMCal;
+    std::unique_ptr<G4UIcmdWithABool> fEnableCoincidenceOfMCP;
+    std::unique_ptr<G4UIcmdWithAString> fSetResultPath;
 };
 
 } // namespace Messenger

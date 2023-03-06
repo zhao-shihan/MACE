@@ -4,8 +4,6 @@
 
 #include "G4ParticleDefinition.hh"
 
-#include <memory>
-
 namespace MACE::Geant4X::Physics::Particle {
 
 class Muonium final : public Env::Memory::Singleton<Muonium>,
@@ -16,9 +14,7 @@ private:
     Muonium();
 
 public:
-    ~Muonium() = default;
-
-    static auto Definition() { return std::addressof(Instance()); }
+    static auto Definition() { return &Instance(); }
 };
 
 } // namespace MACE::Geant4X::Physics::Particle

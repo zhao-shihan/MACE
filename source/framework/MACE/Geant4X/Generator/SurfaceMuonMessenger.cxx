@@ -1,7 +1,8 @@
 #include "MACE/Geant4X/Generator/SurfaceMuon.hxx"
 #include "MACE/Geant4X/Generator/SurfaceMuonMessenger.hxx"
 
-#include "G4SystemOfUnits.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIdirectory.hh"
 
 namespace MACE::Geant4X::Generator {
 
@@ -9,44 +10,51 @@ SurfaceMuonMessenger::SurfaceMuonMessenger() :
     Singleton(),
     G4UImessenger(),
     fSurfaceMuonGenerator(nullptr),
-    fDirectory("/MACE/Generator/SurfaceMuon/"),
-    fSetMomentum("/MACE/Generator/SurfaceMuon/SetMomentum", this),
-    fSetMomentumSpreadRMS("/MACE/Generator/SurfaceMuon/SetMomentumSpreadRMS", this),
-    fSetBeamProfileRMS("/MACE/Generator/SurfaceMuon/SetBeamProfileRMS", this),
-    fSetVertexZ("/MACE/Generator/SurfaceMuon/SetVertexZ", this) {
+    fDirectory(),
+    fSetMomentum(),
+    fSetMomentumSpreadRMS(),
+    fSetBeamProfileRMS(),
+    fSetVertexZ() {
 
-    fDirectory.SetGuidance("MACE muon beam.");
+    fDirectory = std::make_unique<G4UIdirectory>("/MACE/Generator/SurfaceMuon/");
+    fDirectory->SetGuidance("MACE muon beam.");
 
-    fSetMomentum.SetGuidance("Set mean beam momentum.");
-    fSetMomentum.SetParameterName("p", false);
-    fSetMomentum.SetUnitCategory("Energy");
-    fSetMomentum.AvailableForStates(G4State_Idle);
+    fSetMomentum = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Generator/SurfaceMuon/SetMomentum", this);
+    fSetMomentum->SetGuidance("Set mean beam momentum.");
+    fSetMomentum->SetParameterName("p", false);
+    fSetMomentum->SetUnitCategory("Energy");
+    fSetMomentum->AvailableForStates(G4State_Idle);
 
-    fSetMomentumSpreadRMS.SetGuidance("Set beam momentum spread (RMS).");
-    fSetMomentumSpreadRMS.SetParameterName("sigma_p", false);
-    fSetMomentumSpreadRMS.SetUnitCategory("Energy");
-    fSetMomentumSpreadRMS.AvailableForStates(G4State_Idle);
+    fSetMomentumSpreadRMS = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Generator/SurfaceMuon/SetMomentumSpreadRMS", this);
+    fSetMomentumSpreadRMS->SetGuidance("Set beam momentum spread (RMS).");
+    fSetMomentumSpreadRMS->SetParameterName("sigma_p", false);
+    fSetMomentumSpreadRMS->SetUnitCategory("Energy");
+    fSetMomentumSpreadRMS->AvailableForStates(G4State_Idle);
 
-    fSetBeamProfileRMS.SetGuidance("Set beam profile width (RMS).");
-    fSetBeamProfileRMS.SetParameterName("sigma", false);
-    fSetBeamProfileRMS.SetUnitCategory("Length");
-    fSetBeamProfileRMS.AvailableForStates(G4State_Idle);
+    fSetBeamProfileRMS = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Generator/SurfaceMuon/SetBeamProfileRMS", this);
+    fSetBeamProfileRMS->SetGuidance("Set beam profile width (RMS).");
+    fSetBeamProfileRMS->SetParameterName("sigma", false);
+    fSetBeamProfileRMS->SetUnitCategory("Length");
+    fSetBeamProfileRMS->AvailableForStates(G4State_Idle);
 
-    fSetVertexZ.SetGuidance("It does what you think it does.");
-    fSetVertexZ.SetParameterName("z", false);
-    fSetVertexZ.SetUnitCategory("Length");
-    fSetVertexZ.AvailableForStates(G4State_Idle);
+    fSetVertexZ = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Generator/SurfaceMuon/SetVertexZ", this);
+    fSetVertexZ->SetGuidance("It does what you think it does.");
+    fSetVertexZ->SetParameterName("z", false);
+    fSetVertexZ->SetUnitCategory("Length");
+    fSetVertexZ->AvailableForStates(G4State_Idle);
 }
 
+SurfaceMuonMessenger::~SurfaceMuonMessenger() = default;
+
 void SurfaceMuonMessenger::SetNewValue(G4UIcommand* command, G4String value) {
-    if (command == std::addressof(fSetMomentum)) {
-        fSurfaceMuonGenerator->SetMomentum(fSetMomentum.GetNewDoubleValue(value));
-    } else if (command == std::addressof(fSetMomentumSpreadRMS)) {
-        fSurfaceMuonGenerator->SetMomentumSpreadRMS(fSetMomentumSpreadRMS.GetNewDoubleValue(value));
-    } else if (command == std::addressof(fSetBeamProfileRMS)) {
-        fSurfaceMuonGenerator->SetBeamProfileRMS(fSetBeamProfileRMS.GetNewDoubleValue(value));
-    } else if (command == std::addressof(fSetVertexZ)) {
-        fSurfaceMuonGenerator->SetVertexZ(fSetVertexZ.GetNewDoubleValue(value));
+    if (command == fSetMomentum.get()) {
+        fSurfaceMuonGenerator->SetMomentum(fSetMomentum->GetNewDoubleValue(value));
+    } else if (command == fSetMomentumSpreadRMS.get()) {
+        fSurfaceMuonGenerator->SetMomentumSpreadRMS(fSetMomentumSpreadRMS->GetNewDoubleValue(value));
+    } else if (command == fSetBeamProfileRMS.get()) {
+        fSurfaceMuonGenerator->SetBeamProfileRMS(fSetBeamProfileRMS->GetNewDoubleValue(value));
+    } else if (command == fSetVertexZ.get()) {
+        fSurfaceMuonGenerator->SetVertexZ(fSetVertexZ->GetNewDoubleValue(value));
     }
 }
 

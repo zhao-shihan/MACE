@@ -20,11 +20,14 @@ namespace MACE::SimTarget::Messenger {
 GeometryMessenger::GeometryMessenger() :
     G4UImessenger(),
     fDetectorConstruction(nullptr),
+    fDirectory(),
     fImportDescription(),
     fExportDescription(),
     fIxportDescription(),
     fSetTargetDensity(),
     fSetTemperature() {
+
+    fDirectory = std::make_unique<G4UIdirectory>("/MACE/Geometry/");
 
     fImportDescription = std::make_unique<G4UIcmdWithAString>("/MACE/Geometry/Description/Import", this);
     fImportDescription->SetGuidance("Import geometry descriptions required by this program from a yaml file.");

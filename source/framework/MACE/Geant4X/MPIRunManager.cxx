@@ -12,7 +12,6 @@
 
 #include "mpi.h"
 
-#include <array>
 #include <charconv>
 #include <cstdlib>
 #include <iomanip>

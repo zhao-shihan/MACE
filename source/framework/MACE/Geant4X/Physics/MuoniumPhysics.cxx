@@ -13,7 +13,7 @@ using namespace Particle;
 using namespace Process;
 
 MuoniumPhysics::MuoniumPhysics(G4int verbose) :
-    G4VPhysicsConstructor("MuoniumPhysics") {
+    G4VPhysicsConstructor(__func__) {
     verboseLevel = verbose;
 }
 

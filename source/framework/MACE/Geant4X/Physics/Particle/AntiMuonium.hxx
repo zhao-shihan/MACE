@@ -4,8 +4,6 @@
 
 #include "G4ParticleDefinition.hh"
 
-#include <memory>
-
 namespace MACE::Geant4X::Physics::Particle {
 
 class AntiMuonium final : public Env::Memory::Singleton<AntiMuonium>,
@@ -16,9 +14,7 @@ private:
     AntiMuonium();
 
 public:
-    ~AntiMuonium() = default;
-
-    static auto Definition() { return std::addressof(Instance()); }
+    static auto Definition() { return &Instance(); }
 };
 
 } // namespace MACE::Geant4X::Physics::Particle

@@ -13,9 +13,9 @@ AnalysisMessenger::AnalysisMessenger() :
     Singleton(),
     G4UImessenger(),
     fAnalysis(nullptr),
-    fDirectory(nullptr),
-    fSetResultPath(nullptr),
-    fEnableYieldAnalysis(nullptr) {
+    fDirectory(),
+    fSetResultPath(),
+    fEnableYieldAnalysis() {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Analysis/");
     fDirectory->SetGuidance("MACE::SimTarget::Analysis controller.");

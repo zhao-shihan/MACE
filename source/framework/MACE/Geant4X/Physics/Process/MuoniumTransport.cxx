@@ -21,19 +21,19 @@ using namespace Utility::PhysicalConstant;
 
 MuoniumTransport::MuoniumTransport() :
     G4VContinuousProcess("MuoniumTransport", fTransportation),
-    fTarget(std::addressof(Target::Instance())),
+    fTarget(&Target::Instance()),
     fMeanFreePath(200_nm),
     fManipulateAllSteps(false),
     fParticleChange(),
     fTransportStatus(TransportStatus::Unknown),
     fIsExitingTargetVolume(false) {
-    pParticleChange = std::addressof(fParticleChange);
+    pParticleChange = &fParticleChange;
     Messenger::MuoniumPhysicsMessenger::Instance().AssignTo(this);
 }
 
 G4bool MuoniumTransport::IsApplicable(const G4ParticleDefinition& particle) {
-    return std::addressof(particle) == Particle::Muonium::Definition() or
-           std::addressof(particle) == Particle::AntiMuonium::Definition();
+    return &particle == Particle::Muonium::Definition() or
+           &particle == Particle::AntiMuonium::Definition();
 }
 
 G4VParticleChange* MuoniumTransport::AlongStepDoIt(const G4Track& track, const G4Step&) {
@@ -59,7 +59,7 @@ G4VParticleChange* MuoniumTransport::AlongStepDoIt(const G4Track& track, const G
         }
         break;
     }
-    return std::addressof(fParticleChange);
+    return &fParticleChange;
 }
 
 G4double MuoniumTransport::GetContinuousStepLimit(const G4Track& track, G4double, G4double, G4double& safety) {
@@ -110,7 +110,7 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     G4ThreeVector position;
     // displacement of this flight
     // using this displacement instead of track local position in flight for better numeric accuracy
-    G4ThreeVector displacement(0, 0, 0);
+    G4ThreeVector displacement = {0, 0, 0};
     // the free path of single flight step
     G4double freePath;
     // flag indicate that the flight was terminated by decay
@@ -161,7 +161,7 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     // then do the final correction to fulfill the limit
 
     // Correction (dt, dl) contributed from time
-    std::pair<G4double, G4double> finalStepCorrectionFromDecay(0, 0);
+    std::pair<G4double, G4double> finalStepCorrectionFromDecay = {0, 0};
     // evaluate the correction from time if needed
     if (timeUp) {
         // flight is break by decay
@@ -171,7 +171,7 @@ void MuoniumTransport::ProposeRandomFlight(const G4Track& track) {
     }
 
     // Correction (dt, dl) contributed from space
-    std::pair<G4double, G4double> finalStepCorrectionFromEscape(0, 0);
+    std::pair<G4double, G4double> finalStepCorrectionFromEscape = {0, 0};
     // evaluate the correction from space if needed
     if (not insideVolume) {
         // flight is break by target boundary

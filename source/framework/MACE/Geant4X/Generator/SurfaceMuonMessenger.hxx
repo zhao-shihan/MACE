@@ -1,15 +1,19 @@
 #pragma once
 
 #include "MACE/Env/Memory/Singleton.hxx"
-#include "MACE/Geant4X/Generator/SurfaceMuon.hxx"
 
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
 #include "gsl/gsl"
 
+#include <memory>
+
+class G4UIcmdWithADoubleAndUnit;
+class G4UIdirectory;
+
 namespace MACE::Geant4X::Generator {
+
+class SurfaceMuon;
 
 class SurfaceMuonMessenger final : public Env::Memory::Singleton<SurfaceMuonMessenger>,
                                    public G4UImessenger {
@@ -17,9 +21,7 @@ class SurfaceMuonMessenger final : public Env::Memory::Singleton<SurfaceMuonMess
 
 private:
     SurfaceMuonMessenger();
-    ~SurfaceMuonMessenger() noexcept = default;
-    SurfaceMuonMessenger(const SurfaceMuonMessenger&) = delete;
-    SurfaceMuonMessenger& operator=(const SurfaceMuonMessenger&) = delete;
+    ~SurfaceMuonMessenger();
 
 public:
     void AssignTo(gsl::not_null<SurfaceMuon*> gen) { fSurfaceMuonGenerator = gen; }
@@ -29,11 +31,11 @@ public:
 private:
     SurfaceMuon* fSurfaceMuonGenerator;
 
-    G4UIdirectory fDirectory;
-    G4UIcmdWithADoubleAndUnit fSetMomentum;
-    G4UIcmdWithADoubleAndUnit fSetMomentumSpreadRMS;
-    G4UIcmdWithADoubleAndUnit fSetBeamProfileRMS;
-    G4UIcmdWithADoubleAndUnit fSetVertexZ;
+    std::unique_ptr<G4UIdirectory> fDirectory;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetMomentum;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetMomentumSpreadRMS;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetBeamProfileRMS;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetVertexZ;
 };
 
 } // namespace MACE::Geant4X::Generator

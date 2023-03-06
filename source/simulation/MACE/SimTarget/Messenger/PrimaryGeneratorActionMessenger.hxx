@@ -2,11 +2,14 @@
 
 #include "MACE/Env/Memory/Singleton.hxx"
 
-#include "G4UIcmdWithAnInteger.hh"
-#include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
 #include "gsl/gsl"
+
+#include <memory>
+
+class G4UIcmdWithAnInteger;
+class G4UIdirectory;
 
 namespace MACE::SimTarget {
 
@@ -24,9 +27,7 @@ class PrimaryGeneratorActionMessenger final : public Env::Memory::Singleton<Prim
 
 private:
     PrimaryGeneratorActionMessenger();
-    ~PrimaryGeneratorActionMessenger() = default;
-    PrimaryGeneratorActionMessenger(const PrimaryGeneratorActionMessenger&) = delete;
-    PrimaryGeneratorActionMessenger& operator=(const PrimaryGeneratorActionMessenger&) = delete;
+    ~PrimaryGeneratorActionMessenger();
 
 public:
     void AssignTo(gsl::not_null<Action::PrimaryGeneratorAction*> pga) { fPrimaryGeneratorAction = pga; }
@@ -36,7 +37,8 @@ public:
 private:
     Action::PrimaryGeneratorAction* fPrimaryGeneratorAction;
 
-    G4UIcmdWithAnInteger fSetMuonsForEachG4Event;
+    std::unique_ptr<G4UIdirectory> fDirectory;
+    std::unique_ptr<G4UIcmdWithAnInteger> fSetMuonsForEachG4Event;
 };
 
 } // namespace Messenger

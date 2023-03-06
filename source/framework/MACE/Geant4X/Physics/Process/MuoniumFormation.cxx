@@ -9,6 +9,8 @@
 
 #include "gsl/gsl"
 
+#include <limits>
+
 namespace MACE::Geant4X::Physics::Process {
 
 using namespace Utility::LiteralUnit::Time;
@@ -18,17 +20,17 @@ MuoniumFormation::MuoniumFormation() :
     G4VRestProcess("MuoniumFormation", fUserDefined),
     fMuonium(gsl::not_null(Particle::Muonium::Definition())),
     fAntiMuonium(gsl::not_null(Particle::AntiMuonium::Definition())),
-    fTarget(std::addressof(Target::Instance())),
+    fTarget(&Target::Instance()),
     fRandEng(G4Random::getTheEngine()),
     fFormationProbability(0.65),
     fConversionProbability(0),
     fParticleChange() {
-    pParticleChange = std::addressof(fParticleChange);
+    pParticleChange = &fParticleChange;
     Messenger::MuoniumPhysicsMessenger::Instance().AssignTo(this);
 }
 
 G4bool MuoniumFormation::IsApplicable(const G4ParticleDefinition& particle) {
-    return std::addressof(particle) == G4MuonPlus::Definition();
+    return &particle == G4MuonPlus::Definition();
 }
 
 void MuoniumFormation::StartTracking(G4Track* track) {
@@ -61,14 +63,14 @@ G4VParticleChange* MuoniumFormation::AtRestDoIt(const G4Track& track, const G4St
     fParticleChange.AddSecondary(new G4Track(muoniumDynamicParticle, track.GetGlobalTime(), track.GetPosition()));
     // Clean
     ClearNumberOfInteractionLengthLeft();
-    return std::addressof(fParticleChange);
+    return &fParticleChange;
 }
 
 G4double MuoniumFormation::GetMeanLifeTime(const G4Track& track, G4ForceCondition*) {
-    if (fRandEng->flat() < fFormationProbability) {
-        return fTarget->Contain(track.GetPosition()) ? DBL_MIN : DBL_MAX;
+    if (fRandEng->flat() < fFormationProbability and fTarget->Contain(track.GetPosition())) {
+        return std::numeric_limits<double>::min();
     } else {
-        return DBL_MAX;
+        return std::numeric_limits<double>::max();
     }
 }
 

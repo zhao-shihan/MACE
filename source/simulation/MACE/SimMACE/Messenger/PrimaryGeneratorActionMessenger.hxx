@@ -2,12 +2,14 @@
 
 #include "MACE/Env/Memory/Singleton.hxx"
 
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithAnInteger.hh"
-#include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
 #include "gsl/gsl"
+
+#include <memory>
+
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithAnInteger;
 
 namespace MACE::SimMACE {
 
@@ -25,7 +27,7 @@ class PrimaryGeneratorActionMessenger final : public Env::Memory::Singleton<Prim
 
 private:
     PrimaryGeneratorActionMessenger();
-    ~PrimaryGeneratorActionMessenger() = default;
+    ~PrimaryGeneratorActionMessenger();
 
 public:
     void AssignTo(gsl::not_null<Action::PrimaryGeneratorAction*> pga) { fPrimaryGeneratorAction = pga; }
@@ -35,10 +37,10 @@ public:
 private:
     Action::PrimaryGeneratorAction* fPrimaryGeneratorAction;
 
-    G4UIcmdWithADoubleAndUnit fSetFlux;
-    G4UIcmdWithADoubleAndUnit fSetRepetitionRate;
-    G4UIcmdWithADoubleAndUnit fSetTimeWidthRMS;
-    G4UIcmdWithAnInteger fSetMuonsForEachG4Event;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetFlux;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetRepetitionRate;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetTimeWidthRMS;
+    std::unique_ptr<G4UIcmdWithAnInteger> fSetMuonsForEachG4Event;
 };
 
 } // namespace Messenger
