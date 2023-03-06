@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
     MACE::SimTarget::Action::DetectorConstruction::Instance()
         .SetCheckOverlaps(cli.IsInteractive() ? true : false);
 
-    MACE::Geant4X::MPIExecutive().StartSession(cli, std::array{
+    MACE::Geant4X::MPIExecutive().StartSession(cli, {
 #include "MACE/SimTarget/DefaultInitialization.inlmac"
                                                     });
 

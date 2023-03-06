@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     runManager.GetDetectorConstruction().SetCheckOverlaps(cli.IsInteractive() ? true : false);
     runManager.GetPhysicsList().SetVerboseLevel(cli.IsInteractive() ? 1 : 0);
 
-    MACE::Geant4X::MPIExecutive().StartSession(cli, std::array{
+    MACE::Geant4X::MPIExecutive().StartSession(cli, {
 #include "MACE/SimMACE/DefaultInitialization.inlmac"
                                                     });
 
