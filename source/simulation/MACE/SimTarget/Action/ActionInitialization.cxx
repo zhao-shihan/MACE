@@ -8,11 +8,11 @@
 namespace MACE::SimTarget::Action {
 
 void ActionInitialization::Build() const {
-    SetUserAction(new PrimaryGeneratorAction());
-    SetUserAction(new SteppingAction());
-    SetUserAction(new TrackingAction());
-    SetUserAction(new EventAction());
-    SetUserAction(new RunAction());
+    SetUserAction(new PrimaryGeneratorAction);
+    SetUserAction(new SteppingAction);
+    SetUserAction(new TrackingAction);
+    SetUserAction(new EventAction);
+    SetUserAction(new RunAction);
 }
 
 } // namespace MACE::SimTarget::Action

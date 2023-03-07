@@ -6,7 +6,7 @@
 using MACE::SimMACE::Action::ActionInitialization;
 
 void ActionInitialization::Build() const {
-    SetUserAction(new RunAction());
-    SetUserAction(new PrimaryGeneratorAction());
-    SetUserAction(new EventAction());
+    SetUserAction(new RunAction);
+    SetUserAction(new PrimaryGeneratorAction);
+    SetUserAction(new EventAction);
 }

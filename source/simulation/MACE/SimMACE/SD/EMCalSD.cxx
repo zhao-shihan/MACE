@@ -31,7 +31,7 @@ G4bool EMCalSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         (particle->GetPDGCharge() != 0 or particle == G4Gamma::Definition())) { // is a charged particle or gamma
         const auto preStepPoint = step->GetPreStepPoint();
         // new a hit
-        const auto hit = new EMCalHit();
+        const auto hit = new EMCalHit;
         hit->HitTime(preStepPoint->GetGlobalTime());
         hit->SetEnergy(preStepPoint->GetKineticEnergy());
         hit->SetParticle(particle->GetParticleName());

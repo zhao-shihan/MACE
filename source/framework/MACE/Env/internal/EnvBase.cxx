@@ -37,10 +37,10 @@ EnvBase::EnvBase() :
         gInstantiated = true;
     }
 
-    fMuteSingletonPool = std::make_unique<Memory::internal::MuteSingletonPool>();
-    fSingletonPool = std::make_unique<Memory::internal::SingletonPool>();
-    fSingletonFactory = std::make_unique<Memory::internal::SingletonFactory>();
-    fSingletonDeleter = std::make_unique<Memory::internal::SingletonDeleter>();
+    fMuteSingletonPool = std::make_unique_for_overwrite<Memory::internal::MuteSingletonPool>();
+    fSingletonPool = std::make_unique_for_overwrite<Memory::internal::SingletonPool>();
+    fSingletonFactory = std::make_unique_for_overwrite<Memory::internal::SingletonFactory>();
+    fSingletonDeleter = std::make_unique_for_overwrite<Memory::internal::SingletonDeleter>();
 }
 
 EnvBase::~EnvBase() = default;

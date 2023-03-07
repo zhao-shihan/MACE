@@ -36,7 +36,7 @@ G4bool MCPSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         // transform hit position to local coordinate
         const auto hitPosition = G4TwoVector(detectorRotation * (preStepPoint->GetPosition() - detectorPosition));
         // new a hit
-        const auto hit = new MCPHit();
+        const auto hit = new MCPHit;
         hit->HitTime(preStepPoint->GetGlobalTime());
         hit->SetHitPosition(hitPosition);
         hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());

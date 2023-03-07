@@ -10,11 +10,11 @@ using namespace Action;
 
 RunManager::RunManager() :
     MPIRunManager(),
-    fAnalysis(std::make_unique<Analysis>()) {
+    fAnalysis(std::make_unique_for_overwrite<Analysis>()) {
     // Set actions
-    SetUserInitialization(new PhysicsList());
-    SetUserInitialization(new DetectorConstruction());
-    SetUserInitialization(new ActionInitialization());
+    SetUserInitialization(new PhysicsList);
+    SetUserInitialization(new DetectorConstruction);
+    SetUserInitialization(new ActionInitialization);
 }
 
 RunManager::~RunManager() = default;

@@ -7,12 +7,12 @@ using namespace Action;
 
 RunManager::RunManager() :
     MPIRunManager(),
-    fPhysicsList(new PhysicsList()),
-    fAnalysis(std::make_unique<Analysis>()) {
+    fPhysicsList(new PhysicsList),
+    fAnalysis(std::make_unique_for_overwrite<Analysis>()) {
     // Set actions
-    SetUserInitialization(new DetectorConstruction());
+    SetUserInitialization(new DetectorConstruction);
     SetUserInitialization(fPhysicsList);
-    SetUserInitialization(new ActionInitialization());
+    SetUserInitialization(new ActionInitialization);
 }
 
 } // namespace MACE::SimMACE

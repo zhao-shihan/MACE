@@ -38,7 +38,7 @@ Muonium::Muonium() :
     this->SetPDGMagneticMoment(muBohrM);
 
     // create Decay Table
-    auto table = new G4DecayTable();
+    auto table = new G4DecayTable;
     // create a decay channel
     table->Insert(new DecayChannel::MuoniumDecayChannel("M", 1.00));
     this->SetDecayTable(table);

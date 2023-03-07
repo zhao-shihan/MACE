@@ -24,8 +24,8 @@ void MuoniumPhysics::ConstructParticle() {
 }
 
 void MuoniumPhysics::ConstructProcess() {
-    auto muoniumFormation = new MuoniumFormation();
-    auto muoniumTransport = new MuoniumTransport();
+    auto muoniumFormation = new MuoniumFormation;
+    auto muoniumTransport = new MuoniumTransport;
 
     auto muonPlus = G4MuonPlus::Definition()->GetProcessManager();
     muonPlus->AddRestProcess(muoniumFormation);
