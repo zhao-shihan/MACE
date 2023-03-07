@@ -2,12 +2,12 @@
 
 #include "MACE/Concept/FundamentalType.hxx"
 #include "MACE/Math/GetDigits.hxx"
+#include "MACE/Utility/ToSigned.hxx"
 
 #include "backward.hpp"
 
 #include <climits>
 #include <iostream>
-#include <string_view>
 
 namespace MACE::Utility {
 
