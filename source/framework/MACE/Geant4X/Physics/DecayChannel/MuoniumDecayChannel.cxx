@@ -102,7 +102,7 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
     CheckAndFillDaughters();
 
     // parent mass
-    G4double parentmass = G4MT_parent->GetPDGMass();
+    constexpr auto parentmass = muon_mass_c2;
 
     // daughters'mass
     G4double daughtermass[3];
