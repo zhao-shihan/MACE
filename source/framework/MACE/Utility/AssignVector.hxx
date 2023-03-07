@@ -1,8 +1,8 @@
 #pragma once
 
 #include "MACE/Concept/FundamentalType.hxx"
+#include "MACE/Concept/GeneralNumericVector.hxx"
 #include "MACE/Concept/NumericVector.hxx"
-#include "MACE/Concept/Subscriptable.hxx"
 #include "MACE/Utility/ToSigned.hxx"
 
 #include "gsl/gsl"
@@ -15,47 +15,89 @@
 namespace MACE::Utility {
 
 /// @brief Assign something to a vector. If lhs = rhs is well-formed, assign
-/// with operator=, else assign element by element. If sizeof...(rhs) == N,
-/// firstly try lhs = {rhs...}, else assign element by element.
-/// e.g. AssignVector<double, 3>(u, v); AssignVector<double, 3>(u, x, y, z);
+/// with operator=, else assign element by element.
+/// e.g. AssignVector<double, 3>(u, v); AssignVector<double, 3>(u, {x, y, z});
+///      AssignVector<double, 3>(u, x, y, z);
 /// @tparam T The value type of the LHS vector.
 /// @tparam N The dimension of the LHS vector
 /// @param lhs The vector at left-hand side.
 /// @param rhs Something at right hand side.
 /// @return If lhs = rhs is well-formed, returns lhs = rhs, else returns the
 /// lvalue reference to lhs.
-template<Concept::Arithmetic T, std::size_t N>
-decltype(auto) AssignVector(Concept::NumericVector<T, N> auto& lhs, auto&& rhs)
-    requires std::assignable_from<decltype(lhs), decltype(rhs)>
-{
-    return lhs = rhs;
+template<Concept::Arithmetic T, std::size_t N, Concept::NumericVector<T, N> V>
+decltype(auto) AssignVector(V& lhs, V&& rhs) {
+    return lhs = std::forward<decltype(rhs)>(rhs);
 }
 
 /// @brief Assign something to a vector. If lhs = rhs is well-formed, assign
-/// with operator=, else assign element by element. If sizeof...(rhs) == N,
-/// firstly try lhs = {rhs...}, else assign element by element.
-/// e.g. AssignVector<double, 3>(u, v); AssignVector<double, 3>(u, x, y, z);
+/// with operator=, else assign element by element.
+/// e.g. AssignVector<double, 3>(u, v); AssignVector<double, 3>(u, {x, y, z});
+///      AssignVector<double, 3>(u, x, y, z);
 /// @tparam T The value type of the LHS vector.
 /// @tparam N The dimension of the LHS vector
 /// @param lhs The vector at left-hand side.
 /// @param rhs Something at right hand side.
 /// @return If lhs = rhs is well-formed, returns lhs = rhs, else returns the
 /// lvalue reference to lhs.
-template<Concept::Arithmetic T, std::size_t N>
-decltype(auto) AssignVector(Concept::NumericVector<T, N> auto& lhs, Concept::Subscriptable auto&& rhs)
-    requires(not std::assignable_from<decltype(lhs), decltype(rhs)> and
-             requires(gsl::index i) { lhs[i] = rhs[i]; })
+template<Concept::Arithmetic T, std::size_t N, Concept::NumericVector<T, N> V>
+decltype(auto) AssignVector(V& lhs, auto&& rhs)
+    requires(not std::same_as<decltype(rhs), V &&> and
+             std::assignable_from<V&, decltype(rhs)>)
 {
-    for (gsl::index i = 0; i < Utility::ToSigned(N); ++i) {
-        lhs[i] = rhs[i];
+    return lhs = std::forward<decltype(rhs)>(rhs);
+}
+
+/// @brief Assign something to a vector. If lhs = rhs is well-formed, assign
+/// with operator=, else assign element by element.
+/// e.g. AssignVector<double, 3>(u, v); AssignVector<double, 3>(u, {x, y, z});
+///      AssignVector<double, 3>(u, x, y, z);
+/// @tparam T The value type of the LHS vector.
+/// @tparam N The dimension of the LHS vector
+/// @param lhs The vector at left-hand side.
+/// @param rhs Something at right hand side.
+/// @return If lhs = rhs is well-formed, returns lhs = rhs, else returns the
+/// lvalue reference to lhs.
+template<Concept::Arithmetic T, std::size_t N, Concept::NumericVector<T, N> V>
+decltype(auto) AssignVector(V& lhs, std::ranges::input_range auto&& rhs)
+    requires(not std::same_as<decltype(rhs), V &&> and
+             not std::assignable_from<V&, decltype(rhs)> and
+             requires(gsl::index i) { lhs[i] = std::forward<decltype(*std::ranges::begin(rhs))>(*std::ranges::begin(rhs)); })
+{
+    for (gsl::index i = 0; auto&& value : rhs) {
+        lhs[i] = std::forward<decltype(value)>(value);
+        ++i;
     }
     return lhs;
 }
 
 /// @brief Assign something to a vector. If lhs = rhs is well-formed, assign
-/// with operator=, else assign element by element. If sizeof...(rhs) == N,
-/// firstly try lhs = {rhs...}, else assign element by element.
-/// e.g. AssignVector<double, 3>(u, v); AssignVector<double, 3>(u, x, y, z);
+/// with operator=, else assign element by element.
+/// e.g. AssignVector<double, 3>(u, v); AssignVector<double, 3>(u, {x, y, z});
+///      AssignVector<double, 3>(u, x, y, z);
+/// @tparam T The value type of the LHS vector.
+/// @tparam N The dimension of the LHS vector
+/// @param lhs The vector at left-hand side.
+/// @param rhs Something at right hand side.
+/// @return If lhs = rhs is well-formed, returns lhs = rhs, else returns the
+/// lvalue reference to lhs.
+template<Concept::Arithmetic T, std::size_t N, Concept::NumericVector<T, N> V>
+decltype(auto) AssignVector(V& lhs, auto&& rhs)
+    requires(not std::same_as<decltype(rhs), V &&> and
+             not std::assignable_from<V&, decltype(rhs)> and
+             not std::ranges::range<decltype(rhs)> and
+             Concept::GeneralNumericVectorAny<std::remove_cvref_t<decltype(rhs)>, N> and
+             requires(gsl::index i) { lhs[i] = std::forward<decltype(rhs[i])>(rhs[i]); })
+{
+    for (gsl::index i = 0; i < ToSigned(N); ++i) {
+        lhs[i] = std::forward<decltype(rhs[i])>(rhs[i]);
+    }
+    return lhs;
+}
+
+/// @brief Assign something to a vector. If lhs = rhs is well-formed, assign
+/// with operator=, else assign element by element.
+/// e.g. AssignVector<double, 3>(u, v); AssignVector<double, 3>(u, {x, y, z});
+///      AssignVector<double, 3>(u, x, y, z);
 /// @tparam T The value type of the LHS vector.
 /// @tparam N The dimension of the LHS vector
 /// @param lhs The vector at left-hand side.
@@ -65,33 +107,9 @@ decltype(auto) AssignVector(Concept::NumericVector<T, N> auto& lhs, Concept::Sub
 template<Concept::Arithmetic T, std::size_t N>
 decltype(auto) AssignVector(Concept::NumericVector<T, N> auto& lhs, auto... rhs)
     requires(std::same_as<std::common_type_t<T, decltype(rhs)...>, T> and
-             sizeof...(rhs) == N and
-             requires { lhs = {rhs...}; })
+             sizeof...(rhs) == N)
 {
-    return lhs = {rhs...};
-}
-
-/// @brief Assign something to a vector. If lhs = rhs is well-formed, assign
-/// with operator=, else assign element by element. If sizeof...(rhs) == N,
-/// firstly try lhs = {rhs...}, else assign element by element.
-/// e.g. AssignVector<double, 3>(u, v); AssignVector<double, 3>(u, x, y, z);
-/// @tparam T The value type of the LHS vector.
-/// @tparam N The dimension of the LHS vector
-/// @param lhs The vector at left-hand side.
-/// @param rhs Something at right hand side.
-/// @return If lhs = rhs is well-formed, returns lhs = rhs, else returns the
-/// lvalue reference to lhs.
-template<Concept::Arithmetic T, std::size_t N>
-decltype(auto) AssignVector(Concept::NumericVector<T, N> auto& lhs, auto... rhs)
-    requires(std::same_as<std::common_type_t<T, decltype(rhs)...>, T> and
-             sizeof...(rhs) == N and
-             not requires { lhs = {rhs...}; })
-{
-    for (gsl::index i = -1;
-         auto&& value : {rhs...}) {
-        lhs[++i] = value;
-    }
-    return lhs;
+    return lhs = {std::forward<decltype(rhs)>(rhs)...};
 }
 
 /// @brief An alias of AssignVector<T, 2>.
