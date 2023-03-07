@@ -5,6 +5,7 @@
 
 #include "gsl/gsl"
 
+#include <ranges>
 #include <type_traits>
 #include <utility>
 
@@ -21,8 +22,15 @@ struct ValueTypeOf<T> {
     using Type = typename T::value_type;
 };
 
-template<Concept::GeneralNumericVectorAny T>
+template<std::ranges::input_range T>
     requires(not requires { typename T::value_type; })
+struct ValueTypeOf<T> {
+    using Type = std::remove_reference_t<decltype(*std::ranges::cbegin(std::declval<T&>()))>;
+};
+
+template<Concept::GeneralNumericVectorAny T>
+    requires(not requires { typename T::value_type; } and
+             not std::ranges::input_range<T>)
 struct ValueTypeOf<T> {
     using Type = std::remove_reference_t<decltype(std::declval<T&>()[std::declval<gsl::index>()])>;
 };
