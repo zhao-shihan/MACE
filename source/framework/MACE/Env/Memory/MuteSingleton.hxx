@@ -4,6 +4,7 @@
 #include "MACE/Env/Memory/internal/MuteSingletonPool.hxx"
 #include "MACE/Env/Memory/MuteSingletonized.hxx"
 
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <typeinfo>

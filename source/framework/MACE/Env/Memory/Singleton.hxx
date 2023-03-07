@@ -6,6 +6,7 @@
 #include "MACE/Env/Memory/Singletonized.hxx"
 
 #include <cassert>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <typeinfo>
