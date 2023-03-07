@@ -108,10 +108,10 @@ template<Concept::NumericVector2FloatingPoint T>
 class Gaussian2DDiagnoal final : public internal::Gaussian2DDiagnoalBase<Gaussian2DDiagnoal, T> {
 private:
     using Base = internal::Gaussian2DDiagnoalBase<Gaussian2DDiagnoal, T>;
-    using VOfT = Base::VOfT;
+    using VOfT = typename Base::VOfT;
 
 public:
-    using Base::Gaussian2DDiagnoalBase;
+    using internal::Gaussian2DDiagnoalBase<Gaussian2DDiagnoal, T>::Gaussian2DDiagnoalBase;
 
     constexpr void Reset() {}
 
@@ -139,10 +139,10 @@ template<Concept::NumericVector2FloatingPoint T>
 class Gaussian2DDiagnoalFast final : public internal::Gaussian2DDiagnoalBase<Gaussian2DDiagnoalFast, T> {
 private:
     using Base = internal::Gaussian2DDiagnoalBase<Gaussian2DDiagnoalFast, T>;
-    using VOfT = Base::VOfT;
+    using VOfT = typename Base::VOfT;
 
 public:
-    using Base::Gaussian2DDiagnoalBase;
+    using internal::Gaussian2DDiagnoalBase<Gaussian2DDiagnoalFast, T>::Gaussian2DDiagnoalBase;
 
     constexpr void Reset() {}
 

@@ -115,10 +115,10 @@ template<Concept::NumericVector3FloatingPoint T>
 class Gaussian3DDiagnoal final : public internal::Gaussian3DDiagnoalBase<Gaussian3DDiagnoal, T> {
 private:
     using Base = internal::Gaussian3DDiagnoalBase<Gaussian3DDiagnoal, T>;
-    using VOfT = Base::VOfT;
+    using VOfT = typename Base::VOfT;
 
 public:
-    using Base::Gaussian3DDiagnoalBase;
+    using internal::Gaussian3DDiagnoalBase<Gaussian3DDiagnoal, T>::Gaussian3DDiagnoalBase;
 
     constexpr void Reset() { fSaved = false; }
 
@@ -150,10 +150,10 @@ template<Concept::NumericVector3FloatingPoint T>
 class Gaussian3DDiagnoalFast final : public internal::Gaussian3DDiagnoalBase<Gaussian3DDiagnoalFast, T> {
 private:
     using Base = internal::Gaussian3DDiagnoalBase<Gaussian3DDiagnoalFast, T>;
-    using VOfT = Base::VOfT;
+    using VOfT = typename Base::VOfT;
 
 public:
-    using Base::Gaussian3DDiagnoalBase;
+    using internal::Gaussian3DDiagnoalBase<Gaussian3DDiagnoalFast, T>::Gaussian3DDiagnoalBase;
 
     constexpr void Reset() { fSaved = false; }
 
