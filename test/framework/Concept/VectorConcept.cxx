@@ -1,3 +1,4 @@
+#include "MACE/Compatibility/Hep2VectorDivisionAssignment.hxx"
 #include "MACE/Concept/MathVector.hxx"
 #include "MACE/Concept/NumericVector.hxx"
 
@@ -14,6 +15,7 @@
 #include <vector>
 
 using namespace MACE::Concept;
+using namespace MACE::Compatibility;
 
 static_assert(GeneralNumericVector<float*, float, 3>);
 static_assert(GeneralNumericVector<double*, double, 3>);
