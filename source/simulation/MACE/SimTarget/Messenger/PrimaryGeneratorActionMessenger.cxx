@@ -2,7 +2,6 @@
 #include "MACE/SimTarget/Messenger/PrimaryGeneratorActionMessenger.hxx"
 
 #include "G4UIcmdWithAnInteger.hh"
-#include "G4UIdirectory.hh"
 
 namespace MACE::SimTarget::Messenger {
 
@@ -10,10 +9,7 @@ PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger() :
     Singleton(),
     G4UImessenger(),
     fPrimaryGeneratorAction(nullptr),
-    fDirectory(),
     fSetMuonsForEachG4Event() {
-
-    fDirectory = std::make_unique<G4UIdirectory>("/MACE/Generator/");
 
     fSetMuonsForEachG4Event = std::make_unique<G4UIcmdWithAnInteger>("/MACE/Generator/SurfaceMuon/SetMuonsForEachG4Event", this);
     fSetMuonsForEachG4Event->SetGuidance("Set muons generated for each G4 event.");

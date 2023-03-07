@@ -9,7 +9,6 @@
 #include <memory>
 
 class G4UIcmdWithAnInteger;
-class G4UIdirectory;
 
 namespace MACE::SimTarget {
 
@@ -37,7 +36,6 @@ public:
 private:
     Action::PrimaryGeneratorAction* fPrimaryGeneratorAction;
 
-    std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithAnInteger> fSetMuonsForEachG4Event;
 };
 
