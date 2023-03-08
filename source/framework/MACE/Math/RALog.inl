@@ -1,59 +1,59 @@
 namespace MACE::Math {
 
-#define MACE_MATH_RA_N_LOG_FAMILY_IMPLEMENTATION(N, b, CoreStatement)                    \
-    namespace internal {                                                                 \
-                                                                                         \
-    template<typename T>                                                                 \
-        requires std::same_as<T, float> or std::same_as<T, double>                       \
-    constexpr auto RA##N##Log##b(T x) noexcept {                                         \
-        if constexpr (std::numeric_limits<T>::is_iec559) {                               \
-            if (std::isgreater(x, static_cast<T>(0))) [[likely]] {                       \
-                using B = std::conditional_t<std::same_as<T, float>,                     \
-                                             std::uint32_t,                              \
-                                             std::uint64_t>;                             \
-                constexpr int n = std::numeric_limits<T>::digits - 1;                    \
-                constexpr int k = CHAR_BIT * sizeof(T) - 1 - n;                          \
-                const auto xBits = std20::bit_cast<B>(x);                                \
-                std2b::assume(xBits > 0);                                                \
-                std2b::assume(xBits < ~(~static_cast<B>(0) >> 1));                       \
-                const auto eBits = static_cast<int>(xBits >> n);                         \
-                std2b::assume(eBits > 0);                                                \
-                std2b::assume(eBits < 1 << k);                                           \
-                if (eBits != (1 << k) - 1) [[likely]] {                                  \
-                    const auto exponent = eBits - ((1 << (k - 1)) - 1);                  \
-                    x = std20::bit_cast<T>((xBits | ~static_cast<B>(0) << n) << 2 >> 2); \
-                    CoreStatement                                                        \
-                } else {                                                                 \
-                    return std::numeric_limits<T>::infinity();                           \
-                }                                                                        \
-            } else if (std::islessequal(x, static_cast<T>(0))) {                         \
-                if (x == 0) {                                                            \
-                    std::feraiseexcept(FE_DIVBYZERO);                                    \
-                    return -std::numeric_limits<T>::infinity();                          \
-                } else {                                                                 \
-                    std::feraiseexcept(FE_INVALID);                                      \
-                    return std::numeric_limits<T>::quiet_NaN();                          \
-                }                                                                        \
-            } else {                                                                     \
-                return std::numeric_limits<T>::quiet_NaN();                              \
-            }                                                                            \
-        } else {                                                                         \
-            return std::log##b(x);                                                       \
-        }                                                                                \
-    }                                                                                    \
-                                                                                         \
-    } /* namespace internal */                                                           \
-                                                                                         \
-    template<std::floating_point T>                                                      \
-    constexpr T RA##N##Log##b(T x) noexcept {                                            \
-        static_assert(std::same_as<decltype(internal::RA##N##Log##b(x)), T>);            \
-        return internal::RA##N##Log##b(x);                                               \
-    }                                                                                    \
-                                                                                         \
-    template<std::floating_point T>                                                      \
-    constexpr T RA##N##Log##b(std::integral auto x) noexcept {                           \
-        static_assert(std::same_as<decltype(internal::RA##N##Log##b<T>(x)), T>);         \
-        return internal::RA##N##Log##b<T>(x);                                            \
+#define MACE_MATH_RA_N_LOG_FAMILY_IMPLEMENTATION(N, b, CoreStatement)                  \
+    namespace internal {                                                               \
+                                                                                       \
+    template<typename T>                                                               \
+        requires std::same_as<T, float> or std::same_as<T, double>                     \
+    constexpr auto RA##N##Log##b(T x) noexcept {                                       \
+        if constexpr (std::numeric_limits<T>::is_iec559) {                             \
+            if (std::isgreater(x, static_cast<T>(0))) [[likely]] {                     \
+                using B = std::conditional_t<std::same_as<T, float>,                   \
+                                             std::uint32_t,                            \
+                                             std::uint64_t>;                           \
+                constexpr int n = std::numeric_limits<T>::digits - 1;                  \
+                constexpr int k = CHAR_BIT * sizeof(T) - 1 - n;                        \
+                const auto xBits = std::bit_cast<B>(x);                                \
+                std2b::assume(xBits > 0);                                              \
+                std2b::assume(xBits < ~(~static_cast<B>(0) >> 1));                     \
+                const auto eBits = static_cast<int>(xBits >> n);                       \
+                std2b::assume(eBits > 0);                                              \
+                std2b::assume(eBits < 1 << k);                                         \
+                if (eBits != (1 << k) - 1) [[likely]] {                                \
+                    const auto exponent = eBits - ((1 << (k - 1)) - 1);                \
+                    x = std::bit_cast<T>((xBits | ~static_cast<B>(0) << n) << 2 >> 2); \
+                    CoreStatement                                                      \
+                } else {                                                               \
+                    return std::numeric_limits<T>::infinity();                         \
+                }                                                                      \
+            } else if (std::islessequal(x, static_cast<T>(0))) {                       \
+                if (x == 0) {                                                          \
+                    std::feraiseexcept(FE_DIVBYZERO);                                  \
+                    return -std::numeric_limits<T>::infinity();                        \
+                } else {                                                               \
+                    std::feraiseexcept(FE_INVALID);                                    \
+                    return std::numeric_limits<T>::quiet_NaN();                        \
+                }                                                                      \
+            } else {                                                                   \
+                return std::numeric_limits<T>::quiet_NaN();                            \
+            }                                                                          \
+        } else {                                                                       \
+            return std::log##b(x);                                                     \
+        }                                                                              \
+    }                                                                                  \
+                                                                                       \
+    } /* namespace internal */                                                         \
+                                                                                       \
+    template<std::floating_point T>                                                    \
+    constexpr T RA##N##Log##b(T x) noexcept {                                          \
+        static_assert(std::same_as<decltype(internal::RA##N##Log##b(x)), T>);          \
+        return internal::RA##N##Log##b(x);                                             \
+    }                                                                                  \
+                                                                                       \
+    template<std::floating_point T>                                                    \
+    constexpr T RA##N##Log##b(std::integral auto x) noexcept {                         \
+        static_assert(std::same_as<decltype(internal::RA##N##Log##b<T>(x)), T>);       \
+        return internal::RA##N##Log##b<T>(x);                                          \
     }
 
 #define MACE_MATH_RA_N_LOG_CORE_STATEMENT(rational) \

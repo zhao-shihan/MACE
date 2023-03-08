@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MACE/Compatibility/std20/bit_cast.hxx"
 #include "MACE/Compatibility/std2b/assume.hxx"
 #include "MACE/Math/QinAlgorithm.hxx"
 
