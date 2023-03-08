@@ -2,7 +2,7 @@ namespace MACE::Core::DataModel::BranchSocket {
 
 template<Concept::Arithmetic T, int N>
 VectorBranchSocket<T, N>::VectorBranchSocket(const std::string& branchName, const std::array<std::string, N>& leafNames, const std::array<T, N>& defaultValues) :
-    BranchSocketBase<VectorBranchSocket<T, N>, Eigen34::Vector<T, N>>(branchName),
+    BranchSocketBase<VectorBranchSocket<T, N>, Eigen::Vector<T, N>>(branchName),
     fLeafList(LeafListInitializer(leafNames)),
     fVector() {
     // Initialize vector
