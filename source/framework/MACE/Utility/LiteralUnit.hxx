@@ -6,13 +6,17 @@
 
 namespace MACE::Utility::LiteralUnit {
 
-#define MACE_UTILITY_LITERAL_UNIT_DEFINITION(suffix, unit)         \
-    constexpr double operator""_##suffix(long double val) {        \
-        return val * static_cast<long double>(unit);               \
-    }                                                              \
-    constexpr double operator""_##suffix(unsigned long long val) { \
-        return val * static_cast<long double>(unit);               \
+#define MACE_UTILITY_LITERAL_UNIT_DEFINITION_IMPL(FloatType, fullSuffix, unit) \
+    constexpr FloatType operator""_##fullSuffix(long double value) {           \
+        return value * static_cast<long double>(unit);                         \
+    }                                                                          \
+    constexpr FloatType operator""_##fullSuffix(unsigned long long value) {    \
+        return value * static_cast<long double>(unit);                         \
     }
+#define MACE_UTILITY_LITERAL_UNIT_DEFINITION(suffix, unit)             \
+    MACE_UTILITY_LITERAL_UNIT_DEFINITION_IMPL(float, suffix##_f, unit) \
+    MACE_UTILITY_LITERAL_UNIT_DEFINITION_IMPL(double, suffix, unit)    \
+    MACE_UTILITY_LITERAL_UNIT_DEFINITION_IMPL(long double, suffix##_l, unit)
 
 // Length [L] symbols
 inline namespace Length {
@@ -331,21 +335,22 @@ MACE_UTILITY_LITERAL_UNIT_DEFINITION(kV_cm, CLHEP::kilovolt / CLHEP::cm)
 
 inline namespace MathConstant {
 
-MACE_UTILITY_LITERAL_UNIT_DEFINITION(log2e, std::numbers::log2e)
-MACE_UTILITY_LITERAL_UNIT_DEFINITION(log10e, std::numbers::log10e)
-MACE_UTILITY_LITERAL_UNIT_DEFINITION(pi, std::numbers::pi)
-MACE_UTILITY_LITERAL_UNIT_DEFINITION(inv_pi, std::numbers::inv_pi)
-MACE_UTILITY_LITERAL_UNIT_DEFINITION(inv_sqrtpi, std::numbers::inv_sqrtpi)
-MACE_UTILITY_LITERAL_UNIT_DEFINITION(log2, std::numbers::ln2)
-MACE_UTILITY_LITERAL_UNIT_DEFINITION(log10, std::numbers::ln10)
-MACE_UTILITY_LITERAL_UNIT_DEFINITION(sqrt2, std::numbers::sqrt2)
-MACE_UTILITY_LITERAL_UNIT_DEFINITION(sqrt3, std::numbers::sqrt3)
-MACE_UTILITY_LITERAL_UNIT_DEFINITION(inv_sqrt3, std::numbers::inv_sqrt3)
-MACE_UTILITY_LITERAL_UNIT_DEFINITION(egamma, std::numbers::egamma)
-MACE_UTILITY_LITERAL_UNIT_DEFINITION(phi, std::numbers::phi)
+MACE_UTILITY_LITERAL_UNIT_DEFINITION(log2e, std::numbers::log2e_v<long double>)
+MACE_UTILITY_LITERAL_UNIT_DEFINITION(log10e, std::numbers::log10e_v<long double>)
+MACE_UTILITY_LITERAL_UNIT_DEFINITION(pi, std::numbers::pi_v<long double>)
+MACE_UTILITY_LITERAL_UNIT_DEFINITION(inv_pi, std::numbers::inv_pi_v<long double>)
+MACE_UTILITY_LITERAL_UNIT_DEFINITION(inv_sqrtpi, std::numbers::inv_sqrtpi_v<long double>)
+MACE_UTILITY_LITERAL_UNIT_DEFINITION(log2, std::numbers::ln2_v<long double>)
+MACE_UTILITY_LITERAL_UNIT_DEFINITION(log10, std::numbers::ln10_v<long double>)
+MACE_UTILITY_LITERAL_UNIT_DEFINITION(sqrt2, std::numbers::sqrt2_v<long double>)
+MACE_UTILITY_LITERAL_UNIT_DEFINITION(sqrt3, std::numbers::sqrt3_v<long double>)
+MACE_UTILITY_LITERAL_UNIT_DEFINITION(inv_sqrt3, std::numbers::inv_sqrt3_v<long double>)
+MACE_UTILITY_LITERAL_UNIT_DEFINITION(egamma, std::numbers::egamma_v<long double>)
+MACE_UTILITY_LITERAL_UNIT_DEFINITION(phi, std::numbers::phi_v<long double>)
 
 } // namespace MathConstant
 
 #undef MACE_UTILITY_LITERAL_UNIT_DEFINITION
+#undef MACE_UTILITY_LITERAL_UNIT_DEFINITION_IMPL
 
 } // namespace MACE::Utility::LiteralUnit
