@@ -61,14 +61,15 @@
 /vis/viewer/zoom 2.5
 
 # Colors
-/vis/geometry/set/colour BeamMonitor                   0     1     1     1     0.1
 /vis/geometry/set/colour BeamDegrader                  0     1     1     1     0.1
+/vis/geometry/set/colour BeamMonitor                   0     1     1     1     0.1
 /vis/geometry/set/colour CDCBody                       0     1     1     1     0.05
 /vis/geometry/set/colour CDCCell                       0     1     1     1     0.005
 /vis/geometry/set/colour CDCFieldWire                  0     1     1     1     0.01
-/vis/geometry/set/colour CDCLayer                      0     1     1     1     0.005
+/vis/geometry/set/colour CDCGas                        0     1     1     1     0.005
+/vis/geometry/set/colour CDCSenseLayer                 0     1     1     1     0.005
 /vis/geometry/set/colour CDCSenseWire                  0     1     1     1     0.01
-/vis/geometry/set/colour CDCSensitiveVolume            0     1     1     1     0.005
+/vis/geometry/set/colour CDCSuperLayer                 0     1     1     1     0.005
 /vis/geometry/set/colour Collimator                    0     1     1     1     0.05
 /vis/geometry/set/colour EMCal                         0     1     1     1     0.1
 /vis/geometry/set/colour EMCalField                    0     1     1     1     0.05
