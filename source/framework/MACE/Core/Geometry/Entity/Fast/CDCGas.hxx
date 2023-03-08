@@ -4,7 +4,7 @@
 
 namespace MACE::Core::Geometry::Entity::Fast {
 
-class CDCSenseWire final : public IEntity {
+class CDCGas final : public IEntity {
 private:
     void Construct(G4bool checkOverlaps) override;
 };

@@ -1,48 +1,82 @@
 #include "MACE/Core/Geometry/Description/CDC.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/CDCFieldWire.hxx"
-#include "MACE/Utility/PhysicalConstant.hxx"
+#include "MACE/Math/IntegerPower.hxx"
+#include "MACE/Math/MidPoint.hxx"
+#include "MACE/Utility/LiteralUnit.hxx"
 
+#include "CLHEP/Vector/RotationX.h"
+#include "CLHEP/Vector/RotationZ.h"
+
+#include "G4GenericTrap.hh"
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
-#include "gsl/gsl"
+#include <utility>
 
 namespace MACE::Core::Geometry::Entity::Fast {
 
-using namespace MACE::Utility::PhysicalConstant;
+using namespace MACE::Utility::LiteralUnit::Length;
+using namespace MACE::Utility::LiteralUnit::MathConstant;
 
-void CDCFieldWire::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::CDC::Instance();
+void CDCFieldWire::Construct(G4bool checkOverlaps) {
     const auto name = "CDCFieldWire";
-    const auto rFieldWire = description.FieldWireDiameter() / 2;
-    const auto detail = description.FieldWireGeometryDetail();
-    const auto layerCount = std::ssize(detail);
+    const auto& cdc = Description::CDC::Instance();
+    const auto rFieldWire = cdc.FieldWireDiameter() / 2;
 
-    for (gsl::index layerID = 0; layerID < layerCount; ++layerID) {
-        auto&& [halfLength, positionList] = detail[layerID];
-        auto solid = Make<G4Tubs>(
-            name,
-            0,
-            rFieldWire,
-            halfLength,
-            0,
-            twopi);
-        auto logic = Make<G4LogicalVolume>(
-            solid,
-            nullptr,
-            name);
-        for (gsl::index wireID = 0; wireID < std::ssize(positionList); ++wireID) {
-            Make<G4PVPlacement>(
-                G4Transform3D(
-                    G4RotationMatrix(),
-                    positionList[wireID]),
-                logic,
-                name,
-                Mother()->LogicalVolume(layerID),
-                false,
-                wireID,
-                checkOverlaps);
+    for (int fieldWireID = 0;
+         auto&& super : std::as_const(cdc.LayerConfiguration())) {
+        const auto halfPhiCell = super.cellAzimuthWidth / 2;
+
+        for (auto&& sense : super.sense) {
+            const auto MakeFieldWirePlacement =
+                [&](const auto r) {
+                    const auto solid = Make<G4Tubs>(
+                        name,
+                        0,
+                        rFieldWire,
+                        sense.halfLength * sense.SecStereoZenithAngle(r) -
+                            cdc.FieldWireDiameter(), // prevent protrusion
+                        0,
+                        2_pi);
+                    const auto logic = Make<G4LogicalVolume>(
+                        solid,
+                        nullptr,
+                        name);
+                    return
+                        [&, logic,
+                         motherLogicalVolume = Mother().LogicalVolume(sense.senseLayerID).get(),
+                         initialTransform = G4Transform3D(CLHEP::HepRotationX(-sense.StereoZenithAngle(r)),
+                                                          {r, 0, 0})](const auto phi) {
+                            Make<G4PVPlacement>(
+                                G4Transform3D(CLHEP::HepRotationZ(phi), {0, 0, 0}) * initialTransform,
+                                logic,
+                                name,
+                                motherLogicalVolume,
+                                false,
+                                fieldWireID++,
+                                checkOverlaps);
+                        };
+                };
+
+            const auto PlaceInnerFieldWire = MakeFieldWirePlacement(sense.innerRadius + rFieldWire);
+            for (auto&& cell : sense.cell) {
+                PlaceInnerFieldWire(cell.centerAzimuth - halfPhiCell);
+                PlaceInnerFieldWire(cell.centerAzimuth);
+            }
+
+            const auto PlaceCenterFieldWire = MakeFieldWirePlacement(Math::MidPoint(sense.innerRadius, sense.outerRadius) + rFieldWire);
+            for (auto&& cell : sense.cell) {
+                PlaceCenterFieldWire(cell.centerAzimuth - halfPhiCell);
+            }
+
+            if (&sense == &super.sense.back()) {
+                const auto PlaceOuterFieldWire = MakeFieldWirePlacement(sense.outerRadius + rFieldWire);
+                for (auto&& cell : sense.cell) {
+                    PlaceOuterFieldWire(cell.centerAzimuth - halfPhiCell);
+                    PlaceOuterFieldWire(cell.centerAzimuth);
+                }
+            }
         }
     }
 }

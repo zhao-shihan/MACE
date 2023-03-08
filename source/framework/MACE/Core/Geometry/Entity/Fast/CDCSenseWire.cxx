@@ -1,6 +1,9 @@
 #include "MACE/Core/Geometry/Description/CDC.hxx"
 #include "MACE/Core/Geometry/Entity/Fast/CDCSenseWire.hxx"
-#include "MACE/Utility/PhysicalConstant.hxx"
+#include "MACE/Math/IntegerPower.hxx"
+#include "MACE/Utility/LiteralUnit.hxx"
+
+#include "CLHEP/Vector/RotationX.h"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -10,38 +13,43 @@
 
 namespace MACE::Core::Geometry::Entity::Fast {
 
-using namespace MACE::Utility::PhysicalConstant;
+using namespace MACE::Utility::LiteralUnit::Length;
+using namespace MACE::Utility::LiteralUnit::MathConstant;
 
-void CDCSenseWire::ConstructSelf(G4bool checkOverlaps) {
-    const auto& description = Description::CDC::Instance();
+void CDCSenseWire::Construct(G4bool checkOverlaps) {
     const auto name = "CDCSenseWire";
-    const auto rSenseWire = description.SenseWireDiameter() / 2;
-    const auto detail = description.SenseWireGeometryDetail();
-    const auto layerCount = std::ssize(detail);
+    const auto& cdc = Description::CDC::Instance();
+    const auto rSenseWire = cdc.SenseWireDiameter() / 2;
+    const auto rFieldWire = cdc.FieldWireDiameter() / 2;
+    const auto& cellMap = cdc.CellMap();
 
-    for (gsl::index layerID = 0; layerID < layerCount; ++layerID) {
-        const auto& [localPositon, halfLength] = detail[layerID];
-        auto solid = Make<G4Tubs>(
-            name,
-            0,
-            rSenseWire,
-            halfLength,
-            0,
-            twopi);
-        auto logic = Make<G4LogicalVolume>(
-            solid,
-            nullptr,
-            name);
-        Make<G4PVPlacement>(
-            G4Transform3D(
-                G4RotationMatrix(),
-                localPositon),
-            logic,
-            name,
-            Mother()->LogicalVolume(layerID),
-            false,
-            0,
-            checkOverlaps);
+    for (auto&& super : std::as_const(cdc.LayerConfiguration())) {
+        for (auto&& sense : super.sense) {
+            const auto typicalCellID = sense.cell[super.nCellPerSenseLayer / 8].cellID;
+            const auto wireRadialPosition = cellMap[typicalCellID].position.norm();
+
+            const auto solid = Make<G4Tubs>(
+                name,
+                0,
+                rSenseWire,
+                sense.halfLength * sense.SecStereoZenithAngle(wireRadialPosition) -
+                    cdc.SenseWireDiameter(), // prevent protrusion
+                0,
+                2_pi);
+            const auto logic = Make<G4LogicalVolume>(
+                solid,
+                nullptr,
+                name);
+            Make<G4PVPlacement>(
+                G4Transform3D(CLHEP::HepRotationX(-sense.StereoZenithAngle(wireRadialPosition)),
+                              {wireRadialPosition, 0, 0}),
+                logic,
+                name,
+                Mother().LogicalVolume(sense.senseLayerID).get(),
+                false,
+                sense.senseLayerID,
+                checkOverlaps);
+        }
     }
 }
 
