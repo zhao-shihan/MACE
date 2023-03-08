@@ -46,10 +46,10 @@ using CLHEP::eplus;
 // --          Extra usings          -- //
 
 // --        Extra constants         -- //
-static constexpr double muon_mass_c2 = 105.6583745 * CLHEP::MeV;
-static constexpr double muon_lifetime = 2.1969811 * CLHEP::us;
-static constexpr double muonium_mass_c2 = muon_mass_c2 + electron_mass_c2;
-static constexpr double muonium_lifetime = muon_lifetime;
+constexpr auto muon_mass_c2 = 105.6583755 * CLHEP::MeV;
+constexpr auto muon_lifetime = 2.1969811 * CLHEP::us;
+constexpr auto muonium_mass_c2 = muon_mass_c2 + electron_mass_c2 - 13.475 * CLHEP::eV;
+constexpr auto muonium_lifetime = muon_lifetime;
 // --        Extra constants         -- //
 
 } // namespace MACE::Utility::PhysicalConstant
