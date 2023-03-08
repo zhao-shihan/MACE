@@ -25,9 +25,6 @@ DetectorConstruction::DetectorConstruction() :
     FreeSingleton(),
     G4VUserDetectorConstruction(),
     fCheckOverlap(false),
-    fBeamDegrader(nullptr),
-    fBeamMonitor(nullptr),
-    fTarget(nullptr),
     fWorld(nullptr),
     fDensity(30_mg_cm3),
     fTemperature(293.15_K) {
@@ -45,22 +42,18 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     Description::LinacField::Instance().Length(0);
     Description::LinacField::Instance().DownStreamLength(0);
 
-    fBeamDegrader = std::make_shared<BeamDegrader>();
-    fBeamMonitor = std::make_shared<BeamMonitor>();
-    fTarget = std::make_shared<Target>();
     fWorld = std::make_shared<World>();
-    fWorld->AddDaughter(fBeamMonitor);
-    fWorld->AddDaughter(fBeamDegrader);
-    fWorld->AddDaughter(fTarget);
-    fWorld->ConstructSelfAndDescendants(fCheckOverlap);
+    auto& beamMonitor = fWorld->NewDaughter<BeamMonitor>(fCheckOverlap);
+    auto& beamDegrader = fWorld->NewDaughter<BeamDegrader>(fCheckOverlap);
+    auto& target = fWorld->NewDaughter<Target>(fCheckOverlap);
 
     auto nist = G4NistManager::Instance();
-    fBeamDegrader->RegisterMaterial(nist->FindOrBuildMaterial("G4_Al"));
-    fBeamMonitor->RegisterMaterial(nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE"));
-    fTarget->RegisterMaterial(nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", fDensity, fTemperature));
+    beamMonitor.RegisterMaterial(nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE"));
+    beamDegrader.RegisterMaterial(nist->FindOrBuildMaterial("G4_Al"));
+    target.RegisterMaterial(nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", fDensity, fTemperature));
     fWorld->RegisterMaterial(nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3, fTemperature));
 
-    return fWorld->PhysicalVolume();
+    return fWorld->PhysicalVolume().get();
 }
 
 } // namespace MACE::SimTarget::Action

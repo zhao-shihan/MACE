@@ -47,9 +47,6 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    std::shared_ptr<Core::Geometry::IEntity> fBeamDegrader;
-    std::shared_ptr<Core::Geometry::IEntity> fBeamMonitor;
-    std::shared_ptr<Core::Geometry::IEntity> fTarget;
     std::shared_ptr<Core::Geometry::IEntity> fWorld;
 
     G4double fDensity;
