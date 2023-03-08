@@ -4,70 +4,41 @@
 
 #include "G4SDManager.hh"
 
+#include <stdexcept>
+#include <utility>
+
 #if MACE_USE_G4GDML
 #    include "G4GDMLParser.hh"
 #endif
 
 namespace MACE::Core::Geometry {
 
-IEntity::IEntity() :
-    std::enable_shared_from_this<IEntity>(),
-    fMother(nullptr),
-    fDaughters(0),
-    fSolidStore(0),
-    fLogicalVolumes(0),
-    fPhysicalVolumes(0) {}
-
-void IEntity::AddDaughter(const std::shared_ptr<IEntity>& daughter) {
-    if (daughter->fMother != nullptr) {
-        std::cerr << "Error: Entity " << daughter << " already registered to " << daughter->fMother
-                  << " as a daughter, but now trying again to register to " << this
-                  << " as a daughter. Please check the geometry hierarchy.\n";
-        return;
-    }
-    try {
-        daughter->fMother = shared_from_this();
-    } catch (const std::bad_weak_ptr& exception) {
-        std::cerr << "Exception from (...)::IEntity::AddDaughter(...): " << exception.what() << '\n'
-                  << "  Notice: Objects of IEntity derivations should be managed by std::shared_ptr\n";
-        throw exception;
-    }
-    fDaughters.emplace_back(daughter);
-}
-
-void IEntity::ConstructSelfAndDescendants(G4bool checkOverlaps) {
-    if (this->Enabled()) { this->ConstructSelf(checkOverlaps); }
-    for (auto&& daughter : std::as_const(fDaughters)) {
-        daughter.lock()->ConstructSelfAndDescendants(checkOverlaps);
-    }
-}
-
-void IEntity::RegisterMaterial(gsl::index volumeIndex, gsl::not_null<G4Material*> material) const {
-    LogicalVolume(volumeIndex)->SetMaterial(material);
+void IEntity::RegisterMaterial(gsl::index iLogicalVolume, gsl::not_null<G4Material*> material) const {
+    LogicalVolume(iLogicalVolume)->SetMaterial(material);
 }
 
 void IEntity::RegisterMaterial(gsl::not_null<G4Material*> material) const {
-    for (gsl::index i = 0; i < LogicalVolumeNum(); ++i) {
+    for (gsl::index i = 0; i < std::ssize(fLogicalVolumes); ++i) {
         RegisterMaterial(i, material);
     }
 }
 
-void IEntity::RegisterRegion(gsl::index volumeIndex, gsl::not_null<G4Region*> region) const {
-    auto logicalVolume = LogicalVolume(volumeIndex);
+void IEntity::RegisterRegion(gsl::index iLogicalVolume, gsl::not_null<G4Region*> region) const {
+    const auto& logicalVolume = LogicalVolume(iLogicalVolume);
     if (logicalVolume->GetRegion() != region) {
         logicalVolume->SetRegion(region);
-        region->AddRootLogicalVolume(logicalVolume);
+        region->AddRootLogicalVolume(logicalVolume.get());
     }
 }
 
 void IEntity::RegisterRegion(gsl::not_null<G4Region*> region) const {
-    for (gsl::index i = 0; i < LogicalVolumeNum(); ++i) {
+    for (gsl::index i = 0; i < std::ssize(fLogicalVolumes); ++i) {
         RegisterRegion(i, region);
     }
 }
 
-void IEntity::RegisterSD(gsl::index volumeIndex, gsl::not_null<G4VSensitiveDetector*> sd) const {
-    auto logicalVolume = LogicalVolume(volumeIndex);
+void IEntity::RegisterSD(gsl::index iLogicalVolume, gsl::not_null<G4VSensitiveDetector*> sd) const {
+    const auto& logicalVolume = LogicalVolume(iLogicalVolume);
     if (logicalVolume->GetSensitiveDetector() == nullptr) {
         // Register to logicalVolume
         logicalVolume->SetSensitiveDetector(sd);
@@ -89,19 +60,23 @@ void IEntity::RegisterSD(gsl::index volumeIndex, gsl::not_null<G4VSensitiveDetec
 }
 
 void IEntity::RegisterSD(gsl::not_null<G4VSensitiveDetector*> sd) const {
-    for (gsl::index i = 0; i < LogicalVolumeNum(); ++i) {
+    for (gsl::index i = 0; i < std::ssize(fLogicalVolumes); ++i) {
         RegisterSD(i, sd);
     }
 }
 
+void IEntity::Export(std::filesystem::path gdmlFile, gsl::index iPhysicalVolume) const {
 #if MACE_USE_G4GDML
-void IEntity::Export(std::filesystem::path gdmlFile, gsl::index volumeIndex) const {
     if (Env::MPIEnv::Available()) { Utility::MPIUtil::MakeMPIFilePathInPlace(gdmlFile); }
     G4GDMLParser gdml;
     gdml.SetAddPointerToName(false);
     gdml.SetOutputFileOverwrite(true);
-    gdml.Write(gdmlFile.generic_string(), this->PhysicalVolume(volumeIndex));
-}
+    gdml.Write(gdmlFile.generic_string(), PhysicalVolume(iPhysicalVolume).get());
+#else
+    std::clog << "Warning: this binary does not support GDML export (MACE_USE_G4GDML=OFF). "
+                 "Try a binary compiles with MACE_USE_G4GDML=ON"
+              << std::endl;
 #endif
+}
 
 } // namespace MACE::Core::Geometry
