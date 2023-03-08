@@ -35,7 +35,7 @@ To build MACE software from source, there are a few prerequisites.
 
 ### Toolchain
 
-1. A C++ compiler (that supports ≥ C++20. [GCC](https://gcc.gnu.org/) ≥ 10.1, [LLVM Clang](https://clang.llvm.org/) ≥ 12, or MSVC ≥ 19.30 (i.e., [Visual Studio](https://visualstudio.microsoft.com/) 2022 ≥ 17.0))
+1. A C++ compiler (that supports ≥ C++20. [GCC](https://gcc.gnu.org/) ≥ 11, [LLVM Clang](https://clang.llvm.org/) ≥ 12, or MSVC ≥ 19.30 (i.e., [Visual Studio](https://visualstudio.microsoft.com/) 2022 ≥ 17.0))
 2. A C++ library (that supports ≥ C++20. [libstdc++](https://gcc.gnu.org/onlinedocs/libstdc++/) ≥ 10.1, or [MSVC STL](https://github.com/microsoft/STL) with [Visual Studio](https://visualstudio.microsoft.com/) 2022 ≥ 17.0)
 3. [CMake](https://cmake.org/) (≥ 3.16)
 4. A build system compatible with CMake ([GNU Make](https://www.gnu.org/software/make/), [Ninja](https://ninja-build.org), or etc.)
@@ -52,7 +52,7 @@ Required, built-in if not found:
 
 1. [argparse](https://github.com/p-ranav/argparse) (≥ 2.6, built-in if not found (network or pre-downloaded source is required))
 2. [backward-cpp](https://github.com/bombela/backward-cpp) (≥ 1.6, built-in if not found (network or pre-downloaded source is required))
-3. [Eigen](https://eigen.tuxfamily.org/) (≥ 3.3.0, built-in if not found (network or pre-downloaded source is required))
+3. [Eigen](https://eigen.tuxfamily.org/) (≥ 3.4.0, built-in if not found (network or pre-downloaded source is required))
 4. [Microsoft.GSL](https://github.com/Microsoft/GSL) ([ISO C++ guidelines support library](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#gsl-guidelines-support-library)) (≥ 4.0.0, built-in if not found (network or pre-downloaded source is required))
 5. [yaml-cpp](https://github.com/jbeder/yaml-cpp) (≥ 0.6.0, built-in if not found (network or pre-downloaded source is required))
 
@@ -66,14 +66,14 @@ Optional:
 
 [Geant4](https://geant4.web.cern.ch/) and [ROOT](https://root.cern/) need to be installed on your PC following the official guides. They need to be compiled with at least C++17.
 
-[MPI](https://www.mpi-forum.org/) ([MPICH](https://www.mpich.org/), or [OpenMPI](https://www.open-mpi.org/), or [Intel MPI](https://www.intel.cn/content/www/cn/zh/developer/tools/oneapi/mpi-library.html), or [Microsoft MPI](https://github.com/Microsoft/Microsoft-MPI), or etc.), [Eigen](https://eigen.tuxfamily.org/), and [yaml-cpp](https://github.com/jbeder/yaml-cpp) can be installed via package manager (apt, yum, etc.) respect to your Linux distrbution. For example, you can install MPICH, Eigen, and yaml-cpp on Ubuntu (at least focal (20.04)) with following commands
+[MPI](https://www.mpi-forum.org/) ([MPICH](https://www.mpich.org/), or [OpenMPI](https://www.open-mpi.org/), or [Intel MPI](https://www.intel.cn/content/www/cn/zh/developer/tools/oneapi/mpi-library.html), or [Microsoft MPI](https://github.com/Microsoft/Microsoft-MPI), or etc.), [Eigen](https://eigen.tuxfamily.org/), and [yaml-cpp](https://github.com/jbeder/yaml-cpp) can be installed via package manager (apt, yum, etc.) respect to your Linux distrbution. For example, you can install MPICH, Eigen, and yaml-cpp on Ubuntu (at least jammy (22.04)) with following commands
 
 ```shell
 sudo apt update
 sudo apt install mpich libeigen3-dev libyaml-cpp-dev
 ```
 
-The earlier distribution (e.g. Ubuntu earlier than focal) may not be able to obtain Eigen or yaml-cpp of the matching version through the package manager. At this time, it is good to use the built-in libraries. MPI is generally not a problem because the requirement for it is quite low (2.0). But if this does become a problem, it is worthwhile to spend some time compiling one for yourself. There are not many obstacles in compiling it.
+The earlier distribution (e.g. Ubuntu earlier than jammy) may not be able to obtain Eigen or yaml-cpp of the matching version through the package manager. At this time, it is good to use the built-in libraries. MPI is generally not a problem because the requirement for it is quite low (2.0). But if this does become a problem, it is worthwhile to spend some time compiling one for yourself. There are not many obstacles in compiling it.
 
 ### Windows
 
