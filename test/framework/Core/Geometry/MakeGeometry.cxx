@@ -7,144 +7,143 @@
 
 #include "TGeoManager.h"
 
-using namespace MACE::Core::Geometry::Entity::Fast;
+#include <functional>
 
-int main(int argc, char** argv) {
+int main(int argc, char* argv[]) {
     MACE::Env::BasicEnv env(argc, argv, {});
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // Construct entity objects
-    auto fBeamDegrader = std::make_shared<BeamDegrader>();
-    auto fBeamMonitor = std::make_shared<BeamMonitor>();
-    auto fCDCBody = std::make_shared<CDCBody>();
-    auto fCDCCell = std::make_shared<CDCCell>();
-    auto fCDCFieldWire = std::make_shared<CDCFieldWire>();
-    auto fCDCLayer = std::make_shared<CDCLayer>();
-    auto fCDCSenseWire = std::make_shared<CDCSenseWire>();
-    auto fCDCSensitiveVolume = std::make_shared<CDCSensitiveVolume>();
-    auto fCollimator = std::make_shared<Collimator>();
-    auto fEMCal = std::make_shared<EMCal>();
-    auto fEMCalField = std::make_shared<EMCalField>();
-    auto fEMCalShield = std::make_shared<EMCalShield>();
-    auto fFirstBendField = std::make_shared<FirstBendField>();
-    auto fFirstBendSolenoid = std::make_shared<FirstBendSolenoid>();
-    auto fFirstTransportField = std::make_shared<FirstTransportField>();
-    auto fFirstTransportSolenoid = std::make_shared<FirstTransportSolenoid>();
-    auto fLinacField = std::make_shared<LinacField>();
-    auto fMCP = std::make_shared<MCP>();
-    auto fSecondBendField = std::make_shared<SecondBendField>();
-    auto fSecondBendSolenoid = std::make_shared<SecondBendSolenoid>();
-    auto fSecondTransportField = std::make_shared<SecondTransportField>();
-    auto fSecondTransportSolenoid = std::make_shared<SecondTransportSolenoid>();
-    auto fSelectorField = std::make_shared<SelectorField>();
-    auto fSpectrometerField = std::make_shared<SpectrometerField>();
-    auto fSpectrometerMagnet = std::make_shared<SpectrometerMagnet>();
-    auto fSpectrometerShield = std::make_shared<SpectrometerShield>();
-    auto fTarget = std::make_shared<Target>();
-    auto fThirdTransportField = std::make_shared<ThirdTransportField>();
-    auto fThirdTransportSolenoid = std::make_shared<ThirdTransportSolenoid>();
-    auto fWorld = std::make_shared<World>();
-
-    // Construct hierarchy
-    fCDCBody->AddDaughter(fCDCLayer);
-    fCDCCell->AddDaughter(fCDCFieldWire);
-    fCDCCell->AddDaughter(fCDCSensitiveVolume);
-    fCDCLayer->AddDaughter(fCDCCell);
-    fCDCSensitiveVolume->AddDaughter(fCDCSenseWire);
-    fEMCalField->AddDaughter(fEMCal);
-    fEMCalField->AddDaughter(fMCP);
-    fFirstBendField->AddDaughter(fFirstBendSolenoid);
-    fFirstTransportField->AddDaughter(fFirstTransportSolenoid);
-    fLinacField->AddDaughter(fBeamDegrader);
-    fLinacField->AddDaughter(fBeamMonitor);
-    fLinacField->AddDaughter(fTarget);
-    fSecondBendField->AddDaughter(fSecondBendSolenoid);
-    fSecondTransportField->AddDaughter(fCollimator);
-    fSecondTransportField->AddDaughter(fSecondTransportSolenoid);
-    fSecondTransportField->AddDaughter(fSelectorField);
-    fSpectrometerField->AddDaughter(fCDCBody);
-    fSpectrometerField->AddDaughter(fLinacField);
-    fSpectrometerField->AddDaughter(fSpectrometerMagnet);
-    fThirdTransportField->AddDaughter(fThirdTransportSolenoid);
-    fWorld->AddDaughter(fEMCalField);
-    fWorld->AddDaughter(fEMCalShield);
-    fWorld->AddDaughter(fFirstBendField);
-    fWorld->AddDaughter(fFirstTransportField);
-    fWorld->AddDaughter(fSecondBendField);
-    fWorld->AddDaughter(fSecondTransportField);
-    fWorld->AddDaughter(fSpectrometerField);
-    fWorld->AddDaughter(fSpectrometerShield);
-    fWorld->AddDaughter(fThirdTransportField);
-
+    ////////////////////////////////////////////////////////////////
     // Construct volumes
-    fWorld->ConstructSelfAndDescendants(true);
+    ////////////////////////////////////////////////////////////////
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    using namespace MACE::Core::Geometry::Entity::Fast;
+    using MACE::Core::Geometry::IEntity;
 
-    using namespace MACE::Utility::LiteralUnit;
+    constexpr auto fCheckOverlap = true;
 
-    auto nist = G4NistManager::Instance();
+    // 0
 
-    auto aluminium = nist->FindOrBuildMaterial("G4_Al");
-    fBeamDegrader->RegisterMaterial(aluminium);
-    fCDCFieldWire->RegisterMaterial(aluminium);
+    const auto fWorld = std::make_unique_for_overwrite<World>();
 
-    auto cdcGas = nist->FindOrBuildMaterial("G4_He");
-    fCDCCell->RegisterMaterial(cdcGas);
-    fCDCLayer->RegisterMaterial(cdcGas);
-    fCDCSensitiveVolume->RegisterMaterial(cdcGas);
+    // 1
 
-    auto cdcShell = nist->BuildMaterialWithNewDensity("CarbonFiber", "G4_C", 1.7_g_cm3);
-    fCDCBody->RegisterMaterial(cdcShell);
+    auto& emCalField = fWorld->NewDaughter<EMCalField>(fCheckOverlap);
+    auto& emCalShield = fWorld->NewDaughter<EMCalShield>(fCheckOverlap);
+    auto& firstBendField = fWorld->NewDaughter<FirstBendField>(fCheckOverlap);
+    auto& firstTransportField = fWorld->NewDaughter<FirstTransportField>(fCheckOverlap);
+    auto& secondBendField = fWorld->NewDaughter<SecondBendField>(fCheckOverlap);
+    auto& secondTransportField = fWorld->NewDaughter<SecondTransportField>(fCheckOverlap);
+    auto& spectrometerField = fWorld->NewDaughter<SpectrometerField>(fCheckOverlap);
+    auto& spectrometerShield = fWorld->NewDaughter<SpectrometerShield>(fCheckOverlap);
+    auto& thirdTransportField = fWorld->NewDaughter<ThirdTransportField>(fCheckOverlap);
 
-    auto copper = nist->FindOrBuildMaterial("G4_Cu");
-    fCollimator->RegisterMaterial(copper);
-    fFirstBendSolenoid->RegisterMaterial(copper);
-    fFirstTransportSolenoid->RegisterMaterial(copper);
-    fSecondBendSolenoid->RegisterMaterial(copper);
-    fSecondTransportSolenoid->RegisterMaterial(copper);
-    fThirdTransportSolenoid->RegisterMaterial(copper);
+    // 2
 
-    auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
-    fEMCal->RegisterMaterial(csI);
+    auto& emCal = emCalField.NewDaughter<EMCal>(fCheckOverlap);
+    auto& mcp = emCalField.NewDaughter<MCP>(fCheckOverlap);
 
-    auto iron = nist->FindOrBuildMaterial("G4_Fe");
-    fSpectrometerMagnet->RegisterMaterial(iron);
+    auto& firstBendSolenoid = firstBendField.NewDaughter<FirstBendSolenoid>(fCheckOverlap);
 
-    auto lead = nist->FindOrBuildMaterial("G4_Pb");
-    fEMCalShield->RegisterMaterial(lead);
-    fSpectrometerShield->RegisterMaterial(lead);
+    auto& firstTransportSolenoid = firstTransportField.NewDaughter<FirstTransportSolenoid>(fCheckOverlap);
 
-    auto mcpMaterial = nist->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4_g_cm3);
-    fMCP->RegisterMaterial(mcpMaterial);
+    auto& secondBendSolenoid = secondBendField.NewDaughter<SecondBendSolenoid>(fCheckOverlap);
 
-    auto mylar = nist->FindOrBuildMaterial("G4_MYLAR");
-    fBeamDegrader->RegisterMaterial(mylar);
+    auto& collimator = secondTransportField.NewDaughter<Collimator>(fCheckOverlap);
+    auto& secondTransportSolenoid = secondTransportField.NewDaughter<SecondTransportSolenoid>(fCheckOverlap);
+    auto& selectorField = secondTransportField.NewDaughter<SelectorField>(fCheckOverlap);
 
-    auto plasticScitillator = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
-    fBeamMonitor->RegisterMaterial(plasticScitillator);
+    auto& cdcBody = spectrometerField.NewDaughter<CDCBody>(fCheckOverlap);
+    auto& linacField = spectrometerField.NewDaughter<LinacField>(fCheckOverlap);
+    auto& spectrometerMagnet = spectrometerField.NewDaughter<SpectrometerMagnet>(fCheckOverlap);
 
-    auto silicaAerogel = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30_mg_cm3);
-    fTarget->RegisterMaterial(silicaAerogel);
+    auto& thirdTransportSolenoid = thirdTransportField.NewDaughter<ThirdTransportSolenoid>(fCheckOverlap);
 
-    auto tungsten = nist->FindOrBuildMaterial("G4_W");
-    fCDCSenseWire->RegisterMaterial(tungsten);
+    // 3
 
-    auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
-    fEMCalField->RegisterMaterial(vacuum);
-    fFirstBendField->RegisterMaterial(vacuum);
-    fFirstTransportField->RegisterMaterial(vacuum);
-    fLinacField->RegisterMaterial(vacuum);
-    fSecondBendField->RegisterMaterial(vacuum);
-    fSecondTransportField->RegisterMaterial(vacuum);
-    fSelectorField->RegisterMaterial(vacuum);
-    fSpectrometerField->RegisterMaterial(vacuum);
-    fThirdTransportField->RegisterMaterial(vacuum);
+    auto& cdcGas = cdcBody.NewDaughter<CDCGas>(fCheckOverlap);
+
+    auto& beamDegrader = linacField.NewDaughter<BeamDegrader>(fCheckOverlap);
+    auto& beamMonitor = linacField.NewDaughter<BeamMonitor>(fCheckOverlap);
+    auto& target = linacField.NewDaughter<Target>(fCheckOverlap);
+
+    // 4
+
+    auto& cdcSuperLayer = cdcGas.NewDaughter<CDCSuperLayer>(fCheckOverlap);
+
+    // 5
+
+    auto& cdcSenseLayer = cdcSuperLayer.NewDaughter<CDCSenseLayer>(fCheckOverlap);
+
+    // 6
+
+    auto& cdcFieldWire = cdcSenseLayer.NewDaughter<CDCFieldWire>(fCheckOverlap);
+    auto& cdcCell = cdcSenseLayer.NewDaughter<CDCCell>(fCheckOverlap);
+
+    // 7
+
+    auto& cdcSenseWire = cdcCell.NewDaughter<CDCSenseWire>(fCheckOverlap);
+
+    ////////////////////////////////////////////////////////////////
+    // Register materials
+    ////////////////////////////////////////////////////////////////
+
+    using namespace MACE::Utility::LiteralUnit::Density;
+
+    const auto nist = G4NistManager::Instance();
+
+    const auto aluminium = nist->FindOrBuildMaterial("G4_Al");
+    beamDegrader.RegisterMaterial(aluminium);
+    cdcFieldWire.RegisterMaterial(aluminium);
+
+    const auto he = nist->FindOrBuildMaterial("G4_He");
+    cdcCell.RegisterMaterial(he);
+    cdcGas.RegisterMaterial(he);
+    cdcSenseLayer.RegisterMaterial(he);
+    cdcSuperLayer.RegisterMaterial(he);
+
+    const auto cdcShell = nist->BuildMaterialWithNewDensity("CarbonFiber", "G4_C", 1.7_g_cm3);
+    cdcBody.RegisterMaterial(cdcShell);
+
+    const auto copper = nist->FindOrBuildMaterial("G4_Cu");
+    collimator.RegisterMaterial(copper);
+    firstBendSolenoid.RegisterMaterial(copper);
+    firstTransportSolenoid.RegisterMaterial(copper);
+    secondBendSolenoid.RegisterMaterial(copper);
+    secondTransportSolenoid.RegisterMaterial(copper);
+    thirdTransportSolenoid.RegisterMaterial(copper);
+
+    const auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
+    emCal.RegisterMaterial(csI);
+
+    const auto iron = nist->FindOrBuildMaterial("G4_Fe");
+    spectrometerMagnet.RegisterMaterial(iron);
+
+    const auto lead = nist->FindOrBuildMaterial("G4_Pb");
+    emCalShield.RegisterMaterial(lead);
+    spectrometerShield.RegisterMaterial(lead);
+
+    const auto mcpMaterial = nist->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4_g_cm3);
+    mcp.RegisterMaterial(mcpMaterial);
+
+    const auto plasticScitillator = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
+    beamMonitor.RegisterMaterial(plasticScitillator);
+
+    const auto silicaAerogel = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30_mg_cm3);
+    target.RegisterMaterial(silicaAerogel);
+
+    const auto tungsten = nist->FindOrBuildMaterial("G4_W");
+    cdcSenseWire.RegisterMaterial(tungsten);
+
+    const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
+    emCalField.RegisterMaterial(vacuum);
+    firstBendField.RegisterMaterial(vacuum);
+    firstTransportField.RegisterMaterial(vacuum);
+    linacField.RegisterMaterial(vacuum);
+    secondBendField.RegisterMaterial(vacuum);
+    secondTransportField.RegisterMaterial(vacuum);
+    selectorField.RegisterMaterial(vacuum);
+    spectrometerField.RegisterMaterial(vacuum);
+    thirdTransportField.RegisterMaterial(vacuum);
     fWorld->RegisterMaterial(vacuum);
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -159,6 +158,7 @@ int main(int argc, char** argv) {
 
 #if MACE_USE_G4GDML
 
+    cdcSenseLayer.RemoveDaughter<CDCCell>(); // ROOT does not support twisted tube.
     fWorld->Export("test.gdml");
 
     auto geoManager = std::make_unique<TGeoManager>("MACEGeom", "MACE Geometry");
@@ -167,18 +167,17 @@ int main(int argc, char** argv) {
     // set transparency for jsroot display
     // see form https://github.com/root-project/jsroot/blob/master/docs/JSROOT.md#geometry-viewer
     geoManager->GetVolume(fWorld->LogicalVolume()->GetName())->SetInvisible();
-    std::vector<std::shared_ptr<MACE::Core::Geometry::IEntity>> volumesToSetTransparency{
-        fEMCalShield,
-        fEMCal,
-        fSpectrometerMagnet,
-        fSpectrometerShield,
-        fFirstBendSolenoid,
-        fFirstTransportSolenoid,
-        fSecondBendSolenoid,
-        fSecondTransportSolenoid,
-        fThirdTransportSolenoid};
-    for (auto&& volume : std::as_const(volumesToSetTransparency)) {
-        geoManager->GetVolume(volume->LogicalVolume()->GetName())->SetTransparency(60);
+    for (auto&& entity : std::initializer_list<std::reference_wrapper<const IEntity>>{
+             emCalShield,
+             emCal,
+             spectrometerMagnet,
+             spectrometerShield,
+             firstBendSolenoid,
+             firstTransportSolenoid,
+             secondBendSolenoid,
+             secondTransportSolenoid,
+             thirdTransportSolenoid}) {
+        geoManager->GetVolume(entity.get().LogicalVolume()->GetName())->SetTransparency(60);
     }
 
     geoManager->Export("test.root");
