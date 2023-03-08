@@ -1,11 +1,13 @@
 #pragma once
 
 #include "MACE/Core/Geometry/IDescription.hxx"
-
-#include "G4RotationMatrix.hh"
-#include "G4TwoVector.hh"
+#include "MACE/Math/IntegerPower.hxx"
 
 #include "Eigen/Core"
+
+#include "gsl/gsl"
+
+#include <vector>
 
 namespace MACE::Core::Geometry::Description {
 
@@ -14,92 +16,139 @@ class CDC final : public ISingletonDescription<CDC> {
 
 private:
     CDC();
-    ~CDC() noexcept = default;
-    CDC(const CDC&) = delete;
-    CDC& operator=(const CDC&) = delete;
 
 public:
+    const auto& EvenSuperLayerIsAxial() const { return fEvenSuperLayerIsAxial; }
+    const auto& NSuperLayer() const { return fNSuperLayer; }
+    const auto& NSenseLayerPerSuper() const { return fNSenseLayerPerSuper; }
     const auto& GasInnerRadius() const { return fGasInnerRadius; }
-    const auto& GasOuterRadius() const { return fGasOuterRadius; }
     const auto& GasInnerLength() const { return fGasInnerLength; }
-    const auto& GasOuterLength() const { return fGasOuterLength; }
-    const auto& CellWidth() const { return fCellWidth; }
-    const auto& CellWidthDistortionAllowed() const { return fCellWidthDistortionAllowed; }
+    const auto& EndCapSlope() const { return fEndCapSlope; }
+    const auto& MinStereoAngle() const { return fMinStereoAngle; }
+    const auto& MinCellWidth() const { return fMinCellWidth; }
+    const auto& ReferenceCellWidth() const { return fReferenceCellWidth; }
+    const auto& MaxCellWidth() const { return fMaxCellWidth; }
     const auto& FieldWireDiameter() const { return fFieldWireDiameter; }
     const auto& SenseWireDiameter() const { return fSenseWireDiameter; }
-    const auto& SensitiveVolumeRelativeWidth() const { return fSensitiveVolumeRelativeWidth; }
+    const auto& SensitiveWidthFactor() const { return fSensitiveWidthFactor; }
+    const auto& MinAdjacentSuperLayersDistance() const { return fMinAdjacentSuperLayersDistance; }
+    const auto& MinWireAndRadialShellDistance() const { return fMinWireAndRadialShellDistance; }
     const auto& ShellInnerThickness() const { return fShellInnerThickness; }
     const auto& ShellSideThickness() const { return fShellSideThickness; }
     const auto& ShellOuterThickness() const { return fShellOuterThickness; }
 
-    void GasInnerRadius(double val) { fGasInnerRadius = val; }
-    void GasOuterRadius(double val) { fGasOuterRadius = val; }
-    void GasInnerLength(double val) { fGasInnerLength = val; }
-    void GasOuterLength(double val) { fGasOuterLength = val; }
-    void CellWidth(double val) { fCellWidth = val; }
-    void CellWidthDistortionAllowed(double val) { fCellWidthDistortionAllowed = val; }
-    void FieldWireDiameter(double val) { fFieldWireDiameter = val; }
-    void SenseWireDiameter(double val) { fSenseWireDiameter = val; }
-    void SensitiveVolumeRelativeWidth(double val) { fSensitiveVolumeRelativeWidth = val; }
-    void ShellInnerThickness(double val) { fShellInnerThickness = val; }
-    void ShellSideThickness(double val) { fShellSideThickness = val; }
-    void ShellOuterThickness(double val) { fShellOuterThickness = val; }
+    void EvenSuperLayerIsAxial(auto&& v) { (fEvenSuperLayerIsAxial = std::forward<decltype(v)>(v), SetOutdated()); }
+    void NSuperLayer(auto&& v) { (fNSuperLayer = std::forward<decltype(v)>(v), SetOutdated()); }
+    void NSenseLayerPerSuper(auto&& v) { (fNSenseLayerPerSuper = std::forward<decltype(v)>(v), SetOutdated()); }
+    void GasInnerRadius(auto&& v) { (fGasInnerRadius = std::forward<decltype(v)>(v), SetOutdated()); }
+    void GasInnerLength(auto&& v) { (fGasInnerLength = std::forward<decltype(v)>(v), SetOutdated()); }
+    void EndCapSlope(auto&& v) { (fEndCapSlope = std::forward<decltype(v)>(v), SetOutdated()); }
+    void MinStereoAngle(auto&& v) { (fMinStereoAngle = std::forward<decltype(v)>(v), SetOutdated()); }
+    void MinCellWidth(auto&& v) { (fMinCellWidth = std::forward<decltype(v)>(v), SetOutdated()); }
+    void ReferenceCellWidth(auto&& v) { (fReferenceCellWidth = std::forward<decltype(v)>(v), SetOutdated()); }
+    void MaxCellWidth(auto&& v) { (fMaxCellWidth = std::forward<decltype(v)>(v), SetOutdated()); }
+    void FieldWireDiameter(auto&& v) { (fFieldWireDiameter = std::forward<decltype(v)>(v), SetOutdated()); }
+    void SenseWireDiameter(auto&& v) { (fSenseWireDiameter = std::forward<decltype(v)>(v), SetOutdated()); }
+    void SensitiveWidthFactor(auto&& v) { (fSensitiveWidthFactor = std::forward<decltype(v)>(v), SetOutdated()); }
+    void MinAdjacentSuperLayersDistance(auto&& v) { (fMinAdjacentSuperLayersDistance = std::forward<decltype(v)>(v), SetOutdated()); }
+    void MinWireAndRadialShellDistance(auto&& v) { (fMinWireAndRadialShellDistance = std::forward<decltype(v)>(v), SetOutdated()); }
+    void ShellInnerThickness(auto&& v) { (fShellInnerThickness = std::forward<decltype(v)>(v), SetOutdated()); }
+    void ShellSideThickness(auto&& v) { (fShellSideThickness = std::forward<decltype(v)>(v), SetOutdated()); }
+    void ShellOuterThickness(auto&& v) { (fShellOuterThickness = std::forward<decltype(v)>(v), SetOutdated()); }
 
-    /// @return CDC sense wire map. A list of [ wire position @ z=0, wire direction ].
-    std::vector<std::pair<Eigen::Vector2d, Eigen::Vector3d>> SenseWireMap() const;
+    struct SuperLayerConfiguration {
+        struct SenseLayerConfiguration {
+            struct CellConfiguration {
+                int cellID;
+                double centerAzimuth;
+            };
+            int senseLayerID;
+            double innerRadius;
+            double outerRadius;
+            double cellWidth;
+            double halfLength;
+            double stereoAzimuthAngle;
+            auto TanStereoZenithAngle(const auto r) const { return r / halfLength * std::tan(stereoAzimuthAngle / 2); }
+            auto SecStereoZenithAngle(const auto r) const { return std::sqrt(1 + Math::Pow2(TanStereoZenithAngle(r))); }
+            auto CosStereoZenithAngle(const auto r) const { return 1 / SecStereoZenithAngle(r); }
+            auto SinStereoZenithAngle(const auto r) const { return TanStereoZenithAngle(r) / SecStereoZenithAngle(r); }
+            auto StereoZenithAngle(const auto r) const { return std::atan(TanStereoZenithAngle(r)); }
+            std::vector<CellConfiguration> cell;
+        };
+        bool isAxial;
+        int superLayerID;
+        int nCellPerSenseLayer;
+        double cellAzimuthWidth;
+        double innerRadius;
+        double innerHalfLength;
+        double outerRadius;
+        double outerHalfLength;
+        std::vector<SenseLayerConfiguration> sense;
+    };
 
-    // Next 5 methods should only use for geometry construction.
-    // Try not to decode them unless really need.
+    const auto& LayerConfiguration() const { return fLayerConfigurationManager.Get(this); }
+    auto GasOuterRadius() const { return LayerConfiguration().back().outerRadius + fMinWireAndRadialShellDistance; }
+    auto GasOuterLength() const { return fGasInnerLength + 2 * fEndCapSlope * (GasOuterRadius() - fGasInnerRadius); }
 
-    /// @return Layer's information list. Subscript with layerID and get [ layer center radius, thickness(=cellWidth), length/2, nCells ].
-    /// @warning This method constructs a std::vector<std::tuple<...>> according to current Description status,
-    /// thus may become invalid after some Set..., invoke it after any Set method.
-    /// @attention Keep the return value instead of invoke mutiple times if you need to check up the cell info.
-    /// Otherwise constructs a std::vector<std::tuple<...>> like this for many times could lead to performance issue.
-    std::vector<std::tuple<double, double, double, int>> LayerGeometryDetail() const;
-    /// @return Cell info list. Subscript with layerID and get the list of [ angular width, half length, (sub-list)[ rotation ] ].
-    /// @warning This method constructs a std::vector<...> according to current Description status,
-    /// thus may become invalid after some Set..., invoke it after any Set method.
-    /// @attention Keep the return value instead of invoke mutiple times if you need to check up the cell info.
-    /// Otherwise constructs a std::vector<...> like this for many times could lead to performance issue.
-    std::vector<std::tuple<double, double, std::vector<G4RotationMatrix>>> CellGeometryDetail() const;
-    /// @return Field wire info list. Subscript with layerID and get [ half length, (sub-list)[ (local) position ] ].
-    /// the sub-list contains 3 elements, represents the 3 field wire in a lattice.
-    /// @warning This method constructs a std::vector<...> according to current Description status,
-    /// thus may become invalid after some Set..., invoke it after any Set method.
-    /// @attention Keep the return value instead of invoke mutiple times if you need to check up the cell info.
-    /// Otherwise constructs a std::vector<...> like this for many times could lead to performance issue.
-    std::vector<std::pair<double, std::array<G4TwoVector, 3>>> FieldWireGeometryDetail() const;
-    /// @return Sense wire's information map. Subscript with layerID and get [ position, half length ].
-    /// @warning This method constructs a std::vector<...> according to current Description status,
-    /// thus may become invalid after some Set..., invoke it after any Set method.
-    /// @attention Keep the return value instead of invoke mutiple times if you need to check up the cell info.
-    /// Otherwise constructs a std::vector<...> like this for many times could lead to performance issue.
-    std::vector<std::pair<G4TwoVector, double>> SenseWireGeometryDetail() const;
-    /// @return Spectrometer sensitive volume info list. Subscript with layerID and get [ centerRadius, thick, half length, centerPhi, dPhi ].
-    /// @warning This method constructs a std::vector<...> according to current Description status,
-    /// thus may become invalid after some Set..., invoke it after any Set method.
-    /// @attention Keep the return value instead of invoke mutiple times if you need to check up the cell info.
-    /// Otherwise constructs a std::vector<...> like this for many times could lead to performance issue.
-    std::vector<std::tuple<double, double, double, double, double>> SensitiveVolumeGeometryDetail() const;
+    struct CellInformation {
+        Eigen::Vector2d position;
+        Eigen::Vector3d direction;
+    };
+
+    const auto& CellMap() const { return fCellMapManager.Get(this); }
 
 private:
+    class LayerConfigurationManager {
+    public:
+        void SetOutdated() { fOutdated = true; }
+        inline const std::vector<SuperLayerConfiguration>& Get(const CDC* cdc);
+
+    private:
+        bool fOutdated = true;
+        std::vector<SuperLayerConfiguration> fLayerConfiguration = {};
+    };
+
+    class CellMapManager {
+    public:
+        void SetOutdated() { fOutdated = true; }
+        inline const std::vector<CellInformation>& Get(const CDC* cdc);
+
+    private:
+        bool fOutdated = true;
+        std::vector<CellInformation> fCellMap = {};
+    };
+
+    inline void SetOutdated() const;
+    std::vector<SuperLayerConfiguration> ComputeLayerConfiguration() const;
+    std::vector<CellInformation> ComputeCellMap() const;
+
     void ImportValues(const YAML::Node& node) override;
     void ExportValues(YAML::Node& node) const override;
 
 private:
+    bool fEvenSuperLayerIsAxial; // true: AVAUAVAU..., false: VAUAVAUA...
+    int fNSuperLayer;
+    int fNSenseLayerPerSuper;
     double fGasInnerRadius;
-    double fGasOuterRadius;
     double fGasInnerLength;
-    double fGasOuterLength;
-    double fCellWidth;
-    double fCellWidthDistortionAllowed;
+    double fEndCapSlope;
+    double fMinStereoAngle;
+    double fMinCellWidth;
+    double fReferenceCellWidth;
+    double fMaxCellWidth;
     double fFieldWireDiameter;
     double fSenseWireDiameter;
-    double fSensitiveVolumeRelativeWidth;
+    double fSensitiveWidthFactor;
+    double fMinAdjacentSuperLayersDistance;
+    double fMinWireAndRadialShellDistance;
     double fShellInnerThickness;
     double fShellSideThickness;
     double fShellOuterThickness;
+
+    mutable LayerConfigurationManager fLayerConfigurationManager;
+    mutable CellMapManager fCellMapManager;
 };
 
 } // namespace MACE::Core::Geometry::Description
+
+#include "MACE/Core/Geometry/Description/CDC.inl"

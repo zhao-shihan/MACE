@@ -1,208 +1,234 @@
 #include "MACE/Core/Geometry/Description/CDC.hxx"
+#include "MACE/Math/MidPoint.hxx"
+#include "MACE/Math/Parity.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
-#include "gsl/gsl"
+#include "Eigen/Geometry"
+
+#include <algorithm>
+#include <cmath>
+#include <numeric>
+#include <tuple>
+#include <utility>
 
 namespace MACE::Core::Geometry::Description {
 
+using namespace Utility::LiteralUnit::Angle;
 using namespace Utility::LiteralUnit::Length;
+using namespace Utility::LiteralUnit::MathConstant;
 using namespace Utility::PhysicalConstant;
 
 CDC::CDC() :
     ISingletonDescription<CDC>(__func__),
+    fEvenSuperLayerIsAxial(false),
+    fNSuperLayer(7),
+    fNSenseLayerPerSuper(3),
     fGasInnerRadius(15_cm),
-    fGasOuterRadius(45_cm),
-    fGasInnerLength(90_cm),
-    fGasOuterLength(180_cm),
-    fCellWidth(16.2_mm),
-    fCellWidthDistortionAllowed(0.1),
-    fFieldWireDiameter(110_um),
+    fGasInnerLength(120_cm),
+    fEndCapSlope(0.75),
+    fMinStereoAngle(4_deg),
+    fMinCellWidth(6_mm),
+    fReferenceCellWidth(10_mm),
+    fMaxCellWidth(14_mm),
+    fFieldWireDiameter(100_um),
     fSenseWireDiameter(25_um),
-    fSensitiveVolumeRelativeWidth(0.9),
-    fShellInnerThickness(200_um),
-    fShellSideThickness(5_mm),
-    fShellOuterThickness(10_mm) {}
+    fSensitiveWidthFactor(0.975),
+    fMinAdjacentSuperLayersDistance(1_mm),
+    fMinWireAndRadialShellDistance(2_mm),
+    fShellInnerThickness(250_um),
+    fShellSideThickness(10_mm),
+    fShellOuterThickness(10_mm),
+    fLayerConfigurationManager(),
+    fCellMapManager() {}
 
-std::vector<std::pair<Eigen::Vector2d, Eigen::Vector3d>> CDC::SenseWireMap() const {
-    const auto cellGeometryDetail = CellGeometryDetail();
-    const auto senseWireGeometryDetail = SenseWireGeometryDetail();
+std::vector<CDC::SuperLayerConfiguration> CDC::ComputeLayerConfiguration() const {
+    std::vector<SuperLayerConfiguration> layerConfig;
 
-    const auto layerCount = std::ssize(cellGeometryDetail);
+    layerConfig.reserve(fNSuperLayer);
+    for (gsl::index superLayerID = 0; superLayerID < fNSuperLayer; ++superLayerID) {
+        const auto notFirstSuperLayer = superLayerID > 0;
+        auto& super = layerConfig.emplace_back();
+        const auto& lastSuper = notFirstSuperLayer ?
+                                    layerConfig[superLayerID - 1] :
+                                    layerConfig.front();
 
-    std::vector<std::pair<Eigen::Vector2d, Eigen::Vector3d>> senseWireMap;
-    senseWireMap.reserve(3 * layerCount * layerCount); // just an estimation of cell count (pi*r^2), for optimization.
+        super.isAxial = fEvenSuperLayerIsAxial ?
+                            Math::IsEven(superLayerID) :
+                            Math::IsOdd(superLayerID);
+        super.superLayerID = superLayerID;
+        super.innerRadius = superLayerID > 0 ?
+                                lastSuper.outerRadius + fMinAdjacentSuperLayersDistance :
+                                fGasInnerRadius + fMinWireAndRadialShellDistance;
+        super.nCellPerSenseLayer =
+            4 * std::lround(0.5_pi / [this, &super] {
+                return std::clamp(
+                    fReferenceCellWidth /
+                        (fGasInnerRadius + fMinWireAndRadialShellDistance +
+                         0.5 * (fNSuperLayer * fNSenseLayerPerSuper * fReferenceCellWidth +
+                                (fNSuperLayer - 1) * fMinAdjacentSuperLayersDistance)),
+                    fMinCellWidth /
+                        (super.innerRadius + fReferenceCellWidth / 2),
+                    fMaxCellWidth /
+                        (super.innerRadius + fNSenseLayerPerSuper * fReferenceCellWidth - fReferenceCellWidth / 2));
+            }());
+        super.cellAzimuthWidth = 2_pi / super.nCellPerSenseLayer;
+        const auto halfPhiCell = super.cellAzimuthWidth / 2;
 
-    for (gsl::index layerID = 0; layerID < layerCount; ++layerID) {
-        const auto& wireLocalPosition = senseWireGeometryDetail[layerID].first;
-        for (auto&& rotation : std::get<2>(cellGeometryDetail[layerID])) {
-            const auto wirePosition = G4TwoVector(rotation * wireLocalPosition);
-            const auto wireDirection = CLHEP::HepZHat;
-            senseWireMap.emplace_back(Eigen::Vector2d(wirePosition.x(), wirePosition.y()),
-                                      Eigen::Vector3d(wireDirection.x(), wireDirection.y(), wireDirection.z()));
+        super.innerHalfLength =
+            notFirstSuperLayer ?
+                lastSuper.outerHalfLength + fEndCapSlope * fMinAdjacentSuperLayersDistance :
+                fGasInnerLength / 2 + fEndCapSlope * fMinWireAndRadialShellDistance;
+
+        const auto firstInnerStereoZenithAngle =
+            [this,
+             &isAxial = super.isAxial,
+             &superLayerID] {
+                if (isAxial) { return 0.0; }
+                if ((fEvenSuperLayerIsAxial ? superLayerID + 3 : superLayerID) % 4 == 0) {
+                    return +fMinStereoAngle;
+                } else {
+                    return -fMinStereoAngle;
+                }
+            }();
+        const int firstSenseLayerID = superLayerID * fNSenseLayerPerSuper;
+        super.sense.reserve(fNSenseLayerPerSuper);
+        for (gsl::index senseLayerLocalID = 0; senseLayerLocalID < fNSenseLayerPerSuper; ++senseLayerLocalID) {
+            const auto notFirstSenseLayerOfThisSuperLayer = senseLayerLocalID > 0;
+            auto& sense = super.sense.emplace_back();
+            const auto& lastSense = notFirstSenseLayerOfThisSuperLayer ?
+                                        super.sense[senseLayerLocalID - 1] :
+                                        super.sense.front();
+
+            sense.senseLayerID = firstSenseLayerID + senseLayerLocalID;
+            sense.innerRadius =
+                notFirstSenseLayerOfThisSuperLayer ?
+                    lastSense.outerRadius :
+                    super.innerRadius;
+            sense.outerRadius =
+                [&rIn = std::as_const(sense).innerRadius,
+                 &dFW = fFieldWireDiameter,
+                 &halfPhiCell] {
+                    return (rIn + (rIn + dFW) * halfPhiCell) / (1 - halfPhiCell);
+                }();
+            sense.cellWidth = sense.outerRadius - sense.innerRadius;
+            const auto tanInnerStereoZenithAngle = notFirstSenseLayerOfThisSuperLayer ?
+                                                       lastSense.TanStereoZenithAngle(lastSense.outerRadius) :
+                                                       std::tan(firstInnerStereoZenithAngle);
+            sense.halfLength =
+                [&eta = fEndCapSlope,
+                 &lastHL = notFirstSenseLayerOfThisSuperLayer ?
+                               std::as_const(lastSense).halfLength :
+                               std::as_const(super).innerHalfLength,
+                 &rIn = std::as_const(sense).innerRadius,
+                 lastRIn = notFirstSenseLayerOfThisSuperLayer ?
+                               lastSense.innerRadius / std::cos(lastSense.stereoAzimuthAngle / 2) :
+                               super.innerRadius,
+                 tan2ThetaS = Math::Pow2(tanInnerStereoZenithAngle)] {
+                    return (lastHL +
+                            eta * (std::sqrt(
+                                       Math::Pow2(rIn) +
+                                       (lastHL + eta * (rIn - lastRIn)) * (lastHL - eta * (rIn + lastRIn)) * tan2ThetaS) -
+                                   lastRIn)) /
+                           (1 - Math::Pow2(eta) * tan2ThetaS);
+                }();
+            sense.stereoAzimuthAngle = 2 * std::atan(sense.halfLength / sense.innerRadius * tanInnerStereoZenithAngle);
+
+            const int firstCellID = (notFirstSuperLayer ?
+                                         lastSuper.sense.back().cell.back().cellID + 1 :
+                                         0) +
+                                    senseLayerLocalID * super.nCellPerSenseLayer;
+            const auto firstCellAzimuth = Math::IsEven(sense.senseLayerID) ?
+                                              0 :
+                                              halfPhiCell;
+            sense.cell.reserve(super.nCellPerSenseLayer);
+            for (gsl::index cellLocalID = 0; cellLocalID < super.nCellPerSenseLayer; ++cellLocalID) {
+                auto& cell = sense.cell.emplace_back();
+                cell.cellID = firstCellID + cellLocalID;
+                cell.centerAzimuth = firstCellAzimuth + cellLocalID * super.cellAzimuthWidth;
+            }
+            sense.cell.shrink_to_fit();
+        }
+        super.sense.shrink_to_fit();
+
+        super.outerRadius =
+            [&dFW = fFieldWireDiameter,
+             &lastSense = std::as_const(super).sense.back()] {
+                return lastSense.outerRadius / std::cos(lastSense.stereoAzimuthAngle / 2) + dFW;
+            }();
+        super.outerHalfLength = super.innerHalfLength + fEndCapSlope * (super.outerRadius - super.innerRadius);
+    }
+    layerConfig.shrink_to_fit();
+
+    return layerConfig;
+}
+
+std::vector<CDC::CellInformation> CDC::ComputeCellMap() const {
+    std::vector<CellInformation> cellMap;
+
+    const auto rFieldWire = fFieldWireDiameter / 2;
+
+    const auto& layerConfig = LayerConfiguration();
+    cellMap.reserve(
+        std::accumulate(layerConfig.cbegin(), layerConfig.cend(), 0,
+                        [this](const auto& count, const auto& super) {
+                            return count + super.nCellPerSenseLayer * fNSenseLayerPerSuper;
+                        }));
+
+    for (auto&& super : layerConfig) {
+        for (auto&& sense : super.sense) {
+            const auto wireRadialPosition = Math::MidPoint(sense.innerRadius, sense.outerRadius) + rFieldWire;
+            const Eigen::AngleAxisd stereoRotation = {-sense.StereoZenithAngle(wireRadialPosition), Eigen::Vector3d(1, 0, 0)};
+            for (auto&& cell : sense.cell) {
+                cellMap.push_back({Eigen::Rotation2Dd(cell.centerAzimuth) *
+                                       Eigen::Vector2d(wireRadialPosition, 0),
+                                   Eigen::AngleAxisd(cell.centerAzimuth, Eigen::Vector3d(0, 0, 1)) *
+                                       (stereoRotation * Eigen::Vector3d(0, 0, 1))});
+            }
         }
     }
+    cellMap.shrink_to_fit();
 
-    return senseWireMap;
-}
-
-std::vector<std::tuple<double, double, double, int>> CDC::LayerGeometryDetail() const {
-    std::vector<std::tuple<double, double, double, int>> layerGeometryDetail;
-
-    const auto sideSlope = (fGasOuterLength / 2 - fGasInnerLength / 2) / (fGasOuterRadius - fGasInnerRadius);
-
-    // first layer parameters
-    auto layerInnerRadius = fGasInnerRadius;
-    auto trueCellWidth = (1 - fCellWidthDistortionAllowed) * fCellWidth;
-    int cellCount = 4 * std::lround(halfpi / (2 * std::asin(trueCellWidth / (2 * layerInnerRadius + trueCellWidth))));
-    auto cellAngularWidth = 2 * pi / cellCount;
-
-    while (layerInnerRadius + trueCellWidth < fGasOuterRadius) {
-        layerGeometryDetail.emplace_back(
-            layerInnerRadius + trueCellWidth / 2, // layer center radius
-            trueCellWidth,
-            fGasInnerLength / 2 + (layerInnerRadius - fGasInnerRadius) * sideSlope, // layer half length
-            cellCount);
-
-        // update layer parameters
-        layerInnerRadius += trueCellWidth;
-        trueCellWidth = 2 * layerInnerRadius * std::sin(cellAngularWidth / 2) / (1 - std::sin(cellAngularWidth / 2));
-
-        if (trueCellWidth > (1 + fCellWidthDistortionAllowed) * fCellWidth) {
-            // a new "big" layer
-            trueCellWidth = (1 - fCellWidthDistortionAllowed) * fCellWidth;
-            cellCount = 4 * std::lround(halfpi / (2 * std::asin(trueCellWidth / (2 * layerInnerRadius + trueCellWidth))));
-            cellAngularWidth = 2 * pi / cellCount;
-        }
-    }
-
-    return layerGeometryDetail;
-}
-
-std::vector<std::tuple<double, double, std::vector<G4RotationMatrix>>> CDC::CellGeometryDetail() const {
-    const auto layerGeometryDetail = LayerGeometryDetail();
-
-    const auto layerCount = std::ssize(layerGeometryDetail);
-
-    std::vector<std::tuple<double, double, std::vector<G4RotationMatrix>>> cellGeometryDetail;
-    cellGeometryDetail.reserve(layerCount);
-
-    for (gsl::index layerID = 0; layerID < layerCount; ++layerID) {
-        auto&& [_0, _1, halfLength, cellCount] = layerGeometryDetail[layerID];
-
-        const auto cellDeltaPhi = 2 * pi / cellCount;
-
-        auto&& infoSubList = std::get<2>(cellGeometryDetail.emplace_back(cellDeltaPhi, halfLength, 0));
-        infoSubList.reserve(cellCount);
-
-        const auto firstCellPhi = (layerID % 2 == 0) ? 0 : (cellDeltaPhi / 2);
-        for (int k = 0; k < cellCount; ++k) {
-            const auto cellPhi = firstCellPhi + k * cellDeltaPhi;
-            infoSubList.emplace_back(CLHEP::HepZHat, cellPhi);
-        }
-    }
-
-    return cellGeometryDetail;
-}
-
-std::vector<std::pair<double, std::array<G4TwoVector, 3>>> CDC::FieldWireGeometryDetail() const {
-    const auto layerGeometryDetail = LayerGeometryDetail();
-    const auto cellGeometryDetail = CellGeometryDetail();
-
-    const auto layerCount = std::ssize(layerGeometryDetail);
-
-    std::vector<std::pair<double, std::array<G4TwoVector, 3>>> fieldWireGeometryDetail;
-    fieldWireGeometryDetail.reserve(layerCount);
-
-    for (gsl::index layerID = 0; layerID < layerCount; ++layerID) {
-        const auto& [cellAngle, halfLength, _0] = cellGeometryDetail[layerID];
-        const auto& [layerRadius, layerThick, _1, _2] = layerGeometryDetail[layerID];
-
-        auto ToXY = [](double rho, double phi) -> G4TwoVector {
-            return G4TwoVector(rho * std::cos(phi),
-                               rho * std::sin(phi));
-        };
-
-        const auto rhoInn = layerRadius - fFieldWireDiameter / 2;
-        const auto rhoOut = rhoInn + layerThick / 2;
-        const auto phiLow = cellAngle / 2 - std::asin(fFieldWireDiameter / (2 * rhoInn));
-        const auto phiUp = phiLow + cellAngle / 2;
-
-        fieldWireGeometryDetail.emplace_back(halfLength,
-                                             std::array{ToXY(rhoOut, phiLow),
-                                                        ToXY(rhoInn, phiUp),
-                                                        ToXY(rhoOut, phiUp)});
-    }
-
-    return fieldWireGeometryDetail;
-}
-
-std::vector<std::pair<G4TwoVector, double>> CDC::SenseWireGeometryDetail() const {
-    const auto svGeometryDetail = SensitiveVolumeGeometryDetail();
-
-    const auto layerCount = std::ssize(svGeometryDetail);
-
-    std::vector<std::pair<G4TwoVector, double>> senseWireGeometryDetail;
-    senseWireGeometryDetail.reserve(layerCount);
-
-    for (gsl::index layerID = 0; layerID < layerCount; ++layerID) {
-        const auto& [svCenterR, _0, halfLength, svCenterPhi, _1] = svGeometryDetail[layerID];
-        senseWireGeometryDetail.emplace_back(G4TwoVector(svCenterR * std::cos(svCenterPhi),
-                                                         svCenterR * std::sin(svCenterPhi)),
-                                             halfLength);
-    }
-
-    return senseWireGeometryDetail;
-}
-
-std::vector<std::tuple<double, double, double, double, double>> CDC::SensitiveVolumeGeometryDetail() const {
-    const auto layerGeometryDetail = LayerGeometryDetail();
-    const auto cellGeometryDetail = CellGeometryDetail();
-
-    const auto layerCount = std::ssize(layerGeometryDetail);
-
-    std::vector<std::tuple<double, double, double, double, double>> svGeometeryDetail(0);
-    svGeometeryDetail.reserve(layerCount);
-
-    for (gsl::index layerID = 0; layerID < layerCount; ++layerID) {
-        const auto& [cellAngle, halfLength, _0] = cellGeometryDetail[layerID];
-        const auto& [layerRho, layerThick, _1, _2] = layerGeometryDetail[layerID];
-        const auto svRho = layerRho - fFieldWireDiameter / 2;
-        const auto svThick = fSensitiveVolumeRelativeWidth * layerThick;
-        const auto fieldWireAngle = 2 * std::asin(fFieldWireDiameter / (2 * layerRho));
-        const auto svDPhi = fSensitiveVolumeRelativeWidth * cellAngle;
-        const auto svSPhi = (cellAngle - svDPhi) / 2 - fieldWireAngle / 2;
-        svGeometeryDetail.emplace_back(svRho, svThick, halfLength, svSPhi + svDPhi / 2, svDPhi);
-    }
-
-    return svGeometeryDetail;
+    return cellMap;
 }
 
 void CDC::ImportValues(const YAML::Node& node) {
+    ImportValue(node, fEvenSuperLayerIsAxial, "EvenSuperLayerIsAxial");
+    ImportValue(node, fNSuperLayer, "NSuperLayer");
+    ImportValue(node, fNSenseLayerPerSuper, "NSenseLayerPerSuper");
     ImportValue(node, fGasInnerRadius, "GasInnerRadius");
-    ImportValue(node, fGasOuterRadius, "GasOuterRadius");
     ImportValue(node, fGasInnerLength, "GasInnerLength");
-    ImportValue(node, fGasOuterLength, "GasOuterLength");
-    ImportValue(node, fCellWidth, "CellWidth");
-    ImportValue(node, fCellWidthDistortionAllowed, "CellWidthDistortionAllowed");
+    ImportValue(node, fEndCapSlope, "EndCapSlope");
+    ImportValue(node, fMinStereoAngle, "MinStereoAngle");
+    ImportValue(node, fMinCellWidth, "MinCellWidth");
+    ImportValue(node, fReferenceCellWidth, "ReferenceCellWidth");
+    ImportValue(node, fMaxCellWidth, "MaxCellWidth");
     ImportValue(node, fFieldWireDiameter, "FieldWireDiameter");
     ImportValue(node, fSenseWireDiameter, "SenseWireDiameter");
-    ImportValue(node, fSensitiveVolumeRelativeWidth, "SensitiveVolumeRelativeWidth");
+    ImportValue(node, fSensitiveWidthFactor, "SensitiveWidthFactor");
+    ImportValue(node, fMinAdjacentSuperLayersDistance, "MinAdjacentSuperLayersDistance");
+    ImportValue(node, fMinWireAndRadialShellDistance, "MinWireAndRadialShellDistance");
     ImportValue(node, fShellInnerThickness, "ShellInnerThickness");
     ImportValue(node, fShellSideThickness, "ShellSideThickness");
     ImportValue(node, fShellOuterThickness, "ShellOuterThickness");
 }
 
 void CDC::ExportValues(YAML::Node& node) const {
+    ExportValue(node, fEvenSuperLayerIsAxial, "EvenSuperLayerIsAxial");
+    ExportValue(node, fNSuperLayer, "NSuperLayer");
+    ExportValue(node, fNSenseLayerPerSuper, "NSenseLayerPerSuper");
     ExportValue(node, fGasInnerRadius, "GasInnerRadius");
-    ExportValue(node, fGasOuterRadius, "GasOuterRadius");
     ExportValue(node, fGasInnerLength, "GasInnerLength");
-    ExportValue(node, fGasOuterLength, "GasOuterLength");
-    ExportValue(node, fCellWidth, "CellWidth");
-    ExportValue(node, fCellWidthDistortionAllowed, "CellWidthDistortionAllowed");
+    ExportValue(node, fEndCapSlope, "EndCapSlope");
+    ExportValue(node, fMinStereoAngle, "MinStereoAngle");
+    ExportValue(node, fMinCellWidth, "MinCellWidth");
+    ExportValue(node, fReferenceCellWidth, "ReferenceCellWidth");
+    ExportValue(node, fMaxCellWidth, "MaxCellWidth");
     ExportValue(node, fFieldWireDiameter, "FieldWireDiameter");
     ExportValue(node, fSenseWireDiameter, "SenseWireDiameter");
-    ExportValue(node, fSensitiveVolumeRelativeWidth, "SensitiveVolumeRelativeWidth");
+    ExportValue(node, fSensitiveWidthFactor, "SensitiveWidthFactor");
+    ExportValue(node, fMinAdjacentSuperLayersDistance, "MinAdjacentSuperLayersDistance");
+    ExportValue(node, fMinWireAndRadialShellDistance, "MinWireAndRadialShellDistance");
     ExportValue(node, fShellInnerThickness, "ShellInnerThickness");
     ExportValue(node, fShellSideThickness, "ShellSideThickness");
     ExportValue(node, fShellOuterThickness, "ShellOuterThickness");
