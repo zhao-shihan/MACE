@@ -7,9 +7,8 @@
 #include "MACE/SimMACE/Field/VerticalField.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
-#include "G4DormandPrince745.hh"
 #include "G4EqMagElectricField.hh"
-#include "G4IntegrationDriver.hh"
+#include "G4InterpolationDriver.hh"
 #include "G4NistManager.hh"
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
@@ -22,36 +21,7 @@ DetectorConstruction::DetectorConstruction() :
     NonMoveableBase(),
     G4VUserDetectorConstruction(),
     fCheckOverlap(false),
-    fBeamDegrader(nullptr),
-    fBeamMonitor(nullptr),
-    fCDCBody(nullptr),
-    fCDCCell(nullptr),
-    fCDCFieldWire(nullptr),
-    fCDCLayer(nullptr),
-    fCDCSenseWire(nullptr),
-    fCDCSensitiveVolume(nullptr),
-    fCollimator(nullptr),
-    fEMCal(nullptr),
-    fEMCalField(nullptr),
-    fEMCalShield(nullptr),
-    fFirstBendField(nullptr),
-    fFirstBendSolenoid(nullptr),
-    fFirstTransportField(nullptr),
-    fFirstTransportSolenoid(nullptr),
-    fLinacField(nullptr),
-    fMCP(nullptr),
-    fSecondBendField(nullptr),
-    fSecondBendSolenoid(nullptr),
-    fSecondTransportField(nullptr),
-    fSecondTransportSolenoid(nullptr),
-    fSelectorField(nullptr),
-    fSpectrometerField(nullptr),
-    fSpectrometerMagnet(nullptr),
-    fSpectrometerShield(nullptr),
-    fTarget(nullptr),
-    fThirdTransportField(nullptr),
-    fThirdTransportSolenoid(nullptr),
-    fWorld(nullptr),
+    fWorld(std::make_shared<Core::Geometry::Entity::Fast::World>()),
     fEMCalSensitiveRegion(nullptr),
     fDefaultSolidRegion(nullptr),
     fDefaultGaseousRegion(nullptr),
@@ -66,305 +36,307 @@ DetectorConstruction::DetectorConstruction() :
     fMCPSD(nullptr) {}
 
 G4VPhysicalVolume* DetectorConstruction::Construct() {
-    ConstructVolumes();
-    ConstructMaterials();
-    ConstructRegions();
-    ConstructSDs();
-    ConstructFields();
-    return fWorld->PhysicalVolume();
-}
+    ////////////////////////////////////////////////////////////////
+    // Construct volumes
+    ////////////////////////////////////////////////////////////////
 
-void DetectorConstruction::ConstructVolumes() {
     using namespace Core::Geometry::Entity::Fast;
 
-    // Construct entity objects
-    fBeamDegrader = std::make_shared<BeamDegrader>();
-    fBeamMonitor = std::make_shared<BeamMonitor>();
-    fCDCBody = std::make_shared<CDCBody>();
-    fCDCCell = std::make_shared<CDCCell>();
-    fCDCFieldWire = std::make_shared<CDCFieldWire>();
-    fCDCLayer = std::make_shared<CDCLayer>();
-    fCDCSenseWire = std::make_shared<CDCSenseWire>();
-    fCDCSensitiveVolume = std::make_shared<CDCSensitiveVolume>();
-    fCollimator = std::make_shared<Collimator>();
-    fEMCal = std::make_shared<EMCal>();
-    fEMCalField = std::make_shared<EMCalField>();
-    fEMCalShield = std::make_shared<EMCalShield>();
-    fFirstBendField = std::make_shared<FirstBendField>();
-    fFirstBendSolenoid = std::make_shared<FirstBendSolenoid>();
-    fFirstTransportField = std::make_shared<FirstTransportField>();
-    fFirstTransportSolenoid = std::make_shared<FirstTransportSolenoid>();
-    fLinacField = std::make_shared<LinacField>();
-    fMCP = std::make_shared<MCP>();
-    fSecondBendField = std::make_shared<SecondBendField>();
-    fSecondBendSolenoid = std::make_shared<SecondBendSolenoid>();
-    fSecondTransportField = std::make_shared<SecondTransportField>();
-    fSecondTransportSolenoid = std::make_shared<SecondTransportSolenoid>();
-    fSelectorField = std::make_shared<SelectorField>();
-    fSpectrometerField = std::make_shared<SpectrometerField>();
-    fSpectrometerMagnet = std::make_shared<SpectrometerMagnet>();
-    fSpectrometerShield = std::make_shared<SpectrometerShield>();
-    fTarget = std::make_shared<Target>();
-    fThirdTransportField = std::make_shared<ThirdTransportField>();
-    fThirdTransportSolenoid = std::make_shared<ThirdTransportSolenoid>();
-    fWorld = std::make_shared<World>();
+    // 1
 
-    // Construct hierarchy
-    fCDCBody->AddDaughter(fCDCLayer);
-    fCDCCell->AddDaughter(fCDCFieldWire);
-    fCDCCell->AddDaughter(fCDCSensitiveVolume);
-    fCDCLayer->AddDaughter(fCDCCell);
-    fCDCSensitiveVolume->AddDaughter(fCDCSenseWire);
-    fEMCalField->AddDaughter(fEMCal);
-    fEMCalField->AddDaughter(fMCP);
-    fFirstBendField->AddDaughter(fFirstBendSolenoid);
-    fFirstTransportField->AddDaughter(fFirstTransportSolenoid);
-    fLinacField->AddDaughter(fBeamDegrader);
-    fLinacField->AddDaughter(fBeamMonitor);
-    fLinacField->AddDaughter(fTarget);
-    fSecondBendField->AddDaughter(fSecondBendSolenoid);
-    fSecondTransportField->AddDaughter(fCollimator);
-    fSecondTransportField->AddDaughter(fSecondTransportSolenoid);
-    fSecondTransportField->AddDaughter(fSelectorField);
-    fSpectrometerField->AddDaughter(fCDCBody);
-    fSpectrometerField->AddDaughter(fLinacField);
-    fSpectrometerField->AddDaughter(fSpectrometerMagnet);
-    fThirdTransportField->AddDaughter(fThirdTransportSolenoid);
-    fWorld->AddDaughter(fEMCalField);
-    fWorld->AddDaughter(fEMCalShield);
-    fWorld->AddDaughter(fFirstBendField);
-    fWorld->AddDaughter(fFirstTransportField);
-    fWorld->AddDaughter(fSecondBendField);
-    fWorld->AddDaughter(fSecondTransportField);
-    fWorld->AddDaughter(fSpectrometerField);
-    fWorld->AddDaughter(fSpectrometerShield);
-    fWorld->AddDaughter(fThirdTransportField);
+    auto& emCalField = fWorld->NewDaughter<EMCalField>(fCheckOverlap);
+    auto& emCalShield = fWorld->NewDaughter<EMCalShield>(fCheckOverlap);
+    auto& firstBendField = fWorld->NewDaughter<FirstBendField>(fCheckOverlap);
+    auto& firstTransportField = fWorld->NewDaughter<FirstTransportField>(fCheckOverlap);
+    auto& secondBendField = fWorld->NewDaughter<SecondBendField>(fCheckOverlap);
+    auto& secondTransportField = fWorld->NewDaughter<SecondTransportField>(fCheckOverlap);
+    auto& spectrometerField = fWorld->NewDaughter<SpectrometerField>(fCheckOverlap);
+    auto& spectrometerShield = fWorld->NewDaughter<SpectrometerShield>(fCheckOverlap);
+    auto& thirdTransportField = fWorld->NewDaughter<ThirdTransportField>(fCheckOverlap);
 
-    // Construct volumes
-    fWorld->ConstructSelfAndDescendants(fCheckOverlap);
-}
+    // 2
 
-void DetectorConstruction::ConstructMaterials() {
-    using namespace MACE::Utility::LiteralUnit::Density;
+    auto& emCal = emCalField.NewDaughter<EMCal>(fCheckOverlap);
+    auto& mcp = emCalField.NewDaughter<MCP>(fCheckOverlap);
 
-    const auto nist = G4NistManager::Instance();
+    auto& firstBendSolenoid = firstBendField.NewDaughter<FirstBendSolenoid>(fCheckOverlap);
 
-    const auto aluminium = nist->FindOrBuildMaterial("G4_Al");
-    fBeamDegrader->RegisterMaterial(aluminium);
-    fCDCFieldWire->RegisterMaterial(aluminium);
+    auto& firstTransportSolenoid = firstTransportField.NewDaughter<FirstTransportSolenoid>(fCheckOverlap);
 
-    const auto cdcGas = nist->FindOrBuildMaterial("G4_He");
-    fCDCCell->RegisterMaterial(cdcGas);
-    fCDCLayer->RegisterMaterial(cdcGas);
-    fCDCSensitiveVolume->RegisterMaterial(cdcGas);
+    auto& secondBendSolenoid = secondBendField.NewDaughter<SecondBendSolenoid>(fCheckOverlap);
 
-    const auto cdcShell = nist->BuildMaterialWithNewDensity("CarbonFiber", "G4_C", 1.7_g_cm3);
-    fCDCBody->RegisterMaterial(cdcShell);
+    auto& collimator = secondTransportField.NewDaughter<Collimator>(fCheckOverlap);
+    auto& secondTransportSolenoid = secondTransportField.NewDaughter<SecondTransportSolenoid>(fCheckOverlap);
+    auto& selectorField = secondTransportField.NewDaughter<SelectorField>(fCheckOverlap);
 
-    const auto copper = nist->FindOrBuildMaterial("G4_Cu");
-    fCollimator->RegisterMaterial(copper);
-    fFirstBendSolenoid->RegisterMaterial(copper);
-    fFirstTransportSolenoid->RegisterMaterial(copper);
-    fSecondBendSolenoid->RegisterMaterial(copper);
-    fSecondTransportSolenoid->RegisterMaterial(copper);
-    fThirdTransportSolenoid->RegisterMaterial(copper);
+    auto& cdcBody = spectrometerField.NewDaughter<CDCBody>(fCheckOverlap);
+    auto& linacField = spectrometerField.NewDaughter<LinacField>(fCheckOverlap);
+    auto& spectrometerMagnet = spectrometerField.NewDaughter<SpectrometerMagnet>(fCheckOverlap);
 
-    const auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
-    fEMCal->RegisterMaterial(csI);
+    auto& thirdTransportSolenoid = thirdTransportField.NewDaughter<ThirdTransportSolenoid>(fCheckOverlap);
 
-    const auto iron = nist->FindOrBuildMaterial("G4_Fe");
-    fSpectrometerMagnet->RegisterMaterial(iron);
+    // 3
 
-    const auto lead = nist->FindOrBuildMaterial("G4_Pb");
-    fEMCalShield->RegisterMaterial(lead);
-    fSpectrometerShield->RegisterMaterial(lead);
+    auto& cdcGas = cdcBody.NewDaughter<CDCGas>(fCheckOverlap);
 
-    const auto mcpMaterial = nist->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4_g_cm3);
-    fMCP->RegisterMaterial(mcpMaterial);
+    auto& beamDegrader = linacField.NewDaughter<BeamDegrader>(fCheckOverlap);
+    auto& beamMonitor = linacField.NewDaughter<BeamMonitor>(fCheckOverlap);
+    auto& target = linacField.NewDaughter<Target>(fCheckOverlap);
 
-    const auto plasticScitillator = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
-    fBeamMonitor->RegisterMaterial(plasticScitillator);
+    // 4
 
-    const auto silicaAerogel = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30_mg_cm3);
-    fTarget->RegisterMaterial(silicaAerogel);
+    auto& cdcSuperLayer = cdcGas.NewDaughter<CDCSuperLayer>(fCheckOverlap);
 
-    const auto tungsten = nist->FindOrBuildMaterial("G4_W");
-    fCDCSenseWire->RegisterMaterial(tungsten);
+    // 5
 
-    const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
-    fEMCalField->RegisterMaterial(vacuum);
-    fFirstBendField->RegisterMaterial(vacuum);
-    fFirstTransportField->RegisterMaterial(vacuum);
-    fLinacField->RegisterMaterial(vacuum);
-    fSecondBendField->RegisterMaterial(vacuum);
-    fSecondTransportField->RegisterMaterial(vacuum);
-    fSelectorField->RegisterMaterial(vacuum);
-    fSpectrometerField->RegisterMaterial(vacuum);
-    fThirdTransportField->RegisterMaterial(vacuum);
-    fWorld->RegisterMaterial(vacuum);
-}
+    auto& cdcSenseLayer = cdcSuperLayer.NewDaughter<CDCSenseLayer>(fCheckOverlap);
 
-void DetectorConstruction::ConstructRegions() {
-    const auto defaultCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts();
+    // 6
 
-    // EMCalSensitiveRegion
-    fEMCalSensitiveRegion = new Region("EMCalSensitive", RegionType::EMCalSensitive);
-    fEMCalSensitiveRegion->SetProductionCuts(defaultCuts);
+    auto& cdcFieldWire = cdcSenseLayer.NewDaughter<CDCFieldWire>(fCheckOverlap);
+    auto& cdcCell = cdcSenseLayer.NewDaughter<CDCCell>(fCheckOverlap);
 
-    fEMCal->RegisterRegion(fEMCalSensitiveRegion);
+    // 7
 
-    // DefaultSolidRegion
-    fDefaultSolidRegion = new Region("DefaultSolid", RegionType::DefaultSolid);
-    fDefaultSolidRegion->SetProductionCuts(defaultCuts);
+    auto& cdcSenseWire = cdcCell.NewDaughter<CDCSenseWire>(fCheckOverlap);
 
-    fBeamDegrader->RegisterRegion(fDefaultSolidRegion);
-    fBeamMonitor->RegisterRegion(fDefaultSolidRegion);
-    fCDCBody->RegisterRegion(fDefaultSolidRegion);
-    fCDCFieldWire->RegisterRegion(fDefaultSolidRegion);
-    fCDCSenseWire->RegisterRegion(fDefaultSolidRegion);
-    fCollimator->RegisterRegion(fDefaultSolidRegion);
+    ////////////////////////////////////////////////////////////////
+    // Register materials
+    ////////////////////////////////////////////////////////////////
+    {
+        using namespace MACE::Utility::LiteralUnit::Density;
 
-    // DefaultGaseousRegion
-    fDefaultGaseousRegion = new Region("DefaultGaseous", RegionType::DefaultGaseous);
-    fDefaultGaseousRegion->SetProductionCuts(defaultCuts);
+        const auto nist = G4NistManager::Instance();
 
-    fCDCCell->RegisterRegion(fDefaultGaseousRegion);
-    fCDCLayer->RegisterRegion(fDefaultGaseousRegion);
+        const auto aluminium = nist->FindOrBuildMaterial("G4_Al");
+        beamDegrader.RegisterMaterial(aluminium);
+        cdcFieldWire.RegisterMaterial(aluminium);
 
-    // ShieldRegion
-    fShieldRegion = new Region("Shield", RegionType::Shield);
-    fShieldRegion->SetProductionCuts(defaultCuts);
+        const auto he = nist->FindOrBuildMaterial("G4_He");
+        cdcCell.RegisterMaterial(he);
+        cdcGas.RegisterMaterial(he);
+        cdcSenseLayer.RegisterMaterial(he);
+        cdcSuperLayer.RegisterMaterial(he);
 
-    fEMCalShield->RegisterRegion(fShieldRegion);
-    fSpectrometerShield->RegisterRegion(fShieldRegion);
+        const auto cdcShell = nist->BuildMaterialWithNewDensity("CarbonFiber", "G4_C", 1.7_g_cm3);
+        cdcBody.RegisterMaterial(cdcShell);
 
-    // SolenoidOrMagnetRegion
-    fSolenoidOrMagnetRegion = new Region("SolenoidOrMagnet", RegionType::SolenoidOrMagnet);
-    fSolenoidOrMagnetRegion->SetProductionCuts(defaultCuts);
+        const auto copper = nist->FindOrBuildMaterial("G4_Cu");
+        collimator.RegisterMaterial(copper);
+        firstBendSolenoid.RegisterMaterial(copper);
+        firstTransportSolenoid.RegisterMaterial(copper);
+        secondBendSolenoid.RegisterMaterial(copper);
+        secondTransportSolenoid.RegisterMaterial(copper);
+        thirdTransportSolenoid.RegisterMaterial(copper);
 
-    fFirstBendSolenoid->RegisterRegion(fSolenoidOrMagnetRegion);
-    fFirstTransportSolenoid->RegisterRegion(fSolenoidOrMagnetRegion);
-    fSecondBendSolenoid->RegisterRegion(fSolenoidOrMagnetRegion);
-    fSecondTransportSolenoid->RegisterRegion(fSolenoidOrMagnetRegion);
-    fSpectrometerMagnet->RegisterRegion(fSolenoidOrMagnetRegion);
-    fThirdTransportSolenoid->RegisterRegion(fSolenoidOrMagnetRegion);
+        const auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
+        emCal.RegisterMaterial(csI);
 
-    // SpectrometerSensitiveRegion
-    fSpectrometerSensitiveRegion = new Region("SpectrometerSensitive", RegionType::SpectrometerSensitive);
-    fSpectrometerSensitiveRegion->SetProductionCuts(defaultCuts);
+        const auto iron = nist->FindOrBuildMaterial("G4_Fe");
+        spectrometerMagnet.RegisterMaterial(iron);
 
-    fCDCSensitiveVolume->RegisterRegion(fSpectrometerSensitiveRegion);
+        const auto lead = nist->FindOrBuildMaterial("G4_Pb");
+        emCalShield.RegisterMaterial(lead);
+        spectrometerShield.RegisterMaterial(lead);
 
-    // TargetRegion
-    fTargetRegion = new Region("Target", RegionType::Target);
-    fTargetRegion->SetProductionCuts(defaultCuts);
+        const auto mcpMaterial = nist->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4_g_cm3);
+        mcp.RegisterMaterial(mcpMaterial);
 
-    fTarget->RegisterRegion(fTargetRegion);
+        const auto plasticScitillator = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
+        beamMonitor.RegisterMaterial(plasticScitillator);
 
-    // VacuumRegion
-    fVacuumRegion = new Region("Vacuum", RegionType::Vacuum);
-    fVacuumRegion->SetProductionCuts(defaultCuts);
+        const auto silicaAerogel = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30_mg_cm3);
+        target.RegisterMaterial(silicaAerogel);
 
-    fEMCalField->RegisterRegion(fVacuumRegion);
-    fFirstBendField->RegisterRegion(fVacuumRegion);
-    fFirstTransportField->RegisterRegion(fVacuumRegion);
-    fLinacField->RegisterRegion(fVacuumRegion);
-    fSecondBendField->RegisterRegion(fVacuumRegion);
-    fSecondTransportField->RegisterRegion(fVacuumRegion);
-    fSelectorField->RegisterRegion(fVacuumRegion);
-    fSpectrometerField->RegisterRegion(fVacuumRegion);
-    fThirdTransportField->RegisterRegion(fVacuumRegion);
+        const auto tungsten = nist->FindOrBuildMaterial("G4_W");
+        cdcSenseWire.RegisterMaterial(tungsten);
 
-    // MCPSensitiveRegion
-    fMCPSensitiveRegion = new Region("MCPSensitive", RegionType::MCPSensitive);
-    fMCPSensitiveRegion->SetProductionCuts(defaultCuts);
+        const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
+        emCalField.RegisterMaterial(vacuum);
+        firstBendField.RegisterMaterial(vacuum);
+        firstTransportField.RegisterMaterial(vacuum);
+        linacField.RegisterMaterial(vacuum);
+        secondBendField.RegisterMaterial(vacuum);
+        secondTransportField.RegisterMaterial(vacuum);
+        selectorField.RegisterMaterial(vacuum);
+        spectrometerField.RegisterMaterial(vacuum);
+        thirdTransportField.RegisterMaterial(vacuum);
+        fWorld->RegisterMaterial(vacuum);
+    }
 
-    fMCP->RegisterRegion(fMCPSensitiveRegion);
-}
+    ////////////////////////////////////////////////////////////////
+    // Register regions
+    ////////////////////////////////////////////////////////////////
+    {
+        const auto defaultCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts();
 
-void DetectorConstruction::ConstructSDs() {
-    fCDCSD = new SD::CDCSD(fCDCSensitiveVolume->LogicalVolume()->GetName());
-    fCDCSensitiveVolume->RegisterSD(fCDCSD);
+        // EMCalSensitiveRegion
+        fEMCalSensitiveRegion = new Region("EMCalSensitive", RegionType::EMCalSensitive);
+        fEMCalSensitiveRegion->SetProductionCuts(defaultCuts);
 
-    fEMCalSD = new SD::EMCalSD(fEMCal->LogicalVolume()->GetName());
-    fEMCal->RegisterSD(fEMCalSD);
+        emCal.RegisterRegion(fEMCalSensitiveRegion);
 
-    fMCPSD = new SD::MCPSD(fMCP->LogicalVolume()->GetName());
-    fMCP->RegisterSD(fMCPSD);
-}
+        // DefaultSolidRegion
+        fDefaultSolidRegion = new Region("DefaultSolid", RegionType::DefaultSolid);
+        fDefaultSolidRegion->SetProductionCuts(defaultCuts);
 
-void DetectorConstruction::ConstructFields() {
-    using namespace MACE::Utility::LiteralUnit;
-    using namespace Field;
+        beamDegrader.RegisterRegion(fDefaultSolidRegion);
+        beamMonitor.RegisterRegion(fDefaultSolidRegion);
+        cdcBody.RegisterRegion(fDefaultSolidRegion);
+        cdcFieldWire.RegisterRegion(fDefaultSolidRegion);
+        cdcSenseWire.RegisterRegion(fDefaultSolidRegion);
+        collimator.RegisterRegion(fDefaultSolidRegion);
 
-    constexpr G4double hMin = 1_um;
+        // DefaultGaseousRegion
+        fDefaultGaseousRegion = new Region("DefaultGaseous", RegionType::DefaultGaseous);
+        fDefaultGaseousRegion->SetProductionCuts(defaultCuts);
 
-    constexpr G4double defaultB = 0.1_T;
-    const auto parallelBField = new ParallelField(defaultB);
-    const auto verticalBField = new VerticalField(defaultB);
+        cdcCell.RegisterRegion(fDefaultGaseousRegion);
+        cdcGas.RegisterRegion(fDefaultGaseousRegion);
+        cdcSuperLayer.RegisterRegion(fDefaultGaseousRegion);
 
-    fSpectrometerField->RegisterField<
-        G4UniformMagField,
-        G4TMagFieldEquation<G4UniformMagField>,
-        G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
-        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>>(
-        parallelBField, hMin, 6, true);
+        // ShieldRegion
+        fShieldRegion = new Region("Shield", RegionType::Shield);
+        fShieldRegion->SetProductionCuts(defaultCuts);
 
-    fLinacField->RegisterField<
-        LinacField,
-        G4EqMagElectricField,
-        G4DormandPrince745,
-        G4IntegrationDriver<G4DormandPrince745>>(
-        new LinacField(), hMin, 8, true);
+        emCalShield.RegisterRegion(fShieldRegion);
+        spectrometerShield.RegisterRegion(fShieldRegion);
 
-    fFirstTransportField->RegisterField<
-        G4UniformMagField,
-        G4TMagFieldEquation<G4UniformMagField>,
-        G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
-        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>>(
-        parallelBField, hMin, 6, true);
+        // SolenoidOrMagnetRegion
+        fSolenoidOrMagnetRegion = new Region("SolenoidOrMagnet", RegionType::SolenoidOrMagnet);
+        fSolenoidOrMagnetRegion->SetProductionCuts(defaultCuts);
 
-    fFirstBendField->RegisterField<
-        FirstBendField,
-        G4TMagFieldEquation<Field::FirstBendField>,
-        G4TDormandPrince45<G4TMagFieldEquation<Field::FirstBendField>>,
-        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<Field::FirstBendField>>>>(
-        new FirstBendField(), hMin, 6, true);
+        firstBendSolenoid.RegisterRegion(fSolenoidOrMagnetRegion);
+        firstTransportSolenoid.RegisterRegion(fSolenoidOrMagnetRegion);
+        secondBendSolenoid.RegisterRegion(fSolenoidOrMagnetRegion);
+        secondTransportSolenoid.RegisterRegion(fSolenoidOrMagnetRegion);
+        spectrometerMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
+        thirdTransportSolenoid.RegisterRegion(fSolenoidOrMagnetRegion);
 
-    fSecondTransportField->RegisterField<
-        G4UniformMagField,
-        G4TMagFieldEquation<G4UniformMagField>,
-        G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
-        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>>(
-        verticalBField, hMin, 6, true);
+        // SpectrometerSensitiveRegion
+        fSpectrometerSensitiveRegion = new Region("SpectrometerSensitive", RegionType::SpectrometerSensitive);
+        fSpectrometerSensitiveRegion->SetProductionCuts(defaultCuts);
 
-    fSelectorField->RegisterField<
-        SelectorField,
-        G4EqMagElectricField,
-        G4DormandPrince745,
-        G4IntegrationDriver<G4DormandPrince745>>(
-        new SelectorField(), hMin, 8, true);
+        // TargetRegion
+        fTargetRegion = new Region("Target", RegionType::Target);
+        fTargetRegion->SetProductionCuts(defaultCuts);
 
-    fSecondBendField->RegisterField<
-        SecondBendField,
-        G4TMagFieldEquation<Field::SecondBendField>,
-        G4TDormandPrince45<G4TMagFieldEquation<Field::SecondBendField>>,
-        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<Field::SecondBendField>>>>(
-        new SecondBendField(), hMin, 6, true);
+        target.RegisterRegion(fTargetRegion);
 
-    fThirdTransportField->RegisterField<
-        G4UniformMagField,
-        G4TMagFieldEquation<G4UniformMagField>,
-        G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
-        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>>(
-        parallelBField, hMin, 6, true);
+        // VacuumRegion
+        fVacuumRegion = new Region("Vacuum", RegionType::Vacuum);
+        fVacuumRegion->SetProductionCuts(defaultCuts);
 
-    fEMCalField->RegisterField<
-        G4UniformMagField,
-        G4TMagFieldEquation<G4UniformMagField>,
-        G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>,
-        G4IntegrationDriver<G4TDormandPrince45<G4TMagFieldEquation<G4UniformMagField>>>>(
-        parallelBField, hMin, 6, true);
+        emCalField.RegisterRegion(fVacuumRegion);
+        firstBendField.RegisterRegion(fVacuumRegion);
+        firstTransportField.RegisterRegion(fVacuumRegion);
+        linacField.RegisterRegion(fVacuumRegion);
+        secondBendField.RegisterRegion(fVacuumRegion);
+        secondTransportField.RegisterRegion(fVacuumRegion);
+        selectorField.RegisterRegion(fVacuumRegion);
+        spectrometerField.RegisterRegion(fVacuumRegion);
+        thirdTransportField.RegisterRegion(fVacuumRegion);
+
+        // MCPSensitiveRegion
+        fMCPSensitiveRegion = new Region("MCPSensitive", RegionType::MCPSensitive);
+        fMCPSensitiveRegion->SetProductionCuts(defaultCuts);
+
+        mcp.RegisterRegion(fMCPSensitiveRegion);
+    }
+
+    ////////////////////////////////////////////////////////////////
+    // Register SDs
+    ////////////////////////////////////////////////////////////////
+    {
+        fCDCSD = new SD::CDCSD(cdcCell.LogicalVolume()->GetName());
+        cdcCell.RegisterSD(fCDCSD);
+
+        fEMCalSD = new SD::EMCalSD(emCal.LogicalVolume()->GetName());
+        emCal.RegisterSD(fEMCalSD);
+
+        fMCPSD = new SD::MCPSD(mcp.LogicalVolume()->GetName());
+        mcp.RegisterSD(fMCPSD);
+    }
+
+    ////////////////////////////////////////////////////////////////
+    // Register background fields
+    ////////////////////////////////////////////////////////////////
+    {
+        using namespace MACE::Utility::LiteralUnit::Length;
+        using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
+        using namespace Field;
+
+        constexpr auto hMin = 1_um;
+
+        constexpr auto defaultB = 0.1_T;
+        const auto parallelBField = new ParallelField(defaultB);
+        const auto verticalBField = new VerticalField(defaultB);
+
+        spectrometerField.RegisterField<
+            ParallelField,
+            G4TMagFieldEquation<ParallelField>,
+            G4TDormandPrince45<G4TMagFieldEquation<ParallelField>>,
+            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<ParallelField>>>>(
+            parallelBField, hMin, 6, 6, true);
+
+        linacField.RegisterField<
+            LinacField,
+            G4EqMagElectricField,
+            G4TDormandPrince45<G4EqMagElectricField, 8>,
+            G4InterpolationDriver<G4TDormandPrince45<G4EqMagElectricField, 8>>>(
+            new LinacField, hMin, 8, 8, false);
+
+        firstTransportField.RegisterField<
+            ParallelField,
+            G4TMagFieldEquation<ParallelField>,
+            G4TDormandPrince45<G4TMagFieldEquation<ParallelField>>,
+            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<ParallelField>>>>(
+            parallelBField, hMin, 6, 6, true);
+
+        firstBendField.RegisterField<
+            FirstBendField,
+            G4TMagFieldEquation<FirstBendField>,
+            G4TDormandPrince45<G4TMagFieldEquation<FirstBendField>>,
+            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<FirstBendField>>>>(
+            new FirstBendField, hMin, 6, 6, true);
+
+        secondTransportField.RegisterField<
+            VerticalField,
+            G4TMagFieldEquation<VerticalField>,
+            G4TDormandPrince45<G4TMagFieldEquation<VerticalField>>,
+            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<VerticalField>>>>(
+            verticalBField, hMin, 6, 6, true);
+
+        selectorField.RegisterField<
+            SelectorField,
+            G4EqMagElectricField,
+            G4TDormandPrince45<G4EqMagElectricField, 8>,
+            G4InterpolationDriver<G4TDormandPrince45<G4EqMagElectricField, 8>>>(
+            new SelectorField, hMin, 8, 8, true);
+
+        secondBendField.RegisterField<
+            SecondBendField,
+            G4TMagFieldEquation<SecondBendField>,
+            G4TDormandPrince45<G4TMagFieldEquation<SecondBendField>>,
+            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<SecondBendField>>>>(
+            new SecondBendField, hMin, 6, 6, true);
+
+        thirdTransportField.RegisterField<
+            ParallelField,
+            G4TMagFieldEquation<ParallelField>,
+            G4TDormandPrince45<G4TMagFieldEquation<ParallelField>>,
+            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<ParallelField>>>>(
+            parallelBField, hMin, 6, 6, true);
+
+        emCalField.RegisterField<
+            ParallelField,
+            G4TMagFieldEquation<ParallelField>,
+            G4TDormandPrince45<G4TMagFieldEquation<ParallelField>>,
+            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<ParallelField>>>>(
+            parallelBField, hMin, 6, 6, true);
+    }
+
+    return fWorld->PhysicalVolume().get();
 }
 
 } // namespace MACE::SimMACE::Action

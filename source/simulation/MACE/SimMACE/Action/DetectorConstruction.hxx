@@ -9,6 +9,8 @@
 
 #include "G4VUserDetectorConstruction.hh"
 
+#include "gsl/gsl"
+
 #include <memory>
 
 namespace MACE::SimMACE {
@@ -47,45 +49,9 @@ public:
     auto& GetMCPSD() const { return *fMCPSD; }
 
 private:
-    void ConstructVolumes();
-    void ConstructMaterials();
-    void ConstructRegions();
-    void ConstructSDs();
-    void ConstructFields();
-
-private:
     G4bool fCheckOverlap;
 
-    std::shared_ptr<Core::Geometry::IEntity> fBeamDegrader;
-    std::shared_ptr<Core::Geometry::IEntity> fBeamMonitor;
-    std::shared_ptr<Core::Geometry::IEntity> fCDCBody;
-    std::shared_ptr<Core::Geometry::IEntity> fCDCCell;
-    std::shared_ptr<Core::Geometry::IEntity> fCDCFieldWire;
-    std::shared_ptr<Core::Geometry::IEntity> fCDCLayer;
-    std::shared_ptr<Core::Geometry::IEntity> fCDCSenseWire;
-    std::shared_ptr<Core::Geometry::IEntity> fCDCSensitiveVolume;
-    std::shared_ptr<Core::Geometry::IEntity> fCollimator;
-    std::shared_ptr<Core::Geometry::IEntity> fEMCal;
-    std::shared_ptr<Core::Geometry::IEntity> fEMCalField;
-    std::shared_ptr<Core::Geometry::IEntity> fEMCalShield;
-    std::shared_ptr<Core::Geometry::IEntity> fFirstBendField;
-    std::shared_ptr<Core::Geometry::IEntity> fFirstBendSolenoid;
-    std::shared_ptr<Core::Geometry::IEntity> fFirstTransportField;
-    std::shared_ptr<Core::Geometry::IEntity> fFirstTransportSolenoid;
-    std::shared_ptr<Core::Geometry::IEntity> fLinacField;
-    std::shared_ptr<Core::Geometry::IEntity> fMCP;
-    std::shared_ptr<Core::Geometry::IEntity> fSecondBendField;
-    std::shared_ptr<Core::Geometry::IEntity> fSecondBendSolenoid;
-    std::shared_ptr<Core::Geometry::IEntity> fSecondTransportField;
-    std::shared_ptr<Core::Geometry::IEntity> fSecondTransportSolenoid;
-    std::shared_ptr<Core::Geometry::IEntity> fSelectorField;
-    std::shared_ptr<Core::Geometry::IEntity> fSpectrometerField;
-    std::shared_ptr<Core::Geometry::IEntity> fSpectrometerMagnet;
-    std::shared_ptr<Core::Geometry::IEntity> fSpectrometerShield;
-    std::shared_ptr<Core::Geometry::IEntity> fTarget;
-    std::shared_ptr<Core::Geometry::IEntity> fThirdTransportField;
-    std::shared_ptr<Core::Geometry::IEntity> fThirdTransportSolenoid;
-    std::shared_ptr<Core::Geometry::IEntity> fWorld;
+    gsl::not_null<std::shared_ptr<Core::Geometry::IEntity>> fWorld;
 
     Region* fEMCalSensitiveRegion;
     Region* fDefaultSolidRegion;
