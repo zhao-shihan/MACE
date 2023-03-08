@@ -10,7 +10,7 @@ namespace MACE::Core::Geometry::Entity::Fast {
 
 using namespace MACE::Utility::PhysicalConstant;
 
-void SecondTransportField::ConstructSelf(G4bool checkOverlaps) {
+void SecondTransportField::Construct(G4bool checkOverlaps) {
     const auto& description = Description::TransportLine::Instance();
     const auto name = "SecondTransportField";
     const auto length = description.SecondStraightLength();
@@ -32,7 +32,7 @@ void SecondTransportField::ConstructSelf(G4bool checkOverlaps) {
         transform,
         logic,
         name,
-        Mother()->LogicalVolume(),
+        Mother().LogicalVolume().get(),
         false,
         0,
         checkOverlaps);

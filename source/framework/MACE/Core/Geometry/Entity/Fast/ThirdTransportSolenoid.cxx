@@ -10,7 +10,7 @@ namespace MACE::Core::Geometry::Entity::Fast {
 
 using namespace MACE::Utility::PhysicalConstant;
 
-void ThirdTransportSolenoid::ConstructSelf(G4bool checkOverlaps) {
+void ThirdTransportSolenoid::Construct(G4bool checkOverlaps) {
     const auto& description = Description::TransportLine::Instance();
     const auto name = "ThirdTransportSolenoid";
     const auto innerRadius = description.SolenoidInnerRadius();
@@ -32,7 +32,7 @@ void ThirdTransportSolenoid::ConstructSelf(G4bool checkOverlaps) {
         G4Transform3D(),
         logic,
         name,
-        Mother()->LogicalVolume(),
+        Mother().LogicalVolume().get(),
         false,
         0,
         checkOverlaps);

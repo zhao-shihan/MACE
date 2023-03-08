@@ -9,7 +9,7 @@ namespace MACE::Core::Geometry::Entity::Fast {
 
 using namespace MACE::Utility::PhysicalConstant;
 
-void EMCalField::ConstructSelf(G4bool checkOverlaps) {
+void EMCalField::Construct(G4bool checkOverlaps) {
     const auto& description = Description::EMCalField::Instance();
     auto name = description.GetName();
     auto radius = description.Radius();
@@ -31,7 +31,7 @@ void EMCalField::ConstructSelf(G4bool checkOverlaps) {
         transform,
         logic,
         name,
-        Mother()->LogicalVolume(),
+        Mother().LogicalVolume().get(),
         false,
         0,
         checkOverlaps);

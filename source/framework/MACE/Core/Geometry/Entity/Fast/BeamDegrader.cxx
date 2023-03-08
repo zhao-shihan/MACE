@@ -14,7 +14,7 @@ bool BeamDegrader::Enabled() const {
     return Description::BeamDegrader::Instance().Enabled();
 }
 
-void BeamDegrader::ConstructSelf(G4bool checkOverlaps) {
+void BeamDegrader::Construct(G4bool checkOverlaps) {
     const auto& description = Description::BeamDegrader::Instance();
     const auto name = description.GetName();
     const auto width = description.Width();
@@ -34,7 +34,7 @@ void BeamDegrader::ConstructSelf(G4bool checkOverlaps) {
         transform,
         logic,
         name,
-        Mother()->LogicalVolume(),
+        Mother().LogicalVolume().get(),
         false,
         0,
         checkOverlaps);

@@ -9,7 +9,7 @@
 using MACE::Core::Geometry::Entity::Fast::Target;
 using namespace MACE::Utility::LiteralUnit::Density;
 
-void Target::ConstructSelf(G4bool checkOverlaps) {
+void Target::Construct(G4bool checkOverlaps) {
     const auto& description = Description::Target::Instance();
     const auto& name = description.GetName();
     switch (description.ShapeType()) {
@@ -31,7 +31,7 @@ void Target::ConstructSelf(G4bool checkOverlaps) {
             transform,
             logic,
             name,
-            Mother()->LogicalVolume(),
+            Mother().LogicalVolume().get(),
             false,
             0,
             checkOverlaps);

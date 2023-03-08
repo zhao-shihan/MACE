@@ -9,7 +9,7 @@
 using MACE::Core::Geometry::Entity::Fast::MCP;
 using namespace MACE::Utility::LiteralUnit::Density;
 
-void MCP::ConstructSelf(G4bool checkOverlaps) {
+void MCP::Construct(G4bool checkOverlaps) {
     const auto& description = Description::MCP::Instance();
     const auto name = description.GetName();
     const auto width = description.Width();
@@ -30,7 +30,7 @@ void MCP::ConstructSelf(G4bool checkOverlaps) {
             G4ThreeVector(0, 0, thickness / 2)),
         logic,
         name,
-        Mother()->LogicalVolume(),
+        Mother().LogicalVolume().get(),
         false,
         0,
         checkOverlaps);

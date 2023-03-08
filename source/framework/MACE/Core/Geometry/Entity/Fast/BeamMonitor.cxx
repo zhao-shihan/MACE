@@ -14,7 +14,7 @@ bool BeamMonitor::Enabled() const {
     return Description::BeamMonitor::Instance().Enabled();
 }
 
-void BeamMonitor::ConstructSelf(G4bool checkOverlaps) {
+void BeamMonitor::Construct(G4bool checkOverlaps) {
     const auto& description = Description::BeamMonitor::Instance();
     const auto name = description.GetName();
     const auto width = description.Width();
@@ -34,7 +34,7 @@ void BeamMonitor::ConstructSelf(G4bool checkOverlaps) {
         transform,
         logic,
         name,
-        Mother()->LogicalVolume(),
+        Mother().LogicalVolume().get(),
         false,
         0,
         checkOverlaps);

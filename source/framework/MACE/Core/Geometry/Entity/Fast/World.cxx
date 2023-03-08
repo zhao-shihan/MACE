@@ -10,7 +10,7 @@ using MACE::Core::Geometry::Entity::Fast::World;
 using namespace MACE::Utility::LiteralUnit::Density;
 using namespace MACE::Utility::LiteralUnit::Temperature;
 
-void World::ConstructSelf(G4bool checkOverlaps) {
+void World::Construct(G4bool checkOverlaps) {
     const auto& description = Description::World::Instance();
     auto name = description.GetName();
     auto halfX = description.HalfXExtent();

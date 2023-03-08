@@ -9,7 +9,7 @@ namespace MACE::Core::Geometry::Entity::Fast {
 
 using namespace MACE::Utility::PhysicalConstant;
 
-void SelectorField::ConstructSelf(G4bool checkOverlaps) {
+void SelectorField::Construct(G4bool checkOverlaps) {
     const auto& description = Description::SelectorField::Instance();
     const auto name = description.GetName();
     const auto radius = description.Radius();
@@ -33,7 +33,7 @@ void SelectorField::ConstructSelf(G4bool checkOverlaps) {
             G4ThreeVector(0, 0, zPosition)),
         logic,
         name,
-        Mother()->LogicalVolume(),
+        Mother().LogicalVolume().get(),
         false,
         0,
         checkOverlaps);

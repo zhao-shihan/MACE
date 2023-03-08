@@ -10,7 +10,7 @@ namespace MACE::Core::Geometry::Entity::Fast {
 
 using namespace MACE::Utility::PhysicalConstant;
 
-void Collimator::ConstructSelf(G4bool checkOverlaps) {
+void Collimator::Construct(G4bool checkOverlaps) {
     const auto& description = Description::Collimator::Instance();
     const auto name = description.GetName();
     const auto innerRadius = description.InnerRadius();
@@ -39,7 +39,7 @@ void Collimator::ConstructSelf(G4bool checkOverlaps) {
                 G4ThreeVector(0.0, 0.0, axialPosition)),
             logic,
             name,
-            Mother()->LogicalVolume(),
+            Mother().LogicalVolume().get(),
             false,
             0,
             checkOverlaps);

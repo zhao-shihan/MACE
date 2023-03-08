@@ -9,7 +9,7 @@ namespace MACE::Core::Geometry::Entity::Fast {
 
 using namespace MACE::Utility::PhysicalConstant;
 
-void SpectrometerField::ConstructSelf(G4bool checkOverlaps) {
+void SpectrometerField::Construct(G4bool checkOverlaps) {
     const auto& description = Description::SpectrometerField::Instance();
     auto name = description.GetName();
     auto length = description.Length();
@@ -30,7 +30,7 @@ void SpectrometerField::ConstructSelf(G4bool checkOverlaps) {
         G4Transform3D(),
         logic,
         name,
-        Mother()->LogicalVolume(),
+        Mother().LogicalVolume().get(),
         false,
         0,
         checkOverlaps);
