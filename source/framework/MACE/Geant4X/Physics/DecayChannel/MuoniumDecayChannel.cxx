@@ -45,12 +45,16 @@
 // ------------------------------------------------------------
 
 #include "MACE/Geant4X/Physics/DecayChannel/MuoniumDecayChannel.hxx"
+#include "MACE/Math/FindRoot.hxx"
+#include "MACE/Math/IntegerPower.hxx"
+#include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4DecayProducts.hh"
 #include "G4LorentzRotation.hh"
 #include "G4LorentzVector.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4RandomDirection.hh"
 #include "G4RotationMatrix.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VDecayChannel.hh"
@@ -58,20 +62,17 @@
 
 namespace MACE::Geant4X::Physics::DecayChannel {
 
-MuoniumDecayChannel::MuoniumDecayChannel(const G4String& theParentName, G4double theBR, G4int verbose) :
+MuoniumDecayChannel::MuoniumDecayChannel(const G4String& parentName, G4double br, G4int verbose) :
     G4VDecayChannel("MuoniumDecay", verbose) {
-    if (theParentName == "M") {
-        SetBR(theBR);
-        SetParent(theParentName);
-        SetNumberOfDaughters(4);
+    SetBR(br);
+    SetParent(parentName);
+    SetNumberOfDaughters(4);
+    if (parentName == "M") {
         SetDaughter(0, "e+");
         SetDaughter(1, "nu_e");
         SetDaughter(2, "anti_nu_mu");
         SetDaughter(3, "e-");
-    } else if (theParentName == "anti_M") {
-        SetBR(theBR);
-        SetParent(theParentName);
-        SetNumberOfDaughters(4);
+    } else if (parentName == "anti_M") {
         SetDaughter(0, "e-");
         SetDaughter(1, "anti_nu_e");
         SetDaughter(2, "nu_mu");
@@ -81,7 +82,7 @@ MuoniumDecayChannel::MuoniumDecayChannel(const G4String& theParentName, G4double
         if (GetVerboseLevel() > 0) {
             G4cout << "MuoniumDecayChannel::(Constructor) says\n"
                       "\tParent particle is not muonium (M) or anti muonium (anti_m) but "
-                   << theParentName << G4endl;
+                   << parentName << G4endl;
         }
 #endif
     }
@@ -90,18 +91,20 @@ MuoniumDecayChannel::MuoniumDecayChannel(const G4String& theParentName, G4double
 G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
     using namespace MACE::Utility::PhysicalConstant;
 
-    // this version neglects muon polarization,and electron mass
+    // this version neglects muon polarization, and electron mass
     //              assumes the pure V-A coupling
     //              the Neutrinos are correctly V-A
 
 #ifdef G4VERBOSE
-    if (GetVerboseLevel() > 1) G4cout << "G4MuonDecayChannel::DecayIt ";
+    if (GetVerboseLevel() > 1) {
+        G4cout << "G4MuonDecayChannel::DecayIt ";
+    }
 #endif
 
     CheckAndFillParent();
     CheckAndFillDaughters();
 
-    // parent mass
+    // parent mass (first 3 daughter, muon mass)
     constexpr auto parentmass = muon_mass_c2;
 
     // daughters'mass
@@ -158,9 +161,7 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
 
     direction0 *= rot;
 
-    auto daughterparticle = new G4DynamicParticle(G4MT_daughters[0], direction0 * daughtermomentum[0]);
-
-    products->PushProducts(daughterparticle);
+    products->PushProducts(new G4DynamicParticle(G4MT_daughters[0], direction0 * daughtermomentum[0]));
 
     // electronic neutrino  1
 
@@ -169,8 +170,7 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
 
     direction1 *= rot;
 
-    auto daughterparticle1 = new G4DynamicParticle(G4MT_daughters[1], direction1 * daughtermomentum[1]);
-    products->PushProducts(daughterparticle1);
+    products->PushProducts(new G4DynamicParticle(G4MT_daughters[1], direction1 * daughtermomentum[1]));
 
     // muonnic neutrino 2
 
@@ -179,49 +179,33 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
 
     direction2 *= rot;
 
-    auto daughterparticle2 = new G4DynamicParticle(G4MT_daughters[2], direction2 * daughtermomentum[2]);
-    products->PushProducts(daughterparticle2);
+    products->PushProducts(new G4DynamicParticle(G4MT_daughters[2], direction2 * daughtermomentum[2]));
 
     // atomic shell electron 3
 
-    // momentum distribution
-    constexpr std::array<G4double, 501> atomicShellMomentumCDF{
-#include "MuoniumAtomicShellMomentumCDF.dat"
-    };
-    constexpr G4double asmCDFBinWidth = 0.0001 * MeV;
+    using namespace Utility::LiteralUnit::MathConstant;
 
-    // momentum magnitude
     x = G4UniformRand();
-    G4double atomicShellMomentum;
-    if (const auto right = std::ranges::upper_bound(atomicShellMomentumCDF, x);
-        right != atomicShellMomentumCDF.cend()) [[likely]] {
-        const auto x2 = *right;
-        const auto p2 = asmCDFBinWidth * std::distance(atomicShellMomentumCDF.cbegin(), right);
-        const auto x1 = *std::prev(right);
-        const auto p1 = p2 - asmCDFBinWidth;
-        atomicShellMomentum = p1 + (p2 - p1) / (x2 - x1) * (x - x1);
-    } else [[unlikely]] {
-        constexpr auto cdfSize = atomicShellMomentumCDF.size();
-        constexpr auto x0 = atomicShellMomentumCDF[cdfSize - 3];
-        constexpr auto p0 = asmCDFBinWidth * (cdfSize - 3);
-        constexpr auto x1 = atomicShellMomentumCDF[cdfSize - 2];
-        constexpr auto p1 = asmCDFBinWidth * (cdfSize - 2);
-        constexpr auto x2 = atomicShellMomentumCDF[cdfSize - 1];
-        constexpr auto p2 = asmCDFBinWidth * (cdfSize - 1);
-        const auto k0 = (x - x1) / (x0 - x1) * (x - x2) / (x0 - x2);
-        const auto k1 = (x - x0) / (x1 - x0) * (x - x2) / (x1 - x2);
-        const auto k2 = (x - x0) / (x2 - x0) * (x - x1) / (x2 - x1);
-        atomicShellMomentum = k0 * p0 + k1 * p1 + k2 * p2;
-    }
-    // momentum direction
-    const auto cosTheta3 = 2 * G4UniformRand() - 1;
-    const auto sinTheta3 = std::sqrt(1 - cosTheta3 * cosTheta3);
-    const auto phi3 = twopi * G4UniformRand();
-    G4ThreeVector atomicShellDirection(sinTheta3 * std::cos(phi3),
-                                       sinTheta3 * std::sin(phi3),
-                                       cosTheta3);
-    auto daughterparticle3 = new G4DynamicParticle(G4MT_daughters[3], atomicShellDirection * atomicShellMomentum);
-    products->PushProducts(daughterparticle3);
+    const auto atomicShellMomentum = fine_structure_const * muonium_reduced_mass_c2 *
+                                     Math::FindRoot(
+                                         // CDF - (uniform random)
+                                         [&x](const auto p) {
+                                             const auto p2 = Math::Pow2(p);
+                                             return (2 / 3_pi) *
+                                                        p * (p2 * (3 * p2 + 8) - 3) /
+                                                        Math::Pow3(p2 + 1) +
+                                                    1_inv_pi * std::atan(p) - x;
+                                         },
+                                         // PDF
+                                         [](const auto p) {
+                                             const auto p2 = Math::Pow2(p);
+                                             return 32_inv_pi * p2 / Math::Pow4(p2 + 1);
+                                         },
+                                         // <p*>
+                                         8 / 3_pi)
+                                         .first *
+                                     G4RandomDirection();
+    products->PushProducts(new G4DynamicParticle(G4MT_daughters[3], atomicShellMomentum));
 
     // output message
 #ifdef G4VERBOSE

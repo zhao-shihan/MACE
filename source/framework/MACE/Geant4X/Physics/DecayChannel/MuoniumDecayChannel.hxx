@@ -50,10 +50,7 @@ namespace MACE::Geant4X::Physics::DecayChannel {
 //
 class MuoniumDecayChannel final : public G4VDecayChannel {
 public:
-    MuoniumDecayChannel(const G4String& theParentName, G4double theBR, G4int verbose = 1);
-    ~MuoniumDecayChannel() noexcept = default;
-    MuoniumDecayChannel(const MuoniumDecayChannel&) = delete;
-    MuoniumDecayChannel& operator=(const MuoniumDecayChannel&) = delete;
+    MuoniumDecayChannel(const G4String& parentName, G4double br, G4int verbose = 1);
 
     G4DecayProducts* DecayIt(G4double) override;
 };
