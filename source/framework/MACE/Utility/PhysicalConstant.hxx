@@ -1,5 +1,7 @@
 #pragma once
 
+#include "MACE/Math/IntegerPower.hxx"
+
 #include "CLHEP/Units/PhysicalConstants.h"
 
 namespace MACE::Utility::PhysicalConstant {
@@ -48,7 +50,9 @@ using CLHEP::eplus;
 // --        Extra constants         -- //
 constexpr auto muon_mass_c2 = 105.6583755 * CLHEP::MeV;
 constexpr auto muon_lifetime = 2.1969811 * CLHEP::us;
-constexpr auto muonium_mass_c2 = muon_mass_c2 + electron_mass_c2 - 13.475 * CLHEP::eV;
+constexpr auto muonium_reduced_mass_c2 = 1 / (1 / electron_mass_c2 + 1 / muon_mass_c2);
+constexpr auto muonium_mass_c2 = muon_mass_c2 + electron_mass_c2 -
+                                 Math::Pow2(fine_structure_const * muonium_reduced_mass_c2) / (2 * electron_mass_c2);
 constexpr auto muonium_lifetime = muon_lifetime;
 // --        Extra constants         -- //
 
