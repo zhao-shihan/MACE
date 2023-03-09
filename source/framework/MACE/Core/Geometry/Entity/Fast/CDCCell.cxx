@@ -35,14 +35,15 @@ void CDCCell::Construct(G4bool checkOverlaps) {
                  halfWidthCorrection = (1 - cdc.SensitiveWidthFactor()) * sense.cellWidth / 2] {
                     const auto rIn = sense.innerRadius + rFW + halfWidthCorrection;
                     const auto rOut = sense.outerRadius + rFW - halfWidthCorrection;
+                    const auto senseWidth = cdc.SensitiveWidthFactor() * super.cellAzimuthWidth;
                     if (super.isAxial) {
                         return static_cast<G4VSolid*>(Make<G4Tubs>(
                             name,
                             rIn,
                             rOut,
                             sense.halfLength,
-                            0,
-                            2_pi));
+                            -senseWidth / 2,
+                            senseWidth));
                     } else {
                         const auto secHalfPhiS = 1 / std::cos(sense.stereoAzimuthAngle / 2);
                         return static_cast<G4VSolid*>(Make<G4TwistedTubs>(
@@ -51,7 +52,7 @@ void CDCCell::Construct(G4bool checkOverlaps) {
                             rIn * secHalfPhiS,
                             rOut * secHalfPhiS,
                             sense.halfLength,
-                            cdc.SensitiveWidthFactor() * super.cellAzimuthWidth));
+                            senseWidth));
                     }
                 };
             const auto logic = Make<G4LogicalVolume>(
