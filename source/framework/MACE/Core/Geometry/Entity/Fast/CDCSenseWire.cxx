@@ -20,7 +20,6 @@ void CDCSenseWire::Construct(G4bool checkOverlaps) {
     const auto name = "CDCSenseWire";
     const auto& cdc = Description::CDC::Instance();
     const auto rSenseWire = cdc.SenseWireDiameter() / 2;
-    const auto rFieldWire = cdc.FieldWireDiameter() / 2;
     const auto& cellMap = cdc.CellMap();
 
     for (auto&& super : std::as_const(cdc.LayerConfiguration())) {
