@@ -22,15 +22,19 @@ CDCHelixTrack::CDCHelixTrack(const CDCPhysicsTrack& physTrack, Double_t B) :
     fRadius(),
     fZ0(),
     fAlpha() {
-    std::tie(fCenter,
-             fRadius,
-             fZ0,
-             fAlpha) =
-        CDCTrackOperation::ConvertToHelixParameters(std::tie(physTrack.GetVertexPosition(),
-                                                             physTrack.GetVertexEnergy(),
-                                                             physTrack.GetVertexMomentum(),
-                                                             physTrack.GetParticle()),
+    const auto [center,
+                radius,
+                z0,
+                alpha] =
+        CDCTrackOperation::ConvertToHelixParameters(std::tuple{Utility::Vector3Cast<Eigen::Vector3d>(physTrack.VertexPosition()),
+                                                               physTrack.VertexEnergy(),
+                                                               Utility::Vector3Cast<Eigen::Vector3d>(physTrack.VertexMomentum()),
+                                                               physTrack.Particle()},
                                                     B);
+    Utility::AssignVector2D(fCenter, center);
+    fRadius = radius;
+    fZ0 = z0;
+    fAlpha = alpha;
 }
 
 void CDCHelixTrack::FillBranchSockets() const noexcept {

@@ -23,15 +23,19 @@ CDCHelixSimTrack::CDCHelixSimTrack(const CDCPhysicsSimTrack& physTrack, Double_t
     fTrueRadius(),
     fTrueZ0(),
     fTrueAlpha() {
-    std::tie(fTrueCenter,
-             fTrueRadius,
-             fTrueZ0,
-             fTrueAlpha) =
-        CDCTrackOperation::ConvertToHelixParameters(std::tie(physTrack.GetTrueVertexPosition(),
-                                                             physTrack.GetTrueVertexEnergy(),
-                                                             physTrack.GetTrueVertexMomentum(),
-                                                             physTrack.GetTrueParticle()),
+    const auto [trueCenter,
+                trueRadius,
+                trueZ0,
+                trueAlpha] =
+        CDCTrackOperation::ConvertToHelixParameters(std::tuple{Utility::Vector3Cast<Eigen::Vector3d>(physTrack.GetTrueVertexPosition()),
+                                                               physTrack.GetTrueVertexEnergy(),
+                                                               Utility::Vector3Cast<Eigen::Vector3d>(physTrack.GetTrueVertexMomentum()),
+                                                               physTrack.GetTrueParticle()},
                                                     B);
+    Utility::AssignVector2D(fTrueCenter, trueCenter);
+    fTrueRadius = trueRadius;
+    fTrueZ0 = trueZ0;
+    fTrueAlpha = trueAlpha;
 }
 
 void CDCHelixSimTrack::FillBranchSockets() const noexcept {

@@ -2,8 +2,10 @@
 
 #include "MACE/Core/DataModel/SimTrack/CDCSimTrackBase.hxx"
 #include "MACE/Core/DataModel/Track/CDCPhysicsTrack.hxx"
+#include "MACE/stdx/array_alias.hxx"
 #include "MACE/Utility/AssignVector.hxx"
 
+#include <array>
 #include <string_view>
 #include <utility>
 
@@ -34,11 +36,11 @@ public:
     const auto& GetTrueParticle() const { return fTrueParticle; }
 
     void SetTrueVertexPosition(auto&&... x)
-        requires(sizeof...(x) > 0)
+        requires(sizeof...(x) >= 1)
     { Utility::AssignVector3D(fTrueVertexPosition, std::forward<decltype(x)>(x)...); }
     void SetTrueVertexEnergy(double E) { fTrueVertexEnergy = E; }
     void SetTrueVertexMomentum(auto&&... p)
-        requires(sizeof...(p) > 0)
+        requires(sizeof...(p) >= 1)
     { Utility::AssignVector3D(fTrueVertexMomentum, std::forward<decltype(p)>(p)...); }
     void SetTrueParticle(auto&& p) { fTrueParticle = std::forward<decltype(p)>(p); }
 
@@ -48,9 +50,9 @@ public:
     static constexpr auto BasicTreeName() noexcept { return "PhyTrk"sv; }
 
 private:
-    Eigen::Vector3d fTrueVertexPosition;
+    stdx::array3d fTrueVertexPosition;
     double fTrueVertexEnergy;
-    Eigen::Vector3d fTrueVertexMomentum;
+    stdx::array3d fTrueVertexMomentum;
     Utility::ShortString fTrueParticle;
 
     static BranchSocket::Vector3FBranchSocket fgTrueVertexPosition;

@@ -5,9 +5,11 @@
 #include "MACE/Core/DataModel/CDCTrackOperation.hxx"
 #include "MACE/Core/DataModel/Track/CDCTrackBase.hxx"
 #include "MACE/Core/DataModel/TransientData.hxx"
+#include "MACE/stdx/array_alias.hxx"
 #include "MACE/Utility/AssignVector.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
+#include <array>
 #include <string_view>
 #include <utility>
 
@@ -42,10 +44,10 @@ public:
     void SetZ0(double val) { fZ0 = val; }
     void SetAlpha(double val) { fAlpha = val; }
 
-    auto CalcPhi0() const { return CDCTrackOperation::CalcHelixPhi0(fCenter); }
-    auto CalcPhi(const Eigen::Vector2d& point) const { return CDCTrackOperation::CalcHelixPhi(fCenter, point); }
-    auto CalcPhi(double x, double y) const { return CDCTrackOperation::CalcHelixPhi(fCenter, x, y); }
-    auto CalcPoint(double phi) { return CDCTrackOperation::CalcHelixPoint(std::tie(fCenter, fRadius, fZ0, fAlpha), phi); }
+    auto CalcPhi0() const { return CDCTrackOperation::CalcHelixPhi0(Utility::Vector2Cast<Eigen::Vector2d>(fCenter)); }
+    auto CalcPhi(const Eigen::Vector2d& point) const { return CDCTrackOperation::CalcHelixPhi(Utility::Vector2Cast<Eigen::Vector2d>(fCenter), point); }
+    auto CalcPhi(double x, double y) const { return CDCTrackOperation::CalcHelixPhi(Utility::Vector2Cast<Eigen::Vector2d>(fCenter), x, y); }
+    auto CalcPoint(double phi) { return CDCTrackOperation::CalcHelixPoint(std::tuple{Utility::Vector2Cast<Eigen::Vector2d>(fCenter), fRadius, fZ0, fAlpha}, phi); }
 
     void FillBranchSockets() const noexcept;
     static void CreateBranches(TTree& tree);
@@ -53,7 +55,7 @@ public:
     static constexpr auto BasicTreeName() noexcept { return "HlxTrk"sv; }
 
 private:
-    Eigen::Vector2d fCenter;
+    stdx::array2d fCenter;
     double fRadius;
     double fZ0;
     double fAlpha;

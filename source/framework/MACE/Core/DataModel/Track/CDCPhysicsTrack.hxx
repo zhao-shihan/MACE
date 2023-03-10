@@ -5,10 +5,12 @@
 #include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "MACE/Core/DataModel/Track/CDCTrackBase.hxx"
 #include "MACE/Core/DataModel/TransientData.hxx"
+#include "MACE/stdx/array_alias.hxx"
 #include "MACE/Utility/AssignVector.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
+#include <array>
 #include <string_view>
 #include <utility>
 
@@ -32,19 +34,19 @@ public:
 
     explicit CDCPhysicsTrack(const CDCHelixTrack& helix, double phiVertex = 0, double B = 0.1_T, double mass = electron_mass_c2);
 
-    const auto& GetVertexPosition() const { return fVertexPosition; }
-    const auto& GetVertexEnergy() const { return fVertexEnergy; }
-    const auto& GetVertexMomentum() const { return fVertexMomentum; }
-    const auto& GetParticle() const { return fParticle; }
+    const auto& VertexPosition() const { return fVertexPosition; }
+    const auto& VertexEnergy() const { return fVertexEnergy; }
+    const auto& VertexMomentum() const { return fVertexMomentum; }
+    const auto& Particle() const { return fParticle; }
 
-    void SetVertexPosition(auto&&... x)
-        requires(sizeof...(x) > 0)
+    void VertexPosition(auto&&... x)
+        requires(sizeof...(x) >= 1)
     { Utility::AssignVector3D(fVertexPosition, std::forward<decltype(x)>(x)...); }
-    void SetVertexEnergy(double E) { fVertexEnergy = E; }
-    void SetVertexMomentum(auto&&... p)
-        requires(sizeof...(p) > 0)
+    void VertexEnergy(double E) { fVertexEnergy = E; }
+    void VertexMomentum(auto&&... p)
+        requires(sizeof...(p) >= 1)
     { Utility::AssignVector3D(fVertexMomentum, std::forward<decltype(p)>(p)...); }
-    void SetParticle(auto&& p) { fParticle = std::forward<decltype(p)>(p); }
+    void Particle(auto&& p) { fParticle = std::forward<decltype(p)>(p); }
 
     void FillBranchSockets() const noexcept;
     static void CreateBranches(TTree& tree);
@@ -52,9 +54,9 @@ public:
     static constexpr auto BasicTreeName() noexcept { return "PhyTrk"sv; }
 
 private:
-    Eigen::Vector3d fVertexPosition;
+    stdx::array3d fVertexPosition;
     double fVertexEnergy;
-    Eigen::Vector3d fVertexMomentum;
+    stdx::array3d fVertexMomentum;
     ShortString fParticle;
 
     static BranchSocket::Vector3FBranchSocket fgVertexPosition;

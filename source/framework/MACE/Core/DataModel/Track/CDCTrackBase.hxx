@@ -17,11 +17,11 @@ public:
 
     const auto& GetNumHits() const { return fNumHits; }
     const auto& GetChi2() const { return fChi2; }
-    const auto& GetVertexTime() const { return fVertexTime; }
+    const auto& VertexTime() const { return fVertexTime; }
 
     void SetNumHits(int n) { fNumHits = n; }
     void SetChi2(double val) { fChi2 = val; }
-    void SetVertexTime(double val) { fVertexTime = val; }
+    void VertexTime(double val) { fVertexTime = val; }
 
 protected:
     void FillBranchSockets() const noexcept;

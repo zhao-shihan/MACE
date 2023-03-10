@@ -3,8 +3,10 @@
 #include "MACE/Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "MACE/Core/DataModel/TransientData.hxx"
+#include "MACE/stdx/array_alias.hxx"
 #include "MACE/Utility/AssignVector.hxx"
 
+#include <array>
 #include <string_view>
 #include <utility>
 
@@ -22,26 +24,26 @@ public:
     MuoniumTrack& operator=(const MuoniumTrack&) noexcept = default;
     MuoniumTrack& operator=(MuoniumTrack&&) noexcept = default;
 
-    const auto& GetVertexTime() const { return fVertexTime; }
-    const auto& GetVertexPosition() const { return fVertexPosition; }
-    const auto& GetVertexMomentum() const { return fVertexMomentum; }
+    const auto& VertexTime() const { return fVertexTime; }
+    const auto& VertexPosition() const { return fVertexPosition; }
+    const auto& VertexMomentum() const { return fVertexMomentum; }
     const auto& GetDecayTime() const { return fDecayTime; }
     const auto& GetDecayPosition() const { return fDecayPosition; }
     const auto& GetDecayMomentum() const { return fDecayMomentum; }
 
-    void SetVertexTime(double val) { fVertexTime = val; }
-    void SetVertexPosition(auto&&... x)
-        requires(sizeof...(x) > 0)
+    void VertexTime(double val) { fVertexTime = val; }
+    void VertexPosition(auto&&... x)
+        requires(sizeof...(x) >= 1)
     { Utility::AssignVector3D(fVertexPosition, std::forward<decltype(x)>(x)...); }
-    void SetVertexMomentum(auto&&... p)
-        requires(sizeof...(p) > 0)
+    void VertexMomentum(auto&&... p)
+        requires(sizeof...(p) >= 1)
     { Utility::AssignVector3D(fVertexMomentum, std::forward<decltype(p)>(p)...); }
-    void SetDecayTime(double val) { fDecayTime = val; }
-    void SetDecayPosition(auto&&... x)
-        requires(sizeof...(x) > 0)
+    void DecayTime(double val) { fDecayTime = val; }
+    void DecayPosition(auto&&... x)
+        requires(sizeof...(x) >= 1)
     { Utility::AssignVector3D(fDecayPosition, std::forward<decltype(x)>(x)...); }
-    void SetDecayMomentum(auto&&... p)
-        requires(sizeof...(p) > 0)
+    void DecayMomentum(auto&&... p)
+        requires(sizeof...(p) >= 1)
     { Utility::AssignVector3D(fDecayMomentum, std::forward<decltype(p)>(p)...); }
 
     void FillBranchSockets() const noexcept;
@@ -51,11 +53,11 @@ public:
 
 private:
     double fVertexTime;
-    Eigen::Vector3d fVertexPosition;
-    Eigen::Vector3d fVertexMomentum;
+    stdx::array3d fVertexPosition;
+    stdx::array3d fVertexMomentum;
     double fDecayTime;
-    Eigen::Vector3d fDecayPosition;
-    Eigen::Vector3d fDecayMomentum;
+    stdx::array3d fDecayPosition;
+    stdx::array3d fDecayMomentum;
 
     static BranchSocket::DoubleBranchSocket fgVertexTime;
     static BranchSocket::Vector3FBranchSocket fgVertexPosition;
