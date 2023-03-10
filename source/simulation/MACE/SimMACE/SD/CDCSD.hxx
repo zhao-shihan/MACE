@@ -3,6 +3,7 @@
 #include "MACE/SimMACE/Hit/CDCHit.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 
+#include "G4ThreeVector.hh"
 #include "G4TwoVector.hh"
 #include "G4VSensitiveDetector.hh"
 
@@ -28,7 +29,7 @@ private:
     G4int fEventID;
     CDCHitCollection* fHitsCollection;
     std::map<std::pair<int, int>, const G4StepPoint> fEnteredPointList;
-    std::vector<std::pair<G4TwoVector, G4ThreeVector>> fSenseWireMap;
+    std::vector<std::pair<G4TwoVector, G4ThreeVector>> fCellMap;
 };
 
 } // namespace MACE::SimMACE::SD

@@ -2,6 +2,7 @@
 #include "MACE/SimMACE/Region.hxx"
 #include "MACE/SimMACE/RunManager.hxx"
 #include "MACE/SimMACE/SD/CDCSD.hxx"
+#include "MACE/Utility/VectorCast.hxx"
 
 #include "G4HCofThisEvent.hh"
 #include "G4ProductionCuts.hh"
@@ -20,17 +21,15 @@ CDCSD::CDCSD(const G4String& sdName) :
     fEventID(-1),
     fHitsCollection(nullptr),
     fEnteredPointList(),
-    fSenseWireMap(0) {
+    fCellMap() {
 
     collectionName.insert(sdName + "HC");
 
-    const auto senseWireMap = Core::Geometry::Description::CDC::Instance().SenseWireMap();
-    fSenseWireMap.resize(senseWireMap.size());
-    for (gsl::index i = 0; i < std::ssize(senseWireMap); ++i) {
-        auto& [wirePosG4, wireDirG4] = fSenseWireMap[i];
-        const auto& [wirePosEigen, wireDirEigen] = senseWireMap[i];
-        wirePosG4.set(wirePosEigen.x(), wirePosEigen.y());
-        wireDirG4.set(wireDirEigen.x(), wireDirEigen.y(), wireDirEigen.z());
+    const auto cellMap = Core::Geometry::Description::CDC::Instance().CellMap();
+    fCellMap.reserve(cellMap.size());
+    for (auto&& cell : cellMap) {
+        fCellMap.emplace_back(Utility::VectorCast<G4TwoVector, 2>(cell.position),
+                              Utility::VectorCast<G4ThreeVector, 3>(cell.direction));
     }
 }
 
@@ -41,39 +40,30 @@ void CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
 }
 
 G4bool CDCSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
-    if (!step->IsFirstStepInVolume() and !step->IsLastStepInVolume()) { return false; }
+    if (not(step->IsFirstStepInVolume() or step->IsLastStepInVolume())) { return false; }
     const auto track = step->GetTrack();
     const auto particle = track->GetDefinition();
     if (track->GetCurrentStepNumber() <= 1 or particle->GetPDGCharge() == 0) { return false; }
     // get track ID and cell ID of this hit
     const auto trackID = track->GetTrackID();
     const auto touchable = track->GetTouchable();
-    const auto cellID = touchable->GetReplicaNumber(1);
+    const auto cellID = touchable->GetReplicaNumber();
     // find entered point
-    auto monitoring = std::as_const(fEnteredPointList).find({trackID, cellID});
-    auto isMonitoring = (monitoring != fEnteredPointList.cend());
-    if (!isMonitoring and step->IsFirstStepInVolume()) { // is first time entering.
-        monitoring = fEnteredPointList.emplace(std::make_pair(trackID, cellID), *step->GetPostStepPoint()).first;
-        isMonitoring = true;
-    }
-    if (isMonitoring and step->IsLastStepInVolume() and                                                                         // is exiting, and make sure has entered before,
+    const auto [monitoring, isNew] = fEnteredPointList.try_emplace({trackID, cellID}, *step->GetPostStepPoint());
+    if (not isNew and step->IsLastStepInVolume() and                                                                            // is exiting, and make sure has entered before,
         static_cast<Region*>(track->GetNextVolume()->GetLogicalVolume()->GetRegion())->GetType() != RegionType::DefaultSolid) { // but the track is not heading into sense wire!
-        // retrive layerID
-        const auto layerID = touchable->GetReplicaNumber(2);
         // retrive entering time and position
         const auto& enterPoint = monitoring->second;
         const auto tIn = enterPoint.GetGlobalTime();
         const auto rIn = enterPoint.GetPosition();
         const auto pIn = enterPoint.GetMomentumDirection();
-        const auto zIn = enterPoint.GetPosition().z();
         // retrive exiting time and position
         const auto exitPoint = step->GetPreStepPoint();
         const auto tOut = exitPoint->GetGlobalTime();
         const auto rOut = exitPoint->GetPosition();
         const auto pOut = exitPoint->GetMomentumDirection();
-        const auto zOut = exitPoint->GetPosition().z();
         // retrive wire position
-        const auto& [rWire, tWire] = fSenseWireMap[cellID];
+        const auto& [rWire, tWire] = fCellMap[cellID];
         // calculate drift distance
         const auto commonNormalVector = tWire.cross((pIn + pOut) / 2);
         const auto driftDistance = std::abs(((rIn + rOut) / 2 - rWire).dot(commonNormalVector) / commonNormalVector.mag());
@@ -81,23 +71,19 @@ G4bool CDCSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         const auto vertexTotalEnergy = track->GetVertexKineticEnergy() + particle->GetPDGMass();
         const auto vertexMomentum = track->GetVertexMomentumDirection() * std::sqrt(track->GetVertexKineticEnergy() * (vertexTotalEnergy + particle->GetPDGMass()));
         // new a hit
-        const auto hit = new CDCHit();
+        const auto hit = new CDCHit;
         hit->HitTime((tIn + tOut) / 2);
         hit->DriftDistance(driftDistance);
-        hit->HitPositionZ((zIn + zOut) / 2);
-        hit->WirePosition(rWire);
-        hit->WireDirection(tWire);
         hit->CellID(cellID);
-        hit->LayerID(layerID);
-        hit->SetEnergy((enterPoint.GetTotalEnergy() + exitPoint->GetTotalEnergy()) / 2);
-        hit->SetMomentum((enterPoint.GetMomentum() + exitPoint->GetMomentum()) / 2);
-        hit->SetVertexTime(track->GetGlobalTime() - track->GetLocalTime());
-        hit->SetVertexPosition(track->GetVertexPosition());
-        hit->SetVertexEnergy(vertexTotalEnergy);
-        hit->SetVertexMomentum(vertexMomentum);
-        hit->SetParticle(particle->GetParticleName());
-        hit->SetG4EventID(fEventID);
-        hit->SetG4TrackID(trackID);
+        hit->Energy((enterPoint.GetTotalEnergy() + exitPoint->GetTotalEnergy()) / 2);
+        hit->Momentum((enterPoint.GetMomentum() + exitPoint->GetMomentum()) / 2);
+        hit->VertexTime(track->GetGlobalTime() - track->GetLocalTime());
+        hit->VertexPosition(track->GetVertexPosition());
+        hit->VertexEnergy(vertexTotalEnergy);
+        hit->VertexMomentum(vertexMomentum);
+        hit->Particle(particle->GetParticleName());
+        hit->G4EventID(fEventID);
+        hit->G4TrackID(trackID);
         fHitsCollection->insert(hit);
         // particle is exiting, remove it from monitoring list
         fEnteredPointList.erase(monitoring);
