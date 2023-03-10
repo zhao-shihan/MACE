@@ -8,11 +8,9 @@
 
 namespace MACE::Core::DataModel::SimHit {
 
-using namespace std::string_view_literals;
-
 class EMCalSimHit : public Hit::EMCalHit {
 public:
-    EMCalSimHit() noexcept;
+    inline EMCalSimHit() noexcept;
     virtual ~EMCalSimHit() = default;
 
     EMCalSimHit(const EMCalSimHit& hit) noexcept = default;
@@ -20,28 +18,30 @@ public:
     EMCalSimHit& operator=(const EMCalSimHit& hit) noexcept = default;
     EMCalSimHit& operator=(EMCalSimHit&& hit) noexcept = default;
 
-    const auto& GetParticle() const { return fParticle; }
-    const auto& GetG4EventID() const { return fG4EventID; }
-    const auto& GetG4TrackID() const { return fG4TrackID; }
+    const auto& G4EventID() const { return fG4EventID; }
+    const auto& G4TrackID() const { return fG4TrackID; }
+    const auto& Particle() const { return fParticle; }
 
-    void SetParticle(auto&& p) { fParticle = std::forward<decltype(p)>(p); }
-    void SetG4EventID(int val) { fG4EventID = val; }
-    void SetG4TrackID(int val) { fG4TrackID = val; }
+    void G4EventID(int val) { fG4EventID = val; }
+    void G4TrackID(int val) { fG4TrackID = val; }
+    void Particle(auto&& p) { fParticle = std::forward<decltype(p)>(p); }
 
-    void FillBranchSockets() const noexcept;
+    inline void FillBranchSockets() const noexcept;
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    static constexpr auto BasicTreeName() noexcept { return "CalSimHit"sv; }
+    static constexpr auto BasicTreeName() noexcept { return std::string_view("CalSimHit"); }
 
 private:
-    Utility::ShortString fParticle;
     int fG4EventID;
     int fG4TrackID;
+    Utility::ShortString fParticle;
 
-    static BranchSocket::ShortStringBranchSocket fgParticle;
     static BranchSocket::IntBranchSocket fgG4EventID;
     static BranchSocket::IntBranchSocket fgG4TrackID;
+    static BranchSocket::ShortStringBranchSocket fgParticle;
 };
 static_assert(TransientData<EMCalSimHit>);
 
 } // namespace MACE::Core::DataModel::SimHit
+
+#include "MACE/Core/DataModel/SimHit/EMCalSimHit.inl"

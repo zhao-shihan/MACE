@@ -3,18 +3,18 @@
 #include "MACE/Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 #include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "MACE/Core/DataModel/Hit/CDCHit.hxx"
+#include "MACE/stdx/array_alias.hxx"
 #include "MACE/Utility/AssignVector.hxx"
 
+#include <array>
 #include <string_view>
 #include <utility>
 
 namespace MACE::Core::DataModel::SimHit {
 
-using namespace std::string_view_literals;
-
 class CDCSimHit : public Hit::CDCHit {
 public:
-    CDCSimHit() noexcept;
+    inline CDCSimHit() noexcept;
     virtual ~CDCSimHit() = default;
 
     CDCSimHit(const CDCSimHit& hit) noexcept = default;
@@ -22,47 +22,47 @@ public:
     CDCSimHit& operator=(const CDCSimHit& hit) noexcept = default;
     CDCSimHit& operator=(CDCSimHit&& hit) noexcept = default;
 
-    const auto& GetEnergy() const { return fEnergy; }
-    const auto& GetMomentum() const { return fMomentum; }
-    const auto& GetVertexTime() const { return fVertexTime; }
-    const auto& GetVertexPosition() const { return fVertexPosition; }
-    const auto& GetVertexEnergy() const { return fVertexEnergy; }
-    const auto& GetVertexMomentum() const { return fVertexMomentum; }
-    const auto& GetParticle() const { return fParticle; }
-    const auto& GetG4EventID() const { return fG4EventID; }
-    const auto& GetG4TrackID() const { return fG4TrackID; }
+    const auto& G4EventID() const { return fG4EventID; }
+    const auto& G4TrackID() const { return fG4TrackID; }
+    const auto& Energy() const { return fEnergy; }
+    const auto& Momentum() const { return fMomentum; }
+    const auto& VertexTime() const { return fVertexTime; }
+    const auto& VertexPosition() const { return fVertexPosition; }
+    const auto& VertexEnergy() const { return fVertexEnergy; }
+    const auto& VertexMomentum() const { return fVertexMomentum; }
+    const auto& Particle() const { return fParticle; }
 
-    void SetEnergy(double E) { fEnergy = E; }
-    void SetMomentum(auto&&... p)
-        requires(sizeof...(p) > 0)
+    void G4EventID(int val) { fG4EventID = val; }
+    void G4TrackID(int val) { fG4TrackID = val; }
+    void Energy(double E) { fEnergy = E; }
+    void Momentum(auto&&... p)
+        requires(sizeof...(p) >= 1)
     { Utility::AssignVector3D(fMomentum, std::forward<decltype(p)>(p)...); }
-    void SetVertexTime(double val) { fVertexTime = val; }
-    void SetVertexPosition(auto&&... x)
-        requires(sizeof...(x) > 0)
+    void VertexTime(double val) { fVertexTime = val; }
+    void VertexPosition(auto&&... x)
+        requires(sizeof...(x) >= 1)
     { Utility::AssignVector3D(fVertexPosition, std::forward<decltype(x)>(x)...); }
-    void SetVertexEnergy(double E) { fVertexEnergy = E; }
-    void SetVertexMomentum(auto&&... p)
-        requires(sizeof...(p) > 0)
+    void VertexEnergy(double E) { fVertexEnergy = E; }
+    void VertexMomentum(auto&&... p)
+        requires(sizeof...(p) >= 1)
     { Utility::AssignVector3D(fVertexMomentum, std::forward<decltype(p)>(p)...); }
-    void SetParticle(auto&& p) { fParticle = std::forward<decltype(p)>(p); }
-    void SetG4EventID(int val) { fG4EventID = val; }
-    void SetG4TrackID(int val) { fG4TrackID = val; }
+    void Particle(auto&& p) { fParticle = std::forward<decltype(p)>(p); }
 
-    void FillBranchSockets() const noexcept;
+    inline void FillBranchSockets() const noexcept;
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    static constexpr auto BasicTreeName() noexcept { return "CDCSimHit"sv; }
+    static constexpr auto BasicTreeName() noexcept { return std::string_view("CDCSimHit"); }
 
 private:
-    double fEnergy;
-    Eigen::Vector3d fMomentum;
-    double fVertexTime;
-    Eigen::Vector3d fVertexPosition;
-    double fVertexEnergy;
-    Eigen::Vector3d fVertexMomentum;
-    Utility::ShortString fParticle;
     int fG4EventID;
     int fG4TrackID;
+    double fEnergy;
+    stdx::array3d fMomentum;
+    double fVertexTime;
+    stdx::array3d fVertexPosition;
+    double fVertexEnergy;
+    stdx::array3d fVertexMomentum;
+    Utility::ShortString fParticle;
 
     static BranchSocket::FloatBranchSocket fgEnergy;
     static BranchSocket::Vector3FBranchSocket fgMomentum;
@@ -77,3 +77,5 @@ private:
 static_assert(TransientData<CDCSimHit>);
 
 } // namespace MACE::Core::DataModel::SimHit
+
+#include "MACE/Core/DataModel/SimHit/CDCSimHit.inl"
