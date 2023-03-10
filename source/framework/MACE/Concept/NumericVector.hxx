@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Concept/GeneralNumericVector.hxx"
+#include "MACE/Concept/InputNumericVector.hxx"
 #include "MACE/Concept/Subscriptable.hxx"
 
 #include <array>
@@ -33,7 +33,7 @@ struct ListInitialization {
 template<class T, typename F, std::size_t N = std::numeric_limits<std::size_t>::max()>
 concept NumericVector =
     requires {
-        requires GeneralNumericVector<T, F, N>;
+        requires InputNumericVector<T, F, N>;
         requires std::is_standard_layout_v<T>;
         requires std::is_class_v<T>;
         requires std::regular<T>;

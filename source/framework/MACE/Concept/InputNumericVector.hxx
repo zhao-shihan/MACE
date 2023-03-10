@@ -10,7 +10,7 @@
 namespace MACE::Concept {
 
 template<class T, typename F, std::size_t N = std::numeric_limits<std::size_t>::max()>
-concept GeneralNumericVector =
+concept InputNumericVector =
     requires {
         requires(N >= 2);
         requires Arithmetic<F>;
@@ -19,26 +19,26 @@ concept GeneralNumericVector =
     };
 
 template<class T, typename F>
-concept GeneralNumericVector2 = GeneralNumericVector<T, F, 2>;
+concept InputNumericVector2 = InputNumericVector<T, F, 2>;
 template<class T, typename F>
-concept GeneralNumericVector3 = GeneralNumericVector<T, F, 3>;
+concept InputNumericVector3 = InputNumericVector<T, F, 3>;
 template<class T, typename F>
-concept GeneralNumericVector4 = GeneralNumericVector<T, F, 4>;
+concept InputNumericVector4 = InputNumericVector<T, F, 4>;
 template<class T>
-concept GeneralNumericVector2F = GeneralNumericVector2<T, float>;
+concept InputNumericVector2F = InputNumericVector2<T, float>;
 template<class T>
-concept GeneralNumericVector3F = GeneralNumericVector3<T, float>;
+concept InputNumericVector3F = InputNumericVector3<T, float>;
 template<class T>
-concept GeneralNumericVector4F = GeneralNumericVector4<T, float>;
+concept InputNumericVector4F = InputNumericVector4<T, float>;
 template<class T>
-concept GeneralNumericVector2D = GeneralNumericVector2<T, double>;
+concept InputNumericVector2D = InputNumericVector2<T, double>;
 template<class T>
-concept GeneralNumericVector3D = GeneralNumericVector3<T, double>;
+concept InputNumericVector3D = InputNumericVector3<T, double>;
 template<class T>
-concept GeneralNumericVector4D = GeneralNumericVector4<T, double>;
+concept InputNumericVector4D = InputNumericVector4<T, double>;
 
 template<class T, std::size_t N = std::numeric_limits<std::size_t>::max()>
-concept GeneralNumericVectorIntegral =
+concept InputNumericVectorIntegral =
     requires(T v, gsl::index i) {
         requires(WeaklySubscriptableTo<T, bool> or
                  WeaklySubscriptableTo<T, signed char> or
@@ -56,42 +56,42 @@ concept GeneralNumericVectorIntegral =
                  WeaklySubscriptableTo<T, unsigned int> or
                  WeaklySubscriptableTo<T, unsigned long> or
                  WeaklySubscriptableTo<T, unsigned long long>);
-        requires GeneralNumericVector<T, std::remove_reference_t<decltype(v[i])>, N>;
+        requires InputNumericVector<T, std::remove_reference_t<decltype(v[i])>, N>;
     };
 
 template<class T>
-concept GeneralNumericVector2Integral = GeneralNumericVectorIntegral<T, 2>;
+concept InputNumericVector2Integral = InputNumericVectorIntegral<T, 2>;
 template<class T>
-concept GeneralNumericVector3Integral = GeneralNumericVectorIntegral<T, 3>;
+concept InputNumericVector3Integral = InputNumericVectorIntegral<T, 3>;
 template<class T>
-concept GeneralNumericVector4Integral = GeneralNumericVectorIntegral<T, 4>;
+concept InputNumericVector4Integral = InputNumericVectorIntegral<T, 4>;
 
 template<class T, std::size_t N = std::numeric_limits<std::size_t>::max()>
-concept GeneralNumericVectorFloatingPoint =
+concept InputNumericVectorFloatingPoint =
     requires(T v, gsl::index i) {
         requires(WeaklySubscriptableTo<T, float> or
                  WeaklySubscriptableTo<T, double> or
                  WeaklySubscriptableTo<T, long double>);
-        requires GeneralNumericVector<T, std::remove_reference_t<decltype(v[i])>, N>;
+        requires InputNumericVector<T, std::remove_reference_t<decltype(v[i])>, N>;
     };
 
 template<class T>
-concept GeneralNumericVector2FloatingPoint = GeneralNumericVectorFloatingPoint<T, 2>;
+concept InputNumericVector2FloatingPoint = InputNumericVectorFloatingPoint<T, 2>;
 template<class T>
-concept GeneralNumericVector3FloatingPoint = GeneralNumericVectorFloatingPoint<T, 3>;
+concept InputNumericVector3FloatingPoint = InputNumericVectorFloatingPoint<T, 3>;
 template<class T>
-concept GeneralNumericVector4FloatingPoint = GeneralNumericVectorFloatingPoint<T, 4>;
+concept InputNumericVector4FloatingPoint = InputNumericVectorFloatingPoint<T, 4>;
 
 template<class T, std::size_t N = std::numeric_limits<std::size_t>::max()>
-concept GeneralNumericVectorAny =
-    GeneralNumericVectorIntegral<T, N> or
-    GeneralNumericVectorFloatingPoint<T, N>;
+concept InputNumericVectorAny =
+    InputNumericVectorIntegral<T, N> or
+    InputNumericVectorFloatingPoint<T, N>;
 
 template<class T>
-concept GeneralNumericVector2Any = GeneralNumericVectorAny<T, 2>;
+concept InputNumericVector2Any = InputNumericVectorAny<T, 2>;
 template<class T>
-concept GeneralNumericVector3Any = GeneralNumericVectorAny<T, 3>;
+concept InputNumericVector3Any = InputNumericVectorAny<T, 3>;
 template<class T>
-concept GeneralNumericVector4Any = GeneralNumericVectorAny<T, 4>;
+concept InputNumericVector4Any = InputNumericVectorAny<T, 4>;
 
 } // namespace MACE::Concept

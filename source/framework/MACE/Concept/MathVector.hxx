@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Compatibility/Hep2VectorDivisionAssignment.hxx"
+#include "MACE/Compatibility/CLHEPDefectFix/Hep2VectorDivisionAssignment.hxx"
 #include "MACE/Concept/NumericVector.hxx"
 #include "MACE/Utility/ValueTypeOf.hxx"
 
