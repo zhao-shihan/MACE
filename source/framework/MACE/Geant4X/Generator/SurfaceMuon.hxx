@@ -16,17 +16,17 @@ public:
 
     void GeneratePrimaryVertex(G4Event* event) override;
 
-    void SetMomentum(G4double val) { fMomentum = val; }
-    void SetMomentumSpreadRMS(G4double val) { fMomentumSpreadRMS = val; }
-    void SetBeamProfileRMS(G4double val) { fBeamProfileRMS = val; }
-    void SetVertexTime(G4double val) { fVertexTime = val; }
-    void SetVertexZ(G4double val) { fVertexZ = val; }
+    void Momentum(G4double val) { fMomentum = val; }
+    void MomentumSpreadRMS(G4double val) { fMomentumSpreadRMS = val; }
+    void BeamProfileRMS(G4double val) { fBeamProfileRMS = val; }
+    void VertexTime(G4double val) { fVertexTime = val; }
+    void VertexZ(G4double val) { fVertexZ = val; }
 
-    const auto& GetMomentum() const { return fMomentum; }
-    const auto& GetMomentumSpreadRMS() const { return fMomentumSpreadRMS; }
-    const auto& GetBeamProfileRMS() const { return fBeamProfileRMS; }
-    const auto& GetVertexZ() const { return fVertexZ; }
-    const auto& GetVertexTime() const { return fVertexTime; }
+    const auto& Momentum() const { return fMomentum; }
+    const auto& MomentumSpreadRMS() const { return fMomentumSpreadRMS; }
+    const auto& BeamProfileRMS() const { return fBeamProfileRMS; }
+    const auto& VertexZ() const { return fVertexZ; }
+    const auto& VertexTime() const { return fVertexTime; }
 
 private:
     const G4MuonPlus* const fMuonPlus;

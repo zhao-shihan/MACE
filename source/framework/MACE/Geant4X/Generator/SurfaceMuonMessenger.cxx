@@ -48,13 +48,13 @@ SurfaceMuonMessenger::~SurfaceMuonMessenger() = default;
 
 void SurfaceMuonMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     if (command == fSetMomentum.get()) {
-        fSurfaceMuonGenerator->SetMomentum(fSetMomentum->GetNewDoubleValue(value));
+        fSurfaceMuonGenerator->Momentum(fSetMomentum->GetNewDoubleValue(value));
     } else if (command == fSetMomentumSpreadRMS.get()) {
-        fSurfaceMuonGenerator->SetMomentumSpreadRMS(fSetMomentumSpreadRMS->GetNewDoubleValue(value));
+        fSurfaceMuonGenerator->MomentumSpreadRMS(fSetMomentumSpreadRMS->GetNewDoubleValue(value));
     } else if (command == fSetBeamProfileRMS.get()) {
-        fSurfaceMuonGenerator->SetBeamProfileRMS(fSetBeamProfileRMS->GetNewDoubleValue(value));
+        fSurfaceMuonGenerator->BeamProfileRMS(fSetBeamProfileRMS->GetNewDoubleValue(value));
     } else if (command == fSetVertexZ.get()) {
-        fSurfaceMuonGenerator->SetVertexZ(fSetVertexZ->GetNewDoubleValue(value));
+        fSurfaceMuonGenerator->VertexZ(fSetVertexZ->GetNewDoubleValue(value));
     }
 }
 
