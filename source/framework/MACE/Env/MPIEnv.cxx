@@ -1,6 +1,7 @@
 #include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Utility/MPIUtil/CheckedMPICall.hxx"
 #include "MACE/Utility/MPIUtil/CheckedMPICallNoExcept.hxx"
+#include "MACE/stdx/array_alias.hxx"
 
 #include <algorithm>
 #include <array>
@@ -127,8 +128,8 @@ void MPIEnv::InitializeHostInfos() {
                           0,
                           MPI_COMM_WORLD)
     // Processor name list
-    std::vector<std::array<int, 2>> hostIDAndCountSend;
-    std::array<int, 2> hostIDAndCountRecv;
+    std::vector<stdx::array2i> hostIDAndCountSend;
+    stdx::array2i hostIDAndCountRecv;
     std::vector<std::pair<int, NameArray>> hostInfoList;
     // Master find all unique processor names and assign host id and count
     if (AtWorldMaster()) {
