@@ -1,12 +1,14 @@
 #include "MACE/Core/DataFactory.hxx"
 #include "MACE/Core/DataModel/Track/CDCHelixTrack.hxx"
 #include "MACE/Core/DataModel/Track/CDCPhysicsTrack.hxx"
+#include "MACE/stdx/array_arithmetic.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
 #include "CLHEP/Units/PhysicalConstants.h"
 
 using MACE::Core::DataFactory;
 using namespace MACE::Core::DataModel::Track;
+using namespace MACE::stdx::array_arithmetic;
 using namespace MACE::Utility::LiteralUnit;
 
 int main(int, char* argv[]) {
@@ -29,7 +31,7 @@ int main(int, char* argv[]) {
         const auto& physTrk = trackList.emplace_back(std::make_shared<CDCPhysicsTrack>(*helix));
         const auto& revTrack = revTrackList.emplace_back(std::make_shared<CDCHelixTrack>(*physTrk));
         auto& diff = diffList.emplace_back(std::make_shared<CDCHelixTrack>());
-        diff->SetVertexTime(revTrack->GetVertexTime() - helix->GetVertexTime());
+        diff->VertexTime(revTrack->VertexTime() - helix->VertexTime());
         diff->SetCenter(revTrack->GetCenter() - helix->GetCenter());
         diff->Radius(revTrack->Radius() - helix->Radius());
         diff->SetZ0(revTrack->GetZ0() - helix->GetZ0());

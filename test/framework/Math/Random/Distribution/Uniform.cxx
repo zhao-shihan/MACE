@@ -1,9 +1,11 @@
 #include "MACE/Math/Random/Distribution/Uniform.hxx"
 #include "MACE/Math/Random/Distribution/UniformRectangle.hxx"
 #include "MACE/Math/Random/Generator/MT1993764.hxx"
+#include "MACE/stdx/array_alias.hxx"
 
 #include "ROOT/RDataFrame.hxx"
 
+namespace stdx = MACE::stdx;
 using namespace MACE::Math::Random;
 
 int main(int argc, char* argv[]) {
@@ -27,18 +29,18 @@ int main(int argc, char* argv[]) {
                 [&] { return Distribution::Uniform<int>(a1, b1)(mt1993764); })
 
         .Define("ucr",
-                [&] { return Distribution::UniformCompactRectangle<std::array<double, 2>>({a1, b1}, {a2, b2})(mt1993764); })
+                [&] { return Distribution::UniformCompactRectangle<stdx::array2d>({a1, b1}, {a2, b2})(mt1993764); })
         .Define("urr",
-                [&] { return Distribution::UniformRectangle<std::array<double, 2>>({a1, b1}, {a2, b2})(mt1993764); })
+                [&] { return Distribution::UniformRectangle<stdx::array2d>({a1, b1}, {a2, b2})(mt1993764); })
         .Define("uir",
-                [&] { return Distribution::UniformRectangle<std::array<int, 2>>({(int)a1, (int)b1}, {(int)a2, (int)b2})(mt1993764); })
+                [&] { return Distribution::UniformRectangle<stdx::array2i>({(int)a1, (int)b1}, {(int)a2, (int)b2})(mt1993764); })
 
         // .Define("ucc",
-        //         [&] { return Distribution::UniformCompactCuboid<std::array<double, 2>>({a1, b1}, {a2, b2}, {a3, b3})(mt1993764); })
+        //         [&] { return Distribution::UniformCompactCuboid<stdx::array3d>({a1, b1}, {a2, b2}, {a3, b3})(mt1993764); })
         // .Define("urc",
-        //         [&] { return Distribution::UniformCuboid<std::array<double, 2>>({a1, b1}, {a2, b2}, {a3, b3})(mt1993764); })
+        //         [&] { return Distribution::UniformCuboid<stdx::array3d>({a1, b1}, {a2, b2}, {a3, b3})(mt1993764); })
         // .Define("uic",
-        //         [&] { return Distribution::UniformCuboid<std::array<int, 2>>({(int)a1, (int)b1}, {(int)a2, (int)b2}, {(int)a3, (int)b3})(mt1993764); })
+        //         [&] { return Distribution::UniformCuboid<stdx::array3i>({(int)a1, (int)b1}, {(int)a2, (int)b2}, {(int)a3, (int)b3})(mt1993764); })
 
         .Snapshot("uniform", "uniform.root");
 
