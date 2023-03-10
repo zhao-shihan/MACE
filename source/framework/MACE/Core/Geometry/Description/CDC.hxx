@@ -91,6 +91,10 @@ public:
     auto GasOuterLength() const { return fGasInnerLength + 2 * fEndCapSlope * (GasOuterRadius() - fGasInnerRadius); }
 
     struct CellInformation {
+        int cellLocalID;
+        int senseLayerID;
+        int senseLayerLocalID;
+        int superLayerID;
         Eigen::Vector2d position;
         Eigen::Vector3d direction;
     };

@@ -175,17 +175,27 @@ std::vector<CDC::CellInformation> CDC::ComputeCellMap() const {
                             return count + super.nCellPerSenseLayer * fNSenseLayerPerSuper;
                         }));
 
-    for (auto&& super : layerConfig) {
-        for (auto&& sense : super.sense) {
+    for (auto superLayerID = 0;
+         auto&& super : layerConfig) {
+        for (auto senseLayerLocalID = 0;
+             auto&& sense : super.sense) {
             const auto wireRadialPosition = Math::MidPoint(sense.innerRadius, sense.outerRadius) + rFieldWire;
             const Eigen::AngleAxisd stereoRotation = {-sense.StereoZenithAngle(wireRadialPosition), Eigen::Vector3d(1, 0, 0)};
-            for (auto&& cell : sense.cell) {
-                cellMap.push_back({Eigen::Rotation2Dd(cell.centerAzimuth) *
+            for (auto cellLocalID = 0;
+                 auto&& cell : sense.cell) {
+                cellMap.push_back({cellLocalID,
+                                   sense.senseLayerID,
+                                   senseLayerLocalID,
+                                   superLayerID,
+                                   Eigen::Rotation2Dd(cell.centerAzimuth) *
                                        Eigen::Vector2d(wireRadialPosition, 0),
                                    Eigen::AngleAxisd(cell.centerAzimuth, Eigen::Vector3d(0, 0, 1)) *
                                        (stereoRotation * Eigen::Vector3d(0, 0, 1))});
+                ++cellLocalID;
             }
+            ++senseLayerLocalID;
         }
+        ++superLayerID;
     }
     cellMap.shrink_to_fit();
 
