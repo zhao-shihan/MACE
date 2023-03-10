@@ -2,7 +2,6 @@
 
 #include "MACE/Concept/ROOTFundamental.hxx"
 #include "MACE/Core/DataModel/BranchSocketBase.hxx"
-#include "MACE/Utility/ROOTUtil/LeafType.hxx"
 
 #include <string>
 
