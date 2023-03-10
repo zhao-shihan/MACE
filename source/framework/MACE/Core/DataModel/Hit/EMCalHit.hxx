@@ -8,11 +8,9 @@
 
 namespace MACE::Core::DataModel::Hit {
 
-using namespace std::string_view_literals;
-
 class EMCalHit {
 public:
-    EMCalHit() noexcept;
+    inline EMCalHit() noexcept;
     virtual ~EMCalHit() = default;
 
     EMCalHit(const EMCalHit& hit) noexcept = default;
@@ -21,27 +19,25 @@ public:
     EMCalHit& operator=(EMCalHit&& hit) noexcept = default;
 
     const auto& HitTime() const { return fHitTime; }
-    const auto& GetEnergy() const { return fEnergy; }
-    const auto& GetEnergyVariance() const { return fEnergyVariance; }
+    const auto& Energy() const { return fEnergy; }
 
     void HitTime(double val) { fHitTime = val; }
-    void SetEnergy(double val) { fEnergy = val; }
-    void SetEnergyVariance(double val) { fEnergyVariance = val; }
+    void Energy(double val) { fEnergy = val; }
 
-    void FillBranchSockets() const noexcept;
+    inline void FillBranchSockets() const noexcept;
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    static constexpr auto BasicTreeName() noexcept { return "CalHit"sv; }
+    static constexpr auto BasicTreeName() noexcept { return std::string_view("CalHit"); }
 
 private:
     double fHitTime;
     double fEnergy;
-    double fEnergyVariance;
 
     static BranchSocket::DoubleBranchSocket fgHitTime;
     static BranchSocket::FloatBranchSocket fgEnergy;
-    static BranchSocket::FloatBranchSocket fgEnergyVariance;
 };
 static_assert(TransientData<EMCalHit>);
 
 } // namespace MACE::Core::DataModel::Hit
+
+#include "MACE/Core/DataModel/Hit/EMCalHit.inl"
