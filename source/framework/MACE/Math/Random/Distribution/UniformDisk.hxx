@@ -7,6 +7,7 @@
 #include "MACE/Math/IntegerPower.hxx"
 #include "MACE/Math/Random/Distribution/UniformRectangle.hxx"
 #include "MACE/Math/Random/RandomNumberDistributionBase.hxx"
+#include "MACE/stdx/array_alias.hxx"
 #include "MACE/Utility/ValueTypeOf.hxx"
 
 #include <array>
@@ -109,7 +110,7 @@ protected:
 
 } // namespace internal
 
-template<Concept::NumericVector2Any T = std::array<double, 2>>
+template<Concept::NumericVector2Any T = stdx::array2d>
 class UniformCompactDisk;
 
 template<Concept::NumericVector2Any T>
@@ -131,7 +132,7 @@ UniformCompactDisk(T, U, V) -> UniformCompactDisk<std::array<std::common_type_t<
 template<typename T>
 UniformCompactDisk(T) -> UniformCompactDisk<std::array<T, 2>>;
 
-template<Concept::NumericVector2Any T = std::array<double, 2>>
+template<Concept::NumericVector2Any T = stdx::array2d>
 class UniformDisk;
 
 template<Concept::NumericVector2Any T>

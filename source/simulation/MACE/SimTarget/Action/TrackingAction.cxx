@@ -24,9 +24,9 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track) {
     if (const auto particle = track->GetParticleDefinition();
         particle == fMuonium or particle == fAntiMuonium) {
         fMuoniumTrack = Analysis::Instance().NewMuoniumTrack();
-        fMuoniumTrack->SetVertexTime(track->GetGlobalTime());
-        fMuoniumTrack->SetVertexPosition(track->GetPosition());
-        fMuoniumTrack->SetVertexMomentum(track->GetMomentum());
+        fMuoniumTrack->VertexTime(track->GetGlobalTime());
+        fMuoniumTrack->VertexPosition(track->GetPosition());
+        fMuoniumTrack->VertexMomentum(track->GetMomentum());
         fMuoniumTrack->Particle(particle->GetParticleName());
         fMuoniumTrack->G4EventID(fEventID);
         fMuoniumTrack->G4TrackID(track->GetTrackID());
@@ -36,9 +36,9 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track) {
 void TrackingAction::PostUserTrackingAction(const G4Track* track) {
     if (const auto particle = track->GetParticleDefinition();
         particle == fMuonium or particle == fAntiMuonium) {
-        fMuoniumTrack->SetDecayTime(track->GetGlobalTime());
-        fMuoniumTrack->SetDecayPosition(track->GetPosition());
-        fMuoniumTrack->SetDecayMomentum(track->GetMomentum());
+        fMuoniumTrack->DecayTime(track->GetGlobalTime());
+        fMuoniumTrack->DecayPosition(track->GetPosition());
+        fMuoniumTrack->DecayMomentum(track->GetMomentum());
     }
 }
 

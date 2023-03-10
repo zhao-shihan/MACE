@@ -6,6 +6,7 @@
 #include "MACE/Math/RALog.hxx"
 #include "MACE/Math/Random/Distribution/UniformRectangle.hxx"
 #include "MACE/Math/Random/RandomNumberDistributionBase.hxx"
+#include "MACE/stdx/array_alias.hxx"
 #include "MACE/Utility/ValueTypeOf.hxx"
 
 #include <array>
@@ -98,7 +99,7 @@ protected:
 
 /// @brief
 /// @tparam T The result vector type. It must be 2-dimensional and has floating-point type.
-template<Concept::NumericVector2FloatingPoint T = std::array<double, 2>>
+template<Concept::NumericVector2FloatingPoint T = stdx::array2d>
 class Gaussian2DDiagnoal;
 
 template<Concept::NumericVector2FloatingPoint T>
@@ -129,7 +130,7 @@ Gaussian2DDiagnoal(std::initializer_list<T>, std::initializer_list<U>) -> Gaussi
 
 /// @brief
 /// @tparam T The result vector type. It must be 2-dimensional and has floating-point type.
-template<Concept::NumericVector2FloatingPoint T = std::array<double, 2>>
+template<Concept::NumericVector2FloatingPoint T = stdx::array2d>
 class Gaussian2DDiagnoalFast;
 
 template<Concept::NumericVector2FloatingPoint T>

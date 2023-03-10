@@ -33,10 +33,10 @@ G4bool EMCalSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         // new a hit
         const auto hit = new EMCalHit;
         hit->HitTime(preStepPoint->GetGlobalTime());
-        hit->SetEnergy(preStepPoint->GetKineticEnergy());
-        hit->SetParticle(particle->GetParticleName());
-        hit->SetG4EventID(fEventID);
-        hit->SetG4TrackID(track->GetTrackID());
+        hit->Energy(preStepPoint->GetKineticEnergy());
+        hit->Particle(particle->GetParticleName());
+        hit->G4EventID(fEventID);
+        hit->G4TrackID(track->GetTrackID());
         fHitsCollection->insert(hit);
         return true;
     } else {

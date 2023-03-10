@@ -11,7 +11,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
     G4VUserPrimaryGeneratorAction(),
     fSurfaceMuonGenerator(),
     fMuonsForEachG4Event(0) {
-    fSurfaceMuonGenerator.SetVertexZ(-5_cm);
+    fSurfaceMuonGenerator.VertexZ(-5_cm);
     Messenger::PrimaryGeneratorActionMessenger::Instance().AssignTo(this);
 }
 
