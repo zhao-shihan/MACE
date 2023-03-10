@@ -1,7 +1,19 @@
+#pragma once
+
+#include "MACE/Concept/ROOTFundamental.hxx"
+
+#include "RtypesCore.h"
+
+#include "gsl/gsl"
+
+#include <concepts>
+#include <string>
+#include <type_traits>
+
 namespace MACE::Utility::ROOTUtil {
 
 template<Concept::ROOTFundamental T>
-constexpr char LeafType<T>::Code() {
+constexpr auto LeafTypeCode() {
     if constexpr (std::same_as<std::decay_t<T>, gsl::czstring>) {
         return 'C';
     } else if constexpr (std::same_as<T, Char_t>) {
