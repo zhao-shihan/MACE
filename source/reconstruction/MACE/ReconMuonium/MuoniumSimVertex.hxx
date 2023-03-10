@@ -5,8 +5,10 @@
 #include "MACE/Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 #include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "MACE/ReconMuonium/MuoniumVertex.hxx"
+#include "MACE/stdx/array_alias.hxx"
 #include "MACE/Utility/AssignVector.hxx"
 
+#include <array>
 #include <string_view>
 #include <utility>
 
@@ -33,11 +35,11 @@ public:
 
     void SetTrueVertexTime(double val) { fTrueVertexTime = val; }
     void SetTrueVertexPosition(auto&&... x)
-        requires(sizeof...(x) > 0)
+        requires(sizeof...(x) >= 1)
     { Utility::AssignVector3D(fTrueVertexPosition, std::forward<decltype(x)>(x)...); }
     void SetTrueVertexEnergy(double val) { fTrueVertexEnergy = val; }
     void SetTrueVertexMomentum(auto&&... p)
-        requires(sizeof...(p) > 0)
+        requires(sizeof...(p) >= 1)
     { Utility::AssignVector3D(fTrueVertexMomentum, std::forward<decltype(p)>(p)...); }
     void SetTrueParticles(auto&& p) { fTrueParticles = std::forward<decltype(p)>(p); }
 
@@ -48,9 +50,9 @@ public:
 
 private:
     double fTrueVertexTime;
-    Eigen::Vector3d fTrueVertexPosition;
+    stdx::array3d fTrueVertexPosition;
     double fTrueVertexEnergy;
-    Eigen::Vector3d fTrueVertexMomentum;
+    stdx::array3d fTrueVertexMomentum;
     Utility::ShortString fTrueParticles;
 
     static BranchSocket::DoubleBranchSocket fgTrueVertexTime;

@@ -10,9 +10,11 @@
 #include "MACE/Core/Geometry/Description/TransportLine.hxx"
 #include "MACE/Env/MPIEnv.hxx"
 #include "MACE/ReconMuonium/MuoniumSimVertex.hxx"
+#include "MACE/stdx/array_arithmetic.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
+#include "MACE/Utility/VectorCast.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "TH2F.h"
@@ -28,6 +30,7 @@ using namespace MACE::Utility;
 using namespace MACE::Utility::LiteralUnit;
 using namespace MACE::Utility::MPIUtil;
 using namespace MACE::Utility::PhysicalConstant;
+using namespace MACE::stdx::array_arithmetic;
 
 using MACE::Core::DataFactory;
 using MACE::Env::MPIEnv;
@@ -106,7 +109,7 @@ int main(int argc, char* argv[]) {
     for (auto rep = repBegin; rep < repEnd; rep += repStep) {
 
         auto SortByVertexTime = [](const auto& track1, const auto& track2) {
-            return track1->GetVertexTime() < track2->GetVertexTime();
+            return track1->VertexTime() < track2->VertexTime();
         };
         // Get CDC track
         dataHub.TreeNamePrefixFormat("Rep{}_Exact_");
@@ -148,7 +151,7 @@ int main(int argc, char* argv[]) {
             // coincident count
             int coinCount = 0;
             for (; coinCalHitBegin != coinCalHitEnd; ++coinCalHitBegin) {
-                const auto& energy = (*coinCalHitBegin)->GetEnergy();
+                const auto& energy = (*coinCalHitBegin)->Energy();
                 if (480_keV < energy and energy < 540_keV) { ++coinCount; }
             }
             // select the MCP hit if coincident
@@ -167,19 +170,19 @@ int main(int argc, char* argv[]) {
             std::vector<std::shared_ptr<Helix_t>> timeCoinTrack;
             coinCDCHitBegin = std::find_if(coinCDCHitBegin, trackData.cend(),
                                            [&timeBegin](const auto& track) {
-                                               return track->GetVertexTime() > timeBegin;
+                                               return track->VertexTime() > timeBegin;
                                            });
             coinCDCHitEnd = std::find_if(coinCDCHitBegin, trackData.cend(),
                                          [&timeEnd](const auto& track) {
-                                             return track->GetVertexTime() > timeEnd;
+                                             return track->VertexTime() > timeEnd;
                                          });
             timeCoinTrack.insert(timeCoinTrack.cend(), coinCDCHitBegin, coinCDCHitEnd);
             // do space coin
             for (auto&& track : std::as_const(timeCoinTrack)) {
                 const auto& CPAMCP = mcpHit->GetHitPosition();
-                const auto phiMCP = track->CalcPhi(CPAMCP);
+                const auto phiMCP = track->CalcPhi(Utility::Vector2Cast<Eigen::Vector2d>(CPAMCP));
                 const auto CPACDC = track->CalcPoint(phiMCP);
-                const auto& TCACDC = track->GetVertexTime();
+                const auto& TCACDC = track->VertexTime();
                 const auto TCAMCP = mcpHit->HitTime() - CalculateFlightTime(CPACDC.z());
 
                 if (-3 * sigmaZCDC < CPACDC.z() and CPACDC.z() < maxSurvivalLength + 3 * sigmaZCDC) {
@@ -192,14 +195,14 @@ int main(int argc, char* argv[]) {
                     possibleVertex->SetCPACDC(CPACDC);
                     possibleVertex->SetCPAMCP(CPAMCP);
                     possibleVertex->SetDCA(track->Radius() - (track->GetCenter() - CPAMCP).norm());
-                    possibleVertex->SetVertexEnergy(physTrack.GetVertexEnergy());
-                    possibleVertex->SetVertexMomentum(physTrack.GetVertexMomentum());
-                    const auto particles = std::to_string(emCalCoinCount) + "y/" + physTrack.GetParticle();
+                    possibleVertex->VertexEnergy(physTrack.VertexEnergy());
+                    possibleVertex->VertexMomentum(physTrack.VertexMomentum());
+                    const auto particles = std::to_string(emCalCoinCount) + "y/" + physTrack.Particle();
                     possibleVertex->SetParticles(particles);
 
-                    possibleVertex->SetTrueVertexTime(mcpHit->GetVertexTime());
-                    possibleVertex->SetTrueVertexPosition(mcpHit->GetVertexPosition());
-                    const auto trueParticles = mcpHit->GetParticle() + "/" + physTrack.GetParticle();
+                    possibleVertex->SetTrueVertexTime(mcpHit->VertexTime());
+                    possibleVertex->SetTrueVertexPosition(mcpHit->VertexPosition());
+                    const auto trueParticles = mcpHit->Particle() + "/" + physTrack.Particle();
                     possibleVertex->SetTrueParticles(trueParticles);
                 }
             }

@@ -5,7 +5,9 @@
 #include "MACE/Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 #include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "MACE/Utility/AssignVector.hxx"
+#include "MACE/stdx/array_alias.hxx"
 
+#include <array>
 #include <string_view>
 #include <utility>
 
@@ -30,23 +32,23 @@ public:
     const auto& GetCPACDC() const { return fCPACDC; }
     const auto& GetCPAMCP() const { return fCPAMCP; }
     const auto& GetDCA() const { return fDCA; }
-    const auto& GetVertexEnergy() const { return fVertexEnergy; }
-    const auto& GetVertexMomentum() const { return fVertexMomentum; }
+    const auto& VertexEnergy() const { return fVertexEnergy; }
+    const auto& VertexMomentum() const { return fVertexMomentum; }
     const auto& GetParticles() const { return fParticles; }
 
     void SetTCACDC(double val) { fTCACDC = val; }
     void SetTCAMCP(double val) { fTCAMCP = val; }
     void SetDeltaTCA(double val) { fDeltaTCA = val; }
     void SetCPACDC(auto&&... x)
-        requires(sizeof...(x) > 0)
+        requires(sizeof...(x) >= 1)
     { Utility::AssignVector3D(fCPACDC, std::forward<decltype(x)>(x)...); }
     void SetCPAMCP(auto&&... x)
-        requires(sizeof...(x) > 0)
+        requires(sizeof...(x) >= 1)
     { Utility::AssignVector2D(fCPAMCP, std::forward<decltype(x)>(x)...); }
     void SetDCA(double dca) { fDCA = dca; }
-    void SetVertexEnergy(double E) { fVertexEnergy = E; }
-    void SetVertexMomentum(auto&&... p)
-        requires(sizeof...(p) > 0)
+    void VertexEnergy(double E) { fVertexEnergy = E; }
+    void VertexMomentum(auto&&... p)
+        requires(sizeof...(p) >= 1)
     { Utility::AssignVector3D(fVertexMomentum, std::forward<decltype(p)>(p)...); }
     void SetParticles(auto&& p) { fParticles = std::forward<decltype(p)>(p); }
 
@@ -59,11 +61,11 @@ private:
     double fTCACDC;
     double fTCAMCP;
     double fDeltaTCA;
-    Eigen::Vector3d fCPACDC;
-    Eigen::Vector2d fCPAMCP;
+    stdx::array3d fCPACDC;
+    stdx::array2d fCPAMCP;
     double fDCA;
     double fVertexEnergy;
-    Eigen::Vector3d fVertexMomentum;
+    stdx::array3d fVertexMomentum;
     Utility::ShortString fParticles;
 
     static BranchSocket::DoubleBranchSocket fgTCACDC;

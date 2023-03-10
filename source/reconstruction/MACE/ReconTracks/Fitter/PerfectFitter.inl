@@ -11,20 +11,20 @@ bool PerfectFitter<CDCHit_t, Track_t>::Fit(std::vector<HitPtr>& hitData, Track_t
         });
 
     if constexpr (std::same_as<Track_t, CDCPhysicsTrack>) {
-        track.SetVertexTime(firstHit->GetVertexTime());
-        track.SetVertexPosition(firstHit->GetVertexPosition());
-        track.SetVertexEnergy(firstHit->GetVertexEnergy());
-        track.SetVertexMomentum(firstHit->GetVertexMomentum());
-        track.SetParticle(firstHit->GetParticle());
+        track.VertexTime(firstHit->VertexTime());
+        track.VertexPosition(firstHit->VertexPosition());
+        track.VertexEnergy(firstHit->VertexEnergy());
+        track.VertexMomentum(firstHit->VertexMomentum());
+        track.Particle(firstHit->Particle());
         track.SetNumHits(hitData.size());
         track.SetChi2(0);
     } else {
         CDCPhysicsTrack physTrack;
-        physTrack.SetVertexTime(firstHit->GetVertexTime());
-        physTrack.SetVertexPosition(firstHit->GetVertexPosition());
-        physTrack.SetVertexEnergy(firstHit->GetVertexEnergy());
-        physTrack.SetVertexMomentum(firstHit->GetVertexMomentum());
-        physTrack.SetParticle(firstHit->GetParticle());
+        physTrack.VertexTime(firstHit->VertexTime());
+        physTrack.VertexPosition(firstHit->VertexPosition());
+        physTrack.VertexEnergy(firstHit->VertexEnergy());
+        physTrack.VertexMomentum(firstHit->VertexMomentum());
+        physTrack.Particle(firstHit->Particle());
         physTrack.SetNumHits(hitData.size());
         physTrack.SetChi2(0);
         track = Track_t(physTrack);

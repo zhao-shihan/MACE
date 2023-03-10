@@ -110,16 +110,16 @@ int main(int argc, char* argv[]) {
             const auto& physicsTrack = *physicsTracks[i];
             auto& error = *errors.emplace_back(std::make_shared<CDCPhysicsTrack>());
             perfectFitter.Fit(hits, error);
-            const auto timeErr = physicsTrack.GetVertexTime() - error.GetVertexTime();
-            const auto positionErr = physicsTrack.GetVertexPosition() - error.GetVertexPosition();
-            const auto energyErr = physicsTrack.GetVertexEnergy() - error.GetVertexEnergy();
-            const auto momentumErr = physicsTrack.GetVertexMomentum() - error.GetVertexMomentum();
-            const auto particleErr = error.GetParticle() + ">" + physicsTrack.GetParticle();
-            error.SetVertexTime(timeErr);
-            error.SetVertexPosition(positionErr);
-            error.SetVertexEnergy(energyErr);
-            error.SetVertexMomentum(momentumErr);
-            error.SetParticle(particleErr);
+            const auto timeErr = physicsTrack.VertexTime() - error.VertexTime();
+            const auto positionErr = physicsTrack.VertexPosition() - error.VertexPosition();
+            const auto energyErr = physicsTrack.VertexEnergy() - error.VertexEnergy();
+            const auto momentumErr = physicsTrack.VertexMomentum() - error.VertexMomentum();
+            const auto particleErr = error.Particle() + ">" + physicsTrack.Particle();
+            error.VertexTime(timeErr);
+            error.VertexPosition(positionErr);
+            error.VertexEnergy(energyErr);
+            error.VertexMomentum(momentumErr);
+            error.Particle(particleErr);
             error.SetChi2(physicsTrack.GetChi2());
         }
 

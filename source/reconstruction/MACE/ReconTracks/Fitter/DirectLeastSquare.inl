@@ -170,7 +170,7 @@ void DirectLeastSquare<CDCHit_t, Track_t>::FinalScaling() {
 
 template<class CDCHit_t, class Track_t>
 void DirectLeastSquare<CDCHit_t, Track_t>::Finalize(Track_t& track) {
-    track.SetVertexTime(fVertexTime);
+    track.VertexTime(fVertexTime);
     track.SetCenter(fCircleParameters[0], fCircleParameters[1]);
     track.Radius(fCircleParameters[2]);
     track.SetZ0(fRevolveParameters[0]);

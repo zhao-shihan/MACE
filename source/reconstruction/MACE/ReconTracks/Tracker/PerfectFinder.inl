@@ -27,8 +27,8 @@ std::vector<typename PerfectFinder<FitterT_t, CDCHit_t, Track_t>::HitPtr>
 PerfectFinder<FitterT_t, CDCHit_t, Track_t>::LexicographicalSort(std::vector<HitPtr> hitData) {
     std::ranges::sort(hitData,
                       [](const auto& hit1, const auto& hit2) {
-                          return std::tie(hit1->GetG4EventID(), hit1->GetG4TrackID(), hit1->HitTime()) <
-                                 std::tie(hit2->GetG4EventID(), hit2->GetG4TrackID(), hit2->HitTime());
+                          return std::tie(hit1->G4EventID(), hit1->G4TrackID(), hit1->HitTime()) <
+                                 std::tie(hit2->G4EventID(), hit2->G4TrackID(), hit2->HitTime());
                       });
     hitData.shrink_to_fit();
     return hitData;
@@ -43,9 +43,9 @@ PerfectFinder<FitterT_t, CDCHit_t, Track_t>::ClassifyToG4Tracks(const std::vecto
     int currentTrackID = -1;
     std::vector<HitPtr>* currentTrack = nullptr;
     for (auto&& hit : sortedHitData) {
-        if (hit->GetG4TrackID() > currentTrackID or hit->GetG4EventID() > currentEventID) {
-            currentEventID = hit->GetG4EventID();
-            currentTrackID = hit->GetG4TrackID();
+        if (hit->G4TrackID() > currentTrackID or hit->G4EventID() > currentEventID) {
+            currentEventID = hit->G4EventID();
+            currentTrackID = hit->G4TrackID();
             if (currentTrack != nullptr) [[likely]] { currentTrack->shrink_to_fit(); }
             currentTrack = std::addressof(g4Tracks.emplace_back());
             currentTrack->reserve(2 * fThreshold);
