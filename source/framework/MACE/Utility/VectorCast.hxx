@@ -41,4 +41,28 @@ template<class T, std::size_t N>
     return {std::forward<decltype(args)>(args)...};
 }
 
+template<Concept::NumericVectorAny<2> T>
+[[nodiscard]] T Vector2Cast(auto&&... args)
+    requires(sizeof...(args) == 1 or
+             sizeof...(args) == 2)
+{
+    return VectorCast<T, 2>(std::forward<decltype(args)>(args)...);
+}
+
+template<Concept::NumericVectorAny<3> T>
+[[nodiscard]] T Vector3Cast(auto&&... args)
+    requires(sizeof...(args) == 1 or
+             sizeof...(args) == 3)
+{
+    return VectorCast<T, 3>(std::forward<decltype(args)>(args)...);
+}
+
+template<Concept::NumericVectorAny<4> T>
+[[nodiscard]] T Vector4Cast(auto&&... args)
+    requires(sizeof...(args) == 1 or
+             sizeof...(args) == 4)
+{
+    return VectorCast<T, 4>(std::forward<decltype(args)>(args)...);
+}
+
 } // namespace MACE::Utility

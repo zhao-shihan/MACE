@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Concept/FundamentalType.hxx"
-#include "MACE/Concept/GeneralNumericVector.hxx"
+#include "MACE/Concept/InputNumericVector.hxx"
 
 #include "gsl/gsl"
 
@@ -28,7 +28,7 @@ struct ValueTypeOf<T> {
     using Type = std::remove_reference_t<decltype(*std::ranges::cbegin(std::declval<T&>()))>;
 };
 
-template<Concept::GeneralNumericVectorAny T>
+template<Concept::InputNumericVectorAny T>
     requires(not requires { typename T::value_type; } and
              not std::ranges::input_range<T>)
 struct ValueTypeOf<T> {

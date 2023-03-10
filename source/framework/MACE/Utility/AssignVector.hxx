@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Concept/FundamentalType.hxx"
-#include "MACE/Concept/GeneralNumericVector.hxx"
+#include "MACE/Concept/InputNumericVector.hxx"
 #include "MACE/Concept/NumericVector.hxx"
 #include "MACE/Utility/ToSigned.hxx"
 
@@ -85,7 +85,7 @@ decltype(auto) AssignVector(V& lhs, auto&& rhs)
     requires(not std::same_as<decltype(rhs), V &&> and
              not std::assignable_from<V&, decltype(rhs)> and
              not std::ranges::range<decltype(rhs)> and
-             Concept::GeneralNumericVectorAny<std::remove_cvref_t<decltype(rhs)>, N> and
+             Concept::InputNumericVectorAny<std::remove_cvref_t<decltype(rhs)>, N> and
              requires(gsl::index i) { lhs[i] = std::forward<decltype(rhs[i])>(rhs[i]); })
 {
     for (gsl::index i = 0; i < ToSigned(N); ++i) {
