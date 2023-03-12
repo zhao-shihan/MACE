@@ -4,8 +4,8 @@
 #include "MACE/Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "MACE/Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 #include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
-#include "MACE/Utility/AssignVector.hxx"
 #include "MACE/stdx/array_alias.hxx"
+#include "MACE/Utility/VectorAssign.hxx"
 
 #include <array>
 #include <string_view>
@@ -39,17 +39,11 @@ public:
     void SetTCACDC(double val) { fTCACDC = val; }
     void SetTCAMCP(double val) { fTCAMCP = val; }
     void SetDeltaTCA(double val) { fDeltaTCA = val; }
-    void SetCPACDC(auto&&... x)
-        requires(sizeof...(x) >= 1)
-    { Utility::AssignVector3D(fCPACDC, std::forward<decltype(x)>(x)...); }
-    void SetCPAMCP(auto&&... x)
-        requires(sizeof...(x) >= 1)
-    { Utility::AssignVector2D(fCPAMCP, std::forward<decltype(x)>(x)...); }
+    void SetCPACDC(auto&& x) { Utility::VectorAssign(fCPACDC, std::forward<decltype(x)>(x)); }
+    void SetCPAMCP(auto&& x) { Utility::VectorAssign(fCPAMCP, std::forward<decltype(x)>(x)); }
     void SetDCA(double dca) { fDCA = dca; }
     void VertexEnergy(double E) { fVertexEnergy = E; }
-    void VertexMomentum(auto&&... p)
-        requires(sizeof...(p) >= 1)
-    { Utility::AssignVector3D(fVertexMomentum, std::forward<decltype(p)>(p)...); }
+    void VertexMomentum(auto&& p) { Utility::VectorAssign(fVertexMomentum, std::forward<decltype(p)>(p)); }
     void SetParticles(auto&& p) { fParticles = std::forward<decltype(p)>(p); }
 
     void FillBranchSockets() const noexcept;

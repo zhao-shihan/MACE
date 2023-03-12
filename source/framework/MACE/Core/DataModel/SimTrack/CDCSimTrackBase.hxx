@@ -16,10 +16,10 @@ public:
     CDCSimTrackBase& operator=(CDCSimTrackBase&&) noexcept = default;
 
     const auto& GetTrueNumHits() const { return fTrueNumHits; }
-    const auto& GetTrueVertexTime() const { return fTrueVertexTime; }
+    const auto& TrueVertexTime() const { return fTrueVertexTime; }
 
     void SetTrueNumHits(int n) { fTrueNumHits = n; }
-    void SetTrueVertexTime(double val) { fTrueVertexTime = val; }
+    void TrueVertexTime(double val) { fTrueVertexTime = val; }
 
 protected:
     void FillBranchSockets() const noexcept;

@@ -6,9 +6,9 @@
 #include "MACE/Core/DataModel/Track/CDCTrackBase.hxx"
 #include "MACE/Core/DataModel/TransientData.hxx"
 #include "MACE/stdx/array_alias.hxx"
-#include "MACE/Utility/AssignVector.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
+#include "MACE/Utility/VectorAssign.hxx"
 
 #include <array>
 #include <string_view>
@@ -35,17 +35,19 @@ public:
     explicit CDCPhysicsTrack(const CDCHelixTrack& helix, double phiVertex = 0, double B = 0.1_T, double mass = electron_mass_c2);
 
     const auto& VertexPosition() const { return fVertexPosition; }
+    template<Concept::NumericVector3D T>
+    auto VertexPosition() const { return Utility::VectorCast<T>(fVertexPosition); }
     const auto& VertexEnergy() const { return fVertexEnergy; }
     const auto& VertexMomentum() const { return fVertexMomentum; }
+    template<Concept::NumericVector3D T>
+    auto VertexMomentum() const { return Utility::VectorCast<T>(fVertexMomentum); }
     const auto& Particle() const { return fParticle; }
 
-    void VertexPosition(auto&&... x)
-        requires(sizeof...(x) >= 1)
-    { Utility::AssignVector3D(fVertexPosition, std::forward<decltype(x)>(x)...); }
+    void VertexPosition(const stdx::array3d& x) { fVertexPosition = x; }
+    void VertexPosition(auto&& x) { Utility::VectorAssign(fVertexPosition, std::forward<decltype(x)>(x)); }
     void VertexEnergy(double E) { fVertexEnergy = E; }
-    void VertexMomentum(auto&&... p)
-        requires(sizeof...(p) >= 1)
-    { Utility::AssignVector3D(fVertexMomentum, std::forward<decltype(p)>(p)...); }
+    void VertexMomentum(const stdx::array3d& p) { fVertexMomentum = p; }
+    void VertexMomentum(auto&& p) { Utility::VectorAssign(fVertexMomentum, std::forward<decltype(p)>(p)); }
     void Particle(auto&& p) { fParticle = std::forward<decltype(p)>(p); }
 
     void FillBranchSockets() const noexcept;

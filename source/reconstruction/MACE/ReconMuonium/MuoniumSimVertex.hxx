@@ -1,12 +1,14 @@
 #pragma once
 
+#include "MACE/Concept/NumericVector.hxx"
 #include "MACE/Core/DataFactory.hxx"
 #include "MACE/Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "MACE/Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 #include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "MACE/ReconMuonium/MuoniumVertex.hxx"
 #include "MACE/stdx/array_alias.hxx"
-#include "MACE/Utility/AssignVector.hxx"
+#include "MACE/Utility/VectorAssign.hxx"
+#include "MACE/Utility/VectorCast.hxx"
 
 #include <array>
 #include <string_view>
@@ -27,21 +29,19 @@ public:
     MuoniumSimVertex& operator=(const MuoniumSimVertex&) noexcept = default;
     MuoniumSimVertex& operator=(MuoniumSimVertex&&) noexcept = default;
 
-    const auto& GetTrueVertexTime() const { return fTrueVertexTime; }
-    const auto& GetTrueVertexPosition() const { return fTrueVertexPosition; }
-    const auto& GetTrueVertexEnergy() const { return fTrueVertexEnergy; }
-    const auto& GetTrueVertexMomentum() const { return fTrueVertexMomentum; }
-    const auto& GetTrueParticles() const { return fTrueParticles; }
+    const auto& TrueVertexTime() const { return fTrueVertexTime; }
+    const auto& TrueVertexPosition() const { return fTrueVertexPosition; }
+    const auto& TrueVertexEnergy() const { return fTrueVertexEnergy; }
+    const auto& TrueVertexMomentum() const { return fTrueVertexMomentum; }
+    const auto& TrueParticles() const { return fTrueParticles; }
 
-    void SetTrueVertexTime(double val) { fTrueVertexTime = val; }
-    void SetTrueVertexPosition(auto&&... x)
-        requires(sizeof...(x) >= 1)
-    { Utility::AssignVector3D(fTrueVertexPosition, std::forward<decltype(x)>(x)...); }
-    void SetTrueVertexEnergy(double val) { fTrueVertexEnergy = val; }
-    void SetTrueVertexMomentum(auto&&... p)
-        requires(sizeof...(p) >= 1)
-    { Utility::AssignVector3D(fTrueVertexMomentum, std::forward<decltype(p)>(p)...); }
-    void SetTrueParticles(auto&& p) { fTrueParticles = std::forward<decltype(p)>(p); }
+    void TrueVertexTime(double val) { fTrueVertexTime = val; }
+    void TrueVertexPosition(const stdx::array3d& x) { fTrueVertexPosition = x; }
+    void TrueVertexPosition(auto&& x) { Utility::VectorAssign(fTrueVertexPosition, std::forward<decltype(x)>(x)); }
+    void TrueVertexEnergy(double val) { fTrueVertexEnergy = val; }
+    void TrueVertexMomentum(const stdx::array3d& p) { fTrueVertexMomentum = p; }
+    void TrueVertexMomentum(auto&& p) { Utility::VectorAssign(fTrueVertexMomentum, std::forward<decltype(p)>(p)); }
+    void TrueParticles(auto&& p) { fTrueParticles = std::forward<decltype(p)>(p); }
 
     void FillBranchSockets() const noexcept;
     static void CreateBranches(TTree& tree);

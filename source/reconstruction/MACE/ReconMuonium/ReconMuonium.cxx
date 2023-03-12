@@ -10,7 +10,7 @@
 #include "MACE/Core/Geometry/Description/TransportLine.hxx"
 #include "MACE/Env/MPIEnv.hxx"
 #include "MACE/ReconMuonium/MuoniumSimVertex.hxx"
-#include "MACE/stdx/array_arithmetic.hxx"
+#include "MACE/Utility/VectorArithmetic.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
@@ -179,8 +179,8 @@ int main(int argc, char* argv[]) {
             timeCoinTrack.insert(timeCoinTrack.cend(), coinCDCHitBegin, coinCDCHitEnd);
             // do space coin
             for (auto&& track : std::as_const(timeCoinTrack)) {
-                const auto& CPAMCP = mcpHit->GetHitPosition();
-                const auto phiMCP = track->CalcPhi(Utility::Vector2Cast<Eigen::Vector2d>(CPAMCP));
+                const auto& CPAMCP = mcpHit->HitPosition();
+                const auto phiMCP = track->CalcPhi(Utility::VectorCast<Eigen::Vector2d>(CPAMCP));
                 const auto CPACDC = track->CalcPoint(phiMCP);
                 const auto& TCACDC = track->VertexTime();
                 const auto TCAMCP = mcpHit->HitTime() - CalculateFlightTime(CPACDC.z());
@@ -200,10 +200,10 @@ int main(int argc, char* argv[]) {
                     const auto particles = std::to_string(emCalCoinCount) + "y/" + physTrack.Particle();
                     possibleVertex->SetParticles(particles);
 
-                    possibleVertex->SetTrueVertexTime(mcpHit->VertexTime());
-                    possibleVertex->SetTrueVertexPosition(mcpHit->VertexPosition());
+                    possibleVertex->TrueVertexTime(mcpHit->VertexTime());
+                    possibleVertex->TrueVertexPosition(mcpHit->VertexPosition());
                     const auto trueParticles = mcpHit->Particle() + "/" + physTrack.Particle();
-                    possibleVertex->SetTrueParticles(trueParticles);
+                    possibleVertex->TrueParticles(trueParticles);
                 }
             }
             if (not vertexResultOfThisHit.empty()) {

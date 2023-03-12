@@ -28,8 +28,8 @@ CDCSD::CDCSD(const G4String& sdName) :
     const auto cellMap = Core::Geometry::Description::CDC::Instance().CellMap();
     fCellMap.reserve(cellMap.size());
     for (auto&& cell : cellMap) {
-        fCellMap.emplace_back(Utility::VectorCast<G4TwoVector, 2>(cell.position),
-                              Utility::VectorCast<G4ThreeVector, 3>(cell.direction));
+        fCellMap.emplace_back(Utility::VectorCast<G4TwoVector>(cell.position),
+                              Utility::VectorCast<G4ThreeVector>(cell.direction));
     }
 }
 

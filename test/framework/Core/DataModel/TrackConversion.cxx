@@ -1,15 +1,15 @@
 #include "MACE/Core/DataFactory.hxx"
 #include "MACE/Core/DataModel/Track/CDCHelixTrack.hxx"
 #include "MACE/Core/DataModel/Track/CDCPhysicsTrack.hxx"
-#include "MACE/stdx/array_arithmetic.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
+#include "MACE/Utility/VectorArithmetic.hxx"
 
 #include "CLHEP/Units/PhysicalConstants.h"
 
 using MACE::Core::DataFactory;
 using namespace MACE::Core::DataModel::Track;
-using namespace MACE::stdx::array_arithmetic;
 using namespace MACE::Utility::LiteralUnit;
+using namespace MACE::Utility::VectorArithmetic::Vector2Arithmetic;
 
 int main(int, char* argv[]) {
     DataFactory dataHub;

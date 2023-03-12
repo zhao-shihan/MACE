@@ -1,10 +1,12 @@
 #pragma once
 
+#include "MACE/Concept/NumericVector.hxx"
 #include "MACE/Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 #include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "MACE/Core/DataModel/Hit/CDCHit.hxx"
 #include "MACE/stdx/array_alias.hxx"
-#include "MACE/Utility/AssignVector.hxx"
+#include "MACE/Utility/VectorAssign.hxx"
+#include "MACE/Utility/VectorCast.hxx"
 
 #include <array>
 #include <string_view>
@@ -26,26 +28,29 @@ public:
     const auto& G4TrackID() const { return fG4TrackID; }
     const auto& Energy() const { return fEnergy; }
     const auto& Momentum() const { return fMomentum; }
+    template<Concept::NumericVector3D T>
+    auto Momentum() const { return Utility::VectorCast<T>(fMomentum); }
     const auto& VertexTime() const { return fVertexTime; }
     const auto& VertexPosition() const { return fVertexPosition; }
+    template<Concept::NumericVector3D T>
+    auto VertexPosition() const { return Utility::VectorCast<T>(fVertexPosition); }
     const auto& VertexEnergy() const { return fVertexEnergy; }
     const auto& VertexMomentum() const { return fVertexMomentum; }
+    template<Concept::NumericVector3D T>
+    auto VertexMomentum() const { return Utility::VectorCast<T>(fVertexMomentum); }
     const auto& Particle() const { return fParticle; }
 
     void G4EventID(int val) { fG4EventID = val; }
     void G4TrackID(int val) { fG4TrackID = val; }
     void Energy(double E) { fEnergy = E; }
-    void Momentum(auto&&... p)
-        requires(sizeof...(p) >= 1)
-    { Utility::AssignVector3D(fMomentum, std::forward<decltype(p)>(p)...); }
+    void Momentum(const stdx::array3d& p) { fMomentum = p; }
+    void Momentum(auto&& p) { Utility::VectorAssign(fMomentum, std::forward<decltype(p)>(p)); }
     void VertexTime(double val) { fVertexTime = val; }
-    void VertexPosition(auto&&... x)
-        requires(sizeof...(x) >= 1)
-    { Utility::AssignVector3D(fVertexPosition, std::forward<decltype(x)>(x)...); }
+    void VertexPosition(const stdx::array3d& x) { fVertexPosition = x; }
+    void VertexPosition(auto&& x) { Utility::VectorAssign(fVertexPosition, std::forward<decltype(x)>(x)); }
     void VertexEnergy(double E) { fVertexEnergy = E; }
-    void VertexMomentum(auto&&... p)
-        requires(sizeof...(p) >= 1)
-    { Utility::AssignVector3D(fVertexMomentum, std::forward<decltype(p)>(p)...); }
+    void VertexMomentum(const stdx::array3d& p) { fVertexMomentum = p; }
+    void VertexMomentum(auto&& p) { Utility::VectorAssign(fVertexMomentum, std::forward<decltype(p)>(p)); }
     void Particle(auto&& p) { fParticle = std::forward<decltype(p)>(p); }
 
     inline void FillBranchSockets() const noexcept;

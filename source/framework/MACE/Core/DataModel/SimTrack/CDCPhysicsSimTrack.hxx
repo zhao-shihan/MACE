@@ -1,9 +1,10 @@
 #pragma once
 
+#include "MACE/Concept/NumericVector.hxx"
 #include "MACE/Core/DataModel/SimTrack/CDCSimTrackBase.hxx"
 #include "MACE/Core/DataModel/Track/CDCPhysicsTrack.hxx"
 #include "MACE/stdx/array_alias.hxx"
-#include "MACE/Utility/AssignVector.hxx"
+#include "MACE/Utility/VectorAssign.hxx"
 
 #include <array>
 #include <string_view>
@@ -30,18 +31,20 @@ public:
 
     explicit CDCPhysicsSimTrack(const CDCHelixSimTrack& helix, double phiVertex = 0, double B = 0.1_T, double mass = electron_mass_c2);
 
-    const auto& GetTrueVertexPosition() const { return fTrueVertexPosition; }
-    const auto& GetTrueVertexEnergy() const { return fTrueVertexEnergy; }
-    const auto& GetTrueVertexMomentum() const { return fTrueVertexMomentum; }
+    const auto& TrueVertexPosition() const { return fTrueVertexPosition; }
+    template<Concept::NumericVector3D T>
+    auto TrueVertexPosition() const { return Utility::VectorCast<T>(fTrueVertexPosition); }
+    const auto& TrueVertexEnergy() const { return fTrueVertexEnergy; }
+    const auto& TrueVertexMomentum() const { return fTrueVertexMomentum; }
+    template<Concept::NumericVector3D T>
+    auto TrueVertexMomentum() const { return Utility::VectorCast<T>(fTrueVertexMomentum); }
     const auto& GetTrueParticle() const { return fTrueParticle; }
 
-    void SetTrueVertexPosition(auto&&... x)
-        requires(sizeof...(x) >= 1)
-    { Utility::AssignVector3D(fTrueVertexPosition, std::forward<decltype(x)>(x)...); }
-    void SetTrueVertexEnergy(double E) { fTrueVertexEnergy = E; }
-    void SetTrueVertexMomentum(auto&&... p)
-        requires(sizeof...(p) >= 1)
-    { Utility::AssignVector3D(fTrueVertexMomentum, std::forward<decltype(p)>(p)...); }
+    void TrueVertexPosition(const stdx::array3d& x) { fTrueVertexPosition = x; }
+    void TrueVertexPosition(auto&& x) { Utility::VectorAssign(fTrueVertexPosition, std::forward<decltype(x)>(x)); }
+    void TrueVertexEnergy(double E) { fTrueVertexEnergy = E; }
+    void TrueVertexMomentum(const stdx::array3d& p) { fTrueVertexMomentum = p; }
+    void TrueVertexMomentum(auto&& p) { Utility::VectorAssign(fTrueVertexMomentum, std::forward<decltype(p)>(p)); }
     void SetTrueParticle(auto&& p) { fTrueParticle = std::forward<decltype(p)>(p); }
 
     void FillBranchSockets() const noexcept;

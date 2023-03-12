@@ -99,7 +99,7 @@ void Analysis::AnalysisAndWriteYield() {
 
     const auto& target = Core::Geometry::Description::Target::Instance();
     for (auto&& track : std::as_const(fMuoniumTrackList)) {
-        const auto& decayPosition = track->GetDecayPosition();
+        const auto& decayPosition = track->DecayPosition();
         if (target.Contain(decayPosition)) {
             ++nTargetDecay;
         } else {

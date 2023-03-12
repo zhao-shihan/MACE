@@ -6,8 +6,8 @@
 #include "MACE/Core/DataModel/Track/CDCTrackBase.hxx"
 #include "MACE/Core/DataModel/TransientData.hxx"
 #include "MACE/stdx/array_alias.hxx"
-#include "MACE/Utility/AssignVector.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
+#include "MACE/Utility/VectorAssign.hxx"
 
 #include <array>
 #include <string_view>
@@ -37,17 +37,16 @@ public:
     const auto& GetZ0() const { return fZ0; }
     const auto& GetAlpha() const { return fAlpha; }
 
-    void SetCenter(auto&&... c)
-        requires(sizeof...(c) > 0)
-    { Utility::AssignVector2D(fCenter, std::forward<decltype(c)>(c)...); }
+    void SetCenter(const stdx::array2d& c) { fCenter = c; }
+    void SetCenter(auto&& c) { Utility::VectorAssign(fCenter, std::forward<decltype(c)>(c)); }
     void Radius(double val) { fRadius = val; }
     void SetZ0(double val) { fZ0 = val; }
     void SetAlpha(double val) { fAlpha = val; }
 
-    auto CalcPhi0() const { return CDCTrackOperation::CalcHelixPhi0(Utility::Vector2Cast<Eigen::Vector2d>(fCenter)); }
-    auto CalcPhi(const Eigen::Vector2d& point) const { return CDCTrackOperation::CalcHelixPhi(Utility::Vector2Cast<Eigen::Vector2d>(fCenter), point); }
-    auto CalcPhi(double x, double y) const { return CDCTrackOperation::CalcHelixPhi(Utility::Vector2Cast<Eigen::Vector2d>(fCenter), x, y); }
-    auto CalcPoint(double phi) { return CDCTrackOperation::CalcHelixPoint(std::tuple{Utility::Vector2Cast<Eigen::Vector2d>(fCenter), fRadius, fZ0, fAlpha}, phi); }
+    auto CalcPhi0() const { return CDCTrackOperation::CalcHelixPhi0(Utility::VectorCast<Eigen::Vector2d>(fCenter)); }
+    auto CalcPhi(const Eigen::Vector2d& point) const { return CDCTrackOperation::CalcHelixPhi(Utility::VectorCast<Eigen::Vector2d>(fCenter), point); }
+    auto CalcPhi(double x, double y) const { return CDCTrackOperation::CalcHelixPhi(Utility::VectorCast<Eigen::Vector2d>(fCenter), x, y); }
+    auto CalcPoint(double phi) { return CDCTrackOperation::CalcHelixPoint(std::tuple{Utility::VectorCast<Eigen::Vector2d>(fCenter), fRadius, fZ0, fAlpha}, phi); }
 
     void FillBranchSockets() const noexcept;
     static void CreateBranches(TTree& tree);

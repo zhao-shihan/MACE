@@ -2,9 +2,10 @@
 
 #include "MACE/Core/DataModel/SimTrack/CDCSimTrackBase.hxx"
 #include "MACE/Core/DataModel/Track/CDCHelixTrack.hxx"
+#include "MACE/stdx/array_alias.hxx"
+#include "MACE/Utility/VectorArithmetic.hxx"
+#include "MACE/Utility/VectorAssign.hxx"
 #include "MACE/Utility/VectorCast.hxx"
-#include "MACE/stdx/array_arithmetic.hxx"
-#include "MACE/Utility/AssignVector.hxx"
 
 #include <array>
 #include <string_view>
@@ -30,21 +31,22 @@ public:
     explicit CDCHelixSimTrack(const CDCPhysicsSimTrack& physTrack, double B = 0.1_T);
 
     const auto& GetTrueCenter() const { return fTrueCenter; }
+    template<Concept::NumericVector3D T>
+    auto GetTrueCenter() const { return Utility::VectorCast<T>(fTrueCenter); }
     const auto& GetTrueRadius() const { return fTrueRadius; }
     const auto& GetTrueZ0() const { return fTrueZ0; }
     const auto& GetTrueAlpha() const { return fTrueAlpha; }
 
-    void SetTrueCenter(auto&&... c)
-        requires(sizeof...(c) > 0)
-    { Utility::AssignVector2D(fTrueCenter, std::forward<decltype(c)>(c)...); }
+    void SetTrueCenter(const stdx::array2d& c) { fTrueCenter = c; }
+    void SetTrueCenter(auto&& c) { Utility::VectorAssign(fTrueCenter, std::forward<decltype(c)>(c)); }
     void SetTrueRadius(double val) { fTrueRadius = val; }
     void SetTrueZ0(double val) { fTrueZ0 = val; }
     void SetTrueAlpha(double val) { fTrueAlpha = val; }
 
-    auto CalcTruePhi0() const { return CDCTrackOperation::CalcHelixPhi0(Utility::Vector2Cast<Eigen::Vector2d>(fTrueCenter)); }
-    auto CalcTruePhi(const Eigen::Vector2d& point) const { return CDCTrackOperation::CalcHelixPhi(Utility::Vector2Cast<Eigen::Vector2d>(fTrueCenter), point); }
-    auto CalcTruePhi(double x, double y) const { return CDCTrackOperation::CalcHelixPhi(Utility::Vector2Cast<Eigen::Vector2d>(fTrueCenter), x, y); }
-    auto CalcTruePoint(double phi) { return CDCTrackOperation::CalcHelixPoint(std::tuple{Utility::Vector2Cast<Eigen::Vector2d>(fTrueCenter), fTrueRadius, fTrueZ0, fTrueAlpha}, phi); }
+    auto CalcTruePhi0() const { return CDCTrackOperation::CalcHelixPhi0(Utility::VectorCast<Eigen::Vector2d>(fTrueCenter)); }
+    auto CalcTruePhi(const Eigen::Vector2d& point) const { return CDCTrackOperation::CalcHelixPhi(Utility::VectorCast<Eigen::Vector2d>(fTrueCenter), point); }
+    auto CalcTruePhi(double x, double y) const { return CDCTrackOperation::CalcHelixPhi(Utility::VectorCast<Eigen::Vector2d>(fTrueCenter), x, y); }
+    auto CalcTruePoint(double phi) { return CDCTrackOperation::CalcHelixPoint(std::tuple{Utility::VectorCast<Eigen::Vector2d>(fTrueCenter), fTrueRadius, fTrueZ0, fTrueAlpha}, phi); }
 
     void FillBranchSockets() const noexcept;
     static void CreateBranches(TTree& tree);

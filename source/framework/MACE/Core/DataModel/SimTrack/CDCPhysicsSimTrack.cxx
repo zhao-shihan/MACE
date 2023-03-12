@@ -27,14 +27,14 @@ CDCPhysicsSimTrack::CDCPhysicsSimTrack(const CDCHelixSimTrack& helix, Double_t p
                 trueVertexEnergy,
                 trueVertexMomentum,
                 trueParticle] =
-        CDCTrackOperation::ConvertToPhysicsParameters(std::tuple{Utility::Vector2Cast<Eigen::Vector2d>(helix.GetCenter()),
+        CDCTrackOperation::ConvertToPhysicsParameters(std::tuple{Utility::VectorCast<Eigen::Vector2d>(helix.GetCenter()),
                                                                  helix.Radius(),
                                                                  helix.GetZ0(),
                                                                  helix.GetAlpha()},
                                                       phiVertex, B, mass);
-    Utility::AssignVector3D(fTrueVertexPosition, trueVertexPosition);
+    Utility::VectorAssign(fTrueVertexPosition, trueVertexPosition);
     fTrueVertexEnergy = trueVertexEnergy;
-    Utility::AssignVector3D(fTrueVertexMomentum, trueVertexMomentum);
+    Utility::VectorAssign(fTrueVertexMomentum, trueVertexMomentum);
     fTrueParticle = trueParticle;
 }
 

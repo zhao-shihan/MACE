@@ -38,7 +38,7 @@ G4bool MCPSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
         // new a hit
         const auto hit = new MCPHit;
         hit->HitTime(preStepPoint->GetGlobalTime());
-        hit->SetHitPosition(hitPosition);
+        hit->HitPosition(hitPosition);
         hit->VertexTime(track->GetGlobalTime() - track->GetLocalTime());
         hit->VertexPosition(track->GetVertexPosition());
         hit->Particle(particle->GetParticleName());
