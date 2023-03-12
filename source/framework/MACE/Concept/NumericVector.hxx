@@ -20,7 +20,6 @@ struct ListInitialization {
         ::delete ::new T{x...};
         return T{x...};
     };
-
     static constexpr auto Copy = [](auto... x) -> T {
         T v = {x...};
         v = {x...};
@@ -34,18 +33,22 @@ template<class T, typename F, std::size_t N = std::numeric_limits<std::size_t>::
 concept NumericVector =
     requires {
         requires InputNumericVector<T, F, N>;
-        requires std::is_standard_layout_v<T>;
-        requires std::is_class_v<T>;
-        requires std::regular<T>;
-        requires(N == std::numeric_limits<std::size_t>::max() or
-                 requires(std::array<F, N> u) {
-                     requires sizeof(T) == N * sizeof(F);
+        requires std::is_standard_layout_v<std::remove_cvref_t<T>>;
+        requires std::is_class_v<std::remove_cvref_t<T>>;
+        requires std::regular<std::remove_cvref_t<T>>;
+        requires SubscriptableTo<std::remove_cvref_t<T>, F&>;
+        requires(SubscriptableTo<std::add_const_t<std::remove_cvref_t<T>>, const F&> or
+                 SubscriptableTo<std::add_const_t<std::remove_cvref_t<T>>, F>);
+        requires sizeof(T) % sizeof(F) == 0;
+        requires(requires(std::array<F, sizeof(T) / sizeof(F)> u) {
                      std::apply(internal::ListInitialization<T>::Direct, u);
                      std::apply(internal::ListInitialization<T>::Copy, u);
-                 });
-        requires SubscriptableTo<T, F&>;
-        requires(SubscriptableTo<std::add_const_t<T>, const F&> or
-                 SubscriptableTo<std::add_const_t<T>, F>);
+                 } and (N == std::numeric_limits<std::size_t>::max() or
+                        requires(std::array<F, N> u) {
+                            requires sizeof(T) == N * sizeof(F);
+                            std::apply(internal::ListInitialization<T>::Direct, u);
+                            std::apply(internal::ListInitialization<T>::Copy, u);
+                        }));
     };
 
 template<class T, typename F>

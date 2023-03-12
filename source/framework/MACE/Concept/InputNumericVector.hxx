@@ -14,8 +14,11 @@ concept InputNumericVector =
     requires {
         requires(N >= 2);
         requires Arithmetic<F>;
-        requires(std::default_initializable<T> and WeaklySubscriptableTo<T, F>) or
-                    ((std::is_pointer_v<T> or std::is_array_v<T>) and WeaklySubscriptableToMaybeConst<T, F>);
+        requires(std::is_class_v<std::remove_cvref_t<T>> and
+                 std::default_initializable<std::remove_cvref_t<T>>) or
+                    (std::is_pointer_v<std::remove_cvref_t<T>> or
+                     std::is_array_v<std::remove_cvref_t<T>>);
+        requires SubscriptableToMaybeConstReferenced<T, F>;
     };
 
 template<class T, typename F>
@@ -40,22 +43,22 @@ concept InputNumericVector4D = InputNumericVector4<T, double>;
 template<class T, std::size_t N = std::numeric_limits<std::size_t>::max()>
 concept InputNumericVectorIntegral =
     requires(T v, gsl::index i) {
-        requires(WeaklySubscriptableTo<T, bool> or
-                 WeaklySubscriptableTo<T, signed char> or
-                 WeaklySubscriptableTo<T, unsigned char> or
-                 WeaklySubscriptableTo<T, char> or
-                 WeaklySubscriptableTo<T, char8_t> or
-                 WeaklySubscriptableTo<T, char16_t> or
-                 WeaklySubscriptableTo<T, char32_t> or
-                 WeaklySubscriptableTo<T, wchar_t> or
-                 WeaklySubscriptableTo<T, short> or
-                 WeaklySubscriptableTo<T, int> or
-                 WeaklySubscriptableTo<T, long> or
-                 WeaklySubscriptableTo<T, long long> or
-                 WeaklySubscriptableTo<T, unsigned short> or
-                 WeaklySubscriptableTo<T, unsigned int> or
-                 WeaklySubscriptableTo<T, unsigned long> or
-                 WeaklySubscriptableTo<T, unsigned long long>);
+        requires(SubscriptableToMaybeReferenced<T, bool> or
+                 SubscriptableToMaybeReferenced<T, signed char> or
+                 SubscriptableToMaybeReferenced<T, unsigned char> or
+                 SubscriptableToMaybeReferenced<T, char> or
+                 SubscriptableToMaybeReferenced<T, char8_t> or
+                 SubscriptableToMaybeReferenced<T, char16_t> or
+                 SubscriptableToMaybeReferenced<T, char32_t> or
+                 SubscriptableToMaybeReferenced<T, wchar_t> or
+                 SubscriptableToMaybeReferenced<T, short> or
+                 SubscriptableToMaybeReferenced<T, int> or
+                 SubscriptableToMaybeReferenced<T, long> or
+                 SubscriptableToMaybeReferenced<T, long long> or
+                 SubscriptableToMaybeReferenced<T, unsigned short> or
+                 SubscriptableToMaybeReferenced<T, unsigned int> or
+                 SubscriptableToMaybeReferenced<T, unsigned long> or
+                 SubscriptableToMaybeReferenced<T, unsigned long long>);
         requires InputNumericVector<T, std::remove_reference_t<decltype(v[i])>, N>;
     };
 
@@ -69,9 +72,9 @@ concept InputNumericVector4Integral = InputNumericVectorIntegral<T, 4>;
 template<class T, std::size_t N = std::numeric_limits<std::size_t>::max()>
 concept InputNumericVectorFloatingPoint =
     requires(T v, gsl::index i) {
-        requires(WeaklySubscriptableTo<T, float> or
-                 WeaklySubscriptableTo<T, double> or
-                 WeaklySubscriptableTo<T, long double>);
+        requires(SubscriptableToMaybeReferenced<T, float> or
+                 SubscriptableToMaybeReferenced<T, double> or
+                 SubscriptableToMaybeReferenced<T, long double>);
         requires InputNumericVector<T, std::remove_reference_t<decltype(v[i])>, N>;
     };
 

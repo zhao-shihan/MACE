@@ -7,6 +7,7 @@
 #include <concepts>
 #include <cstddef>
 #include <limits>
+#include <type_traits>
 
 namespace MACE::Concept {
 
@@ -33,7 +34,7 @@ template<class T, typename F, std::size_t N = std::numeric_limits<std::size_t>::
 concept MathVector =
     requires {
         requires NumericVector<T, F, N>;
-        requires internal::ExtraRequirementsForMathVector<T>;
+        requires internal::ExtraRequirementsForMathVector<std::remove_cvref_t<T>>;
     };
 
 template<class T, typename F>
