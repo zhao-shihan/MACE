@@ -18,23 +18,41 @@ concept IndirectableTo =
     };
 
 template<typename T, typename U>
-concept WeaklyIndirectableTo =
+concept IndirectableToMaybeReferenced =
     IndirectableTo<T, std::remove_reference_t<U>> or
     IndirectableTo<T, U> or
     IndirectableTo<T, U&>;
 
 #include "MACE/Concept/internal/AccessToMaybeCVConceptMacro.inl"
 
-MACE_CONCEPT_ACCESS_TO_MAYBE_CONST(IndirectableTo)
-MACE_CONCEPT_ACCESS_TO_MAYBE_CONST(WeaklyIndirectableTo)
+template<typename T, typename U>
+concept IndirectableToMaybeConst =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_CONST(IndirectableTo)
+
+template<typename T, typename U>
+concept IndirectableToMaybeConstReferenced =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_CONST(IndirectableToMaybeReferenced)
+
 #undef MACE_CONCEPT_ACCESS_TO_MAYBE_CONST
 
-MACE_CONCEPT_ACCESS_TO_MAYBE_VOLATILE(IndirectableTo)
-MACE_CONCEPT_ACCESS_TO_MAYBE_VOLATILE(WeaklyIndirectableTo)
+template<typename T, typename U>
+concept IndirectableToMaybeVolatile =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_VOLATILE(IndirectableTo)
+
+template<typename T, typename U>
+concept IndirectableToMaybeVolatileReferenced =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_VOLATILE(IndirectableToMaybeReferenced)
+
 #undef MACE_CONCEPT_ACCESS_TO_MAYBE_VOLATILE
 
-MACE_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED(IndirectableTo)
-MACE_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED(WeaklyIndirectableTo)
+template<typename T, typename U>
+concept IndirectableToMaybeQualified =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED(IndirectableTo)
+
+template<typename T, typename U>
+concept IndirectableToMaybeQualifyReferenced =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED(IndirectableToMaybeReferenced)
+
 #undef MACE_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED
 
 } // namespace MACE::Concept

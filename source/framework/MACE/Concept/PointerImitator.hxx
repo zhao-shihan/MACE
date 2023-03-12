@@ -24,32 +24,50 @@ concept PointerImitator =
         requires Subscriptable<T>;
     };
 
-template<typename P, typename T>
+template<typename T, typename U>
 concept WeakPointerImitatorOf =
     requires {
-        requires WeaklyIndirectableTo<P, T>;
-        requires PointerAccessibleTo<P, T>;
+        requires IndirectableToMaybeReferenced<T, U>;
+        requires PointerAccessibleTo<T, U>;
     };
 
-template<typename P, typename T>
+template<typename T, typename U>
 concept PointerImitatorOf =
     requires {
-        requires WeakPointerImitatorOf<P, T>;
-        requires WeaklySubscriptableTo<P, T>;
+        requires WeakPointerImitatorOf<T, U>;
+        requires SubscriptableToMaybeReferenced<T, U>;
     };
 
 #include "MACE/Concept/internal/AccessToMaybeCVConceptMacro.inl"
 
-MACE_CONCEPT_ACCESS_TO_MAYBE_CONST(WeakPointerImitatorOf)
-MACE_CONCEPT_ACCESS_TO_MAYBE_CONST(PointerImitatorOf)
+template<typename T, typename U>
+concept PointerImitatorOfMaybeConst =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_CONST(WeakPointerImitatorOf)
+
+template<typename T, typename U>
+concept PointerImitatorOfMaybeConstReferenced =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_CONST(PointerImitatorOf)
+
 #undef MACE_CONCEPT_ACCESS_TO_MAYBE_CONST
 
-MACE_CONCEPT_ACCESS_TO_MAYBE_VOLATILE(WeakPointerImitatorOf)
-MACE_CONCEPT_ACCESS_TO_MAYBE_VOLATILE(PointerImitatorOf)
+template<typename T, typename U>
+concept PointerImitatorOfMaybeVolatile =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_VOLATILE(WeakPointerImitatorOf)
+
+template<typename T, typename U>
+concept PointerImitatorOfMaybeVolatileReferenced =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_VOLATILE(PointerImitatorOf)
+
 #undef MACE_CONCEPT_ACCESS_TO_MAYBE_VOLATILE
 
-MACE_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED(WeakPointerImitatorOf)
-MACE_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED(PointerImitatorOf)
+template<typename T, typename U>
+concept PointerImitatorOfMaybeQualified =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED(WeakPointerImitatorOf)
+
+template<typename T, typename U>
+concept PointerImitatorOfMaybeQualifyReferenced =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED(PointerImitatorOf)
+
 #undef MACE_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED
 
 } // namespace MACE::Concept

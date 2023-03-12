@@ -7,29 +7,38 @@
 
 namespace MACE::Concept {
 
-template<typename P>
+template<typename T>
 concept PointerAccessible =
-    std::is_pointer_v<P> or
-    requires(P p) {
+    std::is_pointer_v<T> or
+    requires(T p) {
         p.operator->();
     };
 
-template<typename P, typename T>
+template<typename T, typename U>
 concept PointerAccessibleTo =
-    PointerOf<P, T> or
-    requires(P p) {
-        { p.operator->() } -> std::same_as<std::add_pointer_t<T>>;
+    PointerOf<T, U> or
+    requires(T p) {
+        { p.operator->() } -> std::same_as<std::add_pointer_t<U>>;
     };
 
 #include "MACE/Concept/internal/AccessToMaybeCVConceptMacro.inl"
 
-MACE_CONCEPT_ACCESS_TO_MAYBE_CONST(PointerAccessibleTo)
+template<typename T, typename U>
+concept PointerAccessibleToMaybeConst =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_CONST(PointerAccessibleTo)
+
 #undef MACE_CONCEPT_ACCESS_TO_MAYBE_CONST
 
-MACE_CONCEPT_ACCESS_TO_MAYBE_VOLATILE(PointerAccessibleTo)
+template<typename T, typename U>
+concept PointerAccessibleToMaybeVolatile =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_VOLATILE(PointerAccessibleTo)
+
 #undef MACE_CONCEPT_ACCESS_TO_MAYBE_VOLATILE
 
-MACE_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED(PointerAccessibleTo)
+template<typename T, typename U>
+concept PointerAccessibleToMaybeQualified =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED(PointerAccessibleTo)
+
 #undef MACE_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED
 
 } // namespace MACE::Concept

@@ -21,23 +21,41 @@ concept SubscriptableTo =
     };
 
 template<typename T, typename U>
-concept WeaklySubscriptableTo =
+concept SubscriptableToMaybeReferenced =
     SubscriptableTo<T, std::remove_reference_t<U>> or
     SubscriptableTo<T, U> or
     SubscriptableTo<T, U&>;
 
 #include "MACE/Concept/internal/AccessToMaybeCVConceptMacro.inl"
 
-MACE_CONCEPT_ACCESS_TO_MAYBE_CONST(SubscriptableTo)
-MACE_CONCEPT_ACCESS_TO_MAYBE_CONST(WeaklySubscriptableTo)
+template<typename T, typename U>
+concept SubscriptableToMaybeConst =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_CONST(SubscriptableTo)
+
+template<typename T, typename U>
+concept SubscriptableToMaybeConstReferenced =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_CONST(SubscriptableToMaybeReferenced)
+
 #undef MACE_CONCEPT_ACCESS_TO_MAYBE_CONST
 
-MACE_CONCEPT_ACCESS_TO_MAYBE_VOLATILE(SubscriptableTo)
-MACE_CONCEPT_ACCESS_TO_MAYBE_VOLATILE(WeaklySubscriptableTo)
+template<typename T, typename U>
+concept SubscriptableToMaybeVolatile =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_VOLATILE(SubscriptableTo)
+
+template<typename T, typename U>
+concept SubscriptableToMaybeVolatileReferenced =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_VOLATILE(SubscriptableToMaybeReferenced)
+
 #undef MACE_CONCEPT_ACCESS_TO_MAYBE_VOLATILE
 
-MACE_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED(SubscriptableTo)
-MACE_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED(WeaklySubscriptableTo)
+template<typename T, typename U>
+concept SubscriptableToMaybeQualified =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED(SubscriptableTo)
+
+template<typename T, typename U>
+concept SubscriptableToMaybeQualifyReferenced =
+    MACE_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED(SubscriptableToMaybeReferenced)
+
 #undef MACE_CONCEPT_ACCESS_TO_MAYBE_QUALIFIED
 
 } // namespace MACE::Concept
