@@ -5,8 +5,8 @@
 
 namespace MACE::Core::Geometry::Description {
 
-using namespace Utility::LiteralUnit::Length;
-using namespace Utility::PhysicalConstant;
+using namespace LiteralUnit::Length;
+using namespace PhysicalConstant;
 
 TransportLine::TransportLine() :
     ISingletonDescription<TransportLine>(__func__),

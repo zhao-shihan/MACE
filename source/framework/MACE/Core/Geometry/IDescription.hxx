@@ -18,7 +18,7 @@
 
 namespace MACE::Core::Geometry {
 
-class IDescription : public Utility::NonMoveableBase {
+class IDescription : public NonMoveableBase {
 protected:
     IDescription(const std::string& name);
     ~IDescription() = default;

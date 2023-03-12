@@ -1,9 +1,9 @@
 #pragma once
 
 #include "MACE/Concept/NumericVector.hxx"
+#include "MACE/Extension/stdx/array_alias.hxx"
 #include "MACE/Math/Random/Distribution/Gaussian.hxx"
 #include "MACE/Math/Random/RandomNumberDistributionBase.hxx"
-#include "MACE/stdx/array_alias.hxx"
 #include "MACE/Utility/ValueTypeOf.hxx"
 
 #include <array>
@@ -20,7 +20,7 @@ template<Concept::NumericVector3FloatingPoint T, template<class> class AGaussian
 class BasicGaussian3DDiagnoalParameter final : public DistributionParameterBase<BasicGaussian3DDiagnoalParameter<T, AGaussian3DDiagnoal>,
                                                                                 AGaussian3DDiagnoal<T>> {
 private:
-    using VOfT = Utility::ValueTypeOf<T>;
+    using VOfT = ValueTypeOf<T>;
     using Base = DistributionParameterBase<BasicGaussian3DDiagnoalParameter<T, AGaussian3DDiagnoal>,
                                            AGaussian3DDiagnoal<T>>;
 
@@ -61,7 +61,7 @@ class Gaussian3DDiagnoalBase : public RandomNumberDistributionBase<ADerived<T>,
                                                                    BasicGaussian3DDiagnoalParameter<T, ADerived>,
                                                                    T> {
 protected:
-    using VOfT = Utility::ValueTypeOf<T>;
+    using VOfT = ValueTypeOf<T>;
 
 private:
     using Base = RandomNumberDistributionBase<ADerived<T>,

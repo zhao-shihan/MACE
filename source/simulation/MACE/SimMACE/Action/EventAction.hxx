@@ -6,7 +6,7 @@
 
 namespace MACE::SimMACE::Action {
 
-class EventAction final : public Utility::NonMoveableBase,
+class EventAction final : public NonMoveableBase,
                           public G4UserEventAction {
 public:
     void BeginOfEventAction(const G4Event* event) override;

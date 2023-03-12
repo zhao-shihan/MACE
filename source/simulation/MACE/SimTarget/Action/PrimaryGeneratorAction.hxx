@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Env/Memory/FreeSingleton.hxx"
-#include "MACE/Geant4X/Generator/SurfaceMuon.hxx"
+#include "MACE/Extension/Geant4X/Generator/SurfaceMuon.hxx"
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 

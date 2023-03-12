@@ -13,7 +13,7 @@ namespace MACE::SimMACE::SD {
 
 using Hit::CDCHitCollection;
 
-class CDCSD final : public Utility::NonMoveableBase,
+class CDCSD final : public NonMoveableBase,
                     public G4VSensitiveDetector {
 public:
     CDCSD(const G4String& sdName);

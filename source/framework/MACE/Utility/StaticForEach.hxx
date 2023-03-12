@@ -5,7 +5,7 @@
 #include <tuple>
 #include <utility>
 
-namespace MACE::Utility {
+namespace MACE::inline Utility {
 
 template<std::intmax_t Begin, std::intmax_t End,
          template<std::intmax_t, typename...> class, typename...>
@@ -21,4 +21,4 @@ constexpr void StaticForEach(auto&&... args) {
                   AFunctor, AFunctorArgs...>(std::forward<decltype(args)>(args)...);
 }
 
-} // namespace MACE::Utility
+} // namespace MACE::inline Utility

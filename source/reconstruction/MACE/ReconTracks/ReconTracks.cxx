@@ -19,9 +19,9 @@
 using namespace MACE::Core::DataModel::SimHit;
 using namespace MACE::Core::DataModel::Track;
 using namespace MACE::ReconTracks;
-using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
-using namespace MACE::Utility::MPIUtil;
-using namespace MACE::Utility::PhysicalConstant;
+using namespace MACE::LiteralUnit::MagneticFluxDensity;
+using namespace MACE::MPIUtil;
+using namespace MACE::PhysicalConstant;
 
 using MACE::Core::DataFactory;
 using MACE::Env::MPIEnv;

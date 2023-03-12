@@ -6,7 +6,7 @@
 
 namespace MACE::SimMACE::Field {
 
-class VerticalField final : public Utility::NonMoveableBase,
+class VerticalField final : public NonMoveableBase,
                             public G4UniformMagField {
 public:
     VerticalField(G4double B);

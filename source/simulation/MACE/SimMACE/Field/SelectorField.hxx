@@ -6,7 +6,7 @@
 
 namespace MACE::SimMACE::Field {
 
-class SelectorField final : public Utility::NonMoveableBase,
+class SelectorField final : public NonMoveableBase,
                             public G4ElectroMagneticField {
 public:
     SelectorField();

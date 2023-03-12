@@ -1,4 +1,4 @@
-namespace MACE::Utility {
+namespace MACE::inline Utility {
 
 template<std::integral AIndex>
 std::vector<AIndex> DivideIndexNum(AIndex nIndices, AIndex nTakers) {
@@ -51,4 +51,4 @@ std::vector<IntegralIndexRange<AIndex>> DivideIndexRangeTakerWise(std::pair<AInd
     return DivideIndexRangeTakerWise<AIndex>(beginEnd.first, beginEnd.second, nTakers);
 }
 
-} // namespace MACE::Utility
+} // namespace MACE::inline Utility

@@ -1,10 +1,10 @@
 #pragma once
 
 #include "MACE/Concept/NumericVector.hxx"
+#include "MACE/Extension/stdx/array_alias.hxx"
 #include "MACE/Math/Random/Distribution/Joint.hxx"
 #include "MACE/Math/Random/Distribution/Uniform.hxx"
 #include "MACE/Math/Random/RandomNumberDistributionBase.hxx"
-#include "MACE/stdx/array_alias.hxx"
 #include "MACE/Utility/ValueTypeOf.hxx"
 
 #include <array>
@@ -22,7 +22,7 @@ class BasicUniformRectangleParameter final : public JointParameterInterface<Basi
                                                                             AUniform<Utility::ValueTypeOf<T>>,
                                                                             AUniform<Utility::ValueTypeOf<T>>> {
 private:
-    using VOfT = Utility::ValueTypeOf<T>;
+    using VOfT = ValueTypeOf<T>;
     using Base = JointParameterInterface<BasicUniformRectangleParameter<T, AUniformRectangle, AUniform>,
                                          AUniformRectangle<T>,
                                          AUniform<VOfT>,
@@ -53,7 +53,7 @@ class UniformRectangleBase : public JointInterface<ADerived<T>,
                                                    AUniform<Utility::ValueTypeOf<T>>,
                                                    AUniform<Utility::ValueTypeOf<T>>> {
 private:
-    using VOfT = Utility::ValueTypeOf<T>;
+    using VOfT = ValueTypeOf<T>;
     using Base = JointInterface<ADerived<T>,
                                 BasicUniformRectangleParameter<T, ADerived, AUniform>,
                                 T,

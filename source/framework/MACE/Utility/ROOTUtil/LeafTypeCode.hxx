@@ -10,7 +10,7 @@
 #include <string>
 #include <type_traits>
 
-namespace MACE::Utility::ROOTUtil {
+namespace MACE::inline Utility::ROOTUtil {
 
 template<Concept::ROOTFundamental T>
 constexpr auto LeafTypeCode() {
@@ -45,4 +45,4 @@ constexpr auto LeafTypeCode() {
     }
 }
 
-} // namespace MACE::Utility::ROOTUtil
+} // namespace MACE::inline Utility::ROOTUtil

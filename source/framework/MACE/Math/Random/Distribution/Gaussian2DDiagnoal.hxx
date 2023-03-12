@@ -1,12 +1,12 @@
 #pragma once
 
 #include "MACE/Concept/NumericVector.hxx"
+#include "MACE/Extension/stdx/array_alias.hxx"
 #include "MACE/Math/Hypot.hxx"
 #include "MACE/Math/Log.hxx"
 #include "MACE/Math/RALog.hxx"
 #include "MACE/Math/Random/Distribution/UniformRectangle.hxx"
 #include "MACE/Math/Random/RandomNumberDistributionBase.hxx"
-#include "MACE/stdx/array_alias.hxx"
 #include "MACE/Utility/ValueTypeOf.hxx"
 
 #include <array>
@@ -23,7 +23,7 @@ template<Concept::NumericVector2FloatingPoint T, template<class> class AGaussian
 class BasicGaussian2DDiagnoalParameter final : public DistributionParameterBase<BasicGaussian2DDiagnoalParameter<T, AGaussian2DDiagnoal>,
                                                                                 AGaussian2DDiagnoal<T>> {
 private:
-    using VOfT = Utility::ValueTypeOf<T>;
+    using VOfT = ValueTypeOf<T>;
     using Base = DistributionParameterBase<BasicGaussian2DDiagnoalParameter<T, AGaussian2DDiagnoal>,
                                            AGaussian2DDiagnoal<T>>;
 
@@ -58,7 +58,7 @@ class Gaussian2DDiagnoalBase : public RandomNumberDistributionBase<ADerived<T>,
                                                                    BasicGaussian2DDiagnoalParameter<T, ADerived>,
                                                                    T> {
 protected:
-    using VOfT = Utility::ValueTypeOf<T>;
+    using VOfT = ValueTypeOf<T>;
 
 private:
     using Base = RandomNumberDistributionBase<ADerived<T>,

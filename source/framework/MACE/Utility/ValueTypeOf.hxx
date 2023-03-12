@@ -9,7 +9,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace MACE::Utility {
+namespace MACE::inline Utility {
 
 namespace internal {
 
@@ -40,4 +40,4 @@ struct ValueTypeOfImpl<T> {
 template<class T>
 using ValueTypeOf = typename internal::ValueTypeOfImpl<T>::Type;
 
-} // namespace MACE::Utility
+} // namespace MACE::inline Utility

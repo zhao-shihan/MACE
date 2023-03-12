@@ -1,4 +1,4 @@
-namespace MACE::Utility::internal {
+namespace MACE::inline Utility::internal {
 
 template<typename ATime>
 CPUTimer<ATime>::CPUTimer() noexcept :
@@ -14,4 +14,4 @@ ATime CPUTimer<ATime>::NanosecondsUsed() const noexcept {
            static_cast<ATime>(t.tv_nsec - fT0.tv_nsec);
 }
 
-} // namespace MACE::Utility::internal
+} // namespace MACE::inline Utility::internal

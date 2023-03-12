@@ -16,8 +16,8 @@ void DescriptionIO::Import(const std::filesystem::path& yamlFile)
     requires(not IsDescription<ADescriptionTuple>)
 {
     std::array<IDescription*, std::tuple_size_v<ADescriptionTuple>> descriptions;
-    Utility::StaticForEach<0, descriptions.size(),
-                           internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
+    StaticForEach<0, descriptions.size(),
+                  internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
     ImportImpl(yamlFile, descriptions);
 }
 
@@ -26,8 +26,8 @@ void DescriptionIO::Export(const std::filesystem::path& yamlFile, std::string_vi
     requires(not IsDescription<ADescriptionTuple>)
 {
     std::array<IDescription*, std::tuple_size_v<ADescriptionTuple>> descriptions;
-    Utility::StaticForEach<0, descriptions.size(),
-                           internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
+    StaticForEach<0, descriptions.size(),
+                  internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
     ExportImpl(yamlFile, fileComment, descriptions);
 }
 
@@ -36,8 +36,8 @@ void DescriptionIO::Ixport(const std::filesystem::path& yamlFile, std::string_vi
     requires(not IsDescription<ADescriptionTuple>)
 {
     std::array<IDescription*, std::tuple_size_v<ADescriptionTuple>> descriptions;
-    Utility::StaticForEach<0, descriptions.size(),
-                           internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
+    StaticForEach<0, descriptions.size(),
+                  internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
     IxportImpl(yamlFile, fileComment, descriptions);
 }
 
@@ -47,7 +47,7 @@ void DescriptionIO::Import(const std::ranges::range auto& yamlText)
 {
     auto yamlPath = std::filesystem::temp_directory_path() / "tmp_mace_geom.yaml"sv;
     if (Env::MPIEnv::Available()) {
-        Utility::MPIUtil::MakeMPIFilePathInPlace(yamlPath);
+        MPIUtil::MakeMPIFilePathInPlace(yamlPath);
     }
     yamlPath.concat(std::to_string(std::chrono::steady_clock::now().time_since_epoch().count()));
 
@@ -94,7 +94,7 @@ void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::strin
         std::ofstream yamlOut;
         try {
             if (Env::MPIEnv::Available()) {
-                yamlOut.open(Utility::MPIUtil::MakeMPIFilePath(yamlFile), std::ios::out);
+                yamlOut.open(MPIUtil::MakeMPIFilePath(yamlFile), std::ios::out);
             } else {
                 const auto parent = yamlFile.parent_path();
                 if (not parent.empty()) { std::filesystem::create_directories(parent); }

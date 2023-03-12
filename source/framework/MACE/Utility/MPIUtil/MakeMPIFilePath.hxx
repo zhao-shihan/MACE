@@ -4,7 +4,7 @@
 #include <filesystem>
 #include <string_view>
 
-namespace MACE::Utility::MPIUtil {
+namespace MACE::inline Utility::MPIUtil {
 
 /// Create directories and file paths to help managing files during mpi processing.
 ///
@@ -14,9 +14,9 @@ namespace MACE::Utility::MPIUtil {
 ///
 ///   MPI_Init(argc, argv);
 ///     ...
-///   auto filePath = MACE::Utility::MPIUtil::MakeMPIFilePath("result.root");
+///   auto filePath = MACE::MPIUtil::MakeMPIFilePath("result.root");
 ///   // or, equivalently
-///   // auto filePath = MACE::Utility::MPIUtil::MakeMPIFilePath("result", ".root");
+///   // auto filePath = MACE::MPIUtil::MakeMPIFilePath("result", ".root");
 ///   SomeFileHandler::Open(filePath);
 ///     ...
 ///
@@ -58,6 +58,6 @@ std::filesystem::path MakeMPIFilePath(std::convertible_to<std::filesystem::path>
 void MakeMPIFilePathInPlace(std::filesystem::path& path);
 void MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extension);
 
-} // namespace MACE::Utility::MPIUtil
+} // namespace MACE::inline Utility::MPIUtil
 
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.inl"

@@ -1,9 +1,9 @@
 #pragma once
 
-namespace MACE::Utility {
+namespace MACE::inline Utility {
 
 /// @brief Trivial derived class will Exactly comply with the constraints of
-/// MACE::Utility::Concept::MerelyMoveable.
+/// MACE::Concept::MerelyMoveable.
 class MerelyMoveableBase {
 protected:
     constexpr MerelyMoveableBase() noexcept = default;
@@ -16,4 +16,4 @@ protected:
     constexpr MerelyMoveableBase& operator=(MerelyMoveableBase&&) noexcept = default;
 };
 
-} // namespace MACE::Utility
+} // namespace MACE::inline Utility

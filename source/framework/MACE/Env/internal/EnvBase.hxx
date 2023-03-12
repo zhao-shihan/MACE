@@ -17,7 +17,7 @@ class SingletonPool;
 
 namespace internal {
 
-class EnvBase : public Utility::NonMoveableBase {
+class EnvBase : public NonMoveableBase {
 protected:
     EnvBase();
     ~EnvBase();

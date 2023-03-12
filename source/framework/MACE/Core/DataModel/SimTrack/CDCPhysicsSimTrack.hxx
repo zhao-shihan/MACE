@@ -3,7 +3,7 @@
 #include "MACE/Concept/NumericVector.hxx"
 #include "MACE/Core/DataModel/SimTrack/CDCSimTrackBase.hxx"
 #include "MACE/Core/DataModel/Track/CDCPhysicsTrack.hxx"
-#include "MACE/stdx/array_alias.hxx"
+#include "MACE/Extension/stdx/array_alias.hxx"
 #include "MACE/Utility/VectorAssign.hxx"
 
 #include <array>
@@ -13,8 +13,8 @@
 namespace MACE::Core::DataModel::Track {
 
 using namespace std::string_view_literals;
-using namespace Utility::LiteralUnit::MagneticFluxDensity;
-using Utility::PhysicalConstant::electron_mass_c2;
+using namespace LiteralUnit::MagneticFluxDensity;
+using PhysicalConstant::electron_mass_c2;
 
 class CDCHelixSimTrack;
 
@@ -33,18 +33,18 @@ public:
 
     const auto& TrueVertexPosition() const { return fTrueVertexPosition; }
     template<Concept::NumericVector3D T>
-    auto TrueVertexPosition() const { return Utility::VectorCast<T>(fTrueVertexPosition); }
+    auto TrueVertexPosition() const { return VectorCast<T>(fTrueVertexPosition); }
     const auto& TrueVertexEnergy() const { return fTrueVertexEnergy; }
     const auto& TrueVertexMomentum() const { return fTrueVertexMomentum; }
     template<Concept::NumericVector3D T>
-    auto TrueVertexMomentum() const { return Utility::VectorCast<T>(fTrueVertexMomentum); }
+    auto TrueVertexMomentum() const { return VectorCast<T>(fTrueVertexMomentum); }
     const auto& GetTrueParticle() const { return fTrueParticle; }
 
     void TrueVertexPosition(const stdx::array3d& x) { fTrueVertexPosition = x; }
-    void TrueVertexPosition(auto&& x) { Utility::VectorAssign(fTrueVertexPosition, std::forward<decltype(x)>(x)); }
+    void TrueVertexPosition(auto&& x) { VectorAssign(fTrueVertexPosition, std::forward<decltype(x)>(x)); }
     void TrueVertexEnergy(double E) { fTrueVertexEnergy = E; }
     void TrueVertexMomentum(const stdx::array3d& p) { fTrueVertexMomentum = p; }
-    void TrueVertexMomentum(auto&& p) { Utility::VectorAssign(fTrueVertexMomentum, std::forward<decltype(p)>(p)); }
+    void TrueVertexMomentum(auto&& p) { VectorAssign(fTrueVertexMomentum, std::forward<decltype(p)>(p)); }
     void SetTrueParticle(auto&& p) { fTrueParticle = std::forward<decltype(p)>(p); }
 
     void FillBranchSockets() const noexcept;
@@ -56,7 +56,7 @@ private:
     stdx::array3d fTrueVertexPosition;
     double fTrueVertexEnergy;
     stdx::array3d fTrueVertexMomentum;
-    Utility::ShortString fTrueParticle;
+    ShortString fTrueParticle;
 
     static BranchSocket::Vector3FBranchSocket fgTrueVertexPosition;
     static BranchSocket::FloatBranchSocket fgTrueVertexEnergy;

@@ -14,7 +14,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace MACE::Utility {
+namespace MACE::inline Utility {
 
 /// @brief Assign something to a vector. If lhs = rhs is well-formed, assign
 /// with operator=, else assign element by element.
@@ -66,4 +66,4 @@ decltype(auto) VectorAssign(Concept::NumericVectorAny auto& lhs, Concept::InputN
     return lhs;
 }
 
-} // namespace MACE::Utility
+} // namespace MACE::inline Utility

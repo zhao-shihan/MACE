@@ -1,9 +1,9 @@
 #pragma once
 
-namespace MACE::Utility {
+namespace MACE::inline Utility {
 
 /// @brief Trivial derived class will Exactly comply with the constraints of
-/// MACE::Utility::Concept::NonMoveable.
+/// MACE::Concept::NonMoveable.
 class NonMoveableBase {
 protected:
     constexpr NonMoveableBase() noexcept = default;
@@ -16,4 +16,4 @@ protected:
     constexpr NonMoveableBase& operator=(NonMoveableBase&&) noexcept = delete;
 };
 
-} // namespace MACE::Utility
+} // namespace MACE::inline Utility

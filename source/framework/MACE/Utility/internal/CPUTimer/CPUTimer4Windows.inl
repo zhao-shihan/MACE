@@ -1,4 +1,4 @@
-namespace MACE::Utility::internal {
+namespace MACE::inline Utility::internal {
 
 template<typename ATime>
 CPUTimer<ATime>::CPUTimer() noexcept :
@@ -18,4 +18,4 @@ ULARGE_INTEGER CPUTimer<ATime>::ClockIn100ns() const noexcept {
     return t;
 }
 
-} // namespace MACE::Utility::internal
+} // namespace MACE::inline Utility::internal

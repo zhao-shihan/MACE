@@ -20,7 +20,7 @@ Eigen::Vector3d CalcHelixPoint(const HelixTrackParameters& helix, double phi) {
 
 HelixTrackParameters ConvertToHelixParameters(const PhysicsTrackParameters& physTrack,
                                               double B) {
-    using Utility::PhysicalConstant::c_light;
+    using PhysicalConstant::c_light;
 
     const auto& [xV, _, p, particleName] = physTrack;
 
@@ -42,7 +42,7 @@ PhysicsTrackParameters ConvertToPhysicsParameters(const HelixTrackParameters& he
                                                   double phiVertex,
                                                   double B,
                                                   double mass) {
-    using Utility::PhysicalConstant::c_light;
+    using PhysicalConstant::c_light;
 
     const auto& [center, radius, z0, alpha] = helix;
 

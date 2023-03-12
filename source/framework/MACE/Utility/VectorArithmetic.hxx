@@ -5,7 +5,7 @@
 
 #include <type_traits>
 
-namespace MACE::Utility::VectorArithmetic {
+namespace MACE::inline Utility::VectorArithmetic {
 
 inline namespace Vector2Arithmetic {
 
@@ -320,4 +320,4 @@ MACE_UTILITY_VECTOR_ARITHMETIC_VECTOR4_SCALAR_OPERATORS(long double)
 
 } // namespace Vector4Arithmetic
 
-} // namespace MACE::Utility::VectorArithmetic
+} // namespace MACE::inline Utility::VectorArithmetic

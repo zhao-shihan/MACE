@@ -1,5 +1,5 @@
 #include "MACE/Env/MPIEnv.hxx"
-#include "MACE/Geant4X/MPIExecutive.hxx"
+#include "MACE/Extension/Geant4X/MPIExecutive.hxx"
 #include "MACE/SimMACE/Action/DetectorConstruction.hxx"
 #include "MACE/SimMACE/Action/PhysicsList.hxx"
 #include "MACE/SimMACE/RunManager.hxx"

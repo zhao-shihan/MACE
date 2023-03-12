@@ -14,10 +14,10 @@
 
 namespace MACE::Core::Geometry::Description {
 
-using namespace Utility::LiteralUnit::Angle;
-using namespace Utility::LiteralUnit::Length;
-using namespace Utility::LiteralUnit::MathConstant;
-using namespace Utility::PhysicalConstant;
+using namespace LiteralUnit::Angle;
+using namespace LiteralUnit::Length;
+using namespace LiteralUnit::MathConstant;
+using namespace PhysicalConstant;
 
 CDC::CDC() :
     ISingletonDescription<CDC>(__func__),

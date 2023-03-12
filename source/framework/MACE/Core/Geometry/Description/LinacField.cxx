@@ -5,7 +5,7 @@
 
 namespace MACE::Core::Geometry::Description {
 
-using namespace Utility::LiteralUnit::Length;
+using namespace LiteralUnit::Length;
 
 LinacField::LinacField() :
     ISingletonDescription<LinacField>(__func__),

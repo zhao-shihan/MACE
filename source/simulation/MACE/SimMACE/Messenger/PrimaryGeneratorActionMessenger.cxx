@@ -8,7 +8,7 @@
 
 namespace MACE::SimMACE::Messenger {
 
-using namespace MACE::Utility::LiteralUnit::Frequency;
+using namespace MACE::LiteralUnit::Frequency;
 
 PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger() :
     Singleton(),

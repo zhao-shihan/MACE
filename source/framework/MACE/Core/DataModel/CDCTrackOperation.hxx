@@ -10,9 +10,8 @@
 
 namespace MACE::Core::DataModel::CDCTrackOperation {
 
-using Utility::ShortString;
-using Utility::PhysicalConstant::electron_mass_c2;
-using namespace Utility::LiteralUnit::MagneticFluxDensity;
+using PhysicalConstant::electron_mass_c2;
+using namespace LiteralUnit::MagneticFluxDensity;
 
 using HelixTrackParameters = std::tuple<Eigen::Vector2d, double, double, double>;
 using PhysicsTrackParameters = std::tuple<Eigen::Vector3d, double, Eigen::Vector3d, ShortString>;

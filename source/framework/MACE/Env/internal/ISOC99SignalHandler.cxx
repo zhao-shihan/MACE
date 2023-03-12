@@ -37,7 +37,7 @@ extern "C" {
     std::clog << "***** at "sv << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
     backward::StackTrace stack;
     stack.load_here(64);
-    Utility::PrintStackTrace(stack);
+    PrintStackTrace(stack);
     std::clog << std::endl;
 #    ifndef __MINGW32__
     std::quick_exit(EXIT_FAILURE);
@@ -59,7 +59,7 @@ extern "C" {
     std::clog << "***** at "sv << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
     backward::StackTrace stack;
     stack.load_here(64);
-    Utility::PrintStackTrace(stack);
+    PrintStackTrace(stack);
     std::clog << std::endl;
     std::abort();
 }
@@ -87,7 +87,7 @@ extern "C" {
     std::clog << "***** at "sv << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
     backward::StackTrace stack;
     stack.load_here(64);
-    Utility::PrintStackTrace(stack);
+    PrintStackTrace(stack);
     std::clog << std::endl;
     std::abort();
 }

@@ -2,7 +2,7 @@
 
 #include <ctime>
 
-namespace MACE::Utility::internal {
+namespace MACE::inline Utility::internal {
 
 template<typename ATime>
 class CPUTimer {
@@ -19,6 +19,6 @@ private:
     std::clock_t fT0;
 };
 
-} // namespace MACE::Utility::internal
+} // namespace MACE::inline Utility::internal
 
 #include "MACE/Utility/internal/CPUTimer/CPUTimer4Fallback.inl"

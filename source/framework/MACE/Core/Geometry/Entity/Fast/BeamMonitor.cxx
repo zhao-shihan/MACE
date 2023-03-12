@@ -8,7 +8,7 @@
 
 namespace MACE::Core::Geometry::Entity::Fast {
 
-using namespace MACE::Utility::LiteralUnit::Density;
+using namespace MACE::LiteralUnit::Density;
 
 bool BeamMonitor::Enabled() const {
     return Description::BeamMonitor::Instance().Enabled();

@@ -6,7 +6,7 @@
 
 namespace MACE::SimMACE::Action {
 
-class ActionInitialization final : public Utility::NonMoveableBase,
+class ActionInitialization final : public NonMoveableBase,
                                    public G4VUserActionInitialization {
 public:
     void Build() const override;

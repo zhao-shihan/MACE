@@ -1,6 +1,6 @@
 #include "MACE/Compatibility/std2b/to_underlying.hxx"
 #include "MACE/Env/BasicEnv.hxx"
-#include "MACE/Geant4X/Physics/MuoniumPhysics.hxx"
+#include "MACE/Extension/Geant4X/Physics/MuoniumPhysics.hxx"
 #include "MACE/SimMACE/Action/PhysicsList.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
@@ -17,7 +17,7 @@
 namespace MACE::SimMACE::Action {
 
 using namespace MACE::Geant4X::Physics;
-using namespace MACE::Utility::LiteralUnit::Length;
+using namespace MACE::LiteralUnit::Length;
 
 PhysicsList::PhysicsList() :
     G4VModularPhysicsList() {

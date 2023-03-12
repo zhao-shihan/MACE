@@ -34,7 +34,7 @@ public:
 private:
     int fG4EventID;
     int fG4TrackID;
-    Utility::ShortString fParticle;
+    ShortString fParticle;
 
     static BranchSocket::IntBranchSocket fgG4EventID;
     static BranchSocket::IntBranchSocket fgG4TrackID;

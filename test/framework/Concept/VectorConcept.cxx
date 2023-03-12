@@ -1,6 +1,6 @@
 #include "MACE/Concept/MathVector.hxx"
 #include "MACE/Concept/NumericVector.hxx"
-#include "MACE/stdx/array_alias.hxx"
+#include "MACE/Extension/stdx/array_alias.hxx"
 
 #include "CLHEP/Vector/LorentzVector.h"
 #include "CLHEP/Vector/ThreeVector.h"

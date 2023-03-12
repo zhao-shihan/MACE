@@ -4,7 +4,7 @@
 
 #include "CLHEP/Units/PhysicalConstants.h"
 
-namespace MACE::Utility::PhysicalConstant {
+namespace MACE::inline Utility::PhysicalConstant {
 
 // -- same as G4PhysicalConstants.hh -- //
 using CLHEP::alpha_rcl2;
@@ -56,4 +56,4 @@ constexpr auto muonium_mass_c2 = muon_mass_c2 + electron_mass_c2 -
 constexpr auto muonium_lifetime = muon_lifetime;
 // --        Extra constants         -- //
 
-} // namespace MACE::Utility::PhysicalConstant
+} // namespace MACE::inline Utility::PhysicalConstant

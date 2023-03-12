@@ -3,7 +3,7 @@
 
 namespace MACE::Core::Geometry::Description {
 
-using namespace Utility::LiteralUnit::Length;
+using namespace LiteralUnit::Length;
 
 MCP::MCP() :
     ISingletonDescription<MCP>(__func__),

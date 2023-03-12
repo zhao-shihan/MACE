@@ -18,8 +18,8 @@
 
 namespace MACE::SimTarget::Action {
 
-using namespace MACE::Utility::LiteralUnit::Density;
-using namespace MACE::Utility::LiteralUnit::Temperature;
+using namespace MACE::LiteralUnit::Density;
+using namespace MACE::LiteralUnit::Temperature;
 
 DetectorConstruction::DetectorConstruction() :
     FreeSingleton(),

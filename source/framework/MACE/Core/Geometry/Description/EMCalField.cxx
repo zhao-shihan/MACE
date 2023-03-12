@@ -4,7 +4,7 @@
 
 namespace MACE::Core::Geometry::Description {
 
-using namespace Utility::LiteralUnit::Length;
+using namespace LiteralUnit::Length;
 
 EMCalField::EMCalField() :
     ISingletonDescription<EMCalField>(__func__),

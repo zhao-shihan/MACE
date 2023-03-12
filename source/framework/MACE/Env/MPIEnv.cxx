@@ -1,7 +1,7 @@
 #include "MACE/Env/MPIEnv.hxx"
+#include "MACE/Extension/stdx/array_alias.hxx"
 #include "MACE/Utility/MPIUtil/CheckedMPICall.hxx"
 #include "MACE/Utility/MPIUtil/CheckedMPICallNoExcept.hxx"
-#include "MACE/stdx/array_alias.hxx"
 
 #include <algorithm>
 #include <array>
@@ -51,7 +51,7 @@ void MPIEnv::PrintStartupMessageBody(int argc, char* argv[]) const {
             << "-------------------->  MPI library information (end)  <--------------------\n";
         std::cout << " Size of the MPI world communicator: " << fWorldCommSize << '\n';
         if (OnSingleHost()) {
-            std::cout << " Running on \"" << LocalHostName() << "\"\n";
+            std::cout << " Running on " << std::quoted(LocalHostName()) << '\n';
         } else {
             std::cout << " Running on cluster with " << HostNum() << " hosts:\n";
             const auto maxNameWidth = std::ranges::max_element(

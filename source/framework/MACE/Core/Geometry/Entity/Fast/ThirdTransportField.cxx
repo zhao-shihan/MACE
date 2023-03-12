@@ -7,7 +7,7 @@
 
 namespace MACE::Core::Geometry::Entity::Fast {
 
-using namespace MACE::Utility::PhysicalConstant;
+using namespace MACE::PhysicalConstant;
 
 void ThirdTransportField::Construct(G4bool checkOverlaps) {
     const auto& description = Description::TransportLine::Instance();

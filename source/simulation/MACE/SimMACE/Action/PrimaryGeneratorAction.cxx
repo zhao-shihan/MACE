@@ -7,8 +7,8 @@
 
 namespace MACE::SimMACE::Action {
 
-using namespace Utility::LiteralUnit::Frequency;
-using namespace Utility::LiteralUnit::Time;
+using namespace LiteralUnit::Frequency;
+using namespace LiteralUnit::Time;
 
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
     fSurfaceMuonGenerator(),

@@ -7,7 +7,7 @@
 
 namespace MACE::SimMACE::Field {
 
-class SecondBendField final : public Utility::NonMoveableBase,
+class SecondBendField final : public NonMoveableBase,
                               public G4MagneticField {
 public:
     SecondBendField();

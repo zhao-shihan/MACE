@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-using namespace MACE::Utility;
+using namespace MACE;
 
 template<std::integral AInt>
 void DoTest(AInt begin, AInt end, AInt nTakers) {

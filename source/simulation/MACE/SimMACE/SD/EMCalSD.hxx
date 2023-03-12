@@ -9,7 +9,7 @@ namespace MACE::SimMACE::SD {
 
 using Hit::EMCalHitCollection;
 
-class EMCalSD final : public Utility::NonMoveableBase,
+class EMCalSD final : public NonMoveableBase,
                       public G4VSensitiveDetector {
 public:
     EMCalSD(const G4String& sdName);

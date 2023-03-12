@@ -9,7 +9,7 @@ namespace MACE::SimMACE::SD {
 
 using Hit::MCPHitCollection;
 
-class MCPSD final : public Utility::NonMoveableBase,
+class MCPSD final : public NonMoveableBase,
                     public G4VSensitiveDetector {
 public:
     MCPSD(const G4String& sdName);

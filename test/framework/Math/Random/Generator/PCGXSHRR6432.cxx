@@ -12,7 +12,7 @@
 #include <numeric>
 #include <random>
 
-using MACE::Utility::WallTimer;
+using MACE::WallTimer;
 using namespace MACE::Math::Random;
 
 int main() {

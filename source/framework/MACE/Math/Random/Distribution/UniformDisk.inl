@@ -57,7 +57,7 @@ constexpr UniformDiskBase<T, AUniformDisk>::UniformDiskBase(const typename Base:
 
 #define MACE_MATH_RANDOM_DISTRIBUTION_UNIFORM_DISK_GENERATOR(rejection) \
     T r;                                                                \
-    Utility::ValueTypeOf<T> r2;                                         \
+    ValueTypeOf<T> r2;                                                  \
     do {                                                                \
         r = UniformCompactRectangle<T>({-0.5, 0.5}, {-0.5, 0.5})(g);    \
         r2 = Math::Hypot2(r[0], r[1]);                                  \

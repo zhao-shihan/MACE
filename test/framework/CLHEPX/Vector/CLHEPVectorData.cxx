@@ -1,6 +1,6 @@
-#include "MACE/CLHEPX/Vector/Hep2VectorData.hxx"
-#include "MACE/CLHEPX/Vector/Hep3VectorData.hxx"
-#include "MACE/CLHEPX/Vector/HepLorentzVectorData.hxx"
+#include "MACE/Extension/CLHEPX/Vector/Hep2VectorData.hxx"
+#include "MACE/Extension/CLHEPX/Vector/Hep3VectorData.hxx"
+#include "MACE/Extension/CLHEPX/Vector/HepLorentzVectorData.hxx"
 
 #include "CLHEP/Vector/LorentzVector.h"
 #include "CLHEP/Vector/ThreeVector.h"

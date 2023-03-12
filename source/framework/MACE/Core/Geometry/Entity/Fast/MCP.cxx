@@ -7,7 +7,7 @@
 #include "G4PVPlacement.hh"
 
 using MACE::Core::Geometry::Entity::Fast::MCP;
-using namespace MACE::Utility::LiteralUnit::Density;
+using namespace MACE::LiteralUnit::Density;
 
 void MCP::Construct(G4bool checkOverlaps) {
     const auto& description = Description::MCP::Instance();

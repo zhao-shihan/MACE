@@ -1,5 +1,5 @@
-#include "MACE/Geant4X/Physics/Particle/AntiMuonium.hxx"
-#include "MACE/Geant4X/Physics/Particle/Muonium.hxx"
+#include "MACE/Extension/Geant4X/Physics/Particle/AntiMuonium.hxx"
+#include "MACE/Extension/Geant4X/Physics/Particle/Muonium.hxx"
 #include "MACE/SimTarget/Action/SteppingAction.hxx"
 #include "MACE/SimTarget/Messenger/ActionMessenger.hxx"
 

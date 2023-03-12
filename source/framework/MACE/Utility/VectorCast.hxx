@@ -8,7 +8,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace MACE::Utility {
+namespace MACE::inline Utility {
 
 template<Concept::NumericVectorAny T>
 [[nodiscard]] T VectorCast(std::convertible_to<T> auto&& src) {
@@ -24,4 +24,4 @@ template<Concept::NumericVectorAny T>
     return dst;
 }
 
-} // namespace MACE::Utility
+} // namespace MACE::inline Utility

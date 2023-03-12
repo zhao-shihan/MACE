@@ -5,10 +5,10 @@
 
 namespace MACE::SimMACE::Field {
 
-using namespace MACE::Utility::LiteralUnit::ElectricFieldStrength;
-using namespace MACE::Utility::LiteralUnit::Energy;
-using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
-using namespace MACE::Utility::PhysicalConstant;
+using namespace MACE::LiteralUnit::ElectricFieldStrength;
+using namespace MACE::LiteralUnit::Energy;
+using namespace MACE::LiteralUnit::MagneticFluxDensity;
+using namespace MACE::PhysicalConstant;
 
 SelectorField::SelectorField() :
     NonMoveableBase(),

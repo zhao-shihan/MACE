@@ -9,7 +9,7 @@
 
 namespace MACE::Env::CLI {
 
-class CLIBase : public Utility::NonMoveableBase {
+class CLIBase : public NonMoveableBase {
 protected:
     CLIBase();
     ~CLIBase() = default;

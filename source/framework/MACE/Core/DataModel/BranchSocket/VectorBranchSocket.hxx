@@ -4,9 +4,9 @@
 #include "MACE/Core/DataModel/BranchSocketBase.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/ROOTUtil/LeafTypeCode.hxx"
+#include "MACE/Utility/ToSigned.hxx"
 #include "MACE/Utility/VectorAssign.hxx"
 #include "MACE/Utility/VectorCast.hxx"
-#include "MACE/Utility/ToSigned.hxx"
 
 #include "gsl/gsl"
 
@@ -21,8 +21,8 @@ public:
     VectorBranchSocket(const std::string& branchName, const std::array<std::string, N>& leafNames, const std::array<T, N>& defaultValues);
 
     template<Concept::Arithmetic U = T>
-    auto Value() const { return Utility::VectorCast<std::array<U, N>>(fVector); }
-    void Value(auto&& vector) { Utility::VectorAssign(fVector, std::forward<decltype(vector)>(vector)); }
+    auto Value() const { return VectorCast<std::array<U, N>>(fVector); }
+    void Value(auto&& vector) { VectorAssign(fVector, std::forward<decltype(vector)>(vector)); }
 
     void CreateBranch(TTree& tree) { tree.Branch(this->fBranchName.c_str(), fVector.data(), fLeafList.c_str()); }
     void ConnectToBranch(TTree& tree) { tree.SetBranchAddress(this->fBranchName.c_str(), fVector.data()); }

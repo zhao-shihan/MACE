@@ -16,8 +16,8 @@
 
 namespace MACE::Core::Geometry::Entity::Fast {
 
-using namespace MACE::Utility::LiteralUnit::Length;
-using namespace MACE::Utility::LiteralUnit::MathConstant;
+using namespace MACE::LiteralUnit::Length;
+using namespace MACE::LiteralUnit::MathConstant;
 
 void CDCFieldWire::Construct(G4bool checkOverlaps) {
     const auto name = "CDCFieldWire";

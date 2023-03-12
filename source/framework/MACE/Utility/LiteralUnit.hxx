@@ -4,7 +4,7 @@
 
 #include <numbers>
 
-namespace MACE::Utility::LiteralUnit {
+namespace MACE::inline Utility::LiteralUnit {
 
 #define MACE_UTILITY_LITERAL_UNIT_DEFINITION_IMPL(FloatType, fullSuffix, unit) \
     constexpr FloatType operator""_##fullSuffix(long double value) {           \
@@ -353,4 +353,4 @@ MACE_UTILITY_LITERAL_UNIT_DEFINITION(phi, std::numbers::phi_v<long double>)
 #undef MACE_UTILITY_LITERAL_UNIT_DEFINITION
 #undef MACE_UTILITY_LITERAL_UNIT_DEFINITION_IMPL
 
-} // namespace MACE::Utility::LiteralUnit
+} // namespace MACE::inline Utility::LiteralUnit

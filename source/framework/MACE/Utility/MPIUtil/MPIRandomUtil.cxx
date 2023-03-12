@@ -10,7 +10,7 @@
 #include <set>
 #include <vector>
 
-namespace MACE::Utility::MPIUtil {
+namespace MACE::inline Utility::MPIUtil {
 
 void MPIReSeedCLHEPRandom(gsl::not_null<CLHEP::HepRandomEngine*> randEng) {
     const auto& mpiEnv = Env::MPIEnv::Instance();
@@ -53,4 +53,4 @@ void MPIReSeedCLHEPRandom(gsl::not_null<CLHEP::HepRandomEngine*> randEng) {
     randEng->setSeed(seedRecv, 3);
 }
 
-} // namespace MACE::Utility::MPIUtil
+} // namespace MACE::inline Utility::MPIUtil

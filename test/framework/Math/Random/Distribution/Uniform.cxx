@@ -1,7 +1,7 @@
 #include "MACE/Math/Random/Distribution/Uniform.hxx"
 #include "MACE/Math/Random/Distribution/UniformRectangle.hxx"
 #include "MACE/Math/Random/Generator/MT1993764.hxx"
-#include "MACE/stdx/array_alias.hxx"
+#include "MACE/Extension/stdx/array_alias.hxx"
 
 #include "ROOT/RDataFrame.hxx"
 

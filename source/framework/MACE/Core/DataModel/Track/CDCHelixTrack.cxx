@@ -26,12 +26,12 @@ CDCHelixTrack::CDCHelixTrack(const CDCPhysicsTrack& physTrack, Double_t B) :
                 radius,
                 z0,
                 alpha] =
-        CDCTrackOperation::ConvertToHelixParameters(std::tuple{Utility::VectorCast<Eigen::Vector3d>(physTrack.VertexPosition()),
+        CDCTrackOperation::ConvertToHelixParameters(std::tuple{VectorCast<Eigen::Vector3d>(physTrack.VertexPosition()),
                                                                physTrack.VertexEnergy(),
-                                                               Utility::VectorCast<Eigen::Vector3d>(physTrack.VertexMomentum()),
+                                                               VectorCast<Eigen::Vector3d>(physTrack.VertexMomentum()),
                                                                physTrack.Particle()},
                                                     B);
-    Utility::VectorAssign(fCenter, center);
+    VectorAssign(fCenter, center);
     fRadius = radius;
     fZ0 = z0;
     fAlpha = alpha;

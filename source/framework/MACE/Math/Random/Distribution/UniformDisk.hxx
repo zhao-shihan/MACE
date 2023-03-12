@@ -3,11 +3,11 @@
 #include "MACE/Concept/InstantiatedFrom.hxx"
 #include "MACE/Concept/MathVector.hxx"
 #include "MACE/Concept/NumericVector.hxx"
+#include "MACE/Extension/stdx/array_alias.hxx"
 #include "MACE/Math/Hypot.hxx"
 #include "MACE/Math/IntegerPower.hxx"
 #include "MACE/Math/Random/Distribution/UniformRectangle.hxx"
 #include "MACE/Math/Random/RandomNumberDistributionBase.hxx"
-#include "MACE/stdx/array_alias.hxx"
 #include "MACE/Utility/ValueTypeOf.hxx"
 
 #include <array>
@@ -23,7 +23,7 @@ template<Concept::NumericVector2Any T, template<class> class AUniformDisk>
 class BasicUniformDiskParameter final : public DistributionParameterBase<BasicUniformDiskParameter<T, AUniformDisk>,
                                                                          AUniformDisk<T>> {
 private:
-    using VOfT = Utility::ValueTypeOf<T>;
+    using VOfT = ValueTypeOf<T>;
     using Base = DistributionParameterBase<BasicUniformDiskParameter<T, AUniformDisk>,
                                            AUniformDisk<T>>;
 
@@ -60,7 +60,7 @@ class UniformDiskBase : public RandomNumberDistributionBase<AUniformDisk<T>,
                                                             BasicUniformDiskParameter<T, AUniformDisk>,
                                                             T> {
 private:
-    using VOfT = Utility::ValueTypeOf<T>;
+    using VOfT = ValueTypeOf<T>;
     using Base = RandomNumberDistributionBase<AUniformDisk<T>,
                                               BasicUniformDiskParameter<T, AUniformDisk>,
                                               T>;
@@ -126,7 +126,7 @@ public:
 };
 
 template<typename VOfT, class T>
-UniformCompactDisk(VOfT, T) -> UniformCompactDisk<std::enable_if_t<std::same_as<VOfT, Utility::ValueTypeOf<std::remove_cvref_t<T>>>, std::remove_cvref_t<T>>>;
+UniformCompactDisk(VOfT, T) -> UniformCompactDisk<std::enable_if_t<std::same_as<VOfT, ValueTypeOf<std::remove_cvref_t<T>>>, std::remove_cvref_t<T>>>;
 template<typename T, typename U, typename V>
 UniformCompactDisk(T, U, V) -> UniformCompactDisk<std::array<std::common_type_t<T, U, V>, 2>>;
 template<typename T>
@@ -148,7 +148,7 @@ public:
 };
 
 template<typename VOfT, class T>
-UniformDisk(VOfT, T) -> UniformDisk<std::enable_if_t<std::same_as<VOfT, Utility::ValueTypeOf<std::remove_cvref_t<T>>>, std::remove_cvref_t<T>>>;
+UniformDisk(VOfT, T) -> UniformDisk<std::enable_if_t<std::same_as<VOfT, ValueTypeOf<std::remove_cvref_t<T>>>, std::remove_cvref_t<T>>>;
 template<typename T, typename U, typename V>
 UniformDisk(T, U, V) -> UniformDisk<std::array<std::common_type_t<T, U, V>, 2>>;
 template<typename T>

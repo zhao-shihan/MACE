@@ -12,7 +12,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace MACE::Utility {
+namespace MACE::inline Utility {
 
 /// @brief A fixed-capacity string on the stack.
 /// As an option for some known-size cases or aggressive SSO (Short String
@@ -236,6 +236,6 @@ private:
 /// @brief A short string (15 characters) on the stack. Size 16 bytes.
 using ShortString = FixedString<15>;
 
-} // namespace MACE::Utility
+} // namespace MACE::inline Utility
 
 #include "MACE/Utility/FixedString.inl"

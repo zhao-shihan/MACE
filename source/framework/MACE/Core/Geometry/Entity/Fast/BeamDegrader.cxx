@@ -8,7 +8,7 @@
 
 namespace MACE::Core::Geometry::Entity::Fast {
 
-using namespace MACE::Utility::LiteralUnit::Density;
+using namespace MACE::LiteralUnit::Density;
 
 bool BeamDegrader::Enabled() const {
     return Description::BeamDegrader::Instance().Enabled();

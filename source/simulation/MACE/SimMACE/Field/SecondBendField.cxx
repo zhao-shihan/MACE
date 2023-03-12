@@ -6,7 +6,7 @@
 
 namespace MACE::SimMACE::Field {
 
-using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
+using namespace MACE::LiteralUnit::MagneticFluxDensity;
 using TransportLineDescription = Core::Geometry::Description::TransportLine;
 
 SecondBendField::SecondBendField() :

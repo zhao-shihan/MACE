@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Core/DataModel/SimTrack/MuoniumSimTrack.hxx"
-#include "MACE/Geant4X/UseG4Allocator.hxx"
+#include "MACE/Extension/Geant4X/UseG4Allocator.hxx"
 
 #include "G4ThreeVector.hh"
 

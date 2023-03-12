@@ -7,7 +7,7 @@
 
 namespace MACE::SimMACE::Field {
 
-class LinacField final : public Utility::NonMoveableBase,
+class LinacField final : public NonMoveableBase,
                          public G4ElectroMagneticField {
 public:
     LinacField();

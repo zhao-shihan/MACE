@@ -32,11 +32,11 @@ std::optional<const YAML::Node> IDescription::UnpackToLeafNodeForImporting(const
     try {
         std::array<YAML::Node, sizeof...(nodeNames)> leafNodes;
         gsl::index i = 0;
-        Utility::TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
-                              [&node, &leafNodes, &i](auto&& name) {
-                                  leafNodes[i] = (i == 0 ? node : leafNodes[i - 1])[name];
-                                  ++i;
-                              });
+        TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
+                     [&node, &leafNodes, &i](auto&& name) {
+                         leafNodes[i] = (i == 0 ? node : leafNodes[i - 1])[name];
+                         ++i;
+                     });
         return leafNodes.back();
     } catch (const YAML::InvalidNode&) {
         return std::nullopt;
@@ -47,11 +47,11 @@ template<std::convertible_to<std::string>... AStrings>
 YAML::Node IDescription::UnpackToLeafNodeForExporting(YAML::Node& node, AStrings&&... nodeNames) const {
     std::array<YAML::Node, sizeof...(nodeNames)> leafNodes;
     gsl::index i = 0;
-    Utility::TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
-                          [&node, &leafNodes, &i](auto&& name) {
-                              leafNodes[i] = (i == 0 ? node : leafNodes[i - 1])[name];
-                              ++i;
-                          });
+    TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
+                 [&node, &leafNodes, &i](auto&& name) {
+                     leafNodes[i] = (i == 0 ? node : leafNodes[i - 1])[name];
+                     ++i;
+                 });
     return leafNodes.back();
 }
 
@@ -60,10 +60,10 @@ void IDescription::PrintNodeNotFoundWarning(AStrings&&... nodeNames) const {
     if (const auto& env = Env::BasicEnv::Instance();
         env.GetVerboseLevel() >= Env::VerboseLevel::Warning) {
         std::cout << "MACE::Core::Geometry::IDescription: YAML node \"" << fName;
-        Utility::TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
-                              [](auto&& name) {
-                                  std::cout << '/' << name;
-                              });
+        TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
+                     [](auto&& name) {
+                         std::cout << '/' << name;
+                     });
         std::cout << "\" not defined, skipping" << std::endl;
     }
 }

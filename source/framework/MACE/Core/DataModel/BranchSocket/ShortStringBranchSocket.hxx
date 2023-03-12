@@ -7,8 +7,6 @@
 
 namespace MACE::Core::DataModel::BranchSocket {
 
-using Utility::ShortString;
-
 class ShortStringBranchSocket final : public BranchSocketBase<ShortStringBranchSocket, ShortString> {
 public:
     ShortStringBranchSocket(const std::string& branchName, const ShortString& defaultString);

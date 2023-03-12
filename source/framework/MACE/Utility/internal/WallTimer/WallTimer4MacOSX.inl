@@ -16,7 +16,7 @@
 //    misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-namespace MACE::Utility::internal {
+namespace MACE::inline Utility::internal {
 
 template<typename ATime>
 WallTimer<ATime>::WallTimer() noexcept :
@@ -34,4 +34,4 @@ ATime WallTimer<ATime>::NanosecondsElapsed() const noexcept {
            static_cast<ATime>(t.tv_nsec - fT0.tv_nsec);
 }
 
-} // namespace MACE::Utility::internal
+} // namespace MACE::inline Utility::internal

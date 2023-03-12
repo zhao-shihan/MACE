@@ -20,7 +20,7 @@ namespace MACE::Core {
 
 using namespace std::string_view_literals;
 
-class DataFactory final : public Utility::MerelyMoveableBase {
+class DataFactory final : public MerelyMoveableBase {
 public:
     DataFactory();
 

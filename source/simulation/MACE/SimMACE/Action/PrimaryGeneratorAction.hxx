@@ -1,13 +1,13 @@
 #pragma once
 
-#include "MACE/Geant4X/Generator/SurfaceMuon.hxx"
+#include "MACE/Extension/Geant4X/Generator/SurfaceMuon.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 
 namespace MACE::SimMACE::Action {
 
-class PrimaryGeneratorAction final : public Utility::NonMoveableBase,
+class PrimaryGeneratorAction final : public NonMoveableBase,
                                      public G4VUserPrimaryGeneratorAction {
 public:
     PrimaryGeneratorAction();

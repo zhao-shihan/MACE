@@ -104,7 +104,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     // Register materials
     ////////////////////////////////////////////////////////////////
     {
-        using namespace MACE::Utility::LiteralUnit::Density;
+        using namespace MACE::LiteralUnit::Density;
 
         const auto nist = G4NistManager::Instance();
 
@@ -262,8 +262,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     // Register background fields
     ////////////////////////////////////////////////////////////////
     {
-        using namespace MACE::Utility::LiteralUnit::Length;
-        using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
+        using namespace MACE::LiteralUnit::Length;
+        using namespace MACE::LiteralUnit::MagneticFluxDensity;
         using namespace Field;
 
         constexpr auto hMin = 1_um;

@@ -3,7 +3,7 @@
 #include <tuple>
 #include <utility>
 
-namespace MACE::Utility {
+namespace MACE::inline Utility {
 
 /// @brief Traverses a tuple (e.g. std::tuple, std::pair, std::array, etc.).
 /// The "tuple" can be anything acceptable by std::apply.
@@ -16,4 +16,4 @@ constexpr void TupleForEach(auto&& tuple, auto&& func) {
         std::forward<decltype(tuple)>(tuple));
 }
 
-} // namespace MACE::Utility
+} // namespace MACE::inline Utility

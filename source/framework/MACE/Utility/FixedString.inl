@@ -1,4 +1,4 @@
-namespace MACE::Utility {
+namespace MACE::inline Utility {
 
 template<std::size_t AMaxSize>
     requires((AMaxSize + 1) % alignof(void*) == 0)
@@ -220,4 +220,4 @@ std::strong_ordering FixedString<AMaxSize>::operator<=>(auto&& rhs) const noexce
                       std::strong_ordering::greater;
 }
 
-} // namespace MACE::Utility
+} // namespace MACE::inline Utility

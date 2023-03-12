@@ -3,7 +3,7 @@
 
 namespace MACE::Core::Geometry::Description {
 
-using namespace Utility::LiteralUnit::Length;
+using namespace LiteralUnit::Length;
 
 World::World() :
     ISingletonDescription<World>(__func__),

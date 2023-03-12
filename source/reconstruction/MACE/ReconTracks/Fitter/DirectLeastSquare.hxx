@@ -9,7 +9,7 @@
 
 namespace MACE::ReconTracks::Fitter {
 
-using namespace Utility::LiteralUnit::Length;
+using namespace LiteralUnit::Length;
 
 template<class CDCHit_t, class Track_t>
 class DirectLeastSquare final : public Interface::Fitter<CDCHit_t, Track_t> {

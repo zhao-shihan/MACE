@@ -8,8 +8,8 @@
 
 using MACE::Core::DataFactory;
 using namespace MACE::Core::DataModel::Track;
-using namespace MACE::Utility::LiteralUnit;
-using namespace MACE::Utility::VectorArithmetic::Vector2Arithmetic;
+using namespace MACE::LiteralUnit;
+using namespace MACE::VectorArithmetic::Vector2Arithmetic;
 
 int main(int, char* argv[]) {
     DataFactory dataHub;

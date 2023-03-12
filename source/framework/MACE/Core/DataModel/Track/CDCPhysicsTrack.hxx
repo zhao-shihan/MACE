@@ -5,7 +5,7 @@
 #include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "MACE/Core/DataModel/Track/CDCTrackBase.hxx"
 #include "MACE/Core/DataModel/TransientData.hxx"
-#include "MACE/stdx/array_alias.hxx"
+#include "MACE/Extension/stdx/array_alias.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 #include "MACE/Utility/VectorAssign.hxx"
@@ -16,9 +16,9 @@
 
 namespace MACE::Core::DataModel::Track {
 
-using namespace Utility::LiteralUnit::MagneticFluxDensity;
-using Utility::ShortString;
-using Utility::PhysicalConstant::electron_mass_c2;
+using namespace LiteralUnit::MagneticFluxDensity;
+
+using PhysicalConstant::electron_mass_c2;
 
 class CDCHelixTrack;
 
@@ -36,18 +36,18 @@ public:
 
     const auto& VertexPosition() const { return fVertexPosition; }
     template<Concept::NumericVector3D T>
-    auto VertexPosition() const { return Utility::VectorCast<T>(fVertexPosition); }
+    auto VertexPosition() const { return VectorCast<T>(fVertexPosition); }
     const auto& VertexEnergy() const { return fVertexEnergy; }
     const auto& VertexMomentum() const { return fVertexMomentum; }
     template<Concept::NumericVector3D T>
-    auto VertexMomentum() const { return Utility::VectorCast<T>(fVertexMomentum); }
+    auto VertexMomentum() const { return VectorCast<T>(fVertexMomentum); }
     const auto& Particle() const { return fParticle; }
 
     void VertexPosition(const stdx::array3d& x) { fVertexPosition = x; }
-    void VertexPosition(auto&& x) { Utility::VectorAssign(fVertexPosition, std::forward<decltype(x)>(x)); }
+    void VertexPosition(auto&& x) { VectorAssign(fVertexPosition, std::forward<decltype(x)>(x)); }
     void VertexEnergy(double E) { fVertexEnergy = E; }
     void VertexMomentum(const stdx::array3d& p) { fVertexMomentum = p; }
-    void VertexMomentum(auto&& p) { Utility::VectorAssign(fVertexMomentum, std::forward<decltype(p)>(p)); }
+    void VertexMomentum(auto&& p) { VectorAssign(fVertexMomentum, std::forward<decltype(p)>(p)); }
     void Particle(auto&& p) { fParticle = std::forward<decltype(p)>(p); }
 
     void FillBranchSockets() const noexcept;

@@ -34,7 +34,7 @@ public:
     static constexpr auto BasicTreeName() noexcept { return "MSimTrk"sv; }
 
 private:
-    Utility::ShortString fParticle;
+    ShortString fParticle;
     int fG4EventID;
     int fG4TrackID;
 

@@ -15,7 +15,7 @@ namespace internal {
 
 template<class T>
 concept ExtraRequirementsForMathVector =
-    requires(T u, const T v, const T w, const Utility::ValueTypeOf<T> c) {
+    requires(T u, const T v, const T w, const ValueTypeOf<T> c) {
         { u += v } -> std::same_as<T&>;
         { u -= v } -> std::same_as<T&>;
         { u *= c } -> std::same_as<T&>;

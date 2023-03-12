@@ -3,7 +3,7 @@
 #include <concepts>
 #include <vector>
 
-namespace MACE::Utility {
+namespace MACE::inline Utility {
 
 /// @brief Distribute numbers uniformly to takers.
 /// @param nIndices Total number of index
@@ -66,6 +66,6 @@ std::vector<IntegralIndexRange<AIndex>> DivideIndexRangeTakerWise(AIndex begin, 
 template<std::integral AIndex>
 std::vector<IntegralIndexRange<AIndex>> DivideIndexRangeTakerWise(std::pair<AIndex, AIndex> beginEnd, AIndex nTakers);
 
-} // namespace MACE::Utility
+} // namespace MACE::inline Utility
 
 #include "MACE/Utility/DivideIndices.inl"

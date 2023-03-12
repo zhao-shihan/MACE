@@ -67,7 +67,7 @@ void IEntity::RegisterSD(gsl::not_null<G4VSensitiveDetector*> sd) const {
 
 void IEntity::Export(std::filesystem::path gdmlFile, gsl::index iPhysicalVolume) const {
 #if MACE_USE_G4GDML
-    if (Env::MPIEnv::Available()) { Utility::MPIUtil::MakeMPIFilePathInPlace(gdmlFile); }
+    if (Env::MPIEnv::Available()) { MPIUtil::MakeMPIFilePathInPlace(gdmlFile); }
     G4GDMLParser gdml;
     gdml.SetAddPointerToName(false);
     gdml.SetOutputFileOverwrite(true);

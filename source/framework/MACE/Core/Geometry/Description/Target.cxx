@@ -95,7 +95,7 @@ void Target::ExportValues(YAML::Node& node) const {
     }
 }
 
-using namespace Utility::LiteralUnit::Length;
+using namespace LiteralUnit::Length;
 
 Target::CuboidTarget::CuboidTarget() :
     fWidth(6_cm),

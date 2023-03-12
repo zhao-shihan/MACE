@@ -2,7 +2,7 @@
 #include "MACE/Utility/MPIUtil/CheckedMPICall.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
-namespace MACE::Utility::MPIUtil {
+namespace MACE::inline Utility::MPIUtil {
 
 void MakeMPIFilePathInPlace(std::filesystem::path& path) {
     const auto extension = path.extension().generic_string();
@@ -38,4 +38,4 @@ void MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extens
     }
 }
 
-} // namespace MACE::Utility::MPIUtil
+} // namespace MACE::inline Utility::MPIUtil

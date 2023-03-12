@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Geant4X/MPIRunManager.hxx"
+#include "MACE/Extension/Geant4X/MPIRunManager.hxx"
 #include "MACE/SimMACE/Action/DetectorConstruction.hxx"
 #include "MACE/SimMACE/Action/EventAction.hxx"
 #include "MACE/SimMACE/Action/PhysicsList.hxx"

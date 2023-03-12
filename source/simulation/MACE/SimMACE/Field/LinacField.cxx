@@ -7,9 +7,9 @@ namespace MACE::SimMACE::Field {
 
 using LinacDescription = MACE::Core::Geometry::Description::LinacField;
 using Messenger::FieldMessenger;
-using namespace MACE::Utility::LiteralUnit::ElectricPotential;
-using namespace MACE::Utility::LiteralUnit::Length;
-using namespace MACE::Utility::LiteralUnit::MagneticFluxDensity;
+using namespace MACE::LiteralUnit::ElectricPotential;
+using namespace MACE::LiteralUnit::Length;
+using namespace MACE::LiteralUnit::MagneticFluxDensity;
 
 LinacField::LinacField() :
     NonMoveableBase(),

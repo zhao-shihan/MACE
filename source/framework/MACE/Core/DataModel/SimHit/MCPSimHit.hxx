@@ -4,7 +4,7 @@
 #include "MACE/Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 #include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "MACE/Core/DataModel/Hit/MCPHit.hxx"
-#include "MACE/stdx/array_alias.hxx"
+#include "MACE/Extension/stdx/array_alias.hxx"
 #include "MACE/Utility/VectorAssign.hxx"
 #include "MACE/Utility/VectorCast.hxx"
 
@@ -29,14 +29,14 @@ public:
     const auto& VertexTime() const { return fVertexTime; }
     const auto& VertexPosition() const { return fVertexPosition; }
     template<Concept::NumericVector3D T>
-    auto VertexPosition() const { return Utility::VectorCast<T>(fVertexPosition); }
+    auto VertexPosition() const { return VectorCast<T>(fVertexPosition); }
     const auto& Particle() const { return fParticle; }
 
     void G4EventID(int val) { fG4EventID = val; }
     void G4TrackID(int val) { fG4TrackID = val; }
     void VertexTime(double val) { fVertexTime = val; }
     void VertexPosition(const stdx::array3d& x) { fVertexPosition = x; }
-    void VertexPosition(auto&& x) { Utility::VectorAssign(fVertexPosition, std::forward<decltype(x)>(x)); }
+    void VertexPosition(auto&& x) { VectorAssign(fVertexPosition, std::forward<decltype(x)>(x)); }
     void Particle(auto&& p) { fParticle = std::forward<decltype(p)>(p); }
 
     inline void FillBranchSockets() const noexcept;
@@ -49,7 +49,7 @@ private:
     int fG4TrackID;
     double fVertexTime;
     stdx::array3d fVertexPosition;
-    Utility::ShortString fParticle;
+    ShortString fParticle;
 
     static BranchSocket::IntBranchSocket fgG4EventID;
     static BranchSocket::IntBranchSocket fgG4TrackID;

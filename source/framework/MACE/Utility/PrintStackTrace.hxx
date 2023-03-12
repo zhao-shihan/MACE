@@ -9,11 +9,11 @@
 #include <climits>
 #include <iostream>
 
-namespace MACE::Utility {
+namespace MACE::inline Utility {
 
 template<Concept::Character AChar = char>
 void PrintStackTrace(backward::StackTrace& stack, std::basic_ostream<AChar>& os = std::clog);
 
-} // namespace MACE::Utility
+} // namespace MACE::inline Utility
 
 #include "MACE/Utility/PrintStackTrace.inl"

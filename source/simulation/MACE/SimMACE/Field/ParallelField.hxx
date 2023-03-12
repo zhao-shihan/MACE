@@ -6,7 +6,7 @@
 
 namespace MACE::SimMACE::Field {
 
-class ParallelField final : public Utility::NonMoveableBase,
+class ParallelField final : public NonMoveableBase,
                             public G4UniformMagField {
 public:
     ParallelField(G4double B);

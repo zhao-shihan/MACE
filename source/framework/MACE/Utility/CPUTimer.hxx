@@ -15,11 +15,11 @@
 #include <concepts>
 #include <limits>
 
-namespace MACE::Utility {
+namespace MACE::inline Utility {
 
 /// @brief CPU timer better than std::clock() when available.
 template<std::floating_point ATime = double>
     requires(std::numeric_limits<ATime>::digits >= std::numeric_limits<double>::digits)
 class CPUTimer final : public internal::CPUTimer<ATime> {};
 
-} // namespace MACE::Utility
+} // namespace MACE::inline Utility

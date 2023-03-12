@@ -4,7 +4,7 @@
 
 namespace MACE::SimTarget::Action {
 
-using namespace Utility::LiteralUnit::Length;
+using namespace LiteralUnit::Length;
 
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
     FreeSingleton(),

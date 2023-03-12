@@ -4,7 +4,7 @@
 #include "MACE/Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "MACE/Core/DataModel/TransientData.hxx"
-#include "MACE/stdx/array_alias.hxx"
+#include "MACE/Extension/stdx/array_alias.hxx"
 #include "MACE/Utility/VectorAssign.hxx"
 #include "MACE/Utility/VectorCast.hxx"
 
@@ -29,24 +29,24 @@ public:
     const auto& VertexTime() const { return fVertexTime; }
     const auto& VertexPosition() const { return fVertexPosition; }
     template<Concept::NumericVector3D T>
-    auto VertexPosition() const { return Utility::VectorCast<T>(fVertexPosition); }
+    auto VertexPosition() const { return VectorCast<T>(fVertexPosition); }
     const auto& VertexMomentum() const { return fVertexMomentum; }
     template<Concept::NumericVector3D T>
-    auto VertexMomentum() const { return Utility::VectorCast<T>(fVertexMomentum); }
+    auto VertexMomentum() const { return VectorCast<T>(fVertexMomentum); }
     const auto& DecayTime() const { return fDecayTime; }
     const auto& DecayPosition() const { return fDecayPosition; }
     const auto& DecayMomentum() const { return fDecayMomentum; }
 
     void VertexTime(double val) { fVertexTime = val; }
     void VertexPosition(const stdx::array3d& x) { fVertexPosition = x; }
-    void VertexPosition(auto&& x) { Utility::VectorAssign(fVertexPosition, std::forward<decltype(x)>(x)); }
+    void VertexPosition(auto&& x) { VectorAssign(fVertexPosition, std::forward<decltype(x)>(x)); }
     void VertexMomentum(const stdx::array3d& p) { fVertexMomentum = p; }
-    void VertexMomentum(auto&& p) { Utility::VectorAssign(fVertexMomentum, std::forward<decltype(p)>(p)); }
+    void VertexMomentum(auto&& p) { VectorAssign(fVertexMomentum, std::forward<decltype(p)>(p)); }
     void DecayTime(double val) { fDecayTime = val; }
     void DecayPosition(const stdx::array3d& x) { fDecayPosition = x; }
-    void DecayPosition(auto&& x) { Utility::VectorAssign(fDecayPosition, std::forward<decltype(x)>(x)); }
+    void DecayPosition(auto&& x) { VectorAssign(fDecayPosition, std::forward<decltype(x)>(x)); }
     void DecayMomentum(const stdx::array3d& p) { fDecayMomentum = p; }
-    void DecayMomentum(auto&& p) { Utility::VectorAssign(fDecayMomentum, std::forward<decltype(p)>(p)); }
+    void DecayMomentum(auto&& p) { VectorAssign(fDecayMomentum, std::forward<decltype(p)>(p)); }
 
     void FillBranchSockets() const noexcept;
     static void CreateBranches(TTree& tree);

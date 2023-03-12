@@ -21,7 +21,7 @@
 #include <ctime>
 #include <sys/time.h>
 
-namespace MACE::Utility::internal {
+namespace MACE::inline Utility::internal {
 
 template<typename ATime>
 class WallTimer {
@@ -38,6 +38,6 @@ private:
     std::timespec fT0;
 };
 
-} // namespace MACE::Utility::internal
+} // namespace MACE::inline Utility::internal
 
 #include "MACE/Utility/internal/WallTimer/WallTimer4LinuxBSD.inl"

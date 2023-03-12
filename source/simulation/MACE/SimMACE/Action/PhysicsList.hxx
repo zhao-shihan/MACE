@@ -6,7 +6,7 @@
 
 namespace MACE::SimMACE::Action {
 
-class PhysicsList final : public Utility::NonMoveableBase,
+class PhysicsList final : public NonMoveableBase,
                           public G4VModularPhysicsList {
 public:
     PhysicsList();

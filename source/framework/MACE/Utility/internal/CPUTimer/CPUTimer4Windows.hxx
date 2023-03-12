@@ -13,7 +13,7 @@
 
 #include <cstring>
 
-namespace MACE::Utility::internal {
+namespace MACE::inline Utility::internal {
 
 template<typename ATime>
 class CPUTimer {
@@ -35,6 +35,6 @@ private:
     ULARGE_INTEGER fT0;
 };
 
-} // namespace MACE::Utility::internal
+} // namespace MACE::inline Utility::internal
 
 #include "MACE/Utility/internal/CPUTimer/CPUTimer4Windows.inl"

@@ -1,4 +1,4 @@
-#include "MACE/CLHEPX/Random/MT64Engine.hxx"
+#include "MACE/Extension/CLHEPX/Random/MT64Engine.hxx"
 #include "MACE/Math/Random/Distribution/Uniform.hxx"
 #include "MACE/Math/Random/Generator/MT1993764.hxx"
 #include "MACE/Utility/WallTimer.hxx"
@@ -12,7 +12,7 @@
 
 int main() {
     using namespace MACE::Math::Random;
-    using MACE::Utility::WallTimer;
+    using MACE::WallTimer;
 
     Generator::MT1993764 mt64(114514);
     MACE::CLHEPX::Random::MT64Engine mt64x(114514);

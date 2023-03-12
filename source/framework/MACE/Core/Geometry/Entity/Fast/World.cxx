@@ -7,8 +7,8 @@
 #include "G4PVPlacement.hh"
 
 using MACE::Core::Geometry::Entity::Fast::World;
-using namespace MACE::Utility::LiteralUnit::Density;
-using namespace MACE::Utility::LiteralUnit::Temperature;
+using namespace MACE::LiteralUnit::Density;
+using namespace MACE::LiteralUnit::Temperature;
 
 void World::Construct(G4bool checkOverlaps) {
     const auto& description = Description::World::Instance();

@@ -1,4 +1,4 @@
-namespace MACE::Utility {
+namespace MACE::inline Utility {
 
 template<Concept::Character AChar>
 void PrintStackTrace(backward::StackTrace& stack, std::basic_ostream<AChar>& os) {
@@ -9,7 +9,7 @@ void PrintStackTrace(backward::StackTrace& stack, std::basic_ostream<AChar>& os)
     const auto oldFill = os.fill();
     os << "Stack trace (most recent call last):\n";
     backward::SnippetFactory snippetFactory;
-    for (auto frame = Utility::ToSigned(stack.size()) - 1; frame >= 0; --frame) {
+    for (auto frame = ToSigned(stack.size()) - 1; frame >= 0; --frame) {
         const auto trace = resolver.resolve(stack[frame]);
         const std::string_view function = trace.object_function;
         const std::string_view binary = trace.object_filename;
@@ -34,4 +34,4 @@ void PrintStackTrace(backward::StackTrace& stack, std::basic_ostream<AChar>& os)
        << std::setiosflags(oldFlag);
 }
 
-} // namespace MACE::Utility
+} // namespace MACE::inline Utility

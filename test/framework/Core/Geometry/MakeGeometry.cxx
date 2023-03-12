@@ -87,7 +87,7 @@ int main(int argc, char* argv[]) {
     // Register materials
     ////////////////////////////////////////////////////////////////
 
-    using namespace MACE::Utility::LiteralUnit::Density;
+    using namespace MACE::LiteralUnit::Density;
 
     const auto nist = G4NistManager::Instance();
 

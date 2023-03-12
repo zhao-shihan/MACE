@@ -30,7 +30,7 @@ Analysis::Analysis() :
 
 void Analysis::Open(Option_t* option) {
     fFile = std::make_unique<TFile>(
-        Utility::MPIUtil::MakeMPIFilePath(fResultPath, ".root").generic_string().c_str(),
+        MPIUtil::MakeMPIFilePath(fResultPath, ".root").generic_string().c_str(),
         option);
 }
 

@@ -11,7 +11,7 @@
 namespace MACE::Core::DataModel {
 
 template<class ADerived, typename T>
-class BranchSocketBase : public Utility::NonMoveableBase {
+class BranchSocketBase : public NonMoveableBase {
 protected:
     BranchSocketBase(const std::string& branchName);
     ~BranchSocketBase() = default;

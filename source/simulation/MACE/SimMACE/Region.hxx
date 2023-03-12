@@ -18,7 +18,7 @@ enum class RegionType {
     MCPSensitive
 };
 
-class Region final : public Utility::NonMoveableBase,
+class Region final : public NonMoveableBase,
                      public G4Region {
 public:
     Region(const G4String& name, RegionType type);

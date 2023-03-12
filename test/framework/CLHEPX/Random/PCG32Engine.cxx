@@ -1,4 +1,4 @@
-#include "MACE/CLHEPX/Random/PCG32Engine.hxx"
+#include "MACE/Extension/CLHEPX/Random/PCG32Engine.hxx"
 #include "MACE/Math/Random/Distribution/Uniform.hxx"
 #include "MACE/Math/Random/Generator/PCGXSHRR6432.hxx"
 #include "MACE/Utility/WallTimer.hxx"
@@ -12,7 +12,7 @@
 
 int main() {
     using namespace MACE::Math::Random;
-    using MACE::Utility::WallTimer;
+    using MACE::WallTimer;
 
     Generator::PCGXSHRR6432 pcg32(114514);
     MACE::CLHEPX::Random::PCG32Engine pcg32x(114514);

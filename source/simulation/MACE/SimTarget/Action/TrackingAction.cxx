@@ -1,5 +1,5 @@
-#include "MACE/Geant4X/Physics/Particle/AntiMuonium.hxx"
-#include "MACE/Geant4X/Physics/Particle/Muonium.hxx"
+#include "MACE/Extension/Geant4X/Physics/Particle/AntiMuonium.hxx"
+#include "MACE/Extension/Geant4X/Physics/Particle/Muonium.hxx"
 #include "MACE/SimTarget/Action/TrackingAction.hxx"
 #include "MACE/SimTarget/Analysis.hxx"
 #include "MACE/SimTarget/MuoniumTrack.hxx"
@@ -10,7 +10,7 @@
 namespace MACE::SimTarget::Action {
 
 using namespace Geant4X::Physics::Particle;
-using namespace Utility::PhysicalConstant;
+using namespace PhysicalConstant;
 
 TrackingAction::TrackingAction() :
     FreeSingleton(),

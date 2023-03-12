@@ -29,7 +29,7 @@
 
 namespace MACE::Core::Geometry {
 
-class IEntity : public Utility::NonMoveableBase {
+class IEntity : public NonMoveableBase {
 public:
     virtual ~IEntity() = default;
 
