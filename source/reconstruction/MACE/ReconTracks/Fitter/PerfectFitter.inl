@@ -2,7 +2,7 @@ namespace MACE::ReconTracks::Fitter {
 
 template<class CDCHit_t, class Track_t>
 bool PerfectFitter<CDCHit_t, Track_t>::Fit(std::vector<HitPtr>& hitData, Track_t& track) {
-    using namespace Core::DataModel::Track;
+    using namespace DataModel::Track;
 
     const auto& firstHit = *std::ranges::min_element(
         std::as_const(hitData),

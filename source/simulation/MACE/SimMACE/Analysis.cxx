@@ -42,7 +42,7 @@ void Analysis::Close(Option_t* option) {
 }
 
 void Analysis::WriteEvent(G4int repetitionId) {
-    using namespace Core::DataModel::SimHit;
+    using namespace DataModel::SimHit;
 
     if (repetitionId != fRepetitionIdOfLastG4Event) { // means a new repetition or the first repetition
         // last repetition had already come to the end, write its data. If first, skipped inside.

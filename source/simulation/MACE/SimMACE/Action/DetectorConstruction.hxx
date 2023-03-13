@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Core/Geometry/Entity/Fast/All.hxx"
+#include "MACE/Geometry/Entity/Fast/All.hxx"
 #include "MACE/SimMACE/Region.hxx"
 #include "MACE/SimMACE/SD/CDCSD.hxx"
 #include "MACE/SimMACE/SD/EMCalSD.hxx"
@@ -51,7 +51,7 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    gsl::not_null<std::shared_ptr<Core::Geometry::IEntity>> fWorld;
+    gsl::not_null<std::shared_ptr<Geometry::IEntity>> fWorld;
 
     Region* fEMCalSensitiveRegion;
     Region* fDefaultSolidRegion;

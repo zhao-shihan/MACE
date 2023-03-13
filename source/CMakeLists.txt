@@ -1,8 +1,8 @@
 project(MACE)
 
-# Framework
+add_subdirectory(datamodel)
+# add_subdirectory(field)
 add_subdirectory(framework)
-# Simulation
-add_subdirectory(simulation)
-# Reconstruction
+add_subdirectory(geometry)
 # add_subdirectory(reconstruction)
+add_subdirectory(simulation)

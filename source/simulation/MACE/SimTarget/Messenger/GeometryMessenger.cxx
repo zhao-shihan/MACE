@@ -1,8 +1,8 @@
-#include "MACE/Core/Geometry/Description/BeamDegrader.hxx"
-#include "MACE/Core/Geometry/Description/BeamMonitor.hxx"
-#include "MACE/Core/Geometry/Description/Target.hxx"
-#include "MACE/Core/Geometry/Description/World.hxx"
-#include "MACE/Core/Geometry/DescriptionIO.hxx"
+#include "MACE/Geometry/Description/BeamDegrader.hxx"
+#include "MACE/Geometry/Description/BeamMonitor.hxx"
+#include "MACE/Geometry/Description/Target.hxx"
+#include "MACE/Geometry/Description/World.hxx"
+#include "MACE/Geometry/DescriptionIO.hxx"
 #include "MACE/SimTarget/Action/DetectorConstruction.hxx"
 #include "MACE/SimTarget/Messenger/GeometryMessenger.hxx"
 #include "MACE/SimTarget/RunManager.hxx"
@@ -61,7 +61,7 @@ GeometryMessenger::~GeometryMessenger() = default;
 
 void GeometryMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     using UsedDescriptions = Action::DetectorConstruction::UsedDescriptions;
-    using Core::Geometry::DescriptionIO;
+    using Geometry::DescriptionIO;
     if (command == fImportDescription.get()) {
         DescriptionIO::Import<UsedDescriptions>(std::string_view(value));
     } else if (command == fExportDescription.get()) {

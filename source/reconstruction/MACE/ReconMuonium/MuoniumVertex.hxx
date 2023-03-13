@@ -1,9 +1,9 @@
 #pragma once
 
-#include "MACE/Core/DataFactory.hxx"
-#include "MACE/Core/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
-#include "MACE/Core/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
-#include "MACE/Core/DataModel/BranchSocket/VectorBranchSocket.hxx"
+#include "MACE/DataModel/DataFactory.hxx"
+#include "MACE/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
+#include "MACE/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
+#include "MACE/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "MACE/Extension/stdx/array_alias.hxx"
 #include "MACE/Utility/VectorAssign.hxx"
 

@@ -1,6 +1,7 @@
 #include "MACE/Compatibility/std2b/to_underlying.hxx"
 #include "MACE/Env/BasicEnv.hxx"
 #include "MACE/Extension/Geant4X/Physics/MuoniumPhysics.hxx"
+#include "MACE/Geometry/Description/Target.hxx"
 #include "MACE/SimTarget/Action/PhysicsList.hxx"
 
 #include "G4DecayPhysics.hh"
@@ -15,7 +16,7 @@ PhysicsList::PhysicsList() :
     G4VModularPhysicsList() {
     verboseLevel = std2b::to_underlying(Env::BasicEnv::Instance().GetVerboseLevel());
     RegisterPhysics(new G4EmStandardPhysics_option4(verboseLevel));
-    RegisterPhysics(new MuoniumPhysics(verboseLevel));
+    RegisterPhysics(new MuoniumPhysics<Geometry::Description::Target>(verboseLevel));
 }
 
 } // namespace MACE::SimTarget::Action

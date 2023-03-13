@@ -21,7 +21,7 @@ DetectorConstruction::DetectorConstruction() :
     NonMoveableBase(),
     G4VUserDetectorConstruction(),
     fCheckOverlap(false),
-    fWorld(std::make_shared<Core::Geometry::Entity::Fast::World>()),
+    fWorld(std::make_shared<Geometry::Entity::Fast::World>()),
     fEMCalSensitiveRegion(nullptr),
     fDefaultSolidRegion(nullptr),
     fDefaultGaseousRegion(nullptr),
@@ -40,7 +40,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     // Construct volumes
     ////////////////////////////////////////////////////////////////
 
-    using namespace Core::Geometry::Entity::Fast;
+    using namespace Geometry::Entity::Fast;
 
     // 1
 

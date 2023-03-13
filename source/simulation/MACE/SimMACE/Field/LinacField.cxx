@@ -1,12 +1,10 @@
-#include "MACE/Core/Geometry/Description/LinacField.hxx"
+#include "MACE/Geometry/Description/LinacField.hxx"
 #include "MACE/SimMACE/Field/LinacField.hxx"
 #include "MACE/SimMACE/Messenger/FieldMessenger.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
 namespace MACE::SimMACE::Field {
 
-using LinacDescription = MACE::Core::Geometry::Description::LinacField;
-using Messenger::FieldMessenger;
 using namespace MACE::LiteralUnit::ElectricPotential;
 using namespace MACE::LiteralUnit::Length;
 using namespace MACE::LiteralUnit::MagneticFluxDensity;
@@ -17,8 +15,8 @@ LinacField::LinacField() :
     fBz(0.1_T),
     fV(7_kV),
     fDecayZMean(13.05_mm),
-    fEz(7_kV / (LinacDescription::Instance().DownStreamLength() - 13.05_mm)) {
-    FieldMessenger::Instance().AssignTo(this);
+    fEz(7_kV / (Geometry::Description::LinacField::Instance().DownStreamLength() - 13.05_mm)) {
+    Messenger::FieldMessenger::Instance().AssignTo(this);
 }
 
 void LinacField::GetFieldValue(const G4double*, G4double* F) const {
@@ -32,7 +30,7 @@ void LinacField::GetFieldValue(const G4double*, G4double* F) const {
 
 void LinacField::SetLinacPotential(G4double V) {
     fV = V;
-    fEz = fV / (LinacDescription::Instance().DownStreamLength() - fDecayZMean);
+    fEz = fV / (Geometry::Description::LinacField::Instance().DownStreamLength() - fDecayZMean);
 }
 
 } // namespace MACE::SimMACE::Field

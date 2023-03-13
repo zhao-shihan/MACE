@@ -1,9 +1,9 @@
 #pragma once
 
-#include "MACE/Core/DataModel/Hit/CDCHit.hxx"
-#include "MACE/Core/DataModel/SimHit/CDCSimHit.hxx"
-#include "MACE/Core/DataModel/Track/CDCHelixTrack.hxx"
-#include "MACE/Core/DataModel/Track/CDCPhysicsTrack.hxx"
+#include "MACE/DataModel/Hit/CDCHit.hxx"
+#include "MACE/DataModel/SimHit/CDCSimHit.hxx"
+#include "MACE/DataModel/Track/CDCHelixTrack.hxx"
+#include "MACE/DataModel/Track/CDCPhysicsTrack.hxx"
 
 #include <iostream>
 

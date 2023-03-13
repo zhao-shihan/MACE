@@ -1,46 +1,51 @@
 #pragma once
 
 #include "MACE/Env/Memory/Singleton.hxx"
+#include "MACE/Extension/Geant4X/Physics/Process/MuoniumFormation.hxx"
+#include "MACE/Extension/Geant4X/Physics/Process/MuoniumTransport.hxx"
+#include "MACE/Extension/Geant4X/Physics/TargetForMuoniumPhysics.hxx"
 
+#include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADouble.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
 #include "gsl/gsl"
 
 #include <memory>
 
-class G4UIcmdWithABool;
-class G4UIcmdWithADouble;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIdirectory;
-
 namespace MACE::inline Extension::Geant4X::Physics {
 
 namespace Process {
 
+template<TargetForMuoniumPhysics ATarget>
 class MuoniumFormation;
+
+template<TargetForMuoniumPhysics ATarget>
 class MuoniumTransport;
 
 } // namespace Process
 
 namespace Messenger {
 
-class MuoniumPhysicsMessenger final : public Env::Memory::Singleton<MuoniumPhysicsMessenger>,
+template<TargetForMuoniumPhysics ATarget>
+class MuoniumPhysicsMessenger final : public Env::Memory::Singleton<MuoniumPhysicsMessenger<ATarget>>,
                                       public G4UImessenger {
     friend Env::Memory::SingletonFactory;
 
 private:
     MuoniumPhysicsMessenger();
-    ~MuoniumPhysicsMessenger();
 
 public:
-    void AssignTo(gsl::not_null<Process::MuoniumFormation*> mf) { fMuoniumFormation = mf; }
-    void AssignTo(gsl::not_null<Process::MuoniumTransport*> mt) { fMuoniumTransport = mt; }
+    void AssignTo(gsl::not_null<Process::MuoniumFormation<ATarget>*> mf) { fMuoniumFormation = mf; }
+    void AssignTo(gsl::not_null<Process::MuoniumTransport<ATarget>*> mt) { fMuoniumTransport = mt; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    Process::MuoniumFormation* fMuoniumFormation;
-    Process::MuoniumTransport* fMuoniumTransport;
+    Process::MuoniumFormation<ATarget>* fMuoniumFormation;
+    Process::MuoniumTransport<ATarget>* fMuoniumTransport;
 
     std::unique_ptr<G4UIdirectory> fMuoniumPhysicsDirectory;
 
@@ -56,3 +61,5 @@ private:
 } // namespace Messenger
 
 } // namespace MACE::inline Extension::Geant4X::Physics
+
+#include "MACE/Extension/Geant4X/Physics/Messenger/MuoniumPhysicsMessenger.inl"

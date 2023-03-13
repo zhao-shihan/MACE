@@ -9,7 +9,7 @@
 
 namespace MACE {
 
-namespace Core::Geometry {
+namespace Geometry {
 
 namespace Description {
 
@@ -29,7 +29,7 @@ class World;
 
 class IEntity;
 
-} // namespace Core::Geometry
+} // namespace Geometry
 
 namespace SimTarget::Action {
 
@@ -43,41 +43,41 @@ public:
     void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlap = checkOverlaps; }
 
 public:
-    using UsedDescriptions = std::tuple<Core::Geometry::Description::Collimator,
-                                        Core::Geometry::Description::EMCalField,
-                                        Core::Geometry::Description::EMCalShield,
-                                        Core::Geometry::Description::LinacField,
-                                        Core::Geometry::Description::MCP,
-                                        Core::Geometry::Description::SelectorField,
-                                        Core::Geometry::Description::SpectrometerField,
-                                        Core::Geometry::Description::SpectrometerMagnet,
-                                        Core::Geometry::Description::SpectrometerShield,
-                                        Core::Geometry::Description::TransportLine,
-                                        Core::Geometry::Description::World>;
+    using UsedDescriptions = std::tuple<Geometry::Description::Collimator,
+                                        Geometry::Description::EMCalField,
+                                        Geometry::Description::EMCalShield,
+                                        Geometry::Description::LinacField,
+                                        Geometry::Description::MCP,
+                                        Geometry::Description::SelectorField,
+                                        Geometry::Description::SpectrometerField,
+                                        Geometry::Description::SpectrometerMagnet,
+                                        Geometry::Description::SpectrometerShield,
+                                        Geometry::Description::TransportLine,
+                                        Geometry::Description::World>;
 
 private:
     G4bool fCheckOverlap;
 
-    std::shared_ptr<Core::Geometry::IEntity> fCollimator;
-    std::shared_ptr<Core::Geometry::IEntity> fEMCalField;
-    std::shared_ptr<Core::Geometry::IEntity> fEMCalShield;
-    std::shared_ptr<Core::Geometry::IEntity> fFirstBendField;
-    std::shared_ptr<Core::Geometry::IEntity> fFirstBendSolenoid;
-    std::shared_ptr<Core::Geometry::IEntity> fFirstTransportField;
-    std::shared_ptr<Core::Geometry::IEntity> fFirstTransportSolenoid;
-    std::shared_ptr<Core::Geometry::IEntity> fLinacField;
-    std::shared_ptr<Core::Geometry::IEntity> fMCP;
-    std::shared_ptr<Core::Geometry::IEntity> fSecondBendField;
-    std::shared_ptr<Core::Geometry::IEntity> fSecondBendSolenoid;
-    std::shared_ptr<Core::Geometry::IEntity> fSecondTransportField;
-    std::shared_ptr<Core::Geometry::IEntity> fSecondTransportSolenoid;
-    std::shared_ptr<Core::Geometry::IEntity> fSelectorField;
-    std::shared_ptr<Core::Geometry::IEntity> fSpectrometerField;
-    std::shared_ptr<Core::Geometry::IEntity> fSpectrometerMagnet;
-    std::shared_ptr<Core::Geometry::IEntity> fSpectrometerShield;
-    std::shared_ptr<Core::Geometry::IEntity> fThirdTransportField;
-    std::shared_ptr<Core::Geometry::IEntity> fThirdTransportSolenoid;
-    std::shared_ptr<Core::Geometry::IEntity> fWorld;
+    std::shared_ptr<Geometry::IEntity> fCollimator;
+    std::shared_ptr<Geometry::IEntity> fEMCalField;
+    std::shared_ptr<Geometry::IEntity> fEMCalShield;
+    std::shared_ptr<Geometry::IEntity> fFirstBendField;
+    std::shared_ptr<Geometry::IEntity> fFirstBendSolenoid;
+    std::shared_ptr<Geometry::IEntity> fFirstTransportField;
+    std::shared_ptr<Geometry::IEntity> fFirstTransportSolenoid;
+    std::shared_ptr<Geometry::IEntity> fLinacField;
+    std::shared_ptr<Geometry::IEntity> fMCP;
+    std::shared_ptr<Geometry::IEntity> fSecondBendField;
+    std::shared_ptr<Geometry::IEntity> fSecondBendSolenoid;
+    std::shared_ptr<Geometry::IEntity> fSecondTransportField;
+    std::shared_ptr<Geometry::IEntity> fSecondTransportSolenoid;
+    std::shared_ptr<Geometry::IEntity> fSelectorField;
+    std::shared_ptr<Geometry::IEntity> fSpectrometerField;
+    std::shared_ptr<Geometry::IEntity> fSpectrometerMagnet;
+    std::shared_ptr<Geometry::IEntity> fSpectrometerShield;
+    std::shared_ptr<Geometry::IEntity> fThirdTransportField;
+    std::shared_ptr<Geometry::IEntity> fThirdTransportSolenoid;
+    std::shared_ptr<Geometry::IEntity> fWorld;
 };
 
 } // namespace SimTarget::Action

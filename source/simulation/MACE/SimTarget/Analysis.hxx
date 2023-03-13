@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Core/DataFactory.hxx"
+#include "MACE/DataModel/DataFactory.hxx"
 #include "MACE/Env/Memory/FreeSingleton.hxx"
 #include "MACE/SimTarget/MuoniumTrack.hxx"
 
@@ -15,8 +15,6 @@ class G4Run;
 class TFile;
 
 namespace MACE::SimTarget {
-
-using Core::DataFactory;
 
 class Analysis final : public Env::Memory::FreeSingleton<Analysis> {
 public:
@@ -52,7 +50,7 @@ private:
 
     std::unique_ptr<TFile> fResultFile;
     std::unique_ptr<std::ofstream> fYieldFile;
-    DataFactory fDataFactory;
+    DataModel::DataFactory fDataFactory;
 };
 
 } // namespace MACE::SimTarget

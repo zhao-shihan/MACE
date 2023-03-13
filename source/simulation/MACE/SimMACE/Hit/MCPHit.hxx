@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Core/DataModel/SimHit/MCPSimHit.hxx"
+#include "MACE/DataModel/SimHit/MCPSimHit.hxx"
 #include "MACE/Extension/Geant4X/UseG4Allocator.hxx"
 
 #include "G4THitsCollection.hh"
@@ -8,7 +8,7 @@
 
 namespace MACE::SimMACE::Hit {
 
-class MCPHit final : public Core::DataModel::SimHit::MCPSimHit,
+class MCPHit final : public DataModel::SimHit::MCPSimHit,
                      public Geant4X::UseG4Allocator<MCPHit>,
                      public G4VHit {
 public:
@@ -20,7 +20,7 @@ public:
     MCPHit& operator=(const MCPHit& hit) noexcept = default;
     MCPHit& operator=(MCPHit&& hit) noexcept = default;
 };
-static_assert(Core::DataModel::TransientData<MCPHit>);
+static_assert(DataModel::TransientData<MCPHit>);
 
 using MCPHitCollection = G4THitsCollection<MCPHit>;
 

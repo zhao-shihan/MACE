@@ -1,4 +1,4 @@
-#include "MACE/Core/DataFactory.hxx"
+#include "MACE/DataModel/DataFactory.hxx"
 #include "MACE/Env/MPIEnv.hxx"
 #include "MACE/ReconTracks/Fitter/DirectLeastSquare.hxx"
 #include "MACE/ReconTracks/Fitter/Dummy.hxx"

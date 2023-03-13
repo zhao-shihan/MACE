@@ -5,7 +5,7 @@ file(GLOB_RECURSE SimTarget_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
 
 # targets
 add_executable(SimTarget ${SimTarget_srcs})
-target_link_libraries(SimTarget MACE)
+target_link_libraries(SimTarget MACEDataModel MACEFrameWork MACEGeometry)
 
 file(GLOB SimTarget_SCRIPTS ${PROJECT_SOURCE_DIR}/scripts/*)
 foreach(_scripts ${SimTarget_SCRIPTS})

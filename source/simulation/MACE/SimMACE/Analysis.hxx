@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Core/DataFactory.hxx"
+#include "MACE/DataModel/DataFactory.hxx"
 #include "MACE/Env/Memory/FreeSingleton.hxx"
 
 #include "G4Types.hh"
@@ -48,7 +48,7 @@ private:
     G4bool fEnableCoincidenceOfEMCal;
     G4bool fEnableCoincidenceOfMCP;
 
-    Core::DataFactory fDataHub;
+    DataModel::DataFactory fDataHub;
 
     G4int fRepetitionIdOfLastG4Event;
     std::shared_ptr<TTree> fEMCalHitTree;

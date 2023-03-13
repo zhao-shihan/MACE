@@ -1,20 +1,28 @@
 #pragma once
 
-#include "MACE/Core/Geometry/Description/Target.hxx"
+#include "MACE/Extension/Geant4X/Physics/Messenger/MuoniumPhysicsMessenger.hxx"
+#include "MACE/Extension/Geant4X/Physics/Particle/AntiMuonium.hxx"
+#include "MACE/Extension/Geant4X/Physics/Particle/Muonium.hxx"
+#include "MACE/Extension/Geant4X/Physics/TargetForMuoniumPhysics.hxx"
+#include "MACE/Utility/LiteralUnit.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
+#include "MACE/Utility/PhysicalConstant.hxx"
 
+#include "G4MuonPlus.hh"
 #include "G4ParticleChange.hh"
 #include "G4VRestProcess.hh"
 
+#include "gsl/gsl"
+
+#include <limits>
+
 namespace MACE::inline Extension::Geant4X::Physics::Process {
 
-using Core::Geometry::Description::Target;
-
-class MuoniumFormation final : public G4VRestProcess {
+template<TargetForMuoniumPhysics ATarget>
+class MuoniumFormation final : public NonMoveableBase,
+                               public G4VRestProcess {
 public:
     MuoniumFormation();
-    ~MuoniumFormation() noexcept = default;
-    MuoniumFormation(const MuoniumFormation&) = delete;
-    MuoniumFormation& operator=(const MuoniumFormation&) = delete;
 
     void SetFormationProbability(G4double val) { fFormationProbability = val; }
     void SetConversionProbability(G4double val) { fConversionProbability = val; }
@@ -29,7 +37,7 @@ private:
 private:
     const G4ParticleDefinition* const fMuonium;
     const G4ParticleDefinition* const fAntiMuonium;
-    const Target* const fTarget;
+    const ATarget* const fTarget;
     CLHEP::HepRandomEngine* fRandEng;
 
     G4double fFormationProbability;
@@ -39,3 +47,5 @@ private:
 };
 
 } // namespace MACE::inline Extension::Geant4X::Physics::Process
+
+#include "MACE/Extension/Geant4X/Physics/Process/MuoniumFormation.inl"

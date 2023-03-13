@@ -1,6 +1,7 @@
 #include "MACE/Compatibility/std2b/to_underlying.hxx"
 #include "MACE/Env/BasicEnv.hxx"
 #include "MACE/Extension/Geant4X/Physics/MuoniumPhysics.hxx"
+#include "MACE/Geometry/Description/Target.hxx"
 #include "MACE/SimMACE/Action/PhysicsList.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
@@ -45,7 +46,7 @@ PhysicsList::PhysicsList() :
     RegisterPhysics(new G4NeutronTrackingCut(verboseLevel));
 
     // Muonium formation & transport
-    RegisterPhysics(new MuoniumPhysics(verboseLevel));
+    RegisterPhysics(new MuoniumPhysics<Geometry::Description::Target>(verboseLevel));
 }
 
 } // namespace MACE::SimMACE::Action

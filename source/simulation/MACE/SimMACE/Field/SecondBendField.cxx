@@ -1,4 +1,4 @@
-#include "MACE/Core/Geometry/Description/TransportLine.hxx"
+#include "MACE/Geometry/Description/TransportLine.hxx"
 #include "MACE/Math/Hypot.hxx"
 #include "MACE/SimMACE/Field/SecondBendField.hxx"
 #include "MACE/SimMACE/Messenger/FieldMessenger.hxx"
@@ -7,13 +7,12 @@
 namespace MACE::SimMACE::Field {
 
 using namespace MACE::LiteralUnit::MagneticFluxDensity;
-using TransportLineDescription = Core::Geometry::Description::TransportLine;
 
 SecondBendField::SecondBendField() :
     NonMoveableBase(),
     G4MagneticField(),
-    fGeomTransform(TransportLineDescription::Instance().SecondBendTransform()),
-    fBendRadius(TransportLineDescription::Instance().SecondBendRadius()),
+    fGeomTransform(Geometry::Description::TransportLine::Instance().SecondBendTransform()),
+    fBendRadius(Geometry::Description::TransportLine::Instance().SecondBendRadius()),
     fB0R0(0.1_T * fBendRadius) {
     Messenger::FieldMessenger::Instance().AssignTo(this);
 }

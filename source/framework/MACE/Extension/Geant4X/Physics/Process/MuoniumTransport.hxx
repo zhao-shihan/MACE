@@ -1,20 +1,31 @@
 #pragma once
 
-#include "MACE/Core/Geometry/Description/Target.hxx"
+#include "MACE/Compatibility/std2b/unreachable.hxx"
+#include "MACE/Extension/Geant4X/Physics/Messenger/MuoniumPhysicsMessenger.hxx"
+#include "MACE/Extension/Geant4X/Physics/Particle/AntiMuonium.hxx"
+#include "MACE/Extension/Geant4X/Physics/Particle/Muonium.hxx"
+#include "MACE/Extension/Geant4X/Physics/TargetForMuoniumPhysics.hxx"
+#include "MACE/Math/Random/Distribution/Exponential.hxx"
+#include "MACE/Math/Random/Distribution/Gaussian3DDiagnoal.hxx"
+#include "MACE/Math/Random/Generator/PCGXSHRR6432.hxx"
+#include "MACE/Utility/LiteralUnit.hxx"
+#include "MACE/Utility/NonMoveableBase.hxx"
+#include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4ParticleChange.hh"
+#include "G4ThreeVector.hh"
 #include "G4VContinuousProcess.hh"
+#include "Randomize.hh"
+
+#include <random>
 
 namespace MACE::inline Extension::Geant4X::Physics::Process {
 
-using Core::Geometry::Description::Target;
-
-class MuoniumTransport final : public G4VContinuousProcess {
+template<TargetForMuoniumPhysics ATarget>
+class MuoniumTransport final : public NonMoveableBase,
+                               public G4VContinuousProcess {
 public:
     MuoniumTransport();
-    ~MuoniumTransport() noexcept = default;
-    MuoniumTransport(const MuoniumTransport&) = delete;
-    MuoniumTransport& operator=(const MuoniumTransport&) = delete;
 
     void SetMeanFreePath(G4double val) { fMeanFreePath = val; }
     void SetManipulateAllSteps(G4bool val) { fManipulateAllSteps = val; }
@@ -36,7 +47,7 @@ private:
     };
 
 private:
-    const Target* const fTarget;
+    const ATarget* const fTarget;
 
     G4double fMeanFreePath;
     G4bool fManipulateAllSteps;
@@ -47,3 +58,5 @@ private:
 };
 
 } // namespace MACE::inline Extension::Geant4X::Physics::Process
+
+#include "MACE/Extension/Geant4X/Physics/Process/MuoniumTransport.inl"

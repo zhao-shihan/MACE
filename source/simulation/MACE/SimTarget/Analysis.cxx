@@ -1,4 +1,4 @@
-#include "MACE/Core/Geometry/Description/Target.hxx"
+#include "MACE/Geometry/Description/Target.hxx"
 #include "MACE/Env/MPIEnv.hxx"
 #include "MACE/SimTarget/Action/PrimaryGeneratorAction.hxx"
 #include "MACE/SimTarget/Analysis.hxx"
@@ -97,7 +97,7 @@ void Analysis::AnalysisAndWriteYield() {
     nVacuumDecay = 0;
     nDetectableDecay = 0;
 
-    const auto& target = Core::Geometry::Description::Target::Instance();
+    const auto& target = Geometry::Description::Target::Instance();
     for (auto&& track : std::as_const(fMuoniumTrackList)) {
         const auto& decayPosition = track->DecayPosition();
         if (target.Contain(decayPosition)) {
