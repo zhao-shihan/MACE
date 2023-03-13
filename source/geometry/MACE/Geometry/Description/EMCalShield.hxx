@@ -4,7 +4,7 @@
 
 namespace MACE::Geometry::Description {
 
-class EMCalShield final : public ISingletonDescription<EMCalShield> {
+class EMCalShield final : public DescriptionSingletonBase<EMCalShield> {
     friend Env::Memory::SingletonFactory;
 
 private:

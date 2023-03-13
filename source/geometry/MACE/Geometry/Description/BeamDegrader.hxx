@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MACE/Geometry/IDescription.hxx"
+#include "MACE/Geometry/DescriptionBase.hxx"
 
 #include "CLHEP/Geometry/Transform3D.h"
 
 namespace MACE::Geometry::Description {
 
-class BeamDegrader final : public ISingletonDescription<BeamDegrader> {
+class BeamDegrader final : public DescriptionSingletonBase<BeamDegrader> {
     friend Env::Memory::SingletonFactory;
 
 private:

@@ -42,4 +42,4 @@ std::pair<bool, std::pair<std::string, std::string>> DataFactory::SplitPrefixOrS
     }
 }
 
-} // namespace MACE::Core
+} // namespace MACE::DataModel

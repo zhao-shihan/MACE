@@ -2,8 +2,8 @@
 
 #include "MACE/Compatibility/std2b/unreachable.hxx"
 #include "MACE/Concept/InputNumericVector.hxx"
-#include "MACE/Geometry/IDescription.hxx"
 #include "MACE/Env/Memory/MuteSingleton.hxx"
+#include "MACE/Geometry/DescriptionBase.hxx"
 #include "MACE/Math/Hypot.hxx"
 #include "MACE/Math/IntegerPower.hxx"
 
@@ -16,7 +16,7 @@
 
 namespace MACE::Geometry::Description {
 
-class Target final : public ISingletonDescription<Target> {
+class Target final : public DescriptionSingletonBase<Target> {
     friend Env::Memory::SingletonFactory;
 
 public:

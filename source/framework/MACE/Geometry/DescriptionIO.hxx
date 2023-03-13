@@ -1,8 +1,8 @@
 #pragma once
 
 #include "MACE/Concept/InstantiatedFrom.hxx"
-#include "MACE/Geometry/IDescription.hxx"
 #include "MACE/Env/MPIEnv.hxx"
+#include "MACE/Geometry/DescriptionBase.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 #include "MACE/Utility/StaticForEach.hxx"
 
@@ -52,7 +52,7 @@ public:
     static void Import(const std::ranges::range auto& yamlText)
         requires std::convertible_to<typename std::remove_cvref_t<decltype(yamlText)>::value_type, std::string>;
 
-    static void AddInstance(gsl::not_null<IDescription*> instance) { fgInstanceSet.emplace(instance); }
+    static void AddInstance(gsl::not_null<DescriptionBase*> instance) { fgInstanceSet.emplace(instance); }
     static void ImportInstantiated(const std::filesystem::path& yamlFile) { ImportImpl(yamlFile, fgInstanceSet); }
     static void ExportInstantiated(const std::filesystem::path& yamlFile, std::string_view fileComment = ""sv) { ExportImpl(yamlFile, fileComment, fgInstanceSet); }
 
@@ -62,7 +62,7 @@ private:
     static void IxportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::input_range auto& descriptions);
 
 private:
-    static std::set<gsl::not_null<IDescription*>> fgInstanceSet;
+    static std::set<gsl::not_null<DescriptionBase*>> fgInstanceSet;
 };
 
 } // namespace MACE::Geometry

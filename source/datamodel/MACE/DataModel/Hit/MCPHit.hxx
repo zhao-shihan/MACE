@@ -1,9 +1,9 @@
 #pragma once
 
 #include "MACE/Concept/NumericVector.hxx"
-#include "MACE/DataModel/DataFactory.hxx"
 #include "MACE/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "MACE/DataModel/BranchSocket/VectorBranchSocket.hxx"
+#include "MACE/DataModel/DataFactory.hxx"
 #include "MACE/DataModel/TransientData.hxx"
 #include "MACE/Extension/stdx/array_alias.hxx"
 #include "MACE/Utility/VectorAssign.hxx"

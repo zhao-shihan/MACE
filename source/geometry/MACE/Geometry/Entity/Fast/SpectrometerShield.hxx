@@ -1,10 +1,10 @@
 #pragma once
 
-#include "MACE/Geometry/IEntity.hxx"
+#include "MACE/Geometry/EntityBase.hxx"
 
 namespace MACE::Geometry::Entity::Fast {
 
-class SpectrometerShield final : public IEntity {
+class SpectrometerShield final : public EntityBase {
 private:
     void Construct(G4bool checkOverlaps) override;
 };

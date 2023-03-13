@@ -20,7 +20,7 @@ class World;
 
 } // namespace Description
 
-class IEntity;
+class EntityBase;
 
 } // namespace Geometry
 
@@ -47,7 +47,7 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    std::shared_ptr<Geometry::IEntity> fWorld;
+    std::shared_ptr<Geometry::EntityBase> fWorld;
 
     G4double fDensity;
     G4double fTemperature;

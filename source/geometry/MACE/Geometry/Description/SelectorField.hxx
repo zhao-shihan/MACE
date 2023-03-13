@@ -1,10 +1,10 @@
 #pragma once
 
-#include "MACE/Geometry/IDescription.hxx"
+#include "MACE/Geometry/DescriptionBase.hxx"
 
 namespace MACE::Geometry::Description {
 
-class SelectorField final : public ISingletonDescription<SelectorField> {
+class SelectorField final : public DescriptionSingletonBase<SelectorField> {
     friend Env::Memory::SingletonFactory;
 
 private:

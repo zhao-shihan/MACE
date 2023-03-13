@@ -6,7 +6,7 @@ namespace MACE::Geometry::Description {
 using namespace LiteralUnit::Length;
 
 EMCal::EMCal() :
-    ISingletonDescription<EMCal>(__func__),
+    DescriptionSingletonBase<EMCal>(__func__),
     fInnerRadius(15_cm),
     fInnerLength(50_cm),
     fWindowRadius(8_cm),

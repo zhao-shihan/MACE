@@ -2,7 +2,7 @@ namespace MACE::Geometry {
 
 template<typename AValue, typename AReadAs, std::convertible_to<std::string>... AStrings>
     requires std::assignable_from<AValue&, AReadAs>
-void IDescription::ImportValue(const YAML::Node& node, AValue& value, AStrings&&... nodeNames) {
+void DescriptionBase::ImportValue(const YAML::Node& node, AValue& value, AStrings&&... nodeNames) {
     if (const auto leaf = UnpackToLeafNodeForImporting(node, nodeNames...);
         leaf.has_value()) {
         value = leaf->template as<AReadAs>();
@@ -12,7 +12,7 @@ void IDescription::ImportValue(const YAML::Node& node, AValue& value, AStrings&&
 }
 
 template<typename AReadAs, std::convertible_to<std::string>... AStrings>
-void IDescription::ImportValue(const YAML::Node& node, const std::regular_invocable<AReadAs> auto& ImportAction, AStrings&&... nodeNames) {
+void DescriptionBase::ImportValue(const YAML::Node& node, const std::regular_invocable<AReadAs> auto& ImportAction, AStrings&&... nodeNames) {
     if (const auto leaf = UnpackToLeafNodeForImporting(node, nodeNames...);
         leaf.has_value()) {
         ImportAction(leaf->template as<AReadAs>());
@@ -23,12 +23,12 @@ void IDescription::ImportValue(const YAML::Node& node, const std::regular_invoca
 
 template<typename AValue, typename AWriteAs, std::convertible_to<std::string>... AStrings>
     requires std::convertible_to<const AValue&, AWriteAs>
-void IDescription::ExportValue(YAML::Node& node, const AValue& value, AStrings&&... nodeNames) const {
+void DescriptionBase::ExportValue(YAML::Node& node, const AValue& value, AStrings&&... nodeNames) const {
     UnpackToLeafNodeForExporting(node, nodeNames...) = static_cast<AWriteAs>(value);
 }
 
 template<std::convertible_to<std::string>... AStrings>
-std::optional<const YAML::Node> IDescription::UnpackToLeafNodeForImporting(const YAML::Node& node, AStrings&&... nodeNames) {
+std::optional<const YAML::Node> DescriptionBase::UnpackToLeafNodeForImporting(const YAML::Node& node, AStrings&&... nodeNames) {
     try {
         std::array<YAML::Node, sizeof...(nodeNames)> leafNodes;
         gsl::index i = 0;
@@ -44,7 +44,7 @@ std::optional<const YAML::Node> IDescription::UnpackToLeafNodeForImporting(const
 }
 
 template<std::convertible_to<std::string>... AStrings>
-YAML::Node IDescription::UnpackToLeafNodeForExporting(YAML::Node& node, AStrings&&... nodeNames) const {
+YAML::Node DescriptionBase::UnpackToLeafNodeForExporting(YAML::Node& node, AStrings&&... nodeNames) const {
     std::array<YAML::Node, sizeof...(nodeNames)> leafNodes;
     gsl::index i = 0;
     TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
@@ -56,10 +56,10 @@ YAML::Node IDescription::UnpackToLeafNodeForExporting(YAML::Node& node, AStrings
 }
 
 template<std::convertible_to<std::string>... AStrings>
-void IDescription::PrintNodeNotFoundWarning(AStrings&&... nodeNames) const {
+void DescriptionBase::PrintNodeNotFoundWarning(AStrings&&... nodeNames) const {
     if (const auto& env = Env::BasicEnv::Instance();
         env.GetVerboseLevel() >= Env::VerboseLevel::Warning) {
-        std::cout << "MACE::Geometry::IDescription: YAML node \"" << fName;
+        std::cout << "MACE::Geometry::DescriptionBase: YAML node \"" << fName;
         TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
                      [](auto&& name) {
                          std::cout << '/' << name;

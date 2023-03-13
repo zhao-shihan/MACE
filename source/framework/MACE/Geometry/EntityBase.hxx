@@ -29,9 +29,9 @@
 
 namespace MACE::Geometry {
 
-class IEntity : public NonMoveableBase {
+class EntityBase : public NonMoveableBase {
 public:
-    virtual ~IEntity() = default;
+    virtual ~EntityBase() = default;
 
     auto IsTop() const { return not fMother.has_value(); }
     const auto& Mother() const { return fMother.value().get(); }
@@ -41,11 +41,11 @@ public:
     /// A typical usage is to get the information of whether to enable this from description in the override function.
     virtual bool Enabled() const { return true; }
 
-    template<std::derived_from<IEntity> AEntity>
+    template<std::derived_from<EntityBase> AEntity>
     AEntity& NewDaughter(G4bool checkOverlaps);
-    template<std::derived_from<IEntity> AEntity>
+    template<std::derived_from<EntityBase> AEntity>
     std::optional<std::reference_wrapper<AEntity>> FindDaughter() const;
-    template<std::derived_from<IEntity> AEntity>
+    template<std::derived_from<EntityBase> AEntity>
     auto RemoveDaughter() { return fDaughters.erase(typeid(AEntity)) > 0; }
 
     void RegisterMaterial(gsl::index iLogicalVolume, gsl::not_null<G4Material*> material) const;
@@ -84,15 +84,15 @@ private:
     virtual void Construct(G4bool checkOverlaps) = 0;
 
 private:
-    std::optional<std::reference_wrapper<const IEntity>> fMother;
+    std::optional<std::reference_wrapper<const EntityBase>> fMother;
 
     std::vector<std::unique_ptr<G4VSolid>> fSolidStore;
     std::vector<std::unique_ptr<G4LogicalVolume>> fLogicalVolumes;
     std::vector<std::unique_ptr<G4VPhysicalVolume>> fPhysicalVolumes;
 
-    std::map<std::type_index, std::unique_ptr<IEntity>> fDaughters;
+    std::map<std::type_index, std::unique_ptr<EntityBase>> fDaughters;
 };
 
 } // namespace MACE::Geometry
 
-#include "MACE/Geometry/IEntity.inl"
+#include "MACE/Geometry/EntityBase.inl"

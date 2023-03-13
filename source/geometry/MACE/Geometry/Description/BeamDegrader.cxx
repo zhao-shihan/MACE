@@ -10,7 +10,7 @@ namespace MACE::Geometry::Description {
 using namespace LiteralUnit::Length;
 
 BeamDegrader::BeamDegrader() :
-    ISingletonDescription<BeamDegrader>(__func__),
+    DescriptionSingletonBase<BeamDegrader>(__func__),
     fIsEnabled(true),
     fWidth(6_cm),
     fThickness(430_um),

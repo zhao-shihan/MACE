@@ -20,7 +20,7 @@ using namespace LiteralUnit::MathConstant;
 using namespace PhysicalConstant;
 
 CDC::CDC() :
-    ISingletonDescription<CDC>(__func__),
+    DescriptionSingletonBase<CDC>(__func__),
     fEvenSuperLayerIsAxial(false),
     fNSuperLayer(7),
     fNSenseLayerPerSuper(3),

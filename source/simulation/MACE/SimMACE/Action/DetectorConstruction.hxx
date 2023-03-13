@@ -51,7 +51,7 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    gsl::not_null<std::shared_ptr<Geometry::IEntity>> fWorld;
+    gsl::not_null<std::shared_ptr<Geometry::EntityBase>> fWorld;
 
     Region* fEMCalSensitiveRegion;
     Region* fDefaultSolidRegion;

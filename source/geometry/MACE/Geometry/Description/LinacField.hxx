@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MACE/Geometry/IDescription.hxx"
+#include "MACE/Geometry/DescriptionBase.hxx"
 
 #include "CLHEP/Geometry/Transform3D.h"
 
 namespace MACE::Geometry::Description {
 
-class LinacField final : public ISingletonDescription<LinacField> {
+class LinacField final : public DescriptionSingletonBase<LinacField> {
     friend Env::Memory::SingletonFactory;
 
 private:

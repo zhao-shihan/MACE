@@ -1,10 +1,10 @@
 #pragma once
 
-#include "MACE/Geometry/IDescription.hxx"
+#include "MACE/Geometry/DescriptionBase.hxx"
 
 namespace MACE::Geometry::Description {
 
-class World final : public ISingletonDescription<World> {
+class World final : public DescriptionSingletonBase<World> {
     friend Env::Memory::SingletonFactory;
 
 private:

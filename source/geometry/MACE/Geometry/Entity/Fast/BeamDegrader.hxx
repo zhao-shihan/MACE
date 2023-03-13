@@ -1,10 +1,10 @@
 #pragma once
 
-#include "MACE/Geometry/IEntity.hxx"
+#include "MACE/Geometry/EntityBase.hxx"
 
 namespace MACE::Geometry::Entity::Fast {
 
-class BeamDegrader final : public IEntity {
+class BeamDegrader final : public EntityBase {
 public:
     bool Enabled() const override;
 

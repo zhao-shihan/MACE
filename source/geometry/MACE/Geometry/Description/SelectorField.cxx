@@ -6,7 +6,7 @@ namespace MACE::Geometry::Description {
 using namespace LiteralUnit::Length;
 
 SelectorField::SelectorField() :
-    ISingletonDescription<SelectorField>(__func__),
+    DescriptionSingletonBase<SelectorField>(__func__),
     fRadius(7.5_cm),
     fLength(30_cm),
     fAxialPosition(20_cm) {}

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "MACE/DataModel/DataFactory.hxx"
 #include "MACE/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "MACE/DataModel/BranchSocket/VectorBranchSocket.hxx"
+#include "MACE/DataModel/DataFactory.hxx"
 #include "MACE/DataModel/TransientData.hxx"
 #include "MACE/Utility/VectorAssign.hxx"
 

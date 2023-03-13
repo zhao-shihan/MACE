@@ -1,10 +1,10 @@
 #pragma once
 
-#include "MACE/Geometry/IDescription.hxx"
+#include "MACE/Geometry/DescriptionBase.hxx"
 
 namespace MACE::Geometry::Description {
 
-class Collimator final : public ISingletonDescription<Collimator> {
+class Collimator final : public DescriptionSingletonBase<Collimator> {
     friend Env::Memory::SingletonFactory;
 
 private:

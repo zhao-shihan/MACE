@@ -18,10 +18,10 @@
 
 namespace MACE::Geometry {
 
-class IDescription : public NonMoveableBase {
+class DescriptionBase : public NonMoveableBase {
 protected:
-    IDescription(const std::string& name);
-    ~IDescription() = default;
+    DescriptionBase(const std::string& name);
+    ~DescriptionBase() = default;
 
 public:
     const auto& GetName() const { return fName; }
@@ -55,20 +55,20 @@ private:
 };
 
 template<class ADerived>
-class ISingletonDescription : public Env::Memory::Singleton<ADerived>,
-                              public IDescription {
+class DescriptionSingletonBase : public Env::Memory::Singleton<ADerived>,
+                                 public DescriptionBase {
 protected:
-    using IDescription::IDescription;
+    using DescriptionBase::DescriptionBase;
 };
 
 template<class T>
 concept IsDescription =
     requires {
-        requires std::derived_from<T, IDescription>;
-        requires std::derived_from<T, ISingletonDescription<T>>;
+        requires std::derived_from<T, DescriptionBase>;
+        requires std::derived_from<T, DescriptionSingletonBase<T>>;
         requires Env::Memory::Singletonized<T>;
     };
 
 } // namespace MACE::Geometry
 
-#include "MACE/Geometry/IDescription.inl"
+#include "MACE/Geometry/DescriptionBase.inl"

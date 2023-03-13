@@ -6,7 +6,7 @@ namespace MACE::Geometry::Description {
 using namespace LiteralUnit::Length;
 
 MCP::MCP() :
-    ISingletonDescription<MCP>(__func__),
+    DescriptionSingletonBase<MCP>(__func__),
     fWidth(15_cm),
     fThickness(1_cm) {}
 

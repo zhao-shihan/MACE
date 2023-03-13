@@ -1,5 +1,5 @@
-#include "MACE/Geometry/IEntity.hxx"
 #include "MACE/Env/MPIEnv.hxx"
+#include "MACE/Geometry/EntityBase.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
 #include "G4SDManager.hh"
@@ -13,17 +13,17 @@
 
 namespace MACE::Geometry {
 
-void IEntity::RegisterMaterial(gsl::index iLogicalVolume, gsl::not_null<G4Material*> material) const {
+void EntityBase::RegisterMaterial(gsl::index iLogicalVolume, gsl::not_null<G4Material*> material) const {
     LogicalVolume(iLogicalVolume)->SetMaterial(material);
 }
 
-void IEntity::RegisterMaterial(gsl::not_null<G4Material*> material) const {
+void EntityBase::RegisterMaterial(gsl::not_null<G4Material*> material) const {
     for (gsl::index i = 0; i < std::ssize(fLogicalVolumes); ++i) {
         RegisterMaterial(i, material);
     }
 }
 
-void IEntity::RegisterRegion(gsl::index iLogicalVolume, gsl::not_null<G4Region*> region) const {
+void EntityBase::RegisterRegion(gsl::index iLogicalVolume, gsl::not_null<G4Region*> region) const {
     const auto& logicalVolume = LogicalVolume(iLogicalVolume);
     if (logicalVolume->GetRegion() != region) {
         logicalVolume->SetRegion(region);
@@ -31,13 +31,13 @@ void IEntity::RegisterRegion(gsl::index iLogicalVolume, gsl::not_null<G4Region*>
     }
 }
 
-void IEntity::RegisterRegion(gsl::not_null<G4Region*> region) const {
+void EntityBase::RegisterRegion(gsl::not_null<G4Region*> region) const {
     for (gsl::index i = 0; i < std::ssize(fLogicalVolumes); ++i) {
         RegisterRegion(i, region);
     }
 }
 
-void IEntity::RegisterSD(gsl::index iLogicalVolume, gsl::not_null<G4VSensitiveDetector*> sd) const {
+void EntityBase::RegisterSD(gsl::index iLogicalVolume, gsl::not_null<G4VSensitiveDetector*> sd) const {
     const auto& logicalVolume = LogicalVolume(iLogicalVolume);
     if (logicalVolume->GetSensitiveDetector() == nullptr) {
         // Register to logicalVolume
@@ -51,21 +51,21 @@ void IEntity::RegisterSD(gsl::index iLogicalVolume, gsl::not_null<G4VSensitiveDe
         G4ExceptionDescription msg;
         msg << "Attempting to register SD multiple times for \"" << logicalVolume->GetName() << "\" is currently not supported "
             << "(G4MultiSensitiveDetector not supported currently), skipping.";
-        G4Exception("MACE::Geometry::IEntity::RegisterSD", "-1", JustWarning, msg);
+        G4Exception("MACE::Geometry::EntityBase::RegisterSD", "-1", JustWarning, msg);
     } else {
         G4ExceptionDescription msg;
         msg << "Attempting to register the same SD multiple times for \"" << logicalVolume->GetName() << "\", skipping.";
-        G4Exception("MACE::Geometry::IEntity::RegisterSD", "-1", JustWarning, msg);
+        G4Exception("MACE::Geometry::EntityBase::RegisterSD", "-1", JustWarning, msg);
     }
 }
 
-void IEntity::RegisterSD(gsl::not_null<G4VSensitiveDetector*> sd) const {
+void EntityBase::RegisterSD(gsl::not_null<G4VSensitiveDetector*> sd) const {
     for (gsl::index i = 0; i < std::ssize(fLogicalVolumes); ++i) {
         RegisterSD(i, sd);
     }
 }
 
-void IEntity::Export(std::filesystem::path gdmlFile, gsl::index iPhysicalVolume) const {
+void EntityBase::Export(std::filesystem::path gdmlFile, gsl::index iPhysicalVolume) const {
 #if MACE_USE_G4GDML
     if (Env::MPIEnv::Available()) { MPIUtil::MakeMPIFilePathInPlace(gdmlFile); }
     G4GDMLParser gdml;

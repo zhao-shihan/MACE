@@ -6,7 +6,7 @@ namespace MACE::Geometry::Description {
 using namespace LiteralUnit::Length;
 
 SpectrometerField::SpectrometerField() :
-    ISingletonDescription<SpectrometerField>(__func__),
+    DescriptionSingletonBase<SpectrometerField>(__func__),
     fRadius(71_cm),
     fLength(220_cm) {}
 

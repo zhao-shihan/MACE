@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MACE/Geometry/IDescription.hxx"
+#include "MACE/Geometry/DescriptionBase.hxx"
 
 #include "CLHEP/Geometry/Transform3D.h"
 
 namespace MACE::Geometry::Description {
 
-class TransportLine final : public ISingletonDescription<TransportLine> {
+class TransportLine final : public DescriptionSingletonBase<TransportLine> {
     friend Env::Memory::SingletonFactory;
 
 private:

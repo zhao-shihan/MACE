@@ -6,7 +6,7 @@ namespace MACE::Geometry::Description {
 using namespace LiteralUnit::Length;
 
 Collimator::Collimator() :
-    ISingletonDescription<Collimator>(__func__),
+    DescriptionSingletonBase<Collimator>(__func__),
     fInnerRadius(5_mm),
     fOuterRadius(65_mm),
     fLength(30_cm),

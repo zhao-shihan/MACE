@@ -9,7 +9,7 @@ using namespace LiteralUnit::Length;
 using namespace PhysicalConstant;
 
 TransportLine::TransportLine() :
-    ISingletonDescription<TransportLine>(__func__),
+    DescriptionSingletonBase<TransportLine>(__func__),
     fFirstStraightLength(20_cm),
     fFirstBendRadius(50_cm),
     fSecondStraightLength(100_cm),

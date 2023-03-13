@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MACE/Geometry/IDescription.hxx"
+#include "MACE/Geometry/DescriptionBase.hxx"
 
 #include "CLHEP/Geometry/Transform3D.h"
 
 namespace MACE::Geometry::Description {
 
-class EMCalField final : public ISingletonDescription<EMCalField> {
+class EMCalField final : public DescriptionSingletonBase<EMCalField> {
     friend Env::Memory::SingletonFactory;
 
 private:

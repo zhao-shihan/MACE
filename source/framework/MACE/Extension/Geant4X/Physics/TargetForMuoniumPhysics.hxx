@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Geometry/IDescription.hxx"
+#include "MACE/Geometry/DescriptionBase.hxx"
 
 #include "G4ThreeVector.hh"
 

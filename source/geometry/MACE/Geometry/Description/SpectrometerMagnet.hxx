@@ -1,10 +1,10 @@
 #pragma once
 
-#include "MACE/Geometry/IDescription.hxx"
+#include "MACE/Geometry/DescriptionBase.hxx"
 
 namespace MACE::Geometry::Description {
 
-class SpectrometerMagnet final : public ISingletonDescription<SpectrometerMagnet> {
+class SpectrometerMagnet final : public DescriptionSingletonBase<SpectrometerMagnet> {
     friend Env::Memory::SingletonFactory;
 
 private:

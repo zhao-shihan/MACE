@@ -4,7 +4,7 @@ namespace internal {
 
 template<std::intmax_t i, class ADescriptionTuple>
 struct FillDescriptionArray {
-    constexpr void operator()(std::array<IDescription*, std::tuple_size_v<ADescriptionTuple>>& descriptions) const {
+    constexpr void operator()(std::array<DescriptionBase*, std::tuple_size_v<ADescriptionTuple>>& descriptions) const {
         std::get<i>(descriptions) = std::addressof(std::tuple_element_t<i, ADescriptionTuple>::Instance());
     }
 };
@@ -15,7 +15,7 @@ template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
 void DescriptionIO::Import(const std::filesystem::path& yamlFile)
     requires(not IsDescription<ADescriptionTuple>)
 {
-    std::array<IDescription*, std::tuple_size_v<ADescriptionTuple>> descriptions;
+    std::array<DescriptionBase*, std::tuple_size_v<ADescriptionTuple>> descriptions;
     StaticForEach<0, descriptions.size(),
                   internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
     ImportImpl(yamlFile, descriptions);
@@ -25,7 +25,7 @@ template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
 void DescriptionIO::Export(const std::filesystem::path& yamlFile, std::string_view fileComment)
     requires(not IsDescription<ADescriptionTuple>)
 {
-    std::array<IDescription*, std::tuple_size_v<ADescriptionTuple>> descriptions;
+    std::array<DescriptionBase*, std::tuple_size_v<ADescriptionTuple>> descriptions;
     StaticForEach<0, descriptions.size(),
                   internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
     ExportImpl(yamlFile, fileComment, descriptions);
@@ -35,7 +35,7 @@ template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
 void DescriptionIO::Ixport(const std::filesystem::path& yamlFile, std::string_view fileComment)
     requires(not IsDescription<ADescriptionTuple>)
 {
-    std::array<IDescription*, std::tuple_size_v<ADescriptionTuple>> descriptions;
+    std::array<DescriptionBase*, std::tuple_size_v<ADescriptionTuple>> descriptions;
     StaticForEach<0, descriptions.size(),
                   internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
     IxportImpl(yamlFile, fileComment, descriptions);
@@ -75,7 +75,7 @@ void DescriptionIO::ImportImpl(const std::filesystem::path& yamlFile, std::range
 }
 
 void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::input_range auto& descriptions) {
-    std::vector<std::pair<std::string_view, IDescription*>> sortedDescriptions;
+    std::vector<std::pair<std::string_view, DescriptionBase*>> sortedDescriptions;
     sortedDescriptions.reserve(descriptions.size());
     for (auto&& description : descriptions) {
         sortedDescriptions.emplace_back(description->GetName(), description);

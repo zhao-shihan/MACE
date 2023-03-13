@@ -7,7 +7,7 @@ namespace MACE::Geometry::Description {
 using namespace LiteralUnit::Length;
 
 EMCalField::EMCalField() :
-    ISingletonDescription<EMCalField>(__func__),
+    DescriptionSingletonBase<EMCalField>(__func__),
     fRadius(25_cm),
     fLength(70_cm) {}
 

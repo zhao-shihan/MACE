@@ -6,7 +6,7 @@ namespace MACE::Geometry::Description {
 using namespace LiteralUnit::Length;
 
 World::World() :
-    ISingletonDescription<World>(__func__),
+    DescriptionSingletonBase<World>(__func__),
     fHalfXExtent(3_m),
     fHalfYExtent(1_m),
     fHalfZExtent(4_m) {}

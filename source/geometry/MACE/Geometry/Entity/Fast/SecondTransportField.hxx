@@ -1,10 +1,10 @@
 #pragma once
 
-#include "MACE/Geometry/IEntity.hxx"
+#include "MACE/Geometry/EntityBase.hxx"
 
 namespace MACE::Geometry::Entity::Fast {
 
-class SecondTransportField final : public IEntity {
+class SecondTransportField final : public EntityBase {
 private:
     void Construct(G4bool checkOverlaps) override;
 };

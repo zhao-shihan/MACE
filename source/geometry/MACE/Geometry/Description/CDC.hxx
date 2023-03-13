@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Geometry/IDescription.hxx"
+#include "MACE/Geometry/DescriptionBase.hxx"
 #include "MACE/Math/IntegerPower.hxx"
 
 #include "Eigen/Core"
@@ -11,7 +11,7 @@
 
 namespace MACE::Geometry::Description {
 
-class CDC final : public ISingletonDescription<CDC> {
+class CDC final : public DescriptionSingletonBase<CDC> {
     friend Env::Memory::SingletonFactory;
 
 private:

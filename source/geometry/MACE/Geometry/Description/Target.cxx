@@ -10,7 +10,7 @@
 namespace MACE::Geometry::Description {
 
 Target::Target() :
-    ISingletonDescription<Target>(__func__),
+    DescriptionSingletonBase<Target>(__func__),
     fShapeType(TargetShapeType::Cuboid),
     fCuboid() {}
 

@@ -2,6 +2,6 @@
 
 namespace MACE::Geometry {
 
-std::set<gsl::not_null<IDescription*>> DescriptionIO::fgInstanceSet = {};
+std::set<gsl::not_null<DescriptionBase*>> DescriptionIO::fgInstanceSet = {};
 
 } // namespace MACE::Geometry

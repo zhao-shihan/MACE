@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/DataModel/DataFactory.hxx"
 #include "MACE/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
+#include "MACE/DataModel/DataFactory.hxx"
 #include "MACE/DataModel/TransientData.hxx"
 
 #include <string_view>

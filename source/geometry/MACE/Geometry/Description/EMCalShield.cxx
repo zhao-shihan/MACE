@@ -7,7 +7,7 @@ namespace MACE::Geometry::Description {
 using namespace LiteralUnit::Length;
 
 EMCalShield::EMCalShield() :
-    ISingletonDescription<EMCalShield>(__func__),
+    DescriptionSingletonBase<EMCalShield>(__func__),
     fInnerRadius(30_cm),
     fInnerLength(80_cm),
     fWindowRadius(12.7_cm),

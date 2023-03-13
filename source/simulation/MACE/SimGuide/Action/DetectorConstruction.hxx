@@ -27,7 +27,7 @@ class World;
 
 } // namespace Description
 
-class IEntity;
+class EntityBase;
 
 } // namespace Geometry
 
@@ -58,26 +58,26 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    std::shared_ptr<Geometry::IEntity> fCollimator;
-    std::shared_ptr<Geometry::IEntity> fEMCalField;
-    std::shared_ptr<Geometry::IEntity> fEMCalShield;
-    std::shared_ptr<Geometry::IEntity> fFirstBendField;
-    std::shared_ptr<Geometry::IEntity> fFirstBendSolenoid;
-    std::shared_ptr<Geometry::IEntity> fFirstTransportField;
-    std::shared_ptr<Geometry::IEntity> fFirstTransportSolenoid;
-    std::shared_ptr<Geometry::IEntity> fLinacField;
-    std::shared_ptr<Geometry::IEntity> fMCP;
-    std::shared_ptr<Geometry::IEntity> fSecondBendField;
-    std::shared_ptr<Geometry::IEntity> fSecondBendSolenoid;
-    std::shared_ptr<Geometry::IEntity> fSecondTransportField;
-    std::shared_ptr<Geometry::IEntity> fSecondTransportSolenoid;
-    std::shared_ptr<Geometry::IEntity> fSelectorField;
-    std::shared_ptr<Geometry::IEntity> fSpectrometerField;
-    std::shared_ptr<Geometry::IEntity> fSpectrometerMagnet;
-    std::shared_ptr<Geometry::IEntity> fSpectrometerShield;
-    std::shared_ptr<Geometry::IEntity> fThirdTransportField;
-    std::shared_ptr<Geometry::IEntity> fThirdTransportSolenoid;
-    std::shared_ptr<Geometry::IEntity> fWorld;
+    std::shared_ptr<Geometry::EntityBase> fCollimator;
+    std::shared_ptr<Geometry::EntityBase> fEMCalField;
+    std::shared_ptr<Geometry::EntityBase> fEMCalShield;
+    std::shared_ptr<Geometry::EntityBase> fFirstBendField;
+    std::shared_ptr<Geometry::EntityBase> fFirstBendSolenoid;
+    std::shared_ptr<Geometry::EntityBase> fFirstTransportField;
+    std::shared_ptr<Geometry::EntityBase> fFirstTransportSolenoid;
+    std::shared_ptr<Geometry::EntityBase> fLinacField;
+    std::shared_ptr<Geometry::EntityBase> fMCP;
+    std::shared_ptr<Geometry::EntityBase> fSecondBendField;
+    std::shared_ptr<Geometry::EntityBase> fSecondBendSolenoid;
+    std::shared_ptr<Geometry::EntityBase> fSecondTransportField;
+    std::shared_ptr<Geometry::EntityBase> fSecondTransportSolenoid;
+    std::shared_ptr<Geometry::EntityBase> fSelectorField;
+    std::shared_ptr<Geometry::EntityBase> fSpectrometerField;
+    std::shared_ptr<Geometry::EntityBase> fSpectrometerMagnet;
+    std::shared_ptr<Geometry::EntityBase> fSpectrometerShield;
+    std::shared_ptr<Geometry::EntityBase> fThirdTransportField;
+    std::shared_ptr<Geometry::EntityBase> fThirdTransportSolenoid;
+    std::shared_ptr<Geometry::EntityBase> fWorld;
 };
 
 } // namespace SimTarget::Action

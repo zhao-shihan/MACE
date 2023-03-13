@@ -2,9 +2,9 @@
 
 #include "MACE/Extension/Geant4X/Physics/Particle/AntiMuonium.hxx"
 #include "MACE/Extension/Geant4X/Physics/Particle/Muonium.hxx"
-#include "MACE/Extension/Geant4X/Physics/TargetForMuoniumPhysics.hxx"
 #include "MACE/Extension/Geant4X/Physics/Process/MuoniumFormation.hxx"
 #include "MACE/Extension/Geant4X/Physics/Process/MuoniumTransport.hxx"
+#include "MACE/Extension/Geant4X/Physics/TargetForMuoniumPhysics.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 
 #include "G4MuonPlus.hh"
