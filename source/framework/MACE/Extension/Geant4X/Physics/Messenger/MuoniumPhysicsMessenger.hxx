@@ -50,12 +50,12 @@ private:
     std::unique_ptr<G4UIdirectory> fMuoniumPhysicsDirectory;
 
     std::unique_ptr<G4UIdirectory> fFormationProcessDirectory;
-    std::unique_ptr<G4UIcmdWithADouble> fSetFormationProbability;
-    std::unique_ptr<G4UIcmdWithADouble> fSetConversionProbability;
+    std::unique_ptr<G4UIcmdWithADouble> fFormationProbability;
+    std::unique_ptr<G4UIcmdWithADouble> fConversionProbability;
 
     std::unique_ptr<G4UIdirectory> fTransportProcessDirectory;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetMeanFreePath;
-    std::unique_ptr<G4UIcmdWithABool> fSetManipulateAllSteps;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMeanFreePath;
+    std::unique_ptr<G4UIcmdWithABool> fManipulateAllSteps;
 };
 
 } // namespace Messenger

@@ -36,7 +36,7 @@ public:
 private:
     Action::PrimaryGeneratorAction* fPrimaryGeneratorAction;
 
-    std::unique_ptr<G4UIcmdWithAnInteger> fSetMuonsForEachG4Event;
+    std::unique_ptr<G4UIcmdWithAnInteger> fMuonsForEachG4Event;
 };
 
 } // namespace Messenger

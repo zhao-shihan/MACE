@@ -21,51 +21,51 @@ FieldMessenger::FieldMessenger() :
     fSelectorField(nullptr),
     fVerticalField(nullptr),
     fDirectory(),
-    fSetTransportMagneticField(),
-    fSetLinacPotential(),
-    fSetSelectorElectricField() {
+    fTransportMagneticField(),
+    fLinacPotential(),
+    fSelectorElectricField() {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Field/");
     fDirectory->SetGuidance("Detector field controller.");
 
-    fSetTransportMagneticField = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Field/SetTransportMagneticField", this);
-    fSetTransportMagneticField->SetGuidance("Set transport magnetic field.");
-    fSetTransportMagneticField->SetParameterName("B", false);
-    fSetTransportMagneticField->SetUnitCategory("Magnetic flux density");
-    fSetTransportMagneticField->AvailableForStates(G4State_Idle);
+    fTransportMagneticField = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Field/TransportMagneticField", this);
+    fTransportMagneticField->SetGuidance("Set transport magnetic field.");
+    fTransportMagneticField->SetParameterName("B", false);
+    fTransportMagneticField->SetUnitCategory("Magnetic flux density");
+    fTransportMagneticField->AvailableForStates(G4State_Idle);
 
-    fSetLinacPotential = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Field/SetLinacPotential", this);
-    fSetLinacPotential->SetGuidance("Set linac electric potential. "
+    fLinacPotential = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Field/LinacPotential", this);
+    fLinacPotential->SetGuidance("Set linac electric potential. "
                                     "(Selector electric field changes, respectively.)");
-    fSetLinacPotential->SetParameterName("V", false);
-    fSetLinacPotential->SetUnitCategory("Electric potential");
-    fSetLinacPotential->AvailableForStates(G4State_Idle);
+    fLinacPotential->SetParameterName("V", false);
+    fLinacPotential->SetUnitCategory("Electric potential");
+    fLinacPotential->AvailableForStates(G4State_Idle);
 
-    fSetSelectorElectricField = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Field/SetSelectorElectricField", this);
-    fSetSelectorElectricField->SetGuidance("Set selector electric field. (Selector magnetic field changes, respectively, "
+    fSelectorElectricField = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Field/SelectorElectricField", this);
+    fSelectorElectricField->SetGuidance("Set selector electric field. (Selector magnetic field changes, respectively, "
                                            "to ensure the seleted kinetic energy stays the same.)");
-    fSetSelectorElectricField->SetParameterName("E", false);
-    fSetSelectorElectricField->SetUnitCategory("Electric field");
-    fSetSelectorElectricField->AvailableForStates(G4State_Idle);
+    fSelectorElectricField->SetParameterName("E", false);
+    fSelectorElectricField->SetUnitCategory("Electric field");
+    fSelectorElectricField->AvailableForStates(G4State_Idle);
 }
 
 FieldMessenger::~FieldMessenger() = default;
 
 void FieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
-    if (command == fSetTransportMagneticField.get()) {
-        const auto B = fSetTransportMagneticField->GetNewDoubleValue(value);
+    if (command == fTransportMagneticField.get()) {
+        const auto B = fTransportMagneticField->GetNewDoubleValue(value);
         fLinacField->SetTransportBField(B);
         fFirstBendField->SetTransportMagneticField(B);
         fParallelField->SetFieldNorm(B);
         fSecondBendField->SetTransportMagneticField(B);
         fSelectorField->SetTransportField(B);
         fVerticalField->SetFieldNorm(B);
-    } else if (command == fSetLinacPotential.get()) {
-        const auto V = fSetLinacPotential->GetNewDoubleValue(value);
+    } else if (command == fLinacPotential.get()) {
+        const auto V = fLinacPotential->GetNewDoubleValue(value);
         fLinacField->SetLinacPotential(V);
         fSelectorField->SetSelectEnergy(std::abs(V));
-    } else if (command == fSetSelectorElectricField.get()) {
-        fSelectorField->SetSelectorElectricField(fSetSelectorElectricField->GetNewDoubleValue(value));
+    } else if (command == fSelectorElectricField.get()) {
+        fSelectorField->SetSelectorElectricField(fSelectorElectricField->GetNewDoubleValue(value));
     }
 }
 

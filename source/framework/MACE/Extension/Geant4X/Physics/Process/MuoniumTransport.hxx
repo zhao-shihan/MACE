@@ -27,8 +27,8 @@ class MuoniumTransport final : public NonMoveableBase,
 public:
     MuoniumTransport();
 
-    void SetMeanFreePath(G4double val) { fMeanFreePath = val; }
-    void SetManipulateAllSteps(G4bool val) { fManipulateAllSteps = val; }
+    void MeanFreePath(G4double val) { fMeanFreePath = val; }
+    void ManipulateAllSteps(G4bool val) { fManipulateAllSteps = val; }
 
     G4bool IsApplicable(const G4ParticleDefinition&) override;
     G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step&) override;

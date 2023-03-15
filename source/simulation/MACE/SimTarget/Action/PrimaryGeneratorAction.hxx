@@ -12,8 +12,8 @@ class PrimaryGeneratorAction final : public Env::Memory::FreeSingleton<PrimaryGe
 public:
     PrimaryGeneratorAction();
 
-    void SetMuonsForEachG4Event(G4int n) { fMuonsForEachG4Event = n; }
-    const auto& GetMuonsForEachG4Event() const { return fMuonsForEachG4Event; }
+    void MuonsForEachG4Event(G4int n) { fMuonsForEachG4Event = n; }
+    const auto& MuonsForEachG4Event() const { return fMuonsForEachG4Event; }
 
     void GeneratePrimaries(G4Event* event) override;
 

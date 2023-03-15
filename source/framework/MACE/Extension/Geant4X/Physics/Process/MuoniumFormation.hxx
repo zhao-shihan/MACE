@@ -24,8 +24,8 @@ class MuoniumFormation final : public NonMoveableBase,
 public:
     MuoniumFormation();
 
-    void SetFormationProbability(G4double val) { fFormationProbability = val; }
-    void SetConversionProbability(G4double val) { fConversionProbability = val; }
+    void FormationProbability(G4double val) { fFormationProbability = val; }
+    void ConversionProbability(G4double val) { fConversionProbability = val; }
 
     G4bool IsApplicable(const G4ParticleDefinition&) override;
     void StartTracking(G4Track* track) override;

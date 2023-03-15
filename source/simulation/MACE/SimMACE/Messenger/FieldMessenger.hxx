@@ -53,9 +53,9 @@ private:
     Field::VerticalField* fVerticalField;
 
     std::unique_ptr<G4UIdirectory> fDirectory;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetTransportMagneticField;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetLinacPotential;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetSelectorElectricField;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fTransportMagneticField;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fLinacPotential;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSelectorElectricField;
 };
 
 } // namespace Messenger

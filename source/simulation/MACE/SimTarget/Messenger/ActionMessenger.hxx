@@ -38,7 +38,7 @@ private:
     Action::SteppingAction* fSteppingAction;
 
     std::unique_ptr<G4UIdirectory> fDirectory;
-    std::unique_ptr<G4UIcmdWithABool> fSetKillIrrelevants;
+    std::unique_ptr<G4UIcmdWithABool> fKillIrrelevants;
 };
 
 } // namespace Messenger

@@ -8,11 +8,11 @@ MuoniumPhysicsMessenger<ATarget>::MuoniumPhysicsMessenger() :
     fMuoniumTransport(nullptr),
     fMuoniumPhysicsDirectory(),
     fFormationProcessDirectory(),
-    fSetFormationProbability(),
-    fSetConversionProbability(),
+    fFormationProbability(),
+    fConversionProbability(),
     fTransportProcessDirectory(),
-    fSetMeanFreePath(),
-    fSetManipulateAllSteps() {
+    fMeanFreePath(),
+    fManipulateAllSteps() {
 
     fMuoniumPhysicsDirectory = std::make_unique<G4UIdirectory>("/MACE/Physics/MuoniumPhysics/");
     fMuoniumPhysicsDirectory->SetGuidance("Physics of muonium and anti-muonium.");
@@ -20,42 +20,42 @@ MuoniumPhysicsMessenger<ATarget>::MuoniumPhysicsMessenger() :
     fFormationProcessDirectory = std::make_unique<G4UIdirectory>("/MACE/Physics/MuoniumPhysics/Formation/");
     fFormationProcessDirectory->SetGuidance("Muonium formation and transition process.");
 
-    fSetFormationProbability = std::make_unique<G4UIcmdWithADouble>("/MACE/Physics/MuoniumPhysics/Formation/SetFormationProbability", this);
-    fSetFormationProbability->SetGuidance("Set integrated probability of rest mu+ captures a e- in the target.");
-    fSetFormationProbability->SetParameterName("P", false);
-    fSetFormationProbability->AvailableForStates(G4State_Idle);
+    fFormationProbability = std::make_unique<G4UIcmdWithADouble>("/MACE/Physics/MuoniumPhysics/Formation/FormationProbability", this);
+    fFormationProbability->SetGuidance("Set integrated probability of rest mu+ captures a e- in the target.");
+    fFormationProbability->SetParameterName("P", false);
+    fFormationProbability->AvailableForStates(G4State_Idle);
 
-    fSetConversionProbability = std::make_unique<G4UIcmdWithADouble>("/MACE/Physics/MuoniumPhysics/Formation/SetConversionProbability", this);
-    fSetConversionProbability->SetGuidance("Set integrated probability of muonium to anti-muonium conversion.");
-    fSetConversionProbability->SetParameterName("P", false);
-    fSetConversionProbability->AvailableForStates(G4State_Idle);
+    fConversionProbability = std::make_unique<G4UIcmdWithADouble>("/MACE/Physics/MuoniumPhysics/Formation/ConversionProbability", this);
+    fConversionProbability->SetGuidance("Set integrated probability of muonium to anti-muonium conversion.");
+    fConversionProbability->SetParameterName("P", false);
+    fConversionProbability->AvailableForStates(G4State_Idle);
 
     fTransportProcessDirectory = std::make_unique<G4UIdirectory>("/MACE/Physics/MuoniumPhysics/Transport/");
     fTransportProcessDirectory->SetGuidance("The transport process of thermal muonium in the target.");
 
-    fSetMeanFreePath = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Physics/MuoniumPhysics/Transport/SetMeanFreePath", this),
-    fSetMeanFreePath->SetGuidance("Set thermal muonium mean free path in the target.");
-    fSetMeanFreePath->SetParameterName("lambda", false);
-    fSetMeanFreePath->SetUnitCategory("Length");
-    fSetMeanFreePath->AvailableForStates(G4State_Idle);
+    fMeanFreePath = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Physics/MuoniumPhysics/Transport/MeanFreePath", this),
+    fMeanFreePath->SetGuidance("Set thermal muonium mean free path in the target.");
+    fMeanFreePath->SetParameterName("lambda", false);
+    fMeanFreePath->SetUnitCategory("Length");
+    fMeanFreePath->AvailableForStates(G4State_Idle);
 
-    fSetManipulateAllSteps = std::make_unique<G4UIcmdWithABool>("/MACE/Physics/MuoniumPhysics/Transport/SetManipulateAllSteps", this),
-    fSetManipulateAllSteps->SetGuidance("Set whether show each step of thermal random flight of muonium in the target or not.\n"
+    fManipulateAllSteps = std::make_unique<G4UIcmdWithABool>("/MACE/Physics/MuoniumPhysics/Transport/ManipulateAllSteps", this),
+    fManipulateAllSteps->SetGuidance("Set whether show each step of thermal random flight of muonium in the target or not.\n"
                                         "Warning: can be time consuming if set to true.");
-    fSetManipulateAllSteps->SetParameterName("b", false);
-    fSetManipulateAllSteps->AvailableForStates(G4State_Idle);
+    fManipulateAllSteps->SetParameterName("b", false);
+    fManipulateAllSteps->AvailableForStates(G4State_Idle);
 }
 
 template<TargetForMuoniumPhysics ATarget>
 void MuoniumPhysicsMessenger<ATarget>::SetNewValue(G4UIcommand* command, G4String value) {
-    if (command == fSetFormationProbability.get()) {
-        fMuoniumFormation->SetFormationProbability(fSetFormationProbability->GetNewDoubleValue(value));
-    } else if (command == fSetConversionProbability.get()) {
-        fMuoniumFormation->SetConversionProbability(fSetConversionProbability->GetNewDoubleValue(value));
-    } else if (command == fSetMeanFreePath.get()) {
-        fMuoniumTransport->SetMeanFreePath(fSetMeanFreePath->GetNewDoubleValue(value));
-    } else if (command == fSetManipulateAllSteps.get()) {
-        fMuoniumTransport->SetManipulateAllSteps(fSetManipulateAllSteps->GetNewBoolValue(value));
+    if (command == fFormationProbability.get()) {
+        fMuoniumFormation->FormationProbability(fFormationProbability->GetNewDoubleValue(value));
+    } else if (command == fConversionProbability.get()) {
+        fMuoniumFormation->ConversionProbability(fConversionProbability->GetNewDoubleValue(value));
+    } else if (command == fMeanFreePath.get()) {
+        fMuoniumTransport->MeanFreePath(fMeanFreePath->GetNewDoubleValue(value));
+    } else if (command == fManipulateAllSteps.get()) {
+        fMuoniumTransport->ManipulateAllSteps(fManipulateAllSteps->GetNewBoolValue(value));
     }
 }
 

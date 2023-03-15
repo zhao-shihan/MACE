@@ -14,23 +14,24 @@ using namespace LiteralUnit::Length;
 using namespace PhysicalConstant;
 
 SurfaceMuon::SurfaceMuon() :
+    NonMoveableBase(),
     G4VPrimaryGenerator(),
     fMuonPlus(G4MuonPlus::Definition()),
     fMomentum(28_MeV),
-    fMomentumSpreadRMS(0.05 * fMomentum),
-    fBeamProfileRMS(5_mm),
-    fVertexTime(0),
-    fVertexZ(-1.5_m) {
+    fMomentumRMS(0.05 * fMomentum),
+    fPositionRMS(5_mm),
+    fTime(0),
+    fPositionZ(-1.5_m) {
     SurfaceMuonMessenger::Instance().AssignTo(this);
 }
 
 void SurfaceMuon::GeneratePrimaryVertex(G4Event* event) {
     const auto randEng = G4Random::getTheEngine();
 
-    const auto position = G4ThreeVector(G4RandGauss::shoot(randEng, 0, fBeamProfileRMS),
-                                        G4RandGauss::shoot(randEng, 0, fBeamProfileRMS),
-                                        fVertexZ);
-    const auto momentum = G4RandGauss::shoot(randEng, fMomentum, fMomentumSpreadRMS);
+    const auto position = G4ThreeVector(G4RandGauss::shoot(randEng, 0, fPositionRMS),
+                                        G4RandGauss::shoot(randEng, 0, fPositionRMS),
+                                        fPositionZ);
+    const auto momentum = G4RandGauss::shoot(randEng, fMomentum, fMomentumRMS);
     const auto kineticEnergy = std::sqrt(momentum * momentum + muon_mass_c2 * muon_mass_c2) - muon_mass_c2;
 
     const auto primaryParticle = new G4PrimaryParticle(fMuonPlus);
@@ -39,7 +40,7 @@ void SurfaceMuon::GeneratePrimaryVertex(G4Event* event) {
     primaryParticle->SetMomentumDirection(CLHEP::HepZHat);
     primaryParticle->SetCharge(+1);
 
-    const auto primaryVertex = new G4PrimaryVertex(position, fVertexTime);
+    const auto primaryVertex = new G4PrimaryVertex(position, fTime);
     primaryVertex->SetPrimary(primaryParticle);
 
     event->AddPrimaryVertex(primaryVertex);

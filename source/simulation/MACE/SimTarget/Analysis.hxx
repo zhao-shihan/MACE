@@ -21,7 +21,7 @@ public:
     Analysis();
     ~Analysis();
 
-    void SetResultPath(const auto& path) { (fResultPath = std::forward<decltype(path)>(path)).replace_extension(); }
+    void ResultPath(const auto& path) { (fResultPath = std::forward<decltype(path)>(path)).replace_extension(); }
     void EnableYieldAnalysis(bool val) { fEnableYieldAnalysis = val; }
 
     void RunBegin(gsl::not_null<const G4Run*> run);

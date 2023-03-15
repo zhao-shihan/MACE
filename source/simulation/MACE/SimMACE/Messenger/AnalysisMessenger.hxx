@@ -38,7 +38,7 @@ private:
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithABool> fEnableCoincidenceOfEMCal;
     std::unique_ptr<G4UIcmdWithABool> fEnableCoincidenceOfMCP;
-    std::unique_ptr<G4UIcmdWithAString> fSetResultPath;
+    std::unique_ptr<G4UIcmdWithAString> fResultPath;
 };
 
 } // namespace Messenger

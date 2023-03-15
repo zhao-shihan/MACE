@@ -1,5 +1,7 @@
 #pragma once
 
+#include "MACE/Utility/NonMoveableBase.hxx"
+
 #include "G4VPrimaryGenerator.hh"
 
 class G4MuonPlus;
@@ -7,35 +9,33 @@ class G4MuonPlus;
 namespace MACE::inline Extension::Geant4X::Generator {
 
 /// @brief A generator generates surface muon beam.
-class SurfaceMuon final : public G4VPrimaryGenerator {
+class SurfaceMuon final : public NonMoveableBase,
+                          public G4VPrimaryGenerator {
 public:
     SurfaceMuon();
-    ~SurfaceMuon() noexcept = default;
-    SurfaceMuon(const SurfaceMuon&) = delete;
-    SurfaceMuon& operator=(const SurfaceMuon&) = delete;
 
     void GeneratePrimaryVertex(G4Event* event) override;
 
     void Momentum(G4double val) { fMomentum = val; }
-    void MomentumSpreadRMS(G4double val) { fMomentumSpreadRMS = val; }
-    void BeamProfileRMS(G4double val) { fBeamProfileRMS = val; }
-    void VertexTime(G4double val) { fVertexTime = val; }
-    void VertexZ(G4double val) { fVertexZ = val; }
+    void MomentumRMS(G4double val) { fMomentumRMS = val; }
+    void PositionRMS(G4double val) { fPositionRMS = val; }
+    void Time(G4double val) { fTime = val; }
+    void PositionZ(G4double val) { fPositionZ = val; }
 
     const auto& Momentum() const { return fMomentum; }
-    const auto& MomentumSpreadRMS() const { return fMomentumSpreadRMS; }
-    const auto& BeamProfileRMS() const { return fBeamProfileRMS; }
-    const auto& VertexZ() const { return fVertexZ; }
-    const auto& VertexTime() const { return fVertexTime; }
+    const auto& MomentumRMS() const { return fMomentumRMS; }
+    const auto& PositionRMS() const { return fPositionRMS; }
+    const auto& Time() const { return fTime; }
+    const auto& PositionZ() const { return fPositionZ; }
 
 private:
     const G4MuonPlus* const fMuonPlus;
 
     G4double fMomentum;
-    G4double fMomentumSpreadRMS;
-    G4double fBeamProfileRMS;
-    G4double fVertexTime;
-    G4double fVertexZ;
+    G4double fMomentumRMS;
+    G4double fPositionRMS;
+    G4double fTime;
+    G4double fPositionZ;
 };
 
 } // namespace MACE::inline Extension::Geant4X::Generator

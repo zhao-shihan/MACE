@@ -17,7 +17,7 @@ AnalysisMessenger::AnalysisMessenger() :
     fDirectory(),
     fEnableCoincidenceOfEMCal(),
     fEnableCoincidenceOfMCP(),
-    fSetResultPath() {
+    fResultPath() {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Analysis/");
     fDirectory->SetGuidance("MACE::SimMACE::Analysis controller.");
@@ -32,21 +32,21 @@ AnalysisMessenger::AnalysisMessenger() :
     fEnableCoincidenceOfMCP->SetParameterName("mode", false);
     fEnableCoincidenceOfMCP->AvailableForStates(G4State_Idle);
 
-    fSetResultPath = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/SetResultPath", this);
-    fSetResultPath->SetGuidance("Set file name.");
-    fSetResultPath->SetParameterName("file name", false);
-    fSetResultPath->AvailableForStates(G4State_Idle);
+    fResultPath = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/ResultPath", this);
+    fResultPath->SetGuidance("Set file name.");
+    fResultPath->SetParameterName("file name", false);
+    fResultPath->AvailableForStates(G4State_Idle);
 }
 
 AnalysisMessenger::~AnalysisMessenger() = default;
 
 void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     if (command == fEnableCoincidenceOfEMCal.get()) {
-        fAnalysis->SetEnableCoincidenceOfEMCal(fEnableCoincidenceOfEMCal->GetNewBoolValue(value));
+        fAnalysis->EnableCoincidenceOfEMCal(fEnableCoincidenceOfEMCal->GetNewBoolValue(value));
     } else if (command == fEnableCoincidenceOfMCP.get()) {
-        fAnalysis->SetEnableCoincidenceOfMCP(fEnableCoincidenceOfMCP->GetNewBoolValue(value));
-    } else if (command == fSetResultPath.get()) {
-        fAnalysis->SetResultPath(std::string_view(value));
+        fAnalysis->EnableCoincidenceOfMCP(fEnableCoincidenceOfMCP->GetNewBoolValue(value));
+    } else if (command == fResultPath.get()) {
+        fAnalysis->ResultPath(std::string_view(value));
     }
 }
 

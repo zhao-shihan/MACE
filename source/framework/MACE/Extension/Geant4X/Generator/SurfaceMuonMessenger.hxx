@@ -32,10 +32,10 @@ private:
     SurfaceMuon* fSurfaceMuonGenerator;
 
     std::unique_ptr<G4UIdirectory> fDirectory;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetMomentum;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetMomentumSpreadRMS;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetBeamProfileRMS;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetVertexZ;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMomentum;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMomentumRMS;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fPositionRMS;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fPositionZ;
 };
 
 } // namespace MACE::inline Extension::Geant4X::Generator

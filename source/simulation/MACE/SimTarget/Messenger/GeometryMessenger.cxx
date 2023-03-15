@@ -24,8 +24,8 @@ GeometryMessenger::GeometryMessenger() :
     fImportDescription(),
     fExportDescription(),
     fIxportDescription(),
-    fSetTargetDensity(),
-    fSetTemperature() {
+    fTargetDensity(),
+    fTemperature() {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Geometry/");
 
@@ -44,17 +44,17 @@ GeometryMessenger::GeometryMessenger() :
     fIxportDescription->SetParameterName("yaml", false);
     fIxportDescription->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-    fSetTargetDensity = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Geometry/SetTargetDensity", this);
-    fSetTargetDensity->SetGuidance("Set target density.");
-    fSetTargetDensity->SetParameterName("rho", false);
-    fSetTargetDensity->SetUnitCategory("Volumic Mass");
-    fSetTargetDensity->AvailableForStates(G4State_PreInit);
+    fTargetDensity = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Geometry/TargetDensity", this);
+    fTargetDensity->SetGuidance("Set target density.");
+    fTargetDensity->SetParameterName("rho", false);
+    fTargetDensity->SetUnitCategory("Volumic Mass");
+    fTargetDensity->AvailableForStates(G4State_PreInit);
 
-    fSetTemperature = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Geometry/SetTemperature", this);
-    fSetTemperature->SetGuidance("Set environment temperature.");
-    fSetTemperature->SetParameterName("T", false);
-    fSetTemperature->SetUnitCategory("Temperature");
-    fSetTemperature->AvailableForStates(G4State_PreInit);
+    fTemperature = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Geometry/Temperature", this);
+    fTemperature->SetGuidance("Set environment temperature.");
+    fTemperature->SetParameterName("T", false);
+    fTemperature->SetUnitCategory("Temperature");
+    fTemperature->AvailableForStates(G4State_PreInit);
 }
 
 GeometryMessenger::~GeometryMessenger() = default;
@@ -68,10 +68,10 @@ void GeometryMessenger::SetNewValue(G4UIcommand* command, G4String value) {
         DescriptionIO::Export<UsedDescriptions>(std::string_view(value), "SimTarget: geometry description");
     } else if (command == fIxportDescription.get()) {
         DescriptionIO::Ixport<UsedDescriptions>(std::string_view(value), "SimTarget: geometry description");
-    } else if (command == fSetTargetDensity.get()) {
-        fDetectorConstruction->SetTargetDensity(fSetTargetDensity->GetNewDoubleValue(value));
-    } else if (command == fSetTemperature.get()) {
-        fDetectorConstruction->SetTemperature(fSetTemperature->GetNewDoubleValue(value));
+    } else if (command == fTargetDensity.get()) {
+        fDetectorConstruction->SetTargetDensity(fTargetDensity->GetNewDoubleValue(value));
+    } else if (command == fTemperature.get()) {
+        fDetectorConstruction->SetTemperature(fTemperature->GetNewDoubleValue(value));
     }
 }
 
