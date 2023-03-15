@@ -6,7 +6,7 @@ namespace MACE::DataModel {
 
 DataFactory::DataFactory() :
     MerelyMoveableBase(),
-    fPrefixHasIndex(true),
+    fPrefixHasIndex(false),
     fSuffixHasIndex(false),
     fPrefix("", ""),
     fSuffix("", ""),
