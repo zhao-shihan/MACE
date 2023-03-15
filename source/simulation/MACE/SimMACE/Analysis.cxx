@@ -6,6 +6,7 @@
 #include "MACE/SimMACE/Messenger/FieldMessenger.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
+#include "ROOT/RDataFrame.hxx"
 #include "TFile.h"
 
 namespace MACE::SimMACE {
@@ -13,64 +14,48 @@ namespace MACE::SimMACE {
 Analysis::Analysis() :
     FreeSingleton(),
     fFile(nullptr),
-    fResultPath("untitled_SimMACE"),
+    fResultPath("SimMACE_untitled"),
     fEnableCoincidenceOfEMCal(true),
     fEnableCoincidenceOfMCP(true),
     fDataHub(),
-    fRepetitionIdOfLastG4Event(std::numeric_limits<decltype(fRepetitionIdOfLastG4Event)>::max()),
-    fEMCalHitTree(nullptr),
-    fMCPHitTree(nullptr),
-    fCDCHitTree(nullptr),
     fEMCalHitList(nullptr),
     fMCPHitList(nullptr),
     fCDCHitList(nullptr) {
     Messenger::AnalysisMessenger::Instance().AssignTo(this);
-    fDataHub.TreeNamePrefixFormat("Rep{}_");
+    fDataHub.TreeNamePrefixFormat("Evt{}_");
 }
 
 void Analysis::Open(Option_t* option) {
-    fFile = std::make_unique<TFile>(
-        MPIUtil::MakeMPIFilePath(fResultPath, ".root").generic_string().c_str(),
-        option);
+    fFile = new TFile(MPIUtil::MakeMPIFilePath(fResultPath, ".root").generic_string().c_str(),
+                      option,
+                      "",
+                      ROOT::RCompressionSetting::EDefaults::kUseSmallest);
 }
 
 void Analysis::Close(Option_t* option) {
-    WriteTrees();
     fFile->Close(option);
-    // must delete the file object otherwise segmentation violation.
-    fFile.reset();
+    delete fFile;
 }
 
-void Analysis::WriteEvent(G4int repetitionId) {
+void Analysis::WriteEvent(G4int eventID) {
     using namespace DataModel::SimHit;
 
-    if (repetitionId != fRepetitionIdOfLastG4Event) { // means a new repetition or the first repetition
-        // last repetition had already come to the end, write its data. If first, skipped inside.
-        WriteTrees();
-        // create trees for new repetition
-        fEMCalHitTree = fDataHub.CreateTree<EMCalSimHit>(repetitionId);
-        fMCPHitTree = fDataHub.CreateTree<MCPSimHit>(repetitionId);
-        fCDCHitTree = fDataHub.CreateTree<CDCSimHit>(repetitionId);
-    }
+    // create and fill trees
+    const auto emCalHitTree = fDataHub.CreateTree<EMCalSimHit>(eventID);
+    const auto mcpHitTree = fDataHub.CreateTree<MCPSimHit>(eventID);
+    const auto cdcHitTree = fDataHub.CreateTree<CDCSimHit>(eventID);
+    fDataHub.FillTree(*fEMCalHitList, *emCalHitTree, true);
+    fDataHub.FillTree(*fMCPHitList, *mcpHitTree, true);
+    fDataHub.FillTree(*fCDCHitList, *cdcHitTree, true);
 
-    fDataHub.FillTree(*fEMCalHitList, *fEMCalHitTree, true);
-    fDataHub.FillTree(*fMCPHitList, *fMCPHitTree, true);
-    fDataHub.FillTree(*fCDCHitList, *fCDCHitTree, true);
-
-    // dont forget to update repId!
-    fRepetitionIdOfLastG4Event = repetitionId;
-}
-
-void Analysis::WriteTrees() {
-    if (fEMCalHitTree == nullptr or fMCPHitTree == nullptr or fCDCHitTree == nullptr) { return; }
-    const auto emCalTriggered = not fEnableCoincidenceOfEMCal or fEMCalHitTree->GetEntries() != 0;
-    const auto mcpTriggered = not fEnableCoincidenceOfMCP or fMCPHitTree->GetEntries() != 0;
-    const auto cdcTriggered = fCDCHitTree->GetEntries() != 0;
-    // if all coincident then write their data
+    const auto emCalTriggered = not fEnableCoincidenceOfEMCal or emCalHitTree->GetEntries() > 0;
+    const auto mcpTriggered = not fEnableCoincidenceOfMCP or mcpHitTree->GetEntries() > 0;
+    const auto cdcTriggered = cdcHitTree->GetEntries() > 0;
+    // if coincident then write their data
     if (emCalTriggered and mcpTriggered and cdcTriggered) {
-        fEMCalHitTree->Write();
-        fMCPHitTree->Write();
-        fCDCHitTree->Write();
+        emCalHitTree->Write();
+        mcpHitTree->Write();
+        cdcHitTree->Write();
     }
 }
 

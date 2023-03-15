@@ -37,10 +37,8 @@ public:
 private:
     Action::PrimaryGeneratorAction* fPrimaryGeneratorAction;
 
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetFlux;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetRepetitionRate;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSetTimeWidthRMS;
-    std::unique_ptr<G4UIcmdWithAnInteger> fSetMuonsForEachG4Event;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fTimeRMS;
+    std::unique_ptr<G4UIcmdWithAnInteger> fMuonsForEachG4Event;
 };
 
 } // namespace Messenger

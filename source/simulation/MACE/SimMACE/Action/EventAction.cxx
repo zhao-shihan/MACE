@@ -14,9 +14,8 @@ void EventAction::BeginOfEventAction(const G4Event* event) {
     detectors.GetMCPSD().SetEventID(eventID);
 }
 
-void EventAction::EndOfEventAction(const G4Event*) {
-    const auto repetitionID = RunManager::Instance().GetPrimaryGeneratorAction().GetRepetitionID();
-    RunManager::Instance().GetAnalysis().WriteEvent(repetitionID);
+void EventAction::EndOfEventAction(const G4Event* event) {
+    RunManager::Instance().GetAnalysis().WriteEvent(event->GetEventID());
 }
 
 } // namespace MACE::SimMACE::Action
