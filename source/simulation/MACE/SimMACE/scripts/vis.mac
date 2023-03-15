@@ -17,14 +17,12 @@
 /run/initialize
 
 # Customized properties
-/MACE/Generator/SurfaceMuon/Flux                   1e7 s-1
-/MACE/Generator/SurfaceMuon/RepetitionRate         50 Hz
-/MACE/Generator/SurfaceMuon/VertexTimeRMS           100 us
+/MACE/Generator/SurfaceMuon/TimeRMS                20 ns
 /MACE/Generator/SurfaceMuon/Momentum               28 MeV
-/MACE/Generator/SurfaceMuon/MomentumRMS      0.7 MeV
-/MACE/Generator/SurfaceMuon/PositionRMS         5 mm
-/MACE/Generator/SurfaceMuon/VertexZ                -1.5 m
-/MACE/Generator/SurfaceMuon/MuonsForEachG4Event    500
+/MACE/Generator/SurfaceMuon/MomentumRMS            0.7 MeV
+/MACE/Generator/SurfaceMuon/PositionRMS            5 mm
+/MACE/Generator/SurfaceMuon/PositionZ              -1.5 m
+/MACE/Generator/SurfaceMuon/MuonsForEachG4Event    10
 
 /MACE/Physics/MuoniumPhysics/Formation/FormationProbability     0.6
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5    # very high :) 

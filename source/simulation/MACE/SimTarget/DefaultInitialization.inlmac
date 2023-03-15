@@ -30,7 +30,7 @@
 "/MACE/Generator/SurfaceMuon/Momentum               28 MeV",
 "/MACE/Generator/SurfaceMuon/MomentumRMS      0.7 MeV",
 "/MACE/Generator/SurfaceMuon/PositionRMS         5 mm",
-"/MACE/Generator/SurfaceMuon/VertexZ                -5 cm",
+"/MACE/Generator/SurfaceMuon/PositionZ                -5 cm",
 "/MACE/Generator/SurfaceMuon/MuonsForEachG4Event    10",
 "",
 "# Set physics",

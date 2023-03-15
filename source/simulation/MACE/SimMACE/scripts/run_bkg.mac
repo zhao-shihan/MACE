@@ -16,15 +16,15 @@
 /run/initialize
 
 # Customized properties
-/MACE/Generator/SurfaceMuon/VertexTimeRMS          20 ns
+/MACE/Generator/SurfaceMuon/TimeRMS                20 ns
 /MACE/Generator/SurfaceMuon/Momentum               28 MeV
 /MACE/Generator/SurfaceMuon/MomentumRMS            0.7 MeV
 /MACE/Generator/SurfaceMuon/PositionRMS            5 mm
-/MACE/Generator/SurfaceMuon/VertexZ                -1.5 m
-/MACE/Generator/SurfaceMuon/MuonsForEachG4Event    500
+/MACE/Generator/SurfaceMuon/PositionZ              -1.5 m
+/MACE/Generator/SurfaceMuon/MuonsForEachG4Event    10000
 
 /MACE/Physics/MuoniumPhysics/Formation/FormationProbability     0.6
-/MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5    # very high :) 
+/MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 /MACE/Physics/MuoniumPhysics/Transport/MeanFreePath             0.2 um
 
 /MACE/Field/TransportMagneticField     0.1 tesla
@@ -34,11 +34,10 @@
 /MACE/Analysis/EnableCoincidenceOfEMCal   true
 /MACE/Analysis/EnableCoincidenceOfMCP     true
 
-
 #############################################################################
 # Run
 #############################################################################
 
-/MACE/Analysis/ResultPath SimMACE_result
+/MACE/Analysis/ResultPath SimMACE_bkg
 /MPIRun/SetPrintProgress 1
 /run/beamOn 80

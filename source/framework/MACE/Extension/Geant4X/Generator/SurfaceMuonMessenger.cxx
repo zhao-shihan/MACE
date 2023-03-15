@@ -37,7 +37,7 @@ SurfaceMuonMessenger::SurfaceMuonMessenger() :
     fPositionRMS->SetUnitCategory("Length");
     fPositionRMS->AvailableForStates(G4State_Idle);
 
-    fPositionZ = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Generator/SurfaceMuon/VertexZ", this);
+    fPositionZ = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Generator/SurfaceMuon/PositionZ", this);
     fPositionZ->SetGuidance("It does what you think it does.");
     fPositionZ->SetParameterName("z", false);
     fPositionZ->SetUnitCategory("Length");
