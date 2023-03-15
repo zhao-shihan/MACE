@@ -13,7 +13,7 @@ constexpr BasicGaussianParameter<T, AGaussian>::BasicGaussianParameter(T mu, T s
     fSigma(sigma) {}
 
 template<std::floating_point T, template<typename> class AGaussian, Concept::Character AChar>
-auto operator<<(std::basic_ostream<AChar>& os, BasicGaussianParameter<T, AGaussian> self) -> decltype(os) {
+auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussianParameter<T, AGaussian>& self) -> decltype(os) {
     const auto oldPrecision = os.precision(std::numeric_limits<T>::max_digits10);
     return os << self.fMu << ' ' << self.fSigma << std::setprecision(oldPrecision);
 }

@@ -2,6 +2,7 @@
 
 #include "MACE/Math/Parity.hxx"
 #include "MACE/Math/Random/Distribution/Uniform.hxx"
+#include "MACE/Math/Random/Generator/Xoshiro256pp.hxx"
 #include "MACE/Math/Random/UniformPseudoRandomBitGenerator.hxx"
 
 #include "CLHEP/Random/RandomEngine.h"

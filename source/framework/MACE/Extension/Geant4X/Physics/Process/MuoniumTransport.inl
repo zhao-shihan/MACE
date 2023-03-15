@@ -122,14 +122,14 @@ void MuoniumTransport<ATarget>::ProposeRandomFlight(const G4Track& track) {
 
     {
         // a much faster and good random engine
-        Math::Random::Generator::PCGXSHRR6432 pcg32(G4Random::getTheEngine()->operator unsigned int());
+        Math::Random::Generator::Xoshiro256Plus xoshiro256p(G4Random::getTheEngine()->operator unsigned int());
         // standard 3D Gaussian distribution
         Math::Random::Distribution::Gaussian3DDiagnoalFast<G4ThreeVector> standardGaussian3D;
         // do random flight
         do {
             // set free path
             freePath = insideMaterial ?
-                           Math::Random::Distribution::ExponentialFast(fMeanFreePath)(pcg32) :
+                           Math::Random::Distribution::ExponentialFast(fMeanFreePath)(xoshiro256p) :
                            stepInVacuum;
             // update flight length
             trueStepLength += freePath;
@@ -148,7 +148,7 @@ void MuoniumTransport<ATarget>::ProposeRandomFlight(const G4Track& track) {
             if (not insideMaterial) { continue; }
             // if inside material update its velocity
             // set a gauss vector of sigma=1
-            direction = standardGaussian3D(pcg32);
+            direction = standardGaussian3D(xoshiro256p);
             // get its length before multiply sigmaV
             velocity = direction.mag();
             // normalize direction vector

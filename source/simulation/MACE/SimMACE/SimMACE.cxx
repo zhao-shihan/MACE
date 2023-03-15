@@ -1,5 +1,6 @@
 #include "MACE/Compatibility/std2b/to_underlying.hxx"
 #include "MACE/Env/MPIEnv.hxx"
+#include "MACE/Extension/CLHEPX/Random/Xoshiro256Engine.hxx"
 #include "MACE/Extension/Geant4X/MPIExecutive.hxx"
 #include "MACE/SimMACE/Action/DetectorConstruction.hxx"
 #include "MACE/SimMACE/Action/PhysicsList.hxx"
@@ -13,8 +14,8 @@ int main(int argc, char* argv[]) {
     Env::CLI::Geant4CLI cli;
     Env::MPIEnv mpiEnv(argc, argv, cli);
 
-    CLHEP::MTwistEngine randEng(4357);
-    G4Random::setTheEngine(&randEng);
+    CLHEPX::Random::Xoshiro256Engine randomEngine(20030202);
+    G4Random::setTheEngine(&randomEngine);
 
     const auto verboseLevel = cli.GetVerboseLevel().value_or(Env::VerboseLevel::Warning);
 

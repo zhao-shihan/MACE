@@ -8,8 +8,8 @@ RandomEngineBase<PRBG>::RandomEngineBase() :
     static_assert(std::derived_from<PRBG, RandomEngineBase<PRBG>>);
     constexpr auto seedMin = 1;
     constexpr auto seedMax = std::numeric_limits<long>::max() - 1;
-    Math::Random::Generator::PCGXSHRR6432 pcg32(reinterpret_cast<std::uintptr_t>(this));
-    setSeed(Math::Random::Distribution::Uniform<long>(seedMin, seedMax)(pcg32));
+    Math::Random::Generator::Xoshiro256pp xoshiro256pp(reinterpret_cast<std::uintptr_t>(this));
+    setSeed(Math::Random::Distribution::Uniform<long>(seedMin, seedMax)(xoshiro256pp));
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>

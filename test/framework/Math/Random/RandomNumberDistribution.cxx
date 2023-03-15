@@ -2,7 +2,7 @@
 // #include "MACE/Extension/CLHEPX/Random/PCG32Engine.hxx"
 #include "MACE/Math/Random/Distribution/Uniform.hxx"
 #include "MACE/Math/Random/Generator/MT1993732.hxx"
-#include "MACE/Math/Random/Generator/PCGXSHRR6432.hxx"
+#include "MACE/Math/Random/Generator/Xoshiro256Plus.hxx"
 #include "MACE/Math/Random/RandomNumberDistribution.hxx"
 #include "MACE/Math/Random/RandomNumberDistributionBase.hxx"
 
@@ -12,7 +12,7 @@
 using namespace MACE::Math::Random;
 
 int main(int, char* argv[]) {
-    Generator::PCGXSHRR6432 rng;
+    Generator::Xoshiro256Plus rng;
     // Generator::MT1993732 rng;
 
     using RNG = decltype(rng);

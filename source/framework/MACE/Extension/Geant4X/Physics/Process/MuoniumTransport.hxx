@@ -7,7 +7,7 @@
 #include "MACE/Extension/Geant4X/Physics/TargetForMuoniumPhysics.hxx"
 #include "MACE/Math/Random/Distribution/Exponential.hxx"
 #include "MACE/Math/Random/Distribution/Gaussian3DDiagnoal.hxx"
-#include "MACE/Math/Random/Generator/PCGXSHRR6432.hxx"
+#include "MACE/Math/Random/Generator/Xoshiro256Plus.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
