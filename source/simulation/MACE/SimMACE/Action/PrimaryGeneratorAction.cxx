@@ -12,12 +12,12 @@ using namespace LiteralUnit::Time;
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
     fSurfaceMuonGenerator(),
     fTimeWidthRMS(20_ns),
-    fMuonsForEachG4Event(1000) {
+    fMuonsForEachG4Event(10) {
     Messenger::PrimaryGeneratorActionMessenger::Instance().AssignTo(this);
 }
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
-    G4RandGauss randGauss = {G4Random::getTheEngine(), 0, fTimeWidthRMS};
+    G4RandGauss randGauss = {*G4Random::getTheEngine(), 0, fTimeWidthRMS};
     for (G4int i = 0; i < fMuonsForEachG4Event; ++i) {
         fSurfaceMuonGenerator.Time(randGauss.fire());
         fSurfaceMuonGenerator.GeneratePrimaryVertex(event);
