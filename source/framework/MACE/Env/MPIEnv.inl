@@ -13,6 +13,8 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel, bo
     fHostInfoList() {
     // Initialize MPI and properties of MPI_COMM_WORLD
     InitializeMPI(argc, argv);
+    // Disable ROOT implicit multi-threading
+    ROOT::DisableImplicitMT();
     // Print startup message
     if (printStartupMessage and AtWorldMaster()) {
         PrintStartupMessageSplitLine();
