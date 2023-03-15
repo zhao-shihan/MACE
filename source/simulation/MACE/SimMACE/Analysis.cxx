@@ -6,7 +6,6 @@
 #include "MACE/SimMACE/Messenger/FieldMessenger.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
-#include "ROOT/RDataFrame.hxx"
 #include "TFile.h"
 
 namespace MACE::SimMACE {
@@ -22,7 +21,6 @@ Analysis::Analysis() :
     fMCPHitList(nullptr),
     fCDCHitList(nullptr) {
     Messenger::AnalysisMessenger::Instance().AssignTo(this);
-    fDataHub.TreeNamePrefixFormat("Evt{}_");
 }
 
 void Analysis::Open(Option_t* option) {
@@ -37,22 +35,22 @@ void Analysis::Close(Option_t* option) {
     delete fFile;
 }
 
-void Analysis::WriteEvent(G4int eventID) {
-    using namespace DataModel::SimHit;
-
-    // create and fill trees
-    const auto emCalHitTree = fDataHub.CreateTree<EMCalSimHit>(eventID);
-    const auto mcpHitTree = fDataHub.CreateTree<MCPSimHit>(eventID);
-    const auto cdcHitTree = fDataHub.CreateTree<CDCSimHit>(eventID);
-    fDataHub.FillTree(*fEMCalHitList, *emCalHitTree, true);
-    fDataHub.FillTree(*fMCPHitList, *mcpHitTree, true);
-    fDataHub.FillTree(*fCDCHitList, *cdcHitTree, true);
-
-    const auto emCalTriggered = not fEnableCoincidenceOfEMCal or emCalHitTree->GetEntries() > 0;
-    const auto mcpTriggered = not fEnableCoincidenceOfMCP or mcpHitTree->GetEntries() > 0;
-    const auto cdcTriggered = cdcHitTree->GetEntries() > 0;
+void Analysis::WriteEvent() {
+    const auto emCalTriggered = not fEnableCoincidenceOfEMCal or fEMCalHitList->size() > 0;
+    const auto mcpTriggered = not fEnableCoincidenceOfMCP or fMCPHitList->size() > 0;
+    const auto cdcTriggered = fCDCHitList->size() > 0;
     // if coincident then write their data
     if (emCalTriggered and mcpTriggered and cdcTriggered) {
+        using namespace DataModel::SimHit;
+        // create trees
+        const auto emCalHitTree = fDataHub.CreateTree<EMCalSimHit>();
+        const auto mcpHitTree = fDataHub.CreateTree<MCPSimHit>();
+        const auto cdcHitTree = fDataHub.CreateTree<CDCSimHit>();
+        // fill trees
+        fDataHub.FillTree(*fEMCalHitList, *emCalHitTree, true);
+        fDataHub.FillTree(*fMCPHitList, *mcpHitTree, true);
+        fDataHub.FillTree(*fCDCHitList, *cdcHitTree, true);
+        // write trees
         emCalHitTree->Write();
         mcpHitTree->Write();
         cdcHitTree->Write();

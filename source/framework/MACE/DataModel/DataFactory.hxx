@@ -36,20 +36,20 @@ public:
     /// The tree is owned by the file.
     /// If not found, the return value is defined by ROOT (usually nullptr).
     template<TransientData AData>
-    TTree* FindTree(TFile& file, Long64_t treeIndex = 0) const { return file.Get<TTree>(TreeName<AData>(treeIndex).c_str()); }
+    TTree* FindTree(TFile& file, Long64_t treeIndex = -1) const { return file.Get<TTree>(TreeName<AData>(treeIndex).c_str()); }
     /// Create a TChain of the list of ROOT files.
     template<TransientData AData, std::convertible_to<gsl::czstring> APath>
-    std::shared_ptr<TChain> CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex = 0) const;
+    std::shared_ptr<TChain> CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex = -1) const;
     template<TransientData AData, typename APath>
         requires std::convertible_to<decltype(std::declval<APath>().c_str()), gsl::czstring>
-    std::shared_ptr<TChain> CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex = 0) const;
+    std::shared_ptr<TChain> CreateChain(const std::vector<APath>& fileList, Long64_t treeIndex = -1) const;
     /// Get the range of tree index in current tree name setting.
     template<TransientData AData>
     std::pair<Long64_t, Long64_t> GetTreeIndexRange(TFile& file) const;
     /// Create an empty tree with name provided by AData and DataFactory settings.
     /// The tree is owned by shared_ptr.
     template<TransientData AData>
-    std::shared_ptr<TTree> CreateTree(Long64_t treeIndex = 0) const;
+    std::shared_ptr<TTree> CreateTree(Long64_t treeIndex = -1) const;
     /// Fill an existed tree with a data vector.
     /// The data type to be written in tree is specfied by ADataInTree. If not specfied, default to the
     /// type inside the incoming list (type pointed by ADataInListPointer).
@@ -65,9 +65,9 @@ public:
     /// Same effect as invoke CreateTree<ADataInTree>(treeIndex) and FillTree<ADataInTree>(dataList, tree, true).
     template<TransientData ADataInTree, Concept::WeakPointerImitator ADataInListPointer>
         requires std::derived_from<typename std::pointer_traits<ADataInListPointer>::element_type, ADataInTree>
-    std::shared_ptr<TTree> CreateAndFillTree(const std::vector<ADataInListPointer>& dataList, Long64_t treeIndex = 0) const;
+    std::shared_ptr<TTree> CreateAndFillTree(const std::vector<ADataInListPointer>& dataList, Long64_t treeIndex = -1) const;
     template<Concept::WeakPointerImitator ADataInListPointer>
-    std::shared_ptr<TTree> CreateAndFillTree(const std::vector<ADataInListPointer>& dataList, Long64_t treeIndex = 0) const;
+    std::shared_ptr<TTree> CreateAndFillTree(const std::vector<ADataInListPointer>& dataList, Long64_t treeIndex = -1) const;
     /// Create a data vector and fill it with a tree.
     /// Entries to be filled are determined by [entriesRange.first, entriesRange.second).
     /// The data type stores in the data vector is specfied by AData.
@@ -95,7 +95,7 @@ public:
     /// user should ensure that the tree contains branches which AData needs.
     /// It's user's responsibility to ensure the availability of entriesRange.
     template<TransientData AData>
-    std::vector<std::shared_ptr<AData>> CreateAndFillList(TFile& file, const std::pair<Long64_t, Long64_t>& entriesRange, Long64_t treeIndex = 0, bool connected = false) const;
+    std::vector<std::shared_ptr<AData>> CreateAndFillList(TFile& file, const std::pair<Long64_t, Long64_t>& entriesRange, Long64_t treeIndex = -1, bool connected = false) const;
     /// Create a data vector and fill it with a tree. The tree is get via FindTree(TFile& file, Long64_t treeIndex).
     /// The data type stores in the data vector is specfied by AData.
     /// AData can be shrunken, which means just a part of branch in the tree will be read.
@@ -103,7 +103,7 @@ public:
     /// Note: there is no static branch infomation for the tree, so
     /// user should ensure that the tree contains branches which AData needs.
     template<TransientData AData>
-    std::vector<std::shared_ptr<AData>> CreateAndFillList(TFile& file, Long64_t treeIndex = 0, bool connected = false) const;
+    std::vector<std::shared_ptr<AData>> CreateAndFillList(TFile& file, Long64_t treeIndex = -1, bool connected = false) const;
 
 private:
     static std::pair<bool, std::pair<std::string, std::string>> SplitPrefixOrSuffixFormat(std::string_view format);

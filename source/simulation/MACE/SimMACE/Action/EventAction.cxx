@@ -14,8 +14,8 @@ void EventAction::BeginOfEventAction(const G4Event* event) {
     detectors.GetMCPSD().SetEventID(eventID);
 }
 
-void EventAction::EndOfEventAction(const G4Event* event) {
-    RunManager::Instance().GetAnalysis().WriteEvent(event->GetEventID());
+void EventAction::EndOfEventAction(const G4Event*) {
+    RunManager::Instance().GetAnalysis().WriteEvent();
 }
 
 } // namespace MACE::SimMACE::Action

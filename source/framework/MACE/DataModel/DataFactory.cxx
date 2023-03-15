@@ -8,9 +8,9 @@ DataFactory::DataFactory() :
     MerelyMoveableBase(),
     fPrefixHasIndex(true),
     fSuffixHasIndex(false),
-    fPrefix("#", "_"),
+    fPrefix("", ""),
     fSuffix("", ""),
-    fPrefixFormat("#{}_"),
+    fPrefixFormat(""),
     fSuffixFormat("") {}
 
 void DataFactory::TreeNamePrefixFormat(std::string_view prefix) {
