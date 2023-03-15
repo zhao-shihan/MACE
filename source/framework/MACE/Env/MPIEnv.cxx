@@ -105,6 +105,10 @@ void MPIEnv::InitializeMPI(int argc, char* argv[]) {
     MACE_CHECKED_MPI_CALL(MPI_Comm_size,
                           fLocalComm,
                           &fLocalCommSize)
+    // Disable ROOT implicit multi-threading
+    if (ROOT::IsImplicitMTEnabled()) {
+        ROOT::DisableImplicitMT();
+    }
 }
 
 void MPIEnv::InitializeHostInfos() {
