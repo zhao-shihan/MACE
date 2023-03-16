@@ -1,4 +1,4 @@
-#include "MACE/Geometry/Description/LinacField.hxx"
+#include "MACE/Detector/Description/LinacField.hxx"
 #include "MACE/SimMACE/Field/LinacField.hxx"
 #include "MACE/SimMACE/Messenger/FieldMessenger.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
@@ -15,7 +15,7 @@ LinacField::LinacField() :
     fBz(0.1_T),
     fV(7_kV),
     fDecayZMean(13.05_mm),
-    fEz(7_kV / (Geometry::Description::LinacField::Instance().DownStreamLength() - 13.05_mm)) {
+    fEz(7_kV / (Detector::Description::LinacField::Instance().DownStreamLength() - 13.05_mm)) {
     Messenger::FieldMessenger::Instance().AssignTo(this);
 }
 
@@ -30,7 +30,7 @@ void LinacField::GetFieldValue(const G4double*, G4double* F) const {
 
 void LinacField::SetLinacPotential(G4double V) {
     fV = V;
-    fEz = fV / (Geometry::Description::LinacField::Instance().DownStreamLength() - fDecayZMean);
+    fEz = fV / (Detector::Description::LinacField::Instance().DownStreamLength() - fDecayZMean);
 }
 
 } // namespace MACE::SimMACE::Field

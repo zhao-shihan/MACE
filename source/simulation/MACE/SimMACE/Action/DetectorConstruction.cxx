@@ -22,7 +22,7 @@ DetectorConstruction::DetectorConstruction() :
     G4VUserDetectorConstruction(),
     fCheckOverlap(false),
 
-    fWorld(std::make_shared<Geometry::Entity::Fast::World>()),
+    fWorld(std::make_shared<Detector::Geometry::Fast::World>()),
 
     fCDCFieldWireRegion(nullptr),
     fCDCSenseWireRegion(nullptr),
@@ -45,7 +45,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     // Construct volumes
     ////////////////////////////////////////////////////////////////
 
-    using namespace Geometry::Entity::Fast;
+    using namespace Detector::Geometry::Fast;
 
     // 1
 

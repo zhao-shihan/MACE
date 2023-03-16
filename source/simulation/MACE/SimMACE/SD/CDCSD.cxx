@@ -1,4 +1,4 @@
-#include "MACE/Geometry/Description/CDC.hxx"
+#include "MACE/Detector/Description/CDC.hxx"
 #include "MACE/Math/MidPoint.hxx"
 #include "MACE/SimMACE/Region.hxx"
 #include "MACE/SimMACE/RunManager.hxx"
@@ -26,7 +26,7 @@ CDCSD::CDCSD(const G4String& sdName) :
 
     collectionName.insert(sdName + "HC");
 
-    const auto& cellMap = Geometry::Description::CDC::Instance().CellMap();
+    const auto& cellMap = Detector::Description::CDC::Instance().CellMap();
     fCellMap.reserve(cellMap.size());
     for (auto&& cell : cellMap) {
         fCellMap.emplace_back(VectorCast<G4TwoVector>(cell.position),

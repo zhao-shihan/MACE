@@ -17,9 +17,9 @@
 /MACE/Analysis/EnableYieldAnalysis                    true
 
 # Geometry
-#/MACE/Geometry/Description/Import                     geom.yaml
-/MACE/Geometry/TargetDensity                       30 mg/cm3
-/MACE/Geometry/Temperature                         293.15 K
+#/MACE/Detector/Description/Import                     geom.yaml
+/MACE/Detector/TargetDensity                       30 mg/cm3
+/MACE/Detector/Temperature                         293.15 K
 
 # Initialize kernel
 /run/initialize
@@ -47,13 +47,13 @@
 #############################################################################
 
 # Run 0: Flat target
-/MACE/Geometry/Description/Import flat.yaml
+/MACE/Detector/Description/Import flat.yaml
 /run/beamOn                       80
 
 # Run 1: Ablated target with spacing 49.5um, diameter 175um
-/MACE/Geometry/Description/Import hole_0.yaml
+/MACE/Detector/Description/Import hole_0.yaml
 /run/beamOn                       80
 
 # Run 2: Ablated target with spacing 60um, diameter 300um
-/MACE/Geometry/Description/Import hole_1.yaml
+/MACE/Detector/Description/Import hole_1.yaml
 /run/beamOn                       80

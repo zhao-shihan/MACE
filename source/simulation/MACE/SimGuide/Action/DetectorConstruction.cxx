@@ -1,15 +1,15 @@
-#include "MACE/Geometry/Description/Collimator.hxx"
-#include "MACE/Geometry/Description/EMCalField.hxx"
-#include "MACE/Geometry/Description/EMCalShield.hxx"
-#include "MACE/Geometry/Description/LinacField.hxx"
-#include "MACE/Geometry/Description/MCP.hxx"
-#include "MACE/Geometry/Description/SelectorField.hxx"
-#include "MACE/Geometry/Description/SpectrometerField.hxx"
-#include "MACE/Geometry/Description/SpectrometerMagnet.hxx"
-#include "MACE/Geometry/Description/SpectrometerShield.hxx"
-#include "MACE/Geometry/Description/TransportLine.hxx"
-#include "MACE/Geometry/Description/World.hxx"
-#include "MACE/Geometry/DescriptionIO.hxx"
+#include "MACE/Detector/Description/Collimator.hxx"
+#include "MACE/Detector/Description/EMCalField.hxx"
+#include "MACE/Detector/Description/EMCalShield.hxx"
+#include "MACE/Detector/Description/LinacField.hxx"
+#include "MACE/Detector/Description/MCP.hxx"
+#include "MACE/Detector/Description/SelectorField.hxx"
+#include "MACE/Detector/Description/SpectrometerField.hxx"
+#include "MACE/Detector/Description/SpectrometerMagnet.hxx"
+#include "MACE/Detector/Description/SpectrometerShield.hxx"
+#include "MACE/Detector/Description/TransportLine.hxx"
+#include "MACE/Detector/Description/World.hxx"
+#include "MACE/Detector/DescriptionIO.hxx"
 #include "MACE/SimGuide/Action/DetectorConstruction.hxx"
 
 namespace MACE::SimTarget::Action {
@@ -35,7 +35,7 @@ DetectorConstruction::DetectorConstruction() :
     fThirdTransportField(nullptr),
     fThirdTransportSolenoid(nullptr),
     fWorld(nullptr) {
-    Geometry::DescriptionIO::Import<UsedDescriptions>(std::array{
+    Detector::DescriptionIO::Import<UsedDescriptions>(std::array{
 #include "MACE/SimGuide/DefaultGeometry.inlyaml"
     });
 }

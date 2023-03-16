@@ -1,11 +1,11 @@
 #include "MACE/Compatibility/std2b/to_underlying.hxx"
-#include "MACE/Geometry/Description/All.hxx"
-#include "MACE/Geometry/DescriptionIO.hxx"
+#include "MACE/Detector/Description/All.hxx"
+#include "MACE/Detector/DescriptionIO.hxx"
 #include "MACE/Env/BasicEnv.hxx"
 
 #include <random>
 
-using namespace MACE::Geometry;
+using namespace MACE::Detector;
 using namespace MACE::Env;
 using namespace MACE::Compatibility;
 

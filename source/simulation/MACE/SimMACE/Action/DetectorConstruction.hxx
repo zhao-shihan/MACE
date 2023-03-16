@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Geometry/Entity/Fast/All.hxx"
+#include "MACE/Detector/Geometry/Fast/All.hxx"
 #include "MACE/SimMACE/Region.hxx"
 #include "MACE/SimMACE/SD/CDCSD.hxx"
 #include "MACE/SimMACE/SD/EMCalSD.hxx"
@@ -51,7 +51,7 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    gsl::not_null<std::shared_ptr<Geometry::EntityBase>> fWorld;
+    gsl::not_null<std::shared_ptr<Detector::GeometryBase>> fWorld;
 
     Region* fCDCFieldWireRegion;
     Region* fCDCSenseWireRegion;

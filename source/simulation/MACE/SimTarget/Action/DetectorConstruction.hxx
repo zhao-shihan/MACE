@@ -9,7 +9,7 @@
 
 namespace MACE {
 
-namespace Geometry {
+namespace Detector {
 
 namespace Description {
 
@@ -20,7 +20,7 @@ class World;
 
 } // namespace Description
 
-class EntityBase;
+class GeometryBase;
 
 } // namespace Geometry
 
@@ -39,15 +39,15 @@ public:
     void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlap = checkOverlaps; }
 
 public:
-    using UsedDescriptions = std::tuple<Geometry::Description::BeamDegrader,
-                                        Geometry::Description::BeamMonitor,
-                                        Geometry::Description::Target,
-                                        Geometry::Description::World>;
+    using UsedDescriptions = std::tuple<Detector::Description::BeamDegrader,
+                                        Detector::Description::BeamMonitor,
+                                        Detector::Description::Target,
+                                        Detector::Description::World>;
 
 private:
     G4bool fCheckOverlap;
 
-    std::shared_ptr<Geometry::EntityBase> fWorld;
+    std::shared_ptr<Detector::GeometryBase> fWorld;
 
     G4double fDensity;
     G4double fTemperature;

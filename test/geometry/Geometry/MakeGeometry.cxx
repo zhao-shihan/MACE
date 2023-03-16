@@ -1,5 +1,5 @@
-#include "MACE/Geometry/DescriptionIO.hxx"
-#include "MACE/Geometry/Entity/Fast/All.hxx"
+#include "MACE/Detector/DescriptionIO.hxx"
+#include "MACE/Detector/Geometry/Fast/All.hxx"
 #include "MACE/Env/BasicEnv.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
     // Construct volumes
     ////////////////////////////////////////////////////////////////
 
-    using namespace MACE::Geometry::Entity::Fast;
+    using namespace MACE::Detector::Geometry::Fast;
 
     constexpr auto fCheckOverlap = true;
 
@@ -149,7 +149,7 @@ int main(int argc, char* argv[]) {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-    MACE::Geometry::DescriptionIO::ExportInstantiated("test.yaml");
+    MACE::Detector::DescriptionIO::ExportInstantiated("test.yaml");
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,8 +167,8 @@ int main(int argc, char* argv[]) {
     // see form https://github.com/root-project/jsroot/blob/master/docs/JSROOT.md#geometry-viewer
     
     geoManager->GetVolume(fWorld->LogicalVolume()->GetName())->SetInvisible();
-    using MACE::Geometry::EntityBase;
-    for (auto&& entity : std::initializer_list<std::reference_wrapper<const EntityBase>>{
+    using MACE::Detector::GeometryBase;
+    for (auto&& entity : std::initializer_list<std::reference_wrapper<const GeometryBase>>{
              emCalShield,
              emCal,
              spectrometerMagnet,

@@ -1,15 +1,15 @@
-#include "MACE/Geometry/Description/BeamDegrader.hxx"
-#include "MACE/Geometry/Description/BeamMonitor.hxx"
-#include "MACE/Geometry/Description/LinacField.hxx"
-#include "MACE/Geometry/Description/Target.hxx"
-#include "MACE/Geometry/Description/World.hxx"
-#include "MACE/Geometry/DescriptionIO.hxx"
-#include "MACE/Geometry/Entity/Fast/BeamDegrader.hxx"
-#include "MACE/Geometry/Entity/Fast/BeamMonitor.hxx"
-#include "MACE/Geometry/Entity/Fast/Target.hxx"
-#include "MACE/Geometry/Entity/Fast/World.hxx"
+#include "MACE/Detector/Description/BeamDegrader.hxx"
+#include "MACE/Detector/Description/BeamMonitor.hxx"
+#include "MACE/Detector/Description/LinacField.hxx"
+#include "MACE/Detector/Description/Target.hxx"
+#include "MACE/Detector/Description/World.hxx"
+#include "MACE/Detector/DescriptionIO.hxx"
+#include "MACE/Detector/Geometry/Fast/BeamDegrader.hxx"
+#include "MACE/Detector/Geometry/Fast/BeamMonitor.hxx"
+#include "MACE/Detector/Geometry/Fast/Target.hxx"
+#include "MACE/Detector/Geometry/Fast/World.hxx"
 #include "MACE/SimTarget/Action/DetectorConstruction.hxx"
-#include "MACE/SimTarget/Messenger/GeometryMessenger.hxx"
+#include "MACE/SimTarget/Messenger/DetectorMessenger.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
 #include "G4NistManager.hh"
@@ -28,18 +28,18 @@ DetectorConstruction::DetectorConstruction() :
     fWorld(nullptr),
     fDensity(30_mg_cm3),
     fTemperature(293.15_K) {
-    Geometry::DescriptionIO::Import<UsedDescriptions>(std::array{
+    Detector::DescriptionIO::Import<UsedDescriptions>(std::array{
 #include "MACE/SimTarget/DefaultGeometry.inlyaml"
     });
     Messenger::GeometryMessenger::Instance().AssignTo(this);
 }
 
 G4VPhysicalVolume* DetectorConstruction::Construct() {
-    using namespace MACE::Geometry::Entity::Fast;
+    using namespace MACE::Detector::Geometry::Fast;
 
     // LinacField is target's mother by default, modified it to adapt global frame
-    Geometry::Description::LinacField::Instance().Length(0);
-    Geometry::Description::LinacField::Instance().DownStreamLength(0);
+    Detector::Description::LinacField::Instance().Length(0);
+    Detector::Description::LinacField::Instance().DownStreamLength(0);
 
     fWorld = std::make_shared<World>();
     auto& beamMonitor = fWorld->NewDaughter<BeamMonitor>(fCheckOverlap);

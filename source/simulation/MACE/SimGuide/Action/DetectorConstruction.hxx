@@ -9,7 +9,7 @@
 
 namespace MACE {
 
-namespace Geometry {
+namespace Detector {
 
 namespace Description {
 
@@ -27,7 +27,7 @@ class World;
 
 } // namespace Description
 
-class EntityBase;
+class GeometryBase;
 
 } // namespace Geometry
 
@@ -43,41 +43,41 @@ public:
     void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlap = checkOverlaps; }
 
 public:
-    using UsedDescriptions = std::tuple<Geometry::Description::Collimator,
-                                        Geometry::Description::EMCalField,
-                                        Geometry::Description::EMCalShield,
-                                        Geometry::Description::LinacField,
-                                        Geometry::Description::MCP,
-                                        Geometry::Description::SelectorField,
-                                        Geometry::Description::SpectrometerField,
-                                        Geometry::Description::SpectrometerMagnet,
-                                        Geometry::Description::SpectrometerShield,
-                                        Geometry::Description::TransportLine,
-                                        Geometry::Description::World>;
+    using UsedDescriptions = std::tuple<Detector::Description::Collimator,
+                                        Detector::Description::EMCalField,
+                                        Detector::Description::EMCalShield,
+                                        Detector::Description::LinacField,
+                                        Detector::Description::MCP,
+                                        Detector::Description::SelectorField,
+                                        Detector::Description::SpectrometerField,
+                                        Detector::Description::SpectrometerMagnet,
+                                        Detector::Description::SpectrometerShield,
+                                        Detector::Description::TransportLine,
+                                        Detector::Description::World>;
 
 private:
     G4bool fCheckOverlap;
 
-    std::shared_ptr<Geometry::EntityBase> fCollimator;
-    std::shared_ptr<Geometry::EntityBase> fEMCalField;
-    std::shared_ptr<Geometry::EntityBase> fEMCalShield;
-    std::shared_ptr<Geometry::EntityBase> fFirstBendField;
-    std::shared_ptr<Geometry::EntityBase> fFirstBendSolenoid;
-    std::shared_ptr<Geometry::EntityBase> fFirstTransportField;
-    std::shared_ptr<Geometry::EntityBase> fFirstTransportSolenoid;
-    std::shared_ptr<Geometry::EntityBase> fLinacField;
-    std::shared_ptr<Geometry::EntityBase> fMCP;
-    std::shared_ptr<Geometry::EntityBase> fSecondBendField;
-    std::shared_ptr<Geometry::EntityBase> fSecondBendSolenoid;
-    std::shared_ptr<Geometry::EntityBase> fSecondTransportField;
-    std::shared_ptr<Geometry::EntityBase> fSecondTransportSolenoid;
-    std::shared_ptr<Geometry::EntityBase> fSelectorField;
-    std::shared_ptr<Geometry::EntityBase> fSpectrometerField;
-    std::shared_ptr<Geometry::EntityBase> fSpectrometerMagnet;
-    std::shared_ptr<Geometry::EntityBase> fSpectrometerShield;
-    std::shared_ptr<Geometry::EntityBase> fThirdTransportField;
-    std::shared_ptr<Geometry::EntityBase> fThirdTransportSolenoid;
-    std::shared_ptr<Geometry::EntityBase> fWorld;
+    std::shared_ptr<Detector::GeometryBase> fCollimator;
+    std::shared_ptr<Detector::GeometryBase> fEMCalField;
+    std::shared_ptr<Detector::GeometryBase> fEMCalShield;
+    std::shared_ptr<Detector::GeometryBase> fFirstBendField;
+    std::shared_ptr<Detector::GeometryBase> fFirstBendSolenoid;
+    std::shared_ptr<Detector::GeometryBase> fFirstTransportField;
+    std::shared_ptr<Detector::GeometryBase> fFirstTransportSolenoid;
+    std::shared_ptr<Detector::GeometryBase> fLinacField;
+    std::shared_ptr<Detector::GeometryBase> fMCP;
+    std::shared_ptr<Detector::GeometryBase> fSecondBendField;
+    std::shared_ptr<Detector::GeometryBase> fSecondBendSolenoid;
+    std::shared_ptr<Detector::GeometryBase> fSecondTransportField;
+    std::shared_ptr<Detector::GeometryBase> fSecondTransportSolenoid;
+    std::shared_ptr<Detector::GeometryBase> fSelectorField;
+    std::shared_ptr<Detector::GeometryBase> fSpectrometerField;
+    std::shared_ptr<Detector::GeometryBase> fSpectrometerMagnet;
+    std::shared_ptr<Detector::GeometryBase> fSpectrometerShield;
+    std::shared_ptr<Detector::GeometryBase> fThirdTransportField;
+    std::shared_ptr<Detector::GeometryBase> fThirdTransportSolenoid;
+    std::shared_ptr<Detector::GeometryBase> fWorld;
 };
 
 } // namespace SimTarget::Action
