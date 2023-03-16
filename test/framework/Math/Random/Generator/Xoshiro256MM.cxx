@@ -1,6 +1,6 @@
 #include "MACE/Math/Random/Distribution/Uniform.hxx"
 #include "MACE/Math/Random/Generator/MT1993732.hxx"
-#include "MACE/Math/Random/Generator/Xoshiro256pp.hxx"
+#include "MACE/Math/Random/Generator/Xoshiro256MM.hxx"
 #include "MACE/Utility/WallTimer.hxx"
 
 #include "Eigen/Core"
@@ -17,7 +17,7 @@ using namespace MACE::Math::Random;
 
 int main() {
     Generator::MT1993732 mt1993732;
-    Generator::Xoshiro256pp xoshiro256pp;
+    Generator::Xoshiro256MM xoshiro256MM;
 
     std::cout << "Simply generate 10 million integers:" << std::endl;
 
@@ -28,11 +28,11 @@ int main() {
     auto time = timer.MillisecondsElapsed();
     std::cout << "      MT19937-32 : " << time << " ms (last integer: " << r << ')' << std::endl;
 
-    for (int i = 0; i < 1000; ++i) { r = xoshiro256pp(); }
+    for (int i = 0; i < 1000; ++i) { r = xoshiro256MM(); }
     timer.Reset();
-    for (int i = 0; i < 10'000'000; ++i) { r = xoshiro256pp(); }
+    for (int i = 0; i < 10'000'000; ++i) { r = xoshiro256MM(); }
     time = timer.MillisecondsElapsed();
-    std::cout << "    xoshiro256++ : " << time << " ms (last integer: " << r << ')' << std::endl;
+    std::cout << "    xoshiro256** : " << time << " ms (last integer: " << r << ')' << std::endl;
 
     std::cout << "Shuffle a std::array<double, 16> 1 million times:" << std::endl;
     std::array<double, 16> arr16;
@@ -44,11 +44,11 @@ int main() {
     time = timer.MillisecondsElapsed();
     std::cout << "      MT19937-32 : " << time << " ms (first element: " << arr16.front() << ')' << std::endl;
 
-    for (int i = 0; i < 1000; ++i) { std::ranges::shuffle(arr16, xoshiro256pp); }
+    for (int i = 0; i < 1000; ++i) { std::ranges::shuffle(arr16, xoshiro256MM); }
     timer.Reset();
-    for (int i = 0; i < 1'000'000; ++i) { std::ranges::shuffle(arr16, xoshiro256pp); }
+    for (int i = 0; i < 1'000'000; ++i) { std::ranges::shuffle(arr16, xoshiro256MM); }
     time = timer.MillisecondsElapsed();
-    std::cout << "    xoshiro256++ : " << time << " ms (first element: " << arr16.front() << ')' << std::endl;
+    std::cout << "    xoshiro256** : " << time << " ms (first element: " << arr16.front() << ')' << std::endl;
 
     std::cout << "Shuffle a std::array<double, 4096> 10k times:" << std::endl;
     std::array<double, 4096> arr4096;
@@ -60,11 +60,11 @@ int main() {
     time = timer.MillisecondsElapsed();
     std::cout << "      MT19937-32 : " << time << " ms (first element: " << arr4096.front() << ')' << std::endl;
 
-    for (int i = 0; i < 100; ++i) { std::ranges::shuffle(arr4096, xoshiro256pp); }
+    for (int i = 0; i < 100; ++i) { std::ranges::shuffle(arr4096, xoshiro256MM); }
     timer.Reset();
-    for (int i = 0; i < 10'000; ++i) { std::ranges::shuffle(arr4096, xoshiro256pp); }
+    for (int i = 0; i < 10'000; ++i) { std::ranges::shuffle(arr4096, xoshiro256MM); }
     time = timer.MillisecondsElapsed();
-    std::cout << "    xoshiro256++ : " << time << " ms (first element: " << arr4096.front() << ')' << std::endl;
+    std::cout << "    xoshiro256** : " << time << " ms (first element: " << arr4096.front() << ')' << std::endl;
 
     std::cout << "2D random walk, 10 million steps:" << std::endl;
     Eigen::RowVector2d v2d = {0, 0};
@@ -86,18 +86,18 @@ int main() {
 
     v2d = {0, 0};
     for (int i = 0; i < 1'000'000; ++i) {
-        delta2d = {Distribution::Uniform<double>()(xoshiro256pp),
-                   Distribution::Uniform<double>()(xoshiro256pp)};
+        delta2d = {Distribution::Uniform<double>()(xoshiro256MM),
+                   Distribution::Uniform<double>()(xoshiro256MM)};
         v2d += delta2d;
     }
     timer.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
-        delta2d = {Distribution::Uniform<double>()(xoshiro256pp),
-                   Distribution::Uniform<double>()(xoshiro256pp)};
+        delta2d = {Distribution::Uniform<double>()(xoshiro256MM),
+                   Distribution::Uniform<double>()(xoshiro256MM)};
         v2d += delta2d;
     }
     time = timer.MillisecondsElapsed();
-    std::cout << "    xoshiro256++ : " << time << " ms (last displacement: " << std::setprecision(18) << v2d << std::setprecision(6) << ')' << std::endl;
+    std::cout << "    xoshiro256** : " << time << " ms (last displacement: " << std::setprecision(18) << v2d << std::setprecision(6) << ')' << std::endl;
 
     std::cout << "3D random walk, 10 million steps:" << std::endl;
     Eigen::RowVector3d v3d = {0, 0, 0};
@@ -121,20 +121,20 @@ int main() {
 
     v3d = {0, 0, 0};
     for (int i = 0; i < 1'000'000; ++i) {
-        delta3d = {Distribution::Uniform<double>()(xoshiro256pp),
-                   Distribution::Uniform<double>()(xoshiro256pp),
-                   Distribution::Uniform<double>()(xoshiro256pp)};
+        delta3d = {Distribution::Uniform<double>()(xoshiro256MM),
+                   Distribution::Uniform<double>()(xoshiro256MM),
+                   Distribution::Uniform<double>()(xoshiro256MM)};
         v3d += delta3d;
     }
     timer.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
-        delta3d = {Distribution::Uniform<double>()(xoshiro256pp),
-                   Distribution::Uniform<double>()(xoshiro256pp),
-                   Distribution::Uniform<double>()(xoshiro256pp)};
+        delta3d = {Distribution::Uniform<double>()(xoshiro256MM),
+                   Distribution::Uniform<double>()(xoshiro256MM),
+                   Distribution::Uniform<double>()(xoshiro256MM)};
         v3d += delta3d;
     }
     time = timer.MillisecondsElapsed();
-    std::cout << "    xoshiro256++ : " << time << " ms (last displacement: " << std::setprecision(18) << v3d << std::setprecision(6) << ')' << std::endl;
+    std::cout << "    xoshiro256** : " << time << " ms (last displacement: " << std::setprecision(18) << v3d << std::setprecision(6) << ')' << std::endl;
 
     std::cout << "4D random walk, 10 million steps:" << std::endl;
     Eigen::RowVector4d v4d = {0, 0, 0, 0};
@@ -160,22 +160,22 @@ int main() {
 
     v4d = {0, 0, 0, 0};
     for (int i = 0; i < 1'000'000; ++i) {
-        delta4d = {Distribution::Uniform<double>()(xoshiro256pp),
-                   Distribution::Uniform<double>()(xoshiro256pp),
-                   Distribution::Uniform<double>()(xoshiro256pp),
-                   Distribution::Uniform<double>()(xoshiro256pp)};
+        delta4d = {Distribution::Uniform<double>()(xoshiro256MM),
+                   Distribution::Uniform<double>()(xoshiro256MM),
+                   Distribution::Uniform<double>()(xoshiro256MM),
+                   Distribution::Uniform<double>()(xoshiro256MM)};
         v4d += delta4d;
     }
     timer.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
-        delta4d = {Distribution::Uniform<double>()(xoshiro256pp),
-                   Distribution::Uniform<double>()(xoshiro256pp),
-                   Distribution::Uniform<double>()(xoshiro256pp),
-                   Distribution::Uniform<double>()(xoshiro256pp)};
+        delta4d = {Distribution::Uniform<double>()(xoshiro256MM),
+                   Distribution::Uniform<double>()(xoshiro256MM),
+                   Distribution::Uniform<double>()(xoshiro256MM),
+                   Distribution::Uniform<double>()(xoshiro256MM)};
         v4d += delta4d;
     }
     time = timer.MillisecondsElapsed();
-    std::cout << "    xoshiro256++ : " << time << " ms (last displacement: " << std::setprecision(18) << v4d << std::setprecision(6) << ')' << std::endl;
+    std::cout << "    xoshiro256** : " << time << " ms (last displacement: " << std::setprecision(18) << v4d << std::setprecision(6) << ')' << std::endl;
 
     return 0;
 }

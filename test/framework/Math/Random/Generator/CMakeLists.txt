@@ -9,8 +9,8 @@ target_link_libraries(MT1993764 MACEFrameWork)
 add_executable(Xoshiro256Plus Xoshiro256Plus.cxx)
 target_link_libraries(Xoshiro256Plus MACEFrameWork)
 
-add_executable(Xoshiro256pp Xoshiro256pp.cxx)
-target_link_libraries(Xoshiro256pp MACEFrameWork)
+add_executable(Xoshiro256PP Xoshiro256PP.cxx)
+target_link_libraries(Xoshiro256PP MACEFrameWork)
 
-add_executable(Xoshiro256ss Xoshiro256ss.cxx)
-target_link_libraries(Xoshiro256ss MACEFrameWork)
+add_executable(Xoshiro256MM Xoshiro256MM.cxx)
+target_link_libraries(Xoshiro256MM MACEFrameWork)

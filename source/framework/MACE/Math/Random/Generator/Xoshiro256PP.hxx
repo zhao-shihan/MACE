@@ -6,13 +6,13 @@
 
 namespace MACE::Math::Random::Generator {
 
-class Xoshiro256ss final : public Xoshiro256Base<Xoshiro256ss> {
+class Xoshiro256PP final : public Xoshiro256Base<Xoshiro256PP> {
 public:
-    using Xoshiro256Base<Xoshiro256ss>::Xoshiro256Base;
+    using Xoshiro256Base<Xoshiro256PP>::Xoshiro256Base;
 
     constexpr ResultType operator()();
 };
 
 } // namespace MACE::Math::Random::Generator
 
-#include "MACE/Math/Random/Generator/Xoshiro256ss.inl"
+#include "MACE/Math/Random/Generator/Xoshiro256PP.inl"
