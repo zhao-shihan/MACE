@@ -36,4 +36,4 @@ private:
     double fDownStreamLength;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

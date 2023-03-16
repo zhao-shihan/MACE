@@ -69,6 +69,6 @@ concept IsDescription =
         requires Env::Memory::Singletonized<T>;
     };
 
-} // namespace MACE::Geometry
+} // namespace MACE::Detector
 
 #include "MACE/Detector/DescriptionBase.inl"

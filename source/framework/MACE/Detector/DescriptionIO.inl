@@ -122,4 +122,4 @@ void DescriptionIO::IxportImpl(const std::filesystem::path& yamlFile, std::strin
     ExportImpl(std::filesystem::path(yamlFile).replace_extension(".out.yaml"sv), fileComment, descriptions);
 }
 
-} // namespace MACE::Geometry
+} // namespace MACE::Detector

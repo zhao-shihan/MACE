@@ -41,4 +41,4 @@ private:
     int fCount;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

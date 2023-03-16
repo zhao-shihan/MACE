@@ -91,4 +91,4 @@ bool Target::CuboidTarget::HoledCuboid::DetailContain(const Concept::InputNumeri
     }
 }
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

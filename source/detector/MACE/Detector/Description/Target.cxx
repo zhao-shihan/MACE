@@ -127,4 +127,4 @@ void Target::CuboidTarget::HoledCuboid::Diameter(double diameter) {
     fPitch = fSpacing + diameter;
 }
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

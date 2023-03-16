@@ -23,4 +23,4 @@ void DescriptionBase::Export(YAML::Node& rootNode) const {
     ExportValues(node);
 }
 
-} // namespace MACE::Geometry
+} // namespace MACE::Detector

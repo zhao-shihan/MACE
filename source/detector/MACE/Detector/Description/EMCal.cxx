@@ -26,4 +26,4 @@ void EMCal::ExportValues(YAML::Node& node) const {
     ExportValue(node, fCrystalLength, "CrystalLength");
 }
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

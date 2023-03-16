@@ -35,4 +35,4 @@ private:
     double fCrystalLength;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

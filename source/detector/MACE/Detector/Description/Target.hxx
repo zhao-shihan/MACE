@@ -2,8 +2,8 @@
 
 #include "MACE/Compatibility/std2b/unreachable.hxx"
 #include "MACE/Concept/InputNumericVector.hxx"
-#include "MACE/Env/Memory/MuteSingleton.hxx"
 #include "MACE/Detector/DescriptionBase.hxx"
+#include "MACE/Env/Memory/MuteSingleton.hxx"
 #include "MACE/Math/Hypot.hxx"
 #include "MACE/Math/IntegerPower.hxx"
 
@@ -131,6 +131,6 @@ private:
     CuboidTarget fCuboid;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description
 
 #include "MACE/Detector/Description/Target.inl"

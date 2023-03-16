@@ -153,6 +153,6 @@ private:
     mutable CellMapManager fCellMapManager;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description
 
 #include "MACE/Detector/Description/CDC.inl"

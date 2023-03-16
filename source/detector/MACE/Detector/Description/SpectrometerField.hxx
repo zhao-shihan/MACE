@@ -29,4 +29,4 @@ private:
     double fLength;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

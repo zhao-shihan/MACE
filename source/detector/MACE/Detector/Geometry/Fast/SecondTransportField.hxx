@@ -9,4 +9,4 @@ private:
     void Construct(G4bool checkOverlaps) override;
 };
 
-} // namespace MACE::Geometry::Entity::Fast
+} // namespace MACE::Detector::Geometry::Fast

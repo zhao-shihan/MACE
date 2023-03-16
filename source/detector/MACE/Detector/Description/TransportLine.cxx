@@ -86,4 +86,4 @@ void TransportLine::ExportValues(YAML::Node& node) const {
     ExportValue(node, fFieldRadius, "FieldRadius");
 }
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

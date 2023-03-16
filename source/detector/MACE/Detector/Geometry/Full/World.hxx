@@ -6,4 +6,4 @@ namespace MACE::Detector::Geometry::Full {
 
 using World = Geometry::Fast::World;
 
-} // namespace MACE::Geometry::Entity::Full
+} // namespace MACE::Detector::Geometry::Full

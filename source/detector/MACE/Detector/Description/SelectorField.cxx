@@ -23,4 +23,4 @@ void SelectorField::ExportValues(YAML::Node& node) const {
     ExportValue(node, fAxialPosition, "AxialPosition");
 }
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "MACE/Concept/InstantiatedFrom.hxx"
-#include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Detector/DescriptionBase.hxx"
+#include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 #include "MACE/Utility/StaticForEach.hxx"
 
@@ -65,6 +65,6 @@ private:
     static std::set<gsl::not_null<DescriptionBase*>> fgInstanceSet;
 };
 
-} // namespace MACE::Geometry
+} // namespace MACE::Detector
 
 #include "MACE/Detector/DescriptionIO.inl"

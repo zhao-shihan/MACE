@@ -29,4 +29,4 @@ void LinacField::ExportValues(YAML::Node& node) const {
     ExportValue(node, fDownStreamLength, "DownStreamLength");
 }
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

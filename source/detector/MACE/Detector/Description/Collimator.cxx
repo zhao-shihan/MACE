@@ -32,4 +32,4 @@ void Collimator::ExportValues(YAML::Node& node) const {
     ExportValue(node, fCount, "Count");
 }
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

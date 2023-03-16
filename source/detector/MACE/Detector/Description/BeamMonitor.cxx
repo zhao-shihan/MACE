@@ -41,4 +41,4 @@ void BeamMonitor::ExportValues(YAML::Node& node) const {
     ExportValue(node, fDistanceToTargetSurface, "DistanceToTargetSurface");
 }
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

@@ -1,7 +1,7 @@
 #include "MACE/Compatibility/std2b/to_underlying.hxx"
+#include "MACE/Detector/Description/Target.hxx"
 #include "MACE/Env/BasicEnv.hxx"
 #include "MACE/Extension/Geant4X/Physics/MuoniumPhysics.hxx"
-#include "MACE/Detector/Description/Target.hxx"
 #include "MACE/SimTarget/Action/PhysicsList.hxx"
 
 #include "G4DecayPhysics.hh"

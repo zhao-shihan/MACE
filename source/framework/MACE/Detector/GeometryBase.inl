@@ -88,4 +88,4 @@ APhysical* GeometryBase::Make(auto&&... args) {
     return physics;
 }
 
-} // namespace MACE::Geometry
+} // namespace MACE::Detector

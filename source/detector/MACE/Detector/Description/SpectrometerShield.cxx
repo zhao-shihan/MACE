@@ -26,4 +26,4 @@ void SpectrometerShield::ExportValues(YAML::Node& node) const {
     ExportValue(node, fThickness, "Thickness");
 }
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

@@ -1,5 +1,5 @@
-#include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Detector/GeometryBase.hxx"
+#include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
 #include "G4SDManager.hh"
@@ -79,4 +79,4 @@ void GeometryBase::Export(std::filesystem::path gdmlFile, gsl::index iPhysicalVo
 #endif
 }
 
-} // namespace MACE::Geometry
+} // namespace MACE::Detector

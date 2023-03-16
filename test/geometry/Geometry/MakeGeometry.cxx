@@ -165,7 +165,7 @@ int main(int argc, char* argv[]) {
 
     // set transparency for jsroot display
     // see form https://github.com/root-project/jsroot/blob/master/docs/JSROOT.md#geometry-viewer
-    
+
     geoManager->GetVolume(fWorld->LogicalVolume()->GetName())->SetInvisible();
     using MACE::Detector::GeometryBase;
     for (auto&& entity : std::initializer_list<std::reference_wrapper<const GeometryBase>>{

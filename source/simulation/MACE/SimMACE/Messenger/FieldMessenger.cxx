@@ -36,14 +36,14 @@ FieldMessenger::FieldMessenger() :
 
     fLinacPotential = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Field/LinacPotential", this);
     fLinacPotential->SetGuidance("Set linac electric potential. "
-                                    "(Selector electric field changes, respectively.)");
+                                 "(Selector electric field changes, respectively.)");
     fLinacPotential->SetParameterName("V", false);
     fLinacPotential->SetUnitCategory("Electric potential");
     fLinacPotential->AvailableForStates(G4State_Idle);
 
     fSelectorElectricField = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Field/SelectorElectricField", this);
     fSelectorElectricField->SetGuidance("Set selector electric field. (Selector magnetic field changes, respectively, "
-                                           "to ensure the seleted kinetic energy stays the same.)");
+                                        "to ensure the seleted kinetic energy stays the same.)");
     fSelectorElectricField->SetParameterName("E", false);
     fSelectorElectricField->SetUnitCategory("Electric field");
     fSelectorElectricField->AvailableForStates(G4State_Idle);

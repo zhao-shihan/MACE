@@ -244,4 +244,4 @@ void CDC::ExportValues(YAML::Node& node) const {
     ExportValue(node, fShellOuterThickness, "ShellOuterThickness");
 }
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

@@ -52,4 +52,4 @@ void CDCSenseWire::Construct(G4bool checkOverlaps) {
     }
 }
 
-} // namespace MACE::Geometry::Entity::Fast
+} // namespace MACE::Detector::Geometry::Fast

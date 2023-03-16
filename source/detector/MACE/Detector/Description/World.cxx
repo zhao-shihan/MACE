@@ -23,4 +23,4 @@ void World::ExportValues(YAML::Node& node) const {
     ExportValue(node, fHalfZExtent, "HalfZExtent");
 }
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

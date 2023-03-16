@@ -22,7 +22,7 @@ class World;
 
 class GeometryBase;
 
-} // namespace Geometry
+} // namespace Detector
 
 namespace SimTarget::Action {
 

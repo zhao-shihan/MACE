@@ -41,7 +41,7 @@ MuoniumPhysicsMessenger<ATarget>::MuoniumPhysicsMessenger() :
 
     fManipulateAllSteps = std::make_unique<G4UIcmdWithABool>("/MACE/Physics/MuoniumPhysics/Transport/ManipulateAllSteps", this),
     fManipulateAllSteps->SetGuidance("Set whether show each step of thermal random flight of muonium in the target or not.\n"
-                                        "Warning: can be time consuming if set to true.");
+                                     "Warning: can be time consuming if set to true.");
     fManipulateAllSteps->SetParameterName("b", false);
     fManipulateAllSteps->AvailableForStates(G4State_Idle);
 }

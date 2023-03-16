@@ -21,4 +21,4 @@ inline void CDC::SetOutdated() const {
     fCellMapManager.SetOutdated();
 }
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

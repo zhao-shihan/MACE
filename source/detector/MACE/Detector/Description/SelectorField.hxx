@@ -32,4 +32,4 @@ private:
     double fAxialPosition;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

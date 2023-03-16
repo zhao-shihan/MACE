@@ -23,4 +23,4 @@ void SpectrometerMagnet::ExportValues(YAML::Node& node) const {
     ExportValue(node, fLength, "Length");
 }
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

@@ -29,4 +29,4 @@ private:
     double fThickness;
 };
 
-} // namespace MACE::Geometry::Description
+} // namespace MACE::Detector::Description

@@ -68,4 +68,4 @@ void DescriptionBase::PrintNodeNotFoundWarning(AStrings&&... nodeNames) const {
     }
 }
 
-} // namespace MACE::Geometry
+} // namespace MACE::Detector

@@ -93,6 +93,6 @@ private:
     std::map<std::type_index, std::unique_ptr<GeometryBase>> fDaughters;
 };
 
-} // namespace MACE::Geometry
+} // namespace MACE::Detector
 
 #include "MACE/Detector/GeometryBase.inl"

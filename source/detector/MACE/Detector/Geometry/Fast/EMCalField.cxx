@@ -37,4 +37,4 @@ void EMCalField::Construct(G4bool checkOverlaps) {
         checkOverlaps);
 }
 
-} // namespace MACE::Geometry::Entity::Fast
+} // namespace MACE::Detector::Geometry::Fast
