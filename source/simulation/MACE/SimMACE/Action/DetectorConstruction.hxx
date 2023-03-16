@@ -53,15 +53,17 @@ private:
 
     gsl::not_null<std::shared_ptr<Geometry::EntityBase>> fWorld;
 
-    Region* fEMCalSensitiveRegion;
-    Region* fDefaultSolidRegion;
+    Region* fCDCFieldWireRegion;
+    Region* fCDCSenseWireRegion;
     Region* fDefaultGaseousRegion;
+    Region* fDefaultSolidRegion;
+    Region* fEMCalSensitiveRegion;
+    Region* fMCPSensitiveRegion;
     Region* fShieldRegion;
     Region* fSolenoidOrMagnetRegion;
     Region* fSpectrometerSensitiveRegion;
     Region* fTargetRegion;
     Region* fVacuumRegion;
-    Region* fMCPSensitiveRegion;
 
     SD::CDCSD* fCDCSD;
     SD::EMCalSD* fEMCalSD;

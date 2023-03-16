@@ -21,16 +21,21 @@ DetectorConstruction::DetectorConstruction() :
     NonMoveableBase(),
     G4VUserDetectorConstruction(),
     fCheckOverlap(false),
+
     fWorld(std::make_shared<Geometry::Entity::Fast::World>()),
-    fEMCalSensitiveRegion(nullptr),
-    fDefaultSolidRegion(nullptr),
+
+    fCDCFieldWireRegion(nullptr),
+    fCDCSenseWireRegion(nullptr),
     fDefaultGaseousRegion(nullptr),
+    fDefaultSolidRegion(nullptr),
+    fEMCalSensitiveRegion(nullptr),
+    fMCPSensitiveRegion(nullptr),
     fShieldRegion(nullptr),
     fSolenoidOrMagnetRegion(nullptr),
     fSpectrometerSensitiveRegion(nullptr),
     fTargetRegion(nullptr),
     fVacuumRegion(nullptr),
-    fMCPSensitiveRegion(nullptr),
+
     fCDCSD(nullptr),
     fEMCalSD(nullptr),
     fMCPSD(nullptr) {}
@@ -170,22 +175,17 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     {
         const auto defaultCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts();
 
-        // EMCalSensitiveRegion
-        fEMCalSensitiveRegion = new Region("EMCalSensitive", RegionType::EMCalSensitive);
-        fEMCalSensitiveRegion->SetProductionCuts(defaultCuts);
+        // CDCFieldWireRegion
+        fCDCFieldWireRegion = new Region("CDCFieldWire", RegionType::CDCFieldWire);
+        fCDCFieldWireRegion->SetProductionCuts(defaultCuts);
 
-        emCal.RegisterRegion(fEMCalSensitiveRegion);
+        cdcFieldWire.RegisterRegion(fCDCFieldWireRegion);
 
-        // DefaultSolidRegion
-        fDefaultSolidRegion = new Region("DefaultSolid", RegionType::DefaultSolid);
-        fDefaultSolidRegion->SetProductionCuts(defaultCuts);
+        // CDCSenseWireRegion
+        fCDCSenseWireRegion = new Region("CDCSenseWire", RegionType::CDCSenseWire);
+        fCDCSenseWireRegion->SetProductionCuts(defaultCuts);
 
-        beamDegrader.RegisterRegion(fDefaultSolidRegion);
-        beamMonitor.RegisterRegion(fDefaultSolidRegion);
-        cdcBody.RegisterRegion(fDefaultSolidRegion);
-        cdcFieldWire.RegisterRegion(fDefaultSolidRegion);
-        cdcSenseWire.RegisterRegion(fDefaultSolidRegion);
-        collimator.RegisterRegion(fDefaultSolidRegion);
+        cdcSenseWire.RegisterRegion(fCDCSenseWireRegion);
 
         // DefaultGaseousRegion
         fDefaultGaseousRegion = new Region("DefaultGaseous", RegionType::DefaultGaseous);
@@ -194,6 +194,35 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         cdcCell.RegisterRegion(fDefaultGaseousRegion);
         cdcGas.RegisterRegion(fDefaultGaseousRegion);
         cdcSuperLayer.RegisterRegion(fDefaultGaseousRegion);
+
+        // DefaultGaseousRegion
+        fDefaultGaseousRegion = new Region("DefaultGaseous", RegionType::DefaultGaseous);
+        fDefaultGaseousRegion->SetProductionCuts(defaultCuts);
+
+        cdcCell.RegisterRegion(fDefaultGaseousRegion);
+        cdcGas.RegisterRegion(fDefaultGaseousRegion);
+        cdcSuperLayer.RegisterRegion(fDefaultGaseousRegion);
+
+        // DefaultSolidRegion
+        fDefaultSolidRegion = new Region("DefaultSolid", RegionType::DefaultSolid);
+        fDefaultSolidRegion->SetProductionCuts(defaultCuts);
+
+        beamDegrader.RegisterRegion(fDefaultSolidRegion);
+        beamMonitor.RegisterRegion(fDefaultSolidRegion);
+        cdcBody.RegisterRegion(fDefaultSolidRegion);
+        collimator.RegisterRegion(fDefaultSolidRegion);
+
+        // EMCalSensitiveRegion
+        fEMCalSensitiveRegion = new Region("EMCalSensitive", RegionType::EMCalSensitive);
+        fEMCalSensitiveRegion->SetProductionCuts(defaultCuts);
+
+        emCal.RegisterRegion(fEMCalSensitiveRegion);
+
+        // MCPSensitiveRegion
+        fMCPSensitiveRegion = new Region("MCPSensitive", RegionType::MCPSensitive);
+        fMCPSensitiveRegion->SetProductionCuts(defaultCuts);
+
+        mcp.RegisterRegion(fMCPSensitiveRegion);
 
         // ShieldRegion
         fShieldRegion = new Region("Shield", RegionType::Shield);
@@ -236,12 +265,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         selectorField.RegisterRegion(fVacuumRegion);
         spectrometerField.RegisterRegion(fVacuumRegion);
         thirdTransportField.RegisterRegion(fVacuumRegion);
-
-        // MCPSensitiveRegion
-        fMCPSensitiveRegion = new Region("MCPSensitive", RegionType::MCPSensitive);
-        fMCPSensitiveRegion->SetProductionCuts(defaultCuts);
-
-        mcp.RegisterRegion(fMCPSensitiveRegion);
     }
 
     ////////////////////////////////////////////////////////////////

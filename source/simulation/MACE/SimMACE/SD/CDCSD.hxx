@@ -19,10 +19,10 @@ public:
     CDCSD(const G4String& sdName);
 
     void Initialize(G4HCofThisEvent* hitsCollection) override;
-    G4bool ProcessHits(G4Step* step, G4TouchableHistory*) override;
+    G4bool ProcessHits(G4Step* theStep, G4TouchableHistory*) override;
     void EndOfEvent(G4HCofThisEvent*) override;
 
-    /// Inform this SD of event id in EventAction
+    /// @brief Inform this SD of event ID in EventAction
     void SetEventID(G4int eventID) { fEventID = eventID; }
 
 private:

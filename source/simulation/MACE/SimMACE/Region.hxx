@@ -7,15 +7,17 @@
 namespace MACE::SimMACE {
 
 enum class RegionType {
-    EMCalSensitive,
-    DefaultSolid,
+    CDCFieldWire,
+    CDCSenseWire,
     DefaultGaseous,
+    DefaultSolid,
+    EMCalSensitive,
+    MCPSensitive,
     Shield,
     SolenoidOrMagnet,
     SpectrometerSensitive,
     Target,
-    Vacuum,
-    MCPSensitive
+    Vacuum
 };
 
 class Region final : public NonMoveableBase,

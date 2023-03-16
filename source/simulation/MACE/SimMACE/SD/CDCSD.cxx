@@ -1,4 +1,5 @@
 #include "MACE/Geometry/Description/CDC.hxx"
+#include "MACE/Math/MidPoint.hxx"
 #include "MACE/SimMACE/Region.hxx"
 #include "MACE/SimMACE/RunManager.hxx"
 #include "MACE/SimMACE/SD/CDCSD.hxx"
@@ -25,7 +26,7 @@ CDCSD::CDCSD(const G4String& sdName) :
 
     collectionName.insert(sdName + "HC");
 
-    const auto cellMap = Geometry::Description::CDC::Instance().CellMap();
+    const auto& cellMap = Geometry::Description::CDC::Instance().CellMap();
     fCellMap.reserve(cellMap.size());
     for (auto&& cell : cellMap) {
         fCellMap.emplace_back(VectorCast<G4TwoVector>(cell.position),
@@ -39,49 +40,56 @@ void CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-G4bool CDCSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
-    if (not(step->IsFirstStepInVolume() or step->IsLastStepInVolume())) { return false; }
-    const auto track = step->GetTrack();
-    const auto particle = track->GetDefinition();
-    if (track->GetCurrentStepNumber() <= 1 or particle->GetPDGCharge() == 0) { return false; }
-    // get track ID and cell ID of this hit
-    const auto trackID = track->GetTrackID();
-    const auto touchable = track->GetTouchable();
-    const auto cellID = touchable->GetReplicaNumber();
-    // find entered point
-    const auto [monitoring, isNew] = fEnteredPointList.try_emplace({trackID, cellID}, *step->GetPostStepPoint());
-    if (not isNew and step->IsLastStepInVolume() and                                                                            // is exiting, and make sure has entered before,
-        static_cast<Region*>(track->GetNextVolume()->GetLogicalVolume()->GetRegion())->GetType() != RegionType::DefaultSolid) { // but the track is not heading into sense wire!
+G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
+    const auto& step = *theStep;
+    const auto& track = *step.GetTrack();
+    const auto& particle = *track.GetDefinition();
+    if (track.GetCurrentStepNumber() <= 1 or particle.GetPDGCharge() == 0) { return false; }
+
+    const auto trackID = track.GetTrackID();
+    const auto& touchable = *track.GetTouchable();
+    const auto cellID = touchable.GetReplicaNumber();
+
+    if (step.IsFirstStepInVolume()) {
+        const auto [_, isNew] = fEnteredPointList.try_emplace({trackID, cellID}, *step.GetPostStepPoint());
+        return isNew;
+    }
+
+    const auto& nextReigon = static_cast<Region&>(*track.GetNextVolume()->GetLogicalVolume()->GetRegion());
+    decltype(fEnteredPointList)::const_iterator monitoring;
+    if (step.IsLastStepInVolume() and                                                           // is exiting,
+        nextReigon.GetType() != RegionType::CDCSenseWire and                                    // but the track is not heading into sense wire,
+        (monitoring = fEnteredPointList.find({trackID, cellID})) != fEnteredPointList.cend()) { // and make sure it has entered before.
         // retrive entering time and position
         const auto& enterPoint = monitoring->second;
         const auto tIn = enterPoint.GetGlobalTime();
         const auto rIn = enterPoint.GetPosition();
         const auto pIn = enterPoint.GetMomentumDirection();
         // retrive exiting time and position
-        const auto exitPoint = step->GetPreStepPoint();
-        const auto tOut = exitPoint->GetGlobalTime();
-        const auto rOut = exitPoint->GetPosition();
-        const auto pOut = exitPoint->GetMomentumDirection();
+        const auto& exitPoint = *step.GetPreStepPoint();
+        const auto tOut = exitPoint.GetGlobalTime();
+        const auto rOut = exitPoint.GetPosition();
+        const auto pOut = exitPoint.GetMomentumDirection();
         // retrive wire position
         const auto& [rWire, tWire] = fCellMap[cellID];
         // calculate drift distance
-        const auto commonNormalVector = tWire.cross((pIn + pOut) / 2);
-        const auto driftDistance = std::abs(((rIn + rOut) / 2 - rWire).dot(commonNormalVector) / commonNormalVector.mag());
+        const auto commonNormalVector = tWire.cross(Math::MidPoint(pIn, pOut));
+        const auto driftDistance = std::abs((Math::MidPoint(rIn, rOut) - rWire).dot(commonNormalVector) / commonNormalVector.mag());
         // calculate vertex energy and momentum
-        const auto vertexTotalEnergy = track->GetVertexKineticEnergy() + particle->GetPDGMass();
-        const auto vertexMomentum = track->GetVertexMomentumDirection() * std::sqrt(track->GetVertexKineticEnergy() * (vertexTotalEnergy + particle->GetPDGMass()));
+        const auto vertexTotalEnergy = track.GetVertexKineticEnergy() + particle.GetPDGMass();
+        const auto vertexMomentum = track.GetVertexMomentumDirection() * std::sqrt(track.GetVertexKineticEnergy() * (vertexTotalEnergy + particle.GetPDGMass()));
         // new a hit
         const auto hit = new CDCHit;
-        hit->HitTime((tIn + tOut) / 2);
+        hit->HitTime(Math::MidPoint(tIn, tOut));
         hit->DriftDistance(driftDistance);
         hit->CellID(cellID);
-        hit->Energy((enterPoint.GetTotalEnergy() + exitPoint->GetTotalEnergy()) / 2);
-        hit->Momentum((enterPoint.GetMomentum() + exitPoint->GetMomentum()) / 2);
-        hit->VertexTime(track->GetGlobalTime() - track->GetLocalTime());
-        hit->VertexPosition(track->GetVertexPosition());
+        hit->Energy(Math::MidPoint(enterPoint.GetTotalEnergy(), exitPoint.GetTotalEnergy()));
+        hit->Momentum(Math::MidPoint(enterPoint.GetMomentum(), exitPoint.GetMomentum()));
+        hit->VertexTime(track.GetGlobalTime() - track.GetLocalTime());
+        hit->VertexPosition(track.GetVertexPosition());
         hit->VertexEnergy(vertexTotalEnergy);
         hit->VertexMomentum(vertexMomentum);
-        hit->Particle(particle->GetParticleName());
+        hit->Particle(particle.GetParticleName());
         hit->G4EventID(fEventID);
         hit->G4TrackID(trackID);
         fHitsCollection->insert(hit);
