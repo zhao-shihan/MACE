@@ -16,7 +16,7 @@ inline const std::vector<CDC::CellInformation>& CDC::CellMapManager::Get(const C
     return fCellMap;
 }
 
-inline void CDC::SetOutdated() const {
+inline void CDC::SetGeometryOutdated() const {
     fLayerConfigurationManager.SetOutdated();
     fCellMapManager.SetOutdated();
 }

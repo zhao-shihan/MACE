@@ -12,6 +12,8 @@
 
 #include "gsl/gsl"
 
+#include <algorithm>
+
 namespace MACE::SimMACE::SD {
 
 using Hit::CDCHit;
@@ -21,45 +23,56 @@ CDCSD::CDCSD(const G4String& sdName) :
     G4VSensitiveDetector(sdName),
     fEventID(-1),
     fHitsCollection(nullptr),
-    fEnteredPointList(),
-    fCellMap() {
-
-    collectionName.insert(sdName + "HC");
-
+    fMeanDriftVelocity(),
+    fHalfTimeResolution(),
+    fCellEnterPointList(),
+    fCellMap(),
+    fTriggerTimeAndHitList() {
     const auto& cellMap = Detector::Description::CDC::Instance().CellMap();
+    fCellEnterPointList.resize(cellMap.size());
     fCellMap.reserve(cellMap.size());
     for (auto&& cell : cellMap) {
         fCellMap.emplace_back(VectorCast<G4TwoVector>(cell.position),
                               VectorCast<G4ThreeVector>(cell.direction));
     }
+
+    collectionName.insert(sdName + "HC");
 }
 
 void CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
     fHitsCollection = new CDCHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
+
+    const auto& cdc = Detector::Description::CDC::Instance();
+    fMeanDriftVelocity = cdc.MeanDriftVelocity();
+    fHalfTimeResolution = cdc.TimeResolution() / 2;
 }
 
 G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
     const auto& step = *theStep;
     const auto& track = *step.GetTrack();
     const auto& particle = *track.GetDefinition();
-    if (track.GetCurrentStepNumber() <= 1 or particle.GetPDGCharge() == 0) { return false; }
+
+    if (track.GetCurrentStepNumber() <= 1 or particle.GetPDGCharge() == 0) {
+        return false;
+    }
 
     const auto trackID = track.GetTrackID();
     const auto& touchable = *track.GetTouchable();
     const auto cellID = touchable.GetReplicaNumber();
+    auto& enterPointList = fCellEnterPointList[cellID];
 
     if (step.IsFirstStepInVolume()) {
-        const auto [_, isNew] = fEnteredPointList.try_emplace({trackID, cellID}, *step.GetPostStepPoint());
-        return isNew;
+        enterPointList.try_emplace(trackID, *step.GetPostStepPoint());
+        return false;
     }
 
     const auto& nextReigon = static_cast<Region&>(*track.GetNextVolume()->GetLogicalVolume()->GetRegion());
-    decltype(fEnteredPointList)::const_iterator monitoring;
-    if (step.IsLastStepInVolume() and                                                           // is exiting,
-        nextReigon.GetType() != RegionType::CDCSenseWire and                                    // but the track is not heading into sense wire,
-        (monitoring = fEnteredPointList.find({trackID, cellID})) != fEnteredPointList.cend()) { // and make sure it has entered before.
+    decltype(enterPointList.cbegin()) monitoring;
+    if (step.IsLastStepInVolume() and                                           // is exiting,
+        nextReigon.GetType() != RegionType::CDCSenseWire and                    // but the track is not heading into sense wire,
+        (monitoring = enterPointList.find(trackID)) != enterPointList.cend()) { // and make sure it has entered before.
         // retrive entering time and position
         const auto& enterPoint = monitoring->second;
         const auto tIn = enterPoint.GetGlobalTime();
@@ -79,7 +92,7 @@ G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
         const auto vertexTotalEnergy = track.GetVertexKineticEnergy() + particle.GetPDGMass();
         const auto vertexMomentum = track.GetVertexMomentumDirection() * std::sqrt(track.GetVertexKineticEnergy() * (vertexTotalEnergy + particle.GetPDGMass()));
         // new a hit
-        const auto hit = new CDCHit;
+        auto hit = std::make_unique_for_overwrite<CDCHit>();
         hit->HitTime(Math::MidPoint(tIn, tOut));
         hit->DriftDistance(driftDistance);
         hit->CellID(cellID);
@@ -92,17 +105,42 @@ G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
         hit->Particle(particle.GetParticleName());
         hit->G4EventID(fEventID);
         hit->G4TrackID(trackID);
-        fHitsCollection->insert(hit);
+        fTriggerTimeAndHitList.emplace_back(hit->HitTime() + driftDistance / fMeanDriftVelocity,
+                                            std::move(hit));
         // particle is exiting, remove it from monitoring list
-        fEnteredPointList.erase(monitoring);
+        enterPointList.erase(monitoring);
         return true;
     }
+
     return false;
 }
 
 void CDCSD::EndOfEvent(G4HCofThisEvent*) {
-    RunManager::Instance().GetAnalysis().SubmitSpectrometerHC(fHitsCollection->GetVector());
-    fEnteredPointList.clear();
+    std::ranges::sort(fTriggerTimeAndHitList);
+
+    auto triggerTimeThreshold = fTriggerTimeAndHitList.front().first + fHalfTimeResolution;
+    auto& hitList = *fHitsCollection->GetVector();
+    hitList.reserve(fTriggerTimeAndHitList.size());
+    for (std::vector<std::unique_ptr<CDCHit>*> signalHitCandidateList;
+         auto&& [triggerTime, hit] : fTriggerTimeAndHitList) {
+        if (triggerTime > triggerTimeThreshold) {
+            const auto goodHit =
+                *std::ranges::max_element(signalHitCandidateList,
+                                          [](const auto& hit1, const auto& hit2) {
+                                              return (*hit1)->Energy() < (*hit2)->Energy();
+                                          });
+            hitList.emplace_back(goodHit->release());
+            signalHitCandidateList.clear();
+            triggerTimeThreshold = triggerTime + fHalfTimeResolution;
+        }
+        signalHitCandidateList.emplace_back(&hit);
+    }
+    RunManager::Instance().GetAnalysis().SubmitSpectrometerHC(&hitList);
+
+    fTriggerTimeAndHitList.clear();
+    for (auto&& enterPointList : fCellEnterPointList) {
+        enterPointList.clear();
+    }
 }
 
 } // namespace MACE::SimMACE::SD

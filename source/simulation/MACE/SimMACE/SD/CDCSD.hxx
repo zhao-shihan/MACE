@@ -8,6 +8,9 @@
 #include "G4VSensitiveDetector.hh"
 
 #include <map>
+#include <memory>
+#include <utility>
+#include <vector>
 
 namespace MACE::SimMACE::SD {
 
@@ -28,8 +31,13 @@ public:
 private:
     G4int fEventID;
     CDCHitCollection* fHitsCollection;
-    std::map<std::pair<int, int>, const G4StepPoint> fEnteredPointList;
+
+    G4double fMeanDriftVelocity;
+    G4double fHalfTimeResolution;
+
+    std::vector<std::map<int, const G4StepPoint>> fCellEnterPointList;
     std::vector<std::pair<G4TwoVector, G4ThreeVector>> fCellMap;
+    std::vector<std::pair<double, std::unique_ptr<Hit::CDCHit>>> fTriggerTimeAndHitList;
 };
 
 } // namespace MACE::SimMACE::SD

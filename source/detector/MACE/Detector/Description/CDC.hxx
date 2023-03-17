@@ -18,6 +18,10 @@ private:
     CDC();
 
 public:
+    ///////////////////////////////////////////////////////////
+    // Geometry properties
+    ///////////////////////////////////////////////////////////
+
     const auto& EvenSuperLayerIsAxial() const { return fEvenSuperLayerIsAxial; }
     const auto& NSuperLayer() const { return fNSuperLayer; }
     const auto& NSenseLayerPerSuper() const { return fNSenseLayerPerSuper; }
@@ -37,24 +41,24 @@ public:
     const auto& ShellSideThickness() const { return fShellSideThickness; }
     const auto& ShellOuterThickness() const { return fShellOuterThickness; }
 
-    void EvenSuperLayerIsAxial(auto&& v) { (fEvenSuperLayerIsAxial = std::forward<decltype(v)>(v), SetOutdated()); }
-    void NSuperLayer(auto&& v) { (fNSuperLayer = std::forward<decltype(v)>(v), SetOutdated()); }
-    void NSenseLayerPerSuper(auto&& v) { (fNSenseLayerPerSuper = std::forward<decltype(v)>(v), SetOutdated()); }
-    void GasInnerRadius(auto&& v) { (fGasInnerRadius = std::forward<decltype(v)>(v), SetOutdated()); }
-    void GasInnerLength(auto&& v) { (fGasInnerLength = std::forward<decltype(v)>(v), SetOutdated()); }
-    void EndCapSlope(auto&& v) { (fEndCapSlope = std::forward<decltype(v)>(v), SetOutdated()); }
-    void MinStereoAngle(auto&& v) { (fMinStereoAngle = std::forward<decltype(v)>(v), SetOutdated()); }
-    void MinCellWidth(auto&& v) { (fMinCellWidth = std::forward<decltype(v)>(v), SetOutdated()); }
-    void ReferenceCellWidth(auto&& v) { (fReferenceCellWidth = std::forward<decltype(v)>(v), SetOutdated()); }
-    void MaxCellWidth(auto&& v) { (fMaxCellWidth = std::forward<decltype(v)>(v), SetOutdated()); }
-    void FieldWireDiameter(auto&& v) { (fFieldWireDiameter = std::forward<decltype(v)>(v), SetOutdated()); }
-    void SenseWireDiameter(auto&& v) { (fSenseWireDiameter = std::forward<decltype(v)>(v), SetOutdated()); }
-    void SensitiveWidthFactor(auto&& v) { (fSensitiveWidthFactor = std::forward<decltype(v)>(v), SetOutdated()); }
-    void MinAdjacentSuperLayersDistance(auto&& v) { (fMinAdjacentSuperLayersDistance = std::forward<decltype(v)>(v), SetOutdated()); }
-    void MinWireAndRadialShellDistance(auto&& v) { (fMinWireAndRadialShellDistance = std::forward<decltype(v)>(v), SetOutdated()); }
-    void ShellInnerThickness(auto&& v) { (fShellInnerThickness = std::forward<decltype(v)>(v), SetOutdated()); }
-    void ShellSideThickness(auto&& v) { (fShellSideThickness = std::forward<decltype(v)>(v), SetOutdated()); }
-    void ShellOuterThickness(auto&& v) { (fShellOuterThickness = std::forward<decltype(v)>(v), SetOutdated()); }
+    void EvenSuperLayerIsAxial(auto&& v) { (fEvenSuperLayerIsAxial = std::forward<decltype(v)>(v), SetGeometryOutdated()); }
+    void NSuperLayer(auto&& v) { (fNSuperLayer = std::forward<decltype(v)>(v), SetGeometryOutdated()); }
+    void NSenseLayerPerSuper(auto&& v) { (fNSenseLayerPerSuper = std::forward<decltype(v)>(v), SetGeometryOutdated()); }
+    void GasInnerRadius(auto&& v) { (fGasInnerRadius = std::forward<decltype(v)>(v), SetGeometryOutdated()); }
+    void GasInnerLength(auto&& v) { (fGasInnerLength = std::forward<decltype(v)>(v), SetGeometryOutdated()); }
+    void EndCapSlope(auto&& v) { (fEndCapSlope = std::forward<decltype(v)>(v), SetGeometryOutdated()); }
+    void MinStereoAngle(auto&& v) { (fMinStereoAngle = std::forward<decltype(v)>(v), SetGeometryOutdated()); }
+    void MinCellWidth(auto&& v) { (fMinCellWidth = std::forward<decltype(v)>(v), SetGeometryOutdated()); }
+    void ReferenceCellWidth(auto&& v) { (fReferenceCellWidth = std::forward<decltype(v)>(v), SetGeometryOutdated()); }
+    void MaxCellWidth(auto&& v) { (fMaxCellWidth = std::forward<decltype(v)>(v), SetGeometryOutdated()); }
+    void FieldWireDiameter(auto&& v) { (fFieldWireDiameter = std::forward<decltype(v)>(v), SetGeometryOutdated()); }
+    void SenseWireDiameter(auto&& v) { (fSenseWireDiameter = std::forward<decltype(v)>(v), SetGeometryOutdated()); }
+    void SensitiveWidthFactor(auto&& v) { (fSensitiveWidthFactor = std::forward<decltype(v)>(v), SetGeometryOutdated()); }
+    void MinAdjacentSuperLayersDistance(auto&& v) { (fMinAdjacentSuperLayersDistance = std::forward<decltype(v)>(v), SetGeometryOutdated()); }
+    void MinWireAndRadialShellDistance(auto&& v) { (fMinWireAndRadialShellDistance = std::forward<decltype(v)>(v), SetGeometryOutdated()); }
+    void ShellInnerThickness(auto&& v) { (fShellInnerThickness = std::forward<decltype(v)>(v), SetGeometryOutdated()); }
+    void ShellSideThickness(auto&& v) { (fShellSideThickness = std::forward<decltype(v)>(v), SetGeometryOutdated()); }
+    void ShellOuterThickness(auto&& v) { (fShellOuterThickness = std::forward<decltype(v)>(v), SetGeometryOutdated()); }
 
     struct SuperLayerConfiguration {
         struct SenseLayerConfiguration {
@@ -101,7 +105,21 @@ public:
 
     const auto& CellMap() const { return fCellMapManager.Get(this); }
 
+    ///////////////////////////////////////////////////////////
+    // Detection properties
+    ///////////////////////////////////////////////////////////
+
+    const auto& MeanDriftVelocity() const { return fMeanDriftVelocity; }
+    const auto& TimeResolution() const { return fTimeResolution; }
+
+    void MeanDriftVelocity(auto&& v) { fMeanDriftVelocity = std::forward<decltype(v)>(v); }
+    void TimeResolution(auto&& v) { fTimeResolution = std::forward<decltype(v)>(v); }
+
 private:
+    ///////////////////////////////////////////////////////////
+    // Geometry properties
+    ///////////////////////////////////////////////////////////
+
     class LayerConfigurationManager {
     public:
         void SetOutdated() { fOutdated = true; }
@@ -122,7 +140,7 @@ private:
         std::vector<CellInformation> fCellMap = {};
     };
 
-    inline void SetOutdated() const;
+    inline void SetGeometryOutdated() const;
     std::vector<SuperLayerConfiguration> ComputeLayerConfiguration() const;
     std::vector<CellInformation> ComputeCellMap() const;
 
@@ -130,6 +148,10 @@ private:
     void ExportValues(YAML::Node& node) const override;
 
 private:
+    ///////////////////////////////////////////////////////////
+    // Geometry properties
+    ///////////////////////////////////////////////////////////
+
     bool fEvenSuperLayerIsAxial; // true: AVAUAVAU..., false: VAUAVAUA...
     int fNSuperLayer;
     int fNSenseLayerPerSuper;
@@ -151,6 +173,13 @@ private:
 
     mutable LayerConfigurationManager fLayerConfigurationManager;
     mutable CellMapManager fCellMapManager;
+
+    ///////////////////////////////////////////////////////////
+    // Detection properties
+    ///////////////////////////////////////////////////////////
+
+    double fMeanDriftVelocity;
+    double fTimeResolution;
 };
 
 } // namespace MACE::Detector::Description

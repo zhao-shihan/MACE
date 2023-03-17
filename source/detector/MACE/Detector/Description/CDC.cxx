@@ -14,13 +14,12 @@
 
 namespace MACE::Detector::Description {
 
-using namespace LiteralUnit::Angle;
-using namespace LiteralUnit::Length;
-using namespace LiteralUnit::MathConstant;
+using namespace LiteralUnit;
 using namespace PhysicalConstant;
 
 CDC::CDC() :
     DescriptionSingletonBase<CDC>(__func__),
+    // Geometry properties
     fEvenSuperLayerIsAxial(false),
     fNSuperLayer(7),
     fNSenseLayerPerSuper(3),
@@ -40,7 +39,10 @@ CDC::CDC() :
     fShellSideThickness(10_mm),
     fShellOuterThickness(10_mm),
     fLayerConfigurationManager(),
-    fCellMapManager() {}
+    fCellMapManager(),
+    // Detection properties
+    fMeanDriftVelocity(3.5_cm_us),
+    fTimeResolution(30_ns) {}
 
 std::vector<CDC::SuperLayerConfiguration> CDC::ComputeLayerConfiguration() const {
     std::vector<SuperLayerConfiguration> layerConfig;
@@ -203,6 +205,7 @@ std::vector<CDC::CellInformation> CDC::ComputeCellMap() const {
 }
 
 void CDC::ImportValues(const YAML::Node& node) {
+    // Geometry properties
     ImportValue(node, fEvenSuperLayerIsAxial, "EvenSuperLayerIsAxial");
     ImportValue(node, fNSuperLayer, "NSuperLayer");
     ImportValue(node, fNSenseLayerPerSuper, "NSenseLayerPerSuper");
@@ -221,9 +224,13 @@ void CDC::ImportValues(const YAML::Node& node) {
     ImportValue(node, fShellInnerThickness, "ShellInnerThickness");
     ImportValue(node, fShellSideThickness, "ShellSideThickness");
     ImportValue(node, fShellOuterThickness, "ShellOuterThickness");
+    // Detection properties
+    ImportValue(node, fMeanDriftVelocity, "MeanDriftVelocity");
+    ImportValue(node, fTimeResolution, "TimeResolution");
 }
 
 void CDC::ExportValues(YAML::Node& node) const {
+    // Geometry properties
     ExportValue(node, fEvenSuperLayerIsAxial, "EvenSuperLayerIsAxial");
     ExportValue(node, fNSuperLayer, "NSuperLayer");
     ExportValue(node, fNSenseLayerPerSuper, "NSenseLayerPerSuper");
@@ -242,6 +249,9 @@ void CDC::ExportValues(YAML::Node& node) const {
     ExportValue(node, fShellInnerThickness, "ShellInnerThickness");
     ExportValue(node, fShellSideThickness, "ShellSideThickness");
     ExportValue(node, fShellOuterThickness, "ShellOuterThickness");
+    // Detection properties
+    ExportValue(node, fMeanDriftVelocity, "MeanDriftVelocity");
+    ExportValue(node, fTimeResolution, "TimeResolution");
 }
 
 } // namespace MACE::Detector::Description
