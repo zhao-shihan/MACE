@@ -195,14 +195,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         cdcGas.RegisterRegion(fDefaultGaseousRegion);
         cdcSuperLayer.RegisterRegion(fDefaultGaseousRegion);
 
-        // DefaultGaseousRegion
-        fDefaultGaseousRegion = new Region("DefaultGaseous", RegionType::DefaultGaseous);
-        fDefaultGaseousRegion->SetProductionCuts(defaultCuts);
-
-        cdcCell.RegisterRegion(fDefaultGaseousRegion);
-        cdcGas.RegisterRegion(fDefaultGaseousRegion);
-        cdcSuperLayer.RegisterRegion(fDefaultGaseousRegion);
-
         // DefaultSolidRegion
         fDefaultSolidRegion = new Region("DefaultSolid", RegionType::DefaultSolid);
         fDefaultSolidRegion->SetProductionCuts(defaultCuts);
@@ -289,7 +281,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         using namespace MACE::LiteralUnit::MagneticFluxDensity;
         using namespace Field;
 
-        constexpr auto hMin = 1_um;
+        constexpr auto hMin = 50_um;
 
         constexpr auto defaultB = 0.1_T;
         const auto parallelBField = new ParallelField(defaultB);
