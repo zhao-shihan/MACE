@@ -1,5 +1,5 @@
 #include "MACE/Extension/Geant4X/Physics/DecayChannel/MuoniumDecayChannel.hxx"
-#include "MACE/Extension/Geant4X/Physics/Particle/AntiMuonium.hxx"
+#include "MACE/Extension/Geant4X/Physics/Particle/Antimuonium.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4DecayTable.hh"
@@ -9,7 +9,7 @@ namespace MACE::inline Extension::Geant4X::Physics::Particle {
 
 using namespace MACE::PhysicalConstant;
 
-AntiMuonium::AntiMuonium() :
+Antimuonium::Antimuonium() :
     G4ParticleDefinition("anti_M",
                          muonium_mass_c2,
                          hbar_Planck / muonium_lifetime,

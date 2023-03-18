@@ -6,12 +6,12 @@
 
 namespace MACE::inline Extension::Geant4X::Physics::Particle {
 
-class AntiMuonium final : public Env::Memory::Singleton<AntiMuonium>,
+class Antimuonium final : public Env::Memory::Singleton<Antimuonium>,
                           public G4ParticleDefinition {
     friend Env::Memory::SingletonFactory;
 
 private:
-    AntiMuonium();
+    Antimuonium();
 
 public:
     static auto Definition() { return &Instance(); }

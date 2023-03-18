@@ -2,7 +2,7 @@
 
 #include "MACE/Compatibility/std2b/unreachable.hxx"
 #include "MACE/Extension/Geant4X/Physics/Messenger/MuoniumPhysicsMessenger.hxx"
-#include "MACE/Extension/Geant4X/Physics/Particle/AntiMuonium.hxx"
+#include "MACE/Extension/Geant4X/Physics/Particle/Antimuonium.hxx"
 #include "MACE/Extension/Geant4X/Physics/Particle/Muonium.hxx"
 #include "MACE/Extension/Geant4X/Physics/TargetForMuoniumPhysics.hxx"
 #include "MACE/Math/Random/Distribution/Exponential.hxx"

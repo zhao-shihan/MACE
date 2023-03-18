@@ -19,7 +19,7 @@ public:
 private:
     const G4ParticleDefinition* const fMuonPlus;
     const G4ParticleDefinition* const fMuonium;
-    const G4ParticleDefinition* const fAntiMuonium;
+    const G4ParticleDefinition* const fAntimuonium;
     G4bool fKillIrrelevants;
 };
 

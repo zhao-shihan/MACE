@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Extension/Geant4X/Physics/Messenger/MuoniumPhysicsMessenger.hxx"
-#include "MACE/Extension/Geant4X/Physics/Particle/AntiMuonium.hxx"
+#include "MACE/Extension/Geant4X/Physics/Particle/Antimuonium.hxx"
 #include "MACE/Extension/Geant4X/Physics/Particle/Muonium.hxx"
 #include "MACE/Extension/Geant4X/Physics/TargetForMuoniumPhysics.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
@@ -36,7 +36,7 @@ private:
 
 private:
     const G4ParticleDefinition* const fMuonium;
-    const G4ParticleDefinition* const fAntiMuonium;
+    const G4ParticleDefinition* const fAntimuonium;
     const ATarget* const fTarget;
     CLHEP::HepRandomEngine* fRandEng;
 

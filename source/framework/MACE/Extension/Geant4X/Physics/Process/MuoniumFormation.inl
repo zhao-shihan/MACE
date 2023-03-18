@@ -12,9 +12,9 @@ namespace Process {
 template<TargetForMuoniumPhysics ATarget>
 MuoniumFormation<ATarget>::MuoniumFormation() :
     NonMoveableBase(),
-    G4VRestProcess("MuoniumFormation", fUserDefined),
+    G4VRestProcess(__func__, fUserDefined),
     fMuonium(gsl::not_null(Particle::Muonium::Definition())),
-    fAntiMuonium(gsl::not_null(Particle::AntiMuonium::Definition())),
+    fAntimuonium(gsl::not_null(Particle::Antimuonium::Definition())),
     fTarget(&ATarget::Instance()),
     fRandEng(G4Random::getTheEngine()),
     fFormationProbability(0.65),
@@ -44,7 +44,7 @@ G4VParticleChange* MuoniumFormation<ATarget>::AtRestDoIt(const G4Track& track, c
     // The dynamic particle
     auto muoniumDynamicParticle = new G4DynamicParticle(*track.GetDynamicParticle());
     // Determine whether the transition can be observed
-    muoniumDynamicParticle->SetDefinition(fRandEng->flat() < fConversionProbability ? fAntiMuonium : fMuonium);
+    muoniumDynamicParticle->SetDefinition(fRandEng->flat() < fConversionProbability ? fAntimuonium : fMuonium);
     // Sampling momentum according to boltzmann distribution
     const auto temperature = track.GetVolume()->GetLogicalVolume()->GetMaterial()->GetTemperature();
     const auto momentum = std::sqrt(muonium_mass_c2 * k_Boltzmann * temperature) *

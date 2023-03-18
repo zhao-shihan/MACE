@@ -27,7 +27,7 @@ public:
 
 private:
     const gsl::not_null<const G4ParticleDefinition*> fMuonium;
-    const gsl::not_null<const G4ParticleDefinition*> fAntiMuonium;
+    const gsl::not_null<const G4ParticleDefinition*> fAntimuonium;
     MuoniumTrack* fMuoniumTrack;
     G4int fEventID;
 };

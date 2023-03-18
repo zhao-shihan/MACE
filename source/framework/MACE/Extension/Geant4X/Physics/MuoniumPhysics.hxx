@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Extension/Geant4X/Physics/Particle/AntiMuonium.hxx"
+#include "MACE/Extension/Geant4X/Physics/Particle/Antimuonium.hxx"
 #include "MACE/Extension/Geant4X/Physics/Particle/Muonium.hxx"
 #include "MACE/Extension/Geant4X/Physics/Process/MuoniumFormation.hxx"
 #include "MACE/Extension/Geant4X/Physics/Process/MuoniumTransport.hxx"

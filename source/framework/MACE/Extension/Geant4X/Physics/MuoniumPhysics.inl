@@ -11,7 +11,7 @@ template<TargetForMuoniumPhysics ATarget>
 void MuoniumPhysics<ATarget>::ConstructParticle() {
     G4MuonPlus::Definition();
     Particle::Muonium::Definition();
-    Particle::AntiMuonium::Definition();
+    Particle::Antimuonium::Definition();
 }
 
 template<TargetForMuoniumPhysics ATarget>
@@ -25,7 +25,7 @@ void MuoniumPhysics<ATarget>::ConstructProcess() {
     auto muonium = Particle::Muonium::Definition()->GetProcessManager();
     muonium->AddContinuousProcess(muoniumTransport);
 
-    auto antiMuonium = Particle::AntiMuonium::Definition()->GetProcessManager();
+    auto antiMuonium = Particle::Antimuonium::Definition()->GetProcessManager();
     antiMuonium->AddContinuousProcess(muoniumTransport);
 }
 

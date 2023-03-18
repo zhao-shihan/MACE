@@ -14,7 +14,7 @@ using namespace LiteralUnit::Length;
 template<TargetForMuoniumPhysics ATarget>
 MuoniumTransport<ATarget>::MuoniumTransport() :
     NonMoveableBase(),
-    G4VContinuousProcess("MuoniumTransport", fTransportation),
+    G4VContinuousProcess(__func__, fUserDefined),
     fTarget(&ATarget::Instance()),
     fMeanFreePath(200_nm),
     fManipulateAllSteps(false),
@@ -28,7 +28,7 @@ MuoniumTransport<ATarget>::MuoniumTransport() :
 template<TargetForMuoniumPhysics ATarget>
 G4bool MuoniumTransport<ATarget>::IsApplicable(const G4ParticleDefinition& particle) {
     return &particle == Particle::Muonium::Definition() or
-           &particle == Particle::AntiMuonium::Definition();
+           &particle == Particle::Antimuonium::Definition();
 }
 
 template<TargetForMuoniumPhysics ATarget>
