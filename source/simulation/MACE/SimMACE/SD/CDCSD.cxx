@@ -13,6 +13,7 @@
 #include "gsl/gsl"
 
 #include <algorithm>
+#include <numeric>
 
 namespace MACE::SimMACE::SD {
 
@@ -27,7 +28,7 @@ CDCSD::CDCSD(const G4String& sdName) :
     fHalfTimeResolution(),
     fCellEnterPointList(),
     fCellMap(),
-    fTriggerTimeAndHitList() {
+    fCellSignalTimeAndHitList() {
     const auto& cellMap = Detector::Description::CDC::Instance().CellMap();
     fCellEnterPointList.resize(cellMap.size());
     fCellMap.reserve(cellMap.size());
@@ -35,6 +36,7 @@ CDCSD::CDCSD(const G4String& sdName) :
         fCellMap.emplace_back(VectorCast<G4TwoVector>(cell.position),
                               VectorCast<G4ThreeVector>(cell.direction));
     }
+    fCellSignalTimeAndHitList.resize(cellMap.size());
 
     collectionName.insert(sdName + "HC");
 }
@@ -105,8 +107,8 @@ G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
         hit->Particle(particle.GetParticleName());
         hit->G4EventID(fEventID);
         hit->G4TrackID(trackID);
-        fTriggerTimeAndHitList.emplace_back(hit->HitTime() + driftDistance / fMeanDriftVelocity,
-                                            std::move(hit));
+        fCellSignalTimeAndHitList[cellID].emplace_back(hit->HitTime() + driftDistance / fMeanDriftVelocity,
+                                                       std::move(hit));
         // particle is exiting, remove it from monitoring list
         enterPointList.erase(monitoring);
         return true;
@@ -116,31 +118,43 @@ G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
 }
 
 void CDCSD::EndOfEvent(G4HCofThisEvent*) {
-    std::ranges::sort(fTriggerTimeAndHitList);
-
-    auto triggerTimeThreshold = fTriggerTimeAndHitList.front().first + fHalfTimeResolution;
-    auto& hitList = *fHitsCollection->GetVector();
-    hitList.reserve(fTriggerTimeAndHitList.size());
-    for (std::vector<std::unique_ptr<CDCHit>*> signalHitCandidateList;
-         auto&& [triggerTime, hit] : fTriggerTimeAndHitList) {
-        if (triggerTime > triggerTimeThreshold) {
-            const auto goodHit =
-                *std::ranges::max_element(signalHitCandidateList,
-                                          [](const auto& hit1, const auto& hit2) {
-                                              return (*hit1)->Energy() < (*hit2)->Energy();
-                                          });
-            hitList.emplace_back(goodHit->release());
-            signalHitCandidateList.clear();
-            triggerTimeThreshold = triggerTime + fHalfTimeResolution;
-        }
-        signalHitCandidateList.emplace_back(&hit);
-    }
-    RunManager::Instance().GetAnalysis().SubmitSpectrometerHC(&hitList);
-
-    fTriggerTimeAndHitList.clear();
     for (auto&& enterPointList : fCellEnterPointList) {
         enterPointList.clear();
     }
+
+    auto& hitList = *fHitsCollection->GetVector();
+    hitList.reserve(
+        std::accumulate(fCellSignalTimeAndHitList.cbegin(), fCellSignalTimeAndHitList.cend(), 0ull,
+                        [this](const auto& count, const auto& signalTimeAndHitList) {
+                            return count + signalTimeAndHitList.size();
+                        }));
+
+    for (auto&& signalTimeAndHitList : fCellSignalTimeAndHitList) {
+        if (signalTimeAndHitList.empty()) { continue; }
+
+        std::ranges::sort(signalTimeAndHitList);
+
+        std::vector<std::unique_ptr<CDCHit>*> signalHitCandidateList;
+        auto signalTimeThreshold = signalTimeAndHitList.front().first + fHalfTimeResolution;
+        for (auto timeHit = signalTimeAndHitList.begin(); timeHit != signalTimeAndHitList.end(); ++timeHit) {
+            signalHitCandidateList.emplace_back(&timeHit->second);
+            const auto signalTime = timeHit->first;
+            if (signalTime > signalTimeThreshold or timeHit == std::prev(signalTimeAndHitList.end())) {
+                const auto goodHit =
+                    *std::ranges::max_element(signalHitCandidateList,
+                                              [](const auto& hit1, const auto& hit2) {
+                                                  return (*hit1)->Energy() < (*hit2)->Energy();
+                                              });
+                hitList.emplace_back(goodHit->release());
+                signalHitCandidateList.clear();
+                signalTimeThreshold = signalTime + fHalfTimeResolution;
+            }
+        }
+
+        signalTimeAndHitList.clear();
+    }
+
+    RunManager::Instance().GetAnalysis().SubmitSpectrometerHC(&hitList);
 }
 
 } // namespace MACE::SimMACE::SD

@@ -37,7 +37,7 @@ private:
 
     std::vector<std::map<int, const G4StepPoint>> fCellEnterPointList;
     std::vector<std::pair<G4TwoVector, G4ThreeVector>> fCellMap;
-    std::vector<std::pair<double, std::unique_ptr<Hit::CDCHit>>> fTriggerTimeAndHitList;
+    std::vector<std::vector<std::pair<double, std::unique_ptr<Hit::CDCHit>>>> fCellSignalTimeAndHitList;
 };
 
 } // namespace MACE::SimMACE::SD
