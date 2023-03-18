@@ -22,18 +22,18 @@ constexpr JointParameterInterface<ADerived, ADistribution, Ds...>::JointParamete
     DistributionParameterBase<ADerived, ADistribution>(),
     internal::CartesianProductMargin<typename Ds::ParameterType...>(p...) {}
 
-template<class ADerived, class ADistribution, class... Ds, Concept::Character AChar>
-auto operator<<(std::basic_ostream<AChar>& os, const JointParameterInterface<ADerived, ADistribution, Ds...>& self) -> decltype(os) {
+template<Concept::Character AChar, class U, class V, class... Ws>
+auto operator<<(std::basic_ostream<AChar>& os, const JointParameterInterface<U, V, Ws...>& self) -> decltype(os) {
     return ([&os, &self]<gsl::index... Is>(gslx::index_sequence<Is...>) {
         return (os << ... << self.template Margin<Is>());
-    })(gslx::index_sequence_for<Ds...>());
+    })(gslx::index_sequence_for<Ws...>());
 }
 
-template<class ADerived, class ADistribution, class... Ds, Concept::Character AChar>
-auto operator>>(std::basic_istream<AChar>& is, JointParameterInterface<ADerived, ADistribution, Ds...>& self) -> decltype(is) {
+template<Concept::Character AChar, class U, class V, class... Ws>
+auto operator>>(std::basic_istream<AChar>& is, JointParameterInterface<U, V, Ws...>& self) -> decltype(is) {
     return ([&is, &self]<gsl::index... Is>(gslx::index_sequence<Is...>) {
         return (is >> ... >> self.template Margin<Is>());
-    })(gslx::index_sequence_for<Ds...>());
+    })(gslx::index_sequence_for<Ws...>());
 }
 
 template<class ADerived, class AParameter, class T, class... Ds>

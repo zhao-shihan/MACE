@@ -62,10 +62,10 @@ public:
     template<gsl::index I>
     constexpr void Parameter(const std::tuple_element_t<I, std::tuple<typename Ds::ParameterType...>>& p) { this->template Margin<I>() = p; }
 
-    template<Concept::Character AChar>
-    friend auto operator<<(std::basic_ostream<AChar>& os, const JointParameterInterface& self) -> decltype(os);
-    template<Concept::Character AChar>
-    friend auto operator>>(std::basic_istream<AChar>& is, JointParameterInterface& self) -> decltype(is);
+    template<Concept::Character AChar, class U, class V, class... Ws>
+    friend auto operator<<(std::basic_ostream<AChar>& os, const JointParameterInterface<U, V, Ws...>& self) -> decltype(os);
+    template<Concept::Character AChar, class U, class V, class... Ws>
+    friend auto operator>>(std::basic_istream<AChar>& is, JointParameterInterface<U, V, Ws...>& self) -> decltype(is);
 };
 
 template<class ADerived, class AParameter, class T, class... Ds>

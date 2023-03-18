@@ -18,17 +18,17 @@ constexpr BasicGaussian3DDiagnoalParameter<T, AGaussian3DDiagnoal>::BasicGaussia
     fMuZ(pZ.first),
     fSigmaZ(pZ.second) {}
 
-template<std::floating_point T, template<typename> class AGaussian2D, Concept::Character AChar>
-auto operator<<(std::basic_ostream<AChar>& os, BasicGaussian3DDiagnoalParameter<T, AGaussian2D> self) -> decltype(os) {
-    const auto oldPrecision = os.precision(std::numeric_limits<T>::max_digits10);
+template<Concept::Character AChar, Concept::NumericVector3FloatingPoint U, template<class> class V>
+auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussian3DDiagnoalParameter<U, V>& self) -> decltype(os) {
+    const auto oldPrecision = os.precision(std::numeric_limits<U>::max_digits10);
     return os << self.fMuX << ' ' << self.fSigmaX << ' '
               << self.fMuY << ' ' << self.fSigmaY << ' '
               << self.fMuZ << ' ' << self.fSigmaZ
               << std::setprecision(oldPrecision);
 }
 
-template<std::floating_point T, template<typename> class AGaussian2D, Concept::Character AChar>
-auto operator>>(std::basic_ostream<AChar>& is, BasicGaussian3DDiagnoalParameter<T, AGaussian2D> self) -> decltype(is) {
+template<Concept::Character AChar, Concept::NumericVector3FloatingPoint U, template<class> class V>
+auto operator>>(std::basic_istream<AChar>& is, BasicGaussian3DDiagnoalParameter<U, V>& self) -> decltype(is) {
     return is >>
            self.fMuX >> self.fSigmaX >>
            self.fMuY >> self.fSigmaY >>

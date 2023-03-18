@@ -42,10 +42,10 @@ public:
     constexpr void MuZ(VOfT muZ) const { fMuZ = muZ; }
     constexpr void SigmaZ(VOfT sigmaZ) const { fSigmaZ = sigmaZ; }
 
-    template<Concept::Character AChar>
-    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussian3DDiagnoalParameter& self) -> decltype(os);
-    template<Concept::Character AChar>
-    friend auto operator>>(std::basic_istream<AChar>& is, BasicGaussian3DDiagnoalParameter& self) -> decltype(is);
+    template<Concept::Character AChar, Concept::NumericVector3FloatingPoint U, template<class> class V>
+    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussian3DDiagnoalParameter<U, V>& self) -> decltype(os);
+    template<Concept::Character AChar, Concept::NumericVector3FloatingPoint U, template<class> class V>
+    friend auto operator>>(std::basic_istream<AChar>& is, BasicGaussian3DDiagnoalParameter<U, V>& self) -> decltype(is);
 
 private:
     VOfT fMuX;

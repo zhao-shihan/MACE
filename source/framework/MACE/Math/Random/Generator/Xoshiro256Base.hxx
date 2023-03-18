@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Concept/FundamentalType.hxx"
 #include "MACE/Math/Random/UniformPseudoRandomBitGeneratorBase.hxx"
 
 #include <bit>
@@ -22,17 +23,15 @@ protected:
 
 public:
     constexpr void Step();
-    constexpr void Seed(std::uint64_t seed);
+    void Seed(std::uint64_t seed);
 
     static constexpr auto Min() { return std::numeric_limits<std::uint64_t>::min(); }
     static constexpr auto Max() { return std::numeric_limits<std::uint64_t>::max(); }
 
     template<Concept::Character AChar, class T>
-        requires std::derived_from<T, Xoshiro256Base<T>>
-    friend auto operator<<(std::basic_ostream<AChar>& os, const T& self) -> decltype(os);
+    friend auto operator<<(std::basic_ostream<AChar>& os, const Xoshiro256Base<T>& self) -> decltype(os);
     template<Concept::Character AChar, class T>
-        requires std::derived_from<T, Xoshiro256Base<T>>
-    friend auto operator>>(std::basic_istream<AChar>& is, T& self) -> decltype(is);
+    friend auto operator>>(std::basic_istream<AChar>& is, Xoshiro256Base<T>& self) -> decltype(is);
 
 protected:
     std::uint64_t fState[4];

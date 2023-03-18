@@ -30,10 +30,10 @@ public:
 
     constexpr void Expectation(T expectation) { fExpectation = expectation; }
 
-    template<Concept::Character AChar>
-    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicExponentialParameter<T, AExponential>& self) -> decltype(os);
-    template<Concept::Character AChar>
-    friend auto& operator>>(std::basic_istream<AChar>& is, BasicExponentialParameter<T, AExponential>& self) { return is >> self.fExpectation; }
+    template<Concept::Character AChar, std::floating_point U, template<typename> class V>
+    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicExponentialParameter<U, V>& self) -> decltype(os);
+    template<Concept::Character AChar, std::floating_point U, template<typename> class V>
+    friend auto operator>>(std::basic_istream<AChar>& is, BasicExponentialParameter<U, V>& self) -> decltype(is);
 
 private:
     T fExpectation;
@@ -71,9 +71,9 @@ public:
     static constexpr auto Stateless() { return true; }
 
     template<Concept::Character AChar>
-    friend auto& operator<<(std::basic_ostream<AChar>& os, const ExponentialBase<ADerived, T>& self) { return os << self.fParameter; }
+    friend auto& operator<<(std::basic_ostream<AChar>& os, const ExponentialBase& self) { return os << self.fParameter; }
     template<Concept::Character AChar>
-    friend auto& operator>>(std::basic_istream<AChar>& is, ExponentialBase<ADerived, T>& self) { return is >> self.fParameter; }
+    friend auto& operator>>(std::basic_istream<AChar>& is, ExponentialBase& self) { return is >> self.fParameter; }
 
 protected:
     typename Base::ParameterType fParameter;

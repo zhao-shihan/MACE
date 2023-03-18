@@ -12,14 +12,15 @@ constexpr BasicGaussianParameter<T, AGaussian>::BasicGaussianParameter(T mu, T s
     fMu(mu),
     fSigma(sigma) {}
 
-template<std::floating_point T, template<typename> class AGaussian, Concept::Character AChar>
-auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussianParameter<T, AGaussian>& self) -> decltype(os) {
-    const auto oldPrecision = os.precision(std::numeric_limits<T>::max_digits10);
-    return os << self.fMu << ' ' << self.fSigma << std::setprecision(oldPrecision);
+template<Concept::Character AChar, std::floating_point U, template<typename> class V>
+auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussianParameter<U, V>& self) -> decltype(os) {
+    const auto oldPrecision = os.precision(std::numeric_limits<U>::max_digits10);
+    return os << self.fMu << ' ' << self.fSigma
+              << std::setprecision(oldPrecision);
 }
 
-template<std::floating_point T, template<typename> class AGaussian, Concept::Character AChar>
-auto operator>>(std::basic_istream<AChar>& is, BasicGaussianParameter<T, AGaussian>& self) -> decltype(is) {
+template<Concept::Character AChar, std::floating_point U, template<typename> class V>
+auto operator>>(std::basic_istream<AChar>& is, BasicGaussianParameter<U, V>& self) -> decltype(is) {
     return is >> self.fMu >> self.fSigma;
 }
 

@@ -15,15 +15,15 @@ constexpr BasicGaussian2DDiagnoalParameter<T, AGaussian2DDiagnoal>::BasicGaussia
     fMuY(pY.first),
     fSigmaY(pY.second) {}
 
-template<std::floating_point T, template<typename> class AGaussian2D, Concept::Character AChar>
-auto operator<<(std::basic_ostream<AChar>& os, BasicGaussian2DDiagnoalParameter<T, AGaussian2D> self) -> decltype(os) {
-    const auto oldPrecision = os.precision(std::numeric_limits<T>::max_digits10);
+template<Concept::Character AChar, Concept::NumericVector2FloatingPoint U, template<class> class V>
+auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussian2DDiagnoalParameter<U, V>& self) -> decltype(os) {
+    const auto oldPrecision = os.precision(std::numeric_limits<U>::max_digits10);
     return os << self.fMuX << ' ' << self.fSigmaX << ' ' << self.fMuY << ' ' << self.fSigmaY
               << std::setprecision(oldPrecision);
 }
 
-template<std::floating_point T, template<typename> class AGaussian2D, Concept::Character AChar>
-auto operator>>(std::basic_ostream<AChar>& is, BasicGaussian2DDiagnoalParameter<T, AGaussian2D> self) -> decltype(is) {
+template<Concept::Character AChar, Concept::NumericVector2FloatingPoint U, template<class> class V>
+auto operator>>(std::basic_istream<AChar>& is, BasicGaussian2DDiagnoalParameter<U, V>& self) -> decltype(is) {
     return is >> self.fMuX >> self.fSigmaX >> self.fMuY >> self.fSigmaY;
 }
 

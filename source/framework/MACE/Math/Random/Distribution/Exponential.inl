@@ -11,10 +11,16 @@ constexpr BasicExponentialParameter<T, AExponential>::BasicExponentialParameter(
     Base(),
     fExpectation(expectation) {}
 
-template<std::floating_point T, template<typename> class AExponential, Concept::Character AChar>
-auto operator<<(std::basic_ostream<AChar>& os, const BasicExponentialParameter<T, AExponential>& self) -> decltype(os) {
-    const auto oldPrecision = os.precision(std::numeric_limits<T>::max_digits10);
-    return os << self.fExpectation << std::setprecision(oldPrecision);
+template<Concept::Character AChar, std::floating_point U, template<typename> class V>
+auto operator<<(std::basic_ostream<AChar>& os, const BasicExponentialParameter<U, V>& self) -> decltype(os) {
+    const auto oldPrecision = os.precision(std::numeric_limits<U>::max_digits10);
+    return os << self.fExpectation
+              << std::setprecision(oldPrecision);
+}
+
+template<Concept::Character AChar, std::floating_point U, template<typename> class V>
+auto operator>>(std::basic_istream<AChar>& is, BasicExponentialParameter<U, V>& self) -> decltype(is) {
+    return is >> self.fExpectation;
 }
 
 template<template<typename> class ADerived, std::floating_point T>

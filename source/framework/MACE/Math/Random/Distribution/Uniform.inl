@@ -12,6 +12,22 @@ constexpr BasicUniformParameter<T, AUniform>::BasicUniformParameter(T inf, T sup
     fInfimum(inf),
     fSupremum(sup) {}
 
+template<Concept::Character AChar, Concept::Arithmetic U, template<typename> class V>
+auto operator<<(std::basic_ostream<AChar>& os, const BasicUniformParameter<U, V>& self) -> decltype(os) {
+    if constexpr (std::floating_point<U>) {
+        const auto oldPrecision = os.precision(std::numeric_limits<U>::max_digits10);
+        return os << self.fInfimum << ' ' << self.fSupremum
+                  << std::setprecision(oldPrecision);
+    } else {
+        return os << self.fInfimum << ' ' << self.fSupremum;
+    }
+}
+
+template<Concept::Character AChar, Concept::Arithmetic U, template<typename> class V>
+auto operator>>(std::basic_istream<AChar>& is, BasicUniformParameter<U, V>& self) -> decltype(is) {
+    return is >> self.fInfimum >> self.fSupremum;
+}
+
 template<template<typename> class ADerived, Concept::Arithmetic T>
 constexpr UniformBase<ADerived, T>::UniformBase(T inf, T sup) :
     Base(),
@@ -21,16 +37,6 @@ template<template<typename> class ADerived, Concept::Arithmetic T>
 constexpr UniformBase<ADerived, T>::UniformBase(const typename Base::ParameterType& p) :
     Base(),
     fParameter(p) {}
-
-template<template<typename> class ADerived, Concept::Arithmetic T, Concept::Character AChar>
-auto operator<<(std::basic_ostream<AChar>& os, const UniformBase<ADerived, T>& self) -> decltype(os) {
-    if constexpr (std::integral<T>) {
-        return os << self.fParameter;
-    } else {
-        const auto oldPrecision = os.precision(std::numeric_limits<T>::max_digits10);
-        return os << self.fParameter << std::setprecision(oldPrecision);
-    }
-}
 
 } // namespace internal
 

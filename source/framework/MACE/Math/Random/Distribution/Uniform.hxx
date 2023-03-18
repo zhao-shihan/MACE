@@ -25,10 +25,10 @@ public:
     constexpr void Infimum(T inf) { fInfimum = inf; }
     constexpr void Supremum(T sup) { fSupremum = sup; }
 
-    template<Concept::Character AChar>
-    friend auto& operator<<(std::basic_ostream<AChar>& os, const BasicUniformParameter& self) { return os << self.fInfimum << ' ' << self.fSupremum; }
-    template<Concept::Character AChar>
-    friend auto& operator>>(std::basic_istream<AChar>& is, BasicUniformParameter& self) { return is >> self.fInfimum >> self.fSupremum; }
+    template<Concept::Character AChar, Concept::Arithmetic U, template<typename> class V>
+    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicUniformParameter<U, V>& self) -> decltype(os);
+    template<Concept::Character AChar, Concept::Arithmetic U, template<typename> class V>
+    friend auto operator>>(std::basic_istream<AChar>& is, BasicUniformParameter<U, V>& self) -> decltype(is);
 
 private:
     T fInfimum;
@@ -69,7 +69,7 @@ public:
     static constexpr auto Stateless() { return true; }
 
     template<Concept::Character AChar>
-    friend auto operator<<(std::basic_ostream<AChar>& os, const UniformBase& self) -> decltype(os);
+    friend auto& operator<<(std::basic_ostream<AChar>& os, const UniformBase& self) { return os << self.fParameter; }
     template<Concept::Character AChar>
     friend auto& operator>>(std::basic_istream<AChar>& is, UniformBase& self) { return is >> self.fParameter; }
 

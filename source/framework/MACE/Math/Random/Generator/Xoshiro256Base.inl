@@ -33,7 +33,7 @@ constexpr void Xoshiro256Base<ADerived>::Step() {
 }
 
 template<class ADerived>
-constexpr void Xoshiro256Base<ADerived>::Seed(std::uint64_t seed) {
+void Xoshiro256Base<ADerived>::Seed(std::uint64_t seed) {
     std::mt19937_64 mt(seed);
     for (auto&& s : fState) {
         s = mt();
@@ -41,14 +41,12 @@ constexpr void Xoshiro256Base<ADerived>::Seed(std::uint64_t seed) {
 }
 
 template<Concept::Character AChar, class T>
-    requires std::derived_from<T, Xoshiro256Base<T>>
-auto operator<<(std::basic_ostream<AChar>& os, const T& self) -> decltype(os) {
+auto operator<<(std::basic_ostream<AChar>& os, const Xoshiro256Base<T>& self) -> decltype(os) {
     return os << self.fState[0] << ' ' << self.fState[1] << ' ' << self.fState[2] << ' ' << self.fState[3];
 }
 
 template<Concept::Character AChar, class T>
-    requires std::derived_from<T, Xoshiro256Base<T>>
-auto operator>>(std::basic_istream<AChar>& is, T& self) -> decltype(is) {
+auto operator>>(std::basic_istream<AChar>& is, Xoshiro256Base<T>& self) -> decltype(is) {
     return is >> self.fState[0] >> self.fState[1] >> self.fState[2] >> self.fState[3];
 }
 

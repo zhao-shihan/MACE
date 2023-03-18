@@ -41,10 +41,10 @@ public:
     constexpr void MuY(VOfT muY) const { fMuY = muY; }
     constexpr void SigmaY(VOfT sigmaY) const { fSigmaY = sigmaY; }
 
-    template<Concept::Character AChar>
-    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussian2DDiagnoalParameter& self) -> decltype(os);
-    template<Concept::Character AChar>
-    friend auto operator>>(std::basic_istream<AChar>& is, BasicGaussian2DDiagnoalParameter& self) -> decltype(is);
+    template<Concept::Character AChar, Concept::NumericVector2FloatingPoint U, template<class> class V>
+    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussian2DDiagnoalParameter<U, V>& self) -> decltype(os);
+    template<Concept::Character AChar, Concept::NumericVector2FloatingPoint U, template<class> class V>
+    friend auto operator>>(std::basic_istream<AChar>& is, BasicGaussian2DDiagnoalParameter<U, V>& self) -> decltype(is);
 
 private:
     VOfT fMuX;

@@ -31,10 +31,10 @@ public:
     constexpr void Mu(T mu) { fMu = mu; }
     constexpr void Sigma(T sigma) { fSigma = sigma; }
 
-    template<Concept::Character AChar>
-    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussianParameter& self) -> decltype(os);
-    template<Concept::Character AChar>
-    friend auto operator>>(std::basic_istream<AChar>& is, BasicGaussianParameter& self) -> decltype(is);
+    template<Concept::Character AChar, std::floating_point U, template<typename> class V>
+    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussianParameter<U, V>& self) -> decltype(os);
+    template<Concept::Character AChar, std::floating_point U, template<typename> class V>
+    friend auto operator>>(std::basic_istream<AChar>& is, BasicGaussianParameter<U, V>& self) -> decltype(is);
 
 private:
     T fMu;
