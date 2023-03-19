@@ -23,7 +23,7 @@ Analysis::Analysis() :
     fEMCalHitList(nullptr),
     fMCPHitList(nullptr),
     fCDCHitList(nullptr) {
-    fDataHub.TreeNamePrefixFormat("Run{}_");
+    fDataHub.TreeNamePrefixFormat("G4Run{}_");
     Messenger::AnalysisMessenger::Instance().AssignTo(this);
 }
 
