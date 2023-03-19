@@ -24,24 +24,24 @@ void EMCalSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-G4bool EMCalSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
-    const auto track = step->GetTrack();
-    const auto particle = track->GetDefinition();
-    if (step->IsFirstStepInVolume() and track->GetCurrentStepNumber() > 1 and   // is coming from outside, and
-        (particle->GetPDGCharge() != 0 or particle == G4Gamma::Definition())) { // is a charged particle or gamma
-        const auto preStepPoint = step->GetPreStepPoint();
+G4bool EMCalSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
+    const auto& step = *theStep;
+    const auto& track = *step.GetTrack();
+    const auto& particle = *track.GetDefinition();
+    if (step.IsFirstStepInVolume() and track.GetCurrentStepNumber() > 1 and     // is coming from outside, and
+        (particle.GetPDGCharge() != 0 or &particle == G4Gamma::Definition())) { // is a charged particle or gamma
+        const auto& preStepPoint = *step.GetPreStepPoint();
         // new a hit
         const auto hit = new EMCalHit;
-        hit->HitTime(preStepPoint->GetGlobalTime());
-        hit->Energy(preStepPoint->GetKineticEnergy());
-        hit->Particle(particle->GetParticleName());
+        hit->HitTime(preStepPoint.GetGlobalTime());
+        hit->Energy(preStepPoint.GetKineticEnergy());
+        hit->Particle(particle.GetParticleName());
         hit->G4EventID(fEventID);
-        hit->G4TrackID(track->GetTrackID());
+        hit->G4TrackID(track.GetTrackID());
         fHitsCollection->insert(hit);
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 void EMCalSD::EndOfEvent(G4HCofThisEvent*) {

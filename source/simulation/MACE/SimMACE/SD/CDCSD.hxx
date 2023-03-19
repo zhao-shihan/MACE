@@ -36,7 +36,7 @@ private:
     G4double fHalfTimeResolution;
 
     std::vector<std::map<int, const G4StepPoint>> fCellEnterPointList;
-    std::vector<std::pair<G4TwoVector, G4ThreeVector>> fCellMap;
+    std::vector<std::pair<const G4TwoVector, const G4ThreeVector>> fCellMap;
     std::vector<std::vector<std::pair<double, std::unique_ptr<Hit::CDCHit>>>> fCellSignalTimeAndHitList;
 };
 

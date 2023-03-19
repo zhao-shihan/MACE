@@ -23,32 +23,32 @@ void MCPSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-G4bool MCPSD::ProcessHits(G4Step* step, G4TouchableHistory*) {
-    const auto track = step->GetTrack();
-    const auto particle = track->GetDefinition();
-    if (step->IsFirstStepInVolume() and track->GetCurrentStepNumber() > 1 and // is coming from outside, and
-        particle->GetPDGCharge() != 0) {                                      // is a charged particle.
-        const auto preStepPoint = step->GetPreStepPoint();
-        const auto touchable = preStepPoint->GetTouchable();
+G4bool MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
+    const auto& step = *theStep;
+    const auto& track = *step.GetTrack();
+    const auto& particle = *track.GetDefinition();
+    if (step.IsFirstStepInVolume() and track.GetCurrentStepNumber() > 1 and // is coming from outside, and
+        particle.GetPDGCharge() != 0) {                                     // is a charged particle.
+        const auto& preStepPoint = *step.GetPreStepPoint();
+        const auto& touchable = *preStepPoint.GetTouchable();
         // get detector transform
-        const auto& detectorPosition = touchable->GetTranslation();
-        const auto& detectorRotation = *touchable->GetRotation();
+        const auto& detectorPosition = touchable.GetTranslation();
+        const auto& detectorRotation = *touchable.GetRotation();
         // transform hit position to local coordinate
-        const auto hitPosition = G4TwoVector(detectorRotation * (preStepPoint->GetPosition() - detectorPosition));
+        const auto hitPosition = G4TwoVector(detectorRotation * (preStepPoint.GetPosition() - detectorPosition));
         // new a hit
         const auto hit = new MCPHit;
-        hit->HitTime(preStepPoint->GetGlobalTime());
+        hit->HitTime(preStepPoint.GetGlobalTime());
         hit->HitPosition(hitPosition);
-        hit->VertexTime(track->GetGlobalTime() - track->GetLocalTime());
-        hit->VertexPosition(track->GetVertexPosition());
-        hit->Particle(particle->GetParticleName());
+        hit->VertexTime(track.GetGlobalTime() - track.GetLocalTime());
+        hit->VertexPosition(track.GetVertexPosition());
+        hit->Particle(particle.GetParticleName());
         hit->G4EventID(fEventID);
-        hit->G4TrackID(track->GetTrackID());
+        hit->G4TrackID(track.GetTrackID());
         fHitsCollection->insert(hit);
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 void MCPSD::EndOfEvent(G4HCofThisEvent*) {
