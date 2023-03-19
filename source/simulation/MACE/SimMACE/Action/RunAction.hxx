@@ -9,7 +9,7 @@ namespace MACE::SimMACE::Action {
 class RunAction final : public NonMoveableBase,
                         public G4UserRunAction {
 public:
-    void BeginOfRunAction(const G4Run*) override;
+    void BeginOfRunAction(const G4Run* run) override;
     void EndOfRunAction(const G4Run*) override;
 };
 

@@ -8,6 +8,7 @@
 #include "gsl/gsl"
 
 #include <filesystem>
+#include <memory>
 #include <utility>
 
 class TFile;
@@ -30,22 +31,25 @@ public:
     void EnableCoincidenceOfEMCal(G4bool val) { fEnableCoincidenceOfEMCal = val; }
     void EnableCoincidenceOfMCP(G4bool val) { fEnableCoincidenceOfMCP = val; }
 
-    void Open(Option_t* option = "recreate");
-    void Close(Option_t* option = nullptr);
+    void RunBegin(G4int runID, Option_t* option = "recreate");
 
     void SubmitEMCalHC(gsl::not_null<const std::vector<gsl::owner<Hit::EMCalHit*>>*> hitList) { fEMCalHitList = hitList; }
     void SubmitMCPHC(gsl::not_null<const std::vector<gsl::owner<Hit::MCPHit*>>*> hitList) { fMCPHitList = hitList; }
     void SubmitSpectrometerHC(gsl::not_null<const std::vector<gsl::owner<Hit::CDCHit*>>*> hitList) { fCDCHitList = hitList; }
-    void WriteEvent();
+    void EventEnd();
+
+    void RunEnd(Option_t* option = nullptr);
 
 private:
-    gsl::owner<TFile*> fFile;
-
     std::filesystem::path fResultPath;
     G4bool fEnableCoincidenceOfEMCal;
     G4bool fEnableCoincidenceOfMCP;
 
     DataModel::DataFactory fDataHub;
+    std::unique_ptr<TFile> fFile;
+    std::shared_ptr<TTree> fEMCalHitTree;
+    std::shared_ptr<TTree> fMCPHitTree;
+    std::shared_ptr<TTree> fCDCHitTree;
 
     const std::vector<gsl::owner<Hit::EMCalHit*>>* fEMCalHitList;
     const std::vector<gsl::owner<Hit::MCPHit*>>* fMCPHitList;

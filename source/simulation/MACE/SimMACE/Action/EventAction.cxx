@@ -15,7 +15,7 @@ void EventAction::BeginOfEventAction(const G4Event* event) {
 }
 
 void EventAction::EndOfEventAction(const G4Event*) {
-    RunManager::Instance().GetAnalysis().WriteEvent();
+    RunManager::Instance().GetAnalysis().EventEnd();
 }
 
 } // namespace MACE::SimMACE::Action

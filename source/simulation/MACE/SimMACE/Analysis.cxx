@@ -12,49 +12,49 @@ namespace MACE::SimMACE {
 
 Analysis::Analysis() :
     FreeSingleton(),
-    fFile(nullptr),
     fResultPath("SimMACE_untitled"),
     fEnableCoincidenceOfEMCal(true),
     fEnableCoincidenceOfMCP(true),
     fDataHub(),
+    fFile(),
+    fEMCalHitTree(),
+    fMCPHitTree(),
+    fCDCHitTree(),
     fEMCalHitList(nullptr),
     fMCPHitList(nullptr),
     fCDCHitList(nullptr) {
+    fDataHub.TreeNamePrefixFormat("Run{}_");
     Messenger::AnalysisMessenger::Instance().AssignTo(this);
 }
 
-void Analysis::Open(Option_t* option) {
-    fFile = new TFile(MPIUtil::MakeMPIFilePath(fResultPath, ".root").generic_string().c_str(),
-                      option,
-                      "",
-                      ROOT::RCompressionSetting::EDefaults::kUseSmallest);
+void Analysis::RunBegin(G4int runID, Option_t* option) {
+    fFile = std::make_unique<TFile>(MPIUtil::MakeMPIFilePath(fResultPath, ".root").generic_string().c_str(),
+                                    option,
+                                    "",
+                                    ROOT::RCompressionSetting::EDefaults::kUseSmallest);
+    fEMCalHitTree = fDataHub.CreateTree<DataModel::SimHit::EMCalSimHit>(runID);
+    fMCPHitTree = fDataHub.CreateTree<DataModel::SimHit::MCPSimHit>(runID);
+    fCDCHitTree = fDataHub.CreateTree<DataModel::SimHit::CDCSimHit>(runID);
 }
 
-void Analysis::Close(Option_t* option) {
-    fFile->Close(option);
-    delete fFile;
-}
-
-void Analysis::WriteEvent() {
+void Analysis::EventEnd() {
     const auto emCalTriggered = not fEnableCoincidenceOfEMCal or fEMCalHitList->size() > 0;
     const auto mcpTriggered = not fEnableCoincidenceOfMCP or fMCPHitList->size() > 0;
     const auto cdcTriggered = fCDCHitList->size() > 0;
     // if coincident then write their data
     if (emCalTriggered and mcpTriggered and cdcTriggered) {
-        using namespace DataModel::SimHit;
-        // create trees
-        const auto emCalHitTree = fDataHub.CreateTree<EMCalSimHit>();
-        const auto mcpHitTree = fDataHub.CreateTree<MCPSimHit>();
-        const auto cdcHitTree = fDataHub.CreateTree<CDCSimHit>();
-        // fill trees
-        fDataHub.FillTree(*fEMCalHitList, *emCalHitTree, true);
-        fDataHub.FillTree(*fMCPHitList, *mcpHitTree, true);
-        fDataHub.FillTree(*fCDCHitList, *cdcHitTree, true);
-        // write trees
-        emCalHitTree->Write();
-        mcpHitTree->Write();
-        cdcHitTree->Write();
+        fDataHub.FillTree(*fEMCalHitList, *fEMCalHitTree, true);
+        fDataHub.FillTree(*fMCPHitList, *fMCPHitTree, true);
+        fDataHub.FillTree(*fCDCHitList, *fCDCHitTree, true);
     }
+}
+
+void Analysis::RunEnd(Option_t* option) {
+    fEMCalHitTree->Write();
+    fMCPHitTree->Write();
+    fCDCHitTree->Write();
+    fFile->Close(option);
+    fFile.reset();
 }
 
 } // namespace MACE::SimMACE
