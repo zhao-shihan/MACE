@@ -21,7 +21,7 @@
 /MACE/Generator/SurfaceMuon/MomentumRMS            0.7 MeV
 /MACE/Generator/SurfaceMuon/PositionRMS            5 mm
 /MACE/Generator/SurfaceMuon/PositionZ              -1.5 m
-/MACE/Generator/SurfaceMuon/MuonsForEachG4Event    10
+/MACE/Generator/SurfaceMuon/MuonsForEachG4Event    1000
 
 /MACE/Physics/MuoniumPhysics/Formation/FormationProbability     0.6
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    1
@@ -39,5 +39,4 @@
 #############################################################################
 
 /MACE/Analysis/ResultPath SimMACE_sig
-/MPIRun/SetPrintProgress 1
 /run/beamOn 80

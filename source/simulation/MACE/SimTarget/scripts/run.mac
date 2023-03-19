@@ -36,9 +36,6 @@
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 /MACE/Physics/MuoniumPhysics/Transport/MeanFreePath             0.2 um
 
-# print progress
-/MPIRun/SetPrintProgress 10
-
 # kill secondaries
 /MACE/Action/KillIrrelevants    true
 
