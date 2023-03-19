@@ -12,6 +12,7 @@
 
 #include "mpi.h"
 
+#include <algorithm>
 #include <charconv>
 #include <cstdlib>
 #include <iomanip>
@@ -19,8 +20,6 @@
 #include <string>
 
 namespace MACE::inline Extension::Geant4X {
-
-using namespace std::string_view_literals;
 
 namespace internal {
 
@@ -42,7 +41,7 @@ MPIRunManager::MPIRunManager() :
     fTotalNumberOfEventsToBeProcessed(0),
     fEventIDRange{-1, -1, 0, 0},
     fEventIDCounter(-1),
-    fPrintProgress(-1),
+    fPrintProgress(std::max(1, Env::MPIEnv::Instance().WorldCommSize() - 1)),
     fEventWallTimer(),
     fEventWallTime(0),
     fNAvgEventWallTime(0),
@@ -154,13 +153,13 @@ void MPIRunManager::EventEndReport(G4int event) const {
     const auto nEventRemain = numberOfEventToBeProcessed - numberOfEventProcessed;
     const auto eta = FormatSecondToDHMS(std::lround(avgEventWallTime * nEventRemain));
     const auto etaError = numberOfEventProcessed < 5 ?
-                              std::string("N/A"sv) :
+                              std::string("N/A") :
                               FormatSecondToDHMS(std::lround(1.96 * std::sqrt(fNDevEventWallTime / (numberOfEventProcessed - 1)) * nEventRemain)); // 95% C.L. (assuming gaussian)
     const auto progress = 100 * static_cast<float>(numberOfEventProcessed) / numberOfEventToBeProcessed;
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
-    G4cout << std::put_time(std::localtime(&now), "%FT%T%z") << " > Event "sv << event << " finished in rank "sv << mpiEnv.WorldCommRank() << '\n'
-           << "  ETA: "sv << eta << " +/- "sv << etaError << "  Progress of the rank: "sv << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " ("sv << std::fixed << progress << std::defaultfloat << "%)"sv << G4endl;
+    G4cout << std::put_time(std::localtime(&now), "%FT%T%z") << " > G4Event " << event << " finished in rank " << mpiEnv.WorldCommRank() << '\n'
+           << "  ETA: " << eta << " +/- " << etaError << "  Progress of the rank: " << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " (" << std::fixed << progress << std::defaultfloat << "%)" << G4endl;
     G4cout.precision(precisionOfG4cout);
 }
 
@@ -171,13 +170,13 @@ void MPIRunManager::RunEndReport(G4int run) const {
     const auto beginTime = std::chrono::system_clock::to_time_t(fRunBeginSystemTime);
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
-    G4cout << "-------------------------------> Run Finished <-------------------------------\n"sv
-           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run "sv << run << " finished on "sv << mpiEnv.WorldCommSize() << " ranks\n"sv
-           << "  Start time: "sv << std::put_time(std::localtime(&beginTime), "%FT%T%z") << '\n'
-           << "   Wall time: "sv << std::fixed << fRunWallTime << std::defaultfloat << " seconds"sv;
-    if (fRunWallTime > 60) { G4cout << " ("sv << wallTimeDHMS << ')'; }
-    G4cout << "\n"sv
-              "-------------------------------> Run Finished <-------------------------------"sv
+    G4cout << "-------------------------------> Run Finished <-------------------------------\n"
+           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run " << run << " finished on " << mpiEnv.WorldCommSize() << " ranks\n"
+           << "  Start time: " << std::put_time(std::localtime(&beginTime), "%FT%T%z") << '\n'
+           << "   Wall time: " << std::fixed << fRunWallTime << std::defaultfloat << " seconds";
+    if (fRunWallTime > 60) { G4cout << " (" << wallTimeDHMS << ')'; }
+    G4cout << "\n"
+              "-------------------------------> Run Finished <-------------------------------"
            << G4endl;
     G4cout.precision(precisionOfG4cout);
 }
@@ -186,9 +185,9 @@ void MPIRunManager::RunBeginReport(G4int run) {
     const auto& mpiEnv = Env::MPIEnv::Instance();
     if (mpiEnv.AtWorldWorker() or mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    G4cout << "--------------------------------> Run Starts <--------------------------------\n"sv
-           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run "sv << run << " starts on "sv << mpiEnv.WorldCommSize() << " ranks\n"sv
-           << "--------------------------------> Run Starts <--------------------------------"sv << G4endl;
+    G4cout << "--------------------------------> Run Starts <--------------------------------\n"
+           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run " << run << " starts on " << mpiEnv.WorldCommSize() << " ranks\n"
+           << "--------------------------------> Run Starts <--------------------------------" << G4endl;
 }
 
 std::string MPIRunManager::FormatSecondToDHMS(long secondsInTotal) {
@@ -205,18 +204,18 @@ std::string MPIRunManager::FormatSecondToDHMS(long secondsInTotal) {
     std::string dhms;
     if (addDay) {
         const auto charLast = std::to_chars(buffer, bufferEnd, day).ptr;
-        dhms.append(std::string_view(buffer, charLast)).append("d "sv);
+        dhms.append(std::string_view(buffer, charLast)).append("d ");
     }
     if (addHour) {
         const auto charLast = std::to_chars(buffer, bufferEnd, hour).ptr;
-        dhms.append(std::string_view(buffer, charLast)).append("h "sv);
+        dhms.append(std::string_view(buffer, charLast)).append("h ");
     }
     if (addMinute) {
         const auto charLast = std::to_chars(buffer, bufferEnd, minute).ptr;
-        dhms.append(std::string_view(buffer, charLast)).append("m "sv);
+        dhms.append(std::string_view(buffer, charLast)).append("m ");
     }
     const auto charLast = std::to_chars(buffer, bufferEnd, second).ptr;
-    dhms.append(std::string_view(buffer, charLast)).append("s"sv);
+    dhms.append(std::string_view(buffer, charLast)).append("s");
     return dhms;
 }
 
