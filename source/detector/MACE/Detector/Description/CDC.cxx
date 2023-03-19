@@ -172,7 +172,7 @@ std::vector<CDC::CellInformation> CDC::ComputeCellMap() const {
 
     const auto& layerConfig = LayerConfiguration();
     cellMap.reserve(
-        std::accumulate(layerConfig.cbegin(), layerConfig.cend(), 0,
+        std::accumulate(layerConfig.cbegin(), layerConfig.cend(), 0ull,
                         [this](const auto& count, const auto& super) {
                             return count + super.nCellPerSenseLayer * fNSenseLayerPerSuper;
                         }));
