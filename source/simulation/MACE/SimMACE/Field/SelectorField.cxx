@@ -14,8 +14,8 @@ SelectorField::SelectorField() :
     NonMoveableBase(),
     G4ElectroMagneticField(),
     fBTransport(0.1_T),
-    fSelectEk(7_keV),
-    fESelect(5_kV_cm),
+    fSelectEk(1_keV),
+    fESelect(1_kV_cm),
     fBSelect(fESelect / c_light * std::sqrt(electron_mass_c2 / (2 * fSelectEk))) {
     Messenger::FieldMessenger::Instance().AssignTo(this);
 }

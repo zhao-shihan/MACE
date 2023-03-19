@@ -13,9 +13,8 @@ LinacField::LinacField() :
     NonMoveableBase(),
     G4ElectroMagneticField(),
     fBz(0.1_T),
-    fV(7_kV),
-    fDecayZMean(13.05_mm),
-    fEz(7_kV / (Detector::Description::LinacField::Instance().DownStreamLength() - 13.05_mm)) {
+    fV(1_kV),
+    fEz(1_kV / Detector::Description::LinacField::Instance().DownStreamLength()) {
     Messenger::FieldMessenger::Instance().AssignTo(this);
 }
 
@@ -30,7 +29,7 @@ void LinacField::GetFieldValue(const G4double*, G4double* F) const {
 
 void LinacField::SetLinacPotential(G4double V) {
     fV = V;
-    fEz = fV / (Detector::Description::LinacField::Instance().DownStreamLength() - fDecayZMean);
+    fEz = fV / Detector::Description::LinacField::Instance().DownStreamLength();
 }
 
 } // namespace MACE::SimMACE::Field
