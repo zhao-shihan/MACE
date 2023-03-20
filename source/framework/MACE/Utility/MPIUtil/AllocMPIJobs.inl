@@ -17,12 +17,12 @@ IntegralIndexRange<AIndex> AllocMPIJobsJobWise(AIndex jobBegin, AIndex jobEnd, M
         commSize = mpiEnv.LocalCommSize();
         commRank = mpiEnv.LocalCommRank();
     } else {
-        MACE_CHECKED_MPI_CALL(MPI_Comm_size,
-                              comm,
-                              &commSize)
-        MACE_CHECKED_MPI_CALL(MPI_Comm_rank,
-                              comm,
-                              &commRank)
+        MACE_MPI_CALL_WITH_CHECK(MPI_Comm_size,
+                                 comm,
+                                 &commSize)
+        MACE_MPI_CALL_WITH_CHECK(MPI_Comm_rank,
+                                 comm,
+                                 &commRank)
     }
     return AllocMPIJobsJobWise<AIndex>(jobBegin, jobEnd, commSize, commRank);
 }
@@ -54,12 +54,12 @@ IntegralIndexRange<AIndex> AllocMPIJobsWorkerWise(AIndex jobBegin, AIndex jobEnd
         commSize = mpiEnv.LocalCommSize();
         commRank = mpiEnv.LocalCommRank();
     } else {
-        MACE_CHECKED_MPI_CALL(MPI_Comm_size,
-                              comm,
-                              &commSize)
-        MACE_CHECKED_MPI_CALL(MPI_Comm_rank,
-                              comm,
-                              &commRank)
+        MACE_MPI_CALL_WITH_CHECK(MPI_Comm_size,
+                                 comm,
+                                 &commSize)
+        MACE_MPI_CALL_WITH_CHECK(MPI_Comm_rank,
+                                 comm,
+                                 &commRank)
     }
     return AllocMPIJobsWorkerWise<AIndex>(jobBegin, jobEnd, commSize, commRank);
 }

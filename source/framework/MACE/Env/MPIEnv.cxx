@@ -1,7 +1,7 @@
 #include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Extension/stdx/array_alias.hxx"
-#include "MACE/Utility/MPIUtil/CheckedMPICall.hxx"
-#include "MACE/Utility/MPIUtil/CheckedMPICallNoExcept.hxx"
+#include "MACE/Utility/MPIUtil/MPICallWithCheck.hxx"
+#include "MACE/Utility/MPIUtil/MPICallWithCheckNoExcept.hxx"
 
 #include <algorithm>
 #include <array>
@@ -20,10 +20,10 @@ MPIEnv::~MPIEnv() {
     // Update status
     fgFinalized = true;
     // Destructs the local communicator
-    MACE_CHECKED_MPI_CALL_NOEXCEPT(MPI_Comm_free,
-                                   &fLocalComm);
+    MACE_MPI_CALL_WITH_CHECK_NOEXCEPT(MPI_Comm_free,
+                                      &fLocalComm);
     // Finalize MPI
-    MACE_CHECKED_MPI_CALL_NOEXCEPT(MPI_Finalize)
+    MACE_MPI_CALL_WITH_CHECK_NOEXCEPT(MPI_Finalize)
 }
 
 void MPIEnv::PrintStartupMessageBody(int argc, char* argv[]) const {
@@ -32,14 +32,14 @@ void MPIEnv::PrintStartupMessageBody(int argc, char* argv[]) const {
         // MPI library version
         char mpiLibVersion[MPI_MAX_LIBRARY_VERSION_STRING];
         int mpiLibVersionStringLength;
-        MACE_CHECKED_MPI_CALL(MPI_Get_library_version,
-                              mpiLibVersion,
-                              &mpiLibVersionStringLength)
+        MACE_MPI_CALL_WITH_CHECK(MPI_Get_library_version,
+                                 mpiLibVersion,
+                                 &mpiLibVersionStringLength)
         // MPI version at runtime
         std::pair<int, int> mpiRuntimeVersion;
-        MACE_CHECKED_MPI_CALL(MPI_Get_version,
-                              &mpiRuntimeVersion.first,
-                              &mpiRuntimeVersion.second)
+        MACE_MPI_CALL_WITH_CHECK(MPI_Get_version,
+                                 &mpiRuntimeVersion.first,
+                                 &mpiRuntimeVersion.second)
         // Messages
         std::cout << '\n'
                   << " Parallelized by MPI, running " << (Parallel() ? "in parallel" : "sequentially") << '\n';
@@ -72,39 +72,39 @@ void MPIEnv::PrintStartupMessageBody(int argc, char* argv[]) const {
 void MPIEnv::InitializeMPI(int argc, char* argv[]) {
     // Confirm MPI condition
     int mpiInitialized;
-    MACE_CHECKED_MPI_CALL(MPI_Initialized,
-                          &mpiInitialized)
+    MACE_MPI_CALL_WITH_CHECK(MPI_Initialized,
+                             &mpiInitialized)
     if (mpiInitialized) {
         throw std::logic_error("MACE::Env::MPIEnv: Trying to call MPI_Init twice");
     }
     // Initialize MPI
-    MACE_CHECKED_MPI_CALL(MPI_Init,
-                          &argc,
-                          &argv)
+    MACE_MPI_CALL_WITH_CHECK(MPI_Init,
+                             &argc,
+                             &argv)
     // Initialize rank id in the world communicator
-    MACE_CHECKED_MPI_CALL(MPI_Comm_rank,
-                          MPI_COMM_WORLD,
-                          &fWorldCommRank)
+    MACE_MPI_CALL_WITH_CHECK(MPI_Comm_rank,
+                             MPI_COMM_WORLD,
+                             &fWorldCommRank)
     // Initialize size of the world communicator
-    MACE_CHECKED_MPI_CALL(MPI_Comm_size,
-                          MPI_COMM_WORLD,
-                          &fWorldCommSize)
+    MACE_MPI_CALL_WITH_CHECK(MPI_Comm_size,
+                             MPI_COMM_WORLD,
+                             &fWorldCommSize)
     // Initialize informations of all hosts
     InitializeHostInfos();
     // Constructs shared communicator
-    MACE_CHECKED_MPI_CALL(MPI_Comm_split,
-                          MPI_COMM_WORLD,
-                          fLocalHostID,
-                          0,
-                          &fLocalComm)
+    MACE_MPI_CALL_WITH_CHECK(MPI_Comm_split,
+                             MPI_COMM_WORLD,
+                             fLocalHostID,
+                             0,
+                             &fLocalComm)
     // Initialize rank id in the local communicator
-    MACE_CHECKED_MPI_CALL(MPI_Comm_rank,
-                          fLocalComm,
-                          &fLocalCommRank)
+    MACE_MPI_CALL_WITH_CHECK(MPI_Comm_rank,
+                             fLocalComm,
+                             &fLocalCommRank)
     // Initialize size of the local communicator
-    MACE_CHECKED_MPI_CALL(MPI_Comm_size,
-                          fLocalComm,
-                          &fLocalCommSize)
+    MACE_MPI_CALL_WITH_CHECK(MPI_Comm_size,
+                             fLocalComm,
+                             &fLocalCommSize)
     // Disable ROOT implicit multi-threading
     if (ROOT::IsImplicitMTEnabled()) {
         ROOT::DisableImplicitMT();
@@ -116,21 +116,21 @@ void MPIEnv::InitializeHostInfos() {
     // Each rank get its processor name
     NameArray hostNameSend;
     int nameLength;
-    MACE_CHECKED_MPI_CALL(MPI_Get_processor_name,
-                          hostNameSend.data(),
-                          &nameLength)
+    MACE_MPI_CALL_WITH_CHECK(MPI_Get_processor_name,
+                             hostNameSend.data(),
+                             &nameLength)
     // Master collects processor names
     std::vector<NameArray> hostNamesRecv;
     if (AtWorldMaster()) { hostNamesRecv.resize(fWorldCommSize); }
-    MACE_CHECKED_MPI_CALL(MPI_Gather,
-                          hostNameSend.data(),
-                          MPI_MAX_PROCESSOR_NAME,
-                          MPI_CHAR,
-                          hostNamesRecv.data(),
-                          MPI_MAX_PROCESSOR_NAME,
-                          MPI_CHAR,
-                          0,
-                          MPI_COMM_WORLD)
+    MACE_MPI_CALL_WITH_CHECK(MPI_Gather,
+                             hostNameSend.data(),
+                             MPI_MAX_PROCESSOR_NAME,
+                             MPI_CHAR,
+                             hostNamesRecv.data(),
+                             MPI_MAX_PROCESSOR_NAME,
+                             MPI_CHAR,
+                             0,
+                             MPI_COMM_WORLD)
     // Processor name list
     std::vector<stdx::array2i> hostIDAndCountSend;
     stdx::array2i hostIDAndCountRecv;
@@ -162,24 +162,24 @@ void MPIEnv::InitializeHostInfos() {
         }
     }
     // Send host id and count
-    MACE_CHECKED_MPI_CALL(MPI_Scatter,
-                          hostIDAndCountSend.data(),
-                          2,
-                          MPI_INT,
-                          hostIDAndCountRecv.data(),
-                          2,
-                          MPI_INT,
-                          0,
-                          MPI_COMM_WORLD)
+    MACE_MPI_CALL_WITH_CHECK(MPI_Scatter,
+                             hostIDAndCountSend.data(),
+                             2,
+                             MPI_INT,
+                             hostIDAndCountRecv.data(),
+                             2,
+                             MPI_INT,
+                             0,
+                             MPI_COMM_WORLD)
     auto&& [hostID, hostCount] = hostIDAndCountRecv;
     // Master send unique host name list
     if (AtWorldWorker()) { hostInfoList.resize(hostCount); }
-    MACE_CHECKED_MPI_CALL(MPI_Bcast,
-                          hostInfoList.data(),
-                          std::span(hostInfoList).size_bytes(),
-                          MPI_BYTE,
-                          0,
-                          MPI_COMM_WORLD)
+    MACE_MPI_CALL_WITH_CHECK(MPI_Bcast,
+                             hostInfoList.data(),
+                             std::span(hostInfoList).size_bytes(),
+                             MPI_BYTE,
+                             0,
+                             MPI_COMM_WORLD)
     // Assign to the list, convert host names to std::string
     fHostInfoList.reserve(hostCount);
     for (auto&& [hostSize, hostName] : std::as_const(hostInfoList)) {

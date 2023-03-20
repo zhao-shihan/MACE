@@ -3,8 +3,8 @@
 #include "MACE/Extension/Geant4X/MPIRunMessenger.hxx"
 #include "MACE/Math/IntegerPower.hxx"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
-#include "MACE/Utility/MPIUtil/CheckedMPICall.hxx"
-#include "MACE/Utility/MPIUtil/MPIRandomUtil.hxx"
+#include "MACE/Utility/MPIUtil/MPICallWithCheck.hxx"
+#include "MACE/Utility/MPIUtil/MPIReseedPRNG.hxx"
 
 #include "G4Exception.hh"
 #include "G4Run.hh"
@@ -62,7 +62,7 @@ void MPIRunManager::SetPrintProgress(G4int val) {
 
 void MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect) {
     if (CheckNEventIsAtLeastCommSize(nEvent)) {
-        MPIUtil::MPIReSeedCLHEPRandom(G4Random::getTheEngine());
+        MPIUtil::MPIReseedPRNG(*G4Random::getTheEngine());
         fTotalNumberOfEventsToBeProcessed = nEvent;
         const auto& mpiEnv = Env::MPIEnv::Instance();
         fEventIDRange = MPIUtil::AllocMPIJobsJobWise(0, nEvent, mpiEnv.WorldCommSize(), mpiEnv.WorldCommRank());
@@ -72,8 +72,8 @@ void MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect)
 
 void MPIRunManager::RunInitialization() {
     // wait for everyone to start
-    MACE_CHECKED_MPI_CALL(MPI_Barrier,
-                          MPI_COMM_WORLD)
+    MACE_MPI_CALL_WITH_CHECK(MPI_Barrier,
+                             MPI_COMM_WORLD)
     // start the run timer
     fRunBeginSystemTime = std::chrono::system_clock::now();
     fRunCPUTimer.Reset();
@@ -121,8 +121,8 @@ void MPIRunManager::RunTermination() {
     fRunWallTime = fRunWallTimer.SecondsElapsed();
     fRunCPUTime = fRunCPUTimer.SecondsUsed();
     // wait for everyone to finish
-    MACE_CHECKED_MPI_CALL(MPI_Barrier,
-                          MPI_COMM_WORLD)
+    MACE_MPI_CALL_WITH_CHECK(MPI_Barrier,
+                             MPI_COMM_WORLD)
     // run end report
     if (fPrintProgress >= 0) {
         RunEndReport(endedRun);

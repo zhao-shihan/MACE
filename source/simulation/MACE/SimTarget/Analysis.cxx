@@ -3,8 +3,8 @@
 #include "MACE/SimTarget/Action/PrimaryGeneratorAction.hxx"
 #include "MACE/SimTarget/Analysis.hxx"
 #include "MACE/SimTarget/Messenger/AnalysisMessenger.hxx"
-#include "MACE/Utility/MPIUtil/CheckedMPICall.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
+#include "MACE/Utility/MPIUtil/MPICallWithCheck.hxx"
 
 #include "G4Run.hh"
 
@@ -114,15 +114,15 @@ void Analysis::AnalysisAndWriteYield() {
         mpiEnv.Parallel()) {
         std::vector<decltype(yieldData)> yieldDataRecv;
         if (mpiEnv.AtWorldMaster()) { yieldDataRecv.resize(mpiEnv.WorldCommSize()); }
-        MACE_CHECKED_MPI_CALL(MPI_Gather,
-                              yieldData.data(),
-                              yieldData.size(),
-                              MPI_UNSIGNED_LONG,
-                              yieldDataRecv.data(),
-                              yieldData.size(),
-                              MPI_UNSIGNED_LONG,
-                              0,
-                              MPI_COMM_WORLD)
+        MACE_MPI_CALL_WITH_CHECK(MPI_Gather,
+                                 yieldData.data(),
+                                 yieldData.size(),
+                                 MPI_UNSIGNED_LONG,
+                                 yieldDataRecv.data(),
+                                 yieldData.size(),
+                                 MPI_UNSIGNED_LONG,
+                                 0,
+                                 MPI_COMM_WORLD)
 
         if (mpiEnv.AtWorldMaster()) {
             unsigned long nMuonTotal = 0;

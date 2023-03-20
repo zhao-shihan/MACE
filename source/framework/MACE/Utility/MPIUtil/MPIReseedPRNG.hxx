@@ -1,7 +1,5 @@
 #pragma once
 
-#include "gsl/gsl"
-
 namespace CLHEP {
 
 class HepRandomEngine;
@@ -10,6 +8,6 @@ class HepRandomEngine;
 
 namespace MACE::inline Utility::MPIUtil {
 
-void MPIReSeedCLHEPRandom(gsl::not_null<CLHEP::HepRandomEngine*> randEng);
+void MPIReseedPRNG(CLHEP::HepRandomEngine& randEng);
 
 } // namespace MACE::inline Utility::MPIUtil

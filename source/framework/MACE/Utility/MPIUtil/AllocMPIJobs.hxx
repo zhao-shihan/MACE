@@ -2,7 +2,7 @@
 
 #include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Utility/DivideIndices.hxx"
-#include "MACE/Utility/MPIUtil/CheckedMPICall.hxx"
+#include "MACE/Utility/MPIUtil/MPICallWithCheck.hxx"
 
 #include "mpi.h"
 
