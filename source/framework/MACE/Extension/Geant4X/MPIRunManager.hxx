@@ -38,31 +38,31 @@ public:
 
     static auto GetRunManager() { return static_cast<MPIRunManager*>(G4RunManager::GetRunManager()); }
 
-    const auto& GetTotalNumberOfEventToBeProcessed() const { return fTotalNumberOfEventsToBeProcessed; }
-    const auto& GetPrintProgress() const { return fPrintProgress; }
+    const auto& TotalNumberOfEventToBeProcessed() const { return fTotalNumberOfEventsToBeProcessed; }
+    const auto& PrintProgressModulo() const { return fPrintProgressModulo; }
 
-    void SetPrintProgress(G4int val);
+    void PrintProgressModulo(G4int val);
 
     virtual void BeamOn(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) override;
     virtual void RunInitialization() override;
     virtual void InitializeEventLoop(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) override;
+    virtual void ProcessOneEvent(G4int iEvent) override;
     virtual void TerminateOneEvent() override;
     virtual void RunTermination() override;
 
 private:
     G4bool CheckNEventIsAtLeastCommSize(G4int nEvent) const;
-    void EventEndReport(G4int event) const;
-    void RunEndReport(G4int run) const;
+    void EventEndReport(G4int eventID) const;
+    void RunEndReport(G4int runID) const;
 
-    static void RunBeginReport(G4int run);
+    static void RunBeginReport(G4int runID);
     static std::string FormatSecondToDHMS(long secondsInTotal);
 
 private:
     G4int fTotalNumberOfEventsToBeProcessed;
     IntegralIndexRange<G4int> fEventIDRange;
-    G4int fEventIDCounter;
 
-    G4int fPrintProgress;
+    G4int fPrintProgressModulo;
     WallTimer<> fEventWallTimer;
     double fEventWallTime;
     double fNAvgEventWallTime;

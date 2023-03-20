@@ -32,7 +32,7 @@ private:
     MPIRunManager* fMPIRunManager;
 
     std::unique_ptr<G4UIdirectory> fDirectory;
-    std::unique_ptr<G4UIcmdWithAnInteger> fSetPrintProgress;
+    std::unique_ptr<G4UIcmdWithAnInteger> fPrintProgressModulo;
 };
 
 } // namespace MACE::inline Extension::Geant4X
