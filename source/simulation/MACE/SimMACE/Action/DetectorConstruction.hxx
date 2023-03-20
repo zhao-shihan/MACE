@@ -1,11 +1,11 @@
 #pragma once
 
 #include "MACE/Detector/Geometry/Fast/All.hxx"
+#include "MACE/Env/Memory/PassiveSingleton.hxx"
 #include "MACE/SimMACE/Region.hxx"
 #include "MACE/SimMACE/SD/CDCSD.hxx"
 #include "MACE/SimMACE/SD/EMCalSD.hxx"
 #include "MACE/SimMACE/SD/MCPSD.hxx"
-#include "MACE/Utility/NonMoveableBase.hxx"
 
 #include "G4VUserDetectorConstruction.hh"
 
@@ -13,19 +13,9 @@
 
 #include <memory>
 
-namespace MACE::SimMACE {
+namespace MACE::SimMACE::inline Action {
 
-inline namespace SD {
-
-class CDCSD;
-class EMCalSD;
-class MCPSD;
-
-} // namespace SD
-
-inline namespace Action {
-
-class DetectorConstruction final : public NonMoveableBase,
+class DetectorConstruction final : public Env::Memory::PassiveSingleton<DetectorConstruction>,
                                    public G4VUserDetectorConstruction {
 public:
     DetectorConstruction();
@@ -70,6 +60,4 @@ private:
     MCPSD* fMCPSD;
 };
 
-} // namespace Action
-
-} // namespace MACE::SimMACE
+} // namespace MACE::SimMACE::inline Action

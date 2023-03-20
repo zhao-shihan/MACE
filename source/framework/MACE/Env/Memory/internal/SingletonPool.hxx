@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Env/Memory/PassiveSingleton.hxx"
-#include "MACE/Env/Memory/Singletonized.hxx"
+#include "MACE/Env/Memory/Singletonified.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 
 #include "gsl/gsl"
@@ -26,11 +26,11 @@ public:
     using BaseNode = gsl::owner<const SingletonBase*>;
 
 public:
-    template<Singletonized ASingleton>
+    template<Singletonified ASingleton>
     [[nodiscard]] std::optional<std::reference_wrapper<Node>> Find();
-    template<Singletonized ASingleton>
+    template<Singletonified ASingleton>
     [[nodiscard]] auto Contains() const { return fInstanceMap.contains(typeid(ASingleton)); }
-    template<Singletonized ASingleton>
+    template<Singletonified ASingleton>
     [[nodiscard]] Node& Insert(gsl::not_null<ASingleton*> instance);
     [[nodiscard]] std::vector<BaseNode> GetUndeletedInReverseInsertionOrder() const;
 

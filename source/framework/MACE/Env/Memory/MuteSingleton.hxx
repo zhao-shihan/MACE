@@ -2,7 +2,7 @@
 
 #include "MACE/Env/Memory/internal/MuteSingletonBase.hxx"
 #include "MACE/Env/Memory/internal/MuteSingletonPool.hxx"
-#include "MACE/Env/Memory/MuteSingletonized.hxx"
+#include "MACE/Env/Memory/MuteSingletonified.hxx"
 
 #include <memory>
 #include <stdexcept>

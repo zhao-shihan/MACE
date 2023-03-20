@@ -7,7 +7,7 @@ template<class ADerived>
 PassiveSingleton<ADerived>::PassiveSingleton() :
     PassiveSingletonBase(),
     MuteSingleton<ADerived>() {
-    static_assert(PassiveSingletonized<ADerived>);
+    static_assert(PassiveSingletonified<ADerived>);
     fgInstance = static_cast<ADerived*>(this);
 }
 

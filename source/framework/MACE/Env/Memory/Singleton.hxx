@@ -3,7 +3,7 @@
 #include "MACE/Env/Memory/internal/SingletonBase.hxx"
 #include "MACE/Env/Memory/internal/SingletonFactory.hxx"
 #include "MACE/Env/Memory/internal/SingletonPool.hxx"
-#include "MACE/Env/Memory/Singletonized.hxx"
+#include "MACE/Env/Memory/Singletonified.hxx"
 
 #include <cassert>
 #include <memory>
@@ -143,8 +143,8 @@ namespace MACE::Env::Memory {
 ///
 /// @attention Singleton constructed by this method is managed by
 /// MACE::Env::Memory::SingletonFactory, and shares lifetime with
-/// MACE::Env. Call to an Instance() without initialize an environment
-/// has undefined behaviour. Use wisely, think wisely!
+/// MACE::Env. Calling Instance() without initializing an environment
+/// induces error. Use wisely, think wisely!
 template<class ADerived>
 class Singleton : public internal::SingletonBase {
 protected:

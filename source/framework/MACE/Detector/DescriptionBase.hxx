@@ -2,7 +2,7 @@
 
 #include "MACE/Env/BasicEnv.hxx"
 #include "MACE/Env/Memory/Singleton.hxx"
-#include "MACE/Env/Memory/Singletonized.hxx"
+#include "MACE/Env/Memory/Singletonified.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 #include "MACE/Utility/TupleForEach.hxx"
 
@@ -66,7 +66,7 @@ concept IsDescription =
     requires {
         requires std::derived_from<T, DescriptionBase>;
         requires std::derived_from<T, DescriptionSingletonBase<T>>;
-        requires Env::Memory::Singletonized<T>;
+        requires Env::Memory::Singletonified<T>;
     };
 
 } // namespace MACE::Detector

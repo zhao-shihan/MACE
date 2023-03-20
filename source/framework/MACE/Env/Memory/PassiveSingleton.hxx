@@ -1,9 +1,9 @@
 #pragma once
 
-#include "MACE/Env/Memory/PassiveSingletonized.hxx"
-#include "MACE/Env/Memory/internal/PassiveSingletonBase.hxx"
 #include "MACE/Env/Memory/internal/MuteSingletonPool.hxx"
+#include "MACE/Env/Memory/internal/PassiveSingletonBase.hxx"
 #include "MACE/Env/Memory/MuteSingleton.hxx"
+#include "MACE/Env/Memory/PassiveSingletonified.hxx"
 
 #include <cassert>
 #include <memory>
@@ -15,7 +15,7 @@ namespace MACE::Env::Memory {
 
 template<class ADerived>
 class PassiveSingleton : public internal::PassiveSingletonBase,
-                      public MuteSingleton<ADerived> {
+                         public MuteSingleton<ADerived> {
 protected:
     PassiveSingleton();
     ~PassiveSingleton();

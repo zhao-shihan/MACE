@@ -5,7 +5,7 @@ typename Singleton<ADerived>::InstanceKeeper Singleton<ADerived>::fgInstance = {
 
 template<class ADerived>
 Singleton<ADerived>::Singleton() {
-    static_assert(Singletonized<ADerived>);
+    static_assert(Singletonified<ADerived>);
     if (internal::SingletonPool::Instance().Contains<ADerived>()) {
         throw std::logic_error(
             std::string("MACE::Env::Memory::Singleton: Trying to construct ")

@@ -1,6 +1,6 @@
 namespace MACE::Env::Memory::internal {
 
-template<Singletonized ASingleton>
+template<Singletonified ASingleton>
 [[nodiscard]] std::optional<std::reference_wrapper<SingletonPool::Node>> SingletonPool::Find() {
     if (const auto existed = fInstanceMap.find(typeid(ASingleton));
         existed == fInstanceMap.end()) {
@@ -10,7 +10,7 @@ template<Singletonized ASingleton>
     }
 }
 
-template<Singletonized ASingleton>
+template<Singletonified ASingleton>
 [[nodiscard]] SingletonPool::Node& SingletonPool::Insert(gsl::not_null<ASingleton*> instance) {
     if (const auto [iter, inserted] = fInstanceMap.try_emplace(
             typeid(decltype(*instance)), instance,

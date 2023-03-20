@@ -6,7 +6,7 @@ internal::MuteSingletonPool::Node* MuteSingleton<ADerived>::fgInstanceNode = nul
 template<class ADerived>
 MuteSingleton<ADerived>::MuteSingleton() :
     MuteSingletonBase() {
-    static_assert(MuteSingletonized<ADerived>);
+    static_assert(MuteSingletonified<ADerived>);
     if (auto& muteSingletonPool = internal::MuteSingletonPool::Instance();
         not muteSingletonPool.Contains<ADerived>()) {
         fgInstanceNode = std::addressof(muteSingletonPool.Insert<ADerived>(static_cast<ADerived*>(this)));

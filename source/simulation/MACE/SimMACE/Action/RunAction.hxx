@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MACE/Utility/NonMoveableBase.hxx"
+#include "MACE/Env/Memory/PassiveSingleton.hxx"
 
 #include "G4UserRunAction.hh"
 
 namespace MACE::SimMACE::inline Action {
 
-class RunAction final : public NonMoveableBase,
+class RunAction final : public Env::Memory::PassiveSingleton<RunAction>,
                         public G4UserRunAction {
 public:
     void BeginOfRunAction(const G4Run* run) override;

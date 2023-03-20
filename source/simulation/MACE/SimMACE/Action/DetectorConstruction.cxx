@@ -18,7 +18,7 @@
 namespace MACE::SimMACE::inline Action {
 
 DetectorConstruction::DetectorConstruction() :
-    NonMoveableBase(),
+    PassiveSingleton(),
     G4VUserDetectorConstruction(),
     fCheckOverlap(false),
 

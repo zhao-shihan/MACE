@@ -1,12 +1,12 @@
-#include "MACE/SimMACE/RunManager.hxx"
+#include "MACE/SimMACE/Analysis.hxx"
 #include "MACE/SimMACE/SD/MCPSD.hxx"
 
 #include "G4HCofThisEvent.hh"
 #include "G4SDManager.hh"
 #include "G4Step.hh"
+#include "G4TwoVector.hh"
 
 namespace MACE::SimMACE::inline SD {
-
 
 MCPSD::MCPSD(const G4String& sdName) :
     NonMoveableBase(),
@@ -51,7 +51,7 @@ G4bool MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
 }
 
 void MCPSD::EndOfEvent(G4HCofThisEvent*) {
-    RunManager::Instance().GetAnalysis().SubmitMCPHC(fHitsCollection->GetVector());
+    Analysis::Instance().SubmitMCPHC(fHitsCollection->GetVector());
 }
 
 } // namespace MACE::SimMACE::inline SD

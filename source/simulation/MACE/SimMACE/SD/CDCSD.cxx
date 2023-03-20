@@ -1,7 +1,7 @@
 #include "MACE/Detector/Description/CDC.hxx"
 #include "MACE/Math/MidPoint.hxx"
+#include "MACE/SimMACE/Analysis.hxx"
 #include "MACE/SimMACE/Region.hxx"
-#include "MACE/SimMACE/RunManager.hxx"
 #include "MACE/SimMACE/SD/CDCSD.hxx"
 #include "MACE/Utility/VectorCast.hxx"
 
@@ -106,7 +106,7 @@ G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
         hit->G4EventID(fEventID);
         hit->G4TrackID(trackID);
         fCellSignalTimesAndHits[cellID].emplace_back(hit->HitTime() + driftDistance / fMeanDriftVelocity,
-                                                       std::move(hit));
+                                                     std::move(hit));
         // particle is exiting, remove it from monitoring list
         entryPointList.erase(monitoring);
         return true;
@@ -152,7 +152,7 @@ void CDCSD::EndOfEvent(G4HCofThisEvent*) {
         signalTimesAndHits.clear();
     }
 
-    RunManager::Instance().GetAnalysis().SubmitSpectrometerHC(&hits);
+    Analysis::Instance().SubmitSpectrometerHC(&hits);
 }
 
 } // namespace MACE::SimMACE::inline SD

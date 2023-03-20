@@ -10,19 +10,26 @@ namespace MACE::Env::Memory {
 namespace internal {
 
 class SingletonBase;
+class MuteSingletonBase;
 
 } // namespace internal
 
 template<class ADerived>
-class PassiveSingleton;
+class MuteSingleton;
 
 template<class T>
-concept PassiveSingletonized =
+concept IndirectlyMuteSingletonified =
     requires {
-        { T::Instance() } -> std::same_as<T&>;
-        requires std::derived_from<T, PassiveSingleton<T>>;
+        requires std::is_base_of_v<internal::MuteSingletonBase, T>;
         requires not std::is_base_of_v<internal::SingletonBase, T>;
         requires Concept::NonMoveable<T>;
+    };
+
+template<class T>
+concept MuteSingletonified =
+    requires {
+        requires std::derived_from<T, MuteSingleton<T>>;
+        requires IndirectlyMuteSingletonified<T>;
     };
 
 } // namespace MACE::Env::Memory

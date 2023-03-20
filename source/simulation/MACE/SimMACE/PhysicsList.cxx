@@ -2,7 +2,7 @@
 #include "MACE/Detector/Description/Target.hxx"
 #include "MACE/Env/BasicEnv.hxx"
 #include "MACE/Extension/Geant4X/Physics/MuoniumPhysics.hxx"
-#include "MACE/SimMACE/Action/PhysicsList.hxx"
+#include "MACE/SimMACE/PhysicsList.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
 #include "G4DecayPhysics.hh"
@@ -15,12 +15,13 @@
 #include "G4NeutronTrackingCut.hh"
 #include "G4StoppingPhysics.hh"
 
-namespace MACE::SimMACE::inline Action {
+namespace MACE::SimMACE {
 
 using namespace MACE::Geant4X::Physics;
 using namespace MACE::LiteralUnit::Length;
 
 PhysicsList::PhysicsList() :
+    PassiveSingleton(),
     G4VModularPhysicsList() {
 
     verboseLevel = std2b::to_underlying(Env::BasicEnv::Instance().GetVerboseLevel());
@@ -49,4 +50,4 @@ PhysicsList::PhysicsList() :
     RegisterPhysics(new MuoniumPhysics<Detector::Description::Target>(verboseLevel));
 }
 
-} // namespace MACE::SimMACE::inline Action
+} // namespace MACE::SimMACE

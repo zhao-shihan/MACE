@@ -10,6 +10,8 @@ namespace MACE::SimMACE::inline Action {
 using namespace LiteralUnit::Time;
 
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
+    PassiveSingleton(),
+    G4VUserPrimaryGeneratorAction(),
     fSurfaceMuonGenerator(),
     fTimeWidthRMS(20_ns),
     fMuonsForEachG4Event(10) {

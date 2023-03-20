@@ -1,4 +1,4 @@
-#include "MACE/SimMACE/RunManager.hxx"
+#include "MACE/SimMACE/Analysis.hxx"
 #include "MACE/SimMACE/SD/EMCalSD.hxx"
 
 #include "G4Gamma.hh"
@@ -43,7 +43,7 @@ G4bool EMCalSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
 }
 
 void EMCalSD::EndOfEvent(G4HCofThisEvent*) {
-    RunManager::Instance().GetAnalysis().SubmitEMCalHC(fHitsCollection->GetVector());
+    Analysis::Instance().SubmitEMCalHC(fHitsCollection->GetVector());
 }
 
 } // namespace MACE::SimMACE::inline SD

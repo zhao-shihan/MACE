@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MACE/Utility/NonMoveableBase.hxx"
+#include "MACE/Env/Memory/PassiveSingleton.hxx"
 
 #include "G4VUserActionInitialization.hh"
 
 namespace MACE::SimMACE::inline Action {
 
-class ActionInitialization final : public NonMoveableBase,
+class ActionInitialization final : public Env::Memory::PassiveSingleton<ActionInitialization>,
                                    public G4VUserActionInitialization {
 public:
     void Build() const override;

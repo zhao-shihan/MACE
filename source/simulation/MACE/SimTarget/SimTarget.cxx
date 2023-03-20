@@ -3,7 +3,7 @@
 #include "MACE/Extension/CLHEPX/Random/Xoshiro256Engine.hxx"
 #include "MACE/Extension/Geant4X/MPIExecutive.hxx"
 #include "MACE/SimTarget/Action/DetectorConstruction.hxx"
-#include "MACE/SimTarget/Action/PhysicsList.hxx"
+#include "MACE/SimTarget/PhysicsList.hxx"
 #include "MACE/SimTarget/RunManager.hxx"
 
 using namespace MACE;
@@ -17,14 +17,13 @@ int main(int argc, char* argv[]) {
 
     const auto verboseLevel = cli.GetVerboseLevel().value_or(Env::VerboseLevel::Warning);
 
-    // DetectorConstruction, PhysicsList, ActionInitialization are instantiated in RunManager constructor.
+    // PhysicsList, DetectorConstruction, ActionInitialization are instantiated in RunManager constructor.
     SimTarget::RunManager runManager;
-    SimTarget::DetectorConstruction::Instance().SetCheckOverlaps(
-        verboseLevel >= MACE::Env::VerboseLevel::Verbose ?
-            true :
-            false);
-    SimTarget::PhysicsList::Instance().SetVerboseLevel(
-        std2b::to_underlying(verboseLevel));
+    runManager.SetVerboseLevel(std2b::to_underlying(verboseLevel));
+    SimTarget::DetectorConstruction::Instance()
+        .SetCheckOverlaps(verboseLevel >= MACE::Env::VerboseLevel::Verbose);
+    SimTarget::PhysicsList::Instance()
+        .SetVerboseLevel(std2b::to_underlying(verboseLevel));
 
     Geant4X::MPIExecutive().StartSession(cli, {
 #include "MACE/SimTarget/DefaultInitialization.inlmac"

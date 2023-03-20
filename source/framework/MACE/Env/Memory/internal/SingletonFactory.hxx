@@ -2,7 +2,7 @@
 
 #include "MACE/Env/Memory/PassiveSingleton.hxx"
 #include "MACE/Env/Memory/internal/SingletonPool.hxx"
-#include "MACE/Env/Memory/Singletonized.hxx"
+#include "MACE/Env/Memory/Singletonified.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 
 #include <string>
@@ -14,7 +14,7 @@ namespace MACE::Env::Memory::internal {
 /// Not API.
 class SingletonFactory final : public PassiveSingleton<SingletonFactory> {
 public:
-    template<Singletonized ASingleton>
+    template<Singletonified ASingleton>
     [[nodiscard]] SingletonPool::Node& InstantiateOrFind();
 };
 
