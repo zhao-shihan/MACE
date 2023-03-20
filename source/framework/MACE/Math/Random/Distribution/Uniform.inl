@@ -4,7 +4,10 @@ namespace internal {
 
 template<Concept::Arithmetic T, template<typename> class AUniform>
 constexpr BasicUniformParameter<T, AUniform>::BasicUniformParameter() :
-    BasicUniformParameter(0, 1) {}
+    BasicUniformParameter(0,
+                          std::integral<T> ?
+                              std::numeric_limits<T>::max() :
+                              1) {}
 
 template<Concept::Arithmetic T, template<typename> class AUniform>
 constexpr BasicUniformParameter<T, AUniform>::BasicUniformParameter(T inf, T sup) :
