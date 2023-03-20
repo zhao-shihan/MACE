@@ -26,17 +26,17 @@ CDCSD::CDCSD(const G4String& sdName) :
     fHitsCollection(nullptr),
     fMeanDriftVelocity(),
     fHalfTimeResolution(),
-    fCellEnterPointList(),
+    fCellEntryPoints(),
     fCellMap(),
-    fCellSignalTimeAndHitList() {
+    fCellSignalTimesAndHits() {
     const auto& cellMap = Detector::Description::CDC::Instance().CellMap();
-    fCellEnterPointList.resize(cellMap.size());
+    fCellEntryPoints.resize(cellMap.size());
     fCellMap.reserve(cellMap.size());
     for (auto&& cell : cellMap) {
         fCellMap.emplace_back(VectorCast<G4TwoVector>(cell.position),
                               VectorCast<G4ThreeVector>(cell.direction));
     }
-    fCellSignalTimeAndHitList.resize(cellMap.size());
+    fCellSignalTimesAndHits.resize(cellMap.size());
 
     collectionName.insert(sdName + "HC");
 }
@@ -63,18 +63,18 @@ G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
     const auto trackID = track.GetTrackID();
     const auto& touchable = *track.GetTouchable();
     const auto cellID = touchable.GetReplicaNumber();
-    auto& enterPointList = fCellEnterPointList[cellID];
+    auto& entryPointList = fCellEntryPoints[cellID];
 
     if (step.IsFirstStepInVolume()) {
-        enterPointList.try_emplace(trackID, *step.GetPostStepPoint());
+        entryPointList.try_emplace(trackID, *step.GetPostStepPoint());
         return false;
     }
 
     const auto& nextReigon = static_cast<Region&>(*track.GetNextVolume()->GetLogicalVolume()->GetRegion());
-    decltype(enterPointList.cbegin()) monitoring;
+    decltype(entryPointList.cbegin()) monitoring;
     if (step.IsLastStepInVolume() and                                           // is exiting,
         nextReigon.GetType() != RegionType::CDCSenseWire and                    // but the track is not heading into sense wire,
-        (monitoring = enterPointList.find(trackID)) != enterPointList.cend()) { // and make sure it has entered before.
+        (monitoring = entryPointList.find(trackID)) != entryPointList.cend()) { // and make sure it has entered before.
         // retrive entering time and position
         const auto& enterPoint = monitoring->second;
         const auto tIn = enterPoint.GetGlobalTime();
@@ -107,10 +107,10 @@ G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
         hit->Particle(particle.GetParticleName());
         hit->G4EventID(fEventID);
         hit->G4TrackID(trackID);
-        fCellSignalTimeAndHitList[cellID].emplace_back(hit->HitTime() + driftDistance / fMeanDriftVelocity,
+        fCellSignalTimesAndHits[cellID].emplace_back(hit->HitTime() + driftDistance / fMeanDriftVelocity,
                                                        std::move(hit));
         // particle is exiting, remove it from monitoring list
-        enterPointList.erase(monitoring);
+        entryPointList.erase(monitoring);
         return true;
     }
 
@@ -118,43 +118,43 @@ G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
 }
 
 void CDCSD::EndOfEvent(G4HCofThisEvent*) {
-    for (auto&& enterPointList : fCellEnterPointList) {
-        enterPointList.clear();
+    for (auto&& entryPointList : fCellEntryPoints) {
+        entryPointList.clear();
     }
 
-    auto& hitList = *fHitsCollection->GetVector();
-    hitList.reserve(
-        std::accumulate(fCellSignalTimeAndHitList.cbegin(), fCellSignalTimeAndHitList.cend(), 0ull,
-                        [this](const auto& count, const auto& signalTimeAndHitList) {
-                            return count + signalTimeAndHitList.size();
+    auto& hits = *fHitsCollection->GetVector();
+    hits.reserve(
+        std::accumulate(fCellSignalTimesAndHits.cbegin(), fCellSignalTimesAndHits.cend(), 0ull,
+                        [this](const auto& count, const auto& signalTimesAndHits) {
+                            return count + signalTimesAndHits.size();
                         }));
 
-    for (auto&& signalTimeAndHitList : fCellSignalTimeAndHitList) {
-        if (signalTimeAndHitList.empty()) { continue; }
+    for (auto&& signalTimesAndHits : fCellSignalTimesAndHits) {
+        if (signalTimesAndHits.empty()) { continue; }
 
-        std::ranges::sort(signalTimeAndHitList);
+        std::ranges::sort(signalTimesAndHits);
 
         std::vector<std::unique_ptr<CDCHit>*> signalHitCandidateList;
-        auto signalTimeThreshold = signalTimeAndHitList.front().first + fHalfTimeResolution;
-        for (auto timeHit = signalTimeAndHitList.begin(); timeHit != signalTimeAndHitList.end(); ++timeHit) {
+        auto signalTimeThreshold = signalTimesAndHits.front().first + fHalfTimeResolution;
+        for (auto timeHit = signalTimesAndHits.begin(); timeHit != signalTimesAndHits.end(); ++timeHit) {
             signalHitCandidateList.emplace_back(&timeHit->second);
             const auto signalTime = timeHit->first;
-            if (signalTime > signalTimeThreshold or timeHit == std::prev(signalTimeAndHitList.end())) {
+            if (signalTime > signalTimeThreshold or timeHit == std::prev(signalTimesAndHits.end())) {
                 const auto goodHit =
                     *std::ranges::max_element(signalHitCandidateList,
                                               [](const auto& hit1, const auto& hit2) {
                                                   return (*hit1)->Energy() < (*hit2)->Energy();
                                               });
-                hitList.emplace_back(goodHit->release());
+                hits.emplace_back(goodHit->release());
                 signalHitCandidateList.clear();
                 signalTimeThreshold = signalTime + fHalfTimeResolution;
             }
         }
 
-        signalTimeAndHitList.clear();
+        signalTimesAndHits.clear();
     }
 
-    RunManager::Instance().GetAnalysis().SubmitSpectrometerHC(&hitList);
+    RunManager::Instance().GetAnalysis().SubmitSpectrometerHC(&hits);
 }
 
 } // namespace MACE::SimMACE::SD
