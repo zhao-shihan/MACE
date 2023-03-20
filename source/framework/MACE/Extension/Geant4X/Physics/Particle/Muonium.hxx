@@ -4,7 +4,7 @@
 
 #include "G4ParticleDefinition.hh"
 
-namespace MACE::inline Extension::Geant4X::Physics::Particle {
+namespace MACE::inline Extension::Geant4X::Physics::inline Particle {
 
 class Muonium final : public Env::Memory::Singleton<Muonium>,
                       public G4ParticleDefinition {
@@ -17,4 +17,4 @@ public:
     static auto Definition() { return &Instance(); }
 };
 
-} // namespace MACE::inline Extension::Geant4X::Physics::Particle
+} // namespace MACE::inline Extension::Geant4X::Physics::inline Particle

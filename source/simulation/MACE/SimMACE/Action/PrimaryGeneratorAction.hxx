@@ -5,7 +5,7 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 
-namespace MACE::SimMACE::Action {
+namespace MACE::SimMACE::inline Action {
 
 class PrimaryGeneratorAction final : public NonMoveableBase,
                                      public G4VUserPrimaryGeneratorAction {
@@ -27,4 +27,4 @@ private:
     G4int fMuonsForEachG4Event;
 };
 
-} // namespace MACE::SimMACE::Action
+} // namespace MACE::SimMACE::inline Action

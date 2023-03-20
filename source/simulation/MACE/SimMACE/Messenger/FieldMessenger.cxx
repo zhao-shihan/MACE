@@ -9,7 +9,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIdirectory.hh"
 
-namespace MACE::SimMACE::Messenger {
+namespace MACE::SimMACE::inline Messenger {
 
 FieldMessenger::FieldMessenger() :
     Singleton(),
@@ -69,4 +69,4 @@ void FieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     }
 }
 
-} // namespace MACE::SimMACE::Messenger
+} // namespace MACE::SimMACE::inline Messenger

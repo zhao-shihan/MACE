@@ -4,7 +4,7 @@
 #include "MACE/SimMACE/SD/EMCalSD.hxx"
 #include "MACE/SimMACE/SD/MCPSD.hxx"
 
-namespace MACE::SimMACE::Action {
+namespace MACE::SimMACE::inline Action {
 
 void EventAction::BeginOfEventAction(const G4Event* event) {
     const auto eventID = event->GetEventID();
@@ -18,4 +18,4 @@ void EventAction::EndOfEventAction(const G4Event*) {
     RunManager::Instance().GetAnalysis().EventEnd();
 }
 
-} // namespace MACE::SimMACE::Action
+} // namespace MACE::SimMACE::inline Action

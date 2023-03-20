@@ -19,11 +19,11 @@ int main(int argc, char* argv[]) {
 
     // DetectorConstruction, PhysicsList, ActionInitialization are instantiated in RunManager constructor.
     SimTarget::RunManager runManager;
-    SimTarget::Action::DetectorConstruction::Instance().SetCheckOverlaps(
+    SimTarget::DetectorConstruction::Instance().SetCheckOverlaps(
         verboseLevel >= MACE::Env::VerboseLevel::Verbose ?
             true :
             false);
-    SimTarget::Action::PhysicsList::Instance().SetVerboseLevel(
+    SimTarget::PhysicsList::Instance().SetVerboseLevel(
         std2b::to_underlying(verboseLevel));
 
     Geant4X::MPIExecutive().StartSession(cli, {

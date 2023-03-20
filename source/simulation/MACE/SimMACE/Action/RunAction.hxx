@@ -4,7 +4,7 @@
 
 #include "G4UserRunAction.hh"
 
-namespace MACE::SimMACE::Action {
+namespace MACE::SimMACE::inline Action {
 
 class RunAction final : public NonMoveableBase,
                         public G4UserRunAction {
@@ -13,4 +13,4 @@ public:
     void EndOfRunAction(const G4Run*) override;
 };
 
-} // namespace MACE::SimMACE::Action
+} // namespace MACE::SimMACE::inline Action

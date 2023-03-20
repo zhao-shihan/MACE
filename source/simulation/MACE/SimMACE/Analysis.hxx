@@ -15,13 +15,13 @@ class TFile;
 
 namespace MACE::SimMACE {
 
-namespace Hit {
+inline namespace Hit {
 
 class CDCHit;
 class EMCalHit;
 class MCPHit;
 
-} // namespace Hit
+} // inline namespace Hit
 
 class Analysis final : public Env::Memory::FreeSingleton<Analysis> {
 public:
@@ -33,9 +33,9 @@ public:
 
     void RunBegin(G4int runID, Option_t* option = "recreate");
 
-    void SubmitEMCalHC(gsl::not_null<const std::vector<gsl::owner<Hit::EMCalHit*>>*> hitList) { fEMCalHitList = hitList; }
-    void SubmitMCPHC(gsl::not_null<const std::vector<gsl::owner<Hit::MCPHit*>>*> hitList) { fMCPHitList = hitList; }
-    void SubmitSpectrometerHC(gsl::not_null<const std::vector<gsl::owner<Hit::CDCHit*>>*> hitList) { fCDCHitList = hitList; }
+    void SubmitEMCalHC(gsl::not_null<const std::vector<gsl::owner<EMCalHit*>>*> hitList) { fEMCalHitList = hitList; }
+    void SubmitMCPHC(gsl::not_null<const std::vector<gsl::owner<MCPHit*>>*> hitList) { fMCPHitList = hitList; }
+    void SubmitSpectrometerHC(gsl::not_null<const std::vector<gsl::owner<CDCHit*>>*> hitList) { fCDCHitList = hitList; }
     void EventEnd();
 
     void RunEnd(Option_t* option = nullptr);
@@ -51,9 +51,9 @@ private:
     std::shared_ptr<TTree> fMCPHitTree;
     std::shared_ptr<TTree> fCDCHitTree;
 
-    const std::vector<gsl::owner<Hit::EMCalHit*>>* fEMCalHitList;
-    const std::vector<gsl::owner<Hit::MCPHit*>>* fMCPHitList;
-    const std::vector<gsl::owner<Hit::CDCHit*>>* fCDCHitList;
+    const std::vector<gsl::owner<EMCalHit*>>* fEMCalHitList;
+    const std::vector<gsl::owner<MCPHit*>>* fMCPHitList;
+    const std::vector<gsl::owner<CDCHit*>>* fCDCHitList;
 };
 
 } // namespace MACE::SimMACE

@@ -15,7 +15,7 @@
 
 #include <string_view>
 
-namespace MACE::SimTarget::Messenger {
+namespace MACE::SimTarget::inline Messenger {
 
 GeometryMessenger::GeometryMessenger() :
     G4UImessenger(),
@@ -60,7 +60,7 @@ GeometryMessenger::GeometryMessenger() :
 GeometryMessenger::~GeometryMessenger() = default;
 
 void GeometryMessenger::SetNewValue(G4UIcommand* command, G4String value) {
-    using UsedDescriptions = Action::DetectorConstruction::UsedDescriptions;
+    using UsedDescriptions = DetectorConstruction::UsedDescriptions;
     using Detector::DescriptionIO;
     if (command == fImportDescription.get()) {
         DescriptionIO::Import<UsedDescriptions>(std::string_view(value));
@@ -75,4 +75,4 @@ void GeometryMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     }
 }
 
-} // namespace MACE::SimTarget::Messenger
+} // namespace MACE::SimTarget::inline Messenger

@@ -2,7 +2,7 @@
 #include "MACE/SimTarget/Messenger/PrimaryGeneratorActionMessenger.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
-namespace MACE::SimTarget::Action {
+namespace MACE::SimTarget::inline Action {
 
 using namespace LiteralUnit::Length;
 
@@ -12,7 +12,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
     fSurfaceMuonGenerator(),
     fMuonsForEachG4Event(0) {
     fSurfaceMuonGenerator.PositionZ(-5_cm);
-    Messenger::PrimaryGeneratorActionMessenger::Instance().AssignTo(this);
+    PrimaryGeneratorActionMessenger::Instance().AssignTo(this);
 }
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
@@ -21,4 +21,4 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
     }
 }
 
-} // namespace MACE::SimTarget::Action
+} // namespace MACE::SimTarget::inline Action

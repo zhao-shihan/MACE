@@ -24,7 +24,7 @@ Analysis::Analysis() :
     fMCPHitList(nullptr),
     fCDCHitList(nullptr) {
     fDataHub.TreeNamePrefixFormat("G4Run{}_");
-    Messenger::AnalysisMessenger::Instance().AssignTo(this);
+    AnalysisMessenger::Instance().AssignTo(this);
 }
 
 void Analysis::RunBegin(G4int runID, Option_t* option) {

@@ -7,6 +7,8 @@
 #include "G4MuonPlus.hh"
 #include "Randomize.hh"
 
+#include "gsl/gsl"
+
 namespace MACE::inline Extension::Geant4X::Generator {
 
 using namespace LiteralUnit::Energy;
@@ -16,7 +18,7 @@ using namespace PhysicalConstant;
 SurfaceMuon::SurfaceMuon() :
     NonMoveableBase(),
     G4VPrimaryGenerator(),
-    fMuonPlus(G4MuonPlus::Definition()),
+    fMuonPlus(gsl::not_null(G4MuonPlus::Definition())),
     fMomentum(28_MeV),
     fMomentumRMS(0.05 * fMomentum),
     fPositionRMS(5_mm),

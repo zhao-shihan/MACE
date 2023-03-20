@@ -15,9 +15,7 @@
 #include <algorithm>
 #include <numeric>
 
-namespace MACE::SimMACE::SD {
-
-using Hit::CDCHit;
+namespace MACE::SimMACE::inline SD {
 
 CDCSD::CDCSD(const G4String& sdName) :
     NonMoveableBase(),
@@ -125,7 +123,7 @@ void CDCSD::EndOfEvent(G4HCofThisEvent*) {
     auto& hits = *fHitsCollection->GetVector();
     hits.reserve(
         std::accumulate(fCellSignalTimesAndHits.cbegin(), fCellSignalTimesAndHits.cend(), 0ull,
-                        [this](const auto& count, const auto& signalTimesAndHits) {
+                        [](const auto& count, const auto& signalTimesAndHits) {
                             return count + signalTimesAndHits.size();
                         }));
 
@@ -157,4 +155,4 @@ void CDCSD::EndOfEvent(G4HCofThisEvent*) {
     RunManager::Instance().GetAnalysis().SubmitSpectrometerHC(&hits);
 }
 
-} // namespace MACE::SimMACE::SD
+} // namespace MACE::SimMACE::inline SD

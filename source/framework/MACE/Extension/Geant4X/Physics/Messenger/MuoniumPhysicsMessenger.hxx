@@ -17,7 +17,7 @@
 
 namespace MACE::inline Extension::Geant4X::Physics {
 
-namespace Process {
+inline namespace Process {
 
 template<TargetForMuoniumPhysics ATarget>
 class MuoniumFormation;
@@ -25,9 +25,9 @@ class MuoniumFormation;
 template<TargetForMuoniumPhysics ATarget>
 class MuoniumTransport;
 
-} // namespace Process
+} // inline namespace Process
 
-namespace Messenger {
+inline namespace Messenger {
 
 template<TargetForMuoniumPhysics ATarget>
 class MuoniumPhysicsMessenger final : public Env::Memory::Singleton<MuoniumPhysicsMessenger<ATarget>>,
@@ -38,14 +38,14 @@ private:
     MuoniumPhysicsMessenger();
 
 public:
-    void AssignTo(gsl::not_null<Process::MuoniumFormation<ATarget>*> mf) { fMuoniumFormation = mf; }
-    void AssignTo(gsl::not_null<Process::MuoniumTransport<ATarget>*> mt) { fMuoniumTransport = mt; }
+    void AssignTo(gsl::not_null<MuoniumFormation<ATarget>*> mf) { fMuoniumFormation = mf; }
+    void AssignTo(gsl::not_null<MuoniumTransport<ATarget>*> mt) { fMuoniumTransport = mt; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    Process::MuoniumFormation<ATarget>* fMuoniumFormation;
-    Process::MuoniumTransport<ATarget>* fMuoniumTransport;
+    MuoniumFormation<ATarget>* fMuoniumFormation;
+    MuoniumTransport<ATarget>* fMuoniumTransport;
 
     std::unique_ptr<G4UIdirectory> fMuoniumPhysicsDirectory;
 
@@ -58,7 +58,7 @@ private:
     std::unique_ptr<G4UIcmdWithABool> fManipulateAllSteps;
 };
 
-} // namespace Messenger
+} // inline namespace Messenger
 
 } // namespace MACE::inline Extension::Geant4X::Physics
 

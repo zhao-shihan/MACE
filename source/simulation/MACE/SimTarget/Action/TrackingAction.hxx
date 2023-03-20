@@ -13,7 +13,7 @@ namespace MACE::SimTarget {
 
 class MuoniumTrack;
 
-namespace Action {
+inline namespace Action {
 
 class TrackingAction final : public Env::Memory::FreeSingleton<TrackingAction>,
                              public G4UserTrackingAction {

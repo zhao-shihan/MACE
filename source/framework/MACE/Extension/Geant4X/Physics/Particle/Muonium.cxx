@@ -5,7 +5,7 @@
 #include "G4DecayTable.hh"
 #include "G4ParticleTable.hh"
 
-namespace MACE::inline Extension::Geant4X::Physics::Particle {
+namespace MACE::inline Extension::Geant4X::Physics::inline Particle {
 
 using namespace MACE::PhysicalConstant;
 
@@ -40,8 +40,8 @@ Muonium::Muonium() :
     // create Decay Table
     auto table = new G4DecayTable;
     // create a decay channel
-    table->Insert(new DecayChannel::MuoniumDecayChannel("M", 1.00));
+    table->Insert(new MuoniumDecayChannel("M", 1.00));
     this->SetDecayTable(table);
 }
 
-} // namespace MACE::inline Extension::Geant4X::Physics::Particle
+} // namespace MACE::inline Extension::Geant4X::Physics::inline Particle

@@ -60,7 +60,7 @@
 #include "G4VDecayChannel.hh"
 #include "Randomize.hh"
 
-namespace MACE::inline Extension::Geant4X::Physics::DecayChannel {
+namespace MACE::inline Extension::Geant4X::Physics::inline DecayChannel {
 
 MuoniumDecayChannel::MuoniumDecayChannel(const G4String& parentName, G4double br, G4int verbose) :
     G4VDecayChannel("MuoniumDecay", verbose) {
@@ -219,4 +219,4 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
     return products;
 }
 
-} // namespace MACE::inline Extension::Geant4X::Physics::DecayChannel
+} // namespace MACE::inline Extension::Geant4X::Physics::inline DecayChannel

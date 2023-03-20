@@ -4,7 +4,7 @@
 
 #include "G4UserRunAction.hh"
 
-namespace MACE::SimTarget::Action {
+namespace MACE::SimTarget::inline Action {
 
 class RunAction final : public Env::Memory::FreeSingleton<RunAction>,
                         public G4UserRunAction {
@@ -13,4 +13,4 @@ public:
     void EndOfRunAction(const G4Run*) override;
 };
 
-} // namespace MACE::SimTarget::Action
+} // namespace MACE::SimTarget::inline Action

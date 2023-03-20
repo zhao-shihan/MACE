@@ -5,7 +5,7 @@
 
 #include "G4ElectroMagneticField.hh"
 
-namespace MACE::SimMACE::Field {
+namespace MACE::SimMACE::inline Field {
 
 class LinacField final : public NonMoveableBase,
                          public G4ElectroMagneticField {
@@ -21,8 +21,7 @@ public:
 private:
     G4double fBz;
     G4double fV;
-    G4double fDecayZMean;
     G4double fEz;
 };
 
-} // namespace MACE::SimMACE::Field
+} // namespace MACE::SimMACE::inline Field

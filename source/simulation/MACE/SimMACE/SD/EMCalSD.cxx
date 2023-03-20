@@ -6,9 +6,7 @@
 #include "G4SDManager.hh"
 #include "G4Step.hh"
 
-namespace MACE::SimMACE::SD {
-
-using Hit::EMCalHit;
+namespace MACE::SimMACE::inline SD {
 
 EMCalSD::EMCalSD(const G4String& sdName) :
     NonMoveableBase(),
@@ -48,4 +46,4 @@ void EMCalSD::EndOfEvent(G4HCofThisEvent*) {
     RunManager::Instance().GetAnalysis().SubmitEMCalHC(fHitsCollection->GetVector());
 }
 
-} // namespace MACE::SimMACE::SD
+} // namespace MACE::SimMACE::inline SD

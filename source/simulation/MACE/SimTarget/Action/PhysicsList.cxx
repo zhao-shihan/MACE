@@ -7,7 +7,7 @@
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics_option4.hh"
 
-namespace MACE::SimTarget::Action {
+namespace MACE::SimTarget::inline Action {
 
 using namespace MACE::Geant4X::Physics;
 
@@ -19,4 +19,4 @@ PhysicsList::PhysicsList() :
     RegisterPhysics(new MuoniumPhysics<Detector::Description::Target>(verboseLevel));
 }
 
-} // namespace MACE::SimTarget::Action
+} // namespace MACE::SimTarget::inline Action

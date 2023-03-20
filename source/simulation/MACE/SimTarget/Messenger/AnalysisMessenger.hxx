@@ -16,7 +16,7 @@ namespace MACE::SimTarget {
 
 class Analysis;
 
-namespace Messenger {
+inline namespace Messenger {
 
 class AnalysisMessenger final : public Env::Memory::Singleton<AnalysisMessenger>,
                                 public G4UImessenger {
@@ -39,6 +39,6 @@ private:
     std::unique_ptr<G4UIcmdWithABool> fEnableYieldAnalysis;
 };
 
-} // namespace Messenger
+} // inline namespace Messenger
 
 } // namespace MACE::SimTarget

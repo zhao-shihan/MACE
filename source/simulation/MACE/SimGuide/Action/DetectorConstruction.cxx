@@ -12,7 +12,7 @@
 #include "MACE/Detector/DescriptionIO.hxx"
 #include "MACE/SimGuide/Action/DetectorConstruction.hxx"
 
-namespace MACE::SimTarget::Action {
+namespace MACE::SimTarget::inline Action {
 
 DetectorConstruction::DetectorConstruction() :
     fCollimator(nullptr),
@@ -43,4 +43,4 @@ DetectorConstruction::DetectorConstruction() :
 G4VPhysicalVolume* DetectorConstruction::Construct() {
 }
 
-} // namespace MACE::SimTarget::Action
+} // namespace MACE::SimTarget::inline Action

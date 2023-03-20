@@ -8,7 +8,7 @@
 
 #include <string_view>
 
-namespace MACE::SimMACE::Messenger {
+namespace MACE::SimMACE::inline Messenger {
 
 AnalysisMessenger::AnalysisMessenger() :
     Singleton(),
@@ -50,4 +50,4 @@ void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     }
 }
 
-} // namespace MACE::SimMACE::Messenger
+} // namespace MACE::SimMACE::inline Messenger

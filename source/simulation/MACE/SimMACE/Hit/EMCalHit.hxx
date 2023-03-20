@@ -6,7 +6,7 @@
 #include "G4THitsCollection.hh"
 #include "G4VHit.hh"
 
-namespace MACE::SimMACE::Hit {
+namespace MACE::SimMACE::inline Hit {
 
 class EMCalHit final : public DataModel::EMCalSimHit,
                        public Geant4X::UseG4Allocator<EMCalHit>,
@@ -24,4 +24,4 @@ static_assert(DataModel::TransientData<EMCalHit>);
 
 using EMCalHitCollection = G4THitsCollection<EMCalHit>;
 
-} // namespace MACE::SimMACE::Hit
+} // namespace MACE::SimMACE::inline Hit

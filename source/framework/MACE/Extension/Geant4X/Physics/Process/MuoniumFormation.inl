@@ -1,27 +1,27 @@
 namespace MACE::inline Extension::Geant4X::Physics {
 
-namespace Messenger {
+inline namespace Messenger {
 
 template<TargetForMuoniumPhysics ATarget>
 class MuoniumPhysicsMessenger;
 
-} // namespace Messenger
+} // inline namespace Messenger
 
-namespace Process {
+inline namespace Process {
 
 template<TargetForMuoniumPhysics ATarget>
 MuoniumFormation<ATarget>::MuoniumFormation() :
     NonMoveableBase(),
     G4VRestProcess(__func__, fUserDefined),
-    fMuonium(gsl::not_null(Particle::Muonium::Definition())),
-    fAntimuonium(gsl::not_null(Particle::Antimuonium::Definition())),
+    fMuonium(gsl::not_null(Muonium::Definition())),
+    fAntimuonium(gsl::not_null(Antimuonium::Definition())),
     fTarget(&ATarget::Instance()),
     fRandEng(G4Random::getTheEngine()),
     fFormationProbability(0.65),
     fConversionProbability(0),
     fParticleChange() {
     pParticleChange = &fParticleChange;
-    Messenger::MuoniumPhysicsMessenger<ATarget>::Instance().AssignTo(this);
+    MuoniumPhysicsMessenger<ATarget>::Instance().AssignTo(this);
 }
 
 template<TargetForMuoniumPhysics ATarget>
@@ -75,6 +75,6 @@ G4double MuoniumFormation<ATarget>::GetMeanLifeTime(const G4Track& track, G4Forc
     }
 }
 
-} // namespace Process
+} // inline namespace Process
 
 } // namespace MACE::inline Extension::Geant4X::Physics

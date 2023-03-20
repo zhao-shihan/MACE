@@ -5,7 +5,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4UserSteppingAction.hh"
 
-namespace MACE::SimTarget::Action {
+namespace MACE::SimTarget::inline Action {
 
 class SteppingAction final : public Env::Memory::FreeSingleton<SteppingAction>,
                              public G4UserSteppingAction {
@@ -23,4 +23,4 @@ private:
     G4bool fKillIrrelevants;
 };
 
-} // namespace MACE::SimTarget::Action
+} // namespace MACE::SimTarget::inline Action

@@ -8,18 +8,16 @@
 
 #include "gsl/gsl"
 
-namespace MACE::SimTarget::Action {
-
-using namespace Geant4X::Physics::Particle;
+namespace MACE::SimTarget::inline Action {
 
 SteppingAction::SteppingAction() :
     FreeSingleton(),
     G4UserSteppingAction(),
     fMuonPlus(gsl::not_null(G4MuonPlus::Definition())),
-    fMuonium(gsl::not_null(Muonium::Definition())),
-    fAntimuonium(gsl::not_null(Antimuonium::Definition())),
+    fMuonium(gsl::not_null(Geant4X::Physics::Muonium::Definition())),
+    fAntimuonium(gsl::not_null(Geant4X::Physics::Antimuonium::Definition())),
     fKillIrrelevants(false) {
-    Messenger::ActionMessenger::Instance().AssignTo(this);
+    ActionMessenger::Instance().AssignTo(this);
 }
 
 void SteppingAction::UserSteppingAction(const G4Step* step) {
@@ -31,4 +29,4 @@ void SteppingAction::UserSteppingAction(const G4Step* step) {
     }
 }
 
-} // namespace MACE::SimTarget::Action
+} // namespace MACE::SimTarget::inline Action

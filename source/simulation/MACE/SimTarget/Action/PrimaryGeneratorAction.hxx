@@ -5,7 +5,7 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 
-namespace MACE::SimTarget::Action {
+namespace MACE::SimTarget::inline Action {
 
 class PrimaryGeneratorAction final : public Env::Memory::FreeSingleton<PrimaryGeneratorAction>,
                                      public G4VUserPrimaryGeneratorAction {
@@ -23,4 +23,4 @@ private:
     G4int fMuonsForEachG4Event;
 };
 
-} // namespace MACE::SimTarget::Action
+} // namespace MACE::SimTarget::inline Action

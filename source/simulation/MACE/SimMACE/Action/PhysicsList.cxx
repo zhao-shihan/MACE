@@ -15,7 +15,7 @@
 #include "G4NeutronTrackingCut.hh"
 #include "G4StoppingPhysics.hh"
 
-namespace MACE::SimMACE::Action {
+namespace MACE::SimMACE::inline Action {
 
 using namespace MACE::Geant4X::Physics;
 using namespace MACE::LiteralUnit::Length;
@@ -49,4 +49,4 @@ PhysicsList::PhysicsList() :
     RegisterPhysics(new MuoniumPhysics<Detector::Description::Target>(verboseLevel));
 }
 
-} // namespace MACE::SimMACE::Action
+} // namespace MACE::SimMACE::inline Action

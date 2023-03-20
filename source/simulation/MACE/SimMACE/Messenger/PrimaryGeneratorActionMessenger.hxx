@@ -13,13 +13,13 @@ class G4UIcmdWithAnInteger;
 
 namespace MACE::SimMACE {
 
-namespace Action {
+inline namespace Action {
 
 class PrimaryGeneratorAction;
 
 } // namespace Action
 
-namespace Messenger {
+inline namespace Messenger {
 
 class PrimaryGeneratorActionMessenger final : public Env::Memory::Singleton<PrimaryGeneratorActionMessenger>,
                                               public G4UImessenger {
@@ -30,17 +30,17 @@ private:
     ~PrimaryGeneratorActionMessenger();
 
 public:
-    void AssignTo(gsl::not_null<Action::PrimaryGeneratorAction*> pga) { fPrimaryGeneratorAction = pga; }
+    void AssignTo(gsl::not_null<PrimaryGeneratorAction*> pga) { fPrimaryGeneratorAction = pga; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    Action::PrimaryGeneratorAction* fPrimaryGeneratorAction;
+    PrimaryGeneratorAction* fPrimaryGeneratorAction;
 
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fTimeRMS;
     std::unique_ptr<G4UIcmdWithAnInteger> fMuonsForEachG4Event;
 };
 
-} // namespace Messenger
+} // inline namespace Messenger
 
 } // namespace MACE::SimMACE

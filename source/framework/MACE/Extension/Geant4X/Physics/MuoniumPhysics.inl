@@ -10,22 +10,22 @@ MuoniumPhysics<ATarget>::MuoniumPhysics(G4int verbose) :
 template<TargetForMuoniumPhysics ATarget>
 void MuoniumPhysics<ATarget>::ConstructParticle() {
     G4MuonPlus::Definition();
-    Particle::Muonium::Definition();
-    Particle::Antimuonium::Definition();
+    Muonium::Definition();
+    Antimuonium::Definition();
 }
 
 template<TargetForMuoniumPhysics ATarget>
 void MuoniumPhysics<ATarget>::ConstructProcess() {
-    auto muoniumFormation = new Process::MuoniumFormation<ATarget>;
-    auto muoniumTransport = new Process::MuoniumTransport<ATarget>;
+    auto muoniumFormation = new MuoniumFormation<ATarget>;
+    auto muoniumTransport = new MuoniumTransport<ATarget>;
 
     auto muonPlus = G4MuonPlus::Definition()->GetProcessManager();
     muonPlus->AddRestProcess(muoniumFormation);
 
-    auto muonium = Particle::Muonium::Definition()->GetProcessManager();
+    auto muonium = Muonium::Definition()->GetProcessManager();
     muonium->AddContinuousProcess(muoniumTransport);
 
-    auto antiMuonium = Particle::Antimuonium::Definition()->GetProcessManager();
+    auto antiMuonium = Antimuonium::Definition()->GetProcessManager();
     antiMuonium->AddContinuousProcess(muoniumTransport);
 }
 

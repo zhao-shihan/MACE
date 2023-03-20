@@ -1,4 +1,4 @@
-namespace MACE::inline Extension::Geant4X::Physics::Messenger {
+namespace MACE::inline Extension::Geant4X::Physics::inline Messenger {
 
 template<TargetForMuoniumPhysics ATarget>
 MuoniumPhysicsMessenger<ATarget>::MuoniumPhysicsMessenger() :
@@ -59,4 +59,4 @@ void MuoniumPhysicsMessenger<ATarget>::SetNewValue(G4UIcommand* command, G4Strin
     }
 }
 
-} // namespace MACE::inline Extension::Geant4X::Physics::Messenger
+} // namespace MACE::inline Extension::Geant4X::Physics::inline Messenger

@@ -3,7 +3,7 @@
 
 #include "G4UIcmdWithAnInteger.hh"
 
-namespace MACE::SimTarget::Messenger {
+namespace MACE::SimTarget::inline Messenger {
 
 PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger() :
     Singleton(),
@@ -25,4 +25,4 @@ void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String
     }
 }
 
-} // namespace MACE::SimTarget::Messenger
+} // namespace MACE::SimTarget::inline Messenger

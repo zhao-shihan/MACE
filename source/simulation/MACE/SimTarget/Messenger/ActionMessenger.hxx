@@ -13,13 +13,13 @@ class G4UIdirectory;
 
 namespace MACE::SimTarget {
 
-namespace Action {
+inline namespace Action {
 
 class SteppingAction;
 
 } // namespace Action
 
-namespace Messenger {
+inline namespace Messenger {
 
 class ActionMessenger final : public Env::Memory::Singleton<ActionMessenger>,
                               public G4UImessenger {
@@ -30,17 +30,17 @@ private:
     ~ActionMessenger();
 
 public:
-    void AssignTo(gsl::not_null<Action::SteppingAction*> sa) { fSteppingAction = sa; }
+    void AssignTo(gsl::not_null<SteppingAction*> sa) { fSteppingAction = sa; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    Action::SteppingAction* fSteppingAction;
+    SteppingAction* fSteppingAction;
 
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithABool> fKillIrrelevants;
 };
 
-} // namespace Messenger
+} // inline namespace Messenger
 
 } // namespace MACE::SimTarget

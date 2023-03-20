@@ -4,7 +4,7 @@
 
 #include "G4UserEventAction.hh"
 
-namespace MACE::SimMACE::Action {
+namespace MACE::SimMACE::inline Action {
 
 class EventAction final : public NonMoveableBase,
                           public G4UserEventAction {
@@ -13,4 +13,4 @@ public:
     void EndOfEventAction(const G4Event*) override;
 };
 
-} // namespace MACE::SimMACE::Action
+} // namespace MACE::SimMACE::inline Action

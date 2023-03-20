@@ -40,7 +40,7 @@
 
 #include "G4VDecayChannel.hh"
 
-namespace MACE::inline Extension::Geant4X::Physics::DecayChannel {
+namespace MACE::inline Extension::Geant4X::Physics::inline DecayChannel {
 
 // Class Decription
 //  This class describes muon decay kinemtics.
@@ -55,4 +55,4 @@ public:
     G4DecayProducts* DecayIt(G4double) override;
 };
 
-} // namespace MACE::inline Extension::Geant4X::Physics::DecayChannel
+} // namespace MACE::inline Extension::Geant4X::Physics::inline DecayChannel

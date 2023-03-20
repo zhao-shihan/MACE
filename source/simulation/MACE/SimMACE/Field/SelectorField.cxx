@@ -3,7 +3,7 @@
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
-namespace MACE::SimMACE::Field {
+namespace MACE::SimMACE::inline Field {
 
 using namespace MACE::LiteralUnit::ElectricFieldStrength;
 using namespace MACE::LiteralUnit::Energy;
@@ -17,7 +17,7 @@ SelectorField::SelectorField() :
     fSelectEk(1_keV),
     fESelect(1_kV_cm),
     fBSelect(fESelect / c_light * std::sqrt(electron_mass_c2 / (2 * fSelectEk))) {
-    Messenger::FieldMessenger::Instance().AssignTo(this);
+    FieldMessenger::Instance().AssignTo(this);
 }
 
 void SelectorField::GetFieldValue(const G4double*, G4double* F) const {
@@ -39,4 +39,4 @@ void SelectorField::SetSelectEnergy(G4double Ek) {
     fESelect = c_light * std::sqrt(2 * fSelectEk / electron_mass_c2) * fBSelect;
 }
 
-} // namespace MACE::SimMACE::Field
+} // namespace MACE::SimMACE::inline Field

@@ -4,7 +4,7 @@
 
 #include "G4VUserActionInitialization.hh"
 
-namespace MACE::SimTarget::Action {
+namespace MACE::SimTarget::inline Action {
 
 class ActionInitialization final : public Env::Memory::FreeSingleton<ActionInitialization>,
                                    public G4VUserActionInitialization {
@@ -12,4 +12,4 @@ public:
     void Build() const override;
 };
 
-} // namespace MACE::SimTarget::Action
+} // namespace MACE::SimTarget::inline Action

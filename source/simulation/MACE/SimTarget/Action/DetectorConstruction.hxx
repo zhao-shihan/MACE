@@ -24,7 +24,7 @@ class GeometryBase;
 
 } // namespace Detector
 
-namespace SimTarget::Action {
+namespace SimTarget::inline Action {
 
 class DetectorConstruction final : public Env::Memory::FreeSingleton<DetectorConstruction>,
                                    public G4VUserDetectorConstruction {
@@ -53,6 +53,6 @@ private:
     G4double fTemperature;
 };
 
-} // namespace SimTarget::Action
+} // namespace SimTarget::inline Action
 
 } // namespace MACE

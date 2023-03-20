@@ -3,7 +3,7 @@
 #include "MACE/SimMACE/Messenger/FieldMessenger.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
-namespace MACE::SimMACE::Field {
+namespace MACE::SimMACE::inline Field {
 
 using namespace MACE::LiteralUnit::ElectricPotential;
 using namespace MACE::LiteralUnit::Length;
@@ -15,7 +15,7 @@ LinacField::LinacField() :
     fBz(0.1_T),
     fV(1_kV),
     fEz(1_kV / Detector::Description::LinacField::Instance().DownStreamLength()) {
-    Messenger::FieldMessenger::Instance().AssignTo(this);
+    FieldMessenger::Instance().AssignTo(this);
 }
 
 void LinacField::GetFieldValue(const G4double*, G4double* F) const {
@@ -32,4 +32,4 @@ void LinacField::SetLinacPotential(G4double V) {
     fEz = fV / Detector::Description::LinacField::Instance().DownStreamLength();
 }
 
-} // namespace MACE::SimMACE::Field
+} // namespace MACE::SimMACE::inline Field

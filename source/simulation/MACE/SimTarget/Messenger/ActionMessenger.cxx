@@ -4,7 +4,7 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4UIdirectory.hh"
 
-namespace MACE::SimTarget::Messenger {
+namespace MACE::SimTarget::inline Messenger {
 
 ActionMessenger::ActionMessenger() :
     Singleton(),
@@ -28,4 +28,4 @@ void ActionMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     }
 }
 
-} // namespace MACE::SimTarget::Messenger
+} // namespace MACE::SimTarget::inline Messenger

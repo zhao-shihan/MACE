@@ -5,7 +5,7 @@
 #include "G4Event.hh"
 #include "Randomize.hh"
 
-namespace MACE::SimMACE::Action {
+namespace MACE::SimMACE::inline Action {
 
 using namespace LiteralUnit::Time;
 
@@ -13,7 +13,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
     fSurfaceMuonGenerator(),
     fTimeWidthRMS(20_ns),
     fMuonsForEachG4Event(10) {
-    Messenger::PrimaryGeneratorActionMessenger::Instance().AssignTo(this);
+    PrimaryGeneratorActionMessenger::Instance().AssignTo(this);
 }
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
@@ -24,4 +24,4 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
     }
 }
 
-} // namespace MACE::SimMACE::Action
+} // namespace MACE::SimMACE::inline Action

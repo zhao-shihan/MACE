@@ -17,13 +17,13 @@ class G4UIdirectory;
 
 namespace MACE::SimTarget {
 
-namespace Action {
+inline namespace Action {
 
 class DetectorConstruction;
 
 } // namespace Action
 
-namespace Messenger {
+inline namespace Messenger {
 
 class GeometryMessenger final : public Env::Memory::Singleton<GeometryMessenger>,
                                 public G4UImessenger {
@@ -34,12 +34,12 @@ private:
     ~GeometryMessenger();
 
 public:
-    void AssignTo(gsl::not_null<Action::DetectorConstruction*> dc) { fDetectorConstruction = dc; }
+    void AssignTo(gsl::not_null<DetectorConstruction*> dc) { fDetectorConstruction = dc; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    Action::DetectorConstruction* fDetectorConstruction;
+    DetectorConstruction* fDetectorConstruction;
 
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithAString> fImportDescription;
@@ -49,6 +49,6 @@ private:
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fTemperature;
 };
 
-} // namespace Messenger
+} // inline namespace Messenger
 
 } // namespace MACE::SimTarget

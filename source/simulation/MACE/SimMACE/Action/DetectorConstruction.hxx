@@ -15,7 +15,7 @@
 
 namespace MACE::SimMACE {
 
-namespace SD {
+inline namespace SD {
 
 class CDCSD;
 class EMCalSD;
@@ -23,7 +23,7 @@ class MCPSD;
 
 } // namespace SD
 
-namespace Action {
+inline namespace Action {
 
 class DetectorConstruction final : public NonMoveableBase,
                                    public G4VUserDetectorConstruction {
@@ -65,9 +65,9 @@ private:
     Region* fTargetRegion;
     Region* fVacuumRegion;
 
-    SD::CDCSD* fCDCSD;
-    SD::EMCalSD* fEMCalSD;
-    SD::MCPSD* fMCPSD;
+    CDCSD* fCDCSD;
+    EMCalSD* fEMCalSD;
+    MCPSD* fMCPSD;
 };
 
 } // namespace Action

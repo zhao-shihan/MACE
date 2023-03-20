@@ -5,7 +5,7 @@
 #include "G4MagneticField.hh"
 #include "G4Transform3D.hh"
 
-namespace MACE::SimMACE::Field {
+namespace MACE::SimMACE::inline Field {
 
 class SecondBendField final : public NonMoveableBase,
                               public G4MagneticField {
@@ -22,4 +22,4 @@ private:
     G4double fB0R0;
 };
 
-} // namespace MACE::SimMACE::Field
+} // namespace MACE::SimMACE::inline Field

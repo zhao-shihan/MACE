@@ -15,7 +15,7 @@
 #include "G4TDormandPrince45.hh"
 #include "G4TMagFieldEquation.hh"
 
-namespace MACE::SimMACE::Action {
+namespace MACE::SimMACE::inline Action {
 
 DetectorConstruction::DetectorConstruction() :
     NonMoveableBase(),
@@ -45,65 +45,63 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     // Construct volumes
     ////////////////////////////////////////////////////////////////
 
-    using namespace Detector::Geometry::Fast;
-
     // 1
 
-    auto& emCalField = fWorld->NewDaughter<EMCalField>(fCheckOverlap);
-    auto& emCalShield = fWorld->NewDaughter<EMCalShield>(fCheckOverlap);
-    auto& firstBendField = fWorld->NewDaughter<FirstBendField>(fCheckOverlap);
-    auto& firstTransportField = fWorld->NewDaughter<FirstTransportField>(fCheckOverlap);
-    auto& secondBendField = fWorld->NewDaughter<SecondBendField>(fCheckOverlap);
-    auto& secondTransportField = fWorld->NewDaughter<SecondTransportField>(fCheckOverlap);
-    auto& spectrometerField = fWorld->NewDaughter<SpectrometerField>(fCheckOverlap);
-    auto& spectrometerShield = fWorld->NewDaughter<SpectrometerShield>(fCheckOverlap);
-    auto& thirdTransportField = fWorld->NewDaughter<ThirdTransportField>(fCheckOverlap);
+    auto& emCalField = fWorld->NewDaughter<Detector::Geometry::Fast::EMCalField>(fCheckOverlap);
+    auto& emCalShield = fWorld->NewDaughter<Detector::Geometry::Fast::EMCalShield>(fCheckOverlap);
+    auto& firstBendField = fWorld->NewDaughter<Detector::Geometry::Fast::FirstBendField>(fCheckOverlap);
+    auto& firstTransportField = fWorld->NewDaughter<Detector::Geometry::Fast::FirstTransportField>(fCheckOverlap);
+    auto& secondBendField = fWorld->NewDaughter<Detector::Geometry::Fast::SecondBendField>(fCheckOverlap);
+    auto& secondTransportField = fWorld->NewDaughter<Detector::Geometry::Fast::SecondTransportField>(fCheckOverlap);
+    auto& spectrometerField = fWorld->NewDaughter<Detector::Geometry::Fast::SpectrometerField>(fCheckOverlap);
+    auto& spectrometerShield = fWorld->NewDaughter<Detector::Geometry::Fast::SpectrometerShield>(fCheckOverlap);
+    auto& thirdTransportField = fWorld->NewDaughter<Detector::Geometry::Fast::ThirdTransportField>(fCheckOverlap);
 
     // 2
 
-    auto& emCal = emCalField.NewDaughter<EMCal>(fCheckOverlap);
-    auto& mcp = emCalField.NewDaughter<MCP>(fCheckOverlap);
+    auto& emCal = emCalField.NewDaughter<Detector::Geometry::Fast::EMCal>(fCheckOverlap);
+    auto& mcp = emCalField.NewDaughter<Detector::Geometry::Fast::MCP>(fCheckOverlap);
 
-    auto& firstBendSolenoid = firstBendField.NewDaughter<FirstBendSolenoid>(fCheckOverlap);
+    auto& firstBendSolenoid = firstBendField.NewDaughter<Detector::Geometry::Fast::FirstBendSolenoid>(fCheckOverlap);
 
-    auto& firstTransportSolenoid = firstTransportField.NewDaughter<FirstTransportSolenoid>(fCheckOverlap);
+    auto& firstTransportSolenoid = firstTransportField.NewDaughter<Detector::Geometry::Fast::FirstTransportSolenoid>(fCheckOverlap);
 
-    auto& secondBendSolenoid = secondBendField.NewDaughter<SecondBendSolenoid>(fCheckOverlap);
+    auto& secondBendSolenoid = secondBendField.NewDaughter<Detector::Geometry::Fast::SecondBendSolenoid>(fCheckOverlap);
 
-    auto& collimator = secondTransportField.NewDaughter<Collimator>(fCheckOverlap);
-    auto& secondTransportSolenoid = secondTransportField.NewDaughter<SecondTransportSolenoid>(fCheckOverlap);
-    auto& selectorField = secondTransportField.NewDaughter<SelectorField>(fCheckOverlap);
+    auto& collimator = secondTransportField.NewDaughter<Detector::Geometry::Fast::Collimator>(fCheckOverlap);
+    auto& secondTransportSolenoid = secondTransportField.NewDaughter<Detector::Geometry::Fast::SecondTransportSolenoid>(fCheckOverlap);
+    auto& selectorField = secondTransportField.NewDaughter<Detector::Geometry::Fast::SelectorField>(fCheckOverlap);
 
-    auto& cdcBody = spectrometerField.NewDaughter<CDCBody>(fCheckOverlap);
-    auto& linacField = spectrometerField.NewDaughter<LinacField>(fCheckOverlap);
-    auto& spectrometerMagnet = spectrometerField.NewDaughter<SpectrometerMagnet>(fCheckOverlap);
+    auto& cdcBody = spectrometerField.NewDaughter<Detector::Geometry::Fast::CDCBody>(fCheckOverlap);
+    auto& linacField = spectrometerField.NewDaughter<Detector::Geometry::Fast::LinacField>(fCheckOverlap);
+    auto& spectrometerMagnet = spectrometerField.NewDaughter<Detector::Geometry::Fast::SpectrometerMagnet>(fCheckOverlap);
 
-    auto& thirdTransportSolenoid = thirdTransportField.NewDaughter<ThirdTransportSolenoid>(fCheckOverlap);
+    auto& thirdTransportSolenoid = thirdTransportField.NewDaughter<Detector::Geometry::Fast::ThirdTransportSolenoid>(fCheckOverlap);
 
     // 3
 
-    auto& cdcGas = cdcBody.NewDaughter<CDCGas>(fCheckOverlap);
+    auto& cdcGas = cdcBody.NewDaughter<Detector::Geometry::Fast::CDCGas>(fCheckOverlap);
 
-    auto& beamDegrader = linacField.NewDaughter<BeamDegrader>(fCheckOverlap);
-    auto& beamMonitor = linacField.NewDaughter<BeamMonitor>(fCheckOverlap);
-    auto& target = linacField.NewDaughter<Target>(fCheckOverlap);
+    auto& beamDegrader = linacField.NewDaughter<Detector::Geometry::Fast::BeamDegrader>(fCheckOverlap);
+    auto& beamMonitor = linacField.NewDaughter<Detector::Geometry::Fast::BeamMonitor>(fCheckOverlap);
+    auto& target = linacField.NewDaughter<Detector::Geometry::Fast::Target>(fCheckOverlap);
 
     // 4
 
-    auto& cdcSuperLayer = cdcGas.NewDaughter<CDCSuperLayer>(fCheckOverlap);
+    auto& cdcSuperLayer = cdcGas.NewDaughter<Detector::Geometry::Fast::CDCSuperLayer>(fCheckOverlap);
 
     // 5
 
-    auto& cdcSenseLayer = cdcSuperLayer.NewDaughter<CDCSenseLayer>(fCheckOverlap);
+    auto& cdcSenseLayer = cdcSuperLayer.NewDaughter<Detector::Geometry::Fast::CDCSenseLayer>(fCheckOverlap);
 
     // 6
 
-    auto& cdcFieldWire = cdcSenseLayer.NewDaughter<CDCFieldWire>(fCheckOverlap);
-    auto& cdcCell = cdcSenseLayer.NewDaughter<CDCCell>(fCheckOverlap);
+    auto& cdcFieldWire = cdcSenseLayer.NewDaughter<Detector::Geometry::Fast::CDCFieldWire>(fCheckOverlap);
+    auto& cdcCell = cdcSenseLayer.NewDaughter<Detector::Geometry::Fast::CDCCell>(fCheckOverlap);
 
     // 7
 
-    auto& cdcSenseWire = cdcCell.NewDaughter<CDCSenseWire>(fCheckOverlap);
+    auto& cdcSenseWire = cdcCell.NewDaughter<Detector::Geometry::Fast::CDCSenseWire>(fCheckOverlap);
 
     ////////////////////////////////////////////////////////////////
     // Register materials
@@ -276,13 +274,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     // Register SDs
     ////////////////////////////////////////////////////////////////
     {
-        fCDCSD = new SD::CDCSD(cdcCell.LogicalVolume()->GetName());
+        fCDCSD = new CDCSD(cdcCell.LogicalVolume()->GetName());
         cdcCell.RegisterSD(fCDCSD);
 
-        fEMCalSD = new SD::EMCalSD(emCal.LogicalVolume()->GetName());
+        fEMCalSD = new EMCalSD(emCal.LogicalVolume()->GetName());
         emCal.RegisterSD(fEMCalSD);
 
-        fMCPSD = new SD::MCPSD(mcp.LogicalVolume()->GetName());
+        fMCPSD = new MCPSD(mcp.LogicalVolume()->GetName());
         mcp.RegisterSD(fMCPSD);
     }
 
@@ -292,7 +290,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     {
         using namespace MACE::LiteralUnit::Length;
         using namespace MACE::LiteralUnit::MagneticFluxDensity;
-        using namespace Field;
 
         constexpr auto hMin = 50_um;
 
@@ -367,4 +364,4 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     return fWorld->PhysicalVolume().get();
 }
 
-} // namespace MACE::SimMACE::Action
+} // namespace MACE::SimMACE::inline Action

@@ -13,7 +13,7 @@ class G4UIdirectory;
 
 namespace MACE::SimMACE {
 
-namespace Field {
+inline namespace Field {
 
 class FirstBendField;
 class LinacField;
@@ -22,9 +22,9 @@ class SecondBendField;
 class SelectorField;
 class VerticalField;
 
-} // namespace Field
+} // inline namespace Field
 
-namespace Messenger {
+inline namespace Messenger {
 
 class FieldMessenger final : public Env::Memory::Singleton<FieldMessenger>,
                              public G4UImessenger {
@@ -35,22 +35,22 @@ private:
     ~FieldMessenger();
 
 public:
-    void AssignTo(gsl::not_null<Field::FirstBendField*> field) { fFirstBendField = field; }
-    void AssignTo(gsl::not_null<Field::LinacField*> field) { fLinacField = field; }
-    void AssignTo(gsl::not_null<Field::ParallelField*> field) { fParallelField = field; }
-    void AssignTo(gsl::not_null<Field::SecondBendField*> field) { fSecondBendField = field; }
-    void AssignTo(gsl::not_null<Field::SelectorField*> field) { fSelectorField = field; }
-    void AssignTo(gsl::not_null<Field::VerticalField*> field) { fVerticalField = field; }
+    void AssignTo(gsl::not_null<FirstBendField*> field) { fFirstBendField = field; }
+    void AssignTo(gsl::not_null<LinacField*> field) { fLinacField = field; }
+    void AssignTo(gsl::not_null<ParallelField*> field) { fParallelField = field; }
+    void AssignTo(gsl::not_null<SecondBendField*> field) { fSecondBendField = field; }
+    void AssignTo(gsl::not_null<SelectorField*> field) { fSelectorField = field; }
+    void AssignTo(gsl::not_null<VerticalField*> field) { fVerticalField = field; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    Field::FirstBendField* fFirstBendField;
-    Field::LinacField* fLinacField;
-    Field::ParallelField* fParallelField;
-    Field::SecondBendField* fSecondBendField;
-    Field::SelectorField* fSelectorField;
-    Field::VerticalField* fVerticalField;
+    FirstBendField* fFirstBendField;
+    LinacField* fLinacField;
+    ParallelField* fParallelField;
+    SecondBendField* fSecondBendField;
+    SelectorField* fSelectorField;
+    VerticalField* fVerticalField;
 
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fTransportMagneticField;
@@ -58,6 +58,6 @@ private:
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSelectorElectricField;
 };
 
-} // namespace Messenger
+} // inline namespace Messenger
 
 } // namespace MACE::SimMACE

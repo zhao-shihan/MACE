@@ -16,7 +16,7 @@
 
 #include <limits>
 
-namespace MACE::inline Extension::Geant4X::Physics::Process {
+namespace MACE::inline Extension::Geant4X::Physics::inline Process {
 
 template<TargetForMuoniumPhysics ATarget>
 class MuoniumFormation final : public NonMoveableBase,
@@ -46,6 +46,6 @@ private:
     G4ParticleChange fParticleChange;
 };
 
-} // namespace MACE::inline Extension::Geant4X::Physics::Process
+} // namespace MACE::inline Extension::Geant4X::Physics::inline Process
 
 #include "MACE/Extension/Geant4X/Physics/Process/MuoniumFormation.inl"

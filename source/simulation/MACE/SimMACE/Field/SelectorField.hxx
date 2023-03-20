@@ -4,7 +4,7 @@
 
 #include "G4ElectroMagneticField.hh"
 
-namespace MACE::SimMACE::Field {
+namespace MACE::SimMACE::inline Field {
 
 class SelectorField final : public NonMoveableBase,
                             public G4ElectroMagneticField {
@@ -25,4 +25,4 @@ private:
     G4double fBSelect;
 };
 
-} // namespace MACE::SimMACE::Field
+} // namespace MACE::SimMACE::inline Field

@@ -2,7 +2,7 @@
 
 #include <array>
 
-namespace MACE::Field {
+namespace MACE::inline Field {
 
 template<int Components>
 class IField {
@@ -23,4 +23,4 @@ public:
     std::array<double, Components> GetFieldValue(double x, double y, double z) = 0;
 };
 
-} // namespace MACE::Field
+} // namespace MACE::inline Field

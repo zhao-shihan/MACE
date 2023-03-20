@@ -18,15 +18,15 @@ public:
 
     RunManager();
 
-    auto& GetDetectorConstruction() const { return static_cast<Action::DetectorConstruction&>(*userDetector); }
-    auto& GetEventAction() const { return static_cast<Action::EventAction&>(*userEventAction); }
+    auto& GetDetectorConstruction() const { return static_cast<DetectorConstruction&>(*userDetector); }
+    auto& GetEventAction() const { return static_cast<EventAction&>(*userEventAction); }
     auto& GetPhysicsList() const { return *fPhysicsList; }
-    auto& GetPrimaryGeneratorAction() const { return static_cast<Action::PrimaryGeneratorAction&>(*userPrimaryGeneratorAction); }
-    auto& GetRunAction() const { return static_cast<Action::RunAction&>(*userRunAction); }
+    auto& GetPrimaryGeneratorAction() const { return static_cast<PrimaryGeneratorAction&>(*userPrimaryGeneratorAction); }
+    auto& GetRunAction() const { return static_cast<RunAction&>(*userRunAction); }
     auto& GetAnalysis() const { return *fAnalysis; }
 
 private:
-    Action::PhysicsList* const fPhysicsList;
+    PhysicsList* const fPhysicsList;
     std::unique_ptr<Analysis> fAnalysis;
 };
 

@@ -12,9 +12,7 @@
 #include <utility>
 #include <vector>
 
-namespace MACE::SimMACE::SD {
-
-using Hit::CDCHitCollection;
+namespace MACE::SimMACE::inline SD {
 
 class CDCSD final : public NonMoveableBase,
                     public G4VSensitiveDetector {
@@ -37,7 +35,7 @@ private:
 
     std::vector<std::map<int, const G4StepPoint>> fCellEntryPoints;
     std::vector<std::pair<const G4TwoVector, const G4ThreeVector>> fCellMap;
-    std::vector<std::vector<std::pair<double, std::unique_ptr<Hit::CDCHit>>>> fCellSignalTimesAndHits;
+    std::vector<std::vector<std::pair<double, std::unique_ptr<CDCHit>>>> fCellSignalTimesAndHits;
 };
 
-} // namespace MACE::SimMACE::SD
+} // namespace MACE::SimMACE::inline SD

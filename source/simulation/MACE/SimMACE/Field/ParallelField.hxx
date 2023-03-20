@@ -4,7 +4,7 @@
 
 #include "G4UniformMagField.hh"
 
-namespace MACE::SimMACE::Field {
+namespace MACE::SimMACE::inline Field {
 
 class ParallelField final : public NonMoveableBase,
                             public G4UniformMagField {
@@ -14,4 +14,4 @@ public:
     void SetFieldNorm(G4double B) { SetFieldValue(G4ThreeVector(0, 0, B)); }
 };
 
-} // namespace MACE::SimMACE::Field
+} // namespace MACE::SimMACE::inline Field

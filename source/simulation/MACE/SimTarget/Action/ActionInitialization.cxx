@@ -5,7 +5,7 @@
 #include "MACE/SimTarget/Action/SteppingAction.hxx"
 #include "MACE/SimTarget/Action/TrackingAction.hxx"
 
-namespace MACE::SimTarget::Action {
+namespace MACE::SimTarget::inline Action {
 
 void ActionInitialization::Build() const {
     SetUserAction(new PrimaryGeneratorAction);
@@ -15,4 +15,4 @@ void ActionInitialization::Build() const {
     SetUserAction(new RunAction);
 }
 
-} // namespace MACE::SimTarget::Action
+} // namespace MACE::SimTarget::inline Action

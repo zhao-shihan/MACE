@@ -1,13 +1,13 @@
 namespace MACE::inline Extension::Geant4X::Physics {
 
-namespace Messenger {
+inline namespace Messenger {
 
 template<TargetForMuoniumPhysics ATarget>
 class MuoniumPhysicsMessenger;
 
-} // namespace Messenger
+} // inline namespace Messenger
 
-namespace Process {
+inline namespace Process {
 
 using namespace LiteralUnit::Length;
 
@@ -22,13 +22,13 @@ MuoniumTransport<ATarget>::MuoniumTransport() :
     fTransportStatus(TransportStatus::Unknown),
     fIsExitingTargetVolume(false) {
     pParticleChange = &fParticleChange;
-    Messenger::MuoniumPhysicsMessenger<ATarget>::Instance().AssignTo(this);
+    MuoniumPhysicsMessenger<ATarget>::Instance().AssignTo(this);
 }
 
 template<TargetForMuoniumPhysics ATarget>
 G4bool MuoniumTransport<ATarget>::IsApplicable(const G4ParticleDefinition& particle) {
-    return &particle == Particle::Muonium::Definition() or
-           &particle == Particle::Antimuonium::Definition();
+    return &particle == Muonium::Definition() or
+           &particle == Antimuonium::Definition();
 }
 
 template<TargetForMuoniumPhysics ATarget>
@@ -220,6 +220,6 @@ void MuoniumTransport<ATarget>::ProposeRandomFlight(const G4Track& track) {
     fParticleChange.ProposeLocalTime(track.GetLocalTime() + flightTime);
 }
 
-} // namespace Process
+} // inline namespace Process
 
 } // namespace MACE::inline Extension::Geant4X::Physics

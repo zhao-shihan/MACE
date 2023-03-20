@@ -16,7 +16,7 @@
 
 #include <array>
 
-namespace MACE::SimTarget::Action {
+namespace MACE::SimTarget::inline Action {
 
 using namespace MACE::LiteralUnit::Density;
 using namespace MACE::LiteralUnit::Temperature;
@@ -31,7 +31,7 @@ DetectorConstruction::DetectorConstruction() :
     Detector::DescriptionIO::Import<UsedDescriptions>(std::array{
 #include "MACE/SimTarget/DefaultGeometry.inlyaml"
     });
-    Messenger::GeometryMessenger::Instance().AssignTo(this);
+    GeometryMessenger::Instance().AssignTo(this);
 }
 
 G4VPhysicalVolume* DetectorConstruction::Construct() {
@@ -55,4 +55,4 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     return fWorld->PhysicalVolume().get();
 }
 
-} // namespace MACE::SimTarget::Action
+} // namespace MACE::SimTarget::inline Action

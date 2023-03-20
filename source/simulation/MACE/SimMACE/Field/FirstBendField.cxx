@@ -4,7 +4,7 @@
 #include "MACE/SimMACE/Messenger/FieldMessenger.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
-namespace MACE::SimMACE::Field {
+namespace MACE::SimMACE::inline Field {
 
 using namespace MACE::LiteralUnit::MagneticFluxDensity;
 
@@ -14,7 +14,7 @@ FirstBendField::FirstBendField() :
     fGeomTransform(Detector::Description::TransportLine::Instance().FirstBendTransform()),
     fBendRadius(Detector::Description::TransportLine::Instance().FirstBendRadius()),
     fB0R0(0.1_T * fBendRadius) {
-    Messenger::FieldMessenger::Instance().AssignTo(this);
+    FieldMessenger::Instance().AssignTo(this);
 }
 
 void FirstBendField::GetFieldValue(const G4double* x, G4double* B) const {
@@ -26,4 +26,4 @@ void FirstBendField::GetFieldValue(const G4double* x, G4double* B) const {
     B[2] = -fB0R0 * deltaX / r2;
 }
 
-} // namespace MACE::SimMACE::Field
+} // namespace MACE::SimMACE::inline Field

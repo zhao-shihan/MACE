@@ -5,7 +5,7 @@
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics_option4.hh"
 
-namespace MACE::SimGuide::Action {
+namespace MACE::SimGuide::inline Action {
 
 using namespace MACE::Geant4X::Physics;
 
@@ -17,4 +17,4 @@ PhysicsList::PhysicsList() :
     RegisterPhysics(new G4DecayPhysics(verboseLevel));
 }
 
-} // namespace MACE::SimGuide::Action
+} // namespace MACE::SimGuide::inline Action

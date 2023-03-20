@@ -7,16 +7,17 @@
 
 #include "G4Track.hh"
 
-namespace MACE::SimTarget::Action {
+#include "gsl/gsl"
 
-using namespace Geant4X::Physics::Particle;
+namespace MACE::SimTarget::inline Action {
+
 using namespace PhysicalConstant;
 
 TrackingAction::TrackingAction() :
     FreeSingleton(),
     G4UserTrackingAction(),
-    fMuonium(Muonium::Definition()),
-    fAntimuonium(Antimuonium::Definition()),
+    fMuonium(gsl::not_null(Geant4X::Physics::Muonium::Definition())),
+    fAntimuonium(gsl::not_null(Geant4X::Physics::Antimuonium::Definition())),
     fMuoniumTrack(nullptr),
     fEventID(-1) {}
 
@@ -42,4 +43,4 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track) {
     }
 }
 
-} // namespace MACE::SimTarget::Action
+} // namespace MACE::SimTarget::inline Action

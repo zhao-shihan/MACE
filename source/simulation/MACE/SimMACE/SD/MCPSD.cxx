@@ -5,9 +5,8 @@
 #include "G4SDManager.hh"
 #include "G4Step.hh"
 
-namespace MACE::SimMACE::SD {
+namespace MACE::SimMACE::inline SD {
 
-using Hit::MCPHit;
 
 MCPSD::MCPSD(const G4String& sdName) :
     NonMoveableBase(),
@@ -55,4 +54,4 @@ void MCPSD::EndOfEvent(G4HCofThisEvent*) {
     RunManager::Instance().GetAnalysis().SubmitMCPHC(fHitsCollection->GetVector());
 }
 
-} // namespace MACE::SimMACE::SD
+} // namespace MACE::SimMACE::inline SD

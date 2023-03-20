@@ -5,9 +5,7 @@
 
 #include "G4VSensitiveDetector.hh"
 
-namespace MACE::SimMACE::SD {
-
-using Hit::EMCalHitCollection;
+namespace MACE::SimMACE::inline SD {
 
 class EMCalSD final : public NonMoveableBase,
                       public G4VSensitiveDetector {
@@ -26,4 +24,4 @@ private:
     EMCalHitCollection* fHitsCollection;
 };
 
-} // namespace MACE::SimMACE::SD
+} // namespace MACE::SimMACE::inline SD
