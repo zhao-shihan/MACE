@@ -26,7 +26,7 @@ protected:
     ~RandomEngineBase() = default;
 
 public:
-    double flat() override final { return Math::Random::Distribution::Uniform<double>()(fPRBG); }
+    double flat() override final { return Math::Random::Uniform<double>()(fPRBG); }
     virtual void flatArray(const int size, double* vect) override;
 
     void setSeed(long seed, int = 0) override final;
@@ -39,8 +39,8 @@ public:
     std::ostream& put(std::ostream& os) const override final;
     std::istream& get(std::istream& is) override final;
 
-    operator double() override final { return Math::Random::Distribution::Uniform<double>()(fPRBG); }
-    operator float() override final { return Math::Random::Distribution::Uniform<float>()(fPRBG); }
+    operator double() override final { return Math::Random::Uniform<double>()(fPRBG); }
+    operator float() override final { return Math::Random::Uniform<float>()(fPRBG); }
     operator unsigned int() override final { return fPRBG(); }
 
 private:

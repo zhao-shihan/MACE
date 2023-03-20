@@ -4,7 +4,7 @@
 
 #include <bit>
 
-namespace MACE::Math::Random::Generator {
+namespace MACE::Math::Random::inline Generator {
 
 class Xoshiro256MM final : public Xoshiro256Base<Xoshiro256MM> {
 public:
@@ -13,6 +13,6 @@ public:
     constexpr ResultType operator()();
 };
 
-} // namespace MACE::Math::Random::Generator
+} // namespace MACE::Math::Random::inline Generator
 
 #include "MACE/Math/Random/Generator/Xoshiro256MM.inl"

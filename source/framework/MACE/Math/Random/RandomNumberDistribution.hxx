@@ -98,7 +98,7 @@ concept STDRandomNumberDistribution =
         // returned by successive invocations of expression d(g) with the same g
         // are randomly distributed according to the distribution parametrized by
         // d.param().
-        requires requires(Generator::Xoshiro256PP g) {
+        requires requires(Xoshiro256PP g) {
                      { d(g) } -> std::same_as<typename D::result_type>;
                  };
         // 11. They said: "Given g, lvalues of a type satisfying
@@ -106,7 +106,7 @@ concept STDRandomNumberDistribution =
         // D::param_type, expression d(g, p) must be valid. The sequence of numbers
         // returned by successive invocations of d(g, p) with the same g are
         // randomly distributed according to the distribution parametrized by p.
-        requires requires(Generator::Xoshiro256PP g, const typename D::param_type p) {
+        requires requires(Xoshiro256PP g, const typename D::param_type p) {
                      { d(g, p) } -> std::same_as<typename D::result_type>;
                  };
         // 12. They said: "Given x, a (possibly const) value of D, expression

@@ -1,4 +1,4 @@
-namespace MACE::Math::Random::Distribution {
+namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
@@ -66,4 +66,4 @@ constexpr T UniformInteger<T>::operator()(UniformRandomBitGenerator auto& g, con
     return std::uniform_int_distribution<T>(p.Infimum(), p.Supremum())(g);
 }
 
-} // namespace MACE::Math::Random::Distribution
+} // namespace MACE::Math::Random::inline Distribution

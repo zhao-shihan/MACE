@@ -1,4 +1,4 @@
-namespace MACE::Math::Random::Distribution {
+namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
@@ -75,4 +75,4 @@ T Gaussian3DDiagnoalFast<T>::operator()(UniformRandomBitGenerator auto& g, const
 
 #undef MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_3D_DIAGNOAL_GENERATOR_SNIPPET
 
-} // namespace MACE::Math::Random::Distribution
+} // namespace MACE::Math::Random::inline Distribution

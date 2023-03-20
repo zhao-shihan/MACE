@@ -5,11 +5,10 @@
 
 #include "ROOT/RDataFrame.hxx"
 
-namespace stdx = MACE::stdx;
-using namespace MACE::Math::Random;
+using namespace MACE;
 
 int main(int argc, char* argv[]) {
-    Generator::MT1993764 mt1993764;
+    Math::Random::MT1993764 mt1993764;
 
     const auto n = std::stod(argv[1]);
     const auto a1 = argc > 2 ? std::stod(argv[2]) : 0;
@@ -22,25 +21,25 @@ int main(int argc, char* argv[]) {
     ROOT::RDataFrame dataFrame(n);
     dataFrame
         .Define("uc",
-                [&] { return Distribution::UniformCompact<double>(a1, b1)(mt1993764); })
+                [&] { return Math::Random::UniformCompact<double>(a1, b1)(mt1993764); })
         .Define("ur",
-                [&] { return Distribution::Uniform<double>(a1, b1)(mt1993764); })
+                [&] { return Math::Random::Uniform<double>(a1, b1)(mt1993764); })
         .Define("ui",
-                [&] { return Distribution::Uniform<int>(a1, b1)(mt1993764); })
+                [&] { return Math::Random::Uniform<int>(a1, b1)(mt1993764); })
 
         .Define("ucr",
-                [&] { return Distribution::UniformCompactRectangle<stdx::array2d>({a1, b1}, {a2, b2})(mt1993764); })
+                [&] { return Math::Random::UniformCompactRectangle<stdx::array2d>({a1, b1}, {a2, b2})(mt1993764); })
         .Define("urr",
-                [&] { return Distribution::UniformRectangle<stdx::array2d>({a1, b1}, {a2, b2})(mt1993764); })
+                [&] { return Math::Random::UniformRectangle<stdx::array2d>({a1, b1}, {a2, b2})(mt1993764); })
         .Define("uir",
-                [&] { return Distribution::UniformRectangle<stdx::array2i>({(int)a1, (int)b1}, {(int)a2, (int)b2})(mt1993764); })
+                [&] { return Math::Random::UniformRectangle<stdx::array2i>({(int)a1, (int)b1}, {(int)a2, (int)b2})(mt1993764); })
 
         // .Define("ucc",
-        //         [&] { return Distribution::UniformCompactCuboid<stdx::array3d>({a1, b1}, {a2, b2}, {a3, b3})(mt1993764); })
+        //         [&] { return Math::Random::UniformCompactCuboid<stdx::array3d>({a1, b1}, {a2, b2}, {a3, b3})(mt1993764); })
         // .Define("urc",
-        //         [&] { return Distribution::UniformCuboid<stdx::array3d>({a1, b1}, {a2, b2}, {a3, b3})(mt1993764); })
+        //         [&] { return Math::Random::UniformCuboid<stdx::array3d>({a1, b1}, {a2, b2}, {a3, b3})(mt1993764); })
         // .Define("uic",
-        //         [&] { return Distribution::UniformCuboid<stdx::array3i>({(int)a1, (int)b1}, {(int)a2, (int)b2}, {(int)a3, (int)b3})(mt1993764); })
+        //         [&] { return Math::Random::UniformCuboid<stdx::array3i>({(int)a1, (int)b1}, {(int)a2, (int)b2}, {(int)a3, (int)b3})(mt1993764); })
 
         .Snapshot("uniform", "uniform.root");
 

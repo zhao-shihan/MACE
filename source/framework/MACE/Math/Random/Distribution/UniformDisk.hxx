@@ -15,7 +15,7 @@
 #include <concepts>
 #include <iomanip>
 
-namespace MACE::Math::Random::Distribution {
+namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
@@ -154,6 +154,6 @@ UniformDisk(T, U, V) -> UniformDisk<std::array<std::common_type_t<T, U, V>, 2>>;
 template<typename T>
 UniformDisk(T) -> UniformDisk<std::array<T, 2>>;
 
-} // namespace MACE::Math::Random::Distribution
+} // namespace MACE::Math::Random::inline Distribution
 
 #include "MACE/Math/Random/Distribution/UniformDisk.inl"

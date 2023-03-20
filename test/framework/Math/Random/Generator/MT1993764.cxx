@@ -10,12 +10,11 @@
 #include <numeric>
 #include <random>
 
-using MACE::WallTimer;
-using namespace MACE::Math::Random;
+using namespace MACE;
 
 int main() {
     std::mt19937_64 stdMT1993764;
-    Generator::MT1993764 mt1993764;
+    Math::Random::MT1993764 mt1993764;
 
     std::cout << "Simply generate 10 million integers:" << std::endl;
 

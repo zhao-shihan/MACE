@@ -10,12 +10,11 @@
 #include <numeric>
 #include <random>
 
-int main() {
-    using namespace MACE::Math::Random;
-    using MACE::WallTimer;
+using namespace MACE;
 
-    Generator::Xoshiro256Plus xoshiro256p(114514);
-    MACE::CLHEPX::Random::Xoshiro256Engine xoshiro256pX(114514);
+int main() {
+    Math::Random::Xoshiro256Plus xoshiro256p(114514);
+    CLHEPX::Random::Xoshiro256Engine xoshiro256pX(114514);
 
     std::cout << "Simply generate 10 million integers:" << std::endl;
 
@@ -37,14 +36,14 @@ int main() {
     Eigen::RowVector2d delta2d;
 
     for (int i = 0; i < 1'000'000; ++i) {
-        delta2d = {Distribution::Uniform<double>()(xoshiro256p),
-                   Distribution::Uniform<double>()(xoshiro256p)};
+        delta2d = {Math::Random::Uniform<double>()(xoshiro256p),
+                   Math::Random::Uniform<double>()(xoshiro256p)};
         v2d += delta2d;
     }
     timer.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
-        delta2d = {Distribution::Uniform<double>()(xoshiro256p),
-                   Distribution::Uniform<double>()(xoshiro256p)};
+        delta2d = {Math::Random::Uniform<double>()(xoshiro256p),
+                   Math::Random::Uniform<double>()(xoshiro256p)};
         v2d += delta2d;
     }
     time = timer.MillisecondsElapsed();
@@ -70,16 +69,16 @@ int main() {
     Eigen::RowVector3d delta3d;
 
     for (int i = 0; i < 1'000'000; ++i) {
-        delta3d = {Distribution::Uniform<double>()(xoshiro256p),
-                   Distribution::Uniform<double>()(xoshiro256p),
-                   Distribution::Uniform<double>()(xoshiro256p)};
+        delta3d = {Math::Random::Uniform<double>()(xoshiro256p),
+                   Math::Random::Uniform<double>()(xoshiro256p),
+                   Math::Random::Uniform<double>()(xoshiro256p)};
         v3d += delta3d;
     }
     timer.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
-        delta3d = {Distribution::Uniform<double>()(xoshiro256p),
-                   Distribution::Uniform<double>()(xoshiro256p),
-                   Distribution::Uniform<double>()(xoshiro256p)};
+        delta3d = {Math::Random::Uniform<double>()(xoshiro256p),
+                   Math::Random::Uniform<double>()(xoshiro256p),
+                   Math::Random::Uniform<double>()(xoshiro256p)};
         v3d += delta3d;
     }
     time = timer.MillisecondsElapsed();
@@ -107,18 +106,18 @@ int main() {
     Eigen::RowVector4d delta4d;
 
     for (int i = 0; i < 1'000'000; ++i) {
-        delta4d = {Distribution::Uniform<double>()(xoshiro256p),
-                   Distribution::Uniform<double>()(xoshiro256p),
-                   Distribution::Uniform<double>()(xoshiro256p),
-                   Distribution::Uniform<double>()(xoshiro256p)};
+        delta4d = {Math::Random::Uniform<double>()(xoshiro256p),
+                   Math::Random::Uniform<double>()(xoshiro256p),
+                   Math::Random::Uniform<double>()(xoshiro256p),
+                   Math::Random::Uniform<double>()(xoshiro256p)};
         v4d += delta4d;
     }
     timer.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
-        delta4d = {Distribution::Uniform<double>()(xoshiro256p),
-                   Distribution::Uniform<double>()(xoshiro256p),
-                   Distribution::Uniform<double>()(xoshiro256p),
-                   Distribution::Uniform<double>()(xoshiro256p)};
+        delta4d = {Math::Random::Uniform<double>()(xoshiro256p),
+                   Math::Random::Uniform<double>()(xoshiro256p),
+                   Math::Random::Uniform<double>()(xoshiro256p),
+                   Math::Random::Uniform<double>()(xoshiro256p)};
         v4d += delta4d;
     }
     time = timer.MillisecondsElapsed();

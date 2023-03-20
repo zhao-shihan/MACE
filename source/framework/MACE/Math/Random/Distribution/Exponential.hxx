@@ -11,7 +11,7 @@
 #include <iomanip>
 #include <limits>
 
-namespace MACE::Math::Random::Distribution {
+namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
@@ -127,6 +127,6 @@ public:
 template<typename T>
 ExponentialFast(T) -> ExponentialFast<T>;
 
-} // namespace MACE::Math::Random::Distribution
+} // namespace MACE::Math::Random::inline Distribution
 
 #include "MACE/Math/Random/Distribution/Exponential.inl"

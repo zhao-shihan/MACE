@@ -9,7 +9,7 @@
 #include <random>
 #include <type_traits>
 
-namespace MACE::Math::Random::Distribution {
+namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
@@ -147,6 +147,6 @@ public:
 template<typename T, typename U>
 UniformInteger(T, U) -> UniformInteger<std::common_type_t<T, U>>;
 
-} // namespace MACE::Math::Random::Distribution
+} // namespace MACE::Math::Random::inline Distribution
 
 #include "MACE/Math/Random/Distribution/Uniform.inl"

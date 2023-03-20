@@ -10,11 +10,10 @@
 #include <numeric>
 #include <random>
 
-int main() {
-    using namespace MACE::Math::Random;
-    using MACE::WallTimer;
+using namespace MACE;
 
-    Generator::MT1993764 mt64(114514);
+int main() {
+    Math::Random::MT1993764 mt64(114514);
     MACE::CLHEPX::Random::MT64Engine mt64x(114514);
 
     std::cout << "Simply generate 10 million integers:" << std::endl;
@@ -37,14 +36,14 @@ int main() {
     Eigen::RowVector2d delta2d;
 
     for (int i = 0; i < 1'000'000; ++i) {
-        delta2d = {Distribution::Uniform<double>()(mt64),
-                   Distribution::Uniform<double>()(mt64)};
+        delta2d = {Math::Random::Uniform<double>()(mt64),
+                   Math::Random::Uniform<double>()(mt64)};
         v2d += delta2d;
     }
     timer.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
-        delta2d = {Distribution::Uniform<double>()(mt64),
-                   Distribution::Uniform<double>()(mt64)};
+        delta2d = {Math::Random::Uniform<double>()(mt64),
+                   Math::Random::Uniform<double>()(mt64)};
         v2d += delta2d;
     }
     time = timer.MillisecondsElapsed();
@@ -70,16 +69,16 @@ int main() {
     Eigen::RowVector3d delta3d;
 
     for (int i = 0; i < 1'000'000; ++i) {
-        delta3d = {Distribution::Uniform<double>()(mt64),
-                   Distribution::Uniform<double>()(mt64),
-                   Distribution::Uniform<double>()(mt64)};
+        delta3d = {Math::Random::Uniform<double>()(mt64),
+                   Math::Random::Uniform<double>()(mt64),
+                   Math::Random::Uniform<double>()(mt64)};
         v3d += delta3d;
     }
     timer.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
-        delta3d = {Distribution::Uniform<double>()(mt64),
-                   Distribution::Uniform<double>()(mt64),
-                   Distribution::Uniform<double>()(mt64)};
+        delta3d = {Math::Random::Uniform<double>()(mt64),
+                   Math::Random::Uniform<double>()(mt64),
+                   Math::Random::Uniform<double>()(mt64)};
         v3d += delta3d;
     }
     time = timer.MillisecondsElapsed();
@@ -107,18 +106,18 @@ int main() {
     Eigen::RowVector4d delta4d;
 
     for (int i = 0; i < 1'000'000; ++i) {
-        delta4d = {Distribution::Uniform<double>()(mt64),
-                   Distribution::Uniform<double>()(mt64),
-                   Distribution::Uniform<double>()(mt64),
-                   Distribution::Uniform<double>()(mt64)};
+        delta4d = {Math::Random::Uniform<double>()(mt64),
+                   Math::Random::Uniform<double>()(mt64),
+                   Math::Random::Uniform<double>()(mt64),
+                   Math::Random::Uniform<double>()(mt64)};
         v4d += delta4d;
     }
     timer.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
-        delta4d = {Distribution::Uniform<double>()(mt64),
-                   Distribution::Uniform<double>()(mt64),
-                   Distribution::Uniform<double>()(mt64),
-                   Distribution::Uniform<double>()(mt64)};
+        delta4d = {Math::Random::Uniform<double>()(mt64),
+                   Math::Random::Uniform<double>()(mt64),
+                   Math::Random::Uniform<double>()(mt64),
+                   Math::Random::Uniform<double>()(mt64)};
         v4d += delta4d;
     }
     time = timer.MillisecondsElapsed();

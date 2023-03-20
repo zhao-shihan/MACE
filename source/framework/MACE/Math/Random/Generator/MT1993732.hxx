@@ -5,7 +5,7 @@
 
 #include <random>
 
-namespace MACE::Math::Random::Generator {
+namespace MACE::Math::Random::inline Generator {
 
 class MT1993732 final : public UniformPseudoRandomBitGeneratorBase<MT1993732, std::mt19937::result_type> {
 public:
@@ -27,6 +27,6 @@ private:
     std::mt19937 fMT;
 };
 
-} // namespace MACE::Math::Random::Generator
+} // namespace MACE::Math::Random::inline Generator
 
 #include "MACE/Math/Random/Generator/MT1993732.inl"

@@ -12,7 +12,7 @@
 #include <random>
 #include <type_traits>
 
-namespace MACE::Math::Random::Generator {
+namespace MACE::Math::Random::inline Generator {
 
 template<class ADerived>
 class Xoshiro256Base : public UniformPseudoRandomBitGeneratorBase<ADerived, std::uint64_t> {
@@ -39,6 +39,6 @@ protected:
     std::array<std::uint64_t, 4> fState;
 };
 
-} // namespace MACE::Math::Random::Generator
+} // namespace MACE::Math::Random::inline Generator
 
 #include "MACE/Math/Random/Generator/Xoshiro256Base.inl"

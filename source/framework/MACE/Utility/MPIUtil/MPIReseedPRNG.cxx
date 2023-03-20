@@ -25,14 +25,14 @@ void MPIReseedPRNG(CLHEP::HepRandomEngine& randEng) {
     const std::size_t worldSize = mpiEnv.WorldCommSize();
     std::vector<long> seedsSend(mpiEnv.AtWorldMaster() ? worldSize : 0);
     if (mpiEnv.AtWorldMaster()) {
-        static_assert(std::same_as<std::uint64_t, Math::Random::Generator::Xoshiro256PP::ResultType>);
+        static_assert(std::same_as<std::uint64_t, Math::Random::Xoshiro256PP::ResultType>);
 
         std::array<unsigned int, sizeof(std::uint64_t) / sizeof(unsigned int)> xoshiro256PPSeed;
         std::ranges::generate(xoshiro256PPSeed, [&] { return randEng.operator unsigned int(); });
-        Math::Random::Generator::Xoshiro256PP xoshiro256PP(std::bit_cast<std::uint64_t>(xoshiro256PPSeed));
+        Math::Random::Xoshiro256PP xoshiro256PP(std::bit_cast<std::uint64_t>(xoshiro256PPSeed));
 
         std::set<long> uniqueSeeds;
-        Math::Random::Distribution::Uniform<long> uniformLong(1, std::numeric_limits<long>::max() - 1);
+        Math::Random::Uniform<long> uniformLong(1, std::numeric_limits<long>::max() - 1);
         do {
             uniqueSeeds.emplace(uniformLong(xoshiro256PP));
         } while (uniqueSeeds.size() < worldSize);

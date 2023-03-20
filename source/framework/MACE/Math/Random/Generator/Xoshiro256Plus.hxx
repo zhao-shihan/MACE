@@ -2,7 +2,7 @@
 
 #include "MACE/Math/Random/Generator/Xoshiro256Base.hxx"
 
-namespace MACE::Math::Random::Generator {
+namespace MACE::Math::Random::inline Generator {
 
 class Xoshiro256Plus final : public Xoshiro256Base<Xoshiro256Plus> {
 public:
@@ -11,6 +11,6 @@ public:
     constexpr ResultType operator()();
 };
 
-} // namespace MACE::Math::Random::Generator
+} // namespace MACE::Math::Random::inline Generator
 
 #include "MACE/Math/Random/Generator/Xoshiro256Plus.inl"

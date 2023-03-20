@@ -1,4 +1,4 @@
-namespace MACE::Math::Random::Distribution {
+namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
@@ -84,4 +84,4 @@ constexpr T UniformDisk<T>::operator()(UniformRandomBitGenerator auto& g, const 
 
 #undef MACE_MATH_RANDOM_DISTRIBUTION_UNIFORM_DISK_GENERATOR
 
-} // namespace MACE::Math::Random::Distribution
+} // namespace MACE::Math::Random::inline Distribution

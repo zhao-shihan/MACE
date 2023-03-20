@@ -12,7 +12,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace MACE::Math::Random::Distribution {
+namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
@@ -134,6 +134,6 @@ Joint(Ps...) -> Joint<std::array<std::common_type_t<typename Ps::DistributionTyp
 template<class... Ds>
 Joint(JointParameter<Ds...>) -> Joint<std::array<std::common_type_t<typename Ds::ResultType...>, sizeof...(Ds)>, Ds...>;
 
-} // namespace MACE::Math::Random::Distribution
+} // namespace MACE::Math::Random::inline Distribution
 
 #include "MACE/Math/Random/Distribution/Joint.inl"

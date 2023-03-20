@@ -1,4 +1,4 @@
-namespace MACE::Math::Random::Generator {
+namespace MACE::Math::Random::inline Generator {
 
 constexpr Xoshiro256MM::ResultType Xoshiro256MM::operator()() {
     const auto result = std::rotl(fState[1] * 5, 7) * 9;
@@ -6,4 +6,4 @@ constexpr Xoshiro256MM::ResultType Xoshiro256MM::operator()() {
     return result;
 }
 
-} // namespace MACE::Math::Random::Generator
+} // namespace MACE::Math::Random::inline Generator

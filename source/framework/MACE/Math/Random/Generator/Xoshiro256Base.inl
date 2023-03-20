@@ -1,4 +1,4 @@
-namespace MACE::Math::Random::Generator {
+namespace MACE::Math::Random::inline Generator {
 
 template<class ADerived>
 constexpr Xoshiro256Base<ADerived>::Xoshiro256Base() :
@@ -59,4 +59,4 @@ auto operator>>(std::basic_istream<AChar>& is, Xoshiro256Base<T>& self) -> declt
     return is >> self.fState[0] >> self.fState[1] >> self.fState[2] >> self.fState[3];
 }
 
-} // namespace MACE::Math::Random::Generator
+} // namespace MACE::Math::Random::inline Generator

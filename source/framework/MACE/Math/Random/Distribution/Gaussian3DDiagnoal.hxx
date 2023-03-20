@@ -12,7 +12,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace MACE::Math::Random::Distribution {
+namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
@@ -174,6 +174,6 @@ private:
 template<typename T, typename U, typename V>
 Gaussian3DDiagnoalFast(std::initializer_list<T>, std::initializer_list<U>, std::initializer_list<V>) -> Gaussian3DDiagnoalFast<std::array<std::common_type_t<T, U, V>, 3>>;
 
-} // namespace MACE::Math::Random::Distribution
+} // namespace MACE::Math::Random::inline Distribution
 
 #include "MACE/Math/Random/Distribution/Gaussian3DDiagnoal.inl"

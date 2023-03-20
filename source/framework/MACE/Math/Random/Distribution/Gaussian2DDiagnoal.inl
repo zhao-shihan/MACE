@@ -1,4 +1,4 @@
-namespace MACE::Math::Random::Distribution {
+namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
@@ -46,7 +46,7 @@ constexpr Gaussian2DDiagnoalBase<ADerived, T>::Gaussian2DDiagnoalBase(const type
         static_assert(UniformCompactRectangle<T>::Stateless());                      \
         u = UniformCompactRectangle<T>({-0.5, 0.5}, {-0.5, 0.5})(g);                 \
         x = Math::Hypot2(u[0], u[1]);                                                \
-        std2b::assume(0 <= x and x <= 0.5);                                          \
+        std2b::assume(0 <= x and x < 0.5);                                           \
     } while (x == 0 or x > 0.25);                                                    \
     x = std::sqrt(-2 * (Math::TheLog(x) + 2 * std::numbers::ln2_v<VOfT>) / x);       \
     u[0] = p.SigmaX() * (x * u[0]) + p.MuX();                                        \
@@ -65,4 +65,4 @@ T Gaussian2DDiagnoalFast<T>::operator()(UniformRandomBitGenerator auto& g, const
 
 #undef MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_2D_DIAGNOAL_GENERATOR_SNIPPET
 
-} // namespace MACE::Math::Random::Distribution
+} // namespace MACE::Math::Random::inline Distribution

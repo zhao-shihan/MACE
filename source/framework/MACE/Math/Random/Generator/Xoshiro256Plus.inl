@@ -1,4 +1,4 @@
-namespace MACE::Math::Random::Generator {
+namespace MACE::Math::Random::inline Generator {
 
 constexpr Xoshiro256Plus::ResultType Xoshiro256Plus::operator()() {
     const auto result = fState[0] + fState[3];
@@ -6,4 +6,4 @@ constexpr Xoshiro256Plus::ResultType Xoshiro256Plus::operator()() {
     return result;
 }
 
-} // namespace MACE::Math::Random::Generator
+} // namespace MACE::Math::Random::inline Generator

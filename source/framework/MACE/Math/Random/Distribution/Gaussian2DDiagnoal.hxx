@@ -15,7 +15,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace MACE::Math::Random::Distribution {
+namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
@@ -159,6 +159,6 @@ public:
 template<typename T, typename U>
 Gaussian2DDiagnoalFast(std::initializer_list<T>, std::initializer_list<U>) -> Gaussian2DDiagnoalFast<std::array<std::common_type_t<T, U>, 2>>;
 
-} // namespace MACE::Math::Random::Distribution
+} // namespace MACE::Math::Random::inline Distribution
 
 #include "MACE/Math/Random/Distribution/Gaussian2DDiagnoal.inl"

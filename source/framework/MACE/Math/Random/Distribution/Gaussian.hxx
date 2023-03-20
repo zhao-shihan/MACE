@@ -10,7 +10,7 @@
 #include <concepts>
 #include <limits>
 
-namespace MACE::Math::Random::Distribution {
+namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
@@ -148,6 +148,6 @@ private:
 template<typename T, typename U>
 GaussianFast(T, U) -> GaussianFast<std::common_type_t<T, U>>;
 
-} // namespace MACE::Math::Random::Distribution
+} // namespace MACE::Math::Random::inline Distribution
 
 #include "MACE/Math/Random/Distribution/Gaussian.inl"

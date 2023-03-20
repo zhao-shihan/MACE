@@ -7,10 +7,10 @@
 
 #include <cstdlib>
 
-using namespace MACE::Math::Random;
+using namespace MACE;
 
 int main(int argc, char* argv[]) {
-    Generator::MT1993764 mt1993764;
+    Math::Random::MT1993764 mt1993764;
 
     const auto n = std::stod(argv[1]);
     const auto mu1 = argc > 2 ? std::stod(argv[2]) : 0;
@@ -23,11 +23,11 @@ int main(int argc, char* argv[]) {
     ROOT::RDataFrame dataFrame(n);
     dataFrame
         .Define("g1",
-                [&] { return Distribution::Gaussian(mu1, sigma1)(mt1993764); })
+                [&] { return Math::Random::Gaussian(mu1, sigma1)(mt1993764); })
         .Define("g2",
-                [&] { return Distribution::Gaussian2DDiagnoal({mu1, sigma1}, {mu2, sigma2})(mt1993764); })
+                [&] { return Math::Random::Gaussian2DDiagnoal({mu1, sigma1}, {mu2, sigma2})(mt1993764); })
         .Define("g3",
-                [&] { return Distribution::Gaussian3DDiagnoal({mu1, sigma1}, {mu2, sigma2}, {mu3, sigma3})(mt1993764); })
+                [&] { return Math::Random::Gaussian3DDiagnoal({mu1, sigma1}, {mu2, sigma2}, {mu3, sigma3})(mt1993764); })
 
         .Snapshot("gaussian", "gaussian.root");
 

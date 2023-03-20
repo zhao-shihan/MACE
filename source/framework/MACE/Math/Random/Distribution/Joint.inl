@@ -1,4 +1,4 @@
-namespace MACE::Math::Random::Distribution {
+namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
@@ -127,4 +127,4 @@ auto operator>>(std::basic_istream<AChar>& is, JointInterface<Ds...>& self) -> d
     })(gslx::index_sequence_for<Ds...>());
 }
 
-} // namespace MACE::Math::Random::Distribution
+} // namespace MACE::Math::Random::inline Distribution

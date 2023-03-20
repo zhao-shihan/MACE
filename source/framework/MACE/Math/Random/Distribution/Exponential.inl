@@ -1,4 +1,4 @@
-namespace MACE::Math::Random::Distribution {
+namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
@@ -45,4 +45,4 @@ constexpr T ExponentialFast<T>::operator()(UniformRandomBitGenerator auto& g, co
     return -p.Expectation() * Math::RA2Log(Uniform<T>()(g));
 }
 
-} // namespace MACE::Math::Random::Distribution
+} // namespace MACE::Math::Random::inline Distribution

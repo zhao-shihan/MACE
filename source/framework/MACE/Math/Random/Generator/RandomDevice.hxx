@@ -4,7 +4,7 @@
 
 #include <random>
 
-namespace MACE::Math::Random::Generator {
+namespace MACE::Math::Random::inline Generator {
 
 class RandomDevice final : public UniformRandomBitGeneratorBase<RandomDevice, std::random_device::result_type> {
 public:
@@ -19,4 +19,4 @@ private:
     std::random_device fRD;
 };
 
-} // namespace MACE::Math::Random::Generator
+} // namespace MACE::Math::Random::inline Generator
