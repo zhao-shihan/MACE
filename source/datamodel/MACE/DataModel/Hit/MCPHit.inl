@@ -1,4 +1,4 @@
-namespace MACE::DataModel::Hit {
+namespace MACE::DataModel::inline Hit {
 
 inline MCPHit::MCPHit() noexcept :
     fHitTime(fgHitTime.Value()),
@@ -9,4 +9,4 @@ inline void MCPHit::FillBranchSockets() const noexcept {
     fgHitPosition.Value(fHitPosition);
 }
 
-} // namespace MACE::DataModel::Hit
+} // namespace MACE::DataModel::inline Hit

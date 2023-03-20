@@ -2,12 +2,12 @@
 #include "MACE/DataModel/Track/CDCHelixTrack.hxx"
 #include "MACE/DataModel/Track/CDCPhysicsTrack.hxx"
 
-namespace MACE::DataModel::Track {
+namespace MACE::DataModel::inline Track {
 
-BranchSocket::Vector2FBranchSocket CDCHelixTrack::fgCenter("center", {"x", "y"}, {0, 0});
-BranchSocket::FloatBranchSocket CDCHelixTrack::fgRadius("r", 0);
-BranchSocket::FloatBranchSocket CDCHelixTrack::fgZ0("z0", 0);
-BranchSocket::FloatBranchSocket CDCHelixTrack::fgAlpha("alpha", 0);
+Vector2FBranchSocket CDCHelixTrack::fgCenter("center", {"x", "y"}, {0, 0});
+FloatBranchSocket CDCHelixTrack::fgRadius("r", 0);
+FloatBranchSocket CDCHelixTrack::fgZ0("z0", 0);
+FloatBranchSocket CDCHelixTrack::fgAlpha("alpha", 0);
 
 CDCHelixTrack::CDCHelixTrack() noexcept :
     CDCTrackBase(),
@@ -61,4 +61,4 @@ void CDCHelixTrack::ConnectToBranches(TTree& tree) {
     fgAlpha.ConnectToBranch(tree);
 }
 
-} // namespace MACE::DataModel::Track
+} // namespace MACE::DataModel::inline Track

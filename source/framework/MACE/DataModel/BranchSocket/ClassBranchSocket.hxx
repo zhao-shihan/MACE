@@ -8,7 +8,7 @@
 #include <string>
 #include <tuple>
 
-namespace MACE::DataModel::BranchSocket {
+namespace MACE::DataModel::inline BranchSocket {
 
 template<class AClass>
     requires std::assignable_from<AClass, AClass>
@@ -28,6 +28,6 @@ private:
     const gsl::owner<AClass*> fObject;
 };
 
-} // namespace MACE::DataModel::BranchSocket
+} // namespace MACE::DataModel::inline BranchSocket
 
 #include "MACE/DataModel/BranchSocket/ClassBranchSocket.inl"

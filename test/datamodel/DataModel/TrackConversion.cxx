@@ -6,31 +6,30 @@
 
 #include "CLHEP/Units/PhysicalConstants.h"
 
-using MACE::DataModel::DataFactory;
-using namespace MACE::DataModel::Track;
-using namespace MACE::LiteralUnit;
-using namespace MACE::VectorArithmetic::Vector2Arithmetic;
+using namespace MACE;
+using namespace LiteralUnit;
+using namespace VectorArithmetic::Vector2Arithmetic;
 
 int main(int, char* argv[]) {
-    DataFactory dataHub;
+    DataModel::DataFactory dataHub;
     dataHub.TreeNamePrefixFormat("Rep{}_Exact_");
 
     auto fileIn = TFile::Open(argv[1], "open");
-    auto helixTree = dataHub.FindTree<CDCHelixTrack>(*fileIn, 0);
-    auto helixList = dataHub.CreateAndFillList<CDCHelixTrack>(*helixTree);
+    auto helixTree = dataHub.FindTree<DataModel::CDCHelixTrack>(*fileIn, 0);
+    auto helixList = dataHub.CreateAndFillList<DataModel::CDCHelixTrack>(*helixTree);
     fileIn->Close();
     delete fileIn;
 
-    std::vector<std::shared_ptr<CDCPhysicsTrack>> trackList;
-    std::vector<std::shared_ptr<CDCHelixTrack>> revTrackList;
-    std::vector<std::shared_ptr<CDCHelixTrack>> diffList;
+    std::vector<std::shared_ptr<DataModel::CDCPhysicsTrack>> trackList;
+    std::vector<std::shared_ptr<DataModel::CDCHelixTrack>> revTrackList;
+    std::vector<std::shared_ptr<DataModel::CDCHelixTrack>> diffList;
     trackList.reserve(helixList.size());
     revTrackList.reserve(helixList.size());
     diffList.reserve(helixList.size());
     for (auto&& helix : helixList) {
-        const auto& physTrk = trackList.emplace_back(std::make_shared<CDCPhysicsTrack>(*helix));
-        const auto& revTrack = revTrackList.emplace_back(std::make_shared<CDCHelixTrack>(*physTrk));
-        auto& diff = diffList.emplace_back(std::make_shared<CDCHelixTrack>());
+        const auto& physTrk = trackList.emplace_back(std::make_shared<DataModel::CDCPhysicsTrack>(*helix));
+        const auto& revTrack = revTrackList.emplace_back(std::make_shared<DataModel::CDCHelixTrack>(*physTrk));
+        auto& diff = diffList.emplace_back(std::make_shared<DataModel::CDCHelixTrack>());
         diff->VertexTime(revTrack->VertexTime() - helix->VertexTime());
         diff->SetCenter(revTrack->GetCenter() - helix->GetCenter());
         diff->Radius(revTrack->Radius() - helix->Radius());
@@ -42,10 +41,10 @@ int main(int, char* argv[]) {
 
     auto fileOut = TFile::Open(argv[2], "recreate");
     dataHub.TreeNamePrefixFormat("Rep{}_Conv_");
-    dataHub.CreateAndFillTree<CDCPhysicsTrack>(trackList, 0)->Write();
-    dataHub.CreateAndFillTree<CDCHelixTrack>(revTrackList, 0)->Write();
+    dataHub.CreateAndFillTree<DataModel::CDCPhysicsTrack>(trackList, 0)->Write();
+    dataHub.CreateAndFillTree<DataModel::CDCHelixTrack>(revTrackList, 0)->Write();
     dataHub.TreeNamePrefixFormat("Rep{}_Diff_");
-    dataHub.CreateAndFillTree<CDCHelixTrack>(diffList, 0)->Write();
+    dataHub.CreateAndFillTree<DataModel::CDCHelixTrack>(diffList, 0)->Write();
     fileOut->Close();
     delete fileOut;
 

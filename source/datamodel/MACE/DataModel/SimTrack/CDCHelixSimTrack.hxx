@@ -11,7 +11,7 @@
 #include <string_view>
 #include <utility>
 
-namespace MACE::DataModel::Track {
+namespace MACE::DataModel::inline Track {
 
 using namespace std::string_view_literals;
 
@@ -59,11 +59,11 @@ private:
     double fTrueZ0;
     double fTrueAlpha;
 
-    static BranchSocket::Vector2FBranchSocket fgTrueCenter;
-    static BranchSocket::FloatBranchSocket fgTrueRadius;
-    static BranchSocket::FloatBranchSocket fgTrueZ0;
-    static BranchSocket::FloatBranchSocket fgTrueAlpha;
+    static Vector2FBranchSocket fgTrueCenter;
+    static FloatBranchSocket fgTrueRadius;
+    static FloatBranchSocket fgTrueZ0;
+    static FloatBranchSocket fgTrueAlpha;
 };
 static_assert(TransientData<CDCHelixSimTrack>);
 
-} // namespace MACE::DataModel::Track
+} // namespace MACE::DataModel::inline Track

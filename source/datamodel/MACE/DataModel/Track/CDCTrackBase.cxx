@@ -1,10 +1,10 @@
 #include "MACE/DataModel/Track/CDCTrackBase.hxx"
 
-namespace MACE::DataModel::Track {
+namespace MACE::DataModel::inline Track {
 
-BranchSocket::IntBranchSocket CDCTrackBase::fgNumHits("numHits", 0);
-BranchSocket::FloatBranchSocket CDCTrackBase::fgChi2("chi2", 0);
-BranchSocket::DoubleBranchSocket CDCTrackBase::fgVertexTime("vtxTime", 0);
+IntBranchSocket CDCTrackBase::fgNumHits("numHits", 0);
+FloatBranchSocket CDCTrackBase::fgChi2("chi2", 0);
+DoubleBranchSocket CDCTrackBase::fgVertexTime("vtxTime", 0);
 
 CDCTrackBase::CDCTrackBase() noexcept :
     fNumHits(fgNumHits.Value()),
@@ -29,4 +29,4 @@ void CDCTrackBase::ConnectToBranches(TTree& tree) {
     fgVertexTime.ConnectToBranch(tree);
 }
 
-} // namespace MACE::DataModel::Track
+} // namespace MACE::DataModel::inline Track

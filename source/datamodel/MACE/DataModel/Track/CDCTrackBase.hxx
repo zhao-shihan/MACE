@@ -2,7 +2,7 @@
 
 #include "MACE/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 
-namespace MACE::DataModel::Track {
+namespace MACE::DataModel::inline Track {
 
 class CDCTrackBase {
 protected:
@@ -33,9 +33,9 @@ private:
     double fChi2;
     double fVertexTime;
 
-    static BranchSocket::IntBranchSocket fgNumHits;
-    static BranchSocket::FloatBranchSocket fgChi2;
-    static BranchSocket::DoubleBranchSocket fgVertexTime;
+    static IntBranchSocket fgNumHits;
+    static FloatBranchSocket fgChi2;
+    static DoubleBranchSocket fgVertexTime;
 };
 
-} // namespace MACE::DataModel::Track
+} // namespace MACE::DataModel::inline Track

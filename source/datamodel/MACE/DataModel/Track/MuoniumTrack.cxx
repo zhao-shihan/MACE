@@ -1,13 +1,13 @@
 #include "MACE/DataModel/Track/MuoniumTrack.hxx"
 
-namespace MACE::DataModel::Track {
+namespace MACE::DataModel::inline Track {
 
-BranchSocket::DoubleBranchSocket MuoniumTrack::fgVertexTime("vtxTime", 0);
-BranchSocket::Vector3FBranchSocket MuoniumTrack::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
-BranchSocket::Vector3FBranchSocket MuoniumTrack::fgVertexMomentum("vtxMom", {"x", "y", "z"}, {0, 0, 0});
-BranchSocket::DoubleBranchSocket MuoniumTrack::fgDecayTime("dcyTime", 0);
-BranchSocket::Vector3FBranchSocket MuoniumTrack::fgDecayPosition("dcyPos", {"x", "y", "z"}, {0, 0, 0});
-BranchSocket::Vector3FBranchSocket MuoniumTrack::fgDecayMomentum("dcyMom", {"x", "y", "z"}, {0, 0, 0});
+DoubleBranchSocket MuoniumTrack::fgVertexTime("vtxTime", 0);
+Vector3FBranchSocket MuoniumTrack::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
+Vector3FBranchSocket MuoniumTrack::fgVertexMomentum("vtxMom", {"x", "y", "z"}, {0, 0, 0});
+DoubleBranchSocket MuoniumTrack::fgDecayTime("dcyTime", 0);
+Vector3FBranchSocket MuoniumTrack::fgDecayPosition("dcyPos", {"x", "y", "z"}, {0, 0, 0});
+Vector3FBranchSocket MuoniumTrack::fgDecayMomentum("dcyMom", {"x", "y", "z"}, {0, 0, 0});
 
 MuoniumTrack::MuoniumTrack() noexcept :
     fVertexTime(fgVertexTime.Value()),
@@ -44,4 +44,4 @@ void MuoniumTrack::ConnectToBranches(TTree& tree) {
     fgDecayMomentum.ConnectToBranch(tree);
 }
 
-} // namespace MACE::DataModel::Track
+} // namespace MACE::DataModel::inline Track

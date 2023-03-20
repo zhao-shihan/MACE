@@ -12,7 +12,7 @@
 #include <string_view>
 #include <utility>
 
-namespace MACE::DataModel::Track {
+namespace MACE::DataModel::inline Track {
 
 using namespace std::string_view_literals;
 
@@ -61,13 +61,13 @@ private:
     stdx::array3d fDecayPosition;
     stdx::array3d fDecayMomentum;
 
-    static BranchSocket::DoubleBranchSocket fgVertexTime;
-    static BranchSocket::Vector3FBranchSocket fgVertexPosition;
-    static BranchSocket::Vector3FBranchSocket fgVertexMomentum;
-    static BranchSocket::DoubleBranchSocket fgDecayTime;
-    static BranchSocket::Vector3FBranchSocket fgDecayPosition;
-    static BranchSocket::Vector3FBranchSocket fgDecayMomentum;
+    static DoubleBranchSocket fgVertexTime;
+    static Vector3FBranchSocket fgVertexPosition;
+    static Vector3FBranchSocket fgVertexMomentum;
+    static DoubleBranchSocket fgDecayTime;
+    static Vector3FBranchSocket fgDecayPosition;
+    static Vector3FBranchSocket fgDecayMomentum;
 };
 static_assert(TransientData<MuoniumTrack>);
 
-} // namespace MACE::DataModel::Track
+} // namespace MACE::DataModel::inline Track

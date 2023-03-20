@@ -1,9 +1,9 @@
 #include "MACE/DataModel/SimTrack/CDCSimTrackBase.hxx"
 
-namespace MACE::DataModel::Track {
+namespace MACE::DataModel::inline Track {
 
-BranchSocket::IntBranchSocket CDCSimTrackBase::fgTrueNumHits("trueNumHits", 0);
-BranchSocket::DoubleBranchSocket CDCSimTrackBase::fgTrueVertexTime("trueVtxTime", 0);
+IntBranchSocket CDCSimTrackBase::fgTrueNumHits("trueNumHits", 0);
+DoubleBranchSocket CDCSimTrackBase::fgTrueVertexTime("trueVtxTime", 0);
 
 CDCSimTrackBase::CDCSimTrackBase() noexcept :
     fTrueNumHits(fgTrueNumHits.Value()),
@@ -24,4 +24,4 @@ void CDCSimTrackBase::ConnectToBranches(TTree& tree) {
     fgTrueVertexTime.ConnectToBranch(tree);
 }
 
-} // namespace MACE::DataModel::Track
+} // namespace MACE::DataModel::inline Track

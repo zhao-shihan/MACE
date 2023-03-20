@@ -6,9 +6,9 @@
 #include <string_view>
 #include <utility>
 
-namespace MACE::DataModel::SimHit {
+namespace MACE::DataModel::inline SimHit {
 
-class EMCalSimHit : public Hit::EMCalHit {
+class EMCalSimHit : public EMCalHit {
 public:
     inline EMCalSimHit() noexcept;
     virtual ~EMCalSimHit() = default;
@@ -36,12 +36,12 @@ private:
     int fG4TrackID;
     ShortString fParticle;
 
-    static BranchSocket::IntBranchSocket fgG4EventID;
-    static BranchSocket::IntBranchSocket fgG4TrackID;
-    static BranchSocket::ShortStringBranchSocket fgParticle;
+    static IntBranchSocket fgG4EventID;
+    static IntBranchSocket fgG4TrackID;
+    static ShortStringBranchSocket fgParticle;
 };
 static_assert(TransientData<EMCalSimHit>);
 
-} // namespace MACE::DataModel::SimHit
+} // namespace MACE::DataModel::inline SimHit
 
 #include "MACE/DataModel/SimHit/EMCalSimHit.inl"

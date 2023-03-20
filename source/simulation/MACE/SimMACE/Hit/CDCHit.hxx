@@ -8,7 +8,7 @@
 
 namespace MACE::SimMACE::Hit {
 
-class CDCHit final : public DataModel::SimHit::CDCSimHit,
+class CDCHit final : public DataModel::CDCSimHit,
                      public Geant4X::UseG4Allocator<CDCHit>,
                      public G4VHit {
 public:

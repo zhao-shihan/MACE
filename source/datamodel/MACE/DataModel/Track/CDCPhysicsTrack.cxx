@@ -2,12 +2,12 @@
 #include "MACE/DataModel/Track/CDCHelixTrack.hxx"
 #include "MACE/DataModel/Track/CDCPhysicsTrack.hxx"
 
-namespace MACE::DataModel::Track {
+namespace MACE::DataModel::inline Track {
 
-BranchSocket::Vector3FBranchSocket CDCPhysicsTrack::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
-BranchSocket::FloatBranchSocket CDCPhysicsTrack::fgVertexEnergy("vtxEne", 0);
-BranchSocket::Vector3FBranchSocket CDCPhysicsTrack::fgVertexMomentum("vtxMom", {"x", "y", "z"}, {0, 0, 0});
-BranchSocket::ShortStringBranchSocket CDCPhysicsTrack::fgParticle("particle", "");
+Vector3FBranchSocket CDCPhysicsTrack::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
+FloatBranchSocket CDCPhysicsTrack::fgVertexEnergy("vtxEne", 0);
+Vector3FBranchSocket CDCPhysicsTrack::fgVertexMomentum("vtxMom", {"x", "y", "z"}, {0, 0, 0});
+ShortStringBranchSocket CDCPhysicsTrack::fgParticle("particle", "");
 
 CDCPhysicsTrack::CDCPhysicsTrack() noexcept :
     CDCTrackBase(),
@@ -61,4 +61,4 @@ void CDCPhysicsTrack::ConnectToBranches(TTree& tree) {
     fgParticle.ConnectToBranch(tree);
 }
 
-} // namespace MACE::DataModel::Track
+} // namespace MACE::DataModel::inline Track

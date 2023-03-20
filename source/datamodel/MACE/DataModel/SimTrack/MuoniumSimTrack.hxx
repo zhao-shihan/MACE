@@ -6,11 +6,11 @@
 #include <string_view>
 #include <utility>
 
-namespace MACE::DataModel::SimTrack {
+namespace MACE::DataModel::inline SimTrack {
 
 using namespace std::string_view_literals;
 
-class MuoniumSimTrack : public Track::MuoniumTrack {
+class MuoniumSimTrack : public MuoniumTrack {
 public:
     MuoniumSimTrack() noexcept;
     virtual ~MuoniumSimTrack() = default;
@@ -38,10 +38,10 @@ private:
     int fG4EventID;
     int fG4TrackID;
 
-    static BranchSocket::ShortStringBranchSocket fgParticle;
-    static BranchSocket::IntBranchSocket fgG4EventID;
-    static BranchSocket::IntBranchSocket fgG4TrackID;
+    static ShortStringBranchSocket fgParticle;
+    static IntBranchSocket fgG4EventID;
+    static IntBranchSocket fgG4TrackID;
 };
 static_assert(TransientData<MuoniumSimTrack>);
 
-} // namespace MACE::DataModel::SimTrack
+} // namespace MACE::DataModel::inline SimTrack

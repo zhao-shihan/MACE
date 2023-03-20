@@ -6,7 +6,7 @@
 
 #include <string_view>
 
-namespace MACE::DataModel::Hit {
+namespace MACE::DataModel::inline Hit {
 
 class EMCalHit {
 public:
@@ -33,11 +33,11 @@ private:
     double fHitTime;
     double fEnergy;
 
-    static BranchSocket::DoubleBranchSocket fgHitTime;
-    static BranchSocket::FloatBranchSocket fgEnergy;
+    static DoubleBranchSocket fgHitTime;
+    static FloatBranchSocket fgEnergy;
 };
 static_assert(TransientData<EMCalHit>);
 
-} // namespace MACE::DataModel::Hit
+} // namespace MACE::DataModel::inline Hit
 
 #include "MACE/DataModel/Hit/EMCalHit.inl"

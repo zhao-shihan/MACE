@@ -1,4 +1,4 @@
-namespace MACE::DataModel::BranchSocket {
+namespace MACE::DataModel::inline BranchSocket {
 
 template<Concept::Arithmetic T, std::size_t N>
 VectorBranchSocket<T, N>::VectorBranchSocket(const std::string& branchName, const std::array<std::string, N>& leafNames, const std::array<T, N>& defaultValues) :
@@ -19,4 +19,4 @@ VectorBranchSocket<T, N>::VectorBranchSocket(const std::string& branchName, cons
     }
 }
 
-} // namespace MACE::DataModel::BranchSocket
+} // namespace MACE::DataModel::inline BranchSocket

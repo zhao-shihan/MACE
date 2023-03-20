@@ -1,12 +1,12 @@
 #include "MACE/DataModel/SimTrack/CDCHelixSimTrack.hxx"
 #include "MACE/DataModel/SimTrack/CDCPhysicsSimTrack.hxx"
 
-namespace MACE::DataModel::Track {
+namespace MACE::DataModel::inline Track {
 
-BranchSocket::Vector2FBranchSocket CDCHelixSimTrack::fgTrueCenter("trueCenter", {"x", "y"}, {0, 0});
-BranchSocket::FloatBranchSocket CDCHelixSimTrack::fgTrueRadius("trueR", 0);
-BranchSocket::FloatBranchSocket CDCHelixSimTrack::fgTrueZ0("trueZ0", 0);
-BranchSocket::FloatBranchSocket CDCHelixSimTrack::fgTrueAlpha("trueAlpha", 0);
+Vector2FBranchSocket CDCHelixSimTrack::fgTrueCenter("trueCenter", {"x", "y"}, {0, 0});
+FloatBranchSocket CDCHelixSimTrack::fgTrueRadius("trueR", 0);
+FloatBranchSocket CDCHelixSimTrack::fgTrueZ0("trueZ0", 0);
+FloatBranchSocket CDCHelixSimTrack::fgTrueAlpha("trueAlpha", 0);
 
 CDCHelixSimTrack::CDCHelixSimTrack() noexcept :
     CDCHelixTrack(),
@@ -65,4 +65,4 @@ void CDCHelixSimTrack::ConnectToBranches(TTree& tree) {
     fgTrueAlpha.ConnectToBranch(tree);
 }
 
-} // namespace MACE::DataModel::Track
+} // namespace MACE::DataModel::inline Track

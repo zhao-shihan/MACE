@@ -5,7 +5,7 @@
 
 #include <string>
 
-namespace MACE::DataModel::BranchSocket {
+namespace MACE::DataModel::inline BranchSocket {
 
 template<Concept::ROOTFundamental T>
 class FundamentalBranchSocket final : public BranchSocketBase<FundamentalBranchSocket<T>, T> {
@@ -34,6 +34,6 @@ using LongBranchSocket = FundamentalBranchSocket<Long64_t>;
 using ULongBranchSocket = FundamentalBranchSocket<ULong64_t>;
 using BoolBranchSocket = FundamentalBranchSocket<Bool_t>;
 
-} // namespace MACE::DataModel::BranchSocket
+} // namespace MACE::DataModel::inline BranchSocket
 
 #include "MACE/DataModel/BranchSocket/FundamentalBranchSocket.inl"

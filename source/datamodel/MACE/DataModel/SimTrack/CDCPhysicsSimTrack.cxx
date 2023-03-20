@@ -1,12 +1,12 @@
 #include "MACE/DataModel/SimTrack/CDCHelixSimTrack.hxx"
 #include "MACE/DataModel/SimTrack/CDCPhysicsSimTrack.hxx"
 
-namespace MACE::DataModel::Track {
+namespace MACE::DataModel::inline Track {
 
-BranchSocket::Vector3FBranchSocket CDCPhysicsSimTrack::fgTrueVertexPosition("trueVtxPos", {"x", "y", "z"}, {0, 0, 0});
-BranchSocket::FloatBranchSocket CDCPhysicsSimTrack::fgTrueVertexEnergy("trueVtxEne", 0);
-BranchSocket::Vector3FBranchSocket CDCPhysicsSimTrack::fgTrueVertexMomentum("trueVtxMom", {"x", "y", "z"}, {0, 0, 0});
-BranchSocket::ShortStringBranchSocket CDCPhysicsSimTrack::fgTrueParticle("trueParticle", "");
+Vector3FBranchSocket CDCPhysicsSimTrack::fgTrueVertexPosition("trueVtxPos", {"x", "y", "z"}, {0, 0, 0});
+FloatBranchSocket CDCPhysicsSimTrack::fgTrueVertexEnergy("trueVtxEne", 0);
+Vector3FBranchSocket CDCPhysicsSimTrack::fgTrueVertexMomentum("trueVtxMom", {"x", "y", "z"}, {0, 0, 0});
+ShortStringBranchSocket CDCPhysicsSimTrack::fgTrueParticle("trueParticle", "");
 
 CDCPhysicsSimTrack::CDCPhysicsSimTrack() noexcept :
     CDCPhysicsTrack(),
@@ -65,4 +65,4 @@ void CDCPhysicsSimTrack::ConnectToBranches(TTree& tree) {
     fgTrueParticle.ConnectToBranch(tree);
 }
 
-} // namespace MACE::DataModel::Track
+} // namespace MACE::DataModel::inline Track

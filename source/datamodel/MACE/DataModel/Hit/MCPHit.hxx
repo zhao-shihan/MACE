@@ -12,7 +12,7 @@
 #include <string_view>
 #include <utility>
 
-namespace MACE::DataModel::Hit {
+namespace MACE::DataModel::inline Hit {
 
 class MCPHit {
 public:
@@ -42,11 +42,11 @@ private:
     double fHitTime;
     stdx::array2d fHitPosition;
 
-    static BranchSocket::DoubleBranchSocket fgHitTime;
-    static BranchSocket::Vector2FBranchSocket fgHitPosition;
+    static DoubleBranchSocket fgHitTime;
+    static Vector2FBranchSocket fgHitPosition;
 };
 static_assert(TransientData<MCPHit>);
 
-} // namespace MACE::DataModel::Hit
+} // namespace MACE::DataModel::inline Hit
 
 #include "MACE/DataModel/Hit/MCPHit.inl"

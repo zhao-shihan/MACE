@@ -1,10 +1,10 @@
 #include "MACE/DataModel/SimTrack/MuoniumSimTrack.hxx"
 
-namespace MACE::DataModel::SimTrack {
+namespace MACE::DataModel::inline SimTrack {
 
-BranchSocket::ShortStringBranchSocket MuoniumSimTrack::fgParticle("particle", "");
-BranchSocket::IntBranchSocket MuoniumSimTrack::fgG4EventID("g4EventID", -1);
-BranchSocket::IntBranchSocket MuoniumSimTrack::fgG4TrackID("g4TrackID", -1);
+ShortStringBranchSocket MuoniumSimTrack::fgParticle("particle", "");
+IntBranchSocket MuoniumSimTrack::fgG4EventID("g4EventID", -1);
+IntBranchSocket MuoniumSimTrack::fgG4TrackID("g4TrackID", -1);
 
 MuoniumSimTrack::MuoniumSimTrack() noexcept :
     MuoniumTrack(),
@@ -33,4 +33,4 @@ void MuoniumSimTrack::ConnectToBranches(TTree& tree) {
     fgG4TrackID.ConnectToBranch(tree);
 }
 
-} // namespace MACE::DataModel::SimTrack
+} // namespace MACE::DataModel::inline SimTrack

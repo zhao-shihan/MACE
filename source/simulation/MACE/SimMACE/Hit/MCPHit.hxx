@@ -8,7 +8,7 @@
 
 namespace MACE::SimMACE::Hit {
 
-class MCPHit final : public DataModel::SimHit::MCPSimHit,
+class MCPHit final : public DataModel::MCPSimHit,
                      public Geant4X::UseG4Allocator<MCPHit>,
                      public G4VHit {
 public:

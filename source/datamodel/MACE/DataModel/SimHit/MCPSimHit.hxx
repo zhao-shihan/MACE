@@ -12,9 +12,9 @@
 #include <string_view>
 #include <utility>
 
-namespace MACE::DataModel::SimHit {
+namespace MACE::DataModel::inline SimHit {
 
-class MCPSimHit : public Hit::MCPHit {
+class MCPSimHit : public MCPHit {
 public:
     inline MCPSimHit() noexcept;
     virtual ~MCPSimHit() noexcept = default;
@@ -51,14 +51,14 @@ private:
     stdx::array3d fVertexPosition;
     ShortString fParticle;
 
-    static BranchSocket::IntBranchSocket fgG4EventID;
-    static BranchSocket::IntBranchSocket fgG4TrackID;
-    static BranchSocket::DoubleBranchSocket fgVertexTime;
-    static BranchSocket::Vector3FBranchSocket fgVertexPosition;
-    static BranchSocket::ShortStringBranchSocket fgParticle;
+    static IntBranchSocket fgG4EventID;
+    static IntBranchSocket fgG4TrackID;
+    static DoubleBranchSocket fgVertexTime;
+    static Vector3FBranchSocket fgVertexPosition;
+    static ShortStringBranchSocket fgParticle;
 };
 static_assert(TransientData<MCPSimHit>);
 
-} // namespace MACE::DataModel::SimHit
+} // namespace MACE::DataModel::inline SimHit
 
 #include "MACE/DataModel/SimHit/MCPSimHit.inl"

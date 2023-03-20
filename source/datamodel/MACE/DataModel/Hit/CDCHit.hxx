@@ -8,7 +8,7 @@
 
 #include <string_view>
 
-namespace MACE::DataModel::Hit {
+namespace MACE::DataModel::inline Hit {
 
 class CDCHit {
 public:
@@ -38,12 +38,12 @@ private:
     double fDriftDistance;
     double fHitTime;
 
-    static BranchSocket::IntBranchSocket fgCellID;
-    static BranchSocket::FloatBranchSocket fgDriftDistance;
-    static BranchSocket::DoubleBranchSocket fgHitTime;
+    static IntBranchSocket fgCellID;
+    static FloatBranchSocket fgDriftDistance;
+    static DoubleBranchSocket fgHitTime;
 };
 static_assert(TransientData<CDCHit>);
 
-} // namespace MACE::DataModel::Hit
+} // namespace MACE::DataModel::inline Hit
 
 #include "MACE/DataModel/Hit/CDCHit.inl"

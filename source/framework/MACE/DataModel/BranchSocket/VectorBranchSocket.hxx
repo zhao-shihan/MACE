@@ -13,7 +13,7 @@
 #include <array>
 #include <string>
 
-namespace MACE::DataModel::BranchSocket {
+namespace MACE::DataModel::inline BranchSocket {
 
 template<Concept::Arithmetic T, std::size_t N>
 class VectorBranchSocket final : public BranchSocketBase<VectorBranchSocket<T, N>, std::array<T, N>> {
@@ -39,6 +39,6 @@ using Vector2DBranchSocket = VectorBranchSocket<Double_t, 2>;
 using Vector3DBranchSocket = VectorBranchSocket<Double_t, 3>;
 using Vector4DBranchSocket = VectorBranchSocket<Double_t, 4>;
 
-} // namespace MACE::DataModel::BranchSocket
+} // namespace MACE::DataModel::inline BranchSocket
 
 #include "MACE/DataModel/BranchSocket/VectorBranchSocket.inl"

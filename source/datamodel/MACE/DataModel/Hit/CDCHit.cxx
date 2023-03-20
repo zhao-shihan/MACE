@@ -1,10 +1,10 @@
 #include "MACE/DataModel/Hit/CDCHit.hxx"
 
-namespace MACE::DataModel::Hit {
+namespace MACE::DataModel::inline Hit {
 
-BranchSocket::DoubleBranchSocket CDCHit::fgHitTime("hitTime", 0);
-BranchSocket::FloatBranchSocket CDCHit::fgDriftDistance("drift", 0);
-BranchSocket::IntBranchSocket CDCHit::fgCellID("cellID", -1);
+DoubleBranchSocket CDCHit::fgHitTime("hitTime", 0);
+FloatBranchSocket CDCHit::fgDriftDistance("drift", 0);
+IntBranchSocket CDCHit::fgCellID("cellID", -1);
 
 void CDCHit::CreateBranches(TTree& tree) {
     fgCellID.CreateBranch(tree);
@@ -18,4 +18,4 @@ void CDCHit::ConnectToBranches(TTree& tree) {
     fgHitTime.ConnectToBranch(tree);
 }
 
-} // namespace MACE::DataModel::Hit
+} // namespace MACE::DataModel::inline Hit

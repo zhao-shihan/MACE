@@ -1,16 +1,16 @@
 #include "MACE/DataModel/SimHit/CDCSimHit.hxx"
 
-namespace MACE::DataModel::SimHit {
+namespace MACE::DataModel::inline SimHit {
 
-BranchSocket::FloatBranchSocket CDCSimHit::fgEnergy("hitEne", 0);
-BranchSocket::Vector3FBranchSocket CDCSimHit::fgMomentum("hitMom", {"x", "y", "z"}, {0, 0, 0});
-BranchSocket::DoubleBranchSocket CDCSimHit::fgVertexTime("vtxTime", 0);
-BranchSocket::Vector3FBranchSocket CDCSimHit::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
-BranchSocket::FloatBranchSocket CDCSimHit::fgVertexEnergy("vtxEne", 0);
-BranchSocket::Vector3FBranchSocket CDCSimHit::fgVertexMomentum("vtxMom", {"x", "y", "z"}, {0, 0, 0});
-BranchSocket::ShortStringBranchSocket CDCSimHit::fgParticle("particle", "");
-BranchSocket::IntBranchSocket CDCSimHit::fgG4EventID("g4EventID", -1);
-BranchSocket::IntBranchSocket CDCSimHit::fgG4TrackID("g4TrackID", -1);
+FloatBranchSocket CDCSimHit::fgEnergy("hitEne", 0);
+Vector3FBranchSocket CDCSimHit::fgMomentum("hitMom", {"x", "y", "z"}, {0, 0, 0});
+DoubleBranchSocket CDCSimHit::fgVertexTime("vtxTime", 0);
+Vector3FBranchSocket CDCSimHit::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
+FloatBranchSocket CDCSimHit::fgVertexEnergy("vtxEne", 0);
+Vector3FBranchSocket CDCSimHit::fgVertexMomentum("vtxMom", {"x", "y", "z"}, {0, 0, 0});
+ShortStringBranchSocket CDCSimHit::fgParticle("particle", "");
+IntBranchSocket CDCSimHit::fgG4EventID("g4EventID", -1);
+IntBranchSocket CDCSimHit::fgG4TrackID("g4TrackID", -1);
 
 void CDCSimHit::CreateBranches(TTree& tree) {
     CDCHit::CreateBranches(tree);
@@ -38,4 +38,4 @@ void CDCSimHit::ConnectToBranches(TTree& tree) {
     fgParticle.ConnectToBranch(tree);
 }
 
-} // namespace MACE::DataModel::SimHit
+} // namespace MACE::DataModel::inline SimHit

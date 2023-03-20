@@ -1,9 +1,9 @@
 #include "MACE/DataModel/Hit/MCPHit.hxx"
 
-namespace MACE::DataModel::Hit {
+namespace MACE::DataModel::inline Hit {
 
-BranchSocket::DoubleBranchSocket MCPHit::fgHitTime("hitTime", 0);
-BranchSocket::Vector2FBranchSocket MCPHit::fgHitPosition("hitPos", {"x", "y"}, {0, 0});
+DoubleBranchSocket MCPHit::fgHitTime("hitTime", 0);
+Vector2FBranchSocket MCPHit::fgHitPosition("hitPos", {"x", "y"}, {0, 0});
 
 void MCPHit::CreateBranches(TTree& tree) {
     fgHitTime.CreateBranch(tree);
@@ -15,4 +15,4 @@ void MCPHit::ConnectToBranches(TTree& tree) {
     fgHitPosition.ConnectToBranch(tree);
 }
 
-} // namespace MACE::DataModel::Hit
+} // namespace MACE::DataModel::inline Hit

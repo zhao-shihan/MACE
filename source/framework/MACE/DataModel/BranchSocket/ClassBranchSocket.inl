@@ -1,4 +1,4 @@
-namespace MACE::DataModel::BranchSocket {
+namespace MACE::DataModel::inline BranchSocket {
 
 template<class AClass>
     requires std::assignable_from<AClass, AClass>
@@ -17,4 +17,4 @@ ClassBranchSocket<AClass>::~ClassBranchSocket() {
     delete fObject;
 }
 
-} // namespace MACE::DataModel::BranchSocket
+} // namespace MACE::DataModel::inline BranchSocket

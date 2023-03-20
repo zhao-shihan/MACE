@@ -12,9 +12,9 @@
 #include <string_view>
 #include <utility>
 
-namespace MACE::DataModel::SimHit {
+namespace MACE::DataModel::inline SimHit {
 
-class CDCSimHit : public Hit::CDCHit {
+class CDCSimHit : public CDCHit {
 public:
     inline CDCSimHit() noexcept;
     virtual ~CDCSimHit() = default;
@@ -69,18 +69,18 @@ private:
     stdx::array3d fVertexMomentum;
     ShortString fParticle;
 
-    static BranchSocket::FloatBranchSocket fgEnergy;
-    static BranchSocket::Vector3FBranchSocket fgMomentum;
-    static BranchSocket::DoubleBranchSocket fgVertexTime;
-    static BranchSocket::Vector3FBranchSocket fgVertexPosition;
-    static BranchSocket::FloatBranchSocket fgVertexEnergy;
-    static BranchSocket::Vector3FBranchSocket fgVertexMomentum;
-    static BranchSocket::ShortStringBranchSocket fgParticle;
-    static BranchSocket::IntBranchSocket fgG4EventID;
-    static BranchSocket::IntBranchSocket fgG4TrackID;
+    static FloatBranchSocket fgEnergy;
+    static Vector3FBranchSocket fgMomentum;
+    static DoubleBranchSocket fgVertexTime;
+    static Vector3FBranchSocket fgVertexPosition;
+    static FloatBranchSocket fgVertexEnergy;
+    static Vector3FBranchSocket fgVertexMomentum;
+    static ShortStringBranchSocket fgParticle;
+    static IntBranchSocket fgG4EventID;
+    static IntBranchSocket fgG4TrackID;
 };
 static_assert(TransientData<CDCSimHit>);
 
-} // namespace MACE::DataModel::SimHit
+} // namespace MACE::DataModel::inline SimHit
 
 #include "MACE/DataModel/SimHit/CDCSimHit.inl"

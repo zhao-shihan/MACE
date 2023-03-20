@@ -1,12 +1,12 @@
 #include "MACE/DataModel/SimHit/MCPSimHit.hxx"
 
-namespace MACE::DataModel::SimHit {
+namespace MACE::DataModel::inline SimHit {
 
-BranchSocket::IntBranchSocket MCPSimHit::fgG4EventID("g4EventID", -1);
-BranchSocket::IntBranchSocket MCPSimHit::fgG4TrackID("g4TrackID", -1);
-BranchSocket::DoubleBranchSocket MCPSimHit::fgVertexTime("vtxTime", 0);
-BranchSocket::Vector3FBranchSocket MCPSimHit::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
-BranchSocket::ShortStringBranchSocket MCPSimHit::fgParticle("particle", "");
+IntBranchSocket MCPSimHit::fgG4EventID("g4EventID", -1);
+IntBranchSocket MCPSimHit::fgG4TrackID("g4TrackID", -1);
+DoubleBranchSocket MCPSimHit::fgVertexTime("vtxTime", 0);
+Vector3FBranchSocket MCPSimHit::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
+ShortStringBranchSocket MCPSimHit::fgParticle("particle", "");
 
 void MCPSimHit::CreateBranches(TTree& tree) {
     MCPHit::CreateBranches(tree);
@@ -26,4 +26,4 @@ void MCPSimHit::ConnectToBranches(TTree& tree) {
     fgParticle.ConnectToBranch(tree);
 }
 
-} // namespace MACE::DataModel::SimHit
+} // namespace MACE::DataModel::inline SimHit

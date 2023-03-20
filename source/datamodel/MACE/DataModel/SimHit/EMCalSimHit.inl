@@ -1,4 +1,4 @@
-namespace MACE::DataModel::SimHit {
+namespace MACE::DataModel::inline SimHit {
 
 inline EMCalSimHit::EMCalSimHit() noexcept :
     EMCalHit(),
@@ -13,4 +13,4 @@ inline void EMCalSimHit::FillBranchSockets() const noexcept {
     fgParticle.Value(fParticle);
 }
 
-} // namespace MACE::DataModel::SimHit
+} // namespace MACE::DataModel::inline SimHit

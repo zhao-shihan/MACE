@@ -5,7 +5,7 @@
 
 #include <string>
 
-namespace MACE::DataModel::BranchSocket {
+namespace MACE::DataModel::inline BranchSocket {
 
 class ShortStringBranchSocket final : public BranchSocketBase<ShortStringBranchSocket, ShortString> {
 public:
@@ -22,4 +22,4 @@ private:
     ShortString fString;
 };
 
-} // namespace MACE::DataModel::BranchSocket
+} // namespace MACE::DataModel::inline BranchSocket

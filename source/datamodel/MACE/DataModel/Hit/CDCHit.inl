@@ -1,4 +1,4 @@
-namespace MACE::DataModel::Hit {
+namespace MACE::DataModel::inline Hit {
 
 inline CDCHit::CDCHit() noexcept :
     fCellID(fgCellID.Value()),
@@ -11,4 +11,4 @@ inline void CDCHit::FillBranchSockets() const noexcept {
     fgHitTime.Value(fHitTime);
 }
 
-} // namespace MACE::DataModel::Hit
+} // namespace MACE::DataModel::inline Hit

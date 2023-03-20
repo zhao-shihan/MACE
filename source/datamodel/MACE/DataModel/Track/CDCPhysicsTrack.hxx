@@ -14,7 +14,7 @@
 #include <string_view>
 #include <utility>
 
-namespace MACE::DataModel::Track {
+namespace MACE::DataModel::inline Track {
 
 using namespace LiteralUnit::MagneticFluxDensity;
 using namespace std::string_view_literals;
@@ -62,11 +62,11 @@ private:
     stdx::array3d fVertexMomentum;
     ShortString fParticle;
 
-    static BranchSocket::Vector3FBranchSocket fgVertexPosition;
-    static BranchSocket::FloatBranchSocket fgVertexEnergy;
-    static BranchSocket::Vector3FBranchSocket fgVertexMomentum;
-    static BranchSocket::ShortStringBranchSocket fgParticle;
+    static Vector3FBranchSocket fgVertexPosition;
+    static FloatBranchSocket fgVertexEnergy;
+    static Vector3FBranchSocket fgVertexMomentum;
+    static ShortStringBranchSocket fgParticle;
 };
 static_assert(TransientData<CDCPhysicsTrack>);
 
-} // namespace MACE::DataModel::Track
+} // namespace MACE::DataModel::inline Track

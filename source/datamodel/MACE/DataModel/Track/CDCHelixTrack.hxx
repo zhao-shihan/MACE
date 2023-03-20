@@ -13,7 +13,7 @@
 #include <string_view>
 #include <utility>
 
-namespace MACE::DataModel::Track {
+namespace MACE::DataModel::inline Track {
 
 using namespace std::string_view_literals;
 using namespace LiteralUnit::MagneticFluxDensity;
@@ -59,11 +59,11 @@ private:
     double fZ0;
     double fAlpha;
 
-    static BranchSocket::Vector2FBranchSocket fgCenter;
-    static BranchSocket::FloatBranchSocket fgRadius;
-    static BranchSocket::FloatBranchSocket fgZ0;
-    static BranchSocket::FloatBranchSocket fgAlpha;
+    static Vector2FBranchSocket fgCenter;
+    static FloatBranchSocket fgRadius;
+    static FloatBranchSocket fgZ0;
+    static FloatBranchSocket fgAlpha;
 };
 static_assert(TransientData<CDCHelixTrack>);
 
-} // namespace MACE::DataModel::Track
+} // namespace MACE::DataModel::inline Track

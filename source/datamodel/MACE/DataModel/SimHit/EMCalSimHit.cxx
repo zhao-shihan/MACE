@@ -1,10 +1,10 @@
 #include "MACE/DataModel/SimHit/EMCalSimHit.hxx"
 
-namespace MACE::DataModel::SimHit {
+namespace MACE::DataModel::inline SimHit {
 
-BranchSocket::ShortStringBranchSocket EMCalSimHit::fgParticle("particle", "");
-BranchSocket::IntBranchSocket EMCalSimHit::fgG4EventID("g4EventID", -1);
-BranchSocket::IntBranchSocket EMCalSimHit::fgG4TrackID("g4TrackID", -1);
+ShortStringBranchSocket EMCalSimHit::fgParticle("particle", "");
+IntBranchSocket EMCalSimHit::fgG4EventID("g4EventID", -1);
+IntBranchSocket EMCalSimHit::fgG4TrackID("g4TrackID", -1);
 
 void EMCalSimHit::CreateBranches(TTree& tree) {
     EMCalHit::CreateBranches(tree);
@@ -20,4 +20,4 @@ void EMCalSimHit::ConnectToBranches(TTree& tree) {
     fgParticle.ConnectToBranch(tree);
 }
 
-} // namespace MACE::DataModel::SimHit
+} // namespace MACE::DataModel::inline SimHit

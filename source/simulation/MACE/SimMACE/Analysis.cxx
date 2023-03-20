@@ -32,9 +32,9 @@ void Analysis::RunBegin(G4int runID, Option_t* option) {
                                     option,
                                     "",
                                     ROOT::RCompressionSetting::EDefaults::kUseSmallest);
-    fEMCalHitTree = fDataHub.CreateTree<DataModel::SimHit::EMCalSimHit>(runID);
-    fMCPHitTree = fDataHub.CreateTree<DataModel::SimHit::MCPSimHit>(runID);
-    fCDCHitTree = fDataHub.CreateTree<DataModel::SimHit::CDCSimHit>(runID);
+    fEMCalHitTree = fDataHub.CreateTree<DataModel::EMCalSimHit>(runID);
+    fMCPHitTree = fDataHub.CreateTree<DataModel::MCPSimHit>(runID);
+    fCDCHitTree = fDataHub.CreateTree<DataModel::CDCSimHit>(runID);
 }
 
 void Analysis::EventEnd() {
