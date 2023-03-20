@@ -1,6 +1,6 @@
 project(MACE)
 
-include_directories("${MACE_PROJECT_SRC_DIR}/simulation")
+include_directories(${PROJECT_SOURCE_DIR})
 
 add_subdirectory(MACE/SimCDC)
 add_subdirectory(MACE/SimEMCal)
