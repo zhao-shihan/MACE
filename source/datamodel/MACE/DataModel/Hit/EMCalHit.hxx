@@ -27,7 +27,7 @@ public:
     inline void FillBranchSockets() const noexcept;
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    static constexpr auto BasicTreeName() noexcept { return std::string_view("CalHit"); }
+    static constexpr auto BasicTreeName() noexcept { return std::string_view("EMCalHit"); }
 
 private:
     double fHitTime;

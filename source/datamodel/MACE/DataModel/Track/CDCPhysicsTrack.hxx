@@ -17,6 +17,7 @@
 namespace MACE::DataModel::Track {
 
 using namespace LiteralUnit::MagneticFluxDensity;
+using namespace std::string_view_literals;
 
 using PhysicalConstant::electron_mass_c2;
 
