@@ -2,15 +2,7 @@ namespace MACE::inline Extension::CLHEPX::Random {
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
 RandomEngineBase<PRBG>::RandomEngineBase() :
-    HepRandomEngine(),
-    fPRBG() {
-    static_assert(std::is_final_v<PRBG>);
-    static_assert(std::derived_from<PRBG, RandomEngineBase<PRBG>>);
-    constexpr auto seedMin = 1;
-    constexpr auto seedMax = std::numeric_limits<long>::max() - 1;
-    Math::Random::Generator::Xoshiro256PP xoshiro256PP(reinterpret_cast<std::uintptr_t>(this));
-    setSeed(Math::Random::Distribution::Uniform<long>(seedMin, seedMax)(xoshiro256PP));
-}
+    RandomEngineBase(20030202) {}
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
 RandomEngineBase<PRBG>::RandomEngineBase(long seed) :

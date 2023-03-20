@@ -6,15 +6,13 @@
 #include "MACE/SimMACE/Action/PhysicsList.hxx"
 #include "MACE/SimMACE/RunManager.hxx"
 
-#include "Randomize.hh"
-
 using namespace MACE;
 
 int main(int argc, char* argv[]) {
     Env::CLI::Geant4CLI cli;
     Env::MPIEnv mpiEnv(argc, argv, cli);
 
-    CLHEPX::Random::Xoshiro256Engine randomEngine(20030202);
+    CLHEPX::Random::Xoshiro256Engine randomEngine;
     G4Random::setTheEngine(&randomEngine);
 
     const auto verboseLevel = cli.GetVerboseLevel().value_or(Env::VerboseLevel::Warning);
