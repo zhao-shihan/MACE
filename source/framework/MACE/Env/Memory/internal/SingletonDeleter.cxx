@@ -1,4 +1,4 @@
-#include "MACE/Env/Memory/internal/ISingletonBase.hxx"
+#include "MACE/Env/Memory/internal/SingletonBase.hxx"
 #include "MACE/Env/Memory/internal/SingletonDeleter.hxx"
 #include "MACE/Env/Memory/internal/SingletonPool.hxx"
 

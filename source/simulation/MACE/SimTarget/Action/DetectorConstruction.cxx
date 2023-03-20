@@ -22,7 +22,7 @@ using namespace MACE::LiteralUnit::Density;
 using namespace MACE::LiteralUnit::Temperature;
 
 DetectorConstruction::DetectorConstruction() :
-    FreeSingleton(),
+    PassiveSingleton(),
     G4VUserDetectorConstruction(),
     fCheckOverlap(false),
     fWorld(nullptr),

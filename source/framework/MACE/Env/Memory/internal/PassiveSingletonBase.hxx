@@ -4,12 +4,12 @@
 
 namespace MACE::Env::Memory::internal {
 
-/// @brief Implementation detail of MACE::Env::Memory::FreeSingleton.
+/// @brief Implementation detail of MACE::Env::Memory::PassiveSingleton.
 /// Not API. Just a signature of free singleton.
-class FreeSingletonBase : public NonMoveableBase {
+class PassiveSingletonBase : public NonMoveableBase {
 protected:
-    FreeSingletonBase() = default;
-    ~FreeSingletonBase() = default;
+    PassiveSingletonBase() = default;
+    ~PassiveSingletonBase() = default;
 };
 
 } // namespace MACE::Env::Memory::internal

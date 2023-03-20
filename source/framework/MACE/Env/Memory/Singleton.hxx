@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Env/Memory/internal/ISingletonBase.hxx"
+#include "MACE/Env/Memory/internal/SingletonBase.hxx"
 #include "MACE/Env/Memory/internal/SingletonFactory.hxx"
 #include "MACE/Env/Memory/internal/SingletonPool.hxx"
 #include "MACE/Env/Memory/Singletonized.hxx"
@@ -146,7 +146,7 @@ namespace MACE::Env::Memory {
 /// MACE::Env. Call to an Instance() without initialize an environment
 /// has undefined behaviour. Use wisely, think wisely!
 template<class ADerived>
-class Singleton : public internal::ISingletonBase {
+class Singleton : public internal::SingletonBase {
 protected:
     Singleton();
     virtual ~Singleton();

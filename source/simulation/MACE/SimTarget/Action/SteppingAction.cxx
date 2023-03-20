@@ -11,7 +11,7 @@
 namespace MACE::SimTarget::inline Action {
 
 SteppingAction::SteppingAction() :
-    FreeSingleton(),
+    PassiveSingleton(),
     G4UserSteppingAction(),
     fMuonPlus(gsl::not_null(G4MuonPlus::Definition())),
     fMuonium(gsl::not_null(Geant4X::Physics::Muonium::Definition())),

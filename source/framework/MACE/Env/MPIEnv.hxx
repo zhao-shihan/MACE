@@ -14,13 +14,13 @@
 namespace MACE::Env {
 
 class MPIEnv : public BasicEnv,
-               public Memory::FreeSingleton<MPIEnv> {
+               public Memory::PassiveSingleton<MPIEnv> {
 public:
     template<class ACLI = internal::NoCLI>
     MPIEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
     virtual ~MPIEnv();
 
-    using FreeSingleton<MPIEnv>::Instance;
+    using PassiveSingleton<MPIEnv>::Instance;
     static auto Initialized() { return fgInitialized; }
     static auto Finalized() { return fgFinalized; }
     static auto Available() { return Initialized() and not Finalized(); }

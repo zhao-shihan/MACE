@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Env/Memory/FreeSingleton.hxx"
+#include "MACE/Env/Memory/PassiveSingleton.hxx"
 #include "MACE/Env/Memory/Singletonized.hxx"
 #include "MACE/Utility/NonMoveableBase.hxx"
 
@@ -16,14 +16,14 @@
 
 namespace MACE::Env::Memory::internal {
 
-class ISingletonBase;
+class SingletonBase;
 
 /// @brief Implementation detail of MACE::Env::Memory::Singleton.
 /// Not API.
-class SingletonPool final : public FreeSingleton<SingletonPool> {
+class SingletonPool final : public PassiveSingleton<SingletonPool> {
 public:
     using Node = void*;
-    using BaseNode = gsl::owner<const ISingletonBase*>;
+    using BaseNode = gsl::owner<const SingletonBase*>;
 
 public:
     template<Singletonized ASingleton>

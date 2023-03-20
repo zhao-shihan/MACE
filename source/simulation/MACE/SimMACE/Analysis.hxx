@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/DataModel/DataFactory.hxx"
-#include "MACE/Env/Memory/FreeSingleton.hxx"
+#include "MACE/Env/Memory/PassiveSingleton.hxx"
 
 #include "G4Types.hh"
 
@@ -23,7 +23,7 @@ class MCPHit;
 
 } // inline namespace Hit
 
-class Analysis final : public Env::Memory::FreeSingleton<Analysis> {
+class Analysis final : public Env::Memory::PassiveSingleton<Analysis> {
 public:
     Analysis();
 

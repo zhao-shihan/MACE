@@ -1,13 +1,13 @@
 #pragma once
 
-#include "MACE/Env/Memory/FreeSingleton.hxx"
+#include "MACE/Env/Memory/PassiveSingleton.hxx"
 #include "MACE/Extension/Geant4X/Generator/SurfaceMuon.hxx"
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 
 namespace MACE::SimTarget::inline Action {
 
-class PrimaryGeneratorAction final : public Env::Memory::FreeSingleton<PrimaryGeneratorAction>,
+class PrimaryGeneratorAction final : public Env::Memory::PassiveSingleton<PrimaryGeneratorAction>,
                                      public G4VUserPrimaryGeneratorAction {
 public:
     PrimaryGeneratorAction();

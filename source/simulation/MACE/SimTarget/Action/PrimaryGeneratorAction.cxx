@@ -7,7 +7,7 @@ namespace MACE::SimTarget::inline Action {
 using namespace LiteralUnit::Length;
 
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
-    FreeSingleton(),
+    PassiveSingleton(),
     G4VUserPrimaryGeneratorAction(),
     fSurfaceMuonGenerator(),
     fMuonsForEachG4Event(0) {

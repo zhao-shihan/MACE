@@ -12,7 +12,7 @@ namespace MACE::SimTarget::inline Action {
 using namespace MACE::Geant4X::Physics;
 
 PhysicsList::PhysicsList() :
-    FreeSingleton(),
+    PassiveSingleton(),
     G4VModularPhysicsList() {
     verboseLevel = std2b::to_underlying(Env::BasicEnv::Instance().GetVerboseLevel());
     RegisterPhysics(new G4EmStandardPhysics_option4(verboseLevel));

@@ -13,7 +13,7 @@
 namespace MACE::SimTarget {
 
 Analysis::Analysis() :
-    FreeSingleton(),
+    PassiveSingleton(),
     fResultPath("SimTarget_result"),
     fEnableYieldAnalysis(true),
     fThisRun(nullptr),

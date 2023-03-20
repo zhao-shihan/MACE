@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Env/Memory/FreeSingleton.hxx"
+#include "MACE/Env/Memory/PassiveSingleton.hxx"
 
 #include "G4VUserDetectorConstruction.hh"
 
@@ -26,7 +26,7 @@ class GeometryBase;
 
 namespace SimTarget::inline Action {
 
-class DetectorConstruction final : public Env::Memory::FreeSingleton<DetectorConstruction>,
+class DetectorConstruction final : public Env::Memory::PassiveSingleton<DetectorConstruction>,
                                    public G4VUserDetectorConstruction {
 public:
     DetectorConstruction();

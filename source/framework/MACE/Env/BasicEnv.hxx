@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Env/internal/EnvBase.hxx"
-#include "MACE/Env/Memory/FreeSingleton.hxx"
+#include "MACE/Env/Memory/PassiveSingleton.hxx"
 #include "MACE/Env/VerboseLevel.hxx"
 
 #include <type_traits>
@@ -15,7 +15,7 @@ class NoCLI {};
 } // namespace internal
 
 class BasicEnv : public internal::EnvBase,
-                 public Memory::FreeSingleton<BasicEnv> {
+                 public Memory::PassiveSingleton<BasicEnv> {
 public:
     template<class ACLI = internal::NoCLI>
     BasicEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);

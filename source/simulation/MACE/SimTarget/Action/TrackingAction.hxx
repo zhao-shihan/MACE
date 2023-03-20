@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Env/Memory/FreeSingleton.hxx"
+#include "MACE/Env/Memory/PassiveSingleton.hxx"
 
 #include "G4Types.hh"
 #include "G4UserTrackingAction.hh"
@@ -15,7 +15,7 @@ class MuoniumTrack;
 
 inline namespace Action {
 
-class TrackingAction final : public Env::Memory::FreeSingleton<TrackingAction>,
+class TrackingAction final : public Env::Memory::PassiveSingleton<TrackingAction>,
                              public G4UserTrackingAction {
 public:
     TrackingAction();

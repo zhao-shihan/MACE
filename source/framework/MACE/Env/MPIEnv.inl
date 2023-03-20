@@ -3,7 +3,7 @@ namespace MACE::Env {
 template<class ACLI>
 MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel, bool printStartupMessage) :
     BasicEnv(argc, argv, cli, verboseLevel, false),
-    FreeSingleton<MPIEnv>(),
+    PassiveSingleton<MPIEnv>(),
     fWorldCommRank(-1),
     fWorldCommSize(-1),
     fLocalComm(MPI_COMM_NULL),

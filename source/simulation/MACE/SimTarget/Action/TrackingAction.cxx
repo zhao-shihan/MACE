@@ -14,7 +14,7 @@ namespace MACE::SimTarget::inline Action {
 using namespace PhysicalConstant;
 
 TrackingAction::TrackingAction() :
-    FreeSingleton(),
+    PassiveSingleton(),
     G4UserTrackingAction(),
     fMuonium(gsl::not_null(Geant4X::Physics::Muonium::Definition())),
     fAntimuonium(gsl::not_null(Geant4X::Physics::Antimuonium::Definition())),

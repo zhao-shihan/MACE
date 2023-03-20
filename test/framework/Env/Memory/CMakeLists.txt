@@ -3,5 +3,5 @@ project(MACE)
 add_executable(TestSingleton TestSingleton.cxx)
 target_link_libraries(TestSingleton MACEFrameWork)
 
-add_executable(TestFreeSingleton TestFreeSingleton.cxx)
-target_link_libraries(TestFreeSingleton MACEFrameWork)
+add_executable(TestPassiveSingleton TestPassiveSingleton.cxx)
+target_link_libraries(TestPassiveSingleton MACEFrameWork)

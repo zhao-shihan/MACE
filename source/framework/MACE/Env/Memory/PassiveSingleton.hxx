@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/Env/Memory/FreeSingletonized.hxx"
-#include "MACE/Env/Memory/internal/FreeSingletonBase.hxx"
+#include "MACE/Env/Memory/PassiveSingletonized.hxx"
+#include "MACE/Env/Memory/internal/PassiveSingletonBase.hxx"
 #include "MACE/Env/Memory/internal/MuteSingletonPool.hxx"
 #include "MACE/Env/Memory/MuteSingleton.hxx"
 
@@ -14,11 +14,11 @@
 namespace MACE::Env::Memory {
 
 template<class ADerived>
-class FreeSingleton : public internal::FreeSingletonBase,
+class PassiveSingleton : public internal::PassiveSingletonBase,
                       public MuteSingleton<ADerived> {
 protected:
-    FreeSingleton();
-    ~FreeSingleton();
+    PassiveSingleton();
+    ~PassiveSingleton();
 
 public:
     static ADerived& Instance();
@@ -32,4 +32,4 @@ private:
 
 } // namespace MACE::Env::Memory
 
-#include "MACE/Env/Memory/FreeSingleton.inl"
+#include "MACE/Env/Memory/PassiveSingleton.inl"

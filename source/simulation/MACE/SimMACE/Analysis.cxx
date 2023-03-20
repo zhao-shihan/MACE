@@ -11,7 +11,7 @@
 namespace MACE::SimMACE {
 
 Analysis::Analysis() :
-    FreeSingleton(),
+    PassiveSingleton(),
     fResultPath("SimMACE_untitled"),
     fEnableCoincidenceOfEMCal(true),
     fEnableCoincidenceOfMCP(true),

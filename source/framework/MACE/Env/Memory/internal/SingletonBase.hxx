@@ -8,12 +8,12 @@ namespace MACE::Env::Memory::internal {
 /// Not API.
 /// @details The direct base of Singleton<T>. This allow us to manage instances
 /// using polymorphism mechanism.
-class ISingletonBase : public NonMoveableBase {
+class SingletonBase : public NonMoveableBase {
     friend class SingletonDeleter;
 
 protected:
-    ISingletonBase() = default;
-    virtual ~ISingletonBase() = 0;
+    SingletonBase() = default;
+    virtual ~SingletonBase() = 0;
 };
 
 } // namespace MACE::Env::Memory::internal

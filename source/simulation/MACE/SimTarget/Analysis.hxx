@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/DataModel/DataFactory.hxx"
-#include "MACE/Env/Memory/FreeSingleton.hxx"
+#include "MACE/Env/Memory/PassiveSingleton.hxx"
 #include "MACE/SimTarget/MuoniumTrack.hxx"
 
 #include "gsl/gsl"
@@ -16,7 +16,7 @@ class TFile;
 
 namespace MACE::SimTarget {
 
-class Analysis final : public Env::Memory::FreeSingleton<Analysis> {
+class Analysis final : public Env::Memory::PassiveSingleton<Analysis> {
 public:
     Analysis();
     ~Analysis();
