@@ -3,6 +3,8 @@
 #include "MACE/Concept/FundamentalType.hxx"
 #include "MACE/Math/Random/UniformPseudoRandomBitGeneratorBase.hxx"
 
+#include <algorithm>
+#include <array>
 #include <bit>
 #include <concepts>
 #include <cstdint>
@@ -34,7 +36,7 @@ public:
     friend auto operator>>(std::basic_istream<AChar>& is, Xoshiro256Base<T>& self) -> decltype(is);
 
 protected:
-    std::uint64_t fState[4];
+    std::array<std::uint64_t, 4> fState;
 };
 
 } // namespace MACE::Math::Random::Generator

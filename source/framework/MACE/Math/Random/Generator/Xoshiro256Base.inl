@@ -34,10 +34,19 @@ constexpr void Xoshiro256Base<ADerived>::Step() {
 
 template<class ADerived>
 void Xoshiro256Base<ADerived>::Seed(std::uint64_t seed) {
-    std::mt19937_64 mt(seed);
-    for (auto&& s : fState) {
-        s = mt();
-    }
+    std::array<std::uint32_t, 8> s;
+
+    std::minstd_rand lcg(seed);
+    std::ranges::generate_n(s.begin(), 4, lcg);
+
+    lcg.seed(seed >> 32);
+    std::ranges::generate_n(s.begin() + 4, 4, lcg);
+
+    fState = std::bit_cast<decltype(fState)>(s);
+
+    Step();
+    Step();
+    Step();
 }
 
 template<Concept::Character AChar, class T>
