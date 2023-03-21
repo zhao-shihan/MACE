@@ -8,6 +8,8 @@
 #include "MACE/Utility/VectorAssign.hxx"
 #include "MACE/Utility/VectorCast.hxx"
 
+#include "TTree.h"
+
 #include "gsl/gsl"
 
 #include <array>

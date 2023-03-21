@@ -7,8 +7,8 @@
 namespace MACE::ReconTracks {
 
 using VerboseLevel;
-using Core::DataModel::Hit::IsSpectormeterHit;
-using Core::DataModel::Track::IsTrack;
+using Core::DataModel::IsSpectormeterHit;
+using Core::DataModel::IsTrack;
 
 template<IsSpectormeterHit Hit_t, IsTrack Track_t>
 class ITrackFitter {

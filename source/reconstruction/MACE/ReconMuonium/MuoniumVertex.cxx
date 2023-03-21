@@ -2,15 +2,15 @@
 
 namespace MACE::ReconMuonium {
 
-BranchSocket::DoubleBranchSocket MuoniumVertex::fgTCACDC("TCACDC", 0);
-BranchSocket::DoubleBranchSocket MuoniumVertex::fgTCAMCP("TCAMCP", 0);
-BranchSocket::DoubleBranchSocket MuoniumVertex::fgDeltaTCA("DeltaTCA", 0);
-BranchSocket::Vector3FBranchSocket MuoniumVertex::fgCPACDC("CPACDC", {"x", "y", "z"}, {0, 0, 0});
-BranchSocket::Vector2FBranchSocket MuoniumVertex::fgCPAMCP("CPAMCP", {"x", "y"}, {0, 0});
-BranchSocket::FloatBranchSocket MuoniumVertex::fgDCA("DCA", 0);
-BranchSocket::FloatBranchSocket MuoniumVertex::fgVertexEnergy("vtxEne", 0);
-BranchSocket::Vector3FBranchSocket MuoniumVertex::fgVertexMomentum("vtxMom", {"x", "y", "z"}, {0, 0, 0});
-BranchSocket::ShortStringBranchSocket MuoniumVertex::fgParticles("particles", "");
+DoubleBranchSocket MuoniumVertex::fgTCACDC("TCACDC", 0);
+DoubleBranchSocket MuoniumVertex::fgTCAMCP("TCAMCP", 0);
+DoubleBranchSocket MuoniumVertex::fgDeltaTCA("DeltaTCA", 0);
+Vector3FBranchSocket MuoniumVertex::fgCPACDC("CPACDC", {"x", "y", "z"}, {0, 0, 0});
+Vector2FBranchSocket MuoniumVertex::fgCPAMCP("CPAMCP", {"x", "y"}, {0, 0});
+FloatBranchSocket MuoniumVertex::fgDCA("DCA", 0);
+FloatBranchSocket MuoniumVertex::fgVertexEnergy("vtxEne", 0);
+Vector3FBranchSocket MuoniumVertex::fgVertexMomentum("vtxMom", {"x", "y", "z"}, {0, 0, 0});
+ShortStringBranchSocket MuoniumVertex::fgParticles("particles", "");
 
 MuoniumVertex::MuoniumVertex() noexcept :
     fTCACDC(fgTCACDC.Value()),

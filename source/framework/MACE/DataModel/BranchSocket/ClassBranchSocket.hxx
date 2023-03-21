@@ -2,6 +2,8 @@
 
 #include "MACE/DataModel/BranchSocketBase.hxx"
 
+#include "TTree.h"
+
 #include "gsl/gsl"
 
 #include <concepts>

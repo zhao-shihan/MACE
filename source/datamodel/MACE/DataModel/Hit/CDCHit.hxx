@@ -3,44 +3,39 @@
 #include "MACE/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "MACE/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "MACE/DataModel/DataFactory.hxx"
+#include "MACE/DataModel/Entry/FundamentalEntry.hxx"
 #include "MACE/DataModel/TransientData.hxx"
 #include "MACE/Utility/VectorAssign.hxx"
 
 #include <string_view>
+#include <utility>
 
 namespace MACE::DataModel::inline Hit {
 
+using namespace std::string_view_literals;
+
 class CDCHit {
 public:
-    inline CDCHit() noexcept;
     virtual ~CDCHit() = default;
-
-    CDCHit(const CDCHit&) noexcept = default;
-    CDCHit(CDCHit&&) noexcept = default;
-    CDCHit& operator=(const CDCHit&) noexcept = default;
-    CDCHit& operator=(CDCHit&&) noexcept = default;
 
     const auto& CellID() const { return fCellID; }
     const auto& DriftDistance() const { return fDriftDistance; }
     const auto& HitTime() const { return fHitTime; }
 
-    void CellID(int val) { fCellID = val; }
-    void DriftDistance(double d) { fDriftDistance = d; }
-    void HitTime(double val) { fHitTime = val; }
+    void CellID(auto&& v) & { fCellID.Value(std::forward<decltype(v)>(v)); }
+    void DriftDistance(auto&& v) & { fDriftDistance.Value(std::forward<decltype(v)>(v)); }
+    void HitTime(auto&& v) & { fHitTime.Value(std::forward<decltype(v)>(v)); }
 
-    inline void FillBranchSockets() const noexcept;
+    static constexpr auto BasicTreeName() { return "CDCHit"sv; }
+
+    inline void FillBranchSockets() const;
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    static constexpr auto BasicTreeName() noexcept { return std::string_view("CDCHit"); }
 
 private:
-    int fCellID;
-    double fDriftDistance;
-    double fHitTime;
-
-    static IntBranchSocket fgCellID;
-    static FloatBranchSocket fgDriftDistance;
-    static DoubleBranchSocket fgHitTime;
+    IntEntry<CDCHit, 0, int> fCellID;
+    FloatEntry<CDCHit, 1, double> fDriftDistance;
+    DoubleEntry<CDCHit, 2, double> fHitTime;
 };
 static_assert(TransientData<CDCHit>);
 

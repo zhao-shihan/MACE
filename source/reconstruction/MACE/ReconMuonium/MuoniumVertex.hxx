@@ -13,7 +13,7 @@
 
 namespace MACE::ReconMuonium {
 
-namespace BranchSocket = Core::DataModel::BranchSocket;
+namespace BranchSocket = Core::DataModel::inline BranchSocket;
 using namespace std::string_view_literals;
 
 class MuoniumVertex {
@@ -62,15 +62,15 @@ private:
     stdx::array3d fVertexMomentum;
     ShortString fParticles;
 
-    static BranchSocket::DoubleBranchSocket fgTCACDC;
-    static BranchSocket::DoubleBranchSocket fgTCAMCP;
-    static BranchSocket::DoubleBranchSocket fgDeltaTCA;
-    static BranchSocket::Vector3FBranchSocket fgCPACDC;
-    static BranchSocket::Vector2FBranchSocket fgCPAMCP;
-    static BranchSocket::FloatBranchSocket fgDCA;
-    static BranchSocket::FloatBranchSocket fgVertexEnergy;
-    static BranchSocket::Vector3FBranchSocket fgVertexMomentum;
-    static BranchSocket::ShortStringBranchSocket fgParticles;
+    static DoubleBranchSocket fgTCACDC;
+    static DoubleBranchSocket fgTCAMCP;
+    static DoubleBranchSocket fgDeltaTCA;
+    static Vector3FBranchSocket fgCPACDC;
+    static Vector2FBranchSocket fgCPAMCP;
+    static FloatBranchSocket fgDCA;
+    static FloatBranchSocket fgVertexEnergy;
+    static Vector3FBranchSocket fgVertexMomentum;
+    static ShortStringBranchSocket fgParticles;
 };
 static_assert(Core::DataModel::TransientData<MuoniumVertex>);
 

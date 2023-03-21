@@ -3,6 +3,8 @@
 #include "MACE/Concept/ROOTFundamental.hxx"
 #include "MACE/DataModel/BranchSocketBase.hxx"
 
+#include "TTree.h"
+
 #include <string>
 
 namespace MACE::DataModel::inline BranchSocket {

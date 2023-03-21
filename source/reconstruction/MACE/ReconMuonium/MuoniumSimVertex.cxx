@@ -2,11 +2,11 @@
 
 namespace MACE::ReconMuonium {
 
-BranchSocket::DoubleBranchSocket MuoniumSimVertex::fgTrueVertexTime("trueVtxTime", 0);
-BranchSocket::Vector3FBranchSocket MuoniumSimVertex::fgTrueVertexPosition("trueVtxPos", {"x", "y", "z"}, {0, 0, 0});
-BranchSocket::FloatBranchSocket MuoniumSimVertex::fgTrueVertexEnergy("trueVtxEne", 0);
-BranchSocket::Vector3FBranchSocket MuoniumSimVertex::fgTrueVertexMomentum("trueVtxMom", {"x", "y", "z"}, {0, 0, 0});
-BranchSocket::ShortStringBranchSocket MuoniumSimVertex::fgTrueParticles("trueParticles", "");
+DoubleBranchSocket MuoniumSimVertex::fgTrueVertexTime("trueVtxTime", 0);
+Vector3FBranchSocket MuoniumSimVertex::fgTrueVertexPosition("trueVtxPos", {"x", "y", "z"}, {0, 0, 0});
+FloatBranchSocket MuoniumSimVertex::fgTrueVertexEnergy("trueVtxEne", 0);
+Vector3FBranchSocket MuoniumSimVertex::fgTrueVertexMomentum("trueVtxMom", {"x", "y", "z"}, {0, 0, 0});
+ShortStringBranchSocket MuoniumSimVertex::fgTrueParticles("trueParticles", "");
 
 MuoniumSimVertex::MuoniumSimVertex() noexcept :
     MuoniumVertex(),

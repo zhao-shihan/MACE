@@ -3,6 +3,8 @@
 #include "MACE/DataModel/BranchSocketBase.hxx"
 #include "MACE/Utility/FixedString.hxx"
 
+#include "TTree.h"
+
 #include <string>
 
 namespace MACE::DataModel::inline BranchSocket {

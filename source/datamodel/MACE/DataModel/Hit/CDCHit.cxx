@@ -1,21 +1,28 @@
 #include "MACE/DataModel/Hit/CDCHit.hxx"
 
-namespace MACE::DataModel::inline Hit {
+namespace MACE::DataModel {
 
-DoubleBranchSocket CDCHit::fgHitTime("hitTime", 0);
-FloatBranchSocket CDCHit::fgDriftDistance("drift", 0);
-IntBranchSocket CDCHit::fgCellID("cellID", -1);
+template<>
+IntEntry<CDCHit, 0, int>::BranchSocket IntEntry<CDCHit, 0, int>::Base::fgBranchSocket("cellID", -1);
+template<>
+FloatEntry<CDCHit, 1, double>::BranchSocket FloatEntry<CDCHit, 1, double>::Base::fgBranchSocket("drift", 0);
+template<>
+DoubleEntry<CDCHit, 2, double>::BranchSocket DoubleEntry<CDCHit, 2, double>::Base::fgBranchSocket("hitTime", 0);
+
+inline namespace Hit {
 
 void CDCHit::CreateBranches(TTree& tree) {
-    fgCellID.CreateBranch(tree);
-    fgDriftDistance.CreateBranch(tree);
-    fgHitTime.CreateBranch(tree);
+    decltype(fCellID)::CreateBranch(tree);
+    decltype(fDriftDistance)::CreateBranch(tree);
+    decltype(fHitTime)::CreateBranch(tree);
 }
 
 void CDCHit::ConnectToBranches(TTree& tree) {
-    fgCellID.ConnectToBranch(tree);
-    fgDriftDistance.ConnectToBranch(tree);
-    fgHitTime.ConnectToBranch(tree);
+    decltype(fCellID)::ConnectToBranch(tree);
+    decltype(fDriftDistance)::ConnectToBranch(tree);
+    decltype(fHitTime)::ConnectToBranch(tree);
 }
 
-} // namespace MACE::DataModel::inline Hit
+} // namespace Hit
+
+} // namespace MACE::DataModel
