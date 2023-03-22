@@ -40,7 +40,7 @@ MPIRunManager::MPIRunManager() :
     internal::PostG4RunManagerInitFlipG4cout(),
     fTotalNumberOfEventsToBeProcessed(0),
     fEventIDRange{-1, -1, 0, 0},
-    fPrintProgressModulo(std::max(1, Env::MPIEnv::Instance().WorldCommSize() - 1)),
+    fPrintProgressModulo(Env::MPIEnv::Instance().Sequential() ? 1 : Env::MPIEnv::Instance().WorldCommSize() + 1),
     fEventWallTimer(),
     fEventWallTime(0),
     fNAvgEventWallTime(0),
@@ -94,7 +94,7 @@ void MPIRunManager::InitializeEventLoop(G4int nEvent, gsl::czstring macroFile, G
     fEventWallTimer.Reset();
 }
 
-void MPIRunManager::ProcessOneEvent(G4int iEvent){
+void MPIRunManager::ProcessOneEvent(G4int iEvent) {
     G4RunManager::ProcessOneEvent(fEventIDRange.begin + iEvent * fEventIDRange.step);
 }
 
