@@ -10,7 +10,7 @@
 #include <iomanip>
 #include <iostream>
 #include <span>
-#include <string_view>
+#include <utility>
 
 namespace MACE::Env {
 
@@ -114,7 +114,7 @@ void MPIEnv::InitializeMPI(int argc, char* argv[]) {
 }
 
 void MPIEnv::InitializeHostInfo() {
-    using NameFixedString = FixedString<MPI_MAX_PROCESSOR_NAME>;
+    using NameFixedString = FixedString<MPI_MAX_PROCESSOR_NAME - 1>;
     // Each rank get its processor name
     NameFixedString hostNameSend;
     int nameLength;
@@ -143,20 +143,19 @@ void MPIEnv::InitializeHostInfo() {
         hostList.reserve(fWorldCommSize);
         // Find unique name and assign host id
         auto currentNodeId = 0;
-        auto currentName = hostNamesRecv.cbegin();
-        hostIDAndCountSend.emplace_back(std::array{currentNodeId, -1});
+        auto currentName = &std::as_const(hostNamesRecv).front();
+        hostIDAndCountSend.push_back({currentNodeId, -1});
         hostList.emplace_back(-1, *currentName);
-        for (auto it = std::next(hostNamesRecv.cbegin()), end = hostNamesRecv.cend();
-             it != end; ++it) {
-            if (std::strncmp(currentName->data(), it->data(), MPI_MAX_PROCESSOR_NAME) != 0) {
-                hostList.back().first = std::distance(currentName, it);
-                hostList.emplace_back(-1, *it);
+        for (auto&& name : std::as_const(hostNamesRecv)) {
+            if (name != *currentName) {
+                hostList.back().first = std::distance(currentName, &name);
+                hostList.emplace_back(-1, name);
                 ++currentNodeId;
-                currentName = it;
+                currentName = &name;
             }
-            hostIDAndCountSend.emplace_back(std::array{currentNodeId, -1});
+            hostIDAndCountSend.push_back({currentNodeId, -1});
         }
-        hostList.back().first = std::distance(currentName, hostNamesRecv.cend());
+        hostList.back().first = std::distance(currentName, &std::as_const(hostNamesRecv).back());
         // Assign host count
         for (const int hostCount = hostList.size();
              auto&& [_, hostCountSend] : hostIDAndCountSend) {
@@ -165,7 +164,7 @@ void MPIEnv::InitializeHostInfo() {
     }
     // Send host id and count
     MACE_MPI_CALL_WITH_CHECK(MPI_Scatter,
-                             hostIDAndCountSend.data(),
+                             std::as_const(hostIDAndCountSend).data(),
                              2,
                              MPI_INT,
                              hostIDAndCountRecv.data(),
