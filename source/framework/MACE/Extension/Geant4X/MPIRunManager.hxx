@@ -38,10 +38,10 @@ public:
 
     static auto GetRunManager() { return static_cast<MPIRunManager*>(G4RunManager::GetRunManager()); }
 
-    const auto& TotalNumberOfEventToBeProcessed() const { return fTotalNumberOfEventsToBeProcessed; }
+    const auto& NEventToBeMPIProcessed() const { return fNEventToBeMPIProcessed; }
     const auto& PrintProgressModulo() const { return fPrintProgressModulo; }
 
-    void PrintProgressModulo(G4int val);
+    void PrintProgressModulo(const G4int val) { (fPrintProgressModulo = val, printModulo = -1); }
 
     virtual void BeamOn(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) override;
     virtual void RunInitialization() override;
@@ -51,14 +51,14 @@ public:
     virtual void RunTermination() override;
 
 private:
-    void EventEndReport(G4int eventID) const;
-    void RunEndReport(G4int runID) const;
+    void EventEndReport(const G4int eventID) const;
+    void RunEndReport(const G4int runID) const;
 
-    static void RunBeginReport(G4int runID);
-    static std::string FormatSecondToDHMS(long secondsInTotal);
+    static void RunBeginReport(const G4int runID);
+    static std::string FormatSecondToDHMS(const double secondsInTotal);
 
 private:
-    G4int fTotalNumberOfEventsToBeProcessed;
+    G4int fNEventToBeMPIProcessed;
     IntegralIndexRange<G4int> fEventIDRange;
 
     G4int fPrintProgressModulo;

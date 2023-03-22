@@ -39,7 +39,7 @@ MPIRunManager::MPIRunManager() :
     internal::PreG4RunManagerInitFlipG4cout(),
     G4RunManager(),
     internal::PostG4RunManagerInitFlipG4cout(),
-    fTotalNumberOfEventsToBeProcessed(0),
+    fNEventToBeMPIProcessed(0),
     fEventIDRange{-1, -1, 0, 0},
     fPrintProgressModulo(Env::MPIEnv::Instance().Sequential() ? 1 : Env::MPIEnv::Instance().WorldCommSize() + 1),
     fEventWallTimer(),
@@ -53,11 +53,6 @@ MPIRunManager::MPIRunManager() :
     fRunBeginSystemTime(),
     fRunEndSystemTime() {
     MPIRunMessenger::Instance().AssignTo(this);
-}
-
-void MPIRunManager::PrintProgressModulo(G4int val) {
-    printModulo = -1;
-    fPrintProgressModulo = val;
 }
 
 void MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect) {
@@ -75,7 +70,7 @@ void MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect)
     }
 
     MPIUtil::MPIReseedPRNG(*G4Random::getTheEngine());
-    fTotalNumberOfEventsToBeProcessed = nEvent;
+    fNEventToBeMPIProcessed = nEvent;
     fEventIDRange = MPIUtil::AllocMPIJobsJobWise(0, nEvent, mpiEnv.WorldCommSize(), mpiEnv.WorldCommRank());
     G4RunManager::BeamOn(fEventIDRange.count, macroFile, nSelect);
 }
@@ -142,15 +137,15 @@ void MPIRunManager::RunTermination() {
     }
 }
 
-void MPIRunManager::EventEndReport(G4int eventID) const {
+void MPIRunManager::EventEndReport(const G4int eventID) const {
     const auto& mpiEnv = Env::MPIEnv::Instance();
     if (mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
     const auto avgEventWallTime = fNAvgEventWallTime / numberOfEventProcessed;
     const auto nEventRemain = numberOfEventToBeProcessed - numberOfEventProcessed;
-    const auto eta = FormatSecondToDHMS(std::lround(avgEventWallTime * nEventRemain));
+    const auto eta = FormatSecondToDHMS(avgEventWallTime * nEventRemain);
     const auto etaError = numberOfEventProcessed < 5 ?
                               std::string("N/A") :
-                              FormatSecondToDHMS(std::lround(1.96 * std::sqrt(fNDevEventWallTime / (numberOfEventProcessed - 1)) * nEventRemain)); // 95% C.L. (assuming gaussian)
+                              FormatSecondToDHMS(1.96 * std::sqrt(fNDevEventWallTime / (numberOfEventProcessed - 1) * nEventRemain)); // 95% C.L. (assuming gaussian)
     const auto progress = 100 * static_cast<float>(numberOfEventProcessed) / numberOfEventToBeProcessed;
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
@@ -159,10 +154,10 @@ void MPIRunManager::EventEndReport(G4int eventID) const {
     G4cout.precision(precisionOfG4cout);
 }
 
-void MPIRunManager::RunEndReport(G4int runID) const {
+void MPIRunManager::RunEndReport(const G4int runID) const {
     const auto& mpiEnv = Env::MPIEnv::Instance();
     if (mpiEnv.AtWorldWorker() or mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
-    const auto wallTimeDHMS = FormatSecondToDHMS(std::lround(fRunWallTime));
+    const auto wallTimeDHMS = FormatSecondToDHMS(fRunWallTime);
     const auto beginTime = std::chrono::system_clock::to_time_t(fRunBeginSystemTime);
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
@@ -177,7 +172,7 @@ void MPIRunManager::RunEndReport(G4int runID) const {
     G4cout.precision(precisionOfG4cout);
 }
 
-void MPIRunManager::RunBeginReport(G4int runID) {
+void MPIRunManager::RunBeginReport(const G4int runID) {
     const auto& mpiEnv = Env::MPIEnv::Instance();
     if (mpiEnv.AtWorldWorker() or mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
@@ -186,16 +181,17 @@ void MPIRunManager::RunBeginReport(G4int runID) {
            << "--------------------------------> Run Starts <--------------------------------" << G4endl;
 }
 
-std::string MPIRunManager::FormatSecondToDHMS(long secondsInTotal) {
-    const auto div86400 = std::div(secondsInTotal, 86400L);
-    const auto div3600 = std::div(div86400.rem, 3600L);
-    const auto div60 = std::div(div3600.rem, 60L);
+std::string MPIRunManager::FormatSecondToDHMS(const double secondsInTotal) {
+    const auto totalSeconds = std::llround(secondsInTotal);
+    const auto div86400 = std::div(totalSeconds, 86400ll);
+    const auto div3600 = std::div(div86400.rem, 3600ll);
+    const auto div60 = std::div(div3600.rem, 60ll);
     const auto& [day, hour, minute, second] = std::tie(div86400.quot, div3600.quot, div60.quot, div60.rem);
     const auto addDay = day > 0;
     const auto addHour = addDay or hour > 0;
     const auto addMinute = addDay or addHour or minute > 0;
 
-    std::array<char, std::numeric_limits<decltype(secondsInTotal)>::digits10 + 3> buffer; // long enough to store a "long"
+    std::array<char, std::numeric_limits<decltype(totalSeconds)>::digits10 + 3> buffer;
     std::string dhms;
     if (addDay) {
         const auto* const charsEnd = std::to_chars(buffer.begin(), buffer.end(), day).ptr;
