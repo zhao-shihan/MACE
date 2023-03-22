@@ -21,8 +21,8 @@ void BasicEnv::PrintStartupMessageBody(int argc, char* argv[]) const {
     auto cwd = std::filesystem::current_path(cwdError).generic_string();
     if (cwdError) { cwd = "<Error getting current working directory>"; }
     if (fVerboseLevel >= VerboseLevel::Error) {
-        std::cout << " ARMOR framework (MACE offline software system) " << MACE_VERSION_STRING << '\n'
-                  << " Copyright (c) 2020-2022 MACE software working group \n"
+        std::cout << " MACE offline software system " << MACE_VERSION_STRING << '\n'
+                  << " Copyright (c) 2020-2023 MACE working group \n"
                   << '\n'
                   << " Exe: " << exe;
         for (int i = 1; i < argc; ++i) {
