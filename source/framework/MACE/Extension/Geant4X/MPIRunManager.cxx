@@ -13,6 +13,7 @@
 #include "mpi.h"
 
 #include <algorithm>
+#include <array>
 #include <charconv>
 #include <cstdlib>
 #include <iomanip>
@@ -60,10 +61,21 @@ void MPIRunManager::PrintProgressModulo(G4int val) {
 }
 
 void MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect) {
-    if (not CheckNEventIsAtLeastCommSize(nEvent)) { return; }
+    const auto& mpiEnv = Env::MPIEnv::Instance();
+    if (nEvent < mpiEnv.WorldCommSize()) {
+        if (mpiEnv.AtWorldMaster()) {
+            G4Exception("MACE::Utility::G4Util::MPIRunManager::CheckNEventIsAtLeastCommSize(...)",
+                        "TooFewNEventOrTooMuchRank",
+                        JustWarning,
+                        "The number of G4Event must be greater or equal to the number of MPI ranks,\n"
+                        "otherwise deadlock could raise in execution code.\n"
+                        "Please be careful.");
+        }
+        return;
+    }
+
     MPIUtil::MPIReseedPRNG(*G4Random::getTheEngine());
     fTotalNumberOfEventsToBeProcessed = nEvent;
-    const auto& mpiEnv = Env::MPIEnv::Instance();
     fEventIDRange = MPIUtil::AllocMPIJobsJobWise(0, nEvent, mpiEnv.WorldCommSize(), mpiEnv.WorldCommRank());
     G4RunManager::BeamOn(fEventIDRange.count, macroFile, nSelect);
 }
@@ -130,23 +142,6 @@ void MPIRunManager::RunTermination() {
     }
 }
 
-G4bool MPIRunManager::CheckNEventIsAtLeastCommSize(G4int nEvent) const {
-    if (const auto& mpiEnv = Env::MPIEnv::Instance();
-        nEvent < mpiEnv.WorldCommSize()) {
-        if (mpiEnv.AtWorldMaster()) {
-            G4Exception("MACE::Utility::G4Util::MPIRunManager::CheckNEventIsAtLeastCommSize(...)",
-                        "TooFewNEventOrTooMuchRank",
-                        JustWarning,
-                        "The number of G4Event must be greater or equal to the number of MPI ranks,\n"
-                        "otherwise deadlock could raise in execution code.\n"
-                        "Please be careful.");
-        }
-        return false;
-    } else {
-        return true;
-    }
-}
-
 void MPIRunManager::EventEndReport(G4int eventID) const {
     const auto& mpiEnv = Env::MPIEnv::Instance();
     if (mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
@@ -200,23 +195,22 @@ std::string MPIRunManager::FormatSecondToDHMS(long secondsInTotal) {
     const auto addHour = addDay or hour > 0;
     const auto addMinute = addDay or addHour or minute > 0;
 
-    char buffer[std::numeric_limits<long>::digits10 + 3]; // long enough to store a "long"
-    const auto bufferEnd = buffer + std::size(buffer);
+    std::array<char, std::numeric_limits<decltype(secondsInTotal)>::digits10 + 3> buffer; // long enough to store a "long"
     std::string dhms;
     if (addDay) {
-        const auto charLast = std::to_chars(buffer, bufferEnd, day).ptr;
-        dhms.append(std::string_view(buffer, charLast)).append("d ");
+        const auto* const charsEnd = std::to_chars(buffer.begin(), buffer.end(), day).ptr;
+        dhms.append(std::string_view(buffer.cbegin(), charsEnd)).append("d ");
     }
     if (addHour) {
-        const auto charLast = std::to_chars(buffer, bufferEnd, hour).ptr;
-        dhms.append(std::string_view(buffer, charLast)).append("h ");
+        const auto* const charsEnd = std::to_chars(buffer.begin(), buffer.end(), hour).ptr;
+        dhms.append(std::string_view(buffer.cbegin(), charsEnd)).append("h ");
     }
     if (addMinute) {
-        const auto charLast = std::to_chars(buffer, bufferEnd, minute).ptr;
-        dhms.append(std::string_view(buffer, charLast)).append("m ");
+        const auto* const charsEnd = std::to_chars(buffer.begin(), buffer.end(), minute).ptr;
+        dhms.append(std::string_view(buffer.cbegin(), charsEnd)).append("m ");
     }
-    const auto charLast = std::to_chars(buffer, bufferEnd, second).ptr;
-    dhms.append(std::string_view(buffer, charLast)).append("s");
+    const auto* const charsEnd = std::to_chars(buffer.begin(), buffer.end(), second).ptr;
+    dhms.append(std::string_view(buffer.cbegin(), charsEnd)).append("s");
     return dhms;
 }
 

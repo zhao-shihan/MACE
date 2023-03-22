@@ -51,7 +51,6 @@ public:
     virtual void RunTermination() override;
 
 private:
-    G4bool CheckNEventIsAtLeastCommSize(G4int nEvent) const;
     void EventEndReport(G4int eventID) const;
     void RunEndReport(G4int runID) const;
 
