@@ -1,23 +1,30 @@
 #include "MACE/DataModel/SimHit/EMCalSimHit.hxx"
 
-namespace MACE::DataModel::inline SimHit {
+namespace MACE::DataModel {
 
-ShortStringBranchSocket EMCalSimHit::fgParticle("particle", "");
-IntBranchSocket EMCalSimHit::fgG4EventID("g4EventID", -1);
-IntBranchSocket EMCalSimHit::fgG4TrackID("g4TrackID", -1);
+template<>
+EMCalSimHit::Entry::G4EventID::BranchSocket EMCalSimHit::Entry::G4EventID::Base::fgBranchSocket = {"g4EventID", -1};
+template<>
+EMCalSimHit::Entry::G4TrackID::BranchSocket EMCalSimHit::Entry::G4TrackID::Base::fgBranchSocket = {"g4TrackID", -1};
+template<>
+EMCalSimHit::Entry::Particle::BranchSocket EMCalSimHit::Entry::Particle::Base::fgBranchSocket = {"particle", ""};
+
+inline namespace SimHit {
 
 void EMCalSimHit::CreateBranches(TTree& tree) {
     EMCalHit::CreateBranches(tree);
-    fgG4EventID.CreateBranch(tree);
-    fgG4TrackID.CreateBranch(tree);
-    fgParticle.CreateBranch(tree);
+    decltype(fG4EventID)::CreateBranch(tree);
+    decltype(fG4TrackID)::CreateBranch(tree);
+    decltype(fParticle)::CreateBranch(tree);
 }
 
 void EMCalSimHit::ConnectToBranches(TTree& tree) {
     EMCalHit::ConnectToBranches(tree);
-    fgG4EventID.ConnectToBranch(tree);
-    fgG4TrackID.ConnectToBranch(tree);
-    fgParticle.ConnectToBranch(tree);
+    decltype(fG4EventID)::ConnectToBranch(tree);
+    decltype(fG4TrackID)::ConnectToBranch(tree);
+    decltype(fParticle)::ConnectToBranch(tree);
 }
 
-} // namespace MACE::DataModel::inline SimHit
+} // namespace SimHit
+
+} // namespace MACE::DataModel

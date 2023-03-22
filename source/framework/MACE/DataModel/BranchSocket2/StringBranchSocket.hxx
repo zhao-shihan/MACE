@@ -10,9 +10,10 @@
 
 namespace MACE::DataModel::inline BranchSocket {
 
-class ShortStringBranchSocket2 final : public BranchSocketBase2<ShortStringBranchSocket2, ShortString> {
+template<std::size_t AMaxSize>
+class StringBranchSocket final : public BranchSocketBase2<StringBranchSocket<AMaxSize>, FixedString<AMaxSize>> {
 public:
-    ShortStringBranchSocket2(std::string name, ShortString defaultString);
+    StringBranchSocket(std::string name, FixedString<AMaxSize> defaultString);
 
     const auto& Value() const { return fString; }
     void Value(auto&& v) { fString = std::forward<decltype(v)>(v); }
@@ -20,9 +21,15 @@ public:
     void CreateBranch(TTree& tree) { tree.Branch(this->fName.c_str(), fString.Data(), fLeafName.c_str()); }
     void ConnectToBranch(TTree& tree) { tree.SetBranchAddress(this->fName.c_str(), fString.Data()); }
 
+    static constexpr auto MaxSize() { return AMaxSize; }
+
 private:
     const std::string fLeafName;
-    ShortString fString;
+    FixedString<AMaxSize> fString;
 };
 
+using ShortStringBranchSocket2 = StringBranchSocket<15>;
+
 } // namespace MACE::DataModel::inline BranchSocket
+
+#include "MACE/DataModel/BranchSocket2/StringBranchSocket.inl"

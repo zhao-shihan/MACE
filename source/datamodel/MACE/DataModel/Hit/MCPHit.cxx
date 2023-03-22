@@ -1,18 +1,24 @@
 #include "MACE/DataModel/Hit/MCPHit.hxx"
 
-namespace MACE::DataModel::inline Hit {
+namespace MACE::DataModel {
 
-DoubleBranchSocket MCPHit::fgHitTime("hitTime", 0);
-Vector2FBranchSocket MCPHit::fgHitPosition("hitPos", {"x", "y"}, {0, 0});
+template<>
+MCPHit::Entry::HitTime::BranchSocket MCPHit::Entry::HitTime::Base::fgBranchSocket = {"hitTime", 0};
+template<> // clang-format off
+MCPHit::Entry::HitPosition::BranchSocket MCPHit::Entry::HitPosition::Base::fgBranchSocket = {"hitPos", {0, 0}}; // clang-format on
+
+inline namespace Hit {
 
 void MCPHit::CreateBranches(TTree& tree) {
-    fgHitTime.CreateBranch(tree);
-    fgHitPosition.CreateBranch(tree);
+    decltype(fHitTime)::CreateBranch(tree);
+    decltype(fHitPosition)::CreateBranch(tree);
 }
 
 void MCPHit::ConnectToBranches(TTree& tree) {
-    fgHitTime.ConnectToBranch(tree);
-    fgHitPosition.ConnectToBranch(tree);
+    decltype(fHitTime)::ConnectToBranch(tree);
+    decltype(fHitPosition)::ConnectToBranch(tree);
 }
 
-} // namespace MACE::DataModel::inline Hit
+} // namespace Hit
+
+} // namespace MACE::DataModel

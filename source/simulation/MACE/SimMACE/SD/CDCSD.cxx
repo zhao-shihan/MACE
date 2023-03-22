@@ -141,7 +141,7 @@ void CDCSD::EndOfEvent(G4HCofThisEvent*) {
                 const auto goodHit =
                     *std::ranges::max_element(signalHitCandidateList,
                                               [](const auto& hit1, const auto& hit2) {
-                                                  return (*hit1)->Energy() < (*hit2)->Energy();
+                                                  return (*hit1)->Energy().Value() < (*hit2)->Energy().Value();
                                               });
                 hits.emplace_back(goodHit->release());
                 signalHitCandidateList.clear();

@@ -4,32 +4,45 @@
 #include "MACE/DataModel/BranchSocket2/FundamentalBranchSocket2.hxx"
 #include "MACE/DataModel/EntryBase.hxx"
 
+#include "RtypesCore.h"
+
 #include <concepts>
 #include <string>
+#include <utility>
 
 namespace MACE::DataModel::inline Entry {
 
-template<class AData, gsl::index BranchIndex, Concept::ROOTFundamental T, typename U>
-    requires std::convertible_to<const T&, U> and std::assignable_from<T&, const U&>
-class FundamentalEntry final : public EntryBase<FundamentalEntry<AData, BranchIndex, T, U>,
-                                                AData, BranchIndex,
+template<class AData, gsl::index ABranchID, Concept::ROOTFundamental T, typename U>
+    requires(std::integral<T> and std::integral<U>) or
+            (std::floating_point<T> and std::floating_point<U>)
+class FundamentalEntry final : public EntryBase<FundamentalEntry<AData, ABranchID, T, U>,
+                                                AData, ABranchID,
                                                 T, FundamentalBranchSocket2<T>,
                                                 U> {
 public:
-    using Base = EntryBase<FundamentalEntry<AData, BranchIndex, T, U>,
-                           AData, BranchIndex,
+    using Base = EntryBase<FundamentalEntry<AData, ABranchID, T, U>,
+                           AData, ABranchID,
                            T, FundamentalBranchSocket2<T>,
                            U>;
     using BranchSocket = decltype(Base::fgBranchSocket);
 
 public:
     FundamentalEntry();
+
+    const auto& Value() const { return fValue; }
+    void Value(auto&& v) { fValue = std::forward<decltype(v)>(v); }
+
+    void FillBranchSocket() const { this->fgBranchSocket.Value(fValue); }
+
+private:
+    U fValue;
 };
 
-#define MACE_DATA_MODEL_ENTRY_FUNDAMENTAL_ENTRY_ALIAS(Type)                                            \
-    template<class AData, gsl::index BranchIndex, typename T>                                          \
-        requires std::convertible_to<const Type##_t&, T> and std::assignable_from<Type##_t&, const T&> \
-    using Type##Entry = FundamentalEntry<AData, BranchIndex, Type##_t, T>;
+#define MACE_DATA_MODEL_ENTRY_FUNDAMENTAL_ENTRY_ALIAS(Type)                    \
+    template<class AData, gsl::index ABranchID, typename T>                  \
+        requires(std::integral<Type##_t> and std::integral<T>) or              \
+                    (std::floating_point<Type##_t> and std::floating_point<T>) \
+    using Type##Entry = FundamentalEntry<AData, ABranchID, Type##_t, T>;
 
 MACE_DATA_MODEL_ENTRY_FUNDAMENTAL_ENTRY_ALIAS(Char)
 MACE_DATA_MODEL_ENTRY_FUNDAMENTAL_ENTRY_ALIAS(UChar)

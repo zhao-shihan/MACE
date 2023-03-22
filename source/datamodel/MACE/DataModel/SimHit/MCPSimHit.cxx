@@ -1,29 +1,38 @@
 #include "MACE/DataModel/SimHit/MCPSimHit.hxx"
 
-namespace MACE::DataModel::inline SimHit {
+namespace MACE::DataModel {
 
-IntBranchSocket MCPSimHit::fgG4EventID("g4EventID", -1);
-IntBranchSocket MCPSimHit::fgG4TrackID("g4TrackID", -1);
-DoubleBranchSocket MCPSimHit::fgVertexTime("vtxTime", 0);
-Vector3FBranchSocket MCPSimHit::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
-ShortStringBranchSocket MCPSimHit::fgParticle("particle", "");
+template<>
+MCPSimHit::Entry::G4EventID::BranchSocket MCPSimHit::Entry::G4EventID::Base::fgBranchSocket = {"g4EventID", -1};
+template<>
+MCPSimHit::Entry::G4TrackID::BranchSocket MCPSimHit::Entry::G4TrackID::Base::fgBranchSocket = {"g4TrackID", -1};
+template<>
+MCPSimHit::Entry::VertexTime::BranchSocket MCPSimHit::Entry::VertexTime::Base::fgBranchSocket = {"vtxTime", 0};
+template<> // clang-format off
+MCPSimHit::Entry::VertexPosition::BranchSocket MCPSimHit::Entry::VertexPosition::Base::fgBranchSocket = {"vtxPos", {0, 0, 0}}; // clang-format on
+template<>
+MCPSimHit::Entry::Particle::BranchSocket MCPSimHit::Entry::Particle::Base::fgBranchSocket = {"particle", ""};
+
+inline namespace SimHit {
 
 void MCPSimHit::CreateBranches(TTree& tree) {
     MCPHit::CreateBranches(tree);
-    fgG4EventID.CreateBranch(tree);
-    fgG4TrackID.CreateBranch(tree);
-    fgVertexTime.CreateBranch(tree);
-    fgVertexPosition.CreateBranch(tree);
-    fgParticle.CreateBranch(tree);
+    decltype(fG4EventID)::CreateBranch(tree);
+    decltype(fG4TrackID)::CreateBranch(tree);
+    decltype(fVertexTime)::CreateBranch(tree);
+    decltype(fVertexPosition)::CreateBranch(tree);
+    decltype(fParticle)::CreateBranch(tree);
 }
 
 void MCPSimHit::ConnectToBranches(TTree& tree) {
     MCPHit::ConnectToBranches(tree);
-    fgG4EventID.ConnectToBranch(tree);
-    fgG4TrackID.ConnectToBranch(tree);
-    fgVertexTime.ConnectToBranch(tree);
-    fgVertexPosition.ConnectToBranch(tree);
-    fgParticle.ConnectToBranch(tree);
+    decltype(fG4EventID)::ConnectToBranch(tree);
+    decltype(fG4TrackID)::ConnectToBranch(tree);
+    decltype(fVertexTime)::ConnectToBranch(tree);
+    decltype(fVertexPosition)::ConnectToBranch(tree);
+    decltype(fParticle)::ConnectToBranch(tree);
 }
 
-} // namespace MACE::DataModel::inline SimHit
+} // namespace SimHit
+
+} // namespace MACE::DataModel

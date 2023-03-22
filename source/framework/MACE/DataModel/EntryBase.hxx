@@ -12,26 +12,21 @@
 namespace MACE::DataModel {
 
 template<class ADerived,
-         class AData, gsl::index BranchIndex,
+         class AData, gsl::index ABranchID,
          typename T, BranchSocketable2<T> ABranchSocket,
          typename U>
+    requires(ABranchID >= 0)
 class EntryBase {
 protected:
-    explicit EntryBase(U branchSocketValue);
+    EntryBase();
     ~EntryBase() = default;
 
 public:
-    const auto& Value() const { return fValue; }
-    void Value(auto&& v) & { fValue = std::forward<decltype(v)>(v); }
-
+    static auto BranchID() { return ABranchID; }
     static const auto& Name() { return fgBranchSocket.Name(); }
 
-    void FillBranchSocket() const { fgBranchSocket.Value(fValue); }
     static void CreateBranch(TTree& tree) { fgBranchSocket.CreateBranch(tree); }
     static void ConnectToBranch(TTree& tree) { fgBranchSocket.ConnectToBranch(tree); }
-
-private:
-    U fValue;
 
 protected:
     static ABranchSocket fgBranchSocket;

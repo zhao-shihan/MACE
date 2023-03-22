@@ -1,12 +1,8 @@
 namespace MACE::DataModel::inline Hit {
 
-inline EMCalHit::EMCalHit() noexcept :
-    fHitTime(fgHitTime.Value()),
-    fEnergy(fgEnergy.Value()) {}
-
-inline void EMCalHit::FillBranchSockets() const noexcept {
-    fgHitTime.Value(fHitTime);
-    fgEnergy.Value(fEnergy);
+inline void EMCalHit::FillBranchSockets() const {
+    fHitTime.FillBranchSocket();
+    fEnergy.FillBranchSocket();
 }
 
 } // namespace MACE::DataModel::inline Hit

@@ -1,8 +1,10 @@
 namespace MACE::DataModel::inline Entry {
 
-template<class AData, gsl::index BranchIndex, Concept::ROOTFundamental T, typename U>
-    requires std::convertible_to<const T&, U> and std::assignable_from<T&, const U&>
-FundamentalEntry<AData, BranchIndex, T, U>::FundamentalEntry() :
-    Base(this->fgBranchSocket.Value()) {}
+template<class AData, gsl::index ABranchID, Concept::ROOTFundamental T, typename U>
+    requires(std::integral<T> and std::integral<U>) or
+                (std::floating_point<T> and std::floating_point<U>)
+FundamentalEntry<AData, ABranchID, T, U>::FundamentalEntry() :
+    Base(),
+    fValue(this->fgBranchSocket.Value()) {}
 
 } // namespace MACE::DataModel::inline Entry

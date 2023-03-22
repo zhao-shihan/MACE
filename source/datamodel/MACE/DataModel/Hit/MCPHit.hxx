@@ -1,52 +1,55 @@
 #pragma once
 
-#include "MACE/Concept/NumericVector.hxx"
-#include "MACE/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
-#include "MACE/DataModel/BranchSocket/VectorBranchSocket.hxx"
-#include "MACE/DataModel/DataFactory.hxx"
+#include "MACE/DataModel/Entry/FundamentalEntry.hxx"
+#include "MACE/DataModel/Entry/VectorEntry.hxx"
 #include "MACE/DataModel/TransientData.hxx"
 #include "MACE/Extension/stdx/array_alias.hxx"
-#include "MACE/Utility/VectorAssign.hxx"
+#include "MACE/Utility/NonConstructibleBase.hxx"
 
-#include <array>
 #include <string_view>
 #include <utility>
 
-namespace MACE::DataModel::inline Hit {
+namespace MACE::DataModel {
+
+inline namespace Hit {
+
+using namespace std::string_view_literals;
 
 class MCPHit {
 public:
-    inline MCPHit() noexcept;
-    virtual ~MCPHit() = default;
+    struct Entry : NonConstructibleBase {
+        using HitTime = DoubleEntry<MCPHit, 0, double>;
+        using HitPosition = Vector2FEntry<MCPHit, 1, stdx::array2d>;
+    };
 
-    MCPHit(const MCPHit&) noexcept = default;
-    MCPHit(MCPHit&&) noexcept = default;
-    MCPHit& operator=(const MCPHit&) noexcept = default;
-    MCPHit& operator=(MCPHit&&) noexcept = default;
+public:
+    virtual ~MCPHit() = default;
 
     const auto& HitTime() const { return fHitTime; }
     const auto& HitPosition() const { return fHitPosition; }
-    template<Concept::NumericVector2D T>
-    auto HitPosition() const { return VectorCast<T>(fHitPosition); }
 
-    void HitTime(double val) { fHitTime = val; }
-    void HitPosition(const stdx::array2d& x) { fHitPosition = x; }
-    void HitPosition(auto&& x) { VectorAssign(fHitPosition, std::forward<decltype(x)>(x)); }
+    void HitTime(auto&& v) { fHitTime.Value(std::forward<decltype(v)>(v)); }
+    void HitPosition(auto&& v) { fHitPosition.Value(std::forward<decltype(v)>(v)); }
 
-    inline void FillBranchSockets() const noexcept;
+    static constexpr auto BasicTreeName() { return "MCPHit"sv; }
+
+    inline void FillBranchSockets() const;
     static void CreateBranches(TTree& tree);
     static void ConnectToBranches(TTree& tree);
-    static constexpr auto BasicTreeName() noexcept { return std::string_view("MCPHit"); }
 
 private:
-    double fHitTime;
-    stdx::array2d fHitPosition;
-
-    static DoubleBranchSocket fgHitTime;
-    static Vector2FBranchSocket fgHitPosition;
+    Entry::HitTime fHitTime;
+    Entry::HitPosition fHitPosition;
 };
 static_assert(TransientData<MCPHit>);
 
-} // namespace MACE::DataModel::inline Hit
+} // namespace Hit
+
+template<>
+MCPHit::Entry::HitTime::BranchSocket MCPHit::Entry::HitTime::Base::fgBranchSocket;
+template<>
+MCPHit::Entry::HitPosition::BranchSocket MCPHit::Entry::HitPosition::Base::fgBranchSocket;
+
+} // namespace MACE::DataModel
 
 #include "MACE/DataModel/Hit/MCPHit.inl"

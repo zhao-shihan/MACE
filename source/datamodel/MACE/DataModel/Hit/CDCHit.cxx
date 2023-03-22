@@ -3,11 +3,11 @@
 namespace MACE::DataModel {
 
 template<>
-IntEntry<CDCHit, 0, int>::BranchSocket IntEntry<CDCHit, 0, int>::Base::fgBranchSocket("cellID", -1);
+CDCHit::Entry::CellID::BranchSocket CDCHit::Entry::CellID::Base::fgBranchSocket = {"cellID", -1};
 template<>
-FloatEntry<CDCHit, 1, double>::BranchSocket FloatEntry<CDCHit, 1, double>::Base::fgBranchSocket("drift", 0);
+CDCHit::Entry::DriftDistance::BranchSocket CDCHit::Entry::DriftDistance::Base::fgBranchSocket = {"drift", 0};
 template<>
-DoubleEntry<CDCHit, 2, double>::BranchSocket DoubleEntry<CDCHit, 2, double>::Base::fgBranchSocket("hitTime", 0);
+CDCHit::Entry::HitTime::BranchSocket CDCHit::Entry::HitTime::Base::fgBranchSocket = {"hitTime", 0};
 
 inline namespace Hit {
 

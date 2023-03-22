@@ -3,7 +3,7 @@ namespace MACE::DataModel {
 namespace internal {
 
 template<class E,
-         class AData, gsl::index BranchIndex,
+         class AData, gsl::index ABranchID,
          typename T, class ABranchSocket,
          typename U>
 concept EntryConcept =
@@ -18,8 +18,8 @@ concept EntryConcept =
         { E::CreateBranch(tree) } -> std::same_as<void>;
         { E::ConnectToBranch(tree) } -> std::same_as<void>;
         requires std::semiregular<E>;
-        requires std::is_trivially_copyable_v<E>;
-        requires std::derived_from<E, EntryBase<E, AData, BranchIndex, T, ABranchSocket, U>>;
+        requires(std::is_trivially_copyable_v<E> == std::is_trivially_copyable_v<U>);
+        requires std::derived_from<E, EntryBase<E, AData, ABranchID, T, ABranchSocket, U>>;
         requires std::is_final_v<E>;
         requires not std::is_polymorphic_v<E>;
     };
@@ -27,12 +27,12 @@ concept EntryConcept =
 } // namespace internal
 
 template<class ADerived,
-         class AData, gsl::index BranchIndex,
+         class AData, gsl::index ABranchID,
          typename T, BranchSocketable2<T> ABranchSocket,
          typename U>
-EntryBase<ADerived, AData, BranchIndex, T, ABranchSocket, U>::EntryBase(U value) :
-    fValue(std::move(value)) {
-    static_assert(internal::EntryConcept<ADerived, AData, BranchIndex, T, ABranchSocket, U>);
+    requires(ABranchID >= 0)
+EntryBase<ADerived, AData, ABranchID, T, ABranchSocket, U>::EntryBase() {
+    static_assert(internal::EntryConcept<ADerived, AData, ABranchID, T, ABranchSocket, U>);
 }
 
 } // namespace MACE::DataModel

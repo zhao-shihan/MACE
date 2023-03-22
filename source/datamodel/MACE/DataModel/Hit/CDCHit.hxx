@@ -1,20 +1,26 @@
 #pragma once
 
-#include "MACE/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
-#include "MACE/DataModel/BranchSocket/VectorBranchSocket.hxx"
-#include "MACE/DataModel/DataFactory.hxx"
 #include "MACE/DataModel/Entry/FundamentalEntry.hxx"
 #include "MACE/DataModel/TransientData.hxx"
-#include "MACE/Utility/VectorAssign.hxx"
+#include "MACE/Utility/NonConstructibleBase.hxx"
 
 #include <string_view>
 #include <utility>
 
-namespace MACE::DataModel::inline Hit {
+namespace MACE::DataModel {
+
+inline namespace Hit {
 
 using namespace std::string_view_literals;
 
 class CDCHit {
+public:
+    struct Entry : NonConstructibleBase {
+        using CellID = IntEntry<CDCHit, 0, int>;
+        using DriftDistance = FloatEntry<CDCHit, 1, double>;
+        using HitTime = DoubleEntry<CDCHit, 2, double>;
+    };
+
 public:
     virtual ~CDCHit() = default;
 
@@ -33,12 +39,21 @@ public:
     static void ConnectToBranches(TTree& tree);
 
 private:
-    IntEntry<CDCHit, 0, int> fCellID;
-    FloatEntry<CDCHit, 1, double> fDriftDistance;
-    DoubleEntry<CDCHit, 2, double> fHitTime;
+    Entry::CellID fCellID;
+    Entry::DriftDistance fDriftDistance;
+    Entry::HitTime fHitTime;
 };
 static_assert(TransientData<CDCHit>);
 
-} // namespace MACE::DataModel::inline Hit
+} // namespace Hit
+
+template<>
+CDCHit::Entry::CellID::BranchSocket CDCHit::Entry::CellID::Base::fgBranchSocket;
+template<>
+CDCHit::Entry::DriftDistance::BranchSocket CDCHit::Entry::DriftDistance::Base::fgBranchSocket;
+template<>
+CDCHit::Entry::HitTime::BranchSocket CDCHit::Entry::HitTime::Base::fgBranchSocket;
+
+} // namespace MACE::DataModel
 
 #include "MACE/DataModel/Hit/CDCHit.inl"

@@ -1,20 +1,12 @@
 namespace MACE::DataModel::inline SimHit {
 
-inline MCPSimHit::MCPSimHit() noexcept :
-    MCPHit(),
-    fG4EventID(fgG4EventID.Value()),
-    fG4TrackID(fgG4TrackID.Value()),
-    fVertexTime(fgVertexTime.Value()),
-    fVertexPosition(fgVertexPosition.Value<double>()),
-    fParticle(fgParticle.Value()) {}
-
-inline void MCPSimHit::FillBranchSockets() const noexcept {
+inline void MCPSimHit::FillBranchSockets() const {
     MCPHit::FillBranchSockets();
-    fgG4EventID.Value(fG4EventID);
-    fgG4TrackID.Value(fG4TrackID);
-    fgVertexTime.Value(fVertexTime);
-    fgVertexPosition.Value(fVertexPosition);
-    fgParticle.Value(fParticle);
+    fG4EventID.FillBranchSocket();
+    fG4TrackID.FillBranchSocket();
+    fVertexTime.FillBranchSocket();
+    fVertexPosition.FillBranchSocket();
+    fParticle.FillBranchSocket();
 }
 
 } // namespace MACE::DataModel::inline SimHit

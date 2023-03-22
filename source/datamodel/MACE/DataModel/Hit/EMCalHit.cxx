@@ -1,18 +1,24 @@
 #include "MACE/DataModel/Hit/EMCalHit.hxx"
 
-namespace MACE::DataModel::inline Hit {
+namespace MACE::DataModel {
 
-DoubleBranchSocket EMCalHit::fgHitTime("hitTime", 0);
-FloatBranchSocket EMCalHit::fgEnergy("hitEne", 0);
+template<>
+EMCalHit::Entry::HitTime::BranchSocket EMCalHit::Entry::HitTime::Base::fgBranchSocket = {"hitTime", 0};
+template<>
+EMCalHit::Entry::Energy::BranchSocket EMCalHit::Entry::Energy::Base::fgBranchSocket = {"hitEne", 0};
+
+inline namespace Hit {
 
 void EMCalHit::CreateBranches(TTree& tree) {
-    fgHitTime.CreateBranch(tree);
-    fgEnergy.CreateBranch(tree);
+    decltype(fHitTime)::CreateBranch(tree);
+    decltype(fEnergy)::CreateBranch(tree);
 }
 
 void EMCalHit::ConnectToBranches(TTree& tree) {
-    fgHitTime.ConnectToBranch(tree);
-    fgEnergy.ConnectToBranch(tree);
+    decltype(fHitTime)::ConnectToBranch(tree);
+    decltype(fEnergy)::ConnectToBranch(tree);
 }
 
-} // namespace MACE::DataModel::inline Hit
+} // namespace Hit
+
+} // namespace MACE::DataModel

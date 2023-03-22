@@ -3,6 +3,7 @@
 #include "MACE/Concept/ROOTFundamental.hxx"
 #include "MACE/DataModel/BranchSocketBase2.hxx"
 
+#include "RtypesCore.h"
 #include "TTree.h"
 
 #include <string>
