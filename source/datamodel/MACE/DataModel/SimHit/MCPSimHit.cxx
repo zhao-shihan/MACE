@@ -7,11 +7,11 @@ MCPSimHit::Entry::G4EventID::BranchSocket MCPSimHit::Entry::G4EventID::Base::fgB
 template<>
 MCPSimHit::Entry::G4TrackID::BranchSocket MCPSimHit::Entry::G4TrackID::Base::fgBranchSocket = {"g4TrackID", -1};
 template<>
+MCPSimHit::Entry::PDGCode::BranchSocket MCPSimHit::Entry::PDGCode::Base::fgBranchSocket = {"pdgCode", 0};
+template<>
 MCPSimHit::Entry::VertexTime::BranchSocket MCPSimHit::Entry::VertexTime::Base::fgBranchSocket = {"vtxTime", 0};
 template<> // clang-format off
 MCPSimHit::Entry::VertexPosition::BranchSocket MCPSimHit::Entry::VertexPosition::Base::fgBranchSocket = {"vtxPos", {0, 0, 0}}; // clang-format on
-template<>
-MCPSimHit::Entry::Particle::BranchSocket MCPSimHit::Entry::Particle::Base::fgBranchSocket = {"particle", ""};
 
 inline namespace SimHit {
 
@@ -21,7 +21,7 @@ void MCPSimHit::CreateBranches(TTree& tree) {
     decltype(fG4TrackID)::CreateBranch(tree);
     decltype(fVertexTime)::CreateBranch(tree);
     decltype(fVertexPosition)::CreateBranch(tree);
-    decltype(fParticle)::CreateBranch(tree);
+    decltype(fPDGCode)::CreateBranch(tree);
 }
 
 void MCPSimHit::ConnectToBranches(TTree& tree) {
@@ -30,7 +30,7 @@ void MCPSimHit::ConnectToBranches(TTree& tree) {
     decltype(fG4TrackID)::ConnectToBranch(tree);
     decltype(fVertexTime)::ConnectToBranch(tree);
     decltype(fVertexPosition)::ConnectToBranch(tree);
-    decltype(fParticle)::ConnectToBranch(tree);
+    decltype(fPDGCode)::ConnectToBranch(tree);
 }
 
 } // namespace SimHit

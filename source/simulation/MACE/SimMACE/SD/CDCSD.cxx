@@ -96,15 +96,15 @@ G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
         hit->HitTime(Math::MidPoint(tIn, tOut));
         hit->DriftDistance(driftDistance);
         hit->CellID(cellID);
+        hit->G4EventID(fEventID);
+        hit->G4TrackID(trackID);
+        hit->PDGCode(particle.GetPDGEncoding());
         hit->Energy(Math::MidPoint(enterPoint.GetTotalEnergy(), exitPoint.GetTotalEnergy()));
         hit->Momentum(Math::MidPoint(enterPoint.GetMomentum(), exitPoint.GetMomentum()));
         hit->VertexTime(track.GetGlobalTime() - track.GetLocalTime());
         hit->VertexPosition(track.GetVertexPosition());
         hit->VertexEnergy(vertexTotalEnergy);
         hit->VertexMomentum(vertexMomentum);
-        hit->Particle(particle.GetParticleName());
-        hit->G4EventID(fEventID);
-        hit->G4TrackID(trackID);
         fCellSignalTimesAndHits[cellID].emplace_back(hit->HitTime().Value() + driftDistance / fMeanDriftVelocity,
                                                      std::move(hit));
         // particle is exiting, remove it from monitoring list

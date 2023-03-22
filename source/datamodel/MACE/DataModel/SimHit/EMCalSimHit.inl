@@ -4,7 +4,7 @@ inline void EMCalSimHit::FillBranchSockets() const {
     EMCalHit::FillBranchSockets();
     fG4EventID.FillBranchSocket();
     fG4TrackID.FillBranchSocket();
-    fParticle.FillBranchSocket();
+    fPDGCode.FillBranchSocket();
 }
 
 } // namespace MACE::DataModel::inline SimHit

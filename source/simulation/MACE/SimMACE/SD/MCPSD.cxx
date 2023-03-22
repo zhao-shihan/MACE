@@ -39,11 +39,11 @@ G4bool MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
         const auto hit = new MCPHit;
         hit->HitTime(preStepPoint.GetGlobalTime());
         hit->HitPosition(hitPosition);
-        hit->VertexTime(track.GetGlobalTime() - track.GetLocalTime());
-        hit->VertexPosition(track.GetVertexPosition());
-        hit->Particle(particle.GetParticleName());
         hit->G4EventID(fEventID);
         hit->G4TrackID(track.GetTrackID());
+        hit->PDGCode(particle.GetPDGEncoding());
+        hit->VertexTime(track.GetGlobalTime() - track.GetLocalTime());
+        hit->VertexPosition(track.GetVertexPosition());
         fHitsCollection->insert(hit);
         return true;
     }

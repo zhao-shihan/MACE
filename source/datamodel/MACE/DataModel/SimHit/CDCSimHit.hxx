@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MACE/DataModel/Entry/FundamentalEntry.hxx"
-#include "MACE/DataModel/Entry/StringEntry.hxx"
 #include "MACE/DataModel/Entry/VectorEntry.hxx"
 #include "MACE/DataModel/Hit/CDCHit.hxx"
 #include "MACE/Extension/stdx/array_alias.hxx"
@@ -23,13 +22,13 @@ public:
     struct Entry : CDCHit::Entry {
         using G4EventID = IntEntry<CDCSimHit, 3, int>;
         using G4TrackID = IntEntry<CDCSimHit, 4, int>;
-        using Energy = FloatEntry<CDCSimHit, 5, double>;
-        using Momentum = Vector3FEntry<CDCSimHit, 6, stdx::array3d>;
-        using VertexTime = DoubleEntry<CDCSimHit, 7, double>;
-        using VertexPosition = Vector3FEntry<CDCSimHit, 8, stdx::array3d>;
-        using VertexEnergy = FloatEntry<CDCSimHit, 9, double>;
-        using VertexMomentum = Vector3FEntry<CDCSimHit, 10, stdx::array3d>;
-        using Particle = ShortStringEntry<CDCSimHit, 11, ShortString>;
+        using PDGCode = IntEntry<CDCSimHit, 5, int>;
+        using Energy = FloatEntry<CDCSimHit, 6, double>;
+        using Momentum = Vector3FEntry<CDCSimHit, 7, stdx::array3d>;
+        using VertexTime = DoubleEntry<CDCSimHit, 8, double>;
+        using VertexPosition = Vector3FEntry<CDCSimHit, 9, stdx::array3d>;
+        using VertexEnergy = FloatEntry<CDCSimHit, 10, double>;
+        using VertexMomentum = Vector3FEntry<CDCSimHit, 11, stdx::array3d>;
     };
 
 public:
@@ -37,23 +36,23 @@ public:
 
     const auto& G4EventID() const { return fG4EventID; }
     const auto& G4TrackID() const { return fG4TrackID; }
+    const auto& PDGCode() const { return fPDGCode; }
     const auto& Energy() const { return fEnergy; }
     const auto& Momentum() const { return fMomentum; }
     const auto& VertexTime() const { return fVertexTime; }
     const auto& VertexPosition() const { return fVertexPosition; }
     const auto& VertexEnergy() const { return fVertexEnergy; }
     const auto& VertexMomentum() const { return fVertexMomentum; }
-    const auto& Particle() const { return fParticle; }
 
     void G4EventID(auto&& v) { fG4EventID.Value(std::forward<decltype(v)>(v)); }
     void G4TrackID(auto&& v) { fG4TrackID.Value(std::forward<decltype(v)>(v)); }
+    void PDGCode(auto&& v) { fPDGCode.Value(std::forward<decltype(v)>(v)); }
     void Energy(auto&& v) { fEnergy.Value(std::forward<decltype(v)>(v)); }
     void Momentum(auto&& v) { fMomentum.Value(std::forward<decltype(v)>(v)); }
     void VertexTime(auto&& v) { fVertexTime.Value(std::forward<decltype(v)>(v)); }
     void VertexPosition(auto&& v) { fVertexPosition.Value(std::forward<decltype(v)>(v)); }
     void VertexEnergy(auto&& v) { fVertexEnergy.Value(std::forward<decltype(v)>(v)); }
     void VertexMomentum(auto&& v) { fVertexMomentum.Value(std::forward<decltype(v)>(v)); }
-    void Particle(auto&& v) { fParticle.Value(std::forward<decltype(v)>(v)); }
 
     static constexpr auto BasicTreeName() { return "CDCSimHit"sv; }
 
@@ -64,13 +63,13 @@ public:
 private:
     Entry::G4EventID fG4EventID;
     Entry::G4TrackID fG4TrackID;
+    Entry::PDGCode fPDGCode;
     Entry::Energy fEnergy;
     Entry::Momentum fMomentum;
     Entry::VertexTime fVertexTime;
     Entry::VertexPosition fVertexPosition;
     Entry::VertexEnergy fVertexEnergy;
     Entry::VertexMomentum fVertexMomentum;
-    Entry::Particle fParticle;
 };
 static_assert(TransientData<CDCSimHit>);
 
@@ -80,6 +79,8 @@ template<>
 CDCSimHit::Entry::G4EventID::BranchSocket CDCSimHit::Entry::G4EventID::Base::fgBranchSocket;
 template<>
 CDCSimHit::Entry::G4TrackID::BranchSocket CDCSimHit::Entry::G4TrackID::Base::fgBranchSocket;
+template<>
+CDCSimHit::Entry::PDGCode::BranchSocket CDCSimHit::Entry::PDGCode::Base::fgBranchSocket;
 template<>
 CDCSimHit::Entry::Energy::BranchSocket CDCSimHit::Entry::Energy::Base::fgBranchSocket;
 template<>
@@ -92,8 +93,6 @@ template<>
 CDCSimHit::Entry::VertexEnergy::BranchSocket CDCSimHit::Entry::VertexEnergy::Base::fgBranchSocket;
 template<>
 CDCSimHit::Entry::VertexMomentum::BranchSocket CDCSimHit::Entry::VertexMomentum::Base::fgBranchSocket;
-template<>
-CDCSimHit::Entry::Particle::BranchSocket CDCSimHit::Entry::Particle::Base::fgBranchSocket;
 
 } // namespace MACE::DataModel
 

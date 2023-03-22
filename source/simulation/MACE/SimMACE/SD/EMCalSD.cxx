@@ -33,9 +33,9 @@ G4bool EMCalSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
         const auto hit = new EMCalHit;
         hit->HitTime(preStepPoint.GetGlobalTime());
         hit->Energy(preStepPoint.GetKineticEnergy());
-        hit->Particle(particle.GetParticleName());
         hit->G4EventID(fEventID);
         hit->G4TrackID(track.GetTrackID());
+        hit->PDGCode(particle.GetPDGEncoding());
         fHitsCollection->insert(hit);
         return true;
     }

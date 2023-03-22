@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MACE/DataModel/Entry/FundamentalEntry.hxx"
-#include "MACE/DataModel/Entry/StringEntry.hxx"
 #include "MACE/DataModel/Hit/EMCalHit.hxx"
 
 #include <string_view>
@@ -18,7 +17,7 @@ public:
     struct Entry : EMCalHit::Entry {
         using G4EventID = IntEntry<EMCalSimHit, 2, int>;
         using G4TrackID = IntEntry<EMCalSimHit, 3, int>;
-        using Particle = ShortStringEntry<EMCalSimHit, 4, ShortString>;
+        using PDGCode = IntEntry<EMCalSimHit, 4, int>;
     };
 
 public:
@@ -26,11 +25,11 @@ public:
 
     const auto& G4EventID() const { return fG4EventID; }
     const auto& G4TrackID() const { return fG4TrackID; }
-    const auto& Particle() const { return fParticle; }
+    const auto& PDGCode() const { return fPDGCode; }
 
     void G4EventID(auto&& v) { fG4EventID.Value(std::forward<decltype(v)>(v)); }
     void G4TrackID(auto&& v) { fG4TrackID.Value(std::forward<decltype(v)>(v)); }
-    void Particle(auto&& v) { fParticle.Value(std::forward<decltype(v)>(v)); }
+    void PDGCode(auto&& v) { fPDGCode.Value(std::forward<decltype(v)>(v)); }
 
     static constexpr auto BasicTreeName() { return "EMCalSimHit"sv; }
 
@@ -41,7 +40,7 @@ public:
 private:
     Entry::G4EventID fG4EventID;
     Entry::G4TrackID fG4TrackID;
-    Entry::Particle fParticle;
+    Entry::PDGCode fPDGCode;
 };
 static_assert(TransientData<EMCalSimHit>);
 
@@ -52,7 +51,7 @@ EMCalSimHit::Entry::G4EventID::BranchSocket EMCalSimHit::Entry::G4EventID::Base:
 template<>
 EMCalSimHit::Entry::G4TrackID::BranchSocket EMCalSimHit::Entry::G4TrackID::Base::fgBranchSocket;
 template<>
-EMCalSimHit::Entry::Particle::BranchSocket EMCalSimHit::Entry::Particle::Base::fgBranchSocket;
+EMCalSimHit::Entry::PDGCode::BranchSocket EMCalSimHit::Entry::PDGCode::Base::fgBranchSocket;
 
 } // namespace MACE::DataModel
 
