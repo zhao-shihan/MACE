@@ -19,17 +19,15 @@
 namespace MACE::inline Utility::internal {
 
 template<typename ATime>
-WallTimer<ATime>::WallTimer() noexcept :
-    fSystemClock(),
+WallTimeStopwatch<ATime>::WallTimeStopwatch() noexcept :
     fT0() {
-    host_get_clock_service(mach_host_self(), SYSTEM_CLOCK, &fSystemClock);
     Reset();
 }
 
 template<typename ATime>
-ATime WallTimer<ATime>::NanosecondsElapsed() const noexcept {
-    mach_timespec_t t;
-    clock_get_time(fSystemClock, &t);
+ATime WallTimeStopwatch<ATime>::NanosecondsElapsed() const noexcept {
+    std::timespec t;
+    clock_gettime(CLOCK_MONOTONIC, &t);
     return static_cast<ATime>(t.tv_sec - fT0.tv_sec) * 1'000'000'000 +
            static_cast<ATime>(t.tv_nsec - fT0.tv_nsec);
 }

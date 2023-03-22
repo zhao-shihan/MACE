@@ -1,8 +1,8 @@
 #pragma once
 
-#include "MACE/Utility/CPUTimer.hxx"
+#include "MACE/Utility/CPUTimeStopwatch.hxx"
 #include "MACE/Utility/DivideIndices.hxx"
-#include "MACE/Utility/WallTimer.hxx"
+#include "MACE/Utility/WallTimeStopwatch.hxx"
 
 #include "G4RunManager.hh"
 
@@ -62,13 +62,13 @@ private:
     IntegralIndexRange<G4int> fEventIDRange;
 
     G4int fPrintProgressModulo;
-    WallTimer<> fEventWallTimer;
+    WallTimeStopwatch<> fEventWallTimeStopwatch;
     double fEventWallTime;
     double fNAvgEventWallTime;
     double fNDevEventWallTime;
-    CPUTimer<> fRunCPUTimer;
+    CPUTimeStopwatch<> fRunCPUTimeStopwatch;
     double fRunCPUTime;
-    WallTimer<> fRunWallTimer;
+    WallTimeStopwatch<> fRunWallTimeStopwatch;
     double fRunWallTime;
     std::chrono::system_clock::time_point fRunBeginSystemTime;
     std::chrono::system_clock::time_point fRunEndSystemTime;

@@ -1,12 +1,12 @@
 namespace MACE::inline Utility::internal {
 
 template<typename ATime>
-CPUTimer<ATime>::CPUTimer() noexcept :
+CPUTimeStopwatch<ATime>::CPUTimeStopwatch() noexcept :
     fCurrentProcess(GetCurrentProcess()),
     fT0(ClockIn100ns()) {}
 
 template<typename ATime>
-ULARGE_INTEGER CPUTimer<ATime>::ClockIn100ns() const noexcept {
+ULARGE_INTEGER CPUTimeStopwatch<ATime>::ClockIn100ns() const noexcept {
     FILETIME tCreation;
     FILETIME tExit;
     FILETIME tKernel;

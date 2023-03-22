@@ -1,7 +1,7 @@
 #include "MACE/Extension/CLHEPX/Random/Xoshiro256Engine.hxx"
 #include "MACE/Math/Random/Distribution/Uniform.hxx"
 #include "MACE/Math/Random/Generator/Xoshiro256Plus.hxx"
-#include "MACE/Utility/WallTimer.hxx"
+#include "MACE/Utility/WallTimeStopwatch.hxx"
 
 #include "Eigen/Core"
 
@@ -20,15 +20,15 @@ int main() {
 
     unsigned int r;
     for (int i = 0; i < 1000; ++i) { r = xoshiro256p(); }
-    WallTimer<> timer;
+    WallTimeStopwatch<> stopWatch;
     for (int i = 0; i < 10'000'000; ++i) { r = xoshiro256p(); }
-    auto time = timer.MillisecondsElapsed();
+    auto time = stopWatch.MillisecondsElapsed();
     std::cout << "    CLHEPX::...::Xoshiro256Engine : " << time << " ms (last integer: " << r << ')' << std::endl;
 
     for (int i = 0; i < 1000; ++i) { r = (unsigned int)(xoshiro256pX); }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) { r = (unsigned int)(xoshiro256pX); }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "     Math::...::Xoshiro256Plus : " << time << " ms (last integer: " << r << ')' << std::endl;
 
     std::cout << "2D random walk, 10 million steps:" << std::endl;
@@ -40,13 +40,13 @@ int main() {
                    Math::Random::Uniform<double>()(xoshiro256p)};
         v2d += delta2d;
     }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
         delta2d = {Math::Random::Uniform<double>()(xoshiro256p),
                    Math::Random::Uniform<double>()(xoshiro256p)};
         v2d += delta2d;
     }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "    CLHEPX::...::Xoshiro256Engine : " << time << " ms (last displacement: " << std::setprecision(18) << v2d << std::setprecision(6) << ')' << std::endl;
 
     v2d = {0, 0};
@@ -55,13 +55,13 @@ int main() {
                    xoshiro256pX.flat()};
         v2d += delta2d;
     }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
         delta2d = {xoshiro256pX.flat(),
                    xoshiro256pX.flat()};
         v2d += delta2d;
     }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "     Math::...::Xoshiro256Plus : " << time << " ms (last displacement: " << std::setprecision(18) << v2d << std::setprecision(6) << ')' << std::endl;
 
     std::cout << "3D random walk, 10 million steps:" << std::endl;
@@ -74,14 +74,14 @@ int main() {
                    Math::Random::Uniform<double>()(xoshiro256p)};
         v3d += delta3d;
     }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
         delta3d = {Math::Random::Uniform<double>()(xoshiro256p),
                    Math::Random::Uniform<double>()(xoshiro256p),
                    Math::Random::Uniform<double>()(xoshiro256p)};
         v3d += delta3d;
     }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "    CLHEPX::...::Xoshiro256Engine : " << time << " ms (last displacement: " << std::setprecision(18) << v3d << std::setprecision(6) << ')' << std::endl;
 
     v3d = {0, 0, 0};
@@ -91,14 +91,14 @@ int main() {
                    xoshiro256pX.flat()};
         v3d += delta3d;
     }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
         delta3d = {xoshiro256pX.flat(),
                    xoshiro256pX.flat(),
                    xoshiro256pX.flat()};
         v3d += delta3d;
     }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "     Math::...::Xoshiro256Plus : " << time << " ms (last displacement: " << std::setprecision(18) << v3d << std::setprecision(6) << ')' << std::endl;
 
     std::cout << "4D random walk, 10 million steps:" << std::endl;
@@ -112,7 +112,7 @@ int main() {
                    Math::Random::Uniform<double>()(xoshiro256p)};
         v4d += delta4d;
     }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
         delta4d = {Math::Random::Uniform<double>()(xoshiro256p),
                    Math::Random::Uniform<double>()(xoshiro256p),
@@ -120,7 +120,7 @@ int main() {
                    Math::Random::Uniform<double>()(xoshiro256p)};
         v4d += delta4d;
     }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "    CLHEPX::...::Xoshiro256Engine : " << time << " ms (last displacement: " << std::setprecision(18) << v4d << std::setprecision(6) << ')' << std::endl;
 
     v4d = {0, 0, 0, 0};
@@ -131,7 +131,7 @@ int main() {
                    xoshiro256pX.flat()};
         v4d += delta4d;
     }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
         delta4d = {xoshiro256pX.flat(),
                    xoshiro256pX.flat(),
@@ -139,7 +139,7 @@ int main() {
                    xoshiro256pX.flat()};
         v4d += delta4d;
     }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "     Math::...::Xoshiro256Plus : " << time << " ms (last displacement: " << std::setprecision(18) << v4d << std::setprecision(6) << ')' << std::endl;
 
     return 0;

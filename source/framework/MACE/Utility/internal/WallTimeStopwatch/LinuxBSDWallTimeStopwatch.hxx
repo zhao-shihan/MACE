@@ -18,28 +18,26 @@
 
 #pragma once
 
-#include <mach/clock.h>
-#include <mach/mach.h>
+#include <ctime>
+#include <sys/time.h>
 
 namespace MACE::inline Utility::internal {
 
 template<typename ATime>
-class WallTimer {
+class WallTimeStopwatch {
 public:
-    WallTimer() noexcept;
-    ~WallTimer() noexcept { mach_port_deallocate(mach_task_self(), fSystemClock); }
+    WallTimeStopwatch() noexcept;
 
-    void Reset() noexcept { clock_get_time(fSystemClock, &fT0); }
+    void Reset() noexcept { clock_gettime(CLOCK_MONOTONIC, &fT0); }
     auto SecondsElapsed() const noexcept { return NanosecondsElapsed() / 1'000'000'000; }
     auto MillisecondsElapsed() const noexcept { return NanosecondsElapsed() / 1'000'000; }
     auto MicrosecondsElapsed() const noexcept { return NanosecondsElapsed() / 1'000; }
     ATime NanosecondsElapsed() const noexcept;
 
 private:
-    clock_serv_t fSystemClock;
-    mach_timespec_t fT0;
+    std::timespec fT0;
 };
 
 } // namespace MACE::inline Utility::internal
 
-#include "MACE/Utility/internal/WallTimer/WallTimer4MacOSX.inl"
+#include "MACE/Utility/internal/WallTimeStopwatch/LinuxBSDWallTimeStopwatch.inl"

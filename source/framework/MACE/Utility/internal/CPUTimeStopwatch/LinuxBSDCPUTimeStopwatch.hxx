@@ -6,9 +6,9 @@
 namespace MACE::inline Utility::internal {
 
 template<typename ATime>
-class CPUTimer {
+class CPUTimeStopwatch {
 public:
-    CPUTimer() noexcept;
+    CPUTimeStopwatch() noexcept;
 
     void Reset() noexcept { clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &fT0); }
     auto SecondsUsed() const noexcept { return NanosecondsUsed() / 1'000'000'000; }
@@ -22,4 +22,4 @@ private:
 
 } // namespace MACE::inline Utility::internal
 
-#include "MACE/Utility/internal/CPUTimer/CPUTimer4LinuxBSD.inl"
+#include "MACE/Utility/internal/CPUTimeStopwatch/LinuxBSDCPUTimeStopwatch.inl"

@@ -1,7 +1,7 @@
 #include "MACE/Math/Random/Distribution/Uniform.hxx"
 #include "MACE/Math/Random/Generator/MT1993732.hxx"
 #include "MACE/Math/Random/Generator/Xoshiro256Plus.hxx"
-#include "MACE/Utility/WallTimer.hxx"
+#include "MACE/Utility/WallTimeStopwatch.hxx"
 
 #include "Eigen/Core"
 
@@ -22,15 +22,15 @@ int main() {
 
     auto r = mt1993732();
     for (int i = 0; i < 1000; ++i) { r = mt1993732(); }
-    WallTimer<> timer;
+    WallTimeStopwatch<> stopWatch;
     for (int i = 0; i < 10'000'000; ++i) { r = mt1993732(); }
-    auto time = timer.MillisecondsElapsed();
+    auto time = stopWatch.MillisecondsElapsed();
     std::cout << "     MT19937-32 : " << time << " ms (last integer: " << r << ')' << std::endl;
 
     for (int i = 0; i < 1000; ++i) { r = xoshiro256p(); }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) { r = xoshiro256p(); }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "    xoshiro256+ : " << time << " ms (last integer: " << r << ')' << std::endl;
 
     std::cout << "Shuffle a std::array<double, 16> 1 million times:" << std::endl;
@@ -38,15 +38,15 @@ int main() {
     std::iota(arr16.begin(), arr16.end(), 0);
 
     for (int i = 0; i < 1000; ++i) { std::ranges::shuffle(arr16, mt1993732); }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 1'000'000; ++i) { std::ranges::shuffle(arr16, mt1993732); }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "     MT19937-32 : " << time << " ms (first element: " << arr16.front() << ')' << std::endl;
 
     for (int i = 0; i < 1000; ++i) { std::ranges::shuffle(arr16, xoshiro256p); }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 1'000'000; ++i) { std::ranges::shuffle(arr16, xoshiro256p); }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "    xoshiro256+ : " << time << " ms (first element: " << arr16.front() << ')' << std::endl;
 
     std::cout << "Shuffle a std::array<double, 4096> 10k times:" << std::endl;
@@ -54,15 +54,15 @@ int main() {
     std::iota(arr4096.begin(), arr4096.end(), 0);
 
     for (int i = 0; i < 100; ++i) { std::ranges::shuffle(arr4096, mt1993732); }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000; ++i) { std::ranges::shuffle(arr4096, mt1993732); }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "     MT19937-32 : " << time << " ms (first element: " << arr4096.front() << ')' << std::endl;
 
     for (int i = 0; i < 100; ++i) { std::ranges::shuffle(arr4096, xoshiro256p); }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000; ++i) { std::ranges::shuffle(arr4096, xoshiro256p); }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "    xoshiro256+ : " << time << " ms (first element: " << arr4096.front() << ')' << std::endl;
 
     std::cout << "2D random walk, 10 million steps:" << std::endl;
@@ -74,13 +74,13 @@ int main() {
                    Math::Random::Uniform<double>()(mt1993732)};
         v2d += delta2d;
     }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
         delta2d = {Math::Random::Uniform<double>()(mt1993732),
                    Math::Random::Uniform<double>()(mt1993732)};
         v2d += delta2d;
     }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "     MT19937-32 : " << time << " ms (last displacement: " << std::setprecision(18) << v2d << std::setprecision(6) << ')' << std::endl;
 
     v2d = {0, 0};
@@ -89,13 +89,13 @@ int main() {
                    Math::Random::Uniform<double>()(xoshiro256p)};
         v2d += delta2d;
     }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
         delta2d = {Math::Random::Uniform<double>()(xoshiro256p),
                    Math::Random::Uniform<double>()(xoshiro256p)};
         v2d += delta2d;
     }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "    xoshiro256+ : " << time << " ms (last displacement: " << std::setprecision(18) << v2d << std::setprecision(6) << ')' << std::endl;
 
     std::cout << "3D random walk, 10 million steps:" << std::endl;
@@ -108,14 +108,14 @@ int main() {
                    Math::Random::Uniform<double>()(mt1993732)};
         v3d += delta3d;
     }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
         delta3d = {Math::Random::Uniform<double>()(mt1993732),
                    Math::Random::Uniform<double>()(mt1993732),
                    Math::Random::Uniform<double>()(mt1993732)};
         v3d += delta3d;
     }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "     MT19937-32 : " << time << " ms (last displacement: " << std::setprecision(18) << v3d << std::setprecision(6) << ')' << std::endl;
 
     v3d = {0, 0, 0};
@@ -125,14 +125,14 @@ int main() {
                    Math::Random::Uniform<double>()(xoshiro256p)};
         v3d += delta3d;
     }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
         delta3d = {Math::Random::Uniform<double>()(xoshiro256p),
                    Math::Random::Uniform<double>()(xoshiro256p),
                    Math::Random::Uniform<double>()(xoshiro256p)};
         v3d += delta3d;
     }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "    xoshiro256+ : " << time << " ms (last displacement: " << std::setprecision(18) << v3d << std::setprecision(6) << ')' << std::endl;
 
     std::cout << "4D random walk, 10 million steps:" << std::endl;
@@ -146,7 +146,7 @@ int main() {
                    Math::Random::Uniform<double>()(mt1993732)};
         v4d += delta4d;
     }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
         delta4d = {Math::Random::Uniform<double>()(mt1993732),
                    Math::Random::Uniform<double>()(mt1993732),
@@ -154,7 +154,7 @@ int main() {
                    Math::Random::Uniform<double>()(mt1993732)};
         v4d += delta4d;
     }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "     MT19937-32 : " << time << " ms (last displacement: " << std::setprecision(18) << v4d << std::setprecision(6) << ')' << std::endl;
 
     v4d = {0, 0, 0, 0};
@@ -165,7 +165,7 @@ int main() {
                    Math::Random::Uniform<double>()(xoshiro256p)};
         v4d += delta4d;
     }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
         delta4d = {Math::Random::Uniform<double>()(xoshiro256p),
                    Math::Random::Uniform<double>()(xoshiro256p),
@@ -173,7 +173,7 @@ int main() {
                    Math::Random::Uniform<double>()(xoshiro256p)};
         v4d += delta4d;
     }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "    xoshiro256+ : " << time << " ms (last displacement: " << std::setprecision(18) << v4d << std::setprecision(6) << ')' << std::endl;
 
     return 0;

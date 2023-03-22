@@ -5,7 +5,7 @@
 namespace MACE::inline Utility::internal {
 
 template<typename ATime>
-class WallTimer {
+class WallTimeStopwatch {
 private:
     using sc = std::chrono::steady_clock;
     using s = std::chrono::duration<ATime, std::ratio<1>>;
@@ -14,7 +14,7 @@ private:
     using ns = std::chrono::duration<ATime, std::nano>;
 
 public:
-    WallTimer() noexcept;
+    WallTimeStopwatch() noexcept;
 
     void Reset() noexcept { fT0 = sc::now(); }
     auto SecondsElapsed() const noexcept { s(sc::now() - fT0).count(); }
@@ -28,4 +28,4 @@ private:
 
 } // namespace MACE::inline Utility::internal
 
-#include "MACE/Utility/internal/WallTimer/WallTimer4Fallback.inl"
+#include "MACE/Utility/internal/WallTimeStopwatch/FallbackWallTimeStopwatch.inl"

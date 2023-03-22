@@ -16,37 +16,22 @@
 //    misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#pragma once
-
-#if defined _MSC_VER and not defined __clang__ and not defined __GNUC__ and not defined NOMINMAX
-#    define NOMINMAX // Otherwise MS compilers act like idiots when using std::numeric_limits<>::max() and including windows.h
-#endif
-#ifndef WIN32_LEAN_AND_MEAN
-#    define WIN32_LEAN_AND_MEAN
-#    include <windows.h>
-#    undef WIN32_LEAN_AND_MEAN
-#else
-#    include <windows.h>
-#endif
-
 namespace MACE::inline Utility::internal {
 
 template<typename ATime>
-class WallTimer {
-public:
-    WallTimer() noexcept;
+WallTimeStopwatch<ATime>::WallTimeStopwatch() noexcept :
+    fSystemClock(),
+    fT0() {
+    host_get_clock_service(mach_host_self(), SYSTEM_CLOCK, &fSystemClock);
+    Reset();
+}
 
-    void Reset() noexcept { QueryPerformanceCounter(&fT0); }
-    ATime SecondsElapsed() const noexcept;
-    auto MillisecondsElapsed() const noexcept { return SecondsElapsed() * 1'000; }
-    auto MicrosecondsElapsed() const noexcept { return SecondsElapsed() * 1'000'000; }
-    auto NanosecondsElapsed() const noexcept { return SecondsElapsed() * 1'000'000'000; }
-
-private:
-    LARGE_INTEGER fFrequency;
-    LARGE_INTEGER fT0;
-};
+template<typename ATime>
+ATime WallTimeStopwatch<ATime>::NanosecondsElapsed() const noexcept {
+    mach_timespec_t t;
+    clock_get_time(fSystemClock, &t);
+    return static_cast<ATime>(t.tv_sec - fT0.tv_sec) * 1'000'000'000 +
+           static_cast<ATime>(t.tv_nsec - fT0.tv_nsec);
+}
 
 } // namespace MACE::inline Utility::internal
-
-#include "MACE/Utility/internal/WallTimer/WallTimer4Windows.inl"

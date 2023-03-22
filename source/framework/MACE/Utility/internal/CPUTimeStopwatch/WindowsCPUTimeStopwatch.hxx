@@ -16,9 +16,9 @@
 namespace MACE::inline Utility::internal {
 
 template<typename ATime>
-class CPUTimer {
+class CPUTimeStopwatch {
 public:
-    CPUTimer() noexcept;
+    CPUTimeStopwatch() noexcept;
 
     void Reset() noexcept { fT0 = ClockIn100ns(); }
     auto SecondsUsed() const noexcept { return HectonanosecondsUsed() / 10'000'000; }
@@ -37,4 +37,4 @@ private:
 
 } // namespace MACE::inline Utility::internal
 
-#include "MACE/Utility/internal/CPUTimer/CPUTimer4Windows.inl"
+#include "MACE/Utility/internal/CPUTimeStopwatch/WindowsCPUTimeStopwatch.inl"

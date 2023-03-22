@@ -21,16 +21,16 @@
 // Linux/BSD implementation:
 #if (defined linux or defined __linux__ or defined __linux) or \
     (defined __DragonFly__ or defined __FreeBSD__ or defined __NetBSD__ or defined __OpenBSD__)
-#    include "MACE/Utility/internal/WallTimer/WallTimer4LinuxBSD.hxx"
+#    include "MACE/Utility/internal/WallTimeStopwatch/LinuxBSDWallTimeStopwatch.hxx"
 // Mac OSX implementation:
 #elif defined __MACH__
-#    include "MACE/Utility/internal/WallTimer/WallTimer4MacOSX.hxx"
+#    include "MACE/Utility/internal/WallTimeStopwatch/MacOSXWallTimeStopwatch.hxx"
 // Windows implementation:
 #elif defined _WIN32
-#    include "MACE/Utility/internal/WallTimer/WallTimer4Windows.hxx"
+#    include "MACE/Utility/internal/WallTimeStopwatch/WindowsWallTimeStopwatch.hxx"
 // Fallback implementation:
 #else
-#    include "MACE/Utility/internal/WallTimer/WallTimer4Fallback.hxx"
+#    include "MACE/Utility/internal/WallTimeStopwatch/FallbackWallTimeStopwatch.hxx"
 #endif
 
 #include <concepts>
@@ -38,9 +38,9 @@
 
 namespace MACE::inline Utility {
 
-/// @brief high-precision cross-platform (linux/bsd/mac/windows) simple timer class
+/// @brief high-precision cross-platform (linux/bsd/mac/windows) simple stopwatch class
 template<std::floating_point ATime = double>
     requires(std::numeric_limits<ATime>::digits >= std::numeric_limits<double>::digits)
-class WallTimer final : public internal::WallTimer<ATime> {};
+class WallTimeStopwatch final : public internal::WallTimeStopwatch<ATime> {};
 
 } // namespace MACE::inline Utility

@@ -1,7 +1,7 @@
 #include "MACE/Extension/CLHEPX/Random/MT32Engine.hxx"
 #include "MACE/Math/Random/Distribution/Uniform.hxx"
 #include "MACE/Math/Random/Generator/MT1993732.hxx"
-#include "MACE/Utility/WallTimer.hxx"
+#include "MACE/Utility/WallTimeStopwatch.hxx"
 
 #include "Eigen/Core"
 
@@ -20,15 +20,15 @@ int main() {
 
     unsigned int r;
     for (int i = 0; i < 1000; ++i) { r = mt32(); }
-    WallTimer<> timer;
+    WallTimeStopwatch<> stopWatch;
     for (int i = 0; i < 10'000'000; ++i) { r = mt32(); }
-    auto time = timer.MillisecondsElapsed();
+    auto time = stopWatch.MillisecondsElapsed();
     std::cout << "    CLHEPX::...::MT32Engine : " << time << " ms (last integer: " << r << ')' << std::endl;
 
     for (int i = 0; i < 1000; ++i) { r = (unsigned int)(mt32x); }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) { r = (unsigned int)(mt32x); }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "       Math::...::MT1993732 : " << time << " ms (last integer: " << r << ')' << std::endl;
 
     std::cout << "2D random walk, 10 million steps:" << std::endl;
@@ -40,13 +40,13 @@ int main() {
                    Math::Random::Uniform<double>()(mt32)};
         v2d += delta2d;
     }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
         delta2d = {Math::Random::Uniform<double>()(mt32),
                    Math::Random::Uniform<double>()(mt32)};
         v2d += delta2d;
     }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "    CLHEPX::...::MT32Engine : " << time << " ms (last displacement: " << std::setprecision(18) << v2d << std::setprecision(6) << ')' << std::endl;
 
     v2d = {0, 0};
@@ -55,13 +55,13 @@ int main() {
                    mt32x.flat()};
         v2d += delta2d;
     }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
         delta2d = {mt32x.flat(),
                    mt32x.flat()};
         v2d += delta2d;
     }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "       Math::...::MT1993732 : " << time << " ms (last displacement: " << std::setprecision(18) << v2d << std::setprecision(6) << ')' << std::endl;
 
     std::cout << "3D random walk, 10 million steps:" << std::endl;
@@ -74,14 +74,14 @@ int main() {
                    Math::Random::Uniform<double>()(mt32)};
         v3d += delta3d;
     }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
         delta3d = {Math::Random::Uniform<double>()(mt32),
                    Math::Random::Uniform<double>()(mt32),
                    Math::Random::Uniform<double>()(mt32)};
         v3d += delta3d;
     }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "    CLHEPX::...::MT32Engine : " << time << " ms (last displacement: " << std::setprecision(18) << v3d << std::setprecision(6) << ')' << std::endl;
 
     v3d = {0, 0, 0};
@@ -91,14 +91,14 @@ int main() {
                    mt32x.flat()};
         v3d += delta3d;
     }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
         delta3d = {mt32x.flat(),
                    mt32x.flat(),
                    mt32x.flat()};
         v3d += delta3d;
     }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "       Math::...::MT1993732 : " << time << " ms (last displacement: " << std::setprecision(18) << v3d << std::setprecision(6) << ')' << std::endl;
 
     std::cout << "4D random walk, 10 million steps:" << std::endl;
@@ -112,7 +112,7 @@ int main() {
                    Math::Random::Uniform<double>()(mt32)};
         v4d += delta4d;
     }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
         delta4d = {Math::Random::Uniform<double>()(mt32),
                    Math::Random::Uniform<double>()(mt32),
@@ -120,7 +120,7 @@ int main() {
                    Math::Random::Uniform<double>()(mt32)};
         v4d += delta4d;
     }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "    CLHEPX::...::MT32Engine : " << time << " ms (last displacement: " << std::setprecision(18) << v4d << std::setprecision(6) << ')' << std::endl;
 
     v4d = {0, 0, 0, 0};
@@ -131,7 +131,7 @@ int main() {
                    mt32x.flat()};
         v4d += delta4d;
     }
-    timer.Reset();
+    stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
         delta4d = {mt32x.flat(),
                    mt32x.flat(),
@@ -139,7 +139,7 @@ int main() {
                    mt32x.flat()};
         v4d += delta4d;
     }
-    time = timer.MillisecondsElapsed();
+    time = stopWatch.MillisecondsElapsed();
     std::cout << "       Math::...::MT1993732 : " << time << " ms (last displacement: " << std::setprecision(18) << v4d << std::setprecision(6) << ')' << std::endl;
 
     return 0;

@@ -1,7 +1,7 @@
 namespace MACE::inline Utility::internal {
 
 template<typename ATime>
-WallTimer<ATime>::WallTimer() noexcept :
+WallTimeStopwatch<ATime>::WallTimeStopwatch() noexcept :
     fT0(sc::now()) {}
 
 } // namespace MACE::inline Utility::internal

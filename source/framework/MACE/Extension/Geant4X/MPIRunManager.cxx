@@ -42,13 +42,13 @@ MPIRunManager::MPIRunManager() :
     fNEventToBeMPIProcessed(0),
     fEventIDRange{-1, -1, 0, 0},
     fPrintProgressModulo(Env::MPIEnv::Instance().Sequential() ? 1 : Env::MPIEnv::Instance().WorldCommSize() + 1),
-    fEventWallTimer(),
+    fEventWallTimeStopwatch(),
     fEventWallTime(0),
     fNAvgEventWallTime(0),
     fNDevEventWallTime(0),
-    fRunCPUTimer(),
+    fRunCPUTimeStopwatch(),
     fRunCPUTime(0),
-    fRunWallTimer(),
+    fRunWallTimeStopwatch(),
     fRunWallTime(0),
     fRunBeginSystemTime(),
     fRunEndSystemTime() {
@@ -79,10 +79,10 @@ void MPIRunManager::RunInitialization() {
     // wait for everyone to start
     MACE_MPI_CALL_WITH_CHECK(MPI_Barrier,
                              MPI_COMM_WORLD)
-    // start the run timer
+    // start the run stopwatch
     fRunBeginSystemTime = std::chrono::system_clock::now();
-    fRunCPUTimer.Reset();
-    fRunWallTimer.Reset();
+    fRunCPUTimeStopwatch.Reset();
+    fRunWallTimeStopwatch.Reset();
     // initialize run
     G4RunManager::RunInitialization();
     // report
@@ -97,8 +97,8 @@ void MPIRunManager::InitializeEventLoop(G4int nEvent, gsl::czstring macroFile, G
     // reset event time statistic
     fNAvgEventWallTime = 0;
     fNDevEventWallTime = 0;
-    // restart the event timer just before the first event begins
-    fEventWallTimer.Reset();
+    // restart the event stopwatch just before the first event begins
+    fEventWallTimeStopwatch.Reset();
 }
 
 void MPIRunManager::ProcessOneEvent(G4int iEvent) {
@@ -110,9 +110,9 @@ void MPIRunManager::TerminateOneEvent() {
     const auto terminatedEventID = currentEvent->GetEventID();
     // terminate the event
     G4RunManager::TerminateOneEvent();
-    // read & restart the event timer
-    fEventWallTime = fEventWallTimer.SecondsElapsed();
-    fEventWallTimer.Reset();
+    // read & restart the event stopwatch
+    fEventWallTime = fEventWallTimeStopwatch.SecondsElapsed();
+    fEventWallTimeStopwatch.Reset();
     fNAvgEventWallTime += fEventWallTime;
     fNDevEventWallTime += Math::Pow2(fEventWallTime - fNAvgEventWallTime / numberOfEventProcessed);
     // report
@@ -125,9 +125,9 @@ void MPIRunManager::RunTermination() {
     // terminate the run
     const auto endedRun = runIDCounter;
     G4RunManager::RunTermination();
-    // stop the run timer
-    fRunWallTime = fRunWallTimer.SecondsElapsed();
-    fRunCPUTime = fRunCPUTimer.SecondsUsed();
+    // stop the run stopwatch
+    fRunWallTime = fRunWallTimeStopwatch.SecondsElapsed();
+    fRunCPUTime = fRunCPUTimeStopwatch.SecondsUsed();
     // wait for everyone to finish
     MACE_MPI_CALL_WITH_CHECK(MPI_Barrier,
                              MPI_COMM_WORLD)
