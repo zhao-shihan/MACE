@@ -10,7 +10,7 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel, bo
     fLocalCommRank(-1),
     fLocalCommSize(-1),
     fLocalHostID(-1),
-    fHostInfoList() {
+    fHostList() {
     // Initialize MPI and properties of MPI_COMM_WORLD
     // and disable ROOT implicit multi-threading
     InitializeMPI(argc, argv);

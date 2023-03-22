@@ -38,27 +38,23 @@ public:
     auto AtLocalMaster() const { return LocalCommRank() == 0; }
     auto AtLocalWorker() const { return LocalCommRank() > 0; }
 
-    auto HostNum() const { return fHostInfoList.size(); }
-    auto OnSingleHost() const { return HostNum() == 1; }
-    auto OnCluster() const { return HostNum() > 1; }
-    const auto& HostInfoList() const { return fHostInfoList; }
-    const auto& HostInfo(int id) const { return fHostInfoList[id]; }
-    const auto& HostSize(int id) const { return HostInfo(id).size; }
-    const auto& HostName(int id) const { return HostInfo(id).name; }
+    const auto& HostList() const { return fHostList; }
     auto LocalHostID() const { return fLocalHostID; }
-    const auto& LocalHostInfo() const { return HostInfo(fLocalHostID); }
-    const auto& LocalHostSize() const { return HostSize(fLocalHostID); }
-    const auto& LocalHostName() const { return HostName(fLocalHostID); }
+    const auto& Host(int id) const { return fHostList[id]; }
+    const auto& LocalHost() const { return Host(fLocalHostID); }
+    auto NHost() const { return static_cast<int>(fHostList.size()); }
+    auto OnSingleHost() const { return NHost() == 1; }
+    auto OnCluster() const { return NHost() > 1; }
 
 protected:
     void PrintStartupMessageBody(int argc, char* argv[]) const;
 
 private:
     void InitializeMPI(int argc, char* argv[]);
-    void InitializeHostInfos();
+    void InitializeHostInfo();
 
 private:
-    struct Host {
+    struct HostInfo {
         int size;
         std::string name;
     };
@@ -72,7 +68,7 @@ private:
     int fLocalCommSize;
 
     int fLocalHostID;
-    std::vector<Host> fHostInfoList;
+    std::vector<HostInfo> fHostList;
 
     static bool fgInitialized;
     static bool fgFinalized;

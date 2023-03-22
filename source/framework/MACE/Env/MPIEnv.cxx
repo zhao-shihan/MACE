@@ -1,5 +1,6 @@
 #include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Extension/stdx/array_alias.hxx"
+#include "MACE/Utility/FixedString.hxx"
 #include "MACE/Utility/MPIUtil/MPICallWithCheck.hxx"
 #include "MACE/Utility/MPIUtil/MPICallWithCheckNoExcept.hxx"
 
@@ -51,17 +52,18 @@ void MPIEnv::PrintStartupMessageBody(int argc, char* argv[]) const {
             << "-------------------->  MPI library information (end)  <--------------------\n";
         std::cout << " Size of the MPI world communicator: " << fWorldCommSize << '\n';
         if (OnSingleHost()) {
-            std::cout << " Running on " << std::quoted(LocalHostName()) << '\n';
+            std::cout << " Running on " << std::quoted(LocalHost().name) << '\n';
         } else {
-            std::cout << " Running on cluster with " << HostNum() << " hosts:\n";
+            std::cout << " Running on a cluster with " << NHost() << " hosts:\n";
             const auto maxNameWidth = std::ranges::max_element(
-                                          std::as_const(fHostInfoList),
-                                          [](auto&& a, auto&& b) { return a.name.size() < b.name.size(); })
+                                          std::as_const(fHostList),
+                                          [](auto&& host1, auto&& host2) { return host1.name.size() < host2.name.size(); })
                                           ->name.size();
             const auto oldFlags = std::cout.setf(std::ios_base::right, std::ios_base::adjustfield);
             const auto oldFill = std::cout.fill(' ');
-            for (auto&& [hostSize, hostName] : std::as_const(fHostInfoList)) {
-                std::cout << "  Name: " << std::setw(maxNameWidth) << hostName << "  Size: " << hostSize << '\n';
+            for (auto hostID = 0; hostID < NHost(); ++hostID) {
+                const auto& host = fHostList[hostID];
+                std::cout << "  name: " << std::setw(maxNameWidth) << host.name << "  size: " << host.size << '\n';
             }
             std::cout << std::setfill(oldFill)
                       << std::setiosflags(oldFlags);
@@ -90,7 +92,7 @@ void MPIEnv::InitializeMPI(int argc, char* argv[]) {
                              MPI_COMM_WORLD,
                              &fWorldCommSize)
     // Initialize informations of all hosts
-    InitializeHostInfos();
+    InitializeHostInfo();
     // Constructs shared communicator
     MACE_MPI_CALL_WITH_CHECK(MPI_Comm_split,
                              MPI_COMM_WORLD,
@@ -111,19 +113,19 @@ void MPIEnv::InitializeMPI(int argc, char* argv[]) {
     }
 }
 
-void MPIEnv::InitializeHostInfos() {
-    using NameArray = std::array<char, MPI_MAX_PROCESSOR_NAME>;
+void MPIEnv::InitializeHostInfo() {
+    using NameFixedString = FixedString<MPI_MAX_PROCESSOR_NAME>;
     // Each rank get its processor name
-    NameArray hostNameSend;
+    NameFixedString hostNameSend;
     int nameLength;
     MACE_MPI_CALL_WITH_CHECK(MPI_Get_processor_name,
-                             hostNameSend.data(),
+                             hostNameSend.Data(),
                              &nameLength)
     // Master collects processor names
-    std::vector<NameArray> hostNamesRecv;
+    std::vector<NameFixedString> hostNamesRecv;
     if (AtWorldMaster()) { hostNamesRecv.resize(fWorldCommSize); }
     MACE_MPI_CALL_WITH_CHECK(MPI_Gather,
-                             hostNameSend.data(),
+                             hostNameSend.CString(),
                              MPI_MAX_PROCESSOR_NAME,
                              MPI_CHAR,
                              hostNamesRecv.data(),
@@ -134,29 +136,29 @@ void MPIEnv::InitializeHostInfos() {
     // Processor name list
     std::vector<stdx::array2i> hostIDAndCountSend;
     stdx::array2i hostIDAndCountRecv;
-    std::vector<std::pair<int, NameArray>> hostInfoList;
+    std::vector<std::pair<int, NameFixedString>> hostList;
     // Master find all unique processor names and assign host id and count
     if (AtWorldMaster()) {
         hostIDAndCountSend.reserve(fWorldCommSize);
-        hostInfoList.reserve(fWorldCommSize);
+        hostList.reserve(fWorldCommSize);
         // Find unique name and assign host id
-        int currentNodeId = 0;
+        auto currentNodeId = 0;
         auto currentName = hostNamesRecv.cbegin();
         hostIDAndCountSend.emplace_back(std::array{currentNodeId, -1});
-        hostInfoList.emplace_back(-1, *currentName);
+        hostList.emplace_back(-1, *currentName);
         for (auto it = std::next(hostNamesRecv.cbegin()), end = hostNamesRecv.cend();
              it != end; ++it) {
             if (std::strncmp(currentName->data(), it->data(), MPI_MAX_PROCESSOR_NAME) != 0) {
-                hostInfoList.back().first = std::distance(currentName, it);
-                hostInfoList.emplace_back(-1, *it);
+                hostList.back().first = std::distance(currentName, it);
+                hostList.emplace_back(-1, *it);
                 ++currentNodeId;
                 currentName = it;
             }
             hostIDAndCountSend.emplace_back(std::array{currentNodeId, -1});
         }
-        hostInfoList.back().first = std::distance(currentName, hostNamesRecv.cend());
+        hostList.back().first = std::distance(currentName, hostNamesRecv.cend());
         // Assign host count
-        for (const int hostCount = hostInfoList.size();
+        for (const int hostCount = hostList.size();
              auto&& [_, hostCountSend] : hostIDAndCountSend) {
             hostCountSend = hostCount;
         }
@@ -172,23 +174,23 @@ void MPIEnv::InitializeHostInfos() {
                              0,
                              MPI_COMM_WORLD)
     auto&& [hostID, hostCount] = hostIDAndCountRecv;
+    // Assign local processor id
+    fLocalHostID = hostID;
     // Master send unique host name list
-    if (AtWorldWorker()) { hostInfoList.resize(hostCount); }
+    if (AtWorldWorker()) { hostList.resize(hostCount); }
     MACE_MPI_CALL_WITH_CHECK(MPI_Bcast,
-                             hostInfoList.data(),
-                             std::span(hostInfoList).size_bytes(),
+                             hostList.data(),
+                             std::span(hostList).size_bytes(),
                              MPI_BYTE,
                              0,
                              MPI_COMM_WORLD)
     // Assign to the list, convert host names to std::string
-    fHostInfoList.reserve(hostCount);
-    for (auto&& [hostSize, hostName] : std::as_const(hostInfoList)) {
-        auto& hostInfo = fHostInfoList.emplace_back(Host{hostSize, hostName.data()});
-        hostInfo.name.shrink_to_fit();
+    fHostList.reserve(hostCount);
+    for (auto&& [size, name] : std::as_const(hostList)) {
+        fHostList.push_back({size, name});
+        fHostList.back().name.shrink_to_fit();
     }
-    fHostInfoList.shrink_to_fit();
-    // Assign local processor id
-    fLocalHostID = hostID;
+    fHostList.shrink_to_fit();
 }
 
 } // namespace MACE::Env

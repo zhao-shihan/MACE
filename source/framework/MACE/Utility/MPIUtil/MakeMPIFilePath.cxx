@@ -20,7 +20,7 @@ void MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extens
         mpiEnv.Parallel()) {
         // root directory
         if (mpiEnv.OnCluster()) {
-            path /= mpiEnv.LocalHostName();
+            path /= mpiEnv.LocalHost().name;
         }
         // create root directory
         if (mpiEnv.AtLocalMaster()) {
