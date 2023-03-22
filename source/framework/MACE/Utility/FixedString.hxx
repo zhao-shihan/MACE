@@ -20,7 +20,6 @@ namespace MACE::inline Utility {
 /// operators are introduced.
 /// @attention The size of incoming string is never checked. Use with caution.
 template<std::size_t AMaxSize>
-    requires((AMaxSize + 1) % alignof(void*) == 0)
 class FixedString final {
 public:
     using Pointer = char*;
