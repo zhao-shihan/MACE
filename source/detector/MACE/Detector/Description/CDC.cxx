@@ -156,7 +156,7 @@ std::vector<CDC::SuperLayerConfiguration> CDC::ComputeLayerConfiguration() const
         super.outerRadius =
             [&dFW = fFieldWireDiameter,
              &lastSense = std::as_const(super).sense.back()] {
-                return lastSense.outerRadius / std::cos(lastSense.stereoAzimuthAngle / 2) + dFW;
+                return (lastSense.outerRadius + dFW) / std::cos(lastSense.stereoAzimuthAngle / 2);
             }();
         super.outerHalfLength = super.innerHalfLength + fEndCapSlope * (super.outerRadius - super.innerRadius);
     }

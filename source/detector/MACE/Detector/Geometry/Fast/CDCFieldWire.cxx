@@ -30,7 +30,8 @@ void CDCFieldWire::Construct(G4bool checkOverlaps) {
 
         for (auto&& sense : super.sense) {
             const auto MakeFieldWirePlacement =
-                [&](const auto r) {
+                [&](const auto rWireInner) {
+                    const auto r = rWireInner + rFieldWire;
                     const auto solid = Make<G4Tubs>(
                         name,
                         0,
@@ -59,19 +60,19 @@ void CDCFieldWire::Construct(G4bool checkOverlaps) {
                         };
                 };
 
-            const auto PlaceInnerFieldWire = MakeFieldWirePlacement(sense.innerRadius + rFieldWire);
+            const auto PlaceInnerFieldWire = MakeFieldWirePlacement(sense.innerRadius);
             for (auto&& cell : sense.cell) {
                 PlaceInnerFieldWire(cell.centerAzimuth - halfPhiCell);
                 PlaceInnerFieldWire(cell.centerAzimuth);
             }
 
-            const auto PlaceCenterFieldWire = MakeFieldWirePlacement(Math::MidPoint(sense.innerRadius, sense.outerRadius) + rFieldWire);
+            const auto PlaceCenterFieldWire = MakeFieldWirePlacement(Math::MidPoint(sense.innerRadius, sense.outerRadius));
             for (auto&& cell : sense.cell) {
                 PlaceCenterFieldWire(cell.centerAzimuth - halfPhiCell);
             }
 
             if (&sense == &super.sense.back()) {
-                const auto PlaceOuterFieldWire = MakeFieldWirePlacement(sense.outerRadius + rFieldWire);
+                const auto PlaceOuterFieldWire = MakeFieldWirePlacement(sense.outerRadius);
                 for (auto&& cell : sense.cell) {
                     PlaceOuterFieldWire(cell.centerAzimuth - halfPhiCell);
                     PlaceOuterFieldWire(cell.centerAzimuth);
