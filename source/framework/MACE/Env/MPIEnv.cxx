@@ -4,6 +4,8 @@
 #include "MACE/Utility/MPIUtil/MPICallWithCheck.hxx"
 #include "MACE/Utility/MPIUtil/MPICallWithCheckNoExcept.hxx"
 
+#include "TROOT.h"
+
 #include <algorithm>
 #include <array>
 #include <cstring>
@@ -83,7 +85,7 @@ void MPIEnv::InitializeMPI(int argc, char* argv[]) {
     MACE_MPI_CALL_WITH_CHECK(MPI_Init,
                              &argc,
                              &argv)
-    // Initialize rank id in the world communicator
+    // Initialize rank ID in the world communicator
     MACE_MPI_CALL_WITH_CHECK(MPI_Comm_rank,
                              MPI_COMM_WORLD,
                              &fWorldCommRank)
@@ -99,7 +101,7 @@ void MPIEnv::InitializeMPI(int argc, char* argv[]) {
                              fLocalHostID,
                              0,
                              &fLocalComm)
-    // Initialize rank id in the local communicator
+    // Initialize rank ID in the local communicator
     MACE_MPI_CALL_WITH_CHECK(MPI_Comm_rank,
                              fLocalComm,
                              &fLocalCommRank)
@@ -114,7 +116,7 @@ void MPIEnv::InitializeMPI(int argc, char* argv[]) {
 }
 
 void MPIEnv::InitializeHostInfo() {
-    using NameFixedString = FixedString<MPI_MAX_PROCESSOR_NAME - 1>;
+    using NameFixedString = FixedString<MPI_MAX_PROCESSOR_NAME>;
     // Each rank get its processor name
     NameFixedString hostNameSend;
     int nameLength;
@@ -126,10 +128,10 @@ void MPIEnv::InitializeHostInfo() {
     if (AtWorldMaster()) { hostNamesRecv.resize(fWorldCommSize); }
     MACE_MPI_CALL_WITH_CHECK(MPI_Gather,
                              hostNameSend.CString(),
-                             MPI_MAX_PROCESSOR_NAME,
+                             NameFixedString::MaxSize() + 1,
                              MPI_CHAR,
                              hostNamesRecv.data(),
-                             MPI_MAX_PROCESSOR_NAME,
+                             NameFixedString::MaxSize() + 1,
                              MPI_CHAR,
                              0,
                              MPI_COMM_WORLD)
@@ -137,32 +139,31 @@ void MPIEnv::InitializeHostInfo() {
     std::vector<stdx::array2i> hostIDAndCountSend;
     stdx::array2i hostIDAndCountRecv;
     std::vector<std::pair<int, NameFixedString>> hostList;
-    // Master find all unique processor names and assign host id and count
+    // Master find all unique processor names and assign host ID and count
     if (AtWorldMaster()) {
         hostIDAndCountSend.reserve(fWorldCommSize);
         hostList.reserve(fWorldCommSize);
-        // Find unique name and assign host id
-        auto currentNodeId = 0;
-        auto currentName = &std::as_const(hostNamesRecv).front();
-        hostIDAndCountSend.push_back({currentNodeId, -1});
-        hostList.emplace_back(-1, *currentName);
+        // Find unique name and assign host ID
+        auto currentHostID = 0;
+        auto currnetHostName = &std::as_const(hostNamesRecv).front();
         for (auto&& name : std::as_const(hostNamesRecv)) {
-            if (name != *currentName) {
-                hostList.back().first = std::distance(currentName, &name);
-                hostList.emplace_back(-1, name);
-                ++currentNodeId;
-                currentName = &name;
+            if (name != *currnetHostName) {
+                hostList.emplace_back(std::distance(currnetHostName, &name),
+                                      *currnetHostName);
+                ++currentHostID;
+                currnetHostName = &name;
             }
-            hostIDAndCountSend.push_back({currentNodeId, -1});
+            hostIDAndCountSend.push_back({currentHostID, -1});
         }
-        hostList.back().first = std::distance(currentName, &std::as_const(hostNamesRecv).back());
+        hostList.emplace_back(std::distance(currnetHostName, std::as_const(hostNamesRecv).data() + fWorldCommSize),
+                              *currnetHostName);
         // Assign host count
         for (const int hostCount = hostList.size();
              auto&& [_, hostCountSend] : hostIDAndCountSend) {
             hostCountSend = hostCount;
         }
     }
-    // Send host id and count
+    // Send host ID and count
     MACE_MPI_CALL_WITH_CHECK(MPI_Scatter,
                              std::as_const(hostIDAndCountSend).data(),
                              2,
@@ -173,7 +174,7 @@ void MPIEnv::InitializeHostInfo() {
                              0,
                              MPI_COMM_WORLD)
     auto&& [hostID, hostCount] = hostIDAndCountRecv;
-    // Assign local processor id
+    // Assign local processor ID
     fLocalHostID = hostID;
     // Master send unique host name list
     if (AtWorldWorker()) { hostList.resize(hostCount); }

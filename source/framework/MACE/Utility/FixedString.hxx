@@ -39,12 +39,9 @@ public:
 
 public:
     FixedString() noexcept;
-    FixedString(const FixedString& str) noexcept = default;
-    FixedString(FixedString&& str) noexcept = default;
     template<std::size_t N>
     FixedString(const char (&str)[N]) noexcept;
     template<std::size_t N>
-        requires(N != AMaxSize)
     FixedString(const FixedString<N>& str) noexcept;
     FixedString(std::string_view str) noexcept;
     FixedString(auto&& str) noexcept
@@ -61,12 +58,9 @@ public:
     operator std::string_view() const& noexcept { return CString(); }
     operator std::string() const& noexcept { return CString(); }
 
-    FixedString& operator=(const FixedString& rhs) & noexcept = default;
-    FixedString& operator=(FixedString&& rhs) & noexcept = default;
     template<std::size_t N>
     FixedString& operator=(const char (&rhs)[N]) noexcept;
     template<std::size_t N>
-        requires(N != AMaxSize)
     FixedString& operator=(const FixedString<N>& rhs) noexcept { return *this = rhs.Data(); }
     FixedString& operator=(std::string_view rhs) & noexcept;
     FixedString& operator=(auto&& rhs) & noexcept

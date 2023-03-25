@@ -19,7 +19,6 @@ FixedString<AMaxSize>::FixedString(const char (&str)[N]) noexcept :
 
 template<std::size_t AMaxSize>
 template<std::size_t N>
-    requires(N != AMaxSize)
 FixedString<AMaxSize>::FixedString(const FixedString<N>& str) noexcept :
     FixedString(str.Data()) {}
 

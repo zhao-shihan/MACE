@@ -2,8 +2,6 @@
 
 #include "MACE/Env/BasicEnv.hxx"
 
-#include "TROOT.h"
-
 #include "mpi.h"
 
 #include <stdexcept>
