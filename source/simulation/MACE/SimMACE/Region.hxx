@@ -25,7 +25,7 @@ class Region final : public NonMoveableBase,
 public:
     Region(const G4String& name, RegionType type);
 
-    auto GetType() const { return fRegionType; }
+    const auto& Type() const { return fRegionType; }
 
 private:
     const RegionType fRegionType;
