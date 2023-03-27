@@ -30,11 +30,11 @@ G4bool MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
         particle.GetPDGCharge() != 0) {                                     // is a charged particle.
         const auto& preStepPoint = *step.GetPreStepPoint();
         const auto& touchable = *preStepPoint.GetTouchable();
-        // get detector transform
-        const auto& detectorPosition = touchable.GetTranslation();
-        const auto& detectorRotation = *touchable.GetRotation();
         // transform hit position to local coordinate
-        const auto hitPosition = G4TwoVector(detectorRotation * (preStepPoint.GetPosition() - detectorPosition));
+        const auto hitPosition = G4TwoVector(*touchable.GetRotation() * (preStepPoint.GetPosition() - touchable.GetTranslation()));
+        // calculate (E0,p0)
+        const auto vertexTotalEnergy = track.GetVertexKineticEnergy() + particle.GetPDGMass();
+        const auto vertexMomentum = track.GetVertexMomentumDirection() * std::sqrt(track.GetVertexKineticEnergy() * (vertexTotalEnergy + particle.GetPDGMass()));
         // new a hit
         const auto hit = new MCPHit;
         hit->HitTime(preStepPoint.GetGlobalTime());
@@ -42,8 +42,12 @@ G4bool MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
         hit->G4EventID(fEventID);
         hit->G4TrackID(track.GetTrackID());
         hit->PDGCode(particle.GetPDGEncoding());
-        hit->VertexTime(track.GetGlobalTime() - track.GetLocalTime());
+        hit->Energy(preStepPoint.GetTotalEnergy());
+        hit->Momentum(preStepPoint.GetMomentum());
+        hit->VertexTime(preStepPoint.GetGlobalTime() - preStepPoint.GetLocalTime());
         hit->VertexPosition(track.GetVertexPosition());
+        hit->VertexEnergy(vertexTotalEnergy);
+        hit->VertexMomentum(vertexMomentum);
         fHitsCollection->insert(hit);
         return true;
     }

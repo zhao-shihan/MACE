@@ -10,16 +10,7 @@ namespace MACE::SimMACE::inline Hit {
 
 class MCPHit final : public DataModel::MCPSimHit,
                      public Geant4X::UseG4Allocator<MCPHit>,
-                     public G4VHit {
-public:
-    MCPHit() noexcept = default;
-    ~MCPHit() = default;
-
-    MCPHit(const MCPHit& hit) noexcept = default;
-    MCPHit(MCPHit&& hit) noexcept = default;
-    MCPHit& operator=(const MCPHit& hit) noexcept = default;
-    MCPHit& operator=(MCPHit&& hit) noexcept = default;
-};
+                     public G4VHit {};
 static_assert(DataModel::TransientData<MCPHit>);
 
 using MCPHitCollection = G4THitsCollection<MCPHit>;
