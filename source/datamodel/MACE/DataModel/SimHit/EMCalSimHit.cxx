@@ -8,6 +8,16 @@ template<>
 EMCalSimHit::Entry::G4TrackID::BranchSocket EMCalSimHit::Entry::G4TrackID::Base::fgBranchSocket = {"g4TrackID", -1};
 template<>
 EMCalSimHit::Entry::PDGCode::BranchSocket EMCalSimHit::Entry::PDGCode::Base::fgBranchSocket = {"pdgCode", 0};
+template<> // clang-format off
+EMCalSimHit::Entry::Momentum::BranchSocket EMCalSimHit::Entry::Momentum::Base::fgBranchSocket = {"mom", {0, 0, 0}}; // clang-format on
+template<>
+EMCalSimHit::Entry::VertexTime::BranchSocket EMCalSimHit::Entry::VertexTime::Base::fgBranchSocket = {"vtxTime", 0};
+template<> // clang-format off
+EMCalSimHit::Entry::VertexPosition::BranchSocket EMCalSimHit::Entry::VertexPosition::Base::fgBranchSocket = {"vtxPos", {0, 0, 0}}; // clang-format on
+template<>
+EMCalSimHit::Entry::VertexEnergy::BranchSocket EMCalSimHit::Entry::VertexEnergy::Base::fgBranchSocket = {"vtxEne", 0};
+template<> // clang-format off
+EMCalSimHit::Entry::VertexMomentum::BranchSocket EMCalSimHit::Entry::VertexMomentum::Base::fgBranchSocket = {"vtxMom", {0, 0, 0}}; // clang-format on
 
 inline namespace SimHit {
 
@@ -16,6 +26,11 @@ void EMCalSimHit::CreateBranches(TTree& tree) {
     decltype(fG4EventID)::CreateBranch(tree);
     decltype(fG4TrackID)::CreateBranch(tree);
     decltype(fPDGCode)::CreateBranch(tree);
+    decltype(fMomentum)::CreateBranch(tree);
+    decltype(fVertexTime)::CreateBranch(tree);
+    decltype(fVertexPosition)::CreateBranch(tree);
+    decltype(fVertexEnergy)::CreateBranch(tree);
+    decltype(fVertexMomentum)::CreateBranch(tree);
 }
 
 void EMCalSimHit::ConnectToBranches(TTree& tree) {
@@ -23,6 +38,11 @@ void EMCalSimHit::ConnectToBranches(TTree& tree) {
     decltype(fG4EventID)::ConnectToBranch(tree);
     decltype(fG4TrackID)::ConnectToBranch(tree);
     decltype(fPDGCode)::ConnectToBranch(tree);
+    decltype(fMomentum)::ConnectToBranch(tree);
+    decltype(fVertexTime)::ConnectToBranch(tree);
+    decltype(fVertexPosition)::ConnectToBranch(tree);
+    decltype(fVertexEnergy)::ConnectToBranch(tree);
+    decltype(fVertexMomentum)::ConnectToBranch(tree);
 }
 
 } // namespace SimHit

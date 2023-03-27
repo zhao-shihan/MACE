@@ -10,16 +10,7 @@ namespace MACE::SimMACE::inline Hit {
 
 class EMCalHit final : public DataModel::EMCalSimHit,
                        public Geant4X::UseG4Allocator<EMCalHit>,
-                       public G4VHit {
-public:
-    EMCalHit() noexcept = default;
-    ~EMCalHit() = default;
-
-    EMCalHit(const EMCalHit& hit) noexcept = default;
-    EMCalHit(EMCalHit&& hit) noexcept = default;
-    EMCalHit& operator=(const EMCalHit& hit) noexcept = default;
-    EMCalHit& operator=(EMCalHit&& hit) noexcept = default;
-};
+                       public G4VHit {};
 static_assert(DataModel::TransientData<EMCalHit>);
 
 using EMCalHitCollection = G4THitsCollection<EMCalHit>;
