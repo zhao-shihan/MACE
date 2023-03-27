@@ -3,23 +3,23 @@
 namespace MACE::DataModel {
 
 template<>
-CDCSimHit::Entry::G4EventID::BranchSocket CDCSimHit::Entry::G4EventID::Base::fgBranchSocket = {"g4EventID", -1};
+CDCSimHit::Entry::G4EventID::BranchSocket CDCSimHit::Entry::G4EventID::Base::fgBranchSocket = {"g4EvtID", -1};
 template<>
-CDCSimHit::Entry::G4TrackID::BranchSocket CDCSimHit::Entry::G4TrackID::Base::fgBranchSocket = {"g4TrackID", -1};
+CDCSimHit::Entry::G4TrackID::BranchSocket CDCSimHit::Entry::G4TrackID::Base::fgBranchSocket = {"g4TrkID", -1};
 template<>
 CDCSimHit::Entry::PDGCode::BranchSocket CDCSimHit::Entry::PDGCode::Base::fgBranchSocket = {"pdgCode", 0};
 template<>
-CDCSimHit::Entry::Energy::BranchSocket CDCSimHit::Entry::Energy::Base::fgBranchSocket = {"hitEne", 0};
+CDCSimHit::Entry::Energy::BranchSocket CDCSimHit::Entry::Energy::Base::fgBranchSocket = {"E", 0};
 template<> // clang-format off
-CDCSimHit::Entry::Momentum::BranchSocket CDCSimHit::Entry::Momentum::Base::fgBranchSocket = {"hitMom", {0, 0, 0}}; // clang-format on
+CDCSimHit::Entry::Momentum::BranchSocket CDCSimHit::Entry::Momentum::Base::fgBranchSocket = {"p", {0, 0, 0}}; // clang-format on
 template<>
-CDCSimHit::Entry::VertexTime::BranchSocket CDCSimHit::Entry::VertexTime::Base::fgBranchSocket = {"vtxTime", 0};
+CDCSimHit::Entry::VertexTime::BranchSocket CDCSimHit::Entry::VertexTime::Base::fgBranchSocket = {"t0", 0};
 template<> // clang-format off
-CDCSimHit::Entry::VertexPosition::BranchSocket CDCSimHit::Entry::VertexPosition::Base::fgBranchSocket = {"vtxPos", {0, 0, 0}}; // clang-format on
+CDCSimHit::Entry::VertexPosition::BranchSocket CDCSimHit::Entry::VertexPosition::Base::fgBranchSocket = {"x0", {0, 0, 0}}; // clang-format on
 template<>
-CDCSimHit::Entry::VertexEnergy::BranchSocket CDCSimHit::Entry::VertexEnergy::Base::fgBranchSocket = {"vtxEne", 0};
+CDCSimHit::Entry::VertexEnergy::BranchSocket CDCSimHit::Entry::VertexEnergy::Base::fgBranchSocket = {"E0", 0};
 template<> // clang-format off
-CDCSimHit::Entry::VertexMomentum::BranchSocket CDCSimHit::Entry::VertexMomentum::Base::fgBranchSocket = {"vtxMom", {0, 0, 0}}; // clang-format on
+CDCSimHit::Entry::VertexMomentum::BranchSocket CDCSimHit::Entry::VertexMomentum::Base::fgBranchSocket = {"p0", {0, 0, 0}}; // clang-format on
 
 inline namespace SimHit {
 

@@ -3,9 +3,9 @@
 namespace MACE::DataModel {
 
 template<>
-MCPHit::Entry::HitTime::BranchSocket MCPHit::Entry::HitTime::Base::fgBranchSocket = {"hitTime", 0};
+MCPHit::Entry::HitTime::BranchSocket MCPHit::Entry::HitTime::Base::fgBranchSocket = {"t", 0};
 template<> // clang-format off
-MCPHit::Entry::HitPosition::BranchSocket MCPHit::Entry::HitPosition::Base::fgBranchSocket = {"hitPos", {0, 0}}; // clang-format on
+MCPHit::Entry::HitPosition::BranchSocket MCPHit::Entry::HitPosition::Base::fgBranchSocket = {"x", {0, 0}}; // clang-format on
 
 inline namespace Hit {
 

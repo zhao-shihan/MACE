@@ -29,6 +29,10 @@ G4bool EMCalSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
     if (step.IsFirstStepInVolume() and track.GetCurrentStepNumber() > 1 and     // is coming from outside, and
         (particle.GetPDGCharge() != 0 or &particle == G4Gamma::Definition())) { // is a charged particle or gamma
         const auto& preStepPoint = *step.GetPreStepPoint();
+        const auto& touchable = *preStepPoint.GetTouchable();
+        // transform hit position to local coordinate
+        const auto hitPosition = *touchable.GetRotation() * (preStepPoint.GetPosition() - touchable.GetTranslation());
+        // calculate (E0, p0)
         const auto vertexTotalEnergy = track.GetVertexKineticEnergy() + particle.GetPDGMass();
         const auto vertexMomentum = track.GetVertexMomentumDirection() * std::sqrt(track.GetVertexKineticEnergy() * (vertexTotalEnergy + particle.GetPDGMass()));
         // new a hit
@@ -38,6 +42,7 @@ G4bool EMCalSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
         hit->G4EventID(fEventID);
         hit->G4TrackID(track.GetTrackID());
         hit->PDGCode(particle.GetPDGEncoding());
+        hit->HitPosition(hitPosition);
         hit->Momentum(preStepPoint.GetMomentum());
         hit->VertexTime(track.GetGlobalTime() - track.GetLocalTime());
         hit->VertexPosition(track.GetVertexPosition());

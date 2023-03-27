@@ -3,21 +3,23 @@
 namespace MACE::DataModel {
 
 template<>
-EMCalSimHit::Entry::G4EventID::BranchSocket EMCalSimHit::Entry::G4EventID::Base::fgBranchSocket = {"g4EventID", -1};
+EMCalSimHit::Entry::G4EventID::BranchSocket EMCalSimHit::Entry::G4EventID::Base::fgBranchSocket = {"g4EvtID", -1};
 template<>
-EMCalSimHit::Entry::G4TrackID::BranchSocket EMCalSimHit::Entry::G4TrackID::Base::fgBranchSocket = {"g4TrackID", -1};
+EMCalSimHit::Entry::G4TrackID::BranchSocket EMCalSimHit::Entry::G4TrackID::Base::fgBranchSocket = {"g4TrkID", -1};
 template<>
 EMCalSimHit::Entry::PDGCode::BranchSocket EMCalSimHit::Entry::PDGCode::Base::fgBranchSocket = {"pdgCode", 0};
 template<> // clang-format off
-EMCalSimHit::Entry::Momentum::BranchSocket EMCalSimHit::Entry::Momentum::Base::fgBranchSocket = {"mom", {0, 0, 0}}; // clang-format on
-template<>
-EMCalSimHit::Entry::VertexTime::BranchSocket EMCalSimHit::Entry::VertexTime::Base::fgBranchSocket = {"vtxTime", 0};
+EMCalSimHit::Entry::HitPosition::BranchSocket EMCalSimHit::Entry::HitPosition::Base::fgBranchSocket = {"x", {0, 0, 0}};   // clang-format on
 template<> // clang-format off
-EMCalSimHit::Entry::VertexPosition::BranchSocket EMCalSimHit::Entry::VertexPosition::Base::fgBranchSocket = {"vtxPos", {0, 0, 0}}; // clang-format on
+EMCalSimHit::Entry::Momentum::BranchSocket EMCalSimHit::Entry::Momentum::Base::fgBranchSocket = {"p", {0, 0, 0}}; // clang-format on
 template<>
-EMCalSimHit::Entry::VertexEnergy::BranchSocket EMCalSimHit::Entry::VertexEnergy::Base::fgBranchSocket = {"vtxEne", 0};
+EMCalSimHit::Entry::VertexTime::BranchSocket EMCalSimHit::Entry::VertexTime::Base::fgBranchSocket = {"t0", 0};
 template<> // clang-format off
-EMCalSimHit::Entry::VertexMomentum::BranchSocket EMCalSimHit::Entry::VertexMomentum::Base::fgBranchSocket = {"vtxMom", {0, 0, 0}}; // clang-format on
+EMCalSimHit::Entry::VertexPosition::BranchSocket EMCalSimHit::Entry::VertexPosition::Base::fgBranchSocket = {"x0", {0, 0, 0}}; // clang-format on
+template<>
+EMCalSimHit::Entry::VertexEnergy::BranchSocket EMCalSimHit::Entry::VertexEnergy::Base::fgBranchSocket = {"E0", 0};
+template<> // clang-format off
+EMCalSimHit::Entry::VertexMomentum::BranchSocket EMCalSimHit::Entry::VertexMomentum::Base::fgBranchSocket = {"p0", {0, 0, 0}}; // clang-format on
 
 inline namespace SimHit {
 

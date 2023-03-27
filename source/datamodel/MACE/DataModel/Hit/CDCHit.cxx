@@ -5,9 +5,9 @@ namespace MACE::DataModel {
 template<>
 CDCHit::Entry::CellID::BranchSocket CDCHit::Entry::CellID::Base::fgBranchSocket = {"cellID", -1};
 template<>
-CDCHit::Entry::DriftDistance::BranchSocket CDCHit::Entry::DriftDistance::Base::fgBranchSocket = {"drift", 0};
+CDCHit::Entry::DriftDistance::BranchSocket CDCHit::Entry::DriftDistance::Base::fgBranchSocket = {"d", 0};
 template<>
-CDCHit::Entry::HitTime::BranchSocket CDCHit::Entry::HitTime::Base::fgBranchSocket = {"hitTime", 0};
+CDCHit::Entry::HitTime::BranchSocket CDCHit::Entry::HitTime::Base::fgBranchSocket = {"t", 0};
 
 inline namespace Hit {
 

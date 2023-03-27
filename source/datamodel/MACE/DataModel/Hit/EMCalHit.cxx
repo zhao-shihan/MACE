@@ -3,9 +3,9 @@
 namespace MACE::DataModel {
 
 template<>
-EMCalHit::Entry::HitTime::BranchSocket EMCalHit::Entry::HitTime::Base::fgBranchSocket = {"hitTime", 0};
+EMCalHit::Entry::HitTime::BranchSocket EMCalHit::Entry::HitTime::Base::fgBranchSocket = {"t", 0};
 template<>
-EMCalHit::Entry::Energy::BranchSocket EMCalHit::Entry::Energy::Base::fgBranchSocket = {"hitEne", 0};
+EMCalHit::Entry::Energy::BranchSocket EMCalHit::Entry::Energy::Base::fgBranchSocket = {"E", 0};
 
 inline namespace Hit {
 

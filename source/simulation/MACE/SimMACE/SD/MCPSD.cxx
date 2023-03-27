@@ -32,7 +32,7 @@ G4bool MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
         const auto& touchable = *preStepPoint.GetTouchable();
         // transform hit position to local coordinate
         const auto hitPosition = G4TwoVector(*touchable.GetRotation() * (preStepPoint.GetPosition() - touchable.GetTranslation()));
-        // calculate (E0,p0)
+        // calculate (E0, p0)
         const auto vertexTotalEnergy = track.GetVertexKineticEnergy() + particle.GetPDGMass();
         const auto vertexMomentum = track.GetVertexMomentumDirection() * std::sqrt(track.GetVertexKineticEnergy() * (vertexTotalEnergy + particle.GetPDGMass()));
         // new a hit

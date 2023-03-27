@@ -34,15 +34,15 @@ public:
 public:
     virtual ~CDCSimHit() = default;
 
-    const auto& G4EventID() const { return fG4EventID; }
-    const auto& G4TrackID() const { return fG4TrackID; }
-    const auto& PDGCode() const { return fPDGCode; }
-    const auto& Energy() const { return fEnergy; }
-    const auto& Momentum() const { return fMomentum; }
-    const auto& VertexTime() const { return fVertexTime; }
-    const auto& VertexPosition() const { return fVertexPosition; }
-    const auto& VertexEnergy() const { return fVertexEnergy; }
-    const auto& VertexMomentum() const { return fVertexMomentum; }
+    [[nodiscard]] const auto& G4EventID() const { return fG4EventID; }
+    [[nodiscard]] const auto& G4TrackID() const { return fG4TrackID; }
+    [[nodiscard]] const auto& PDGCode() const { return fPDGCode; }
+    [[nodiscard]] const auto& Energy() const { return fEnergy; }
+    [[nodiscard]] const auto& Momentum() const { return fMomentum; }
+    [[nodiscard]] const auto& VertexTime() const { return fVertexTime; }
+    [[nodiscard]] const auto& VertexPosition() const { return fVertexPosition; }
+    [[nodiscard]] const auto& VertexEnergy() const { return fVertexEnergy; }
+    [[nodiscard]] const auto& VertexMomentum() const { return fVertexMomentum; }
 
     void G4EventID(auto&& v) { fG4EventID.Value(std::forward<decltype(v)>(v)); }
     void G4TrackID(auto&& v) { fG4TrackID.Value(std::forward<decltype(v)>(v)); }
