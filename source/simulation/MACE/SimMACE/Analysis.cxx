@@ -31,7 +31,7 @@ void Analysis::RunBegin(G4int runID, Option_t* option) {
     fFile = std::make_unique<TFile>(MPIUtil::MakeMPIFilePath(fResultPath, ".root").generic_string().c_str(),
                                     option,
                                     "",
-                                    ROOT::RCompressionSetting::EDefaults::kUseSmallest);
+                                    ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
     fEMCalHitTree = fDataHub.CreateTree<DataModel::EMCalSimHit>(runID);
     fMCPHitTree = fDataHub.CreateTree<DataModel::MCPSimHit>(runID);
     fCDCHitTree = fDataHub.CreateTree<DataModel::CDCSimHit>(runID);
