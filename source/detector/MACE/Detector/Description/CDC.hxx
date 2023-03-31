@@ -72,11 +72,11 @@ public:
             double cellWidth;
             double halfLength;
             double stereoAzimuthAngle;
-            auto TanStereoZenithAngle(const auto r) const { return r / halfLength * std::tan(stereoAzimuthAngle / 2); }
-            auto SecStereoZenithAngle(const auto r) const { return std::sqrt(1 + Math::Pow2(TanStereoZenithAngle(r))); }
-            auto CosStereoZenithAngle(const auto r) const { return 1 / SecStereoZenithAngle(r); }
-            auto SinStereoZenithAngle(const auto r) const { return TanStereoZenithAngle(r) / SecStereoZenithAngle(r); }
-            auto StereoZenithAngle(const auto r) const { return std::atan(TanStereoZenithAngle(r)); }
+            double TanStereoZenithAngle(auto r) const { return r / halfLength * std::tan(stereoAzimuthAngle / 2); }
+            double SecStereoZenithAngle(auto r) const { return std::sqrt(1 + Math::Pow2(TanStereoZenithAngle(r))); }
+            double CosStereoZenithAngle(auto r) const { return 1 / SecStereoZenithAngle(r); }
+            double SinStereoZenithAngle(auto r) const { return TanStereoZenithAngle(r) / SecStereoZenithAngle(r); }
+            double StereoZenithAngle(auto r) const { return std::atan(TanStereoZenithAngle(r)); }
             std::vector<CellConfiguration> cell;
         };
         bool isAxial;
