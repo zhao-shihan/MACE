@@ -3,6 +3,7 @@
 #include "MACE/Concept/NumericVector.hxx"
 #include "MACE/Extension/gslx/index_sequence.hxx"
 #include "MACE/Math/Random/RandomNumberDistributionBase.hxx"
+#include "MACE/Utility/InlineMacro.hxx"
 
 #include "gsl/gsl"
 
@@ -81,8 +82,8 @@ protected:
     constexpr ~JointInterface() = default;
 
 public:
-    constexpr T operator()(UniformRandomBitGenerator auto& g);
-    constexpr T operator()(UniformRandomBitGenerator auto& g, const AParameter& p);
+    MACE_STRONG_INLINE constexpr T operator()(UniformRandomBitGenerator auto& g);
+    MACE_STRONG_INLINE constexpr T operator()(UniformRandomBitGenerator auto& g, const AParameter& p);
 
     constexpr void Reset();
 

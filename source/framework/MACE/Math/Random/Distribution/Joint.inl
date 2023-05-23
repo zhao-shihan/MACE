@@ -59,7 +59,7 @@ constexpr JointInterface<ADerived, AParameter, T, Ds...>::JointInterface(const A
 
 template<class ADerived, class AParameter, class T, class... Ds>
     requires(sizeof...(Ds) >= 2 and Concept::NumericVectorAny<T, sizeof...(Ds)>)
-constexpr T JointInterface<ADerived, AParameter, T, Ds...>::operator()(UniformRandomBitGenerator auto& g) {
+MACE_STRONG_INLINE constexpr T JointInterface<ADerived, AParameter, T, Ds...>::operator()(UniformRandomBitGenerator auto& g) {
     return ([this, &g]<gsl::index... Is>(gslx::index_sequence<Is...>)->T {
         return {this->template Margin<Is>()(g)...};
     })(gslx::index_sequence_for<Ds...>());
@@ -67,7 +67,7 @@ constexpr T JointInterface<ADerived, AParameter, T, Ds...>::operator()(UniformRa
 
 template<class ADerived, class AParameter, class T, class... Ds>
     requires(sizeof...(Ds) >= 2 and Concept::NumericVectorAny<T, sizeof...(Ds)>)
-constexpr T JointInterface<ADerived, AParameter, T, Ds...>::operator()(UniformRandomBitGenerator auto& g, const AParameter& p) {
+MACE_STRONG_INLINE constexpr T JointInterface<ADerived, AParameter, T, Ds...>::operator()(UniformRandomBitGenerator auto& g, const AParameter& p) {
     return ([this, &g, &p]<gsl::index... Is>(gslx::index_sequence<Is...>)->T {
         return {this->template Margin<Is>()(g, p.template Parameter<Is>())...};
     })(gslx::index_sequence_for<Ds...>());

@@ -47,12 +47,12 @@ constexpr GaussianBase<T, AGaussian>::GaussianBase(const typename Base::Paramete
     }
 
 template<std::floating_point T>
-T Gaussian<T>::operator()(UniformRandomBitGenerator auto& g, const GaussianParameter<T>& p) {
+MACE_STRONG_INLINE T Gaussian<T>::operator()(UniformRandomBitGenerator auto& g, const GaussianParameter<T>& p) {
     MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_GENERATOR_SNIPPET()
 }
 
 template<std::floating_point T>
-T GaussianFast<T>::operator()(UniformRandomBitGenerator auto& g, const GaussianFastParameter<T>& p) {
+MACE_STRONG_INLINE T GaussianFast<T>::operator()(UniformRandomBitGenerator auto& g, const GaussianFastParameter<T>& p) {
     MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_GENERATOR_SNIPPET(Fast)
 }
 

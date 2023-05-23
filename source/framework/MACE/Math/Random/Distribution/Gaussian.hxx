@@ -94,8 +94,8 @@ public:
 
     constexpr void Reset() { fSaved = false; }
 
-    auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    T operator()(UniformRandomBitGenerator auto& g, const GaussianParameter<T>& p);
+    MACE_STRONG_INLINE auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
+    MACE_STRONG_INLINE T operator()(UniformRandomBitGenerator auto& g, const GaussianParameter<T>& p);
 
     constexpr auto Min() const { return std::numeric_limits<T>::lowest(); }
     constexpr auto Max() const { return std::numeric_limits<T>::max(); }
@@ -132,8 +132,8 @@ public:
 
     constexpr void Reset() { fSaved = false; }
 
-    auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    T operator()(UniformRandomBitGenerator auto& g, const GaussianFastParameter<T>& p);
+    MACE_STRONG_INLINE auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
+    MACE_STRONG_INLINE T operator()(UniformRandomBitGenerator auto& g, const GaussianFastParameter<T>& p);
 
     constexpr auto Min() const { return std::numeric_limits<T>::lowest(); }
     constexpr auto Max() const { return std::numeric_limits<T>::max(); }

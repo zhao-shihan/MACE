@@ -3,6 +3,7 @@
 #include "MACE/Compatibility/std2b/assume.hxx"
 #include "MACE/Concept/FundamentalType.hxx"
 #include "MACE/Math/Random/RandomNumberDistributionBase.hxx"
+#include "MACE/Utility/InlineMacro.hxx"
 
 #include <concepts>
 #include <iomanip>
@@ -92,8 +93,8 @@ class UniformCompact final : public internal::UniformBase<UniformCompact, T> {
 public:
     using internal::UniformBase<UniformCompact, T>::UniformBase;
 
-    constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    constexpr T operator()(UniformRandomBitGenerator auto& g, const UniformCompactParameter<T>& p);
+    MACE_ALWAYS_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
+    MACE_ALWAYS_INLINE constexpr T operator()(UniformRandomBitGenerator auto& g, const UniformCompactParameter<T>& p);
 };
 
 template<typename T, typename U>
@@ -126,8 +127,8 @@ class UniformReal final : public internal::UniformBase<Uniform, T> {
 public:
     using internal::UniformBase<Uniform, T>::UniformBase;
 
-    constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    constexpr T operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p);
+    MACE_ALWAYS_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
+    MACE_ALWAYS_INLINE constexpr T operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p);
 };
 
 template<typename T, typename U>
@@ -140,8 +141,8 @@ class UniformInteger final : public internal::UniformBase<Uniform, T> {
 public:
     using internal::UniformBase<Uniform, T>::UniformBase;
 
-    constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    constexpr T operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p);
+    MACE_ALWAYS_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
+    MACE_ALWAYS_INLINE constexpr T operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p);
 };
 
 template<typename T, typename U>

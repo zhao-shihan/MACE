@@ -36,13 +36,13 @@ constexpr ExponentialBase<ADerived, T>::ExponentialBase(const typename Base::Par
 } // namespace internal
 
 template<std::floating_point T>
-constexpr T Exponential<T>::operator()(UniformRandomBitGenerator auto& g, const ExponentialParameter<T>& p) {
+MACE_STRONG_INLINE constexpr T Exponential<T>::operator()(UniformRandomBitGenerator auto& g, const ExponentialParameter<T>& p) {
     return -p.Expectation() * Math::Log(Uniform<T>()(g));
 }
 
 template<std::floating_point T>
-constexpr T ExponentialFast<T>::operator()(UniformRandomBitGenerator auto& g, const ExponentialFastParameter<T>& p) {
-    return -p.Expectation() * Math::RA2Log(Uniform<T>()(g));
+MACE_ALWAYS_INLINE constexpr T ExponentialFast<T>::operator()(UniformRandomBitGenerator auto& g, const ExponentialFastParameter<T>& p) {
+    return -p.Expectation() * internal::FastLogForCompact01(Uniform<T>()(g));
 }
 
 } // namespace MACE::Math::Random::inline Distribution

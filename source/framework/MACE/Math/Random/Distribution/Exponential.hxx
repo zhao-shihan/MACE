@@ -2,11 +2,11 @@
 
 #include "MACE/Concept/FundamentalType.hxx"
 #include "MACE/Math/Log.hxx"
-#include "MACE/Math/RALog.hxx"
+#include "MACE/Math/Random/Distribution/internal/FastLogForCompact01.hxx"
 #include "MACE/Math/Random/Distribution/Uniform.hxx"
 #include "MACE/Math/Random/RandomNumberDistributionBase.hxx"
+#include "MACE/Utility/InlineMacro.hxx"
 
-#include <cmath>
 #include <concepts>
 #include <iomanip>
 #include <limits>
@@ -94,8 +94,8 @@ class Exponential final : public internal::ExponentialBase<Exponential, T> {
 public:
     using internal::ExponentialBase<Exponential, T>::ExponentialBase;
 
-    constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    constexpr T operator()(UniformRandomBitGenerator auto& g, const ExponentialParameter<T>& p);
+    MACE_STRONG_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
+    MACE_STRONG_INLINE constexpr T operator()(UniformRandomBitGenerator auto& g, const ExponentialParameter<T>& p);
 };
 
 template<typename T>
@@ -120,8 +120,8 @@ class ExponentialFast final : public internal::ExponentialBase<ExponentialFast, 
 public:
     using internal::ExponentialBase<ExponentialFast, T>::ExponentialBase;
 
-    constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    constexpr T operator()(UniformRandomBitGenerator auto& g, const ExponentialFastParameter<T>& p);
+    MACE_ALWAYS_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
+    MACE_ALWAYS_INLINE constexpr T operator()(UniformRandomBitGenerator auto& g, const ExponentialFastParameter<T>& p);
 };
 
 template<typename T>

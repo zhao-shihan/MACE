@@ -44,14 +44,14 @@ constexpr UniformBase<ADerived, T>::UniformBase(const typename Base::ParameterTy
 } // namespace internal
 
 template<std::floating_point T>
-constexpr T UniformCompact<T>::operator()(UniformRandomBitGenerator auto& g, const UniformCompactParameter<T>& p) {
+MACE_ALWAYS_INLINE constexpr T UniformCompact<T>::operator()(UniformRandomBitGenerator auto& g, const UniformCompactParameter<T>& p) {
     const auto u = static_cast<T>(g() - g.Min()) / (g.Max() - g.Min());
     std2b::assume(0 <= u and u <= 1);
     return p.Infimum() + u * (p.Supremum() - p.Infimum());
 }
 
 template<std::floating_point T>
-constexpr T UniformReal<T>::operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p) {
+MACE_ALWAYS_INLINE constexpr T UniformReal<T>::operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p) {
     T u;
     do {
         u = UniformCompact()(g);
@@ -61,7 +61,7 @@ constexpr T UniformReal<T>::operator()(UniformRandomBitGenerator auto& g, const 
 }
 
 template<std::integral T>
-constexpr T UniformInteger<T>::operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p) {
+MACE_ALWAYS_INLINE constexpr T UniformInteger<T>::operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p) {
     // Do we need an independent implementation?
     return std::uniform_int_distribution<T>(p.Infimum(), p.Supremum())(g);
 }

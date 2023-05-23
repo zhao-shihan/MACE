@@ -1,13 +1,14 @@
 #pragma once
 
 #include "MACE/Concept/NumericVector.hxx"
-#include "MACE/Extension/stdx/array_alias.hxx"
+#include "MACE/Extension/stdx/arraynx.hxx"
 #include "MACE/Math/Hypot.hxx"
 #include "MACE/Math/Log.hxx"
-#include "MACE/Math/RALog.hxx"
+#include "MACE/Math/Random/Distribution/internal/FastLogForCompact01.hxx"
 #include "MACE/Math/Random/Distribution/UniformRectangle.hxx"
 #include "MACE/Math/Random/RandomNumberDistributionBase.hxx"
-#include "MACE/Utility/ValueTypeOf.hxx"
+#include "MACE/Utility/InlineMacro.hxx"
+#include "MACE/Utility/VectorValueType.hxx"
 
 #include <array>
 #include <concepts>
@@ -23,23 +24,23 @@ template<Concept::NumericVector2FloatingPoint T, template<class> class AGaussian
 class BasicGaussian2DDiagnoalParameter final : public DistributionParameterBase<BasicGaussian2DDiagnoalParameter<T, AGaussian2DDiagnoal>,
                                                                                 AGaussian2DDiagnoal<T>> {
 private:
-    using VOfT = ValueTypeOf<T>;
+    using VT = VectorValueType<T>;
     using Base = DistributionParameterBase<BasicGaussian2DDiagnoalParameter<T, AGaussian2DDiagnoal>,
                                            AGaussian2DDiagnoal<T>>;
 
 public:
     constexpr BasicGaussian2DDiagnoalParameter();
-    constexpr BasicGaussian2DDiagnoalParameter(std::pair<VOfT, VOfT> pX, std::pair<VOfT, VOfT> pY);
+    constexpr BasicGaussian2DDiagnoalParameter(std::pair<VT, VT> pX, std::pair<VT, VT> pY);
 
     constexpr auto MuX() const { return fMuX; }
     constexpr auto SigmaX() const { return fSigmaX; }
     constexpr auto MuY() const { return fMuY; }
     constexpr auto SigmaY() const { return fSigmaY; }
 
-    constexpr void MuX(VOfT muX) const { fMuX = muX; }
-    constexpr void SigmaX(VOfT sigmaX) const { fSigmaX = sigmaX; }
-    constexpr void MuY(VOfT muY) const { fMuY = muY; }
-    constexpr void SigmaY(VOfT sigmaY) const { fSigmaY = sigmaY; }
+    constexpr void MuX(VT muX) const { fMuX = muX; }
+    constexpr void SigmaX(VT sigmaX) const { fSigmaX = sigmaX; }
+    constexpr void MuY(VT muY) const { fMuY = muY; }
+    constexpr void SigmaY(VT sigmaY) const { fSigmaY = sigmaY; }
 
     template<Concept::Character AChar, Concept::NumericVector2FloatingPoint U, template<class> class V>
     friend auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussian2DDiagnoalParameter<U, V>& self) -> decltype(os);
@@ -47,10 +48,10 @@ public:
     friend auto operator>>(std::basic_istream<AChar>& is, BasicGaussian2DDiagnoalParameter<U, V>& self) -> decltype(is);
 
 private:
-    VOfT fMuX;
-    VOfT fSigmaX;
-    VOfT fMuY;
-    VOfT fSigmaY;
+    VT fMuX;
+    VT fSigmaX;
+    VT fMuY;
+    VT fSigmaY;
 };
 
 template<template<class> class ADerived, Concept::NumericVector2FloatingPoint T>
@@ -58,7 +59,7 @@ class Gaussian2DDiagnoalBase : public RandomNumberDistributionBase<ADerived<T>,
                                                                    BasicGaussian2DDiagnoalParameter<T, ADerived>,
                                                                    T> {
 protected:
-    using VOfT = ValueTypeOf<T>;
+    using VT = VectorValueType<T>;
 
 private:
     using Base = RandomNumberDistributionBase<ADerived<T>,
@@ -67,7 +68,7 @@ private:
 
 public:
     constexpr Gaussian2DDiagnoalBase() = default;
-    constexpr Gaussian2DDiagnoalBase(std::pair<VOfT, VOfT> pX, std::pair<VOfT, VOfT> pY);
+    constexpr Gaussian2DDiagnoalBase(std::pair<VT, VT> pX, std::pair<VT, VT> pY);
     constexpr explicit Gaussian2DDiagnoalBase(const typename Base::ParameterType& p);
 
 protected:
@@ -81,10 +82,10 @@ public:
     constexpr auto SigmaY() const { return fParameter.SigmaY(); }
 
     constexpr void Parameter(const typename Base::ParameterType& p) { fParameter = p; }
-    constexpr void MuX(VOfT muX) const { fParameter.MuX(muX); }
-    constexpr void SigmaX(VOfT sigmaX) const { fParameter.SigmaX(sigmaX); }
-    constexpr void MuY(VOfT muY) const { fParameter.MuY(muY); }
-    constexpr void SigmaY(VOfT sigmaY) const { fParameter.SigmaY(sigmaY); }
+    constexpr void MuX(VT muX) const { fParameter.MuX(muX); }
+    constexpr void SigmaX(VT sigmaX) const { fParameter.SigmaX(sigmaX); }
+    constexpr void MuY(VT muY) const { fParameter.MuY(muY); }
+    constexpr void SigmaY(VT sigmaY) const { fParameter.SigmaY(sigmaY); }
 
     template<Concept::Character AChar>
     friend auto& operator<<(std::basic_ostream<AChar>& os, const Gaussian2DDiagnoalBase& self) { return os << self.fParameter; }
@@ -109,18 +110,18 @@ template<Concept::NumericVector2FloatingPoint T>
 class Gaussian2DDiagnoal final : public internal::Gaussian2DDiagnoalBase<Gaussian2DDiagnoal, T> {
 private:
     using Base = internal::Gaussian2DDiagnoalBase<Gaussian2DDiagnoal, T>;
-    using VOfT = typename Base::VOfT;
+    using VT = typename Base::VT;
 
 public:
     using internal::Gaussian2DDiagnoalBase<Gaussian2DDiagnoal, T>::Gaussian2DDiagnoalBase;
 
     constexpr void Reset() {}
 
-    auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    T operator()(UniformRandomBitGenerator auto& g, const Gaussian2DDiagnoalParameter<T>& p);
+    MACE_STRONG_INLINE auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
+    MACE_STRONG_INLINE T operator()(UniformRandomBitGenerator auto& g, const Gaussian2DDiagnoalParameter<T>& p);
 
-    constexpr T Min() const { return {std::numeric_limits<VOfT>::lowest(), std::numeric_limits<VOfT>::lowest()}; }
-    constexpr T Max() const { return {std::numeric_limits<VOfT>::max(), std::numeric_limits<VOfT>::max()}; }
+    constexpr T Min() const { return {std::numeric_limits<VT>::lowest(), std::numeric_limits<VT>::lowest()}; }
+    constexpr T Max() const { return {std::numeric_limits<VT>::max(), std::numeric_limits<VT>::max()}; }
 
     static constexpr auto Stateless() { return true; }
 };
@@ -140,7 +141,7 @@ template<Concept::NumericVector2FloatingPoint T>
 class Gaussian2DDiagnoalFast final : public internal::Gaussian2DDiagnoalBase<Gaussian2DDiagnoalFast, T> {
 private:
     using Base = internal::Gaussian2DDiagnoalBase<Gaussian2DDiagnoalFast, T>;
-    using VOfT = typename Base::VOfT;
+    using VT = typename Base::VT;
 
 public:
     using internal::Gaussian2DDiagnoalBase<Gaussian2DDiagnoalFast, T>::Gaussian2DDiagnoalBase;
@@ -150,8 +151,8 @@ public:
     auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
     T operator()(UniformRandomBitGenerator auto& g, const Gaussian2DDiagnoalFastParameter<T>& p);
 
-    constexpr T Min() const { return {std::numeric_limits<VOfT>::lowest(), std::numeric_limits<VOfT>::lowest()}; }
-    constexpr T Max() const { return {std::numeric_limits<VOfT>::max(), std::numeric_limits<VOfT>::max()}; }
+    MACE_STRONG_INLINE constexpr T Min() const { return {std::numeric_limits<VT>::lowest(), std::numeric_limits<VT>::lowest()}; }
+    MACE_STRONG_INLINE constexpr T Max() const { return {std::numeric_limits<VT>::max(), std::numeric_limits<VT>::max()}; }
 
     static constexpr auto Stateless() { return true; }
 };
