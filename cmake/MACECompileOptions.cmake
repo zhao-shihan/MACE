@@ -35,7 +35,8 @@ if(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE)
         message(STATUS "LTO/IPO enabled for MACE")
     else()
         set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE OFF)
-        message(NOTICE "***Notice: LTO/IPO not supported: \"${MACE_IPO_SUPPORTED_ERROR}\". Turning off CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE")
+        # message(NOTICE "***Notice: LTO/IPO not supported: \"${MACE_IPO_SUPPORTED_ERROR}\". Turning off CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE")
+        message(NOTICE "***Notice: LTO/IPO not supported. Turning off CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE")
     endif()
 endif()
 
@@ -56,13 +57,13 @@ endif()
 # Surpress some, if needed
 if(MACE_SURPRESS_USELESS_COMPILE_WARNINGS)
     if(CMAKE_COMPILER_IS_GNUCXX)
-        # OpenMPI
-        add_compile_options(-Wno-cast-function-type)
-        # ROOT
-        add_compile_options(-Wno-volatile)
+        # # OpenMPI
+        # add_compile_options(-Wno-cast-function-type)
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-        # ROOT
-        add_compile_options(-Wno-deprecated-volatile)
+        # if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 15.0.0)
+        #     # backward-cpp
+        #     add_compile_options(-Wno-unqualified-std-cast-call)
+        # endif()
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         # ROOT (conditional expression is constant)
         add_compile_options(/wd4127)
@@ -141,54 +142,4 @@ if(CMAKE_CXX_PLATFORM_ID STREQUAL "MinGW")
     # MinGW and GCC 12.2 have issues with explitic vectorization
     add_compile_definitions(EIGEN_DONT_VECTORIZE=1)
     message(NOTICE "***Notice: Building on Windows with MinGW, disabling vectorization of Eigen")
-endif()
-
-# =============================================================================
-# ROOT-induced compile options for MACE
-# =============================================================================
-
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    # See https://root-forum.cern.ch/t/preprocessor-macro-x86-64-problem-with-clhep-on-windows/50431
-    if(${ROOT_VERSION} VERSION_LESS_EQUAL 6.26.04)
-        # We simply define the accidentally involved __uint128_t to a random type and pray that it won't actually be used.
-        add_compile_definitions(__uint128_t=char******)
-        message(NOTICE "***Notice: Building on Windows with ROOT ${ROOT_VERSION}, defining __uint128_t to another random type.")
-        message(NOTICE "           See https://root-forum.cern.ch/t/preprocessor-macro-x86-64-problem-with-clhep-on-windows/50431")
-    endif()
-endif()
-
-# Solve conflict between <span> and "ROOT/RSpan.hxx"
-# See https://github.com/root-project/root/pull/11311
-include(CheckCXXSourceCompiles)
-if(DEFINED CMAKE_REQUIRED_INCLUDES)
-    set(THE_CMAKE_REQUIRED_INCLUDES_HAS_DEFINED_BEFORE TRUE)
-    set(PREVIOUS_CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES})
-endif()
-set(CMAKE_REQUIRED_INCLUDES ${ROOT_INCLUDE_DIRS})
-if(DEFINED CMAKE_REQUIRED_LIBRARIES)
-    set(THE_CMAKE_REQUIRED_LIBRARIES_HAS_DEFINED_BEFORE TRUE)
-    set(PREVIOUS_CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES})
-endif()
-set(CMAKE_REQUIRED_LIBRARIES ${ROOT_LIBRARIES})
-check_cxx_source_compiles("
-    #include \"ROOT/RSpan.hxx\"
-    #include <span>
-    int main() { return 0; }
-    " MACE_ROOT_HAS_NO_CONFLICT_WITH_SPAN)
-if(THE_CMAKE_REQUIRED_INCLUDES_HAS_DEFINED_BEFORE)
-    set(CMAKE_REQUIRED_INCLUDES ${PREVIOUS_CMAKE_REQUIRED_INCLUDES})
-    unset(PREVIOUS_CMAKE_REQUIRED_INCLUDES)
-else()
-    unset(CMAKE_REQUIRED_INCLUDES)
-endif()
-unset(THE_CMAKE_REQUIRED_INCLUDES_HAS_DEFINED_BEFORE)
-if(THE_CMAKE_REQUIRED_LIBRARIES_HAS_DEFINED_BEFORE)
-    set(CMAKE_REQUIRED_LIBRARIES ${PREVIOUS_CMAKE_REQUIRED_LIBRARIES})
-    unset(PREVIOUS_CMAKE_REQUIRED_LIBRARIES)
-else()
-    unset(CMAKE_REQUIRED_LIBRARIES)
-endif()
-unset(THE_CMAKE_REQUIRED_LIBRARIES_HAS_DEFINED_BEFORE)
-if(NOT MACE_ROOT_HAS_NO_CONFLICT_WITH_SPAN)
-    add_compile_definitions(R__HAS_STD_SPAN=1)
 endif()
