@@ -27,9 +27,9 @@
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    1
 /MACE/Physics/MuoniumPhysics/Transport/MeanFreePath             0.2 um
 
-/MACE/Field/TransportMagneticField     0.1 tesla
-/MACE/Field/LinacPotential             7 kilovolt
-/MACE/Field/SelectorElectricField      500 kilovolt/m
+/MACE/Field/AcceleratorPotential          500 volt
+/MACE/Field/SpectrometerMagneticField     0.1 tesla
+/MACE/Field/SolenoidMagneticField         0.1 tesla
 
 /MACE/Analysis/EnableCoincidenceOfEMCal   true
 /MACE/Analysis/EnableCoincidenceOfMCP     true
