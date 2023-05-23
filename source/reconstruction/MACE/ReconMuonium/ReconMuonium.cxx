@@ -5,9 +5,9 @@
 #include "MACE/DataModel/Track/CDCHelixTrack.hxx"
 #include "MACE/DataModel/Track/CDCPhysicsTrack.hxx"
 #include "MACE/Detector/Description/EMCalField.hxx"
-#include "MACE/Detector/Description/LinacField.hxx"
+#include "MACE/Detector/Description/AcceleratorField.hxx"
 #include "MACE/Detector/Description/SpectrometerField.hxx"
-#include "MACE/Detector/Description/TransportLine.hxx"
+#include "MACE/Detector/Description/Solenoid.hxx"
 #include "MACE/Env/MPIEnv.hxx"
 #include "MACE/ReconMuonium/MuoniumSimVertex.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
@@ -50,23 +50,23 @@ int main(int argc, char* argv[]) {
     const auto sigmaCPA = std::stod(argv[4]);
     const auto sigmaZCDC = std::stod(argv[5]);
 
-    // linac
-    const auto linacLength = LinacField::Instance().DownStreamLength();
-    const auto accE = 7_kV / (linacLength - 13.05_mm);
+    // accelerator
+    const auto acceleratorLength = AcceleratorField::Instance().DownStreamLength();
+    const auto accE = 7_kV / (acceleratorLength - 13.05_mm);
     // flight
-    const auto& transportLine = TransportLine::Instance();
+    const auto& transportLine = Solenoid::Instance();
     const auto flightLength =
-        SpectrometerField::Instance().Length() / 2 - linacLength +
-        transportLine.FirstStraightLength() +
-        transportLine.FirstBendRadius() * halfpi +
-        transportLine.SecondStraightLength() +
-        transportLine.SecondBendRadius() * halfpi +
-        transportLine.ThirdStraightLength() +
+        SpectrometerField::Instance().Length() / 2 - acceleratorLength +
+        transportLine.S1Length() +
+        transportLine.B1Radius() * halfpi +
+        transportLine.S2Length() +
+        transportLine.B2Radius() * halfpi +
+        transportLine.S3Length() +
         EMCalField::Instance().Length() / 2;
     // muonium survival length (5 tau_mu @ 300K)
     const auto maxSurvivalLength = c_light * std::sqrt(3 * k_Boltzmann * 300_K / muonium_mass_c2) * 5 * 2197.03_ns;
-    auto CalculateFlightTime = [&accE, &linacLength, &flightLength](double zVertex) {
-        const auto velocity = c_light * std::sqrt((2 * eplus * accE / electron_mass_c2) * (linacLength - zVertex));
+    auto CalculateFlightTime = [&accE, &acceleratorLength, &flightLength](double zVertex) {
+        const auto velocity = c_light * std::sqrt((2 * eplus * accE / electron_mass_c2) * (acceleratorLength - zVertex));
         const auto accTime = velocity / (eplus * accE * c_squared / electron_mass_c2);
         return accTime + flightLength / velocity + 1.0906_ns; // TODO: figure out the magic 1.0906_ns
     };
@@ -74,11 +74,11 @@ int main(int argc, char* argv[]) {
     const auto tofMax = CalculateFlightTime(maxSurvivalLength + 3 * sigmaZCDC);
     const auto tofMin = CalculateFlightTime(-3 * sigmaZCDC);
     std::cout
-        << "   Linac length: " << linacLength / 1_cm << " cm\n"
+        << "   Accelerator length: " << acceleratorLength / 1_cm << " cm\n"
         << "  M max survive: " << maxSurvivalLength / 1_cm << " cm\n"
-        << "  Linac E field: " << accE / 1_kV_cm << " kV/cm\n"
-        << "e+/- max flight: " << (linacLength + flightLength) / 1_cm << " cm\n"
-        << "e+/- min flight: " << (linacLength + flightLength - maxSurvivalLength) / 1_cm << " cm\n"
+        << "  Accelerator E field: " << accE / 1_kV_cm << " kV/cm\n"
+        << "e+/- max flight: " << (acceleratorLength + flightLength) / 1_cm << " cm\n"
+        << "e+/- min flight: " << (acceleratorLength + flightLength - maxSurvivalLength) / 1_cm << " cm\n"
         << "   e+/- max TOF: " << tofMax / 1_ns << " ns\n"
         << "   e+/- min TOF: " << tofMin / 1_ns << " ns" << std::endl;
 

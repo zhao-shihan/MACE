@@ -5,7 +5,7 @@
 #include "MACE/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
 #include "MACE/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "MACE/DataModel/DataFactory.hxx"
-#include "MACE/Extension/stdx/array_alias.hxx"
+#include "MACE/Extension/stdx/arraynx.hxx"
 #include "MACE/ReconMuonium/MuoniumVertex.hxx"
 #include "MACE/Utility/VectorAssign.hxx"
 #include "MACE/Utility/VectorCast.hxx"
@@ -43,9 +43,9 @@ public:
     void TrueVertexMomentum(auto&& p) { VectorAssign(fTrueVertexMomentum, std::forward<decltype(p)>(p)); }
     void TrueParticles(auto&& p) { fTrueParticles = std::forward<decltype(p)>(p); }
 
-    void FillBranchSockets() const noexcept;
-    static void CreateBranches(TTree& tree);
-    static void ConnectToBranches(TTree& tree);
+    void FillAllBranchSocket() const& noexcept;
+    static void CreateAllBranch(TTree& tree);
+    static void ConnectToAllBranch(TTree& tree);
     static constexpr auto BasicTreeName() noexcept { return "MVtx"sv; }
 
 private:

@@ -23,7 +23,7 @@ MuoniumVertex::MuoniumVertex() noexcept :
     fVertexMomentum(fgVertexMomentum.Value<double>()),
     fParticles(fgParticles.Value()) {}
 
-void MuoniumVertex::FillBranchSockets() const noexcept {
+void MuoniumVertex::FillAllBranchSocket() const& noexcept {
     fgTCACDC.Value(fTCACDC);
     fgTCAMCP.Value(fTCAMCP);
     fgDeltaTCA.Value(fDeltaTCA);
@@ -35,7 +35,7 @@ void MuoniumVertex::FillBranchSockets() const noexcept {
     fgParticles.Value(fParticles);
 }
 
-void MuoniumVertex::CreateBranches(TTree& tree) {
+void MuoniumVertex::CreateAllBranch(TTree& tree) {
     fgTCACDC.CreateBranch(tree);
     fgTCAMCP.CreateBranch(tree);
     fgDeltaTCA.CreateBranch(tree);
@@ -47,7 +47,7 @@ void MuoniumVertex::CreateBranches(TTree& tree) {
     fgParticles.CreateBranch(tree);
 }
 
-void MuoniumVertex::ConnectToBranches(TTree& tree) {
+void MuoniumVertex::ConnectToAllBranch(TTree& tree) {
     fgTCACDC.ConnectToBranch(tree);
     fgTCAMCP.ConnectToBranch(tree);
     fgDeltaTCA.ConnectToBranch(tree);

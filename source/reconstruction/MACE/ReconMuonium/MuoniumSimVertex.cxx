@@ -16,8 +16,8 @@ MuoniumSimVertex::MuoniumSimVertex() noexcept :
     fTrueVertexMomentum(fgTrueVertexMomentum.Value<double>()),
     fTrueParticles(fgTrueParticles.Value()) {}
 
-void MuoniumSimVertex::FillBranchSockets() const noexcept {
-    MuoniumVertex::FillBranchSockets();
+void MuoniumSimVertex::FillAllBranchSocket() const& noexcept {
+    MuoniumVertex::FillAllBranchSocket();
     fgTrueVertexTime.Value(fTrueVertexTime);
     fgTrueVertexPosition.Value(fTrueVertexPosition);
     fgTrueVertexEnergy.Value(fTrueVertexEnergy);
@@ -25,8 +25,8 @@ void MuoniumSimVertex::FillBranchSockets() const noexcept {
     fgTrueParticles.Value(fTrueParticles);
 }
 
-void MuoniumSimVertex::CreateBranches(TTree& tree) {
-    MuoniumVertex::CreateBranches(tree);
+void MuoniumSimVertex::CreateAllBranch(TTree& tree) {
+    MuoniumVertex::CreateAllBranch(tree);
     fgTrueVertexTime.CreateBranch(tree);
     fgTrueVertexPosition.CreateBranch(tree);
     fgTrueVertexEnergy.CreateBranch(tree);
@@ -34,8 +34,8 @@ void MuoniumSimVertex::CreateBranches(TTree& tree) {
     fgTrueParticles.CreateBranch(tree);
 }
 
-void MuoniumSimVertex::ConnectToBranches(TTree& tree) {
-    MuoniumVertex::ConnectToBranches(tree);
+void MuoniumSimVertex::ConnectToAllBranch(TTree& tree) {
+    MuoniumVertex::ConnectToAllBranch(tree);
     fgTrueVertexTime.ConnectToBranch(tree);
     fgTrueVertexPosition.ConnectToBranch(tree);
     fgTrueVertexEnergy.ConnectToBranch(tree);
