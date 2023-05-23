@@ -3,9 +3,8 @@
 namespace MACE::inline Utility {
 
 class NonConstructibleBase {
-protected:
+private:
     constexpr NonConstructibleBase() = delete;
-    constexpr ~NonConstructibleBase() = delete;
 };
 
 } // namespace MACE::inline Utility

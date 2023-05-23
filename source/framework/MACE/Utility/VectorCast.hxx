@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MACE/Concept/NumericVector.hxx"
-#include "MACE/Utility/ValueTypeOf.hxx"
 #include "MACE/Utility/VectorAssign.hxx"
 
 #include <concepts>

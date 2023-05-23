@@ -2,10 +2,11 @@
 
 #include "MACE/Concept/FundamentalType.hxx"
 #include "MACE/Concept/Indirectable.hxx"
-#include "MACE/Concept/InputNumericVector.hxx"
+#include "MACE/Concept/InputVector.hxx"
 #include "MACE/Concept/NumericVector.hxx"
 #include "MACE/Utility/ToSigned.hxx"
-#include "MACE/Utility/ValueTypeOf.hxx"
+#include "MACE/Utility/VectorDimension.hxx"
+#include "MACE/Utility/VectorValueType.hxx"
 
 #include "gsl/gsl"
 
@@ -38,7 +39,7 @@ decltype(auto) VectorAssign(Concept::NumericVectorAny auto& lhs, auto&& rhs)
 /// lvalue reference to lhs.
 decltype(auto) VectorAssign(Concept::NumericVectorAny auto& lhs, std::ranges::input_range auto&& rhs)
     requires(not std::assignable_from<decltype(lhs), decltype(rhs)> and
-             std::assignable_from<ValueTypeOf<decltype(lhs)>&, ValueTypeOf<decltype(rhs)>>)
+             std::assignable_from<VectorValueType<std::remove_cvref_t<decltype(lhs)>>&, std::ranges::range_value_t<decltype(rhs)>>)
 {
     for (gsl::index i = 0;
          auto&& value : std::forward<decltype(rhs)>(rhs)) {
@@ -55,13 +56,12 @@ decltype(auto) VectorAssign(Concept::NumericVectorAny auto& lhs, std::ranges::in
 /// @param rhs Something at right hand side.
 /// @return If lhs = rhs is well-formed, returns lhs = rhs, else returns the
 /// lvalue reference to lhs.
-decltype(auto) VectorAssign(Concept::NumericVectorAny auto& lhs, Concept::InputNumericVectorAny auto&& rhs)
+decltype(auto) VectorAssign(Concept::NumericVectorAny auto& lhs, const Concept::InputVectorAny auto& rhs)
     requires(not std::assignable_from<decltype(lhs), decltype(rhs)> and
              not std::ranges::input_range<decltype(rhs)>)
 {
-    constexpr auto dimension = sizeof(decltype(lhs)) / sizeof(ValueTypeOf<decltype(lhs)>);
-    for (gsl::index i = 0; i < ToSigned(dimension); ++i) {
-        lhs[i] = std::forward<decltype(rhs)>(rhs)[i];
+    for (gsl::index i = 0; i < ToSigned(VectorDimension<std::remove_cvref_t<decltype(lhs)>>); ++i) {
+        lhs[i] = rhs[i];
     }
     return lhs;
 }
