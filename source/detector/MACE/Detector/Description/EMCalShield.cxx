@@ -1,5 +1,5 @@
 #include "MACE/Detector/Description/EMCalShield.hxx"
-#include "MACE/Detector/Description/TransportLine.hxx"
+#include "MACE/Detector/Description/Solenoid.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
 namespace MACE::Detector::Description {

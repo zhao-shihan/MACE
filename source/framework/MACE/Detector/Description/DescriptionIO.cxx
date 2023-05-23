@@ -1,6 +1,6 @@
-#include "MACE/Detector/DescriptionIO.hxx"
+#include "MACE/Detector/Description/DescriptionIO.hxx"
 
-namespace MACE::Detector {
+namespace MACE::Detector::Description {
 
 std::set<gsl::not_null<DescriptionBase*>> DescriptionIO::fgInstanceSet = {};
 

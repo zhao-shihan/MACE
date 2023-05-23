@@ -9,9 +9,6 @@ class EMCalShield final : public DescriptionSingletonBase<EMCalShield> {
 
 private:
     EMCalShield();
-    ~EMCalShield() noexcept = default;
-    EMCalShield(const EMCalShield&) = delete;
-    EMCalShield& operator=(const EMCalShield&) = delete;
 
 public:
     const auto& InnerRadius() const { return fInnerRadius; }

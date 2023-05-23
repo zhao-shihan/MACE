@@ -1,9 +1,10 @@
 #pragma once
 
 #include "MACE/Concept/InstantiatedFrom.hxx"
-#include "MACE/Detector/DescriptionBase.hxx"
+#include "MACE/Detector/Description/DescriptionBase.hxx"
 #include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
+#include "MACE/Utility/NonConstructibleBase.hxx"
 #include "MACE/Utility/StaticForEach.hxx"
 
 #include "yaml-cpp/yaml.h"
@@ -24,29 +25,27 @@
 #include <tuple>
 #include <vector>
 
-namespace MACE::Detector {
+namespace MACE::Detector::Description {
 
 using namespace std::string_view_literals;
 
-class DescriptionIO final {
+class DescriptionIO final : public NonConstructibleBase {
 public:
-    DescriptionIO() = delete;
-
-    template<IsDescription... ADescriptions>
-    static void Import(const std::filesystem::path& yamlFile) { Import<std::tuple<ADescriptions...>>(yamlFile); }
-    template<IsDescription... ADescriptions>
-    static void Export(const std::filesystem::path& yamlFile, std::string_view fileComment = ""sv) { Export<std::tuple<ADescriptions...>>(yamlFile, fileComment); }
-    template<IsDescription... ADescriptions>
-    static void Ixport(const std::filesystem::path& yamlFile, std::string_view fileComment = ""sv) { Ixport<std::tuple<ADescriptions...>>(yamlFile, fileComment); }
-    template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
+    template<Description... Ds>
+    static void Import(const std::filesystem::path& yamlFile) { Import<std::tuple<Ds...>>(yamlFile); }
+    template<Description... Ds>
+    static void Export(const std::filesystem::path& yamlFile, std::string_view fileComment = ""sv) { Export<std::tuple<Ds...>>(yamlFile, fileComment); }
+    template<Description... Ds>
+    static void Ixport(const std::filesystem::path& yamlFile, std::string_view fileComment = ""sv) { Ixport<std::tuple<Ds...>>(yamlFile, fileComment); }
+    template<Concept::InstantiatedFrom<std::tuple> T>
     static void Import(const std::filesystem::path& yamlFile)
-        requires(not IsDescription<ADescriptionTuple>);
-    template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
+        requires(not Description<T>);
+    template<Concept::InstantiatedFrom<std::tuple> T>
     static void Export(const std::filesystem::path& yamlFile, std::string_view fileComment = ""sv)
-        requires(not IsDescription<ADescriptionTuple>);
-    template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
+        requires(not Description<T>);
+    template<Concept::InstantiatedFrom<std::tuple> T>
     static void Ixport(const std::filesystem::path& yamlFile, std::string_view fileComment = ""sv)
-        requires(not IsDescription<ADescriptionTuple>);
+        requires(not Description<T>);
 
     template<typename... ArgsOfImport>
     static void Import(const std::ranges::range auto& yamlText)
@@ -67,4 +66,4 @@ private:
 
 } // namespace MACE::Detector
 
-#include "MACE/Detector/DescriptionIO.inl"
+#include "MACE/Detector/Description/DescriptionIO.inl"

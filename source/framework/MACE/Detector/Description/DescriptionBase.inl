@@ -1,4 +1,4 @@
-namespace MACE::Detector {
+namespace MACE::Detector::Description {
 
 template<typename AValue, typename AReadAs, std::convertible_to<std::string>... AStrings>
     requires std::assignable_from<AValue&, AReadAs>
@@ -59,7 +59,7 @@ template<std::convertible_to<std::string>... AStrings>
 void DescriptionBase::PrintNodeNotFoundWarning(AStrings&&... nodeNames) const {
     if (const auto& env = Env::BasicEnv::Instance();
         env.GetVerboseLevel() >= Env::VerboseLevel::Warning) {
-        std::cout << "MACE::Detector::DescriptionBase: YAML node \"" << fName;
+        std::cout << "MACE::Detector::Description::DescriptionBase: YAML node \"" << fName;
         TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
                      [](auto&& name) {
                          std::cout << '/' << name;

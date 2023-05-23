@@ -1,43 +1,43 @@
-namespace MACE::Detector {
+namespace MACE::Detector::Description {
 
 namespace internal {
 
-template<std::intmax_t i, class ADescriptionTuple>
+template<std::intmax_t i, class T>
 struct FillDescriptionArray {
-    constexpr void operator()(std::array<DescriptionBase*, std::tuple_size_v<ADescriptionTuple>>& descriptions) const {
-        std::get<i>(descriptions) = std::addressof(std::tuple_element_t<i, ADescriptionTuple>::Instance());
+    constexpr void operator()(std::array<DescriptionBase*, std::tuple_size_v<T>>& descriptions) const {
+        std::get<i>(descriptions) = std::addressof(std::tuple_element_t<i, T>::Instance());
     }
 };
 
 } // namespace internal
 
-template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
+template<Concept::InstantiatedFrom<std::tuple> T>
 void DescriptionIO::Import(const std::filesystem::path& yamlFile)
-    requires(not IsDescription<ADescriptionTuple>)
+    requires(not Description<T>)
 {
-    std::array<DescriptionBase*, std::tuple_size_v<ADescriptionTuple>> descriptions;
+    std::array<DescriptionBase*, std::tuple_size_v<T>> descriptions;
     StaticForEach<0, descriptions.size(),
-                  internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
+                  internal::FillDescriptionArray, T>(descriptions);
     ImportImpl(yamlFile, descriptions);
 }
 
-template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
+template<Concept::InstantiatedFrom<std::tuple> T>
 void DescriptionIO::Export(const std::filesystem::path& yamlFile, std::string_view fileComment)
-    requires(not IsDescription<ADescriptionTuple>)
+    requires(not Description<T>)
 {
-    std::array<DescriptionBase*, std::tuple_size_v<ADescriptionTuple>> descriptions;
+    std::array<DescriptionBase*, std::tuple_size_v<T>> descriptions;
     StaticForEach<0, descriptions.size(),
-                  internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
+                  internal::FillDescriptionArray, T>(descriptions);
     ExportImpl(yamlFile, fileComment, descriptions);
 }
 
-template<Concept::InstantiatedFrom<std::tuple> ADescriptionTuple>
+template<Concept::InstantiatedFrom<std::tuple> T>
 void DescriptionIO::Ixport(const std::filesystem::path& yamlFile, std::string_view fileComment)
-    requires(not IsDescription<ADescriptionTuple>)
+    requires(not Description<T>)
 {
-    std::array<DescriptionBase*, std::tuple_size_v<ADescriptionTuple>> descriptions;
+    std::array<DescriptionBase*, std::tuple_size_v<T>> descriptions;
     StaticForEach<0, descriptions.size(),
-                  internal::FillDescriptionArray, ADescriptionTuple>(descriptions);
+                  internal::FillDescriptionArray, T>(descriptions);
     IxportImpl(yamlFile, fileComment, descriptions);
 }
 
@@ -60,7 +60,7 @@ void DescriptionIO::Import(const std::ranges::range auto& yamlText)
         yamlOut.close();
         Import<ArgsOfImport...>(yamlPath);
     } else {
-        throw std::runtime_error("MACE::Detector::DescriptionIO::Import: Cannot open temp yaml file");
+        throw std::runtime_error("MACE::Detector::Description::DescriptionIO::Import: Cannot open temp yaml file");
     }
 
     std::error_code muteRemoveError;
@@ -78,7 +78,7 @@ void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::strin
     std::vector<std::pair<std::string_view, DescriptionBase*>> sortedDescriptions;
     sortedDescriptions.reserve(descriptions.size());
     for (auto&& description : descriptions) {
-        sortedDescriptions.emplace_back(description->GetName(), description);
+        sortedDescriptions.emplace_back(description->Name(), description);
     }
     std::ranges::sort(sortedDescriptions);
 
@@ -113,7 +113,7 @@ void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::strin
         yamlOut.close();
     } catch (const InvalidFile&) {
         MACE_ENVIRONMENT_CONTROLLED_OUT(Error, std::cout)
-            << "MACE::Detector::DescriptionIO::ExportImpl: Cannot open yaml file, export failed"sv << std::endl;
+            << "MACE::Detector::Description::DescriptionIO::ExportImpl: Cannot open yaml file, export failed"sv << std::endl;
     }
 }
 

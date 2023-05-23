@@ -1,5 +1,5 @@
 #include "MACE/Compatibility/std2b/unreachable.hxx"
-#include "MACE/Detector/Description/LinacField.hxx"
+#include "MACE/Detector/Description/AcceleratorField.hxx"
 #include "MACE/Detector/Description/Target.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
@@ -104,8 +104,8 @@ Target::CuboidTarget::CuboidTarget() :
     fHole() {}
 
 HepGeom::Transform3D Target::CuboidTarget::CalcTransform() const {
-    const auto& linacField = LinacField::Instance();
-    const auto transZ = linacField.Length() / 2 - linacField.DownStreamLength() - fThickness / 2;
+    const auto& acceleratorField = AcceleratorField::Instance();
+    const auto transZ = acceleratorField.Length() / 2 - acceleratorField.DownStreamLength() - fThickness / 2;
     return HepGeom::Transform3D(CLHEP::HepRotation(), CLHEP::Hep3Vector(0, 0, transZ));
 }
 

@@ -16,7 +16,7 @@
 #include <optional>
 #include <string>
 
-namespace MACE::Detector {
+namespace MACE::Detector::Description {
 
 class DescriptionBase : public NonMoveableBase {
 protected:
@@ -24,7 +24,7 @@ protected:
     ~DescriptionBase() = default;
 
 public:
-    const auto& GetName() const { return fName; }
+    const auto& Name() const { return fName; }
 
     void Import(const YAML::Node& rootNode);
     void Export(YAML::Node& rootNode) const;
@@ -62,13 +62,13 @@ protected:
 };
 
 template<class T>
-concept IsDescription =
+concept Description =
     requires {
         requires std::derived_from<T, DescriptionBase>;
         requires std::derived_from<T, DescriptionSingletonBase<T>>;
         requires Env::Memory::Singletonified<T>;
     };
 
-} // namespace MACE::Detector
+} // namespace MACE::Detector::Description
 
-#include "MACE/Detector/DescriptionBase.inl"
+#include "MACE/Detector/Description/DescriptionBase.inl"

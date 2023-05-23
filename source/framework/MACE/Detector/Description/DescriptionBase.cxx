@@ -1,7 +1,7 @@
-#include "MACE/Detector/DescriptionBase.hxx"
-#include "MACE/Detector/DescriptionIO.hxx"
+#include "MACE/Detector/Description/DescriptionBase.hxx"
+#include "MACE/Detector/Description/DescriptionIO.hxx"
 
-namespace MACE::Detector {
+namespace MACE::Detector::Description {
 
 DescriptionBase::DescriptionBase(const std::string& name) :
     NonMoveableBase(),

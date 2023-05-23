@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Detector/DescriptionBase.hxx"
+#include "MACE/Detector/Description/DescriptionBase.hxx"
 
 namespace MACE::Detector::Description {
 
@@ -9,9 +9,6 @@ class SelectorField final : public DescriptionSingletonBase<SelectorField> {
 
 private:
     SelectorField();
-    ~SelectorField() noexcept = default;
-    SelectorField(const SelectorField&) = delete;
-    SelectorField& operator=(const SelectorField&) = delete;
 
 public:
     const auto& Radius() const { return fRadius; }

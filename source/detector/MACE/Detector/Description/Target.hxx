@@ -1,9 +1,9 @@
 #pragma once
 
 #include "MACE/Compatibility/std2b/unreachable.hxx"
-#include "MACE/Concept/InputNumericVector.hxx"
-#include "MACE/Detector/DescriptionBase.hxx"
-#include "MACE/Env/Memory/MuteSingleton.hxx"
+#include "MACE/Concept/InputVector.hxx"
+#include "MACE/Detector/Description/DescriptionBase.hxx"
+#include "MACE/Env/Memory/WeakSingleton.hxx"
 #include "MACE/Math/Hypot.hxx"
 #include "MACE/Math/IntegerPower.hxx"
 
@@ -25,14 +25,14 @@ public:
     };
 
     template<class ADerivedShape>
-    class ShapeBase : public Env::Memory::MuteSingleton<ADerivedShape> {
+    class ShapeBase : public Env::Memory::WeakSingleton<ADerivedShape> {
     protected:
         ShapeBase();
         ~ShapeBase() = default;
 
     protected:
         template<class ADerivedDetail>
-        class DetailBase : public Env::Memory::MuteSingleton<ADerivedDetail> {
+        class DetailBase : public Env::Memory::WeakSingleton<ADerivedDetail> {
         protected:
             DetailBase();
             ~DetailBase() = default;
@@ -63,9 +63,9 @@ public:
         const auto& Hole() const { return fHole; }
         auto& Hole() { return fHole; }
 
-        bool VolumeContain(const Concept::InputNumericVector3D auto& x) const noexcept;
-        bool Contain(const Concept::InputNumericVector3D auto& x, bool insideVolume) const noexcept;
-        bool TestDetectable(const Concept::InputNumericVector3D auto& x) const noexcept;
+        bool VolumeContain(const Concept::InputVector3D auto& x) const noexcept;
+        bool Contain(const Concept::InputVector3D auto& x, bool insideVolume) const noexcept;
+        bool TestDetectable(const Concept::InputVector3D auto& x) const noexcept;
 
     private:
         class HoledCuboid final : public DetailBase<HoledCuboid> {
@@ -85,8 +85,8 @@ public:
             auto Depth() const { return fDepth; }
             auto Pitch() const { return fPitch; }
 
-            bool DetailContain(const Concept::InputNumericVector3D auto& x) const noexcept;
-            bool DetailDetectable(const Concept::InputNumericVector3D auto&) const noexcept { return false; }
+            bool DetailContain(const Concept::InputVector3D auto& x) const noexcept;
+            bool DetailDetectable(const Concept::InputVector3D auto&) const noexcept { return false; }
 
         private:
             double fHalfExtent;
@@ -115,12 +115,12 @@ public:
     auto& Cuboid() { return fCuboid; }
 
     /// @brief Return true if inside the target volume (include boundary (closed region), don't consider fine structure).
-    bool VolumeContain(const Concept::InputNumericVector3D auto& x) const noexcept;
+    bool VolumeContain(const Concept::InputVector3D auto& x) const noexcept;
     /// @brief Return true if inside the exact target geometry (considering fine structure).
-    bool Contain(const Concept::InputNumericVector3D auto& x, bool insideVolume) const noexcept;
-    bool Contain(const Concept::InputNumericVector3D auto& x) const noexcept { return Contain(x, VolumeContain(x)); }
+    bool Contain(const Concept::InputVector3D auto& x, bool insideVolume) const noexcept;
+    bool Contain(const Concept::InputVector3D auto& x) const noexcept { return Contain(x, VolumeContain(x)); }
     /// @brief Return true if the decay position x is detectable (i.e. is not shadowed by target).
-    bool TestDetectable(const Concept::InputNumericVector3D auto& x) const noexcept;
+    bool TestDetectable(const Concept::InputVector3D auto& x) const noexcept;
 
 private:
     void ImportValues(const YAML::Node& node) override;

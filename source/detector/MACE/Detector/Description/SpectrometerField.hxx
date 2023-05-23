@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Detector/DescriptionBase.hxx"
+#include "MACE/Detector/Description/DescriptionBase.hxx"
 
 namespace MACE::Detector::Description {
 
@@ -9,24 +9,43 @@ class SpectrometerField final : public DescriptionSingletonBase<SpectrometerFiel
 
 private:
     SpectrometerField();
-    ~SpectrometerField() noexcept = default;
-    SpectrometerField(const SpectrometerField&) = delete;
-    SpectrometerField& operator=(const SpectrometerField&) = delete;
 
 public:
+    ///////////////////////////////////////////////////////////
+    // Geometry
+    ///////////////////////////////////////////////////////////
+
     const auto& Radius() const { return fRadius; }
     const auto& Length() const { return fLength; }
 
-    void Radius(double val) { fRadius = val; }
-    void Length(double val) { fLength = val; }
+    void Radius(auto val) { fRadius = val; }
+    void Length(auto val) { fLength = val; }
+
+    ///////////////////////////////////////////////////////////
+    // Field
+    ///////////////////////////////////////////////////////////
+
+    const auto& MagneticFluxDensity() const { return fMagneticFluxDensity; }
+
+    void MagneticFluxDensity(auto v) { fMagneticFluxDensity = v; }
 
 private:
     void ImportValues(const YAML::Node& node) override;
     void ExportValues(YAML::Node& node) const override;
 
 private:
+    ///////////////////////////////////////////////////////////
+    // Geometry
+    ///////////////////////////////////////////////////////////
+
     double fRadius;
     double fLength;
+
+    ///////////////////////////////////////////////////////////
+    // Field
+    ///////////////////////////////////////////////////////////
+
+    double fMagneticFluxDensity;
 };
 
 } // namespace MACE::Detector::Description

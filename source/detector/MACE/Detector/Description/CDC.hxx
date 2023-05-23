@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Detector/DescriptionBase.hxx"
+#include "MACE/Detector/Description/DescriptionBase.hxx"
 #include "MACE/Math/IntegerPower.hxx"
 
 #include "Eigen/Core"
@@ -19,7 +19,7 @@ private:
 
 public:
     ///////////////////////////////////////////////////////////
-    // Geometry properties
+    // Geometry
     ///////////////////////////////////////////////////////////
 
     const auto& EvenSuperLayerIsAxial() const { return fEvenSuperLayerIsAxial; }
@@ -106,7 +106,7 @@ public:
     const auto& CellMap() const { return fCellMapManager.Get(this); }
 
     ///////////////////////////////////////////////////////////
-    // Detection properties
+    // Detection
     ///////////////////////////////////////////////////////////
 
     const auto& MeanDriftVelocity() const { return fMeanDriftVelocity; }
@@ -117,7 +117,7 @@ public:
 
 private:
     ///////////////////////////////////////////////////////////
-    // Geometry properties
+    // Geometry
     ///////////////////////////////////////////////////////////
 
     class LayerConfigurationManager {
@@ -149,7 +149,7 @@ private:
 
 private:
     ///////////////////////////////////////////////////////////
-    // Geometry properties
+    // Geometry
     ///////////////////////////////////////////////////////////
 
     bool fEvenSuperLayerIsAxial; // true: AVAUAVAU..., false: VAUAVAUA...
@@ -175,7 +175,7 @@ private:
     mutable CellMapManager fCellMapManager;
 
     ///////////////////////////////////////////////////////////
-    // Detection properties
+    // Detection
     ///////////////////////////////////////////////////////////
 
     double fMeanDriftVelocity;

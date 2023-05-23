@@ -1,6 +1,6 @@
 namespace MACE::Detector::Description {
 
-bool Target::VolumeContain(const Concept::InputNumericVector3D auto& x) const noexcept {
+bool Target::VolumeContain(const Concept::InputVector3D auto& x) const noexcept {
     switch (fShapeType) {
     case TargetShapeType::Cuboid:
         return fCuboid.VolumeContain(x);
@@ -8,7 +8,7 @@ bool Target::VolumeContain(const Concept::InputNumericVector3D auto& x) const no
     std2b::unreachable();
 }
 
-bool Target::Contain(const Concept::InputNumericVector3D auto& x, bool insideVolume) const noexcept {
+bool Target::Contain(const Concept::InputVector3D auto& x, bool insideVolume) const noexcept {
     switch (fShapeType) {
     case TargetShapeType::Cuboid:
         return fCuboid.Contain(x, insideVolume);
@@ -16,7 +16,7 @@ bool Target::Contain(const Concept::InputNumericVector3D auto& x, bool insideVol
     std2b::unreachable();
 }
 
-bool Target::TestDetectable(const Concept::InputNumericVector3D auto& x) const noexcept {
+bool Target::TestDetectable(const Concept::InputVector3D auto& x) const noexcept {
     switch (fShapeType) {
     case TargetShapeType::Cuboid:
         return fCuboid.TestDetectable(x);
@@ -27,7 +27,7 @@ bool Target::TestDetectable(const Concept::InputNumericVector3D auto& x) const n
 template<class ADerivedShape>
 Target::ShapeBase<ADerivedShape>::ShapeBase() {
     static_assert(
-        requires(const ADerivedShape& shape, CLHEP::Hep3Vector&& x, bool&& inside) {
+        requires(const ADerivedShape shape, CLHEP::Hep3Vector x, bool inside) {
             requires std::is_base_of_v<ShapeBase<ADerivedShape>, ADerivedShape>;
             requires std::is_final_v<ADerivedShape>;
             { shape.CalcTransform() } -> std::same_as<HepGeom::Transform3D>;
@@ -41,7 +41,7 @@ template<class ADerivedShape>
 template<class ADerivedDetail>
 Target::ShapeBase<ADerivedShape>::DetailBase<ADerivedDetail>::DetailBase() {
     static_assert(
-        requires(const ADerivedDetail& detail, CLHEP::Hep3Vector&& x) {
+        requires(const ADerivedDetail detail, CLHEP::Hep3Vector x) {
             requires std::is_base_of_v<DetailBase<ADerivedDetail>, ADerivedDetail>;
             requires std::is_final_v<ADerivedDetail>;
             { detail.DetailContain(x) } -> std::same_as<bool>;
@@ -49,13 +49,13 @@ Target::ShapeBase<ADerivedShape>::DetailBase<ADerivedDetail>::DetailBase() {
         });
 }
 
-bool Target::CuboidTarget::VolumeContain(const Concept::InputNumericVector3D auto& x) const noexcept {
+bool Target::CuboidTarget::VolumeContain(const Concept::InputVector3D auto& x) const noexcept {
     return -fThickness <= x[2] and x[2] <= 0 and
            std::abs(x[0]) <= fWidth / 2 and
            std::abs(x[1]) <= fWidth / 2;
 }
 
-bool Target::CuboidTarget::Contain(const Concept::InputNumericVector3D auto& x, bool insideVolume) const noexcept {
+bool Target::CuboidTarget::Contain(const Concept::InputVector3D auto& x, bool insideVolume) const noexcept {
     switch (fDetailType) {
     case ShapeDetailType::Flat:
         return insideVolume;
@@ -66,7 +66,7 @@ bool Target::CuboidTarget::Contain(const Concept::InputNumericVector3D auto& x, 
     std2b::unreachable();
 }
 
-bool Target::CuboidTarget::TestDetectable(const Concept::InputNumericVector3D auto& x) const noexcept {
+bool Target::CuboidTarget::TestDetectable(const Concept::InputVector3D auto& x) const noexcept {
     const auto notShadowed = x[2] > 0 or
                              std::abs(x[0]) > fWidth / 2 or
                              std::abs(x[1]) > fWidth / 2;
@@ -80,7 +80,7 @@ bool Target::CuboidTarget::TestDetectable(const Concept::InputNumericVector3D au
     std2b::unreachable();
 }
 
-bool Target::CuboidTarget::HoledCuboid::DetailContain(const Concept::InputNumericVector3D auto& x) const noexcept {
+bool Target::CuboidTarget::HoledCuboid::DetailContain(const Concept::InputVector3D auto& x) const noexcept {
     if (x[2] < -fDepth or std::abs(x[0]) > fHalfExtent or std::abs(x[1]) > fHalfExtent) {
         return true;
     } else {

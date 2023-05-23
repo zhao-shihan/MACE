@@ -6,11 +6,11 @@
 
 namespace MACE::Detector::Description {
 
-class EMCalField final : public DescriptionSingletonBase<EMCalField> {
+class AcceleratorField final : public DescriptionSingletonBase<AcceleratorField> {
     friend Env::Memory::SingletonFactory;
 
 private:
-    EMCalField();
+    AcceleratorField();
 
 public:
     ///////////////////////////////////////////////////////////
@@ -19,11 +19,11 @@ public:
 
     const auto& Radius() const { return fRadius; }
     const auto& Length() const { return fLength; }
+    const auto& DownStreamLength() const { return fDownStreamLength; }
 
     void Radius(auto v) { fRadius = v; }
     void Length(auto v) { fLength = v; }
-
-    // Next 1 method should only use for geometry construction.
+    void DownStreamLength(auto v) { (fDownStreamLength = v, UpdateAcceleratorFieldStrength()); }
 
     HepGeom::Transform3D CalcTransform() const;
 
@@ -31,13 +31,21 @@ public:
     // Field
     ///////////////////////////////////////////////////////////
 
-    const auto& MagneticFluxDensity() const { return fMagneticFluxDensity; }
+    const auto& AcceleratorPotential() const { return fAcceleratorPotential; }
 
-    void MagneticFluxDensity(auto v) { fMagneticFluxDensity = v; }
+    void AcceleratorPotential(auto v) { (fAcceleratorPotential = v, UpdateAcceleratorFieldStrength()); }
+
+    ///////////////////////////////////////////////////////////
+    // Cached value
+    ///////////////////////////////////////////////////////////
+
+    const auto& AcceleratorFieldStrength() const { return fAcceleratorFieldStrength; }
 
 private:
     void ImportValues(const YAML::Node& node) override;
     void ExportValues(YAML::Node& node) const override;
+
+    void UpdateAcceleratorFieldStrength() { fAcceleratorFieldStrength = fAcceleratorPotential / fDownStreamLength; }
 
 private:
     ///////////////////////////////////////////////////////////
@@ -46,12 +54,19 @@ private:
 
     double fRadius;
     double fLength;
+    double fDownStreamLength;
 
     ///////////////////////////////////////////////////////////
     // Field
     ///////////////////////////////////////////////////////////
 
-    double fMagneticFluxDensity;
+    double fAcceleratorPotential;
+
+    ///////////////////////////////////////////////////////////
+    // Cached value
+    ///////////////////////////////////////////////////////////
+
+    double fAcceleratorFieldStrength;
 };
 
 } // namespace MACE::Detector::Description

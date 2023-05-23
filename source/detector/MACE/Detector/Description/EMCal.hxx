@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Detector/DescriptionBase.hxx"
+#include "MACE/Detector/Description/DescriptionBase.hxx"
 
 namespace MACE::Detector::Description {
 

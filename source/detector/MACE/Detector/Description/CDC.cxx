@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 #include <numeric>
 #include <tuple>
 #include <utility>
@@ -19,7 +20,7 @@ using namespace PhysicalConstant;
 
 CDC::CDC() :
     DescriptionSingletonBase<CDC>(__func__),
-    // Geometry properties
+    // Geometry
     fEvenSuperLayerIsAxial(false),
     fNSuperLayer(7),
     fNSenseLayerPerSuper(3),
@@ -40,7 +41,7 @@ CDC::CDC() :
     fShellOuterThickness(10_mm),
     fLayerConfigurationManager(),
     fCellMapManager(),
-    // Detection properties
+    // Detection
     fMeanDriftVelocity(3.5_cm_us),
     fTimeResolution(30_ns) {}
 
@@ -193,6 +194,12 @@ std::vector<CDC::CellInformation> CDC::ComputeCellMap() const {
                                        Eigen::Vector2d(wireRadialPosition, 0),
                                    Eigen::AngleAxisd(cell.centerAzimuth, Eigen::Vector3d(0, 0, 1)) *
                                        (stereoRotation * Eigen::Vector3d(0, 0, 1))});
+                // const auto& x0 = cellMap.back().position;
+                // const auto& t0 = cellMap.back().direction;
+                // const auto& l0 = 2 * sense.halfLength * sense.SecStereoZenithAngle(sense.innerRadius + sense.cellWidth / 2 + fFieldWireDiameter / 2);
+                // const auto oldCoutPrecision = std::cout.precision(std::numeric_limits<double>::max_digits10);
+                // std::cout << x0.x() << '\t' << x0.y() << '\t' << t0.x() << '\t' << t0.y() << '\t' << t0.z() << '\t' << l0 << std::endl;
+                // std::cout.precision(oldCoutPrecision);
                 ++cellLocalID;
             }
             ++senseLayerLocalID;
@@ -205,7 +212,7 @@ std::vector<CDC::CellInformation> CDC::ComputeCellMap() const {
 }
 
 void CDC::ImportValues(const YAML::Node& node) {
-    // Geometry properties
+    // Geometry
     ImportValue(node, fEvenSuperLayerIsAxial, "EvenSuperLayerIsAxial");
     ImportValue(node, fNSuperLayer, "NSuperLayer");
     ImportValue(node, fNSenseLayerPerSuper, "NSenseLayerPerSuper");
@@ -224,13 +231,13 @@ void CDC::ImportValues(const YAML::Node& node) {
     ImportValue(node, fShellInnerThickness, "ShellInnerThickness");
     ImportValue(node, fShellSideThickness, "ShellSideThickness");
     ImportValue(node, fShellOuterThickness, "ShellOuterThickness");
-    // Detection properties
+    // Detection
     ImportValue(node, fMeanDriftVelocity, "MeanDriftVelocity");
     ImportValue(node, fTimeResolution, "TimeResolution");
 }
 
 void CDC::ExportValues(YAML::Node& node) const {
-    // Geometry properties
+    // Geometry
     ExportValue(node, fEvenSuperLayerIsAxial, "EvenSuperLayerIsAxial");
     ExportValue(node, fNSuperLayer, "NSuperLayer");
     ExportValue(node, fNSenseLayerPerSuper, "NSenseLayerPerSuper");
@@ -249,7 +256,7 @@ void CDC::ExportValues(YAML::Node& node) const {
     ExportValue(node, fShellInnerThickness, "ShellInnerThickness");
     ExportValue(node, fShellSideThickness, "ShellSideThickness");
     ExportValue(node, fShellOuterThickness, "ShellOuterThickness");
-    // Detection properties
+    // Detection
     ExportValue(node, fMeanDriftVelocity, "MeanDriftVelocity");
     ExportValue(node, fTimeResolution, "TimeResolution");
 }
