@@ -2,7 +2,7 @@
 #include "MACE/Detector/Description/BeamMonitor.hxx"
 #include "MACE/Detector/Description/Target.hxx"
 #include "MACE/Detector/Description/World.hxx"
-#include "MACE/Detector/DescriptionIO.hxx"
+#include "MACE/Detector/Description/DescriptionIO.hxx"
 #include "MACE/SimTarget/Action/DetectorConstruction.hxx"
 #include "MACE/SimTarget/Messenger/DetectorMessenger.hxx"
 #include "MACE/SimTarget/RunManager.hxx"
@@ -60,14 +60,14 @@ GeometryMessenger::GeometryMessenger() :
 GeometryMessenger::~GeometryMessenger() = default;
 
 void GeometryMessenger::SetNewValue(G4UIcommand* command, G4String value) {
-    using UsedDescriptions = DetectorConstruction::UsedDescriptions;
-    using Detector::DescriptionIO;
+    using DescriptionInUse = DetectorConstruction::DescriptionInUse;
+    using Detector::Description::DescriptionIO;
     if (command == fImportDescription.get()) {
-        DescriptionIO::Import<UsedDescriptions>(std::string_view(value));
+        DescriptionIO::Import<DescriptionInUse>(std::string_view(value));
     } else if (command == fExportDescription.get()) {
-        DescriptionIO::Export<UsedDescriptions>(std::string_view(value), "SimTarget: geometry description");
+        DescriptionIO::Export<DescriptionInUse>(std::string_view(value), "SimTarget: geometry description");
     } else if (command == fIxportDescription.get()) {
-        DescriptionIO::Ixport<UsedDescriptions>(std::string_view(value), "SimTarget: geometry description");
+        DescriptionIO::Ixport<DescriptionInUse>(std::string_view(value), "SimTarget: geometry description");
     } else if (command == fTargetDensity.get()) {
         fDetectorConstruction->SetTargetDensity(fTargetDensity->GetNewDoubleValue(value));
     } else if (command == fTemperature.get()) {
