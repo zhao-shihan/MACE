@@ -3,50 +3,59 @@
 namespace MACE::DataModel {
 
 template<>
-CDCSimHit::Entry::G4EventID::BranchSocket CDCSimHit::Entry::G4EventID::Base::fgBranchSocket = {"g4EvtID", -1};
+CDCSimHit::Entry::MCEventID::BranchSocket CDCSimHit::Entry::MCEventID::Base::fgBranchSocket =
+    {"mcEvtID", "MC Event ID", -1};
 template<>
-CDCSimHit::Entry::G4TrackID::BranchSocket CDCSimHit::Entry::G4TrackID::Base::fgBranchSocket = {"g4TrkID", -1};
+CDCSimHit::Entry::MCTrackID::BranchSocket CDCSimHit::Entry::MCTrackID::Base::fgBranchSocket =
+    {"mcTrkID", "MC Track ID", -1};
 template<>
-CDCSimHit::Entry::PDGCode::BranchSocket CDCSimHit::Entry::PDGCode::Base::fgBranchSocket = {"pdgCode", 0};
+CDCSimHit::Entry::PDGCode::BranchSocket CDCSimHit::Entry::PDGCode::Base::fgBranchSocket =
+    {"pdgCode", "Particle PDG Code (MC Truth)", 0};
 template<>
-CDCSimHit::Entry::Energy::BranchSocket CDCSimHit::Entry::Energy::Base::fgBranchSocket = {"E", 0};
-template<> // clang-format off
-CDCSimHit::Entry::Momentum::BranchSocket CDCSimHit::Entry::Momentum::Base::fgBranchSocket = {"p", {0, 0, 0}}; // clang-format on
+CDCSimHit::Entry::KineticEnergy::BranchSocket CDCSimHit::Entry::KineticEnergy::Base::fgBranchSocket =
+    {"Ek", "Hitting Kinetic Energy (MC Truth)", 0};
 template<>
-CDCSimHit::Entry::VertexTime::BranchSocket CDCSimHit::Entry::VertexTime::Base::fgBranchSocket = {"t0", 0};
-template<> // clang-format off
-CDCSimHit::Entry::VertexPosition::BranchSocket CDCSimHit::Entry::VertexPosition::Base::fgBranchSocket = {"x0", {0, 0, 0}}; // clang-format on
+CDCSimHit::Entry::Momentum::BranchSocket CDCSimHit::Entry::Momentum::Base::fgBranchSocket = // clang-format off
+    {"p", "Hitting Momentum (MC Truth)", {0, 0, 0}}; // clang-format on
 template<>
-CDCSimHit::Entry::VertexEnergy::BranchSocket CDCSimHit::Entry::VertexEnergy::Base::fgBranchSocket = {"E0", 0};
-template<> // clang-format off
-CDCSimHit::Entry::VertexMomentum::BranchSocket CDCSimHit::Entry::VertexMomentum::Base::fgBranchSocket = {"p0", {0, 0, 0}}; // clang-format on
+CDCSimHit::Entry::VertexTime::BranchSocket CDCSimHit::Entry::VertexTime::Base::fgBranchSocket =
+    {"t0", "Vertex Time (MC Truth)", 0};
+template<>
+CDCSimHit::Entry::VertexPosition::BranchSocket CDCSimHit::Entry::VertexPosition::Base::fgBranchSocket = // clang-format off
+    {"x0", "Vertex Position (MC Truth)", {0, 0, 0}}; // clang-format on
+template<>
+CDCSimHit::Entry::VertexKineticEnergy::BranchSocket CDCSimHit::Entry::VertexKineticEnergy::Base::fgBranchSocket =
+    {"Ek0", "Vertex Kinetic Energy (MC Truth)", 0};
+template<>
+CDCSimHit::Entry::VertexMomentum::BranchSocket CDCSimHit::Entry::VertexMomentum::Base::fgBranchSocket = // clang-format off
+    {"p0", "Vertex Momentum (MC Truth)", {0, 0, 0}}; // clang-format on
 
 inline namespace SimHit {
 
-void CDCSimHit::CreateBranches(TTree& tree) {
-    CDCHit::CreateBranches(tree);
-    decltype(fG4EventID)::CreateBranch(tree);
-    decltype(fG4TrackID)::CreateBranch(tree);
-    decltype(fPDGCode)::CreateBranch(tree);
-    decltype(fEnergy)::CreateBranch(tree);
-    decltype(fMomentum)::CreateBranch(tree);
-    decltype(fVertexTime)::CreateBranch(tree);
-    decltype(fVertexPosition)::CreateBranch(tree);
-    decltype(fVertexEnergy)::CreateBranch(tree);
-    decltype(fVertexMomentum)::CreateBranch(tree);
+void CDCSimHit::CreateAllBranch(TTree& tree) {
+    CDCHit::CreateAllBranch(tree);
+    Entry::MCEventID::CreateBranch(tree);
+    Entry::MCTrackID::CreateBranch(tree);
+    Entry::PDGCode::CreateBranch(tree);
+    Entry::KineticEnergy::CreateBranch(tree);
+    Entry::Momentum::CreateBranch(tree);
+    Entry::VertexTime::CreateBranch(tree);
+    Entry::VertexPosition::CreateBranch(tree);
+    Entry::VertexKineticEnergy::CreateBranch(tree);
+    Entry::VertexMomentum::CreateBranch(tree);
 }
 
-void CDCSimHit::ConnectToBranches(TTree& tree) {
-    CDCHit::ConnectToBranches(tree);
-    decltype(fG4EventID)::ConnectToBranch(tree);
-    decltype(fG4TrackID)::ConnectToBranch(tree);
-    decltype(fPDGCode)::ConnectToBranch(tree);
-    decltype(fEnergy)::ConnectToBranch(tree);
-    decltype(fMomentum)::ConnectToBranch(tree);
-    decltype(fVertexTime)::ConnectToBranch(tree);
-    decltype(fVertexPosition)::ConnectToBranch(tree);
-    decltype(fVertexEnergy)::ConnectToBranch(tree);
-    decltype(fVertexMomentum)::ConnectToBranch(tree);
+void CDCSimHit::ConnectToAllBranch(TTree& tree) {
+    CDCHit::ConnectToAllBranch(tree);
+    Entry::MCEventID::ConnectToBranch(tree);
+    Entry::MCTrackID::ConnectToBranch(tree);
+    Entry::PDGCode::ConnectToBranch(tree);
+    Entry::KineticEnergy::ConnectToBranch(tree);
+    Entry::Momentum::ConnectToBranch(tree);
+    Entry::VertexTime::ConnectToBranch(tree);
+    Entry::VertexPosition::ConnectToBranch(tree);
+    Entry::VertexKineticEnergy::ConnectToBranch(tree);
+    Entry::VertexMomentum::ConnectToBranch(tree);
 }
 
 } // namespace SimHit

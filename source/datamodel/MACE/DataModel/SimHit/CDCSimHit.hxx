@@ -3,13 +3,11 @@
 #include "MACE/DataModel/Entry/FundamentalEntry.hxx"
 #include "MACE/DataModel/Entry/VectorEntry.hxx"
 #include "MACE/DataModel/Hit/CDCHit.hxx"
-#include "MACE/Extension/stdx/array_alias.hxx"
+#include "MACE/Extension/stdx/arraynx.hxx"
 #include "MACE/Utility/VectorAssign.hxx"
 #include "MACE/Utility/VectorCast.hxx"
 
-#include <array>
 #include <string_view>
-#include <utility>
 
 namespace MACE::DataModel {
 
@@ -20,55 +18,55 @@ using namespace std::string_view_literals;
 class CDCSimHit : public CDCHit {
 public:
     struct Entry : CDCHit::Entry {
-        using G4EventID = IntEntry<CDCSimHit, 3, int>;
-        using G4TrackID = IntEntry<CDCSimHit, 4, int>;
-        using PDGCode = IntEntry<CDCSimHit, 5, int>;
-        using Energy = FloatEntry<CDCSimHit, 6, double>;
-        using Momentum = Vector3FEntry<CDCSimHit, 7, stdx::array3d>;
-        using VertexTime = DoubleEntry<CDCSimHit, 8, double>;
-        using VertexPosition = Vector3FEntry<CDCSimHit, 9, stdx::array3d>;
-        using VertexEnergy = FloatEntry<CDCSimHit, 10, double>;
-        using VertexMomentum = Vector3FEntry<CDCSimHit, 11, stdx::array3d>;
+        using MCEventID = IntEntry<CDCSimHit, 0, int>;
+        using MCTrackID = IntEntry<CDCSimHit, 1, int>;
+        using PDGCode = IntEntry<CDCSimHit, 2, int>;
+        using KineticEnergy = FloatEntry<CDCSimHit, 3, double>;
+        using Momentum = Vector3FEntry<CDCSimHit, 4, stdx::array3d>;
+        using VertexTime = DoubleEntry<CDCSimHit, 5, double>;
+        using VertexPosition = Vector3FEntry<CDCSimHit, 6, stdx::array3d>;
+        using VertexKineticEnergy = FloatEntry<CDCSimHit, 7, double>;
+        using VertexMomentum = Vector3FEntry<CDCSimHit, 8, stdx::array3d>;
     };
 
 public:
     virtual ~CDCSimHit() = default;
 
-    [[nodiscard]] const auto& G4EventID() const { return fG4EventID; }
-    [[nodiscard]] const auto& G4TrackID() const { return fG4TrackID; }
-    [[nodiscard]] const auto& PDGCode() const { return fPDGCode; }
-    [[nodiscard]] const auto& Energy() const { return fEnergy; }
-    [[nodiscard]] const auto& Momentum() const { return fMomentum; }
-    [[nodiscard]] const auto& VertexTime() const { return fVertexTime; }
-    [[nodiscard]] const auto& VertexPosition() const { return fVertexPosition; }
-    [[nodiscard]] const auto& VertexEnergy() const { return fVertexEnergy; }
-    [[nodiscard]] const auto& VertexMomentum() const { return fVertexMomentum; }
+    [[nodiscard]] const auto& MCEventID() const& { return fMCEventID; }
+    [[nodiscard]] const auto& MCTrackID() const& { return fMCTrackID; }
+    [[nodiscard]] const auto& PDGCode() const& { return fPDGCode; }
+    [[nodiscard]] const auto& KineticEnergy() const& { return fKineticEnergy; }
+    [[nodiscard]] const auto& Momentum() const& { return fMomentum; }
+    [[nodiscard]] const auto& VertexTime() const& { return fVertexTime; }
+    [[nodiscard]] const auto& VertexPosition() const& { return fVertexPosition; }
+    [[nodiscard]] const auto& VertexKineticEnergy() const& { return fVertexKineticEnergy; }
+    [[nodiscard]] const auto& VertexMomentum() const& { return fVertexMomentum; }
 
-    void G4EventID(auto&& v) { fG4EventID.Value(std::forward<decltype(v)>(v)); }
-    void G4TrackID(auto&& v) { fG4TrackID.Value(std::forward<decltype(v)>(v)); }
-    void PDGCode(auto&& v) { fPDGCode.Value(std::forward<decltype(v)>(v)); }
-    void Energy(auto&& v) { fEnergy.Value(std::forward<decltype(v)>(v)); }
-    void Momentum(auto&& v) { fMomentum.Value(std::forward<decltype(v)>(v)); }
-    void VertexTime(auto&& v) { fVertexTime.Value(std::forward<decltype(v)>(v)); }
-    void VertexPosition(auto&& v) { fVertexPosition.Value(std::forward<decltype(v)>(v)); }
-    void VertexEnergy(auto&& v) { fVertexEnergy.Value(std::forward<decltype(v)>(v)); }
-    void VertexMomentum(auto&& v) { fVertexMomentum.Value(std::forward<decltype(v)>(v)); }
+    [[nodiscard]] auto& MCEventID() & { return fMCEventID; }
+    [[nodiscard]] auto& MCTrackID() & { return fMCTrackID; }
+    [[nodiscard]] auto& PDGCode() & { return fPDGCode; }
+    [[nodiscard]] auto& KineticEnergy() & { return fKineticEnergy; }
+    [[nodiscard]] auto& Momentum() & { return fMomentum; }
+    [[nodiscard]] auto& VertexTime() & { return fVertexTime; }
+    [[nodiscard]] auto& VertexPosition() & { return fVertexPosition; }
+    [[nodiscard]] auto& VertexKineticEnergy() & { return fVertexKineticEnergy; }
+    [[nodiscard]] auto& VertexMomentum() & { return fVertexMomentum; }
 
     static constexpr auto BasicTreeName() { return "CDCSimHit"sv; }
 
-    inline void FillBranchSockets() const;
-    static void CreateBranches(TTree& tree);
-    static void ConnectToBranches(TTree& tree);
+    inline void FillAllBranchSocket() const&;
+    static void CreateAllBranch(TTree& tree);
+    static void ConnectToAllBranch(TTree& tree);
 
 private:
-    Entry::G4EventID fG4EventID;
-    Entry::G4TrackID fG4TrackID;
+    Entry::MCEventID fMCEventID;
+    Entry::MCTrackID fMCTrackID;
     Entry::PDGCode fPDGCode;
-    Entry::Energy fEnergy;
+    Entry::KineticEnergy fKineticEnergy;
     Entry::Momentum fMomentum;
     Entry::VertexTime fVertexTime;
     Entry::VertexPosition fVertexPosition;
-    Entry::VertexEnergy fVertexEnergy;
+    Entry::VertexKineticEnergy fVertexKineticEnergy;
     Entry::VertexMomentum fVertexMomentum;
 };
 static_assert(TransientData<CDCSimHit>);
@@ -76,13 +74,13 @@ static_assert(TransientData<CDCSimHit>);
 } // namespace SimHit
 
 template<>
-CDCSimHit::Entry::G4EventID::BranchSocket CDCSimHit::Entry::G4EventID::Base::fgBranchSocket;
+CDCSimHit::Entry::MCEventID::BranchSocket CDCSimHit::Entry::MCEventID::Base::fgBranchSocket;
 template<>
-CDCSimHit::Entry::G4TrackID::BranchSocket CDCSimHit::Entry::G4TrackID::Base::fgBranchSocket;
+CDCSimHit::Entry::MCTrackID::BranchSocket CDCSimHit::Entry::MCTrackID::Base::fgBranchSocket;
 template<>
 CDCSimHit::Entry::PDGCode::BranchSocket CDCSimHit::Entry::PDGCode::Base::fgBranchSocket;
 template<>
-CDCSimHit::Entry::Energy::BranchSocket CDCSimHit::Entry::Energy::Base::fgBranchSocket;
+CDCSimHit::Entry::KineticEnergy::BranchSocket CDCSimHit::Entry::KineticEnergy::Base::fgBranchSocket;
 template<>
 CDCSimHit::Entry::Momentum::BranchSocket CDCSimHit::Entry::Momentum::Base::fgBranchSocket;
 template<>
@@ -90,7 +88,7 @@ CDCSimHit::Entry::VertexTime::BranchSocket CDCSimHit::Entry::VertexTime::Base::f
 template<>
 CDCSimHit::Entry::VertexPosition::BranchSocket CDCSimHit::Entry::VertexPosition::Base::fgBranchSocket;
 template<>
-CDCSimHit::Entry::VertexEnergy::BranchSocket CDCSimHit::Entry::VertexEnergy::Base::fgBranchSocket;
+CDCSimHit::Entry::VertexKineticEnergy::BranchSocket CDCSimHit::Entry::VertexKineticEnergy::Base::fgBranchSocket;
 template<>
 CDCSimHit::Entry::VertexMomentum::BranchSocket CDCSimHit::Entry::VertexMomentum::Base::fgBranchSocket;
 

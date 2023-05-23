@@ -1,15 +1,15 @@
 namespace MACE::DataModel::inline SimHit {
 
-inline void MCPSimHit::FillBranchSockets() const {
-    MCPHit::FillBranchSockets();
-    fG4EventID.FillBranchSocket();
-    fG4TrackID.FillBranchSocket();
+inline void MCPSimHit::FillAllBranchSocket() const& {
+    MCPHit::FillAllBranchSocket();
+    fMCEventID.FillBranchSocket();
+    fMCTrackID.FillBranchSocket();
     fPDGCode.FillBranchSocket();
-    fEnergy.FillBranchSocket();
+    fKineticEnergy.FillBranchSocket();
     fMomentum.FillBranchSocket();
     fVertexTime.FillBranchSocket();
     fVertexPosition.FillBranchSocket();
-    fVertexEnergy.FillBranchSocket();
+    fVertexKineticEnergy.FillBranchSocket();
     fVertexMomentum.FillBranchSocket();
 }
 
