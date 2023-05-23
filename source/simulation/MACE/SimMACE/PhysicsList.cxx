@@ -8,10 +8,9 @@
 #include "G4DecayPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4EmStandardPhysics_option4.hh"
-#include "G4HadronElasticPhysicsXS.hh"
-#include "G4HadronInelasticQBBC.hh"
-#include "G4IonElasticPhysics.hh"
-#include "G4IonPhysicsXS.hh"
+#include "G4HadronElasticPhysics.hh"
+#include "G4HadronPhysicsFTFP_BERT.hh"
+#include "G4IonPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 #include "G4StoppingPhysics.hh"
 
@@ -30,23 +29,28 @@ PhysicsList::PhysicsList() :
     // EM Physics
     RegisterPhysics(new G4EmStandardPhysics_option4(verboseLevel));
 
-    // Synchroton Radiation & Gamma-Nuclear Physics
+    // Synchroton Radiation & GN Physics
     RegisterPhysics(new G4EmExtraPhysics(verboseLevel));
 
     // Decays
     RegisterPhysics(new G4DecayPhysics(verboseLevel));
 
+    // Hadron Elastic scattering
+    RegisterPhysics(new G4HadronElasticPhysics(verboseLevel));
+
     // Hadron Physics
-    RegisterPhysics(new G4HadronElasticPhysicsXS(verboseLevel));
+    RegisterPhysics(new G4HadronPhysicsFTFP_BERT(verboseLevel));
+
+    // Stopping Physics
     RegisterPhysics(new G4StoppingPhysics(verboseLevel));
-    RegisterPhysics(new G4IonPhysicsXS(verboseLevel));
-    RegisterPhysics(new G4IonElasticPhysics(verboseLevel));
-    RegisterPhysics(new G4HadronInelasticQBBC(verboseLevel));
+
+    // Ion Physics
+    RegisterPhysics(new G4IonPhysics(verboseLevel));
 
     // Neutron tracking cut
     RegisterPhysics(new G4NeutronTrackingCut(verboseLevel));
 
-    // Muonium formation & transport
+    // Muonium physics
     RegisterPhysics(new MuoniumPhysics<Detector::Description::Target>(verboseLevel));
 }
 
