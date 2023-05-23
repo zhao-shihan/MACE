@@ -66,31 +66,31 @@ G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
         [&](const G4StepPoint& entryPoint, const G4StepPoint& exitPoint) {
             const auto time = Math::MidPoint(entryPoint.GetGlobalTime(), exitPoint.GetGlobalTime());
             const auto position = Math::MidPoint(entryPoint.GetPosition(), exitPoint.GetPosition());
-            const auto energy = Math::MidPoint(entryPoint.GetTotalEnergy(), exitPoint.GetTotalEnergy());
+            const auto energy = Math::MidPoint(entryPoint.GetKineticEnergy(), exitPoint.GetKineticEnergy());
             const auto momentum = Math::MidPoint(entryPoint.GetMomentum(), exitPoint.GetMomentum());
             // retrive wire position
             const auto& [xWire, tWire] = fCellMap[cellID];
             // calculate drift distance
             const auto commonNormal = tWire.cross(momentum);
             const auto driftDistance = std::abs((position - xWire).dot(commonNormal)) / commonNormal.mag();
-            // calculate vertex energy and momentum
-            const auto vertexTotalEnergy = track.GetVertexKineticEnergy() + particle.GetPDGMass();
-            const auto vertexMomentum = track.GetVertexMomentumDirection() * std::sqrt(track.GetVertexKineticEnergy() * (vertexTotalEnergy + particle.GetPDGMass()));
+            // retrive vertex energy and momentum
+            const auto vertexEk = track.GetVertexKineticEnergy();
+            const auto vertexMomentum = track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()));
             // new a hit
             auto hit = std::make_unique_for_overwrite<CDCHit>();
-            hit->HitTime(time);
-            hit->DriftDistance(driftDistance);
-            hit->CellID(cellID);
-            hit->G4EventID(fEventID);
-            hit->G4TrackID(trackID);
-            hit->PDGCode(particle.GetPDGEncoding());
-            hit->Energy(energy);
-            hit->Momentum(momentum);
-            hit->VertexTime(track.GetGlobalTime() - track.GetLocalTime());
-            hit->VertexPosition(track.GetVertexPosition());
-            hit->VertexEnergy(vertexTotalEnergy);
-            hit->VertexMomentum(vertexMomentum);
-            fCellSignalTimesAndHits[cellID].emplace_back(hit->HitTime().Value() + driftDistance / fMeanDriftVelocity,
+            hit->CellID().Value(cellID);
+            hit->DriftDistance().Value(driftDistance);
+            hit->Time().Value(time);
+            hit->MCEventID().Value(fEventID);
+            hit->MCTrackID().Value(trackID);
+            hit->PDGCode().Value(particle.GetPDGEncoding());
+            hit->KineticEnergy().Value(energy);
+            hit->Momentum().Value(momentum);
+            hit->VertexTime().Value(track.GetGlobalTime() - track.GetLocalTime());
+            hit->VertexPosition().Value(track.GetVertexPosition());
+            hit->VertexKineticEnergy().Value(vertexEk);
+            hit->VertexMomentum().Value(vertexMomentum);
+            fCellSignalTimesAndHits[cellID].emplace_back(time + driftDistance / fMeanDriftVelocity,
                                                          std::move(hit));
         };
 
@@ -148,7 +148,7 @@ void CDCSD::EndOfEvent(G4HCofThisEvent*) {
                 const auto goodHit =
                     *std::ranges::max_element(signalHitCandidateList,
                                               [](const auto& hit1, const auto& hit2) {
-                                                  return (*hit1)->Energy().Value() < (*hit2)->Energy().Value();
+                                                  return (*hit1)->KineticEnergy().Value() < (*hit2)->KineticEnergy().Value();
                                               });
                 hits.emplace_back(goodHit->release());
                 signalHitCandidateList.clear();
