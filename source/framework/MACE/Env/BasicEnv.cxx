@@ -9,13 +9,13 @@
 
 namespace MACE::Env {
 
-void BasicEnv::PrintStartupMessageSplitLine() const {
+void BasicEnv::PrintWelcomeMessageSplitLine() const {
     MACE_VERBOSE_LEVEL_CONTROLLED_OUT(fVerboseLevel, Error, std::cout)
         << "\n===============================================================================\n"
         << std::endl;
 }
 
-void BasicEnv::PrintStartupMessageBody(int argc, char* argv[]) const {
+void BasicEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const {
     std::error_code cwdError;
     const auto exe = std::filesystem::path(argv[0]).filename().generic_string();
     auto cwd = std::filesystem::current_path(cwdError).generic_string();

@@ -18,14 +18,14 @@ class BasicEnv : public internal::EnvBase,
                  public Memory::PassiveSingleton<BasicEnv> {
 public:
     template<class ACLI = internal::NoCLI>
-    BasicEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel = VerboseLevel::Warning, bool printStartupMessage = true);
+    BasicEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel = VerboseLevel::Warning, bool printWelcomeMessage = true);
     virtual ~BasicEnv() = default;
 
     const auto& GetVerboseLevel() const { return fVerboseLevel; }
 
 protected:
-    void PrintStartupMessageSplitLine() const;
-    void PrintStartupMessageBody(int argc, char* argv[]) const;
+    void PrintWelcomeMessageSplitLine() const;
+    void PrintWelcomeMessageBody(int argc, char* argv[]) const;
 
 private:
     VerboseLevel fVerboseLevel;

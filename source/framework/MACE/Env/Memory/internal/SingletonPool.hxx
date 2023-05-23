@@ -35,7 +35,7 @@ public:
     [[nodiscard]] std::vector<BaseNode> GetUndeletedInReverseInsertionOrder() const;
 
 private:
-    std::map<const std::type_index, std::pair<Node, const std::pair<gsl::index, BaseNode>>> fInstanceMap;
+    std::map<std::type_index, std::pair<Node, const std::pair<gsl::index, BaseNode>>> fInstanceMap;
 };
 
 } // namespace MACE::Env::Memory::internal

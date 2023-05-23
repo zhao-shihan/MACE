@@ -4,12 +4,12 @@
 
 namespace MACE::Env::Memory::internal {
 
-/// @brief Implementation detail of MACE::Env::Memory::MuteSingleton.
+/// @brief Implementation detail of MACE::Env::Memory::WeakSingleton.
 /// Not API. Just a signature of mute singleton.
-class MuteSingletonBase : public NonMoveableBase {
+class WeakSingletonBase : public NonMoveableBase {
 protected:
-    MuteSingletonBase() = default;
-    ~MuteSingletonBase() = default;
+    WeakSingletonBase() = default;
+    ~WeakSingletonBase() = default;
 };
 
 } // namespace MACE::Env::Memory::internal

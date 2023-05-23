@@ -1,7 +1,7 @@
 namespace MACE::Env {
 
 template<class ACLI>
-BasicEnv::BasicEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel, bool printStartupMessage) :
+BasicEnv::BasicEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel, bool printWelcomeMessage) :
     EnvBase(),
     PassiveSingleton(),
     fVerboseLevel(verboseLevel) {
@@ -13,10 +13,10 @@ BasicEnv::BasicEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel
         fVerboseLevel = cli.GetVerboseLevel().value_or(verboseLevel);
     }
     // Print startup message after parse
-    if (printStartupMessage) {
-        PrintStartupMessageSplitLine();
-        PrintStartupMessageBody(argc, argv);
-        PrintStartupMessageSplitLine();
+    if (printWelcomeMessage) {
+        PrintWelcomeMessageSplitLine();
+        PrintWelcomeMessageBody(argc, argv);
+        PrintWelcomeMessageSplitLine();
     }
 }
 

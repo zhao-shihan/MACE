@@ -5,7 +5,13 @@ template<Singletonified ASingleton>
     auto& instancePool = SingletonPool::Instance();
     if (const auto existedNode = instancePool.Find<ASingleton>();
         not existedNode.has_value()) [[likely]] {
-        return instancePool.Insert<ASingleton>(new ASingleton);
+        const auto newInstance = new ASingleton;
+        try {
+            return instancePool.Insert<ASingleton>(newInstance);
+        } catch (const std::logic_error& exception) {
+            delete newInstance;
+            throw exception;
+        }
     } else {
         return existedNode.value();
     }

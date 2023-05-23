@@ -149,7 +149,7 @@ template<class ADerived>
 class Singleton : public internal::SingletonBase {
 protected:
     Singleton();
-    virtual ~Singleton();
+    virtual ~Singleton() override;
 
 public:
     static ADerived& Instance();

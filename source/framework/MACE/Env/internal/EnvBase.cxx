@@ -1,5 +1,5 @@
 #include "MACE/Env/internal/EnvBase.hxx"
-#include "MACE/Env/Memory/internal/MuteSingletonPool.hxx"
+#include "MACE/Env/Memory/internal/WeakSingletonPool.hxx"
 #include "MACE/Env/Memory/internal/SingletonDeleter.hxx"
 #include "MACE/Env/Memory/internal/SingletonFactory.hxx"
 #include "MACE/Env/Memory/internal/SingletonPool.hxx"
@@ -16,7 +16,7 @@ namespace MACE::Env::internal {
 
 EnvBase::EnvBase() :
     NonMoveableBase(),
-    fMuteSingletonPool(nullptr),
+    fWeakSingletonPool(nullptr),
     fSingletonPool(nullptr),
     fSingletonFactory(nullptr),
     fSingletonDeleter(nullptr) {
@@ -37,7 +37,7 @@ EnvBase::EnvBase() :
         gInstantiated = true;
     }
 
-    fMuteSingletonPool = std::make_unique_for_overwrite<Memory::internal::MuteSingletonPool>();
+    fWeakSingletonPool = std::make_unique_for_overwrite<Memory::internal::WeakSingletonPool>();
     fSingletonPool = std::make_unique_for_overwrite<Memory::internal::SingletonPool>();
     fSingletonFactory = std::make_unique_for_overwrite<Memory::internal::SingletonFactory>();
     fSingletonDeleter = std::make_unique_for_overwrite<Memory::internal::SingletonDeleter>();
