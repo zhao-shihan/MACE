@@ -4,7 +4,7 @@
 #include "MACE/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
 #include "MACE/DataModel/BranchSocket/VectorBranchSocket.hxx"
 #include "MACE/DataModel/TransientData.hxx"
-#include "MACE/Extension/stdx/array_alias.hxx"
+#include "MACE/Extension/stdx/arraynx.hxx"
 #include "MACE/Utility/VectorAssign.hxx"
 #include "MACE/Utility/VectorCast.hxx"
 
@@ -48,9 +48,9 @@ public:
     void DecayMomentum(const stdx::array3d& p) { fDecayMomentum = p; }
     void DecayMomentum(auto&& p) { VectorAssign(fDecayMomentum, std::forward<decltype(p)>(p)); }
 
-    void FillBranchSockets() const noexcept;
-    static void CreateBranches(TTree& tree);
-    static void ConnectToBranches(TTree& tree);
+    void FillAllBranchSocket() const& noexcept;
+    static void CreateAllBranch(TTree& tree);
+    static void ConnectToAllBranch(TTree& tree);
     static constexpr auto BasicTreeName() noexcept { return "MTrk"sv; }
 
 private:

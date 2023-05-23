@@ -17,7 +17,7 @@ MuoniumTrack::MuoniumTrack() noexcept :
     fDecayPosition(fgDecayPosition.Value<double>()),
     fDecayMomentum(fgVertexMomentum.Value<double>()) {}
 
-void MuoniumTrack::FillBranchSockets() const noexcept {
+void MuoniumTrack::FillAllBranchSocket() const& noexcept {
     fgVertexTime.Value(fVertexTime);
     fgVertexPosition.Value(fVertexPosition);
     fgVertexMomentum.Value(fVertexMomentum);
@@ -26,7 +26,7 @@ void MuoniumTrack::FillBranchSockets() const noexcept {
     fgDecayMomentum.Value(fDecayMomentum);
 }
 
-void MuoniumTrack::CreateBranches(TTree& tree) {
+void MuoniumTrack::CreateAllBranch(TTree& tree) {
     fgVertexTime.CreateBranch(tree);
     fgVertexPosition.CreateBranch(tree);
     fgVertexMomentum.CreateBranch(tree);
@@ -35,7 +35,7 @@ void MuoniumTrack::CreateBranches(TTree& tree) {
     fgDecayMomentum.CreateBranch(tree);
 }
 
-void MuoniumTrack::ConnectToBranches(TTree& tree) {
+void MuoniumTrack::ConnectToAllBranch(TTree& tree) {
     fgVertexTime.ConnectToBranch(tree);
     fgVertexPosition.ConnectToBranch(tree);
     fgVertexMomentum.ConnectToBranch(tree);

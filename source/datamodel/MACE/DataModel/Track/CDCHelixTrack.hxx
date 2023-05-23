@@ -1,69 +1,66 @@
 #pragma once
 
-#include "MACE/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
-#include "MACE/DataModel/BranchSocket/VectorBranchSocket.hxx"
-#include "MACE/DataModel/CDCTrackOperation.hxx"
+#include "MACE/DataModel/Entry/FundamentalEntry.hxx"
+#include "MACE/DataModel/Entry/VectorEntry.hxx"
 #include "MACE/DataModel/Track/CDCTrackBase.hxx"
 #include "MACE/DataModel/TransientData.hxx"
-#include "MACE/Extension/stdx/array_alias.hxx"
-#include "MACE/Utility/LiteralUnit.hxx"
-#include "MACE/Utility/VectorAssign.hxx"
+#include "MACE/Extension/stdx/arraynx.hxx"
 
-#include <array>
 #include <string_view>
-#include <utility>
 
-namespace MACE::DataModel::inline Track {
+namespace MACE::DataModel {
+
+inline namespace Track {
 
 using namespace std::string_view_literals;
-using namespace LiteralUnit::MagneticFluxDensity;
-
-class CDCPhysicsTrack;
 
 class CDCHelixTrack : public CDCTrackBase {
 public:
-    CDCHelixTrack() noexcept;
+    struct Entry : CDCTrackBase::Entry {
+        using Center = Vector2FEntry<CDCHelixTrack, 0, stdx::array2d>;
+        using Radius = FloatEntry<CDCHelixTrack, 1, double>;
+        using VertexZ = FloatEntry<CDCHelixTrack, 2, double>;
+        using Theta = FloatEntry<CDCHelixTrack, 3, double>;
+    };
+
+public:
     virtual ~CDCHelixTrack() = default;
 
-    CDCHelixTrack(const CDCHelixTrack&) noexcept = default;
-    CDCHelixTrack(CDCHelixTrack&&) noexcept = default;
-    CDCHelixTrack& operator=(const CDCHelixTrack&) noexcept = default;
-    CDCHelixTrack& operator=(CDCHelixTrack&&) noexcept = default;
+    [[nodiscard]] auto& Center() & { return fCenter; }
+    [[nodiscard]] auto& Radius() & { return fRadius; }
+    [[nodiscard]] auto& VertexZ() & { return fVertexZ; }
+    [[nodiscard]] auto& Theta() & { return fTheta; }
 
-    explicit CDCHelixTrack(const CDCPhysicsTrack& physTrack, double B = 0.1_T);
+    [[nodiscard]] const auto& Center() const& { return fCenter; }
+    [[nodiscard]] const auto& Radius() const& { return fRadius; }
+    [[nodiscard]] const auto& VertexZ() const& { return fVertexZ; }
+    [[nodiscard]] const auto& Theta() const& { return fTheta; }
 
-    const auto& GetCenter() const { return fCenter; }
-    const auto& Radius() const { return fRadius; }
-    const auto& GetZ0() const { return fZ0; }
-    const auto& GetAlpha() const { return fAlpha; }
+    static constexpr auto BasicTreeName() { return "CDCHelixTrack"sv; }
 
-    void SetCenter(const stdx::array2d& c) { fCenter = c; }
-    void SetCenter(auto&& c) { VectorAssign(fCenter, std::forward<decltype(c)>(c)); }
-    void Radius(double val) { fRadius = val; }
-    void SetZ0(double val) { fZ0 = val; }
-    void SetAlpha(double val) { fAlpha = val; }
-
-    auto CalcPhi0() const { return CDCTrackOperation::CalcHelixPhi0(VectorCast<Eigen::Vector2d>(fCenter)); }
-    auto CalcPhi(const Eigen::Vector2d& point) const { return CDCTrackOperation::CalcHelixPhi(VectorCast<Eigen::Vector2d>(fCenter), point); }
-    auto CalcPhi(double x, double y) const { return CDCTrackOperation::CalcHelixPhi(VectorCast<Eigen::Vector2d>(fCenter), x, y); }
-    auto CalcPoint(double phi) { return CDCTrackOperation::CalcHelixPoint(std::tuple{VectorCast<Eigen::Vector2d>(fCenter), fRadius, fZ0, fAlpha}, phi); }
-
-    void FillBranchSockets() const noexcept;
-    static void CreateBranches(TTree& tree);
-    static void ConnectToBranches(TTree& tree);
-    static constexpr auto BasicTreeName() noexcept { return "HlxTrk"sv; }
+    inline void FillAllBranchSocket() const&;
+    static void CreateAllBranch(TTree& tree);
+    static void ConnectToAllBranch(TTree& tree);
 
 private:
-    stdx::array2d fCenter;
-    double fRadius;
-    double fZ0;
-    double fAlpha;
-
-    static Vector2FBranchSocket fgCenter;
-    static FloatBranchSocket fgRadius;
-    static FloatBranchSocket fgZ0;
-    static FloatBranchSocket fgAlpha;
+    Entry::Center fCenter;
+    Entry::Radius fRadius;
+    Entry::VertexZ fVertexZ;
+    Entry::Theta fTheta;
 };
 static_assert(TransientData<CDCHelixTrack>);
 
-} // namespace MACE::DataModel::inline Track
+} // namespace Track
+
+template<>
+CDCHelixTrack::Entry::Center::BranchSocket CDCHelixTrack::Entry::Center::Base::fgBranchSocket;
+template<>
+CDCHelixTrack::Entry::Radius::BranchSocket CDCHelixTrack::Entry::Radius::Base::fgBranchSocket;
+template<>
+CDCHelixTrack::Entry::VertexZ::BranchSocket CDCHelixTrack::Entry::VertexZ::Base::fgBranchSocket;
+template<>
+CDCHelixTrack::Entry::Theta::BranchSocket CDCHelixTrack::Entry::Theta::Base::fgBranchSocket;
+
+} // namespace MACE::DataModel
+
+#include "MACE/DataModel/Track/CDCHelixTrack.inl"

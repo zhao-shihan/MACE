@@ -1,72 +1,60 @@
 #pragma once
 
-#include "MACE/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
-#include "MACE/DataModel/BranchSocket/ShortStringBranchSocket.hxx"
-#include "MACE/DataModel/BranchSocket/VectorBranchSocket.hxx"
+#include "MACE/DataModel/Entry/FundamentalEntry.hxx"
+#include "MACE/DataModel/Entry/VectorEntry.hxx"
 #include "MACE/DataModel/Track/CDCTrackBase.hxx"
 #include "MACE/DataModel/TransientData.hxx"
-#include "MACE/Extension/stdx/array_alias.hxx"
-#include "MACE/Utility/LiteralUnit.hxx"
-#include "MACE/Utility/PhysicalConstant.hxx"
-#include "MACE/Utility/VectorAssign.hxx"
+#include "MACE/Extension/stdx/arraynx.hxx"
 
-#include <array>
 #include <string_view>
-#include <utility>
 
-namespace MACE::DataModel::inline Track {
+namespace MACE::DataModel {
 
-using namespace LiteralUnit::MagneticFluxDensity;
+inline namespace Track {
+
 using namespace std::string_view_literals;
-
-using PhysicalConstant::electron_mass_c2;
-
-class CDCHelixTrack;
 
 class CDCPhysicsTrack : public CDCTrackBase {
 public:
-    CDCPhysicsTrack() noexcept;
+    struct Entry : CDCTrackBase::Entry {
+        using VertexPosition = Vector3FEntry<CDCPhysicsTrack, 0, stdx::array3d>;
+        using VertexKineticEnergy = FloatEntry<CDCPhysicsTrack, 1, double>;
+        using VertexMomentum = Vector3FEntry<CDCPhysicsTrack, 2, stdx::array3d>;
+    };
+
+public:
     virtual ~CDCPhysicsTrack() = default;
 
-    CDCPhysicsTrack(const CDCPhysicsTrack&) noexcept = default;
-    CDCPhysicsTrack(CDCPhysicsTrack&&) noexcept = default;
-    CDCPhysicsTrack& operator=(const CDCPhysicsTrack&) noexcept = default;
-    CDCPhysicsTrack& operator=(CDCPhysicsTrack&&) noexcept = default;
+    [[nodiscard]] const auto& VertexPosition() const& { return fVertexPosition; }
+    [[nodiscard]] const auto& VertexKineticEnergy() const& { return fVertexKineticEnergy; }
+    [[nodiscard]] const auto& VertexMomentum() const& { return fVertexMomentum; }
 
-    explicit CDCPhysicsTrack(const CDCHelixTrack& helix, double phiVertex = 0, double B = 0.1_T, double mass = electron_mass_c2);
+    [[nodiscard]] auto& VertexPosition() & { return fVertexPosition; }
+    [[nodiscard]] auto& VertexKineticEnergy() & { return fVertexKineticEnergy; }
+    [[nodiscard]] auto& VertexMomentum() & { return fVertexMomentum; }
 
-    const auto& VertexPosition() const { return fVertexPosition; }
-    template<Concept::NumericVector3D T>
-    auto VertexPosition() const { return VectorCast<T>(fVertexPosition); }
-    const auto& VertexEnergy() const { return fVertexEnergy; }
-    const auto& VertexMomentum() const { return fVertexMomentum; }
-    template<Concept::NumericVector3D T>
-    auto VertexMomentum() const { return VectorCast<T>(fVertexMomentum); }
-    const auto& Particle() const { return fParticle; }
+    static constexpr auto BasicTreeName() { return "CDCPhysicsTrack"sv; }
 
-    void VertexPosition(const stdx::array3d& x) { fVertexPosition = x; }
-    void VertexPosition(auto&& x) { VectorAssign(fVertexPosition, std::forward<decltype(x)>(x)); }
-    void VertexEnergy(double E) { fVertexEnergy = E; }
-    void VertexMomentum(const stdx::array3d& p) { fVertexMomentum = p; }
-    void VertexMomentum(auto&& p) { VectorAssign(fVertexMomentum, std::forward<decltype(p)>(p)); }
-    void Particle(auto&& p) { fParticle = std::forward<decltype(p)>(p); }
-
-    void FillBranchSockets() const noexcept;
-    static void CreateBranches(TTree& tree);
-    static void ConnectToBranches(TTree& tree);
-    static constexpr auto BasicTreeName() noexcept { return "PhyTrk"sv; }
+    inline void FillAllBranchSocket() const&;
+    static void CreateAllBranch(TTree& tree);
+    static void ConnectToAllBranch(TTree& tree);
 
 private:
-    stdx::array3d fVertexPosition;
-    double fVertexEnergy;
-    stdx::array3d fVertexMomentum;
-    ShortString fParticle;
-
-    static Vector3FBranchSocket fgVertexPosition;
-    static FloatBranchSocket fgVertexEnergy;
-    static Vector3FBranchSocket fgVertexMomentum;
-    static ShortStringBranchSocket fgParticle;
+    Entry::VertexPosition fVertexPosition;
+    Entry::VertexKineticEnergy fVertexKineticEnergy;
+    Entry::VertexMomentum fVertexMomentum;
 };
 static_assert(TransientData<CDCPhysicsTrack>);
 
-} // namespace MACE::DataModel::inline Track
+} // namespace Track
+
+template<>
+CDCPhysicsTrack::Entry::VertexPosition::BranchSocket CDCPhysicsTrack::Entry::VertexPosition::Base::fgBranchSocket;
+template<>
+CDCPhysicsTrack::Entry::VertexKineticEnergy::BranchSocket CDCPhysicsTrack::Entry::VertexKineticEnergy::Base::fgBranchSocket;
+template<>
+CDCPhysicsTrack::Entry::VertexMomentum::BranchSocket CDCPhysicsTrack::Entry::VertexMomentum::Base::fgBranchSocket;
+
+} // namespace MACE::DataModel
+
+#include "MACE/DataModel/Track/CDCPhysicsTrack.inl"

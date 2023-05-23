@@ -1,64 +1,33 @@
-#include "MACE/DataModel/CDCTrackOperation.hxx"
-#include "MACE/DataModel/Track/CDCHelixTrack.hxx"
 #include "MACE/DataModel/Track/CDCPhysicsTrack.hxx"
 
-namespace MACE::DataModel::inline Track {
+namespace MACE::DataModel {
 
-Vector3FBranchSocket CDCPhysicsTrack::fgVertexPosition("vtxPos", {"x", "y", "z"}, {0, 0, 0});
-FloatBranchSocket CDCPhysicsTrack::fgVertexEnergy("vtxEne", 0);
-Vector3FBranchSocket CDCPhysicsTrack::fgVertexMomentum("vtxMom", {"x", "y", "z"}, {0, 0, 0});
-ShortStringBranchSocket CDCPhysicsTrack::fgParticle("particle", "");
+template<>
+CDCPhysicsTrack::Entry::VertexPosition::BranchSocket CDCPhysicsTrack::Entry::VertexPosition::Base::fgBranchSocket =  // clang-format off
+    {"x0", "Vertex Position", {0, 0, 0}}; // clang-format on
+template<>
+CDCPhysicsTrack::Entry::VertexKineticEnergy::BranchSocket CDCPhysicsTrack::Entry::VertexKineticEnergy::Base::fgBranchSocket = 
+    {"Ek0", "Vertex Kinetic Energy", -114514};
+template<>
+CDCPhysicsTrack::Entry::VertexMomentum::BranchSocket CDCPhysicsTrack::Entry::VertexMomentum::Base::fgBranchSocket =  // clang-format off
+    {"p0", "Vertex Momentum", {0, 0, 0}}; // clang-format on
 
-CDCPhysicsTrack::CDCPhysicsTrack() noexcept :
-    CDCTrackBase(),
-    fVertexPosition(fgVertexPosition.Value<double>()),
-    fVertexEnergy(fgVertexEnergy.Value()),
-    fVertexMomentum(fgVertexMomentum.Value<double>()),
-    fParticle(fgParticle.Value()) {}
+inline namespace Track {
 
-CDCPhysicsTrack::CDCPhysicsTrack(const CDCHelixTrack& helix, Double_t phiVertex, Double_t B, Double_t mass) :
-    CDCTrackBase(static_cast<const CDCTrackBase&>(helix)),
-    fVertexPosition(),
-    fVertexEnergy(),
-    fVertexMomentum(),
-    fParticle() {
-    const auto [vertexPosition,
-                vertexEnergy,
-                vertexMomentum,
-                particle] =
-        CDCTrackOperation::ConvertToPhysicsParameters(std::tuple{VectorCast<Eigen::Vector2d>(helix.GetCenter()),
-                                                                 helix.Radius(),
-                                                                 helix.GetZ0(),
-                                                                 helix.GetAlpha()},
-                                                      phiVertex, B, mass);
-    VectorAssign(fVertexPosition, vertexPosition);
-    fVertexEnergy = vertexEnergy;
-    VectorAssign(fVertexMomentum, vertexMomentum);
-    fParticle = particle;
+void CDCPhysicsTrack::CreateAllBranch(TTree& tree) {
+    CDCTrackBase::CreateAllBranch(tree);
+    Entry::VertexPosition::CreateBranch(tree);
+    Entry::VertexKineticEnergy::CreateBranch(tree);
+    Entry::VertexMomentum::CreateBranch(tree);
 }
 
-void CDCPhysicsTrack::FillBranchSockets() const noexcept {
-    CDCTrackBase::FillBranchSockets();
-    fgVertexPosition.Value(fVertexPosition);
-    fgVertexEnergy.Value(fVertexEnergy);
-    fgVertexMomentum.Value(fVertexMomentum);
-    fgParticle.Value(fParticle);
+void CDCPhysicsTrack::ConnectToAllBranch(TTree& tree) {
+    CDCTrackBase::ConnectToAllBranch(tree);
+    Entry::VertexPosition::ConnectToBranch(tree);
+    Entry::VertexKineticEnergy::ConnectToBranch(tree);
+    Entry::VertexMomentum::ConnectToBranch(tree);
 }
 
-void CDCPhysicsTrack::CreateBranches(TTree& tree) {
-    CDCTrackBase::CreateBranches(tree);
-    fgVertexPosition.CreateBranch(tree);
-    fgVertexEnergy.CreateBranch(tree);
-    fgVertexMomentum.CreateBranch(tree);
-    fgParticle.CreateBranch(tree);
-}
+} // namespace Track
 
-void CDCPhysicsTrack::ConnectToBranches(TTree& tree) {
-    CDCTrackBase::ConnectToBranches(tree);
-    fgVertexPosition.ConnectToBranch(tree);
-    fgVertexEnergy.ConnectToBranch(tree);
-    fgVertexMomentum.ConnectToBranch(tree);
-    fgParticle.ConnectToBranch(tree);
-}
-
-} // namespace MACE::DataModel::inline Track
+} // namespace MACE::DataModel
