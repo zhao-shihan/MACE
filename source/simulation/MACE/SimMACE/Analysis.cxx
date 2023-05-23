@@ -3,7 +3,6 @@
 #include "MACE/SimMACE/Hit/EMCalHit.hxx"
 #include "MACE/SimMACE/Hit/MCPHit.hxx"
 #include "MACE/SimMACE/Messenger/AnalysisMessenger.hxx"
-#include "MACE/SimMACE/Messenger/FieldMessenger.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
 #include "TFile.h"
