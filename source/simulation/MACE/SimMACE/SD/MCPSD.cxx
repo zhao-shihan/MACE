@@ -33,21 +33,21 @@ G4bool MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
         // transform hit position to local coordinate
         const auto hitPosition = G4TwoVector(*touchable.GetRotation() * (preStepPoint.GetPosition() - touchable.GetTranslation()));
         // calculate (E0, p0)
-        const auto vertexTotalEnergy = track.GetVertexKineticEnergy() + particle.GetPDGMass();
-        const auto vertexMomentum = track.GetVertexMomentumDirection() * std::sqrt(track.GetVertexKineticEnergy() * (vertexTotalEnergy + particle.GetPDGMass()));
+        const auto vertexEk = track.GetVertexKineticEnergy();
+        const auto vertexMomentum = track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()));
         // new a hit
         const auto hit = new MCPHit;
-        hit->HitTime(preStepPoint.GetGlobalTime());
-        hit->HitPosition(hitPosition);
-        hit->G4EventID(fEventID);
-        hit->G4TrackID(track.GetTrackID());
-        hit->PDGCode(particle.GetPDGEncoding());
-        hit->Energy(preStepPoint.GetTotalEnergy());
-        hit->Momentum(preStepPoint.GetMomentum());
-        hit->VertexTime(preStepPoint.GetGlobalTime() - preStepPoint.GetLocalTime());
-        hit->VertexPosition(track.GetVertexPosition());
-        hit->VertexEnergy(vertexTotalEnergy);
-        hit->VertexMomentum(vertexMomentum);
+        hit->Time().Value(preStepPoint.GetGlobalTime());
+        hit->Position().Value(hitPosition);
+        hit->MCEventID().Value(fEventID);
+        hit->MCTrackID().Value(track.GetTrackID());
+        hit->PDGCode().Value(particle.GetPDGEncoding());
+        hit->KineticEnergy().Value(preStepPoint.GetKineticEnergy());
+        hit->Momentum().Value(preStepPoint.GetMomentum());
+        hit->VertexTime().Value(track.GetGlobalTime() - track.GetLocalTime());
+        hit->VertexPosition().Value(track.GetVertexPosition());
+        hit->VertexKineticEnergy().Value(vertexEk);
+        hit->VertexMomentum().Value(vertexMomentum);
         fHitsCollection->insert(hit);
         return true;
     }
