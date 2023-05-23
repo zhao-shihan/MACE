@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Detector/DescriptionBase.hxx"
+#include "MACE/Detector/Description/DescriptionBase.hxx"
 
 #include "G4ThreeVector.hh"
 
@@ -11,7 +11,7 @@ namespace MACE::inline Extension::Geant4X::Physics {
 template<class T>
 concept TargetForMuoniumPhysics =
     requires(T target, G4ThreeVector x) {
-        requires Detector::IsDescription<T>;
+        requires Detector::Description::Description<T>;
         { target.VolumeContain(x) } -> std::convertible_to<bool>;
         { target.Contain(x) } -> std::convertible_to<bool>;
     };
