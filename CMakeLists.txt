@@ -32,6 +32,7 @@ option(MACE_BUILD_TEST "Build MACE with test programs." ON)
 option(MACE_BUILTIN_ARGPARSE "Use built-in argparse (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_BACKWARD "Use built-in backward-cpp (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_EIGEN "Use built-in Eigen (network or pre-downloaded source is required)." OFF)
+option(MACE_BUILTIN_GENFIT "Use built-in GenFit (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_MSGSL "Use built-in Microsoft.GSL (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_YAML_CPP "Use built-in yaml-cpp (network or pre-downloaded source is required)." OFF)
 option(MACE_SIGNAL_HANDLER "Build with signal handling. Signal handlers are registered at the construction of environment." ON)
@@ -74,6 +75,8 @@ include(${MACE_PROJECT_CMAKE_DIR}/LookForROOT.cmake)
 include(${MACE_PROJECT_CMAKE_DIR}/LookForArgparse.cmake)
 # backward-cpp
 include(${MACE_PROJECT_CMAKE_DIR}/LookForBackward.cmake)
+# GenFit
+include(${MACE_PROJECT_CMAKE_DIR}/LookForGenFit.cmake)
 # Microsoft.GSL
 include(${MACE_PROJECT_CMAKE_DIR}/LookForMicrosoftGSL.cmake)
 # yaml-cpp

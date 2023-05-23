@@ -44,53 +44,40 @@ EmptyLineBeforeAccessModifier: LogicalBlock
 FixNamespaceComments: true
 IncludeBlocks: Regroup
 IncludeCategories: 
-  - Regex: '<.*>'
-    Priority: 11
-  - Regex: '"gsl/gsl"'
-    Priority: 10
-    CaseSensitive: true
-  - Regex: '"mpi.*\.h"'
-    Priority: 9
-    CaseSensitive: true
-  - Regex: '"gsl.*\.h"'
-    Priority: 8
-    CaseSensitive: true
-  - Regex: '"Eigen/.*"'
-    Priority: 7
-    CaseSensitive: true
-  - Regex: '"argparse/.*"'
-    Priority: 6
-    CaseSensitive: true
-  - Regex: '"yaml-cpp/.*"'
-    Priority: 5
-    CaseSensitive: true
-  - Regex: '"backward.hpp"'
-    Priority: 4
-    CaseSensitive: true
-  - Regex: '"ROOT/.*"'
-    Priority: 3
-    CaseSensitive: true
-  - Regex: '"R.*\.h"'
-    Priority: 3
-    CaseSensitive: true
-  - Regex: '"T.*\.h"'
-    Priority: 3
-    CaseSensitive: true
-  - Regex: '"G4.*"'
-    Priority: 2
-    CaseSensitive: true
-  - Regex: '"globals.hh"'
-    Priority: 2
-    CaseSensitive: true
-  - Regex: '"Randomize.hh"'
-    Priority: 2
-    CaseSensitive: true
-  - Regex: '"CLHEP/.*"'
-    Priority: 1
-    CaseSensitive: true
   - Regex: '"MACE/.*\.hxx"'
     Priority: 0
-    CaseSensitive: true
+  - Regex: '"CLHEP/.*"'
+    Priority: 1
+  - Regex: '"T.*\.h"'
+    Priority: 2
+  - Regex: '"R.*\.h"'
+    Priority: 2
+  - Regex: '"ROOT/.*"'
+    Priority: 2
+  - Regex: '"Randomize.hh"'
+    Priority: 3
+  - Regex: '"globals.hh"'
+    Priority: 3
+  - Regex: '"G4.*"'
+    Priority: 3
+  - Regex: '"backward.hpp"'
+    Priority: 4
+  - Regex: '"yaml-cpp/.*"'
+    Priority: 5
+  - Regex: '"argparse/.*"'
+    Priority: 6
+  - Regex: '"Eigen/.*"'
+    Priority: 7
+  - Regex: '"gsl.*\.h"'
+    Priority: 8
+  - Regex: '"mpi.*\.h"'
+    Priority: 9
+  - Regex: '"gsl/gsl"'
+    Priority: 10
+  - Regex: '".*"'
+    Priority: 11
+  - Regex: '<.*>'
+    Priority: 12
 IndentAccessModifiers: false
 IndentCaseBlocks: false
 IndentCaseLabels: false
@@ -112,7 +99,7 @@ ReferenceAlignment: Left
 ReflowComments: true
 SeparateDefinitionBlocks: Leave
 ShortNamespaceLines: 0
-SortIncludes: CaseInsensitive
+SortIncludes: CaseSensitive
 SortUsingDeclarations: true
 SpaceAfterCStyleCast: false
 SpaceAfterLogicalNot: false
