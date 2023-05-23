@@ -14,7 +14,6 @@
 #include "MACE/Detector/Geometry/Fast/EMCalField.hxx"
 #include "MACE/Detector/Geometry/Fast/EMCalShield.hxx"
 #include "MACE/Detector/Geometry/Fast/MCP.hxx"
-#include "MACE/Detector/Geometry/Fast/SelectorField.hxx"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1.hxx"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1Field.hxx"
 #include "MACE/Detector/Geometry/Fast/SolenoidB2.hxx"
@@ -81,7 +80,6 @@ int main(int argc, char* argv[]) {
 
     auto& collimator = secondTransportField.NewDaughter<Collimator>(fCheckOverlap);
     auto& secondTransportSolenoid = secondTransportField.NewDaughter<SolenoidS2>(fCheckOverlap);
-    auto& selectorField = secondTransportField.NewDaughter<SelectorField>(fCheckOverlap);
 
     auto& cdcBody = spectrometerField.NewDaughter<CDCBody>(fCheckOverlap);
     auto& acceleratorField = spectrometerField.NewDaughter<AcceleratorField>(fCheckOverlap);
@@ -185,7 +183,6 @@ int main(int argc, char* argv[]) {
     acceleratorField.RegisterMaterial(vacuum);
     secondBendField.RegisterMaterial(vacuum);
     secondTransportField.RegisterMaterial(vacuum);
-    selectorField.RegisterMaterial(vacuum);
     spectrometerField.RegisterMaterial(vacuum);
     thirdTransportField.RegisterMaterial(vacuum);
     fWorld->RegisterMaterial(vacuum);

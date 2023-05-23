@@ -1,6 +1,7 @@
 #include "MACE/Compatibility/std2b/to_underlying.hxx"
-#include "MACE/Detector/Description/All.hxx"
 #include "MACE/Detector/Description/DescriptionIO.hxx"
+#include "MACE/Detector/Description/Solenoid.hxx"
+#include "MACE/Detector/Description/Target.hxx"
 #include "MACE/Env/BasicEnv.hxx"
 
 #include <random>
