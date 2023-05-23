@@ -16,13 +16,13 @@ namespace Description {
 class Collimator;
 class EMCalField;
 class EMCalShield;
-class LinacField;
+class AcceleratorField;
 class MCP;
 class SelectorField;
 class SpectrometerField;
 class SpectrometerMagnet;
 class SpectrometerShield;
-class TransportLine;
+class Solenoid;
 class World;
 
 } // namespace Description
@@ -46,13 +46,13 @@ public:
     using UsedDescriptions = std::tuple<Detector::Description::Collimator,
                                         Detector::Description::EMCalField,
                                         Detector::Description::EMCalShield,
-                                        Detector::Description::LinacField,
+                                        Detector::Description::AcceleratorField,
                                         Detector::Description::MCP,
                                         Detector::Description::SelectorField,
                                         Detector::Description::SpectrometerField,
                                         Detector::Description::SpectrometerMagnet,
                                         Detector::Description::SpectrometerShield,
-                                        Detector::Description::TransportLine,
+                                        Detector::Description::Solenoid,
                                         Detector::Description::World>;
 
 private:
@@ -61,22 +61,22 @@ private:
     std::shared_ptr<Detector::GeometryBase> fCollimator;
     std::shared_ptr<Detector::GeometryBase> fEMCalField;
     std::shared_ptr<Detector::GeometryBase> fEMCalShield;
-    std::shared_ptr<Detector::GeometryBase> fFirstBendField;
-    std::shared_ptr<Detector::GeometryBase> fFirstBendSolenoid;
-    std::shared_ptr<Detector::GeometryBase> fFirstTransportField;
-    std::shared_ptr<Detector::GeometryBase> fFirstTransportSolenoid;
-    std::shared_ptr<Detector::GeometryBase> fLinacField;
+    std::shared_ptr<Detector::GeometryBase> fSolenoidB1Field;
+    std::shared_ptr<Detector::GeometryBase> fSolenoidB1;
+    std::shared_ptr<Detector::GeometryBase> fSolenoidS1Field;
+    std::shared_ptr<Detector::GeometryBase> fSolenoidS1;
+    std::shared_ptr<Detector::GeometryBase> fAcceleratorField;
     std::shared_ptr<Detector::GeometryBase> fMCP;
-    std::shared_ptr<Detector::GeometryBase> fSecondBendField;
-    std::shared_ptr<Detector::GeometryBase> fSecondBendSolenoid;
-    std::shared_ptr<Detector::GeometryBase> fSecondTransportField;
-    std::shared_ptr<Detector::GeometryBase> fSecondTransportSolenoid;
+    std::shared_ptr<Detector::GeometryBase> fSolenoidB2Field;
+    std::shared_ptr<Detector::GeometryBase> fSolenoidB2;
+    std::shared_ptr<Detector::GeometryBase> fSolenoidS2Field;
+    std::shared_ptr<Detector::GeometryBase> fSolenoidS2;
     std::shared_ptr<Detector::GeometryBase> fSelectorField;
     std::shared_ptr<Detector::GeometryBase> fSpectrometerField;
     std::shared_ptr<Detector::GeometryBase> fSpectrometerMagnet;
     std::shared_ptr<Detector::GeometryBase> fSpectrometerShield;
-    std::shared_ptr<Detector::GeometryBase> fThirdTransportField;
-    std::shared_ptr<Detector::GeometryBase> fThirdTransportSolenoid;
+    std::shared_ptr<Detector::GeometryBase> fSolenoidS3Field;
+    std::shared_ptr<Detector::GeometryBase> fSolenoidS3;
     std::shared_ptr<Detector::GeometryBase> fWorld;
 };
 

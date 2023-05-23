@@ -1,15 +1,15 @@
 #include "MACE/Detector/Description/Collimator.hxx"
 #include "MACE/Detector/Description/EMCalField.hxx"
 #include "MACE/Detector/Description/EMCalShield.hxx"
-#include "MACE/Detector/Description/LinacField.hxx"
+#include "MACE/Detector/Description/AcceleratorField.hxx"
 #include "MACE/Detector/Description/MCP.hxx"
 #include "MACE/Detector/Description/SelectorField.hxx"
 #include "MACE/Detector/Description/SpectrometerField.hxx"
 #include "MACE/Detector/Description/SpectrometerMagnet.hxx"
 #include "MACE/Detector/Description/SpectrometerShield.hxx"
-#include "MACE/Detector/Description/TransportLine.hxx"
+#include "MACE/Detector/Description/Solenoid.hxx"
 #include "MACE/Detector/Description/World.hxx"
-#include "MACE/Detector/DescriptionIO.hxx"
+#include "MACE/Detector/Description/DescriptionIO.hxx"
 #include "MACE/SimGuide/Action/DetectorConstruction.hxx"
 
 namespace MACE::SimTarget::inline Action {
@@ -18,22 +18,22 @@ DetectorConstruction::DetectorConstruction() :
     fCollimator(nullptr),
     fEMCalField(nullptr),
     fEMCalShield(nullptr),
-    fFirstBendField(nullptr),
-    fFirstBendSolenoid(nullptr),
-    fFirstTransportField(nullptr),
-    fFirstTransportSolenoid(nullptr),
-    fLinacField(nullptr),
+    fSolenoidB1Field(nullptr),
+    fSolenoidB1(nullptr),
+    fSolenoidS1Field(nullptr),
+    fSolenoidS1(nullptr),
+    fAcceleratorField(nullptr),
     fMCP(nullptr),
-    fSecondBendField(nullptr),
-    fSecondBendSolenoid(nullptr),
-    fSecondTransportField(nullptr),
-    fSecondTransportSolenoid(nullptr),
+    fSolenoidB2Field(nullptr),
+    fSolenoidB2(nullptr),
+    fSolenoidS2Field(nullptr),
+    fSolenoidS2(nullptr),
     fSelectorField(nullptr),
     fSpectrometerField(nullptr),
     fSpectrometerMagnet(nullptr),
     fSpectrometerShield(nullptr),
-    fThirdTransportField(nullptr),
-    fThirdTransportSolenoid(nullptr),
+    fSolenoidS3Field(nullptr),
+    fSolenoidS3(nullptr),
     fWorld(nullptr) {
     Detector::DescriptionIO::Import<UsedDescriptions>(std::array{
 #include "MACE/SimGuide/DefaultGeometry.inlyaml"
