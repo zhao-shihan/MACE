@@ -3,10 +3,10 @@ namespace MACE::Math::Random::inline Generator {
 template<class ADerived>
 constexpr Xoshiro256Base<ADerived>::Xoshiro256Base() :
     UniformPseudoRandomBitGeneratorBase<ADerived, std::uint64_t>(),
-    fState{14514284786278117030ull,
-           4620546740167642908ull,
-           13109570281517897720ull,
-           17462938647148434322ull} {
+    fState{0x893C3E22C678FAA9ull,
+           0x30589ADC78696ADAull,
+           0x1D541511D5F51D5Bull,
+           0xE3CBD397A993A9EEull} {
     static_assert(std::derived_from<ADerived, Xoshiro256Base<ADerived>>);
     static_assert(std::is_final_v<ADerived>);
 }
@@ -34,16 +34,8 @@ constexpr void Xoshiro256Base<ADerived>::Step() {
 
 template<class ADerived>
 void Xoshiro256Base<ADerived>::Seed(std::uint64_t seed) {
-    std::array<std::uint32_t, 8> s;
-
-    std::minstd_rand lcg(seed);
-    std::ranges::generate_n(s.begin(), 4, lcg);
-
-    lcg.seed(seed >> 32);
-    std::ranges::generate_n(s.begin() + 4, 4, lcg);
-
-    fState = std::bit_cast<decltype(fState)>(s);
-
+    SplitMix64 splitMix64(seed);
+    std::ranges::generate(fState, splitMix64);
     Step();
     Step();
     Step();

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/Concept/FundamentalType.hxx"
+#include "MACE/Math/Random/Generator/SplitMix64.hxx"
 #include "MACE/Math/Random/UniformPseudoRandomBitGeneratorBase.hxx"
 
 #include <algorithm>
@@ -9,7 +10,6 @@
 #include <concepts>
 #include <cstdint>
 #include <limits>
-#include <random>
 #include <type_traits>
 
 namespace MACE::Math::Random::inline Generator {
