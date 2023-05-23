@@ -1,8 +1,8 @@
 namespace MACE::DataModel::inline Hit {
 
-inline void MCPHit::FillBranchSockets() const {
-    fHitTime.FillBranchSocket();
-    fHitPosition.FillBranchSocket();
+inline void MCPHit::FillAllBranchSocket() const& {
+    fTime.FillBranchSocket();
+    fPosition.FillBranchSocket();
 }
 
 } // namespace MACE::DataModel::inline Hit

@@ -3,11 +3,10 @@
 #include "MACE/DataModel/Entry/FundamentalEntry.hxx"
 #include "MACE/DataModel/Entry/VectorEntry.hxx"
 #include "MACE/DataModel/TransientData.hxx"
-#include "MACE/Extension/stdx/array_alias.hxx"
+#include "MACE/Extension/stdx/arraynx.hxx"
 #include "MACE/Utility/NonConstructibleBase.hxx"
 
 #include <string_view>
-#include <utility>
 
 namespace MACE::DataModel {
 
@@ -18,37 +17,37 @@ using namespace std::string_view_literals;
 class MCPHit {
 public:
     struct Entry : NonConstructibleBase {
-        using HitTime = DoubleEntry<MCPHit, 0, double>;
-        using HitPosition = Vector2FEntry<MCPHit, 1, stdx::array2d>;
+        using Time = DoubleEntry<MCPHit, 0, double>;
+        using Position = Vector2FEntry<MCPHit, 1, stdx::array2d>;
     };
 
 public:
     virtual ~MCPHit() = default;
 
-    const auto& HitTime() const { return fHitTime; }
-    const auto& HitPosition() const { return fHitPosition; }
+    const auto& Time() const& { return fTime; }
+    const auto& Position() const& { return fPosition; }
 
-    void HitTime(auto&& v) { fHitTime.Value(std::forward<decltype(v)>(v)); }
-    void HitPosition(auto&& v) { fHitPosition.Value(std::forward<decltype(v)>(v)); }
+    auto& Time() & { return fTime; }
+    auto& Position() & { return fPosition; }
 
     static constexpr auto BasicTreeName() { return "MCPHit"sv; }
 
-    inline void FillBranchSockets() const;
-    static void CreateBranches(TTree& tree);
-    static void ConnectToBranches(TTree& tree);
+    inline void FillAllBranchSocket() const&;
+    static void CreateAllBranch(TTree& tree);
+    static void ConnectToAllBranch(TTree& tree);
 
 private:
-    Entry::HitTime fHitTime;
-    Entry::HitPosition fHitPosition;
+    Entry::Time fTime;
+    Entry::Position fPosition;
 };
 static_assert(TransientData<MCPHit>);
 
 } // namespace Hit
 
 template<>
-MCPHit::Entry::HitTime::BranchSocket MCPHit::Entry::HitTime::Base::fgBranchSocket;
+MCPHit::Entry::Time::BranchSocket MCPHit::Entry::Time::Base::fgBranchSocket;
 template<>
-MCPHit::Entry::HitPosition::BranchSocket MCPHit::Entry::HitPosition::Base::fgBranchSocket;
+MCPHit::Entry::Position::BranchSocket MCPHit::Entry::Position::Base::fgBranchSocket;
 
 } // namespace MACE::DataModel
 

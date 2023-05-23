@@ -5,7 +5,6 @@
 #include "MACE/Utility/NonConstructibleBase.hxx"
 
 #include <string_view>
-#include <utility>
 
 namespace MACE::DataModel {
 
@@ -16,37 +15,37 @@ using namespace std::string_view_literals;
 class EMCalHit {
 public:
     struct Entry : NonConstructibleBase {
-        using HitTime = DoubleEntry<EMCalHit, 0, double>;
-        using Energy = FloatEntry<EMCalHit, 1, double>;
+        using Time = DoubleEntry<EMCalHit, 0, double>;
+        using EnergyDeposition = FloatEntry<EMCalHit, 1, double>;
     };
 
 public:
     virtual ~EMCalHit() = default;
 
-    const auto& HitTime() const { return fHitTime; }
-    const auto& Energy() const { return fEnergy; }
+    [[nodiscard]] const auto& Time() const& { return fTime; }
+    [[nodiscard]] const auto& EnergyDeposition() const& { return fEnergyDeposition; }
 
-    void HitTime(auto&& v) { fHitTime.Value(std::forward<decltype(v)>(v)); }
-    void Energy(auto&& v) { fEnergy.Value(std::forward<decltype(v)>(v)); }
+    [[nodiscard]] auto& Time() & { return fTime; }
+    [[nodiscard]] auto& EnergyDeposition() & { return fEnergyDeposition; }
 
     static constexpr auto BasicTreeName() { return "EMCalHit"sv; }
 
-    inline void FillBranchSockets() const;
-    static void CreateBranches(TTree& tree);
-    static void ConnectToBranches(TTree& tree);
+    inline void FillAllBranchSocket() const&;
+    static void CreateAllBranch(TTree& tree);
+    static void ConnectToAllBranch(TTree& tree);
 
 private:
-    Entry::HitTime fHitTime;
-    Entry::Energy fEnergy;
+    Entry::Time fTime;
+    Entry::EnergyDeposition fEnergyDeposition;
 };
 static_assert(TransientData<EMCalHit>);
 
 } // namespace Hit
 
 template<>
-EMCalHit::Entry::HitTime::BranchSocket EMCalHit::Entry::HitTime::Base::fgBranchSocket;
+EMCalHit::Entry::Time::BranchSocket EMCalHit::Entry::Time::Base::fgBranchSocket;
 template<>
-EMCalHit::Entry::Energy::BranchSocket EMCalHit::Entry::Energy::Base::fgBranchSocket;
+EMCalHit::Entry::EnergyDeposition::BranchSocket EMCalHit::Entry::EnergyDeposition::Base::fgBranchSocket;
 
 } // namespace MACE::DataModel
 

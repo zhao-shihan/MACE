@@ -1,9 +1,9 @@
 namespace MACE::DataModel::inline Hit {
 
-inline void CDCHit::FillBranchSockets() const {
+inline void CDCHit::FillAllBranchSocket() const& {
     fCellID.FillBranchSocket();
     fDriftDistance.FillBranchSocket();
-    fHitTime.FillBranchSocket();
+    fTime.FillBranchSocket();
 }
 
 } // namespace MACE::DataModel::inline Hit
