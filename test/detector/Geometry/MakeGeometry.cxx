@@ -1,6 +1,37 @@
-#include "MACE/Detector/DescriptionIO.hxx"
-#include "MACE/Detector/Geometry/Fast/All.hxx"
+#include "MACE/Detector/Description/DescriptionIO.hxx"
+#include "MACE/Detector/Geometry/Fast/AcceleratorField.hxx"
+#include "MACE/Detector/Geometry/Fast/BeamDegrader.hxx"
+#include "MACE/Detector/Geometry/Fast/BeamMonitor.hxx"
+#include "MACE/Detector/Geometry/Fast/CDCBody.hxx"
+#include "MACE/Detector/Geometry/Fast/CDCCell.hxx"
+#include "MACE/Detector/Geometry/Fast/CDCFieldWire.hxx"
+#include "MACE/Detector/Geometry/Fast/CDCGas.hxx"
+#include "MACE/Detector/Geometry/Fast/CDCSenseLayer.hxx"
+#include "MACE/Detector/Geometry/Fast/CDCSenseWire.hxx"
+#include "MACE/Detector/Geometry/Fast/CDCSuperLayer.hxx"
+#include "MACE/Detector/Geometry/Fast/Collimator.hxx"
+#include "MACE/Detector/Geometry/Fast/EMCal.hxx"
+#include "MACE/Detector/Geometry/Fast/EMCalField.hxx"
+#include "MACE/Detector/Geometry/Fast/EMCalShield.hxx"
+#include "MACE/Detector/Geometry/Fast/MCP.hxx"
+#include "MACE/Detector/Geometry/Fast/SelectorField.hxx"
+#include "MACE/Detector/Geometry/Fast/SolenoidB1.hxx"
+#include "MACE/Detector/Geometry/Fast/SolenoidB1Field.hxx"
+#include "MACE/Detector/Geometry/Fast/SolenoidB2.hxx"
+#include "MACE/Detector/Geometry/Fast/SolenoidB2Field.hxx"
+#include "MACE/Detector/Geometry/Fast/SolenoidS1.hxx"
+#include "MACE/Detector/Geometry/Fast/SolenoidS1Field.hxx"
+#include "MACE/Detector/Geometry/Fast/SolenoidS2.hxx"
+#include "MACE/Detector/Geometry/Fast/SolenoidS2Field.hxx"
+#include "MACE/Detector/Geometry/Fast/SolenoidS3.hxx"
+#include "MACE/Detector/Geometry/Fast/SolenoidS3Field.hxx"
+#include "MACE/Detector/Geometry/Fast/SpectrometerField.hxx"
+#include "MACE/Detector/Geometry/Fast/SpectrometerMagnet.hxx"
+#include "MACE/Detector/Geometry/Fast/SpectrometerShield.hxx"
+#include "MACE/Detector/Geometry/Fast/Target.hxx"
+#include "MACE/Detector/Geometry/Fast/World.hxx"
 #include "MACE/Env/BasicEnv.hxx"
+#include "MACE/Env/CLI/BasicCLI.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
 #include "G4NistManager.hh"
@@ -10,7 +41,8 @@
 #include <functional>
 
 int main(int argc, char* argv[]) {
-    MACE::Env::BasicEnv env(argc, argv, {});
+    MACE::Env::CLI::BasicCLI cli;
+    MACE::Env::BasicEnv env(argc, argv, cli);
 
     ////////////////////////////////////////////////////////////////
     // Construct volumes
@@ -28,42 +60,42 @@ int main(int argc, char* argv[]) {
 
     auto& emCalField = fWorld->NewDaughter<EMCalField>(fCheckOverlap);
     auto& emCalShield = fWorld->NewDaughter<EMCalShield>(fCheckOverlap);
-    auto& firstBendField = fWorld->NewDaughter<FirstBendField>(fCheckOverlap);
-    auto& firstTransportField = fWorld->NewDaughter<FirstTransportField>(fCheckOverlap);
-    auto& secondBendField = fWorld->NewDaughter<SecondBendField>(fCheckOverlap);
-    auto& secondTransportField = fWorld->NewDaughter<SecondTransportField>(fCheckOverlap);
+    auto& firstBendField = fWorld->NewDaughter<SolenoidB1Field>(fCheckOverlap);
+    auto& firstTransportField = fWorld->NewDaughter<SolenoidS1Field>(fCheckOverlap);
+    auto& secondBendField = fWorld->NewDaughter<SolenoidB2Field>(fCheckOverlap);
+    auto& secondTransportField = fWorld->NewDaughter<SolenoidS2Field>(fCheckOverlap);
     auto& spectrometerField = fWorld->NewDaughter<SpectrometerField>(fCheckOverlap);
     auto& spectrometerShield = fWorld->NewDaughter<SpectrometerShield>(fCheckOverlap);
-    auto& thirdTransportField = fWorld->NewDaughter<ThirdTransportField>(fCheckOverlap);
+    auto& thirdTransportField = fWorld->NewDaughter<SolenoidS3Field>(fCheckOverlap);
 
     // 2
 
     auto& emCal = emCalField.NewDaughter<EMCal>(fCheckOverlap);
     auto& mcp = emCalField.NewDaughter<MCP>(fCheckOverlap);
 
-    auto& firstBendSolenoid = firstBendField.NewDaughter<FirstBendSolenoid>(fCheckOverlap);
+    auto& firstBendSolenoid = firstBendField.NewDaughter<SolenoidB1>(fCheckOverlap);
 
-    auto& firstTransportSolenoid = firstTransportField.NewDaughter<FirstTransportSolenoid>(fCheckOverlap);
+    auto& firstTransportSolenoid = firstTransportField.NewDaughter<SolenoidS1>(fCheckOverlap);
 
-    auto& secondBendSolenoid = secondBendField.NewDaughter<SecondBendSolenoid>(fCheckOverlap);
+    auto& secondBendSolenoid = secondBendField.NewDaughter<SolenoidB2>(fCheckOverlap);
 
     auto& collimator = secondTransportField.NewDaughter<Collimator>(fCheckOverlap);
-    auto& secondTransportSolenoid = secondTransportField.NewDaughter<SecondTransportSolenoid>(fCheckOverlap);
+    auto& secondTransportSolenoid = secondTransportField.NewDaughter<SolenoidS2>(fCheckOverlap);
     auto& selectorField = secondTransportField.NewDaughter<SelectorField>(fCheckOverlap);
 
     auto& cdcBody = spectrometerField.NewDaughter<CDCBody>(fCheckOverlap);
-    auto& linacField = spectrometerField.NewDaughter<LinacField>(fCheckOverlap);
+    auto& acceleratorField = spectrometerField.NewDaughter<AcceleratorField>(fCheckOverlap);
     auto& spectrometerMagnet = spectrometerField.NewDaughter<SpectrometerMagnet>(fCheckOverlap);
 
-    auto& thirdTransportSolenoid = thirdTransportField.NewDaughter<ThirdTransportSolenoid>(fCheckOverlap);
+    auto& thirdTransportSolenoid = thirdTransportField.NewDaughter<SolenoidS3>(fCheckOverlap);
 
     // 3
 
     auto& cdcGas = cdcBody.NewDaughter<CDCGas>(fCheckOverlap);
 
-    auto& beamDegrader = linacField.NewDaughter<BeamDegrader>(fCheckOverlap);
-    auto& beamMonitor = linacField.NewDaughter<BeamMonitor>(fCheckOverlap);
-    auto& target = linacField.NewDaughter<Target>(fCheckOverlap);
+    auto& beamDegrader = acceleratorField.NewDaughter<BeamDegrader>(fCheckOverlap);
+    auto& beamMonitor = acceleratorField.NewDaughter<BeamMonitor>(fCheckOverlap);
+    auto& target = acceleratorField.NewDaughter<Target>(fCheckOverlap);
 
     // 4
 
@@ -150,7 +182,7 @@ int main(int argc, char* argv[]) {
     emCalField.RegisterMaterial(vacuum);
     firstBendField.RegisterMaterial(vacuum);
     firstTransportField.RegisterMaterial(vacuum);
-    linacField.RegisterMaterial(vacuum);
+    acceleratorField.RegisterMaterial(vacuum);
     secondBendField.RegisterMaterial(vacuum);
     secondTransportField.RegisterMaterial(vacuum);
     selectorField.RegisterMaterial(vacuum);
@@ -162,7 +194,7 @@ int main(int argc, char* argv[]) {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-    MACE::Detector::DescriptionIO::ExportInstantiated("test.yaml");
+    MACE::Detector::Description::DescriptionIO::ExportInstantiated("test.yaml");
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,7 +212,7 @@ int main(int argc, char* argv[]) {
     // see form https://github.com/root-project/jsroot/blob/master/docs/JSROOT.md#geometry-viewer
 
     geoManager->GetVolume(fWorld->LogicalVolume()->GetName())->SetInvisible();
-    using MACE::Detector::GeometryBase;
+    using MACE::Detector::Geometry::GeometryBase;
     for (auto&& entity : std::initializer_list<std::reference_wrapper<const GeometryBase>>{
              emCalShield,
              emCal,
