@@ -12,22 +12,22 @@ MuoniumSimTrack::MuoniumSimTrack() noexcept :
     fG4EventID(fgG4EventID.Value()),
     fG4TrackID(fgG4TrackID.Value()) {}
 
-void MuoniumSimTrack::FillBranchSockets() const noexcept {
-    MuoniumTrack::FillBranchSockets();
+void MuoniumSimTrack::FillAllBranchSocket() const& noexcept {
+    MuoniumTrack::FillAllBranchSocket();
     fgParticle.Value(fParticle);
     fgG4EventID.Value(fG4EventID);
     fgG4TrackID.Value(fG4TrackID);
 }
 
-void MuoniumSimTrack::CreateBranches(TTree& tree) {
-    MuoniumTrack::CreateBranches(tree);
+void MuoniumSimTrack::CreateAllBranch(TTree& tree) {
+    MuoniumTrack::CreateAllBranch(tree);
     fgParticle.CreateBranch(tree);
     fgG4EventID.CreateBranch(tree);
     fgG4TrackID.CreateBranch(tree);
 }
 
-void MuoniumSimTrack::ConnectToBranches(TTree& tree) {
-    MuoniumTrack::ConnectToBranches(tree);
+void MuoniumSimTrack::ConnectToAllBranch(TTree& tree) {
+    MuoniumTrack::ConnectToAllBranch(tree);
     fgParticle.ConnectToBranch(tree);
     fgG4EventID.ConnectToBranch(tree);
     fgG4TrackID.ConnectToBranch(tree);

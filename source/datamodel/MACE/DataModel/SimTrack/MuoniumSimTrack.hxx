@@ -28,9 +28,9 @@ public:
     void G4EventID(int val) { fG4EventID = val; }
     void G4TrackID(int val) { fG4TrackID = val; }
 
-    void FillBranchSockets() const noexcept;
-    static void CreateBranches(TTree& tree);
-    static void ConnectToBranches(TTree& tree);
+    void FillAllBranchSocket() const& noexcept;
+    static void CreateAllBranch(TTree& tree);
+    static void ConnectToAllBranch(TTree& tree);
     static constexpr auto BasicTreeName() noexcept { return "MSimTrk"sv; }
 
 private:

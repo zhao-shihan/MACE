@@ -1,68 +1,40 @@
 #include "MACE/DataModel/SimTrack/CDCHelixSimTrack.hxx"
-#include "MACE/DataModel/SimTrack/CDCPhysicsSimTrack.hxx"
 
-namespace MACE::DataModel::inline Track {
+namespace MACE::DataModel {
 
-Vector2FBranchSocket CDCHelixSimTrack::fgTrueCenter("trueCenter", {"x", "y"}, {0, 0});
-FloatBranchSocket CDCHelixSimTrack::fgTrueRadius("trueR", 0);
-FloatBranchSocket CDCHelixSimTrack::fgTrueZ0("trueZ0", 0);
-FloatBranchSocket CDCHelixSimTrack::fgTrueAlpha("trueAlpha", 0);
+template<>
+CDCHelixSimTrack::Entry::CenterTruth::BranchSocket CDCHelixSimTrack::Entry::CenterTruth::Base::fgBranchSocket = // clang-format off
+    {"centerT", "Transverse Center (MC Truth)", {0, 0}}; // clang-format on
+template<>
+CDCHelixSimTrack::Entry::RadiusTruth::BranchSocket CDCHelixSimTrack::Entry::RadiusTruth::Base::fgBranchSocket =
+    {"rT", "Transverse Radius (MC Truth)", 0};
+template<>
+CDCHelixSimTrack::Entry::VertexZTruth::BranchSocket CDCHelixSimTrack::Entry::VertexZTruth::Base::fgBranchSocket =
+    {"z0T", "Vertex Z Coordinate (MC Truth)", 0};
+template<>
+CDCHelixSimTrack::Entry::ThetaTruth::BranchSocket CDCHelixSimTrack::Entry::ThetaTruth::Base::fgBranchSocket =
+    {"thetaT", "Polar Angle (MC Truth)", 0};
 
-CDCHelixSimTrack::CDCHelixSimTrack() noexcept :
-    CDCHelixTrack(),
-    CDCSimTrackBase(),
-    fTrueCenter(fgTrueCenter.Value<double>()),
-    fTrueRadius(fgTrueRadius.Value()),
-    fTrueZ0(fgTrueZ0.Value()),
-    fTrueAlpha(fgTrueAlpha.Value()) {}
+inline namespace SimTrack {
 
-CDCHelixSimTrack::CDCHelixSimTrack(const CDCPhysicsSimTrack& physTrack, Double_t B) :
-    CDCHelixTrack(static_cast<const CDCPhysicsTrack&>(physTrack), B),
-    CDCSimTrackBase(static_cast<const CDCSimTrackBase&>(physTrack)),
-    fTrueCenter(),
-    fTrueRadius(),
-    fTrueZ0(),
-    fTrueAlpha() {
-    const auto [trueCenter,
-                trueRadius,
-                trueZ0,
-                trueAlpha] =
-        CDCTrackOperation::ConvertToHelixParameters(std::tuple{VectorCast<Eigen::Vector3d>(physTrack.TrueVertexPosition()),
-                                                               physTrack.TrueVertexEnergy(),
-                                                               VectorCast<Eigen::Vector3d>(physTrack.TrueVertexMomentum()),
-                                                               physTrack.GetTrueParticle()},
-                                                    B);
-    VectorAssign(fTrueCenter, trueCenter);
-    fTrueRadius = trueRadius;
-    fTrueZ0 = trueZ0;
-    fTrueAlpha = trueAlpha;
+void CDCHelixSimTrack::CreateAllBranch(TTree& tree) {
+    CDCHelixTrack::CreateAllBranch(tree);
+    CDCSimTrackBase::CreateAllBranch(tree);
+    Entry::CenterTruth::CreateBranch(tree);
+    Entry::RadiusTruth::CreateBranch(tree);
+    Entry::VertexZTruth::CreateBranch(tree);
+    Entry::ThetaTruth::CreateBranch(tree);
 }
 
-void CDCHelixSimTrack::FillBranchSockets() const noexcept {
-    CDCHelixTrack::FillBranchSockets();
-    CDCSimTrackBase::FillBranchSockets();
-    fgTrueCenter.Value(fTrueCenter);
-    fgTrueRadius.Value(fTrueRadius);
-    fgTrueZ0.Value(fTrueZ0);
-    fgTrueAlpha.Value(fTrueAlpha);
+void CDCHelixSimTrack::ConnectToAllBranch(TTree& tree) {
+    CDCHelixTrack::ConnectToAllBranch(tree);
+    CDCSimTrackBase::ConnectToAllBranch(tree);
+    Entry::CenterTruth::ConnectToBranch(tree);
+    Entry::RadiusTruth::ConnectToBranch(tree);
+    Entry::VertexZTruth::ConnectToBranch(tree);
+    Entry::ThetaTruth::ConnectToBranch(tree);
 }
 
-void CDCHelixSimTrack::CreateBranches(TTree& tree) {
-    CDCHelixTrack::CreateBranches(tree);
-    CDCSimTrackBase::CreateBranches(tree);
-    fgTrueCenter.CreateBranch(tree);
-    fgTrueRadius.CreateBranch(tree);
-    fgTrueZ0.CreateBranch(tree);
-    fgTrueAlpha.CreateBranch(tree);
-}
+} // namespace SimTrack
 
-void CDCHelixSimTrack::ConnectToBranches(TTree& tree) {
-    CDCHelixTrack::ConnectToBranches(tree);
-    CDCSimTrackBase::ConnectToBranches(tree);
-    fgTrueCenter.ConnectToBranch(tree);
-    fgTrueRadius.ConnectToBranch(tree);
-    fgTrueZ0.ConnectToBranch(tree);
-    fgTrueAlpha.ConnectToBranch(tree);
-}
-
-} // namespace MACE::DataModel::inline Track
+} // namespace MACE::DataModel

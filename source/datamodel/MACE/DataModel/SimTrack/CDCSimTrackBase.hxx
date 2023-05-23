@@ -1,37 +1,53 @@
 #pragma once
 
-#include "MACE/DataModel/BranchSocket/FundamentalBranchSocket.hxx"
+#include "MACE/DataModel/Entry/FundamentalEntry.hxx"
+#include "MACE/Utility/NonConstructibleBase.hxx"
 
-namespace MACE::DataModel::inline Track {
+namespace MACE::DataModel {
+
+inline namespace SimTrack {
 
 class CDCSimTrackBase {
+public:
+    struct Entry : NonConstructibleBase {
+        using PDGCodeTruth = IntEntry<CDCSimTrackBase, 0, int>;
+        using NHitTruth = IntEntry<CDCSimTrackBase, 1, int>;
+        using VertexTimeTruth = DoubleEntry<CDCSimTrackBase, 2, double>;
+    };
+
 protected:
-    CDCSimTrackBase() noexcept;
+    CDCSimTrackBase() = default;
     ~CDCSimTrackBase() = default;
 
 public:
-    CDCSimTrackBase(const CDCSimTrackBase&) noexcept = default;
-    CDCSimTrackBase(CDCSimTrackBase&&) noexcept = default;
-    CDCSimTrackBase& operator=(const CDCSimTrackBase&) noexcept = default;
-    CDCSimTrackBase& operator=(CDCSimTrackBase&&) noexcept = default;
+    [[nodiscard]] const auto& PDGCodeTruth() const& { return fPDGCodeTruth; }
+    [[nodiscard]] const auto& NHitTruth() const& { return fNHitTruth; }
+    [[nodiscard]] const auto& VertexTimeTruth() const& { return fVertexTimeTruth; }
 
-    const auto& GetTrueNumHits() const { return fTrueNumHits; }
-    const auto& TrueVertexTime() const { return fTrueVertexTime; }
-
-    void SetTrueNumHits(int n) { fTrueNumHits = n; }
-    void TrueVertexTime(double val) { fTrueVertexTime = val; }
+    [[nodiscard]] auto& PDGCodeTruth() & { return fPDGCodeTruth; }
+    [[nodiscard]] auto& NHitTruth() & { return fNHitTruth; }
+    [[nodiscard]] auto& VertexTimeTruth() & { return fVertexTimeTruth; }
 
 protected:
-    void FillBranchSockets() const noexcept;
-    static void CreateBranches(TTree& tree);
-    static void ConnectToBranches(TTree& tree);
+    inline void FillAllBranchSocket() const&;
+    static void CreateAllBranch(TTree& tree);
+    static void ConnectToAllBranch(TTree& tree);
 
 private:
-    int fTrueNumHits;
-    double fTrueVertexTime;
-
-    static IntBranchSocket fgTrueNumHits;
-    static DoubleBranchSocket fgTrueVertexTime;
+    Entry::PDGCodeTruth fPDGCodeTruth;
+    Entry::NHitTruth fNHitTruth;
+    Entry::VertexTimeTruth fVertexTimeTruth;
 };
 
-} // namespace MACE::DataModel::inline Track
+} // namespace SimTrack
+
+template<>
+CDCSimTrackBase::Entry::PDGCodeTruth::BranchSocket CDCSimTrackBase::Entry::PDGCodeTruth::Base::fgBranchSocket;
+template<>
+CDCSimTrackBase::Entry::NHitTruth::BranchSocket CDCSimTrackBase::Entry::NHitTruth::Base::fgBranchSocket;
+template<>
+CDCSimTrackBase::Entry::VertexTimeTruth::BranchSocket CDCSimTrackBase::Entry::VertexTimeTruth::Base::fgBranchSocket;
+
+} // namespace MACE::DataModel
+
+#include "MACE/DataModel/SimTrack/CDCSimTrackBase.inl"

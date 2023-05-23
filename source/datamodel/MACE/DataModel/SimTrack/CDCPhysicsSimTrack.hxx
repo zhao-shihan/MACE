@@ -1,68 +1,63 @@
 #pragma once
 
-#include "MACE/Concept/NumericVector.hxx"
+#include "MACE/DataModel/Entry/FundamentalEntry.hxx"
+#include "MACE/DataModel/Entry/VectorEntry.hxx"
 #include "MACE/DataModel/SimTrack/CDCSimTrackBase.hxx"
 #include "MACE/DataModel/Track/CDCPhysicsTrack.hxx"
-#include "MACE/Extension/stdx/array_alias.hxx"
-#include "MACE/Utility/VectorAssign.hxx"
+#include "MACE/DataModel/TransientData.hxx"
+#include "MACE/Extension/stdx/arraynx.hxx"
 
-#include <array>
 #include <string_view>
-#include <utility>
 
-namespace MACE::DataModel::inline Track {
+namespace MACE::DataModel {
+
+inline namespace SimTrack {
 
 using namespace std::string_view_literals;
-using namespace LiteralUnit::MagneticFluxDensity;
-using PhysicalConstant::electron_mass_c2;
-
-class CDCHelixSimTrack;
 
 class CDCPhysicsSimTrack : public CDCPhysicsTrack,
                            public CDCSimTrackBase {
 public:
-    CDCPhysicsSimTrack() noexcept;
-    virtual ~CDCPhysicsSimTrack() = default;
+    struct Entry : CDCPhysicsTrack::Entry,
+                   CDCSimTrackBase::Entry {
+        using VertexPositionTruth = Vector3FEntry<CDCPhysicsSimTrack, 0, stdx::array3d>;
+        using VertexKineticEnergyTruth = FloatEntry<CDCPhysicsSimTrack, 1, double>;
+        using VertexMomentumTruth = Vector3FEntry<CDCPhysicsSimTrack, 2, stdx::array3d>;
+    };
 
-    CDCPhysicsSimTrack(const CDCPhysicsSimTrack&) noexcept = default;
-    CDCPhysicsSimTrack(CDCPhysicsSimTrack&&) noexcept = default;
-    CDCPhysicsSimTrack& operator=(const CDCPhysicsSimTrack&) noexcept = default;
-    CDCPhysicsSimTrack& operator=(CDCPhysicsSimTrack&&) noexcept = default;
+public:
+    virtual ~CDCPhysicsSimTrack() override = default;
 
-    explicit CDCPhysicsSimTrack(const CDCHelixSimTrack& helix, double phiVertex = 0, double B = 0.1_T, double mass = electron_mass_c2);
+    [[nodiscard]] const auto& VertexPositionTruth() const& { return fVertexPositionTruth; }
+    [[nodiscard]] const auto& VertexKineticEnergyTruth() const& { return fVertexKineticEnergyTruth; }
+    [[nodiscard]] const auto& VertexMomentumTruth() const& { return fVertexMomentumTruth; }
 
-    const auto& TrueVertexPosition() const { return fTrueVertexPosition; }
-    template<Concept::NumericVector3D T>
-    auto TrueVertexPosition() const { return VectorCast<T>(fTrueVertexPosition); }
-    const auto& TrueVertexEnergy() const { return fTrueVertexEnergy; }
-    const auto& TrueVertexMomentum() const { return fTrueVertexMomentum; }
-    template<Concept::NumericVector3D T>
-    auto TrueVertexMomentum() const { return VectorCast<T>(fTrueVertexMomentum); }
-    const auto& GetTrueParticle() const { return fTrueParticle; }
+    [[nodiscard]] auto& VertexPositionTruth() & { return fVertexPositionTruth; }
+    [[nodiscard]] auto& VertexKineticEnergyTruth() & { return fVertexKineticEnergyTruth; }
+    [[nodiscard]] auto& VertexMomentumTruth() & { return fVertexMomentumTruth; }
 
-    void TrueVertexPosition(const stdx::array3d& x) { fTrueVertexPosition = x; }
-    void TrueVertexPosition(auto&& x) { VectorAssign(fTrueVertexPosition, std::forward<decltype(x)>(x)); }
-    void TrueVertexEnergy(double E) { fTrueVertexEnergy = E; }
-    void TrueVertexMomentum(const stdx::array3d& p) { fTrueVertexMomentum = p; }
-    void TrueVertexMomentum(auto&& p) { VectorAssign(fTrueVertexMomentum, std::forward<decltype(p)>(p)); }
-    void SetTrueParticle(auto&& p) { fTrueParticle = std::forward<decltype(p)>(p); }
+    static constexpr auto BasicTreeName() { return "CDCPhysicsSimTrack"sv; }
 
-    void FillBranchSockets() const noexcept;
-    static void CreateBranches(TTree& tree);
-    static void ConnectToBranches(TTree& tree);
-    static constexpr auto BasicTreeName() noexcept { return "PhyTrk"sv; }
+    inline void FillAllBranchSocket() const&;
+    static void CreateAllBranch(TTree& tree);
+    static void ConnectToAllBranch(TTree& tree);
 
 private:
-    stdx::array3d fTrueVertexPosition;
-    double fTrueVertexEnergy;
-    stdx::array3d fTrueVertexMomentum;
-    ShortString fTrueParticle;
-
-    static Vector3FBranchSocket fgTrueVertexPosition;
-    static FloatBranchSocket fgTrueVertexEnergy;
-    static Vector3FBranchSocket fgTrueVertexMomentum;
-    static ShortStringBranchSocket fgTrueParticle;
+    Entry::VertexPositionTruth fVertexPositionTruth;
+    Entry::VertexKineticEnergyTruth fVertexKineticEnergyTruth;
+    Entry::VertexMomentumTruth fVertexMomentumTruth;
 };
 static_assert(TransientData<CDCPhysicsSimTrack>);
 
-} // namespace MACE::DataModel::inline Track
+} // namespace SimTrack
+
+template<>
+CDCPhysicsSimTrack::Entry::VertexPositionTruth::BranchSocket CDCPhysicsSimTrack::Entry::VertexPositionTruth::Base::fgBranchSocket;
+template<>
+CDCPhysicsSimTrack::Entry::VertexKineticEnergyTruth::BranchSocket CDCPhysicsSimTrack::Entry::VertexKineticEnergyTruth::Base::fgBranchSocket;
+template<>
+CDCPhysicsSimTrack::Entry::VertexMomentumTruth::BranchSocket CDCPhysicsSimTrack::Entry::VertexMomentumTruth::Base::fgBranchSocket;
+
+} // namespace MACE::DataModel
+
+#include "MACE/DataModel/SimTrack/CDCPhysicsSimTrack.inl"
