@@ -1,26 +1,24 @@
 #pragma once
 
 #include "MACE/Concept/ROOTFundamental.hxx"
-#include "MACE/DataModel/BranchSocketBase2.hxx"
+#include "MACE/DataModel/BranchSocket2/BranchSocketBase2.hxx"
 
 #include "RtypesCore.h"
-#include "TTree.h"
 
 #include <string>
-#include <utility>
 
 namespace MACE::DataModel::inline BranchSocket {
 
 template<Concept::ROOTFundamental T>
 class FundamentalBranchSocket2 final : public BranchSocketBase2<FundamentalBranchSocket2<T>, T> {
 public:
-    FundamentalBranchSocket2(std::string name, T defaultValue);
+    FundamentalBranchSocket2(std::string name, std::string title, T defaultValue);
 
     const auto& Value() const { return fValue; }
-    void Value(auto&& v) { fValue = std::forward<decltype(v)>(v); }
+    void Value(const auto& v) { fValue = v; }
 
-    void CreateBranch(TTree& tree) { tree.Branch(this->fName.c_str(), &fValue); }
-    void ConnectToBranch(TTree& tree) { tree.SetBranchAddress(this->fName.c_str(), &fValue); }
+    void CreateBranch(TTree& tree) { this->DoCreateBranch(tree, &fValue); }
+    void ConnectToBranch(TTree& tree) { this->DoConnectToBranch(tree, &fValue); }
 
 private:
     T fValue;

@@ -2,7 +2,7 @@
 
 #include "MACE/Concept/ROOTFundamental.hxx"
 #include "MACE/DataModel/BranchSocket2/FundamentalBranchSocket2.hxx"
-#include "MACE/DataModel/EntryBase.hxx"
+#include "MACE/DataModel/Entry/EntryBase.hxx"
 
 #include "RtypesCore.h"
 
@@ -12,16 +12,16 @@
 
 namespace MACE::DataModel::inline Entry {
 
-template<class AData, gsl::index ABranchID, Concept::ROOTFundamental T, typename U>
+template<class AData, gsl::index AUniqueID, Concept::ROOTFundamental T, typename U>
     requires(std::integral<T> and std::integral<U>) or
             (std::floating_point<T> and std::floating_point<U>)
-class FundamentalEntry final : public EntryBase<FundamentalEntry<AData, ABranchID, T, U>,
-                                                AData, ABranchID,
+class FundamentalEntry final : public EntryBase<FundamentalEntry<AData, AUniqueID, T, U>,
+                                                AData, AUniqueID,
                                                 T, FundamentalBranchSocket2<T>,
                                                 U> {
 public:
-    using Base = EntryBase<FundamentalEntry<AData, ABranchID, T, U>,
-                           AData, ABranchID,
+    using Base = EntryBase<FundamentalEntry<AData, AUniqueID, T, U>,
+                           AData, AUniqueID,
                            T, FundamentalBranchSocket2<T>,
                            U>;
     using BranchSocket = decltype(Base::fgBranchSocket);
@@ -39,10 +39,10 @@ private:
 };
 
 #define MACE_DATA_MODEL_ENTRY_FUNDAMENTAL_ENTRY_ALIAS(Type)                    \
-    template<class AData, gsl::index ABranchID, typename T>                  \
+    template<class AData, gsl::index AUniqueID, typename T>                  \
         requires(std::integral<Type##_t> and std::integral<T>) or              \
                     (std::floating_point<Type##_t> and std::floating_point<T>) \
-    using Type##Entry = FundamentalEntry<AData, ABranchID, Type##_t, T>;
+    using Type##Entry = FundamentalEntry<AData, AUniqueID, Type##_t, T>;
 
 MACE_DATA_MODEL_ENTRY_FUNDAMENTAL_ENTRY_ALIAS(Char)
 MACE_DATA_MODEL_ENTRY_FUNDAMENTAL_ENTRY_ALIAS(UChar)

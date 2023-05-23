@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/DataModel/BranchSocketable2.hxx"
+#include "MACE/DataModel/BranchSocket2/BranchSocket2.hxx"
 
 #include "TTree.h"
 
@@ -12,17 +12,16 @@
 namespace MACE::DataModel {
 
 template<class ADerived,
-         class AData, gsl::index ABranchID,
-         typename T, BranchSocketable2<T> ABranchSocket,
+         class AData, gsl::index AUniqueID,
+         typename T, BranchSocket2<T> ABranchSocket,
          typename U>
-    requires(ABranchID >= 0)
+    requires(AUniqueID >= 0)
 class EntryBase {
 protected:
     EntryBase();
     ~EntryBase() = default;
 
 public:
-    static auto BranchID() { return ABranchID; }
     static const auto& Name() { return fgBranchSocket.Name(); }
 
     static void CreateBranch(TTree& tree) { fgBranchSocket.CreateBranch(tree); }
@@ -34,4 +33,4 @@ protected:
 
 } // namespace MACE::DataModel
 
-#include "MACE/DataModel/EntryBase.inl"
+#include "MACE/DataModel/Entry/EntryBase.inl"

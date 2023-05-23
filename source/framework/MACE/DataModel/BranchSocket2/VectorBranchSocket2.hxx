@@ -1,12 +1,11 @@
 #pragma once
 
 #include "MACE/Concept/ROOTFundamental.hxx"
-#include "MACE/DataModel/BranchSocketBase2.hxx"
+#include "MACE/DataModel/BranchSocket2/BranchSocketBase2.hxx"
 #include "MACE/Utility/ROOTUtil/LeafTypeCode.hxx"
 #include "MACE/Utility/VectorAssign.hxx"
 
 #include "RtypesCore.h"
-#include "TTree.h"
 
 #include "gsl/gsl"
 
@@ -20,15 +19,15 @@ namespace MACE::DataModel::inline BranchSocket {
 template<Concept::ROOTFundamental T, std::size_t N>
 class VectorBranchSocket2 final : public BranchSocketBase2<VectorBranchSocket2<T, N>, std::array<T, N>> {
 public:
-    VectorBranchSocket2(std::string name, std::array<T, N> defaultValue);
+    VectorBranchSocket2(std::string name, std::string title, std::array<T, N> defaultValue);
 
     const auto& Value() const { return fVector; }
     template<Concept::NumericVectorAny<N> V>
     auto Value() const { return VectorCast<V>(fVector); }
     void Value(auto&& v) { VectorAssign(fVector, std::forward<decltype(v)>(v)); }
 
-    void CreateBranch(TTree& tree) { tree.Branch(this->fName.c_str(), &fVector); }
-    void ConnectToBranch(TTree& tree) { tree.SetBranchAddress(this->fName.c_str(), fVector.data()); }
+    void CreateBranch(TTree& tree) { this->DoCreateBranch(tree, &fVector); }
+    void ConnectToBranch(TTree& tree) { this->DoConnectToBranch(tree, fVector.data()); }
 
 private:
     std::array<T, N> fVector;

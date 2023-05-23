@@ -36,16 +36,16 @@ std::shared_ptr<TTree> DataFactory::CreateTree(Long64_t treeIndex) const {
     const auto tree = std::make_shared<TTree>();
     tree->SetName(TreeName<AData>(treeIndex).c_str());
     tree->SetDirectory(nullptr);
-    AData::CreateBranches(*tree);
+    AData::CreateAllBranch(*tree);
     return tree;
 }
 
 template<TransientData ADataInTree, Concept::WeakPointerImitator ADataInListPointer>
     requires std::derived_from<typename std::pointer_traits<ADataInListPointer>::element_type, ADataInTree>
 void DataFactory::FillTree(const std::vector<ADataInListPointer>& dataList, TTree& tree, bool connected) {
-    if (not connected) { ADataInTree::ConnectToBranches(tree); }
+    if (not connected) { ADataInTree::ConnectToAllBranch(tree); }
     for (auto&& data : dataList) {
-        static_cast<const ADataInTree&>(*data).FillBranchSockets();
+        static_cast<const ADataInTree&>(*data).FillAllBranchSocket();
         tree.Fill();
     }
 }
@@ -72,7 +72,7 @@ template<TransientData AData>
 std::vector<std::shared_ptr<AData>> DataFactory::CreateAndFillList(TTree& tree, const std::pair<Long64_t, Long64_t>& entriesRange, bool connected) {
     std::vector<std::shared_ptr<AData>> dataList(0);
     dataList.reserve(entriesRange.second - entriesRange.first);
-    if (not connected) { AData::ConnectToBranches(tree); }
+    if (not connected) { AData::ConnectToAllBranch(tree); }
     for (Long64_t i = entriesRange.first; i < entriesRange.second; ++i) {
         tree.GetEntry(i);
         dataList.emplace_back(std::make_shared<AData>());

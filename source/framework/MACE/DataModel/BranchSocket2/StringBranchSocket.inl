@@ -1,8 +1,8 @@
 namespace MACE::DataModel::inline BranchSocket {
 
 template<std::size_t AMaxSize>
-StringBranchSocket<AMaxSize>::StringBranchSocket(std::string name, FixedString<AMaxSize> defaultString) :
-    BranchSocketBase2<StringBranchSocket<AMaxSize>, ShortString>(std::move(name)),
+StringBranchSocket<AMaxSize>::StringBranchSocket(std::string name, std::string title, FixedString<AMaxSize> defaultString) :
+    BranchSocketBase2<StringBranchSocket<AMaxSize>, ShortString>(std::move(name), std::move(title)),
     fLeafName(this->fName + "/C"),
     fString(std::move(defaultString)) {}
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/DataModel/BranchSocket2/StringBranchSocket.hxx"
-#include "MACE/DataModel/EntryBase.hxx"
+#include "MACE/DataModel/Entry/EntryBase.hxx"
 #include "MACE/Utility/FixedString.hxx"
 
 #include <concepts>
@@ -9,15 +9,15 @@
 
 namespace MACE::DataModel::inline Entry {
 
-template<class AData, gsl::index ABranchID, std::size_t AMaxSize, std::convertible_to<FixedString<AMaxSize>> T>
+template<class AData, gsl::index AUniqueID, std::size_t AMaxSize, std::convertible_to<FixedString<AMaxSize>> T>
     requires std::convertible_to<FixedString<AMaxSize>, T>
-class StringEntry final : public EntryBase<StringEntry<AData, ABranchID, AMaxSize, T>,
-                                           AData, ABranchID,
+class StringEntry final : public EntryBase<StringEntry<AData, AUniqueID, AMaxSize, T>,
+                                           AData, AUniqueID,
                                            FixedString<AMaxSize>, StringBranchSocket<AMaxSize>,
                                            T> {
 public:
-    using Base = EntryBase<StringEntry<AData, ABranchID, AMaxSize, T>,
-                           AData, ABranchID,
+    using Base = EntryBase<StringEntry<AData, AUniqueID, AMaxSize, T>,
+                           AData, AUniqueID,
                            FixedString<AMaxSize>, StringBranchSocket<AMaxSize>,
                            T>;
     using BranchSocket = decltype(Base::fgBranchSocket);
@@ -34,9 +34,9 @@ private:
     T fString;
 };
 
-template<class AData, gsl::index ABranchID, std::convertible_to<ShortString> T>
+template<class AData, gsl::index AUniqueID, std::convertible_to<ShortString> T>
     requires std::convertible_to<ShortString, T>
-using ShortStringEntry = StringEntry<AData, ABranchID, ShortString::MaxSize(), T>;
+using ShortStringEntry = StringEntry<AData, AUniqueID, ShortString::MaxSize(), T>;
 
 } // namespace MACE::DataModel::inline Entry
 
