@@ -2,7 +2,7 @@
 
 #include "MACE/Compatibility/CLHEPDefectFix/Hep2VectorDivisionAssignment.hxx"
 #include "MACE/Concept/NumericVector.hxx"
-#include "MACE/Utility/ValueTypeOf.hxx"
+#include "MACE/Utility/VectorValueType.hxx"
 
 #include <concepts>
 #include <cstddef>
@@ -15,7 +15,7 @@ namespace internal {
 
 template<class T>
 concept ExtraRequirementsForMathVector =
-    requires(T u, const T v, const T w, const ValueTypeOf<T> c) {
+    requires(T u, const T v, const T w, const VectorValueType<T> c) {
         { u += v } -> std::same_as<T&>;
         { u -= v } -> std::same_as<T&>;
         { u *= c } -> std::same_as<T&>;
@@ -34,7 +34,7 @@ template<class T, typename F, std::size_t N = std::numeric_limits<std::size_t>::
 concept MathVector =
     requires {
         requires NumericVector<T, F, N>;
-        requires internal::ExtraRequirementsForMathVector<std::remove_cvref_t<T>>;
+        requires internal::ExtraRequirementsForMathVector<T>;
     };
 
 template<class T, typename F>
