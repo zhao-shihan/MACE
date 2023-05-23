@@ -1,9 +1,9 @@
 #include "MACE/Detector/Description/BeamDegrader.hxx"
 #include "MACE/Detector/Description/BeamMonitor.hxx"
-#include "MACE/Detector/Description/LinacField.hxx"
+#include "MACE/Detector/Description/AcceleratorField.hxx"
 #include "MACE/Detector/Description/Target.hxx"
 #include "MACE/Detector/Description/World.hxx"
-#include "MACE/Detector/DescriptionIO.hxx"
+#include "MACE/Detector/Description/DescriptionIO.hxx"
 #include "MACE/Detector/Geometry/Fast/BeamDegrader.hxx"
 #include "MACE/Detector/Geometry/Fast/BeamMonitor.hxx"
 #include "MACE/Detector/Geometry/Fast/Target.hxx"
@@ -28,7 +28,7 @@ DetectorConstruction::DetectorConstruction() :
     fWorld(nullptr),
     fDensity(30_mg_cm3),
     fTemperature(293.15_K) {
-    Detector::DescriptionIO::Import<UsedDescriptions>(std::array{
+    Detector::Description::DescriptionIO::Import<DescriptionInUse>(std::array{
 #include "MACE/SimTarget/DefaultGeometry.inlyaml"
     });
     GeometryMessenger::Instance().AssignTo(this);
@@ -37,9 +37,9 @@ DetectorConstruction::DetectorConstruction() :
 G4VPhysicalVolume* DetectorConstruction::Construct() {
     using namespace MACE::Detector::Geometry::Fast;
 
-    // LinacField is target's mother by default, modified it to adapt global frame
-    Detector::Description::LinacField::Instance().Length(0);
-    Detector::Description::LinacField::Instance().DownStreamLength(0);
+    // AcceleratorField is target's mother by default, modified it to adapt global frame
+    Detector::Description::AcceleratorField::Instance().Length(0);
+    Detector::Description::AcceleratorField::Instance().DownStreamLength(0);
 
     fWorld = std::make_shared<World>();
     auto& beamMonitor = fWorld->NewDaughter<BeamMonitor>(fCheckOverlap);

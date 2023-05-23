@@ -20,7 +20,11 @@ class World;
 
 } // namespace Description
 
+namespace Geometry {
+
 class GeometryBase;
+
+} // namespace Geometry
 
 } // namespace Detector
 
@@ -39,7 +43,7 @@ public:
     void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlap = checkOverlaps; }
 
 public:
-    using UsedDescriptions = std::tuple<Detector::Description::BeamDegrader,
+    using DescriptionInUse = std::tuple<Detector::Description::BeamDegrader,
                                         Detector::Description::BeamMonitor,
                                         Detector::Description::Target,
                                         Detector::Description::World>;
@@ -47,7 +51,7 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    std::shared_ptr<Detector::GeometryBase> fWorld;
+    std::shared_ptr<Detector::Geometry::GeometryBase> fWorld;
 
     G4double fDensity;
     G4double fTemperature;
