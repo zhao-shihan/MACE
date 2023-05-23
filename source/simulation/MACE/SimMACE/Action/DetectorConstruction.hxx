@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MACE/Detector/Geometry/Fast/All.hxx"
 #include "MACE/Env/Memory/PassiveSingleton.hxx"
 #include "MACE/SimMACE/Region.hxx"
 #include "MACE/SimMACE/SD/CDCSD.hxx"
@@ -13,7 +12,40 @@
 
 #include <memory>
 
-namespace MACE::SimMACE::inline Action {
+namespace MACE {
+
+namespace Detector {
+
+namespace Description {
+
+class BeamDegrader;
+class BeamMonitor;
+class CDC;
+class Collimator;
+class EMCal;
+class EMCalField;
+class EMCalShield;
+class AcceleratorField;
+class MCP;
+class SelectorField;
+class SpectrometerField;
+class SpectrometerMagnet;
+class SpectrometerShield;
+class Target;
+class Solenoid;
+class World;
+
+} // namespace Description
+
+namespace Geometry {
+
+class GeometryBase;
+
+} // namespace Geometry
+
+} // namespace Detector
+
+namespace SimMACE::inline Action {
 
 class DetectorConstruction final : public Env::Memory::PassiveSingleton<DetectorConstruction>,
                                    public G4VUserDetectorConstruction {
@@ -38,10 +70,28 @@ public:
     auto& GetCDCSD() const { return *fCDCSD; }
     auto& GetMCPSD() const { return *fMCPSD; }
 
+public:
+    using DescriptionInUse = std::tuple<Detector::Description::BeamDegrader,
+                                        Detector::Description::BeamMonitor,
+                                        Detector::Description::CDC,
+                                        Detector::Description::Collimator,
+                                        Detector::Description::EMCal,
+                                        Detector::Description::EMCalField,
+                                        Detector::Description::EMCalShield,
+                                        Detector::Description::AcceleratorField,
+                                        Detector::Description::MCP,
+                                        Detector::Description::SelectorField,
+                                        Detector::Description::SpectrometerField,
+                                        Detector::Description::SpectrometerMagnet,
+                                        Detector::Description::SpectrometerShield,
+                                        Detector::Description::Target,
+                                        Detector::Description::Solenoid,
+                                        Detector::Description::World>;
+
 private:
     G4bool fCheckOverlap;
 
-    gsl::not_null<std::shared_ptr<Detector::GeometryBase>> fWorld;
+    gsl::not_null<std::shared_ptr<Detector::Geometry::GeometryBase>> fWorld;
 
     Region* fCDCFieldWireRegion;
     Region* fCDCSenseWireRegion;
@@ -60,4 +110,6 @@ private:
     MCPSD* fMCPSD;
 };
 
-} // namespace MACE::SimMACE::inline Action
+} // namespace SimMACE::inline Action
+
+} // namespace MACE
