@@ -22,9 +22,9 @@ void MPIReseedPRNG(CLHEP::HepRandomEngine& randEng) {
     const auto& mpiEnv = Env::MPIEnv::Instance();
     if (mpiEnv.Sequential()) { return; }
 
-    const std::size_t worldSize = mpiEnv.WorldCommSize();
-    std::vector<long> seedsSend(mpiEnv.AtWorldMaster() ? worldSize : 0);
-    if (mpiEnv.AtWorldMaster()) {
+    const std::size_t worldSize = mpiEnv.CommWorldSize();
+    std::vector<long> seedsSend(mpiEnv.AtCommWorldMaster() ? worldSize : 0);
+    if (mpiEnv.AtCommWorldMaster()) {
         static_assert(std::same_as<std::uint64_t, Math::Random::Xoshiro256PP::ResultType>);
 
         std::array<unsigned int, sizeof(std::uint64_t) / sizeof(unsigned int)> xoshiro256PPSeed;

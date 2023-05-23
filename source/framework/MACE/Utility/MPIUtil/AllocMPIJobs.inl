@@ -11,11 +11,11 @@ IntegralIndexRange<AIndex> AllocMPIJobsJobWise(AIndex jobBegin, AIndex jobEnd, M
     int commRank;
     if (const auto& mpiEnv = Env::MPIEnv::Instance();
         comm == MPI_COMM_WORLD) {
-        commSize = mpiEnv.WorldCommSize();
-        commRank = mpiEnv.WorldCommRank();
-    } else if (comm == mpiEnv.LocalComm()) {
-        commSize = mpiEnv.LocalCommSize();
-        commRank = mpiEnv.LocalCommRank();
+        commSize = mpiEnv.CommWorldSize();
+        commRank = mpiEnv.CommWorldRank();
+    } else if (comm == mpiEnv.CommShared()) {
+        commSize = mpiEnv.CommSharedSize();
+        commRank = mpiEnv.CommSharedRank();
     } else {
         MACE_MPI_CALL_WITH_CHECK(MPI_Comm_size,
                                  comm,
@@ -48,11 +48,11 @@ IntegralIndexRange<AIndex> AllocMPIJobsWorkerWise(AIndex jobBegin, AIndex jobEnd
     int commRank;
     if (const auto& mpiEnv = Env::MPIEnv::Instance();
         comm == MPI_COMM_WORLD) {
-        commSize = mpiEnv.WorldCommSize();
-        commRank = mpiEnv.WorldCommRank();
-    } else if (comm == mpiEnv.LocalComm()) {
-        commSize = mpiEnv.LocalCommSize();
-        commRank = mpiEnv.LocalCommRank();
+        commSize = mpiEnv.CommWorldSize();
+        commRank = mpiEnv.CommWorldRank();
+    } else if (comm == mpiEnv.CommShared()) {
+        commSize = mpiEnv.CommSharedSize();
+        commRank = mpiEnv.CommSharedRank();
     } else {
         MACE_MPI_CALL_WITH_CHECK(MPI_Comm_size,
                                  comm,
