@@ -21,7 +21,6 @@
 #include "MACE/Detector/Geometry/Fast/EMCalField.hxx"
 #include "MACE/Detector/Geometry/Fast/EMCalShield.hxx"
 #include "MACE/Detector/Geometry/Fast/MCP.hxx"
-// #include "MACE/Detector/Geometry/Fast/SelectorField.hxx"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1.hxx"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1Field.hxx"
 #include "MACE/Detector/Geometry/Fast/SolenoidB2.hxx"
@@ -39,7 +38,6 @@
 #include "MACE/Detector/Geometry/Fast/World.hxx"
 #include "MACE/Detector/Geometry/GeometryBase.hxx"
 #include "MACE/SimMACE/Action/DetectorConstruction.hxx"
-// #include "MACE/SimMACE/Field/SelectorField.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
 #include "G4EqMagElectricField.hh"
@@ -108,7 +106,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     auto& solenoidB2 = solenoidB2Field.NewDaughter<Detector::Geometry::Fast::SolenoidB2>(fCheckOverlap);
 
     auto& multiplateCollimator = solenoidS2Field.NewDaughter<Detector::Geometry::Fast::MultiplateCollimator>(fCheckOverlap);
-    // auto& selectorField = solenoidS2Field.NewDaughter<Detector::Geometry::Fast::SelectorField>(fCheckOverlap);
     auto& solenoidS2 = solenoidS2Field.NewDaughter<Detector::Geometry::Fast::SolenoidS2>(fCheckOverlap);
 
     auto& acceleratorField = spectrometerField.NewDaughter<Detector::Geometry::Fast::AcceleratorField>(fCheckOverlap);
@@ -213,7 +210,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         acceleratorField.RegisterMaterial(vacuum);
         solenoidB2Field.RegisterMaterial(vacuum);
         solenoidS2Field.RegisterMaterial(vacuum);
-        // selectorField.RegisterMaterial(vacuum);
         spectrometerField.RegisterMaterial(vacuum);
         solenoidS3Field.RegisterMaterial(vacuum);
         fWorld->RegisterMaterial(vacuum);
@@ -304,7 +300,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         acceleratorField.RegisterRegion(fVacuumRegion);
         solenoidB2Field.RegisterRegion(fVacuumRegion);
         solenoidS2Field.RegisterRegion(fVacuumRegion);
-        // selectorField.RegisterRegion(fVacuumRegion);
         spectrometerField.RegisterRegion(fVacuumRegion);
         solenoidS3Field.RegisterRegion(fVacuumRegion);
     }
@@ -367,13 +362,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
             G4TDormandPrince45<G4TMagFieldEquation<SolenoidS2Field>>,
             G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<SolenoidS2Field>>>>(
             new SolenoidS2Field, hMin, 6, 6, false);
-
-        // selectorField.RegisterField<
-        //     SelectorField,
-        //     G4EqMagElectricField,
-        //     G4TDormandPrince45<G4EqMagElectricField, 8>,
-        //     G4InterpolationDriver<G4TDormandPrince45<G4EqMagElectricField, 8>>>(
-        //     new SelectorField, hMin, 8, 8, false);
 
         solenoidB2Field.RegisterField<
             SolenoidB2Field,
