@@ -21,7 +21,7 @@ class MPIRunMessenger final : public Env::Memory::Singleton<MPIRunMessenger>,
 
 private:
     MPIRunMessenger();
-    ~MPIRunMessenger() = default;
+    ~MPIRunMessenger();
 
 public:
     void AssignTo(gsl::not_null<MPIRunManager*> mpirunManager) { fMPIRunManager = mpirunManager; }

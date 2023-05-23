@@ -26,7 +26,7 @@ namespace internal {
 
 FlipG4cout::FlipG4cout() {
     if (const auto& mpiEnv = Env::MPIEnv::Instance();
-        mpiEnv.AtWorldWorker() or
+        mpiEnv.AtCommWorldWorker() or
         mpiEnv.GetVerboseLevel() == Env::VerboseLevel::Quiet) {
         static std::streambuf* gG4coutBufExchanger = nullptr;
         gG4coutBufExchanger = G4cout.rdbuf(gG4coutBufExchanger);
@@ -41,7 +41,7 @@ MPIRunManager::MPIRunManager() :
     internal::PostG4RunManagerInitFlipG4cout(),
     fNEventToBeMPIProcessed(0),
     fEventIDRange{-1, -1, 0, 0},
-    fPrintProgressModulo(Env::MPIEnv::Instance().Sequential() ? 1 : Env::MPIEnv::Instance().WorldCommSize() + 1),
+    fPrintProgressModulo(Env::MPIEnv::Instance().Sequential() ? 1 : Env::MPIEnv::Instance().CommWorldSize() + 1),
     fEventWallTimeStopwatch(),
     fEventWallTime(0),
     fNAvgEventWallTime(0),
@@ -57,8 +57,8 @@ MPIRunManager::MPIRunManager() :
 
 void MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect) {
     const auto& mpiEnv = Env::MPIEnv::Instance();
-    if (nEvent < mpiEnv.WorldCommSize()) {
-        if (mpiEnv.AtWorldMaster()) {
+    if (nEvent < mpiEnv.CommWorldSize()) {
+        if (mpiEnv.AtCommWorldMaster()) {
             G4Exception("MACE::Utility::G4Util::MPIRunManager::CheckNEventIsAtLeastCommSize(...)",
                         "TooFewNEventOrTooMuchRank",
                         JustWarning,
@@ -71,7 +71,7 @@ void MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect)
 
     MPIUtil::MPIReseedPRNG(*G4Random::getTheEngine());
     fNEventToBeMPIProcessed = nEvent;
-    fEventIDRange = MPIUtil::AllocMPIJobsJobWise(0, nEvent, mpiEnv.WorldCommSize(), mpiEnv.WorldCommRank());
+    fEventIDRange = MPIUtil::AllocMPIJobsJobWise(0, nEvent, mpiEnv.CommWorldSize(), mpiEnv.CommWorldRank());
     G4RunManager::BeamOn(fEventIDRange.count, macroFile, nSelect);
 }
 
@@ -149,20 +149,20 @@ void MPIRunManager::EventEndReport(const G4int eventID) const {
     const auto progress = 100 * static_cast<float>(numberOfEventProcessed) / numberOfEventToBeProcessed;
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
-    G4cout << std::put_time(std::localtime(&now), "%FT%T%z") << " > G4Event " << eventID << " finished in rank " << mpiEnv.WorldCommRank() << '\n'
+    G4cout << std::put_time(std::localtime(&now), "%FT%T%z") << " > G4Event " << eventID << " finished in rank " << mpiEnv.CommWorldRank() << '\n'
            << "  ETA: " << eta << " +/- " << etaError << "  Progress of the rank: " << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " (" << std::fixed << progress << std::defaultfloat << "%)" << G4endl;
     G4cout.precision(precisionOfG4cout);
 }
 
 void MPIRunManager::RunEndReport(const G4int runID) const {
     const auto& mpiEnv = Env::MPIEnv::Instance();
-    if (mpiEnv.AtWorldWorker() or mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
+    if (mpiEnv.AtCommWorldWorker() or mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
     const auto wallTimeDHMS = FormatSecondToDHMS(fRunWallTime);
     const auto beginTime = std::chrono::system_clock::to_time_t(fRunBeginSystemTime);
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
     G4cout << "-------------------------------> Run Finished <-------------------------------\n"
-           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run " << runID << " finished on " << mpiEnv.WorldCommSize() << " ranks\n"
+           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run " << runID << " finished on " << mpiEnv.CommWorldSize() << " ranks\n"
            << "  Start time: " << std::put_time(std::localtime(&beginTime), "%FT%T%z") << '\n'
            << "   Wall time: " << std::fixed << fRunWallTime << std::defaultfloat << " seconds";
     if (fRunWallTime > 60) { G4cout << " (" << wallTimeDHMS << ')'; }
@@ -174,10 +174,10 @@ void MPIRunManager::RunEndReport(const G4int runID) const {
 
 void MPIRunManager::RunBeginReport(const G4int runID) {
     const auto& mpiEnv = Env::MPIEnv::Instance();
-    if (mpiEnv.AtWorldWorker() or mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
+    if (mpiEnv.AtCommWorldWorker() or mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     G4cout << "--------------------------------> Run Starts <--------------------------------\n"
-           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run " << runID << " starts on " << mpiEnv.WorldCommSize() << " ranks\n"
+           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run " << runID << " starts on " << mpiEnv.CommWorldSize() << " ranks\n"
            << "--------------------------------> Run Starts <--------------------------------" << G4endl;
 }
 

@@ -22,6 +22,8 @@ MPIRunMessenger::MPIRunMessenger() :
     fPrintProgressModulo->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
+MPIRunMessenger::~MPIRunMessenger() = default;
+
 void MPIRunMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     if (command == fPrintProgressModulo.get()) {
         fMPIRunManager->PrintProgressModulo(fPrintProgressModulo->GetNewIntValue(value));

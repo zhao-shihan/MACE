@@ -2,7 +2,7 @@
 
 #include "MACE/Env/BasicEnv.hxx"
 #include "MACE/Env/CLI/Geant4CLI.hxx"
-#include "MACE/Env/Memory/MuteSingleton.hxx"
+#include "MACE/Env/Memory/WeakSingleton.hxx"
 
 #include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
@@ -19,7 +19,7 @@ namespace MACE::inline Extension::Geant4X {
 
 using Env::CLI::Geant4CLI;
 
-class MPIExecutive final : public Env::Memory::MuteSingleton<MPIExecutive> {
+class MPIExecutive final : public Env::Memory::WeakSingleton<MPIExecutive> {
 public:
     void StartSession(const Geant4CLI& cli, auto&& macFileOrCmdList) const;
     template<typename T>

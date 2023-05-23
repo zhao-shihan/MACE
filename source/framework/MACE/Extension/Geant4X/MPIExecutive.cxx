@@ -9,7 +9,7 @@ void MPIExecutive::CheckSequential() const {
     const auto& mpiEnv = Env::MPIEnv::Instance();
     if (mpiEnv.Parallel()) {
         std::string where("MACE::Geant4X::MPIExecutive::CheckSequential");
-        if (mpiEnv.AtWorldMaster()) {
+        if (mpiEnv.AtCommWorldMaster()) {
             G4Exception(where.c_str(),
                         "InteractiveSessionMustBeSequential",
                         JustWarning,
