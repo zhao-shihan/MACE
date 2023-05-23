@@ -1,6 +1,6 @@
 #include "MACE/Compatibility/std2b/to_underlying.hxx"
 #include "MACE/Detector/Description/All.hxx"
-#include "MACE/Detector/DescriptionIO.hxx"
+#include "MACE/Detector/Description/DescriptionIO.hxx"
 #include "MACE/Env/BasicEnv.hxx"
 
 #include <random>
@@ -15,59 +15,59 @@ int main(int argc, char* argv[]) {
     std::mt19937 rand;
     std::uniform_real_distribution<double> flat;
 
-    auto& transportLine = Description::TransportLine::Instance();
+    auto& transportLine = Description::Solenoid::Instance();
     std::cout << "Default:\n"
-              << transportLine.FirstStraightLength() << '\n'
-              << transportLine.FirstBendRadius() << '\n'
-              << transportLine.SecondStraightLength() << '\n'
-              << transportLine.SecondBendRadius() << '\n'
-              << transportLine.ThirdStraightLength() << '\n'
-              << transportLine.SolenoidInnerRadius() << '\n'
-              << transportLine.SolenoidOuterRadius() << '\n'
+              << transportLine.S1Length() << '\n'
+              << transportLine.B1Radius() << '\n'
+              << transportLine.S2Length() << '\n'
+              << transportLine.B2Radius() << '\n'
+              << transportLine.S3Length() << '\n'
+              << transportLine.InnerRadius() << '\n'
+              << transportLine.OuterRadius() << '\n'
               << transportLine.FieldRadius() << '\n'
               << std::endl;
 
     std::cout << "Shuffled!\n\n";
-    transportLine.FirstStraightLength(flat(rand));
-    transportLine.FirstBendRadius(flat(rand));
-    transportLine.SecondStraightLength(flat(rand));
-    transportLine.SecondBendRadius(flat(rand));
-    transportLine.ThirdStraightLength(flat(rand));
-    transportLine.SolenoidInnerRadius(flat(rand));
-    transportLine.SolenoidOuterRadius(flat(rand));
+    transportLine.S1Length(flat(rand));
+    transportLine.B1Radius(flat(rand));
+    transportLine.S2Length(flat(rand));
+    transportLine.B2Radius(flat(rand));
+    transportLine.S3Length(flat(rand));
+    transportLine.InnerRadius(flat(rand));
+    transportLine.OuterRadius(flat(rand));
     transportLine.FieldRadius(flat(rand));
 
-    DescriptionIO::Export<Description::TransportLine>("tl.yaml");
+    Description::DescriptionIO::Export<Description::Solenoid>("tl.yaml");
     std::cout << "After write into yaml:\n"
-              << transportLine.FirstStraightLength() << '\n'
-              << transportLine.FirstBendRadius() << '\n'
-              << transportLine.SecondStraightLength() << '\n'
-              << transportLine.SecondBendRadius() << '\n'
-              << transportLine.ThirdStraightLength() << '\n'
-              << transportLine.SolenoidInnerRadius() << '\n'
-              << transportLine.SolenoidOuterRadius() << '\n'
+              << transportLine.S1Length() << '\n'
+              << transportLine.B1Radius() << '\n'
+              << transportLine.S2Length() << '\n'
+              << transportLine.B2Radius() << '\n'
+              << transportLine.S3Length() << '\n'
+              << transportLine.InnerRadius() << '\n'
+              << transportLine.OuterRadius() << '\n'
               << transportLine.FieldRadius() << '\n'
               << std::endl;
 
     std::cout << "Shuffled!\n\n";
-    transportLine.FirstStraightLength(flat(rand));
-    transportLine.FirstBendRadius(flat(rand));
-    transportLine.SecondStraightLength(flat(rand));
-    transportLine.SecondBendRadius(flat(rand));
-    transportLine.ThirdStraightLength(flat(rand));
-    transportLine.SolenoidInnerRadius(flat(rand));
-    transportLine.SolenoidOuterRadius(flat(rand));
+    transportLine.S1Length(flat(rand));
+    transportLine.B1Radius(flat(rand));
+    transportLine.S2Length(flat(rand));
+    transportLine.B2Radius(flat(rand));
+    transportLine.S3Length(flat(rand));
+    transportLine.InnerRadius(flat(rand));
+    transportLine.OuterRadius(flat(rand));
     transportLine.FieldRadius(flat(rand));
 
-    DescriptionIO::ImportInstantiated("tl.yaml");
+    Description::DescriptionIO::ImportInstantiated("tl.yaml");
     std::cout << "After read from yaml:\n"
-              << transportLine.FirstStraightLength() << '\n'
-              << transportLine.FirstBendRadius() << '\n'
-              << transportLine.SecondStraightLength() << '\n'
-              << transportLine.SecondBendRadius() << '\n'
-              << transportLine.ThirdStraightLength() << '\n'
-              << transportLine.SolenoidInnerRadius() << '\n'
-              << transportLine.SolenoidOuterRadius() << '\n'
+              << transportLine.S1Length() << '\n'
+              << transportLine.B1Radius() << '\n'
+              << transportLine.S2Length() << '\n'
+              << transportLine.B2Radius() << '\n'
+              << transportLine.S3Length() << '\n'
+              << transportLine.InnerRadius() << '\n'
+              << transportLine.OuterRadius() << '\n'
               << transportLine.FieldRadius() << '\n'
               << std::endl;
 
@@ -93,7 +93,7 @@ int main(int argc, char* argv[]) {
     target.Cuboid().Hole().Diameter(flat(rand));
     target.Cuboid().Hole().Depth(flat(rand));
 
-    DescriptionIO::Export<Description::Target>("tg.yaml");
+    Description::DescriptionIO::Export<Description::Target>("tg.yaml");
     std::cout << "After write into yaml:\n"
               << std2b::to_underlying(target.ShapeType()) << '\n'
               << target.Cuboid().Width() << '\n'
@@ -115,7 +115,7 @@ int main(int argc, char* argv[]) {
     target.Cuboid().Hole().Diameter(flat(rand));
     target.Cuboid().Hole().Depth(flat(rand));
 
-    DescriptionIO::ImportInstantiated("tg.yaml");
+    Description::DescriptionIO::ImportInstantiated("tg.yaml");
     std::cout << "After read from yaml:\n"
               << std2b::to_underlying(target.ShapeType()) << '\n'
               << target.Cuboid().Width() << '\n'
