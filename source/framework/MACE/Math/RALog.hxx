@@ -2,6 +2,7 @@
 
 #include "MACE/Compatibility/std2b/assume.hxx"
 #include "MACE/Math/QinAlgorithm.hxx"
+#include "MACE/Utility/InlineMacro.hxx"
 
 #include <bit>
 #include <cfenv>
@@ -10,7 +11,6 @@
 #include <concepts>
 #include <cstddef>
 #include <cstdint>
-#include <cstring>
 #include <limits>
 #include <numbers>
 #include <type_traits>
@@ -59,4 +59,4 @@ MACE_MATH_RA_N_LOG_FAMILY_DELETE(6, float)
 
 } // namespace MACE::Math
 
-#include "RALog.inl"
+#include "MACE/Math/RALog.inl"

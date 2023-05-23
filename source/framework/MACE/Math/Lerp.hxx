@@ -2,7 +2,7 @@
 
 #include "MACE/Concept/FundamentalType.hxx"
 #include "MACE/Concept/MathVector.hxx"
-#include "MACE/Utility/ValueTypeOf.hxx"
+#include "MACE/Utility/VectorValueType.hxx"
 
 #include <cmath>
 #include <concepts>
@@ -23,8 +23,8 @@ constexpr auto Lerp(const Concept::Arithmetic auto a,
 constexpr decltype(auto) Lerp(const Concept::MathVectorAny auto& a,
                               const Concept::MathVectorAny auto& b,
                               const Concept::Arithmetic auto t)
-    requires(not std::same_as<ValueTypeOf<decltype(a)>, bool> and
-             not std::same_as<ValueTypeOf<decltype(b)>, bool> and
+    requires(not std::same_as<VectorValueType<std::remove_cvref_t<decltype(a)>>, bool> and
+             not std::same_as<VectorValueType<std::remove_cvref_t<decltype(b)>>, bool> and
              not std::same_as<decltype(t), bool>) and
             requires { b - a; } and
             requires { a - b; }

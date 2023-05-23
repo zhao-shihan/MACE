@@ -5,7 +5,7 @@ namespace MACE::Math {
                                                                                        \
     template<typename T>                                                               \
         requires std::same_as<T, float> or std::same_as<T, double>                     \
-    constexpr auto RA##N##Log##b(T x) noexcept {                                       \
+    MACE_ALWAYS_INLINE constexpr auto RA##N##Log##b(T x) noexcept {                    \
         if constexpr (std::numeric_limits<T>::is_iec559) {                             \
             if (std::isgreater(x, static_cast<T>(0))) [[likely]] {                     \
                 using B = std::conditional_t<std::same_as<T, float>,                   \
@@ -26,7 +26,7 @@ namespace MACE::Math {
                 } else {                                                               \
                     return std::numeric_limits<T>::infinity();                         \
                 }                                                                      \
-            } else if (std::islessequal(x, static_cast<T>(0))) {                       \
+            } else if (std::islessequal(x, static_cast<T>(0))) [[likely]] {            \
                 if (x == 0) {                                                          \
                     std::feraiseexcept(FE_DIVBYZERO);                                  \
                     return -std::numeric_limits<T>::infinity();                        \
@@ -35,7 +35,8 @@ namespace MACE::Math {
                     return std::numeric_limits<T>::quiet_NaN();                        \
                 }                                                                      \
             } else {                                                                   \
-                return std::numeric_limits<T>::quiet_NaN();                            \
+                std2b::assume(x != x);                                                 \
+                return x;                                                              \
             }                                                                          \
         } else {                                                                       \
             return std::log##b(x);                                                     \
