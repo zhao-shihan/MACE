@@ -11,7 +11,7 @@ using namespace MACE::PhysicalConstant;
 
 void SelectorField::Construct(G4bool checkOverlaps) {
     const auto& description = Description::SelectorField::Instance();
-    const auto name = description.GetName();
+    const auto name = description.Name();
     const auto radius = description.Radius();
     const auto length = description.Length();
     const auto zPosition = description.AxialPosition();

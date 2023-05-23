@@ -1,4 +1,4 @@
-#include "MACE/Detector/GeometryBase.hxx"
+#include "MACE/Detector/Geometry/GeometryBase.hxx"
 #include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 
@@ -11,7 +11,7 @@
 #    include "G4GDMLParser.hh"
 #endif
 
-namespace MACE::Detector {
+namespace MACE::Detector::Geometry {
 
 void GeometryBase::RegisterMaterial(gsl::index iLogicalVolume, gsl::not_null<G4Material*> material) const {
     LogicalVolume(iLogicalVolume)->SetMaterial(material);
@@ -51,11 +51,11 @@ void GeometryBase::RegisterSD(gsl::index iLogicalVolume, gsl::not_null<G4VSensit
         G4ExceptionDescription msg;
         msg << "Attempting to register SD multiple times for \"" << logicalVolume->GetName() << "\" is currently not supported "
             << "(G4MultiSensitiveDetector not supported currently), skipping.";
-        G4Exception("MACE::Detector::GeometryBase::RegisterSD", "-1", JustWarning, msg);
+        G4Exception("MACE::Detector::Geometry::GeometryBase::RegisterSD", "-1", JustWarning, msg);
     } else {
         G4ExceptionDescription msg;
         msg << "Attempting to register the same SD multiple times for \"" << logicalVolume->GetName() << "\", skipping.";
-        G4Exception("MACE::Detector::GeometryBase::RegisterSD", "-1", JustWarning, msg);
+        G4Exception("MACE::Detector::Geometry::GeometryBase::RegisterSD", "-1", JustWarning, msg);
     }
 }
 
@@ -79,4 +79,4 @@ void GeometryBase::Export(std::filesystem::path gdmlFile, gsl::index iPhysicalVo
 #endif
 }
 
-} // namespace MACE::Detector
+} // namespace MACE::Detector::Geometry

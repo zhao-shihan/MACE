@@ -11,7 +11,7 @@ using namespace MACE::LiteralUnit::Density;
 
 void Target::Construct(G4bool checkOverlaps) {
     const auto& description = Description::Target::Instance();
-    const auto& name = description.GetName();
+    const auto& name = description.Name();
     switch (description.ShapeType()) {
     case Description::Target::TargetShapeType::Cuboid:
         const auto& cuboidDescription = description.Cuboid();

@@ -1,5 +1,5 @@
-#include "MACE/Detector/Description/TransportLine.hxx"
-#include "MACE/Detector/Geometry/Fast/ThirdTransportField.hxx"
+#include "MACE/Detector/Description/Solenoid.hxx"
+#include "MACE/Detector/Geometry/Fast/SolenoidS1Field.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4PVPlacement.hh"
@@ -9,12 +9,12 @@ namespace MACE::Detector::Geometry::Fast {
 
 using namespace MACE::PhysicalConstant;
 
-void ThirdTransportField::Construct(G4bool checkOverlaps) {
-    const auto& description = Description::TransportLine::Instance();
-    const auto name = "ThirdTransportField";
-    const auto length = description.ThirdStraightLength();
+void SolenoidS1Field::Construct(G4bool checkOverlaps) {
+    const auto& description = Description::Solenoid::Instance();
+    const auto name = "SolenoidS1Field";
     const auto radius = description.FieldRadius();
-    const auto transform = description.ThirdStraightTransform();
+    const auto length = description.S1Length();
+    const auto transform = description.S1Transform();
 
     auto solid = Make<G4Tubs>(
         name,

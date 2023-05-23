@@ -1,5 +1,5 @@
-#include "MACE/Detector/Description/TransportLine.hxx"
-#include "MACE/Detector/Geometry/Fast/FirstBendSolenoid.hxx"
+#include "MACE/Detector/Description/Solenoid.hxx"
+#include "MACE/Detector/Geometry/Fast/SolenoidB2.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4NistManager.hh"
@@ -10,19 +10,19 @@ namespace MACE::Detector::Geometry::Fast {
 
 using namespace MACE::PhysicalConstant;
 
-void FirstBendSolenoid::Construct(G4bool checkOverlaps) {
-    const auto& description = Description::TransportLine::Instance();
-    const auto name = "FirstBendSolenoid";
-    const auto innerRadius = description.SolenoidInnerRadius();
-    const auto outerRadius = description.SolenoidOuterRadius();
-    const auto bendRadius = description.FirstBendRadius();
+void SolenoidB2::Construct(G4bool checkOverlaps) {
+    const auto& description = Description::Solenoid::Instance();
+    const auto name = "SolenoidB2";
+    const auto innerRadius = description.InnerRadius();
+    const auto outerRadius = description.OuterRadius();
+    const auto bendRadius = description.B2Radius();
 
     auto solid = Make<G4Torus>(
         name,
         innerRadius,
         outerRadius,
         bendRadius,
-        halfpi,
+        -halfpi,
         halfpi);
     auto logic = Make<G4LogicalVolume>(
         solid,

@@ -13,7 +13,7 @@ using namespace MACE::PhysicalConstant;
 
 void SpectrometerShield::Construct(G4bool checkOverlaps) {
     const auto& description = Description::SpectrometerShield::Instance();
-    auto name = description.GetName();
+    auto name = description.Name();
     auto innerRadius = description.InnerRadius();
     auto innerLength = description.InnerLength();
     auto windowRadius = description.WindowRadius();

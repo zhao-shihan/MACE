@@ -1,29 +1,29 @@
-#include "MACE/Detector/Description/SpectrometerMagnet.hxx"
-#include "MACE/Detector/Geometry/Fast/SpectrometerMagnet.hxx"
+#include "MACE/Detector/Description/Solenoid.hxx"
+#include "MACE/Detector/Geometry/Fast/SolenoidB1.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
-#include "G4Tubs.hh"
+#include "G4Torus.hh"
 
 namespace MACE::Detector::Geometry::Fast {
 
 using namespace MACE::PhysicalConstant;
 
-void SpectrometerMagnet::Construct(G4bool checkOverlaps) {
-    const auto& description = Description::SpectrometerMagnet::Instance();
-    const auto name = description.Name();
+void SolenoidB1::Construct(G4bool checkOverlaps) {
+    const auto& description = Description::Solenoid::Instance();
+    const auto name = "SolenoidB1";
     const auto innerRadius = description.InnerRadius();
     const auto outerRadius = description.OuterRadius();
-    const auto length = description.Length();
+    const auto bendRadius = description.B1Radius();
 
-    auto solid = Make<G4Tubs>(
+    auto solid = Make<G4Torus>(
         name,
         innerRadius,
         outerRadius,
-        length / 2,
-        0,
-        twopi);
+        bendRadius,
+        halfpi,
+        halfpi);
     auto logic = Make<G4LogicalVolume>(
         solid,
         nullptr,

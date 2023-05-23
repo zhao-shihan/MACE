@@ -1,10 +1,10 @@
 #pragma once
 
-#include "MACE/Detector/GeometryBase.hxx"
+#include "MACE/Detector/Geometry/GeometryBase.hxx"
 
 namespace MACE::Detector::Geometry::Fast {
 
-class SecondBendField final : public GeometryBase {
+class SolenoidB1Field final : public GeometryBase {
 private:
     void Construct(G4bool checkOverlaps) override;
 };

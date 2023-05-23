@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Geometry::Fast {
 
-class SelectorField final : public GeometryBase {
+class AcceleratorField final : public GeometryBase {
 private:
     void Construct(G4bool checkOverlaps) override;
 };

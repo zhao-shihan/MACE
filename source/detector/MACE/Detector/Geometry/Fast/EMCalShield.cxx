@@ -13,42 +13,42 @@ using namespace MACE::PhysicalConstant;
 
 void EMCalShield::Construct(G4bool checkOverlaps) {
     const auto& description = Description::EMCalShield::Instance();
-    auto name = description.GetName();
-    auto innerRadius = description.InnerRadius();
-    auto innerLength = description.InnerLength();
-    auto windowRadius = description.WindowRadius();
-    auto thickness = description.Thickness();
-    auto transform = description.CalcTransform();
+    const auto name = description.Name();
+    const auto innerRadius = description.InnerRadius();
+    const auto innerLength = description.InnerLength();
+    const auto windowRadius = description.WindowRadius();
+    const auto thickness = description.Thickness();
+    const auto transform = description.CalcTransform();
 
-    auto body = Make<G4Tubs>(
+    const auto body = Make<G4Tubs>(
         "_temp",
         innerRadius,
         innerRadius + thickness,
         innerLength / 2,
         0,
         twopi);
-    auto cap = Make<G4Tubs>(
+    const auto cap = Make<G4Tubs>(
         "_temp",
         windowRadius,
         innerRadius + thickness,
         thickness / 2,
         0,
         twopi);
-    auto temp = Make<G4UnionSolid>(
+    const auto temp = Make<G4UnionSolid>(
         "_temp",
         body,
         cap,
         G4Transform3D(
             G4RotationMatrix(),
             G4ThreeVector(0, 0, -innerLength / 2 - thickness / 2)));
-    auto solid = Make<G4UnionSolid>(
+    const auto solid = Make<G4UnionSolid>(
         name,
         temp,
         cap,
         G4Transform3D(
             G4RotationMatrix(),
             G4ThreeVector(0, 0, innerLength / 2 + thickness / 2)));
-    auto logic = Make<G4LogicalVolume>(
+    const auto logic = Make<G4LogicalVolume>(
         solid,
         nullptr,
         name);

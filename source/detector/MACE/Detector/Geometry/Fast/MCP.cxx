@@ -11,7 +11,7 @@ using namespace MACE::LiteralUnit::Density;
 
 void MCP::Construct(G4bool checkOverlaps) {
     const auto& description = Description::MCP::Instance();
-    const auto name = description.GetName();
+    const auto name = description.Name();
     const auto width = description.Width();
     const auto thickness = description.Thickness();
 

@@ -13,7 +13,7 @@ using namespace MACE::PhysicalConstant;
 
 void EMCal::Construct(G4bool checkOverlaps) {
     const auto& description = Description::EMCal::Instance();
-    const auto name = description.GetName();
+    const auto name = description.Name();
     const auto innerRadius = description.InnerRadius();
     const auto innerLength = description.InnerLength();
     const auto windowRadius = description.WindowRadius();

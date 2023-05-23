@@ -1,6 +1,5 @@
-#include "MACE/Detector/Description/SpectrometerField.hxx"
-#include "MACE/Detector/Description/TransportLine.hxx"
-#include "MACE/Detector/Geometry/Fast/SecondTransportField.hxx"
+#include "MACE/Detector/Description/AcceleratorField.hxx"
+#include "MACE/Detector/Geometry/Fast/AcceleratorField.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
 #include "G4PVPlacement.hh"
@@ -10,12 +9,12 @@ namespace MACE::Detector::Geometry::Fast {
 
 using namespace MACE::PhysicalConstant;
 
-void SecondTransportField::Construct(G4bool checkOverlaps) {
-    const auto& description = Description::TransportLine::Instance();
-    const auto name = "SecondTransportField";
-    const auto length = description.SecondStraightLength();
-    const auto radius = description.FieldRadius();
-    const auto transform = description.SecondStraightTransform();
+void AcceleratorField::Construct(G4bool checkOverlaps) {
+    const auto& description = Description::AcceleratorField::Instance();
+    const auto name = description.Name();
+    const auto radius = description.Radius();
+    const auto length = description.Length();
+    const auto transform = description.CalcTransform();
 
     auto solid = Make<G4Tubs>(
         name,

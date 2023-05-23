@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Detector/GeometryBase.hxx"
+#include "MACE/Detector/Geometry/GeometryBase.hxx"
 
 namespace MACE::Detector::Geometry::Fast {
 

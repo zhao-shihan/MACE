@@ -11,7 +11,7 @@ using namespace MACE::PhysicalConstant;
 
 void SpectrometerField::Construct(G4bool checkOverlaps) {
     const auto& description = Description::SpectrometerField::Instance();
-    auto name = description.GetName();
+    auto name = description.Name();
     auto length = description.Length();
     auto radius = description.Radius();
 

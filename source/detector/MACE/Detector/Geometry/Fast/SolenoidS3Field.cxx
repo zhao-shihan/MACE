@@ -1,29 +1,28 @@
-#include "MACE/Detector/Description/TransportLine.hxx"
-#include "MACE/Detector/Geometry/Fast/FirstBendField.hxx"
+#include "MACE/Detector/Description/Solenoid.hxx"
+#include "MACE/Detector/Geometry/Fast/SolenoidS3Field.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 
-#include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
-#include "G4Torus.hh"
+#include "G4Tubs.hh"
 
 namespace MACE::Detector::Geometry::Fast {
 
 using namespace MACE::PhysicalConstant;
 
-void FirstBendField::Construct(G4bool checkOverlaps) {
-    const auto& description = Description::TransportLine::Instance();
-    const auto name = "FirstBendField";
+void SolenoidS3Field::Construct(G4bool checkOverlaps) {
+    const auto& description = Description::Solenoid::Instance();
+    const auto name = "SolenoidS3Field";
+    const auto length = description.S3Length();
     const auto radius = description.FieldRadius();
-    const auto bendRadius = description.FirstBendRadius();
-    const auto transform = description.FirstBendTransform();
+    const auto transform = description.S3Transform();
 
-    auto solid = Make<G4Torus>(
+    auto solid = Make<G4Tubs>(
         name,
         0,
         radius,
-        bendRadius,
-        halfpi,
-        halfpi);
+        length / 2,
+        0,
+        twopi);
     auto logic = Make<G4LogicalVolume>(
         solid,
         nullptr,

@@ -11,7 +11,7 @@ using namespace MACE::PhysicalConstant;
 
 void EMCalField::Construct(G4bool checkOverlaps) {
     const auto& description = Description::EMCalField::Instance();
-    auto name = description.GetName();
+    auto name = description.Name();
     auto radius = description.Radius();
     auto length = description.Length();
     auto transform = description.CalcTransform();

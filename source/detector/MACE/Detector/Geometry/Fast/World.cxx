@@ -12,7 +12,7 @@ using namespace MACE::LiteralUnit::Temperature;
 
 void World::Construct(G4bool checkOverlaps) {
     const auto& description = Description::World::Instance();
-    auto name = description.GetName();
+    auto name = description.Name();
     auto halfX = description.HalfXExtent();
     auto halfY = description.HalfYExtent();
     auto halfZ = description.HalfZExtent();
