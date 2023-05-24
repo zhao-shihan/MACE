@@ -52,16 +52,15 @@ void DescriptionIO::Import(const std::ranges::range auto& yamlText)
     yamlPath.concat(std::to_string(std::chrono::steady_clock::now().time_since_epoch().count()));
 
     std::fstream yamlOut(yamlPath, std::ios::out);
-    if (yamlOut.is_open()) {
-        for (auto&& line : yamlText) {
-            yamlOut << line << '\n';
-        }
-        yamlOut << std::endl;
-        yamlOut.close();
-        Import<ArgsOfImport...>(yamlPath);
-    } else {
+    if (not yamlOut.is_open()) {
         throw std::runtime_error("MACE::Detector::Description::DescriptionIO::Import: Cannot open temp yaml file");
     }
+    for (auto&& line : yamlText) {
+        yamlOut << line << '\n';
+    }
+    yamlOut << std::endl;
+    yamlOut.close();
+    Import<ArgsOfImport...>(yamlPath);
 
     std::error_code muteRemoveError;
     std::filesystem::remove(yamlPath, muteRemoveError);
@@ -118,8 +117,9 @@ void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::strin
 }
 
 void DescriptionIO::IxportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::input_range auto& descriptions) {
+    ExportImpl(std::filesystem::path(yamlFile).replace_extension(".prev.yaml"sv), fileComment, descriptions);
     ImportImpl(yamlFile, descriptions);
-    ExportImpl(std::filesystem::path(yamlFile).replace_extension(".out.yaml"sv), fileComment, descriptions);
+    ExportImpl(std::filesystem::path(yamlFile).replace_extension(".curr.yaml"sv), fileComment, descriptions);
 }
 
-} // namespace MACE::Detector
+} // namespace MACE::Detector::Description
