@@ -24,7 +24,7 @@ public:
     void EndOfEvent(G4HCofThisEvent*) override;
 
     /// @brief Inform this SD of event ID in EventAction
-    void SetEventID(G4int eventID) { fEventID = eventID; }
+    void EventID(G4int eventID) { fEventID = eventID; }
 
 private:
     G4int fEventID;

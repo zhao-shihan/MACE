@@ -16,11 +16,11 @@
 #include "MACE/Detector/Geometry/Fast/CDCSenseLayer.hxx"
 #include "MACE/Detector/Geometry/Fast/CDCSenseWire.hxx"
 #include "MACE/Detector/Geometry/Fast/CDCSuperLayer.hxx"
-#include "MACE/Detector/Geometry/Fast/MultiplateCollimator.hxx"
 #include "MACE/Detector/Geometry/Fast/EMCal.hxx"
 #include "MACE/Detector/Geometry/Fast/EMCalField.hxx"
 #include "MACE/Detector/Geometry/Fast/EMCalShield.hxx"
 #include "MACE/Detector/Geometry/Fast/MCP.hxx"
+#include "MACE/Detector/Geometry/Fast/MultiplateCollimator.hxx"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1.hxx"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1Field.hxx"
 #include "MACE/Detector/Geometry/Fast/SolenoidB2.hxx"
@@ -38,6 +38,7 @@
 #include "MACE/Detector/Geometry/Fast/World.hxx"
 #include "MACE/Detector/Geometry/GeometryBase.hxx"
 #include "MACE/SimMACE/Action/DetectorConstruction.hxx"
+#include "MACE/SimMACE/Messenger/DetectorMessenger.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
 #include "G4EqMagElectricField.hh"
@@ -75,6 +76,7 @@ DetectorConstruction::DetectorConstruction() :
     // Detector::Description::DescriptionIO::Import<DescriptionInUse>(std::array{
     // #include "MACE/SimMACE/DefaultGeometry.inlyaml"
     // });
+    GeometryMessenger::Instance().AssignTo(this);
 }
 
 G4VPhysicalVolume* DetectorConstruction::Construct() {
@@ -308,13 +310,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     // Register SDs
     ////////////////////////////////////////////////////////////////
     {
-        fCDCSD = new CDCSD(cdcCell.LogicalVolume()->GetName());
+        fCDCSD = new SD::CDCSD(cdcCell.LogicalVolume()->GetName());
         cdcCell.RegisterSD(fCDCSD);
 
-        fEMCalSD = new EMCalSD(emCal.LogicalVolume()->GetName());
+        fEMCalSD = new SD::EMCalSD(emCal.LogicalVolume()->GetName());
         emCal.RegisterSD(fEMCalSD);
 
-        fMCPSD = new MCPSD(mcp.LogicalVolume()->GetName());
+        fMCPSD = new SD::MCPSD(mcp.LogicalVolume()->GetName());
         mcp.RegisterSD(fMCPSD);
     }
 

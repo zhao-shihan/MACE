@@ -1,0 +1,98 @@
+# SimMACE: geometry description
+
+AcceleratorField:
+  Radius: 75
+  Length: 1000
+  DownStreamLength: 900
+  AcceleratorPotential: 0.0005
+BeamDegrader:
+  Enabled: true
+  Width: 60
+  Thickness: 0.43
+  DistanceToTargetSurface: 5
+BeamMonitor:
+  Enabled: false
+  Width: 40
+  Thickness: 0.5
+  DistanceToTargetSurface: 5
+CDC:
+  EvenSuperLayerIsAxial: false
+  NSuperLayer: 7
+  NSenseLayerPerSuper: 3
+  GasInnerRadius: 150
+  GasInnerLength: 1200
+  EndCapSlope: 0.75
+  MinStereoAngle: 0.069813170079773182
+  MinCellWidth: 6
+  ReferenceCellWidth: 10
+  MaxCellWidth: 14
+  FieldWireDiameter: 0.08
+  SenseWireDiameter: 0.02
+  SensitiveWidthFactor: 0.975
+  MinAdjacentSuperLayersDistance: 1
+  MinWireAndRadialShellDistance: 2
+  ShellInnerThickness: 0.25
+  ShellSideThickness: 10
+  ShellOuterThickness: 10
+  MeanDriftVelocity: 0.035
+  TimeResolution: 30
+EMCal:
+  InnerRadius: 150
+  InnerLength: 500
+  WindowRadius: 80
+  CrystalLength: 50
+EMCalField:
+  Radius: 250
+  Length: 700
+  MagneticFluxDensity: 0.0001
+EMCalShield:
+  InnerRadius: 300
+  InnerLength: 800
+  WindowRadius: 127
+  Thickness: 50
+MCP:
+  Width: 150
+  Thickness: 10
+MultiplateCollimator:
+  Length: 1000
+  Width: 100
+  Thickness: 0.5
+  Count: 11
+Solenoid:
+  S1Length: 200
+  B1Radius: 500
+  S2Length: 1000
+  B2Radius: 500
+  S3Length: 200
+  InnerRadius: 75
+  OuterRadius: 125
+  FieldRadius: 126
+  MagneticFluxDensity: 0.0001
+SpectrometerField:
+  Radius: 710
+  Length: 2200
+  MagneticFluxDensity: 0.0001
+SpectrometerMagnet:
+  InnerRadius: 500
+  OuterRadius: 700
+  Length: 2180
+SpectrometerShield:
+  InnerRadius: 720
+  InnerLength: 2220
+  WindowRadius: 127
+  Thickness: 50
+Target:
+  ShapeType: Cuboid
+  Cuboid:
+    Width: 60
+    Thickness: 10
+    DetailType: Hole
+    Hole:
+      AblationExtent: 40
+      Spacing: 0.0495
+      Diameter: 0.175
+      Depth: 3
+World:
+  HalfXExtent: 3000
+  HalfYExtent: 1000
+  HalfZExtent: 4000

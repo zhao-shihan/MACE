@@ -1,5 +1,20 @@
 #pragma once
 
+#include "MACE/Detector/Description/AcceleratorField.hxx"
+#include "MACE/Detector/Description/BeamDegrader.hxx"
+#include "MACE/Detector/Description/BeamMonitor.hxx"
+#include "MACE/Detector/Description/CDC.hxx"
+#include "MACE/Detector/Description/EMCal.hxx"
+#include "MACE/Detector/Description/EMCalField.hxx"
+#include "MACE/Detector/Description/EMCalShield.hxx"
+#include "MACE/Detector/Description/MCP.hxx"
+#include "MACE/Detector/Description/MultiplateCollimator.hxx"
+#include "MACE/Detector/Description/Solenoid.hxx"
+#include "MACE/Detector/Description/SpectrometerField.hxx"
+#include "MACE/Detector/Description/SpectrometerMagnet.hxx"
+#include "MACE/Detector/Description/SpectrometerShield.hxx"
+#include "MACE/Detector/Description/Target.hxx"
+#include "MACE/Detector/Description/World.hxx"
 #include "MACE/Env/Memory/PassiveSingleton.hxx"
 #include "MACE/SimMACE/Region.hxx"
 #include "MACE/SimMACE/SD/CDCSD.hxx"
@@ -8,42 +23,15 @@
 
 #include "G4VUserDetectorConstruction.hh"
 
-#include "gsl/gsl"
-
 #include <memory>
 
 namespace MACE {
 
-namespace Detector {
-
-namespace Description {
-
-class BeamDegrader;
-class BeamMonitor;
-class CDC;
-class Collimator;
-class EMCal;
-class EMCalField;
-class EMCalShield;
-class AcceleratorField;
-class MCP;
-class SelectorField;
-class SpectrometerField;
-class SpectrometerMagnet;
-class SpectrometerShield;
-class Target;
-class Solenoid;
-class World;
-
-} // namespace Description
-
-namespace Geometry {
+namespace Detector::Geometry {
 
 class GeometryBase;
 
-} // namespace Geometry
-
-} // namespace Detector
+} // namespace Detector::Geometry
 
 namespace SimMACE::inline Action {
 
@@ -56,42 +44,41 @@ public:
 
     void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlap = checkOverlaps; }
 
-    auto& GetEMCalSensitiveRegion() const { return *fEMCalSensitiveRegion; }
-    auto& GetDefaultSolidRegion() const { return *fDefaultSolidRegion; }
-    auto& GetDefaultGaseousRegion() const { return *fDefaultGaseousRegion; }
-    auto& GetShieldRegion() const { return *fShieldRegion; }
-    auto& GetSolenoidOrMagnetRegion() const { return *fSolenoidOrMagnetRegion; }
-    auto& GetSpectrometerSensitiveRegion() const { return *fSpectrometerSensitiveRegion; }
-    auto& GetTargetRegion() const { return *fTargetRegion; }
-    auto& GetVacuumRegion() const { return *fVacuumRegion; }
-    auto& GetMCPSensitiveRegion() const { return *fMCPSensitiveRegion; }
+    auto& EMCalSensitiveRegion() const { return *fEMCalSensitiveRegion; }
+    auto& DefaultSolidRegion() const { return *fDefaultSolidRegion; }
+    auto& DefaultGaseousRegion() const { return *fDefaultGaseousRegion; }
+    auto& ShieldRegion() const { return *fShieldRegion; }
+    auto& SolenoidOrMagnetRegion() const { return *fSolenoidOrMagnetRegion; }
+    auto& SpectrometerSensitiveRegion() const { return *fSpectrometerSensitiveRegion; }
+    auto& TargetRegion() const { return *fTargetRegion; }
+    auto& VacuumRegion() const { return *fVacuumRegion; }
+    auto& MCPSensitiveRegion() const { return *fMCPSensitiveRegion; }
 
-    auto& GetEMCalSD() const { return *fEMCalSD; }
-    auto& GetCDCSD() const { return *fCDCSD; }
-    auto& GetMCPSD() const { return *fMCPSD; }
+    auto& EMCalSD() const { return *fEMCalSD; }
+    auto& CDCSD() const { return *fCDCSD; }
+    auto& MCPSD() const { return *fMCPSD; }
 
 public:
-    using DescriptionInUse = std::tuple<Detector::Description::BeamDegrader,
+    using DescriptionInUse = std::tuple<Detector::Description::AcceleratorField,
+                                        Detector::Description::BeamDegrader,
                                         Detector::Description::BeamMonitor,
                                         Detector::Description::CDC,
-                                        Detector::Description::Collimator,
                                         Detector::Description::EMCal,
                                         Detector::Description::EMCalField,
                                         Detector::Description::EMCalShield,
-                                        Detector::Description::AcceleratorField,
                                         Detector::Description::MCP,
-                                        Detector::Description::SelectorField,
+                                        Detector::Description::MultiplateCollimator,
+                                        Detector::Description::Solenoid,
                                         Detector::Description::SpectrometerField,
                                         Detector::Description::SpectrometerMagnet,
                                         Detector::Description::SpectrometerShield,
                                         Detector::Description::Target,
-                                        Detector::Description::Solenoid,
                                         Detector::Description::World>;
 
 private:
     G4bool fCheckOverlap;
 
-    gsl::not_null<std::shared_ptr<Detector::Geometry::GeometryBase>> fWorld;
+    std::shared_ptr<Detector::Geometry::GeometryBase> fWorld;
 
     Region* fCDCFieldWireRegion;
     Region* fCDCSenseWireRegion;
@@ -105,9 +92,9 @@ private:
     Region* fTargetRegion;
     Region* fVacuumRegion;
 
-    CDCSD* fCDCSD;
-    EMCalSD* fEMCalSD;
-    MCPSD* fMCPSD;
+    SD::CDCSD* fCDCSD;
+    SD::EMCalSD* fEMCalSD;
+    SD::MCPSD* fMCPSD;
 };
 
 } // namespace SimMACE::inline Action

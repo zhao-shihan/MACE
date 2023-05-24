@@ -12,9 +12,9 @@ namespace MACE::SimMACE::inline Action {
 void EventAction::BeginOfEventAction(const G4Event* event) {
     const auto eventID = event->GetEventID();
     const auto& detectors = DetectorConstruction::Instance();
-    detectors.GetEMCalSD().SetEventID(eventID);
-    detectors.GetCDCSD().SetEventID(eventID);
-    detectors.GetMCPSD().SetEventID(eventID);
+    detectors.EMCalSD().EventID(eventID);
+    detectors.CDCSD().EventID(eventID);
+    detectors.MCPSD().EventID(eventID);
 }
 
 void EventAction::EndOfEventAction(const G4Event*) {
