@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/DataModel/Entry/FundamentalEntry.hxx"
+#include "MACE/DataModel/Field/FundamentalField.hxx"
 #include "MACE/DataModel/TransientData.hxx"
 #include "MACE/Utility/NonConstructibleBase.hxx"
 
@@ -14,10 +14,10 @@ using namespace std::string_view_literals;
 
 class CDCHit {
 public:
-    struct Entry : NonConstructibleBase {
-        using CellID = IntEntry<CDCHit, 0, int>;
-        using DriftDistance = FloatEntry<CDCHit, 1, double>;
-        using Time = DoubleEntry<CDCHit, 2, double>;
+    struct Field : NonConstructibleBase {
+        using CellID = IntField<CDCHit, 0, int>;
+        using DriftDistance = FloatField<CDCHit, 1, double>;
+        using Time = DoubleField<CDCHit, 2, double>;
     };
 
 public:
@@ -38,20 +38,20 @@ public:
     static void ConnectToAllBranch(TTree& tree);
 
 private:
-    Entry::CellID fCellID;
-    Entry::DriftDistance fDriftDistance;
-    Entry::Time fTime;
+    Field::CellID fCellID;
+    Field::DriftDistance fDriftDistance;
+    Field::Time fTime;
 };
 static_assert(TransientData<CDCHit>);
 
 } // namespace Hit
 
 template<>
-CDCHit::Entry::CellID::BranchSocket CDCHit::Entry::CellID::Base::fgBranchSocket;
+CDCHit::Field::CellID::BranchSocket CDCHit::Field::CellID::Base::fgBranchSocket;
 template<>
-CDCHit::Entry::DriftDistance::BranchSocket CDCHit::Entry::DriftDistance::Base::fgBranchSocket;
+CDCHit::Field::DriftDistance::BranchSocket CDCHit::Field::DriftDistance::Base::fgBranchSocket;
 template<>
-CDCHit::Entry::Time::BranchSocket CDCHit::Entry::Time::Base::fgBranchSocket;
+CDCHit::Field::Time::BranchSocket CDCHit::Field::Time::Base::fgBranchSocket;
 
 } // namespace MACE::DataModel
 

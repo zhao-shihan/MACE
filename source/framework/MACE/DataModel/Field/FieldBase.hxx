@@ -16,10 +16,10 @@ template<class ADerived,
          typename T, BranchSocket2<T> ABranchSocket,
          typename U>
     requires(AUniqueID >= 0)
-class EntryBase {
+class FieldBase {
 protected:
-    EntryBase();
-    ~EntryBase() = default;
+    FieldBase();
+    ~FieldBase() = default;
 
 public:
     static const auto& Name() { return fgBranchSocket.Name(); }
@@ -33,4 +33,4 @@ protected:
 
 } // namespace MACE::DataModel
 
-#include "MACE/DataModel/Entry/EntryBase.inl"
+#include "MACE/DataModel/Field/FieldBase.inl"

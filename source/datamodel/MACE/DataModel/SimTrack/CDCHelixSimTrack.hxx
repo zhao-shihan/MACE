@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/DataModel/Entry/FundamentalEntry.hxx"
-#include "MACE/DataModel/Entry/VectorEntry.hxx"
+#include "MACE/DataModel/Field/FundamentalField.hxx"
+#include "MACE/DataModel/Field/VectorField.hxx"
 #include "MACE/DataModel/SimTrack/CDCSimTrackBase.hxx"
 #include "MACE/DataModel/Track/CDCHelixTrack.hxx"
 #include "MACE/DataModel/TransientData.hxx"
@@ -18,11 +18,11 @@ using namespace std::string_view_literals;
 class CDCHelixSimTrack : public CDCHelixTrack,
                          public CDCSimTrackBase {
 public:
-    struct Entry : CDCSimTrackBase::Entry {
-        using CenterTruth = Vector2FEntry<CDCHelixSimTrack, 0, stdx::array2d>;
-        using RadiusTruth = FloatEntry<CDCHelixSimTrack, 1, double>;
-        using VertexZTruth = FloatEntry<CDCHelixSimTrack, 2, double>;
-        using ThetaTruth = FloatEntry<CDCHelixSimTrack, 3, double>;
+    struct Field : CDCSimTrackBase::Field {
+        using CenterTruth = Vector2FField<CDCHelixSimTrack, 0, stdx::array2d>;
+        using RadiusTruth = FloatField<CDCHelixSimTrack, 1, double>;
+        using VertexZTruth = FloatField<CDCHelixSimTrack, 2, double>;
+        using ThetaTruth = FloatField<CDCHelixSimTrack, 3, double>;
     };
 
 public:
@@ -45,23 +45,23 @@ public:
     static void ConnectToAllBranch(TTree& tree);
 
 private:
-    Entry::CenterTruth fCenterTruth;
-    Entry::RadiusTruth fRadiusTruth;
-    Entry::VertexZTruth fVertexZTruth;
-    Entry::ThetaTruth fThetaTruth;
+    Field::CenterTruth fCenterTruth;
+    Field::RadiusTruth fRadiusTruth;
+    Field::VertexZTruth fVertexZTruth;
+    Field::ThetaTruth fThetaTruth;
 };
 static_assert(TransientData<CDCHelixSimTrack>);
 
 } // namespace SimTrack
 
 template<>
-CDCHelixSimTrack::Entry::CenterTruth::BranchSocket CDCHelixSimTrack::Entry::CenterTruth::Base::fgBranchSocket;
+CDCHelixSimTrack::Field::CenterTruth::BranchSocket CDCHelixSimTrack::Field::CenterTruth::Base::fgBranchSocket;
 template<>
-CDCHelixSimTrack::Entry::RadiusTruth::BranchSocket CDCHelixSimTrack::Entry::RadiusTruth::Base::fgBranchSocket;
+CDCHelixSimTrack::Field::RadiusTruth::BranchSocket CDCHelixSimTrack::Field::RadiusTruth::Base::fgBranchSocket;
 template<>
-CDCHelixSimTrack::Entry::VertexZTruth::BranchSocket CDCHelixSimTrack::Entry::VertexZTruth::Base::fgBranchSocket;
+CDCHelixSimTrack::Field::VertexZTruth::BranchSocket CDCHelixSimTrack::Field::VertexZTruth::Base::fgBranchSocket;
 template<>
-CDCHelixSimTrack::Entry::ThetaTruth::BranchSocket CDCHelixSimTrack::Entry::ThetaTruth::Base::fgBranchSocket;
+CDCHelixSimTrack::Field::ThetaTruth::BranchSocket CDCHelixSimTrack::Field::ThetaTruth::Base::fgBranchSocket;
 
 } // namespace MACE::DataModel
 

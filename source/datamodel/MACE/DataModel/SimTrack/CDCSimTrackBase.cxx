@@ -3,27 +3,27 @@
 namespace MACE::DataModel {
 
 template<>
-CDCSimTrackBase::Entry::PDGCodeTruth::BranchSocket CDCSimTrackBase::Entry::PDGCodeTruth::Base::fgBranchSocket =
+CDCSimTrackBase::Field::PDGCodeTruth::BranchSocket CDCSimTrackBase::Field::PDGCodeTruth::Base::fgBranchSocket =
     {"pdgCodeT", "Particle PDG Code (MC Truth)", 0};
 template<>
-CDCSimTrackBase::Entry::NHitTruth::BranchSocket CDCSimTrackBase::Entry::NHitTruth::Base::fgBranchSocket =
+CDCSimTrackBase::Field::NHitTruth::BranchSocket CDCSimTrackBase::Field::NHitTruth::Base::fgBranchSocket =
     {"nHitT", "Number of Hits (MC Truth)", -1};
 template<>
-CDCSimTrackBase::Entry::VertexTimeTruth::BranchSocket CDCSimTrackBase::Entry::VertexTimeTruth::Base::fgBranchSocket =
+CDCSimTrackBase::Field::VertexTimeTruth::BranchSocket CDCSimTrackBase::Field::VertexTimeTruth::Base::fgBranchSocket =
     {"t0T", "Vertex Time (MC Truth)", 0};
 
 inline namespace SimTrack {
 
 void CDCSimTrackBase::CreateAllBranch(TTree& tree) {
-    Entry::PDGCodeTruth::CreateBranch(tree);
-    Entry::NHitTruth::CreateBranch(tree);
-    Entry::VertexTimeTruth::CreateBranch(tree);
+    Field::PDGCodeTruth::CreateBranch(tree);
+    Field::NHitTruth::CreateBranch(tree);
+    Field::VertexTimeTruth::CreateBranch(tree);
 }
 
 void CDCSimTrackBase::ConnectToAllBranch(TTree& tree) {
-    Entry::PDGCodeTruth::ConnectToBranch(tree);
-    Entry::NHitTruth::ConnectToBranch(tree);
-    Entry::VertexTimeTruth::ConnectToBranch(tree);
+    Field::PDGCodeTruth::ConnectToBranch(tree);
+    Field::NHitTruth::ConnectToBranch(tree);
+    Field::VertexTimeTruth::ConnectToBranch(tree);
 }
 
 } // namespace SimTrack

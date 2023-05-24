@@ -3,7 +3,7 @@
 #include "MACE/Concept/NumericVector.hxx"
 #include "MACE/Concept/ROOTFundamental.hxx"
 #include "MACE/DataModel/BranchSocket2/VectorBranchSocket2.hxx"
-#include "MACE/DataModel/Entry/EntryBase.hxx"
+#include "MACE/DataModel/Field/FieldBase.hxx"
 #include "MACE/Utility/VectorAssign.hxx"
 #include "MACE/Utility/VectorCast.hxx"
 #include "MACE/Utility/VectorValueType.hxx"
@@ -14,24 +14,24 @@
 #include <string>
 #include <utility>
 
-namespace MACE::DataModel::inline Entry {
+namespace MACE::DataModel::inline Field {
 
 template<class AData, gsl::index AUniqueID, Concept::ROOTFundamental T, std::size_t N, Concept::NumericVectorAny<N> U>
     requires(std::integral<T> and std::integral<VectorValueType<U>>) or
             (std::floating_point<T> and std::floating_point<VectorValueType<U>>)
-class VectorEntry final : public EntryBase<VectorEntry<AData, AUniqueID, T, N, U>,
+class VectorField final : public FieldBase<VectorField<AData, AUniqueID, T, N, U>,
                                            AData, AUniqueID,
                                            std::array<T, N>, VectorBranchSocket2<T, N>,
                                            U> {
 public:
-    using Base = EntryBase<VectorEntry<AData, AUniqueID, T, N, U>,
+    using Base = FieldBase<VectorField<AData, AUniqueID, T, N, U>,
                            AData, AUniqueID,
                            std::array<T, N>, VectorBranchSocket2<T, N>,
                            U>;
     using BranchSocket = decltype(Base::fgBranchSocket);
 
 public:
-    VectorEntry();
+    VectorField();
 
     const auto& Value() const { return fVector; }
     template<Concept::NumericVectorAny<N> V>
@@ -50,7 +50,7 @@ private:
     template<class AData, gsl::index AUniqueID, Concept::NumericVectorAny<N> T>             \
         requires(std::integral<Type> and std::integral<VectorValueType<T>>) or              \
                     (std::floating_point<Type> and std::floating_point<VectorValueType<T>>) \
-    using Vector##N##Suffix##Entry = VectorEntry<AData, AUniqueID, Type, N, T>;
+    using Vector##N##Suffix##Field = VectorField<AData, AUniqueID, Type, N, T>;
 
 MACE_DATA_MODEL_ENTRY_VECTOR_ENTRY_ALIAS(Float_t, 2, F)
 MACE_DATA_MODEL_ENTRY_VECTOR_ENTRY_ALIAS(Float_t, 3, F)
@@ -61,6 +61,6 @@ MACE_DATA_MODEL_ENTRY_VECTOR_ENTRY_ALIAS(Double_t, 4, D)
 
 #undef MACE_DATA_MODEL_ENTRY_VECTOR_ENTRY_ALIAS
 
-} // namespace MACE::DataModel::inline Entry
+} // namespace MACE::DataModel::inline Field
 
-#include "MACE/DataModel/Entry/VectorEntry.inl"
+#include "MACE/DataModel/Field/VectorField.inl"

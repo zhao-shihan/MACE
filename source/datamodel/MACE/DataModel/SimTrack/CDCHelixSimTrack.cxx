@@ -3,16 +3,16 @@
 namespace MACE::DataModel {
 
 template<>
-CDCHelixSimTrack::Entry::CenterTruth::BranchSocket CDCHelixSimTrack::Entry::CenterTruth::Base::fgBranchSocket = // clang-format off
+CDCHelixSimTrack::Field::CenterTruth::BranchSocket CDCHelixSimTrack::Field::CenterTruth::Base::fgBranchSocket = // clang-format off
     {"centerT", "Transverse Center (MC Truth)", {0, 0}}; // clang-format on
 template<>
-CDCHelixSimTrack::Entry::RadiusTruth::BranchSocket CDCHelixSimTrack::Entry::RadiusTruth::Base::fgBranchSocket =
+CDCHelixSimTrack::Field::RadiusTruth::BranchSocket CDCHelixSimTrack::Field::RadiusTruth::Base::fgBranchSocket =
     {"rT", "Transverse Radius (MC Truth)", 0};
 template<>
-CDCHelixSimTrack::Entry::VertexZTruth::BranchSocket CDCHelixSimTrack::Entry::VertexZTruth::Base::fgBranchSocket =
+CDCHelixSimTrack::Field::VertexZTruth::BranchSocket CDCHelixSimTrack::Field::VertexZTruth::Base::fgBranchSocket =
     {"z0T", "Vertex Z Coordinate (MC Truth)", 0};
 template<>
-CDCHelixSimTrack::Entry::ThetaTruth::BranchSocket CDCHelixSimTrack::Entry::ThetaTruth::Base::fgBranchSocket =
+CDCHelixSimTrack::Field::ThetaTruth::BranchSocket CDCHelixSimTrack::Field::ThetaTruth::Base::fgBranchSocket =
     {"thetaT", "Polar Angle (MC Truth)", 0};
 
 inline namespace SimTrack {
@@ -20,19 +20,19 @@ inline namespace SimTrack {
 void CDCHelixSimTrack::CreateAllBranch(TTree& tree) {
     CDCHelixTrack::CreateAllBranch(tree);
     CDCSimTrackBase::CreateAllBranch(tree);
-    Entry::CenterTruth::CreateBranch(tree);
-    Entry::RadiusTruth::CreateBranch(tree);
-    Entry::VertexZTruth::CreateBranch(tree);
-    Entry::ThetaTruth::CreateBranch(tree);
+    Field::CenterTruth::CreateBranch(tree);
+    Field::RadiusTruth::CreateBranch(tree);
+    Field::VertexZTruth::CreateBranch(tree);
+    Field::ThetaTruth::CreateBranch(tree);
 }
 
 void CDCHelixSimTrack::ConnectToAllBranch(TTree& tree) {
     CDCHelixTrack::ConnectToAllBranch(tree);
     CDCSimTrackBase::ConnectToAllBranch(tree);
-    Entry::CenterTruth::ConnectToBranch(tree);
-    Entry::RadiusTruth::ConnectToBranch(tree);
-    Entry::VertexZTruth::ConnectToBranch(tree);
-    Entry::ThetaTruth::ConnectToBranch(tree);
+    Field::CenterTruth::ConnectToBranch(tree);
+    Field::RadiusTruth::ConnectToBranch(tree);
+    Field::VertexZTruth::ConnectToBranch(tree);
+    Field::ThetaTruth::ConnectToBranch(tree);
 }
 
 } // namespace SimTrack

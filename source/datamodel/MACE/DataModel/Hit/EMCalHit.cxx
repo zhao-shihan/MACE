@@ -3,22 +3,22 @@
 namespace MACE::DataModel {
 
 template<>
-EMCalHit::Entry::Time::BranchSocket EMCalHit::Entry::Time::Base::fgBranchSocket = 
+EMCalHit::Field::Time::BranchSocket EMCalHit::Field::Time::Base::fgBranchSocket = 
     {"t", "Hitting Time", 0};
 template<>
-EMCalHit::Entry::EnergyDeposition::BranchSocket EMCalHit::Entry::EnergyDeposition::Base::fgBranchSocket = 
+EMCalHit::Field::EnergyDeposition::BranchSocket EMCalHit::Field::EnergyDeposition::Base::fgBranchSocket = 
     {"E", "Energy Deposition", 0};
 
 inline namespace Hit {
 
 void EMCalHit::CreateAllBranch(TTree& tree) {
-    Entry::Time::CreateBranch(tree);
-    Entry::EnergyDeposition::CreateBranch(tree);
+    Field::Time::CreateBranch(tree);
+    Field::EnergyDeposition::CreateBranch(tree);
 }
 
 void EMCalHit::ConnectToAllBranch(TTree& tree) {
-    Entry::Time::ConnectToBranch(tree);
-    Entry::EnergyDeposition::ConnectToBranch(tree);
+    Field::Time::ConnectToBranch(tree);
+    Field::EnergyDeposition::ConnectToBranch(tree);
 }
 
 } // namespace Hit

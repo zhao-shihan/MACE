@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/DataModel/Entry/FundamentalEntry.hxx"
-#include "MACE/DataModel/Entry/VectorEntry.hxx"
+#include "MACE/DataModel/Field/FundamentalField.hxx"
+#include "MACE/DataModel/Field/VectorField.hxx"
 #include "MACE/DataModel/Track/CDCTrackBase.hxx"
 #include "MACE/DataModel/TransientData.hxx"
 #include "MACE/Extension/stdx/arraynx.hxx"
@@ -16,10 +16,10 @@ using namespace std::string_view_literals;
 
 class CDCPhysicsTrack : public CDCTrackBase {
 public:
-    struct Entry : CDCTrackBase::Entry {
-        using VertexPosition = Vector3FEntry<CDCPhysicsTrack, 0, stdx::array3d>;
-        using VertexKineticEnergy = FloatEntry<CDCPhysicsTrack, 1, double>;
-        using VertexMomentum = Vector3FEntry<CDCPhysicsTrack, 2, stdx::array3d>;
+    struct Field : CDCTrackBase::Field {
+        using VertexPosition = Vector3FField<CDCPhysicsTrack, 0, stdx::array3d>;
+        using VertexKineticEnergy = FloatField<CDCPhysicsTrack, 1, double>;
+        using VertexMomentum = Vector3FField<CDCPhysicsTrack, 2, stdx::array3d>;
     };
 
 public:
@@ -40,20 +40,20 @@ public:
     static void ConnectToAllBranch(TTree& tree);
 
 private:
-    Entry::VertexPosition fVertexPosition;
-    Entry::VertexKineticEnergy fVertexKineticEnergy;
-    Entry::VertexMomentum fVertexMomentum;
+    Field::VertexPosition fVertexPosition;
+    Field::VertexKineticEnergy fVertexKineticEnergy;
+    Field::VertexMomentum fVertexMomentum;
 };
 static_assert(TransientData<CDCPhysicsTrack>);
 
 } // namespace Track
 
 template<>
-CDCPhysicsTrack::Entry::VertexPosition::BranchSocket CDCPhysicsTrack::Entry::VertexPosition::Base::fgBranchSocket;
+CDCPhysicsTrack::Field::VertexPosition::BranchSocket CDCPhysicsTrack::Field::VertexPosition::Base::fgBranchSocket;
 template<>
-CDCPhysicsTrack::Entry::VertexKineticEnergy::BranchSocket CDCPhysicsTrack::Entry::VertexKineticEnergy::Base::fgBranchSocket;
+CDCPhysicsTrack::Field::VertexKineticEnergy::BranchSocket CDCPhysicsTrack::Field::VertexKineticEnergy::Base::fgBranchSocket;
 template<>
-CDCPhysicsTrack::Entry::VertexMomentum::BranchSocket CDCPhysicsTrack::Entry::VertexMomentum::Base::fgBranchSocket;
+CDCPhysicsTrack::Field::VertexMomentum::BranchSocket CDCPhysicsTrack::Field::VertexMomentum::Base::fgBranchSocket;
 
 } // namespace MACE::DataModel
 

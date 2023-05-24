@@ -6,7 +6,7 @@ template<class E,
          class AData, gsl::index AUniqueID,
          typename T, class ABranchSocket,
          typename U>
-concept EntryConcept =
+concept FieldConcept =
     requires(E& e, const E& ce, const U v, TTree& tree) {
         requires BranchSocket2<ABranchSocket, T>;
         typename E::Base;
@@ -19,7 +19,7 @@ concept EntryConcept =
         { E::ConnectToBranch(tree) } -> std::same_as<void>;
         requires std::semiregular<E>;
         requires(std::is_trivially_copyable_v<E> == std::is_trivially_copyable_v<U>);
-        requires std::derived_from<E, EntryBase<E, AData, AUniqueID, T, ABranchSocket, U>>;
+        requires std::derived_from<E, FieldBase<E, AData, AUniqueID, T, ABranchSocket, U>>;
         requires std::is_final_v<E>;
         requires not std::is_polymorphic_v<E>;
     };
@@ -31,8 +31,8 @@ template<class ADerived,
          typename T, BranchSocket2<T> ABranchSocket,
          typename U>
     requires(AUniqueID >= 0)
-EntryBase<ADerived, AData, AUniqueID, T, ABranchSocket, U>::EntryBase() {
-    static_assert(internal::EntryConcept<ADerived, AData, AUniqueID, T, ABranchSocket, U>);
+FieldBase<ADerived, AData, AUniqueID, T, ABranchSocket, U>::FieldBase() {
+    static_assert(internal::FieldConcept<ADerived, AData, AUniqueID, T, ABranchSocket, U>);
 }
 
 } // namespace MACE::DataModel

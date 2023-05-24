@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/DataModel/Entry/FundamentalEntry.hxx"
+#include "MACE/DataModel/Field/FundamentalField.hxx"
 #include "MACE/Utility/NonConstructibleBase.hxx"
 
 namespace MACE::DataModel {
@@ -9,11 +9,11 @@ inline namespace Track {
 
 class CDCTrackBase {
 public:
-    struct Entry : NonConstructibleBase {
-        using PDGCode = IntEntry<CDCTrackBase, 0, int>;
-        using NHit = IntEntry<CDCTrackBase, 1, int>;
-        using Chi2 = FloatEntry<CDCTrackBase, 2, double>;
-        using VertexTime = DoubleEntry<CDCTrackBase, 3, double>;
+    struct Field : NonConstructibleBase {
+        using PDGCode = IntField<CDCTrackBase, 0, int>;
+        using NHit = IntField<CDCTrackBase, 1, int>;
+        using Chi2 = FloatField<CDCTrackBase, 2, double>;
+        using VertexTime = DoubleField<CDCTrackBase, 3, double>;
     };
 
 protected:
@@ -37,22 +37,22 @@ protected:
     static void ConnectToAllBranch(TTree& tree);
 
 private:
-    Entry::PDGCode fPDGCode;
-    Entry::NHit fNHit;
-    Entry::Chi2 fChi2;
-    Entry::VertexTime fVertexTime;
+    Field::PDGCode fPDGCode;
+    Field::NHit fNHit;
+    Field::Chi2 fChi2;
+    Field::VertexTime fVertexTime;
 };
 
 } // namespace Track
 
 template<>
-CDCTrackBase::Entry::PDGCode::BranchSocket CDCTrackBase::Entry::PDGCode::Base::fgBranchSocket;
+CDCTrackBase::Field::PDGCode::BranchSocket CDCTrackBase::Field::PDGCode::Base::fgBranchSocket;
 template<>
-CDCTrackBase::Entry::NHit::BranchSocket CDCTrackBase::Entry::NHit::Base::fgBranchSocket;
+CDCTrackBase::Field::NHit::BranchSocket CDCTrackBase::Field::NHit::Base::fgBranchSocket;
 template<>
-CDCTrackBase::Entry::Chi2::BranchSocket CDCTrackBase::Entry::Chi2::Base::fgBranchSocket;
+CDCTrackBase::Field::Chi2::BranchSocket CDCTrackBase::Field::Chi2::Base::fgBranchSocket;
 template<>
-CDCTrackBase::Entry::VertexTime::BranchSocket CDCTrackBase::Entry::VertexTime::Base::fgBranchSocket;
+CDCTrackBase::Field::VertexTime::BranchSocket CDCTrackBase::Field::VertexTime::Base::fgBranchSocket;
 
 } // namespace MACE::DataModel
 

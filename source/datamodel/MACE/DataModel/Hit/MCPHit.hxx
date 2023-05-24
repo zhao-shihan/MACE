@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/DataModel/Entry/FundamentalEntry.hxx"
-#include "MACE/DataModel/Entry/VectorEntry.hxx"
+#include "MACE/DataModel/Field/FundamentalField.hxx"
+#include "MACE/DataModel/Field/VectorField.hxx"
 #include "MACE/DataModel/TransientData.hxx"
 #include "MACE/Extension/stdx/arraynx.hxx"
 #include "MACE/Utility/NonConstructibleBase.hxx"
@@ -16,9 +16,9 @@ using namespace std::string_view_literals;
 
 class MCPHit {
 public:
-    struct Entry : NonConstructibleBase {
-        using Time = DoubleEntry<MCPHit, 0, double>;
-        using Position = Vector2FEntry<MCPHit, 1, stdx::array2d>;
+    struct Field : NonConstructibleBase {
+        using Time = DoubleField<MCPHit, 0, double>;
+        using Position = Vector2FField<MCPHit, 1, stdx::array2d>;
     };
 
 public:
@@ -37,17 +37,17 @@ public:
     static void ConnectToAllBranch(TTree& tree);
 
 private:
-    Entry::Time fTime;
-    Entry::Position fPosition;
+    Field::Time fTime;
+    Field::Position fPosition;
 };
 static_assert(TransientData<MCPHit>);
 
 } // namespace Hit
 
 template<>
-MCPHit::Entry::Time::BranchSocket MCPHit::Entry::Time::Base::fgBranchSocket;
+MCPHit::Field::Time::BranchSocket MCPHit::Field::Time::Base::fgBranchSocket;
 template<>
-MCPHit::Entry::Position::BranchSocket MCPHit::Entry::Position::Base::fgBranchSocket;
+MCPHit::Field::Position::BranchSocket MCPHit::Field::Position::Base::fgBranchSocket;
 
 } // namespace MACE::DataModel
 
