@@ -20,7 +20,7 @@
 # Geometry
 #/MACE/Detector/Description/Import                     geom.yaml
 /MACE/Detector/TargetDensity                       30 mg/cm3
-/MACE/Detector/Temperature                         293.15 K
+/MACE/Detector/TargetTemperature                   293.15 K
 
 # Initialize kernel
 /run/initialize

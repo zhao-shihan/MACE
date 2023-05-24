@@ -46,7 +46,7 @@ private:
     std::unique_ptr<G4UIcmdWithAString> fExportDescription;
     std::unique_ptr<G4UIcmdWithAString> fIxportDescription;
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fTargetDensity;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fTemperature;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fTargetTemperature;
 };
 
 } // inline namespace Messenger

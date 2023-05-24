@@ -1,11 +1,6 @@
-#include "MACE/Detector/Description/BeamDegrader.hxx"
-#include "MACE/Detector/Description/BeamMonitor.hxx"
-#include "MACE/Detector/Description/Target.hxx"
-#include "MACE/Detector/Description/World.hxx"
 #include "MACE/Detector/Description/DescriptionIO.hxx"
 #include "MACE/SimTarget/Action/DetectorConstruction.hxx"
 #include "MACE/SimTarget/Messenger/DetectorMessenger.hxx"
-#include "MACE/SimTarget/RunManager.hxx"
 
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWithABool.hh"
@@ -25,7 +20,7 @@ GeometryMessenger::GeometryMessenger() :
     fExportDescription(),
     fIxportDescription(),
     fTargetDensity(),
-    fTemperature() {
+    fTargetTemperature() {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Detector/");
 
@@ -40,7 +35,8 @@ GeometryMessenger::GeometryMessenger() :
     fExportDescription->AvailableForStates(G4State_PreInit, G4State_Idle);
 
     fIxportDescription = std::make_unique<G4UIcmdWithAString>("/MACE/Detector/Description/Ixport", this);
-    fIxportDescription->SetGuidance("Import, then immediately export geometry descriptions used by this program.");
+    fIxportDescription->SetGuidance("Export, Import, then export geometry descriptions used by this program. "
+                                    "Exported files have '.prev' (previous) or '.curr' (current) suffix, respectively.");
     fIxportDescription->SetParameterName("yaml", false);
     fIxportDescription->AvailableForStates(G4State_PreInit, G4State_Idle);
 
@@ -50,11 +46,11 @@ GeometryMessenger::GeometryMessenger() :
     fTargetDensity->SetUnitCategory("Volumic Mass");
     fTargetDensity->AvailableForStates(G4State_PreInit);
 
-    fTemperature = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Detector/Temperature", this);
-    fTemperature->SetGuidance("Set environment temperature.");
-    fTemperature->SetParameterName("T", false);
-    fTemperature->SetUnitCategory("Temperature");
-    fTemperature->AvailableForStates(G4State_PreInit);
+    fTargetTemperature = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Detector/TargetTemperature", this);
+    fTargetTemperature->SetGuidance("Set target temperature.");
+    fTargetTemperature->SetParameterName("T", false);
+    fTargetTemperature->SetUnitCategory("Temperature");
+    fTargetTemperature->AvailableForStates(G4State_PreInit);
 }
 
 GeometryMessenger::~GeometryMessenger() = default;
@@ -69,9 +65,9 @@ void GeometryMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     } else if (command == fIxportDescription.get()) {
         DescriptionIO::Ixport<DescriptionInUse>(std::string_view(value), "SimTarget: geometry description");
     } else if (command == fTargetDensity.get()) {
-        fDetectorConstruction->SetTargetDensity(fTargetDensity->GetNewDoubleValue(value));
-    } else if (command == fTemperature.get()) {
-        fDetectorConstruction->SetTemperature(fTemperature->GetNewDoubleValue(value));
+        fDetectorConstruction->TargetDensity(fTargetDensity->GetNewDoubleValue(value));
+    } else if (command == fTargetTemperature.get()) {
+        fDetectorConstruction->TargetTemperature(fTargetTemperature->GetNewDoubleValue(value));
     }
 }
 
