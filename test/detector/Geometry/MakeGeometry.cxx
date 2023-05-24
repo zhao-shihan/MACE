@@ -9,11 +9,11 @@
 #include "MACE/Detector/Geometry/Fast/CDCSenseLayer.hxx"
 #include "MACE/Detector/Geometry/Fast/CDCSenseWire.hxx"
 #include "MACE/Detector/Geometry/Fast/CDCSuperLayer.hxx"
-#include "MACE/Detector/Geometry/Fast/Collimator.hxx"
 #include "MACE/Detector/Geometry/Fast/EMCal.hxx"
 #include "MACE/Detector/Geometry/Fast/EMCalField.hxx"
 #include "MACE/Detector/Geometry/Fast/EMCalShield.hxx"
 #include "MACE/Detector/Geometry/Fast/MCP.hxx"
+#include "MACE/Detector/Geometry/Fast/MultiplateCollimator.hxx"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1.hxx"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1Field.hxx"
 #include "MACE/Detector/Geometry/Fast/SolenoidB2.hxx"
@@ -33,9 +33,9 @@
 #include "MACE/Env/CLI/BasicCLI.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 
-#include "G4NistManager.hh"
-
 #include "TGeoManager.h"
+
+#include "G4NistManager.hh"
 
 #include <functional>
 
@@ -59,33 +59,33 @@ int main(int argc, char* argv[]) {
 
     auto& emCalField = fWorld->NewDaughter<EMCalField>(fCheckOverlap);
     auto& emCalShield = fWorld->NewDaughter<EMCalShield>(fCheckOverlap);
-    auto& firstBendField = fWorld->NewDaughter<SolenoidB1Field>(fCheckOverlap);
-    auto& firstTransportField = fWorld->NewDaughter<SolenoidS1Field>(fCheckOverlap);
-    auto& secondBendField = fWorld->NewDaughter<SolenoidB2Field>(fCheckOverlap);
-    auto& secondTransportField = fWorld->NewDaughter<SolenoidS2Field>(fCheckOverlap);
+    auto& solenoidB1Field = fWorld->NewDaughter<SolenoidB1Field>(fCheckOverlap);
+    auto& solenoidB2Field = fWorld->NewDaughter<SolenoidB2Field>(fCheckOverlap);
+    auto& solenoidS1Field = fWorld->NewDaughter<SolenoidS1Field>(fCheckOverlap);
+    auto& solenoidS2Field = fWorld->NewDaughter<SolenoidS2Field>(fCheckOverlap);
+    auto& solenoidS3Field = fWorld->NewDaughter<SolenoidS3Field>(fCheckOverlap);
     auto& spectrometerField = fWorld->NewDaughter<SpectrometerField>(fCheckOverlap);
     auto& spectrometerShield = fWorld->NewDaughter<SpectrometerShield>(fCheckOverlap);
-    auto& thirdTransportField = fWorld->NewDaughter<SolenoidS3Field>(fCheckOverlap);
 
     // 2
 
     auto& emCal = emCalField.NewDaughter<EMCal>(fCheckOverlap);
     auto& mcp = emCalField.NewDaughter<MCP>(fCheckOverlap);
 
-    auto& firstBendSolenoid = firstBendField.NewDaughter<SolenoidB1>(fCheckOverlap);
+    auto& solenoidB1 = solenoidB1Field.NewDaughter<SolenoidB1>(fCheckOverlap);
 
-    auto& firstTransportSolenoid = firstTransportField.NewDaughter<SolenoidS1>(fCheckOverlap);
+    auto& solenoidS1 = solenoidS1Field.NewDaughter<SolenoidS1>(fCheckOverlap);
 
-    auto& secondBendSolenoid = secondBendField.NewDaughter<SolenoidB2>(fCheckOverlap);
+    auto& solenoidB2 = solenoidB2Field.NewDaughter<SolenoidB2>(fCheckOverlap);
 
-    auto& collimator = secondTransportField.NewDaughter<Collimator>(fCheckOverlap);
-    auto& secondTransportSolenoid = secondTransportField.NewDaughter<SolenoidS2>(fCheckOverlap);
+    auto& multiplateCollimator = solenoidS2Field.NewDaughter<MultiplateCollimator>(fCheckOverlap);
+    auto& solenoidS2 = solenoidS2Field.NewDaughter<SolenoidS2>(fCheckOverlap);
 
-    auto& cdcBody = spectrometerField.NewDaughter<CDCBody>(fCheckOverlap);
     auto& acceleratorField = spectrometerField.NewDaughter<AcceleratorField>(fCheckOverlap);
+    auto& cdcBody = spectrometerField.NewDaughter<CDCBody>(fCheckOverlap);
     auto& spectrometerMagnet = spectrometerField.NewDaughter<SpectrometerMagnet>(fCheckOverlap);
 
-    auto& thirdTransportSolenoid = thirdTransportField.NewDaughter<SolenoidS3>(fCheckOverlap);
+    auto& solenoidS3 = solenoidS3Field.NewDaughter<SolenoidS3>(fCheckOverlap);
 
     // 3
 
@@ -115,77 +115,78 @@ int main(int argc, char* argv[]) {
     ////////////////////////////////////////////////////////////////
     // Register materials
     ////////////////////////////////////////////////////////////////
+    {
+        using namespace MACE::LiteralUnit::Density;
 
-    using namespace MACE::LiteralUnit::Density;
+        const auto nist = G4NistManager::Instance();
 
-    const auto nist = G4NistManager::Instance();
+        const auto aluminium = nist->FindOrBuildMaterial("G4_Al");
+        beamDegrader.RegisterMaterial(aluminium);
+        cdcFieldWire.RegisterMaterial(aluminium);
 
-    const auto aluminium = nist->FindOrBuildMaterial("G4_Al");
-    beamDegrader.RegisterMaterial(aluminium);
-    cdcFieldWire.RegisterMaterial(aluminium);
+        const auto cdcHeBasedGas = [&nist] {
+            constexpr auto heFraction = 0.85;
+            constexpr auto butaneFraction = 1 - heFraction;
+            const auto he = nist->FindOrBuildMaterial("G4_He");
+            const auto butane = nist->FindOrBuildMaterial("G4_BUTANE");
+            const auto gas = new G4Material("CDCGas",
+                                            heFraction * he->GetDensity() +
+                                                butaneFraction * butane->GetDensity(),
+                                            2,
+                                            kStateGas);
+            gas->AddMaterial(he, heFraction);
+            gas->AddMaterial(butane, butaneFraction);
+            return gas;
+        }();
+        cdcCell.RegisterMaterial(cdcHeBasedGas);
+        cdcGas.RegisterMaterial(cdcHeBasedGas);
+        cdcSenseLayer.RegisterMaterial(cdcHeBasedGas);
+        cdcSuperLayer.RegisterMaterial(cdcHeBasedGas);
 
-    const auto cdcHeBasedGas = [&nist] {
-        constexpr auto heFraction = 0.85;
-        constexpr auto butaneFraction = 1 - heFraction;
-        const auto he = nist->FindOrBuildMaterial("G4_He");
-        const auto butane = nist->FindOrBuildMaterial("G4_BUTANE");
-        const auto gas = new G4Material("CDCGas",
-                                        heFraction * he->GetDensity() +
-                                            butaneFraction * butane->GetDensity(),
-                                        2,
-                                        kStateGas);
-        gas->AddMaterial(he, heFraction);
-        gas->AddMaterial(butane, butaneFraction);
-        return gas;
-    }();
-    cdcCell.RegisterMaterial(cdcHeBasedGas);
-    cdcGas.RegisterMaterial(cdcHeBasedGas);
-    cdcSenseLayer.RegisterMaterial(cdcHeBasedGas);
-    cdcSuperLayer.RegisterMaterial(cdcHeBasedGas);
+        const auto cdcShell = nist->BuildMaterialWithNewDensity("CarbonFiber", "G4_C", 1.7_g_cm3);
+        cdcBody.RegisterMaterial(cdcShell);
 
-    const auto cdcShell = nist->BuildMaterialWithNewDensity("CarbonFiber", "G4_C", 1.7_g_cm3);
-    cdcBody.RegisterMaterial(cdcShell);
+        const auto copper = nist->FindOrBuildMaterial("G4_Cu");
+        solenoidB1.RegisterMaterial(copper);
+        solenoidS1.RegisterMaterial(copper);
+        solenoidB2.RegisterMaterial(copper);
+        solenoidS2.RegisterMaterial(copper);
+        solenoidS3.RegisterMaterial(copper);
 
-    const auto copper = nist->FindOrBuildMaterial("G4_Cu");
-    collimator.RegisterMaterial(copper);
-    firstBendSolenoid.RegisterMaterial(copper);
-    firstTransportSolenoid.RegisterMaterial(copper);
-    secondBendSolenoid.RegisterMaterial(copper);
-    secondTransportSolenoid.RegisterMaterial(copper);
-    thirdTransportSolenoid.RegisterMaterial(copper);
+        const auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
+        emCal.RegisterMaterial(csI);
 
-    const auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
-    emCal.RegisterMaterial(csI);
+        const auto iron = nist->FindOrBuildMaterial("G4_Fe");
+        spectrometerMagnet.RegisterMaterial(iron);
+        multiplateCollimator.RegisterMaterial(iron);
 
-    const auto iron = nist->FindOrBuildMaterial("G4_Fe");
-    spectrometerMagnet.RegisterMaterial(iron);
+        const auto lead = nist->FindOrBuildMaterial("G4_Pb");
+        emCalShield.RegisterMaterial(lead);
+        spectrometerShield.RegisterMaterial(lead);
 
-    const auto lead = nist->FindOrBuildMaterial("G4_Pb");
-    emCalShield.RegisterMaterial(lead);
-    spectrometerShield.RegisterMaterial(lead);
+        const auto mcpMaterial = nist->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4_g_cm3);
+        mcp.RegisterMaterial(mcpMaterial);
 
-    const auto mcpMaterial = nist->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4_g_cm3);
-    mcp.RegisterMaterial(mcpMaterial);
+        const auto plasticScitillator = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
+        beamMonitor.RegisterMaterial(plasticScitillator);
 
-    const auto plasticScitillator = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
-    beamMonitor.RegisterMaterial(plasticScitillator);
+        const auto silicaAerogel = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30_mg_cm3);
+        target.RegisterMaterial(silicaAerogel);
 
-    const auto silicaAerogel = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30_mg_cm3);
-    target.RegisterMaterial(silicaAerogel);
+        const auto tungsten = nist->FindOrBuildMaterial("G4_W");
+        cdcSenseWire.RegisterMaterial(tungsten);
 
-    const auto tungsten = nist->FindOrBuildMaterial("G4_W");
-    cdcSenseWire.RegisterMaterial(tungsten);
-
-    const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
-    emCalField.RegisterMaterial(vacuum);
-    firstBendField.RegisterMaterial(vacuum);
-    firstTransportField.RegisterMaterial(vacuum);
-    acceleratorField.RegisterMaterial(vacuum);
-    secondBendField.RegisterMaterial(vacuum);
-    secondTransportField.RegisterMaterial(vacuum);
-    spectrometerField.RegisterMaterial(vacuum);
-    thirdTransportField.RegisterMaterial(vacuum);
-    fWorld->RegisterMaterial(vacuum);
+        const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
+        emCalField.RegisterMaterial(vacuum);
+        solenoidB1Field.RegisterMaterial(vacuum);
+        solenoidS1Field.RegisterMaterial(vacuum);
+        acceleratorField.RegisterMaterial(vacuum);
+        solenoidB2Field.RegisterMaterial(vacuum);
+        solenoidS2Field.RegisterMaterial(vacuum);
+        spectrometerField.RegisterMaterial(vacuum);
+        solenoidS3Field.RegisterMaterial(vacuum);
+        fWorld->RegisterMaterial(vacuum);
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -215,11 +216,11 @@ int main(int argc, char* argv[]) {
              emCal,
              spectrometerMagnet,
              spectrometerShield,
-             firstBendSolenoid,
-             firstTransportSolenoid,
-             secondBendSolenoid,
-             secondTransportSolenoid,
-             thirdTransportSolenoid}) {
+             solenoidB1,
+             solenoidB2,
+             solenoidS1,
+             solenoidS2,
+             solenoidS3}) {
         geoManager->GetVolume(entity.get().LogicalVolume()->GetName())->SetTransparency(60);
     }
 
