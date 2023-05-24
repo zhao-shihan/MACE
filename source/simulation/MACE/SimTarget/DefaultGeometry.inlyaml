@@ -1,7 +1,7 @@
 "BeamDegrader:"
 ,"  Enabled: true"
 ,"  Width: 60"
-,"  Thickness: 0.42"
+,"  Thickness: 0.43"
 ,"  DistanceToTargetSurface: 5"
 ,"BeamMonitor:"
 ,"  Enabled: false"
