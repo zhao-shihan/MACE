@@ -1,8 +1,4 @@
-#include "MACE/Detector/Description/BeamDegrader.hxx"
-#include "MACE/Detector/Description/BeamMonitor.hxx"
 #include "MACE/Detector/Description/AcceleratorField.hxx"
-#include "MACE/Detector/Description/Target.hxx"
-#include "MACE/Detector/Description/World.hxx"
 #include "MACE/Detector/Description/DescriptionIO.hxx"
 #include "MACE/Detector/Geometry/Fast/BeamDegrader.hxx"
 #include "MACE/Detector/Geometry/Fast/BeamMonitor.hxx"
@@ -26,8 +22,8 @@ DetectorConstruction::DetectorConstruction() :
     G4VUserDetectorConstruction(),
     fCheckOverlap(false),
     fWorld(nullptr),
-    fDensity(30_mg_cm3),
-    fTemperature(293.15_K) {
+    fTargetDensity(30_mg_cm3),
+    fTargetTemperature(293.15_K) {
     Detector::Description::DescriptionIO::Import<DescriptionInUse>(std::array{
 #include "MACE/SimTarget/DefaultGeometry.inlyaml"
     });
@@ -49,8 +45,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     auto nist = G4NistManager::Instance();
     beamMonitor.RegisterMaterial(nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE"));
     beamDegrader.RegisterMaterial(nist->FindOrBuildMaterial("G4_Al"));
-    target.RegisterMaterial(nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", fDensity, fTemperature));
-    fWorld->RegisterMaterial(nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3, fTemperature));
+    target.RegisterMaterial(nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", fTargetDensity, fTargetTemperature));
+    fWorld->RegisterMaterial(nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3, fTargetTemperature));
 
     return fWorld->PhysicalVolume().get();
 }

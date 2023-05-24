@@ -1,5 +1,9 @@
 #pragma once
 
+#include "MACE/Detector/Description/BeamDegrader.hxx"
+#include "MACE/Detector/Description/BeamMonitor.hxx"
+#include "MACE/Detector/Description/Target.hxx"
+#include "MACE/Detector/Description/World.hxx"
 #include "MACE/Env/Memory/PassiveSingleton.hxx"
 
 #include "G4VUserDetectorConstruction.hh"
@@ -9,24 +13,11 @@
 
 namespace MACE {
 
-namespace Detector {
-
-namespace Description {
-
-class BeamDegrader;
-class BeamMonitor;
-class Target;
-class World;
-
-} // namespace Description
-
-namespace Geometry {
+namespace Detector::Geometry {
 
 class GeometryBase;
 
-} // namespace Geometry
-
-} // namespace Detector
+} // namespace Detector::Geometry
 
 namespace SimTarget::inline Action {
 
@@ -37,8 +28,8 @@ public:
 
     G4VPhysicalVolume* Construct() override;
 
-    void SetTargetDensity(G4double val) { fDensity = val; }
-    void SetTemperature(G4double val) { fTemperature = val; }
+    void TargetDensity(G4double val) { fTargetDensity = val; }
+    void TargetTemperature(G4double val) { fTargetTemperature = val; }
 
     void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlap = checkOverlaps; }
 
@@ -53,8 +44,8 @@ private:
 
     std::shared_ptr<Detector::Geometry::GeometryBase> fWorld;
 
-    G4double fDensity;
-    G4double fTemperature;
+    G4double fTargetDensity;
+    G4double fTargetTemperature;
 };
 
 } // namespace SimTarget::inline Action
