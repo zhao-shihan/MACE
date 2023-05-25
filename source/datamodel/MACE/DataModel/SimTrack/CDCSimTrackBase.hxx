@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/DataModel/Field/FundamentalField.hxx"
+#include "MACE/DataModel/Column/FundamentalColumn.hxx"
 #include "MACE/Utility/NonConstructibleBase.hxx"
 
 namespace MACE::DataModel {
@@ -9,10 +9,10 @@ inline namespace SimTrack {
 
 class CDCSimTrackBase {
 public:
-    struct Field : NonConstructibleBase {
-        using PDGCodeTruth = IntField<CDCSimTrackBase, 0, int>;
-        using NHitTruth = IntField<CDCSimTrackBase, 1, int>;
-        using VertexTimeTruth = DoubleField<CDCSimTrackBase, 2, double>;
+    struct Column : NonConstructibleBase {
+        using PDGCodeTruth = IntColumn<CDCSimTrackBase, 0, int>;
+        using NHitTruth = IntColumn<CDCSimTrackBase, 1, int>;
+        using VertexTimeTruth = DoubleColumn<CDCSimTrackBase, 2, double>;
     };
 
 protected:
@@ -34,19 +34,19 @@ protected:
     static void ConnectToAllBranch(TTree& tree);
 
 private:
-    Field::PDGCodeTruth fPDGCodeTruth;
-    Field::NHitTruth fNHitTruth;
-    Field::VertexTimeTruth fVertexTimeTruth;
+    Column::PDGCodeTruth fPDGCodeTruth;
+    Column::NHitTruth fNHitTruth;
+    Column::VertexTimeTruth fVertexTimeTruth;
 };
 
 } // namespace SimTrack
 
 template<>
-CDCSimTrackBase::Field::PDGCodeTruth::BranchSocket CDCSimTrackBase::Field::PDGCodeTruth::Base::fgBranchSocket;
+CDCSimTrackBase::Column::PDGCodeTruth::BranchSocket CDCSimTrackBase::Column::PDGCodeTruth::Base::fgBranchSocket;
 template<>
-CDCSimTrackBase::Field::NHitTruth::BranchSocket CDCSimTrackBase::Field::NHitTruth::Base::fgBranchSocket;
+CDCSimTrackBase::Column::NHitTruth::BranchSocket CDCSimTrackBase::Column::NHitTruth::Base::fgBranchSocket;
 template<>
-CDCSimTrackBase::Field::VertexTimeTruth::BranchSocket CDCSimTrackBase::Field::VertexTimeTruth::Base::fgBranchSocket;
+CDCSimTrackBase::Column::VertexTimeTruth::BranchSocket CDCSimTrackBase::Column::VertexTimeTruth::Base::fgBranchSocket;
 
 } // namespace MACE::DataModel
 

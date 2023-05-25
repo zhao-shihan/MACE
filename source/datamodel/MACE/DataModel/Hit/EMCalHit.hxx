@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/DataModel/Field/FundamentalField.hxx"
+#include "MACE/DataModel/Column/FundamentalColumn.hxx"
 #include "MACE/DataModel/TransientData.hxx"
 #include "MACE/Utility/NonConstructibleBase.hxx"
 
@@ -14,9 +14,9 @@ using namespace std::string_view_literals;
 
 class EMCalHit {
 public:
-    struct Field : NonConstructibleBase {
-        using Time = DoubleField<EMCalHit, 0, double>;
-        using EnergyDeposition = FloatField<EMCalHit, 1, double>;
+    struct Column : NonConstructibleBase {
+        using Time = DoubleColumn<EMCalHit, 0, double>;
+        using EnergyDeposition = FloatColumn<EMCalHit, 1, double>;
     };
 
 public:
@@ -35,17 +35,17 @@ public:
     static void ConnectToAllBranch(TTree& tree);
 
 private:
-    Field::Time fTime;
-    Field::EnergyDeposition fEnergyDeposition;
+    Column::Time fTime;
+    Column::EnergyDeposition fEnergyDeposition;
 };
 static_assert(TransientData<EMCalHit>);
 
 } // namespace Hit
 
 template<>
-EMCalHit::Field::Time::BranchSocket EMCalHit::Field::Time::Base::fgBranchSocket;
+EMCalHit::Column::Time::BranchSocket EMCalHit::Column::Time::Base::fgBranchSocket;
 template<>
-EMCalHit::Field::EnergyDeposition::BranchSocket EMCalHit::Field::EnergyDeposition::Base::fgBranchSocket;
+EMCalHit::Column::EnergyDeposition::BranchSocket EMCalHit::Column::EnergyDeposition::Base::fgBranchSocket;
 
 } // namespace MACE::DataModel
 

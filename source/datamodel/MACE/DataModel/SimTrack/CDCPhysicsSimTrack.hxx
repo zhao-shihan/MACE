@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/DataModel/Field/FundamentalField.hxx"
-#include "MACE/DataModel/Field/VectorField.hxx"
+#include "MACE/DataModel/Column/FundamentalColumn.hxx"
+#include "MACE/DataModel/Column/VectorColumn.hxx"
 #include "MACE/DataModel/SimTrack/CDCSimTrackBase.hxx"
 #include "MACE/DataModel/Track/CDCPhysicsTrack.hxx"
 #include "MACE/DataModel/TransientData.hxx"
@@ -18,11 +18,11 @@ using namespace std::string_view_literals;
 class CDCPhysicsSimTrack : public CDCPhysicsTrack,
                            public CDCSimTrackBase {
 public:
-    struct Field : CDCPhysicsTrack::Field,
-                   CDCSimTrackBase::Field {
-        using VertexPositionTruth = Vector3FField<CDCPhysicsSimTrack, 0, stdx::array3d>;
-        using VertexKineticEnergyTruth = FloatField<CDCPhysicsSimTrack, 1, double>;
-        using VertexMomentumTruth = Vector3FField<CDCPhysicsSimTrack, 2, stdx::array3d>;
+    struct Column : CDCPhysicsTrack::Column,
+                   CDCSimTrackBase::Column {
+        using VertexPositionTruth = Vector3FColumn<CDCPhysicsSimTrack, 0, stdx::array3d>;
+        using VertexKineticEnergyTruth = FloatColumn<CDCPhysicsSimTrack, 1, double>;
+        using VertexMomentumTruth = Vector3FColumn<CDCPhysicsSimTrack, 2, stdx::array3d>;
     };
 
 public:
@@ -43,20 +43,20 @@ public:
     static void ConnectToAllBranch(TTree& tree);
 
 private:
-    Field::VertexPositionTruth fVertexPositionTruth;
-    Field::VertexKineticEnergyTruth fVertexKineticEnergyTruth;
-    Field::VertexMomentumTruth fVertexMomentumTruth;
+    Column::VertexPositionTruth fVertexPositionTruth;
+    Column::VertexKineticEnergyTruth fVertexKineticEnergyTruth;
+    Column::VertexMomentumTruth fVertexMomentumTruth;
 };
 static_assert(TransientData<CDCPhysicsSimTrack>);
 
 } // namespace SimTrack
 
 template<>
-CDCPhysicsSimTrack::Field::VertexPositionTruth::BranchSocket CDCPhysicsSimTrack::Field::VertexPositionTruth::Base::fgBranchSocket;
+CDCPhysicsSimTrack::Column::VertexPositionTruth::BranchSocket CDCPhysicsSimTrack::Column::VertexPositionTruth::Base::fgBranchSocket;
 template<>
-CDCPhysicsSimTrack::Field::VertexKineticEnergyTruth::BranchSocket CDCPhysicsSimTrack::Field::VertexKineticEnergyTruth::Base::fgBranchSocket;
+CDCPhysicsSimTrack::Column::VertexKineticEnergyTruth::BranchSocket CDCPhysicsSimTrack::Column::VertexKineticEnergyTruth::Base::fgBranchSocket;
 template<>
-CDCPhysicsSimTrack::Field::VertexMomentumTruth::BranchSocket CDCPhysicsSimTrack::Field::VertexMomentumTruth::Base::fgBranchSocket;
+CDCPhysicsSimTrack::Column::VertexMomentumTruth::BranchSocket CDCPhysicsSimTrack::Column::VertexMomentumTruth::Base::fgBranchSocket;
 
 } // namespace MACE::DataModel
 

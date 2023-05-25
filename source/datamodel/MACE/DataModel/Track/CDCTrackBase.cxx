@@ -3,32 +3,32 @@
 namespace MACE::DataModel {
 
 template<>
-CDCTrackBase::Field::PDGCode::BranchSocket CDCTrackBase::Field::PDGCode::Base::fgBranchSocket = 
+CDCTrackBase::Column::PDGCode::BranchSocket CDCTrackBase::Column::PDGCode::Base::fgBranchSocket = 
     {"pdgCode", "Particle PDG Code", 0};
 template<>
-CDCTrackBase::Field::NHit::BranchSocket CDCTrackBase::Field::NHit::Base::fgBranchSocket = 
+CDCTrackBase::Column::NHit::BranchSocket CDCTrackBase::Column::NHit::Base::fgBranchSocket = 
     {"nHit", "Number of Hits Fitted", -1};
 template<>
-CDCTrackBase::Field::Chi2::BranchSocket CDCTrackBase::Field::Chi2::Base::fgBranchSocket = 
+CDCTrackBase::Column::Chi2::BranchSocket CDCTrackBase::Column::Chi2::Base::fgBranchSocket = 
     {"chi2", "Fitting chi^{2}", -1};
 template<>
-CDCTrackBase::Field::VertexTime::BranchSocket CDCTrackBase::Field::VertexTime::Base::fgBranchSocket = 
+CDCTrackBase::Column::VertexTime::BranchSocket CDCTrackBase::Column::VertexTime::Base::fgBranchSocket = 
     {"t0", "Vertex Time", 0};
 
 inline namespace Track {
 
 void CDCTrackBase::CreateAllBranch(TTree& tree) {
-    Field::PDGCode::CreateBranch(tree);
-    Field::NHit::CreateBranch(tree);
-    Field::Chi2::CreateBranch(tree);
-    Field::VertexTime::CreateBranch(tree);
+    Column::PDGCode::CreateBranch(tree);
+    Column::NHit::CreateBranch(tree);
+    Column::Chi2::CreateBranch(tree);
+    Column::VertexTime::CreateBranch(tree);
 }
 
 void CDCTrackBase::ConnectToAllBranch(TTree& tree) {
-    Field::PDGCode::ConnectToBranch(tree);
-    Field::NHit::ConnectToBranch(tree);
-    Field::Chi2::ConnectToBranch(tree);
-    Field::VertexTime::ConnectToBranch(tree);
+    Column::PDGCode::ConnectToBranch(tree);
+    Column::NHit::ConnectToBranch(tree);
+    Column::Chi2::ConnectToBranch(tree);
+    Column::VertexTime::ConnectToBranch(tree);
 }
 
 } // namespace Track

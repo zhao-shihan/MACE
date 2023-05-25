@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/DataModel/Field/FundamentalField.hxx"
-#include "MACE/DataModel/Field/VectorField.hxx"
+#include "MACE/DataModel/Column/FundamentalColumn.hxx"
+#include "MACE/DataModel/Column/VectorColumn.hxx"
 #include "MACE/DataModel/Hit/CDCHit.hxx"
 #include "MACE/Extension/stdx/arraynx.hxx"
 #include "MACE/Utility/VectorAssign.hxx"
@@ -17,16 +17,16 @@ using namespace std::string_view_literals;
 
 class CDCSimHit : public CDCHit {
 public:
-    struct Field : CDCHit::Field {
-        using MCEventID = IntField<CDCSimHit, 0, int>;
-        using MCTrackID = IntField<CDCSimHit, 1, int>;
-        using PDGCode = IntField<CDCSimHit, 2, int>;
-        using KineticEnergy = FloatField<CDCSimHit, 3, double>;
-        using Momentum = Vector3FField<CDCSimHit, 4, stdx::array3d>;
-        using VertexTime = DoubleField<CDCSimHit, 5, double>;
-        using VertexPosition = Vector3FField<CDCSimHit, 6, stdx::array3d>;
-        using VertexKineticEnergy = FloatField<CDCSimHit, 7, double>;
-        using VertexMomentum = Vector3FField<CDCSimHit, 8, stdx::array3d>;
+    struct Column : CDCHit::Column {
+        using MCEventID = IntColumn<CDCSimHit, 0, int>;
+        using MCTrackID = IntColumn<CDCSimHit, 1, int>;
+        using PDGCode = IntColumn<CDCSimHit, 2, int>;
+        using KineticEnergy = FloatColumn<CDCSimHit, 3, double>;
+        using Momentum = Vector3FColumn<CDCSimHit, 4, stdx::array3d>;
+        using VertexTime = DoubleColumn<CDCSimHit, 5, double>;
+        using VertexPosition = Vector3FColumn<CDCSimHit, 6, stdx::array3d>;
+        using VertexKineticEnergy = FloatColumn<CDCSimHit, 7, double>;
+        using VertexMomentum = Vector3FColumn<CDCSimHit, 8, stdx::array3d>;
     };
 
 public:
@@ -59,38 +59,38 @@ public:
     static void ConnectToAllBranch(TTree& tree);
 
 private:
-    Field::MCEventID fMCEventID;
-    Field::MCTrackID fMCTrackID;
-    Field::PDGCode fPDGCode;
-    Field::KineticEnergy fKineticEnergy;
-    Field::Momentum fMomentum;
-    Field::VertexTime fVertexTime;
-    Field::VertexPosition fVertexPosition;
-    Field::VertexKineticEnergy fVertexKineticEnergy;
-    Field::VertexMomentum fVertexMomentum;
+    Column::MCEventID fMCEventID;
+    Column::MCTrackID fMCTrackID;
+    Column::PDGCode fPDGCode;
+    Column::KineticEnergy fKineticEnergy;
+    Column::Momentum fMomentum;
+    Column::VertexTime fVertexTime;
+    Column::VertexPosition fVertexPosition;
+    Column::VertexKineticEnergy fVertexKineticEnergy;
+    Column::VertexMomentum fVertexMomentum;
 };
 static_assert(TransientData<CDCSimHit>);
 
 } // namespace SimHit
 
 template<>
-CDCSimHit::Field::MCEventID::BranchSocket CDCSimHit::Field::MCEventID::Base::fgBranchSocket;
+CDCSimHit::Column::MCEventID::BranchSocket CDCSimHit::Column::MCEventID::Base::fgBranchSocket;
 template<>
-CDCSimHit::Field::MCTrackID::BranchSocket CDCSimHit::Field::MCTrackID::Base::fgBranchSocket;
+CDCSimHit::Column::MCTrackID::BranchSocket CDCSimHit::Column::MCTrackID::Base::fgBranchSocket;
 template<>
-CDCSimHit::Field::PDGCode::BranchSocket CDCSimHit::Field::PDGCode::Base::fgBranchSocket;
+CDCSimHit::Column::PDGCode::BranchSocket CDCSimHit::Column::PDGCode::Base::fgBranchSocket;
 template<>
-CDCSimHit::Field::KineticEnergy::BranchSocket CDCSimHit::Field::KineticEnergy::Base::fgBranchSocket;
+CDCSimHit::Column::KineticEnergy::BranchSocket CDCSimHit::Column::KineticEnergy::Base::fgBranchSocket;
 template<>
-CDCSimHit::Field::Momentum::BranchSocket CDCSimHit::Field::Momentum::Base::fgBranchSocket;
+CDCSimHit::Column::Momentum::BranchSocket CDCSimHit::Column::Momentum::Base::fgBranchSocket;
 template<>
-CDCSimHit::Field::VertexTime::BranchSocket CDCSimHit::Field::VertexTime::Base::fgBranchSocket;
+CDCSimHit::Column::VertexTime::BranchSocket CDCSimHit::Column::VertexTime::Base::fgBranchSocket;
 template<>
-CDCSimHit::Field::VertexPosition::BranchSocket CDCSimHit::Field::VertexPosition::Base::fgBranchSocket;
+CDCSimHit::Column::VertexPosition::BranchSocket CDCSimHit::Column::VertexPosition::Base::fgBranchSocket;
 template<>
-CDCSimHit::Field::VertexKineticEnergy::BranchSocket CDCSimHit::Field::VertexKineticEnergy::Base::fgBranchSocket;
+CDCSimHit::Column::VertexKineticEnergy::BranchSocket CDCSimHit::Column::VertexKineticEnergy::Base::fgBranchSocket;
 template<>
-CDCSimHit::Field::VertexMomentum::BranchSocket CDCSimHit::Field::VertexMomentum::Base::fgBranchSocket;
+CDCSimHit::Column::VertexMomentum::BranchSocket CDCSimHit::Column::VertexMomentum::Base::fgBranchSocket;
 
 } // namespace MACE::DataModel
 

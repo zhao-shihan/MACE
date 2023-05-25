@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/DataModel/Field/FundamentalField.hxx"
-#include "MACE/DataModel/Field/VectorField.hxx"
+#include "MACE/DataModel/Column/FundamentalColumn.hxx"
+#include "MACE/DataModel/Column/VectorColumn.hxx"
 #include "MACE/DataModel/Track/CDCTrackBase.hxx"
 #include "MACE/DataModel/TransientData.hxx"
 #include "MACE/Extension/stdx/arraynx.hxx"
@@ -16,11 +16,11 @@ using namespace std::string_view_literals;
 
 class CDCHelixTrack : public CDCTrackBase {
 public:
-    struct Field : CDCTrackBase::Field {
-        using Center = Vector2FField<CDCHelixTrack, 0, stdx::array2d>;
-        using Radius = FloatField<CDCHelixTrack, 1, double>;
-        using VertexZ = FloatField<CDCHelixTrack, 2, double>;
-        using Theta = FloatField<CDCHelixTrack, 3, double>;
+    struct Column : CDCTrackBase::Column {
+        using Center = Vector2FColumn<CDCHelixTrack, 0, stdx::array2d>;
+        using Radius = FloatColumn<CDCHelixTrack, 1, double>;
+        using VertexZ = FloatColumn<CDCHelixTrack, 2, double>;
+        using Theta = FloatColumn<CDCHelixTrack, 3, double>;
     };
 
 public:
@@ -43,23 +43,23 @@ public:
     static void ConnectToAllBranch(TTree& tree);
 
 private:
-    Field::Center fCenter;
-    Field::Radius fRadius;
-    Field::VertexZ fVertexZ;
-    Field::Theta fTheta;
+    Column::Center fCenter;
+    Column::Radius fRadius;
+    Column::VertexZ fVertexZ;
+    Column::Theta fTheta;
 };
 static_assert(TransientData<CDCHelixTrack>);
 
 } // namespace Track
 
 template<>
-CDCHelixTrack::Field::Center::BranchSocket CDCHelixTrack::Field::Center::Base::fgBranchSocket;
+CDCHelixTrack::Column::Center::BranchSocket CDCHelixTrack::Column::Center::Base::fgBranchSocket;
 template<>
-CDCHelixTrack::Field::Radius::BranchSocket CDCHelixTrack::Field::Radius::Base::fgBranchSocket;
+CDCHelixTrack::Column::Radius::BranchSocket CDCHelixTrack::Column::Radius::Base::fgBranchSocket;
 template<>
-CDCHelixTrack::Field::VertexZ::BranchSocket CDCHelixTrack::Field::VertexZ::Base::fgBranchSocket;
+CDCHelixTrack::Column::VertexZ::BranchSocket CDCHelixTrack::Column::VertexZ::Base::fgBranchSocket;
 template<>
-CDCHelixTrack::Field::Theta::BranchSocket CDCHelixTrack::Field::Theta::Base::fgBranchSocket;
+CDCHelixTrack::Column::Theta::BranchSocket CDCHelixTrack::Column::Theta::Base::fgBranchSocket;
 
 } // namespace MACE::DataModel
 

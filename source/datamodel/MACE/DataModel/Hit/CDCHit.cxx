@@ -3,27 +3,27 @@
 namespace MACE::DataModel {
 
 template<>
-CDCHit::Field::CellID::BranchSocket CDCHit::Field::CellID::Base::fgBranchSocket =
+CDCHit::Column::CellID::BranchSocket CDCHit::Column::CellID::Base::fgBranchSocket =
     {"cellID", "Hitting Cell ID", -1};
 template<>
-CDCHit::Field::DriftDistance::BranchSocket CDCHit::Field::DriftDistance::Base::fgBranchSocket =
+CDCHit::Column::DriftDistance::BranchSocket CDCHit::Column::DriftDistance::Base::fgBranchSocket =
     {"d", "Drift Distance", 0};
 template<>
-CDCHit::Field::Time::BranchSocket CDCHit::Field::Time::Base::fgBranchSocket =
+CDCHit::Column::Time::BranchSocket CDCHit::Column::Time::Base::fgBranchSocket =
     {"t", "Hitting Time", 0};
 
 inline namespace Hit {
 
 void CDCHit::CreateAllBranch(TTree& tree) {
-    Field::CellID::CreateBranch(tree);
-    Field::DriftDistance::CreateBranch(tree);
-    Field::Time::CreateBranch(tree);
+    Column::CellID::CreateBranch(tree);
+    Column::DriftDistance::CreateBranch(tree);
+    Column::Time::CreateBranch(tree);
 }
 
 void CDCHit::ConnectToAllBranch(TTree& tree) {
-    Field::CellID::ConnectToBranch(tree);
-    Field::DriftDistance::ConnectToBranch(tree);
-    Field::Time::ConnectToBranch(tree);
+    Column::CellID::ConnectToBranch(tree);
+    Column::DriftDistance::ConnectToBranch(tree);
+    Column::Time::ConnectToBranch(tree);
 }
 
 } // namespace Hit

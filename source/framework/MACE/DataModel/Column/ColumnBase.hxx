@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/DataModel/BranchSocket2/BranchSocket2.hxx"
+#include "MACE/DataModel/Column/internal/ColumnSignatureBase.hxx"
 
 #include "TTree.h"
 
@@ -9,17 +10,17 @@
 #include <concepts>
 #include <string>
 
-namespace MACE::DataModel {
+namespace MACE::DataModel::inline Column {
 
 template<class ADerived,
          class AData, gsl::index AUniqueID,
          typename T, BranchSocket2<T> ABranchSocket,
          typename U>
     requires(AUniqueID >= 0)
-class FieldBase {
+class ColumnBase : public internal::ColumnSignatureBase {
 protected:
-    FieldBase();
-    ~FieldBase() = default;
+    constexpr ColumnBase();
+    constexpr ~ColumnBase() = default;
 
 public:
     static const auto& Name() { return fgBranchSocket.Name(); }
@@ -31,6 +32,6 @@ protected:
     static ABranchSocket fgBranchSocket;
 };
 
-} // namespace MACE::DataModel
+} // namespace MACE::DataModel::inline Column
 
-#include "MACE/DataModel/Field/FieldBase.inl"
+#include "MACE/DataModel/Column/ColumnBase.inl"

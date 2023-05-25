@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/DataModel/Field/FundamentalField.hxx"
-#include "MACE/DataModel/Field/VectorField.hxx"
+#include "MACE/DataModel/Column/FundamentalColumn.hxx"
+#include "MACE/DataModel/Column/VectorColumn.hxx"
 #include "MACE/DataModel/Hit/EMCalHit.hxx"
 #include "MACE/Extension/stdx/arraynx.hxx"
 
@@ -15,16 +15,16 @@ using namespace std::string_view_literals;
 
 class EMCalSimHit : public EMCalHit {
 public:
-    struct Field : EMCalHit::Field {
-        using MCEventID = IntField<EMCalSimHit, 2, int>;
-        using MCTrackID = IntField<EMCalSimHit, 3, int>;
-        using PDGCode = IntField<EMCalSimHit, 4, int>;
-        using Position = Vector3FField<EMCalSimHit, 5, stdx::array3d>;
-        using Momentum = Vector3FField<EMCalSimHit, 6, stdx::array3d>;
-        using VertexTime = DoubleField<EMCalSimHit, 7, double>;
-        using VertexPosition = Vector3FField<EMCalSimHit, 8, stdx::array3d>;
-        using VertexKineticEnergy = FloatField<EMCalSimHit, 9, double>;
-        using VertexMomentum = Vector3FField<EMCalSimHit, 10, stdx::array3d>;
+    struct Column : EMCalHit::Column {
+        using MCEventID = IntColumn<EMCalSimHit, 2, int>;
+        using MCTrackID = IntColumn<EMCalSimHit, 3, int>;
+        using PDGCode = IntColumn<EMCalSimHit, 4, int>;
+        using Position = Vector3FColumn<EMCalSimHit, 5, stdx::array3d>;
+        using Momentum = Vector3FColumn<EMCalSimHit, 6, stdx::array3d>;
+        using VertexTime = DoubleColumn<EMCalSimHit, 7, double>;
+        using VertexPosition = Vector3FColumn<EMCalSimHit, 8, stdx::array3d>;
+        using VertexKineticEnergy = FloatColumn<EMCalSimHit, 9, double>;
+        using VertexMomentum = Vector3FColumn<EMCalSimHit, 10, stdx::array3d>;
     };
 
 public:
@@ -58,38 +58,38 @@ public:
     static void ConnectToAllBranch(TTree& tree);
 
 private:
-    Field::MCEventID fMCEventID;
-    Field::MCTrackID fMCTrackID;
-    Field::PDGCode fPDGCode;
-    Field::Position fPosition;
-    Field::Momentum fMomentum;
-    Field::VertexTime fVertexTime;
-    Field::VertexPosition fVertexPosition;
-    Field::VertexKineticEnergy fVertexKineticEnergy;
-    Field::VertexMomentum fVertexMomentum;
+    Column::MCEventID fMCEventID;
+    Column::MCTrackID fMCTrackID;
+    Column::PDGCode fPDGCode;
+    Column::Position fPosition;
+    Column::Momentum fMomentum;
+    Column::VertexTime fVertexTime;
+    Column::VertexPosition fVertexPosition;
+    Column::VertexKineticEnergy fVertexKineticEnergy;
+    Column::VertexMomentum fVertexMomentum;
 };
 static_assert(TransientData<EMCalSimHit>);
 
 } // namespace SimHit
 
 template<>
-EMCalSimHit::Field::MCEventID::BranchSocket EMCalSimHit::Field::MCEventID::Base::fgBranchSocket;
+EMCalSimHit::Column::MCEventID::BranchSocket EMCalSimHit::Column::MCEventID::Base::fgBranchSocket;
 template<>
-EMCalSimHit::Field::MCTrackID::BranchSocket EMCalSimHit::Field::MCTrackID::Base::fgBranchSocket;
+EMCalSimHit::Column::MCTrackID::BranchSocket EMCalSimHit::Column::MCTrackID::Base::fgBranchSocket;
 template<>
-EMCalSimHit::Field::PDGCode::BranchSocket EMCalSimHit::Field::PDGCode::Base::fgBranchSocket;
+EMCalSimHit::Column::PDGCode::BranchSocket EMCalSimHit::Column::PDGCode::Base::fgBranchSocket;
 template<>
-EMCalSimHit::Field::Position::BranchSocket EMCalSimHit::Field::Position::Base::fgBranchSocket;
+EMCalSimHit::Column::Position::BranchSocket EMCalSimHit::Column::Position::Base::fgBranchSocket;
 template<>
-EMCalSimHit::Field::Momentum::BranchSocket EMCalSimHit::Field::Momentum::Base::fgBranchSocket;
+EMCalSimHit::Column::Momentum::BranchSocket EMCalSimHit::Column::Momentum::Base::fgBranchSocket;
 template<>
-EMCalSimHit::Field::VertexTime::BranchSocket EMCalSimHit::Field::VertexTime::Base::fgBranchSocket;
+EMCalSimHit::Column::VertexTime::BranchSocket EMCalSimHit::Column::VertexTime::Base::fgBranchSocket;
 template<>
-EMCalSimHit::Field::VertexPosition::BranchSocket EMCalSimHit::Field::VertexPosition::Base::fgBranchSocket;
+EMCalSimHit::Column::VertexPosition::BranchSocket EMCalSimHit::Column::VertexPosition::Base::fgBranchSocket;
 template<>
-EMCalSimHit::Field::VertexKineticEnergy::BranchSocket EMCalSimHit::Field::VertexKineticEnergy::Base::fgBranchSocket;
+EMCalSimHit::Column::VertexKineticEnergy::BranchSocket EMCalSimHit::Column::VertexKineticEnergy::Base::fgBranchSocket;
 template<>
-EMCalSimHit::Field::VertexMomentum::BranchSocket EMCalSimHit::Field::VertexMomentum::Base::fgBranchSocket;
+EMCalSimHit::Column::VertexMomentum::BranchSocket EMCalSimHit::Column::VertexMomentum::Base::fgBranchSocket;
 
 } // namespace MACE::DataModel
 
