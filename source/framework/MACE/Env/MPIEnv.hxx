@@ -75,7 +75,7 @@ private:
 } // namespace MACE::Env
 
 #define MACE_MPI_WORLD_MASTER_OUT(out)                                  \
-    static_assert(std::derived_from<std::remove_cvref_t<decltype(out)>, \
+    static_assert(std::derived_from<std::decay_t<decltype(out)>, \
                                     std::ostream>);                     \
     if (not MACE::Env::MPIEnv::Available() or                           \
         MACE::Env::MPIEnv::Instance().AtCommWorldMaster()) out
@@ -91,7 +91,7 @@ private:
     MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)
 
 #define MACE_MPI_WORLD_WORKER_OUT(out)                                  \
-    static_assert(std::derived_from<std::remove_cvref_t<decltype(out)>, \
+    static_assert(std::derived_from<std::decay_t<decltype(out)>, \
                                     std::ostream>);                     \
     if (not MACE::Env::MPIEnv::Available() or                           \
         MACE::Env::MPIEnv::Instance().AtCommWorldWorker()) out
@@ -107,7 +107,7 @@ private:
     MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)
 
 #define MACE_MPI_SHARED_MASTER_OUT(out)                                 \
-    static_assert(std::derived_from<std::remove_cvref_t<decltype(out)>, \
+    static_assert(std::derived_from<std::decay_t<decltype(out)>, \
                                     std::ostream>);                     \
     if (not MACE::Env::MPIEnv::Available() or                           \
         MACE::Env::MPIEnv::Instance().AtCommSharedMaster()) out
@@ -123,7 +123,7 @@ private:
     MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)
 
 #define MACE_MPI_SHARED_WORKER_OUT(out)                                 \
-    static_assert(std::derived_from<std::remove_cvref_t<decltype(out)>, \
+    static_assert(std::derived_from<std::decay_t<decltype(out)>, \
                                     std::ostream>);                     \
     if (not MACE::Env::MPIEnv::Available() or                           \
         MACE::Env::MPIEnv::Instance().AtCommSharedWorker()) out

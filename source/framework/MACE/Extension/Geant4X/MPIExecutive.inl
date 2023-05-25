@@ -67,7 +67,7 @@ void MPIExecutive::StartBatchSessionImpl(auto&& macFileOrCmdList) const {
 }
 
 void MPIExecutive::Execute(const std::ranges::input_range auto& cmdList)
-    requires std::convertible_to<typename std::remove_cvref_t<decltype(cmdList)>::value_type, std::string>
+    requires std::convertible_to<typename std::decay_t<decltype(cmdList)>::value_type, std::string>
 {
     for (auto&& command : cmdList) {
         if (const auto success = ExecuteCommand(std::forward<decltype(command)>(command));

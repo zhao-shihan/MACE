@@ -23,6 +23,7 @@
 #include <string>
 #include <string_view>
 #include <tuple>
+#include <type_traits>
 #include <vector>
 
 namespace MACE::Detector::Description {
@@ -49,7 +50,7 @@ public:
 
     template<typename... ArgsOfImport>
     static void Import(const std::ranges::range auto& yamlText)
-        requires std::convertible_to<typename std::remove_cvref_t<decltype(yamlText)>::value_type, std::string>;
+        requires std::convertible_to<typename std::decay_t<decltype(yamlText)>::value_type, std::string>;
 
     static void AddInstance(gsl::not_null<DescriptionBase*> instance) { fgInstanceSet.emplace(instance); }
     static void ImportInstantiated(const std::filesystem::path& yamlFile) { ImportImpl(yamlFile, fgInstanceSet); }
@@ -64,6 +65,6 @@ private:
     static std::set<gsl::not_null<DescriptionBase*>> fgInstanceSet;
 };
 
-} // namespace MACE::Detector
+} // namespace MACE::Detector::Description
 
 #include "MACE/Detector/Description/DescriptionIO.inl"

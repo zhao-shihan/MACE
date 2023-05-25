@@ -19,7 +19,7 @@ namespace MACE::Math {
 constexpr auto Norm2(const Concept::NumericVectorFloatingPoint auto& x) {
     return ([&x]<gsl::index... Is>(gslx::index_sequence<Is...>) {
         return Hypot2(x[Is]...);
-    })(gslx::make_index_sequence<VectorDimension<std::remove_cvref_t<decltype(x)>>>());
+    })(gslx::make_index_sequence<VectorDimension<std::decay_t<decltype(x)>>>());
 }
 
 auto Norm(const Concept::NumericVectorFloatingPoint auto& x) {
@@ -30,7 +30,7 @@ template<std::floating_point T = double>
 constexpr auto Norm2(const Concept::NumericVectorIntegral auto& x) {
     return ([&x]<gsl::index... Is>(gslx::index_sequence<Is...>) {
         return Hypot2<T>(x[Is]...);
-    })(gslx::make_index_sequence<VectorDimension<std::remove_cvref_t<decltype(x)>>>());
+    })(gslx::make_index_sequence<VectorDimension<std::decay_t<decltype(x)>>>());
 }
 
 template<std::floating_point T = double>

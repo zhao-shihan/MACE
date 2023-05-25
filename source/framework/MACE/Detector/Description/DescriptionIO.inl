@@ -43,7 +43,7 @@ void DescriptionIO::Ixport(const std::filesystem::path& yamlFile, std::string_vi
 
 template<typename... ArgsOfImport>
 void DescriptionIO::Import(const std::ranges::range auto& yamlText)
-    requires std::convertible_to<typename std::remove_cvref_t<decltype(yamlText)>::value_type, std::string>
+    requires std::convertible_to<typename std::decay_t<decltype(yamlText)>::value_type, std::string>
 {
     auto yamlPath = std::filesystem::temp_directory_path() / "tmp_mace_geom.yaml"sv;
     if (Env::MPIEnv::Available()) {

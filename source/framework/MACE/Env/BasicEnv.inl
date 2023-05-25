@@ -6,7 +6,7 @@ BasicEnv::BasicEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel
     PassiveSingleton(),
     fVerboseLevel(verboseLevel) {
     // CLI: do parse and get args
-    if constexpr (not std::is_same_v<std::remove_cvref_t<ACLI>, internal::NoCLI>) {
+    if constexpr (not std::is_same_v<std::decay_t<ACLI>, internal::NoCLI>) {
         // Parse
         cli.ParseArgs(argc, argv);
         // Get args

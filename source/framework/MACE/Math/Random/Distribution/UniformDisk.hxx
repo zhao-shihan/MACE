@@ -127,7 +127,7 @@ public:
 };
 
 template<typename VT, class T>
-UniformCompactDisk(VT, T) -> UniformCompactDisk<std::enable_if_t<std::same_as<VT, VectorValueType<std::remove_cvref_t<T>>>, std::remove_cvref_t<T>>>;
+UniformCompactDisk(VT, T) -> UniformCompactDisk<std::enable_if_t<std::same_as<VT, VectorValueType<std::decay_t<T>>>, std::decay_t<T>>>;
 template<typename T, typename U, typename V>
 UniformCompactDisk(T, U, V) -> UniformCompactDisk<std::array<std::common_type_t<T, U, V>, 2>>;
 template<typename T>
@@ -149,7 +149,7 @@ public:
 };
 
 template<typename VT, class T>
-UniformDisk(VT, T) -> UniformDisk<std::enable_if_t<std::same_as<VT, VectorValueType<std::remove_cvref_t<T>>>, std::remove_cvref_t<T>>>;
+UniformDisk(VT, T) -> UniformDisk<std::enable_if_t<std::same_as<VT, VectorValueType<std::decay_t<T>>>, std::decay_t<T>>>;
 template<typename T, typename U, typename V>
 UniformDisk(T, U, V) -> UniformDisk<std::array<std::common_type_t<T, U, V>, 2>>;
 template<typename T>

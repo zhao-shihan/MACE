@@ -39,7 +39,7 @@ decltype(auto) VectorAssign(Concept::NumericVectorAny auto& lhs, auto&& rhs)
 /// lvalue reference to lhs.
 decltype(auto) VectorAssign(Concept::NumericVectorAny auto& lhs, std::ranges::input_range auto&& rhs)
     requires(not std::assignable_from<decltype(lhs), decltype(rhs)> and
-             std::assignable_from<VectorValueType<std::remove_cvref_t<decltype(lhs)>>&, std::ranges::range_value_t<decltype(rhs)>>)
+             std::assignable_from<VectorValueType<std::decay_t<decltype(lhs)>>&, std::ranges::range_value_t<decltype(rhs)>>)
 {
     for (gsl::index i = 0;
          auto&& value : std::forward<decltype(rhs)>(rhs)) {
@@ -60,7 +60,7 @@ decltype(auto) VectorAssign(Concept::NumericVectorAny auto& lhs, const Concept::
     requires(not std::assignable_from<decltype(lhs), decltype(rhs)> and
              not std::ranges::input_range<decltype(rhs)>)
 {
-    for (gsl::index i = 0; i < ToSigned(VectorDimension<std::remove_cvref_t<decltype(lhs)>>); ++i) {
+    for (gsl::index i = 0; i < ToSigned(VectorDimension<std::decay_t<decltype(lhs)>>); ++i) {
         lhs[i] = rhs[i];
     }
     return lhs;
