@@ -31,6 +31,7 @@ include(CMakeDependentOption)
 option(MACE_BUILD_TEST "Build MACE with test programs." ON)
 option(MACE_BUILTIN_ARGPARSE "Use built-in argparse (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_BACKWARD "Use built-in backward-cpp (network or pre-downloaded source is required)." OFF)
+option(MACE_BUILTIN_FMT "Use built-in fmt (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_EIGEN "Use built-in Eigen (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_GENFIT "Use built-in GenFit (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_MSGSL "Use built-in Microsoft.GSL (network or pre-downloaded source is required)." OFF)
@@ -48,6 +49,7 @@ option(MACE_USE_SHARED_MSVC_RT "Select the MSVC runtime library for use (MSVC on
 cmake_dependent_option(MACE_SHOW_EVEN_MORE_COMPILE_WARNINGS "Add compile flag to show even more compile warnings (GCC: -Weffc++, Clang: -Weverything, MSVC: /Wall)." OFF NOT MACE_SURPRESS_USELESS_COMPILE_WARNINGS OFF)
 set(MACE_BUILTIN_ARGPARSE_VERSION 2.9 CACHE STRING "Set built-in argparse version (if required).")
 set(MACE_BUILTIN_BACKWARD_VERSION 1.6 CACHE STRING "Set built-in backward-cpp version (if required).")
+set(MACE_BUILTIN_FMT_VERSION 10.0.0 CACHE STRING "Set built-in fmt version (if required).")
 set(MACE_BUILTIN_EIGEN_VERSION 3.4.0 CACHE STRING "Set built-in Eigen version (if required).")
 set(MACE_BUILTIN_MSGSL_VERSION 4.0.0 CACHE STRING "Set built-in Microsoft.GSL version (if required).")
 set(MACE_BUILTIN_YAML_CPP_VERSION 0.7.0 CACHE STRING "Set built-in yaml-cpp version (if required).")
@@ -75,6 +77,8 @@ include(${MACE_PROJECT_CMAKE_DIR}/LookForROOT.cmake)
 include(${MACE_PROJECT_CMAKE_DIR}/LookForArgparse.cmake)
 # backward-cpp
 include(${MACE_PROJECT_CMAKE_DIR}/LookForBackward.cmake)
+# fmt
+include(${MACE_PROJECT_CMAKE_DIR}/LookForFmt.cmake)
 # GenFit
 include(${MACE_PROJECT_CMAKE_DIR}/LookForGenFit.cmake)
 # Microsoft.GSL

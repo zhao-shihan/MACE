@@ -74,10 +74,12 @@ IncludeCategories:
     Priority: 9
   - Regex: '"gsl/gsl"'
     Priority: 10
-  - Regex: '".*"'
+  - Regex: '"fmt/.*\.h"'
     Priority: 11
-  - Regex: '<.*>'
+  - Regex: '".*"'
     Priority: 12
+  - Regex: '<.*>'
+    Priority: 13
 IndentAccessModifiers: false
 IndentCaseBlocks: false
 IndentCaseLabels: false

@@ -23,6 +23,8 @@ if(LIBDWARF_INCLUDE_DIR AND LIBELF_INCLUDE_DIR AND LIBDWARF_LIBRARY AND LIBELF_L
     target_link_libraries(MACEFrameWork ${LIBDWARF_LIBRARY}
                                ${LIBELF_LIBRARY})
 endif()
+# fmt
+target_link_libraries(MACEFrameWork fmt::fmt)
 # Eigen
 target_link_libraries(MACEFrameWork Eigen3::Eigen)
 # Microsoft.GSL
