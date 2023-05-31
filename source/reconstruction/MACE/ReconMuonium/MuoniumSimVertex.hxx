@@ -37,10 +37,10 @@ public:
 
     void TrueVertexTime(double val) { fTrueVertexTime = val; }
     void TrueVertexPosition(const stdx::array3d& x) { fTrueVertexPosition = x; }
-    void TrueVertexPosition(auto&& x) { VectorAssign(fTrueVertexPosition, std::forward<decltype(x)>(x)); }
+    void TrueVertexPosition(auto&& x) { fTrueVertexPosition <<= std::forward<decltype(x)>(x); }
     void TrueVertexEnergy(double val) { fTrueVertexEnergy = val; }
     void TrueVertexMomentum(const stdx::array3d& p) { fTrueVertexMomentum = p; }
-    void TrueVertexMomentum(auto&& p) { VectorAssign(fTrueVertexMomentum, std::forward<decltype(p)>(p)); }
+    void TrueVertexMomentum(auto&& p) { fTrueVertexMomentum <<= std::forward<decltype(p)>(p); }
     void TrueParticles(auto&& p) { fTrueParticles = std::forward<decltype(p)>(p); }
 
     void FillAllBranchSocket() const& noexcept;

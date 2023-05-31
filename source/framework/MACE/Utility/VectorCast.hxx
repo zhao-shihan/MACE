@@ -11,7 +11,7 @@ namespace MACE::inline Utility {
 
 template<Concept::NumericVectorAny T>
 [[nodiscard]] T VectorCast(std::convertible_to<T> auto&& src) {
-    return std::forward<decltype(src)>(src);
+    return src;
 }
 
 template<Concept::NumericVectorAny T>
@@ -19,7 +19,7 @@ template<Concept::NumericVectorAny T>
     requires(not std::convertible_to<decltype(src), T>)
 {
     T dst;
-    VectorAssign(dst, std::forward<decltype(src)>(src));
+    dst <<= std::forward<decltype(src)>(src);
     return dst;
 }
 

@@ -24,7 +24,7 @@ public:
 
     template<Concept::Arithmetic U = T>
     auto Value() const { return VectorCast<std::array<U, N>>(fVector); }
-    void Value(auto&& vector) { VectorAssign(fVector, std::forward<decltype(vector)>(vector)); }
+    void Value(auto&& vector) { fVector <<= std::forward<decltype(vector)>(vector); }
 
     void CreateBranch(TTree& tree) { tree.Branch(this->fBranchName.c_str(), fVector.data(), fLeafList.c_str()); }
     void ConnectToBranch(TTree& tree) { tree.SetBranchAddress(this->fBranchName.c_str(), fVector.data()); }

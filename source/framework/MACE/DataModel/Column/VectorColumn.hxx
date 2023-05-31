@@ -20,14 +20,14 @@ template<class AData, gsl::index AUniqueID, Concept::ROOTFundamental T, std::siz
     requires(std::integral<T> and std::integral<VectorValueType<U>>) or
             (std::floating_point<T> and std::floating_point<VectorValueType<U>>)
 class VectorColumn final : public ColumnBase<VectorColumn<AData, AUniqueID, T, N, U>,
-                                           AData, AUniqueID,
-                                           std::array<T, N>, VectorBranchSocket2<T, N>,
-                                           U> {
+                                             AData, AUniqueID,
+                                             std::array<T, N>, VectorBranchSocket2<T, N>,
+                                             U> {
 public:
     using Base = ColumnBase<VectorColumn<AData, AUniqueID, T, N, U>,
-                           AData, AUniqueID,
-                           std::array<T, N>, VectorBranchSocket2<T, N>,
-                           U>;
+                            AData, AUniqueID,
+                            std::array<T, N>, VectorBranchSocket2<T, N>,
+                            U>;
     using BranchSocket = decltype(Base::fgBranchSocket);
 
 public:
@@ -37,7 +37,7 @@ public:
     template<Concept::NumericVectorAny<N> V>
     auto Value() const { return VectorCast<V>(fVector); }
 
-    void Value(auto&& v) { VectorAssign(fVector, std::forward<decltype(v)>(v)); }
+    void Value(auto&& v) { fVector <<= std::forward<decltype(v)>(v); }
     void Value(U&& v) { fVector = std::forward<U>(v); }
 
     void FillBranchSocket() const { this->fgBranchSocket.Value(fVector); }

@@ -24,7 +24,7 @@ public:
     const auto& Value() const { return fVector; }
     template<Concept::NumericVectorAny<N> V>
     auto Value() const { return VectorCast<V>(fVector); }
-    void Value(auto&& v) { VectorAssign(fVector, std::forward<decltype(v)>(v)); }
+    void Value(auto&& v) { fVector <<= std::forward<decltype(v)>(v); }
 
     void CreateBranch(TTree& tree) { this->DoCreateBranch(tree, &fVector); }
     void ConnectToBranch(TTree& tree) { this->DoConnectToBranch(tree, fVector.data()); }

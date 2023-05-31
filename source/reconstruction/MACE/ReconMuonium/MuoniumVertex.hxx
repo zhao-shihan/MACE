@@ -39,11 +39,11 @@ public:
     void SetTCACDC(double val) { fTCACDC = val; }
     void SetTCAMCP(double val) { fTCAMCP = val; }
     void SetDeltaTCA(double val) { fDeltaTCA = val; }
-    void SetCPACDC(auto&& x) { VectorAssign(fCPACDC, std::forward<decltype(x)>(x)); }
-    void SetCPAMCP(auto&& x) { VectorAssign(fCPAMCP, std::forward<decltype(x)>(x)); }
+    void SetCPACDC(auto&& x) { fCPACDC <<= std::forward<decltype(x)>(x); }
+    void SetCPAMCP(auto&& x) { fCPAMCP <<= std::forward<decltype(x)>(x); }
     void SetDCA(double dca) { fDCA = dca; }
     void VertexEnergy(double E) { fVertexEnergy = E; }
-    void VertexMomentum(auto&& p) { VectorAssign(fVertexMomentum, std::forward<decltype(p)>(p)); }
+    void VertexMomentum(auto&& p) { fVertexMomentum <<= std::forward<decltype(p)>(p); }
     void SetParticles(auto&& p) { fParticles = std::forward<decltype(p)>(p); }
 
     void FillAllBranchSocket() const& noexcept;

@@ -39,14 +39,14 @@ public:
 
     void VertexTime(double val) { fVertexTime = val; }
     void VertexPosition(const stdx::array3d& x) { fVertexPosition = x; }
-    void VertexPosition(auto&& x) { VectorAssign(fVertexPosition, std::forward<decltype(x)>(x)); }
+    void VertexPosition(auto&& x) { fVertexPosition <<= std::forward<decltype(x)>(x); }
     void VertexMomentum(const stdx::array3d& p) { fVertexMomentum = p; }
-    void VertexMomentum(auto&& p) { VectorAssign(fVertexMomentum, std::forward<decltype(p)>(p)); }
+    void VertexMomentum(auto&& p) { fVertexMomentum <<= std::forward<decltype(p)>(p); }
     void DecayTime(double val) { fDecayTime = val; }
     void DecayPosition(const stdx::array3d& x) { fDecayPosition = x; }
-    void DecayPosition(auto&& x) { VectorAssign(fDecayPosition, std::forward<decltype(x)>(x)); }
+    void DecayPosition(auto&& x) { fDecayPosition <<= std::forward<decltype(x)>(x); }
     void DecayMomentum(const stdx::array3d& p) { fDecayMomentum = p; }
-    void DecayMomentum(auto&& p) { VectorAssign(fDecayMomentum, std::forward<decltype(p)>(p)); }
+    void DecayMomentum(auto&& p) { fDecayMomentum <<= std::forward<decltype(p)>(p); }
 
     void FillAllBranchSocket() const& noexcept;
     static void CreateAllBranch(TTree& tree);
