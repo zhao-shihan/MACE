@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined _MSC_VER or defined __INTEL_COMPILER
+#if defined _MSC_VER
 #    define MACE_STRONG_INLINE __forceinline
 #else
 #    define MACE_STRONG_INLINE inline
