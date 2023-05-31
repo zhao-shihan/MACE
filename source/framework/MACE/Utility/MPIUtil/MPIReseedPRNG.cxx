@@ -1,6 +1,6 @@
 #include "MACE/Env/MPIEnv.hxx"
 #include "MACE/Math/Random/Distribution/Uniform.hxx"
-#include "MACE/Math/Random/Generator/Xoshiro512MM.hxx"
+#include "MACE/Math/Random/Generator/Xoshiro512SS.hxx"
 #include "MACE/Utility/MPIUtil/MPICallWithCheck.hxx"
 #include "MACE/Utility/MPIUtil/MPIReseedPRNG.hxx"
 
@@ -25,16 +25,16 @@ void MPIReseedPRNG(CLHEP::HepRandomEngine& randEng) {
     const std::size_t worldSize = mpiEnv.CommWorldSize();
     std::vector<long> seedsSend(mpiEnv.AtCommWorldMaster() ? worldSize : 0);
     if (mpiEnv.AtCommWorldMaster()) {
-        static_assert(std::same_as<std::uint64_t, Math::Random::Xoshiro512MM::ResultType>);
+        static_assert(std::same_as<std::uint64_t, Math::Random::Xoshiro512SS::ResultType>);
 
-        std::array<unsigned int, sizeof(std::uint64_t) / sizeof(unsigned int)> xoshiro512MMSeed;
-        std::ranges::generate(xoshiro512MMSeed, [&] { return randEng.operator unsigned int(); });
-        Math::Random::Xoshiro512MM xoshiro512MM(std::bit_cast<std::uint64_t>(xoshiro512MMSeed));
+        std::array<unsigned int, sizeof(std::uint64_t) / sizeof(unsigned int)> xoshiro512SSSeed;
+        std::ranges::generate(xoshiro512SSSeed, [&] { return randEng.operator unsigned int(); });
+        Math::Random::Xoshiro512SS xoshiro512SS(std::bit_cast<std::uint64_t>(xoshiro512SSSeed));
 
         std::set<long> uniqueSeeds;
         Math::Random::Uniform<long> uniformLong(1, std::numeric_limits<long>::max() - 1);
         do {
-            uniqueSeeds.emplace(uniformLong(xoshiro512MM));
+            uniqueSeeds.emplace(uniformLong(xoshiro512SS));
         } while (uniqueSeeds.size() < worldSize);
         std::ranges::copy(uniqueSeeds, seedsSend.begin());
     }

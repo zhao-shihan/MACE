@@ -7,14 +7,14 @@
 
 namespace MACE::Math::Random::inline Generator {
 
-class Xoshiro256MM final : public Xoshiro256Base<Xoshiro256MM> {
+class Xoshiro256SS final : public Xoshiro256Base<Xoshiro256SS> {
 public:
-    constexpr Xoshiro256MM() = default;
-    constexpr Xoshiro256MM(std::uint64_t seed);
+    constexpr Xoshiro256SS() = default;
+    constexpr Xoshiro256SS(std::uint64_t seed);
 
     MACE_ALWAYS_INLINE constexpr ResultType operator()();
 };
 
 } // namespace MACE::Math::Random::inline Generator
 
-#include "MACE/Math/Random/Generator/Xoshiro256MM.inl"
+#include "MACE/Math/Random/Generator/Xoshiro256SS.inl"
