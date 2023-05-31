@@ -217,7 +217,6 @@ int main(int argc, char* argv[]) {
 
     // generate momentum seed by smearing true value
     const auto MomentumSeed = [&rng](stdx::array3d p) {
-        using namespace VectorArithmetic::Vector3Arithmetic;
         constexpr auto resolution = 0.2;
         const auto sigma = resolution * Math::Norm(p);
         p += Math::Random::Gaussian3DDiagnoal({0., sigma}, {0., sigma}, {0., sigma})(rng);
