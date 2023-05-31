@@ -27,7 +27,7 @@
 #include "MACE/Math/Random/Generator/Xoshiro256Plus.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
-#include "MACE/Utility/VectorArithmetic.hxx"
+#include "MACE/Utility/VectorArithmeticOperator.hxx"
 #include "MACE/Utility/VectorCast.hxx"
 
 #include "RKTrackRep.h"

@@ -14,7 +14,7 @@
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.hxx"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
-#include "MACE/Utility/VectorArithmetic.hxx"
+#include "MACE/Utility/VectorArithmeticOperator.hxx"
 #include "MACE/Utility/VectorCast.hxx"
 
 #include "TH2F.h"
