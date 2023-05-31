@@ -2,9 +2,12 @@
 
 #include "MACE/Concept/FundamentalType.hxx"
 #include "MACE/Math/Random/UniformPseudoRandomBitGeneratorBase.hxx"
+#include "MACE/Utility/InlineMacro.hxx"
 
 #include <cinttypes>
+#include <istream>
 #include <limits>
+#include <ostream>
 
 namespace MACE::Math::Random::inline Generator {
 
@@ -13,7 +16,7 @@ public:
     constexpr SplitMix64();
     constexpr SplitMix64(ResultType seed);
 
-    constexpr SplitMix64::ResultType operator()();
+    MACE_ALWAYS_INLINE constexpr SplitMix64::ResultType operator()();
     constexpr void Seed(ResultType seed);
 
     static constexpr auto Min() { return std::numeric_limits<ResultType>::min(); }
