@@ -13,21 +13,21 @@
 using namespace MACE;
 
 int main() {
-    Math::Random::Xoshiro256Plus xoshiro256p(114514);
-    CLHEPX::Random::Xoshiro256Engine xoshiro256pX(114514);
+    Math::Random::Xoshiro256Plus xoshiro256Plus(114514);
+    CLHEPX::Random::Xoshiro256Engine xoshiro256PlusX(114514);
 
     std::cout << "Simply generate 10 million integers:" << std::endl;
 
     unsigned int r;
-    for (int i = 0; i < 1000; ++i) { r = xoshiro256p(); }
+    for (int i = 0; i < 1000; ++i) { r = xoshiro256Plus(); }
     WallTimeStopwatch<> stopWatch;
-    for (int i = 0; i < 10'000'000; ++i) { r = xoshiro256p(); }
+    for (int i = 0; i < 10'000'000; ++i) { r = xoshiro256Plus(); }
     auto time = stopWatch.MillisecondsElapsed();
     std::cout << "    CLHEPX::...::Xoshiro256Engine : " << time << " ms (last integer: " << r << ')' << std::endl;
 
-    for (int i = 0; i < 1000; ++i) { r = (unsigned int)(xoshiro256pX); }
+    for (int i = 0; i < 1000; ++i) { r = (unsigned int)(xoshiro256PlusX); }
     stopWatch.Reset();
-    for (int i = 0; i < 10'000'000; ++i) { r = (unsigned int)(xoshiro256pX); }
+    for (int i = 0; i < 10'000'000; ++i) { r = (unsigned int)(xoshiro256PlusX); }
     time = stopWatch.MillisecondsElapsed();
     std::cout << "     Math::...::Xoshiro256Plus : " << time << " ms (last integer: " << r << ')' << std::endl;
 
@@ -36,14 +36,14 @@ int main() {
     Eigen::RowVector2d delta2d;
 
     for (int i = 0; i < 1'000'000; ++i) {
-        delta2d = {Math::Random::Uniform<double>()(xoshiro256p),
-                   Math::Random::Uniform<double>()(xoshiro256p)};
+        delta2d = {Math::Random::Uniform<double>()(xoshiro256Plus),
+                   Math::Random::Uniform<double>()(xoshiro256Plus)};
         v2d += delta2d;
     }
     stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
-        delta2d = {Math::Random::Uniform<double>()(xoshiro256p),
-                   Math::Random::Uniform<double>()(xoshiro256p)};
+        delta2d = {Math::Random::Uniform<double>()(xoshiro256Plus),
+                   Math::Random::Uniform<double>()(xoshiro256Plus)};
         v2d += delta2d;
     }
     time = stopWatch.MillisecondsElapsed();
@@ -51,14 +51,14 @@ int main() {
 
     v2d = {0, 0};
     for (int i = 0; i < 1'000'000; ++i) {
-        delta2d = {xoshiro256pX.flat(),
-                   xoshiro256pX.flat()};
+        delta2d = {xoshiro256PlusX.flat(),
+                   xoshiro256PlusX.flat()};
         v2d += delta2d;
     }
     stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
-        delta2d = {xoshiro256pX.flat(),
-                   xoshiro256pX.flat()};
+        delta2d = {xoshiro256PlusX.flat(),
+                   xoshiro256PlusX.flat()};
         v2d += delta2d;
     }
     time = stopWatch.MillisecondsElapsed();
@@ -69,16 +69,16 @@ int main() {
     Eigen::RowVector3d delta3d;
 
     for (int i = 0; i < 1'000'000; ++i) {
-        delta3d = {Math::Random::Uniform<double>()(xoshiro256p),
-                   Math::Random::Uniform<double>()(xoshiro256p),
-                   Math::Random::Uniform<double>()(xoshiro256p)};
+        delta3d = {Math::Random::Uniform<double>()(xoshiro256Plus),
+                   Math::Random::Uniform<double>()(xoshiro256Plus),
+                   Math::Random::Uniform<double>()(xoshiro256Plus)};
         v3d += delta3d;
     }
     stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
-        delta3d = {Math::Random::Uniform<double>()(xoshiro256p),
-                   Math::Random::Uniform<double>()(xoshiro256p),
-                   Math::Random::Uniform<double>()(xoshiro256p)};
+        delta3d = {Math::Random::Uniform<double>()(xoshiro256Plus),
+                   Math::Random::Uniform<double>()(xoshiro256Plus),
+                   Math::Random::Uniform<double>()(xoshiro256Plus)};
         v3d += delta3d;
     }
     time = stopWatch.MillisecondsElapsed();
@@ -86,16 +86,16 @@ int main() {
 
     v3d = {0, 0, 0};
     for (int i = 0; i < 1'000'000; ++i) {
-        delta3d = {xoshiro256pX.flat(),
-                   xoshiro256pX.flat(),
-                   xoshiro256pX.flat()};
+        delta3d = {xoshiro256PlusX.flat(),
+                   xoshiro256PlusX.flat(),
+                   xoshiro256PlusX.flat()};
         v3d += delta3d;
     }
     stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
-        delta3d = {xoshiro256pX.flat(),
-                   xoshiro256pX.flat(),
-                   xoshiro256pX.flat()};
+        delta3d = {xoshiro256PlusX.flat(),
+                   xoshiro256PlusX.flat(),
+                   xoshiro256PlusX.flat()};
         v3d += delta3d;
     }
     time = stopWatch.MillisecondsElapsed();
@@ -106,18 +106,18 @@ int main() {
     Eigen::RowVector4d delta4d;
 
     for (int i = 0; i < 1'000'000; ++i) {
-        delta4d = {Math::Random::Uniform<double>()(xoshiro256p),
-                   Math::Random::Uniform<double>()(xoshiro256p),
-                   Math::Random::Uniform<double>()(xoshiro256p),
-                   Math::Random::Uniform<double>()(xoshiro256p)};
+        delta4d = {Math::Random::Uniform<double>()(xoshiro256Plus),
+                   Math::Random::Uniform<double>()(xoshiro256Plus),
+                   Math::Random::Uniform<double>()(xoshiro256Plus),
+                   Math::Random::Uniform<double>()(xoshiro256Plus)};
         v4d += delta4d;
     }
     stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
-        delta4d = {Math::Random::Uniform<double>()(xoshiro256p),
-                   Math::Random::Uniform<double>()(xoshiro256p),
-                   Math::Random::Uniform<double>()(xoshiro256p),
-                   Math::Random::Uniform<double>()(xoshiro256p)};
+        delta4d = {Math::Random::Uniform<double>()(xoshiro256Plus),
+                   Math::Random::Uniform<double>()(xoshiro256Plus),
+                   Math::Random::Uniform<double>()(xoshiro256Plus),
+                   Math::Random::Uniform<double>()(xoshiro256Plus)};
         v4d += delta4d;
     }
     time = stopWatch.MillisecondsElapsed();
@@ -125,18 +125,18 @@ int main() {
 
     v4d = {0, 0, 0, 0};
     for (int i = 0; i < 1'000'000; ++i) {
-        delta4d = {xoshiro256pX.flat(),
-                   xoshiro256pX.flat(),
-                   xoshiro256pX.flat(),
-                   xoshiro256pX.flat()};
+        delta4d = {xoshiro256PlusX.flat(),
+                   xoshiro256PlusX.flat(),
+                   xoshiro256PlusX.flat(),
+                   xoshiro256PlusX.flat()};
         v4d += delta4d;
     }
     stopWatch.Reset();
     for (int i = 0; i < 10'000'000; ++i) {
-        delta4d = {xoshiro256pX.flat(),
-                   xoshiro256pX.flat(),
-                   xoshiro256pX.flat(),
-                   xoshiro256pX.flat()};
+        delta4d = {xoshiro256PlusX.flat(),
+                   xoshiro256PlusX.flat(),
+                   xoshiro256PlusX.flat(),
+                   xoshiro256PlusX.flat()};
         v4d += delta4d;
     }
     time = stopWatch.MillisecondsElapsed();
