@@ -1,14 +1,16 @@
 #pragma once
 
 #include "MACE/Math/Random/Generator/Xoshiro256Base.hxx"
+#include "MACE/Utility/InlineMacro.hxx"
 
 namespace MACE::Math::Random::inline Generator {
 
 class Xoshiro256Plus final : public Xoshiro256Base<Xoshiro256Plus> {
 public:
-    using Xoshiro256Base<Xoshiro256Plus>::Xoshiro256Base;
+    constexpr Xoshiro256Plus() = default;
+    constexpr Xoshiro256Plus(std::uint64_t seed);
 
-    constexpr ResultType operator()();
+    MACE_ALWAYS_INLINE constexpr ResultType operator()();
 };
 
 } // namespace MACE::Math::Random::inline Generator

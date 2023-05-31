@@ -24,7 +24,7 @@
 #include "MACE/Math/Norm.hxx"
 #include "MACE/Math/Random/Distribution/Gaussian.hxx"
 #include "MACE/Math/Random/Distribution/Gaussian3DDiagnoal.hxx"
-#include "MACE/Math/Random/Generator/Xoshiro256Plus.hxx"
+#include "MACE/Math/Random/Generator/Xoshiro512MM.hxx"
 #include "MACE/Utility/LiteralUnit.hxx"
 #include "MACE/Utility/PhysicalConstant.hxx"
 #include "MACE/Utility/VectorArithmeticOperator.hxx"
@@ -36,9 +36,9 @@
 #include "TGeoManager.h"
 #include "TGeoMaterialInterface.h"
 #include "TMath.h"
+#include "TVector3.h"
 #include "Track.h"
 #include "TrackPoint.h"
-#include "TVector3.h"
 
 #include "G4NistManager.hh"
 
@@ -213,7 +213,7 @@ int main(int argc, char* argv[]) {
     genfit::KalmanFitterRefTrack fitter;
 
     // rng
-    Math::Random::Xoshiro256PP rng;
+    Math::Random::Xoshiro512MM rng;
 
     // generate momentum seed by smearing true value
     const auto MomentumSeed = [&rng](stdx::array3d p) {
