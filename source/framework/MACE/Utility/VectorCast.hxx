@@ -19,7 +19,7 @@ template<Concept::NumericVectorAny T>
     requires(not std::convertible_to<decltype(src), T>)
 {
     T dst;
-    dst <<= std::forward<decltype(src)>(src);
+    VectorAssign(dst, std::forward<decltype(src)>(src));
     return dst;
 }
 
