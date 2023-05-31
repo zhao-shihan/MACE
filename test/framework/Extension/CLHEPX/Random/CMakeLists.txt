@@ -1,10 +1,13 @@
 project(MACE)
 
-add_executable(MT32Engine MT32Engine.cxx)
-target_link_libraries(MT32Engine MACEFrameWork)
+add_executable(MT1993732Engine MT1993732Engine.cxx)
+target_link_libraries(MT1993732Engine MACEFrameWork)
 
-add_executable(MT64Engine MT64Engine.cxx)
-target_link_libraries(MT64Engine MACEFrameWork)
+add_executable(MT1993764Engine MT1993764Engine.cxx)
+target_link_libraries(MT1993764Engine MACEFrameWork)
 
-add_executable(Xoshiro256Engine Xoshiro256Engine.cxx)
-target_link_libraries(Xoshiro256Engine MACEFrameWork)
+add_executable(Xoshiro256SSEngine Xoshiro256SSEngine.cxx)
+target_link_libraries(Xoshiro256SSEngine MACEFrameWork)
+
+add_executable(Xoshiro512SSEngine Xoshiro512SSEngine.cxx)
+target_link_libraries(Xoshiro512SSEngine MACEFrameWork)

@@ -5,11 +5,11 @@
 
 namespace MACE::inline Extension::CLHEPX::Random {
 
-class MT64Engine final : public RandomEngineBase<Math::Random::MT1993764> {
+class MT1993764Engine final : public RandomEngineBase<Math::Random::MT1993764> {
 public:
     using RandomEngineBase<Math::Random::MT1993764>::RandomEngineBase;
 
-    std::string name() const override { return "MT64Engine"; }
+    std::string name() const override { return "MT1993764Engine"; }
 };
 
 } // namespace MACE::inline Extension::CLHEPX::Random

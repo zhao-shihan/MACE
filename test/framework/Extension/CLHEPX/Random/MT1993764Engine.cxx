@@ -1,4 +1,4 @@
-#include "MACE/Extension/CLHEPX/Random/MT64Engine.hxx"
+#include "MACE/Extension/CLHEPX/Random/MT1993764Engine.hxx"
 #include "MACE/Math/Random/Distribution/Uniform.hxx"
 #include "MACE/Math/Random/Generator/MT1993764.hxx"
 #include "MACE/Utility/WallTimeStopwatch.hxx"
@@ -14,7 +14,7 @@ using namespace MACE;
 
 int main() {
     Math::Random::MT1993764 mt64(114514);
-    MACE::CLHEPX::Random::MT64Engine mt64x(114514);
+    MACE::CLHEPX::Random::MT1993764Engine mt64x(114514);
 
     std::cout << "Simply generate 10 million integers:" << std::endl;
 
@@ -23,7 +23,7 @@ int main() {
     WallTimeStopwatch<> stopWatch;
     for (int i = 0; i < 10'000'000; ++i) { r = mt64(); }
     auto time = stopWatch.MillisecondsElapsed();
-    std::cout << "    CLHEPX::...::MT64Engine : " << time << " ms (last integer: " << r << ')' << std::endl;
+    std::cout << "    CLHEPX::...::MT1993764Engine : " << time << " ms (last integer: " << r << ')' << std::endl;
 
     for (int i = 0; i < 1000; ++i) { r = (unsigned int)(mt64x); }
     stopWatch.Reset();
@@ -47,7 +47,7 @@ int main() {
         v2d += delta2d;
     }
     time = stopWatch.MillisecondsElapsed();
-    std::cout << "    CLHEPX::...::MT64Engine : " << time << " ms (last displacement: " << std::setprecision(18) << v2d << std::setprecision(6) << ')' << std::endl;
+    std::cout << "    CLHEPX::...::MT1993764Engine : " << time << " ms (last displacement: " << std::setprecision(18) << v2d << std::setprecision(6) << ')' << std::endl;
 
     v2d = {0, 0};
     for (int i = 0; i < 1'000'000; ++i) {
@@ -82,7 +82,7 @@ int main() {
         v3d += delta3d;
     }
     time = stopWatch.MillisecondsElapsed();
-    std::cout << "    CLHEPX::...::MT64Engine : " << time << " ms (last displacement: " << std::setprecision(18) << v3d << std::setprecision(6) << ')' << std::endl;
+    std::cout << "    CLHEPX::...::MT1993764Engine : " << time << " ms (last displacement: " << std::setprecision(18) << v3d << std::setprecision(6) << ')' << std::endl;
 
     v3d = {0, 0, 0};
     for (int i = 0; i < 1'000'000; ++i) {
@@ -121,7 +121,7 @@ int main() {
         v4d += delta4d;
     }
     time = stopWatch.MillisecondsElapsed();
-    std::cout << "    CLHEPX::...::MT64Engine : " << time << " ms (last displacement: " << std::setprecision(18) << v4d << std::setprecision(6) << ')' << std::endl;
+    std::cout << "    CLHEPX::...::MT1993764Engine : " << time << " ms (last displacement: " << std::setprecision(18) << v4d << std::setprecision(6) << ')' << std::endl;
 
     v4d = {0, 0, 0, 0};
     for (int i = 0; i < 1'000'000; ++i) {
