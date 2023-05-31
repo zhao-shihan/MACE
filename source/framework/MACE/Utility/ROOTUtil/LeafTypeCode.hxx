@@ -43,8 +43,6 @@ constexpr auto LeafTypeCode() {
         return 'g';
     } else if constexpr (std::same_as<T, Bool_t>) {
         return 'O';
-    } else {
-        std2b::unreachable();
     }
 }
 
