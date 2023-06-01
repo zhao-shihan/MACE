@@ -35,8 +35,8 @@ To build MACE software from source, there are a few prerequisites.
 
 ### Toolchain
 
-1. A C++ compiler (that supports ≥ C++20. [GCC](https://gcc.gnu.org/) ≥ 11, [LLVM Clang](https://clang.llvm.org/) ≥ 12, or MSVC ≥ 19.30 (i.e., [Visual Studio](https://visualstudio.microsoft.com/) 2022 ≥ 17.0))
-2. A C++ library (that supports ≥ C++20. [libstdc++](https://gcc.gnu.org/onlinedocs/libstdc++/) ≥ 10.1, or [MSVC STL](https://github.com/microsoft/STL) with [Visual Studio](https://visualstudio.microsoft.com/) 2022 ≥ 17.0)
+1. A C++ compiler (that supports ≥ C++20. [GCC](https://gcc.gnu.org/) ≥ 11, [LLVM Clang](https://clang.llvm.org/) ≥ 15, or MSVC ≥ 19.30 (i.e., [Visual Studio](https://visualstudio.microsoft.com/) 2022 ≥ 17.0))
+2. A C++ library (that supports ≥ C++20. [libstdc++](https://gcc.gnu.org/onlinedocs/libstdc++/) ≥ 11, or [MSVC STL](https://github.com/microsoft/STL) with [Visual Studio](https://visualstudio.microsoft.com/) 2022 ≥ 17.0)
 3. [CMake](https://cmake.org/) (≥ 3.16)
 4. A build system compatible with CMake ([GNU Make](https://www.gnu.org/software/make/), [Ninja](https://ninja-build.org), or etc.)
 
