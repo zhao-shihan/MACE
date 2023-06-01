@@ -1,6 +1,6 @@
 project(MACE)
 
-file(GLOB_RECURSE MACE_FRAMEWORK_SRC ${PROJECT_SOURCE_DIR}/MACE/*.cxx)
+file(GLOB_RECURSE MACE_FRAMEWORK_SRC ${PROJECT_SOURCE_DIR}/MACE/*.c++)
 
 add_library(MACEFrameWork STATIC ${MACE_FRAMEWORK_SRC})
 target_include_directories(MACEFrameWork PUBLIC ${MACE_PROJECT_SRC_DIR}/framework)

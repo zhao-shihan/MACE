@@ -1,13 +1,13 @@
 project(MACE)
 
-add_executable(MT1993732Engine MT1993732Engine.cxx)
+add_executable(MT1993732Engine MT1993732Engine.c++)
 target_link_libraries(MT1993732Engine MACEFrameWork)
 
-add_executable(MT1993764Engine MT1993764Engine.cxx)
+add_executable(MT1993764Engine MT1993764Engine.c++)
 target_link_libraries(MT1993764Engine MACEFrameWork)
 
-add_executable(Xoshiro256SSEngine Xoshiro256SSEngine.cxx)
+add_executable(Xoshiro256SSEngine Xoshiro256SSEngine.c++)
 target_link_libraries(Xoshiro256SSEngine MACEFrameWork)
 
-add_executable(Xoshiro512SSEngine Xoshiro512SSEngine.cxx)
+add_executable(Xoshiro512SSEngine Xoshiro512SSEngine.c++)
 target_link_libraries(Xoshiro512SSEngine MACEFrameWork)

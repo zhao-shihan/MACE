@@ -1,6 +1,6 @@
 project(MACE)
 
-add_executable(RALog RALog.cxx)
+add_executable(RALog RALog.c++)
 target_link_libraries(RALog MACEFrameWork)
 
 add_subdirectory(IntegerPower)

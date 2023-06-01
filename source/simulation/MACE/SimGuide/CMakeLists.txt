@@ -1,7 +1,7 @@
 project(MACE)
 
 # SimGuide sources
-file(GLOB_RECURSE SimGuide_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
+file(GLOB_RECURSE SimGuide_srcs ${PROJECT_SOURCE_DIR}/*.c++)
 
 # targets
 add_executable(SimGuide ${SimGuide_srcs})

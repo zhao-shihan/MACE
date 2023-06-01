@@ -1,7 +1,7 @@
 project(MACE)
 
 # SimMACE sources
-file(GLOB_RECURSE SimMACE_srcs ${PROJECT_SOURCE_DIR}/*.cxx)
+file(GLOB_RECURSE SimMACE_srcs ${PROJECT_SOURCE_DIR}/*.c++)
 
 # targets
 add_executable(SimMACE ${SimMACE_srcs})

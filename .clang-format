@@ -44,7 +44,7 @@ EmptyLineBeforeAccessModifier: LogicalBlock
 FixNamespaceComments: true
 IncludeBlocks: Regroup
 IncludeCategories: 
-  - Regex: '"MACE/.*\.hxx"'
+  - Regex: '"MACE/.*\.h++"'
     Priority: 0
   - Regex: '"CLHEP/.*"'
     Priority: 1

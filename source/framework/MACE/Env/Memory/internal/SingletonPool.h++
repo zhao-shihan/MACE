@@ -1,0 +1,43 @@
+#pragma once
+
+#include "MACE/Env/Memory/PassiveSingleton.h++"
+#include "MACE/Env/Memory/Singletonified.h++"
+#include "MACE/Utility/NonMoveableBase.h++"
+
+#include "gsl/gsl"
+
+#include <functional>
+#include <map>
+#include <optional>
+#include <stdexcept>
+#include <typeindex>
+#include <typeinfo>
+#include <utility>
+
+namespace MACE::Env::Memory::internal {
+
+class SingletonBase;
+
+/// @brief Implementation detail of MACE::Env::Memory::Singleton.
+/// Not API.
+class SingletonPool final : public PassiveSingleton<SingletonPool> {
+public:
+    using Node = void*;
+    using BaseNode = gsl::owner<const SingletonBase*>;
+
+public:
+    template<Singletonified ASingleton>
+    [[nodiscard]] std::optional<std::reference_wrapper<Node>> Find();
+    template<Singletonified ASingleton>
+    [[nodiscard]] auto Contains() const { return fInstanceMap.contains(typeid(ASingleton)); }
+    template<Singletonified ASingleton>
+    [[nodiscard]] Node& Insert(gsl::not_null<ASingleton*> instance);
+    [[nodiscard]] std::vector<BaseNode> GetUndeletedInReverseInsertionOrder() const;
+
+private:
+    std::map<std::type_index, std::pair<Node, const std::pair<gsl::index, BaseNode>>> fInstanceMap;
+};
+
+} // namespace MACE::Env::Memory::internal
+
+#include "MACE/Env/Memory/internal/SingletonPool.inl"

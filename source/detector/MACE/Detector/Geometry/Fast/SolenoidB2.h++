@@ -1,0 +1,12 @@
+#pragma once
+
+#include "MACE/Detector/Geometry/GeometryBase.h++"
+
+namespace MACE::Detector::Geometry::Fast {
+
+class SolenoidB2 final : public GeometryBase {
+private:
+    void Construct(G4bool checkOverlaps) override;
+};
+
+} // namespace MACE::Detector::Geometry::Fast
