@@ -2,7 +2,7 @@
 
 #include "MACE/Concept/FundamentalType.h++"
 #include "MACE/Math/GetDigits.h++"
-#include "MACE/Utility/ToSigned.h++"
+#include "MACE/Extension/stdx/to_signed.h++"
 
 #include "backward.hpp"
 

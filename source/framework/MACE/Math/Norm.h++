@@ -3,7 +3,7 @@
 #include "MACE/Concept/NumericVector.h++"
 #include "MACE/Extension/gslx/index_sequence.h++"
 #include "MACE/Math/Hypot.h++"
-#include "MACE/Utility/ToSigned.h++"
+#include "MACE/Extension/stdx/to_signed.h++"
 #include "MACE/Utility/VectorCast.h++"
 #include "MACE/Utility/VectorDimension.h++"
 #include "MACE/Utility/VectorValueType.h++"

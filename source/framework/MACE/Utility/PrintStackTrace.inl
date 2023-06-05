@@ -9,7 +9,7 @@ void PrintStackTrace(backward::StackTrace& stack, std::basic_ostream<AChar>& os)
     const auto oldFill = os.fill();
     os << "Stack trace (most recent call last):\n";
     backward::SnippetFactory snippetFactory;
-    for (auto frame = ToSigned(stack.size()) - 1; frame >= 0; --frame) {
+    for (auto frame = stdx::to_signed(stack.size()) - 1; frame >= 0; --frame) {
         const auto trace = resolver.resolve(stack[frame]);
         const std::string_view function = trace.object_function;
         const std::string_view binary = trace.object_filename;

@@ -4,7 +4,7 @@
 #include "MACE/DataModel/BranchSocketBase.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 #include "MACE/Utility/ROOTUtil/LeafTypeCode.h++"
-#include "MACE/Utility/ToSigned.h++"
+#include "MACE/Extension/stdx/to_signed.h++"
 #include "MACE/Utility/VectorAssign.h++"
 #include "MACE/Utility/VectorCast.h++"
 
