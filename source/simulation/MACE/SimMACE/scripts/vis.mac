@@ -36,7 +36,8 @@
 /MACE/Analysis/EnableCoincidenceOfMCP     true
 
 # Name of output
-/MACE/Analysis/ResultPath              SimMACE_result
+/MACE/Analysis/FilePath   SimMACE_result
+/MACE/Analysis/FileOption RECREATE
 
 #############################################################################
 # Visualization settings

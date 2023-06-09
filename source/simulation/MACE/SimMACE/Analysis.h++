@@ -27,11 +27,12 @@ class Analysis final : public Env::Memory::PassiveSingleton<Analysis> {
 public:
     Analysis();
 
-    void ResultPath(const auto& path) { (fResultPath = std::forward<decltype(path)>(path)).replace_extension(); }
+    void FilePath(std::filesystem::path path) { fFilePath = std::move(path); }
+    void FileOption(std::string option) { fFileOption = std::move(option); }
     void EnableCoincidenceOfEMCal(G4bool val) { fEnableCoincidenceOfEMCal = val; }
     void EnableCoincidenceOfMCP(G4bool val) { fEnableCoincidenceOfMCP = val; }
 
-    void RunBegin(G4int runID, Option_t* option = "recreate");
+    void RunBegin(G4int runID);
 
     void SubmitEMCalHC(gsl::not_null<const std::vector<gsl::owner<EMCalHit*>>*> hitList) { fEMCalHitList = hitList; }
     void SubmitMCPHC(gsl::not_null<const std::vector<gsl::owner<MCPHit*>>*> hitList) { fMCPHitList = hitList; }
@@ -41,7 +42,8 @@ public:
     void RunEnd(Option_t* option = nullptr);
 
 private:
-    std::filesystem::path fResultPath;
+    std::filesystem::path fFilePath;
+    std::string fFileOption;
     G4bool fEnableCoincidenceOfEMCal;
     G4bool fEnableCoincidenceOfMCP;
 

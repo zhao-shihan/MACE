@@ -38,5 +38,6 @@
 # Run
 #############################################################################
 
-/MACE/Analysis/ResultPath SimMACE_bkg
+/MACE/Analysis/FilePath   SimMACE_bkg
+/MACE/Analysis/FileOption UPDATE
 /run/beamOn 80

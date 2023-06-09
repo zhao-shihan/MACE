@@ -11,7 +11,8 @@ namespace MACE::SimMACE {
 
 Analysis::Analysis() :
     PassiveSingleton(),
-    fResultPath("SimMACE_untitled"),
+    fFilePath("SimMACE_untitled"),
+    fFileOption("UPDATE"),
     fEnableCoincidenceOfEMCal(true),
     fEnableCoincidenceOfMCP(true),
     fDataHub(),
@@ -26,9 +27,9 @@ Analysis::Analysis() :
     AnalysisMessenger::Instance().AssignTo(this);
 }
 
-void Analysis::RunBegin(G4int runID, Option_t* option) {
-    fFile = std::make_unique<TFile>(MPIUtil::MakeMPIFilePath(fResultPath, ".root").generic_string().c_str(),
-                                    option,
+void Analysis::RunBegin(G4int runID) {
+    fFile = std::make_unique<TFile>(MPIUtil::MakeMPIFilePath(fFilePath, ".root").generic_string().c_str(),
+                                    fFileOption.c_str(),
                                     "",
                                     ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
     fEMCalHitTree = fDataHub.CreateTree<DataModel::EMCalSimHit>(runID);
