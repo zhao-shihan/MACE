@@ -44,26 +44,30 @@ EmptyLineBeforeAccessModifier: LogicalBlock
 FixNamespaceComments: true
 IncludeBlocks: Regroup
 IncludeCategories: 
-  - Regex: '"MACE/.*\.h\+\+"'
-    Priority: 0
-  - Regex: '"CLHEP/.*"'
-    Priority: 1
-  - Regex: '"T.*\.h"'
-    Priority: 2
-  - Regex: '"R.*\.h"'
-    Priority: 2
-  - Regex: '"R.*\.hxx"'
-    Priority: 2
-  - Regex: '"ROOT/.*"'
-    Priority: 2
+  # special
   - Regex: '"Randomize\.hh"'
     Priority: 3
   - Regex: '"globals\.hh"'
     Priority: 3
-  - Regex: '"G4.*"'
-    Priority: 3
   - Regex: '"backward\.hpp"'
     Priority: 4
+  - Regex: '"RKTrackRep\.h"'
+    Priority: 12
+  # general
+  - Regex: '"MACE/.*\.h\+\+"'
+    Priority: 0
+  - Regex: '"CLHEP/.*"'
+    Priority: 1
+  - Regex: '"ROOT/.*"'
+    Priority: 2
+  - Regex: '"R.*\.hxx"'
+    Priority: 2
+  - Regex: '"R.*\.h"'
+    Priority: 2
+  - Regex: '"T.*\.h"'
+    Priority: 2
+  - Regex: '"G4.*"'
+    Priority: 3
   - Regex: '"yaml-cpp/.*"'
     Priority: 5
   - Regex: '"argparse/.*"'
@@ -74,7 +78,7 @@ IncludeCategories:
     Priority: 8
   - Regex: '"mpi.*\.h"'
     Priority: 9
-  - Regex: '"gsl/gsl"'
+  - Regex: '"gsl/.*"'
     Priority: 10
   - Regex: '"fmt/.*\.h"'
     Priority: 11
