@@ -11,7 +11,7 @@ namespace MACE::Concept {
 
 template<typename T>
 concept ROOTFundamental =
-    std::same_as<std::decay_t<T>, gsl::czstring> or
+    std::same_as<std::decay_t<T>, gsl::zstring> or
     std::same_as<T, Char_t> or
     std::same_as<T, UChar_t> or
     std::same_as<T, Short_t> or

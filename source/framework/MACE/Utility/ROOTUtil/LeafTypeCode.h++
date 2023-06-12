@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MACE/Compatibility/std2b/unreachable.h++"
 #include "MACE/Concept/ROOTFundamental.h++"
 
 #include "RtypesCore.h"
@@ -8,14 +7,13 @@
 #include "gsl/gsl"
 
 #include <concepts>
-#include <string>
 #include <type_traits>
 
 namespace MACE::inline Utility::ROOTUtil {
 
 template<Concept::ROOTFundamental T>
-constexpr auto LeafTypeCode() {
-    if constexpr (std::same_as<std::decay_t<T>, gsl::czstring>) {
+constexpr auto LeafTypeCode() -> char {
+    if constexpr (std::same_as<std::decay_t<T>, gsl::zstring>) {
         return 'C';
     } else if constexpr (std::same_as<T, Char_t>) {
         return 'B';
