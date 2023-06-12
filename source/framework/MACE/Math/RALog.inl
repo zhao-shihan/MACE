@@ -7,10 +7,13 @@ namespace MACE::Math {
         requires std::same_as<T, float> or std::same_as<T, double>                     \
     MACE_ALWAYS_INLINE constexpr auto RA##N##Log##b(T x) noexcept {                    \
         if constexpr (std::numeric_limits<T>::is_iec559) {                             \
-            if (std::isgreater(x, static_cast<T>(0))) [[likely]] {                     \
-                using B = std::conditional_t<std::same_as<T, float>,                   \
-                                             std::uint32_t,                            \
-                                             std::uint64_t>;                           \
+            if (x > 0) [[likely]] {                                                    \
+                using B =                                                              \
+                    std::conditional_t<                                                \
+                        std::same_as<T, float>, std::uint32_t,                         \
+                        std::conditional_t<                                            \
+                            std::same_as<T, double>, std::uint64_t,                    \
+                            void>>;                                                    \
                 constexpr int n = std::numeric_limits<T>::digits - 1;                  \
                 constexpr int k = CHAR_BIT * sizeof(T) - 1 - n;                        \
                 const auto xBits = std::bit_cast<B>(x);                                \
@@ -26,7 +29,7 @@ namespace MACE::Math {
                 } else {                                                               \
                     return std::numeric_limits<T>::infinity();                         \
                 }                                                                      \
-            } else if (std::islessequal(x, static_cast<T>(0))) [[likely]] {            \
+            } else if (x <= 0) [[likely]] {                                            \
                 if (x == 0) {                                                          \
                     std::feraiseexcept(FE_DIVBYZERO);                                  \
                     return -std::numeric_limits<T>::infinity();                        \

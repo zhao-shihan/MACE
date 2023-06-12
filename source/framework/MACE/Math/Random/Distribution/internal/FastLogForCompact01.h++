@@ -16,11 +16,14 @@
 namespace MACE::Math::Random::inline Distribution::internal {
 
 template<std::floating_point T>
-MACE_ALWAYS_INLINE constexpr T FastLogForCompact01(T x) {
+MACE_ALWAYS_INLINE constexpr auto FastLogForCompact01(T x) {
     if constexpr (std::numeric_limits<T>::is_iec559) {
-        using B = std::conditional_t<std::same_as<T, float>,
-                                     std::uint32_t,
-                                     std::uint64_t>;
+        using B =
+            std::conditional_t<
+                std::same_as<T, float>, std::uint32_t,
+                std::conditional_t<
+                    std::same_as<T, double>, std::uint64_t,
+                    void>>;
         constexpr int n = std::numeric_limits<T>::digits - 1;
         constexpr int k = CHAR_BIT * sizeof(T) - 1 - n;
         const auto xBits = std::bit_cast<B>(x);
