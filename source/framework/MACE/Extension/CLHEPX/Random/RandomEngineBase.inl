@@ -13,28 +13,28 @@ RandomEngineBase<PRBG>::RandomEngineBase(long seed) :
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-void RandomEngineBase<PRBG>::flatArray(const int size, double* vect) {
+auto RandomEngineBase<PRBG>::flatArray(const int size, double* vect) -> void {
     for (int i = 0; i < size; ++i) {
         vect[i] = flat();
     }
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-void RandomEngineBase<PRBG>::setSeed(long seed, int) {
+auto RandomEngineBase<PRBG>::setSeed(long seed, int) -> void {
     fPRBG.Seed(seed);
     theSeed = seed;
     theSeeds = &theSeed;
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-void RandomEngineBase<PRBG>::setSeeds(const long* seeds, int) {
+auto RandomEngineBase<PRBG>::setSeeds(const long* seeds, int) -> void {
     fPRBG.Seed(*seeds);
     theSeed = *seeds;
     theSeeds = seeds;
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-void RandomEngineBase<PRBG>::saveStatus(gsl::czstring filename) const {
+auto RandomEngineBase<PRBG>::saveStatus(gsl::czstring filename) const -> void {
     std::ofstream os(filename, std::ios::out);
     if (os.is_open()) {
         put(os);
@@ -45,7 +45,7 @@ void RandomEngineBase<PRBG>::saveStatus(gsl::czstring filename) const {
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-void RandomEngineBase<PRBG>::restoreStatus(gsl::czstring filename) {
+auto RandomEngineBase<PRBG>::restoreStatus(gsl::czstring filename) -> void {
     std::ifstream is(filename, std::ios::in);
     if (is.is_open()) {
         get(is);
@@ -56,7 +56,7 @@ void RandomEngineBase<PRBG>::restoreStatus(gsl::czstring filename) {
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-void RandomEngineBase<PRBG>::showStatus() const {
+auto RandomEngineBase<PRBG>::showStatus() const -> void {
     constexpr std::string_view split = "----------------------------------------------------------------";
     const auto engineName = name();
     const auto firstSplit = static_cast<std::intmax_t>(split.length()) -         // length(split) -
@@ -70,7 +70,7 @@ void RandomEngineBase<PRBG>::showStatus() const {
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-std::ostream& RandomEngineBase<PRBG>::put(std::ostream& os) const {
+auto RandomEngineBase<PRBG>::put(std::ostream& os) const -> decltype(os) {
     const auto engineName = name();
     os << engineName << "-begin\n"
        << fPRBG << '\n'
@@ -79,7 +79,7 @@ std::ostream& RandomEngineBase<PRBG>::put(std::ostream& os) const {
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-std::istream& RandomEngineBase<PRBG>::get(std::istream& is) {
+auto RandomEngineBase<PRBG>::get(std::istream& is) -> decltype(is) {
     const auto engineName = name();
     std::string tag;
     is >> tag;
@@ -98,7 +98,7 @@ std::istream& RandomEngineBase<PRBG>::get(std::istream& is) {
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-std::istream& RandomEngineBase<PRBG>::getState(std::istream& is) {
+auto RandomEngineBase<PRBG>::getState(std::istream& is) -> decltype(is) {
     std::cerr << "RandomEngineBase<PRBG>::getState has no effect. Do not use\n";
     return is;
 }

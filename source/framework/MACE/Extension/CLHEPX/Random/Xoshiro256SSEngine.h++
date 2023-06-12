@@ -9,7 +9,7 @@ class Xoshiro256SSEngine final : public RandomEngineBase<Math::Random::Xoshiro25
 public:
     using RandomEngineBase<Math::Random::Xoshiro256SS>::RandomEngineBase;
 
-    std::string name() const override { return "Xoshiro256SSEngine"; }
+    auto name() const -> std::string override { return "Xoshiro256SSEngine"; }
 };
 
 } // namespace MACE::inline Extension::CLHEPX::Random

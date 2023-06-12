@@ -9,7 +9,7 @@ class MT1993764Engine final : public RandomEngineBase<Math::Random::MT1993764> {
 public:
     using RandomEngineBase<Math::Random::MT1993764>::RandomEngineBase;
 
-    std::string name() const override { return "MT1993764Engine"; }
+    auto name() const -> std::string override { return "MT1993764Engine"; }
 };
 
 } // namespace MACE::inline Extension::CLHEPX::Random

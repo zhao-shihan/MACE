@@ -20,24 +20,24 @@ template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
 class RandomEngineBase : public CLHEP::HepRandomEngine {
 public:
     RandomEngineBase();
-    RandomEngineBase(long seed);
+    explicit RandomEngineBase(long seed);
 
 protected:
     ~RandomEngineBase() = default;
 
 public:
-    double flat() override final { return Math::Random::Uniform<double>()(fPRBG); }
-    virtual void flatArray(const int size, double* vect) override;
+    auto flat() -> double override final { return Math::Random::Uniform<double>()(fPRBG); }
+    virtual auto flatArray(const int size, double* vect) -> void override;
 
-    void setSeed(long seed, int = 0) override final;
-    void setSeeds(const long* seeds, int = 0) override final;
+    auto setSeed(long seed, int = 0) -> void override final;
+    auto setSeeds(const long* seeds, int = 0) -> void override final;
 
-    void saveStatus(gsl::czstring filename) const override final;
-    void restoreStatus(gsl::czstring filename) override final;
-    void showStatus() const override final;
+    auto saveStatus(gsl::czstring filename) const -> void override final;
+    auto restoreStatus(gsl::czstring filename) -> void override final;
+    auto showStatus() const -> void override final;
 
-    std::ostream& put(std::ostream& os) const override final;
-    std::istream& get(std::istream& is) override final;
+    auto put(std::ostream& os) const -> decltype(os) override final;
+    auto get(std::istream& is) -> decltype(is) override final;
 
     operator double() override final { return Math::Random::Uniform<double>()(fPRBG); }
     operator float() override final { return Math::Random::Uniform<float>()(fPRBG); }
@@ -45,7 +45,7 @@ public:
 
 private:
     /// @brief Do not use.
-    std::istream& getState(std::istream& is) override final;
+    auto getState(std::istream& is) -> decltype(is) override final;
 
 private:
     PRBG fPRBG;

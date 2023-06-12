@@ -17,11 +17,11 @@ template<class ADerived, std::size_t NBit>
 class XoshiroBase : public UniformPseudoRandomBitGeneratorBase<ADerived, std::uint64_t> {
 protected:
     constexpr XoshiroBase(std::array<std::uint64_t, NBit / 64> defaultState);
-    constexpr XoshiroBase(std::uint64_t seed);
+    constexpr explicit XoshiroBase(std::uint64_t seed);
     constexpr ~XoshiroBase() = default;
 
 public:
-    constexpr void Seed(std::uint64_t seed);
+    constexpr auto Seed(std::uint64_t seed) -> void;
 
     static constexpr auto Min() { return std::numeric_limits<std::uint64_t>::min(); }
     static constexpr auto Max() { return std::numeric_limits<std::uint64_t>::max(); }

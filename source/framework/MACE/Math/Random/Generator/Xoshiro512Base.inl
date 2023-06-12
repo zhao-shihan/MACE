@@ -18,7 +18,7 @@ constexpr Xoshiro512Base<ADerived>::Xoshiro512Base(std::uint64_t seed) :
     XoshiroBase<ADerived, 512>(seed) {}
 
 template<class ADerived>
-MACE_ALWAYS_INLINE constexpr void Xoshiro512Base<ADerived>::Step() {
+MACE_ALWAYS_INLINE constexpr auto Xoshiro512Base<ADerived>::Step() -> void {
     const auto t = this->fState[1] << 11;
 
     this->fState[2] ^= this->fState[0];

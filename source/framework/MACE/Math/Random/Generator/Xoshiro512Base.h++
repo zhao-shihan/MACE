@@ -16,11 +16,11 @@ template<class ADerived>
 class Xoshiro512Base : public XoshiroBase<ADerived, 512> {
 protected:
     constexpr Xoshiro512Base();
-    constexpr Xoshiro512Base(std::uint64_t seed);
+    constexpr explicit Xoshiro512Base(std::uint64_t seed);
     constexpr ~Xoshiro512Base() = default;
 
 public:
-    MACE_ALWAYS_INLINE constexpr void Step();
+    MACE_ALWAYS_INLINE constexpr auto Step() -> void;
 
     template<Concept::Character AChar, class T>
     friend auto operator<<(std::basic_ostream<AChar>& os, const Xoshiro512Base<T>& self) -> decltype(os);
