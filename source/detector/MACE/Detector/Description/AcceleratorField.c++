@@ -13,9 +13,9 @@ AcceleratorField::AcceleratorField() :
     // Geometry
     fRadius(75_mm),
     fLength(100_cm),
-    fDownStreamLength(90_cm),
+    fDownStreamLength(60_cm),
     // Field
-    fAcceleratorPotential(500_V),
+    fAcceleratorPotential(5_kV),
     // Cached value
     fAcceleratorFieldStrength(fAcceleratorPotential / fDownStreamLength) {}
 

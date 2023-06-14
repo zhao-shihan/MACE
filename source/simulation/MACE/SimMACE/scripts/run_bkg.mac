@@ -27,7 +27,7 @@
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 /MACE/Physics/MuoniumPhysics/Transport/MeanFreePath             0.2 um
 
-/MACE/Field/AcceleratorPotential          500 volt
+/MACE/Field/AcceleratorPotential          5 kilovolt
 /MACE/Field/SpectrometerMagneticField     0.1 tesla
 /MACE/Field/SolenoidMagneticField         0.1 tesla
 
