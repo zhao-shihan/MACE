@@ -12,6 +12,9 @@
 
 #include "mpi.h"
 
+#include "fmt/chrono.h"
+#include "fmt/format.h"
+
 #include <algorithm>
 #include <array>
 #include <charconv>
@@ -146,39 +149,36 @@ void MPIRunManager::EventEndReport(const G4int eventID) const {
     const auto etaError = numberOfEventProcessed < 5 ?
                               std::string("N/A") :
                               FormatSecondToDHMS(1.96 * std::sqrt(fNDevEventWallTime / (numberOfEventProcessed - 1) * nEventRemain)); // 95% C.L. (assuming gaussian)
-    const auto progress = 100 * static_cast<float>(numberOfEventProcessed) / numberOfEventToBeProcessed;
-    const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
-    G4cout << std::put_time(std::localtime(&now), "%FT%T%z") << " > G4Event " << eventID << " finished in rank " << mpiEnv.CommWorldRank() << '\n'
-           << "  ETA: " << eta << " +/- " << etaError << "  Progress of the rank: " << numberOfEventProcessed << '/' << numberOfEventToBeProcessed << " (" << std::fixed << progress << std::defaultfloat << "%)" << G4endl;
-    G4cout.precision(precisionOfG4cout);
+    const auto progress = static_cast<double>(numberOfEventProcessed) / numberOfEventToBeProcessed;
+    using scsc = std::chrono::system_clock;
+    fmt::println("Rank {} > {:%FT%T%z} > G4Event {} finished \n"
+                 "  Est. rem.: {} +/- {}  Rank progress: {}/{} ({:.2f}%)",
+                 mpiEnv.CommWorldRank(), fmt::localtime(scsc::to_time_t(scsc::now())), eventID,
+                 eta, etaError, numberOfEventProcessed, numberOfEventToBeProcessed, 100 * progress);
 }
 
 void MPIRunManager::RunEndReport(const G4int runID) const {
     const auto& mpiEnv = Env::MPIEnv::Instance();
     if (mpiEnv.AtCommWorldWorker() or mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
-    const auto wallTimeDHMS = FormatSecondToDHMS(fRunWallTime);
-    const auto beginTime = std::chrono::system_clock::to_time_t(fRunBeginSystemTime);
-    const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    const auto precisionOfG4cout = G4cout.precision(2); // P.S. The precision of G4cout must be changed somewhere in G4, however inexplicably not changed back. We leave it as is.
-    G4cout << "-------------------------------> Run Finished <-------------------------------\n"
-           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run " << runID << " finished on " << mpiEnv.CommWorldSize() << " ranks\n"
-           << "  Start time: " << std::put_time(std::localtime(&beginTime), "%FT%T%z") << '\n'
-           << "   Wall time: " << std::fixed << fRunWallTime << std::defaultfloat << " seconds";
-    if (fRunWallTime > 60) { G4cout << " (" << wallTimeDHMS << ')'; }
-    G4cout << "\n"
-              "-------------------------------> Run Finished <-------------------------------"
-           << G4endl;
-    G4cout.precision(precisionOfG4cout);
+    using scsc = std::chrono::system_clock;
+    fmt::println("-------------------------------> Run Finished <-------------------------------\n"
+                 "{:%FT%T%z} > G4Run {} finished on {} ranks\n"
+                 "  Start time: {:%FT%T%z}\n"
+                 "   Wall time: {:.2f} seconds{}\n"
+                 "-------------------------------> Run Finished <-------------------------------",
+                 fmt::localtime(scsc::to_time_t(scsc::now())), runID, mpiEnv.CommWorldSize(),
+                 fmt::localtime(scsc::to_time_t(fRunBeginSystemTime)),
+                 fRunWallTime, fRunWallTime > 60 ? " (" + FormatSecondToDHMS(fRunWallTime) + ")" : "");
 }
 
 void MPIRunManager::RunBeginReport(const G4int runID) {
     const auto& mpiEnv = Env::MPIEnv::Instance();
     if (mpiEnv.AtCommWorldWorker() or mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
-    const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    G4cout << "--------------------------------> Run Starts <--------------------------------\n"
-           << std::put_time(std::localtime(&now), "%FT%T%z") << " > Run " << runID << " starts on " << mpiEnv.CommWorldSize() << " ranks\n"
-           << "--------------------------------> Run Starts <--------------------------------" << G4endl;
+    using scsc = std::chrono::system_clock;
+    fmt::println("--------------------------------> Run Starts <--------------------------------\n"
+                 "{:%FT%T%z} > G4Run {} starts on {} ranks\n"
+                 "--------------------------------> Run Starts <--------------------------------",
+                 fmt::localtime(scsc::to_time_t(scsc::now())), runID, mpiEnv.CommWorldSize());
 }
 
 std::string MPIRunManager::FormatSecondToDHMS(const double secondsInTotal) {
