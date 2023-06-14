@@ -187,22 +187,18 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
 
     x = G4UniformRand();
     const auto atomicShellMomentum = fine_structure_const * muonium_reduced_mass_c2 *
-                                     Math::FindRoot(
-                                         // CDF - (uniform random)
+                                     Math::FindRoot::Secant(
+                                         // CDF - x
                                          [&x](const auto p) {
                                              const auto p2 = Math::Pow2(p);
                                              return (2 / 3_pi) *
-                                                        p * (p2 * (3 * p2 + 8) - 3) /
-                                                        Math::Pow3(p2 + 1) +
-                                                    1_inv_pi * std::atan(p) - x;
+                                                        (p * (p2 * (3 * p2 + 8) - 3) /
+                                                             Math::Pow3(p2 + 1) +
+                                                         3 * std::atan(p)) -
+                                                    x;
                                          },
-                                         // PDF
-                                         [](const auto p) {
-                                             const auto p2 = Math::Pow2(p);
-                                             return 32_inv_pi * p2 / Math::Pow4(p2 + 1);
-                                         },
-                                         // <p*>
-                                         8 / 3_pi)
+                                         // most probable p*
+                                         27 / 8_pi)
                                          .first *
                                      G4RandomDirection();
     products->PushProducts(new G4DynamicParticle(G4MT_daughters[3], atomicShellMomentum));
