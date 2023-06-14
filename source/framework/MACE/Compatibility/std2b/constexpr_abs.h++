@@ -22,7 +22,7 @@ namespace MACE::inline Compatibility::std2b {
 MACE_ALWAYS_INLINE constexpr auto abs(std::floating_point auto x) {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::abs(x);
-#else                            // backport
+#else // backport
 #    if defined __clang__ or defined __GNUC__
     if constexpr (std::same_as<decltype(x), double>) {
         return __builtin_fabs(x);
@@ -42,31 +42,31 @@ MACE_ALWAYS_INLINE constexpr auto abs(std::floating_point auto x) {
 MACE_ALWAYS_INLINE constexpr auto fabs(std::floating_point auto x) {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::fabs(x);
-#else                            // backport
+#else // backport
     return abs(x);
 #endif
 }
 
-MACE_ALWAYS_INLINE constexpr float fabsf(float x) {
+MACE_ALWAYS_INLINE constexpr auto fabsf(float x) -> float {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::fabsf(x);
-#else                            // backport
+#else // backport
     return abs(x);
 #endif
 }
 
-MACE_ALWAYS_INLINE constexpr long double fabsl(long double x) {
+MACE_ALWAYS_INLINE constexpr auto fabsl(long double x) -> long double {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::fabsl(x);
-#else                            // backport
+#else // backport
     return abs(x);
 #endif
 }
 
-MACE_ALWAYS_INLINE constexpr double fabs(std::integral auto n) {
+MACE_ALWAYS_INLINE constexpr auto fabs(std::integral auto n) -> double {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::fabs(n);
-#else                            // backport
+#else // backport
     return abs(static_cast<double>(n));
 #endif
 }
@@ -75,42 +75,42 @@ MACE_ALWAYS_INLINE constexpr double fabs(std::integral auto n) {
 // integral abs
 ///////////////////////////////////////////////////////////////////////////////
 
-MACE_ALWAYS_INLINE constexpr int abs(int n) {
+MACE_ALWAYS_INLINE constexpr auto abs(int n) -> int {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::abs(n);
-#else                            // backport
+#else // backport
     return n >= 0 ? n : -n;
 #endif
 }
 
-MACE_ALWAYS_INLINE constexpr long abs(long n) {
+MACE_ALWAYS_INLINE constexpr auto abs(long n) -> long {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::abs(n);
-#else                            // backport
+#else // backport
     return n >= 0 ? n : -n;
 #endif
 }
 
-MACE_ALWAYS_INLINE constexpr long long abs(long long n) {
+MACE_ALWAYS_INLINE constexpr auto abs(long long n) -> long long {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::abs(n);
-#else                            // backport
+#else // backport
     return n >= 0 ? n : -n;
 #endif
 }
 
-MACE_ALWAYS_INLINE constexpr long labs(long n) {
+MACE_ALWAYS_INLINE constexpr auto labs(long n) -> long {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::labs(n);
-#else                            // backport
+#else // backport
     return n >= 0 ? n : -n;
 #endif
 }
 
-MACE_ALWAYS_INLINE constexpr long long llabs(long long n) {
+MACE_ALWAYS_INLINE constexpr auto llabs(long long n) -> long long {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::llabs(n);
-#else                            // backport
+#else // backport
     return n >= 0 ? n : -n;
 #endif
 }
