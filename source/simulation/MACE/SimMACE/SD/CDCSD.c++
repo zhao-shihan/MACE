@@ -23,10 +23,12 @@ CDCSD::CDCSD(const G4String& sdName) :
     fEventID(-1),
     fHitsCollection(nullptr),
     fMeanDriftVelocity(),
-    fHalfTimeResolution(),
+    fDeadTime(),
     fCellEntryPoints(),
     fCellMap(),
     fCellSignalTimesAndHits() {
+    collectionName.emplace_back(sdName + "HC");
+
     const auto& cellMap = Detector::Description::CDC::Instance().CellMap();
     fCellEntryPoints.resize(cellMap.size());
     fCellMap.reserve(cellMap.size());
@@ -35,18 +37,16 @@ CDCSD::CDCSD(const G4String& sdName) :
                               VectorCast<G4ThreeVector>(cell.direction));
     }
     fCellSignalTimesAndHits.resize(cellMap.size());
-
-    collectionName.insert(sdName + "HC");
 }
 
 void CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
-    fHitsCollection = new CDCHitCollection(SensitiveDetectorName, collectionName[0]);
+    fHitsCollection = new CDCHitCollection(SensitiveDetectorName, collectionName.front());
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 
     const auto& cdc = Detector::Description::CDC::Instance();
     fMeanDriftVelocity = cdc.MeanDriftVelocity();
-    fHalfTimeResolution = cdc.TimeResolution() / 2;
+    fDeadTime = cdc.DeadTime();
 }
 
 G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
@@ -127,8 +127,8 @@ void CDCSD::EndOfEvent(G4HCofThisEvent*) {
         entryPointList.clear();
     }
 
-    auto& hits = *fHitsCollection->GetVector();
-    hits.reserve(
+    auto& hitList = *fHitsCollection->GetVector();
+    hitList.reserve(
         std::accumulate(fCellSignalTimesAndHits.cbegin(), fCellSignalTimesAndHits.cend(), 0ull,
                         [](const auto& count, const auto& signalTimesAndHits) {
                             return count + signalTimesAndHits.size();
@@ -140,7 +140,7 @@ void CDCSD::EndOfEvent(G4HCofThisEvent*) {
         std::ranges::sort(signalTimesAndHits);
 
         std::vector<std::unique_ptr<CDCHit>*> signalHitCandidateList;
-        auto signalTimeThreshold = signalTimesAndHits.front().first + fHalfTimeResolution;
+        auto signalTimeThreshold = signalTimesAndHits.front().first + fDeadTime;
         for (auto timeHit = signalTimesAndHits.begin(); timeHit != signalTimesAndHits.end(); ++timeHit) {
             signalHitCandidateList.emplace_back(&timeHit->second);
             const auto signalTime = timeHit->first;
@@ -150,16 +150,16 @@ void CDCSD::EndOfEvent(G4HCofThisEvent*) {
                                               [](const auto& hit1, const auto& hit2) {
                                                   return (*hit1)->KineticEnergy().Value() < (*hit2)->KineticEnergy().Value();
                                               });
-                hits.emplace_back(goodHit->release());
+                hitList.emplace_back(goodHit->release());
                 signalHitCandidateList.clear();
-                signalTimeThreshold = signalTime + fHalfTimeResolution;
+                signalTimeThreshold = signalTime + fDeadTime;
             }
         }
 
         signalTimesAndHits.clear();
     }
 
-    Analysis::Instance().SubmitSpectrometerHC(&hits);
+    Analysis::Instance().SubmitSpectrometerHC(&hitList);
 }
 
 } // namespace MACE::SimMACE::inline SD

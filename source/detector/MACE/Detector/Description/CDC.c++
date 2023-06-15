@@ -43,7 +43,7 @@ CDC::CDC() :
     fCellMapManager(),
     // Detection
     fMeanDriftVelocity(3.5_cm_us),
-    fTimeResolution(30_ns) {}
+    fDeadTime(30_ns) {}
 
 std::vector<CDC::SuperLayerConfiguration> CDC::ComputeLayerConfiguration() const {
     std::vector<SuperLayerConfiguration> layerConfig;
@@ -233,7 +233,7 @@ void CDC::ImportValues(const YAML::Node& node) {
     ImportValue(node, fShellOuterThickness, "ShellOuterThickness");
     // Detection
     ImportValue(node, fMeanDriftVelocity, "MeanDriftVelocity");
-    ImportValue(node, fTimeResolution, "TimeResolution");
+    ImportValue(node, fDeadTime, "DeadTime");
 }
 
 void CDC::ExportValues(YAML::Node& node) const {
@@ -258,7 +258,7 @@ void CDC::ExportValues(YAML::Node& node) const {
     ExportValue(node, fShellOuterThickness, "ShellOuterThickness");
     // Detection
     ExportValue(node, fMeanDriftVelocity, "MeanDriftVelocity");
-    ExportValue(node, fTimeResolution, "TimeResolution");
+    ExportValue(node, fDeadTime, "DeadTime");
 }
 
 } // namespace MACE::Detector::Description

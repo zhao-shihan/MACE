@@ -31,7 +31,7 @@ private:
     CDCHitCollection* fHitsCollection;
 
     G4double fMeanDriftVelocity;
-    G4double fHalfTimeResolution;
+    G4double fDeadTime;
 
     std::vector<std::map<int, const G4StepPoint>> fCellEntryPoints;
     std::vector<std::pair<const G4TwoVector, const G4ThreeVector>> fCellMap;

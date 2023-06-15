@@ -110,10 +110,10 @@ public:
     ///////////////////////////////////////////////////////////
 
     const auto& MeanDriftVelocity() const { return fMeanDriftVelocity; }
-    const auto& TimeResolution() const { return fTimeResolution; }
+    const auto& DeadTime() const { return fDeadTime; }
 
     void MeanDriftVelocity(auto&& v) { fMeanDriftVelocity = std::forward<decltype(v)>(v); }
-    void TimeResolution(auto&& v) { fTimeResolution = std::forward<decltype(v)>(v); }
+    void DeadTime(auto&& v) { fDeadTime = std::forward<decltype(v)>(v); }
 
 private:
     ///////////////////////////////////////////////////////////
@@ -179,7 +179,7 @@ private:
     ///////////////////////////////////////////////////////////
 
     double fMeanDriftVelocity;
-    double fTimeResolution;
+    double fDeadTime;
 };
 
 } // namespace MACE::Detector::Description
