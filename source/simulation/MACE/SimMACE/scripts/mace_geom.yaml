@@ -35,7 +35,7 @@ CDC:
   ShellSideThickness: 10
   ShellOuterThickness: 10
   MeanDriftVelocity: 0.035
-  TimeResolution: 30
+  DeadTime: 30
 EMCal:
   InnerRadius: 150
   InnerLength: 500

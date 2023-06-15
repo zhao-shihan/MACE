@@ -53,6 +53,10 @@ IncludeCategories:
     Priority: 4
   - Regex: '"RKTrackRep\.h"'
     Priority: 12
+  - Regex: '"Track\.h"'
+    Priority: 12
+  - Regex: '"TrackPoint\.h"'
+    Priority: 12
   # general
   - Regex: '"MACE/.*\.h\+\+"'
     Priority: 0
@@ -82,10 +86,12 @@ IncludeCategories:
     Priority: 10
   - Regex: '"fmt/.*\.h"'
     Priority: 11
-  - Regex: '".*"'
+  - Regex: '".*\.h"'
     Priority: 12
-  - Regex: '<.*>'
+  - Regex: '".*"'
     Priority: 13
+  - Regex: '<.*>'
+    Priority: 14
 IndentAccessModifiers: false
 IndentCaseBlocks: false
 IndentCaseLabels: false
