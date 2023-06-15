@@ -151,34 +151,34 @@ void MPIRunManager::EventEndReport(const G4int eventID) const {
                               FormatSecondToDHMS(1.96 * std::sqrt(fNDevEventWallTime / (numberOfEventProcessed - 1) * nEventRemain)); // 95% C.L. (assuming gaussian)
     const auto progress = static_cast<double>(numberOfEventProcessed) / numberOfEventToBeProcessed;
     using scsc = std::chrono::system_clock;
-    fmt::println("Rank {} > {:%FT%T%z} > G4Event {} finished \n"
-                 "  Est. rem.: {} +/- {}  Rank progress: {}/{} ({:.2f}%)",
-                 mpiEnv.CommWorldRank(), fmt::localtime(scsc::to_time_t(scsc::now())), eventID,
-                 eta, etaError, numberOfEventProcessed, numberOfEventToBeProcessed, 100 * progress);
+    fmt::print("Rank {} > {:%FT%T%z} > G4Event {} finished \n"
+               "  Est. rem.: {} +/- {}  Rank progress: {}/{} ({:.2f}%)\n",
+               mpiEnv.CommWorldRank(), fmt::localtime(scsc::to_time_t(scsc::now())), eventID,
+               eta, etaError, numberOfEventProcessed, numberOfEventToBeProcessed, 100 * progress);
 }
 
 void MPIRunManager::RunEndReport(const G4int runID) const {
     const auto& mpiEnv = Env::MPIEnv::Instance();
     if (mpiEnv.AtCommWorldWorker() or mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
     using scsc = std::chrono::system_clock;
-    fmt::println("-------------------------------> Run Finished <-------------------------------\n"
-                 "{:%FT%T%z} > G4Run {} finished on {} ranks\n"
-                 "  Start time: {:%FT%T%z}\n"
-                 "   Wall time: {:.2f} seconds{}\n"
-                 "-------------------------------> Run Finished <-------------------------------",
-                 fmt::localtime(scsc::to_time_t(scsc::now())), runID, mpiEnv.CommWorldSize(),
-                 fmt::localtime(scsc::to_time_t(fRunBeginSystemTime)),
-                 fRunWallTime, fRunWallTime > 60 ? " (" + FormatSecondToDHMS(fRunWallTime) + ")" : "");
+    fmt::print("-------------------------------> Run Finished <-------------------------------\n"
+               "{:%FT%T%z} > G4Run {} finished on {} ranks\n"
+               "  Start time: {:%FT%T%z}\n"
+               "   Wall time: {:.2f} seconds{}\n"
+               "-------------------------------> Run Finished <-------------------------------\n",
+               fmt::localtime(scsc::to_time_t(scsc::now())), runID, mpiEnv.CommWorldSize(),
+               fmt::localtime(scsc::to_time_t(fRunBeginSystemTime)),
+               fRunWallTime, fRunWallTime > 60 ? " (" + FormatSecondToDHMS(fRunWallTime) + ")" : "");
 }
 
 void MPIRunManager::RunBeginReport(const G4int runID) {
     const auto& mpiEnv = Env::MPIEnv::Instance();
     if (mpiEnv.AtCommWorldWorker() or mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
     using scsc = std::chrono::system_clock;
-    fmt::println("--------------------------------> Run Starts <--------------------------------\n"
-                 "{:%FT%T%z} > G4Run {} starts on {} ranks\n"
-                 "--------------------------------> Run Starts <--------------------------------",
-                 fmt::localtime(scsc::to_time_t(scsc::now())), runID, mpiEnv.CommWorldSize());
+    fmt::print("--------------------------------> Run Starts <--------------------------------\n"
+               "{:%FT%T%z} > G4Run {} starts on {} ranks\n"
+               "--------------------------------> Run Starts <--------------------------------\n",
+               fmt::localtime(scsc::to_time_t(scsc::now())), runID, mpiEnv.CommWorldSize());
 }
 
 std::string MPIRunManager::FormatSecondToDHMS(const double secondsInTotal) {
