@@ -18,7 +18,7 @@
 "/run/initialize",
 "",
 "# Customized properties",
-"/MACE/Generator/SurfaceMuon/TimeRMS                20 ns",
+"/MACE/Generator/SurfaceMuon/TimeRMS                0 ns",
 "/MACE/Generator/SurfaceMuon/Momentum               28 MeV",
 "/MACE/Generator/SurfaceMuon/MomentumRMS            0.7 MeV",
 "/MACE/Generator/SurfaceMuon/PositionRMS            5 mm",
@@ -37,7 +37,7 @@
 "/MACE/Analysis/EnableCoincidenceOfMCP     true",
 "",
 "# Name of output",
-"/MACE/Analysis/FilePath   SimMACE_result",
+"/MACE/Analysis/FilePath   SimMACE_vis",
 "/MACE/Analysis/FileOption RECREATE",
 "",
 

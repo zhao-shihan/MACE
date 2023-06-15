@@ -16,12 +16,12 @@
 /run/initialize
 
 # Customized properties
-/MACE/Generator/SurfaceMuon/TimeRMS                20 ns
+/MACE/Generator/SurfaceMuon/TimeRMS                0 ns
 /MACE/Generator/SurfaceMuon/Momentum               28 MeV
 /MACE/Generator/SurfaceMuon/MomentumRMS            0.7 MeV
 /MACE/Generator/SurfaceMuon/PositionRMS            5 mm
 /MACE/Generator/SurfaceMuon/PositionZ              -1.5 m
-/MACE/Generator/SurfaceMuon/MuonsForEachG4Event    1000
+/MACE/Generator/SurfaceMuon/MuonsForEachG4Event    2000    # 50 kHz beam
 
 /MACE/Physics/MuoniumPhysics/Formation/FormationProbability     0.6
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0
@@ -31,13 +31,13 @@
 /MACE/Field/SpectrometerMagneticField     0.1 tesla
 /MACE/Field/SolenoidMagneticField         0.1 tesla
 
-/MACE/Analysis/EnableCoincidenceOfEMCal   true
-/MACE/Analysis/EnableCoincidenceOfMCP     true
+/MACE/Analysis/EnableCoincidenceOfEMCal   false
+/MACE/Analysis/EnableCoincidenceOfMCP     false
 
 #############################################################################
 # Run
 #############################################################################
 
 /MACE/Analysis/FilePath   SimMACE_bkg
-/MACE/Analysis/FileOption UPDATE
+/MACE/Analysis/FileOption RECREATE
 /run/beamOn 80
