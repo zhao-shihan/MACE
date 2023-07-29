@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/DataModel/BranchSocket2/BranchSocket2.hxx"
-#include "MACE/Utility/NonMoveableBase.hxx"
+#include "MACE/DataModel/BranchSocket2/BranchSocket2.h++"
+#include "MACE/Utility/NonMoveableBase.h++"
 
 #include "TTree.h"
 
@@ -9,7 +9,7 @@
 #include <string>
 #include <utility>
 
-namespace MACE::DataModel {
+namespace MACE::DataModel::inline BranchSocket {
 
 template<class ADerived, typename T>
 class BranchSocketBase2 : public NonMoveableBase {

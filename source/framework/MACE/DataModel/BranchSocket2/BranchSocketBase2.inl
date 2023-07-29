@@ -1,4 +1,4 @@
-namespace MACE::DataModel {
+namespace MACE::DataModel::inline BranchSocket {
 
 template<class ADerived, typename T>
 BranchSocketBase2<ADerived, T>::BranchSocketBase2(std::string name, std::string title) :

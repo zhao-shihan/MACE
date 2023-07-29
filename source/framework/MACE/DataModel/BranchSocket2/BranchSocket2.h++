@@ -1,14 +1,14 @@
 #pragma once
 
-#include "MACE/Concept/NonMoveable.hxx"
-#include "MACE/Concept/ROOTFundamental.hxx"
+#include "MACE/Concept/NonMoveable.h++"
+#include "MACE/Concept/ROOTFundamental.h++"
 
 #include <concepts>
 #include <type_traits>
 
 class TTree;
 
-namespace MACE::DataModel {
+namespace MACE::DataModel::inline BranchSocket {
 
 template<class ADerived, typename T>
 class BranchSocketBase2;
@@ -29,4 +29,4 @@ concept BranchSocket2 =
         requires not std::is_polymorphic_v<S>;
     };
 
-} // namespace MACE::DataModel
+} // namespace MACE::DataModel::inline BranchSocket

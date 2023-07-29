@@ -184,7 +184,6 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
     // atomic shell electron 3
 
     using namespace LiteralUnit::MathConstant;
-
     x = G4UniformRand();
     const auto atomicShellMomentum = fine_structure_const * muonium_reduced_mass_c2 *
                                      Math::FindRoot::Secant(
