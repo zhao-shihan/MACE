@@ -51,8 +51,8 @@ Target::ShapeBase<ADerivedShape>::DetailBase<ADerivedDetail>::DetailBase() {
 
 bool Target::CuboidTarget::VolumeContain(const Concept::InputVector3D auto& x) const noexcept {
     return -fThickness <= x[2] and x[2] <= 0 and
-           std::abs(x[0]) <= fWidth / 2 and
-           std::abs(x[1]) <= fWidth / 2;
+           std2b::abs(x[0]) <= fWidth / 2 and
+           std2b::abs(x[1]) <= fWidth / 2;
 }
 
 bool Target::CuboidTarget::Contain(const Concept::InputVector3D auto& x, bool insideVolume) const noexcept {
@@ -68,8 +68,8 @@ bool Target::CuboidTarget::Contain(const Concept::InputVector3D auto& x, bool in
 
 bool Target::CuboidTarget::TestDetectable(const Concept::InputVector3D auto& x) const noexcept {
     const auto notShadowed = x[2] > 0 or
-                             std::abs(x[0]) > fWidth / 2 or
-                             std::abs(x[1]) > fWidth / 2;
+                             std2b::abs(x[0]) > fWidth / 2 or
+                             std2b::abs(x[1]) > fWidth / 2;
     switch (fDetailType) {
     case ShapeDetailType::Flat:
         return notShadowed;
@@ -81,7 +81,7 @@ bool Target::CuboidTarget::TestDetectable(const Concept::InputVector3D auto& x) 
 }
 
 bool Target::CuboidTarget::HoledCuboid::DetailContain(const Concept::InputVector3D auto& x) const noexcept {
-    if (x[2] < -fDepth or std::abs(x[0]) > fHalfExtent or std::abs(x[1]) > fHalfExtent) {
+    if (x[2] < -fDepth or std2b::abs(x[0]) > fHalfExtent or std2b::abs(x[1]) > fHalfExtent) {
         return true;
     } else {
         using std::numbers::sqrt3;
