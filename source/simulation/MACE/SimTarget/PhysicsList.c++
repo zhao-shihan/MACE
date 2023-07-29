@@ -16,6 +16,7 @@ PhysicsList::PhysicsList() :
     G4VModularPhysicsList() {
     verboseLevel = std2b::to_underlying(Env::BasicEnv::Instance().GetVerboseLevel());
     RegisterPhysics(new G4EmStandardPhysics_option4(verboseLevel));
+    RegisterPhysics(new G4DecayPhysics(verboseLevel));
     RegisterPhysics(new MuoniumPhysics<Detector::Description::Target>(verboseLevel));
 }
 
