@@ -3,6 +3,7 @@
 #include "MACE/Math/IntegerPower.h++"
 
 #include "CLHEP/Units/PhysicalConstants.h"
+#include "CLHEP/Units/SystemOfUnits.h"
 
 namespace MACE::inline Utility::PhysicalConstant {
 
@@ -24,7 +25,6 @@ using CLHEP::elm_coupling;
 using CLHEP::epsilon0;
 using CLHEP::fine_structure_const;
 using CLHEP::h_Planck;
-using CLHEP::halfpi;
 using CLHEP::hbar_Planck;
 using CLHEP::hbarc;
 using CLHEP::hbarc_squared;
@@ -33,17 +33,15 @@ using CLHEP::kGasThreshold;
 using CLHEP::mu0;
 using CLHEP::neutron_mass_c2;
 using CLHEP::nuclear_magneton;
-using CLHEP::pi;
-using CLHEP::pi2;
 using CLHEP::proton_mass_c2;
 using CLHEP::STP_Pressure;
 using CLHEP::STP_Temperature;
-using CLHEP::twopi;
 using CLHEP::twopi_mc2_rcl2;
 using CLHEP::universe_mean_density;
 // -- same as G4PhysicalConstants.hh -- //
 
 // --          Extra usings          -- //
+using CLHEP::e_SI;
 using CLHEP::eplus;
 // --          Extra usings          -- //
 

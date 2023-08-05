@@ -6,9 +6,10 @@
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 
-using MACE::Detector::Geometry::Fast::World;
-using namespace MACE::LiteralUnit::Density;
-using namespace MACE::LiteralUnit::Temperature;
+namespace MACE::Detector::Geometry::Fast {
+
+using namespace LiteralUnit::Density;
+using namespace LiteralUnit::Temperature;
 
 void World::Construct(G4bool checkOverlaps) {
     const auto& description = Description::World::Instance();
@@ -35,3 +36,5 @@ void World::Construct(G4bool checkOverlaps) {
         0,
         checkOverlaps);
 }
+
+} // namespace MACE::Detector::Geometry::Fast::World

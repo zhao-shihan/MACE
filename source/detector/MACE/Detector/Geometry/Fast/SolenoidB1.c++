@@ -1,6 +1,6 @@
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1.h++"
-#include "MACE/Utility/PhysicalConstant.h++"
+#include "MACE/Utility/MathConstant.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -8,7 +8,7 @@
 
 namespace MACE::Detector::Geometry::Fast {
 
-using namespace MACE::PhysicalConstant;
+using namespace MathConstant;
 
 void SolenoidB1::Construct(G4bool checkOverlaps) {
     const auto& description = Description::Solenoid::Instance();
@@ -22,8 +22,8 @@ void SolenoidB1::Construct(G4bool checkOverlaps) {
         innerRadius,
         outerRadius,
         bendRadius,
-        halfpi,
-        halfpi);
+        pi / 2,
+        pi / 2);
     auto logic = Make<G4LogicalVolume>(
         solid,
         nullptr,

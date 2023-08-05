@@ -7,7 +7,7 @@
 
 namespace MACE::inline Extension::Geant4X::Physics::inline Particle {
 
-using namespace MACE::PhysicalConstant;
+using namespace PhysicalConstant;
 
 Muonium::Muonium() :
     G4ParticleDefinition("M",

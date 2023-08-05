@@ -29,7 +29,7 @@ using namespace MACE::ReconMuonium;
 using namespace MACE;
 using namespace MACE::LiteralUnit;
 using namespace MACE::MPIUtil;
-using namespace MACE::PhysicalConstant;
+using namespace PhysicalConstant;
 using namespace MACE::stdx::array_arithmetic;
 
 using MACE::Core::DataFactory;

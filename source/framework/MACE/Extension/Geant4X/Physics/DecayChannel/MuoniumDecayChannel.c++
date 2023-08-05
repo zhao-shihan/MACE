@@ -48,6 +48,7 @@
 #include "MACE/Math/FindRoot.h++"
 #include "MACE/Math/IntegerPower.h++"
 #include "MACE/Utility/LiteralUnit.h++"
+#include "MACE/Utility/MathConstant.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
 
 #include "G4DecayProducts.hh"
@@ -89,7 +90,8 @@ MuoniumDecayChannel::MuoniumDecayChannel(const G4String& parentName, G4double br
 }
 
 G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
-    using namespace MACE::PhysicalConstant;
+    using namespace PhysicalConstant;
+    using namespace MathConstant;
 
     // this version neglects muon polarization, and electron mass
     //              assumes the pure V-A coupling
@@ -149,9 +151,9 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
     costheta = 1. - 2. / Ee - 2. / Ene + 2. / Ene / Ee;
     sintheta = std::sqrt(1. - costheta * costheta);
 
-    rphi = twopi * G4UniformRand() * rad;
+    rphi = 2 * pi * rad * G4UniformRand();
     rtheta = std::acos(2. * G4UniformRand() - 1.);
-    rpsi = twopi * G4UniformRand() * rad;
+    rpsi = 2 * pi * rad * G4UniformRand();
 
     G4RotationMatrix rot(rphi, rtheta, rpsi);
 

@@ -1,6 +1,6 @@
 #include "MACE/Detector/Description/SpectrometerMagnet.h++"
 #include "MACE/Detector/Geometry/Fast/SpectrometerMagnet.h++"
-#include "MACE/Utility/PhysicalConstant.h++"
+#include "MACE/Utility/MathConstant.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -8,7 +8,7 @@
 
 namespace MACE::Detector::Geometry::Fast {
 
-using namespace MACE::PhysicalConstant;
+using namespace MathConstant;
 
 void SpectrometerMagnet::Construct(G4bool checkOverlaps) {
     const auto& description = Description::SpectrometerMagnet::Instance();
@@ -23,7 +23,7 @@ void SpectrometerMagnet::Construct(G4bool checkOverlaps) {
         outerRadius,
         length / 2,
         0,
-        twopi);
+        2 * pi);
     auto logic = Make<G4LogicalVolume>(
         solid,
         nullptr,

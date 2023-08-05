@@ -1,6 +1,6 @@
 #include "MACE/Detector/Description/SpectrometerShield.h++"
 #include "MACE/Detector/Geometry/Fast/SpectrometerShield.h++"
-#include "MACE/Utility/PhysicalConstant.h++"
+#include "MACE/Utility/MathConstant.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -9,7 +9,7 @@
 
 namespace MACE::Detector::Geometry::Fast {
 
-using namespace MACE::PhysicalConstant;
+using namespace MathConstant;
 
 void SpectrometerShield::Construct(G4bool checkOverlaps) {
     const auto& description = Description::SpectrometerShield::Instance();
@@ -25,14 +25,14 @@ void SpectrometerShield::Construct(G4bool checkOverlaps) {
         innerRadius + thickness,
         innerLength / 2,
         0,
-        twopi);
+        2 * pi);
     auto cap = Make<G4Tubs>(
         "_temp",
         windowRadius,
         innerRadius + thickness,
         thickness / 2,
         0,
-        twopi);
+        2 * pi);
     auto temp = Make<G4UnionSolid>(
         "_temp",
         body,

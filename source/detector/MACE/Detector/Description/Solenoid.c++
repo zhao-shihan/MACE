@@ -1,13 +1,13 @@
-#include "MACE/Detector/Description/SpectrometerField.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
+#include "MACE/Detector/Description/SpectrometerField.h++"
 #include "MACE/Utility/LiteralUnit.h++"
-#include "MACE/Utility/PhysicalConstant.h++"
+#include "MACE/Utility/MathConstant.h++"
 
 namespace MACE::Detector::Description {
 
 using namespace LiteralUnit::Length;
 using namespace LiteralUnit::MagneticFluxDensity;
-using namespace PhysicalConstant;
+using namespace MathConstant;
 
 Solenoid::Solenoid() :
     DescriptionSingletonBase<Solenoid>(__func__),
@@ -38,7 +38,7 @@ HepGeom::Transform3D Solenoid::B1Transform() const {
     const auto localTransZ = fS1Length / 2;
     const auto translation = S1Transform().getTranslation() +
                              CLHEP::Hep3Vector(localTransX, localTransY, localTransZ);
-    return HepGeom::Transform3D(CLHEP::HepRotation(CLHEP::HepXHat, halfpi), translation);
+    return HepGeom::Transform3D(CLHEP::HepRotation(CLHEP::HepXHat, pi / 2), translation);
 }
 
 HepGeom::Transform3D Solenoid::S2Transform() const {
@@ -47,7 +47,7 @@ HepGeom::Transform3D Solenoid::S2Transform() const {
     const auto localTransZ = fB1Radius;
     const auto translation = B1Transform().getTranslation() +
                              CLHEP::Hep3Vector(localTransX, localTransY, localTransZ);
-    return HepGeom::Transform3D(CLHEP::HepRotation(CLHEP::HepYHat, halfpi), translation);
+    return HepGeom::Transform3D(CLHEP::HepRotation(CLHEP::HepYHat, pi / 2), translation);
 }
 
 HepGeom::Transform3D Solenoid::B2Transform() const {
@@ -56,7 +56,7 @@ HepGeom::Transform3D Solenoid::B2Transform() const {
     const auto localTransZ = fB2Radius;
     const auto translation = S2Transform().getTranslation() +
                              CLHEP::Hep3Vector(localTransX, localTransY, localTransZ);
-    return HepGeom::Transform3D(CLHEP::HepRotation(CLHEP::HepXHat, halfpi), translation);
+    return HepGeom::Transform3D(CLHEP::HepRotation(CLHEP::HepXHat, pi / 2), translation);
 }
 
 HepGeom::Transform3D Solenoid::S3Transform() const {
