@@ -1,6 +1,6 @@
 #pragma once
 
-namespace MACE::DataModel::inline Field::internal {
+namespace MACE::DataModel::inline Column::internal {
 
 class ColumnSignatureBase {
 protected:
@@ -8,4 +8,4 @@ protected:
     constexpr ~ColumnSignatureBase() = default;
 };
 
-} // namespace MACE::DataModel::inline Field::internal
+} // namespace MACE::DataModel::inline Column::internal

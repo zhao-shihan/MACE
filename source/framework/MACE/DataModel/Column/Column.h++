@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MACE/DataModel/Field/internal/FieldSignatureBase.h++"
+#include "MACE/DataModel/Column/internal/ColumnSignatureBase.h++"
 
 #include <concepts>
 
-namespace MACE::DataModel::inline Field {
+namespace MACE::DataModel::inline Column {
 
 template<class T>
-concept Field = std::derived_from<T, internal::FieldSignatureBase>;
+concept Column = std::derived_from<T, internal::ColumnSignatureBase>;
 
-} // namespace MACE::DataModel::inline Field
+} // namespace MACE::DataModel::inline Column
