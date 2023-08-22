@@ -1,10 +1,12 @@
 #pragma once
 
-#include "MACE/Data/Model/Field/BasicField.h++"
+#include "MACE/Data/Model/Field.h++"
 
-namespace MACE::Data::inline Model::inline Field {
+#include <type_traits>
 
-namespace detail {
+namespace MACE::Data::inline Model {
+
+namespace internal {
 
 template<template<typename, gsl::index> typename, typename>
 struct IsNamedFieldTemplateOf
@@ -18,8 +20,9 @@ struct IsNamedFieldTemplateOf<ANamedField, ANamedField<AFieldSet, I>>
 
 template<typename F>
 concept NamedField = requires {
+    requires internal::IsNamedFieldTemplateOf<Field<typename F::Type>::template Named, F>::value;
     typename F::Type;
-    requires detail::IsNamedFieldTemplateOf<BasicField<typename F::Type>::template Named, F>::value;
+    requires std::is_trivially_destructible_v<F>;
 };
 
-} // namespace MACE::Data::inline Field
+} // namespace MACE::Data::inline Model

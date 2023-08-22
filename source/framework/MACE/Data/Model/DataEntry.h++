@@ -5,9 +5,9 @@
 
 namespace MACE::Data::inline Model {
 
-template<class M>
-concept DataModel =
-    internal::DataModelNoRecursion<M> and
-    internal::DataEntryNoRecursion<typename M::Entry>;
+template<typename E>
+concept DataEntry =
+    internal::DataEntryNoRecursion<E> and
+    internal::DataModelNoRecursion<typename E::Model>;
 
 } // namespace MACE::Data::inline Model

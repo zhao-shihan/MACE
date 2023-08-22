@@ -1,6 +1,6 @@
 namespace MACE::Data::inline Model {
 
-template<typename AFieldSet, Concept::InstantiatedFrom<BasicField>... AFields>
-constexpr FieldSet<AFieldSet, AFields...>::Entry::~Entry() = default;
+template<typename AConcreteFieldSet, Concept::InstantiatedFrom<Field>... AFields>
+constexpr FieldSet<AConcreteFieldSet, AFields...>::Entry::~Entry() = default;
 
-} // namespace MACE::DataModel
+} // namespace MACE::Data::inline Model

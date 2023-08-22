@@ -1,18 +1,28 @@
-namespace MACE::Data::inline Model::inline Field {
+#define MACE_DATA_MODEL_FIELD_DEFINE_FIELD_NAME_TITLE(TheField) \
+    namespace MACE::Data::inline Model {                        \
+    template<>                                                  \
+    template<>                                                  \
+    std::string TheField::fgName{TheField::DefaultName()};      \
+    template<>                                                  \
+    template<>                                                  \
+    std::string TheField::fgTitle{TheField::DefaultTitle()};    \
+    }
+
+namespace MACE::Data::inline Model {
 
 template<GoodFieldValueType T>
 template<typename AFieldSet, gsl::index I>
-constexpr BasicField<T>::Named<AFieldSet, I>::Named(const T& object) :
+constexpr Field<T>::Named<AFieldSet, I>::Named(const T& object) :
     fObject(object) {}
 
 template<GoodFieldValueType T>
 template<typename AFieldSet, gsl::index I>
-constexpr BasicField<T>::Named<AFieldSet, I>::Named(T&& object) :
+constexpr Field<T>::Named<AFieldSet, I>::Named(T&& object) :
     fObject(std::move(object)) {}
 
 template<GoodFieldValueType T>
 template<typename AFieldSet, gsl::index I>
-constexpr auto BasicField<T>::Named<AFieldSet, I>::operator=(detail::VeryDifferentFrom<Named> auto&& o) & -> auto& {
+constexpr auto Field<T>::Named<AFieldSet, I>::operator=(detail::VeryDifferentFrom<Named> auto&& o) & -> auto& {
     if constexpr (std::assignable_from<T&, decltype(o)>) {
         fObject = std::forward<decltype(o)>(o);
     } else if constexpr (requires { VectorAssign(fObject, std::forward<decltype(o)>(o)); }) {
@@ -28,7 +38,7 @@ constexpr auto BasicField<T>::Named<AFieldSet, I>::operator=(detail::VeryDiffere
 template<GoodFieldValueType T>
 template<typename AFieldSet, gsl::index I>
 template<typename U>
-constexpr auto BasicField<T>::Named<AFieldSet, I>::As() const -> std::conditional_t<std::same_as<T, U>, const T&, U> {
+constexpr auto Field<T>::Named<AFieldSet, I>::As() const -> std::conditional_t<std::same_as<T, U>, const T&, U> {
     if constexpr (std::same_as<T, U> or std::convertible_to<const T&, U>) {
         return fObject;
     } else if constexpr (requires { static_cast<U>(fObject); }) {
@@ -44,7 +54,7 @@ constexpr auto BasicField<T>::Named<AFieldSet, I>::As() const -> std::conditiona
 
 // template<GoodFieldValueType T>
 // template<typename AFieldSet, gsl::index I>
-// MACE_ALWAYS_INLINE auto BasicField<T>::Named<AFieldSet, I>::CreateBranchFor(TTree& tree) -> TBranch* {
+// MACE_ALWAYS_INLINE auto Field<T>::Named<AFieldSet, I>::CreateBranchFor(TTree& tree) -> TBranch* {
 //     const auto branch = [this, &tree] {
 //         if constexpr (Concept::ROOTFundamental<T>) {
 //             return tree.Branch(fgName.c_str(),
@@ -71,7 +81,7 @@ constexpr auto BasicField<T>::Named<AFieldSet, I>::As() const -> std::conditiona
 
 // template<GoodFieldValueType T>
 // template<typename AFieldSet, gsl::index I>
-// MACE_ALWAYS_INLINE auto BasicField<T>::Named<AFieldSet, I>::SetAddressTo(TBranch& branch) -> std::conditional_t<std::is_class_v<T>, T*, void> {
+// MACE_ALWAYS_INLINE auto Field<T>::Named<AFieldSet, I>::SetAddressTo(TBranch& branch) -> std::conditional_t<std::is_class_v<T>, T*, void> {
 //     if constexpr (Concept::ROOTFundamental<T>) {
 //         branch.SetAddress(&fObject);
 //         return;
@@ -91,4 +101,4 @@ constexpr auto BasicField<T>::Named<AFieldSet, I>::As() const -> std::conditiona
 //     }
 // }
 
-} // namespace MACE::Data::inline Model::inline Field
+} // namespace MACE::Data::inline Model
