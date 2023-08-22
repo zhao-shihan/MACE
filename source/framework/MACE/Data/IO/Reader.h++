@@ -24,69 +24,78 @@ template<DataModel AModel, std::derived_from<TTree> ATree>
 class Reader final : public internal::ReaderWriterBase<AModel, ATree> {
 private:
     using Base = internal::ReaderWriterBase<AModel, ATree>;
-    using value_type = typename Base::value_type;
-    using size_type = typename Base::size_type;
-    using difference_type = typename Base::difference_type;
+    using ValueType = typename Base::ValueType;
+    using SizeType = typename Base::SizeType;
+    using DifferenceType = typename Base::DifferenceType;
     template<gsl::index I>
     using Field = typename Base::template Field<I>;
 
 public:
-    class const_iterator final {
+    class ConstIterator final {
         friend class Reader;
 
     private:
-        const_iterator(const Reader* reader, gsl::index index);
+        ConstIterator(std::shared_ptr<const typename Base::Essential> essential, gsl::index index);
 
     public:
-        const_iterator() = default;
+        ConstIterator() = default;
 
-        auto operator*() const { return (*fReader)[fIndex]; }
-        auto operator->() const { return; }
+        auto operator*() const { return (this->Tree().GetEntry(fIndex), this->Entry()); }
+        auto operator->() const { return std::make_unique<ValueType>(**this); }
 
         auto operator++() { return (++fIndex, *this); }
-        auto operator++(int) -> const_iterator { return {fReader, fIndex++}; }
+        auto operator++(int) -> ConstIterator { return {fEssential, fIndex++}; }
         auto operator--() { return (--fIndex, *this); }
-        auto operator--(int) -> const_iterator { return {fReader, fIndex--}; }
+        auto operator--(int) -> ConstIterator { return {fEssential, fIndex--}; }
 
-        auto operator-(const const_iterator& that) const -> difference_type;
+        auto operator-(const ConstIterator& that) const -> DifferenceType;
 
-        auto operator+=(difference_type n) { return (fIndex += n, *this); }
-        auto operator+(difference_type n) const { return const_iterator(*this) += n; }
-        friend auto operator+(difference_type n, const_iterator i) { return i += n; }
-        auto operator-=(difference_type n) { return (fIndex -= n, *this); }
-        auto operator-(difference_type n) const { return const_iterator(*this) -= n; }
+        auto operator+=(DifferenceType n) { return (fIndex += n, *this); }
+        auto operator+(DifferenceType n) const { return ConstIterator(*this) += n; }
+        friend auto operator+(DifferenceType n, ConstIterator i) { return i += n; }
+        auto operator-=(DifferenceType n) { return (fIndex -= n, *this); }
+        auto operator-(DifferenceType n) const { return ConstIterator(*this) -= n; }
 
-        auto operator[](difference_type n) const { return (*fReader)[fIndex + n]; }
+        auto operator[](gsl::index i) const { return *(*this + i); }
 
-        auto operator==(const const_iterator& that) const -> bool;
-        auto operator<=>(const const_iterator& that) const -> std::strong_ordering;
-
-    private:
-        auto TreeAddress() const -> const TTree* { return &fReader->Tree(); }
+        auto operator==(const ConstIterator& that) const -> bool;
+        auto operator<=>(const ConstIterator& that) const -> std::strong_ordering;
 
     private:
-        const Reader* const fReader;
+        auto TreeAddress() const -> const TTree* { return std::addressof(fEssential->tree); }
+
+    private:
+        const std::shared_ptr<const typename Base::Essential> fEssential;
         gsl::index fIndex;
     };
 
-    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+    using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
 
 public:
     Reader(ATree& tree);
 
-    auto size() const -> size_type { return this->fTree.GetEntries(); }
-    auto ssize() const -> std::make_signed_t<size_type> { return size(); }
+    auto SignedSize() const -> std::make_signed_t<SizeType> { return this->Tree().GetEntries(); }
+    auto Size() const -> SizeType { return SignedSize(); }
 
-    auto begin() const -> const_iterator { return {this, 0}; }
-    auto end() const -> const_iterator { return {this, size()}; }
-    auto cbegin() const -> { return begin(); }
-    auto cend() const -> { return end(); }
-    auto rbegin() const { return const_reverse_iterator(end()); }
-    auto rend() const { return const_reverse_iterator(begin()); }
-    auto crbegin() const -> { return rbegin(); }
-    auto crend() const -> { return rend(); }
+    auto Begin() const -> ConstIterator { return {this->fEssential, 0}; }
+    auto End() const -> ConstIterator { return {this->fEssential, SignedSize()}; }
+    auto ReverseBegin() const { return ConstReverseIterator(End()); }
+    auto ReverseEnd() const { return ConstReverseIterator(Begin()); }
 
-    auto operator[](gsl::index i) const { return (this->fTree.GetEntry(i), *this->fEntry); }
+    auto operator[](gsl::index i) const { return (this->Tree().GetEntry(i), this->Entry()); }
+
+public:
+    using const_iterator = ConstIterator;
+    using const_reverse_iterator = ConstReverseIterator;
+
+public:
+    auto ssize() const { return SignedSize(); }
+    auto size() const { return Size(); }
+
+    auto begin() const { return Begin(); }
+    auto end() const { return End(); }
+    auto rbegin() const { return ReverseBegin(); }
+    auto rend() const { return ReverseEnd(); }
 };
 
 } // namespace MACE::Data::inline IO

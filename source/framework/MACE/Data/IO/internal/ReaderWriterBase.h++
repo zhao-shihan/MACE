@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Data/Model/DataModel.h++"
-#include "MACE/Data/Model/Field/NamedField.h++"
+#include "MACE/Data/Model/NamedField.h++"
 #include "MACE/Extension/gslx/index_sequence.h++"
 #include "MACE/Extension/stdx/tuple_like.h++"
 #include "MACE/Utility/FixedString.h++"
@@ -77,9 +77,13 @@ struct IsFixedString<FixedString<N>>
 template<DataModel AModel, std::derived_from<TTree> ATree>
 class ReaderWriterBase {
 public:
-    using value_type = typename AModel::Entry;
-    using size_type = std::size_t;
-    using difference_type = std::ptrdiff_t;
+    using ValueType = typename AModel::Entry;
+    using SizeType = decltype(std::declval<TTree>().GetEntries());
+    using DifferenceType = std::make_signed_t<SizeType>;
+
+    using value_type = ValueType;
+    using size_type = SizeType;
+    using difference_type = DifferenceType;
 
 protected:
     template<gsl::index I>
@@ -87,21 +91,26 @@ protected:
     template<gsl::index I>
     using FieldType = typename Field<I>::Type;
 
-public: // protected:
+protected:
     ReaderWriterBase(ATree& tree);
     ~ReaderWriterBase();
 
 public:
-    auto Tree() const -> auto& { return fTree; }
+    auto Tree() const -> auto& { return fEssential->tree; }
 
 protected:
+    auto Entry() const -> auto& { return fEssential->entry; }
     template<gsl::index I>
     auto FieldPointer() const -> decltype(auto) { return std::get<I>(fFieldPointerList); }
 
 protected:
-    ATree& fTree;
+    struct Essential {
+        ATree& tree;
+        ValueType entry;
+    };
 
-    mutable typename AModel::Entry fEntry;
+protected:
+    std::shared_ptr<Essential> fEssential;
 
 private:
     std::vector<void*> fClassPointerStorage;
