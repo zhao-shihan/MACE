@@ -1,57 +1,37 @@
-/* #pragma once
+#pragma once
 
-#include "MACE/Data/Model/Field/BasicField.h++"
+#include "MACE/Data/Model/Field.h++"
 #include "MACE/Data/Model/FieldSet.h++"
-#include "MACE/Data/Model/ModelBase.h++"
+#include "MACE/Data/Model/Hit/HitBasis.h++"
+#include "MACE/Data/Model/Modelled.h++"
 
-#include <array>
 #include <string_view>
 
-namespace MACE::Data::inline Model {
+namespace MACE::Data::inline Model::inline Hit {
 
-inline namespace Hit {
-
-using namespace std::string_view_literals;
-
-class CDCHit final : public ModelBase<CDCHit,
-                                      std::tuple<>,
-                                      std::tuple<FieldSet<CDCHit,
-                                                          BasicField<int>,
-                                                          BasicField<float>,
-                                                          BasicField<double>,
-                                                          // !!!!!!
-                                                          BasicField<std::array<float, 2>>,
-                                                          BasicField<std::vector<int>>,
-                                                          BasicField<FixedString<15>>>>> {
+class CDCHit : public Modelled<CDCHit,
+                               std::tuple<HitBasis>,
+                               std::tuple<FieldSet<CDCHit,
+                                                   Field<int>,
+                                                   Field<float>>>> {
 public:
-    using CellID = Field<0, FieldIndexMode::Relative>;
-    using DriftDistance = Field<1, FieldIndexMode::Relative>;
-    using Time = Field<2, FieldIndexMode::Relative>;
+    using CellID = LocalField<0>;
+    using DriftDistance = LocalField<1>;
 
-    static constexpr auto BasicName() { return "CDCHit"sv; }
+    static constexpr auto BasicName() -> std::string_view { return "CDCHit"; }
 
 public:
-    class Entry : public ModelBase::Entry {
+    class Entry : public Modelled::Entry {
     public:
         [[nodiscard]] auto CellID() const -> decltype(auto) { return Get<CDCHit::CellID>(); }
         [[nodiscard]] auto DriftDistance() const -> decltype(auto) { return Get<CDCHit::DriftDistance>(); }
-        [[nodiscard]] auto Time() const -> decltype(auto) { return Get<CDCHit::Time>(); }
 
         [[nodiscard]] auto CellID() -> decltype(auto) { return Get<CDCHit::CellID>(); }
         [[nodiscard]] auto DriftDistance() -> decltype(auto) { return Get<CDCHit::DriftDistance>(); }
-        [[nodiscard]] auto Time() -> decltype(auto) { return Get<CDCHit::Time>(); }
     };
 };
 
-} // namespace Hit
+} // namespace MACE::Data::inline Model::inline Hit
 
-inline namespace Field {
-
-MACE_DATA_MODEL_FIELD_DECLARE_FIELD_NAME_TITLE(CDCHit::CellID)
-MACE_DATA_MODEL_FIELD_DECLARE_FIELD_NAME_TITLE(CDCHit::DriftDistance)
-MACE_DATA_MODEL_FIELD_DECLARE_FIELD_NAME_TITLE(CDCHit::Time)
-
-} // namespace Field
-
-} // namespace MACE::Data::inline Model
- */
+MACE_DATA_MODEL_FIELD_DECLARE_FIELD_NAME_TITLE(CDCHit::CellID, "cellID", "Hitting Cell ID")
+MACE_DATA_MODEL_FIELD_DECLARE_FIELD_NAME_TITLE(CDCHit::DriftDistance, "d", "Drift Distance")
