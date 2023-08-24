@@ -22,6 +22,8 @@ public:
 public:
     class Entry : public Modelled::Entry {
     public:
+        virtual ~Entry() override = default;
+
         [[nodiscard]] auto Position() const -> decltype(auto) { return Get<MCPHit::Position>(); }
 
         [[nodiscard]] auto Position() -> decltype(auto) { return Get<MCPHit::Position>(); }

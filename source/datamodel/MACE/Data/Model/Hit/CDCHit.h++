@@ -23,6 +23,8 @@ public:
 public:
     class Entry : public Modelled::Entry {
     public:
+        virtual ~Entry() override = default;
+
         [[nodiscard]] auto CellID() const -> decltype(auto) { return Get<CDCHit::CellID>(); }
         [[nodiscard]] auto DriftDistance() const -> decltype(auto) { return Get<CDCHit::DriftDistance>(); }
 

@@ -14,6 +14,12 @@ class MCPSimHit : public Modelled<MCPSimHit,
                                   std::tuple<>> {
 public:
     static constexpr auto BasicName() -> std::string_view { return "MCPSimHit"; }
+
+public:
+    class Entry : public Modelled::Entry {
+    public:
+        virtual ~Entry() override = default;
+    };
 };
 
 } // namespace MACE::Data::inline Model::inline SimHit

@@ -21,6 +21,8 @@ public:
 public:
     class Entry : public Modelled::Entry {
     public:
+        virtual ~Entry() override = default;
+
         [[nodiscard]] auto EnergyDeposition() const -> decltype(auto) { return Get<EMCalHit::EnergyDeposition>(); }
 
         [[nodiscard]] auto EnergyDeposition() -> decltype(auto) { return Get<EMCalHit::EnergyDeposition>(); }
