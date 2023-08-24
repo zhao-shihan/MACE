@@ -24,9 +24,9 @@ DetectorConstruction::DetectorConstruction() :
     fWorld(nullptr),
     fTargetDensity(30_mg_cm3),
     fTargetTemperature(293.15_K) {
-    Detector::Description::DescriptionIO::Import<DescriptionInUse>(std::array{
+    Detector::Description::DescriptionIO::Import<DescriptionInUse>(
 #include "MACE/SimTarget/DefaultGeometry.inlyaml"
-    });
+    );
     GeometryMessenger::Instance().AssignTo(this);
 }
 

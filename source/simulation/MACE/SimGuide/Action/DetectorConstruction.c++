@@ -1,15 +1,15 @@
+#include "MACE/Detector/Description/AcceleratorField.h++"
 #include "MACE/Detector/Description/Collimator.h++"
+#include "MACE/Detector/Description/DescriptionIO.h++"
 #include "MACE/Detector/Description/EMCalField.h++"
 #include "MACE/Detector/Description/EMCalShield.h++"
-#include "MACE/Detector/Description/AcceleratorField.h++"
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Detector/Description/SelectorField.h++"
+#include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Description/SpectrometerField.h++"
 #include "MACE/Detector/Description/SpectrometerMagnet.h++"
 #include "MACE/Detector/Description/SpectrometerShield.h++"
-#include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Description/World.h++"
-#include "MACE/Detector/Description/DescriptionIO.h++"
 #include "MACE/SimGuide/Action/DetectorConstruction.h++"
 
 namespace MACE::SimTarget::inline Action {
@@ -35,9 +35,9 @@ DetectorConstruction::DetectorConstruction() :
     fSolenoidS3Field(nullptr),
     fSolenoidS3(nullptr),
     fWorld(nullptr) {
-    Detector::DescriptionIO::Import<UsedDescriptions>(std::array{
+    Detector::DescriptionIO::Import<UsedDescriptions>(
 #include "MACE/SimGuide/DefaultGeometry.inlyaml"
-    });
+    );
 }
 
 G4VPhysicalVolume* DetectorConstruction::Construct() {

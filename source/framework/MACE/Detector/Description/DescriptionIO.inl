@@ -11,30 +11,24 @@ struct FillDescriptionArray {
 
 } // namespace internal
 
-template<Concept::InstantiatedFrom<std::tuple> T>
-void DescriptionIO::Import(const std::filesystem::path& yamlFile)
-    requires(not Description<T>)
-{
+template<stdx::tuple_like T>
+void DescriptionIO::Import(const std::filesystem::path& yamlFile) {
     std::array<DescriptionBase*, std::tuple_size_v<T>> descriptions;
     StaticForEach<0, descriptions.size(),
                   internal::FillDescriptionArray, T>(descriptions);
     ImportImpl(yamlFile, descriptions);
 }
 
-template<Concept::InstantiatedFrom<std::tuple> T>
-void DescriptionIO::Export(const std::filesystem::path& yamlFile, std::string_view fileComment)
-    requires(not Description<T>)
-{
+template<stdx::tuple_like T>
+void DescriptionIO::Export(const std::filesystem::path& yamlFile, std::string_view fileComment) {
     std::array<DescriptionBase*, std::tuple_size_v<T>> descriptions;
     StaticForEach<0, descriptions.size(),
                   internal::FillDescriptionArray, T>(descriptions);
     ExportImpl(yamlFile, fileComment, descriptions);
 }
 
-template<Concept::InstantiatedFrom<std::tuple> T>
-void DescriptionIO::Ixport(const std::filesystem::path& yamlFile, std::string_view fileComment)
-    requires(not Description<T>)
-{
+template<stdx::tuple_like T>
+void DescriptionIO::Ixport(const std::filesystem::path& yamlFile, std::string_view fileComment) {
     std::array<DescriptionBase*, std::tuple_size_v<T>> descriptions;
     StaticForEach<0, descriptions.size(),
                   internal::FillDescriptionArray, T>(descriptions);
@@ -45,21 +39,22 @@ template<typename... ArgsOfImport>
 void DescriptionIO::Import(const std::ranges::range auto& yamlText)
     requires std::convertible_to<typename std::decay_t<decltype(yamlText)>::value_type, std::string>
 {
-    auto yamlPath = std::filesystem::temp_directory_path() / "tmp_mace_geom.yaml"sv;
+    auto yamlPath = std::filesystem::temp_directory_path() / "tmp_mace_geom.yaml";
     if (Env::MPIEnv::Available()) {
         MPIUtil::MakeMPIFilePathInPlace(yamlPath);
     }
     yamlPath.concat(std::to_string(std::chrono::steady_clock::now().time_since_epoch().count()));
 
-    std::fstream yamlOut(yamlPath, std::ios::out);
-    if (not yamlOut.is_open()) {
-        throw std::runtime_error("MACE::Detector::Description::DescriptionIO::Import: Cannot open temp yaml file");
+    {
+        std::fstream yamlOut(yamlPath, std::ios::out);
+        if (not yamlOut.is_open()) {
+            throw std::runtime_error("MACE::Detector::Description::DescriptionIO::Import: Cannot open temp yaml file");
+        }
+        for (auto&& line : yamlText) {
+            yamlOut << line << '\n';
+        }
+        yamlOut << std::endl;
     }
-    for (auto&& line : yamlText) {
-        yamlOut << line << '\n';
-    }
-    yamlOut << std::endl;
-    yamlOut.close();
     Import<ArgsOfImport...>(yamlPath);
 
     std::error_code muteRemoveError;
@@ -106,20 +101,20 @@ void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::strin
             const auto firstLineFeed = fileComment.find_first_of('\n');
             const auto begin = fileComment.begin();
             const auto end = (firstLineFeed == std::string_view::npos) ? fileComment.end() : std::next(begin, firstLineFeed);
-            yamlOut << "# "sv << std::string_view(begin, end) << "\n\n"sv;
+            yamlOut << "# " << std::string_view(begin, end) << "\n\n";
         }
         yamlOut << geomYaml << std::endl;
         yamlOut.close();
     } catch (const InvalidFile&) {
         MACE_ENVIRONMENT_CONTROLLED_OUT(Error, std::cout)
-            << "MACE::Detector::Description::DescriptionIO::ExportImpl: Cannot open yaml file, export failed"sv << std::endl;
+            << "MACE::Detector::Description::DescriptionIO::ExportImpl: Cannot open yaml file, export failed" << std::endl;
     }
 }
 
 void DescriptionIO::IxportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::input_range auto& descriptions) {
-    ExportImpl(std::filesystem::path(yamlFile).replace_extension(".prev.yaml"sv), fileComment, descriptions);
+    ExportImpl(std::filesystem::path(yamlFile).replace_extension(".prev.yaml"), fileComment, descriptions);
     ImportImpl(yamlFile, descriptions);
-    ExportImpl(std::filesystem::path(yamlFile).replace_extension(".curr.yaml"sv), fileComment, descriptions);
+    ExportImpl(std::filesystem::path(yamlFile).replace_extension(".curr.yaml"), fileComment, descriptions);
 }
 
 } // namespace MACE::Detector::Description

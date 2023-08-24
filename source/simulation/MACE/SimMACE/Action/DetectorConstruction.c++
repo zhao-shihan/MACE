@@ -73,9 +73,9 @@ DetectorConstruction::DetectorConstruction() :
     fCDCSD(nullptr),
     fEMCalSD(nullptr),
     fMCPSD(nullptr) {
-    // Detector::Description::DescriptionIO::Import<DescriptionInUse>(std::array{
-    // #include "MACE/SimMACE/DefaultGeometry.inlyaml"
-    // });
+/*     Detector::Description::DescriptionIO::Import<DescriptionInUse>(
+#include "MACE/SimMACE/DefaultGeometry.inlyaml"
+    ); */
     GeometryMessenger::Instance().AssignTo(this);
 }
 
