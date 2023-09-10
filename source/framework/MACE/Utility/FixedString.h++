@@ -174,6 +174,8 @@ public:
     static constexpr auto capacity() noexcept -> std::size_t { return Capacity(); }
     static constexpr auto max_size() noexcept -> std::size_t { return MaxSize(); }
 
+    static constexpr auto Occupation() noexcept -> std::size_t { return AMaxSize + 1; }
+
     friend auto operator+(FixedString lhs, const FixedString& rhs) noexcept -> FixedString { return lhs += rhs; }
     friend auto operator+(FixedString lhs, auto&& rhs) noexcept -> FixedString
         requires requires { lhs += std::forward<decltype(rhs)>(rhs); }

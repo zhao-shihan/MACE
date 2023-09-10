@@ -128,35 +128,39 @@ void MPIEnv::InitializeNodeInfo() {
     if (AtCommWorldMaster()) { nodeNamesRecv.resize(fCommWorldSize); }
     MACE_MPI_CALL_WITH_CHECK(MPI_Gather,
                              nodeNameSend.CString(),
-                             NameFixedString::MaxSize() + 1,
+                             NameFixedString::Occupation(),
                              MPI_CHAR,
                              nodeNamesRecv.data(),
-                             NameFixedString::MaxSize() + 1,
+                             NameFixedString::Occupation(),
                              MPI_CHAR,
                              0,
                              MPI_COMM_WORLD)
     // Processor name list
     std::vector<stdx::array2i> nodeIDAndCountSend;
     stdx::array2i nodeIDAndCountRecv;
-    std::vector<std::pair<int, NameFixedString>> nodeList;
+    struct NodeInfoForMPI {
+        int size;
+        NameFixedString name;
+    };
+    std::vector<NodeInfoForMPI> nodeList;
     // Master find all unique processor names and assign node ID and count
     if (AtCommWorldMaster()) {
         nodeIDAndCountSend.reserve(fCommWorldSize);
         nodeList.reserve(fCommWorldSize);
         // Find unique name and assign node ID
         auto currentNodeID = 0;
-        auto currentNodeName = &std::as_const(nodeNamesRecv).front();
+        auto currentNodeName = std::as_const(nodeNamesRecv).data();
         for (auto&& name : std::as_const(nodeNamesRecv)) {
             if (name != *currentNodeName) {
-                nodeList.emplace_back(std::distance(currentNodeName, &name),
-                                      *currentNodeName);
+                nodeList.push_back({static_cast<int>(std::distance(currentNodeName, &name)),
+                                    *currentNodeName});
                 ++currentNodeID;
                 currentNodeName = &name;
             }
             nodeIDAndCountSend.push_back({currentNodeID, -1});
         }
-        nodeList.emplace_back(std::distance(currentNodeName, std::as_const(nodeNamesRecv).data() + fCommWorldSize),
-                              *currentNodeName);
+        nodeList.push_back({static_cast<int>(std::distance(currentNodeName, std::to_address(nodeNamesRecv.cend()))),
+                            *currentNodeName});
         // Assign node count
         for (const int nodeCount = nodeList.size();
              auto&& [_, nodeCountSend] : nodeIDAndCountSend) {
@@ -166,11 +170,11 @@ void MPIEnv::InitializeNodeInfo() {
     // Send node ID and count
     MACE_MPI_CALL_WITH_CHECK(MPI_Scatter,
                              std::as_const(nodeIDAndCountSend).data(),
-                             2,
-                             MPI_INT,
+                             1,
+                             MPI_2INT,
                              nodeIDAndCountRecv.data(),
-                             2,
-                             MPI_INT,
+                             1,
+                             MPI_2INT,
                              0,
                              MPI_COMM_WORLD)
     auto&& [nodeID, nodeCount] = nodeIDAndCountRecv;
@@ -178,12 +182,26 @@ void MPIEnv::InitializeNodeInfo() {
     fLocalNodeID = nodeID;
     // Master send unique node name list
     if (AtCommWorldWorker()) { nodeList.resize(nodeCount); }
+    constexpr int blockLengthOfNodeInfoForMPI[] = {1, NameFixedString::Occupation()};
+    constexpr MPI_Aint displacementOfNodeInfoForMPI[] = {offsetof(NodeInfoForMPI, size), offsetof(NodeInfoForMPI, name)};
+    constexpr MPI_Datatype typeOfNodeInfoForMPI[] = {MPI_INT, MPI_CHAR};
+    MPI_Datatype nodeInfoForMPI;
+    MACE_MPI_CALL_WITH_CHECK(MPI_Type_create_struct,
+                             2,
+                             blockLengthOfNodeInfoForMPI,
+                             displacementOfNodeInfoForMPI,
+                             typeOfNodeInfoForMPI,
+                             &nodeInfoForMPI)
+    MACE_MPI_CALL_WITH_CHECK(MPI_Type_commit,
+                             &nodeInfoForMPI)
     MACE_MPI_CALL_WITH_CHECK(MPI_Bcast,
                              nodeList.data(),
-                             std::span(nodeList).size_bytes(),
-                             MPI_BYTE,
+                             nodeList.size(),
+                             nodeInfoForMPI,
                              0,
                              MPI_COMM_WORLD)
+    MACE_MPI_CALL_WITH_CHECK(MPI_Type_free,
+                             &nodeInfoForMPI)
     // Assign to the list, convert node names to std::string
     fCluster.reserve(nodeCount);
     for (auto&& [size, name] : std::as_const(nodeList)) {
