@@ -1,10 +1,9 @@
 #pragma once
 
 #include "MACE/Data/Model/DataModel.h++"
-#include "MACE/Data/Model/NamedField.h++"
 #include "MACE/Extension/gslx/index_sequence.h++"
-#include "MACE/Extension/stdx/tuple_like.h++"
 #include "MACE/Utility/FixedString.h++"
+#include "MACE/Utility/NonMoveableBase.h++"
 
 #include "TBranch.h"
 #include "TTree.h"
@@ -19,7 +18,6 @@
 #include <concepts>
 #include <memory>
 #include <stdexcept>
-#include <tuple>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -74,8 +72,8 @@ struct IsFixedString<FixedString<N>>
 
 } // namespace internal
 
-template<DataModel AModel, std::derived_from<TTree> ATree>
-class ReaderWriterBase {
+template<DataModel AModel>
+class ReaderWriterBase : public NonMoveableBase {
 public:
     using ValueType = typename AModel::Entry;
     using SizeType = decltype(std::declval<TTree>().GetEntries());
@@ -92,25 +90,25 @@ protected:
     using FieldType = typename Field<I>::Type;
 
 protected:
-    ReaderWriterBase(ATree& tree);
+    ReaderWriterBase(TTree& tree);
     ~ReaderWriterBase();
 
 public:
-    auto Tree() const -> auto& { return fEssential->tree; }
+    auto Tree() const -> auto& { return fEssential.tree; }
 
 protected:
-    auto Entry() const -> auto& { return fEssential->entry; }
+    auto Entry() const -> const auto& { return fEssential.entry; }
     template<gsl::index I>
     auto FieldPointer() const -> decltype(auto) { return std::get<I>(fFieldPointerList); }
 
 protected:
     struct Essential {
-        ATree& tree;
+        TTree& tree;
         ValueType entry;
     };
 
 protected:
-    std::shared_ptr<Essential> fEssential;
+    Essential fEssential;
 
 private:
     std::vector<void*> fClassPointerStorage;
