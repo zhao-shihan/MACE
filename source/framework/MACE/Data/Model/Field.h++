@@ -39,17 +39,23 @@ template<std::size_t N>
 struct IsFixedString<FixedString<N>>
     : std::true_type {};
 
-template<typename T, typename U>
-concept VeryDifferentFrom = not std::same_as<std::decay_t<T>, U>;
-
 } // namespace detail
 
 template<typename T>
 concept GoodFieldValueType =
-    (Concept::ROOTFundamental<T> and not std::same_as<T, gsl::zstring>) or
-    (detail::IsStdArray<T>::value and Concept::ROOTFundamental<typename T::value_type> and not std::same_as<typename T::value_type, gsl::zstring>) or
-    detail::IsFixedString<T>::value or
-    std::is_class_v<T>;
+    [] {
+        if constexpr (Concept::ROOTFundamental<T>) {
+            return not std::same_as<std::decay_t<T>, gsl::zstring>;
+        }
+        if constexpr (detail::IsStdArray<T>{}) {
+            return Concept::ROOTFundamental<typename T::value_type> and
+                   not std::same_as<std::decay_t<typename T::value_type>, gsl::zstring>;
+        }
+        if constexpr (detail::IsFixedString<T>{}) {
+            return true;
+        }
+        return std::is_class_v<T>;
+    }();
 
 template<GoodFieldValueType T>
 class Field final : public NonConstructibleBase {
@@ -58,7 +64,7 @@ public:
 
 public:
     template<typename AFieldSet, gsl::index>
-    class Named final {
+    class [[nodiscard]] Named final {
     public:
         using Type = T;
 
@@ -67,7 +73,10 @@ public:
         constexpr Named(const T& object);
         constexpr Named(T&& object);
 
-        constexpr auto operator=(detail::VeryDifferentFrom<Named> auto&& o) & -> auto&;
+        constexpr Named(auto&& v)
+            requires requires { VectorCast<T>(std::forward<decltype(v)>(v)); };
+        constexpr auto operator=(auto&& v) -> Named&
+            requires requires(T fObject) { VectorAssign(fObject, std::forward<decltype(v)>(v)); };
 
         constexpr operator T&() { return fObject; }
         constexpr operator const T&() const { return fObject; }

@@ -22,7 +22,6 @@ template<typename F>
 concept NamedField = requires {
     requires internal::IsNamedFieldTemplateOf<Field<typename F::Type>::template Named, F>::value;
     typename F::Type;
-    requires std::is_trivially_destructible_v<F>;
 };
 
 } // namespace MACE::Data::inline Model

@@ -21,8 +21,15 @@
 namespace MACE::Data::inline Model {
 
 template<typename ADerived,
-         stdx::tuple_like ABaseFieldSetTuple,
-         stdx::tuple_like AThisFieldSetTuple>
+         Concept::InstantiatedFrom<std::tuple> ABaseFieldSetTuple,
+         Concept::InstantiatedFrom<std::tuple> AThisFieldSetTuple>
+    requires(
+        []<gsl::index... Is>(gslx::index_sequence<Is...>) {
+            return (... and FieldSetLike<std::tuple_element_t<Is, ABaseFieldSetTuple>>);
+        }(gslx::make_index_sequence<std::tuple_size_v<ABaseFieldSetTuple>>{}) and
+        []<gsl::index... Is>(gslx::index_sequence<Is...>) {
+            return (... and FieldSetLike<std::tuple_element_t<Is, AThisFieldSetTuple>>);
+        }(gslx::make_index_sequence<std::tuple_size_v<AThisFieldSetTuple>>{}))
 class Modelled;
 
 template<typename ADerived,

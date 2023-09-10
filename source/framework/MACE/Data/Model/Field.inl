@@ -13,25 +13,24 @@ namespace MACE::Data::inline Model {
 template<GoodFieldValueType T>
 template<typename AFieldSet, gsl::index I>
 constexpr Field<T>::Named<AFieldSet, I>::Named(const T& object) :
-    fObject(object) {}
+    fObject{object} {}
 
 template<GoodFieldValueType T>
 template<typename AFieldSet, gsl::index I>
 constexpr Field<T>::Named<AFieldSet, I>::Named(T&& object) :
-    fObject(std::move(object)) {}
+    fObject{std::move(object)} {}
 
 template<GoodFieldValueType T>
 template<typename AFieldSet, gsl::index I>
-constexpr auto Field<T>::Named<AFieldSet, I>::operator=(detail::VeryDifferentFrom<Named> auto&& o) & -> auto& {
-    if constexpr (std::assignable_from<T&, decltype(o)>) {
-        fObject = std::forward<decltype(o)>(o);
-    } else if constexpr (requires { VectorAssign(fObject, std::forward<decltype(o)>(o)); }) {
-        VectorAssign(fObject, std::forward<decltype(o)>(o));
-    } else {
-        struct {
-        } failed;
-        fObject = failed;
-    }
+constexpr Field<T>::Named<AFieldSet, I>::Named(auto&& v) // clang-format off
+    requires requires { VectorCast<T>(std::forward<decltype(v)>(v)); } : // clang-format on
+    fObject{VectorCast<T>(std::forward<decltype(v)>(v))} {}
+
+template<GoodFieldValueType T>
+template<typename AFieldSet, gsl::index I>
+constexpr auto Field<T>::Named<AFieldSet, I>::operator=(auto&& v) -> Named& // clang-format off
+    requires requires(T fObject) { VectorAssign(fObject, std::forward<decltype(v)>(v)); } { // clang-format on
+    VectorAssign(fObject, std::forward<decltype(v)>(v));
     return *this;
 }
 

@@ -4,12 +4,11 @@ template<typename ADerived,
          FieldSetLike... ABaseFieldSets,
          FieldSetLike... ANewFieldSets>
 constexpr auto Modelled<ADerived,
-                         std::tuple<ABaseFieldSets...>,
-                         std::tuple<ANewFieldSets...>>::Name() -> std::string_view {
+                        std::tuple<ABaseFieldSets...>,
+                        std::tuple<ANewFieldSets...>>::Name() -> std::string_view {
     static_assert(std::derived_from<ADerived, Modelled<ADerived,
-                                                        std::tuple<ABaseFieldSets...>,
-                                                        std::tuple<ANewFieldSets...>>>);
-    static_assert(DataModel<ADerived>);
+                                                       std::tuple<ABaseFieldSets...>,
+                                                       std::tuple<ANewFieldSets...>>>);
     return ADerived::BasicName();
 }
 
@@ -17,8 +16,8 @@ template<typename ADerived,
          FieldSetLike... ABaseFieldSets,
          FieldSetLike... ANewFieldSets>
 constexpr Modelled<ADerived,
-                    std::tuple<ABaseFieldSets...>,
-                    std::tuple<ANewFieldSets...>>::Entry::~Entry() = default;
+                   std::tuple<ABaseFieldSets...>,
+                   std::tuple<ANewFieldSets...>>::Entry::~Entry() = default;
 
 #define MACE_DATA_MODEL_MODEL_BASE_ENTRY_GET_IMPL_BODY                                                    \
     using TheFieldSet = std::tuple_element_t<IFieldSet, std::tuple<ABaseFieldSets..., ANewFieldSets...>>; \
@@ -33,8 +32,8 @@ template<typename ADerived,
          FieldSetLike... ANewFieldSets>
 template<typename F, gsl::index IFieldSet>
 constexpr auto Modelled<ADerived,
-                         std::tuple<ABaseFieldSets...>,
-                         std::tuple<ANewFieldSets...>>::Entry::GetImpl() const -> decltype(auto) {
+                        std::tuple<ABaseFieldSets...>,
+                        std::tuple<ANewFieldSets...>>::Entry::GetImpl() const -> decltype(auto) {
     MACE_DATA_MODEL_MODEL_BASE_ENTRY_GET_IMPL_BODY
 }
 
@@ -43,8 +42,8 @@ template<typename ADerived,
          FieldSetLike... ANewFieldSets>
 template<typename F, gsl::index IFieldSet>
 constexpr auto Modelled<ADerived,
-                         std::tuple<ABaseFieldSets...>,
-                         std::tuple<ANewFieldSets...>>::Entry::GetImpl() -> decltype(auto) {
+                        std::tuple<ABaseFieldSets...>,
+                        std::tuple<ANewFieldSets...>>::Entry::GetImpl() -> decltype(auto) {
     MACE_DATA_MODEL_MODEL_BASE_ENTRY_GET_IMPL_BODY
 }
 
