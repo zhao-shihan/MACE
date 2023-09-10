@@ -25,11 +25,11 @@ public:
     public:
         virtual ~Entry() override = default;
 
-        [[nodiscard]] auto CellID() const -> decltype(auto) { return Get<CDCHit::CellID>(); }
-        [[nodiscard]] auto DriftDistance() const -> decltype(auto) { return Get<CDCHit::DriftDistance>(); }
+        auto CellID() const -> decltype(auto) { return Get<CDCHit::CellID>(); }
+        auto DriftDistance() const -> decltype(auto) { return Get<CDCHit::DriftDistance>(); }
 
-        [[nodiscard]] auto CellID() -> decltype(auto) { return Get<CDCHit::CellID>(); }
-        [[nodiscard]] auto DriftDistance() -> decltype(auto) { return Get<CDCHit::DriftDistance>(); }
+        auto CellID() -> decltype(auto) { return Get<CDCHit::CellID>(); }
+        auto DriftDistance() -> decltype(auto) { return Get<CDCHit::DriftDistance>(); }
     };
 };
 

@@ -30,25 +30,25 @@ public:
 public:
     class Entry : public FieldSet::Entry {
     public:
-        [[nodiscard]] auto MCEventID() const -> decltype(auto) { return Get<SimHitBasis::MCEventID>(); }
-        [[nodiscard]] auto MCTrackID() const -> decltype(auto) { return Get<SimHitBasis::MCTrackID>(); }
-        [[nodiscard]] auto PDGCode() const -> decltype(auto) { return Get<SimHitBasis::PDGCode>(); }
-        [[nodiscard]] auto KineticEnergy() const -> decltype(auto) { return Get<SimHitBasis::KineticEnergy>(); }
-        [[nodiscard]] auto Momentum() const -> decltype(auto) { return Get<SimHitBasis::Momentum>(); }
-        [[nodiscard]] auto VertexTime() const -> decltype(auto) { return Get<SimHitBasis::VertexTime>(); }
-        [[nodiscard]] auto VertexPosition() const -> decltype(auto) { return Get<SimHitBasis::VertexPosition>(); }
-        [[nodiscard]] auto VertexKineticEnergy() const -> decltype(auto) { return Get<SimHitBasis::VertexKineticEnergy>(); }
-        [[nodiscard]] auto VertexMomentum() const -> decltype(auto) { return Get<SimHitBasis::VertexMomentum>(); }
+        auto MCEventID() const -> decltype(auto) { return Get<SimHitBasis::MCEventID>(); }
+        auto MCTrackID() const -> decltype(auto) { return Get<SimHitBasis::MCTrackID>(); }
+        auto PDGCode() const -> decltype(auto) { return Get<SimHitBasis::PDGCode>(); }
+        auto KineticEnergy() const -> decltype(auto) { return Get<SimHitBasis::KineticEnergy>(); }
+        auto Momentum() const -> decltype(auto) { return Get<SimHitBasis::Momentum>(); }
+        auto VertexTime() const -> decltype(auto) { return Get<SimHitBasis::VertexTime>(); }
+        auto VertexPosition() const -> decltype(auto) { return Get<SimHitBasis::VertexPosition>(); }
+        auto VertexKineticEnergy() const -> decltype(auto) { return Get<SimHitBasis::VertexKineticEnergy>(); }
+        auto VertexMomentum() const -> decltype(auto) { return Get<SimHitBasis::VertexMomentum>(); }
 
-        [[nodiscard]] auto MCEventID() -> decltype(auto) { return Get<SimHitBasis::MCEventID>(); }
-        [[nodiscard]] auto MCTrackID() -> decltype(auto) { return Get<SimHitBasis::MCTrackID>(); }
-        [[nodiscard]] auto PDGCode() -> decltype(auto) { return Get<SimHitBasis::PDGCode>(); }
-        [[nodiscard]] auto KineticEnergy() -> decltype(auto) { return Get<SimHitBasis::KineticEnergy>(); }
-        [[nodiscard]] auto Momentum() -> decltype(auto) { return Get<SimHitBasis::Momentum>(); }
-        [[nodiscard]] auto VertexTime() -> decltype(auto) { return Get<SimHitBasis::VertexTime>(); }
-        [[nodiscard]] auto VertexPosition() -> decltype(auto) { return Get<SimHitBasis::VertexPosition>(); }
-        [[nodiscard]] auto VertexKineticEnergy() -> decltype(auto) { return Get<SimHitBasis::VertexKineticEnergy>(); }
-        [[nodiscard]] auto VertexMomentum() -> decltype(auto) { return Get<SimHitBasis::VertexMomentum>(); }
+        auto MCEventID() -> decltype(auto) { return Get<SimHitBasis::MCEventID>(); }
+        auto MCTrackID() -> decltype(auto) { return Get<SimHitBasis::MCTrackID>(); }
+        auto PDGCode() -> decltype(auto) { return Get<SimHitBasis::PDGCode>(); }
+        auto KineticEnergy() -> decltype(auto) { return Get<SimHitBasis::KineticEnergy>(); }
+        auto Momentum() -> decltype(auto) { return Get<SimHitBasis::Momentum>(); }
+        auto VertexTime() -> decltype(auto) { return Get<SimHitBasis::VertexTime>(); }
+        auto VertexPosition() -> decltype(auto) { return Get<SimHitBasis::VertexPosition>(); }
+        auto VertexKineticEnergy() -> decltype(auto) { return Get<SimHitBasis::VertexKineticEnergy>(); }
+        auto VertexMomentum() -> decltype(auto) { return Get<SimHitBasis::VertexMomentum>(); }
     };
 };
 

@@ -13,9 +13,9 @@ public:
 public:
     class Entry : public FieldSet::Entry {
     public:
-        [[nodiscard]] auto Time() const -> decltype(auto) { return Get<HitBasis::Time>(); }
+        auto Time() const -> decltype(auto) { return Get<HitBasis::Time>(); }
 
-        [[nodiscard]] auto Time() -> decltype(auto) { return Get<HitBasis::Time>(); }
+        auto Time() -> decltype(auto) { return Get<HitBasis::Time>(); }
     };
 };
 
