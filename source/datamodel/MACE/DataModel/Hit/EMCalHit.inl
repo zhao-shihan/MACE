@@ -1,6 +1,6 @@
 namespace MACE::DataModel::inline Hit {
 
-inline void EMCalHit::FillAllBranchSocket() const& {
+inline void EMCHit::FillAllBranchSocket() const& {
     fTime.FillBranchSocket();
     fEnergyDeposition.FillBranchSocket();
 }

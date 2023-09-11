@@ -36,16 +36,16 @@ CDC:
   ShellOuterThickness: 10
   MeanDriftVelocity: 0.035
   DeadTime: 30
-EMCal:
+EMC:
   InnerRadius: 150
   InnerLength: 500
   WindowRadius: 80
   CrystalLength: 50
-EMCalField:
+EMCField:
   Radius: 250
   Length: 700
   MagneticFluxDensity: 0.0001
-EMCalShield:
+EMCShield:
   InnerRadius: 300
   InnerLength: 800
   WindowRadius: 127

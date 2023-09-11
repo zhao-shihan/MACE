@@ -31,7 +31,7 @@
 /MACE/Field/SpectrometerMagneticField     0.1 tesla
 /MACE/Field/SolenoidMagneticField         0.1 tesla
 
-/MACE/Analysis/EnableCoincidenceOfEMCal   false
+/MACE/Analysis/EnableCoincidenceOfEMC     false
 /MACE/Analysis/EnableCoincidenceOfMCP     false
 
 #############################################################################

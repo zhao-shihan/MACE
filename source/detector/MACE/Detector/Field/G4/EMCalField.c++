@@ -1,11 +1,11 @@
-#include "MACE/Detector/Field/G4/EMCalField.h++"
-#include "MACE/Detector/Field/G4/Messenger/EMCalFieldMessenger.h++"
+#include "MACE/Detector/Field/G4/EMCField.h++"
+#include "MACE/Detector/Field/G4/Messenger/EMCFieldMessenger.h++"
 
 namespace MACE::Detector::Field::G4 {
 
-EMCalField::EMCalField() :
+EMCField::EMCField() :
     WrapAsG4Field() {
-    EMCalFieldMessenger::Instance().AssignTo(this);
+    EMCFieldMessenger::Instance().AssignTo(this);
 }
 
 } // namespace MACE::Detector::Field::G4

@@ -36,7 +36,7 @@ private:
     Analysis* fAnalysis;
 
     std::unique_ptr<G4UIdirectory> fDirectory;
-    std::unique_ptr<G4UIcmdWithABool> fEnableCoincidenceOfEMCal;
+    std::unique_ptr<G4UIcmdWithABool> fEnableCoincidenceOfEMC;
     std::unique_ptr<G4UIcmdWithABool> fEnableCoincidenceOfMCP;
     std::unique_ptr<G4UIcmdWithAString> fFilePath;
     std::unique_ptr<G4UIcmdWithAString> fFileOption;

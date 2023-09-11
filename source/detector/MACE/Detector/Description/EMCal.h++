@@ -4,14 +4,11 @@
 
 namespace MACE::Detector::Description {
 
-class EMCal final : public DescriptionSingletonBase<EMCal> {
+class EMC final : public DescriptionSingletonBase<EMC> {
     friend Env::Memory::SingletonFactory;
 
 private:
-    EMCal();
-    ~EMCal() noexcept = default;
-    EMCal(const EMCal&) = delete;
-    EMCal& operator=(const EMCal&) = delete;
+    EMC();
 
 public:
     const auto& InnerRadius() const { return fInnerRadius; }

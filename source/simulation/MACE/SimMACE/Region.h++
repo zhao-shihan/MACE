@@ -11,7 +11,7 @@ enum class RegionType {
     CDCSenseWire,
     DefaultGaseous,
     DefaultSolid,
-    EMCalSensitive,
+    EMCSensitive,
     MCPSensitive,
     Shield,
     SolenoidOrMagnet,

@@ -1,16 +1,16 @@
 #pragma once
 
-#include "MACE/SimMACE/Hit/EMCalHit.h++"
+#include "MACE/SimMACE/Hit/EMCHit.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
 #include "G4VSensitiveDetector.hh"
 
 namespace MACE::SimMACE::inline SD {
 
-class EMCalSD final : public NonMoveableBase,
+class EMCSD final : public NonMoveableBase,
                       public G4VSensitiveDetector {
 public:
-    EMCalSD(const G4String& sdName);
+    EMCSD(const G4String& sdName);
 
     void Initialize(G4HCofThisEvent* hitsCollection) override;
     G4bool ProcessHits(G4Step* theStep, G4TouchableHistory*) override;
@@ -21,7 +21,7 @@ public:
 
 private:
     G4int fEventID;
-    EMCalHitCollection* fHitsCollection;
+    EMCHitCollection* fHitsCollection;
 };
 
 } // namespace MACE::SimMACE::inline SD

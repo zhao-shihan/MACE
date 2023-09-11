@@ -13,25 +13,25 @@ class G4UIdirectory;
 
 namespace MACE::Detector::Field::G4 {
 
-class EMCalField;
+class EMCField;
 
 inline namespace Messenger {
 
-class EMCalFieldMessenger final : public Env::Memory::Singleton<EMCalFieldMessenger>,
+class EMCFieldMessenger final : public Env::Memory::Singleton<EMCFieldMessenger>,
                                   public G4UImessenger {
     friend Env::Memory::SingletonFactory;
 
 private:
-    EMCalFieldMessenger();
-    ~EMCalFieldMessenger();
+    EMCFieldMessenger();
+    ~EMCFieldMessenger();
 
 public:
-    void AssignTo(gsl::not_null<EMCalField*> field) { fEMCalField = field; }
+    void AssignTo(gsl::not_null<EMCField*> field) { fEMCField = field; }
 
     void SetNewValue(G4UIcommand* command, G4String value) override;
 
 private:
-    EMCalField* fEMCalField;
+    EMCField* fEMCField;
 
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSpectrometerMagneticField;

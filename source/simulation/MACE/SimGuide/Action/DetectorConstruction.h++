@@ -14,8 +14,8 @@ namespace Detector {
 namespace Description {
 
 class Collimator;
-class EMCalField;
-class EMCalShield;
+class EMCField;
+class EMCShield;
 class AcceleratorField;
 class MCP;
 class SelectorField;
@@ -44,8 +44,8 @@ public:
 
 public:
     using UsedDescriptions = std::tuple<Detector::Description::Collimator,
-                                        Detector::Description::EMCalField,
-                                        Detector::Description::EMCalShield,
+                                        Detector::Description::EMCField,
+                                        Detector::Description::EMCShield,
                                         Detector::Description::AcceleratorField,
                                         Detector::Description::MCP,
                                         Detector::Description::SelectorField,
@@ -59,8 +59,8 @@ private:
     G4bool fCheckOverlap;
 
     std::shared_ptr<Detector::GeometryBase> fCollimator;
-    std::shared_ptr<Detector::GeometryBase> fEMCalField;
-    std::shared_ptr<Detector::GeometryBase> fEMCalShield;
+    std::shared_ptr<Detector::GeometryBase> fEMCField;
+    std::shared_ptr<Detector::GeometryBase> fEMCShield;
     std::shared_ptr<Detector::GeometryBase> fSolenoidB1Field;
     std::shared_ptr<Detector::GeometryBase> fSolenoidB1;
     std::shared_ptr<Detector::GeometryBase> fSolenoidS1Field;

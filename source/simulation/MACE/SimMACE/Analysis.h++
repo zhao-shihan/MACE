@@ -18,7 +18,7 @@ namespace MACE::SimMACE {
 inline namespace Hit {
 
 class CDCHit;
-class EMCalHit;
+class EMCHit;
 class MCPHit;
 
 } // inline namespace Hit
@@ -29,12 +29,12 @@ public:
 
     void FilePath(std::filesystem::path path) { fFilePath = std::move(path); }
     void FileOption(std::string option) { fFileOption = std::move(option); }
-    void EnableCoincidenceOfEMCal(G4bool val) { fEnableCoincidenceOfEMCal = val; }
+    void EnableCoincidenceOfEMC(G4bool val) { fEnableCoincidenceOfEMC = val; }
     void EnableCoincidenceOfMCP(G4bool val) { fEnableCoincidenceOfMCP = val; }
 
     void RunBegin(G4int runID);
 
-    void SubmitEMCalHC(gsl::not_null<const std::vector<gsl::owner<EMCalHit*>>*> hitList) { fEMCalHitList = hitList; }
+    void SubmitEMCHC(gsl::not_null<const std::vector<gsl::owner<EMCHit*>>*> hitList) { fEMCHitList = hitList; }
     void SubmitMCPHC(gsl::not_null<const std::vector<gsl::owner<MCPHit*>>*> hitList) { fMCPHitList = hitList; }
     void SubmitSpectrometerHC(gsl::not_null<const std::vector<gsl::owner<CDCHit*>>*> hitList) { fCDCHitList = hitList; }
     void EventEnd();
@@ -44,16 +44,16 @@ public:
 private:
     std::filesystem::path fFilePath;
     std::string fFileOption;
-    G4bool fEnableCoincidenceOfEMCal;
+    G4bool fEnableCoincidenceOfEMC;
     G4bool fEnableCoincidenceOfMCP;
 
     DataModel::DataFactory fDataHub;
     std::unique_ptr<TFile> fFile;
-    std::shared_ptr<TTree> fEMCalHitTree;
+    std::shared_ptr<TTree> fEMCHitTree;
     std::shared_ptr<TTree> fMCPHitTree;
     std::shared_ptr<TTree> fCDCHitTree;
 
-    const std::vector<gsl::owner<EMCalHit*>>* fEMCalHitList;
+    const std::vector<gsl::owner<EMCHit*>>* fEMCHitList;
     const std::vector<gsl::owner<MCPHit*>>* fMCPHitList;
     const std::vector<gsl::owner<CDCHit*>>* fCDCHitList;
 };

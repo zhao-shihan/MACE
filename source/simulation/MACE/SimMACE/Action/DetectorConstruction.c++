@@ -1,5 +1,5 @@
 #include "MACE/Detector/Field/G4/AcceleratorField.h++"
-#include "MACE/Detector/Field/G4/EMCalField.h++"
+#include "MACE/Detector/Field/G4/EMCField.h++"
 #include "MACE/Detector/Field/G4/SolenoidB1Field.h++"
 #include "MACE/Detector/Field/G4/SolenoidB2Field.h++"
 #include "MACE/Detector/Field/G4/SolenoidS1Field.h++"
@@ -16,9 +16,9 @@
 #include "MACE/Detector/Geometry/Fast/CDCSenseLayer.h++"
 #include "MACE/Detector/Geometry/Fast/CDCSenseWire.h++"
 #include "MACE/Detector/Geometry/Fast/CDCSuperLayer.h++"
-#include "MACE/Detector/Geometry/Fast/EMCal.h++"
-#include "MACE/Detector/Geometry/Fast/EMCalField.h++"
-#include "MACE/Detector/Geometry/Fast/EMCalShield.h++"
+#include "MACE/Detector/Geometry/Fast/EMC.h++"
+#include "MACE/Detector/Geometry/Fast/EMCField.h++"
+#include "MACE/Detector/Geometry/Fast/EMCShield.h++"
 #include "MACE/Detector/Geometry/Fast/MCP.h++"
 #include "MACE/Detector/Geometry/Fast/MultiplateCollimator.h++"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1.h++"
@@ -62,7 +62,7 @@ DetectorConstruction::DetectorConstruction() :
     fCDCSenseWireRegion(nullptr),
     fDefaultGaseousRegion(nullptr),
     fDefaultSolidRegion(nullptr),
-    fEMCalSensitiveRegion(nullptr),
+    fEMCSensitiveRegion(nullptr),
     fMCPSensitiveRegion(nullptr),
     fShieldRegion(nullptr),
     fSolenoidOrMagnetRegion(nullptr),
@@ -71,7 +71,7 @@ DetectorConstruction::DetectorConstruction() :
     fVacuumRegion(nullptr),
 
     fCDCSD(nullptr),
-    fEMCalSD(nullptr),
+    fEMCSD(nullptr),
     fMCPSD(nullptr) {
 /*     Detector::Description::DescriptionIO::Import<DescriptionInUse>(
 #include "MACE/SimMACE/DefaultGeometry.inlyaml"
@@ -86,8 +86,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 
     // 1
 
-    auto& emCalField = fWorld->NewDaughter<Detector::Geometry::Fast::EMCalField>(fCheckOverlap);
-    auto& emCalShield = fWorld->NewDaughter<Detector::Geometry::Fast::EMCalShield>(fCheckOverlap);
+    auto& emcField = fWorld->NewDaughter<Detector::Geometry::Fast::EMCField>(fCheckOverlap);
+    auto& emcShield = fWorld->NewDaughter<Detector::Geometry::Fast::EMCShield>(fCheckOverlap);
     auto& solenoidB1Field = fWorld->NewDaughter<Detector::Geometry::Fast::SolenoidB1Field>(fCheckOverlap);
     auto& solenoidB2Field = fWorld->NewDaughter<Detector::Geometry::Fast::SolenoidB2Field>(fCheckOverlap);
     auto& solenoidS1Field = fWorld->NewDaughter<Detector::Geometry::Fast::SolenoidS1Field>(fCheckOverlap);
@@ -98,8 +98,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 
     // 2
 
-    auto& emCal = emCalField.NewDaughter<Detector::Geometry::Fast::EMCal>(fCheckOverlap);
-    auto& mcp = emCalField.NewDaughter<Detector::Geometry::Fast::MCP>(fCheckOverlap);
+    auto& emc = emcField.NewDaughter<Detector::Geometry::Fast::EMC>(fCheckOverlap);
+    auto& mcp = emcField.NewDaughter<Detector::Geometry::Fast::MCP>(fCheckOverlap);
 
     auto& solenoidB1 = solenoidB1Field.NewDaughter<Detector::Geometry::Fast::SolenoidB1>(fCheckOverlap);
 
@@ -183,14 +183,14 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         solenoidS3.RegisterMaterial(copper);
 
         const auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
-        emCal.RegisterMaterial(csI);
+        emc.RegisterMaterial(csI);
 
         const auto iron = nist->FindOrBuildMaterial("G4_Fe");
         spectrometerMagnet.RegisterMaterial(iron);
         multiplateCollimator.RegisterMaterial(iron);
 
         const auto lead = nist->FindOrBuildMaterial("G4_Pb");
-        emCalShield.RegisterMaterial(lead);
+        emcShield.RegisterMaterial(lead);
         spectrometerShield.RegisterMaterial(lead);
 
         const auto mcpMaterial = nist->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4_g_cm3);
@@ -206,7 +206,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         cdcSenseWire.RegisterMaterial(tungsten);
 
         const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
-        emCalField.RegisterMaterial(vacuum);
+        emcField.RegisterMaterial(vacuum);
         solenoidB1Field.RegisterMaterial(vacuum);
         solenoidS1Field.RegisterMaterial(vacuum);
         acceleratorField.RegisterMaterial(vacuum);
@@ -252,11 +252,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         cdcBody.RegisterRegion(fDefaultSolidRegion);
         multiplateCollimator.RegisterRegion(fDefaultSolidRegion);
 
-        // EMCalSensitiveRegion
-        fEMCalSensitiveRegion = new Region("EMCalSensitive", RegionType::EMCalSensitive);
-        fEMCalSensitiveRegion->SetProductionCuts(defaultCuts);
+        // EMCSensitiveRegion
+        fEMCSensitiveRegion = new Region("EMCSensitive", RegionType::EMCSensitive);
+        fEMCSensitiveRegion->SetProductionCuts(defaultCuts);
 
-        emCal.RegisterRegion(fEMCalSensitiveRegion);
+        emc.RegisterRegion(fEMCSensitiveRegion);
 
         // MCPSensitiveRegion
         fMCPSensitiveRegion = new Region("MCPSensitive", RegionType::MCPSensitive);
@@ -268,7 +268,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         fShieldRegion = new Region("Shield", RegionType::Shield);
         fShieldRegion->SetProductionCuts(defaultCuts);
 
-        emCalShield.RegisterRegion(fShieldRegion);
+        emcShield.RegisterRegion(fShieldRegion);
         spectrometerShield.RegisterRegion(fShieldRegion);
 
         // SolenoidOrMagnetRegion
@@ -296,7 +296,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         fVacuumRegion = new Region("Vacuum", RegionType::Vacuum);
         fVacuumRegion->SetProductionCuts(defaultCuts);
 
-        emCalField.RegisterRegion(fVacuumRegion);
+        emcField.RegisterRegion(fVacuumRegion);
         solenoidB1Field.RegisterRegion(fVacuumRegion);
         solenoidS1Field.RegisterRegion(fVacuumRegion);
         acceleratorField.RegisterRegion(fVacuumRegion);
@@ -313,8 +313,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         fCDCSD = new SD::CDCSD(cdcCell.LogicalVolume()->GetName());
         cdcCell.RegisterSD(fCDCSD);
 
-        fEMCalSD = new SD::EMCalSD(emCal.LogicalVolume()->GetName());
-        emCal.RegisterSD(fEMCalSD);
+        fEMCSD = new SD::EMCSD(emc.LogicalVolume()->GetName());
+        emc.RegisterSD(fEMCSD);
 
         fMCPSD = new SD::MCPSD(mcp.LogicalVolume()->GetName());
         mcp.RegisterSD(fMCPSD);
@@ -379,12 +379,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
             G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<SolenoidS3Field>>>>(
             new SolenoidS3Field, hMin, 6, 6, false);
 
-        emCalField.RegisterField<
-            EMCalField,
-            G4TMagFieldEquation<EMCalField>,
-            G4TDormandPrince45<G4TMagFieldEquation<EMCalField>>,
-            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<EMCalField>>>>(
-            new EMCalField, hMin, 6, 6, false);
+        emcField.RegisterField<
+            EMCField,
+            G4TMagFieldEquation<EMCField>,
+            G4TDormandPrince45<G4TMagFieldEquation<EMCField>>,
+            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<EMCField>>>>(
+            new EMCField, hMin, 6, 6, false);
     }
 
     return fWorld->PhysicalVolume().get();

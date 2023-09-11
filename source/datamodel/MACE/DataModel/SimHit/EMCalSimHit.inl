@@ -1,7 +1,7 @@
 namespace MACE::DataModel::inline SimHit {
 
-inline void EMCalSimHit::FillAllBranchSocket() const& {
-    EMCalHit::FillAllBranchSocket();
+inline void EMCSimHit::FillAllBranchSocket() const& {
+    EMCHit::FillAllBranchSocket();
     fMCEventID.FillBranchSocket();
     fMCTrackID.FillBranchSocket();
     fPDGCode.FillBranchSocket();

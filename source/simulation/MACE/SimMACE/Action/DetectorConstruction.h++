@@ -4,9 +4,9 @@
 #include "MACE/Detector/Description/BeamDegrader.h++"
 #include "MACE/Detector/Description/BeamMonitor.h++"
 #include "MACE/Detector/Description/CDC.h++"
-#include "MACE/Detector/Description/EMCal.h++"
-#include "MACE/Detector/Description/EMCalField.h++"
-#include "MACE/Detector/Description/EMCalShield.h++"
+#include "MACE/Detector/Description/EMC.h++"
+#include "MACE/Detector/Description/EMCField.h++"
+#include "MACE/Detector/Description/EMCShield.h++"
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Detector/Description/MultiplateCollimator.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
@@ -18,7 +18,7 @@
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimMACE/Region.h++"
 #include "MACE/SimMACE/SD/CDCSD.h++"
-#include "MACE/SimMACE/SD/EMCalSD.h++"
+#include "MACE/SimMACE/SD/EMCSD.h++"
 #include "MACE/SimMACE/SD/MCPSD.h++"
 
 #include "G4VUserDetectorConstruction.hh"
@@ -44,7 +44,7 @@ public:
 
     void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlap = checkOverlaps; }
 
-    auto& EMCalSensitiveRegion() const { return *fEMCalSensitiveRegion; }
+    auto& EMCSensitiveRegion() const { return *fEMCSensitiveRegion; }
     auto& DefaultSolidRegion() const { return *fDefaultSolidRegion; }
     auto& DefaultGaseousRegion() const { return *fDefaultGaseousRegion; }
     auto& ShieldRegion() const { return *fShieldRegion; }
@@ -54,7 +54,7 @@ public:
     auto& VacuumRegion() const { return *fVacuumRegion; }
     auto& MCPSensitiveRegion() const { return *fMCPSensitiveRegion; }
 
-    auto& EMCalSD() const { return *fEMCalSD; }
+    auto& EMCSD() const { return *fEMCSD; }
     auto& CDCSD() const { return *fCDCSD; }
     auto& MCPSD() const { return *fMCPSD; }
 
@@ -63,9 +63,9 @@ public:
                                         Detector::Description::BeamDegrader,
                                         Detector::Description::BeamMonitor,
                                         Detector::Description::CDC,
-                                        Detector::Description::EMCal,
-                                        Detector::Description::EMCalField,
-                                        Detector::Description::EMCalShield,
+                                        Detector::Description::EMC,
+                                        Detector::Description::EMCField,
+                                        Detector::Description::EMCShield,
                                         Detector::Description::MCP,
                                         Detector::Description::MultiplateCollimator,
                                         Detector::Description::Solenoid,
@@ -84,7 +84,7 @@ private:
     Region* fCDCSenseWireRegion;
     Region* fDefaultGaseousRegion;
     Region* fDefaultSolidRegion;
-    Region* fEMCalSensitiveRegion;
+    Region* fEMCSensitiveRegion;
     Region* fMCPSensitiveRegion;
     Region* fShieldRegion;
     Region* fSolenoidOrMagnetRegion;
@@ -93,7 +93,7 @@ private:
     Region* fVacuumRegion;
 
     SD::CDCSD* fCDCSD;
-    SD::EMCalSD* fEMCalSD;
+    SD::EMCSD* fEMCSD;
     SD::MCPSD* fMCPSD;
 };
 

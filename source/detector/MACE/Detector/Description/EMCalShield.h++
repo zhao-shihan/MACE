@@ -1,14 +1,14 @@
 #pragma once
 
-#include "MACE/Detector/Description/EMCalField.h++"
+#include "MACE/Detector/Description/EMCField.h++"
 
 namespace MACE::Detector::Description {
 
-class EMCalShield final : public DescriptionSingletonBase<EMCalShield> {
+class EMCShield final : public DescriptionSingletonBase<EMCShield> {
     friend Env::Memory::SingletonFactory;
 
 private:
-    EMCalShield();
+    EMCShield();
 
 public:
     const auto& InnerRadius() const { return fInnerRadius; }
@@ -23,7 +23,7 @@ public:
 
     // Next 1 method should only use for geometry construction.
 
-    auto CalcTransform() const { return EMCalField::Instance().CalcTransform(); }
+    auto CalcTransform() const { return EMCField::Instance().CalcTransform(); }
 
 private:
     void ImportValues(const YAML::Node& node) override;

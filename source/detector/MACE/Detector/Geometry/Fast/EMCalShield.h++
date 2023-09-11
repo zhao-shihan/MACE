@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Geometry::Fast {
 
-class EMCalShield final : public GeometryBase {
+class EMCShield final : public GeometryBase {
 private:
     void Construct(G4bool checkOverlaps) override;
 };

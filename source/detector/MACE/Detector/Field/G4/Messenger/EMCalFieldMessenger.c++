@@ -1,34 +1,34 @@
-#include "MACE/Detector/Description/EMCalField.h++"
-#include "MACE/Detector/Field/G4/Messenger/EMCalFieldMessenger.h++"
-#include "MACE/Detector/Field/G4/EMCalField.h++"
+#include "MACE/Detector/Description/EMCField.h++"
+#include "MACE/Detector/Field/G4/Messenger/EMCFieldMessenger.h++"
+#include "MACE/Detector/Field/G4/EMCField.h++"
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIdirectory.hh"
 
 namespace MACE::Detector::Field::G4::inline Messenger {
 
-EMCalFieldMessenger::EMCalFieldMessenger() :
+EMCFieldMessenger::EMCFieldMessenger() :
     Singleton(),
     G4UImessenger(),
-    fEMCalField(nullptr),
+    fEMCField(nullptr),
     fDirectory(),
     fSpectrometerMagneticField() {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Field/");
     fDirectory->SetGuidance("Detector field controller.");
 
-    fSpectrometerMagneticField = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Field/EMCalMagneticField", this);
+    fSpectrometerMagneticField = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Field/EMCMagneticField", this);
     fSpectrometerMagneticField->SetGuidance("Set the magnetic flux density of spectrometer magnetic field.");
     fSpectrometerMagneticField->SetParameterName("B", false);
     fSpectrometerMagneticField->SetUnitCategory("Magnetic flux density");
     fSpectrometerMagneticField->AvailableForStates(G4State_Idle);
 }
 
-EMCalFieldMessenger::~EMCalFieldMessenger() = default;
+EMCFieldMessenger::~EMCFieldMessenger() = default;
 
-void EMCalFieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
+void EMCFieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
     if (command == fSpectrometerMagneticField.get()) {
-        Description::EMCalField::Instance().MagneticFluxDensity(fSpectrometerMagneticField->GetNewDoubleValue(value));
+        Description::EMCField::Instance().MagneticFluxDensity(fSpectrometerMagneticField->GetNewDoubleValue(value));
     }
 }
 

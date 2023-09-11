@@ -1,8 +1,8 @@
 #include "MACE/Detector/Description/AcceleratorField.h++"
 #include "MACE/Detector/Description/Collimator.h++"
 #include "MACE/Detector/Description/DescriptionIO.h++"
-#include "MACE/Detector/Description/EMCalField.h++"
-#include "MACE/Detector/Description/EMCalShield.h++"
+#include "MACE/Detector/Description/EMCField.h++"
+#include "MACE/Detector/Description/EMCShield.h++"
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Detector/Description/SelectorField.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
@@ -16,8 +16,8 @@ namespace MACE::SimTarget::inline Action {
 
 DetectorConstruction::DetectorConstruction() :
     fCollimator(nullptr),
-    fEMCalField(nullptr),
-    fEMCalShield(nullptr),
+    fEMCField(nullptr),
+    fEMCShield(nullptr),
     fSolenoidB1Field(nullptr),
     fSolenoidB1(nullptr),
     fSolenoidS1Field(nullptr),

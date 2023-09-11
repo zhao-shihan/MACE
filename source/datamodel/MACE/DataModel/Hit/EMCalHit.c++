@@ -1,22 +1,22 @@
-#include "MACE/DataModel/Hit/EMCalHit.h++"
+#include "MACE/DataModel/Hit/EMCHit.h++"
 
 namespace MACE::DataModel {
 
 template<>
-EMCalHit::Column::Time::BranchSocket EMCalHit::Column::Time::Base::fgBranchSocket = 
+EMCHit::Column::Time::BranchSocket EMCHit::Column::Time::Base::fgBranchSocket = 
     {"t", "Hitting Time", 0};
 template<>
-EMCalHit::Column::EnergyDeposition::BranchSocket EMCalHit::Column::EnergyDeposition::Base::fgBranchSocket = 
+EMCHit::Column::EnergyDeposition::BranchSocket EMCHit::Column::EnergyDeposition::Base::fgBranchSocket = 
     {"E", "Energy Deposition", 0};
 
 inline namespace Hit {
 
-void EMCalHit::CreateAllBranch(TTree& tree) {
+void EMCHit::CreateAllBranch(TTree& tree) {
     Column::Time::CreateBranch(tree);
     Column::EnergyDeposition::CreateBranch(tree);
 }
 
-void EMCalHit::ConnectToAllBranch(TTree& tree) {
+void EMCHit::ConnectToAllBranch(TTree& tree) {
     Column::Time::ConnectToBranch(tree);
     Column::EnergyDeposition::ConnectToBranch(tree);
 }

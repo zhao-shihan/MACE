@@ -4,16 +4,16 @@
 #include "MACE/Compatibility/std2b/constexpr_abs.h++"
 #include "MACE/Data/IO/Reader.h++"
 #include "MACE/Data/Model/Hit/CDCHit.h++"
-#include "MACE/Data/Model/Hit/EMCalHit.h++"
+#include "MACE/Data/Model/Hit/EMCHit.h++"
 #include "MACE/Data/Model/Hit/MCPHit.h++"
 #include "MACE/Data/Model/SimHit/CDCSimHit.h++"
-#include "MACE/Data/Model/SimHit/EMCalSimHit.h++"
+#include "MACE/Data/Model/SimHit/EMCSimHit.h++"
 #include "MACE/Data/Model/SimHit/MCPSimHit.h++"
 #include "MACE/Data/Model/SimTrack/CDCHelixSimTrack.h++"
 #include "MACE/Data/Model/SimTrack/CDCPhysicsSimTrack.h++"
 #include "MACE/DataModel/DataFactory.h++"
 #include "MACE/DataModel/SimHit/CDCSimHit.h++"
-#include "MACE/DataModel/SimHit/EMCalSimHit.h++"
+#include "MACE/DataModel/SimHit/EMCSimHit.h++"
 #include "MACE/DataModel/SimHit/MCPSimHit.h++"
 #include "MACE/DataModel/SimTrack/CDCHelixSimTrack.h++"
 #include "MACE/DataModel/SimTrack/CDCPhysicsSimTrack.h++"
@@ -428,32 +428,32 @@ int main(int argc, char* argv[]) {
     const auto sigFile = std::make_unique<TFile>(argv[1]);
     decltype(auto) cdcHitSigTree = *dataFactory.FindTree<DataModel::CDCSimHit>(*sigFile, 0);
     decltype(auto) mcpHitSigTree = *dataFactory.FindTree<DataModel::MCPSimHit>(*sigFile, 0);
-    decltype(auto) emCalHitSigTree = *dataFactory.FindTree<DataModel::EMCalSimHit>(*sigFile, 0);
+    decltype(auto) emcHitSigTree = *dataFactory.FindTree<DataModel::EMCSimHit>(*sigFile, 0);
 
     const auto bkgFile = std::make_unique<TFile>(argv[2]);
     decltype(auto) cdcHitBkgTree = *dataFactory.FindTree<DataModel::CDCSimHit>(*bkgFile, 0);
     decltype(auto) mcpHitBkgTree = *dataFactory.FindTree<DataModel::MCPSimHit>(*bkgFile, 0);
-    decltype(auto) emCalHitBkgTree = *dataFactory.FindTree<DataModel::EMCalSimHit>(*bkgFile, 0);
+    decltype(auto) emcHitBkgTree = *dataFactory.FindTree<DataModel::EMCSimHit>(*bkgFile, 0);
 
     // auto cdcHitSigDataAll = dataFactory.CreateAndFillList<DataModel::CDCSimHit>(cdcHitSigTree);
     // auto mcpHitSigDataAll = dataFactory.CreateAndFillList<DataModel::MCPSimHit>(mcpHitSigTree);
-    // auto emCalHitSigDataAll = dataFactory.CreateAndFillList<DataModel::EMCalSimHit>(emCalHitSigTree);
+    // auto emcHitSigDataAll = dataFactory.CreateAndFillList<DataModel::EMCSimHit>(emcHitSigTree);
     // auto cdcHitBkgDataAll = dataFactory.CreateAndFillList<DataModel::CDCSimHit>(cdcHitBkgTree);
     // auto mcpHitBkgDataAll = dataFactory.CreateAndFillList<DataModel::MCPSimHit>(mcpHitBkgTree);
-    // auto emCalHitBkgDataAll = dataFactory.CreateAndFillList<DataModel::EMCalSimHit>(emCalHitBkgTree);
+    // auto emcHitBkgDataAll = dataFactory.CreateAndFillList<DataModel::EMCSimHit>(emcHitBkgTree);
     Data::Reader<Data::CDCSimHit> cdcHitSigReader{cdcHitSigTree};
     Data::Reader<Data::MCPSimHit> mcpHitSigReader{cdcHitSigTree};
-    Data::Reader<Data::EMCalSimHit> emCalHitSigReader{cdcHitSigTree};
+    Data::Reader<Data::EMCSimHit> emcHitSigReader{cdcHitSigTree};
     auto cdcHitSigDataAll = cdcHitSigReader.IteratorCollection();
     auto mcpHitSigDataAll = mcpHitSigReader.IteratorCollection();
-    auto emCalHitSigDataAll = emCalHitSigReader.IteratorCollection();
+    auto emcHitSigDataAll = emcHitSigReader.IteratorCollection();
 
     Data::Reader<Data::CDCSimHit> cdcHitBkgReader{cdcHitBkgTree};
     Data::Reader<Data::MCPSimHit> mcpHitBkgReader{cdcHitBkgTree};
-    Data::Reader<Data::EMCalSimHit> emCalHitBkgReader{cdcHitBkgTree};
+    Data::Reader<Data::EMCSimHit> emcHitBkgReader{cdcHitBkgTree};
     auto cdcHitBkgDataAll = cdcHitBkgReader.IteratorCollection();
     auto mcpHitBkgDataAll = cdcHitBkgReader.IteratorCollection();
-    auto emCalHitBkgDataAll = cdcHitBkgReader.IteratorCollection();
+    auto emcHitBkgDataAll = cdcHitBkgReader.IteratorCollection();
 
     constexpr auto EventIDCompare =
         [](const auto& hit1, const auto& hit2) {
@@ -461,10 +461,10 @@ int main(int argc, char* argv[]) {
         };
     std::ranges::sort(cdcHitSigDataAll, EventIDCompare);
     std::ranges::sort(mcpHitSigDataAll, EventIDCompare);
-    std::ranges::sort(emCalHitSigDataAll, EventIDCompare);
+    std::ranges::sort(emcHitSigDataAll, EventIDCompare);
     std::ranges::sort(cdcHitBkgDataAll, EventIDCompare);
     std::ranges::sort(mcpHitBkgDataAll, EventIDCompare);
-    std::ranges::sort(emCalHitBkgDataAll, EventIDCompare);
+    std::ranges::sort(emcHitBkgDataAll, EventIDCompare);
 
     constexpr auto SplitByEventID =
         [](const auto& data, const auto maxID) {
@@ -484,16 +484,16 @@ int main(int argc, char* argv[]) {
         };
     const auto maxSigID = std::max({(*std::ranges::max_element(cdcHitSigDataAll, EventIDCompare))->MCEventID()(),
                                     (*std::ranges::max_element(mcpHitSigDataAll, EventIDCompare))->MCEventID()(),
-                                    (*std::ranges::max_element(emCalHitSigDataAll, EventIDCompare))->MCEventID()()});
+                                    (*std::ranges::max_element(emcHitSigDataAll, EventIDCompare))->MCEventID()()});
     const auto maxBkgID = std::max({(*std::ranges::max_element(cdcHitBkgDataAll, EventIDCompare))->MCEventID()(),
                                     (*std::ranges::max_element(mcpHitBkgDataAll, EventIDCompare))->MCEventID()(),
-                                    (*std::ranges::max_element(emCalHitBkgDataAll, EventIDCompare))->MCEventID()()});
+                                    (*std::ranges::max_element(emcHitBkgDataAll, EventIDCompare))->MCEventID()()});
     const auto cdcHitSigData = SplitByEventID(cdcHitSigDataAll, maxSigID);
     const auto mcpHitSigData = SplitByEventID(mcpHitSigDataAll, maxSigID);
-    const auto emCalHitSigData = SplitByEventID(emCalHitSigDataAll, maxSigID);
+    const auto emcHitSigData = SplitByEventID(emcHitSigDataAll, maxSigID);
     const auto cdcHitBkgData = SplitByEventID(cdcHitBkgDataAll, maxBkgID);
     const auto mcpHitBkgData = SplitByEventID(mcpHitBkgDataAll, maxBkgID);
-    const auto emCalHitBkgData = SplitByEventID(emCalHitBkgDataAll, maxBkgID);
+    const auto emcHitBkgData = SplitByEventID(emcHitBkgDataAll, maxBkgID);
 
     auto eventID = 0;
     TFile coincidentDataFile("coincident_data.root", "RECREATE");
@@ -503,31 +503,31 @@ int main(int argc, char* argv[]) {
         const auto bkgID = sigID % maxBkgID;
         const auto& cdcHitSig = cdcHitSigData[sigID];
         const auto& mcpHitSig = mcpHitSigData[sigID];
-        const auto& emCalHitSig = emCalHitSigData[sigID];
+        const auto& emcHitSig = emcHitSigData[sigID];
         const auto& cdcHitBkg = cdcHitBkgData[bkgID];
         const auto& mcpHitBkg = mcpHitBkgData[bkgID];
-        const auto& emCalHitBkg = emCalHitBkgData[bkgID];
+        const auto& emcHitBkg = emcHitBkgData[bkgID];
 
         for (auto&& mcpHit : mcpHitSig) {
             const auto& tMCP = mcpHit->Time()();
             const auto& xMCP = mcpHit->Position()();
 
             //
-            // MCP <-> EMCal
+            // MCP <-> EMC
             //
 
             auto nGamma = 0;
-            const auto EMCalSmearFilter =
-                [&](const auto& emCalHit) {
-                    const auto tEMCal = Gaussian1D(rng, {emCalHit->Time()(), 4.5_ns / 2.355});
-                    const auto energy = Gaussian1D(rng, {emCalHit->EnergyDeposition()(), 350_keV / 2.355});
-                    if (tMCP + 0.5_ns - 6_ns < tEMCal and tEMCal < tMCP + 0.5_ns + 6_ns and
+            const auto EMCSmearFilter =
+                [&](const auto& emcHit) {
+                    const auto tEMC = Gaussian1D(rng, {emcHit->Time()(), 4.5_ns / 2.355});
+                    const auto energy = Gaussian1D(rng, {emcHit->EnergyDeposition()(), 350_keV / 2.355});
+                    if (tMCP + 0.5_ns - 6_ns < tEMC and tEMC < tMCP + 0.5_ns + 6_ns and
                         200_keV < energy and energy < 1000_keV) {
                         ++nGamma;
                     }
                 };
-            std::ranges::for_each(emCalHitSig, EMCalSmearFilter);
-            // std::ranges::for_each(emCalHitBkg, EMCalSmearFilter);
+            std::ranges::for_each(emcHitSig, EMCSmearFilter);
+            // std::ranges::for_each(emcHitBkg, EMCSmearFilter);
             if (nGamma < 2) {
                 continue;
             }
@@ -586,35 +586,35 @@ int main(int argc, char* argv[]) {
     const auto ProcessEvent =
         [&](const double tMCP, const ROOT::RVecF& xMCPRVec, const int sigEventID) {
             ROOT::RDataFrame cdcHitSigDFAll(cdcHitSigTree);
-            ROOT::RDataFrame emCalHitSigDFAll(emCalHitSigTree);
+            ROOT::RDataFrame emcHitSigDFAll(emcHitSigTree);
             const auto SigFilter = [&sigEventID](const int id) { return id == sigEventID; };
             auto cdcHitSigDF = cdcHitSigDFAll.Filter(SigFilter, {DataModel::CDCSimHit::Column::MCEventID::Name()});
-            auto emCalHitSigDF = emCalHitSigDFAll.Filter(SigFilter, {DataModel::EMCalSimHit::Column::MCEventID::Name()});
+            auto emcHitSigDF = emcHitSigDFAll.Filter(SigFilter, {DataModel::EMCSimHit::Column::MCEventID::Name()});
 
             ROOT::RDataFrame cdcHitBkgDFAll(cdcHitBkgTree);
-            ROOT::RDataFrame emCalHitBkgDFAll(emCalHitBkgTree);
+            ROOT::RDataFrame emcHitBkgDFAll(emcHitBkgTree);
             const auto BkgFilter = [&eventID](const int id) { return id == eventID % 10; };
             auto cdcHitBkgDF = cdcHitBkgDFAll.Filter(BkgFilter, {DataModel::CDCSimHit::Column::MCEventID::Name()});
-            auto emCalHitBkgDF = emCalHitBkgDFAll.Filter(BkgFilter, {DataModel::EMCalSimHit::Column::MCEventID::Name()});
+            auto emcHitBkgDF = emcHitBkgDFAll.Filter(BkgFilter, {DataModel::EMCSimHit::Column::MCEventID::Name()});
 
             //
-            // MCP <-> EMCal
+            // MCP <-> EMC
             //
 
-            const auto EMCalSmearFilter =
-                [&](double tEMCal, float energy) {
-                    tEMCal = Gaussian1D(rng, {tEMCal, 4.5_ns / 2.355});
+            const auto EMCSmearFilter =
+                [&](double tEMC, float energy) {
+                    tEMC = Gaussian1D(rng, {tEMC, 4.5_ns / 2.355});
                     energy = Gaussian1D(rng, {energy, 350_keV / 2.355});
-                    return tMCP + 0.5_ns - 6_ns < tEMCal and tEMCal < tMCP + 0.5_ns + 6_ns and
+                    return tMCP + 0.5_ns - 6_ns < tEMC and tEMC < tMCP + 0.5_ns + 6_ns and
                            200_keV < energy and energy < 1000_keV;
                 };
-            const auto nGamma = *emCalHitSigDF.Filter(EMCalSmearFilter,
-                                                      {DataModel::EMCalHit::Column::Time::Name(),
-                                                       DataModel::EMCalHit::Column::EnergyDeposition::Name()})
+            const auto nGamma = *emcHitSigDF.Filter(EMCSmearFilter,
+                                                      {DataModel::EMCHit::Column::Time::Name(),
+                                                       DataModel::EMCHit::Column::EnergyDeposition::Name()})
                                      .Count() +
-                                *emCalHitBkgDF.Filter(EMCalSmearFilter,
-                                                      {DataModel::EMCalHit::Column::Time::Name(),
-                                                       DataModel::EMCalHit::Column::EnergyDeposition::Name()})
+                                *emcHitBkgDF.Filter(EMCSmearFilter,
+                                                      {DataModel::EMCHit::Column::Time::Name(),
+                                                       DataModel::EMCHit::Column::EnergyDeposition::Name()})
                                      .Count();
             if (nGamma < 2) {
                 return;

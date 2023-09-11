@@ -1,4 +1,4 @@
-#include "MACE/Detector/Description/EMCalField.h++"
+#include "MACE/Detector/Description/EMCField.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
@@ -7,15 +7,15 @@ namespace MACE::Detector::Description {
 using namespace LiteralUnit::Length;
 using namespace LiteralUnit::MagneticFluxDensity;
 
-EMCalField::EMCalField() :
-    DescriptionSingletonBase<EMCalField>(__func__),
+EMCField::EMCField() :
+    DescriptionSingletonBase<EMCField>(__func__),
     // Geometry
     fRadius(25_cm),
     fLength(70_cm), 
     // Field
     fMagneticFluxDensity(100_mT) {}
 
-HepGeom::Transform3D EMCalField::CalcTransform() const {
+HepGeom::Transform3D EMCField::CalcTransform() const {
     const auto& transportLine = Solenoid::Instance();
     const auto localTransX = 0;
     const auto localTransY = 0;
@@ -25,7 +25,7 @@ HepGeom::Transform3D EMCalField::CalcTransform() const {
     return HepGeom::Transform3D(CLHEP::HepRotation(), translation);
 }
 
-void EMCalField::ImportValues(const YAML::Node& node) {
+void EMCField::ImportValues(const YAML::Node& node) {
     // Geometry
     ImportValue(node, fRadius, "Radius");
     ImportValue(node, fLength, "Length");
@@ -33,7 +33,7 @@ void EMCalField::ImportValues(const YAML::Node& node) {
     ImportValue(node, fMagneticFluxDensity, "MagneticFluxDensity");
 }
 
-void EMCalField::ExportValues(YAML::Node& node) const {
+void EMCField::ExportValues(YAML::Node& node) const {
     // Geometry
     ExportValue(node, fRadius, "Radius");
     ExportValue(node, fLength, "Length");

@@ -1,10 +1,10 @@
 #include "MACE/DataModel/CDCTrackOperation.h++"
 #include "MACE/DataModel/DataFactory.h++"
-#include "MACE/DataModel/SimHit/EMCalSimHit.h++"
+#include "MACE/DataModel/SimHit/EMCSimHit.h++"
 #include "MACE/DataModel/SimHit/MCPSimHit.h++"
 #include "MACE/DataModel/Track/CDCHelixTrack.h++"
 #include "MACE/DataModel/Track/CDCPhysicsTrack.h++"
-#include "MACE/Detector/Description/EMCalField.h++"
+#include "MACE/Detector/Description/EMCField.h++"
 #include "MACE/Detector/Description/AcceleratorField.h++"
 #include "MACE/Detector/Description/SpectrometerField.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
@@ -35,7 +35,7 @@ using namespace MACE::stdx::array_arithmetic;
 using MACE::Core::DataFactory;
 using MACE::Env::MPIEnv;
 
-using EMCalHit_t = SimHit::EMCalSimHit;
+using EMCHit_t = SimHit::EMCSimHit;
 using Helix_t = Track::CDCHelixTrack;
 using MCPHit_t = SimHit::MCPSimHit;
 using MVertex_t = MuoniumSimVertex;
@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
         transportLine.S2Length() +
         transportLine.B2Radius() * halfpi +
         transportLine.S3Length() +
-        EMCalField::Instance().Length() / 2;
+        EMCField::Instance().Length() / 2;
     // muonium survival length (5 tau_mu @ 300K)
     const auto maxSurvivalLength = c_light * std::sqrt(3 * k_Boltzmann * 300_K / muonium_mass_c2) * 5 * 2197.03_ns;
     auto CalculateFlightTime = [&accE, &acceleratorLength, &flightLength](double zVertex) {
@@ -123,15 +123,15 @@ int main(int argc, char* argv[]) {
         // Get MCP data
         auto mcpData = dataHub.CreateAndFillList<MCPHit_t>(hitFileIn, rep);
         std::ranges::sort(mcpData, SortByHitTime);
-        // Get EMCal data
-        std::vector<std::shared_ptr<EMCalHit_t>> calData;
-        calData = dataHub.CreateAndFillList<EMCalHit_t>(hitFileIn, rep);
+        // Get EMC data
+        std::vector<std::shared_ptr<EMCHit_t>> calData;
+        calData = dataHub.CreateAndFillList<EMCHit_t>(hitFileIn, rep);
         std::ranges::sort(calData, SortByHitTime);
 
         // result list
         std::vector<std::shared_ptr<MVertex_t>> vertexResult;
 
-        // coincidence with EMCal
+        // coincidence with EMC
         std::vector<std::pair<std::shared_ptr<MCPHit_t>, int>> coinedMCPData;
         auto coinCalHitBegin = calData.cbegin();
         auto coinCalHitEnd = coinCalHitBegin;
@@ -160,7 +160,7 @@ int main(int argc, char* argv[]) {
 
         auto coinCDCHitBegin = trackData.cbegin();
         auto coinCDCHitEnd = coinCDCHitBegin;
-        for (auto&& [mcpHit, emCalCoinCount] : std::as_const(coinedMCPData)) {
+        for (auto&& [mcpHit, emcCoinCount] : std::as_const(coinedMCPData)) {
             // result list
             std::vector<std::shared_ptr<MVertex_t>> vertexResultOfThisHit;
             // coincidence time window for this MCP hit
@@ -197,7 +197,7 @@ int main(int argc, char* argv[]) {
                     possibleVertex->SetDCA(track->Radius() - (track->GetCenter() - CPAMCP).norm());
                     possibleVertex->VertexEnergy(physTrack.VertexEnergy());
                     possibleVertex->VertexMomentum(physTrack.VertexMomentum());
-                    const auto particles = std::to_string(emCalCoinCount) + "y/" + physTrack.Particle();
+                    const auto particles = std::to_string(emcCoinCount) + "y/" + physTrack.Particle();
                     possibleVertex->SetParticles(particles);
 
                     possibleVertex->TrueVertexTime(mcpHit->VertexTime());

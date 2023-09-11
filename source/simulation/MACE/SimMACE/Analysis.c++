@@ -1,6 +1,6 @@
 #include "MACE/SimMACE/Analysis.h++"
 #include "MACE/SimMACE/Hit/CDCHit.h++"
-#include "MACE/SimMACE/Hit/EMCalHit.h++"
+#include "MACE/SimMACE/Hit/EMCHit.h++"
 #include "MACE/SimMACE/Hit/MCPHit.h++"
 #include "MACE/SimMACE/Messenger/AnalysisMessenger.h++"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.h++"
@@ -13,14 +13,14 @@ Analysis::Analysis() :
     PassiveSingleton(),
     fFilePath("SimMACE_untitled"),
     fFileOption("UPDATE"),
-    fEnableCoincidenceOfEMCal(true),
+    fEnableCoincidenceOfEMC(true),
     fEnableCoincidenceOfMCP(true),
     fDataHub(),
     fFile(),
-    fEMCalHitTree(),
+    fEMCHitTree(),
     fMCPHitTree(),
     fCDCHitTree(),
-    fEMCalHitList(nullptr),
+    fEMCHitList(nullptr),
     fMCPHitList(nullptr),
     fCDCHitList(nullptr) {
     fDataHub.TreeNamePrefixFormat("G4Run{}_");
@@ -32,25 +32,25 @@ void Analysis::RunBegin(G4int runID) {
                                     fFileOption.c_str(),
                                     "",
                                     ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
-    fEMCalHitTree = fDataHub.CreateTree<DataModel::EMCalSimHit>(runID);
+    fEMCHitTree = fDataHub.CreateTree<DataModel::EMCSimHit>(runID);
     fMCPHitTree = fDataHub.CreateTree<DataModel::MCPSimHit>(runID);
     fCDCHitTree = fDataHub.CreateTree<DataModel::CDCSimHit>(runID);
 }
 
 void Analysis::EventEnd() {
-    const auto emCalTriggered = not fEnableCoincidenceOfEMCal or fEMCalHitList->size() > 0;
+    const auto emcTriggered = not fEnableCoincidenceOfEMC or fEMCHitList->size() > 0;
     const auto mcpTriggered = not fEnableCoincidenceOfMCP or fMCPHitList->size() > 0;
     const auto cdcTriggered = fCDCHitList->size() > 0;
     // if coincident then write their data
-    if (emCalTriggered and mcpTriggered and cdcTriggered) {
-        fDataHub.FillTree(*fEMCalHitList, *fEMCalHitTree, true);
+    if (emcTriggered and mcpTriggered and cdcTriggered) {
+        fDataHub.FillTree(*fEMCHitList, *fEMCHitTree, true);
         fDataHub.FillTree(*fMCPHitList, *fMCPHitTree, true);
         fDataHub.FillTree(*fCDCHitList, *fCDCHitTree, true);
     }
 }
 
 void Analysis::RunEnd(Option_t* option) {
-    fEMCalHitTree->Write();
+    fEMCHitTree->Write();
     fMCPHitTree->Write();
     fCDCHitTree->Write();
     fFile->Close(option);

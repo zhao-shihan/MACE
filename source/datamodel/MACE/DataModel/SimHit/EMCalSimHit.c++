@@ -1,39 +1,39 @@
-#include "MACE/DataModel/SimHit/EMCalSimHit.h++"
+#include "MACE/DataModel/SimHit/EMCSimHit.h++"
 
 namespace MACE::DataModel {
 
 template<>
-EMCalSimHit::Column::MCEventID::BranchSocket EMCalSimHit::Column::MCEventID::Base::fgBranchSocket =
+EMCSimHit::Column::MCEventID::BranchSocket EMCSimHit::Column::MCEventID::Base::fgBranchSocket =
     {"mcEvtID", "MC Event ID", -1};
 template<>
-EMCalSimHit::Column::MCTrackID::BranchSocket EMCalSimHit::Column::MCTrackID::Base::fgBranchSocket =
+EMCSimHit::Column::MCTrackID::BranchSocket EMCSimHit::Column::MCTrackID::Base::fgBranchSocket =
     {"mcTrkID", "MC Track ID", -1};
 template<>
-EMCalSimHit::Column::PDGCode::BranchSocket EMCalSimHit::Column::PDGCode::Base::fgBranchSocket =
+EMCSimHit::Column::PDGCode::BranchSocket EMCSimHit::Column::PDGCode::Base::fgBranchSocket =
     {"pdgCode", "Particle PDG Code (MC Truth)", 0};
 template<>
-EMCalSimHit::Column::Position::BranchSocket EMCalSimHit::Column::Position::Base::fgBranchSocket = // clang-format off
+EMCSimHit::Column::Position::BranchSocket EMCSimHit::Column::Position::Base::fgBranchSocket = // clang-format off
     {"x", "Hitting Position (MC Truth)", {0, 0, 0}}; // clang-format on
 template<>
-EMCalSimHit::Column::Momentum::BranchSocket EMCalSimHit::Column::Momentum::Base::fgBranchSocket = // clang-format off
+EMCSimHit::Column::Momentum::BranchSocket EMCSimHit::Column::Momentum::Base::fgBranchSocket = // clang-format off
     {"p", "Hitting Momentum (MC Truth)", {0, 0, 0}}; // clang-format on
 template<>
-EMCalSimHit::Column::VertexTime::BranchSocket EMCalSimHit::Column::VertexTime::Base::fgBranchSocket =
+EMCSimHit::Column::VertexTime::BranchSocket EMCSimHit::Column::VertexTime::Base::fgBranchSocket =
     {"t0", "Vertex Time (MC Truth)", 0};
 template<>
-EMCalSimHit::Column::VertexPosition::BranchSocket EMCalSimHit::Column::VertexPosition::Base::fgBranchSocket = // clang-format off
+EMCSimHit::Column::VertexPosition::BranchSocket EMCSimHit::Column::VertexPosition::Base::fgBranchSocket = // clang-format off
     {"x0", "Vertex Position (MC Truth)", {0, 0, 0}}; // clang-format on
 template<>
-EMCalSimHit::Column::VertexKineticEnergy::BranchSocket EMCalSimHit::Column::VertexKineticEnergy::Base::fgBranchSocket =
+EMCSimHit::Column::VertexKineticEnergy::BranchSocket EMCSimHit::Column::VertexKineticEnergy::Base::fgBranchSocket =
     {"Ek0", "Vertex Kinetic Energy (MC Truth)", 0};
 template<>
-EMCalSimHit::Column::VertexMomentum::BranchSocket EMCalSimHit::Column::VertexMomentum::Base::fgBranchSocket = // clang-format off
+EMCSimHit::Column::VertexMomentum::BranchSocket EMCSimHit::Column::VertexMomentum::Base::fgBranchSocket = // clang-format off
     {"p0", "Vertex Momentum (MC Truth)", {0, 0, 0}}; // clang-format on
 
 inline namespace SimHit {
 
-void EMCalSimHit::CreateAllBranch(TTree& tree) {
-    EMCalHit::CreateAllBranch(tree);
+void EMCSimHit::CreateAllBranch(TTree& tree) {
+    EMCHit::CreateAllBranch(tree);
     Column::MCEventID::CreateBranch(tree);
     Column::MCTrackID::CreateBranch(tree);
     Column::PDGCode::CreateBranch(tree);
@@ -45,8 +45,8 @@ void EMCalSimHit::CreateAllBranch(TTree& tree) {
     Column::VertexMomentum::CreateBranch(tree);
 }
 
-void EMCalSimHit::ConnectToAllBranch(TTree& tree) {
-    EMCalHit::ConnectToAllBranch(tree);
+void EMCSimHit::ConnectToAllBranch(TTree& tree) {
+    EMCHit::ConnectToAllBranch(tree);
     Column::MCEventID::ConnectToBranch(tree);
     Column::MCTrackID::ConnectToBranch(tree);
     Column::PDGCode::ConnectToBranch(tree);

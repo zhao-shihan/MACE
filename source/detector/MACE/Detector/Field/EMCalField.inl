@@ -1,7 +1,7 @@
 namespace MACE::Detector::Field {
 
 template<std::floating_point AFloat>
-constexpr EMCalField<AFloat>::EMCalField() :
-    fEMCalField(&Description::EMCalField::Instance()) {}
+constexpr EMCField<AFloat>::EMCField() :
+    fEMCField(&Description::EMCField::Instance()) {}
 
 } // namespace MACE::Detector::Field

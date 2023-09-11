@@ -9,9 +9,9 @@
 #include "MACE/Detector/Geometry/Fast/CDCSenseLayer.h++"
 #include "MACE/Detector/Geometry/Fast/CDCSenseWire.h++"
 #include "MACE/Detector/Geometry/Fast/CDCSuperLayer.h++"
-#include "MACE/Detector/Geometry/Fast/EMCal.h++"
-#include "MACE/Detector/Geometry/Fast/EMCalField.h++"
-#include "MACE/Detector/Geometry/Fast/EMCalShield.h++"
+#include "MACE/Detector/Geometry/Fast/EMC.h++"
+#include "MACE/Detector/Geometry/Fast/EMCField.h++"
+#include "MACE/Detector/Geometry/Fast/EMCShield.h++"
 #include "MACE/Detector/Geometry/Fast/MCP.h++"
 #include "MACE/Detector/Geometry/Fast/MultiplateCollimator.h++"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1.h++"
@@ -57,8 +57,8 @@ int main(int argc, char* argv[]) {
 
     // 1
 
-    auto& emCalField = fWorld->NewDaughter<EMCalField>(fCheckOverlap);
-    auto& emCalShield = fWorld->NewDaughter<EMCalShield>(fCheckOverlap);
+    auto& emcField = fWorld->NewDaughter<EMCField>(fCheckOverlap);
+    auto& emcShield = fWorld->NewDaughter<EMCShield>(fCheckOverlap);
     auto& solenoidB1Field = fWorld->NewDaughter<SolenoidB1Field>(fCheckOverlap);
     auto& solenoidB2Field = fWorld->NewDaughter<SolenoidB2Field>(fCheckOverlap);
     auto& solenoidS1Field = fWorld->NewDaughter<SolenoidS1Field>(fCheckOverlap);
@@ -69,8 +69,8 @@ int main(int argc, char* argv[]) {
 
     // 2
 
-    auto& emCal = emCalField.NewDaughter<EMCal>(fCheckOverlap);
-    auto& mcp = emCalField.NewDaughter<MCP>(fCheckOverlap);
+    auto& emc = emcField.NewDaughter<EMC>(fCheckOverlap);
+    auto& mcp = emcField.NewDaughter<MCP>(fCheckOverlap);
 
     auto& solenoidB1 = solenoidB1Field.NewDaughter<SolenoidB1>(fCheckOverlap);
 
@@ -154,14 +154,14 @@ int main(int argc, char* argv[]) {
         solenoidS3.RegisterMaterial(copper);
 
         const auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
-        emCal.RegisterMaterial(csI);
+        emc.RegisterMaterial(csI);
 
         const auto iron = nist->FindOrBuildMaterial("G4_Fe");
         spectrometerMagnet.RegisterMaterial(iron);
         multiplateCollimator.RegisterMaterial(iron);
 
         const auto lead = nist->FindOrBuildMaterial("G4_Pb");
-        emCalShield.RegisterMaterial(lead);
+        emcShield.RegisterMaterial(lead);
         spectrometerShield.RegisterMaterial(lead);
 
         const auto mcpMaterial = nist->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4_g_cm3);
@@ -177,7 +177,7 @@ int main(int argc, char* argv[]) {
         cdcSenseWire.RegisterMaterial(tungsten);
 
         const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
-        emCalField.RegisterMaterial(vacuum);
+        emcField.RegisterMaterial(vacuum);
         solenoidB1Field.RegisterMaterial(vacuum);
         solenoidS1Field.RegisterMaterial(vacuum);
         acceleratorField.RegisterMaterial(vacuum);
@@ -212,8 +212,8 @@ int main(int argc, char* argv[]) {
     geoManager->GetVolume(fWorld->LogicalVolume()->GetName())->SetInvisible();
     using MACE::Detector::Geometry::GeometryBase;
     for (auto&& entity : std::initializer_list<std::reference_wrapper<const GeometryBase>>{
-             emCalShield,
-             emCal,
+             emcShield,
+             emc,
              spectrometerMagnet,
              spectrometerShield,
              solenoidB1,

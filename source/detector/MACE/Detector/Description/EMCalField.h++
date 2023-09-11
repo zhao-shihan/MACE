@@ -6,11 +6,11 @@
 
 namespace MACE::Detector::Description {
 
-class EMCalField final : public DescriptionSingletonBase<EMCalField> {
+class EMCField final : public DescriptionSingletonBase<EMCField> {
     friend Env::Memory::SingletonFactory;
 
 private:
-    EMCalField();
+    EMCField();
 
 public:
     ///////////////////////////////////////////////////////////

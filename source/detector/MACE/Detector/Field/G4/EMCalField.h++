@@ -1,13 +1,13 @@
 #pragma once
 
-#include "MACE/Detector/Field/EMCalField.h++"
+#include "MACE/Detector/Field/EMCField.h++"
 #include "MACE/Detector/Field/WrapAsG4Field.h++"
 
 namespace MACE::Detector::Field::G4 {
 
-class EMCalField final : public WrapAsG4Field<Field::EMCalField<G4double>> {
+class EMCField final : public WrapAsG4Field<Field::EMCField<G4double>> {
 public:
-    EMCalField();
+    EMCField();
 };
 
 } // namespace MACE::Detector::Field::G4

@@ -1,5 +1,5 @@
 #include "MACE/SimMACE/Analysis.h++"
-#include "MACE/SimMACE/SD/EMCalSD.h++"
+#include "MACE/SimMACE/SD/EMCSD.h++"
 
 #include "G4Gamma.hh"
 #include "G4HCofThisEvent.hh"
@@ -8,7 +8,7 @@
 
 namespace MACE::SimMACE::inline SD {
 
-EMCalSD::EMCalSD(const G4String& sdName) :
+EMCSD::EMCSD(const G4String& sdName) :
     NonMoveableBase(),
     G4VSensitiveDetector(sdName),
     fEventID(-1),
@@ -16,13 +16,13 @@ EMCalSD::EMCalSD(const G4String& sdName) :
     collectionName.insert(sdName + "HC");
 }
 
-void EMCalSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
-    fHitsCollection = new EMCalHitCollection(SensitiveDetectorName, collectionName[0]);
+void EMCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
+    fHitsCollection = new EMCHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-G4bool EMCalSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
+G4bool EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
     const auto& step = *theStep;
     const auto& track = *step.GetTrack();
     const auto& particle = *track.GetDefinition();
@@ -36,7 +36,7 @@ G4bool EMCalSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
         const auto vertexEk = track.GetVertexKineticEnergy();
         const auto vertexMomentum = track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()));
         // new a hit
-        const auto hit = new EMCalHit;
+        const auto hit = new EMCHit;
         hit->Time().Value(preStepPoint.GetGlobalTime());
         hit->EnergyDeposition().Value(preStepPoint.GetKineticEnergy());
         hit->MCEventID().Value(fEventID);
@@ -54,8 +54,8 @@ G4bool EMCalSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
     return false;
 }
 
-void EMCalSD::EndOfEvent(G4HCofThisEvent*) {
-    Analysis::Instance().SubmitEMCalHC(fHitsCollection->GetVector());
+void EMCSD::EndOfEvent(G4HCofThisEvent*) {
+    Analysis::Instance().SubmitEMCHC(fHitsCollection->GetVector());
 }
 
 } // namespace MACE::SimMACE::inline SD

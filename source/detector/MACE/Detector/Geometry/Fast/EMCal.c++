@@ -1,5 +1,5 @@
-#include "MACE/Detector/Description/EMCal.h++"
-#include "MACE/Detector/Geometry/Fast/EMCal.h++"
+#include "MACE/Detector/Description/EMC.h++"
+#include "MACE/Detector/Geometry/Fast/EMC.h++"
 #include "MACE/Utility/MathConstant.h++"
 
 #include "G4NistManager.hh"
@@ -11,8 +11,8 @@ namespace MACE::Detector::Geometry::Fast {
 
 using namespace MathConstant;
 
-void EMCal::Construct(G4bool checkOverlaps) {
-    const auto& description = Description::EMCal::Instance();
+void EMC::Construct(G4bool checkOverlaps) {
+    const auto& description = Description::EMC::Instance();
     const auto name = description.Name();
     const auto innerRadius = description.InnerRadius();
     const auto innerLength = description.InnerLength();

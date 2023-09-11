@@ -1,5 +1,5 @@
-#include "MACE/Detector/Description/EMCalField.h++"
-#include "MACE/Detector/Geometry/Fast/EMCalField.h++"
+#include "MACE/Detector/Description/EMCField.h++"
+#include "MACE/Detector/Geometry/Fast/EMCField.h++"
 #include "MACE/Utility/MathConstant.h++"
 
 #include "G4PVPlacement.hh"
@@ -9,8 +9,8 @@ namespace MACE::Detector::Geometry::Fast {
 
 using namespace MathConstant;
 
-void EMCalField::Construct(G4bool checkOverlaps) {
-    const auto& description = Description::EMCalField::Instance();
+void EMCField::Construct(G4bool checkOverlaps) {
+    const auto& description = Description::EMCField::Instance();
     auto name = description.Name();
     auto radius = description.Radius();
     auto length = description.Length();

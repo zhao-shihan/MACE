@@ -2,7 +2,7 @@
 
 #include "MACE/DataModel/Column/FundamentalColumn.h++"
 #include "MACE/DataModel/Column/VectorColumn.h++"
-#include "MACE/DataModel/Hit/EMCalHit.h++"
+#include "MACE/DataModel/Hit/EMCHit.h++"
 #include "MACE/Extension/stdx/arraynx.h++"
 
 #include <string_view>
@@ -13,22 +13,22 @@ inline namespace SimHit {
 
 using namespace std::string_view_literals;
 
-class EMCalSimHit : public EMCalHit {
+class EMCSimHit : public EMCHit {
 public:
-    struct Column : EMCalHit::Column {
-        using MCEventID = IntColumn<EMCalSimHit, 2, int>;
-        using MCTrackID = IntColumn<EMCalSimHit, 3, int>;
-        using PDGCode = IntColumn<EMCalSimHit, 4, int>;
-        using Position = Vector3FColumn<EMCalSimHit, 5, stdx::array3d>;
-        using Momentum = Vector3FColumn<EMCalSimHit, 6, stdx::array3d>;
-        using VertexTime = DoubleColumn<EMCalSimHit, 7, double>;
-        using VertexPosition = Vector3FColumn<EMCalSimHit, 8, stdx::array3d>;
-        using VertexKineticEnergy = FloatColumn<EMCalSimHit, 9, double>;
-        using VertexMomentum = Vector3FColumn<EMCalSimHit, 10, stdx::array3d>;
+    struct Column : EMCHit::Column {
+        using MCEventID = IntColumn<EMCSimHit, 2, int>;
+        using MCTrackID = IntColumn<EMCSimHit, 3, int>;
+        using PDGCode = IntColumn<EMCSimHit, 4, int>;
+        using Position = Vector3FColumn<EMCSimHit, 5, stdx::array3d>;
+        using Momentum = Vector3FColumn<EMCSimHit, 6, stdx::array3d>;
+        using VertexTime = DoubleColumn<EMCSimHit, 7, double>;
+        using VertexPosition = Vector3FColumn<EMCSimHit, 8, stdx::array3d>;
+        using VertexKineticEnergy = FloatColumn<EMCSimHit, 9, double>;
+        using VertexMomentum = Vector3FColumn<EMCSimHit, 10, stdx::array3d>;
     };
 
 public:
-    virtual ~EMCalSimHit() = default;
+    virtual ~EMCSimHit() = default;
 
     [[nodiscard]] const auto& MCEventID() const& { return fMCEventID; }
     [[nodiscard]] const auto& MCTrackID() const& { return fMCTrackID; }
@@ -51,7 +51,7 @@ public:
     [[nodiscard]] auto& VertexMomentum() & { return fVertexMomentum; }
 
 
-    static constexpr auto BasicTreeName() { return "EMCalSimHit"sv; }
+    static constexpr auto BasicTreeName() { return "EMCSimHit"sv; }
 
     inline void FillAllBranchSocket() const&;
     static void CreateAllBranch(TTree& tree);
@@ -68,29 +68,29 @@ private:
     Column::VertexKineticEnergy fVertexKineticEnergy;
     Column::VertexMomentum fVertexMomentum;
 };
-static_assert(TransientData<EMCalSimHit>);
+static_assert(TransientData<EMCSimHit>);
 
 } // namespace SimHit
 
 template<>
-EMCalSimHit::Column::MCEventID::BranchSocket EMCalSimHit::Column::MCEventID::Base::fgBranchSocket;
+EMCSimHit::Column::MCEventID::BranchSocket EMCSimHit::Column::MCEventID::Base::fgBranchSocket;
 template<>
-EMCalSimHit::Column::MCTrackID::BranchSocket EMCalSimHit::Column::MCTrackID::Base::fgBranchSocket;
+EMCSimHit::Column::MCTrackID::BranchSocket EMCSimHit::Column::MCTrackID::Base::fgBranchSocket;
 template<>
-EMCalSimHit::Column::PDGCode::BranchSocket EMCalSimHit::Column::PDGCode::Base::fgBranchSocket;
+EMCSimHit::Column::PDGCode::BranchSocket EMCSimHit::Column::PDGCode::Base::fgBranchSocket;
 template<>
-EMCalSimHit::Column::Position::BranchSocket EMCalSimHit::Column::Position::Base::fgBranchSocket;
+EMCSimHit::Column::Position::BranchSocket EMCSimHit::Column::Position::Base::fgBranchSocket;
 template<>
-EMCalSimHit::Column::Momentum::BranchSocket EMCalSimHit::Column::Momentum::Base::fgBranchSocket;
+EMCSimHit::Column::Momentum::BranchSocket EMCSimHit::Column::Momentum::Base::fgBranchSocket;
 template<>
-EMCalSimHit::Column::VertexTime::BranchSocket EMCalSimHit::Column::VertexTime::Base::fgBranchSocket;
+EMCSimHit::Column::VertexTime::BranchSocket EMCSimHit::Column::VertexTime::Base::fgBranchSocket;
 template<>
-EMCalSimHit::Column::VertexPosition::BranchSocket EMCalSimHit::Column::VertexPosition::Base::fgBranchSocket;
+EMCSimHit::Column::VertexPosition::BranchSocket EMCSimHit::Column::VertexPosition::Base::fgBranchSocket;
 template<>
-EMCalSimHit::Column::VertexKineticEnergy::BranchSocket EMCalSimHit::Column::VertexKineticEnergy::Base::fgBranchSocket;
+EMCSimHit::Column::VertexKineticEnergy::BranchSocket EMCSimHit::Column::VertexKineticEnergy::Base::fgBranchSocket;
 template<>
-EMCalSimHit::Column::VertexMomentum::BranchSocket EMCalSimHit::Column::VertexMomentum::Base::fgBranchSocket;
+EMCSimHit::Column::VertexMomentum::BranchSocket EMCSimHit::Column::VertexMomentum::Base::fgBranchSocket;
 
 } // namespace MACE::DataModel
 
-#include "MACE/DataModel/SimHit/EMCalSimHit.inl"
+#include "MACE/DataModel/SimHit/EMCSimHit.inl"
