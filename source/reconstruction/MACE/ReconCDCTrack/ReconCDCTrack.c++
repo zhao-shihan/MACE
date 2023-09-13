@@ -197,8 +197,8 @@ void MakeMACECDCGeometry() {
     genfit::FieldManager::getInstance()->init(new genfit::ConstField(0, 0, Detector::Description::SpectrometerField::Instance().MagneticFluxDensity() / 0.1_T));
 }
 
-auto FitTrack(std::vector<Data::Reader<Data::CDCSimHit>::Iterator> hitData) -> std::pair<std::vector<std::shared_ptr<Data::CDCPhysicsSimTrack::Entry>>,
-                                                                                         std::vector<std::shared_ptr<Data::CDCHelixTrack::Entry>>> {
+auto FitTrack(std::vector<Data::ReadIterator<Data::CDCSimHit>> hitData) -> std::pair<std::vector<std::shared_ptr<Data::CDCPhysicsSimTrack::Entry>>,
+                                                                                     std::vector<std::shared_ptr<Data::CDCHelixTrack::Entry>>> {
     if (hitData.empty()) {
         return {};
     }

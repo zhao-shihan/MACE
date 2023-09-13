@@ -1,23 +1,23 @@
 namespace MACE::Data::inline IO {
 
 template<Modelized AModel>
-Reader<AModel>::ConstIterator::ConstIterator(const typename Reader<AModel>::Essential& essential, gsl::index index) :
-    ConstIterator{&essential, index} {}
+Reader<AModel>::Iterator::Iterator(gsl::index index, const typename Reader<AModel>::Essential& essential) :
+    Iterator{index, &essential} {}
 
 template<Modelized AModel>
-Reader<AModel>::ConstIterator::ConstIterator(const typename Reader<AModel>::Essential* essential, gsl::index index) :
-    fEssential{essential},
-    fIndex{index} {}
+Reader<AModel>::Iterator::Iterator(gsl::index index, const typename Reader<AModel>::Essential* essential) :
+    fIndex{index},
+    fEssential{essential} {}
 
 template<Modelized AModel>
-auto Reader<AModel>::ConstIterator::operator-(const ConstIterator& that) const -> DifferenceType {
-    if (TreeAddress() != that.TreeAddress()) {
-        throw std::logic_error{fmt::format("Trying to compare two iterators (LHS at {}, RHS at {}) "
-                                           "pointing to different TTrees (LHS holds {} at index {}, "
-                                           "RHS holds {} at index {})",
+auto Reader<AModel>::Iterator::operator-(const Iterator& that) const -> DifferenceType {
+    if (&Tree() != &that.Tree()) {
+        throw std::logic_error{fmt::format("Attempting to subtract two data reader iterators (LHS at {}, RHS at {}) "
+                                           "referring to different TTree! LHS refers to entry {} in (TTree&)@{} (Name: {} Title: {}), "
+                                           "and RHS refers to entry {} in (TTree&)@{} (Name: {} Title: {}).",
                                            this, &that,
-                                           TreeAddress(), fIndex,
-                                           that.TreeAddress(), that.fIndex)};
+                                           fIndex, &Tree(), Tree()->GetName(), Tree()->GetTitle(),
+                                           that.fIndex, &that.Tree(), that.Tree()->GetName(), that.Tree()->GetTitle())};
     }
     return fIndex - that.fIndex;
 }
@@ -38,8 +38,7 @@ template<Modelized AModel>
 template<template<typename, typename...> typename ASequenceContainer>
 auto Reader<AModel>::IteratorCollection() const -> ASequenceContainer<Iterator> {
     ASequenceContainer<Iterator> data(Size());
-    Iterator iterator = {this->fEssential, -1};
-    std::ranges::generate(data, [&iterator] { return ++iterator; });
+    std2b::ranges::iota(data, Begin());
     return data;
 }
 
