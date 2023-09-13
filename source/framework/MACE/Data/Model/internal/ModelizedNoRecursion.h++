@@ -8,7 +8,7 @@
 namespace MACE::Data::inline Model::internal {
 
 template<class M>
-concept DataModelNoRecursion =
+concept ModelizedNoRecursion =
     requires(std::string_view sv1, std::string_view sv2) {
         requires FieldSetLike<M>;
         { M::BasicName() } -> std::same_as<std::string_view>;

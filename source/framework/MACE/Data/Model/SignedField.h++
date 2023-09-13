@@ -9,18 +9,18 @@ namespace MACE::Data::inline Model {
 namespace internal {
 
 template<template<typename, gsl::index> typename, typename>
-struct IsNamedFieldTemplateOf
+struct IsSignedFieldTemplateOf
     : std::false_type {};
 
-template<template<typename, gsl::index> typename ANamedField, typename AFieldSet, gsl::index I>
-struct IsNamedFieldTemplateOf<ANamedField, ANamedField<AFieldSet, I>>
+template<template<typename, gsl::index> typename ASignedField, typename AFieldSet, gsl::index I>
+struct IsSignedFieldTemplateOf<ASignedField, ASignedField<AFieldSet, I>>
     : std::true_type {};
 
 } // namespace internal
 
 template<typename F>
-concept NamedField = requires {
-    requires internal::IsNamedFieldTemplateOf<Field<typename F::Type>::template Named, F>::value;
+concept SignedField = requires {
+    requires internal::IsSignedFieldTemplateOf<Field<typename F::Type>::template Signed, F>::value;
     typename F::Type;
 };
 

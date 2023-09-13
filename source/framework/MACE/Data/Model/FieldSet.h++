@@ -17,32 +17,32 @@ namespace internal {
 namespace internal {
 
 template<typename, stdx::tuple_like, typename>
-struct NamedFieldTupleHelper;
+struct SignedFieldTupleHelper;
 
-template<typename AConcreteFieldSet, stdx::tuple_like T, gsl::index... Is>
-struct NamedFieldTupleHelper<AConcreteFieldSet,
+template<typename ADerived, stdx::tuple_like T, gsl::index... Is>
+struct SignedFieldTupleHelper<ADerived,
                              T,
                              gslx::index_sequence<Is...>> {
-    using Type = std::tuple<typename std::tuple_element_t<Is, T>::template Named<AConcreteFieldSet, Is>...>;
+    using Type = std::tuple<typename std::tuple_element_t<Is, T>::template Signed<ADerived, Is>...>;
 };
 
-template<typename AConcreteFieldSet, Concept::InstantiatedFrom<Field>... AFields>
-struct NamedFieldTuple
-    : NamedFieldTupleHelper<AConcreteFieldSet,
+template<typename ADerived, Concept::InstantiatedFrom<Field>... AFields>
+struct SignedFieldTuple
+    : SignedFieldTupleHelper<ADerived,
                             std::tuple<AFields...>,
                             gslx::index_sequence_for<AFields...>> {};
 
 } // namespace internal
 
-template<typename AConcreteFieldSet, Concept::InstantiatedFrom<Field>... AFields>
-using NamedFieldTuple = typename internal::NamedFieldTuple<AConcreteFieldSet, AFields...>::Type;
+template<typename ADerived, Concept::InstantiatedFrom<Field>... AFields>
+using SignedFieldTuple = typename internal::SignedFieldTuple<ADerived, AFields...>::Type;
 
 } // namespace internal
 
-template<typename AConcreteFieldSet, Concept::InstantiatedFrom<Field>... AFields>
+template<typename ADerived, Concept::InstantiatedFrom<Field>... AFields>
 class FieldSet : public NonConstructibleBase {
 public:
-    using FieldTuple = internal::NamedFieldTuple<AConcreteFieldSet, AFields...>;
+    using FieldTuple = internal::SignedFieldTuple<ADerived, AFields...>;
 
     template<gsl::index I>
     using Field = std::tuple_element_t<I, FieldTuple>;

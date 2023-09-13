@@ -1,20 +1,12 @@
 #pragma once
 
 #include "MACE/Concept/InstantiatedFrom.h++"
-#include "MACE/Data/Model/DataModel.h++"
-#include "MACE/Data/Model/FieldSet.h++"
 #include "MACE/Data/Model/FieldSetLike.h++"
-#include "MACE/Data/Model/NamedField.h++"
 #include "MACE/Extension/stdx/tuple_concat.h++"
-#include "MACE/Utility/NonConstructibleBase.h++"
-#include "MACE/Utility/NonMoveableBase.h++"
 
 #include "gsl/gsl"
 
-#include "fmt/format.h"
-
 #include <concepts>
-#include <string_view>
 #include <tuple>
 #include <utility>
 
@@ -30,15 +22,15 @@ template<typename ADerived,
         []<gsl::index... Is>(gslx::index_sequence<Is...>) {
             return (... and FieldSetLike<std::tuple_element_t<Is, AThisFieldSetTuple>>);
         }(gslx::make_index_sequence<std::tuple_size_v<AThisFieldSetTuple>>{}))
-class Modelled;
+class ModelSegment;
 
 template<typename ADerived,
          FieldSetLike... ABaseFieldSets,
          FieldSetLike... ANewFieldSets>
-class Modelled<ADerived,
-               std::tuple<ABaseFieldSets...>,
-               std::tuple<ANewFieldSets...>> : public ABaseFieldSets...,
-                                               public ANewFieldSets... {
+class ModelSegment<ADerived,
+                   std::tuple<ABaseFieldSets...>,
+                   std::tuple<ANewFieldSets...>> : public ABaseFieldSets...,
+                                                   public ANewFieldSets... {
 private:
     using BaseFieldTuple = stdx::tuple_concat_t<typename ABaseFieldSets::FieldTuple...>;
 
@@ -52,12 +44,6 @@ protected:
     using LocalField = Field<I + std::tuple_size_v<BaseFieldTuple>>;
 
 public:
-    static constexpr auto Name() -> std::string_view;
-    static auto Name(const auto& prefix) -> std::string { return fmt::format("{}{}", prefix, Name()); }
-    static auto Name(const auto& prefix, const auto& suffix) -> std::string { return fmt::format("{}{}{}", prefix, Name(), suffix); }
-    static auto PrefixedName(const auto& prefix) -> std::string { return fmt::format("{}{}", prefix, Name()); }
-    static auto SuffixedName(const auto& suffix) -> std::string { return fmt::format("{}{}", Name(), suffix); }
-
     static constexpr auto NField() { return std::tuple_size_v<FieldTuple>; }
     static constexpr auto Topmost() { return std::tuple_size_v<BaseFieldTuple> == 0; }
 
@@ -101,4 +87,4 @@ public:
 
 } // namespace MACE::Data::inline Model
 
-#include "MACE/Data/Model/Modelled.inl"
+#include "MACE/Data/Model/ModelSegment.inl"

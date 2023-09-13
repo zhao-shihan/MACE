@@ -10,7 +10,7 @@
 namespace MACE::Data::inline Model::internal {
 
 template<typename E>
-concept DataEntryNoRecursion =
+concept EntryNoRecursion =
     requires {
         typename E::Model;
         typename E::Model::Entry;

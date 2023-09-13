@@ -64,18 +64,18 @@ public:
 
 public:
     template<typename AFieldSet, gsl::index>
-    class [[nodiscard]] Named final {
+    class [[nodiscard]] Signed final {
     public:
         using Type = T;
 
     public:
-        constexpr Named() = default;
-        constexpr Named(const T& object);
-        constexpr Named(T&& object);
+        constexpr Signed() = default;
+        constexpr Signed(const T& object);
+        constexpr Signed(T&& object);
 
-        constexpr Named(auto&& v)
+        constexpr Signed(auto&& v)
             requires requires { VectorCast<T>(std::forward<decltype(v)>(v)); };
-        constexpr auto operator=(auto&& v) -> Named&
+        constexpr auto operator=(auto&& v) -> Signed&
             requires requires(T fObject) { VectorAssign(fObject, std::forward<decltype(v)>(v)); };
 
         constexpr operator T&() { return fObject; }
