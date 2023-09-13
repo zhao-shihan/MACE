@@ -1,15 +1,15 @@
 namespace MACE::Data::inline IO {
 
-template<DataModel AModel>
+template<Modelized AModel>
 Reader<AModel>::ConstIterator::ConstIterator(const typename Reader<AModel>::Essential& essential, gsl::index index) :
     ConstIterator{&essential, index} {}
 
-template<DataModel AModel>
+template<Modelized AModel>
 Reader<AModel>::ConstIterator::ConstIterator(const typename Reader<AModel>::Essential* essential, gsl::index index) :
     fEssential{essential},
     fIndex{index} {}
 
-template<DataModel AModel>
+template<Modelized AModel>
 auto Reader<AModel>::ConstIterator::operator-(const ConstIterator& that) const -> DifferenceType {
     if (TreeAddress() != that.TreeAddress()) {
         throw std::logic_error{fmt::format("Trying to compare two iterators (LHS at {}, RHS at {}) "
@@ -22,7 +22,7 @@ auto Reader<AModel>::ConstIterator::operator-(const ConstIterator& that) const -
     return fIndex - that.fIndex;
 }
 
-template<DataModel AModel>
+template<Modelized AModel>
 Reader<AModel>::Reader(TTree& tree) :
     Base(tree) {
     [this]<gsl::index... Is>(gslx::index_sequence<Is...>) {
@@ -34,7 +34,7 @@ Reader<AModel>::Reader(TTree& tree) :
     }(gslx::make_index_sequence<AModel::NField()>());
 }
 
-template<DataModel AModel>
+template<Modelized AModel>
 template<template<typename, typename...> typename ASequenceContainer>
 auto Reader<AModel>::IteratorCollection() const -> ASequenceContainer<Iterator> {
     ASequenceContainer<Iterator> data(Size());

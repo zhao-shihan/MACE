@@ -1,6 +1,6 @@
 namespace MACE::Data::inline IO::internal {
 
-template<DataModel AModel>
+template<Modelized AModel>
 ReaderWriterBase<AModel>::ReaderWriterBase(TTree& tree) :
     NonMoveableBase{},
     fEssential{tree, {}},
@@ -21,7 +21,7 @@ ReaderWriterBase<AModel>::ReaderWriterBase(TTree& tree) :
             }()...};
         }(gslx::make_index_sequence<AModel::NField()>{})} {}
 
-template<DataModel AModel>
+template<Modelized AModel>
 ReaderWriterBase<AModel>::~ReaderWriterBase() {
     [this]<gsl::index... Is>(gslx::index_sequence<Is...>) {
         (..., Tree().ResetBranchAddress(Tree().GetBranch(Field<Is>::Name().c_str())));

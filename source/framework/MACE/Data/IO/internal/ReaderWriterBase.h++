@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Data/Model/DataModel.h++"
+#include "MACE/Data/Model/Modelized.h++"
 #include "MACE/Extension/gslx/index_sequence.h++"
 #include "MACE/Utility/FixedString.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
@@ -72,7 +72,7 @@ struct IsFixedString<FixedString<N>>
 
 } // namespace internal
 
-template<DataModel AModel>
+template<Modelized AModel>
 class ReaderWriterBase : public NonMoveableBase {
 public:
     using ValueType = typename AModel::Entry;

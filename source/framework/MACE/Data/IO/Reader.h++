@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Data/IO/internal/ReaderWriterBase.h++"
-#include "MACE/Data/Model/DataModel.h++"
+#include "MACE/Data/Model/Modelized.h++"
 #include "MACE/Extension/gslx/index_sequence.h++"
 
 #include "TTree.h"
@@ -17,7 +17,7 @@
 
 namespace MACE::Data::inline IO {
 
-template<DataModel AModel>
+template<Modelized AModel>
 class Reader final : public internal::ReaderWriterBase<AModel> {
 private:
     using Base = internal::ReaderWriterBase<AModel>;
