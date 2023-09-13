@@ -2,20 +2,24 @@
 
 #include "MACE/Data/Model/Field.h++"
 #include "MACE/Data/Model/FieldSet.h++"
+#include "MACE/Data/Model/ModelSegment.h++"
+#include "MACE/Data/Model/SimBasis.h++"
 #include "MACE/Extension/stdx/arraynx.h++"
 
 namespace MACE::Data::inline Model::inline SimHit {
 
-class SimHitBasis : public FieldSet<SimHitBasis,
-                                    Field<int>,
-                                    Field<int>,
-                                    Field<int>,
-                                    Field<float>,
-                                    Field<stdx::array3f>,
-                                    Field<double>,
-                                    Field<stdx::array3f>,
-                                    Field<float>,
-                                    Field<stdx::array3f>> {
+class SimHitBasis : public ModelSegment<SimHitBasis,
+                                        std::tuple<>,
+                                        std::tuple<FieldSet<SimHitBasis,
+                                                            Field<int>,
+                                                            Field<int>,
+                                                            Field<int>,
+                                                            Field<float>,
+                                                            Field<stdx::array3f>,
+                                                            Field<double>,
+                                                            Field<stdx::array3f>,
+                                                            Field<float>,
+                                                            Field<stdx::array3f>>>> {
 public:
     using MCEventID = Field<0>;
     using MCTrackID = Field<1>;
@@ -28,7 +32,7 @@ public:
     using VertexMomentum = Field<8>;
 
 public:
-    class Entry : public FieldSet::Entry {
+    class Entry : public ModelSegment::Entry {
     public:
         auto MCEventID() const -> decltype(auto) { return Get<SimHitBasis::MCEventID>(); }
         auto MCTrackID() const -> decltype(auto) { return Get<SimHitBasis::MCTrackID>(); }

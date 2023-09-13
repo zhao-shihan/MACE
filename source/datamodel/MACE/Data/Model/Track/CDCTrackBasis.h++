@@ -2,14 +2,17 @@
 
 #include "MACE/Data/Model/Field.h++"
 #include "MACE/Data/Model/FieldSet.h++"
+#include "MACE/Data/Model/ModelSegment.h++"
 
 namespace MACE::Data::inline Model::inline Track {
 
-class CDCTrackBasis : public FieldSet<CDCTrackBasis,
-                                      Field<int>,
-                                      Field<int>,
-                                      Field<float>,
-                                      Field<double>> {
+class CDCTrackBasis : public ModelSegment<CDCTrackBasis,
+                                          std::tuple<>,
+                                          std::tuple<FieldSet<CDCTrackBasis,
+                                                              Field<int>,
+                                                              Field<int>,
+                                                              Field<float>,
+                                                              Field<double>>>> {
 public:
     using PDGCode = Field<0>;
     using NHit = Field<1>;
