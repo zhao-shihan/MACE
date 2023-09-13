@@ -2,7 +2,7 @@
 
 #include "MACE/Data/Model/Field.h++"
 #include "MACE/Data/Model/FieldSet.h++"
-#include "MACE/Data/Model/Modelled.h++"
+#include "MACE/Data/Model/Modelize.h++"
 #include "MACE/Data/Model/Track/CDCTrackBasis.h++"
 #include "MACE/Extension/stdx/arraynx.h++"
 
@@ -10,7 +10,7 @@
 
 namespace MACE::Data::inline Model::inline Track {
 
-class CDCHelixTrack : public Modelled<CDCHelixTrack,
+class CDCHelixTrack : public Modelize<CDCHelixTrack,
                                       std::tuple<CDCTrackBasis>,
                                       std::tuple<FieldSet<CDCHelixTrack,
                                                           Field<stdx::array2f>,
@@ -26,7 +26,7 @@ public:
     static constexpr auto BasicName() -> std::string_view { return "CDCHelixTrack"; }
 
 public:
-    class Entry : public Modelled::Entry {
+    class Entry : public Modelize::Entry {
     public:
         virtual ~Entry() override = default;
 

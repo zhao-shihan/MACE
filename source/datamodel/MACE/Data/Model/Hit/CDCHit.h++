@@ -3,13 +3,13 @@
 #include "MACE/Data/Model/Field.h++"
 #include "MACE/Data/Model/FieldSet.h++"
 #include "MACE/Data/Model/Hit/HitBasis.h++"
-#include "MACE/Data/Model/Modelled.h++"
+#include "MACE/Data/Model/Modelize.h++"
 
 #include <string_view>
 
 namespace MACE::Data::inline Model::inline Hit {
 
-class CDCHit : public Modelled<CDCHit,
+class CDCHit : public Modelize<CDCHit,
                                std::tuple<HitBasis>,
                                std::tuple<FieldSet<CDCHit,
                                                    Field<int>,
@@ -21,7 +21,7 @@ public:
     static constexpr auto BasicName() -> std::string_view { return "CDCHit"; }
 
 public:
-    class Entry : public Modelled::Entry {
+    class Entry : public Modelize::Entry {
     public:
         virtual ~Entry() override = default;
 

@@ -3,13 +3,13 @@
 #include "MACE/Data/Model/Field.h++"
 #include "MACE/Data/Model/FieldSet.h++"
 #include "MACE/Data/Model/Hit/HitBasis.h++"
-#include "MACE/Data/Model/Modelled.h++"
+#include "MACE/Data/Model/Modelize.h++"
 
 #include <string_view>
 
 namespace MACE::Data::inline Model::inline Hit {
 
-class EMCHit : public Modelled<EMCHit,
+class EMCHit : public Modelize<EMCHit,
                                  std::tuple<HitBasis>,
                                  std::tuple<FieldSet<EMCHit,
                                                      Field<float>>>> {
@@ -19,7 +19,7 @@ public:
     static constexpr auto BasicName() -> std::string_view { return "EMCHit"; }
 
 public:
-    class Entry : public Modelled::Entry {
+    class Entry : public Modelize::Entry {
     public:
         virtual ~Entry() override = default;
 
