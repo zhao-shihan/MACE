@@ -14,7 +14,7 @@ auto Reader<AModel>::Iterator::operator-(const Iterator& that) const -> Differen
     if (&Tree() != &that.Tree()) {
         throw std::logic_error{fmt::format("Attempting to subtract two data reader iterators (LHS at {}, RHS at {}) "
                                            "referring to different TTree! LHS refers to entry {} in (TTree&)@{} (Name: {} Title: {}), "
-                                           "and RHS refers to entry {} in (TTree&)@{} (Name: {} Title: {}).",
+                                           "and RHS refers to entry {} in (TTree&)@{} (Name: {} Title: {})",
                                            this, &that,
                                            fIndex, &Tree(), Tree()->GetName(), Tree()->GetTitle(),
                                            that.fIndex, &that.Tree(), that.Tree()->GetName(), that.Tree()->GetTitle())};
@@ -26,11 +26,21 @@ template<Modelized AModel>
 Reader<AModel>::Reader(TTree& tree) :
     Base(tree) {
     [this]<gsl::index... Is>(gslx::index_sequence<Is...>) {
-        if ((... or (this->Tree().GetBranch(Field<Is>::Name().c_str()) == nullptr))) {
-            throw std::runtime_error(fmt::format("Tree \"{}\" does not satisify the data model \"{}\"",
-                                                 this->Tree().GetName(), AModel::Name()));
-        }
-        (..., this->Tree().SetBranchAddress(Field<Is>::Name().c_str(), this->template FieldPointer<Is>()));
+        (...,
+         [this] {
+             if (this->Tree().GetBranch(Field<Is>::Name().c_str()) == nullptr) {
+                 throw std::invalid_argument(fmt::format("TTree named {} does not meet the data model {} due to the absence of field {}",
+                                                         this->Tree().GetName(), AModel::Name(), Field<Is>::Name()));
+             }
+         }());
+    }(gslx::make_index_sequence<AModel::NField()>());
+    [this]<gsl::index... Is>(gslx::index_sequence<Is...>) {
+        (...,
+         [this] {
+             TBranch* branch;
+             this->Tree().SetBranchAddress(Field<Is>::Name().c_str(), this->template FieldPointer<Is>(), &branch);
+             branch->SetAutoDelete(false);
+         }());
     }(gslx::make_index_sequence<AModel::NField()>());
 }
 

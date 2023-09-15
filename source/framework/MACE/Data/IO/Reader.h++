@@ -5,6 +5,7 @@
 #include "MACE/Data/Model/Modelized.h++"
 #include "MACE/Extension/gslx/index_sequence.h++"
 
+#include "TBranch.h"
 #include "TTree.h"
 
 #include "gsl/gsl"
