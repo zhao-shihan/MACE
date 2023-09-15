@@ -1,6 +1,6 @@
 message(STATUS "Looking for yaml-cpp")
 
-set(MACE_YAML_CPP_MINIMUM_REQUIRED 0.6.0)
+set(MACE_YAML_CPP_MINIMUM_REQUIRED 0.8.0)
 
 if(NOT MACE_BUILTIN_YAML_CPP)
     find_package(yaml-cpp ${MACE_YAML_CPP_MINIMUM_REQUIRED} QUIET)
@@ -18,8 +18,8 @@ if(MACE_BUILTIN_YAML_CPP)
         set(MACE_BUILTIN_YAML_CPP_VERSION ${MACE_YAML_CPP_MINIMUM_REQUIRED})
     endif()
     # set download dest and URL
-    set(MACE_BUILTIN_YAML_CPP_SRC_DIR "${MACE_PROJECT_3RDPARTY_DIR}/yaml-cpp-yaml-cpp-${MACE_BUILTIN_YAML_CPP_VERSION}")
-    set(MACE_BUILTIN_YAML_CPP_URL "https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-${MACE_BUILTIN_YAML_CPP_VERSION}.tar.gz")
+    set(MACE_BUILTIN_YAML_CPP_SRC_DIR "${MACE_PROJECT_3RDPARTY_DIR}/yaml-cpp-${MACE_BUILTIN_YAML_CPP_VERSION}")
+    set(MACE_BUILTIN_YAML_CPP_URL "https://github.com/jbeder/yaml-cpp/archive/refs/tags/${MACE_BUILTIN_YAML_CPP_VERSION}.tar.gz")
     # reuse or download
     include(FetchContent)
     if(EXISTS "${MACE_BUILTIN_YAML_CPP_SRC_DIR}/CMakeLists.txt")
