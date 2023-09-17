@@ -39,22 +39,21 @@ template<typename... ArgsOfImport>
 void DescriptionIO::Import(const std::ranges::range auto& yamlText)
     requires std::convertible_to<typename std::decay_t<decltype(yamlText)>::value_type, std::string>
 {
-    auto yamlPath = std::filesystem::temp_directory_path() / "tmp_mace_geom.yaml";
-    if (Env::MPIEnv::Available()) {
-        MPIUtil::MakeMPIFilePathInPlace(yamlPath);
+    auto yamlName = fmt::format("tmp_mace_geom{:x}", std::chrono::steady_clock::now().time_since_epoch().count());
+    if (Env::MPIEnv::Initialized()) {
+        yamlName.append(fmt::format(".rank{}", Env::MPIEnv::Instance().CommWorldRank()));
     }
-    yamlPath.concat(std::to_string(std::chrono::steady_clock::now().time_since_epoch().count()));
+    yamlName.append(".yaml");
+    const auto yamlPath = std::filesystem::temp_directory_path() / yamlName;
 
-    {
-        std::fstream yamlOut(yamlPath, std::ios::out);
-        if (not yamlOut.is_open()) {
-            throw std::runtime_error("MACE::Detector::Description::DescriptionIO::Import: Cannot open temp yaml file");
-        }
-        for (auto&& line : yamlText) {
-            yamlOut << line << '\n';
-        }
-        yamlOut << std::endl;
+    const auto yamlFile = std::fopen(yamlPath.generic_string().c_str(), "w");
+    if (yamlFile == nullptr) {
+        throw std::runtime_error("MACE::Detector::Description::DescriptionIO::Import: Cannot open temp yaml file");
     }
+    for (auto&& line : yamlText) {
+        fmt::println(yamlFile, "{}", line);
+    }
+    std::fclose(yamlFile);
     Import<ArgsOfImport...>(yamlPath);
 
     std::error_code muteRemoveError;
@@ -83,7 +82,7 @@ void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::strin
 
     struct InvalidFile {};
     try {
-        if (yamlFile.empty()) { throw InvalidFile(); }
+        if (yamlFile.empty()) { throw InvalidFile{}; }
 
         std::ofstream yamlOut;
         try {
@@ -94,8 +93,8 @@ void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::strin
                 if (not parent.empty()) { std::filesystem::create_directories(parent); }
                 yamlOut.open(yamlFile, std::ios::out);
             }
-        } catch (const std::filesystem::filesystem_error&) { throw InvalidFile(); }
-        if (not yamlOut.is_open()) { throw InvalidFile(); }
+        } catch (const std::filesystem::filesystem_error&) { throw InvalidFile{}; }
+        if (not yamlOut.is_open()) { throw InvalidFile{}; }
 
         if (not fileComment.empty()) {
             const auto firstLineFeed = fileComment.find_first_of('\n');
@@ -104,7 +103,6 @@ void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::strin
             yamlOut << "# " << std::string_view(begin, end) << "\n\n";
         }
         yamlOut << geomYaml << std::endl;
-        yamlOut.close();
     } catch (const InvalidFile&) {
         MACE_ENVIRONMENT_CONTROLLED_OUT(Error, std::cout)
             << "MACE::Detector::Description::DescriptionIO::ExportImpl: Cannot open yaml file, export failed" << std::endl;

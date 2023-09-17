@@ -11,10 +11,13 @@
 
 #include "gsl/gsl"
 
+#include "fmt/format.h"
+
 #include <algorithm>
 #include <array>
 #include <chrono>
 #include <concepts>
+#include <cstdio>
 #include <filesystem>
 #include <fstream>
 #include <ranges>
