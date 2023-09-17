@@ -1,0 +1,54 @@
+#include "MACE/Detector/Description/AcceleratorField.h++"
+#include "MACE/Detector/Description/DescriptionIO.h++"
+#include "MACE/Detector/Geometry/Fast/BeamDegrader.h++"
+#include "MACE/Detector/Geometry/Fast/BeamMonitor.h++"
+#include "MACE/Detector/Geometry/Fast/Target.h++"
+#include "MACE/Detector/Geometry/Fast/World.h++"
+#include "MACE/Simulation/SimTarget/Action/DetectorConstruction.h++"
+#include "MACE/Simulation/SimTarget/Messenger/DetectorMessenger.h++"
+#include "MACE/Utility/LiteralUnit.h++"
+
+#include "G4NistManager.hh"
+
+#include <array>
+
+namespace MACE::inline Simulation::SimTarget::inline Action {
+
+using namespace MACE::LiteralUnit::Density;
+using namespace MACE::LiteralUnit::Temperature;
+
+DetectorConstruction::DetectorConstruction() :
+    PassiveSingleton(),
+    G4VUserDetectorConstruction(),
+    fCheckOverlap(false),
+    fWorld(nullptr),
+    fTargetDensity(30_mg_cm3),
+    fTargetTemperature(293.15_K) {
+    Detector::Description::DescriptionIO::Import<DescriptionInUse>(
+#include "MACE/Simulation/SimTarget/DefaultGeometry.inlyaml"
+    );
+    GeometryMessenger::Instance().AssignTo(this);
+}
+
+G4VPhysicalVolume* DetectorConstruction::Construct() {
+    using namespace MACE::Detector::Geometry::Fast;
+
+    // AcceleratorField is target's mother by default, modified it to adapt global frame
+    Detector::Description::AcceleratorField::Instance().Length(0);
+    Detector::Description::AcceleratorField::Instance().DownStreamLength(0);
+
+    fWorld = std::make_shared<World>();
+    auto& beamMonitor = fWorld->NewDaughter<BeamMonitor>(fCheckOverlap);
+    auto& beamDegrader = fWorld->NewDaughter<BeamDegrader>(fCheckOverlap);
+    auto& target = fWorld->NewDaughter<Target>(fCheckOverlap);
+
+    auto nist = G4NistManager::Instance();
+    beamMonitor.RegisterMaterial(nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE"));
+    beamDegrader.RegisterMaterial(nist->FindOrBuildMaterial("G4_Al"));
+    target.RegisterMaterial(nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", fTargetDensity, fTargetTemperature));
+    fWorld->RegisterMaterial(nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3, fTargetTemperature));
+
+    return fWorld->PhysicalVolume().get();
+}
+
+} // namespace MACE::inline Simulation::SimTarget::inline Action
