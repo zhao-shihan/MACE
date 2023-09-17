@@ -1,3 +1,4 @@
+#include "MACE/Compatibility/std2b/constexpr_cmath.h++"
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/Geant4X/MPIRunManager.h++"
 #include "MACE/Extension/Geant4X/MPIRunMessenger.h++"
@@ -183,9 +184,9 @@ void MPIRunManager::RunBeginReport(const G4int runID) {
 
 std::string MPIRunManager::FormatSecondToDHMS(const double secondsInTotal) {
     const auto totalSeconds = std::llround(secondsInTotal);
-    const auto div86400 = std::div(totalSeconds, 86400ll);
-    const auto div3600 = std::div(div86400.rem, 3600ll);
-    const auto div60 = std::div(div3600.rem, 60ll);
+    const auto div86400 = std2b::div(totalSeconds, 86400ll);
+    const auto div3600 = std2b::div(div86400.rem, 3600ll);
+    const auto div60 = std2b::div(div3600.rem, 60ll);
     const auto& [day, hour, minute, second] = std::tie(div86400.quot, div3600.quot, div60.quot, div60.rem);
     const auto addDay = day > 0;
     const auto addHour = addDay or hour > 0;

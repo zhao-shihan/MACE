@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Compatibility/std2b/constexpr_abs.h++"
+#include "MACE/Compatibility/std2b/constexpr_cmath.h++"
 #include "MACE/Compatibility/std2b/unreachable.h++"
 #include "MACE/Concept/InputVector.h++"
 #include "MACE/Detector/Description/DescriptionBase.h++"

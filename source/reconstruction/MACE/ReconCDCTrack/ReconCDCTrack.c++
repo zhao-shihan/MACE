@@ -1,7 +1,7 @@
 // #include "MACE/ReconCDCTrack/Finder/MCTruthFinder.h++"
 // #include "MACE/ReconCDCTrack/Fitter/MCTruthFitter.h++"
 
-#include "MACE/Compatibility/std2b/constexpr_abs.h++"
+#include "MACE/Compatibility/std2b/constexpr_cmath.h++"
 #include "MACE/Data/IO/Reader.h++"
 #include "MACE/Data/Model/Hit/CDCHit.h++"
 #include "MACE/Data/Model/Hit/EMCHit.h++"

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "MACE/Compatibility/std2b/constexpr_abs.h++"
-#include "MACE/Compatibility/std2b/constexpr_isnan.h++"
+#include "MACE/Compatibility/std2b/constexpr_cmath.h++"
 #include "MACE/Math/IntegerPower.h++"
 
 #include <cmath>
