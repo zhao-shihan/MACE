@@ -1,0 +1,28 @@
+#pragma once
+
+#include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
+#include "MACE/Simulation/Physics/Particle/Muonium.h++"
+#include "MACE/Simulation/Physics/Process/MuoniumFormation.h++"
+#include "MACE/Simulation/Physics/Process/MuoniumTransport.h++"
+#include "MACE/Simulation/Physics/TargetForMuoniumPhysics.h++"
+#include "MACE/Utility/NonMoveableBase.h++"
+
+#include "G4MuonPlus.hh"
+#include "G4ProcessManager.hh"
+#include "G4VPhysicsConstructor.hh"
+
+namespace MACE::inline Simulation::Physics {
+
+template<TargetForMuoniumPhysics ATarget>
+class MuoniumPhysics final : public NonMoveableBase,
+                             public G4VPhysicsConstructor {
+public:
+    MuoniumPhysics(G4int verbose);
+
+    void ConstructParticle() override;
+    void ConstructProcess() override;
+};
+
+} // namespace MACE::inline Simulation::Physics
+
+#include "MACE/Simulation/Physics/MuoniumPhysics.inl"

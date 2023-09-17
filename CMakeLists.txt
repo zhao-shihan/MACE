@@ -17,7 +17,7 @@ project(MACE VERSION 0.0.0
 # Dirs
 set(MACE_PROJECT_ROOT_DIR "${PROJECT_SOURCE_DIR}")
 set(MACE_PROJECT_CMAKE_DIR "${MACE_PROJECT_ROOT_DIR}/cmake")
-set(MACE_PROJECT_SRC_DIR "${MACE_PROJECT_ROOT_DIR}/source")
+set(MACE_PROJECT_SRC_DIR "${MACE_PROJECT_ROOT_DIR}/src")
 set(MACE_PROJECT_3RDPARTY_DIR "${MACE_PROJECT_ROOT_DIR}/thirdparty")
 
 # =============================================================================
@@ -96,7 +96,3 @@ include(${MACE_PROJECT_CMAKE_DIR}/LookForEigen.cmake)
 include(${MACE_PROJECT_CMAKE_DIR}/MACECompileOptions.cmake)
 # main content
 add_subdirectory(${MACE_PROJECT_SRC_DIR})
-# test
-if(MACE_BUILD_TEST)
-    add_subdirectory(test)
-endif()
