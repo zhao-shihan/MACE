@@ -1,4 +1,4 @@
-#include "MACE/Extension/CLHEPX/Random/Xoshiro512SSEngine.h++"
+#include "MACE/Extension/CLHEPX/Random/Wrap.h++"
 #include "MACE/Math/Random/Distribution/Uniform.h++"
 #include "MACE/Math/Random/Generator/Xoshiro512SS.h++"
 #include "MACE/Utility/WallTimeStopwatch.h++"
@@ -14,7 +14,7 @@ using namespace MACE;
 
 int main() {
     Math::Random::Xoshiro512SS xoshiro512SS(114514);
-    CLHEPX::Random::Xoshiro512SSEngine xoshiro512SSX(114514);
+    CLHEPX::Random::Wrap<Math::Random::Xoshiro512SS> xoshiro512SSX(114514);
 
     std::cout << "Simply generate 10 million integers:" << std::endl;
 

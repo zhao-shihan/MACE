@@ -1,62 +1,62 @@
 namespace MACE::inline Extension::CLHEPX::Random {
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-RandomEngineBase<PRBG>::RandomEngineBase() :
-    RandomEngineBase(20030202) {}
+Wrap<PRBG>::Wrap() :
+    Wrap{20030202} {}
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-RandomEngineBase<PRBG>::RandomEngineBase(long seed) :
-    HepRandomEngine(),
+Wrap<PRBG>::Wrap(long seed) :
+    HepRandomEngine{},
     fPRBG(seed) {
     theSeed = seed;
     theSeeds = &theSeed;
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-auto RandomEngineBase<PRBG>::flatArray(const int size, double* vect) -> void {
+auto Wrap<PRBG>::flatArray(const int size, double* vect) -> void {
     for (int i = 0; i < size; ++i) {
         vect[i] = flat();
     }
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-auto RandomEngineBase<PRBG>::setSeed(long seed, int) -> void {
+auto Wrap<PRBG>::setSeed(long seed, int) -> void {
     fPRBG.Seed(seed);
     theSeed = seed;
     theSeeds = &theSeed;
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-auto RandomEngineBase<PRBG>::setSeeds(const long* seeds, int) -> void {
+auto Wrap<PRBG>::setSeeds(const long* seeds, int) -> void {
     fPRBG.Seed(*seeds);
     theSeed = *seeds;
     theSeeds = seeds;
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-auto RandomEngineBase<PRBG>::saveStatus(gsl::czstring filename) const -> void {
+auto Wrap<PRBG>::saveStatus(gsl::czstring filename) const -> void {
     std::ofstream os(filename, std::ios::out);
     if (os.is_open()) {
         put(os);
         os.close();
     } else {
-        std::cerr << "RandomEngineBase<PRBG>::saveStatus (with PRBG = " << typeid(PRBG).name() << "): Cannot open \"" << filename << "\", nothing was done\n";
+        std::cerr << "Wrap<PRBG>::saveStatus (with PRBG = " << typeid(PRBG).name() << "): Cannot open \"" << filename << "\", nothing was done\n";
     }
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-auto RandomEngineBase<PRBG>::restoreStatus(gsl::czstring filename) -> void {
+auto Wrap<PRBG>::restoreStatus(gsl::czstring filename) -> void {
     std::ifstream is(filename, std::ios::in);
     if (is.is_open()) {
         get(is);
         is.close();
     } else {
-        std::cerr << "RandomEngineBase<PRBG>::restoreStatus (with PRBG = " << typeid(PRBG).name() << "): Cannot open \"" << filename << "\", nothing was done\n";
+        std::cerr << "Wrap<PRBG>::restoreStatus (with PRBG = " << typeid(PRBG).name() << "): Cannot open \"" << filename << "\", nothing was done\n";
     }
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-auto RandomEngineBase<PRBG>::showStatus() const -> void {
+auto Wrap<PRBG>::showStatus() const -> void {
     constexpr std::string_view split = "----------------------------------------------------------------";
     const auto engineName = name();
     const auto firstSplit = static_cast<std::intmax_t>(split.length()) -         // length(split) -
@@ -70,7 +70,7 @@ auto RandomEngineBase<PRBG>::showStatus() const -> void {
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-auto RandomEngineBase<PRBG>::put(std::ostream& os) const -> decltype(os) {
+auto Wrap<PRBG>::put(std::ostream& os) const -> decltype(os) {
     const auto engineName = name();
     os << engineName << "-begin\n"
        << fPRBG << '\n'
@@ -79,18 +79,18 @@ auto RandomEngineBase<PRBG>::put(std::ostream& os) const -> decltype(os) {
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-auto RandomEngineBase<PRBG>::get(std::istream& is) -> decltype(is) {
+auto Wrap<PRBG>::get(std::istream& is) -> decltype(is) {
     const auto engineName = name();
     std::string tag;
     is >> tag;
     if (tag != std::string(engineName).append("-begin")) {
-        std::cerr << "RandomEngineBase<PRBG>::get (with PRBG = " << typeid(PRBG).name() << "): No " << engineName << " found at current position, engine state unchanged. Input stream has been consumed\n";
+        std::cerr << "Wrap<PRBG>::get (with PRBG = " << typeid(PRBG).name() << "): No " << engineName << " found at current position, engine state unchanged. Input stream has been consumed\n";
         return is;
     }
     PRBG volunteer;
     is >> volunteer >> tag;
     if (tag != std::string(engineName).append("-end")) {
-        std::cerr << "RandomEngineBase<PRBG>::get (with PRBG = " << typeid(PRBG).name() << "): " << engineName << " read from the input stream is incomplete, engine state unchanged. Input stream has been consumed\n";
+        std::cerr << "Wrap<PRBG>::get (with PRBG = " << typeid(PRBG).name() << "): " << engineName << " read from the input stream is incomplete, engine state unchanged. Input stream has been consumed\n";
         return is;
     }
     fPRBG = volunteer;
@@ -98,8 +98,8 @@ auto RandomEngineBase<PRBG>::get(std::istream& is) -> decltype(is) {
 }
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-auto RandomEngineBase<PRBG>::getState(std::istream& is) -> decltype(is) {
-    std::cerr << "RandomEngineBase<PRBG>::getState has no effect. Do not use\n";
+auto Wrap<PRBG>::getState(std::istream& is) -> decltype(is) {
+    std::cerr << "Wrap<PRBG>::getState has no effect. Do not use\n";
     return is;
 }
 

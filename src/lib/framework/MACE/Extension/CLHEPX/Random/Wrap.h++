@@ -8,6 +8,7 @@
 
 #include "gsl/gsl"
 
+#include <typeinfo>
 #include <fstream>
 #include <limits>
 #include <string>
@@ -17,15 +18,13 @@
 namespace MACE::inline Extension::CLHEPX::Random {
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
-class RandomEngineBase : public CLHEP::HepRandomEngine {
+class Wrap : public CLHEP::HepRandomEngine {
 public:
-    RandomEngineBase();
-    explicit RandomEngineBase(long seed);
+    Wrap();
+    explicit Wrap(long seed);
 
-protected:
-    ~RandomEngineBase() = default;
+    ~Wrap() = default;
 
-public:
     auto flat() -> double override final { return Math::Random::Uniform<double>()(fPRBG); }
     virtual auto flatArray(const int size, double* vect) -> void override;
 
@@ -35,6 +34,8 @@ public:
     auto saveStatus(gsl::czstring filename) const -> void override final;
     auto restoreStatus(gsl::czstring filename) -> void override final;
     auto showStatus() const -> void override final;
+
+    virtual auto name() const -> std::string override { return typeid(Wrap).name(); }
 
     auto put(std::ostream& os) const -> decltype(os) override final;
     auto get(std::istream& is) -> decltype(is) override final;
@@ -53,4 +54,4 @@ private:
 
 } // namespace MACE::inline Extension::CLHEPX::Random
 
-#include "MACE/Extension/CLHEPX/Random/RandomEngineBase.inl"
+#include "MACE/Extension/CLHEPX/Random/Wrap.inl"

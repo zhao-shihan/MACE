@@ -1,4 +1,4 @@
-#include "MACE/Extension/CLHEPX/Random/MT1993764Engine.h++"
+#include "MACE/Extension/CLHEPX/Random/Wrap.h++"
 #include "MACE/Math/Random/Distribution/Uniform.h++"
 #include "MACE/Math/Random/Generator/MT1993764.h++"
 #include "MACE/Utility/WallTimeStopwatch.h++"
@@ -14,7 +14,7 @@ using namespace MACE;
 
 int main() {
     Math::Random::MT1993764 mt64(114514);
-    MACE::CLHEPX::Random::MT1993764Engine mt64x(114514);
+    MACE::CLHEPX::Random::Wrap<Math::Random::MT1993764> mt64x(114514);
 
     std::cout << "Simply generate 10 million integers:" << std::endl;
 
