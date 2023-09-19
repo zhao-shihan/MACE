@@ -12,7 +12,6 @@ class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithABool;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
-class G4UICommand;
 class G4UIdirectory;
 
 namespace MACE::SimMACE {
