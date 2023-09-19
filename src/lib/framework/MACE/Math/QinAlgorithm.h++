@@ -1,20 +1,22 @@
 #pragma once
 
 #include <concepts>
-#include <limits>
 #include <initializer_list>
+#include <limits>
 #include <ranges>
 
 namespace MACE::Math {
 
 template<std::floating_point T,
          std::ranges::range C = std::initializer_list<T>>
-constexpr auto QinPolynomial(const T x,
-                             const C& coefficientList) -> T {
-    using nl = std::numeric_limits<T>;
+constexpr auto QinPolynomial(const C& coefficientList,
+                             const T x) -> T {
     auto c = std::ranges::crbegin(coefficientList);
     const auto end = std::ranges::crend(coefficientList);
-    if (c == end) { return nl::has_quiet_NaN ? nl::quiet_NaN() : 0; }
+    if (c == end) {
+        using nl = std::numeric_limits<T>;
+        return nl::has_quiet_NaN ? nl::quiet_NaN() : 0;
+    }
     T p = *c++;
     do {
         p = p * x + *c++;
@@ -22,29 +24,29 @@ constexpr auto QinPolynomial(const T x,
     return p;
 }
 
+template<std::floating_point T = double,
+         std::ranges::range C = std::initializer_list<T>>
+constexpr auto QinPolynomial(const C& coefficientList,
+                             const std::integral auto x) -> T {
+    return QinPolynomial<T>(coefficientList, x);
+}
+
 template<std::floating_point T,
          std::ranges::range A = std::initializer_list<T>,
          std::ranges::range B = std::initializer_list<T>>
-constexpr auto QinRational(const T x,
-                           const A& numerator,
-                           const B& denominator) -> T {
-    return QinPolynomial(x, numerator) / QinPolynomial(x, denominator);
-}
-
-template<std::floating_point T = double,
-         std::ranges::range C = std::initializer_list<T>>
-constexpr auto QinPolynomial(const std::integral auto x,
-                             const C& coefficientList) -> T {
-    return QinPolynomial<T>(x, coefficientList);
+constexpr auto QinRational(const A& numerator,
+                           const B& denominator,
+                           const T x) -> T {
+    return QinPolynomial(numerator, x) / QinPolynomial(denominator, x);
 }
 
 template<std::floating_point T = double,
          std::ranges::range A = std::initializer_list<T>,
          std::ranges::range B = std::initializer_list<T>>
-constexpr auto QinRational(const std::integral auto x,
-                           const A& numerator,
-                           const B& denominator) -> T {
-    return QinRational<T>(x, numerator, denominator);
+constexpr auto QinRational(const A& numerator,
+                           const B& denominator,
+                           const std::integral auto x) -> T {
+    return QinRational<T>(numerator, denominator, x);
 }
 
 } // namespace MACE::Math
