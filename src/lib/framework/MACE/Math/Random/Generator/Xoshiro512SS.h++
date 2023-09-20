@@ -10,7 +10,7 @@ namespace MACE::Math::Random::inline Generator {
 class Xoshiro512SS final : public Xoshiro512Base<Xoshiro512SS> {
 public:
     constexpr Xoshiro512SS() = default;
-    constexpr explicit Xoshiro512SS(std::uint64_t seed);
+    constexpr explicit Xoshiro512SS(SeedType seed);
 
     MACE_ALWAYS_INLINE constexpr auto operator()() -> ResultType;
 };

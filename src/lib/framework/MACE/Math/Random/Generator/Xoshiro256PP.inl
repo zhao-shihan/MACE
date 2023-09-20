@@ -1,7 +1,7 @@
 namespace MACE::Math::Random::inline Generator {
 
-constexpr Xoshiro256PP::Xoshiro256PP(std::uint64_t seed) :
-    Xoshiro256Base(seed) {}
+constexpr Xoshiro256PP::Xoshiro256PP(Xoshiro256PP::SeedType seed) :
+    Xoshiro256Base{seed} {}
 
 MACE_ALWAYS_INLINE constexpr auto Xoshiro256PP::operator()() -> Xoshiro256PP::ResultType {
     const auto result = std::rotl(fState[0] + fState[3], 23) + fState[0];

@@ -15,7 +15,7 @@ namespace MACE::Math::Random {
 /// @brief Sub-requirements on D::param_type of RandomNumberDistribution (a C++
 /// named requirements).
 /// See also: https://en.cppreference.com/w/cpp/named_req/RandomNumberDistribution
-template<class P>
+template<typename P>
 concept STDDistributionParameter =
     requires {
         // 1. They said: "D::param_type (aka P) satisfies CopyConstructible."
@@ -39,7 +39,7 @@ concept STDDistributionParameter =
 /// @brief Sub-requirements on D::param_type of RandomNumberDistribution (a C++
 /// named requirements).
 /// See also: https://en.cppreference.com/w/cpp/named_req/RandomNumberDistribution
-template<class P, class D>
+template<typename P, typename D>
 concept STDDistributionParameterOf =
     requires {
         // 1. Previous requirements.
@@ -54,7 +54,7 @@ concept STDDistributionParameterOf =
 
 /// @brief C++ named requirements: RandomNumberDistribution.
 /// See also: https://en.cppreference.com/w/cpp/named_req/RandomNumberDistribution
-template<class D>
+template<typename D>
 concept STDRandomNumberDistribution =
     requires(D d, const D x) {
         // 1. They said: "D satisfies CopyConstructible."
@@ -146,10 +146,10 @@ concept STDRandomNumberDistribution =
         requires Concept::StreamIOable<D>;
     };
 
-template<class ADerived, class ADistribution>
+template<typename ADerived, typename ADistribution>
 class DistributionParameterBase;
 
-template<class P>
+template<typename P>
 concept DistributionParameter =
     requires {
         // 1. Same as the sub-requirements on D::param_type of
@@ -168,7 +168,7 @@ concept DistributionParameter =
         requires std::is_final_v<P>;
     };
 
-template<class P, class D>
+template<typename P, typename D>
 concept DistributionParameterOf =
     requires {
         // 1. Same as the sub-requirements on D::param_type of
@@ -187,11 +187,11 @@ concept DistributionParameterOf =
         requires std::same_as<P, typename D::ParameterType>;
     };
 
-template<class ADerived, class AParameter, class T>
+template<typename ADerived, typename AParameter, typename T>
     requires(std::is_arithmetic_v<T> or Concept::NumericVectorAny<T>)
 class RandomNumberDistributionBase;
 
-template<class D>
+template<typename D>
 concept RandomNumberDistribution =
     requires(D d, const D x) {
         // 1. C++ named requirements: RandomNumberDistribution.

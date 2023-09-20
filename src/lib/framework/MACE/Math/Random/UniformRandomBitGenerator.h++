@@ -6,22 +6,18 @@
 
 namespace MACE::Math::Random {
 
-/// @brief C++ named requirements: UniformRandomBitGenerator.
-/// See also: https://en.cppreference.com/w/cpp/named_req/UniformRandomBitGenerator
-template<class G>
-concept STDUniformRandomBitGenerator = std::uniform_random_bit_generator<G>;
-
-template<class ADerived, std::unsigned_integral AResult>
+template<typename ADerived, std::unsigned_integral AResult>
 class UniformRandomBitGeneratorBase;
 
 /// @brief Concept of uniform random bit generator.
-template<class G>
+template<typename G>
 concept UniformRandomBitGenerator =
     requires(G g) {
         // 1. C++ named requirements: UniformRandomBitGenerator.
-        requires STDUniformRandomBitGenerator<G>;
+        // See also: https://en.cppreference.com/w/cpp/named_req/UniformRandomBitGenerator
+        requires std::uniform_random_bit_generator<G>;
         // 2. Same as the C++ named requirements but in our convention.
-        // 2.1 Has ResultType. It is an unsigned integer.
+        // 2.1 Has ResultType. It is an unsigned integral type.
         typename G::ResultType;
         requires std::unsigned_integral<typename G::ResultType>;
         // 2.2 Has static member functions Min() and Max(), and Min() < Max().

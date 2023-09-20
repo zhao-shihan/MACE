@@ -7,13 +7,15 @@
 
 namespace MACE::Math::Random::inline Generator {
 
-class MT1993732 final : public UniformPseudoRandomBitGeneratorBase<MT1993732, std::mt19937::result_type> {
+class MT1993732 final : public UniformPseudoRandomBitGeneratorBase<MT1993732,
+                                                                   std::mt19937::result_type,
+                                                                   std::mt19937::result_type> {
 public:
     MT1993732() = default;
-    explicit MT1993732(ResultType seed);
+    explicit MT1993732(SeedType seed);
 
     auto operator()() { return fMT(); }
-    auto Seed(ResultType seed) -> void { fMT.seed(seed); }
+    auto Seed(SeedType seed) -> void { fMT.seed(seed); }
 
     static constexpr auto Min() { return std::mt19937::min(); }
     static constexpr auto Max() { return std::mt19937::max(); }

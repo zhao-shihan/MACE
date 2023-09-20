@@ -14,7 +14,9 @@ namespace MACE::Math::Random::inline Generator {
 
 template<class ADerived, std::size_t NBit>
     requires(NBit % 64 == 0)
-class XoshiroBase : public UniformPseudoRandomBitGeneratorBase<ADerived, std::uint64_t> {
+class XoshiroBase : public UniformPseudoRandomBitGeneratorBase<ADerived,
+                                                               std::uint64_t,
+                                                               std::uint64_t> {
 protected:
     constexpr XoshiroBase(std::array<std::uint64_t, NBit / 64> defaultState);
     constexpr explicit XoshiroBase(std::uint64_t seed);

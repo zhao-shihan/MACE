@@ -11,13 +11,15 @@
 
 namespace MACE::Math::Random::inline Generator {
 
-class SplitMix64 final : public UniformPseudoRandomBitGeneratorBase<SplitMix64, std::uint64_t> {
+class SplitMix64 final : public UniformPseudoRandomBitGeneratorBase<SplitMix64,
+                                                                    std::uint64_t,
+                                                                    std::uint64_t> {
 public:
     constexpr SplitMix64();
-    constexpr explicit SplitMix64(ResultType seed);
+    constexpr explicit SplitMix64(SeedType seed);
 
     MACE_ALWAYS_INLINE constexpr auto operator()() -> SplitMix64::ResultType;
-    constexpr auto Seed(ResultType seed) -> void;
+    constexpr auto Seed(SeedType seed) -> void;
 
     static constexpr auto Min() { return std::numeric_limits<ResultType>::min(); }
     static constexpr auto Max() { return std::numeric_limits<ResultType>::max(); }

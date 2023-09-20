@@ -1,8 +1,12 @@
 namespace MACE::Math::Random {
 
-template<class ADerived, std::unsigned_integral AResult>
-constexpr UniformPseudoRandomBitGeneratorBase<ADerived, AResult>::UniformPseudoRandomBitGeneratorBase() :
-    UniformRandomBitGeneratorBase<ADerived, AResult>() {
+template<typename ADerived,
+         std::unsigned_integral AResult,
+         std::unsigned_integral ASeed>
+constexpr UniformPseudoRandomBitGeneratorBase<ADerived,
+                                              AResult,
+                                              ASeed>::UniformPseudoRandomBitGeneratorBase() :
+    UniformRandomBitGeneratorBase<ADerived, AResult>{} {
     static_assert(UniformPseudoRandomBitGenerator<ADerived>);
 }
 

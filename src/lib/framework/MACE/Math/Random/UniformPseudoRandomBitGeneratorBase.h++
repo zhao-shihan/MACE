@@ -12,14 +12,19 @@ namespace MACE::Math::Random {
 /// the concept UniformPseudoRandomBitGenerator.
 /// @tparam ADerived The finally derived class.
 /// @tparam AResult The output type of derived PRBG.
-template<class ADerived, std::unsigned_integral AResult>
+template<typename ADerived,
+         std::unsigned_integral AResult,
+         std::unsigned_integral ASeed>
 class UniformPseudoRandomBitGeneratorBase : public UniformRandomBitGeneratorBase<ADerived, AResult> {
+public:
+    using SeedType = ASeed;
+
 protected:
     constexpr UniformPseudoRandomBitGeneratorBase();
     constexpr ~UniformPseudoRandomBitGeneratorBase() = default;
 
 public:
-    decltype(auto) seed(auto&& s) { return static_cast<ADerived*>(this)->Seed(std::forward<decltype(s)>(s)); }
+    auto seed(SeedType s) -> void { return static_cast<ADerived*>(this)->Seed(s); }
 };
 
 } // namespace MACE::Math::Random

@@ -1,12 +1,12 @@
 namespace MACE::Math::Random::inline Generator {
 
 constexpr SplitMix64::SplitMix64() :
-    UniformPseudoRandomBitGeneratorBase(),
-    fState(0x1BCC2859AEA0EE4Dull) {}
+    UniformPseudoRandomBitGeneratorBase{},
+    fState{static_cast<decltype(fState)>(0x1BCC2859AEA0EE4Dull)} {}
 
-constexpr SplitMix64::SplitMix64(SplitMix64::ResultType seed) :
-    UniformPseudoRandomBitGeneratorBase(),
-    fState() {
+constexpr SplitMix64::SplitMix64(SplitMix64::SeedType seed) :
+    UniformPseudoRandomBitGeneratorBase{},
+    fState{} {
     Seed(seed);
 }
 
@@ -17,7 +17,7 @@ MACE_ALWAYS_INLINE constexpr auto SplitMix64::operator()() -> SplitMix64::Result
     return z ^ (z >> 31);
 }
 
-constexpr auto SplitMix64::Seed(SplitMix64::ResultType seed) -> void {
+constexpr auto SplitMix64::Seed(SplitMix64::SeedType seed) -> void {
     fState = seed;
     (*this)();
     (*this)();

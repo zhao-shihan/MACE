@@ -2,16 +2,16 @@ namespace MACE::Math::Random::inline Generator {
 
 template<class ADerived>
 constexpr Xoshiro256Base<ADerived>::Xoshiro256Base() :
-    XoshiroBase<ADerived, 256>({0x893C3E22C678FAA9ull,
+    XoshiroBase<ADerived, 256>{{0x893C3E22C678FAA9ull,
                                 0x30589ADC78696ADAull,
                                 0x1D541511D5F51D5Bull,
-                                0xE3CBD397A993A9EEull}) {
+                                0xE3CBD397A993A9EEull}} {
     static_assert(std::derived_from<ADerived, Xoshiro256Base<ADerived>>);
 }
 
 template<class ADerived>
 constexpr Xoshiro256Base<ADerived>::Xoshiro256Base(std::uint64_t seed) :
-    XoshiroBase<ADerived, 256>(seed) {}
+    XoshiroBase<ADerived, 256>{seed} {}
 
 template<class ADerived>
 MACE_ALWAYS_INLINE constexpr auto Xoshiro256Base<ADerived>::Step() -> void {

@@ -7,7 +7,7 @@
 
 namespace MACE::Math::Random {
 
-template<class ADerived, class ADistribution>
+template<typename ADerived, typename ADistribution>
 class DistributionParameterBase {
 public:
     using DistributionType = ADistribution;
@@ -21,7 +21,7 @@ public:
     constexpr bool operator==(const DistributionParameterBase&) const = default;
 };
 
-template<class ADerived, class AParameter, class T>
+template<typename ADerived, typename AParameter, typename T>
     requires(std::is_arithmetic_v<T> or Concept::NumericVectorAny<T>)
 class RandomNumberDistributionBase {
 public:
