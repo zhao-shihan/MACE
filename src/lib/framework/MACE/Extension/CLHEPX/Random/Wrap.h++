@@ -8,7 +8,9 @@
 
 #include "gsl/gsl"
 
-#include <typeinfo>
+#include "fmt/format.h"
+
+#include <cstdio>
 #include <fstream>
 #include <limits>
 #include <string>
@@ -25,7 +27,7 @@ public:
 
     ~Wrap() = default;
 
-    auto flat() -> double override final { return Math::Random::Uniform<double>()(fPRBG); }
+    auto flat() -> double override final { return Math::Random::Uniform<double>{}(fPRBG); }
     virtual auto flatArray(const int size, double* vect) -> void override;
 
     auto setSeed(long seed, int = 0) -> void override final;

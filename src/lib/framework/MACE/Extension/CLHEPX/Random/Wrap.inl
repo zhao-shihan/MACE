@@ -7,7 +7,7 @@ Wrap<PRBG>::Wrap() :
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
 Wrap<PRBG>::Wrap(long seed) :
     HepRandomEngine{},
-    fPRBG(seed) {
+    fPRBG{static_cast<typename PRBG::SeedType>(seed)} {
     theSeed = seed;
     theSeeds = &theSeed;
 }
@@ -38,9 +38,9 @@ auto Wrap<PRBG>::saveStatus(gsl::czstring filename) const -> void {
     std::ofstream os(filename, std::ios::out);
     if (os.is_open()) {
         put(os);
-        os.close();
     } else {
-        std::cerr << "Wrap<PRBG>::saveStatus (with PRBG = " << typeid(PRBG).name() << "): Cannot open \"" << filename << "\", nothing was done\n";
+        fmt::println(stderr, "Wrap<PRBG>::saveStatus: Cannot open \"{}\", nothing was done. (Wrap<PRBG>::name(): {})",
+                     filename, name());
     }
 }
 
@@ -49,9 +49,9 @@ auto Wrap<PRBG>::restoreStatus(gsl::czstring filename) -> void {
     std::ifstream is(filename, std::ios::in);
     if (is.is_open()) {
         get(is);
-        is.close();
     } else {
-        std::cerr << "Wrap<PRBG>::restoreStatus (with PRBG = " << typeid(PRBG).name() << "): Cannot open \"" << filename << "\", nothing was done\n";
+        fmt::println(stderr, "Wrap<PRBG>::restoreStatus: Cannot open \"{}\", nothing was done. (Wrap<PRBG>::name(): {})",
+                     filename, name());
     }
 }
 
@@ -99,7 +99,7 @@ auto Wrap<PRBG>::get(std::istream& is) -> decltype(is) {
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
 auto Wrap<PRBG>::getState(std::istream& is) -> decltype(is) {
-    std::cerr << "Wrap<PRBG>::getState has no effect. Do not use\n";
+    fmt::println(stderr, "Wrap<PRBG>::getState has no effect. Do not use");
     return is;
 }
 
