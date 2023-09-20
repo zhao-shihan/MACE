@@ -3,14 +3,10 @@ namespace MACE::Math::Random::inline Distribution {
 namespace internal {
 
 template<std::floating_point T, template<typename> class AGaussian>
-constexpr BasicGaussianParameter<T, AGaussian>::BasicGaussianParameter() :
-    BasicGaussianParameter(0, 1) {}
-
-template<std::floating_point T, template<typename> class AGaussian>
 constexpr BasicGaussianParameter<T, AGaussian>::BasicGaussianParameter(T mu, T sigma) :
-    Base(),
-    fMu(mu),
-    fSigma(sigma) {}
+    Base{},
+    fMu{mu},
+    fSigma{sigma} {}
 
 template<Concept::Character AChar, std::floating_point U, template<typename> class V>
 auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussianParameter<U, V>& self) -> decltype(os) {

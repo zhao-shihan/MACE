@@ -22,7 +22,7 @@ private:
                                            AGaussian<T>>;
 
 public:
-    constexpr BasicGaussianParameter();
+    constexpr BasicGaussianParameter() = default;
     constexpr BasicGaussianParameter(T mu, T sigma);
 
     constexpr auto Mu() const { return fMu; }
@@ -37,8 +37,8 @@ public:
     friend auto operator>>(std::basic_istream<AChar>& is, BasicGaussianParameter<U, V>& self) -> decltype(is);
 
 private:
-    T fMu;
-    T fSigma;
+    T fMu = 0;
+    T fSigma = 1;
 };
 
 template<std::floating_point T, template<typename> class AGaussian>
