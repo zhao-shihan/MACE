@@ -68,6 +68,8 @@ IncludeCategories:
     Priority: 2
   - Regex: '"R.*\.h"'
     Priority: 2
+  - Regex: '".*/T.*\.h"'
+    Priority: 2
   - Regex: '"T.*\.h"'
     Priority: 2
   - Regex: '"G4.*"'
