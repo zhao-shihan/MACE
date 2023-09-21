@@ -65,6 +65,7 @@ include(${MACE_PROJECT_CMAKE_DIR}/GlobalCompileOptions.cmake)
 # =============================================================================
 
 # Required:
+
 # MPI
 include(${MACE_PROJECT_CMAKE_DIR}/LookForMPI.cmake)
 # Geant4
@@ -73,6 +74,12 @@ include(${MACE_PROJECT_CMAKE_DIR}/LookForGeant4.cmake)
 include(${MACE_PROJECT_CMAKE_DIR}/LookForROOT.cmake)
 
 # Required, built-in if not found:
+
+# Set CMP0077 to new in order to configure options for build-in libraries
+# See https://discourse.cmake.org/t/what-is-the-correct-way-to-set-options-of-a-project-before-fetch-content/268/6
+# See also https://cmake.org/cmake/help/latest/policy/CMP0077.html
+cmake_policy(SET CMP0077 NEW)
+
 # argparse
 include(${MACE_PROJECT_CMAKE_DIR}/LookForArgparse.cmake)
 # backward-cpp
@@ -85,7 +92,7 @@ include(${MACE_PROJECT_CMAKE_DIR}/LookForGenFit.cmake)
 include(${MACE_PROJECT_CMAKE_DIR}/LookForMicrosoftGSL.cmake)
 # yaml-cpp
 include(${MACE_PROJECT_CMAKE_DIR}/LookForYamlCpp.cmake)
-# Eigen (should be the last otherwise might run into problem if other download steps raise error)
+# Eigen (should be the last whenever possible, otherwise might run into problem if other download steps raise error)
 include(${MACE_PROJECT_CMAKE_DIR}/LookForEigen.cmake)
 
 # =============================================================================
