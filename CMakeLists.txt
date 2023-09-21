@@ -1,9 +1,15 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
-# Enable MSVC_RUNTIME_LIBRARY target property, see https://cmake.org/cmake/help/latest/policy/CMP0091.html
+# Enable MSVC_RUNTIME_LIBRARY target property
+# See https://cmake.org/cmake/help/latest/policy/CMP0091.html
 cmake_policy(SET CMP0091 NEW)
+# Set CMP0077 to new in order to configure options for build-in libraries
+# See https://discourse.cmake.org/t/what-is-the-correct-way-to-set-options-of-a-project-before-fetch-content/268/6
+# See also https://cmake.org/cmake/help/latest/policy/CMP0077.html
+cmake_policy(SET CMP0077 NEW)
 if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
-    # ExternalProject_Add sets the timestamps of extracted contents to the time of extraction, see https://cmake.org/cmake/help/latest/policy/CMP0135.html
+    # ExternalProject_Add sets the timestamps of extracted contents to the time of extraction
+    # See https://cmake.org/cmake/help/latest/policy/CMP0135.html
     cmake_policy(SET CMP0135 NEW)
 endif()
 
@@ -31,10 +37,11 @@ include(CMakeDependentOption)
 option(MACE_BUILD_TEST "Build MACE with test programs." ON)
 option(MACE_BUILTIN_ARGPARSE "Use built-in argparse (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_BACKWARD "Use built-in backward-cpp (network or pre-downloaded source is required)." OFF)
-option(MACE_BUILTIN_FMT "Use built-in fmt (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_EIGEN "Use built-in Eigen (network or pre-downloaded source is required)." OFF)
+option(MACE_BUILTIN_FMT "Use built-in fmt (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_GENFIT "Use built-in GenFit (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_MSGSL "Use built-in Microsoft.GSL (network or pre-downloaded source is required)." OFF)
+option(MACE_BUILTIN_PMP "Use built-in pmp (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_YAML_CPP "Use built-in yaml-cpp (network or pre-downloaded source is required)." OFF)
 option(MACE_SIGNAL_HANDLER "Build with signal handling. Signal handlers are registered at the construction of environment." ON)
 option(MACE_USE_G4GDML "Build with G4gdml support. This option will be automatically turned OFF if Geant4::G4gdml is not found. Once turned off, you are not able to export geometry (to ROOT or other)." ON)
@@ -45,13 +52,14 @@ option(MACE_USE_STATIC_G4 "Attempt to link Geant4 static libraries if available,
 # Options (ON/OFF)
 option(MACE_ENABLE_MSVC_STD_CONFORMITY "Build MACE with standard-conformity (MSVC only: /permissive- /Zc:__cplusplus /Zc:inline)." ON)
 option(MACE_SURPRESS_USELESS_COMPILE_WARNINGS "Surpress compile warnings raise from external dependencies." ON)
-option(MACE_USE_SHARED_MSVC_RT "Select the MSVC runtime library for use (MSVC only). ON for shared (.dll), OFF for static (.lib). If you run into link error related to MSVC runtime, you can try to flip this." ON)
+option(MACE_USE_SHARED_MSVC_RT "Select the MSVC runtime library for use (MSVC only). ON for shared (.dll), OFF for static (.lib). If you run into link error related to MSVC runtime, you can try flip this." ON)
 cmake_dependent_option(MACE_SHOW_EVEN_MORE_COMPILE_WARNINGS "Add compile flag to show even more compile warnings (GCC: -Weffc++, Clang: -Weverything, MSVC: /Wall)." OFF NOT MACE_SURPRESS_USELESS_COMPILE_WARNINGS OFF)
 set(MACE_BUILTIN_ARGPARSE_VERSION 2.9 CACHE STRING "Set built-in argparse version (if required).")
 set(MACE_BUILTIN_BACKWARD_VERSION 1.6 CACHE STRING "Set built-in backward-cpp version (if required).")
-set(MACE_BUILTIN_FMT_VERSION 10.1.1 CACHE STRING "Set built-in fmt version (if required).")
 set(MACE_BUILTIN_EIGEN_VERSION 3.4.0 CACHE STRING "Set built-in Eigen version (if required).")
+set(MACE_BUILTIN_FMT_VERSION 10.1.1 CACHE STRING "Set built-in fmt version (if required).")
 set(MACE_BUILTIN_MSGSL_VERSION 4.0.0 CACHE STRING "Set built-in Microsoft.GSL version (if required).")
+set(MACE_BUILTIN_PMP_VERSION 3.0.0 CACHE STRING "Set built-in fmt version (if required).")
 set(MACE_BUILTIN_YAML_CPP_VERSION 0.8.0 CACHE STRING "Set built-in yaml-cpp version (if required).")
 
 # =============================================================================
@@ -75,11 +83,6 @@ include(${MACE_PROJECT_CMAKE_DIR}/LookForROOT.cmake)
 
 # Required, built-in if not found:
 
-# Set CMP0077 to new in order to configure options for build-in libraries
-# See https://discourse.cmake.org/t/what-is-the-correct-way-to-set-options-of-a-project-before-fetch-content/268/6
-# See also https://cmake.org/cmake/help/latest/policy/CMP0077.html
-cmake_policy(SET CMP0077 NEW)
-
 # argparse
 include(${MACE_PROJECT_CMAKE_DIR}/LookForArgparse.cmake)
 # backward-cpp
@@ -94,6 +97,8 @@ include(${MACE_PROJECT_CMAKE_DIR}/LookForMicrosoftGSL.cmake)
 include(${MACE_PROJECT_CMAKE_DIR}/LookForYamlCpp.cmake)
 # Eigen (should be the last whenever possible, otherwise might run into problem if other download steps raise error)
 include(${MACE_PROJECT_CMAKE_DIR}/LookForEigen.cmake)
+# PMP
+include(${MACE_PROJECT_CMAKE_DIR}/LookForPMP.cmake)
 
 # =============================================================================
 # Let's go!
