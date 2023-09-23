@@ -1,7 +1,9 @@
 #pragma once
 
 #include "MACE/Extension/Geant4X/SingletonG4Allocator.h++"
+#include "MACE/Utility/InlineMacro.h++"
 
+#include <cinttypes>
 #include <concepts>
 #include <type_traits>
 
@@ -10,15 +12,15 @@ namespace MACE::inline Extension::Geant4X {
 template<class ADerived>
 class UseG4Allocator {
 protected:
-    UseG4Allocator();
+    UseG4Allocator() = default;
     ~UseG4Allocator() = default;
 
 public:
-    [[nodiscard]] void* operator new(std::size_t);
-    [[nodiscard]] void* operator new[](std::size_t) = delete;
+    [[nodiscard]] MACE_ALWAYS_INLINE auto operator new(std::size_t) -> void*;
+    [[nodiscard]] MACE_ALWAYS_INLINE auto operator new[](std::size_t) -> void* = delete;
 
-    void operator delete(void* ptr);
-    void operator delete[](void*) = delete;
+    MACE_ALWAYS_INLINE auto operator delete(void* ptr) -> void;
+    MACE_ALWAYS_INLINE auto operator delete[](void*) -> void = delete;
 };
 
 } // namespace MACE::inline Extension::Geant4X
