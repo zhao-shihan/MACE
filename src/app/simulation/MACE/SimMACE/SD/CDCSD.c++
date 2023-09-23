@@ -40,7 +40,7 @@ CDCSD::CDCSD(const G4String& sdName) :
 }
 
 void CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
-    fHitsCollection = new CDCHitCollection(SensitiveDetectorName, collectionName.front());
+    fHitsCollection = new CDCHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 

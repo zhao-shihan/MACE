@@ -8,9 +8,9 @@
 
 namespace MACE::SimMACE::inline Hit {
 
-class MCPHit final : public DataModel::MCPSimHit,
-                     public Geant4X::UseG4Allocator<MCPHit>,
-                     public G4VHit {};
+class MCPHit final : public Geant4X::UseG4Allocator<MCPHit>,
+                     public G4VHit,
+                     public DataModel::MCPSimHit {};
 static_assert(DataModel::TransientData<MCPHit>);
 
 using MCPHitCollection = G4THitsCollection<MCPHit>;
