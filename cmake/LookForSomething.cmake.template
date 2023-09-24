@@ -41,7 +41,7 @@ if(MACE_BUILTIN_<LIB_NAME>)
         message(STATUS "<lib_cmake_name> will be downloaded from ${MACE_BUILTIN_<LIB_NAME>_URL} to ${MACE_BUILTIN_<LIB_NAME>_SRC_DIR}")
     endif()
     # set options
-    
+    # uses CACHE INTERNAL variables to propagate options. see https://discourse.cmake.org/t/what-is-the-correct-way-to-set-options-of-a-project-before-fetch-content/268/4
     # configure it
     message(STATUS "Downloading (if required) and configuring <lib_cmake_name> (version: ${MACE_BUILTIN_<LIB_NAME>_VERSION})")
     FetchContent_MakeAvailable(<lib_cmake_name>)
