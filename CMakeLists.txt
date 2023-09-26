@@ -103,6 +103,6 @@ include(${MACE_PROJECT_CMAKE_DIR}/LookForYamlCpp.cmake)
 # =============================================================================
 
 # Config for MACE
-include(${MACE_PROJECT_CMAKE_DIR}/MACECompileOptions.cmake)
+include(${MACE_PROJECT_CMAKE_DIR}/MACECompileConfig.cmake)
 # main content
 add_subdirectory(${MACE_PROJECT_SRC_DIR})
