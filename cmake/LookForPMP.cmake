@@ -1,13 +1,3 @@
-# Usage:
-# 1. Replace pmp with the standard name of the library (The name that find_package can find the library. If the library uses xxxConfig.cmake then it is xxx) (e.g. for yaml-cpp it is yaml-cpp, for Eigen3 it is Eigen).
-# 2. Replace PMP with a full uppercase name same as (or at least similar to, if not convenient) pmp  (e.g. for yaml-cpp it is YAML_CPP, for Eigen3 it is EIGEN, for Microsoft-GSL it is MSGSL).
-# 3. Replace 3.0.0 with the minimum version required for this library.
-# 4. Replace pmp-library- with the directory name same as what the library archive extracts to.
-# 5. Replace https://github.com/pmp-library/pmp-library/archive/refs/tags/3.0.0.tar.gz with the library archive download URL template, which should includes ${MACE_BUILTIN_PMP_VERSION} indicates the library version (e.g. for yaml-cpp it is https://github.com/jbeder/pmp/archive/refs/tags/${MACE_BUILTIN_PMP_VERSION}.tar.gz)
-# 6. Add proper options between "reuse or download" section and "configure it" section.
-# 7. Delete this guide text, and make other parts of this file prettier.
-# 8. Set options MACE_BUILTIN_PMP and MACE_BUILTIN_PMP_VERSION in the main CMakeLists.txt.
-
 message(STATUS "Looking for pmp")
 
 set(MACE_PMP_MINIMUM_REQUIRED 3.0.0)
@@ -45,7 +35,10 @@ if(MACE_BUILTIN_PMP)
     set(PMP_BUILD_TESTS OFF)
     set(PMP_BUILD_DOCS OFF)
     set(PMP_BUILD_VIS OFF)
+    set(PMP_INSTALL ON)
     set(PMP_STRICT_COMPILATION OFF)
+    set(PMP_SCALAR_TYPE 64)
+    set(PMP_INDEX_TYPE 64)
     # configure it
     message(STATUS "Downloading (if required) and configuring pmp (version: ${MACE_BUILTIN_PMP_VERSION})")
     FetchContent_MakeAvailable(pmp)
@@ -59,6 +52,8 @@ endif()
 
 if(NOT MACE_BUILTIN_PMP)
     message(STATUS "Looking for pmp - found (version: ${pmp_VERSION})")
+    set(PMP_INCLUDE_DIRS ${pmp_DIR}/include)
 else()
     message(STATUS "Looking for pmp - built-in (version: ${MACE_BUILTIN_PMP_VERSION})")
+    set(PMP_INCLUDE_DIRS ${MACE_BUILTIN_PMP_SRC_DIR}/src)
 endif()

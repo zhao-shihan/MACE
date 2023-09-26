@@ -19,9 +19,9 @@ if(LIBBFD_INCLUDE_DIR AND LIBBFD_LIBRARY)
 endif()
 if(LIBDWARF_INCLUDE_DIR AND LIBELF_INCLUDE_DIR AND LIBDWARF_LIBRARY AND LIBELF_LIBRARY)
     target_include_directories(MACEFramework PUBLIC ${LIBDWARF_INCLUDE_DIR}
-                                           ${LIBELF_INCLUDE_DIR})
+                                                    ${LIBELF_INCLUDE_DIR})
     target_link_libraries(MACEFramework ${LIBDWARF_LIBRARY}
-                               ${LIBELF_LIBRARY})
+                                        ${LIBELF_LIBRARY})
 endif()
 # fmt
 target_link_libraries(MACEFramework fmt::fmt)

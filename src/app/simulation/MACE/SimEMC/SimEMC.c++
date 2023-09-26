@@ -8,7 +8,7 @@
 
 using namespace MACE;
 
-int main(int argc, char* argv[]) {
+auto main(int argc, char* argv[]) -> int {
     Env::CLI::Geant4CLI cli;
     Env::MPIEnv mpiEnv(argc, argv, cli);
 

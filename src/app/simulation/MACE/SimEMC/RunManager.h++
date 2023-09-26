@@ -10,7 +10,7 @@ class Analysis;
 
 class RunManager final : public Geant4X::MPIRunManager {
 public:
-    static auto& Instance() { return static_cast<RunManager&>(*GetRunManager()); }
+    static auto Instance() -> auto& { return static_cast<RunManager&>(*GetRunManager()); }
 
     RunManager();
     ~RunManager();

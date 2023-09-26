@@ -5,26 +5,27 @@
 #include "G4SDManager.hh"
 #include "G4Step.hh"
 
+#include <utility>
+
 namespace MACE::SimEMC::inline SD {
 
-SiPMSD::SiPMSD(const G4String& sdName) :
-    NonMoveableBase(),
-    G4VSensitiveDetector(sdName),
-    fEventID(-1),
-    fHitsCollection(nullptr) {
-    collectionName.insert(sdName + "HC");
+SiPMSD::SiPMSD(G4String name) :
+    NonMoveableBase{},
+    G4VSensitiveDetector{std::move(name)},
+    fHitsCollection{nullptr} {
+    collectionName.insert(SensitiveDetectorName + "HC");
 }
 
-void SiPMSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
-    fHitsCollection = new EMCHitCollection(SensitiveDetectorName, collectionName[0]);
+auto SiPMSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
+    fHitsCollection = new SiPMHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-G4bool SiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
+auto SiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 }
 
-void SiPMSD::EndOfEvent(G4HCofThisEvent*) {
+auto SiPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
 }
 
 } // namespace MACE::SimEMC::inline SD

@@ -46,52 +46,53 @@ IncludeBlocks: Regroup
 IncludeCategories: 
   # special
   - Regex: '"Randomize\.hh"'
-    Priority: 3
+    Priority: 4
   - Regex: '"globals\.hh"'
-    Priority: 3
-  - Regex: '"backward\.hpp"'
     Priority: 4
   - Regex: '"RKTrackRep\.h"'
-    Priority: 12
+    Priority: 14
   - Regex: '"Track\.h"'
-    Priority: 12
+    Priority: 14
   - Regex: '"TrackPoint\.h"'
-    Priority: 12
+    Priority: 14
   # general
   - Regex: '"MACE/.*\.h\+\+"'
     Priority: 0
   - Regex: '"CLHEP/.*"'
-    Priority: 1
+    Priority: 2
   - Regex: '"ROOT/.*"'
-    Priority: 2
-  - Regex: '"R.*\.hxx"'
-    Priority: 2
-  - Regex: '"R.*\.h"'
-    Priority: 2
-  - Regex: '".*/T.*\.h"'
-    Priority: 2
-  - Regex: '"T.*\.h"'
-    Priority: 2
-  - Regex: '"G4.*"'
     Priority: 3
-  - Regex: '"yaml-cpp/.*"'
+  - Regex: '"R.*\.hxx"'
+    Priority: 3
+  - Regex: '"R.*\.h"'
+    Priority: 3
+  - Regex: '".*/T.*\.h"'
+    Priority: 3
+  - Regex: '"T.*\.h"'
+    Priority: 3
+  - Regex: '"G4.*"'
+    Priority: 4
+  - Regex: '"pmp/.*"'
     Priority: 5
-  - Regex: '"argparse/.*"'
+  - Regex: '"backward\.hpp"'
     Priority: 6
-  - Regex: '"Eigen/.*"'
+  - Regex: '"yaml-cpp/.*"'
     Priority: 7
-  - Regex: '"gsl.*\.h"'
+  - Regex: '"argparse/.*"'
     Priority: 8
-  - Regex: '"mpi.*\.h"'
+  - Regex: '"Eigen/.*"'
     Priority: 9
-  - Regex: '"gsl/.*"'
+  - Regex: '"gsl.*\.h"'
     Priority: 10
-  - Regex: '"fmt/.*\.h"'
+  - Regex: '"mpi.*\.h"'
     Priority: 11
-  - Regex: '".*\.h"'
+  - Regex: '"gsl/.*"'
     Priority: 12
-  - Regex: '".*"'
+  - Regex: '"fmt/.*\.h"'
     Priority: 13
+  # very general
+  - Regex: '".*"'
+    Priority: 1
   - Regex: '<.*>'
     Priority: 14
 IndentAccessModifiers: false
