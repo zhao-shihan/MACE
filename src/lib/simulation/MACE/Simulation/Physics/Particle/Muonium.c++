@@ -24,11 +24,10 @@ Muonium::Muonium() :
                          "lepton",
                          0,
                          0,
-                         1311,
+                         990013111,
                          false,
                          muonium_lifetime,
-                         nullptr,
-                         false} {
+                         nullptr} {
 
     // Bohr magnetron of Muonium - T. Shiroka
     // The magnetic moment of Mu is the sum of those of mu+ and e- with
