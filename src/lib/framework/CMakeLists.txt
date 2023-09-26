@@ -36,5 +36,7 @@ target_link_libraries(MACEFramework MPI::MPI_C)
 # Geant4
 target_link_libraries(MACEFramework ${Geant4_LIBRARIES})
 # ROOT
-target_include_directories(MACEFramework PUBLIC ${ROOT_INCLUDE_DIRS})
-target_link_libraries(MACEFramework ${ROOT_LIBRARIES})
+target_link_libraries(MACEFramework ROOT::Core ROOT::Hist ROOT::Tree ROOT::MathCore ROOT::ROOTDataFrame)
+# options & definitions
+target_compile_options(MACEFramework PUBLIC ${MACE_COMPILE_OPTIONS})
+target_compile_definitions(MACEFramework PUBLIC ${MACE_COMPILE_DEFINITIONS})

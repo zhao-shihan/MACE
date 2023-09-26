@@ -64,7 +64,7 @@ set(MACE_BUILTIN_YAML_CPP_VERSION 0.8.0 CACHE STRING "Set built-in yaml-cpp vers
 # Global compile options
 # =============================================================================
 
-include(${MACE_PROJECT_CMAKE_DIR}/GlobalCompileOptions.cmake)
+include(${MACE_PROJECT_CMAKE_DIR}/GlobalCompileConfig.cmake)
 
 # =============================================================================
 # Dependencies

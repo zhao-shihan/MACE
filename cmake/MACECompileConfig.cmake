@@ -41,53 +41,60 @@ if(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE)
 endif()
 
 # =============================================================================
+# Compile options and definitions for MACE
+# =============================================================================
+
+set(MACE_COMPILE_OPTIONS "")
+set(MACE_COMPILE_DEFINITIONS "")
+
+# =============================================================================
 # Compile warnings for MACE
 # =============================================================================
 
 # More warnings
 if(CMAKE_COMPILER_IS_GNUCXX)
-    add_compile_options(-Wall -Wextra -Wduplicated-cond -Wnon-virtual-dtor -pedantic -Wundef -Wunused-macros)
+    list(APPEND MACE_COMPILE_OPTIONS -Wall -Wextra -Wduplicated-cond -Wnon-virtual-dtor -pedantic -Wundef -Wunused-macros)
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    add_compile_options(-WCL4 -Wmove -Wnon-virtual-dtor -pedantic -Wundef -Wunused-macros
-                        -Wno-gnu-zero-variadic-macro-arguments)
+    list(APPEND MACE_COMPILE_OPTIONS -WCL4 -Wmove -Wnon-virtual-dtor -pedantic -Wundef -Wunused-macros
+                                     -Wno-gnu-zero-variadic-macro-arguments)
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    add_compile_options(/W4)
+    list(APPEND MACE_COMPILE_OPTIONS /W4)
 endif()
 
 # Surpress some, if needed
 if(MACE_SURPRESS_USELESS_COMPILE_WARNINGS)
     if(CMAKE_COMPILER_IS_GNUCXX)
         # # OpenMPI
-        # add_compile_options(-Wno-cast-function-type)
+        # list(APPEND MACE_COMPILE_OPTIONS -Wno-cast-function-type)
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
         # if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 15.0.0)
         #     # backward-cpp
-        #     add_compile_options(-Wno-unqualified-std-cast-call)
+        #     list(APPEND MACE_COMPILE_OPTIONS -Wno-unqualified-std-cast-call)
         # endif()
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         # ROOT (conditional expression is constant)
-        add_compile_options(/wd4127)
+        list(APPEND MACE_COMPILE_OPTIONS /wd4127)
         # Common ('argument': conversion from 'type1' to 'type2', possible loss of data)
-        add_compile_options(/wd4244)
+        list(APPEND MACE_COMPILE_OPTIONS /wd4244)
         # Common ('var': conversion from 'size_t' to 'type', possible loss of data)
-        add_compile_options(/wd4267)
+        list(APPEND MACE_COMPILE_OPTIONS /wd4267)
         # MSVC std::tuple ('derived class' : destructor was implicitly defined as deleted because a base class destructor is inaccessible or deleted)
-        add_compile_options(/wd4624)
+        list(APPEND MACE_COMPILE_OPTIONS /wd4624)
         # Common (The file contains a character that cannot be represented in the current code page (number). Save the file in Unicode format to prevent data loss)
-        add_compile_options(/wd4819)
+        list(APPEND MACE_COMPILE_OPTIONS /wd4819)
         # ROOT (using a function, class member, variable, or typedef that's marked deprecated)
-        add_compile_options(/wd4996)
+        list(APPEND MACE_COMPILE_OPTIONS /wd4996)
         # Eigen (operator 'operator-name': deprecated between enumerations of different types)
-        add_compile_options(/wd5054)
+        list(APPEND MACE_COMPILE_OPTIONS /wd5054)
     endif()
 # Even more warnings, if needed
 elseif(MACE_SHOW_EVEN_MORE_COMPILE_WARNINGS)
     if(CMAKE_COMPILER_IS_GNUCXX)
-        add_compile_options(-Weffc++)
+        list(APPEND MACE_COMPILE_OPTIONS -Weffc++)
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-        add_compile_options(-Weverything)
+        list(APPEND MACE_COMPILE_OPTIONS -Weverything)
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-        add_compile_options(/Wall)
+        list(APPEND MACE_COMPILE_OPTIONS /Wall)
     endif()
 endif()
 
@@ -96,29 +103,29 @@ endif()
 # =============================================================================
 
 if(MACE_SIGNAL_HANDLER)
-    add_compile_definitions(MACE_SIGNAL_HANDLER=1)
+    list(APPEND MACE_COMPILE_DEFINITIONS MACE_SIGNAL_HANDLER=1)
 else()
-    add_compile_definitions(MACE_SIGNAL_HANDLER=0)
+    list(APPEND MACE_COMPILE_DEFINITIONS MACE_SIGNAL_HANDLER=0)
 endif()
 
 if(MACE_USE_G4GDML)
-    add_compile_definitions(MACE_USE_G4GDML=1)
+    list(APPEND MACE_COMPILE_DEFINITIONS MACE_USE_G4GDML=1)
 else()
-    add_compile_definitions(MACE_USE_G4GDML=0)
+    list(APPEND MACE_COMPILE_DEFINITIONS MACE_USE_G4GDML=0)
 endif()
 
 if(MACE_USE_G4VIS)
-    add_compile_definitions(MACE_USE_G4VIS=1)
+    list(APPEND MACE_COMPILE_DEFINITIONS MACE_USE_G4VIS=1)
 else()
-    add_compile_definitions(MACE_USE_G4VIS=0)
+    list(APPEND MACE_COMPILE_DEFINITIONS MACE_USE_G4VIS=0)
 endif()
 
 if(MACE_ENABLE_MSVC_STD_CONFORMITY AND CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     # Enable standard-conformity
-    add_compile_options(/permissive- /Zc:__cplusplus /Zc:inline)
+    list(APPEND MACE_COMPILE_OPTIONS /permissive- /Zc:__cplusplus /Zc:inline)
     message(STATUS "MSVC standard-conformity enabled (/permissive- /Zc:__cplusplus /Zc:inline)")
     # Be permissive to standard cfunctions
-    add_compile_definitions(_CRT_SECURE_NO_WARNINGS=1)
+    list(APPEND MACE_COMPILE_DEFINITIONS _CRT_SECURE_NO_WARNINGS=1)
 endif()
 
 # =============================================================================
@@ -126,20 +133,20 @@ endif()
 # =============================================================================
 
 # Inform OpenMPI not to bring mpicxx in, it's necessary for most cases.
-add_compile_definitions(OMPI_SKIP_MPICXX=1)
+list(APPEND MACE_COMPILE_DEFINITIONS OMPI_SKIP_MPICXX=1)
 
 # Inform MPICH and derivatives not to bring mpicxx in, seems unnecessary but more consistent.
-add_compile_definitions(MPICH_SKIP_MPICXX=1)
+list(APPEND MACE_COMPILE_DEFINITIONS MPICH_SKIP_MPICXX=1)
 
 # =============================================================================
 # Eigen-induced compile options for MACE
 # =============================================================================
 
 # Inform Eigen not to enable multithreading, though we are not using OpenMP. It is safer to do so.
-add_compile_definitions(EIGEN_DONT_PARALLELIZE=1)
+list(APPEND MACE_COMPILE_DEFINITIONS EIGEN_DONT_PARALLELIZE=1)
 
 if(CMAKE_CXX_PLATFORM_ID STREQUAL "MinGW")
     # MinGW and GCC 12.2 have issues with explitic vectorization
-    add_compile_definitions(EIGEN_DONT_VECTORIZE=1)
+    list(APPEND MACE_COMPILE_DEFINITIONS EIGEN_DONT_VECTORIZE=1)
     message(NOTICE "***Notice: Building on Windows with MinGW, disabling vectorization of Eigen")
 endif()
