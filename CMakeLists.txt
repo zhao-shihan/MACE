@@ -37,7 +37,6 @@ include(CMakeDependentOption)
 option(MACE_BUILD_TEST "Build MACE with test programs." ON)
 option(MACE_BUILTIN_ARGPARSE "Use built-in argparse (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_BACKWARD "Use built-in backward-cpp (network or pre-downloaded source is required)." OFF)
-option(MACE_BUILTIN_EIGEN "Use built-in Eigen (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_FMT "Use built-in fmt (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_GENFIT "Use built-in GenFit (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_MSGSL "Use built-in Microsoft.GSL (network or pre-downloaded source is required)." OFF)
@@ -56,7 +55,6 @@ option(MACE_USE_SHARED_MSVC_RT "Select the MSVC runtime library for use (MSVC on
 cmake_dependent_option(MACE_SHOW_EVEN_MORE_COMPILE_WARNINGS "Add compile flag to show even more compile warnings (GCC: -Weffc++, Clang: -Weverything, MSVC: /Wall)." OFF NOT MACE_SURPRESS_USELESS_COMPILE_WARNINGS OFF)
 set(MACE_BUILTIN_ARGPARSE_VERSION 2.9 CACHE STRING "Set built-in argparse version (if required).")
 set(MACE_BUILTIN_BACKWARD_VERSION 1.6 CACHE STRING "Set built-in backward-cpp version (if required).")
-set(MACE_BUILTIN_EIGEN_VERSION 3.4.0 CACHE STRING "Set built-in Eigen version (if required).")
 set(MACE_BUILTIN_FMT_VERSION 10.1.1 CACHE STRING "Set built-in fmt version (if required).")
 set(MACE_BUILTIN_MSGSL_VERSION 4.0.0 CACHE STRING "Set built-in Microsoft.GSL version (if required).")
 set(MACE_BUILTIN_PMP_VERSION 3.0.0 CACHE STRING "Set built-in fmt version (if required).")
@@ -76,6 +74,8 @@ include(${MACE_PROJECT_CMAKE_DIR}/GlobalCompileOptions.cmake)
 
 # MPI
 include(${MACE_PROJECT_CMAKE_DIR}/LookForMPI.cmake)
+# Eigen
+include(${MACE_PROJECT_CMAKE_DIR}/LookForEigen.cmake)
 # Geant4
 include(${MACE_PROJECT_CMAKE_DIR}/LookForGeant4.cmake)
 # ROOT
@@ -93,12 +93,10 @@ include(${MACE_PROJECT_CMAKE_DIR}/LookForFmt.cmake)
 include(${MACE_PROJECT_CMAKE_DIR}/LookForGenFit.cmake)
 # Microsoft.GSL
 include(${MACE_PROJECT_CMAKE_DIR}/LookForMicrosoftGSL.cmake)
-# yaml-cpp
-include(${MACE_PROJECT_CMAKE_DIR}/LookForYamlCpp.cmake)
-# Eigen (should be the last whenever possible, otherwise might run into problem if other download steps raise error)
-include(${MACE_PROJECT_CMAKE_DIR}/LookForEigen.cmake)
 # PMP
 include(${MACE_PROJECT_CMAKE_DIR}/LookForPMP.cmake)
+# yaml-cpp
+include(${MACE_PROJECT_CMAKE_DIR}/LookForYamlCpp.cmake)
 
 # =============================================================================
 # Let's go!
