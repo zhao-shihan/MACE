@@ -31,7 +31,7 @@ constexpr auto div(long x, long y) -> std::ldiv_t {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::div(x, y);
 #else // backport
-    return ldiv(x, y);
+    return {.quot = x / y, .rem = x % y};
 #endif
 }
 
@@ -39,7 +39,7 @@ constexpr auto div(long long x, long long y) -> std::lldiv_t {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::div(x, y);
 #else // backport
-    return lldiv(x, y);
+    return {.quot = x / y, .rem = x % y};
 #endif
 }
 
@@ -47,7 +47,7 @@ constexpr auto ldiv(long x, long y) -> std::ldiv_t {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::ldiv(x, y);
 #else // backport
-    return {.quot = x / y, .rem = x % y};
+    return div(x, y);
 #endif
 }
 
@@ -55,7 +55,7 @@ constexpr auto lldiv(long long x, long long y) -> std::lldiv_t {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::lldiv(x, y);
 #else // backport
-    return {.quot = x / y, .rem = x % y};
+    return div(x, y);
 #endif
 }
 
@@ -63,7 +63,7 @@ constexpr auto lldiv(long long x, long long y) -> std::lldiv_t {
 // #ifdef __cpp_lib_constexpr_cmath // C++2b
 //     return std::div(x, y);
 // #else // backport
-//     return imaxdiv(x, y);
+//     return {.quot = x / y, .rem = x % y};
 // #endif
 // }
 
@@ -145,7 +145,7 @@ MACE_ALWAYS_INLINE constexpr auto abs(long n) -> long {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::abs(n);
 #else // backport
-    return labs(n);
+    return n >= 0 ? n : -n;
 #endif
 }
 
@@ -153,7 +153,7 @@ MACE_ALWAYS_INLINE constexpr auto abs(long long n) -> long long {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::abs(n);
 #else // backport
-    return llabs(n);
+    return n >= 0 ? n : -n;
 #endif
 }
 
@@ -161,7 +161,7 @@ MACE_ALWAYS_INLINE constexpr auto labs(long n) -> long {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::labs(n);
 #else // backport
-    return n >= 0 ? n : -n;
+    return abs(n);
 #endif
 }
 
@@ -169,7 +169,7 @@ MACE_ALWAYS_INLINE constexpr auto llabs(long long n) -> long long {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::llabs(n);
 #else // backport
-    return n >= 0 ? n : -n;
+    return abs(n);
 #endif
 }
 
@@ -177,7 +177,7 @@ MACE_ALWAYS_INLINE constexpr auto llabs(long long n) -> long long {
 // #ifdef __cpp_lib_constexpr_cmath // C++2b
 //     return std::abs(n);
 // #else // backport
-//     return imaxabs(n);
+//     return n >= 0 ? n : -n;
 // #endif
 // }
 
