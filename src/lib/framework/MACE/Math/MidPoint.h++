@@ -9,8 +9,8 @@
 
 namespace MACE::Math {
 
-constexpr decltype(auto) MidPoint(const Concept::GeneralArithmetic auto& a,
-                                  const Concept::GeneralArithmetic auto& b)
+constexpr auto MidPoint(const Concept::GeneralArithmetic auto& a,
+                        const Concept::GeneralArithmetic auto& b) -> decltype(auto)
     requires(not std::same_as<decltype(a), bool> and
              not std::same_as<decltype(b), bool>) and
             requires { a + b; } and
