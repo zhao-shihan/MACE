@@ -95,8 +95,6 @@ void MuoniumTransport<ATarget>::ProposeRandomFlight(const G4Track& track) {
     const auto timeLimit = track.GetDynamicParticle()->GetPreAssignedDecayProperTime() - track.GetProperTime();
     // std dev of velocity of single direction
     const auto sigmaV = std::sqrt((k_Boltzmann * c_squared / muon_mass_c2) * track.GetMaterial()->GetTemperature());
-    // the trial step in vacuum regions of target fine structure
-    const auto stepInVacuum = 2 * fMeanFreePath;
 
     // the total flight length in this G4Step
     G4double trueStepLength = 0;
@@ -116,9 +114,7 @@ void MuoniumTransport<ATarget>::ProposeRandomFlight(const G4Track& track) {
     // flag indicate that the flight was terminated by decay
     G4bool timeUp;
     // flag indicate that the flight was terminated by target boundary
-    auto insideVolume = fTarget->VolumeContain(initialPosition);
-    // flag indicate that the muonium is not inside the material
-    auto insideMaterial = fTarget->Contain(initialPosition, insideVolume);
+    G4bool insideVolume;
 
     {
         // a much faster and good random engine
@@ -128,9 +124,7 @@ void MuoniumTransport<ATarget>::ProposeRandomFlight(const G4Track& track) {
         // do random flight
         do {
             // set free path
-            freePath = insideMaterial ?
-                           Math::Random::ExponentialFast(fMeanFreePath)(xoshiro256Plus) :
-                           stepInVacuum;
+            freePath = Math::Random::ExponentialFast(fMeanFreePath)(xoshiro256Plus);
             // update flight length
             trueStepLength += freePath;
             // update time
@@ -144,8 +138,7 @@ void MuoniumTransport<ATarget>::ProposeRandomFlight(const G4Track& track) {
             insideVolume = fTarget->VolumeContain(position);
             if (timeUp or not insideVolume) { break; }
             // check whether the end point inside material
-            insideMaterial = fTarget->Contain(position, true);
-            if (not insideMaterial) { continue; }
+            if (not fTarget->Contain(position, true)) { continue; }
             // if inside material update its velocity
             // set a gauss vector of sigma=1
             direction = standardGaussian3D(xoshiro256Plus);
