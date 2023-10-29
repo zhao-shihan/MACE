@@ -39,6 +39,7 @@ option(MACE_BUILTIN_ARGPARSE "Use built-in argparse (network or pre-downloaded s
 option(MACE_BUILTIN_BACKWARD "Use built-in backward-cpp (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_FMT "Use built-in fmt (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_GENFIT "Use built-in GenFit (network or pre-downloaded source is required)." OFF)
+option(MACE_BUILTIN_GENFIT_EVENT_DISPLAY "Build GenFit event display module if GenFit is built-in." ON)
 option(MACE_BUILTIN_MSGSL "Use built-in Microsoft.GSL (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_PMP "Use built-in pmp (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_YAML_CPP "Use built-in yaml-cpp (network or pre-downloaded source is required)." OFF)
