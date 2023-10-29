@@ -1,5 +1,0 @@
-#include "MACE/Data/Model/Track/CDCPhysicsTrack.h++"
-
-MACE_DATA_MODEL_FIELD_DEFINE_FIELD_NAME_TITLE(CDCPhysicsTrack::VertexPosition)
-MACE_DATA_MODEL_FIELD_DEFINE_FIELD_NAME_TITLE(CDCPhysicsTrack::VertexKineticEnergy)
-MACE_DATA_MODEL_FIELD_DEFINE_FIELD_NAME_TITLE(CDCPhysicsTrack::VertexMomentum)
