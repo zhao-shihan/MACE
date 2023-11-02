@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Concept/InstantiatedFrom.h++"
 #include "MACE/Data/CEvalNTSTA.h++"
 #include "MACE/Data/Field.h++"
 #include "MACE/Extension/gslx/index_sequence.h++"
@@ -64,31 +65,27 @@ concept IsField = internal::IsField<T>::value;
 
 } // namespace internal
 
-template<typename... Ts>
-    requires(... and static_cast<bool>(internal::IsModel<Ts> xor internal::IsField<Ts>))
-struct Model;
+template<typename T>
+concept Modelizable = static_cast<bool>(internal::IsModel<T> xor internal::IsField<T>);
 
-template<typename AModel, typename... AOthers>
-    requires(internal::IsModel<AModel> and ... and static_cast<bool>(internal::IsModel<AOthers> xor internal::IsField<AOthers>))
-struct Model<AModel, AOthers...> final : internal::ModelBase<Model<AModel, AOthers...>,
-                                                             stdx::tuple_concat_t<typename AModel::FieldTuple,
-                                                                                  typename Model<AOthers...>::FieldTuple>> {
-    static constexpr auto Topmost() { return false; }
-};
+template<Modelizable... Ts>
+struct Model; // fields should be placed after data models in template parameters!
+
+template<internal::IsModel AModel, Modelizable... AOthers>
+struct Model<AModel, AOthers...> final
+    : internal::ModelBase<Model<AModel, AOthers...>,
+                          stdx::tuple_concat_t<typename AModel::FieldTuple,
+                                               typename Model<AOthers...>::FieldTuple>> {};
 
 template<GoodFieldValueType... Ts, CEvalNTSTA... ANames, CEvalNTSTA... ATitles>
-struct Model<Field<Ts, ANames, ATitles>...> final : internal::ModelBase<Model<Field<Ts, ANames, ATitles>...>,
-                                                                        std::tuple<Field<Ts, ANames, ATitles>...>> {
-    static constexpr auto Topmost() { return true; }
-};
+struct Model<Field<Ts, ANames, ATitles>...> final
+    : internal::ModelBase<Model<Field<Ts, ANames, ATitles>...>,
+                          std::tuple<Field<Ts, ANames, ATitles>...>> {};
 
 template<>
-struct Model<> final : internal::ModelBase<Model<>,
-                                           std::tuple<>> {};
-
-template<typename AField, typename... ANotAllFields>
-    requires(internal::IsField<AField> and (... or internal::IsModel<ANotAllFields>))
-struct Model<AField, ANotAllFields...>; // field should be placed after data models or data sections in template parameters!
+struct Model<> final
+    : internal::ModelBase<Model<>,
+                          std::tuple<>> {};
 
 } // namespace MACE::Data
 

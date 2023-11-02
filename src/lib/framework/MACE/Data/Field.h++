@@ -1,8 +1,7 @@
 #pragma once
 
-#include "MACE/Concept/ROOTFundamental.h++"
 #include "MACE/Data/CEvalNTSTA.h++"
-#include "MACE/Utility/FixedString.h++"
+#include "MACE/Data/internal/TypeTraits.h++"
 #include "MACE/Utility/NonConstructibleBase.h++"
 #include "MACE/Utility/VectorAssign.h++"
 #include "MACE/Utility/VectorCast.h++"
@@ -19,24 +18,6 @@
 #include <utility>
 
 namespace MACE::Data {
-
-namespace internal {
-
-template<typename>
-struct IsStdArray
-    : std::false_type {};
-template<typename T, std::size_t N>
-struct IsStdArray<std::array<T, N>>
-    : std::true_type {};
-
-template<typename>
-struct IsFixedString
-    : std::false_type {};
-template<std::size_t N>
-struct IsFixedString<FixedString<N>>
-    : std::true_type {};
-
-} // namespace internal
 
 template<typename T>
 concept GoodFieldValueType =
@@ -78,11 +59,11 @@ public:
 
     constexpr operator T&() & { return fObject; }
     constexpr operator const T&() const& { return fObject; }
-    constexpr operator T() && { return std::move(fObject); }
+    constexpr operator T&&() && { return std::move(fObject); }
 
     constexpr auto operator()() & -> auto& { return fObject; }
     constexpr auto operator()() const& -> const auto& { return fObject; }
-    constexpr auto operator()() && -> auto { return std::move(fObject); }
+    constexpr auto operator()() && -> auto&& { return std::move(fObject); }
 
     template<typename U>
     constexpr auto As() const& -> std::conditional_t<std::same_as<T, U>, const T&, U>;
