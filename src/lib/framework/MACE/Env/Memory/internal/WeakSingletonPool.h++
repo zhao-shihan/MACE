@@ -5,6 +5,9 @@
 
 #include "gsl/gsl"
 
+#include "fmt/format.h"
+
+#include <cstdio>
 #include <functional>
 #include <map>
 #include <optional>
@@ -25,14 +28,14 @@ public:
     WeakSingletonPool();
     ~WeakSingletonPool();
 
-    static WeakSingletonPool& Instance();
+    static auto Instance() -> WeakSingletonPool&;
 
     template<WeakSingletonified AWeakSingleton>
-    [[nodiscard]] std::optional<std::reference_wrapper<Node>> Find();
+    [[nodiscard]] auto Find() -> std::optional<std::reference_wrapper<Node>>;
     template<WeakSingletonified AWeakSingleton>
-    [[nodiscard]] auto Contains() const { return fInstanceMap.contains(typeid(AWeakSingleton)); }
+    [[nodiscard]] auto Contains() const -> auto { return fInstanceMap.contains(typeid(AWeakSingleton)); }
     template<WeakSingletonified AWeakSingleton>
-    [[nodiscard]] Node& Insert(gsl::not_null<AWeakSingleton*> instance);
+    [[nodiscard]] auto Insert(gsl::not_null<AWeakSingleton*> instance) -> Node&;
 
 private:
     std::map<std::type_index, Node> fInstanceMap;

@@ -1,25 +1,23 @@
 namespace MACE::Env::Memory {
 
-template<class ADerived>
+template<typename ADerived>
 internal::WeakSingletonPool::Node* WeakSingleton<ADerived>::fgInstanceNode = nullptr;
 
-template<class ADerived>
+template<typename ADerived>
 WeakSingleton<ADerived>::WeakSingleton() :
-    WeakSingletonBase() {
+    WeakSingletonBase{} {
     static_assert(WeakSingletonified<ADerived>);
     if (auto& weakSingletonPool = internal::WeakSingletonPool::Instance();
         not weakSingletonPool.Contains<ADerived>()) {
         fgInstanceNode = &weakSingletonPool.Insert<ADerived>(static_cast<ADerived*>(this));
     } else {
-        throw std::logic_error(
-            std::string("MACE::Env::Memory::WeakSingleton::WeakSingleton(): "
-                        "Trying to construct ")
-                .append(typeid(ADerived).name())
-                .append(" (mute singleton in environment) twice"));
+        throw std::logic_error{fmt::format("MACE::Env::Memory::WeakSingleton::WeakSingleton(): "
+                                           "Trying to construct {} (mute singleton in environment) twice",
+                                           typeid(ADerived).name())};
     }
 }
 
-template<class ADerived>
+template<typename ADerived>
 WeakSingleton<ADerived>::~WeakSingleton() {
     *fgInstanceNode = nullptr;
     fgInstanceNode = nullptr;

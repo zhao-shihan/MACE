@@ -1,7 +1,7 @@
 namespace MACE::Env::Memory::internal {
 
 template<WeakSingletonified AWeakSingleton>
-[[nodiscard]] std::optional<std::reference_wrapper<WeakSingletonPool::Node>> WeakSingletonPool::Find() {
+[[nodiscard]] auto WeakSingletonPool::Find() -> std::optional<std::reference_wrapper<WeakSingletonPool::Node>> {
     if (const auto existed = fInstanceMap.find(typeid(AWeakSingleton));
         existed == fInstanceMap.cend()) {
         return std::nullopt;
@@ -11,16 +11,14 @@ template<WeakSingletonified AWeakSingleton>
 }
 
 template<WeakSingletonified AWeakSingleton>
-[[nodiscard]] WeakSingletonPool::Node& WeakSingletonPool::Insert(gsl::not_null<AWeakSingleton*> instance) {
-    if (const auto [iter, inserted] = fInstanceMap.try_emplace(typeid(decltype(*instance)), instance);
+[[nodiscard]] auto WeakSingletonPool::Insert(gsl::not_null<AWeakSingleton*> instance) -> Node& {
+    if (const auto [iter, inserted] = fInstanceMap.try_emplace(typeid(AWeakSingleton), instance);
         inserted) {
         return iter->second;
     } else {
-        throw std::logic_error(
-            std::string("MACE::Env::Memory::internal::WeakSingletonPool::Insert: "
-                        "Instance of type ")
-                .append(typeid(decltype(*instance)).name())
-                .append(" already exists"));
+        throw std::logic_error{fmt::format("MACE::Env::Memory::internal::WeakSingletonPool::Insert: "
+                                           "Instance of type {} already exists",
+                                           typeid(AWeakSingleton).name())};
     }
 }
 

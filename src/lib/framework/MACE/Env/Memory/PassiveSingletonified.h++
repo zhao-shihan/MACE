@@ -13,10 +13,10 @@ class SingletonBase;
 
 } // namespace internal
 
-template<class ADerived>
+template<typename ADerived>
 class PassiveSingleton;
 
-template<class T>
+template<typename T>
 concept PassiveSingletonified =
     requires {
         { T::Instance() } -> std::same_as<T&>;

@@ -6,6 +6,8 @@
 
 #include "gsl/gsl"
 
+#include "fmt/format.h"
+
 #include <functional>
 #include <map>
 #include <optional>
@@ -27,12 +29,12 @@ public:
 
 public:
     template<Singletonified ASingleton>
-    [[nodiscard]] std::optional<std::reference_wrapper<Node>> Find();
+    [[nodiscard]] auto Find() -> std::optional<std::reference_wrapper<Node>>;
     template<Singletonified ASingleton>
-    [[nodiscard]] auto Contains() const { return fInstanceMap.contains(typeid(ASingleton)); }
+    [[nodiscard]] auto Contains() const -> auto { return fInstanceMap.contains(typeid(ASingleton)); }
     template<Singletonified ASingleton>
-    [[nodiscard]] Node& Insert(gsl::not_null<ASingleton*> instance);
-    [[nodiscard]] std::vector<BaseNode> GetUndeletedInReverseInsertionOrder() const;
+    [[nodiscard]] auto Insert(gsl::not_null<ASingleton*> instance) -> Node&;
+    [[nodiscard]] auto GetUndeletedInReverseInsertionOrder() const -> std::vector<BaseNode>;
 
 private:
     std::map<std::type_index, std::pair<Node, const std::pair<gsl::index, BaseNode>>> fInstanceMap;

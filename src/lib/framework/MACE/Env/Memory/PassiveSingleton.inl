@@ -1,23 +1,23 @@
 namespace MACE::Env::Memory {
 
-template<class ADerived>
+template<typename ADerived>
 ADerived* PassiveSingleton<ADerived>::fgInstance = nullptr;
 
-template<class ADerived>
+template<typename ADerived>
 PassiveSingleton<ADerived>::PassiveSingleton() :
-    PassiveSingletonBase(),
-    WeakSingleton<ADerived>() {
+    PassiveSingletonBase{},
+    WeakSingleton<ADerived>{} {
     static_assert(PassiveSingletonified<ADerived>);
     fgInstance = static_cast<ADerived*>(this);
 }
 
-template<class ADerived>
+template<typename ADerived>
 PassiveSingleton<ADerived>::~PassiveSingleton() {
     fgInstance = nullptr;
 }
 
-template<class ADerived>
-ADerived& PassiveSingleton<ADerived>::Instance() {
+template<typename ADerived>
+auto PassiveSingleton<ADerived>::Instance() -> ADerived& {
     if (fgInstance == nullptr) [[unlikely]] {
         assert(WeakSingleton<ADerived>::fgInstanceNode == nullptr);
         FindInstance();
@@ -26,8 +26,8 @@ ADerived& PassiveSingleton<ADerived>::Instance() {
     return *fgInstance;
 }
 
-template<class ADerived>
-void PassiveSingleton<ADerived>::FindInstance() {
+template<typename ADerived>
+auto PassiveSingleton<ADerived>::FindInstance() -> void {
     if (const auto optionalNode = internal::WeakSingletonPool::Instance().Find<ADerived>();
         optionalNode.has_value()) {
         if (auto& node = optionalNode->get();
@@ -35,16 +35,14 @@ void PassiveSingleton<ADerived>::FindInstance() {
             WeakSingleton<ADerived>::fgInstanceNode = std::addressof(node);
             fgInstance = static_cast<ADerived*>(node);
         } else {
-            throw std::logic_error(
-                std::string("MACE::Env::Memory::PassiveSingleton::Instance(): The instance of ")
-                    .append(typeid(ADerived).name())
-                    .append(" (free singleton in environment) has been deleted"));
+            throw std::logic_error{fmt::format("MACE::Env::Memory::PassiveSingleton::Instance(): "
+                                               "The instance of {} (passive singleton in environment) has been deleted",
+                                               typeid(ADerived).name())};
         }
     } else {
-        throw std::logic_error(
-            std::string("MACE::Env::Memory::PassiveSingleton::Instance(): ")
-                .append(typeid(ADerived).name())
-                .append(" (free singleton in environment) has not been instantiated"));
+        throw std::logic_error{fmt::format("MACE::Env::Memory::PassiveSingleton::Instance(): "
+                                           "{} (passive singleton in environment) has not been instantiated",
+                                           typeid(ADerived).name())};
     }
 }
 

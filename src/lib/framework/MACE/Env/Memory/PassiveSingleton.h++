@@ -1,9 +1,11 @@
 #pragma once
 
-#include "MACE/Env/Memory/internal/WeakSingletonPool.h++"
-#include "MACE/Env/Memory/internal/PassiveSingletonBase.h++"
-#include "MACE/Env/Memory/WeakSingleton.h++"
 #include "MACE/Env/Memory/PassiveSingletonified.h++"
+#include "MACE/Env/Memory/WeakSingleton.h++"
+#include "MACE/Env/Memory/internal/PassiveSingletonBase.h++"
+#include "MACE/Env/Memory/internal/WeakSingletonPool.h++"
+
+#include "fmt/format.h"
 
 #include <cassert>
 #include <memory>
@@ -13,7 +15,7 @@
 
 namespace MACE::Env::Memory {
 
-template<class ADerived>
+template<typename ADerived>
 class PassiveSingleton : public internal::PassiveSingletonBase,
                          public WeakSingleton<ADerived> {
 protected:
@@ -21,10 +23,10 @@ protected:
     ~PassiveSingleton();
 
 public:
-    static ADerived& Instance();
+    static auto Instance() -> ADerived&;
 
 private:
-    static void FindInstance();
+    static auto FindInstance() -> void;
 
 private:
     static ADerived* fgInstance;
