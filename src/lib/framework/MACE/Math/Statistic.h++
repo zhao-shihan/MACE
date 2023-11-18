@@ -16,10 +16,64 @@
 
 namespace MACE::Math {
 
-enum struct Stat1DUse { Scalar,
-                        Vector };
+template<int N>
+    requires(N > 0)
+class Statistic;
 
-template<int N, Stat1DUse = Stat1DUse::Scalar>
+template<>
+class Statistic<1> {
+public:
+    constexpr Statistic();
+    template<std::ranges::input_range S = std::initializer_list<double>>
+        requires std::convertible_to<std::ranges::range_value_t<S>, double>
+    constexpr explicit Statistic(const S& sample, double weight = 1);
+    template<std::ranges::input_range S = std::initializer_list<double>, std::ranges::input_range W = std::initializer_list<double>>
+        requires std::convertible_to<std::ranges::range_value_t<S>, double> and std::convertible_to<std::ranges::range_value_t<W>, double>
+    constexpr Statistic(const S& sample, const W& weight);
+
+    constexpr auto Fill(double sample, double weight = 1) -> void;
+    template<std::ranges::input_range S = std::initializer_list<double>>
+        requires std::convertible_to<std::ranges::range_value_t<S>, double>
+    constexpr auto Fill(const S& sample, double weight = 1) -> void;
+    template<std::ranges::input_range S = std::initializer_list<double>, std::ranges::input_range W = std::initializer_list<double>>
+        requires std::convertible_to<std::ranges::range_value_t<S>, double> and std::convertible_to<std::ranges::range_value_t<W>, double>
+    constexpr auto Fill(const S& sample, const W& weight) -> void;
+
+    constexpr auto Sum() const -> const auto& { return fSumWX; }
+    constexpr auto SumProduct() const -> const auto& { return fSumWX2; }
+    constexpr auto SumCubic() const -> const auto& { return fSumWX3; }
+    constexpr auto SumQuartic() const -> const auto& { return fSumWX4; }
+
+    constexpr auto WeightSum() const -> const auto& { return fSumW; }
+
+    template<int K>
+        requires(0 <= K and K <= 4)
+    constexpr auto Moment() const -> double;
+    template<int K>
+        requires(0 <= K and K <= 4)
+    constexpr auto CentralMoment() const -> double;
+
+    constexpr auto Mean() const -> decltype(auto) { return Moment<1>(); }
+    constexpr auto MeanSquare() const -> decltype(auto) { return Moment<2>(); }
+    constexpr auto MeanCubic() const -> decltype(auto) { return Moment<3>(); }
+    constexpr auto MeanQuartic() const -> decltype(auto) { return Moment<4>(); }
+
+    constexpr auto Variance() const -> decltype(auto) { return CentralMoment<2>(); }
+    auto StdDev() const -> decltype(auto) { return std::sqrt(Variance()); }
+
+    auto Skewness() const -> decltype(auto) { return CentralMoment<3>() / Math::Cubic(StdDev()); }
+
+    constexpr auto Kurtosis() const -> decltype(auto) { return CentralMoment<4>() / Math::Square(Variance()); }
+
+private:
+    double fSumWX;
+    double fSumWX2;
+    double fSumWX3;
+    double fSumWX4;
+    double fSumW;
+};
+
+template<int N>
     requires(N > 0)
 class Statistic {
 public:
@@ -40,14 +94,14 @@ public:
         requires Concept::InputVectorAny<std::ranges::range_value_t<S>, N> and std::convertible_to<std::ranges::range_value_t<W>, double>
     auto Fill(const S& sample, const W& weight) -> void;
 
-    auto Sum(int i) const { return fSumWX[i]; }
-    auto SumProduct(int i, int j) const { return fSumWXX(i, j); }
-    auto SumSquare(int i) const { return SumProduct(i, i); }
-    auto SumCubic(int i) const { return fSumWX3[i]; }
-    auto SumQuartic(int i) const { return fSumWX4[i]; }
+    auto Sum(int i) const -> decltype(auto) { return fSumWX[i]; }
+    auto SumProduct(int i, int j) const -> decltype(auto) { return fSumWXX(i, j); }
+    auto SumSquare(int i) const -> decltype(auto) { return SumProduct(i, i); }
+    auto SumCubic(int i) const -> decltype(auto) { return fSumWX3[i]; }
+    auto SumQuartic(int i) const -> decltype(auto) { return fSumWX4[i]; }
     auto Sum() const -> const auto& { return fSumWX; }
     auto SumProduct() const -> const auto& { return fSumWXX; }
-    auto SumSquare() const { return SumProduct().diagonal().eval(); }
+    auto SumSquare() const -> decltype(auto) { return SumProduct().diagonal().eval(); }
     auto SumCubic() const -> const auto& { return fSumWX3; }
     auto SumQuartic() const -> const auto& { return fSumWX4; }
 
@@ -67,89 +121,42 @@ public:
         requires(0 <= K and K <= 4)
     auto CentralMoment() const -> Eigen::Vector<double, N>;
 
-    auto Mixed2ndMoment(int i, int j) const { return fSumWXX(i, j) / fSumW; }
-    auto Mixed2ndMoment() const { return (fSumWXX / fSumW).eval(); }
+    auto Mixed2ndMoment(int i, int j) const -> decltype(auto) { return fSumWXX(i, j) / fSumW; }
+    auto Mixed2ndMoment() const -> decltype(auto) { return (fSumWXX / fSumW).eval(); }
 
-    auto Mixed2ndCentralMoment(int i, int j) const { return Mixed2ndMoment(i, j) - Moment<1>(i) * Moment<1>(j); }
+    auto Mixed2ndCentralMoment(int i, int j) const -> decltype(auto) { return Mixed2ndMoment(i, j) - Moment<1>(i) * Moment<1>(j); }
     auto Mixed2ndCentralMoment() const -> Eigen::Matrix<double, N, N>;
 
-    auto Mean(int i) const { return Moment<1>(i); }
-    auto MeanSquare(int i) { return Moment<2>(i); }
-    auto MeanCubic(int i) const { return Moment<3>(i); }
-    auto MeanQuartic(int i) const { return Moment<4>(i); }
-    auto MeanProduct(int i, int j) const { return Mixed2ndMoment(i, j); }
-    auto Mean() const { return Moment<1>(); }
-    auto MeanSquare() const { return Moment<2>(); }
-    auto MeanCubic() const { return Moment<3>(); }
-    auto MeanQuartic() const { return Moment<4>(); }
-    auto MeanProduct() const { return Mixed2ndMoment(); }
+    auto Mean(int i) const -> decltype(auto) { return Moment<1>(i); }
+    auto MeanSquare(int i) const -> decltype(auto) { return Moment<2>(i); }
+    auto MeanCubic(int i) const -> decltype(auto) { return Moment<3>(i); }
+    auto MeanQuartic(int i) const -> decltype(auto) { return Moment<4>(i); }
+    auto MeanProduct(int i, int j) const -> decltype(auto) { return Mixed2ndMoment(i, j); }
+    auto Mean() const -> decltype(auto) { return Moment<1>(); }
+    auto MeanSquare() const -> decltype(auto) { return Moment<2>(); }
+    auto MeanCubic() const -> decltype(auto) { return Moment<3>(); }
+    auto MeanQuartic() const -> decltype(auto) { return Moment<4>(); }
+    auto MeanProduct() const -> decltype(auto) { return Mixed2ndMoment(); }
 
-    auto Variance(int i) const { return CentralMoment<2>(i); }
-    auto StdDev(int i) const { return sqrt(Variance(i)); }
-    auto Covariance(int i, int j) const { return Mixed2ndCentralMoment(i, j); }
-    auto Variance() const { return CentralMoment<2>(); }
-    auto StdDev() const { return Variance().cwiseSqrt().eval(); }
-    auto Covariance() const { return Mixed2ndCentralMoment(); }
+    auto Variance(int i) const -> decltype(auto) { return CentralMoment<2>(i); }
+    auto StdDev(int i) const -> decltype(auto) { return std::sqrt(Variance(i)); }
+    auto Covariance(int i, int j) const -> decltype(auto) { return Mixed2ndCentralMoment(i, j); }
+    auto Variance() const -> decltype(auto) { return CentralMoment<2>(); }
+    auto StdDev() const -> decltype(auto) { return Variance().cwiseSqrt().eval(); }
+    auto Covariance() const -> decltype(auto) { return Mixed2ndCentralMoment(); }
 
-    auto Skewness(int i) const { return CentralMoment<3>(i) / Math::Cubic(StdDev(i)); }
+    auto Skewness(int i) const -> decltype(auto) { return CentralMoment<3>(i) / Math::Cubic(StdDev(i)); }
     auto Skewness() const -> Eigen::Vector<double, N>;
 
-    auto Kurtosis(int i) const { return CentralMoment<4>(i) / Math::Square(Variance(i)); }
+    auto Kurtosis(int i) const -> decltype(auto) { return CentralMoment<4>(i) / Math::Square(Variance(i)); }
     auto Kurtosis() const -> Eigen::Vector<double, N>;
 
-protected:
+private:
     Eigen::Vector<double, N> fSumWX;
     Eigen::Matrix<double, N, N> fSumWXX;
     Eigen::Vector<double, N> fSumWX3;
     Eigen::Vector<double, N> fSumWX4;
     double fSumW;
-};
-
-template<>
-class Statistic<1, Stat1DUse::Scalar> : protected Statistic<1, Stat1DUse::Vector> {
-private:
-    using Base = Statistic<1, Stat1DUse::Vector>;
-
-public:
-    Statistic();
-    template<std::ranges::input_range S = std::initializer_list<double>>
-        requires std::convertible_to<std::ranges::range_value_t<S>, double>
-    explicit Statistic(const S& sample, double weight = 1);
-    template<std::ranges::input_range S = std::initializer_list<double>, std::ranges::input_range W = std::initializer_list<double>>
-        requires std::convertible_to<std::ranges::range_value_t<S>, double> and std::convertible_to<std::ranges::range_value_t<W>, double>
-    Statistic(const S& sample, const W& weight);
-
-    auto Fill(double sample, double weight = 1) -> void { Base::Fill({sample}, weight); }
-    template<std::ranges::input_range S = std::initializer_list<double>>
-        requires std::convertible_to<std::ranges::range_value_t<S>, double>
-    auto Fill(const S& sample, double weight = 1) -> void;
-    template<std::ranges::input_range S = std::initializer_list<double>, std::ranges::input_range W = std::initializer_list<double>>
-        requires std::convertible_to<std::ranges::range_value_t<S>, double> and std::convertible_to<std::ranges::range_value_t<W>, double>
-    auto Fill(const S& sample, const W& weight) -> void;
-
-    auto Sum() const { return Sum(0); }
-    auto SumSquare() const { return SumSquare(0); }
-    auto SumCubic() const { return SumCubic(0); }
-    auto SumQuartic() const { return SumQuartic(0); }
-
-    auto WeightSum() const -> const auto& { return fSumW; }
-
-    template<int K>
-    auto Moment() const { return Moment<K>(0); }
-    template<int K>
-    auto CentralMoment() const { return CentralMoment<K>(0); }
-
-    auto Mean() const { return Moment<1>(); }
-    auto MeanSquare() { return Moment<2>(); }
-    auto MeanCubic() const { return Moment<3>(); }
-    auto MeanQuartic() const { return Moment<4>(); }
-
-    auto Variance() const { return CentralMoment<2>(); }
-    auto StdDev() const { return sqrt(Variance()); }
-
-    auto Skewness() const { return CentralMoment<3>() / Math::Cubic(StdDev()); }
-
-    auto Kurtosis() const { return CentralMoment<4>() / Math::Square(Variance()); }
 };
 
 } // namespace MACE::Math
