@@ -54,14 +54,14 @@ private:
     std::string fName;
 };
 
-template<class ADerived>
+template<typename ADerived>
 class DescriptionSingletonBase : public Env::Memory::Singleton<ADerived>,
                                  public DescriptionBase {
 protected:
     using DescriptionBase::DescriptionBase;
 };
 
-template<class T>
+template<typename T>
 concept Description =
     requires {
         requires std::derived_from<T, DescriptionBase>;

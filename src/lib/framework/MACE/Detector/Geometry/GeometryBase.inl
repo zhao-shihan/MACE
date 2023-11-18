@@ -34,7 +34,7 @@ std::optional<std::reference_wrapper<AEntity>> GeometryBase::FindDaughter() cons
     }
 }
 
-template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, class AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
+template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
 void GeometryBase::RegisterField(gsl::index volumeIndex, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const {
     const auto& logicalVolume = LogicalVolume(volumeIndex);
     const auto equation = new AEquation(field);
@@ -60,7 +60,7 @@ void GeometryBase::RegisterField(gsl::index volumeIndex, gsl::not_null<AField*> 
     // }
 }
 
-template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, class AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
+template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
 void GeometryBase::RegisterField(gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const {
     for (gsl::index i = 0; i < std::ssize(fLogicalVolumes); ++i) {
         RegisterField<AField, AEquation, AStepper, ADriver>(i, field, hMin, nVarStepper, nVarDriver, forceToAllDaughters);

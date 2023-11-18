@@ -28,25 +28,25 @@ MACE_ALWAYS_INLINE constexpr auto iota(std::ranges::output_range<const T&> auto&
 
 #else // backport
 
-template<class O, class T>
+template<typename O, typename T>
 struct out_value_result {
     [[no_unique_address]] O out;
     [[no_unique_address]] T value;
 
-    template<class O2, class T2>
+    template<typename O2, typename T2>
         requires std::convertible_to<const O&, O2> and std::convertible_to<const T&, T2>
     constexpr operator out_value_result<O2, T2>() const& {
         return {out, value};
     }
 
-    template<class O2, class T2>
+    template<typename O2, typename T2>
         requires std::convertible_to<O, O2> and std::convertible_to<T, T2>
     constexpr operator out_value_result<O2, T2>() && {
         return {std::move(out), std::move(value)};
     }
 };
 
-template<class O, class T>
+template<typename O, typename T>
 using iota_result = out_value_result<O, T>;
 
 namespace internal {

@@ -2,12 +2,12 @@ namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
-template<Concept::NumericVector2FloatingPoint T, template<class> class AGaussian2DDiagnoal>
+template<Concept::NumericVector2FloatingPoint T, template<typename> typename AGaussian2DDiagnoal>
 constexpr BasicGaussian2DDiagnoalParameter<T, AGaussian2DDiagnoal>::BasicGaussian2DDiagnoalParameter() :
     BasicGaussian2DDiagnoalParameter({0, 1},
                                      {0, 1}) {}
 
-template<Concept::NumericVector2FloatingPoint T, template<class> class AGaussian2DDiagnoal>
+template<Concept::NumericVector2FloatingPoint T, template<typename> typename AGaussian2DDiagnoal>
 constexpr BasicGaussian2DDiagnoalParameter<T, AGaussian2DDiagnoal>::BasicGaussian2DDiagnoalParameter(std::pair<VT, VT> pX, std::pair<VT, VT> pY) :
     Base(),
     fMuX(pX.first),
@@ -15,24 +15,24 @@ constexpr BasicGaussian2DDiagnoalParameter<T, AGaussian2DDiagnoal>::BasicGaussia
     fMuY(pY.first),
     fSigmaY(pY.second) {}
 
-template<Concept::Character AChar, Concept::NumericVector2FloatingPoint U, template<class> class V>
+template<Concept::Character AChar, Concept::NumericVector2FloatingPoint U, template<typename> typename V>
 auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussian2DDiagnoalParameter<U, V>& self) -> decltype(os) {
     const auto oldPrecision = os.precision(std::numeric_limits<U>::max_digits10);
     return os << self.fMuX << ' ' << self.fSigmaX << ' ' << self.fMuY << ' ' << self.fSigmaY
               << std::setprecision(oldPrecision);
 }
 
-template<Concept::Character AChar, Concept::NumericVector2FloatingPoint U, template<class> class V>
+template<Concept::Character AChar, Concept::NumericVector2FloatingPoint U, template<typename> typename V>
 auto operator>>(std::basic_istream<AChar>& is, BasicGaussian2DDiagnoalParameter<U, V>& self) -> decltype(is) {
     return is >> self.fMuX >> self.fSigmaX >> self.fMuY >> self.fSigmaY;
 }
 
-template<template<class> class ADerived, Concept::NumericVector2FloatingPoint T>
+template<template<typename> typename ADerived, Concept::NumericVector2FloatingPoint T>
 constexpr Gaussian2DDiagnoalBase<ADerived, T>::Gaussian2DDiagnoalBase(std::pair<VT, VT> pX, std::pair<VT, VT> pY) :
     Base(),
     fParameter(pX, pY) {}
 
-template<template<class> class ADerived, Concept::NumericVector2FloatingPoint T>
+template<template<typename> typename ADerived, Concept::NumericVector2FloatingPoint T>
 constexpr Gaussian2DDiagnoalBase<ADerived, T>::Gaussian2DDiagnoalBase(const typename Base::ParameterType& p) :
     Base(),
     fParameter(p) {}

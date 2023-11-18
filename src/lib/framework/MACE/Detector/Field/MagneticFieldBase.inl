@@ -1,6 +1,6 @@
 namespace MACE::Detector::Field {
 
-template<class ADerived, std::floating_point AFloat>
+template<typename ADerived, std::floating_point AFloat>
 constexpr MagneticFieldBase<ADerived, AFloat>::MagneticFieldBase() :
     ElectromagneticFieldBase<ADerived, AFloat>() {
     static_assert(std::derived_from<ADerived, MagneticFieldBase<ADerived, AFloat>>);

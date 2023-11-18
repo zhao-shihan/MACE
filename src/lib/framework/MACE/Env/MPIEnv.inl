@@ -1,6 +1,6 @@
 namespace MACE::Env {
 
-template<class ACLI>
+template<typename ACLI>
 MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel, bool printWelcomeMessage) :
     BasicEnv{argc, argv, cli, verboseLevel, false},
     PassiveSingleton<MPIEnv>{},

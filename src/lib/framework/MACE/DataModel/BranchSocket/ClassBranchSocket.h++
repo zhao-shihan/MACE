@@ -12,7 +12,7 @@
 
 namespace MACE::DataModel::inline BranchSocket {
 
-template<class AClass>
+template<typename AClass>
     requires std::assignable_from<AClass, AClass>
 class ClassBranchSocket final : public BranchSocketBase<ClassBranchSocket<AClass>, AClass> {
 public:

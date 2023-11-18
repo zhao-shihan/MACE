@@ -17,7 +17,7 @@ class NoCLI {};
 class BasicEnv : public internal::EnvBase,
                  public Memory::PassiveSingleton<BasicEnv> {
 public:
-    template<class ACLI = internal::NoCLI>
+    template<typename ACLI = internal::NoCLI>
     BasicEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel = VerboseLevel::Warning, bool printWelcomeMessage = true);
     virtual ~BasicEnv() = default;
 

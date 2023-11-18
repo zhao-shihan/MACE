@@ -9,7 +9,7 @@
 
 namespace MACE::Detector::Field {
 
-template<class ADerived, std::floating_point AFloat>
+template<typename ADerived, std::floating_point AFloat>
 class ElectromagneticFieldBase {
 protected:
     constexpr ElectromagneticFieldBase();

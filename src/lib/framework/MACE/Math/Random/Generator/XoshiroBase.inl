@@ -1,6 +1,6 @@
 namespace MACE::Math::Random::inline Generator {
 
-template<class ADerived, std::size_t NBit>
+template<typename ADerived, std::size_t NBit>
     requires(NBit % 64 == 0)
 constexpr XoshiroBase<ADerived, NBit>::XoshiroBase(std::array<std::uint64_t, NBit / 64> defaultState) :
     UniformPseudoRandomBitGeneratorBase<ADerived, std::uint64_t, std::uint64_t>{},
@@ -8,7 +8,7 @@ constexpr XoshiroBase<ADerived, NBit>::XoshiroBase(std::array<std::uint64_t, NBi
     static_assert(std::derived_from<ADerived, XoshiroBase<ADerived, NBit>>);
 }
 
-template<class ADerived, std::size_t NBit>
+template<typename ADerived, std::size_t NBit>
     requires(NBit % 64 == 0)
 constexpr XoshiroBase<ADerived, NBit>::XoshiroBase(std::uint64_t seed) :
     UniformPseudoRandomBitGeneratorBase<ADerived, std::uint64_t, std::uint64_t>{},
@@ -16,7 +16,7 @@ constexpr XoshiroBase<ADerived, NBit>::XoshiroBase(std::uint64_t seed) :
     Seed(seed);
 }
 
-template<class ADerived, std::size_t NBit>
+template<typename ADerived, std::size_t NBit>
     requires(NBit % 64 == 0)
 constexpr auto XoshiroBase<ADerived, NBit>::Seed(std::uint64_t seed) -> void {
     SplitMix64 splitMix64{seed};

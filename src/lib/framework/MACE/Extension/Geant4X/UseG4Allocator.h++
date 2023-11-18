@@ -9,7 +9,7 @@
 
 namespace MACE::inline Extension::Geant4X {
 
-template<class ADerived>
+template<typename ADerived>
 class UseG4Allocator {
 protected:
     UseG4Allocator() = default;

@@ -12,7 +12,7 @@
 
 namespace MACE::DataModel::inline Column {
 
-template<class ADerived,
+template<typename ADerived,
          class AData, gsl::index AUniqueID,
          typename T, BranchSocket2<T> ABranchSocket,
          typename U>

@@ -1,6 +1,6 @@
 namespace MACE::Math::Random::inline Generator {
 
-template<class ADerived>
+template<typename ADerived>
 constexpr Xoshiro256Base<ADerived>::Xoshiro256Base() :
     XoshiroBase<ADerived, 256>{{0x893C3E22C678FAA9ull,
                                 0x30589ADC78696ADAull,
@@ -9,11 +9,11 @@ constexpr Xoshiro256Base<ADerived>::Xoshiro256Base() :
     static_assert(std::derived_from<ADerived, Xoshiro256Base<ADerived>>);
 }
 
-template<class ADerived>
+template<typename ADerived>
 constexpr Xoshiro256Base<ADerived>::Xoshiro256Base(std::uint64_t seed) :
     XoshiroBase<ADerived, 256>{seed} {}
 
-template<class ADerived>
+template<typename ADerived>
 MACE_ALWAYS_INLINE constexpr auto Xoshiro256Base<ADerived>::Step() -> void {
     const auto t = this->fState[1] << 17;
 
@@ -27,7 +27,7 @@ MACE_ALWAYS_INLINE constexpr auto Xoshiro256Base<ADerived>::Step() -> void {
     this->fState[3] = std::rotl(this->fState[3], 45);
 }
 
-template<Concept::Character AChar, class T>
+template<Concept::Character AChar, typename T>
 auto operator<<(std::basic_ostream<AChar>& os, const Xoshiro256Base<T>& self) -> decltype(os) {
     return os << self.fState[0] << ' '
               << self.fState[1] << ' '
@@ -35,7 +35,7 @@ auto operator<<(std::basic_ostream<AChar>& os, const Xoshiro256Base<T>& self) ->
               << self.fState[3];
 }
 
-template<Concept::Character AChar, class T>
+template<Concept::Character AChar, typename T>
 auto operator>>(std::basic_istream<AChar>& is, Xoshiro256Base<T>& self) -> decltype(is) {
     return is >> self.fState[0] // clang-format off
               >> self.fState[1]

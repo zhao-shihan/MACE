@@ -2,9 +2,9 @@ namespace MACE::DataModel::inline Column {
 
 namespace internal {
 
-template<class C,
+template<typename C,
          class AData, gsl::index AUniqueID,
-         typename T, class ABranchSocket,
+         typename T, typename ABranchSocket,
          typename U>
 concept ColumnConcept =
     requires(C& c, const C& cc, const U v, TTree& tree) {
@@ -26,7 +26,7 @@ concept ColumnConcept =
 
 } // namespace internal
 
-template<class ADerived,
+template<typename ADerived,
          class AData, gsl::index AUniqueID,
          typename T, BranchSocket2<T> ABranchSocket,
          typename U>

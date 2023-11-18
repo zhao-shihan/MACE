@@ -69,7 +69,7 @@ namespace MACE::Env::Memory {
 ///
 ///   In Example2.h++:
 ///
-///     template<class T>
+///     template<typename T>
 ///     class Example2Base : public Singleton<T> {
 ///     protected:
 ///         Example2Base();
@@ -107,7 +107,7 @@ namespace MACE::Env::Memory {
 ///     };
 ///
 ///     // The true CRTP
-///     template<class T>
+///     template<typename T>
 ///     class Example3SingletonBase : public Singleton<T>,
 ///                                   public Example3Base {
 ///     protected:

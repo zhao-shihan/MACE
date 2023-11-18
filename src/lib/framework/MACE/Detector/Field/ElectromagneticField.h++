@@ -7,7 +7,7 @@
 
 namespace MACE::Detector::Field {
 
-template<class F, typename AFloat>
+template<typename F, typename AFloat>
 concept ElectromagneticField =
     requires(const F f, stdx::array3<AFloat> x) {
         requires std::floating_point<AFloat>;

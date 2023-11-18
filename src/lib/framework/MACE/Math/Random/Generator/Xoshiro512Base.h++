@@ -12,7 +12,7 @@
 
 namespace MACE::Math::Random::inline Generator {
 
-template<class ADerived>
+template<typename ADerived>
 class Xoshiro512Base : public XoshiroBase<ADerived, 512> {
 protected:
     constexpr Xoshiro512Base();
@@ -22,9 +22,9 @@ protected:
 public:
     MACE_ALWAYS_INLINE constexpr auto Step() -> void;
 
-    template<Concept::Character AChar, class T>
+    template<Concept::Character AChar, typename T>
     friend auto operator<<(std::basic_ostream<AChar>& os, const Xoshiro512Base<T>& self) -> decltype(os);
-    template<Concept::Character AChar, class T>
+    template<Concept::Character AChar, typename T>
     friend auto operator>>(std::basic_istream<AChar>& is, Xoshiro512Base<T>& self) -> decltype(is);
 };
 

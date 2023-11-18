@@ -25,14 +25,14 @@ public:
         Cuboid
     };
 
-    template<class ADerivedShape>
+    template<typename ADerivedShape>
     class ShapeBase : public Env::Memory::WeakSingleton<ADerivedShape> {
     protected:
         ShapeBase();
         ~ShapeBase() = default;
 
     protected:
-        template<class ADerivedDetail>
+        template<typename ADerivedDetail>
         class DetailBase : public Env::Memory::WeakSingleton<ADerivedDetail> {
         protected:
             DetailBase();
