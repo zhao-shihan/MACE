@@ -1,20 +1,20 @@
 #pragma once
 
-#include "MACE/Data/Field.h++"
-#include "MACE/Data/Model.h++"
+#include "MACE/Data/TupleModel.h++"
+#include "MACE/Data/Value.h++"
 #include "MACE/Extension/stdx/arraynx.h++"
 
 namespace MACE::Data {
 
-using CDCHit = Model<Field<int, "cellID", "Hitting cell ID">,
-                     Field<float, "d", "Drift distance">,
-                     Field<double, "t", "Hitting time">>;
+using CDCHit = TupleModel<Value<int, "cellID", "Hitting cell ID">,
+                          Value<float, "d", "Drift distance">,
+                          Value<double, "t", "Hitting time">>;
 
-using EMCHit = Model<Field<int, "unitID", "Hitting unit ID">,
-                     Field<double, "t", "Hitting time">,
-                     Field<float, "E", "Energy deposition">>;
+using EMCHit = TupleModel<Value<int, "unitID", "Hitting unit ID">,
+                          Value<double, "t", "Hitting time">,
+                          Value<float, "E", "Energy deposition">>;
 
-using MCPHit = Model<Field<double, "t", "Hitting time">,
-                     Field<stdx::array2f, "x", "Hitting position">>;
+using MCPHit = TupleModel<Value<double, "t", "Hitting time">,
+                          Value<stdx::array2f, "x", "Hitting position">>;
 
 } // namespace MACE::Data

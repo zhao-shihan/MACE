@@ -1,25 +1,26 @@
 #pragma once
 
-#include "MACE/Data/Field.h++"
 #include "MACE/Data/Hit.h++"
-#include "MACE/Data/Model.h++"
-#include "MACE/Data/SimDataBasis.h++"
+#include "MACE/Data/TupleModel.h++"
+#include "MACE/Data/Value.h++"
 #include "MACE/Extension/stdx/arraynx.h++"
 
 namespace MACE::Data {
 
-using SimHitBasis = Model<SimDataBasis,
-                          Field<float, "Ek", "Hitting kinetic energy (MC truth)">,
-                          Field<stdx::array3f, "p", "Hitting momentum (MC truth)">,
-                          Field<float, "t0", "Vertex time (MC truth)">,
-                          Field<stdx::array3f, "x0", "Vertex position (MC truth)">,
-                          Field<float, "Ek0", "Vertex kinetic energy (MC truth)">,
-                          Field<stdx::array3f, "p0", "Vertex momentum (MC truth)">>;
+using SimHitBasis = TupleModel<Value<int, "evtID", "MC Event ID">,
+                               Value<int, "trkID", "MC Track ID">,
+                               Value<int, "pdgID", "Particle PDG ID (MC truth)">,
+                               Value<float, "Ek", "Hitting kinetic energy (MC truth)">,
+                               Value<stdx::array3f, "p", "Hitting momentum (MC truth)">,
+                               Value<float, "t0", "Vertex time (MC truth)">,
+                               Value<stdx::array3f, "x0", "Vertex position (MC truth)">,
+                               Value<float, "Ek0", "Vertex kinetic energy (MC truth)">,
+                               Value<stdx::array3f, "p0", "Vertex momentum (MC truth)">>;
 
-using CDCSimHit = Model<CDCHit, SimHitBasis>;
+using CDCSimHit = TupleModel<CDCHit, SimHitBasis>;
 
-using EMCSimHit = Model<EMCHit, SimHitBasis>;
+using EMCSimHit = TupleModel<EMCHit, SimHitBasis>;
 
-using MCPSimHit = Model<MCPHit, SimHitBasis>;
+using MCPSimHit = TupleModel<MCPHit, SimHitBasis>;
 
 } // namespace MACE::Data

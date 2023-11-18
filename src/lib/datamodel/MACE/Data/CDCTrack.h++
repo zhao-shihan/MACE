@@ -1,21 +1,27 @@
 #pragma once
 
-#include "MACE/Data/Field.h++"
-#include "MACE/Data/Model.h++"
+#include "MACE/Data/TupleModel.h++"
+#include "MACE/Data/Value.h++"
+#include "MACE/Extension/stdx/arraynx.h++"
 
 namespace MACE::Data {
 
-using CDCTrack = Model<Field<int, "pdgID", "Particle PDG ID">,
-                       Field<int, "nHit", "Number of hits fitted">,
-                       Field<float, "chi2", "Fitting chi^{2}">,
-                       Field<double, "t0", "Vertex time">,
-                       Field<std::array3f, "x0", "Vertex position">,
-                       Field<float, "Ek0", "Vertex kinetic energy">,
-                       Field<std::array3f, "p0", "Vertex momentum">,
-                       Field<std::array2f, "c0", "Transverse center">,
-                       Field<float, "r0", "Transverse radius">,
-                       Field<float, "z0", "Reference Z">,
-                       Field<float, "phi0", "Reference azimuth angle">,
-                       Field<float, "theta0", "Reference zenith angle">>;
+using CDCTrack = TupleModel<Value<int, "evtID", "Event ID">,
+                            Value<int, "trkID", "Track ID">,
+                            Value<int, "pdgID", "Particle PDG ID">,
+                            Value<int, "nHit", "Number of hits fitted">,
+                            Value<float, "chi2", "Fitting chi^{2}">,
+                            Value<double, "t0", "Vertex time">,
+                            Value<stdx::array3f, "x0", "Vertex position">,
+                            Value<float, "Ek0", "Vertex kinetic energy">,
+                            Value<stdx::array3f, "p0", "Vertex momentum">,
+                            Value<stdx::array2f, "c0", "Transverse center">,
+                            Value<float, "r0", "Transverse radius">,
+                            Value<float, "z0", "Reference Z">,
+                            Value<float, "phi0", "Reference azimuth angle">,
+                            Value<float, "theta0", "Reference zenith angle">>;
+
+constexpr auto CalculateHelix(TupleContain<CDCTrack> auto& track);
+constexpr auto CalculateVertex(TupleContain<CDCTrack> auto& track);
 
 } // namespace MACE::Data
