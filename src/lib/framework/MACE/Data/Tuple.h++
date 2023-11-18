@@ -1,10 +1,10 @@
 #pragma once
 
 #include "MACE/Concept/InstantiatedFrom.h++"
-#include "MACE/Utility/CETAString.h++"
 #include "MACE/Data/TupleModel.h++"
 #include "MACE/Data/Value.h++"
 #include "MACE/Extension/gslx/index_sequence.h++"
+#include "MACE/Utility/CETAString.h++"
 
 #include "gsl/gsl"
 
@@ -92,13 +92,13 @@ protected:
 
 public:
     template<gsl::index I>
-    friend constexpr auto get(const EnableStructuredBinding& t) -> const Type<I>& { return t.GetImpl<I>(); }
+    friend constexpr auto get(const ADerived& t) -> const Type<I>& { return static_cast<const EnableStructuredBinding&>(t).GetImpl<I>(); }
     template<gsl::index I>
-    friend constexpr auto get(EnableStructuredBinding& t) -> Type<I>& { return t.GetImpl<I>(); }
+    friend constexpr auto get(ADerived& t) -> Type<I>& { return static_cast<EnableStructuredBinding&>(t).GetImpl<I>(); }
     template<gsl::index I>
-    friend constexpr auto get(EnableStructuredBinding&& t) -> Type<I>&& { return std::move(t).template GetImpl<I>(); }
+    friend constexpr auto get(ADerived&& t) -> Type<I>&& { return static_cast<EnableStructuredBinding&&>(t).GetImpl<I>(); }
     template<gsl::index I>
-    friend constexpr auto get(const EnableStructuredBinding&& t) -> const Type<I>&& { return std::move(t).template GetImpl<I>(); }
+    friend constexpr auto get(const ADerived&& t) -> const Type<I>&& { return static_cast<const EnableStructuredBinding&&>(t).GetImpl<I>(); }
 
 private:
     template<gsl::index I>

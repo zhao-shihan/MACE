@@ -3,6 +3,7 @@ namespace MACE::Data {
 template<typename ADerived>
 template<gsl::index I>
 constexpr auto EnableStructuredBinding<ADerived>::GetImpl() const& -> const Type<I>& {
+    static_assert(std::derived_from<ADerived, EnableStructuredBinding>);
     static_assert(TupleLike<ADerived>);
     return Self().template Get<std::tuple_element_t<I, typename ADerived::Model::StdTuple>::Name()>();
 }
@@ -10,6 +11,7 @@ constexpr auto EnableStructuredBinding<ADerived>::GetImpl() const& -> const Type
 template<typename ADerived>
 template<gsl::index I>
 constexpr auto EnableStructuredBinding<ADerived>::GetImpl() & -> Type<I>& {
+    static_assert(std::derived_from<ADerived, EnableStructuredBinding>);
     static_assert(TupleLike<ADerived>);
     return Self().template Get<std::tuple_element_t<I, typename ADerived::Model::StdTuple>::Name()>();
 }
@@ -17,6 +19,7 @@ constexpr auto EnableStructuredBinding<ADerived>::GetImpl() & -> Type<I>& {
 template<typename ADerived>
 template<gsl::index I>
 constexpr auto EnableStructuredBinding<ADerived>::GetImpl() && -> Type<I>&& {
+    static_assert(std::derived_from<ADerived, EnableStructuredBinding>);
     static_assert(TupleLike<ADerived>);
     return std::move(Self()).template Get<std::tuple_element_t<I, typename ADerived::Model::StdTuple>::Name()>();
 }
@@ -24,6 +27,7 @@ constexpr auto EnableStructuredBinding<ADerived>::GetImpl() && -> Type<I>&& {
 template<typename ADerived>
 template<gsl::index I>
 constexpr auto EnableStructuredBinding<ADerived>::GetImpl() const&& -> const Type<I>&& {
+    static_assert(std::derived_from<ADerived, EnableStructuredBinding>);
     static_assert(TupleLike<ADerived>);
     return std::move(Self()).template Get<std::tuple_element_t<I, typename ADerived::Model::StdTuple>::Name()>();
 }
