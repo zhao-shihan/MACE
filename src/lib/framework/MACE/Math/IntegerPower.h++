@@ -71,44 +71,44 @@ constexpr auto PowRZ(std::integral auto x) {
 
 // Useful shorthands:
 
-constexpr auto Pow2(Concept::Arithmetic auto x) { return PowRZ<2>(x); }
-constexpr auto Pow3(Concept::Arithmetic auto x) { return PowRZ<3>(x); }
-constexpr auto Pow4(Concept::Arithmetic auto x) { return PowRZ<4>(x); }
-constexpr auto Pow5(Concept::Arithmetic auto x) { return PowRZ<5>(x); }
-constexpr auto Pow6(Concept::Arithmetic auto x) { return PowRZ<6>(x); }
-constexpr auto Pow7(Concept::Arithmetic auto x) { return PowRZ<7>(x); }
-constexpr auto Pow8(Concept::Arithmetic auto x) { return PowRZ<8>(x); }
-constexpr auto Pow9(Concept::Arithmetic auto x) { return PowRZ<9>(x); }
-constexpr auto Pow10(Concept::Arithmetic auto x) { return PowRZ<10>(x); }
-constexpr auto Pow11(Concept::Arithmetic auto x) { return PowRZ<11>(x); }
-constexpr auto Pow12(Concept::Arithmetic auto x) { return PowRZ<12>(x); }
-constexpr auto Pow13(Concept::Arithmetic auto x) { return PowRZ<13>(x); }
-constexpr auto Pow14(Concept::Arithmetic auto x) { return PowRZ<14>(x); }
-constexpr auto Pow15(Concept::Arithmetic auto x) { return PowRZ<15>(x); }
-constexpr auto Pow16(Concept::Arithmetic auto x) { return PowRZ<16>(x); }
-constexpr auto Pow17(Concept::Arithmetic auto x) { return PowRZ<17>(x); }
-constexpr auto Pow18(Concept::Arithmetic auto x) { return PowRZ<18>(x); }
-constexpr auto Pow19(Concept::Arithmetic auto x) { return PowRZ<19>(x); }
-constexpr auto Pow20(Concept::Arithmetic auto x) { return PowRZ<20>(x); }
+constexpr auto Pow2(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<2>(x); }
+constexpr auto Pow3(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<3>(x); }
+constexpr auto Pow4(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<4>(x); }
+constexpr auto Pow5(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<5>(x); }
+constexpr auto Pow6(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<6>(x); }
+constexpr auto Pow7(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<7>(x); }
+constexpr auto Pow8(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<8>(x); }
+constexpr auto Pow9(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<9>(x); }
+constexpr auto Pow10(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<10>(x); }
+constexpr auto Pow11(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<11>(x); }
+constexpr auto Pow12(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<12>(x); }
+constexpr auto Pow13(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<13>(x); }
+constexpr auto Pow14(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<14>(x); }
+constexpr auto Pow15(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<15>(x); }
+constexpr auto Pow16(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<16>(x); }
+constexpr auto Pow17(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<17>(x); }
+constexpr auto Pow18(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<18>(x); }
+constexpr auto Pow19(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<19>(x); }
+constexpr auto Pow20(Concept::Arithmetic auto x) -> decltype(auto) { return PowRZ<20>(x); }
 
-constexpr auto Square(Concept::Arithmetic auto x) { return Pow2(x); }
-constexpr auto Cubic(Concept::Arithmetic auto x) { return Pow3(x); }
-constexpr auto Quartic(Concept::Arithmetic auto x) { return Pow4(x); }
-constexpr auto Quintic(Concept::Arithmetic auto x) { return Pow5(x); }
-constexpr auto Sextic(Concept::Arithmetic auto x) { return Pow6(x); }
-constexpr auto Septimic(Concept::Arithmetic auto x) { return Pow7(x); }
-constexpr auto Octavic(Concept::Arithmetic auto x) { return Pow8(x); }
-constexpr auto Nonaic(Concept::Arithmetic auto x) { return Pow9(x); }
-constexpr auto Decimic(Concept::Arithmetic auto x) { return Pow10(x); }
-constexpr auto Undecimic(Concept::Arithmetic auto x) { return Pow11(x); }
-constexpr auto Duodecimic(Concept::Arithmetic auto x) { return Pow12(x); }
-constexpr auto Tredecimic(Concept::Arithmetic auto x) { return Pow13(x); }
-constexpr auto Quattuordecimic(Concept::Arithmetic auto x) { return Pow14(x); }
-constexpr auto Quindecimic(Concept::Arithmetic auto x) { return Pow15(x); }
-constexpr auto Sedecimic(Concept::Arithmetic auto x) { return Pow16(x); }
-constexpr auto Septendecimic(Concept::Arithmetic auto x) { return Pow17(x); }
-constexpr auto Octodecimic(Concept::Arithmetic auto x) { return Pow18(x); }
-constexpr auto Novemdecimic(Concept::Arithmetic auto x) { return Pow19(x); }
-constexpr auto Vigesimic(Concept::Arithmetic auto x) { return Pow20(x); }
+constexpr auto Square(Concept::Arithmetic auto x) -> decltype(auto) { return Pow2(x); }
+constexpr auto Cubic(Concept::Arithmetic auto x) -> decltype(auto) { return Pow3(x); }
+constexpr auto Quartic(Concept::Arithmetic auto x) -> decltype(auto) { return Pow4(x); }
+constexpr auto Quintic(Concept::Arithmetic auto x) -> decltype(auto) { return Pow5(x); }
+constexpr auto Sextic(Concept::Arithmetic auto x) -> decltype(auto) { return Pow6(x); }
+constexpr auto Septimic(Concept::Arithmetic auto x) -> decltype(auto) { return Pow7(x); }
+constexpr auto Octavic(Concept::Arithmetic auto x) -> decltype(auto) { return Pow8(x); }
+constexpr auto Nonaic(Concept::Arithmetic auto x) -> decltype(auto) { return Pow9(x); }
+constexpr auto Decimic(Concept::Arithmetic auto x) -> decltype(auto) { return Pow10(x); }
+constexpr auto Undecimic(Concept::Arithmetic auto x) -> decltype(auto) { return Pow11(x); }
+constexpr auto Duodecimic(Concept::Arithmetic auto x) -> decltype(auto) { return Pow12(x); }
+constexpr auto Tredecimic(Concept::Arithmetic auto x) -> decltype(auto) { return Pow13(x); }
+constexpr auto Quattuordecimic(Concept::Arithmetic auto x) -> decltype(auto) { return Pow14(x); }
+constexpr auto Quindecimic(Concept::Arithmetic auto x) -> decltype(auto) { return Pow15(x); }
+constexpr auto Sedecimic(Concept::Arithmetic auto x) -> decltype(auto) { return Pow16(x); }
+constexpr auto Septendecimic(Concept::Arithmetic auto x) -> decltype(auto) { return Pow17(x); }
+constexpr auto Octodecimic(Concept::Arithmetic auto x) -> decltype(auto) { return Pow18(x); }
+constexpr auto Novemdecimic(Concept::Arithmetic auto x) -> decltype(auto) { return Pow19(x); }
+constexpr auto Vigesimic(Concept::Arithmetic auto x) -> decltype(auto) { return Pow20(x); }
 
 } // namespace MACE::Math
