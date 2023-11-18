@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Data/Model/SimRawHit/EMCSimRawHit.c++"
+#include "MACE/Data/TupleModel/SimRawHit/EMCSimRawHit.c++"
 #include "MACE/Extension/Geant4X/UseG4Allocator.h++"
 
 #include "G4THitsCollection.hh"
