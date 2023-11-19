@@ -115,7 +115,7 @@ private:
 };
 
 template<TupleModelizable... Ts>
-class Tuple final : public EnableStructuredBinding<Tuple<Ts...>> {
+class Tuple : public EnableStructuredBinding<Tuple<Ts...>> {
 public:
     using Model = TupleModel<Ts...>;
 

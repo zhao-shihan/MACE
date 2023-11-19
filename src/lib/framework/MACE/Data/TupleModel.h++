@@ -1,10 +1,10 @@
 #pragma once
 
 #include "MACE/Concept/InstantiatedFrom.h++"
-#include "MACE/Utility/CETAString.h++"
 #include "MACE/Data/Value.h++"
 #include "MACE/Extension/gslx/index_sequence.h++"
 #include "MACE/Extension/stdx/tuple_concat.h++"
+#include "MACE/Utility/CETAString.h++"
 #include "MACE/Utility/NonConstructibleBase.h++"
 
 #include "gsl/gsl"
