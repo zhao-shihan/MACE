@@ -32,7 +32,6 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& emc = fWorld->NewDaughter<EMC>(fCheckOverlap);
 
     auto nist = G4NistManager::Instance();
-    emc.RegisterMaterial(nist->FindOrBuildMaterial("G4_CESIUM_IODIDE"));
     fWorld->RegisterMaterial(nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3));
 
     return fWorld->PhysicalVolume().get();

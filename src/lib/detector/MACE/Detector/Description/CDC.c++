@@ -234,6 +234,8 @@ void CDC::ImportValues(const YAML::Node& node) {
     // Detection
     ImportValue(node, fMeanDriftVelocity, "MeanDriftVelocity");
     ImportValue(node, fDeadTime, "DeadTime");
+
+    SetGeometryOutdated();
 }
 
 void CDC::ExportValues(YAML::Node& node) const {

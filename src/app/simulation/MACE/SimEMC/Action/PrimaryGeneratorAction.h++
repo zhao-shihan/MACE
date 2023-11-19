@@ -2,6 +2,7 @@
 
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 
+#include "G4GeneralParticleSource.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 
 namespace MACE::SimEMC::inline Action {
@@ -12,6 +13,9 @@ public:
     PrimaryGeneratorAction();
 
     auto GeneratePrimaries(G4Event* event) -> void override;
+
+private:
+    G4GeneralParticleSource* fParticleGun;
 };
 
 } // namespace MACE::SimEMC::inline Action
