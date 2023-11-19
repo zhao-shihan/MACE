@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/SimMACE/Hit/CDCHit.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
@@ -7,10 +8,22 @@
 #include "G4TwoVector.hh"
 #include "G4VSensitiveDetector.hh"
 
-#include <map>
+#include <array>
 #include <memory>
+#include <unordered_map>
 #include <utility>
 #include <vector>
+
+namespace std {
+
+template<>
+struct hash<array<int32_t, 2>> {
+    auto operator()(const array<int32_t, 2>& i) const noexcept -> size_t {
+        return bit_cast<uint64_t>(i);
+    }
+};
+
+} // namespace std
 
 namespace MACE::SimMACE::inline SD {
 
@@ -33,9 +46,9 @@ private:
     G4double fMeanDriftVelocity;
     G4double fDeadTime;
 
-    std::vector<std::map<int, const G4StepPoint>> fCellEntryPoints;
     std::vector<std::pair<const G4TwoVector, const G4ThreeVector>> fCellMap;
-    std::vector<std::vector<std::pair<double, std::unique_ptr<CDCHit>>>> fCellSignalTimesAndHits;
+    std::unordered_map<stdx::array2i32, const G4StepPoint> fCellEntryPoint;
+    std::unordered_map<int, std::vector<std::pair<double, std::unique_ptr<CDCHit>>>> fCellSignalTimesAndHit;
 };
 
 } // namespace MACE::SimMACE::inline SD
