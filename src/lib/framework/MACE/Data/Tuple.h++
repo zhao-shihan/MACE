@@ -16,7 +16,7 @@
 namespace MACE::Data {
 
 template<typename T>
-concept TupleLike = requires(T i, const T ci) {
+concept TupleLike = requires(T t, const T ct) {
     typename T::Model;
     requires Concept::InstantiatedFrom<typename T::Model, TupleModel>;
     { T::Size() } -> std::same_as<std::size_t>;
@@ -24,25 +24,25 @@ concept TupleLike = requires(T i, const T ci) {
     {
         []<gsl::index... Is>(gslx::index_sequence<Is...>, T tuple) {
             (..., (std::ignore = tuple.template Get<std::tuple_element_t<Is, typename T::Model::StdTuple>::Name()>()));
-        }(gslx::make_index_sequence<T::Size()>{}, i)
+        }(gslx::make_index_sequence<T::Size()>{}, t)
     };
     {
         []<gsl::index... Is>(gslx::index_sequence<Is...>, const T tuple) {
             (..., (std::ignore = tuple.template Get<std::tuple_element_t<Is, typename T::Model::StdTuple>::Name()>()));
-        }(gslx::make_index_sequence<T::Size()>{}, ci)
+        }(gslx::make_index_sequence<T::Size()>{}, ct)
     };
     requires T::Size() <= 1 or requires {
         {
             []<gsl::index... Is>(gslx::index_sequence<Is...>, T tuple) {
                 (..., (std::ignore = tuple.template Get<std::tuple_element_t<Is, typename T::Model::StdTuple>::Name(),
                                                         std::tuple_element_t<Is + 1, typename T::Model::StdTuple>::Name()>()));
-            }(gslx::make_index_sequence<T::Size() - 1>{}, i)
+            }(gslx::make_index_sequence<T::Size() - 1>{}, t)
         };
         {
             []<gsl::index... Is>(gslx::index_sequence<Is...>, const T tuple) {
                 (..., (std::ignore = tuple.template Get<std::tuple_element_t<Is, typename T::Model::StdTuple>::Name(),
                                                         std::tuple_element_t<Is + 1, typename T::Model::StdTuple>::Name()>()));
-            }(gslx::make_index_sequence<T::Size() - 1>{}, ci)
+            }(gslx::make_index_sequence<T::Size() - 1>{}, ct)
         };
     };
 };
@@ -81,41 +81,36 @@ struct tuple_element<I, T>
 namespace MACE::Data {
 
 template<typename ADerived>
-class EnableStructuredBinding {
-private:
+class EnableGet {
+    template<CETAString... ANames>
+        requires(sizeof...(ANames) >= 1)
+    friend constexpr auto Get(const ADerived& t) -> decltype(auto) { return t.template Get<ANames...>(); }
+    template<CETAString... ANames>
+        requires(sizeof...(ANames) >= 1)
+    friend constexpr auto Get(ADerived& t) -> decltype(auto) { return t.template Get<ANames...>(); }
+    template<CETAString... ANames>
+        requires(sizeof...(ANames) >= 1)
+    friend constexpr auto Get(ADerived&& t) -> decltype(auto) { return std::move(t).template Get<ANames...>(); }
+    template<CETAString... ANames>
+        requires(sizeof...(ANames) >= 1)
+    friend constexpr auto Get(const ADerived&& t) -> decltype(auto) { return std::move(t).template Get<ANames...>(); }
+
     template<gsl::index I>
-    using Type = std::tuple_element_t<I, ADerived>;
+    friend constexpr auto get(const ADerived& t) -> decltype(auto) { return t.template Get<std::tuple_element_t<I, ADerived>::Name()>(); }
+    template<gsl::index I>
+    friend constexpr auto get(ADerived& t) -> decltype(auto) { return t.template Get<std::tuple_element_t<I, ADerived>::Name()>(); }
+    template<gsl::index I>
+    friend constexpr auto get(ADerived&& t) -> decltype(auto) { return std::move(t).template Get<std::tuple_element_t<I, ADerived>::Name()>(); }
+    template<gsl::index I>
+    friend constexpr auto get(const ADerived&& t) -> decltype(auto) { return std::move(t).template Get<std::tuple_element_t<I, ADerived>::Name()>(); }
 
 protected:
-    constexpr EnableStructuredBinding() = default;
-    constexpr ~EnableStructuredBinding() = default;
-
-public:
-    template<gsl::index I>
-    friend constexpr auto get(const ADerived& t) -> const Type<I>& { return static_cast<const EnableStructuredBinding&>(t).GetImpl<I>(); }
-    template<gsl::index I>
-    friend constexpr auto get(ADerived& t) -> Type<I>& { return static_cast<EnableStructuredBinding&>(t).GetImpl<I>(); }
-    template<gsl::index I>
-    friend constexpr auto get(ADerived&& t) -> Type<I>&& { return static_cast<EnableStructuredBinding&&>(t).GetImpl<I>(); }
-    template<gsl::index I>
-    friend constexpr auto get(const ADerived&& t) -> const Type<I>&& { return static_cast<const EnableStructuredBinding&&>(t).GetImpl<I>(); }
-
-private:
-    template<gsl::index I>
-    constexpr auto GetImpl() const& -> const Type<I>&;
-    template<gsl::index I>
-    constexpr auto GetImpl() & -> Type<I>&;
-    template<gsl::index I>
-    constexpr auto GetImpl() && -> Type<I>&&;
-    template<gsl::index I>
-    constexpr auto GetImpl() const&& -> const Type<I>&&;
-
-    constexpr auto Self() const -> const auto& { return static_cast<const ADerived&>(*this); }
-    constexpr auto Self() -> auto& { return static_cast<ADerived&>(*this); }
+    constexpr EnableGet();
+    constexpr ~EnableGet() = default;
 };
 
 template<TupleModelizable... Ts>
-class Tuple : public EnableStructuredBinding<Tuple<Ts...>> {
+class Tuple : public EnableGet<Tuple<Ts...>> {
 public:
     using Model = TupleModel<Ts...>;
 
@@ -132,13 +127,16 @@ public:
 
     template<CETAString... ANames>
         requires(sizeof...(ANames) >= 1)
-    constexpr auto Get() & -> decltype(auto) { return GetImpl<Model::template Index<ANames>()...>(); }
-    template<CETAString... ANames>
-        requires(sizeof...(ANames) >= 1)
     constexpr auto Get() const& -> decltype(auto) { return GetImpl<Model::template Index<ANames>()...>(); }
     template<CETAString... ANames>
         requires(sizeof...(ANames) >= 1)
+    constexpr auto Get() & -> decltype(auto) { return GetImpl<Model::template Index<ANames>()...>(); }
+    template<CETAString... ANames>
+        requires(sizeof...(ANames) >= 1)
     constexpr auto Get() && -> decltype(auto) { return std::move(*this).template GetImpl<Model::template Index<ANames>()...>(); }
+    template<CETAString... ANames>
+        requires(sizeof...(ANames) >= 1)
+    constexpr auto Get() const&& -> decltype(auto) { return std::move(*this).template GetImpl<Model::template Index<ANames>()...>(); }
 
     template<TupleLike ATuple>
     constexpr auto operator==(const ATuple& that) const -> auto;

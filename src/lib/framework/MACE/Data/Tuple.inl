@@ -1,35 +1,9 @@
 namespace MACE::Data {
 
 template<typename ADerived>
-template<gsl::index I>
-constexpr auto EnableStructuredBinding<ADerived>::GetImpl() const& -> const Type<I>& {
-    static_assert(std::derived_from<ADerived, EnableStructuredBinding>);
+constexpr EnableGet<ADerived>::EnableGet() {
+    static_assert(std::derived_from<ADerived, EnableGet>);
     static_assert(TupleLike<ADerived>);
-    return Self().template Get<std::tuple_element_t<I, typename ADerived::Model::StdTuple>::Name()>();
-}
-
-template<typename ADerived>
-template<gsl::index I>
-constexpr auto EnableStructuredBinding<ADerived>::GetImpl() & -> Type<I>& {
-    static_assert(std::derived_from<ADerived, EnableStructuredBinding>);
-    static_assert(TupleLike<ADerived>);
-    return Self().template Get<std::tuple_element_t<I, typename ADerived::Model::StdTuple>::Name()>();
-}
-
-template<typename ADerived>
-template<gsl::index I>
-constexpr auto EnableStructuredBinding<ADerived>::GetImpl() && -> Type<I>&& {
-    static_assert(std::derived_from<ADerived, EnableStructuredBinding>);
-    static_assert(TupleLike<ADerived>);
-    return std::move(Self()).template Get<std::tuple_element_t<I, typename ADerived::Model::StdTuple>::Name()>();
-}
-
-template<typename ADerived>
-template<gsl::index I>
-constexpr auto EnableStructuredBinding<ADerived>::GetImpl() const&& -> const Type<I>&& {
-    static_assert(std::derived_from<ADerived, EnableStructuredBinding>);
-    static_assert(TupleLike<ADerived>);
-    return std::move(Self()).template Get<std::tuple_element_t<I, typename ADerived::Model::StdTuple>::Name()>();
 }
 
 template<TupleModelizable... Ts>
@@ -58,7 +32,7 @@ constexpr auto Tuple<Ts...>::operator==(const ATuple& that) const -> auto {
                                 if constexpr (nameI != nameJ) {
                                     return false;
                                 } else {
-                                    return Get<nameI>() == that.template Get<nameJ>();
+                                    return Get<nameI>(*this) == Get<nameJ>(that);
                                 }
                             }()));
                 }(gslx::make_index_sequence<ATuple::Size()>{}, std::integral_constant<gsl::index, Is>{})));

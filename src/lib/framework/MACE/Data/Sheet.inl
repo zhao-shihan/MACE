@@ -156,7 +156,7 @@ auto Sheet<Ts...>::Dataset::UpdateStatus() -> void {
 
 template<TupleModelizable... Ts>
 Sheet<Ts...>::Entry::Entry(gsl::index index, Dataset& data) :
-    EnableStructuredBinding<Entry>{},
+    EnableGet<Entry>{},
     fIndex{index},
     fData{&data} {}
 

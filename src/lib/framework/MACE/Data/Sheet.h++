@@ -117,7 +117,7 @@ private:
         internal::BranchAddressHelper<Tuple<Ts...>> fBranchAddressHelper;
     };
 
-    class [[nodiscard]] Entry final : public EnableStructuredBinding<Entry> {
+    class [[nodiscard]] Entry final : public EnableGet<Entry> {
     public:
         using Model = typename Sheet::Model;
 

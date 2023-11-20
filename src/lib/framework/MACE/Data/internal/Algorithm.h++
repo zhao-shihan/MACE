@@ -153,7 +153,7 @@ auto AllAnyNoneOfCountFindIfOrNot(auto&& all_any_none_of_count_find_if_or_not, I
                     return std::forward<F>(Pred)(std::forward<decltype(v)>(v));
                 },
                 [&Proj](auto&& entry) {
-                    return std::forward<P>(Proj)(*std::move(entry.template Get<AName>()));
+                    return std::forward<P>(Proj)(*std::move(Get<AName>(entry)));
                 });
         });
 }
@@ -172,7 +172,7 @@ auto AllAnyNoneOfCountFindIfOrNot(auto&& all_any_none_of_count_find_if_or_not, I
                     return stdx::apply(std::forward<F>(Pred), std::forward<decltype(t)>(t));
                 },
                 [&Proj](auto&& entry) {
-                    return std::forward<P>(Proj)(std::move(entry.template Get<ANames>())...);
+                    return std::forward<P>(Proj)(std::move(Get<ANames>(entry))...);
                 });
         });
 }
@@ -190,7 +190,7 @@ auto ForEach(auto&& for_each, I first, S last, F&& Func, P&& Proj) -> decltype(a
                     std::forward<F>(Func)(std::forward<decltype(v)>(v));
                 },
                 [&Proj](auto&& entry) {
-                    return std::forward<P>(Proj)(*std::move(entry.template Get<AName>()));
+                    return std::forward<P>(Proj)(*std::move(Get<AName>(entry)));
                 });
         });
 }
@@ -209,7 +209,7 @@ auto ForEach(auto&& for_each, I first, S last, F&& Func, P&& Proj) -> decltype(a
                     stdx::apply(std::forward<F>(Func), std::forward<decltype(t)>(t));
                 },
                 [&Proj](auto&& entry) {
-                    return std::forward<P>(Proj)(std::move(entry.template Get<ANames>())...);
+                    return std::forward<P>(Proj)(std::move(Get<ANames>(entry))...);
                 });
         });
 }
@@ -224,7 +224,7 @@ auto CountFind(auto&& count_find, I first, S last, const UnderlyingType<I, AName
                 first, last,
                 value,
                 [&Proj](auto&& entry) {
-                    return std::forward<P>(Proj)(*std::move(entry.template Get<AName>()));
+                    return std::forward<P>(Proj)(*std::move(Get<AName>(entry)));
                 });
         });
 }
@@ -240,7 +240,7 @@ auto CountFind(auto&& count_find, I first, S last, const ATuple& tuple, P&& Proj
                 first, last,
                 tuple,
                 [&Proj](auto&& entry) {
-                    return std::forward<P>(Proj)(std::move(entry.template Get<ANames>())...);
+                    return std::forward<P>(Proj)(std::move(Get<ANames>(entry))...);
                 });
         });
 }
@@ -259,7 +259,7 @@ auto CountFind(auto&& count_find, I first, S last, const ATuple& tuple, P&& Proj
 //                 std::forward<R>(r),
 //                 std::forward<F>(Pred),
 //                 [&Proj1](auto&& entry) {
-//                     return std::forward<P1>(Proj1)(*std::move(entry.template Get<AName>()));
+//                     return std::forward<P1>(Proj1)(*std::move(Get<AName>(entry)));
 //                 },
 //                 [&Proj2](auto&& v) {
 //                     return std::forward<P2>(Proj2)(std::forward<decltype(v)>(v));
@@ -285,12 +285,12 @@ auto CountFind(auto&& count_find, I first, S last, const ATuple& tuple, P&& Proj
 //                 first2, last2,
 //                 std::forward<F>(Pred),
 //                 [&Proj1](auto&& entry) {
-//                     return std::forward<P1>(Proj1)(std::move(entry.template Get<ANames>())...);
+//                     return std::forward<P1>(Proj1)(std::move(Get<ANames>(entry))...);
 //                 },
 //                 [&Proj2](auto&& t) {
 //                     return std::forward<P2>(Proj2)(
-//                         std::forward<decltype(std::forward<decltype(t)>(t).template Get<ANames>())>(
-//                             std::forward<decltype(t)>(t).template Get<ANames>())...);
+//                         std::forward<decltype(Get<ANames>(std::forward<decltype(t)>(t)))>(
+//                              Get<ANames>(std::forward<decltype(t)>(t)))...);
 //                 });
 //         });
 // }

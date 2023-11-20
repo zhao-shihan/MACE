@@ -4,7 +4,7 @@ template<Concept::InstantiatedFrom<Tuple> ATuple>
 template<CETAString AName>
 auto BranchAddressHelper<ATuple>::ValuePointer(ATuple& tuple) -> auto {
     using ObjectType = typename ATuple::Model::template ValueOf<AName>::Type;
-    ObjectType& object = tuple.template Get<AName>();
+    ObjectType& object = Get<AName>(tuple);
     if constexpr (Concept::ROOTFundamental<ObjectType> or IsStdArray<ObjectType>{}) {
         return &object;
     } else if constexpr (IsFixedString<ObjectType>{}) {

@@ -145,9 +145,9 @@ void CDCSD::EndOfEvent(G4HCofThisEvent*) {
                 if (const auto signalTime = timeHit->first;
                     signalTime > signalTimeThreshold or timeHit == std::prev(signalTimesAndHit.end())) {
                     const auto goodHit =
-                        *std::ranges::max_element(signalHitCandidateList,
-                                                  [](const std::unique_ptr<CDCHit>* hit1, const std::unique_ptr<CDCHit>* hit2) {
-                                                      return (*hit1)->Get<"Ek">() < (*hit2)->Get<"Ek">();
+                        *std::ranges::max_element(std::as_const(signalHitCandidateList),
+                                                  [](auto&& hit1, auto&& hit2) {
+                                                      return Get<"Ek">(**hit1) < Get<"Ek">(**hit2);
                                                   });
                     hitList.emplace_back(goodHit->release());
                     signalHitCandidateList.clear();
