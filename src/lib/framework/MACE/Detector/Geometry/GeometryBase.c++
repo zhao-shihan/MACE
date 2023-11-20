@@ -32,6 +32,10 @@ void GeometryBase::RegisterRegion(gsl::index iLogicalVolume, gsl::not_null<G4Reg
 }
 
 void GeometryBase::RegisterRegion(gsl::not_null<G4Region*> region) const {
+    if (fLogicalVolumes.empty()) {
+        std::logic_error{"MACE::Detector::Geometry::GeometryBase::RegisterRegion: "
+                         "No logical volumes (may be you forget to construct geometry, or did not construct volumes with GeometryBase::Make?)"};
+    }
     for (gsl::index i = 0; i < std::ssize(fLogicalVolumes); ++i) {
         RegisterRegion(i, region);
     }
@@ -60,6 +64,10 @@ void GeometryBase::RegisterSD(gsl::index iLogicalVolume, gsl::not_null<G4VSensit
 }
 
 void GeometryBase::RegisterSD(gsl::not_null<G4VSensitiveDetector*> sd) const {
+    if (fLogicalVolumes.empty()) {
+        std::logic_error{"MACE::Detector::Geometry::GeometryBase::RegisterSD: "
+                         "No logical volumes (may be you forget to construct geometry, or did not construct volumes with GeometryBase::Make?)"};
+    }
     for (gsl::index i = 0; i < std::ssize(fLogicalVolumes); ++i) {
         RegisterSD(i, sd);
     }
