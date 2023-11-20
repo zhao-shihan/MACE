@@ -33,55 +33,57 @@ class GeometryBase : public NonMoveableBase {
 public:
     virtual ~GeometryBase() = default;
 
-    auto IsTop() const { return not fMother.has_value(); }
-    const auto& Mother() const { return fMother.value().get(); }
+    auto Topmost() const -> bool { return not fMother.has_value(); }
+    auto Mother() const -> const auto& { return fMother.value().get(); }
 
-    /// @brief Determines whether we will construct this entity.
+    /// @brief Determines whether we will construct this geometry.
     /// Entities could override this function to control whether this will be constructed.
     /// A typical usage is to get the information of whether to enable this from description in the override function.
     virtual bool Enabled() const { return true; }
 
-    template<std::derived_from<GeometryBase> AEntity>
-    AEntity& NewDaughter(G4bool checkOverlaps);
-    template<std::derived_from<GeometryBase> AEntity>
-    std::optional<std::reference_wrapper<AEntity>> FindDaughter() const;
-    template<std::derived_from<GeometryBase> AEntity>
-    auto RemoveDaughter() { return fDaughters.erase(typeid(AEntity)) > 0; }
+    template<std::derived_from<GeometryBase> AGeometry>
+    auto NewDaughter(G4bool checkOverlaps) -> AGeometry&;
+    template<std::derived_from<GeometryBase> AGeometry>
+    auto FindDaughter() const -> std::optional<std::reference_wrapper<AGeometry>>;
+    template<std::derived_from<GeometryBase> AGeometry>
+    auto RemoveDaughter() -> bool { return fDaughters.erase(typeid(AGeometry)) > 0; }
+    template<std::derived_from<GeometryBase> AGeometry>
+    auto FindSibling() const -> auto { return Mother().FindDaughter<AGeometry>(); }
 
-    void RegisterMaterial(gsl::index iLogicalVolume, gsl::not_null<G4Material*> material) const;
-    void RegisterMaterial(gsl::not_null<G4Material*> material) const;
+    auto RegisterMaterial(gsl::index iLogicalVolume, gsl::not_null<G4Material*> material) const -> void;
+    auto RegisterMaterial(gsl::not_null<G4Material*> material) const -> void;
 
-    void RegisterRegion(gsl::index iLogicalVolume, gsl::not_null<G4Region*> region) const;
-    void RegisterRegion(gsl::not_null<G4Region*> region) const;
+    auto RegisterRegion(gsl::index iLogicalVolume, gsl::not_null<G4Region*> region) const -> void;
+    auto RegisterRegion(gsl::not_null<G4Region*> region) const -> void;
 
-    void RegisterSD(gsl::index iLogicalVolume, gsl::not_null<G4VSensitiveDetector*> sd) const;
-    void RegisterSD(gsl::not_null<G4VSensitiveDetector*> sd) const;
+    auto RegisterSD(gsl::index iLogicalVolume, gsl::not_null<G4VSensitiveDetector*> sd) const -> void;
+    auto RegisterSD(gsl::not_null<G4VSensitiveDetector*> sd) const -> void;
 
-    template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, class AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
-    void RegisterField(gsl::index iLogicalVolume, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const;
-    template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, class AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
-    void RegisterField(gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const;
+    template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
+    auto RegisterField(gsl::index iLogicalVolume, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void;
+    template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
+    auto RegisterField(gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void;
 
-    void Export(std::filesystem::path gdmlFile, gsl::index iPhysicalVolume = 0) const;
+    auto Export(std::filesystem::path gdmlFile, gsl::index iPhysicalVolume = 0) const -> void;
 
-    const auto& LogicalVolumes() const { return fLogicalVolumes; }
-    const auto& LogicalVolume(gsl::index i = 0) const { return fLogicalVolumes.at(i); }
-    const auto& PhysicalVolumes() const { return fPhysicalVolumes; }
-    const auto& PhysicalVolume(gsl::index i = 0) const { return fPhysicalVolumes.at(i); }
+    auto LogicalVolumes() const -> const auto& { return fLogicalVolumes; }
+    auto LogicalVolume(gsl::index i = 0) const -> const auto& { return fLogicalVolumes.at(i); }
+    auto PhysicalVolumes() const -> const auto& { return fPhysicalVolumes; }
+    auto PhysicalVolume(gsl::index i = 0) const -> const auto& { return fPhysicalVolumes.at(i); }
 
 protected:
-    // Make a G4Solid and keep it (for deleting when Entity deconstructs).
+    // Make a G4Solid and keep it (for deleting when geometry deconstructs).
     template<std::derived_from<G4VSolid> ASolid>
-    ASolid* Make(auto&&... args);
-    // Make a G4LogicalVolume and keep it for futher access. Will be deleted when Entity deconstructed.
+    auto Make(auto&&... args) -> ASolid*;
+    // Make a G4LogicalVolume and keep it for futher access. Will be deleted when geometry deconstructed.
     template<std::derived_from<G4LogicalVolume> ALogical>
-    ALogical* Make(auto&&... args);
-    // Make a G4PhysicalVolume and keep it for futher access. Will be deleted when Entity deconstructed.
+    auto Make(auto&&... args) -> ALogical*;
+    // Make a G4PhysicalVolume and keep it for futher access. Will be deleted when geometry deconstructed.
     template<std::derived_from<G4VPhysicalVolume> APhysical>
-    APhysical* Make(auto&&... args);
+    auto Make(auto&&... args) -> APhysical*;
 
 private:
-    virtual void Construct(G4bool checkOverlaps) = 0;
+    virtual auto Construct(G4bool checkOverlaps) -> void = 0;
 
 private:
     std::optional<std::reference_wrapper<const GeometryBase>> fMother;
