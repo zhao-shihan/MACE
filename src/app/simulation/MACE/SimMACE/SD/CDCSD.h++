@@ -32,12 +32,12 @@ class CDCSD final : public NonMoveableBase,
 public:
     CDCSD(const G4String& sdName);
 
-    void Initialize(G4HCofThisEvent* hitsCollection) override;
-    G4bool ProcessHits(G4Step* theStep, G4TouchableHistory*) override;
-    void EndOfEvent(G4HCofThisEvent*) override;
+    auto Initialize(G4HCofThisEvent* hitsCollection) -> void override;
+    auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
+    auto EndOfEvent(G4HCofThisEvent*) -> void override;
 
     /// @brief Inform this SD of event ID in EventAction
-    void EventID(G4int eventID) { fEventID = eventID; }
+    auto EventID(G4int eventID) -> void { fEventID = eventID; }
 
 private:
     G4int fEventID;
