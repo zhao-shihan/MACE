@@ -3,6 +3,8 @@
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
+#include "MACE/SimEMC/SD/EMCSD.h++"
+#include "MACE/SimEMC/SD/PMTSD.h++"
 
 #include "G4VUserDetectorConstruction.hh"
 
@@ -28,6 +30,9 @@ public:
 
     auto SetCheckOverlaps(G4bool checkOverlaps) -> void { fCheckOverlap = checkOverlaps; }
 
+    auto& EMCSD() const { return *fEMCSD; }
+    auto& PMTSD() const { return *fPMTSD; }
+
 public:
     using DescriptionInUse = std::tuple<Detector::Description::EMC,
                                         Detector::Description::World>;
@@ -36,6 +41,9 @@ private:
     G4bool fCheckOverlap;
 
     std::shared_ptr<Detector::Geometry::GeometryBase> fWorld;
+
+    SD::EMCSD* fEMCSD;
+    SD::PMTSD* fPMTSD;
 };
 
 } // namespace SimEMC::inline Action

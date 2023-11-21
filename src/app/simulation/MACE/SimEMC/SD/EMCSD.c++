@@ -8,6 +8,8 @@
 #include "G4SDManager.hh"
 #include "G4Step.hh"
 
+#include "fmt/format.h"
+
 #include <utility>
 
 namespace MACE::SimEMC::inline SD {
@@ -21,13 +23,14 @@ EMCSD::EMCSD(G4String name) :
 
 auto EMCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
     int cellTotalNumber = Detector::Description::EMC::Instance().CellTotalNumber();
-
+    fmt::println("fdsafdsafdsafdsafsdafdsafsdfsadsa: {}", collectionName[0]);
     fHitsCollection = new EMCHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 
-    for (auto i = 0; i < cellTotalNumber; i++)
+    for (auto i = 0; i < cellTotalNumber; i++) {
         fHitsCollection->insert(new EMCHit());
+    }
 }
 
 auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {

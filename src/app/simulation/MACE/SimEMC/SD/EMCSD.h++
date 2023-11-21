@@ -1,7 +1,7 @@
 #pragma once
 
 // #include "MACE/SimEMC/Hit/EMCRawHit.h++"
-#include "MACE/SimEMC/Hit/PMTHit.h++"
+#include "MACE/SimEMC/Hit/EMCHit.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
 #include "G4VSensitiveDetector.hh"

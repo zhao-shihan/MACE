@@ -9,8 +9,11 @@
 #include "MACE/Detector/Geometry/Fast/CDCSenseLayer.h++"
 #include "MACE/Detector/Geometry/Fast/CDCSenseWire.h++"
 #include "MACE/Detector/Geometry/Fast/CDCSuperLayer.h++"
-#include "MACE/Detector/Geometry/Fast/EMC.h++"
+#include "MACE/Detector/Geometry/Fast/EMCCrystal.h++"
 #include "MACE/Detector/Geometry/Fast/EMCField.h++"
+#include "MACE/Detector/Geometry/Fast/EMCPMTCathode.h++"
+#include "MACE/Detector/Geometry/Fast/EMCPMTCoupler.h++"
+#include "MACE/Detector/Geometry/Fast/EMCPMTWindow.h++"
 #include "MACE/Detector/Geometry/Fast/EMCShield.h++"
 #include "MACE/Detector/Geometry/Fast/MCP.h++"
 #include "MACE/Detector/Geometry/Fast/MultiplateCollimator.h++"
@@ -69,7 +72,11 @@ int main(int argc, char* argv[]) {
 
     // 2
 
-    auto& emc = emcField.NewDaughter<EMC>(fCheckOverlap);
+    auto& emcCrystal = emcField.NewDaughter<EMCCrystal>(fCheckOverlap);
+    auto& emcPMTCoupler = emcField.NewDaughter<EMCPMTCoupler>(fCheckOverlap);
+    auto& emcPMTWindow = emcField.NewDaughter<EMCPMTWindow>(fCheckOverlap);
+    auto& emcPMTCathode = emcField.NewDaughter<EMCPMTCathode>(fCheckOverlap);
+
     auto& mcp = emcField.NewDaughter<MCP>(fCheckOverlap);
 
     auto& solenoidB1 = solenoidB1Field.NewDaughter<SolenoidB1>(fCheckOverlap);
@@ -153,8 +160,8 @@ int main(int argc, char* argv[]) {
         solenoidS2.RegisterMaterial(copper);
         solenoidS3.RegisterMaterial(copper);
 
-        const auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
-        emc.RegisterMaterial(csI);
+        // const auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
+        // emc.RegisterMaterial(csI);
 
         const auto iron = nist->FindOrBuildMaterial("G4_Fe");
         spectrometerMagnet.RegisterMaterial(iron);
@@ -213,7 +220,10 @@ int main(int argc, char* argv[]) {
     using MACE::Detector::Geometry::GeometryBase;
     for (auto&& entity : std::initializer_list<std::reference_wrapper<const GeometryBase>>{
              emcShield,
-             emc,
+             emcCrystal,
+             emcPMTCoupler,
+             emcPMTWindow,
+             emcPMTCathode,
              spectrometerMagnet,
              spectrometerShield,
              solenoidB1,

@@ -49,7 +49,6 @@ public:
     auto RemoveDaughter() -> bool { return fDaughters.erase(typeid(AGeometry)) > 0; }
     template<std::derived_from<GeometryBase> AGeometry>
     auto FindSibling() const -> auto { return Mother().FindDaughter<AGeometry>(); }
-
     auto RegisterMaterial(gsl::index iLogicalVolume, gsl::not_null<G4Material*> material) const -> void;
     auto RegisterMaterial(gsl::not_null<G4Material*> material) const -> void;
 

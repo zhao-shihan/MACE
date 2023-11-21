@@ -39,8 +39,8 @@
 "/vis/viewer/set/auxiliaryEdge false",
 "/vis/viewer/set/lineSegmentsPerCircle 100",
 "/vis/viewer/zoom 10",
+"/vis/viewer/addCutawayPlane 0 0 0",
 "",
-"/vis/geometry/set/visibility World 0 false",
 "/vis/scene/add/date",
 "/vis/scene/add/axes 0 0 0 1 cm",
 "/vis/scene/add/trajectories smooth #rich",
@@ -50,6 +50,7 @@
 "/vis/filtering/trajectories/particleFilter-0/add e+",
 "/vis/filtering/trajectories/particleFilter-0/add e-",
 "/vis/filtering/trajectories/particleFilter-0/add gamma",
+"/vis/filtering/trajectories/particleFilter-0/add opticalphoton",
 "/vis/filtering/trajectories/particleFilter-0/add M",
 "/vis/filtering/trajectories/particleFilter-0/add -M",
 "/vis/filtering/trajectories/particleFilter-0/add mu+",
@@ -58,6 +59,16 @@
 "",
 "/vis/verbose warnings",
 "/vis/viewer/set/autoRefresh true",
+"/vis/geometry/set/visibility World 0 false",
+
+"#############################################################################",
+"# General Particle Source settings",
+"#############################################################################",
+
+"/gps/particle gamma",
+"/gps/ene/mono 0.511 MeV",
+"/gps/pos/centre 0. 0. 0. cm",
+"/gps/ang/type iso",
 ""
 
 #endif
