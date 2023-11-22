@@ -37,17 +37,19 @@ G4bool EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
         const auto vertexMomentum = track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()));
         // new a hit
         const auto hit = new EMCHit;
-        hit->Time().Value(preStepPoint.GetGlobalTime());
-        hit->EnergyDeposition().Value(preStepPoint.GetKineticEnergy());
-        hit->MCEventID().Value(fEventID);
-        hit->MCTrackID().Value(track.GetTrackID());
-        hit->PDGCode().Value(particle.GetPDGEncoding());
-        hit->Position().Value(hitPosition);
-        hit->Momentum().Value(preStepPoint.GetMomentum());
-        hit->VertexTime().Value(track.GetGlobalTime() - track.GetLocalTime());
-        hit->VertexPosition().Value(track.GetVertexPosition());
-        hit->VertexKineticEnergy().Value(vertexEk);
-        hit->VertexMomentum().Value(vertexMomentum);
+        hit->Get<"CellID">() = 0;
+        hit->Get<"t">() = preStepPoint.GetGlobalTime();
+        hit->Get<"E">() = preStepPoint.GetKineticEnergy();
+        hit->Get<"EvtID">() = fEventID;
+        hit->Get<"TrkID">() = track.GetTrackID();
+        hit->Get<"PDGID">() = particle.GetPDGEncoding();
+        hit->Get<"Ek">() = preStepPoint.GetKineticEnergy();
+        hit->Get<"x">() = hitPosition;
+        hit->Get<"p">() = preStepPoint.GetMomentum();
+        hit->Get<"t0">() = track.GetGlobalTime() - track.GetLocalTime();
+        hit->Get<"x0">() = track.GetVertexPosition();
+        hit->Get<"Ek0">() = vertexEk;
+        hit->Get<"p0">() = vertexMomentum;
         fHitsCollection->insert(hit);
         return true;
     }
@@ -55,7 +57,7 @@ G4bool EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
 }
 
 void EMCSD::EndOfEvent(G4HCofThisEvent*) {
-    Analysis::Instance().SubmitEMCHC(fHitsCollection->GetVector());
+    Analysis::Instance().SubmitEMCHC(*fHitsCollection->GetVector());
 }
 
 } // namespace MACE::SimMACE::inline SD
