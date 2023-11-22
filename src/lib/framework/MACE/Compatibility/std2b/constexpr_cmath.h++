@@ -19,7 +19,7 @@ namespace MACE::inline Compatibility::std2b {
 // div
 ///////////////////////////////////////////////////////////////////////////////
 
-constexpr auto div(int x, int y) -> std::div_t {
+MACE_ALWAYS_INLINE constexpr auto div(int x, int y) -> std::div_t {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::div(x, y);
 #else // backport
@@ -27,7 +27,7 @@ constexpr auto div(int x, int y) -> std::div_t {
 #endif
 }
 
-constexpr auto div(long x, long y) -> std::ldiv_t {
+MACE_ALWAYS_INLINE constexpr auto div(long x, long y) -> std::ldiv_t {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::div(x, y);
 #else // backport
@@ -35,7 +35,7 @@ constexpr auto div(long x, long y) -> std::ldiv_t {
 #endif
 }
 
-constexpr auto div(long long x, long long y) -> std::lldiv_t {
+MACE_ALWAYS_INLINE constexpr auto div(long long x, long long y) -> std::lldiv_t {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::div(x, y);
 #else // backport
@@ -43,7 +43,7 @@ constexpr auto div(long long x, long long y) -> std::lldiv_t {
 #endif
 }
 
-constexpr auto ldiv(long x, long y) -> std::ldiv_t {
+MACE_ALWAYS_INLINE constexpr auto ldiv(long x, long y) -> std::ldiv_t {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::ldiv(x, y);
 #else // backport
@@ -51,7 +51,7 @@ constexpr auto ldiv(long x, long y) -> std::ldiv_t {
 #endif
 }
 
-constexpr auto lldiv(long long x, long long y) -> std::lldiv_t {
+MACE_ALWAYS_INLINE constexpr auto lldiv(long long x, long long y) -> std::lldiv_t {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::lldiv(x, y);
 #else // backport
@@ -59,7 +59,7 @@ constexpr auto lldiv(long long x, long long y) -> std::lldiv_t {
 #endif
 }
 
-// constexpr auto div(std::intmax_t x, std::intmax_t y) -> std::imaxdiv_t {
+// MACE_ALWAYS_INLINE constexpr auto div(std::intmax_t x, std::intmax_t y) -> std::imaxdiv_t {
 // #ifdef __cpp_lib_constexpr_cmath // C++2b
 //     return std::div(x, y);
 // #else // backport
@@ -67,7 +67,7 @@ constexpr auto lldiv(long long x, long long y) -> std::lldiv_t {
 // #endif
 // }
 
-constexpr auto imaxdiv(std::intmax_t x, std::intmax_t y) -> std::imaxdiv_t {
+MACE_ALWAYS_INLINE constexpr auto imaxdiv(std::intmax_t x, std::intmax_t y) -> std::imaxdiv_t {
 #ifdef __cpp_lib_constexpr_cmath // C++2b
     return std::imaxdiv(x, y);
 #else // backport
