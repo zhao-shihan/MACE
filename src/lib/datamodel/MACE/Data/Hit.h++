@@ -11,7 +11,7 @@ using CDCHit = TupleModel<CDCRawHit,
                           Value<double, "tD", "Drift time">,
                           Value<float, "d", "Drift distance">>;
 
-using EMCHit = TupleModel<Value<int, "UnitID", "Hitting unit ID">,
+using EMCHit = TupleModel<Value<int, "CellID", "Hitting unit ID">,
                           Value<double, "t", "Hitting time">,
                           Value<float, "E", "Energy deposition">>;
 
