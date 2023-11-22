@@ -20,23 +20,16 @@
 namespace MACE::SimMACE::inline SD {
 
 CDCSD::CDCSD(const G4String& sdName) :
-    NonMoveableBase(),
-    G4VSensitiveDetector(sdName),
-    fEventID(-1),
-    fHitsCollection(nullptr),
-    fMeanDriftVelocity(),
-    fDeadTime(),
-    fCellMap(),
-    fCellEntryPoint(),
-    fCellSignalTimesAndHit() {
+    NonMoveableBase{},
+    G4VSensitiveDetector{sdName},
+    fEventID{-1},
+    fHitsCollection{},
+    fMeanDriftVelocity{},
+    fDeadTime{},
+    fCellMap{},
+    fCellEntryPoint{},
+    fCellSignalTimesAndHit{} {
     collectionName.emplace_back(sdName + "HC");
-
-    const auto& cellMap = Detector::Description::CDC::Instance().CellMap();
-    fCellMap.reserve(cellMap.size());
-    for (auto&& cell : cellMap) {
-        fCellMap.emplace_back(VectorCast<G4TwoVector>(cell.position),
-                              VectorCast<G4ThreeVector>(cell.direction));
-    }
 }
 
 void CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
@@ -47,6 +40,7 @@ void CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
     const auto& cdc = Detector::Description::CDC::Instance();
     fMeanDriftVelocity = cdc.MeanDriftVelocity();
     fDeadTime = cdc.DeadTime();
+    fCellMap = &cdc.CellMap();
 }
 
 G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
@@ -68,7 +62,9 @@ G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
             const auto energy{Math::MidPoint(entryPoint.GetKineticEnergy(), exitPoint.GetKineticEnergy())};
             const auto momentum{Math::MidPoint(entryPoint.GetMomentum(), exitPoint.GetMomentum())};
             // retrive wire position
-            const auto& [xWire, tWire]{fCellMap[cellID]};
+            const auto& cellInfo = fCellMap->at(cellID);
+            const auto xWire{VectorCast<G4TwoVector>((*fCellMap)[cellID].position)};
+            const auto tWire{VectorCast<G4ThreeVector>((*fCellMap)[cellID].direction)};
             // calculate drift distance
             const auto commonNormal{tWire.cross(momentum)};
             const auto driftDistance{std::abs((position - xWire).dot(commonNormal)) / commonNormal.mag()};
@@ -79,20 +75,20 @@ G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
             const auto vertexMomentum{track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()))};
             // new a hit
             auto hit = std::make_unique_for_overwrite<CDCHit>();
-            hit->Get<"CellID">() = cellID;
-            hit->Get<"t">() = signalTime;
-            hit->Get<"tD">() = driftTime;
-            hit->Get<"d">() = driftDistance;
-            hit->Get<"EvtID">() = fEventID;
-            hit->Get<"TrkID">() = trackID;
-            hit->Get<"PDGID">() = particle.GetPDGEncoding();
-            hit->Get<"Ek">() = energy;
-            hit->Get<"x">() = position;
-            hit->Get<"p">() = momentum;
-            hit->Get<"t0">() = track.GetGlobalTime() - track.GetLocalTime();
-            hit->Get<"x0">() = track.GetVertexPosition();
-            hit->Get<"Ek0">() = vertexEk;
-            hit->Get<"p0">() = vertexMomentum;
+            Get<"CellID">(*hit) = cellID;
+            Get<"t">(*hit) = signalTime;
+            Get<"tD">(*hit) = driftTime;
+            Get<"d">(*hit) = driftDistance;
+            Get<"EvtID">(*hit) = fEventID;
+            Get<"TrkID">(*hit) = trackID;
+            Get<"PDGID">(*hit) = particle.GetPDGEncoding();
+            Get<"Ek">(*hit) = energy;
+            Get<"x">(*hit) = position;
+            Get<"p">(*hit) = momentum;
+            Get<"t0">(*hit) = track.GetGlobalTime() - track.GetLocalTime();
+            Get<"x0">(*hit) = track.GetVertexPosition();
+            Get<"Ek0">(*hit) = vertexEk;
+            Get<"p0">(*hit) = vertexMomentum;
             fCellSignalTimesAndHit[cellID].emplace_back(signalTime, std::move(hit));
         };
 
