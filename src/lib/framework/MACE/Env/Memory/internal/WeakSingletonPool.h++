@@ -9,12 +9,12 @@
 
 #include <cstdio>
 #include <functional>
-#include <map>
 #include <optional>
 #include <stdexcept>
 #include <string>
 #include <typeindex>
 #include <typeinfo>
+#include <unordered_map>
 
 namespace MACE::Env::Memory::internal {
 
@@ -38,7 +38,7 @@ public:
     [[nodiscard]] auto Insert(gsl::not_null<AWeakSingleton*> instance) -> Node&;
 
 private:
-    std::map<std::type_index, Node> fInstanceMap;
+    std::unordered_map<std::type_index, Node> fInstanceMap;
 
     static WeakSingletonPool* fgInstance;
 };

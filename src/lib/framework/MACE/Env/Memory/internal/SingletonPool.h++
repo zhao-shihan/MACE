@@ -9,11 +9,11 @@
 #include "fmt/format.h"
 
 #include <functional>
-#include <map>
 #include <optional>
 #include <stdexcept>
 #include <typeindex>
 #include <typeinfo>
+#include <unordered_map>
 #include <utility>
 
 namespace MACE::Env::Memory::internal {
@@ -37,7 +37,7 @@ public:
     [[nodiscard]] auto GetUndeletedInReverseInsertionOrder() const -> std::vector<BaseNode>;
 
 private:
-    std::map<std::type_index, std::pair<Node, const std::pair<gsl::index, BaseNode>>> fInstanceMap;
+    std::unordered_map<std::type_index, std::pair<Node, const std::pair<gsl::index, BaseNode>>> fInstanceMap;
 };
 
 } // namespace MACE::Env::Memory::internal

@@ -20,11 +20,11 @@
 #include <functional>
 #include <iomanip>
 #include <iostream>
-#include <map>
 #include <memory>
 #include <optional>
 #include <typeindex>
 #include <typeinfo>
+#include <unordered_map>
 #include <vector>
 
 namespace MACE::Detector::Geometry {
@@ -92,7 +92,7 @@ private:
     std::vector<std::unique_ptr<G4LogicalVolume>> fLogicalVolumes;
     std::vector<std::unique_ptr<G4VPhysicalVolume>> fPhysicalVolumes;
 
-    std::map<std::type_index, std::unique_ptr<GeometryBase>> fDaughters;
+    std::unordered_map<std::type_index, std::unique_ptr<GeometryBase>> fDaughters;
 };
 
 } // namespace MACE::Detector::Geometry
