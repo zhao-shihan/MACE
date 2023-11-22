@@ -8,15 +8,15 @@ Output<Ts...>::Output(const std::string& name, const std::string& title) :
     fBranchAddressHelper{} {
     [this]<gsl::index... Is>(gslx::index_sequence<Is...>) {
         (...,
-         [this] {
-             using TheValue = std::tuple_element_t<Is, Tuple<Ts...>>;
+         [this]<gsl::index I>(std::integral_constant<gsl::index, I>) {
+             using TheValue = std::tuple_element_t<I, Tuple<Ts...>>;
              const auto branch = fTree.Branch(TheValue::Name(), fBranchAddressHelper.template ValuePointer<TheValue::Name()>(fEntry));
              branch->SetAutoDelete(false);
              if constexpr (TheValue::Description().HasValue()) {
                  const auto title = fmt::format("({}) {}", branch->GetLeaf(TheValue::Name())->GetTypeName(), TheValue::Description().StringView());
                  branch->SetTitle(title.c_str());
              }
-         }());
+         }(std::integral_constant<gsl::index, Is>{}));
     }(gslx::make_index_sequence<Tuple<Ts...>::Size()>());
 }
 

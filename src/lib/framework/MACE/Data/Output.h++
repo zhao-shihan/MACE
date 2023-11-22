@@ -6,6 +6,7 @@
 #include "MACE/Data/internal/BranchAddressHelper.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
+#include "TLeaf.h"
 #include "TTree.h"
 
 #include "fmt/format.h"
@@ -17,6 +18,7 @@
 #include <memory>
 #include <ranges>
 #include <string>
+#include <type_traits>
 
 namespace MACE::Data {
 
