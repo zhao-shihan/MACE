@@ -20,12 +20,12 @@
 namespace MACE::Data {
 
 template<TupleModelizable... Ts>
-class Writer : public NonMoveableBase {
+class Output : public NonMoveableBase {
 public:
     using Model = TupleModel<Ts...>;
 
 public:
-    Writer(const std::string& name, const std::string& title = {});
+    Output(const std::string& name, const std::string& title = {});
 
     template<typename T = Tuple<Ts...>>
         requires std::assignable_from<Tuple<Ts...>&, T>
@@ -50,12 +50,12 @@ public:
                  std::assignable_from<Tuple<Ts...>&, std::iter_reference_t<std::ranges::range_value_t<R>>>
     auto operator<<(const R& data) -> const auto& { return (Fill(data), *this); }
 
-    auto Entry() -> auto { return WriteIterator{this}; }
+    auto Entry() -> auto { return OutputIterator{this}; }
 
     auto Write(int option = 0, int bufferSize = 0) const -> auto { return fTree.Write(nullptr, option, bufferSize); }
 
 private:
-    class WriteIterator final {
+    class OutputIterator final {
     public:
         using difference_type = std::ptrdiff_t;
         using value_type = void;
@@ -64,17 +64,17 @@ private:
         using iterator_category = std::output_iterator_tag;
 
     public:
-        explicit WriteIterator(Writer* writer);
+        explicit OutputIterator(Output* output);
 
         template<typename T = Tuple<Ts...>>
-        auto operator=(T&& data) const -> auto& { return (*fWriter << std::forward<T>(data), *this); }
+        auto operator=(T&& data) const -> auto& { return (*fOutput << std::forward<T>(data), *this); }
 
         auto operator*() const -> auto& { return *this; }
         auto operator++() const -> auto& { return *this; }
         auto operator++(int) const -> auto& { return *this; }
 
     private:
-        Writer* fWriter;
+        Output* fOutput;
     };
 
 private:
@@ -86,4 +86,4 @@ private:
 
 } // namespace MACE::Data
 
-#include "MACE/Data/Writer.h++"
+#include "MACE/Data/Output.h++"

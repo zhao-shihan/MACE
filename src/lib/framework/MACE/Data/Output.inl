@@ -1,7 +1,7 @@
 namespace MACE::Data {
 
 template<TupleModelizable... Ts>
-Writer<Ts...>::Writer(const std::string& name, const std::string& title) :
+Output<Ts...>::Output(const std::string& name, const std::string& title) :
     NonMoveableBase{},
     fTree{name.c_str(), title.c_str()},
     fEntry{},
@@ -23,7 +23,7 @@ Writer<Ts...>::Writer(const std::string& name, const std::string& title) :
 template<TupleModelizable... Ts>
 template<typename T>
     requires std::assignable_from<Tuple<Ts...>&, T>
-auto Writer<Ts...>::Fill(T&& tuple) -> std::size_t {
+auto Output<Ts...>::Fill(T&& tuple) -> std::size_t {
     fEntry = std::forward<T>(tuple);
     return fTree.Fill();
 }
@@ -31,7 +31,7 @@ auto Writer<Ts...>::Fill(T&& tuple) -> std::size_t {
 template<TupleModelizable... Ts>
 template<std::ranges::input_range R>
     requires std::assignable_from<Tuple<Ts...>&, std::ranges::range_reference_t<R>>
-auto Writer<Ts...>::Fill(R&& data) -> std::size_t {
+auto Output<Ts...>::Fill(R&& data) -> std::size_t {
     std::size_t bytesTotal{};
     for (auto&& tuple : std::forward<R>(data)) {
         bytesTotal += Fill(std::forward_like<R>(tuple));
@@ -43,7 +43,7 @@ template<TupleModelizable... Ts>
 template<std::ranges::input_range R>
     requires std::indirectly_readable<std::ranges::range_value_t<R>> and
              std::assignable_from<Tuple<Ts...>&, std::iter_reference_t<std::ranges::range_value_t<R>>>
-auto Writer<Ts...>::Fill(const R& data) -> std::size_t {
+auto Output<Ts...>::Fill(const R& data) -> std::size_t {
     std::size_t bytesTotal{};
     for (auto&& i : data) {
         bytesTotal += Fill(std::forward<decltype(*i)>(*i));
@@ -52,7 +52,7 @@ auto Writer<Ts...>::Fill(const R& data) -> std::size_t {
 }
 
 template<TupleModelizable... Ts>
-Writer<Ts...>::WriteIterator::WriteIterator(Writer* writer) :
-    fWriter(writer) {}
+Output<Ts...>::OutputIterator::OutputIterator(Output* output) :
+    fOutput(output) {}
 
 } // namespace MACE::Data
