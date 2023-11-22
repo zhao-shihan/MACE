@@ -61,9 +61,9 @@ Sheet<Ts...>::Dataset::Dataset(const std::string& name, const R& files) :
     // 1: check tree type
     [this]<gsl::index... Is>(gslx::index_sequence<Is...>) {
         (...,
-         [this] {
+         [this]<gsl::index I>(std::integral_constant<gsl::index, I>) {
              TBranch* branch;
-             using TheValue = std::tuple_element_t<Is, Tuple<Ts...>>;
+             using TheValue = std::tuple_element_t<I, Tuple<Ts...>>;
              constexpr auto name = TheValue::Name();
              switch (fChain.SetBranchAddress(name, fBranchAddressHelper.template ValuePointer<name>(fFetchedEntry), &branch)) {
              case TChain::kMissingBranch:
@@ -98,7 +98,7 @@ Sheet<Ts...>::Dataset::Dataset(const std::string& name, const R& files) :
                  break;
              }
              branch->SetAutoDelete(false);
-         }());
+         }(std::integral_constant<gsl::index, Is>{}));
     }(gslx::make_index_sequence<EntrySize()>());
     // 2: set chain branch address by updating status
     Status(true);
@@ -144,13 +144,13 @@ template<TupleModelizable... Ts>
 auto Sheet<Ts...>::Dataset::UpdateStatus() -> void {
     [this]<gsl::index... Is>(gslx::index_sequence<Is...>) {
         (...,
-         [this] {
+         [this]<gsl::index I>(std::integral_constant<gsl::index, I>) {
              constexpr auto name = std::tuple_element_t<Is, Tuple<Ts...>>::Name();
              void* const valuePointer = fBranchAddressHelper.template ValuePointer<name>(fFetchedEntry);
              TBranch* branch;
              fChain.SetBranchAddress(name, valuePointer, &branch);
              branch->SetAutoDelete(false);
-         }());
+         }(std::integral_constant<gsl::index, Is>{}));
     }(gslx::make_index_sequence<EntrySize()>());
 }
 
