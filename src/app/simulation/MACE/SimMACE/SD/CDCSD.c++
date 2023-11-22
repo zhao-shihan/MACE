@@ -9,6 +9,8 @@
 #include "G4ProductionCuts.hh"
 #include "G4SDManager.hh"
 #include "G4Step.hh"
+#include "G4ThreeVector.hh"
+#include "G4TwoVector.hh"
 
 #include "gsl/gsl"
 
@@ -63,8 +65,8 @@ G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
             const auto momentum{Math::MidPoint(entryPoint.GetMomentum(), exitPoint.GetMomentum())};
             // retrive wire position
             const auto& cellInfo = fCellMap->at(cellID);
-            const auto xWire{VectorCast<G4TwoVector>((*fCellMap)[cellID].position)};
-            const auto tWire{VectorCast<G4ThreeVector>((*fCellMap)[cellID].direction)};
+            const auto xWire{VectorCast<G4TwoVector>(cellInfo.position)};
+            const auto tWire{VectorCast<G4ThreeVector>(cellInfo.direction)};
             // calculate drift distance
             const auto commonNormal{tWire.cross(momentum)};
             const auto driftDistance{std::abs((position - xWire).dot(commonNormal)) / commonNormal.mag()};
@@ -154,7 +156,7 @@ void CDCSD::EndOfEvent(G4HCofThisEvent*) {
         signalTimesAndHit.clear();
     }
 
-    Analysis::Instance().SubmitSpectrometerHC(&hitList);
+    Analysis::Instance().SubmitSpectrometerHC(hitList);
 }
 
 } // namespace MACE::SimMACE::inline SD
