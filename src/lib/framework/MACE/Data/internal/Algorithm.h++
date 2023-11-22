@@ -146,7 +146,7 @@ template<CETAString AName,
          std::predicate<InvokeByNameResult<P, I, AName>> F>
 auto AllAnyNoneOfCountFindIfOrNot(auto&& all_any_none_of_count_find_if_or_not, I first, S last, F&& Pred, P&& Proj) -> decltype(auto) {
     return CheckAndGetSheetFromFirstLast(first, last)
-        .template ExecuteWithOnlyEnabled<AName>([&] {
+        .template DoWith<AName>([&] {
             return all_any_none_of_count_find_if_or_not(
                 first, last,
                 [&Pred](auto&& v) {
@@ -165,7 +165,7 @@ template<CETAString... ANames,
     requires(sizeof...(ANames) >= 2)
 auto AllAnyNoneOfCountFindIfOrNot(auto&& all_any_none_of_count_find_if_or_not, I first, S last, F&& Pred, P&& Proj) -> decltype(auto) {
     return CheckAndGetSheetFromFirstLast(first, last)
-        .template ExecuteWithOnlyEnabled<ANames...>([&] {
+        .template DoWith<ANames...>([&] {
             return all_any_none_of_count_find_if_or_not(
                 first, last,
                 [&Pred](auto&& t) {
@@ -183,7 +183,7 @@ template<CETAString AName,
          std::invocable<InvokeByNameResult<P, I, AName>> F>
 auto ForEach(auto&& for_each, I first, S last, F&& Func, P&& Proj) -> decltype(auto) {
     return CheckAndGetSheetFromFirstLast(first, last)
-        .template ExecuteWithOnlyEnabled<AName>([&] {
+        .template DoWith<AName>([&] {
             return for_each(
                 first, last,
                 [&Func](auto&& v) {
@@ -202,7 +202,7 @@ template<CETAString... ANames,
     requires(sizeof...(ANames) >= 2)
 auto ForEach(auto&& for_each, I first, S last, F&& Func, P&& Proj) -> decltype(auto) {
     return CheckAndGetSheetFromFirstLast(first, last)
-        .template ExecuteWithOnlyEnabled<ANames...>([&] {
+        .template DoWith<ANames...>([&] {
             return for_each(
                 first, last,
                 [&Func](auto&& t) {
@@ -219,7 +219,7 @@ template<CETAString AName,
          InvocableByName<I, AName> P>
 auto CountFind(auto&& count_find, I first, S last, const UnderlyingType<I, AName>& value, P&& Proj) -> decltype(auto) {
     return CheckAndGetSheetFromFirstLast(first, last)
-        .template ExecuteWithOnlyEnabled<AName>([&] {
+        .template DoWith<AName>([&] {
             return count_find(
                 first, last,
                 value,
@@ -235,7 +235,7 @@ template<CETAString... ANames,
          InvocableByName<I, ANames...> P>
 auto CountFind(auto&& count_find, I first, S last, const ATuple& tuple, P&& Proj) -> decltype(auto) {
     return CheckAndGetSheetFromFirstLast(first, last)
-        .template ExecuteWithOnlyEnabled<ANames...>([&] {
+        .template DoWith<ANames...>([&] {
             return count_find(
                 first, last,
                 tuple,
@@ -253,7 +253,7 @@ auto CountFind(auto&& count_find, I first, S last, const ATuple& tuple, P&& Proj
 //          std::predicate<InvokeByNameResult<P1, I, AName>, std::invoke_result_t<P2, std::iter_reference_t<I2>>> F>
 // auto Mismatch(auto&& mismatch_find_end_first_of, I first, S last, R&& r, F&& Pred, P1&& Proj1, P2&& Proj2) -> decltype(auto) {
 //     return CheckAndGetSheetFromFirstLast(first, last)
-//         .template ExecuteWithOnlyEnabled<AName>([&] {
+//         .template DoWith<AName>([&] {
 //             return mismatch_find_end_first_of(
 //                 first, last,
 //                 std::forward<R>(r),
@@ -279,7 +279,7 @@ auto CountFind(auto&& count_find, I first, S last, const ATuple& tuple, P&& Proj
 //                             std::invoke_result_t<P2, typename std::decay_t<std::ranges::range_value_t<R>>::Model::template ValueOf<ANames>...>>
 // auto Mismatch(auto&& mismatch_find_end_first_of, I first1, S last1, I2 first2, S2 last2, R&& r, F&& Pred, P1&& Proj1, P2&& Proj2) -> decltype(auto) {
 //     return CheckAndGetSheetFromFirstLast(first, last)
-//         .template ExecuteWithOnlyEnabled<ANames...>([&] {
+//         .template DoWith<ANames...>([&] {
 //             return mismatch_find_end_first_of(
 //                 first1, last1,
 //                 first2, last2,

@@ -66,9 +66,9 @@ public:
     auto DataEmpty() const -> auto { return DataSize() == 0; }
 
     template<CETAString... ANames>
-    auto ExecuteWithOnlyEnabled(std::invocable auto&& F) const -> decltype(auto);
+    auto DoWith(std::invocable auto&& F) const -> decltype(auto);
     template<CETAString... ANames>
-    auto ExecuteWithOnlyDisabled(std::invocable auto&& F) const -> decltype(auto);
+    auto DoWithout(std::invocable auto&& F) const -> decltype(auto);
 
 public:
     template<CETAString ANames>

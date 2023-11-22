@@ -19,7 +19,7 @@ Sheet<Ts...>::Sheet(const std::string& name, const R& files) :
 
 template<TupleModelizable... Ts>
 template<CETAString... ANames>
-auto Sheet<Ts...>::ExecuteWithOnlyEnabled(std::invocable auto&& F) const -> decltype(auto) {
+auto Sheet<Ts...>::DoWith(std::invocable auto&& F) const -> decltype(auto) {
     const auto originalStatus = fData->Status();
     fData->Status(false);
     (..., fData->template Status<ANames>(true));
@@ -32,7 +32,7 @@ auto Sheet<Ts...>::ExecuteWithOnlyEnabled(std::invocable auto&& F) const -> decl
 
 template<TupleModelizable... Ts>
 template<CETAString... ANames>
-auto Sheet<Ts...>::ExecuteWithOnlyDisabled(std::invocable auto&& F) const -> decltype(auto) {
+auto Sheet<Ts...>::DoWithout(std::invocable auto&& F) const -> decltype(auto) {
     const auto originalStatus = fData->Status();
     fData->Status(true);
     (..., fData->template Status<ANames>(false));
