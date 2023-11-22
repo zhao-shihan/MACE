@@ -139,6 +139,11 @@ private:
         /// @return The data tuple.
         auto Get() const -> auto;
 
+        auto operator*() const -> const Entry& { return *this; }
+        auto operator*() -> Entry& { return *this; }
+        auto operator->() const -> const Entry* { return this; }
+        auto operator->() -> Entry* { return this; }
+
         auto operator==(const Entry& that) const -> auto { return fIndex == that.fIndex; }
         auto operator<=>(const Entry& that) const -> auto { return fIndex <=> that.fIndex; }
 
