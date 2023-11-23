@@ -7,37 +7,33 @@
 
 namespace MACE::Data {
 
-using SimHitBasis = TupleModel<Value<int, "EvtID", "MC Event ID">,
-                               Value<int, "TrkID", "MC Track ID">,
-                               Value<int, "PDGID", "Particle PDG ID (MC truth)">>;
+using SimHitBasicTruth = TupleModel<Value<int, "EvtID", "MC Event ID">,
+                                    Value<int, "TrkID", "MC Track ID">,
+                                    Value<int, "PDGID", "Particle PDG ID (MC truth)">>;
+
+using SimHitVertexTruth = TupleModel<Value<float, "t0", "Vertex time (MC truth)">,
+                                     Value<stdx::array3f, "x0", "Vertex position (MC truth)">,
+                                     Value<float, "Ek0", "Vertex kinetic energy (MC truth)">,
+                                     Value<stdx::array3f, "p0", "Vertex momentum (MC truth)">>;
 
 using CDCSimHit = TupleModel<CDCHit,
-                             SimHitBasis,
+                             SimHitBasicTruth,
                              Value<float, "Ek", "Hitting kinetic energy (MC truth)">,
                              Value<stdx::array3f, "x", "Hitting position (MC truth)">,
                              Value<stdx::array3f, "p", "Hitting momentum (MC truth)">,
-                             Value<float, "t0", "Vertex time (MC truth)">,
-                             Value<stdx::array3f, "x0", "Vertex position (MC truth)">,
-                             Value<float, "Ek0", "Vertex kinetic energy (MC truth)">,
-                             Value<stdx::array3f, "p0", "Vertex momentum (MC truth)">>;
+                             SimHitVertexTruth>;
 
 using EMCSimHit = TupleModel<EMCHit,
-                             SimHitBasis,
+                             SimHitBasicTruth,
                              Value<float, "Ek", "Hitting kinetic energy (MC truth)">,
                              Value<stdx::array3f, "x", "Hitting position (MC truth)">,
                              Value<stdx::array3f, "p", "Hitting momentum (MC truth)">,
-                             Value<float, "t0", "Vertex time (MC truth)">,
-                             Value<stdx::array3f, "x0", "Vertex position (MC truth)">,
-                             Value<float, "Ek0", "Vertex kinetic energy (MC truth)">,
-                             Value<stdx::array3f, "p0", "Vertex momentum (MC truth)">>;
+                             SimHitVertexTruth>;
 
 using MCPSimHit = TupleModel<MCPHit,
-                             SimHitBasis,
+                             SimHitBasicTruth,
                              Value<float, "Ek", "Hitting kinetic energy (MC truth)">,
                              Value<stdx::array3f, "p", "Hitting momentum (MC truth)">,
-                             Value<float, "t0", "Vertex time (MC truth)">,
-                             Value<stdx::array3f, "x0", "Vertex position (MC truth)">,
-                             Value<float, "Ek0", "Vertex kinetic energy (MC truth)">,
-                             Value<stdx::array3f, "p0", "Vertex momentum (MC truth)">>;
+                             SimHitVertexTruth>;
 
 } // namespace MACE::Data
