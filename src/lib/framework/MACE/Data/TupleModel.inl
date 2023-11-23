@@ -5,7 +5,6 @@ template<CETAString AName, gsl::index I>
 consteval auto ModelBase<ADerived, AStdTuple>::IndexImpl() -> gsl::index {
     if constexpr (I > Size() - 1) {
         static_assert(I < Size(), "no such value of this name within this data model");
-        return -1;
     } else if constexpr (std::tuple_element_t<I, AStdTuple>::Name() == AName) {
         return I;
     } else {

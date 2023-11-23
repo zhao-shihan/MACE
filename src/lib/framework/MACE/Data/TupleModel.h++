@@ -62,8 +62,10 @@ private:
 template<typename T>
 concept TupleModelizable = static_cast<bool>(std::derived_from<T, internal::ModelSignature> xor internal::IsValue<T>::value);
 
-template<TupleModelizable... Ts>
-struct TupleModel; // fields should be placed after data models in template parameters!
+template<TupleModelizable...>
+struct TupleModel final
+    : internal::ModelBase<TupleModel<>,
+                          std::tuple<>> {};
 
 template<std::derived_from<internal::ModelSignature> AModel, TupleModelizable... AOthers>
 struct TupleModel<AModel, AOthers...> final
@@ -71,15 +73,11 @@ struct TupleModel<AModel, AOthers...> final
                           stdx::tuple_concat_t<typename AModel::StdTuple,
                                                typename TupleModel<AOthers...>::StdTuple>> {};
 
-template<ValueAcceptable... Ts, CETAString... ANames, CETAString... ADescriptions>
-struct TupleModel<Value<Ts, ANames, ADescriptions>...> final
-    : internal::ModelBase<TupleModel<Value<Ts, ANames, ADescriptions>...>,
-                          std::tuple<Value<Ts, ANames, ADescriptions>...>> {};
-
-template<>
-struct TupleModel<> final
-    : internal::ModelBase<TupleModel<>,
-                          std::tuple<>> {};
+template<ValueAcceptable T, CETAString AName, CETAString ADescription, TupleModelizable... AOthers>
+struct TupleModel<Value<T, AName, ADescription>, AOthers...> final
+    : internal::ModelBase<TupleModel<Value<T, AName, ADescription>, AOthers...>,
+                          stdx::tuple_concat_t<std::tuple<Value<T, AName, ADescription>>,
+                                               typename TupleModel<AOthers...>::StdTuple>> {};
 
 template<typename M1, typename M2>
 concept TupleModelContain = requires {
