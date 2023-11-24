@@ -67,10 +67,6 @@ void EMCPMTCoupler::Construct(G4bool checkOverlaps) {
     siliconeOilPropertiesTable->AddProperty("ABSLENGTH", fEnergyPair, {15_cm, 15_cm});
     siliconeOil->SetMaterialPropertiesTable(siliconeOilPropertiesTable);
 
-    if (Env::BasicEnv::Instance().GetVerboseLevel() >= Env::VerboseLevel::Verbose) {
-        siliconeOilPropertiesTable->DumpTable();
-    }
-
     auto rfSurfacePropertiesTable = new G4MaterialPropertiesTable();
     rfSurfacePropertiesTable->AddProperty("REFLECTIVITY", fEnergyPair, {0.985, 0.985});
 

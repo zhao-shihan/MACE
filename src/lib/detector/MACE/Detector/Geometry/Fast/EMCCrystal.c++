@@ -16,6 +16,8 @@
 #include "G4QuadrangularFacet.hh"
 #include "G4TessellatedSolid.hh"
 
+#include "fmt/format.h"
+
 #include <algorithm>
 #include <utility>
 
@@ -78,6 +80,7 @@ void EMCCrystal::Construct(G4bool checkOverlaps) {
     csI->SetMaterialPropertiesTable(csiPropertiesTable);
 
     if (Env::BasicEnv::Instance().GetVerboseLevel() >= Env::VerboseLevel::Verbose) {
+        fmt::println("\nPMT Quantum Efficiency:");
         csiPropertiesTable->DumpTable();
     }
 

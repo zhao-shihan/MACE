@@ -14,6 +14,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4Tubs.hh"
 
+#include "fmt/format.h"
+
 #include <algorithm>
 #include <utility>
 
@@ -74,6 +76,7 @@ void EMCPMTCathode::Construct(G4bool checkOverlaps) {
     cathodeSurfacePropertiesTable->AddProperty("EFFICIENCY", cathodeSurfacePropertiesEnergy, cathodeSurfacePropertiesEfficiency);
 
     if (Env::BasicEnv::Instance().GetVerboseLevel() >= Env::VerboseLevel::Verbose) {
+        fmt::println("\nPMT Quantum Efficiency:");
         cathodeSurfacePropertiesTable->DumpTable();
     }
 
