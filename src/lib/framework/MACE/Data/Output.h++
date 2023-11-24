@@ -28,7 +28,7 @@ public:
     using Model = TupleModel<Ts...>;
 
 public:
-    Output(const std::string& name, const std::string& title = {});
+    explicit Output(const std::string& name, const std::string& title = {});
 
     template<typename T = Tuple<Ts...>>
         requires std::assignable_from<Tuple<Ts...>&, T>
