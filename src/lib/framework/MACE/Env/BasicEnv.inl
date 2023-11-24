@@ -1,6 +1,6 @@
 namespace MACE::Env {
 
-template<class ACLI>
+template<typename ACLI>
 BasicEnv::BasicEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel, bool printWelcomeMessage) :
     EnvBase(),
     PassiveSingleton(),

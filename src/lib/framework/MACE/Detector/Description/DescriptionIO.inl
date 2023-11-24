@@ -2,7 +2,7 @@ namespace MACE::Detector::Description {
 
 namespace internal {
 
-template<std::intmax_t i, class T>
+template<std::intmax_t i, typename T>
 struct FillDescriptionArray {
     constexpr void operator()(std::array<DescriptionBase*, std::tuple_size_v<T>>& descriptions) const {
         std::get<i>(descriptions) = std::addressof(std::tuple_element_t<i, T>::Instance());

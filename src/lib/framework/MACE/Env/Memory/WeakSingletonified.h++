@@ -14,10 +14,10 @@ class WeakSingletonBase;
 
 } // namespace internal
 
-template<class ADerived>
+template<typename ADerived>
 class WeakSingleton;
 
-template<class T>
+template<typename T>
 concept IndirectlyWeakSingletonified =
     requires {
         requires std::is_base_of_v<internal::WeakSingletonBase, T>;
@@ -25,7 +25,7 @@ concept IndirectlyWeakSingletonified =
         requires Concept::NonMoveable<T>;
     };
 
-template<class T>
+template<typename T>
 concept WeakSingletonified =
     requires {
         requires std::derived_from<T, WeakSingleton<T>>;

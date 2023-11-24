@@ -1,9 +1,11 @@
 #pragma once
 
+#include "MACE/Env/Memory/Singletonified.h++"
 #include "MACE/Env/Memory/internal/SingletonBase.h++"
 #include "MACE/Env/Memory/internal/SingletonFactory.h++"
 #include "MACE/Env/Memory/internal/SingletonPool.h++"
-#include "MACE/Env/Memory/Singletonified.h++"
+
+#include "fmt/format.h"
 
 #include <cassert>
 #include <memory>
@@ -67,7 +69,7 @@ namespace MACE::Env::Memory {
 ///
 ///   In Example2.h++:
 ///
-///     template<class T>
+///     template<typename T>
 ///     class Example2Base : public Singleton<T> {
 ///     protected:
 ///         Example2Base();
@@ -105,7 +107,7 @@ namespace MACE::Env::Memory {
 ///     };
 ///
 ///     // The true CRTP
-///     template<class T>
+///     template<typename T>
 ///     class Example3SingletonBase : public Singleton<T>,
 ///                                   public Example3Base {
 ///     protected:
@@ -145,17 +147,17 @@ namespace MACE::Env::Memory {
 /// MACE::Env::Memory::SingletonFactory, and shares lifetime with
 /// MACE::Env. Calling Instance() without initializing an environment
 /// induces error. Use wisely, think wisely!
-template<class ADerived>
+template<typename ADerived>
 class Singleton : public internal::SingletonBase {
 protected:
     Singleton();
     virtual ~Singleton() override;
 
 public:
-    static ADerived& Instance();
+    static auto Instance() -> ADerived&;
 
 private:
-    static void InstantiateOrFindInstance();
+    static auto InstantiateOrFindInstance() -> void;
 
 private:
     static struct InstanceKeeper {

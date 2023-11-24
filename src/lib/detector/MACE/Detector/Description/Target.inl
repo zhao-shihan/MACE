@@ -24,7 +24,7 @@ bool Target::TestDetectable(const Concept::InputVector3D auto& x) const noexcept
     std2b::unreachable();
 }
 
-template<class ADerivedShape>
+template<typename ADerivedShape>
 Target::ShapeBase<ADerivedShape>::ShapeBase() {
     static_assert(
         requires(const ADerivedShape shape, CLHEP::Hep3Vector x, bool inside) {
@@ -37,8 +37,8 @@ Target::ShapeBase<ADerivedShape>::ShapeBase() {
         });
 }
 
-template<class ADerivedShape>
-template<class ADerivedDetail>
+template<typename ADerivedShape>
+template<typename ADerivedDetail>
 Target::ShapeBase<ADerivedShape>::DetailBase<ADerivedDetail>::DetailBase() {
     static_assert(
         requires(const ADerivedDetail detail, CLHEP::Hep3Vector x) {

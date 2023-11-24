@@ -6,7 +6,7 @@
 
 namespace MACE::Concept {
 
-template<class T>
+template<typename T>
 concept GeneralArithmetic =
     std::is_arithmetic_v<T> or
     MathVectorAny<T>;

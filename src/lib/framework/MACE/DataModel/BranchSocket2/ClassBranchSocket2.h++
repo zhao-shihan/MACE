@@ -10,7 +10,7 @@
 
 namespace MACE::DataModel::inline BranchSocket {
 
-template<class AClass>
+template<typename AClass>
 class ClassBranchSocket2 final : public BranchSocketBase2<ClassBranchSocket2<AClass>, AClass> {
 public:
     template<typename... Args>

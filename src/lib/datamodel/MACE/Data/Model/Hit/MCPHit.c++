@@ -1,3 +1,0 @@
-#include "MACE/Data/Model/Hit/MCPHit.h++"
-
-MACE_DATA_MODEL_FIELD_DEFINE_FIELD_NAME_TITLE(MCPHit::Position)

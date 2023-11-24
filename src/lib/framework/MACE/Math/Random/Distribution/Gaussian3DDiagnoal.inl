@@ -2,13 +2,13 @@ namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
-template<Concept::NumericVector3FloatingPoint T, template<class> class AGaussian3DDiagnoal>
+template<Concept::NumericVector3FloatingPoint T, template<typename> typename AGaussian3DDiagnoal>
 constexpr BasicGaussian3DDiagnoalParameter<T, AGaussian3DDiagnoal>::BasicGaussian3DDiagnoalParameter() :
     BasicGaussian3DDiagnoalParameter({0, 1},
                                      {0, 1},
                                      {0, 1}) {}
 
-template<Concept::NumericVector3FloatingPoint T, template<class> class AGaussian3DDiagnoal>
+template<Concept::NumericVector3FloatingPoint T, template<typename> typename AGaussian3DDiagnoal>
 constexpr BasicGaussian3DDiagnoalParameter<T, AGaussian3DDiagnoal>::BasicGaussian3DDiagnoalParameter(std::pair<VT, VT> pX, std::pair<VT, VT> pY, std::pair<VT, VT> pZ) :
     Base(),
     fMuX(pX.first),
@@ -18,7 +18,7 @@ constexpr BasicGaussian3DDiagnoalParameter<T, AGaussian3DDiagnoal>::BasicGaussia
     fMuZ(pZ.first),
     fSigmaZ(pZ.second) {}
 
-template<Concept::Character AChar, Concept::NumericVector3FloatingPoint U, template<class> class V>
+template<Concept::Character AChar, Concept::NumericVector3FloatingPoint U, template<typename> typename V>
 auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussian3DDiagnoalParameter<U, V>& self) -> decltype(os) {
     const auto oldPrecision = os.precision(std::numeric_limits<U>::max_digits10);
     return os << self.fMuX << ' ' << self.fSigmaX << ' '
@@ -27,7 +27,7 @@ auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussian3DDiagnoalPara
               << std::setprecision(oldPrecision);
 }
 
-template<Concept::Character AChar, Concept::NumericVector3FloatingPoint U, template<class> class V>
+template<Concept::Character AChar, Concept::NumericVector3FloatingPoint U, template<typename> typename V>
 auto operator>>(std::basic_istream<AChar>& is, BasicGaussian3DDiagnoalParameter<U, V>& self) -> decltype(is) {
     return is >>
            self.fMuX >> self.fSigmaX >>
@@ -35,12 +35,12 @@ auto operator>>(std::basic_istream<AChar>& is, BasicGaussian3DDiagnoalParameter<
            self.fMuZ >> self.fSigmaZ;
 }
 
-template<template<class> class ADerived, Concept::NumericVector3FloatingPoint T>
+template<template<typename> typename ADerived, Concept::NumericVector3FloatingPoint T>
 constexpr Gaussian3DDiagnoalBase<ADerived, T>::Gaussian3DDiagnoalBase(std::pair<VT, VT> pX, std::pair<VT, VT> pY, std::pair<VT, VT> pZ) :
     Base(),
     fParameter(pX, pY, pZ) {}
 
-template<template<class> class ADerived, Concept::NumericVector3FloatingPoint T>
+template<template<typename> typename ADerived, Concept::NumericVector3FloatingPoint T>
 constexpr Gaussian3DDiagnoalBase<ADerived, T>::Gaussian3DDiagnoalBase(const typename Base::ParameterType& p) :
     Base(),
     fParameter(p) {}

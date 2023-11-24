@@ -1,10 +1,10 @@
 namespace MACE::Env::Memory::internal {
 
 template<Singletonified ASingleton>
-[[nodiscard]] SingletonPool::Node& SingletonFactory::InstantiateOrFind() {
+[[nodiscard]] auto SingletonFactory::InstantiateOrFind() -> SingletonPool::Node& {
     auto& instancePool = SingletonPool::Instance();
     if (const auto existedNode = instancePool.Find<ASingleton>();
-        not existedNode.has_value()) [[likely]] {
+        not existedNode.has_value()) {
         const auto newInstance = new ASingleton;
         try {
             return instancePool.Insert<ASingleton>(newInstance);
@@ -40,9 +40,8 @@ template<Singletonified ASingleton>
     //   is a class template. In this case, for the identical type
     //   ASingleton, this function might be called many times for each
     //   different instances of static members of "singleton base class".
-    //   Since the actual instances are stored in the dynamically constructed
-    //   this->fSingletonInstanceList, they are singlet for sure. We just
-    //   look up for the type and return the corresponding pointer value.
+    //   Since the actual instances are stored in the SingletonPool (singlet
+    //   for sure), we just look up for the type and return the pointer.
 }
 
 } // namespace MACE::Env::Memory::internal

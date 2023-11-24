@@ -1,14 +1,16 @@
 #pragma once
 
+#include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/SimMACE/Hit/CDCHit.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
-#include "G4ThreeVector.hh"
-#include "G4TwoVector.hh"
 #include "G4VSensitiveDetector.hh"
 
-#include <map>
+#include "gsl/gsl"
+
+#include <array>
 #include <memory>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -19,12 +21,17 @@ class CDCSD final : public NonMoveableBase,
 public:
     CDCSD(const G4String& sdName);
 
-    void Initialize(G4HCofThisEvent* hitsCollection) override;
-    G4bool ProcessHits(G4Step* theStep, G4TouchableHistory*) override;
-    void EndOfEvent(G4HCofThisEvent*) override;
+    auto Initialize(G4HCofThisEvent* hitsCollection) -> void override;
+    auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
+    auto EndOfEvent(G4HCofThisEvent*) -> void override;
 
     /// @brief Inform this SD of event ID in EventAction
-    void EventID(G4int eventID) { fEventID = eventID; }
+    auto EventID(G4int eventID) -> void { fEventID = eventID; }
+
+private:
+    struct HashArray2I32 {
+        auto operator()(const stdx::array2i32& i) const noexcept -> std::size_t { return std::bit_cast<std::uint64_t>(i); }
+    };
 
 private:
     G4int fEventID;
@@ -32,10 +39,10 @@ private:
 
     G4double fMeanDriftVelocity;
     G4double fDeadTime;
+    const std::vector<Detector::Description::CDC::CellInformation>* fCellMap;
 
-    std::vector<std::map<int, const G4StepPoint>> fCellEntryPoints;
-    std::vector<std::pair<const G4TwoVector, const G4ThreeVector>> fCellMap;
-    std::vector<std::vector<std::pair<double, std::unique_ptr<CDCHit>>>> fCellSignalTimesAndHits;
+    std::unordered_map<stdx::array2i32, const G4StepPoint, HashArray2I32> fCellEntryPoint;
+    std::unordered_map<int, std::vector<std::pair<double, std::unique_ptr<CDCHit>>>> fCellSignalTimesAndHit;
 };
 
 } // namespace MACE::SimMACE::inline SD

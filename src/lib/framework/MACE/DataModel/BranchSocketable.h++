@@ -10,10 +10,10 @@ class TTree;
 
 namespace MACE::DataModel {
 
-template<class ADerived, typename T>
+template<typename ADerived, typename T>
 class BranchSocketBase;
 
-template<class S, typename T>
+template<typename S, typename T>
 concept BranchSocketable =
     requires(S& s, const S& cs, const T v, TTree& tree) {
         requires Concept::ROOTFundamental<T> or std::is_class_v<T>; // Fundamental type or string/array wrapper.

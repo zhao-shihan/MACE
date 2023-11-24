@@ -6,7 +6,7 @@
 
 namespace MACE::DataModel::inline Column {
 
-template<class T>
+template<typename T>
 concept Column = std::derived_from<T, internal::ColumnSignatureBase>;
 
 } // namespace MACE::DataModel::inline Column

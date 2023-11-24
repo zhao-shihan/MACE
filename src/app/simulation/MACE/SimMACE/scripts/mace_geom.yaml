@@ -64,9 +64,9 @@ Solenoid:
   S2Length: 1000
   B2Radius: 500
   S3Length: 200
-  InnerRadius: 75
-  OuterRadius: 125
-  FieldRadius: 126
+  InnerRadius: 25
+  OuterRadius: 75
+  FieldRadius: 76
   MagneticFluxDensity: 0.0001
 SpectrometerField:
   Radius: 710

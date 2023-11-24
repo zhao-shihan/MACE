@@ -10,7 +10,7 @@ class TTree;
 
 namespace MACE::DataModel {
 
-template<class T>
+template<typename T>
 concept TransientData =
     requires(const T& data, TTree& tree) {
         requires std::semiregular<T>;

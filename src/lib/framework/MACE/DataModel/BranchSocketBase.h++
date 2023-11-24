@@ -8,7 +8,7 @@
 
 namespace MACE::DataModel {
 
-template<class ADerived, typename T>
+template<typename ADerived, typename T>
 class BranchSocketBase : public NonMoveableBase {
 protected:
     BranchSocketBase(std::string branchName);

@@ -8,7 +8,7 @@
 
 namespace MACE::inline Simulation::Physics {
 
-template<class T>
+template<typename T>
 concept TargetForMuoniumPhysics =
     requires(T target, G4ThreeVector x) {
         requires Detector::Description::Description<T>;

@@ -16,7 +16,7 @@ namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
-template<Concept::NumericVector3FloatingPoint T, template<class> class AGaussian3DDiagnoal>
+template<Concept::NumericVector3FloatingPoint T, template<typename> typename AGaussian3DDiagnoal>
 class BasicGaussian3DDiagnoalParameter final : public DistributionParameterBase<BasicGaussian3DDiagnoalParameter<T, AGaussian3DDiagnoal>,
                                                                                 AGaussian3DDiagnoal<T>> {
 private:
@@ -42,9 +42,9 @@ public:
     constexpr void MuZ(VT muZ) const { fMuZ = muZ; }
     constexpr void SigmaZ(VT sigmaZ) const { fSigmaZ = sigmaZ; }
 
-    template<Concept::Character AChar, Concept::NumericVector3FloatingPoint U, template<class> class V>
+    template<Concept::Character AChar, Concept::NumericVector3FloatingPoint U, template<typename> typename V>
     friend auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussian3DDiagnoalParameter<U, V>& self) -> decltype(os);
-    template<Concept::Character AChar, Concept::NumericVector3FloatingPoint U, template<class> class V>
+    template<Concept::Character AChar, Concept::NumericVector3FloatingPoint U, template<typename> typename V>
     friend auto operator>>(std::basic_istream<AChar>& is, BasicGaussian3DDiagnoalParameter<U, V>& self) -> decltype(is);
 
 private:
@@ -56,7 +56,7 @@ private:
     VT fSigmaZ;
 };
 
-template<template<class> class ADerived, Concept::NumericVector3FloatingPoint T>
+template<template<typename> typename ADerived, Concept::NumericVector3FloatingPoint T>
 class Gaussian3DDiagnoalBase : public RandomNumberDistributionBase<ADerived<T>,
                                                                    BasicGaussian3DDiagnoalParameter<T, ADerived>,
                                                                    T> {

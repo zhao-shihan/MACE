@@ -5,7 +5,7 @@
 
 namespace MACE::Detector::Field {
 
-template<class F, typename AFloat>
+template<typename F, typename AFloat>
 concept ElectricField =
     requires {
         requires ElectromagneticField<F, AFloat>;

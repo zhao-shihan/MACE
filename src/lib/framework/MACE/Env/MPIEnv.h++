@@ -23,7 +23,7 @@ namespace MACE::Env {
 class MPIEnv : public BasicEnv,
                public Memory::PassiveSingleton<MPIEnv> {
 public:
-    template<class ACLI = internal::NoCLI>
+    template<typename ACLI = internal::NoCLI>
     MPIEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel = VerboseLevel::Warning, bool printWelcomeMessage = true);
     virtual ~MPIEnv();
 

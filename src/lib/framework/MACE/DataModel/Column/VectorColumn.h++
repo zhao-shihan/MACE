@@ -16,7 +16,7 @@
 
 namespace MACE::DataModel::inline Column {
 
-template<class AData, gsl::index AUniqueID, Concept::ROOTFundamental T, std::size_t N, Concept::NumericVectorAny<N> U>
+template<typename AData, gsl::index AUniqueID, Concept::ROOTFundamental T, std::size_t N, Concept::NumericVectorAny<N> U>
     requires(std::integral<T> and std::integral<VectorValueType<U>>) or
             (std::floating_point<T> and std::floating_point<VectorValueType<U>>)
 class VectorColumn final : public ColumnBase<VectorColumn<AData, AUniqueID, T, N, U>,
@@ -47,7 +47,7 @@ private:
 };
 
 #define MACE_DATA_MODEL_ENTRY_VECTOR_ENTRY_ALIAS(Type, N, Suffix)                           \
-    template<class AData, gsl::index AUniqueID, Concept::NumericVectorAny<N> T>             \
+    template<typename AData, gsl::index AUniqueID, Concept::NumericVectorAny<N> T>             \
         requires(std::integral<Type> and std::integral<VectorValueType<T>>) or              \
                     (std::floating_point<Type> and std::floating_point<VectorValueType<T>>) \
     using Vector##N##Suffix##Column = VectorColumn<AData, AUniqueID, Type, N, T>;

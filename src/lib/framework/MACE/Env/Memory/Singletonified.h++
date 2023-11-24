@@ -14,10 +14,10 @@ class SingletonBase;
 
 } // namespace internal
 
-template<class ADerived>
+template<typename ADerived>
 class Singleton;
 
-template<class T>
+template<typename T>
 concept Singletonified =
     requires {
         { T::Instance() } -> std::same_as<T&>;

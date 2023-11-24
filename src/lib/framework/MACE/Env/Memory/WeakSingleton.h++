@@ -1,8 +1,10 @@
 #pragma once
 
+#include "MACE/Env/Memory/WeakSingletonified.h++"
 #include "MACE/Env/Memory/internal/WeakSingletonBase.h++"
 #include "MACE/Env/Memory/internal/WeakSingletonPool.h++"
-#include "MACE/Env/Memory/WeakSingletonified.h++"
+
+#include "fmt/format.h"
 
 #include <memory>
 #include <stdexcept>
@@ -11,10 +13,10 @@
 
 namespace MACE::Env::Memory {
 
-template<class ADerived>
+template<typename ADerived>
 class PassiveSingleton;
 
-template<class ADerived>
+template<typename ADerived>
 class WeakSingleton : public internal::WeakSingletonBase {
     friend class PassiveSingleton<ADerived>;
 

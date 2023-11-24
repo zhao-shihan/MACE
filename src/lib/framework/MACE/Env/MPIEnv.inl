@@ -1,6 +1,6 @@
 namespace MACE::Env {
 
-template<class ACLI>
+template<typename ACLI>
 MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel, bool printWelcomeMessage) :
     BasicEnv{argc, argv, cli, verboseLevel, false},
     PassiveSingleton<MPIEnv>{},
@@ -105,7 +105,7 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel, bo
             if (AtCommWorldWorker()) { nodeList.resize(nodeCount); }
             constexpr int blockLengthOfNodeInfoForMPI[] = {1, NameFixedString::Occupation()};
             constexpr MPI_Aint displacementOfNodeInfoForMPI[] = {offsetof(NodeInfoForMPI, size), offsetof(NodeInfoForMPI, name)};
-            constexpr MPI_Datatype typeOfNodeInfoForMPI[] = {MPI_INT, MPI_CHAR};
+            const MPI_Datatype typeOfNodeInfoForMPI[] = {MPI_INT, MPI_CHAR};
             MPI_Datatype nodeInfoForMPI;
             MACE_MPI_CALL_WITH_CHECK(MPI_Type_create_struct,
                                      2,

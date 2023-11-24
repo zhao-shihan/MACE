@@ -45,16 +45,16 @@ FixNamespaceComments: true
 IncludeBlocks: Regroup
 IncludeCategories: 
   # special
+  - Regex: '"RKTrackRep\.h"'
+    Priority: 1
+  - Regex: '"Track\.h"'
+    Priority: 1
+  - Regex: '"TrackPoint\.h"'
+    Priority: 1
   - Regex: '"Randomize\.hh"'
     Priority: 4
   - Regex: '"globals\.hh"'
     Priority: 4
-  - Regex: '"RKTrackRep\.h"'
-    Priority: 14
-  - Regex: '"Track\.h"'
-    Priority: 14
-  - Regex: '"TrackPoint\.h"'
-    Priority: 14
   # general
   - Regex: '"MACE/.*\.h\+\+"'
     Priority: 0

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "MACE/Env/Memory/PassiveSingleton.h++"
-#include "MACE/Env/Memory/internal/SingletonPool.h++"
 #include "MACE/Env/Memory/Singletonified.h++"
+#include "MACE/Env/Memory/internal/SingletonPool.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
 #include <string>
@@ -15,7 +15,7 @@ namespace MACE::Env::Memory::internal {
 class SingletonFactory final : public PassiveSingleton<SingletonFactory> {
 public:
     template<Singletonified ASingleton>
-    [[nodiscard]] SingletonPool::Node& InstantiateOrFind();
+    [[nodiscard]] auto InstantiateOrFind() -> SingletonPool::Node&;
 };
 
 } // namespace MACE::Env::Memory::internal

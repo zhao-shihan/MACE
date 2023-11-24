@@ -2,25 +2,25 @@ namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
-template<Concept::NumericVector2Any T, template<class> class AUniformDisk>
+template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
 constexpr BasicUniformDiskParameter<T, AUniformDisk>::BasicUniformDiskParameter() :
     BasicUniformDiskParameter(1) {}
 
-template<Concept::NumericVector2Any T, template<class> class AUniformDisk>
+template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
 constexpr BasicUniformDiskParameter<T, AUniformDisk>::BasicUniformDiskParameter(VT r, VT x0, VT y0) :
     Base(),
     fRadius(r),
     fCenterX(x0),
     fCenterY(y0) {}
 
-template<Concept::NumericVector2Any T, template<class> class AUniformDisk>
+template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
 constexpr BasicUniformDiskParameter<T, AUniformDisk>::BasicUniformDiskParameter(VT radius, const T& center) :
     Base(),
     fRadius(radius),
     fCenterX(center[0]),
     fCenterY(center[1]) {}
 
-template<Concept::NumericVector2Any T, template<class> class AUniformDisk>
+template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
 constexpr BasicUniformDiskParameter<T, AUniformDisk>::BasicUniformDiskParameter(VT radius) :
     Base(),
     fRadius(radius),
@@ -33,22 +33,22 @@ auto operator<<(std::basic_ostream<AChar>& os, const BasicUniformDiskParameter<T
     return os << self.fRadius << ' ' << self.fCenter[0] << ' ' << self.fCenter[1] << std::setprecision(oldPrecision);
 }
 
-template<Concept::NumericVector2Any T, template<class> class AUniformDisk>
+template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
 constexpr UniformDiskBase<T, AUniformDisk>::UniformDiskBase(VT r, VT x0, VT y0) :
     Base(),
     fParameter(r, x0, y0) {}
 
-template<Concept::NumericVector2Any T, template<class> class AUniformDisk>
+template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
 constexpr UniformDiskBase<T, AUniformDisk>::UniformDiskBase(VT radius, const T& center) :
     Base(),
     fParameter(radius, center) {}
 
-template<Concept::NumericVector2Any T, template<class> class AUniformDisk>
+template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
 constexpr UniformDiskBase<T, AUniformDisk>::UniformDiskBase(VT radius) :
     Base(),
     fParameter(radius) {}
 
-template<Concept::NumericVector2Any T, template<class> class AUniformDisk>
+template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
 constexpr UniformDiskBase<T, AUniformDisk>::UniformDiskBase(const typename Base::ParameterType& p) :
     Base(),
     fParameter(p) {}

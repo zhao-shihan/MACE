@@ -6,7 +6,7 @@
 
 namespace MACE::inline Extension::Geant4X {
 
-template<class T>
+template<typename T>
 class SingletonG4Allocator final : public Env::Memory::Singleton<SingletonG4Allocator<T>>,
                                    public G4Allocator<T> {
     friend Env::Memory::SingletonFactory;
