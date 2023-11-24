@@ -108,8 +108,8 @@ template<typename I>
 concept SheetIterator =
     requires(I i) {
         requires ForwardIteratorOfTupleLike<I>;
-        { i.Sheet() };
-        { i.Sheet().begin() } -> std::common_reference_with<I>;
+        { i.TheSheet() };
+        { i.TheSheet().begin() } -> std::common_reference_with<I>;
     };
 
 template<typename S, typename I>
@@ -118,8 +118,8 @@ concept SheetSentinelFor =
         requires SheetIterator<S>;
         requires SheetIterator<I>;
         requires std::sentinel_for<S, I>;
-        { s.Sheet().begin() } -> std::common_reference_with<I>;
-        { i.Sheet().begin() } -> std::common_reference_with<S>;
+        { s.TheSheet().begin() } -> std::common_reference_with<I>;
+        { i.TheSheet().begin() } -> std::common_reference_with<S>;
     };
 
 template<typename S>
@@ -133,9 +133,9 @@ namespace {
 
 template<SheetIterator I, SheetSentinelFor<I> S>
 auto CheckAndGetSheetFromFirstLast(I first, S last) -> const auto& {
-    if (&first.Sheet() == &last.Sheet()) { return first.Sheet(); }
+    if (&first.TheSheet() == &last.TheSheet()) { return first.TheSheet(); }
     throw std::invalid_argument{fmt::format("Algorithm on MACE::Data::Sheet: first and last not reference to the same sheet (but {} and {})",
-                                            static_cast<const void*>(&first.Sheet()), static_cast<const void*>(&last.Sheet()))};
+                                            static_cast<const void*>(&first.TheSheet()), static_cast<const void*>(&last.TheSheet()))};
 }
 
 } // namespace
