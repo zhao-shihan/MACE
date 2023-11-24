@@ -185,7 +185,7 @@ private:
         template<typename J>
         auto operator==(const IteratorAdaptor<J>& that) const -> auto { return fIterator == that.fIterator; }
 
-        auto Sheet() const -> S& { return *fSheet; }
+        auto TheSheet() const -> S& { return *fSheet; }
 
     private:
         I fIterator;
