@@ -10,8 +10,8 @@ using namespace LiteralUnit::MagneticFluxDensity;
 EMCField::EMCField() :
     DescriptionSingletonBase<EMCField>(__func__),
     // Geometry
-    fRadius(25_cm),
-    fLength(70_cm), 
+    fRadius(45_cm),
+    fLength(90_cm),
     // Field
     fMagneticFluxDensity(100_mT) {}
 
