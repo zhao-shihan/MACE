@@ -21,6 +21,24 @@ if(NOT DEFINED CMAKE_CXX_EXTENSIONS)
 endif()
 
 # =============================================================================
+# Unity build for MACE
+# =============================================================================
+
+if(MACE_ENABLE_UNITY_BUILD)
+    set(CMAKE_UNITY_BUILD ON)
+    if(MACE_FULL_UNITY_BUILD)
+        set(CMAKE_UNITY_BUILD_BATCH_SIZE 0)
+    else()
+        set(CMAKE_UNITY_BUILD_BATCH_SIZE 8)
+    endif()
+    if(CMAKE_UNITY_BUILD_BATCH_SIZE GREATER 0)
+        message(STATUS "Unity build enabled for MACE (batch size: ${CMAKE_UNITY_BUILD_BATCH_SIZE})")
+    else()
+        message(STATUS "Unity build enabled for MACE (batch size: unlimited)")
+    endif()
+endif()
+
+# =============================================================================
 # LTO/IPO for MACE
 # =============================================================================
 
@@ -35,7 +53,6 @@ if(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE)
         message(STATUS "LTO/IPO enabled for MACE")
     else()
         set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE OFF)
-        # message(NOTICE "***Notice: LTO/IPO not supported: \"${MACE_IPO_SUPPORTED_ERROR}\". Turning off CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE")
         message(NOTICE "***Notice: LTO/IPO not supported. Turning off CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE")
     endif()
 endif()
