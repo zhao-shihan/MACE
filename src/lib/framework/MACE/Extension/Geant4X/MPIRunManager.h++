@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Math/Statistic.h++"
 #include "MACE/Utility/CPUTimeStopwatch.h++"
 #include "MACE/Utility/DivideIndices.h++"
 #include "MACE/Utility/WallTimeStopwatch.h++"
@@ -36,26 +37,25 @@ public:
     MPIRunManager(const MPIRunManager&) = delete;
     MPIRunManager& operator=(const MPIRunManager&) = delete;
 
-    static auto GetRunManager() { return static_cast<MPIRunManager*>(G4RunManager::GetRunManager()); }
+    static auto GetRunManager() -> auto { return static_cast<MPIRunManager*>(G4RunManager::GetRunManager()); }
 
-    const auto& NEventToBeMPIProcessed() const { return fNEventToBeMPIProcessed; }
-    const auto& PrintProgressModulo() const { return fPrintProgressModulo; }
+    auto NEventToBeMPIProcessed() const -> const auto& { return fNEventToBeMPIProcessed; }
+    auto PrintProgressModulo() const -> const auto& { return fPrintProgressModulo; }
 
-    void PrintProgressModulo(const G4int val) { (fPrintProgressModulo = val, printModulo = -1); }
+    auto PrintProgressModulo(const G4int val) -> void { (fPrintProgressModulo = val, printModulo = -1); }
 
-    virtual void BeamOn(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) override;
-    virtual void RunInitialization() override;
-    virtual void InitializeEventLoop(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) override;
-    virtual void ProcessOneEvent(G4int iEvent) override;
-    virtual void TerminateOneEvent() override;
-    virtual void RunTermination() override;
+    virtual auto BeamOn(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) -> void override;
+    virtual auto RunInitialization() -> void override;
+    virtual auto InitializeEventLoop(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) -> void override;
+    virtual auto ProcessOneEvent(G4int iEvent) -> void override;
+    virtual auto TerminateOneEvent() -> void override;
+    virtual auto RunTermination() -> void override;
 
 private:
-    void EventEndReport(const G4int eventID) const;
-    void RunEndReport(const G4int runID) const;
+    auto EventEndReport(const G4int eventID) const -> void;
+    auto RunEndReport(const G4int runID) const -> void;
 
-    static void RunBeginReport(const G4int runID);
-    static std::string FormatSecondToDHMS(const double secondsInTotal);
+    static auto RunBeginReport(const G4int runID) -> void;
 
 private:
     G4int fNEventToBeMPIProcessed;
@@ -63,9 +63,7 @@ private:
 
     G4int fPrintProgressModulo;
     WallTimeStopwatch<> fEventWallTimeStopwatch;
-    double fEventWallTime;
-    double fNAvgEventWallTime;
-    double fNDevEventWallTime;
+    Math::Statistic<1> fEventWallTimeStatistic;
     CPUTimeStopwatch<> fRunCPUTimeStopwatch;
     double fRunCPUTime;
     WallTimeStopwatch<> fRunWallTimeStopwatch;
