@@ -23,7 +23,6 @@ EMCSD::EMCSD(G4String name) :
 
 auto EMCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
     int cellTotalNumber = Detector::Description::EMC::Instance().CellTotalNumber();
-    fmt::println("fdsafdsafdsafdsafsdafdsafsdfsadsa: {}", collectionName[0]);
     fHitsCollection = new EMCHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
@@ -43,7 +42,6 @@ auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     return true;
 }
 
-auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
-}
+auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {}
 
 } // namespace MACE::SimEMC::inline SD

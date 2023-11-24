@@ -1,8 +1,14 @@
 #include "MACE/Detector/Description/EMC.h++"
+#include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Math/Hypot.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/MathConstant.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
+#include "MACE/Utility/VectorCast.h++"
+
+#include "CLHEP/Vector/TwoVector.h"
+
+#include "G4SystemOfUnits.hh"
 
 #include "pmp/algorithms/differential_geometry.h"
 #include "pmp/algorithms/normals.h"
@@ -146,7 +152,7 @@ EMC::EMC() :
     fNSubdivision{2},
     fInnerRadius{15_cm},
     fCrystalHypotenuse{15_cm},
-    fPMTRadius{2.54_cm},
+    fPMTRadius{3.5_cm},
     fPMTCouplerThickness{0.1_mm},
     fPMTWindowThickness{1_mm},
     fPMTCathodeThickness{20_nm},
@@ -185,28 +191,42 @@ EMC::EMC() :
                                 0.377295009, 0.349451089, 0.323115952, 0.299661221, 0.272194497, 0.250420003, 0.226930981, 0.203270507,
                                 0.181153108, 0.158178444, 0.136918308, 0.117715605, 0.098855806, 0.08136763, 0.063879453, 0.046734182,
                                 0.030960533, 0.015186883},
-    fScintillationYield{54000_MeV},
+    fScintillationYield{54000},
     fScintillationTimeConstant1{1000_ns},
-    fResolutionScale{1.0} {}
+    fResolutionScale{1} {}
 
 auto EMC::ComputeMesh() const -> MeshInformation {
     auto pmpMesh = EMCMesh{fNSubdivision}.Generate();
     MeshInformation mesh;
     auto& [vertex, faceList]{mesh};
-
+    const auto solenoidInnerRadius = Solenoid::Instance().InnerRadius();
     const auto point = pmpMesh.vertex_property<pmp::Point>("v:point");
+
     for (auto&& v : pmpMesh.vertices()) {
-        vertex.push_back({point[v][0], point[v][1], point[v][2]});
+        vertex.emplace_back(VectorCast<CLHEP::Hep3Vector>(point[v]));
     }
+
     for (auto&& f : pmpMesh.faces()) {
+        if (std::ranges::any_of(pmpMesh.vertices(f), [&](const auto& v) {
+                CLHEP::Hep2Vector p{point[v][0] * fInnerRadius, point[v][1] * fInnerRadius};
+                return p.mag() < solenoidInnerRadius and point[v][2] < 0;
+            })) {
+            continue;
+        }
+
+        const auto centroid = VectorCast<CLHEP::Hep3Vector>(pmp::centroid(pmpMesh, f));
+        if (centroid.perp2() < 1e-3) {
+            continue;
+        }
+
         auto& face = faceList.emplace_back();
-        const auto c = pmp::centroid(pmpMesh, f);
-        face.centroid = {c[0], c[1], c[2]};
-        const auto n = pmp::face_normal(pmpMesh, f);
-        face.normal = {n[0], n[1], n[2]};
+        face.centroid = centroid;
+        face.normal = VectorCast<CLHEP::Hep3Vector>(pmp::face_normal(pmpMesh, f));
+
         for (auto&& v : pmpMesh.vertices(f)) {
             face.vertexIndex.emplace_back(v.idx());
         }
+
         const auto LocalPhi =
             [uHat = (vertex[face.vertexIndex.front()] - face.centroid).unit(),
              vHat = face.normal.cross(vertex[face.vertexIndex.front()] - face.centroid).unit(),

@@ -50,11 +50,6 @@ auto EventAction::EndOfEventAction(const G4Event* event) -> void {
         analysisManager->FillNtupleDColumn(1, 2, pmtHit->Time());
         analysisManager->AddNtupleRow(1);
     }
-
-    auto printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
-    if ((printModulo > 0) && (eventID % printModulo == 0)) {
-        G4cout << "---> End of event: " << eventID << G4endl;
-    }
 }
 
 } // namespace MACE::SimEMC::inline Action

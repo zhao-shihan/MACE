@@ -31,7 +31,7 @@ void EMCPMTCathode::Construct(G4bool checkOverlaps) {
     const auto innerRadius = description.InnerRadius();
     const auto fCrystalHypotenuse = description.CrystalHypotenuse();
 
-    const auto pmtRadius = description.PMTRadius();
+    double pmtRadius;
     const auto pmtCouplerThickness = description.PMTCouplerThickness();
     const auto pmtWindowThickness = description.PMTWindowThickness();
     const auto pmtCathodeThickness = description.PMTCathodeThickness();
@@ -103,6 +103,12 @@ void EMCPMTCathode::Construct(G4bool checkOverlaps) {
                 return G4Translate3D{crystalOuterCentroid + offsetInNormalDirection * normal} * rotation;
             };
 
+        if (copyNo <= 11) {
+            pmtRadius = 23_mm;
+        } else {
+            pmtRadius = 36_mm;
+        }
+
         const auto solidCathode = Make<G4Tubs>("temp", 0, pmtRadius, pmtCathodeThickness / 2, 0, 2 * pi);
         const auto logicCathode = Make<G4LogicalVolume>(solidCathode, bialkali, "EMCCathode");
         const auto cathodeTransform = Transform(pmtCouplerThickness + pmtWindowThickness + pmtCathodeThickness / 2);
@@ -118,7 +124,7 @@ void EMCPMTCathode::Construct(G4bool checkOverlaps) {
         // Construct Optical Surface
         /////////////////////////////////////////////
 
-        auto cathodeSurface = new G4OpticalSurface("Cathode", glisur, polished, dielectric_metal);
+        auto cathodeSurface = new G4OpticalSurface("Cathode", unified, polished, dielectric_metal);
         new G4LogicalSkinSurface("cathodeSkinSurface", logicCathode, cathodeSurface);
         cathodeSurface->SetMaterialPropertiesTable(cathodeSurfacePropertiesTable);
 

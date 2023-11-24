@@ -103,7 +103,6 @@ void EMCCrystal::Construct(G4bool checkOverlaps) {
         const auto outerHypotenuse = crytalInnerHypotenuse + fCrystalHypotenuse;
 
         const auto crystalOuterRadius = outerHypotenuse * centroidMagnitude;
-        const auto outerRadius = outerHypotenuse * centroidMagnitude;
 
         // make a crystal-shaped solid with certain shrinkage (e.g. shrink with coat thickness)
         const auto MakeTessellatedSolid =

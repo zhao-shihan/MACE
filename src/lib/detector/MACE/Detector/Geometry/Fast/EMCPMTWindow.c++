@@ -30,7 +30,7 @@ void EMCPMTWindow::Construct(G4bool checkOverlaps) {
     const auto innerRadius = description.InnerRadius();
     const auto fCrystalHypotenuse = description.CrystalHypotenuse();
 
-    const auto pmtRadius = description.PMTRadius();
+    double pmtRadius;
     const auto pmtCouplerThickness = description.PMTCouplerThickness();
     const auto pmtWindowThickness = description.PMTWindowThickness();
 
@@ -87,6 +87,12 @@ void EMCPMTWindow::Construct(G4bool checkOverlaps) {
              rotation = G4Rotate3D{normal.theta(), CLHEP::HepZHat.cross(normal)}](double offsetInNormalDirection) {
                 return G4Translate3D{crystalOuterCentroid + offsetInNormalDirection * normal} * rotation;
             };
+
+        if (copyNo <= 11) {
+            pmtRadius = 25.5_mm;
+        } else {
+            pmtRadius = 40_mm;
+        }
 
         const auto solidWindow = Make<G4Tubs>("temp", 0, pmtRadius, pmtWindowThickness / 2, 0, 2 * pi);
         const auto logicWindow = Make<G4LogicalVolume>(solidWindow, glass, "EMCWindow");
