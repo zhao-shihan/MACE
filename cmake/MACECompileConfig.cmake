@@ -42,14 +42,12 @@ endif()
 # LTO/IPO for MACE
 # =============================================================================
 
-if(NOT DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE)
-    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE ON)
-endif()
-if(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE)
+if(MACE_ENABLE_IPO)
     include(CheckIPOSupported)
     check_ipo_supported(RESULT MACE_ENABLE_IPO_SUPPORTED
                         OUTPUT MACE_IPO_SUPPORTED_ERROR)
     if(MACE_ENABLE_IPO_SUPPORTED)
+        set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE ON)
         message(STATUS "LTO/IPO enabled for MACE")
     else()
         set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE OFF)
