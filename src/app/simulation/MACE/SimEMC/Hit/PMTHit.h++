@@ -11,14 +11,14 @@ class PMTHit final : public Geant4X::UseG4Allocator<PMTHit>,
                      public G4VHit {
 public:
     auto Time() -> const auto& { return fTime; }
-    auto CopyNo() -> const auto& { return fCopyNo; }
+    auto CellID() -> const auto& { return fCellID; }
 
     auto Time(double v) -> void { fTime = v; }
-    auto CopyNo(int v) -> void { fCopyNo = v; }
+    auto CellID(int v) -> void { fCellID = v; }
 
 private:
     double fTime;
-    int fCopyNo;
+    int fCellID;
 };
 
 using PMTHitCollection = G4THitsCollection<PMTHit>;

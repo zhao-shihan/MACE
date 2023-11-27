@@ -26,9 +26,8 @@ DetectorConstruction::DetectorConstruction() :
     G4VUserDetectorConstruction{},
     fCheckOverlap{false},
     fWorld{},
-
-    fEMCSD(nullptr),
-    fPMTSD(nullptr) {
+    fEMCSD{},
+    fPMTSD{} {
     // Detector::Description::DescriptionIO::Import<DescriptionInUse>(
     // #include "MACE/SimEMC/DefaultGeometry.inlyaml"
     // );

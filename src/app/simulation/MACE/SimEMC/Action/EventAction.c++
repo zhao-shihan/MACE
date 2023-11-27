@@ -46,7 +46,7 @@ auto EventAction::EndOfEventAction(const G4Event* event) -> void {
         auto pmtHit = (*pmtHC)[j];
 
         analysisManager->FillNtupleIColumn(1, 0, eventID);
-        analysisManager->FillNtupleIColumn(1, 1, pmtHit->CopyNo());
+        analysisManager->FillNtupleIColumn(1, 1, pmtHit->CellID());
         analysisManager->FillNtupleDColumn(1, 2, pmtHit->Time());
         analysisManager->AddNtupleRow(1);
     }

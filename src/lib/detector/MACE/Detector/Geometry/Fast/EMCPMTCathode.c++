@@ -31,7 +31,7 @@ void EMCPMTCathode::Construct(G4bool checkOverlaps) {
     const auto name = description.Name();
 
     const auto innerRadius = description.InnerRadius();
-    const auto fCrystalHypotenuse = description.CrystalHypotenuse();
+    const auto crystalHypotenuse = description.CrystalHypotenuse();
 
     double pmtRadius;
     const auto pmtCouplerThickness = description.PMTCouplerThickness();
@@ -59,10 +59,10 @@ void EMCPMTCathode::Construct(G4bool checkOverlaps) {
     // Construct Material Optical Properties Tables
     //////////////////////////////////////////////////
 
-    const auto fLambdaMin = 200_nm;
-    const auto fLambdaMax = 700_nm;
-    std::vector<G4double> fEnergyPair = {h_Planck * c_light / fLambdaMax,
-                                         h_Planck * c_light / fLambdaMin};
+    constexpr auto fLambdaMin = 200_nm;
+    constexpr auto fLambdaMax = 700_nm;
+    const std::vector<G4double> fEnergyPair = {h_Planck * c_light / fLambdaMax,
+                                               h_Planck * c_light / fLambdaMin};
 
     std::vector<G4double> cathodeSurfacePropertiesEnergy(pmtWaveLengthBin.size());
     std::vector<G4double> cathodeSurfacePropertiesEfficiency(pmtQuantumEfficiency.size());
@@ -71,7 +71,7 @@ void EMCPMTCathode::Construct(G4bool checkOverlaps) {
     std::transform(pmtQuantumEfficiency.begin(), pmtQuantumEfficiency.end(), cathodeSurfacePropertiesEfficiency.begin(),
                    [](auto n) { return n * perCent; });
 
-    auto cathodeSurfacePropertiesTable = new G4MaterialPropertiesTable();
+    const auto cathodeSurfacePropertiesTable = new G4MaterialPropertiesTable();
     cathodeSurfacePropertiesTable->AddProperty("REFLECTIVITY", fEnergyPair, {0., 0.});
     cathodeSurfacePropertiesTable->AddProperty("EFFICIENCY", cathodeSurfacePropertiesEnergy, cathodeSurfacePropertiesEfficiency);
 
@@ -91,10 +91,10 @@ void EMCPMTCathode::Construct(G4bool checkOverlaps) {
     for (G4int copyNo = 0;
          auto&& [centroid, normal, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
         const auto centroidMagnitude = centroid.mag();
-        auto fCrystalLength = fCrystalHypotenuse * centroidMagnitude;
+        const auto crystalLength = crystalHypotenuse * centroidMagnitude;
 
         const auto crytalInnerHypotenuse = innerRadius;
-        const auto outerHypotenuse = crytalInnerHypotenuse + fCrystalHypotenuse;
+        const auto outerHypotenuse = crytalInnerHypotenuse + crystalHypotenuse;
 
         const auto crystalOuterRadius = outerHypotenuse * centroidMagnitude;
         const auto outerRadius = outerHypotenuse * centroidMagnitude;
@@ -127,7 +127,7 @@ void EMCPMTCathode::Construct(G4bool checkOverlaps) {
         // Construct Optical Surface
         /////////////////////////////////////////////
 
-        auto cathodeSurface = new G4OpticalSurface("Cathode", unified, polished, dielectric_metal);
+        const auto cathodeSurface = new G4OpticalSurface("Cathode", unified, polished, dielectric_metal);
         new G4LogicalSkinSurface("cathodeSkinSurface", logicCathode, cathodeSurface);
         cathodeSurface->SetMaterialPropertiesTable(cathodeSurfacePropertiesTable);
 

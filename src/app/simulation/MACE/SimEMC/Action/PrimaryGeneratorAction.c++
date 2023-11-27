@@ -6,13 +6,12 @@ namespace MACE::SimEMC::inline Action {
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
     PassiveSingleton{},
     G4VUserPrimaryGeneratorAction{},
-    fParticleGun{0} {
+    fGPS{} {
     // PrimaryGeneratorActionMessenger::Instance().AssignTo(this);
-    fParticleGun = new G4GeneralParticleSource();
 }
 
 auto PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) -> void {
-    fParticleGun->GeneratePrimaryVertex(event);
+    fGPS->GeneratePrimaryVertex(event);
 }
 
 } // namespace MACE::SimEMC::inline Action

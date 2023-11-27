@@ -33,7 +33,7 @@ void EMCCrystal::Construct(G4bool checkOverlaps) {
     const auto name = description.Name();
 
     const auto innerRadius = description.InnerRadius();
-    const auto fCrystalHypotenuse = description.CrystalHypotenuse();
+    const auto crystalHypotenuse = description.CrystalHypotenuse();
 
     const auto csiEnergyBin = description.CsIEnergyBin();
     const auto csiScintillationComponent1 = description.CsIScintillationComponent1();
@@ -64,12 +64,12 @@ void EMCCrystal::Construct(G4bool checkOverlaps) {
     // Construct Material Optical Properties Tables
     //////////////////////////////////////////////////
 
-    const auto fLambdaMin = 200_nm;
-    const auto fLambdaMax = 700_nm;
-    std::vector<G4double> fEnergyPair = {h_Planck * c_light / fLambdaMax,
-                                         h_Planck * c_light / fLambdaMin};
+    constexpr auto fLambdaMin = 200_nm;
+    constexpr auto fLambdaMax = 700_nm;
+    const std::vector<G4double> fEnergyPair = {h_Planck * c_light / fLambdaMax,
+                                               h_Planck * c_light / fLambdaMin};
 
-    auto csiPropertiesTable = new G4MaterialPropertiesTable;
+    const auto csiPropertiesTable = new G4MaterialPropertiesTable;
     csiPropertiesTable->AddProperty("RINDEX", fEnergyPair, {1.79, 1.79});
     csiPropertiesTable->AddProperty("GROUPVEL", fEnergyPair, {167.482, 167.482});
     csiPropertiesTable->AddProperty("ABSLENGTH", fEnergyPair, {370_mm, 370_mm});
@@ -84,13 +84,13 @@ void EMCCrystal::Construct(G4bool checkOverlaps) {
         csiPropertiesTable->DumpTable();
     }
 
-    auto rfSurfacePropertiesTable = new G4MaterialPropertiesTable();
+    const auto rfSurfacePropertiesTable = new G4MaterialPropertiesTable();
     rfSurfacePropertiesTable->AddProperty("REFLECTIVITY", fEnergyPair, {0.985, 0.985});
 
-    auto rfoilSurfacePropertiesTable = new G4MaterialPropertiesTable();
+    const auto rfoilSurfacePropertiesTable = new G4MaterialPropertiesTable();
     rfoilSurfacePropertiesTable->AddProperty("TRANSMITTANCE", fEnergyPair, {1, 1});
 
-    auto tapeSurfacePropertiesTable = new G4MaterialPropertiesTable();
+    const auto tapeSurfacePropertiesTable = new G4MaterialPropertiesTable();
     tapeSurfacePropertiesTable->AddProperty("TRANSMITTANCE", fEnergyPair, {0, 0});
 
     /////////////////////////////////////////////
@@ -100,10 +100,10 @@ void EMCCrystal::Construct(G4bool checkOverlaps) {
     for (G4int copyNo = 0;
          auto&& [centroid, normal, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
         const auto centroidMagnitude = centroid.mag();
-        auto fCrystalLength = fCrystalHypotenuse * centroidMagnitude;
+        const auto crystalLength = crystalHypotenuse * centroidMagnitude;
 
         const auto crytalInnerHypotenuse = innerRadius;
-        const auto outerHypotenuse = crytalInnerHypotenuse + fCrystalHypotenuse;
+        const auto outerHypotenuse = crytalInnerHypotenuse + crystalHypotenuse;
 
         const auto crystalOuterRadius = outerHypotenuse * centroidMagnitude;
 
@@ -193,8 +193,8 @@ void EMCCrystal::Construct(G4bool checkOverlaps) {
         // Crystal
 
         const auto solidCrystal = MakeTessellatedSolid("temp");
-        const auto cutCrystalBox = Make<G4Box>("temp", 1_m, 1_m, fCrystalLength / 2);
-        const auto crystalTransform = Transform(-fCrystalLength / 2);
+        const auto cutCrystalBox = Make<G4Box>("temp", 1_m, 1_m, crystalLength / 2);
+        const auto crystalTransform = Transform(-crystalLength / 2);
         const auto cutSoildCrystal = Make<G4IntersectionSolid>("EMCCrystal", solidCrystal, cutCrystalBox, crystalTransform);
         //========================================== CsI(Tl) ============================================
         const auto logicCrystal = Make<G4LogicalVolume>(cutSoildCrystal, csI, "EMCCrystal");
@@ -211,17 +211,17 @@ void EMCCrystal::Construct(G4bool checkOverlaps) {
         // Construct Optical Surface
         /////////////////////////////////////////////
 
-        auto rfSurface = new G4OpticalSurface("reflector", unified, polished, dielectric_metal);
+        const auto rfSurface = new G4OpticalSurface("reflector", unified, polished, dielectric_metal);
         new G4LogicalSkinSurface("rfSurface", logicCrystal, rfSurface);
         rfSurface->SetMaterialPropertiesTable(rfSurfacePropertiesTable);
 
-        auto tapeSurface = new G4OpticalSurface("rfoil", unified, polished, dielectric_metal);
+        const auto tapeSurface = new G4OpticalSurface("rfoil", unified, polished, dielectric_metal);
         new G4LogicalBorderSurface("rfoilSurface", Mother().PhysicalVolume().get(), physicalCrystal, tapeSurface);
         tapeSurface->SetMaterialPropertiesTable(tapeSurfacePropertiesTable);
 
         if (FindSibling<EMCPMTCoupler>().has_value() == true) {
 
-            auto rfoilSurface = new G4OpticalSurface("rfoil", unified, polished, dielectric_dielectric);
+            const auto rfoilSurface = new G4OpticalSurface("rfoil", unified, polished, dielectric_dielectric);
             new G4LogicalBorderSurface("rfoilSurface",
                                        physicalCrystal,
                                        FindSibling<EMCPMTCoupler>().value().get().PhysicalVolume(copyNo).get(),

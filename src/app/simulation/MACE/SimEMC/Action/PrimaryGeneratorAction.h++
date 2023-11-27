@@ -15,7 +15,7 @@ public:
     auto GeneratePrimaries(G4Event* event) -> void override;
 
 private:
-    G4GeneralParticleSource* fParticleGun;
+    G4GeneralParticleSource* fGPS;
 };
 
 } // namespace MACE::SimEMC::inline Action

@@ -5,8 +5,6 @@
 #include "CLHEP/Geometry/Point3D.h"
 #include "CLHEP/Vector/ThreeVector.h"
 
-#include "Eigen/Core"
-
 namespace MACE::Detector::Description {
 
 class EMC final : public DescriptionSingletonBase<EMC> {

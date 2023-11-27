@@ -30,8 +30,8 @@ public:
 
     auto SetCheckOverlaps(G4bool checkOverlaps) -> void { fCheckOverlap = checkOverlaps; }
 
-    auto& EMCSD() const { return *fEMCSD; }
-    auto& PMTSD() const { return *fPMTSD; }
+    auto EMCSD() const -> auto& { return *fEMCSD; }
+    auto PMTSD() const -> auto& { return *fPMTSD; }
 
 public:
     using DescriptionInUse = std::tuple<Detector::Description::EMC,

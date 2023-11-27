@@ -13,7 +13,7 @@ namespace MACE::SimEMC::inline SD {
 PMTSD::PMTSD(G4String name) :
     NonMoveableBase{},
     G4VSensitiveDetector{std::move(name)},
-    fHitsCollection{nullptr} {
+    fHitsCollection{} {
     collectionName.insert(SensitiveDetectorName + "HC");
 }
 
@@ -34,7 +34,7 @@ auto PMTSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     auto globalTime = theStep->GetPostStepPoint()->GetGlobalTime();
     auto copyNo = theStep->GetTrack()->GetVolume()->GetCopyNo();
     hit->Time(globalTime);
-    hit->CopyNo(copyNo);
+    hit->CellID(copyNo);
     fHitsCollection->insert(hit);
 
     return true;

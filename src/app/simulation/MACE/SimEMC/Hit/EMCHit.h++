@@ -10,11 +10,11 @@ namespace MACE::SimEMC::inline Hit {
 class EMCHit final : public Geant4X::UseG4Allocator<EMCHit>,
                      public G4VHit {
 public:
-    auto Energy() -> const auto& { return fEdep; }
-    auto Energy(double v) -> void { fEdep += v; }
+    auto Energy() -> const auto& { return fEnergyDeposition; }
+    auto Energy(double v) -> void { fEnergyDeposition += v; }
 
 private:
-    double fEdep = 0.;
+    double fEnergyDeposition{};
 };
 
 using EMCHitCollection = G4THitsCollection<EMCHit>;

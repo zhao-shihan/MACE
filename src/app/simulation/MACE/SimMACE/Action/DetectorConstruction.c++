@@ -61,21 +61,20 @@ DetectorConstruction::DetectorConstruction() :
 
     fWorld(std::make_shared<Detector::Geometry::Fast::World>()),
 
-    fCDCFieldWireRegion(nullptr),
-    fCDCSenseWireRegion(nullptr),
-    fDefaultGaseousRegion(nullptr),
-    fDefaultSolidRegion(nullptr),
-    fEMCSensitiveRegion(nullptr),
-    fMCPSensitiveRegion(nullptr),
-    fShieldRegion(nullptr),
-    fSolenoidOrMagnetRegion(nullptr),
-    fSpectrometerSensitiveRegion(nullptr),
-    fTargetRegion(nullptr),
-    fVacuumRegion(nullptr),
-
-    fCDCSD(nullptr),
-    fEMCSD(nullptr),
-    fMCPSD(nullptr) {
+    fCDCFieldWireRegion{},
+    fCDCSenseWireRegion{},
+    fDefaultGaseousRegion{},
+    fDefaultSolidRegion{},
+    fEMCSensitiveRegion{},
+    fMCPSensitiveRegion{},
+    fShieldRegion{},
+    fSolenoidOrMagnetRegion{},
+    fSpectrometerSensitiveRegion{},
+    fTargetRegion{},
+    fVacuumRegion{},
+    fCDCSD{},
+    fEMCSD{},
+    fMCPSD{} {
     /*     Detector::Description::DescriptionIO::Import<DescriptionInUse>(
     #include "MACE/SimMACE/DefaultGeometry.inlyaml"
         ); */
@@ -264,6 +263,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         fEMCSensitiveRegion->SetProductionCuts(defaultCuts);
 
         emcCrystal.RegisterRegion(fEMCSensitiveRegion);
+        emcPMTCoupler.RegisterRegion(fEMCSensitiveRegion);
+        emcPMTWindow.RegisterRegion(fEMCSensitiveRegion);
+        emcPMTCathode.RegisterRegion(fEMCSensitiveRegion);
 
         // MCPSensitiveRegion
         fMCPSensitiveRegion = new Region("MCPSensitive", RegionType::MCPSensitive);

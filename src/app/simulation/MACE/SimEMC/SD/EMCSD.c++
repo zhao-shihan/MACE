@@ -17,7 +17,7 @@ namespace MACE::SimEMC::inline SD {
 EMCSD::EMCSD(G4String name) :
     NonMoveableBase{},
     G4VSensitiveDetector{std::move(name)},
-    fHitsCollection{nullptr} {
+    fHitsCollection{} {
     collectionName.insert(SensitiveDetectorName + "HC");
 }
 
