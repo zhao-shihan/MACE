@@ -95,11 +95,11 @@ void EMCPMTCathode::Construct(G4bool checkOverlaps) {
         const auto pmtRadius = vertexIndex.size() == 5 ? emc.SmallPMTCathodeRadius() : emc.LargePMTCathodeRadius();
 
         const auto solidCathode = Make<G4Tubs>("temp", 0, pmtRadius, pmtCathodeThickness / 2, 0, 2 * pi);
-        const auto logicCathode = Make<G4LogicalVolume>(solidCathode, bialkali, "EMCCathode");
+        const auto logicCathode = Make<G4LogicalVolume>(solidCathode, bialkali, "EMCPMTCathode");
 
         Make<G4PVPlacement>(cathodeTransform,
                             logicCathode,
-                            "EMCCathode",
+                            "EMCPMTCathode",
                             Mother().LogicalVolume().get(),
                             true,
                             copyNo,

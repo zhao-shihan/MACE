@@ -85,10 +85,10 @@ void EMCPMTCoupler::Construct(G4bool checkOverlaps) {
         const auto pmtRadius = vertexIndex.size() == 5 ? emc.SmallPMTRadius() : emc.LargePMTRadius();
 
         const auto solidOptocoupler = Make<G4Tubs>("temp", 0, pmtRadius, pmtCouplerThickness / 2, 0, 2 * pi);
-        const auto logicOptocoupler = Make<G4LogicalVolume>(solidOptocoupler, siliconeOil, "EMCOptocoupler");
+        const auto logicOptocoupler = Make<G4LogicalVolume>(solidOptocoupler, siliconeOil, "EMCPMTCoupler");
         const auto physicalOptocoupler = Make<G4PVPlacement>(optocouplerTransform,
                                                              logicOptocoupler,
-                                                             "EMCOptocoupler",
+                                                             "EMCPMTCoupler",
                                                              Mother().LogicalVolume().get(),
                                                              true,
                                                              copyNo,
