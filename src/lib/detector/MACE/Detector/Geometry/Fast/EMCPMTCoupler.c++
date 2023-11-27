@@ -29,9 +29,6 @@ void EMCPMTCoupler::Construct(G4bool checkOverlaps) {
     const auto& description = Description::EMC::Instance();
     const auto name = description.Name();
 
-    const auto innerRadius = description.InnerRadius();
-    const auto crystalHypotenuse = description.CrystalHypotenuse();
-
     const auto pmtCouplerThickness = description.PMTCouplerThickness();
 
     const auto couplerEnergyBin = description.CouplerEnergyBin();

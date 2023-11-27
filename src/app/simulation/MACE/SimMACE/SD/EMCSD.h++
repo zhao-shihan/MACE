@@ -5,10 +5,13 @@
 
 #include "G4VSensitiveDetector.hh"
 
+#include <unordered_map>
+#include <vector>
+
 namespace MACE::SimMACE::inline SD {
 
 class EMCSD final : public NonMoveableBase,
-                      public G4VSensitiveDetector {
+                    public G4VSensitiveDetector {
 public:
     EMCSD(const G4String& sdName);
 
@@ -21,6 +24,7 @@ public:
 
 private:
     G4int fEventID;
+    std::unordered_map<int, EMCHit*> fHit;
     EMCHitCollection* fHitsCollection;
 };
 
