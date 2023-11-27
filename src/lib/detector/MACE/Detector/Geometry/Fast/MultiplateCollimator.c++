@@ -16,7 +16,7 @@ namespace MACE::Detector::Geometry::Fast {
 
 using namespace LiteralUnit::Angle;
 using namespace LiteralUnit::Length;
-using namespace LiteralUnit::MathConstant;
+using namespace LiteralUnit::MathConstantSuffix;
 
 void MultiplateCollimator::Construct(G4bool checkOverlaps) {
     const auto& multiplateCollimator = Description::MultiplateCollimator::Instance();

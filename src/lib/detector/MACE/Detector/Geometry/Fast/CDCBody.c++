@@ -13,7 +13,7 @@
 
 namespace MACE::Detector::Geometry::Fast {
 
-using namespace MACE::LiteralUnit::MathConstant;
+using namespace MACE::LiteralUnit::MathConstantSuffix;
 
 void CDCBody::Construct(G4bool checkOverlaps) {
     const auto& cdc = Description::CDC::Instance();

@@ -22,7 +22,7 @@
 namespace MACE::Detector::Geometry::Fast {
 
 void CDCCell::Construct(G4bool checkOverlaps) {
-    using namespace MACE::LiteralUnit::MathConstant;
+    using namespace MACE::LiteralUnit::MathConstantSuffix;
 
     const auto name = "CDCCell";
     const auto& cdc = Description::CDC::Instance();

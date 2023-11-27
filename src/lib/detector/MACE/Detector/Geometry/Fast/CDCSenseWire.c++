@@ -14,7 +14,7 @@
 namespace MACE::Detector::Geometry::Fast {
 
 using namespace MACE::LiteralUnit::Length;
-using namespace MACE::LiteralUnit::MathConstant;
+using namespace MACE::LiteralUnit::MathConstantSuffix;
 
 void CDCSenseWire::Construct(G4bool checkOverlaps) {
     const auto name = "CDCSenseWire";

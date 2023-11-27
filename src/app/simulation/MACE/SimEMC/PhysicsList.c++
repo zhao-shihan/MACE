@@ -6,6 +6,7 @@
 #include "G4DecayPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4EmStandardPhysics_option4.hh"
+#include "G4OpticalPhysics.hh"
 
 namespace MACE::SimEMC {
 
@@ -26,6 +27,10 @@ PhysicsList::PhysicsList() :
 
     // Decays
     RegisterPhysics(new G4DecayPhysics(verboseLevel));
+
+    // Optical
+    RegisterPhysics(new G4OpticalPhysics(verboseLevel));
+    G4OpticalParameters::Instance()->SetBoundaryInvokeSD(true);
 }
 
 } // namespace MACE::SimEMC

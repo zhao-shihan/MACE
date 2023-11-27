@@ -16,8 +16,11 @@
 #include "MACE/Detector/Geometry/Fast/CDCSenseLayer.h++"
 #include "MACE/Detector/Geometry/Fast/CDCSenseWire.h++"
 #include "MACE/Detector/Geometry/Fast/CDCSuperLayer.h++"
-#include "MACE/Detector/Geometry/Fast/EMC.h++"
+#include "MACE/Detector/Geometry/Fast/EMCCrystal.h++"
 #include "MACE/Detector/Geometry/Fast/EMCField.h++"
+#include "MACE/Detector/Geometry/Fast/EMCPMTCathode.h++"
+#include "MACE/Detector/Geometry/Fast/EMCPMTCoupler.h++"
+#include "MACE/Detector/Geometry/Fast/EMCPMTWindow.h++"
 #include "MACE/Detector/Geometry/Fast/EMCShield.h++"
 #include "MACE/Detector/Geometry/Fast/MCP.h++"
 #include "MACE/Detector/Geometry/Fast/MultiplateCollimator.h++"
@@ -58,24 +61,23 @@ DetectorConstruction::DetectorConstruction() :
 
     fWorld(std::make_shared<Detector::Geometry::Fast::World>()),
 
-    fCDCFieldWireRegion(nullptr),
-    fCDCSenseWireRegion(nullptr),
-    fDefaultGaseousRegion(nullptr),
-    fDefaultSolidRegion(nullptr),
-    fEMCSensitiveRegion(nullptr),
-    fMCPSensitiveRegion(nullptr),
-    fShieldRegion(nullptr),
-    fSolenoidOrMagnetRegion(nullptr),
-    fSpectrometerSensitiveRegion(nullptr),
-    fTargetRegion(nullptr),
-    fVacuumRegion(nullptr),
-
-    fCDCSD(nullptr),
-    fEMCSD(nullptr),
-    fMCPSD(nullptr) {
-/*     Detector::Description::DescriptionIO::Import<DescriptionInUse>(
-#include "MACE/SimMACE/DefaultGeometry.inlyaml"
-    ); */
+    fCDCFieldWireRegion{},
+    fCDCSenseWireRegion{},
+    fDefaultGaseousRegion{},
+    fDefaultSolidRegion{},
+    fEMCSensitiveRegion{},
+    fMCPSensitiveRegion{},
+    fShieldRegion{},
+    fSolenoidOrMagnetRegion{},
+    fSpectrometerSensitiveRegion{},
+    fTargetRegion{},
+    fVacuumRegion{},
+    fCDCSD{},
+    fEMCSD{},
+    fMCPSD{} {
+    /*     Detector::Description::DescriptionIO::Import<DescriptionInUse>(
+    #include "MACE/SimMACE/DefaultGeometry.inlyaml"
+        ); */
     GeometryMessenger::Instance().AssignTo(this);
 }
 
@@ -98,7 +100,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 
     // 2
 
-    auto& emc = emcField.NewDaughter<Detector::Geometry::Fast::EMC>(fCheckOverlap);
+    auto& emcCrystal = emcField.NewDaughter<Detector::Geometry::Fast::EMCCrystal>(fCheckOverlap);
+    auto& emcPMTCoupler = emcField.NewDaughter<Detector::Geometry::Fast::EMCPMTCoupler>(fCheckOverlap);
+    auto& emcPMTWindow = emcField.NewDaughter<Detector::Geometry::Fast::EMCPMTWindow>(fCheckOverlap);
+    auto& emcPMTCathode = emcField.NewDaughter<Detector::Geometry::Fast::EMCPMTCathode>(fCheckOverlap);
+
     auto& mcp = emcField.NewDaughter<Detector::Geometry::Fast::MCP>(fCheckOverlap);
 
     auto& solenoidB1 = solenoidB1Field.NewDaughter<Detector::Geometry::Fast::SolenoidB1>(fCheckOverlap);
@@ -182,8 +188,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         solenoidS2.RegisterMaterial(copper);
         solenoidS3.RegisterMaterial(copper);
 
-        const auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
-        emc.RegisterMaterial(csI);
+        // const auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
+        // emc.RegisterMaterial(csI);
 
         const auto iron = nist->FindOrBuildMaterial("G4_Fe");
         spectrometerMagnet.RegisterMaterial(iron);
@@ -256,7 +262,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         fEMCSensitiveRegion = new Region("EMCSensitive", RegionType::EMCSensitive);
         fEMCSensitiveRegion->SetProductionCuts(defaultCuts);
 
-        emc.RegisterRegion(fEMCSensitiveRegion);
+        emcCrystal.RegisterRegion(fEMCSensitiveRegion);
+        emcPMTCoupler.RegisterRegion(fEMCSensitiveRegion);
+        emcPMTWindow.RegisterRegion(fEMCSensitiveRegion);
+        emcPMTCathode.RegisterRegion(fEMCSensitiveRegion);
 
         // MCPSensitiveRegion
         fMCPSensitiveRegion = new Region("MCPSensitive", RegionType::MCPSensitive);
@@ -313,8 +322,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         fCDCSD = new SD::CDCSD(cdcCell.LogicalVolume()->GetName());
         cdcCell.RegisterSD(fCDCSD);
 
-        fEMCSD = new SD::EMCSD(emc.LogicalVolume()->GetName());
-        emc.RegisterSD(fEMCSD);
+        fEMCSD = new SD::EMCSD(emcCrystal.LogicalVolume()->GetName());
+        emcCrystal.RegisterSD(fEMCSD);
 
         fMCPSD = new SD::MCPSD(mcp.LogicalVolume()->GetName());
         mcp.RegisterSD(fMCPSD);

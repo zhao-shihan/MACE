@@ -16,7 +16,7 @@ public:
     ~RunManager();
 
 private:
-    std::unique_ptr<Analysis> fAnalysis;
+    // std::unique_ptr<Analysis> fAnalysis;
 };
 
 } // namespace MACE::SimEMC
