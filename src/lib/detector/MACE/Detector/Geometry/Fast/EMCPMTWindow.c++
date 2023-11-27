@@ -74,10 +74,10 @@ void EMCPMTWindow::Construct(G4bool checkOverlaps) {
         const auto pmtRadius = vertexIndex.size() == 5 ? emc.SmallPMTCathodeRadius() : emc.LargePMTCathodeRadius();
 
         const auto solidWindow = Make<G4Tubs>("temp", 0, pmtRadius, pmtWindowThickness / 2, 0, 2 * pi);
-        const auto logicWindow = Make<G4LogicalVolume>(solidWindow, glass, "EMCWindow");
+        const auto logicWindow = Make<G4LogicalVolume>(solidWindow, glass, "EMCPMTWindow");
         Make<G4PVPlacement>(windowTransform,
                             logicWindow,
-                            "EMCWindow",
+                            "EMCPMTWindow",
                             Mother().LogicalVolume().get(),
                             true,
                             copyNo,

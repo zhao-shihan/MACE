@@ -4,11 +4,11 @@
 
 namespace MACE::Detector::Description {
 
-class MultiplateCollimator final : public DescriptionSingletonBase<MultiplateCollimator> {
+class Filter final : public DescriptionSingletonBase<Filter> {
     friend Env::Memory::SingletonFactory;
 
 private:
-    MultiplateCollimator();
+    Filter();
 
 public:
     const auto& Length() const { return fLength; }

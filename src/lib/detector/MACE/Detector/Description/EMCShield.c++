@@ -10,7 +10,7 @@ EMCShield::EMCShield() :
     DescriptionSingletonBase<EMCShield>(__func__),
     fInnerRadius(50_cm),
     fInnerLength(100_cm),
-    fWindowRadius(12.7_cm),
+    fWindowRadius(7.7_cm),
     fThickness(5_cm) {}
 
 void EMCShield::ImportValues(const YAML::Node& node) {

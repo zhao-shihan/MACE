@@ -22,8 +22,8 @@
 #include "MACE/Detector/Geometry/Fast/EMCPMTCoupler.h++"
 #include "MACE/Detector/Geometry/Fast/EMCPMTWindow.h++"
 #include "MACE/Detector/Geometry/Fast/EMCShield.h++"
+#include "MACE/Detector/Geometry/Fast/Filter.h++"
 #include "MACE/Detector/Geometry/Fast/MCP.h++"
-#include "MACE/Detector/Geometry/Fast/MultiplateCollimator.h++"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1.h++"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1Field.h++"
 #include "MACE/Detector/Geometry/Fast/SolenoidB2.h++"
@@ -113,7 +113,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 
     auto& solenoidB2 = solenoidB2Field.NewDaughter<Detector::Geometry::Fast::SolenoidB2>(fCheckOverlap);
 
-    auto& multiplateCollimator = solenoidS2Field.NewDaughter<Detector::Geometry::Fast::MultiplateCollimator>(fCheckOverlap);
+    auto& filter = solenoidS2Field.NewDaughter<Detector::Geometry::Fast::Filter>(fCheckOverlap);
     auto& solenoidS2 = solenoidS2Field.NewDaughter<Detector::Geometry::Fast::SolenoidS2>(fCheckOverlap);
 
     auto& acceleratorField = spectrometerField.NewDaughter<Detector::Geometry::Fast::AcceleratorField>(fCheckOverlap);
@@ -187,13 +187,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         solenoidB2.RegisterMaterial(copper);
         solenoidS2.RegisterMaterial(copper);
         solenoidS3.RegisterMaterial(copper);
+        filter.RegisterMaterial(copper);
 
         // const auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
         // emc.RegisterMaterial(csI);
 
         const auto iron = nist->FindOrBuildMaterial("G4_Fe");
         spectrometerMagnet.RegisterMaterial(iron);
-        multiplateCollimator.RegisterMaterial(iron);
 
         const auto lead = nist->FindOrBuildMaterial("G4_Pb");
         emcShield.RegisterMaterial(lead);
@@ -256,7 +256,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         beamDegrader.RegisterRegion(fDefaultSolidRegion);
         beamMonitor.RegisterRegion(fDefaultSolidRegion);
         cdcBody.RegisterRegion(fDefaultSolidRegion);
-        multiplateCollimator.RegisterRegion(fDefaultSolidRegion);
+        filter.RegisterRegion(fDefaultSolidRegion);
 
         // EMCSensitiveRegion
         fEMCSensitiveRegion = new Region("EMCSensitive", RegionType::EMCSensitive);

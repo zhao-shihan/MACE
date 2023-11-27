@@ -9,7 +9,7 @@ SpectrometerShield::SpectrometerShield() :
     DescriptionSingletonBase<SpectrometerShield>(__func__),
     fInnerRadius(72_cm),
     fInnerLength(222_cm),
-    fWindowRadius(12.7_cm),
+    fWindowRadius(7.7_cm),
     fThickness(5_cm) {}
 
 void SpectrometerShield::ImportValues(const YAML::Node& node) {
