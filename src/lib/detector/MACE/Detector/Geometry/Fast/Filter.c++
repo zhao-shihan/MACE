@@ -1,5 +1,5 @@
-#include "MACE/Detector/Description/MultiplateCollimator.h++"
-#include "MACE/Detector/Geometry/Fast/MultiplateCollimator.h++"
+#include "MACE/Detector/Description/Filter.h++"
+#include "MACE/Detector/Geometry/Fast/Filter.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "CLHEP/Vector/RotationZ.h"
@@ -18,8 +18,8 @@ using namespace LiteralUnit::Angle;
 using namespace LiteralUnit::Length;
 using namespace LiteralUnit::MathConstantSuffix;
 
-void MultiplateCollimator::Construct(G4bool checkOverlaps) {
-    const auto& multiplateCollimator = Description::MultiplateCollimator::Instance();
+void Filter::Construct(G4bool checkOverlaps) {
+    const auto& multiplateCollimator = Description::Filter::Instance();
     const auto name = multiplateCollimator.Name();
     const auto halfLength = multiplateCollimator.Length() / 2;
     const auto halfWidth = multiplateCollimator.Width() / 2;

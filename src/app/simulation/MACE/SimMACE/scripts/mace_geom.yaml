@@ -48,12 +48,12 @@ EMCField:
 EMCShield:
   InnerRadius: 300
   InnerLength: 800
-  WindowRadius: 127
+  WindowRadius: 77
   Thickness: 50
 MCP:
   Width: 150
   Thickness: 10
-MultiplateCollimator:
+Filter:
   Length: 1000
   Width: 100
   Thickness: 0.5
@@ -79,7 +79,7 @@ SpectrometerMagnet:
 SpectrometerShield:
   InnerRadius: 720
   InnerLength: 2220
-  WindowRadius: 127
+  WindowRadius: 77
   Thickness: 50
 Target:
   ShapeType: Cuboid

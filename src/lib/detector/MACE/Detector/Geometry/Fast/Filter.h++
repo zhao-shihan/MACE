@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Geometry::Fast {
 
-class MultiplateCollimator final : public GeometryBase {
+class Filter final : public GeometryBase {
 private:
     void Construct(G4bool checkOverlaps) override;
 };

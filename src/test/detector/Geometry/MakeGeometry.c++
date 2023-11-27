@@ -16,7 +16,7 @@
 #include "MACE/Detector/Geometry/Fast/EMCPMTWindow.h++"
 #include "MACE/Detector/Geometry/Fast/EMCShield.h++"
 #include "MACE/Detector/Geometry/Fast/MCP.h++"
-#include "MACE/Detector/Geometry/Fast/MultiplateCollimator.h++"
+#include "MACE/Detector/Geometry/Fast/Filter.h++"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1.h++"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1Field.h++"
 #include "MACE/Detector/Geometry/Fast/SolenoidB2.h++"
@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
 
     auto& solenoidB2 = solenoidB2Field.NewDaughter<SolenoidB2>(fCheckOverlap);
 
-    auto& multiplateCollimator = solenoidS2Field.NewDaughter<MultiplateCollimator>(fCheckOverlap);
+    auto& multiplateCollimator = solenoidS2Field.NewDaughter<Filter>(fCheckOverlap);
     auto& solenoidS2 = solenoidS2Field.NewDaughter<SolenoidS2>(fCheckOverlap);
 
     auto& acceleratorField = spectrometerField.NewDaughter<AcceleratorField>(fCheckOverlap);
