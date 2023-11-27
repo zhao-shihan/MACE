@@ -37,19 +37,20 @@ G4bool EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
     const auto& track = *step.GetTrack();
     const auto& particle = *track.GetDefinition();
 
-    if (&particle == G4OpticalPhoton::Definition()) {
-        const auto& preStepPoint = *step.GetPreStepPoint();
-        const auto& touchable = *preStepPoint.GetTouchable();
-        // transform hit position to local coordinate
-        const auto hitPosition = *touchable.GetRotation() * (preStepPoint.GetPosition() - touchable.GetTranslation());
-        // calculate (Ek0, p0)
-        const auto vertexEk = track.GetVertexKineticEnergy();
-        const auto vertexMomentum = track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()));
+    if (&particle != G4OpticalPhoton::Definition()) {
         const auto cellID = track.GetVolume()->GetCopyNo();
-        // new a hit
+        // find or new a hit
         const auto [iter, isNewHit] = fHit.try_emplace(cellID, new EMCHit);
         auto& hit = *iter->second;
         if (isNewHit) {
+            const auto& preStepPoint = *step.GetPreStepPoint();
+            const auto& touchable = *preStepPoint.GetTouchable();
+            // transform hit position to local coordinate
+            const auto hitPosition = *touchable.GetRotation() * (preStepPoint.GetPosition() - touchable.GetTranslation());
+            // calculate (Ek0, p0)
+            const auto vertexEk = track.GetVertexKineticEnergy();
+            const auto vertexMomentum = track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()));
+
             Get<"CellID">(hit) = cellID;
             Get<"t">(hit) = preStepPoint.GetGlobalTime();
             Get<"E">(hit) = 0;
@@ -72,6 +73,7 @@ G4bool EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
 
 void EMCSD::EndOfEvent(G4HCofThisEvent*) {
     for (auto&& [_, hit] : std::as_const(fHit)) {
+        if (Get<"E">(*hit) == 0) { continue; }
         fHitsCollection->insert(hit);
     }
     fHit.clear();
