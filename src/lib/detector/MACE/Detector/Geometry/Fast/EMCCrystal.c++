@@ -101,13 +101,10 @@ void EMCCrystal::Construct(G4bool checkOverlaps) {
          auto&& [centroid, normal, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
         const auto centroidMagnitude = centroid.mag();
         const auto crystalLength = crystalHypotenuse * centroidMagnitude;
-
-        const auto crytalInnerHypotenuse = innerRadius;
-        const auto outerHypotenuse = crytalInnerHypotenuse + crystalHypotenuse;
-
-        const auto crystalOuterRadius = outerHypotenuse * centroidMagnitude;
+        const auto outerHypotenuse = innerRadius + crystalHypotenuse;
 
         // make a crystal-shaped solid with certain shrinkage (e.g. shrink with coat thickness)
+
         const auto MakeTessellatedSolid =
             [&,
              midHypotenuse = (innerRadius + outerHypotenuse) / 2,
@@ -183,18 +180,14 @@ void EMCCrystal::Construct(G4bool checkOverlaps) {
                 return solid;
             };
 
-        const auto Transform =
-            [&normal,
-             crystalOuterCentroid = crystalOuterRadius * centroid / centroidMagnitude,
-             rotation = G4Rotate3D{normal.theta(), CLHEP::HepZHat.cross(normal)}](double offsetInNormalDirection) {
-                return G4Translate3D{crystalOuterCentroid + offsetInNormalDirection * normal} * rotation;
-            };
+        const auto crystalTransform =
+            Detector::Description::EMC::Instance().ComputeTransformToOuterSurfaceWithOffset(copyNo,
+                                                                                            -crystalLength / 2);
 
         // Crystal
 
         const auto solidCrystal = MakeTessellatedSolid("temp");
         const auto cutCrystalBox = Make<G4Box>("temp", 1_m, 1_m, crystalLength / 2);
-        const auto crystalTransform = Transform(-crystalLength / 2);
         const auto cutSoildCrystal = Make<G4IntersectionSolid>("EMCCrystal", solidCrystal, cutCrystalBox, crystalTransform);
         //========================================== CsI(Tl) ============================================
         const auto logicCrystal = Make<G4LogicalVolume>(cutSoildCrystal, csI, "EMCCrystal");

@@ -9,6 +9,7 @@
 #include "CLHEP/Vector/TwoVector.h"
 
 #include "G4SystemOfUnits.hh"
+#include "G4Transform3D.hh"
 
 #include "pmp/algorithms/differential_geometry.h"
 #include "pmp/algorithms/normals.h"
@@ -152,7 +153,10 @@ EMC::EMC() :
     fNSubdivision{2},
     fInnerRadius{15_cm},
     fCrystalHypotenuse{15_cm},
-    fPMTRadius{3.5_cm},
+    fSmallPMTRadius{25.5_mm},
+    fLargePMTRadius{40_mm},
+    fSmallPMTCathodeRadius{23_mm},
+    fLargePMTCathodeRadius{36_mm},
     fPMTCouplerThickness{0.1_mm},
     fPMTWindowThickness{1_mm},
     fPMTCathodeThickness{20_nm},
@@ -246,12 +250,34 @@ auto EMC::ComputeMesh() const -> MeshInformation {
     }
     return mesh;
 }
+auto EMC::ComputeTransformToOuterSurfaceWithOffset(int cellID, double offsetInNormalDirection) const -> HepGeom::Transform3D {
+    auto mesh = ComputeMesh();
+    const auto faceList = mesh.fFaceList;
+    auto&& [centroid, normal, vertexIndex] = faceList[cellID];
 
+    const auto centroidMagnitude = centroid.mag();
+    const auto crystalOuterRadius = (fInnerRadius + fCrystalHypotenuse) * centroidMagnitude;
+
+    auto crystalOuterCentroid = crystalOuterRadius * centroid / centroidMagnitude;
+    auto rotation = G4Rotate3D{normal.theta(), CLHEP::HepZHat.cross(normal)};
+
+    return G4Translate3D{crystalOuterCentroid + offsetInNormalDirection * normal} * rotation;
+
+    // auto Transform =
+    //     [&normal,
+    //      crystalOuterCentroid = crystalOuterRadius * centroid / centroidMagnitude,
+    //      rotation = G4Rotate3D{normal.theta(), CLHEP::HepZHat.cross(normal)}](double offsetInNormalDirection) {
+    //         return G4Translate3D{crystalOuterCentroid + offsetInNormalDirection * normal} * rotation;
+    //     };
+}
 auto EMC::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fNSubdivision, "NSubdivision");
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
-    ImportValue(node, fPMTRadius, "PMTRadius");
+    ImportValue(node, fSmallPMTRadius, "SmallPMTRadius");
+    ImportValue(node, fLargePMTRadius, "LargePMTRadius");
+    ImportValue(node, fSmallPMTCathodeRadius, "SmallPMTCathodeRadius");
+    ImportValue(node, fLargePMTCathodeRadius, "LargePMTCathodeRadius");
     ImportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ImportValue(node, fPMTWindowThickness, "PMTWindowThickness");
     ImportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
@@ -272,7 +298,10 @@ auto EMC::ExportValues(YAML::Node& node) const -> void {
     ExportValue(node, fNSubdivision, "NSubdivision");
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
-    ExportValue(node, fPMTRadius, "PMTRadius");
+    ExportValue(node, fSmallPMTRadius, "SmallPMTRadius");
+    ExportValue(node, fLargePMTRadius, "LargePMTRadius");
+    ExportValue(node, fSmallPMTCathodeRadius, "SmallPMTCathodeRadius");
+    ExportValue(node, fLargePMTCathodeRadius, "LargePMTCathodeRadius");
     ExportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ExportValue(node, fPMTWindowThickness, "PMTWindowThickness");
     ExportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");

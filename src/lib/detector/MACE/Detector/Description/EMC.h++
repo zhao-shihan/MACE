@@ -17,7 +17,10 @@ public:
     auto NSubdivision() const -> const auto& { return fNSubdivision; }
     auto InnerRadius() const -> const auto& { return fInnerRadius; }
     auto CrystalHypotenuse() const -> const auto& { return fCrystalHypotenuse; }
-    auto PMTRadius() const -> const auto& { return fPMTRadius; }
+    auto SmallPMTRadius() const -> const auto& { return fSmallPMTRadius; }
+    auto LargePMTRadius() const -> const auto& { return fLargePMTRadius; }
+    auto SmallPMTCathodeRadius() const -> const auto& { return fSmallPMTCathodeRadius; }
+    auto LargePMTCathodeRadius() const -> const auto& { return fLargePMTCathodeRadius; }
     auto PMTCouplerThickness() const -> const auto& { return fPMTCouplerThickness; }
     auto PMTWindowThickness() const -> auto& { return fPMTWindowThickness; }
     auto PMTCathodeThickness() const -> auto& { return fPMTCathodeThickness; }
@@ -35,13 +38,17 @@ public:
 
     auto Mesh() const -> const auto& { return fMeshManager.Get(this); }
     auto CellTotalNumber() const -> auto { return Mesh().fFaceList.size(); }
+    auto ComputeTransformToOuterSurfaceWithOffset(int cellID, double offsetInNormalDirection) const -> HepGeom::Transform3D;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
     auto NSubdivision(const auto& val) -> void { (fNSubdivision = val, SetGeometryOutdated()); }
     auto InnerRadius(const auto& val) -> void { (fInnerRadius = val, SetGeometryOutdated()); }
     auto CrystalHypotenuse(const auto& val) -> void { (fCrystalHypotenuse = val, SetGeometryOutdated()); }
-    auto PMTRadius(const auto& val) -> void { fPMTRadius = val; }
+    auto SmallPMTRadius(const auto& val) -> void { fSmallPMTRadius = val; }
+    auto LargePMTRadius(const auto& val) -> void { fLargePMTRadius = val; }
+    auto SmallPMTCathodeRadius(const auto& val) -> void { fSmallPMTCathodeRadius = val; }
+    auto LargePMTCathodeRadius(const auto& val) -> void { fLargePMTCathodeRadius = val; }
     auto PMTCouplerThickness(const auto& val) -> void { fPMTCouplerThickness = val; }
     auto PMTWindowThickness(const auto& val) -> void { fPMTWindowThickness = val; }
     auto PMTCathodeThickness(const auto& val) -> void { fPMTCathodeThickness = val; }
@@ -91,7 +98,10 @@ private:
     int fNSubdivision;
     double fInnerRadius;
     double fCrystalHypotenuse;
-    double fPMTRadius;
+    double fSmallPMTRadius;
+    double fLargePMTRadius;
+    double fSmallPMTCathodeRadius;
+    double fLargePMTCathodeRadius;
     double fPMTCouplerThickness;
     double fPMTWindowThickness;
     double fPMTCathodeThickness;

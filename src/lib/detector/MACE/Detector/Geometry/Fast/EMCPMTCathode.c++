@@ -17,6 +17,7 @@
 #include "fmt/format.h"
 
 #include <algorithm>
+#include <cassert>
 #include <utility>
 
 namespace MACE::Detector::Geometry::Fast {
@@ -30,10 +31,6 @@ void EMCPMTCathode::Construct(G4bool checkOverlaps) {
     const auto& description = Description::EMC::Instance();
     const auto name = description.Name();
 
-    const auto innerRadius = description.InnerRadius();
-    const auto crystalHypotenuse = description.CrystalHypotenuse();
-
-    double pmtRadius;
     const auto pmtCouplerThickness = description.PMTCouplerThickness();
     const auto pmtWindowThickness = description.PMTWindowThickness();
     const auto pmtCathodeThickness = description.PMTCathodeThickness();
@@ -85,43 +82,28 @@ void EMCPMTCathode::Construct(G4bool checkOverlaps) {
     /////////////////////////////////////////////
 
     const auto& emc = Description::EMC::Instance();
-    const auto& vertex = emc.Mesh().fVertex;
     const auto& faceList = emc.Mesh().fFaceList;
 
     for (G4int copyNo = 0;
          auto&& [centroid, normal, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
-        const auto centroidMagnitude = centroid.mag();
-        const auto crystalLength = crystalHypotenuse * centroidMagnitude;
 
-        const auto crytalInnerHypotenuse = innerRadius;
-        const auto outerHypotenuse = crytalInnerHypotenuse + crystalHypotenuse;
+        const auto cathodeTransform =
+            Detector::Description::EMC::Instance().ComputeTransformToOuterSurfaceWithOffset(copyNo,
+                                                                                            pmtCouplerThickness + pmtWindowThickness + pmtCathodeThickness / 2);
 
-        const auto crystalOuterRadius = outerHypotenuse * centroidMagnitude;
-        const auto outerRadius = outerHypotenuse * centroidMagnitude;
-
-        const auto Transform =
-            [&normal,
-             crystalOuterCentroid = crystalOuterRadius * centroid / centroidMagnitude,
-             rotation = G4Rotate3D{normal.theta(), CLHEP::HepZHat.cross(normal)}](double offsetInNormalDirection) {
-                return G4Translate3D{crystalOuterCentroid + offsetInNormalDirection * normal} * rotation;
-            };
-
-        if (copyNo <= 11) {
-            pmtRadius = 23_mm;
-        } else {
-            pmtRadius = 36_mm;
-        }
+        assert(vertexIndex.size() == 5 or vertexIndex.size() == 6);
+        const auto pmtRadius = vertexIndex.size() == 5 ? emc.SmallPMTCathodeRadius() : emc.LargePMTCathodeRadius();
 
         const auto solidCathode = Make<G4Tubs>("temp", 0, pmtRadius, pmtCathodeThickness / 2, 0, 2 * pi);
         const auto logicCathode = Make<G4LogicalVolume>(solidCathode, bialkali, "EMCCathode");
-        const auto cathodeTransform = Transform(pmtCouplerThickness + pmtWindowThickness + pmtCathodeThickness / 2);
-        const auto physicalCathode = Make<G4PVPlacement>(cathodeTransform,
-                                                         logicCathode,
-                                                         "EMCCathode",
-                                                         Mother().LogicalVolume().get(),
-                                                         true,
-                                                         copyNo,
-                                                         checkOverlaps);
+
+        Make<G4PVPlacement>(cathodeTransform,
+                            logicCathode,
+                            "EMCCathode",
+                            Mother().LogicalVolume().get(),
+                            true,
+                            copyNo,
+                            checkOverlaps);
 
         /////////////////////////////////////////////
         // Construct Optical Surface

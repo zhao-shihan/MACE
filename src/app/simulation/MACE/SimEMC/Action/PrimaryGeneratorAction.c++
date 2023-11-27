@@ -8,6 +8,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
     G4VUserPrimaryGeneratorAction{},
     fGPS{} {
     // PrimaryGeneratorActionMessenger::Instance().AssignTo(this);
+    fGPS = new G4GeneralParticleSource();
 }
 
 auto PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) -> void {
