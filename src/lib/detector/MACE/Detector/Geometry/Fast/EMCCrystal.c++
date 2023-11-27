@@ -98,7 +98,7 @@ void EMCCrystal::Construct(G4bool checkOverlaps) {
     /////////////////////////////////////////////
 
     for (G4int copyNo = 0;
-         auto&& [centroid, normal, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
+         auto&& [centroid, _2, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
         const auto centroidMagnitude = centroid.mag();
         const auto crystalLength = crystalHypotenuse * centroidMagnitude;
         const auto outerHypotenuse = innerRadius + crystalHypotenuse;

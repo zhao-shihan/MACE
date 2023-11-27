@@ -64,7 +64,7 @@ void EMCPMTWindow::Construct(G4bool checkOverlaps) {
     const auto& faceList = emc.Mesh().fFaceList;
 
     for (G4int copyNo = 0;
-         auto&& [centroid, normal, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
+         auto&& [_1, _2, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
 
         const auto windowTransform =
             Detector::Description::EMC::Instance().ComputeTransformToOuterSurfaceWithOffset(copyNo,

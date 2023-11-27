@@ -251,8 +251,7 @@ auto EMC::ComputeMesh() const -> MeshInformation {
     return mesh;
 }
 auto EMC::ComputeTransformToOuterSurfaceWithOffset(int cellID, double offsetInNormalDirection) const -> HepGeom::Transform3D {
-    auto mesh = ComputeMesh();
-    const auto faceList = mesh.fFaceList;
+    const auto& faceList = Mesh().fFaceList;
     auto&& [centroid, normal, vertexIndex] = faceList[cellID];
 
     const auto centroidMagnitude = centroid.mag();
@@ -262,14 +261,8 @@ auto EMC::ComputeTransformToOuterSurfaceWithOffset(int cellID, double offsetInNo
     auto rotation = G4Rotate3D{normal.theta(), CLHEP::HepZHat.cross(normal)};
 
     return G4Translate3D{crystalOuterCentroid + offsetInNormalDirection * normal} * rotation;
-
-    // auto Transform =
-    //     [&normal,
-    //      crystalOuterCentroid = crystalOuterRadius * centroid / centroidMagnitude,
-    //      rotation = G4Rotate3D{normal.theta(), CLHEP::HepZHat.cross(normal)}](double offsetInNormalDirection) {
-    //         return G4Translate3D{crystalOuterCentroid + offsetInNormalDirection * normal} * rotation;
-    //     };
 }
+
 auto EMC::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fNSubdivision, "NSubdivision");
     ImportValue(node, fInnerRadius, "InnerRadius");
