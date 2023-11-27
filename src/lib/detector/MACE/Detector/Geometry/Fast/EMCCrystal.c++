@@ -124,20 +124,20 @@ void EMCCrystal::Construct(G4bool checkOverlaps) {
 
                 // clang-format off
 
-                // Pentagon:
-                //      0
-                //   /  |  \
-                //  1 - C - 4
-                //  \ / \  /
-                //   2 - 3
-                //
-                // Hexagon:
-                //     0 - 5
-                //   / \  / \
-                //  1 - C - 4
-                //  \ /  \ /
-                //   2 - 3
-
+                /* Pentagon:
+                 *      0
+                 *   /  |  \
+                 *  1 - C - 4
+                 *  \ / \  /
+                 *   2 - 3
+                 *
+                 * Hexagon:
+                 *     0 - 5
+                 *   / \  / \
+                 *  1 - C - 4
+                 *  \ /  \ /
+                 *   2 - 3      
+                 */
                 // clang-format on
 
                 const auto solid = Make<G4TessellatedSolid>(name);
