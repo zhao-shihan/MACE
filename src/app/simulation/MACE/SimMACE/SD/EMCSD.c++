@@ -40,7 +40,7 @@ G4bool EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
     if (&particle != G4OpticalPhoton::Definition()) {
         const auto cellID = track.GetVolume()->GetCopyNo();
         // find or new a hit
-        const auto [iter, isNewHit] = fHit.try_emplace(cellID, new EMCHit);
+        const auto [iter, isNewHit] = fHit.try_emplace(cellID, std::make_unique_for_overwrite<EMCHit>());
         auto& hit = *iter->second;
         if (isNewHit) {
             const auto& preStepPoint = *step.GetPreStepPoint();
@@ -72,9 +72,9 @@ G4bool EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
 }
 
 void EMCSD::EndOfEvent(G4HCofThisEvent*) {
-    for (auto&& [_, hit] : std::as_const(fHit)) {
+    for (auto&& [_, hit] : fHit) {
         if (Get<"E">(*hit) == 0) { continue; }
-        fHitsCollection->insert(hit);
+        fHitsCollection->insert(hit.release());
     }
     fHit.clear();
     Analysis::Instance().SubmitEMCHC(*fHitsCollection->GetVector());
