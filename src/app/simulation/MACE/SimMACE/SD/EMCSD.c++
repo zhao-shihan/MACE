@@ -15,13 +15,13 @@ EMCSD::EMCSD(const G4String& sdName) :
     NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fEventID{-1},
-    fHitsCollection{},
-    fHit{} {
+    fHit{},
+    fHitsCollection{} {
     collectionName.insert(sdName + "HC");
 }
 
 void EMCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
-    int cellTotalNumber = Detector::Description::EMC::Instance().CellTotalNumber();
+    // int cellTotalNumber = Detector::Description::EMC::Instance().CellTotalNumber();
 
     fHitsCollection = new EMCHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);

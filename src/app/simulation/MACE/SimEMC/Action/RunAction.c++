@@ -6,7 +6,7 @@
 
 namespace MACE::SimEMC::inline Action {
 
-auto RunAction::BeginOfRunAction(const G4Run* run) -> void {
+auto RunAction::BeginOfRunAction(const G4Run* /* run */) -> void {
     // Analysis::Instance().RunBegin(run);
     auto analysisManager = G4AnalysisManager::Instance();
     analysisManager->OpenFile(MPIUtil::MakeMPIFilePath("EMCdemo", ".root").generic_string());

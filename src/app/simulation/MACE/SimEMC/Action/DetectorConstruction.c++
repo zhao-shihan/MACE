@@ -39,8 +39,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     fWorld = std::make_shared<World>();
     auto& emcCrystal = fWorld->NewDaughter<EMCCrystal>(fCheckOverlap);
-    auto& emcPMTCoupler = fWorld->NewDaughter<EMCPMTCoupler>(fCheckOverlap);
-    auto& emcPMTWindow = fWorld->NewDaughter<EMCPMTWindow>(fCheckOverlap);
+    fWorld->NewDaughter<EMCPMTCoupler>(fCheckOverlap);
+    fWorld->NewDaughter<EMCPMTWindow>(fCheckOverlap);
     auto& emcPMTCathode = fWorld->NewDaughter<EMCPMTCathode>(fCheckOverlap);
 
     auto nist = G4NistManager::Instance();
