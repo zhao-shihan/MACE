@@ -239,7 +239,7 @@ auto EMC::ComputeMesh() const -> MeshInformation {
             [uHat = (vertex[face.vertexIndex.front()] - face.centroid).unit(),
              vHat = face.normal.cross(vertex[face.vertexIndex.front()] - face.centroid).unit(),
              &localOrigin = face.centroid,
-             &vertex](const auto& i) {
+             &vertex = vertex](const auto& i) {
                 const auto localPoint = vertex[i] - localOrigin;
                 return std::atan2(localPoint.dot(vHat), localPoint.dot(uHat));
             };
