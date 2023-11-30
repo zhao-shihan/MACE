@@ -28,33 +28,33 @@ public:
     virtual ~MPIEnv();
 
     using PassiveSingleton<MPIEnv>::Instance;
-    static auto Initialized() { return fgInitialized; }
-    static auto Finalized() { return fgFinalized; }
-    static auto Available() { return Initialized() and not Finalized(); }
+    static auto Initialized() -> auto { return fgInitialized; }
+    static auto Finalized() -> auto { return fgFinalized; }
+    static auto Available() -> auto { return Initialized() and not Finalized(); }
 
     auto CommWorldRank() const -> const auto& { return fCommWorldRank; }
     auto CommWorldSize() const -> const auto& { return fCommWorldSize; }
-    auto AtCommWorldMaster() const { return CommWorldRank() == 0; }
-    auto AtCommWorldWorker() const { return CommWorldRank() > 0; }
-    auto Sequential() const { return CommWorldSize() == 1; }
-    auto Parallel() const { return CommWorldSize() > 1; }
+    auto AtCommWorldMaster() const -> auto { return CommWorldRank() == 0; }
+    auto AtCommWorldWorker() const -> auto { return CommWorldRank() > 0; }
+    auto Sequential() const -> auto { return CommWorldSize() == 1; }
+    auto Parallel() const -> auto { return CommWorldSize() > 1; }
 
     auto CommShared() const -> const auto& { return fSharedComm; }
     auto CommSharedRank() const -> const auto& { return fSharedCommRank; }
     auto CommSharedSize() const -> const auto& { return fSharedCommSize; }
-    auto AtCommSharedMaster() const { return CommSharedRank() == 0; }
-    auto AtCommSharedWorker() const { return CommSharedRank() > 0; }
+    auto AtCommSharedMaster() const -> auto { return CommSharedRank() == 0; }
+    auto AtCommSharedWorker() const -> auto { return CommSharedRank() > 0; }
 
     auto NodeList() const -> const auto& { return fCluster.node; }
-    auto LocalNodeID() const { return fCluster.local; }
+    auto LocalNodeID() const -> const auto& { return fCluster.local; }
     auto Node(int id) const -> const auto& { return NodeList().at(id); }
     auto LocalNode() const -> const auto& { return Node(LocalNodeID()); }
     auto ClusterSize() const -> int { return NodeList().size(); }
-    auto OnSingleNode() const { return ClusterSize() == 1; }
-    auto OnCluster() const { return ClusterSize() > 1; }
+    auto OnSingleNode() const -> auto { return ClusterSize() == 1; }
+    auto OnCluster() const -> auto { return ClusterSize() > 1; }
 
 protected:
-    void PrintWelcomeMessageBody(int argc, char* argv[]) const;
+    auto PrintWelcomeMessageBody(int argc, char* argv[]) const -> void;
 
 private:
     struct NodeInfo {

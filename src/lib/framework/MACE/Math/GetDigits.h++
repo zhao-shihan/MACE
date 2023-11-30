@@ -9,9 +9,9 @@ namespace MACE::Math {
 /// @param base The base.
 /// @param includeSign Set whether the digits in return includes "-" sign (true means include, false means exclude).
 /// @return The n-based digits.
-constexpr int GetDigits(std::signed_integral auto m, int base, bool includeSign = false) {
-    if (base == 0) [[unlikely]] { return 0; }
-    if (base < 0) [[unlikely]] { base = -base; }
+constexpr auto GetDigits(std::signed_integral auto m, int base, bool includeSign = false) -> int {
+    if (base == 0) { return 0; }
+    if (base < 0) { base = -base; }
     int d = 0;
     if (m < 0) {
         if (includeSign) { ++d; }
@@ -30,7 +30,7 @@ constexpr int GetDigits(std::signed_integral auto m, int base, bool includeSign 
 /// @param includeSign Set whether the digits in return includes "-" sign (true means include, false means exclude).
 /// @return The n-based digits.
 template<int Base>
-constexpr auto GetDigits(std::signed_integral auto m, bool includeSign = false) {
+constexpr auto GetDigits(std::signed_integral auto m, bool includeSign = false) -> auto {
     return GetDigits(m, Base, includeSign);
 }
 
@@ -38,9 +38,9 @@ constexpr auto GetDigits(std::signed_integral auto m, bool includeSign = false) 
 /// @param m The integer.
 /// @param base The base.
 /// @return The n-based digits.
-constexpr int GetDigits(std::unsigned_integral auto m, int base) {
-    if (base == 0) [[unlikely]] { return 0; }
-    if (base < 0) [[unlikely]] { base = -base; }
+constexpr auto GetDigits(std::unsigned_integral auto m, int base) -> int {
+    if (base == 0) { return 0; }
+    if (base < 0) { base = -base; }
     int d = 0;
     do {
         m /= base;
@@ -54,7 +54,7 @@ constexpr int GetDigits(std::unsigned_integral auto m, int base) {
 /// @param m The integer.
 /// @return The n-based digits.
 template<int Base>
-constexpr auto GetDigits(std::unsigned_integral auto m) {
+constexpr auto GetDigits(std::unsigned_integral auto m) -> auto {
     return GetDigits(m, Base);
 }
 
