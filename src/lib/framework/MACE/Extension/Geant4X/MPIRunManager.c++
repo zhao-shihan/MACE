@@ -177,7 +177,7 @@ auto MPIRunManager::EventEndReport(const G4int eventID) const -> void {
     const auto eta = FormatSecondToDHMS(nEventRemain * fEventWallTimeStatistic.Mean());
     const auto etaError = numberOfEventProcessed < 5 ?
                               "N/A"s :
-                              FormatSecondToDHMS(1.96 * nEventRemain * std::sqrt(fEventWallTimeStatistic.Variance() / numberOfEventProcessed)); // 95% C.L. (assuming gaussian)
+                              FormatSecondToDHMS(3 * nEventRemain * std::sqrt(fEventWallTimeStatistic.Variance() / numberOfEventProcessed));
     const auto progress = static_cast<double>(numberOfEventProcessed) / numberOfEventToBeProcessed;
     using scsc = std::chrono::system_clock;
     fmt::print("Rank {} > {:%FT%T%z} > G4Event {} finished \n"
