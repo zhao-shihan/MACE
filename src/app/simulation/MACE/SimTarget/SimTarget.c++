@@ -4,6 +4,7 @@
 #include "MACE/Extension/Geant4X/MPIExecutive.h++"
 #include "MACE/Math/Random/Generator/Xoshiro512SS.h++"
 #include "MACE/SimTarget/Action/DetectorConstruction.h++"
+#include "MACE/SimTarget/DefaultMacro.h++"
 #include "MACE/SimTarget/PhysicsList.h++"
 #include "MACE/SimTarget/RunManager.h++"
 
@@ -26,9 +27,7 @@ int main(int argc, char* argv[]) {
     SimTarget::PhysicsList::Instance()
         .SetVerboseLevel(std2b::to_underlying(verboseLevel));
 
-    Geant4X::MPIExecutive().StartSession(cli, {
-#include "MACE/SimTarget/DefaultInitialization.inlmac"
-                                              });
+    Geant4X::MPIExecutive().StartSession(cli, SimTarget::defaultMacro);
 
     return EXIT_SUCCESS;
 }

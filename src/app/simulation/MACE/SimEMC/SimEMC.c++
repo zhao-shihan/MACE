@@ -3,6 +3,7 @@
 #include "MACE/Extension/CLHEPX/Random/Wrap.h++"
 #include "MACE/Extension/Geant4X/MPIExecutive.h++"
 #include "MACE/SimEMC/Action/DetectorConstruction.h++"
+#include "MACE/SimEMC/DefaultMacro.h++"
 #include "MACE/SimEMC/PhysicsList.h++"
 #include "MACE/SimEMC/RunManager.h++"
 
@@ -25,9 +26,7 @@ auto main(int argc, char* argv[]) -> int {
     SimEMC::PhysicsList::Instance()
         .SetVerboseLevel(std2b::to_underlying(verboseLevel));
 
-    Geant4X::MPIExecutive().StartSession(cli, {
-#include "MACE/SimEMC/DefaultInitialization.inlmac"
-                                              });
+    Geant4X::MPIExecutive().StartSession(cli, SimEMC::defaultMacro);
 
     return EXIT_SUCCESS;
 }
