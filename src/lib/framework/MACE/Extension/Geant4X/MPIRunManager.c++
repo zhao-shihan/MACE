@@ -143,10 +143,10 @@ auto SToDHMS(double secondsInTotal) -> std::string {
     const auto div3600{std2b::div(div86400.rem, 3600ll)};
     const auto div60{std2b::div(div3600.rem, 60ll)};
     const auto& [day, hour, minute, second]{std::tie(div86400.quot, div3600.quot, div60.quot, div60.rem)};
-    if (day > 0) { return std::format("{}d {}h", day, hour); }
-    if (hour > 0) { return std::format("{}h {}m", hour, minute); }
-    if (minute > 0) { return std::format("{}m {}s", minute, second); }
-    return std::format("{}s", second);
+    if (day > 0) { return fmt::format("{}d {}h", day, hour); }
+    if (hour > 0) { return fmt::format("{}h {}m", hour, minute); }
+    if (minute > 0) { return fmt::format("{}m {}s", minute, second); }
+    return fmt::format("{}s", second);
 }
 
 } // namespace
