@@ -11,7 +11,7 @@ using namespace PhysicalConstant;
 
 Antimuonium::Antimuonium() :
     Singleton{},
-    G4ParticleDefinition{"anti_M",
+    G4ParticleDefinition{"anti_muonium",
                          muonium_mass_c2,
                          hbar_Planck / muonium_lifetime,
                          0,
@@ -41,7 +41,7 @@ Antimuonium::Antimuonium() :
     // create Decay Table
     auto table = new G4DecayTable;
     // create a decay channel
-    table->Insert(new MuoniumDecayChannel("anti_M", 1.00));
+    table->Insert(new MuoniumDecayChannel("anti_muonium", 1.00));
     this->SetDecayTable(table);
 }
 
