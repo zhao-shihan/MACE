@@ -3,6 +3,7 @@
 #include "MACE/Math/Statistic.h++"
 #include "MACE/Utility/CPUTimeStopwatch.h++"
 #include "MACE/Utility/DivideIndices.h++"
+#include "MACE/Utility/NonMoveableBase.h++"
 #include "MACE/Utility/WallTimeStopwatch.h++"
 
 #include "G4RunManager.hh"
@@ -28,21 +29,20 @@ class PostG4RunManagerInitFlipG4cout : private FlipG4cout {};
 
 } // namespace internal
 
-class MPIRunManager : private internal::PreG4RunManagerInitFlipG4cout,
+class MPIRunManager : public NonMoveableBase,
+                      private internal::PreG4RunManagerInitFlipG4cout,
                       public G4RunManager,
                       private internal::PostG4RunManagerInitFlipG4cout {
 public:
     MPIRunManager();
     virtual ~MPIRunManager() = default;
-    MPIRunManager(const MPIRunManager&) = delete;
-    MPIRunManager& operator=(const MPIRunManager&) = delete;
 
     static auto GetRunManager() -> auto { return static_cast<MPIRunManager*>(G4RunManager::GetRunManager()); }
 
     auto NEventToBeMPIProcessed() const -> const auto& { return fNEventToBeMPIProcessed; }
     auto PrintProgressModulo() const -> const auto& { return fPrintProgressModulo; }
 
-    auto PrintProgressModulo(const G4int val) -> void { (fPrintProgressModulo = val, printModulo = -1); }
+    auto PrintProgressModulo(G4int val) -> void { fPrintProgressModulo = val, printModulo = -1; }
 
     virtual auto BeamOn(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) -> void override;
     virtual auto RunInitialization() -> void override;
@@ -52,10 +52,10 @@ public:
     virtual auto RunTermination() -> void override;
 
 private:
-    auto EventEndReport(const G4int eventID) const -> void;
-    auto RunEndReport(const G4int runID) const -> void;
+    auto EventEndReport(G4int eventID) const -> void;
+    auto RunEndReport(G4int runID) const -> void;
 
-    static auto RunBeginReport(const G4int runID) -> void;
+    static auto RunBeginReport(G4int runID) -> void;
 
 private:
     G4int fNEventToBeMPIProcessed;
