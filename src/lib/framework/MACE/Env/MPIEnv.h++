@@ -24,7 +24,7 @@ class MPIEnv : public BasicEnv,
                public Memory::PassiveSingleton<MPIEnv> {
 public:
     template<typename ACLI = internal::NoCLI>
-    MPIEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel = VerboseLevel::Warning, bool printWelcomeMessage = true);
+    MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel = VL::Warning, bool printWelcomeMessage = true);
     virtual ~MPIEnv();
 
     using PassiveSingleton<MPIEnv>::Instance;

@@ -79,7 +79,7 @@ void EMCCrystal::Construct(G4bool checkOverlaps) {
     csiPropertiesTable->AddConstProperty("RESOLUTIONSCALE", resolutionScale);
     csI->SetMaterialPropertiesTable(csiPropertiesTable);
 
-    if (Env::BasicEnv::Instance().GetVerboseLevel() >= Env::VerboseLevel::Verbose) {
+    if (Env::BasicEnv::Instance().GetVerboseLevel() >= Env::VL::Verbose) {
         fmt::println("\nPMT Quantum Efficiency:");
         csiPropertiesTable->DumpTable();
     }
