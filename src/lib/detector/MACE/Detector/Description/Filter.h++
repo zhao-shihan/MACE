@@ -11,23 +11,23 @@ private:
     Filter();
 
 public:
-    const auto& Length() const { return fLength; }
-    const auto& Width() const { return fWidth; }
-    const auto& Thickness() const { return fThickness; }
-    const auto& Count() const { return fCount; }
+    auto Length() const -> const auto& { return fLength; }
+    auto Radius() const -> const auto& { return fRadius; }
+    auto Thickness() const -> const auto& { return fThickness; }
+    auto Count() const -> const auto& { return fCount; }
 
-    void Length(auto v) { fLength = v; }
-    void Width(auto v) { fWidth = v; }
-    void Thickness(auto v) { fThickness = v; }
-    void Count(auto v) { fCount = v; }
+    auto Length(auto v) -> void { fLength = v; }
+    auto Radius(auto v) -> void { fRadius = v; }
+    auto Thickness(auto v) -> void { fThickness = v; }
+    auto Count(auto v) -> void { fCount = v; }
 
 private:
-    void ImportValues(const YAML::Node& node) override;
-    void ExportValues(YAML::Node& node) const override;
+    auto ImportValues(const YAML::Node& node) -> void override;
+    auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
     double fLength;
-    double fWidth;
+    double fRadius;
     double fThickness;
     int fCount;
 };

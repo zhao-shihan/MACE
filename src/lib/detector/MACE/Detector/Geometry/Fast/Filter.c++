@@ -1,14 +1,12 @@
 #include "MACE/Detector/Description/Filter.h++"
 #include "MACE/Detector/Geometry/Fast/Filter.h++"
+#include "MACE/Math/IntegerPower.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "CLHEP/Vector/RotationZ.h"
 
 #include "G4Box.hh"
-#include "G4MultiUnion.hh"
 #include "G4PVPlacement.hh"
-#include "G4SubtractionSolid.hh"
-#include "G4Tubs.hh"
 
 #include <cmath>
 
@@ -19,26 +17,28 @@ using namespace LiteralUnit::Length;
 using namespace LiteralUnit::MathConstantSuffix;
 
 void Filter::Construct(G4bool checkOverlaps) {
-    const auto& multiplateCollimator = Description::Filter::Instance();
-    const auto name = multiplateCollimator.Name();
-    const auto halfLength = multiplateCollimator.Length() / 2;
-    const auto halfWidth = multiplateCollimator.Width() / 2;
-    const auto halfThickness = multiplateCollimator.Thickness() / 2;
-    const auto count = multiplateCollimator.Count();
-    const auto spacing = multiplateCollimator.Width() / (count - 1);
+    const auto& filter = Description::Filter::Instance();
+    const auto name = filter.Name();
+    const auto halfLength = filter.Length() / 2;
+    const auto radius = filter.Radius();
+    const auto halfThickness = filter.Thickness() / 2;
+    const auto count = filter.Count();
+    const auto spacing = 2 * radius / count;
 
-    const auto solid = Make<G4Box>(
-        "",
-        halfThickness,
-        halfWidth,
-        halfLength);
-    const auto logic = Make<G4LogicalVolume>(
-        solid,
-        nullptr,
-        name);
     for (auto i = 0; i < count; ++i) {
-        Make<G4PVPlacement>(
-            G4Transform3D({}, {-halfWidth + i * spacing, 0, 0}),
+        const auto x{(-radius + spacing / 2) + i * spacing};
+        const auto halfWidth{std::sqrt(Math::Pow<2>(radius) - Math::Pow<2>(x))};
+        const auto solid = Make<G4Box>(
+            "",
+            halfThickness,
+            halfWidth,
+            halfLength);
+        const auto logic = Make<G4LogicalVolume>(
+            solid,
+            nullptr,
+            name);
+        Make<G4PVPlacement>( // clang-format off
+            G4Transform3D{{}, {x, 0, 0}}, // clang-format on
             logic,
             name,
             Mother().LogicalVolume().get(),

@@ -10,16 +10,16 @@ using namespace LiteralUnit::MagneticFluxDensity;
 using namespace MathConstant;
 
 Solenoid::Solenoid() :
-    DescriptionSingletonBase<Solenoid>(__func__),
+    DescriptionSingletonBase<Solenoid>{"Solenoid"},
     // Geometry
-    fS1Length(20_cm),
-    fB1Radius(50_cm),
-    fS2Length(100_cm),
-    fB2Radius(50_cm),
-    fS3Length(20_cm),
-    fInnerRadius(2.5_cm),
-    fOuterRadius(7.5_cm),
-    fFieldRadius(7.6_cm),
+    fS1Length{20_cm},
+    fB1Radius{50_cm},
+    fS2Length{100_cm},
+    fB2Radius{50_cm},
+    fS3Length{20_cm},
+    fInnerRadius{25_mm},
+    fOuterRadius{75_mm},
+    fFieldRadius{76_mm},
     // Field
     fMagneticFluxDensity(100_mT) {}
 
