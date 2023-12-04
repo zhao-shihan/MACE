@@ -17,9 +17,9 @@ Analysis::Analysis() :
     PassiveSingleton{},
     fFilePath{"SimMACE_untitled"},
     fFileOption{"UPDATE"},
-    fEnableCoincidenceOfCDC{true},
-    fEnableCoincidenceOfMCP{true},
-    fEnableCoincidenceOfEMC{true},
+    fCoincidenceWithCDC{true},
+    fCoincidenceWithMCP{true},
+    fCoincidenceWithEMC{true},
     fFile{},
     fCDCSimHitOutput{},
     fMCPSimHitOutput{},
@@ -43,9 +43,9 @@ void Analysis::RunBegin(G4int runID) {
 }
 
 void Analysis::EventEnd() {
-    const auto cdcTriggered = not fEnableCoincidenceOfCDC or fCDCHitList->size() > 0;
-    const auto mcpTriggered = not fEnableCoincidenceOfMCP or fMCPHitList->size() > 0;
-    const auto emcTriggered = not fEnableCoincidenceOfEMC or fEMCHitList->size() > 0;
+    const auto cdcTriggered = not fCoincidenceWithCDC or fCDCHitList->size() > 0;
+    const auto mcpTriggered = not fCoincidenceWithMCP or fMCPHitList->size() > 0;
+    const auto emcTriggered = not fCoincidenceWithEMC or fEMCHitList->size() > 0;
     if (emcTriggered and mcpTriggered and cdcTriggered) {
         *fCDCSimHitOutput << *fCDCHitList;
         *fMCPSimHitOutput << *fMCPHitList;

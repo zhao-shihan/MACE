@@ -32,8 +32,9 @@
 /MACE/Field/SpectrometerMagneticField     0.1 tesla
 /MACE/Field/SolenoidMagneticField         0.1 tesla
 
-/MACE/Analysis/EnableCoincidenceOfEMC     true
-/MACE/Analysis/EnableCoincidenceOfMCP     true
+/MACE/Analysis/CoincidenceWithCDC     true
+/MACE/Analysis/CoincidenceWithMCP     true
+/MACE/Analysis/CoincidenceWithEMC     true
 
 # Name of output
 /MACE/Analysis/FilePath   SimMACE_vis

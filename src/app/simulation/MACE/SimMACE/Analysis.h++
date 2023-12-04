@@ -25,9 +25,9 @@ public:
 
     void FilePath(std::filesystem::path path) { fFilePath = std::move(path); }
     void FileOption(std::string option) { fFileOption = std::move(option); }
-    void EnableCoincidenceOfCDC(G4bool val) { fEnableCoincidenceOfMCP = val; }
-    void EnableCoincidenceOfMCP(G4bool val) { fEnableCoincidenceOfMCP = val; }
-    void EnableCoincidenceOfEMC(G4bool val) { fEnableCoincidenceOfEMC = val; }
+    void CoincidenceWithCDC(bool val) { fCoincidenceWithMCP = val; }
+    void CoincidenceWithMCP(bool val) { fCoincidenceWithMCP = val; }
+    void CoincidenceWithEMC(bool val) { fCoincidenceWithEMC = val; }
 
     void RunBegin(G4int runID);
 
@@ -41,9 +41,9 @@ public:
 private:
     std::filesystem::path fFilePath;
     std::string fFileOption;
-    G4bool fEnableCoincidenceOfCDC;
-    G4bool fEnableCoincidenceOfMCP;
-    G4bool fEnableCoincidenceOfEMC;
+    bool fCoincidenceWithCDC;
+    bool fCoincidenceWithMCP;
+    bool fCoincidenceWithEMC;
 
     gsl::owner<TFile*> fFile;
     std::unique_ptr<Data::Output<Data::CDCSimHit>> fCDCSimHitOutput;
