@@ -2,8 +2,8 @@
 
 namespace MACE::DataModel::inline BranchSocket {
 
-ShortStringBranchSocket::ShortStringBranchSocket(const std::string& branchName, const ShortString& defaultString) :
-    BranchSocketBase<ShortStringBranchSocket, ShortString>(branchName),
+ShortStringBranchSocket::ShortStringBranchSocket(const std::string& branchName, const String15& defaultString) :
+    BranchSocketBase<ShortStringBranchSocket, String15>(branchName),
     fLeafName(branchName + "/C"),
     fString(defaultString) {}
 

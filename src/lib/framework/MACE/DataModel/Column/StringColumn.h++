@@ -34,9 +34,9 @@ private:
     T fString;
 };
 
-template<typename AData, gsl::index AUniqueID, std::convertible_to<ShortString> T>
-    requires std::convertible_to<ShortString, T>
-using ShortStringColumn = StringColumn<AData, AUniqueID, ShortString::MaxSize(), T>;
+template<typename AData, gsl::index AUniqueID, std::convertible_to<String15> T>
+    requires std::convertible_to<String15, T>
+using ShortStringColumn = StringColumn<AData, AUniqueID, String15::MaxSize(), T>;
 
 } // namespace MACE::DataModel::inline Column
 

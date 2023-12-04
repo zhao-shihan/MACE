@@ -53,7 +53,7 @@ private:
     stdx::array3d fTrueVertexPosition;
     double fTrueVertexEnergy;
     stdx::array3d fTrueVertexMomentum;
-    ShortString fTrueParticles;
+    String15 fTrueParticles;
 
     static DoubleBranchSocket fgTrueVertexTime;
     static Vector3FBranchSocket fgTrueVertexPosition;

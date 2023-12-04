@@ -7,10 +7,10 @@ namespace MACE::Detector::Description {
 using namespace LiteralUnit::Length;
 
 ShieldingWall::ShieldingWall() :
-    DescriptionSingletonBase<ShieldingWall>(__func__),
+    DescriptionSingletonBase<ShieldingWall>("ShieldingWall"),
     fHeight{2_m},
     fWidth{4_m},
-    fThickness{20_cm} {}
+    fThickness{30_cm} {}
 
 auto ShieldingWall::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fHeight, "Height");
