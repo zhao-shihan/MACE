@@ -191,10 +191,10 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
                                      Math::FindRoot::Secant(
                                          // CDF - x
                                          [&x](const auto p) {
-                                             const auto p2 = Math::Pow2(p);
+                                             const auto p2 = Math::Pow<2>(p);
                                              return (2 / 3_pi) *
                                                         (p * (p2 * (3 * p2 + 8) - 3) /
-                                                             Math::Pow3(p2 + 1) +
+                                                             Math::Pow<3>(p2 + 1) +
                                                          3 * std::atan(p)) -
                                                     x;
                                          },

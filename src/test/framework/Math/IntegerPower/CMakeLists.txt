@@ -9,8 +9,8 @@ target_link_libraries(CheckPowRZASM MACEFramework)
 add_library(CheckPowZNASM OBJECT CheckPowZNASM.c++)
 target_link_libraries(CheckPowZNASM MACEFramework)
 
-add_executable(TestPowRZ TestPowRZ.c++)
-target_link_libraries(TestPowRZ MACEFramework)
+add_executable(TestIPow TestIPow.c++)
+target_link_libraries(TestIPow MACEFramework)
 
-add_executable(TestPowZN TestPowZN.c++)
-target_link_libraries(TestPowZN MACEFramework)
+add_executable(TestPow TestPow.c++)
+target_link_libraries(TestPow MACEFramework)

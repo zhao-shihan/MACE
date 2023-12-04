@@ -14,7 +14,7 @@ namespace MACE::Math::FindRoot {
 namespace internal {
 
 template<std::floating_point T>
-inline constexpr auto defaultTolerance = Math::PowRZ<std::numeric_limits<T>::digits / 2, T>(2) *
+inline constexpr auto defaultTolerance = Math::Pow<std::numeric_limits<T>::digits / 2, T>(2) *
                                          std::numeric_limits<T>::epsilon();
 
 } // namespace internal
