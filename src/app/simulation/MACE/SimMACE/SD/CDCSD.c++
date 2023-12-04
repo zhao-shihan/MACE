@@ -75,6 +75,8 @@ G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
             // retrive vertex energy and momentum
             const auto vertexEk{track.GetVertexKineticEnergy()};
             const auto vertexMomentum{track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()))};
+            // track creator process
+            const auto creatorProcess{track.GetCreatorProcess()};
             // new a hit
             auto hit = std::make_unique_for_overwrite<CDCHit>();
             Get<"CellID">(*hit) = cellID;
@@ -91,6 +93,7 @@ G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
             Get<"x0">(*hit) = track.GetVertexPosition();
             Get<"Ek0">(*hit) = vertexEk;
             Get<"p0">(*hit) = vertexMomentum;
+            Get<"CreatProc">(*hit) = creatorProcess ? creatorProcess->GetProcessName() : "";
             fCellSignalTimesAndHit[cellID].emplace_back(signalTime, std::move(hit));
         };
 

@@ -50,7 +50,9 @@ G4bool EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
             // calculate (Ek0, p0)
             const auto vertexEk = track.GetVertexKineticEnergy();
             const auto vertexMomentum = track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()));
-
+            // track creator process
+            const auto creatorProcess{track.GetCreatorProcess()};
+            // save hit info
             Get<"CellID">(hit) = cellID;
             Get<"t">(hit) = preStepPoint.GetGlobalTime();
             Get<"E">(hit) = 0;
@@ -64,6 +66,7 @@ G4bool EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
             Get<"x0">(hit) = track.GetVertexPosition();
             Get<"Ek0">(hit) = vertexEk;
             Get<"p0">(hit) = vertexMomentum;
+            Get<"CreatProc">(hit) = creatorProcess ? creatorProcess->GetProcessName() : "";
         }
         Get<"E">(hit) += step.GetTotalEnergyDeposit();
         return true;
