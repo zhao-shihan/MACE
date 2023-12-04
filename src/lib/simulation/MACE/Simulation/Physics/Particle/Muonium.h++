@@ -4,7 +4,7 @@
 
 #include "G4ParticleDefinition.hh"
 
-namespace MACE::inline Simulation::Physics::inline Particle {
+namespace MACE::inline Simulation::inline Physics::inline Particle {
 
 class Muonium final : public Env::Memory::Singleton<Muonium>,
                       public G4ParticleDefinition {
@@ -14,7 +14,7 @@ private:
     Muonium();
 
 public:
-    static auto Definition() { return &Instance(); }
+    static auto Definition() -> auto { return &Instance(); }
 };
 
-} // namespace MACE::inline Simulation::Physics::inline Particle
+} // namespace MACE::inline Simulation::inline Physics::inline Particle

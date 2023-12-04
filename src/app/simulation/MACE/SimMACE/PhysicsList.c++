@@ -50,7 +50,7 @@ PhysicsList::PhysicsList() :
     RegisterPhysics(new G4NeutronTrackingCut(verboseLevel));
 
     // Muonium physics
-    RegisterPhysics(new Physics::MuoniumPhysics<Detector::Description::Target>(verboseLevel));
+    RegisterPhysics(new MuoniumPhysics<Detector::Description::Target>(verboseLevel));
 }
 
 } // namespace MACE::SimMACE

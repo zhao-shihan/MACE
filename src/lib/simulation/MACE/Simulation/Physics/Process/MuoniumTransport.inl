@@ -1,11 +1,11 @@
-namespace MACE::inline Simulation::Physics {
+namespace MACE::inline Simulation::inline Physics {
 
 inline namespace Messenger {
 
 template<TargetForMuoniumPhysics ATarget>
 class MuoniumPhysicsMessenger;
 
-} // inline namespace Messenger
+} // namespace Messenger
 
 inline namespace Process {
 
@@ -13,26 +13,26 @@ using namespace LiteralUnit::Length;
 
 template<TargetForMuoniumPhysics ATarget>
 MuoniumTransport<ATarget>::MuoniumTransport() :
-    NonMoveableBase(),
-    G4VContinuousProcess(__func__, fUserDefined),
-    fTarget(&ATarget::Instance()),
-    fMeanFreePath(200_nm),
-    fManipulateAllSteps(false),
-    fParticleChange(),
-    fTransportStatus(TransportStatus::Unknown),
-    fIsExitingTargetVolume(false) {
+    NonMoveableBase{},
+    G4VContinuousProcess{"MuoniumTransport", fUserDefined},
+    fTarget{&ATarget::Instance()},
+    fMeanFreePath{200_nm},
+    fManipulateAllSteps{false},
+    fParticleChange{},
+    fTransportStatus{TransportStatus::Unknown},
+    fIsExitingTargetVolume{false} {
     pParticleChange = &fParticleChange;
     MuoniumPhysicsMessenger<ATarget>::Instance().AssignTo(this);
 }
 
 template<TargetForMuoniumPhysics ATarget>
-G4bool MuoniumTransport<ATarget>::IsApplicable(const G4ParticleDefinition& particle) {
+auto MuoniumTransport<ATarget>::IsApplicable(const G4ParticleDefinition& particle) -> G4bool {
     return &particle == Muonium::Definition() or
            &particle == Antimuonium::Definition();
 }
 
 template<TargetForMuoniumPhysics ATarget>
-G4VParticleChange* MuoniumTransport<ATarget>::AlongStepDoIt(const G4Track& track, const G4Step&) {
+auto MuoniumTransport<ATarget>::AlongStepDoIt(const G4Track& track, const G4Step&) -> G4VParticleChange* {
     fParticleChange.Initialize(track);
     switch (fTransportStatus) {
     case TransportStatus::Unknown:
@@ -59,7 +59,7 @@ G4VParticleChange* MuoniumTransport<ATarget>::AlongStepDoIt(const G4Track& track
 }
 
 template<TargetForMuoniumPhysics ATarget>
-G4double MuoniumTransport<ATarget>::GetContinuousStepLimit(const G4Track& track, G4double, G4double, G4double& safety) {
+auto MuoniumTransport<ATarget>::GetContinuousStepLimit(const G4Track& track, G4double, G4double, G4double& safety) -> G4double {
     if (track.GetProperTime() >= track.GetDynamicParticle()->GetPreAssignedDecayProperTime()) {
         fTransportStatus = TransportStatus::Decaying;
         SetGPILSelection(NotCandidateForSelection);
@@ -83,7 +83,7 @@ G4double MuoniumTransport<ATarget>::GetContinuousStepLimit(const G4Track& track,
 }
 
 template<TargetForMuoniumPhysics ATarget>
-void MuoniumTransport<ATarget>::ProposeRandomFlight(const G4Track& track) {
+auto MuoniumTransport<ATarget>::ProposeRandomFlight(const G4Track& track) -> void {
     using namespace PhysicalConstant;
 
     // 'cause the momentum, position, etc. violates much in this process, no easy way of using G4 tracking mechanism to manage this process.
@@ -213,6 +213,6 @@ void MuoniumTransport<ATarget>::ProposeRandomFlight(const G4Track& track) {
     fParticleChange.ProposeLocalTime(track.GetLocalTime() + flightTime);
 }
 
-} // inline namespace Process
+} // namespace Process
 
-} // namespace MACE::inline Simulation::Physics
+} // namespace MACE::inline Simulation::inline Physics

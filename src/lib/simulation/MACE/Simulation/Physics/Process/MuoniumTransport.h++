@@ -1,13 +1,13 @@
 #pragma once
 
 #include "MACE/Compatibility/std2b/unreachable.h++"
+#include "MACE/Math/Random/Distribution/Exponential.h++"
+#include "MACE/Math/Random/Distribution/Gaussian3DDiagnoal.h++"
+#include "MACE/Math/Random/Generator/Xoshiro256Plus.h++"
 #include "MACE/Simulation/Physics/Messenger/MuoniumPhysicsMessenger.h++"
 #include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
 #include "MACE/Simulation/Physics/Particle/Muonium.h++"
 #include "MACE/Simulation/Physics/TargetForMuoniumPhysics.h++"
-#include "MACE/Math/Random/Distribution/Exponential.h++"
-#include "MACE/Math/Random/Distribution/Gaussian3DDiagnoal.h++"
-#include "MACE/Math/Random/Generator/Xoshiro256Plus.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
@@ -19,7 +19,7 @@
 
 #include <random>
 
-namespace MACE::inline Simulation::Physics::inline Process {
+namespace MACE::inline Simulation::inline Physics::inline Process {
 
 template<TargetForMuoniumPhysics ATarget>
 class MuoniumTransport final : public NonMoveableBase,
@@ -27,15 +27,15 @@ class MuoniumTransport final : public NonMoveableBase,
 public:
     MuoniumTransport();
 
-    void MeanFreePath(G4double val) { fMeanFreePath = val; }
-    void ManipulateAllSteps(G4bool val) { fManipulateAllSteps = val; }
+    auto MeanFreePath(G4double val) -> void { fMeanFreePath = val; }
+    auto ManipulateAllSteps(G4bool val) -> void { fManipulateAllSteps = val; }
 
-    G4bool IsApplicable(const G4ParticleDefinition&) override;
-    G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step&) override;
+    auto IsApplicable(const G4ParticleDefinition&) -> G4bool override;
+    auto AlongStepDoIt(const G4Track& track, const G4Step&) -> G4VParticleChange* override;
 
 private:
-    G4double GetContinuousStepLimit(const G4Track& track, G4double, G4double, G4double&) override;
-    void ProposeRandomFlight(const G4Track& track);
+    auto GetContinuousStepLimit(const G4Track& track, G4double, G4double, G4double&) -> G4double override;
+    auto ProposeRandomFlight(const G4Track& track) -> void;
 
 private:
     enum class TransportStatus {
@@ -57,6 +57,6 @@ private:
     G4bool fIsExitingTargetVolume;
 };
 
-} // namespace MACE::inline Simulation::Physics::inline Process
+} // namespace MACE::inline Simulation::inline Physics::inline Process
 
 #include "MACE/Simulation/Physics/Process/MuoniumTransport.inl"

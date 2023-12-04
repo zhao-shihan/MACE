@@ -1,21 +1,21 @@
-namespace MACE::inline Simulation::Physics {
+namespace MACE::inline Simulation::inline Physics {
 
 template<TargetForMuoniumPhysics ATarget>
 MuoniumPhysics<ATarget>::MuoniumPhysics(G4int verbose) :
     NonMoveableBase{},
-    G4VPhysicsConstructor{__func__} {
+    G4VPhysicsConstructor{"MuoniumPhysics"} {
     verboseLevel = verbose;
 }
 
 template<TargetForMuoniumPhysics ATarget>
-void MuoniumPhysics<ATarget>::ConstructParticle() {
+auto MuoniumPhysics<ATarget>::ConstructParticle() -> void {
     G4MuonPlus::Definition();
     Muonium::Definition();
     Antimuonium::Definition();
 }
 
 template<TargetForMuoniumPhysics ATarget>
-void MuoniumPhysics<ATarget>::ConstructProcess() {
+auto MuoniumPhysics<ATarget>::ConstructProcess() -> void {
     auto muoniumFormation = new MuoniumFormation<ATarget>;
     auto muoniumTransport = new MuoniumTransport<ATarget>;
 
@@ -29,4 +29,4 @@ void MuoniumPhysics<ATarget>::ConstructProcess() {
     antiMuonium->AddContinuousProcess(muoniumTransport);
 }
 
-} // namespace MACE::inline Simulation::Physics
+} // namespace MACE::inline Simulation::inline Physics

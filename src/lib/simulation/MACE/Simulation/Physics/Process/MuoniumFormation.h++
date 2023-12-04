@@ -16,7 +16,7 @@
 
 #include <limits>
 
-namespace MACE::inline Simulation::Physics::inline Process {
+namespace MACE::inline Simulation::inline Physics::inline Process {
 
 template<TargetForMuoniumPhysics ATarget>
 class MuoniumFormation final : public NonMoveableBase,
@@ -24,15 +24,15 @@ class MuoniumFormation final : public NonMoveableBase,
 public:
     MuoniumFormation();
 
-    void FormationProbability(G4double val) { fFormationProbability = val; }
-    void ConversionProbability(G4double val) { fConversionProbability = val; }
+    auto FormationProbability(G4double val) -> void { fFormationProbability = val; }
+    auto ConversionProbability(G4double val) -> void { fConversionProbability = val; }
 
-    G4bool IsApplicable(const G4ParticleDefinition&) override;
-    void StartTracking(G4Track* track) override;
-    G4VParticleChange* AtRestDoIt(const G4Track& track, const G4Step&) override;
+    auto IsApplicable(const G4ParticleDefinition&) -> G4bool override;
+    auto StartTracking(G4Track* track) -> void override;
+    auto AtRestDoIt(const G4Track& track, const G4Step&) -> G4VParticleChange* override;
 
 private:
-    G4double GetMeanLifeTime(const G4Track& track, G4ForceCondition*) override;
+    auto GetMeanLifeTime(const G4Track& track, G4ForceCondition*) -> G4double override;
 
 private:
     const G4ParticleDefinition* const fMuonium;
@@ -46,6 +46,6 @@ private:
     G4ParticleChange fParticleChange;
 };
 
-} // namespace MACE::inline Simulation::Physics::inline Process
+} // namespace MACE::inline Simulation::inline Physics::inline Process
 
 #include "MACE/Simulation/Physics/Process/MuoniumFormation.inl"

@@ -20,10 +20,10 @@ class TrackingAction final : public Env::Memory::PassiveSingleton<TrackingAction
 public:
     TrackingAction();
 
-    void EventID(G4int id) { fEventID = id; }
+    auto EventID(G4int id) -> void { fEventID = id; }
 
-    void PreUserTrackingAction(const G4Track* track) override;
-    void PostUserTrackingAction(const G4Track* track) override;
+    auto PreUserTrackingAction(const G4Track* track) -> void override;
+    auto PostUserTrackingAction(const G4Track* track) -> void override;
 
 private:
     const gsl::not_null<const G4ParticleDefinition*> fMuonium;

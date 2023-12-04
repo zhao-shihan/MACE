@@ -6,7 +6,7 @@
 
 #include <concepts>
 
-namespace MACE::inline Simulation::Physics {
+namespace MACE::inline Simulation::inline Physics {
 
 template<typename T>
 concept TargetForMuoniumPhysics =

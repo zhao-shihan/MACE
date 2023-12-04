@@ -5,7 +5,7 @@
 #include "G4DecayTable.hh"
 #include "G4ParticleTable.hh"
 
-namespace MACE::inline Simulation::Physics::inline Particle {
+namespace MACE::inline Simulation::inline Physics::inline Particle {
 
 using namespace PhysicalConstant;
 
@@ -45,4 +45,4 @@ Antimuonium::Antimuonium() :
     this->SetDecayTable(table);
 }
 
-} // namespace MACE::inline Simulation::Physics::inline Particle
+} // namespace MACE::inline Simulation::inline Physics::inline Particle

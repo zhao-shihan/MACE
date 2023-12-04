@@ -44,9 +44,9 @@
 //      Modified for the muonium decay by Toni SHIROKA, Paul Scherrer Institut, PSI
 // ------------------------------------------------------------
 
-#include "MACE/Simulation/Physics/DecayChannel/MuoniumDecayChannel.h++"
 #include "MACE/Math/FindRoot.h++"
 #include "MACE/Math/IntegerPower.h++"
+#include "MACE/Simulation/Physics/DecayChannel/MuoniumDecayChannel.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/MathConstant.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
@@ -61,7 +61,7 @@
 #include "G4VDecayChannel.hh"
 #include "Randomize.hh"
 
-namespace MACE::inline Simulation::Physics::inline DecayChannel {
+namespace MACE::inline Simulation::inline Physics::inline DecayChannel {
 
 MuoniumDecayChannel::MuoniumDecayChannel(const G4String& parentName, G4double br, G4int verbose) :
     G4VDecayChannel{"MuoniumDecay", verbose} {
@@ -89,7 +89,7 @@ MuoniumDecayChannel::MuoniumDecayChannel(const G4String& parentName, G4double br
     }
 }
 
-G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
+auto MuoniumDecayChannel::DecayIt(G4double) -> G4DecayProducts* {
     using namespace PhysicalConstant;
     using namespace MathConstant;
 
@@ -216,4 +216,4 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
     return products;
 }
 
-} // namespace MACE::inline Simulation::Physics::inline DecayChannel
+} // namespace MACE::inline Simulation::inline Physics::inline DecayChannel
