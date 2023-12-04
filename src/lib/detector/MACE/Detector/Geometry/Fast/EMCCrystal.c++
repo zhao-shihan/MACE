@@ -79,7 +79,7 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
     csiPropertiesTable->AddConstProperty("RESOLUTIONSCALE", resolutionScale);
     csI->SetMaterialPropertiesTable(csiPropertiesTable);
 
-    if (Env::BasicEnv::Instance().GetVerboseLevel() >= Env::VerboseLevel::Verbose) {
+    if (Env::BasicEnv::Instance().GetVerboseLevel() >= Env::VL::Verbose) {
         fmt::println("\nPMT Quantum Efficiency:");
         csiPropertiesTable->DumpTable();
     }
@@ -98,7 +98,7 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
     /////////////////////////////////////////////
 
     for (G4int copyNo = 0;
-         auto&& [centroid, _2, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
+         auto&& [centroid, _, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
         const auto centroidMagnitude = centroid.mag();
         const auto crystalLength = crystalHypotenuse * centroidMagnitude;
         const auto outerHypotenuse = innerRadius + crystalHypotenuse;
@@ -106,9 +106,7 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
         // make a crystal-shaped solid with certain shrinkage (e.g. shrink with coat thickness)
 
         const auto MakeTessellatedSolid =
-            [&,
-             midHypotenuse = (innerRadius + outerHypotenuse) / 2,
-             midCentroid = (innerRadius + outerHypotenuse) / 2 * centroid](const auto& name) {
+            [&, &centroid = centroid, &vertexIndex = vertexIndex](const auto& name) {
                 constexpr auto crystalHypotenuseExtension = 1_cm;
 
                 const auto innerHypotenuseHere = innerRadius - crystalHypotenuseExtension;
@@ -146,14 +144,14 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
                                                       innerVertexHere[0],
                                                       innerVertexHere[vertexIndex.size() - 1],
                                                       G4FacetVertexType::ABSOLUTE));
-                for (auto i = vertexIndex.size() - 1; i > 0; --i) {
+                for (auto i = std::ssize(vertexIndex) - 1; i > 0; --i) {
                     solid->AddFacet(new G4TriangularFacet(innerCentroidHere,
                                                           innerVertexHere[i],
                                                           innerVertexHere[i - 1],
                                                           G4FacetVertexType::ABSOLUTE));
                 }
                 // side surface
-                for (auto i = 0; i < vertexIndex.size() - 1; ++i) {
+                for (auto i = 0; i < std::ssize(vertexIndex) - 1; ++i) {
                     solid->AddFacet(new G4QuadrangularFacet(innerVertexHere[i],
                                                             innerVertexHere[i + 1],
                                                             outerVertexHere[i + 1],
@@ -166,7 +164,7 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
                                                         outerVertexHere[vertexIndex.size() - 1],
                                                         G4FacetVertexType::ABSOLUTE));
                 // outer surface
-                for (auto i = 0; i < vertexIndex.size() - 1; ++i) {
+                for (auto i = 0; i < std::ssize(vertexIndex) - 1; ++i) {
                     solid->AddFacet(new G4TriangularFacet(outerCentroidHere,
                                                           outerVertexHere[i],
                                                           outerVertexHere[i + 1],

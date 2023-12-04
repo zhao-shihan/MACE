@@ -5,6 +5,7 @@
 
 #include "G4VSensitiveDetector.hh"
 
+#include <memory>
 #include <unordered_map>
 #include <vector>
 
@@ -24,7 +25,7 @@ public:
 
 private:
     G4int fEventID;
-    std::unordered_map<int, EMCHit*> fHit;
+    std::unordered_map<int, std::unique_ptr<EMCHit>> fHit;
     EMCHitCollection* fHitsCollection;
 };
 

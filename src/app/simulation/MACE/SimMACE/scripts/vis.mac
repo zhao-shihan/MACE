@@ -78,6 +78,7 @@
 /vis/geometry/set/colour EMCPMTWindow                  0     1     1     1     0.1
 /vis/geometry/set/colour Filter                        0     1     1     1     0.05
 /vis/geometry/set/colour MCP                           0     1     1     1     0.1
+/vis/geometry/set/colour ShieldingWall                 0     1     1     1     0.05
 /vis/geometry/set/colour SelectorField                 0     1     1     1     0.05
 /vis/geometry/set/colour SolenoidB1                    0     1     1     1     0.05
 /vis/geometry/set/colour SolenoidB1Field               0     1     1     1     0.05

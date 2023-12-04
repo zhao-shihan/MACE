@@ -24,7 +24,7 @@ MPIEnv::~MPIEnv() {
 
 void MPIEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const {
     BasicEnv::PrintWelcomeMessageBody(argc, argv);
-    if (GetVerboseLevel() >= VerboseLevel::Error) {
+    if (GetVerboseLevel() >= VL::Error) {
         // MPI library version
         char mpiLibVersion[MPI_MAX_LIBRARY_VERSION_STRING];
         int mpiLibVersionStringLength;

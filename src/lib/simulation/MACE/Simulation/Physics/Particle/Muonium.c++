@@ -11,7 +11,7 @@ using namespace PhysicalConstant;
 
 Muonium::Muonium() :
     Singleton{},
-    G4ParticleDefinition{"M",
+    G4ParticleDefinition{"muonium",
                          muonium_mass_c2,
                          hbar_Planck / muonium_lifetime,
                          0,
@@ -40,7 +40,7 @@ Muonium::Muonium() :
     // create Decay Table
     auto table = new G4DecayTable;
     // create a decay channel
-    table->Insert(new MuoniumDecayChannel("M", 1.00));
+    table->Insert(new MuoniumDecayChannel("muonium", 1.00));
     this->SetDecayTable(table);
 }
 

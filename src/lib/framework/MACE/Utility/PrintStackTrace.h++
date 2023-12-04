@@ -1,19 +1,13 @@
 #pragma once
 
-#include "MACE/Concept/FundamentalType.h++"
-#include "MACE/Math/GetDigits.h++"
-#include "MACE/Extension/stdx/to_signed.h++"
+#include <cstdio>
 
-#include "backward.hpp"
-
-#include <climits>
-#include <iostream>
+namespace backward {
+class StackTrace;
+} // namespace backward
 
 namespace MACE::inline Utility {
 
-template<Concept::Character AChar = char>
-void PrintStackTrace(backward::StackTrace& stack, std::basic_ostream<AChar>& os = std::clog);
+void PrintStackTrace(backward::StackTrace& stack, int skip = 0, std::FILE* stream = stderr);
 
 } // namespace MACE::inline Utility
-
-#include "MACE/Utility/PrintStackTrace.inl"

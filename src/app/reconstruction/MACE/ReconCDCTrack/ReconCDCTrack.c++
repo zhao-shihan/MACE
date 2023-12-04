@@ -318,7 +318,7 @@ auto FitTrack(std::vector<Data::ReadIterator<Data::CDCSimHit>> hitData) -> std::
             rawHitCov[6][3] = 0;
             rawHitCov[6][4] = 0;
             rawHitCov[6][5] = 0;
-            rawHitCov[6][6] = Math::Pow2(100_um / 2.355 / 10);
+            rawHitCov[6][6] = Math::Pow<2>(100_um / 2.355 / 10);
 
             const auto wireMeasurement = new genfit::WireMeasurement(rawHitCoords,
                                                                      rawHitCov,
@@ -350,7 +350,7 @@ auto FitTrack(std::vector<Data::ReadIterator<Data::CDCSimHit>> hitData) -> std::
         const auto pFirst = state.getMom() * 1000;
         const auto mass = state.getMass() * 1000;
         const auto charge = state.getCharge();
-        const auto kineticEnergy = std::sqrt(pFirst.Mag2() + Math::Pow2(mass)) - mass;
+        const auto kineticEnergy = std::sqrt(pFirst.Mag2() + Math::Pow<2>(mass)) - mass;
 
         static const auto bField = Detector::Description::SpectrometerField::Instance().MagneticFluxDensity();
         const auto pT = Math::Hypot(pFirst.x(), pFirst.y());

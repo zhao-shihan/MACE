@@ -25,11 +25,11 @@ std::string TestEqual(auto a, auto real, auto tolerance) {
 template<int N>
 void TestPowI(auto xI, auto xL, auto xLL, auto xUL, auto xULL) {
     std::cout << std::setprecision(18)
-              << "(int)                 " << TestEqual(PowZN<N>(xI), std::pow(xI, N), std::abs(N) * std::numeric_limits<double>::epsilon()) << " --> PowZN<" << N << ">(x) = " << PowZN<N>(xI) << ", pow(x, " << N << ") = " << std::pow(xI, N) << '\n'
-              << "(long)                " << TestEqual(PowZN<N>(xL), std::pow(xL, N), std::abs(N) * std::numeric_limits<double>::epsilon()) << " --> PowZN<" << N << ">(x) = " << PowZN<N>(xL) << ", pow(x, " << N << ") = " << std::pow(xL, N) << '\n'
-              << "(long long)           " << TestEqual(PowZN<N>(xLL), std::pow(xLL, N), std::abs(N) * std::numeric_limits<double>::epsilon()) << " --> PowZN<" << N << ">(x) = " << PowZN<N>(xLL) << ", pow(x, " << N << ") = " << std::pow(xLL, N) << '\n'
-              << "(unsigned long)       " << TestEqual(PowZN<N>(xUL), std::pow(xUL, N), std::abs(N) * std::numeric_limits<double>::epsilon()) << " --> PowZN<" << N << ">(x) = " << PowZN<N>(xUL) << ", pow(x, " << N << ") = " << std::pow(xUL, N) << '\n'
-              << "(unsigned long long)  " << TestEqual(PowZN<N>(xULL), std::pow(xULL, N), std::abs(N) * std::numeric_limits<double>::epsilon()) << " --> PowZN<" << N << ">(x) = " << PowZN<N>(xULL) << ", pow(x, " << N << ") = " << std::pow(xULL, N) << '\n'
+              << "(int)                 " << TestEqual(IPow<N>(xI), std::pow(xI, N), std::abs(N) * std::numeric_limits<double>::epsilon()) << " --> IPow<" << N << ">(x) = " << IPow<N>(xI) << ", pow(x, " << N << ") = " << std::pow(xI, N) << '\n'
+              << "(long)                " << TestEqual(IPow<N>(xL), std::pow(xL, N), std::abs(N) * std::numeric_limits<double>::epsilon()) << " --> IPow<" << N << ">(x) = " << IPow<N>(xL) << ", pow(x, " << N << ") = " << std::pow(xL, N) << '\n'
+              << "(long long)           " << TestEqual(IPow<N>(xLL), std::pow(xLL, N), std::abs(N) * std::numeric_limits<double>::epsilon()) << " --> IPow<" << N << ">(x) = " << IPow<N>(xLL) << ", pow(x, " << N << ") = " << std::pow(xLL, N) << '\n'
+              << "(unsigned long)       " << TestEqual(IPow<N>(xUL), std::pow(xUL, N), std::abs(N) * std::numeric_limits<double>::epsilon()) << " --> IPow<" << N << ">(x) = " << IPow<N>(xUL) << ", pow(x, " << N << ") = " << std::pow(xUL, N) << '\n'
+              << "(unsigned long long)  " << TestEqual(IPow<N>(xULL), std::pow(xULL, N), std::abs(N) * std::numeric_limits<double>::epsilon()) << " --> IPow<" << N << ">(x) = " << IPow<N>(xULL) << ", pow(x, " << N << ") = " << std::pow(xULL, N) << '\n'
               << std::endl;
 }
 

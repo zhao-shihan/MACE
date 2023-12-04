@@ -68,12 +68,12 @@ MuoniumDecayChannel::MuoniumDecayChannel(const G4String& parentName, G4double br
     SetBR(br);
     SetParent(parentName);
     SetNumberOfDaughters(4);
-    if (parentName == "M") {
+    if (parentName == "muonium") {
         SetDaughter(0, "e+");
         SetDaughter(1, "nu_e");
         SetDaughter(2, "anti_nu_mu");
         SetDaughter(3, "e-");
-    } else if (parentName == "anti_M") {
+    } else if (parentName == "anti_muonium") {
         SetDaughter(0, "e-");
         SetDaughter(1, "anti_nu_e");
         SetDaughter(2, "nu_mu");
@@ -82,7 +82,7 @@ MuoniumDecayChannel::MuoniumDecayChannel(const G4String& parentName, G4double br
 #ifdef G4VERBOSE
         if (GetVerboseLevel() > 0) {
             G4cout << "MuoniumDecayChannel::(Constructor) says\n"
-                      "\tParent particle is not muonium (M) or anti muonium (anti_m) but "
+                      "\tParent particle is not muonium or anti muonium but "
                    << parentName << G4endl;
         }
 #endif
@@ -191,10 +191,10 @@ G4DecayProducts* MuoniumDecayChannel::DecayIt(G4double) {
                                      Math::FindRoot::Secant(
                                          // CDF - x
                                          [&x](const auto p) {
-                                             const auto p2 = Math::Pow2(p);
+                                             const auto p2 = Math::Pow<2>(p);
                                              return (2 / 3_pi) *
                                                         (p * (p2 * (3 * p2 + 8) - 3) /
-                                                             Math::Pow3(p2 + 1) +
+                                                             Math::Pow<3>(p2 + 1) +
                                                          3 * std::atan(p)) -
                                                     x;
                                          },

@@ -1,4 +1,5 @@
 #include "MACE/Compatibility/std2b/constexpr_cmath.h++"
+#include "MACE/Compatibility/std2b/to_underlying.h++"
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/Geant4X/MPIRunManager.h++"
 #include "MACE/Extension/Geant4X/MPIRunMessenger.h++"
@@ -17,11 +18,8 @@
 #include "fmt/format.h"
 
 #include <algorithm>
-#include <array>
-#include <charconv>
 #include <cstdlib>
-#include <iomanip>
-#include <ios>
+#include <streambuf>
 #include <string>
 
 namespace MACE::inline Extension::Geant4X {
@@ -29,10 +27,10 @@ namespace MACE::inline Extension::Geant4X {
 namespace internal {
 
 FlipG4cout::FlipG4cout() {
-    if (const auto& mpiEnv = Env::MPIEnv::Instance();
+    if (const auto& mpiEnv{Env::MPIEnv::Instance()};
         mpiEnv.AtCommWorldWorker() or
-        mpiEnv.GetVerboseLevel() == Env::VerboseLevel::Quiet) {
-        static std::streambuf* gG4coutBufExchanger = nullptr;
+        mpiEnv.GetVerboseLevel() == Env::VL::Quiet) {
+        static std::streambuf* gG4coutBufExchanger{nullptr};
         gG4coutBufExchanger = G4cout.rdbuf(gG4coutBufExchanger);
     }
 }
@@ -40,6 +38,7 @@ FlipG4cout::FlipG4cout() {
 } // namespace internal
 
 MPIRunManager::MPIRunManager() :
+    NonMoveableBase{},
     internal::PreG4RunManagerInitFlipG4cout{},
     G4RunManager{},
     internal::PostG4RunManagerInitFlipG4cout{},
@@ -54,19 +53,19 @@ MPIRunManager::MPIRunManager() :
     fRunWallTime{},
     fRunBeginSystemTime{},
     fRunEndSystemTime{} {
+    SetVerboseLevel(std2b::to_underlying(Env::MPIEnv::Instance().GetVerboseLevel()));
     MPIRunMessenger::Instance().AssignTo(this);
 }
 
 auto MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect) -> void {
-    const auto& mpiEnv = Env::MPIEnv::Instance();
+    const auto& mpiEnv{Env::MPIEnv::Instance()};
     if (nEvent < mpiEnv.CommWorldSize()) {
         if (mpiEnv.AtCommWorldMaster()) {
-            G4Exception("MACE::Utility::G4Util::MPIRunManager::CheckNEventIsAtLeastCommSize(...)",
+            G4Exception("MACE::Geant4X::MPIRunManager::CheckNEventIsAtLeastCommSize(...)",
                         "TooFewNEventOrTooMuchRank",
                         JustWarning,
                         "The number of G4Event must be greater or equal to the number of MPI ranks,\n"
-                        "otherwise deadlock could raise in execution code.\n"
-                        "Please be careful.");
+                        "otherwise deadlock could raise in execution code.");
         }
         return;
     }
@@ -108,7 +107,7 @@ auto MPIRunManager::ProcessOneEvent(G4int iEvent) -> void {
 
 auto MPIRunManager::TerminateOneEvent() -> void {
     // the terminating event ID
-    const auto terminatedEventID = currentEvent->GetEventID();
+    const auto terminatedEventID{currentEvent->GetEventID()};
     // terminate the event
     G4RunManager::TerminateOneEvent();
     // read & restart the event stopwatch
@@ -122,7 +121,7 @@ auto MPIRunManager::TerminateOneEvent() -> void {
 
 auto MPIRunManager::RunTermination() -> void {
     // terminate the run
-    const auto endedRun = runIDCounter;
+    const auto endedRun{runIDCounter};
     G4RunManager::RunTermination();
     // stop the run stopwatch
     fRunWallTime = fRunWallTimeStopwatch.SecondsElapsed();
@@ -138,71 +137,54 @@ auto MPIRunManager::RunTermination() -> void {
 
 namespace {
 
-auto FormatSecondToDHMS(double secondsInTotal) -> std::string {
-    const auto totalSeconds = std::llround(secondsInTotal);
-    const auto div86400 = std2b::div(totalSeconds, 86400ll);
-    const auto div3600 = std2b::div(div86400.rem, 3600ll);
-    const auto div60 = std2b::div(div3600.rem, 60ll);
-    const auto& [day, hour, minute, second] = std::tie(div86400.quot, div3600.quot, div60.quot, div60.rem);
-    const auto addDay = day > 0;
-    const auto addHour = addDay or hour > 0;
-    const auto addMinute = addDay or addHour or minute > 0;
-
-    std::array<char, std::numeric_limits<decltype(totalSeconds)>::digits10 + 3> buffer;
-    std::string dhms;
-    if (addDay) {
-        const auto* const charsEnd = std::to_chars(buffer.begin(), buffer.end(), day).ptr;
-        dhms.append(std::string_view(buffer.cbegin(), charsEnd)).append("d ");
-    }
-    if (addHour) {
-        const auto* const charsEnd = std::to_chars(buffer.begin(), buffer.end(), hour).ptr;
-        dhms.append(std::string_view(buffer.cbegin(), charsEnd)).append("h ");
-    }
-    if (addMinute) {
-        const auto* const charsEnd = std::to_chars(buffer.begin(), buffer.end(), minute).ptr;
-        dhms.append(std::string_view(buffer.cbegin(), charsEnd)).append("m ");
-    }
-    const auto* const charsEnd = std::to_chars(buffer.begin(), buffer.end(), second).ptr;
-    dhms.append(std::string_view(buffer.cbegin(), charsEnd)).append("s");
-    return dhms;
+auto SToDHMS(double secondsInTotal) -> std::string {
+    const auto totalSeconds{std::llround(secondsInTotal)};
+    const auto div86400{std2b::div(totalSeconds, 86400ll)};
+    const auto div3600{std2b::div(div86400.rem, 3600ll)};
+    const auto div60{std2b::div(div3600.rem, 60ll)};
+    const auto& [day, hour, minute, second]{std::tie(div86400.quot, div3600.quot, div60.quot, div60.rem)};
+    if (day > 0) { return fmt::format("{}d {}h", day, hour); }
+    if (hour > 0) { return fmt::format("{}h {}m", hour, minute); }
+    if (minute > 0) { return fmt::format("{}m {}s", minute, second); }
+    return fmt::format("{}s", second);
 }
 
 } // namespace
 
-auto MPIRunManager::EventEndReport(const G4int eventID) const -> void {
+auto MPIRunManager::EventEndReport(G4int eventID) const -> void {
     using namespace std::string_literals;
-    const auto& mpiEnv = Env::MPIEnv::Instance();
-    if (mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
-    const auto nEventRemain = numberOfEventToBeProcessed - numberOfEventProcessed;
-    const auto eta = FormatSecondToDHMS(nEventRemain * fEventWallTimeStatistic.Mean());
-    const auto etaError = numberOfEventProcessed < 5 ?
-                              "N/A"s :
-                              FormatSecondToDHMS(1.96 * nEventRemain * std::sqrt(fEventWallTimeStatistic.Variance() / numberOfEventProcessed)); // 95% C.L. (assuming gaussian)
-    const auto progress = static_cast<double>(numberOfEventProcessed) / numberOfEventToBeProcessed;
+    const auto& mpiEnv{Env::MPIEnv::Instance()};
+    if (mpiEnv.GetVerboseLevel() < Env::VL::Error) { return; }
+    const auto nEventRemain{numberOfEventToBeProcessed - numberOfEventProcessed};
+    const auto eta{SToDHMS(nEventRemain * fEventWallTimeStatistic.Mean())};
+    const auto etaError{numberOfEventProcessed < 5 ?
+                            "N/A"s :
+                            SToDHMS(3 * nEventRemain * std::sqrt(fEventWallTimeStatistic.Variance() / numberOfEventProcessed))};
+    const auto progress{static_cast<double>(numberOfEventProcessed) / numberOfEventToBeProcessed};
     using scsc = std::chrono::system_clock;
-    fmt::print("Rank {} > {:%FT%T%z} > G4Event {} finished \n"
+    fmt::print("Rank{}> {:%FT%T%z} > G4Event {} finished \n"
                "  Est. rem. time: {} +/- {}  Rank progress: {}/{} ({:.4}%)\n",
                mpiEnv.CommWorldRank(), fmt::localtime(scsc::to_time_t(scsc::now())), eventID,
                eta, etaError, numberOfEventProcessed, numberOfEventToBeProcessed, 100 * progress);
 }
 
-auto MPIRunManager::RunEndReport(const G4int runID) const -> void {
-    const auto& mpiEnv = Env::MPIEnv::Instance();
-    if (mpiEnv.AtCommWorldWorker() or mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
+auto MPIRunManager::RunEndReport(G4int runID) const -> void {
+    const auto& mpiEnv{Env::MPIEnv::Instance()};
+    if (mpiEnv.AtCommWorldWorker() or mpiEnv.GetVerboseLevel() < Env::VL::Error) { return; }
     using scsc = std::chrono::system_clock;
     fmt::print("------------------------------> G4Run Finished <------------------------------\n"
                "{:%FT%T%z} > G4Run {} finished on {} ranks\n"
                "  Start time: {:%FT%T%z}\n"
-               "   Wall time: {:.2f} seconds{}\n"
+               "   Wall time: {:.2f} seconds {}\n"
                "------------------------------> G4Run Finished <------------------------------\n",
                fmt::localtime(scsc::to_time_t(scsc::now())), runID, mpiEnv.CommWorldSize(),
                fmt::localtime(scsc::to_time_t(fRunBeginSystemTime)),
-               fRunWallTime, fRunWallTime > 60 ? " (" + FormatSecondToDHMS(fRunWallTime) + ")" : "");
+               fRunWallTime, fRunWallTime > 60 ? '(' + SToDHMS(fRunWallTime) + ')' : "");
 }
 
-auto MPIRunManager::RunBeginReport(const G4int runID) -> void {
-    const auto& mpiEnv = Env::MPIEnv::Instance();
-    if (mpiEnv.AtCommWorldWorker() or mpiEnv.GetVerboseLevel() < Env::VerboseLevel::Error) { return; }
+auto MPIRunManager::RunBeginReport(G4int runID) -> void {
+    const auto& mpiEnv{Env::MPIEnv::Instance()};
+    if (mpiEnv.AtCommWorldWorker() or mpiEnv.GetVerboseLevel() < Env::VL::Error) { return; }
     using scsc = std::chrono::system_clock;
     fmt::print("-------------------------------> G4Run Starts <-------------------------------\n"
                "{:%FT%T%z} > G4Run {} starts on {} ranks\n"

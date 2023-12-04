@@ -61,9 +61,9 @@ public:
     constexpr auto Variance() const -> decltype(auto) { return CentralMoment<2>(); }
     auto StdDev() const -> decltype(auto) { return std::sqrt(Variance()); }
 
-    auto Skewness() const -> decltype(auto) { return CentralMoment<3>() / Math::Cubic(StdDev()); }
+    auto Skewness() const -> decltype(auto) { return CentralMoment<3>() / Math::Pow<3>(StdDev()); }
 
-    constexpr auto Kurtosis() const -> decltype(auto) { return CentralMoment<4>() / Math::Square(Variance()); }
+    constexpr auto Kurtosis() const -> decltype(auto) { return CentralMoment<4>() / Math::Pow<2>(Variance()); }
 
 private:
     double fSumWX;
@@ -145,10 +145,10 @@ public:
     auto StdDev() const -> decltype(auto) { return Variance().cwiseSqrt().eval(); }
     auto Covariance() const -> decltype(auto) { return Mixed2ndCentralMoment(); }
 
-    auto Skewness(int i) const -> decltype(auto) { return CentralMoment<3>(i) / Math::Cubic(StdDev(i)); }
+    auto Skewness(int i) const -> decltype(auto) { return CentralMoment<3>(i) / Math::Pow<3>(StdDev(i)); }
     auto Skewness() const -> Eigen::Vector<double, N>;
 
-    auto Kurtosis(int i) const -> decltype(auto) { return CentralMoment<4>(i) / Math::Square(Variance(i)); }
+    auto Kurtosis(int i) const -> decltype(auto) { return CentralMoment<4>(i) / Math::Pow<2>(Variance(i)); }
     auto Kurtosis() const -> Eigen::Vector<double, N>;
 
 private:

@@ -87,7 +87,7 @@ bool Target::CuboidTarget::HoledCuboid::DetailContain(const Concept::InputVector
         using std::numbers::sqrt3;
         const auto u = std::round((x[0] - (1 / sqrt3) * x[1]) / fPitch) * fPitch;
         const auto v = std::round((2 / sqrt3) * x[1] / fPitch) * fPitch;
-        return Math::Hypot2(x[0] - (u + v / 2), x[1] - (sqrt3 / 2) * v) > Math::Pow2(fRadius);
+        return Math::Hypot2(x[0] - (u + v / 2), x[1] - (sqrt3 / 2) * v) > Math::Pow<2>(fRadius);
     }
 }
 
