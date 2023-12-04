@@ -3,7 +3,7 @@
 #include "MACE/Compatibility/std2b/forward_like.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Data/TupleModel.h++"
-#include "MACE/Data/internal/BranchAddressHelper.h++"
+#include "MACE/Data/internal/BranchHelper.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
 #include "TLeaf.h"
@@ -84,7 +84,7 @@ private:
     TTree fTree;
     Tuple<Ts...> fEntry;
 
-    internal::BranchAddressHelper<Tuple<Ts...>> fBranchAddressHelper;
+    internal::BranchHelper<Tuple<Ts...>> fBranchHelper;
 };
 
 } // namespace MACE::Data

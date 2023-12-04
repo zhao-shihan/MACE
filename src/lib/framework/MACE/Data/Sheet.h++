@@ -3,7 +3,7 @@
 #include "MACE/Data/Algorithm.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Data/TupleModel.h++"
-#include "MACE/Data/internal/BranchAddressHelper.h++"
+#include "MACE/Data/internal/BranchHelper.h++"
 #include "MACE/Extension/gslx/index_sequence.h++"
 #include "MACE/Extension/stdx/applicable.h++"
 #include "MACE/Extension/stdx/apply.h++"
@@ -114,7 +114,7 @@ private:
         gsl::index fFetchedIndex;
         Tuple<Ts...> fFetchedEntry;
 
-        internal::BranchAddressHelper<Tuple<Ts...>> fBranchAddressHelper;
+        internal::BranchHelper<Tuple<Ts...>> fBranchHelper;
     };
 
     class [[nodiscard]] Entry final : public EnableGet<Entry> {

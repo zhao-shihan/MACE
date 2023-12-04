@@ -52,7 +52,7 @@ Sheet<Ts...>::Dataset::Dataset(const std::string& name, const R& files) :
     fStatus{},
     fFetchedIndex{-1},
     fFetchedEntry{},
-    fBranchAddressHelper{} {
+    fBranchHelper{fFetchedEntry} {
     fChain.ResetBit(TObject::kMustCleanup);
     for (auto&& file : files) {
         fChain.Add(file.c_str());
@@ -62,40 +62,35 @@ Sheet<Ts...>::Dataset::Dataset(const std::string& name, const R& files) :
     [this]<gsl::index... Is>(gslx::index_sequence<Is...>) {
         (...,
          [this]<gsl::index I>(std::integral_constant<gsl::index, I>) {
-             TBranch* branch;
              using TheValue = std::tuple_element_t<I, Tuple<Ts...>>;
-             constexpr auto name = TheValue::Name();
-             switch (fChain.SetBranchAddress(name, fBranchAddressHelper.template ValuePointer<name>(fFetchedEntry), &branch)) {
+             constexpr auto name{TheValue::Name()};
+             const auto [ec, branch]{fBranchHelper.template ConnectBranch<name>(fChain)};
+             switch (ec) {
              case TChain::kMissingBranch:
                  throw std::runtime_error{fmt::format("MACE::Data::Sheet<Ts...>::Dataset: "
                                                       "error occured when setting address for branch \"{}\" of tree \"{}\" "
                                                       "(TChain::SetBranchAddress returned kMissingBranch: Missing branch)",
                                                       name.StringView(), fChain.GetName())};
-                 break;
              case TChain::kInternalError:
                  throw std::runtime_error{fmt::format("MACE::Data::Sheet<Ts...>::Dataset: "
                                                       "error occured when setting address for branch \"{}\" of tree \"{}\" "
                                                       "(TChain::SetBranchAddress returned kInternalError: Internal error (could not find the type corresponding to a data type number))",
                                                       name.StringView(), fChain.GetName())};
-                 break;
              case TChain::kMissingCompiledCollectionProxy:
                  throw std::runtime_error{fmt::format("MACE::Data::Sheet<Ts...>::Dataset: "
                                                       "error occured when setting address for branch \"{}\" of tree \"{}\" "
                                                       "(TChain::SetBranchAddress returned kMissingCompiledCollectionProxy: Missing compiled collection proxy for a compiled collection)",
                                                       name.StringView(), fChain.GetName())};
-                 break;
              case TChain::kMismatch:
                  throw std::runtime_error{fmt::format("MACE::Data::Sheet<Ts...>::Dataset: "
                                                       "error occured when setting address for branch \"{}\" of tree \"{}\" "
                                                       "(TChain::SetBranchAddress returned kMismatch: Non-Class Pointer type given does not match the type expected by the branch",
                                                       name.StringView(), fChain.GetName())};
-                 break;
              case TChain::kClassMismatch:
                  throw std::runtime_error{fmt::format("MACE::Data::Sheet<Ts...>::Dataset: "
                                                       "error occured when setting address for branch \"{}\" of tree \"{}\" "
                                                       "(TChain::SetBranchAddress returned kClassMismatch: Class Pointer type given does not match the type expected by the branch",
                                                       name.StringView(), fChain.GetName())};
-                 break;
              }
              branch->SetAutoDelete(false);
          }(std::integral_constant<gsl::index, Is>{}));
@@ -145,11 +140,8 @@ auto Sheet<Ts...>::Dataset::UpdateStatus() -> void {
     [this]<gsl::index... Is>(gslx::index_sequence<Is...>) {
         (...,
          [this]<gsl::index I>(std::integral_constant<gsl::index, I>) {
-             constexpr auto name = std::tuple_element_t<Is, Tuple<Ts...>>::Name();
-             void* const valuePointer = fBranchAddressHelper.template ValuePointer<name>(fFetchedEntry);
-             TBranch* branch;
-             fChain.SetBranchAddress(name, valuePointer, &branch);
-             branch->SetAutoDelete(false);
+             constexpr auto name{std::tuple_element_t<Is, Tuple<Ts...>>::Name()};
+             fBranchHelper.template ConnectBranchNoCheck<name>(fChain)->SetAutoDelete(false);
          }(std::integral_constant<gsl::index, Is>{}));
     }(gslx::make_index_sequence<EntrySize()>());
 }

@@ -5,15 +5,15 @@ Output<Ts...>::Output(const std::string& name, const std::string& title) :
     NonMoveableBase{},
     fTree{name.c_str(), title.c_str()},
     fEntry{},
-    fBranchAddressHelper{} {
+    fBranchHelper{fEntry} {
     [this]<gsl::index... Is>(gslx::index_sequence<Is...>) {
         (...,
          [this]<gsl::index I>(std::integral_constant<gsl::index, I>) {
              using TheValue = std::tuple_element_t<I, Tuple<Ts...>>;
-             const auto branch = fTree.Branch(TheValue::Name(), fBranchAddressHelper.template ValuePointer<TheValue::Name()>(fEntry));
+             const auto branch{fBranchHelper.template CreateBranch<TheValue::Name()>(fTree)};
              branch->SetAutoDelete(false);
              if constexpr (TheValue::Description().HasValue()) {
-                 const auto title = fmt::format("({}) {}", branch->GetLeaf(TheValue::Name())->GetTypeName(), TheValue::Description().StringView());
+                 const auto title{fmt::format("({}) {}", branch->GetLeaf(TheValue::Name())->GetTypeName(), TheValue::Description().StringView())};
                  branch->SetTitle(title.c_str());
              }
          }(std::integral_constant<gsl::index, Is>{}));
