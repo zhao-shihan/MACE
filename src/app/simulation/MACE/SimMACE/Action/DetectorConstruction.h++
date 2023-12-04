@@ -9,6 +9,7 @@
 #include "MACE/Detector/Description/EMCShield.h++"
 #include "MACE/Detector/Description/Filter.h++"
 #include "MACE/Detector/Description/MCP.h++"
+#include "MACE/Detector/Description/ShieldingWall.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Description/SpectrometerField.h++"
 #include "MACE/Detector/Description/SpectrometerMagnet.h++"
@@ -68,6 +69,7 @@ public:
                                         Detector::Description::EMCShield,
                                         Detector::Description::Filter,
                                         Detector::Description::MCP,
+                                        Detector::Description::ShieldingWall,
                                         Detector::Description::Solenoid,
                                         Detector::Description::SpectrometerField,
                                         Detector::Description::SpectrometerMagnet,

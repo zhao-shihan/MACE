@@ -28,7 +28,7 @@ using namespace LiteralUnit;
 using namespace MathConstant;
 using namespace PhysicalConstant;
 
-void EMCCrystal::Construct(G4bool checkOverlaps) {
+auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
     const auto& description = Description::EMC::Instance();
     const auto name = description.Name();
 
@@ -136,7 +136,7 @@ void EMCCrystal::Construct(G4bool checkOverlaps) {
                  *   / \  / \
                  *  1 - C - 4
                  *  \ /  \ /
-                 *   2 - 3      
+                 *   2 - 3
                  */
                 // clang-format on
 

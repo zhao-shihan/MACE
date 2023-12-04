@@ -24,6 +24,7 @@
 #include "MACE/Detector/Geometry/Fast/EMCShield.h++"
 #include "MACE/Detector/Geometry/Fast/Filter.h++"
 #include "MACE/Detector/Geometry/Fast/MCP.h++"
+#include "MACE/Detector/Geometry/Fast/ShieldingWall.h++"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1.h++"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1Field.h++"
 #include "MACE/Detector/Geometry/Fast/SolenoidB2.h++"
@@ -97,6 +98,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     auto& solenoidS3Field = fWorld->NewDaughter<Detector::Geometry::Fast::SolenoidS3Field>(fCheckOverlap);
     auto& spectrometerField = fWorld->NewDaughter<Detector::Geometry::Fast::SpectrometerField>(fCheckOverlap);
     auto& spectrometerShield = fWorld->NewDaughter<Detector::Geometry::Fast::SpectrometerShield>(fCheckOverlap);
+    auto& shieldingWall = fWorld->NewDaughter<Detector::Geometry::Fast::ShieldingWall>(fCheckOverlap);
 
     // 2
 
@@ -257,6 +259,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         beamMonitor.RegisterRegion(fDefaultSolidRegion);
         cdcBody.RegisterRegion(fDefaultSolidRegion);
         filter.RegisterRegion(fDefaultSolidRegion);
+        shieldingWall.RegisterRegion(fDefaultSolidRegion);
 
         // EMCSensitiveRegion
         fEMCSensitiveRegion = new Region("EMCSensitive", RegionType::EMCSensitive);

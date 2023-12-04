@@ -10,10 +10,10 @@ using namespace LiteralUnit::MagneticFluxDensity;
 EMCField::EMCField() :
     DescriptionSingletonBase<EMCField>(__func__),
     // Geometry
-    fRadius(45_cm),
-    fLength(90_cm),
+    fRadius{45_cm},
+    fLength{90_cm},
     // Field
-    fMagneticFluxDensity(100_mT) {}
+    fMagneticFluxDensity{100_mT} {}
 
 HepGeom::Transform3D EMCField::CalcTransform() const {
     const auto& transportLine = Solenoid::Instance();

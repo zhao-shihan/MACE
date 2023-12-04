@@ -23,7 +23,7 @@ using namespace LiteralUnit;
 using namespace MathConstant;
 using namespace PhysicalConstant;
 
-void EMCPMTWindow::Construct(G4bool checkOverlaps) {
+auto EMCPMTWindow::Construct(G4bool checkOverlaps) -> void {
 
     const auto& description = Description::EMC::Instance();
     const auto name = description.Name();

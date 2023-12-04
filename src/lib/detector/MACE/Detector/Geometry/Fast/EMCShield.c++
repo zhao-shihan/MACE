@@ -11,7 +11,7 @@ namespace MACE::Detector::Geometry::Fast {
 
 using namespace MathConstant;
 
-void EMCShield::Construct(G4bool checkOverlaps) {
+auto EMCShield::Construct(G4bool checkOverlaps) -> void {
     const auto& description = Description::EMCShield::Instance();
     const auto name = description.Name();
     const auto innerRadius = description.InnerRadius();

@@ -11,23 +11,23 @@ private:
     EMCShield();
 
 public:
-    const auto& InnerRadius() const { return fInnerRadius; }
-    const auto& InnerLength() const { return fInnerLength; }
-    const auto& WindowRadius() const { return fWindowRadius; }
-    const auto& Thickness() const { return fThickness; }
+    auto InnerRadius() const -> const auto& { return fInnerRadius; }
+    auto InnerLength() const -> const auto& { return fInnerLength; }
+    auto WindowRadius() const -> const auto& { return fWindowRadius; }
+    auto Thickness() const -> const auto& { return fThickness; }
 
-    void InnerRadius(double val) { fInnerRadius = val; }
-    void InnerLength(double val) { fInnerLength = val; }
-    void WindowRadius(double val) { fWindowRadius = val; }
-    void Thickness(double val) { fThickness = val; }
+    auto InnerRadius(double val) -> void { fInnerRadius = val; }
+    auto InnerLength(double val) -> void { fInnerLength = val; }
+    auto WindowRadius(double val) -> void { fWindowRadius = val; }
+    auto Thickness(double val) -> void { fThickness = val; }
 
     // Next 1 method should only use for geometry construction.
 
     auto CalcTransform() const { return EMCField::Instance().CalcTransform(); }
 
 private:
-    void ImportValues(const YAML::Node& node) override;
-    void ExportValues(YAML::Node& node) const override;
+    auto ImportValues(const YAML::Node& node) -> void override;
+    auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
     double fInnerRadius;

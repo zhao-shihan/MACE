@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Geometry::Fast {
 
-class MCP final : public GeometryBase {
+class ShieldingWall final : public GeometryBase {
 private:
     auto Construct(G4bool checkOverlaps) -> void override;
 };
