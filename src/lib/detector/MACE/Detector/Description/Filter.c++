@@ -10,7 +10,7 @@ Filter::Filter() :
     fLength{100_cm},
     fRadius{24_mm},
     fThickness{200_um},
-    fCount{30} {}
+    fCount{42} {}
 
 void Filter::ImportValues(const YAML::Node& node) {
     ImportValue(node, fLength, "Length");
