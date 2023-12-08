@@ -14,9 +14,9 @@ concept ElectromagneticField =
         { f.BFieldAt(x) } -> std::same_as<decltype(x)>;
         { f.EFieldAt(x) } -> std::same_as<decltype(x)>;
         { f.BEFieldAt(x) } -> std::same_as<stdx::array2<decltype(x)>>;
-        { f.template BFieldAt<stdx::array3<AFloat>>({0, 0, 0}) } -> std::same_as<stdx::array3<AFloat>>;
-        { f.template EFieldAt<stdx::array3<AFloat>>({0, 0, 0}) } -> std::same_as<stdx::array3<AFloat>>;
-        { f.template BEFieldAt<stdx::array3<AFloat>>({0, 0, 0}) } -> std::same_as<stdx::array2<stdx::array3<AFloat>>>;
+        { f.template BFieldAt<stdx::array3<AFloat>>({}) } -> std::same_as<stdx::array3<AFloat>>;
+        { f.template EFieldAt<stdx::array3<AFloat>>({}) } -> std::same_as<stdx::array3<AFloat>>;
+        { f.template BEFieldAt<stdx::array3<AFloat>>({}) } -> std::same_as<stdx::array2<stdx::array3<AFloat>>>;
     };
 
 } // namespace MACE::Detector::Field
