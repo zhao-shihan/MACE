@@ -5,9 +5,11 @@
 
 namespace MACE::Detector::Field::G4 {
 
-class AcceleratorField final : public WrapAsG4Field<Field::AcceleratorField<G4double>> {
+class AcceleratorField : public WrapAsG4Field<Field::AcceleratorField<G4double>> {
 public:
     AcceleratorField();
+
+    virtual auto DoesFieldChangeEnergy() const -> G4bool override { return true; }
 };
 
 } // namespace MACE::Detector::Field::G4

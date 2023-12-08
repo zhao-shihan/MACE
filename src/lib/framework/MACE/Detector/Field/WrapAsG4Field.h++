@@ -31,7 +31,6 @@ public:
     virtual ~WrapAsG4Field() = default;
 
     void GetFieldValue(const G4double* x, G4double* f) const override final;
-    G4bool DoesFieldChangeEnergy() const override final { return not MagneticField<AField, G4double>; }
 };
 
 } // namespace MACE::Detector::Field
