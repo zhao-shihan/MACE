@@ -2,10 +2,13 @@
 #include "MACE/SimMACE/SD/MCPSD.h++"
 
 #include "G4HCofThisEvent.hh"
-#include "G4VProcess.hh"
 #include "G4SDManager.hh"
 #include "G4Step.hh"
 #include "G4TwoVector.hh"
+#include "G4VProcess.hh"
+
+#include <cmath>
+#include <string_view>
 
 namespace MACE::SimMACE::inline SD {
 
@@ -51,7 +54,7 @@ G4bool MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
         Get<"x0">(*hit) = track.GetVertexPosition();
         Get<"Ek0">(*hit) = vertexEk;
         Get<"p0">(*hit) = vertexMomentum;
-        Get<"CreatProc">(*hit) = creatorProcess ? creatorProcess->GetProcessName() : "";
+        *Get<"CreatProc">(*hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "<primary>";
         fHitsCollection->insert(hit);
         return true;
     }

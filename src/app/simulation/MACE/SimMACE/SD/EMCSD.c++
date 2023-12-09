@@ -6,7 +6,10 @@
 #include "G4OpticalPhoton.hh"
 #include "G4SDManager.hh"
 #include "G4Step.hh"
+#include "G4VProcess.hh"
 
+#include <cmath>
+#include <string_view>
 #include <utility>
 
 namespace MACE::SimMACE::inline SD {
@@ -66,7 +69,7 @@ G4bool EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
             Get<"x0">(hit) = track.GetVertexPosition();
             Get<"Ek0">(hit) = vertexEk;
             Get<"p0">(hit) = vertexMomentum;
-            Get<"CreatProc">(hit) = creatorProcess ? creatorProcess->GetProcessName() : "";
+            *Get<"CreatProc">(hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "<Primary>";
         }
         Get<"E">(hit) += step.GetTotalEnergyDeposit();
         return true;

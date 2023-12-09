@@ -11,6 +11,7 @@
 #include "G4Step.hh"
 #include "G4ThreeVector.hh"
 #include "G4TwoVector.hh"
+#include "G4VProcess.hh"
 
 #include "gsl/gsl"
 
@@ -18,6 +19,7 @@
 #include <bit>
 #include <cstdint>
 #include <numeric>
+#include <string_view>
 
 namespace MACE::SimMACE::inline SD {
 
@@ -93,7 +95,7 @@ G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
             Get<"x0">(*hit) = track.GetVertexPosition();
             Get<"Ek0">(*hit) = vertexEk;
             Get<"p0">(*hit) = vertexMomentum;
-            Get<"CreatProc">(*hit) = creatorProcess ? creatorProcess->GetProcessName() : "";
+            *Get<"CreatProc">(*hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "<Primary>";
             fCellSignalTimesAndHit[cellID].emplace_back(signalTime, std::move(hit));
         };
 
