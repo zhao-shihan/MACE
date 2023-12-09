@@ -234,9 +234,7 @@ MCP:
   Width: 150
   Thickness: 10
 ShieldingWall:
-  Height: 2000
-  Width: 4000
-  Thickness: 300
+  Thickness: 500
 Solenoid:
   S1Length: 200
   B1Radius: 500

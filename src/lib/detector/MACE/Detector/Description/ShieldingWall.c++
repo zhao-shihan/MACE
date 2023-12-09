@@ -8,19 +8,13 @@ using namespace LiteralUnit::Length;
 
 ShieldingWall::ShieldingWall() :
     DescriptionSingletonBase<ShieldingWall>("ShieldingWall"),
-    fHeight{2_m},
-    fWidth{4_m},
-    fThickness{30_cm} {}
+    fThickness{50_cm} {}
 
 auto ShieldingWall::ImportValues(const YAML::Node& node) -> void {
-    ImportValue(node, fHeight, "Height");
-    ImportValue(node, fWidth, "Width");
     ImportValue(node, fThickness, "Thickness");
 }
 
 auto ShieldingWall::ExportValues(YAML::Node& node) const -> void {
-    ExportValue(node, fHeight, "Height");
-    ExportValue(node, fWidth, "Width");
     ExportValue(node, fThickness, "Thickness");
 }
 
