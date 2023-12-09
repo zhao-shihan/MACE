@@ -45,7 +45,7 @@ auto ShieldingWall::Construct(G4bool checkOverlaps) -> void {
         G4NistManager::Instance()->FindOrBuildMaterial("G4_CONCRETE"),
         name);
     Make<G4PVPlacement>(
-        G4Transform3D{CLHEP::HepRotationZ{pi / 2}, VectorCast<G4ThreeVector>(solenoid.S1Center())},
+        G4Transform3D{CLHEP::HepRotationY{pi / 2}, VectorCast<G4ThreeVector>(solenoid.S2Center())},
         logic,
         name,
         Mother().LogicalVolume().get(),
