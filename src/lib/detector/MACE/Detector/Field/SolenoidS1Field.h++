@@ -4,20 +4,17 @@
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Field/MagneticFieldBase.h++"
 
-#include <concepts>
-
 namespace MACE::Detector::Field {
 
-template<std::floating_point AFloat>
-class SolenoidS1Field : public MagneticFieldBase<SolenoidS1Field<AFloat>, AFloat> {
+class SolenoidS1Field : public MagneticFieldBase<SolenoidS1Field> {
 public:
-    constexpr SolenoidS1Field();
+    inline SolenoidS1Field();
 
-    template<Concept::NumericVector3<AFloat> T>
-    constexpr T BFieldAt(const T&) const { return {0, 0, fSolenoid->MagneticFluxDensity()}; }
+    template<Concept::NumericVector3D T>
+    auto BFieldAt(T) const -> T { return {0, 0, fSolenoid.MagneticFluxDensity()}; }
 
 private:
-    const Description::Solenoid* const fSolenoid;
+    const Description::Solenoid& fSolenoid;
 };
 
 } // namespace MACE::Detector::Field

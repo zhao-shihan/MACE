@@ -5,7 +5,7 @@
 
 namespace MACE::Detector::Field::G4 {
 
-class EMCField : public WrapAsG4Field<Field::EMCField<G4double>> {
+class EMCField : public WrapAsG4Field<Field::EMCField> {
 public:
     EMCField();
 };

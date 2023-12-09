@@ -5,7 +5,7 @@
 
 namespace MACE::Detector::Field::G4 {
 
-class AcceleratorField : public WrapAsG4Field<Field::AcceleratorField<G4double>> {
+class AcceleratorField : public WrapAsG4Field<Field::AcceleratorField> {
 public:
     AcceleratorField();
 

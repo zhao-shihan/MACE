@@ -8,18 +8,18 @@
 
 namespace MACE::Detector::Field {
 
-template<typename ADerived, std::floating_point AFloat>
+template<typename ADerived>
 class ElectricFieldBase;
 
-template<typename ADerived, std::floating_point AFloat>
-class MagneticFieldBase : public ElectromagneticFieldBase<ADerived, AFloat> {
+template<typename ADerived>
+class MagneticFieldBase : public ElectromagneticFieldBase<ADerived> {
 protected:
     constexpr MagneticFieldBase();
     constexpr ~MagneticFieldBase() = default;
 
 public:
-    template<Concept::NumericVector3<AFloat> T>
-    static constexpr T EFieldAt(const T&) { return {0, 0, 0}; }
+    template<Concept::NumericVector3D T>
+    static constexpr auto EFieldAt(T) -> T { return {0, 0, 0}; }
 };
 
 } // namespace MACE::Detector::Field

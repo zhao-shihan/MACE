@@ -9,15 +9,22 @@
 
 namespace MACE::Detector::Field {
 
-template<typename ADerived, std::floating_point AFloat>
+template<typename ADerived>
 class ElectromagneticFieldBase {
 protected:
-    constexpr ElectromagneticFieldBase();
+    constexpr ElectromagneticFieldBase() = default;
     constexpr ~ElectromagneticFieldBase() = default;
 
 public:
-    template<Concept::NumericVector3<AFloat> T>
-    constexpr stdx::array2<T> BEFieldAt(const T& x) const;
+    template<Concept::NumericVector3D T>
+    struct F {
+        T B;
+        T E;
+    };
+
+public:
+    template<Concept::NumericVector3D T>
+    constexpr auto BEFieldAt(T x) const -> F<T>;
 };
 
 } // namespace MACE::Detector::Field

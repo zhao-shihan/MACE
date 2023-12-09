@@ -7,12 +7,12 @@
 
 namespace MACE::Detector::Field {
 
-template<typename F, typename AFloat>
+template<typename F>
 concept MagneticField =
     requires {
-        requires ElectromagneticField<F, AFloat>;
-        { F::template EFieldAt<stdx::array3<AFloat>>({}) } -> std::same_as<stdx::array3<AFloat>>;
-        requires F::template EFieldAt<stdx::array3<AFloat>>({}) == stdx::array3<AFloat>{};
+        requires ElectromagneticField<F>;
+        { F::template EFieldAt<stdx::array3d>({}) } -> std::same_as<stdx::array3d>;
+        requires F::template EFieldAt<stdx::array3d>({}) == stdx::array3d{};
     };
 
 } // namespace MACE::Detector::Field

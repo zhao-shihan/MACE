@@ -4,6 +4,7 @@
 #include "MACE/Detector/Geometry/GeometryBase.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/MathConstant.h++"
+#include "MACE/Utility/VectorCast.h++"
 
 #include "G4Box.hh"
 #include "G4NistManager.hh"
@@ -17,17 +18,14 @@ using namespace LiteralUnit;
 using namespace MathConstant;
 
 auto ShieldingWall::Construct(G4bool checkOverlaps) -> void {
-    const auto& description = Description::ShieldingWall::Instance();
-    const auto name = description.Name();
+    const auto& description{Description::ShieldingWall::Instance()};
+    const auto name{description.Name()};
 
-    const auto solenoidRaius = Description::Solenoid::Instance().OuterRadius();
-    const auto transform = Description::Solenoid::Instance().S2Transform();
-    const auto height = description.Height();
-    const auto width = description.Width();
-    const auto thickness = description.Thickness();
+    const auto height{description.Height()};
+    const auto width{description.Width()};
+    const auto thickness{description.Thickness()};
 
-    const auto nistManager = G4NistManager::Instance();
-    const auto cement = nistManager->FindOrBuildMaterial("G4_CONCRETE");
+    const auto& solenoid{Description::Solenoid::Instance()};
 
     auto box = Make<G4Box>(
         name,
@@ -37,17 +35,17 @@ auto ShieldingWall::Construct(G4bool checkOverlaps) -> void {
     auto cylinder = Make<G4Tubs>(
         name,
         0,
-        solenoidRaius + 2_cm,
+        solenoid.OuterRadius() + 2_cm,
         thickness / 2 + 2_cm,
         0,
         2 * pi);
     auto solid = Make<G4SubtractionSolid>("Box - Cylinder", box, cylinder);
     auto logic = Make<G4LogicalVolume>(
         solid,
-        cement,
+        G4NistManager::Instance()->FindOrBuildMaterial("G4_CONCRETE"),
         name);
     Make<G4PVPlacement>(
-        transform,
+        G4Transform3D{CLHEP::HepRotationZ{pi / 2}, VectorCast<G4ThreeVector>(solenoid.S1Center())},
         logic,
         name,
         Mother().LogicalVolume().get(),
@@ -55,4 +53,5 @@ auto ShieldingWall::Construct(G4bool checkOverlaps) -> void {
         0,
         checkOverlaps);
 }
+
 } // namespace MACE::Detector::Geometry::Fast

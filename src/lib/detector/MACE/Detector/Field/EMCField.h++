@@ -4,20 +4,17 @@
 #include "MACE/Detector/Description/EMCField.h++"
 #include "MACE/Detector/Field/MagneticFieldBase.h++"
 
-#include <concepts>
-
 namespace MACE::Detector::Field {
 
-template<std::floating_point AFloat>
-class EMCField : public MagneticFieldBase<EMCField<AFloat>, AFloat> {
+class EMCField : public MagneticFieldBase<EMCField> {
 public:
-    constexpr EMCField();
+    inline EMCField();
 
-    template<Concept::NumericVector3<AFloat> T>
-    constexpr T BFieldAt(const T&) const { return {0, 0, fEMCField->MagneticFluxDensity()}; }
+    template<Concept::NumericVector3D T>
+    auto BFieldAt(T) const -> T { return {0, 0, fEMCField.MagneticFluxDensity()}; }
 
 private:
-    const Description::EMCField* const fEMCField;
+    const Description::EMCField& fEMCField;
 };
 
 } // namespace MACE::Detector::Field

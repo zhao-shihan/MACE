@@ -21,10 +21,6 @@ public:
     auto WindowRadius(double val) -> void { fWindowRadius = val; }
     auto Thickness(double val) -> void { fThickness = val; }
 
-    // Next 1 method should only use for geometry construction.
-
-    auto CalcTransform() const { return EMCField::Instance().CalcTransform(); }
-
 private:
     auto ImportValues(const YAML::Node& node) -> void override;
     auto ExportValues(YAML::Node& node) const -> void override;

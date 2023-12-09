@@ -5,7 +5,7 @@
 
 namespace MACE::Detector::Field::G4 {
 
-class SolenoidS1Field : public WrapAsG4Field<Field::SolenoidS1Field<G4double>> {
+class SolenoidS1Field : public WrapAsG4Field<Field::SolenoidS1Field> {
 public:
     SolenoidS1Field();
 };

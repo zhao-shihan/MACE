@@ -18,11 +18,11 @@
 
 namespace MACE::Detector::Field {
 
-template<ElectromagneticField<G4double> AField>
+template<ElectromagneticField AField>
 class WrapAsG4Field : public NonMoveableBase,
-                      public std::conditional_t<MagneticField<AField, G4double>,
+                      public std::conditional_t<MagneticField<AField>,
                                                 G4MagneticField,
-                                                std::conditional_t<ElectricField<AField, G4double>,
+                                                std::conditional_t<ElectricField<AField>,
                                                                    G4ElectricField,
                                                                    G4ElectroMagneticField>>,
                       public AField {

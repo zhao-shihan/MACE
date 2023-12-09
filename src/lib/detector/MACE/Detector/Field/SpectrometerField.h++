@@ -4,20 +4,17 @@
 #include "MACE/Detector/Description/SpectrometerField.h++"
 #include "MACE/Detector/Field/MagneticFieldBase.h++"
 
-#include <concepts>
-
 namespace MACE::Detector::Field {
 
-template<std::floating_point AFloat>
-class SpectrometerField : public MagneticFieldBase<SpectrometerField<AFloat>, AFloat> {
+class SpectrometerField : public MagneticFieldBase<SpectrometerField> {
 public:
-    constexpr SpectrometerField();
+    inline SpectrometerField();
 
-    template<Concept::NumericVector3<AFloat> T>
-    constexpr T BFieldAt(const T&) const { return {0, 0, fSpectrometerField->MagneticFluxDensity()}; }
+    template<Concept::NumericVector3D T>
+    auto BFieldAt(T) const -> T { return {0, 0, fSpectrometerField.MagneticFluxDensity()}; }
 
 private:
-    const Description::SpectrometerField* const fSpectrometerField;
+    const Description::SpectrometerField& fSpectrometerField;
 };
 
 } // namespace MACE::Detector::Field
