@@ -9,7 +9,7 @@ using namespace LiteralUnit::MagneticFluxDensity;
 SpectrometerField::SpectrometerField() :
     DescriptionSingletonBase<SpectrometerField>(__func__),
     // Geometry
-    fRadius(71_cm),
+    fRadius(61_cm),
     fLength(220_cm),
     // Field
     fMagneticFluxDensity(100_mT) {}
