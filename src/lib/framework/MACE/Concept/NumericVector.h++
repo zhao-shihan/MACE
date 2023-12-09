@@ -2,6 +2,9 @@
 
 #include "MACE/Concept/InputVector.h++"
 #include "MACE/Concept/Subscriptable.h++"
+#include "MACE/Extension/gslx/index_sequence.h++"
+
+#include "gsl/gsl"
 
 #include <array>
 #include <concepts>
@@ -10,24 +13,6 @@
 #include <type_traits>
 
 namespace MACE::Concept {
-
-namespace internal {
-
-template<typename T>
-struct ListInitialization {
-    static constexpr auto Direct = [](auto... x) {
-        [[maybe_unused]] T v{x...};
-        ::delete ::new T{x...};
-        return T{x...};
-    };
-    static constexpr auto Copy = [](auto... x) -> T {
-        T v = {x...};
-        v = {x...};
-        return {x...};
-    };
-};
-
-} // namespace internal
 
 template<typename T, typename F, std::size_t N = std::numeric_limits<std::size_t>::max()>
 concept NumericVector =
@@ -40,16 +25,15 @@ concept NumericVector =
         requires(SubscriptableTo<std::add_const_t<T>, const F&> or
                  SubscriptableTo<std::add_const_t<T>, F>);
         requires sizeof(T) % sizeof(F) == 0;
-        requires requires(std::array<F, sizeof(T) / sizeof(F)> u) {
-                     std::apply(internal::ListInitialization<T>::Direct, u);
-                     std::apply(internal::ListInitialization<T>::Copy, u);
-                 };
+        requires([]<gsl::index... Is>(gslx::index_sequence<Is...>) {
+            return requires(T v, std::array<F, sizeof...(Is)> u) {
+                ::delete ::new T{std::get<Is>(u)...};
+                v = T{std::get<Is>(u)...};
+                v = {std::get<Is>(u)...};
+            };
+        }(gslx::make_index_sequence<sizeof(T) / sizeof(F)>{}));
         requires(N == std::numeric_limits<std::size_t>::max() or
-                 requires(std::array<F, N> u) {
-                     requires sizeof(T) == N * sizeof(F);
-                     std::apply(internal::ListInitialization<T>::Direct, u);
-                     std::apply(internal::ListInitialization<T>::Copy, u);
-                 });
+                 sizeof(T) / sizeof(F) == N);
     };
 
 template<typename T, typename F>
