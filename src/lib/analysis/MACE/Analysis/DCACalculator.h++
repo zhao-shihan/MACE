@@ -1,4 +1,4 @@
-#pragma once
+/* #pragma once
 
 #include "MACE/Compatibility/std2b/constexpr_cmath.h++"
 #include "MACE/DataModel/Hit/MCPHit.h++"
@@ -14,7 +14,6 @@
 
 namespace MACE::Analysis {
 
-template<std::floating_point AFloat = double>
 class DCACalculator final {
 public:
     AFloat Compute(const DataModel::CDCPhysicsTrack& cdcTrack, const DataModel::MCPHit& mcpHit) const;
@@ -24,9 +23,10 @@ private:
     AFloat ComputePointCircleDCA(const AFloat r, const stdx::array2<AFloat> center, const stdx::array2<AFloat> point) const;
 
 private:
-    Detector::Field::SpectrometerField<AFloat> fSpectrometerField;
+    Detector::Field::SpectrometerField fSpectrometerField;
 };
 
 } // namespace MACE::Analysis
 
 #include "MACE/Analysis/DCACalculator.inl"
+ */
