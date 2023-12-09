@@ -28,14 +28,11 @@ template<typename T>
 concept UniqueStdTuple =
     requires {
         requires Concept::InstantiatedFrom<T, std::tuple>;
-        requires(
-            []<gsl::index... Is>(gslx::index_sequence<Is...>) {
-                return (... and
-                        ([]<gsl::index... Js, gsl::index I>(gslx::index_sequence<Js...>, std::integral_constant<gsl::index, I>) {
-                            return (... and
-                                    (I != Js or std::tuple_element_t<I, T>::Name() == std::tuple_element_t<Js, T>::Name()));
-                        }(gslx::make_index_sequence<std::tuple_size_v<T>>{}, std::integral_constant<gsl::index, Is>{})));
-            }(gslx::make_index_sequence<std::tuple_size_v<T>>{}));
+        requires([]<gsl::index... Is>(gslx::index_sequence<Is...>) {
+            return (... and ([]<gsl::index... Js, gsl::index I>(gslx::index_sequence<Js...>, std::integral_constant<gsl::index, I>) {
+                        return (... and static_cast<bool>((I != Js) xor (std::tuple_element_t<I, T>::Name() == std::tuple_element_t<Js, T>::Name())));
+                    }(gslx::make_index_sequence<std::tuple_size_v<T>>{}, std::integral_constant<gsl::index, Is>{})));
+        }(gslx::make_index_sequence<std::tuple_size_v<T>>{}));
     };
 
 } // namespace internal
@@ -84,15 +81,12 @@ concept TupleModelContain = requires {
     requires Concept::InstantiatedFrom<M1, TupleModel>;
     requires Concept::InstantiatedFrom<M2, TupleModel>;
     requires M1::Size() >= M2::Size();
-    requires(
-        []<gsl::index... Is>(gslx::index_sequence<Is...>) {
-            return (... and
-                    ([]<gsl::index... Js, gsl::index I>(gslx::index_sequence<Js...>, std::integral_constant<gsl::index, I>) {
-                        return (... or
-                                (std::tuple_element_t<Js, typename M1::StdTuple>::Name() ==
-                                 std::tuple_element_t<I, typename M2::StdTuple>::Name()));
-                    }(gslx::make_index_sequence<M1::Size()>{}, std::integral_constant<gsl::index, Is>{})));
-        }(gslx::make_index_sequence<M2::Size()>{}));
+    requires([]<gsl::index... Is>(gslx::index_sequence<Is...>) {
+        return (... and ([]<gsl::index... Js, gsl::index I>(gslx::index_sequence<Js...>, std::integral_constant<gsl::index, I>) {
+                    return (... or (std::tuple_element_t<Js, typename M1::StdTuple>::Name() ==
+                                    std::tuple_element_t<I, typename M2::StdTuple>::Name()));
+                }(gslx::make_index_sequence<M1::Size()>{}, std::integral_constant<gsl::index, Is>{})));
+    }(gslx::make_index_sequence<M2::Size()>{}));
 };
 
 template<typename M1, typename M2>
