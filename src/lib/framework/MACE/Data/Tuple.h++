@@ -16,34 +16,26 @@
 namespace MACE::Data {
 
 template<typename T>
-concept TupleLike = requires(T t, const T ct) {
+concept TupleLike = requires {
     typename T::Model;
     requires Concept::InstantiatedFrom<typename T::Model, TupleModel>;
     { T::Size() } -> std::same_as<std::size_t>;
     requires T::Size() >= 0;
-    {
-        []<gsl::index... Is>(gslx::index_sequence<Is...>, T tuple) {
-            (..., (std::ignore = tuple.template Get<std::tuple_element_t<Is, typename T::Model::StdTuple>::Name()>()));
-        }(gslx::make_index_sequence<T::Size()>{}, t)
-    };
-    {
-        []<gsl::index... Is>(gslx::index_sequence<Is...>, const T tuple) {
-            (..., (std::ignore = tuple.template Get<std::tuple_element_t<Is, typename T::Model::StdTuple>::Name()>()));
-        }(gslx::make_index_sequence<T::Size()>{}, ct)
-    };
+    requires([]<gsl::index... Is>(gslx::index_sequence<Is...>) {
+        return (... and requires(T t) { t.template Get<std::tuple_element_t<Is, typename T::Model::StdTuple>::Name()>(); });
+    }(gslx::make_index_sequence<T::Size()>{}));
+    requires([]<gsl::index... Is>(gslx::index_sequence<Is...>) {
+        return (... and requires(const T t) { t.template Get<std::tuple_element_t<Is, typename T::Model::StdTuple>::Name()>(); });
+    }(gslx::make_index_sequence<T::Size()>{}));
     requires T::Size() <= 1 or requires {
-        {
-            []<gsl::index... Is>(gslx::index_sequence<Is...>, T tuple) {
-                (..., (std::ignore = tuple.template Get<std::tuple_element_t<Is, typename T::Model::StdTuple>::Name(),
-                                                        std::tuple_element_t<Is + 1, typename T::Model::StdTuple>::Name()>()));
-            }(gslx::make_index_sequence<T::Size() - 1>{}, t)
-        };
-        {
-            []<gsl::index... Is>(gslx::index_sequence<Is...>, const T tuple) {
-                (..., (std::ignore = tuple.template Get<std::tuple_element_t<Is, typename T::Model::StdTuple>::Name(),
-                                                        std::tuple_element_t<Is + 1, typename T::Model::StdTuple>::Name()>()));
-            }(gslx::make_index_sequence<T::Size() - 1>{}, ct)
-        };
+        requires([]<gsl::index... Is>(gslx::index_sequence<Is...>) {
+            return (... and requires(T t) { t.template Get<std::tuple_element_t<Is, typename T::Model::StdTuple>::Name(),
+                                                           std::tuple_element_t<Is + 1, typename T::Model::StdTuple>::Name()>(); });
+        }(gslx::make_index_sequence<T::Size() - 1>{}));
+        requires([]<gsl::index... Is>(gslx::index_sequence<Is...>) {
+            return (... and requires(const T t) { t.template Get<std::tuple_element_t<Is, typename T::Model::StdTuple>::Name(),
+                                                                 std::tuple_element_t<Is + 1, typename T::Model::StdTuple>::Name()>(); });
+        }(gslx::make_index_sequence<T::Size() - 1>{}));
     };
 };
 

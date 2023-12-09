@@ -23,12 +23,10 @@ template<TupleLike ATuple>
 constexpr auto Tuple<Ts...>::operator==(const ATuple& that) const -> auto {
     if constexpr (not TupleEquivalent<Tuple, ATuple>) { return false; }
     return [&]<gsl::index... Is>(gslx::index_sequence<Is...>) {
-        return (... and
-                ([&]<gsl::index... Js, gsl::index I>(gslx::index_sequence<Js...>, std::integral_constant<gsl::index, I>) {
-                    return (... or
-                            ([&] {
-                                constexpr auto nameI = std::tuple_element_t<I, Tuple>::Name();
-                                constexpr auto nameJ = std::tuple_element_t<Js, ATuple>::Name();
+        return (... and ([&]<gsl::index... Js, gsl::index I>(gslx::index_sequence<Js...>, std::integral_constant<gsl::index, I>) {
+                    return (... or ([&] {
+                                constexpr auto nameI{std::tuple_element_t<I, Tuple>::Name()};
+                                constexpr auto nameJ{std::tuple_element_t<Js, ATuple>::Name()};
                                 if constexpr (nameI != nameJ) {
                                     return false;
                                 } else {
