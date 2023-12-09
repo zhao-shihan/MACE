@@ -24,10 +24,9 @@ concept tuple_like =
         typename std::tuple_size<T>::type;
         requires std::derived_from<std::tuple_size<T>,
                                    std::integral_constant<std::size_t, std::tuple_size_v<T>>>;
-        requires(
-            []<std::size_t... Is>(std::index_sequence<Is...>) {
-                return (... and internal::has_tuple_element_and_get<T, Is>);
-            }(std::make_index_sequence<std::tuple_size_v<T>>()));
+        requires([]<std::size_t... Is>(std::index_sequence<Is...>) {
+            return (... and internal::has_tuple_element_and_get<T, Is>);
+        }(std::make_index_sequence<std::tuple_size_v<T>>()));
     };
 
 } // namespace MACE::inline Extension::stdx
