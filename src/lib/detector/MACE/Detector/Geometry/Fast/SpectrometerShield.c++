@@ -11,7 +11,7 @@ namespace MACE::Detector::Geometry::Fast {
 
 using namespace MathConstant;
 
-void SpectrometerShield::Construct(G4bool checkOverlaps) {
+auto SpectrometerShield::Construct(G4bool checkOverlaps) -> void {
     const auto& description = Description::SpectrometerShield::Instance();
     auto name = description.Name();
     auto innerRadius = description.InnerRadius();

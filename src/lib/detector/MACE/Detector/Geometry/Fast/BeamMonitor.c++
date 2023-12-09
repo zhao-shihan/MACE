@@ -14,7 +14,7 @@ bool BeamMonitor::Enabled() const {
     return Description::BeamMonitor::Instance().Enabled();
 }
 
-void BeamMonitor::Construct(G4bool checkOverlaps) {
+auto BeamMonitor::Construct(G4bool checkOverlaps) -> void {
     const auto& description = Description::BeamMonitor::Instance();
     const auto name = description.Name();
     const auto width = description.Width();

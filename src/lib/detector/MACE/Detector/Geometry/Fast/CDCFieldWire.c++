@@ -19,7 +19,7 @@ namespace MACE::Detector::Geometry::Fast {
 using namespace MACE::LiteralUnit::Length;
 using namespace MACE::LiteralUnit::MathConstantSuffix;
 
-void CDCFieldWire::Construct(G4bool checkOverlaps) {
+auto CDCFieldWire::Construct(G4bool checkOverlaps) -> void {
     const auto name = "CDCFieldWire";
     const auto& cdc = Description::CDC::Instance();
     const auto rFieldWire = cdc.FieldWireDiameter() / 2;

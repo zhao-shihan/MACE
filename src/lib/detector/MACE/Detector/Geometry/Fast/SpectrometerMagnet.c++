@@ -10,7 +10,7 @@ namespace MACE::Detector::Geometry::Fast {
 
 using namespace MathConstant;
 
-void SpectrometerMagnet::Construct(G4bool checkOverlaps) {
+auto SpectrometerMagnet::Construct(G4bool checkOverlaps) -> void {
     const auto& description = Description::SpectrometerMagnet::Instance();
     const auto name = description.Name();
     const auto innerRadius = description.InnerRadius();

@@ -10,7 +10,7 @@ namespace MACE::Detector::Geometry::Fast {
 
 using namespace MathConstant;
 
-void SolenoidB1::Construct(G4bool checkOverlaps) {
+auto SolenoidB1::Construct(G4bool checkOverlaps) -> void {
     const auto& description = Description::Solenoid::Instance();
     const auto name = "SolenoidB1";
     const auto innerRadius = description.InnerRadius();

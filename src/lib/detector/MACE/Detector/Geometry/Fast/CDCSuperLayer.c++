@@ -14,7 +14,7 @@ namespace MACE::Detector::Geometry::Fast {
 
 using namespace MACE::LiteralUnit::MathConstantSuffix;
 
-void CDCSuperLayer::Construct(G4bool checkOverlaps) {
+auto CDCSuperLayer::Construct(G4bool checkOverlaps) -> void {
     const auto& cdc = Description::CDC::Instance();
     const auto name = "CDCSuperLayer";
     const auto layerConfig = cdc.LayerConfiguration();

@@ -9,7 +9,7 @@ namespace MACE::Detector::Geometry::Fast {
 
 using namespace MathConstant;
 
-void SpectrometerField::Construct(G4bool checkOverlaps) {
+auto SpectrometerField::Construct(G4bool checkOverlaps) -> void {
     const auto& description = Description::SpectrometerField::Instance();
     auto name = description.Name();
     auto length = description.Length();

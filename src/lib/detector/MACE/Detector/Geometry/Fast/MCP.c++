@@ -9,7 +9,7 @@
 using MACE::Detector::Geometry::Fast::MCP;
 using namespace MACE::LiteralUnit::Density;
 
-void MCP::Construct(G4bool checkOverlaps) {
+auto MCP::Construct(G4bool checkOverlaps) -> void {
     const auto& description = Description::MCP::Instance();
     const auto name = description.Name();
     const auto width = description.Width();

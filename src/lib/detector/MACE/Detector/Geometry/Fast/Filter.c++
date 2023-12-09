@@ -16,7 +16,7 @@ using namespace LiteralUnit::Angle;
 using namespace LiteralUnit::Length;
 using namespace LiteralUnit::MathConstantSuffix;
 
-void Filter::Construct(G4bool checkOverlaps) {
+auto Filter::Construct(G4bool checkOverlaps) -> void {
     const auto& filter = Description::Filter::Instance();
     const auto name = filter.Name();
     const auto halfLength = filter.Length() / 2;

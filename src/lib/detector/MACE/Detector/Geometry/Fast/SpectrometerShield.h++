@@ -6,7 +6,7 @@ namespace MACE::Detector::Geometry::Fast {
 
 class SpectrometerShield final : public GeometryBase {
 private:
-    void Construct(G4bool checkOverlaps) override;
+    auto Construct(G4bool checkOverlaps) -> void override;
 };
 
 } // namespace MACE::Detector::Geometry::Fast

@@ -11,7 +11,7 @@ namespace MACE::Detector::Geometry::Fast {
 
 using namespace MathConstant;
 
-void SolenoidS2Field::Construct(G4bool checkOverlaps) {
+auto SolenoidS2Field::Construct(G4bool checkOverlaps) -> void {
     const auto& solenoid{Description::Solenoid::Instance()};
     const auto name{"SolenoidS2Field"};
 

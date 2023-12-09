@@ -11,7 +11,7 @@ namespace MACE::Detector::Geometry::Fast {
 using namespace LiteralUnit::Density;
 using namespace LiteralUnit::Temperature;
 
-void World::Construct(G4bool checkOverlaps) {
+auto World::Construct(G4bool checkOverlaps) -> void {
     const auto& description = Description::World::Instance();
     auto name = description.Name();
     auto halfX = description.HalfXExtent();
