@@ -4,6 +4,7 @@
 #include "MACE/Env/Memory/WeakSingleton.h++"
 #include "MACE/Env/Memory/internal/PassiveSingletonBase.h++"
 #include "MACE/Env/Memory/internal/WeakSingletonPool.h++"
+#include "MACE/Utility/InlineMacro.h++"
 
 #include "fmt/format.h"
 
@@ -23,7 +24,7 @@ protected:
     ~PassiveSingleton();
 
 public:
-    static auto Instance() -> ADerived&;
+    MACE_ALWAYS_INLINE static auto Instance() -> ADerived&;
 
 private:
     static auto FindInstance() -> void;

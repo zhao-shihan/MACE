@@ -17,7 +17,7 @@ PassiveSingleton<ADerived>::~PassiveSingleton() {
 }
 
 template<typename ADerived>
-auto PassiveSingleton<ADerived>::Instance() -> ADerived& {
+MACE_ALWAYS_INLINE auto PassiveSingleton<ADerived>::Instance() -> ADerived& {
     if (fgInstance == nullptr) [[unlikely]] {
         assert(WeakSingleton<ADerived>::fgInstanceNode == nullptr);
         FindInstance();

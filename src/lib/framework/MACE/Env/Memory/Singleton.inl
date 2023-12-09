@@ -26,7 +26,7 @@ Singleton<ADerived>::~Singleton() {
 }
 
 template<typename ADerived>
-auto Singleton<ADerived>::Instance() -> ADerived& {
+MACE_ALWAYS_INLINE auto Singleton<ADerived>::Instance() -> ADerived& {
     if (fgInstance.object == nullptr) [[unlikely]] {
         assert(fgInstance.node == nullptr);
         InstantiateOrFindInstance();

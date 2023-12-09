@@ -4,6 +4,7 @@
 #include "MACE/Env/Memory/internal/SingletonBase.h++"
 #include "MACE/Env/Memory/internal/SingletonFactory.h++"
 #include "MACE/Env/Memory/internal/SingletonPool.h++"
+#include "MACE/Utility/InlineMacro.h++"
 
 #include "fmt/format.h"
 
@@ -154,7 +155,7 @@ protected:
     virtual ~Singleton() override;
 
 public:
-    static auto Instance() -> ADerived&;
+    MACE_ALWAYS_INLINE static auto Instance() -> ADerived&;
 
 private:
     static auto InstantiateOrFindInstance() -> void;
