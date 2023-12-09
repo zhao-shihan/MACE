@@ -24,4 +24,6 @@ RunManager::RunManager() :
     SetUserInitialization(new ActionInitialization);
 }
 
+RunManager::~RunManager() = default;
+
 } // namespace MACE::SimTarget
