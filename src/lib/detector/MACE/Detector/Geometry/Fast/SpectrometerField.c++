@@ -3,6 +3,7 @@
 #include "MACE/Utility/MathConstant.h++"
 
 #include "G4PVPlacement.hh"
+#include "G4ThreeVector.hh"
 #include "G4Tubs.hh"
 
 namespace MACE::Detector::Geometry::Fast {

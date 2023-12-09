@@ -4,6 +4,7 @@
 #include "MACE/Utility/VectorCast.h++"
 
 #include "G4PVPlacement.hh"
+#include "G4ThreeVector.hh"
 #include "G4Tubs.hh"
 
 namespace MACE::Detector::Geometry::Fast {

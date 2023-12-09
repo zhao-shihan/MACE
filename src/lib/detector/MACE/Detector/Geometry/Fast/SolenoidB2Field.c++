@@ -3,7 +3,10 @@
 #include "MACE/Utility/MathConstant.h++"
 #include "MACE/Utility/VectorCast.h++"
 
+#include "CLHEP/Vector/RotationX.h"
+
 #include "G4PVPlacement.hh"
+#include "G4ThreeVector.hh"
 #include "G4Torus.hh"
 
 namespace MACE::Detector::Geometry::Fast {
