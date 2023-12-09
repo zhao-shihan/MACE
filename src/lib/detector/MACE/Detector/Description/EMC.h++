@@ -12,6 +12,7 @@ class EMC final : public DescriptionSingletonBase<EMC> {
 
 private:
     EMC();
+    ~EMC() = default;
 
 public:
     auto NSubdivision() const -> const auto& { return fNSubdivision; }

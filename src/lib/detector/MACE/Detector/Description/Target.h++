@@ -124,8 +124,8 @@ public:
     bool TestDetectable(const Concept::InputVector3D auto& x) const noexcept;
 
 private:
-    void ImportValues(const YAML::Node& node) override;
-    void ExportValues(YAML::Node& node) const override;
+    auto ImportValues(const YAML::Node& node) -> void override;
+    auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
     TargetShapeType fShapeType;

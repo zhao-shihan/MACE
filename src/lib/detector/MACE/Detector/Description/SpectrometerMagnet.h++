@@ -10,8 +10,6 @@ class SpectrometerMagnet final : public DescriptionSingletonBase<SpectrometerMag
 private:
     SpectrometerMagnet();
     ~SpectrometerMagnet() noexcept = default;
-    SpectrometerMagnet(const SpectrometerMagnet&) = delete;
-    SpectrometerMagnet& operator=(const SpectrometerMagnet&) = delete;
 
 public:
     const auto& InnerRadius() const { return fInnerRadius; }
@@ -23,8 +21,8 @@ public:
     void Length(double val) { fLength = val; }
 
 private:
-    void ImportValues(const YAML::Node& node) override;
-    void ExportValues(YAML::Node& node) const override;
+    auto ImportValues(const YAML::Node& node) -> void override;
+    auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
     double fInnerRadius;

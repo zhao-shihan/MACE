@@ -15,6 +15,7 @@ class EMCField final : public DescriptionSingletonBase<EMCField> {
 
 private:
     EMCField();
+    ~EMCField() = default;
 
 public:
     ///////////////////////////////////////////////////////////

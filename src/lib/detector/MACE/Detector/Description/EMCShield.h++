@@ -9,6 +9,7 @@ class EMCShield final : public DescriptionSingletonBase<EMCShield> {
 
 private:
     EMCShield();
+    ~EMCShield() = default;
 
 public:
     auto InnerRadius() const -> const auto& { return fInnerRadius; }

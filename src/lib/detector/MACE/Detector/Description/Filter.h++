@@ -9,6 +9,7 @@ class Filter final : public DescriptionSingletonBase<Filter> {
 
 private:
     Filter();
+    ~Filter() = default;
 
 public:
     auto Length() const -> const auto& { return fLength; }

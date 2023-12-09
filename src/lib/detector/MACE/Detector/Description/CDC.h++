@@ -16,6 +16,7 @@ class CDC final : public DescriptionSingletonBase<CDC> {
 
 private:
     CDC();
+    ~CDC() = default;
 
 public:
     ///////////////////////////////////////////////////////////
@@ -144,8 +145,8 @@ private:
     std::vector<SuperLayerConfiguration> ComputeLayerConfiguration() const;
     std::vector<CellInformation> ComputeCellMap() const;
 
-    void ImportValues(const YAML::Node& node) override;
-    void ExportValues(YAML::Node& node) const override;
+    auto ImportValues(const YAML::Node& node) -> void override;
+    auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
     ///////////////////////////////////////////////////////////

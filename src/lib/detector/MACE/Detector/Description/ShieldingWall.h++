@@ -9,6 +9,7 @@ class ShieldingWall final : public DescriptionSingletonBase<ShieldingWall> {
 
 private:
     ShieldingWall();
+    ~ShieldingWall() = default;
 
 public:
     const auto& Height() const { return fHeight; }
@@ -20,8 +21,8 @@ public:
     void Thickness(double val) { fThickness = val; }
 
 private:
-    void ImportValues(const YAML::Node& node) override;
-    void ExportValues(YAML::Node& node) const override;
+    auto ImportValues(const YAML::Node& node) -> void override;
+    auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
     double fHeight;
