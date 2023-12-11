@@ -30,6 +30,8 @@ if(MACE_BUILTIN_BACKWARD)
                                       URL "${MACE_BUILTIN_BACKWARD_URL}")
         message(STATUS "backward-cpp will be downloaded from ${MACE_BUILTIN_BACKWARD_URL} to ${MACE_BUILTIN_BACKWARD_SRC_DIR}")
     endif()
+    # set options
+    set(BACKWARD_SHARED ${BUILD_SHARED_LIBS})
     # configure it
     message(STATUS "Downloading (if required) and configuring backward-cpp (version: ${MACE_BUILTIN_BACKWARD_VERSION})")
     FetchContent_MakeAvailable(Backward)
