@@ -60,7 +60,7 @@ auto MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect)
     const auto& mpiEnv{Env::MPIEnv::Instance()};
 
     MPIUtil::MPIReseedPRNG(*G4Random::getTheEngine());
-    fRunPlanOfThisRank = MPIUtil::AllocMPIJobsWorkerWise(0, nEvent, mpiEnv.CommWorldSize(), mpiEnv.CommWorldRank());
+    fRunPlanOfThisRank = MPIUtil::AllocMPIJobsJobWise(0, nEvent, mpiEnv.CommWorldSize(), mpiEnv.CommWorldRank());
 
     fakeRun = nEvent <= 0;
     numberOfEventToBeProcessed = nEvent;
@@ -68,7 +68,8 @@ auto MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect)
     if (ConfirmBeamOnCondition()) {
         ConstructScoringWorlds();
         RunInitialization();
-        DoEventLoop(nEvent, macroFile, nSelect);
+        DoEventLoop(fRunPlanOfThisRank.count, macroFile,
+                    nSelect <= 0 ? nSelect : MPIUtil::AllocMPIJobsJobWise(0, nSelect, mpiEnv.CommWorldSize(), mpiEnv.CommWorldRank()).count);
         RunTermination();
     }
     fakeRun = false;
