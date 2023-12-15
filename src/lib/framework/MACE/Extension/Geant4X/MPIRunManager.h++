@@ -39,8 +39,8 @@ public:
 
     static auto GetRunManager() -> auto { return static_cast<MPIRunManager*>(G4RunManager::GetRunManager()); }
 
-    auto NEventToBeMPIProcessed() const -> const auto& { return fNEventToBeMPIProcessed; }
     auto PrintProgressModulo() const -> const auto& { return fPrintProgressModulo; }
+    auto EventWallTimeStatistic() const -> const auto& { return fEventWallTimeStatistic; }
 
     auto PrintProgressModulo(G4int val) -> void { fPrintProgressModulo = val, printModulo = -1; }
 
@@ -52,24 +52,27 @@ public:
     virtual auto RunTermination() -> void override;
 
 private:
+    using scsc = std::chrono::system_clock;
+
     auto EventEndReport(G4int eventID) const -> void;
-    auto RunEndReport(G4int runID) const -> void;
 
     static auto RunBeginReport(G4int runID) -> void;
+    static auto PerRankRunEndReport(G4int runID, double wallTime, double cpuTime) -> void;
+    static auto RunEndReport(G4int runID, scsc::time_point runBeginTime, double maxWallTime, double totalCPUTime) -> void;
+
+    static auto SToDHMS(double secondsInTotal) -> std::string;
 
 private:
-    G4int fNEventToBeMPIProcessed;
-    IntegralIndexRange<G4int> fEventIDRange;
-
     G4int fPrintProgressModulo;
+
+    IntegralIndexRange<G4int> fRunPlanOfThisRank;
+
     WallTimeStopwatch<> fEventWallTimeStopwatch;
     Math::Statistic<1> fEventWallTimeStatistic;
-    CPUTimeStopwatch<> fRunCPUTimeStopwatch;
-    double fRunCPUTime;
+
+    scsc::time_point fRunBeginSystemTime;
     WallTimeStopwatch<> fRunWallTimeStopwatch;
-    double fRunWallTime;
-    std::chrono::system_clock::time_point fRunBeginSystemTime;
-    std::chrono::system_clock::time_point fRunEndSystemTime;
+    CPUTimeStopwatch<> fRunCPUTimeStopwatch;
 };
 
 } // namespace MACE::inline Extension::Geant4X
