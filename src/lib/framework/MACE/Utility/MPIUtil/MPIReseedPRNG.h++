@@ -8,6 +8,6 @@ class HepRandomEngine;
 
 namespace MACE::inline Utility::MPIUtil {
 
-void MPIReseedPRNG(CLHEP::HepRandomEngine& randEng);
+auto MPIReseedPRNG(CLHEP::HepRandomEngine& randEng) -> void;
 
 } // namespace MACE::inline Utility::MPIUtil

@@ -17,11 +17,11 @@
 
 namespace MACE::inline Utility::MPIUtil {
 
-void MPIReseedPRNG(CLHEP::HepRandomEngine& randEng) {
+auto MPIReseedPRNG(CLHEP::HepRandomEngine& randEng) -> void {
     const auto& mpiEnv = Env::MPIEnv::Instance();
     if (mpiEnv.Sequential()) { return; }
 
-    const std::size_t worldSize = mpiEnv.CommWorldSize();
+    const auto worldSize{mpiEnv.CommWorldSize()};
     std::vector<long> seedsSend(mpiEnv.AtCommWorldMaster() ? worldSize : 0);
     if (mpiEnv.AtCommWorldMaster()) {
         static_assert(std::same_as<std::uint64_t, Math::Random::Xoshiro512SS::ResultType>);
@@ -34,7 +34,7 @@ void MPIReseedPRNG(CLHEP::HepRandomEngine& randEng) {
         Math::Random::Uniform<long> uniformLong(1, std::numeric_limits<long>::max() - 1);
         do {
             uniqueSeeds.emplace(uniformLong(xoshiro512SS));
-        } while (uniqueSeeds.size() < worldSize);
+        } while (ssize(uniqueSeeds) < worldSize);
         std::ranges::copy(uniqueSeeds, seedsSend.begin());
     }
 
