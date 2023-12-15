@@ -2,6 +2,7 @@ namespace MACE::inline Utility {
 
 template<std::integral AIndex>
 std::vector<AIndex> DivideIndexNum(AIndex nIndices, AIndex nTakers) {
+    if (nIndices < 0) { nIndices = 0; }
     const auto basicDivision = nIndices / nTakers;
     const auto remainder = nIndices % nTakers;
     std::vector<AIndex> dividedIndexNums(nTakers, basicDivision);
@@ -13,6 +14,7 @@ std::vector<AIndex> DivideIndexNum(AIndex nIndices, AIndex nTakers) {
 
 template<std::integral AIndex>
 std::vector<IntegralIndexRange<AIndex>> DivideIndexRangeIndexWise(AIndex begin, AIndex end, AIndex nTakers) {
+    if (end < begin) { end = begin; }
     const auto dividedIndexNums = DivideIndexNum<AIndex>(end - begin, nTakers);
     std::vector<IntegralIndexRange<AIndex>> dividedIndexRanges(nTakers);
     for (AIndex i = 0; i < nTakers; ++i) {
@@ -31,6 +33,7 @@ std::vector<IntegralIndexRange<AIndex>> DivideIndexRangeIndexWise(std::pair<AInd
 
 template<std::integral AIndex>
 std::vector<IntegralIndexRange<AIndex>> DivideIndexRangeTakerWise(AIndex begin, AIndex end, AIndex nTakers) {
+    if (end < begin) { end = begin; }
     const auto dividedIndexNums = DivideIndexNum<AIndex>(end - begin, nTakers);
     std::vector<IntegralIndexRange<AIndex>> dividedIndexRanges(nTakers);
     dividedIndexRanges[0] = {(AIndex)0,
