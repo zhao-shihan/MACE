@@ -39,14 +39,16 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
             // Master collects processor names
             std::vector<NameFixedString> nodeNamesRecv;
             if (AtCommWorldMaster()) { nodeNamesRecv.resize(fCommWorldSize); }
-            MPI_Gather(nodeNameSend.CString(),
-                       NameFixedString::Occupation(),
-                       MPI_CHAR,
-                       nodeNamesRecv.data(),
-                       NameFixedString::Occupation(),
-                       MPI_CHAR,
-                       0,
-                       MPI_COMM_WORLD);
+            MPI_Request gatherNodeNamesRequest;
+            MPI_Igather(nodeNameSend.CString(),
+                        NameFixedString::Occupation(),
+                        MPI_CHAR,
+                        nodeNamesRecv.data(),
+                        NameFixedString::Occupation(),
+                        MPI_CHAR,
+                        0,
+                        MPI_COMM_WORLD,
+                        &gatherNodeNamesRequest);
             // Processor name list
             std::vector<stdx::array2i> nodeIDAndCountSend;
             stdx::array2i nodeIDAndCountRecv;
@@ -66,6 +68,9 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
             MPI_Type_commit(&nodeInfoForMPI);
             std::vector<NodeInfoForMPI> nodeList;
             // Master find all unique processor names and assign node ID and count
+            MPI_Status gatherNodeNamesStatus;
+            MPI_Wait(&gatherNodeNamesRequest,
+                     &gatherNodeNamesStatus);
             if (AtCommWorldMaster()) {
                 nodeIDAndCountSend.reserve(fCommWorldSize);
                 nodeList.reserve(fCommWorldSize);

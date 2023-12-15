@@ -17,6 +17,9 @@ void MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extens
 
     if (const auto& mpiEnv = Env::MPIEnv::Instance();
         mpiEnv.Parallel()) {
+        MPI_Request mpiBarrierRequest;
+        MPI_Ibarrier(mpiEnv.CommShared(),
+                     &mpiBarrierRequest);
         // root directory
         if (mpiEnv.OnCluster()) {
             path /= mpiEnv.LocalNode().name;
@@ -30,7 +33,9 @@ void MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extens
                     .concat(std::to_string(mpiEnv.CommWorldRank()))
                     .concat(extension);
         // wait for create_directories
-        MPI_Barrier(mpiEnv.CommShared());
+        MPI_Status mpiBarrierStatus;
+        MPI_Wait(&mpiBarrierRequest,
+                 &mpiBarrierStatus);
     } else {
         path.concat(extension);
     }
