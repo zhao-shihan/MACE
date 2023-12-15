@@ -28,11 +28,10 @@ class WallTimeStopwatch {
 public:
     WallTimeStopwatch() noexcept;
 
-    void Reset() noexcept { clock_gettime(CLOCK_MONOTONIC, &fT0); }
-    auto SecondsElapsed() const noexcept { return NanosecondsElapsed() / 1'000'000'000; }
-    auto MillisecondsElapsed() const noexcept { return NanosecondsElapsed() / 1'000'000; }
-    auto MicrosecondsElapsed() const noexcept { return NanosecondsElapsed() / 1'000; }
-    ATime NanosecondsElapsed() const noexcept;
+    auto SecondsElapsed() const noexcept -> auto { return NanosecondsElapsed() / 1'000'000'000; }
+    auto MillisecondsElapsed() const noexcept -> auto { return NanosecondsElapsed() / 1'000'000; }
+    auto MicrosecondsElapsed() const noexcept -> auto { return NanosecondsElapsed() / 1'000; }
+    auto NanosecondsElapsed() const noexcept -> ATime;
 
 private:
     std::timespec fT0;

@@ -26,7 +26,7 @@ int main() {
     std::cout << "    CLHEPX::...::MT1993732Engine : " << time << " ms (last integer: " << r << ')' << std::endl;
 
     for (int i = 0; i < 1000; ++i) { r = (unsigned int)(mt32x); }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) { r = (unsigned int)(mt32x); }
     time = stopWatch.MillisecondsElapsed();
     std::cout << "       Math::...::MT1993732 : " << time << " ms (last integer: " << r << ')' << std::endl;
@@ -40,7 +40,7 @@ int main() {
                    Math::Random::Uniform<double>()(mt32)};
         v2d += delta2d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta2d = {Math::Random::Uniform<double>()(mt32),
                    Math::Random::Uniform<double>()(mt32)};
@@ -55,7 +55,7 @@ int main() {
                    mt32x.flat()};
         v2d += delta2d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta2d = {mt32x.flat(),
                    mt32x.flat()};
@@ -74,7 +74,7 @@ int main() {
                    Math::Random::Uniform<double>()(mt32)};
         v3d += delta3d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta3d = {Math::Random::Uniform<double>()(mt32),
                    Math::Random::Uniform<double>()(mt32),
@@ -91,7 +91,7 @@ int main() {
                    mt32x.flat()};
         v3d += delta3d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta3d = {mt32x.flat(),
                    mt32x.flat(),
@@ -112,7 +112,7 @@ int main() {
                    Math::Random::Uniform<double>()(mt32)};
         v4d += delta4d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta4d = {Math::Random::Uniform<double>()(mt32),
                    Math::Random::Uniform<double>()(mt32),
@@ -131,7 +131,7 @@ int main() {
                    mt32x.flat()};
         v4d += delta4d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta4d = {mt32x.flat(),
                    mt32x.flat(),

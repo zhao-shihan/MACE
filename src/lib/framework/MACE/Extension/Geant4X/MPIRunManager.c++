@@ -126,8 +126,8 @@ auto MPIRunManager::RunInitialization() -> void {
              &runBeginBarrierStatus);
     // start the run stopwatch
     fRunBeginSystemTime = scsc::now();
-    fRunWallTimeStopwatch.Reset();
-    fRunCPUTimeStopwatch.Reset();
+    fRunWallTimeStopwatch = {};
+    fRunCPUTimeStopwatch = {};
     // report
     if (fPrintProgressModulo >= 0) {
         if (const auto& mpiEnv{Env::MPIEnv::Instance()};
@@ -143,7 +143,7 @@ auto MPIRunManager::InitializeEventLoop(G4int nEvent, gsl::czstring macroFile, G
     // reset event time statistic
     fEventWallTimeStatistic = {};
     // restart the event stopwatch just before the first event begins
-    fEventWallTimeStopwatch.Reset();
+    fEventWallTimeStopwatch = {};
 }
 
 auto MPIRunManager::ProcessOneEvent(G4int iEvent) -> void {
@@ -157,7 +157,7 @@ auto MPIRunManager::TerminateOneEvent() -> void {
     G4RunManager::TerminateOneEvent();
     // read & restart the event stopwatch
     fEventWallTimeStatistic.Fill(fEventWallTimeStopwatch.SecondsElapsed());
-    fEventWallTimeStopwatch.Reset();
+    fEventWallTimeStopwatch = {};
     // report
     if (fPrintProgressModulo > 0 and terminatedEventID % fPrintProgressModulo == 0) {
         if (Env::MPIEnv::Instance().GetVerboseLevel() >= Env::VL::Error) {

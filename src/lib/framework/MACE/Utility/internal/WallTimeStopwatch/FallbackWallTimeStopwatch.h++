@@ -16,11 +16,10 @@ private:
 public:
     WallTimeStopwatch() noexcept;
 
-    void Reset() noexcept { fT0 = sc::now(); }
-    auto SecondsElapsed() const noexcept { s(sc::now() - fT0).count(); }
-    auto MillisecondsElapsed() const noexcept { ms(sc::now() - fT0).count(); }
-    auto MicrosecondsElapsed() const noexcept { us(sc::now() - fT0).count(); }
-    auto NanosecondsElapsed() const noexcept { ns(sc::now() - fT0).count(); }
+    auto SecondsElapsed() const noexcept -> auto { s(sc::now() - fT0).count(); }
+    auto MillisecondsElapsed() const noexcept -> auto { ms(sc::now() - fT0).count(); }
+    auto MicrosecondsElapsed() const noexcept -> auto { us(sc::now() - fT0).count(); }
+    auto NanosecondsElapsed() const noexcept -> auto { ns(sc::now() - fT0).count(); }
 
 private:
     sc::time_point fT0;

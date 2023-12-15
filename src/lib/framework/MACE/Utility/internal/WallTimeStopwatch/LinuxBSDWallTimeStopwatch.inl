@@ -20,12 +20,12 @@ namespace MACE::inline Utility::internal {
 
 template<typename ATime>
 WallTimeStopwatch<ATime>::WallTimeStopwatch() noexcept :
-    fT0() {
-    Reset();
+    fT0{} {
+    clock_gettime(CLOCK_MONOTONIC, &fT0);
 }
 
 template<typename ATime>
-ATime WallTimeStopwatch<ATime>::NanosecondsElapsed() const noexcept {
+auto WallTimeStopwatch<ATime>::NanosecondsElapsed() const noexcept -> ATime {
     std::timespec t;
     clock_gettime(CLOCK_MONOTONIC, &t);
     return static_cast<ATime>(t.tv_sec - fT0.tv_sec) * 1'000'000'000 +

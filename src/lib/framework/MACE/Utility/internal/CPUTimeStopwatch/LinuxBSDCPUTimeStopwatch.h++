@@ -10,11 +10,10 @@ class CPUTimeStopwatch {
 public:
     CPUTimeStopwatch() noexcept;
 
-    void Reset() noexcept { clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &fT0); }
-    auto SecondsUsed() const noexcept { return NanosecondsUsed() / 1'000'000'000; }
-    auto MillisecondsUsed() const noexcept { return NanosecondsUsed() / 1'000'000; }
-    auto MicrosecondsUsed() const noexcept { return NanosecondsUsed() / 1'000; }
-    ATime NanosecondsUsed() const noexcept;
+    auto SecondsUsed() const noexcept -> auto { return NanosecondsUsed() / 1'000'000'000; }
+    auto MillisecondsUsed() const noexcept -> auto { return NanosecondsUsed() / 1'000'000; }
+    auto MicrosecondsUsed() const noexcept -> auto { return NanosecondsUsed() / 1'000; }
+    auto NanosecondsUsed() const noexcept -> ATime;
 
 private:
     std::timespec fT0;

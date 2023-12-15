@@ -19,7 +19,7 @@ using namespace MACE;
     for (auto k = 0ull; k < n; ++k) {                  \
         xFPType = TheLog(u##xFPType(rng));             \
     }                                                  \
-    sw.Reset();                                        \
+    sw = {};                                           \
     for (auto k = 0ull; k < n; ++k) {                  \
         xFPType = TheLog(u##xFPType(rng));             \
     }                                                  \

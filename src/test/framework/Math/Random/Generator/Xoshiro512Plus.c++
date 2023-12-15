@@ -28,7 +28,7 @@ int main() {
     std::cout << "     MT19937-32 : " << time << " ms (last integer: " << r << ')' << std::endl;
 
     for (int i = 0; i < 1000; ++i) { r = xoshiro512Plus(); }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) { r = xoshiro512Plus(); }
     time = stopWatch.MillisecondsElapsed();
     std::cout << "    xoshiro512+ : " << time << " ms (last integer: " << r << ')' << std::endl;
@@ -38,13 +38,13 @@ int main() {
     std::iota(arr16.begin(), arr16.end(), 0);
 
     for (int i = 0; i < 1000; ++i) { std::ranges::shuffle(arr16, mt1993732); }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 1'000'000; ++i) { std::ranges::shuffle(arr16, mt1993732); }
     time = stopWatch.MillisecondsElapsed();
     std::cout << "     MT19937-32 : " << time << " ms (first element: " << arr16.front() << ')' << std::endl;
 
     for (int i = 0; i < 1000; ++i) { std::ranges::shuffle(arr16, xoshiro512Plus); }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 1'000'000; ++i) { std::ranges::shuffle(arr16, xoshiro512Plus); }
     time = stopWatch.MillisecondsElapsed();
     std::cout << "    xoshiro512+ : " << time << " ms (first element: " << arr16.front() << ')' << std::endl;
@@ -54,13 +54,13 @@ int main() {
     std::iota(arr4096.begin(), arr4096.end(), 0);
 
     for (int i = 0; i < 100; ++i) { std::ranges::shuffle(arr4096, mt1993732); }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000; ++i) { std::ranges::shuffle(arr4096, mt1993732); }
     time = stopWatch.MillisecondsElapsed();
     std::cout << "     MT19937-32 : " << time << " ms (first element: " << arr4096.front() << ')' << std::endl;
 
     for (int i = 0; i < 100; ++i) { std::ranges::shuffle(arr4096, xoshiro512Plus); }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000; ++i) { std::ranges::shuffle(arr4096, xoshiro512Plus); }
     time = stopWatch.MillisecondsElapsed();
     std::cout << "    xoshiro512+ : " << time << " ms (first element: " << arr4096.front() << ')' << std::endl;
@@ -74,7 +74,7 @@ int main() {
                    Math::Random::Uniform<double>()(mt1993732)};
         v2d += delta2d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta2d = {Math::Random::Uniform<double>()(mt1993732),
                    Math::Random::Uniform<double>()(mt1993732)};
@@ -89,7 +89,7 @@ int main() {
                    Math::Random::Uniform<double>()(xoshiro512Plus)};
         v2d += delta2d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta2d = {Math::Random::Uniform<double>()(xoshiro512Plus),
                    Math::Random::Uniform<double>()(xoshiro512Plus)};
@@ -108,7 +108,7 @@ int main() {
                    Math::Random::Uniform<double>()(mt1993732)};
         v3d += delta3d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta3d = {Math::Random::Uniform<double>()(mt1993732),
                    Math::Random::Uniform<double>()(mt1993732),
@@ -125,7 +125,7 @@ int main() {
                    Math::Random::Uniform<double>()(xoshiro512Plus)};
         v3d += delta3d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta3d = {Math::Random::Uniform<double>()(xoshiro512Plus),
                    Math::Random::Uniform<double>()(xoshiro512Plus),
@@ -146,7 +146,7 @@ int main() {
                    Math::Random::Uniform<double>()(mt1993732)};
         v4d += delta4d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta4d = {Math::Random::Uniform<double>()(mt1993732),
                    Math::Random::Uniform<double>()(mt1993732),
@@ -165,7 +165,7 @@ int main() {
                    Math::Random::Uniform<double>()(xoshiro512Plus)};
         v4d += delta4d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta4d = {Math::Random::Uniform<double>()(xoshiro512Plus),
                    Math::Random::Uniform<double>()(xoshiro512Plus),
