@@ -1,6 +1,5 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.h++"
-#include "MACE/Utility/MPIUtil/MPICallWithCheck.h++"
 
 namespace MACE::inline Utility::MPIUtil {
 
@@ -31,8 +30,7 @@ void MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extens
                     .concat(std::to_string(mpiEnv.CommWorldRank()))
                     .concat(extension);
         // wait for create_directories
-        MACE_MPI_CALL_WITH_CHECK(MPI_Barrier,
-                                 mpiEnv.CommShared())
+        MPI_Barrier(mpiEnv.CommShared());
     } else {
         path.concat(extension);
     }

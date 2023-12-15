@@ -3,7 +3,6 @@
 #include "MACE/Env/BasicEnv.h++"
 #include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/Utility/FixedString.h++"
-#include "MACE/Utility/MPIUtil/MPICallWithCheck.h++"
 
 #include "TROOT.h"
 

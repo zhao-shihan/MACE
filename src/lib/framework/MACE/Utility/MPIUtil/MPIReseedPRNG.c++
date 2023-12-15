@@ -1,7 +1,6 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Math/Random/Distribution/Uniform.h++"
 #include "MACE/Math/Random/Generator/Xoshiro512SS.h++"
-#include "MACE/Utility/MPIUtil/MPICallWithCheck.h++"
 #include "MACE/Utility/MPIUtil/MPIReseedPRNG.h++"
 
 #include "CLHEP/Random/RandomEngine.h"
@@ -40,15 +39,14 @@ void MPIReseedPRNG(CLHEP::HepRandomEngine& randEng) {
     }
 
     long seedRecv;
-    MACE_MPI_CALL_WITH_CHECK(MPI_Scatter,
-                             seedsSend.data(),
-                             1,
-                             MPI_LONG,
-                             &seedRecv,
-                             1,
-                             MPI_LONG,
-                             0,
-                             MPI_COMM_WORLD)
+    MPI_Scatter(seedsSend.data(),
+                1,
+                MPI_LONG,
+                &seedRecv,
+                1,
+                MPI_LONG,
+                0,
+                MPI_COMM_WORLD);
     randEng.setSeed(seedRecv, 3);
 }
 

@@ -5,7 +5,6 @@
 #include "MACE/Extension/Geant4X/MPIRunMessenger.h++"
 #include "MACE/Math/IntegerPower.h++"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.h++"
-#include "MACE/Utility/MPIUtil/MPICallWithCheck.h++"
 #include "MACE/Utility/MPIUtil/MPIReseedPRNG.h++"
 
 #include "G4Exception.hh"
@@ -80,8 +79,7 @@ auto MPIRunManager::RunInitialization() -> void {
     // initialize run
     G4RunManager::RunInitialization();
     // wait for everyone to start
-    MACE_MPI_CALL_WITH_CHECK(MPI_Barrier,
-                             MPI_COMM_WORLD)
+    MPI_Barrier(MPI_COMM_WORLD);
     // start the run stopwatch
     fRunBeginSystemTime = std::chrono::system_clock::now();
     fRunCPUTimeStopwatch.Reset();
@@ -127,8 +125,7 @@ auto MPIRunManager::RunTermination() -> void {
     fRunWallTime = fRunWallTimeStopwatch.SecondsElapsed();
     fRunCPUTime = fRunCPUTimeStopwatch.SecondsUsed();
     // wait for everyone to finish
-    MACE_MPI_CALL_WITH_CHECK(MPI_Barrier,
-                             MPI_COMM_WORLD)
+    MPI_Barrier(MPI_COMM_WORLD);
     // run end report
     if (fPrintProgressModulo >= 0) {
         RunEndReport(endedRun);

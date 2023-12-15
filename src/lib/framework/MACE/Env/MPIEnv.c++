@@ -1,5 +1,4 @@
 #include "MACE/Env/MPIEnv.h++"
-#include "MACE/Utility/MPIUtil/MPICallWithCheckNoExcept.h++"
 
 #include <algorithm>
 #include <cstring>
@@ -16,10 +15,9 @@ MPIEnv::~MPIEnv() {
     fgFinalized = true;
     // Destructs the local communicator
     auto sharedComm = fSharedComm;
-    MACE_MPI_CALL_WITH_CHECK_NOEXCEPT(MPI_Comm_free,
-                                      &sharedComm);
+    MPI_Comm_free(&sharedComm);
     // Finalize MPI
-    MACE_MPI_CALL_WITH_CHECK_NOEXCEPT(MPI_Finalize)
+    MPI_Finalize();
 }
 
 void MPIEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const {
@@ -28,14 +26,12 @@ void MPIEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const {
         // MPI library version
         char mpiLibVersion[MPI_MAX_LIBRARY_VERSION_STRING];
         int mpiLibVersionStringLength;
-        MACE_MPI_CALL_WITH_CHECK(MPI_Get_library_version,
-                                 mpiLibVersion,
-                                 &mpiLibVersionStringLength)
+        MPI_Get_library_version(mpiLibVersion,
+                                &mpiLibVersionStringLength);
         // MPI version at runtime
         std::pair<int, int> mpiRuntimeVersion;
-        MACE_MPI_CALL_WITH_CHECK(MPI_Get_version,
-                                 &mpiRuntimeVersion.first,
-                                 &mpiRuntimeVersion.second)
+        MPI_Get_version(&mpiRuntimeVersion.first,
+                        &mpiRuntimeVersion.second);
         // Messages
         std::cout << '\n'
                   << " Parallelized by MPI, running " << (Parallel() ? "in parallel" : "sequentially") << '\n';
