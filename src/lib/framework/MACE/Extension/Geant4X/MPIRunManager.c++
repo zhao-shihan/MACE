@@ -7,19 +7,21 @@
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.h++"
 #include "MACE/Utility/MPIUtil/MPIReseedPRNG.h++"
 
+#include "G4ApplicationState.hh"
 #include "G4Exception.hh"
 #include "G4Run.hh"
+#include "G4StateManager.hh"
 #include "Randomize.hh"
-
-#include "mpi.h"
 
 #include "fmt/chrono.h"
 #include "fmt/format.h"
 
 #include <algorithm>
+#include <array>
 #include <cstdlib>
 #include <streambuf>
 #include <string>
+#include <string_view>
 
 namespace MACE::inline Extension::Geant4X {
 
@@ -47,34 +49,80 @@ MPIRunManager::MPIRunManager() :
     fEventWallTimeStatistic{},
     fRunBeginSystemTime{},
     fRunWallTimeStopwatch{},
-    fRunCPUTimeStopwatch{} {
+    fRunCPUTimeStopwatch{},
+    fRunBeginBarrierRequest{},
+    fRunEndBarrierRequest{} {
     SetVerboseLevel(std2b::to_underlying(Env::MPIEnv::Instance().GetVerboseLevel()));
     MPIRunMessenger::Instance().AssignTo(this);
 }
 
 auto MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect) -> void {
     const auto& mpiEnv{Env::MPIEnv::Instance()};
-    if (nEvent < mpiEnv.CommWorldSize()) {
-        if (mpiEnv.AtCommWorldMaster()) {
-            G4Exception("MACE::Geant4X::MPIRunManager::CheckNEventIsAtLeastCommSize(...)",
-                        "TooFewNEventOrTooMuchRank",
-                        JustWarning,
-                        "The number of G4Event must be greater or equal to the number of MPI ranks,\n"
-                        "otherwise deadlock could raise in execution code.");
-        }
-        return;
-    }
+
     MPIUtil::MPIReseedPRNG(*G4Random::getTheEngine());
     fRunPlanOfThisRank = MPIUtil::AllocMPIJobsWorkerWise(0, nEvent, mpiEnv.CommWorldSize(), mpiEnv.CommWorldRank());
-    G4RunManager::BeamOn(fRunPlanOfThisRank.count, macroFile, nSelect);
+
+    fakeRun = nEvent <= 0;
     numberOfEventToBeProcessed = nEvent;
+    numberOfEventProcessed = 0;
+    if (ConfirmBeamOnCondition()) {
+        ConstructScoringWorlds();
+        RunInitialization();
+        DoEventLoop(nEvent, macroFile, nSelect);
+        RunTermination();
+    }
+    fakeRun = false;
+}
+
+auto MPIRunManager::ConfirmBeamOnCondition() -> G4bool {
+    const auto& mpiEnv{Env::MPIEnv::Instance()};
+
+    if (const auto currentState{G4StateManager::GetStateManager()->GetCurrentState()};
+        currentState != G4State_PreInit and currentState != G4State_Idle) {
+        if (mpiEnv.AtCommWorldMaster()) {
+            G4cerr << "Illegal application state - BeamOn ignored." << G4endl;
+        }
+        return false;
+    }
+
+    if (not initializedAtLeastOnce) {
+        if (mpiEnv.AtCommWorldMaster()) {
+            G4cerr << "Geant4 kernel should be initialized before the first BeamOn - BeamOn ignored." << G4endl;
+        }
+        return false;
+    }
+
+    if (numberOfEventToBeProcessed < mpiEnv.CommWorldSize()) {
+        if (mpiEnv.AtCommWorldMaster()) {
+            G4cerr << "The number of G4Event must >= the number of MPI ranks - BeamOn ignored." << G4endl;
+        }
+        return false;
+    }
+
+    MPI_Ibarrier(MPI_COMM_WORLD,
+                 &fRunBeginBarrierRequest);
+    MPI_Ibarrier(MPI_COMM_WORLD,
+                 &fRunEndBarrierRequest);
+
+    if (not geometryInitialized or not physicsInitialized) {
+        if (verboseLevel > 0 and mpiEnv.AtCommWorldMaster()) {
+            G4cout << "Start re-initialization because \n";
+            if (not geometryInitialized) { G4cout << "  Geometry\n"; }
+            if (not physicsInitialized) { G4cout << "  Physics processes\n"; }
+            G4cout << "has been modified since last Run." << G4endl;
+        }
+        Initialize();
+    }
+    return true;
 }
 
 auto MPIRunManager::RunInitialization() -> void {
     // initialize run
     G4RunManager::RunInitialization();
     // wait for everyone to start
-    MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Status runBeginBarrierStatus;
+    MPI_Wait(&fRunBeginBarrierRequest,
+             &runBeginBarrierStatus);
     // start the run stopwatch
     fRunBeginSystemTime = scsc::now();
     fRunWallTimeStopwatch.Reset();
@@ -130,25 +178,35 @@ auto MPIRunManager::RunTermination() -> void {
         PerRankRunEndReport(endedRun, wallTime, cpuTime);
     }
     // wait for everyone to end
-    MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Status runEndBarrierStatus;
+    MPI_Wait(&fRunEndBarrierRequest,
+             &runEndBarrierStatus);
     // run end report
     if (fPrintProgressModulo >= 0 and mpiEnv.GetVerboseLevel() >= Env::VL::Error) {
-        double maxWallTime;
-        double totalCPUTime;
-        MPI_Reduce(&wallTime,
-                   &maxWallTime,
-                   1,
-                   MPI_DOUBLE,
-                   MPI_MAX,
-                   0,
-                   MPI_COMM_WORLD);
-        MPI_Reduce(&cpuTime,
-                   &totalCPUTime,
-                   1,
-                   MPI_DOUBLE,
-                   MPI_SUM,
-                   0,
-                   MPI_COMM_WORLD);
+        std::array<MPI_Request, 2> fTimeMPIRequests;
+        auto& [findMaxWallTime, sumCPUTime]{fTimeMPIRequests};
+        double maxWallTime{};
+        MPI_Ireduce(&wallTime,
+                    &maxWallTime,
+                    1,
+                    MPI_DOUBLE,
+                    MPI_MAX,
+                    0,
+                    MPI_COMM_WORLD,
+                    &findMaxWallTime);
+        double totalCPUTime{};
+        MPI_Ireduce(&cpuTime,
+                    &totalCPUTime,
+                    1,
+                    MPI_DOUBLE,
+                    MPI_SUM,
+                    0,
+                    MPI_COMM_WORLD,
+                    &sumCPUTime);
+        std::array<MPI_Status, fTimeMPIRequests.size()> fTimeMPIStatuses;
+        MPI_Waitall(fTimeMPIRequests.size(),
+                    fTimeMPIRequests.data(),
+                    fTimeMPIStatuses.data());
         if (mpiEnv.AtCommWorldMaster()) {
             RunEndReport(endedRun, fRunBeginSystemTime, maxWallTime, totalCPUTime);
         }
@@ -172,9 +230,9 @@ auto MPIRunManager::EventEndReport(G4int eventID) const -> void {
 
 auto MPIRunManager::RunBeginReport(G4int runID) -> void {
     const auto& mpiEnv{Env::MPIEnv::Instance()};
-    fmt::print("-------------------------------> G4Run starts <--------------------------------\n"
+    fmt::print("--------------------------------> G4Run starts <-------------------------------\n"
                "{:%FT%T%z} > G4Run {} starts on {} ranks\n"
-               "-------------------------------> G4Run starts <--------------------------------\n",
+               "--------------------------------> G4Run starts <-------------------------------\n",
                fmt::localtime(scsc::to_time_t(scsc::now())), runID, mpiEnv.CommWorldSize());
 }
 

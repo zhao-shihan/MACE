@@ -8,11 +8,11 @@
 
 #include "G4RunManager.hh"
 
+#include "mpi.h"
+
 #include "gsl/gsl"
 
 #include <chrono>
-#include <ctime>
-#include <string_view>
 
 namespace MACE::inline Extension::Geant4X {
 
@@ -45,6 +45,7 @@ public:
     auto PrintProgressModulo(G4int val) -> void { fPrintProgressModulo = val, printModulo = -1; }
 
     virtual auto BeamOn(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) -> void override;
+    virtual auto ConfirmBeamOnCondition() -> G4bool override;
     virtual auto RunInitialization() -> void override;
     virtual auto InitializeEventLoop(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) -> void override;
     virtual auto ProcessOneEvent(G4int iEvent) -> void override;
@@ -73,6 +74,9 @@ private:
     scsc::time_point fRunBeginSystemTime;
     WallTimeStopwatch<> fRunWallTimeStopwatch;
     CPUTimeStopwatch<> fRunCPUTimeStopwatch;
+
+    MPI_Request fRunBeginBarrierRequest;
+    MPI_Request fRunEndBarrierRequest;
 };
 
 } // namespace MACE::inline Extension::Geant4X
