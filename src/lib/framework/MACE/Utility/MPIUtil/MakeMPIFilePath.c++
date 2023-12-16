@@ -33,9 +33,8 @@ void MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extens
                     .concat(std::to_string(mpiEnv.CommWorldRank()))
                     .concat(extension);
         // wait for create_directories
-        MPI_Status mpiBarrierStatus;
         MPI_Wait(&mpiBarrierRequest,
-                 &mpiBarrierStatus);
+                 MPI_STATUS_IGNORE);
     } else {
         path.concat(extension);
     }

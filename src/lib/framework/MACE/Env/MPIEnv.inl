@@ -68,9 +68,8 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
             MPI_Type_commit(&nodeInfoForMPI);
             std::vector<NodeInfoForMPI> nodeList;
             // Master find all unique processor names and assign node ID and count
-            MPI_Status gatherNodeNamesStatus;
             MPI_Wait(&gatherNodeNamesRequest,
-                     &gatherNodeNamesStatus);
+                     MPI_STATUS_IGNORE);
             if (AtCommWorldMaster()) {
                 nodeIDAndCountSend.reserve(fCommWorldSize);
                 nodeList.reserve(fCommWorldSize);
