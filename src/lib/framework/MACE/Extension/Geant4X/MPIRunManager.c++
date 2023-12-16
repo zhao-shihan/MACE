@@ -50,8 +50,8 @@ MPIRunManager::MPIRunManager() :
     fRunBeginSystemTime{},
     fRunWallTimeStopwatch{},
     fRunCPUTimeStopwatch{},
-    fRunBeginBarrierRequest{},
-    fRunEndBarrierRequest{} {
+    fRunBeginBarrierRequest{MPI_REQUEST_NULL},
+    fRunEndBarrierRequest{MPI_REQUEST_NULL} {
     SetVerboseLevel(std2b::to_underlying(Env::MPIEnv::Instance().GetVerboseLevel()));
     MPIRunMessenger::Instance().AssignTo(this);
 }
@@ -100,8 +100,10 @@ auto MPIRunManager::ConfirmBeamOnCondition() -> G4bool {
         return false;
     }
 
+    if (fRunBeginBarrierRequest != MPI_REQUEST_NULL) { MPI_Request_free(&fRunBeginBarrierRequest); }
     MPI_Ibarrier(MPI_COMM_WORLD,
                  &fRunBeginBarrierRequest);
+    if (fRunEndBarrierRequest != MPI_REQUEST_NULL) { MPI_Request_free(&fRunEndBarrierRequest); }
     MPI_Ibarrier(MPI_COMM_WORLD,
                  &fRunEndBarrierRequest);
 
@@ -121,9 +123,8 @@ auto MPIRunManager::RunInitialization() -> void {
     // initialize run
     G4RunManager::RunInitialization();
     // wait for everyone to start
-    MPI_Status runBeginBarrierStatus;
     MPI_Wait(&fRunBeginBarrierRequest,
-             &runBeginBarrierStatus);
+             MPI_STATUS_IGNORE);
     // start the run stopwatch
     fRunBeginSystemTime = scsc::now();
     fRunWallTimeStopwatch = {};
@@ -179,9 +180,8 @@ auto MPIRunManager::RunTermination() -> void {
         PerRankRunEndReport(endedRun, wallTime, cpuTime);
     }
     // wait for everyone to end
-    MPI_Status runEndBarrierStatus;
     MPI_Wait(&fRunEndBarrierRequest,
-             &runEndBarrierStatus);
+             MPI_STATUS_IGNORE);
     // run end report
     if (fPrintProgressModulo >= 0 and mpiEnv.GetVerboseLevel() >= Env::VL::Error) {
         std::array<MPI_Request, 2> fTimeMPIRequests;
@@ -204,10 +204,9 @@ auto MPIRunManager::RunTermination() -> void {
                     0,
                     MPI_COMM_WORLD,
                     &sumCPUTime);
-        std::array<MPI_Status, fTimeMPIRequests.size()> fTimeMPIStatuses;
         MPI_Waitall(fTimeMPIRequests.size(),
                     fTimeMPIRequests.data(),
-                    fTimeMPIStatuses.data());
+                    MPI_STATUSES_IGNORE);
         if (mpiEnv.AtCommWorldMaster()) {
             RunEndReport(endedRun, fRunBeginSystemTime, maxWallTime, totalCPUTime);
         }
