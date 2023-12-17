@@ -53,10 +53,10 @@ namespace MACE::inline Utility::MPIUtil {
 /// When just ./xxx (not in MPI mode) :
 /// Just a single result.root will be created.
 ///
-std::filesystem::path MakeMPIFilePath(std::convertible_to<std::filesystem::path> auto&& path);
-std::filesystem::path MakeMPIFilePath(std::convertible_to<std::filesystem::path> auto&& path, std::string_view extension);
-void MakeMPIFilePathInPlace(std::filesystem::path& path);
-void MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extension);
+auto MakeMPIFilePath(std::convertible_to<std::filesystem::path> auto&& path) -> std::filesystem::path;
+auto MakeMPIFilePath(std::convertible_to<std::filesystem::path> auto&& path, std::string_view extension) -> std::filesystem::path;
+auto MakeMPIFilePathInPlace(std::filesystem::path& path) -> void;
+auto MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extension) -> void;
 
 } // namespace MACE::inline Utility::MPIUtil
 

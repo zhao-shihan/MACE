@@ -49,9 +49,7 @@ MPIRunManager::MPIRunManager() :
     fEventWallTimeStatistic{},
     fRunBeginSystemTime{},
     fRunWallTimeStopwatch{},
-    fRunCPUTimeStopwatch{},
-    fRunBeginBarrierRequest{MPI_REQUEST_NULL},
-    fRunEndBarrierRequest{MPI_REQUEST_NULL} {
+    fRunCPUTimeStopwatch{} {
     SetVerboseLevel(std2b::to_underlying(Env::MPIEnv::Instance().GetVerboseLevel()));
     MPIRunMessenger::Instance().AssignTo(this);
 }
@@ -100,13 +98,6 @@ auto MPIRunManager::ConfirmBeamOnCondition() -> G4bool {
         return false;
     }
 
-    if (fRunBeginBarrierRequest != MPI_REQUEST_NULL) { MPI_Request_free(&fRunBeginBarrierRequest); }
-    MPI_Ibarrier(MPI_COMM_WORLD,
-                 &fRunBeginBarrierRequest);
-    if (fRunEndBarrierRequest != MPI_REQUEST_NULL) { MPI_Request_free(&fRunEndBarrierRequest); }
-    MPI_Ibarrier(MPI_COMM_WORLD,
-                 &fRunEndBarrierRequest);
-
     if (not geometryInitialized or not physicsInitialized) {
         if (verboseLevel > 0 and mpiEnv.AtCommWorldMaster()) {
             G4cout << "Start re-initialization because \n";
@@ -123,8 +114,7 @@ auto MPIRunManager::RunInitialization() -> void {
     // initialize run
     G4RunManager::RunInitialization();
     // wait for everyone to start
-    MPI_Wait(&fRunBeginBarrierRequest,
-             MPI_STATUS_IGNORE);
+    MPI_Barrier(MPI_COMM_WORLD);
     // start the run stopwatch
     fRunBeginSystemTime = scsc::now();
     fRunWallTimeStopwatch = {};
@@ -174,16 +164,11 @@ auto MPIRunManager::RunTermination() -> void {
     // stop the run stopwatch
     const auto cpuTime{fRunCPUTimeStopwatch.SecondsUsed()};
     const auto wallTime{fRunWallTimeStopwatch.SecondsElapsed()};
-    // if running in parallel, per rank run end report
-    const auto& mpiEnv{Env::MPIEnv::Instance()};
-    if (fPrintProgressModulo >= 0 and mpiEnv.GetVerboseLevel() >= Env::VL::Error and mpiEnv.Parallel()) {
-        PerRankRunEndReport(endedRun, wallTime, cpuTime);
-    }
-    // wait for everyone to end
-    MPI_Wait(&fRunEndBarrierRequest,
-             MPI_STATUS_IGNORE);
     // run end report
-    if (fPrintProgressModulo >= 0 and mpiEnv.GetVerboseLevel() >= Env::VL::Error) {
+    if (const auto& mpiEnv{Env::MPIEnv::Instance()};
+        fPrintProgressModulo >= 0 and mpiEnv.GetVerboseLevel() >= Env::VL::Error) {
+        // if running in parallel, per rank run end report
+        if (mpiEnv.Parallel()) { PerRankRunEndReport(endedRun, wallTime, cpuTime); }
         std::array<MPI_Request, 2> fTimeMPIRequests;
         auto& [findMaxWallTime, sumCPUTime]{fTimeMPIRequests};
         double maxWallTime{};
@@ -210,6 +195,8 @@ auto MPIRunManager::RunTermination() -> void {
         if (mpiEnv.AtCommWorldMaster()) {
             RunEndReport(endedRun, fRunBeginSystemTime, maxWallTime, totalCPUTime);
         }
+    } else {
+        MPI_Barrier(MPI_COMM_WORLD);
     }
 }
 

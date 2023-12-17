@@ -1,25 +1,24 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.h++"
 
+#include "fmt/format.h"
+
 namespace MACE::inline Utility::MPIUtil {
 
-void MakeMPIFilePathInPlace(std::filesystem::path& path) {
-    const auto extension = path.extension().generic_string();
+auto MakeMPIFilePathInPlace(std::filesystem::path& path) -> void {
+    const auto extension{path.extension().generic_string()};
     MakeMPIFilePathInPlace(path.replace_extension(), extension);
 }
 
-void MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extension) {
+auto MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extension) -> void {
     // file name without extension
-    auto fileName = path.filename();
+    auto fileName{path.filename()};
     if (fileName.empty()) {
         throw std::logic_error("MACE::Utility::MPIUtil::MakeMPIFilePathInPlace: Empty name");
     }
 
     if (const auto& mpiEnv = Env::MPIEnv::Instance();
         mpiEnv.Parallel()) {
-        MPI_Request mpiBarrierRequest;
-        MPI_Ibarrier(mpiEnv.CommShared(),
-                     &mpiBarrierRequest);
         // root directory
         if (mpiEnv.OnCluster()) {
             path /= mpiEnv.LocalNode().name;
@@ -28,15 +27,18 @@ void MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extens
         if (mpiEnv.AtCommSharedMaster()) {
             std::filesystem::create_directories(path);
         }
+        // wait for create_directories
+        MPI_Request mpiBarrierRequest;
+        MPI_Ibarrier(mpiEnv.CommShared(),
+                     &mpiBarrierRequest);
         // construct full path
-        path /= fileName.concat(".rank")
-                    .concat(std::to_string(mpiEnv.CommWorldRank()))
-                    .concat(extension);
+        auto rankN{fmt::format(".rank{}.", mpiEnv.CommWorldRank())};
+        path /= fileName.concat(std::move(rankN)).replace_extension(extension);
         // wait for create_directories
         MPI_Wait(&mpiBarrierRequest,
                  MPI_STATUS_IGNORE);
     } else {
-        path.concat(extension);
+        path.replace_extension(extension);
     }
 }
 

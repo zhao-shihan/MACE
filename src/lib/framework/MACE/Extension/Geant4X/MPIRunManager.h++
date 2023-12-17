@@ -74,9 +74,6 @@ private:
     scsc::time_point fRunBeginSystemTime;
     WallTimeStopwatch<> fRunWallTimeStopwatch;
     CPUTimeStopwatch<> fRunCPUTimeStopwatch;
-
-    MPI_Request fRunBeginBarrierRequest;
-    MPI_Request fRunEndBarrierRequest;
 };
 
 } // namespace MACE::inline Extension::Geant4X
