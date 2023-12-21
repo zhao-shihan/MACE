@@ -2,7 +2,7 @@
 
 #include "MACE/Math/Statistic.h++"
 #include "MACE/Utility/CPUTimeStopwatch.h++"
-#include "MACE/Utility/DivideIndices.h++"
+#include "MACE/Utility/MPIUtil/TaskScheduler.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 #include "MACE/Utility/WallTimeStopwatch.h++"
 
@@ -39,41 +39,14 @@ public:
 
     static auto GetRunManager() -> auto { return static_cast<MPIRunManager*>(G4RunManager::GetRunManager()); }
 
-    auto PrintProgressModulo() const -> const auto& { return fPrintProgressModulo; }
-    auto EventWallTimeStatistic() const -> const auto& { return fEventWallTimeStatistic; }
-
-    auto PrintProgressModulo(G4int val) -> void { fPrintProgressModulo = val, printModulo = -1; }
+    auto PrintProgressModulo(G4int mod) -> void { fTask.PrintProgressModulo(mod), printModulo = -1; }
 
     virtual auto BeamOn(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) -> void override;
     virtual auto ConfirmBeamOnCondition() -> G4bool override;
-    virtual auto RunInitialization() -> void override;
-    virtual auto InitializeEventLoop(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) -> void override;
-    virtual auto ProcessOneEvent(G4int iEvent) -> void override;
-    virtual auto TerminateOneEvent() -> void override;
-    virtual auto RunTermination() -> void override;
+    virtual auto DoEventLoop(G4int nEvent, const char* macroFile, G4int nSelect) -> void override;
 
 private:
-    using scsc = std::chrono::system_clock;
-
-    auto EventEndReport(G4int eventID) const -> void;
-
-    static auto RunBeginReport(G4int runID) -> void;
-    static auto PerRankRunEndReport(G4int runID, double wallTime, double cpuTime) -> void;
-    static auto RunEndReport(G4int runID, scsc::time_point runBeginTime, double maxWallTime, double totalCPUTime) -> void;
-
-    static auto SToDHMS(double secondsInTotal) -> std::string;
-
-private:
-    G4int fPrintProgressModulo;
-
-    IntegralIndexRange<G4int> fRunPlanOfThisRank;
-
-    WallTimeStopwatch<> fEventWallTimeStopwatch;
-    Math::Statistic<1> fEventWallTimeStatistic;
-
-    scsc::time_point fRunBeginSystemTime;
-    WallTimeStopwatch<> fRunWallTimeStopwatch;
-    CPUTimeStopwatch<> fRunCPUTimeStopwatch;
+    MPIUtil::TaskScheduler<G4int> fTask;
 };
 
 } // namespace MACE::inline Extension::Geant4X
