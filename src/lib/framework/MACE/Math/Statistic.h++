@@ -65,6 +65,9 @@ public:
 
     constexpr auto Kurtosis() const -> decltype(auto) { return CentralMoment<4>() / Math::Pow<2>(Variance()); }
 
+    constexpr auto VarianceOfMean() const -> decltype(auto) { return Variance() / fSumW; }
+    auto StdDevOfMean() const -> decltype(auto) { return std::sqrt(VarianceOfMean()); }
+
 private:
     double fSumWX;
     double fSumWX2;
