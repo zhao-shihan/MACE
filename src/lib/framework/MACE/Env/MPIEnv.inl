@@ -6,12 +6,6 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
     PassiveSingleton<MPIEnv>{},
     fCommWorldRank{
         [&argc, &argv] {
-            // Confirm MPI condition
-            int mpiInitialized;
-            MPI_Initialized(&mpiInitialized);
-            if (mpiInitialized) {
-                throw std::logic_error("MACE::Env::MPIEnv: Trying to call MPI_Init twice");
-            }
             // Initialize MPI
             MPI_Init(&argc, &argv);
             // Initialize rank ID in the world communicator
