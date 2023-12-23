@@ -19,7 +19,7 @@ inline namespace Messenger {
 
 class SpectrometerFieldMessenger final : public Env::Memory::Singleton<SpectrometerFieldMessenger>,
                                      public G4UImessenger {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     SpectrometerFieldMessenger();

@@ -4,11 +4,10 @@
 #include "MACE/Env/Memory/WeakSingleton.h++"
 #include "MACE/Env/Memory/internal/PassiveSingletonBase.h++"
 #include "MACE/Env/Memory/internal/WeakSingletonPool.h++"
-#include "MACE/Utility/InlineMacro.h++"
+#include "MACE/Compatibility/std2b/unreachable.h++"
 
 #include "fmt/format.h"
 
-#include <cassert>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -21,16 +20,13 @@ class PassiveSingleton : public internal::PassiveSingletonBase,
                          public WeakSingleton<ADerived> {
 protected:
     PassiveSingleton();
-    ~PassiveSingleton();
+    ~PassiveSingleton() = default;
 
 public:
     MACE_ALWAYS_INLINE static auto Instance() -> ADerived&;
 
 private:
-    static auto FindInstance() -> void;
-
-private:
-    static ADerived* fgInstance;
+    using Base = WeakSingleton<ADerived>;
 };
 
 } // namespace MACE::Env::Memory

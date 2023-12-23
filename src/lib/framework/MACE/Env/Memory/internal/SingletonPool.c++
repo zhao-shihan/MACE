@@ -4,13 +4,13 @@
 
 namespace MACE::Env::Memory::internal {
 
-[[nodiscard]] auto SingletonPool::GetUndeletedInReverseInsertionOrder() const -> std::vector<BaseNode> {
-    std::vector<std::pair<gsl::index, BaseNode>> undeletedListWithID;
+[[nodiscard]] auto SingletonPool::GetUndeletedInReverseInsertionOrder() const -> std::vector<gsl::owner<const SingletonBase*>> {
+    std::vector<std::pair<gsl::index, gsl::owner<const SingletonBase*>>> undeletedListWithID;
     undeletedListWithID.reserve(fInstanceMap.size());
-    for (auto&& [_, nodePair] : fInstanceMap) {
-        const auto& [node, baseNodePair] = nodePair;
+    for (auto&& [_, nodeInfo] : fInstanceMap) {
+        const auto& [node, index, base]{nodeInfo};
         if (node != nullptr) {
-            undeletedListWithID.emplace_back(baseNodePair);
+            undeletedListWithID.emplace_back(index, base);
         }
     }
 
@@ -19,7 +19,7 @@ namespace MACE::Env::Memory::internal {
                           return lhs.first > rhs.first;
                       });
 
-    std::vector<BaseNode> undeletedList;
+    std::vector<gsl::owner<const SingletonBase*>> undeletedList;
     undeletedList.reserve(undeletedListWithID.size());
     for (auto&& [id, baseNode] : std::as_const(undeletedListWithID)) {
         undeletedList.emplace_back(baseNode);

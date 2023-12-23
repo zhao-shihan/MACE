@@ -20,7 +20,7 @@ inline namespace Messenger {
 
 class AnalysisMessenger final : public Env::Memory::Singleton<AnalysisMessenger>,
                                 public G4UImessenger {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     AnalysisMessenger();

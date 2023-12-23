@@ -5,7 +5,7 @@
 namespace MACE::Detector::Description {
 
 class EMCShield final : public DescriptionSingletonBase<EMCShield> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     EMCShield();

@@ -145,8 +145,6 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
     if (ROOT::IsImplicitMTEnabled()) {
         ROOT::DisableImplicitMT();
     }
-    // Update status
-    fgInitialized = true;
     // Print startup message
     if (printWelcomeMessage and AtCommWorldMaster()) {
         PrintWelcomeMessageSplitLine();

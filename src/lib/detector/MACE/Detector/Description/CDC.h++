@@ -12,7 +12,7 @@
 namespace MACE::Detector::Description {
 
 class CDC final : public DescriptionSingletonBase<CDC> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     CDC();

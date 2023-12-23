@@ -32,7 +32,7 @@ inline namespace Messenger {
 template<TargetForMuoniumPhysics ATarget>
 class MuoniumPhysicsMessenger final : public Env::Memory::Singleton<MuoniumPhysicsMessenger<ATarget>>,
                                       public G4UImessenger {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     MuoniumPhysicsMessenger();

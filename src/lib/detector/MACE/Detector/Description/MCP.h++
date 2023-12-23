@@ -5,7 +5,7 @@
 namespace MACE::Detector::Description {
 
 class MCP final : public DescriptionSingletonBase<MCP> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     MCP();

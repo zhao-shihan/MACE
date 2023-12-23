@@ -7,7 +7,7 @@
 namespace MACE::Detector::Description {
 
 class AcceleratorField final : public DescriptionSingletonBase<AcceleratorField> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     AcceleratorField();

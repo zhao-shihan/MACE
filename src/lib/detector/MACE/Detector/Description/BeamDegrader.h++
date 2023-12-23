@@ -7,7 +7,7 @@
 namespace MACE::Detector::Description {
 
 class BeamDegrader final : public DescriptionSingletonBase<BeamDegrader> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     BeamDegrader();

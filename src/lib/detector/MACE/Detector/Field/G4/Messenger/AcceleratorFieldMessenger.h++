@@ -19,7 +19,7 @@ inline namespace Messenger {
 
 class AcceleratorFieldMessenger final : public Env::Memory::Singleton<AcceleratorFieldMessenger>,
                                         public G4UImessenger {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     AcceleratorFieldMessenger();

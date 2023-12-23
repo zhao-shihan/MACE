@@ -17,7 +17,7 @@ class SurfaceMuon;
 
 class SurfaceMuonMessenger final : public Env::Memory::Singleton<SurfaceMuonMessenger>,
                                    public G4UImessenger {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     SurfaceMuonMessenger();

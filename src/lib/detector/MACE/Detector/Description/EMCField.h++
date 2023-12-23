@@ -11,7 +11,7 @@
 namespace MACE::Detector::Description {
 
 class EMCField final : public DescriptionSingletonBase<EMCField> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     EMCField();

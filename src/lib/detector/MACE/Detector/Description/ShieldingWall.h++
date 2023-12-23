@@ -5,7 +5,7 @@
 namespace MACE::Detector::Description {
 
 class ShieldingWall final : public DescriptionSingletonBase<ShieldingWall> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     ShieldingWall();

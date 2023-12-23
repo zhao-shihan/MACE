@@ -23,7 +23,7 @@ inline namespace Messenger {
 
 class SolenoidFieldMessenger final : public Env::Memory::Singleton<SolenoidFieldMessenger>,
                              public G4UImessenger {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     SolenoidFieldMessenger();

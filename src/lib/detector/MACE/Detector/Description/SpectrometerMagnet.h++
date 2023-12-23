@@ -5,7 +5,7 @@
 namespace MACE::Detector::Description {
 
 class SpectrometerMagnet final : public DescriptionSingletonBase<SpectrometerMagnet> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     SpectrometerMagnet();

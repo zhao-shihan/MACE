@@ -8,7 +8,7 @@
 namespace MACE::Detector::Description {
 
 class Solenoid final : public DescriptionSingletonBase<Solenoid> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     Solenoid();

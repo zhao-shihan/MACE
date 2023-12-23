@@ -5,7 +5,7 @@
 namespace MACE::Detector::Description {
 
 class Filter final : public DescriptionSingletonBase<Filter> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     Filter();

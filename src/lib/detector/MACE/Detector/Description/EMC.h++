@@ -8,7 +8,7 @@
 namespace MACE::Detector::Description {
 
 class EMC final : public DescriptionSingletonBase<EMC> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     EMC();

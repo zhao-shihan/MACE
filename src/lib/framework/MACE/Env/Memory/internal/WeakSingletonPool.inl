@@ -1,7 +1,7 @@
 namespace MACE::Env::Memory::internal {
 
 template<WeakSingletonified AWeakSingleton>
-[[nodiscard]] auto WeakSingletonPool::Find() -> std::optional<std::reference_wrapper<WeakSingletonPool::Node>> {
+[[nodiscard]] auto WeakSingletonPool::Find() -> std::optional<std::reference_wrapper<void*>> {
     if (const auto existed = fInstanceMap.find(typeid(AWeakSingleton));
         existed == fInstanceMap.cend()) {
         return std::nullopt;
@@ -11,7 +11,7 @@ template<WeakSingletonified AWeakSingleton>
 }
 
 template<WeakSingletonified AWeakSingleton>
-[[nodiscard]] auto WeakSingletonPool::Insert(gsl::not_null<AWeakSingleton*> instance) -> Node& {
+[[nodiscard]] auto WeakSingletonPool::Insert(gsl::not_null<AWeakSingleton*> instance) -> void*& {
     if (const auto [iter, inserted] = fInstanceMap.try_emplace(typeid(AWeakSingleton), instance);
         inserted) {
         return iter->second;

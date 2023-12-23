@@ -5,7 +5,7 @@
 namespace MACE::Detector::Description {
 
 class World final : public DescriptionSingletonBase<World> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     World();

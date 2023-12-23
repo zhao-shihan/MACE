@@ -17,7 +17,7 @@ class MPIRunManager;
 
 class MPIRunMessenger final : public Env::Memory::Singleton<MPIRunMessenger>,
                               public G4UImessenger {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     MPIRunMessenger();

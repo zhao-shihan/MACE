@@ -8,7 +8,7 @@ namespace MACE::inline Simulation::inline Physics::inline Particle {
 
 class Muonium final : public Env::Memory::Singleton<Muonium>,
                       public G4ParticleDefinition {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     Muonium();

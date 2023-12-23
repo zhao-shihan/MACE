@@ -5,7 +5,7 @@
 namespace MACE::Detector::Description {
 
 class SpectrometerField final : public DescriptionSingletonBase<SpectrometerField> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     SpectrometerField();

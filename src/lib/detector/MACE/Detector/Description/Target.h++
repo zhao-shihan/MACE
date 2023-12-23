@@ -18,7 +18,7 @@
 namespace MACE::Detector::Description {
 
 class Target final : public DescriptionSingletonBase<Target> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 public:
     enum class TargetShapeType {

@@ -11,6 +11,7 @@
 #include <functional>
 #include <optional>
 #include <stdexcept>
+#include <tuple>
 #include <typeindex>
 #include <typeinfo>
 #include <unordered_map>
@@ -24,20 +25,16 @@ class SingletonBase;
 /// Not API.
 class SingletonPool final : public PassiveSingleton<SingletonPool> {
 public:
-    using Node = void*;
-    using BaseNode = gsl::owner<const SingletonBase*>;
-
-public:
     template<Singletonified ASingleton>
-    [[nodiscard]] auto Find() -> std::optional<std::reference_wrapper<Node>>;
+    [[nodiscard]] auto Find() -> std::optional<std::reference_wrapper<void*>>;
     template<Singletonified ASingleton>
     [[nodiscard]] auto Contains() const -> auto { return fInstanceMap.contains(typeid(ASingleton)); }
     template<Singletonified ASingleton>
-    [[nodiscard]] auto Insert(gsl::not_null<ASingleton*> instance) -> Node&;
-    [[nodiscard]] auto GetUndeletedInReverseInsertionOrder() const -> std::vector<BaseNode>;
+    [[nodiscard]] auto Insert(gsl::not_null<ASingleton*> instance) -> void*&;
+    [[nodiscard]] auto GetUndeletedInReverseInsertionOrder() const -> std::vector<gsl::owner<const SingletonBase*>>;
 
 private:
-    std::unordered_map<std::type_index, std::pair<Node, const std::pair<gsl::index, BaseNode>>> fInstanceMap;
+    std::unordered_map<std::type_index, std::tuple<void*, const gsl::index, const gsl::owner<const SingletonBase*>>> fInstanceMap;
 };
 
 } // namespace MACE::Env::Memory::internal

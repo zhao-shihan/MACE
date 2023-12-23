@@ -27,9 +27,11 @@ public:
     virtual ~MPIEnv();
 
     using PassiveSingleton<MPIEnv>::Instance;
-    static auto Initialized() -> auto { return fgInitialized; }
-    static auto Finalized() -> auto { return fgFinalized; }
-    static auto Available() -> auto { return Initialized() and not Finalized(); }
+    using PassiveSingleton<MPIEnv>::Available;
+    using PassiveSingleton<MPIEnv>::Expired;
+    using PassiveSingleton<MPIEnv>::Instantiated;
+    static auto Initialized() -> auto { return Instantiated(); }
+    static auto Finalized() -> auto { return Expired(); }
 
     auto CommWorldRank() const -> const auto& { return fCommWorldRank; }
     auto CommWorldSize() const -> const auto& { return fCommWorldSize; }
@@ -73,9 +75,6 @@ private:
     const MPI_Comm fSharedComm;
     const int fSharedCommRank;
     const int fSharedCommSize;
-
-    static bool fgInitialized;
-    static bool fgFinalized;
 };
 
 } // namespace MACE::Env

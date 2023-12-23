@@ -7,7 +7,7 @@
 namespace MACE::Detector::Description {
 
 class BeamMonitor final : public DescriptionSingletonBase<BeamMonitor> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     BeamMonitor();

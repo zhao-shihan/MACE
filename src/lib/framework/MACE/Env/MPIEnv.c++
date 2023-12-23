@@ -7,12 +7,7 @@
 
 namespace MACE::Env {
 
-bool MPIEnv::fgInitialized = false;
-bool MPIEnv::fgFinalized = false;
-
 MPIEnv::~MPIEnv() {
-    // Update status
-    fgFinalized = true;
     // Destructs the local communicator
     auto sharedComm = fSharedComm;
     MPI_Comm_free(&sharedComm);
