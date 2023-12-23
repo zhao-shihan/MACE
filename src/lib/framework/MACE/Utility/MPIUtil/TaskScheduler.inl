@@ -22,9 +22,6 @@ TaskScheduler<T>::TaskScheduler() :
     MPI_Info info;
     MPI_Info_create(&info);
     MPI_Info_set(info,
-                 "no_locks",
-                 "true");
-    MPI_Info_set(info,
                  "accumulate_ops",
                  "same_op");
     MPI_Info_set(info,
@@ -39,6 +36,8 @@ TaskScheduler<T>::TaskScheduler() :
                      MPI_COMM_WORLD,
                      &fMemory,
                      &fWindow);
+    MPI_Win_fence(MPI_MODE_NOSTORE | MPI_MODE_NOPUT | MPI_MODE_NOPRECEDE | MPI_MODE_NOSUCCEED,
+                  fWindow);
     MPI_Info_free(&info);
 }
 
@@ -91,6 +90,10 @@ auto TaskScheduler<T>::Next() -> std::optional<T> {
     }
 
     constexpr T one{1};
+    MPI_Win_lock(MPI_LOCK_EXCLUSIVE,
+                 0,
+                 0,
+                 fWindow);
     MPI_Fetch_and_op(&one,
                      &fProcessingTask,
                      DataType<T>(),
@@ -98,6 +101,8 @@ auto TaskScheduler<T>::Next() -> std::optional<T> {
                      0,
                      MPI_SUM,
                      fWindow);
+    MPI_Win_unlock(0,
+                   fWindow);
     if (fProcessingTask > fTask.last) { fProcessingTask = fTask.last; } // note: fetch-and-add over last is possible
 
     if (fNLocalProcessedTask > 0) {
@@ -177,13 +182,13 @@ auto TaskScheduler<T>::TaskReport() const -> void {
     const auto nUp{static_cast<double>(fProcessingTask)};
     const auto nLow{nUp > mpiEnv.CommWorldSize() ? nUp - mpiEnv.CommWorldSize() : 1};
     const auto eta{t * (NTask() * Math::MidPoint(1 / nUp, 1 / nLow) - 1)};
-    const auto etaError{3 * t * mpiEnv.CommWorldSize() * NTask() / (2 * nUp * nLow)};
+    // const auto etaError{3 * t * mpiEnv.CommWorldSize() * NTask() / (2 * nUp * nLow)};
     const auto nMean{Math::MidPoint(nLow, nUp)};
     const auto progress{nMean / NTask()};
     fmt::print("Rank{}> {:%FT%T%z} > {} {} has started\n"
-               "Rank{}>   Est. rem. time: {} +/- {}  Progress: {}/{} ({:.4}%)\n",
+               "Rank{}>   Est. rem. time: {}  Progress: {}/{} ({:.4}%)\n",
                mpiEnv.CommWorldRank(), fmt::localtime(scsc::to_time_t(scsc::now())), fTaskName, fProcessingTask,
-               mpiEnv.CommWorldRank(), SToDHMS(eta), SToDHMS(etaError), nMean, NTask(), 100 * progress);
+               mpiEnv.CommWorldRank(), SToDHMS(eta), nMean, NTask(), 100 * progress);
 }
 
 template<std::integral T>
