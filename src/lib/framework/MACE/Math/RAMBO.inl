@@ -31,7 +31,7 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
                 R[j] += p[i][j];
             }
         }
-        const auto Rmass{std::sqrt(Math::Pow<2>(R[0]) - Math::Pow<2>(R[1]) - Math::Pow<2>(R[2]) - Math::Pow<2>(R[3]))};
+        const auto Rmass{std::sqrt(Math::Pow<2>(R[0]) - Math::Hypot2(R[1], R[2], R[3]))};
         for (auto j{0}; j < 4; j++) {
             R[j] /= -Rmass;
         }
@@ -85,7 +85,7 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
                 fc = fa;
                 e = d = b - a;
             }
-            if (std::abs(fc) < std::abs(fb)) {
+            if (std2b::abs(fc) < std2b::abs(fb)) {
                 a = b;
                 b = c;
                 c = a;
@@ -93,10 +93,10 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
                 fb = fc;
                 fc = fa;
             }
-            const auto tol1{2 * realtiny * std::abs(b) + tol / 2};
+            const auto tol1{2 * realtiny * std2b::abs(b) + tol / 2};
             const auto xm{(c - b) / 2};
-            if (std::abs(xm) <= tol1 or fb == 0) return b;
-            if (std::abs(e) >= tol1 and std::abs(fa) > std::abs(fb)) {
+            if (std2b::abs(xm) <= tol1 or fb == 0) return b;
+            if (std2b::abs(e) >= tol1 and std2b::abs(fa) > std2b::abs(fb)) {
                 const auto s{fb / fa};
                 if (a == c) {
                     p = 2 * xm * s;
@@ -108,8 +108,8 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
                     q = (q - 1) * (r1 - 1) * (s - 1);
                 }
                 if (p > 0) q = -q;
-                p = std::abs(p);
-                if (2 * p < std::min(3.0 * xm * q - std::abs(tol1 * q), std::abs(e * q))) {
+                p = std2b::abs(p);
+                if (2 * p < std::min(3 * xm * q - std2b::abs(tol1 * q), std2b::abs(e * q))) {
                     e = d;
                     d = p / q;
                 } else {
@@ -122,7 +122,7 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
             }
             a = b;
             fa = fb;
-            if (std::abs(d) > tol1) {
+            if (std2b::abs(d) > tol1) {
                 b += d;
             } else {
                 b += (xm > 1) ? tol1 : -tol1;
@@ -136,14 +136,14 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
         [&](double xi) {
             double retval{};
             for (auto i{0}; i < N; i++) {
-                retval += std::sqrt(Math::Pow<2>(fMass[i]) + Math::Pow<2>(xi) * Math::Pow<2>(p[i][0]));
+                retval += Math::Hypot(fMass[i], xi * p[i][0]);
             }
             return retval;
         },
         fECM, 0, 1, 1e-10)};
     // rescale all the momenta
     for (auto iMom{0}; iMom < N; iMom++) {
-        p[iMom][0] = std::sqrt(Math::Pow<2>(fMass[iMom]) + Math::Pow<2>(xi) * Math::Pow<2>(p[iMom][0]));
+        p[iMom][0] = Math::Hypot(fMass[iMom], xi * p[iMom][0]);
         p[iMom][1] *= xi;
         p[iMom][2] *= xi;
         p[iMom][3] *= xi;
@@ -153,7 +153,7 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
     double prodpnormdivE{1};
     double sumpnormsquadivE{};
     for (auto iMom{0}; iMom < N; iMom++) {
-        auto pnormsqua{Math::Pow<2>(p[iMom][1]) + Math::Pow<2>(p[iMom][2]) + Math::Pow<2>(p[iMom][3])};
+        auto pnormsqua{Math::Hypot2(p[iMom][1], p[iMom][2], p[iMom][3])};
         auto pnorm{std::sqrt(pnormsqua)};
         sumpnorm += pnorm;
         prodpnormdivE *= pnorm / p[iMom][0];

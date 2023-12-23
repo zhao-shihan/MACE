@@ -1,5 +1,7 @@
 #pragma once
 
+#include "MACE/Compatibility/std2b/constexpr_cmath.h++"
+#include "MACE/Math/Hypot.h++"
 #include "MACE/Math/IntegerPower.h++"
 
 #include "CLHEP/Random/RandFlat.h"
