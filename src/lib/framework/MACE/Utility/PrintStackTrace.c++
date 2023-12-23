@@ -11,19 +11,22 @@
 
 namespace MACE::inline Utility {
 
-void PrintStackTrace(backward::StackTrace& stack, int skip, std::FILE* stream) {
+MACE_NOINLINE auto PrintStackTrace(int depth, int skip, std::FILE* stream) -> void {
+    const auto trueSkip{skip + 1};
+    backward::StackTrace stack;
+    stack.load_here(depth + trueSkip);
     backward::TraceResolver resolver;
     resolver.load_stacktrace(stack);
 
-    const auto& mpiEnv{Env::MPIEnv::Instance()};
-
-    const auto lineHeader{mpiEnv.Initialized() ? fmt::format("Rank{}> ", mpiEnv.CommWorldRank()) : ""};
+    const auto lineHeader{Env::MPIEnv::Initialized() ?
+                              fmt::format("Rank{}> ", Env::MPIEnv::Instance().CommWorldRank()) :
+                              ""};
     auto text{lineHeader + "Stack trace (most recent call last):\n"};
     backward::SnippetFactory snippetFactory;
-    for (auto i{std::ssize(stack) - 1 - skip}; i >= 0; --i) {
+    for (auto i{std::ssize(stack) - 1}; i >= trueSkip; --i) {
         auto trace{resolver.resolve(stack[i])};
         text += fmt::format("{}#{:<2} {} in {} from {}",
-                            lineHeader, i, std::move(trace.addr),
+                            lineHeader, i - trueSkip, std::move(trace.addr),
                             trace.object_function.empty() ? "??" : std::move(trace.object_function),
                             trace.object_filename.empty() ? "??" : std::move(trace.object_filename));
         if (auto&& src{trace.source};

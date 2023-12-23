@@ -2,12 +2,10 @@
 
 #include <cstdio>
 
-namespace backward {
-class StackTrace;
-} // namespace backward
+#include "MACE/Utility/InlineMacro.h++"
 
 namespace MACE::inline Utility {
 
-void PrintStackTrace(backward::StackTrace& stack, int skip = 0, std::FILE* stream = stderr);
+MACE_NOINLINE auto PrintStackTrace(int depth = 64, int skip = 0, std::FILE* stream = stderr) -> void;
 
 } // namespace MACE::inline Utility

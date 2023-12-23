@@ -1,10 +1,8 @@
 #if MACE_SIGNAL_HANDLER
 
-#    include "MACE/Env/internal/ISOC99SignalHandler.h++"
 #    include "MACE/Env/MPIEnv.h++"
+#    include "MACE/Env/internal/ISOC99SignalHandler.h++"
 #    include "MACE/Utility/PrintStackTrace.h++"
-
-#    include "backward.hpp"
 
 #    include <chrono>
 #    include <csignal>
@@ -34,9 +32,7 @@ extern "C" {
         std::clog << "***** on rank " << mpi.CommWorldRank() << " (node: " << mpi.LocalNode().name << ")\n";
     }
     std::clog << "***** at " << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
-    backward::StackTrace stack;
-    stack.load_here(64);
-    PrintStackTrace(stack);
+    PrintStackTrace(64, 2);
     std::clog << std::endl;
 #    ifndef __MINGW32__
     std::quick_exit(EXIT_FAILURE);
@@ -55,9 +51,7 @@ extern "C" {
         std::clog << "***** on rank " << mpi.CommWorldRank() << " (node: " << mpi.LocalNode().name << ")\n";
     }
     std::clog << "***** at " << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
-    backward::StackTrace stack;
-    stack.load_here(64);
-    PrintStackTrace(stack);
+    PrintStackTrace(64, 2);
     std::clog << std::endl;
     std::abort();
 }
@@ -82,9 +76,7 @@ extern "C" {
         std::clog << "***** on rank " << mpi.CommWorldRank() << " (node: " << mpi.LocalNode().name << ")\n";
     }
     std::clog << "***** at " << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
-    backward::StackTrace stack;
-    stack.load_here(64);
-    PrintStackTrace(stack);
+    PrintStackTrace(64, 2);
     std::clog << std::endl;
     std::abort();
 }

@@ -13,3 +13,11 @@
 #else
 #    define MACE_ALWAYS_INLINE MACE_STRONG_INLINE
 #endif
+
+#if defined __clang__
+#    define MACE_NOINLINE [[clang::noinline]]
+#elif defined __GNUC__
+#    define MACE_NOINLINE [[gnu::noinline]]
+#elif defined _MSC_VER
+#    define MACE_NOINLINE __declspec(noinline)
+#endif
