@@ -9,8 +9,8 @@ namespace MACE::Env {
 
 MPIEnv::~MPIEnv() {
     // Destructs the local communicator
-    auto sharedComm = fSharedComm;
-    MPI_Comm_free(&sharedComm);
+    auto commNode = fCommNode;
+    MPI_Comm_free(&commNode);
     // Finalize MPI
     MPI_Finalize();
 }

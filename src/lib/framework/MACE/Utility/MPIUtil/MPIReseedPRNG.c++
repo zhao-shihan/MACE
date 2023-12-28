@@ -22,8 +22,8 @@ auto MPIReseedPRNG(CLHEP::HepRandomEngine& randEng) -> void {
     if (mpiEnv.Sequential()) { return; }
 
     const auto worldSize{mpiEnv.CommWorldSize()};
-    std::vector<long> seedsSend(mpiEnv.AtCommWorldMaster() ? worldSize : 0);
-    if (mpiEnv.AtCommWorldMaster()) {
+    std::vector<long> seedsSend(mpiEnv.OnCommWorldMaster() ? worldSize : 0);
+    if (mpiEnv.OnCommWorldMaster()) {
         static_assert(std::same_as<std::uint64_t, Math::Random::Xoshiro512SS::ResultType>);
 
         std::array<unsigned int, sizeof(std::uint64_t) / sizeof(unsigned int)> xoshiro512SSSeed;

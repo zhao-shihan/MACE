@@ -13,9 +13,9 @@ IntegralIndexRange<AIndex> AllocMPIJobsJobWise(AIndex jobBegin, AIndex jobEnd, M
         comm == MPI_COMM_WORLD) {
         commSize = mpiEnv.CommWorldSize();
         commRank = mpiEnv.CommWorldRank();
-    } else if (comm == mpiEnv.CommShared()) {
-        commSize = mpiEnv.CommSharedSize();
-        commRank = mpiEnv.CommSharedRank();
+    } else if (comm == mpiEnv.CommNode()) {
+        commSize = mpiEnv.CommNodeSize();
+        commRank = mpiEnv.CommNodeRank();
     } else {
         MPI_Comm_size(comm, &commSize);
         MPI_Comm_rank(comm, &commRank);
@@ -46,9 +46,9 @@ IntegralIndexRange<AIndex> AllocMPIJobsWorkerWise(AIndex jobBegin, AIndex jobEnd
         comm == MPI_COMM_WORLD) {
         commSize = mpiEnv.CommWorldSize();
         commRank = mpiEnv.CommWorldRank();
-    } else if (comm == mpiEnv.CommShared()) {
-        commSize = mpiEnv.CommSharedSize();
-        commRank = mpiEnv.CommSharedRank();
+    } else if (comm == mpiEnv.CommNode()) {
+        commSize = mpiEnv.CommNodeSize();
+        commRank = mpiEnv.CommNodeRank();
     } else {
         MPI_Comm_size(comm, &commSize);
         MPI_Comm_rank(comm, &commRank);

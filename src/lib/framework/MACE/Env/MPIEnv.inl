@@ -35,7 +35,7 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
                                    &nameLength);        // resultlen
             // Master collects processor names
             std::vector<NameFixedString> nodeNamesRecv;
-            if (AtCommWorldMaster()) { nodeNamesRecv.resize(fCommWorldSize); }
+            if (OnCommWorldMaster()) { nodeNamesRecv.resize(fCommWorldSize); }
             MPI_Request gatherNodeNamesRequest;
             MPI_Igather(nodeNameSend.CString(),        // sendbuf
                         NameFixedString::Occupation(), // sendcount
@@ -68,7 +68,7 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
                      MPI_STATUS_IGNORE);      // status
             // Master find all unique processor names and assign node ID and count
             std::vector<NodeInfoForMPI> nodeList;
-            if (AtCommWorldMaster()) {
+            if (OnCommWorldMaster()) {
                 // key: node name, mapped: rank
                 std::multimap<const NameFixedString&, int> nodeMap;
                 for (int rank{};
@@ -117,7 +117,7 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
                       0,               // root
                       MPI_COMM_WORLD); // comm
             // Master send unique node name list
-            if (AtCommWorldWorker()) { nodeList.resize(nodeCount); }
+            if (OnCommWorldWorker()) { nodeList.resize(nodeCount); }
             MPI_Bcast(nodeList.data(), // buffer
                       nodeList.size(), // count
                       nodeInfoForMPI,  // datatype
@@ -138,7 +138,7 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
             // Return the cluster info
             return cluster;
         }()},
-    fSharedComm{
+    fCommNode{
         [this] {
             MPI_Comm comm;
             // Constructs shared communicator
@@ -148,19 +148,19 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
                            &comm);         // newcomm
             return comm;
         }()},
-    fSharedCommRank{
+    fCommNodeRank{
         [this] {
             int rank;
             // Initialize rank ID in the local communicator
-            MPI_Comm_rank(fSharedComm, // comm
+            MPI_Comm_rank(fCommNode, // comm
                           &rank);      // rank
             return rank;
         }()},
-    fSharedCommSize{
+    fCommNodeSize{
         [this] {
             int size;
             // Initialize size of the local communicator
-            MPI_Comm_size(fSharedComm, // comm
+            MPI_Comm_size(fCommNode, // comm
                           &size);      // size
             return size;
         }()} {
@@ -169,7 +169,7 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
         ROOT::DisableImplicitMT();
     }
     // Print startup message
-    if (printWelcomeMessage and AtCommWorldMaster()) {
+    if (printWelcomeMessage and OnCommWorldMaster()) {
         PrintWelcomeMessageSplitLine();
         PrintWelcomeMessageBody(argc, argv);
         PrintWelcomeMessageSplitLine();

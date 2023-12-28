@@ -29,7 +29,7 @@ namespace internal {
 
 FlipG4cout::FlipG4cout() {
     if (const auto& mpiEnv{Env::MPIEnv::Instance()};
-        mpiEnv.AtCommWorldWorker() or
+        mpiEnv.OnCommWorldWorker() or
         mpiEnv.GetVerboseLevel() == Env::VL::Quiet) {
         static std::streambuf* gG4coutBufExchanger{nullptr};
         gG4coutBufExchanger = G4cout.rdbuf(gG4coutBufExchanger);
@@ -72,21 +72,21 @@ auto MPIRunManager::ConfirmBeamOnCondition() -> G4bool {
 
     if (const auto currentState{G4StateManager::GetStateManager()->GetCurrentState()};
         currentState != G4State_PreInit and currentState != G4State_Idle) {
-        if (mpiEnv.AtCommWorldMaster()) {
+        if (mpiEnv.OnCommWorldMaster()) {
             G4cerr << "Illegal application state - BeamOn ignored." << G4endl;
         }
         return false;
     }
 
     if (not initializedAtLeastOnce) {
-        if (mpiEnv.AtCommWorldMaster()) {
+        if (mpiEnv.OnCommWorldMaster()) {
             G4cerr << "Geant4 kernel should be initialized before the first BeamOn - BeamOn ignored." << G4endl;
         }
         return false;
     }
 
     if (not geometryInitialized or not physicsInitialized) {
-        if (verboseLevel > 0 and mpiEnv.AtCommWorldMaster()) {
+        if (verboseLevel > 0 and mpiEnv.OnCommWorldMaster()) {
             G4cout << "Start re-initialization because \n";
             if (not geometryInitialized) { G4cout << "  Geometry\n"; }
             if (not physicsInitialized) { G4cout << "  Physics processes\n"; }
@@ -142,7 +142,7 @@ auto MPIRunManager::DoEventLoop(G4int nEvent, const char* macroFile, G4int nSele
 //         MPI_Waitall(fTimeMPIRequests.size(),
 //                     fTimeMPIRequests.data(),
 //                     MPI_STATUSES_IGNORE);
-//         if (mpiEnv.AtCommWorldMaster()) {
+//         if (mpiEnv.OnCommWorldMaster()) {
 //             RunEndReport(endedRun, fRunBeginSystemTime, maxWallTime, totalCPUTime);
 //         }
 //     } else {

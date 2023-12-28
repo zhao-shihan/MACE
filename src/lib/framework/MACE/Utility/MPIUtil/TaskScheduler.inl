@@ -30,7 +30,7 @@ TaskScheduler<T>::TaskScheduler() :
     MPI_Info_set(info,
                  "same_disp_unit",
                  "true");
-    MPI_Win_allocate(Env::MPIEnv::Instance().AtCommWorldMaster() ? sizeof(T) : 0,
+    MPI_Win_allocate(Env::MPIEnv::Instance().OnCommWorldMaster() ? sizeof(T) : 0,
                      sizeof(T),
                      info,
                      MPI_COMM_WORLD,
@@ -74,7 +74,7 @@ template<std::integral T>
 auto TaskScheduler<T>::Reset() -> void {
     fProcessingTask = fTask.first;
     fNLocalProcessedTask = 0;
-    if (Env::MPIEnv::Instance().AtCommWorldMaster()) {
+    if (Env::MPIEnv::Instance().OnCommWorldMaster()) {
         *fMemory = fTask.first;
     }
 }
@@ -123,7 +123,7 @@ template<std::integral T>
 auto TaskScheduler<T>::PreRunAction() -> void {
     fProcessing = true;
     const auto& mpiEnv{Env::MPIEnv::Instance()};
-    MPI_Win_fence(mpiEnv.AtCommWorldMaster() ?
+    MPI_Win_fence(mpiEnv.OnCommWorldMaster() ?
                       MPI_MODE_NOPRECEDE :
                       MPI_MODE_NOSTORE | MPI_MODE_NOPUT | MPI_MODE_NOPRECEDE,
                   fWindow);
@@ -131,7 +131,7 @@ auto TaskScheduler<T>::PreRunAction() -> void {
     fWallTimeStopwatch = {};
     fCPUTimeStopwatch = {};
     if (fPrintProgressModulo >= 0 and
-        mpiEnv.AtCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error) {
+        mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error) {
         PreRunReport();
     }
 }
@@ -157,7 +157,7 @@ auto TaskScheduler<T>::PostRunAction() -> void {
     fProcessing = false;
     if (fPrintProgressModulo >= 0) {
         if (const auto& mpiEnv{Env::MPIEnv::Instance()};
-            mpiEnv.AtCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error) {
+            mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error) {
             PostRunReport();
         }
     }

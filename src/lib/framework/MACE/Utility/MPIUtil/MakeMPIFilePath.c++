@@ -24,12 +24,12 @@ auto MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extens
             path /= mpiEnv.LocalNode().name;
         }
         // create root directory
-        if (mpiEnv.AtCommSharedMaster()) {
+        if (mpiEnv.OnCommNodeMaster()) {
             std::filesystem::create_directories(path);
         }
         // wait for create_directories
         MPI_Request mpiBarrierRequest;
-        MPI_Ibarrier(mpiEnv.CommShared(),
+        MPI_Ibarrier(mpiEnv.CommNode(),
                      &mpiBarrierRequest);
         // construct full path
         auto rankN{fmt::format(".rank{}.", mpiEnv.CommWorldRank())};

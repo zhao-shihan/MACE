@@ -79,7 +79,7 @@ void Analysis::CloseResultFile() {
 }
 
 void Analysis::OpenYieldFile() {
-    if (Env::MPIEnv::Instance().AtCommWorldMaster()) {
+    if (Env::MPIEnv::Instance().OnCommWorldMaster()) {
         const auto yieldPath = std::filesystem::path(fResultPath).concat("_yield.csv");
         fYieldFile = std::make_unique<std::ofstream>(yieldPath, std::ios::out);
         *fYieldFile << "runID,nMuon,nMFormed,nMTargetDecay,nMVacuumDecay,nMDetectableDecay" << std::endl;
@@ -112,7 +112,7 @@ void Analysis::AnalysisAndWriteYield() {
     if (const auto& mpiEnv = Env::MPIEnv::Instance();
         mpiEnv.Parallel()) {
         std::vector<std::array<unsigned long long, 5>> yieldDataRecv;
-        if (mpiEnv.AtCommWorldMaster()) { yieldDataRecv.resize(mpiEnv.CommWorldSize()); }
+        if (mpiEnv.OnCommWorldMaster()) { yieldDataRecv.resize(mpiEnv.CommWorldSize()); }
         MPI_Gather(yieldData.data(),       // sendbuf
                    yieldData.size(),       // sendcount
                    MPI_UNSIGNED_LONG_LONG, // sendtype
@@ -122,7 +122,7 @@ void Analysis::AnalysisAndWriteYield() {
                    0,                      // root
                    MPI_COMM_WORLD);        // comm
 
-        if (mpiEnv.AtCommWorldMaster()) {
+        if (mpiEnv.OnCommWorldMaster()) {
             auto nMuonTotal{0ull};
             auto nFormedTotal{0ull};
             auto nTargetDecayTotal{0ull};
