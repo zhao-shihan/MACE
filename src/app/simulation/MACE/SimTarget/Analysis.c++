@@ -5,21 +5,21 @@
 #include "MACE/SimTarget/Messenger/AnalysisMessenger.h++"
 #include "MACE/Utility/MPIUtil/MakeMPIFilePath.h++"
 
-#include "G4Run.hh"
-
 #include "TFile.h"
+
+#include "G4Run.hh"
 
 namespace MACE::SimTarget {
 
 Analysis::Analysis() :
     PassiveSingleton(),
-    fResultPath("SimTarget_result"),
-    fEnableYieldAnalysis(true),
-    fThisRun(nullptr),
-    fMuoniumTrackList(0),
-    fResultFile(nullptr),
-    fYieldFile(nullptr),
-    fDataFactory() {
+    fResultPath{"SimTarget_result"},
+    fEnableYieldAnalysis{true},
+    fThisRun{},
+    fMuoniumTrackList{},
+    fResultFile{},
+    fYieldFile{},
+    fDataFactory{} {
     AnalysisMessenger::Instance().AssignTo(this);
     fDataFactory.TreeNamePrefixFormat("Run{}_");
 }
@@ -87,11 +87,11 @@ void Analysis::OpenYieldFile() {
 }
 
 void Analysis::AnalysisAndWriteYield() {
-    std::array<unsigned long, 5> yieldData;
+    std::array<unsigned long long, 5> yieldData;
     auto& [nMuon, nFormed, nTargetDecay, nVacuumDecay, nDetectableDecay] = yieldData;
-    nMuon = static_cast<unsigned long>(PrimaryGeneratorAction::Instance().MuonsForEachG4Event()) *
-            static_cast<unsigned long>(fThisRun->GetNumberOfEvent());
-    nFormed = static_cast<unsigned long>(fMuoniumTrackList.size());
+    nMuon = static_cast<unsigned long long>(PrimaryGeneratorAction::Instance().MuonsForEachG4Event()) *
+            static_cast<unsigned long long>(fThisRun->GetNumberOfEvent());
+    nFormed = fMuoniumTrackList.size();
     nTargetDecay = 0;
     nVacuumDecay = 0;
     nDetectableDecay = 0;
@@ -111,23 +111,23 @@ void Analysis::AnalysisAndWriteYield() {
 
     if (const auto& mpiEnv = Env::MPIEnv::Instance();
         mpiEnv.Parallel()) {
-        std::vector<decltype(yieldData)> yieldDataRecv;
+        std::vector<std::array<unsigned long long, 5>> yieldDataRecv;
         if (mpiEnv.AtCommWorldMaster()) { yieldDataRecv.resize(mpiEnv.CommWorldSize()); }
-        MPI_Gather(yieldData.data(),
-                   yieldData.size(),
-                   MPI_UNSIGNED_LONG,
-                   yieldDataRecv.data(),
-                   yieldData.size(),
-                   MPI_UNSIGNED_LONG,
-                   0,
-                   MPI_COMM_WORLD);
+        MPI_Gather(yieldData.data(),       // sendbuf
+                   yieldData.size(),       // sendcount
+                   MPI_UNSIGNED_LONG_LONG, // sendtype
+                   yieldDataRecv.data(),   // recvbuf
+                   yieldData.size(),       // recvcount
+                   MPI_UNSIGNED_LONG_LONG, // recvtype
+                   0,                      // root
+                   MPI_COMM_WORLD);        // comm
 
         if (mpiEnv.AtCommWorldMaster()) {
-            unsigned long nMuonTotal = 0;
-            unsigned long nFormedTotal = 0;
-            unsigned long nTargetDecayTotal = 0;
-            unsigned long nVacuumDecayTotal = 0;
-            unsigned long nDetectableDecayTotal = 0;
+            auto nMuonTotal{0ull};
+            auto nFormedTotal{0ull};
+            auto nTargetDecayTotal{0ull};
+            auto nVacuumDecayTotal{0ull};
+            auto nDetectableDecayTotal{0ull};
             for (auto&& [nMuonRecv, nFormedRecv, nTargetDecayRecv, nVacuumDecayRecv, nDetectableDecayRecv] : std::as_const(yieldDataRecv)) {
                 nMuonTotal += nMuonRecv;
                 nFormedTotal += nFormedRecv;

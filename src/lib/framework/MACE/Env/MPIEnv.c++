@@ -21,12 +21,12 @@ void MPIEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const {
         // MPI library version
         char mpiLibVersion[MPI_MAX_LIBRARY_VERSION_STRING];
         int mpiLibVersionStringLength;
-        MPI_Get_library_version(mpiLibVersion,
-                                &mpiLibVersionStringLength);
+        MPI_Get_library_version(mpiLibVersion,               // version
+                                &mpiLibVersionStringLength); // resultlen
         // MPI version at runtime
         std::pair<int, int> mpiRuntimeVersion;
-        MPI_Get_version(&mpiRuntimeVersion.first,
-                        &mpiRuntimeVersion.second);
+        MPI_Get_version(&mpiRuntimeVersion.first,   // version
+                        &mpiRuntimeVersion.second); // subversion
         // Messages
         std::cout << '\n'
                   << " Parallelized by MPI, running " << (Parallel() ? "in parallel" : "sequentially") << '\n';

@@ -9,6 +9,7 @@
 namespace MACE::inline Utility::MPIUtil {
 
 template<typename T>
+    requires Concept::MPIPredefined<std::decay_t<std::remove_pointer_t<T>>>
 auto DataType() -> MPI_Datatype {
     using U = std::decay_t<std::remove_pointer_t<T>>;
     if constexpr (std::same_as<U, char>) {
