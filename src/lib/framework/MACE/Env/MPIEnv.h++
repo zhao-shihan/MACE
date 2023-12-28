@@ -8,8 +8,10 @@
 
 #include "mpi.h"
 
+#include <algorithm>
 #include <cstddef>
 #include <iterator>
+#include <map>
 #include <memory>
 #include <stdexcept>
 #include <string>

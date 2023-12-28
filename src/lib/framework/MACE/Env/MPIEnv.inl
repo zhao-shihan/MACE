@@ -47,8 +47,9 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
                         MPI_COMM_WORLD,                // comm
                         &gatherNodeNamesRequest);      // request
             // Processor name list
-            std::vector<stdx::array2i> nodeIDAndCountSend;
-            stdx::array2i nodeIDAndCountRecv;
+            std::vector<int> nodeIDSend;
+            int nodeIDRecv;
+            int nodeCount;
             struct NodeInfoForMPI {
                 int size;
                 NameFixedString name;
@@ -63,45 +64,58 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
                                    typeOfNodeInfoForMPI,         // array_of_types
                                    &nodeInfoForMPI);             // newtype
             MPI_Type_commit(&nodeInfoForMPI);
-            std::vector<NodeInfoForMPI> nodeList;
-            // Master find all unique processor names and assign node ID and count
             MPI_Wait(&gatherNodeNamesRequest, // request
                      MPI_STATUS_IGNORE);      // status
+            // Master find all unique processor names and assign node ID and count
+            std::vector<NodeInfoForMPI> nodeList;
             if (AtCommWorldMaster()) {
-                nodeIDAndCountSend.reserve(fCommWorldSize);
-                nodeList.reserve(fCommWorldSize);
-                // Find unique name and assign node ID
-                auto currentNodeID = 0;
-                auto currentNodeName = std::as_const(nodeNamesRecv).data();
-                for (auto&& name : std::as_const(nodeNamesRecv)) {
-                    if (name != *currentNodeName) {
-                        nodeList.push_back({static_cast<int>(std::distance(currentNodeName, &name)),
-                                            *currentNodeName});
-                        ++currentNodeID;
-                        currentNodeName = &name;
+                // key: node name, mapped: rank
+                std::multimap<const NameFixedString&, int> nodeMap;
+                for (int rank{};
+                     auto&& name : std::as_const(nodeNamesRecv)) {
+                    nodeMap.emplace(name, rank++);
+                }
+
+                std::vector<std::pair<std::vector<int>, const NameFixedString*>> rankNode;
+                auto currentNodeName{&nodeMap.begin()->first};
+                rankNode.push_back({{}, currentNodeName});
+                for (auto&& [nodeName, rank] : std::as_const(nodeMap)) {
+                    if (nodeName != *currentNodeName) {
+                        currentNodeName = &nodeName;
+                        rankNode.push_back({{}, currentNodeName});
                     }
-                    nodeIDAndCountSend.push_back({currentNodeID, -1});
+                    rankNode.back().first.emplace_back(rank);
                 }
-                nodeList.push_back({static_cast<int>(std::distance(currentNodeName, std::to_address(nodeNamesRecv.cend()))),
-                                    *currentNodeName});
-                // Assign node count
-                for (const int nodeCount = nodeList.size();
-                     auto&& [_, nodeCountSend] : nodeIDAndCountSend) {
-                    nodeCountSend = nodeCount;
+                std::ranges::sort(rankNode);
+
+                nodeIDSend.resize(fCommWorldSize);
+                for (int nodeID{};
+                     auto&& [rankList, nodeName] : std::as_const(rankNode)) {
+                    nodeList.emplace_back(ssize(rankList), *nodeName);
+                    for (auto&& rank : rankList) {
+                        nodeIDSend.at(rank) = nodeID;
+                    }
+                    ++nodeID;
                 }
+                nodeCount = ssize(rankNode);
             }
-            // Send node ID and count
-            MPI_Scatter(std::as_const(nodeIDAndCountSend).data(), // sendbuf
-                        1,                                        // sendcount
-                        MPI_2INT,                                 // sendtype
-                        nodeIDAndCountRecv.data(),                // recvbuf
-                        1,                                        // recvcount
-                        MPI_2INT,                                 // recvtype
-                        0,                                        // root
-                        MPI_COMM_WORLD);                          // comm
-            auto&& [nodeID, nodeCount] = nodeIDAndCountRecv;
-            // Assign local processor ID
-            cluster.local = nodeID;
+            // Scatter node ID
+            MPI_Request scatterNodeIDRequest;
+            MPI_Iscatter(nodeIDSend.data(),      // sendbuf
+                         1,                      // sendcount
+                         MPI_INT,                // sendtype
+                         &nodeIDRecv,            // recvbuf
+                         1,                      // recvcount
+                         MPI_INT,                // recvtype
+                         0,                      // root
+                         MPI_COMM_WORLD,         // comm
+                         &scatterNodeIDRequest); // request
+            // Broadcast node count
+            MPI_Bcast(&nodeCount,      // buffer
+                      1,               // count
+                      MPI_INT,         // datatype
+                      0,               // root
+                      MPI_COMM_WORLD); // comm
             // Master send unique node name list
             if (AtCommWorldWorker()) { nodeList.resize(nodeCount); }
             MPI_Bcast(nodeList.data(), // buffer
@@ -117,6 +131,10 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
                 cluster.node.back().name.shrink_to_fit();
             }
             cluster.node.shrink_to_fit();
+            // Assign local processor ID
+            MPI_Wait(&scatterNodeIDRequest, // request
+                     MPI_STATUS_IGNORE);    // status
+            cluster.local = nodeIDRecv;
             // Return the cluster info
             return cluster;
         }()},
