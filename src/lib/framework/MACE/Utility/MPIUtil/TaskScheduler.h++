@@ -3,9 +3,7 @@
 #include "MACE/Compatibility/std2b/constexpr_cmath.h++"
 #include "MACE/Concept/MPIPredefined.h++"
 #include "MACE/Env/MPIEnv.h++"
-#include "MACE/Math/MidPoint.h++"
 #include "MACE/Utility/CPUTimeStopwatch.h++"
-#include "MACE/Utility/MPIUtil/DataType.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 #include "MACE/Utility/WallTimeStopwatch.h++"
 
@@ -14,7 +12,6 @@
 #include "fmt/chrono.h"
 #include "fmt/format.h"
 
-#include <cassert>
 #include <chrono>
 #include <cmath>
 #include <concepts>
@@ -32,6 +29,7 @@ public:
     TaskScheduler();
     explicit TaskScheduler(T size);
     TaskScheduler(T first, T last);
+    virtual ~TaskScheduler() = default;
 
     auto AssignTask(T size) -> void { AssignTask(0, size); }
     auto AssignTask(T first, T last) -> void;
@@ -46,33 +44,36 @@ public:
     auto Deficient() const -> bool { return Env::MPIEnv::Instance().CommWorldSize() < NTask(); }
 
     auto Next() -> std::optional<T>;
+
     auto ProcessingTask() const -> T { return fProcessingTask; }
     auto NLocalProcessedTask() const -> T { return fNLocalProcessedTask; }
     auto NProcessedTask() const -> T { return fProcessingTask - fTask.first; }
 
 private:
-    using scsc = std::chrono::system_clock;
-
-    auto PreRunAction() -> void;
-    auto PostTaskAction(T iEnded) const -> void;
-    auto PostRunAction() -> void;
+    virtual auto PreRunAction() -> void = 0;
+    virtual auto PreTaskAction() -> void = 0;
+    virtual auto PostTaskAction() -> void = 0;
+    virtual auto PostRunAction() -> void = 0;
 
     auto PreRunReport() const -> void;
-    auto TaskReport(T iEnded) const -> void;
+    auto PostTaskReport(T iEnded) const -> void;
     auto PostRunReport() const -> void;
 
     static auto SToDHMS(double s) -> std::string;
 
 private:
+    using scsc = std::chrono::system_clock;
+
+protected:
     struct {
         T first;
         T last;
     } fTask;
-    bool fProcessing;
     T fProcessingTask;
     T fNLocalProcessedTask;
 
-    const T fStep;
+private:
+    bool fProcessing;
 
     T fPrintProgressModulo;
 

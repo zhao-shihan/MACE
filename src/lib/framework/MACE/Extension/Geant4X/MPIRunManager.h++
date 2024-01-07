@@ -13,6 +13,7 @@
 #include "gsl/gsl"
 
 #include <chrono>
+#include <memory>
 
 namespace MACE::inline Extension::Geant4X {
 
@@ -39,14 +40,14 @@ public:
 
     static auto GetRunManager() -> auto { return static_cast<MPIRunManager*>(G4RunManager::GetRunManager()); }
 
-    auto PrintProgressModulo(G4int mod) -> void { fTask.PrintProgressModulo(mod), printModulo = -1; }
+    auto PrintProgressModulo(G4int mod) -> void { fTask->PrintProgressModulo(mod), printModulo = -1; }
 
     virtual auto BeamOn(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) -> void override;
     virtual auto ConfirmBeamOnCondition() -> G4bool override;
     virtual auto DoEventLoop(G4int nEvent, const char* macroFile, G4int nSelect) -> void override;
 
 private:
-    MPIUtil::TaskScheduler<G4int> fTask;
+    std::unique_ptr<MPIUtil::TaskScheduler<G4int>> fTask;
 };
 
 } // namespace MACE::inline Extension::Geant4X
