@@ -54,11 +54,11 @@ private:
     using scsc = std::chrono::system_clock;
 
     auto PreRunAction() -> void;
-    auto PostTaskAction() const -> void;
+    auto PostTaskAction(T iEnded) const -> void;
     auto PostRunAction() -> void;
 
     auto PreRunReport() const -> void;
-    auto TaskReport() const -> void;
+    auto TaskReport(T iEnded) const -> void;
     auto PostRunReport() const -> void;
 
     static auto SToDHMS(double s) -> std::string;

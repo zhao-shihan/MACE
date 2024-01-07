@@ -9,7 +9,7 @@ TaskScheduler<T>::TaskScheduler() :
     fProcessingTask{},
     fNLocalProcessedTask{},
     fStep{Env::MPIEnv::Instance().CommWorldSize()},
-    fPrintProgressModulo{10 * (Env::MPIEnv::Instance().Parallel() ? Env::MPIEnv::Instance().CommWorldSize() + 1 : 1)},
+    fPrintProgressModulo{Env::MPIEnv::Instance().Parallel() ? 10 * Env::MPIEnv::Instance().CommWorldSize() + 1 : 10},
     fWallTimeStopwatch{},
     fCPUTimeStopwatch{},
     fRunWallTime{},
@@ -57,9 +57,10 @@ auto TaskScheduler<T>::Next() -> std::optional<T> {
         PreRunAction();
         fProcessing = true;
     } else {
+        const auto processedTask{fProcessingTask};
         fProcessingTask = std::min(fProcessingTask + fStep, fTask.last);
         ++fNLocalProcessedTask;
-        PostTaskAction();
+        PostTaskAction(processedTask);
     }
     if (fProcessingTask != fTask.last) [[likely]] {
         return fProcessingTask;
@@ -85,10 +86,10 @@ auto TaskScheduler<T>::PreRunAction() -> void {
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-auto TaskScheduler<T>::PostTaskAction() const -> void {
-    if (fPrintProgressModulo > 0 and fProcessingTask % fPrintProgressModulo == 0) {
+auto TaskScheduler<T>::PostTaskAction(T iEnded) const -> void {
+    if (fPrintProgressModulo > 0 and iEnded % fPrintProgressModulo == 0) {
         if (Env::MPIEnv::Instance().GetVerboseLevel() >= Env::VL::Error) {
-            TaskReport();
+            TaskReport(iEnded);
         }
     }
 }
@@ -120,14 +121,14 @@ auto TaskScheduler<T>::PreRunReport() const -> void {
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-auto TaskScheduler<T>::TaskReport() const -> void {
+auto TaskScheduler<T>::TaskReport(T iEnded) const -> void {
     const auto& mpiEnv{Env::MPIEnv::Instance()};
     const auto progress{static_cast<double>(NProcessedTask()) / NTask()};
     const auto eta{(1 / progress - 1) * fWallTimeStopwatch.SecondsElapsed()};
     fmt::print("MPI{}> {:%FT%T%z} > {} {} has ended\n"
-               "MPI{}>   Est. rem. time: {}  Progress: {}/{} ({:.4}%)\n",
-               mpiEnv.CommWorldRank(), fmt::localtime(scsc::to_time_t(scsc::now())), fTaskName, fProcessingTask - fStep,
-               mpiEnv.CommWorldRank(), fNLocalProcessedTask > 10 ? SToDHMS(eta) : "N/A", NProcessedTask(), NTask(), 100 * progress);
+               "MPI{}>   Est. rem. time: {}  Progress: {} | {}/{} | {:.4}%\n",
+               mpiEnv.CommWorldRank(), fmt::localtime(scsc::to_time_t(scsc::now())), fTaskName, iEnded,
+               mpiEnv.CommWorldRank(), fNLocalProcessedTask > 10 ? SToDHMS(eta) : "N/A", fNLocalProcessedTask, NProcessedTask(), NTask(), 100 * progress);
 }
 
 template<std::integral T>
