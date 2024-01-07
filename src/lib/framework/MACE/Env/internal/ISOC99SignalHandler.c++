@@ -29,7 +29,7 @@ extern "C" {
     }
     if (MPIEnv::Available()) {
         const auto& mpi = MPIEnv::Instance();
-        std::clog << "***** on rank " << mpi.CommWorldRank() << " (node: " << mpi.LocalNode().name << ")\n";
+        std::clog << "***** on MPI process " << mpi.CommWorldRank() << " (node: " << mpi.LocalNode().name << ")\n";
     }
     std::clog << "***** at " << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
     PrintStackTrace(64, 2);
@@ -48,7 +48,7 @@ extern "C" {
     std::clog << "***** ABORT (SIGABRT) received\n";
     if (MPIEnv::Available()) {
         const auto& mpi = MPIEnv::Instance();
-        std::clog << "***** on rank " << mpi.CommWorldRank() << " (node: " << mpi.LocalNode().name << ")\n";
+        std::clog << "***** on MPI process " << mpi.CommWorldRank() << " (node: " << mpi.LocalNode().name << ")\n";
     }
     std::clog << "***** at " << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
     PrintStackTrace(64, 2);
@@ -73,7 +73,7 @@ extern "C" {
     }
     if (MPIEnv::Available()) {
         const auto& mpi = MPIEnv::Instance();
-        std::clog << "***** on rank " << mpi.CommWorldRank() << " (node: " << mpi.LocalNode().name << ")\n";
+        std::clog << "***** on MPI process " << mpi.CommWorldRank() << " (node: " << mpi.LocalNode().name << ")\n";
     }
     std::clog << "***** at " << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
     PrintStackTrace(64, 2);

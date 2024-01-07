@@ -9,7 +9,7 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
             // Initialize MPI
             MPI_Init(&argc,  // argc
                      &argv); // argv
-            // Initialize rank ID in the world communicator
+            // Initialize rank in the world communicator
             int rank;
             MPI_Comm_rank(MPI_COMM_WORLD, // comm
                           &rank);         // rank
@@ -28,7 +28,7 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
             using NameFixedString = FixedString<MPI_MAX_PROCESSOR_NAME>;
             // Member fCluster to be initialized
             std::remove_cv_t<decltype(fCluster)> cluster;
-            // Each rank get its processor name
+            // Each process get its processor name
             NameFixedString nodeNameSend;
             int nameLength;
             MPI_Get_processor_name(nodeNameSend.Data(), // name
@@ -91,7 +91,7 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
                 nodeIDSend.resize(fCommWorldSize);
                 for (int nodeID{};
                      auto&& [rankList, nodeName] : std::as_const(rankNode)) {
-                    nodeList.emplace_back(ssize(rankList), *nodeName);
+                    nodeList.push_back({static_cast<int>(rankList.size()), *nodeName});
                     for (auto&& rank : rankList) {
                         nodeIDSend.at(rank) = nodeID;
                     }
@@ -153,7 +153,7 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
             int rank;
             // Initialize rank ID in the local communicator
             MPI_Comm_rank(fCommNode, // comm
-                          &rank);      // rank
+                          &rank);    // rank
             return rank;
         }()},
     fCommNodeSize{
@@ -161,7 +161,7 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
             int size;
             // Initialize size of the local communicator
             MPI_Comm_size(fCommNode, // comm
-                          &size);      // size
+                          &size);    // size
             return size;
         }()} {
     // Disable ROOT implicit multi-threading

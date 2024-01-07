@@ -38,15 +38,15 @@ public:
     auto CommWorldRank() const -> const auto& { return fCommWorldRank; }
     auto CommWorldSize() const -> const auto& { return fCommWorldSize; }
     auto OnCommWorldMaster() const -> auto { return CommWorldRank() == 0; }
-    auto OnCommWorldWorker() const -> auto { return CommWorldRank() > 0; }
+    auto OnCommWorldWorker() const -> auto { return CommWorldRank() != 0; }
     auto Sequential() const -> auto { return CommWorldSize() == 1; }
-    auto Parallel() const -> auto { return CommWorldSize() > 1; }
+    auto Parallel() const -> auto { return CommWorldSize() != 1; }
 
     auto CommNode() const -> const auto& { return fCommNode; }
     auto CommNodeRank() const -> const auto& { return fCommNodeRank; }
     auto CommNodeSize() const -> const auto& { return fCommNodeSize; }
     auto OnCommNodeMaster() const -> auto { return CommNodeRank() == 0; }
-    auto OnCommNodeWorker() const -> auto { return CommNodeRank() > 0; }
+    auto OnCommNodeWorker() const -> auto { return CommNodeRank() != 0; }
 
     auto NodeList() const -> const auto& { return fCluster.node; }
     auto LocalNodeID() const -> const auto& { return fCluster.local; }
@@ -54,7 +54,7 @@ public:
     auto LocalNode() const -> const auto& { return Node(LocalNodeID()); }
     auto ClusterSize() const -> int { return NodeList().size(); }
     auto OnSingleNode() const -> auto { return ClusterSize() == 1; }
-    auto OnCluster() const -> auto { return ClusterSize() > 1; }
+    auto OnCluster() const -> auto { return ClusterSize() != 1; }
 
 protected:
     auto PrintWelcomeMessageBody(int argc, char* argv[]) const -> void;

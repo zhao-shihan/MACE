@@ -32,7 +32,7 @@ auto MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extens
         MPI_Ibarrier(mpiEnv.CommNode(),
                      &mpiBarrierRequest);
         // construct full path
-        auto rankN{fmt::format(".rank{}.", mpiEnv.CommWorldRank())};
+        auto rankN{fmt::format(".mpi{}.", mpiEnv.CommWorldRank())};
         path /= fileName.concat(std::move(rankN)).replace_extension(extension);
         // wait for create_directories
         MPI_Wait(&mpiBarrierRequest,

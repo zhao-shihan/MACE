@@ -41,7 +41,7 @@ void DescriptionIO::Import(const std::ranges::range auto& yamlText)
 {
     auto yamlName = fmt::format("tmp_mace_geom{:x}", std::chrono::steady_clock::now().time_since_epoch().count());
     if (Env::MPIEnv::Initialized()) {
-        yamlName.append(fmt::format(".rank{}", Env::MPIEnv::Instance().CommWorldRank()));
+        yamlName.append(fmt::format(".mpi{}", Env::MPIEnv::Instance().CommWorldRank()));
     }
     yamlName.append(".yaml");
     const auto yamlPath = std::filesystem::temp_directory_path() / yamlName;

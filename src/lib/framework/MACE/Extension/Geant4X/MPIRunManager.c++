@@ -44,10 +44,8 @@ MPIRunManager::MPIRunManager() :
     G4RunManager{},
     internal::PostG4RunManagerInitFlipG4cout{},
     fTask{} {
+    printModulo = -1;
     SetVerboseLevel(std2b::to_underlying(Env::MPIEnv::Instance().GetVerboseLevel()));
-    PrintProgressModulo(Env::MPIEnv::Instance().Parallel() ?
-                            Env::MPIEnv::Instance().CommWorldSize() + 1 :
-                            1);
     fTask.TaskName("G4Event");
     MPIRunMessenger::Instance().AssignTo(this);
 }
