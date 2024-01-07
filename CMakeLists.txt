@@ -59,7 +59,7 @@ cmake_dependent_option(MACE_FULL_UNITY_BUILD "Building MACE use unity build tech
 cmake_dependent_option(MACE_SHOW_EVEN_MORE_COMPILE_WARNINGS "Add compile flag to show even more compile warnings (GCC: -Weffc++, Clang: -Weverything, MSVC: /Wall)." OFF NOT MACE_SURPRESS_USELESS_COMPILE_WARNINGS OFF)
 set(MACE_BUILTIN_ARGPARSE_VERSION 3.0 CACHE STRING "Set built-in argparse version (if required).")
 set(MACE_BUILTIN_BACKWARD_VERSION 1.6 CACHE STRING "Set built-in backward-cpp version (if required).")
-set(MACE_BUILTIN_FMT_VERSION 10.1.1 CACHE STRING "Set built-in fmt version (if required).")
+set(MACE_BUILTIN_FMT_VERSION 10.2.1 CACHE STRING "Set built-in fmt version (if required).")
 set(MACE_BUILTIN_MSGSL_VERSION 4.0.0 CACHE STRING "Set built-in Microsoft.GSL version (if required).")
 set(MACE_BUILTIN_PMP_VERSION 3.0.0 CACHE STRING "Set built-in fmt version (if required).")
 set(MACE_BUILTIN_YAML_CPP_VERSION 0.8.0 CACHE STRING "Set built-in yaml-cpp version (if required).")
