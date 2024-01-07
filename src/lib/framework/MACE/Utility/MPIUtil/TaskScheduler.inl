@@ -4,13 +4,12 @@ template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
 TaskScheduler<T>::TaskScheduler() :
     NonMoveableBase{},
-    fProcessing{},
     fTask{},
+    fProcessing{},
     fProcessingTask{},
     fNLocalProcessedTask{},
-    fMemory{},
-    fWindow{},
-    fPrintProgressModulo{},
+    fStep{Env::MPIEnv::Instance().CommWorldSize()},
+    fPrintProgressModulo{10 * (Env::MPIEnv::Instance().Parallel() ? Env::MPIEnv::Instance().CommWorldSize() + 1 : 1)},
     fWallTimeStopwatch{},
     fCPUTimeStopwatch{},
     fRunWallTime{},
@@ -18,28 +17,7 @@ TaskScheduler<T>::TaskScheduler() :
     fRunBeginSystemTime{},
     fRunEndSystemTime{},
     fRunName{"Run"},
-    fTaskName{"Task"} {
-    MPI_Info info;
-    MPI_Info_create(&info);
-    MPI_Info_set(info,
-                 "accumulate_ops",
-                 "same_op");
-    MPI_Info_set(info,
-                 "accumulate_ordering",
-                 "none");
-    MPI_Info_set(info,
-                 "same_disp_unit",
-                 "true");
-    MPI_Win_allocate(Env::MPIEnv::Instance().OnCommWorldMaster() ? sizeof(T) : 0,
-                     sizeof(T),
-                     info,
-                     MPI_COMM_WORLD,
-                     &fMemory,
-                     &fWindow);
-    MPI_Win_fence(MPI_MODE_NOSTORE | MPI_MODE_NOPUT | MPI_MODE_NOPRECEDE | MPI_MODE_NOSUCCEED,
-                  fWindow);
-    MPI_Info_free(&info);
-}
+    fTaskName{"Task"} {}
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
@@ -55,16 +33,10 @@ TaskScheduler<T>::TaskScheduler(T first, T last) :
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-TaskScheduler<T>::~TaskScheduler() {
-    assert(fProcessingTask <= fTask.last);
-    MPI_Win_free(&fWindow);
-}
-
-template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
 auto TaskScheduler<T>::AssignTask(T first, T last) -> void {
-    if (last < first) { throw std::invalid_argument{"last < first not allowed"}; }
-    if (Env::MPIEnv::Instance().CommWorldSize() < NTask()) { fmt::println(stderr, "Warning: size of MPI_COMM_WORLD < number of tasks"); }
+    if (fProcessing) { throw std::logic_error{"Assign task during processing is not allowed"}; }
+    if (last < first) { throw std::invalid_argument{"last < first is not allowed"}; }
+    if (Deficient()) { fmt::println(stderr, "Warning: size of MPI_COMM_WORLD < number of tasks"); }
     fTask = {first, last};
     Reset();
 }
@@ -72,48 +44,27 @@ auto TaskScheduler<T>::AssignTask(T first, T last) -> void {
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
 auto TaskScheduler<T>::Reset() -> void {
-    fProcessingTask = fTask.first;
+    fProcessing = false;
+    fProcessingTask = fTask.first + Env::MPIEnv::Instance().CommWorldRank();
     fNLocalProcessedTask = 0;
-    if (Env::MPIEnv::Instance().OnCommWorldMaster()) {
-        *fMemory = fTask.first;
-    }
 }
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
 auto TaskScheduler<T>::Next() -> std::optional<T> {
-    assert(fProcessingTask <= fTask.last);
-    if (fProcessingTask == fTask.last) { return std::nullopt; }
-
-    if (fNLocalProcessedTask == 0) {
+    if (not fProcessing) [[unlikely]] {
+        if (fProcessingTask == fTask.last) { return std::nullopt; }
         PreRunAction();
+        fProcessing = true;
+    } else {
+        fProcessingTask = std::min(fProcessingTask + fStep, fTask.last);
+        ++fNLocalProcessedTask;
+        PostTaskAction();
     }
-
-    constexpr T one{1};
-    MPI_Win_lock(MPI_LOCK_EXCLUSIVE,
-                 0,
-                 0,
-                 fWindow);
-    MPI_Fetch_and_op(&one,
-                     &fProcessingTask,
-                     DataType<T>(),
-                     0,
-                     0,
-                     MPI_SUM,
-                     fWindow);
-    MPI_Win_unlock(0,
-                   fWindow);
-    if (fProcessingTask > fTask.last) { fProcessingTask = fTask.last; } // note: fetch-and-add over last is possible
-
-    if (fNLocalProcessedTask > 0) {
-        TaskAction();
-    }
-    ++fNLocalProcessedTask;
-
-    if (fProcessingTask < fTask.last) {
+    if (fProcessingTask != fTask.last) [[likely]] {
         return fProcessingTask;
     }
-
+    fProcessing = false;
     PostRunAction();
     return std::nullopt;
 }
@@ -121,12 +72,8 @@ auto TaskScheduler<T>::Next() -> std::optional<T> {
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
 auto TaskScheduler<T>::PreRunAction() -> void {
-    fProcessing = true;
     const auto& mpiEnv{Env::MPIEnv::Instance()};
-    MPI_Win_fence(mpiEnv.OnCommWorldMaster() ?
-                      MPI_MODE_NOPRECEDE :
-                      MPI_MODE_NOSTORE | MPI_MODE_NOPUT | MPI_MODE_NOPRECEDE,
-                  fWindow);
+    MPI_Barrier(MPI_COMM_WORLD);
     fRunBeginSystemTime = scsc::now();
     fWallTimeStopwatch = {};
     fCPUTimeStopwatch = {};
@@ -138,7 +85,7 @@ auto TaskScheduler<T>::PreRunAction() -> void {
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-auto TaskScheduler<T>::TaskAction() const -> void {
+auto TaskScheduler<T>::PostTaskAction() const -> void {
     if (fPrintProgressModulo > 0 and fProcessingTask % fPrintProgressModulo == 0) {
         if (Env::MPIEnv::Instance().GetVerboseLevel() >= Env::VL::Error) {
             TaskReport();
@@ -152,9 +99,7 @@ auto TaskScheduler<T>::PostRunAction() -> void {
     fRunWallTime = fWallTimeStopwatch.SecondsElapsed();
     fRunCPUTime = fCPUTimeStopwatch.SecondsUsed();
     fRunEndSystemTime = scsc::now();
-    MPI_Win_fence(MPI_MODE_NOSTORE | MPI_MODE_NOPUT | MPI_MODE_NOSUCCEED,
-                  fWindow);
-    fProcessing = false;
+    MPI_Barrier(MPI_COMM_WORLD);
     if (fPrintProgressModulo >= 0) {
         if (const auto& mpiEnv{Env::MPIEnv::Instance()};
             mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error) {
@@ -168,27 +113,21 @@ template<std::integral T>
 auto TaskScheduler<T>::PreRunReport() const -> void {
     const auto& mpiEnv{Env::MPIEnv::Instance()};
     fmt::print("-------------------------------------------------------------------------------\n"
-               " {:%FT%T%z} > {} has started on {} ranks\n"
+               " {:%FT%T%z} > {} has started on {} process{}\n"
                "-------------------------------------------------------------------------------\n",
-               fmt::localtime(scsc::to_time_t(fRunBeginSystemTime)), fRunName, mpiEnv.CommWorldSize());
+               fmt::localtime(scsc::to_time_t(fRunBeginSystemTime)), fRunName, mpiEnv.CommWorldSize(), mpiEnv.Parallel() ? "es" : "");
 }
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
 auto TaskScheduler<T>::TaskReport() const -> void {
-    using namespace std::string_literals;
     const auto& mpiEnv{Env::MPIEnv::Instance()};
-    const auto t{fWallTimeStopwatch.SecondsElapsed()};
-    const auto nUp{static_cast<double>(fProcessingTask)};
-    const auto nLow{nUp > mpiEnv.CommWorldSize() ? nUp - mpiEnv.CommWorldSize() : 1};
-    const auto eta{t * (NTask() * Math::MidPoint(1 / nUp, 1 / nLow) - 1)};
-    // const auto etaError{3 * t * mpiEnv.CommWorldSize() * NTask() / (2 * nUp * nLow)};
-    const auto nMean{Math::MidPoint(nLow, nUp)};
-    const auto progress{nMean / NTask()};
-    fmt::print("Rank{}> {:%FT%T%z} > {} {} has started\n"
-               "Rank{}>   Est. rem. time: {}  Progress: {}/{} ({:.4}%)\n",
-               mpiEnv.CommWorldRank(), fmt::localtime(scsc::to_time_t(scsc::now())), fTaskName, fProcessingTask,
-               mpiEnv.CommWorldRank(), SToDHMS(eta), nMean, NTask(), 100 * progress);
+    const auto progress{static_cast<double>(NProcessedTask()) / NTask()};
+    const auto eta{(1 / progress - 1) * fWallTimeStopwatch.SecondsElapsed()};
+    fmt::print("MPI{}> {:%FT%T%z} > {} {} has ended\n"
+               "MPI{}>   Est. rem. time: {}  Progress: {}/{} ({:.4}%)\n",
+               mpiEnv.CommWorldRank(), fmt::localtime(scsc::to_time_t(scsc::now())), fTaskName, fProcessingTask - fStep,
+               mpiEnv.CommWorldRank(), fNLocalProcessedTask > 10 ? SToDHMS(eta) : "N/A", NProcessedTask(), NTask(), 100 * progress);
 }
 
 template<std::integral T>
@@ -196,11 +135,11 @@ template<std::integral T>
 auto TaskScheduler<T>::PostRunReport() const -> void {
     const auto& mpiEnv{Env::MPIEnv::Instance()};
     fmt::print("-------------------------------------------------------------------------------\n"
-               " {:%FT%T%z} > {} has ended on {} ranks\n"
+               " {:%FT%T%z} > {} has ended on {} process{}\n"
                "   Start time: {:%FT%T%z}\n"
                "    Wall time: {:.3f} seconds{}\n"
                "-------------------------------------------------------------------------------\n",
-               fmt::localtime(scsc::to_time_t(fRunEndSystemTime)), fRunName, mpiEnv.CommWorldSize(),
+               fmt::localtime(scsc::to_time_t(fRunEndSystemTime)), fRunName, mpiEnv.CommWorldSize(), mpiEnv.Parallel() ? "es" : "",
                fmt::localtime(scsc::to_time_t(fRunBeginSystemTime)),
                fRunWallTime, fRunWallTime <= 60 ? "" : " (" + SToDHMS(fRunWallTime) + ')');
 }

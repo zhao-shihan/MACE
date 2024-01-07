@@ -32,7 +32,6 @@ public:
     TaskScheduler();
     explicit TaskScheduler(T size);
     TaskScheduler(T first, T last);
-    ~TaskScheduler();
 
     auto AssignTask(T size) -> void { AssignTask(0, size); }
     auto AssignTask(T first, T last) -> void;
@@ -44,17 +43,18 @@ public:
     auto Processing() const -> bool { return fProcessing; }
     auto Task() const -> const auto& { return fTask; }
     auto NTask() const -> T { return fTask.last - fTask.first; }
+    auto Deficient() const -> bool { return Env::MPIEnv::Instance().CommWorldSize() < NTask(); }
 
     auto Next() -> std::optional<T>;
     auto ProcessingTask() const -> T { return fProcessingTask; }
-    auto NProcessedTask() const -> T { return ProcessingTask() - fTask.first; }
     auto NLocalProcessedTask() const -> T { return fNLocalProcessedTask; }
+    auto NProcessedTask() const -> T { return fProcessingTask - fTask.first; }
 
 private:
     using scsc = std::chrono::system_clock;
 
     auto PreRunAction() -> void;
-    auto TaskAction() const -> void;
+    auto PostTaskAction() const -> void;
     auto PostRunAction() -> void;
 
     auto PreRunReport() const -> void;
@@ -64,16 +64,15 @@ private:
     static auto SToDHMS(double s) -> std::string;
 
 private:
-    bool fProcessing;
     struct {
         T first;
         T last;
     } fTask;
+    bool fProcessing;
     T fProcessingTask;
     T fNLocalProcessedTask;
 
-    volatile T* fMemory;
-    MPI_Win fWindow;
+    const T fStep;
 
     T fPrintProgressModulo;
 
