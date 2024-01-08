@@ -6,7 +6,6 @@
 #include "MACE/Math/IntegerPower.h++"
 #include "MACE/Utility/MPIUtil/AllocMPIJobs.h++"
 #include "MACE/Utility/MPIUtil/MPIReseedPRNG.h++"
-#include "MACE/Utility/MPIUtil/StaticTaskScheduler.h++"
 
 #include "G4ApplicationState.hh"
 #include "G4Exception.hh"
@@ -44,10 +43,10 @@ MPIRunManager::MPIRunManager() :
     internal::PreG4RunManagerInitFlipG4cout{},
     G4RunManager{},
     internal::PostG4RunManagerInitFlipG4cout{},
-    fTask{std::make_unique_for_overwrite<MPIUtil::StaticTaskScheduler<G4int>>()} {
+    fScheduler{} {
     printModulo = -1;
     SetVerboseLevel(std2b::to_underlying(Env::MPIEnv::Instance().GetVerboseLevel()));
-    fTask->TaskName("G4Event");
+    fScheduler.TaskName("G4Event");
     MPIRunMessenger::Instance().AssignTo(this);
 }
 
@@ -55,7 +54,7 @@ auto MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect)
     MPIUtil::MPIReseedPRNG(*G4Random::getTheEngine());
     fakeRun = nEvent <= 0;
     if (ConfirmBeamOnCondition()) {
-        fTask->AssignTask(nEvent);
+        fScheduler.AssignTask(nEvent);
         numberOfEventToBeProcessed = nEvent;
         numberOfEventProcessed = 0;
         ConstructScoringWorlds();
@@ -99,9 +98,9 @@ auto MPIRunManager::ConfirmBeamOnCondition() -> G4bool {
 auto MPIRunManager::DoEventLoop(G4int nEvent, const char* macroFile, G4int nSelect) -> void {
     InitializeEventLoop(nEvent, macroFile, nSelect);
     // Set name for message
-    fTask->RunName(fmt::format("G4Run {}", currentRun->GetRunID()));
+    fScheduler.RunName(fmt::format("G4Run {}", currentRun->GetRunID()));
     // Event loop
-    for (auto i{fTask->Next()}; i.has_value(); i = fTask->Next()) {
+    for (auto i{fScheduler.Next()}; i.has_value(); i = fScheduler.Next()) {
         ProcessOneEvent(*i);
         TerminateOneEvent();
         if (runAborted) { break; }

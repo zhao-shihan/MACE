@@ -2,11 +2,8 @@ namespace MACE::inline Utility::MPIUtil {
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-TaskScheduler<T>::TaskScheduler() :
-    NonMoveableBase{},
-    fTask{},
-    fProcessingTask{},
-    fNLocalProcessedTask{},
+Scheduler<T>::Scheduler() :
+    fKernel{std::make_unique_for_overwrite<StaticSchedulerKernel<T>>()},
     fProcessing{},
     fPrintProgressModulo{Env::MPIEnv::Instance().Parallel() ? 10 * Env::MPIEnv::Instance().CommWorldSize() + 1 : 10},
     fWallTimeStopwatch{},
@@ -20,40 +17,40 @@ TaskScheduler<T>::TaskScheduler() :
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-TaskScheduler<T>::TaskScheduler(T size) :
-    TaskScheduler{0, size} {}
+Scheduler<T>::Scheduler(T size) :
+    Scheduler{0, size} {}
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-TaskScheduler<T>::TaskScheduler(T first, T last) :
-    TaskScheduler{} {
+Scheduler<T>::Scheduler(T first, T last) :
+    Scheduler{} {
     AssignTask(first, last);
 }
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-auto TaskScheduler<T>::AssignTask(T first, T last) -> void {
+auto Scheduler<T>::AssignTask(T first, T last) -> void {
     if (fProcessing) { throw std::logic_error{"Assign task during processing is not allowed"}; }
     if (last < first) { throw std::invalid_argument{"last < first is not allowed"}; }
-    if (Deficient()) { fmt::println(stderr, "Warning: size of MPI_COMM_WORLD < number of tasks"); }
-    fTask = {first, last};
+    fKernel->fTask = {first, last};
+    if (Deficient()) { fmt::println(stderr, "Warning: size of MPI_COMM_WORLD > number of tasks"); }
     Reset();
 }
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-auto TaskScheduler<T>::Reset() -> void {
-    fProcessingTask = fTask.first;
-    fNLocalProcessedTask = 0;
+auto Scheduler<T>::Reset() -> void {
+    fKernel->fProcessingTask = Task().first;
+    fKernel->fNLocalProcessedTask = 0;
     fProcessing = false;
 }
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-auto TaskScheduler<T>::Next() -> std::optional<T> {
+auto Scheduler<T>::Next() -> std::optional<T> {
     if (not fProcessing) [[unlikely]] {
-        if (fProcessingTask == fTask.last) { return std::nullopt; }
-        PreRunAction();
+        if (ProcessingTask() == Task().last) { return std::nullopt; }
+        fKernel->PreRunAction();
         MPI_Barrier(MPI_COMM_WORLD);
         fRunBeginSystemTime = scsc::now();
         fWallTimeStopwatch = {};
@@ -61,20 +58,20 @@ auto TaskScheduler<T>::Next() -> std::optional<T> {
         PreRunReport();
         fProcessing = true;
     } else {
-        ++fNLocalProcessedTask;
-        const auto processedTask{fProcessingTask};
-        PostTaskAction();
+        ++fKernel->fNLocalProcessedTask;
+        const auto processedTask{ProcessingTask()};
+        fKernel->PostTaskAction();
         PostTaskReport(processedTask);
     }
-    if (fProcessingTask != fTask.last) [[likely]] {
-        PreTaskAction();
-        return fProcessingTask;
+    if (ProcessingTask() != Task().last) [[likely]] {
+        fKernel->PreTaskAction();
+        return ProcessingTask();
     }
     fProcessing = false;
     fRunWallTime = fWallTimeStopwatch.SecondsElapsed();
     fRunCPUTime = fCPUTimeStopwatch.SecondsUsed();
     fRunEndSystemTime = scsc::now();
-    PostRunAction();
+    fKernel->PostRunAction();
     MPI_Barrier(MPI_COMM_WORLD);
     PostRunReport();
     return std::nullopt;
@@ -82,7 +79,7 @@ auto TaskScheduler<T>::Next() -> std::optional<T> {
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-auto TaskScheduler<T>::PreRunReport() const -> void {
+auto Scheduler<T>::PreRunReport() const -> void {
     if (fPrintProgressModulo >= 0) {
         const auto& mpiEnv{Env::MPIEnv::Instance()};
         if (mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error) {
@@ -96,7 +93,7 @@ auto TaskScheduler<T>::PreRunReport() const -> void {
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-auto TaskScheduler<T>::PostTaskReport(T iEnded) const -> void {
+auto Scheduler<T>::PostTaskReport(T iEnded) const -> void {
     if (fPrintProgressModulo > 0 and iEnded % fPrintProgressModulo == 0) {
         const auto& mpiEnv{Env::MPIEnv::Instance()};
         if (mpiEnv.GetVerboseLevel() >= Env::VL::Error) {
@@ -105,14 +102,14 @@ auto TaskScheduler<T>::PostTaskReport(T iEnded) const -> void {
             fmt::print("MPI{}> {:%FT%T%z} > {} {} has ended\n"
                        "MPI{}>   Est. rem. time: {}  Progress: {} | {}/{} | {:.4}%\n",
                        mpiEnv.CommWorldRank(), fmt::localtime(scsc::to_time_t(scsc::now())), fTaskName, iEnded,
-                       mpiEnv.CommWorldRank(), fNLocalProcessedTask > 10 ? SToDHMS(eta) : "N/A", fNLocalProcessedTask, NProcessedTask(), NTask(), 100 * progress);
+                       mpiEnv.CommWorldRank(), NLocalProcessedTask() > 10 ? SToDHMS(eta) : "N/A", NLocalProcessedTask(), NProcessedTask(), NTask(), 100 * progress);
         }
     }
 }
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-auto TaskScheduler<T>::PostRunReport() const -> void {
+auto Scheduler<T>::PostRunReport() const -> void {
     if (fPrintProgressModulo >= 0) {
         const auto& mpiEnv{Env::MPIEnv::Instance()};
         if (mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error) {
@@ -130,7 +127,7 @@ auto TaskScheduler<T>::PostRunReport() const -> void {
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-auto TaskScheduler<T>::SToDHMS(double s) -> std::string {
+auto Scheduler<T>::SToDHMS(double s) -> std::string {
     const auto totalSeconds{std::llround(s)};
     const auto div86400{std2b::div(totalSeconds, 86400ll)};
     const auto div3600{std2b::div(div86400.rem, 3600ll)};

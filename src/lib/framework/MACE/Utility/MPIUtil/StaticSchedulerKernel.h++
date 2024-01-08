@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Env/MPIEnv.h++"
-#include "MACE/Utility/MPIUtil/TaskScheduler.h++"
+#include "MACE/Utility/MPIUtil/SchedulerKernel.h++"
 
 #include <concepts>
 #include <optional>
@@ -9,11 +9,9 @@
 namespace MACE::inline Utility::MPIUtil {
 
 template<std::integral T>
-class StaticTaskScheduler final : public TaskScheduler<T> {
+class StaticSchedulerKernel final : public SchedulerKernel<T> {
 public:
-    StaticTaskScheduler();
-    explicit StaticTaskScheduler(T size);
-    StaticTaskScheduler(T first, T last);
+    using SchedulerKernel<T>::SchedulerKernel;
 
 private:
     auto PreRunAction() -> void override;
@@ -24,4 +22,4 @@ private:
 
 } // namespace MACE::inline Utility::MPIUtil
 
-#include "MACE/Utility/MPIUtil/StaticTaskScheduler.inl"
+#include "MACE/Utility/MPIUtil/StaticSchedulerKernel.inl"

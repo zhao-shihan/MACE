@@ -4,7 +4,8 @@
 #include "MACE/Concept/MPIPredefined.h++"
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Utility/CPUTimeStopwatch.h++"
-#include "MACE/Utility/NonMoveableBase.h++"
+#include "MACE/Utility/MPIUtil/SchedulerKernel.h++"
+#include "MACE/Utility/MPIUtil/StaticSchedulerKernel.h++"
 #include "MACE/Utility/WallTimeStopwatch.h++"
 
 #include "mpi.h"
@@ -16,6 +17,7 @@
 #include <cmath>
 #include <concepts>
 #include <cstdio>
+#include <memory>
 #include <optional>
 #include <stdexcept>
 #include <tuple>
@@ -24,37 +26,31 @@ namespace MACE::inline Utility::MPIUtil {
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-class TaskScheduler : public NonMoveableBase {
+class Scheduler final {
 public:
-    TaskScheduler();
-    explicit TaskScheduler(T size);
-    TaskScheduler(T first, T last);
-    virtual ~TaskScheduler() = default;
+    Scheduler();
+    explicit Scheduler(T size);
+    Scheduler(T first, T last);
 
     auto AssignTask(T size) -> void { AssignTask(0, size); }
     auto AssignTask(T first, T last) -> void;
     auto Reset() -> void;
     auto PrintProgressModulo(T mod) -> void { fPrintProgressModulo = mod; }
-    auto RunName(std::string name) { fRunName = std::move(name); }
-    auto TaskName(std::string name) { fTaskName = std::move(name); }
+    auto RunName(std::string name) -> void { fRunName = std::move(name); }
+    auto TaskName(std::string name) -> void { fTaskName = std::move(name); }
 
     auto Processing() const -> bool { return fProcessing; }
-    auto Task() const -> const auto& { return fTask; }
-    auto NTask() const -> T { return fTask.last - fTask.first; }
-    auto Deficient() const -> bool { return Env::MPIEnv::Instance().CommWorldSize() < NTask(); }
+    auto Task() const -> auto { return fKernel->fTask; }
+    auto NTask() const -> T { return fKernel->fTask.last - fKernel->fTask.first; }
+    auto Deficient() const -> bool { return Env::MPIEnv::Instance().CommWorldSize() > NTask(); }
 
     auto Next() -> std::optional<T>;
 
-    auto ProcessingTask() const -> T { return fProcessingTask; }
-    auto NLocalProcessedTask() const -> T { return fNLocalProcessedTask; }
-    auto NProcessedTask() const -> T { return fProcessingTask - fTask.first; }
+    auto ProcessingTask() const -> T { return fKernel->fProcessingTask; }
+    auto NLocalProcessedTask() const -> T { return fKernel->fNLocalProcessedTask; }
+    auto NProcessedTask() const -> T { return fKernel->fProcessingTask - fKernel->fTask.first; }
 
 private:
-    virtual auto PreRunAction() -> void = 0;
-    virtual auto PreTaskAction() -> void = 0;
-    virtual auto PostTaskAction() -> void = 0;
-    virtual auto PostRunAction() -> void = 0;
-
     auto PreRunReport() const -> void;
     auto PostTaskReport(T iEnded) const -> void;
     auto PostRunReport() const -> void;
@@ -64,15 +60,9 @@ private:
 private:
     using scsc = std::chrono::system_clock;
 
-protected:
-    struct {
-        T first;
-        T last;
-    } fTask;
-    T fProcessingTask;
-    T fNLocalProcessedTask;
-
 private:
+    std::unique_ptr<SchedulerKernel<T>> fKernel;
+
     bool fProcessing;
 
     T fPrintProgressModulo;
@@ -91,4 +81,4 @@ private:
 
 } // namespace MACE::inline Utility::MPIUtil
 
-#include "MACE/Utility/MPIUtil/TaskScheduler.inl"
+#include "MACE/Utility/MPIUtil/Scheduler.inl"
