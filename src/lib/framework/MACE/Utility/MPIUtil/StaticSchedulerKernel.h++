@@ -4,7 +4,6 @@
 #include "MACE/Utility/MPIUtil/SchedulerKernel.h++"
 
 #include <concepts>
-#include <optional>
 
 namespace MACE::inline Utility::MPIUtil {
 

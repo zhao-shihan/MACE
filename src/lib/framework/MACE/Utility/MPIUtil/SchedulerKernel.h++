@@ -15,9 +15,15 @@ template<std::integral T>
 class SchedulerKernel {
     friend class Scheduler<T>;
 
+protected:
+    struct Task {
+        T first;
+        T last;
+    };
+
 public:
     SchedulerKernel() = default;
-    SchedulerKernel(T first, T last);
+    SchedulerKernel(Task task);
     virtual ~SchedulerKernel() = default;
 
 private:
@@ -27,10 +33,7 @@ private:
     virtual auto PostRunAction() -> void = 0;
 
 protected:
-    struct {
-        T first;
-        T last;
-    } fTask;
+    Task fTask;
     T fProcessingTask;
     T fNLocalProcessedTask;
 };

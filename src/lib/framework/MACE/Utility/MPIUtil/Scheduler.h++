@@ -29,12 +29,19 @@ template<std::integral T>
 class Scheduler final {
 public:
     Scheduler();
-    explicit Scheduler(T size);
+    explicit Scheduler(SchedulerKernel<T>::Task task);
     Scheduler(T first, T last);
+    explicit Scheduler(T size);
 
-    auto AssignTask(T size) -> void { AssignTask(0, size); }
-    auto AssignTask(T first, T last) -> void;
+    template<template<typename> typename AKernel>
+        requires std::derived_from<AKernel<T>, SchedulerKernel<T>>
+    auto SwitchKernel() -> void;
+
+    auto AssignTask(SchedulerKernel<T>::Task task) -> void;
+    auto AssignTask(T first, T last) -> void { AssignTask({first, last}); }
+    auto AssignTask(T size) -> void { AssignTask({0, size}); }
     auto Reset() -> void;
+
     auto PrintProgressModulo(T mod) -> void { fPrintProgressModulo = mod; }
     auto RunName(std::string name) -> void { fRunName = std::move(name); }
     auto TaskName(std::string name) -> void { fTaskName = std::move(name); }

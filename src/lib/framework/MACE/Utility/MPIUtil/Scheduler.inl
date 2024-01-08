@@ -17,22 +17,36 @@ Scheduler<T>::Scheduler() :
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-Scheduler<T>::Scheduler(T size) :
-    Scheduler{0, size} {}
-
-template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-Scheduler<T>::Scheduler(T first, T last) :
+Scheduler<T>::Scheduler(SchedulerKernel<T>::Task task) :
     Scheduler{} {
-    AssignTask(first, last);
+    AssignTask(task);
 }
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-auto Scheduler<T>::AssignTask(T first, T last) -> void {
+Scheduler<T>::Scheduler(T size) : // clang-format off
+    Scheduler{{0, size}} {} // clang-format on
+
+template<std::integral T>
+    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
+Scheduler<T>::Scheduler(T first, T last) : // clang-format off
+    Scheduler{{first, last}} {} // clang-format on
+
+template<std::integral T>
+    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
+template<template<typename> typename AKernel>
+    requires std::derived_from<AKernel<T>, SchedulerKernel<T>>
+auto Scheduler<T>::SwitchKernel() -> void {
+    if (fProcessing) { throw std::logic_error{"Switch scheduler kernel during processing is not allowed"}; }
+    fKernel = std::make_unique<AKernel<T>>(Task());
+}
+
+template<std::integral T>
+    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
+auto Scheduler<T>::AssignTask(SchedulerKernel<T>::Task task) -> void {
     if (fProcessing) { throw std::logic_error{"Assign task during processing is not allowed"}; }
-    if (last < first) { throw std::invalid_argument{"last < first is not allowed"}; }
-    fKernel->fTask = {first, last};
+    if (task.last < task.first) { throw std::invalid_argument{"last < first is not allowed"}; }
+    fKernel->fTask = task;
     if (Deficient()) { fmt::println(stderr, "Warning: size of MPI_COMM_WORLD > number of tasks"); }
     Reset();
 }
