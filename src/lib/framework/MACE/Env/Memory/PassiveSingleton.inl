@@ -10,13 +10,13 @@ PassiveSingleton<ADerived>::PassiveSingleton() :
 template<typename ADerived>
 MACE_ALWAYS_INLINE auto PassiveSingleton<ADerived>::Instance() -> ADerived& {
     switch (Base::UpdateInstance()) {
-    case Base::Status::NotInstantiated:
+    [[unlikely]] case Base::Status::NotInstantiated:
         throw std::logic_error{fmt::format("MACE::Env::Memory::PassiveSingleton::Instance(): "
                                            "{} (passive singleton in environment) has not been instantiated",
                                            typeid(ADerived).name())};
     [[likely]] case Base::Status::Available:
         return *static_cast<ADerived*>(*Base::fgInstance);
-    case Base::Status::Expired:
+    [[unlikely]] case Base::Status::Expired:
         throw std::logic_error{fmt::format("MACE::Env::Memory::PassiveSingleton::Instance(): "
                                            "The instance of {} (passive singleton in environment) has been deleted",
                                            typeid(ADerived).name())};

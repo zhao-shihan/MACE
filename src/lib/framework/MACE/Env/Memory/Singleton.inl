@@ -18,7 +18,7 @@ Singleton<ADerived>::~Singleton() {
 template<typename ADerived>
 MACE_ALWAYS_INLINE auto Singleton<ADerived>::Instance() -> ADerived& {
     switch (UpdateInstance()) {
-    case Status::NotInstantiated: {
+    [[unlikely]] case Status::NotInstantiated: {
         auto& pool{internal::SingletonPool::Instance()};
         if (pool.Contains<ADerived>()) {
             throw std::logic_error{fmt::format("MACE::Env::Memory::Singleton: "
@@ -30,7 +30,7 @@ MACE_ALWAYS_INLINE auto Singleton<ADerived>::Instance() -> ADerived& {
         [[fallthrough]];
     [[likely]] case Status::Available:
         return *static_cast<ADerived*>(*fgInstance);
-    case Status::Expired:
+    [[unlikely]] case Status::Expired:
         throw std::logic_error{fmt::format("MACE::Env::Memory::Singleton::Instance(): "
                                            "The instance of {} has been deleted",
                                            typeid(ADerived).name())};
