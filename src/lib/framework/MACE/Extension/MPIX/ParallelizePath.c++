@@ -1,20 +1,20 @@
 #include "MACE/Env/MPIEnv.h++"
-#include "MACE/Extension/MPIX/MakeMPIFilePath.h++"
+#include "MACE/Extension/MPIX/ParallelizePath.h++"
 
 #include "fmt/format.h"
 
 namespace MACE::inline Extension::MPIX {
 
-auto MakeMPIFilePathInPlace(std::filesystem::path& path) -> void {
+auto ParallelizePathInPlace(std::filesystem::path& path) -> void {
     const auto extension{path.extension().generic_string()};
-    MakeMPIFilePathInPlace(path.replace_extension(), extension);
+    ParallelizePathInPlace(path.replace_extension(), extension);
 }
 
-auto MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extension) -> void {
+auto ParallelizePathInPlace(std::filesystem::path& path, std::string_view extension) -> void {
     // file name without extension
     auto fileName{path.filename()};
     if (fileName.empty()) {
-        throw std::logic_error("MACE::Utility::MPIX::MakeMPIFilePathInPlace: Empty name");
+        throw std::logic_error("MACE::Utility::MPIX::ParallelizePathInPlace: Empty name");
     }
 
     if (const auto& mpiEnv = Env::MPIEnv::Instance();

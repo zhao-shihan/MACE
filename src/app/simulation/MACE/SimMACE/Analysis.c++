@@ -3,7 +3,7 @@
 #include "MACE/SimMACE/Hit/EMCHit.h++"
 #include "MACE/SimMACE/Hit/MCPHit.h++"
 #include "MACE/SimMACE/Messenger/AnalysisMessenger.h++"
-#include "MACE/Extension/MPIX/MakeMPIFilePath.h++"
+#include "MACE/Extension/MPIX/ParallelizePath.h++"
 
 #include "TFile.h"
 
@@ -31,7 +31,7 @@ Analysis::Analysis() :
 }
 
 void Analysis::RunBegin(G4int runID) {
-    const auto fullFilePath{MPIX::MakeMPIFilePath(fFilePath, ".root").generic_string()};
+    const auto fullFilePath{MPIX::ParallelizePath(fFilePath, ".root").generic_string()};
     fFile = TFile::Open(fullFilePath.c_str(), fFileOption.c_str(),
                         "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
     if (fFile == nullptr) {

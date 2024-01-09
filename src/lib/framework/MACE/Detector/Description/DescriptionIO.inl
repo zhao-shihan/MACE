@@ -87,7 +87,7 @@ void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::strin
         std::ofstream yamlOut;
         try {
             if (Env::MPIEnv::Available()) {
-                yamlOut.open(MPIX::MakeMPIFilePath(yamlFile), std::ios::out);
+                yamlOut.open(MPIX::ParallelizePath(yamlFile), std::ios::out);
             } else {
                 const auto parent = yamlFile.parent_path();
                 if (not parent.empty()) { std::filesystem::create_directories(parent); }

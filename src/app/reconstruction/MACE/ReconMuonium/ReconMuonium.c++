@@ -12,7 +12,7 @@
 #include "MACE/ReconMuonium/MuoniumSimVertex.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Extension/MPIX/AllocMPIJobs.h++"
-#include "MACE/Extension/MPIX/MakeMPIFilePath.h++"
+#include "MACE/Extension/MPIX/ParallelizePath.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
 #include "MACE/Utility/VectorArithmeticOperator.h++"
 #include "MACE/Utility/VectorCast.h++"
@@ -91,7 +91,7 @@ int main(int argc, char* argv[]) {
 
     std::filesystem::path pathOut(argv[1]);
     pathOut.replace_extension("");
-    const auto fileNameOut = MakeMPIFilePath(pathOut.string() + "_recM", ".root");
+    const auto fileNameOut = ParallelizePath(pathOut.string() + "_recM", ".root");
     // output file of this process
     TFile fileOut(fileNameOut.generic_string().c_str(), "recreate");
 

@@ -3,7 +3,7 @@
 #include "MACE/SimTarget/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimTarget/Analysis.h++"
 #include "MACE/SimTarget/Messenger/AnalysisMessenger.h++"
-#include "MACE/Extension/MPIX/MakeMPIFilePath.h++"
+#include "MACE/Extension/MPIX/ParallelizePath.h++"
 
 #include "TFile.h"
 
@@ -63,7 +63,7 @@ void Analysis::Close() {
 
 void Analysis::OpenResultFile() {
     fResultFile = std::make_unique<TFile>(
-        MPIX::MakeMPIFilePath(fResultPath, ".root").generic_string().c_str(),
+        MPIX::ParallelizePath(fResultPath, ".root").generic_string().c_str(),
         "recreate");
 }
 

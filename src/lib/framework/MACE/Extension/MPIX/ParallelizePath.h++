@@ -14,9 +14,9 @@ namespace MACE::inline Extension::MPIX {
 ///
 ///   MPI_Init(argc, argv);
 ///     ...
-///   auto filePath = MACE::MPIX::MakeMPIFilePath("result.root");
+///   auto filePath = MACE::MPIX::ParallelizePath("result.root");
 ///   // or, equivalently
-///   // auto filePath = MACE::MPIX::MakeMPIFilePath("result", ".root");
+///   // auto filePath = MACE::MPIX::ParallelizePath("result", ".root");
 ///   SomeFileHandler::Open(filePath);
 ///     ...
 ///
@@ -53,11 +53,11 @@ namespace MACE::inline Extension::MPIX {
 /// When just ./xxx (not in MPI mode) :
 /// Just a single result.root will be created.
 ///
-auto MakeMPIFilePath(std::convertible_to<std::filesystem::path> auto&& path) -> std::filesystem::path;
-auto MakeMPIFilePath(std::convertible_to<std::filesystem::path> auto&& path, std::string_view extension) -> std::filesystem::path;
-auto MakeMPIFilePathInPlace(std::filesystem::path& path) -> void;
-auto MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extension) -> void;
+auto ParallelizePath(std::convertible_to<std::filesystem::path> auto&& path) -> std::filesystem::path;
+auto ParallelizePath(std::convertible_to<std::filesystem::path> auto&& path, std::string_view extension) -> std::filesystem::path;
+auto ParallelizePathInPlace(std::filesystem::path& path) -> void;
+auto ParallelizePathInPlace(std::filesystem::path& path, std::string_view extension) -> void;
 
 } // namespace MACE::inline Extension::MPIX
 
-#include "MACE/Extension/MPIX/MakeMPIFilePath.inl"
+#include "MACE/Extension/MPIX/ParallelizePath.inl"
