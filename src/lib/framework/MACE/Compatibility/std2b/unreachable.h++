@@ -17,8 +17,6 @@ namespace MACE::inline Compatibility::std2b {
     __builtin_unreachable();
 #elif defined _MSC_VER
     __assume(false);
-#else
-    return;
 #endif
 }
 
