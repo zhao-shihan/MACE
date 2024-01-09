@@ -9,6 +9,7 @@
 #include "mpi.h"
 
 #include <algorithm>
+#include <array>
 #include <cstddef>
 #include <iterator>
 #include <map>

@@ -58,16 +58,19 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
                 int size;
                 NameFixedString name;
             };
-            constexpr int blockLengthOfNodeInfoForMPI[]{1, NameFixedString::Occupation()};
-            const MPI_Aint displacementOfNodeInfoForMPI[]{offsetof(NodeInfoForMPI, size), offsetof(NodeInfoForMPI, name)};
-            const MPI_Datatype typeOfNodeInfoForMPI[]{MPI_INT, MPI_CHAR};
-            MPI_Datatype nodeInfoForMPI;
-            MPI_Type_create_struct(2,                            // count
-                                   blockLengthOfNodeInfoForMPI,  // array_of_block_lengths
-                                   displacementOfNodeInfoForMPI, // array_of_displacements
-                                   typeOfNodeInfoForMPI,         // array_of_types
-                                   &nodeInfoForMPI);             // newtype
-            MPI_Type_commit(&nodeInfoForMPI);
+            MPI_Datatype structNodeInfoForMPI;
+            MPI_Type_create_struct(2,                                                      // count
+                                   std::array<int, 2>{1,                                   // array_of_block_lengths
+                                                      NameFixedString::Occupation()}       // array_of_block_lengths
+                                       .data(),                                            // array_of_block_lengths
+                                   std::array<MPI_Aint, 2>{offsetof(NodeInfoForMPI, size), // array_of_displacements
+                                                           offsetof(NodeInfoForMPI, name)} // array_of_displacements
+                                       .data(),                                            // array_of_displacements
+                                   std::array<MPI_Datatype, 2>{MPI_INT,                    // array_of_types
+                                                               MPI_CHAR}                   // array_of_types
+                                       .data(),                                            // array_of_types
+                                   &structNodeInfoForMPI);                                 // newtype
+            MPI_Type_commit(&structNodeInfoForMPI);
             MPI_Wait(&gatherNodeNamesRequest, // request
                      MPI_STATUS_IGNORE);      // status
             // Master find all unique processor names and assign node ID and count
@@ -122,12 +125,12 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
                       MPI_COMM_WORLD); // comm
             // Master send unique node name list
             if (OnCommWorldWorker()) { nodeList.resize(nodeCount); }
-            MPI_Bcast(nodeList.data(), // buffer
-                      nodeList.size(), // count
-                      nodeInfoForMPI,  // datatype
-                      0,               // root
-                      MPI_COMM_WORLD); // comm
-            MPI_Type_free(&nodeInfoForMPI);
+            MPI_Bcast(nodeList.data(),      // buffer
+                      nodeList.size(),      // count
+                      structNodeInfoForMPI, // datatype
+                      0,                    // root
+                      MPI_COMM_WORLD);      // comm
+            MPI_Type_free(&structNodeInfoForMPI);
             // Assign to the list, convert node names to std::string
             cluster.node.reserve(nodeCount);
             for (auto&& [size, name] : std::as_const(nodeList)) {
