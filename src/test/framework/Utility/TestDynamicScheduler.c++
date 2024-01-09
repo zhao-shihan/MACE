@@ -1,6 +1,6 @@
 #include "MACE/Env/MPIEnv.h++"
+#include "MACE/Utility/MPIUtil/DynamicScheduler.h++"
 #include "MACE/Utility/MPIUtil/Executor.h++"
-#include "MACE/Utility/MPIUtil/StaticScheduler.h++"
 
 #include "fmt/format.h"
 
@@ -13,7 +13,14 @@ using namespace std::chrono_literals;
 auto main(int argc, char* argv[]) -> int {
     MACE::Env::MPIEnv env{argc, argv, {}};
 
-    MPIUtil::Executor executor{std::stoll(argv[1]), MPIUtil::ScheduleBy<MPIUtil::StaticScheduler>{}};
+    MPIUtil::Executor executor{std::stoll(argv[1]), MPIUtil::ScheduleBy<MPIUtil::DynamicScheduler>{}};
+
+    executor.PrintProgressModulo(-1);
+    executor.Execute([&](auto i) {
+        fmt::println("{},{}", i, env.CommWorldRank());
+    });
+
+    std::this_thread::sleep_for(3s);
 
     executor.PrintProgressModulo(0);
     executor.Execute([&](auto i) {

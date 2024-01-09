@@ -2,7 +2,7 @@
 
 #include "MACE/Math/Statistic.h++"
 #include "MACE/Utility/CPUTimeStopwatch.h++"
-#include "MACE/Utility/MPIUtil/Scheduler.h++"
+#include "MACE/Utility/MPIUtil/Executor.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 #include "MACE/Utility/WallTimeStopwatch.h++"
 
@@ -47,7 +47,7 @@ public:
     virtual auto DoEventLoop(G4int nEvent, const char* macroFile, G4int nSelect) -> void override;
 
 private:
-    MPIUtil::Scheduler<G4int> fScheduler;
+    MPIUtil::Executor<G4int> fScheduler;
 };
 
 } // namespace MACE::inline Extension::Geant4X

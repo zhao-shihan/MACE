@@ -98,13 +98,13 @@ auto MPIRunManager::ConfirmBeamOnCondition() -> G4bool {
 auto MPIRunManager::DoEventLoop(G4int nEvent, const char* macroFile, G4int nSelect) -> void {
     InitializeEventLoop(nEvent, macroFile, nSelect);
     // Set name for message
-    fScheduler.RunName(fmt::format("G4Run {}", currentRun->GetRunID()));
+    fScheduler.ExecutionName(fmt::format("G4Run {}", currentRun->GetRunID()));
     // Event loop
-    for (auto i{fScheduler.Next()}; i.has_value(); i = fScheduler.Next()) {
-        ProcessOneEvent(*i);
+    fScheduler.Execute([this](auto eventID) {
+        ProcessOneEvent(eventID);
         TerminateOneEvent();
-        if (runAborted) { break; }
-    }
+        if (runAborted) { throw std::runtime_error{"G4Run aborted"}; }
+    });
     // If multi-threading, TerminateEventLoop() is invoked after all threads are finished.
     // MPIRunManager::runManagerType is sequentialRM.
     if (runManagerType == sequentialRM) { TerminateEventLoop(); }
