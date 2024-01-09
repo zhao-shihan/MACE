@@ -1,7 +1,7 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Math/Random/Distribution/Uniform.h++"
 #include "MACE/Math/Random/Generator/Xoshiro512SS.h++"
-#include "MACE/Utility/MPIUtil/MPIReseedPRNG.h++"
+#include "MACE/Extension/MPIX/MPIReseedPRNG.h++"
 
 #include "CLHEP/Random/RandomEngine.h"
 
@@ -15,7 +15,7 @@
 #include <set>
 #include <vector>
 
-namespace MACE::inline Utility::MPIUtil {
+namespace MACE::inline Extension::MPIX {
 
 auto MPIReseedPRNG(CLHEP::HepRandomEngine& randEng) -> void {
     const auto& mpiEnv = Env::MPIEnv::Instance();
@@ -50,4 +50,4 @@ auto MPIReseedPRNG(CLHEP::HepRandomEngine& randEng) -> void {
     randEng.setSeed(seedRecv, 3);
 }
 
-} // namespace MACE::inline Utility::MPIUtil
+} // namespace MACE::inline Extension::MPIX

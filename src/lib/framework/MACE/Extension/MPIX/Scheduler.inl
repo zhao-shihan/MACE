@@ -1,4 +1,4 @@
-namespace MACE::inline Utility::MPIUtil {
+namespace MACE::inline Extension::MPIX {
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
@@ -7,4 +7,4 @@ auto Scheduler<T>::Reset() -> void {
     fNLocalExecutedTask = 0;
 }
 
-} // namespace MACE::inline Utility::MPIUtil
+} // namespace MACE::inline Extension::MPIX

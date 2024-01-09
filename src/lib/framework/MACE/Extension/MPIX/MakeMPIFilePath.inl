@@ -1,4 +1,4 @@
-namespace MACE::inline Utility::MPIUtil {
+namespace MACE::inline Extension::MPIX {
 
 auto MakeMPIFilePath(std::convertible_to<std::filesystem::path> auto&& path) -> std::filesystem::path {
     std::filesystem::path result{std::forward<decltype(path)>(path)};
@@ -12,4 +12,4 @@ auto MakeMPIFilePath(std::convertible_to<std::filesystem::path> auto&& path, std
     return result;
 }
 
-} // namespace MACE::inline Utility::MPIUtil
+} // namespace MACE::inline Extension::MPIX

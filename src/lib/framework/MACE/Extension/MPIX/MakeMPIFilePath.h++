@@ -4,7 +4,7 @@
 #include <filesystem>
 #include <string_view>
 
-namespace MACE::inline Utility::MPIUtil {
+namespace MACE::inline Extension::MPIX {
 
 /// Create directories and file paths to help managing files during mpi processing.
 ///
@@ -14,41 +14,41 @@ namespace MACE::inline Utility::MPIUtil {
 ///
 ///   MPI_Init(argc, argv);
 ///     ...
-///   auto filePath = MACE::MPIUtil::MakeMPIFilePath("result.root");
+///   auto filePath = MACE::MPIX::MakeMPIFilePath("result.root");
 ///   // or, equivalently
-///   // auto filePath = MACE::MPIUtil::MakeMPIFilePath("result", ".root");
+///   // auto filePath = MACE::MPIX::MakeMPIFilePath("result", ".root");
 ///   SomeFileHandler::Open(filePath);
 ///     ...
 ///
 /// When running xxx on 16 nodes (e.g. named as node0, ..., node15), each node has 24 processes:
 /// A directory named result will be created, under which a series of directories named
 /// node0, node1, ..., node15 will be created. And there will be a series of files named
-/// result.rank0.root, ..., result.rank23.root under result/node0, etc. And a dirmap saves paths.
+/// result.mpi0.root, ..., result.mpi23.root under result/node0, etc. And a dirmap saves paths.
 /// Directory structure as:
 ///
-/// result ┬ node0 ┬ result.rank0.root
-///        │       ├ result.rank1.root
+/// result ┬ node0 ┬ result.mpi0.root
+///        │       ├ result.mpi1.root
 ///        │       ├ ...
-///        │       └ result.rank23.root
-///        ├ node1 ┬ result.rank24.root
-///        │       ├ result.rank25.root
+///        │       └ result.mpi23.root
+///        ├ node1 ┬ result.mpi24.root
+///        │       ├ result.mpi25.root
 ///        │       ├ ...
-///        │       └ result.rank47.root
+///        │       └ result.mpi47.root
 ///        ├ ...
-///        └ node15 ┬ result.rank360.root
-///                 ├ result.rank361.root
+///        └ node15 ┬ result.mpi360.root
+///                 ├ result.mpi361.root
 ///                 ├ ...
-///                 └ result.rank383.root
+///                 └ result.mpi383.root
 ///
 /// When running xxx on 1 node (e.g. PC), which has 8 processes:
 /// A directory named result will be created, under which a series of files named
-/// result.rank0.root, ..., result.rank7.root will be created. And a dirmap saves directory path.
+/// result.mpi0.root, ..., result.mpi7.root will be created. And a dirmap saves directory path.
 /// Directory structure as:
 ///
-/// result ┬ result.rank0.root
-///        ├ result.rank1.root
+/// result ┬ result.mpi0.root
+///        ├ result.mpi1.root
 ///        ├ ...
-///        └ result.rank7.root
+///        └ result.mpi7.root
 ///
 /// When just ./xxx (not in MPI mode) :
 /// Just a single result.root will be created.
@@ -58,6 +58,6 @@ auto MakeMPIFilePath(std::convertible_to<std::filesystem::path> auto&& path, std
 auto MakeMPIFilePathInPlace(std::filesystem::path& path) -> void;
 auto MakeMPIFilePathInPlace(std::filesystem::path& path, std::string_view extension) -> void;
 
-} // namespace MACE::inline Utility::MPIUtil
+} // namespace MACE::inline Extension::MPIX
 
-#include "MACE/Utility/MPIUtil/MakeMPIFilePath.inl"
+#include "MACE/Extension/MPIX/MakeMPIFilePath.inl"

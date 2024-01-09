@@ -5,8 +5,8 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/stdx/boolean_testable.h++"
 #include "MACE/Utility/CPUTimeStopwatch.h++"
-#include "MACE/Utility/MPIUtil/DynamicScheduler.h++"
-#include "MACE/Utility/MPIUtil/Scheduler.h++"
+#include "MACE/Extension/MPIX/DynamicScheduler.h++"
+#include "MACE/Extension/MPIX/Scheduler.h++"
 #include "MACE/Utility/WallTimeStopwatch.h++"
 
 #include "mpi.h"
@@ -24,7 +24,7 @@
 #include <stdexcept>
 #include <tuple>
 
-namespace MACE::inline Utility::MPIUtil {
+namespace MACE::inline Extension::MPIX {
 
 template<template<typename> typename>
 struct ScheduleBy {};
@@ -97,6 +97,6 @@ private:
     std::string fTaskName;
 };
 
-} // namespace MACE::inline Utility::MPIUtil
+} // namespace MACE::inline Extension::MPIX
 
-#include "MACE/Utility/MPIUtil/Executor.inl"
+#include "MACE/Extension/MPIX/Executor.inl"

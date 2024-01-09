@@ -3,7 +3,7 @@
 #include "MACE/Detector/Description/DescriptionBase.h++"
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/stdx/tuple_like.h++"
-#include "MACE/Utility/MPIUtil/MakeMPIFilePath.h++"
+#include "MACE/Extension/MPIX/MakeMPIFilePath.h++"
 #include "MACE/Utility/NonConstructibleBase.h++"
 #include "MACE/Utility/StaticForEach.h++"
 

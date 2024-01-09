@@ -11,8 +11,8 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/ReconMuonium/MuoniumSimVertex.h++"
 #include "MACE/Utility/LiteralUnit.h++"
-#include "MACE/Utility/MPIUtil/AllocMPIJobs.h++"
-#include "MACE/Utility/MPIUtil/MakeMPIFilePath.h++"
+#include "MACE/Extension/MPIX/AllocMPIJobs.h++"
+#include "MACE/Extension/MPIX/MakeMPIFilePath.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
 #include "MACE/Utility/VectorArithmeticOperator.h++"
 #include "MACE/Utility/VectorCast.h++"
@@ -28,7 +28,7 @@ using namespace MACE::Core::Geometry::Description;
 using namespace MACE::ReconMuonium;
 using namespace MACE;
 using namespace MACE::LiteralUnit;
-using namespace MACE::MPIUtil;
+using namespace MACE::MPIX;
 using namespace PhysicalConstant;
 using namespace MACE::stdx::array_arithmetic;
 

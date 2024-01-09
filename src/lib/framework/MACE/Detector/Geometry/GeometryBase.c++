@@ -1,6 +1,6 @@
 #include "MACE/Detector/Geometry/GeometryBase.h++"
 #include "MACE/Env/MPIEnv.h++"
-#include "MACE/Utility/MPIUtil/MakeMPIFilePath.h++"
+#include "MACE/Extension/MPIX/MakeMPIFilePath.h++"
 
 #include "G4SDManager.hh"
 
@@ -75,7 +75,7 @@ void GeometryBase::RegisterSD(gsl::not_null<G4VSensitiveDetector*> sd) const {
 
 void GeometryBase::Export(std::filesystem::path gdmlFile, gsl::index iPhysicalVolume) const {
 #if MACE_USE_G4GDML
-    if (Env::MPIEnv::Available()) { MPIUtil::MakeMPIFilePathInPlace(gdmlFile); }
+    if (Env::MPIEnv::Available()) { MPIX::MakeMPIFilePathInPlace(gdmlFile); }
     G4GDMLParser gdml;
     gdml.SetAddPointerToName(false);
     gdml.SetOutputFileOverwrite(true);

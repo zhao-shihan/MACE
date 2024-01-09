@@ -2,7 +2,7 @@
 
 #include "MACE/Math/Statistic.h++"
 #include "MACE/Utility/CPUTimeStopwatch.h++"
-#include "MACE/Utility/MPIUtil/Executor.h++"
+#include "MACE/Extension/MPIX/Executor.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 #include "MACE/Utility/WallTimeStopwatch.h++"
 
@@ -40,14 +40,14 @@ public:
 
     static auto GetRunManager() -> auto { return static_cast<MPIRunManager*>(G4RunManager::GetRunManager()); }
 
-    auto PrintProgressModulo(G4int mod) -> void { fScheduler.PrintProgressModulo(mod), printModulo = -1; }
+    auto PrintProgressModulo(G4int mod) -> void { fExecutor.PrintProgressModulo(mod), printModulo = -1; }
 
     virtual auto BeamOn(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) -> void override;
     virtual auto ConfirmBeamOnCondition() -> G4bool override;
     virtual auto DoEventLoop(G4int nEvent, const char* macroFile, G4int nSelect) -> void override;
 
 private:
-    MPIUtil::Executor<G4int> fScheduler;
+    MPIX::Executor<G4int> fExecutor;
 };
 
 } // namespace MACE::inline Extension::Geant4X

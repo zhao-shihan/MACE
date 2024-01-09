@@ -6,7 +6,7 @@
 
 #include <type_traits>
 
-namespace MACE::inline Utility::MPIUtil {
+namespace MACE::inline Extension::MPIX {
 
 template<typename T>
     requires Concept::MPIPredefined<std::decay_t<std::remove_pointer_t<T>>>
@@ -81,4 +81,4 @@ auto DataType(auto&& value) -> MPI_Datatype {
     return DataType<decltype(value)>();
 }
 
-} // namespace MACE::inline Utility::MPIUtil
+} // namespace MACE::inline Extension::MPIX
