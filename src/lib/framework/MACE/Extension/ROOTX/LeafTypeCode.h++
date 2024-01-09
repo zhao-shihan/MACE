@@ -9,7 +9,7 @@
 #include <concepts>
 #include <type_traits>
 
-namespace MACE::inline Utility::ROOTUtil {
+namespace MACE::inline Extension::ROOTX {
 
 template<Concept::ROOTFundamental T>
 constexpr auto LeafTypeCode() -> char {
