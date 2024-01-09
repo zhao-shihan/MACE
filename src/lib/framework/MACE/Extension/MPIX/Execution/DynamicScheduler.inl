@@ -1,4 +1,4 @@
-namespace MACE::inline Extension::MPIX {
+namespace MACE::inline Extension::MPIX::inline Execution {
 
 template<std::integral T>
 DynamicScheduler<T>::DynamicScheduler() :
@@ -271,4 +271,4 @@ auto DynamicScheduler<T>::Worker::PostTaskAction() -> void {
     }
 }
 
-} // namespace MACE::inline Extension::MPIX
+} // namespace MACE::inline Extension::MPIX::inline Execution

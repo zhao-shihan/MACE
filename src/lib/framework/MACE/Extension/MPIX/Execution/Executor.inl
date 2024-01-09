@@ -1,4 +1,4 @@
-namespace MACE::inline Extension::MPIX {
+namespace MACE::inline Extension::MPIX::inline Execution {
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
@@ -156,4 +156,4 @@ auto Executor<T>::SToDHMS(double s) -> std::string {
     return fmt::format("{}s", second);
 }
 
-} // namespace MACE::inline Extension::MPIX
+} // namespace MACE::inline Extension::MPIX::inline Execution

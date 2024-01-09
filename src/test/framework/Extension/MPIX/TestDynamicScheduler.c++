@@ -1,6 +1,6 @@
 #include "MACE/Env/MPIEnv.h++"
-#include "MACE/Extension/MPIX/DynamicScheduler.h++"
-#include "MACE/Extension/MPIX/Executor.h++"
+#include "MACE/Extension/MPIX/Execution/DynamicScheduler.h++"
+#include "MACE/Extension/MPIX/Execution/Executor.h++"
 
 #include "fmt/format.h"
 

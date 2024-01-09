@@ -4,7 +4,7 @@
 
 #include <concepts>
 
-namespace MACE::inline Extension::MPIX {
+namespace MACE::inline Extension::MPIX::inline Execution {
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
@@ -42,6 +42,6 @@ protected:
     T fNLocalExecutedTask;
 };
 
-} // namespace MACE::inline Extension::MPIX
+} // namespace MACE::inline Extension::MPIX::inline Execution
 
-#include "MACE/Extension/MPIX/Scheduler.inl"
+#include "MACE/Extension/MPIX/Execution/Scheduler.inl"

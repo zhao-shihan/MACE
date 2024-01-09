@@ -1,11 +1,11 @@
 #pragma once
 
 #include "MACE/Env/MPIEnv.h++"
-#include "MACE/Extension/MPIX/Scheduler.h++"
+#include "MACE/Extension/MPIX/Execution/Scheduler.h++"
 
 #include <concepts>
 
-namespace MACE::inline Extension::MPIX {
+namespace MACE::inline Extension::MPIX::inline Execution {
 
 template<std::integral T>
 class StaticScheduler final : public Scheduler<T> {
@@ -15,6 +15,6 @@ class StaticScheduler final : public Scheduler<T> {
     auto PostLoopAction() -> void override {}
 };
 
-} // namespace MACE::inline Extension::MPIX
+} // namespace MACE::inline Extension::MPIX::inline Execution
 
-#include "MACE/Extension/MPIX/StaticScheduler.inl"
+#include "MACE/Extension/MPIX/Execution/StaticScheduler.inl"

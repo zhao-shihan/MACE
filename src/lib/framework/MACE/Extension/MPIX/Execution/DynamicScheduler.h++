@@ -3,7 +3,7 @@
 #include "MACE/Compatibility/std2b/unreachable.h++"
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/MPIX/DataType.h++"
-#include "MACE/Extension/MPIX/Scheduler.h++"
+#include "MACE/Extension/MPIX/Execution/Scheduler.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
 #include "mpi.h"
@@ -19,7 +19,7 @@
 #include <variant>
 #include <vector>
 
-namespace MACE::inline Extension::MPIX {
+namespace MACE::inline Extension::MPIX::inline Execution {
 
 template<std::integral T>
 class DynamicScheduler final : public Scheduler<T> {
@@ -123,6 +123,6 @@ private:
     static constexpr auto fgBalanceFactor{0.01};
 };
 
-} // namespace MACE::inline Extension::MPIX
+} // namespace MACE::inline Extension::MPIX::inline Execution
 
-#include "MACE/Extension/MPIX/DynamicScheduler.inl"
+#include "MACE/Extension/MPIX/Execution/DynamicScheduler.inl"

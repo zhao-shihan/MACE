@@ -1,8 +1,8 @@
 #pragma once
 
+#include "MACE/Extension/MPIX/Execution/Executor.h++"
 #include "MACE/Math/Statistic.h++"
 #include "MACE/Utility/CPUTimeStopwatch.h++"
-#include "MACE/Extension/MPIX/Executor.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 #include "MACE/Utility/WallTimeStopwatch.h++"
 

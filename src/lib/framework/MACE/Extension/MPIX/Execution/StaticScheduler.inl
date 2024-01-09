@@ -1,4 +1,4 @@
-namespace MACE::inline Extension::MPIX {
+namespace MACE::inline Extension::MPIX::inline Execution {
 
 template<std::integral T>
 auto StaticScheduler<T>::PreLoopAction() -> void {
@@ -17,4 +17,4 @@ auto StaticScheduler<T>::PostTaskAction() -> void {
     }
 }
 
-} // namespace MACE::inline Extension::MPIX
+} // namespace MACE::inline Extension::MPIX::inline Execution

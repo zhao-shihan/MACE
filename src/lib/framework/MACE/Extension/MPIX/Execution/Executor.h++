@@ -3,10 +3,10 @@
 #include "MACE/Compatibility/std2b/constexpr_cmath.h++"
 #include "MACE/Concept/MPIPredefined.h++"
 #include "MACE/Env/MPIEnv.h++"
+#include "MACE/Extension/MPIX/Execution/DynamicScheduler.h++"
+#include "MACE/Extension/MPIX/Execution/Scheduler.h++"
 #include "MACE/Extension/stdx/boolean_testable.h++"
 #include "MACE/Utility/CPUTimeStopwatch.h++"
-#include "MACE/Extension/MPIX/DynamicScheduler.h++"
-#include "MACE/Extension/MPIX/Scheduler.h++"
 #include "MACE/Utility/WallTimeStopwatch.h++"
 
 #include "mpi.h"
@@ -24,7 +24,7 @@
 #include <stdexcept>
 #include <tuple>
 
-namespace MACE::inline Extension::MPIX {
+namespace MACE::inline Extension::MPIX::inline Execution {
 
 template<template<typename> typename>
 struct ScheduleBy {};
@@ -97,6 +97,6 @@ private:
     std::string fTaskName;
 };
 
-} // namespace MACE::inline Extension::MPIX
+} // namespace MACE::inline Extension::MPIX::inline Execution
 
-#include "MACE/Extension/MPIX/Executor.inl"
+#include "MACE/Extension/MPIX/Execution/Executor.inl"
