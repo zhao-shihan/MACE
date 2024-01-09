@@ -4,7 +4,7 @@
 #include "MACE/Extension/Geant4X/MPIRunManager.h++"
 #include "MACE/Extension/Geant4X/MPIRunMessenger.h++"
 #include "MACE/Math/IntegerPower.h++"
-#include "MACE/Extension/MPIX/MPIReseedPRNG.h++"
+#include "MACE/Utility/MPIReseedRandomEngine.h++"
 
 #include "G4ApplicationState.hh"
 #include "G4Exception.hh"
@@ -50,7 +50,7 @@ MPIRunManager::MPIRunManager() :
 }
 
 auto MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect) -> void {
-    MPIX::MPIReseedPRNG(*G4Random::getTheEngine());
+    MPIReseedRandomEngine();
     fakeRun = nEvent <= 0;
     if (ConfirmBeamOnCondition()) {
         fExecutor.AssignTask(nEvent);

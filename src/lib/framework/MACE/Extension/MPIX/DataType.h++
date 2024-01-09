@@ -9,9 +9,9 @@
 namespace MACE::inline Extension::MPIX {
 
 template<typename T>
-    requires Concept::MPIPredefined<std::decay_t<std::remove_pointer_t<T>>>
+    requires Concept::MPIPredefined<std::decay_t<std::remove_pointer_t<std::decay_t<T>>>>
 auto DataType() -> MPI_Datatype {
-    using U = std::decay_t<std::remove_pointer_t<T>>;
+    using U = std::decay_t<std::remove_pointer_t<std::decay_t<T>>>;
     if constexpr (std::same_as<U, char>) {
         return MPI_CHAR;
     } else if constexpr (std::same_as<U, signed short int>) {
@@ -77,8 +77,9 @@ auto DataType() -> MPI_Datatype {
     }
 }
 
-auto DataType(auto&& value) -> MPI_Datatype {
-    return DataType<decltype(value)>();
+template<typename T>
+auto DataType(T&&) -> MPI_Datatype {
+    return DataType<T>();
 }
 
 } // namespace MACE::inline Extension::MPIX
