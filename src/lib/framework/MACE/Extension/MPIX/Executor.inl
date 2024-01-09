@@ -21,7 +21,7 @@ template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
 template<template<typename> typename S>
     requires std::derived_from<S<T>, Scheduler<T>>
-Executor<T>::Executor(Scheduler<T>::Task task, ScheduleBy<S>) :
+Executor<T>::Executor(typename Scheduler<T>::Task task, ScheduleBy<S>) :
     Executor{ScheduleBy<S>{}} {
     AssignTask(task);
 }
@@ -53,7 +53,7 @@ auto Executor<T>::SwitchScheduler() -> void {
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
-auto Executor<T>::AssignTask(Scheduler<T>::Task task) -> void {
+auto Executor<T>::AssignTask(typename Scheduler<T>::Task task) -> void {
     if (fExecuting) { throw std::logic_error{"assign task during processing"}; }
     if (task.last < task.first) { throw std::invalid_argument{"last < first"}; }
     if (Env::MPIEnv::Instance().CommWorldSize() > task.last - task.first) { throw std::runtime_error{"size of MPI_COMM_WORLD > number of tasks"}; }

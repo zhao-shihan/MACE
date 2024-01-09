@@ -41,7 +41,7 @@ private:
 
 class SingletonInstantiator final : NonConstructibleBase {
     template<typename ASingleton>
-    friend auto Singleton<ASingleton>::Instance() -> ASingleton&;
+    friend class Singleton;
 
     template<Singletonified ASingleton>
     static auto New() { return new ASingleton; }

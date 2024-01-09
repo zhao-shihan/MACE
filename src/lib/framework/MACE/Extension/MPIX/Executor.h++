@@ -38,7 +38,7 @@ public:
     Executor(ScheduleBy<S> = {});
     template<template<typename> typename S = DynamicScheduler>
         requires std::derived_from<S<T>, Scheduler<T>>
-    explicit Executor(Scheduler<T>::Task task, ScheduleBy<S> = {});
+    explicit Executor(typename Scheduler<T>::Task task, ScheduleBy<S> = {});
     template<template<typename> typename S = DynamicScheduler>
         requires std::derived_from<S<T>, Scheduler<T>>
     Executor(T first, T last, ScheduleBy<S> = {});
@@ -50,7 +50,7 @@ public:
         requires std::derived_from<AScheduler<T>, Scheduler<T>>
     auto SwitchScheduler() -> void;
 
-    auto AssignTask(Scheduler<T>::Task task) -> void;
+    auto AssignTask(typename Scheduler<T>::Task task) -> void;
     auto AssignTask(T first, T last) -> void { AssignTask({first, last}); }
     auto AssignTask(T size) -> void { AssignTask({0, size}); }
 
