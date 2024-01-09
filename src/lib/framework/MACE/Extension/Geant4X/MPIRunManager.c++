@@ -4,7 +4,6 @@
 #include "MACE/Extension/Geant4X/MPIRunManager.h++"
 #include "MACE/Extension/Geant4X/MPIRunMessenger.h++"
 #include "MACE/Math/IntegerPower.h++"
-#include "MACE/Utility/MPIUtil/AllocMPIJobs.h++"
 #include "MACE/Utility/MPIUtil/MPIReseedPRNG.h++"
 
 #include "G4ApplicationState.hh"
