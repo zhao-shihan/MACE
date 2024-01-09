@@ -28,11 +28,15 @@ namespace internal {
 
 template<std::integral T>
 auto MasterMakeUniqueSeedSeries(auto xsr256Seed) -> std::set<T> {
+    const auto& mpiEnv{Env::MPIEnv::Instance()};
+    assert(mpiEnv.OnCommWorldMaster());
+
     static_assert(std::same_as<Math::Random::Xoshiro256PP::SeedType, std::uint64_t>);
     Math::Random::Xoshiro256PP xsr256{std::bit_cast<std::uint64_t>(xsr256Seed)};
     Math::Random::Uniform<T> uniform{1, std::numeric_limits<T>::max() - 1};
+
     std::set<T> uniqueSeeds;
-    const auto worldSize{Env::MPIEnv::Instance().CommWorldSize()};
+    const auto worldSize{mpiEnv.CommWorldSize()};
     do {
         uniqueSeeds.emplace(uniform(xsr256));
     } while (ssize(uniqueSeeds) < worldSize);
@@ -41,8 +45,7 @@ auto MasterMakeUniqueSeedSeries(auto xsr256Seed) -> std::set<T> {
 
 } // namespace internal
 
-auto MPIReseedRandomEngine(CLHEP::HepRandomEngine* clhepRng,
-                           TRandom* tRandom) -> void {
+auto MPIReseedRandomEngine(CLHEP::HepRandomEngine* clhepRng, TRandom* tRandom) -> void {
     const auto& mpiEnv{Env::MPIEnv::Instance()};
     if (mpiEnv.Sequential()) { return; }
 
@@ -82,22 +85,22 @@ auto MPIReseedRandomEngine(CLHEP::HepRandomEngine* clhepRng,
         if (clhepRng != nullptr) {
             std::array<unsigned int, sizeof(std::uint64_t) / sizeof(unsigned int)> xsr256Seed;
             std::ranges::generate(xsr256Seed, [&] { return clhepRng->operator unsigned int(); });
-            for (gsl::index i{};
-                 const auto& s : internal::MasterMakeUniqueSeedSeries<decltype(Seed::clhep)>(xsr256Seed)) {
+            const auto uniqueSeed{internal::MasterMakeUniqueSeedSeries<decltype(Seed::clhep)>(xsr256Seed)};
+            assert(uniqueSeed.size() == seedSend.size());
+            for (gsl::index i{}; const auto& s : uniqueSeed) {
                 seedSend[i].clhepNull = false;
-                seedSend[i].clhep = s;
-                ++i;
+                seedSend[i++].clhep = s;
             }
         }
         if (tRandom != nullptr) {
             static_assert(std::same_as<decltype(tRandom->Integer(std::numeric_limits<UInt_t>::max()) + 1), UInt_t>);
             std::array<UInt_t, sizeof(std::uint64_t) / sizeof(UInt_t)> xsr256Seed;
             std::ranges::generate(xsr256Seed, [&] { return tRandom->Integer(std::numeric_limits<UInt_t>::max()) + 1; });
-            for (gsl::index i{};
-                 const auto& s : internal::MasterMakeUniqueSeedSeries<decltype(Seed::root)>(xsr256Seed)) {
+            const auto uniqueSeed{internal::MasterMakeUniqueSeedSeries<decltype(Seed::root)>(xsr256Seed)};
+            assert(uniqueSeed.size() == seedSend.size());
+            for (gsl::index i{}; const auto& s : uniqueSeed) {
                 seedSend[i].rootNull = false;
-                seedSend[i].root = s;
-                ++i;
+                seedSend[i++].root = s;
             }
         }
     }
