@@ -35,6 +35,8 @@ public:
     static auto Initialized() -> auto { return Instantiated(); }
     static auto Finalized() -> auto { return Expired(); }
 
+    auto MPIThreadSupport() const -> const auto& { return fMPIThreadSupport; }
+
     auto CommWorldRank() const -> const auto& { return fCommWorldRank; }
     auto CommWorldSize() const -> const auto& { return fCommWorldSize; }
     auto OnCommWorldMaster() const -> auto { return CommWorldRank() == 0; }
@@ -66,6 +68,8 @@ private:
     };
 
 private:
+    const int fMPIThreadSupport;
+
     const int fCommWorldRank;
     const int fCommWorldSize;
 

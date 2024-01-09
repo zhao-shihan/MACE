@@ -4,12 +4,17 @@ template<typename ACLI>
 MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWelcomeMessage) :
     BasicEnv{argc, argv, cli, verboseLevel, false},
     PassiveSingleton<MPIEnv>{},
-    fCommWorldRank{
+    fMPIThreadSupport{
         [&argc, &argv] {
-            // Initialize MPI
-            MPI_Init(&argc,  // argc
-                     &argv); // argv
-            // Initialize rank in the world communicator
+            int mpiThreadSupport;
+            MPI_Init_thread(&argc,               // argc
+                            &argv,               // argv
+                            MPI_THREAD_MULTIPLE, // required
+                            &mpiThreadSupport);  // provided
+            return mpiThreadSupport;
+        }()},
+    fCommWorldRank{
+        [] {
             int rank;
             MPI_Comm_rank(MPI_COMM_WORLD, // comm
                           &rank);         // rank
@@ -17,7 +22,6 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
         }()},
     fCommWorldSize{
         [] {
-            // Initialize size of the world communicator
             int size;
             MPI_Comm_size(MPI_COMM_WORLD, // comm
                           &size);         // size
