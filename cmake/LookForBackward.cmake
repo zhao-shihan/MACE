@@ -32,6 +32,7 @@ if(MACE_BUILTIN_BACKWARD)
     endif()
     # set options
     set(BACKWARD_SHARED ${BUILD_SHARED_LIBS})
+    set(BACKWARD_TESTS OFF)
     # configure it
     message(STATUS "Downloading (if required) and configuring backward-cpp (version: ${MACE_BUILTIN_BACKWARD_VERSION})")
     FetchContent_MakeAvailable(Backward)

@@ -6,7 +6,8 @@ add_library(MACEFramework STATIC ${MACE_FRAMEWORK_SRC})
 # argparse
 target_link_libraries(MACEFramework PUBLIC argparse::argparse)
 # backward-cpp
-target_link_libraries(MACEFramework PRIVATE backward)
+target_include_directories(MACEFramework PRIVATE ${BACKWARD_INCLUDE_DIRS})
+target_compile_definitions(MACEFramework PRIVATE ${BACKWARD_DEFINITIONS})
 if(LIBDW_LIBRARY)
     target_link_libraries(MACEFramework PRIVATE ${LIBDW_LIBRARY})
 endif()
