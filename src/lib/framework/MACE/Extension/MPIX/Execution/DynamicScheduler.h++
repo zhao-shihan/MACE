@@ -58,7 +58,6 @@ private:
     class Master final : public NonMoveableBase {
     public:
         Master(DynamicScheduler<T>* ds);
-        ~Master();
 
         auto PreLoopAction() -> void;
         auto PreTaskAction() -> void {}
@@ -71,27 +70,22 @@ private:
             Supervisor(DynamicScheduler<T>* ds);
             ~Supervisor();
 
-            auto ResetTaskID() -> void { fMainTaskID = fDS->fTask.first + fDS->fComm.Size() * fDS->fBatchSize; }
             auto FetchAddTaskID() -> T;
 
-            auto Supervise() -> void;
+            auto Start() -> void;
 
         private:
             DynamicScheduler<T>* const fDS;
-
             std::atomic<T> fMainTaskID;
-
-            std::vector<T> fTaskIDSend;
             std::vector<MPI_Request> fRecv;
+            std::vector<T> fTaskIDSend;
             std::vector<MPI_Request> fSend;
+            std::jthread fSupervisorThread;
         };
 
     private:
         DynamicScheduler<T>* const fDS;
-
         Supervisor fSupervisor;
-        std::jthread fSupervisorThread;
-
         T fBatchCounter;
     };
     friend class Master;
@@ -108,7 +102,6 @@ private:
 
     private:
         DynamicScheduler<T>* const fDS;
-
         T fTaskIDRecv;
         std::array<MPI_Request, 2> fRequest;
         T fBatchCounter;
