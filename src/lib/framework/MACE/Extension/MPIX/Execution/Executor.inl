@@ -8,14 +8,22 @@ Executor<T>::Executor(ScheduleBy<S>) :
     fScheduler{std::make_unique_for_overwrite<S<T>>()},
     fExecuting{},
     fPrintProgressModulo{Env::MPIEnv::Instance().Parallel() ? 10 * Env::MPIEnv::Instance().CommWorldSize() + 1 : 10},
+    fExecutionName{"Execution"},
+    fTaskName{"Task"},
+    fExecutionBeginSystemTime{},
     fWallTimeStopwatch{},
     fCPUTimeStopwatch{},
-    fExecutionWallTime{},
-    fExecutionCPUTime{},
-    fExecutionBeginSystemTime{},
-    fExecutionEndSystemTime{},
-    fExecutionName{"Execution"},
-    fTaskName{"Task"} {}
+    fExecutionWallTimeAndCPUTime{},
+    fExecutionWallTime{fExecutionWallTimeAndCPUTime[0]},
+    fExecutionCPUTime{fExecutionWallTimeAndCPUTime[1]},
+    fExecutionWallTimeAndCPUTimeOfAllProcessKeptByMaster{},
+    fNLocalExecutedTaskOfAllProcessKeptByMaster{} {
+    if (const auto& mpiEnv{Env::MPIEnv::Instance()};
+        mpiEnv.OnCommWorldMaster()) {
+        fExecutionWallTimeAndCPUTimeOfAllProcessKeptByMaster.resize(mpiEnv.CommWorldSize());
+        fNLocalExecutedTaskOfAllProcessKeptByMaster.resize(mpiEnv.CommWorldSize());
+    }
+}
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
@@ -86,10 +94,31 @@ auto Executor<T>::Execute(std::invocable<T> auto&& Func) -> T {
     }
     fExecutionWallTime = fWallTimeStopwatch.SecondsElapsed();
     fExecutionCPUTime = fCPUTimeStopwatch.SecondsUsed();
-    fExecutionEndSystemTime = scsc::now();
+    std::array<MPI_Request, 2> gatherRequest;
+    auto& [gatherTimeRequest, gatherNLocalExecutedTaskRequest]{gatherRequest};
+    MPI_Igather(fExecutionWallTimeAndCPUTime.data(),                         // sendbuf
+                2,                                                           // sendcount
+                MPI_DOUBLE,                                                  // sendtype
+                fExecutionWallTimeAndCPUTimeOfAllProcessKeptByMaster.data(), // recvbuf
+                2,                                                           // recvcount
+                MPI_DOUBLE,                                                  // recvtype
+                0,                                                           // root
+                MPI_COMM_WORLD,                                              // comm
+                &gatherTimeRequest);                                         // request
+    MPI_Igather(&fScheduler->fNLocalExecutedTask,                            // sendbuf
+                1,                                                           // sendcount
+                DataType<T>(),                                               // sendtype
+                fNLocalExecutedTaskOfAllProcessKeptByMaster.data(),          // recvbuf
+                1,                                                           // recvcount
+                DataType<T>(),                                               // recvtype
+                0,                                                           // root
+                MPI_COMM_WORLD,                                              // comm
+                &gatherNLocalExecutedTaskRequest);                                         // request
     fScheduler->PostLoopAction();
     fExecuting = false;
-    MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Waitall(gatherRequest.size(), // count
+                gatherRequest.data(), // array_of_requests
+                MPI_STATUSES_IGNORE); // array_of_statuses
     PostLoopReport();
     return NLocalExecutedTask();
 }
@@ -130,14 +159,23 @@ auto Executor<T>::PostLoopReport() const -> void {
     if (fPrintProgressModulo >= 0) {
         const auto& mpiEnv{Env::MPIEnv::Instance()};
         if (mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error) {
+            const auto now{scsc::now()};
+            double maxWallTime{};
+            double totalCpuTime{};
+            for (auto&& [wallTime, cpuTime] : std::as_const(fExecutionWallTimeAndCPUTimeOfAllProcessKeptByMaster)) {
+                if (wallTime > maxWallTime) { maxWallTime = wallTime; }
+                totalCpuTime += cpuTime;
+            }
             fmt::print("-------------------------------------------------------------------------------\n"
                        " {:%FT%T%z} > {} has ended on {} process{}\n"
                        "   Start time: {:%FT%T%z}\n"
                        "    Wall time: {:.3f} seconds{}\n"
+                       "     CPU time: {:.3f} seconds{}\n"
                        "-------------------------------------------------------------------------------\n",
-                       fmt::localtime(scsc::to_time_t(fExecutionEndSystemTime)), fExecutionName, mpiEnv.CommWorldSize(), mpiEnv.Parallel() ? "es" : "",
+                       fmt::localtime(scsc::to_time_t(now)), fExecutionName, mpiEnv.CommWorldSize(), mpiEnv.Parallel() ? "es" : "",
                        fmt::localtime(scsc::to_time_t(fExecutionBeginSystemTime)),
-                       fExecutionWallTime, fExecutionWallTime <= 60 ? "" : " (" + SToDHMS(fExecutionWallTime) + ')');
+                       fExecutionWallTime, fExecutionWallTime <= 60 ? "" : " (" + SToDHMS(fExecutionWallTime) + ')',
+                       totalCpuTime, totalCpuTime <= 60 ? "" : " (" + SToDHMS(totalCpuTime) + ')');
         }
     }
 }

@@ -20,9 +20,11 @@
 #include <concepts>
 #include <cstdio>
 #include <memory>
+#include <numeric>
 #include <optional>
 #include <stdexcept>
 #include <tuple>
+#include <utility>
 
 namespace MACE::inline Extension::MPIX::inline Execution {
 
@@ -85,16 +87,18 @@ private:
 
     T fPrintProgressModulo;
 
-    WallTimeStopwatch<double> fWallTimeStopwatch;
-    CPUTimeStopwatch<double> fCPUTimeStopwatch;
-    double fExecutionWallTime;
-    double fExecutionCPUTime;
-
-    scsc::time_point fExecutionBeginSystemTime;
-    scsc::time_point fExecutionEndSystemTime;
-
     std::string fExecutionName;
     std::string fTaskName;
+
+    scsc::time_point fExecutionBeginSystemTime;
+    WallTimeStopwatch<double> fWallTimeStopwatch;
+    CPUTimeStopwatch<double> fCPUTimeStopwatch;
+    std::array<double, 2> fExecutionWallTimeAndCPUTime;
+    double& fExecutionWallTime;
+    double& fExecutionCPUTime;
+
+    std::vector<std::array<double, 2>> fExecutionWallTimeAndCPUTimeOfAllProcessKeptByMaster;
+    std::vector<T> fNLocalExecutedTaskOfAllProcessKeptByMaster;
 };
 
 } // namespace MACE::inline Extension::MPIX::inline Execution
