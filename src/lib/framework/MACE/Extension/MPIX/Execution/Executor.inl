@@ -1,7 +1,7 @@
 namespace MACE::inline Extension::MPIX::inline Execution {
 
 template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
+    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 template<template<typename> typename S>
     requires std::derived_from<S<T>, Scheduler<T>>
 Executor<T>::Executor(ScheduleBy<S>) :
@@ -26,7 +26,7 @@ Executor<T>::Executor(ScheduleBy<S>) :
 }
 
 template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
+    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 template<template<typename> typename S>
     requires std::derived_from<S<T>, Scheduler<T>>
 Executor<T>::Executor(typename Scheduler<T>::Task task, ScheduleBy<S>) :
@@ -35,21 +35,21 @@ Executor<T>::Executor(typename Scheduler<T>::Task task, ScheduleBy<S>) :
 }
 
 template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
+    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 template<template<typename> typename S>
     requires std::derived_from<S<T>, Scheduler<T>>
 Executor<T>::Executor(T size, ScheduleBy<S>) : // clang-format off
     Executor{{0, size}, ScheduleBy<S>{}} {} // clang-format on
 
 template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
+    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 template<template<typename> typename S>
     requires std::derived_from<S<T>, Scheduler<T>>
 Executor<T>::Executor(T first, T last, ScheduleBy<S>) : // clang-format off
     Executor{{first, last}, ScheduleBy<S>{}} {} // clang-format on
 
 template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
+    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 template<template<typename> typename AScheduler>
     requires std::derived_from<AScheduler<T>, Scheduler<T>>
 auto Executor<T>::SwitchScheduler() -> void {
@@ -60,7 +60,7 @@ auto Executor<T>::SwitchScheduler() -> void {
 }
 
 template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
+    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 auto Executor<T>::AssignTask(typename Scheduler<T>::Task task) -> void {
     if (fExecuting) { throw std::logic_error{"assign task during processing"}; }
     if (task.last < task.first) { throw std::invalid_argument{"last < first"}; }
@@ -73,7 +73,7 @@ auto Executor<T>::AssignTask(typename Scheduler<T>::Task task) -> void {
 }
 
 template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
+    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 auto Executor<T>::Execute(std::invocable<T> auto&& Func) -> T {
     fScheduler->Reset();
     fExecuting = true;
@@ -113,7 +113,7 @@ auto Executor<T>::Execute(std::invocable<T> auto&& Func) -> T {
                 DataType<T>(),                                               // recvtype
                 0,                                                           // root
                 MPI_COMM_WORLD,                                              // comm
-                &gatherNLocalExecutedTaskRequest);                                         // request
+                &gatherNLocalExecutedTaskRequest);                           // request
     fScheduler->PostLoopAction();
     fExecuting = false;
     MPI_Waitall(gatherRequest.size(), // count
@@ -124,64 +124,62 @@ auto Executor<T>::Execute(std::invocable<T> auto&& Func) -> T {
 }
 
 template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
+    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
+auto Executor<T>::PrintExecutionSummary() const -> void {}
+
+template<std::integral T>
+    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 auto Executor<T>::PreLoopReport() const -> void {
-    if (fPrintProgressModulo >= 0) {
-        const auto& mpiEnv{Env::MPIEnv::Instance()};
-        if (mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error) {
-            fmt::print("-------------------------------------------------------------------------------\n"
-                       " {:%FT%T%z} > {} has started on {} process{}\n"
-                       "-------------------------------------------------------------------------------\n",
-                       fmt::localtime(scsc::to_time_t(fExecutionBeginSystemTime)), fExecutionName, mpiEnv.CommWorldSize(), mpiEnv.Parallel() ? "es" : "");
-        }
-    }
+    if (fPrintProgressModulo < 0) { return; }
+    const auto& mpiEnv{Env::MPIEnv::Instance()};
+    if (not(mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error)) { return; }
+    fmt::print("-------------------------------------------------------------------------------\n"
+               " {:%FT%T%z} > {} has started on {} process{}\n"
+               "-------------------------------------------------------------------------------\n",
+               fmt::localtime(scsc::to_time_t(fExecutionBeginSystemTime)), fExecutionName, mpiEnv.CommWorldSize(), mpiEnv.Parallel() ? "es" : "");
 }
 
 template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
+    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 auto Executor<T>::PostTaskReport(T iEnded) const -> void {
-    if (fPrintProgressModulo > 0 and iEnded % fPrintProgressModulo == 0) {
-        const auto& mpiEnv{Env::MPIEnv::Instance()};
-        if (mpiEnv.GetVerboseLevel() >= Env::VL::Error) {
-            const auto progress{static_cast<double>(NExecutedTask()) / NTask()};
-            const auto eta{(1 / progress - 1) * fWallTimeStopwatch.SecondsElapsed()};
-            fmt::print("MPI{}> {:%FT%T%z} > {} {} has ended\n"
-                       "MPI{}>   Est. rem. time: {}  Progress: {} | {}/{} | {:.4}%\n",
-                       mpiEnv.CommWorldRank(), fmt::localtime(scsc::to_time_t(scsc::now())), fTaskName, iEnded,
-                       mpiEnv.CommWorldRank(), NLocalExecutedTask() > 10 ? SToDHMS(eta) : "N/A", NLocalExecutedTask(), NExecutedTask(), NTask(), 100 * progress);
-        }
-    }
+    if (not(fPrintProgressModulo > 0 and iEnded % fPrintProgressModulo == 0)) { return; }
+    const auto& mpiEnv{Env::MPIEnv::Instance()};
+    if (mpiEnv.GetVerboseLevel() < Env::VL::Error) { return; }
+    const auto progress{static_cast<double>(NExecutedTask()) / NTask()};
+    const auto eta{(1 / progress - 1) * fWallTimeStopwatch.SecondsElapsed()};
+    fmt::print("MPI{}> {:%FT%T%z} > {} {} has ended\n"
+               "MPI{}>   Est. rem. time: {}  Progress: {} | {}/{} | {:.4}%\n",
+               mpiEnv.CommWorldRank(), fmt::localtime(scsc::to_time_t(scsc::now())), fTaskName, iEnded,
+               mpiEnv.CommWorldRank(), NLocalExecutedTask() > 10 ? SToDHMS(eta) : "N/A", NLocalExecutedTask(), NExecutedTask(), NTask(), 100 * progress);
 }
 
 template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
+    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 auto Executor<T>::PostLoopReport() const -> void {
-    if (fPrintProgressModulo >= 0) {
-        const auto& mpiEnv{Env::MPIEnv::Instance()};
-        if (mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error) {
-            const auto now{scsc::now()};
-            double maxWallTime{};
-            double totalCpuTime{};
-            for (auto&& [wallTime, cpuTime] : std::as_const(fExecutionWallTimeAndCPUTimeOfAllProcessKeptByMaster)) {
-                if (wallTime > maxWallTime) { maxWallTime = wallTime; }
-                totalCpuTime += cpuTime;
-            }
-            fmt::print("-------------------------------------------------------------------------------\n"
-                       " {:%FT%T%z} > {} has ended on {} process{}\n"
-                       "   Start time: {:%FT%T%z}\n"
-                       "    Wall time: {:.3f} seconds{}\n"
-                       "     CPU time: {:.3f} seconds{}\n"
-                       "-------------------------------------------------------------------------------\n",
-                       fmt::localtime(scsc::to_time_t(now)), fExecutionName, mpiEnv.CommWorldSize(), mpiEnv.Parallel() ? "es" : "",
-                       fmt::localtime(scsc::to_time_t(fExecutionBeginSystemTime)),
-                       fExecutionWallTime, fExecutionWallTime <= 60 ? "" : " (" + SToDHMS(fExecutionWallTime) + ')',
-                       totalCpuTime, totalCpuTime <= 60 ? "" : " (" + SToDHMS(totalCpuTime) + ')');
-        }
+    if (fPrintProgressModulo < 0) { return; }
+    const auto& mpiEnv{Env::MPIEnv::Instance()};
+    if (not(mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error)) { return; }
+    const auto now{scsc::now()};
+    double maxWallTime{};
+    double totalCpuTime{};
+    for (auto&& [wallTime, cpuTime] : std::as_const(fExecutionWallTimeAndCPUTimeOfAllProcessKeptByMaster)) {
+        if (wallTime > maxWallTime) { maxWallTime = wallTime; }
+        totalCpuTime += cpuTime;
     }
+    fmt::print("-------------------------------------------------------------------------------\n"
+               " {:%FT%T%z} > {} has ended on {} process{}\n"
+               "   Start time: {:%FT%T%z}\n"
+               "    Wall time: {:.3f} seconds{}\n"
+               "     CPU time: {:.3f} seconds{}\n"
+               "-------------------------------------------------------------------------------\n",
+               fmt::localtime(scsc::to_time_t(now)), fExecutionName, mpiEnv.CommWorldSize(), mpiEnv.Parallel() ? "es" : "",
+               fmt::localtime(scsc::to_time_t(fExecutionBeginSystemTime)),
+               fExecutionWallTime, fExecutionWallTime <= 60 ? "" : " (" + SToDHMS(fExecutionWallTime) + ')',
+               totalCpuTime, totalCpuTime <= 60 ? "" : " (" + SToDHMS(totalCpuTime) + ')');
 }
 
 template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
+    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 auto Executor<T>::SToDHMS(double s) -> std::string {
     const auto totalSeconds{std::llround(s)};
     const auto div86400{std2b::div(totalSeconds, 86400ll)};

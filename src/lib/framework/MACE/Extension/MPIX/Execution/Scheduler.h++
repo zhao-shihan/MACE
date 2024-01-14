@@ -7,11 +7,11 @@
 namespace MACE::inline Extension::MPIX::inline Execution {
 
 template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
+    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 class Executor;
 
 template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
+    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 class Scheduler {
     friend class Executor<T>;
 

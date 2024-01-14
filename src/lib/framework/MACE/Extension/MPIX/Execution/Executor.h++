@@ -32,7 +32,7 @@ template<template<typename> typename>
 struct ScheduleBy {};
 
 template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(int))
+    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 class Executor final {
 public:
     template<template<typename> typename S = DynamicScheduler>
@@ -69,6 +69,8 @@ public:
     auto ExecutingTask() const -> T { return fScheduler->fExecutingTask; }
     auto NLocalExecutedTask() const -> T { return fScheduler->fNLocalExecutedTask; }
     auto NExecutedTask() const -> T { return fScheduler->NExecutedTask(); }
+
+    auto PrintExecutionSummary() const -> void;
 
 private:
     auto PreLoopReport() const -> void;
