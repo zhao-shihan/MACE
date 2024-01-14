@@ -109,42 +109,4 @@ auto MPIRunManager::DoEventLoop(G4int nEvent, const char* macroFile, G4int nSele
     if (runManagerType == sequentialRM) { TerminateEventLoop(); }
 }
 
-// auto MPIRunManager::RunTermination() -> void {
-//     G4RunManager::RunTermination();
-//     // run end report
-//     if (const auto& mpiEnv{Env::MPIEnv::Instance()};
-//         fPrintProgressModulo >= 0 and mpiEnv.GetVerboseLevel() >= Env::VL::Error) {
-//         // // if running in parallel, per rank run end report
-//         // if (mpiEnv.Parallel()) { PerRankRunEndReport(endedRun, wallTime, cpuTime); }
-//         std::array<MPI_Request, 2> fTimeMPIRequests;
-//         auto& [findMaxWallTime, sumCPUTime]{fTimeMPIRequests};
-//         double maxWallTime{};
-//         MPI_Ireduce(&wallTime,
-//                     &maxWallTime,
-//                     1,
-//                     MPI_DOUBLE,
-//                     MPI_MAX,
-//                     0,
-//                     MPI_COMM_WORLD,
-//                     &findMaxWallTime);
-//         double totalCPUTime{};
-//         MPI_Ireduce(&cpuTime,
-//                     &totalCPUTime,
-//                     1,
-//                     MPI_DOUBLE,
-//                     MPI_SUM,
-//                     0,
-//                     MPI_COMM_WORLD,
-//                     &sumCPUTime);
-//         MPI_Waitall(fTimeMPIRequests.size(),
-//                     fTimeMPIRequests.data(),
-//                     MPI_STATUSES_IGNORE);
-//         if (mpiEnv.OnCommWorldMaster()) {
-//             RunEndReport(endedRun, fRunBeginSystemTime, maxWallTime, totalCPUTime);
-//         }
-//     } else {
-//         MPI_Barrier(MPI_COMM_WORLD);
-//     }
-// }
-
 } // namespace MACE::inline Extension::Geant4X
