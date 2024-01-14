@@ -120,12 +120,25 @@ auto Executor<T>::Execute(std::invocable<T> auto&& Func) -> T {
                 gatherRequest.data(), // array_of_requests
                 MPI_STATUSES_IGNORE); // array_of_statuses
     PostLoopReport();
+    PrintExecutionSummary();
     return NLocalExecutedTask();
 }
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
-auto Executor<T>::PrintExecutionSummary() const -> void {}
+auto Executor<T>::PrintExecutionSummary() const -> void {
+    const auto& mpiEnv{Env::MPIEnv::Instance()};
+    if (not(mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error)) { return; }
+    fmt::println("+------------------+--------------> Summary <-------------+-------------------+\n"
+                 "| Rank in world    | Executed          | Wall time (s)    | CPU time (s)      |\n"
+                 "+------------------+-------------------+------------------+-------------------+");
+    for (int rank{}; rank < mpiEnv.CommWorldSize(); ++rank) {
+        const auto& executed{fNLocalExecutedTaskOfAllProcessKeptByMaster[rank]};
+        const auto& [wallTime, cpuTime]{fExecutionWallTimeAndCPUTimeOfAllProcessKeptByMaster[rank]};
+        fmt::println("| {:16} | {:17} | {:16.3f} | {:17.3f} |", rank, executed, wallTime, cpuTime);
+    }
+    fmt::println("+------------------+--------------> Summary <-------------+-------------------+");
+}
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
@@ -133,10 +146,11 @@ auto Executor<T>::PreLoopReport() const -> void {
     if (fPrintProgressModulo < 0) { return; }
     const auto& mpiEnv{Env::MPIEnv::Instance()};
     if (not(mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error)) { return; }
-    fmt::print("-------------------------------------------------------------------------------\n"
-               " {:%FT%T%z} > {} has started on {} process{}\n"
-               "-------------------------------------------------------------------------------\n",
-               fmt::localtime(scsc::to_time_t(fExecutionBeginSystemTime)), fExecutionName, mpiEnv.CommWorldSize(), mpiEnv.Parallel() ? "es" : "");
+    fmt::print("+----------------------------------> Start <----------------------------------+\n"
+               "| {:75} |\n"
+               "+----------------------------------> Start <----------------------------------+\n",
+               fmt::format("{:%FT%T%z} > {} has started on {} process{}",
+                           fmt::localtime(scsc::to_time_t(fExecutionBeginSystemTime)), fExecutionName, mpiEnv.CommWorldSize(), mpiEnv.Parallel() ? "es" : ""));
 }
 
 template<std::integral T>
@@ -166,16 +180,16 @@ auto Executor<T>::PostLoopReport() const -> void {
         if (wallTime > maxWallTime) { maxWallTime = wallTime; }
         totalCpuTime += cpuTime;
     }
-    fmt::print("-------------------------------------------------------------------------------\n"
-               " {:%FT%T%z} > {} has ended on {} process{}\n"
-               "   Start time: {:%FT%T%z}\n"
-               "    Wall time: {:.3f} seconds{}\n"
-               "     CPU time: {:.3f} seconds{}\n"
-               "-------------------------------------------------------------------------------\n",
-               fmt::localtime(scsc::to_time_t(now)), fExecutionName, mpiEnv.CommWorldSize(), mpiEnv.Parallel() ? "es" : "",
-               fmt::localtime(scsc::to_time_t(fExecutionBeginSystemTime)),
-               fExecutionWallTime, fExecutionWallTime <= 60 ? "" : " (" + SToDHMS(fExecutionWallTime) + ')',
-               totalCpuTime, totalCpuTime <= 60 ? "" : " (" + SToDHMS(totalCpuTime) + ')');
+    fmt::print("+-----------------------------------> End <-----------------------------------+\n"
+               "| {:75} |\n"
+               "| {:75} |\n"
+               "| {:75} |\n"
+               "| {:75} |\n"
+               "+-----------------------------------> End <-----------------------------------+\n",
+               fmt::format("{:%FT%T%z} > {} has ended on {} process{}", fmt::localtime(scsc::to_time_t(now)), fExecutionName, mpiEnv.CommWorldSize(), mpiEnv.Parallel() ? "es" : ""),
+               fmt::format("  Start time: {:%FT%T%z}", fmt::localtime(scsc::to_time_t(fExecutionBeginSystemTime))),
+               fmt::format("   Wall time: {:.3f} seconds{}", fExecutionWallTime, fExecutionWallTime <= 60 ? "" : " (" + SToDHMS(fExecutionWallTime) + ')'),
+               fmt::format("    CPU time: {:.3f} seconds{}", totalCpuTime, totalCpuTime <= 60 ? "" : " (" + SToDHMS(totalCpuTime) + ')'));
 }
 
 template<std::integral T>
