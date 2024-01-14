@@ -129,7 +129,7 @@ auto DynamicScheduler<T>::Master::Supervisor::Start() -> void {
                    0,                               // root
                    fDS->fComm,                      // comm
                    &firstSupervisorRecvReadyBcast); // request
-        bool scheduling{true};
+        int completing{};
         do {
             int cgCount;
             std::vector<int> cgRank(fDS->fComm.Size() - 1);
@@ -141,30 +141,21 @@ auto DynamicScheduler<T>::Master::Supervisor::Start() -> void {
             for (int i{}; i < cgCount; ++i) {
                 const auto c{cgRank[i]};
                 fTaskIDSend[c] = FetchAddTaskID();
-                if (fTaskIDSend[c] == fDS->fTask.last) {
-                    scheduling = false;
-                    break;
+                if (fTaskIDSend[c] != fDS->fTask.last) {
+                    MPI_Start(&fRecv[c]);
+                } else {
+                    ++completing;
                 }
-                MPI_Start(&fRecv[c]);
                 MPI_Wait(&fSend[c],          // request
                          MPI_STATUS_IGNORE); // status
                 MPI_Start(&fSend[c]);
             }
-        } while (scheduling);
+        } while (completing != fDS->fComm.Size() - 1);
         MPI_Wait(&firstSupervisorRecvReadyBcast, // request
                  MPI_STATUS_IGNORE);             // status
         MPI_Waitall(fSend.size(),                // count
                     fSend.data(),                // array_of_requests
                     MPI_STATUSES_IGNORE);        // array_of_statuses
-        for (auto&& i : fTaskIDSend) { i = fDS->fTask.last; }
-        MPI_Waitall(fRecv.size(),         // count
-                    fRecv.data(),         // array_of_requests
-                    MPI_STATUSES_IGNORE); // array_of_statuses
-        MPI_Startall(fSend.size(),        // count
-                     fSend.data());       // array_of_requests
-        MPI_Waitall(fSend.size(),         // count
-                    fSend.data(),         // array_of_requests
-                    MPI_STATUSES_IGNORE); // array_of_statuses
     }};
 }
 
