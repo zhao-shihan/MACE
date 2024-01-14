@@ -16,7 +16,8 @@ namespace MACE::Env::internal {
 
 extern "C" {
 
-[[noreturn]] void MACE_ISOC99_SIGINT_SIGTERM_Handler(int sig) {
+void MACE_ISOC99_SIGINT_SIGTERM_Handler(int sig) {
+    std::signal(sig, SIG_DFL);
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     std::cerr << std::endl;
     switch (sig) {
@@ -34,11 +35,7 @@ extern "C" {
     std::clog << "***** at " << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
     PrintStackTrace(64, 2);
     std::clog << std::endl;
-#    ifndef __MINGW32__
-    std::quick_exit(EXIT_FAILURE);
-#    else
-    std::_Exit(EXIT_FAILURE);
-#    endif
+    std::raise(sig);
 }
 
 [[noreturn]] void MACE_ISOC99_SIGABRT_Handler(int) {
@@ -56,8 +53,8 @@ extern "C" {
     std::abort();
 }
 
-[[noreturn]] void MACE_ISOC99_SIGFPE_SIGILL_SIGSEGV_Handler(int sig) {
-    std::signal(SIGABRT, SIG_DFL);
+void MACE_ISOC99_SIGFPE_SIGILL_SIGSEGV_Handler(int sig) {
+    std::signal(sig, SIG_DFL);
     const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     std::cerr << std::endl;
     switch (sig) {
@@ -78,7 +75,7 @@ extern "C" {
     std::clog << "***** at " << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
     PrintStackTrace(64, 2);
     std::clog << std::endl;
-    std::abort();
+    std::raise(sig);
 }
 
 } // extern "C"
