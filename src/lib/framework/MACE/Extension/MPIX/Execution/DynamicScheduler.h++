@@ -98,7 +98,7 @@ private:
         auto PreLoopAction() -> void;
         auto PreTaskAction() -> void;
         auto PostTaskAction() -> void;
-        auto PostLoopAction() -> void {}
+        auto PostLoopAction() -> void;
 
     private:
         DynamicScheduler<T>* const fDS;

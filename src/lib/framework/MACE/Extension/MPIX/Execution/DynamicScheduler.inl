@@ -96,13 +96,13 @@ DynamicScheduler<T>::Master::Supervisor::Supervisor(DynamicScheduler<T>* ds) :
                       &fRecv.emplace_back()); // request
     }
     for (int dest{1}; dest < fDS->fComm.Size(); ++dest) {
-        MPI_Send_init(&fTaskIDSend.emplace_back(), // buf
-                      1,                           // count
-                      DataType<T>(),               // datatype
-                      dest,                        // dest
-                      1,                           // tag
-                      fDS->fComm,                  // comm
-                      &fSend.emplace_back());      // request
+        MPI_Rsend_init(&fTaskIDSend.emplace_back(), // buf
+                       1,                           // count
+                       DataType<T>(),               // datatype
+                       dest,                        // dest
+                       1,                           // tag
+                       fDS->fComm,                  // comm
+                       &fSend.emplace_back());      // request
     }
 }
 
@@ -195,13 +195,13 @@ DynamicScheduler<T>::Worker::Worker(DynamicScheduler<T>* ds) :
     fRequest{},
     fBatchCounter{} {
     auto& [send, recv]{fRequest};
-    MPI_Send_init(nullptr,       // buf
-                  0,             // count
-                  MPI_BYTE,      // datatype
-                  0,             // dest
-                  0,             // tag
-                  fDS->fComm,    // comm
-                  &send);        // request
+    MPI_Rsend_init(nullptr,      // buf
+                   0,            // count
+                   MPI_BYTE,     // datatype
+                   0,            // dest
+                   0,            // tag
+                   fDS->fComm,   // comm
+                   &send);       // request
     MPI_Recv_init(&fTaskIDRecv,  // buf
                   1,             // count
                   DataType<T>(), // datatype
@@ -250,6 +250,13 @@ auto DynamicScheduler<T>::Worker::PostTaskAction() -> void {
     } else {
         ++fDS->fExecutingTask;
     }
+}
+
+template<std::integral T>
+auto DynamicScheduler<T>::Worker::PostLoopAction() -> void {
+    MPI_Waitall(fRequest.size(),      // count
+                fRequest.data(),      // array_of_requests
+                MPI_STATUSES_IGNORE); // array_of_statuses
 }
 
 } // namespace MACE::inline Extension::MPIX::inline Execution
