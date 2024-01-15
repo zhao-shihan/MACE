@@ -156,7 +156,7 @@ auto Executor<T>::PreLoopReport() const -> void {
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 auto Executor<T>::PostTaskReport(T iEnded) const -> void {
-    if (not(fPrintProgressModulo > 0 and iEnded % fPrintProgressModulo == 0)) { return; }
+    if (not(fPrintProgressModulo > 0 and NExecutedTask() % fPrintProgressModulo == 0)) { return; }
     const auto& mpiEnv{Env::MPIEnv::Instance()};
     if (mpiEnv.GetVerboseLevel() < Env::VL::Error) { return; }
     const auto progress{static_cast<double>(NExecutedTask()) / NTask()};
@@ -200,7 +200,7 @@ auto Executor<T>::SToDHMS(double s) -> std::string {
     const auto div3600{std23::div(div86400.rem, 3600ll)};
     const auto div60{std23::div(div3600.rem, 60ll)};
     const auto& [day, hour, minute, second]{std::tie(div86400.quot, div3600.quot, div60.quot, div60.rem)};
-    if (day > 0) { return fmt::format("{}d {}h", day, hour); }
+    if (day > 0) { return fmt::format("{}d {}h {}m", day, hour, minute); }
     if (hour > 0) { return fmt::format("{}h {}m", hour, minute); }
     if (minute > 0) { return fmt::format("{}m {}s", minute, second); }
     return fmt::format("{}s", second);
