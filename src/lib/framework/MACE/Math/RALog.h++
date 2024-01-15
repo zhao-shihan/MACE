@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Compatibility/std2b/assume.h++"
+#include "MACE/Compatibility/std23/assume.h++"
 #include "MACE/Math/QinAlgorithm.h++"
 #include "MACE/Utility/InlineMacro.h++"
 

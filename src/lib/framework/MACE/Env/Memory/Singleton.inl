@@ -35,7 +35,7 @@ MACE_ALWAYS_INLINE auto Singleton<ADerived>::Instance() -> ADerived& {
                                            "The instance of {} has been deleted",
                                            typeid(ADerived).name())};
     }
-    std2b::unreachable();
+    std23::unreachable();
 }
 
 template<typename ADerived>

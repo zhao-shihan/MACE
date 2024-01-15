@@ -8,7 +8,7 @@
 #    include <utility>
 #endif
 
-namespace MACE::inline Compatibility::std2b {
+namespace MACE::inline Compatibility::std23 {
 
 [[noreturn]] MACE_ALWAYS_INLINE void unreachable() {
 #ifdef __cpp_lib_unreachable
@@ -20,4 +20,4 @@ namespace MACE::inline Compatibility::std2b {
 #endif
 }
 
-} // namespace MACE::inline Compatibility::std2b
+} // namespace MACE::inline Compatibility::std23

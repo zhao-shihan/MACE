@@ -9,7 +9,7 @@
 #    include <type_traits>
 #endif
 
-namespace MACE::inline Compatibility::std2b {
+namespace MACE::inline Compatibility::std23 {
 
 template<typename T, typename U>
 [[nodiscard]] MACE_ALWAYS_INLINE constexpr auto forward_like(U&& x) noexcept -> auto&& {
@@ -33,4 +33,4 @@ template<typename T, typename U>
 #endif
 }
 
-} // namespace MACE::inline Compatibility::std2b
+} // namespace MACE::inline Compatibility::std23

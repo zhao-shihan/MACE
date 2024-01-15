@@ -1,4 +1,4 @@
-#include "MACE/Compatibility/std2b/unreachable.h++"
+#include "MACE/Compatibility/std23/unreachable.h++"
 #include "MACE/Detector/Description/BeamDegrader.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Utility/LiteralUnit.h++"
@@ -24,7 +24,7 @@ HepGeom::Transform3D BeamDegrader::CalcTransform() const {
         const auto transZ = cuboidTarget.CalcTransform().getTranslation().z() - cuboidTarget.Thickness() / 2 - fThickness / 2 - fDistanceToTargetSurface;
         return HepGeom::Transform3D(CLHEP::HepRotation(), CLHEP::Hep3Vector(0, 0, transZ));
     }
-    std2b::unreachable();
+    std23::unreachable();
 }
 
 void BeamDegrader::ImportValues(const YAML::Node& node) {

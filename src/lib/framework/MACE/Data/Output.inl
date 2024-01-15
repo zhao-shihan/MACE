@@ -34,7 +34,7 @@ template<std::ranges::input_range R>
 auto Output<Ts...>::Fill(R&& data) -> std::size_t {
     std::size_t bytesTotal{};
     for (auto&& tuple : std::forward<R>(data)) {
-        bytesTotal += Fill(std2b::forward_like<R>(tuple));
+        bytesTotal += Fill(std23::forward_like<R>(tuple));
     }
     return bytesTotal;
 }

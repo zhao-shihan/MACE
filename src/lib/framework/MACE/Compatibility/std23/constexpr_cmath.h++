@@ -13,7 +13,7 @@
 #    include <cmath>
 #endif
 
-namespace MACE::inline Compatibility::std2b {
+namespace MACE::inline Compatibility::std23 {
 
 ///////////////////////////////////////////////////////////////////////////////
 // div
@@ -213,4 +213,4 @@ MACE_ALWAYS_INLINE constexpr auto isnan(const std::integral auto n) -> bool {
 #endif
 }
 
-} // namespace MACE::inline Compatibility::std2b
+} // namespace MACE::inline Compatibility::std23

@@ -27,8 +27,8 @@ MACE_ALWAYS_INLINE constexpr auto FastLogForCompact01(T x) {
         constexpr int n = std::numeric_limits<T>::digits - 1;
         constexpr int k = CHAR_BIT * sizeof(T) - 1 - n;
         const auto xBits = std::bit_cast<B>(x);
-        std2b::assume(xBits > 0);
-        std2b::assume(xBits < ~(~static_cast<B>(0) >> 1));
+        std23::assume(xBits > 0);
+        std23::assume(xBits < ~(~static_cast<B>(0) >> 1));
         x = std::bit_cast<T>((xBits | ~static_cast<B>(0) << n) << 2 >> 2);
         const auto r = QinRational({1.00000000000000000000000000000000000L,
                                     0.583383967700472856709787286973478877L},

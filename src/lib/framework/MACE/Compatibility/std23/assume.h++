@@ -4,10 +4,10 @@
 
 #if not __has_cpp_attribute(assume) and \
     not(defined __clang__ or defined __GNUC__ or defined _MSC_VER)
-#    include "MACE/Compatibility/std2b/unreachable.h++"
+#    include "MACE/Compatibility/std23/unreachable.h++"
 #endif
 
-namespace MACE::inline Compatibility::std2b {
+namespace MACE::inline Compatibility::std23 {
 
 MACE_ALWAYS_INLINE constexpr void assume(bool condition) noexcept {
 #if __has_cpp_attribute(assume)
@@ -23,4 +23,4 @@ MACE_ALWAYS_INLINE constexpr void assume(bool condition) noexcept {
 #endif
 }
 
-} // namespace MACE::inline Compatibility::std2b
+} // namespace MACE::inline Compatibility::std23

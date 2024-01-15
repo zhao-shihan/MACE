@@ -1,4 +1,4 @@
-#include "MACE/Compatibility/std2b/to_underlying.h++"
+#include "MACE/Compatibility/std23/to_underlying.h++"
 #include "MACE/Env/CLI/BasicCLI.h++"
 #include "MACE/Version.h++"
 
@@ -27,9 +27,9 @@ BasicCLI::BasicCLI() :
         .scan<'i', int>()
         .help("Set verbose level. (-2: quiet, -1: error, 0: warning, 1: verbose, 2: more verbose)")
         .action([](const std::string& argVerbose) {
-            constexpr auto low = std2b::to_underlying(VL::Quiet);
-            constexpr auto up = std2b::to_underlying(VL::MoreVerbose);
-            auto parsedVerbose = std2b::to_underlying(VL::Undefined);
+            constexpr auto low = std23::to_underlying(VL::Quiet);
+            constexpr auto up = std23::to_underlying(VL::MoreVerbose);
+            auto parsedVerbose = std23::to_underlying(VL::Undefined);
             std::from_chars(argVerbose.data(), argVerbose.data() + argVerbose.size(), parsedVerbose);
             if (parsedVerbose < low or parsedVerbose > up) {
                 throw std::runtime_error(std::string("-V --verbose: '")

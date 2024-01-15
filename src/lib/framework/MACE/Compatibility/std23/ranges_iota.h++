@@ -11,7 +11,7 @@
 #    include <iterator>
 #endif
 
-namespace MACE::inline Compatibility::std2b::ranges {
+namespace MACE::inline Compatibility::std23::ranges {
 
 #ifdef __cpp_lib_ranges_iota // C++2b
 
@@ -71,4 +71,4 @@ struct iota_fn {
 
 inline constexpr iota_fn iota{};
 
-} // namespace MACE::inline Compatibility::std2b::ranges
+} // namespace MACE::inline Compatibility::std23::ranges

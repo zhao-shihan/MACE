@@ -85,7 +85,7 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
                 fc = fa;
                 e = d = b - a;
             }
-            if (std2b::abs(fc) < std2b::abs(fb)) {
+            if (std23::abs(fc) < std23::abs(fb)) {
                 a = b;
                 b = c;
                 c = a;
@@ -93,10 +93,10 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
                 fb = fc;
                 fc = fa;
             }
-            const auto tol1{2 * realtiny * std2b::abs(b) + tol / 2};
+            const auto tol1{2 * realtiny * std23::abs(b) + tol / 2};
             const auto xm{(c - b) / 2};
-            if (std2b::abs(xm) <= tol1 or fb == 0) return b;
-            if (std2b::abs(e) >= tol1 and std2b::abs(fa) > std2b::abs(fb)) {
+            if (std23::abs(xm) <= tol1 or fb == 0) return b;
+            if (std23::abs(e) >= tol1 and std23::abs(fa) > std23::abs(fb)) {
                 const auto s{fb / fa};
                 if (a == c) {
                     p = 2 * xm * s;
@@ -108,8 +108,8 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
                     q = (q - 1) * (r1 - 1) * (s - 1);
                 }
                 if (p > 0) q = -q;
-                p = std2b::abs(p);
-                if (2 * p < std::min(3 * xm * q - std2b::abs(tol1 * q), std2b::abs(e * q))) {
+                p = std23::abs(p);
+                if (2 * p < std::min(3 * xm * q - std23::abs(tol1 * q), std23::abs(e * q))) {
                     e = d;
                     d = p / q;
                 } else {
@@ -122,7 +122,7 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
             }
             a = b;
             fa = fb;
-            if (std2b::abs(d) > tol1) {
+            if (std23::abs(d) > tol1) {
                 b += d;
             } else {
                 b += (xm > 1) ? tol1 : -tol1;

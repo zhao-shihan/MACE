@@ -21,7 +21,7 @@ MACE_ALWAYS_INLINE auto PassiveSingleton<ADerived>::Instance() -> ADerived& {
                                            "The instance of {} (passive singleton in environment) has been deleted",
                                            typeid(ADerived).name())};
     }
-    std2b::unreachable();
+    std23::unreachable();
 }
 
 } // namespace MACE::Env::Memory

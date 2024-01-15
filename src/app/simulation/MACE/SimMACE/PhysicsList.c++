@@ -1,4 +1,4 @@
-#include "MACE/Compatibility/std2b/to_underlying.h++"
+#include "MACE/Compatibility/std23/to_underlying.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Env/BasicEnv.h++"
 #include "MACE/Simulation/Physics/MuoniumPhysics.h++"
@@ -22,7 +22,7 @@ PhysicsList::PhysicsList() :
     PassiveSingleton(),
     G4VModularPhysicsList() {
 
-    verboseLevel = std2b::to_underlying(Env::BasicEnv::Instance().GetVerboseLevel());
+    verboseLevel = std23::to_underlying(Env::BasicEnv::Instance().GetVerboseLevel());
     defaultCutValue = 700_um;
 
     // EM Physics

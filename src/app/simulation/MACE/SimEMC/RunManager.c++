@@ -1,4 +1,4 @@
-#include "MACE/Compatibility/std2b/to_underlying.h++"
+#include "MACE/Compatibility/std23/to_underlying.h++"
 #include "MACE/Env/BasicEnv.h++"
 #include "MACE/SimEMC/Action/ActionInitialization.h++"
 #include "MACE/SimEMC/Action/DetectorConstruction.h++"
@@ -14,7 +14,7 @@ RunManager::RunManager() :
     const auto verboseLevel{Env::BasicEnv::Instance().GetVerboseLevel()};
 
     const auto physicsList{new PhysicsList};
-    physicsList->SetVerboseLevel(std2b::to_underlying(verboseLevel));
+    physicsList->SetVerboseLevel(std23::to_underlying(verboseLevel));
     SetUserInitialization(physicsList);
 
     const auto detectorConstruction{new DetectorConstruction};

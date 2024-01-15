@@ -8,7 +8,7 @@
 #    include <type_traits>
 #endif
 
-namespace MACE::inline Compatibility::std2b {
+namespace MACE::inline Compatibility::std23 {
 
 template<typename AEnum>
 constexpr std::underlying_type_t<AEnum> to_underlying(AEnum enumValue) noexcept {
@@ -19,4 +19,4 @@ constexpr std::underlying_type_t<AEnum> to_underlying(AEnum enumValue) noexcept 
 #endif
 }
 
-} // namespace MACE::inline Compatibility::std2b
+} // namespace MACE::inline Compatibility::std23
