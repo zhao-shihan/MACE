@@ -56,7 +56,8 @@ DynamicScheduler<T>::Comm::~Comm() {
 
 template<std::integral T>
 auto DynamicScheduler<T>::PreLoopAction() -> void {
-    fBatchSize = static_cast<T>(fgBalanceFactor * static_cast<double>(this->NTask()) / fComm.Size()) + 1;
+    // width ~ BalanceFactor -> +/- BalanceFactor / 2
+    fBatchSize = static_cast<T>(fgBalanceFactor / 2 * static_cast<double>(this->NTask()) / fComm.Size()) + 1;
     std::visit([](auto&& c) { c.PreLoopAction(); }, fContext);
 }
 
