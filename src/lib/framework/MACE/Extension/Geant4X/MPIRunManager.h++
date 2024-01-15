@@ -46,6 +46,8 @@ public:
     virtual auto ConfirmBeamOnCondition() -> G4bool override;
     virtual auto DoEventLoop(G4int nEvent, const char* macroFile, G4int nSelect) -> void override;
 
+    auto PrintRunSummary() const -> void { fExecutor.PrintExecutionSummary(); }
+
 private:
     MPIX::Executor<G4int> fExecutor;
 };

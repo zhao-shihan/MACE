@@ -39,6 +39,9 @@
 # Run
 #############################################################################
 
+#/MPIRun/PrintProgressModulo 100
+
 /MACE/Analysis/FilePath   SimMACE_sig
 /MACE/Analysis/FileOption RECREATE
 /run/beamOn 8000
+/MPIRun/PrintRunSummary

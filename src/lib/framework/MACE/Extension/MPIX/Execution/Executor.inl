@@ -120,7 +120,6 @@ auto Executor<T>::Execute(std::invocable<T> auto&& Func) -> T {
                 gatherRequest.data(), // array_of_requests
                 MPI_STATUSES_IGNORE); // array_of_statuses
     PostLoopReport();
-    PrintExecutionSummary();
     return NLocalExecutedTask();
 }
 
@@ -129,6 +128,7 @@ template<std::integral T>
 auto Executor<T>::PrintExecutionSummary() const -> void {
     const auto& mpiEnv{Env::MPIEnv::Instance()};
     if (not(mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error)) { return; }
+    if (fExecuting and mpiEnv.GetVerboseLevel() >= Env::VL::Warning) { fmt::print(stderr, "Execution summary not available for now."); }
     fmt::println("+------------------+--------------> Summary <-------------+-------------------+\n"
                  "| Rank in world    | Executed          | Wall time (s)    | CPU time (s)      |\n"
                  "+------------------+-------------------+------------------+-------------------+");
