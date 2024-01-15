@@ -51,10 +51,17 @@
 #include "MACE/Utility/MathConstant.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
 
+#include "G4AntiNeutrinoE.hh"
+#include "G4AntiNeutrinoMu.hh"
 #include "G4DecayProducts.hh"
+#include "G4DynamicParticle.hh"
+#include "G4Electron.hh"
 #include "G4LorentzRotation.hh"
 #include "G4LorentzVector.hh"
+#include "G4NeutrinoE.hh"
+#include "G4NeutrinoMu.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4Positron.hh"
 #include "G4RandomDirection.hh"
 #include "G4RotationMatrix.hh"
 #include "G4SystemOfUnits.hh"
@@ -65,19 +72,19 @@ namespace MACE::inline Simulation::inline Physics::inline DecayChannel {
 
 MuoniumDecayChannel::MuoniumDecayChannel(const G4String& parentName, G4double br, G4int verbose) :
     G4VDecayChannel{"MuoniumDecay", verbose} {
-    SetBR(br);
     SetParent(parentName);
+    SetBR(br);
     SetNumberOfDaughters(4);
     if (parentName == "muonium") {
-        SetDaughter(0, "e+");
-        SetDaughter(1, "nu_e");
-        SetDaughter(2, "anti_nu_mu");
-        SetDaughter(3, "e-");
+        SetDaughter(0, G4Positron::Definition());
+        SetDaughter(1, G4NeutrinoE::Definition());
+        SetDaughter(2, G4AntiNeutrinoMu::Definition());
+        SetDaughter(3, G4Electron::Definition());
     } else if (parentName == "anti_muonium") {
-        SetDaughter(0, "e-");
-        SetDaughter(1, "anti_nu_e");
-        SetDaughter(2, "nu_mu");
-        SetDaughter(3, "e+");
+        SetDaughter(0, G4Electron::Definition());
+        SetDaughter(1, G4AntiNeutrinoE::Definition());
+        SetDaughter(2, G4NeutrinoMu::Definition());
+        SetDaughter(3, G4Positron::Definition());
     } else {
 #ifdef G4VERBOSE
         if (GetVerboseLevel() > 0) {
@@ -99,7 +106,7 @@ auto MuoniumDecayChannel::DecayIt(G4double) -> G4DecayProducts* {
 
 #ifdef G4VERBOSE
     if (GetVerboseLevel() > 1) {
-        G4cout << "G4MuonDecayChannel::DecayIt ";
+        G4cout << "MuoniumDecayChannel::DecayIt ";
     }
 #endif
 
@@ -116,12 +123,13 @@ auto MuoniumDecayChannel::DecayIt(G4double) -> G4DecayProducts* {
     }
 
     // create G4Decayproducts with parent G4DynamicParticle at rest
-    auto products = new G4DecayProducts(G4DynamicParticle(G4MT_parent, G4ThreeVector(), 0.0));
+    // clang-format off
+    auto products = new G4DecayProducts{G4DynamicParticle{G4MT_parent, {}, 0}}; // clang-format on
 
     // calculate daughter momentum
     G4double daughtermomentum[3];
     // calculate electron energy
-    G4double xmax = (1.0 + daughtermass[0] * daughtermass[0] / (parentmass * parentmass));
+    G4double xmax = (1 + Math::Pow<2>(daughtermass[0]) / Math::Pow<2>(parentmass));
     G4double x;
 
     G4double Ee, Ene;
@@ -129,11 +137,11 @@ auto MuoniumDecayChannel::DecayIt(G4double) -> G4DecayProducts* {
     G4double gam;
     G4double EMax = parentmass / 2 - daughtermass[0];
 
-    const std::size_t MAX_LOOP = 1000;
+    constexpr auto MAX_LOOP = 1000;
     // Generating Random Energy
-    for (std::size_t loop1 = 0; loop1 < MAX_LOOP; ++loop1) {
+    for (int loop1{}; loop1 < MAX_LOOP; ++loop1) {
         Ee = G4UniformRand();
-        for (std::size_t loop2 = 0; loop2 < MAX_LOOP; ++loop2) {
+        for (int loop2{}; loop2 < MAX_LOOP; ++loop2) {
             x = xmax * G4UniformRand();
             gam = G4UniformRand();
             if (gam <= x * (1. - x)) break;
