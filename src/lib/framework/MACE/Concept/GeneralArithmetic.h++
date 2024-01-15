@@ -1,0 +1,14 @@
+#pragma once
+
+#include "MACE/Concept/MathVector.h++"
+
+#include <type_traits>
+
+namespace MACE::Concept {
+
+template<typename T>
+concept GeneralArithmetic =
+    std::is_arithmetic_v<T> or
+    MathVectorAny<T>;
+
+} // namespace MACE::Concept

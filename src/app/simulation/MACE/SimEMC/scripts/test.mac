@@ -1,0 +1,13 @@
+/control/verbose 0
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+/run/initialize
+
+/gps/particle gamma
+/gps/ene/mono 0.511 MeV
+/gps/pos/centre 0. 0. 0. cm
+#/gps/ang/type iso
+/gps/direction 0 0.370438 -0.599382
+
+/run/beamOn 1000

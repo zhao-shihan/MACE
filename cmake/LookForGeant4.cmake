@@ -6,25 +6,26 @@ find_package(Geant4 ${MACE_G4_MINIMUM_REQUIRED} REQUIRED) # to load Geant4Config
 
 set(MACE_G4_REQUIRED_COMPONENTS "ui_all")
 
-if(MACE_USE_STATIC_G4)
-    if(Geant4_static_FOUND)
-        list(APPEND MACE_G4_REQUIRED_COMPONENTS static)
-    else()
-        message(NOTICE "***Notice: MACE_USE_STATIC_G4 is ON but Geant4 reports that static libraries are not found. Dynamic libraries will be linked")
-    endif()
-endif()
-
-if(MACE_WITH_G4GDML)
+if(MACE_USE_G4GDML)
     if(Geant4_gdml_FOUND)
         list(APPEND MACE_G4_REQUIRED_COMPONENTS gdml)
     else()
-        set(MACE_WITH_G4GDML OFF)
-        message(NOTICE "***Notice: Geant4::G4gdml not found. Turning off MACE_WITH_G4GDML")
+        set(MACE_USE_G4GDML OFF)
+        message(NOTICE "***Notice: Geant4::G4gdml not found. Turning off MACE_USE_G4GDML")
     endif()
 endif()
 
-if(MACE_WITH_G4VIS)
+if(MACE_USE_G4VIS)
     list(APPEND MACE_G4_REQUIRED_COMPONENTS vis_all)
+endif()
+
+if(MACE_USE_STATIC_G4)
+    if(Geant4_static_FOUND)
+        list(APPEND MACE_G4_REQUIRED_COMPONENTS static)
+        message(STATUS "Geant4 static libraries will be linked")
+    else()
+        message(NOTICE "***Notice: MACE_USE_STATIC_G4 is ON but Geant4 reports that static libraries are not found. Dynamic libraries will be linked")
+    endif()
 endif()
 
 find_package(Geant4 ${MACE_G4_MINIMUM_REQUIRED} REQUIRED ${MACE_G4_REQUIRED_COMPONENTS})

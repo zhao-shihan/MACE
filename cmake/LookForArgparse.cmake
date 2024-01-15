@@ -1,6 +1,6 @@
 message(STATUS "Looking for argparse")
 
-set(MACE_ARGPARSE_MINIMUM_REQUIRED 2.6)
+set(MACE_ARGPARSE_MINIMUM_REQUIRED 3.0)
 
 if(NOT MACE_BUILTIN_ARGPARSE)
     find_package(argparse "${MACE_ARGPARSE_MINIMUM_REQUIRED}.0" QUIET)
@@ -17,22 +17,23 @@ if(MACE_BUILTIN_ARGPARSE)
         message(NOTICE "***Notice: Provided MACE_BUILTIN_ARGPARSE_VERSION is ${MACE_BUILTIN_ARGPARSE_VERSION}, which is less than the requirement (${MACE_ARGPARSE_MINIMUM_REQUIRED}). Changing to ${MACE_ARGPARSE_MINIMUM_REQUIRED}")
         set(MACE_BUILTIN_ARGPARSE_VERSION ${MACE_ARGPARSE_MINIMUM_REQUIRED})
     endif()
-    # set download src and dest
-    include(FetchContent)
+    # set download dest and URL
     set(MACE_BUILTIN_ARGPARSE_SRC_DIR "${MACE_PROJECT_3RDPARTY_DIR}/argparse-${MACE_BUILTIN_ARGPARSE_VERSION}")
     set(MACE_BUILTIN_ARGPARSE_URL "https://github.com/p-ranav/argparse/archive/refs/tags/v${MACE_BUILTIN_ARGPARSE_VERSION}.tar.gz")
+    # reuse or download
+    include(FetchContent)
     if(EXISTS "${MACE_BUILTIN_ARGPARSE_SRC_DIR}/CMakeLists.txt")
-        message(STATUS "Reusing argparse source ${MACE_BUILTIN_ARGPARSE_SRC_DIR}")
         FetchContent_Declare(argparse SOURCE_DIR "${MACE_BUILTIN_ARGPARSE_SRC_DIR}")
+        message(STATUS "Reusing argparse source ${MACE_BUILTIN_ARGPARSE_SRC_DIR}")
     else()
-        message(STATUS "argparse will be downloaded from ${MACE_BUILTIN_ARGPARSE_URL} to ${MACE_BUILTIN_ARGPARSE_SRC_DIR}")
         FetchContent_Declare(argparse SOURCE_DIR "${MACE_BUILTIN_ARGPARSE_SRC_DIR}"
                                       URL "${MACE_BUILTIN_ARGPARSE_URL}")
+        message(STATUS "argparse will be downloaded from ${MACE_BUILTIN_ARGPARSE_URL} to ${MACE_BUILTIN_ARGPARSE_SRC_DIR}")
     endif()
     # configure it
-    message(STATUS ">>>>>>>> Downloading (if required) and configuring built-in argparse (version: ${MACE_BUILTIN_ARGPARSE_VERSION})")
+    message(STATUS "Downloading (if required) and configuring argparse (version: ${MACE_BUILTIN_ARGPARSE_VERSION})")
     FetchContent_MakeAvailable(argparse)
-    message(STATUS "<<<<<<<< Downloading (if required) and configuring built-in argparse (version: ${MACE_BUILTIN_ARGPARSE_VERSION}) - done")
+    message(STATUS "Downloading (if required) and configuring argparse (version: ${MACE_BUILTIN_ARGPARSE_VERSION}) - done")
     # check download
     if(NOT EXISTS "${MACE_BUILTIN_ARGPARSE_SRC_DIR}/CMakeLists.txt")
         file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/argparse-subbuild")

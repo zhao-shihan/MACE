@@ -1,11 +1,20 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
-# enable MSVC_RUNTIME_LIBRARY target property, see https://cmake.org/cmake/help/latest/policy/CMP0091.html
+# Enable MSVC_RUNTIME_LIBRARY target property
+# See https://cmake.org/cmake/help/latest/policy/CMP0091.html
 cmake_policy(SET CMP0091 NEW)
+# Set CMP0077 to new in order to configure options for build-in libraries
+# See https://discourse.cmake.org/t/what-is-the-correct-way-to-set-options-of-a-project-before-fetch-content/268/6
+# See also https://cmake.org/cmake/help/latest/policy/CMP0077.html
+cmake_policy(SET CMP0077 NEW)
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
+    # ExternalProject_Add sets the timestamps of extracted contents to the time of extraction
+    # See https://cmake.org/cmake/help/latest/policy/CMP0135.html
+    cmake_policy(SET CMP0135 NEW)
+endif()
 
-include(CMakeDependentOption)
-
-project(MACE_PROJECT)
+project(MACE VERSION 0.0.0
+             LANGUAGES C CXX)
 
 # =============================================================================
 # Variables
@@ -14,59 +23,90 @@ project(MACE_PROJECT)
 # Dirs
 set(MACE_PROJECT_ROOT_DIR "${PROJECT_SOURCE_DIR}")
 set(MACE_PROJECT_CMAKE_DIR "${MACE_PROJECT_ROOT_DIR}/cmake")
-set(MACE_PROJECT_SRC_DIR "${MACE_PROJECT_ROOT_DIR}/source")
+set(MACE_PROJECT_SRC_DIR "${MACE_PROJECT_ROOT_DIR}/src")
 set(MACE_PROJECT_3RDPARTY_DIR "${MACE_PROJECT_ROOT_DIR}/thirdparty")
 
 # =============================================================================
 # Options
 # =============================================================================
 
+include(CMakeDependentOption)
+
 # Basic
 # Options (ON/OFF)
 option(MACE_BUILD_TEST "Build MACE with test programs." ON)
 option(MACE_BUILTIN_ARGPARSE "Use built-in argparse (network or pre-downloaded source is required)." OFF)
-option(MACE_BUILTIN_EIGEN "Use built-in Eigen (network or pre-downloaded source is required)." OFF)
+option(MACE_BUILTIN_BACKWARD "Use built-in backward-cpp (network or pre-downloaded source is required)." OFF)
+option(MACE_BUILTIN_FMT "Use built-in fmt (network or pre-downloaded source is required)." OFF)
+option(MACE_BUILTIN_GENFIT "Use built-in GenFit (network or pre-downloaded source is required)." OFF)
+option(MACE_BUILTIN_GENFIT_EVENT_DISPLAY "Build GenFit event display module if GenFit is built-in." ON)
+option(MACE_BUILTIN_MSGSL "Use built-in Microsoft.GSL (network or pre-downloaded source is required)." OFF)
+option(MACE_BUILTIN_PMP "Use built-in pmp (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_YAML_CPP "Use built-in yaml-cpp (network or pre-downloaded source is required)." OFF)
 option(MACE_SIGNAL_HANDLER "Build with signal handling. Signal handlers are registered at the construction of environment." ON)
-option(MACE_USE_STATIC_G4 "Attempt to link Geant4 static libraries if available, by finding the \"static\" component of G4. There may be some performance gains if successful (depending on the compiler options), but some other (originally) possible dynamic linkages becomes impossible. If cannot find \"static\", dynamic libraries will be linked." ON)
-option(MACE_WITH_G4GDML "Build with G4gdml support. This option will be automatically turned OFF if Geant4::G4gdml is not found. Once turned off, you are not able to export geometry (to ROOT or other)." ON)
-option(MACE_WITH_G4VIS "Build Geant4 applications of MACE with available visualization. Note that whether Geant4 supports visualization is determined by options with which Geant4 is built. MACE does not, and cannot, affect whether G4 enables visualization." ON)
+option(MACE_USE_G4GDML "Build with G4gdml support. This option will be automatically turned OFF if Geant4::G4gdml is not found. Once turned off, you are not able to export geometry (to ROOT or other)." ON)
+option(MACE_USE_G4VIS "Build Geant4 applications of MACE with available visualization. Note that whether Geant4 supports visualization is determined by options with which Geant4 is built. MACE does not, and cannot, affect whether G4 enables visualization." ON)
+option(MACE_USE_STATIC_G4 "Attempt to link Geant4 static libraries if available, by finding the \"static\" component of G4. If \"static\" is not found, dynamic libraries will be linked." ON)
 
 # Advance
 # Options (ON/OFF)
-option(MACE_SHOW_ALL_COMPILE_WARNINGS "Show all compile warnings. Once turned on, MACE_SURPRESS_COMPILE_WARNINGS will be turned off, and MACE_SHOW_GCC_EFFCXX_COMPILE_WARNINGS will be turned on." OFF)
-option(MACE_USE_SHARED_MSVC_RT "Select the MSVC runtime library for use (MSVC only). ON for shared (.dll), OFF for static (.lib). If you run into link error related to MSVC runtime, you can try to flip this." ON)
-cmake_dependent_option(MACE_SHOW_GCC_EFFCXX_COMPILE_WARNINGS "Show -Weffc++ compile warnings. (gcc only)" OFF "NOT MACE_SHOW_ALL_COMPILE_WARNINGS" ON)
-cmake_dependent_option(MACE_SURPRESS_COMPILE_WARNINGS "Surpress compile warnings raise from external dependencies." ON "NOT MACE_SHOW_ALL_COMPILE_WARNINGS" OFF)
-set(MACE_BUILTIN_ARGPARSE_VERSION 2.6 CACHE STRING "Set built-in argparse version (if required).")
-set(MACE_BUILTIN_EIGEN_VERSION 3.4.0 CACHE STRING "Set built-in Eigen version (if required).")
-set(MACE_BUILTIN_YAML_CPP_VERSION 0.7.0 CACHE STRING "Set built-in yaml-cpp version (if required).")
+option(MACE_ENABLE_IPO "Bulid MACE with interprocedural optimization" ON)
+option(MACE_ENABLE_MSVC_STD_CONFORMITY "Build MACE with standard-conformity (MSVC only: /permissive- /Zc:__cplusplus /Zc:inline)." ON)
+option(MACE_ENABLE_UNITY_BUILD "Build MACE with unity build technique." ON)
+option(MACE_SURPRESS_USELESS_COMPILE_WARNINGS "Surpress compile warnings raise from external dependencies." ON)
+option(MACE_USE_SHARED_MSVC_RT "Select the MSVC runtime library for use (MSVC only). ON for shared (.dll), OFF for static (.lib). If you run into link error related to MSVC runtime, you can try flip this." ON)
+cmake_dependent_option(MACE_FULL_UNITY_BUILD "Building MACE use unity build technique COMPLETELY." OFF MACE_ENABLE_UNITY_BUILD OFF)
+cmake_dependent_option(MACE_SHOW_EVEN_MORE_COMPILE_WARNINGS "Add compile flag to show even more compile warnings (GCC: -Weffc++, Clang: -Weverything, MSVC: /Wall)." OFF NOT MACE_SURPRESS_USELESS_COMPILE_WARNINGS OFF)
+set(MACE_BUILTIN_ARGPARSE_VERSION 3.0 CACHE STRING "Set built-in argparse version (if required).")
+set(MACE_BUILTIN_BACKWARD_VERSION 1.6 CACHE STRING "Set built-in backward-cpp version (if required).")
+set(MACE_BUILTIN_FMT_VERSION 10.2.1 CACHE STRING "Set built-in fmt version (if required).")
+set(MACE_BUILTIN_MSGSL_VERSION 4.0.0 CACHE STRING "Set built-in Microsoft.GSL version (if required).")
+set(MACE_BUILTIN_PMP_VERSION 3.0.0 CACHE STRING "Set built-in fmt version (if required).")
+set(MACE_BUILTIN_YAML_CPP_VERSION 0.8.0 CACHE STRING "Set built-in yaml-cpp version (if required).")
 
 # =============================================================================
 # Global compile options
 # =============================================================================
 
-include(${MACE_PROJECT_CMAKE_DIR}/GlobalCompileOptions.cmake)
+include(${MACE_PROJECT_CMAKE_DIR}/GlobalCompileConfig.cmake)
 
 # =============================================================================
 # Dependencies
 # =============================================================================
 
+# Required:
+
 # MPI
 include(${MACE_PROJECT_CMAKE_DIR}/LookForMPI.cmake)
-# ROOT
-include(${MACE_PROJECT_CMAKE_DIR}/LookForROOT.cmake)
+# Eigen
+include(${MACE_PROJECT_CMAKE_DIR}/LookForEigen.cmake)
 # Geant4
 include(${MACE_PROJECT_CMAKE_DIR}/LookForGeant4.cmake)
-# argparse (if built-in it's hard to download at sino-mainland, put it ahead)
+# ROOT
+include(${MACE_PROJECT_CMAKE_DIR}/LookForROOT.cmake)
+
+# Required, built-in if not found:
+
+# argparse
 include(${MACE_PROJECT_CMAKE_DIR}/LookForArgparse.cmake)
-# yaml-cpp (if built-in it's hard to download at sino-mainland, put it ahead)
+# backward-cpp
+include(${MACE_PROJECT_CMAKE_DIR}/LookForBackward.cmake)
+# fmt
+include(${MACE_PROJECT_CMAKE_DIR}/LookForFmt.cmake)
+# GenFit
+include(${MACE_PROJECT_CMAKE_DIR}/LookForGenFit.cmake)
+# Microsoft.GSL
+include(${MACE_PROJECT_CMAKE_DIR}/LookForMicrosoftGSL.cmake)
+# PMP
+include(${MACE_PROJECT_CMAKE_DIR}/LookForPMP.cmake)
+# yaml-cpp
 include(${MACE_PROJECT_CMAKE_DIR}/LookForYamlCpp.cmake)
-# Eigen (should be the last otherwise might run into problem if previous steps raises error)
-include(${MACE_PROJECT_CMAKE_DIR}/LookForEigen.cmake)
 
 # =============================================================================
 # Let's go!
 # =============================================================================
 
+# Config for MACE
+include(${MACE_PROJECT_CMAKE_DIR}/MACECompileConfig.cmake)
+# main content
 add_subdirectory(${MACE_PROJECT_SRC_DIR})
