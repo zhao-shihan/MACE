@@ -17,25 +17,35 @@ namespace MACE::Env::internal {
 extern "C" {
 
 void MACE_ISOC99_SIGINT_SIGTERM_Handler(int sig) {
-    std::signal(sig, SIG_DFL);
-    const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    std::cerr << std::endl;
-    switch (sig) {
-    case SIGINT:
-        std::clog << "***** INTERRUPT (SIGINT) received\n";
-        break;
-    case SIGTERM:
-        std::clog << "***** TERMINATE (SIGTERM) received\n";
-        break;
-    }
-    if (MPIEnv::Available()) {
-        const auto& mpi = MPIEnv::Instance();
-        std::clog << "***** on MPI process " << mpi.CommWorldRank() << " (node: " << mpi.LocalNode().name << ")\n";
-    }
-    std::clog << "***** at " << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
-    PrintStackTrace(64, 2);
-    std::clog << std::endl;
-    std::raise(sig);
+    static auto called{false};
+    static struct Handler {
+        Handler(int sig) {
+            if (called) {
+                std::abort();
+            } else {
+                called = true;
+            }
+            std::signal(sig, SIG_DFL);
+            const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+            std::cerr << std::endl;
+            switch (sig) {
+            case SIGINT:
+                std::clog << "***** INTERRUPT (SIGINT) received\n";
+                break;
+            case SIGTERM:
+                std::clog << "***** TERMINATE (SIGTERM) received\n";
+                break;
+            }
+            if (MPIEnv::Available()) {
+                const auto& mpi = MPIEnv::Instance();
+                std::clog << "***** on MPI process " << mpi.CommWorldRank() << " (node: " << mpi.LocalNode().name << ")\n";
+            }
+            std::clog << "***** at " << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
+            PrintStackTrace(64, 2);
+            std::clog << std::endl;
+            std::raise(sig);
+        }
+    } handler{sig};
 }
 
 [[noreturn]] void MACE_ISOC99_SIGABRT_Handler(int) {
@@ -54,28 +64,38 @@ void MACE_ISOC99_SIGINT_SIGTERM_Handler(int sig) {
 }
 
 void MACE_ISOC99_SIGFPE_SIGILL_SIGSEGV_Handler(int sig) {
-    std::signal(sig, SIG_DFL);
-    const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    std::cerr << std::endl;
-    switch (sig) {
-    case SIGFPE:
-        std::clog << "***** ERRONEOUS ARITHMETIC OPERATION (SIGFPE) received\n";
-        break;
-    case SIGILL:
-        std::clog << "***** ILLEGAL INSTRUCTION (SIGILL) received\n";
-        break;
-    case SIGSEGV:
-        std::clog << "***** SEGMENTATION VIOLATION (SIGSEGV) received\n";
-        break;
-    }
-    if (MPIEnv::Available()) {
-        const auto& mpi = MPIEnv::Instance();
-        std::clog << "***** on MPI process " << mpi.CommWorldRank() << " (node: " << mpi.LocalNode().name << ")\n";
-    }
-    std::clog << "***** at " << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
-    PrintStackTrace(64, 2);
-    std::clog << std::endl;
-    std::raise(sig);
+    static auto called{false};
+    static struct Handler {
+        Handler(int sig) {
+            if (called) {
+                std::abort();
+            } else {
+                called = true;
+            }
+            std::signal(sig, SIG_DFL);
+            const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+            std::cerr << std::endl;
+            switch (sig) {
+            case SIGFPE:
+                std::clog << "***** ERRONEOUS ARITHMETIC OPERATION (SIGFPE) received\n";
+                break;
+            case SIGILL:
+                std::clog << "***** ILLEGAL INSTRUCTION (SIGILL) received\n";
+                break;
+            case SIGSEGV:
+                std::clog << "***** SEGMENTATION VIOLATION (SIGSEGV) received\n";
+                break;
+            }
+            if (MPIEnv::Available()) {
+                const auto& mpi = MPIEnv::Instance();
+                std::clog << "***** on MPI process " << mpi.CommWorldRank() << " (node: " << mpi.LocalNode().name << ")\n";
+            }
+            std::clog << "***** at " << std::put_time(std::localtime(&now), "%FT%T%z") << std::endl;
+            PrintStackTrace(64, 2);
+            std::clog << std::endl;
+            std::raise(sig);
+        }
+    } handler{sig};
 }
 
 } // extern "C"

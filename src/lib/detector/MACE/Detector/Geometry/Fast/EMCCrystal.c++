@@ -184,7 +184,7 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
 
         // Crystal
 
-        const auto solidCrystal = MakeTessellatedSolid("temp");
+        const auto solidCrystal = MakeTessellatedSolid(fmt::format("temp{}", copyNo));
         const auto cutCrystalBox = Make<G4Box>("temp", 1_m, 1_m, crystalLength / 2);
         const auto cutSoildCrystal = Make<G4IntersectionSolid>("EMCCrystal", solidCrystal, cutCrystalBox, crystalTransform);
         //========================================== CsI(Tl) ============================================

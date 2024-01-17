@@ -77,7 +77,7 @@ void GeometryBase::Export(std::filesystem::path gdmlFile, gsl::index iPhysicalVo
 #if MACE_USE_G4GDML
     if (Env::MPIEnv::Available()) { MPIX::ParallelizePathInPlace(gdmlFile); }
     G4GDMLParser gdml;
-    gdml.SetAddPointerToName(false);
+    gdml.SetAddPointerToName(true);
     gdml.SetOutputFileOverwrite(true);
     gdml.Write(gdmlFile.generic_string(), PhysicalVolume(iPhysicalVolume).get());
 #else
