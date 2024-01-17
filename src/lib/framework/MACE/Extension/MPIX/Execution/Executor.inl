@@ -188,7 +188,7 @@ auto Executor<T>::PostLoopReport() const -> void {
                "+-----------------------------------> End <-----------------------------------+\n",
                fmt::format("{:%FT%T%z} > {} has ended on {} process{}", fmt::localtime(scsc::to_time_t(now)), fExecutionName, mpiEnv.CommWorldSize(), mpiEnv.Parallel() ? "es" : ""),
                fmt::format("  Start time: {:%FT%T%z}", fmt::localtime(scsc::to_time_t(fExecutionBeginSystemTime))),
-               fmt::format("   Wall time: {:.3f} seconds{}", fExecutionWallTime, fExecutionWallTime <= 60 ? "" : " (" + SToDHMS(fExecutionWallTime) + ')'),
+               fmt::format("   Wall time: {:.3f} seconds{}", maxWallTime, maxWallTime <= 60 ? "" : " (" + SToDHMS(maxWallTime) + ')'),
                fmt::format("    CPU time: {:.3f} seconds{}", totalCpuTime, totalCpuTime <= 60 ? "" : " (" + SToDHMS(totalCpuTime) + ')'));
 }
 
