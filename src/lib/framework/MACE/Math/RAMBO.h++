@@ -20,6 +20,8 @@
 #include <stdexcept>
 #include <utility>
 
+namespace MACE::Math {
+
 template<int N>
     requires(N >= 2)
 class RAMBO {
@@ -48,5 +50,7 @@ private:
 
     static constexpr auto fgTiny = 1e-9;
 };
+
+} // namespace MACE::Math
 
 #include "MACE/Math/RAMBO.inl"
