@@ -1,13 +1,4 @@
-namespace MACE::inline Simulation::inline Physics {
-
-inline namespace Messenger {
-
-template<TargetForMuoniumPhysics ATarget>
-class MuoniumPhysicsMessenger;
-
-} // namespace Messenger
-
-inline namespace Process {
+namespace MACE::inline Simulation::inline Physics::inline Process {
 
 template<TargetForMuoniumPhysics ATarget>
 MuoniumFormation<ATarget>::MuoniumFormation() :
@@ -75,6 +66,4 @@ auto MuoniumFormation<ATarget>::GetMeanLifeTime(const G4Track& track, G4ForceCon
     }
 }
 
-} // namespace Process
-
-} // namespace MACE::inline Simulation::inline Physics
+} // namespace MACE::inline Simulation::inline Physics::inline Process

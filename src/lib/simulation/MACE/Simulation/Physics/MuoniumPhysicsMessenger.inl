@@ -1,4 +1,4 @@
-namespace MACE::inline Simulation::inline Physics::inline Messenger {
+namespace MACE::inline Simulation::inline Physics {
 
 template<TargetForMuoniumPhysics ATarget>
 MuoniumPhysicsMessenger<ATarget>::MuoniumPhysicsMessenger() :
@@ -47,7 +47,7 @@ MuoniumPhysicsMessenger<ATarget>::MuoniumPhysicsMessenger() :
 }
 
 template<TargetForMuoniumPhysics ATarget>
-void MuoniumPhysicsMessenger<ATarget>::SetNewValue(G4UIcommand* command, G4String value) {
+auto MuoniumPhysicsMessenger<ATarget>::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fFormationProbability.get()) {
         fMuoniumFormation->FormationProbability(fFormationProbability->GetNewDoubleValue(value));
     } else if (command == fConversionProbability.get()) {
@@ -59,4 +59,4 @@ void MuoniumPhysicsMessenger<ATarget>::SetNewValue(G4UIcommand* command, G4Strin
     }
 }
 
-} // namespace MACE::inline Simulation::inline Physics::inline Messenger
+} // namespace MACE::inline Simulation::inline Physics

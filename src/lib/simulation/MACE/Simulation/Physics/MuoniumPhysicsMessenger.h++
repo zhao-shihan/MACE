@@ -27,8 +27,6 @@ class MuoniumTransport;
 
 } // namespace Process
 
-inline namespace Messenger {
-
 template<TargetForMuoniumPhysics ATarget>
 class MuoniumPhysicsMessenger final : public Env::Memory::Singleton<MuoniumPhysicsMessenger<ATarget>>,
                                       public G4UImessenger {
@@ -58,8 +56,6 @@ private:
     std::unique_ptr<G4UIcmdWithABool> fManipulateAllSteps;
 };
 
-} // namespace Messenger
-
 } // namespace MACE::inline Simulation::inline Physics
 
-#include "MACE/Simulation/Physics/Messenger/MuoniumPhysicsMessenger.inl"
+#include "MACE/Simulation/Physics/MuoniumPhysicsMessenger.inl"

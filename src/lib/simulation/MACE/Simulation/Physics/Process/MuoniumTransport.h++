@@ -4,7 +4,7 @@
 #include "MACE/Math/Random/Distribution/Exponential.h++"
 #include "MACE/Math/Random/Distribution/Gaussian3DDiagnoal.h++"
 #include "MACE/Math/Random/Generator/Xoshiro256Plus.h++"
-#include "MACE/Simulation/Physics/Messenger/MuoniumPhysicsMessenger.h++"
+#include "MACE/Simulation/Physics/MuoniumPhysicsMessenger.h++"
 #include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
 #include "MACE/Simulation/Physics/Particle/Muonium.h++"
 #include "MACE/Simulation/Physics/TargetForMuoniumPhysics.h++"

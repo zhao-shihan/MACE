@@ -1,11 +1,7 @@
 namespace MACE::inline Simulation::inline Physics {
 
-inline namespace Messenger {
-
 template<TargetForMuoniumPhysics ATarget>
 class MuoniumPhysicsMessenger;
-
-} // namespace Messenger
 
 inline namespace Process {
 
