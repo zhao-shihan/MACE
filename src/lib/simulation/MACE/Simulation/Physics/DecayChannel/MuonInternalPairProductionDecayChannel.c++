@@ -1,4 +1,5 @@
 #include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
+#include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannelMessenger.h++"
 
 #include "G4AntiNeutrinoE.hh"
 #include "G4AntiNeutrinoMu.hh"
@@ -53,10 +54,11 @@ MuonInternalPairProductionDecayChannel::MuonInternalPairProductionDecayChannel(c
 #endif
     }
     WarmUp();
+    MuonInternalPairProductionDecayChannelMessenger::Instance().AssignTo(this);
 }
 
 auto MuonInternalPairProductionDecayChannel::SameChargedFinalStateEnergyCut(double eUp) -> void {
-    if (eUp > 0) {
+    if (eUp > electron_mass_c2) {
         fSameChargedFinalStateEnergyCut = eUp;
     } else {
         fSameChargedFinalStateEnergyCut = muon_mass_c2;
@@ -80,6 +82,7 @@ auto MuonInternalPairProductionDecayChannel::DecayIt(G4double) -> G4DecayProduct
     for (int i{}; i < fMetropolisDiscard; ++i) {
         UpdateState(rng);
     }
+    UpdateState(rng);
     // clang-format off
     auto products{new G4DecayProducts{G4DynamicParticle{G4MT_parent, {}, 0}}}; // clang-format on
     for (int i{}; i < 5; ++i) {
