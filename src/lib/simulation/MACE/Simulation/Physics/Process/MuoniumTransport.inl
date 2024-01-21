@@ -18,7 +18,7 @@ MuoniumTransport<ATarget>::MuoniumTransport() :
     fTransportStatus{TransportStatus::Unknown},
     fIsExitingTargetVolume{false} {
     pParticleChange = &fParticleChange;
-    MuoniumPhysicsMessenger<ATarget>::Instance().AssignTo(this);
+    MuoniumPhysicsMessenger<ATarget>::Instance().Register(this);
 }
 
 template<TargetForMuoniumPhysics ATarget>

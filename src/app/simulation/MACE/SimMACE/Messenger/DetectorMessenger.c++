@@ -41,7 +41,7 @@ GeometryMessenger::GeometryMessenger() :
 
 GeometryMessenger::~GeometryMessenger() = default;
 
-void GeometryMessenger::SetNewValue(G4UIcommand* command, G4String value) {
+auto GeometryMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     using DescriptionInUse = DetectorConstruction::DescriptionInUse;
     using Detector::Description::DescriptionIO;
     if (command == fImportDescription.get()) {

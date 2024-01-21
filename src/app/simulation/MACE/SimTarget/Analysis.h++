@@ -21,25 +21,25 @@ public:
     Analysis();
     ~Analysis();
 
-    void ResultPath(auto&& path) { (fResultPath = std::forward<decltype(path)>(path)).replace_extension(); }
-    void EnableYieldAnalysis(bool val) { fEnableYieldAnalysis = val; }
+    auto ResultPath(std::filesystem::path path) -> void { fResultPath = std::move(path.replace_extension()); }
+    auto EnableYieldAnalysis(bool val) -> void { fEnableYieldAnalysis = val; }
 
     void RunBegin(gsl::not_null<const G4Run*> run);
     auto NewMuoniumTrack() { return fMuoniumTrackList.emplace_back(std::make_unique_for_overwrite<MuoniumTrack>()).get(); }
     void RunEnd();
 
 private:
-    void Open();
-    void Write();
-    void Close();
+    auto Open() -> void;
+    auto Write() -> void;
+    auto Close() -> void;
 
-    void OpenResultFile();
-    void WriteResult();
-    void CloseResultFile();
+    auto OpenResultFile() -> void;
+    auto WriteResult() -> void;
+    auto CloseResultFile() -> void;
 
-    void OpenYieldFile();
-    void AnalysisAndWriteYield();
-    void CloseYieldFile();
+    auto OpenYieldFile() -> void;
+    auto AnalysisAndWriteYield() -> void;
+    auto CloseYieldFile() -> void;
 
 private:
     std::filesystem::path fResultPath;

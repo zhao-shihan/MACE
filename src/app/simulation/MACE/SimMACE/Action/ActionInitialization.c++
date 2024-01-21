@@ -5,7 +5,7 @@
 
 namespace MACE::SimMACE {
 
-void ActionInitialization::Build() const {
+auto ActionInitialization::Build() const -> void {
     SetUserAction(new RunAction);
     SetUserAction(new PrimaryGeneratorAction);
     SetUserAction(new EventAction);

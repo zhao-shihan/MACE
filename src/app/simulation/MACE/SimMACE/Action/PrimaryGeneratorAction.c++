@@ -15,10 +15,10 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
     fSurfaceMuonGenerator(),
     fTimeWidthRMS(20_ns),
     fMuonsForEachG4Event(10) {
-    PrimaryGeneratorActionMessenger::Instance().AssignTo(this);
+    PrimaryGeneratorActionMessenger::Instance().Register(this);
 }
 
-void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
+auto PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) -> void {
     G4RandGauss randGauss = {*G4Random::getTheEngine(), 0, fTimeWidthRMS};
     for (G4int i = 0; i < fMuonsForEachG4Event; ++i) {
         fSurfaceMuonGenerator.Time(randGauss.fire());

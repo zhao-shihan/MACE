@@ -31,7 +31,7 @@ PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger() :
 
 PrimaryGeneratorActionMessenger::~PrimaryGeneratorActionMessenger() = default;
 
-void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String value) {
+auto PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fTimeRMS.get()) {
         fPrimaryGeneratorAction->TimeRMS(fTimeRMS->GetNewDoubleValue(value));
     } else if (command == fMuonsForEachG4Event.get()) {

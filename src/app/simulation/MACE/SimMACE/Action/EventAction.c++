@@ -9,7 +9,7 @@
 
 namespace MACE::SimMACE::inline Action {
 
-void EventAction::BeginOfEventAction(const G4Event* event) {
+auto EventAction::BeginOfEventAction(const G4Event* event) -> void {
     const auto eventID = event->GetEventID();
     const auto& detectors = DetectorConstruction::Instance();
     detectors.EMCSD().EventID(eventID);

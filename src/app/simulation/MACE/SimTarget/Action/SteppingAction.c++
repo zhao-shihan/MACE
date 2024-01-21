@@ -17,10 +17,10 @@ SteppingAction::SteppingAction() :
     fMuonium{gsl::not_null(Muonium::Definition())},
     fAntimuonium{gsl::not_null(Antimuonium::Definition())},
     fKillIrrelevants{false} {
-    ActionMessenger::Instance().AssignTo(this);
+    ActionMessenger::Instance().Register(this);
 }
 
-void SteppingAction::UserSteppingAction(const G4Step* step) {
+auto SteppingAction::UserSteppingAction(const G4Step* step) -> void {
     if (fKillIrrelevants) {
         const auto particle = step->GetTrack()->GetParticleDefinition();
         if (particle != fMuonPlus and particle != fMuonium and particle != fAntimuonium) {

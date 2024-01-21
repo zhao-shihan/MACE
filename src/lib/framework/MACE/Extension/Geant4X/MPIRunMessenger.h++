@@ -25,9 +25,9 @@ private:
     ~MPIRunMessenger();
 
 public:
-    void AssignTo(gsl::not_null<MPIRunManager*> mpirunManager) { fMPIRunManager = mpirunManager; }
+    auto Register(gsl::not_null<MPIRunManager*> mpirunManager) -> void { fMPIRunManager = mpirunManager; }
 
-    void SetNewValue(G4UIcommand* command, G4String value) override;
+    auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
     MPIRunManager* fMPIRunManager;

@@ -41,23 +41,23 @@ class DetectorConstruction final : public Env::Memory::PassiveSingleton<Detector
 public:
     DetectorConstruction();
 
-    G4VPhysicalVolume* Construct() override;
+    auto Construct() -> G4VPhysicalVolume* override;
 
-    void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlap = checkOverlaps; }
+    auto SetCheckOverlaps(G4bool checkOverlaps) -> void { fCheckOverlap = checkOverlaps; }
 
-    auto& EMCSensitiveRegion() const { return *fEMCSensitiveRegion; }
-    auto& DefaultSolidRegion() const { return *fDefaultSolidRegion; }
-    auto& DefaultGaseousRegion() const { return *fDefaultGaseousRegion; }
-    auto& ShieldRegion() const { return *fShieldRegion; }
-    auto& SolenoidOrMagnetRegion() const { return *fSolenoidOrMagnetRegion; }
-    auto& SpectrometerSensitiveRegion() const { return *fSpectrometerSensitiveRegion; }
-    auto& TargetRegion() const { return *fTargetRegion; }
-    auto& VacuumRegion() const { return *fVacuumRegion; }
-    auto& MCPSensitiveRegion() const { return *fMCPSensitiveRegion; }
+    auto EMCSensitiveRegion() const -> const auto& { return *fEMCSensitiveRegion; }
+    auto DefaultSolidRegion() const -> const auto& { return *fDefaultSolidRegion; }
+    auto DefaultGaseousRegion() const -> const auto& { return *fDefaultGaseousRegion; }
+    auto ShieldRegion() const -> const auto& { return *fShieldRegion; }
+    auto SolenoidOrMagnetRegion() const -> const auto& { return *fSolenoidOrMagnetRegion; }
+    auto SpectrometerSensitiveRegion() const -> const auto& { return *fSpectrometerSensitiveRegion; }
+    auto TargetRegion() const -> const auto& { return *fTargetRegion; }
+    auto VacuumRegion() const -> const auto& { return *fVacuumRegion; }
+    auto MCPSensitiveRegion() const -> const auto& { return *fMCPSensitiveRegion; }
 
-    auto& EMCSD() const { return *fEMCSD; }
-    auto& CDCSD() const { return *fCDCSD; }
-    auto& MCPSD() const { return *fMCPSD; }
+    auto EMCSD() const -> auto& { return *fEMCSD; }
+    auto CDCSD() const -> auto& { return *fCDCSD; }
+    auto MCPSD() const -> auto& { return *fMCPSD; }
 
 public:
     using DescriptionInUse = std::tuple<Detector::Description::AcceleratorField,

@@ -24,7 +24,7 @@ private:
     ~MuonInternalPairProductionDecayChannelMessenger();
 
 public:
-    auto AssignTo(gsl::not_null<MuonInternalPairProductionDecayChannel*> dc) -> void { fMuonInternalPairProductionDecayChannel = dc; }
+    auto Register(gsl::not_null<MuonInternalPairProductionDecayChannel*> dc) -> void { fMuonInternalPairProductionDecayChannel = dc; }
 
     auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 

@@ -20,7 +20,7 @@ Analysis::Analysis() :
     fResultFile{},
     fYieldFile{},
     fDataFactory{} {
-    AnalysisMessenger::Instance().AssignTo(this);
+    AnalysisMessenger::Instance().Register(this);
     fDataFactory.TreeNamePrefixFormat("Run{}_");
 }
 

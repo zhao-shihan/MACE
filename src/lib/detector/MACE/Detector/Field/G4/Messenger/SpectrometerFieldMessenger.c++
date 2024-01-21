@@ -26,7 +26,7 @@ SpectrometerFieldMessenger::SpectrometerFieldMessenger() :
 
 SpectrometerFieldMessenger::~SpectrometerFieldMessenger() = default;
 
-void SpectrometerFieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
+auto SpectrometerFieldMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fSpectrometerMagneticField.get()) {
         Description::SpectrometerField::Instance().MagneticFluxDensity(fSpectrometerMagneticField->GetNewDoubleValue(value));
     }

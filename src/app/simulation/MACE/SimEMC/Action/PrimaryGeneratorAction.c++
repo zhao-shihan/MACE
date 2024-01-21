@@ -7,7 +7,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
     PassiveSingleton{},
     G4VUserPrimaryGeneratorAction{},
     fGPS{} {
-    // PrimaryGeneratorActionMessenger::Instance().AssignTo(this);
+    // PrimaryGeneratorActionMessenger::Instance().Register(this);
     fGPS = new G4GeneralParticleSource();
 }
 

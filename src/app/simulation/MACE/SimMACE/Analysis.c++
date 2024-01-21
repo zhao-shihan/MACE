@@ -27,7 +27,7 @@ Analysis::Analysis() :
     fEMCHitList{},
     fMCPHitList{},
     fCDCHitList{} {
-    AnalysisMessenger::Instance().AssignTo(this);
+    AnalysisMessenger::Instance().Register(this);
 }
 
 void Analysis::RunBegin(G4int runID) {

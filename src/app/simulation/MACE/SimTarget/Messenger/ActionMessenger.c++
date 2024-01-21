@@ -22,7 +22,7 @@ ActionMessenger::ActionMessenger() :
 
 ActionMessenger::~ActionMessenger() = default;
 
-void ActionMessenger::SetNewValue(G4UIcommand* command, G4String value) {
+auto ActionMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fKillIrrelevants.get()) {
         fSteppingAction->SetKillIrrelevants(fKillIrrelevants->GetNewBoolValue(value));
     }

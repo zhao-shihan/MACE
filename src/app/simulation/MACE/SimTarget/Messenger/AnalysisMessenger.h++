@@ -27,9 +27,9 @@ private:
     ~AnalysisMessenger();
 
 public:
-    void AssignTo(gsl::not_null<Analysis*> ana) { fAnalysis = ana; }
+    auto Register(gsl::not_null<Analysis*> ana) -> void { fAnalysis = ana; }
 
-    void SetNewValue(G4UIcommand* command, G4String value) override;
+    auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
     Analysis* fAnalysis;
@@ -39,6 +39,6 @@ private:
     std::unique_ptr<G4UIcmdWithABool> fEnableYieldAnalysis;
 };
 
-} // inline namespace Messenger
+} // namespace Messenger
 
 } // namespace MACE::SimTarget

@@ -54,7 +54,7 @@ MuonInternalPairProductionDecayChannel::MuonInternalPairProductionDecayChannel(c
 #endif
     }
     WarmUp();
-    MuonInternalPairProductionDecayChannelMessenger::Instance().AssignTo(this);
+    MuonInternalPairProductionDecayChannelMessenger::Instance().Register(this);
 }
 
 auto MuonInternalPairProductionDecayChannel::SameChargedFinalStateEnergyCut(double eUp) -> void {

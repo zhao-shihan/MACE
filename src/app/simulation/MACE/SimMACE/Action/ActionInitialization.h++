@@ -9,7 +9,7 @@ namespace MACE::SimMACE::inline Action {
 class ActionInitialization final : public Env::Memory::PassiveSingleton<ActionInitialization>,
                                    public G4VUserActionInitialization {
 public:
-    void Build() const override;
+    auto Build() const -> void override;
 };
 
 } // namespace MACE::SimMACE::inline Action

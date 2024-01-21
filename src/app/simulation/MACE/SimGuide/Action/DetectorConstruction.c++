@@ -40,7 +40,7 @@ DetectorConstruction::DetectorConstruction() :
     );
 }
 
-G4VPhysicalVolume* DetectorConstruction::Construct() {
+auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 }
 
 } // namespace MACE::SimTarget::inline Action

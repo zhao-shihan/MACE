@@ -30,9 +30,9 @@ private:
     ~ActionMessenger();
 
 public:
-    void AssignTo(gsl::not_null<SteppingAction*> sa) { fSteppingAction = sa; }
+    auto Register(gsl::not_null<SteppingAction*> sa) -> void { fSteppingAction = sa; }
 
-    void SetNewValue(G4UIcommand* command, G4String value) override;
+    auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
     SteppingAction* fSteppingAction;
@@ -41,6 +41,6 @@ private:
     std::unique_ptr<G4UIcmdWithABool> fKillIrrelevants;
 };
 
-} // inline namespace Messenger
+} // namespace Messenger
 
 } // namespace MACE::SimTarget

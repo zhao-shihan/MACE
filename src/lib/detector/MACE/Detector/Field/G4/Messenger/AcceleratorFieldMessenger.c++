@@ -26,7 +26,7 @@ AcceleratorFieldMessenger::AcceleratorFieldMessenger() :
 
 AcceleratorFieldMessenger::~AcceleratorFieldMessenger() = default;
 
-void AcceleratorFieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
+auto AcceleratorFieldMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fAcceleratorPotential.get()) {
         Description::AcceleratorField::Instance().AcceleratorPotential(fAcceleratorPotential->GetNewDoubleValue(value));
     }

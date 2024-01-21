@@ -46,7 +46,7 @@ MPIRunManager::MPIRunManager() :
     printModulo = -1;
     SetVerboseLevel(std23::to_underlying(Env::MPIEnv::Instance().GetVerboseLevel()));
     fExecutor.TaskName("G4Event");
-    MPIRunMessenger::Instance().AssignTo(this);
+    MPIRunMessenger::Instance().Register(this);
 }
 
 auto MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect) -> void {

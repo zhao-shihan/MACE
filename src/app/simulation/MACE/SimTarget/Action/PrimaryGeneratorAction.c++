@@ -12,10 +12,10 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
     fSurfaceMuonGenerator(),
     fMuonsForEachG4Event(0) {
     fSurfaceMuonGenerator.PositionZ(-5_cm);
-    PrimaryGeneratorActionMessenger::Instance().AssignTo(this);
+    PrimaryGeneratorActionMessenger::Instance().Register(this);
 }
 
-void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) {
+auto PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) -> void {
     for (G4int i = 0; i < fMuonsForEachG4Event; ++i) {
         fSurfaceMuonGenerator.GeneratePrimaryVertex(event);
     }

@@ -12,7 +12,7 @@ MuoniumFormation<ATarget>::MuoniumFormation() :
     fConversionProbability{0},
     fParticleChange{} {
     pParticleChange = &fParticleChange;
-    MuoniumPhysicsMessenger<ATarget>::Instance().AssignTo(this);
+    MuoniumPhysicsMessenger<ATarget>::Instance().Register(this);
 }
 
 template<TargetForMuoniumPhysics ATarget>

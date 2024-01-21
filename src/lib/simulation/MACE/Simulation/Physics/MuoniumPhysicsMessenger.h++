@@ -36,8 +36,8 @@ private:
     MuoniumPhysicsMessenger();
 
 public:
-    auto AssignTo(gsl::not_null<MuoniumFormation<ATarget>*> mf) -> void { fMuoniumFormation = mf; }
-    auto AssignTo(gsl::not_null<MuoniumTransport<ATarget>*> mt) -> void { fMuoniumTransport = mt; }
+    auto Register(gsl::not_null<MuoniumFormation<ATarget>*> mf) -> void { fMuoniumFormation = mf; }
+    auto Register(gsl::not_null<MuoniumTransport<ATarget>*> mt) -> void { fMuoniumTransport = mt; }
 
     auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 

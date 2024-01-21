@@ -52,7 +52,7 @@ AnalysisMessenger::AnalysisMessenger() :
 
 AnalysisMessenger::~AnalysisMessenger() = default;
 
-void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
+auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fCoincidenceWithCDC.get()) {
         fAnalysis->CoincidenceWithCDC(fCoincidenceWithCDC->GetNewBoolValue(value));
     } else if (command == fCoincidenceWithMCP.get()) {

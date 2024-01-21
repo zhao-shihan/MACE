@@ -5,7 +5,7 @@
 
 namespace MACE::SimTarget::inline Action {
 
-void EventAction::BeginOfEventAction(const G4Event* event) {
+auto EventAction::BeginOfEventAction(const G4Event* event) -> void {
     TrackingAction::Instance().EventID(event->GetEventID());
 }
 
