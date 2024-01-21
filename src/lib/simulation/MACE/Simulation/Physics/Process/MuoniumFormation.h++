@@ -45,7 +45,7 @@ private:
 
     G4ParticleChange fParticleChange;
 
-    MuoniumPhysicsMessenger<ATarget>::template Register<MuoniumFormation<ATarget>> fMessengerRegister;
+    typename MuoniumPhysicsMessenger<ATarget>::template Register<MuoniumFormation<ATarget>> fMessengerRegister;
 };
 
 } // namespace MACE::inline Simulation::inline Physics::inline Process

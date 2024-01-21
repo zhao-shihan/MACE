@@ -56,7 +56,7 @@ private:
     TransportStatus fTransportStatus;
     G4bool fIsExitingTargetVolume;
 
-    MuoniumPhysicsMessenger<ATarget>::template Register<MuoniumTransport<ATarget>> fMessengerRegister;
+    typename MuoniumPhysicsMessenger<ATarget>::template Register<MuoniumTransport<ATarget>> fMessengerRegister;
 };
 
 } // namespace Process

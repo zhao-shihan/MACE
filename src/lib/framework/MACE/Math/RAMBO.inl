@@ -51,7 +51,7 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
     }()};
 
     const auto State{
-        [&p] {
+        [&p = p] {
             std::array<CLHEP::HepLorentzVector, N> state;
             std::ranges::transform(p, state.begin(),
                                    [](const auto& q) -> CLHEP::HepLorentzVector {
@@ -136,7 +136,7 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
         return 0;
     }};
     const auto xi{ZBrent(
-        [&](double xi) {
+        [&, &p = p](double xi) {
             double retval{};
             for (auto i{0}; i < N; i++) {
                 retval += Hypot(fMass[i], xi * p[i][0]);
