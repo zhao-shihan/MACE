@@ -55,8 +55,10 @@ private:
     G4ParticleChange fParticleChange;
     TransportStatus fTransportStatus;
     G4bool fIsExitingTargetVolume;
+
+    MuoniumPhysicsMessenger<ATarget>::template Register<MuoniumTransport<ATarget>> fMessengerRegister;
 };
 
-} // namespace MACE::inline Simulation::inline Physics::inline Process
+} // namespace Process
 
 #include "MACE/Simulation/Physics/Process/MuoniumTransport.inl"

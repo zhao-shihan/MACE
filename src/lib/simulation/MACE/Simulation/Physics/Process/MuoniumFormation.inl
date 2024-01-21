@@ -10,9 +10,9 @@ MuoniumFormation<ATarget>::MuoniumFormation() :
     fRandEng{G4Random::getTheEngine()},
     fFormationProbability{0.655},
     fConversionProbability{0},
-    fParticleChange{} {
+    fParticleChange{},
+    fMessengerRegister{this} {
     pParticleChange = &fParticleChange;
-    MuoniumPhysicsMessenger<ATarget>::Instance().Register(this);
 }
 
 template<TargetForMuoniumPhysics ATarget>

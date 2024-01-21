@@ -44,6 +44,8 @@ private:
     G4double fConversionProbability;
 
     G4ParticleChange fParticleChange;
+
+    MuoniumPhysicsMessenger<ATarget>::template Register<MuoniumFormation<ATarget>> fMessengerRegister;
 };
 
 } // namespace MACE::inline Simulation::inline Physics::inline Process
