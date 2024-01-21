@@ -7,8 +7,7 @@ namespace MACE::Env::Memory::internal {
 
 SingletonPool::~SingletonPool() {
     for (auto&& [_, nodeInfo] : fInstanceMap) {
-        const auto& [node, index, base]{nodeInfo};
-        assert(*node == nullptr);
+        assert(*get<0>(nodeInfo) == nullptr);
     }
 }
 
