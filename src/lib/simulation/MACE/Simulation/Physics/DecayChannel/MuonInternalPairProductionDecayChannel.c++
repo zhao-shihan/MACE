@@ -12,9 +12,6 @@
 
 #include "gsl/gsl"
 
-#include <algorithm>
-#include <tuple>
-
 namespace MACE::inline Simulation::inline Physics::inline DecayChannel {
 
 using namespace PhysicalConstant;
