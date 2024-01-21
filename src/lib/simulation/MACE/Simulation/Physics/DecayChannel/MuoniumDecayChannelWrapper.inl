@@ -1,0 +1,73 @@
+namespace MACE::inline Simulation::inline Physics::inline DecayChannel {
+
+template<std::derived_from<G4VDecayChannel> AMuonDecayChannel, CETAString AName>
+MuoniumDecayChannelWrapper<AMuonDecayChannel, AName>::MuoniumDecayChannelWrapper(const G4String& parentName, G4double br, G4int verbose) :
+    AMuonDecayChannel{parentName == "muonium" ? "mu+" : "mu-", br},
+    fAtomicShellProductIndex{this->numberOfDaughters} {
+    this->SetVerboseLevel(verbose);
+    // save muon decay info
+    std::vector<G4ParticleDefinition*> daughter;
+    daughter.reserve(this->numberOfDaughters + 1);
+    for (int i{}; i < this->numberOfDaughters; ++i) {
+        daughter.emplace_back(this->GetDaughter(i));
+    }
+    if (parentName == "muonium") {
+        daughter.emplace_back(G4Electron::Definition());
+    } else if (parentName == "anti_muonium") {
+        daughter.emplace_back(G4Positron::Definition());
+    } else {
+        throw std::invalid_argument{fmt::format("MuoniumDecayChannelWrapper: parent particle is not muonium or anti_muonium but {}", parentName)};
+    }
+    // set muonium decay info
+    this->kinematics_name = AName.StringView();
+    this->SetParent(parentName);
+    this->SetBR(br);
+    this->SetNumberOfDaughters(ssize(daughter));
+    for (gsl::index i{}; i < ssize(daughter); ++i) {
+        this->SetDaughter(i, daughter[i]);
+    }
+}
+
+template<std::derived_from<G4VDecayChannel> AMuonDecayChannel, CETAString AName>
+auto MuoniumDecayChannelWrapper<AMuonDecayChannel, AName>::DecayIt(G4double) -> G4DecayProducts* {
+    using namespace LiteralUnit::MathConstantSuffix;
+    using namespace PhysicalConstant;
+
+#ifdef G4VERBOSE
+    if (this->GetVerboseLevel() > 1) {
+        fmt::println("MuoniumDecayChannelWrapper::DecayIt");
+    }
+#endif
+
+    auto [pStar, converged]{Math::FindRoot::Secant(
+        // CDF - x
+        [x = G4UniformRand()](const auto p) {
+            const auto p2 = Math::Pow<2>(p);
+            return (2 / 3_pi) *
+                       (p * (p2 * (3 * p2 + 8) - 3) /
+                            Math::Pow<3>(p2 + 1) +
+                        3 * std::atan(p)) -
+                   x;
+        },
+        // most probable p*
+        27 / 8_pi)};
+    if (not converged and this->GetVerboseLevel() > 0) {
+        fmt::println(stderr, "MuoniumDecayChannelWrapper: atomic shell e+/e- momentum disconverged");
+    }
+    const auto p{fine_structure_const * muonium_reduced_mass_c2 * pStar * G4RandomDirection()};
+
+    const auto products{AMuonDecayChannel::DecayIt(muon_mass_c2)};
+    products->Boost(-p.x() / muon_mass_c2, -p.y() / muon_mass_c2, -p.z() / muon_mass_c2); // recoil boost
+    products->PushProducts(new G4DynamicParticle(this->G4MT_daughters[fAtomicShellProductIndex], p));
+
+#ifdef G4VERBOSE
+    if (this->GetVerboseLevel() > 1) {
+        fmt::println("MuoniumDecayChannelWrapper::DecayIt\n"
+                     "\tCreate decay products in rest frame.");
+        products->DumpInfo();
+    }
+#endif
+    return products;
+}
+
+} // namespace MACE::inline Simulation::inline Physics::inline DecayChannel
