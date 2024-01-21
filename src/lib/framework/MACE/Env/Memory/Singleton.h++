@@ -8,6 +8,7 @@
 
 #include "fmt/format.h"
 
+#include <memory>
 #include <stdexcept>
 #include <typeinfo>
 
@@ -24,7 +25,7 @@ public:
     MACE_ALWAYS_INLINE static auto NotInstantiated() -> bool { return UpdateInstance() == Status::NotInstantiated; }
     MACE_ALWAYS_INLINE static auto Available() -> bool { return UpdateInstance() == Status::Available; }
     MACE_ALWAYS_INLINE static auto Expired() -> bool { return UpdateInstance() == Status::Expired; }
-    MACE_ALWAYS_INLINE static auto Instantiated() -> bool;
+    MACE_ALWAYS_INLINE static auto Instantiated() -> bool { return not NotInstantiated(); }
 
 private:
     enum class Status {
@@ -36,7 +37,7 @@ private:
     MACE_ALWAYS_INLINE static auto UpdateInstance() -> Status;
 
 private:
-    static void** fgInstance;
+    static std::shared_ptr<void*> fgInstance;
 };
 
 class SingletonInstantiator final : NonConstructibleBase {

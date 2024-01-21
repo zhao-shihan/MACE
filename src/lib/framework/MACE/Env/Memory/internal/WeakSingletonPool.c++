@@ -20,7 +20,7 @@ WeakSingletonPool::WeakSingletonPool() :
 
 WeakSingletonPool::~WeakSingletonPool() {
     for (auto&& [type, instance] : std::as_const(fInstanceMap)) {
-        if (instance != nullptr) [[unlikely]] {
+        if (*instance != nullptr) [[unlikely]] {
             fmt::println(stderr,
                          "MACE::Env::Memory::internal::WeakSingletonPool::~WeakSingletonPool(): "
                          "Instance of type {} (weak singleton in environment) still survives, "
