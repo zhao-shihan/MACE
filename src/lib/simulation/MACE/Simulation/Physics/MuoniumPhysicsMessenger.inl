@@ -48,13 +48,21 @@ MuoniumPhysicsMessenger<ATarget>::MuoniumPhysicsMessenger() :
 template<TargetForMuoniumPhysics ATarget>
 auto MuoniumPhysicsMessenger<ATarget>::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fFormationProbability.get()) {
-        this->template Deliver<MuoniumFormation<ATarget>>([&](auto&& r) { r.FormationProbability(fFormationProbability->GetNewDoubleValue(value)); });
+        this->template Deliver<MuoniumFormation<ATarget>>([&](auto&& r) {
+            r.FormationProbability(fFormationProbability->GetNewDoubleValue(value));
+        });
     } else if (command == fConversionProbability.get()) {
-        this->template Deliver<MuoniumFormation<ATarget>>([&](auto&& r) { r.ConversionProbability(fConversionProbability->GetNewDoubleValue(value)); });
+        this->template Deliver<MuoniumFormation<ATarget>>([&](auto&& r) {
+            r.ConversionProbability(fConversionProbability->GetNewDoubleValue(value));
+        });
     } else if (command == fMeanFreePath.get()) {
-        this->template Deliver<MuoniumTransport<ATarget>>([&](auto&& r) { r.MeanFreePath(fMeanFreePath->GetNewDoubleValue(value)); });
+        this->template Deliver<MuoniumTransport<ATarget>>([&](auto&& r) {
+            r.MeanFreePath(fMeanFreePath->GetNewDoubleValue(value));
+        });
     } else if (command == fManipulateAllSteps.get()) {
-        this->template Deliver<MuoniumTransport<ATarget>>([&](auto&& r) { r.ManipulateAllSteps(fManipulateAllSteps->GetNewBoolValue(value)); });
+        this->template Deliver<MuoniumTransport<ATarget>>([&](auto&& r) {
+            r.ManipulateAllSteps(fManipulateAllSteps->GetNewBoolValue(value));
+        });
     }
 }
 

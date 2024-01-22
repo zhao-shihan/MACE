@@ -9,8 +9,6 @@
 #include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
-#include "gsl/gsl"
-
 #include <memory>
 
 namespace MACE::inline Simulation::inline Physics {
