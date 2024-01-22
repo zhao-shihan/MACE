@@ -12,15 +12,14 @@
 
 namespace MACE::SimTarget::inline Messenger {
 
-GeometryMessenger::GeometryMessenger() :
-    G4UImessenger(),
-    fDetectorConstruction(nullptr),
-    fDirectory(),
-    fImportDescription(),
-    fExportDescription(),
-    fIxportDescription(),
-    fTargetDensity(),
-    fTargetTemperature() {
+DetectorMessenger::DetectorMessenger() :
+    SingletonMessenger{},
+    fDirectory{},
+    fImportDescription{},
+    fExportDescription{},
+    fIxportDescription{},
+    fTargetDensity{},
+    fTargetTemperature{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Detector/");
 
@@ -53,9 +52,9 @@ GeometryMessenger::GeometryMessenger() :
     fTargetTemperature->AvailableForStates(G4State_PreInit);
 }
 
-GeometryMessenger::~GeometryMessenger() = default;
+DetectorMessenger::~DetectorMessenger() = default;
 
-auto GeometryMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
+auto DetectorMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     using DescriptionInUse = DetectorConstruction::DescriptionInUse;
     using Detector::Description::DescriptionIO;
     if (command == fImportDescription.get()) {
@@ -65,9 +64,13 @@ auto GeometryMessenger::SetNewValue(G4UIcommand* command, G4String value) -> voi
     } else if (command == fIxportDescription.get()) {
         DescriptionIO::Ixport<DescriptionInUse>(std::string_view(value), "SimTarget: geometry description");
     } else if (command == fTargetDensity.get()) {
-        fDetectorConstruction->TargetDensity(fTargetDensity->GetNewDoubleValue(value));
+        Deliver<DetectorConstruction>([&](auto&& r) {
+            r.TargetDensity(fTargetDensity->GetNewDoubleValue(value));
+        });
     } else if (command == fTargetTemperature.get()) {
-        fDetectorConstruction->TargetTemperature(fTargetTemperature->GetNewDoubleValue(value));
+        Deliver<DetectorConstruction>([&](auto&& r) {
+            r.TargetTemperature(fTargetTemperature->GetNewDoubleValue(value));
+        });
     }
 }
 
