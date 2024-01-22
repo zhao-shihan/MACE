@@ -8,10 +8,9 @@
 #include "fmt/format.h"
 
 #include <cstdio>
-#include <functional>
-#include <optional>
 #include <stdexcept>
 #include <string>
+#include <memory>
 #include <typeindex>
 #include <typeinfo>
 #include <unordered_map>
@@ -28,14 +27,14 @@ public:
     static auto Instance() -> WeakSingletonPool&;
 
     template<WeakSingletonified AWeakSingleton>
-    [[nodiscard]] auto Find() -> std::optional<std::reference_wrapper<void*>>;
+    [[nodiscard]] auto Find() -> std::shared_ptr<void*>;
     template<WeakSingletonified AWeakSingleton>
     [[nodiscard]] auto Contains() const -> auto { return fInstanceMap.contains(typeid(AWeakSingleton)); }
     template<WeakSingletonified AWeakSingleton>
-    [[nodiscard]] auto Insert(gsl::not_null<AWeakSingleton*> instance) -> void*&;
+    [[nodiscard]] auto Insert(gsl::not_null<AWeakSingleton*> instance) ->  std::shared_ptr<void*>;
 
 private:
-    std::unordered_map<std::type_index, void*> fInstanceMap;
+    std::unordered_map<std::type_index, const std::weak_ptr<void*>> fInstanceMap;
 
     static WeakSingletonPool* fgInstance;
 };

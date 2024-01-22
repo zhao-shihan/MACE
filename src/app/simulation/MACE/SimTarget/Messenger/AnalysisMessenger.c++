@@ -33,7 +33,7 @@ AnalysisMessenger::AnalysisMessenger() :
 
 AnalysisMessenger::~AnalysisMessenger() = default;
 
-void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
+auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fResultPath.get()) {
         fAnalysis->ResultPath(std::string_view(value));
     } else if (command == fEnableYieldAnalysis.get()) {

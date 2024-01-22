@@ -31,6 +31,7 @@ using EMCSimHit = TupleModel<EMCHit,
                              Value<stdx::array3f, "x", "Hitting position (MC truth)">,
                              Value<stdx::array3f, "p", "Hitting momentum (MC truth)">,
                              SimHitVertexTruth>;
+
 using PMTSimHit = TupleModel<PMTHit,
                              Value<int, "EvtID", "MC Event ID">,
                              Value<int, "TrkID", "MC Track ID">>;

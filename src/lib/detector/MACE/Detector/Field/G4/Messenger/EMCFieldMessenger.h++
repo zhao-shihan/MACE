@@ -18,7 +18,7 @@ class EMCField;
 inline namespace Messenger {
 
 class EMCFieldMessenger final : public Env::Memory::Singleton<EMCFieldMessenger>,
-                                  public G4UImessenger {
+                                public G4UImessenger {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -26,9 +26,9 @@ private:
     ~EMCFieldMessenger();
 
 public:
-    void AssignTo(gsl::not_null<EMCField*> field) { fEMCField = field; }
+    auto Register(gsl::not_null<EMCField*> field) -> void { fEMCField = field; }
 
-    void SetNewValue(G4UIcommand* command, G4String value) override;
+    auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
     EMCField* fEMCField;

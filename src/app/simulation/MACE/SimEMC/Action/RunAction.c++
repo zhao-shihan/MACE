@@ -1,6 +1,7 @@
 #include "MACE/SimEMC/Action/RunAction.h++"
 #include "MACE/SimEMC/Analysis.h++"
 
+#include "G4AnalysisManager.hh"
 #include "G4Run.hh"
 
 namespace MACE::SimEMC::inline Action {

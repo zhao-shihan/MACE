@@ -1,8 +1,6 @@
 #pragma once
 
-#include "MACE/Env/Memory/Singleton.h++"
-#include "MACE/Simulation/Physics/Process/MuoniumFormation.h++"
-#include "MACE/Simulation/Physics/Process/MuoniumTransport.h++"
+#include "MACE/Extension/Geant4X/SingletonMessenger.h++"
 #include "MACE/Simulation/Physics/TargetForMuoniumPhysics.h++"
 
 #include "G4UIcmdWithABool.hh"
@@ -10,8 +8,6 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
-
-#include "gsl/gsl"
 
 #include <memory>
 
@@ -27,26 +23,19 @@ class MuoniumTransport;
 
 } // namespace Process
 
-inline namespace Messenger {
-
 template<TargetForMuoniumPhysics ATarget>
-class MuoniumPhysicsMessenger final : public Env::Memory::Singleton<MuoniumPhysicsMessenger<ATarget>>,
-                                      public G4UImessenger {
+class MuoniumPhysicsMessenger final : public Geant4X::SingletonMessenger<MuoniumPhysicsMessenger<ATarget>,
+                                                                         MuoniumFormation<ATarget>,
+                                                                         MuoniumTransport<ATarget>> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
     MuoniumPhysicsMessenger();
 
 public:
-    auto AssignTo(gsl::not_null<MuoniumFormation<ATarget>*> mf) -> void { fMuoniumFormation = mf; }
-    auto AssignTo(gsl::not_null<MuoniumTransport<ATarget>*> mt) -> void { fMuoniumTransport = mt; }
-
     auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
-    MuoniumFormation<ATarget>* fMuoniumFormation;
-    MuoniumTransport<ATarget>* fMuoniumTransport;
-
     std::unique_ptr<G4UIdirectory> fMuoniumPhysicsDirectory;
 
     std::unique_ptr<G4UIdirectory> fFormationProcessDirectory;
@@ -58,8 +47,6 @@ private:
     std::unique_ptr<G4UIcmdWithABool> fManipulateAllSteps;
 };
 
-} // namespace Messenger
-
 } // namespace MACE::inline Simulation::inline Physics
 
-#include "MACE/Simulation/Physics/Messenger/MuoniumPhysicsMessenger.inl"
+#include "MACE/Simulation/Physics/MuoniumPhysicsMessenger.inl"

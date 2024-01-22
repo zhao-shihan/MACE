@@ -12,13 +12,13 @@ class PrimaryGeneratorAction final : public Env::Memory::PassiveSingleton<Primar
 public:
     PrimaryGeneratorAction();
 
-    void TimeRMS(G4double val) { fTimeWidthRMS = val; }
-    void MuonsForEachG4Event(G4int n) { fMuonsForEachG4Event = n; }
+    auto TimeRMS(G4double val) -> void { fTimeWidthRMS = val; }
+    auto MuonsForEachG4Event(G4int n) -> void { fMuonsForEachG4Event = n; }
 
-    const auto& GetTimeWidthRMS() const { return fTimeWidthRMS; }
-    const auto& MuonsForEachG4Event() const { return fMuonsForEachG4Event; }
+    auto GetTimeWidthRMS() const -> auto { return fTimeWidthRMS; }
+    auto MuonsForEachG4Event() const -> auto { return fMuonsForEachG4Event; }
 
-    void GeneratePrimaries(G4Event* event) override;
+    auto GeneratePrimaries(G4Event* event) -> void override;
 
 private:
     Generator::SurfaceMuon fSurfaceMuonGenerator;

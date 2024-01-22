@@ -24,7 +24,7 @@ SurfaceMuon::SurfaceMuon() :
     fPositionRMS{5_mm},
     fTime{0},
     fPositionZ{-1.5_m} {
-    SurfaceMuonMessenger::Instance().AssignTo(this);
+    SurfaceMuonMessenger::Instance().Register(this);
 }
 
 void SurfaceMuon::GeneratePrimaryVertex(G4Event* event) {

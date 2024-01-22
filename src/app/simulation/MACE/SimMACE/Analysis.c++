@@ -1,9 +1,8 @@
+#include "MACE/Extension/MPIX/ParallelizePath.h++"
 #include "MACE/SimMACE/Analysis.h++"
 #include "MACE/SimMACE/Hit/CDCHit.h++"
 #include "MACE/SimMACE/Hit/EMCHit.h++"
 #include "MACE/SimMACE/Hit/MCPHit.h++"
-#include "MACE/SimMACE/Messenger/AnalysisMessenger.h++"
-#include "MACE/Extension/MPIX/ParallelizePath.h++"
 
 #include "TFile.h"
 
@@ -26,9 +25,8 @@ Analysis::Analysis() :
     fEMCSimHitOutput{},
     fEMCHitList{},
     fMCPHitList{},
-    fCDCHitList{} {
-    AnalysisMessenger::Instance().AssignTo(this);
-}
+    fCDCHitList{},
+    fMessengerRegister{this} {}
 
 void Analysis::RunBegin(G4int runID) {
     const auto fullFilePath{MPIX::ParallelizePath(fFilePath, ".root").generic_string()};

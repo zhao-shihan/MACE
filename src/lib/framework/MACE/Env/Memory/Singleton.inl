@@ -1,7 +1,7 @@
 namespace MACE::Env::Memory {
 
 template<typename ADerived>
-void** Singleton<ADerived>::fgInstance{};
+std::shared_ptr<void*> Singleton<ADerived>::fgInstance{};
 
 template<typename ADerived>
 Singleton<ADerived>::Singleton() :
@@ -25,9 +25,9 @@ MACE_ALWAYS_INLINE auto Singleton<ADerived>::Instance() -> ADerived& {
                                                "Trying to construct {} (environmental singleton) twice",
                                                typeid(ADerived).name())};
         }
-        fgInstance = &pool.Insert<ADerived>(SingletonInstantiator::New<ADerived>());
-    }
+        fgInstance = pool.Insert<ADerived>(SingletonInstantiator::New<ADerived>());
         [[fallthrough]];
+    }
     [[likely]] case Status::Available:
         return *static_cast<ADerived*>(*fgInstance);
     [[unlikely]] case Status::Expired:
@@ -39,20 +39,13 @@ MACE_ALWAYS_INLINE auto Singleton<ADerived>::Instance() -> ADerived& {
 }
 
 template<typename ADerived>
-MACE_ALWAYS_INLINE auto Singleton<ADerived>::Instantiated() -> bool {
-    const auto status{UpdateInstance()};
-    return status == Status::Available or
-           status == Status::Expired;
-}
-
-template<typename ADerived>
 MACE_ALWAYS_INLINE auto Singleton<ADerived>::UpdateInstance() -> Status {
     if (fgInstance == nullptr) [[unlikely]] {
-        if (const auto optionalNode{internal::SingletonPool::Instance().Find<ADerived>()};
-            optionalNode.has_value()) {
-            fgInstance = &optionalNode->get();
-        } else {
+        if (const auto sharedNode{internal::SingletonPool::Instance().Find<ADerived>()};
+            sharedNode == nullptr) {
             return Status::NotInstantiated;
+        } else {
+            fgInstance = sharedNode;
         }
     }
     if (*fgInstance == nullptr) {

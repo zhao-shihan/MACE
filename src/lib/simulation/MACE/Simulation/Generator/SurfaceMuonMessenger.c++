@@ -46,7 +46,7 @@ SurfaceMuonMessenger::SurfaceMuonMessenger() :
 
 SurfaceMuonMessenger::~SurfaceMuonMessenger() = default;
 
-void SurfaceMuonMessenger::SetNewValue(G4UIcommand* command, G4String value) {
+auto SurfaceMuonMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fMomentum.get()) {
         fSurfaceMuonGenerator->Momentum(fMomentum->GetNewDoubleValue(value));
     } else if (command == fMomentumRMS.get()) {

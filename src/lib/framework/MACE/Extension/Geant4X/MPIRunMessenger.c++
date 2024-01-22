@@ -30,7 +30,7 @@ MPIRunMessenger::MPIRunMessenger() :
 
 MPIRunMessenger::~MPIRunMessenger() = default;
 
-void MPIRunMessenger::SetNewValue(G4UIcommand* command, G4String value) {
+auto MPIRunMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fPrintProgressModulo.get()) {
         fMPIRunManager->PrintProgressModulo(fPrintProgressModulo->GetNewIntValue(value));
     } else if (command == fPrintRunSummary.get()) {

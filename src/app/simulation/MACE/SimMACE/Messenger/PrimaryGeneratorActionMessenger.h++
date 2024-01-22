@@ -30,9 +30,9 @@ private:
     ~PrimaryGeneratorActionMessenger();
 
 public:
-    void AssignTo(gsl::not_null<PrimaryGeneratorAction*> pga) { fPrimaryGeneratorAction = pga; }
+    auto Register(gsl::not_null<PrimaryGeneratorAction*> pga) -> void { fPrimaryGeneratorAction = pga; }
 
-    void SetNewValue(G4UIcommand* command, G4String value) override;
+    auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
     PrimaryGeneratorAction* fPrimaryGeneratorAction;
@@ -41,6 +41,6 @@ private:
     std::unique_ptr<G4UIcmdWithAnInteger> fMuonsForEachG4Event;
 };
 
-} // inline namespace Messenger
+} // namespace Messenger
 
 } // namespace MACE::SimMACE

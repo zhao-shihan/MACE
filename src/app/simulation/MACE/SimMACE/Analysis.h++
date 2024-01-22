@@ -6,6 +6,7 @@
 #include "MACE/SimMACE/Hit/CDCHit.h++"
 #include "MACE/SimMACE/Hit/EMCHit.h++"
 #include "MACE/SimMACE/Hit/MCPHit.h++"
+#include "MACE/SimMACE/Messenger/AnalysisMessenger.h++"
 
 #include "G4Types.hh"
 
@@ -23,20 +24,20 @@ class Analysis final : public Env::Memory::PassiveSingleton<Analysis> {
 public:
     Analysis();
 
-    void FilePath(std::filesystem::path path) { fFilePath = std::move(path); }
-    void FileOption(std::string option) { fFileOption = std::move(option); }
-    void CoincidenceWithCDC(bool val) { fCoincidenceWithMCP = val; }
-    void CoincidenceWithMCP(bool val) { fCoincidenceWithMCP = val; }
-    void CoincidenceWithEMC(bool val) { fCoincidenceWithEMC = val; }
+    auto FilePath(std::filesystem::path path) -> void { fFilePath = std::move(path); }
+    auto FileOption(std::string option) -> void { fFileOption = std::move(option); }
+    auto CoincidenceWithCDC(bool val) -> void { fCoincidenceWithMCP = val; }
+    auto CoincidenceWithMCP(bool val) -> void { fCoincidenceWithMCP = val; }
+    auto CoincidenceWithEMC(bool val) -> void { fCoincidenceWithEMC = val; }
 
-    void RunBegin(G4int runID);
+    auto RunBegin(G4int runID) -> void;
 
-    void SubmitEMCHC(const std::vector<gsl::owner<EMCHit*>>& hitList) { fEMCHitList = &hitList; }
-    void SubmitMCPHC(const std::vector<gsl::owner<MCPHit*>>& hitList) { fMCPHitList = &hitList; }
-    void SubmitSpectrometerHC(const std::vector<gsl::owner<CDCHit*>>& hitList) { fCDCHitList = &hitList; }
-    void EventEnd();
+    auto SubmitEMCHC(const std::vector<gsl::owner<EMCHit*>>& hitList) -> void { fEMCHitList = &hitList; }
+    auto SubmitMCPHC(const std::vector<gsl::owner<MCPHit*>>& hitList) -> void { fMCPHitList = &hitList; }
+    auto SubmitSpectrometerHC(const std::vector<gsl::owner<CDCHit*>>& hitList) -> void { fCDCHitList = &hitList; }
+    auto EventEnd() -> void;
 
-    void RunEnd(Option_t* option = nullptr);
+    auto RunEnd(Option_t* option = nullptr) -> void;
 
 private:
     std::filesystem::path fFilePath;
@@ -53,6 +54,8 @@ private:
     const std::vector<gsl::owner<EMCHit*>>* fEMCHitList;
     const std::vector<gsl::owner<MCPHit*>>* fMCPHitList;
     const std::vector<gsl::owner<CDCHit*>>* fCDCHitList;
+
+    AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };
 
 } // namespace MACE::SimMACE

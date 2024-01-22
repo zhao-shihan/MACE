@@ -26,7 +26,7 @@ EMCFieldMessenger::EMCFieldMessenger() :
 
 EMCFieldMessenger::~EMCFieldMessenger() = default;
 
-void EMCFieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
+auto EMCFieldMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fSpectrometerMagneticField.get()) {
         Description::EMCField::Instance().MagneticFluxDensity(fSpectrometerMagneticField->GetNewDoubleValue(value));
     }

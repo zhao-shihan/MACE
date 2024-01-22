@@ -1,13 +1,4 @@
-namespace MACE::inline Simulation::inline Physics {
-
-inline namespace Messenger {
-
-template<TargetForMuoniumPhysics ATarget>
-class MuoniumPhysicsMessenger;
-
-} // namespace Messenger
-
-inline namespace Process {
+namespace MACE::inline Simulation::inline Physics::inline Process {
 
 using namespace LiteralUnit::Length;
 
@@ -20,9 +11,9 @@ MuoniumTransport<ATarget>::MuoniumTransport() :
     fManipulateAllSteps{false},
     fParticleChange{},
     fTransportStatus{TransportStatus::Unknown},
-    fIsExitingTargetVolume{false} {
+    fIsExitingTargetVolume{false},
+    fMessengerRegister{this} {
     pParticleChange = &fParticleChange;
-    MuoniumPhysicsMessenger<ATarget>::Instance().AssignTo(this);
 }
 
 template<TargetForMuoniumPhysics ATarget>
@@ -213,6 +204,4 @@ auto MuoniumTransport<ATarget>::ProposeRandomFlight(const G4Track& track) -> voi
     fParticleChange.ProposeLocalTime(track.GetLocalTime() + flightTime);
 }
 
-} // namespace Process
-
-} // namespace MACE::inline Simulation::inline Physics
+} // namespace MACE::inline Simulation::inline Physics::inline Process

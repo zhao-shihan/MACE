@@ -50,8 +50,10 @@ option(MACE_USE_STATIC_G4 "Attempt to link Geant4 static libraries if available,
 
 # Advance
 # Options (ON/OFF)
+option(MACE_ENABLE_ASAN_IN_DEBUG_BUILD "Enable AddressSanitizer in debug build" OFF)
 option(MACE_ENABLE_IPO "Bulid MACE with interprocedural optimization" ON)
 option(MACE_ENABLE_MSVC_STD_CONFORMITY "Build MACE with standard-conformity (MSVC only: /permissive- /Zc:__cplusplus /Zc:inline)." ON)
+option(MACE_ENABLE_UBSAN_IN_DEBUG_BUILD "Enable UndefinedBehaviorSanitizer in debug build" ON)
 option(MACE_ENABLE_UNITY_BUILD "Build MACE with unity build technique." ON)
 option(MACE_SURPRESS_USELESS_COMPILE_WARNINGS "Surpress compile warnings raise from external dependencies." ON)
 option(MACE_USE_SHARED_MSVC_RT "Select the MSVC runtime library for use (MSVC only). ON for shared (.dll), OFF for static (.lib). If you run into link error related to MSVC runtime, you can try flip this." ON)

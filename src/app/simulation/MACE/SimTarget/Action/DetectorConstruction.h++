@@ -26,12 +26,12 @@ class DetectorConstruction final : public Env::Memory::PassiveSingleton<Detector
 public:
     DetectorConstruction();
 
-    G4VPhysicalVolume* Construct() override;
+    auto Construct() -> G4VPhysicalVolume* override;
 
-    void TargetDensity(G4double val) { fTargetDensity = val; }
-    void TargetTemperature(G4double val) { fTargetTemperature = val; }
+    auto TargetDensity(G4double val) -> void { fTargetDensity = val; }
+    auto TargetTemperature(G4double val) -> void { fTargetTemperature = val; }
 
-    void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlap = checkOverlaps; }
+    auto SetCheckOverlaps(G4bool checkOverlaps) -> void { fCheckOverlap = checkOverlaps; }
 
 public:
     using DescriptionInUse = std::tuple<Detector::Description::BeamDegrader,

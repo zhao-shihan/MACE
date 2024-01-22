@@ -1,13 +1,4 @@
-namespace MACE::inline Simulation::inline Physics {
-
-inline namespace Messenger {
-
-template<TargetForMuoniumPhysics ATarget>
-class MuoniumPhysicsMessenger;
-
-} // namespace Messenger
-
-inline namespace Process {
+namespace MACE::inline Simulation::inline Physics::inline Process {
 
 template<TargetForMuoniumPhysics ATarget>
 MuoniumFormation<ATarget>::MuoniumFormation() :
@@ -19,9 +10,9 @@ MuoniumFormation<ATarget>::MuoniumFormation() :
     fRandEng{G4Random::getTheEngine()},
     fFormationProbability{0.655},
     fConversionProbability{0},
-    fParticleChange{} {
+    fParticleChange{},
+    fMessengerRegister{this} {
     pParticleChange = &fParticleChange;
-    MuoniumPhysicsMessenger<ATarget>::Instance().AssignTo(this);
 }
 
 template<TargetForMuoniumPhysics ATarget>
@@ -75,6 +66,4 @@ auto MuoniumFormation<ATarget>::GetMeanLifeTime(const G4Track& track, G4ForceCon
     }
 }
 
-} // namespace Process
-
-} // namespace MACE::inline Simulation::inline Physics
+} // namespace MACE::inline Simulation::inline Physics::inline Process

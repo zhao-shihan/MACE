@@ -46,7 +46,7 @@ DetectorConstruction::DetectorConstruction() :
     // Detector::Description::DescriptionIO::Import<DescriptionInUse>(
     // #include "MACE/SimEMC/DefaultGeometry.inlyaml"
     // );
-    // GeometryMessenger::Instance().AssignTo(this);
+    // GeometryMessenger::Instance().Register(this);
 }
 
 auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {

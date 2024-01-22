@@ -1,11 +1,10 @@
-namespace MACE::inline Simulation::inline Physics::inline Messenger {
+namespace MACE::inline Simulation::inline Physics {
 
 template<TargetForMuoniumPhysics ATarget>
 MuoniumPhysicsMessenger<ATarget>::MuoniumPhysicsMessenger() :
-    Env::Memory::Singleton<MuoniumPhysicsMessenger<ATarget>>{},
-    G4UImessenger{},
-    fMuoniumFormation{},
-    fMuoniumTransport{},
+    Geant4X::SingletonMessenger<MuoniumPhysicsMessenger<ATarget>,
+                                MuoniumFormation<ATarget>,
+                                MuoniumTransport<ATarget>>{},
     fMuoniumPhysicsDirectory{},
     fFormationProcessDirectory{},
     fFormationProbability{},
@@ -47,16 +46,24 @@ MuoniumPhysicsMessenger<ATarget>::MuoniumPhysicsMessenger() :
 }
 
 template<TargetForMuoniumPhysics ATarget>
-void MuoniumPhysicsMessenger<ATarget>::SetNewValue(G4UIcommand* command, G4String value) {
+auto MuoniumPhysicsMessenger<ATarget>::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fFormationProbability.get()) {
-        fMuoniumFormation->FormationProbability(fFormationProbability->GetNewDoubleValue(value));
+        this->template Deliver<MuoniumFormation<ATarget>>([&](auto&& r) {
+            r.FormationProbability(fFormationProbability->GetNewDoubleValue(value));
+        });
     } else if (command == fConversionProbability.get()) {
-        fMuoniumFormation->ConversionProbability(fConversionProbability->GetNewDoubleValue(value));
+        this->template Deliver<MuoniumFormation<ATarget>>([&](auto&& r) {
+            r.ConversionProbability(fConversionProbability->GetNewDoubleValue(value));
+        });
     } else if (command == fMeanFreePath.get()) {
-        fMuoniumTransport->MeanFreePath(fMeanFreePath->GetNewDoubleValue(value));
+        this->template Deliver<MuoniumTransport<ATarget>>([&](auto&& r) {
+            r.MeanFreePath(fMeanFreePath->GetNewDoubleValue(value));
+        });
     } else if (command == fManipulateAllSteps.get()) {
-        fMuoniumTransport->ManipulateAllSteps(fManipulateAllSteps->GetNewBoolValue(value));
+        this->template Deliver<MuoniumTransport<ATarget>>([&](auto&& r) {
+            r.ManipulateAllSteps(fManipulateAllSteps->GetNewBoolValue(value));
+        });
     }
 }
 
-} // namespace MACE::inline Simulation::inline Physics::inline Messenger
+} // namespace MACE::inline Simulation::inline Physics

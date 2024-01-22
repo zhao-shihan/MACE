@@ -18,7 +18,7 @@ class SpectrometerField;
 inline namespace Messenger {
 
 class SpectrometerFieldMessenger final : public Env::Memory::Singleton<SpectrometerFieldMessenger>,
-                                     public G4UImessenger {
+                                         public G4UImessenger {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -26,9 +26,9 @@ private:
     ~SpectrometerFieldMessenger();
 
 public:
-    void AssignTo(gsl::not_null<SpectrometerField*> field) { fSpectrometerField = field; }
+    auto Register(gsl::not_null<SpectrometerField*> field) -> void { fSpectrometerField = field; }
 
-    void SetNewValue(G4UIcommand* command, G4String value) override;
+    auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
     SpectrometerField* fSpectrometerField;

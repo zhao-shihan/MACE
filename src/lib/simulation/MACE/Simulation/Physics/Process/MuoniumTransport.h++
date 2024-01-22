@@ -4,7 +4,7 @@
 #include "MACE/Math/Random/Distribution/Exponential.h++"
 #include "MACE/Math/Random/Distribution/Gaussian3DDiagnoal.h++"
 #include "MACE/Math/Random/Generator/Xoshiro256Plus.h++"
-#include "MACE/Simulation/Physics/Messenger/MuoniumPhysicsMessenger.h++"
+#include "MACE/Simulation/Physics/MuoniumPhysicsMessenger.h++"
 #include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
 #include "MACE/Simulation/Physics/Particle/Muonium.h++"
 #include "MACE/Simulation/Physics/TargetForMuoniumPhysics.h++"
@@ -55,8 +55,10 @@ private:
     G4ParticleChange fParticleChange;
     TransportStatus fTransportStatus;
     G4bool fIsExitingTargetVolume;
+
+    typename MuoniumPhysicsMessenger<ATarget>::template Register<MuoniumTransport<ATarget>> fMessengerRegister;
 };
 
-} // namespace MACE::inline Simulation::inline Physics::inline Process
+} // namespace Process
 
 #include "MACE/Simulation/Physics/Process/MuoniumTransport.inl"

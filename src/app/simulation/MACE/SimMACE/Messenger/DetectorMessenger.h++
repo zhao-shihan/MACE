@@ -33,9 +33,9 @@ private:
     ~GeometryMessenger();
 
 public:
-    void AssignTo(gsl::not_null<DetectorConstruction*> dc) { fDetectorConstruction = dc; }
+    auto Register(gsl::not_null<DetectorConstruction*> dc) -> void { fDetectorConstruction = dc; }
 
-    void SetNewValue(G4UIcommand* command, G4String value) override;
+    auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
     DetectorConstruction* fDetectorConstruction;
@@ -46,6 +46,6 @@ private:
     std::unique_ptr<G4UIcmdWithAString> fIxportDescription;
 };
 
-} // inline namespace Messenger
+} // namespace Messenger
 
 } // namespace MACE::SimMACE

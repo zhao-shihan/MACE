@@ -1,11 +1,13 @@
+namespace MACE::Math {
+
 template<int N>
     requires(N >= 2)
 constexpr RAMBO<N>::RAMBO(double eCM, std::array<double, N> mass) :
     fECM{eCM},
     fMass{std::move(mass)},
-    fAllMassAreTiny{std::ranges::all_of(fMass, [&](auto m) { return Math::Pow<2>(m / fECM) < fgTiny; })} {
-    if (eCM - std::reduce(fMass.cbegin(), fMass.cend()) <= 0) {
-        throw std::domain_error{"No enough energy for generate"};
+    fAllMassAreTiny{std::ranges::all_of(fMass, [&](auto m) { return Pow<2>(m / fECM) < fgTiny; })} {
+    if (eCM <= std::reduce(fMass.cbegin(), fMass.cend())) {
+        throw std::domain_error{"No enough energy for generating"};
     }
 }
 
@@ -19,7 +21,7 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
 
         for (int i = 0; i < N; i++) {
             const auto c{2 * u[4 * i] - 1};
-            const auto s{std::sqrt(1 - Math::Pow<2>(c))};
+            const auto s{std::sqrt(1 - Pow<2>(c))};
             const auto f{CLHEP::twopi * u[4 * i + 1]};
             const auto r12{u[4 * i + 2] * u[4 * i + 3]};
             const auto En{r12 > 0 ? -std::log(r12) : 747}; // -log(1e-323)
@@ -31,7 +33,7 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
                 R[j] += p[i][j];
             }
         }
-        const auto Rmass{std::sqrt(Math::Pow<2>(R[0]) - Math::Hypot2(R[1], R[2], R[3]))};
+        const auto Rmass{std::sqrt(Pow<2>(R[0]) - Hypot2(R[1], R[2], R[3]))};
         for (auto j{0}; j < 4; j++) {
             R[j] /= -Rmass;
         }
@@ -49,7 +51,7 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
     }()};
 
     const auto State{
-        [&p] {
+        [&p = p] {
             std::array<CLHEP::HepLorentzVector, N> state;
             std::ranges::transform(p, state.begin(),
                                    [](const auto& q) -> CLHEP::HepLorentzVector {
@@ -79,7 +81,8 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
         if (fa * fb > 0) { return 0; }
 
         // Start search
-        for (auto iter{1ll}; iter < std::max(1000ll, std::llround(1 / std::sqrt(tol))); iter++) {
+        const auto maxIter{std::max(1000ll, std::llround(1 / std::sqrt(tol)))};
+        for (auto iter{0ll}; iter < maxIter; iter++) {
             if ((fb > 0 and fc > 0) or (fb < 0 and fc < 0)) {
                 c = a;
                 fc = fa;
@@ -95,7 +98,7 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
             }
             const auto tol1{2 * realtiny * std23::abs(b) + tol / 2};
             const auto xm{(c - b) / 2};
-            if (std23::abs(xm) <= tol1 or fb == 0) return b;
+            if (std23::abs(xm) <= tol1 or fb == 0) { return b; }
             if (std23::abs(e) >= tol1 and std23::abs(fa) > std23::abs(fb)) {
                 const auto s{fb / fa};
                 if (a == c) {
@@ -133,17 +136,17 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
         return 0;
     }};
     const auto xi{ZBrent(
-        [&](double xi) {
+        [&, &p = p](double xi) {
             double retval{};
             for (auto i{0}; i < N; i++) {
-                retval += Math::Hypot(fMass[i], xi * p[i][0]);
+                retval += Hypot(fMass[i], xi * p[i][0]);
             }
             return retval;
         },
         fECM, 0, 1, 1e-10)};
     // rescale all the momenta
     for (auto iMom{0}; iMom < N; iMom++) {
-        p[iMom][0] = Math::Hypot(fMass[iMom], xi * p[iMom][0]);
+        p[iMom][0] = Hypot(fMass[iMom], xi * p[iMom][0]);
         p[iMom][1] *= xi;
         p[iMom][2] *= xi;
         p[iMom][3] *= xi;
@@ -153,7 +156,7 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
     double prodpnormdivE{1};
     double sumpnormsquadivE{};
     for (auto iMom{0}; iMom < N; iMom++) {
-        auto pnormsqua{Math::Hypot2(p[iMom][1], p[iMom][2], p[iMom][3])};
+        auto pnormsqua{Hypot2(p[iMom][1], p[iMom][2], p[iMom][3])};
         auto pnorm{std::sqrt(pnormsqua)};
         sumpnorm += pnorm;
         prodpnormdivE *= pnorm / p[iMom][0];
@@ -161,7 +164,7 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
     }
     // There's a typo in eq. 4.11 of the Rambo paper by Kleiss,
     // Stirling and Ellis, the Ecm below is not present there
-    weight *= Math::Pow<2 * N - 3>(sumpnorm / fECM) * prodpnormdivE * fECM / sumpnormsquadivE;
+    weight *= Pow<2 * N - 3>(sumpnorm / fECM) * prodpnormdivE * fECM / sumpnormsquadivE;
 
     return {weight, State()};
 }
@@ -191,3 +194,5 @@ auto RAMBO<N>::operator()(CLHEP::HepRandomEngine& rng, const CLHEP::Hep3Vector& 
     rng.flatArray(4 * N, u.data());
     return (*this)(u, beta);
 }
+
+} // namespace MACE::Math

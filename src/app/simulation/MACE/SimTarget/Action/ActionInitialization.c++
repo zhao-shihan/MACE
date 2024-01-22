@@ -7,7 +7,7 @@
 
 namespace MACE::SimTarget::inline Action {
 
-void ActionInitialization::Build() const {
+auto ActionInitialization::Build() const -> void {
     SetUserAction(new PrimaryGeneratorAction);
     SetUserAction(new SteppingAction);
     SetUserAction(new TrackingAction);

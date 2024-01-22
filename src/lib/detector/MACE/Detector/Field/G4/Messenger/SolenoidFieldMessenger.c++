@@ -34,7 +34,7 @@ SolenoidFieldMessenger::SolenoidFieldMessenger() :
 
 SolenoidFieldMessenger::~SolenoidFieldMessenger() = default;
 
-void SolenoidFieldMessenger::SetNewValue(G4UIcommand* command, G4String value) {
+auto SolenoidFieldMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fSolenoidMagneticField.get()) {
         Description::Solenoid::Instance().MagneticFluxDensity(fSolenoidMagneticField->GetNewDoubleValue(value));
     }

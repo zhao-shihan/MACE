@@ -1,10 +1,8 @@
 #pragma once
 
-#include "MACE/Env/Memory/Singleton.h++"
+#include "MACE/Extension/Geant4X/SingletonMessenger.h++"
 
 #include "G4UImessenger.hh"
-
-#include "gsl/gsl"
 
 #include <memory>
 
@@ -19,8 +17,8 @@ class Analysis;
 
 inline namespace Messenger {
 
-class AnalysisMessenger final : public Env::Memory::Singleton<AnalysisMessenger>,
-                                public G4UImessenger {
+class AnalysisMessenger final : public Geant4X::SingletonMessenger<AnalysisMessenger,
+                                                                   Analysis> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -28,13 +26,9 @@ private:
     ~AnalysisMessenger();
 
 public:
-    void AssignTo(gsl::not_null<Analysis*> ana) { fAnalysis = ana; }
-
-    void SetNewValue(G4UIcommand* command, G4String value) override;
+    auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
-    Analysis* fAnalysis;
-
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithCDC;
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithMCP;
@@ -43,6 +37,6 @@ private:
     std::unique_ptr<G4UIcmdWithAString> fFileOption;
 };
 
-} // inline namespace Messenger
+} // namespace Messenger
 
 } // namespace MACE::SimMACE

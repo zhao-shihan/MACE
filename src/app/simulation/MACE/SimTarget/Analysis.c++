@@ -1,9 +1,9 @@
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Env/MPIEnv.h++"
+#include "MACE/Extension/MPIX/ParallelizePath.h++"
 #include "MACE/SimTarget/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimTarget/Analysis.h++"
 #include "MACE/SimTarget/Messenger/AnalysisMessenger.h++"
-#include "MACE/Extension/MPIX/ParallelizePath.h++"
 
 #include "TFile.h"
 
@@ -20,7 +20,7 @@ Analysis::Analysis() :
     fResultFile{},
     fYieldFile{},
     fDataFactory{} {
-    AnalysisMessenger::Instance().AssignTo(this);
+    AnalysisMessenger::Instance().Register(this);
     fDataFactory.TreeNamePrefixFormat("Run{}_");
 }
 

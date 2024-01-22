@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Simulation/Physics/Messenger/MuoniumPhysicsMessenger.h++"
+#include "MACE/Simulation/Physics/MuoniumPhysicsMessenger.h++"
 #include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
 #include "MACE/Simulation/Physics/Particle/Muonium.h++"
 #include "MACE/Simulation/Physics/TargetForMuoniumPhysics.h++"
@@ -44,6 +44,8 @@ private:
     G4double fConversionProbability;
 
     G4ParticleChange fParticleChange;
+
+    typename MuoniumPhysicsMessenger<ATarget>::template Register<MuoniumFormation<ATarget>> fMessengerRegister;
 };
 
 } // namespace MACE::inline Simulation::inline Physics::inline Process

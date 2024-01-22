@@ -27,10 +27,10 @@ DetectorConstruction::DetectorConstruction() :
     Detector::Description::DescriptionIO::Import<DescriptionInUse>(
 #include "MACE/SimTarget/DefaultGeometry.inlyaml"
     );
-    GeometryMessenger::Instance().AssignTo(this);
+    GeometryMessenger::Instance().Register(this);
 }
 
-G4VPhysicalVolume* DetectorConstruction::Construct() {
+auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     using namespace MACE::Detector::Geometry::Fast;
 
     // AcceleratorField is target's mother by default, modified it to adapt global frame
