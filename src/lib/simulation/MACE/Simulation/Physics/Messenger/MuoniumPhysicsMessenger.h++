@@ -15,7 +15,7 @@
 
 #include <memory>
 
-namespace MACE::inline Simulation::Physics {
+namespace MACE::inline Simulation::inline Physics {
 
 inline namespace Process {
 
@@ -25,23 +25,23 @@ class MuoniumFormation;
 template<TargetForMuoniumPhysics ATarget>
 class MuoniumTransport;
 
-} // inline namespace Process
+} // namespace Process
 
 inline namespace Messenger {
 
 template<TargetForMuoniumPhysics ATarget>
 class MuoniumPhysicsMessenger final : public Env::Memory::Singleton<MuoniumPhysicsMessenger<ATarget>>,
                                       public G4UImessenger {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     MuoniumPhysicsMessenger();
 
 public:
-    void AssignTo(gsl::not_null<MuoniumFormation<ATarget>*> mf) { fMuoniumFormation = mf; }
-    void AssignTo(gsl::not_null<MuoniumTransport<ATarget>*> mt) { fMuoniumTransport = mt; }
+    auto AssignTo(gsl::not_null<MuoniumFormation<ATarget>*> mf) -> void { fMuoniumFormation = mf; }
+    auto AssignTo(gsl::not_null<MuoniumTransport<ATarget>*> mt) -> void { fMuoniumTransport = mt; }
 
-    void SetNewValue(G4UIcommand* command, G4String value) override;
+    auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
     MuoniumFormation<ATarget>* fMuoniumFormation;
@@ -58,8 +58,8 @@ private:
     std::unique_ptr<G4UIcmdWithABool> fManipulateAllSteps;
 };
 
-} // inline namespace Messenger
+} // namespace Messenger
 
-} // namespace MACE::inline Simulation::Physics
+} // namespace MACE::inline Simulation::inline Physics
 
 #include "MACE/Simulation/Physics/Messenger/MuoniumPhysicsMessenger.inl"

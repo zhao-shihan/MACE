@@ -2,7 +2,7 @@
 
 #include "MACE/Concept/ROOTFundamental.h++"
 #include "MACE/DataModel/BranchSocket2/BranchSocketBase2.h++"
-#include "MACE/Utility/ROOTUtil/LeafTypeCode.h++"
+#include "MACE/Extension/ROOTX/LeafTypeCode.h++"
 #include "MACE/Utility/VectorAssign.h++"
 
 #include "RtypesCore.h"

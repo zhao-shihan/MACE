@@ -231,7 +231,11 @@ private:
 };
 
 /// @brief A short string (15 characters) on the stack. Size 16 bytes.
-using ShortString = FixedString<15>;
+using String15 = FixedString<15>;
+/// @brief A short string (31 characters) on the stack. Size 32 bytes.
+using String31 = FixedString<31>;
+/// @brief A short string (63 characters) on the stack. Size 64 bytes.
+using String63 = FixedString<63>;
 
 } // namespace MACE::inline Utility
 

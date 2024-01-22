@@ -36,11 +36,10 @@ class WallTimeStopwatch {
 public:
     WallTimeStopwatch() noexcept;
 
-    void Reset() noexcept { QueryPerformanceCounter(&fT0); }
-    ATime SecondsElapsed() const noexcept;
-    auto MillisecondsElapsed() const noexcept { return SecondsElapsed() * 1'000; }
-    auto MicrosecondsElapsed() const noexcept { return SecondsElapsed() * 1'000'000; }
-    auto NanosecondsElapsed() const noexcept { return SecondsElapsed() * 1'000'000'000; }
+    auto SecondsElapsed() const noexcept -> ATime;
+    auto MillisecondsElapsed() const noexcept -> auto { return SecondsElapsed() * 1'000; }
+    auto MicrosecondsElapsed() const noexcept -> auto { return SecondsElapsed() * 1'000'000; }
+    auto NanosecondsElapsed() const noexcept -> auto { return SecondsElapsed() * 1'000'000'000; }
 
 private:
     LARGE_INTEGER fFrequency;

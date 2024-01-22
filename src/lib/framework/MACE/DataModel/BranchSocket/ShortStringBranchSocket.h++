@@ -9,9 +9,9 @@
 
 namespace MACE::DataModel::inline BranchSocket {
 
-class ShortStringBranchSocket final : public BranchSocketBase<ShortStringBranchSocket, ShortString> {
+class ShortStringBranchSocket final : public BranchSocketBase<ShortStringBranchSocket, String15> {
 public:
-    ShortStringBranchSocket(const std::string& branchName, const ShortString& defaultString);
+    ShortStringBranchSocket(const std::string& branchName, const String15& defaultString);
 
     const auto& Value() const { return fString; }
     void Value(auto&& string) { fString = std::forward<decltype(string)>(string); }
@@ -21,7 +21,7 @@ public:
 
 private:
     const std::string fLeafName;
-    ShortString fString;
+    String15 fString;
 };
 
 } // namespace MACE::DataModel::inline BranchSocket

@@ -4,7 +4,7 @@
 #include "MACE/Math/Random/UniformPseudoRandomBitGeneratorBase.h++"
 #include "MACE/Utility/InlineMacro.h++"
 
-#include <cinttypes>
+#include <cstdint>
 #include <istream>
 #include <limits>
 #include <ostream>

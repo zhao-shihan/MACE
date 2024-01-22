@@ -9,11 +9,15 @@
 #include "MACE/Detector/Geometry/Fast/CDCSenseLayer.h++"
 #include "MACE/Detector/Geometry/Fast/CDCSenseWire.h++"
 #include "MACE/Detector/Geometry/Fast/CDCSuperLayer.h++"
-#include "MACE/Detector/Geometry/Fast/EMC.h++"
+#include "MACE/Detector/Geometry/Fast/EMCCrystal.h++"
 #include "MACE/Detector/Geometry/Fast/EMCField.h++"
+#include "MACE/Detector/Geometry/Fast/EMCPMTCathode.h++"
+#include "MACE/Detector/Geometry/Fast/EMCPMTCoupler.h++"
+#include "MACE/Detector/Geometry/Fast/EMCPMTWindow.h++"
 #include "MACE/Detector/Geometry/Fast/EMCShield.h++"
+#include "MACE/Detector/Geometry/Fast/Filter.h++"
 #include "MACE/Detector/Geometry/Fast/MCP.h++"
-#include "MACE/Detector/Geometry/Fast/MultiplateCollimator.h++"
+#include "MACE/Detector/Geometry/Fast/ShieldingWall.h++"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1.h++"
 #include "MACE/Detector/Geometry/Fast/SolenoidB1Field.h++"
 #include "MACE/Detector/Geometry/Fast/SolenoidB2.h++"
@@ -66,10 +70,15 @@ int main(int argc, char* argv[]) {
     auto& solenoidS3Field = fWorld->NewDaughter<SolenoidS3Field>(fCheckOverlap);
     auto& spectrometerField = fWorld->NewDaughter<SpectrometerField>(fCheckOverlap);
     auto& spectrometerShield = fWorld->NewDaughter<SpectrometerShield>(fCheckOverlap);
+    auto& shieldingWall = fWorld->NewDaughter<ShieldingWall>(fCheckOverlap);
 
     // 2
 
-    auto& emc = emcField.NewDaughter<EMC>(fCheckOverlap);
+    auto& emcCrystal = emcField.NewDaughter<EMCCrystal>(fCheckOverlap);
+    auto& emcPMTCoupler = emcField.NewDaughter<EMCPMTCoupler>(fCheckOverlap);
+    auto& emcPMTWindow = emcField.NewDaughter<EMCPMTWindow>(fCheckOverlap);
+    auto& emcPMTCathode = emcField.NewDaughter<EMCPMTCathode>(fCheckOverlap);
+
     auto& mcp = emcField.NewDaughter<MCP>(fCheckOverlap);
 
     auto& solenoidB1 = solenoidB1Field.NewDaughter<SolenoidB1>(fCheckOverlap);
@@ -78,7 +87,7 @@ int main(int argc, char* argv[]) {
 
     auto& solenoidB2 = solenoidB2Field.NewDaughter<SolenoidB2>(fCheckOverlap);
 
-    auto& multiplateCollimator = solenoidS2Field.NewDaughter<MultiplateCollimator>(fCheckOverlap);
+    auto& filter = solenoidS2Field.NewDaughter<Filter>(fCheckOverlap);
     auto& solenoidS2 = solenoidS2Field.NewDaughter<SolenoidS2>(fCheckOverlap);
 
     auto& acceleratorField = spectrometerField.NewDaughter<AcceleratorField>(fCheckOverlap);
@@ -152,13 +161,13 @@ int main(int argc, char* argv[]) {
         solenoidB2.RegisterMaterial(copper);
         solenoidS2.RegisterMaterial(copper);
         solenoidS3.RegisterMaterial(copper);
+        filter.RegisterMaterial(copper);
 
-        const auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
-        emc.RegisterMaterial(csI);
+        // const auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
+        // emc.RegisterMaterial(csI);
 
         const auto iron = nist->FindOrBuildMaterial("G4_Fe");
         spectrometerMagnet.RegisterMaterial(iron);
-        multiplateCollimator.RegisterMaterial(iron);
 
         const auto lead = nist->FindOrBuildMaterial("G4_Pb");
         emcShield.RegisterMaterial(lead);
@@ -213,9 +222,13 @@ int main(int argc, char* argv[]) {
     using MACE::Detector::Geometry::GeometryBase;
     for (auto&& entity : std::initializer_list<std::reference_wrapper<const GeometryBase>>{
              emcShield,
-             emc,
+             emcCrystal,
+             emcPMTCoupler,
+             emcPMTWindow,
+             emcPMTCathode,
              spectrometerMagnet,
              spectrometerShield,
+             shieldingWall,
              solenoidB1,
              solenoidB2,
              solenoidS1,

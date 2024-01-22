@@ -12,7 +12,7 @@
 
 namespace MACE::DataModel::inline Column {
 
-template<class AData, gsl::index AUniqueID, Concept::ROOTFundamental T, typename U>
+template<typename AData, gsl::index AUniqueID, Concept::ROOTFundamental T, typename U>
     requires(std::integral<T> and std::integral<U>) or
             (std::floating_point<T> and std::floating_point<U>)
 class FundamentalColumn final : public ColumnBase<FundamentalColumn<AData, AUniqueID, T, U>,
@@ -39,7 +39,7 @@ private:
 };
 
 #define MACE_DATA_MODEL_ENTRY_FUNDAMENTAL_ENTRY_ALIAS(Type)                    \
-    template<class AData, gsl::index AUniqueID, typename T>                  \
+    template<typename AData, gsl::index AUniqueID, typename T>                  \
         requires(std::integral<Type##_t> and std::integral<T>) or              \
                     (std::floating_point<Type##_t> and std::floating_point<T>) \
     using Type##Column = FundamentalColumn<AData, AUniqueID, Type##_t, T>;

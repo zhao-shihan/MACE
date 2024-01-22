@@ -20,7 +20,7 @@ namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
-template<Concept::NumericVector2Any T, template<class> class AUniformDisk>
+template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
 class BasicUniformDiskParameter final : public DistributionParameterBase<BasicUniformDiskParameter<T, AUniformDisk>,
                                                                          AUniformDisk<T>> {
 private:
@@ -126,7 +126,7 @@ public:
     MACE_STRONG_INLINE constexpr T operator()(UniformRandomBitGenerator auto& g, const UniformCompactDiskParameter<T>& p);
 };
 
-template<typename VT, class T>
+template<typename VT, typename T>
 UniformCompactDisk(VT, T) -> UniformCompactDisk<std::enable_if_t<std::same_as<VT, VectorValueType<std::decay_t<T>>>, std::decay_t<T>>>;
 template<typename T, typename U, typename V>
 UniformCompactDisk(T, U, V) -> UniformCompactDisk<std::array<std::common_type_t<T, U, V>, 2>>;
@@ -148,7 +148,7 @@ public:
     MACE_STRONG_INLINE constexpr T operator()(UniformRandomBitGenerator auto& g, const UniformDiskParameter<T>& p);
 };
 
-template<typename VT, class T>
+template<typename VT, typename T>
 UniformDisk(VT, T) -> UniformDisk<std::enable_if_t<std::same_as<VT, VectorValueType<std::decay_t<T>>>, std::decay_t<T>>>;
 template<typename T, typename U, typename V>
 UniformDisk(T, U, V) -> UniformDisk<std::array<std::common_type_t<T, U, V>, 2>>;

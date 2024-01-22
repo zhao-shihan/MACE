@@ -9,34 +9,31 @@
 #include "G4ProductionCuts.hh"
 #include "G4SDManager.hh"
 #include "G4Step.hh"
+#include "G4ThreeVector.hh"
+#include "G4TwoVector.hh"
+#include "G4VProcess.hh"
 
 #include "gsl/gsl"
 
 #include <algorithm>
+#include <bit>
+#include <cstdint>
 #include <numeric>
+#include <string_view>
 
 namespace MACE::SimMACE::inline SD {
 
 CDCSD::CDCSD(const G4String& sdName) :
-    NonMoveableBase(),
-    G4VSensitiveDetector(sdName),
-    fEventID(-1),
-    fHitsCollection(nullptr),
-    fMeanDriftVelocity(),
-    fDeadTime(),
-    fCellEntryPoints(),
-    fCellMap(),
-    fCellSignalTimesAndHits() {
+    NonMoveableBase{},
+    G4VSensitiveDetector{sdName},
+    fEventID{-1},
+    fHitsCollection{},
+    fMeanDriftVelocity{},
+    fDeadTime{},
+    fCellMap{},
+    fCellEntryPoint{},
+    fCellSignalTimesAndHit{} {
     collectionName.emplace_back(sdName + "HC");
-
-    const auto& cellMap = Detector::Description::CDC::Instance().CellMap();
-    fCellEntryPoints.resize(cellMap.size());
-    fCellMap.reserve(cellMap.size());
-    for (auto&& cell : cellMap) {
-        fCellMap.emplace_back(VectorCast<G4TwoVector>(cell.position),
-                              VectorCast<G4ThreeVector>(cell.direction));
-    }
-    fCellSignalTimesAndHits.resize(cellMap.size());
 }
 
 void CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
@@ -47,6 +44,7 @@ void CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
     const auto& cdc = Detector::Description::CDC::Instance();
     fMeanDriftVelocity = cdc.MeanDriftVelocity();
     fDeadTime = cdc.DeadTime();
+    fCellMap = &cdc.CellMap();
 }
 
 G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
@@ -64,58 +62,64 @@ G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
 
     const auto SaveHit =
         [&](const G4StepPoint& entryPoint, const G4StepPoint& exitPoint) {
-            const auto time = Math::MidPoint(entryPoint.GetGlobalTime(), exitPoint.GetGlobalTime());
-            const auto position = Math::MidPoint(entryPoint.GetPosition(), exitPoint.GetPosition());
-            const auto energy = Math::MidPoint(entryPoint.GetKineticEnergy(), exitPoint.GetKineticEnergy());
-            const auto momentum = Math::MidPoint(entryPoint.GetMomentum(), exitPoint.GetMomentum());
+            const auto position{Math::MidPoint(entryPoint.GetPosition(), exitPoint.GetPosition())};
+            const auto energy{Math::MidPoint(entryPoint.GetKineticEnergy(), exitPoint.GetKineticEnergy())};
+            const auto momentum{Math::MidPoint(entryPoint.GetMomentum(), exitPoint.GetMomentum())};
             // retrive wire position
-            const auto& [xWire, tWire] = fCellMap[cellID];
+            const auto& cellInfo = fCellMap->at(cellID);
+            const auto xWire{VectorCast<G4TwoVector>(cellInfo.position)};
+            const auto tWire{VectorCast<G4ThreeVector>(cellInfo.direction)};
             // calculate drift distance
-            const auto commonNormal = tWire.cross(momentum);
-            const auto driftDistance = std::abs((position - xWire).dot(commonNormal)) / commonNormal.mag();
+            const auto commonNormal{tWire.cross(momentum)};
+            const auto driftDistance{std::abs((position - xWire).dot(commonNormal)) / commonNormal.mag()};
+            const auto driftTime{driftDistance / fMeanDriftVelocity};
+            const auto signalTime{Math::MidPoint(entryPoint.GetGlobalTime(), exitPoint.GetGlobalTime()) + driftTime};
             // retrive vertex energy and momentum
-            const auto vertexEk = track.GetVertexKineticEnergy();
-            const auto vertexMomentum = track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()));
+            const auto vertexEk{track.GetVertexKineticEnergy()};
+            const auto vertexMomentum{track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()))};
+            // track creator process
+            const auto creatorProcess{track.GetCreatorProcess()};
             // new a hit
             auto hit = std::make_unique_for_overwrite<CDCHit>();
-            hit->CellID().Value(cellID);
-            hit->DriftDistance().Value(driftDistance);
-            hit->Time().Value(time);
-            hit->MCEventID().Value(fEventID);
-            hit->MCTrackID().Value(trackID);
-            hit->PDGCode().Value(particle.GetPDGEncoding());
-            hit->KineticEnergy().Value(energy);
-            hit->Momentum().Value(momentum);
-            hit->VertexTime().Value(track.GetGlobalTime() - track.GetLocalTime());
-            hit->VertexPosition().Value(track.GetVertexPosition());
-            hit->VertexKineticEnergy().Value(vertexEk);
-            hit->VertexMomentum().Value(vertexMomentum);
-            fCellSignalTimesAndHits[cellID].emplace_back(time + driftDistance / fMeanDriftVelocity,
-                                                         std::move(hit));
+            Get<"CellID">(*hit) = cellID;
+            Get<"t">(*hit) = signalTime;
+            Get<"tD">(*hit) = driftTime;
+            Get<"d">(*hit) = driftDistance;
+            Get<"EvtID">(*hit) = fEventID;
+            Get<"TrkID">(*hit) = trackID;
+            Get<"PDGID">(*hit) = particle.GetPDGEncoding();
+            Get<"Ek">(*hit) = energy;
+            Get<"x">(*hit) = position;
+            Get<"p">(*hit) = momentum;
+            Get<"t0">(*hit) = track.GetGlobalTime() - track.GetLocalTime();
+            Get<"x0">(*hit) = track.GetVertexPosition();
+            Get<"Ek0">(*hit) = vertexEk;
+            Get<"p0">(*hit) = vertexMomentum;
+            *Get<"CreatProc">(*hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "<Primary>";
+            fCellSignalTimesAndHit[cellID].emplace_back(signalTime, std::move(hit));
         };
 
     const auto& nextReigon = static_cast<Region&>(*track.GetNextVolume()->GetLogicalVolume()->GetRegion());
-    auto& entryPointList = fCellEntryPoints[cellID];
 
     if (step.IsFirstStepInVolume() and step.IsLastStepInVolume() and // is entering and exiting,
         nextReigon.Type() != RegionType::CDCSenseWire) {             // but the track is not heading into sense wire.
         SaveHit(*step.GetPreStepPoint(), *step.GetPostStepPoint());
-        entryPointList.erase(trackID);
+        fCellEntryPoint.erase({cellID, trackID});
         return true;
     }
 
     if (step.IsFirstStepInVolume()) {
-        entryPointList.try_emplace(trackID, *step.GetPostStepPoint());
+        fCellEntryPoint.try_emplace({cellID, trackID}, *step.GetPreStepPoint());
         return false;
     }
-    if (decltype(entryPointList.cbegin()) monitoring;
-        step.IsLastStepInVolume() and                                           // is exiting,
-        nextReigon.Type() != RegionType::CDCSenseWire and                       // but the track is not heading into sense wire,
-        (monitoring = entryPointList.find(trackID)) != entryPointList.cend()) { // and make sure it has entered before.
+    if (decltype(fCellEntryPoint.cbegin()) monitoring;
+        step.IsLastStepInVolume() and                                                       // is exiting,
+        nextReigon.Type() != RegionType::CDCSenseWire and                                   // but the track is not heading into sense wire,
+        (monitoring = fCellEntryPoint.find({cellID, trackID})) != fCellEntryPoint.cend()) { // and make sure it has entered before.
         // save the hit
-        SaveHit(monitoring->second, *step.GetPreStepPoint());
+        SaveHit(monitoring->second, *step.GetPostStepPoint());
         // particle is exiting, remove it from monitoring list
-        entryPointList.erase(monitoring);
+        fCellEntryPoint.erase(monitoring);
         return true;
     }
 
@@ -123,43 +127,41 @@ G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
 }
 
 void CDCSD::EndOfEvent(G4HCofThisEvent*) {
-    for (auto&& entryPointList : fCellEntryPoints) {
-        entryPointList.clear();
-    }
+    fCellEntryPoint.clear();
 
     auto& hitList = *fHitsCollection->GetVector();
     hitList.reserve(
-        std::accumulate(fCellSignalTimesAndHits.cbegin(), fCellSignalTimesAndHits.cend(), 0ull,
-                        [](const auto& count, const auto& signalTimesAndHits) {
-                            return count + signalTimesAndHits.size();
+        std::accumulate(fCellSignalTimesAndHit.cbegin(), fCellSignalTimesAndHit.cend(), 0ull,
+                        [](const auto& count, const auto& value) {
+                            return count + value.second.size();
                         }));
 
-    for (auto&& signalTimesAndHits : fCellSignalTimesAndHits) {
-        if (signalTimesAndHits.empty()) { continue; }
-
-        std::ranges::sort(signalTimesAndHits);
-
-        std::vector<std::unique_ptr<CDCHit>*> signalHitCandidateList;
-        auto signalTimeThreshold = signalTimesAndHits.front().first + fDeadTime;
-        for (auto timeHit = signalTimesAndHits.begin(); timeHit != signalTimesAndHits.end(); ++timeHit) {
-            signalHitCandidateList.emplace_back(&timeHit->second);
-            const auto signalTime = timeHit->first;
-            if (signalTime > signalTimeThreshold or timeHit == std::prev(signalTimesAndHits.end())) {
-                const auto goodHit =
-                    *std::ranges::max_element(signalHitCandidateList,
-                                              [](const auto& hit1, const auto& hit2) {
-                                                  return (*hit1)->KineticEnergy().Value() < (*hit2)->KineticEnergy().Value();
-                                              });
-                hitList.emplace_back(goodHit->release());
-                signalHitCandidateList.clear();
-                signalTimeThreshold = signalTime + fDeadTime;
+    for (auto&& [_, signalTimesAndHit] : fCellSignalTimesAndHit) {
+        if (signalTimesAndHit.size() == 1) {
+            hitList.emplace_back(signalTimesAndHit.front().second.release());
+        } else {
+            std::ranges::sort(signalTimesAndHit);
+            std::vector<std::unique_ptr<CDCHit>*> signalHitCandidateList;
+            auto signalTimeThreshold = signalTimesAndHit.front().first + fDeadTime;
+            for (auto timeHit = signalTimesAndHit.begin(); timeHit != signalTimesAndHit.end(); ++timeHit) {
+                signalHitCandidateList.emplace_back(&timeHit->second);
+                if (const auto signalTime = timeHit->first;
+                    signalTime > signalTimeThreshold or timeHit == std::prev(signalTimesAndHit.end())) {
+                    const auto goodHit =
+                        *std::ranges::max_element(std::as_const(signalHitCandidateList),
+                                                  [](auto&& hit1, auto&& hit2) {
+                                                      return Get<"Ek">(**hit1) < Get<"Ek">(**hit2);
+                                                  });
+                    hitList.emplace_back(goodHit->release());
+                    signalHitCandidateList.clear();
+                    signalTimeThreshold = signalTime + fDeadTime;
+                }
             }
         }
-
-        signalTimesAndHits.clear();
+        signalTimesAndHit.clear();
     }
 
-    Analysis::Instance().SubmitSpectrometerHC(&hitList);
+    Analysis::Instance().SubmitSpectrometerHC(hitList);
 }
 
 } // namespace MACE::SimMACE::inline SD

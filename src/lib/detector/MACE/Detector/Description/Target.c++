@@ -1,4 +1,4 @@
-#include "MACE/Compatibility/std2b/unreachable.h++"
+#include "MACE/Compatibility/std23/unreachable.h++"
 #include "MACE/Detector/Description/AcceleratorField.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Utility/LiteralUnit.h++"
@@ -69,7 +69,7 @@ void Target::ExportValues(YAML::Node& node) const {
             case TargetShapeType::Cuboid:
                 return "Cuboid"s;
             }
-            std2b::unreachable();
+            std23::unreachable();
         }(),
         "ShapeType");
     {
@@ -83,7 +83,7 @@ void Target::ExportValues(YAML::Node& node) const {
                 case CuboidTarget::ShapeDetailType::Hole:
                     return "Hole"s;
                 }
-                std2b::unreachable();
+                std23::unreachable();
             }(),
             "Cuboid", "DetailType");
         {

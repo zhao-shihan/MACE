@@ -1,7 +1,6 @@
 #include "MACE/Env/internal/EnvBase.h++"
 #include "MACE/Env/Memory/internal/WeakSingletonPool.h++"
 #include "MACE/Env/Memory/internal/SingletonDeleter.h++"
-#include "MACE/Env/Memory/internal/SingletonFactory.h++"
 #include "MACE/Env/Memory/internal/SingletonPool.h++"
 
 #if MACE_SIGNAL_HANDLER
@@ -16,10 +15,9 @@ namespace MACE::Env::internal {
 
 EnvBase::EnvBase() :
     NonMoveableBase(),
-    fWeakSingletonPool(nullptr),
-    fSingletonPool(nullptr),
-    fSingletonFactory(nullptr),
-    fSingletonDeleter(nullptr) {
+    fWeakSingletonPool{},
+    fSingletonPool{},
+    fSingletonDeleter{} {
 
 #if MACE_SIGNAL_HANDLER
     std::signal(SIGABRT, MACE_ISOC99_SIGABRT_Handler);
@@ -39,7 +37,6 @@ EnvBase::EnvBase() :
 
     fWeakSingletonPool = std::make_unique_for_overwrite<Memory::internal::WeakSingletonPool>();
     fSingletonPool = std::make_unique_for_overwrite<Memory::internal::SingletonPool>();
-    fSingletonFactory = std::make_unique_for_overwrite<Memory::internal::SingletonFactory>();
     fSingletonDeleter = std::make_unique_for_overwrite<Memory::internal::SingletonDeleter>();
 }
 

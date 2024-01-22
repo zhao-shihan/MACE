@@ -60,7 +60,7 @@ private:
     double fDCA;
     double fVertexEnergy;
     stdx::array3d fVertexMomentum;
-    ShortString fParticles;
+    String15 fParticles;
 
     static DoubleBranchSocket fgTCACDC;
     static DoubleBranchSocket fgTCAMCP;

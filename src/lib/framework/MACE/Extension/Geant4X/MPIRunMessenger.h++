@@ -9,6 +9,7 @@
 #include <memory>
 
 class G4UIcmdWithAnInteger;
+class G4UIcommand;
 class G4UIdirectory;
 
 namespace MACE::inline Extension::Geant4X {
@@ -17,7 +18,7 @@ class MPIRunManager;
 
 class MPIRunMessenger final : public Env::Memory::Singleton<MPIRunMessenger>,
                               public G4UImessenger {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     MPIRunMessenger();
@@ -33,6 +34,7 @@ private:
 
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithAnInteger> fPrintProgressModulo;
+    std::unique_ptr<G4UIcommand> fPrintRunSummary;
 };
 
 } // namespace MACE::inline Extension::Geant4X

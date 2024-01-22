@@ -1,6 +1,6 @@
 message(STATUS "Looking for fmt")
 
-set(MACE_FMT_MINIMUM_REQUIRED 10.1.0)
+set(MACE_FMT_MINIMUM_REQUIRED 10.0.0)
 
 if(NOT MACE_BUILTIN_FMT)
     find_package(fmt ${MACE_FMT_MINIMUM_REQUIRED} QUIET)

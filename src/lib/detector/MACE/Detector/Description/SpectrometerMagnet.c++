@@ -6,10 +6,10 @@ namespace MACE::Detector::Description {
 using namespace LiteralUnit::Length;
 
 SpectrometerMagnet::SpectrometerMagnet() :
-    DescriptionSingletonBase<SpectrometerMagnet>(__func__),
-    fInnerRadius(50_cm),
-    fOuterRadius(70_cm),
-    fLength(218_cm) {}
+    DescriptionSingletonBase<SpectrometerMagnet>{"SpectrometerMagnet"},
+    fInnerRadius{50_cm},
+    fOuterRadius{60_cm},
+    fLength{218_cm} {}
 
 void SpectrometerMagnet::ImportValues(const YAML::Node& node) {
     ImportValue(node, fInnerRadius, "InnerRadius");

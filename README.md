@@ -35,8 +35,8 @@ To build MACE software from source, there are a few prerequisites.
 
 ### Toolchain
 
-1. A C++ compiler (that supports ≥ C++20. [GCC](https://gcc.gnu.org/) ≥ 11, [LLVM Clang](https://clang.llvm.org/) ≥ 15, or MSVC ≥ 19.30 (i.e., [Visual Studio](https://visualstudio.microsoft.com/) 2022 ≥ 17.0))
-2. A C++ library (that supports ≥ C++20. [libstdc++](https://gcc.gnu.org/onlinedocs/libstdc++/) ≥ 11, or [MSVC STL](https://github.com/microsoft/STL) with [Visual Studio](https://visualstudio.microsoft.com/) 2022 ≥ 17.0)
+1. A C++ compiler (that supports ≥ C++20. [GCC](https://gcc.gnu.org/) ≥ 12, [LLVM Clang](https://clang.llvm.org/) ≥ 15, or MSVC ≥ 19.30 (i.e., [Visual Studio](https://visualstudio.microsoft.com/) 2022 ≥ 17.0))
+2. A C++ library (that supports ≥ C++20. [libstdc++](https://gcc.gnu.org/onlinedocs/libstdc++/) ≥ 12, or [MSVC STL](https://github.com/microsoft/STL) with [Visual Studio](https://visualstudio.microsoft.com/) 2022 ≥ 17.0)
 3. [CMake](https://cmake.org/) (≥ 3.16)
 4. A build system compatible with CMake ([GNU Make](https://www.gnu.org/software/make/), [Ninja](https://ninja-build.org), or etc.)
 
@@ -44,23 +44,24 @@ To build MACE software from source, there are a few prerequisites.
 
 Required:
 
-1. [MPI](https://www.mpi-forum.org/) (≥ 2.0, [MPICH](https://www.mpich.org/), [OpenMPI](https://www.open-mpi.org/), [Intel MPI](https://www.intel.cn/content/www/cn/zh/developer/tools/oneapi/mpi-library.html), [Microsoft MPI](https://github.com/Microsoft/Microsoft-MPI), etc. On your frequency)
-2. [Geant4](https://geant4.web.cern.ch/) (≥ 11.0.0)
-3. [ROOT](https://root.cern/) (≥ 6.28.04)
+1. [MPI](https://www.mpi-forum.org/) (≥ 3.0, [MPICH](https://www.mpich.org/), [OpenMPI](https://www.open-mpi.org/), [Intel MPI](https://www.intel.cn/content/www/cn/zh/developer/tools/oneapi/mpi-library.html), [Microsoft MPI](https://github.com/Microsoft/Microsoft-MPI), etc. On your frequency)
+2. [Eigen](https://eigen.tuxfamily.org/) (≥ 3.4.0)
+3. [Geant4](https://geant4.web.cern.ch/) (≥ 11.0.0)
+4. [ROOT](https://root.cern/) (≥ 6.28.04)
 
-Required, built-in if not found:
+Required, built-in if not found (network or pre-downloaded source is required):
 
-1. [argparse](https://github.com/p-ranav/argparse) (≥ 2.6, built-in if not found (network or pre-downloaded source is required))
-2. [backward-cpp](https://github.com/bombela/backward-cpp) (≥ 1.6, built-in if not found (network or pre-downloaded source is required))
-3. [Eigen](https://eigen.tuxfamily.org/) (≥ 3.4.0, built-in if not found (network or pre-downloaded source is required))
-4. [Microsoft.GSL](https://github.com/Microsoft/GSL) ([ISO C++ guidelines support library](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#gsl-guidelines-support-library)) (≥ 4.0.0, built-in if not found (network or pre-downloaded source is required))
-5. [yaml-cpp](https://github.com/jbeder/yaml-cpp) (≥ 0.6.0, built-in if not found (network or pre-downloaded source is required))
+1. [argparse](https://github.com/p-ranav/argparse) (≥ 2.6, built-in if not found)
+2. [backward-cpp](https://github.com/bombela/backward-cpp) (≥ 1.6, built-in if not found)
+3. [Microsoft.GSL](https://github.com/Microsoft/GSL) ([ISO C++ guidelines support library](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#gsl-guidelines-support-library)) (≥ 4.0.0, built-in if not found)
+4. [PMP](https://www.pmp-library.org/) (Polygon Mesh Processing Library) (≥ 3.0.0, built-in if not found)
+5. [yaml-cpp](https://github.com/jbeder/yaml-cpp) (≥ 0.8.0, built-in if not found)
 
 Optional:
 
 1. Geant4::G4gdml (Geant4 optional component. The requirement is controlled by CMake option MACE_USE_G4GDML. It supports the export of G4 geometry.)
 
-## Prepare for your PC  
+## Prepare for your PC
 
 ### Linux
 
@@ -81,13 +82,13 @@ Although it is supported to run on Windows, it is indeed not very recommended. O
 
 But it doesn't really matter - only if you can tolerate relatively poor performance and less pretty visualization (very likely). To install on windows, the first thing you need to do is to install [Visual Studio](https://visualstudio.microsoft.com/) 2022 (and its C++ components), and [CMake](https://cmake.org/). Then you can either directly install the precompiled version of [ROOT](https://root.cern/) and [Geant4](https://geant4.web.cern.ch/) (Note: using the precompiled version of Geant4 means that there is no support for gdml. If you need gdml, please compile a G4 with gdml. This is relatively troublesome, because you need to compile a [Xerces-C++](https://xerces.apache.org/xerces-c/) before this), or compile them manually. Then you need to add Geant4, ROOT and CMake (if you haven't choose to add environment variables when installing) to the environment variables. The rest of the dependencies only need to depend on the built-ins, unless you are able to install them all.
 
-## Prepare for public cluster/supercomputer  
+## Prepare for public cluster/supercomputer
 
 Unless you use container (e.g. [Apptainer](http://apptainer.org/)), you may need to do everything yourself - at this time, it is usually a more efficient option to turn to an expert of environment configuring to help you. It is not easy to build a complete and stable tool chain from scratch on a supercomputer that often lacks many libraries. If you are a master of environment building, we don't have to say much. You just need to confidently configure the environment following what we described above. In addition, if you choose to use container, it should be noted that some supercomputers have their own MPI implementation, which is likely to be optimized based on the cluster topology, and may have better performance when used. If a container is used, the linked MPI may be inside the container, always a universal version that not optimized for a specific machine. If so, then this potential performance gain may be lost.
 
 ## Build
 
-After everything prepared, it's time to build.  
+After everything prepared, it's time to build.
 
 MACE software follows a classical cmake & build procedure, for example,
 
@@ -106,7 +107,7 @@ cmake <MACE_PROJECT_ROOT_DIR>
 make -j
 ```
 
-That's ok to use other generators, respect to your preference.  
+That's ok to use other generators, respect to your preference.
 
 # How to Run
 

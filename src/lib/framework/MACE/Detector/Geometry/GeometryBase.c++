@@ -1,6 +1,6 @@
 #include "MACE/Detector/Geometry/GeometryBase.h++"
 #include "MACE/Env/MPIEnv.h++"
-#include "MACE/Utility/MPIUtil/MakeMPIFilePath.h++"
+#include "MACE/Extension/MPIX/ParallelizePath.h++"
 
 #include "G4SDManager.hh"
 
@@ -32,6 +32,10 @@ void GeometryBase::RegisterRegion(gsl::index iLogicalVolume, gsl::not_null<G4Reg
 }
 
 void GeometryBase::RegisterRegion(gsl::not_null<G4Region*> region) const {
+    if (fLogicalVolumes.empty()) {
+        std::logic_error{"MACE::Detector::Geometry::GeometryBase::RegisterRegion: "
+                         "No logical volumes (may be you forget to construct geometry, or did not construct volumes with GeometryBase::Make?)"};
+    }
     for (gsl::index i = 0; i < std::ssize(fLogicalVolumes); ++i) {
         RegisterRegion(i, region);
     }
@@ -60,6 +64,10 @@ void GeometryBase::RegisterSD(gsl::index iLogicalVolume, gsl::not_null<G4VSensit
 }
 
 void GeometryBase::RegisterSD(gsl::not_null<G4VSensitiveDetector*> sd) const {
+    if (fLogicalVolumes.empty()) {
+        std::logic_error{"MACE::Detector::Geometry::GeometryBase::RegisterSD: "
+                         "No logical volumes (may be you forget to construct geometry, or did not construct volumes with GeometryBase::Make?)"};
+    }
     for (gsl::index i = 0; i < std::ssize(fLogicalVolumes); ++i) {
         RegisterSD(i, sd);
     }
@@ -67,9 +75,9 @@ void GeometryBase::RegisterSD(gsl::not_null<G4VSensitiveDetector*> sd) const {
 
 void GeometryBase::Export(std::filesystem::path gdmlFile, gsl::index iPhysicalVolume) const {
 #if MACE_USE_G4GDML
-    if (Env::MPIEnv::Available()) { MPIUtil::MakeMPIFilePathInPlace(gdmlFile); }
+    if (Env::MPIEnv::Available()) { MPIX::ParallelizePathInPlace(gdmlFile); }
     G4GDMLParser gdml;
-    gdml.SetAddPointerToName(false);
+    gdml.SetAddPointerToName(true);
     gdml.SetOutputFileOverwrite(true);
     gdml.Write(gdmlFile.generic_string(), PhysicalVolume(iPhysicalVolume).get());
 #else

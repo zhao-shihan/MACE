@@ -13,7 +13,7 @@ class SingletonBase : public NonMoveableBase {
 
 protected:
     SingletonBase() = default;
-    virtual ~SingletonBase() = 0;
+    virtual ~SingletonBase() = default;
 };
 
 } // namespace MACE::Env::Memory::internal

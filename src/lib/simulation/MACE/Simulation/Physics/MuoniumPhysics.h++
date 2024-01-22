@@ -11,7 +11,7 @@
 #include "G4ProcessManager.hh"
 #include "G4VPhysicsConstructor.hh"
 
-namespace MACE::inline Simulation::Physics {
+namespace MACE::inline Simulation::inline Physics {
 
 template<TargetForMuoniumPhysics ATarget>
 class MuoniumPhysics final : public NonMoveableBase,
@@ -19,10 +19,10 @@ class MuoniumPhysics final : public NonMoveableBase,
 public:
     MuoniumPhysics(G4int verbose);
 
-    void ConstructParticle() override;
-    void ConstructProcess() override;
+    auto ConstructParticle() -> void override;
+    auto ConstructProcess() -> void override;
 };
 
-} // namespace MACE::inline Simulation::Physics
+} // namespace MACE::inline Simulation::inline Physics
 
 #include "MACE/Simulation/Physics/MuoniumPhysics.inl"

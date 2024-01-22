@@ -1,23 +1,11 @@
 // #include "MACE/ReconCDCTrack/Finder/MCTruthFinder.h++"
 // #include "MACE/ReconCDCTrack/Fitter/MCTruthFitter.h++"
 
-#include "MACE/Compatibility/std2b/constexpr_cmath.h++"
-#include "MACE/Data/IO/Reader.h++"
-#include "MACE/Data/Model/Hit/CDCHit.h++"
-#include "MACE/Data/Model/Hit/EMCHit.h++"
-#include "MACE/Data/Model/Hit/MCPHit.h++"
-#include "MACE/Data/Model/SimHit/CDCSimHit.h++"
-#include "MACE/Data/Model/SimHit/EMCSimHit.h++"
-#include "MACE/Data/Model/SimHit/MCPSimHit.h++"
-#include "MACE/Data/Model/SimTrack/CDCHelixSimTrack.h++"
-#include "MACE/Data/Model/SimTrack/CDCPhysicsSimTrack.h++"
-#include "MACE/DataModel/DataFactory.h++"
-#include "MACE/DataModel/SimHit/CDCSimHit.h++"
-#include "MACE/DataModel/SimHit/EMCSimHit.h++"
-#include "MACE/DataModel/SimHit/MCPSimHit.h++"
-#include "MACE/DataModel/SimTrack/CDCHelixSimTrack.h++"
-#include "MACE/DataModel/SimTrack/CDCPhysicsSimTrack.h++"
-#include "MACE/DataModel/Track/CDCHelixTrack.h++"
+#include "MACE/Compatibility/std23/constexpr_cmath.h++"
+#include "MACE/Data/CDCTrack.h++"
+#include "MACE/Data/Hit.h++"
+#include "MACE/Data/Sheet.h++"
+#include "MACE/Data/SimHit.h++"
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/SpectrometerField.h++"
 #include "MACE/Detector/Geometry/Fast/AcceleratorField.h++"
@@ -46,6 +34,19 @@
 #include "MACE/Utility/VectorArithmeticOperator.h++"
 #include "MACE/Utility/VectorCast.h++"
 
+#include "ConstField.h"
+#include "EventDisplay.h"
+#include "Exception.h"
+#include "FieldManager.h"
+#include "KalmanFitStatus.h"
+#include "KalmanFitterRefTrack.h"
+#include "MaterialEffects.h"
+#include "RKTrackRep.h"
+#include "StateOnPlane.h"
+#include "Track.h"
+#include "TrackPoint.h"
+#include "WireMeasurement.h"
+
 #include "TDatabasePDG.h"
 #include "TEveManager.h"
 #include "TGeoManager.h"
@@ -62,19 +63,6 @@
 #include "gsl/gsl"
 
 #include "fmt/format.h"
-
-#include "ConstField.h"
-#include "EventDisplay.h"
-#include "Exception.h"
-#include "FieldManager.h"
-#include "KalmanFitStatus.h"
-#include "KalmanFitterRefTrack.h"
-#include "MaterialEffects.h"
-#include "RKTrackRep.h"
-#include "StateOnPlane.h"
-#include "Track.h"
-#include "TrackPoint.h"
-#include "WireMeasurement.h"
 
 #include <algorithm>
 #include <array>
@@ -206,16 +194,16 @@ auto FitTrack(std::vector<Data::ReadIterator<Data::CDCSimHit>> hitData) -> std::
     // find track
     std::ranges::sort(hitData,
                       [](const auto& hit1, const auto& hit2) {
-                          return std::tie(hit1->MCEventID()(), hit1->MCTrackID()(), hit1->CellID()()) <
-                                 std::tie(hit2->MCEventID()(), hit2->MCTrackID()(), hit2->CellID()());
+                          return std::tie(hit1->MCEventID(), hit1->MCTrackID(), hit1->CellID()) <
+                                 std::tie(hit2->MCEventID(), hit2->MCTrackID(), hit2->CellID());
                       });
 
     std::vector<std::vector<std::shared_ptr<Data::CDCSimHit::Entry>>> rawTrackData;
     {
         std::vector<std::shared_ptr<Data::CDCSimHit::Entry>> rawTrack;
-        for (std::tuple currentTrackID = {hitData.front()->MCEventID()(), hitData.front()->MCTrackID()()};
+        for (std::tuple currentTrackID = {hitData.front()->MCEventID(), hitData.front()->MCTrackID()};
              auto&& hit : std::as_const(hitData)) {
-            if (const auto newTrackID = std::tie(hit->MCEventID()(), hit->MCTrackID()());
+            if (const auto newTrackID = std::tie(hit->MCEventID(), hit->MCTrackID());
                 newTrackID != currentTrackID) {
                 if (rawTrack.size() >= 7) {
                     rawTrackData.emplace_back(rawTrack);
@@ -223,7 +211,7 @@ auto FitTrack(std::vector<Data::ReadIterator<Data::CDCSimHit>> hitData) -> std::
                 rawTrack.clear();
                 currentTrackID = newTrackID;
             }
-            if (hit->VertexKineticEnergy()() > 5_MeV) {
+            if (hit->VertexKineticEnergyTruth() > 5_MeV) {
                 rawTrack.emplace_back(std::make_shared<Data::CDCSimHit::Entry>(*hit));
             }
         }
@@ -261,16 +249,16 @@ auto FitTrack(std::vector<Data::ReadIterator<Data::CDCSimHit>> hitData) -> std::
         const auto& firstHit = rawTrack.front();
 
         // do the fit
-        const auto trackRep = new genfit::RKTrackRep(firstHit->PDGCode()());
-        auto& genfitTrack = genfitTrackData.emplace_back(trackRep, TVector3(0, 0, 0), MomentumSeed(firstHit->VertexMomentum().As<stdx::array3d>()));
+        const auto trackRep = new genfit::RKTrackRep(firstHit->PDGCodeTruth());
+        auto& genfitTrack = genfitTrackData.emplace_back(trackRep, TVector3(0, 0, 0), MomentumSeed(firstHit->VertexMomentumTruth().As<stdx::array3d>()));
         for (auto hitID = 0;
              auto&& hit : rawTrack) {
-            const auto cellID = hit->CellID()();
+            const auto cellID = hit->CellID();
             const auto cellHit = cdcCellMap[cellID];
             const Eigen::Vector3d wirePosition3D = {cellHit.position.x(), cellHit.position.y(), 0};
             const Eigen::Vector3d endPoint1 = (wirePosition3D - 1000 * cellHit.direction) / 10;
             const Eigen::Vector3d endPoint2 = (wirePosition3D + 1000 * cellHit.direction) / 10;
-            const auto driftInROOTUnit = std::abs(Gaussian1D(rng, {hit->DriftDistance()(), 100_um / 2.355})) / 10;
+            const auto driftInROOTUnit = std::abs(Gaussian1D(rng, {hit->DriftDistance(), 100_um / 2.355})) / 10;
 
             TVectorD rawHitCoords(7);
             rawHitCoords[0] = endPoint1.x();
@@ -330,7 +318,7 @@ auto FitTrack(std::vector<Data::ReadIterator<Data::CDCSimHit>> hitData) -> std::
             rawHitCov[6][3] = 0;
             rawHitCov[6][4] = 0;
             rawHitCov[6][5] = 0;
-            rawHitCov[6][6] = Math::Pow2(100_um / 2.355 / 10);
+            rawHitCov[6][6] = Math::Pow<2>(100_um / 2.355 / 10);
 
             const auto wireMeasurement = new genfit::WireMeasurement(rawHitCoords,
                                                                      rawHitCov,
@@ -357,12 +345,12 @@ auto FitTrack(std::vector<Data::ReadIterator<Data::CDCSimHit>> hitData) -> std::
         const auto& fitStatus = *genfitTrack.getKalmanFitStatus();
         const auto& fitTrack = fitTrackData.emplace_back(std::make_shared_for_overwrite<Data::CDCPhysicsSimTrack::Entry>());
         const auto& fitHelixTrack = fitHelixTrackData.emplace_back(std::make_shared_for_overwrite<Data::CDCHelixTrack::Entry>());
-        const auto tVertex = firstHit->Time()() - cdcInnerRadius / c_light;
+        const auto tVertex = firstHit->Time() - cdcInnerRadius / c_light;
         const auto xFirst = state.getPos() * 10;
         const auto pFirst = state.getMom() * 1000;
         const auto mass = state.getMass() * 1000;
         const auto charge = state.getCharge();
-        const auto kineticEnergy = std::sqrt(pFirst.Mag2() + Math::Pow2(mass)) - mass;
+        const auto kineticEnergy = std::sqrt(pFirst.Mag2() + Math::Pow<2>(mass)) - mass;
 
         static const auto bField = Detector::Description::SpectrometerField::Instance().MagneticFluxDensity();
         const auto pT = Math::Hypot(pFirst.x(), pFirst.y());
@@ -390,12 +378,12 @@ auto FitTrack(std::vector<Data::ReadIterator<Data::CDCSimHit>> hitData) -> std::
         fitTrack->VertexKineticEnergy() = kineticEnergy;
         fitTrack->VertexMomentum() = std::array{pFirst.x(), pFirst.y(), pFirst.z()};
 
-        fitTrack->PDGCodeTruth() = firstHit->PDGCode()();
+        fitTrack->PDGCodeTruth() = firstHit->PDGCodeTruth();
         fitTrack->NHitTruth() = rawTrack.size();
-        fitTrack->VertexTimeTruth() = firstHit->VertexTime()();
-        fitTrack->VertexPositionTruth() = firstHit->VertexPosition()();
-        fitTrack->VertexKineticEnergyTruth() = firstHit->VertexKineticEnergy()();
-        fitTrack->VertexMomentumTruth() = firstHit->VertexMomentum()();
+        fitTrack->VertexTimeTruth() = firstHit->VertexTimeTruth();
+        fitTrack->VertexPositionTruth() = firstHit->VertexPositionTruth();
+        fitTrack->VertexKineticEnergyTruth() = firstHit->VertexKineticEnergyTruth();
+        fitTrack->VertexMomentumTruth() = firstHit->VertexMomentumTruth();
 
         fitHelixTrack->Chi2() = fitStatus.getChi2();
         fitHelixTrack->PDGCode() = state.getPDG();
@@ -424,6 +412,10 @@ int main(int argc, char* argv[]) {
     // hit data
     MACE::DataModel::DataFactory dataFactory;
     dataFactory.TreeNamePrefixFormat("G4Run{}_");
+
+    // cdcHitSig
+    // mcpHitSig
+    // emcHitSig
 
     const auto sigFile = std::make_unique<TFile>(argv[1]);
     decltype(auto) cdcHitSigTree = *dataFactory.FindTree<DataModel::CDCSimHit>(*sigFile, 0);
@@ -457,7 +449,7 @@ int main(int argc, char* argv[]) {
 
     constexpr auto EventIDCompare =
         [](const auto& hit1, const auto& hit2) {
-            return hit1->MCEventID()() < hit2->MCEventID()();
+            return hit1->MCEventID() < hit2->MCEventID();
         };
     std::ranges::sort(cdcHitSigDataAll, EventIDCompare);
     std::ranges::sort(mcpHitSigDataAll, EventIDCompare);
@@ -471,10 +463,10 @@ int main(int argc, char* argv[]) {
             std::vector<std::decay_t<decltype(data)>> splitData(maxID + 1);
             auto hitBegin = data.cbegin();
             while (hitBegin != data.cend()) {
-                const auto currentID = (*hitBegin)->MCEventID()();
+                const auto currentID = (*hitBegin)->MCEventID();
                 const auto hitEnd = std::ranges::find_if_not(hitBegin, data.cend(),
-                                                             [&hitBegin, &currentID](const auto& hit) {
-                                                                 return hit->MCEventID()() == currentID;
+                                                             [&currentID](const auto& hit) {
+                                                                 return hit->MCEventID() == currentID();
                                                              });
                 splitData[currentID] = {hitBegin, hitEnd};
                 hitBegin = hitEnd;
@@ -482,12 +474,12 @@ int main(int argc, char* argv[]) {
             splitData.shrink_to_fit();
             return splitData;
         };
-    const auto maxSigID = std::max({(*std::ranges::max_element(cdcHitSigDataAll, EventIDCompare))->MCEventID()(),
-                                    (*std::ranges::max_element(mcpHitSigDataAll, EventIDCompare))->MCEventID()(),
-                                    (*std::ranges::max_element(emcHitSigDataAll, EventIDCompare))->MCEventID()()});
-    const auto maxBkgID = std::max({(*std::ranges::max_element(cdcHitBkgDataAll, EventIDCompare))->MCEventID()(),
-                                    (*std::ranges::max_element(mcpHitBkgDataAll, EventIDCompare))->MCEventID()(),
-                                    (*std::ranges::max_element(emcHitBkgDataAll, EventIDCompare))->MCEventID()()});
+    const auto maxSigID = std::max({(*std::ranges::max_element(cdcHitSigDataAll, EventIDCompare))->MCEventID(),
+                                    (*std::ranges::max_element(mcpHitSigDataAll, EventIDCompare))->MCEventID(),
+                                    (*std::ranges::max_element(emcHitSigDataAll, EventIDCompare))->MCEventID()});
+    const auto maxBkgID = std::max({(*std::ranges::max_element(cdcHitBkgDataAll, EventIDCompare))->MCEventID(),
+                                    (*std::ranges::max_element(mcpHitBkgDataAll, EventIDCompare))->MCEventID(),
+                                    (*std::ranges::max_element(emcHitBkgDataAll, EventIDCompare))->MCEventID()});
     const auto cdcHitSigData = SplitByEventID(cdcHitSigDataAll, maxSigID);
     const auto mcpHitSigData = SplitByEventID(mcpHitSigDataAll, maxSigID);
     const auto emcHitSigData = SplitByEventID(emcHitSigDataAll, maxSigID);
@@ -509,8 +501,8 @@ int main(int argc, char* argv[]) {
         const auto& emcHitBkg = emcHitBkgData[bkgID];
 
         for (auto&& mcpHit : mcpHitSig) {
-            const auto& tMCP = mcpHit->Time()();
-            const auto& xMCP = mcpHit->Position()();
+            const auto& tMCP = mcpHit->Time();
+            const auto& xMCP = mcpHit->Position();
 
             //
             // MCP <-> EMC
@@ -519,8 +511,8 @@ int main(int argc, char* argv[]) {
             auto nGamma = 0;
             const auto EMCSmearFilter =
                 [&](const auto& emcHit) {
-                    const auto tEMC = Gaussian1D(rng, {emcHit->Time()(), 4.5_ns / 2.355});
-                    const auto energy = Gaussian1D(rng, {emcHit->EnergyDeposition()(), 350_keV / 2.355});
+                    const auto tEMC = Gaussian1D(rng, {emcHit->Time(), 4.5_ns / 2.355});
+                    const auto energy = Gaussian1D(rng, {emcHit->EnergyDeposition(), 350_keV / 2.355});
                     if (tMCP + 0.5_ns - 6_ns < tEMC and tEMC < tMCP + 0.5_ns + 6_ns and
                         200_keV < energy and energy < 1000_keV) {
                         ++nGamma;
@@ -540,7 +532,7 @@ int main(int argc, char* argv[]) {
                 [&](const auto& cdcHitData) {
                     std::vector<typename std::decay_t<decltype(cdcHitData)>::value_type> coincidentHitList;
                     for (auto&& cdcHit : cdcHitData) {
-                        const auto tCDC = Gaussian1D(rng, {cdcHit->Time()(), 2_ns / 2.355});
+                        const auto tCDC = Gaussian1D(rng, {cdcHit->Time(), 2_ns / 2.355});
                         const auto deltaT = tMCP - tCDC;
                         if (118.6_ns + 0.5_ns < deltaT and deltaT < 124.9_ns + 3.5_ns) {
                             coincidentHitList.emplace_back(cdcHit);
@@ -568,8 +560,8 @@ int main(int argc, char* argv[]) {
 
             std::vector<std::pair<double, double>> dcaTOF;
             for (auto&& helix : std::as_const(coincidentCDCHelixData)) {
-                const auto dca = Math::Norm(helix->Center()() - xMCP) - helix->Radius()();
-                const auto tof = tMCP - helix->VertexTime()();
+                const auto dca = Math::Norm(helix->Center()() - xMCP()) - helix->Radius();
+                const auto tof = tMCP - helix->VertexTime();
                 dcaTOFData.Fill(dca, tof);
             }
 
@@ -669,7 +661,7 @@ int main(int argc, char* argv[]) {
             const auto xMCP = VectorCast<stdx::array2d>(xMCPRVec);
             std::vector<std::pair<double, double>> dcaTOF;
             for (auto&& helix : std::as_const(coincidentCDCHelixData)) {
-                const auto dca = std2b::abs(Math::Norm(helix->Center()() - xMCP) - helix->Radius()());
+                const auto dca = std23::abs(Math::Norm(helix->Center()() - xMCP) - helix->Radius()());
                 std::cout << dca << std::endl;
             }
 

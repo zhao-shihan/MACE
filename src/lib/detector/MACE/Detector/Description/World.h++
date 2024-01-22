@@ -5,13 +5,11 @@
 namespace MACE::Detector::Description {
 
 class World final : public DescriptionSingletonBase<World> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     World();
-    ~World() noexcept = default;
-    World(const World&) = delete;
-    World& operator=(const World&) = delete;
+    ~World() = default;
 
 public:
     const auto& HalfXExtent() const { return fHalfXExtent; }
@@ -23,8 +21,8 @@ public:
     void HalfZExtent(double val) { fHalfZExtent = val; }
 
 private:
-    void ImportValues(const YAML::Node& node) override;
-    void ExportValues(YAML::Node& node) const override;
+    auto ImportValues(const YAML::Node& node) -> void override;
+    auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
     double fHalfXExtent;

@@ -1,51 +1,64 @@
 namespace MACE::Env::Memory {
 
-template<class ADerived>
-typename Singleton<ADerived>::InstanceKeeper Singleton<ADerived>::fgInstance = {nullptr, nullptr};
+template<typename ADerived>
+void** Singleton<ADerived>::fgInstance{};
 
-template<class ADerived>
-Singleton<ADerived>::Singleton() {
+template<typename ADerived>
+Singleton<ADerived>::Singleton() :
+    SingletonBase{} {
     static_assert(Singletonified<ADerived>);
-    if (internal::SingletonPool::Instance().Contains<ADerived>()) {
-        throw std::logic_error(
-            std::string("MACE::Env::Memory::Singleton: Trying to construct ")
-                .append(typeid(ADerived).name())
-                .append(" (environmental singleton) twice"));
-    }
 }
 
-template<class ADerived>
+template<typename ADerived>
 Singleton<ADerived>::~Singleton() {
-    assert((fgInstance.object == nullptr and fgInstance.node == nullptr) or
-           fgInstance.object == *fgInstance.node);
-    if (fgInstance.object != nullptr) {
-        fgInstance.object = nullptr;
-        *fgInstance.node = nullptr;
-        fgInstance.node = nullptr;
-    }
+    UpdateInstance();
+    *fgInstance = nullptr;
 }
 
-template<class ADerived>
-ADerived& Singleton<ADerived>::Instance() {
-    if (fgInstance.object == nullptr) [[unlikely]] {
-        assert(fgInstance.node == nullptr);
-        InstantiateOrFindInstance();
+template<typename ADerived>
+MACE_ALWAYS_INLINE auto Singleton<ADerived>::Instance() -> ADerived& {
+    switch (UpdateInstance()) {
+    [[unlikely]] case Status::NotInstantiated: {
+        auto& pool{internal::SingletonPool::Instance()};
+        if (pool.Contains<ADerived>()) {
+            throw std::logic_error{fmt::format("MACE::Env::Memory::Singleton: "
+                                               "Trying to construct {} (environmental singleton) twice",
+                                               typeid(ADerived).name())};
+        }
+        fgInstance = &pool.Insert<ADerived>(SingletonInstantiator::New<ADerived>());
     }
-    assert(fgInstance.object == *fgInstance.node);
-    return *fgInstance.object;
+        [[fallthrough]];
+    [[likely]] case Status::Available:
+        return *static_cast<ADerived*>(*fgInstance);
+    [[unlikely]] case Status::Expired:
+        throw std::logic_error{fmt::format("MACE::Env::Memory::Singleton::Instance(): "
+                                           "The instance of {} has been deleted",
+                                           typeid(ADerived).name())};
+    }
+    std23::unreachable();
 }
 
-template<class ADerived>
-void Singleton<ADerived>::InstantiateOrFindInstance() {
-    if (auto& node = internal::SingletonFactory::Instance().InstantiateOrFind<ADerived>();
-        node != nullptr) {
-        fgInstance.object = static_cast<ADerived*>(node);
-        fgInstance.node = std::addressof(node);
+template<typename ADerived>
+MACE_ALWAYS_INLINE auto Singleton<ADerived>::Instantiated() -> bool {
+    const auto status{UpdateInstance()};
+    return status == Status::Available or
+           status == Status::Expired;
+}
+
+template<typename ADerived>
+MACE_ALWAYS_INLINE auto Singleton<ADerived>::UpdateInstance() -> Status {
+    if (fgInstance == nullptr) [[unlikely]] {
+        if (const auto optionalNode{internal::SingletonPool::Instance().Find<ADerived>()};
+            optionalNode.has_value()) {
+            fgInstance = &optionalNode->get();
+        } else {
+            return Status::NotInstantiated;
+        }
+    }
+    if (*fgInstance == nullptr) {
+        return Status::Expired;
     } else {
-        throw std::logic_error(
-            std::string("MACE::Env::Memory::Singleton::Instance(): The instance of ")
-                .append(typeid(ADerived).name())
-                .append(" has been deleted"));
+        return Status::Available;
     }
 }
 

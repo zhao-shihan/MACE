@@ -9,7 +9,7 @@
 using MACE::Detector::Geometry::Fast::Target;
 using namespace MACE::LiteralUnit::Density;
 
-void Target::Construct(G4bool checkOverlaps) {
+auto Target::Construct(G4bool checkOverlaps) -> void {
     const auto& description = Description::Target::Instance();
     const auto& name = description.Name();
     switch (description.ShapeType()) {

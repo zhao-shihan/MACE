@@ -2,7 +2,7 @@
 #include "MACE/Env/Memory/Singleton.h++"
 
 class NullSingleton final : public MACE::Env::Memory::Singleton<NullSingleton> {
-    friend MACE::Env::Memory::SingletonFactory;
+    friend MACE::Env::Memory::SingletonInstantiator;
 
 private:
     NullSingleton() = default;

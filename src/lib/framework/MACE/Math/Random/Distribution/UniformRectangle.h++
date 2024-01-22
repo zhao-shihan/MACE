@@ -16,7 +16,7 @@ namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
-template<Concept::NumericVector2Any T, template<class> class AUniformRectangle, template<typename> class AUniform>
+template<Concept::NumericVector2Any T, template<typename> typename AUniformRectangle, template<typename> class AUniform>
 class BasicUniformRectangleParameter final : public JointParameterInterface<BasicUniformRectangleParameter<T, AUniformRectangle, AUniform>,
                                                                             AUniformRectangle<T>,
                                                                             AUniform<VectorValueType<T>>,
@@ -46,7 +46,7 @@ public:
     constexpr void SupremumY(VT supY) { ParameterY({InfimumY(), supY}); }
 };
 
-template<template<class> class ADerived, Concept::NumericVector2Any T, template<typename> class AUniform>
+template<template<typename> typename ADerived, Concept::NumericVector2Any T, template<typename> class AUniform>
 class UniformRectangleBase : public JointInterface<ADerived<T>,
                                                    BasicUniformRectangleParameter<T, ADerived, AUniform>,
                                                    T,

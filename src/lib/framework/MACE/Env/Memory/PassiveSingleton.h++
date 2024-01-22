@@ -1,11 +1,13 @@
 #pragma once
 
-#include "MACE/Env/Memory/internal/WeakSingletonPool.h++"
-#include "MACE/Env/Memory/internal/PassiveSingletonBase.h++"
-#include "MACE/Env/Memory/WeakSingleton.h++"
 #include "MACE/Env/Memory/PassiveSingletonified.h++"
+#include "MACE/Env/Memory/WeakSingleton.h++"
+#include "MACE/Env/Memory/internal/PassiveSingletonBase.h++"
+#include "MACE/Env/Memory/internal/WeakSingletonPool.h++"
+#include "MACE/Compatibility/std23/unreachable.h++"
 
-#include <cassert>
+#include "fmt/format.h"
+
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -13,21 +15,18 @@
 
 namespace MACE::Env::Memory {
 
-template<class ADerived>
+template<typename ADerived>
 class PassiveSingleton : public internal::PassiveSingletonBase,
                          public WeakSingleton<ADerived> {
 protected:
     PassiveSingleton();
-    ~PassiveSingleton();
+    ~PassiveSingleton() = default;
 
 public:
-    static ADerived& Instance();
+    MACE_ALWAYS_INLINE static auto Instance() -> ADerived&;
 
 private:
-    static void FindInstance();
-
-private:
-    static ADerived* fgInstance;
+    using Base = WeakSingleton<ADerived>;
 };
 
 } // namespace MACE::Env::Memory

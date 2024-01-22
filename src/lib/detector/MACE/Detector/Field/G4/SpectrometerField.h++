@@ -5,7 +5,7 @@
 
 namespace MACE::Detector::Field::G4 {
 
-class SpectrometerField final : public WrapAsG4Field<Field::SpectrometerField<G4double>> {
+class SpectrometerField : public WrapAsG4Field<Field::SpectrometerField> {
 public:
     SpectrometerField();
 };

@@ -19,20 +19,20 @@ namespace internal {
 
 namespace internal {
 
-template<gsl::index I, class T>
+template<gsl::index I, typename T>
 struct Margin {
     T value;
 };
 
-template<class...>
+template<typename...>
 struct CartesianProductMarginBase;
-template<gsl::index... Is, class... Ts>
+template<gsl::index... Is, typename... Ts>
     requires(sizeof...(Is) == sizeof...(Ts))
 struct CartesianProductMarginBase<gslx::index_sequence<Is...>, Ts...> : Margin<Is, Ts>... {};
 
 } // namespace internal
 
-template<class... Ts>
+template<typename... Ts>
 struct CartesianProductMargin : internal::CartesianProductMarginBase<gslx::index_sequence_for<Ts...>, Ts...> {
     CartesianProductMargin() = default;
     CartesianProductMargin(const Ts&... objects);
@@ -45,7 +45,7 @@ struct CartesianProductMargin : internal::CartesianProductMarginBase<gslx::index
 
 } // namespace internal
 
-template<class ADerived, class ADistribution, class... Ds>
+template<typename ADerived, typename ADistribution, typename... Ds>
     requires(sizeof...(Ds) >= 2)
 class JointParameterInterface : public DistributionParameterBase<ADerived, ADistribution>,
                                 public internal::CartesianProductMargin<typename Ds::ParameterType...> {
@@ -63,13 +63,13 @@ public:
     template<gsl::index I>
     constexpr void Parameter(const std::tuple_element_t<I, std::tuple<typename Ds::ParameterType...>>& p) { this->template Margin<I>() = p; }
 
-    template<Concept::Character AChar, class U, class V, class... Ws>
+    template<Concept::Character AChar, typename U, typename V, typename... Ws>
     friend auto operator<<(std::basic_ostream<AChar>& os, const JointParameterInterface<U, V, Ws...>& self) -> decltype(os);
-    template<Concept::Character AChar, class U, class V, class... Ws>
+    template<Concept::Character AChar, typename U, typename V, typename... Ws>
     friend auto operator>>(std::basic_istream<AChar>& is, JointParameterInterface<U, V, Ws...>& self) -> decltype(is);
 };
 
-template<class ADerived, class AParameter, class T, class... Ds>
+template<typename ADerived, typename AParameter, typename T, typename... Ds>
     requires(sizeof...(Ds) >= 2 and Concept::NumericVectorAny<T, sizeof...(Ds)>)
 class JointInterface : public RandomNumberDistributionBase<ADerived, AParameter, T>,
                        public internal::CartesianProductMargin<Ds...> {
@@ -106,11 +106,11 @@ public:
     friend auto operator>>(std::basic_istream<AChar>& is, JointInterface& self) -> decltype(is);
 };
 
-template<class T, class... Ds>
+template<typename T, typename... Ds>
     requires(sizeof...(Ds) >= 2 and Concept::NumericVectorAny<T, sizeof...(Ds)> and (... and Concept::Arithmetic<typename Ds::ResultType>))
 class Joint;
 
-template<class T, class... Ds>
+template<typename T, typename... Ds>
     requires(sizeof...(Ds) >= 2 and Concept::NumericVectorAny<T, sizeof...(Ds)> and (... and Concept::Arithmetic<typename Ds::ResultType>))
 class JointParameter final : public JointParameterInterface<JointParameter<T, Ds...>,
                                                             Joint<T, Ds...>,
@@ -118,10 +118,10 @@ class JointParameter final : public JointParameterInterface<JointParameter<T, Ds
     using JointParameterInterface<Ds...>::JointParameterInterface;
 };
 
-template<class... Ps>
+template<typename... Ps>
 JointParameter(Ps...) -> JointParameter<std::array<std::common_type_t<typename Ps::DistributionType::ResultType...>, sizeof...(Ps)>, typename Ps::DistributionType...>;
 
-template<class T, class... Ds>
+template<typename T, typename... Ds>
     requires(sizeof...(Ds) >= 2 and Concept::NumericVectorAny<T, sizeof...(Ds)> and (... and Concept::Arithmetic<typename Ds::ResultType>))
 class Joint final : public JointInterface<Joint<T, Ds...>,
                                           JointParameter<T, Ds...>,
@@ -130,9 +130,9 @@ class Joint final : public JointInterface<Joint<T, Ds...>,
     using JointInterface<T, Ds...>::JointInterface;
 };
 
-template<class... Ps>
+template<typename... Ps>
 Joint(Ps...) -> Joint<std::array<std::common_type_t<typename Ps::DistributionType::ResultType...>, sizeof...(Ps)>, typename Ps::DistributionType...>;
-template<class... Ds>
+template<typename... Ds>
 Joint(JointParameter<Ds...>) -> Joint<std::array<std::common_type_t<typename Ds::ResultType...>, sizeof...(Ds)>, Ds...>;
 
 } // namespace MACE::Math::Random::inline Distribution

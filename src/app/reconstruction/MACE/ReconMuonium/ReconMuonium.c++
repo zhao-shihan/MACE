@@ -11,8 +11,8 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/ReconMuonium/MuoniumSimVertex.h++"
 #include "MACE/Utility/LiteralUnit.h++"
-#include "MACE/Utility/MPIUtil/AllocMPIJobs.h++"
-#include "MACE/Utility/MPIUtil/MakeMPIFilePath.h++"
+#include "MACE/Extension/MPIX/AllocMPIJobs.h++"
+#include "MACE/Extension/MPIX/ParallelizePath.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
 #include "MACE/Utility/VectorArithmeticOperator.h++"
 #include "MACE/Utility/VectorCast.h++"
@@ -28,7 +28,7 @@ using namespace MACE::Core::Geometry::Description;
 using namespace MACE::ReconMuonium;
 using namespace MACE;
 using namespace MACE::LiteralUnit;
-using namespace MACE::MPIUtil;
+using namespace MACE::MPIX;
 using namespace PhysicalConstant;
 using namespace MACE::stdx::array_arithmetic;
 
@@ -91,8 +91,8 @@ int main(int argc, char* argv[]) {
 
     std::filesystem::path pathOut(argv[1]);
     pathOut.replace_extension("");
-    const auto fileNameOut = MakeMPIFilePath(pathOut.string() + "_recM", ".root");
-    // output file of this rank
+    const auto fileNameOut = ParallelizePath(pathOut.string() + "_recM", ".root");
+    // output file of this process
     TFile fileOut(fileNameOut.generic_string().c_str(), "recreate");
 
     DataFactory dataHub;

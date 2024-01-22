@@ -26,7 +26,7 @@ inline namespace Messenger {
 
 class GeometryMessenger final : public Env::Memory::Singleton<GeometryMessenger>,
                                 public G4UImessenger {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     GeometryMessenger();

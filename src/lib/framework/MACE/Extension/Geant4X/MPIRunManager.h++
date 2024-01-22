@@ -1,16 +1,19 @@
 #pragma once
 
+#include "MACE/Extension/MPIX/Execution/Executor.h++"
+#include "MACE/Math/Statistic.h++"
 #include "MACE/Utility/CPUTimeStopwatch.h++"
-#include "MACE/Utility/DivideIndices.h++"
+#include "MACE/Utility/NonMoveableBase.h++"
 #include "MACE/Utility/WallTimeStopwatch.h++"
 
 #include "G4RunManager.hh"
 
+#include "mpi.h"
+
 #include "gsl/gsl"
 
 #include <chrono>
-#include <ctime>
-#include <string_view>
+#include <memory>
 
 namespace MACE::inline Extension::Geant4X {
 
@@ -27,51 +30,26 @@ class PostG4RunManagerInitFlipG4cout : private FlipG4cout {};
 
 } // namespace internal
 
-class MPIRunManager : private internal::PreG4RunManagerInitFlipG4cout,
+class MPIRunManager : public NonMoveableBase,
+                      private internal::PreG4RunManagerInitFlipG4cout,
                       public G4RunManager,
                       private internal::PostG4RunManagerInitFlipG4cout {
 public:
     MPIRunManager();
     virtual ~MPIRunManager() = default;
-    MPIRunManager(const MPIRunManager&) = delete;
-    MPIRunManager& operator=(const MPIRunManager&) = delete;
 
-    static auto GetRunManager() { return static_cast<MPIRunManager*>(G4RunManager::GetRunManager()); }
+    static auto GetRunManager() -> auto { return static_cast<MPIRunManager*>(G4RunManager::GetRunManager()); }
 
-    const auto& NEventToBeMPIProcessed() const { return fNEventToBeMPIProcessed; }
-    const auto& PrintProgressModulo() const { return fPrintProgressModulo; }
+    auto PrintProgressModulo(G4int mod) -> void { fExecutor.PrintProgressModulo(mod), printModulo = -1; }
 
-    void PrintProgressModulo(const G4int val) { (fPrintProgressModulo = val, printModulo = -1); }
+    virtual auto BeamOn(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) -> void override;
+    virtual auto ConfirmBeamOnCondition() -> G4bool override;
+    virtual auto DoEventLoop(G4int nEvent, const char* macroFile, G4int nSelect) -> void override;
 
-    virtual void BeamOn(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) override;
-    virtual void RunInitialization() override;
-    virtual void InitializeEventLoop(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) override;
-    virtual void ProcessOneEvent(G4int iEvent) override;
-    virtual void TerminateOneEvent() override;
-    virtual void RunTermination() override;
+    auto PrintRunSummary() const -> void { fExecutor.PrintExecutionSummary(); }
 
 private:
-    void EventEndReport(const G4int eventID) const;
-    void RunEndReport(const G4int runID) const;
-
-    static void RunBeginReport(const G4int runID);
-    static std::string FormatSecondToDHMS(const double secondsInTotal);
-
-private:
-    G4int fNEventToBeMPIProcessed;
-    IntegralIndexRange<G4int> fEventIDRange;
-
-    G4int fPrintProgressModulo;
-    WallTimeStopwatch<> fEventWallTimeStopwatch;
-    double fEventWallTime;
-    double fNAvgEventWallTime;
-    double fNDevEventWallTime;
-    CPUTimeStopwatch<> fRunCPUTimeStopwatch;
-    double fRunCPUTime;
-    WallTimeStopwatch<> fRunWallTimeStopwatch;
-    double fRunWallTime;
-    std::chrono::system_clock::time_point fRunBeginSystemTime;
-    std::chrono::system_clock::time_point fRunEndSystemTime;
+    MPIX::Executor<G4int> fExecutor;
 };
 
 } // namespace MACE::inline Extension::Geant4X

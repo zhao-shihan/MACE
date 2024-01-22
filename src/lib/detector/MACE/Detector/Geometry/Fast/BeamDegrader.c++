@@ -14,7 +14,7 @@ bool BeamDegrader::Enabled() const {
     return Description::BeamDegrader::Instance().Enabled();
 }
 
-void BeamDegrader::Construct(G4bool checkOverlaps) {
+auto BeamDegrader::Construct(G4bool checkOverlaps) -> void {
     const auto& description = Description::BeamDegrader::Instance();
     const auto name = description.Name();
     const auto width = description.Width();

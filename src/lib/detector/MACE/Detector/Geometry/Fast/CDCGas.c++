@@ -12,9 +12,9 @@
 
 namespace MACE::Detector::Geometry::Fast {
 
-using namespace MACE::LiteralUnit::MathConstant;
+using namespace MACE::LiteralUnit::MathConstantSuffix;
 
-void CDCGas::Construct(G4bool checkOverlaps) {
+auto CDCGas::Construct(G4bool checkOverlaps) -> void {
     const auto& cdc = Description::CDC::Instance();
     const auto name = "CDCGas";
     const auto zI = cdc.GasInnerLength() / 2;

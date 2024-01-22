@@ -1,28 +1,27 @@
 namespace MACE::Env::Memory::internal {
 
 template<Singletonified ASingleton>
-[[nodiscard]] std::optional<std::reference_wrapper<SingletonPool::Node>> SingletonPool::Find() {
-    if (const auto existed = fInstanceMap.find(typeid(ASingleton));
+[[nodiscard]] auto SingletonPool::Find() -> std::optional<std::reference_wrapper<void*>> {
+    if (const auto existed{fInstanceMap.find(typeid(ASingleton))};
         existed == fInstanceMap.end()) {
         return std::nullopt;
     } else {
-        return existed->second.first;
+        return get<0>(existed->second);
     }
 }
 
 template<Singletonified ASingleton>
-[[nodiscard]] SingletonPool::Node& SingletonPool::Insert(gsl::not_null<ASingleton*> instance) {
-    if (const auto [iter, inserted] = fInstanceMap.try_emplace(
-            typeid(decltype(*instance)), instance,
-            std::make_pair(fInstanceMap.size(), static_cast<SingletonBase*>(instance)));
+[[nodiscard]] auto SingletonPool::Insert(gsl::not_null<ASingleton*> instance) -> void*& {
+    if (const auto [iter, inserted]{fInstanceMap.try_emplace(
+            typeid(ASingleton), std::tuple{instance,
+                                           fInstanceMap.size(),
+                                           static_cast<SingletonBase*>(instance)})};
         inserted) {
-        return iter->second.first;
+        return get<0>(iter->second);
     } else {
-        throw std::logic_error(
-            std::string("MACE::Env::Memory::internal::SingletonPool::Insert: "
-                        "Instance of type ")
-                .append(typeid(decltype(*instance)).name())
-                .append(" already exists"));
+        throw std::logic_error{fmt::format("MACE::Env::Memory::internal::SingletonPool::Insert: "
+                                           "Instance of type {} already exists",
+                                           typeid(ASingleton).name())};
     }
 }
 

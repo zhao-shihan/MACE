@@ -3,13 +3,14 @@
 #include "MACE/Utility/MathConstant.h++"
 
 #include "G4PVPlacement.hh"
+#include "G4ThreeVector.hh"
 #include "G4Tubs.hh"
 
 namespace MACE::Detector::Geometry::Fast {
 
 using namespace MathConstant;
 
-void SpectrometerField::Construct(G4bool checkOverlaps) {
+auto SpectrometerField::Construct(G4bool checkOverlaps) -> void {
     const auto& description = Description::SpectrometerField::Instance();
     auto name = description.Name();
     auto length = description.Length();

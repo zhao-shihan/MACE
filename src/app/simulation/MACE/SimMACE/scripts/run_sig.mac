@@ -31,13 +31,17 @@
 /MACE/Field/SpectrometerMagneticField     0.1 tesla
 /MACE/Field/SolenoidMagneticField         0.1 tesla
 
-/MACE/Analysis/EnableCoincidenceOfEMC     true
-/MACE/Analysis/EnableCoincidenceOfMCP     true
+/MACE/Analysis/CoincidenceWithCDC     true
+/MACE/Analysis/CoincidenceWithMCP     true
+/MACE/Analysis/CoincidenceWithEMC     true
 
 #############################################################################
 # Run
 #############################################################################
 
+#/MPIRun/PrintProgressModulo 100
+
 /MACE/Analysis/FilePath   SimMACE_sig
 /MACE/Analysis/FileOption RECREATE
 /run/beamOn 8000
+/MPIRun/PrintRunSummary

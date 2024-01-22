@@ -13,12 +13,12 @@
 
 namespace MACE::Detector::Geometry::Fast {
 
-using namespace MACE::LiteralUnit::MathConstant;
+using namespace MACE::LiteralUnit::MathConstantSuffix;
 
-void CDCBody::Construct(G4bool checkOverlaps) {
+auto CDCBody::Construct(G4bool checkOverlaps) -> void {
     const auto& cdc = Description::CDC::Instance();
     const auto name = "CDCBody";
-    const auto sideExtension = cdc.ShellSideThickness() * std::sqrt(1 + 1 / Math::Pow2(cdc.EndCapSlope())) -
+    const auto sideExtension = cdc.ShellSideThickness() * std::sqrt(1 + 1 / Math::Pow<2>(cdc.EndCapSlope())) -
                                cdc.ShellInnerThickness() / cdc.EndCapSlope();
     const auto zI = cdc.GasInnerLength() / 2 + sideExtension;
     const auto zO = cdc.GasOuterLength() / 2 + sideExtension;

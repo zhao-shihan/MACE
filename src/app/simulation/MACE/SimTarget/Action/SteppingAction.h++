@@ -12,9 +12,9 @@ class SteppingAction final : public Env::Memory::PassiveSingleton<SteppingAction
 public:
     SteppingAction();
 
-    void SetKillIrrelevants(G4bool val) { fKillIrrelevants = val; }
+    auto SetKillIrrelevants(G4bool val) -> void { fKillIrrelevants = val; }
 
-    void UserSteppingAction(const G4Step* step) override;
+    auto UserSteppingAction(const G4Step* step) -> void override;
 
 private:
     const G4ParticleDefinition* const fMuonPlus;

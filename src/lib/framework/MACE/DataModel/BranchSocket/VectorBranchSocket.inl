@@ -6,7 +6,7 @@ VectorBranchSocket<T, N>::VectorBranchSocket(const std::string& branchName, cons
     fLeafList(
         [&leafNames] {
             std::string leafList;
-            leafList.append(leafNames[0]).append(std::string{'/', ROOTUtil::LeafTypeCode<T>()});
+            leafList.append(leafNames[0]).append(std::string{'/', ROOTX::LeafTypeCode<T>()});
             for (gsl::index i = 1; i < stdx::to_signed(N); ++i) {
                 leafList.append(":").append(leafNames[i]);
             }

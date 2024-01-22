@@ -46,7 +46,7 @@ constexpr UniformBase<ADerived, T>::UniformBase(const typename Base::ParameterTy
 template<std::floating_point T>
 MACE_ALWAYS_INLINE constexpr T UniformCompact<T>::operator()(UniformRandomBitGenerator auto& g, const UniformCompactParameter<T>& p) {
     const auto u = static_cast<T>(g() - g.Min()) / (g.Max() - g.Min());
-    std2b::assume(0 <= u and u <= 1);
+    std23::assume(0 <= u and u <= 1);
     return p.Infimum() + u * (p.Supremum() - p.Infimum());
 }
 
@@ -55,7 +55,7 @@ MACE_ALWAYS_INLINE constexpr T UniformReal<T>::operator()(UniformRandomBitGenera
     T u;
     do {
         u = UniformCompact()(g);
-        std2b::assume(0 <= u and u <= 1);
+        std23::assume(0 <= u and u <= 1);
     } while (u <= 0 or 1 <= u);
     return p.Infimum() + u * (p.Supremum() - p.Infimum());
 }

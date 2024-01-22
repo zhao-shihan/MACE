@@ -8,19 +8,19 @@ using namespace LiteralUnit::Length;
 
 EMCShield::EMCShield() :
     DescriptionSingletonBase<EMCShield>(__func__),
-    fInnerRadius(30_cm),
-    fInnerLength(80_cm),
-    fWindowRadius(12.7_cm),
-    fThickness(5_cm) {}
+    fInnerRadius{50_cm},
+    fInnerLength{100_cm},
+    fWindowRadius{7.7_cm},
+    fThickness{5_cm} {}
 
-void EMCShield::ImportValues(const YAML::Node& node) {
+auto EMCShield::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fInnerLength, "InnerLength");
     ImportValue(node, fWindowRadius, "WindowRadius");
     ImportValue(node, fThickness, "Thickness");
 }
 
-void EMCShield::ExportValues(YAML::Node& node) const {
+auto EMCShield::ExportValues(YAML::Node& node) const -> void {
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fInnerLength, "InnerLength");
     ExportValue(node, fWindowRadius, "WindowRadius");

@@ -25,6 +25,8 @@ if(MACE_BUILTIN_GENFIT)
                                       URL "${MACE_BUILTIN_GENFIT_URL}")
         message(STATUS "GenFit will be downloaded from ${MACE_BUILTIN_GENFIT_URL} to ${MACE_BUILTIN_GENFIT_SRC_DIR}")
     endif()
+    # set options
+    set(GF_BUILD_EVENT_DISPLAY ${MACE_BUILTIN_GENFIT_EVENT_DISPLAY})
     # configure it
     message(STATUS "Downloading (if required) and configuring GenFit (version: 2.2.0)")
     FetchContent_MakeAvailable(genfit)

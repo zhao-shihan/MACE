@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/Compatibility/std2b/constexpr_cmath.h++"
-#include "MACE/Compatibility/std2b/unreachable.h++"
+#include "MACE/Compatibility/std23/constexpr_cmath.h++"
+#include "MACE/Compatibility/std23/unreachable.h++"
 #include "MACE/Concept/InputVector.h++"
 #include "MACE/Detector/Description/DescriptionBase.h++"
 #include "MACE/Env/Memory/WeakSingleton.h++"
@@ -18,21 +18,21 @@
 namespace MACE::Detector::Description {
 
 class Target final : public DescriptionSingletonBase<Target> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 public:
     enum class TargetShapeType {
         Cuboid
     };
 
-    template<class ADerivedShape>
+    template<typename ADerivedShape>
     class ShapeBase : public Env::Memory::WeakSingleton<ADerivedShape> {
     protected:
         ShapeBase();
         ~ShapeBase() = default;
 
     protected:
-        template<class ADerivedDetail>
+        template<typename ADerivedDetail>
         class DetailBase : public Env::Memory::WeakSingleton<ADerivedDetail> {
         protected:
             DetailBase();
@@ -124,8 +124,8 @@ public:
     bool TestDetectable(const Concept::InputVector3D auto& x) const noexcept;
 
 private:
-    void ImportValues(const YAML::Node& node) override;
-    void ExportValues(YAML::Node& node) const override;
+    auto ImportValues(const YAML::Node& node) -> void override;
+    auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
     TargetShapeType fShapeType;

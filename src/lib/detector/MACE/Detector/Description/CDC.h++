@@ -12,10 +12,11 @@
 namespace MACE::Detector::Description {
 
 class CDC final : public DescriptionSingletonBase<CDC> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     CDC();
+    ~CDC() = default;
 
 public:
     ///////////////////////////////////////////////////////////
@@ -73,7 +74,7 @@ public:
             double halfLength;
             double stereoAzimuthAngle;
             double TanStereoZenithAngle(auto r) const { return r / halfLength * std::tan(stereoAzimuthAngle / 2); }
-            double SecStereoZenithAngle(auto r) const { return std::sqrt(1 + Math::Pow2(TanStereoZenithAngle(r))); }
+            double SecStereoZenithAngle(auto r) const { return std::sqrt(1 + Math::Pow<2>(TanStereoZenithAngle(r))); }
             double CosStereoZenithAngle(auto r) const { return 1 / SecStereoZenithAngle(r); }
             double SinStereoZenithAngle(auto r) const { return TanStereoZenithAngle(r) / SecStereoZenithAngle(r); }
             double StereoZenithAngle(auto r) const { return std::atan(TanStereoZenithAngle(r)); }
@@ -144,8 +145,8 @@ private:
     std::vector<SuperLayerConfiguration> ComputeLayerConfiguration() const;
     std::vector<CellInformation> ComputeCellMap() const;
 
-    void ImportValues(const YAML::Node& node) override;
-    void ExportValues(YAML::Node& node) const override;
+    auto ImportValues(const YAML::Node& node) -> void override;
+    auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
     ///////////////////////////////////////////////////////////

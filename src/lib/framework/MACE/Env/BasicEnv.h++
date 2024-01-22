@@ -1,8 +1,10 @@
 #pragma once
 
-#include "MACE/Env/internal/EnvBase.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/Env/VerboseLevel.h++"
+#include "MACE/Env/internal/EnvBase.h++"
+
+#include "fmt/format.h"
 
 #include <type_traits>
 
@@ -17,18 +19,18 @@ class NoCLI {};
 class BasicEnv : public internal::EnvBase,
                  public Memory::PassiveSingleton<BasicEnv> {
 public:
-    template<class ACLI = internal::NoCLI>
-    BasicEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel = VerboseLevel::Warning, bool printWelcomeMessage = true);
+    template<typename ACLI = internal::NoCLI>
+    BasicEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel = VL::Warning, bool printWelcomeMessage = true);
     virtual ~BasicEnv() = default;
 
-    const auto& GetVerboseLevel() const { return fVerboseLevel; }
+    auto GetVerboseLevel() const -> const auto& { return fVerboseLevel; }
 
 protected:
-    void PrintWelcomeMessageSplitLine() const;
-    void PrintWelcomeMessageBody(int argc, char* argv[]) const;
+    auto PrintWelcomeMessageSplitLine() const -> void;
+    auto PrintWelcomeMessageBody(int argc, char* argv[]) const -> void;
 
 private:
-    VerboseLevel fVerboseLevel;
+    VL fVerboseLevel;
 };
 
 } // namespace MACE::Env

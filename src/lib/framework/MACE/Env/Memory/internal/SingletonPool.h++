@@ -6,12 +6,15 @@
 
 #include "gsl/gsl"
 
+#include "fmt/format.h"
+
 #include <functional>
-#include <map>
 #include <optional>
 #include <stdexcept>
+#include <tuple>
 #include <typeindex>
 #include <typeinfo>
+#include <unordered_map>
 #include <utility>
 
 namespace MACE::Env::Memory::internal {
@@ -22,20 +25,16 @@ class SingletonBase;
 /// Not API.
 class SingletonPool final : public PassiveSingleton<SingletonPool> {
 public:
-    using Node = void*;
-    using BaseNode = gsl::owner<const SingletonBase*>;
-
-public:
     template<Singletonified ASingleton>
-    [[nodiscard]] std::optional<std::reference_wrapper<Node>> Find();
+    [[nodiscard]] auto Find() -> std::optional<std::reference_wrapper<void*>>;
     template<Singletonified ASingleton>
-    [[nodiscard]] auto Contains() const { return fInstanceMap.contains(typeid(ASingleton)); }
+    [[nodiscard]] auto Contains() const -> auto { return fInstanceMap.contains(typeid(ASingleton)); }
     template<Singletonified ASingleton>
-    [[nodiscard]] Node& Insert(gsl::not_null<ASingleton*> instance);
-    [[nodiscard]] std::vector<BaseNode> GetUndeletedInReverseInsertionOrder() const;
+    [[nodiscard]] auto Insert(gsl::not_null<ASingleton*> instance) -> void*&;
+    [[nodiscard]] auto GetUndeletedInReverseInsertionOrder() const -> std::vector<gsl::owner<const SingletonBase*>>;
 
 private:
-    std::map<std::type_index, std::pair<Node, const std::pair<gsl::index, BaseNode>>> fInstanceMap;
+    std::unordered_map<std::type_index, std::tuple<void*, const gsl::index, const gsl::owner<const SingletonBase*>>> fInstanceMap;
 };
 
 } // namespace MACE::Env::Memory::internal

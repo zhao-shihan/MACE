@@ -1,7 +1,7 @@
 namespace MACE::Env {
 
-template<class ACLI>
-BasicEnv::BasicEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel, bool printWelcomeMessage) :
+template<typename ACLI>
+BasicEnv::BasicEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWelcomeMessage) :
     EnvBase(),
     PassiveSingleton(),
     fVerboseLevel(verboseLevel) {

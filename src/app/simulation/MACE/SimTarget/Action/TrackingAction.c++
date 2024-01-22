@@ -1,8 +1,8 @@
-#include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
-#include "MACE/Simulation/Physics/Particle/Muonium.h++"
 #include "MACE/SimTarget/Action/TrackingAction.h++"
 #include "MACE/SimTarget/Analysis.h++"
 #include "MACE/SimTarget/MuoniumTrack.h++"
+#include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
+#include "MACE/Simulation/Physics/Particle/Muonium.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
 
 #include "G4Track.hh"
@@ -16,12 +16,12 @@ using namespace PhysicalConstant;
 TrackingAction::TrackingAction() :
     PassiveSingleton{},
     G4UserTrackingAction{},
-    fMuonium{gsl::not_null{Physics::Muonium::Definition()}},
-    fAntimuonium{gsl::not_null{Physics::Antimuonium::Definition()}},
-    fMuoniumTrack{nullptr},
+    fMuonium{gsl::not_null{Muonium::Definition()}},
+    fAntimuonium{gsl::not_null{Antimuonium::Definition()}},
+    fMuoniumTrack{},
     fEventID{-1} {}
 
-void TrackingAction::PreUserTrackingAction(const G4Track* track) {
+auto TrackingAction::PreUserTrackingAction(const G4Track* track) -> void {
     if (const auto particle = track->GetParticleDefinition();
         particle == fMuonium or particle == fAntimuonium) {
         fMuoniumTrack = Analysis::Instance().NewMuoniumTrack();
@@ -34,7 +34,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track) {
     }
 }
 
-void TrackingAction::PostUserTrackingAction(const G4Track* track) {
+auto TrackingAction::PostUserTrackingAction(const G4Track* track) -> void {
     if (const auto particle = track->GetParticleDefinition();
         particle == fMuonium or particle == fAntimuonium) {
         fMuoniumTrack->DecayTime(track->GetGlobalTime());

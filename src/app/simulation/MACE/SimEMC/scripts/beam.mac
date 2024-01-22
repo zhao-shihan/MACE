@@ -1,0 +1,25 @@
+/control/verbose 0
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+
+/MACE/Generator/SwitchToGPS
+/MACE/Physics/UseOpticalPhysics
+
+/run/initialize
+
+/gps/particle e+
+/gps/direction 0 0 1
+/gps/ene/mono 5 keV
+/gps/pos/type Beam
+/gps/pos/radius 0 cm
+/gps/pos/sigma_r 5.6 mm
+/gps/pos/centre 0. 0. -40. cm
+
+#/MACE/Analysis/EnableCoincidenceOfEMC     true
+#/MACE/Analysis/EnableCoincidenceOfMCP     true
+
+/MACE/Analysis/FilePath   SimEMC_sig
+/MACE/Analysis/FileOption RECREATE
+
+/run/beamOn 1000

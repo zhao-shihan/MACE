@@ -7,16 +7,17 @@
 
 namespace MACE::Detector::Field {
 
-template<class F, typename AFloat>
+template<typename F>
 concept ElectromagneticField =
-    requires(const F f, stdx::array3<AFloat> x) {
-        requires std::floating_point<AFloat>;
-        { f.BFieldAt(x) } -> std::same_as<decltype(x)>;
-        { f.EFieldAt(x) } -> std::same_as<decltype(x)>;
-        { f.BEFieldAt(x) } -> std::same_as<stdx::array2<decltype(x)>>;
-        { f.template BFieldAt<stdx::array3<AFloat>>({0, 0, 0}) } -> std::same_as<stdx::array3<AFloat>>;
-        { f.template EFieldAt<stdx::array3<AFloat>>({0, 0, 0}) } -> std::same_as<stdx::array3<AFloat>>;
-        { f.template BEFieldAt<stdx::array3<AFloat>>({0, 0, 0}) } -> std::same_as<stdx::array2<stdx::array3<AFloat>>>;
+    requires(const F f, stdx::array3d x) {
+        { f.BFieldAt(x) } -> std::same_as<stdx::array3d>;
+        { f.EFieldAt(x) } -> std::same_as<stdx::array3d>;
+        { f.BEFieldAt(x).B } -> std::same_as<stdx::array3d&&>;
+        { f.BEFieldAt(x).E } -> std::same_as<stdx::array3d&&>;
+        { f.template BFieldAt<stdx::array3d>({}) } -> std::same_as<stdx::array3d>;
+        { f.template EFieldAt<stdx::array3d>({}) } -> std::same_as<stdx::array3d>;
+        { f.template BEFieldAt<stdx::array3d>({}).B } -> std::same_as<stdx::array3d&&>;
+        { f.template BEFieldAt<stdx::array3d>({}).E } -> std::same_as<stdx::array3d&&>;
     };
 
 } // namespace MACE::Detector::Field

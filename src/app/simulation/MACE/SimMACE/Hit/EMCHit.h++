@@ -1,6 +1,7 @@
 #pragma once
 
-#include "MACE/DataModel/SimHit/EMCSimHit.h++"
+#include "MACE/Data/SimHit.h++"
+#include "MACE/Data/Tuple.h++"
 #include "MACE/Extension/Geant4X/UseG4Allocator.h++"
 
 #include "G4THitsCollection.hh"
@@ -10,8 +11,7 @@ namespace MACE::SimMACE::inline Hit {
 
 class EMCHit final : public Geant4X::UseG4Allocator<EMCHit>,
                      public G4VHit,
-                     public DataModel::EMCSimHit {};
-static_assert(DataModel::TransientData<EMCHit>);
+                     public Data::Tuple<Data::EMCSimHit> {};
 
 using EMCHitCollection = G4THitsCollection<EMCHit>;
 

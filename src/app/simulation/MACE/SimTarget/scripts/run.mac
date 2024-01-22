@@ -43,14 +43,21 @@
 # Run
 #############################################################################
 
+#/MPIRun/PrintProgressModulo 100
+
+/MPIRun/PrintRunSummary
+
 # Run 0: Flat target
 /MACE/Detector/Description/Import flat.yaml
 /run/beamOn                       80
+/MPIRun/PrintRunSummary
 
 # Run 1: Ablated target with spacing 49.5um, diameter 175um
 /MACE/Detector/Description/Import hole_0.yaml
 /run/beamOn                       80
+/MPIRun/PrintRunSummary
 
 # Run 2: Ablated target with spacing 60um, diameter 300um
 /MACE/Detector/Description/Import hole_1.yaml
 /run/beamOn                       80
+/MPIRun/PrintRunSummary

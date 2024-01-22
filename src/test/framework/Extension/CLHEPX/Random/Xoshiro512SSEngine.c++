@@ -26,7 +26,7 @@ int main() {
     std::cout << "    CLHEPX::...::Xoshiro512SSEngine : " << time << " ms (last integer: " << r << ')' << std::endl;
 
     for (int i = 0; i < 1000; ++i) { r = (unsigned int)(xoshiro512SSX); }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) { r = (unsigned int)(xoshiro512SSX); }
     time = stopWatch.MillisecondsElapsed();
     std::cout << "     Math::...::Xoshiro512SS : " << time << " ms (last integer: " << r << ')' << std::endl;
@@ -40,7 +40,7 @@ int main() {
                    Math::Random::Uniform<double>()(xoshiro512SS)};
         v2d += delta2d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta2d = {Math::Random::Uniform<double>()(xoshiro512SS),
                    Math::Random::Uniform<double>()(xoshiro512SS)};
@@ -55,7 +55,7 @@ int main() {
                    xoshiro512SSX.flat()};
         v2d += delta2d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta2d = {xoshiro512SSX.flat(),
                    xoshiro512SSX.flat()};
@@ -74,7 +74,7 @@ int main() {
                    Math::Random::Uniform<double>()(xoshiro512SS)};
         v3d += delta3d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta3d = {Math::Random::Uniform<double>()(xoshiro512SS),
                    Math::Random::Uniform<double>()(xoshiro512SS),
@@ -91,7 +91,7 @@ int main() {
                    xoshiro512SSX.flat()};
         v3d += delta3d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta3d = {xoshiro512SSX.flat(),
                    xoshiro512SSX.flat(),
@@ -112,7 +112,7 @@ int main() {
                    Math::Random::Uniform<double>()(xoshiro512SS)};
         v4d += delta4d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta4d = {Math::Random::Uniform<double>()(xoshiro512SS),
                    Math::Random::Uniform<double>()(xoshiro512SS),
@@ -131,7 +131,7 @@ int main() {
                    xoshiro512SSX.flat()};
         v4d += delta4d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta4d = {xoshiro512SSX.flat(),
                    xoshiro512SSX.flat(),

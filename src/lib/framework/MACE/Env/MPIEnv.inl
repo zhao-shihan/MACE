@@ -1,128 +1,136 @@
 namespace MACE::Env {
 
-template<class ACLI>
-MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel, bool printWelcomeMessage) :
+template<typename ACLI>
+MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWelcomeMessage) :
     BasicEnv{argc, argv, cli, verboseLevel, false},
     PassiveSingleton<MPIEnv>{},
-    fCommWorldRank{
+    fMPIThreadSupport{
         [&argc, &argv] {
-            // Confirm MPI condition
-            int mpiInitialized;
-            MACE_MPI_CALL_WITH_CHECK(MPI_Initialized,
-                                     &mpiInitialized)
-            if (mpiInitialized) {
-                throw std::logic_error("MACE::Env::MPIEnv: Trying to call MPI_Init twice");
-            }
-            // Initialize MPI
-            MACE_MPI_CALL_WITH_CHECK(MPI_Init,
-                                     &argc,
-                                     &argv)
-            // Initialize rank ID in the world communicator
+            int mpiThreadSupport;
+            MPI_Init_thread(&argc,               // argc
+                            &argv,               // argv
+                            MPI_THREAD_MULTIPLE, // required
+                            &mpiThreadSupport);  // provided
+            return mpiThreadSupport;
+        }()},
+    fCommWorldRank{
+        [] {
             int rank;
-            MACE_MPI_CALL_WITH_CHECK(MPI_Comm_rank,
-                                     MPI_COMM_WORLD,
-                                     &rank)
+            MPI_Comm_rank(MPI_COMM_WORLD, // comm
+                          &rank);         // rank
             return rank;
         }()},
     fCommWorldSize{
         [] {
-            // Initialize size of the world communicator
             int size;
-            MACE_MPI_CALL_WITH_CHECK(MPI_Comm_size,
-                                     MPI_COMM_WORLD,
-                                     &size)
+            MPI_Comm_size(MPI_COMM_WORLD, // comm
+                          &size);         // size
             return size;
         }()},
     fCluster{
-        [this]() -> std::remove_cv_t<decltype(fCluster)> {
+        [this] {
             using NameFixedString = FixedString<MPI_MAX_PROCESSOR_NAME>;
             // Member fCluster to be initialized
             std::remove_cv_t<decltype(fCluster)> cluster;
-            // Each rank get its processor name
+            // Each process get its processor name
             NameFixedString nodeNameSend;
             int nameLength;
-            MACE_MPI_CALL_WITH_CHECK(MPI_Get_processor_name,
-                                     nodeNameSend.Data(),
-                                     &nameLength)
+            MPI_Get_processor_name(nodeNameSend.Data(), // name
+                                   &nameLength);        // resultlen
             // Master collects processor names
             std::vector<NameFixedString> nodeNamesRecv;
-            if (AtCommWorldMaster()) { nodeNamesRecv.resize(fCommWorldSize); }
-            MACE_MPI_CALL_WITH_CHECK(MPI_Gather,
-                                     nodeNameSend.CString(),
-                                     NameFixedString::Occupation(),
-                                     MPI_CHAR,
-                                     nodeNamesRecv.data(),
-                                     NameFixedString::Occupation(),
-                                     MPI_CHAR,
-                                     0,
-                                     MPI_COMM_WORLD)
+            if (OnCommWorldMaster()) { nodeNamesRecv.resize(fCommWorldSize); }
+            MPI_Request gatherNodeNamesRequest;
+            MPI_Igather(nodeNameSend.CString(),        // sendbuf
+                        NameFixedString::Occupation(), // sendcount
+                        MPI_CHAR,                      // sendtype
+                        nodeNamesRecv.data(),          // recvbuf
+                        NameFixedString::Occupation(), // recvcount
+                        MPI_CHAR,                      // recvtype
+                        0,                             // root
+                        MPI_COMM_WORLD,                // comm
+                        &gatherNodeNamesRequest);      // request
             // Processor name list
-            std::vector<stdx::array2i> nodeIDAndCountSend;
-            stdx::array2i nodeIDAndCountRecv;
+            std::vector<int> nodeIDSend;
+            int nodeIDRecv;
+            int nodeCount;
             struct NodeInfoForMPI {
                 int size;
                 NameFixedString name;
             };
-            std::vector<NodeInfoForMPI> nodeList;
+            MPI_Datatype structNodeInfoForMPI;
+            MPI_Type_create_struct(2,                                                      // count
+                                   std::array<int, 2>{1,                                   // array_of_block_lengths
+                                                      NameFixedString::Occupation()}       // array_of_block_lengths
+                                       .data(),                                            // array_of_block_lengths
+                                   std::array<MPI_Aint, 2>{offsetof(NodeInfoForMPI, size), // array_of_displacements
+                                                           offsetof(NodeInfoForMPI, name)} // array_of_displacements
+                                       .data(),                                            // array_of_displacements
+                                   std::array<MPI_Datatype, 2>{MPI_INT,                    // array_of_types
+                                                               MPI_CHAR}                   // array_of_types
+                                       .data(),                                            // array_of_types
+                                   &structNodeInfoForMPI);                                 // newtype
+            MPI_Type_commit(&structNodeInfoForMPI);
+            MPI_Wait(&gatherNodeNamesRequest, // request
+                     MPI_STATUS_IGNORE);      // status
             // Master find all unique processor names and assign node ID and count
-            if (AtCommWorldMaster()) {
-                nodeIDAndCountSend.reserve(fCommWorldSize);
-                nodeList.reserve(fCommWorldSize);
-                // Find unique name and assign node ID
-                auto currentNodeID = 0;
-                auto currentNodeName = std::as_const(nodeNamesRecv).data();
-                for (auto&& name : std::as_const(nodeNamesRecv)) {
-                    if (name != *currentNodeName) {
-                        nodeList.push_back({static_cast<int>(std::distance(currentNodeName, &name)),
-                                            *currentNodeName});
-                        ++currentNodeID;
-                        currentNodeName = &name;
+            std::vector<NodeInfoForMPI> nodeList;
+            if (OnCommWorldMaster()) {
+                // key: node name, mapped: rank
+                std::multimap<const NameFixedString&, int> nodeMap;
+                for (int rank{};
+                     auto&& name : std::as_const(nodeNamesRecv)) {
+                    nodeMap.emplace(name, rank++);
+                }
+
+                std::vector<std::pair<std::vector<int>, const NameFixedString*>> rankNode;
+                auto currentNodeName{&nodeMap.begin()->first};
+                rankNode.push_back({{}, currentNodeName});
+                for (auto&& [nodeName, rank] : std::as_const(nodeMap)) {
+                    if (nodeName != *currentNodeName) {
+                        currentNodeName = &nodeName;
+                        rankNode.push_back({{}, currentNodeName});
                     }
-                    nodeIDAndCountSend.push_back({currentNodeID, -1});
+                    rankNode.back().first.emplace_back(rank);
                 }
-                nodeList.push_back({static_cast<int>(std::distance(currentNodeName, std::to_address(nodeNamesRecv.cend()))),
-                                    *currentNodeName});
-                // Assign node count
-                for (const int nodeCount = nodeList.size();
-                     auto&& [_, nodeCountSend] : nodeIDAndCountSend) {
-                    nodeCountSend = nodeCount;
+                std::ranges::sort(rankNode);
+
+                nodeIDSend.resize(fCommWorldSize);
+                for (int nodeID{};
+                     auto&& [rankList, nodeName] : std::as_const(rankNode)) {
+                    nodeList.push_back({static_cast<int>(rankList.size()), *nodeName});
+                    for (auto&& rank : rankList) {
+                        nodeIDSend.at(rank) = nodeID;
+                    }
+                    ++nodeID;
                 }
+                nodeCount = ssize(rankNode);
             }
-            // Send node ID and count
-            MACE_MPI_CALL_WITH_CHECK(MPI_Scatter,
-                                     std::as_const(nodeIDAndCountSend).data(),
-                                     1,
-                                     MPI_2INT,
-                                     nodeIDAndCountRecv.data(),
-                                     1,
-                                     MPI_2INT,
-                                     0,
-                                     MPI_COMM_WORLD)
-            auto&& [nodeID, nodeCount] = nodeIDAndCountRecv;
-            // Assign local processor ID
-            cluster.local = nodeID;
+            // Scatter node ID
+            MPI_Request scatterNodeIDRequest;
+            MPI_Iscatter(nodeIDSend.data(),      // sendbuf
+                         1,                      // sendcount
+                         MPI_INT,                // sendtype
+                         &nodeIDRecv,            // recvbuf
+                         1,                      // recvcount
+                         MPI_INT,                // recvtype
+                         0,                      // root
+                         MPI_COMM_WORLD,         // comm
+                         &scatterNodeIDRequest); // request
+            // Broadcast node count
+            MPI_Bcast(&nodeCount,      // buffer
+                      1,               // count
+                      MPI_INT,         // datatype
+                      0,               // root
+                      MPI_COMM_WORLD); // comm
             // Master send unique node name list
-            if (AtCommWorldWorker()) { nodeList.resize(nodeCount); }
-            constexpr int blockLengthOfNodeInfoForMPI[] = {1, NameFixedString::Occupation()};
-            constexpr MPI_Aint displacementOfNodeInfoForMPI[] = {offsetof(NodeInfoForMPI, size), offsetof(NodeInfoForMPI, name)};
-            constexpr MPI_Datatype typeOfNodeInfoForMPI[] = {MPI_INT, MPI_CHAR};
-            MPI_Datatype nodeInfoForMPI;
-            MACE_MPI_CALL_WITH_CHECK(MPI_Type_create_struct,
-                                     2,
-                                     blockLengthOfNodeInfoForMPI,
-                                     displacementOfNodeInfoForMPI,
-                                     typeOfNodeInfoForMPI,
-                                     &nodeInfoForMPI)
-            MACE_MPI_CALL_WITH_CHECK(MPI_Type_commit,
-                                     &nodeInfoForMPI)
-            MACE_MPI_CALL_WITH_CHECK(MPI_Bcast,
-                                     nodeList.data(),
-                                     nodeList.size(),
-                                     nodeInfoForMPI,
-                                     0,
-                                     MPI_COMM_WORLD)
-            MACE_MPI_CALL_WITH_CHECK(MPI_Type_free,
-                                     &nodeInfoForMPI)
+            if (OnCommWorldWorker()) { nodeList.resize(nodeCount); }
+            MPI_Bcast(nodeList.data(),      // buffer
+                      nodeList.size(),      // count
+                      structNodeInfoForMPI, // datatype
+                      0,                    // root
+                      MPI_COMM_WORLD);      // comm
+            MPI_Type_free(&structNodeInfoForMPI);
             // Assign to the list, convert node names to std::string
             cluster.node.reserve(nodeCount);
             for (auto&& [size, name] : std::as_const(nodeList)) {
@@ -130,46 +138,45 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VerboseLevel verboseLevel, bo
                 cluster.node.back().name.shrink_to_fit();
             }
             cluster.node.shrink_to_fit();
+            // Assign local processor ID
+            MPI_Wait(&scatterNodeIDRequest, // request
+                     MPI_STATUS_IGNORE);    // status
+            cluster.local = nodeIDRecv;
             // Return the cluster info
             return cluster;
         }()},
-    fSharedComm{
+    fCommNode{
         [this] {
             MPI_Comm comm;
             // Constructs shared communicator
-            MACE_MPI_CALL_WITH_CHECK(MPI_Comm_split,
-                                     MPI_COMM_WORLD,
-                                     fCluster.local,
-                                     0,
-                                     &comm)
+            MPI_Comm_split(MPI_COMM_WORLD, // comm
+                           fCluster.local, // color
+                           0,              // key
+                           &comm);         // newcomm
             return comm;
         }()},
-    fSharedCommRank{
+    fCommNodeRank{
         [this] {
             int rank;
             // Initialize rank ID in the local communicator
-            MACE_MPI_CALL_WITH_CHECK(MPI_Comm_rank,
-                                     fSharedComm,
-                                     &rank)
+            MPI_Comm_rank(fCommNode, // comm
+                          &rank);    // rank
             return rank;
         }()},
-    fSharedCommSize{
+    fCommNodeSize{
         [this] {
             int size;
             // Initialize size of the local communicator
-            MACE_MPI_CALL_WITH_CHECK(MPI_Comm_size,
-                                     fSharedComm,
-                                     &size)
+            MPI_Comm_size(fCommNode, // comm
+                          &size);    // size
             return size;
         }()} {
     // Disable ROOT implicit multi-threading
     if (ROOT::IsImplicitMTEnabled()) {
         ROOT::DisableImplicitMT();
     }
-    // Update status
-    fgInitialized = true;
     // Print startup message
-    if (printWelcomeMessage and AtCommWorldMaster()) {
+    if (printWelcomeMessage and OnCommWorldMaster()) {
         PrintWelcomeMessageSplitLine();
         PrintWelcomeMessageBody(argc, argv);
         PrintWelcomeMessageSplitLine();

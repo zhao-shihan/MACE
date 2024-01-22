@@ -4,12 +4,16 @@
 
 #include "G4VModularPhysicsList.hh"
 
-namespace MACE::SimMACE {
+class G4VModularPhysicsList;
+
+namespace MACE::SimEMC {
 
 class PhysicsList final : public Env::Memory::PassiveSingleton<PhysicsList>,
                           public G4VModularPhysicsList {
 public:
     PhysicsList();
+
+    auto UseOpticalPhysics() -> void;
 };
 
-} // namespace MACE::SimMACE
+} // namespace MACE::SimEMC

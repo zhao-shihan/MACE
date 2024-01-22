@@ -58,7 +58,7 @@ YAML::Node DescriptionBase::UnpackToLeafNodeForExporting(YAML::Node& node, AStri
 template<std::convertible_to<std::string>... AStrings>
 void DescriptionBase::PrintNodeNotFoundWarning(AStrings&&... nodeNames) const {
     if (const auto& env = Env::BasicEnv::Instance();
-        env.GetVerboseLevel() >= Env::VerboseLevel::Warning) {
+        env.GetVerboseLevel() >= Env::VL::Warning) {
         std::cout << "MACE::Detector::Description::DescriptionBase: YAML node \"" << fName;
         TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
                      [](auto&& name) {

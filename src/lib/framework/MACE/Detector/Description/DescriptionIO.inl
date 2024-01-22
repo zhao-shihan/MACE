@@ -2,7 +2,7 @@ namespace MACE::Detector::Description {
 
 namespace internal {
 
-template<std::intmax_t i, class T>
+template<std::intmax_t i, typename T>
 struct FillDescriptionArray {
     constexpr void operator()(std::array<DescriptionBase*, std::tuple_size_v<T>>& descriptions) const {
         std::get<i>(descriptions) = std::addressof(std::tuple_element_t<i, T>::Instance());
@@ -41,7 +41,7 @@ void DescriptionIO::Import(const std::ranges::range auto& yamlText)
 {
     auto yamlName = fmt::format("tmp_mace_geom{:x}", std::chrono::steady_clock::now().time_since_epoch().count());
     if (Env::MPIEnv::Initialized()) {
-        yamlName.append(fmt::format(".rank{}", Env::MPIEnv::Instance().CommWorldRank()));
+        yamlName.append(fmt::format(".mpi{}", Env::MPIEnv::Instance().CommWorldRank()));
     }
     yamlName.append(".yaml");
     const auto yamlPath = std::filesystem::temp_directory_path() / yamlName;
@@ -87,7 +87,7 @@ void DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::strin
         std::ofstream yamlOut;
         try {
             if (Env::MPIEnv::Available()) {
-                yamlOut.open(MPIUtil::MakeMPIFilePath(yamlFile), std::ios::out);
+                yamlOut.open(MPIX::ParallelizePath(yamlFile), std::ios::out);
             } else {
                 const auto parent = yamlFile.parent_path();
                 if (not parent.empty()) { std::filesystem::create_directories(parent); }

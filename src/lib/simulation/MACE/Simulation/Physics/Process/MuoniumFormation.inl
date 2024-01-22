@@ -1,43 +1,43 @@
-namespace MACE::inline Simulation::Physics {
+namespace MACE::inline Simulation::inline Physics {
 
 inline namespace Messenger {
 
 template<TargetForMuoniumPhysics ATarget>
 class MuoniumPhysicsMessenger;
 
-} // inline namespace Messenger
+} // namespace Messenger
 
 inline namespace Process {
 
 template<TargetForMuoniumPhysics ATarget>
 MuoniumFormation<ATarget>::MuoniumFormation() :
-    NonMoveableBase(),
-    G4VRestProcess(__func__, fUserDefined),
-    fMuonium(gsl::not_null(Muonium::Definition())),
-    fAntimuonium(gsl::not_null(Antimuonium::Definition())),
-    fTarget(&ATarget::Instance()),
-    fRandEng(G4Random::getTheEngine()),
-    fFormationProbability(0.65),
-    fConversionProbability(0),
-    fParticleChange() {
+    NonMoveableBase{},
+    G4VRestProcess{"MuoniumFormation", fUserDefined},
+    fMuonium{gsl::not_null(Muonium::Definition())},
+    fAntimuonium{gsl::not_null(Antimuonium::Definition())},
+    fTarget{&ATarget::Instance()},
+    fRandEng{G4Random::getTheEngine()},
+    fFormationProbability{0.655},
+    fConversionProbability{0},
+    fParticleChange{} {
     pParticleChange = &fParticleChange;
     MuoniumPhysicsMessenger<ATarget>::Instance().AssignTo(this);
 }
 
 template<TargetForMuoniumPhysics ATarget>
-G4bool MuoniumFormation<ATarget>::IsApplicable(const G4ParticleDefinition& particle) {
+auto MuoniumFormation<ATarget>::IsApplicable(const G4ParticleDefinition& particle) -> G4bool {
     return &particle == G4MuonPlus::Definition();
 }
 
 template<TargetForMuoniumPhysics ATarget>
-void MuoniumFormation<ATarget>::StartTracking(G4Track* track) {
+auto MuoniumFormation<ATarget>::StartTracking(G4Track* track) -> void {
     G4VRestProcess::StartTracking(track);
     // the random engine in use
     fRandEng = gsl::not_null(G4Random::getTheEngine());
 }
 
 template<TargetForMuoniumPhysics ATarget>
-G4VParticleChange* MuoniumFormation<ATarget>::AtRestDoIt(const G4Track& track, const G4Step&) {
+auto MuoniumFormation<ATarget>::AtRestDoIt(const G4Track& track, const G4Step&) -> G4VParticleChange* {
     using namespace PhysicalConstant;
 
     fParticleChange.Initialize(track);
@@ -67,7 +67,7 @@ G4VParticleChange* MuoniumFormation<ATarget>::AtRestDoIt(const G4Track& track, c
 }
 
 template<TargetForMuoniumPhysics ATarget>
-G4double MuoniumFormation<ATarget>::GetMeanLifeTime(const G4Track& track, G4ForceCondition*) {
+auto MuoniumFormation<ATarget>::GetMeanLifeTime(const G4Track& track, G4ForceCondition*) -> G4double {
     if (fRandEng->flat() < fFormationProbability and fTarget->Contain(track.GetPosition())) {
         return std::numeric_limits<double>::min();
     } else {
@@ -75,6 +75,6 @@ G4double MuoniumFormation<ATarget>::GetMeanLifeTime(const G4Track& track, G4Forc
     }
 }
 
-} // inline namespace Process
+} // namespace Process
 
-} // namespace MACE::inline Simulation::Physics
+} // namespace MACE::inline Simulation::inline Physics

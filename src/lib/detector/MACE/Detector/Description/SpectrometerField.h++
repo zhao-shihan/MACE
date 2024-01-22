@@ -5,10 +5,11 @@
 namespace MACE::Detector::Description {
 
 class SpectrometerField final : public DescriptionSingletonBase<SpectrometerField> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     SpectrometerField();
+    ~SpectrometerField() = default;
 
 public:
     ///////////////////////////////////////////////////////////
@@ -30,8 +31,8 @@ public:
     void MagneticFluxDensity(auto v) { fMagneticFluxDensity = v; }
 
 private:
-    void ImportValues(const YAML::Node& node) override;
-    void ExportValues(YAML::Node& node) const override;
+    auto ImportValues(const YAML::Node& node) -> void override;
+    auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
     ///////////////////////////////////////////////////////////

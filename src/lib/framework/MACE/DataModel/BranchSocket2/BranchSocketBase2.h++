@@ -11,7 +11,7 @@
 
 namespace MACE::DataModel::inline BranchSocket {
 
-template<class ADerived, typename T>
+template<typename ADerived, typename T>
 class BranchSocketBase2 : public NonMoveableBase {
 protected:
     BranchSocketBase2(std::string name, std::string title);

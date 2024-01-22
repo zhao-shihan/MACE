@@ -1,6 +1,6 @@
 namespace MACE::DataModel {
 
-template<class ADerived, typename T>
+template<typename ADerived, typename T>
 BranchSocketBase<ADerived, T>::BranchSocketBase(std::string branchName) :
     NonMoveableBase(),
     fBranchName(std::move(branchName)) {

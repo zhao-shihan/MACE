@@ -26,7 +26,7 @@ int main() {
     std::cout << "       std::mt19937 : " << time << " ms (last integer: " << r << ')' << std::endl;
 
     for (int i = 0; i < 1'000'000; ++i) { r = mt1993732(); }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) { r = mt1993732(); }
     time = stopWatch.MillisecondsElapsed();
     std::cout << "    MACE MT19937-32 : " << time << " ms (last integer: " << r << ')' << std::endl;
@@ -36,14 +36,14 @@ int main() {
 
     std::iota(arr16.begin(), arr16.end(), 0);
     for (int i = 0; i < 100'000; ++i) { std::ranges::shuffle(arr16, stdMT1993732); }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 1'000'000; ++i) { std::ranges::shuffle(arr16, stdMT1993732); }
     time = stopWatch.MillisecondsElapsed();
     std::cout << "       std::mt19937 : " << time << " ms (first element: " << arr16.front() << ')' << std::endl;
 
     std::iota(arr16.begin(), arr16.end(), 0);
     for (int i = 0; i < 100'000; ++i) { std::ranges::shuffle(arr16, mt1993732); }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 1'000'000; ++i) { std::ranges::shuffle(arr16, mt1993732); }
     time = stopWatch.MillisecondsElapsed();
     std::cout << "    MACE MT19937-32 : " << time << " ms (first element: " << arr16.front() << ')' << std::endl;
@@ -53,14 +53,14 @@ int main() {
 
     std::iota(arr4096.begin(), arr4096.end(), 0);
     for (int i = 0; i < 1'000; ++i) { std::ranges::shuffle(arr4096, stdMT1993732); }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000; ++i) { std::ranges::shuffle(arr4096, stdMT1993732); }
     time = stopWatch.MillisecondsElapsed();
     std::cout << "       std::mt19937 : " << time << " ms (first element: " << arr4096.front() << ')' << std::endl;
 
     std::iota(arr4096.begin(), arr4096.end(), 0);
     for (int i = 0; i < 1'000; ++i) { std::ranges::shuffle(arr4096, mt1993732); }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000; ++i) { std::ranges::shuffle(arr4096, mt1993732); }
     time = stopWatch.MillisecondsElapsed();
     std::cout << "    MACE MT19937-32 : " << time << " ms (first element: " << arr4096.front() << ')' << std::endl;
@@ -74,7 +74,7 @@ int main() {
                    std::uniform_real_distribution()(stdMT1993732)};
         v2d += delta2d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta2d = {std::uniform_real_distribution()(stdMT1993732),
                    std::uniform_real_distribution()(stdMT1993732)};
@@ -89,7 +89,7 @@ int main() {
                    std::uniform_real_distribution()(mt1993732)};
         v2d += delta2d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta2d = {std::uniform_real_distribution()(mt1993732),
                    std::uniform_real_distribution()(mt1993732)};
@@ -108,7 +108,7 @@ int main() {
                    std::uniform_real_distribution()(stdMT1993732)};
         v3d += delta3d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta3d = {std::uniform_real_distribution()(stdMT1993732),
                    std::uniform_real_distribution()(stdMT1993732),
@@ -125,7 +125,7 @@ int main() {
                    std::uniform_real_distribution()(mt1993732)};
         v3d += delta3d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta3d = {std::uniform_real_distribution()(mt1993732),
                    std::uniform_real_distribution()(mt1993732),
@@ -146,7 +146,7 @@ int main() {
                    std::uniform_real_distribution()(stdMT1993732)};
         v4d += delta4d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta4d = {std::uniform_real_distribution()(stdMT1993732),
                    std::uniform_real_distribution()(stdMT1993732),
@@ -165,7 +165,7 @@ int main() {
                    std::uniform_real_distribution()(mt1993732)};
         v4d += delta4d;
     }
-    stopWatch.Reset();
+    stopWatch = {};
     for (int i = 0; i < 10'000'000; ++i) {
         delta4d = {std::uniform_real_distribution()(mt1993732),
                    std::uniform_real_distribution()(mt1993732),

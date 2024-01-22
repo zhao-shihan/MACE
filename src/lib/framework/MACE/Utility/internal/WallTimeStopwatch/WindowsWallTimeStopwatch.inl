@@ -20,14 +20,14 @@ namespace MACE::inline Utility::internal {
 
 template<typename ATime>
 WallTimeStopwatch<ATime>::WallTimeStopwatch() noexcept :
-    fFrequency(),
-    fT0() {
+    fFrequency{},
+    fT0{} {
     QueryPerformanceFrequency(&fFrequency);
-    Reset();
+    QueryPerformanceCounter(&fT0);
 }
 
 template<typename ATime>
-ATime WallTimeStopwatch<ATime>::SecondsElapsed() const noexcept {
+auto WallTimeStopwatch<ATime>::SecondsElapsed() const noexcept -> ATime {
     LARGE_INTEGER t;
     QueryPerformanceCounter(&t);
     return static_cast<ATime>(t.QuadPart - fT0.QuadPart) / fFrequency.QuadPart;

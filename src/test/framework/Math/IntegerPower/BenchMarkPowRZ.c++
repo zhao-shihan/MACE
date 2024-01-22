@@ -35,22 +35,22 @@ T BenchmarkPowRZ(T common) {
 
     std::cout << "Background: " << duration<double, std::milli>(end - begin).count() << " ms\t\t";
 
-    // benchmark PowRZ
+    // benchmark Pow
     // warm up
     begin = steady_clock::now();
     for (int i = 0; i < warmUpCycle; ++i) {
-        dummy = PowRZ<N>(T(common + 1e-5 * i));
+        dummy = Pow<N>(T(common + 1e-5 * i));
     }
     end = steady_clock::now();
     // benchmark
     begin = steady_clock::now();
     for (int i = 0; i < benchmarkCycle; ++i) {
-        dummy = PowRZ<N>(T(common + 1e-5 * i));
+        dummy = Pow<N>(T(common + 1e-5 * i));
     }
     end = steady_clock::now();
 
     const duration<double, std::milli> powIntTime = end - begin;
-    std::cout << "PowRZ<" << N << ">(x):\t" << powIntTime.count() << " ms\t";
+    std::cout << "Pow<" << N << ">(x):\t" << powIntTime.count() << " ms\t";
 
     // benchmark std::pow
     // warm up
@@ -79,65 +79,65 @@ int main(int argc, char* argv[]) {
     std::cout << #Type << ", power zero:" << std::endl; \
     BenchmarkPowRZ<Type, 0>(common);                    \
     std::cout << #Type << ", power 4^n:" << std::endl;  \
-    BenchmarkPowRZ<Type, PowZN<4>(0)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<4>(1)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<4>(2)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<4>(3)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<4>(4)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<4>(5)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<4>(6)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<4>(7)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<4>(8)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<4>(9)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<4>(10)>(common);         \
-    BenchmarkPowRZ<Type, PowZN<4>(11)>(common);         \
-    BenchmarkPowRZ<Type, PowZN<4>(12)>(common);         \
-    BenchmarkPowRZ<Type, PowZN<4>(13)>(common);         \
-    BenchmarkPowRZ<Type, PowZN<4>(14)>(common);         \
-    BenchmarkPowRZ<Type, PowZN<4>(15)>(common);         \
+    BenchmarkPowRZ<Type, IPow<4>(0)>(common);          \
+    BenchmarkPowRZ<Type, IPow<4>(1)>(common);          \
+    BenchmarkPowRZ<Type, IPow<4>(2)>(common);          \
+    BenchmarkPowRZ<Type, IPow<4>(3)>(common);          \
+    BenchmarkPowRZ<Type, IPow<4>(4)>(common);          \
+    BenchmarkPowRZ<Type, IPow<4>(5)>(common);          \
+    BenchmarkPowRZ<Type, IPow<4>(6)>(common);          \
+    BenchmarkPowRZ<Type, IPow<4>(7)>(common);          \
+    BenchmarkPowRZ<Type, IPow<4>(8)>(common);          \
+    BenchmarkPowRZ<Type, IPow<4>(9)>(common);          \
+    BenchmarkPowRZ<Type, IPow<4>(10)>(common);         \
+    BenchmarkPowRZ<Type, IPow<4>(11)>(common);         \
+    BenchmarkPowRZ<Type, IPow<4>(12)>(common);         \
+    BenchmarkPowRZ<Type, IPow<4>(13)>(common);         \
+    BenchmarkPowRZ<Type, IPow<4>(14)>(common);         \
+    BenchmarkPowRZ<Type, IPow<4>(15)>(common);         \
     std::cout << #Type << ", power -4^n:" << std::endl; \
-    BenchmarkPowRZ<Type, -PowZN<4>(0)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<4>(1)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<4>(2)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<4>(3)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<4>(4)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<4>(5)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<4>(6)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<4>(7)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<4>(8)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<4>(9)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<4>(10)>(common);        \
-    BenchmarkPowRZ<Type, -PowZN<4>(11)>(common);        \
-    BenchmarkPowRZ<Type, -PowZN<4>(12)>(common);        \
-    BenchmarkPowRZ<Type, -PowZN<4>(13)>(common);        \
-    BenchmarkPowRZ<Type, -PowZN<4>(14)>(common);        \
-    BenchmarkPowRZ<Type, -PowZN<4>(15)>(common);        \
+    BenchmarkPowRZ<Type, -IPow<4>(0)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<4>(1)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<4>(2)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<4>(3)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<4>(4)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<4>(5)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<4>(6)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<4>(7)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<4>(8)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<4>(9)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<4>(10)>(common);        \
+    BenchmarkPowRZ<Type, -IPow<4>(11)>(common);        \
+    BenchmarkPowRZ<Type, -IPow<4>(12)>(common);        \
+    BenchmarkPowRZ<Type, -IPow<4>(13)>(common);        \
+    BenchmarkPowRZ<Type, -IPow<4>(14)>(common);        \
+    BenchmarkPowRZ<Type, -IPow<4>(15)>(common);        \
     std::cout << #Type << ", power 7^n:" << std::endl;  \
-    BenchmarkPowRZ<Type, PowZN<7>(0)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<7>(1)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<7>(2)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<7>(3)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<7>(4)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<7>(5)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<7>(6)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<7>(7)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<7>(8)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<7>(9)>(common);          \
-    BenchmarkPowRZ<Type, PowZN<7>(10)>(common);         \
-    BenchmarkPowRZ<Type, PowZN<7>(11)>(common);         \
+    BenchmarkPowRZ<Type, IPow<7>(0)>(common);          \
+    BenchmarkPowRZ<Type, IPow<7>(1)>(common);          \
+    BenchmarkPowRZ<Type, IPow<7>(2)>(common);          \
+    BenchmarkPowRZ<Type, IPow<7>(3)>(common);          \
+    BenchmarkPowRZ<Type, IPow<7>(4)>(common);          \
+    BenchmarkPowRZ<Type, IPow<7>(5)>(common);          \
+    BenchmarkPowRZ<Type, IPow<7>(6)>(common);          \
+    BenchmarkPowRZ<Type, IPow<7>(7)>(common);          \
+    BenchmarkPowRZ<Type, IPow<7>(8)>(common);          \
+    BenchmarkPowRZ<Type, IPow<7>(9)>(common);          \
+    BenchmarkPowRZ<Type, IPow<7>(10)>(common);         \
+    BenchmarkPowRZ<Type, IPow<7>(11)>(common);         \
     std::cout << #Type << ", power -7^n:" << std::endl; \
-    BenchmarkPowRZ<Type, -PowZN<7>(0)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<7>(1)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<7>(2)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<7>(3)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<7>(4)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<7>(5)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<7>(6)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<7>(7)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<7>(8)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<7>(9)>(common);         \
-    BenchmarkPowRZ<Type, -PowZN<7>(10)>(common);        \
-    BenchmarkPowRZ<Type, -PowZN<7>(11)>(common);
+    BenchmarkPowRZ<Type, -IPow<7>(0)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<7>(1)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<7>(2)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<7>(3)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<7>(4)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<7>(5)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<7>(6)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<7>(7)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<7>(8)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<7>(9)>(common);         \
+    BenchmarkPowRZ<Type, -IPow<7>(10)>(common);        \
+    BenchmarkPowRZ<Type, -IPow<7>(11)>(common);
 
     // MACE_BENCHMARK_POWRZ(char);
     // MACE_BENCHMARK_POWRZ(signed char);

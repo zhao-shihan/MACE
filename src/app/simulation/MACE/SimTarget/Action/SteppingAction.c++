@@ -14,8 +14,8 @@ SteppingAction::SteppingAction() :
     PassiveSingleton(),
     G4UserSteppingAction(),
     fMuonPlus{gsl::not_null{G4MuonPlus::Definition()}},
-    fMuonium{gsl::not_null(Physics::Muonium::Definition())},
-    fAntimuonium{gsl::not_null(Physics::Antimuonium::Definition())},
+    fMuonium{gsl::not_null(Muonium::Definition())},
+    fAntimuonium{gsl::not_null(Antimuonium::Definition())},
     fKillIrrelevants{false} {
     ActionMessenger::Instance().AssignTo(this);
 }

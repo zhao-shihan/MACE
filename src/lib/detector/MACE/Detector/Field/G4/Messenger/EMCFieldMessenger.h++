@@ -19,7 +19,7 @@ inline namespace Messenger {
 
 class EMCFieldMessenger final : public Env::Memory::Singleton<EMCFieldMessenger>,
                                   public G4UImessenger {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     EMCFieldMessenger();

@@ -5,10 +5,11 @@
 namespace MACE::Detector::Description {
 
 class MCP final : public DescriptionSingletonBase<MCP> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     MCP();
+    ~MCP() = default;
 
 public:
     const auto& Width() const { return fWidth; }
@@ -18,8 +19,8 @@ public:
     void Thickness(double val) { fThickness = val; }
 
 private:
-    void ImportValues(const YAML::Node& node) override;
-    void ExportValues(YAML::Node& node) const override;
+    auto ImportValues(const YAML::Node& node) -> void override;
+    auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
     double fWidth;

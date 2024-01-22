@@ -9,7 +9,7 @@ public:
     bool Enabled() const override;
 
 private:
-    void Construct(G4bool checkOverlaps) override;
+    auto Construct(G4bool checkOverlaps) -> void override;
 };
 
 } // namespace MACE::Detector::Geometry::Fast

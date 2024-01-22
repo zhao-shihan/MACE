@@ -1,43 +1,46 @@
 #pragma once
 
 #include "MACE/Detector/Description/DescriptionBase.h++"
+#include "MACE/Detector/Description/Solenoid.h++"
+#include "MACE/Extension/stdx/arraynx.h++"
+#include "MACE/Utility/InlineMacro.h++"
+#include "MACE/Utility/VectorArithmeticOperator.h++"
 
 #include "CLHEP/Geometry/Transform3D.h"
 
 namespace MACE::Detector::Description {
 
 class EMCField final : public DescriptionSingletonBase<EMCField> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     EMCField();
+    ~EMCField() = default;
 
 public:
     ///////////////////////////////////////////////////////////
     // Geometry
     ///////////////////////////////////////////////////////////
 
-    const auto& Radius() const { return fRadius; }
-    const auto& Length() const { return fLength; }
+    auto Radius() const -> const auto& { return fRadius; }
+    auto Length() const -> const auto& { return fLength; }
 
-    void Radius(auto v) { fRadius = v; }
-    void Length(auto v) { fLength = v; }
+    auto Radius(auto v) -> void { fRadius = v; }
+    auto Length(auto v) -> void { fLength = v; }
 
-    // Next 1 method should only use for geometry construction.
-
-    HepGeom::Transform3D CalcTransform() const;
+    MACE_ALWAYS_INLINE auto Center() const -> stdx::array3d;
 
     ///////////////////////////////////////////////////////////
     // Field
     ///////////////////////////////////////////////////////////
 
-    const auto& MagneticFluxDensity() const { return fMagneticFluxDensity; }
+    auto MagneticFluxDensity() const -> const auto& { return fMagneticFluxDensity; }
 
-    void MagneticFluxDensity(auto v) { fMagneticFluxDensity = v; }
+    auto MagneticFluxDensity(auto v) -> void { fMagneticFluxDensity = v; }
 
 private:
-    void ImportValues(const YAML::Node& node) override;
-    void ExportValues(YAML::Node& node) const override;
+    auto ImportValues(const YAML::Node& node) -> void override;
+    auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
     ///////////////////////////////////////////////////////////
@@ -55,3 +58,5 @@ private:
 };
 
 } // namespace MACE::Detector::Description
+
+#include "MACE/Detector/Description/EMCField.inl"

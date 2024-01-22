@@ -20,18 +20,17 @@ class CPUTimeStopwatch {
 public:
     CPUTimeStopwatch() noexcept;
 
-    void Reset() noexcept { fT0 = ClockIn100ns(); }
-    auto SecondsUsed() const noexcept { return HectonanosecondsUsed() / 10'000'000; }
-    auto MillisecondsUsed() const noexcept { return HectonanosecondsUsed() / 10'000; }
-    auto MicrosecondsUsed() const noexcept { return HectonanosecondsUsed() / 10; }
-    auto NanosecondsUsed() const noexcept { return HectonanosecondsUsed() * 100; }
+    auto SecondsUsed() const noexcept -> auto { return HectonanosecondsUsed() / 10'000'000; }
+    auto MillisecondsUsed() const noexcept -> auto { return HectonanosecondsUsed() / 10'000; }
+    auto MicrosecondsUsed() const noexcept -> auto { return HectonanosecondsUsed() / 10; }
+    auto NanosecondsUsed() const noexcept -> auto { return HectonanosecondsUsed() * 100; }
 
 private:
-    auto HectonanosecondsUsed() const noexcept { return static_cast<ATime>(ClockIn100ns().QuadPart - fT0.QuadPart); }
-    ULARGE_INTEGER ClockIn100ns() const noexcept;
+    auto HectonanosecondsUsed() const noexcept -> auto { return static_cast<ATime>(ClockIn100ns().QuadPart - fT0.QuadPart); }
+    auto ClockIn100ns() const noexcept -> ULARGE_INTEGER;
 
 private:
-    const HANDLE fCurrentProcess;
+    HANDLE fCurrentProcess;
     ULARGE_INTEGER fT0;
 };
 

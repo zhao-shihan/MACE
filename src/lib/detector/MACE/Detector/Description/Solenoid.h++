@@ -1,47 +1,55 @@
 #pragma once
 
 #include "MACE/Detector/Description/DescriptionBase.h++"
-
-#include "CLHEP/Geometry/Transform3D.h"
+#include "MACE/Detector/Description/SpectrometerField.h++"
+#include "MACE/Extension/stdx/arraynx.h++"
+#include "MACE/Utility/VectorArithmeticOperator.h++"
 
 namespace MACE::Detector::Description {
 
 class Solenoid final : public DescriptionSingletonBase<Solenoid> {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     Solenoid();
+    ~Solenoid() = default;
 
 public:
     ///////////////////////////////////////////////////////////
     // Geometry
     ///////////////////////////////////////////////////////////
 
-    const auto& S1Length() const { return fS1Length; }
-    const auto& B1Radius() const { return fB1Radius; }
-    const auto& S2Length() const { return fS2Length; }
-    const auto& B2Radius() const { return fB2Radius; }
-    const auto& S3Length() const { return fS3Length; }
-    const auto& InnerRadius() const { return fInnerRadius; }
-    const auto& OuterRadius() const { return fOuterRadius; }
-    const auto& FieldRadius() const { return fFieldRadius; }
+    auto S1Length() const -> const auto& { return fS1Length; }
+    auto B1Radius() const -> const auto& { return fB1Radius; }
+    auto S2Length() const -> const auto& { return fS2Length; }
+    auto B2Radius() const -> const auto& { return fB2Radius; }
+    auto S3Length() const -> const auto& { return fS3Length; }
+    auto InnerRadius() const -> const auto& { return fInnerRadius; }
+    auto OuterRadius() const -> const auto& { return fOuterRadius; }
+    auto FieldRadius() const -> const auto& { return fFieldRadius; }
 
-    void S1Length(auto v) { fS1Length = v; }
-    void B1Radius(auto v) { fB1Radius = v; }
-    void S2Length(auto v) { fS2Length = v; }
-    void B2Radius(auto v) { fB2Radius = v; }
-    void S3Length(auto v) { fS3Length = v; }
-    void InnerRadius(auto v) { fInnerRadius = v; }
-    void OuterRadius(auto v) { fOuterRadius = v; }
-    void FieldRadius(auto v) { fFieldRadius = v; }
+    auto S1Length(auto v) -> void { fS1Length = v; }
+    auto B1Radius(auto v) -> void { fB1Radius = v; }
+    auto S2Length(auto v) -> void { fS2Length = v; }
+    auto B2Radius(auto v) -> void { fB2Radius = v; }
+    auto S3Length(auto v) -> void { fS3Length = v; }
+    auto InnerRadius(auto v) -> void { fInnerRadius = v; }
+    auto OuterRadius(auto v) -> void { fOuterRadius = v; }
+    auto FieldRadius(auto v) -> void { fFieldRadius = v; }
 
-    // Next 5 methods should only use for geometry construction.
+    auto S1Center() const -> stdx::array3d { return {0, 0, (SpectrometerField::Instance().Length() + fS1Length) / 2}; }
+    auto B1Center() const -> stdx::array3d { return S1Center() + stdx::array3d{fB1Radius, 0, fS1Length / 2}; }
+    auto S2Center() const -> stdx::array3d { return B1Center() + stdx::array3d{fS2Length / 2, 0, fB1Radius}; }
+    auto B2Center() const -> stdx::array3d { return S2Center() + stdx::array3d{fS2Length / 2, 0, fB2Radius}; }
+    auto S3Center() const -> stdx::array3d { return B2Center() + stdx::array3d{fB2Radius, 0, fS3Length / 2}; }
 
-    HepGeom::Transform3D S1Transform() const;
-    HepGeom::Transform3D B1Transform() const;
-    HepGeom::Transform3D S2Transform() const;
-    HepGeom::Transform3D B2Transform() const;
-    HepGeom::Transform3D S3Transform() const;
+    // // Next 5 methods should only use for geometry construction.
+
+    // HepGeom::Transform3D S1Transform() const;
+    // HepGeom::Transform3D B1Transform() const;
+    // HepGeom::Transform3D S2Transform() const;
+    // HepGeom::Transform3D B2Transform() const;
+    // HepGeom::Transform3D S3Transform() const;
 
     ///////////////////////////////////////////////////////////
     // Field
@@ -52,8 +60,8 @@ public:
     void MagneticFluxDensity(auto v) { fMagneticFluxDensity = v; }
 
 private:
-    void ImportValues(const YAML::Node& node) override;
-    void ExportValues(YAML::Node& node) const override;
+    auto ImportValues(const YAML::Node& node) -> void override;
+    auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
     ///////////////////////////////////////////////////////////

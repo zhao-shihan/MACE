@@ -9,7 +9,7 @@
 
 namespace MACE::DataModel::inline Column {
 
-template<class AData, gsl::index AUniqueID, std::size_t AMaxSize, std::convertible_to<FixedString<AMaxSize>> T>
+template<typename AData, gsl::index AUniqueID, std::size_t AMaxSize, std::convertible_to<FixedString<AMaxSize>> T>
     requires std::convertible_to<FixedString<AMaxSize>, T>
 class StringColumn final : public ColumnBase<StringColumn<AData, AUniqueID, AMaxSize, T>,
                                            AData, AUniqueID,
@@ -34,9 +34,9 @@ private:
     T fString;
 };
 
-template<class AData, gsl::index AUniqueID, std::convertible_to<ShortString> T>
-    requires std::convertible_to<ShortString, T>
-using ShortStringColumn = StringColumn<AData, AUniqueID, ShortString::MaxSize(), T>;
+template<typename AData, gsl::index AUniqueID, std::convertible_to<String15> T>
+    requires std::convertible_to<String15, T>
+using ShortStringColumn = StringColumn<AData, AUniqueID, String15::MaxSize(), T>;
 
 } // namespace MACE::DataModel::inline Column
 

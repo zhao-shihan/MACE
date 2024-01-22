@@ -127,13 +127,13 @@ std::vector<CDC::SuperLayerConfiguration> CDC::ComputeLayerConfiguration() const
                  lastRIn = notFirstSenseLayerOfThisSuperLayer ?
                                lastSense.innerRadius / std::cos(lastSense.stereoAzimuthAngle / 2) :
                                super.innerRadius,
-                 tan2ThetaS = Math::Pow2(tanInnerStereoZenithAngle)] {
+                 tan2ThetaS = Math::Pow<2>(tanInnerStereoZenithAngle)] {
                     return (lastHL +
                             eta * (std::sqrt(
-                                       Math::Pow2(rIn) +
+                                       Math::Pow<2>(rIn) +
                                        (lastHL + eta * (rIn - lastRIn)) * (lastHL - eta * (rIn + lastRIn)) * tan2ThetaS) -
                                    lastRIn)) /
-                           (1 - Math::Pow2(eta) * tan2ThetaS);
+                           (1 - Math::Pow<2>(eta) * tan2ThetaS);
                 }();
             sense.stereoAzimuthAngle = 2 * std::atan(sense.halfLength / sense.innerRadius * tanInnerStereoZenithAngle);
 
@@ -234,6 +234,8 @@ void CDC::ImportValues(const YAML::Node& node) {
     // Detection
     ImportValue(node, fMeanDriftVelocity, "MeanDriftVelocity");
     ImportValue(node, fDeadTime, "DeadTime");
+
+    SetGeometryOutdated();
 }
 
 void CDC::ExportValues(YAML::Node& node) const {

@@ -5,7 +5,7 @@ bool Target::VolumeContain(const Concept::InputVector3D auto& x) const noexcept 
     case TargetShapeType::Cuboid:
         return fCuboid.VolumeContain(x);
     }
-    std2b::unreachable();
+    std23::unreachable();
 }
 
 bool Target::Contain(const Concept::InputVector3D auto& x, bool insideVolume) const noexcept {
@@ -13,7 +13,7 @@ bool Target::Contain(const Concept::InputVector3D auto& x, bool insideVolume) co
     case TargetShapeType::Cuboid:
         return fCuboid.Contain(x, insideVolume);
     }
-    std2b::unreachable();
+    std23::unreachable();
 }
 
 bool Target::TestDetectable(const Concept::InputVector3D auto& x) const noexcept {
@@ -21,10 +21,10 @@ bool Target::TestDetectable(const Concept::InputVector3D auto& x) const noexcept
     case TargetShapeType::Cuboid:
         return fCuboid.TestDetectable(x);
     }
-    std2b::unreachable();
+    std23::unreachable();
 }
 
-template<class ADerivedShape>
+template<typename ADerivedShape>
 Target::ShapeBase<ADerivedShape>::ShapeBase() {
     static_assert(
         requires(const ADerivedShape shape, CLHEP::Hep3Vector x, bool inside) {
@@ -37,8 +37,8 @@ Target::ShapeBase<ADerivedShape>::ShapeBase() {
         });
 }
 
-template<class ADerivedShape>
-template<class ADerivedDetail>
+template<typename ADerivedShape>
+template<typename ADerivedDetail>
 Target::ShapeBase<ADerivedShape>::DetailBase<ADerivedDetail>::DetailBase() {
     static_assert(
         requires(const ADerivedDetail detail, CLHEP::Hep3Vector x) {
@@ -51,8 +51,8 @@ Target::ShapeBase<ADerivedShape>::DetailBase<ADerivedDetail>::DetailBase() {
 
 bool Target::CuboidTarget::VolumeContain(const Concept::InputVector3D auto& x) const noexcept {
     return -fThickness <= x[2] and x[2] <= 0 and
-           std2b::abs(x[0]) <= fWidth / 2 and
-           std2b::abs(x[1]) <= fWidth / 2;
+           std23::abs(x[0]) <= fWidth / 2 and
+           std23::abs(x[1]) <= fWidth / 2;
 }
 
 bool Target::CuboidTarget::Contain(const Concept::InputVector3D auto& x, bool insideVolume) const noexcept {
@@ -63,13 +63,13 @@ bool Target::CuboidTarget::Contain(const Concept::InputVector3D auto& x, bool in
         return insideVolume and
                fHole.DetailContain(x);
     }
-    std2b::unreachable();
+    std23::unreachable();
 }
 
 bool Target::CuboidTarget::TestDetectable(const Concept::InputVector3D auto& x) const noexcept {
     const auto notShadowed = x[2] > 0 or
-                             std2b::abs(x[0]) > fWidth / 2 or
-                             std2b::abs(x[1]) > fWidth / 2;
+                             std23::abs(x[0]) > fWidth / 2 or
+                             std23::abs(x[1]) > fWidth / 2;
     switch (fDetailType) {
     case ShapeDetailType::Flat:
         return notShadowed;
@@ -77,17 +77,17 @@ bool Target::CuboidTarget::TestDetectable(const Concept::InputVector3D auto& x) 
         return notShadowed or
                fHole.DetailDetectable(x);
     }
-    std2b::unreachable();
+    std23::unreachable();
 }
 
 bool Target::CuboidTarget::HoledCuboid::DetailContain(const Concept::InputVector3D auto& x) const noexcept {
-    if (x[2] < -fDepth or std2b::abs(x[0]) > fHalfExtent or std2b::abs(x[1]) > fHalfExtent) {
+    if (x[2] < -fDepth or std23::abs(x[0]) > fHalfExtent or std23::abs(x[1]) > fHalfExtent) {
         return true;
     } else {
         using std::numbers::sqrt3;
         const auto u = std::round((x[0] - (1 / sqrt3) * x[1]) / fPitch) * fPitch;
         const auto v = std::round((2 / sqrt3) * x[1] / fPitch) * fPitch;
-        return Math::Hypot2(x[0] - (u + v / 2), x[1] - (sqrt3 / 2) * v) > Math::Pow2(fRadius);
+        return Math::Hypot2(x[0] - (u + v / 2), x[1] - (sqrt3 / 2) * v) > Math::Pow<2>(fRadius);
     }
 }
 

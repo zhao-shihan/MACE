@@ -1,6 +1,6 @@
 namespace MACE::DataModel::inline BranchSocket {
 
-template<class AClass>
+template<typename AClass>
     requires std::assignable_from<AClass, AClass>
 template<typename... Args>
 ClassBranchSocket<AClass>::ClassBranchSocket(const std::string& branchName, std::tuple<Args&&...> argTuple) :
@@ -11,7 +11,7 @@ ClassBranchSocket<AClass>::ClassBranchSocket(const std::string& branchName, std:
         },
         argTuple)) {}
 
-template<class AClass>
+template<typename AClass>
     requires std::assignable_from<AClass, AClass>
 ClassBranchSocket<AClass>::~ClassBranchSocket() {
     delete fObject;

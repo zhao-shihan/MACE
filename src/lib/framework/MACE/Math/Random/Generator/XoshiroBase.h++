@@ -12,7 +12,7 @@
 
 namespace MACE::Math::Random::inline Generator {
 
-template<class ADerived, std::size_t NBit>
+template<typename ADerived, std::size_t NBit>
     requires(NBit % 64 == 0)
 class XoshiroBase : public UniformPseudoRandomBitGeneratorBase<ADerived,
                                                                std::uint64_t,

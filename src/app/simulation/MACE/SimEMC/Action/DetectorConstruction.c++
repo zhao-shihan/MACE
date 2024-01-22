@@ -1,24 +1,48 @@
 #include "MACE/Detector/Description/DescriptionIO.h++"
-#include "MACE/Detector/Geometry/Fast/EMC.h++"
+#include "MACE/Detector/Description/World.h++"
+#include "MACE/Detector/Geometry/Fast/EMCCrystal.h++"
+#include "MACE/Detector/Geometry/Fast/EMCPMTCathode.h++"
+#include "MACE/Detector/Geometry/Fast/EMCPMTCoupler.h++"
+#include "MACE/Detector/Geometry/Fast/EMCPMTWindow.h++"
+#include "MACE/Detector/Geometry/Fast/MCP.h++"
 #include "MACE/Detector/Geometry/Fast/World.h++"
+#include "MACE/Detector/Geometry/GeometryBase.h++"
 #include "MACE/SimEMC/Action/DetectorConstruction.h++"
+#include "MACE/SimEMC/Detector/EMCShield.h++"
+#include "MACE/SimEMC/Detector/EMCTunnel.h++"
+#include "MACE/SimEMC/SD/EMCSD.h++"
+#include "MACE/SimEMC/SD/MCPSD.h++"
+#include "MACE/SimEMC/SD/PMTSD.h++"
+
 // #include "MACE/SimEMC/Messenger/DetectorMessenger.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
+#include "G4ProductionCuts.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4Region.hh"
+#include "G4SDManager.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <array>
 
 namespace MACE::SimEMC::inline Action {
 
-using namespace MACE::LiteralUnit::Density;
-using namespace MACE::LiteralUnit::Temperature;
+using namespace MACE::LiteralUnit;
 
 DetectorConstruction::DetectorConstruction() :
     PassiveSingleton{},
     G4VUserDetectorConstruction{},
     fCheckOverlap{false},
-    fWorld{} {
+    fWorld{},
+    fEMCSensitiveRegion{},
+    fMCPSensitiveRegion{},
+    fShieldRegion{},
+    fTunnelRegion{},
+    fVacuumRegion{},
+
+    fEMCSD{},
+    fPMTSD{} {
     // Detector::Description::DescriptionIO::Import<DescriptionInUse>(
     // #include "MACE/SimEMC/DefaultGeometry.inlyaml"
     // );
@@ -28,12 +52,60 @@ DetectorConstruction::DetectorConstruction() :
 auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     using namespace MACE::Detector::Geometry::Fast;
 
+    auto& description = MACE::Detector::Description::World::Instance();
+    description.HalfXExtent(26_m);
+    description.HalfYExtent(20_m);
+    description.HalfZExtent(26_m);
+
     fWorld = std::make_shared<World>();
-    auto& emc = fWorld->NewDaughter<EMC>(fCheckOverlap);
+    auto& emcCrystal = fWorld->NewDaughter<EMCCrystal>(fCheckOverlap);
+    auto& emcPMTCoupler = fWorld->NewDaughter<EMCPMTCoupler>(fCheckOverlap);
+    auto& emcPMTWindow = fWorld->NewDaughter<EMCPMTWindow>(fCheckOverlap);
+    auto& emcPMTCathode = fWorld->NewDaughter<EMCPMTCathode>(fCheckOverlap);
+    auto& mcp = fWorld->NewDaughter<MCP>(fCheckOverlap);
+    // auto& emcShield = fWorld->NewDaughter<MACE::SimEMC::Detector::EMCShield>(fCheckOverlap);
+    // auto& emcTunnel = fWorld->NewDaughter<MACE::SimEMC::Detector::EMCTunnel>(fCheckOverlap);
 
     auto nist = G4NistManager::Instance();
-    emc.RegisterMaterial(nist->FindOrBuildMaterial("G4_CESIUM_IODIDE"));
     fWorld->RegisterMaterial(nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3));
+
+    const auto defaultCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts();
+
+    fEMCSensitiveRegion = new Region("EMCSensitive", RegionType::EMCSensitive);
+    fEMCSensitiveRegion->SetProductionCuts(defaultCuts);
+
+    emcCrystal.RegisterRegion(fEMCSensitiveRegion);
+    emcPMTCoupler.RegisterRegion(fEMCSensitiveRegion);
+    emcPMTWindow.RegisterRegion(fEMCSensitiveRegion);
+    emcPMTCathode.RegisterRegion(fEMCSensitiveRegion);
+
+    fMCPSensitiveRegion = new Region("MCPSensitive", RegionType::MCPSensitive);
+    fMCPSensitiveRegion->SetProductionCuts(defaultCuts);
+
+    mcp.RegisterRegion(fMCPSensitiveRegion);
+
+    // fShieldRegion = new Region("Shield", RegionType::Shield);
+    // fShieldRegion->SetProductionCuts(defaultCuts);
+
+    // emcShield.RegisterRegion(fShieldRegion);
+
+    // fTunnelRegion = new Region("Tunnel", RegionType::Tunnel);
+    // const auto cuts = new G4ProductionCuts;
+    // cuts->SetProductionCut(2.5_cm);
+    // fTunnelRegion->SetProductionCuts(cuts);
+
+    // emcTunnel.RegisterRegion(fTunnelRegion);
+
+    fEMCSD = new SD::EMCSD(emcCrystal.LogicalVolume()->GetName());
+    emcCrystal.RegisterSD(fEMCSD);
+
+    fPMTSD = new SD::PMTSD(emcPMTCathode.LogicalVolume()->GetName());
+    emcPMTCathode.RegisterSD(fPMTSD);
+
+    fMCPSD = new SD::MCPSD(mcp.LogicalVolume()->GetName());
+    mcp.RegisterSD(fMCPSD);
+
+    // fWorld->Export("geometry.gdml");
 
     return fWorld->PhysicalVolume().get();
 }

@@ -1,5 +1,4 @@
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Detector/Description/SpectrometerField.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/MathConstant.h++"
 
@@ -10,63 +9,18 @@ using namespace LiteralUnit::MagneticFluxDensity;
 using namespace MathConstant;
 
 Solenoid::Solenoid() :
-    DescriptionSingletonBase<Solenoid>(__func__),
+    DescriptionSingletonBase<Solenoid>{"Solenoid"},
     // Geometry
-    fS1Length(20_cm),
-    fB1Radius(50_cm),
-    fS2Length(100_cm),
-    fB2Radius(50_cm),
-    fS3Length(20_cm),
-    fInnerRadius(7.5_cm),
-    fOuterRadius(12.5_cm),
-    fFieldRadius(12.6_cm),
+    fS1Length{20_cm},
+    fB1Radius{50_cm},
+    fS2Length{100_cm},
+    fB2Radius{50_cm},
+    fS3Length{20_cm},
+    fInnerRadius{25_mm},
+    fOuterRadius{75_mm},
+    fFieldRadius{76_mm},
     // Field
     fMagneticFluxDensity(100_mT) {}
-
-HepGeom::Transform3D Solenoid::S1Transform() const {
-    const auto& spectrometerField = SpectrometerField::Instance();
-    const auto transX = 0;
-    const auto transY = 0;
-    const auto transZ = spectrometerField.Length() / 2 + fS1Length / 2;
-    return HepGeom::Transform3D(CLHEP::HepRotation(),
-                                CLHEP::Hep3Vector(transX, transY, transZ));
-}
-
-HepGeom::Transform3D Solenoid::B1Transform() const {
-    const auto localTransX = fB1Radius;
-    const auto localTransY = 0;
-    const auto localTransZ = fS1Length / 2;
-    const auto translation = S1Transform().getTranslation() +
-                             CLHEP::Hep3Vector(localTransX, localTransY, localTransZ);
-    return HepGeom::Transform3D(CLHEP::HepRotation(CLHEP::HepXHat, pi / 2), translation);
-}
-
-HepGeom::Transform3D Solenoid::S2Transform() const {
-    const auto localTransX = fS2Length / 2;
-    const auto localTransY = 0;
-    const auto localTransZ = fB1Radius;
-    const auto translation = B1Transform().getTranslation() +
-                             CLHEP::Hep3Vector(localTransX, localTransY, localTransZ);
-    return HepGeom::Transform3D(CLHEP::HepRotation(CLHEP::HepYHat, pi / 2), translation);
-}
-
-HepGeom::Transform3D Solenoid::B2Transform() const {
-    const auto localTransX = fS2Length / 2;
-    const auto localTransY = 0;
-    const auto localTransZ = fB2Radius;
-    const auto translation = S2Transform().getTranslation() +
-                             CLHEP::Hep3Vector(localTransX, localTransY, localTransZ);
-    return HepGeom::Transform3D(CLHEP::HepRotation(CLHEP::HepXHat, pi / 2), translation);
-}
-
-HepGeom::Transform3D Solenoid::S3Transform() const {
-    auto localTransX = fB2Radius;
-    auto localTransY = 0;
-    auto localTransZ = fS3Length / 2;
-    const auto translation = B2Transform().getTranslation() +
-                             CLHEP::Hep3Vector(localTransX, localTransY, localTransZ);
-    return HepGeom::Transform3D(CLHEP::HepRotation(), translation);
-}
 
 void Solenoid::ImportValues(const YAML::Node& node) {
     // Geometry

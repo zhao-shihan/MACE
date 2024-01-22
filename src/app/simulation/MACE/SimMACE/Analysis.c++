@@ -3,9 +3,13 @@
 #include "MACE/SimMACE/Hit/EMCHit.h++"
 #include "MACE/SimMACE/Hit/MCPHit.h++"
 #include "MACE/SimMACE/Messenger/AnalysisMessenger.h++"
-#include "MACE/Utility/MPIUtil/MakeMPIFilePath.h++"
+#include "MACE/Extension/MPIX/ParallelizePath.h++"
 
 #include "TFile.h"
+
+#include "fmt/format.h"
+
+#include <stdexcept>
 
 namespace MACE::SimMACE {
 
@@ -13,48 +17,48 @@ Analysis::Analysis() :
     PassiveSingleton{},
     fFilePath{"SimMACE_untitled"},
     fFileOption{"UPDATE"},
-    fEnableCoincidenceOfEMC{true},
-    fEnableCoincidenceOfMCP{true},
-    fDataHub{},
+    fCoincidenceWithCDC{true},
+    fCoincidenceWithMCP{true},
+    fCoincidenceWithEMC{true},
     fFile{},
-    fEMCHitTree{},
-    fMCPHitTree{},
-    fCDCHitTree{},
-    fEMCHitList{nullptr},
-    fMCPHitList{nullptr},
-    fCDCHitList{nullptr}{
-    fDataHub.TreeNamePrefixFormat("G4Run{}_");
+    fCDCSimHitOutput{},
+    fMCPSimHitOutput{},
+    fEMCSimHitOutput{},
+    fEMCHitList{},
+    fMCPHitList{},
+    fCDCHitList{} {
     AnalysisMessenger::Instance().AssignTo(this);
 }
 
 void Analysis::RunBegin(G4int runID) {
-    fFile = std::make_unique<TFile>(MPIUtil::MakeMPIFilePath(fFilePath, ".root").generic_string().c_str(),
-                                    fFileOption.c_str(),
-                                    "",
-                                    ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
-    fEMCHitTree = fDataHub.CreateTree<DataModel::EMCSimHit>(runID);
-    fMCPHitTree = fDataHub.CreateTree<DataModel::MCPSimHit>(runID);
-    fCDCHitTree = fDataHub.CreateTree<DataModel::CDCSimHit>(runID);
+    const auto fullFilePath{MPIX::ParallelizePath(fFilePath, ".root").generic_string()};
+    fFile = TFile::Open(fullFilePath.c_str(), fFileOption.c_str(),
+                        "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
+    if (fFile == nullptr) {
+        throw std::runtime_error{fmt::format("MACE::SimMACE::Analysis::RunBegin: Cannot open file \"{}\"", fullFilePath)};
+    }
+    fCDCSimHitOutput = std::make_unique<Data::Output<Data::CDCSimHit>>(fmt::format("G4Run{}_CDCSimHit", runID));
+    fMCPSimHitOutput = std::make_unique<Data::Output<Data::MCPSimHit>>(fmt::format("G4Run{}_MCPSimHit", runID));
+    fEMCSimHitOutput = std::make_unique<Data::Output<Data::EMCSimHit>>(fmt::format("G4Run{}_EMCSimHit", runID));
 }
 
 void Analysis::EventEnd() {
-    const auto emcTriggered = not fEnableCoincidenceOfEMC or fEMCHitList->size() > 0;
-    const auto mcpTriggered = not fEnableCoincidenceOfMCP or fMCPHitList->size() > 0;
-    const auto cdcTriggered = fCDCHitList->size() > 0;
-    // if coincident then write their data
+    const auto cdcTriggered = not fCoincidenceWithCDC or fCDCHitList->size() > 0;
+    const auto mcpTriggered = not fCoincidenceWithMCP or fMCPHitList->size() > 0;
+    const auto emcTriggered = not fCoincidenceWithEMC or fEMCHitList->size() > 0;
     if (emcTriggered and mcpTriggered and cdcTriggered) {
-        fDataHub.FillTree(*fEMCHitList, *fEMCHitTree, true);
-        fDataHub.FillTree(*fMCPHitList, *fMCPHitTree, true);
-        fDataHub.FillTree(*fCDCHitList, *fCDCHitTree, true);
+        *fCDCSimHitOutput << *fCDCHitList;
+        *fMCPSimHitOutput << *fMCPHitList;
+        *fEMCSimHitOutput << *fEMCHitList;
     }
 }
 
 void Analysis::RunEnd(Option_t* option) {
-    fEMCHitTree->Write();
-    fMCPHitTree->Write();
-    fCDCHitTree->Write();
+    fCDCSimHitOutput->Write();
+    fMCPSimHitOutput->Write();
+    fEMCSimHitOutput->Write();
     fFile->Close(option);
-    fFile.reset();
+    delete fFile;
 }
 
 } // namespace MACE::SimMACE

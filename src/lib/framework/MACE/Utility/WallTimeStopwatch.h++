@@ -22,9 +22,6 @@
 #if (defined linux or defined __linux__ or defined __linux) or \
     (defined __DragonFly__ or defined __FreeBSD__ or defined __NetBSD__ or defined __OpenBSD__)
 #    include "MACE/Utility/internal/WallTimeStopwatch/LinuxBSDWallTimeStopwatch.h++"
-// Mac OSX implementation:
-#elif defined __MACH__
-#    include "MACE/Utility/internal/WallTimeStopwatch/MacOSXWallTimeStopwatch.h++"
 // Windows implementation:
 #elif defined _WIN32
 #    include "MACE/Utility/internal/WallTimeStopwatch/WindowsWallTimeStopwatch.h++"
@@ -38,7 +35,7 @@
 
 namespace MACE::inline Utility {
 
-/// @brief high-precision cross-platform (linux/bsd/mac/windows) simple stopwatch class
+/// @brief high-precision cross-platform (linux/bsd/windows/etc.) simple stopwatch class
 template<std::floating_point ATime = double>
     requires(std::numeric_limits<ATime>::digits >= std::numeric_limits<double>::digits)
 class WallTimeStopwatch final : public internal::WallTimeStopwatch<ATime> {};

@@ -23,7 +23,7 @@ inline namespace Messenger {
 
 class ActionMessenger final : public Env::Memory::Singleton<ActionMessenger>,
                               public G4UImessenger {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     ActionMessenger();

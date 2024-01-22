@@ -194,6 +194,9 @@ MACE_UTILITY_LITERAL_UNIT_DEFINITION(K, CLHEP::kelvin)
 inline namespace AmountOfSubstance {
 
 MACE_UTILITY_LITERAL_UNIT_DEFINITION(mol, CLHEP::mole)
+MACE_UTILITY_LITERAL_UNIT_DEFINITION(kg_mol, CLHEP::kg / CLHEP::mole)
+MACE_UTILITY_LITERAL_UNIT_DEFINITION(g_mol, CLHEP::g / CLHEP::mole)
+MACE_UTILITY_LITERAL_UNIT_DEFINITION(mg_mol, CLHEP::mg / CLHEP::mole)
 
 } // namespace AmountOfSubstance
 
@@ -338,7 +341,7 @@ MACE_UTILITY_LITERAL_UNIT_DEFINITION(kV_cm, CLHEP::kilovolt / CLHEP::cm)
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
-inline namespace MathConstant {
+inline namespace MathConstantSuffix {
 
 MACE_UTILITY_LITERAL_UNIT_DEFINITION(log2e, std::numbers::log2e_v<long double>)
 MACE_UTILITY_LITERAL_UNIT_DEFINITION(log10e, std::numbers::log10e_v<long double>)
@@ -353,7 +356,7 @@ MACE_UTILITY_LITERAL_UNIT_DEFINITION(inv_sqrt3, std::numbers::inv_sqrt3_v<long d
 MACE_UTILITY_LITERAL_UNIT_DEFINITION(egamma, std::numbers::egamma_v<long double>)
 MACE_UTILITY_LITERAL_UNIT_DEFINITION(phi, std::numbers::phi_v<long double>)
 
-} // namespace MathConstant
+} // namespace MathConstantSuffix
 
 #undef MACE_UTILITY_LITERAL_UNIT_DEFINITION
 #undef MACE_UTILITY_LITERAL_UNIT_DEFINITION_IMPL

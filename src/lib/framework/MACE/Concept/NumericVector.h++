@@ -2,6 +2,9 @@
 
 #include "MACE/Concept/InputVector.h++"
 #include "MACE/Concept/Subscriptable.h++"
+#include "MACE/Extension/gslx/index_sequence.h++"
+
+#include "gsl/gsl"
 
 #include <array>
 #include <concepts>
@@ -11,25 +14,7 @@
 
 namespace MACE::Concept {
 
-namespace internal {
-
-template<class T>
-struct ListInitialization {
-    static constexpr auto Direct = [](auto... x) {
-        [[maybe_unused]] T v{x...};
-        ::delete ::new T{x...};
-        return T{x...};
-    };
-    static constexpr auto Copy = [](auto... x) -> T {
-        T v = {x...};
-        v = {x...};
-        return {x...};
-    };
-};
-
-} // namespace internal
-
-template<class T, typename F, std::size_t N = std::numeric_limits<std::size_t>::max()>
+template<typename T, typename F, std::size_t N = std::numeric_limits<std::size_t>::max()>
 concept NumericVector =
     requires {
         requires InputVector<T, F, N>;
@@ -40,38 +25,37 @@ concept NumericVector =
         requires(SubscriptableTo<std::add_const_t<T>, const F&> or
                  SubscriptableTo<std::add_const_t<T>, F>);
         requires sizeof(T) % sizeof(F) == 0;
-        requires requires(std::array<F, sizeof(T) / sizeof(F)> u) {
-                     std::apply(internal::ListInitialization<T>::Direct, u);
-                     std::apply(internal::ListInitialization<T>::Copy, u);
-                 };
+        requires([]<gsl::index... Is>(gslx::index_sequence<Is...>) {
+            return requires(T v, std::array<F, sizeof...(Is)> u) {
+                ::delete ::new T{std::get<Is>(u)...};
+                v = T{std::get<Is>(u)...};
+                v = {std::get<Is>(u)...};
+            };
+        }(gslx::make_index_sequence<sizeof(T) / sizeof(F)>{}));
         requires(N == std::numeric_limits<std::size_t>::max() or
-                 requires(std::array<F, N> u) {
-                     requires sizeof(T) == N * sizeof(F);
-                     std::apply(internal::ListInitialization<T>::Direct, u);
-                     std::apply(internal::ListInitialization<T>::Copy, u);
-                 });
+                 sizeof(T) / sizeof(F) == N);
     };
 
-template<class T, typename F>
+template<typename T, typename F>
 concept NumericVector2 = NumericVector<T, F, 2>;
-template<class T, typename F>
+template<typename T, typename F>
 concept NumericVector3 = NumericVector<T, F, 3>;
-template<class T, typename F>
+template<typename T, typename F>
 concept NumericVector4 = NumericVector<T, F, 4>;
-template<class T>
+template<typename T>
 concept NumericVector2F = NumericVector2<T, float>;
-template<class T>
+template<typename T>
 concept NumericVector3F = NumericVector3<T, float>;
-template<class T>
+template<typename T>
 concept NumericVector4F = NumericVector4<T, float>;
-template<class T>
+template<typename T>
 concept NumericVector2D = NumericVector2<T, double>;
-template<class T>
+template<typename T>
 concept NumericVector3D = NumericVector3<T, double>;
-template<class T>
+template<typename T>
 concept NumericVector4D = NumericVector4<T, double>;
 
-template<class T, std::size_t N = std::numeric_limits<std::size_t>::max()>
+template<typename T, std::size_t N = std::numeric_limits<std::size_t>::max()>
 concept NumericVectorIntegral = NumericVector<T, bool, N> or
                                 NumericVector<T, signed char, N> or
                                 NumericVector<T, unsigned char, N> or
@@ -89,34 +73,34 @@ concept NumericVectorIntegral = NumericVector<T, bool, N> or
                                 NumericVector<T, unsigned long, N> or
                                 NumericVector<T, unsigned long long, N>;
 
-template<class T>
+template<typename T>
 concept NumericVector2Integral = NumericVectorIntegral<T, 2>;
-template<class T>
+template<typename T>
 concept NumericVector3Integral = NumericVectorIntegral<T, 3>;
-template<class T>
+template<typename T>
 concept NumericVector4Integral = NumericVectorIntegral<T, 4>;
 
-template<class T, std::size_t N = std::numeric_limits<std::size_t>::max()>
+template<typename T, std::size_t N = std::numeric_limits<std::size_t>::max()>
 concept NumericVectorFloatingPoint = NumericVector<T, float, N> or
                                      NumericVector<T, double, N> or
                                      NumericVector<T, long double, N>;
 
-template<class T>
+template<typename T>
 concept NumericVector2FloatingPoint = NumericVectorFloatingPoint<T, 2>;
-template<class T>
+template<typename T>
 concept NumericVector3FloatingPoint = NumericVectorFloatingPoint<T, 3>;
-template<class T>
+template<typename T>
 concept NumericVector4FloatingPoint = NumericVectorFloatingPoint<T, 4>;
 
-template<class T, std::size_t N = std::numeric_limits<std::size_t>::max()>
+template<typename T, std::size_t N = std::numeric_limits<std::size_t>::max()>
 concept NumericVectorAny = NumericVectorIntegral<T, N> or
                            NumericVectorFloatingPoint<T, N>;
 
-template<class T>
+template<typename T>
 concept NumericVector2Any = NumericVectorAny<T, 2>;
-template<class T>
+template<typename T>
 concept NumericVector3Any = NumericVectorAny<T, 3>;
-template<class T>
+template<typename T>
 concept NumericVector4Any = NumericVectorAny<T, 4>;
 
 } // namespace MACE::Concept

@@ -1,19 +1,21 @@
 namespace MACE::Detector::Geometry {
 
-template<std::derived_from<GeometryBase> AEntity>
-AEntity& GeometryBase::NewDaughter(G4bool checkOverlaps) {
-    if (typeid(AEntity) == typeid(*this)) {
-        throw std::logic_error("Trying to add the same entity to itself as a daughter");
+template<std::derived_from<GeometryBase> AGeometry>
+auto GeometryBase::NewDaughter(G4bool checkOverlaps) -> AGeometry& {
+    if (typeid(AGeometry) == typeid(*this)) {
+        throw std::logic_error("MACE::Detector::Geometry::GeometryBase::AddDaughter: "
+                               "Trying to add the same geometry to itself as a daughter");
     }
 
-    const auto [iterator, emplaced] = fDaughters.try_emplace(typeid(AEntity), std::make_unique_for_overwrite<AEntity>());
+    const auto [iterator, emplaced] = fDaughters.try_emplace(typeid(AGeometry), std::make_unique_for_overwrite<AGeometry>());
     if (not emplaced) {
-        throw std::logic_error("Trying to add the same entity twice to the same mother");
+        throw std::logic_error("MACE::Detector::Geometry::GeometryBase::AddDaughter: "
+                               "Trying to add the same geometry to itself as a daughter");
     }
     const auto& daughter = iterator->second;
     daughter->fMother = *this;
 
-    if (IsTop() and Enabled()) {
+    if (Topmost() and Enabled()) {
         Construct(checkOverlaps);
     }
     const auto hasEnabled = not fLogicalVolumes.empty();
@@ -21,21 +23,21 @@ AEntity& GeometryBase::NewDaughter(G4bool checkOverlaps) {
         daughter->Construct(checkOverlaps);
     }
 
-    return static_cast<AEntity&>(*daughter);
+    return static_cast<AGeometry&>(*daughter);
 }
 
-template<std::derived_from<GeometryBase> AEntity>
-std::optional<std::reference_wrapper<AEntity>> GeometryBase::FindDaughter() const {
-    if (const auto existedDaughter = fDaughters.find(typeid(AEntity));
+template<std::derived_from<GeometryBase> AGeometry>
+auto GeometryBase::FindDaughter() const -> std::optional<std::reference_wrapper<AGeometry>> {
+    if (const auto existedDaughter = fDaughters.find(typeid(AGeometry));
         existedDaughter != fDaughters.cend()) {
-        return static_cast<AEntity&>(*existedDaughter->second);
+        return static_cast<AGeometry&>(*existedDaughter->second);
     } else {
         return std::nullopt;
     }
 }
 
-template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, class AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
-void GeometryBase::RegisterField(gsl::index volumeIndex, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const {
+template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
+auto GeometryBase::RegisterField(gsl::index volumeIndex, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void {
     const auto& logicalVolume = LogicalVolume(volumeIndex);
     const auto equation = new AEquation(field);
     const auto stepper =
@@ -60,8 +62,12 @@ void GeometryBase::RegisterField(gsl::index volumeIndex, gsl::not_null<AField*> 
     // }
 }
 
-template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, class AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
-void GeometryBase::RegisterField(gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const {
+template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
+auto GeometryBase::RegisterField(gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void {
+    if (fLogicalVolumes.empty()) {
+        std::logic_error{"MACE::Detector::Geometry::GeometryBase::RegisterField: "
+                         "No logical volumes (may be you forget to construct geometry, or did not construct volumes with GeometryBase::Make?)"};
+    }
     for (gsl::index i = 0; i < std::ssize(fLogicalVolumes); ++i) {
         RegisterField<AField, AEquation, AStepper, ADriver>(i, field, hMin, nVarStepper, nVarDriver, forceToAllDaughters);
     }

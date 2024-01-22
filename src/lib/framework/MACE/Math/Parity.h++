@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cinttypes>
 #include <concepts>
 
 namespace MACE::Math {

@@ -21,7 +21,7 @@ inline namespace Messenger {
 
 class AnalysisMessenger final : public Env::Memory::Singleton<AnalysisMessenger>,
                                 public G4UImessenger {
-    friend Env::Memory::SingletonFactory;
+    friend Env::Memory::SingletonInstantiator;
 
 private:
     AnalysisMessenger();
@@ -36,8 +36,9 @@ private:
     Analysis* fAnalysis;
 
     std::unique_ptr<G4UIdirectory> fDirectory;
-    std::unique_ptr<G4UIcmdWithABool> fEnableCoincidenceOfEMC;
-    std::unique_ptr<G4UIcmdWithABool> fEnableCoincidenceOfMCP;
+    std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithCDC;
+    std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithMCP;
+    std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithEMC;
     std::unique_ptr<G4UIcmdWithAString> fFilePath;
     std::unique_ptr<G4UIcmdWithAString> fFileOption;
 };

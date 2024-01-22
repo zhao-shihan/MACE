@@ -1,5 +1,4 @@
 #include "MACE/Env/MPIEnv.h++"
-#include "MACE/Utility/MPIUtil/MPICallWithCheckNoExcept.h++"
 
 #include <algorithm>
 #include <cstring>
@@ -8,34 +7,26 @@
 
 namespace MACE::Env {
 
-bool MPIEnv::fgInitialized = false;
-bool MPIEnv::fgFinalized = false;
-
 MPIEnv::~MPIEnv() {
-    // Update status
-    fgFinalized = true;
     // Destructs the local communicator
-    auto sharedComm = fSharedComm;
-    MACE_MPI_CALL_WITH_CHECK_NOEXCEPT(MPI_Comm_free,
-                                      &sharedComm);
+    auto commNode = fCommNode;
+    MPI_Comm_free(&commNode);
     // Finalize MPI
-    MACE_MPI_CALL_WITH_CHECK_NOEXCEPT(MPI_Finalize)
+    MPI_Finalize();
 }
 
 void MPIEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const {
     BasicEnv::PrintWelcomeMessageBody(argc, argv);
-    if (GetVerboseLevel() >= VerboseLevel::Error) {
+    if (GetVerboseLevel() >= VL::Error) {
         // MPI library version
         char mpiLibVersion[MPI_MAX_LIBRARY_VERSION_STRING];
         int mpiLibVersionStringLength;
-        MACE_MPI_CALL_WITH_CHECK(MPI_Get_library_version,
-                                 mpiLibVersion,
-                                 &mpiLibVersionStringLength)
+        MPI_Get_library_version(mpiLibVersion,               // version
+                                &mpiLibVersionStringLength); // resultlen
         // MPI version at runtime
         std::pair<int, int> mpiRuntimeVersion;
-        MACE_MPI_CALL_WITH_CHECK(MPI_Get_version,
-                                 &mpiRuntimeVersion.first,
-                                 &mpiRuntimeVersion.second)
+        MPI_Get_version(&mpiRuntimeVersion.first,   // version
+                        &mpiRuntimeVersion.second); // subversion
         // Messages
         std::cout << '\n'
                   << " Parallelized by MPI, running " << (Parallel() ? "in parallel" : "sequentially") << '\n';

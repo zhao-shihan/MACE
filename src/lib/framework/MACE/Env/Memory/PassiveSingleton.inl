@@ -1,51 +1,27 @@
 namespace MACE::Env::Memory {
 
-template<class ADerived>
-ADerived* PassiveSingleton<ADerived>::fgInstance = nullptr;
-
-template<class ADerived>
+template<typename ADerived>
 PassiveSingleton<ADerived>::PassiveSingleton() :
-    PassiveSingletonBase(),
-    WeakSingleton<ADerived>() {
+    PassiveSingletonBase{},
+    Base{} {
     static_assert(PassiveSingletonified<ADerived>);
-    fgInstance = static_cast<ADerived*>(this);
 }
 
-template<class ADerived>
-PassiveSingleton<ADerived>::~PassiveSingleton() {
-    fgInstance = nullptr;
-}
-
-template<class ADerived>
-ADerived& PassiveSingleton<ADerived>::Instance() {
-    if (fgInstance == nullptr) [[unlikely]] {
-        assert(WeakSingleton<ADerived>::fgInstanceNode == nullptr);
-        FindInstance();
+template<typename ADerived>
+MACE_ALWAYS_INLINE auto PassiveSingleton<ADerived>::Instance() -> ADerived& {
+    switch (Base::UpdateInstance()) {
+    [[unlikely]] case Base::Status::NotInstantiated:
+        throw std::logic_error{fmt::format("MACE::Env::Memory::PassiveSingleton::Instance(): "
+                                           "{} (passive singleton in environment) has not been instantiated",
+                                           typeid(ADerived).name())};
+    [[likely]] case Base::Status::Available:
+        return *static_cast<ADerived*>(*Base::fgInstance);
+    [[unlikely]] case Base::Status::Expired:
+        throw std::logic_error{fmt::format("MACE::Env::Memory::PassiveSingleton::Instance(): "
+                                           "The instance of {} (passive singleton in environment) has been deleted",
+                                           typeid(ADerived).name())};
     }
-    assert(fgInstance == *WeakSingleton<ADerived>::fgInstanceNode);
-    return *fgInstance;
-}
-
-template<class ADerived>
-void PassiveSingleton<ADerived>::FindInstance() {
-    if (const auto optionalNode = internal::WeakSingletonPool::Instance().Find<ADerived>();
-        optionalNode.has_value()) {
-        if (auto& node = optionalNode->get();
-            node != nullptr) {
-            WeakSingleton<ADerived>::fgInstanceNode = std::addressof(node);
-            fgInstance = static_cast<ADerived*>(node);
-        } else {
-            throw std::logic_error(
-                std::string("MACE::Env::Memory::PassiveSingleton::Instance(): The instance of ")
-                    .append(typeid(ADerived).name())
-                    .append(" (free singleton in environment) has been deleted"));
-        }
-    } else {
-        throw std::logic_error(
-            std::string("MACE::Env::Memory::PassiveSingleton::Instance(): ")
-                .append(typeid(ADerived).name())
-                .append(" (free singleton in environment) has not been instantiated"));
-    }
+    std23::unreachable();
 }
 
 } // namespace MACE::Env::Memory

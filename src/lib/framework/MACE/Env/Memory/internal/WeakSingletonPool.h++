@@ -5,13 +5,16 @@
 
 #include "gsl/gsl"
 
+#include "fmt/format.h"
+
+#include <cstdio>
 #include <functional>
-#include <map>
 #include <optional>
 #include <stdexcept>
 #include <string>
 #include <typeindex>
 #include <typeinfo>
+#include <unordered_map>
 
 namespace MACE::Env::Memory::internal {
 
@@ -19,23 +22,20 @@ namespace MACE::Env::Memory::internal {
 /// Not API.
 class WeakSingletonPool final : public NonMoveableBase {
 public:
-    using Node = void*;
-
-public:
     WeakSingletonPool();
     ~WeakSingletonPool();
 
-    static WeakSingletonPool& Instance();
+    static auto Instance() -> WeakSingletonPool&;
 
     template<WeakSingletonified AWeakSingleton>
-    [[nodiscard]] std::optional<std::reference_wrapper<Node>> Find();
+    [[nodiscard]] auto Find() -> std::optional<std::reference_wrapper<void*>>;
     template<WeakSingletonified AWeakSingleton>
-    [[nodiscard]] auto Contains() const { return fInstanceMap.contains(typeid(AWeakSingleton)); }
+    [[nodiscard]] auto Contains() const -> auto { return fInstanceMap.contains(typeid(AWeakSingleton)); }
     template<WeakSingletonified AWeakSingleton>
-    [[nodiscard]] Node& Insert(gsl::not_null<AWeakSingleton*> instance);
+    [[nodiscard]] auto Insert(gsl::not_null<AWeakSingleton*> instance) -> void*&;
 
 private:
-    std::map<std::type_index, Node> fInstanceMap;
+    std::unordered_map<std::type_index, void*> fInstanceMap;
 
     static WeakSingletonPool* fgInstance;
 };

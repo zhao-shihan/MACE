@@ -3,13 +3,13 @@
 #include "MACE/Extension/Geant4X/SingletonG4Allocator.h++"
 #include "MACE/Utility/InlineMacro.h++"
 
-#include <cinttypes>
 #include <concepts>
+#include <cstddef>
 #include <type_traits>
 
 namespace MACE::inline Extension::Geant4X {
 
-template<class ADerived>
+template<typename ADerived>
 class UseG4Allocator {
 protected:
     UseG4Allocator() = default;

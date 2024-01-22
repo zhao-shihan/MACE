@@ -1,11 +1,11 @@
-namespace MACE::inline Simulation::Physics::inline Messenger {
+namespace MACE::inline Simulation::inline Physics::inline Messenger {
 
 template<TargetForMuoniumPhysics ATarget>
 MuoniumPhysicsMessenger<ATarget>::MuoniumPhysicsMessenger() :
     Env::Memory::Singleton<MuoniumPhysicsMessenger<ATarget>>{},
     G4UImessenger{},
-    fMuoniumFormation{nullptr},
-    fMuoniumTransport{nullptr},
+    fMuoniumFormation{},
+    fMuoniumTransport{},
     fMuoniumPhysicsDirectory{},
     fFormationProcessDirectory{},
     fFormationProbability{},
@@ -59,4 +59,4 @@ void MuoniumPhysicsMessenger<ATarget>::SetNewValue(G4UIcommand* command, G4Strin
     }
 }
 
-} // namespace MACE::inline Simulation::Physics::inline Messenger
+} // namespace MACE::inline Simulation::inline Physics::inline Messenger

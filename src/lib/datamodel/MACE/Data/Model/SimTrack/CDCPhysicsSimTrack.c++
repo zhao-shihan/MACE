@@ -1,5 +1,0 @@
-#include "MACE/Data/Model/SimTrack/CDCPhysicsSimTrack.h++"
-
-MACE_DATA_MODEL_FIELD_DEFINE_FIELD_NAME_TITLE(CDCPhysicsSimTrack::VertexPositionTruth)
-MACE_DATA_MODEL_FIELD_DEFINE_FIELD_NAME_TITLE(CDCPhysicsSimTrack::VertexKineticEnergyTruth)
-MACE_DATA_MODEL_FIELD_DEFINE_FIELD_NAME_TITLE(CDCPhysicsSimTrack::VertexMomentumTruth)

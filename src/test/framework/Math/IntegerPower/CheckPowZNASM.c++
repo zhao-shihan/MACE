@@ -7,7 +7,7 @@ using namespace MACE::Math;
 
 #define MACE_TEST_GENERATE_POWI_FUNC(FPType, Prefix)               \
     FPType Prefix##__DoConstPowIImAlmostEmpty() {                  \
-        return PowZN<4>(3);                                        \
+        return IPow<4>(3);                                        \
     }                                                              \
     FPType Prefix##__DoConstMultiplyImAlmostEmpty() {              \
         return 3 * 3 * 3 * 3;                                      \
@@ -16,7 +16,7 @@ using namespace MACE::Math;
         return std::pow(3, 4);                                     \
     }                                                              \
     FPType Prefix##__DoPowISquareImEquivlentToMultiply(FPType a) { \
-        return PowZN<2>(a);                                        \
+        return IPow<2>(a);                                        \
     }                                                              \
     FPType Prefix##__DoMultiplySquare(FPType a) {                  \
         return a * a;                                              \
@@ -25,7 +25,7 @@ using namespace MACE::Math;
         return std::pow(a, 2);                                     \
     }                                                              \
     FPType Prefix##__DoPowICubicImEquivlentToMultiply(FPType a) {  \
-        return PowZN<3>(a);                                        \
+        return IPow<3>(a);                                        \
     }                                                              \
     FPType Prefix##__DoMultiplyCubic(FPType a) {                   \
         return a * a * a;                                          \
@@ -34,7 +34,7 @@ using namespace MACE::Math;
         return std::pow(a, 3);                                     \
     }                                                              \
     FPType Prefix##__DoPowI5ImEquivlentToMultiply(FPType a) {      \
-        return PowZN<5>(a);                                        \
+        return IPow<5>(a);                                        \
     }                                                              \
     FPType Prefix##__DoMultiply5th(FPType a) {                     \
         return (a * a) * (a * a) * a;                              \

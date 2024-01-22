@@ -5,13 +5,13 @@
 #include "G4DecayTable.hh"
 #include "G4ParticleTable.hh"
 
-namespace MACE::inline Simulation::Physics::inline Particle {
+namespace MACE::inline Simulation::inline Physics::inline Particle {
 
 using namespace PhysicalConstant;
 
 Antimuonium::Antimuonium() :
     Singleton{},
-    G4ParticleDefinition{"anti_M",
+    G4ParticleDefinition{"anti_muonium",
                          muonium_mass_c2,
                          hbar_Planck / muonium_lifetime,
                          0,
@@ -24,11 +24,10 @@ Antimuonium::Antimuonium() :
                          "lepton",
                          0,
                          0,
-                         -1311,
+                         -990013111,
                          false,
                          muonium_lifetime,
-                         nullptr,
-                         false} {
+                         nullptr} {
 
     // Bohr magnetron of Muonium - T. Shiroka
     // The magnetic moment of Mu is the sum of those of mu+ and e- with
@@ -42,8 +41,8 @@ Antimuonium::Antimuonium() :
     // create Decay Table
     auto table = new G4DecayTable;
     // create a decay channel
-    table->Insert(new MuoniumDecayChannel("anti_M", 1.00));
+    table->Insert(new MuoniumDecayChannel("anti_muonium", 1.00));
     this->SetDecayTable(table);
 }
 
-} // namespace MACE::inline Simulation::Physics::inline Particle
+} // namespace MACE::inline Simulation::inline Physics::inline Particle

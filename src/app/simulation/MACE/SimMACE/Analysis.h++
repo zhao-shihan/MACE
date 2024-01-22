@@ -1,7 +1,11 @@
 #pragma once
 
+#include "MACE/Data/Output.h++"
 #include "MACE/DataModel/DataFactory.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
+#include "MACE/SimMACE/Hit/CDCHit.h++"
+#include "MACE/SimMACE/Hit/EMCHit.h++"
+#include "MACE/SimMACE/Hit/MCPHit.h++"
 
 #include "G4Types.hh"
 
@@ -15,28 +19,21 @@ class TFile;
 
 namespace MACE::SimMACE {
 
-inline namespace Hit {
-
-class CDCHit;
-class EMCHit;
-class MCPHit;
-
-} // inline namespace Hit
-
 class Analysis final : public Env::Memory::PassiveSingleton<Analysis> {
 public:
     Analysis();
 
     void FilePath(std::filesystem::path path) { fFilePath = std::move(path); }
     void FileOption(std::string option) { fFileOption = std::move(option); }
-    void EnableCoincidenceOfEMC(G4bool val) { fEnableCoincidenceOfEMC = val; }
-    void EnableCoincidenceOfMCP(G4bool val) { fEnableCoincidenceOfMCP = val; }
+    void CoincidenceWithCDC(bool val) { fCoincidenceWithMCP = val; }
+    void CoincidenceWithMCP(bool val) { fCoincidenceWithMCP = val; }
+    void CoincidenceWithEMC(bool val) { fCoincidenceWithEMC = val; }
 
     void RunBegin(G4int runID);
 
-    void SubmitEMCHC(gsl::not_null<const std::vector<gsl::owner<EMCHit*>>*> hitList) { fEMCHitList = hitList; }
-    void SubmitMCPHC(gsl::not_null<const std::vector<gsl::owner<MCPHit*>>*> hitList) { fMCPHitList = hitList; }
-    void SubmitSpectrometerHC(gsl::not_null<const std::vector<gsl::owner<CDCHit*>>*> hitList) { fCDCHitList = hitList; }
+    void SubmitEMCHC(const std::vector<gsl::owner<EMCHit*>>& hitList) { fEMCHitList = &hitList; }
+    void SubmitMCPHC(const std::vector<gsl::owner<MCPHit*>>& hitList) { fMCPHitList = &hitList; }
+    void SubmitSpectrometerHC(const std::vector<gsl::owner<CDCHit*>>& hitList) { fCDCHitList = &hitList; }
     void EventEnd();
 
     void RunEnd(Option_t* option = nullptr);
@@ -44,14 +41,14 @@ public:
 private:
     std::filesystem::path fFilePath;
     std::string fFileOption;
-    G4bool fEnableCoincidenceOfEMC;
-    G4bool fEnableCoincidenceOfMCP;
+    bool fCoincidenceWithCDC;
+    bool fCoincidenceWithMCP;
+    bool fCoincidenceWithEMC;
 
-    DataModel::DataFactory fDataHub;
-    std::unique_ptr<TFile> fFile;
-    std::shared_ptr<TTree> fEMCHitTree;
-    std::shared_ptr<TTree> fMCPHitTree;
-    std::shared_ptr<TTree> fCDCHitTree;
+    gsl::owner<TFile*> fFile;
+    std::unique_ptr<Data::Output<Data::CDCSimHit>> fCDCSimHitOutput;
+    std::unique_ptr<Data::Output<Data::MCPSimHit>> fMCPSimHitOutput;
+    std::unique_ptr<Data::Output<Data::EMCSimHit>> fEMCSimHitOutput;
 
     const std::vector<gsl::owner<EMCHit*>>* fEMCHitList;
     const std::vector<gsl::owner<MCPHit*>>* fMCPHitList;
