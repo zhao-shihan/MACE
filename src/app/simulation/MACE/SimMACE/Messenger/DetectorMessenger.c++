@@ -12,13 +12,12 @@
 
 namespace MACE::SimMACE::inline Messenger {
 
-GeometryMessenger::GeometryMessenger() :
-    G4UImessenger(),
-    fDetectorConstruction(nullptr),
-    fDirectory(),
-    fImportDescription(),
-    fExportDescription(),
-    fIxportDescription() {
+DetectorMessenger::DetectorMessenger() :
+    SingletonMessenger{},
+    fDirectory{},
+    fImportDescription{},
+    fExportDescription{},
+    fIxportDescription{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Detector/");
 
@@ -39,17 +38,17 @@ GeometryMessenger::GeometryMessenger() :
     fIxportDescription->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
-GeometryMessenger::~GeometryMessenger() = default;
+DetectorMessenger::~DetectorMessenger() = default;
 
-auto GeometryMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
+auto DetectorMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     using DescriptionInUse = DetectorConstruction::DescriptionInUse;
     using Detector::Description::DescriptionIO;
     if (command == fImportDescription.get()) {
-        DescriptionIO::Import<DescriptionInUse>(std::string_view(value));
+        DescriptionIO::Import<DescriptionInUse>(std::string_view{value});
     } else if (command == fExportDescription.get()) {
-        DescriptionIO::Export<DescriptionInUse>(std::string_view(value), "SimMACE: geometry description");
+        DescriptionIO::Export<DescriptionInUse>(std::string_view{value}, "SimMACE: geometry description");
     } else if (command == fIxportDescription.get()) {
-        DescriptionIO::Ixport<DescriptionInUse>(std::string_view(value), "SimMACE: geometry description");
+        DescriptionIO::Ixport<DescriptionInUse>(std::string_view{value}, "SimMACE: geometry description");
     }
 }
 

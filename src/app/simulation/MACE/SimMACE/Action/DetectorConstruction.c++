@@ -56,12 +56,10 @@
 namespace MACE::SimMACE::inline Action {
 
 DetectorConstruction::DetectorConstruction() :
-    PassiveSingleton(),
-    G4VUserDetectorConstruction(),
-    fCheckOverlap(false),
-
-    fWorld(std::make_shared<Detector::Geometry::Fast::World>()),
-
+    PassiveSingleton{},
+    G4VUserDetectorConstruction{},
+    fCheckOverlap{},
+    fWorld{std::make_shared<Detector::Geometry::Fast::World>()},
     fCDCFieldWireRegion{},
     fCDCSenseWireRegion{},
     fDefaultGaseousRegion{},
@@ -79,7 +77,7 @@ DetectorConstruction::DetectorConstruction() :
     /*     Detector::Description::DescriptionIO::Import<DescriptionInUse>(
     #include "MACE/SimMACE/DefaultGeometry.inlyaml"
         ); */
-    GeometryMessenger::Instance().Register(this);
+    DetectorMessenger::EnsureInstantiated();
 }
 
 auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
