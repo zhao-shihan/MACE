@@ -2,8 +2,6 @@
 
 #include "MACE/Extension/Geant4X/SingletonMessenger.h++"
 
-#include "G4UImessenger.hh"
-
 #include <memory>
 
 class G4UIcmdWith3VectorAndUnit;
