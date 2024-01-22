@@ -6,10 +6,8 @@
 namespace MACE::SimTarget::inline Messenger {
 
 PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger() :
-    Singleton(),
-    G4UImessenger(),
-    fPrimaryGeneratorAction(nullptr),
-    fMuonsForEachG4Event() {
+    SingletonMessenger{},
+    fMuonsForEachG4Event{} {
 
     fMuonsForEachG4Event = std::make_unique<G4UIcmdWithAnInteger>("/MACE/Generator/SurfaceMuon/MuonsForEachG4Event", this);
     fMuonsForEachG4Event->SetGuidance("Set muons generated for each G4 event.");
@@ -21,7 +19,9 @@ PrimaryGeneratorActionMessenger::~PrimaryGeneratorActionMessenger() = default;
 
 auto PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fMuonsForEachG4Event.get()) {
-        fPrimaryGeneratorAction->MuonsForEachG4Event(fMuonsForEachG4Event->GetNewIntValue(value));
+        Deliver<PrimaryGeneratorAction>([&](auto&& r) {
+            r.MuonsForEachG4Event(fMuonsForEachG4Event->GetNewIntValue(value));
+        });
     }
 }
 
