@@ -11,9 +11,7 @@
 namespace MACE::SimMACE::inline Messenger {
 
 AnalysisMessenger::AnalysisMessenger() :
-    Singleton{},
-    G4UImessenger{},
-    fAnalysis{},
+    SingletonMessenger{},
     fDirectory{},
     fCoincidenceWithCDC{},
     fCoincidenceWithMCP{},
@@ -54,15 +52,25 @@ AnalysisMessenger::~AnalysisMessenger() = default;
 
 auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fCoincidenceWithCDC.get()) {
-        fAnalysis->CoincidenceWithCDC(fCoincidenceWithCDC->GetNewBoolValue(value));
+        Deliver<Analysis>([&](auto&& r) {
+            r.CoincidenceWithCDC(fCoincidenceWithCDC->GetNewBoolValue(value));
+        });
     } else if (command == fCoincidenceWithMCP.get()) {
-        fAnalysis->CoincidenceWithMCP(fCoincidenceWithMCP->GetNewBoolValue(value));
+        Deliver<Analysis>([&](auto&& r) {
+            r.CoincidenceWithMCP(fCoincidenceWithMCP->GetNewBoolValue(value));
+        });
     } else if (command == fCoincidenceWithEMC.get()) {
-        fAnalysis->CoincidenceWithEMC(fCoincidenceWithEMC->GetNewBoolValue(value));
+        Deliver<Analysis>([&](auto&& r) {
+            r.CoincidenceWithEMC(fCoincidenceWithEMC->GetNewBoolValue(value));
+        });
     } else if (command == fFilePath.get()) {
-        fAnalysis->FilePath(std::string_view(value));
+        Deliver<Analysis>([&](auto&& r) {
+            r.FilePath(std::string_view(value));
+        });
     } else if (command == fFileOption.get()) {
-        fAnalysis->FileOption(value);
+        Deliver<Analysis>([&](auto&& r) {
+            r.FileOption(value);
+        });
     }
 }
 

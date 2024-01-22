@@ -4,6 +4,7 @@
 #include "MACE/DataModel/DataFactory.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimMACE/Hit/CDCHit.h++"
+#include "MACE/SimMACE/Messenger/AnalysisMessenger.h++"
 #include "MACE/SimMACE/Hit/EMCHit.h++"
 #include "MACE/SimMACE/Hit/MCPHit.h++"
 
@@ -53,6 +54,8 @@ private:
     const std::vector<gsl::owner<EMCHit*>>* fEMCHitList;
     const std::vector<gsl::owner<MCPHit*>>* fMCPHitList;
     const std::vector<gsl::owner<CDCHit*>>* fCDCHitList;
+
+    AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };
 
 } // namespace MACE::SimMACE
