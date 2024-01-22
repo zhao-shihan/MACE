@@ -10,12 +10,10 @@
 namespace MACE::SimTarget::inline Messenger {
 
 AnalysisMessenger::AnalysisMessenger() :
-    Singleton(),
-    G4UImessenger(),
-    fAnalysis(nullptr),
-    fDirectory(),
-    fResultPath(),
-    fEnableYieldAnalysis() {
+    SingletonMessenger{},
+    fDirectory{},
+    fResultPath{},
+    fEnableYieldAnalysis{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Analysis/");
     fDirectory->SetGuidance("MACE::SimTarget::Analysis controller.");
@@ -35,9 +33,13 @@ AnalysisMessenger::~AnalysisMessenger() = default;
 
 auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fResultPath.get()) {
-        fAnalysis->ResultPath(std::string_view(value));
+        Deliver<Analysis>([&](auto&& r) {
+            r.ResultPath(std::string_view{value});
+        });
     } else if (command == fEnableYieldAnalysis.get()) {
-        fAnalysis->EnableYieldAnalysis(fEnableYieldAnalysis->GetNewBoolValue(value));
+        Deliver<Analysis>([&](auto&& r) {
+            r.EnableYieldAnalysis(fEnableYieldAnalysis->GetNewBoolValue(value));
+        });
     }
 }
 

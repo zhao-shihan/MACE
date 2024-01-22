@@ -2,6 +2,7 @@
 
 #include "MACE/DataModel/DataFactory.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
+#include "MACE/SimTarget/Messenger/AnalysisMessenger.h++"
 #include "MACE/SimTarget/MuoniumTrack.h++"
 
 #include "gsl/gsl"
@@ -51,6 +52,8 @@ private:
     std::unique_ptr<TFile> fResultFile;
     std::unique_ptr<std::ofstream> fYieldFile;
     DataModel::DataFactory fDataFactory;
+
+    AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };
 
 } // namespace MACE::SimTarget
