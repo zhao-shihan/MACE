@@ -40,7 +40,7 @@ private:
     static std::shared_ptr<void*> fgInstance;
 };
 
-class SingletonInstantiator final : NonConstructibleBase {
+class SingletonInstantiator final : public NonConstructibleBase {
     template<typename ASingleton>
     friend class Singleton;
 

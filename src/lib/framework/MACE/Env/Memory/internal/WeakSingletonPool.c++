@@ -1,6 +1,7 @@
+#include "MACE/Env/BasicEnv.h++"
 #include "MACE/Env/Memory/internal/WeakSingletonPool.h++"
 
-#include <iostream>
+#include <cstdio>
 #include <utility>
 
 namespace MACE::Env::Memory::internal {
@@ -20,10 +21,16 @@ WeakSingletonPool::WeakSingletonPool() :
 
 WeakSingletonPool::~WeakSingletonPool() {
     for (auto&& [type, instance] : std::as_const(fInstanceMap)) {
-        if (*instance != nullptr) [[unlikely]] {
+        if (instance.expired()) {
             fmt::println(stderr,
                          "MACE::Env::Memory::internal::WeakSingletonPool::~WeakSingletonPool(): "
-                         "Instance of type {} (weak singleton in environment) still survives, "
+                         "Instance pointer of {} expired",
+                         type.name());
+        }
+        if (*instance.lock() != nullptr) [[unlikely]] {
+            fmt::println(stderr,
+                         "MACE::Env::Memory::internal::WeakSingletonPool::~WeakSingletonPool(): "
+                         "Instance of {} survives, "
                          "implies memory leak or following undefined behavior",
                          type.name());
         }
@@ -37,7 +44,7 @@ auto WeakSingletonPool::Instance() -> WeakSingletonPool& {
     } else {
         throw std::logic_error{"MACE::Env::Memory::internal::WeakSingletonPool::Instance(): "
                                "The pool has not been instantiated or has been destructed "
-                               "(Maybe you forgot to instantiate an environment?)"};
+                               "(maybe you forgot to instantiate an environment?)"};
     }
 }
 

@@ -36,7 +36,7 @@ public:
     [[nodiscard]] auto GetUndeletedInReverseInsertionOrder() const -> std::vector<gsl::owner<const SingletonBase*>>;
 
 private:
-    std::unordered_map<std::type_index, std::tuple<std::shared_ptr<void*>, const gsl::index, const gsl::owner<const SingletonBase*>>> fInstanceMap;
+    std::unordered_map<std::type_index, const std::tuple<std::weak_ptr<void*>, gsl::index, gsl::owner<const SingletonBase*>>> fInstanceMap;
 };
 
 } // namespace MACE::Env::Memory::internal

@@ -34,7 +34,7 @@ public:
     [[nodiscard]] auto Insert(gsl::not_null<AWeakSingleton*> instance) ->  std::shared_ptr<void*>;
 
 private:
-    std::unordered_map<std::type_index, std::shared_ptr<void*>> fInstanceMap;
+    std::unordered_map<std::type_index, const std::weak_ptr<void*>> fInstanceMap;
 
     static WeakSingletonPool* fgInstance;
 };
