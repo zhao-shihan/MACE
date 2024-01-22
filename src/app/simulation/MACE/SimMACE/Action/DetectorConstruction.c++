@@ -77,7 +77,7 @@ DetectorConstruction::DetectorConstruction() :
     /*     Detector::Description::DescriptionIO::Import<DescriptionInUse>(
     #include "MACE/SimMACE/DefaultGeometry.inlyaml"
         ); */
-    DetectorMessenger::EnsureInstantiated();
+    DetectorMessenger::EnsureInstantiation();
 }
 
 auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
