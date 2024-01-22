@@ -17,7 +17,7 @@ auto ParallelizePathInPlace(std::filesystem::path& path, std::string_view extens
         throw std::logic_error("MACE::Utility::MPIX::ParallelizePathInPlace: Empty name");
     }
 
-    if (const auto& mpiEnv = Env::MPIEnv::Instance();
+    if (const auto& mpiEnv{Env::MPIEnv::Instance()};
         mpiEnv.Parallel()) {
         // root directory
         if (mpiEnv.OnCluster()) {
@@ -32,13 +32,12 @@ auto ParallelizePathInPlace(std::filesystem::path& path, std::string_view extens
         MPI_Ibarrier(mpiEnv.CommNode(),
                      &mpiBarrierRequest);
         // construct full path
-        auto rankN{fmt::format(".mpi{}.", mpiEnv.CommWorldRank())};
-        path /= fileName.concat(std::move(rankN)).replace_extension(extension);
+        path /= fileName.concat(fmt::format(".mpi{}.", mpiEnv.CommWorldRank())).replace_extension(extension);
         // wait for create_directories
         MPI_Wait(&mpiBarrierRequest,
                  MPI_STATUS_IGNORE);
     } else {
-        path.replace_extension(extension);
+        path.concat(".").replace_extension(extension);
     }
 }
 
