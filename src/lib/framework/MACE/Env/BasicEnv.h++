@@ -23,6 +23,8 @@ public:
     BasicEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel = VL::Warning, bool printWelcomeMessage = true);
     virtual ~BasicEnv() = default;
 
+    auto Argc() const -> auto { return fArgc; }
+    auto Argv() const -> auto { return fArgv; }
     auto GetVerboseLevel() const -> const auto& { return fVerboseLevel; }
 
 protected:
@@ -30,6 +32,8 @@ protected:
     auto PrintWelcomeMessageBody(int argc, char* argv[]) const -> void;
 
 private:
+    int fArgc;
+    char** fArgv;
     VL fVerboseLevel;
 };
 
