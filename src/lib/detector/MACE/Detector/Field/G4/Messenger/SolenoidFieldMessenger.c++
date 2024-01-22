@@ -12,15 +12,9 @@
 namespace MACE::Detector::Field::G4::inline Messenger {
 
 SolenoidFieldMessenger::SolenoidFieldMessenger() :
-    Singleton(),
-    G4UImessenger(),
-    fSolenoidB1Field(nullptr),
-    fSolenoidB2Field(nullptr),
-    fSolenoidS1Field(nullptr),
-    fSolenoidS2Field(nullptr),
-    fSolenoidS3Field(nullptr),
-    fDirectory(),
-    fSolenoidMagneticField() {
+    SingletonMessenger{},
+    fDirectory{},
+    fSolenoidMagneticField{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Field/");
     fDirectory->SetGuidance("Detector field controller.");

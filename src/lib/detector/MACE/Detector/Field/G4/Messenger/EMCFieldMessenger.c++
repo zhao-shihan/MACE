@@ -1,6 +1,6 @@
 #include "MACE/Detector/Description/EMCField.h++"
-#include "MACE/Detector/Field/G4/Messenger/EMCFieldMessenger.h++"
 #include "MACE/Detector/Field/G4/EMCField.h++"
+#include "MACE/Detector/Field/G4/Messenger/EMCFieldMessenger.h++"
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIdirectory.hh"
@@ -8,11 +8,9 @@
 namespace MACE::Detector::Field::G4::inline Messenger {
 
 EMCFieldMessenger::EMCFieldMessenger() :
-    Singleton(),
-    G4UImessenger(),
-    fEMCField(nullptr),
-    fDirectory(),
-    fSpectrometerMagneticField() {
+    SingletonMessenger{},
+    fDirectory{},
+    fSpectrometerMagneticField{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Field/");
     fDirectory->SetGuidance("Detector field controller.");

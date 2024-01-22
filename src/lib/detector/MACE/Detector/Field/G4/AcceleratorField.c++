@@ -4,8 +4,8 @@
 namespace MACE::Detector::Field::G4 {
 
 AcceleratorField::AcceleratorField() :
-    WrapAsG4Field() {
-    AcceleratorFieldMessenger::Instance().Register(this);
+    WrapAsG4Field{} {
+    AcceleratorFieldMessenger::EnsureInstantiation();
 }
 
 } // namespace MACE::Detector::Field::G4
