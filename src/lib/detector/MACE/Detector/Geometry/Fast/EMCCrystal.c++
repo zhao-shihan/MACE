@@ -201,7 +201,7 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
         // Construct Optical Surface
         /////////////////////////////////////////////
 
-        const auto rfSurface = new G4OpticalSurface("reflector", unified, polished, dielectric_dielectric);
+        const auto rfSurface = new G4OpticalSurface("reflector", unified, polished, dielectric_metal);
         new G4LogicalSkinSurface("reflectorSurface", logicCrystal, rfSurface);
         rfSurface->SetMaterialPropertiesTable(rfSurfacePropertiesTable);
 

@@ -1,10 +1,14 @@
-#include "MACE/SimEMC/Analysis.h++"
-#include "MACE/SimEMC/SD/MCPSD.h++"
+#include "MACE/SimMACE/Analysis.h++"
+#include "MACE/SimMACE/SD/MCPSD.h++"
 
 #include "G4HCofThisEvent.hh"
 #include "G4SDManager.hh"
 #include "G4Step.hh"
 #include "G4TwoVector.hh"
+#include "G4VProcess.hh"
+
+#include <cmath>
+#include <string_view>
 
 namespace MACE::SimEMC::inline SD {
 
@@ -16,13 +20,13 @@ MCPSD::MCPSD(const G4String& sdName) :
     collectionName.insert(sdName + "HC");
 }
 
-auto MCPSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
+void MCPSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
     fHitsCollection = new MCPHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-auto MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
+G4bool MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
     const auto& step = *theStep;
     const auto& track = *step.GetTrack();
     const auto& particle = *track.GetDefinition();
@@ -35,26 +39,29 @@ auto MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
         // calculate (E0, p0)
         const auto vertexEk{track.GetVertexKineticEnergy()};
         const auto vertexMomentum{track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()))};
+        // track creator process
+        const auto creatorProcess{track.GetCreatorProcess()};
         // new a hit
         const auto hit = new MCPHit;
-        hit->Get<"t">() = preStepPoint.GetGlobalTime();
-        hit->Get<"x">() = hitPosition;
-        hit->Get<"EvtID">() = fEventID;
-        hit->Get<"TrkID">() = track.GetTrackID();
-        hit->Get<"PDGID">() = particle.GetPDGEncoding();
-        hit->Get<"Ek">() = preStepPoint.GetKineticEnergy();
-        hit->Get<"p">() = preStepPoint.GetMomentum();
-        hit->Get<"t0">() = track.GetGlobalTime() - track.GetLocalTime();
-        hit->Get<"x0">() = track.GetVertexPosition();
-        hit->Get<"Ek0">() = vertexEk;
-        hit->Get<"p0">() = vertexMomentum;
+        Get<"t">(*hit) = preStepPoint.GetGlobalTime();
+        Get<"x">(*hit) = hitPosition;
+        Get<"EvtID">(*hit) = fEventID;
+        Get<"TrkID">(*hit) = track.GetTrackID();
+        Get<"PDGID">(*hit) = particle.GetPDGEncoding();
+        Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
+        Get<"p">(*hit) = preStepPoint.GetMomentum();
+        Get<"t0">(*hit) = track.GetGlobalTime() - track.GetLocalTime();
+        Get<"x0">(*hit) = track.GetVertexPosition();
+        Get<"Ek0">(*hit) = vertexEk;
+        Get<"p0">(*hit) = vertexMomentum;
+        *Get<"CreatProc">(*hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "<primary>";
         fHitsCollection->insert(hit);
         return true;
     }
     return false;
 }
 
-auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
+void MCPSD::EndOfEvent(G4HCofThisEvent*) {
     Analysis::Instance().SubmitMCPHC(*fHitsCollection->GetVector());
 }
 

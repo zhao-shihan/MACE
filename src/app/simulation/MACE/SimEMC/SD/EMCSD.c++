@@ -1,12 +1,15 @@
 #include "MACE/Detector/Description/EMC.h++"
-#include "MACE/SimEMC/Analysis.h++"
-#include "MACE/SimEMC/SD/EMCSD.h++"
+#include "MACE/SimMACE/Analysis.h++"
+#include "MACE/SimMACE/SD/EMCSD.h++"
 
 #include "G4HCofThisEvent.hh"
 #include "G4OpticalPhoton.hh"
 #include "G4SDManager.hh"
 #include "G4Step.hh"
+#include "G4VProcess.hh"
 
+#include <cmath>
+#include <string_view>
 #include <utility>
 
 namespace MACE::SimEMC::inline SD {
@@ -20,7 +23,7 @@ EMCSD::EMCSD(const G4String& sdName) :
     collectionName.insert(sdName + "HC");
 }
 
-auto EMCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
+void EMCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
     // int cellTotalNumber = Detector::Description::EMC::Instance().CellTotalNumber();
 
     fHitsCollection = new EMCHitCollection(SensitiveDetectorName, collectionName[0]);
@@ -32,7 +35,7 @@ auto EMCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
     // }
 }
 
-auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
+G4bool EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
     const auto& step = *theStep;
     const auto& track = *step.GetTrack();
     const auto& particle = *track.GetDefinition();
@@ -50,7 +53,9 @@ auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
             // calculate (Ek0, p0)
             const auto vertexEk = track.GetVertexKineticEnergy();
             const auto vertexMomentum = track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()));
-
+            // track creator process
+            const auto creatorProcess{track.GetCreatorProcess()};
+            // save hit info
             Get<"CellID">(hit) = cellID;
             Get<"t">(hit) = preStepPoint.GetGlobalTime();
             Get<"E">(hit) = 0;
@@ -64,6 +69,7 @@ auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
             Get<"x0">(hit) = track.GetVertexPosition();
             Get<"Ek0">(hit) = vertexEk;
             Get<"p0">(hit) = vertexMomentum;
+            *Get<"CreatProc">(hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "<Primary>";
         }
         Get<"E">(hit) += step.GetTotalEnergyDeposit();
         return true;
@@ -71,7 +77,7 @@ auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     return false;
 }
 
-auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
+void EMCSD::EndOfEvent(G4HCofThisEvent*) {
     for (auto&& [_, hit] : fHit) {
         if (Get<"E">(*hit) == 0) { continue; }
         fHitsCollection->insert(hit.release());
