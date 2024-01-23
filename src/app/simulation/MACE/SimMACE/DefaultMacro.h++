@@ -113,7 +113,7 @@ constexpr auto defaultMacro = {
     "/vis/filtering/trajectories/particleFilter-0/add e+",
     "/vis/filtering/trajectories/particleFilter-0/add e-",
     "/vis/filtering/trajectories/particleFilter-0/add gamma",
-    "/vis/filtering/trajectories/particleFilter-0/add M",
+    "/vis/filtering/trajectories/particleFilter-0/add muonium",
     "/vis/filtering/trajectories/particleFilter-0/add anti_M",
     "/vis/filtering/trajectories/particleFilter-0/add mu+",
     "",
