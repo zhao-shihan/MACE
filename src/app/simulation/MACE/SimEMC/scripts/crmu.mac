@@ -15,3 +15,4 @@
 
 /MPIRun/PrintProgressModulo 10000
 /run/beamOn 19350000
+/MPIRun/PrintRunSummary

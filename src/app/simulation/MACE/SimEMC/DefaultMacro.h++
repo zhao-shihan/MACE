@@ -24,6 +24,10 @@ constexpr auto defaultMacro = {
     "# Initialize kernel",
     "/run/initialize",
     "",
+    "# Name of output",
+    "/MACE/Analysis/FilePath   SimEMC_vis",
+    "/MACE/Analysis/FileOption RECREATE",
+    "",
 
 #if MACE_USE_G4VIS
 
@@ -92,19 +96,20 @@ constexpr auto defaultMacro = {
     "# General Particle Source settings",
     "#############################################################################",
 
-    // "/gps/particle gamma",
-    // "/gps/ene/mono 0.511 MeV",
-    // "/gps/pos/centre 0. 0. 0. cm",
-    // "/gps/ang/type iso",
+    "/gps/particle gamma",
+    "/gps/ene/mono 0.511 MeV",
+    "/gps/pos/centre 0. 0. 0. cm",
+    "/gps/direction 0 0.370438 -0.599382",
+// "/gps/ang/type iso",
 
-    "/gps/particle e+",
-    "/gps/direction 0 0 1",
-    "/gps/ene/mono 5 keV",
-    "/gps/pos/type Beam",
-    "/gps/pos/shape Circle",
-    "/gps/pos/radius 0 cm",
-    "/gps/pos/sigma_r 5.6 mm",
-    "/gps/pos/centre 0. 0. -40. cm",
+// "/gps/particle e+",
+// "/gps/direction 0 0 1",
+// "/gps/ene/mono 5 keV",
+// "/gps/pos/type Beam",
+// "/gps/pos/shape Circle",
+// "/gps/pos/radius 0 cm",
+// "/gps/pos/sigma_r 5.6 mm",
+// "/gps/pos/centre 0. 0. -40. cm",
 
 #endif
 
