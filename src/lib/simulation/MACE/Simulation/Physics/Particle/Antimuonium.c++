@@ -41,7 +41,7 @@ Antimuonium::Antimuonium() :
     // create Decay Table
     auto table = new G4DecayTable;
     // create a decay channel
-    table->Insert(new MuoniumDecayChannel("anti_muonium", 1.00));
+    table->Insert(new MuoniumDecayChannel{"anti_muonium", 1});
     this->SetDecayTable(table);
 }
 

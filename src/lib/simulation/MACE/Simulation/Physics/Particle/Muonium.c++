@@ -40,7 +40,7 @@ Muonium::Muonium() :
     // create Decay Table
     auto table = new G4DecayTable;
     // create a decay channel
-    table->Insert(new MuoniumDecayChannel("muonium", 1.00));
+    table->Insert(new MuoniumDecayChannel{"muonium", 1});
     this->SetDecayTable(table);
 }
 
