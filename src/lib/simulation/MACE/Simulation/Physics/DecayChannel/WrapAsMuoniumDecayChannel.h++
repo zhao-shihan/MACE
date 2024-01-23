@@ -26,9 +26,9 @@
 namespace MACE::inline Simulation::inline Physics::inline DecayChannel {
 
 template<std::derived_from<G4VDecayChannel> AMuonDecayChannel, CETAString AName>
-class MuoniumDecayChannelWrapper : public AMuonDecayChannel {
+class WrapAsMuoniumDecayChannel : public AMuonDecayChannel {
 public:
-    MuoniumDecayChannelWrapper(const G4String& parentName, G4double br, G4int verbose = 1);
+    WrapAsMuoniumDecayChannel(const G4String& parentName, G4double br, G4int verbose = 1);
 
     auto DecayIt(G4double) -> G4DecayProducts* override;
 
@@ -38,4 +38,4 @@ private:
 
 } // namespace MACE::inline Simulation::inline Physics::inline DecayChannel
 
-#include "MACE/Simulation/Physics/DecayChannel/MuoniumDecayChannelWrapper.inl"
+#include "MACE/Simulation/Physics/DecayChannel/WrapAsMuoniumDecayChannel.inl"

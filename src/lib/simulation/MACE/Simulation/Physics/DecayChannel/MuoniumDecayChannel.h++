@@ -1,11 +1,11 @@
 #pragma once
 
-#include "MACE/Simulation/Physics/DecayChannel/MuoniumDecayChannelWrapper.h++"
+#include "MACE/Simulation/Physics/DecayChannel/WrapAsMuoniumDecayChannel.h++"
 
 #include "G4MuonDecayChannel.hh"
 
 namespace MACE::inline Simulation::inline Physics::inline DecayChannel {
 
-using MuoniumDecayChannel = MuoniumDecayChannelWrapper<G4MuonDecayChannel, "MuoniumDecay">;
+using MuoniumDecayChannel = WrapAsMuoniumDecayChannel<G4MuonDecayChannel, "MuoniumDecay">;
 
 } // namespace MACE::inline Simulation::inline Physics::inline DecayChannel
