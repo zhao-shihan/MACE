@@ -2,7 +2,7 @@
 #include "MACE/Env/BasicEnv.h++"
 #include "MACE/SimEMC/Action/ActionInitialization.h++"
 #include "MACE/SimEMC/Action/DetectorConstruction.h++"
-// #include "MACE/SimEMC/Analysis.h++"
+#include "MACE/SimEMC/Analysis.h++"
 #include "MACE/SimEMC/PhysicsList.h++"
 #include "MACE/SimEMC/RunManager.h++"
 
@@ -23,5 +23,7 @@ RunManager::RunManager() :
 
     SetUserInitialization(new ActionInitialization);
 }
+
+RunManager::~RunManager() = default;
 
 } // namespace MACE::SimEMC

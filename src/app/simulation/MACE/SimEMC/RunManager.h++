@@ -16,7 +16,7 @@ public:
     static auto Instance() -> auto& { return static_cast<RunManager&>(*GetRunManager()); }
 
 private:
-    // std::unique_ptr<Analysis> fAnalysis;
+    std::unique_ptr<Analysis> fAnalysis;
 };
 
 } // namespace MACE::SimEMC
