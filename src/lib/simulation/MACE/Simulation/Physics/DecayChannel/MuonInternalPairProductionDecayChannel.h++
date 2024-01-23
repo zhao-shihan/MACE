@@ -9,7 +9,7 @@
 
 namespace MACE::inline Simulation::inline Physics::inline DecayChannel {
 
-class MuonInternalPairProductionDecayChannel final : public G4VDecayChannel {
+class MuonInternalPairProductionDecayChannel : public G4VDecayChannel {
 public:
     MuonInternalPairProductionDecayChannel(const G4String& parentName, G4double br, G4int verbose = 1);
 
