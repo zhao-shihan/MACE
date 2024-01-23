@@ -6,6 +6,7 @@
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
 
+#include "G4DecayProducts.hh"
 #include "G4Electron.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Positron.hh"
