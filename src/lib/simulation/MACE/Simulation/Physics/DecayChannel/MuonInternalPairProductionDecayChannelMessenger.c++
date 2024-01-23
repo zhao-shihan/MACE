@@ -7,16 +7,15 @@
 namespace MACE::inline Simulation::inline Physics::inline DecayChannel {
 
 MuonInternalPairProductionDecayChannelMessenger::MuonInternalPairProductionDecayChannelMessenger() :
-    Singleton{},
-    G4UImessenger{},
-    fMuonInternalPairProductionDecayChannel{},
-    fMuonIPPDecayDirectory{},
+    SingletonMessenger{},
+    fDirectory{},
     fMetropolisDelta{},
     fMetropolisDiscard{},
     fMetropolisWarmupCycle{},
     fSameChargedFinalStateEnergyCut{} {
-    fMuonIPPDecayDirectory = std::make_unique<G4UIdirectory>("/MACE/Physics/MuonIPPDecay/");
-    fMuonIPPDecayDirectory->SetGuidance("Muon internal pair production decay channel (mu->eeevv).");
+
+    fDirectory = std::make_unique<G4UIdirectory>("/MACE/Physics/MuonIPPDecay/");
+    fDirectory->SetGuidance("Muon internal pair production decay channel (mu->eeevv).");
 
     fMetropolisDelta = std::make_unique<G4UIcmdWithADouble>("/MACE/Physics/MuonIPPDecay/MetropolisDelta", this);
     fMetropolisDelta->SetGuidance("Set the 1D-displacement (20 dimensions in total) of the random walk in the Metropolis algorithm. "
@@ -56,13 +55,21 @@ MuonInternalPairProductionDecayChannelMessenger::~MuonInternalPairProductionDeca
 
 auto MuonInternalPairProductionDecayChannelMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fMetropolisDelta.get()) {
-        fMuonInternalPairProductionDecayChannel->MetropolisDelta(fMetropolisDelta->GetNewDoubleValue(value));
+        Deliver<MuonInternalPairProductionDecayChannel>([&](auto&& r) {
+            r.MetropolisDelta(fMetropolisDelta->GetNewDoubleValue(value));
+        });
     } else if (command == fMetropolisDiscard.get()) {
-        fMuonInternalPairProductionDecayChannel->MetropolisDiscard(fMetropolisDiscard->GetNewIntValue(value));
+        Deliver<MuonInternalPairProductionDecayChannel>([&](auto&& r) {
+            r.MetropolisDiscard(fMetropolisDiscard->GetNewIntValue(value));
+        });
     } else if (command == fMetropolisWarmupCycle.get()) {
-        fMuonInternalPairProductionDecayChannel->MetropolisWarmupCycle(fMetropolisWarmupCycle->GetNewIntValue(value));
+        Deliver<MuonInternalPairProductionDecayChannel>([&](auto&& r) {
+            r.MetropolisWarmupCycle(fMetropolisWarmupCycle->GetNewIntValue(value));
+        });
     } else if (command == fSameChargedFinalStateEnergyCut.get()) {
-        fMuonInternalPairProductionDecayChannel->SameChargedFinalStateEnergyCut(fSameChargedFinalStateEnergyCut->GetNewDoubleValue(value));
+        Deliver<MuonInternalPairProductionDecayChannel>([&](auto&& r) {
+            r.SameChargedFinalStateEnergyCut(fSameChargedFinalStateEnergyCut->GetNewDoubleValue(value));
+        });
     }
 }
 

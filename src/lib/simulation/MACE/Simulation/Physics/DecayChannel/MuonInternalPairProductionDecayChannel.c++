@@ -1,5 +1,4 @@
 #include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
-#include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannelMessenger.h++"
 
 #include "G4AntiNeutrinoE.hh"
 #include "G4AntiNeutrinoMu.hh"
@@ -25,7 +24,8 @@ MuonInternalPairProductionDecayChannel::MuonInternalPairProductionDecayChannel(c
     fRAMBO{muon_mass_c2, {electron_mass_c2, electron_mass_c2, electron_mass_c2, 0, 0}},
     fRawState{},
     fEvent{},
-    fWeightedM2{} {
+    fWeightedM2{},
+    fMessengerRegister{this} {
     SetParent(parentName);
     SetBR(br);
     SetNumberOfDaughters(5);
@@ -50,8 +50,7 @@ MuonInternalPairProductionDecayChannel::MuonInternalPairProductionDecayChannel(c
         }
 #endif
     }
-    WarmUp();
-    MuonInternalPairProductionDecayChannelMessenger::Instance().Register(this);
+    Thermalize();
 }
 
 auto MuonInternalPairProductionDecayChannel::SameChargedFinalStateEnergyCut(double eUp) -> void {
@@ -60,7 +59,7 @@ auto MuonInternalPairProductionDecayChannel::SameChargedFinalStateEnergyCut(doub
     } else {
         fSameChargedFinalStateEnergyCut = muon_mass_c2;
     }
-    WarmUp();
+    Thermalize();
 }
 
 auto MuonInternalPairProductionDecayChannel::DecayIt(G4double) -> G4DecayProducts* {
@@ -120,7 +119,7 @@ auto MuonInternalPairProductionDecayChannel::UpdateState(CLHEP::HepRandomEngine&
     }
 }
 
-auto MuonInternalPairProductionDecayChannel::WarmUp() -> void {
+auto MuonInternalPairProductionDecayChannel::Thermalize() -> void {
     auto& rng{*G4Random::getTheEngine()};
     // initialize
     do {

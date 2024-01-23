@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/Math/RAMBO.h++"
+#include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannelMessenger.h++"
 
 #include "G4VDecayChannel.hh"
 
@@ -21,7 +22,7 @@ public:
 
 private:
     auto UpdateState(CLHEP::HepRandomEngine& rng) -> void;
-    auto WarmUp() -> void;
+    auto Thermalize() -> void;
 
     auto Cut(const Math::RAMBO<5>::Event& event) const -> bool;
 
@@ -37,6 +38,8 @@ private:
     std::array<double, 5 * 4> fRawState;
     Math::RAMBO<5>::Event fEvent;
     double fWeightedM2;
+
+    MuonInternalPairProductionDecayChannelMessenger::Register<MuonInternalPairProductionDecayChannel> fMessengerRegister;
 };
 
 } // namespace MACE::inline Simulation::inline Physics::inline DecayChannel
