@@ -90,8 +90,8 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
     const auto couplerSurfacePropertiesTable = new G4MaterialPropertiesTable();
     couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", fEnergyPair, {1, 1});
 
-    const auto tapeSurfacePropertiesTable = new G4MaterialPropertiesTable();
-    tapeSurfacePropertiesTable->AddProperty("TRANSMITTANCE", fEnergyPair, {0, 0});
+    const auto airPaintSurfacePropertiesTable = new G4MaterialPropertiesTable();
+    airPaintSurfacePropertiesTable->AddProperty("REFLECTIVITY", fEnergyPair, {0, 0});
 
     /////////////////////////////////////////////
     // Construct Volumes
@@ -203,13 +203,13 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
         // Construct Optical Surface
         /////////////////////////////////////////////
 
-        const auto rfSurface = new G4OpticalSurface("reflector", unified, polished, dielectric_metal);
-        new G4LogicalSkinSurface("rfSurface", logicCrystal, rfSurface);
+        const auto rfSurface = new G4OpticalSurface("reflector", unified, polished, dielectric_dielectric);
+        new G4LogicalSkinSurface("reflectorSurface", logicCrystal, rfSurface);
         rfSurface->SetMaterialPropertiesTable(rfSurfacePropertiesTable);
 
-        const auto tapeSurface = new G4OpticalSurface("tape", unified, polished, dielectric_metal);
-        new G4LogicalBorderSurface("protectiveSurface", Mother().PhysicalVolume().get(), physicalCrystal, tapeSurface);
-        tapeSurface->SetMaterialPropertiesTable(tapeSurfacePropertiesTable);
+        const auto airPaintSurface = new G4OpticalSurface("AirPaint", unified, polished, dielectric_metal);
+        new G4LogicalBorderSurface("airPaintSurface", Mother().PhysicalVolume().get(), physicalCrystal, airPaintSurface);
+        airPaintSurface->SetMaterialPropertiesTable(airPaintSurfacePropertiesTable);
 
         if (FindSibling<EMCPMTCoupler>().has_value() == true) {
 
