@@ -6,6 +6,7 @@
 
 class G4UIcmdWithADouble;
 class G4UIcmdWithAnInteger;
+class G4UIdirectory;
 
 namespace MACE::inline Simulation::inline Physics::inline DecayChannel {
 
