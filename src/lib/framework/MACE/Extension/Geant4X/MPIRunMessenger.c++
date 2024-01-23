@@ -8,9 +8,7 @@
 namespace MACE::inline Extension::Geant4X {
 
 MPIRunMessenger::MPIRunMessenger() :
-    Singleton{},
-    G4UImessenger{},
-    fMPIRunManager{},
+    SingletonMessenger{},
     fDirectory{},
     fPrintProgressModulo{},
     fPrintRunSummary{} {
@@ -32,9 +30,13 @@ MPIRunMessenger::~MPIRunMessenger() = default;
 
 auto MPIRunMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fPrintProgressModulo.get()) {
-        fMPIRunManager->PrintProgressModulo(fPrintProgressModulo->GetNewIntValue(value));
+        Deliver<MPIRunManager>([&](auto&& r) {
+            r.PrintProgressModulo(fPrintProgressModulo->GetNewIntValue(value));
+        });
     } else if (command == fPrintRunSummary.get()) {
-        fMPIRunManager->PrintRunSummary();
+        Deliver<MPIRunManager>([&](auto&& r) {
+            r.PrintRunSummary();
+        });
     }
 }
 

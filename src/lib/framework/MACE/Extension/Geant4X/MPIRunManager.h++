@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Extension/Geant4X/MPIRunMessenger.h++"
 #include "MACE/Extension/MPIX/Execution/Executor.h++"
 #include "MACE/Math/Statistic.h++"
 #include "MACE/Utility/CPUTimeStopwatch.h++"
@@ -50,6 +51,8 @@ public:
 
 private:
     MPIX::Executor<G4int> fExecutor;
+
+    MPIRunMessenger::Register<MPIRunManager> fMessengerRegister;
 };
 
 } // namespace MACE::inline Extension::Geant4X

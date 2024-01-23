@@ -2,7 +2,6 @@
 #include "MACE/Compatibility/std23/to_underlying.h++"
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/Geant4X/MPIRunManager.h++"
-#include "MACE/Extension/Geant4X/MPIRunMessenger.h++"
 #include "MACE/Math/IntegerPower.h++"
 #include "MACE/Utility/MPIReseedRandomEngine.h++"
 
@@ -42,11 +41,11 @@ MPIRunManager::MPIRunManager() :
     internal::PreG4RunManagerInitFlipG4cout{},
     G4RunManager{},
     internal::PostG4RunManagerInitFlipG4cout{},
-    fExecutor{} {
+    fExecutor{},
+    fMessengerRegister{this} {
     printModulo = -1;
     SetVerboseLevel(std23::to_underlying(Env::MPIEnv::Instance().GetVerboseLevel()));
     fExecutor.TaskName("G4Event");
-    MPIRunMessenger::Instance().Register(this);
 }
 
 auto MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect) -> void {
