@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Simulation/Generator/SurfaceMuonMessenger.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
 #include "G4VPrimaryGenerator.hh"
@@ -36,6 +37,8 @@ private:
     G4double fPositionRMS;
     G4double fTime;
     G4double fPositionZ;
+
+    SurfaceMuonMessenger::Register<SurfaceMuon> fMessengerRegister;
 };
 
 } // namespace MACE::inline Simulation::Generator

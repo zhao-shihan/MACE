@@ -7,9 +7,7 @@
 namespace MACE::inline Simulation::Generator {
 
 SurfaceMuonMessenger::SurfaceMuonMessenger() :
-    Singleton{},
-    G4UImessenger{},
-    fSurfaceMuonGenerator{nullptr},
+    SingletonMessenger{},
     fDirectory{},
     fMomentum{},
     fMomentumRMS{},
@@ -48,13 +46,21 @@ SurfaceMuonMessenger::~SurfaceMuonMessenger() = default;
 
 auto SurfaceMuonMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fMomentum.get()) {
-        fSurfaceMuonGenerator->Momentum(fMomentum->GetNewDoubleValue(value));
+        Deliver<SurfaceMuon>([&](auto&& r) {
+            r.Momentum(fMomentum->GetNewDoubleValue(value));
+        });
     } else if (command == fMomentumRMS.get()) {
-        fSurfaceMuonGenerator->MomentumRMS(fMomentumRMS->GetNewDoubleValue(value));
+        Deliver<SurfaceMuon>([&](auto&& r) {
+            r.MomentumRMS(fMomentumRMS->GetNewDoubleValue(value));
+        });
     } else if (command == fPositionRMS.get()) {
-        fSurfaceMuonGenerator->PositionRMS(fPositionRMS->GetNewDoubleValue(value));
+        Deliver<SurfaceMuon>([&](auto&& r) {
+            r.PositionRMS(fPositionRMS->GetNewDoubleValue(value));
+        });
     } else if (command == fPositionZ.get()) {
-        fSurfaceMuonGenerator->PositionZ(fPositionZ->GetNewDoubleValue(value));
+        Deliver<SurfaceMuon>([&](auto&& r) {
+            r.PositionZ(fPositionZ->GetNewDoubleValue(value));
+        });
     }
 }
 
