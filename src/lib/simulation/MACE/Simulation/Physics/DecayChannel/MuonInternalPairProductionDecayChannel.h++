@@ -5,6 +5,7 @@
 
 #include "G4VDecayChannel.hh"
 
+#include <algorithm>
 #include <array>
 
 namespace MACE::inline Simulation::inline Physics::inline DecayChannel {
@@ -13,7 +14,7 @@ class MuonInternalPairProductionDecayChannel : public G4VDecayChannel {
 public:
     MuonInternalPairProductionDecayChannel(const G4String& parentName, G4double br, G4int verbose = 1);
 
-    auto MetropolisDelta(double delta) -> void { fMetropolisDelta = delta; }
+    auto MetropolisDelta(double delta) -> void { fMetropolisDelta = std::clamp(delta, 0., 1.); }
     auto MetropolisDiscard(double n) -> void { fMetropolisDiscard = n; }
     auto MetropolisWarmupCycle(int n) -> void { fMetropolisWarmupCycle = n; }
     auto SameChargedFinalStateEnergyCut(double eUp) -> void;

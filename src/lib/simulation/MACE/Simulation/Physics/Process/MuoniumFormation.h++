@@ -14,6 +14,7 @@
 
 #include "gsl/gsl"
 
+#include <algorithm>
 #include <limits>
 
 namespace MACE::inline Simulation::inline Physics::inline Process {
@@ -24,8 +25,8 @@ class MuoniumFormation final : public NonMoveableBase,
 public:
     MuoniumFormation();
 
-    auto FormationProbability(G4double val) -> void { fFormationProbability = val; }
-    auto ConversionProbability(G4double val) -> void { fConversionProbability = val; }
+    auto FormationProbability(G4double p) -> void { fFormationProbability = std::clamp(p, 0., 1.); }
+    auto ConversionProbability(G4double p) -> void { fConversionProbability = std::clamp(p, 0., 1.); }
 
     auto IsApplicable(const G4ParticleDefinition&) -> G4bool override;
     auto StartTracking(G4Track* track) -> void override;
