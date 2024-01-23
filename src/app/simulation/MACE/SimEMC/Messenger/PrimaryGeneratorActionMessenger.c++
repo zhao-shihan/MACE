@@ -16,7 +16,7 @@ PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger() :
     fSwitchToCosmicRayMuon{} {
 
     fSwitchToGPS = std::make_unique<G4UIcommand>("/MACE/Generator/SwitchToGPS", this);
-    fSwitchToGPS->SetGuidance("If set then annihilation gamma will be used.");
+    fSwitchToGPS->SetGuidance("If set then the G4GeneralParticleSource will be used.");
     fSwitchToGPS->AvailableForStates(G4State_PreInit, G4State_Idle);
 
     fSwitchToCosmicRayMuon = std::make_unique<G4UIcommand>("/MACE/Generator/SwitchToCosmicRayMuon", this);
