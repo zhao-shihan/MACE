@@ -71,7 +71,6 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
 
     const auto csiPropertiesTable = new G4MaterialPropertiesTable;
     csiPropertiesTable->AddProperty("RINDEX", fEnergyPair, {1.79, 1.79});
-    csiPropertiesTable->AddProperty("GROUPVEL", fEnergyPair, {167.482, 167.482});
     csiPropertiesTable->AddProperty("ABSLENGTH", fEnergyPair, {370_mm, 370_mm});
     csiPropertiesTable->AddProperty("SCINTILLATIONCOMPONENT1", csiEnergyBin, csiScintillationComponent1);
     csiPropertiesTable->AddConstProperty("SCINTILLATIONYIELD", scintillationYield);
@@ -189,7 +188,6 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
         const auto cutSoildCrystal = Make<G4IntersectionSolid>("EMCCrystal", solidCrystal, cutCrystalBox, crystalTransform);
         //========================================== CsI(Tl) ============================================
         const auto logicCrystal = Make<G4LogicalVolume>(cutSoildCrystal, csI, "EMCCrystal");
-        // const auto logicCrystal = Make<G4LogicalVolume>(solidCrystal, csI, "EMCCrystal");
         //===============================================================================================
         const auto physicalCrystal = Make<G4PVPlacement>(G4Transform3D{},
                                                          logicCrystal,
