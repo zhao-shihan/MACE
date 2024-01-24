@@ -91,8 +91,8 @@
 /vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSizeType screen
 /vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsType dots
 
-/vis/modeling/trajectories/drawByParticleID-0/setRGBA M 1 0 1 1
-/vis/modeling/trajectories/drawByParticleID-0/setRGBA anti_M 1 0 1 1
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA muonium 1 0 1 1
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA anti_muonium 1 0 1 1
 
 /vis/scene/endOfEventAction accumulate
 
