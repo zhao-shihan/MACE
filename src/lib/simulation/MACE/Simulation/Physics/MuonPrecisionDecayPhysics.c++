@@ -1,3 +1,4 @@
+#include "MACE/Math/Clamp.h++"
 #include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
 #include "MACE/Simulation/Physics/MuonPrecisionDecayPhysics.h++"
 
@@ -6,7 +7,6 @@
 #include "G4MuonMinus.hh"
 #include "G4MuonPlus.hh"
 
-#include <algorithm>
 #include <stdexcept>
 
 namespace MACE::inline Simulation::inline Physics {
@@ -21,7 +21,7 @@ MuonPrecisionDecayPhysics::MuonPrecisionDecayPhysics(G4int verbose) :
 }
 
 auto MuonPrecisionDecayPhysics::IPPDecayBR(double br) -> void {
-    fIPPDecayBR = std::clamp(br, 0., 1.);
+    fIPPDecayBR = Math::Clamp<"[]">(br, 0., 1.);
     if (fProcessConstructed) {
         ConstructProcess();
     }
