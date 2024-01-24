@@ -13,8 +13,8 @@ using namespace PhysicalConstant;
 
 MuonInternalPairProductionDecayChannel::MuonInternalPairProductionDecayChannel(const G4String& parentName, G4double br, G4int verbose) : // clang-format off
     G4VDecayChannel{"MuonIPPDecay", verbose}, // clang-format on
-    fMetropolisDelta{0.06},
-    fMetropolisDiscard{100},
+    fMetropolisDelta{0.01},
+    fMetropolisDiscard{200},
     fSameChargedFinalStateEnergyCut{muon_mass_c2},
     fRAMBO{muon_mass_c2, {electron_mass_c2, electron_mass_c2, electron_mass_c2, 0, 0}},
     fRawState{},

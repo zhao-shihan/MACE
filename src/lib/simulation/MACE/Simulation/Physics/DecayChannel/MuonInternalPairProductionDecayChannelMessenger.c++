@@ -19,8 +19,8 @@ MuonInternalPairProductionDecayChannelMessenger::MuonInternalPairProductionDecay
 
     fMetropolisDelta = std::make_unique<G4UIcmdWithADouble>("/MACE/Physics/MuonDecay/IPPDecay/MetropolisDelta", this);
     fMetropolisDelta->SetGuidance("Set the 1D-displacement (20 dimensions in total) of the random walk in the Metropolis algorithm. "
-                                  "Smaller values enhance autocorrelation, while larger values decrease performance. "
-                                  "The typical value is below 0.1.");
+                                  "Smaller values enhance autocorrelation, while larger values decrease performance and lead to biased results. "
+                                  "The typical value is below 0.05.");
     fMetropolisDelta->SetParameterName("delta", false);
     fMetropolisDelta->SetRange("0 < delta && delta < 0.5");
     fMetropolisDelta->AvailableForStates(G4State_Idle);
