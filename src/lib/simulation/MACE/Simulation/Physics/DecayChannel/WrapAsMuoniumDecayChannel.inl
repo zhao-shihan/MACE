@@ -58,7 +58,7 @@ auto WrapAsMuoniumDecayChannel<AMuonDecayChannel, AName>::DecayIt(G4double) -> G
 
     const auto products{AMuonDecayChannel::DecayIt(muon_mass_c2)};
     products->Boost(-p.x() / muon_mass_c2, -p.y() / muon_mass_c2, -p.z() / muon_mass_c2); // recoil boost
-    products->PushProducts(new G4DynamicParticle(this->G4MT_daughters[fAtomicShellProductIndex], p));
+    products->PushProducts(new G4DynamicParticle{this->G4MT_daughters[fAtomicShellProductIndex], p});
 
 #ifdef G4VERBOSE
     if (this->GetVerboseLevel() > 1) {

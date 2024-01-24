@@ -9,6 +9,7 @@
 #include "G4NeutrinoE.hh"
 #include "G4NeutrinoMu.hh"
 #include "G4Positron.hh"
+#include "Randomize.hh"
 
 #include "gsl/gsl"
 
@@ -101,11 +102,13 @@ auto MuonInternalPairProductionDecayChannel::UpdateState(CLHEP::HepRandomEngine&
     decltype(fEvent) newEvent;
     while (true) {
         do {
-            rng.flatArray(newRawState.size(), newRawState.data());
-            for (gsl::index i{}; i < ssize(newRawState); ++i) {
-                newRawState[i] = fMetropolisDelta * (2 * newRawState[i] - 1);
-                newRawState[i] += fRawState[i];
-            }
+            std::ranges::transform(fRawState, newRawState.begin(),
+                                   [&](auto u) {
+                                       u += G4RandFlat::shoot(&rng, -fMetropolisDelta, fMetropolisDelta);
+                                       if (u < 0) { u += 1; }
+                                       if (1 < u) { u -= 1; }
+                                       return u;
+                                   });
             newEvent = fRAMBO(newRawState);
         } while (Cut(newEvent) == false);
         const auto newWeightedM2{WeightedM2(newEvent)};
