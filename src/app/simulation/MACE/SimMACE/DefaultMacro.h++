@@ -132,7 +132,7 @@ constexpr auto defaultMacro = {
     "/vis/modeling/trajectories/drawByParticleID-0/setRGBA muonium 1 0 1 1",
     "/vis/modeling/trajectories/drawByParticleID-0/setRGBA anti_muonium 1 0 1 1",
     "",
-    "/vis/scene/endOfEventAction refresh -1",
+    "/vis/scene/endOfEventAction accumulate",
     "",
     "/vis/verbose warnings",
     "/vis/viewer/set/autoRefresh true",
