@@ -1,14 +1,8 @@
 #include "MACE/Math/IntegerPower.h++"
 #include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
 
-#include "G4AntiNeutrinoE.hh"
-#include "G4AntiNeutrinoMu.hh"
 #include "G4DecayProducts.hh"
 #include "G4DynamicParticle.hh"
-#include "G4Electron.hh"
-#include "G4NeutrinoE.hh"
-#include "G4NeutrinoMu.hh"
-#include "G4Positron.hh"
 #include "Randomize.hh"
 
 #include "gsl/gsl"
@@ -31,17 +25,17 @@ MuonInternalPairProductionDecayChannel::MuonInternalPairProductionDecayChannel(c
     SetBR(br);
     SetNumberOfDaughters(5);
     if (parentName == "mu+") {
-        SetDaughter(0, G4Positron::Definition());
-        SetDaughter(1, G4Electron::Definition());
-        SetDaughter(2, G4Positron::Definition());
-        SetDaughter(3, G4AntiNeutrinoMu::Definition());
-        SetDaughter(4, G4NeutrinoE::Definition());
+        SetDaughter(0, "e+");
+        SetDaughter(1, "e-");
+        SetDaughter(2, "e+");
+        SetDaughter(3, "anti_nu_mu");
+        SetDaughter(4, "nu_e");
     } else if (parentName == "mu-") {
-        SetDaughter(0, G4Electron::Definition());
-        SetDaughter(1, G4Positron::Definition());
-        SetDaughter(2, G4Electron::Definition());
-        SetDaughter(3, G4NeutrinoMu::Definition());
-        SetDaughter(4, G4AntiNeutrinoE::Definition());
+        SetDaughter(0, "e-");
+        SetDaughter(1, "e+");
+        SetDaughter(2, "e-");
+        SetDaughter(3, "nu_mu");
+        SetDaughter(4, "anti_nu_e");
     } else {
 #ifdef G4VERBOSE
         if (GetVerboseLevel() > 0) {

@@ -6,15 +6,15 @@ WrapAsMuoniumDecayChannel<AMuonDecayChannel, AName>::WrapAsMuoniumDecayChannel(c
     fAtomicShellProductIndex{this->numberOfDaughters} {
     this->SetVerboseLevel(verbose);
     // save muon decay info
-    std::vector<G4ParticleDefinition*> daughter;
+    std::vector<G4String> daughter;
     daughter.reserve(this->numberOfDaughters + 1);
     for (int i{}; i < this->numberOfDaughters; ++i) {
-        daughter.emplace_back(this->GetDaughter(i));
+        daughter.emplace_back(this->GetDaughterName(i));
     }
     if (parentName == "muonium") {
-        daughter.emplace_back(G4Electron::Definition());
+        daughter.emplace_back("e-");
     } else if (parentName == "anti_muonium") {
-        daughter.emplace_back(G4Positron::Definition());
+        daughter.emplace_back("e+");
     } else {
         throw std::invalid_argument{fmt::format("WrapAsMuoniumDecayChannel: parent particle is not muonium or anti_muonium but {}", parentName)};
     }
@@ -22,7 +22,7 @@ WrapAsMuoniumDecayChannel<AMuonDecayChannel, AName>::WrapAsMuoniumDecayChannel(c
     this->kinematics_name = AName.StringView();
     this->SetParent(parentName);
     this->SetBR(br);
-    this->SetNumberOfDaughters(ssize(daughter));
+    this->SetNumberOfDaughters(daughter.size());
     for (gsl::index i{}; i < ssize(daughter); ++i) {
         this->SetDaughter(i, daughter[i]);
     }
