@@ -12,7 +12,6 @@ MuonInternalPairProductionDecayChannelMessenger::MuonInternalPairProductionDecay
     fDirectory{},
     fMetropolisDelta{},
     fMetropolisDiscard{},
-    fMetropolisWarmupCycle{},
     fSameChargedFinalStateEnergyCut{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Physics/MuonDecay/IPPDecay/");
@@ -37,13 +36,6 @@ MuonInternalPairProductionDecayChannelMessenger::MuonInternalPairProductionDecay
     fMetropolisDiscard->SetRange("n > 0");
     fMetropolisDiscard->AvailableForStates(G4State_Idle);
 
-    fMetropolisWarmupCycle = std::make_unique<G4UIcmdWithAnInteger>("/MACE/Physics/MuonDecay/IPPDecay/MetropolisWarmupCycle", this);
-    fMetropolisWarmupCycle->SetGuidance("Set how many updates in the Metropolis algorithm warm up process. "
-                                        "The typical value is greater than 1000000.");
-    fMetropolisWarmupCycle->SetParameterName("n", false);
-    fMetropolisWarmupCycle->SetRange("n > 0");
-    fMetropolisWarmupCycle->AvailableForStates(G4State_Idle);
-
     fSameChargedFinalStateEnergyCut = std::make_unique<G4UIcmdWithADouble>("/MACE/Physics/MuonDecay/IPPDecay/SameChargedFinalStateEnergyCut", this);
     fSameChargedFinalStateEnergyCut->SetGuidance("Set the energy cut (energy upper bound) for the two same-charge-sign final states. "
                                                  "Only if at least one of the final states' energy is lower than the cut, the event is sampled. "
@@ -62,10 +54,6 @@ auto MuonInternalPairProductionDecayChannelMessenger::SetNewValue(G4UIcommand* c
     } else if (command == fMetropolisDiscard.get()) {
         Deliver<MuonInternalPairProductionDecayChannel>([&](auto&& r) {
             r.MetropolisDiscard(fMetropolisDiscard->GetNewIntValue(value));
-        });
-    } else if (command == fMetropolisWarmupCycle.get()) {
-        Deliver<MuonInternalPairProductionDecayChannel>([&](auto&& r) {
-            r.MetropolisWarmupCycle(fMetropolisWarmupCycle->GetNewIntValue(value));
         });
     } else if (command == fSameChargedFinalStateEnergyCut.get()) {
         Deliver<MuonInternalPairProductionDecayChannel>([&](auto&& r) {

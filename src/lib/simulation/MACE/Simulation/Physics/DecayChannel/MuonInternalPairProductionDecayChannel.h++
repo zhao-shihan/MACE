@@ -15,8 +15,7 @@ public:
     MuonInternalPairProductionDecayChannel(const G4String& parentName, G4double br, G4int verbose = 1);
 
     auto MetropolisDelta(double delta) -> void { fMetropolisDelta = std::clamp(delta, 0., 1.); }
-    auto MetropolisDiscard(double n) -> void { fMetropolisDiscard = n; }
-    auto MetropolisWarmupCycle(int n) -> void { fMetropolisWarmupCycle = n; }
+    auto MetropolisDiscard(int n) -> void { fMetropolisDiscard = std::max(0, n); }
     auto SameChargedFinalStateEnergyCut(double eUp) -> void;
 
     auto DecayIt(G4double) -> G4DecayProducts* override;
@@ -32,7 +31,6 @@ private:
 private:
     double fMetropolisDelta;
     int fMetropolisDiscard;
-    int fMetropolisWarmupCycle;
     double fSameChargedFinalStateEnergyCut;
 
     Math::RAMBO<5> fRAMBO;

@@ -27,7 +27,6 @@ private:
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithADouble> fMetropolisDelta;
     std::unique_ptr<G4UIcmdWithAnInteger> fMetropolisDiscard;
-    std::unique_ptr<G4UIcmdWithAnInteger> fMetropolisWarmupCycle;
     std::unique_ptr<G4UIcmdWithADouble> fSameChargedFinalStateEnergyCut;
 };
 

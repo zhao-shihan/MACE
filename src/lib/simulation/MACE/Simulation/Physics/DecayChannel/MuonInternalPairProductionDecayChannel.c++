@@ -1,3 +1,4 @@
+#include "MACE/Math/IntegerPower.h++"
 #include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
 
 #include "G4AntiNeutrinoE.hh"
@@ -19,7 +20,6 @@ MuonInternalPairProductionDecayChannel::MuonInternalPairProductionDecayChannel(c
     G4VDecayChannel{"MuonIPPDecay", verbose}, // clang-format on
     fMetropolisDelta{0.05},
     fMetropolisDiscard{100},
-    fMetropolisWarmupCycle{5000000},
     fSameChargedFinalStateEnergyCut{muon_mass_c2},
     fRAMBO{muon_mass_c2, {electron_mass_c2, electron_mass_c2, electron_mass_c2, 0, 0}},
     fRawState{},
@@ -127,8 +127,9 @@ auto MuonInternalPairProductionDecayChannel::Thermalize() -> void {
         fEvent = fRAMBO(fRawState);
     } while (Cut(fEvent) == false);
     fWeightedM2 = WeightedM2(fEvent);
-    // warm up cycle
-    for (auto i{0}; i < fMetropolisWarmupCycle; ++i) {
+    // thermalize
+    const auto nCycle{static_cast<unsigned long long>(Math::Pow<2>(10 / fMetropolisDelta))};
+    for (auto i{0ull}; i < nCycle; ++i) {
         UpdateState(rng);
     }
 }
