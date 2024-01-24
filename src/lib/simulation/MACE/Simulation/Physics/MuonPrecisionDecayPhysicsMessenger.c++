@@ -17,7 +17,7 @@ MuonPrecisionDecayPhysicsMessenger::MuonPrecisionDecayPhysicsMessenger() :
     fIPPDecayBR = std::make_unique<G4UIcmdWithADouble>("/MACE/Physics/MuonDecay/IPPDecay/BR", this);
     fIPPDecayBR->SetGuidance("Set branching ratio for muon(ium) internal pair production decay channel.");
     fIPPDecayBR->SetParameterName("BR", false);
-    fIPPDecayBR->SetRange("0 < BR && BR < 1");
+    fIPPDecayBR->SetRange("0 <= BR && BR <= 1");
     fIPPDecayBR->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
