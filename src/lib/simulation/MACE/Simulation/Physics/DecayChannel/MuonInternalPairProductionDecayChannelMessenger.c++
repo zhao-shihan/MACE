@@ -22,7 +22,7 @@ MuonInternalPairProductionDecayChannelMessenger::MuonInternalPairProductionDecay
                                   "Smaller values enhance autocorrelation, while larger values decrease performance. "
                                   "The typical value is below 0.1.");
     fMetropolisDelta->SetParameterName("delta", false);
-    fMetropolisDelta->SetRange("0 < delta && delta < 1");
+    fMetropolisDelta->SetRange("0 < delta && delta < 0.5");
     fMetropolisDelta->AvailableForStates(G4State_Idle);
 
     fMetropolisDiscard = std::make_unique<G4UIcmdWithAnInteger>("/MACE/Physics/MuonDecay/IPPDecay/MetropolisDiscard", this);

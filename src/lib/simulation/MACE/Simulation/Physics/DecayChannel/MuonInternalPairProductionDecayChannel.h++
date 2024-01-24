@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Math/Clamp.h++"
 #include "MACE/Math/RAMBO.h++"
 #include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannelMessenger.h++"
 
@@ -14,7 +15,7 @@ class MuonInternalPairProductionDecayChannel : public G4VDecayChannel {
 public:
     MuonInternalPairProductionDecayChannel(const G4String& parentName, G4double br, G4int verbose = 1);
 
-    auto MetropolisDelta(double delta) -> void { fMetropolisDelta = std::clamp(delta, 0., 1.); }
+    auto MetropolisDelta(double delta) -> void { fMetropolisDelta = Math::Clamp<"()">(delta, 0., 0.5); }
     auto MetropolisDiscard(int n) -> void { fMetropolisDiscard = std::max(0, n); }
     auto SameChargedFinalStateEnergyCut(double eUp) -> void;
 
