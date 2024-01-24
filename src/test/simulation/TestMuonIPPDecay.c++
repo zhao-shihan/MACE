@@ -13,6 +13,7 @@
 #include "G4MuonPlus.hh"
 #include "G4NeutrinoE.hh"
 #include "G4NeutrinoMu.hh"
+#include "G4ParticleTable.hh"
 #include "G4Positron.hh"
 
 using namespace MACE;
@@ -20,14 +21,16 @@ using namespace MACE;
 auto main(int argc, char* argv[]) -> int {
     Env::BasicEnv env{argc, argv, {}};
 
-    G4MuonPlus::Definition();
-    G4MuonMinus::Definition();
+    G4ParticleTable::GetParticleTable()->SetReadiness();
     G4AntiNeutrinoE::Definition();
     G4AntiNeutrinoMu::Definition();
     G4Electron::Definition();
+    G4MuonMinus::Definition();
+    G4MuonPlus::Definition();
     G4NeutrinoE::Definition();
     G4NeutrinoMu::Definition();
     G4Positron::Definition();
+
     MuonInternalPairProductionDecayChannel ippDecay{"mu+", 1};
 
     TFile file{"mu2eeevv.root", "RECREATE"};
