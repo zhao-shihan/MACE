@@ -36,8 +36,9 @@ auto MuonPrecisionDecayPhysics::ConstructProcess() -> void {
     const auto NewDecayTableFor{
         [this](G4ParticleDefinition* muon) {
             const auto decay{new G4DecayTable};
-            decay->Insert(new G4MuonDecayChannel{muon->GetParticleName(), 0});                                             // 0
-            decay->Insert(new MuonInternalPairProductionDecayChannel{muon->GetParticleName(), fIPPDecayBR, verboseLevel}); // 1
+            // ! sort by initial BR
+            decay->Insert(new G4MuonDecayChannel{muon->GetParticleName(), 1});
+            decay->Insert(new MuonInternalPairProductionDecayChannel{muon->GetParticleName(), fIPPDecayBR, verboseLevel});
             decay->GetDecayChannel(0)->SetVerboseLevel(verboseLevel);
             CheckAndSetMainChannelBR(decay);
             delete muon->GetDecayTable();
