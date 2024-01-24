@@ -7,6 +7,6 @@ consteval CETAString<N>::Data::Data(const CharString& string) {
 
 template<std::size_t N>
 consteval CETAString<N>::CETAString(const CharString& string) :
-    fStringDataImNotAPI{string} {}
+    fStringDataImNotPublic{string} {}
 
 } // namespace MACE::inline Utility
