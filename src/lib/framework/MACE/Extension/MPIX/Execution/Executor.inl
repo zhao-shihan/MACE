@@ -7,7 +7,9 @@ template<template<typename> typename S>
 Executor<T>::Executor(ScheduleBy<S>) :
     fScheduler{std::make_unique_for_overwrite<S<T>>()},
     fExecuting{},
-    fPrintProgressModulo{Env::MPIEnv::Instance().Parallel() ? 10 * Env::MPIEnv::Instance().CommWorldSize() + 1 : 10},
+    fPrintProgressModulo{static_cast<T>(Env::MPIEnv::Instance().Parallel() ?
+                                            10 * Env::MPIEnv::Instance().CommWorldSize() + 1 :
+                                            10)},
     fExecutionName{"Execution"},
     fTaskName{"Task"},
     fExecutionBeginSystemTime{},
@@ -64,7 +66,9 @@ template<std::integral T>
 auto Executor<T>::AssignTask(typename Scheduler<T>::Task task) -> void {
     if (fExecuting) { throw std::logic_error{"assign task during processing"}; }
     if (task.last < task.first) { throw std::invalid_argument{"last < first"}; }
-    if (Env::MPIEnv::Instance().CommWorldSize() > task.last - task.first) { throw std::runtime_error{"size of MPI_COMM_WORLD > number of tasks"}; }
+    if (static_cast<T>(Env::MPIEnv::Instance().CommWorldSize()) > task.last - task.first) {
+        throw std::runtime_error{"size of MPI_COMM_WORLD > number of tasks"};
+    }
     fScheduler->fTask = task;
     fScheduler->Reset();
     assert(ExecutingTask() == Task().first);
