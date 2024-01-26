@@ -132,12 +132,12 @@ auto MuonInternalPairProductionDecayChannel::Thermalize() -> void {
     }
 }
 
-auto MuonInternalPairProductionDecayChannel::Cut(const Math::RAMBO<5>::Event& event) const -> bool {
+auto MuonInternalPairProductionDecayChannel::Cut(const CLHEPX::RAMBO<5>::Event& event) const -> bool {
     const auto& [p, p1, p2, k1, k2]{event.state};
     return p.e() < fSameChargedFinalStateEnergyCut or p2.e() < fSameChargedFinalStateEnergyCut;
 }
 
-auto MuonInternalPairProductionDecayChannel::WeightedM2(const Math::RAMBO<5>::Event& event) -> double {
+auto MuonInternalPairProductionDecayChannel::WeightedM2(const CLHEPX::RAMBO<5>::Event& event) -> double {
     const auto& [weight, state]{event};
     const auto& [p, p1, p2, k1, k2]{state};
 

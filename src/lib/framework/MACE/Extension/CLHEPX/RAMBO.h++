@@ -20,7 +20,7 @@
 #include <stdexcept>
 #include <utility>
 
-namespace MACE::Math {
+namespace MACE::inline Extension::CLHEPX {
 
 template<int N>
     requires(N >= 2)
@@ -51,6 +51,6 @@ private:
     static constexpr auto fgTiny = 1e-9;
 };
 
-} // namespace MACE::Math
+} // namespace MACE::inline Extension::CLHEPX
 
-#include "MACE/Math/RAMBO.inl"
+#include "MACE/Extension/CLHEPX/RAMBO.inl"

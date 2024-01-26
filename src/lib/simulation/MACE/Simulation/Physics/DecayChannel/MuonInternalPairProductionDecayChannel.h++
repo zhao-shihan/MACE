@@ -1,7 +1,7 @@
 #pragma once
 
+#include "MACE/Extension/CLHEPX/RAMBO.h++"
 #include "MACE/Math/Clamp.h++"
-#include "MACE/Math/RAMBO.h++"
 #include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannelMessenger.h++"
 
 #include "G4VDecayChannel.hh"
@@ -25,18 +25,18 @@ private:
     auto UpdateState(CLHEP::HepRandomEngine& rng, double delta) -> void;
     auto Thermalize() -> void;
 
-    auto Cut(const Math::RAMBO<5>::Event& event) const -> bool;
+    auto Cut(const CLHEPX::RAMBO<5>::Event& event) const -> bool;
 
-    static auto WeightedM2(const Math::RAMBO<5>::Event& event) -> double;
+    static auto WeightedM2(const CLHEPX::RAMBO<5>::Event& event) -> double;
 
 private:
     double fMetropolisDelta;
     int fMetropolisDiscard;
     double fSameChargedFinalStateEnergyCut;
 
-    Math::RAMBO<5> fRAMBO;
+    CLHEPX::RAMBO<5> fRAMBO;
     std::array<double, 5 * 4> fRawState;
-    Math::RAMBO<5>::Event fEvent;
+    CLHEPX::RAMBO<5>::Event fEvent;
     double fWeightedM2;
 
     MuonInternalPairProductionDecayChannelMessenger::Register<MuonInternalPairProductionDecayChannel> fMessengerRegister;
