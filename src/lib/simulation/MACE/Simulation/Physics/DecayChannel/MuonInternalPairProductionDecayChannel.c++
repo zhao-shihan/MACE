@@ -71,9 +71,9 @@ auto MuonInternalPairProductionDecayChannel::DecayIt(G4double) -> G4DecayProduct
 
     auto& rng{*G4Random::getTheEngine()};
     for (int i{}; i < fMetropolisDiscard; ++i) {
-        UpdateState(rng);
+        UpdateState(rng, fMetropolisDelta);
     }
-    UpdateState(rng);
+    UpdateState(rng, fMetropolisDelta);
     // clang-format off
     auto products{new G4DecayProducts{G4DynamicParticle{G4MT_parent, {}, 0}}}; // clang-format on
     for (int i{}; i < 5; ++i) {
@@ -91,14 +91,14 @@ auto MuonInternalPairProductionDecayChannel::DecayIt(G4double) -> G4DecayProduct
     return products;
 }
 
-auto MuonInternalPairProductionDecayChannel::UpdateState(CLHEP::HepRandomEngine& rng) -> void {
+auto MuonInternalPairProductionDecayChannel::UpdateState(CLHEP::HepRandomEngine& rng, double delta) -> void {
     decltype(fRawState) newRawState;
     decltype(fEvent) newEvent;
     while (true) {
         do {
             std::ranges::transform(fRawState, newRawState.begin(),
                                    [&](auto u) {
-                                       u += G4RandFlat::shoot(&rng, -fMetropolisDelta, fMetropolisDelta);
+                                       u += G4RandFlat::shoot(&rng, -delta, delta);
                                        if (u < 0) { u = -u; }
                                        if (1 < u) { u = 2 - u; }
                                        return u;
@@ -125,9 +125,10 @@ auto MuonInternalPairProductionDecayChannel::Thermalize() -> void {
     } while (Cut(fEvent) == false);
     fWeightedM2 = WeightedM2(fEvent);
     // thermalize
-    const auto nCycle{static_cast<unsigned long long>(Math::Pow<2>(10 / fMetropolisDelta))};
-    for (auto i{0ull}; i < nCycle; ++i) {
-        UpdateState(rng);
+    constexpr long double deltaSA0{0.1};
+    constexpr auto nSA{100000};
+    for (auto deltaSA{deltaSA0}; deltaSA > std::numeric_limits<double>::epsilon(); deltaSA -= deltaSA0 / nSA) {
+        UpdateState(rng, deltaSA);
     }
 }
 

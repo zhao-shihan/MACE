@@ -22,7 +22,7 @@ public:
     auto DecayIt(G4double) -> G4DecayProducts* override;
 
 private:
-    auto UpdateState(CLHEP::HepRandomEngine& rng) -> void;
+    auto UpdateState(CLHEP::HepRandomEngine& rng, double delta) -> void;
     auto Thermalize() -> void;
 
     auto Cut(const Math::RAMBO<5>::Event& event) const -> bool;
