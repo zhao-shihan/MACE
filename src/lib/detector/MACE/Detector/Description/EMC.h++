@@ -19,15 +19,15 @@ public:
     auto InnerRadius() const -> const auto& { return fInnerRadius; }
     auto CrystalHypotenuse() const -> const auto& { return fCrystalHypotenuse; }
     auto SmallPMTRadius() const -> const auto& { return fSmallPMTRadius; }
-    auto LargePMTRadius() const -> const auto& { return fLargePMTRadius; }
+    auto SmallPMTLength() const -> const auto& { return fSmallPMTLength; }
     auto SmallPMTCathodeRadius() const -> const auto& { return fSmallPMTCathodeRadius; }
+    auto LargePMTRadius() const -> const auto& { return fLargePMTRadius; }
     auto LargePMTCathodeRadius() const -> const auto& { return fLargePMTCathodeRadius; }
+    auto LargePMTLength() const -> const auto& { return fLargePMTLength; }
     auto PMTCouplerThickness() const -> const auto& { return fPMTCouplerThickness; }
     auto PMTWindowThickness() const -> const auto& { return fPMTWindowThickness; }
     auto PMTCathodeThickness() const -> const auto& { return fPMTCathodeThickness; }
 
-    auto CouplerEnergyBin() const -> const auto& { return fCouplerEnergyBin; }
-    auto CouplerRefractiveIndex() const -> const auto& { return fCouplerRefractiveIndex; }
     auto PMTWaveLengthBin() const -> const auto& { return fPMTWaveLengthBin; }
     auto PMTQuantumEfficiency() const -> const auto& { return fPMTQuantumEfficiency; }
     auto CsIEnergyBin() const -> const auto& { return fCsIEnergyBin; }
@@ -47,15 +47,15 @@ public:
     auto InnerRadius(const auto& val) -> void { (fInnerRadius = val, SetGeometryOutdated()); }
     auto CrystalHypotenuse(const auto& val) -> void { (fCrystalHypotenuse = val, SetGeometryOutdated()); }
     auto SmallPMTRadius(const auto& val) -> void { fSmallPMTRadius = val; }
-    auto LargePMTRadius(const auto& val) -> void { fLargePMTRadius = val; }
+    auto SmallPMTLength(const auto& val) -> void { fSmallPMTLength = val; }
     auto SmallPMTCathodeRadius(const auto& val) -> void { fSmallPMTCathodeRadius = val; }
+    auto LargePMTRadius(const auto& val) -> void { fLargePMTRadius = val; }
+    auto LargePMTLength(const auto& val) -> void { fLargePMTLength = val; }
     auto LargePMTCathodeRadius(const auto& val) -> void { fLargePMTCathodeRadius = val; }
     auto PMTCouplerThickness(const auto& val) -> void { fPMTCouplerThickness = val; }
     auto PMTWindowThickness(const auto& val) -> void { fPMTWindowThickness = val; }
     auto PMTCathodeThickness(const auto& val) -> void { fPMTCathodeThickness = val; }
 
-    auto CoupleEnergyBin(const auto& val) -> void { fCouplerEnergyBin = val; }
-    auto CouplerRefractiveIndex(const auto& val) -> void { fCouplerRefractiveIndex = val; }
     auto PMTWaveLengthBin(const auto& val) -> void { fPMTWaveLengthBin = val; }
     auto PMTQuantumEfficiency(const auto& val) -> void { fPMTQuantumEfficiency = val; }
     auto CsIEnergyBin(const auto& val) -> void { fCsIEnergyBin = val; }
@@ -100,15 +100,15 @@ private:
     double fInnerRadius;
     double fCrystalHypotenuse;
     double fSmallPMTRadius;
-    double fLargePMTRadius;
+    double fSmallPMTLength;
     double fSmallPMTCathodeRadius;
+    double fLargePMTRadius;
+    double fLargePMTLength;
     double fLargePMTCathodeRadius;
     double fPMTCouplerThickness;
     double fPMTWindowThickness;
     double fPMTCathodeThickness;
 
-    std::vector<double> fCouplerEnergyBin;
-    std::vector<double> fCouplerRefractiveIndex;
     std::vector<double> fPMTWaveLengthBin;
     std::vector<double> fPMTQuantumEfficiency;
     std::vector<double> fCsIEnergyBin;

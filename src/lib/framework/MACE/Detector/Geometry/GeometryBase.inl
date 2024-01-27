@@ -63,6 +63,15 @@ auto GeometryBase::RegisterField(gsl::index volumeIndex, gsl::not_null<AField*> 
 }
 
 template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
+auto GeometryBase::RegisterField(std::string_view logicalVolumeName, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void {
+    for (gsl::index i{}; i < ssize(fLogicalVolumes); ++i) {
+        if (fLogicalVolumes[i]->GetName() == logicalVolumeName) {
+            RegisterField<AField, AEquation, AStepper, ADriver>(i, field, hMin, nVarStepper, nVarDriver, forceToAllDaughters);
+        }
+    }
+}
+
+template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
 auto GeometryBase::RegisterField(gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void {
     if (fLogicalVolumes.empty()) {
         std::logic_error{"MACE::Detector::Geometry::GeometryBase::RegisterField: "

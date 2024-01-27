@@ -154,15 +154,14 @@ EMC::EMC() :
     fInnerRadius{15_cm},
     fCrystalHypotenuse{15_cm},
     fSmallPMTRadius{25.5_mm},
-    fLargePMTRadius{40_mm},
+    fSmallPMTLength{144_mm},
     fSmallPMTCathodeRadius{23_mm},
-    fLargePMTCathodeRadius{36_mm},
+    fLargePMTRadius{39_mm},
+    fLargePMTLength{156_mm},
+    fLargePMTCathodeRadius{35_mm},
     fPMTCouplerThickness{0.1_mm},
     fPMTWindowThickness{1_mm},
     fPMTCathodeThickness{20_nm},
-    fCouplerEnergyBin{8.01532E-07, 1.89386E-06, 1.92915E-06, 2.1093E-06,
-                      2.27541E-06, 2.55633E-06, 2.58828E-06},
-    fCouplerRefractiveIndex{1.3912, 1.3992, 1.3997, 1.4015, 1.4034, 1.4071, 1.4076},
     fPMTWaveLengthBin{715.759, 704.541, 687.714, 670.887, 654.06, 637.234, 620.807, 606.384,
                       592.562, 584.019, 577.939, 571.814, 566.671, 562.542, 558.307, 553.099,
                       547.49, 541.48, 534.669, 527.057, 519.361, 511.903, 505.422, 499.413,
@@ -268,15 +267,15 @@ auto EMC::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
     ImportValue(node, fSmallPMTRadius, "SmallPMTRadius");
-    ImportValue(node, fLargePMTRadius, "LargePMTRadius");
+    ImportValue(node, fSmallPMTLength, "SmallPMTLength");
     ImportValue(node, fSmallPMTCathodeRadius, "SmallPMTCathodeRadius");
+    ImportValue(node, fLargePMTRadius, "LargePMTRadius");
+    ImportValue(node, fLargePMTLength, "LargePMTLength");
     ImportValue(node, fLargePMTCathodeRadius, "LargePMTCathodeRadius");
     ImportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ImportValue(node, fPMTWindowThickness, "PMTWindowThickness");
     ImportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
 
-    ImportValue(node, fCouplerEnergyBin, "fCouplerEnergyBin");
-    ImportValue(node, fCouplerRefractiveIndex, "fCouplerRefractiveIndex");
     ImportValue(node, fCsIEnergyBin, "fCsIEnergyBin");
     ImportValue(node, fCsIScintillationComponent1, "fCsIScintillationComponent1");
 
@@ -292,15 +291,15 @@ auto EMC::ExportValues(YAML::Node& node) const -> void {
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
     ExportValue(node, fSmallPMTRadius, "SmallPMTRadius");
-    ExportValue(node, fLargePMTRadius, "LargePMTRadius");
+    ExportValue(node, fSmallPMTLength, "SmallPMTLength");
     ExportValue(node, fSmallPMTCathodeRadius, "SmallPMTCathodeRadius");
+    ExportValue(node, fLargePMTRadius, "LargePMTRadius");
+    ExportValue(node, fLargePMTLength, "LargePMTLength");
     ExportValue(node, fLargePMTCathodeRadius, "LargePMTCathodeRadius");
     ExportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ExportValue(node, fPMTWindowThickness, "PMTWindowThickness");
     ExportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
 
-    ExportValue(node, fCouplerEnergyBin, "fCouplerEnergyBin");
-    ExportValue(node, fCouplerRefractiveIndex, "fCouplerRefractiveIndex");
     ExportValue(node, fCsIEnergyBin, "fCsIEnergyBin");
     ExportValue(node, fCsIScintillationComponent1, "fCsIScintillationComponent1");
 

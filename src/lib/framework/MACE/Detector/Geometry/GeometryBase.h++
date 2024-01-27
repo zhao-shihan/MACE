@@ -51,16 +51,21 @@ public:
     auto FindSibling() const -> auto { return Mother().FindDaughter<AGeometry>(); }
 
     auto RegisterMaterial(gsl::index iLogicalVolume, gsl::not_null<G4Material*> material) const -> void;
+    auto RegisterMaterial(std::string_view logicalVolumeName, gsl::not_null<G4Material*> material) const -> void;
     auto RegisterMaterial(gsl::not_null<G4Material*> material) const -> void;
 
     auto RegisterRegion(gsl::index iLogicalVolume, gsl::not_null<G4Region*> region) const -> void;
+    auto RegisterRegion(std::string_view logicalVolumeName, gsl::not_null<G4Region*> region) const -> void;
     auto RegisterRegion(gsl::not_null<G4Region*> region) const -> void;
 
     auto RegisterSD(gsl::index iLogicalVolume, gsl::not_null<G4VSensitiveDetector*> sd) const -> void;
+    auto RegisterSD(std::string_view logicalVolumeName, gsl::not_null<G4VSensitiveDetector*> sd) const -> void;
     auto RegisterSD(gsl::not_null<G4VSensitiveDetector*> sd) const -> void;
 
     template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
     auto RegisterField(gsl::index iLogicalVolume, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void;
+    template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
+    auto RegisterField(std::string_view logicalVolumeName, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void;
     template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
     auto RegisterField(gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void;
 

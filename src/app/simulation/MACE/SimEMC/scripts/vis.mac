@@ -44,7 +44,7 @@
 /vis/geometry/set/colour EMCCrystal                    0     1     1     1     0.1
 /vis/geometry/set/colour EMCPMTCathode                 0     1     1     1     0.1
 /vis/geometry/set/colour EMCPMTCoupler                 0     1     1     1     0.1
-/vis/geometry/set/colour EMCPMTWindow                  0     1     1     1     0.1
+/vis/geometry/set/colour EMCPMTShell                   0     1     1     1     0.1
 
 /vis/scene/add/date
 /vis/scene/add/axes 0 0 0 40 cm

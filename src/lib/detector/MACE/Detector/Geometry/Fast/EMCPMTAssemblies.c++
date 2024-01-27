@@ -1,5 +1,5 @@
 #include "MACE/Detector/Description/EMC.h++"
-#include "MACE/Detector/Geometry/Fast/EMCPMTCathode.h++"
+#include "MACE/Detector/Geometry/Fast/EMCPMTAssemblies.h++"
 #include "MACE/Detector/Geometry/GeometryBase.h++"
 #include "MACE/Env/BasicEnv.h++"
 #include "MACE/Utility/LiteralUnit.h++"
@@ -11,6 +11,7 @@
 #include "G4NistManager.hh"
 #include "G4OpticalSurface.hh"
 #include "G4PVPlacement.hh"
+#include "G4SubtractionSolid.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Tubs.hh"
 
@@ -26,7 +27,7 @@ using namespace LiteralUnit;
 using namespace MathConstant;
 using namespace PhysicalConstant;
 
-auto EMCPMTCathode::Construct(G4bool checkOverlaps) -> void {
+auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
 
     const auto& description = Description::EMC::Instance();
     const auto name = description.Name();
@@ -47,6 +48,7 @@ auto EMCPMTCathode::Construct(G4bool checkOverlaps) -> void {
     const auto antimonyElement = nistManager->FindOrBuildElement("Sb");
     const auto cesiumElement = nistManager->FindOrBuildElement("Cs");
 
+    const auto glass = nistManager->FindOrBuildMaterial("G4_GLASS_PLATE");
     const auto bialkali = new G4Material("Bialkali", 2.0_g_cm3, 3, kStateSolid);
     bialkali->AddElement(potassiumElement, 2);
     bialkali->AddElement(cesiumElement, 1);
@@ -60,6 +62,10 @@ auto EMCPMTCathode::Construct(G4bool checkOverlaps) -> void {
     constexpr auto fLambdaMax = 700_nm;
     const std::vector<G4double> fEnergyPair = {h_Planck * c_light / fLambdaMax,
                                                h_Planck * c_light / fLambdaMin};
+
+    const auto windowPropertiesTable = new G4MaterialPropertiesTable();
+    windowPropertiesTable->AddProperty("RINDEX", fEnergyPair, {1.49, 1.49}); // ET 9269B 9956B
+    glass->SetMaterialPropertiesTable(windowPropertiesTable);
 
     std::vector<G4double> cathodeSurfacePropertiesEnergy(pmtWaveLengthBin.size());
     std::vector<G4double> cathodeSurfacePropertiesEfficiency(pmtQuantumEfficiency.size());
@@ -87,14 +93,40 @@ auto EMCPMTCathode::Construct(G4bool checkOverlaps) -> void {
     for (G4int copyNo = 0;
          auto&& [_1, _2, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
 
+        double cathodeRadius{};
+        double pmtRadius{};
+        double pmtLength{};
+
+        if (vertexIndex.size() == 5) {
+            pmtRadius = emc.SmallPMTRadius();
+            pmtLength = emc.SmallPMTLength();
+            cathodeRadius = emc.SmallPMTCathodeRadius();
+        } else if (vertexIndex.size() == 6) {
+            pmtRadius = emc.LargePMTRadius();
+            pmtLength = emc.LargePMTLength();
+            cathodeRadius = emc.LargePMTCathodeRadius();
+        }
+
+        const auto shellTransform =
+            Detector::Description::EMC::Instance().ComputeTransformToOuterSurfaceWithOffset(copyNo,
+                                                                                            pmtCouplerThickness + pmtLength / 2);
         const auto cathodeTransform =
             Detector::Description::EMC::Instance().ComputeTransformToOuterSurfaceWithOffset(copyNo,
                                                                                             pmtCouplerThickness + pmtWindowThickness + pmtCathodeThickness / 2);
 
-        assert(vertexIndex.size() == 5 or vertexIndex.size() == 6);
-        const auto pmtRadius = vertexIndex.size() == 5 ? emc.SmallPMTCathodeRadius() : emc.LargePMTCathodeRadius();
+        const auto solidGlassBox = Make<G4Tubs>("temp", 0, pmtRadius, pmtLength / 2, 0, 2 * pi);
+        const auto solidPMTVacuum = Make<G4Tubs>("temp", 0, pmtRadius - pmtWindowThickness, pmtLength / 2 - pmtWindowThickness, 0, 2 * pi);
+        const auto solidPMTShell = Make<G4SubtractionSolid>("EMCPMTShell", solidGlassBox, solidPMTVacuum);
+        const auto logicPMTShell = Make<G4LogicalVolume>(solidPMTShell, glass, "EMCPMTShell");
+        Make<G4PVPlacement>(shellTransform,
+                            logicPMTShell,
+                            "EMCPMTShell",
+                            Mother().LogicalVolume().get(),
+                            true,
+                            copyNo,
+                            checkOverlaps);
 
-        const auto solidCathode = Make<G4Tubs>("temp", 0, pmtRadius, pmtCathodeThickness / 2, 0, 2 * pi);
+        const auto solidCathode = Make<G4Tubs>("temp", 0, cathodeRadius, pmtCathodeThickness / 2, 0, 2 * pi);
         const auto logicCathode = Make<G4LogicalVolume>(solidCathode, bialkali, "EMCPMTCathode");
 
         Make<G4PVPlacement>(cathodeTransform,

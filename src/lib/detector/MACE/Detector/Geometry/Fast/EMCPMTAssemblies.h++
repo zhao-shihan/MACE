@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Geometry::Fast {
 
-class EMCPMTWindow final : public GeometryBase {
+class EMCPMTAssemblies final : public GeometryBase {
 private:
     auto Construct(G4bool checkOverlaps) -> void override;
 };

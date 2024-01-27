@@ -56,7 +56,7 @@ constexpr auto defaultMacro = {
     "/vis/geometry/set/colour EMCCrystal                    0     1     1     1     0.1",
     "/vis/geometry/set/colour EMCPMTCathode                 0     1     1     1     0.1",
     "/vis/geometry/set/colour EMCPMTCoupler                 0     1     1     1     0.1",
-    "/vis/geometry/set/colour EMCPMTWindow                  0     1     1     1     0.1",
+    "/vis/geometry/set/colour EMCPMTShell                   0     1     1     1     0.1",
     "/vis/geometry/set/colour EMCTunnel                     0     1     1     1     0.1",
     "/vis/geometry/set/colour EMCShield                     0     1     1     1     0.1",
     "",

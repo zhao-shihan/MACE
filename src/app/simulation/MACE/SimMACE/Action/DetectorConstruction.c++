@@ -18,9 +18,8 @@
 #include "MACE/Detector/Geometry/Fast/CDCSuperLayer.h++"
 #include "MACE/Detector/Geometry/Fast/EMCCrystal.h++"
 #include "MACE/Detector/Geometry/Fast/EMCField.h++"
-#include "MACE/Detector/Geometry/Fast/EMCPMTCathode.h++"
+#include "MACE/Detector/Geometry/Fast/EMCPMTAssemblies.h++"
 #include "MACE/Detector/Geometry/Fast/EMCPMTCoupler.h++"
-#include "MACE/Detector/Geometry/Fast/EMCPMTWindow.h++"
 #include "MACE/Detector/Geometry/Fast/EMCShield.h++"
 #include "MACE/Detector/Geometry/Fast/Filter.h++"
 #include "MACE/Detector/Geometry/Fast/MCP.h++"
@@ -104,8 +103,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     auto& emcCrystal = emcField.NewDaughter<Detector::Geometry::Fast::EMCCrystal>(fCheckOverlap);
     auto& emcPMTCoupler = emcField.NewDaughter<Detector::Geometry::Fast::EMCPMTCoupler>(fCheckOverlap);
-    auto& emcPMTWindow = emcField.NewDaughter<Detector::Geometry::Fast::EMCPMTWindow>(fCheckOverlap);
-    auto& emcPMTCathode = emcField.NewDaughter<Detector::Geometry::Fast::EMCPMTCathode>(fCheckOverlap);
+    auto& emcPMTAssemblies = emcField.NewDaughter<Detector::Geometry::Fast::EMCPMTAssemblies>(fCheckOverlap);
 
     auto& mcp = emcField.NewDaughter<Detector::Geometry::Fast::MCP>(fCheckOverlap);
 
@@ -260,9 +258,6 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         fEMCSensitiveRegion->SetProductionCuts(defaultCuts);
 
         emcCrystal.RegisterRegion(fEMCSensitiveRegion);
-        emcPMTCoupler.RegisterRegion(fEMCSensitiveRegion);
-        emcPMTWindow.RegisterRegion(fEMCSensitiveRegion);
-        emcPMTCathode.RegisterRegion(fEMCSensitiveRegion);
 
         // MCPSensitiveRegion
         fMCPSensitiveRegion = new Region("MCPSensitive", RegionType::MCPSensitive);

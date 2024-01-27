@@ -1,9 +1,8 @@
 #include "MACE/Detector/Description/DescriptionIO.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/Detector/Geometry/Fast/EMCCrystal.h++"
-#include "MACE/Detector/Geometry/Fast/EMCPMTCathode.h++"
+#include "MACE/Detector/Geometry/Fast/EMCPMTAssemblies.h++"
 #include "MACE/Detector/Geometry/Fast/EMCPMTCoupler.h++"
-#include "MACE/Detector/Geometry/Fast/EMCPMTWindow.h++"
 #include "MACE/Detector/Geometry/Fast/MCP.h++"
 #include "MACE/Detector/Geometry/Fast/World.h++"
 #include "MACE/Detector/Geometry/GeometryBase.h++"
@@ -60,8 +59,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     fWorld = std::make_shared<World>();
     auto& emcCrystal = fWorld->NewDaughter<EMCCrystal>(fCheckOverlap);
     auto& emcPMTCoupler = fWorld->NewDaughter<EMCPMTCoupler>(fCheckOverlap);
-    auto& emcPMTWindow = fWorld->NewDaughter<EMCPMTWindow>(fCheckOverlap);
-    auto& emcPMTCathode = fWorld->NewDaughter<EMCPMTCathode>(fCheckOverlap);
+    auto& emcPMTAssemblies = fWorld->NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
     auto& mcp = fWorld->NewDaughter<MCP>(fCheckOverlap);
     // auto& emcShield = fWorld->NewDaughter<MACE::SimEMC::Detector::EMCShield>(fCheckOverlap);
     // auto& emcTunnel = fWorld->NewDaughter<MACE::SimEMC::Detector::EMCTunnel>(fCheckOverlap);
@@ -75,9 +73,6 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     fEMCSensitiveRegion->SetProductionCuts(defaultCuts);
 
     emcCrystal.RegisterRegion(fEMCSensitiveRegion);
-    emcPMTCoupler.RegisterRegion(fEMCSensitiveRegion);
-    emcPMTWindow.RegisterRegion(fEMCSensitiveRegion);
-    emcPMTCathode.RegisterRegion(fEMCSensitiveRegion);
 
     fMCPSensitiveRegion = new Region("MCPSensitive", RegionType::MCPSensitive);
     fMCPSensitiveRegion->SetProductionCuts(defaultCuts);
@@ -99,8 +94,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     fEMCSD = new SD::EMCSD(emcCrystal.LogicalVolume()->GetName());
     emcCrystal.RegisterSD(fEMCSD);
 
-    fPMTSD = new SD::PMTSD(emcPMTCathode.LogicalVolume()->GetName());
-    emcPMTCathode.RegisterSD(fPMTSD);
+    fPMTSD = new SD::PMTSD(emcPMTAssemblies.LogicalVolume()->GetName());
+    emcPMTAssemblies.RegisterSD("EMCPMTCathode", fPMTSD);
 
     fMCPSD = new SD::MCPSD(mcp.LogicalVolume()->GetName());
     mcp.RegisterSD(fMCPSD);
