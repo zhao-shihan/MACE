@@ -41,6 +41,7 @@ public:
 
     static auto GetRunManager() -> auto { return static_cast<MPIRunManager*>(G4RunManager::GetRunManager()); }
 
+    auto PrintProgress(G4bool b) -> void { fExecutor.PrintProgress(b), printModulo = -1; }
     auto PrintProgressModulo(G4int mod) -> void { fExecutor.PrintProgressModulo(mod), printModulo = -1; }
 
     virtual auto BeamOn(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) -> void override;
