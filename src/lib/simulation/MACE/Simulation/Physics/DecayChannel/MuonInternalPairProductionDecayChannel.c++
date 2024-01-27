@@ -138,8 +138,7 @@ auto MuonInternalPairProductionDecayChannel::Cut(const CLHEPX::RAMBO<5>::Event& 
 }
 
 auto MuonInternalPairProductionDecayChannel::WeightedM2(const CLHEPX::RAMBO<5>::Event& event) -> double {
-    const auto& [weight, state]{event};
-    const auto& [p, p1, p2, k1, k2]{state};
+    const auto& [p, p1, p2, k1, k2]{event.state};
 
     constexpr auto u2 = muon_mass_c2 * muon_mass_c2;
     constexpr auto m2 = electron_mass_c2 * electron_mass_c2;
@@ -289,7 +288,7 @@ auto MuonInternalPairProductionDecayChannel::WeightedM2(const CLHEPX::RAMBO<5>::
     const auto matr2mu = C2 * C2 * D1 * D1 * tr22 - C2 * C3 * D1 * D2 * tr24 + C3 * C3 * D2 * D2 * tr44;
     const auto matr2emu = C1 * C2 * D1 * D1 * tr12 - C1 * C3 * D1 * D2 * tr14 - C1 * C2 * D1 * D2 * tr23 + C1 * C3 * D2 * D2 * tr34;
 
-    return weight * (matr2e + matr2mu + matr2emu);
+    return event.weight * (matr2e + matr2mu + matr2emu);
 }
 
 } // namespace MACE::inline Simulation::inline Physics::inline DecayChannel
