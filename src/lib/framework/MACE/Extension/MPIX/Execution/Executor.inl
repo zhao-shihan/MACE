@@ -7,9 +7,9 @@ template<template<typename> typename S>
 Executor<T>::Executor(ScheduleBy<S>) :
     fScheduler{std::make_unique_for_overwrite<S<T>>()},
     fExecuting{},
-    fPrintProgressModulo{static_cast<T>(Env::MPIEnv::Instance().Parallel() ?
-                                            10 * Env::MPIEnv::Instance().CommWorldSize() + 1 :
-                                            10)},
+    fPrintProgress{true},
+    fPrintProgressModulo{},
+    fAutoPrintProgressModulo{1},
     fExecutionName{"Execution"},
     fTaskName{"Task"},
     fExecutionBeginSystemTime{},
@@ -74,6 +74,7 @@ auto Executor<T>::AssignTask(typename Scheduler<T>::Task task) -> void {
     assert(ExecutingTask() == Task().first);
     assert(NLocalExecutedTask() == 0);
     assert(NExecutedTask() == 0);
+    fAutoPrintProgressModulo = 1;
 }
 
 template<std::integral T>
@@ -147,7 +148,7 @@ auto Executor<T>::PrintExecutionSummary() const -> void {
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 auto Executor<T>::PreLoopReport() const -> void {
-    if (fPrintProgressModulo < 0) { return; }
+    if (not fPrintProgress) { return; }
     const auto& mpiEnv{Env::MPIEnv::Instance()};
     if (not(mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error)) { return; }
     fmt::print("+----------------------------------> Start <----------------------------------+\n"
@@ -160,21 +161,29 @@ auto Executor<T>::PreLoopReport() const -> void {
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 auto Executor<T>::PostTaskReport(T iEnded) const -> void {
-    if (not(fPrintProgressModulo > 0 and NExecutedTask() % fPrintProgressModulo == 0)) { return; }
+    if (not fPrintProgress or fPrintProgressModulo < 0) { return; }
+    if (fPrintProgressModulo == 0) {
+        if ((iEnded + 1) >= 10 * fAutoPrintProgressModulo) { fAutoPrintProgressModulo *= 10; }
+        if ((iEnded + 1) % fAutoPrintProgressModulo != 0) { return; }
+    } else {
+        if ((iEnded + 1) % fPrintProgressModulo != 0) { return; }
+    }
     const auto& mpiEnv{Env::MPIEnv::Instance()};
     if (mpiEnv.GetVerboseLevel() < Env::VL::Error) { return; }
+    const auto est{NLocalExecutedTask() > 10};
+    const auto speed{est ? NExecutedTask() / fWallTimeStopwatch.SecondsElapsed() : 0};
+    const auto eta{est ? (NTask() - NExecutedTask()) / speed : 0};
     const auto progress{static_cast<double>(NExecutedTask()) / NTask()};
-    const auto eta{(1 / progress - 1) * fWallTimeStopwatch.SecondsElapsed()};
     fmt::print("MPI{}> {:%FT%T%z} > {} {} has ended\n"
-               "MPI{}>   Est. rem. time: {}  Progress: {} | {}/{} | {:.4}%\n",
+               "MPI{}>   Est. rem. {}  Prog.: {} | {}/{} | {:.3}%\n",
                mpiEnv.CommWorldRank(), fmt::localtime(scsc::to_time_t(scsc::now())), fTaskName, iEnded,
-               mpiEnv.CommWorldRank(), NLocalExecutedTask() > 10 ? SToDHMS(eta) : "N/A", NLocalExecutedTask(), NExecutedTask(), NTask(), 100 * progress);
+               mpiEnv.CommWorldRank(), est ? fmt::format("{} ({:.3}/s)", SToDHMS(eta), speed) : "N/A", NLocalExecutedTask(), NExecutedTask(), NTask(), 100 * progress);
 }
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 auto Executor<T>::PostLoopReport() const -> void {
-    if (fPrintProgressModulo < 0) { return; }
+    if (not fPrintProgress) { return; }
     const auto& mpiEnv{Env::MPIEnv::Instance()};
     if (not(mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error)) { return; }
     const auto now{scsc::now()};

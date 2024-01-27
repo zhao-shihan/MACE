@@ -56,7 +56,8 @@ public:
     auto AssignTask(T first, T last) -> void { AssignTask({first, last}); }
     auto AssignTask(T size) -> void { AssignTask({0, size}); }
 
-    auto PrintProgressModulo(T mod) -> void { fPrintProgressModulo = mod; }
+    auto PrintProgress(bool a) -> void { fPrintProgress = a; }
+    auto PrintProgressModulo(long long mod) -> void { fPrintProgressModulo = mod; }
     auto ExecutionName(std::string name) -> void { fExecutionName = std::move(name); }
     auto TaskName(std::string name) -> void { fTaskName = std::move(name); }
 
@@ -87,7 +88,9 @@ private:
 
     bool fExecuting;
 
-    T fPrintProgressModulo;
+    bool fPrintProgress;
+    long long fPrintProgressModulo;
+    mutable T fAutoPrintProgressModulo;
 
     std::string fExecutionName;
     std::string fTaskName;
