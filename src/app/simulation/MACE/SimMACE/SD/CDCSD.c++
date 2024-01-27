@@ -1,4 +1,5 @@
 #include "MACE/Detector/Description/CDC.h++"
+#include "MACE/Extension/stdx/ranges_numeric.h++"
 #include "MACE/Math/MidPoint.h++"
 #include "MACE/SimMACE/Analysis.h++"
 #include "MACE/SimMACE/Region.h++"
@@ -18,6 +19,7 @@
 #include <algorithm>
 #include <bit>
 #include <cstdint>
+#include <functional>
 #include <numeric>
 #include <string_view>
 
@@ -130,11 +132,8 @@ void CDCSD::EndOfEvent(G4HCofThisEvent*) {
     fCellEntryPoint.clear();
 
     auto& hitList = *fHitsCollection->GetVector();
-    hitList.reserve(
-        std::accumulate(fCellSignalTimesAndHit.cbegin(), fCellSignalTimesAndHit.cend(), 0ull,
-                        [](const auto& count, const auto& value) {
-                            return count + value.second.size();
-                        }));
+    hitList.reserve(stdx::ranges::transform_reduce(fCellSignalTimesAndHit, 0ull, std::plus{},
+                                                   [](const auto& pair) { return pair.second.size(); }));
 
     for (auto&& [_, signalTimesAndHit] : fCellSignalTimesAndHit) {
         if (signalTimesAndHit.size() == 1) {
