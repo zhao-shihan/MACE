@@ -13,23 +13,28 @@ using namespace std::chrono_literals;
 auto main(int argc, char* argv[]) -> int {
     MACE::Env::MPIEnv env{argc, argv, {}};
 
-    MPIX::Executor executor{std::stoll(argv[1]), MPIX::ScheduleBy<MPIX::StaticScheduler>{}};
+    MPIX::Executor<unsigned short> executor{MPIX::ScheduleBy<MPIX::StaticScheduler>{}};
 
-    executor.PrintProgressModulo(0);
-    executor.Execute([&](auto i) {
-        std::this_thread::sleep_for(500ms);
-        fmt::println("{},{}", i, env.CommWorldRank());
-    });
+    const auto n{std::stoll(argv[1])};
 
-    executor.Execute([&](auto i) {
-        std::this_thread::sleep_for(500ms);
-        fmt::println("{},{}", i, env.CommWorldRank());
-    });
+    executor.PrintProgressModulo(-1);
+    executor.Execute(n,
+                     [&](auto i) {
+                         std::this_thread::sleep_for(500ms);
+                         fmt::println("{},{}", i, env.CommWorldRank());
+                     });
+
+    executor.Execute(n,
+                     [&](auto i) {
+                         std::this_thread::sleep_for(500ms);
+                         fmt::println("{},{}", i, env.CommWorldRank());
+                     });
 
     executor.PrintProgressModulo(1);
-    executor.Execute([&](auto) {
-        std::this_thread::sleep_for(500ms);
-    });
+    executor.Execute(n,
+                     [&](auto) {
+                         std::this_thread::sleep_for(500ms);
+                     });
 
     return EXIT_SUCCESS;
 }

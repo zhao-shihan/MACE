@@ -47,26 +47,27 @@ auto main(int argc, char* argv[]) -> int {
     TFile file{MPIX::ParallelizePath("mu2eeevv.root").generic_string().c_str(), "RECREATE", "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
     TNtuple t{"eeevv", "eeevv", "e1:e2:e3:e4:e5"};
 
-    MPIX::Executor<unsigned long long> executor{std::stoull(argv[1])};
-    executor.Execute([&](auto) {
-        const auto product{ippDecay.DecayIt(0)};
-        const auto v2{product->PopProducts()};
-        const auto v1{product->PopProducts()};
-        const auto e3{product->PopProducts()};
-        const auto e2{product->PopProducts()};
-        const auto e1{product->PopProducts()};
-        t.Fill(e1->GetTotalEnergy(),
-               e2->GetTotalEnergy(),
-               e3->GetTotalEnergy(),
-               v1->GetTotalEnergy(),
-               v2->GetTotalEnergy());
-        delete v2;
-        delete v1;
-        delete e3;
-        delete e2;
-        delete e1;
-        delete product;
-    });
+    MPIX::Executor<unsigned long long> executor;
+    executor.Execute(std::stoull(argv[1]),
+                     [&](auto) {
+                         const auto product{ippDecay.DecayIt(0)};
+                         const auto v2{product->PopProducts()};
+                         const auto v1{product->PopProducts()};
+                         const auto e3{product->PopProducts()};
+                         const auto e2{product->PopProducts()};
+                         const auto e1{product->PopProducts()};
+                         t.Fill(e1->GetTotalEnergy(),
+                                e2->GetTotalEnergy(),
+                                e3->GetTotalEnergy(),
+                                v1->GetTotalEnergy(),
+                                v2->GetTotalEnergy());
+                         delete v2;
+                         delete v1;
+                         delete e3;
+                         delete e2;
+                         delete e1;
+                         delete product;
+                     });
     executor.PrintExecutionSummary();
 
     t.Write();

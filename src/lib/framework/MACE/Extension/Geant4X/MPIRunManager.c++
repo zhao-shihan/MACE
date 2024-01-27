@@ -52,7 +52,6 @@ auto MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect)
     MPIReseedRandomEngine();
     fakeRun = nEvent <= 0;
     if (ConfirmBeamOnCondition()) {
-        fExecutor.AssignTask(nEvent);
         numberOfEventToBeProcessed = nEvent;
         numberOfEventProcessed = 0;
         ConstructScoringWorlds();
@@ -98,11 +97,12 @@ auto MPIRunManager::DoEventLoop(G4int nEvent, const char* macroFile, G4int nSele
     // Set name for message
     fExecutor.ExecutionName(fmt::format("G4Run {}", currentRun->GetRunID()));
     // Event loop
-    fExecutor.Execute([this](auto eventID) {
-        ProcessOneEvent(eventID);
-        TerminateOneEvent();
-        if (runAborted) { throw std::runtime_error{"G4Run aborted"}; }
-    });
+    fExecutor.Execute(numberOfEventToBeProcessed,
+                      [this](auto eventID) {
+                          ProcessOneEvent(eventID);
+                          TerminateOneEvent();
+                          if (runAborted) { throw std::runtime_error{"G4Run aborted"}; }
+                      });
     // If multi-threading, TerminateEventLoop() is invoked after all threads are finished.
     // MPIRunManager::runManagerType is sequentialRM.
     if (runManagerType == sequentialRM) { TerminateEventLoop(); }

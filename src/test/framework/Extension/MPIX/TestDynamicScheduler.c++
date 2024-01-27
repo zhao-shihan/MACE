@@ -13,30 +13,37 @@ using namespace std::chrono_literals;
 auto main(int argc, char* argv[]) -> int {
     MACE::Env::MPIEnv env{argc, argv, {}};
 
-    MPIX::Executor executor{std::stoll(argv[1]), MPIX::ScheduleBy<MPIX::DynamicScheduler>{}};
+    MPIX::Executor<unsigned short> executor{MPIX::ScheduleBy<MPIX::DynamicScheduler>{}};
 
-    executor.PrintProgressModulo(-1);
-    executor.Execute([&](auto i) {
-        fmt::println("{},{}", i, env.CommWorldRank());
-    });
+    const auto n{std::stoll(argv[1])};
+
+    executor.PrintProgress(false);
+    executor.Execute(n,
+                     [&](auto i) {
+                         fmt::println("{},{}", i, env.CommWorldRank());
+                     });
 
     std::this_thread::sleep_for(3s);
 
-    executor.PrintProgressModulo(0);
-    executor.Execute([&](auto i) {
-        std::this_thread::sleep_for(500ms);
-        fmt::println("{},{}", i, env.CommWorldRank());
-    });
+    executor.PrintProgress(true);
+    executor.PrintProgressModulo(-1);
+    executor.Execute(n,
+                     [&](auto i) {
+                         std::this_thread::sleep_for(500ms);
+                         fmt::println("{},{}", i, env.CommWorldRank());
+                     });
 
-    executor.Execute([&](auto i) {
-        std::this_thread::sleep_for(500ms);
-        fmt::println("{},{}", i, env.CommWorldRank());
-    });
+    executor.Execute(n,
+                     [&](auto i) {
+                         std::this_thread::sleep_for(500ms);
+                         fmt::println("{},{}", i, env.CommWorldRank());
+                     });
 
     executor.PrintProgressModulo(1);
-    executor.Execute([&](auto) {
-        std::this_thread::sleep_for(500ms);
-    });
+    executor.Execute(n,
+                     [&](auto) {
+                         std::this_thread::sleep_for(500ms);
+                     });
 
     return EXIT_SUCCESS;
 }

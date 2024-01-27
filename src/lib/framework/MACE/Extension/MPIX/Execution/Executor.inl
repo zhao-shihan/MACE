@@ -30,29 +30,6 @@ Executor<T>::Executor(ScheduleBy<S>) :
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
-template<template<typename> typename S>
-    requires std::derived_from<S<T>, Scheduler<T>>
-Executor<T>::Executor(typename Scheduler<T>::Task task, ScheduleBy<S>) :
-    Executor{ScheduleBy<S>{}} {
-    AssignTask(task);
-}
-
-template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
-template<template<typename> typename S>
-    requires std::derived_from<S<T>, Scheduler<T>>
-Executor<T>::Executor(T size, ScheduleBy<S>) : // clang-format off
-    Executor{{0, size}, ScheduleBy<S>{}} {} // clang-format on
-
-template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
-template<template<typename> typename S>
-    requires std::derived_from<S<T>, Scheduler<T>>
-Executor<T>::Executor(T first, T last, ScheduleBy<S>) : // clang-format off
-    Executor{{first, last}, ScheduleBy<S>{}} {} // clang-format on
-
-template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 template<template<typename> typename AScheduler>
     requires std::derived_from<AScheduler<T>, Scheduler<T>>
 auto Executor<T>::SwitchScheduler() -> void {
@@ -64,23 +41,19 @@ auto Executor<T>::SwitchScheduler() -> void {
 
 template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
-auto Executor<T>::AssignTask(typename Scheduler<T>::Task task) -> void {
-    if (fExecuting) { throw std::logic_error{"assign task during processing"}; }
-    if (task.last < task.first) { throw std::invalid_argument{"last < first"}; }
-    if (static_cast<T>(Env::MPIEnv::Instance().CommWorldSize()) > task.last - task.first) {
-        throw std::runtime_error{"size of MPI_COMM_WORLD > number of tasks"};
+auto Executor<T>::Execute(typename Scheduler<T>::Task task, std::invocable<T> auto&& F) -> T {
+    // reset
+    if (task.last < task.first) { throw std::invalid_argument{"task.last < task.first"}; }
+    if (task.last == task.first) { return 0; }
+    if (task.last - task.first < static_cast<T>(Env::MPIEnv::Instance().CommWorldSize())) {
+        throw std::runtime_error{"number of tasks < size of MPI_COMM_WORLD"};
     }
     fScheduler->fTask = task;
     fScheduler->Reset();
     assert(ExecutingTask() == Task().first);
     assert(NLocalExecutedTask() == 0);
     assert(NExecutedTask() == 0);
-}
-
-template<std::integral T>
-    requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
-auto Executor<T>::Execute(std::invocable<T> auto&& Func) -> T {
-    fScheduler->Reset();
+    // initialize
     fExecuting = true;
     fScheduler->PreLoopAction();
     MPI_Barrier(MPI_COMM_WORLD);
@@ -88,15 +61,17 @@ auto Executor<T>::Execute(std::invocable<T> auto&& Func) -> T {
     fWallTimeStopwatch = {};
     fCPUTimeStopwatch = {};
     PreLoopReport();
+    // main loop
     while (ExecutingTask() != Task().last) {
         fScheduler->PreTaskAction();
         const auto taskID{ExecutingTask()};
         assert(taskID <= Task().last);
-        Func(taskID);
+        F(taskID);
         ++fScheduler->fNLocalExecutedTask;
         fScheduler->PostTaskAction();
         PostTaskReport(taskID);
     }
+    // finalize
     fExecutionWallTime = fWallTimeStopwatch.SecondsElapsed();
     fExecutionCPUTime = fCPUTimeStopwatch.SecondsUsed();
     struct GatheringDataType {
