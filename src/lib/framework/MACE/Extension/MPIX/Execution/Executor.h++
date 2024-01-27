@@ -14,6 +14,7 @@
 #include "fmt/chrono.h"
 #include "fmt/format.h"
 
+#include <algorithm>
 #include <cassert>
 #include <chrono>
 #include <cmath>
