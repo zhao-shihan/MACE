@@ -17,6 +17,14 @@ void GeometryBase::RegisterMaterial(gsl::index iLogicalVolume, gsl::not_null<G4M
     LogicalVolume(iLogicalVolume)->SetMaterial(material);
 }
 
+auto GeometryBase::RegisterMaterial(std::string_view logicalVolumeName, gsl::not_null<G4Material*> material) const -> void {
+    for (gsl::index i{}; i < ssize(fLogicalVolumes); ++i) {
+        if (fLogicalVolumes[i]->GetName() == logicalVolumeName) {
+            RegisterMaterial(i, material);
+        }
+    }
+}
+
 void GeometryBase::RegisterMaterial(gsl::not_null<G4Material*> material) const {
     for (gsl::index i = 0; i < std::ssize(fLogicalVolumes); ++i) {
         RegisterMaterial(i, material);
@@ -28,6 +36,14 @@ void GeometryBase::RegisterRegion(gsl::index iLogicalVolume, gsl::not_null<G4Reg
     if (logicalVolume->GetRegion() != region) {
         logicalVolume->SetRegion(region);
         region->AddRootLogicalVolume(logicalVolume.get());
+    }
+}
+
+auto GeometryBase::RegisterRegion(std::string_view logicalVolumeName, gsl::not_null<G4Region*> region) const -> void {
+    for (gsl::index i{}; i < ssize(fLogicalVolumes); ++i) {
+        if (fLogicalVolumes[i]->GetName() == logicalVolumeName) {
+            RegisterRegion(i, region);
+        }
     }
 }
 
@@ -60,6 +76,14 @@ void GeometryBase::RegisterSD(gsl::index iLogicalVolume, gsl::not_null<G4VSensit
         G4ExceptionDescription msg;
         msg << "Attempting to register the same SD multiple times for \"" << logicalVolume->GetName() << "\", skipping.";
         G4Exception("MACE::Detector::Geometry::GeometryBase::RegisterSD", "-1", JustWarning, msg);
+    }
+}
+
+auto GeometryBase::RegisterSD(std::string_view logicalVolumeName, gsl::not_null<G4VSensitiveDetector*> sd) const -> void {
+    for (gsl::index i{}; i < ssize(fLogicalVolumes); ++i) {
+        if (fLogicalVolumes[i]->GetName() == logicalVolumeName) {
+            RegisterSD(i, sd);
+        }
     }
 }
 

@@ -57,6 +57,7 @@ public:
     auto RegisterRegion(gsl::not_null<G4Region*> region) const -> void;
 
     auto RegisterSD(gsl::index iLogicalVolume, gsl::not_null<G4VSensitiveDetector*> sd) const -> void;
+    auto RegisterSD(std::string_view logicalVolumeName, gsl::not_null<G4VSensitiveDetector*> sd) const -> void;
     auto RegisterSD(gsl::not_null<G4VSensitiveDetector*> sd) const -> void;
 
     template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
