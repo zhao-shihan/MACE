@@ -6,6 +6,7 @@
 #include "MACE/Extension/MPIX/Execution/DynamicScheduler.h++"
 #include "MACE/Extension/MPIX/Execution/Scheduler.h++"
 #include "MACE/Extension/stdx/boolean_testable.h++"
+#include "MACE/Extension/stdx/ranges_numeric.h++"
 #include "MACE/Utility/CPUTimeStopwatch.h++"
 #include "MACE/Utility/WallTimeStopwatch.h++"
 
@@ -99,12 +100,12 @@ private:
     scsc::time_point fExecutionBeginSystemTime;
     WallTimeStopwatch<double> fWallTimeStopwatch;
     CPUTimeStopwatch<double> fCPUTimeStopwatch;
-    std::array<double, 2> fExecutionWallTimeAndCPUTime;
-    double& fExecutionWallTime;
-    double& fExecutionCPUTime;
+    double fExecutionWallTime;
+    double fExecutionCPUTime;
 
-    std::vector<std::array<double, 2>> fExecutionWallTimeAndCPUTimeOfAllProcessKeptByMaster;
     std::vector<T> fNLocalExecutedTaskOfAllProcessKeptByMaster;
+    std::vector<double> fExecutionWallTimeOfAllProcessKeptByMaster;
+    std::vector<double> fExecutionCPUTimeOfAllProcessKeptByMaster;
 };
 
 } // namespace MACE::inline Extension::MPIX::inline Execution

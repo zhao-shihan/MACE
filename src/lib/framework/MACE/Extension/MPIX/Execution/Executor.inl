@@ -15,15 +15,16 @@ Executor<T>::Executor(ScheduleBy<S>) :
     fExecutionBeginSystemTime{},
     fWallTimeStopwatch{},
     fCPUTimeStopwatch{},
-    fExecutionWallTimeAndCPUTime{},
-    fExecutionWallTime{fExecutionWallTimeAndCPUTime[0]},
-    fExecutionCPUTime{fExecutionWallTimeAndCPUTime[1]},
-    fExecutionWallTimeAndCPUTimeOfAllProcessKeptByMaster{},
-    fNLocalExecutedTaskOfAllProcessKeptByMaster{} {
+    fExecutionWallTime{},
+    fExecutionCPUTime{},
+    fNLocalExecutedTaskOfAllProcessKeptByMaster{},
+    fExecutionWallTimeOfAllProcessKeptByMaster{},
+    fExecutionCPUTimeOfAllProcessKeptByMaster{} {
     if (const auto& mpiEnv{Env::MPIEnv::Instance()};
         mpiEnv.OnCommWorldMaster()) {
-        fExecutionWallTimeAndCPUTimeOfAllProcessKeptByMaster.resize(mpiEnv.CommWorldSize());
         fNLocalExecutedTaskOfAllProcessKeptByMaster.resize(mpiEnv.CommWorldSize());
+        fExecutionWallTimeOfAllProcessKeptByMaster.resize(mpiEnv.CommWorldSize());
+        fExecutionCPUTimeOfAllProcessKeptByMaster.resize(mpiEnv.CommWorldSize());
     }
 }
 
@@ -98,31 +99,55 @@ auto Executor<T>::Execute(std::invocable<T> auto&& Func) -> T {
     }
     fExecutionWallTime = fWallTimeStopwatch.SecondsElapsed();
     fExecutionCPUTime = fCPUTimeStopwatch.SecondsUsed();
-    std::array<MPI_Request, 2> gatherRequest;
-    auto& [gatherTimeRequest, gatherNLocalExecutedTaskRequest]{gatherRequest};
-    MPI_Igather(fExecutionWallTimeAndCPUTime.data(),                         // sendbuf
-                2,                                                           // sendcount
-                MPI_DOUBLE,                                                  // sendtype
-                fExecutionWallTimeAndCPUTimeOfAllProcessKeptByMaster.data(), // recvbuf
-                2,                                                           // recvcount
-                MPI_DOUBLE,                                                  // recvtype
-                0,                                                           // root
-                MPI_COMM_WORLD,                                              // comm
-                &gatherTimeRequest);                                         // request
-    MPI_Igather(&fScheduler->fNLocalExecutedTask,                            // sendbuf
-                1,                                                           // sendcount
-                DataType<T>(),                                               // sendtype
-                fNLocalExecutedTaskOfAllProcessKeptByMaster.data(),          // recvbuf
-                1,                                                           // recvcount
-                DataType<T>(),                                               // recvtype
-                0,                                                           // root
-                MPI_COMM_WORLD,                                              // comm
-                &gatherNLocalExecutedTaskRequest);                           // request
+    struct GatheringDataType {
+        T nLocalExecutedTask;
+        double wallTime;
+        double cpuTime;
+    };
+    MPI_Datatype gatheringDataType;
+    MPI_Type_create_struct(3,                                                                       // count
+                           std::array<int, 3>{1,                                                    // array_of_block_lengths
+                                              1,                                                    // array_of_block_lengths
+                                              1}                                                    // array_of_block_lengths
+                               .data(),                                                             // array_of_block_lengths
+                           std::array<MPI_Aint, 3>{offsetof(GatheringDataType, nLocalExecutedTask), // array_of_displacements
+                                                   offsetof(GatheringDataType, wallTime),           // array_of_displacements
+                                                   offsetof(GatheringDataType, cpuTime)}            // array_of_displacements
+                               .data(),                                                             // array_of_displacements
+                           std::array<MPI_Datatype, 3>{DataType<T>(),                               // array_of_types
+                                                       MPI_DOUBLE,                                  // array_of_types
+                                                       MPI_DOUBLE}                                  // array_of_types
+                               .data(),                                                             // array_of_types
+                           &gatheringDataType);                                                     // newtype
+    GatheringDataType gatheringData{fScheduler->fNLocalExecutedTask, fExecutionWallTime, fExecutionCPUTime};
+    std::vector<GatheringDataType> masterGatheredData;
+    const auto& mpiEnv{Env::MPIEnv::Instance()};
+    if (mpiEnv.OnCommWorldMaster()) {
+        masterGatheredData.resize(mpiEnv.CommWorldSize());
+    }
+    MPI_Request gatherRequest;
+    MPI_Type_commit(&gatheringDataType);
+    MPI_Igather(&gatheringData,            // sendbuf
+                1,                         // sendcount
+                gatheringDataType,         // sendtype
+                masterGatheredData.data(), // recvbuf
+                1,                         // recvcount
+                gatheringDataType,         // recvtype
+                0,                         // root
+                MPI_COMM_WORLD,            // comm
+                &gatherRequest);           // request
+    MPI_Type_free(&gatheringDataType);
     fScheduler->PostLoopAction();
     fExecuting = false;
-    MPI_Waitall(gatherRequest.size(), // count
-                gatherRequest.data(), // array_of_requests
-                MPI_STATUSES_IGNORE); // array_of_statuses
+    MPI_Wait(&gatherRequest,     // request
+             MPI_STATUS_IGNORE); // status
+    if (mpiEnv.OnCommWorldMaster()) {
+        for (int rank{}; rank < mpiEnv.CommWorldSize(); ++rank) {
+            fNLocalExecutedTaskOfAllProcessKeptByMaster[rank] = masterGatheredData[rank].nLocalExecutedTask;
+            fExecutionWallTimeOfAllProcessKeptByMaster[rank] = masterGatheredData[rank].wallTime;
+            fExecutionCPUTimeOfAllProcessKeptByMaster[rank] = masterGatheredData[rank].cpuTime;
+        }
+    }
     PostLoopReport();
     return NLocalExecutedTask();
 }
@@ -138,7 +163,8 @@ auto Executor<T>::PrintExecutionSummary() const -> void {
                  "+------------------+-------------------+------------------+-------------------+");
     for (int rank{}; rank < mpiEnv.CommWorldSize(); ++rank) {
         const auto& executed{fNLocalExecutedTaskOfAllProcessKeptByMaster[rank]};
-        const auto& [wallTime, cpuTime]{fExecutionWallTimeAndCPUTimeOfAllProcessKeptByMaster[rank]};
+        const auto& wallTime{fExecutionWallTimeOfAllProcessKeptByMaster[rank]};
+        const auto& cpuTime{fExecutionCPUTimeOfAllProcessKeptByMaster[rank]};
         fmt::println("| {:16} | {:17} | {:16.3f} | {:17.3f} |", rank, executed, wallTime, cpuTime);
     }
     fmt::println("+------------------+--------------> Summary <-------------+-------------------+");
@@ -186,12 +212,8 @@ auto Executor<T>::PostLoopReport() const -> void {
     const auto& mpiEnv{Env::MPIEnv::Instance()};
     if (not(mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error)) { return; }
     const auto now{scsc::now()};
-    double maxWallTime{};
-    double totalCpuTime{};
-    for (auto&& [wallTime, cpuTime] : std::as_const(fExecutionWallTimeAndCPUTimeOfAllProcessKeptByMaster)) {
-        if (wallTime > maxWallTime) { maxWallTime = wallTime; }
-        totalCpuTime += cpuTime;
-    }
+    const auto maxWallTime{*std::ranges::max_element(fExecutionWallTimeOfAllProcessKeptByMaster)};
+    const auto totalCpuTime{stdx::ranges::reduce(fExecutionCPUTimeOfAllProcessKeptByMaster)};
     fmt::print("+-----------------------------------> End <-----------------------------------+\n"
                "| {:75} |\n"
                "| {:75} |\n"
