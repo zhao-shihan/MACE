@@ -227,23 +227,23 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     // Register regions
     ////////////////////////////////////////////////////////////////
     {
-        const auto defaultCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts();
+        // const auto defaultCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts();
 
         // CDCFieldWireRegion
         fCDCFieldWireRegion = new Region("CDCFieldWire", RegionType::CDCFieldWire);
-        fCDCFieldWireRegion->SetProductionCuts(defaultCuts);
+        // fCDCFieldWireRegion->SetProductionCuts(defaultCuts);
 
         cdcFieldWire.RegisterRegion(fCDCFieldWireRegion);
 
         // CDCSenseWireRegion
         fCDCSenseWireRegion = new Region("CDCSenseWire", RegionType::CDCSenseWire);
-        fCDCSenseWireRegion->SetProductionCuts(defaultCuts);
+        // fCDCSenseWireRegion->SetProductionCuts(defaultCuts);
 
         cdcSenseWire.RegisterRegion(fCDCSenseWireRegion);
 
         // DefaultGaseousRegion
         fDefaultGaseousRegion = new Region("DefaultGaseous", RegionType::DefaultGaseous);
-        fDefaultGaseousRegion->SetProductionCuts(defaultCuts);
+        // fDefaultGaseousRegion->SetProductionCuts(defaultCuts);
 
         cdcCell.RegisterRegion(fDefaultGaseousRegion);
         cdcGas.RegisterRegion(fDefaultGaseousRegion);
@@ -251,7 +251,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
         // DefaultSolidRegion
         fDefaultSolidRegion = new Region("DefaultSolid", RegionType::DefaultSolid);
-        fDefaultSolidRegion->SetProductionCuts(defaultCuts);
+        // fDefaultSolidRegion->SetProductionCuts(defaultCuts);
 
         beamDegrader.RegisterRegion(fDefaultSolidRegion);
         beamMonitor.RegisterRegion(fDefaultSolidRegion);
@@ -261,7 +261,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
         // EMCSensitiveRegion
         fEMCSensitiveRegion = new Region("EMCSensitive", RegionType::EMCSensitive);
-        fEMCSensitiveRegion->SetProductionCuts(defaultCuts);
+        // fEMCSensitiveRegion->SetProductionCuts(defaultCuts);
 
         emcCrystal.RegisterRegion(fEMCSensitiveRegion);
         emcPMTCoupler.RegisterRegion(fEMCSensitiveRegion);
@@ -270,20 +270,20 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
         // MCPSensitiveRegion
         fMCPSensitiveRegion = new Region("MCPSensitive", RegionType::MCPSensitive);
-        fMCPSensitiveRegion->SetProductionCuts(defaultCuts);
+        // fMCPSensitiveRegion->SetProductionCuts(defaultCuts);
 
         mcp.RegisterRegion(fMCPSensitiveRegion);
 
         // ShieldRegion
         fShieldRegion = new Region("Shield", RegionType::Shield);
-        fShieldRegion->SetProductionCuts(defaultCuts);
+        // fShieldRegion->SetProductionCuts(defaultCuts);
 
         emcShield.RegisterRegion(fShieldRegion);
         spectrometerShield.RegisterRegion(fShieldRegion);
 
         // SolenoidOrMagnetRegion
         fSolenoidOrMagnetRegion = new Region("SolenoidOrMagnet", RegionType::SolenoidOrMagnet);
-        fSolenoidOrMagnetRegion->SetProductionCuts(defaultCuts);
+        // fSolenoidOrMagnetRegion->SetProductionCuts(defaultCuts);
 
         solenoidB1.RegisterRegion(fSolenoidOrMagnetRegion);
         solenoidS1.RegisterRegion(fSolenoidOrMagnetRegion);
@@ -294,17 +294,17 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
         // SpectrometerSensitiveRegion
         fSpectrometerSensitiveRegion = new Region("SpectrometerSensitive", RegionType::SpectrometerSensitive);
-        fSpectrometerSensitiveRegion->SetProductionCuts(defaultCuts);
+        // fSpectrometerSensitiveRegion->SetProductionCuts(defaultCuts);
 
         // TargetRegion
         fTargetRegion = new Region("Target", RegionType::Target);
-        fTargetRegion->SetProductionCuts(defaultCuts);
+        // fTargetRegion->SetProductionCuts(defaultCuts);
 
         target.RegisterRegion(fTargetRegion);
 
         // VacuumRegion
         fVacuumRegion = new Region("Vacuum", RegionType::Vacuum);
-        fVacuumRegion->SetProductionCuts(defaultCuts);
+        // fVacuumRegion->SetProductionCuts(defaultCuts);
 
         emcField.RegisterRegion(fVacuumRegion);
         solenoidB1Field.RegisterRegion(fVacuumRegion);
@@ -338,7 +338,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         using namespace LiteralUnit::MagneticFluxDensity;
         using namespace Detector::Field::G4;
 
-        constexpr auto hMin = 50_um;
+        constexpr auto hMin = 100_um;
 
         spectrometerField.RegisterField<
             SpectrometerField,
