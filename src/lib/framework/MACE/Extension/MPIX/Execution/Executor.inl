@@ -175,9 +175,9 @@ auto Executor<T>::PostTaskReport(T iEnded) const -> void {
     const auto est{NLocalExecutedTask() > 10};
     const auto progress{static_cast<double>(NExecutedTask()) / NTask()};
     fmt::print("MPI{}> {:%FT%T%z} > {} {} has ended\n"
-               "MPI{}>   Est. rem. {}  Prog.: {} | {}/{} | {:.3}%\n",
+               "MPI{}>   {}Prog.: {} | {}/{} | {:.3}%\n",
                mpiEnv.CommWorldRank(), fmt::localtime(scsc::to_time_t(scsc::now())), fTaskName, iEnded,
-               mpiEnv.CommWorldRank(), est ? fmt::format("{} ({:.3}/s)", SToDHMS(eta), speed) : "N/A", NLocalExecutedTask(), NExecutedTask(), NTask(), 100 * progress);
+               mpiEnv.CommWorldRank(), est ? fmt::format("Est. rem. {} ({:.3}/s)  ", SToDHMS(eta), speed) : "", NLocalExecutedTask(), NExecutedTask(), NTask(), 100 * progress);
 }
 
 template<std::integral T>
