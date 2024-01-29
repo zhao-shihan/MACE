@@ -12,6 +12,7 @@
 #include "G4ThreeVector.hh"
 #include "G4TwoVector.hh"
 #include "G4VProcess.hh"
+#include "G4VTouchable.hh"
 
 #include <algorithm>
 #include <cmath>
