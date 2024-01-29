@@ -55,12 +55,12 @@ constexpr Gaussian2DDiagnoalBase<ADerived, T>::Gaussian2DDiagnoalBase(const type
 
 template<Concept::NumericVector2FloatingPoint T>
 MACE_STRONG_INLINE T Gaussian2DDiagnoal<T>::operator()(UniformRandomBitGenerator auto& g, const Gaussian2DDiagnoalParameter<T>& p) {
-    MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_2D_DIAGNOAL_GENERATOR_SNIPPET(Math::Log)
+    MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_2D_DIAGNOAL_GENERATOR_SNIPPET(std::log)
 }
 
 template<Concept::NumericVector2FloatingPoint T>
 MACE_STRONG_INLINE T Gaussian2DDiagnoalFast<T>::operator()(UniformRandomBitGenerator auto& g, const Gaussian2DDiagnoalFastParameter<T>& p) {
-    MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_2D_DIAGNOAL_GENERATOR_SNIPPET(internal::FastLogForCompact01)
+    MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_2D_DIAGNOAL_GENERATOR_SNIPPET(internal::FastLogForOpen01)
 }
 
 #undef MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_2D_DIAGNOAL_GENERATOR_SNIPPET

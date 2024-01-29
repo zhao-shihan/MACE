@@ -37,12 +37,12 @@ constexpr ExponentialBase<ADerived, T>::ExponentialBase(const typename Base::Par
 
 template<std::floating_point T>
 MACE_STRONG_INLINE constexpr T Exponential<T>::operator()(UniformRandomBitGenerator auto& g, const ExponentialParameter<T>& p) {
-    return -p.Expectation() * Math::Log(Uniform<T>()(g));
+    return -p.Expectation() * std::log(Uniform<T>()(g));
 }
 
 template<std::floating_point T>
 MACE_ALWAYS_INLINE constexpr T ExponentialFast<T>::operator()(UniformRandomBitGenerator auto& g, const ExponentialFastParameter<T>& p) {
-    return -p.Expectation() * internal::FastLogForCompact01(Uniform<T>()(g));
+    return -p.Expectation() * internal::FastLogForOpen01(Uniform<T>()(g));
 }
 
 } // namespace MACE::Math::Random::inline Distribution

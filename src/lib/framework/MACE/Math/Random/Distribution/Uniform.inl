@@ -56,7 +56,7 @@ MACE_ALWAYS_INLINE constexpr T UniformReal<T>::operator()(UniformRandomBitGenera
     do {
         u = UniformCompact()(g);
         std23::assume(0 <= u and u <= 1);
-    } while (u <= 0 or 1 <= u);
+    } while (u == 0 or u == 1);
     return p.Infimum() + u * (p.Supremum() - p.Infimum());
 }
 
