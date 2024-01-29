@@ -16,16 +16,17 @@ class EMCSD final : public NonMoveableBase,
 public:
     EMCSD(const G4String& sdName);
 
-    void Initialize(G4HCofThisEvent* hitsCollection) override;
-    G4bool ProcessHits(G4Step* theStep, G4TouchableHistory*) override;
-    void EndOfEvent(G4HCofThisEvent*) override;
+    auto Initialize(G4HCofThisEvent* hitsCollection) -> void override;
+    auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
+    auto EndOfEvent(G4HCofThisEvent*) -> void override;
 
     /// Inform this SD of event id in EventAction
-    void EventID(G4int eventID) { fEventID = eventID; }
+    auto EventID(G4int eventID) -> void { fEventID = eventID; }
 
 private:
     G4int fEventID;
-    std::unordered_map<int, std::unique_ptr<EMCHit>> fHit;
+
+    std::unordered_map<int, std::vector<std::unique_ptr<EMCHit>>> fSplitHit;
     EMCHitCollection* fHitsCollection;
 };
 
