@@ -111,10 +111,10 @@ public:
     ///////////////////////////////////////////////////////////
 
     auto MeanDriftVelocity() const -> auto { return fMeanDriftVelocity; }
-    auto DeadTime() const -> auto { return fDeadTime; }
+    auto TimeResolutionFWHM() const -> auto { return fTimeResolutionFWHM; }
 
     auto MeanDriftVelocity(double v) -> void { fMeanDriftVelocity = v; }
-    auto DeadTime(double v) -> void { fDeadTime = v; }
+    auto TimeResolutionFWHM(double v) -> void { fTimeResolutionFWHM = v; }
 
 private:
     ///////////////////////////////////////////////////////////
@@ -180,7 +180,7 @@ private:
     ///////////////////////////////////////////////////////////
 
     double fMeanDriftVelocity;
-    double fDeadTime;
+    double fTimeResolutionFWHM;
 };
 
 } // namespace MACE::Detector::Description
