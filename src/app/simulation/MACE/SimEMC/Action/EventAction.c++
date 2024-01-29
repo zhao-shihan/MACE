@@ -23,7 +23,7 @@ auto EventAction::EndOfEventAction(const G4Event* event) -> void {
     auto pmtHCid = G4SDManager::GetSDMpointer()->GetCollectionID("EMCCathodeHC");
     auto pmtHC = static_cast<PMTHitCollection*>(event->GetHCofThisEvent()->GetHC(pmtHCid));
 
-    int cellTotalNumber = Detector::Description::EMC::Instance().CellTotalNumber();
+    int cellTotalNumber = Detector::Description::EMC::Instance().NUnit();
 
     auto eventID = event->GetEventID();
     auto analysisManager = G4AnalysisManager::Instance();

@@ -22,7 +22,7 @@ EMCSD::EMCSD(G4String name) :
 }
 
 auto EMCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
-    int cellTotalNumber = Detector::Description::EMC::Instance().CellTotalNumber();
+    int cellTotalNumber = Detector::Description::EMC::Instance().NUnit();
     fHitsCollection = new EMCHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
