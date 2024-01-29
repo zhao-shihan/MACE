@@ -2,6 +2,7 @@
 
 #include "MACE/Extension/CLHEPX/RAMBO.h++"
 #include "MACE/Math/Clamp.h++"
+#include "MACE/Math/Random/Generator/Xoshiro256Plus.h++"
 #include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannelMessenger.h++"
 
 #include "G4VDecayChannel.hh"
@@ -22,7 +23,7 @@ public:
     auto DecayIt(G4double) -> G4DecayProducts* override;
 
 private:
-    auto UpdateState(CLHEP::HepRandomEngine& rng, double delta) -> void;
+    auto UpdateState(double delta) -> void;
     auto Thermalize() -> void;
 
     auto Cut(const CLHEPX::RAMBO<5>::Event& event) const -> bool;
@@ -38,6 +39,9 @@ private:
     std::array<double, 5 * 4> fRawState;
     CLHEPX::RAMBO<5>::Event fEvent;
     double fWeightedM2;
+
+    Math::Random::Xoshiro256Plus fXoshiro256Plus;
+    unsigned char fReseedCounter;
 
     MuonInternalPairProductionDecayChannelMessenger::Register<MuonInternalPairProductionDecayChannel> fMessengerRegister;
 };
