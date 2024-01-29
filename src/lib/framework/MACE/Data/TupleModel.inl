@@ -3,8 +3,9 @@ namespace MACE::Data::internal {
 template<typename ADerived, internal::UniqueStdTuple AStdTuple>
 template<CETAString AName, gsl::index I>
 consteval auto ModelBase<ADerived, AStdTuple>::IndexImpl() -> gsl::index {
-    if constexpr (I > Size() - 1) {
+    if constexpr (I == Size()) {
         static_assert(I < Size(), "no such value of this name within this data model");
+        return StopConsteval();
     } else if constexpr (std::tuple_element_t<I, AStdTuple>::Name() == AName) {
         return I;
     } else {
