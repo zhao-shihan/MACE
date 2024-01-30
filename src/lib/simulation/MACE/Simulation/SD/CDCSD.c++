@@ -96,7 +96,7 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"x0">(*hit) = track.GetVertexPosition();
     Get<"Ek0">(*hit) = vertexEk;
     Get<"p0">(*hit) = vertexMomentum;
-    *Get<"CreatProc">(*hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "<0>";
+    *Get<"CreatProc">(*hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "|0>";
     fSplitHit[cellID].emplace_back(std::move(hit));
 
     return true;
