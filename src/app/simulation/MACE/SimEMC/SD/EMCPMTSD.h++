@@ -5,6 +5,11 @@
 
 #include "G4VSensitiveDetector.hh"
 
+#include <utility>
+#include <memory>
+#include <unordered_map>
+#include <vector>
+
 namespace MACE::SimEMC::inline SD {
 
 class EMCPMTSD final : public NonMoveableBase,
@@ -16,12 +21,16 @@ public:
     auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
     auto EndOfEvent(G4HCofThisEvent*) -> void override;
 
+    auto NOpticalPhotonHit() const -> const auto& { return fNHit; }
+
     /// Inform this SD of event id in EventAction
     auto EventID(G4int eventID) -> void { fEventID = eventID; }
 
 private:
     G4int fEventID;
-    std::unordered_map<int, std::unique_ptr<EMCPMTHit>> fHit;
+
+    std::unordered_map<int, std::vector<std::unique_ptr<EMCPMTHit>>> fHit;
+    std::vector<std::pair<int, int>> fNHit;
     EMCPMTHitCollection* fHitsCollection;
 };
 
