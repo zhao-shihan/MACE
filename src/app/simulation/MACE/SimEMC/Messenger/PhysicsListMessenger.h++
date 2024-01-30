@@ -1,10 +1,6 @@
 #pragma once
 
-#include "MACE/Env/Memory/Singleton.h++"
-
-#include "G4UImessenger.hh"
-
-#include "gsl/gsl"
+#include "MACE/Extension/Geant4X/SingletonMessenger.h++"
 
 #include <memory>
 
@@ -16,8 +12,8 @@ class PhysicsList;
 
 inline namespace Messenger {
 
-class PhysicsListMessenger final : public Env::Memory::Singleton<PhysicsListMessenger>,
-                                   public G4UImessenger {
+class PhysicsListMessenger final : public Geant4X::SingletonMessenger<PhysicsListMessenger,
+                                                                      PhysicsList> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -25,13 +21,9 @@ private:
     ~PhysicsListMessenger();
 
 public:
-    auto AssignTo(gsl::not_null<PhysicsList*> pl) -> void { fPhysicsList = pl; }
-
     auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
-    PhysicsList* fPhysicsList;
-
     std::unique_ptr<G4UIcommand> fUseOpticalPhysics;
 };
 
