@@ -22,7 +22,7 @@ EMCPMTSD::EMCPMTSD(const G4String& sdName) :
 }
 
 auto EMCPMTSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
-    fNHit.clear(); // clear at the begin of event allows EMCSD to get optical photon counts at the end of event
+    fHit.clear(); // clear at the begin of event allows EMCSD to get optical photon counts at the end of event
 
     fHitsCollection = new EMCPMTHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID{G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection)};
@@ -62,9 +62,17 @@ auto EMCPMTSD::EndOfEvent(G4HCofThisEvent*) -> void {
             assert(Get<"UnitID">(*hit) == unitID);
             fHitsCollection->insert(hit.release());
         }
-        if (hitOfUnit.size() > 0) { fNHit.emplace_back(unitID, hitOfUnit.size()); }
-        hitOfUnit.clear();
     }
+}
+
+auto EMCPMTSD::NOpticalPhotonHit() const -> std::unordered_map<int, int> {
+    std::unordered_map<int, int> nHit;
+    for (auto&& [unitID, hit] : fHit) {
+        if (hit.size() > 0) {
+            nHit[unitID] = hit.size();
+        }
+    }
+    return nHit;
 }
 
 } // namespace MACE::Simulation::inline SD
