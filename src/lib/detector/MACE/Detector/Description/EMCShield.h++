@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Detector/Description/DescriptionBase.h++"
 #include "MACE/Detector/Description/EMCField.h++"
 
 namespace MACE::Detector::Description {

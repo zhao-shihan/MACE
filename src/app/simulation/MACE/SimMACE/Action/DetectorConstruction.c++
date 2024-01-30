@@ -18,9 +18,8 @@
 #include "MACE/Detector/Geometry/Fast/CDCSuperLayer.h++"
 #include "MACE/Detector/Geometry/Fast/EMCCrystal.h++"
 #include "MACE/Detector/Geometry/Fast/EMCField.h++"
-#include "MACE/Detector/Geometry/Fast/EMCPMTCathode.h++"
+#include "MACE/Detector/Geometry/Fast/EMCPMTAssemblies.h++"
 #include "MACE/Detector/Geometry/Fast/EMCPMTCoupler.h++"
-#include "MACE/Detector/Geometry/Fast/EMCPMTWindow.h++"
 #include "MACE/Detector/Geometry/Fast/EMCShield.h++"
 #include "MACE/Detector/Geometry/Fast/Filter.h++"
 #include "MACE/Detector/Geometry/Fast/MCP.h++"
@@ -102,8 +101,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     auto& emcCrystal = emcField.NewDaughter<Detector::Geometry::Fast::EMCCrystal>(fCheckOverlap);
     auto& emcPMTCoupler = emcField.NewDaughter<Detector::Geometry::Fast::EMCPMTCoupler>(fCheckOverlap);
-    auto& emcPMTWindow = emcField.NewDaughter<Detector::Geometry::Fast::EMCPMTWindow>(fCheckOverlap);
-    auto& emcPMTCathode = emcField.NewDaughter<Detector::Geometry::Fast::EMCPMTCathode>(fCheckOverlap);
+    auto& emcPMTAssemblies = emcField.NewDaughter<Detector::Geometry::Fast::EMCPMTAssemblies>(fCheckOverlap);
 
     auto& mcp = emcField.NewDaughter<Detector::Geometry::Fast::MCP>(fCheckOverlap);
 
@@ -189,18 +187,12 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         solenoidS3.RegisterMaterial(copper);
         filter.RegisterMaterial(copper);
 
-        // const auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
-        // emc.RegisterMaterial(csI);
-
         const auto iron = nist->FindOrBuildMaterial("G4_Fe");
         spectrometerMagnet.RegisterMaterial(iron);
 
         const auto lead = nist->FindOrBuildMaterial("G4_Pb");
         emcShield.RegisterMaterial(lead);
         spectrometerShield.RegisterMaterial(lead);
-
-        const auto mcpMaterial = nist->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4_g_cm3);
-        mcp.RegisterMaterial(mcpMaterial);
 
         const auto plasticScitillator = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
         beamMonitor.RegisterMaterial(plasticScitillator);
@@ -264,9 +256,6 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         // fEMCSensitiveRegion->SetProductionCuts(defaultCuts);
 
         emcCrystal.RegisterRegion(fEMCSensitiveRegion);
-        emcPMTCoupler.RegisterRegion(fEMCSensitiveRegion);
-        emcPMTWindow.RegisterRegion(fEMCSensitiveRegion);
-        emcPMTCathode.RegisterRegion(fEMCSensitiveRegion);
 
         // MCPSensitiveRegion
         fMCPSensitiveRegion = new Region("MCPSensitive", RegionType::MCPSensitive);

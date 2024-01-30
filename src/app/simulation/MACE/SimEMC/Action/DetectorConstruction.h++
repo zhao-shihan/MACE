@@ -3,7 +3,9 @@
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
+#include "MACE/SimEMC/Region.h++"
 #include "MACE/SimEMC/SD/EMCSD.h++"
+#include "MACE/SimEMC/SD/MCPSD.h++"
 #include "MACE/SimEMC/SD/PMTSD.h++"
 
 #include "G4VUserDetectorConstruction.hh"
@@ -30,8 +32,15 @@ public:
 
     auto SetCheckOverlaps(G4bool checkOverlaps) -> void { fCheckOverlap = checkOverlaps; }
 
+    auto EMCSensitiveRegion() const -> const auto& { return *fEMCSensitiveRegion; }
+    auto MCPSensitiveRegion() const -> const auto& { return *fMCPSensitiveRegion; }
+    auto ShieldRegion() const -> const auto& { return *fShieldRegion; }
+    auto TunnelRegion() const -> const auto& { return *fTunnelRegion; }
+    auto VacuumRegion() const -> const auto& { return *fVacuumRegion; }
+
     auto EMCSD() const -> auto& { return *fEMCSD; }
     auto PMTSD() const -> auto& { return *fPMTSD; }
+    auto MCPSD() const -> auto& { return *fMCPSD; }
 
 public:
     using DescriptionInUse = std::tuple<Detector::Description::EMC,
@@ -42,8 +51,15 @@ private:
 
     std::shared_ptr<Detector::Geometry::GeometryBase> fWorld;
 
+    Region* fEMCSensitiveRegion;
+    Region* fMCPSensitiveRegion;
+    Region* fShieldRegion;
+    Region* fTunnelRegion;
+    Region* fVacuumRegion;
+
     SD::EMCSD* fEMCSD;
     SD::PMTSD* fPMTSD;
+    SD::MCPSD* fMCPSD;
 };
 
 } // namespace SimEMC::inline Action

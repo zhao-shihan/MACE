@@ -61,7 +61,7 @@ Optional:
 
 1. Geant4::G4gdml (Geant4 optional component. The requirement is controlled by CMake option MACE_USE_G4GDML. It supports the export of G4 geometry.)
 
-## Prepare for your PC  
+## Prepare for your PC
 
 ### Linux
 
@@ -82,13 +82,13 @@ Although it is supported to run on Windows, it is indeed not very recommended. O
 
 But it doesn't really matter - only if you can tolerate relatively poor performance and less pretty visualization (very likely). To install on windows, the first thing you need to do is to install [Visual Studio](https://visualstudio.microsoft.com/) 2022 (and its C++ components), and [CMake](https://cmake.org/). Then you can either directly install the precompiled version of [ROOT](https://root.cern/) and [Geant4](https://geant4.web.cern.ch/) (Note: using the precompiled version of Geant4 means that there is no support for gdml. If you need gdml, please compile a G4 with gdml. This is relatively troublesome, because you need to compile a [Xerces-C++](https://xerces.apache.org/xerces-c/) before this), or compile them manually. Then you need to add Geant4, ROOT and CMake (if you haven't choose to add environment variables when installing) to the environment variables. The rest of the dependencies only need to depend on the built-ins, unless you are able to install them all.
 
-## Prepare for public cluster/supercomputer  
+## Prepare for public cluster/supercomputer
 
 Unless you use container (e.g. [Apptainer](http://apptainer.org/)), you may need to do everything yourself - at this time, it is usually a more efficient option to turn to an expert of environment configuring to help you. It is not easy to build a complete and stable tool chain from scratch on a supercomputer that often lacks many libraries. If you are a master of environment building, we don't have to say much. You just need to confidently configure the environment following what we described above. In addition, if you choose to use container, it should be noted that some supercomputers have their own MPI implementation, which is likely to be optimized based on the cluster topology, and may have better performance when used. If a container is used, the linked MPI may be inside the container, always a universal version that not optimized for a specific machine. If so, then this potential performance gain may be lost.
 
 ## Build
 
-After everything prepared, it's time to build.  
+After everything prepared, it's time to build.
 
 MACE software follows a classical cmake & build procedure, for example,
 
@@ -107,7 +107,7 @@ cmake <MACE_PROJECT_ROOT_DIR>
 make -j
 ```
 
-That's ok to use other generators, respect to your preference.  
+That's ok to use other generators, respect to your preference.
 
 # How to Run
 

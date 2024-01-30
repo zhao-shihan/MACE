@@ -11,9 +11,8 @@
 #include "MACE/Detector/Geometry/Fast/CDCSuperLayer.h++"
 #include "MACE/Detector/Geometry/Fast/EMCCrystal.h++"
 #include "MACE/Detector/Geometry/Fast/EMCField.h++"
-#include "MACE/Detector/Geometry/Fast/EMCPMTCathode.h++"
+#include "MACE/Detector/Geometry/Fast/EMCPMTAssemblies.h++"
 #include "MACE/Detector/Geometry/Fast/EMCPMTCoupler.h++"
-#include "MACE/Detector/Geometry/Fast/EMCPMTWindow.h++"
 #include "MACE/Detector/Geometry/Fast/EMCShield.h++"
 #include "MACE/Detector/Geometry/Fast/Filter.h++"
 #include "MACE/Detector/Geometry/Fast/MCP.h++"
@@ -76,8 +75,7 @@ int main(int argc, char* argv[]) {
 
     auto& emcCrystal = emcField.NewDaughter<EMCCrystal>(fCheckOverlap);
     auto& emcPMTCoupler = emcField.NewDaughter<EMCPMTCoupler>(fCheckOverlap);
-    auto& emcPMTWindow = emcField.NewDaughter<EMCPMTWindow>(fCheckOverlap);
-    auto& emcPMTCathode = emcField.NewDaughter<EMCPMTCathode>(fCheckOverlap);
+    auto& emcPMTAssemblies = emcField.NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
 
     auto& mcp = emcField.NewDaughter<MCP>(fCheckOverlap);
 
@@ -224,8 +222,7 @@ int main(int argc, char* argv[]) {
              emcShield,
              emcCrystal,
              emcPMTCoupler,
-             emcPMTWindow,
-             emcPMTCathode,
+             emcPMTAssemblies,
              spectrometerMagnet,
              spectrometerShield,
              shieldingWall,
