@@ -32,11 +32,11 @@ public:
 
     auto SetCheckOverlaps(G4bool checkOverlaps) -> void { fCheckOverlap = checkOverlaps; }
 
-    auto EMCSensitiveRegion() const -> auto& { return *fEMCSensitiveRegion; }
-    auto MCPSensitiveRegion() const -> auto& { return *fMCPSensitiveRegion; }
-    auto ShieldRegion() const -> auto& { return *fShieldRegion; }
-    auto TunnelRegion() const -> auto& { return *fTunnelRegion; }
-    auto VacuumRegion() const -> auto& { return *fVacuumRegion; }
+    auto EMCSensitiveRegion() const -> const auto& { return *fEMCSensitiveRegion; }
+    auto MCPSensitiveRegion() const -> const auto& { return *fMCPSensitiveRegion; }
+    auto ShieldRegion() const -> const auto& { return *fShieldRegion; }
+    auto TunnelRegion() const -> const auto& { return *fTunnelRegion; }
+    auto VacuumRegion() const -> const auto& { return *fVacuumRegion; }
 
     auto EMCSD() const -> auto& { return *fEMCSD; }
     auto PMTSD() const -> auto& { return *fPMTSD; }
