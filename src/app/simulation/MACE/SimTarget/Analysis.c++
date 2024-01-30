@@ -3,6 +3,7 @@
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
 #include "MACE/SimTarget/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimTarget/Analysis.h++"
+#include "MACE/SimTarget/Messenger/AnalysisMessenger.h++"
 
 #include "TFile.h"
 

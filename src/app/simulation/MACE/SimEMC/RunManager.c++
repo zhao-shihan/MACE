@@ -2,15 +2,15 @@
 #include "MACE/Env/BasicEnv.h++"
 #include "MACE/SimEMC/Action/ActionInitialization.h++"
 #include "MACE/SimEMC/Action/DetectorConstruction.h++"
-// #include "MACE/SimEMC/Analysis.h++"
+#include "MACE/SimEMC/Analysis.h++"
 #include "MACE/SimEMC/PhysicsList.h++"
 #include "MACE/SimEMC/RunManager.h++"
 
 namespace MACE::SimEMC {
 
 RunManager::RunManager() :
-    MPIRunManager{}/* ,
-    fAnalysis{std::make_unique_for_overwrite<Analysis>()} */ {
+    MPIRunManager{},
+    fAnalysis{std::make_unique_for_overwrite<Analysis>()} {
     const auto verboseLevel{Env::BasicEnv::Instance().GetVerboseLevel()};
 
     const auto physicsList{new PhysicsList};
@@ -23,5 +23,7 @@ RunManager::RunManager() :
 
     SetUserInitialization(new ActionInitialization);
 }
+
+RunManager::~RunManager() = default;
 
 } // namespace MACE::SimEMC

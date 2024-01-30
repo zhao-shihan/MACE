@@ -7,13 +7,16 @@
 #include "G4PVPlacement.hh"
 
 using MACE::Detector::Geometry::Fast::MCP;
-using namespace MACE::LiteralUnit::Density;
+using namespace MACE::LiteralUnit;
 
 auto MCP::Construct(G4bool checkOverlaps) -> void {
     const auto& description = Description::MCP::Instance();
     const auto name = description.Name();
     const auto width = description.Width();
     const auto thickness = description.Thickness();
+
+    const auto nistManager = G4NistManager::Instance();
+    const auto mcpMaterial = nistManager->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4_g_cm3);
 
     auto solid = Make<G4Box>(
         name,
@@ -22,7 +25,7 @@ auto MCP::Construct(G4bool checkOverlaps) -> void {
         thickness / 2);
     auto logic = Make<G4LogicalVolume>(
         solid,
-        nullptr,
+        mcpMaterial,
         name);
     Make<G4PVPlacement>(
         G4Transform3D(
