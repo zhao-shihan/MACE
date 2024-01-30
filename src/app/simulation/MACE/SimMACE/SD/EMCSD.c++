@@ -43,8 +43,13 @@ auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
     if (&particle == G4OpticalPhoton::Definition()) { return false; }
 
-    const auto& touchable{*track.GetTouchable()};
+    const auto eDep{step.GetTotalEnergyDeposit()};
+
+    if (eDep == 0) { return false; }
+    assert(eDep > 0);
+
     const auto& preStepPoint{*step.GetPreStepPoint()};
+    const auto& touchable{*preStepPoint.GetTouchable()};
     const auto unitID{touchable.GetReplicaNumber()};
     // calculate (Ek0, p0)
     const auto vertexEk{track.GetVertexKineticEnergy()};
@@ -112,7 +117,7 @@ auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                     const auto topHit{*iTopHit};
                     // construct real hit
                     Get<"HitID">(**topHit) = hitID++;
-                    assert(Get<"CellID">(**topHit) == unitID);
+                    assert(Get<"UnitID">(**topHit) == unitID);
                     for (auto&& hit : std::as_const(hitCandidate)) {
                         if (hit == topHit) { continue; }
                         Get<"Edep">(**topHit) += Get<"Edep">(**hit);
