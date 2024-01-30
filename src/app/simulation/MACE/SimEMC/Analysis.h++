@@ -11,6 +11,7 @@
 
 #include <filesystem>
 #include <memory>
+#include <optional>
 #include <utility>
 
 class TFile;
@@ -51,9 +52,9 @@ private:
     G4bool fEnableCoincidenceOfMCP;
 
     gsl::owner<TFile*> fFile;
-    std::unique_ptr<Data::Output<Data::EMCSimHit>> fEMCSimHitOutput;
-    std::unique_ptr<Data::Output<Data::EMCPMTSimHit>> fEMCPMTSimHitOutput;
-    std::unique_ptr<Data::Output<Data::MCPSimHit>> fMCPSimHitOutput;
+    std::optional<Data::Output<Data::EMCSimHit>> fEMCSimHitOutput;
+    std::optional<Data::Output<Data::EMCPMTSimHit>> fEMCPMTSimHitOutput;
+    std::optional<Data::Output<Data::MCPSimHit>> fMCPSimHitOutput;
 
     const std::vector<gsl::owner<Simulation::EMCHit*>>* fEMCHitList;
     const std::vector<gsl::owner<EMCPMTHit*>>* fEMCPMTHitList;

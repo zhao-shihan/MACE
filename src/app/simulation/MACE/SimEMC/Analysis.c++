@@ -34,9 +34,9 @@ auto Analysis::RunBegin(G4int runID) -> void {
     if (fFile == nullptr) {
         throw std::runtime_error{fmt::format("MACE::SimEMC::Analysis::RunBegin: Cannot open file \"{}\"", fullFilePath)};
     }
-    fEMCSimHitOutput = std::make_unique<Data::Output<Data::EMCSimHit>>(fmt::format("G4Run{}_EMCSimHit", runID));
-    fEMCPMTSimHitOutput = std::make_unique<Data::Output<Data::EMCPMTSimHit>>(fmt::format("G4Run{}_EMCPMTSimHit", runID));
-    fMCPSimHitOutput = std::make_unique<Data::Output<Data::MCPSimHit>>(fmt::format("G4Run{}_MCPSimHit", runID));
+    fEMCSimHitOutput.emplace(fmt::format("G4Run{}_EMCSimHit", runID));
+    fEMCPMTSimHitOutput.emplace(fmt::format("G4Run{}_EMCPMTSimHit", runID));
+    fMCPSimHitOutput.emplace(fmt::format("G4Run{}_MCPSimHit", runID));
 }
 
 auto Analysis::EventEnd() -> void {
