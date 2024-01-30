@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Math/Clamp.h++"
 #include "MACE/Simulation/Physics/MuoniumPhysicsMessenger.h++"
 #include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
 #include "MACE/Simulation/Physics/Particle/Muonium.h++"
@@ -24,8 +25,8 @@ class MuoniumFormation final : public NonMoveableBase,
 public:
     MuoniumFormation();
 
-    auto FormationProbability(G4double val) -> void { fFormationProbability = val; }
-    auto ConversionProbability(G4double val) -> void { fConversionProbability = val; }
+    auto FormationProbability(G4double p) -> void { fFormationProbability = Math::Clamp<"[]">(p, 0., 1.); }
+    auto ConversionProbability(G4double p) -> void { fConversionProbability = Math::Clamp<"[]">(p, 0., 1.); }
 
     auto IsApplicable(const G4ParticleDefinition&) -> G4bool override;
     auto StartTracking(G4Track* track) -> void override;

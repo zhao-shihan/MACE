@@ -47,9 +47,9 @@ private:
     bool fCoincidenceWithEMC;
 
     gsl::owner<TFile*> fFile;
-    std::unique_ptr<Data::Output<Data::CDCSimHit>> fCDCSimHitOutput;
-    std::unique_ptr<Data::Output<Data::MCPSimHit>> fMCPSimHitOutput;
-    std::unique_ptr<Data::Output<Data::EMCSimHit>> fEMCSimHitOutput;
+    std::optional<Data::Output<Data::CDCSimHit>> fCDCSimHitOutput;
+    std::optional<Data::Output<Data::MCPSimHit>> fMCPSimHitOutput;
+    std::optional<Data::Output<Data::EMCSimHit>> fEMCSimHitOutput;
 
     const std::vector<gsl::owner<EMCHit*>>* fEMCHitList;
     const std::vector<gsl::owner<MCPHit*>>* fMCPHitList;

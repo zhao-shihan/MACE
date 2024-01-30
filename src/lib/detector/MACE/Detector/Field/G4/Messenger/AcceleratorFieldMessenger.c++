@@ -8,11 +8,9 @@
 namespace MACE::Detector::Field::G4::inline Messenger {
 
 AcceleratorFieldMessenger::AcceleratorFieldMessenger() :
-    Singleton(),
-    G4UImessenger(),
-    fAcceleratorField(nullptr),
-    fDirectory(),
-    fAcceleratorPotential() {
+    SingletonMessenger{},
+    fDirectory{},
+    fAcceleratorPotential{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Field/");
     fDirectory->SetGuidance("Detector field controller.");

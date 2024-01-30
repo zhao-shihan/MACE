@@ -6,17 +6,6 @@ DynamicScheduler<T>::DynamicScheduler() :
     fComm{},
     fBatchSize{},
     fContext{} {
-    switch (Env::MPIEnv::Instance().MPIThreadSupport()) {
-    case MPI_THREAD_SINGLE:
-        throw std::runtime_error{"the MPI library provides MPI_THREAD_SINGLE, "
-                                 "but dynamic scheduler requires MPI_THREAD_MULTIPLE"};
-    case MPI_THREAD_FUNNELED:
-        throw std::runtime_error{"the MPI library provides MPI_THREAD_FUNNELED, "
-                                 "but dynamic scheduler requires MPI_THREAD_MULTIPLE"};
-    case MPI_THREAD_SERIALIZED:
-        throw std::runtime_error{"the MPI library provides MPI_THREAD_SERIALIZED, "
-                                 "but dynamic scheduler requires MPI_THREAD_MULTIPLE"};
-    }
     if (fComm.Rank() == 0) {
         fContext.template emplace<Master>(this);
     } else {
@@ -84,26 +73,28 @@ DynamicScheduler<T>::Master::Supervisor::Supervisor(DynamicScheduler<T>* ds) :
     fTaskIDSend{},
     fSend{},
     fSupervisorThread{} {
-    fRecv.reserve(fDS->fComm.Size() - 1);
-    fTaskIDSend.reserve(fDS->fComm.Size() - 1);
-    fSend.reserve(fDS->fComm.Size() - 1);
-    for (int src{1}; src < fDS->fComm.Size(); ++src) {
-        MPI_Recv_init(nullptr,                // buf
-                      0,                      // count
-                      MPI_BYTE,               // datatype
-                      src,                    // source
-                      0,                      // tag
-                      fDS->fComm,             // comm
-                      &fRecv.emplace_back()); // request
-    }
-    for (int dest{1}; dest < fDS->fComm.Size(); ++dest) {
-        MPI_Rsend_init(&fTaskIDSend.emplace_back(), // buf
-                       1,                           // count
-                       DataType<T>(),               // datatype
-                       dest,                        // dest
-                       1,                           // tag
-                       fDS->fComm,                  // comm
-                       &fSend.emplace_back());      // request
+    if (fDS->fComm.Size() > 1) {
+        fRecv.reserve(fDS->fComm.Size() - 1);
+        fTaskIDSend.reserve(fDS->fComm.Size() - 1);
+        fSend.reserve(fDS->fComm.Size() - 1);
+        for (int src{1}; src < fDS->fComm.Size(); ++src) {
+            MPI_Recv_init(nullptr,                // buf
+                          0,                      // count
+                          MPI_BYTE,               // datatype
+                          src,                    // source
+                          0,                      // tag
+                          fDS->fComm,             // comm
+                          &fRecv.emplace_back()); // request
+        }
+        for (int dest{1}; dest < fDS->fComm.Size(); ++dest) {
+            MPI_Rsend_init(&fTaskIDSend.emplace_back(), // buf
+                           1,                           // count
+                           DataType<T>(),               // datatype
+                           dest,                        // dest
+                           1,                           // tag
+                           fDS->fComm,                  // comm
+                           &fSend.emplace_back());      // request
+        }
     }
 }
 
@@ -117,8 +108,23 @@ DynamicScheduler<T>::Master::Supervisor::~Supervisor() {
 template<std::integral T>
 auto DynamicScheduler<T>::Master::Supervisor::Start() -> void {
     fMainTaskID = fDS->fTask.first + fDS->fComm.Size() * fDS->fBatchSize;
+    // No need of supervisor in sequential execution
     if (fDS->fComm.Size() == 1) { return; }
-    if (fSupervisorThread.joinable()) { fSupervisorThread.join(); } // wait for last supervision to end if needed
+    // Check MPI thread support
+    switch (Env::MPIEnv::Instance().MPIThreadSupport()) {
+    case MPI_THREAD_SINGLE:
+        throw std::runtime_error{"the MPI library provides MPI_THREAD_SINGLE, "
+                                 "but dynamic scheduler requires MPI_THREAD_MULTIPLE"};
+    case MPI_THREAD_FUNNELED:
+        throw std::runtime_error{"the MPI library provides MPI_THREAD_FUNNELED, "
+                                 "but dynamic scheduler requires MPI_THREAD_MULTIPLE"};
+    case MPI_THREAD_SERIALIZED:
+        throw std::runtime_error{"the MPI library provides MPI_THREAD_SERIALIZED, "
+                                 "but dynamic scheduler requires MPI_THREAD_MULTIPLE"};
+    }
+    // wait for last supervision to end if needed
+    if (fSupervisorThread.joinable()) { fSupervisorThread.join(); }
+    // Start supervise
     fSupervisorThread = std::jthread{[this] {
         MPI_Startall(fRecv.size(),  // count
                      fRecv.data()); // array_of_requests

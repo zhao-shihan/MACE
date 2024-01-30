@@ -50,6 +50,7 @@ struct ModelBase : ModelSignature {
     using ValueOf = std::tuple_element_t<Index<AName>(), StdTuple>;
 
 private:
+    static auto StopConsteval() -> gsl::index { return -1; }
     template<CETAString AName, gsl::index I = 0>
     static consteval auto IndexImpl() -> gsl::index;
 };

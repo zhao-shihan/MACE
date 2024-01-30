@@ -1,10 +1,6 @@
 #pragma once
 
-#include "MACE/Env/Memory/Singleton.h++"
-
-#include "G4UImessenger.hh"
-
-#include "gsl/gsl"
+#include "MACE/Extension/Geant4X/SingletonMessenger.h++"
 
 #include <memory>
 
@@ -15,8 +11,8 @@ namespace MACE::inline Simulation::Generator {
 
 class SurfaceMuon;
 
-class SurfaceMuonMessenger final : public Env::Memory::Singleton<SurfaceMuonMessenger>,
-                                   public G4UImessenger {
+class SurfaceMuonMessenger final : public Geant4X::SingletonMessenger<SurfaceMuonMessenger,
+                                                                      SurfaceMuon> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -24,13 +20,9 @@ private:
     ~SurfaceMuonMessenger();
 
 public:
-    auto Register(gsl::not_null<SurfaceMuon*> gen) -> void { fSurfaceMuonGenerator = gen; }
-
     auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
-    SurfaceMuon* fSurfaceMuonGenerator;
-
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMomentum;
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMomentumRMS;

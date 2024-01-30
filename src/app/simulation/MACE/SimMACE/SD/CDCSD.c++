@@ -1,25 +1,23 @@
-#include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Math/MidPoint.h++"
 #include "MACE/SimMACE/Analysis.h++"
-#include "MACE/SimMACE/Region.h++"
 #include "MACE/SimMACE/SD/CDCSD.h++"
+#include "MACE/Utility/VectorArithmeticOperator.h++"
 #include "MACE/Utility/VectorCast.h++"
 
 #include "G4HCofThisEvent.hh"
-#include "G4ProductionCuts.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4SDManager.hh"
 #include "G4Step.hh"
+#include "G4StepPoint.hh"
 #include "G4ThreeVector.hh"
 #include "G4TwoVector.hh"
 #include "G4VProcess.hh"
-
-#include "gsl/gsl"
+#include "G4VTouchable.hh"
 
 #include <algorithm>
-#include <bit>
-#include <cstdint>
-#include <numeric>
+#include <cmath>
 #include <string_view>
+#include <utility>
 
 namespace MACE::SimMACE::inline SD {
 
@@ -27,141 +25,142 @@ CDCSD::CDCSD(const G4String& sdName) :
     NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fEventID{-1},
-    fHitsCollection{},
     fMeanDriftVelocity{},
-    fDeadTime{},
     fCellMap{},
-    fCellEntryPoint{},
-    fCellSignalTimesAndHit{} {
+    fSplitHit{},
+    fHitsCollection{} {
     collectionName.emplace_back(sdName + "HC");
 }
 
-void CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
-    fHitsCollection = new CDCHitCollection(SensitiveDetectorName, collectionName[0]);
-    auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
-    hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
-
-    const auto& cdc = Detector::Description::CDC::Instance();
+auto CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
+    const auto& cdc{Detector::Description::CDC::Instance()};
     fMeanDriftVelocity = cdc.MeanDriftVelocity();
-    fDeadTime = cdc.DeadTime();
     fCellMap = &cdc.CellMap();
+
+    fHitsCollection = new CDCHitCollection(SensitiveDetectorName, collectionName[0]);
+    const auto hitsCollectionID{G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection)};
+    hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-G4bool CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
-    const auto& step = *theStep;
-    const auto& track = *step.GetTrack();
-    const auto& particle = *track.GetDefinition();
+auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
+    const auto& step{*theStep};
+    const auto& track{*step.GetTrack()};
+    const auto& particle{*track.GetDefinition()};
 
-    if (track.GetCurrentStepNumber() <= 1 or particle.GetPDGCharge() == 0) {
-        return false;
-    }
+    if (particle.GetPDGCharge() == 0) { return false; }
 
-    const auto trackID = track.GetTrackID();
-    const auto& touchable = *track.GetTouchable();
-    const auto cellID = touchable.GetReplicaNumber();
+    const auto& preStepPoint{*step.GetPreStepPoint()};
+    const auto& postStepPoint{*step.GetPostStepPoint()};
+    const auto cellID{track.GetTouchable()->GetReplicaNumber()};
+    const auto kineticEnergy{Math::MidPoint(preStepPoint.GetKineticEnergy(), postStepPoint.GetKineticEnergy())};
+    const auto position{Math::MidPoint(preStepPoint.GetPosition(), postStepPoint.GetPosition())};
+    const auto momentum{Math::MidPoint(preStepPoint.GetMomentum(), postStepPoint.GetMomentum())};
+    // retrive wire position
+    const auto& cellInfo{fCellMap->at(cellID)};
+    const auto xWire{VectorCast<G4TwoVector>(cellInfo.position)};
+    const auto tWire{VectorCast<G4ThreeVector>(cellInfo.direction)};
+    // calculate drift distance
+    const auto commonNormal{tWire.cross(momentum)};
+    const auto driftDistance{std::abs((position - xWire).dot(commonNormal)) / commonNormal.mag()};
+    const auto driftTime{driftDistance / fMeanDriftVelocity};
+    const auto hitTime{Math::MidPoint(preStepPoint.GetGlobalTime(), postStepPoint.GetGlobalTime())};
+    const auto signalTime{hitTime + driftTime};
+    // vertex Ek and p
+    const auto vertexEk{track.GetVertexKineticEnergy()};
+    const auto vertexMomentum{track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()))};
+    // track creator process
+    const auto creatorProcess{track.GetCreatorProcess()};
+    // assert event ID
+    assert(fEventID >= 0);
+    // new a hit
+    auto hit{std::make_unique_for_overwrite<CDCHit>()};
+    Get<"EvtID">(*hit) = fEventID;
+    Get<"HitID">(*hit) = -1; // to be determined
+    Get<"CellID">(*hit) = cellID;
+    Get<"t">(*hit) = signalTime;
+    Get<"tD">(*hit) = driftTime;
+    Get<"d">(*hit) = driftDistance;
+    Get<"Edep">(*hit) = preStepPoint.GetKineticEnergy() - postStepPoint.GetKineticEnergy(); // use deltaE since we not care about secondaries (see EndOfEvent)
+    Get<"tHit">(*hit) = hitTime;
+    Get<"Ek">(*hit) = kineticEnergy;
+    Get<"x">(*hit) = position;
+    Get<"p">(*hit) = momentum;
+    Get<"TrkID">(*hit) = track.GetTrackID();
+    Get<"PDGID">(*hit) = particle.GetPDGEncoding();
+    Get<"t0">(*hit) = track.GetGlobalTime() - track.GetLocalTime();
+    Get<"x0">(*hit) = track.GetVertexPosition();
+    Get<"Ek0">(*hit) = vertexEk;
+    Get<"p0">(*hit) = vertexMomentum;
+    *Get<"CreatProc">(*hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "<0>";
+    fSplitHit[cellID].emplace_back(std::move(hit));
 
-    const auto SaveHit =
-        [&](const G4StepPoint& entryPoint, const G4StepPoint& exitPoint) {
-            const auto position{Math::MidPoint(entryPoint.GetPosition(), exitPoint.GetPosition())};
-            const auto energy{Math::MidPoint(entryPoint.GetKineticEnergy(), exitPoint.GetKineticEnergy())};
-            const auto momentum{Math::MidPoint(entryPoint.GetMomentum(), exitPoint.GetMomentum())};
-            // retrive wire position
-            const auto& cellInfo = fCellMap->at(cellID);
-            const auto xWire{VectorCast<G4TwoVector>(cellInfo.position)};
-            const auto tWire{VectorCast<G4ThreeVector>(cellInfo.direction)};
-            // calculate drift distance
-            const auto commonNormal{tWire.cross(momentum)};
-            const auto driftDistance{std::abs((position - xWire).dot(commonNormal)) / commonNormal.mag()};
-            const auto driftTime{driftDistance / fMeanDriftVelocity};
-            const auto signalTime{Math::MidPoint(entryPoint.GetGlobalTime(), exitPoint.GetGlobalTime()) + driftTime};
-            // retrive vertex energy and momentum
-            const auto vertexEk{track.GetVertexKineticEnergy()};
-            const auto vertexMomentum{track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()))};
-            // track creator process
-            const auto creatorProcess{track.GetCreatorProcess()};
-            // new a hit
-            auto hit = std::make_unique_for_overwrite<CDCHit>();
-            Get<"CellID">(*hit) = cellID;
-            Get<"t">(*hit) = signalTime;
-            Get<"tD">(*hit) = driftTime;
-            Get<"d">(*hit) = driftDistance;
-            Get<"EvtID">(*hit) = fEventID;
-            Get<"TrkID">(*hit) = trackID;
-            Get<"PDGID">(*hit) = particle.GetPDGEncoding();
-            Get<"Ek">(*hit) = energy;
-            Get<"x">(*hit) = position;
-            Get<"p">(*hit) = momentum;
-            Get<"t0">(*hit) = track.GetGlobalTime() - track.GetLocalTime();
-            Get<"x0">(*hit) = track.GetVertexPosition();
-            Get<"Ek0">(*hit) = vertexEk;
-            Get<"p0">(*hit) = vertexMomentum;
-            *Get<"CreatProc">(*hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "<Primary>";
-            fCellSignalTimesAndHit[cellID].emplace_back(signalTime, std::move(hit));
-        };
-
-    const auto& nextReigon = static_cast<Region&>(*track.GetNextVolume()->GetLogicalVolume()->GetRegion());
-
-    if (step.IsFirstStepInVolume() and step.IsLastStepInVolume() and // is entering and exiting,
-        nextReigon.Type() != RegionType::CDCSenseWire) {             // but the track is not heading into sense wire.
-        SaveHit(*step.GetPreStepPoint(), *step.GetPostStepPoint());
-        fCellEntryPoint.erase({cellID, trackID});
-        return true;
-    }
-
-    if (step.IsFirstStepInVolume()) {
-        fCellEntryPoint.try_emplace({cellID, trackID}, *step.GetPreStepPoint());
-        return false;
-    }
-    if (decltype(fCellEntryPoint.cbegin()) monitoring;
-        step.IsLastStepInVolume() and                                                       // is exiting,
-        nextReigon.Type() != RegionType::CDCSenseWire and                                   // but the track is not heading into sense wire,
-        (monitoring = fCellEntryPoint.find({cellID, trackID})) != fCellEntryPoint.cend()) { // and make sure it has entered before.
-        // save the hit
-        SaveHit(monitoring->second, *step.GetPostStepPoint());
-        // particle is exiting, remove it from monitoring list
-        fCellEntryPoint.erase(monitoring);
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
-void CDCSD::EndOfEvent(G4HCofThisEvent*) {
-    fCellEntryPoint.clear();
+auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
+    const auto timeResolutionFWHM{Detector::Description::CDC::Instance().TimeResolutionFWHM()};
 
-    auto& hitList = *fHitsCollection->GetVector();
-    hitList.reserve(
-        std::accumulate(fCellSignalTimesAndHit.cbegin(), fCellSignalTimesAndHit.cend(), 0ull,
-                        [](const auto& count, const auto& value) {
-                            return count + value.second.size();
-                        }));
-
-    for (auto&& [_, signalTimesAndHit] : fCellSignalTimesAndHit) {
-        if (signalTimesAndHit.size() == 1) {
-            hitList.emplace_back(signalTimesAndHit.front().second.release());
-        } else {
-            std::ranges::sort(signalTimesAndHit);
-            std::vector<std::unique_ptr<CDCHit>*> signalHitCandidateList;
-            auto signalTimeThreshold = signalTimesAndHit.front().first + fDeadTime;
-            for (auto timeHit = signalTimesAndHit.begin(); timeHit != signalTimesAndHit.end(); ++timeHit) {
-                signalHitCandidateList.emplace_back(&timeHit->second);
-                if (const auto signalTime = timeHit->first;
-                    signalTime > signalTimeThreshold or timeHit == std::prev(signalTimesAndHit.end())) {
-                    const auto goodHit =
-                        *std::ranges::max_element(std::as_const(signalHitCandidateList),
-                                                  [](auto&& hit1, auto&& hit2) {
-                                                      return Get<"Ek">(**hit1) < Get<"Ek">(**hit2);
-                                                  });
-                    hitList.emplace_back(goodHit->release());
-                    signalHitCandidateList.clear();
-                    signalTimeThreshold = signalTime + fDeadTime;
+    for (int hitID{};
+         auto&& [cellID, splitHit] : fSplitHit) {
+        switch (splitHit.size()) {
+        case 0:
+            break;
+        case 1: {
+            auto& hit{splitHit.front()};
+            Get<"HitID">(*hit) = hitID++;
+            assert(Get<"CellID">(*hit) == cellID);
+            fHitsCollection->insert(hit.release());
+            splitHit.clear();
+        } break;
+        default: {
+            // sort hit by signal time
+            std::ranges::sort(splitHit,
+                              [](const auto& hit1, const auto& hit2) {
+                                  return Get<"t">(*hit1) < Get<"t">(*hit2);
+                              });
+            // loop over all hits on this cell and cluster to real hits by signal times
+            auto windowClosingTime{Get<"t">(*splitHit.front()) + timeResolutionFWHM};
+            std::vector<std::unique_ptr<CDCHit>*> hitCandidate;
+            for (auto&& aSplitHit : splitHit) {
+                const auto timeWindowClosed{Get<"t">(*aSplitHit) > windowClosingTime};
+                if (not timeWindowClosed) {
+                    hitCandidate.emplace_back(&aSplitHit);
+                }
+                if (timeWindowClosed or aSplitHit == splitHit.back()) {
+                    // find top hit
+                    const auto iTopHit{std::ranges::min_element(std::as_const(hitCandidate),
+                                                                [](const auto& hit1, const auto& hit2) {
+                                                                    return Get<"TrkID">(**hit1) < Get<"TrkID">(**hit2);
+                                                                })};
+                    const auto topHit{*iTopHit};
+                    // construct real hit
+                    Get<"HitID">(**topHit) = hitID++;
+                    assert(Get<"CellID">(**topHit) == cellID);
+                    int nTopHit{};
+                    for (auto&& hit : std::as_const(hitCandidate)) {
+                        if (hit == topHit or
+                            Get<"TrkID">(**hit) != Get<"TrkID">(**topHit)) { continue; }
+                        ++nTopHit;
+                        Get<"Edep">(**topHit) += Get<"Edep">(**hit); // sum
+                        Get<"tHit">(**topHit) += Get<"tHit">(**hit); // mean
+                        *Get<"x">(**topHit) += *Get<"x">(**hit);     // mean
+                    }
+                    Get<"tHit">(**topHit) /= nTopHit; // mean
+                    *Get<"x">(**topHit) /= nTopHit;   // mean
+                    fHitsCollection->insert(topHit->release());
+                    // reset
+                    hitCandidate.clear();
+                    if (timeWindowClosed) {
+                        hitCandidate.emplace_back(&aSplitHit);
+                        windowClosingTime = Get<"t">(*aSplitHit) + timeResolutionFWHM;
+                    }
                 }
             }
+            splitHit.clear();
+        } break;
         }
-        signalTimesAndHit.clear();
     }
-
-    Analysis::Instance().SubmitSpectrometerHC(hitList);
+    Analysis::Instance().SubmitSpectrometerHC(*fHitsCollection->GetVector());
 }
 
 } // namespace MACE::SimMACE::inline SD

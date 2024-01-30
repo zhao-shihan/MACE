@@ -4,8 +4,8 @@
 namespace MACE::Detector::Field::G4 {
 
 SpectrometerField::SpectrometerField() :
-    WrapAsG4Field() {
-    SpectrometerFieldMessenger::Instance().Register(this);
+    WrapAsG4Field{} {
+    SpectrometerFieldMessenger::EnsureInstantiation();
 }
 
 } // namespace MACE::Detector::Field::G4

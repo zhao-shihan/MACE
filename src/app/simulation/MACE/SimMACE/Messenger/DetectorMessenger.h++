@@ -1,10 +1,6 @@
 #pragma once
 
-#include "MACE/Env/Memory/Singleton.h++"
-
-#include "G4UImessenger.hh"
-
-#include "gsl/gsl"
+#include "MACE/Extension/Geant4X/SingletonMessenger.h++"
 
 #include <memory>
 
@@ -14,38 +10,23 @@ class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
 class G4UIdirectory;
 
-namespace MACE::SimMACE {
+namespace MACE::SimMACE::inline Messenger {
 
-inline namespace Action {
-
-class DetectorConstruction;
-
-} // namespace Action
-
-inline namespace Messenger {
-
-class GeometryMessenger final : public Env::Memory::Singleton<GeometryMessenger>,
-                                public G4UImessenger {
+class DetectorMessenger final : public Geant4X::SingletonMessenger<DetectorMessenger> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
-    GeometryMessenger();
-    ~GeometryMessenger();
+    DetectorMessenger();
+    ~DetectorMessenger();
 
 public:
-    auto Register(gsl::not_null<DetectorConstruction*> dc) -> void { fDetectorConstruction = dc; }
-
     auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
-    DetectorConstruction* fDetectorConstruction;
-
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithAString> fImportDescription;
     std::unique_ptr<G4UIcmdWithAString> fExportDescription;
     std::unique_ptr<G4UIcmdWithAString> fIxportDescription;
 };
 
-} // namespace Messenger
-
-} // namespace MACE::SimMACE
+} // namespace MACE::SimMACE::inline Messenger

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/Env/Memory/PassiveSingleton.h++"
+#include "MACE/SimMACE/Messenger/PrimaryGeneratorActionMessenger.h++"
 #include "MACE/Simulation/Generator/SurfaceMuon.h++"
 
 #include "G4VUserPrimaryGeneratorAction.hh"
@@ -25,6 +26,8 @@ private:
 
     G4double fTimeWidthRMS;
     G4int fMuonsForEachG4Event;
+
+    PrimaryGeneratorActionMessenger::Register<PrimaryGeneratorAction> fMessengerRegister;
 };
 
 } // namespace MACE::SimMACE::inline Action

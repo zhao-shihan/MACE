@@ -1,5 +1,4 @@
 #include "MACE/Simulation/Generator/SurfaceMuon.h++"
-#include "MACE/Simulation/Generator/SurfaceMuonMessenger.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
 
@@ -23,9 +22,8 @@ SurfaceMuon::SurfaceMuon() :
     fMomentumRMS{0.05 * fMomentum},
     fPositionRMS{5_mm},
     fTime{0},
-    fPositionZ{-1.5_m} {
-    SurfaceMuonMessenger::Instance().Register(this);
-}
+    fPositionZ{-1.5_m},
+    fMessengerRegister{this} {}
 
 void SurfaceMuon::GeneratePrimaryVertex(G4Event* event) {
     const auto randEng = G4Random::getTheEngine();

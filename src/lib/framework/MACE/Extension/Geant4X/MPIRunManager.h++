@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Extension/Geant4X/MPIRunMessenger.h++"
 #include "MACE/Extension/MPIX/Execution/Executor.h++"
 #include "MACE/Math/Statistic.h++"
 #include "MACE/Utility/CPUTimeStopwatch.h++"
@@ -40,6 +41,7 @@ public:
 
     static auto GetRunManager() -> auto { return static_cast<MPIRunManager*>(G4RunManager::GetRunManager()); }
 
+    auto PrintProgress(G4bool b) -> void { fExecutor.PrintProgress(b), printModulo = -1; }
     auto PrintProgressModulo(G4int mod) -> void { fExecutor.PrintProgressModulo(mod), printModulo = -1; }
 
     virtual auto BeamOn(G4int nEvent, gsl::czstring macroFile = nullptr, G4int nSelect = -1) -> void override;
@@ -50,6 +52,8 @@ public:
 
 private:
     MPIX::Executor<G4int> fExecutor;
+
+    MPIRunMessenger::Register<MPIRunManager> fMessengerRegister;
 };
 
 } // namespace MACE::inline Extension::Geant4X

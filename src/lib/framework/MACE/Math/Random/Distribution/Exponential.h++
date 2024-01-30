@@ -1,12 +1,12 @@
 #pragma once
 
 #include "MACE/Concept/FundamentalType.h++"
-#include "MACE/Math/Log.h++"
-#include "MACE/Math/Random/Distribution/internal/FastLogForCompact01.h++"
 #include "MACE/Math/Random/Distribution/Uniform.h++"
+#include "MACE/Math/Random/Distribution/internal/FastLogForOpen01.h++"
 #include "MACE/Math/Random/RandomNumberDistributionBase.h++"
 #include "MACE/Utility/InlineMacro.h++"
 
+#include <cmath>
 #include <concepts>
 #include <iomanip>
 #include <limits>

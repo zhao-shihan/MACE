@@ -2,7 +2,6 @@
 #include "MACE/Compatibility/std23/to_underlying.h++"
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/Geant4X/MPIRunManager.h++"
-#include "MACE/Extension/Geant4X/MPIRunMessenger.h++"
 #include "MACE/Math/IntegerPower.h++"
 #include "MACE/Utility/MPIReseedRandomEngine.h++"
 
@@ -42,18 +41,17 @@ MPIRunManager::MPIRunManager() :
     internal::PreG4RunManagerInitFlipG4cout{},
     G4RunManager{},
     internal::PostG4RunManagerInitFlipG4cout{},
-    fExecutor{} {
+    fExecutor{},
+    fMessengerRegister{this} {
     printModulo = -1;
     SetVerboseLevel(std23::to_underlying(Env::MPIEnv::Instance().GetVerboseLevel()));
     fExecutor.TaskName("G4Event");
-    MPIRunMessenger::Instance().Register(this);
 }
 
 auto MPIRunManager::BeamOn(G4int nEvent, gsl::czstring macroFile, G4int nSelect) -> void {
     MPIReseedRandomEngine();
     fakeRun = nEvent <= 0;
     if (ConfirmBeamOnCondition()) {
-        fExecutor.AssignTask(nEvent);
         numberOfEventToBeProcessed = nEvent;
         numberOfEventProcessed = 0;
         ConstructScoringWorlds();
@@ -99,11 +97,12 @@ auto MPIRunManager::DoEventLoop(G4int nEvent, const char* macroFile, G4int nSele
     // Set name for message
     fExecutor.ExecutionName(fmt::format("G4Run {}", currentRun->GetRunID()));
     // Event loop
-    fExecutor.Execute([this](auto eventID) {
-        ProcessOneEvent(eventID);
-        TerminateOneEvent();
-        if (runAborted) { throw std::runtime_error{"G4Run aborted"}; }
-    });
+    fExecutor.Execute(numberOfEventToBeProcessed,
+                      [this](auto eventID) {
+                          ProcessOneEvent(eventID);
+                          TerminateOneEvent();
+                          if (runAborted) { throw std::runtime_error{"G4Run aborted"}; }
+                      });
     // If multi-threading, TerminateEventLoop() is invoked after all threads are finished.
     // MPIRunManager::runManagerType is sequentialRM.
     if (runManagerType == sequentialRM) { TerminateEventLoop(); }

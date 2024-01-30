@@ -4,8 +4,8 @@
 namespace MACE::Detector::Field::G4 {
 
 EMCField::EMCField() :
-    WrapAsG4Field() {
-    EMCFieldMessenger::Instance().Register(this);
+    WrapAsG4Field{} {
+    EMCFieldMessenger::EnsureInstantiation();
 }
 
 } // namespace MACE::Detector::Field::G4

@@ -7,10 +7,9 @@
 namespace MACE::SimTarget::inline Messenger {
 
 ActionMessenger::ActionMessenger() :
-    Singleton(),
-    fSteppingAction(nullptr),
-    fDirectory(),
-    fKillIrrelevants() {
+    SingletonMessenger{},
+    fDirectory{},
+    fKillIrrelevants{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Action/");
 
@@ -24,7 +23,9 @@ ActionMessenger::~ActionMessenger() = default;
 
 auto ActionMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fKillIrrelevants.get()) {
-        fSteppingAction->SetKillIrrelevants(fKillIrrelevants->GetNewBoolValue(value));
+        Deliver<SteppingAction>([&](auto&& r) {
+            r.SetKillIrrelevants(fKillIrrelevants->GetNewBoolValue(value));
+        });
     }
 }
 

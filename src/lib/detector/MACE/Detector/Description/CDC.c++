@@ -1,4 +1,5 @@
 #include "MACE/Detector/Description/CDC.h++"
+#include "MACE/Extension/stdx/ranges_numeric.h++"
 #include "MACE/Math/MidPoint.h++"
 #include "MACE/Math/Parity.h++"
 #include "MACE/Utility/LiteralUnit.h++"
@@ -8,6 +9,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <functional>
 #include <iostream>
 #include <numeric>
 #include <tuple>
@@ -43,18 +45,18 @@ CDC::CDC() :
     fCellMapManager(),
     // Detection
     fMeanDriftVelocity(3.5_cm_us),
-    fDeadTime(30_ns) {}
+    fTimeResolutionFWHM(30_ns) {}
 
-std::vector<CDC::SuperLayerConfiguration> CDC::ComputeLayerConfiguration() const {
+auto CDC::ComputeLayerConfiguration() const -> std::vector<SuperLayerConfiguration> {
     std::vector<SuperLayerConfiguration> layerConfig;
 
     layerConfig.reserve(fNSuperLayer);
-    for (gsl::index superLayerID = 0; superLayerID < fNSuperLayer; ++superLayerID) {
-        const auto notFirstSuperLayer = superLayerID > 0;
-        auto& super = layerConfig.emplace_back();
-        const auto& lastSuper = notFirstSuperLayer ?
-                                    layerConfig[superLayerID - 1] :
-                                    layerConfig.front();
+    for (gsl::index superLayerID{}; superLayerID < fNSuperLayer; ++superLayerID) {
+        const auto notFirstSuperLayer{superLayerID > 0};
+        auto& super{layerConfig.emplace_back()};
+        const auto& lastSuper{notFirstSuperLayer ?
+                                  layerConfig[superLayerID - 1] :
+                                  layerConfig.front()};
 
         super.isAxial = fEvenSuperLayerIsAxial ?
                             Math::IsEven(superLayerID) :
@@ -76,32 +78,32 @@ std::vector<CDC::SuperLayerConfiguration> CDC::ComputeLayerConfiguration() const
                         (super.innerRadius + fNSenseLayerPerSuper * fReferenceCellWidth - fReferenceCellWidth / 2));
             }());
         super.cellAzimuthWidth = 2_pi / super.nCellPerSenseLayer;
-        const auto halfPhiCell = super.cellAzimuthWidth / 2;
+        const auto halfPhiCell{super.cellAzimuthWidth / 2};
 
         super.innerHalfLength =
             notFirstSuperLayer ?
                 lastSuper.outerHalfLength + fEndCapSlope * fMinAdjacentSuperLayersDistance :
                 fGasInnerLength / 2 + fEndCapSlope * fMinWireAndRadialShellDistance;
 
-        const auto firstInnerStereoZenithAngle =
+        const auto firstInnerStereoZenithAngle{
             [this,
-             &isAxial = super.isAxial,
-             &superLayerID] {
+             isAxial{super.isAxial},
+             superLayerID] {
                 if (isAxial) { return 0.0; }
                 if ((fEvenSuperLayerIsAxial ? superLayerID + 3 : superLayerID) % 4 == 0) {
                     return +fMinStereoAngle;
                 } else {
                     return -fMinStereoAngle;
                 }
-            }();
-        const int firstSenseLayerID = superLayerID * fNSenseLayerPerSuper;
+            }()};
+        const auto firstSenseLayerID{static_cast<int>(superLayerID * fNSenseLayerPerSuper)};
         super.sense.reserve(fNSenseLayerPerSuper);
-        for (gsl::index senseLayerLocalID = 0; senseLayerLocalID < fNSenseLayerPerSuper; ++senseLayerLocalID) {
-            const auto notFirstSenseLayerOfThisSuperLayer = senseLayerLocalID > 0;
-            auto& sense = super.sense.emplace_back();
-            const auto& lastSense = notFirstSenseLayerOfThisSuperLayer ?
-                                        super.sense[senseLayerLocalID - 1] :
-                                        super.sense.front();
+        for (gsl::index senseLayerLocalID{}; senseLayerLocalID < fNSenseLayerPerSuper; ++senseLayerLocalID) {
+            const auto notFirstSenseLayerOfThisSuperLayer{senseLayerLocalID > 0};
+            auto& sense{super.sense.emplace_back()};
+            const auto& lastSense{notFirstSenseLayerOfThisSuperLayer ?
+                                      super.sense[senseLayerLocalID - 1] :
+                                      super.sense.front()};
 
             sense.senseLayerID = firstSenseLayerID + senseLayerLocalID;
             sense.innerRadius =
@@ -109,25 +111,25 @@ std::vector<CDC::SuperLayerConfiguration> CDC::ComputeLayerConfiguration() const
                     lastSense.outerRadius :
                     super.innerRadius;
             sense.outerRadius =
-                [&rIn = std::as_const(sense).innerRadius,
-                 &dFW = fFieldWireDiameter,
-                 &halfPhiCell] {
+                [rIn{sense.innerRadius},
+                 dFW{fFieldWireDiameter},
+                 halfPhiCell] {
                     return (rIn + (rIn + dFW) * halfPhiCell) / (1 - halfPhiCell);
                 }();
             sense.cellWidth = sense.outerRadius - sense.innerRadius;
-            const auto tanInnerStereoZenithAngle = notFirstSenseLayerOfThisSuperLayer ?
-                                                       lastSense.TanStereoZenithAngle(lastSense.outerRadius) :
-                                                       std::tan(firstInnerStereoZenithAngle);
+            const auto tanInnerStereoZenithAngle{notFirstSenseLayerOfThisSuperLayer ?
+                                                     lastSense.TanStereoZenithAngle(lastSense.outerRadius) :
+                                                     std::tan(firstInnerStereoZenithAngle)};
             sense.halfLength =
-                [&eta = fEndCapSlope,
-                 &lastHL = notFirstSenseLayerOfThisSuperLayer ?
-                               std::as_const(lastSense).halfLength :
-                               std::as_const(super).innerHalfLength,
-                 &rIn = std::as_const(sense).innerRadius,
-                 lastRIn = notFirstSenseLayerOfThisSuperLayer ?
-                               lastSense.innerRadius / std::cos(lastSense.stereoAzimuthAngle / 2) :
-                               super.innerRadius,
-                 tan2ThetaS = Math::Pow<2>(tanInnerStereoZenithAngle)] {
+                [eta{fEndCapSlope},
+                 lastHL{notFirstSenseLayerOfThisSuperLayer ?
+                            lastSense.halfLength :
+                            super.innerHalfLength},
+                 rIn{sense.innerRadius},
+                 lastRIn{notFirstSenseLayerOfThisSuperLayer ?
+                             lastSense.innerRadius / std::cos(lastSense.stereoAzimuthAngle / 2) :
+                             super.innerRadius},
+                 tan2ThetaS{Math::Pow<2>(tanInnerStereoZenithAngle)}] {
                     return (lastHL +
                             eta * (std::sqrt(
                                        Math::Pow<2>(rIn) +
@@ -137,16 +139,16 @@ std::vector<CDC::SuperLayerConfiguration> CDC::ComputeLayerConfiguration() const
                 }();
             sense.stereoAzimuthAngle = 2 * std::atan(sense.halfLength / sense.innerRadius * tanInnerStereoZenithAngle);
 
-            const int firstCellID = (notFirstSuperLayer ?
-                                         lastSuper.sense.back().cell.back().cellID + 1 :
-                                         0) +
-                                    senseLayerLocalID * super.nCellPerSenseLayer;
-            const auto firstCellAzimuth = Math::IsEven(sense.senseLayerID) ?
-                                              0 :
-                                              halfPhiCell;
+            const auto firstCellID{static_cast<int>((notFirstSuperLayer ?
+                                                         lastSuper.sense.back().cell.back().cellID + 1 :
+                                                         0) +
+                                                    senseLayerLocalID * super.nCellPerSenseLayer)};
+            const auto firstCellAzimuth{Math::IsEven(sense.senseLayerID) ?
+                                            0 :
+                                            halfPhiCell};
             sense.cell.reserve(super.nCellPerSenseLayer);
-            for (gsl::index cellLocalID = 0; cellLocalID < super.nCellPerSenseLayer; ++cellLocalID) {
-                auto& cell = sense.cell.emplace_back();
+            for (gsl::index cellLocalID{}; cellLocalID < super.nCellPerSenseLayer; ++cellLocalID) {
+                auto& cell{sense.cell.emplace_back()};
                 cell.cellID = firstCellID + cellLocalID;
                 cell.centerAzimuth = firstCellAzimuth + cellLocalID * super.cellAzimuthWidth;
             }
@@ -155,7 +157,7 @@ std::vector<CDC::SuperLayerConfiguration> CDC::ComputeLayerConfiguration() const
         super.sense.shrink_to_fit();
 
         super.outerRadius =
-            [&dFW = fFieldWireDiameter,
+            [dFW{fFieldWireDiameter},
              &lastSense = std::as_const(super).sense.back()] {
                 return (lastSense.outerRadius + dFW) / std::cos(lastSense.stereoAzimuthAngle / 2);
             }();
@@ -166,25 +168,24 @@ std::vector<CDC::SuperLayerConfiguration> CDC::ComputeLayerConfiguration() const
     return layerConfig;
 }
 
-std::vector<CDC::CellInformation> CDC::ComputeCellMap() const {
+auto CDC::ComputeCellMap() const -> std::vector<CellInformation> {
     std::vector<CellInformation> cellMap;
 
-    const auto rFieldWire = fFieldWireDiameter / 2;
+    const auto rFieldWire{fFieldWireDiameter / 2};
 
-    const auto& layerConfig = LayerConfiguration();
-    cellMap.reserve(
-        std::accumulate(layerConfig.cbegin(), layerConfig.cend(), 0ull,
-                        [this](const auto& count, const auto& super) {
-                            return count + super.nCellPerSenseLayer * fNSenseLayerPerSuper;
-                        }));
+    const auto& layerConfig{LayerConfiguration()};
+    cellMap.reserve(stdx::ranges::transform_reduce(layerConfig, 0ull, std::plus{},
+                                                   [this](const auto& super) {
+                                                       return super.nCellPerSenseLayer * fNSenseLayerPerSuper;
+                                                   }));
 
-    for (auto superLayerID = 0;
+    for (int superLayerID{};
          auto&& super : layerConfig) {
-        for (auto senseLayerLocalID = 0;
+        for (int senseLayerLocalID{};
              auto&& sense : super.sense) {
-            const auto wireRadialPosition = Math::MidPoint(sense.innerRadius, sense.outerRadius) + rFieldWire;
-            const Eigen::AngleAxisd stereoRotation = {-sense.StereoZenithAngle(wireRadialPosition), Eigen::Vector3d(1, 0, 0)};
-            for (auto cellLocalID = 0;
+            const auto wireRadialPosition{Math::MidPoint(sense.innerRadius, sense.outerRadius) + rFieldWire};
+            const Eigen::AngleAxisd stereoRotation{-sense.StereoZenithAngle(wireRadialPosition), Eigen::Vector3d(1, 0, 0)};
+            for (int cellLocalID{};
                  auto&& cell : sense.cell) {
                 cellMap.push_back({cellLocalID,
                                    sense.senseLayerID,
@@ -211,7 +212,7 @@ std::vector<CDC::CellInformation> CDC::ComputeCellMap() const {
     return cellMap;
 }
 
-void CDC::ImportValues(const YAML::Node& node) {
+auto CDC::ImportValues(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fEvenSuperLayerIsAxial, "EvenSuperLayerIsAxial");
     ImportValue(node, fNSuperLayer, "NSuperLayer");
@@ -233,12 +234,12 @@ void CDC::ImportValues(const YAML::Node& node) {
     ImportValue(node, fShellOuterThickness, "ShellOuterThickness");
     // Detection
     ImportValue(node, fMeanDriftVelocity, "MeanDriftVelocity");
-    ImportValue(node, fDeadTime, "DeadTime");
+    ImportValue(node, fTimeResolutionFWHM, "TimeResolutionFWHM");
 
     SetGeometryOutdated();
 }
 
-void CDC::ExportValues(YAML::Node& node) const {
+auto CDC::ExportValues(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fEvenSuperLayerIsAxial, "EvenSuperLayerIsAxial");
     ExportValue(node, fNSuperLayer, "NSuperLayer");
@@ -260,7 +261,7 @@ void CDC::ExportValues(YAML::Node& node) const {
     ExportValue(node, fShellOuterThickness, "ShellOuterThickness");
     // Detection
     ExportValue(node, fMeanDriftVelocity, "MeanDriftVelocity");
-    ExportValue(node, fDeadTime, "DeadTime");
+    ExportValue(node, fTimeResolutionFWHM, "TimeResolutionFWHM");
 }
 
 } // namespace MACE::Detector::Description

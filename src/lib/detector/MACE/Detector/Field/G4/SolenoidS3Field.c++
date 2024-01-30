@@ -4,8 +4,8 @@
 namespace MACE::Detector::Field::G4 {
 
 SolenoidS3Field::SolenoidS3Field() :
-    WrapAsG4Field() {
-    SolenoidFieldMessenger::Instance().Register(this);
+    WrapAsG4Field{} {
+    SolenoidFieldMessenger::EnsureInstantiation();
 }
 
 } // namespace MACE::Detector::Field::G4

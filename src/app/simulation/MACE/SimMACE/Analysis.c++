@@ -28,22 +28,22 @@ Analysis::Analysis() :
     fCDCHitList{},
     fMessengerRegister{this} {}
 
-void Analysis::RunBegin(G4int runID) {
+auto Analysis::RunBegin(G4int runID) -> void {
     const auto fullFilePath{MPIX::ParallelizePath(fFilePath, ".root").generic_string()};
     fFile = TFile::Open(fullFilePath.c_str(), fFileOption.c_str(),
                         "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
     if (fFile == nullptr) {
         throw std::runtime_error{fmt::format("MACE::SimMACE::Analysis::RunBegin: Cannot open file \"{}\"", fullFilePath)};
     }
-    fCDCSimHitOutput = std::make_unique<Data::Output<Data::CDCSimHit>>(fmt::format("G4Run{}_CDCSimHit", runID));
-    fMCPSimHitOutput = std::make_unique<Data::Output<Data::MCPSimHit>>(fmt::format("G4Run{}_MCPSimHit", runID));
-    fEMCSimHitOutput = std::make_unique<Data::Output<Data::EMCSimHit>>(fmt::format("G4Run{}_EMCSimHit", runID));
+    fCDCSimHitOutput.emplace(fmt::format("G4Run{}_CDCSimHit", runID));
+    fMCPSimHitOutput.emplace(fmt::format("G4Run{}_MCPSimHit", runID));
+    fEMCSimHitOutput.emplace(fmt::format("G4Run{}_EMCSimHit", runID));
 }
 
-void Analysis::EventEnd() {
-    const auto cdcTriggered = not fCoincidenceWithCDC or fCDCHitList->size() > 0;
-    const auto mcpTriggered = not fCoincidenceWithMCP or fMCPHitList->size() > 0;
-    const auto emcTriggered = not fCoincidenceWithEMC or fEMCHitList->size() > 0;
+auto Analysis::EventEnd() -> void {
+    const auto cdcTriggered{not fCoincidenceWithCDC or fCDCHitList->size() > 0};
+    const auto mcpTriggered{not fCoincidenceWithMCP or fMCPHitList->size() > 0};
+    const auto emcTriggered{not fCoincidenceWithEMC or fEMCHitList->size() > 0};
     if (emcTriggered and mcpTriggered and cdcTriggered) {
         *fCDCSimHitOutput << *fCDCHitList;
         *fMCPSimHitOutput << *fMCPHitList;
@@ -51,7 +51,7 @@ void Analysis::EventEnd() {
     }
 }
 
-void Analysis::RunEnd(Option_t* option) {
+auto Analysis::RunEnd(Option_t* option) -> void {
     fCDCSimHitOutput->Write();
     fMCPSimHitOutput->Write();
     fEMCSimHitOutput->Write();

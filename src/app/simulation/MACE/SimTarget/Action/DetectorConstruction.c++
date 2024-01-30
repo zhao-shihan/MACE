@@ -5,7 +5,6 @@
 #include "MACE/Detector/Geometry/Fast/Target.h++"
 #include "MACE/Detector/Geometry/Fast/World.h++"
 #include "MACE/SimTarget/Action/DetectorConstruction.h++"
-#include "MACE/SimTarget/Messenger/DetectorMessenger.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
@@ -18,16 +17,16 @@ using namespace MACE::LiteralUnit::Density;
 using namespace MACE::LiteralUnit::Temperature;
 
 DetectorConstruction::DetectorConstruction() :
-    PassiveSingleton(),
-    G4VUserDetectorConstruction(),
-    fCheckOverlap(false),
-    fWorld(nullptr),
-    fTargetDensity(30_mg_cm3),
-    fTargetTemperature(293.15_K) {
+    PassiveSingleton{},
+    G4VUserDetectorConstruction{},
+    fCheckOverlap{false},
+    fWorld{nullptr},
+    fTargetDensity{30_mg_cm3},
+    fTargetTemperature{293.15_K},
+    fMessengerRegister{this} {
     Detector::Description::DescriptionIO::Import<DescriptionInUse>(
 #include "MACE/SimTarget/DefaultGeometry.inlyaml"
     );
-    GeometryMessenger::Instance().Register(this);
 }
 
 auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {

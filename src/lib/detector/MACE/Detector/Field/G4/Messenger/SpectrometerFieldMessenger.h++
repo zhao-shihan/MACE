@@ -1,10 +1,6 @@
 #pragma once
 
-#include "MACE/Env/Memory/Singleton.h++"
-
-#include "G4UImessenger.hh"
-
-#include "gsl/gsl"
+#include "MACE/Extension/Geant4X/SingletonMessenger.h++"
 
 #include <memory>
 
@@ -17,8 +13,7 @@ class SpectrometerField;
 
 inline namespace Messenger {
 
-class SpectrometerFieldMessenger final : public Env::Memory::Singleton<SpectrometerFieldMessenger>,
-                                         public G4UImessenger {
+class SpectrometerFieldMessenger final : public Geant4X::SingletonMessenger<SpectrometerFieldMessenger> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -26,13 +21,9 @@ private:
     ~SpectrometerFieldMessenger();
 
 public:
-    auto Register(gsl::not_null<SpectrometerField*> field) -> void { fSpectrometerField = field; }
-
     auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
-    SpectrometerField* fSpectrometerField;
-
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSpectrometerMagneticField;
 };

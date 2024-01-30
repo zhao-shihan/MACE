@@ -1,5 +1,4 @@
 #include "MACE/SimTarget/Action/PrimaryGeneratorAction.h++"
-#include "MACE/SimTarget/Messenger/PrimaryGeneratorActionMessenger.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 namespace MACE::SimTarget::inline Action {
@@ -7,12 +6,12 @@ namespace MACE::SimTarget::inline Action {
 using namespace LiteralUnit::Length;
 
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
-    PassiveSingleton(),
-    G4VUserPrimaryGeneratorAction(),
-    fSurfaceMuonGenerator(),
-    fMuonsForEachG4Event(0) {
+    PassiveSingleton{},
+    G4VUserPrimaryGeneratorAction{},
+    fSurfaceMuonGenerator{},
+    fMuonsForEachG4Event{},
+    fMessengerRegister{this} {
     fSurfaceMuonGenerator.PositionZ(-5_cm);
-    PrimaryGeneratorActionMessenger::Instance().Register(this);
 }
 
 auto PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) -> void {

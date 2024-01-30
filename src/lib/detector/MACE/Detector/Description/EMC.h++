@@ -3,7 +3,10 @@
 #include "MACE/Detector/Description/DescriptionBase.h++"
 
 #include "CLHEP/Geometry/Point3D.h"
+#include "CLHEP/Geometry/Transform3D.h"
 #include "CLHEP/Vector/ThreeVector.h"
+
+#include <vector>
 
 namespace MACE::Detector::Description {
 
@@ -38,7 +41,7 @@ public:
     auto ResolutionScale() const -> const auto& { return fResolutionScale; }
 
     auto Mesh() const -> const auto& { return fMeshManager.Get(this); }
-    auto CellTotalNumber() const -> auto { return Mesh().fFaceList.size(); }
+    auto NUnit() const -> auto { return Mesh().fFaceList.size(); }
     auto ComputeTransformToOuterSurfaceWithOffset(int cellID, double offsetInNormalDirection) const -> HepGeom::Transform3D;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////

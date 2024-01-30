@@ -11,11 +11,9 @@ namespace MACE::SimMACE::inline Messenger {
 using namespace MACE::LiteralUnit::Frequency;
 
 PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger() :
-    Singleton(),
-    G4UImessenger(),
-    fPrimaryGeneratorAction(nullptr),
-    fTimeRMS(),
-    fMuonsForEachG4Event() {
+    SingletonMessenger{},
+    fTimeRMS{},
+    fMuonsForEachG4Event{} {
 
     fTimeRMS = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Generator/SurfaceMuon/TimeRMS", this);
     fTimeRMS->SetGuidance("Set time width (RMS) of beam.");
@@ -33,9 +31,13 @@ PrimaryGeneratorActionMessenger::~PrimaryGeneratorActionMessenger() = default;
 
 auto PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fTimeRMS.get()) {
-        fPrimaryGeneratorAction->TimeRMS(fTimeRMS->GetNewDoubleValue(value));
+        Deliver<PrimaryGeneratorAction>([&](auto&& r) {
+            r.TimeRMS(fTimeRMS->GetNewDoubleValue(value));
+        });
     } else if (command == fMuonsForEachG4Event.get()) {
-        fPrimaryGeneratorAction->MuonsForEachG4Event(fMuonsForEachG4Event->GetNewIntValue(value));
+        Deliver<PrimaryGeneratorAction>([&](auto&& r) {
+            r.MuonsForEachG4Event(fMuonsForEachG4Event->GetNewIntValue(value));
+        });
     }
 }
 

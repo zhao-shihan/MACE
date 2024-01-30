@@ -22,11 +22,13 @@ MuoniumPhysicsMessenger<ATarget>::MuoniumPhysicsMessenger() :
     fFormationProbability = std::make_unique<G4UIcmdWithADouble>("/MACE/Physics/MuoniumPhysics/Formation/FormationProbability", this);
     fFormationProbability->SetGuidance("Set integrated probability of rest mu+ captures a e- in the target.");
     fFormationProbability->SetParameterName("P", false);
+    fFormationProbability->SetRange("0 <= P && P <= 1");
     fFormationProbability->AvailableForStates(G4State_Idle);
 
     fConversionProbability = std::make_unique<G4UIcmdWithADouble>("/MACE/Physics/MuoniumPhysics/Formation/ConversionProbability", this);
     fConversionProbability->SetGuidance("Set integrated probability of muonium to anti-muonium conversion.");
     fConversionProbability->SetParameterName("P", false);
+    fConversionProbability->SetRange("0 <= P && P <= 1");
     fConversionProbability->AvailableForStates(G4State_Idle);
 
     fTransportProcessDirectory = std::make_unique<G4UIdirectory>("/MACE/Physics/MuoniumPhysics/Transport/");
@@ -41,7 +43,7 @@ MuoniumPhysicsMessenger<ATarget>::MuoniumPhysicsMessenger() :
     fManipulateAllSteps = std::make_unique<G4UIcmdWithABool>("/MACE/Physics/MuoniumPhysics/Transport/ManipulateAllSteps", this),
     fManipulateAllSteps->SetGuidance("Set whether show each step of thermal random flight of muonium in the target or not.\n"
                                      "Warning: can be time consuming if set to true.");
-    fManipulateAllSteps->SetParameterName("b", false);
+    fManipulateAllSteps->SetParameterName("bool", false);
     fManipulateAllSteps->AvailableForStates(G4State_Idle);
 }
 

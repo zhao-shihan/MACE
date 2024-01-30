@@ -5,6 +5,7 @@
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
+#include "MACE/SimTarget/Messenger/DetectorMessenger.h++"
 
 #include "G4VUserDetectorConstruction.hh"
 
@@ -46,6 +47,8 @@ private:
 
     G4double fTargetDensity;
     G4double fTargetTemperature;
+
+    DetectorMessenger::Register<DetectorConstruction> fMessengerRegister;
 };
 
 } // namespace SimTarget::inline Action

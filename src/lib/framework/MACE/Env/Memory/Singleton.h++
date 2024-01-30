@@ -22,6 +22,8 @@ protected:
 
 public:
     MACE_ALWAYS_INLINE static auto Instance() -> ADerived&;
+    MACE_ALWAYS_INLINE static auto EnsureInstantiation() -> void { Instance(); }
+
     MACE_ALWAYS_INLINE static auto NotInstantiated() -> bool { return UpdateInstance() == Status::NotInstantiated; }
     MACE_ALWAYS_INLINE static auto Available() -> bool { return UpdateInstance() == Status::Available; }
     MACE_ALWAYS_INLINE static auto Expired() -> bool { return UpdateInstance() == Status::Expired; }

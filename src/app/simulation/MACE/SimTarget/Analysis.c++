@@ -19,8 +19,8 @@ Analysis::Analysis() :
     fMuoniumTrackList{},
     fResultFile{},
     fYieldFile{},
-    fDataFactory{} {
-    AnalysisMessenger::Instance().Register(this);
+    fDataFactory{},
+    fMessengerRegister{this} {
     fDataFactory.TreeNamePrefixFormat("Run{}_");
 }
 

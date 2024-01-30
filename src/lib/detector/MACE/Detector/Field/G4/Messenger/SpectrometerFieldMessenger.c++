@@ -8,11 +8,9 @@
 namespace MACE::Detector::Field::G4::inline Messenger {
 
 SpectrometerFieldMessenger::SpectrometerFieldMessenger() :
-    Singleton(),
-    G4UImessenger(),
-    fSpectrometerField(nullptr),
-    fDirectory(),
-    fSpectrometerMagneticField() {
+    SingletonMessenger{},
+    fDirectory{},
+    fSpectrometerMagneticField{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Field/");
     fDirectory->SetGuidance("Detector field controller.");
