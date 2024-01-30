@@ -27,7 +27,7 @@
 
 namespace MACE::SimEMC::inline Action {
 
-using namespace MACE::LiteralUnit;
+using namespace LiteralUnit;
 
 DetectorConstruction::DetectorConstruction() :
     PassiveSingleton{},
@@ -49,9 +49,9 @@ DetectorConstruction::DetectorConstruction() :
 }
 
 auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
-    using namespace MACE::Detector::Geometry::Fast;
+    using namespace Detector::Geometry::Fast;
 
-    auto& description = MACE::Detector::Description::World::Instance();
+    auto& description = Detector::Description::World::Instance();
     description.HalfXExtent(26_m);
     description.HalfYExtent(20_m);
     description.HalfZExtent(26_m);
@@ -61,8 +61,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& emcPMTCoupler = fWorld->NewDaughter<EMCPMTCoupler>(fCheckOverlap);
     auto& emcPMTAssemblies = fWorld->NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
     auto& mcp = fWorld->NewDaughter<MCP>(fCheckOverlap);
-    // auto& emcShield = fWorld->NewDaughter<MACE::SimEMC::Detector::EMCShield>(fCheckOverlap);
-    // auto& emcTunnel = fWorld->NewDaughter<MACE::SimEMC::Detector::EMCTunnel>(fCheckOverlap);
+    // auto& emcShield = fWorld->NewDaughter<SimEMC::Detector::EMCShield>(fCheckOverlap);
+    // auto& emcTunnel = fWorld->NewDaughter<SimEMC::Detector::EMCTunnel>(fCheckOverlap);
 
     auto nist = G4NistManager::Instance();
     fWorld->RegisterMaterial(nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3));
