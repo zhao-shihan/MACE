@@ -49,9 +49,14 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
     if (particle.GetPDGCharge() == 0) { return false; }
 
+    const auto eDep{step.GetTotalEnergyDeposit() - step.GetNonIonizingEnergyDeposit()}; // ionizing Edep
+
+    if (eDep == 0) { return false; }
+    assert(eDep > 0);
+
     const auto& preStepPoint{*step.GetPreStepPoint()};
     const auto& postStepPoint{*step.GetPostStepPoint()};
-    const auto cellID{track.GetTouchable()->GetReplicaNumber()};
+    const auto cellID{preStepPoint.GetTouchable()->GetReplicaNumber()};
     const auto kineticEnergy{Math::MidPoint(preStepPoint.GetKineticEnergy(), postStepPoint.GetKineticEnergy())};
     const auto position{Math::MidPoint(preStepPoint.GetPosition(), postStepPoint.GetPosition())};
     const auto momentum{Math::MidPoint(preStepPoint.GetMomentum(), postStepPoint.GetMomentum())};
@@ -80,7 +85,7 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"t">(*hit) = signalTime;
     Get<"tD">(*hit) = driftTime;
     Get<"d">(*hit) = driftDistance;
-    Get<"Edep">(*hit) = preStepPoint.GetKineticEnergy() - postStepPoint.GetKineticEnergy(); // use deltaE since we not care about secondaries (see EndOfEvent)
+    Get<"Edep">(*hit) = eDep;
     Get<"tHit">(*hit) = hitTime;
     Get<"Ek">(*hit) = kineticEnergy;
     Get<"x">(*hit) = position;
@@ -138,12 +143,13 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                     assert(Get<"CellID">(**topHit) == cellID);
                     int nTopHit{};
                     for (auto&& hit : std::as_const(hitCandidate)) {
-                        if (hit == topHit or
-                            Get<"TrkID">(**hit) != Get<"TrkID">(**topHit)) { continue; }
-                        ++nTopHit;
+                        if (hit == topHit) { continue; }
                         Get<"Edep">(**topHit) += Get<"Edep">(**hit); // sum
-                        Get<"tHit">(**topHit) += Get<"tHit">(**hit); // mean
-                        *Get<"x">(**topHit) += *Get<"x">(**hit);     // mean
+                        if (Get<"TrkID">(**hit) == Get<"TrkID">(**topHit)) {
+                            ++nTopHit;
+                            Get<"tHit">(**topHit) += Get<"tHit">(**hit); // mean
+                            *Get<"x">(**topHit) += *Get<"x">(**hit);     // mean
+                        }
                     }
                     Get<"tHit">(**topHit) /= nTopHit; // mean
                     *Get<"x">(**topHit) /= nTopHit;   // mean
