@@ -7,7 +7,7 @@
 #include "G4THitsCollection.hh"
 #include "G4VHit.hh"
 
-namespace MACE::SimEMC::inline Hit {
+namespace MACE::Simulation::inline Hit {
 
 class EMCPMTHit final : public Geant4X::UseG4Allocator<EMCPMTHit>,
                         public G4VHit,
@@ -15,4 +15,4 @@ class EMCPMTHit final : public Geant4X::UseG4Allocator<EMCPMTHit>,
 
 using EMCPMTHitCollection = G4THitsCollection<EMCPMTHit>;
 
-} // namespace MACE::SimEMC::inline Hit
+} // namespace MACE::Simulation::inline Hit

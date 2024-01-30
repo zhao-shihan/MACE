@@ -1,7 +1,7 @@
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
 #include "MACE/SimEMC/Analysis.h++"
-#include "MACE/SimEMC/Hit/EMCPMTHit.h++"
 #include "MACE/Simulation/Hit/EMCHit.h++"
+#include "MACE/Simulation/Hit/EMCPMTHit.h++"
 #include "MACE/Simulation/Hit/MCPHit.h++"
 
 #include "TFile.h"
@@ -40,8 +40,8 @@ auto Analysis::RunBegin(G4int runID) -> void {
 }
 
 auto Analysis::EventEnd() -> void {
-    const auto emcTriggered = not fEnableCoincidenceOfEMC or fEMCHitList->size() > 0;
-    const auto mcpTriggered = not fEnableCoincidenceOfMCP or fMCPHitList->size() > 0;
+    const auto emcTriggered{not fEnableCoincidenceOfEMC or fEMCHitList->size() > 0};
+    const auto mcpTriggered{not fEnableCoincidenceOfMCP or fMCPHitList->size() > 0};
     if (emcTriggered and mcpTriggered) {
         *fEMCSimHitOutput << *fEMCHitList;
         *fEMCPMTSimHitOutput << *fEMCPMTHitList;

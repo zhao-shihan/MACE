@@ -1,68 +1,10 @@
 #include "MACE/SimEMC/Analysis.h++"
 #include "MACE/SimEMC/SD/EMCPMTSD.h++"
 
-#include "G4HCofThisEvent.hh"
-#include "G4OpticalPhoton.hh"
-#include "G4SDManager.hh"
-#include "G4Step.hh"
-
-#include <cassert>
-
 namespace MACE::SimEMC::inline SD {
 
-EMCPMTSD::EMCPMTSD(const G4String& sdName) :
-    NonMoveableBase{},
-    G4VSensitiveDetector{sdName},
-    fEventID{-1},
-    fHit{},
-    fHitsCollection{} {
-    collectionName.insert(sdName + "HC");
-}
-
-auto EMCPMTSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
-    fNHit.clear(); // clear at the begin of event allows EMCSD to get optical photon counts at the end of event
-
-    fHitsCollection = new EMCPMTHitCollection(SensitiveDetectorName, collectionName[0]);
-    auto hitsCollectionID{G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection)};
-    hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
-}
-
-auto EMCPMTSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
-    const auto& step{*theStep};
-    const auto& track{*step.GetTrack()};
-    const auto& particle{*track.GetDefinition()};
-
-    if (&particle != G4OpticalPhoton::Definition()) { return false; }
-
-    step.GetTrack()->SetTrackStatus(fStopAndKill);
-
-    const auto postStepPoint{*step.GetPostStepPoint()};
-    const auto unitID{postStepPoint.GetTouchable()->GetReplicaNumber()};
-    // assert event ID
-    assert(fEventID >= 0);
-    // new a hit
-    auto hit{std::make_unique_for_overwrite<EMCPMTHit>()};
-    Get<"EvtID">(*hit) = fEventID;
-    Get<"HitID">(*hit) = -1; // to be determined
-    Get<"UnitID">(*hit) = unitID;
-    Get<"t">(*hit) = postStepPoint.GetGlobalTime();
-    // Get<"EMCHitID">(*hit) = -1; // to be determined
-    fHit[unitID].emplace_back(std::move(hit));
-
-    return true;
-}
-
-auto EMCPMTSD::EndOfEvent(G4HCofThisEvent*) -> void {
-    for (int hitID{};
-         auto&& [unitID, hitOfUnit] : fHit) {
-        for (auto&& hit : hitOfUnit) {
-            Get<"HitID">(*hit) = hitID++;
-            assert(Get<"UnitID">(*hit) == unitID);
-            fHitsCollection->insert(hit.release());
-        }
-        if (hitOfUnit.size() > 0) { fNHit.emplace_back(unitID, hitOfUnit.size()); }
-        hitOfUnit.clear();
-    }
+auto EMCPMTSD::EndOfEvent(G4HCofThisEvent* hc) -> void {
+    Simulation::EMCPMTSD::EndOfEvent(hc);
     Analysis::Instance().SubmitEMCPMTHC(*fHitsCollection->GetVector());
 }
 
