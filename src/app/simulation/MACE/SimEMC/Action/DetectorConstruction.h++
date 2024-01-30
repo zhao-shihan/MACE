@@ -43,13 +43,13 @@ public:
     auto MCPSD() const -> auto& { return *fMCPSD; }
 
 public:
-    using DescriptionInUse = std::tuple<MACE::Detector::Description::EMC,
-                                        MACE::Detector::Description::World>;
+    using DescriptionInUse = std::tuple<Detector::Description::EMC,
+                                        Detector::Description::World>;
 
 private:
     G4bool fCheckOverlap;
 
-    std::shared_ptr<MACE::Detector::Geometry::GeometryBase> fWorld;
+    std::shared_ptr<Detector::Geometry::GeometryBase> fWorld;
 
     Region* fEMCSensitiveRegion;
     Region* fMCPSensitiveRegion;
