@@ -17,7 +17,7 @@ constexpr auto defaultMacro = {
     "/run/verbose 2",
     "",
     "# Customized properties",
-    "#/MACE/Generator/SwitchToCosmicRayMuon",
+    "#/MACE/Generator/SwitchToEcoMug",
     "/MACE/Generator/SwitchToGPS",
     "/MACE/Physics/UseOpticalPhysics",
     "",

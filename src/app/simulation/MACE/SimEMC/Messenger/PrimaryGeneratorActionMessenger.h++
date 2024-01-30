@@ -1,27 +1,21 @@
 #pragma once
 
-#include "MACE/Env/Memory/Singleton.h++"
-
-#include "G4UIcmdWithABool.hh"
-
-#include "gsl/gsl"
+#include "MACE/Extension/Geant4X/SingletonMessenger.h++"
 
 #include <memory>
 
-class G4UIcmdWithABool;
+class G4UIcommand;
 
 namespace MACE::SimEMC {
 
 inline namespace Action {
-
 class PrimaryGeneratorAction;
-
 } // namespace Action
 
 inline namespace Messenger {
 
-class PrimaryGeneratorActionMessenger final : public Env::Memory::Singleton<PrimaryGeneratorActionMessenger>,
-                                              public G4UImessenger {
+class PrimaryGeneratorActionMessenger final : public Geant4X::SingletonMessenger<PrimaryGeneratorActionMessenger,
+                                                                                 PrimaryGeneratorAction> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -29,15 +23,11 @@ private:
     ~PrimaryGeneratorActionMessenger();
 
 public:
-    auto AssignTo(gsl::not_null<PrimaryGeneratorAction*> pga) -> void { fPrimaryGeneratorAction = pga; }
-
     auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
-    PrimaryGeneratorAction* fPrimaryGeneratorAction;
-
     std::unique_ptr<G4UIcommand> fSwitchToGPS;
-    std::unique_ptr<G4UIcommand> fSwitchToCosmicRayMuon;
+    std::unique_ptr<G4UIcommand> fSwitchToEcoMug;
 };
 
 } // namespace Messenger

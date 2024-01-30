@@ -3,7 +3,7 @@
 /event/verbose 0
 /tracking/verbose 0
 
-/MACE/Generator/SwitchToCosmicRayMuon
+/MACE/Generator/SwitchToEcoMug
 
 /run/initialize
 
