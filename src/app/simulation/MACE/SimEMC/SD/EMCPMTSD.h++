@@ -1,16 +1,16 @@
 #pragma once
 
-#include "MACE/SimEMC/Hit/PMTHit.h++"
+#include "MACE/SimEMC/Hit/EMCPMTHit.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
 #include "G4VSensitiveDetector.hh"
 
 namespace MACE::SimEMC::inline SD {
 
-class PMTSD final : public NonMoveableBase,
-                    public G4VSensitiveDetector {
+class EMCPMTSD final : public NonMoveableBase,
+                       public G4VSensitiveDetector {
 public:
-    PMTSD(const G4String& sdName);
+    EMCPMTSD(const G4String& sdName);
 
     auto Initialize(G4HCofThisEvent* hitsCollection) -> void override;
     auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
@@ -21,8 +21,8 @@ public:
 
 private:
     G4int fEventID;
-    std::unordered_map<int, std::unique_ptr<PMTHit>> fHit;
-    PMTHitCollection* fHitsCollection;
+    std::unordered_map<int, std::unique_ptr<EMCPMTHit>> fHit;
+    EMCPMTHitCollection* fHitsCollection;
 };
 
 } // namespace MACE::SimEMC::inline SD

@@ -1,5 +1,5 @@
 #include "MACE/SimEMC/Analysis.h++"
-#include "MACE/SimEMC/SD/PMTSD.h++"
+#include "MACE/SimEMC/SD/EMCPMTSD.h++"
 
 #include "G4HCofThisEvent.hh"
 #include "G4OpticalPhoton.hh"
@@ -10,7 +10,7 @@
 
 namespace MACE::SimEMC::inline SD {
 
-PMTSD::PMTSD(const G4String& sdName) :
+EMCPMTSD::EMCPMTSD(const G4String& sdName) :
     NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fEventID{-1},
@@ -19,58 +19,59 @@ PMTSD::PMTSD(const G4String& sdName) :
     collectionName.insert(sdName + "HC");
 }
 
-auto PMTSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
-    fHitsCollection = new PMTHitCollection(SensitiveDetectorName, collectionName[0]);
+auto EMCPMTSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
+    fHitsCollection = new EMCPMTHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-auto PMTSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
+auto EMCPMTSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     // auto particleDefinition = theStep->GetTrack()->GetDefinition();
     // if (particleDefinition != G4OpticalPhoton::OpticalPhotonDefinition()) { return false; }
     // theStep->GetTrack()->SetTrackStatus(fStopAndKill);
-    // auto hit = new PMTHit;
+    // auto hit = new EMCPMTHit;
     // auto globalTime = theStep->GetPostStepPoint()->GetGlobalTime();
     // auto copyNo = theStep->GetTrack()->GetVolume()->GetCopyNo();
     // hit->Time(globalTime);
     // hit->CellID(copyNo);
     // fHitsCollection->insert(hit);
     // return true;
-    const auto& step = *theStep;
-    const auto& track = *step.GetTrack();
-    const auto& particle = *track.GetDefinition();
+    const auto& step{*theStep};
+    const auto& track{*step.GetTrack()};
+    const auto& particle{*track.GetDefinition()};
 
     if (&particle == G4OpticalPhoton::Definition()) {
         step.GetTrack()->SetTrackStatus(fStopAndKill);
-        const auto cellID = track.GetVolume()->GetCopyNo();
+        const auto unitID{track.GetVolume()->GetCopyNo()};
         // find or new a hit
-        const auto [iter, isNewHit] = fHit.try_emplace(cellID, std::make_unique_for_overwrite<PMTHit>());
-        auto& hit = *iter->second;
+        const auto [iter, isNewHit]{fHit.try_emplace(unitID, std::make_unique_for_overwrite<EMCPMTHit>())};
+        auto& hit{*iter->second};
         if (isNewHit) {
-            const auto& preStepPoint = *step.GetPreStepPoint();
-            const auto& touchable = *preStepPoint.GetTouchable();
+            const auto& preStepPoint{*step.GetPreStepPoint()};
+            const auto& touchable{*preStepPoint.GetTouchable()};
             // transform hit position to local coordinate
-            const auto hitPosition = *touchable.GetRotation() * (preStepPoint.GetPosition() - touchable.GetTranslation());
+            const auto hitPosition{*touchable.GetRotation() * (preStepPoint.GetPosition() - touchable.GetTranslation())};
             // calculate (Ek0, p0)
-            const auto vertexEk = track.GetVertexKineticEnergy();
-            const auto vertexMomentum = track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()));
+            const auto vertexEk{track.GetVertexKineticEnergy()};
+            const auto vertexMomentum{track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()))};
 
-            Get<"CellID">(hit) = cellID;
-            Get<"t">(hit) = preStepPoint.GetGlobalTime();
             Get<"EvtID">(hit) = fEventID;
-            Get<"TrkID">(hit) = track.GetTrackID();
+            Get<"HitID">(hit) = -1;
+            Get<"UnitID">(hit) = unitID;
+            Get<"t">(hit) = preStepPoint.GetGlobalTime();
+            Get<"EMCHitID">(hit) = -1;
         }
         return true;
     }
     return false;
 }
 
-auto PMTSD::EndOfEvent(G4HCofThisEvent*) -> void {
+auto EMCPMTSD::EndOfEvent(G4HCofThisEvent*) -> void {
     for (auto&& [_, hit] : fHit) {
         fHitsCollection->insert(hit.release());
     }
     fHit.clear();
-    Analysis::Instance().SubmitPMTHC(*fHitsCollection->GetVector());
+    Analysis::Instance().SubmitEMCPMTHC(*fHitsCollection->GetVector());
 }
 
 } // namespace MACE::SimEMC::inline SD

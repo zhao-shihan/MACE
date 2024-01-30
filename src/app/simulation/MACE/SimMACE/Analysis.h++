@@ -1,11 +1,8 @@
 #pragma once
 
 #include "MACE/Data/Output.h++"
-#include "MACE/DataModel/DataFactory.h++"
+#include "MACE/Data/SimHit.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
-#include "MACE/SimMACE/Hit/CDCHit.h++"
-#include "MACE/SimMACE/Hit/EMCHit.h++"
-#include "MACE/SimMACE/Hit/MCPHit.h++"
 #include "MACE/SimMACE/Messenger/AnalysisMessenger.h++"
 
 #include "G4Types.hh"
@@ -17,6 +14,12 @@
 #include <utility>
 
 class TFile;
+
+namespace MACE::inline Simulation::inline Hit {
+class CDCHit;
+class EMCHit;
+class MCPHit;
+} // namespace MACE::inline Simulation::inline Hit
 
 namespace MACE::SimMACE {
 
@@ -32,9 +35,9 @@ public:
 
     auto RunBegin(G4int runID) -> void;
 
-    auto SubmitEMCHC(const std::vector<gsl::owner<EMCHit*>>& hitList) -> void { fEMCHitList = &hitList; }
-    auto SubmitMCPHC(const std::vector<gsl::owner<MCPHit*>>& hitList) -> void { fMCPHitList = &hitList; }
-    auto SubmitSpectrometerHC(const std::vector<gsl::owner<CDCHit*>>& hitList) -> void { fCDCHitList = &hitList; }
+    auto SubmitCDCHC(const std::vector<gsl::owner<Simulation::CDCHit*>>& hitList) -> void { fCDCHitList = &hitList; }
+    auto SubmitEMCHC(const std::vector<gsl::owner<Simulation::EMCHit*>>& hitList) -> void { fEMCHitList = &hitList; }
+    auto SubmitMCPHC(const std::vector<gsl::owner<Simulation::MCPHit*>>& hitList) -> void { fMCPHitList = &hitList; }
     auto EventEnd() -> void;
 
     auto RunEnd(Option_t* option = nullptr) -> void;
@@ -48,12 +51,12 @@ private:
 
     gsl::owner<TFile*> fFile;
     std::optional<Data::Output<Data::CDCSimHit>> fCDCSimHitOutput;
-    std::optional<Data::Output<Data::MCPSimHit>> fMCPSimHitOutput;
     std::optional<Data::Output<Data::EMCSimHit>> fEMCSimHitOutput;
+    std::optional<Data::Output<Data::MCPSimHit>> fMCPSimHitOutput;
 
-    const std::vector<gsl::owner<EMCHit*>>* fEMCHitList;
-    const std::vector<gsl::owner<MCPHit*>>* fMCPHitList;
-    const std::vector<gsl::owner<CDCHit*>>* fCDCHitList;
+    const std::vector<gsl::owner<Simulation::CDCHit*>>* fCDCHitList;
+    const std::vector<gsl::owner<Simulation::EMCHit*>>* fEMCHitList;
+    const std::vector<gsl::owner<Simulation::MCPHit*>>* fMCPHitList;
 
     AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };

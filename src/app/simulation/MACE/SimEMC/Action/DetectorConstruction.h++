@@ -6,7 +6,7 @@
 #include "MACE/SimEMC/Region.h++"
 #include "MACE/SimEMC/SD/EMCSD.h++"
 #include "MACE/SimEMC/SD/MCPSD.h++"
-#include "MACE/SimEMC/SD/PMTSD.h++"
+#include "MACE/SimEMC/SD/EMCPMTSD.h++"
 
 #include "G4VUserDetectorConstruction.hh"
 
@@ -39,7 +39,7 @@ public:
     auto VacuumRegion() const -> const auto& { return *fVacuumRegion; }
 
     auto EMCSD() const -> auto& { return *fEMCSD; }
-    auto PMTSD() const -> auto& { return *fPMTSD; }
+    auto EMCPMTSD() const -> auto& { return *fEMCPMTSD; }
     auto MCPSD() const -> auto& { return *fMCPSD; }
 
 public:
@@ -58,7 +58,7 @@ private:
     Region* fVacuumRegion;
 
     SD::EMCSD* fEMCSD;
-    SD::PMTSD* fPMTSD;
+    SD::EMCPMTSD* fEMCPMTSD;
     SD::MCPSD* fMCPSD;
 };
 

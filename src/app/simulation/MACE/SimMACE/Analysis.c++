@@ -1,8 +1,8 @@
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
 #include "MACE/SimMACE/Analysis.h++"
-#include "MACE/SimMACE/Hit/CDCHit.h++"
-#include "MACE/SimMACE/Hit/EMCHit.h++"
-#include "MACE/SimMACE/Hit/MCPHit.h++"
+#include "MACE/Simulation/Hit/CDCHit.h++"
+#include "MACE/Simulation/Hit/EMCHit.h++"
+#include "MACE/Simulation/Hit/MCPHit.h++"
 
 #include "TFile.h"
 
@@ -21,11 +21,11 @@ Analysis::Analysis() :
     fCoincidenceWithEMC{true},
     fFile{},
     fCDCSimHitOutput{},
-    fMCPSimHitOutput{},
     fEMCSimHitOutput{},
+    fMCPSimHitOutput{},
+    fCDCHitList{},
     fEMCHitList{},
     fMCPHitList{},
-    fCDCHitList{},
     fMessengerRegister{this} {}
 
 auto Analysis::RunBegin(G4int runID) -> void {
@@ -42,19 +42,19 @@ auto Analysis::RunBegin(G4int runID) -> void {
 
 auto Analysis::EventEnd() -> void {
     const auto cdcTriggered{not fCoincidenceWithCDC or fCDCHitList->size() > 0};
-    const auto mcpTriggered{not fCoincidenceWithMCP or fMCPHitList->size() > 0};
     const auto emcTriggered{not fCoincidenceWithEMC or fEMCHitList->size() > 0};
+    const auto mcpTriggered{not fCoincidenceWithMCP or fMCPHitList->size() > 0};
     if (emcTriggered and mcpTriggered and cdcTriggered) {
         *fCDCSimHitOutput << *fCDCHitList;
-        *fMCPSimHitOutput << *fMCPHitList;
         *fEMCSimHitOutput << *fEMCHitList;
+        *fMCPSimHitOutput << *fMCPHitList;
     }
 }
 
 auto Analysis::RunEnd(Option_t* option) -> void {
     fCDCSimHitOutput->Write();
-    fMCPSimHitOutput->Write();
     fEMCSimHitOutput->Write();
+    fMCPSimHitOutput->Write();
     fFile->Close(option);
     delete fFile;
 }

@@ -11,7 +11,7 @@
 #include "MACE/SimEMC/Detector/EMCTunnel.h++"
 #include "MACE/SimEMC/SD/EMCSD.h++"
 #include "MACE/SimEMC/SD/MCPSD.h++"
-#include "MACE/SimEMC/SD/PMTSD.h++"
+#include "MACE/SimEMC/SD/EMCPMTSD.h++"
 
 // #include "MACE/SimEMC/Messenger/DetectorMessenger.h++"
 #include "MACE/Utility/LiteralUnit.h++"
@@ -41,7 +41,7 @@ DetectorConstruction::DetectorConstruction() :
     fVacuumRegion{},
 
     fEMCSD{},
-    fPMTSD{} {
+    fEMCPMTSD{} {
     // Detector::Description::DescriptionIO::Import<DescriptionInUse>(
     // #include "MACE/SimEMC/DefaultGeometry.inlyaml"
     // );
@@ -49,16 +49,16 @@ DetectorConstruction::DetectorConstruction() :
 }
 
 auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
-    using namespace Detector::Geometry::Fast;
+    using namespace MACE::Detector::Geometry::Fast;
 
-    auto& description = Detector::Description::World::Instance();
+    auto& description = MACE::Detector::Description::World::Instance();
     description.HalfXExtent(26_m);
     description.HalfYExtent(20_m);
     description.HalfZExtent(26_m);
 
     fWorld = std::make_shared<World>();
     auto& emcCrystal = fWorld->NewDaughter<EMCCrystal>(fCheckOverlap);
-    auto& emcPMTCoupler = fWorld->NewDaughter<EMCPMTCoupler>(fCheckOverlap);
+    fWorld->NewDaughter<EMCPMTCoupler>(fCheckOverlap);
     auto& emcPMTAssemblies = fWorld->NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
     auto& mcp = fWorld->NewDaughter<MCP>(fCheckOverlap);
     // auto& emcShield = fWorld->NewDaughter<SimEMC::Detector::EMCShield>(fCheckOverlap);
@@ -94,8 +94,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     fEMCSD = new SD::EMCSD(emcCrystal.LogicalVolume()->GetName());
     emcCrystal.RegisterSD(fEMCSD);
 
-    fPMTSD = new SD::PMTSD(emcPMTAssemblies.LogicalVolume()->GetName());
-    emcPMTAssemblies.RegisterSD("EMCPMTCathode", fPMTSD);
+    fEMCPMTSD = new SD::EMCPMTSD(emcPMTAssemblies.LogicalVolume()->GetName());
+    emcPMTAssemblies.RegisterSD("EMCPMTCathode", fEMCPMTSD);
 
     fMCPSD = new SD::MCPSD(mcp.LogicalVolume()->GetName());
     mcp.RegisterSD(fMCPSD);
