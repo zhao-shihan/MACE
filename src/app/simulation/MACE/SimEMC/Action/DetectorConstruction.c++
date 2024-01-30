@@ -91,11 +91,11 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     // emcTunnel.RegisterRegion(fTunnelRegion);
 
-    fEMCSD = new SD::EMCSD(emcCrystal.LogicalVolume()->GetName());
-    emcCrystal.RegisterSD(fEMCSD);
-
     fEMCPMTSD = new SD::EMCPMTSD(emcPMTAssemblies.LogicalVolume()->GetName());
     emcPMTAssemblies.RegisterSD("EMCPMTCathode", fEMCPMTSD);
+
+    fEMCSD = new SD::EMCSD(emcCrystal.LogicalVolume()->GetName(), fEMCPMTSD);
+    emcCrystal.RegisterSD(fEMCSD);
 
     fMCPSD = new SD::MCPSD(mcp.LogicalVolume()->GetName());
     mcp.RegisterSD(fMCPSD);
