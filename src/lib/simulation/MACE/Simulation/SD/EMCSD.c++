@@ -1,4 +1,5 @@
 #include "MACE/Detector/Description/EMC.h++"
+#include "MACE/Simulation/SD/EMCPMTSD.h++"
 #include "MACE/Simulation/SD/EMCSD.h++"
 
 #include "G4HCofThisEvent.hh"
@@ -21,10 +22,11 @@
 
 namespace MACE::inline Simulation::inline SD {
 
-EMCSD::EMCSD(const G4String& sdName) :
+EMCSD::EMCSD(const G4String& sdName, const EMCPMTSD* emcPMTSD) :
     NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fEventID{-1},
+    fEMCPMTSD{emcPMTSD},
     fSplitHit{},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
@@ -65,6 +67,7 @@ auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"UnitID">(*hit) = unitID;
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
     Get<"Edep">(*hit) = step.GetTotalEnergyDeposit();
+    Get<"nOptPho">(*hit) = -1; // to be determined
     Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
     Get<"x">(*hit) = *touchable.GetRotation() * (preStepPoint.GetPosition() - touchable.GetTranslation());
     Get<"p">(*hit) = preStepPoint.GetMomentum();
@@ -133,6 +136,12 @@ auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
             }
             splitHit.clear();
         } break;
+        }
+    }
+    if (fEMCPMTSD != nullptr) {
+        auto nHit{fEMCPMTSD->NOpticalPhotonHit()};
+        for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
+            Get<"nOptPho">(*hit) = nHit[Get<"UnitID">(*hit)];
         }
     }
 }

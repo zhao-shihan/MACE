@@ -11,10 +11,12 @@
 
 namespace MACE::inline Simulation::inline SD {
 
+class EMCPMTSD;
+
 class EMCSD : public NonMoveableBase,
               public G4VSensitiveDetector {
 public:
-    EMCSD(const G4String& sdName);
+    EMCSD(const G4String& sdName, const EMCPMTSD* emcPMTSD = {});
 
     virtual auto Initialize(G4HCofThisEvent* hitsCollection) -> void override;
     virtual auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
@@ -25,6 +27,8 @@ public:
 
 protected:
     G4int fEventID;
+
+    const EMCPMTSD* const fEMCPMTSD;
 
     std::unordered_map<int, std::vector<std::unique_ptr<EMCHit>>> fSplitHit;
     EMCHitCollection* fHitsCollection;
