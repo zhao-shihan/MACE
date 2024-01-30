@@ -11,9 +11,7 @@
 namespace MACE::SimEMC::inline Messenger {
 
 AnalysisMessenger::AnalysisMessenger() :
-    Singleton{},
-    G4UImessenger{},
-    fAnalysis{nullptr},
+    SingletonMessenger{},
     fDirectory{},
     fEnableCoincidenceOfEMC{},
     fEnableCoincidenceOfMCP{},
@@ -48,13 +46,21 @@ AnalysisMessenger::~AnalysisMessenger() = default;
 
 auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fEnableCoincidenceOfEMC.get()) {
-        fAnalysis->EnableCoincidenceOfEMC(fEnableCoincidenceOfEMC->GetNewBoolValue(value));
+        Deliver<Analysis>([&](auto&& r) {
+            r.EnableCoincidenceOfEMC(fEnableCoincidenceOfEMC->GetNewBoolValue(value));
+        });
     } else if (command == fEnableCoincidenceOfMCP.get()) {
-        fAnalysis->EnableCoincidenceOfMCP(fEnableCoincidenceOfMCP->GetNewBoolValue(value));
+        Deliver<Analysis>([&](auto&& r) {
+            r.EnableCoincidenceOfMCP(fEnableCoincidenceOfMCP->GetNewBoolValue(value));
+        });
     } else if (command == fFilePath.get()) {
-        fAnalysis->FilePath(std::string_view(value));
+        Deliver<Analysis>([&](auto&& r) {
+            r.FilePath(std::string_view(value));
+        });
     } else if (command == fFileOption.get()) {
-        fAnalysis->FileOption(value);
+        Deliver<Analysis>([&](auto&& r) {
+            r.FileOption(value);
+        });
     }
 }
 

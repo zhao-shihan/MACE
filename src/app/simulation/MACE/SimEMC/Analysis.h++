@@ -3,6 +3,7 @@
 #include "MACE/Data/Output.h++"
 #include "MACE/Data/SimHit.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
+#include "MACE/SimEMC/Messenger/AnalysisMessenger.h++"
 
 #include "G4Types.hh"
 
@@ -57,6 +58,8 @@ private:
     const std::vector<gsl::owner<Simulation::EMCHit*>>* fEMCHitList;
     const std::vector<gsl::owner<EMCPMTHit*>>* fEMCPMTHitList;
     const std::vector<gsl::owner<Simulation::MCPHit*>>* fMCPHitList;
+
+    AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };
 
 } // namespace MACE::SimEMC
