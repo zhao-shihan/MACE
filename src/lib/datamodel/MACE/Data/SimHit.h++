@@ -24,6 +24,7 @@ using CDCSimHit = TupleModel<CDCHit,
                              SimHitVertexTruth>;
 
 using EMCSimHit = TupleModel<EMCHit,
+                             Value<unsigned int, "nOptPho", "Number of optical photon hits on PMT (MC truth)">,
                              Value<float, "Ek", "Hit kinetic energy (MC truth)">,
                              Value<stdx::array3f, "x", "Hit position (MC truth)">,
                              Value<stdx::array3f, "p", "Hit momentum (MC truth)">,
