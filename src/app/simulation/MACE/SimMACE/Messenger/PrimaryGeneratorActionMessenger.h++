@@ -10,9 +10,7 @@ class G4UIcmdWithAnInteger;
 namespace MACE::SimMACE {
 
 inline namespace Action {
-
 class PrimaryGeneratorAction;
-
 } // namespace Action
 
 inline namespace Messenger {

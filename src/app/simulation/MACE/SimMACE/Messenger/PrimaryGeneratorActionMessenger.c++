@@ -1,14 +1,10 @@
 #include "MACE/SimMACE/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimMACE/Messenger/PrimaryGeneratorActionMessenger.h++"
-#include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "G4UnitsTable.hh"
 
 namespace MACE::SimMACE::inline Messenger {
-
-using namespace MACE::LiteralUnit::Frequency;
 
 PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger() :
     SingletonMessenger{},
