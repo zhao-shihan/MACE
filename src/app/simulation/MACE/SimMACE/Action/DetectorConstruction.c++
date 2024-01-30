@@ -100,7 +100,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     // 2
 
     auto& emcCrystal = emcField.NewDaughter<Detector::Geometry::Fast::EMCCrystal>(fCheckOverlap);
-    auto& emcPMTCoupler = emcField.NewDaughter<Detector::Geometry::Fast::EMCPMTCoupler>(fCheckOverlap);
+    /* auto& emcPMTCoupler = */ emcField.NewDaughter<Detector::Geometry::Fast::EMCPMTCoupler>(fCheckOverlap);
     auto& emcPMTAssemblies = emcField.NewDaughter<Detector::Geometry::Fast::EMCPMTAssemblies>(fCheckOverlap);
 
     auto& mcp = emcField.NewDaughter<Detector::Geometry::Fast::MCP>(fCheckOverlap);
@@ -248,6 +248,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         beamDegrader.RegisterRegion(fDefaultSolidRegion);
         beamMonitor.RegisterRegion(fDefaultSolidRegion);
         cdcBody.RegisterRegion(fDefaultSolidRegion);
+        emcPMTAssemblies.RegisterRegion(fDefaultSolidRegion);
         filter.RegisterRegion(fDefaultSolidRegion);
         shieldingWall.RegisterRegion(fDefaultSolidRegion);
 
