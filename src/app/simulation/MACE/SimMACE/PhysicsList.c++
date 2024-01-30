@@ -12,8 +12,6 @@
 
 namespace MACE::SimMACE {
 
-using namespace MACE::LiteralUnit::Length;
-
 PhysicsList::PhysicsList() :
     PassiveSingleton{},
     FTFP_BERT{std23::to_underlying(Env::BasicEnv::Instance().GetVerboseLevel())} {
