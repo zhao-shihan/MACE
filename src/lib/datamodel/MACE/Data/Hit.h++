@@ -21,10 +21,12 @@ using EMCHit = TupleModel<HitEventIDHitID,
                           Value<double, "t", "Hit time">,
                           Value<float, "Edep", "Energy deposition">>;
 
-using PMTHit = TupleModel<Value<int, "CellID", "Hitting unit ID">,
-                          Value<double, "t", "Hitting time">>;
+using EMCPMTHit = TupleModel<HitEventIDHitID,
+                             Value<int, "UnitID", "Hit unit ID">,
+                             Value<double, "t", "Hit time">>;
 
-using MCPHit = TupleModel<Value<double, "t", "Hitting time">,
-                          Value<stdx::array2f, "x", "Hitting position">>;
+using MCPHit = TupleModel<HitEventIDHitID,
+                          Value<double, "t", "Hit time">,
+                          Value<stdx::array2f, "x", "Hit position">>;
 
 } // namespace MACE::Data
