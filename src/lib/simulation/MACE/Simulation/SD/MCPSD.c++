@@ -11,6 +11,7 @@
 #include "G4VProcess.hh"
 #include "G4VTouchable.hh"
 
+#include <cassert>
 #include <cmath>
 #include <string_view>
 

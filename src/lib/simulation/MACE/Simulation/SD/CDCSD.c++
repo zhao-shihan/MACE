@@ -14,6 +14,7 @@
 #include "G4VTouchable.hh"
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <string_view>
 #include <utility>
