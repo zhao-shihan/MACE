@@ -24,15 +24,9 @@ EMCSD::EMCSD(const G4String& sdName) :
 }
 
 void EMCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) {
-    // int cellTotalNumber = Detector::Description::EMC::Instance().CellTotalNumber();
-
     fHitsCollection = new EMCHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
-
-    // for (auto i = 0; i < cellTotalNumber; i++) {
-    //     fHitsCollection->insert(new EMCHit());
-    // }
 }
 
 G4bool EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) {
