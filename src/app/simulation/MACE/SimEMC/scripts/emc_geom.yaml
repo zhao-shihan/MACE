@@ -14,6 +14,6 @@ EMC:
   PMTWindowThickness: 1
   PMTCathodeThickness: 2.0000000000000005e-05
 World:
-  HalfXExtent: 26000
-  HalfYExtent: 20000
-  HalfZExtent: 26000
+  HalfXExtent: 2000
+  HalfYExtent: 2000
+  HalfZExtent: 2000
