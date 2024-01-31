@@ -18,7 +18,7 @@
 
 namespace MACE::DataModel {
 
-class DataFactory final : public MerelyMoveableBase {
+class [[deprecated]] DataFactory final : public MerelyMoveableBase {
 public:
     DataFactory();
 
