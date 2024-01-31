@@ -41,14 +41,17 @@ auto Analysis::RunBegin(G4int runID) -> void {
 }
 
 auto Analysis::EventEnd() -> void {
-    const auto cdcTriggered{not fCoincidenceWithCDC or fCDCHitList->size() > 0};
-    const auto emcTriggered{not fCoincidenceWithEMC or fEMCHitList->size() > 0};
-    const auto mcpTriggered{not fCoincidenceWithMCP or fMCPHitList->size() > 0};
+    const auto cdcTriggered{not fCoincidenceWithCDC or fCDCHitList == nullptr or fCDCHitList->size() > 0};
+    const auto emcTriggered{not fCoincidenceWithEMC or fEMCHitList == nullptr or fEMCHitList->size() > 0};
+    const auto mcpTriggered{not fCoincidenceWithMCP or fMCPHitList == nullptr or fMCPHitList->size() > 0};
     if (emcTriggered and mcpTriggered and cdcTriggered) {
-        *fCDCSimHitOutput << *fCDCHitList;
-        *fEMCSimHitOutput << *fEMCHitList;
-        *fMCPSimHitOutput << *fMCPHitList;
+        if (fCDCHitList) { *fCDCSimHitOutput << *fCDCHitList; }
+        if (fEMCHitList) { *fEMCSimHitOutput << *fEMCHitList; }
+        if (fMCPHitList) { *fMCPSimHitOutput << *fMCPHitList; }
     }
+    fCDCHitList = {};
+    fEMCHitList = {};
+    fMCPHitList = {};
 }
 
 auto Analysis::RunEnd(Option_t* option) -> void {
