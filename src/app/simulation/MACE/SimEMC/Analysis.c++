@@ -40,13 +40,16 @@ auto Analysis::RunBegin(G4int runID) -> void {
 }
 
 auto Analysis::EventEnd() -> void {
-    const auto emcTriggered{not fEnableCoincidenceOfEMC or fEMCHitList->size() > 0};
-    const auto mcpTriggered{not fEnableCoincidenceOfMCP or fMCPHitList->size() > 0};
+    const auto emcTriggered{not fEnableCoincidenceOfEMC or fEMCHitList == nullptr or fEMCHitList->size() > 0};
+    const auto mcpTriggered{not fEnableCoincidenceOfMCP or fMCPHitList == nullptr or fMCPHitList->size() > 0};
     if (emcTriggered and mcpTriggered) {
-        *fEMCSimHitOutput << *fEMCHitList;
-        *fEMCPMTSimHitOutput << *fEMCPMTHitList;
-        *fMCPSimHitOutput << *fMCPHitList;
+        if (fEMCHitList) { *fEMCSimHitOutput << *fEMCHitList; }
+        if (fEMCPMTHitList) { *fEMCPMTSimHitOutput << *fEMCPMTHitList; }
+        if (fMCPHitList) { *fMCPSimHitOutput << *fMCPHitList; }
     }
+    fEMCHitList = {};
+    fEMCPMTHitList = {};
+    fMCPHitList = {};
 }
 
 auto Analysis::RunEnd(Option_t* option) -> void {
