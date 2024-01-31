@@ -35,9 +35,9 @@ public:
 
     auto RunBegin(G4int runID) -> void;
 
-    auto SubmitCDCHC(const std::vector<gsl::owner<Simulation::CDCHit*>>& hitList) -> void { fCDCHitList = &hitList; }
-    auto SubmitEMCHC(const std::vector<gsl::owner<Simulation::EMCHit*>>& hitList) -> void { fEMCHitList = &hitList; }
-    auto SubmitMCPHC(const std::vector<gsl::owner<Simulation::MCPHit*>>& hitList) -> void { fMCPHitList = &hitList; }
+    auto SubmitCDCHC(gsl::not_null<std::vector<gsl::owner<Simulation::CDCHit*>>*> hc) -> void { fCDCHit = hc; }
+    auto SubmitEMCHC(gsl::not_null<std::vector<gsl::owner<Simulation::EMCHit*>>*> hc) -> void { fEMCHit = hc; }
+    auto SubmitMCPHC(gsl::not_null<std::vector<gsl::owner<Simulation::MCPHit*>>*> hc) -> void { fMCPHit = hc; }
     auto EventEnd() -> void;
 
     auto RunEnd(Option_t* option = nullptr) -> void;
@@ -54,9 +54,9 @@ private:
     std::optional<Data::Output<Data::EMCSimHit>> fEMCSimHitOutput;
     std::optional<Data::Output<Data::MCPSimHit>> fMCPSimHitOutput;
 
-    const std::vector<gsl::owner<Simulation::CDCHit*>>* fCDCHitList;
-    const std::vector<gsl::owner<Simulation::EMCHit*>>* fEMCHitList;
-    const std::vector<gsl::owner<Simulation::MCPHit*>>* fMCPHitList;
+    const std::vector<gsl::owner<Simulation::CDCHit*>>* fCDCHit;
+    const std::vector<gsl::owner<Simulation::EMCHit*>>* fEMCHit;
+    const std::vector<gsl::owner<Simulation::MCPHit*>>* fMCPHit;
 
     AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };

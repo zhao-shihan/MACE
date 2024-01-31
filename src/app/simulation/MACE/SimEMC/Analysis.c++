@@ -15,16 +15,16 @@ namespace MACE::SimEMC {
 Analysis::Analysis() :
     PassiveSingleton{},
     fFilePath{"SimEMC_untitled"},
-    fFileOption{"UPDATE"},
+    fFileOption{"NEW"},
     fEnableCoincidenceOfEMC{true},
     fEnableCoincidenceOfMCP{false},
     fFile{},
     fEMCSimHitOutput{},
     fEMCPMTSimHitOutput{},
     fMCPSimHitOutput{},
-    fEMCHitList{},
-    fEMCPMTHitList{},
-    fMCPHitList{},
+    fEMCHit{},
+    fEMCPMTHit{},
+    fMCPHit{},
     fMessengerRegister{this} {}
 
 auto Analysis::RunBegin(G4int runID) -> void {
@@ -40,16 +40,16 @@ auto Analysis::RunBegin(G4int runID) -> void {
 }
 
 auto Analysis::EventEnd() -> void {
-    const auto emcTriggered{not fEnableCoincidenceOfEMC or fEMCHitList == nullptr or fEMCHitList->size() > 0};
-    const auto mcpTriggered{not fEnableCoincidenceOfMCP or fMCPHitList == nullptr or fMCPHitList->size() > 0};
+    const auto emcTriggered{not fEnableCoincidenceOfEMC or fEMCHit == nullptr or fEMCHit->size() > 0};
+    const auto mcpTriggered{not fEnableCoincidenceOfMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
     if (emcTriggered and mcpTriggered) {
-        if (fEMCHitList) { *fEMCSimHitOutput << *fEMCHitList; }
-        if (fEMCPMTHitList) { *fEMCPMTSimHitOutput << *fEMCPMTHitList; }
-        if (fMCPHitList) { *fMCPSimHitOutput << *fMCPHitList; }
+        if (fEMCHit) { *fEMCSimHitOutput << *fEMCHit; }
+        if (fEMCPMTHit) { *fEMCPMTSimHitOutput << *fEMCPMTHit; }
+        if (fMCPHit) { *fMCPSimHitOutput << *fMCPHit; }
     }
-    fEMCHitList = {};
-    fEMCPMTHitList = {};
-    fMCPHitList = {};
+    fEMCHit = {};
+    fEMCPMTHit = {};
+    fMCPHit = {};
 }
 
 auto Analysis::RunEnd(Option_t* option) -> void {

@@ -15,7 +15,7 @@ namespace MACE::SimMACE {
 Analysis::Analysis() :
     PassiveSingleton{},
     fFilePath{"SimMACE_untitled"},
-    fFileOption{"UPDATE"},
+    fFileOption{"NEW"},
     fCoincidenceWithCDC{true},
     fCoincidenceWithMCP{true},
     fCoincidenceWithEMC{true},
@@ -23,9 +23,9 @@ Analysis::Analysis() :
     fCDCSimHitOutput{},
     fEMCSimHitOutput{},
     fMCPSimHitOutput{},
-    fCDCHitList{},
-    fEMCHitList{},
-    fMCPHitList{},
+    fCDCHit{},
+    fEMCHit{},
+    fMCPHit{},
     fMessengerRegister{this} {}
 
 auto Analysis::RunBegin(G4int runID) -> void {
@@ -41,17 +41,17 @@ auto Analysis::RunBegin(G4int runID) -> void {
 }
 
 auto Analysis::EventEnd() -> void {
-    const auto cdcTriggered{not fCoincidenceWithCDC or fCDCHitList == nullptr or fCDCHitList->size() > 0};
-    const auto emcTriggered{not fCoincidenceWithEMC or fEMCHitList == nullptr or fEMCHitList->size() > 0};
-    const auto mcpTriggered{not fCoincidenceWithMCP or fMCPHitList == nullptr or fMCPHitList->size() > 0};
+    const auto cdcTriggered{not fCoincidenceWithCDC or fCDCHit == nullptr or fCDCHit->size() > 0};
+    const auto emcTriggered{not fCoincidenceWithEMC or fEMCHit == nullptr or fEMCHit->size() > 0};
+    const auto mcpTriggered{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
     if (emcTriggered and mcpTriggered and cdcTriggered) {
-        if (fCDCHitList) { *fCDCSimHitOutput << *fCDCHitList; }
-        if (fEMCHitList) { *fEMCSimHitOutput << *fEMCHitList; }
-        if (fMCPHitList) { *fMCPSimHitOutput << *fMCPHitList; }
+        if (fCDCHit) { *fCDCSimHitOutput << *fCDCHit; }
+        if (fEMCHit) { *fEMCSimHitOutput << *fEMCHit; }
+        if (fMCPHit) { *fMCPSimHitOutput << *fMCPHit; }
     }
-    fCDCHitList = {};
-    fEMCHitList = {};
-    fMCPHitList = {};
+    fCDCHit = {};
+    fEMCHit = {};
+    fMCPHit = {};
 }
 
 auto Analysis::RunEnd(Option_t* option) -> void {
