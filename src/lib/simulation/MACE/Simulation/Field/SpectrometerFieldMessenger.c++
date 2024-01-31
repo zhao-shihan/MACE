@@ -1,11 +1,11 @@
 #include "MACE/Detector/Description/SpectrometerField.h++"
-#include "MACE/Detector/Field/G4/Messenger/SpectrometerFieldMessenger.h++"
-#include "MACE/Detector/Field/G4/SpectrometerField.h++"
+#include "MACE/Simulation/Field/SpectrometerFieldMessenger.h++"
+#include "MACE/Simulation/Field/SpectrometerField.h++"
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIdirectory.hh"
 
-namespace MACE::Detector::Field::G4::inline Messenger {
+namespace MACE::inline Simulation::inline Field {
 
 SpectrometerFieldMessenger::SpectrometerFieldMessenger() :
     SingletonMessenger{},
@@ -26,8 +26,8 @@ SpectrometerFieldMessenger::~SpectrometerFieldMessenger() = default;
 
 auto SpectrometerFieldMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fSpectrometerMagneticField.get()) {
-        Description::SpectrometerField::Instance().MagneticFluxDensity(fSpectrometerMagneticField->GetNewDoubleValue(value));
+        Detector::Description::SpectrometerField::Instance().MagneticFluxDensity(fSpectrometerMagneticField->GetNewDoubleValue(value));
     }
 }
 
-} // namespace MACE::Detector::Field::G4::inline Messenger
+} // namespace MACE::inline Simulation::inline Field

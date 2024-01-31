@@ -7,11 +7,9 @@
 class G4UIcmdWithADoubleAndUnit;
 class G4UIdirectory;
 
-namespace MACE::Detector::Field::G4 {
+namespace MACE::inline Simulation::inline Field {
 
 class AcceleratorField;
-
-inline namespace Messenger {
 
 class AcceleratorFieldMessenger final : public Geant4X::SingletonMessenger<AcceleratorFieldMessenger> {
     friend Env::Memory::SingletonInstantiator;
@@ -28,6 +26,4 @@ private:
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fAcceleratorPotential;
 };
 
-} // namespace Messenger
-
-} // namespace MACE::Detector::Field::G4
+} // namespace MACE::inline Simulation::inline Field

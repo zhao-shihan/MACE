@@ -1,11 +1,11 @@
 #include "MACE/Detector/Description/AcceleratorField.h++"
-#include "MACE/Detector/Field/G4/AcceleratorField.h++"
-#include "MACE/Detector/Field/G4/Messenger/AcceleratorFieldMessenger.h++"
+#include "MACE/Simulation/Field/AcceleratorField.h++"
+#include "MACE/Simulation/Field/AcceleratorFieldMessenger.h++"
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIdirectory.hh"
 
-namespace MACE::Detector::Field::G4::inline Messenger {
+namespace MACE::inline Simulation::inline Field {
 
 AcceleratorFieldMessenger::AcceleratorFieldMessenger() :
     SingletonMessenger{},
@@ -26,8 +26,8 @@ AcceleratorFieldMessenger::~AcceleratorFieldMessenger() = default;
 
 auto AcceleratorFieldMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fAcceleratorPotential.get()) {
-        Description::AcceleratorField::Instance().AcceleratorPotential(fAcceleratorPotential->GetNewDoubleValue(value));
+        Detector::Description::AcceleratorField::Instance().AcceleratorPotential(fAcceleratorPotential->GetNewDoubleValue(value));
     }
 }
 
-} // namespace MACE::Detector::Field::G4::inline Messenger
+} // namespace MACE::inline Simulation::inline Field

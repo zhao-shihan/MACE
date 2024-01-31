@@ -7,11 +7,9 @@
 class G4UIcmdWithADoubleAndUnit;
 class G4UIdirectory;
 
-namespace MACE::Detector::Field::G4 {
+namespace MACE::inline Simulation::inline Field {
 
 class SpectrometerField;
-
-inline namespace Messenger {
 
 class SpectrometerFieldMessenger final : public Geant4X::SingletonMessenger<SpectrometerFieldMessenger> {
     friend Env::Memory::SingletonInstantiator;
@@ -28,6 +26,4 @@ private:
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSpectrometerMagneticField;
 };
 
-} // namespace Messenger
-
-} // namespace MACE::Detector::Field::G4
+} // namespace MACE::inline Simulation::inline Field

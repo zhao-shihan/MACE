@@ -1,14 +1,6 @@
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Detector/Description/MCP.h++"
-#include "MACE/Detector/Field/G4/AcceleratorField.h++"
-#include "MACE/Detector/Field/G4/EMCField.h++"
-#include "MACE/Detector/Field/G4/SolenoidB1Field.h++"
-#include "MACE/Detector/Field/G4/SolenoidB2Field.h++"
-#include "MACE/Detector/Field/G4/SolenoidS1Field.h++"
-#include "MACE/Detector/Field/G4/SolenoidS2Field.h++"
-#include "MACE/Detector/Field/G4/SolenoidS3Field.h++"
-#include "MACE/Detector/Field/G4/SpectrometerField.h++"
 #include "MACE/Detector/Geometry/Fast/AcceleratorField.h++"
 #include "MACE/Detector/Geometry/Fast/BeamDegrader.h++"
 #include "MACE/Detector/Geometry/Fast/BeamMonitor.h++"
@@ -45,6 +37,14 @@
 #include "MACE/Detector/Geometry/GeometryBase.h++"
 #include "MACE/SimMACE/Action/DetectorConstruction.h++"
 #include "MACE/SimMACE/Messenger/DetectorMessenger.h++"
+#include "MACE/Simulation/Field/AcceleratorField.h++"
+#include "MACE/Simulation/Field/EMCField.h++"
+#include "MACE/Simulation/Field/SolenoidB1Field.h++"
+#include "MACE/Simulation/Field/SolenoidB2Field.h++"
+#include "MACE/Simulation/Field/SolenoidS1Field.h++"
+#include "MACE/Simulation/Field/SolenoidS2Field.h++"
+#include "MACE/Simulation/Field/SolenoidS3Field.h++"
+#include "MACE/Simulation/Field/SpectrometerField.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4EqMagElectricField.hh"
@@ -333,7 +333,6 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     {
         using namespace LiteralUnit::Length;
         using namespace LiteralUnit::MagneticFluxDensity;
-        using namespace Detector::Field::G4;
 
         constexpr auto hMin = 100_um;
 

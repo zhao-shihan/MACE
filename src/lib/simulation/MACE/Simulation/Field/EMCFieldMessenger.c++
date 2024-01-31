@@ -1,11 +1,11 @@
 #include "MACE/Detector/Description/EMCField.h++"
-#include "MACE/Detector/Field/G4/EMCField.h++"
-#include "MACE/Detector/Field/G4/Messenger/EMCFieldMessenger.h++"
+#include "MACE/Simulation/Field/EMCField.h++"
+#include "MACE/Simulation/Field/EMCFieldMessenger.h++"
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIdirectory.hh"
 
-namespace MACE::Detector::Field::G4::inline Messenger {
+namespace MACE::inline Simulation::inline Field {
 
 EMCFieldMessenger::EMCFieldMessenger() :
     SingletonMessenger{},
@@ -26,8 +26,8 @@ EMCFieldMessenger::~EMCFieldMessenger() = default;
 
 auto EMCFieldMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fSpectrometerMagneticField.get()) {
-        Description::EMCField::Instance().MagneticFluxDensity(fSpectrometerMagneticField->GetNewDoubleValue(value));
+        Detector::Description::EMCField::Instance().MagneticFluxDensity(fSpectrometerMagneticField->GetNewDoubleValue(value));
     }
 }
 
-} // namespace MACE::Detector::Field::G4::inline Messenger
+} // namespace MACE::inline Simulation::inline Field

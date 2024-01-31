@@ -1,15 +1,15 @@
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Detector/Field/G4/Messenger/SolenoidFieldMessenger.h++"
-#include "MACE/Detector/Field/G4/SolenoidB1Field.h++"
-#include "MACE/Detector/Field/G4/SolenoidB2Field.h++"
-#include "MACE/Detector/Field/G4/SolenoidS1Field.h++"
-#include "MACE/Detector/Field/G4/SolenoidS2Field.h++"
-#include "MACE/Detector/Field/G4/SolenoidS3Field.h++"
+#include "MACE/Simulation/Field/SolenoidFieldMessenger.h++"
+#include "MACE/Simulation/Field/SolenoidB1Field.h++"
+#include "MACE/Simulation/Field/SolenoidB2Field.h++"
+#include "MACE/Simulation/Field/SolenoidS1Field.h++"
+#include "MACE/Simulation/Field/SolenoidS2Field.h++"
+#include "MACE/Simulation/Field/SolenoidS3Field.h++"
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIdirectory.hh"
 
-namespace MACE::Detector::Field::G4::inline Messenger {
+namespace MACE::inline Simulation::inline Field {
 
 SolenoidFieldMessenger::SolenoidFieldMessenger() :
     SingletonMessenger{},
@@ -30,8 +30,8 @@ SolenoidFieldMessenger::~SolenoidFieldMessenger() = default;
 
 auto SolenoidFieldMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fSolenoidMagneticField.get()) {
-        Description::Solenoid::Instance().MagneticFluxDensity(fSolenoidMagneticField->GetNewDoubleValue(value));
+        Detector::Description::Solenoid::Instance().MagneticFluxDensity(fSolenoidMagneticField->GetNewDoubleValue(value));
     }
 }
 
-} // namespace MACE::Detector::Field::G4::inline Messenger
+} // namespace MACE::inline Simulation::inline Field
