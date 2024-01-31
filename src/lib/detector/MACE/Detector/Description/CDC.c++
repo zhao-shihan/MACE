@@ -21,31 +21,31 @@ using namespace LiteralUnit;
 using namespace PhysicalConstant;
 
 CDC::CDC() :
-    DescriptionSingletonBase<CDC>(__func__),
+    DescriptionSingletonBase<CDC>("CDC"),
     // Geometry
-    fEvenSuperLayerIsAxial(false),
-    fNSuperLayer(7),
-    fNSenseLayerPerSuper(3),
-    fGasInnerRadius(15_cm),
-    fGasInnerLength(120_cm),
-    fEndCapSlope(0.75),
-    fMinStereoAngle(4_deg),
-    fMinCellWidth(6_mm),
-    fReferenceCellWidth(10_mm),
-    fMaxCellWidth(14_mm),
-    fFieldWireDiameter(80_um),
-    fSenseWireDiameter(20_um),
-    fSensitiveWidthFactor(0.975),
-    fMinAdjacentSuperLayersDistance(1_mm),
-    fMinWireAndRadialShellDistance(2_mm),
-    fShellInnerThickness(250_um),
-    fShellSideThickness(10_mm),
-    fShellOuterThickness(10_mm),
-    fLayerConfigurationManager(),
-    fCellMapManager(),
+    fEvenSuperLayerIsAxial{},
+    fNSuperLayer{7},
+    fNSenseLayerPerSuper{3},
+    fGasInnerRadius{15_cm},
+    fGasInnerLength{120_cm},
+    fEndCapSlope{0.75},
+    fMinStereoAngle{6_deg},
+    fMinCellWidth{6_mm},
+    fReferenceCellWidth{10_mm},
+    fMaxCellWidth{14_mm},
+    fFieldWireDiameter{80_um},
+    fSenseWireDiameter{20_um},
+    fSensitiveWidthFactor{0.975},
+    fMinAdjacentSuperLayersDistance{1_mm},
+    fMinWireAndRadialShellDistance{2_mm},
+    fShellInnerThickness{250_um},
+    fShellSideThickness{10_mm},
+    fShellOuterThickness{10_mm},
+    fLayerConfigurationManager{},
+    fCellMapManager{},
     // Detection
-    fMeanDriftVelocity(3.5_cm_us),
-    fTimeResolutionFWHM(30_ns) {}
+    fMeanDriftVelocity{3.5_cm_us},
+    fTimeResolutionFWHM{30_ns} {}
 
 auto CDC::ComputeLayerConfiguration() const -> std::vector<SuperLayerConfiguration> {
     std::vector<SuperLayerConfiguration> layerConfig;
