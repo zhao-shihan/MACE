@@ -43,7 +43,7 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    std::make_unique<Detector::Geometry::GeometryBase> fWorld;
+    std::unique_ptr<Detector::Geometry::GeometryBase> fWorld;
 
     G4double fTargetDensity;
     G4double fTargetTemperature;

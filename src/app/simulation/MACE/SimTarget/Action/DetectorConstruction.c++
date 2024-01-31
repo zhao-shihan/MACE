@@ -20,7 +20,7 @@ DetectorConstruction::DetectorConstruction() :
     PassiveSingleton{},
     G4VUserDetectorConstruction{},
     fCheckOverlap{false},
-    fWorld{nullptr},
+    fWorld{},
     fTargetDensity{30_mg_cm3},
     fTargetTemperature{293.15_K},
     fMessengerRegister{this} {
