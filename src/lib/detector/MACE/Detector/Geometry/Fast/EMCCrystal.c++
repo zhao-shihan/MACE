@@ -209,12 +209,12 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
         new G4LogicalBorderSurface("airPaintSurface", Mother().PhysicalVolume().get(), physicalCrystal, airPaintSurface);
         airPaintSurface->SetMaterialPropertiesTable(airPaintSurfacePropertiesTable);
 
-        if (FindSibling<EMCPMTCoupler>().has_value() == true) {
-
+        const auto emcPMTCoupler{FindSibling<EMCPMTCoupler>()};
+        if (emcPMTCoupler) {
             const auto couplerSurface = new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric);
             new G4LogicalBorderSurface("couplerSurface",
                                        physicalCrystal,
-                                       FindSibling<EMCPMTCoupler>().value().get().PhysicalVolume(copyNo).get(),
+                                       emcPMTCoupler->PhysicalVolume(copyNo).get(),
                                        couplerSurface);
             couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
         }
