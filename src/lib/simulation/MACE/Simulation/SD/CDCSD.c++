@@ -49,9 +49,9 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
     if (particle.GetPDGCharge() == 0) { return false; }
 
-    const auto eDep{step.GetTotalEnergyDeposit() - step.GetNonIonizingEnergyDeposit()}; // ionizing Edep
+    const auto eDep{step.GetTotalEnergyDeposit()};
 
-    if (eDep == 0) { return false; }
+    if (eDep - step.GetNonIonizingEnergyDeposit() == 0) { return false; } // ionizing Edep
     assert(eDep > 0);
 
     const auto& preStepPoint{*step.GetPreStepPoint()};
