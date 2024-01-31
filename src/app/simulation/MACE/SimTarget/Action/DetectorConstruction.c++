@@ -36,7 +36,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     Detector::Description::AcceleratorField::Instance().Length(0);
     Detector::Description::AcceleratorField::Instance().DownStreamLength(0);
 
-    fWorld = std::make_shared<World>();
+    fWorld = std::make_unique<World>();
     auto& beamMonitor = fWorld->NewDaughter<BeamMonitor>(fCheckOverlap);
     auto& beamDegrader = fWorld->NewDaughter<BeamDegrader>(fCheckOverlap);
     auto& target = fWorld->NewDaughter<Target>(fCheckOverlap);
