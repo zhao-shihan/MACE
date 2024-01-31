@@ -80,7 +80,7 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    std::shared_ptr<Detector::Geometry::GeometryBase> fWorld;
+    std::unique_ptr<Detector::Geometry::GeometryBase> fWorld;
 
     Region* fCDCFieldWireRegion;
     Region* fCDCSenseWireRegion;

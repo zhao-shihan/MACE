@@ -1,3 +1,6 @@
+#include "MACE/Detector/Description/CDC.h++"
+#include "MACE/Detector/Description/EMC.h++"
+#include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Detector/Field/G4/AcceleratorField.h++"
 #include "MACE/Detector/Field/G4/EMCField.h++"
 #include "MACE/Detector/Field/G4/SolenoidB1Field.h++"
@@ -58,7 +61,7 @@ DetectorConstruction::DetectorConstruction() :
     PassiveSingleton{},
     G4VUserDetectorConstruction{},
     fCheckOverlap{},
-    fWorld{std::make_shared<Detector::Geometry::Fast::World>()},
+    fWorld{},
     fCDCFieldWireRegion{},
     fCDCSenseWireRegion{},
     fDefaultGaseousRegion{},
@@ -83,6 +86,10 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     ////////////////////////////////////////////////////////////////
     // Construct volumes
     ////////////////////////////////////////////////////////////////
+
+    // 0
+
+    fWorld = std::make_unique<Detector::Geometry::Fast::World>();
 
     // 1
 
@@ -310,13 +317,13 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     // Register SDs
     ////////////////////////////////////////////////////////////////
     {
-        fCDCSD = new SD::CDCSD(cdcCell.LogicalVolume()->GetName());
+        fCDCSD = new SD::CDCSD{Detector::Description::CDC::Instance().Name()};
         cdcCell.RegisterSD(fCDCSD);
 
-        fEMCSD = new SD::EMCSD(emcCrystal.LogicalVolume()->GetName());
+        fEMCSD = new SD::EMCSD{Detector::Description::EMC::Instance().Name()};
         emcCrystal.RegisterSD(fEMCSD);
 
-        fMCPSD = new SD::MCPSD(mcp.LogicalVolume()->GetName());
+        fMCPSD = new SD::MCPSD{Detector::Description::MCP::Instance().Name()};
         mcp.RegisterSD(fMCPSD);
     }
 
