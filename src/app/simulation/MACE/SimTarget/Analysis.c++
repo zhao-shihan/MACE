@@ -1,3 +1,4 @@
+#include "MACE/Data/Output.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
@@ -9,6 +10,10 @@
 
 #include "G4Run.hh"
 
+#include "fmt/format.h"
+
+#include <stdexcept>
+
 namespace MACE::SimTarget {
 
 Analysis::Analysis() :
@@ -16,13 +21,10 @@ Analysis::Analysis() :
     fResultPath{"SimTarget_result"},
     fEnableYieldAnalysis{true},
     fThisRun{},
-    fMuoniumTrackList{},
     fResultFile{},
+    fMuoniumTrack{},
     fYieldFile{},
-    fDataFactory{},
-    fMessengerRegister{this} {
-    fDataFactory.TreeNamePrefixFormat("Run{}_");
-}
+    fMessengerRegister{this} {}
 
 Analysis::~Analysis() {
     Close();
@@ -51,7 +53,7 @@ void Analysis::Write() {
     if (fEnableYieldAnalysis) {
         AnalysisAndWriteYield();
     }
-    fMuoniumTrackList.clear();
+    fMuoniumTrack.clear();
 }
 
 void Analysis::Close() {
@@ -62,43 +64,46 @@ void Analysis::Close() {
 }
 
 void Analysis::OpenResultFile() {
-    fResultFile = std::make_unique<TFile>(
-        MPIX::ParallelizePath(fResultPath, ".root").generic_string().c_str(),
-        "recreate");
+    const auto fullResultPath{MPIX::ParallelizePath(fResultPath, ".root").generic_string()};
+    fResultFile = TFile::Open(fullResultPath.c_str(), "RECREATE",
+                              "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
+    if (fResultFile == nullptr) {
+        throw std::runtime_error{fmt::format("MACE::SimTarget::Analysis::OpenResultFile: Cannot open file \"{}\"", fullResultPath)};
+    }
 }
 
 void Analysis::WriteResult() {
-    if (fMuoniumTrackList.empty()) { return; }
-    fDataFactory.CreateAndFillTree<MuoniumTrack>(fMuoniumTrackList, fThisRun->GetRunID())->Write();
+    Data::Output<MuoniumTrack> output{fmt::format("G4Run{}_MTrk", fThisRun->GetRunID())};
+    output << fMuoniumTrack;
+    output.Write();
 }
 
 void Analysis::CloseResultFile() {
     if (fResultFile == nullptr) { return; }
     fResultFile->Close();
-    fResultFile.reset();
+    delete fResultFile;
 }
 
 void Analysis::OpenYieldFile() {
     if (Env::MPIEnv::Instance().OnCommWorldMaster()) {
-        const auto yieldPath = std::filesystem::path(fResultPath).concat("_yield.csv");
-        fYieldFile = std::make_unique<std::ofstream>(yieldPath, std::ios::out);
-        *fYieldFile << "runID,nMuon,nMFormed,nMTargetDecay,nMVacuumDecay,nMDetectableDecay" << std::endl;
+        fYieldFile = std::fopen(std::string{fResultPath}.append("_yield.csv").c_str(), "w");
+        fmt::println(fYieldFile, "runID,nMuon,nMFormed,nMTargetDecay,nMVacuumDecay,nMDetectableDecay");
     }
 }
 
 void Analysis::AnalysisAndWriteYield() {
     std::array<unsigned long long, 5> yieldData;
-    auto& [nMuon, nFormed, nTargetDecay, nVacuumDecay, nDetectableDecay] = yieldData;
+    auto& [nMuon, nFormed, nTargetDecay, nVacuumDecay, nDetectableDecay]{yieldData};
     nMuon = static_cast<unsigned long long>(PrimaryGeneratorAction::Instance().MuonsForEachG4Event()) *
             static_cast<unsigned long long>(fThisRun->GetNumberOfEvent());
-    nFormed = fMuoniumTrackList.size();
+    nFormed = fMuoniumTrack.size();
     nTargetDecay = 0;
     nVacuumDecay = 0;
     nDetectableDecay = 0;
 
-    const auto& target = Detector::Description::Target::Instance();
-    for (auto&& track : std::as_const(fMuoniumTrackList)) {
-        const auto& decayPosition = track->DecayPosition();
+    const auto& target{Detector::Description::Target::Instance()};
+    for (auto&& track : std::as_const(fMuoniumTrack)) {
+        const auto& decayPosition{Get<"x">(*track).As<stdx::array3d>()};
         if (target.Contain(decayPosition)) {
             ++nTargetDecay;
         } else {
@@ -109,7 +114,7 @@ void Analysis::AnalysisAndWriteYield() {
         }
     }
 
-    if (const auto& mpiEnv = Env::MPIEnv::Instance();
+    if (const auto& mpiEnv{Env::MPIEnv::Instance()};
         mpiEnv.Parallel()) {
         std::vector<std::array<unsigned long long, 5>> yieldDataRecv;
         if (mpiEnv.OnCommWorldMaster()) { yieldDataRecv.resize(mpiEnv.CommWorldSize()); }
@@ -135,17 +140,16 @@ void Analysis::AnalysisAndWriteYield() {
                 nVacuumDecayTotal += nVacuumDecayRecv;
                 nDetectableDecayTotal += nDetectableDecayRecv;
             }
-            *fYieldFile << fThisRun->GetRunID() << ',' << nMuonTotal << ',' << nFormedTotal << ',' << nTargetDecayTotal << ',' << nVacuumDecayTotal << ',' << nDetectableDecayTotal << std::endl;
+            fmt::println(fYieldFile, "{},{},{},{},{},{}", fThisRun->GetRunID(), nMuonTotal, nFormedTotal, nTargetDecayTotal, nVacuumDecayTotal, nDetectableDecayTotal);
         }
     } else {
-        *fYieldFile << fThisRun->GetRunID() << ',' << nMuon << ',' << nFormed << ',' << nTargetDecay << ',' << nVacuumDecay << ',' << nDetectableDecay << std::endl;
+        fmt::println(fYieldFile, "{},{},{},{},{},{}", fThisRun->GetRunID(), nMuon, nFormed, nTargetDecay, nVacuumDecay, nDetectableDecay);
     }
 }
 
 void Analysis::CloseYieldFile() {
     if (fYieldFile == nullptr) { return; }
-    fYieldFile->close();
-    fYieldFile.reset();
+    std::fclose(fYieldFile);
 }
 
 } // namespace MACE::SimTarget

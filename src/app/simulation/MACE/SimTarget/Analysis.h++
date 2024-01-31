@@ -1,21 +1,35 @@
 #pragma once
 
-#include "MACE/DataModel/DataFactory.h++"
+#include "MACE/Data/Tuple.h++"
+#include "MACE/Data/TupleModel.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
+#include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/SimTarget/Messenger/AnalysisMessenger.h++"
-#include "MACE/SimTarget/MuoniumTrack.h++"
 
 #include "gsl/gsl"
 
+#include <cstdio>
 #include <filesystem>
-#include <fstream>
 #include <memory>
+#include <vector>
 
 class G4Run;
 
 class TFile;
 
 namespace MACE::SimTarget {
+
+using MuoniumTrack = Data::TupleModel<Data::Value<int, "EvtID", "Event ID">,
+                                      Data::Value<int, "TrkID", "Track ID">,
+                                      Data::Value<int, "PDGID", "Particle PDG ID">,
+                                      Data::Value<float, "t0", "Vertex time">,
+                                      Data::Value<stdx::array3f, "x0", "Vertex position">,
+                                      Data::Value<float, "Ek0", "Vertex kinetic energy">,
+                                      Data::Value<stdx::array3f, "p0", "Vertex momentum">,
+                                      Data::Value<double, "t", "Decay time">,
+                                      Data::Value<stdx::array3f, "x", "Decay position">,
+                                      Data::Value<float, "Ek", "Kinetic energy just before decay">,
+                                      Data::Value<stdx::array3f, "p", "Momentum just before decay">>;
 
 class Analysis final : public Env::Memory::PassiveSingleton<Analysis> {
 public:
@@ -26,7 +40,7 @@ public:
     auto EnableYieldAnalysis(bool val) -> void { fEnableYieldAnalysis = val; }
 
     void RunBegin(gsl::not_null<const G4Run*> run);
-    auto NewMuoniumTrack() { return fMuoniumTrackList.emplace_back(std::make_unique_for_overwrite<MuoniumTrack>()).get(); }
+    auto NewMuoniumTrack() { return fMuoniumTrack.emplace_back(std::make_unique_for_overwrite<Data::Tuple<MuoniumTrack>>()).get(); }
     void RunEnd();
 
 private:
@@ -47,11 +61,11 @@ private:
     bool fEnableYieldAnalysis;
 
     const G4Run* fThisRun;
-    std::vector<std::unique_ptr<MuoniumTrack>> fMuoniumTrackList;
 
-    std::unique_ptr<TFile> fResultFile;
-    std::unique_ptr<std::ofstream> fYieldFile;
-    DataModel::DataFactory fDataFactory;
+    gsl::owner<TFile*> fResultFile;
+    std::vector<std::unique_ptr<Data::Tuple<MuoniumTrack>>> fMuoniumTrack;
+
+    gsl::owner<std::FILE*> fYieldFile;
 
     AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };

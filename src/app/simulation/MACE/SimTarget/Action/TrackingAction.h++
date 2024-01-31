@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/SimTarget/Analysis.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 
 #include "G4Types.hh"
@@ -10,8 +11,6 @@
 class G4ParticleDefinition;
 
 namespace MACE::SimTarget {
-
-class MuoniumTrack;
 
 inline namespace Action {
 
@@ -26,9 +25,7 @@ public:
     auto PostUserTrackingAction(const G4Track* track) -> void override;
 
 private:
-    const gsl::not_null<const G4ParticleDefinition*> fMuonium;
-    const gsl::not_null<const G4ParticleDefinition*> fAntimuonium;
-    MuoniumTrack* fMuoniumTrack;
+    Data::Tuple<MuoniumTrack>* fMuoniumTrack;
     G4int fEventID;
 };
 
