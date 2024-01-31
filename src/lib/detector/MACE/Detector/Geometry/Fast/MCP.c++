@@ -2,11 +2,12 @@
 #include "MACE/Detector/Geometry/Fast/MCP.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
-#include "G4Box.hh"
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
+#include "G4Tubs.hh"
 
-using MACE::Detector::Geometry::Fast::MCP;
+namespace MACE::Detector::Geometry::Fast {
+
 using namespace MACE::LiteralUnit;
 
 auto MCP::Construct(G4bool checkOverlaps) -> void {
@@ -18,11 +19,13 @@ auto MCP::Construct(G4bool checkOverlaps) -> void {
     const auto nistManager = G4NistManager::Instance();
     const auto mcpMaterial = nistManager->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4_g_cm3);
 
-    auto solid = Make<G4Box>(
+    auto solid = Make<G4Tubs>(
         name,
+        0,
         width / 2,
-        width / 2,
-        thickness / 2);
+        thickness / 2,
+        0,
+        2_pi);
     auto logic = Make<G4LogicalVolume>(
         solid,
         mcpMaterial,
@@ -38,3 +41,5 @@ auto MCP::Construct(G4bool checkOverlaps) -> void {
         0,
         checkOverlaps);
 }
+
+} // namespace MACE::Detector::Geometry::Fast

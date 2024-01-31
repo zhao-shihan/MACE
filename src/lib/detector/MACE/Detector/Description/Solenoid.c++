@@ -16,9 +16,9 @@ Solenoid::Solenoid() :
     fS2Length{100_cm},
     fB2Radius{50_cm},
     fS3Length{20_cm},
-    fInnerRadius{25_mm},
-    fOuterRadius{75_mm},
-    fFieldRadius{76_mm},
+    fInnerRadius{50_mm},
+    fOuterRadius{100_mm},
+    fFieldRadius{101_mm},
     // Field
     fMagneticFluxDensity(100_mT) {}
 
