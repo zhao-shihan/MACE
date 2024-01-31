@@ -13,8 +13,6 @@
 /gps/pos/centre 0. 0. 0. cm
 /gps/ang/type iso
 
-#/MPIRun/PrintProgressModulo 100
-
 /MACE/Analysis/FilePath   SimEMC_sig
 /MACE/Analysis/FileOption RECREATE
 /run/beamOn 1000

@@ -16,8 +16,7 @@
 /gps/pos/sigma_r 5.6 mm
 /gps/pos/centre 0. 0. -40. cm
 
-#/MACE/Analysis/EnableCoincidenceOfEMC     true
-#/MACE/Analysis/EnableCoincidenceOfMCP     true
+/MACE/Analysis/EnableCoincidenceOfMCP     true
 
 /MACE/Analysis/FilePath   SimEMC_sig
 /MACE/Analysis/FileOption RECREATE
