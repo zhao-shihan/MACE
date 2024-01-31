@@ -11,11 +11,10 @@
 #include "MACE/SimEMC/Action/DetectorConstruction.h++"
 #include "MACE/SimEMC/Detector/EMCShield.h++"
 #include "MACE/SimEMC/Detector/EMCTunnel.h++"
+#include "MACE/SimEMC/Messenger/DetectorMessenger.h++"
 #include "MACE/SimEMC/SD/EMCPMTSD.h++"
 #include "MACE/SimEMC/SD/EMCSD.h++"
 #include "MACE/SimEMC/SD/MCPSD.h++"
-
-// #include "MACE/SimEMC/Messenger/DetectorMessenger.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
@@ -48,6 +47,7 @@ DetectorConstruction::DetectorConstruction() :
     // #include "MACE/SimEMC/DefaultGeometry.inlyaml"
     // );
     // GeometryMessenger::Instance().Register(this);
+    DetectorMessenger::EnsureInstantiation();
 }
 
 auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {

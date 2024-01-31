@@ -96,10 +96,10 @@ constexpr auto defaultMacro = {
     "# General Particle Source settings",
     "#############################################################################",
 
-    "/gps/particle gamma",
-    "/gps/ene/mono 0.511 MeV",
-    "/gps/pos/centre 0. 0. 0. cm",
-    "/gps/direction 0 0.370438 -0.599382",
+// "/gps/particle gamma",
+// "/gps/ene/mono 0.511 MeV",
+// "/gps/pos/centre 0. 0. 0. cm",
+// "/gps/direction 0 0.370438 -0.599382",
 // "/gps/ang/type iso",
 
 // "/gps/particle e+",

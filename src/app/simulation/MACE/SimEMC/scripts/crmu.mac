@@ -7,12 +7,10 @@
 
 /run/initialize
 
-/MACE/Analysis/EnableCoincidenceOfEMC     true
 /MACE/Analysis/EnableCoincidenceOfMCP     true
 
 /MACE/Analysis/FilePath   SimEMC_crmu
 /MACE/Analysis/FileOption RECREATE
 
-/MPIRun/PrintProgressModulo 10000
 /run/beamOn 19350000
 /MPIRun/PrintRunSummary

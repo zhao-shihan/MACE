@@ -275,13 +275,13 @@ auto EMC::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ImportValue(node, fPMTWindowThickness, "PMTWindowThickness");
     ImportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
-
-    ImportValue(node, fCsIEnergyBin, "fCsIEnergyBin");
-    ImportValue(node, fCsIScintillationComponent1, "fCsIScintillationComponent1");
-
-    ImportValue(node, fScintillationYield, "fScintillationYield");
-    ImportValue(node, fScintillationTimeConstant1, "fScintillationTimeConstant1");
-    ImportValue(node, fResolutionScale, "fReolutionScale");
+    // ImportValue(node, fPMTWaveLengthBin, "PMTWaveLengthBin");
+    // ImportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
+    // ImportValue(node, fCsIEnergyBin, "CsIEnergyBin");
+    // ImportValue(node, fCsIScintillationComponent1, "CsIScintillationComponent1");
+    // ImportValue(node, fScintillationYield, "ScintillationYield");
+    // ImportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
+    // ImportValue(node, fResolutionScale, "ReolutionScale");
 
     SetGeometryOutdated();
 }
@@ -299,13 +299,13 @@ auto EMC::ExportValues(YAML::Node& node) const -> void {
     ExportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ExportValue(node, fPMTWindowThickness, "PMTWindowThickness");
     ExportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
-
-    ExportValue(node, fCsIEnergyBin, "fCsIEnergyBin");
-    ExportValue(node, fCsIScintillationComponent1, "fCsIScintillationComponent1");
-
-    ExportValue(node, fScintillationYield, "fScintillationYield");
-    ExportValue(node, fScintillationTimeConstant1, "fScintillationTimeConstant1");
-    ExportValue(node, fResolutionScale, "fReolutionScale");
+    // ExportValue(node, fPMTWaveLengthBin, "PMTWaveLengthBin");
+    // ExportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
+    // ExportValue(node, fCsIEnergyBin, "CsIEnergyBin");
+    // ExportValue(node, fCsIScintillationComponent1, "CsIScintillationComponent1");
+    // ExportValue(node, fScintillationYield, "ScintillationYield");
+    // ExportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
+    // ExportValue(node, fResolutionScale, "ReolutionScale");
 }
 
 } // namespace MACE::Detector::Description

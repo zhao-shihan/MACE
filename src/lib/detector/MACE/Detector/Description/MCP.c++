@@ -7,7 +7,7 @@ using namespace LiteralUnit::Length;
 
 MCP::MCP() :
     DescriptionSingletonBase<MCP>(__func__),
-    fWidth(15_cm),
+    fWidth(10_cm),
     fThickness(1_cm) {}
 
 void MCP::ImportValues(const YAML::Node& node) {

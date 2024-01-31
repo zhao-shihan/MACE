@@ -17,7 +17,7 @@ Analysis::Analysis() :
     fFilePath{"SimEMC_untitled"},
     fFileOption{"UPDATE"},
     fEnableCoincidenceOfEMC{true},
-    fEnableCoincidenceOfMCP{true},
+    fEnableCoincidenceOfMCP{false},
     fFile{},
     fEMCSimHitOutput{},
     fEMCPMTSimHitOutput{},
