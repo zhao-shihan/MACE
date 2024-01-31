@@ -2,12 +2,12 @@
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Detector/Description/World.h++"
-#include "MACE/Detector/Geometry/Fast/EMCCrystal.h++"
-#include "MACE/Detector/Geometry/Fast/EMCPMTAssemblies.h++"
-#include "MACE/Detector/Geometry/Fast/EMCPMTCoupler.h++"
-#include "MACE/Detector/Geometry/Fast/MCP.h++"
-#include "MACE/Detector/Geometry/Fast/World.h++"
+#include "MACE/Detector/Geometry/EMCCrystal.h++"
+#include "MACE/Detector/Geometry/EMCPMTAssemblies.h++"
+#include "MACE/Detector/Geometry/EMCPMTCoupler.h++"
 #include "MACE/Detector/Geometry/GeometryBase.h++"
+#include "MACE/Detector/Geometry/MCP.h++"
+#include "MACE/Detector/Geometry/World.h++"
 #include "MACE/SimEMC/Action/DetectorConstruction.h++"
 #include "MACE/SimEMC/Detector/EMCShield.h++"
 #include "MACE/SimEMC/Detector/EMCTunnel.h++"
@@ -51,7 +51,7 @@ DetectorConstruction::DetectorConstruction() :
 }
 
 auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
-    using namespace MACE::Detector::Geometry::Fast;
+    using namespace MACE::Detector::Geometry;
 
     auto& description = MACE::Detector::Description::World::Instance();
     description.HalfXExtent(26_m);

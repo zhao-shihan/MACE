@@ -1,40 +1,40 @@
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Detector/Description/MCP.h++"
-#include "MACE/Detector/Geometry/Fast/AcceleratorField.h++"
-#include "MACE/Detector/Geometry/Fast/BeamDegrader.h++"
-#include "MACE/Detector/Geometry/Fast/BeamMonitor.h++"
-#include "MACE/Detector/Geometry/Fast/CDCBody.h++"
-#include "MACE/Detector/Geometry/Fast/CDCCell.h++"
-#include "MACE/Detector/Geometry/Fast/CDCFieldWire.h++"
-#include "MACE/Detector/Geometry/Fast/CDCGas.h++"
-#include "MACE/Detector/Geometry/Fast/CDCSenseLayer.h++"
-#include "MACE/Detector/Geometry/Fast/CDCSenseWire.h++"
-#include "MACE/Detector/Geometry/Fast/CDCSuperLayer.h++"
-#include "MACE/Detector/Geometry/Fast/EMCCrystal.h++"
-#include "MACE/Detector/Geometry/Fast/EMCField.h++"
-#include "MACE/Detector/Geometry/Fast/EMCPMTAssemblies.h++"
-#include "MACE/Detector/Geometry/Fast/EMCPMTCoupler.h++"
-#include "MACE/Detector/Geometry/Fast/EMCShield.h++"
-#include "MACE/Detector/Geometry/Fast/Filter.h++"
-#include "MACE/Detector/Geometry/Fast/MCP.h++"
-#include "MACE/Detector/Geometry/Fast/ShieldingWall.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidB1.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidB1Field.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidB2.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidB2Field.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidS1.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidS1Field.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidS2.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidS2Field.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidS3.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidS3Field.h++"
-#include "MACE/Detector/Geometry/Fast/SpectrometerField.h++"
-#include "MACE/Detector/Geometry/Fast/SpectrometerMagnet.h++"
-#include "MACE/Detector/Geometry/Fast/SpectrometerShield.h++"
-#include "MACE/Detector/Geometry/Fast/Target.h++"
-#include "MACE/Detector/Geometry/Fast/World.h++"
+#include "MACE/Detector/Geometry/AcceleratorField.h++"
+#include "MACE/Detector/Geometry/BeamDegrader.h++"
+#include "MACE/Detector/Geometry/BeamMonitor.h++"
+#include "MACE/Detector/Geometry/CDCBody.h++"
+#include "MACE/Detector/Geometry/CDCCell.h++"
+#include "MACE/Detector/Geometry/CDCFieldWire.h++"
+#include "MACE/Detector/Geometry/CDCGas.h++"
+#include "MACE/Detector/Geometry/CDCSenseLayer.h++"
+#include "MACE/Detector/Geometry/CDCSenseWire.h++"
+#include "MACE/Detector/Geometry/CDCSuperLayer.h++"
+#include "MACE/Detector/Geometry/EMCCrystal.h++"
+#include "MACE/Detector/Geometry/EMCField.h++"
+#include "MACE/Detector/Geometry/EMCPMTAssemblies.h++"
+#include "MACE/Detector/Geometry/EMCPMTCoupler.h++"
+#include "MACE/Detector/Geometry/EMCShield.h++"
+#include "MACE/Detector/Geometry/Filter.h++"
 #include "MACE/Detector/Geometry/GeometryBase.h++"
+#include "MACE/Detector/Geometry/MCP.h++"
+#include "MACE/Detector/Geometry/ShieldingWall.h++"
+#include "MACE/Detector/Geometry/SolenoidB1.h++"
+#include "MACE/Detector/Geometry/SolenoidB1Field.h++"
+#include "MACE/Detector/Geometry/SolenoidB2.h++"
+#include "MACE/Detector/Geometry/SolenoidB2Field.h++"
+#include "MACE/Detector/Geometry/SolenoidS1.h++"
+#include "MACE/Detector/Geometry/SolenoidS1Field.h++"
+#include "MACE/Detector/Geometry/SolenoidS2.h++"
+#include "MACE/Detector/Geometry/SolenoidS2Field.h++"
+#include "MACE/Detector/Geometry/SolenoidS3.h++"
+#include "MACE/Detector/Geometry/SolenoidS3Field.h++"
+#include "MACE/Detector/Geometry/SpectrometerField.h++"
+#include "MACE/Detector/Geometry/SpectrometerMagnet.h++"
+#include "MACE/Detector/Geometry/SpectrometerShield.h++"
+#include "MACE/Detector/Geometry/Target.h++"
+#include "MACE/Detector/Geometry/World.h++"
 #include "MACE/SimMACE/Action/DetectorConstruction.h++"
 #include "MACE/SimMACE/Messenger/DetectorMessenger.h++"
 #include "MACE/Simulation/Field/AcceleratorField.h++"
@@ -89,68 +89,68 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     // 0
 
-    fWorld = std::make_unique<Detector::Geometry::Fast::World>();
+    fWorld = std::make_unique<Detector::Geometry::World>();
 
     // 1
 
-    auto& emcField = fWorld->NewDaughter<Detector::Geometry::Fast::EMCField>(fCheckOverlap);
-    auto& emcShield = fWorld->NewDaughter<Detector::Geometry::Fast::EMCShield>(fCheckOverlap);
-    auto& solenoidB1Field = fWorld->NewDaughter<Detector::Geometry::Fast::SolenoidB1Field>(fCheckOverlap);
-    auto& solenoidB2Field = fWorld->NewDaughter<Detector::Geometry::Fast::SolenoidB2Field>(fCheckOverlap);
-    auto& solenoidS1Field = fWorld->NewDaughter<Detector::Geometry::Fast::SolenoidS1Field>(fCheckOverlap);
-    auto& solenoidS2Field = fWorld->NewDaughter<Detector::Geometry::Fast::SolenoidS2Field>(fCheckOverlap);
-    auto& solenoidS3Field = fWorld->NewDaughter<Detector::Geometry::Fast::SolenoidS3Field>(fCheckOverlap);
-    auto& spectrometerField = fWorld->NewDaughter<Detector::Geometry::Fast::SpectrometerField>(fCheckOverlap);
-    auto& spectrometerShield = fWorld->NewDaughter<Detector::Geometry::Fast::SpectrometerShield>(fCheckOverlap);
-    auto& shieldingWall = fWorld->NewDaughter<Detector::Geometry::Fast::ShieldingWall>(fCheckOverlap);
+    auto& emcField = fWorld->NewDaughter<Detector::Geometry::EMCField>(fCheckOverlap);
+    auto& emcShield = fWorld->NewDaughter<Detector::Geometry::EMCShield>(fCheckOverlap);
+    auto& solenoidB1Field = fWorld->NewDaughter<Detector::Geometry::SolenoidB1Field>(fCheckOverlap);
+    auto& solenoidB2Field = fWorld->NewDaughter<Detector::Geometry::SolenoidB2Field>(fCheckOverlap);
+    auto& solenoidS1Field = fWorld->NewDaughter<Detector::Geometry::SolenoidS1Field>(fCheckOverlap);
+    auto& solenoidS2Field = fWorld->NewDaughter<Detector::Geometry::SolenoidS2Field>(fCheckOverlap);
+    auto& solenoidS3Field = fWorld->NewDaughter<Detector::Geometry::SolenoidS3Field>(fCheckOverlap);
+    auto& spectrometerField = fWorld->NewDaughter<Detector::Geometry::SpectrometerField>(fCheckOverlap);
+    auto& spectrometerShield = fWorld->NewDaughter<Detector::Geometry::SpectrometerShield>(fCheckOverlap);
+    auto& shieldingWall = fWorld->NewDaughter<Detector::Geometry::ShieldingWall>(fCheckOverlap);
 
     // 2
 
-    auto& emcCrystal = emcField.NewDaughter<Detector::Geometry::Fast::EMCCrystal>(fCheckOverlap);
-    /* auto& emcPMTCoupler = */ emcField.NewDaughter<Detector::Geometry::Fast::EMCPMTCoupler>(fCheckOverlap);
-    auto& emcPMTAssemblies = emcField.NewDaughter<Detector::Geometry::Fast::EMCPMTAssemblies>(fCheckOverlap);
+    auto& emcCrystal = emcField.NewDaughter<Detector::Geometry::EMCCrystal>(fCheckOverlap);
+    /* auto& emcPMTCoupler = */ emcField.NewDaughter<Detector::Geometry::EMCPMTCoupler>(fCheckOverlap);
+    auto& emcPMTAssemblies = emcField.NewDaughter<Detector::Geometry::EMCPMTAssemblies>(fCheckOverlap);
 
-    auto& mcp = emcField.NewDaughter<Detector::Geometry::Fast::MCP>(fCheckOverlap);
+    auto& mcp = emcField.NewDaughter<Detector::Geometry::MCP>(fCheckOverlap);
 
-    auto& solenoidB1 = solenoidB1Field.NewDaughter<Detector::Geometry::Fast::SolenoidB1>(fCheckOverlap);
+    auto& solenoidB1 = solenoidB1Field.NewDaughter<Detector::Geometry::SolenoidB1>(fCheckOverlap);
 
-    auto& solenoidS1 = solenoidS1Field.NewDaughter<Detector::Geometry::Fast::SolenoidS1>(fCheckOverlap);
+    auto& solenoidS1 = solenoidS1Field.NewDaughter<Detector::Geometry::SolenoidS1>(fCheckOverlap);
 
-    auto& solenoidB2 = solenoidB2Field.NewDaughter<Detector::Geometry::Fast::SolenoidB2>(fCheckOverlap);
+    auto& solenoidB2 = solenoidB2Field.NewDaughter<Detector::Geometry::SolenoidB2>(fCheckOverlap);
 
-    auto& filter = solenoidS2Field.NewDaughter<Detector::Geometry::Fast::Filter>(fCheckOverlap);
-    auto& solenoidS2 = solenoidS2Field.NewDaughter<Detector::Geometry::Fast::SolenoidS2>(fCheckOverlap);
+    auto& filter = solenoidS2Field.NewDaughter<Detector::Geometry::Filter>(fCheckOverlap);
+    auto& solenoidS2 = solenoidS2Field.NewDaughter<Detector::Geometry::SolenoidS2>(fCheckOverlap);
 
-    auto& acceleratorField = spectrometerField.NewDaughter<Detector::Geometry::Fast::AcceleratorField>(fCheckOverlap);
-    auto& cdcBody = spectrometerField.NewDaughter<Detector::Geometry::Fast::CDCBody>(fCheckOverlap);
-    auto& spectrometerMagnet = spectrometerField.NewDaughter<Detector::Geometry::Fast::SpectrometerMagnet>(fCheckOverlap);
+    auto& acceleratorField = spectrometerField.NewDaughter<Detector::Geometry::AcceleratorField>(fCheckOverlap);
+    auto& cdcBody = spectrometerField.NewDaughter<Detector::Geometry::CDCBody>(fCheckOverlap);
+    auto& spectrometerMagnet = spectrometerField.NewDaughter<Detector::Geometry::SpectrometerMagnet>(fCheckOverlap);
 
-    auto& solenoidS3 = solenoidS3Field.NewDaughter<Detector::Geometry::Fast::SolenoidS3>(fCheckOverlap);
+    auto& solenoidS3 = solenoidS3Field.NewDaughter<Detector::Geometry::SolenoidS3>(fCheckOverlap);
 
     // 3
 
-    auto& cdcGas = cdcBody.NewDaughter<Detector::Geometry::Fast::CDCGas>(fCheckOverlap);
+    auto& cdcGas = cdcBody.NewDaughter<Detector::Geometry::CDCGas>(fCheckOverlap);
 
-    auto& beamDegrader = acceleratorField.NewDaughter<Detector::Geometry::Fast::BeamDegrader>(fCheckOverlap);
-    auto& beamMonitor = acceleratorField.NewDaughter<Detector::Geometry::Fast::BeamMonitor>(fCheckOverlap);
-    auto& target = acceleratorField.NewDaughter<Detector::Geometry::Fast::Target>(fCheckOverlap);
+    auto& beamDegrader = acceleratorField.NewDaughter<Detector::Geometry::BeamDegrader>(fCheckOverlap);
+    auto& beamMonitor = acceleratorField.NewDaughter<Detector::Geometry::BeamMonitor>(fCheckOverlap);
+    auto& target = acceleratorField.NewDaughter<Detector::Geometry::Target>(fCheckOverlap);
 
     // 4
 
-    auto& cdcSuperLayer = cdcGas.NewDaughter<Detector::Geometry::Fast::CDCSuperLayer>(fCheckOverlap);
+    auto& cdcSuperLayer = cdcGas.NewDaughter<Detector::Geometry::CDCSuperLayer>(fCheckOverlap);
 
     // 5
 
-    auto& cdcSenseLayer = cdcSuperLayer.NewDaughter<Detector::Geometry::Fast::CDCSenseLayer>(fCheckOverlap);
+    auto& cdcSenseLayer = cdcSuperLayer.NewDaughter<Detector::Geometry::CDCSenseLayer>(fCheckOverlap);
 
     // 6
 
-    auto& cdcFieldWire = cdcSenseLayer.NewDaughter<Detector::Geometry::Fast::CDCFieldWire>(fCheckOverlap);
-    auto& cdcCell = cdcSenseLayer.NewDaughter<Detector::Geometry::Fast::CDCCell>(fCheckOverlap);
+    auto& cdcFieldWire = cdcSenseLayer.NewDaughter<Detector::Geometry::CDCFieldWire>(fCheckOverlap);
+    auto& cdcCell = cdcSenseLayer.NewDaughter<Detector::Geometry::CDCCell>(fCheckOverlap);
 
     // 7
 
-    auto& cdcSenseWire = cdcCell.NewDaughter<Detector::Geometry::Fast::CDCSenseWire>(fCheckOverlap);
+    auto& cdcSenseWire = cdcCell.NewDaughter<Detector::Geometry::CDCSenseWire>(fCheckOverlap);
 
     ////////////////////////////////////////////////////////////////
     // Register materials

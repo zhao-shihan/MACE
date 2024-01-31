@@ -8,17 +8,17 @@
 #include "MACE/Data/SimHit.h++"
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/SpectrometerField.h++"
-#include "MACE/Detector/Geometry/Fast/AcceleratorField.h++"
-#include "MACE/Detector/Geometry/Fast/BeamDegrader.h++"
-#include "MACE/Detector/Geometry/Fast/BeamMonitor.h++"
-#include "MACE/Detector/Geometry/Fast/CDCBody.h++"
-#include "MACE/Detector/Geometry/Fast/CDCFieldWire.h++"
-#include "MACE/Detector/Geometry/Fast/CDCGas.h++"
-#include "MACE/Detector/Geometry/Fast/CDCSenseLayer.h++"
-#include "MACE/Detector/Geometry/Fast/CDCSuperLayer.h++"
-#include "MACE/Detector/Geometry/Fast/SpectrometerField.h++"
-#include "MACE/Detector/Geometry/Fast/Target.h++"
-#include "MACE/Detector/Geometry/Fast/World.h++"
+#include "MACE/Detector/Geometry/AcceleratorField.h++"
+#include "MACE/Detector/Geometry/BeamDegrader.h++"
+#include "MACE/Detector/Geometry/BeamMonitor.h++"
+#include "MACE/Detector/Geometry/CDCBody.h++"
+#include "MACE/Detector/Geometry/CDCFieldWire.h++"
+#include "MACE/Detector/Geometry/CDCGas.h++"
+#include "MACE/Detector/Geometry/CDCSenseLayer.h++"
+#include "MACE/Detector/Geometry/CDCSuperLayer.h++"
+#include "MACE/Detector/Geometry/SpectrometerField.h++"
+#include "MACE/Detector/Geometry/Target.h++"
+#include "MACE/Detector/Geometry/World.h++"
 #include "MACE/Env/BasicEnv.h++"
 #include "MACE/Env/CLI/BasicCLI.h++"
 #include "MACE/Extension/stdx/arraynx.h++"
@@ -84,7 +84,7 @@ Math::Random::Gaussian Gaussian1D;
 Math::Random::Gaussian3DDiagnoal Gaussian3D;
 
 void MakeMACECDCGeometry() {
-    using namespace Detector::Geometry::Fast;
+    using namespace Detector::Geometry;
 
     constexpr auto fCheckOverlap = false;
 

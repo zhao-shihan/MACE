@@ -1,9 +1,9 @@
 #include "MACE/Detector/Description/AcceleratorField.h++"
 #include "MACE/Detector/Description/DescriptionIO.h++"
-#include "MACE/Detector/Geometry/Fast/BeamDegrader.h++"
-#include "MACE/Detector/Geometry/Fast/BeamMonitor.h++"
-#include "MACE/Detector/Geometry/Fast/Target.h++"
-#include "MACE/Detector/Geometry/Fast/World.h++"
+#include "MACE/Detector/Geometry/BeamDegrader.h++"
+#include "MACE/Detector/Geometry/BeamMonitor.h++"
+#include "MACE/Detector/Geometry/Target.h++"
+#include "MACE/Detector/Geometry/World.h++"
 #include "MACE/SimTarget/Action/DetectorConstruction.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
@@ -30,7 +30,7 @@ DetectorConstruction::DetectorConstruction() :
 }
 
 auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
-    using namespace MACE::Detector::Geometry::Fast;
+    using namespace MACE::Detector::Geometry;
 
     // AcceleratorField is target's mother by default, modified it to adapt global frame
     Detector::Description::AcceleratorField::Instance().Length(0);
