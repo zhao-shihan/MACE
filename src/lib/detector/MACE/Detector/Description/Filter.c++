@@ -7,10 +7,10 @@ using namespace LiteralUnit::Length;
 
 Filter::Filter() :
     DescriptionSingletonBase<Filter>{"Filter"},
-    fLength{100_cm},
-    fRadius{24_mm},
+    fLength{50_cm},
+    fRadius{49_mm},
     fThickness{200_um},
-    fCount{42} {}
+    fCount{85} {}
 
 void Filter::ImportValues(const YAML::Node& node) {
     ImportValue(node, fLength, "Length");
