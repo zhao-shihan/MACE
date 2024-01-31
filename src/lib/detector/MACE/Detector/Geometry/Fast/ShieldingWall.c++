@@ -41,8 +41,8 @@ auto ShieldingWall::Construct(G4bool checkOverlaps) -> void {
     auto cylinder = Make<G4Tubs>(
         name,
         0,
-        solenoid.OuterRadius() + 2_cm,
-        shieldingWall.Thickness() / 2 + 2_cm,
+        solenoid.FieldRadius() + 2_cm,
+        solenoid.S2Length() / 2 + 2_cm,
         0,
         2 * pi); // clang-format off
     const G4Transform3D wallTransform{
