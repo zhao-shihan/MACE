@@ -1,9 +1,11 @@
 #include "MACE/Math/IntegerPower.h++"
 #include "MACE/Math/Random/Distribution/Uniform.h++"
 #include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
+#include "MACE/Utility/PhysicalConstant.h++"
 
 #include "G4DecayProducts.hh"
 #include "G4DynamicParticle.hh"
+#include "Randomize.hh"
 
 #include "gsl/gsl"
 
