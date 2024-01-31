@@ -29,18 +29,12 @@ public:
     auto ConversionProbability(G4double p) -> void { fConversionProbability = Math::Clamp<"[]">(p, 0., 1.); }
 
     auto IsApplicable(const G4ParticleDefinition&) -> G4bool override;
-    auto StartTracking(G4Track* track) -> void override;
     auto AtRestDoIt(const G4Track& track, const G4Step&) -> G4VParticleChange* override;
 
 private:
     auto GetMeanLifeTime(const G4Track& track, G4ForceCondition*) -> G4double override;
 
 private:
-    const G4ParticleDefinition* const fMuonium;
-    const G4ParticleDefinition* const fAntimuonium;
-    const ATarget* const fTarget;
-    CLHEP::HepRandomEngine* fRandEng;
-
     G4double fFormationProbability;
     G4double fConversionProbability;
 
