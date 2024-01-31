@@ -4,9 +4,9 @@
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimEMC/Region.h++"
+#include "MACE/SimEMC/SD/EMCPMTSD.h++"
 #include "MACE/SimEMC/SD/EMCSD.h++"
 #include "MACE/SimEMC/SD/MCPSD.h++"
-#include "MACE/SimEMC/SD/EMCPMTSD.h++"
 
 #include "G4VUserDetectorConstruction.hh"
 
@@ -49,7 +49,7 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    std::shared_ptr<Detector::Geometry::GeometryBase> fWorld;
+    std::unique_ptr<Detector::Geometry::GeometryBase> fWorld;
 
     Region* fEMCSensitiveRegion;
     Region* fMCPSensitiveRegion;

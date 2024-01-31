@@ -1,4 +1,6 @@
 #include "MACE/Detector/Description/DescriptionIO.h++"
+#include "MACE/Detector/Description/EMC.h++"
+#include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/Detector/Geometry/Fast/EMCCrystal.h++"
 #include "MACE/Detector/Geometry/Fast/EMCPMTAssemblies.h++"
@@ -9,9 +11,9 @@
 #include "MACE/SimEMC/Action/DetectorConstruction.h++"
 #include "MACE/SimEMC/Detector/EMCShield.h++"
 #include "MACE/SimEMC/Detector/EMCTunnel.h++"
+#include "MACE/SimEMC/SD/EMCPMTSD.h++"
 #include "MACE/SimEMC/SD/EMCSD.h++"
 #include "MACE/SimEMC/SD/MCPSD.h++"
-#include "MACE/SimEMC/SD/EMCPMTSD.h++"
 
 // #include "MACE/SimEMC/Messenger/DetectorMessenger.h++"
 #include "MACE/Utility/LiteralUnit.h++"
@@ -56,7 +58,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     description.HalfYExtent(20_m);
     description.HalfZExtent(26_m);
 
-    fWorld = std::make_shared<World>();
+    fWorld = std::make_unique<World>();
     auto& emcCrystal = fWorld->NewDaughter<EMCCrystal>(fCheckOverlap);
     fWorld->NewDaughter<EMCPMTCoupler>(fCheckOverlap);
     auto& emcPMTAssemblies = fWorld->NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
@@ -91,13 +93,15 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     // emcTunnel.RegisterRegion(fTunnelRegion);
 
-    fEMCPMTSD = new SD::EMCPMTSD(emcPMTAssemblies.LogicalVolume()->GetName());
+    const auto& emcName{MACE::Detector::Description::EMC::Instance().Name()};
+
+    fEMCPMTSD = new SD::EMCPMTSD{emcName + "PMT"};
     emcPMTAssemblies.RegisterSD("EMCPMTCathode", fEMCPMTSD);
 
-    fEMCSD = new SD::EMCSD(emcCrystal.LogicalVolume()->GetName(), fEMCPMTSD);
+    fEMCSD = new SD::EMCSD{emcName, fEMCPMTSD};
     emcCrystal.RegisterSD(fEMCSD);
 
-    fMCPSD = new SD::MCPSD(mcp.LogicalVolume()->GetName());
+    fMCPSD = new SD::MCPSD{MACE::Detector::Description::MCP::Instance().Name()};
     mcp.RegisterSD(fMCPSD);
 
     // fWorld->Export("geometry.gdml");
