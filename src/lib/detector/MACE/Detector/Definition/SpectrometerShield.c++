@@ -1,6 +1,7 @@
 #include "MACE/Detector/Definition/SpectrometerShield.h++"
+#include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Description/SpectrometerShield.h++"
-#include "MACE/Utility/MathConstant.h++"
+#include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -10,24 +11,26 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace MathConstant;
+using namespace LiteralUnit;
 
 auto SpectrometerShield::Construct(G4bool checkOverlaps) -> void {
     const auto& shield{Description::SpectrometerShield::Instance()};
+    const auto& solenoid{Description::Solenoid::Instance()};
+
     auto body{Make<G4Tubs>(
         "_temp",
         shield.InnerRadius(),
         shield.InnerRadius() + shield.Thickness(),
         shield.InnerLength() / 2,
         0,
-        2 * pi)};
+        2_pi)};
     auto cap{Make<G4Tubs>(
         "_temp",
-        shield.WindowRadius(),
+        solenoid.FieldRadius() + shield.GapAroundWindow(),
         shield.InnerRadius() + shield.Thickness(),
         shield.Thickness() / 2,
         0,
-        2 * pi)}; // clang-format off
+        2_pi)}; // clang-format off
     auto solid{Make<G4UnionSolid>(
             shield.Name(),
             body,

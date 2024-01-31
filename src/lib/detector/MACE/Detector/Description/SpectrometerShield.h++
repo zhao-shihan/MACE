@@ -14,12 +14,12 @@ private:
 public:
     auto InnerRadius() const -> const auto& { return fInnerRadius; }
     auto InnerLength() const -> const auto& { return fInnerLength; }
-    auto WindowRadius() const -> const auto& { return fWindowRadius; }
+    auto GapAroundWindow() const -> const auto& { return fGapAroundWindow; }
     auto Thickness() const -> const auto& { return fThickness; }
 
     auto InnerRadius(double val) -> void { fInnerRadius = val; }
     auto InnerLength(double val) -> void { fInnerLength = val; }
-    auto WindowRadius(double val) -> void { fWindowRadius = val; }
+    auto GapAroundWindow(double val) -> void { fGapAroundWindow = val; }
     auto Thickness(double val) -> void { fThickness = val; }
 
 private:
@@ -29,7 +29,7 @@ private:
 private:
     double fInnerRadius;
     double fInnerLength;
-    double fWindowRadius;
+    double fGapAroundWindow;
     double fThickness;
 };
 

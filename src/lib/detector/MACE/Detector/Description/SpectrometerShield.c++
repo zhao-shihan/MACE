@@ -9,20 +9,20 @@ SpectrometerShield::SpectrometerShield() :
     DescriptionSingletonBase<SpectrometerShield>{"SpectrometerShield"},
     fInnerRadius{62_cm},
     fInnerLength{222_cm},
-    fWindowRadius{7.7_cm},
+    fGapAroundWindow{1_cm},
     fThickness{5_cm} {}
 
 void SpectrometerShield::ImportValues(const YAML::Node& node) {
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fInnerLength, "InnerLength");
-    ImportValue(node, fWindowRadius, "WindowRadius");
+    ImportValue(node, fGapAroundWindow, "GapAroundWindow");
     ImportValue(node, fThickness, "Thickness");
 }
 
 void SpectrometerShield::ExportValues(YAML::Node& node) const {
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fInnerLength, "InnerLength");
-    ExportValue(node, fWindowRadius, "WindowRadius");
+    ExportValue(node, fGapAroundWindow, "GapAroundWindow");
     ExportValue(node, fThickness, "Thickness");
 }
 

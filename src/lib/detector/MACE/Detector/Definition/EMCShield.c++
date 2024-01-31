@@ -1,7 +1,8 @@
 #include "MACE/Detector/Definition/EMCShield.h++"
 #include "MACE/Detector/Description/EMCField.h++"
 #include "MACE/Detector/Description/EMCShield.h++"
-#include "MACE/Utility/MathConstant.h++"
+#include "MACE/Detector/Description/Solenoid.h++"
+#include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/VectorCast.h++"
 
 #include "G4NistManager.hh"
@@ -11,45 +12,45 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace MathConstant;
+using namespace LiteralUnit;
 
 auto EMCShield::Construct(G4bool checkOverlaps) -> void {
-    const auto& emcShield{Description::EMCShield::Instance()};
-    const auto name{emcShield.Name()};
+    const auto& shield{Description::EMCShield::Instance()};
     const auto& emcField{Description::EMCField::Instance()};
+    const auto& solenoid{Description::Solenoid::Instance()};
 
-    const auto body = Make<G4Tubs>(
+    const auto body{Make<G4Tubs>(
         "_temp",
-        emcShield.InnerRadius(),
-        emcShield.InnerRadius() + emcShield.Thickness(),
-        emcShield.InnerLength() / 2,
+        shield.InnerRadius(),
+        shield.InnerRadius() + shield.Thickness(),
+        shield.InnerLength() / 2,
         0,
-        2 * pi);
-    const auto cap = Make<G4Tubs>(
+        2_pi)};
+    const auto cap{Make<G4Tubs>(
         "_temp",
-        emcShield.WindowRadius(),
-        emcShield.InnerRadius() + emcShield.Thickness(),
-        emcShield.Thickness() / 2,
+        solenoid.FieldRadius() + shield.GapAroundWindow(),
+        shield.InnerRadius() + shield.Thickness(),
+        shield.Thickness() / 2,
         0,
-        2 * pi);
-    const auto temp = Make<G4UnionSolid>(
+        2_pi)}; // clang-format off
+    const auto temp{Make<G4UnionSolid>(
         "_temp",
         body,
-        cap, // clang-format off
-        G4Transform3D{{}, {0, 0, -emcShield.InnerLength() / 2 - emcShield.Thickness() / 2}}); // clang-format on
-    const auto solid = Make<G4UnionSolid>(
-        name,
+        cap,
+        G4Transform3D{{}, {0, 0, -shield.InnerLength() / 2 - shield.Thickness() / 2}})};
+    const auto solid{Make<G4UnionSolid>(
+        shield.Name(),
         temp,
-        cap, // clang-format off
-        G4Transform3D{{}, {0, 0, emcShield.InnerLength() / 2 + emcShield.Thickness() / 2}}); // clang-format on
-    const auto logic = Make<G4LogicalVolume>(
+        cap,
+        G4Transform3D{{}, {0, 0, shield.InnerLength() / 2 + shield.Thickness() / 2}})}; // clang-format on
+    const auto logic{Make<G4LogicalVolume>(
         solid,
         nullptr,
-        name);
+        shield.Name())};
     Make<G4PVPlacement>(
         G4Transform3D{{}, VectorCast<G4ThreeVector>(emcField.Center())},
         logic,
-        name,
+        shield.Name(),
         Mother().LogicalVolume().get(),
         false,
         0,

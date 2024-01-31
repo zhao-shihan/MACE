@@ -1,7 +1,8 @@
 #include "MACE/Detector/Description/DescriptionIO.h++"
 #include "MACE/Detector/Description/EMCShield.h++"
+#include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/SimEMC/Detector/EMCShield.h++"
-#include "MACE/Utility/MathConstant.h++"
+#include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -10,55 +11,44 @@
 
 namespace MACE::SimEMC::Detector {
 
-using namespace MathConstant;
+using namespace LiteralUnit;
 
 auto EMCShield::Construct(G4bool checkOverlaps) -> void {
-    const auto& description = MACE::Detector::Description::EMCShield::Instance();
-    const auto name = description.Name();
-    const auto innerRadius = description.InnerRadius();
-    const auto innerLength = description.InnerLength();
-    const auto windowRadius = description.WindowRadius();
-    const auto thickness = description.Thickness();
+    const auto& shield{MACE::Detector::Description::EMCShield::Instance()};
+    const auto& solenoid{MACE::Detector::Description::Solenoid::Instance()};
 
-    const auto nistManager = G4NistManager::Instance();
-    const auto lead = nistManager->FindOrBuildMaterial("G4_Pb");
-
-    const auto body = Make<G4Tubs>(
+    const auto body{Make<G4Tubs>(
         "_temp",
-        innerRadius,
-        innerRadius + thickness,
-        innerLength / 2,
+        shield.InnerRadius(),
+        shield.InnerRadius() + shield.Thickness(),
+        shield.InnerLength() / 2,
         0,
-        2 * pi);
-    const auto cap = Make<G4Tubs>(
+        2_pi)};
+    const auto cap{Make<G4Tubs>(
         "_temp",
-        windowRadius,
-        innerRadius + thickness,
-        thickness / 2,
+        solenoid.FieldRadius() + shield.GapAroundWindow(),
+        shield.InnerRadius() + shield.Thickness(),
+        shield.Thickness() / 2,
         0,
-        2 * pi);
-    const auto temp = Make<G4UnionSolid>(
+        2_pi)}; // clang-format off
+    const auto temp{Make<G4UnionSolid>(
         "_temp",
         body,
         cap,
-        G4Transform3D(
-            G4RotationMatrix(),
-            G4ThreeVector(0, 0, -innerLength / 2 - thickness / 2)));
-    const auto solid = Make<G4UnionSolid>(
-        name,
+        G4Transform3D{{}, {0, 0, -shield.InnerLength() / 2 - shield.Thickness() / 2}})};
+    const auto solid{Make<G4UnionSolid>(
+        shield.Name(),
         temp,
         cap,
-        G4Transform3D(
-            G4RotationMatrix(),
-            G4ThreeVector(0, 0, innerLength / 2 + thickness / 2)));
-    const auto logic = Make<G4LogicalVolume>(
+        G4Transform3D{{}, {0, 0, shield.InnerLength() / 2 + shield.Thickness() / 2}})}; // clang-format on
+    const auto logic{Make<G4LogicalVolume>(
         solid,
-        lead,
-        name);
+        G4NistManager::Instance()->FindOrBuildMaterial("G4_Pb"),
+        shield.Name())};
     Make<G4PVPlacement>(
         G4Transform3D(),
         logic,
-        name,
+        shield.Name(),
         Mother().LogicalVolume().get(),
         false,
         0,
