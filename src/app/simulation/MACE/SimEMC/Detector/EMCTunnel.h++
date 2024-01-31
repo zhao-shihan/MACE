@@ -1,10 +1,10 @@
 #pragma once
 
-#include "MACE/Detector/Geometry/GeometryBase.h++"
+#include "MACE/Detector/Definition/DefinitionBase.h++"
 
 namespace MACE::SimEMC::Detector {
 
-class EMCTunnel final : public MACE::Detector::Geometry::GeometryBase {
+class EMCTunnel final : public MACE::Detector::Definition::GeometryBase {
 private:
     void Construct(G4bool checkOverlaps) override;
 };

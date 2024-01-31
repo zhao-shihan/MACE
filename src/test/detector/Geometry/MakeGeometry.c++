@@ -1,37 +1,37 @@
 #include "MACE/Detector/Description/DescriptionIO.h++"
-#include "MACE/Detector/Geometry/AcceleratorField.h++"
-#include "MACE/Detector/Geometry/BeamDegrader.h++"
-#include "MACE/Detector/Geometry/BeamMonitor.h++"
-#include "MACE/Detector/Geometry/CDCBody.h++"
-#include "MACE/Detector/Geometry/CDCCell.h++"
-#include "MACE/Detector/Geometry/CDCFieldWire.h++"
-#include "MACE/Detector/Geometry/CDCGas.h++"
-#include "MACE/Detector/Geometry/CDCSenseLayer.h++"
-#include "MACE/Detector/Geometry/CDCSenseWire.h++"
-#include "MACE/Detector/Geometry/CDCSuperLayer.h++"
-#include "MACE/Detector/Geometry/EMCCrystal.h++"
-#include "MACE/Detector/Geometry/EMCField.h++"
-#include "MACE/Detector/Geometry/EMCPMTAssemblies.h++"
-#include "MACE/Detector/Geometry/EMCPMTCoupler.h++"
-#include "MACE/Detector/Geometry/EMCShield.h++"
-#include "MACE/Detector/Geometry/Filter.h++"
-#include "MACE/Detector/Geometry/MCP.h++"
-#include "MACE/Detector/Geometry/ShieldingWall.h++"
-#include "MACE/Detector/Geometry/SolenoidB1.h++"
-#include "MACE/Detector/Geometry/SolenoidB1Field.h++"
-#include "MACE/Detector/Geometry/SolenoidB2.h++"
-#include "MACE/Detector/Geometry/SolenoidB2Field.h++"
-#include "MACE/Detector/Geometry/SolenoidS1.h++"
-#include "MACE/Detector/Geometry/SolenoidS1Field.h++"
-#include "MACE/Detector/Geometry/SolenoidS2.h++"
-#include "MACE/Detector/Geometry/SolenoidS2Field.h++"
-#include "MACE/Detector/Geometry/SolenoidS3.h++"
-#include "MACE/Detector/Geometry/SolenoidS3Field.h++"
-#include "MACE/Detector/Geometry/SpectrometerField.h++"
-#include "MACE/Detector/Geometry/SpectrometerMagnet.h++"
-#include "MACE/Detector/Geometry/SpectrometerShield.h++"
-#include "MACE/Detector/Geometry/Target.h++"
-#include "MACE/Detector/Geometry/World.h++"
+#include "MACE/Detector/Definition/AcceleratorField.h++"
+#include "MACE/Detector/Definition/BeamDegrader.h++"
+#include "MACE/Detector/Definition/BeamMonitor.h++"
+#include "MACE/Detector/Definition/CDCBody.h++"
+#include "MACE/Detector/Definition/CDCCell.h++"
+#include "MACE/Detector/Definition/CDCFieldWire.h++"
+#include "MACE/Detector/Definition/CDCGas.h++"
+#include "MACE/Detector/Definition/CDCSenseLayer.h++"
+#include "MACE/Detector/Definition/CDCSenseWire.h++"
+#include "MACE/Detector/Definition/CDCSuperLayer.h++"
+#include "MACE/Detector/Definition/EMCCrystal.h++"
+#include "MACE/Detector/Definition/EMCField.h++"
+#include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
+#include "MACE/Detector/Definition/EMCPMTCoupler.h++"
+#include "MACE/Detector/Definition/EMCShield.h++"
+#include "MACE/Detector/Definition/Filter.h++"
+#include "MACE/Detector/Definition/MCP.h++"
+#include "MACE/Detector/Definition/ShieldingWall.h++"
+#include "MACE/Detector/Definition/SolenoidB1.h++"
+#include "MACE/Detector/Definition/SolenoidB1Field.h++"
+#include "MACE/Detector/Definition/SolenoidB2.h++"
+#include "MACE/Detector/Definition/SolenoidB2Field.h++"
+#include "MACE/Detector/Definition/SolenoidS1.h++"
+#include "MACE/Detector/Definition/SolenoidS1Field.h++"
+#include "MACE/Detector/Definition/SolenoidS2.h++"
+#include "MACE/Detector/Definition/SolenoidS2Field.h++"
+#include "MACE/Detector/Definition/SolenoidS3.h++"
+#include "MACE/Detector/Definition/SolenoidS3Field.h++"
+#include "MACE/Detector/Definition/SpectrometerField.h++"
+#include "MACE/Detector/Definition/SpectrometerMagnet.h++"
+#include "MACE/Detector/Definition/SpectrometerShield.h++"
+#include "MACE/Detector/Definition/Target.h++"
+#include "MACE/Detector/Definition/World.h++"
 #include "MACE/Env/BasicEnv.h++"
 #include "MACE/Env/CLI/BasicCLI.h++"
 #include "MACE/Utility/LiteralUnit.h++"
@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
     // Construct volumes
     ////////////////////////////////////////////////////////////////
 
-    using namespace MACE::Detector::Geometry;
+    using namespace MACE::Detector::Definition;
 
     constexpr auto fCheckOverlap = true;
 
@@ -217,7 +217,7 @@ int main(int argc, char* argv[]) {
     // see form https://github.com/root-project/jsroot/blob/master/docs/JSROOT.md#geometry-viewer
 
     geoManager->GetVolume(fWorld->LogicalVolume()->GetName())->SetInvisible();
-    using MACE::Detector::Geometry::GeometryBase;
+    using MACE::Detector::Definition::GeometryBase;
     for (auto&& entity : std::initializer_list<std::reference_wrapper<const GeometryBase>>{
              emcShield,
              emcCrystal,

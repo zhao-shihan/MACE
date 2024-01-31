@@ -15,11 +15,11 @@
 
 namespace MACE {
 
-namespace Detector::Geometry {
+namespace Detector::Definition {
 
 class GeometryBase;
 
-} // namespace Detector::Geometry
+} // namespace Detector::Definition
 
 namespace SimEMC::inline Action {
 
@@ -49,7 +49,7 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    std::unique_ptr<Detector::Geometry::GeometryBase> fWorld;
+    std::unique_ptr<Detector::Definition::GeometryBase> fWorld;
 
     Region* fEMCSensitiveRegion;
     Region* fMCPSensitiveRegion;

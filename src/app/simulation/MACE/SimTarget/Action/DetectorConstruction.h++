@@ -14,11 +14,11 @@
 
 namespace MACE {
 
-namespace Detector::Geometry {
+namespace Detector::Definition {
 
 class GeometryBase;
 
-} // namespace Detector::Geometry
+} // namespace Detector::Definition
 
 namespace SimTarget::inline Action {
 
@@ -43,7 +43,7 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    std::unique_ptr<Detector::Geometry::GeometryBase> fWorld;
+    std::unique_ptr<Detector::Definition::GeometryBase> fWorld;
 
     G4double fTargetDensity;
     G4double fTargetTemperature;
