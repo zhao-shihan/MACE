@@ -44,16 +44,13 @@ auto CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
 
 auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& step{*theStep};
-    const auto& track{*step.GetTrack()};
-    const auto& particle{*track.GetDefinition()};
-
-    if (particle.GetPDGCharge() == 0) { return false; }
-
     const auto eDep{step.GetTotalEnergyDeposit()};
 
     if (eDep - step.GetNonIonizingEnergyDeposit() == 0) { return false; } // ionizing Edep
     assert(eDep > 0);
 
+    const auto& track{*step.GetTrack()};
+    const auto& particle{*track.GetDefinition()};
     const auto& preStepPoint{*step.GetPreStepPoint()};
     const auto& postStepPoint{*step.GetPostStepPoint()};
     const auto cellID{preStepPoint.GetTouchable()->GetReplicaNumber()};
