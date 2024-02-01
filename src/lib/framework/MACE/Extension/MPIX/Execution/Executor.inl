@@ -164,7 +164,8 @@ auto Executor<T>::PostTaskReport(T iEnded) const -> void {
     if (not fPrintProgress or fPrintProgressModulo < 0) { return; }
     const auto& mpiEnv{Env::MPIEnv::Instance()};
     if (mpiEnv.GetVerboseLevel() < Env::VL::Error) { return; }
-    const auto speed{NExecutedTask() / fWallTimeStopwatch.SecondsElapsed()};
+    const auto secondsElapsed{fWallTimeStopwatch.SecondsElapsed()};
+    const auto speed{NExecutedTask() / secondsElapsed};
     if (fPrintProgressModulo == 0) {
         fAutoPrintProgressModulo = std::max(1ll, std::llround(speed * 3)); // print every 3s
         if ((iEnded + 1) % fAutoPrintProgressModulo != 0) { return; }
@@ -175,9 +176,9 @@ auto Executor<T>::PostTaskReport(T iEnded) const -> void {
     const auto est{NLocalExecutedTask() > 10};
     const auto progress{static_cast<double>(NExecutedTask()) / NTask()};
     fmt::print("MPI{}> {:%FT%T%z} > {} {} has ended\n"
-               "MPI{}>   {}Prog.: {} | {}/{} | {:.3}%\n",
+               "MPI{}>   {} elaps., {}prog.: {} | {}/{} | {:.3}%\n",
                mpiEnv.CommWorldRank(), fmt::localtime(scsc::to_time_t(scsc::now())), fTaskName, iEnded,
-               mpiEnv.CommWorldRank(), est ? fmt::format("Est. rem. {} ({:.3}/s)  ", SToDHMS(eta), speed) : "", NLocalExecutedTask(), NExecutedTask(), NTask(), 100 * progress);
+               mpiEnv.CommWorldRank(), SToDHMS(secondsElapsed), est ? fmt::format("est. rem. {} ({:.3}/s), ", SToDHMS(eta), speed) : "", NLocalExecutedTask(), NExecutedTask(), NTask(), 100 * progress);
 }
 
 template<std::integral T>
