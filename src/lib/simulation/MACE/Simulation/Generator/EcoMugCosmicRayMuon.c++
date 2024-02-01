@@ -6,23 +6,23 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-#ifndef EcoMug_H
-#    define EcoMug_H
+#include <array>
+#include <bit>
+#include <cmath>
+#include <functional>
+#include <initializer_list>
+#include <iostream>
+#include <random>
+#include <sstream>
 
-#    include <array>
-#    include <cmath>
-#    include <functional>
-#    include <initializer_list>
-#    include <iostream>
-#    include <random>
-#    include <sstream>
+namespace {
 
-#    define ECOMUG_VERSION "2.1"
+#define ECOMUG_VERSION "2.1"
 
-#    ifndef M_PI
-#        define M_PI_NOT_DEFINED
-#        define M_PI 3.14159265358979323846
-#    endif
+#ifndef M_PI
+#    define M_PI_NOT_DEFINED
+#    define M_PI 3.14159265358979323846
+#endif
 
 namespace EMUnits {
 // Default units:
@@ -129,11 +129,11 @@ private:
     std::ostringstream os;
 };
 
-#    define EMLogger(level, msg, type)     \
-        if (level > EMLog::ReportingLevel) \
-            ;                              \
-        else                               \
-            EMLog().Get(level, msg, type)
+#define EMLogger(level, msg, type)     \
+    if (level > EMLog::ReportingLevel) \
+        ;                              \
+    else                               \
+        EMLog().Get(level, msg, type)
 
 // EMLog::TLogLevel EMLog::ReportingLevel = WARNING;
 ///////////////////////////////////////////////////////////////
@@ -181,12 +181,7 @@ public:
     };
 
     double to_double(std::uint64_t x) {
-        union U {
-            std::uint64_t i;
-            double d;
-        };
-        U u = {UINT64_C(0x3FF) << 52 | x >> 12};
-        return u.d - 1.0;
+        return std::bit_cast<double>(UINT64_C(0x3FF) << 52 | x >> 12) - 1.0;
     };
 
     std::uint64_t s[2];
@@ -1193,45 +1188,44 @@ private:
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 
-#    ifdef ECOMUG_VERSION
-#        undef ECOMUG_VERSION
-#    endif
-
-#    ifdef M_PI_NOT_DEFINED
-#        undef M_PI
-#        undef M_PI_NOT_DEFINED
-#    endif
-
+#ifdef ECOMUG_VERSION
+#    undef ECOMUG_VERSION
 #endif
+
+#ifdef M_PI_NOT_DEFINED
+#    undef M_PI
+#    undef M_PI_NOT_DEFINED
+#endif
+
+} // namespace
 
 namespace Generator {
 
 EcoMugCosmicRayMuon::EcoMugCosmicRayMuon() :
     G4VPrimaryGenerator(),
-    fMuonPlus(G4MuonPlus::Definition()),
-    fMuonMinus(G4MuonMinus::Definition()),
-    fEcoMug() {
-    fEcoMug = std::make_unique<EcoMug>();
-    fEcoMug->SetUseSky();
-    fEcoMug->SetSkySize({50. * CLHEP::m, 50. * CLHEP::m});
-    fEcoMug->SetSkyCenterPosition({0., 0., 20. * CLHEP::m});
+    fEcoMug{EcoMug{}} {
+    auto& ecoMug{std::any_cast<EcoMug&>(fEcoMug)};
+    ecoMug.SetUseSky();
+    ecoMug.SetSkySize({50. * CLHEP::m, 50. * CLHEP::m});
+    ecoMug.SetSkyCenterPosition({0., 0., 20. * CLHEP::m});
 }
 
 EcoMugCosmicRayMuon::~EcoMugCosmicRayMuon() = default;
 
 auto EcoMugCosmicRayMuon::GeneratePrimaryVertex(G4Event* event) -> void {
-    fEcoMug->Generate();
+    auto& ecoMug{std::any_cast<EcoMug&>(fEcoMug)};
+    ecoMug.Generate();
 
     // The following are all transformed to the Geant4 coordinate system convention
 
     std::array<double, 3> p;
-    fEcoMug->GetGenerationMomentum(p);
+    ecoMug.GetGenerationMomentum(p);
     (p[0] *= GeV, p[1] *= GeV, p[2] *= GeV);
-    const auto primaryParticle = fEcoMug->GetCharge() > 0 ?
-                                     new G4PrimaryParticle(fMuonPlus, p[0], p[2], -p[1]) :
-                                     new G4PrimaryParticle(fMuonMinus, p[0], p[2], -p[1]);
+    const auto primaryParticle = ecoMug.GetCharge() > 0 ?
+                                     new G4PrimaryParticle(G4MuonPlus::Definition(), p[0], p[2], -p[1]) :
+                                     new G4PrimaryParticle(G4MuonMinus::Definition(), p[0], p[2], -p[1]);
 
-    const auto& [x, y, z] = fEcoMug->GetGenerationPosition();
+    const auto& [x, y, z] = ecoMug.GetGenerationPosition();
     const auto primaryVertex = new G4PrimaryVertex({x, z, -y}, 0);
 
     primaryVertex->SetPrimary(primaryParticle);

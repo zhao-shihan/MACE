@@ -2,11 +2,7 @@
 
 #include "G4VPrimaryGenerator.hh"
 
-#include <memory>
-
-class G4MuonPlus;
-class G4MuonMinus;
-class EcoMug;
+#include <any>
 
 namespace Generator {
 
@@ -19,10 +15,7 @@ public:
     auto GeneratePrimaryVertex(G4Event* event) -> void override;
 
 private:
-    const G4MuonPlus* const fMuonPlus;
-    const G4MuonMinus* const fMuonMinus;
-
-    std::unique_ptr<EcoMug> fEcoMug;
+    std::any fEcoMug;
 };
 
 } // namespace Generator
