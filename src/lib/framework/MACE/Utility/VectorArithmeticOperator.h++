@@ -13,37 +13,40 @@ inline namespace Vector2ArithmeticOperator {
                                                                                \
     auto operator+(const Concept::NumericVector2<T> auto& u,                   \
                    const Concept::NumericVector2<U> auto& v)                   \
-        ->std::conditional_t<sizeof(T) >= sizeof(U),                           \
-                             std::decay_t<decltype(u)>,                        \
-                             std::decay_t<decltype(v)>> {                      \
+        -> std::conditional_t<sizeof(T) >= sizeof(U),                          \
+                              std::decay_t<decltype(u)>,                       \
+                              std::decay_t<decltype(v)>> {                     \
         return {u[0] + v[0],                                                   \
                 u[1] + v[1]};                                                  \
     }                                                                          \
                                                                                \
     auto operator-(const Concept::NumericVector2<T> auto& u,                   \
                    const Concept::NumericVector2<U> auto& v)                   \
-        ->std::conditional_t<sizeof(T) >= sizeof(U),                           \
-                             std::decay_t<decltype(u)>,                        \
-                             std::decay_t<decltype(v)>> {                      \
+        -> std::conditional_t<sizeof(T) >= sizeof(U),                          \
+                              std::decay_t<decltype(u)>,                       \
+                              std::decay_t<decltype(v)>> {                     \
         return {u[0] - v[0],                                                   \
                 u[1] - v[1]};                                                  \
     }                                                                          \
                                                                                \
     auto operator*(const Concept::NumericVector2<T> auto& u,                   \
-                   const Concept::NumericVector2<U> auto& v) {                 \
+                   const Concept::NumericVector2<U> auto& v)                   \
+        -> auto {                                                              \
         return u[0] * v[0] +                                                   \
                u[1] * v[1];                                                    \
     }                                                                          \
                                                                                \
-    auto& operator+=(Concept::NumericVector2<T> auto& u,                       \
-                     const Concept::NumericVector2<U> auto& v) {               \
+    auto operator+=(Concept::NumericVector2<T> auto& u,                        \
+                    const Concept::NumericVector2<U> auto& v)                  \
+        -> auto& {                                                             \
         u[0] += v[0];                                                          \
         u[1] += v[1];                                                          \
         return u;                                                              \
     }                                                                          \
                                                                                \
-    auto& operator-=(Concept::NumericVector2<T> auto& u,                       \
-                     const Concept::NumericVector2<U> auto& v) {               \
+    auto operator-=(Concept::NumericVector2<T> auto& u,                        \
+                    const Concept::NumericVector2<U> auto& v)                  \
+        -> auto& {                                                             \
         u[0] -= v[0];                                                          \
         u[1] -= v[1];                                                          \
         return u;                                                              \
@@ -51,36 +54,44 @@ inline namespace Vector2ArithmeticOperator {
 
 #define MACE_UTILITY_VECTOR_ARITHMETIC_OPERATOR_VECTOR2_SCALAR_OPERATORS(T) \
                                                                             \
+    auto operator-(const Concept::NumericVector2<T> auto& u)                \
+        -> std::decay_t<decltype(u)> {                                      \
+        return {-u[0],                                                      \
+                -u[1]};                                                     \
+    }                                                                       \
+                                                                            \
     auto operator*(const Concept::NumericVector2<T> auto& u,                \
                    Concept::Arithmetic auto c)                              \
-        ->std::decay_t<decltype(u)> {                                       \
+        -> std::decay_t<decltype(u)> {                                      \
         return {u[0] * c,                                                   \
                 u[1] * c};                                                  \
     }                                                                       \
                                                                             \
     auto operator*(Concept::Arithmetic auto c,                              \
                    const Concept::NumericVector2<T> auto& u)                \
-        ->std::decay_t<decltype(u)> {                                       \
+        -> std::decay_t<decltype(u)> {                                      \
         return {c * u[0],                                                   \
                 c * u[1]};                                                  \
     }                                                                       \
                                                                             \
     auto operator/(const Concept::NumericVector2<T> auto& u,                \
                    Concept::Arithmetic auto c)                              \
-        ->std::decay_t<decltype(u)> {                                       \
+        -> std::decay_t<decltype(u)> {                                      \
         return {u[0] / c,                                                   \
                 u[1] / c};                                                  \
     }                                                                       \
                                                                             \
-    auto& operator*=(Concept::NumericVector2<T> auto& u,                    \
-                     Concept::Arithmetic auto c) {                          \
+    auto operator*=(Concept::NumericVector2<T> auto& u,                     \
+                    Concept::Arithmetic auto c)                             \
+        -> auto& {                                                          \
         u[0] *= c;                                                          \
         u[1] *= c;                                                          \
         return u;                                                           \
     }                                                                       \
                                                                             \
-    auto& operator/=(Concept::NumericVector2<T> auto& u,                    \
-                     Concept::Arithmetic auto c) {                          \
+    auto operator/=(Concept::NumericVector2<T> auto& u,                     \
+                    Concept::Arithmetic auto c)                             \
+        -> auto& {                                                          \
         u[0] /= c;                                                          \
         u[1] /= c;                                                          \
         return u;                                                           \
@@ -110,9 +121,9 @@ inline namespace Vector3ArithmeticOperator {
                                                                                \
     auto operator+(const Concept::NumericVector3<T> auto& u,                   \
                    const Concept::NumericVector3<U> auto& v)                   \
-        ->std::conditional_t<sizeof(T) >= sizeof(U),                           \
-                             std::decay_t<decltype(u)>,                        \
-                             std::decay_t<decltype(v)>> {                      \
+        -> std::conditional_t<sizeof(T) >= sizeof(U),                          \
+                              std::decay_t<decltype(u)>,                       \
+                              std::decay_t<decltype(v)>> {                     \
         return {u[0] + v[0],                                                   \
                 u[1] + v[1],                                                   \
                 u[2] + v[2]};                                                  \
@@ -120,31 +131,34 @@ inline namespace Vector3ArithmeticOperator {
                                                                                \
     auto operator-(const Concept::NumericVector3<T> auto& u,                   \
                    const Concept::NumericVector3<U> auto& v)                   \
-        ->std::conditional_t<sizeof(T) >= sizeof(U),                           \
-                             std::decay_t<decltype(u)>,                        \
-                             std::decay_t<decltype(v)>> {                      \
+        -> std::conditional_t<sizeof(T) >= sizeof(U),                          \
+                              std::decay_t<decltype(u)>,                       \
+                              std::decay_t<decltype(v)>> {                     \
         return {u[0] - v[0],                                                   \
                 u[1] - v[1],                                                   \
                 u[2] - v[2]};                                                  \
     }                                                                          \
                                                                                \
     auto operator*(const Concept::NumericVector3<T> auto& u,                   \
-                   const Concept::NumericVector3<U> auto& v) {                 \
+                   const Concept::NumericVector3<U> auto& v)                   \
+        -> auto {                                                              \
         return u[0] * v[0] +                                                   \
                u[1] * v[1] +                                                   \
                u[2] * v[2];                                                    \
     }                                                                          \
                                                                                \
-    auto& operator+=(Concept::NumericVector3<T> auto& u,                       \
-                     const Concept::NumericVector3<U> auto& v) {               \
+    auto operator+=(Concept::NumericVector3<T> auto& u,                        \
+                    const Concept::NumericVector3<U> auto& v)                  \
+        -> auto& {                                                             \
         u[0] += v[0];                                                          \
         u[1] += v[1];                                                          \
         u[2] += v[2];                                                          \
         return u;                                                              \
     }                                                                          \
                                                                                \
-    auto& operator-=(Concept::NumericVector3<T> auto& u,                       \
-                     const Concept::NumericVector3<U> auto& v) {               \
+    auto operator-=(Concept::NumericVector3<T> auto& u,                        \
+                    const Concept::NumericVector3<U> auto& v)                  \
+        -> auto& {                                                             \
         u[0] -= v[0];                                                          \
         u[1] -= v[1];                                                          \
         u[2] -= v[2];                                                          \
@@ -153,9 +167,16 @@ inline namespace Vector3ArithmeticOperator {
 
 #define MACE_UTILITY_VECTOR_ARITHMETIC_OPERATOR_VECTOR3_SCALAR_OPERATORS(T) \
                                                                             \
+    auto operator-(const Concept::NumericVector3<T> auto& u)                \
+        -> std::decay_t<decltype(u)> {                                      \
+        return {-u[0],                                                      \
+                -u[1],                                                      \
+                -u[2]};                                                     \
+    }                                                                       \
+                                                                            \
     auto operator*(const Concept::NumericVector3<T> auto& u,                \
                    Concept::Arithmetic auto c)                              \
-        ->std::decay_t<decltype(u)> {                                       \
+        -> std::decay_t<decltype(u)> {                                      \
         return {u[0] * c,                                                   \
                 u[1] * c,                                                   \
                 u[2] * c};                                                  \
@@ -163,7 +184,7 @@ inline namespace Vector3ArithmeticOperator {
                                                                             \
     auto operator*(Concept::Arithmetic auto c,                              \
                    const Concept::NumericVector3<T> auto& u)                \
-        ->std::decay_t<decltype(u)> {                                       \
+        -> std::decay_t<decltype(u)> {                                      \
         return {c * u[0],                                                   \
                 c * u[1],                                                   \
                 c * u[2]};                                                  \
@@ -171,22 +192,24 @@ inline namespace Vector3ArithmeticOperator {
                                                                             \
     auto operator/(const Concept::NumericVector3<T> auto& u,                \
                    Concept::Arithmetic auto c)                              \
-        ->std::decay_t<decltype(u)> {                                       \
+        -> std::decay_t<decltype(u)> {                                      \
         return {u[0] / c,                                                   \
                 u[1] / c,                                                   \
                 u[2] / c};                                                  \
     }                                                                       \
                                                                             \
-    auto& operator*=(Concept::NumericVector3<T> auto& u,                    \
-                     Concept::Arithmetic auto c) {                          \
+    auto operator*=(Concept::NumericVector3<T> auto& u,                     \
+                    Concept::Arithmetic auto c)                             \
+        -> auto& {                                                          \
         u[0] *= c;                                                          \
         u[1] *= c;                                                          \
         u[2] *= c;                                                          \
         return u;                                                           \
     }                                                                       \
                                                                             \
-    auto& operator/=(Concept::NumericVector3<T> auto& u,                    \
-                     Concept::Arithmetic auto c) {                          \
+    auto operator/=(Concept::NumericVector3<T> auto& u,                     \
+                    Concept::Arithmetic auto c)                             \
+        -> auto& {                                                          \
         u[0] /= c;                                                          \
         u[1] /= c;                                                          \
         u[2] /= c;                                                          \
@@ -217,9 +240,9 @@ inline namespace Vector4ArithmeticOperator {
                                                                                \
     auto operator+(const Concept::NumericVector4<T> auto& u,                   \
                    const Concept::NumericVector4<U> auto& v)                   \
-        ->std::conditional_t<sizeof(T) >= sizeof(U),                           \
-                             std::decay_t<decltype(u)>,                        \
-                             std::decay_t<decltype(v)>> {                      \
+        -> std::conditional_t<sizeof(T) >= sizeof(U),                          \
+                              std::decay_t<decltype(u)>,                       \
+                              std::decay_t<decltype(v)>> {                     \
         return {u[0] + v[0],                                                   \
                 u[1] + v[1],                                                   \
                 u[2] + v[2],                                                   \
@@ -228,17 +251,18 @@ inline namespace Vector4ArithmeticOperator {
                                                                                \
     auto operator-(const Concept::NumericVector4<T> auto& u,                   \
                    const Concept::NumericVector4<U> auto& v)                   \
-        ->std::conditional_t<sizeof(T) >= sizeof(U),                           \
-                             std::decay_t<decltype(u)>,                        \
-                             std::decay_t<decltype(v)>> {                      \
+        -> std::conditional_t<sizeof(T) >= sizeof(U),                          \
+                              std::decay_t<decltype(u)>,                       \
+                              std::decay_t<decltype(v)>> {                     \
         return {u[0] - v[0],                                                   \
                 u[1] - v[1],                                                   \
                 u[2] - v[2],                                                   \
                 u[3] - v[3]};                                                  \
     }                                                                          \
                                                                                \
-    auto& operator+=(Concept::NumericVector4<T> auto& u,                       \
-                     const Concept::NumericVector4<U> auto& v) {               \
+    auto operator+=(Concept::NumericVector4<T> auto& u,                        \
+                    const Concept::NumericVector4<U> auto& v)                  \
+        -> auto& {                                                             \
         u[0] += v[0];                                                          \
         u[1] += v[1];                                                          \
         u[2] += v[2];                                                          \
@@ -246,8 +270,9 @@ inline namespace Vector4ArithmeticOperator {
         return u;                                                              \
     }                                                                          \
                                                                                \
-    auto& operator-=(Concept::NumericVector4<T> auto& u,                       \
-                     const Concept::NumericVector4<U> auto& v) {               \
+    auto operator-=(Concept::NumericVector4<T> auto& u,                        \
+                    const Concept::NumericVector4<U> auto& v)                  \
+        -> auto& {                                                             \
         u[0] -= v[0];                                                          \
         u[1] -= v[1];                                                          \
         u[2] -= v[2];                                                          \
@@ -257,9 +282,17 @@ inline namespace Vector4ArithmeticOperator {
 
 #define MACE_UTILITY_VECTOR_ARITHMETIC_OPERATOR_VECTOR4_SCALAR_OPERATORS(T) \
                                                                             \
+    auto operator-(const Concept::NumericVector4<T> auto& u)                \
+        -> std::decay_t<decltype(u)> {                                      \
+        return {-u[0],                                                      \
+                -u[1],                                                      \
+                -u[2],                                                      \
+                -u[3]};                                                     \
+    }                                                                       \
+                                                                            \
     auto operator*(const Concept::NumericVector4<T> auto& u,                \
                    Concept::Arithmetic auto c)                              \
-        ->std::decay_t<decltype(u)> {                                       \
+        -> std::decay_t<decltype(u)> {                                      \
         return {u[0] * c,                                                   \
                 u[1] * c,                                                   \
                 u[2] * c,                                                   \
@@ -268,7 +301,7 @@ inline namespace Vector4ArithmeticOperator {
                                                                             \
     auto operator*(Concept::Arithmetic auto c,                              \
                    const Concept::NumericVector4<T> auto& u)                \
-        ->std::decay_t<decltype(u)> {                                       \
+        -> std::decay_t<decltype(u)> {                                      \
         return {c * u[0],                                                   \
                 c * u[1],                                                   \
                 c * u[2],                                                   \
@@ -277,15 +310,16 @@ inline namespace Vector4ArithmeticOperator {
                                                                             \
     auto operator/(const Concept::NumericVector4<T> auto& u,                \
                    Concept::Arithmetic auto c)                              \
-        ->std::decay_t<decltype(u)> {                                       \
+        -> std::decay_t<decltype(u)> {                                      \
         return {u[0] / c,                                                   \
                 u[1] / c,                                                   \
                 u[2] / c,                                                   \
                 u[3] / c};                                                  \
     }                                                                       \
                                                                             \
-    auto& operator*=(Concept::NumericVector4<T> auto& u,                    \
-                     Concept::Arithmetic auto c) {                          \
+    auto operator*=(Concept::NumericVector4<T> auto& u,                     \
+                    Concept::Arithmetic auto c)                             \
+        -> auto& {                                                          \
         u[0] *= c;                                                          \
         u[1] *= c;                                                          \
         u[2] *= c;                                                          \
@@ -293,8 +327,9 @@ inline namespace Vector4ArithmeticOperator {
         return u;                                                           \
     }                                                                       \
                                                                             \
-    auto& operator/=(Concept::NumericVector4<T> auto& u,                    \
-                     Concept::Arithmetic auto c) {                          \
+    auto operator/=(Concept::NumericVector4<T> auto& u,                     \
+                    Concept::Arithmetic auto c)                             \
+        -> auto& {                                                          \
         u[0] /= c;                                                          \
         u[1] /= c;                                                          \
         u[2] /= c;                                                          \
