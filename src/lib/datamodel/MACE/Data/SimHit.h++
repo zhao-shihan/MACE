@@ -4,7 +4,8 @@
 #include "MACE/Data/TupleModel.h++"
 #include "MACE/Data/Value.h++"
 #include "MACE/Extension/stdx/arraynx.h++"
-#include "MACE/Utility/FixedString.h++"
+
+#include <string>
 
 namespace MACE::Data {
 
@@ -14,7 +15,7 @@ using SimHitVertexTruth = TupleModel<Value<int, "TrkID", "MC Track ID">,
                                      Value<stdx::array3f, "x0", "Vertex position (MC truth)">,
                                      Value<float, "Ek0", "Vertex kinetic energy (MC truth)">,
                                      Value<stdx::array3f, "p0", "Vertex momentum (MC truth)">,
-                                     Value<String31, "CreatProc", "Track creator process (MC truth)">>;
+                                     Value<std::string, "CreatProc", "Track creator process (MC truth)">>;
 
 using CDCSimHit = TupleModel<CDCHit,
                              Value<double, "tHit", "Hit time (MC truth)">,
