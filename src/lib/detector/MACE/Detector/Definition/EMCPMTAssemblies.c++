@@ -1,4 +1,5 @@
 #include "MACE/Detector/Definition/DefinitionBase.h++"
+#include "MACE/Detector/Definition/EMCCrystal.h++"
 #include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Env/BasicEnv.h++"
@@ -44,9 +45,19 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
     /////////////////////////////////////////////
 
     const auto nistManager = G4NistManager::Instance();
+    const auto hydrogenElement = nistManager->FindOrBuildElement("H");
+    const auto carbonElement = nistManager->FindOrBuildElement("C");
+    const auto oxygenElement = nistManager->FindOrBuildElement("O");
+    const auto siliconElement = nistManager->FindOrBuildElement("Si");
     const auto potassiumElement = nistManager->FindOrBuildElement("K");
     const auto antimonyElement = nistManager->FindOrBuildElement("Sb");
     const auto cesiumElement = nistManager->FindOrBuildElement("Cs");
+
+    const auto siliconeGrease = new G4Material("siliconeGrease", 1.06_g_cm3, 4, kStateLiquid);
+    siliconeGrease->AddElement(carbonElement, 2);
+    siliconeGrease->AddElement(hydrogenElement, 6);
+    siliconeGrease->AddElement(oxygenElement, 1);
+    siliconeGrease->AddElement(siliconElement, 1);
 
     const auto glass = nistManager->FindOrBuildMaterial("G4_GLASS_PLATE");
     const auto bialkali = new G4Material("Bialkali", 2.0_g_cm3, 3, kStateSolid);
@@ -63,6 +74,11 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
     const std::vector<G4double> fEnergyPair = {h_Planck * c_light / fLambdaMax,
                                                h_Planck * c_light / fLambdaMin};
 
+    const auto siliconeGreasePropertiesTable = new G4MaterialPropertiesTable();
+    siliconeGreasePropertiesTable->AddProperty("RINDEX", fEnergyPair, {1.46, 1.46}); // EJ-550
+    siliconeGreasePropertiesTable->AddProperty("ABSLENGTH", fEnergyPair, {100_cm, 100_cm});
+    siliconeGrease->SetMaterialPropertiesTable(siliconeGreasePropertiesTable);
+
     const auto windowPropertiesTable = new G4MaterialPropertiesTable();
     windowPropertiesTable->AddProperty("RINDEX", fEnergyPair, {1.49, 1.49}); // ET 9269B 9956B
     glass->SetMaterialPropertiesTable(windowPropertiesTable);
@@ -73,6 +89,9 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
                    [](auto val) { return h_Planck * c_light / (val * nm / mm); });
     std::transform(pmtQuantumEfficiency.begin(), pmtQuantumEfficiency.end(), cathodeSurfacePropertiesEfficiency.begin(),
                    [](auto n) { return n * perCent; });
+
+    const auto couplerSurfacePropertiesTable = new G4MaterialPropertiesTable();
+    couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", fEnergyPair, {1, 1});
 
     const auto cathodeSurfacePropertiesTable = new G4MaterialPropertiesTable();
     cathodeSurfacePropertiesTable->AddProperty("REFLECTIVITY", fEnergyPair, {0., 0.});
@@ -107,12 +126,27 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
             cathodeRadius = emc.LargePMTCathodeRadius();
         }
 
+        const auto couplerTransform =
+            Detector::Description::EMC::Instance().ComputeTransformToOuterSurfaceWithOffset(copyNo,
+                                                                                            pmtCouplerThickness / 2);
+
         const auto shellTransform =
             Detector::Description::EMC::Instance().ComputeTransformToOuterSurfaceWithOffset(copyNo,
                                                                                             pmtCouplerThickness + pmtLength / 2);
+
         const auto cathodeTransform =
             Detector::Description::EMC::Instance().ComputeTransformToOuterSurfaceWithOffset(copyNo,
                                                                                             pmtCouplerThickness + pmtWindowThickness + pmtCathodeThickness / 2);
+
+        const auto solidCoupler = Make<G4Tubs>("temp", 0, pmtRadius, pmtCouplerThickness / 2, 0, 2 * pi);
+        const auto logicCoupler = Make<G4LogicalVolume>(solidCoupler, siliconeGrease, "EMCPMTCoupler");
+        const auto physicalCoupler = Make<G4PVPlacement>(couplerTransform,
+                                                         logicCoupler,
+                                                         "EMCPMTCoupler",
+                                                         Mother().LogicalVolume().get(),
+                                                         true,
+                                                         copyNo,
+                                                         checkOverlaps);
 
         const auto solidGlassBox = Make<G4Tubs>("temp", 0, pmtRadius, pmtLength / 2, 0, 2 * pi);
         const auto solidPMTVacuum = Make<G4Tubs>("temp", 0, pmtRadius - pmtWindowThickness, pmtLength / 2 - pmtWindowThickness, 0, 2 * pi);
@@ -140,6 +174,16 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
         /////////////////////////////////////////////
         // Construct Optical Surface
         /////////////////////////////////////////////
+
+        const auto emcCrystal{FindSibling<EMCCrystal>()};
+        if (emcCrystal) {
+            const auto couplerSurface = new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric);
+            new G4LogicalBorderSurface("couplerSurface",
+                                       emcCrystal->PhysicalVolume(copyNo).get(),
+                                       physicalCoupler,
+                                       couplerSurface);
+            couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
+        }
 
         const auto cathodeSurface = new G4OpticalSurface("Cathode", unified, polished, dielectric_metal);
         new G4LogicalSkinSurface("cathodeSkinSurface", logicCathode, cathodeSurface);

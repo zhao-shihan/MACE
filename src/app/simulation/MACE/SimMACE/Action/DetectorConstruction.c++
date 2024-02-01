@@ -12,7 +12,6 @@
 #include "MACE/Detector/Definition/EMCCrystal.h++"
 #include "MACE/Detector/Definition/EMCField.h++"
 #include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
-#include "MACE/Detector/Definition/EMCPMTCoupler.h++"
 #include "MACE/Detector/Definition/EMCShield.h++"
 #include "MACE/Detector/Definition/Filter.h++"
 #include "MACE/Detector/Definition/MCP.h++"
@@ -107,7 +106,6 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     // 2
 
     auto& emcCrystal = emcField.NewDaughter<Detector::Definition::EMCCrystal>(fCheckOverlap);
-    /* auto& emcPMTCoupler = */ emcField.NewDaughter<Detector::Definition::EMCPMTCoupler>(fCheckOverlap);
     auto& emcPMTAssemblies = emcField.NewDaughter<Detector::Definition::EMCPMTAssemblies>(fCheckOverlap);
 
     auto& mcp = emcField.NewDaughter<Detector::Definition::MCP>(fCheckOverlap);

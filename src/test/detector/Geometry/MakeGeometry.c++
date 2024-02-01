@@ -1,4 +1,3 @@
-#include "MACE/Detector/Description/DescriptionIO.h++"
 #include "MACE/Detector/Definition/AcceleratorField.h++"
 #include "MACE/Detector/Definition/BeamDegrader.h++"
 #include "MACE/Detector/Definition/BeamMonitor.h++"
@@ -12,7 +11,6 @@
 #include "MACE/Detector/Definition/EMCCrystal.h++"
 #include "MACE/Detector/Definition/EMCField.h++"
 #include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
-#include "MACE/Detector/Definition/EMCPMTCoupler.h++"
 #include "MACE/Detector/Definition/EMCShield.h++"
 #include "MACE/Detector/Definition/Filter.h++"
 #include "MACE/Detector/Definition/MCP.h++"
@@ -32,6 +30,7 @@
 #include "MACE/Detector/Definition/SpectrometerShield.h++"
 #include "MACE/Detector/Definition/Target.h++"
 #include "MACE/Detector/Definition/World.h++"
+#include "MACE/Detector/Description/DescriptionIO.h++"
 #include "MACE/Env/BasicEnv.h++"
 #include "MACE/Env/CLI/BasicCLI.h++"
 #include "MACE/Utility/LiteralUnit.h++"
@@ -74,7 +73,6 @@ int main(int argc, char* argv[]) {
     // 2
 
     auto& emcCrystal = emcField.NewDaughter<EMCCrystal>(fCheckOverlap);
-    auto& emcPMTCoupler = emcField.NewDaughter<EMCPMTCoupler>(fCheckOverlap);
     auto& emcPMTAssemblies = emcField.NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
 
     auto& mcp = emcField.NewDaughter<MCP>(fCheckOverlap);
@@ -221,7 +219,6 @@ int main(int argc, char* argv[]) {
     for (auto&& entity : std::initializer_list<std::reference_wrapper<const GeometryBase>>{
              emcShield,
              emcCrystal,
-             emcPMTCoupler,
              emcPMTAssemblies,
              spectrometerMagnet,
              spectrometerShield,

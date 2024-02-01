@@ -1,6 +1,6 @@
 #include "MACE/Detector/Definition/DefinitionBase.h++"
 #include "MACE/Detector/Definition/EMCCrystal.h++"
-#include "MACE/Detector/Definition/EMCPMTCoupler.h++"
+#include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Env/BasicEnv.h++"
 #include "MACE/Utility/LiteralUnit.h++"
@@ -186,9 +186,7 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
         const auto solidCrystal = MakeTessellatedSolid(fmt::format("temp{}", copyNo));
         const auto cutCrystalBox = Make<G4Box>("temp", 1_m, 1_m, crystalLength / 2);
         const auto cutSoildCrystal = Make<G4IntersectionSolid>("EMCCrystal", solidCrystal, cutCrystalBox, crystalTransform);
-        //========================================== CsI(Tl) ============================================
         const auto logicCrystal = Make<G4LogicalVolume>(cutSoildCrystal, csI, "EMCCrystal");
-        //===============================================================================================
         const auto physicalCrystal = Make<G4PVPlacement>(G4Transform3D{},
                                                          logicCrystal,
                                                          "EMCCrystal",
@@ -209,12 +207,12 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
         new G4LogicalBorderSurface("airPaintSurface", Mother().PhysicalVolume().get(), physicalCrystal, airPaintSurface);
         airPaintSurface->SetMaterialPropertiesTable(airPaintSurfacePropertiesTable);
 
-        const auto emcPMTCoupler{FindSibling<EMCPMTCoupler>()};
+        const auto emcPMTCoupler{FindSibling<EMCPMTAssemblies>()};
         if (emcPMTCoupler) {
             const auto couplerSurface = new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric);
             new G4LogicalBorderSurface("couplerSurface",
                                        physicalCrystal,
-                                       emcPMTCoupler->PhysicalVolume(copyNo).get(),
+                                       emcPMTCoupler->PhysicalVolume("EMCPMTCoupler", copyNo).get(),
                                        couplerSurface);
             couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
         }
