@@ -42,7 +42,7 @@ DetectorMessenger::~DetectorMessenger() = default;
 
 auto DetectorMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     using DescriptionInUse = DetectorConstruction::DescriptionInUse;
-    using Detector::Description::DescriptionIO;
+    using MACE::Detector::Description::DescriptionIO;
     if (command == fImportDescription.get()) {
         DescriptionIO::Import<DescriptionInUse>(std::string_view{value});
     } else if (command == fExportDescription.get()) {
