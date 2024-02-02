@@ -56,7 +56,7 @@ IncludeCategories:
   - Regex: '"globals\.hh"'
     Priority: 4
   # general
-  - Regex: '"MACE/.*\.h\+\+"'
+  - Regex: '"MACE/.*\.h.*"'
     Priority: 0
   - Regex: '"CLHEP/.*"'
     Priority: 2
