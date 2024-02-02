@@ -11,6 +11,7 @@
 #include "MACE/Detector/Definition/DefinitionBase.h++"
 #include "MACE/Detector/Definition/EMCCrystal.h++"
 #include "MACE/Detector/Definition/EMCField.h++"
+#include "MACE/Detector/Definition/EMCMagnet.h++"
 #include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
 #include "MACE/Detector/Definition/EMCShield.h++"
 #include "MACE/Detector/Definition/Filter.h++"
@@ -107,6 +108,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     auto& emcCrystal = emcField.NewDaughter<Detector::Definition::EMCCrystal>(fCheckOverlap);
     auto& emcPMTAssemblies = emcField.NewDaughter<Detector::Definition::EMCPMTAssemblies>(fCheckOverlap);
+    auto& emcMagnet = emcField.NewDaughter<Detector::Definition::EMCMagnet>(fCheckOverlap);
 
     auto& mcp = emcField.NewDaughter<Detector::Definition::MCP>(fCheckOverlap);
 
@@ -283,6 +285,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         solenoidB2.RegisterRegion(fSolenoidOrMagnetRegion);
         solenoidS2.RegisterRegion(fSolenoidOrMagnetRegion);
         spectrometerMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
+        emcMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
         solenoidS3.RegisterRegion(fSolenoidOrMagnetRegion);
 
         // SpectrometerSensitiveRegion

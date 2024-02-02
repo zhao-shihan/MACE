@@ -80,6 +80,7 @@
 /vis/geometry/set/colour CDCSuperLayer                 0     1     1     1     0.005
 /vis/geometry/set/colour EMCCrystal                    0     1     1     1     0.1
 /vis/geometry/set/colour EMCField                      0     1     1     1     0.05
+/vis/geometry/set/colour EMCMagnet                     0     1     1     1     0.05
 /vis/geometry/set/colour EMCShield                     0     1     1     1     0.05
 /vis/geometry/set/colour EMCPMTCathode                 0     1     1     1     0.1
 /vis/geometry/set/colour EMCPMTCoupler                 0     1     1     1     0.1

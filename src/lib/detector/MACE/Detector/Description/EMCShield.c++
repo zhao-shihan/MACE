@@ -8,7 +8,7 @@ using namespace LiteralUnit::Length;
 
 EMCShield::EMCShield() :
     DescriptionSingletonBase<EMCShield>{"EMCShield"},
-    fInnerRadius{50_cm},
+    fInnerRadius{60_cm},
     fInnerLength{100_cm},
     fGapAroundWindow{1_cm},
     fThickness{5_cm} {}

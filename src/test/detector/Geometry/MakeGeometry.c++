@@ -10,6 +10,7 @@
 #include "MACE/Detector/Definition/CDCSuperLayer.h++"
 #include "MACE/Detector/Definition/EMCCrystal.h++"
 #include "MACE/Detector/Definition/EMCField.h++"
+#include "MACE/Detector/Definition/EMCMagnet.h++"
 #include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
 #include "MACE/Detector/Definition/EMCShield.h++"
 #include "MACE/Detector/Definition/Filter.h++"
@@ -74,6 +75,7 @@ int main(int argc, char* argv[]) {
 
     auto& emcCrystal = emcField.NewDaughter<EMCCrystal>(fCheckOverlap);
     auto& emcPMTAssemblies = emcField.NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
+    auto& emcMagnet = emcField.NewDaughter<EMCMagnet>(fCheckOverlap);
 
     auto& mcp = emcField.NewDaughter<MCP>(fCheckOverlap);
 
@@ -218,6 +220,7 @@ int main(int argc, char* argv[]) {
              emcShield,
              emcCrystal,
              emcPMTAssemblies,
+             emcMagnet,
              spectrometerMagnet,
              spectrometerShield,
              shieldingWall,
