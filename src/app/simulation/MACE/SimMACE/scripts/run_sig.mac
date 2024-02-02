@@ -16,12 +16,12 @@
 /run/initialize
 
 # Customized properties
-/MACE/Generator/SurfaceMuon/TimeRMS                0 ns
+/MACE/Generator/SurfaceMuon/PulseWidth                0 ns
 /MACE/Generator/SurfaceMuon/Momentum               28 MeV
 /MACE/Generator/SurfaceMuon/MomentumRMS            0.7 MeV
 /MACE/Generator/SurfaceMuon/PositionRMS            5 mm
 /MACE/Generator/SurfaceMuon/PositionZ              -1.5 m
-/MACE/Generator/SurfaceMuon/MuonsForEachG4Event    1
+/MACE/Generator/SurfaceMuon/PrimariesForEachG4Event    1
 
 /MACE/Physics/MuoniumPhysics/Formation/FormationProbability     1
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    1

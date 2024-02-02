@@ -17,12 +17,19 @@
 /run/initialize
 
 # Customized properties
-/MACE/Generator/SurfaceMuon/TimeRMS                0 ns
-/MACE/Generator/SurfaceMuon/Momentum               28 MeV
-/MACE/Generator/SurfaceMuon/MomentumRMS            0.7 MeV
-/MACE/Generator/SurfaceMuon/PositionRMS            5 mm
-/MACE/Generator/SurfaceMuon/PositionZ              -1.5 m
-/MACE/Generator/SurfaceMuon/MuonsForEachG4Event    10
+
+/gps/particle mu+
+/gps/direction 0 0 1
+/gps/pos/type Beam
+/gps/pos/shape Circle
+/gps/pos/centre 0. 0. -1.5. m
+/gps/pos/radius 0 mm
+/gps/pos/sigma_r 5 mm
+/gps/ene/type Gauss
+/gps/ene/mono 3.647 MeV
+/gps/ene/sigma 0.0912 MeV
+/MACE/Generator/GPS/PulseWidth                  0 ns
+/MACE/Generator/GPS/PrimariesForEachG4Event     10
 
 /MACE/Physics/MuoniumPhysics/Formation/FormationProbability     0.6
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5    # very high :)
@@ -130,3 +137,5 @@
 
 /vis/verbose warnings
 /vis/viewer/set/autoRefresh true
+
+

@@ -4,6 +4,7 @@
 #include "MACE/SimMACE/Messenger/PrimaryGeneratorActionMessenger.h++"
 #include "MACE/Simulation/Generator/SurfaceMuon.h++"
 
+#include "G4GeneralParticleSource.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 
 namespace MACE::SimMACE::inline Action {
@@ -13,19 +14,16 @@ class PrimaryGeneratorAction final : public Env::Memory::PassiveSingleton<Primar
 public:
     PrimaryGeneratorAction();
 
-    auto TimeRMS(G4double val) -> void { fTimeWidthRMS = val; }
-    auto MuonsForEachG4Event(G4int n) -> void { fMuonsForEachG4Event = n; }
-
-    auto GetTimeWidthRMS() const -> auto { return fTimeWidthRMS; }
-    auto MuonsForEachG4Event() const -> auto { return fMuonsForEachG4Event; }
+    auto PulseWidth(G4double val) -> void { fPulseWidth = val; }
+    auto PrimariesForEachG4Event(G4int n) -> void { fPrimariesForEachG4Event = n; }
 
     auto GeneratePrimaries(G4Event* event) -> void override;
 
 private:
-    Generator::SurfaceMuon fSurfaceMuonGenerator;
+    G4GeneralParticleSource fGeneralParticleSource;
 
-    G4double fTimeWidthRMS;
-    G4int fMuonsForEachG4Event;
+    G4double fPulseWidth;
+    G4int fPrimariesForEachG4Event;
 
     PrimaryGeneratorActionMessenger::Register<PrimaryGeneratorAction> fMessengerRegister;
 };

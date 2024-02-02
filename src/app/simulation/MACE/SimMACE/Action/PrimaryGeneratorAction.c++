@@ -11,16 +11,16 @@ using namespace LiteralUnit::Time;
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
     PassiveSingleton{},
     G4VUserPrimaryGeneratorAction{},
-    fSurfaceMuonGenerator{},
-    fTimeWidthRMS{20_ns},
-    fMuonsForEachG4Event{10},
+    fGeneralParticleSource{},
+    fPulseWidth{20_ns},
+    fPrimariesForEachG4Event{10},
     fMessengerRegister{this} {}
 
 auto PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) -> void {
-    G4RandGauss randGauss = {*G4Random::getTheEngine(), 0, fTimeWidthRMS};
-    for (G4int i{}; i < fMuonsForEachG4Event; ++i) {
-        fSurfaceMuonGenerator.Time(randGauss.fire());
-        fSurfaceMuonGenerator.GeneratePrimaryVertex(event);
+    G4RandFlat randFlat{*G4Random::getTheEngine(), 0, fPulseWidth};
+    for (G4int i{}; i < fPrimariesForEachG4Event; ++i) {
+        fGeneralParticleSource.SetParticleTime(randFlat.fire());
+        fGeneralParticleSource.GeneratePrimaryVertex(event);
     }
 }
 
