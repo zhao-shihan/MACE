@@ -5,7 +5,6 @@
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
 #include "MACE/Extension/stdx/tuple_like.h++"
 #include "MACE/Utility/NonConstructibleBase.h++"
-#include "MACE/Utility/StaticForEach.h++"
 
 #include "yaml-cpp/yaml.h"
 
