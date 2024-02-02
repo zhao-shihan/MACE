@@ -29,7 +29,7 @@ void MPIEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const {
                         &mpiRuntimeVersion.second); // subversion
         // Messages
         std::cout << '\n'
-                  << " Parallelized by MPI, running " << (Parallel() ? "in parallel" : "sequentially") << '\n';
+                  << " Parallelized with MPI, running " << (Parallel() ? "in parallel" : "sequentially") << '\n';
         MACE_VERBOSE_LEVEL_CONTROLLED_OUT(GetVerboseLevel(), Verbose, std::cout)
             << " Compiled with MPI " << MPI_VERSION << '.' << MPI_SUBVERSION << ", running with MPI " << mpiRuntimeVersion.first << '.' << mpiRuntimeVersion.second << '\n';
         MACE_VERBOSE_LEVEL_CONTROLLED_OUT(GetVerboseLevel(), MoreVerbose, std::cout)

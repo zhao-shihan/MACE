@@ -22,7 +22,7 @@ void BasicEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const {
     if (fVerboseLevel >= VL::Error) {
         fmt::print("\n"
                    " MACE offline software system {}\n"
-                   " Copyright (c) 2020-2023 MACE working group\n"
+                   " Copyright (c) 2020-2024 MACE working group\n"
                    "\n"
                    " Exe: {}",
                    MACE_VERSION_STRING,
