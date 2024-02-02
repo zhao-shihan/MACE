@@ -8,7 +8,7 @@ using namespace LiteralUnit::Length;
 SpectrometerMagnet::SpectrometerMagnet() :
     DescriptionSingletonBase<SpectrometerMagnet>{"SpectrometerMagnet"},
     fInnerRadius{50_cm},
-    fOuterRadius{60_cm},
+    fOuterRadius{55_cm},
     fLength{218_cm} {}
 
 void SpectrometerMagnet::ImportValues(const YAML::Node& node) {

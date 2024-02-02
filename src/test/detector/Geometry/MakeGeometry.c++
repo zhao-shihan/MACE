@@ -152,6 +152,7 @@ int main(int argc, char* argv[]) {
         cdcBody.RegisterMaterial(cdcShell);
 
         const auto copper = nist->FindOrBuildMaterial("G4_Cu");
+        spectrometerMagnet.RegisterMaterial(copper);
         solenoidB1.RegisterMaterial(copper);
         solenoidS1.RegisterMaterial(copper);
         solenoidB2.RegisterMaterial(copper);
@@ -161,9 +162,6 @@ int main(int argc, char* argv[]) {
 
         // const auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
         // emc.RegisterMaterial(csI);
-
-        const auto iron = nist->FindOrBuildMaterial("G4_Fe");
-        spectrometerMagnet.RegisterMaterial(iron);
 
         const auto lead = nist->FindOrBuildMaterial("G4_Pb");
         emcShield.RegisterMaterial(lead);
