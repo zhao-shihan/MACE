@@ -1,3 +1,4 @@
+#include "MACE/External/gfx/timsort.hpp"
 #include "MACE/Math/MidPoint.h++"
 #include "MACE/Simulation/SD/CDCSD.h++"
 #include "MACE/Utility/VectorArithmeticOperator.h++"
@@ -101,7 +102,6 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
 auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     const auto timeResolutionFWHM{Detector::Description::CDC::Instance().TimeResolutionFWHM()};
-
     for (int hitID{};
          auto&& [cellID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
@@ -116,10 +116,10 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
         } break;
         default: {
             // sort hit by signal time
-            std::ranges::sort(splitHit,
-                              [](const auto& hit1, const auto& hit2) {
-                                  return Get<"t">(*hit1) < Get<"t">(*hit2);
-                              });
+            gfx::timsort(splitHit,
+                         [](const auto& hit1, const auto& hit2) {
+                             return Get<"t">(*hit1) < Get<"t">(*hit2);
+                         });
             // loop over all hits on this cell and cluster to real hits by signal times
             auto windowClosingTime{Get<"t">(*splitHit.front()) + timeResolutionFWHM};
             std::vector<std::unique_ptr<CDCHit>*> hitCandidate;

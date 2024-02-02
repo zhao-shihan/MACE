@@ -1,4 +1,5 @@
 #include "MACE/Detector/Description/EMC.h++"
+#include "MACE/External/gfx/timsort.hpp"
 #include "MACE/Simulation/SD/EMCPMTSD.h++"
 #include "MACE/Simulation/SD/EMCSD.h++"
 
@@ -99,10 +100,10 @@ auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
         } break;
         default: {
             // sort hit by time
-            std::ranges::sort(splitHit,
-                              [](const auto& hit1, const auto& hit2) {
-                                  return Get<"t">(*hit1) < Get<"t">(*hit2);
-                              });
+            gfx::timsort(splitHit,
+                         [](const auto& hit1, const auto& hit2) {
+                             return Get<"t">(*hit1) < Get<"t">(*hit2);
+                         });
             // loop over all hits on this crystal and cluster to real hits by times
             auto windowClosingTime{Get<"t">(*splitHit.front()) + scintillationTimeConstant1};
             std::vector<std::unique_ptr<EMCHit>*> hitCandidate;
