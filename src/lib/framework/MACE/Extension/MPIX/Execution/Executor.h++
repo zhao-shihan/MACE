@@ -59,7 +59,6 @@ public:
 
     auto ExecutingTask() const -> T { return fScheduler->fExecutingTask; }
     auto NLocalExecutedTask() const -> T { return fScheduler->fNLocalExecutedTask; }
-    auto NExecutedTask() const -> T { return fScheduler->NExecutedTask(); }
 
     auto PrintExecutionSummary() const -> void;
 
@@ -80,7 +79,6 @@ private:
 
     bool fPrintProgress;
     long long fPrintProgressModulo;
-    mutable T fAutoPrintProgressModulo;
 
     std::string fExecutionName;
     std::string fTaskName;

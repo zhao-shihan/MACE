@@ -17,4 +17,10 @@ auto StaticScheduler<T>::PostTaskAction() -> void {
     }
 }
 
+template<std::integral T>
+auto StaticScheduler<T>::NExecutedTask() const -> std::pair<bool, T> {
+    return {this->fNLocalExecutedTask > 10,
+            this->fExecutingTask - this->fTask.first};
+}
+
 } // namespace MACE::inline Extension::MPIX::inline Execution

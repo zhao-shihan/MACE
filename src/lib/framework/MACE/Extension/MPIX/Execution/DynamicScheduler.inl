@@ -46,7 +46,7 @@ DynamicScheduler<T>::Comm::~Comm() {
 template<std::integral T>
 auto DynamicScheduler<T>::PreLoopAction() -> void {
     // width ~ BalanceFactor -> +/- BalanceFactor / 2
-    fBatchSize = static_cast<T>(fgBalanceFactor / 2 * static_cast<double>(this->NTask()) / fComm.Size()) + 1;
+    fBatchSize = static_cast<T>(fgBalancingFactor / 2 * static_cast<double>(this->NTask()) / fComm.Size()) + 1;
     std::visit([](auto&& c) { c.PreLoopAction(); }, fContext);
 }
 
@@ -63,6 +63,12 @@ auto DynamicScheduler<T>::PostTaskAction() -> void {
 template<std::integral T>
 auto DynamicScheduler<T>::PostLoopAction() -> void {
     std::visit([](auto&& c) { c.PostLoopAction(); }, fContext);
+}
+
+template<std::integral T>
+auto DynamicScheduler<T>::NExecutedTask() const -> std::pair<bool, T> {
+    return {this->fNLocalExecutedTask > 10 * fBatchSize,
+            this->fExecutingTask - this->fTask.first};
 }
 
 template<std::integral T>
