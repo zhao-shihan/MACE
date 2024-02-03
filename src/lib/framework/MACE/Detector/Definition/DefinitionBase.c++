@@ -49,13 +49,13 @@ auto RegisterSD(const std::unique_ptr<G4LogicalVolume>& logic, gsl::not_null<G4V
     }
 }
 
-auto Export(std::filesystem::path gdmlFile, const std::unique_ptr<G4VPhysicalVolume>& physics) {
+auto Export(std::filesystem::path gdmlFile, const std::unique_ptr<G4LogicalVolume>& logic) {
 #if MACE_USE_G4GDML
     if (Env::MPIEnv::Available()) { MPIX::ParallelizePathInPlace(gdmlFile); }
     G4GDMLParser gdml;
     gdml.SetAddPointerToName(true);
     gdml.SetOutputFileOverwrite(true);
-    gdml.Write(gdmlFile.generic_string(), physics.get());
+    gdml.Write(gdmlFile.generic_string(), logic.get());
 #else
     G4Exception("MACE::Detector::Definition::DefinitionBase::Export", "-1", JustWarning,
                 "This binary does not support GDML export (MACE_USE_G4GDML=OFF). "
@@ -153,12 +153,12 @@ auto DefinitionBase::RegisterSD(std::string_view logicalVolumeName, gsl::index i
 
 auto DefinitionBase::Export(std::filesystem::path gdmlFile, gsl::index iPhysicalVolume) const -> void {
     if (not Ready()) { return; }
-    internal::Export(std::move(gdmlFile), PhysicalVolume(iPhysicalVolume));
+    internal::Export(std::move(gdmlFile), LogicalVolume(iPhysicalVolume));
 }
 
 auto DefinitionBase::Export(std::filesystem::path gdmlFile, std::string_view physicalVolumeName, gsl::index iPhysicalVolume) const -> void {
     if (not Ready()) { return; }
-    internal::Export(std::move(gdmlFile), PhysicalVolume(physicalVolumeName, iPhysicalVolume));
+    internal::Export(std::move(gdmlFile), LogicalVolume(physicalVolumeName, iPhysicalVolume));
 }
 
 auto DefinitionBase::LogicalVolumes() const -> const std::vector<std::unique_ptr<G4LogicalVolume>>& {
