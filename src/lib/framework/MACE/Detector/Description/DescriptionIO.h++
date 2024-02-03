@@ -4,6 +4,7 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
 #include "MACE/Extension/stdx/tuple_like.h++"
+#include "MACE/Utility/CreateTemporaryFile.h++"
 #include "MACE/Utility/NonConstructibleBase.h++"
 
 #include "yaml-cpp/yaml.h"

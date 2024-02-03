@@ -55,19 +55,7 @@ template<typename... ArgsOfImport>
 auto DescriptionIO::Import(const std::ranges::range auto& yamlText) -> void
     requires std::convertible_to<typename std::decay_t<decltype(yamlText)>::value_type, std::string>
 {
-    std::filesystem::path yamlPath;
-    std::uint_fast64_t extraSuffix{};
-    do {
-        auto yamlName{fmt::format("{}tmpgeom{:x}{:x}",
-                                  Env::BasicEnv::Instance().Argv()[0],
-                                  std::chrono::steady_clock::now().time_since_epoch().count(),
-                                  ++extraSuffix)};
-        if (Env::MPIEnv::Initialized()) {
-            yamlName.append(fmt::format(".mpi{}", Env::MPIEnv::Instance().CommWorldRank()));
-        }
-        yamlName.append(".yaml");
-        yamlPath = std::filesystem::temp_directory_path() / yamlName;
-    } while (std::filesystem::exists(yamlPath));
+    const auto yamlPath{CreateTemporaryFile("geom", ".yaml")};
 
     const auto yamlFile{std::fopen(yamlPath.generic_string().c_str(), "w")};
     if (yamlFile == nullptr) {
