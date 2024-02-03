@@ -1,0 +1,31 @@
+#############################################################################
+# Initialization settings
+#############################################################################
+
+/control/verbose 0
+/run/verbose 0
+
+/run/initialize
+
+/gps/particle                                  neutron
+/gps/pos/type                                  Volume
+/gps/pos/shape                                 Para
+/gps/pos/centre                                3 0 0 m
+/gps/pos/halfx                                 1 m
+/gps/pos/halfy                                 1 m
+/gps/pos/halfz                                 1 m
+/gps/ang/type                                  iso
+/gps/ene/type                                  Lin
+/gps/ene/min                                   0.025 eV
+/gps/ene/max                                   5 MeV
+/MACE/Generator/GPS/PulseWidth                 0 ns
+/MACE/Generator/GPS/PrimariesForEachG4Event    1
+
+#############################################################################
+# Run
+#############################################################################
+
+/MACE/Analysis/FilePath   SimMACE_env_neutron
+/MACE/Analysis/FileOption NEW
+/run/beamOn 80
+/MPIRun/PrintRunSummary
