@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/Math/Random/Generator/Xoshiro512Base.h++"
+#include "MACE/Utility/InlineMacro.h++"
 
 namespace MACE::Math::Random::inline Generator {
 
@@ -9,7 +10,7 @@ public:
     constexpr Xoshiro512Plus() = default;
     constexpr explicit Xoshiro512Plus(SeedType seed);
 
-    constexpr auto operator()() -> ResultType;
+    MACE_ALWAYS_INLINE constexpr auto operator()() -> ResultType;
 };
 
 } // namespace MACE::Math::Random::inline Generator

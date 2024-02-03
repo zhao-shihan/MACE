@@ -1,15 +1,15 @@
 namespace MACE::Math::Random::inline Generator {
 
 template<typename ADerived>
-constexpr Xoshiro512Base<ADerived>::Xoshiro512Base() :
-    XoshiroBase<ADerived, 512>{{0x893C3E22C678FAA9ull,
+constexpr Xoshiro512Base<ADerived>::Xoshiro512Base() : // clang-format off
+    XoshiroBase<ADerived, 512>{{0x893C3E22C678FAA9ull, 
                                 0x30589ADC78696ADAull,
                                 0x1D541511D5F51D5Bull,
                                 0xE3CBD397A993A9EEull,
                                 0x1A7CB96107B6F389ull,
                                 0xD947C32467BF2036ull,
                                 0xD7A5E004646E6A58ull,
-                                0x6426F7F8732F5C48ull}} {
+                                0x6426F7F8732F5C48ull}} { // clang-format on
     static_assert(std::derived_from<ADerived, Xoshiro512Base<ADerived>>);
 }
 
@@ -19,7 +19,7 @@ constexpr Xoshiro512Base<ADerived>::Xoshiro512Base(std::uint64_t seed) :
 
 template<typename ADerived>
 MACE_ALWAYS_INLINE constexpr auto Xoshiro512Base<ADerived>::Step() -> void {
-    const auto t = this->fState[1] << 11;
+    const auto t{this->fState[1] << 11};
 
     this->fState[2] ^= this->fState[0];
     this->fState[5] ^= this->fState[1];
