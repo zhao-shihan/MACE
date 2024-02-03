@@ -21,23 +21,26 @@ Analysis::Analysis() :
     fCoincidenceWithEMC{true},
     fFile{},
     fCDCSimHitOutput{},
+    fCDCSimTrackOutput{},
     fEMCSimHitOutput{},
     fMCPSimHitOutput{},
     fCDCHit{},
+    fCDCTrack{},
     fEMCHit{},
     fMCPHit{},
     fMessengerRegister{this} {}
 
-auto Analysis::RunBegin(G4int runID) -> void {
+auto Analysis::RunBegin() -> void {
     const auto fullFilePath{MPIX::ParallelizePath(fFilePath, ".root").generic_string()};
     fFile = TFile::Open(fullFilePath.c_str(), fFileOption.c_str(),
                         "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
     if (fFile == nullptr) {
         throw std::runtime_error{fmt::format("MACE::SimMACE::Analysis::RunBegin: Cannot open file \"{}\"", fullFilePath)};
     }
-    fCDCSimHitOutput.emplace(fmt::format("G4Run{}_CDCSimHit", runID));
-    fMCPSimHitOutput.emplace(fmt::format("G4Run{}_MCPSimHit", runID));
-    fEMCSimHitOutput.emplace(fmt::format("G4Run{}_EMCSimHit", runID));
+    fCDCSimHitOutput.emplace("CDCSimHit");
+    fCDCSimTrackOutput.emplace("CDCSimTrack");
+    fMCPSimHitOutput.emplace("MCPSimHit");
+    fEMCSimHitOutput.emplace("EMCSimHit");
 }
 
 auto Analysis::EventEnd() -> void {
@@ -46,18 +49,25 @@ auto Analysis::EventEnd() -> void {
     const auto mcpTriggered{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
     if (emcTriggered and mcpTriggered and cdcTriggered) {
         if (fCDCHit) { *fCDCSimHitOutput << *fCDCHit; }
+        if (fCDCTrack) { *fCDCSimTrackOutput << *fCDCTrack; }
         if (fEMCHit) { *fEMCSimHitOutput << *fEMCHit; }
         if (fMCPHit) { *fMCPSimHitOutput << *fMCPHit; }
     }
     fCDCHit = {};
+    fCDCTrack = {};
     fEMCHit = {};
     fMCPHit = {};
 }
 
-auto Analysis::RunEnd(Option_t* option) -> void {
+auto Analysis::RunEnd(G4int runID, Option_t* option) -> void {
+    const auto runDirectory{fmt::format("G4Run{}", runID)};
+    fFile->mkdir(runDirectory.c_str());
+    fFile->cd(runDirectory.c_str());
     fCDCSimHitOutput->Write();
+    fCDCSimTrackOutput->Write();
     fEMCSimHitOutput->Write();
     fMCPSimHitOutput->Write();
+    fFile->cd();
     fFile->Close(option);
     delete fFile;
 }

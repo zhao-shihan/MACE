@@ -1,7 +1,9 @@
 #pragma once
 
+#include "MACE/Data/CDCTrack.h++"
 #include "MACE/Data/Output.h++"
 #include "MACE/Data/SimHit.h++"
+#include "MACE/Data/Tuple.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimMACE/Messenger/AnalysisMessenger.h++"
 
@@ -33,14 +35,15 @@ public:
     auto CoincidenceWithMCP(bool val) -> void { fCoincidenceWithMCP = val; }
     auto CoincidenceWithEMC(bool val) -> void { fCoincidenceWithEMC = val; }
 
-    auto RunBegin(G4int runID) -> void;
+    auto RunBegin() -> void;
 
-    auto SubmitCDCHC(gsl::not_null<std::vector<gsl::owner<Simulation::CDCHit*>>*> hc) -> void { fCDCHit = hc; }
-    auto SubmitEMCHC(gsl::not_null<std::vector<gsl::owner<Simulation::EMCHit*>>*> hc) -> void { fEMCHit = hc; }
-    auto SubmitMCPHC(gsl::not_null<std::vector<gsl::owner<Simulation::MCPHit*>>*> hc) -> void { fMCPHit = hc; }
+    auto SubmitCDCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::CDCHit*>>*> hc) -> void { fCDCHit = hc; }
+    auto SubmitCDCTrackData(const std::vector<std::unique_ptr<Data::Tuple<Data::CDCSimTrack>>>& track) -> void { fCDCTrack = &track; }
+    auto SubmitEMCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::EMCHit*>>*> hc) -> void { fEMCHit = hc; }
+    auto SubmitMCPHC(gsl::not_null<const std::vector<gsl::owner<Simulation::MCPHit*>>*> hc) -> void { fMCPHit = hc; }
     auto EventEnd() -> void;
 
-    auto RunEnd(Option_t* option = nullptr) -> void;
+    auto RunEnd(G4int runID, Option_t* option = nullptr) -> void;
 
 private:
     std::filesystem::path fFilePath;
@@ -51,10 +54,12 @@ private:
 
     gsl::owner<TFile*> fFile;
     std::optional<Data::Output<Data::CDCSimHit>> fCDCSimHitOutput;
+    std::optional<Data::Output<Data::CDCSimTrack>> fCDCSimTrackOutput;
     std::optional<Data::Output<Data::EMCSimHit>> fEMCSimHitOutput;
     std::optional<Data::Output<Data::MCPSimHit>> fMCPSimHitOutput;
 
     const std::vector<gsl::owner<Simulation::CDCHit*>>* fCDCHit;
+    const std::vector<std::unique_ptr<Data::Tuple<Data::CDCSimTrack>>>* fCDCTrack;
     const std::vector<gsl::owner<Simulation::EMCHit*>>* fEMCHit;
     const std::vector<gsl::owner<Simulation::MCPHit*>>* fMCPHit;
 

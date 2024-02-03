@@ -1,5 +1,7 @@
 #pragma once
 
+#include "MACE/Data/CDCTrack.h++"
+#include "MACE/Data/Tuple.h++"
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Simulation/Hit/CDCHit.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
@@ -24,6 +26,10 @@ public:
     /// @brief Inform this SD of event ID in EventAction
     auto EventID(G4int eventID) -> void { fEventID = eventID; }
 
+private:
+    auto BuildHitData() -> void;
+    auto BuildTrackData() -> void;
+
 protected:
     G4int fEventID;
 
@@ -32,6 +38,8 @@ protected:
 
     std::unordered_map<int, std::vector<std::unique_ptr<CDCHit>>> fSplitHit;
     CDCHitCollection* fHitsCollection;
+
+    std::vector<std::unique_ptr<Data::Tuple<Data::CDCSimTrack>>> fTrack;
 };
 
 } // namespace MACE::inline Simulation::inline SD

@@ -1,3 +1,4 @@
+#include "MACE/Detector/Description/SpectrometerField.h++"
 #include "MACE/External/gfx/timsort.hpp"
 #include "MACE/Math/MidPoint.h++"
 #include "MACE/Simulation/SD/CDCSD.h++"
@@ -29,7 +30,8 @@ CDCSD::CDCSD(const G4String& sdName) :
     fMeanDriftVelocity{},
     fCellMap{},
     fSplitHit{},
-    fHitsCollection{} {
+    fHitsCollection{},
+    fTrack{} {
     collectionName.emplace_back(sdName + "HC");
 }
 
@@ -41,6 +43,8 @@ auto CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
     fHitsCollection = new CDCHitCollection(SensitiveDetectorName, collectionName[0]);
     const auto hitsCollectionID{G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection)};
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
+
+    fTrack.clear();
 }
 
 auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
@@ -101,6 +105,11 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 }
 
 auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
+    BuildHitData();
+    BuildTrackData();
+}
+
+auto CDCSD::BuildHitData() -> void {
     const auto timeResolutionFWHM{Detector::Description::CDC::Instance().TimeResolutionFWHM()};
     for (int hitID{};
          auto&& [cellID, splitHit] : fSplitHit) {
@@ -162,6 +171,36 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
             splitHit.clear();
         } break;
         }
+    }
+}
+
+auto CDCSD::BuildTrackData() -> void {
+    auto& hitData{*fHitsCollection->GetVector()};
+    gfx::timsort(hitData,
+                 [](const auto& hit1, const auto& hit2) {
+                     return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
+                 });
+    const auto magneticFluxDensity{Detector::Description::SpectrometerField::Instance().MagneticFluxDensity()};
+    auto lastTrackID{-1};
+    Data::Tuple<Data::CDCSimTrack>* track{};
+    for (auto&& pHit : std::as_const(hitData)) {
+        const auto& hit{*pHit};
+        assert(Get<"TrkID">(hit) >= 0);
+        if (Get<"TrkID">(hit) != lastTrackID) {
+            lastTrackID = Get<"TrkID">(hit);
+            track = fTrack.emplace_back(std::make_unique_for_overwrite<Data::Tuple<Data::CDCSimTrack>>()).get();
+            Get<"EvtID">(*track) = Get<"EvtID">(hit);
+            Get<"TrkID">(*track) = Get<"TrkID">(hit);
+            Get<"chi2">(*track) = 0;
+            Get<"t0">(*track) = Get<"t0">(hit);
+            Get<"PDGID">(*track) = Get<"PDGID">(hit);
+            Get<"x0">(*track) = Get<"x0">(hit);
+            Get<"Ek0">(*track) = Get<"Ek0">(hit);
+            Get<"p0">(*track) = Get<"p0">(hit);
+            Data::CalculateHelix(*track, magneticFluxDensity);
+            Get<"CreatProc">(*track) = Get<"CreatProc">(hit);
+        }
+        Get<"HitID">(*track)->emplace_back(Get<"HitID">(hit));
     }
 }
 
