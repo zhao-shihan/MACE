@@ -7,8 +7,6 @@
 
 /run/initialize
 
-/MACE/Analysis/EnableCoincidenceOfMCP     true
-
 /MACE/Analysis/FilePath   SimEMC_crmu
 /MACE/Analysis/FileOption RECREATE
 
