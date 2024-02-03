@@ -27,6 +27,7 @@
 /MACE/Field/AcceleratorPotential          5 kilovolt
 /MACE/Field/SpectrometerMagneticField     0.1 tesla
 /MACE/Field/SolenoidMagneticField         0.1 tesla
+/MACE/Field/EMCMagneticField              0.1 tesla
 
 /MACE/Analysis/CoincidenceWithCDC     true
 /MACE/Analysis/CoincidenceWithMCP     true
@@ -35,8 +36,6 @@
 #############################################################################
 # Run
 #############################################################################
-
-#/MPIRun/PrintProgressModulo 100
 
 /MACE/Analysis/FilePath   SimMACE_signal
 /MACE/Analysis/FileOption NEW

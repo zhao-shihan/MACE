@@ -21,6 +21,15 @@
 /MACE/Generator/GPS/PulseWidth                 0 ns
 /MACE/Generator/GPS/PrimariesForEachG4Event    1
 
+/MACE/Field/AcceleratorPotential          5 kilovolt
+/MACE/Field/SpectrometerMagneticField     0.1 tesla
+/MACE/Field/SolenoidMagneticField         0.1 tesla
+/MACE/Field/EMCMagneticField              0.1 tesla
+
+/MACE/Analysis/CoincidenceWithCDC     false
+/MACE/Analysis/CoincidenceWithMCP     false
+/MACE/Analysis/CoincidenceWithEMC     false
+
 #############################################################################
 # Run
 #############################################################################
