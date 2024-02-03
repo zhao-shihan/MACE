@@ -177,7 +177,7 @@ auto Executor<T>::PostTaskReport(T iEnded) const -> void {
                "MPI{}>   {} elaps., {}\n",
                mpiEnv.CommWorldRank(), fmt::localtime(scsc::to_time_t(scsc::now())), fTaskName, iEnded,
                mpiEnv.CommWorldRank(), SToDHMS(secondsElapsed),
-               [&] {
+               [&, goodForEstmation{goodForEstmation}, nExecutedTask{nExecutedTask}] {
                    if (goodForEstmation) {
                        const auto eta{(NTask() - nExecutedTask) / speed};
                        const auto progress{static_cast<double>(nExecutedTask) / NTask()};
