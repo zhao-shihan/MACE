@@ -17,7 +17,7 @@ namespace MACE::Data {
 
 using CDCTrack = TupleModel<Value<int, "EvtID", "Event ID">,
                             Value<int, "TrkID", "Track ID">,
-                            Value<std::vector<int>, "HitID", "Fitted hit(ID)s">,
+                            Value<std::vector<int>, "HitID", "Hit(ID)s in this track">,
                             Value<float, "chi2", "Goodness of fit (chi^{2})">,
                             Value<double, "t0", "Vertex time">,
                             // vertex information
@@ -32,12 +32,13 @@ using CDCTrack = TupleModel<Value<int, "EvtID", "Event ID">,
                             Value<float, "z0", "Vertex z coordinate">,
                             Value<float, "theta0", "Reference zenith angle">>;
 
-// using CDCSimTrack =
+using CDCSimTrack = TupleModel<CDCTrack,
+                               Value<std::string, "CreatProc", "Track creator process (MC truth)">>;
 
 /// @brief Calculate helix information from known vertex information in-place.
 /// @param track The track
-/// @param magFluxDensity Magnetic field B0
-constexpr auto CalculateHelix(TupleContain<CDCTrack> auto& track, double magFluxDensity) -> void {
+/// @param magneticFluxDensity Magnetic field B0
+constexpr auto CalculateHelix(TupleContain<Data::Tuple<CDCTrack>> auto& track, double magneticFluxDensity) -> void {
     using PhysicalConstant::c_light;
 
     const auto charge{Get<"PDGID">(track) > 0 ? -1 : 1};
@@ -46,7 +47,7 @@ constexpr auto CalculateHelix(TupleContain<CDCTrack> auto& track, double magFlux
 
     const auto absPXY{Math::Hypot(p0[0], p0[1])};
     const auto pXY{charge < 0 ? absPXY : -absPXY};
-    const auto r0{pXY / (-charge * magFluxDensity * c_light)};
+    const auto r0{pXY / (-charge * magneticFluxDensity * c_light)};
     const stdx::array2d x0Local{r0 * (p0[1] / pXY),
                                 r0 * (-p0[0] / pXY)};
     const auto phi0{std::atan2(-x0Local[1], -x0Local[0])};
@@ -57,7 +58,7 @@ constexpr auto CalculateHelix(TupleContain<CDCTrack> auto& track, double magFlux
     // const auto deltaPhi{x0Local[0] * c0[1] - c0[0] * x0Local[1] > 0 ? absDeltaPhi : -absDeltaPhi};
     const auto theta0{std::atan2(pXY, p0[2])};
     // const auto z0{x0[3] - r0 * deltaPhi / std::tan(theta0)};
-    const auto z0{x0[3]};
+    const auto z0{x0[2]};
 
     Get<"c0">(track) = c0;
     Get<"r0">(track) = r0;
@@ -68,8 +69,8 @@ constexpr auto CalculateHelix(TupleContain<CDCTrack> auto& track, double magFlux
 
 /// @brief Calculate vertex information from known helix information in-place.
 /// @param track The track
-/// @param magFluxDensity Magnetic field B0
-constexpr auto CalculateVertex(TupleContain<CDCTrack> auto& track, double magFluxDensity) -> void {
+/// @param magneticFluxDensity Magnetic field B0
+constexpr auto CalculateVertex(TupleContain<Data::Tuple<CDCTrack>> auto& track, double magneticFluxDensity) -> void {
     using PhysicalConstant::c_light;
     using PhysicalConstant::electron_mass_c2;
 
@@ -88,7 +89,7 @@ constexpr auto CalculateVertex(TupleContain<CDCTrack> auto& track, double magFlu
                            c0[1] + r0 * sin0,
                            z0};
 
-    const auto pXY{-charge * magFluxDensity * c_light * r0};
+    const auto pXY{-charge * magneticFluxDensity * c_light * r0};
     const auto pZ{pXY / std::tan(theta0)};
     const auto ek0{std::sqrt(Math::Hypot2(pXY, pZ) + Math::Pow<2>(electron_mass_c2)) - electron_mass_c2};
     const stdx::array3d p0{-pXY * sin0,
