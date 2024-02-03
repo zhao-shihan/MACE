@@ -55,8 +55,8 @@ auto MPIReseedRandomEngine(CLHEP::HepRandomEngine* clhepRng, TRandom* tRandom) -
     struct Seed {
         bool clhepNull{true};
         bool rootNull{true};
-        long clhep{0};
-        unsigned root{0};
+        long clhep{};
+        unsigned root{};
     };
     static_assert(std::is_same_v<decltype(Seed::clhep), decltype(clhepRng->getSeed())>);
     static_assert(std::is_same_v<decltype(Seed::root), decltype(tRandom->GetSeed())>);
