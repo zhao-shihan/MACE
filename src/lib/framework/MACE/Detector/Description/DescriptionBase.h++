@@ -4,7 +4,6 @@
 #include "MACE/Env/Memory/Singleton.h++"
 #include "MACE/Env/Memory/Singletonified.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
-#include "MACE/Utility/TupleForEach.h++"
 
 #include "yaml-cpp/yaml.h"
 
@@ -26,29 +25,29 @@ protected:
 public:
     const auto& Name() const { return fName; }
 
-    void Import(const YAML::Node& rootNode);
-    void Export(YAML::Node& rootNode) const;
+    auto Import(const YAML::Node& rootNode) -> void;
+    auto Export(YAML::Node& rootNode) const -> void;
 
 protected:
     template<typename AValue, typename AReadAs = AValue, std::convertible_to<std::string>... AStrings>
         requires std::assignable_from<AValue&, AReadAs>
-    void ImportValue(const YAML::Node& node, AValue& value, AStrings&&... nodeNames);
+    auto ImportValue(const YAML::Node& node, AValue& value, AStrings&&... nodeNames) -> void;
     template<typename AReadAs, std::convertible_to<std::string>... AStrings>
-    void ImportValue(const YAML::Node& node, const std::regular_invocable<AReadAs> auto& ImportAction, AStrings&&... nodeNames);
+    auto ImportValue(const YAML::Node& node, const std::regular_invocable<AReadAs> auto& ImportAction, AStrings&&... nodeNames) -> void;
     template<typename AValue, typename AWriteAs = AValue, std::convertible_to<std::string>... AStrings>
         requires std::convertible_to<const AValue&, AWriteAs>
-    void ExportValue(YAML::Node& node, const AValue& value, AStrings&&... nodeNames) const;
+    auto ExportValue(YAML::Node& node, const AValue& value, AStrings&&... nodeNames) const -> void;
 
 private:
     virtual void ImportValues(const YAML::Node& node) = 0;
     virtual void ExportValues(YAML::Node& node) const = 0;
 
     template<std::convertible_to<std::string>... AStrings>
-    std::optional<const YAML::Node> UnpackToLeafNodeForImporting(const YAML::Node& node, AStrings&&... nodeNames);
+    auto UnpackToLeafNodeForImporting(const YAML::Node& node, AStrings&&... nodeNames) -> std::optional<const YAML::Node>;
     template<std::convertible_to<std::string>... AStrings>
-    YAML::Node UnpackToLeafNodeForExporting(YAML::Node& node, AStrings&&... nodeNames) const;
+    auto UnpackToLeafNodeForExporting(YAML::Node& node, AStrings&&... nodeNames) const -> YAML::Node;
     template<std::convertible_to<std::string>... AStrings>
-    void PrintNodeNotFoundWarning(AStrings&&... nodeNames) const;
+    auto PrintNodeNotFoundWarning(AStrings&&... nodeNames) const -> void;
 
 private:
     std::string fName;

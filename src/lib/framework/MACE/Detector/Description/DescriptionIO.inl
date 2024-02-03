@@ -1,6 +1,7 @@
 namespace MACE::Detector::Description {
 
 namespace internal {
+namespace {
 
 template<std::intmax_t i, typename T>
 struct FillDescriptionArray {
@@ -9,29 +10,44 @@ struct FillDescriptionArray {
     }
 };
 
+template<std::intmax_t Begin, std::intmax_t End,
+         template<std::intmax_t, typename...> class, typename...>
+    requires(Begin >= End)
+constexpr void StaticForEach(auto&&...) {}
+
+template<std::intmax_t Begin, std::intmax_t End,
+         template<std::intmax_t, typename...> class AFunctor, typename... AFunctorArgs>
+    requires(Begin < End and std::default_initializable<AFunctor<Begin, AFunctorArgs...>>)
+constexpr void StaticForEach(auto&&... args) {
+    AFunctor<Begin, AFunctorArgs...>()(std::forward<decltype(args)>(args)...);
+    StaticForEach<Begin + 1, End,
+                  AFunctor, AFunctorArgs...>(std::forward<decltype(args)>(args)...);
+}
+
+} // namespace
 } // namespace internal
 
 template<stdx::tuple_like T>
 auto DescriptionIO::Import(const std::filesystem::path& yamlFile) -> void {
     std::array<DescriptionBase*, std::tuple_size_v<T>> descriptions;
-    StaticForEach<0, descriptions.size(),
-                  internal::FillDescriptionArray, T>(descriptions);
+    internal::StaticForEach<0, descriptions.size(),
+                            internal::FillDescriptionArray, T>(descriptions);
     ImportImpl(yamlFile, descriptions);
 }
 
 template<stdx::tuple_like T>
 auto DescriptionIO::Export(const std::filesystem::path& yamlFile, std::string_view fileComment) -> void {
     std::array<DescriptionBase*, std::tuple_size_v<T>> descriptions;
-    StaticForEach<0, descriptions.size(),
-                  internal::FillDescriptionArray, T>(descriptions);
+    internal::StaticForEach<0, descriptions.size(),
+                            internal::FillDescriptionArray, T>(descriptions);
     ExportImpl(yamlFile, fileComment, descriptions);
 }
 
 template<stdx::tuple_like T>
 auto DescriptionIO::Ixport(const std::filesystem::path& yamlFile, std::string_view fileComment) -> void {
     std::array<DescriptionBase*, std::tuple_size_v<T>> descriptions;
-    StaticForEach<0, descriptions.size(),
-                  internal::FillDescriptionArray, T>(descriptions);
+    internal::StaticForEach<0, descriptions.size(),
+                            internal::FillDescriptionArray, T>(descriptions);
     IxportImpl(yamlFile, fileComment, descriptions);
 }
 
