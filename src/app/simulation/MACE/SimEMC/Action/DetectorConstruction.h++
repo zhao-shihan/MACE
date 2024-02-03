@@ -17,7 +17,7 @@ namespace MACE {
 
 namespace Detector::Definition {
 
-class GeometryBase;
+class DefinitionBase;
 
 } // namespace Detector::Definition
 
@@ -49,7 +49,7 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    std::unique_ptr<MACE::Detector::Definition::GeometryBase> fWorld;
+    std::unique_ptr<MACE::Detector::Definition::DefinitionBase> fWorld;
 
     Region* fEMCSensitiveRegion;
     Region* fMCPSensitiveRegion;

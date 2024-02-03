@@ -4,7 +4,7 @@
 
 namespace MACE::SimEMC::Detector {
 
-class EMCShield final : public MACE::Detector::Definition::GeometryBase {
+class EMCShield final : public MACE::Detector::Definition::DefinitionBase {
 private:
     auto Construct(G4bool checkOverlaps) -> void override;
 };

@@ -1,15 +1,15 @@
 namespace MACE::Detector::Definition {
 
-template<std::derived_from<GeometryBase> AGeometry>
-auto GeometryBase::NewDaughter(G4bool checkOverlaps) -> AGeometry& {
-    if (typeid(AGeometry) == typeid(*this)) {
-        throw std::logic_error("MACE::Detector::Definition::GeometryBase::AddDaughter: "
+template<std::derived_from<DefinitionBase> ADefinition>
+auto DefinitionBase::NewDaughter(G4bool checkOverlaps) -> ADefinition& {
+    if (typeid(ADefinition) == typeid(*this)) {
+        throw std::logic_error("MACE::Detector::Definition::DefinitionBase::AddDaughter: "
                                "Trying to add the same geometry to itself as a daughter");
     }
 
-    const auto [iterator, emplaced]{fDaughters.try_emplace(typeid(AGeometry), std::make_unique_for_overwrite<AGeometry>())};
+    const auto [iterator, emplaced]{fDaughters.try_emplace(typeid(ADefinition), std::make_unique_for_overwrite<ADefinition>())};
     if (not emplaced) {
-        throw std::logic_error("MACE::Detector::Definition::GeometryBase::AddDaughter: "
+        throw std::logic_error("MACE::Detector::Definition::DefinitionBase::AddDaughter: "
                                "Trying to add the same geometry to itself as a daughter");
     }
     const auto& daughter{iterator->second};
@@ -22,14 +22,14 @@ auto GeometryBase::NewDaughter(G4bool checkOverlaps) -> AGeometry& {
         daughter->Construct(checkOverlaps);
     }
 
-    return static_cast<AGeometry&>(*daughter);
+    return static_cast<ADefinition&>(*daughter);
 }
 
-template<std::derived_from<GeometryBase> AGeometry>
-auto GeometryBase::FindDaughter() const -> AGeometry* {
-    if (const auto existedDaughter{fDaughters.find(typeid(AGeometry))};
+template<std::derived_from<DefinitionBase> ADefinition>
+auto DefinitionBase::FindDaughter() const -> ADefinition* {
+    if (const auto existedDaughter{fDaughters.find(typeid(ADefinition))};
         existedDaughter != fDaughters.cend()) {
-        return static_cast<AGeometry*>(existedDaughter->second.get());
+        return static_cast<ADefinition*>(existedDaughter->second.get());
     } else {
         return {};
     }
@@ -66,7 +66,7 @@ auto RegisterField(const std::unique_ptr<G4LogicalVolume>& logic, gsl::not_null<
 } // namespace internal
 
 template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
-auto GeometryBase::RegisterField(gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void {
+auto DefinitionBase::RegisterField(gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void {
     if (not Ready()) { return; }
     const auto& lvs{LogicalVolumes()};
     assert(lvs.size() > 0);
@@ -76,7 +76,7 @@ auto GeometryBase::RegisterField(gsl::not_null<AField*> field, G4double hMin, G4
 }
 
 template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
-auto GeometryBase::RegisterField(std::string_view logicalVolumeName, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void {
+auto DefinitionBase::RegisterField(std::string_view logicalVolumeName, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void {
     if (not Ready()) { return; }
     const auto& lvs{LogicalVolumes(logicalVolumeName)};
     assert(lvs.size() > 0);
@@ -86,31 +86,31 @@ auto GeometryBase::RegisterField(std::string_view logicalVolumeName, gsl::not_nu
 }
 
 template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
-auto GeometryBase::RegisterField(gsl::index iLogicalVolume, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void {
+auto DefinitionBase::RegisterField(gsl::index iLogicalVolume, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void {
     if (not Ready()) { return; }
     internal::RegisterField<AField, AEquation, AStepper, ADriver>(LogicalVolume(iLogicalVolume), field, hMin, nVarStepper, nVarDriver, forceToAllDaughters);
 }
 
 template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
-auto GeometryBase::RegisterField(std::string_view logicalVolumeName, gsl::index iLogicalVolume, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void {
+auto DefinitionBase::RegisterField(std::string_view logicalVolumeName, gsl::index iLogicalVolume, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void {
     if (not Ready()) { return; }
     internal::RegisterField<AField, AEquation, AStepper, ADriver>(LogicalVolume(logicalVolumeName, iLogicalVolume), field, hMin, nVarStepper, nVarDriver, forceToAllDaughters);
 }
 
 template<std::derived_from<G4VSolid> ASolid>
-auto GeometryBase::Make(auto&&... args) -> gsl::not_null<ASolid*> {
+auto DefinitionBase::Make(auto&&... args) -> gsl::not_null<ASolid*> {
     auto solid{std::make_unique<ASolid>(std::forward<decltype(args)>(args)...)};
     return static_cast<ASolid*>(fSolidStore.emplace_back(std::move(solid)).get());
 }
 
 template<std::derived_from<G4LogicalVolume> ALogical>
-auto GeometryBase::Make(auto&&... args) -> gsl::not_null<ALogical*> {
+auto DefinitionBase::Make(auto&&... args) -> gsl::not_null<ALogical*> {
     auto logic{std::make_unique<ALogical>(std::forward<decltype(args)>(args)...)};
     return static_cast<ALogical*>(fLogicalVolumes[logic->GetName()].emplace_back(std::move(logic)).get());
 }
 
 template<std::derived_from<G4VPhysicalVolume> APhysical>
-auto GeometryBase::Make(auto&&... args) -> gsl::not_null<APhysical*> {
+auto DefinitionBase::Make(auto&&... args) -> gsl::not_null<APhysical*> {
     auto physics{std::make_unique<APhysical>(std::forward<decltype(args)>(args)...)};
     return static_cast<APhysical*>(fPhysicalVolumes[physics->GetName()].emplace_back(std::move(physics)).get());
 }

@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Definition {
 
-class BeamMonitor final : public GeometryBase {
+class BeamMonitor final : public DefinitionBase {
 public:
     bool Enabled() const override;
 

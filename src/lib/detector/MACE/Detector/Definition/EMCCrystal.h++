@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Definition {
 
-class EMCCrystal final : public GeometryBase {
+class EMCCrystal final : public DefinitionBase {
 private:
     auto Construct(G4bool checkOverlaps) -> void override;
 };

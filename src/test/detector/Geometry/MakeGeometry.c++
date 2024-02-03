@@ -77,7 +77,7 @@ int main(int argc, char* argv[]) {
     auto& emcPMTAssemblies = emcField.NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
     auto& emcMagnet = emcField.NewDaughter<EMCMagnet>(fCheckOverlap);
 
-    auto& mcp = emcField.NewDaughter<MCP>(fCheckOverlap);
+    /* auto& mcp =  */ emcField.NewDaughter<MCP>(fCheckOverlap);
 
     auto& solenoidB1 = solenoidB1Field.NewDaughter<SolenoidB1>(fCheckOverlap);
 
@@ -169,9 +169,6 @@ int main(int argc, char* argv[]) {
         emcShield.RegisterMaterial(lead);
         spectrometerShield.RegisterMaterial(lead);
 
-        const auto mcpMaterial = nist->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4_g_cm3);
-        mcp.RegisterMaterial(mcpMaterial);
-
         const auto plasticScitillator = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
         beamMonitor.RegisterMaterial(plasticScitillator);
 
@@ -215,8 +212,8 @@ int main(int argc, char* argv[]) {
     // see form https://github.com/root-project/jsroot/blob/master/docs/JSROOT.md#geometry-viewer
 
     geoManager->GetVolume(fWorld->LogicalVolume()->GetName())->SetInvisible();
-    using MACE::Detector::Definition::GeometryBase;
-    for (auto&& entity : std::initializer_list<std::reference_wrapper<const GeometryBase>>{
+    using MACE::Detector::Definition::DefinitionBase;
+    for (auto&& entity : std::initializer_list<std::reference_wrapper<const DefinitionBase>>{
              emcShield,
              emcCrystal,
              emcPMTAssemblies,

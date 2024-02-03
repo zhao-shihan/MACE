@@ -36,13 +36,13 @@ auto RegisterSD(const std::unique_ptr<G4LogicalVolume>& logic, gsl::not_null<G4V
             sdManager->AddNewDetector(sd);
         }
     } else if (logic->GetSensitiveDetector() != sd) {
-        G4Exception("MACE::Detector::Definition::GeometryBase::RegisterSD", "-1", JustWarning,
+        G4Exception("MACE::Detector::Definition::DefinitionBase::RegisterSD", "-1", JustWarning,
                     fmt::format("Attempting to register SD multiple times for \"{}\" is currently not supported "
                                 "(G4MultiSensitiveDetector not supported currently), skipping.",
                                 logic->GetName())
                         .c_str());
     } else {
-        G4Exception("MACE::Detector::Definition::GeometryBase::RegisterSD", "-1", JustWarning,
+        G4Exception("MACE::Detector::Definition::DefinitionBase::RegisterSD", "-1", JustWarning,
                     fmt::format("Attempting to register the same SD multiple times for \"{}\", skipping.",
                                 logic->GetName())
                         .c_str());
@@ -57,7 +57,7 @@ auto Export(std::filesystem::path gdmlFile, const std::unique_ptr<G4VPhysicalVol
     gdml.SetOutputFileOverwrite(true);
     gdml.Write(gdmlFile.generic_string(), physics.get());
 #else
-    G4Exception("MACE::Detector::Definition::GeometryBase::Export", "-1", JustWarning,
+    G4Exception("MACE::Detector::Definition::DefinitionBase::Export", "-1", JustWarning,
                 "This binary does not support GDML export (MACE_USE_G4GDML=OFF). "
                 "Try with a binary configured with MACE_USE_G4GDML=ON. "
                 "Nothing was done for the time being.");
@@ -67,7 +67,7 @@ auto Export(std::filesystem::path gdmlFile, const std::unique_ptr<G4VPhysicalVol
 } // namespace
 } // namespace internal
 
-auto GeometryBase::RegisterMaterial(gsl::not_null<G4Material*> material) const -> void {
+auto DefinitionBase::RegisterMaterial(gsl::not_null<G4Material*> material) const -> void {
     if (not Ready()) { return; }
     const auto& lvs{LogicalVolumes()};
     assert(lvs.size() > 0);
@@ -76,7 +76,7 @@ auto GeometryBase::RegisterMaterial(gsl::not_null<G4Material*> material) const -
     }
 }
 
-auto GeometryBase::RegisterMaterial(std::string_view logicalVolumeName, gsl::not_null<G4Material*> material) const -> void {
+auto DefinitionBase::RegisterMaterial(std::string_view logicalVolumeName, gsl::not_null<G4Material*> material) const -> void {
     if (not Ready()) { return; }
     const auto& lvs{LogicalVolumes(logicalVolumeName)};
     assert(lvs.size() > 0);
@@ -85,17 +85,17 @@ auto GeometryBase::RegisterMaterial(std::string_view logicalVolumeName, gsl::not
     }
 }
 
-auto GeometryBase::RegisterMaterial(gsl::index iLogicalVolume, gsl::not_null<G4Material*> material) const -> void {
+auto DefinitionBase::RegisterMaterial(gsl::index iLogicalVolume, gsl::not_null<G4Material*> material) const -> void {
     if (not Ready()) { return; }
     internal::RegisterMaterial(LogicalVolume(iLogicalVolume), material);
 }
 
-auto GeometryBase::RegisterMaterial(std::string_view logicalVolumeName, gsl::index iLogicalVolume, gsl::not_null<G4Material*> material) const -> void {
+auto DefinitionBase::RegisterMaterial(std::string_view logicalVolumeName, gsl::index iLogicalVolume, gsl::not_null<G4Material*> material) const -> void {
     if (not Ready()) { return; }
     internal::RegisterMaterial(LogicalVolume(logicalVolumeName, iLogicalVolume), material);
 }
 
-auto GeometryBase::RegisterRegion(gsl::not_null<G4Region*> region) const -> void {
+auto DefinitionBase::RegisterRegion(gsl::not_null<G4Region*> region) const -> void {
     if (not Ready()) { return; }
     const auto& lvs{LogicalVolumes()};
     assert(lvs.size() > 0);
@@ -104,7 +104,7 @@ auto GeometryBase::RegisterRegion(gsl::not_null<G4Region*> region) const -> void
     }
 }
 
-auto GeometryBase::RegisterRegion(std::string_view logicalVolumeName, gsl::not_null<G4Region*> region) const -> void {
+auto DefinitionBase::RegisterRegion(std::string_view logicalVolumeName, gsl::not_null<G4Region*> region) const -> void {
     if (not Ready()) { return; }
     const auto& lvs{LogicalVolumes(logicalVolumeName)};
     assert(lvs.size() > 0);
@@ -113,17 +113,17 @@ auto GeometryBase::RegisterRegion(std::string_view logicalVolumeName, gsl::not_n
     }
 }
 
-auto GeometryBase::RegisterRegion(gsl::index iLogicalVolume, gsl::not_null<G4Region*> region) const -> void {
+auto DefinitionBase::RegisterRegion(gsl::index iLogicalVolume, gsl::not_null<G4Region*> region) const -> void {
     if (not Ready()) { return; }
     internal::RegisterRegion(LogicalVolume(iLogicalVolume), region);
 }
 
-auto GeometryBase::RegisterRegion(std::string_view logicalVolumeName, gsl::index iLogicalVolume, gsl::not_null<G4Region*> region) const -> void {
+auto DefinitionBase::RegisterRegion(std::string_view logicalVolumeName, gsl::index iLogicalVolume, gsl::not_null<G4Region*> region) const -> void {
     if (not Ready()) { return; }
     internal::RegisterRegion(LogicalVolume(logicalVolumeName, iLogicalVolume), region);
 }
 
-auto GeometryBase::RegisterSD(gsl::not_null<G4VSensitiveDetector*> sd) const -> void {
+auto DefinitionBase::RegisterSD(gsl::not_null<G4VSensitiveDetector*> sd) const -> void {
     if (not Ready()) { return; }
     const auto& lvs{LogicalVolumes()};
     assert(lvs.size() > 0);
@@ -132,7 +132,7 @@ auto GeometryBase::RegisterSD(gsl::not_null<G4VSensitiveDetector*> sd) const -> 
     }
 }
 
-auto GeometryBase::RegisterSD(std::string_view logicalVolumeName, gsl::not_null<G4VSensitiveDetector*> sd) const -> void {
+auto DefinitionBase::RegisterSD(std::string_view logicalVolumeName, gsl::not_null<G4VSensitiveDetector*> sd) const -> void {
     if (not Ready()) { return; }
     const auto& lvs{LogicalVolumes(logicalVolumeName)};
     assert(lvs.size() > 0);
@@ -141,32 +141,32 @@ auto GeometryBase::RegisterSD(std::string_view logicalVolumeName, gsl::not_null<
     }
 }
 
-auto GeometryBase::RegisterSD(gsl::index iLogicalVolume, gsl::not_null<G4VSensitiveDetector*> sd) const -> void {
+auto DefinitionBase::RegisterSD(gsl::index iLogicalVolume, gsl::not_null<G4VSensitiveDetector*> sd) const -> void {
     if (not Ready()) { return; }
     internal::RegisterSD(LogicalVolume(iLogicalVolume), sd);
 }
 
-auto GeometryBase::RegisterSD(std::string_view logicalVolumeName, gsl::index iLogicalVolume, gsl::not_null<G4VSensitiveDetector*> sd) const -> void {
+auto DefinitionBase::RegisterSD(std::string_view logicalVolumeName, gsl::index iLogicalVolume, gsl::not_null<G4VSensitiveDetector*> sd) const -> void {
     if (not Ready()) { return; }
     internal::RegisterSD(LogicalVolume(logicalVolumeName, iLogicalVolume), sd);
 }
 
-auto GeometryBase::Export(std::filesystem::path gdmlFile, gsl::index iPhysicalVolume) const -> void {
+auto DefinitionBase::Export(std::filesystem::path gdmlFile, gsl::index iPhysicalVolume) const -> void {
     if (not Ready()) { return; }
     internal::Export(std::move(gdmlFile), PhysicalVolume(iPhysicalVolume));
 }
 
-auto GeometryBase::Export(std::filesystem::path gdmlFile, std::string_view physicalVolumeName, gsl::index iPhysicalVolume) const -> void {
+auto DefinitionBase::Export(std::filesystem::path gdmlFile, std::string_view physicalVolumeName, gsl::index iPhysicalVolume) const -> void {
     if (not Ready()) { return; }
     internal::Export(std::move(gdmlFile), PhysicalVolume(physicalVolumeName, iPhysicalVolume));
 }
 
-auto GeometryBase::LogicalVolumes() const -> const std::vector<std::unique_ptr<G4LogicalVolume>>& {
+auto DefinitionBase::LogicalVolumes() const -> const std::vector<std::unique_ptr<G4LogicalVolume>>& {
     if (fLogicalVolumes.size() == 0) { throw std::out_of_range{"no logical volume"}; }
     return fLogicalVolumes.begin()->second;
 }
 
-auto GeometryBase::PhysicalVolumes() const -> const std::vector<std::unique_ptr<G4VPhysicalVolume>>& {
+auto DefinitionBase::PhysicalVolumes() const -> const std::vector<std::unique_ptr<G4VPhysicalVolume>>& {
     if (fPhysicalVolumes.size() == 0) { throw std::out_of_range{"no physical volume"}; }
     return fPhysicalVolumes.begin()->second;
 }

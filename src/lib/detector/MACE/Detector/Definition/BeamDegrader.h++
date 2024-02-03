@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Definition {
 
-class BeamDegrader final : public GeometryBase {
+class BeamDegrader final : public DefinitionBase {
 public:
     bool Enabled() const override;
 

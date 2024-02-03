@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Definition {
 
-class MCP final : public GeometryBase {
+class MCP final : public DefinitionBase {
 private:
     auto Construct(G4bool checkOverlaps) -> void override;
 };

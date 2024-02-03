@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Definition {
 
-class SpectrometerMagnet final : public GeometryBase {
+class SpectrometerMagnet final : public DefinitionBase {
 private:
     auto Construct(G4bool checkOverlaps) -> void override;
 };

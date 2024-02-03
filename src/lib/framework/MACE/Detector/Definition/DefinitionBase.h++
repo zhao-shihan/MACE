@@ -31,9 +31,9 @@
 
 namespace MACE::Detector::Definition {
 
-class GeometryBase : public NonMoveableBase {
+class DefinitionBase : public NonMoveableBase {
 public:
-    virtual ~GeometryBase() = default;
+    virtual ~DefinitionBase() = default;
 
     auto Topmost() const -> bool { return fMother == nullptr; }
     auto Mother() const -> const auto& { return *fMother; }
@@ -43,14 +43,14 @@ public:
     /// A typical usage is to get the information of whether to enable this from description in the override function.
     virtual auto Enabled() const -> bool { return true; }
 
-    template<std::derived_from<GeometryBase> AGeometry>
-    auto NewDaughter(G4bool checkOverlaps) -> AGeometry&;
-    template<std::derived_from<GeometryBase> AGeometry>
-    auto FindDaughter() const -> AGeometry*;
-    template<std::derived_from<GeometryBase> AGeometry>
-    auto RemoveDaughter() -> bool { return fDaughters.erase(typeid(AGeometry)) > 0; }
-    template<std::derived_from<GeometryBase> AGeometry>
-    auto FindSibling() const -> auto { return Mother().FindDaughter<AGeometry>(); }
+    template<std::derived_from<DefinitionBase> ADefinition>
+    auto NewDaughter(G4bool checkOverlaps) -> ADefinition&;
+    template<std::derived_from<DefinitionBase> ADefinition>
+    auto FindDaughter() const -> ADefinition*;
+    template<std::derived_from<DefinitionBase> ADefinition>
+    auto RemoveDaughter() -> bool { return fDaughters.erase(typeid(ADefinition)) > 0; }
+    template<std::derived_from<DefinitionBase> ADefinition>
+    auto FindSibling() const -> auto { return Mother().FindDaughter<ADefinition>(); }
 
     auto RegisterMaterial(gsl::not_null<G4Material*> material) const -> void;
     auto RegisterMaterial(std::string_view logicalVolumeName, gsl::not_null<G4Material*> material) const -> void;
@@ -106,13 +106,13 @@ private:
     auto Ready() const -> bool { return fPhysicalVolumes.size() > 0; }
 
 private:
-    const GeometryBase* fMother{};
+    const DefinitionBase* fMother{};
 
     std::vector<std::unique_ptr<G4VSolid>> fSolidStore;
     std::unordered_map<std::string, std::vector<std::unique_ptr<G4LogicalVolume>>> fLogicalVolumes;
     std::unordered_map<std::string, std::vector<std::unique_ptr<G4VPhysicalVolume>>> fPhysicalVolumes;
 
-    std::unordered_map<std::type_index, std::unique_ptr<GeometryBase>> fDaughters;
+    std::unordered_map<std::type_index, std::unique_ptr<DefinitionBase>> fDaughters;
 };
 
 } // namespace MACE::Detector::Definition

@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Definition {
 
-class CDCFieldWire final : public GeometryBase {
+class CDCFieldWire final : public DefinitionBase {
 private:
     auto Construct(G4bool checkOverlaps) -> void override;
 };

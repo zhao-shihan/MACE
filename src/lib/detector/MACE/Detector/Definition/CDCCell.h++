@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Definition {
 
-class CDCCell final : public GeometryBase {
+class CDCCell final : public DefinitionBase {
 private:
     auto Construct(G4bool checkOverlaps) -> void override;
 };

@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Definition {
 
-class EMCPMTAssemblies final : public GeometryBase {
+class EMCPMTAssemblies final : public DefinitionBase {
 private:
     auto Construct(G4bool checkOverlaps) -> void override;
 };
