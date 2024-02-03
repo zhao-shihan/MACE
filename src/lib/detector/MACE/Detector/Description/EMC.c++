@@ -152,7 +152,7 @@ EMC::EMC() :
     DescriptionSingletonBase{__func__},
     fNSubdivision{2},
     fInnerRadius{15_cm},
-    fCrystalHypotenuse{10_cm},
+    fCrystalHypotenuse{12_cm},
     fSmallPMTRadius{25.5_mm},
     fSmallPMTLength{144_mm},
     fSmallPMTCathodeRadius{23_mm},
