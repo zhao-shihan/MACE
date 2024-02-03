@@ -1,8 +1,7 @@
 #include "MACE/Env/MPIEnv.h++"
-#include "MACE/Extension/CLHEPX/Random/Wrap.h++"
+#include "MACE/Extension/CLHEPX/Random/Xoshiro.h++"
 #include "MACE/Extension/MPIX/Execution/Executor.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
-#include "MACE/Math/Random/Generator/Xoshiro256Plus.h++"
 #include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
 #include "MACE/Utility/MPIReseedRandomEngine.h++"
 
@@ -26,7 +25,7 @@ using namespace MACE;
 auto main(int argc, char* argv[]) -> int {
     Env::MPIEnv env{argc, argv, {}};
 
-    CLHEPX::Random::Wrap<Math::Random::Xoshiro256Plus> rng;
+    CLHEPX::Random::Xoshiro256Plus rng;
     CLHEP::HepRandom::setTheEngine(&rng);
     MPIReseedRandomEngine();
 
