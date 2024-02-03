@@ -14,11 +14,11 @@ public:
     MT1993764() = default;
     explicit MT1993764(SeedType seed);
 
-    auto operator()() { return fMT(); }
+    auto operator()() -> auto { return fMT(); }
     auto Seed(SeedType seed) -> void { fMT.seed(seed); }
 
-    static constexpr auto Min() { return std::mt19937_64::min(); }
-    static constexpr auto Max() { return std::mt19937_64::max(); }
+    static constexpr auto Min() -> auto { return std::mt19937_64::min(); }
+    static constexpr auto Max() -> auto { return std::mt19937_64::max(); }
 
     template<Concept::Character AChar>
     friend auto operator<<(std::basic_ostream<AChar>& os, const MT1993764& self) -> decltype(auto) { return os << self.fMT; }
