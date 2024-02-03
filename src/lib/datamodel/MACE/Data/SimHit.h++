@@ -9,6 +9,8 @@
 
 namespace MACE::Data {
 
+namespace internal {
+
 using SimHitVertexTruth = TupleModel<Value<int, "TrkID", "MC Track ID">,
                                      Value<int, "PDGID", "Particle PDG ID (MC truth)">,
                                      Value<float, "t0", "Vertex time (MC truth)">,
@@ -17,25 +19,27 @@ using SimHitVertexTruth = TupleModel<Value<int, "TrkID", "MC Track ID">,
                                      Value<stdx::array3f, "p0", "Vertex momentum (MC truth)">,
                                      Value<std::string, "CreatProc", "Track creator process (MC truth)">>;
 
+} // namespace internal
+
 using CDCSimHit = TupleModel<CDCHit,
                              Value<double, "tHit", "Hit time (MC truth)">,
                              Value<float, "Ek", "Hit kinetic energy (MC truth)">,
                              Value<stdx::array3f, "x", "Hit position (MC truth)">,
                              Value<stdx::array3f, "p", "Hit momentum (MC truth)">,
-                             SimHitVertexTruth>;
+                             internal::SimHitVertexTruth>;
 
 using EMCSimHit = TupleModel<EMCHit,
-                             Value<unsigned int, "nOptPho", "Number of optical photon hits on PMT (MC truth)">,
+                             Value<int, "nOptPho", "Number of optical photon hits on PMT (MC truth)">,
                              Value<float, "Ek", "Hit kinetic energy (MC truth)">,
                              Value<stdx::array3f, "x", "Hit position (MC truth)">,
                              Value<stdx::array3f, "p", "Hit momentum (MC truth)">,
-                             SimHitVertexTruth>;
+                             internal::SimHitVertexTruth>;
 
 using EMCPMTSimHit = TupleModel<EMCPMTHit /* , Value<int, "EMCHitID", "EMC Hit ID (MC truth)"> */>;
 
 using MCPSimHit = TupleModel<MCPHit,
                              Value<float, "Ek", "Hit kinetic energy (MC truth)">,
                              Value<stdx::array3f, "p", "Hit momentum (MC truth)">,
-                             SimHitVertexTruth>;
+                             internal::SimHitVertexTruth>;
 
 } // namespace MACE::Data

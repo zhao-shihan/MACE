@@ -6,26 +6,30 @@
 
 namespace MACE::Data {
 
+namespace internal {
+
 using HitEventIDHitID = TupleModel<Value<int, "EvtID", "Event ID">,
                                    Value<int, "HitID", "Hit ID">>;
 
-using CDCHit = TupleModel<HitEventIDHitID,
+} // namespace internal
+
+using CDCHit = TupleModel<internal::HitEventIDHitID,
                           Value<int, "CellID", "Hit cell ID">,
                           Value<double, "t", "Signal time">,
                           Value<double, "tD", "Drift time">,
                           Value<float, "d", "Drift distance">,
                           Value<float, "Edep", "Energy deposition">>;
 
-using EMCHit = TupleModel<HitEventIDHitID,
+using EMCHit = TupleModel<internal::HitEventIDHitID,
                           Value<int, "UnitID", "Hit unit ID">,
                           Value<double, "t", "Hit time">,
                           Value<float, "Edep", "Energy deposition">>;
 
-using EMCPMTHit = TupleModel<HitEventIDHitID,
+using EMCPMTHit = TupleModel<internal::HitEventIDHitID,
                              Value<int, "UnitID", "Hit unit ID">,
                              Value<double, "t", "Hit time">>;
 
-using MCPHit = TupleModel<HitEventIDHitID,
+using MCPHit = TupleModel<internal::HitEventIDHitID,
                           Value<double, "t", "Hit time">,
                           Value<stdx::array2f, "x", "Hit position">>;
 
