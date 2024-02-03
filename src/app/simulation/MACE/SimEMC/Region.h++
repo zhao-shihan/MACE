@@ -9,6 +9,7 @@ namespace MACE::SimEMC {
 enum class RegionType {
     EMCSensitive,
     MCPSensitive,
+    SolenoidOrMagnet,
     Shield,
     Tunnel,
     Vacuum

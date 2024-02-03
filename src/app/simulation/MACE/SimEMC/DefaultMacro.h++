@@ -59,6 +59,7 @@ constexpr auto defaultMacro = {
     "/vis/geometry/set/colour EMCPMTShell                   0     1     1     1     0.1",
     "/vis/geometry/set/colour EMCTunnel                     0     1     1     1     0.1",
     "/vis/geometry/set/colour EMCShield                     0     1     1     1     0.1",
+    "/vis/geometry/set/colour EMCMagnet                     0     1     1     1     0.1",
     "",
     "/vis/scene/add/date",
     "/vis/scene/add/axes 0 0 0 40 cm",

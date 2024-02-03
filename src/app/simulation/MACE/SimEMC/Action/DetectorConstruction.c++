@@ -8,6 +8,7 @@
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/SimEMC/Action/DetectorConstruction.h++"
+#include "MACE/SimEMC/Detector/EMCMagnet.h++"
 #include "MACE/SimEMC/Detector/EMCShield.h++"
 #include "MACE/SimEMC/Detector/EMCTunnel.h++"
 #include "MACE/SimEMC/Messenger/DetectorMessenger.h++"
@@ -36,10 +37,9 @@ DetectorConstruction::DetectorConstruction() :
     fWorld{},
     fEMCSensitiveRegion{},
     fMCPSensitiveRegion{},
-    fShieldRegion{},
+    fSolenoidOrMagnetRegion{},
     fTunnelRegion{},
     fVacuumRegion{},
-
     fEMCSD{},
     fEMCPMTSD{} {
     // Detector::Description::DescriptionIO::Import<DescriptionInUse>(
@@ -61,8 +61,10 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& emcCrystal = fWorld->NewDaughter<EMCCrystal>(fCheckOverlap);
     auto& emcPMTAssemblies = fWorld->NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
     auto& mcp = fWorld->NewDaughter<MCP>(fCheckOverlap);
-    // auto& emcShield = fWorld->NewDaughter<SimEMC::Detector::EMCShield>(fCheckOverlap);
-    // auto& emcTunnel = fWorld->NewDaughter<SimEMC::Detector::EMCTunnel>(fCheckOverlap);
+
+    auto& emcMagnet = fWorld->NewDaughter<SimEMC::Detector::EMCMagnet>(fCheckOverlap);
+    auto& emcShield = fWorld->NewDaughter<SimEMC::Detector::EMCShield>(fCheckOverlap);
+    auto& emcTunnel = fWorld->NewDaughter<SimEMC::Detector::EMCTunnel>(fCheckOverlap);
 
     auto nist = G4NistManager::Instance();
     fWorld->RegisterMaterial(nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3));
@@ -71,25 +73,25 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     fEMCSensitiveRegion = new Region("EMCSensitive", RegionType::EMCSensitive);
     fEMCSensitiveRegion->SetProductionCuts(defaultCuts);
-
     emcCrystal.RegisterRegion(fEMCSensitiveRegion);
 
     fMCPSensitiveRegion = new Region("MCPSensitive", RegionType::MCPSensitive);
     fMCPSensitiveRegion->SetProductionCuts(defaultCuts);
-
     mcp.RegisterRegion(fMCPSensitiveRegion);
 
-    // fShieldRegion = new Region("Shield", RegionType::Shield);
-    // fShieldRegion->SetProductionCuts(defaultCuts);
+    fSolenoidOrMagnetRegion = new Region("SolenoidOrMagnet", RegionType::SolenoidOrMagnet);
+    fSolenoidOrMagnetRegion->SetProductionCuts(defaultCuts);
+    emcMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
 
-    // emcShield.RegisterRegion(fShieldRegion);
+    fShieldRegion = new Region("Shield", RegionType::Shield);
+    fShieldRegion->SetProductionCuts(defaultCuts);
+    emcShield.RegisterRegion(fShieldRegion);
 
-    // fTunnelRegion = new Region("Tunnel", RegionType::Tunnel);
-    // const auto cuts = new G4ProductionCuts;
-    // cuts->SetProductionCut(2.5_cm);
-    // fTunnelRegion->SetProductionCuts(cuts);
-
-    // emcTunnel.RegisterRegion(fTunnelRegion);
+    fTunnelRegion = new Region("Tunnel", RegionType::Tunnel);
+    const auto cuts = new G4ProductionCuts;
+    cuts->SetProductionCut(2.5_cm);
+    fTunnelRegion->SetProductionCuts(cuts);
+    emcTunnel.RegisterRegion(fTunnelRegion);
 
     const auto& emcName{MACE::Detector::Description::EMC::Instance().Name()};
 
