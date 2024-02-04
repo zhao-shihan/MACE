@@ -51,7 +51,7 @@ auto Executor<T>::Execute(typename Scheduler<T>::Task task, std::invocable<T> au
     fScheduler->Reset();
     assert(ExecutingTask() == Task().first);
     assert(NLocalExecutedTask() == 0);
-    assert(NExecutedTask().second == 0);
+    assert(fScheduler->NExecutedTask().second == 0);
     // initialize
     fExecuting = true;
     fScheduler->PreLoopAction();
