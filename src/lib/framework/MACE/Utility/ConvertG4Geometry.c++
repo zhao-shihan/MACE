@@ -49,7 +49,7 @@ auto ConvertG4GeometryToTMacro(const std::string& name, const std::filesystem::p
 auto {0}() -> void {{
     std::ofstream gdmlFile{{"{1}"}};
     if (gdmlFile.fail()) {{ throw std::runtime_error{{"error opening {1}"}}; }}
-    gdmlFile << R"{0}({2}\n){0}";
+    gdmlFile << R"{0}({2}){0}""\n";
     std::cout << "\nGDML has been saved to {1}" << std::endl;
 }}
 )macro",
