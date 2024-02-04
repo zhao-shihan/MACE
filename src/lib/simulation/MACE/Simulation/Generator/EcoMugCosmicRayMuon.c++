@@ -33,35 +33,35 @@ namespace EMUnits {
 
 // Lengths and areas
 static const double m = 1.;
-static const double cm = 1.e-2 * m;
-static const double mm = 1.e-3 * m;
-static const double km = 1000. * m;
-static const double mm2 = mm * mm;
-static const double cm2 = cm * cm;
+// static const double cm    = 1.e-2*m;
+// static const double mm    = 1.e-3*m;
+// static const double km    = 1000.*m;
+// static const double mm2   = mm*mm;
+// static const double cm2   = cm*cm;
 static const double m2 = m * m;
-static const double km2 = km * km;
+// static const double km2   = km*km;
 
 // Angles
-static const double rad = 1.;
-static const double mrad = 1.e-3 * rad;
-static const double deg = (M_PI / 180.0) * rad;
+// static const double rad   = 1.;
+// static const double mrad  = 1.e-3*rad;
+// static const double deg   = (M_PI/180.0)*rad;
 
 // Time
 static const double s = 1.;
-static const double ms = 1.e-3 * s;
-static const double us = 1.e-6 * s;
-static const double ns = 1.e-9 * s;
-static const double min = 60. * s;
-static const double hour = 60. * min;
-static const double day = 24. * hour;
+// static const double ms    = 1.e-3*s;
+// static const double us    = 1.e-6*s;
+// static const double ns    = 1.e-9*s;
+// static const double min = 60. * s;
+// static const double hour  = 60.*min;
+// static const double day   = 24.*hour;
 static const double hertz = 1. / s;
 
 // Energy/momentum
-static const double GeV = 1.;
-static const double MeV = 1.e-3 * GeV;
-static const double keV = 1.e-3 * MeV;
-static const double TeV = 1.e+6 * MeV;
-static const double eV = 1.e-6 * MeV;
+// static const double GeV = 1.;
+// static const double MeV = 1.e-3*GeV;
+// static const double keV = 1.e-3*MeV;
+// static const double TeV = 1.e+6*MeV;
+// static const double  eV = 1.e-6*MeV;
 }; // namespace EMUnits
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
@@ -87,7 +87,7 @@ public:
         fflush(stderr);
     };
 
-    std::ostringstream& Get(TLogLevel level = INFO);
+    // std::ostringstream& Get(TLogLevel level = INFO);
     void Get(TLogLevel level, const std::string& msg, TMsgType type = EcoMug) {
         std::cout << "[EcoMug v" << ECOMUG_VERSION << "] [";
         std::cout << ToString(level);
@@ -117,7 +117,7 @@ public:
             return WARNING;
         if (level == "ERROR")
             return ERROR;
-        EMLog().Get(WARNING) << "Unknown logging level '" << level << "'. Using INFO level as default.";
+        // EMLog().Get(WARNING) << "Unknown logging level '" << level << "'. Using INFO level as default.";
         return INFO;
     };
 
@@ -135,7 +135,7 @@ private:
     else                               \
         EMLog().Get(level, msg, type)
 
-// EMLog::TLogLevel EMLog::ReportingLevel = WARNING;
+EMLog::TLogLevel EMLog::ReportingLevel = WARNING;
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 
