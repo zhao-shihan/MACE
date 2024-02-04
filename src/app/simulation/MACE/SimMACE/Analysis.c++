@@ -1,10 +1,13 @@
+#include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
 #include "MACE/SimMACE/Analysis.h++"
 #include "MACE/Simulation/Hit/CDCHit.h++"
 #include "MACE/Simulation/Hit/EMCHit.h++"
 #include "MACE/Simulation/Hit/MCPHit.h++"
+#include "MACE/Utility/ConvertG4Geometry.h++"
 
 #include "TFile.h"
+#include "TMacro.h"
 
 #include "fmt/format.h"
 
@@ -63,10 +66,17 @@ auto Analysis::RunEnd(G4int runID, Option_t* option) -> void {
     const auto runDirectory{fmt::format("G4Run{}", runID)};
     fFile->mkdir(runDirectory.c_str());
     fFile->cd(runDirectory.c_str());
+
+    // write geometry
+    if (Env::MPIEnv::Instance().OnCommWorldMaster()) {
+        ConvertG4GeometryToTMacro("SimMACE_gdml", "SimMACE.gdml")->Write();
+    }
+    // write data
     fCDCSimHitOutput->Write();
     fCDCSimTrackOutput->Write();
     fEMCSimHitOutput->Write();
     fMCPSimHitOutput->Write();
+
     fFile->cd();
     fFile->Close(option);
     delete fFile;
