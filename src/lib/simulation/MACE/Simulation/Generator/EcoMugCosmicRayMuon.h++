@@ -4,7 +4,7 @@
 
 #include <any>
 
-namespace Generator {
+namespace MACE::inline Simulation::Generator {
 
 /// @brief brief description A generator generates surface muon beam.
 class EcoMugCosmicRayMuon final : public G4VPrimaryGenerator {
@@ -18,4 +18,4 @@ private:
     std::any fEcoMug;
 };
 
-} // namespace Generator
+} // namespace MACE::inline Simulation::Generator

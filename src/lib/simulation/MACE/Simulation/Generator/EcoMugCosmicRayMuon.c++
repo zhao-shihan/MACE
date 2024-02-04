@@ -1199,10 +1199,10 @@ private:
 
 } // namespace
 
-namespace Generator {
+namespace MACE::inline Simulation::Generator {
 
 EcoMugCosmicRayMuon::EcoMugCosmicRayMuon() :
-    G4VPrimaryGenerator(),
+    G4VPrimaryGenerator{},
     fEcoMug{EcoMug{}} {
     auto& ecoMug{std::any_cast<EcoMug&>(fEcoMug)};
     ecoMug.SetUseSky();
@@ -1233,4 +1233,4 @@ auto EcoMugCosmicRayMuon::GeneratePrimaryVertex(G4Event* event) -> void {
     event->AddPrimaryVertex(primaryVertex);
 }
 
-} // namespace Generator
+} // namespace MACE::inline Simulation::Generator
