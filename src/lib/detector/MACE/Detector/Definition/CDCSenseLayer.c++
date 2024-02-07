@@ -16,16 +16,16 @@ namespace MACE::Detector::Definition {
 auto CDCSenseLayer::Construct(G4bool checkOverlaps) -> void {
     using namespace MACE::LiteralUnit::MathConstantSuffix;
 
-    const auto& cdc = Description::CDC::Instance();
-    const auto name = "CDCSenseLayer";
+    const auto& cdc{Description::CDC::Instance()};
+    const auto name{cdc.Name() + "SenseLayer"};
 
     for (auto&& super : std::as_const(cdc.LayerConfiguration())) {
         for (auto&& sense : super.sense) {
-            const auto layerInnerRadius = sense.innerRadius;
-            const auto layerOuterRadius = &sense != &super.sense.back() ?
-                                              sense.outerRadius :
-                                              sense.outerRadius + cdc.FieldWireDiameter();
-            const auto solid =
+            const auto layerInnerRadius{sense.innerRadius};
+            const auto layerOuterRadius{&sense != &super.sense.back() ?
+                                            sense.outerRadius :
+                                            sense.outerRadius + cdc.FieldWireDiameter()};
+            const auto solid{
                 super.isAxial ?
                     static_cast<G4VSolid*>(Make<G4Tubs>(
                         name,
@@ -40,13 +40,13 @@ auto CDCSenseLayer::Construct(G4bool checkOverlaps) -> void {
                         layerOuterRadius,
                         sense.StereoZenithAngle(layerInnerRadius),
                         sense.StereoZenithAngle(layerOuterRadius),
-                        sense.halfLength));
-            const auto logic = Make<G4LogicalVolume>(
+                        sense.halfLength))};
+            const auto logic{Make<G4LogicalVolume>(
                 solid,
-                nullptr,
-                name);
+                cdc.GasMaterial(),
+                name)};
             Make<G4PVPlacement>(
-                G4Transform3D(),
+                G4Transform3D{},
                 logic,
                 name,
                 Mother().LogicalVolume(super.superLayerID).get(),

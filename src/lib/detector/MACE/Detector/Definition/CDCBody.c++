@@ -13,37 +13,39 @@
 
 namespace MACE::Detector::Definition {
 
+using namespace MACE::LiteralUnit::Density;
 using namespace MACE::LiteralUnit::MathConstantSuffix;
 
 auto CDCBody::Construct(G4bool checkOverlaps) -> void {
-    const auto& cdc = Description::CDC::Instance();
-    const auto name = "CDCBody";
-    const auto sideExtension = cdc.ShellSideThickness() * std::sqrt(1 + 1 / Math::Pow<2>(cdc.EndCapSlope())) -
-                               cdc.ShellInnerThickness() / cdc.EndCapSlope();
-    const auto zI = cdc.GasInnerLength() / 2 + sideExtension;
-    const auto zO = cdc.GasOuterLength() / 2 + sideExtension;
-    const auto rI = cdc.GasInnerRadius() - cdc.ShellInnerThickness();
-    const auto rOI = cdc.GasOuterRadius() - cdc.ShellInnerThickness();
-    const auto rOO = cdc.GasOuterRadius() + cdc.ShellOuterThickness();
+    const auto& cdc{Description::CDC::Instance()};
+    const auto name{cdc.Name() + "Body"};
+    const auto sideExtension{cdc.ShellSideThickness() * std::sqrt(1 + 1 / Math::Pow<2>(cdc.EndCapSlope())) -
+                             cdc.ShellInnerThickness() / cdc.EndCapSlope()};
+    const auto zI{cdc.GasInnerLength() / 2 + sideExtension};
+    const auto zO{cdc.GasOuterLength() / 2 + sideExtension};
+    const auto rI{cdc.GasInnerRadius() - cdc.ShellInnerThickness()};
+    const auto rOI{cdc.GasOuterRadius() - cdc.ShellInnerThickness()};
+    const auto rOO{cdc.GasOuterRadius() + cdc.ShellOuterThickness()};
 
-    const std::array zPlaneList = {-zO, -zI, zI, zO};
-    const std::array rInnerList = {rOI, rI, rI, rOI};
-    const std::array rOuterList = {rOO, rOO, rOO, rOO};
+    const std::array zPlaneList{-zO, -zI, zI, zO};
+    const std::array rInnerList{rOI, rI, rI, rOI};
+    const std::array rOuterList{rOO, rOO, rOO, rOO};
 
-    const auto solid = Make<G4Polycone>(
+    const auto solid{Make<G4Polycone>(
         name,
         0,
         2_pi,
         zPlaneList.size(),
         zPlaneList.data(),
         rInnerList.data(),
-        rOuterList.data());
-    auto logic = Make<G4LogicalVolume>(
+        rOuterList.data())};
+    auto logic{Make<G4LogicalVolume>(
         solid,
-        nullptr,
-        name);
+        G4NistManager::Instance()
+            ->BuildMaterialWithNewDensity("CarbonFiber", "G4_C", 1.7_g_cm3),
+        name)};
     Make<G4PVPlacement>(
-        G4Transform3D(),
+        G4Transform3D{},
         logic,
         name,
         Mother().LogicalVolume().get(),

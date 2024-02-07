@@ -3,10 +3,8 @@
 #include "MACE/Detector/Definition/BeamMonitor.h++"
 #include "MACE/Detector/Definition/CDCBody.h++"
 #include "MACE/Detector/Definition/CDCCell.h++"
-#include "MACE/Detector/Definition/CDCFieldWire.h++"
 #include "MACE/Detector/Definition/CDCGas.h++"
 #include "MACE/Detector/Definition/CDCSenseLayer.h++"
-#include "MACE/Detector/Definition/CDCSenseWire.h++"
 #include "MACE/Detector/Definition/CDCSuperLayer.h++"
 #include "MACE/Detector/Definition/EMCCrystal.h++"
 #include "MACE/Detector/Definition/EMCField.h++"
@@ -77,7 +75,7 @@ int main(int argc, char* argv[]) {
     auto& emcPMTAssemblies = emcField.NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
     auto& emcMagnet = emcField.NewDaughter<EMCMagnet>(fCheckOverlap);
 
-    /* auto& mcp =  */ emcField.NewDaughter<MCP>(fCheckOverlap);
+    /* auto& mcp = */ emcField.NewDaughter<MCP>(fCheckOverlap);
 
     auto& solenoidB1 = solenoidB1Field.NewDaughter<SolenoidB1>(fCheckOverlap);
 
@@ -112,12 +110,7 @@ int main(int argc, char* argv[]) {
 
     // 6
 
-    auto& cdcFieldWire = cdcSenseLayer.NewDaughter<CDCFieldWire>(fCheckOverlap);
-    auto& cdcCell = cdcSenseLayer.NewDaughter<CDCCell>(fCheckOverlap);
-
-    // 7
-
-    auto& cdcSenseWire = cdcCell.NewDaughter<CDCSenseWire>(fCheckOverlap);
+    /* auto& cdcCell = */ cdcSenseLayer.NewDaughter<CDCCell>(fCheckOverlap);
 
     ////////////////////////////////////////////////////////////////
     // Register materials
@@ -129,29 +122,6 @@ int main(int argc, char* argv[]) {
 
         const auto aluminium = nist->FindOrBuildMaterial("G4_Al");
         beamDegrader.RegisterMaterial(aluminium);
-        cdcFieldWire.RegisterMaterial(aluminium);
-
-        const auto cdcHeBasedGas = [&nist] {
-            constexpr auto heFraction = 0.85;
-            constexpr auto butaneFraction = 1 - heFraction;
-            const auto he = nist->FindOrBuildMaterial("G4_He");
-            const auto butane = nist->FindOrBuildMaterial("G4_BUTANE");
-            const auto gas = new G4Material("CDCGas",
-                                            heFraction * he->GetDensity() +
-                                                butaneFraction * butane->GetDensity(),
-                                            2,
-                                            kStateGas);
-            gas->AddMaterial(he, heFraction);
-            gas->AddMaterial(butane, butaneFraction);
-            return gas;
-        }();
-        cdcCell.RegisterMaterial(cdcHeBasedGas);
-        cdcGas.RegisterMaterial(cdcHeBasedGas);
-        cdcSenseLayer.RegisterMaterial(cdcHeBasedGas);
-        cdcSuperLayer.RegisterMaterial(cdcHeBasedGas);
-
-        const auto cdcShell = nist->BuildMaterialWithNewDensity("CarbonFiber", "G4_C", 1.7_g_cm3);
-        cdcBody.RegisterMaterial(cdcShell);
 
         const auto copper = nist->FindOrBuildMaterial("G4_Cu");
         spectrometerMagnet.RegisterMaterial(copper);
@@ -162,9 +132,6 @@ int main(int argc, char* argv[]) {
         solenoidS3.RegisterMaterial(copper);
         filter.RegisterMaterial(copper);
 
-        // const auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
-        // emc.RegisterMaterial(csI);
-
         const auto lead = nist->FindOrBuildMaterial("G4_Pb");
         emcShield.RegisterMaterial(lead);
         spectrometerShield.RegisterMaterial(lead);
@@ -174,9 +141,6 @@ int main(int argc, char* argv[]) {
 
         const auto silicaAerogel = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30_mg_cm3);
         target.RegisterMaterial(silicaAerogel);
-
-        const auto tungsten = nist->FindOrBuildMaterial("G4_W");
-        cdcSenseWire.RegisterMaterial(tungsten);
 
         const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
         emcField.RegisterMaterial(vacuum);

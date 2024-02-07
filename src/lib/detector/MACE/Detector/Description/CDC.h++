@@ -9,6 +9,8 @@
 
 #include <vector>
 
+class G4Material;
+
 namespace MACE::Detector::Description {
 
 class CDC final : public DescriptionSingletonBase<CDC> {
@@ -35,7 +37,6 @@ public:
     auto MaxCellWidth() const -> auto { return fMaxCellWidth; }
     auto FieldWireDiameter() const -> auto { return fFieldWireDiameter; }
     auto SenseWireDiameter() const -> auto { return fSenseWireDiameter; }
-    auto SensitiveWidthFactor() const -> auto { return fSensitiveWidthFactor; }
     auto MinAdjacentSuperLayersDistance() const -> auto { return fMinAdjacentSuperLayersDistance; }
     auto MinWireAndRadialShellDistance() const -> auto { return fMinWireAndRadialShellDistance; }
     auto ShellInnerThickness() const -> auto { return fShellInnerThickness; }
@@ -54,7 +55,6 @@ public:
     auto MaxCellWidth(double v) -> void { fMaxCellWidth = v, SetGeometryOutdated(); }
     auto FieldWireDiameter(double v) -> void { fFieldWireDiameter = v, SetGeometryOutdated(); }
     auto SenseWireDiameter(double v) -> void { fSenseWireDiameter = v, SetGeometryOutdated(); }
-    auto SensitiveWidthFactor(double v) -> void { fSensitiveWidthFactor = v, SetGeometryOutdated(); }
     auto MinAdjacentSuperLayersDistance(double v) -> void { fMinAdjacentSuperLayersDistance = v, SetGeometryOutdated(); }
     auto MinWireAndRadialShellDistance(double v) -> void { fMinWireAndRadialShellDistance = v, SetGeometryOutdated(); }
     auto ShellInnerThickness(double v) -> void { fShellInnerThickness = v, SetGeometryOutdated(); }
@@ -73,7 +73,7 @@ public:
             double cellWidth;
             double halfLength;
             double stereoAzimuthAngle;
-            auto TanStereoZenithAngle(double r) const -> auto { return r / halfLength * std::tan(stereoAzimuthAngle / 2); }
+            auto TanStereoZenithAngle(double r) const -> auto { return r * std::tan(stereoAzimuthAngle / 2) / halfLength; }
             auto SecStereoZenithAngle(double r) const -> auto { return std::sqrt(1 + Math::Pow<2>(TanStereoZenithAngle(r))); }
             auto CosStereoZenithAngle(double r) const -> auto { return 1 / SecStereoZenithAngle(r); }
             auto SinStereoZenithAngle(double r) const -> auto { return TanStereoZenithAngle(r) / SecStereoZenithAngle(r); }
@@ -105,6 +105,16 @@ public:
     };
 
     auto CellMap() const -> const auto& { return fCellMapManager.Get(this); }
+
+    ///////////////////////////////////////////////////////////
+    // Material
+    ///////////////////////////////////////////////////////////
+
+    auto ButaneFraction() const -> auto { return fButaneFraction; }
+
+    auto ButaneFraction(double v) -> void { fButaneFraction = v; }
+
+    auto GasMaterial() const -> G4Material*;
 
     ///////////////////////////////////////////////////////////
     // Detection
@@ -165,7 +175,6 @@ private:
     double fMaxCellWidth;
     double fFieldWireDiameter;
     double fSenseWireDiameter;
-    double fSensitiveWidthFactor;
     double fMinAdjacentSuperLayersDistance;
     double fMinWireAndRadialShellDistance;
     double fShellInnerThickness;
@@ -174,6 +183,12 @@ private:
 
     mutable LayerConfigurationManager fLayerConfigurationManager;
     mutable CellMapManager fCellMapManager;
+
+    ///////////////////////////////////////////////////////////
+    // Material
+    ///////////////////////////////////////////////////////////
+
+    double fButaneFraction;
 
     ///////////////////////////////////////////////////////////
     // Detection

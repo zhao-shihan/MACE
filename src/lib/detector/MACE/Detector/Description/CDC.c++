@@ -5,6 +5,9 @@
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
 
+#include "G4Material.hh"
+#include "G4NistManager.hh"
+
 #include "Eigen/Geometry"
 
 #include <algorithm>
@@ -35,7 +38,6 @@ CDC::CDC() :
     fMaxCellWidth{14_mm},
     fFieldWireDiameter{80_um},
     fSenseWireDiameter{20_um},
-    fSensitiveWidthFactor{0.975},
     fMinAdjacentSuperLayersDistance{1_mm},
     fMinWireAndRadialShellDistance{2_mm},
     fShellInnerThickness{250_um},
@@ -43,9 +45,28 @@ CDC::CDC() :
     fShellOuterThickness{10_mm},
     fLayerConfigurationManager{},
     fCellMapManager{},
+    // Material
+    fButaneFraction{0.15},
     // Detection
     fMeanDriftVelocity{3.5_cm_us},
     fTimeResolutionFWHM{30_ns} {}
+
+auto CDC::GasMaterial() const -> G4Material* {
+    constexpr auto materialName{"CDCGas"};
+    const auto nist{G4NistManager::Instance()};
+    auto gas{nist->FindMaterial(materialName)};
+    if (gas) { return gas; }
+    const auto heFraction{1 - fButaneFraction};
+    const auto he{nist->FindOrBuildMaterial("G4_He")};
+    const auto butane{nist->FindOrBuildMaterial("G4_BUTANE")};
+    gas = new G4Material{"CDCGas",
+                         heFraction * he->GetDensity() + fButaneFraction * butane->GetDensity(),
+                         2,
+                         kStateGas};
+    gas->AddMaterial(he, heFraction);
+    gas->AddMaterial(butane, fButaneFraction);
+    return gas;
+}
 
 auto CDC::ComputeLayerConfiguration() const -> std::vector<SuperLayerConfiguration> {
     std::vector<SuperLayerConfiguration> layerConfig;
@@ -226,12 +247,13 @@ auto CDC::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fMaxCellWidth, "MaxCellWidth");
     ImportValue(node, fFieldWireDiameter, "FieldWireDiameter");
     ImportValue(node, fSenseWireDiameter, "SenseWireDiameter");
-    ImportValue(node, fSensitiveWidthFactor, "SensitiveWidthFactor");
     ImportValue(node, fMinAdjacentSuperLayersDistance, "MinAdjacentSuperLayersDistance");
     ImportValue(node, fMinWireAndRadialShellDistance, "MinWireAndRadialShellDistance");
     ImportValue(node, fShellInnerThickness, "ShellInnerThickness");
     ImportValue(node, fShellSideThickness, "ShellSideThickness");
     ImportValue(node, fShellOuterThickness, "ShellOuterThickness");
+    // Material
+    ImportValue(node, fButaneFraction, "ButaneFraction");
     // Detection
     ImportValue(node, fMeanDriftVelocity, "MeanDriftVelocity");
     ImportValue(node, fTimeResolutionFWHM, "TimeResolutionFWHM");
@@ -253,12 +275,13 @@ auto CDC::ExportValues(YAML::Node& node) const -> void {
     ExportValue(node, fMaxCellWidth, "MaxCellWidth");
     ExportValue(node, fFieldWireDiameter, "FieldWireDiameter");
     ExportValue(node, fSenseWireDiameter, "SenseWireDiameter");
-    ExportValue(node, fSensitiveWidthFactor, "SensitiveWidthFactor");
     ExportValue(node, fMinAdjacentSuperLayersDistance, "MinAdjacentSuperLayersDistance");
     ExportValue(node, fMinWireAndRadialShellDistance, "MinWireAndRadialShellDistance");
     ExportValue(node, fShellInnerThickness, "ShellInnerThickness");
     ExportValue(node, fShellSideThickness, "ShellSideThickness");
     ExportValue(node, fShellOuterThickness, "ShellOuterThickness");
+    // Material
+    ExportValue(node, fButaneFraction, "ButaneFraction");
     // Detection
     ExportValue(node, fMeanDriftVelocity, "MeanDriftVelocity");
     ExportValue(node, fTimeResolutionFWHM, "TimeResolutionFWHM");
