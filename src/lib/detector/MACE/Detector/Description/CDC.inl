@@ -1,24 +1,24 @@
 namespace MACE::Detector::Description {
 
-inline const std::vector<CDC::SuperLayerConfiguration>& CDC::LayerConfigurationManager::Get(const CDC* cdc) {
-    if (fOutdated) {
-        fLayerConfiguration = cdc->ComputeLayerConfiguration();
-        fOutdated = false;
-    }
-    return fLayerConfiguration;
+inline auto CDC::Cache::Expire() -> void {
+    fLayerConfiguration = {};
+    fCellMap = {};
+    fCellMapFromSenseLayerIDAndLocalCellID = {};
 }
 
-inline const std::vector<CDC::CellInformation>& CDC::CellMapManager::Get(const CDC* cdc) {
-    if (fOutdated) {
-        fCellMap = cdc->ComputeCellMap();
-        fOutdated = false;
-    }
-    return fCellMap;
+inline auto CDC::Cache::LayerConfiguration(const CDC* cdc) -> const std::vector<SuperLayerConfiguration>& {
+    if (fLayerConfiguration) { return *fLayerConfiguration; }
+    return *(fLayerConfiguration = cdc->ComputeLayerConfiguration());
 }
 
-inline void CDC::SetGeometryOutdated() const {
-    fLayerConfigurationManager.SetOutdated();
-    fCellMapManager.SetOutdated();
+inline auto CDC::Cache::CellMap(const CDC* cdc) -> const std::vector<CellInformation>& {
+    if (fCellMap) { return *fCellMap; }
+    return *(fCellMap = cdc->ComputeCellMap());
+}
+
+inline auto CDC::Cache::CellMapFromSenseLayerIDAndLocalCellID(const CDC* cdc) -> const CellMapFromSenseLayerIDAndLocalCellIDType& {
+    if (fCellMapFromSenseLayerIDAndLocalCellID) { return *fCellMapFromSenseLayerIDAndLocalCellID; }
+    return *(fCellMapFromSenseLayerIDAndLocalCellID = cdc->ComputeCellMapFromSenseLayerIDAndLocalCellID());
 }
 
 } // namespace MACE::Detector::Description

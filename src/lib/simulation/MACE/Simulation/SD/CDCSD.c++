@@ -38,7 +38,9 @@ CDCSD::CDCSD(const G4String& sdName) :
 auto CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
     const auto& cdc{Detector::Description::CDC::Instance()};
     fMeanDriftVelocity = cdc.MeanDriftVelocity();
-    fCellMap = &cdc.CellMap();
+    fCellMap = &cdc.CellMapFromSenseLayerIDAndLocalCellID();
+
+    fSplitHit.reserve(fCellMap->size());
 
     fHitsCollection = new CDCHitCollection(SensitiveDetectorName, collectionName[0]);
     const auto hitsCollectionID{G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection)};
@@ -58,12 +60,12 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& particle{*track.GetDefinition()};
     const auto& preStepPoint{*step.GetPreStepPoint()};
     const auto& postStepPoint{*step.GetPostStepPoint()};
-    const auto cellID{preStepPoint.GetTouchable()->GetReplicaNumber()};
+    const auto& touchable{*preStepPoint.GetTouchable()};
     const auto kineticEnergy{Math::MidPoint(preStepPoint.GetKineticEnergy(), postStepPoint.GetKineticEnergy())};
     const auto position{Math::MidPoint(preStepPoint.GetPosition(), postStepPoint.GetPosition())};
     const auto momentum{Math::MidPoint(preStepPoint.GetMomentum(), postStepPoint.GetMomentum())};
     // retrive wire position
-    const auto& cellInfo{fCellMap->at(cellID)};
+    const auto& cellInfo{fCellMap->at({touchable.GetReplicaNumber(1), touchable.GetReplicaNumber()})};
     const auto xWire{VectorCast<G4TwoVector>(cellInfo.position)};
     const auto tWire{VectorCast<G4ThreeVector>(cellInfo.direction)};
     // calculate drift distance
@@ -83,7 +85,7 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     auto hit{std::make_unique_for_overwrite<CDCHit>()};
     Get<"EvtID">(*hit) = fEventID;
     Get<"HitID">(*hit) = -1; // to be determined
-    Get<"CellID">(*hit) = cellID;
+    Get<"CellID">(*hit) = cellInfo.cellID;
     Get<"t">(*hit) = signalTime;
     Get<"tD">(*hit) = driftTime;
     Get<"d">(*hit) = driftDistance;
@@ -99,7 +101,7 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"Ek0">(*hit) = vertexEk;
     Get<"p0">(*hit) = vertexMomentum;
     *Get<"CreatProc">(*hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "|0>";
-    fSplitHit[cellID].emplace_back(std::move(hit));
+    fSplitHit[cellInfo.cellID].emplace_back(std::move(hit));
 
     return true;
 }

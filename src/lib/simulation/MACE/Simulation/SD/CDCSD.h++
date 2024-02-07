@@ -34,7 +34,7 @@ protected:
     G4int fEventID;
 
     double fMeanDriftVelocity;
-    const std::vector<Detector::Description::CDC::CellInformation>* fCellMap;
+    const Detector::Description::CDC::CellMapFromSenseLayerIDAndLocalCellIDType* fCellMap;
 
     std::unordered_map<int, std::vector<std::unique_ptr<CDCHit>>> fSplitHit;
     CDCHitCollection* fHitsCollection;

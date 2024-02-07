@@ -43,8 +43,7 @@ CDC::CDC() :
     fShellInnerThickness{250_um},
     fShellSideThickness{10_mm},
     fShellOuterThickness{10_mm},
-    fLayerConfigurationManager{},
-    fCellMapManager{},
+    fCache{},
     // Material
     fButaneFraction{0.15},
     // Detection
@@ -208,7 +207,8 @@ auto CDC::ComputeCellMap() const -> std::vector<CellInformation> {
             const Eigen::AngleAxisd stereoRotation{-sense.StereoZenithAngle(wireRadialPosition), Eigen::Vector3d(1, 0, 0)};
             for (int cellLocalID{};
                  auto&& cell : sense.cell) {
-                cellMap.push_back({cellLocalID,
+                cellMap.push_back({cell.cellID,
+                                   cellLocalID,
                                    sense.senseLayerID,
                                    senseLayerLocalID,
                                    superLayerID,
@@ -231,6 +231,16 @@ auto CDC::ComputeCellMap() const -> std::vector<CellInformation> {
     cellMap.shrink_to_fit();
 
     return cellMap;
+}
+
+auto CDC::ComputeCellMapFromSenseLayerIDAndLocalCellID() const -> CellMapFromSenseLayerIDAndLocalCellIDType {
+    CellMapFromSenseLayerIDAndLocalCellIDType cellMapFromSenseLayerIDAndLocalCellID;
+    const auto& cellMap{CellMap()};
+    cellMapFromSenseLayerIDAndLocalCellID.reserve(cellMap.size());
+    for (auto&& cellInfo : cellMap) {
+        cellMapFromSenseLayerIDAndLocalCellID[{cellInfo.senseLayerID, cellInfo.cellLocalID}] = cellInfo;
+    }
+    return cellMapFromSenseLayerIDAndLocalCellID;
 }
 
 auto CDC::ImportValues(const YAML::Node& node) -> void {
@@ -258,7 +268,7 @@ auto CDC::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fMeanDriftVelocity, "MeanDriftVelocity");
     ImportValue(node, fTimeResolutionFWHM, "TimeResolutionFWHM");
 
-    SetGeometryOutdated();
+    fCache.Expire();
 }
 
 auto CDC::ExportValues(YAML::Node& node) const -> void {

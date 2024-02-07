@@ -1,12 +1,16 @@
 #pragma once
 
 #include "MACE/Detector/Description/DescriptionBase.h++"
+#include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/Math/IntegerPower.h++"
 
 #include "Eigen/Core"
 
 #include "gsl/gsl"
 
+#include <bit>
+#include <cinttypes>
+#include <optional>
 #include <vector>
 
 class G4Material;
@@ -43,23 +47,23 @@ public:
     auto ShellSideThickness() const -> auto { return fShellSideThickness; }
     auto ShellOuterThickness() const -> auto { return fShellOuterThickness; }
 
-    auto EvenSuperLayerIsAxial(bool v) -> void { fEvenSuperLayerIsAxial = v, SetGeometryOutdated(); }
-    auto NSuperLayer(int v) -> void { fNSuperLayer = v, SetGeometryOutdated(); }
-    auto NSenseLayerPerSuper(int v) -> void { fNSenseLayerPerSuper = v, SetGeometryOutdated(); }
-    auto GasInnerRadius(double v) -> void { fGasInnerRadius = v, SetGeometryOutdated(); }
-    auto GasInnerLength(double v) -> void { fGasInnerLength = v, SetGeometryOutdated(); }
-    auto EndCapSlope(double v) -> void { fEndCapSlope = v, SetGeometryOutdated(); }
-    auto MinStereoAngle(double v) -> void { fMinStereoAngle = v, SetGeometryOutdated(); }
-    auto MinCellWidth(double v) -> void { fMinCellWidth = v, SetGeometryOutdated(); }
-    auto ReferenceCellWidth(double v) -> void { fReferenceCellWidth = v, SetGeometryOutdated(); }
-    auto MaxCellWidth(double v) -> void { fMaxCellWidth = v, SetGeometryOutdated(); }
-    auto FieldWireDiameter(double v) -> void { fFieldWireDiameter = v, SetGeometryOutdated(); }
-    auto SenseWireDiameter(double v) -> void { fSenseWireDiameter = v, SetGeometryOutdated(); }
-    auto MinAdjacentSuperLayersDistance(double v) -> void { fMinAdjacentSuperLayersDistance = v, SetGeometryOutdated(); }
-    auto MinWireAndRadialShellDistance(double v) -> void { fMinWireAndRadialShellDistance = v, SetGeometryOutdated(); }
-    auto ShellInnerThickness(double v) -> void { fShellInnerThickness = v, SetGeometryOutdated(); }
-    auto ShellSideThickness(double v) -> void { fShellSideThickness = v, SetGeometryOutdated(); }
-    auto ShellOuterThickness(double v) -> void { fShellOuterThickness = v, SetGeometryOutdated(); }
+    auto EvenSuperLayerIsAxial(bool v) -> void { fEvenSuperLayerIsAxial = v, fCache.Expire(); }
+    auto NSuperLayer(int v) -> void { fNSuperLayer = v, fCache.Expire(); }
+    auto NSenseLayerPerSuper(int v) -> void { fNSenseLayerPerSuper = v, fCache.Expire(); }
+    auto GasInnerRadius(double v) -> void { fGasInnerRadius = v, fCache.Expire(); }
+    auto GasInnerLength(double v) -> void { fGasInnerLength = v, fCache.Expire(); }
+    auto EndCapSlope(double v) -> void { fEndCapSlope = v, fCache.Expire(); }
+    auto MinStereoAngle(double v) -> void { fMinStereoAngle = v, fCache.Expire(); }
+    auto MinCellWidth(double v) -> void { fMinCellWidth = v, fCache.Expire(); }
+    auto ReferenceCellWidth(double v) -> void { fReferenceCellWidth = v, fCache.Expire(); }
+    auto MaxCellWidth(double v) -> void { fMaxCellWidth = v, fCache.Expire(); }
+    auto FieldWireDiameter(double v) -> void { fFieldWireDiameter = v, fCache.Expire(); }
+    auto SenseWireDiameter(double v) -> void { fSenseWireDiameter = v, fCache.Expire(); }
+    auto MinAdjacentSuperLayersDistance(double v) -> void { fMinAdjacentSuperLayersDistance = v, fCache.Expire(); }
+    auto MinWireAndRadialShellDistance(double v) -> void { fMinWireAndRadialShellDistance = v, fCache.Expire(); }
+    auto ShellInnerThickness(double v) -> void { fShellInnerThickness = v, fCache.Expire(); }
+    auto ShellSideThickness(double v) -> void { fShellSideThickness = v, fCache.Expire(); }
+    auto ShellOuterThickness(double v) -> void { fShellOuterThickness = v, fCache.Expire(); }
 
     struct SuperLayerConfiguration {
         struct SenseLayerConfiguration {
@@ -91,11 +95,12 @@ public:
         std::vector<SenseLayerConfiguration> sense;
     };
 
-    auto LayerConfiguration() const -> const auto& { return fLayerConfigurationManager.Get(this); }
+    auto LayerConfiguration() const -> const auto& { return fCache.LayerConfiguration(this); }
     auto GasOuterRadius() const -> auto { return LayerConfiguration().back().outerRadius + fMinWireAndRadialShellDistance; }
     auto GasOuterLength() const -> auto { return fGasInnerLength + 2 * fEndCapSlope * (GasOuterRadius() - fGasInnerRadius); }
 
     struct CellInformation {
+        int cellID;
         int cellLocalID;
         int senseLayerID;
         int senseLayerLocalID;
@@ -104,7 +109,8 @@ public:
         Eigen::Vector3d direction;
     };
 
-    auto CellMap() const -> const auto& { return fCellMapManager.Get(this); }
+    auto CellMap() const -> const auto& { return fCache.CellMap(this); }
+    auto CellMapFromSenseLayerIDAndLocalCellID() const -> const auto& { return fCache.CellMapFromSenseLayerIDAndLocalCellID(this); }
 
     ///////////////////////////////////////////////////////////
     // Material
@@ -131,29 +137,33 @@ private:
     // Geometry
     ///////////////////////////////////////////////////////////
 
-    class LayerConfigurationManager {
-    public:
-        auto SetOutdated() -> void { fOutdated = true; }
-        inline auto Get(const CDC* cdc) -> const std::vector<SuperLayerConfiguration>&;
-
-    private:
-        bool fOutdated = true;
-        std::vector<SuperLayerConfiguration> fLayerConfiguration = {};
+    struct HashArray2i32 {
+        constexpr auto operator()(stdx::array2i32 i) const -> std::size_t {
+            return std::bit_cast<std::uint64_t>(i);
+        }
     };
 
-    class CellMapManager {
+public:
+    using CellMapFromSenseLayerIDAndLocalCellIDType = std::unordered_map<stdx::array2i32, CellInformation, HashArray2i32>;
+
+private:
+    class Cache {
     public:
-        auto SetOutdated() -> void { fOutdated = true; }
-        inline auto Get(const CDC* cdc) -> const std::vector<CellInformation>&;
+        inline auto Expire() -> void;
+
+        inline auto LayerConfiguration(const CDC* cdc) -> const std::vector<SuperLayerConfiguration>&;
+        inline auto CellMap(const CDC* cdc) -> const std::vector<CellInformation>&;
+        inline auto CellMapFromSenseLayerIDAndLocalCellID(const CDC* cdc) -> const CellMapFromSenseLayerIDAndLocalCellIDType&;
 
     private:
-        bool fOutdated = true;
-        std::vector<CellInformation> fCellMap = {};
+        std::optional<std::vector<SuperLayerConfiguration>> fLayerConfiguration{};
+        std::optional<std::vector<CellInformation>> fCellMap{};
+        std::optional<CellMapFromSenseLayerIDAndLocalCellIDType> fCellMapFromSenseLayerIDAndLocalCellID{};
     };
 
-    inline auto SetGeometryOutdated() const -> void;
     auto ComputeLayerConfiguration() const -> std::vector<SuperLayerConfiguration>;
     auto ComputeCellMap() const -> std::vector<CellInformation>;
+    auto ComputeCellMapFromSenseLayerIDAndLocalCellID() const -> CellMapFromSenseLayerIDAndLocalCellIDType;
 
     auto ImportValues(const YAML::Node& node) -> void override;
     auto ExportValues(YAML::Node& node) const -> void override;
@@ -181,8 +191,7 @@ private:
     double fShellSideThickness;
     double fShellOuterThickness;
 
-    mutable LayerConfigurationManager fLayerConfigurationManager;
-    mutable CellMapManager fCellMapManager;
+    mutable Cache fCache;
 
     ///////////////////////////////////////////////////////////
     // Material
