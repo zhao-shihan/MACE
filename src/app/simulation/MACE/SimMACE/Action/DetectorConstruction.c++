@@ -284,7 +284,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     ////////////////////////////////////////////////////////////////
     {
         fCDCSD = new SD::CDCSD{Detector::Description::CDC::Instance().Name()};
-        cdcCell.RegisterSD(fCDCSD);
+        cdcCell.RegisterSD("CDCCell", fCDCSD);
 
         fEMCSD = new SD::EMCSD{Detector::Description::EMC::Instance().Name()};
         emcCrystal.RegisterSD(fEMCSD);
