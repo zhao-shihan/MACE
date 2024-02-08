@@ -30,9 +30,9 @@
 /MACE/Field/SolenoidMagneticField         0.1 tesla
 /MACE/Field/EMCMagneticField              0.1 tesla
 
-/MACE/Analysis/CoincidenceWithCDC     true
-/MACE/Analysis/CoincidenceWithMCP     true
-/MACE/Analysis/CoincidenceWithEMC     true
+/MACE/Analysis/CoincidenceWithCDC     false
+/MACE/Analysis/CoincidenceWithMCP     false
+/MACE/Analysis/CoincidenceWithEMC     false
 
 /MACE/Analysis/FilePath   SimMACE_vis
 /MACE/Analysis/FileOption RECREATE
