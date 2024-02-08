@@ -10,7 +10,6 @@
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
-#include "G4PVReplica.hh"
 #include "G4Transform3D.hh"
 #include "G4Tubs.hh"
 #include "G4TwistedTubs.hh"
