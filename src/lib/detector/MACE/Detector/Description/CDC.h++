@@ -36,9 +36,9 @@ public:
     auto GasInnerLength() const -> auto { return fGasInnerLength; }
     auto EndCapSlope() const -> auto { return fEndCapSlope; }
     auto MinStereoAngle() const -> auto { return fMinStereoAngle; }
-    auto MinCellWidth() const -> auto { return fMinCellWidth; }
+    auto CellWidthLowerBound() const -> auto { return fCellWidthLowerBound; }
     auto ReferenceCellWidth() const -> auto { return fReferenceCellWidth; }
-    auto MaxCellWidth() const -> auto { return fMaxCellWidth; }
+    auto CellWidthUpperBound() const -> auto { return fCellWidthUpperBound; }
     auto FieldWireDiameter() const -> auto { return fFieldWireDiameter; }
     auto SenseWireDiameter() const -> auto { return fSenseWireDiameter; }
     auto MinAdjacentSuperLayersDistance() const -> auto { return fMinAdjacentSuperLayersDistance; }
@@ -54,9 +54,9 @@ public:
     auto GasInnerLength(double v) -> void { fGasInnerLength = v, fCache.Expire(); }
     auto EndCapSlope(double v) -> void { fEndCapSlope = v, fCache.Expire(); }
     auto MinStereoAngle(double v) -> void { fMinStereoAngle = v, fCache.Expire(); }
-    auto MinCellWidth(double v) -> void { fMinCellWidth = v, fCache.Expire(); }
+    auto CellWidthLowerBound(double v) -> void { fCellWidthLowerBound = v, fCache.Expire(); }
     auto ReferenceCellWidth(double v) -> void { fReferenceCellWidth = v, fCache.Expire(); }
-    auto MaxCellWidth(double v) -> void { fMaxCellWidth = v, fCache.Expire(); }
+    auto CellWidthUpperBound(double v) -> void { fCellWidthUpperBound = v, fCache.Expire(); }
     auto FieldWireDiameter(double v) -> void { fFieldWireDiameter = v, fCache.Expire(); }
     auto SenseWireDiameter(double v) -> void { fSenseWireDiameter = v, fCache.Expire(); }
     auto MinAdjacentSuperLayersDistance(double v) -> void { fMinAdjacentSuperLayersDistance = v, fCache.Expire(); }
@@ -180,9 +180,9 @@ private:
     double fGasInnerLength;
     double fEndCapSlope;
     double fMinStereoAngle;
-    double fMinCellWidth;
+    double fCellWidthLowerBound;
     double fReferenceCellWidth;
-    double fMaxCellWidth;
+    double fCellWidthUpperBound;
     double fFieldWireDiameter;
     double fSenseWireDiameter;
     double fMinAdjacentSuperLayersDistance;

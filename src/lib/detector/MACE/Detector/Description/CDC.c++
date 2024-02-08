@@ -33,9 +33,9 @@ CDC::CDC() :
     fGasInnerLength{120_cm},
     fEndCapSlope{0.75},
     fMinStereoAngle{6_deg},
-    fMinCellWidth{6_mm},
+    fCellWidthLowerBound{6_mm},
     fReferenceCellWidth{10_mm},
-    fMaxCellWidth{14_mm},
+    fCellWidthUpperBound{14_mm},
     fFieldWireDiameter{80_um},
     fSenseWireDiameter{20_um},
     fMinAdjacentSuperLayersDistance{1_mm},
@@ -71,7 +71,7 @@ auto CDC::ComputeLayerConfiguration() const -> std::vector<SuperLayerConfigurati
     std::vector<SuperLayerConfiguration> layerConfig;
 
     layerConfig.reserve(fNSuperLayer);
-    for (gsl::index superLayerID{}; superLayerID < fNSuperLayer; ++superLayerID) {
+    for (int superLayerID{}; superLayerID < fNSuperLayer; ++superLayerID) {
         const auto notFirstSuperLayer{superLayerID > 0};
         auto& super{layerConfig.emplace_back()};
         const auto& lastSuper{notFirstSuperLayer ?
@@ -92,9 +92,9 @@ auto CDC::ComputeLayerConfiguration() const -> std::vector<SuperLayerConfigurati
                         (fGasInnerRadius + fMinWireAndRadialShellDistance +
                          0.5 * (fNSuperLayer * fNSenseLayerPerSuper * fReferenceCellWidth +
                                 (fNSuperLayer - 1) * fMinAdjacentSuperLayersDistance)),
-                    fMinCellWidth /
+                    fCellWidthLowerBound /
                         (super.innerRadius + fReferenceCellWidth / 2),
-                    fMaxCellWidth /
+                    fCellWidthUpperBound /
                         (super.innerRadius + fNSenseLayerPerSuper * fReferenceCellWidth - fReferenceCellWidth / 2));
             }());
         super.cellAzimuthWidth = 2_pi / super.nCellPerSenseLayer;
@@ -118,7 +118,7 @@ auto CDC::ComputeLayerConfiguration() const -> std::vector<SuperLayerConfigurati
             }()};
         const auto firstSenseLayerID{static_cast<int>(superLayerID * fNSenseLayerPerSuper)};
         super.sense.reserve(fNSenseLayerPerSuper);
-        for (gsl::index senseLayerLocalID{}; senseLayerLocalID < fNSenseLayerPerSuper; ++senseLayerLocalID) {
+        for (int senseLayerLocalID{}; senseLayerLocalID < fNSenseLayerPerSuper; ++senseLayerLocalID) {
             const auto notFirstSenseLayerOfThisSuperLayer{senseLayerLocalID > 0};
             auto& sense{super.sense.emplace_back()};
             const auto& lastSense{notFirstSenseLayerOfThisSuperLayer ?
@@ -167,7 +167,7 @@ auto CDC::ComputeLayerConfiguration() const -> std::vector<SuperLayerConfigurati
                                             0 :
                                             halfPhiCell};
             sense.cell.reserve(super.nCellPerSenseLayer);
-            for (gsl::index cellLocalID{}; cellLocalID < super.nCellPerSenseLayer; ++cellLocalID) {
+            for (int cellLocalID{}; cellLocalID < super.nCellPerSenseLayer; ++cellLocalID) {
                 auto& cell{sense.cell.emplace_back()};
                 cell.cellID = firstCellID + cellLocalID;
                 cell.centerAzimuth = firstCellAzimuth + cellLocalID * super.cellAzimuthWidth;
@@ -203,8 +203,8 @@ auto CDC::ComputeCellMap() const -> std::vector<CellInformation> {
          auto&& super : layerConfig) {
         for (int senseLayerLocalID{};
              auto&& sense : super.sense) {
-            const auto wireRadialPosition{Math::MidPoint(sense.innerRadius, sense.outerRadius) + rFieldWire};
-            const Eigen::AngleAxisd stereoRotation{-sense.StereoZenithAngle(wireRadialPosition), Eigen::Vector3d(1, 0, 0)};
+            const auto wireRadialPosition{Math::MidPoint(sense.innerRadius, sense.outerRadius) + rFieldWire}; // clang-format off
+            const Eigen::AngleAxisd stereoRotation{-sense.StereoZenithAngle(wireRadialPosition), Eigen::Vector3d{1, 0, 0}};
             for (int cellLocalID{};
                  auto&& cell : sense.cell) {
                 cellMap.push_back({cell.cellID,
@@ -212,10 +212,10 @@ auto CDC::ComputeCellMap() const -> std::vector<CellInformation> {
                                    sense.senseLayerID,
                                    senseLayerLocalID,
                                    superLayerID,
-                                   Eigen::Rotation2Dd(cell.centerAzimuth) *
-                                       Eigen::Vector2d(wireRadialPosition, 0),
-                                   Eigen::AngleAxisd(cell.centerAzimuth, Eigen::Vector3d(0, 0, 1)) *
-                                       (stereoRotation * Eigen::Vector3d(0, 0, 1))});
+                                   Eigen::Rotation2Dd{cell.centerAzimuth} *
+                                       Eigen::Vector2d{wireRadialPosition, 0},
+                                   Eigen::AngleAxisd{cell.centerAzimuth, Eigen::Vector3d{0, 0, 1}} *
+                                       (stereoRotation * Eigen::Vector3d{0, 0, 1})}); // clang-format on
                 // const auto& x0 = cellMap.back().position;
                 // const auto& t0 = cellMap.back().direction;
                 // const auto& l0 = 2 * sense.halfLength * sense.SecStereoZenithAngle(sense.innerRadius + sense.cellWidth / 2 + fFieldWireDiameter / 2);
@@ -252,9 +252,9 @@ auto CDC::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fGasInnerLength, "GasInnerLength");
     ImportValue(node, fEndCapSlope, "EndCapSlope");
     ImportValue(node, fMinStereoAngle, "MinStereoAngle");
-    ImportValue(node, fMinCellWidth, "MinCellWidth");
+    ImportValue(node, fCellWidthLowerBound, "CellWidthLowerBound");
     ImportValue(node, fReferenceCellWidth, "ReferenceCellWidth");
-    ImportValue(node, fMaxCellWidth, "MaxCellWidth");
+    ImportValue(node, fCellWidthUpperBound, "CellWidthUpperBound");
     ImportValue(node, fFieldWireDiameter, "FieldWireDiameter");
     ImportValue(node, fSenseWireDiameter, "SenseWireDiameter");
     ImportValue(node, fMinAdjacentSuperLayersDistance, "MinAdjacentSuperLayersDistance");
@@ -280,9 +280,9 @@ auto CDC::ExportValues(YAML::Node& node) const -> void {
     ExportValue(node, fGasInnerLength, "GasInnerLength");
     ExportValue(node, fEndCapSlope, "EndCapSlope");
     ExportValue(node, fMinStereoAngle, "MinStereoAngle");
-    ExportValue(node, fMinCellWidth, "MinCellWidth");
+    ExportValue(node, fCellWidthLowerBound, "CellWidthLowerBound");
     ExportValue(node, fReferenceCellWidth, "ReferenceCellWidth");
-    ExportValue(node, fMaxCellWidth, "MaxCellWidth");
+    ExportValue(node, fCellWidthUpperBound, "CellWidthUpperBound");
     ExportValue(node, fFieldWireDiameter, "FieldWireDiameter");
     ExportValue(node, fSenseWireDiameter, "SenseWireDiameter");
     ExportValue(node, fMinAdjacentSuperLayersDistance, "MinAdjacentSuperLayersDistance");

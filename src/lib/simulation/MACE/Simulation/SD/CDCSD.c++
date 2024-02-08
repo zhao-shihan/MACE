@@ -38,7 +38,7 @@ CDCSD::CDCSD(const G4String& sdName) :
 auto CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
     const auto& cdc{Detector::Description::CDC::Instance()};
     fMeanDriftVelocity = cdc.MeanDriftVelocity();
-    fCellMap = &cdc.CellMapFromSenseLayerIDAndLocalCellID();
+    fCellMap = &cdc.CellMap();
 
     fSplitHit.reserve(fCellMap->size());
 
@@ -53,23 +53,22 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& step{*theStep};
     const auto eDep{step.GetTotalEnergyDeposit()};
 
-    if (eDep - step.GetNonIonizingEnergyDeposit() == 0) { return false; } // ionizing Edep
-    assert(eDep > 0);
+    assert(0 <= step.GetNonIonizingEnergyDeposit());
+    assert(step.GetNonIonizingEnergyDeposit() <= eDep);
+    if (eDep - step.GetNonIonizingEnergyDeposit() < std::numeric_limits<double>::epsilon()) { return false; } // ionizing Edep
 
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
     const auto& preStepPoint{*step.GetPreStepPoint()};
     const auto& postStepPoint{*step.GetPostStepPoint()};
     const auto& touchable{*preStepPoint.GetTouchable()};
-    const auto kineticEnergy{Math::MidPoint(preStepPoint.GetKineticEnergy(), postStepPoint.GetKineticEnergy())};
     const auto position{Math::MidPoint(preStepPoint.GetPosition(), postStepPoint.GetPosition())};
-    const auto momentum{Math::MidPoint(preStepPoint.GetMomentum(), postStepPoint.GetMomentum())};
     // retrive wire position
-    const auto& cellInfo{fCellMap->at({touchable.GetReplicaNumber(1), touchable.GetReplicaNumber()})};
+    const auto& cellInfo{fCellMap->at(touchable.GetReplicaNumber(1))};
     const auto xWire{VectorCast<G4TwoVector>(cellInfo.position)};
     const auto tWire{VectorCast<G4ThreeVector>(cellInfo.direction)};
     // calculate drift distance
-    const auto commonNormal{tWire.cross(momentum)};
+    const auto commonNormal{tWire.cross(Math::MidPoint(preStepPoint.GetMomentum(), postStepPoint.GetMomentum()))};
     const auto driftDistance{std::abs((position - xWire).dot(commonNormal)) / commonNormal.mag()};
     const auto driftTime{driftDistance / fMeanDriftVelocity};
     const auto hitTime{Math::MidPoint(preStepPoint.GetGlobalTime(), postStepPoint.GetGlobalTime())};
@@ -91,9 +90,9 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"d">(*hit) = driftDistance;
     Get<"Edep">(*hit) = eDep;
     Get<"tHit">(*hit) = hitTime;
-    Get<"Ek">(*hit) = kineticEnergy;
+    Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
     Get<"x">(*hit) = position;
-    Get<"p">(*hit) = momentum;
+    Get<"p">(*hit) = preStepPoint.GetMomentum();
     Get<"TrkID">(*hit) = track.GetTrackID();
     Get<"PDGID">(*hit) = particle.GetPDGEncoding();
     Get<"t0">(*hit) = track.GetGlobalTime() - track.GetLocalTime();

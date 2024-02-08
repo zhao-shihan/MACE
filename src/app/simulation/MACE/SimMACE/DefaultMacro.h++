@@ -73,6 +73,7 @@ constexpr auto defaultMacro = {
     "/vis/geometry/set/colour CDCGas                        0     1     1     1     0.005",
     "/vis/geometry/set/colour CDCSenseLayer                 0     1     1     1     0.005",
     "/vis/geometry/set/colour CDCSenseWire                  0     1     1     1     0.01",
+    "/vis/geometry/set/colour CDCSensitiveVolume            0     1     1     1     0.005",
     "/vis/geometry/set/colour CDCSuperLayer                 0     1     1     1     0.005",
     "/vis/geometry/set/colour EMCCrystal                    0     1     1     1     0.1",
     "/vis/geometry/set/colour EMCField                      0     1     1     1     0.05",

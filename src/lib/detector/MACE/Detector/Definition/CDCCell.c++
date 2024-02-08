@@ -27,6 +27,7 @@ auto CDCCell::Construct(G4bool checkOverlaps) -> void {
 
     const auto& cdc{Description::CDC::Instance()};
     const auto cellName{cdc.Name() + "Cell"};
+    const auto svName{cdc.Name() + "SensitiveVolume"};
     const auto fwName{cdc.Name() + "FieldWire"};
     const auto swName{cdc.Name() + "SenseWire"};
 
@@ -42,7 +43,7 @@ auto CDCCell::Construct(G4bool checkOverlaps) -> void {
             const auto cellROut{&sense != &super.sense.back() ?
                                     sense.outerRadius :
                                     sense.outerRadius + cdc.FieldWireDiameter()};
-            const auto solidCell{[&, rFW{cdc.FieldWireDiameter() / 2}] {
+            const auto solidCell{[&] {
                 if (super.isAxial) {
                     return static_cast<G4VSolid*>(Make<G4Tubs>(
                         cellName,
@@ -66,14 +67,58 @@ auto CDCCell::Construct(G4bool checkOverlaps) -> void {
                 cdc.GasMaterial(),
                 cellName)};
             const auto rFW{cdc.FieldWireDiameter() / 2};
-            const auto phiOffset{std::asin((rFW / std::cos(sense.stereoAzimuthAngle / 2)) / (cellRIn + rFW))}; // prevent protrusion
-            Make<G4PVReplica>(cellName,
-                              logicalCell,
-                              Mother().LogicalVolume(sense.senseLayerID).get(),
-                              kPhi,
-                              super.nCellPerSenseLayer,
-                              super.cellAzimuthWidth,
-                              sense.cell.front().centerAzimuth - phiOffset);
+            const auto phiFWFront{std::asin((rFW / std::cos(sense.stereoAzimuthAngle / 2)) / (cellRIn + rFW))};
+            for (auto&& cell : sense.cell) {
+                // G4PVReplica seems buggy here
+                Make<G4PVPlacement>(
+                    G4Transform3D{CLHEP::HepRotationZ{cell.centerAzimuth - phiFWFront}, {}},
+                    logicalCell,
+                    cellName,
+                    Mother().LogicalVolume(sense.senseLayerID).get(),
+                    false,
+                    cell.cellID,
+                    checkOverlaps);
+            }
+
+            //
+            // sensitive volume
+            //
+
+            const auto svRIn{sense.innerRadius + cdc.FieldWireDiameter()};
+            const auto svROut{sense.outerRadius};
+            const auto phiFWBack{std::asin(rFW / (cellRIn + rFW))};
+            const auto phiSV{super.cellAzimuthWidth - phiFWBack-phiFWFront};
+            const auto solidSV{[&] {
+                if (super.isAxial) {
+                    return static_cast<G4VSolid*>(Make<G4Tubs>(
+                        svName,
+                        svRIn,
+                        svROut,
+                        sense.halfLength,
+                        -phiSV / 2,
+                        phiSV));
+                } else {
+                    return static_cast<G4VSolid*>(Make<G4TwistedTubs>(
+                        svName,
+                        sense.stereoAzimuthAngle,
+                        svRIn / std::cos(sense.stereoAzimuthAngle / 2),
+                        svROut / std::cos(sense.stereoAzimuthAngle / 2),
+                        sense.halfLength,
+                        phiSV));
+                }
+            }()};
+            const auto logicalSV{Make<G4LogicalVolume>(
+                solidSV,
+                cdc.GasMaterial(),
+                svName)};
+            Make<G4PVPlacement>(
+                G4Transform3D{CLHEP::HepRotationZ{(phiFWBack - phiFWFront) / 2 + phiFWFront}, {}},
+                logicalSV,
+                svName,
+                logicalCell,
+                false,
+                sense.senseLayerID,
+                checkOverlaps);
 
             //
             // field wire volume
@@ -94,8 +139,8 @@ auto CDCCell::Construct(G4bool checkOverlaps) -> void {
             const auto PlaceFW{
                 [&](int copyNo, double r, double phi0) {
                     return Make<G4PVPlacement>(
-                        G4Transform3D{CLHEP::HepRotationZ{phi0 + phiOffset}, {}} *
-                            G4Transform3D(CLHEP::HepRotationX(-sense.StereoZenithAngle(r)), {r, 0, 0}),
+                        G4Transform3D{CLHEP::HepRotationZ{phi0 + phiFWFront}, {}} *
+                            G4Transform3D{CLHEP::HepRotationX{-sense.StereoZenithAngle(r)}, {r, 0, 0}},
                         logicalFW,
                         fwName,
                         logicalCell,
@@ -131,11 +176,10 @@ auto CDCCell::Construct(G4bool checkOverlaps) -> void {
                 nist->FindOrBuildMaterial("G4_W"),
                 swName)};
             Make<G4PVPlacement>(
-                G4Transform3D{CLHEP::HepRotationZ{phiOffset}, {}} *
-                    G4Transform3D(CLHEP::HepRotationX(-sense.StereoZenithAngle(rCenterWire)), {rCenterWire, 0, 0}),
+                G4Transform3D{CLHEP::HepRotationX{-sense.StereoZenithAngle(rCenterWire)}, {rCenterWire, 0, 0}},
                 logicalSW,
                 swName,
-                logicalCell,
+                logicalSV,
                 false,
                 sense.senseLayerID,
                 checkOverlaps);

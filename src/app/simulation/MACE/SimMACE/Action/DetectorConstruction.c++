@@ -209,7 +209,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         fDefaultGaseousRegion = new Region("DefaultGaseous", RegionType::DefaultGaseous);
         // fDefaultGaseousRegion->SetProductionCuts(defaultCuts);
 
-        cdcCell.RegisterRegion(fDefaultGaseousRegion);
+        cdcCell.RegisterRegion("CDCCell", fDefaultGaseousRegion);
+        cdcCell.RegisterRegion("CDCSensitiveVolume", fDefaultGaseousRegion);
         cdcGas.RegisterRegion(fDefaultGaseousRegion);
         cdcSuperLayer.RegisterRegion(fDefaultGaseousRegion);
 
@@ -284,7 +285,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     ////////////////////////////////////////////////////////////////
     {
         fCDCSD = new SD::CDCSD{Detector::Description::CDC::Instance().Name()};
-        cdcCell.RegisterSD("CDCCell", fCDCSD);
+        cdcCell.RegisterSD("CDCSensitiveVolume", fCDCSD);
 
         fEMCSD = new SD::EMCSD{Detector::Description::EMC::Instance().Name()};
         emcCrystal.RegisterSD(fEMCSD);
