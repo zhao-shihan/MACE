@@ -35,7 +35,7 @@ public:
     auto CoincidenceWithMCP(bool val) -> void { fCoincidenceWithMCP = val; }
     auto CoincidenceWithEMC(bool val) -> void { fCoincidenceWithEMC = val; }
 
-    auto RunBegin() -> void;
+    auto RunBegin(G4int runID) -> void;
 
     auto SubmitCDCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::CDCHit*>>*> hc) -> void { fCDCHit = hc; }
     auto SubmitCDCTrackData(const std::vector<std::unique_ptr<Data::Tuple<Data::CDCSimTrack>>>& track) -> void { fCDCTrack = &track; }
@@ -43,7 +43,7 @@ public:
     auto SubmitMCPHC(gsl::not_null<const std::vector<gsl::owner<Simulation::MCPHit*>>*> hc) -> void { fMCPHit = hc; }
     auto EventEnd() -> void;
 
-    auto RunEnd(G4int runID, Option_t* option = nullptr) -> void;
+    auto RunEnd(Option_t* option = nullptr) -> void;
 
 private:
     std::filesystem::path fFilePath;

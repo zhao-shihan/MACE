@@ -33,13 +33,16 @@ Analysis::Analysis() :
     fMCPHit{},
     fMessengerRegister{this} {}
 
-auto Analysis::RunBegin() -> void {
+auto Analysis::RunBegin(G4int runID) -> void {
     const auto fullFilePath{MPIX::ParallelizePath(fFilePath, ".root").generic_string()};
-    fFile = TFile::Open(fullFilePath.c_str(), fFileOption.c_str(),
+    fFile = TFile::Open(fullFilePath.c_str(), runID == 0 ? fFileOption.c_str() : "UPDATE",
                         "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
     if (fFile == nullptr) {
         throw std::runtime_error{fmt::format("MACE::SimMACE::Analysis::RunBegin: Cannot open file \"{}\"", fullFilePath)};
     }
+    const auto runDirectory{fmt::format("G4Run{}", runID)};
+    fFile->mkdir(runDirectory.c_str());
+    fFile->cd(runDirectory.c_str());
     fCDCSimHitOutput.emplace("CDCSimHit");
     fCDCSimTrackOutput.emplace("CDCSimTrack");
     fMCPSimHitOutput.emplace("MCPSimHit");
@@ -62,11 +65,7 @@ auto Analysis::EventEnd() -> void {
     fMCPHit = {};
 }
 
-auto Analysis::RunEnd(G4int runID, Option_t* option) -> void {
-    const auto runDirectory{fmt::format("G4Run{}", runID)};
-    fFile->mkdir(runDirectory.c_str());
-    fFile->cd(runDirectory.c_str());
-
+auto Analysis::RunEnd(Option_t* option) -> void {
     // write geometry
     if (Env::MPIEnv::Instance().OnCommWorldMaster()) {
         ConvertG4GeometryToTMacro("SimMACE_gdml", "SimMACE.gdml")->Write();
@@ -76,8 +75,7 @@ auto Analysis::RunEnd(G4int runID, Option_t* option) -> void {
     fCDCSimTrackOutput->Write();
     fEMCSimHitOutput->Write();
     fMCPSimHitOutput->Write();
-
-    fFile->cd();
+    // close file
     fFile->Close(option);
     delete fFile;
 }
