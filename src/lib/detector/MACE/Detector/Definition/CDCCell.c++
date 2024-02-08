@@ -66,8 +66,7 @@ auto CDCCell::Construct(G4bool checkOverlaps) -> void {
                 cdc.GasMaterial(),
                 cellName)};
             const auto rFW{cdc.FieldWireDiameter() / 2};
-            const auto phiHalfFW{std::asin(rFW / (cellRIn + rFW))};
-            const auto phiOffset{2 * phiHalfFW}; // prevent protrusion
+            const auto phiOffset{std::asin((rFW / std::cos(sense.stereoAzimuthAngle / 2)) / (cellRIn + rFW))}; // prevent protrusion
             Make<G4PVReplica>(cellName,
                               logicalCell,
                               Mother().LogicalVolume(sense.senseLayerID).get(),
