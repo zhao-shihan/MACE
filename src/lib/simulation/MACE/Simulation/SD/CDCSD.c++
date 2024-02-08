@@ -64,7 +64,9 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& touchable{*preStepPoint.GetTouchable()};
     const auto position{Math::MidPoint(preStepPoint.GetPosition(), postStepPoint.GetPosition())};
     // retrive wire position
-    const auto& cellInfo{fCellMap->at(touchable.GetReplicaNumber(1))};
+    const auto cellID{touchable.GetReplicaNumber(1)};
+    const auto& cellInfo{fCellMap->at(cellID)};
+    assert(cellID == cellInfo.cellID);
     const auto xWire{VectorCast<G4TwoVector>(cellInfo.position)};
     const auto tWire{VectorCast<G4ThreeVector>(cellInfo.direction)};
     // calculate drift distance
@@ -84,7 +86,7 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     auto hit{std::make_unique_for_overwrite<CDCHit>()};
     Get<"EvtID">(*hit) = fEventID;
     Get<"HitID">(*hit) = -1; // to be determined
-    Get<"CellID">(*hit) = cellInfo.cellID;
+    Get<"CellID">(*hit) = cellID;
     Get<"t">(*hit) = signalTime;
     Get<"tD">(*hit) = driftTime;
     Get<"d">(*hit) = driftDistance;
@@ -100,7 +102,7 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"Ek0">(*hit) = vertexEk;
     Get<"p0">(*hit) = vertexMomentum;
     *Get<"CreatProc">(*hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "|0>";
-    fSplitHit[cellInfo.cellID].emplace_back(std::move(hit));
+    fSplitHit[cellID].emplace_back(std::move(hit));
 
     return true;
 }
