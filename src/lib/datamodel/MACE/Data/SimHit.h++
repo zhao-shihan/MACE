@@ -13,7 +13,7 @@ namespace internal {
 
 using SimHitVertexTruth = TupleModel<Value<int, "TrkID", "MC Track ID">,
                                      Value<int, "PDGID", "Particle PDG ID (MC truth)">,
-                                     Value<float, "t0", "Vertex time (MC truth)">,
+                                     Value<double, "t0", "Vertex time (MC truth)">,
                                      Value<stdx::array3f, "x0", "Vertex position (MC truth)">,
                                      Value<float, "Ek0", "Vertex kinetic energy (MC truth)">,
                                      Value<stdx::array3f, "p0", "Vertex momentum (MC truth)">,
