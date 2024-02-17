@@ -2,7 +2,7 @@
 #include "MACE/Env/BasicEnv.h++"
 #include "MACE/SimMACE/Action/ActionInitialization.h++"
 #include "MACE/SimMACE/Action/DetectorConstruction.h++"
-#include "MACE/SimMACE/Analysis.h++"
+#include "MACE/SimMACE/Data/Analysis.h++"
 #include "MACE/SimMACE/PhysicsList.h++"
 #include "MACE/SimMACE/RunManager.h++"
 

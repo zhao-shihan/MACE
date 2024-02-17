@@ -1,4 +1,4 @@
-#include "MACE/SimMACE/Analysis.h++"
+#include "MACE/SimMACE/Data/Analysis.h++"
 #include "MACE/SimMACE/SD/CDCSD.h++"
 
 namespace MACE::SimMACE::inline SD {

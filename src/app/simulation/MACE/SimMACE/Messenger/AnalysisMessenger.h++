@@ -11,7 +11,9 @@ class G4UIdirectory;
 
 namespace MACE::SimMACE {
 
+inline namespace Data {
 class Analysis;
+} // namespace Data
 
 inline namespace Messenger {
 

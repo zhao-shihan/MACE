@@ -23,7 +23,7 @@ class EMCHit;
 class MCPHit;
 } // namespace MACE::inline Simulation::inline Hit
 
-namespace MACE::SimMACE {
+namespace MACE::SimMACE::Data {
 
 class Analysis final : public Env::Memory::PassiveSingleton<Analysis> {
 public:
@@ -38,7 +38,7 @@ public:
     auto RunBegin(G4int runID) -> void;
 
     auto SubmitCDCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::CDCHit*>>*> hc) -> void { fCDCHit = hc; }
-    auto SubmitCDCTrackData(const std::vector<std::unique_ptr<Data::Tuple<Data::CDCSimTrack>>>& track) -> void { fCDCTrack = &track; }
+    auto SubmitCDCTrackData(const std::vector<std::unique_ptr<MACE::Data::Tuple<MACE::Data::CDCSimTrack>>>& track) -> void { fCDCTrack = &track; }
     auto SubmitEMCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::EMCHit*>>*> hc) -> void { fEMCHit = hc; }
     auto SubmitMCPHC(gsl::not_null<const std::vector<gsl::owner<Simulation::MCPHit*>>*> hc) -> void { fMCPHit = hc; }
     auto EventEnd() -> void;
@@ -53,17 +53,17 @@ private:
     bool fCoincidenceWithEMC;
 
     gsl::owner<TFile*> fFile;
-    std::optional<Data::Output<Data::CDCSimHit>> fCDCSimHitOutput;
-    std::optional<Data::Output<Data::CDCSimTrack>> fCDCSimTrackOutput;
-    std::optional<Data::Output<Data::EMCSimHit>> fEMCSimHitOutput;
-    std::optional<Data::Output<Data::MCPSimHit>> fMCPSimHitOutput;
+    std::optional<MACE::Data::Output<MACE::Data::CDCSimHit>> fCDCSimHitOutput;
+    std::optional<MACE::Data::Output<MACE::Data::CDCSimTrack>> fCDCSimTrackOutput;
+    std::optional<MACE::Data::Output<MACE::Data::EMCSimHit>> fEMCSimHitOutput;
+    std::optional<MACE::Data::Output<MACE::Data::MCPSimHit>> fMCPSimHitOutput;
 
     const std::vector<gsl::owner<Simulation::CDCHit*>>* fCDCHit;
-    const std::vector<std::unique_ptr<Data::Tuple<Data::CDCSimTrack>>>* fCDCTrack;
+    const std::vector<std::unique_ptr<MACE::Data::Tuple<MACE::Data::CDCSimTrack>>>* fCDCTrack;
     const std::vector<gsl::owner<Simulation::EMCHit*>>* fEMCHit;
     const std::vector<gsl::owner<Simulation::MCPHit*>>* fMCPHit;
 
     AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };
 
-} // namespace MACE::SimMACE
+} // namespace MACE::SimMACE::Data

@@ -1,6 +1,6 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
-#include "MACE/SimMACE/Analysis.h++"
+#include "MACE/SimMACE/Data/Analysis.h++"
 #include "MACE/Simulation/Hit/CDCHit.h++"
 #include "MACE/Simulation/Hit/EMCHit.h++"
 #include "MACE/Simulation/Hit/MCPHit.h++"
@@ -13,7 +13,7 @@
 
 #include <stdexcept>
 
-namespace MACE::SimMACE {
+namespace MACE::SimMACE::Data {
 
 Analysis::Analysis() :
     PassiveSingleton{},
@@ -80,4 +80,4 @@ auto Analysis::RunEnd(Option_t* option) -> void {
     delete fFile;
 }
 
-} // namespace MACE::SimMACE
+} // namespace MACE::SimMACE::Data

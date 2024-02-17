@@ -1,5 +1,5 @@
 #include "MACE/SimMACE/Action/RunAction.h++"
-#include "MACE/SimMACE/Analysis.h++"
+#include "MACE/SimMACE/Data/Analysis.h++"
 
 #include "G4Run.hh"
 
