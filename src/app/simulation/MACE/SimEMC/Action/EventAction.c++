@@ -9,14 +9,6 @@
 
 namespace MACE::SimEMC::inline Action {
 
-auto EventAction::BeginOfEventAction(const G4Event* event) -> void {
-    const auto eventID = event->GetEventID();
-    const auto& detectors = DetectorConstruction::Instance();
-    detectors.EMCSD().EventID(eventID);
-    detectors.EMCPMTSD().EventID(eventID);
-    detectors.MCPSD().EventID(eventID);
-}
-
 auto EventAction::EndOfEventAction(const G4Event*) -> void {
     Analysis::Instance().EventEnd();
 }

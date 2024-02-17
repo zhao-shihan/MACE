@@ -1,5 +1,6 @@
 #include "MACE/Simulation/SD/EMCPMTSD.h++"
 
+#include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4OpticalPhoton.hh"
 #include "G4SDManager.hh"
@@ -15,7 +16,6 @@ namespace MACE::Simulation::inline SD {
 EMCPMTSD::EMCPMTSD(const G4String& sdName) :
     NonMoveableBase{},
     G4VSensitiveDetector{sdName},
-    fEventID{-1},
     fHit{},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
@@ -40,11 +40,9 @@ auto EMCPMTSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
     const auto postStepPoint{*step.GetPostStepPoint()};
     const auto unitID{postStepPoint.GetTouchable()->GetReplicaNumber()};
-    // assert event ID
-    assert(fEventID >= 0);
     // new a hit
     auto hit{std::make_unique_for_overwrite<EMCPMTHit>()};
-    Get<"EvtID">(*hit) = fEventID;
+    Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"UnitID">(*hit) = unitID;
     Get<"t">(*hit) = postStepPoint.GetGlobalTime();

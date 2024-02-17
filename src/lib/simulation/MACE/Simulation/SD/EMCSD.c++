@@ -3,6 +3,7 @@
 #include "MACE/Simulation/SD/EMCPMTSD.h++"
 #include "MACE/Simulation/SD/EMCSD.h++"
 
+#include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4OpticalPhoton.hh"
 #include "G4ParticleDefinition.hh"
@@ -26,7 +27,6 @@ namespace MACE::inline Simulation::inline SD {
 EMCSD::EMCSD(const G4String& sdName, const EMCPMTSD* emcPMTSD) :
     NonMoveableBase{},
     G4VSensitiveDetector{sdName},
-    fEventID{-1},
     fEMCPMTSD{emcPMTSD},
     fSplitHit{},
     fHitsCollection{} {
@@ -59,11 +59,9 @@ auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto vertexMomentum{track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()))};
     // track creator process
     const auto creatorProcess{track.GetCreatorProcess()};
-    // assert event ID
-    assert(fEventID >= 0);
     // new a hit
     auto hit{std::make_unique_for_overwrite<EMCHit>()};
-    Get<"EvtID">(*hit) = fEventID;
+    Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"UnitID">(*hit) = unitID;
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();

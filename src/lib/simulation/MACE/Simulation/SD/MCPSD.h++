@@ -15,11 +15,7 @@ public:
     virtual auto Initialize(G4HCofThisEvent* hitsCollection) -> void override;
     virtual auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
 
-    /// Inform this SD of event id in EventAction
-    auto EventID(G4int eventID) -> void { fEventID = eventID; }
-
 protected:
-    G4int fEventID;
     int fHitID;
 
     MCPHitCollection* fHitsCollection;

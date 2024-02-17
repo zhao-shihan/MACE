@@ -22,12 +22,7 @@ public:
     virtual auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
     virtual auto EndOfEvent(G4HCofThisEvent*) -> void override;
 
-    /// Inform this SD of event id in EventAction
-    auto EventID(G4int eventID) -> void { fEventID = eventID; }
-
 protected:
-    G4int fEventID;
-
     const EMCPMTSD* const fEMCPMTSD;
 
     std::unordered_map<int, std::vector<std::unique_ptr<EMCHit>>> fSplitHit;

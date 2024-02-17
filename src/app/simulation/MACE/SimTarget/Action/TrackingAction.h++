@@ -19,14 +19,11 @@ class TrackingAction final : public Env::Memory::PassiveSingleton<TrackingAction
 public:
     TrackingAction();
 
-    auto EventID(G4int id) -> void { fEventID = id; }
-
     auto PreUserTrackingAction(const G4Track* track) -> void override;
     auto PostUserTrackingAction(const G4Track* track) -> void override;
 
 private:
     Data::Tuple<MuoniumTrack>* fMuoniumTrack;
-    G4int fEventID;
 };
 
 } // namespace Action

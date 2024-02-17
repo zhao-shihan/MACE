@@ -23,12 +23,7 @@ public:
 
     auto NOpticalPhotonHit() const -> std::unordered_map<int, int>;
 
-    /// Inform this SD of event id in EventAction
-    auto EventID(G4int eventID) -> void { fEventID = eventID; }
-
 protected:
-    G4int fEventID;
-
     std::unordered_map<int, std::vector<std::unique_ptr<EMCPMTHit>>> fHit;
     EMCPMTHitCollection* fHitsCollection;
 };

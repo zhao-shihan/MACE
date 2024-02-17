@@ -1,5 +1,6 @@
 #include "MACE/Simulation/SD/MCPSD.h++"
 
+#include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4RotationMatrix.hh"
@@ -20,7 +21,6 @@ namespace MACE::inline Simulation::inline SD {
 MCPSD::MCPSD(const G4String& sdName) :
     NonMoveableBase{},
     G4VSensitiveDetector{sdName},
-    fEventID{-1},
     fHitID{},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
@@ -49,11 +49,9 @@ auto MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
         const auto vertexMomentum{track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()))};
         // track creator process
         const auto creatorProcess{track.GetCreatorProcess()};
-        // assert event ID
-        assert(fEventID >= 0);
         // new a hit
         const auto hit{new MCPHit};
-        Get<"EvtID">(*hit) = fEventID;
+        Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
         Get<"HitID">(*hit) = fHitID++;
         Get<"t">(*hit) = preStepPoint.GetGlobalTime();
         Get<"x">(*hit) = hitPosition;

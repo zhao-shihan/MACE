@@ -23,16 +23,11 @@ public:
     virtual auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
     virtual auto EndOfEvent(G4HCofThisEvent*) -> void override;
 
-    /// @brief Inform this SD of event ID in EventAction
-    auto EventID(G4int eventID) -> void { fEventID = eventID; }
-
 private:
     auto BuildHitData() -> void;
     auto BuildTrackData() -> void;
 
 protected:
-    G4int fEventID;
-
     double fMeanDriftVelocity;
     const std::vector<Detector::Description::CDC::CellInformation>* fCellMap;
 

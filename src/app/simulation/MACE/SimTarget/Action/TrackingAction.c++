@@ -3,6 +3,7 @@
 #include "MACE/Simulation/Physics/Particle/Muonium.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
 
+#include "G4EventManager.hh"
 #include "G4Track.hh"
 
 #include "gsl/gsl"
@@ -14,14 +15,13 @@ using namespace PhysicalConstant;
 TrackingAction::TrackingAction() :
     PassiveSingleton{},
     G4UserTrackingAction{},
-    fMuoniumTrack{},
-    fEventID{-1} {}
+    fMuoniumTrack{} {}
 
 auto TrackingAction::PreUserTrackingAction(const G4Track* track) -> void {
     if (const auto particle{track->GetParticleDefinition()};
         particle == Muonium::Definition() or particle == Antimuonium::Definition()) {
         fMuoniumTrack = Analysis::Instance().NewMuoniumTrack();
-        Get<"EvtID">(*fMuoniumTrack) = fEventID;
+        Get<"EvtID">(*fMuoniumTrack) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
         Get<"TrkID">(*fMuoniumTrack) = track->GetTrackID();
         Get<"PDGID">(*fMuoniumTrack) = particle->GetPDGEncoding();
         Get<"t0">(*fMuoniumTrack) = track->GetGlobalTime();
