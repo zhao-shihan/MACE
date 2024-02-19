@@ -10,11 +10,11 @@ namespace MACE::Detector::Description {
 using namespace LiteralUnit::Length;
 
 BeamDegrader::BeamDegrader() :
-    DescriptionSingletonBase<BeamDegrader>(__func__),
-    fIsEnabled(true),
-    fWidth(6_cm),
-    fThickness(430_um),
-    fDistanceToTargetSurface(5_mm) {}
+    DescriptionSingletonBase{"BeamDegrader"},
+    fIsEnabled{true},
+    fWidth{6_cm},
+    fThickness{430_um},
+    fDistanceToTargetSurface{5_mm} {}
 
 HepGeom::Transform3D BeamDegrader::CalcTransform() const {
     switch (const auto& target = Target::Instance();
