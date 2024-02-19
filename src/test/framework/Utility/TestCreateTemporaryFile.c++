@@ -17,7 +17,5 @@ auto main(int argc, char* argv[]) -> int {
 
     std::getchar();
 
-    std::filesystem::remove(path);
-
     return EXIT_SUCCESS;
 }
