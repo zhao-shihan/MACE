@@ -1,5 +1,6 @@
 #include "MACE/Simulation/SD/MCPSD.h++"
 
+#include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4ParticleDefinition.hh"

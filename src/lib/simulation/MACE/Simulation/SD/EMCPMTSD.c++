@@ -1,5 +1,6 @@
 #include "MACE/Simulation/SD/EMCPMTSD.h++"
 
+#include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4OpticalPhoton.hh"

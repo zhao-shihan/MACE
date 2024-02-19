@@ -5,6 +5,7 @@
 #include "MACE/Utility/VectorArithmeticOperator.h++"
 #include "MACE/Utility/VectorCast.h++"
 
+#include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4ParticleDefinition.hh"

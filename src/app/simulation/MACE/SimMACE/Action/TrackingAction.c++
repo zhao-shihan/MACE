@@ -3,6 +3,7 @@
 #include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
 #include "MACE/Simulation/Physics/Particle/Muonium.h++"
 
+#include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4MuonMinus.hh"
 #include "G4MuonPlus.hh"
