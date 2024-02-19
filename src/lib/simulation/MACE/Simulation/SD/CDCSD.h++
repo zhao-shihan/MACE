@@ -34,7 +34,7 @@ protected:
     std::unordered_map<int, std::vector<std::unique_ptr<CDCHit>>> fSplitHit;
     CDCHitCollection* fHitsCollection;
 
-    std::vector<std::unique_ptr<Data::Tuple<Data::CDCSimTrack>>> fTrack;
+    std::vector<std::unique_ptr<Data::Tuple<Data::CDCSimTrack>>> fTrackData;
 };
 
 } // namespace MACE::inline Simulation::inline SD

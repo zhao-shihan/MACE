@@ -31,7 +31,7 @@ CDCSD::CDCSD(const G4String& sdName) :
     fCellMap{},
     fSplitHit{},
     fHitsCollection{},
-    fTrack{} {
+    fTrackData{} {
     collectionName.emplace_back(sdName + "HC");
 }
 
@@ -46,7 +46,7 @@ auto CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
     const auto hitsCollectionID{G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection)};
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 
-    fTrack.clear();
+    fTrackData.clear();
 }
 
 auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
@@ -189,7 +189,7 @@ auto CDCSD::BuildTrackData() -> void {
         assert(Get<"TrkID">(hit) >= 0);
         if (Get<"TrkID">(hit) != lastTrackID) {
             lastTrackID = Get<"TrkID">(hit);
-            track = fTrack.emplace_back(std::make_unique_for_overwrite<Data::Tuple<Data::CDCSimTrack>>()).get();
+            track = fTrackData.emplace_back(std::make_unique_for_overwrite<Data::Tuple<Data::CDCSimTrack>>()).get();
             Get<"EvtID">(*track) = Get<"EvtID">(hit);
             Get<"TrkID">(*track) = Get<"TrkID">(hit);
             Get<"chi2">(*track) = 0;
