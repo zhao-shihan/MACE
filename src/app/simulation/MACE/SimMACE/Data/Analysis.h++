@@ -5,7 +5,8 @@
 #include "MACE/Data/SimHit.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
-#include "MACE/SimMACE/Messenger/AnalysisMessenger.h++"
+#include "MACE/SimMACE/Data/Model/DecayVertex.h++"
+#include "MACE/SimMACE/Data/AnalysisMessenger.h++"
 
 #include "G4Types.hh"
 
@@ -37,8 +38,9 @@ public:
 
     auto RunBegin(G4int runID) -> void;
 
+    auto SubmitDecayVertexData(const std::vector<std::unique_ptr<MACE::Data::Tuple<Data::DecayVertex>>>& data) -> void { fDecayVertex = &data; }
     auto SubmitCDCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::CDCHit*>>*> hc) -> void { fCDCHit = hc; }
-    auto SubmitCDCTrackData(const std::vector<std::unique_ptr<MACE::Data::Tuple<MACE::Data::CDCSimTrack>>>& track) -> void { fCDCTrack = &track; }
+    auto SubmitCDCTrackData(const std::vector<std::unique_ptr<MACE::Data::Tuple<MACE::Data::CDCSimTrack>>>& data) -> void { fCDCTrack = &data; }
     auto SubmitEMCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::EMCHit*>>*> hc) -> void { fEMCHit = hc; }
     auto SubmitMCPHC(gsl::not_null<const std::vector<gsl::owner<Simulation::MCPHit*>>*> hc) -> void { fMCPHit = hc; }
     auto EventEnd() -> void;
@@ -53,11 +55,13 @@ private:
     bool fCoincidenceWithEMC;
 
     gsl::owner<TFile*> fFile;
+    std::optional<MACE::Data::Output<Data::DecayVertex>> fDecayVertexOutput;
     std::optional<MACE::Data::Output<MACE::Data::CDCSimHit>> fCDCSimHitOutput;
     std::optional<MACE::Data::Output<MACE::Data::CDCSimTrack>> fCDCSimTrackOutput;
     std::optional<MACE::Data::Output<MACE::Data::EMCSimHit>> fEMCSimHitOutput;
     std::optional<MACE::Data::Output<MACE::Data::MCPSimHit>> fMCPSimHitOutput;
 
+    const std::vector<std::unique_ptr<MACE::Data::Tuple<Data::DecayVertex>>>* fDecayVertex;
     const std::vector<gsl::owner<Simulation::CDCHit*>>* fCDCHit;
     const std::vector<std::unique_ptr<MACE::Data::Tuple<MACE::Data::CDCSimTrack>>>* fCDCTrack;
     const std::vector<gsl::owner<Simulation::EMCHit*>>* fEMCHit;

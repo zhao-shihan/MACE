@@ -23,6 +23,7 @@ Analysis::Analysis() :
     fCoincidenceWithMCP{true},
     fCoincidenceWithEMC{true},
     fFile{},
+    fDecayVertexOutput{},
     fCDCSimHitOutput{},
     fCDCSimTrackOutput{},
     fEMCSimHitOutput{},
@@ -43,6 +44,7 @@ auto Analysis::RunBegin(G4int runID) -> void {
     const auto runDirectory{fmt::format("G4Run{}", runID)};
     fFile->mkdir(runDirectory.c_str());
     fFile->cd(runDirectory.c_str());
+    fDecayVertexOutput.emplace("DecayVertex");
     fCDCSimHitOutput.emplace("CDCSimHit");
     fCDCSimTrackOutput.emplace("CDCSimTrack");
     fMCPSimHitOutput.emplace("MCPSimHit");
@@ -54,11 +56,13 @@ auto Analysis::EventEnd() -> void {
     const auto emcTriggered{not fCoincidenceWithEMC or fEMCHit == nullptr or fEMCHit->size() > 0};
     const auto mcpTriggered{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
     if (emcTriggered and mcpTriggered and cdcTriggered) {
+        if (fDecayVertex) { *fDecayVertexOutput << *fDecayVertex; }
         if (fCDCHit) { *fCDCSimHitOutput << *fCDCHit; }
         if (fCDCTrack) { *fCDCSimTrackOutput << *fCDCTrack; }
         if (fEMCHit) { *fEMCSimHitOutput << *fEMCHit; }
         if (fMCPHit) { *fMCPSimHitOutput << *fMCPHit; }
     }
+    fDecayVertex = {};
     fCDCHit = {};
     fCDCTrack = {};
     fEMCHit = {};
@@ -71,6 +75,7 @@ auto Analysis::RunEnd(Option_t* option) -> void {
         ConvertG4GeometryToTMacro("SimMACE_gdml", "SimMACE.gdml")->Write();
     }
     // write data
+    fDecayVertexOutput->Write();
     fCDCSimHitOutput->Write();
     fCDCSimTrackOutput->Write();
     fEMCSimHitOutput->Write();

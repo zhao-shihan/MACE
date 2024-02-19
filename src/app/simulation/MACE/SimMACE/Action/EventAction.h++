@@ -9,6 +9,7 @@ namespace MACE::SimMACE::inline Action {
 class EventAction final : public Env::Memory::PassiveSingleton<EventAction>,
                           public G4UserEventAction {
 public:
+    auto BeginOfEventAction(const G4Event*) -> void override;
     auto EndOfEventAction(const G4Event*) -> void override;
 };
 

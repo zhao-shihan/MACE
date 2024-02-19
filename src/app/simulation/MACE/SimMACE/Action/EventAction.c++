@@ -1,16 +1,19 @@
-#include "MACE/SimMACE/Action/DetectorConstruction.h++"
 #include "MACE/SimMACE/Action/EventAction.h++"
+#include "MACE/SimMACE/Action/TrackingAction.h++"
 #include "MACE/SimMACE/Data/Analysis.h++"
-#include "MACE/SimMACE/SD/CDCSD.h++"
-#include "MACE/SimMACE/SD/EMCSD.h++"
-#include "MACE/SimMACE/SD/MCPSD.h++"
 
 #include "G4Event.hh"
 
 namespace MACE::SimMACE::inline Action {
 
+auto EventAction::BeginOfEventAction(const G4Event*) -> void {
+    TrackingAction::Instance().ClearDecayVertexData();
+}
+
 auto EventAction::EndOfEventAction(const G4Event*) -> void {
-    Analysis::Instance().EventEnd();
+    auto& analysis{Data::Analysis::Instance()};
+    analysis.SubmitDecayVertexData(TrackingAction::Instance().DecayVertexData());
+    analysis.EventEnd();
 }
 
 } // namespace MACE::SimMACE::inline Action

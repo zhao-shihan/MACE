@@ -2,6 +2,7 @@
 #include "MACE/SimMACE/Action/EventAction.h++"
 #include "MACE/SimMACE/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimMACE/Action/RunAction.h++"
+#include "MACE/SimMACE/Action/TrackingAction.h++"
 
 namespace MACE::SimMACE {
 
@@ -9,6 +10,7 @@ auto ActionInitialization::Build() const -> void {
     SetUserAction(new RunAction);
     SetUserAction(new PrimaryGeneratorAction);
     SetUserAction(new EventAction);
+    SetUserAction(new TrackingAction);
 }
 
 } // namespace MACE::SimMACE
