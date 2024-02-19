@@ -9,13 +9,9 @@ class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
 class G4UIdirectory;
 
-namespace MACE::SimMACE {
+namespace MACE::SimMACE::Data {
 
-inline namespace Data {
 class Analysis;
-} // namespace Data
-
-inline namespace Messenger {
 
 class AnalysisMessenger final : public Geant4X::SingletonMessenger<AnalysisMessenger,
                                                                    Analysis> {
@@ -36,7 +32,5 @@ private:
     std::unique_ptr<G4UIcmdWithAString> fFilePath;
     std::unique_ptr<G4UIcmdWithAString> fFileOption;
 };
-
-} // namespace Messenger
 
 } // namespace MACE::SimMACE

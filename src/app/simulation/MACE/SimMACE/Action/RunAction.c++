@@ -6,11 +6,11 @@
 namespace MACE::SimMACE::inline Action {
 
 auto RunAction::BeginOfRunAction(const G4Run* run) -> void {
-    Analysis::Instance().RunBegin(run->GetRunID());
+    Data::Analysis::Instance().RunBegin(run->GetRunID());
 }
 
 auto RunAction::EndOfRunAction(const G4Run*) -> void {
-    Analysis::Instance().RunEnd();
+    Data::Analysis::Instance().RunEnd();
 }
 
 } // namespace MACE::SimMACE::inline Action

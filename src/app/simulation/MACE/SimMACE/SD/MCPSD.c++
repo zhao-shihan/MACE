@@ -5,7 +5,7 @@ namespace MACE::SimMACE::inline SD {
 
 auto MCPSD::EndOfEvent(G4HCofThisEvent* hc) -> void {
     Simulation::MCPSD::EndOfEvent(hc);
-    Analysis::Instance().SubmitMCPHC(fHitsCollection->GetVector());
+    Data::Analysis::Instance().SubmitMCPHC(fHitsCollection->GetVector());
 }
 
 } // namespace MACE::SimMACE::inline SD

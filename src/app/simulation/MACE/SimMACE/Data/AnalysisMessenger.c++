@@ -1,5 +1,5 @@
 #include "MACE/SimMACE/Data/Analysis.h++"
-#include "MACE/SimMACE/Messenger/AnalysisMessenger.h++"
+#include "MACE/SimMACE/Data/AnalysisMessenger.h++"
 
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
@@ -8,7 +8,7 @@
 
 #include <string_view>
 
-namespace MACE::SimMACE::inline Messenger {
+namespace MACE::SimMACE::Data {
 
 AnalysisMessenger::AnalysisMessenger() :
     SingletonMessenger{},
@@ -74,4 +74,4 @@ auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> voi
     }
 }
 
-} // namespace MACE::SimMACE::inline Messenger
+} // namespace MACE::SimMACE::Data

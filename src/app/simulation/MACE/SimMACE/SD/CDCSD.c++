@@ -5,8 +5,8 @@ namespace MACE::SimMACE::inline SD {
 
 auto CDCSD::EndOfEvent(G4HCofThisEvent* hc) -> void {
     Simulation::CDCSD::EndOfEvent(hc);
-    Analysis::Instance().SubmitCDCHC(fHitsCollection->GetVector());
-    Analysis::Instance().SubmitCDCTrackData(fTrack);
+    Data::Analysis::Instance().SubmitCDCHC(fHitsCollection->GetVector());
+    Data::Analysis::Instance().SubmitCDCTrackData(fTrackData);
 }
 
 } // namespace MACE::SimMACE::inline SD

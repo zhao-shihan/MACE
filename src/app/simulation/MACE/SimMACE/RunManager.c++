@@ -10,7 +10,7 @@ namespace MACE::SimMACE {
 
 RunManager::RunManager() :
     MPIRunManager{},
-    fAnalysis{std::make_unique_for_overwrite<Analysis>()} {
+    fAnalysis{std::make_unique_for_overwrite<Data::Analysis>()} {
     const auto verboseLevel{Env::BasicEnv::Instance().GetVerboseLevel()};
 
     const auto physicsList{new PhysicsList};
