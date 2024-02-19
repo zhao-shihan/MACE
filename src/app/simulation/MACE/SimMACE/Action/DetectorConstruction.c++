@@ -68,7 +68,7 @@ DetectorConstruction::DetectorConstruction() :
     fMCPSensitiveRegion{},
     fShieldRegion{},
     fSolenoidOrMagnetRegion{},
-    fSpectrometerSensitiveRegion{},
+    fCDCSensitiveRegion{},
     fTargetRegion{},
     fVacuumRegion{},
     fCDCSD{},
@@ -210,8 +210,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         // fDefaultGaseousRegion->SetProductionCuts(defaultCuts);
 
         cdcCell.RegisterRegion("CDCCell", fDefaultGaseousRegion);
-        cdcCell.RegisterRegion("CDCSensitiveVolume", fDefaultGaseousRegion);
         cdcGas.RegisterRegion(fDefaultGaseousRegion);
+        cdcSenseLayer.RegisterRegion(fDefaultGaseousRegion);
         cdcSuperLayer.RegisterRegion(fDefaultGaseousRegion);
 
         // DefaultSolidRegion
@@ -256,9 +256,11 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         emcMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
         solenoidS3.RegisterRegion(fSolenoidOrMagnetRegion);
 
-        // SpectrometerSensitiveRegion
-        fSpectrometerSensitiveRegion = new Region("SpectrometerSensitive", RegionType::SpectrometerSensitive);
-        // fSpectrometerSensitiveRegion->SetProductionCuts(defaultCuts);
+        // CDCSensitiveRegion
+        fCDCSensitiveRegion = new Region("CDCSensitive", RegionType::CDCSensitive);
+        // fCDCSensitiveRegion->SetProductionCuts(defaultCuts);
+
+        cdcCell.RegisterRegion("CDCSensitiveVolume", fCDCSensitiveRegion);
 
         // TargetRegion
         fTargetRegion = new Region("Target", RegionType::Target);

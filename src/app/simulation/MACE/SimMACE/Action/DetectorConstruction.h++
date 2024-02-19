@@ -50,7 +50,7 @@ public:
     auto DefaultGaseousRegion() const -> const auto& { return *fDefaultGaseousRegion; }
     auto ShieldRegion() const -> const auto& { return *fShieldRegion; }
     auto SolenoidOrMagnetRegion() const -> const auto& { return *fSolenoidOrMagnetRegion; }
-    auto SpectrometerSensitiveRegion() const -> const auto& { return *fSpectrometerSensitiveRegion; }
+    auto CDCSensitiveRegion() const -> const auto& { return *fCDCSensitiveRegion; }
     auto TargetRegion() const -> const auto& { return *fTargetRegion; }
     auto VacuumRegion() const -> const auto& { return *fVacuumRegion; }
     auto MCPSensitiveRegion() const -> const auto& { return *fMCPSensitiveRegion; }
@@ -90,7 +90,7 @@ private:
     Region* fMCPSensitiveRegion;
     Region* fShieldRegion;
     Region* fSolenoidOrMagnetRegion;
-    Region* fSpectrometerSensitiveRegion;
+    Region* fCDCSensitiveRegion;
     Region* fTargetRegion;
     Region* fVacuumRegion;
 

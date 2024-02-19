@@ -15,7 +15,7 @@ enum class RegionType {
     MCPSensitive,
     Shield,
     SolenoidOrMagnet,
-    SpectrometerSensitive,
+    CDCSensitive,
     Target,
     Vacuum
 };
