@@ -5,6 +5,11 @@
 
 namespace MACE::inline Simulation::inline Physics::inline DecayChannel {
 
-using MuoniumInternalPairProductionDecayChannel = WrapAsMuoniumDecayChannel<MuonInternalPairProductionDecayChannel, "MuoniumIPPDecay">;
+class MuoniumInternalPairProductionDecayChannel : public WrapAsMuoniumDecayChannel<MuonInternalPairProductionDecayChannel, "MuoniumIPPDecay"> {
+public:
+    using WrapAsMuoniumDecayChannel::WrapAsMuoniumDecayChannel;
+
+    virtual auto MACESpecificCutApplicable() const -> bool override { return GetParentName() == "muonium"; }
+};
 
 } // namespace MACE::inline Simulation::inline Physics::inline DecayChannel

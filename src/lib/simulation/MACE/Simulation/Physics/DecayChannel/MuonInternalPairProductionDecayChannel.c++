@@ -1,3 +1,10 @@
+#include "MACE/Compatibility/std23/constexpr_cmath.h++"
+#include "MACE/Detector/Description/AcceleratorField.h++"
+#include "MACE/Detector/Description/CDC.h++"
+#include "MACE/Detector/Description/Filter.h++"
+#include "MACE/Detector/Description/Solenoid.h++"
+#include "MACE/Detector/Description/SpectrometerField.h++"
+#include "MACE/Math/Hypot.h++"
 #include "MACE/Math/IntegerPower.h++"
 #include "MACE/Math/Random/Distribution/Uniform.h++"
 #include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
@@ -8,6 +15,8 @@
 #include "Randomize.hh"
 
 #include "gsl/gsl"
+
+#include "fmt/format.h"
 
 #include <algorithm>
 #include <bit>
@@ -20,7 +29,7 @@ MuonInternalPairProductionDecayChannel::MuonInternalPairProductionDecayChannel(c
     G4VDecayChannel{"MuonIPPDecay", verbose}, // clang-format on
     fMetropolisDelta{0.05},
     fMetropolisDiscard{100},
-    fSameChargedFinalStateEnergyCut{muon_mass_c2},
+    fApplyMACESpecificCut{},
     fRAMBO{muon_mass_c2, {electron_mass_c2, electron_mass_c2, electron_mass_c2, 0, 0}},
     fRawState{},
     fEvent{},
@@ -55,12 +64,9 @@ MuonInternalPairProductionDecayChannel::MuonInternalPairProductionDecayChannel(c
     Thermalize();
 }
 
-auto MuonInternalPairProductionDecayChannel::SameChargedFinalStateEnergyCut(double eUp) -> void {
-    if (eUp > electron_mass_c2) {
-        fSameChargedFinalStateEnergyCut = eUp;
-    } else {
-        fSameChargedFinalStateEnergyCut = muon_mass_c2;
-    }
+auto MuonInternalPairProductionDecayChannel::ApplyMACESpecificCut(bool apply) -> void {
+    if (apply and not MACESpecificCutApplicable()) { return; }
+    fApplyMACESpecificCut = apply;
     Thermalize();
 }
 
@@ -119,7 +125,8 @@ auto MuonInternalPairProductionDecayChannel::UpdateState(double delta) -> void {
         } while (Cut(newEvent) == false);
         const auto newWeightedM2{WeightedM2(newEvent)};
         if (newWeightedM2 >= fWeightedM2 or
-            newWeightedM2 >= fWeightedM2 * Math::Random::Distribution::UniformCompact{}(fXoshiro256Plus)) {
+            newWeightedM2 >= fWeightedM2 * Math::Random::Distribution::Uniform<double>{}(fXoshiro256Plus)) {
+            static_assert(Math::Random::Distribution::Uniform<double>::Stateless());
             fRawState = newRawState;
             fEvent = newEvent;
             fWeightedM2 = newWeightedM2;
@@ -145,8 +152,30 @@ auto MuonInternalPairProductionDecayChannel::Thermalize() -> void {
 }
 
 auto MuonInternalPairProductionDecayChannel::Cut(const CLHEPX::RAMBO<5>::Event& event) const -> bool {
-    const auto& [p, p1, p2, k1, k2]{event.state};
-    return p.e() < fSameChargedFinalStateEnergyCut or p2.e() < fSameChargedFinalStateEnergyCut;
+    if (fApplyMACESpecificCut) {
+        const auto spectrometerB{Detector::Description::SpectrometerField::Instance().MagneticFluxDensity()};
+        const auto cdcInnerRadius{Detector::Description::CDC::Instance().GasInnerRadius()};
+        const auto cdcPXYCut{(cdcInnerRadius / 2) * spectrometerB * c_light};
+
+        const auto solenoidB{Detector::Description::Solenoid::Instance().MagneticFluxDensity()};
+        const auto filterInterval{Detector::Description::Filter::Instance().Interval()};
+        const auto maxPositronPXY{(5 * filterInterval) * solenoidB * c_light};
+
+        const auto acceleratorU{Detector::Description::AcceleratorField::Instance().AcceleratorPotential()};
+        const auto maxPositronAbsPZ{std::sqrt(2 * electron_mass_c2 * eplus * acceleratorU)};
+
+        const auto& [p, p1, p2, k1, k2]{event.state};
+        const auto positron1PXY{Math::Hypot(p.x(), p.y())};
+        const auto positron1AbsPZ{std23::abs(p.z())};
+        const auto electronPXY{Math::Hypot(p1.x(), p1.y())};
+        const auto positron2PXY{Math::Hypot(p2.x(), p2.y())};
+        const auto positron2AbsPZ{std23::abs(p2.z())};
+
+        return electronPXY > cdcPXYCut and ((positron1PXY < cdcPXYCut and positron2PXY < maxPositronPXY and positron2AbsPZ < maxPositronAbsPZ) or
+                                            (positron2PXY < cdcPXYCut and positron1PXY < maxPositronPXY and positron1AbsPZ < maxPositronAbsPZ));
+    } else {
+        return true;
+    }
 }
 
 auto MuonInternalPairProductionDecayChannel::WeightedM2(const CLHEPX::RAMBO<5>::Event& event) -> double {

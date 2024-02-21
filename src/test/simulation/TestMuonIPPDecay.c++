@@ -42,6 +42,7 @@ auto main(int argc, char* argv[]) -> int {
     MuonInternalPairProductionDecayChannel ippDecay{"mu+", 1};
     ippDecay.MetropolisDelta(std::stod(argv[2]));
     ippDecay.MetropolisDiscard(std::stod(argv[3]));
+    if (argc >= 5) { ippDecay.ApplyMACESpecificCut(true); }
 
     TFile file{MPIX::ParallelizePath("mu2eeevv.root").generic_string().c_str(), "RECREATE", "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
     TNtuple t{"eeevv", "eeevv", "e1:e2:e3:e4:e5"};

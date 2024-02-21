@@ -18,11 +18,13 @@ public:
 
     auto MetropolisDelta(double delta) -> void { fMetropolisDelta = Math::Clamp<"()">(delta, 0., 0.5); }
     auto MetropolisDiscard(int n) -> void { fMetropolisDiscard = std::max(0, n); }
-    auto SameChargedFinalStateEnergyCut(double eUp) -> void;
+    auto ApplyMACESpecificCut(bool apply) -> void;
 
     auto DecayIt(G4double) -> G4DecayProducts* override;
 
 private:
+    virtual auto MACESpecificCutApplicable() const -> bool { return GetParentName() == "mu+"; }
+
     auto UpdateState(double delta) -> void;
     auto Thermalize() -> void;
 
@@ -33,7 +35,7 @@ private:
 private:
     double fMetropolisDelta;
     int fMetropolisDiscard;
-    double fSameChargedFinalStateEnergyCut;
+    bool fApplyMACESpecificCut;
 
     CLHEPX::RAMBO<5> fRAMBO;
     std::array<double, 5 * 4> fRawState;

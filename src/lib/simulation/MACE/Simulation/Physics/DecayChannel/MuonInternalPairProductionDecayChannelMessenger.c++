@@ -1,6 +1,7 @@
 #include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
 #include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannelMessenger.h++"
 
+#include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIdirectory.hh"
@@ -12,7 +13,7 @@ MuonInternalPairProductionDecayChannelMessenger::MuonInternalPairProductionDecay
     fDirectory{},
     fMetropolisDelta{},
     fMetropolisDiscard{},
-    fSameChargedFinalStateEnergyCut{} {
+    fApplyMACESpecificCut{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Physics/MuonDecay/IPPDecay/");
     fDirectory->SetGuidance("Muon(ium) internal pair production decay channel (mu->eeevv / M->eeevve).");
@@ -36,12 +37,10 @@ MuonInternalPairProductionDecayChannelMessenger::MuonInternalPairProductionDecay
     fMetropolisDiscard->SetRange("n > 0");
     fMetropolisDiscard->AvailableForStates(G4State_Idle);
 
-    fSameChargedFinalStateEnergyCut = std::make_unique<G4UIcmdWithADouble>("/MACE/Physics/MuonDecay/IPPDecay/SameChargedFinalStateEnergyCut", this);
-    fSameChargedFinalStateEnergyCut->SetGuidance("Set the energy cut (energy upper bound) for the two same-charge-sign final states. "
-                                                 "Only if at least one of the final states' energy is lower than the cut, the event is sampled. "
-                                                 "The cut is cleared if the value set is smaller than the electron mass.");
-    fSameChargedFinalStateEnergyCut->SetParameterName("Emax", false);
-    fSameChargedFinalStateEnergyCut->AvailableForStates(G4State_Idle);
+    fApplyMACESpecificCut = std::make_unique<G4UIcmdWithABool>("/MACE/Physics/MuonDecay/IPPDecay/ApplyMACESpecificCut", this);
+    fApplyMACESpecificCut->SetGuidance("If true, apply MACE specific momentum cut to mu+ IPP decay products. Check source code for details.");
+    fApplyMACESpecificCut->SetParameterName("apply", false);
+    fApplyMACESpecificCut->AvailableForStates(G4State_Idle);
 }
 
 MuonInternalPairProductionDecayChannelMessenger::~MuonInternalPairProductionDecayChannelMessenger() = default;
@@ -55,9 +54,9 @@ auto MuonInternalPairProductionDecayChannelMessenger::SetNewValue(G4UIcommand* c
         Deliver<MuonInternalPairProductionDecayChannel>([&](auto&& r) {
             r.MetropolisDiscard(fMetropolisDiscard->GetNewIntValue(value));
         });
-    } else if (command == fSameChargedFinalStateEnergyCut.get()) {
+    } else if (command == fApplyMACESpecificCut.get()) {
         Deliver<MuonInternalPairProductionDecayChannel>([&](auto&& r) {
-            r.SameChargedFinalStateEnergyCut(fSameChargedFinalStateEnergyCut->GetNewDoubleValue(value));
+            r.ApplyMACESpecificCut(fApplyMACESpecificCut->GetNewBoolValue(value));
         });
     }
 }
