@@ -8,18 +8,18 @@
 
 /run/initialize
 
-/gps/particle mu+
-/gps/direction 0 0 1
-/gps/pos/type Beam
-/gps/pos/shape Circle
-/gps/pos/centre 0. 0. -1.5. m
-/gps/pos/radius 0 mm
-/gps/pos/sigma_r 5 mm
-/gps/ene/type Gauss
-/gps/ene/mono 3.647 MeV
-/gps/ene/sigma 0.0912 MeV
-/MACE/Generator/GPS/PulseWidth                  0 ns
-/MACE/Generator/GPS/PrimariesForEachG4Event     1
+/gps/particle                                  mu+
+/gps/direction                                 0 0 1
+/gps/pos/type                                  Beam
+/gps/pos/shape                                 Circle
+/gps/pos/centre                                0 0 -1.5 m
+/gps/pos/radius                                0 mm
+/gps/pos/sigma_r                               5 mm
+/gps/ene/type                                  Gauss
+/gps/ene/mono                                  3.647 MeV    # momentum 28 MeV
+/gps/ene/sigma                                 0.1793 MeV
+/MACE/Generator/GPS/PulseWidth                 0 ns
+/MACE/Generator/GPS/PrimariesForEachG4Event    1
 
 /MACE/Physics/MuoniumPhysics/Formation/FormationProbability     0.655
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5
