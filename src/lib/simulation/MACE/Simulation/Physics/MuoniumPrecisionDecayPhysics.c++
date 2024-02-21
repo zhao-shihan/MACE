@@ -13,25 +13,27 @@ MuoniumPrecisionDecayPhysics::MuoniumPrecisionDecayPhysics(G4int verbose) :
     namePhysics = "MuoniumPrecisionDecayPhysics";
 }
 
-auto MuoniumPrecisionDecayPhysics::ConstructParticle() -> void {
-    Muonium::Definition();
-    Antimuonium::Definition();
-}
-
 auto MuoniumPrecisionDecayPhysics::ConstructProcess() -> void {
     const auto NewDecayTableFor{
         [this](G4ParticleDefinition* muonium) {
             const auto decay{new G4DecayTable};
-            // ! sort by initial BR
-            decay->Insert(new MuoniumDecayChannel{muonium->GetParticleName(), 1, verboseLevel});
-            decay->Insert(new MuoniumInternalPairProductionDecayChannel{muonium->GetParticleName(), fIPPDecayBR, verboseLevel});
-            CheckAndSetMainChannelBR(decay);
+            // sort by initial BR! we firstly write random BRs in decrease order...
+            decay->Insert(new MuoniumDecayChannel{muonium->GetParticleName(), 1e-1, verboseLevel});
+            decay->Insert(new MuoniumInternalPairProductionDecayChannel{muonium->GetParticleName(), 1e-2, verboseLevel});
+            // delete old table and set new
             delete muonium->GetDecayTable();
             muonium->SetDecayTable(decay);
         }};
     NewDecayTableFor(Muonium::Definition());
     NewDecayTableFor(Antimuonium::Definition());
-    fProcessConstructed = true;
+    fDecayTableConstructed = true;
+    // set BR here
+    UpdateBR();
+}
+
+auto MuoniumPrecisionDecayPhysics::UpdateBR() -> void {
+    UpdateBRFor(Muonium::Definition());
+    UpdateBRFor(Antimuonium::Definition());
 }
 
 } // namespace MACE::inline Simulation::inline Physics

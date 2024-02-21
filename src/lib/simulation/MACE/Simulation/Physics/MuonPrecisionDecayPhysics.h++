@@ -5,7 +5,7 @@
 
 #include "G4VPhysicsConstructor.hh"
 
-class G4DecayTable;
+class G4ParticleDefinition;
 
 namespace MACE::inline Simulation::inline Physics {
 
@@ -16,16 +16,18 @@ public:
 
     auto IPPDecayBR(double br) -> void;
 
-    virtual auto ConstructParticle() -> void override;
+    virtual auto ConstructParticle() -> void override { UpdateBR(); }
     virtual auto ConstructProcess() -> void override;
 
 protected:
-    static auto CheckAndSetMainChannelBR(const G4DecayTable* decay) -> void;
+    virtual auto UpdateBR() -> void;
+
+    auto UpdateBRFor(const G4ParticleDefinition* mu) -> void;
 
 protected:
-    bool fProcessConstructed;
-
     double fIPPDecayBR;
+
+    bool fDecayTableConstructed;
 
     MuonPrecisionDecayPhysicsMessenger::Register<MuonPrecisionDecayPhysics> fMessengerRegister;
 };

@@ -8,8 +8,10 @@ class MuoniumPrecisionDecayPhysics final : public MuonPrecisionDecayPhysics {
 public:
     MuoniumPrecisionDecayPhysics(G4int verbose);
 
-    auto ConstructParticle() -> void override;
     auto ConstructProcess() -> void override;
+
+private:
+    auto UpdateBR() -> void override;
 };
 
 } // namespace MACE::inline Simulation::inline Physics

@@ -14,42 +14,46 @@ namespace MACE::inline Simulation::inline Physics {
 MuonPrecisionDecayPhysics::MuonPrecisionDecayPhysics(G4int verbose) :
     NonMoveableBase{},
     G4VPhysicsConstructor{"MuonPrecisionDecayPhysics"},
-    fProcessConstructed{},
     fIPPDecayBR{3.4e-5},
+    fDecayTableConstructed{},
     fMessengerRegister{this} {
     verboseLevel = verbose;
 }
 
 auto MuonPrecisionDecayPhysics::IPPDecayBR(double br) -> void {
     fIPPDecayBR = Math::Clamp<"[]">(br, 0., 1.);
-    if (fProcessConstructed) {
-        ConstructProcess();
-    }
-}
-
-auto MuonPrecisionDecayPhysics::ConstructParticle() -> void {
-    G4MuonPlus::Definition();
-    G4MuonMinus::Definition();
+    UpdateBR();
 }
 
 auto MuonPrecisionDecayPhysics::ConstructProcess() -> void {
     const auto NewDecayTableFor{
         [this](G4ParticleDefinition* muon) {
             const auto decay{new G4DecayTable};
-            // ! sort by initial BR
-            decay->Insert(new G4MuonDecayChannel{muon->GetParticleName(), 1});
-            decay->Insert(new MuonInternalPairProductionDecayChannel{muon->GetParticleName(), fIPPDecayBR, verboseLevel});
-            decay->GetDecayChannel(0)->SetVerboseLevel(verboseLevel);
-            CheckAndSetMainChannelBR(decay);
+            // sort by initial BR! we firstly write random BRs in decrease order...
+            decay->Insert(new G4MuonDecayChannel{muon->GetParticleName(), 1e-1}), decay->GetDecayChannel(0)->SetVerboseLevel(verboseLevel);
+            decay->Insert(new MuonInternalPairProductionDecayChannel{muon->GetParticleName(), 1e-2, verboseLevel});
+            // delete old table and set new
             delete muon->GetDecayTable();
             muon->SetDecayTable(decay);
         }};
     NewDecayTableFor(G4MuonPlus::Definition());
     NewDecayTableFor(G4MuonMinus::Definition());
-    fProcessConstructed = true;
+    fDecayTableConstructed = true;
+    // set BR here
+    UpdateBR();
 }
 
-auto MuonPrecisionDecayPhysics::CheckAndSetMainChannelBR(const G4DecayTable* decay) -> void {
+auto MuonPrecisionDecayPhysics::UpdateBR() -> void {
+    UpdateBRFor(G4MuonPlus::Definition());
+    UpdateBRFor(G4MuonMinus::Definition());
+}
+
+auto MuonPrecisionDecayPhysics::UpdateBRFor(const G4ParticleDefinition* mu) -> void {
+    if (not fDecayTableConstructed) { return; }
+    const auto decay{mu->GetDecayTable()};
+    // set rare decay mode first
+    decay->GetDecayChannel(1)->SetBR(fIPPDecayBR);
+    // then set main decay mode
     double mainDecayBR{1};
     for (auto i{1}; i < decay->entries(); ++i) {
         mainDecayBR -= decay->GetDecayChannel(i)->GetBR();
