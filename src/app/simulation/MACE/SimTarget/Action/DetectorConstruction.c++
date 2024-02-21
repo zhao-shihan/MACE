@@ -21,7 +21,7 @@ DetectorConstruction::DetectorConstruction() :
     G4VUserDetectorConstruction{},
     fCheckOverlap{false},
     fWorld{},
-    fTargetDensity{30_mg_cm3},
+    fTargetDensity{27_mg_cm3},
     fTargetTemperature{293.15_K},
     fMessengerRegister{this} {
     Detector::Description::DescriptionIO::Import<DescriptionInUse>(
