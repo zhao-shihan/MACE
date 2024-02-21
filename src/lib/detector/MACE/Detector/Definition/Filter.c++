@@ -17,16 +17,16 @@ using namespace LiteralUnit::Length;
 using namespace LiteralUnit::MathConstantSuffix;
 
 auto Filter::Construct(G4bool checkOverlaps) -> void {
-    const auto& filter = Description::Filter::Instance();
-    const auto name = filter.Name();
-    const auto halfLength = filter.Length() / 2;
-    const auto radius = filter.Radius();
-    const auto halfThickness = filter.Thickness() / 2;
-    const auto count = filter.Count();
-    const auto spacing = 2 * radius / count;
+    const auto& filter{Description::Filter::Instance()};
+    const auto name{filter.Name()};
+    const auto halfLength{filter.Length() / 2};
+    const auto radius{filter.Radius()};
+    const auto halfThickness{filter.Thickness() / 2};
+    const auto count{filter.Count()};
+    const auto interval{filter.Interval()};
 
     for (auto i = 0; i < count; ++i) {
-        const auto x{(-radius + spacing / 2) + i * spacing};
+        const auto x{(-radius + interval / 2) + i * interval};
         const auto halfWidth{std::sqrt(Math::Pow<2>(radius) - Math::Pow<2>(x))};
         const auto solid = Make<G4Box>(
             "",

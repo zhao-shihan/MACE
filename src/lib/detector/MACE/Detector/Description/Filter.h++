@@ -16,6 +16,7 @@ public:
     auto Radius() const -> const auto& { return fRadius; }
     auto Thickness() const -> const auto& { return fThickness; }
     auto Count() const -> const auto& { return fCount; }
+    auto Interval() const -> auto { return 2 * fRadius / fCount; }
 
     auto Length(auto v) -> void { fLength = v; }
     auto Radius(auto v) -> void { fRadius = v; }
