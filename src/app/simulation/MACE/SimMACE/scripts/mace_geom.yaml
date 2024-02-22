@@ -50,15 +50,16 @@ EMC:
   PMTWindowThickness: 1
   PMTCathodeThickness: 2.0000000000000005e-05
 EMCField:
-  Radius: 470
-  Length: 950
+  Radius: 600
+  Length: 1000
   MagneticFluxDensity: 0.0001
 EMCShield:
-  InnerRadius: 600
-  InnerLength: 1000
+  InnerRadius: 650
+  InnerLength: 1100
   GapAroundWindow: 10
   Thickness: 50
 Filter:
+  Enabled: true
   Length: 500
   Radius: 49
   Thickness: 0.20000000000000001

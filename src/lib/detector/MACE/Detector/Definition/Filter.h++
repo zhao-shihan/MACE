@@ -5,6 +5,9 @@
 namespace MACE::Detector::Definition {
 
 class Filter final : public DefinitionBase {
+public:
+    bool Enabled() const override;
+
 private:
     auto Construct(G4bool checkOverlaps) -> void override;
 };

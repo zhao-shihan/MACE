@@ -12,22 +12,25 @@ private:
     ~Filter() = default;
 
 public:
-    auto Length() const -> const auto& { return fLength; }
-    auto Radius() const -> const auto& { return fRadius; }
-    auto Thickness() const -> const auto& { return fThickness; }
-    auto Count() const -> const auto& { return fCount; }
+    auto Enabled() const -> auto { return fEnabled; }
+    auto Length() const -> auto { return fLength; }
+    auto Radius() const -> auto { return fRadius; }
+    auto Thickness() const -> auto { return fThickness; }
+    auto Count() const -> auto { return fCount; }
     auto Interval() const -> auto { return 2 * fRadius / fCount; }
 
-    auto Length(auto v) -> void { fLength = v; }
-    auto Radius(auto v) -> void { fRadius = v; }
-    auto Thickness(auto v) -> void { fThickness = v; }
-    auto Count(auto v) -> void { fCount = v; }
+    auto Enabled(bool val) -> void { fEnabled = val; }
+    auto Length(auto val) -> void { fLength = val; }
+    auto Radius(auto val) -> void { fRadius = val; }
+    auto Thickness(auto val) -> void { fThickness = val; }
+    auto Count(auto val) -> void { fCount = val; }
 
 private:
     auto ImportValues(const YAML::Node& node) -> void override;
     auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
+    bool fEnabled;
     double fLength;
     double fRadius;
     double fThickness;
