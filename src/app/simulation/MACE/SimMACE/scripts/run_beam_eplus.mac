@@ -5,6 +5,8 @@
 /control/verbose 0
 /run/verbose 0
 
+#/MACE/Detector/Description/Ixport mace_geom.yaml
+
 /run/initialize
 
 /gps/particle                                  e+
