@@ -11,7 +11,7 @@ using namespace LiteralUnit::Length;
 
 BeamDegrader::BeamDegrader() :
     DescriptionSingletonBase{"BeamDegrader"},
-    fIsEnabled{true},
+    fEnabled{true},
     fWidth{6_cm},
     fThickness{430_um},
     fDistanceToTargetSurface{5_mm} {}
@@ -27,15 +27,15 @@ HepGeom::Transform3D BeamDegrader::CalcTransform() const {
     std23::unreachable();
 }
 
-void BeamDegrader::ImportValues(const YAML::Node& node) {
-    ImportValue(node, fIsEnabled, "Enabled");
+auto BeamDegrader::ImportValues(const YAML::Node& node) -> void {
+    ImportValue(node, fEnabled, "Enabled");
     ImportValue(node, fWidth, "Width");
     ImportValue(node, fThickness, "Thickness");
     ImportValue(node, fDistanceToTargetSurface, "DistanceToTargetSurface");
 }
 
-void BeamDegrader::ExportValues(YAML::Node& node) const {
-    ExportValue(node, fIsEnabled, "Enabled");
+auto BeamDegrader::ExportValues(YAML::Node& node) const -> void {
+    ExportValue(node, fEnabled, "Enabled");
     ExportValue(node, fWidth, "Width");
     ExportValue(node, fThickness, "Thickness");
     ExportValue(node, fDistanceToTargetSurface, "DistanceToTargetSurface");

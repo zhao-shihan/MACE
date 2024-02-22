@@ -14,12 +14,12 @@ private:
     ~BeamMonitor() = default;
 
 public:
-    const auto& Enabled() const { return fIsEnabled; }
+    const auto& Enabled() const { return fEnabled; }
     const auto& Width() const { return fWidth; }
     const auto& Thickness() const { return fThickness; }
     const auto& DistanceToTargetSurface() const { return fDistanceToTargetSurface; }
 
-    void Enabled(bool val) { fIsEnabled = val; }
+    void Enabled(bool val) { fEnabled = val; }
     void Width(double val) { fWidth = val; }
     void Thickness(double val) { fThickness = val; }
     void DistanceToTargetSurface(double val) { fDistanceToTargetSurface = val; }
@@ -33,7 +33,7 @@ private:
     auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
-    bool fIsEnabled;
+    bool fEnabled;
     double fWidth;
     double fThickness;
     double fDistanceToTargetSurface;
