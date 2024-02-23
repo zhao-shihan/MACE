@@ -31,10 +31,9 @@ MuonInternalPairProductionDecayChannelMessenger::MuonInternalPairProductionDecay
                                     "The more samples are discarded, the less significant the autocorrelation is, but it will reduce the performance of sampling. "
                                     "When the total number of samples (number of IPP decay events) is small, a larger number of discards should be set. "
                                     "When the number of samples is large, the number of discards can be appropriately reduced. "
-                                    "This value is also related to the delta of the random walk, and the smaller the delta, the more samples that should be discarded."
-                                    "The typical value is 100 for 0.05 delta.");
+                                    "This value is also related to the delta of the random walk, and the smaller the delta, the more samples that should be discarded.");
     fMetropolisDiscard->SetParameterName("n", false);
-    fMetropolisDiscard->SetRange("n > 0");
+    fMetropolisDiscard->SetRange("n >= 0");
     fMetropolisDiscard->AvailableForStates(G4State_Idle);
 
     fApplyMACESpecificCut = std::make_unique<G4UIcmdWithABool>("/MACE/Physics/MuonDecay/IPPDecay/ApplyMACESpecificCut", this);
