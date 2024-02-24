@@ -8,13 +8,13 @@
 
 namespace MACE::Env {
 
-void BasicEnv::PrintWelcomeMessageSplitLine() const {
+auto BasicEnv::PrintWelcomeMessageSplitLine() const -> void {
     if (fVerboseLevel >= VL::Error) {
         fmt::print("\n===============================================================================\n");
     }
 }
 
-void BasicEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const {
+auto BasicEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const -> void {
     std::error_code cwdError;
     const auto exe{std::filesystem::path(argv[0]).filename().generic_string()};
     auto cwd{std::filesystem::current_path(cwdError).generic_string()};
@@ -38,7 +38,7 @@ void BasicEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const {
         fmt::print("\n"
                    " List of all {} command line arguments:\n",
                    argc);
-        for (int i = 0; i < argc; ++i) {
+        for (int i{}; i < argc; ++i) {
             fmt::println("  argv[{}]: {}", i, argv[i]);
         }
     }
