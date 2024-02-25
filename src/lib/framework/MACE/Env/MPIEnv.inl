@@ -11,6 +11,9 @@ MPIEnv::MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool printWe
                             &argv,               // argv
                             MPI_THREAD_MULTIPLE, // required
                             &mpiThreadSupport);  // provided
+            if (mpiThreadSupport < MPI_THREAD_FUNNELED) {
+                throw std::runtime_error{"the MPI library thread support is less than MPI_THREAD_FUNNELED"};
+            }
             return mpiThreadSupport;
         }()},
     fCommWorldRank{

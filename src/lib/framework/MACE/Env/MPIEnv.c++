@@ -9,13 +9,15 @@ namespace MACE::Env {
 
 MPIEnv::~MPIEnv() {
     // Destructs the local communicator
-    auto commNode = fCommNode;
+    auto commNode{fCommNode};
     MPI_Comm_free(&commNode);
+    // Wait all processes before finalizing
+    MPI_Barrier(MPI_COMM_WORLD);
     // Finalize MPI
     MPI_Finalize();
 }
 
-void MPIEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const {
+auto MPIEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const -> void {
     BasicEnv::PrintWelcomeMessageBody(argc, argv);
     if (GetVerboseLevel() >= VL::Error) {
         // MPI library version

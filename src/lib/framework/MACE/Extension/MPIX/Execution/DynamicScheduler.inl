@@ -131,45 +131,46 @@ auto DynamicScheduler<T>::Master::Supervisor::Start() -> void {
     // wait for last supervision to end if needed
     if (fSupervisorThread.joinable()) { fSupervisorThread.join(); }
     // Start supervise
-    fSupervisorThread = std::jthread{[this] {
-        MPI_Startall(fRecv.size(),  // count
-                     fRecv.data()); // array_of_requests
-        // inform workers that receive have been posted
-        MPI_Request firstSupervisorRecvReadyBcast;
-        MPI_Ibcast(nullptr,                         // buffer
-                   0,                               // count
-                   MPI_BYTE,                        // datatype
-                   0,                               // root
-                   fDS->fComm,                      // comm
-                   &firstSupervisorRecvReadyBcast); // request
-        int completing{};
-        do {
-            int cgCount;
-            std::vector<int> cgRank(fDS->fComm.Size() - 1);
-            MPI_Waitsome(fRecv.size(),         // incount
-                         fRecv.data(),         // array_of_requests
-                         &cgCount,             // outcount
-                         cgRank.data(),        // array_of_indices
-                         MPI_STATUSES_IGNORE); // array_of_statuses
-            for (int i{}; i < cgCount; ++i) {
-                const auto c{cgRank[i]};
-                fTaskIDSend[c] = FetchAddTaskID();
-                if (fTaskIDSend[c] != fDS->fTask.last) {
-                    MPI_Start(&fRecv[c]);
-                } else {
-                    ++completing;
+    fSupervisorThread = std::jthread{
+        [this] {
+            MPI_Startall(fRecv.size(),  // count
+                         fRecv.data()); // array_of_requests
+            // inform workers that receive have been posted
+            MPI_Request firstSupervisorRecvReadyBcast;
+            MPI_Ibcast(nullptr,                         // buffer
+                       0,                               // count
+                       MPI_BYTE,                        // datatype
+                       0,                               // root
+                       fDS->fComm,                      // comm
+                       &firstSupervisorRecvReadyBcast); // request
+            int completing{};
+            do {
+                int cgCount;
+                std::vector<int> cgRank(fDS->fComm.Size() - 1);
+                MPI_Waitsome(fRecv.size(),         // incount
+                             fRecv.data(),         // array_of_requests
+                             &cgCount,             // outcount
+                             cgRank.data(),        // array_of_indices
+                             MPI_STATUSES_IGNORE); // array_of_statuses
+                for (int i{}; i < cgCount; ++i) {
+                    const auto c{cgRank[i]};
+                    fTaskIDSend[c] = FetchAddTaskID();
+                    if (fTaskIDSend[c] != fDS->fTask.last) {
+                        MPI_Start(&fRecv[c]);
+                    } else {
+                        ++completing;
+                    }
+                    MPI_Wait(&fSend[c],          // request
+                             MPI_STATUS_IGNORE); // status
+                    MPI_Start(&fSend[c]);
                 }
-                MPI_Wait(&fSend[c],          // request
-                         MPI_STATUS_IGNORE); // status
-                MPI_Start(&fSend[c]);
-            }
-        } while (completing != fDS->fComm.Size() - 1);
-        MPI_Wait(&firstSupervisorRecvReadyBcast, // request
-                 MPI_STATUS_IGNORE);             // status
-        MPI_Waitall(fSend.size(),                // count
-                    fSend.data(),                // array_of_requests
-                    MPI_STATUSES_IGNORE);        // array_of_statuses
-    }};
+            } while (completing != fDS->fComm.Size() - 1);
+            MPI_Wait(&firstSupervisorRecvReadyBcast, // request
+                     MPI_STATUS_IGNORE);             // status
+            MPI_Waitall(fSend.size(),                // count
+                        fSend.data(),                // array_of_requests
+                        MPI_STATUSES_IGNORE);        // array_of_statuses
+        }};
 }
 
 template<std::integral T>
@@ -236,11 +237,15 @@ auto DynamicScheduler<T>::Worker::PreLoopAction() -> void {
     fDS->fExecutingTask = fDS->fTask.first + fDS->fComm.Rank() * fDS->fBatchSize;
     fBatchCounter = 0;
     // wait for supervisor to post receive
-    MPI_Bcast(nullptr,     // buffer
-              0,           // count
-              MPI_BYTE,    // datatype
-              0,           // root
-              fDS->fComm); // comm
+    MPI_Request firstSupervisorRecvReadyBcast;
+    MPI_Ibcast(nullptr,                         // buffer
+               0,                               // count
+               MPI_BYTE,                        // datatype
+               0,                               // root
+               fDS->fComm,                      // comm
+               &firstSupervisorRecvReadyBcast); // request
+    MPI_Wait(&firstSupervisorRecvReadyBcast,    // request
+             MPI_STATUS_IGNORE);                // status
 }
 
 template<std::integral T>
