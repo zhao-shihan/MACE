@@ -109,7 +109,7 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
     const auto& emc = Description::EMC::Instance();
     const auto& faceList = emc.Mesh().fFaceList;
 
-    for (G4int copyNo = 0;
+    for (int unitID{};
          auto&& [_1, _2, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
 
         double cathodeRadius{};
@@ -127,15 +127,15 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
         }
 
         const auto couplerTransform =
-            Detector::Description::EMC::Instance().ComputeTransformToOuterSurfaceWithOffset(copyNo,
+            Detector::Description::EMC::Instance().ComputeTransformToOuterSurfaceWithOffset(unitID,
                                                                                             pmtCouplerThickness / 2);
 
         const auto shellTransform =
-            Detector::Description::EMC::Instance().ComputeTransformToOuterSurfaceWithOffset(copyNo,
+            Detector::Description::EMC::Instance().ComputeTransformToOuterSurfaceWithOffset(unitID,
                                                                                             pmtCouplerThickness + pmtLength / 2);
 
         const auto cathodeTransform =
-            Detector::Description::EMC::Instance().ComputeTransformToOuterSurfaceWithOffset(copyNo,
+            Detector::Description::EMC::Instance().ComputeTransformToOuterSurfaceWithOffset(unitID,
                                                                                             pmtCouplerThickness + pmtWindowThickness + pmtCathodeThickness / 2);
 
         const auto solidCoupler = Make<G4Tubs>("temp", 0, pmtRadius, pmtCouplerThickness / 2, 0, 2 * pi);
@@ -145,7 +145,7 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
                                                          "EMCPMTCoupler",
                                                          Mother().LogicalVolume().get(),
                                                          true,
-                                                         copyNo,
+                                                         unitID,
                                                          checkOverlaps);
 
         const auto solidGlassBox = Make<G4Tubs>("temp", 0, pmtRadius, pmtLength / 2, 0, 2 * pi);
@@ -157,7 +157,7 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
                             "EMCPMTShell",
                             Mother().LogicalVolume().get(),
                             true,
-                            copyNo,
+                            unitID,
                             checkOverlaps);
 
         const auto solidCathode = Make<G4Tubs>("temp", 0, cathodeRadius, pmtCathodeThickness / 2, 0, 2 * pi);
@@ -168,7 +168,7 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
                             "EMCPMTCathode",
                             Mother().LogicalVolume().get(),
                             true,
-                            copyNo,
+                            unitID,
                             checkOverlaps);
 
         /////////////////////////////////////////////
@@ -179,7 +179,7 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
         if (emcCrystal) {
             const auto couplerSurface = new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric);
             new G4LogicalBorderSurface("couplerSurface",
-                                       emcCrystal->PhysicalVolume(copyNo).get(),
+                                       emcCrystal->PhysicalVolume(fmt::format("EMCCrystal_{}", unitID)).get(),
                                        physicalCoupler,
                                        couplerSurface);
             couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
@@ -189,7 +189,7 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
         new G4LogicalSkinSurface("cathodeSkinSurface", logicCathode, cathodeSurface);
         cathodeSurface->SetMaterialPropertiesTable(cathodeSurfacePropertiesTable);
 
-        ++copyNo;
+        ++unitID;
     }
 }
 

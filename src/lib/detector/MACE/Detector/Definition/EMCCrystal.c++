@@ -96,7 +96,7 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
     // Construct Volumes
     /////////////////////////////////////////////
 
-    for (G4int copyNo = 0;
+    for (int copyNo{};
          auto&& [centroid, _, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
         const auto centroidMagnitude = centroid.mag();
         const auto crystalLength = crystalHypotenuse * centroidMagnitude;
@@ -183,17 +183,33 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
 
         // Crystal
 
-        const auto solidCrystal = MakeTessellatedSolid(fmt::format("temp{}", copyNo));
-        const auto cutCrystalBox = Make<G4Box>("temp", 1_m, 1_m, crystalLength / 2);
-        const auto cutSoildCrystal = Make<G4IntersectionSolid>("EMCCrystal", solidCrystal, cutCrystalBox, crystalTransform);
-        const auto logicCrystal = Make<G4LogicalVolume>(cutSoildCrystal, csI, "EMCCrystal");
-        const auto physicalCrystal = Make<G4PVPlacement>(G4Transform3D{},
-                                                         logicCrystal,
-                                                         "EMCCrystal",
-                                                         Mother().LogicalVolume().get(),
-                                                         true,
-                                                         copyNo,
-                                                         checkOverlaps);
+        const auto solidCrystal{MakeTessellatedSolid(fmt::format("temp_{}", copyNo))};
+        const auto cutCrystalBox{
+            Make<G4Box>(
+                "temp",
+                1_m,
+                1_m,
+                crystalLength / 2)};
+        const auto cutSoildCrystal{
+            Make<G4IntersectionSolid>(
+                "EMCCrystal",
+                solidCrystal,
+                cutCrystalBox,
+                crystalTransform)};
+        const auto logicCrystal{
+            Make<G4LogicalVolume>(
+                cutSoildCrystal,
+                csI,
+                "EMCCrystal")};
+        const auto physicalCrystal{
+            Make<G4PVPlacement>(
+                G4Transform3D{},
+                logicCrystal,
+                fmt::format("EMCCrystal_{}", copyNo),
+                Mother().LogicalVolume().get(),
+                true,
+                copyNo,
+                checkOverlaps)};
 
         /////////////////////////////////////////////
         // Construct Optical Surface
