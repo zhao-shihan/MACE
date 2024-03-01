@@ -31,24 +31,26 @@ FixedString<AMaxSize>::FixedString(std::string_view str) noexcept :
 }
 
 template<std::size_t AMaxSize>
-FixedString<AMaxSize>::FixedString(auto&& str) noexcept
-    requires std::same_as<std::remove_cvref_t<decltype(str)>, gsl::zstring> or
-             std::same_as<std::remove_cvref_t<decltype(str)>, gsl::czstring> or
-             (std::convertible_to<decltype(str), gsl::czstring> and // clang-format off
-              not std::convertible_to<decltype(str), std::string_view>) : // clang-format on
+template<typename T>
+    requires std::same_as<std::decay_t<T>, gsl::zstring> or
+             std::same_as<std::decay_t<T>, gsl::czstring> or
+             (std::convertible_to<T &&, gsl::czstring> and
+              not std::convertible_to<T &&, std::string_view>)
+FixedString<AMaxSize>::FixedString(T&& str) noexcept :
     fData{} {
     std::strncpy(fData, str, AMaxSize);
     fData[AMaxSize] = '\0';
 }
 
 template<std::size_t AMaxSize>
-FixedString<AMaxSize>::FixedString(auto&& str) noexcept
-    requires std::convertible_to<decltype(str), std::string> and
-             (not std::convertible_to<decltype(str), std::string_view>) and // clang-format off
-             (not std::convertible_to<decltype(str), gsl::czstring>) : // clang-format on
+template<typename T>
+    requires std::convertible_to<T&&, std::string> and
+             (not std::convertible_to<T &&, std::string_view>) and
+             (not std::convertible_to<T &&, gsl::czstring>)
+FixedString<AMaxSize>::FixedString(T&& str) noexcept :
     fData{} {
-    const std::string string = std::forward<decltype(str)>(str);
-    const auto length = std::min(string.length(), AMaxSize);
+    const std::string string{std::forward<T>(str)};
+    const auto length{std::min(string.length(), AMaxSize)};
     std::memcpy(fData, string.c_str(), length);
     fData[length] = '\0';
 }
@@ -79,13 +81,13 @@ auto FixedString<AMaxSize>::operator=(std::string_view rhs) & noexcept -> FixedS
 }
 
 template<std::size_t AMaxSize>
-auto FixedString<AMaxSize>::operator=(auto&& rhs) & noexcept -> FixedString<AMaxSize>&
-    requires std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::zstring> or
-             std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::czstring> or
-             (std::convertible_to<decltype(rhs), gsl::czstring> and
-              not std::convertible_to<decltype(rhs), std::string_view>)
-{
-    const gsl::czstring cstr = std::forward<decltype(rhs)>(rhs);
+template<typename T>
+    requires std::same_as<std::decay_t<T>, gsl::zstring> or
+             std::same_as<std::decay_t<T>, gsl::czstring> or
+             (std::convertible_to<T &&, gsl::czstring> and
+              not std::convertible_to<T &&, std::string_view>)
+auto FixedString<AMaxSize>::operator=(T && rhs) & noexcept -> FixedString<AMaxSize>& {
+    const gsl::czstring cstr{std::forward<T>(rhs)};
     if (fData != cstr) {
         if (std::abs(ConstBegin() - cstr) > AMaxSize) {
             std::strncpy(fData, cstr, AMaxSize);
@@ -100,13 +102,13 @@ auto FixedString<AMaxSize>::operator=(auto&& rhs) & noexcept -> FixedString<AMax
 }
 
 template<std::size_t AMaxSize>
-auto FixedString<AMaxSize>::operator=(auto&& rhs) & noexcept -> FixedString<AMaxSize>&
-    requires std::convertible_to<decltype(rhs), std::string> and
-             (not std::convertible_to<decltype(rhs), std::string_view>) and
-             (not std::convertible_to<decltype(rhs), gsl::czstring>)
-{
-    const std::string string = std::forward<decltype(rhs)>(rhs);
-    const auto length = std::min(string.length(), AMaxSize);
+template<typename T>
+    requires std::convertible_to<T&&, std::string> and
+             (not std::convertible_to<T &&, std::string_view>) and
+             (not std::convertible_to<T &&, gsl::czstring>)
+auto FixedString<AMaxSize>::operator=(T && rhs) & noexcept -> FixedString<AMaxSize>& {
+    const std::string string{std::forward<T>(rhs)};
+    const auto length{std::min(string.length(), AMaxSize)};
     std::memcpy(fData, string.c_str(), length);
     fData[length] = '\0';
     return *this;
@@ -123,9 +125,9 @@ auto FixedString<AMaxSize>::operator=(auto&& rhs) & noexcept -> FixedString<AMax
 template<std::size_t AMaxSize>
 template<std::size_t N>
 auto FixedString<AMaxSize>::Append(const char (&str)[N]) noexcept -> FixedString<AMaxSize>& {
-    const auto length = Length();
-    const auto end = Begin() + length;
-    const auto count = std::min(N - 1, AMaxSize - length);
+    const auto length{Length()};
+    const auto end{Begin() + length};
+    const auto count{std::min(N - 1, AMaxSize - length)};
     std::memmove(end, str, count);
     end[count] = '\0';
     return *this;
@@ -133,23 +135,23 @@ auto FixedString<AMaxSize>::Append(const char (&str)[N]) noexcept -> FixedString
 
 template<std::size_t AMaxSize>
 auto FixedString<AMaxSize>::Append(std::string_view str) noexcept -> FixedString<AMaxSize>& {
-    const auto length = Length();
-    const auto end = Begin() + length;
-    const auto count = std::min(str.length(), AMaxSize - length);
+    const auto length{Length()};
+    const auto end{Begin() + length};
+    const auto count{std::min(str.length(), AMaxSize - length)};
     std::memmove(end, str.data(), count);
     end[count] = '\0';
     return *this;
 }
 
 template<std::size_t AMaxSize>
-auto FixedString<AMaxSize>::Append(auto&& str) noexcept -> FixedString<AMaxSize>&
-    requires std::same_as<std::remove_cvref_t<decltype(str)>, gsl::zstring> or
-             std::same_as<std::remove_cvref_t<decltype(str)>, gsl::czstring> or
-             (std::convertible_to<decltype(str), gsl::czstring> and
-              not std::convertible_to<decltype(str), std::string_view>)
-{
-    const gsl::czstring cstr = std::forward<decltype(str)>(str);
-    const auto length = Length();
+template<typename T>
+    requires std::same_as<std::decay_t<T>, gsl::zstring> or
+             std::same_as<std::decay_t<T>, gsl::czstring> or
+             (std::convertible_to<T &&, gsl::czstring> and
+              not std::convertible_to<T &&, std::string_view>)
+auto FixedString<AMaxSize>::Append(T&& str) noexcept -> FixedString<AMaxSize>& {
+    const gsl::czstring cstr{std::forward<T>(str)};
+    const auto length{Length()};
     if (std::abs(ConstBegin() - cstr) > AMaxSize) {
         std::strncat(Begin() + length, cstr, AMaxSize - length);
     } else {
@@ -161,15 +163,15 @@ auto FixedString<AMaxSize>::Append(auto&& str) noexcept -> FixedString<AMaxSize>
 }
 
 template<std::size_t AMaxSize>
-auto FixedString<AMaxSize>::Append(auto&& str) noexcept -> FixedString<AMaxSize>&
-    requires std::convertible_to<decltype(str), std::string> and
-             (not std::convertible_to<decltype(str), std::string_view>) and
-             (not std::convertible_to<decltype(str), gsl::czstring>)
-{
-    const std::string string = std::forward<decltype(str)>(str);
-    const auto length = Length();
-    const auto end = Begin() + length;
-    const auto count = std::min(string.length(), AMaxSize - length);
+template<typename T>
+    requires std::convertible_to<T&&, std::string> and
+             (not std::convertible_to<T &&, std::string_view>) and
+             (not std::convertible_to<T &&, gsl::czstring>)
+auto FixedString<AMaxSize>::Append(T&& str) noexcept -> FixedString<AMaxSize>& {
+    const std::string string{std::forward<T>(str)};
+    const auto length{Length()};
+    const auto end{Begin() + length};
+    const auto count{std::min(string.length(), AMaxSize - length)};
     std::memcpy(end, string.c_str(), count);
     end[count] = '\0';
     return *this;
@@ -185,14 +187,13 @@ auto FixedString<AMaxSize>::operator<=>(const char (&rhs)[N]) const noexcept -> 
 }
 
 template<std::size_t AMaxSize>
-auto FixedString<AMaxSize>::operator<=>(auto&& rhs) const noexcept -> std::strong_ordering
-    requires std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::zstring> or
-             std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::czstring> or
-             (std::convertible_to<decltype(rhs), gsl::czstring> and
-              not std::convertible_to<decltype(rhs), std::string_view>)
-{
-    const gsl::czstring cstr = std::forward<decltype(rhs)>(rhs);
-    const auto cmp = std::strncmp(fData, cstr, AMaxSize + 1);
+template<typename T>
+    requires std::same_as<std::decay_t<T>, gsl::zstring> or
+             std::same_as<std::decay_t<T>, gsl::czstring> or
+             (std::convertible_to<T &&, gsl::czstring> and
+              not std::convertible_to<T &&, std::string_view>)
+auto FixedString<AMaxSize>::operator<=>(T && rhs) const noexcept -> std::strong_ordering {
+    const auto cmp{std::strncmp(fData, std::forward<T>(rhs), AMaxSize + 1)};
     return cmp == 0 ? std::strong_ordering::equal :
            cmp < 0  ? std::strong_ordering::less :
                       std::strong_ordering::greater;

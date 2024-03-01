@@ -44,15 +44,17 @@ public:
     template<std::size_t N>
     FixedString(const FixedString<N>& str) noexcept;
     FixedString(std::string_view str) noexcept;
-    FixedString(auto&& str) noexcept
-        requires std::same_as<std::remove_cvref_t<decltype(str)>, gsl::zstring> or
-                 std::same_as<std::remove_cvref_t<decltype(str)>, gsl::czstring> or
-                 (std::convertible_to<decltype(str), gsl::czstring> and
-                  not std::convertible_to<decltype(str), std::string_view>);
-    FixedString(auto&& str) noexcept
-        requires std::convertible_to<decltype(str), std::string> and
-                 (not std::convertible_to<decltype(str), std::string_view>) and
-                 (not std::convertible_to<decltype(str), gsl::czstring>);
+    template<typename T>
+        requires std::same_as<std::decay_t<T>, gsl::zstring> or
+                 std::same_as<std::decay_t<T>, gsl::czstring> or
+                 (std::convertible_to<T &&, gsl::czstring> and
+                  not std::convertible_to<T &&, std::string_view>)
+    FixedString(T&& str) noexcept;
+    template<typename T>
+        requires std::convertible_to<T&&, std::string> and
+                 (not std::convertible_to<T &&, std::string_view>) and
+                 (not std::convertible_to<T &&, gsl::czstring>)
+    FixedString(T&& str) noexcept;
     FixedString(std::nullptr_t) noexcept = delete;
 
     operator std::string_view() const noexcept { return CString(); }
@@ -63,15 +65,17 @@ public:
     template<std::size_t N>
     auto operator=(const FixedString<N>& rhs) & noexcept -> FixedString& { return *this = rhs.Data(); }
     auto operator=(std::string_view rhs) & noexcept -> FixedString&;
-    auto operator=(auto&& rhs) & noexcept -> FixedString&
-        requires std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::zstring> or
-                 std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::czstring> or
-                 (std::convertible_to<decltype(rhs), gsl::czstring> and
-                  not std::convertible_to<decltype(rhs), std::string_view>);
-    auto operator=(auto&& rhs) & noexcept -> FixedString&
-        requires std::convertible_to<decltype(rhs), std::string> and
-                 (not std::convertible_to<decltype(rhs), std::string_view>) and
-                 (not std::convertible_to<decltype(rhs), gsl::czstring>);
+    template<typename T>
+        requires std::same_as<std::decay_t<T>, gsl::zstring> or
+                 std::same_as<std::decay_t<T>, gsl::czstring> or
+                 (std::convertible_to<T &&, gsl::czstring> and
+                  not std::convertible_to<T &&, std::string_view>)
+    auto operator=(T&& rhs) & noexcept -> FixedString&;
+    template<typename T>
+        requires std::convertible_to<T&&, std::string> and
+                 (not std::convertible_to<T &&, std::string_view>) and
+                 (not std::convertible_to<T &&, gsl::czstring>)
+    auto operator=(T&& rhs) & noexcept -> FixedString&;
     auto operator=(std::nullptr_t) noexcept -> FixedString& = delete;
 
     auto Length() const noexcept -> std::size_t { return std::strlen(fData); }
@@ -116,15 +120,17 @@ public:
     template<std::size_t N>
     auto Append(const FixedString<N>& str) noexcept -> FixedString& { return Append(str.Data()); }
     auto Append(std::string_view str) noexcept -> FixedString&;
-    auto Append(auto&& str) noexcept -> FixedString&
-        requires std::same_as<std::remove_cvref_t<decltype(str)>, gsl::zstring> or
-                 std::same_as<std::remove_cvref_t<decltype(str)>, gsl::czstring> or
-                 (std::convertible_to<decltype(str), gsl::czstring> and
-                  not std::convertible_to<decltype(str), std::string_view>);
-    auto Append(auto&& str) noexcept -> FixedString&
-        requires std::convertible_to<decltype(str), std::string> and
-                 (not std::convertible_to<decltype(str), std::string_view>) and
-                 (not std::convertible_to<decltype(str), gsl::czstring>);
+    template<typename T>
+        requires std::same_as<std::decay_t<T>, gsl::zstring> or
+                 std::same_as<std::decay_t<T>, gsl::czstring> or
+                 (std::convertible_to<T &&, gsl::czstring> and
+                  not std::convertible_to<T &&, std::string_view>)
+    auto Append(T&& str) noexcept -> FixedString&;
+    template<typename T>
+        requires std::convertible_to<T&&, std::string> and
+                 (not std::convertible_to<T &&, std::string_view>) and
+                 (not std::convertible_to<T &&, gsl::czstring>)
+    auto Append(T&& str) noexcept -> FixedString&;
     auto Append(std::nullptr_t) noexcept -> FixedString& = delete;
     auto append(auto&& str) noexcept -> FixedString&
         requires requires(FixedString self) { self.Append(std::forward<decltype(str)>(str)); }
@@ -138,35 +144,36 @@ public:
     auto operator==(const char (&rhs)[N]) const noexcept -> bool { return std::strncmp(fData, rhs, std::min(N, AMaxSize + 1)) == 0; }
     template<std::size_t N>
     auto operator==(const FixedString<N>& rhs) const noexcept -> bool { return *this == rhs.Data(); }
-    auto operator==(std::string_view rhs) const noexcept -> bool { return std::string_view(*this) == rhs; }
-    auto operator==(auto&& rhs) const noexcept -> bool
-        requires std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::zstring> or
-                 std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::czstring> or
-                 (std::convertible_to<decltype(rhs), gsl::czstring> and
-                  not std::convertible_to<decltype(rhs), std::string_view>)
-    { return std::strncmp(fData, std::forward<decltype(rhs)>(rhs), AMaxSize + 1) == 0; }
-    auto operator==(auto&& rhs) const noexcept -> bool
-        requires std::convertible_to<decltype(rhs), std::string> and
-                 (not std::convertible_to<decltype(rhs), std::string_view>) and
-                 (not std::convertible_to<decltype(rhs), gsl::czstring>)
-    { return *this == std::string(std::forward<decltype(rhs)>(rhs)).c_str(); }
+    auto operator==(std::string_view rhs) const noexcept -> bool { return std::string_view{*this} == rhs; }
+    template<typename T>
+        requires std::same_as<std::decay_t<T>, gsl::zstring> or
+                 std::same_as<std::decay_t<T>, gsl::czstring> or
+                 (std::convertible_to<T &&, gsl::czstring> and
+                  not std::convertible_to<T &&, std::string_view>)
+    auto operator==(T&& rhs) const noexcept -> bool { return std::strncmp(fData, std::forward<T>(rhs), AMaxSize + 1) == 0; }
+    template<typename T>
+        requires std::convertible_to<T&&, std::string> and
+                 (not std::convertible_to<T &&, std::string_view>) and
+                 (not std::convertible_to<T &&, gsl::czstring>)
+    auto operator==(T&& rhs) const noexcept -> bool { return std::string_view{*this} == std::string{std::forward<T>(rhs)}; }
     auto operator==(std::nullptr_t) const noexcept -> bool = delete;
 
     template<std::size_t N>
     auto operator<=>(const char (&rhs)[N]) const noexcept -> std::strong_ordering;
     template<std::size_t N>
     auto operator<=>(const FixedString<N>& rhs) const noexcept -> std::strong_ordering { return *this <=> rhs.Data(); }
-    auto operator<=>(std::string_view rhs) const noexcept -> std::strong_ordering { return std::string_view(*this) <=> rhs; }
-    auto operator<=>(auto&& rhs) const noexcept -> std::strong_ordering
-        requires std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::zstring> or
-                 std::same_as<std::remove_cvref_t<decltype(rhs)>, gsl::czstring> or
-                 (std::convertible_to<decltype(rhs), gsl::czstring> and
-                  not std::convertible_to<decltype(rhs), std::string_view>);
-    auto operator<=>(auto&& rhs) const noexcept -> std::strong_ordering
-        requires std::convertible_to<decltype(rhs), std::string> and
-                 (not std::convertible_to<decltype(rhs), std::string_view>) and
-                 (not std::convertible_to<decltype(rhs), gsl::czstring>)
-    { return *this <=> std::string(std::forward<decltype(rhs)>(rhs)).c_str(); }
+    auto operator<=>(std::string_view rhs) const noexcept -> std::strong_ordering { return std::string_view{*this} <=> rhs; }
+    template<typename T>
+        requires std::same_as<std::decay_t<T>, gsl::zstring> or
+                 std::same_as<std::decay_t<T>, gsl::czstring> or
+                 (std::convertible_to<T &&, gsl::czstring> and
+                  not std::convertible_to<T &&, std::string_view>)
+    auto operator<=>(T&& rhs) const noexcept -> std::strong_ordering;
+    template<typename T>
+        requires std::convertible_to<T&&, std::string> and
+                 (not std::convertible_to<T &&, std::string_view>) and
+                 (not std::convertible_to<T &&, gsl::czstring>)
+    auto operator<=>(T&& rhs) const noexcept -> std::strong_ordering { return std::string_view{*this} <=> std::string{std::forward<T>(rhs)}; }
     auto operator<=>(std::nullptr_t) const noexcept -> std::strong_ordering = delete;
 
     static constexpr auto Capacity() noexcept -> std::size_t { return AMaxSize; }
