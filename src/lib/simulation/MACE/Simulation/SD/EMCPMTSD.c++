@@ -12,7 +12,7 @@
 
 #include <cassert>
 
-namespace MACE::Simulation::inline SD {
+namespace MACE::inline Simulation::inline SD {
 
 EMCPMTSD::EMCPMTSD(const G4String& sdName) :
     NonMoveableBase{},
