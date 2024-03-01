@@ -31,18 +31,18 @@ public:
     explicit Output(const std::string& name, const std::string& title = {});
 
     template<typename T = Tuple<Ts...>>
-        requires std::assignable_from<Tuple<Ts...>&, T>
+        requires std::assignable_from<Tuple<Ts...>&, T&&>
     auto Fill(T&& tuple) -> std::size_t;
     template<typename T = Tuple<Ts...>>
-        requires std::assignable_from<Tuple<Ts...>&, T>
-    auto operator<<(T&& tuple) -> const auto& { return (Fill(std::forward<T>(tuple)), *this); }
+        requires std::assignable_from<Tuple<Ts...>&, T&&>
+    auto operator<<(T&& tuple) -> const auto& { return Fill(std::forward<T>(tuple)), *this; }
 
     template<std::ranges::input_range R = std::initializer_list<Tuple<Ts...>>>
         requires std::assignable_from<Tuple<Ts...>&, std::ranges::range_reference_t<R>>
     auto Fill(R&& data) -> std::size_t;
     template<std::ranges::input_range R = std::initializer_list<Tuple<Ts...>>>
         requires std::assignable_from<Tuple<Ts...>&, std::ranges::range_reference_t<R>>
-    auto operator<<(R&& data) -> const auto& { return (Fill(std::forward<R>(data)), *this); }
+    auto operator<<(R&& data) -> const auto& { return Fill(std::forward<R>(data)), *this; }
 
     template<std::ranges::input_range R>
         requires std::indirectly_readable<std::ranges::range_value_t<R>> and
@@ -51,7 +51,7 @@ public:
     template<std::ranges::input_range R>
         requires std::indirectly_readable<std::ranges::range_value_t<R>> and
                  std::assignable_from<Tuple<Ts...>&, std::iter_reference_t<std::ranges::range_value_t<R>>>
-    auto operator<<(const R& data) -> const auto& { return (Fill(data), *this); }
+    auto operator<<(const R& data) -> const auto& { return Fill(data), *this; }
 
     auto Entry() -> auto { return OutputIterator{this}; }
 
@@ -70,7 +70,7 @@ private:
         explicit OutputIterator(Output* output);
 
         template<typename T = Tuple<Ts...>>
-        auto operator=(T&& data) const -> auto& { return (*fOutput << std::forward<T>(data), *this); }
+        auto operator=(T&& data) const -> auto& { return *fOutput << std::forward<T>(data), *this; }
 
         auto operator*() const -> auto& { return *this; }
         auto operator++() const -> auto& { return *this; }

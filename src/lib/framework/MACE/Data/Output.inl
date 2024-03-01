@@ -22,7 +22,7 @@ Output<Ts...>::Output(const std::string& name, const std::string& title) :
 
 template<TupleModelizable... Ts>
 template<typename T>
-    requires std::assignable_from<Tuple<Ts...>&, T>
+    requires std::assignable_from<Tuple<Ts...>&, T&&>
 auto Output<Ts...>::Fill(T&& tuple) -> std::size_t {
     fEntry = std::forward<T>(tuple);
     return fTree.Fill();
@@ -53,6 +53,6 @@ auto Output<Ts...>::Fill(const R& data) -> std::size_t {
 
 template<TupleModelizable... Ts>
 Output<Ts...>::OutputIterator::OutputIterator(Output* output) :
-    fOutput(output) {}
+    fOutput{output} {}
 
 } // namespace MACE::Data
