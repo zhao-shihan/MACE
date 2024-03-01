@@ -15,7 +15,7 @@ namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
-template<std::floating_point T, template<typename> class AExponential>
+template<std::floating_point T, template<typename> typename AExponential>
 class BasicExponentialParameter final : public DistributionParameterBase<BasicExponentialParameter<T, AExponential>,
                                                                          AExponential<T>> {
 private:
@@ -26,20 +26,26 @@ public:
     constexpr BasicExponentialParameter();
     constexpr BasicExponentialParameter(T expectation);
 
-    constexpr auto Expectation() const { return fExpectation; }
+    constexpr auto Expectation() const -> auto { return fExpectation; }
 
-    constexpr void Expectation(T expectation) { fExpectation = expectation; }
+    constexpr auto Expectation(T expectation) -> void { fExpectation = expectation; }
 
-    template<Concept::Character AChar, std::floating_point U, template<typename> class V>
-    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicExponentialParameter<U, V>& self) -> decltype(os);
-    template<Concept::Character AChar, std::floating_point U, template<typename> class V>
-    friend auto operator>>(std::basic_istream<AChar>& is, BasicExponentialParameter<U, V>& self) -> decltype(is);
+    template<Concept::Character AChar>
+    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicExponentialParameter& self) -> decltype(os) { return self.StreamOutput(os); }
+    template<Concept::Character AChar>
+    friend auto operator>>(std::basic_istream<AChar>& is, BasicExponentialParameter& self) -> decltype(is) { return self.StreamInput(is); }
+
+private:
+    template<Concept::Character AChar>
+    auto StreamOutput(std::basic_ostream<AChar>& os) const -> decltype(os);
+    template<Concept::Character AChar>
+    auto StreamInput(std::basic_istream<AChar>& is) & -> decltype(is);
 
 private:
     T fExpectation;
 };
 
-template<template<typename> class ADerived, std::floating_point T>
+template<template<typename> typename ADerived, std::floating_point T>
 class ExponentialBase : public RandomNumberDistributionBase<ADerived<T>,
                                                             BasicExponentialParameter<T, ADerived>,
                                                             T> {
@@ -57,23 +63,23 @@ protected:
     constexpr ~ExponentialBase() = default;
 
 public:
-    constexpr void Reset() {}
+    constexpr auto Reset() -> void {}
 
-    constexpr auto Parameter() const { return fParameter; }
-    constexpr auto Expectation() const { return fParameter.Expectation(); }
+    constexpr auto Parameter() const -> auto { return fParameter; }
+    constexpr auto Expectation() const -> auto { return fParameter.Expectation(); }
 
-    constexpr void Parameter(const typename Base::ParameterType& p) { fParameter = p; }
-    constexpr void Expectation(T expectation) { fParameter.Expectation(expectation); }
+    constexpr auto Parameter(const typename Base::ParameterType& p) -> void { fParameter = p; }
+    constexpr auto Expectation(T expectation) -> void { fParameter.Expectation(expectation); }
 
-    constexpr auto Min() const { return std::numeric_limits<T>::min(); }
-    constexpr auto Max() const { return std::numeric_limits<T>::max(); }
+    constexpr auto Min() const -> auto { return std::numeric_limits<T>::min(); }
+    constexpr auto Max() const -> auto { return std::numeric_limits<T>::max(); }
 
-    static constexpr auto Stateless() { return true; }
+    static constexpr auto Stateless() -> bool { return true; }
 
     template<Concept::Character AChar>
-    friend auto& operator<<(std::basic_ostream<AChar>& os, const ExponentialBase& self) { return os << self.fParameter; }
+    friend auto operator<<(std::basic_ostream<AChar>& os, const ExponentialBase& self) -> auto& { return os << self.fParameter; }
     template<Concept::Character AChar>
-    friend auto& operator>>(std::basic_istream<AChar>& is, ExponentialBase& self) { return is >> self.fParameter; }
+    friend auto operator>>(std::basic_istream<AChar>& is, ExponentialBase& self) -> auto& { return is >> self.fParameter; }
 
 protected:
     typename Base::ParameterType fParameter;
@@ -94,8 +100,8 @@ class Exponential final : public internal::ExponentialBase<Exponential, T> {
 public:
     using internal::ExponentialBase<Exponential, T>::ExponentialBase;
 
-    MACE_STRONG_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    MACE_STRONG_INLINE constexpr T operator()(UniformRandomBitGenerator auto& g, const ExponentialParameter<T>& p);
+    MACE_STRONG_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) -> auto { return (*this)(g, this->fParameter); }
+    MACE_STRONG_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g, const ExponentialParameter<T>& p) -> T;
 };
 
 template<typename T>
@@ -120,8 +126,8 @@ class ExponentialFast final : public internal::ExponentialBase<ExponentialFast, 
 public:
     using internal::ExponentialBase<ExponentialFast, T>::ExponentialBase;
 
-    MACE_ALWAYS_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    MACE_ALWAYS_INLINE constexpr T operator()(UniformRandomBitGenerator auto& g, const ExponentialFastParameter<T>& p);
+    MACE_ALWAYS_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) -> auto { return (*this)(g, this->fParameter); }
+    MACE_ALWAYS_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g, const ExponentialFastParameter<T>& p) -> T;
 };
 
 template<typename T>

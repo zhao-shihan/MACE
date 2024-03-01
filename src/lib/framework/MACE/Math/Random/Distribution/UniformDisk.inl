@@ -4,54 +4,62 @@ namespace internal {
 
 template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
 constexpr BasicUniformDiskParameter<T, AUniformDisk>::BasicUniformDiskParameter() :
-    BasicUniformDiskParameter(1) {}
+    BasicUniformDiskParameter{1} {}
 
 template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
 constexpr BasicUniformDiskParameter<T, AUniformDisk>::BasicUniformDiskParameter(VT r, VT x0, VT y0) :
-    Base(),
-    fRadius(r),
-    fCenterX(x0),
-    fCenterY(y0) {}
+    Base{},
+    fRadius{r},
+    fCenterX{x0},
+    fCenterY{y0} {}
 
 template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
-constexpr BasicUniformDiskParameter<T, AUniformDisk>::BasicUniformDiskParameter(VT radius, const T& center) :
-    Base(),
-    fRadius(radius),
-    fCenterX(center[0]),
-    fCenterY(center[1]) {}
+constexpr BasicUniformDiskParameter<T, AUniformDisk>::BasicUniformDiskParameter(VT radius, T center) :
+    Base{},
+    fRadius{radius},
+    fCenterX{center[0]},
+    fCenterY{center[1]} {}
 
 template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
 constexpr BasicUniformDiskParameter<T, AUniformDisk>::BasicUniformDiskParameter(VT radius) :
-    Base(),
-    fRadius(radius),
-    fCenterX(0),
-    fCenterY(0) {}
+    Base{},
+    fRadius{radius},
+    fCenterX{0},
+    fCenterY{0} {}
 
-template<std::floating_point T, template<typename> class AUniformDisk, Concept::Character AChar>
-auto operator<<(std::basic_ostream<AChar>& os, const BasicUniformDiskParameter<T, AUniformDisk>& self) -> decltype(os) {
-    const auto oldPrecision = os.precision(std::numeric_limits<T>::max_digits10);
-    return os << self.fRadius << ' ' << self.fCenter[0] << ' ' << self.fCenter[1] << std::setprecision(oldPrecision);
+template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
+template<Concept::Character AChar>
+auto BasicUniformDiskParameter<T, AUniformDisk>::StreamOutput(std::basic_ostream<AChar>& os) const -> decltype(os) {
+    const auto oldPrecision{os.precision(std::numeric_limits<VectorValueType<T>>::max_digits10)};
+    return os << fRadius << ' ' << fCenter[0] << ' ' << fCenter[1]
+              << std::setprecision(oldPrecision);
+}
+
+template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
+template<Concept::Character AChar>
+auto BasicUniformDiskParameter<T, AUniformDisk>::StreamInput(std::basic_istream<AChar>& is) & -> decltype(is) {
+    return is >> fRadius >> fCenter[0] >> fCenter[1];
 }
 
 template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
 constexpr UniformDiskBase<T, AUniformDisk>::UniformDiskBase(VT r, VT x0, VT y0) :
-    Base(),
-    fParameter(r, x0, y0) {}
+    Base{},
+    fParameter{r, x0, y0} {}
 
 template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
-constexpr UniformDiskBase<T, AUniformDisk>::UniformDiskBase(VT radius, const T& center) :
-    Base(),
-    fParameter(radius, center) {}
+constexpr UniformDiskBase<T, AUniformDisk>::UniformDiskBase(VT radius, T center) :
+    Base{},
+    fParameter{radius, center} {}
 
 template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
 constexpr UniformDiskBase<T, AUniformDisk>::UniformDiskBase(VT radius) :
-    Base(),
-    fParameter(radius) {}
+    Base{},
+    fParameter{radius} {}
 
 template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
 constexpr UniformDiskBase<T, AUniformDisk>::UniformDiskBase(const typename Base::ParameterType& p) :
-    Base(),
-    fParameter(p) {}
+    Base{},
+    fParameter{p} {}
 
 } // namespace internal
 
@@ -72,12 +80,12 @@ constexpr UniformDiskBase<T, AUniformDisk>::UniformDiskBase(const typename Base:
     return r;
 
 template<Concept::NumericVector2Any T>
-MACE_STRONG_INLINE constexpr T UniformCompactDisk<T>::operator()(UniformRandomBitGenerator auto& g, const UniformCompactDiskParameter<T>& p) {
+MACE_STRONG_INLINE constexpr auto UniformCompactDisk<T>::operator()(UniformRandomBitGenerator auto& g, const UniformCompactDiskParameter<T>& p) -> T {
     MACE_MATH_RANDOM_DISTRIBUTION_UNIFORM_DISK_GENERATOR(r2 > 0.25)
 }
 
 template<Concept::NumericVector2Any T>
-MACE_STRONG_INLINE constexpr T UniformDisk<T>::operator()(UniformRandomBitGenerator auto& g, const UniformDiskParameter<T>& p) {
+MACE_STRONG_INLINE constexpr auto UniformDisk<T>::operator()(UniformRandomBitGenerator auto& g, const UniformDiskParameter<T>& p) -> T {
     MACE_MATH_RANDOM_DISTRIBUTION_UNIFORM_DISK_GENERATOR(r2 >= 0.25)
 }
 

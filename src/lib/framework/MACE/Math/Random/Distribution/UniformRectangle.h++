@@ -16,7 +16,7 @@ namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
-template<Concept::NumericVector2Any T, template<typename> typename AUniformRectangle, template<typename> class AUniform>
+template<Concept::NumericVector2Any T, template<typename> typename AUniformRectangle, template<typename> typename AUniform>
 class BasicUniformRectangleParameter final : public JointParameterInterface<BasicUniformRectangleParameter<T, AUniformRectangle, AUniform>,
                                                                             AUniformRectangle<T>,
                                                                             AUniform<VectorValueType<T>>,
@@ -31,22 +31,22 @@ private:
 public:
     using Base::Base;
 
-    constexpr const auto& ParameterX() const { return this->template Parameter<0>(); }
-    constexpr const auto& InfimumX() const { return ParameterX().Infimum(); }
-    constexpr const auto& SupremumX() const { return ParameterX().Supremum(); }
-    constexpr const auto& ParameterY() const { return this->template Parameter<1>(); }
-    constexpr const auto& InfimumY() const { return ParameterY().Infimum(); }
-    constexpr const auto& SupremumY() const { return ParameterY().Supremum(); }
+    constexpr auto ParameterX() const -> auto { return this->template Parameter<0>(); }
+    constexpr auto InfimumX() const -> auto { return ParameterX().Infimum(); }
+    constexpr auto SupremumX() const -> auto { return ParameterX().Supremum(); }
+    constexpr auto ParameterY() const -> auto { return this->template Parameter<1>(); }
+    constexpr auto InfimumY() const -> auto { return ParameterY().Infimum(); }
+    constexpr auto SupremumY() const -> auto { return ParameterY().Supremum(); }
 
-    constexpr void ParameterX(const typename AUniform<VT>::ParameterType& x) { Parameter<0>(x); }
-    constexpr void InfimumX(VT infX) { ParameterX({infX, SupremumX()}); }
-    constexpr void SupremumX(VT supX) { ParameterX({InfimumX(), supX}); }
-    constexpr void ParameterY(const typename AUniform<VT>::ParameterType& y) { Parameter<1>(y); }
-    constexpr void InfimumY(VT infY) { ParameterY({infY, SupremumY()}); }
-    constexpr void SupremumY(VT supY) { ParameterY({InfimumY(), supY}); }
+    constexpr auto ParameterX(const typename AUniform<VT>::ParameterType x) -> void { Parameter<0>(x); }
+    constexpr auto InfimumX(VT infX) -> void { ParameterX({infX, SupremumX()}); }
+    constexpr auto SupremumX(VT supX) -> void { ParameterX({InfimumX(), supX}); }
+    constexpr auto ParameterY(const typename AUniform<VT>::ParameterType y) -> void { Parameter<1>(y); }
+    constexpr auto InfimumY(VT infY) -> void { ParameterY({infY, SupremumY()}); }
+    constexpr auto SupremumY(VT supY) -> void { ParameterY({InfimumY(), supY}); }
 };
 
-template<template<typename> typename ADerived, Concept::NumericVector2Any T, template<typename> class AUniform>
+template<template<typename> typename ADerived, Concept::NumericVector2Any T, template<typename> typename AUniform>
 class UniformRectangleBase : public JointInterface<ADerived<T>,
                                                    BasicUniformRectangleParameter<T, ADerived, AUniform>,
                                                    T,
@@ -67,19 +67,19 @@ protected:
     constexpr ~UniformRectangleBase() = default;
 
 public:
-    constexpr const auto& ParameterX() const { return Base::template Parameter<0>(); }
-    constexpr const auto& InfimumX() const { return ParameterX().Infimum(); }
-    constexpr const auto& SupremumX() const { return ParameterX().Supremum(); }
-    constexpr const auto& ParameterY() const { return Base::template Parameter<1>(); }
-    constexpr const auto& InfimumY() const { return ParameterY().Infimum(); }
-    constexpr const auto& SupremumY() const { return ParameterY().Supremum(); }
+    constexpr auto ParameterX() const -> auto { return Base::template Parameter<0>(); }
+    constexpr auto InfimumX() const -> auto { return ParameterX().Infimum(); }
+    constexpr auto SupremumX() const -> auto { return ParameterX().Supremum(); }
+    constexpr auto ParameterY() const -> auto { return Base::template Parameter<1>(); }
+    constexpr auto InfimumY() const -> auto { return ParameterY().Infimum(); }
+    constexpr auto SupremumY() const -> auto { return ParameterY().Supremum(); }
 
-    constexpr void ParameterX(const typename AUniform<VT>::ParameterType& x) { Base::template Parameter<0>(x); }
-    constexpr void InfimumX(VT infX) { ParameterX({infX, SupremumX()}); }
-    constexpr void SupremumX(VT supX) { ParameterX({InfimumX(), supX}); }
-    constexpr void ParameterY(const typename AUniform<VT>::ParameterType& y) { Base::template Parameter<1>(y); }
-    constexpr void InfimumY(VT infY) { ParameterY({infY, SupremumY()}); }
-    constexpr void SupremumY(VT supY) { ParameterY({InfimumY(), supY}); }
+    constexpr auto ParameterX(const typename AUniform<VT>::ParameterType& x) -> void { Base::template Parameter<0>(x); }
+    constexpr auto InfimumX(VT infX) -> void { ParameterX({infX, SupremumX()}); }
+    constexpr auto SupremumX(VT supX) -> void { ParameterX({InfimumX(), supX}); }
+    constexpr auto ParameterY(const typename AUniform<VT>::ParameterType& y) -> void { Base::template Parameter<1>(y); }
+    constexpr auto InfimumY(VT infY) -> void { ParameterY({infY, SupremumY()}); }
+    constexpr auto SupremumY(VT supY) -> void { ParameterY({InfimumY(), supY}); }
 };
 
 } // namespace internal

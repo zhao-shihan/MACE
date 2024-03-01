@@ -1,8 +1,8 @@
 #pragma once
 
 #include "MACE/Math/QinAlgorithm.h++"
-#include "MACE/Utility/InlineMacro.h++"
 #include "MACE/Utility/BitWidthOf.h++"
+#include "MACE/Utility/InlineMacro.h++"
 
 #include <bit>
 #include <cassert>
@@ -18,7 +18,7 @@
 namespace MACE::Math::Random::inline Distribution::internal {
 
 template<std::floating_point T>
-MACE_ALWAYS_INLINE constexpr auto FastLogForOpen01(T x) {
+MACE_ALWAYS_INLINE constexpr auto FastLogForOpen01(T x) -> auto {
     assert(0 < x and x < 1);
     std23::assume(0 < x and x < 1);
     if constexpr (std::numeric_limits<T>::is_iec559) {

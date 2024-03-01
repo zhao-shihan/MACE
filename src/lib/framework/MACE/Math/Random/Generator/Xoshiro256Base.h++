@@ -22,10 +22,16 @@ protected:
 public:
     MACE_ALWAYS_INLINE constexpr auto Step() -> void;
 
-    template<Concept::Character AChar, typename T>
-    friend auto operator<<(std::basic_ostream<AChar>& os, const Xoshiro256Base<T>& self) -> decltype(os);
-    template<Concept::Character AChar, typename T>
-    friend auto operator>>(std::basic_istream<AChar>& is, Xoshiro256Base<T>& self) -> decltype(is);
+    template<Concept::Character AChar>
+    friend auto operator<<(std::basic_ostream<AChar>& os, const Xoshiro256Base& self) -> decltype(os) { return self.StreamOutput(os); }
+    template<Concept::Character AChar>
+    friend auto operator>>(std::basic_istream<AChar>& is, Xoshiro256Base& self) -> decltype(is) { return self.StreamInput(is); }
+
+private:
+    template<Concept::Character AChar>
+    auto StreamOutput(std::basic_ostream<AChar>& os) const -> decltype(os);
+    template<Concept::Character AChar>
+    auto StreamInput(std::basic_istream<AChar>& is) & -> decltype(is);
 };
 
 } // namespace MACE::Math::Random::inline Generator

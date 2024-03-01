@@ -35,28 +35,30 @@ MACE_ALWAYS_INLINE constexpr auto Xoshiro512Base<ADerived>::Step() -> void {
     this->fState[7] = std::rotl(this->fState[7], 21);
 }
 
-template<Concept::Character AChar, typename T>
-auto operator<<(std::basic_ostream<AChar>& os, const Xoshiro512Base<T>& self) -> decltype(os) {
-    return os << self.fState[0] << ' '
-              << self.fState[1] << ' '
-              << self.fState[2] << ' '
-              << self.fState[3] << ' '
-              << self.fState[4] << ' '
-              << self.fState[5] << ' '
-              << self.fState[6] << ' '
-              << self.fState[7];
+template<typename ADerived>
+template<Concept::Character AChar>
+auto Xoshiro512Base<ADerived>::StreamOutput(std::basic_ostream<AChar>& os) const -> decltype(os) {
+    return os << this->fState[0] << ' '
+              << this->fState[1] << ' '
+              << this->fState[2] << ' '
+              << this->fState[3] << ' '
+              << this->fState[4] << ' '
+              << this->fState[5] << ' '
+              << this->fState[6] << ' '
+              << this->fState[7];
 }
 
-template<Concept::Character AChar, typename T>
-auto operator>>(std::basic_istream<AChar>& is, Xoshiro512Base<T>& self) -> decltype(is) {
-    return is >> self.fState[0] // clang-format off
-              >> self.fState[1]
-              >> self.fState[2]
-              >> self.fState[3]
-              >> self.fState[4]
-              >> self.fState[5]
-              >> self.fState[6]
-              >> self.fState[7]; // clang-format on
+template<typename ADerived>
+template<Concept::Character AChar>
+auto Xoshiro512Base<ADerived>::StreamInput(std::basic_istream<AChar>& is) & -> decltype(is) {
+    return is >> this->fState[0] // clang-format off
+              >> this->fState[1]
+              >> this->fState[2]
+              >> this->fState[3]
+              >> this->fState[4]
+              >> this->fState[5]
+              >> this->fState[6]
+              >> this->fState[7]; // clang-format on
 }
 
 } // namespace MACE::Math::Random::inline Generator

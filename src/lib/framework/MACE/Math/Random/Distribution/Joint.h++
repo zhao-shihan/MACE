@@ -38,9 +38,9 @@ struct CartesianProductMargin : internal::CartesianProductMarginBase<gslx::index
     CartesianProductMargin(const Ts&... objects);
 
     template<gsl::index I>
-    constexpr const auto& Margin() const { return static_cast<const internal::Margin<I, std::tuple_element_t<I, std::tuple<Ts...>>>*>(this)->value; }
+    constexpr auto Margin() const -> const auto& { return static_cast<const internal::Margin<I, std::tuple_element_t<I, std::tuple<Ts...>>>*>(this)->value; }
     template<gsl::index I>
-    constexpr auto& Margin() { return static_cast<internal::Margin<I, std::tuple_element_t<I, std::tuple<Ts...>>>*>(this)->value; }
+    constexpr auto Margin() -> auto& { return static_cast<internal::Margin<I, std::tuple_element_t<I, std::tuple<Ts...>>>*>(this)->value; }
 };
 
 } // namespace internal
@@ -58,15 +58,21 @@ protected:
 
 public:
     template<gsl::index I>
-    constexpr const auto& Parameter() const { return this->template Margin<I>(); }
+    constexpr auto Parameter() const -> const auto& { return this->template Margin<I>(); }
 
     template<gsl::index I>
-    constexpr void Parameter(const std::tuple_element_t<I, std::tuple<typename Ds::ParameterType...>>& p) { this->template Margin<I>() = p; }
+    constexpr auto Parameter(const std::tuple_element_t<I, std::tuple<typename Ds::ParameterType...>>& p) -> void { this->template Margin<I>() = p; }
 
-    template<Concept::Character AChar, typename U, typename V, typename... Ws>
-    friend auto operator<<(std::basic_ostream<AChar>& os, const JointParameterInterface<U, V, Ws...>& self) -> decltype(os);
-    template<Concept::Character AChar, typename U, typename V, typename... Ws>
-    friend auto operator>>(std::basic_istream<AChar>& is, JointParameterInterface<U, V, Ws...>& self) -> decltype(is);
+    template<Concept::Character AChar>
+    friend auto operator<<(std::basic_ostream<AChar>& os, const JointParameterInterface& self) -> decltype(os) { return self.StreamOutput(os); }
+    template<Concept::Character AChar>
+    friend auto operator>>(std::basic_istream<AChar>& is, JointParameterInterface& self) -> decltype(is) { return self.StreamInput(is); }
+
+private:
+    template<Concept::Character AChar>
+    auto StreamOutput(std::basic_ostream<AChar>& os) const -> decltype(os);
+    template<Concept::Character AChar>
+    auto StreamInput(std::basic_istream<AChar>& is) & -> decltype(is);
 };
 
 template<typename ADerived, typename AParameter, typename T, typename... Ds>
@@ -82,28 +88,34 @@ protected:
     constexpr ~JointInterface() = default;
 
 public:
-    MACE_STRONG_INLINE constexpr T operator()(UniformRandomBitGenerator auto& g);
-    MACE_STRONG_INLINE constexpr T operator()(UniformRandomBitGenerator auto& g, const AParameter& p);
+    MACE_STRONG_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) -> T;
+    MACE_STRONG_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g, const AParameter& p) -> T;
 
-    constexpr void Reset();
+    constexpr auto Reset() -> void;
 
-    constexpr AParameter Parameter() const;
+    constexpr auto Parameter() const -> AParameter;
     template<gsl::index I>
-    constexpr auto Parameter() const { return this->template Margin<I>().Parameter(); }
+    constexpr auto Parameter() const -> auto { return this->template Margin<I>().Parameter(); }
 
-    constexpr void Parameter(const AParameter& p);
+    constexpr auto Parameter(const AParameter& p) -> void;
     template<gsl::index I>
-    constexpr void Parameter(const typename std::tuple_element_t<I, std::tuple<Ds...>>::ParameterType& p) { this->template Margin<I>().Parameter(p); }
+    constexpr auto Parameter(const typename std::tuple_element_t<I, std::tuple<Ds...>>::ParameterType& p) -> void { this->template Margin<I>().Parameter(p); }
 
-    constexpr T Min() const;
-    constexpr T Max() const;
+    constexpr auto Min() const -> T;
+    constexpr auto Max() const -> T;
 
-    static constexpr bool Stateless() { return (... and Ds::Stateless()); }
+    static constexpr auto Stateless() -> bool { return (... and Ds::Stateless()); }
 
     template<Concept::Character AChar>
-    friend auto operator<<(std::basic_ostream<AChar>& os, const JointInterface& self) -> decltype(os);
+    friend auto operator<<(std::basic_ostream<AChar>& os, const JointInterface& self) -> decltype(os) { return self.StreamOutput(os); }
     template<Concept::Character AChar>
-    friend auto operator>>(std::basic_istream<AChar>& is, JointInterface& self) -> decltype(is);
+    friend auto operator>>(std::basic_istream<AChar>& is, JointInterface& self) -> decltype(is) { return self.StreamInput(is); }
+
+private:
+    template<Concept::Character AChar>
+    auto StreamOutput(std::basic_ostream<AChar>& os) const -> decltype(os);
+    template<Concept::Character AChar>
+    auto StreamInput(std::basic_istream<AChar>& is) & -> decltype(is);
 };
 
 template<typename T, typename... Ds>

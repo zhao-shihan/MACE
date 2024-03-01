@@ -31,24 +31,30 @@ private:
 public:
     constexpr BasicUniformDiskParameter();
     constexpr BasicUniformDiskParameter(VT r, VT x0, VT y0);
-    constexpr BasicUniformDiskParameter(VT radius, const T& center);
+    constexpr BasicUniformDiskParameter(VT radius, T center);
     constexpr explicit BasicUniformDiskParameter(VT radius);
 
-    constexpr const auto& Radius() const { return fRadius; }
-    constexpr const auto& CenterX() const { return fCenterX; }
-    constexpr const auto& CenterY() const { return fCenterY; }
-    constexpr T Center() const { return {fCenterX, fCenterY}; }
+    constexpr auto Radius() const -> auto { return fRadius; }
+    constexpr auto CenterX() const -> auto { return fCenterX; }
+    constexpr auto CenterY() const -> auto { return fCenterY; }
+    constexpr auto Center() const -> T { return {fCenterX, fCenterY}; }
 
-    constexpr void Radius(VT r) { fRadius = r; }
-    constexpr void CenterX(VT x0) const { fCenterX = x0; }
-    constexpr void CenterY(VT y0) const { fCenterY = y0; }
-    constexpr void Center(VT x0, VT y0) { (CenterX(x0), CenterY(y0)); }
-    constexpr void Center(const T& r0) { Center(r0[0], r0[1]); }
+    constexpr auto Radius(VT r) -> void { fRadius = r; }
+    constexpr auto CenterX(VT x0) -> void { fCenterX = x0; }
+    constexpr auto CenterY(VT y0) -> void { fCenterY = y0; }
+    constexpr auto Center(VT x0, VT y0) -> void { CenterX(x0), CenterY(y0); }
+    constexpr auto Center(T r0) -> void { Center(r0[0], r0[1]); }
 
     template<Concept::Character AChar>
-    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicUniformDiskParameter<T, AUniformDisk>& self) -> decltype(os);
+    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicUniformDiskParameter& self) -> decltype(os) { return self.StreamOutput(os); }
     template<Concept::Character AChar>
-    friend auto operator>>(std::basic_istream<AChar>& is, BasicUniformDiskParameter<T, AUniformDisk>& self) -> decltype(is);
+    friend auto operator>>(std::basic_istream<AChar>& is, BasicUniformDiskParameter& self) -> decltype(is) { return self.StreamInput(is); }
+
+private:
+    template<Concept::Character AChar>
+    auto StreamOutput(std::basic_ostream<AChar>& os) const -> decltype(os);
+    template<Concept::Character AChar>
+    auto StreamInput(std::basic_istream<AChar>& is) & -> decltype(is);
 
 private:
     VT fRadius;
@@ -56,7 +62,7 @@ private:
     VT fCenterY;
 };
 
-template<Concept::NumericVector2Any T, template<typename> class AUniformDisk>
+template<Concept::NumericVector2Any T, template<typename> typename AUniformDisk>
 class UniformDiskBase : public RandomNumberDistributionBase<AUniformDisk<T>,
                                                             BasicUniformDiskParameter<T, AUniformDisk>,
                                                             T> {
@@ -69,7 +75,7 @@ private:
 public:
     constexpr UniformDiskBase() = default;
     constexpr UniformDiskBase(VT r, VT x0, VT y0);
-    constexpr UniformDiskBase(VT radius, const T& center);
+    constexpr UniformDiskBase(VT radius, T center);
     constexpr explicit UniformDiskBase(VT radius);
     constexpr explicit UniformDiskBase(const typename Base::ParameterType& p);
 
@@ -77,33 +83,33 @@ protected:
     constexpr ~UniformDiskBase() = default;
 
 public:
-    constexpr void Reset() {}
+    constexpr auto Reset() -> void {}
 
-    constexpr auto Parameter() const { return fParameter; }
-    constexpr const auto& Radius() const { return fParameter.Radius(); }
-    constexpr const auto& CenterX() const { return fParameter.CenterX(); }
-    constexpr const auto& CenterY() const { return fParameter.CenterY(); }
-    constexpr auto Center() const { return fParameter.Center(); }
+    constexpr auto Parameter() const -> auto { return fParameter; }
+    constexpr auto Radius() const -> auto { return fParameter.Radius(); }
+    constexpr auto CenterX() const -> auto { return fParameter.CenterX(); }
+    constexpr auto CenterY() const -> auto { return fParameter.CenterY(); }
+    constexpr auto Center() const -> auto { return fParameter.Center(); }
 
-    constexpr void Parameter(const typename Base::ParameterType& p) { fParameter = p; }
-    constexpr void Radius(VT r) { fParameter.Radius(r); }
-    constexpr void CenterX(VT x0) const { fParameter.CenterX(x0); }
-    constexpr void CenterY(VT y0) const { fParameter.CenterY(y0); }
-    constexpr void Center(VT x0, VT y0) { fParameter.Center(x0, y0); }
-    constexpr void Center(const T& r0) { fParameter.Center(r0); }
+    constexpr auto Parameter(const typename Base::ParameterType& p) -> void { fParameter = p; }
+    constexpr auto Radius(VT r) -> void { fParameter.Radius(r); }
+    constexpr auto CenterX(VT x0) -> void { fParameter.CenterX(x0); }
+    constexpr auto CenterY(VT y0) -> void { fParameter.CenterY(y0); }
+    constexpr auto Center(VT x0, VT y0) -> void { fParameter.Center(x0, y0); }
+    constexpr auto Center(T r0) -> void { fParameter.Center(r0); }
 
-    constexpr auto Min() const { return T{CenterX() - Radius(), CenterY() - Radius()}; }
-    constexpr auto Max() const { return T{CenterX() + Radius(), CenterY() + Radius()}; }
+    constexpr auto Min() const -> T { return {CenterX() - Radius(), CenterY() - Radius()}; }
+    constexpr auto Max() const -> T { return {CenterX() + Radius(), CenterY() + Radius()}; }
 
-    static constexpr auto Stateless() { return true; }
+    static constexpr auto Stateless() -> bool { return true; }
 
     template<Concept::Character AChar>
-    friend auto& operator<<(std::basic_ostream<AChar>& os, const UniformDiskBase<T, AUniformDisk>& self) { return os << self.fParameter; }
+    friend auto operator<<(std::basic_ostream<AChar>& os, const UniformDiskBase<T, AUniformDisk>& self) -> auto& { return os << self.fParameter; }
     template<Concept::Character AChar>
-    friend auto& operator>>(std::basic_istream<AChar>& is, UniformDiskBase<T, AUniformDisk>& self) { return is >> self.fParameter; }
+    friend auto operator>>(std::basic_istream<AChar>& is, UniformDiskBase<T, AUniformDisk>& self) -> auto& { return is >> self.fParameter; }
 
 protected:
-    static constexpr std::pair<T, VT> UniformCompactDisk(UniformRandomBitGenerator auto& g, const DistributionParameter auto& p);
+    static constexpr auto UniformCompactDisk(UniformRandomBitGenerator auto& g, const DistributionParameter auto& p) -> std::pair<T, VT>;
 
 protected:
     typename Base::ParameterType fParameter;
@@ -122,8 +128,8 @@ class UniformCompactDisk final : public internal::UniformDiskBase<T, UniformComp
 public:
     using internal::UniformDiskBase<T, UniformCompactDisk>::UniformDiskBase;
 
-    MACE_STRONG_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    MACE_STRONG_INLINE constexpr T operator()(UniformRandomBitGenerator auto& g, const UniformCompactDiskParameter<T>& p);
+    MACE_STRONG_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) -> auto { return (*this)(g, this->fParameter); }
+    MACE_STRONG_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g, const UniformCompactDiskParameter<T>& p) -> T;
 };
 
 template<typename VT, typename T>
@@ -144,8 +150,8 @@ class UniformDisk final : public internal::UniformDiskBase<T, UniformDisk> {
 public:
     using internal::UniformDiskBase<T, UniformDisk>::UniformDiskBase;
 
-    MACE_STRONG_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    MACE_STRONG_INLINE constexpr T operator()(UniformRandomBitGenerator auto& g, const UniformDiskParameter<T>& p);
+    MACE_STRONG_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) -> auto { return (*this)(g, this->fParameter); }
+    MACE_STRONG_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g, const UniformDiskParameter<T>& p) -> T;
 };
 
 template<typename VT, typename T>
