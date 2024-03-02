@@ -18,7 +18,6 @@ class EMCField;
 class EMCShield;
 class AcceleratorField;
 class MCP;
-class SelectorField;
 class SpectrometerField;
 class SpectrometerMagnet;
 class SpectrometerShield;
@@ -48,7 +47,6 @@ public:
                                         Detector::Description::EMCShield,
                                         Detector::Description::AcceleratorField,
                                         Detector::Description::MCP,
-                                        Detector::Description::SelectorField,
                                         Detector::Description::SpectrometerField,
                                         Detector::Description::SpectrometerMagnet,
                                         Detector::Description::SpectrometerShield,
@@ -71,7 +69,6 @@ private:
     std::shared_ptr<Detector::DefinitionBase> fSolenoidB2;
     std::shared_ptr<Detector::DefinitionBase> fSolenoidS2Field;
     std::shared_ptr<Detector::DefinitionBase> fSolenoidS2;
-    std::shared_ptr<Detector::DefinitionBase> fSelectorField;
     std::shared_ptr<Detector::DefinitionBase> fSpectrometerField;
     std::shared_ptr<Detector::DefinitionBase> fSpectrometerMagnet;
     std::shared_ptr<Detector::DefinitionBase> fSpectrometerShield;

@@ -4,7 +4,6 @@
 #include "MACE/Detector/Description/EMCField.h++"
 #include "MACE/Detector/Description/EMCShield.h++"
 #include "MACE/Detector/Description/MCP.h++"
-#include "MACE/Detector/Description/SelectorField.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Description/SpectrometerField.h++"
 #include "MACE/Detector/Description/SpectrometerMagnet.h++"
@@ -15,26 +14,25 @@
 namespace MACE::SimTarget::inline Action {
 
 DetectorConstruction::DetectorConstruction() :
-    fCollimator(nullptr),
-    fEMCField(nullptr),
-    fEMCShield(nullptr),
-    fSolenoidB1Field(nullptr),
-    fSolenoidB1(nullptr),
-    fSolenoidS1Field(nullptr),
-    fSolenoidS1(nullptr),
-    fAcceleratorField(nullptr),
-    fMCP(nullptr),
-    fSolenoidB2Field(nullptr),
-    fSolenoidB2(nullptr),
-    fSolenoidS2Field(nullptr),
-    fSolenoidS2(nullptr),
-    fSelectorField(nullptr),
-    fSpectrometerField(nullptr),
-    fSpectrometerMagnet(nullptr),
-    fSpectrometerShield(nullptr),
-    fSolenoidS3Field(nullptr),
-    fSolenoidS3(nullptr),
-    fWorld(nullptr) {
+    fCollimator{},
+    fEMCField{},
+    fEMCShield{},
+    fSolenoidB1Field{},
+    fSolenoidB1{},
+    fSolenoidS1Field{},
+    fSolenoidS1{},
+    fAcceleratorField{},
+    fMCP{},
+    fSolenoidB2Field{},
+    fSolenoidB2{},
+    fSolenoidS2Field{},
+    fSolenoidS2{},
+    fSpectrometerField{},
+    fSpectrometerMagnet{},
+    fSpectrometerShield{},
+    fSolenoidS3Field{},
+    fSolenoidS3{},
+    fWorld{} {
     Detector::DescriptionIO::Import<UsedDescriptions>(
 #include "MACE/SimGuide/DefaultGeometry.inlyaml"
     );
