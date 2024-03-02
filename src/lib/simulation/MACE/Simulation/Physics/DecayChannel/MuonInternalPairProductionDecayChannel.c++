@@ -29,7 +29,9 @@ MuonInternalPairProductionDecayChannel::MuonInternalPairProductionDecayChannel(c
     G4VDecayChannel{"MuonIPPDecay", verbose}, // clang-format on
     fMetropolisDelta{0.05},
     fMetropolisDiscard{100},
-    fApplyMACESpecificCut{},
+    fApplyMACESpecificPxyCut{},
+    fApplyMACESpecificPzCut{},
+    fThermalized{},
     fRAMBO{muon_mass_c2, {electron_mass_c2, electron_mass_c2, electron_mass_c2, 0, 0}},
     fRawState{},
     fEvent{},
@@ -61,23 +63,21 @@ MuonInternalPairProductionDecayChannel::MuonInternalPairProductionDecayChannel(c
         }
 #endif
     }
-    Thermalize();
 }
 
-auto MuonInternalPairProductionDecayChannel::ApplyMACESpecificCut(bool apply) -> void {
+auto MuonInternalPairProductionDecayChannel::ApplyMACESpecificPxyCut(bool apply) -> void {
     if (apply and not MACESpecificCutApplicable()) { return; }
-    fApplyMACESpecificCut = apply;
-    Thermalize();
+    fApplyMACESpecificPxyCut = apply;
+    fThermalized = false;
+}
+
+auto MuonInternalPairProductionDecayChannel::ApplyMACESpecificPzCut(bool apply) -> void {
+    if (apply and not MACESpecificCutApplicable()) { return; }
+    fApplyMACESpecificPzCut = apply;
+    fThermalized = false;
 }
 
 auto MuonInternalPairProductionDecayChannel::DecayIt(G4double) -> G4DecayProducts* {
-    if (fReseedCounter++ == 0) {
-        static_assert(sizeof(Math::Random::SplitMix64::SeedType) % sizeof(unsigned int) == 0);
-        std::array<unsigned int, sizeof(Math::Random::SplitMix64::SeedType) / sizeof(unsigned int)> seed;
-        std::ranges::generate(seed, [&rng = *G4Random::getTheEngine()] { return rng.operator unsigned int(); });
-        fXoshiro256Plus.Seed(std::bit_cast<Math::Random::SplitMix64::SeedType>(seed));
-    }
-
 #ifdef G4VERBOSE
     if (GetVerboseLevel() > 1) {
         G4cout << "MuonInternalPairProductionDecayChannel::DecayIt ";
@@ -86,6 +86,29 @@ auto MuonInternalPairProductionDecayChannel::DecayIt(G4double) -> G4DecayProduct
 
     CheckAndFillParent();
     CheckAndFillDaughters();
+
+    if (fReseedCounter++ == 0) {
+        static_assert(sizeof(Math::Random::SplitMix64::SeedType) % sizeof(unsigned int) == 0);
+        std::array<unsigned int, sizeof(Math::Random::SplitMix64::SeedType) / sizeof(unsigned int)> seed;
+        std::ranges::generate(seed, [&rng = *G4Random::getTheEngine()] { return rng.operator unsigned int(); });
+        fXoshiro256Plus.Seed(std::bit_cast<Math::Random::SplitMix64::SeedType>(seed));
+    }
+
+    if (not fThermalized) {
+        // initialize
+        do {
+            std::ranges::generate(fRawState, [this] { return Math::Random::Uniform<double>{}(fXoshiro256Plus); });
+            fEvent = fRAMBO(fRawState);
+        } while (PassCut(fEvent) == false);
+        fWeightedM2 = WeightedM2(fEvent);
+        // thermalize
+        constexpr long double deltaSA0{0.1};
+        constexpr auto nSA{100000};
+        for (auto deltaSA{deltaSA0}; deltaSA > std::numeric_limits<double>::epsilon(); deltaSA -= deltaSA0 / nSA) {
+            UpdateState(deltaSA);
+        }
+        fThermalized = true;
+    }
 
     for (int i{}; i < fMetropolisDiscard; ++i) {
         UpdateState(fMetropolisDelta);
@@ -122,7 +145,7 @@ auto MuonInternalPairProductionDecayChannel::UpdateState(double delta) -> void {
                                        return u;
                                    });
             newEvent = fRAMBO(newRawState);
-        } while (Cut(newEvent) == false);
+        } while (PassCut(newEvent) == false);
         const auto newWeightedM2{WeightedM2(newEvent)};
         if (newWeightedM2 >= fWeightedM2 or
             newWeightedM2 >= fWeightedM2 * Math::Random::Distribution::Uniform<double>{}(fXoshiro256Plus)) {
@@ -135,47 +158,42 @@ auto MuonInternalPairProductionDecayChannel::UpdateState(double delta) -> void {
     }
 }
 
-auto MuonInternalPairProductionDecayChannel::Thermalize() -> void {
-    auto& rng{*G4Random::getTheEngine()};
-    // initialize
-    do {
-        rng.flatArray(fRawState.size(), fRawState.data());
-        fEvent = fRAMBO(fRawState);
-    } while (Cut(fEvent) == false);
-    fWeightedM2 = WeightedM2(fEvent);
-    // thermalize
-    constexpr long double deltaSA0{0.1};
-    constexpr auto nSA{100000};
-    for (auto deltaSA{deltaSA0}; deltaSA > std::numeric_limits<double>::epsilon(); deltaSA -= deltaSA0 / nSA) {
-        UpdateState(deltaSA);
-    }
-}
+auto MuonInternalPairProductionDecayChannel::PassCut(const CLHEPX::RAMBO<5>::Event& event) const -> bool {
+    const auto& [p, p1, p2, k1, k2]{event.state};
 
-auto MuonInternalPairProductionDecayChannel::Cut(const CLHEPX::RAMBO<5>::Event& event) const -> bool {
-    if (fApplyMACESpecificCut) {
+    auto passCut1{true};
+    auto passCut2{true};
+
+    if (fApplyMACESpecificPxyCut) {
         const auto spectrometerB{Detector::Description::SpectrometerField::Instance().MagneticFluxDensity()};
         const auto cdcInnerRadius{Detector::Description::CDC::Instance().GasInnerRadius()};
-        const auto cdcPXYCut{(cdcInnerRadius / 2) * spectrometerB * c_light};
+        const auto cdcPxyCut{(cdcInnerRadius / 2) * spectrometerB * c_light};
 
-        const auto solenoidB{Detector::Description::Solenoid::Instance().MagneticFluxDensity()};
-        const auto filterInterval{Detector::Description::Filter::Instance().Interval()};
-        const auto maxPositronPXY{(5 * filterInterval) * solenoidB * c_light};
+        const auto& filter{Detector::Description::Filter::Instance()};
+        const auto& solenoid{Detector::Description::Solenoid::Instance()};
+        const auto maxPositronRxy{filter.Enabled() ? 5 * filter.Interval() : solenoid.InnerRadius()};
+        const auto maxPositronPxy{maxPositronRxy * solenoid.MagneticFluxDensity() * c_light};
 
-        const auto acceleratorU{Detector::Description::AcceleratorField::Instance().AcceleratorPotential()};
-        const auto maxPositronAbsPZ{std::sqrt(2 * electron_mass_c2 * eplus * acceleratorU)};
+        const auto positron1Pxy{Math::Hypot(p.x(), p.y())};
+        const auto electronPxy{Math::Hypot(p1.x(), p1.y())};
+        const auto positron2Pxy{Math::Hypot(p2.x(), p2.y())};
 
-        const auto& [p, p1, p2, k1, k2]{event.state};
-        const auto positron1PXY{Math::Hypot(p.x(), p.y())};
-        const auto positron1AbsPZ{std23::abs(p.z())};
-        const auto electronPXY{Math::Hypot(p1.x(), p1.y())};
-        const auto positron2PXY{Math::Hypot(p2.x(), p2.y())};
-        const auto positron2AbsPZ{std23::abs(p2.z())};
-
-        return electronPXY > cdcPXYCut and ((positron1PXY < cdcPXYCut and positron2PXY < maxPositronPXY and positron2AbsPZ < maxPositronAbsPZ) or
-                                            (positron2PXY < cdcPXYCut and positron1PXY < maxPositronPXY and positron1AbsPZ < maxPositronAbsPZ));
-    } else {
-        return true;
+        passCut1 &= electronPxy > cdcPxyCut and positron1Pxy < cdcPxyCut and positron2Pxy < maxPositronPxy;
+        passCut2 &= electronPxy > cdcPxyCut and positron2Pxy < cdcPxyCut and positron1Pxy < maxPositronPxy;
     }
+
+    if (fApplyMACESpecificPzCut) {
+        const auto acceleratorU{Detector::Description::AcceleratorField::Instance().AcceleratorPotential()};
+        const auto maxPositronAbsPz{std::sqrt(2 * electron_mass_c2 * eplus * acceleratorU)};
+
+        const auto positron1AbsPz{std23::abs(p.z())};
+        const auto positron2AbsPz{std23::abs(p2.z())};
+
+        passCut1 &= positron2AbsPz < maxPositronAbsPz;
+        passCut2 &= positron1AbsPz < maxPositronAbsPz;
+    }
+
+    return passCut1 or passCut2;
 }
 
 auto MuonInternalPairProductionDecayChannel::WeightedM2(const CLHEPX::RAMBO<5>::Event& event) -> double {

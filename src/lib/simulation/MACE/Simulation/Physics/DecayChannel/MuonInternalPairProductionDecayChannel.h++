@@ -18,7 +18,9 @@ public:
 
     auto MetropolisDelta(double delta) -> void { fMetropolisDelta = Math::Clamp<"()">(delta, 0., 0.5); }
     auto MetropolisDiscard(int n) -> void { fMetropolisDiscard = std::max(0, n); }
-    auto ApplyMACESpecificCut(bool apply) -> void;
+
+    auto ApplyMACESpecificPxyCut(bool apply) -> void;
+    auto ApplyMACESpecificPzCut(bool apply) -> void;
 
     auto DecayIt(G4double) -> G4DecayProducts* override;
 
@@ -26,16 +28,17 @@ private:
     virtual auto MACESpecificCutApplicable() const -> bool { return GetParentName() == "mu+"; }
 
     auto UpdateState(double delta) -> void;
-    auto Thermalize() -> void;
-
-    auto Cut(const CLHEPX::RAMBO<5>::Event& event) const -> bool;
+    auto PassCut(const CLHEPX::RAMBO<5>::Event& event) const -> bool;
 
     static auto WeightedM2(const CLHEPX::RAMBO<5>::Event& event) -> double;
 
 private:
     double fMetropolisDelta;
     int fMetropolisDiscard;
-    bool fApplyMACESpecificCut;
+
+    bool fApplyMACESpecificPxyCut;
+    bool fApplyMACESpecificPzCut;
+    bool fThermalized;
 
     CLHEPX::RAMBO<5> fRAMBO;
     std::array<double, 5 * 4> fRawState;

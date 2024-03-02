@@ -13,7 +13,8 @@ MuonInternalPairProductionDecayChannelMessenger::MuonInternalPairProductionDecay
     fDirectory{},
     fMetropolisDelta{},
     fMetropolisDiscard{},
-    fApplyMACESpecificCut{} {
+    fApplyMACESpecificPxyCut{},
+    fApplyMACESpecificPzCut{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Physics/MuonDecay/IPPDecay/");
     fDirectory->SetGuidance("Muon(ium) internal pair production decay channel (mu->eeevv / M->eeevve).");
@@ -36,10 +37,15 @@ MuonInternalPairProductionDecayChannelMessenger::MuonInternalPairProductionDecay
     fMetropolisDiscard->SetRange("n >= 0");
     fMetropolisDiscard->AvailableForStates(G4State_Idle);
 
-    fApplyMACESpecificCut = std::make_unique<G4UIcmdWithABool>("/MACE/Physics/MuonDecay/IPPDecay/ApplyMACESpecificCut", this);
-    fApplyMACESpecificCut->SetGuidance("If true, apply MACE specific momentum cut to mu+ IPP decay products. Check source code for details.");
-    fApplyMACESpecificCut->SetParameterName("apply", false);
-    fApplyMACESpecificCut->AvailableForStates(G4State_Idle);
+    fApplyMACESpecificPxyCut = std::make_unique<G4UIcmdWithABool>("/MACE/Physics/MuonDecay/IPPDecay/ApplyMACESpecificPxyCut", this);
+    fApplyMACESpecificPxyCut->SetGuidance("If true, apply MACE specific transverse momentum cut to mu+ IPP decay products. Check source code for details.");
+    fApplyMACESpecificPxyCut->SetParameterName("apply", false);
+    fApplyMACESpecificPxyCut->AvailableForStates(G4State_Idle);
+
+    fApplyMACESpecificPzCut = std::make_unique<G4UIcmdWithABool>("/MACE/Physics/MuonDecay/IPPDecay/ApplyMACESpecificPzCut", this);
+    fApplyMACESpecificPzCut->SetGuidance("If true, apply MACE specific longtitude momentum cut to mu+ IPP decay products. Check source code for details.");
+    fApplyMACESpecificPzCut->SetParameterName("apply", false);
+    fApplyMACESpecificPzCut->AvailableForStates(G4State_Idle);
 }
 
 MuonInternalPairProductionDecayChannelMessenger::~MuonInternalPairProductionDecayChannelMessenger() = default;
@@ -53,9 +59,13 @@ auto MuonInternalPairProductionDecayChannelMessenger::SetNewValue(G4UIcommand* c
         Deliver<MuonInternalPairProductionDecayChannel>([&](auto&& r) {
             r.MetropolisDiscard(fMetropolisDiscard->GetNewIntValue(value));
         });
-    } else if (command == fApplyMACESpecificCut.get()) {
+    } else if (command == fApplyMACESpecificPxyCut.get()) {
         Deliver<MuonInternalPairProductionDecayChannel>([&](auto&& r) {
-            r.ApplyMACESpecificCut(fApplyMACESpecificCut->GetNewBoolValue(value));
+            r.ApplyMACESpecificPxyCut(fApplyMACESpecificPxyCut->GetNewBoolValue(value));
+        });
+    } else if (command == fApplyMACESpecificPzCut.get()) {
+        Deliver<MuonInternalPairProductionDecayChannel>([&](auto&& r) {
+            r.ApplyMACESpecificPzCut(fApplyMACESpecificPzCut->GetNewBoolValue(value));
         });
     }
 }
