@@ -26,8 +26,8 @@ template<typename ADerived, typename ADistribution, typename... Ds>
     requires(sizeof...(Ds) >= 2)
 template<Concept::Character AChar>
 auto JointParameterInterface<ADerived, ADistribution, Ds...>::StreamOutput(std::basic_ostream<AChar>& os) const -> decltype(os) {
-    return ([&os]<gsl::index... Is>(gslx::index_sequence<Is...>) {
-        return (os << ... << Margin<Is>());
+    return ([&]<gsl::index... Is>(gslx::index_sequence<Is...>) {
+        return (os << ... << this->template Margin<Is>());
     })(gslx::index_sequence_for<Ds...>());
 }
 
@@ -35,8 +35,8 @@ template<typename ADerived, typename ADistribution, typename... Ds>
     requires(sizeof...(Ds) >= 2)
 template<Concept::Character AChar>
 auto JointParameterInterface<ADerived, ADistribution, Ds...>::StreamInput(std::basic_istream<AChar>& is) & -> decltype(is) {
-    return ([&is]<gsl::index... Is>(gslx::index_sequence<Is...>) {
-        return (is >> ... >> Margin<Is>());
+    return ([&]<gsl::index... Is>(gslx::index_sequence<Is...>) {
+        return (is >> ... >> this->template Margin<Is>());
     })(gslx::index_sequence_for<Ds...>());
 }
 
@@ -121,8 +121,8 @@ template<typename ADerived, typename AParameter, typename T, typename... Ds>
     requires(sizeof...(Ds) >= 2 and Concept::NumericVectorAny<T, sizeof...(Ds)>)
 template<Concept::Character AChar>
 auto JointInterface<ADerived, AParameter, T, Ds...>::StreamOutput(std::basic_ostream<AChar>& os) const -> decltype(os) {
-    return ([&os]<gsl::index... Is>(gslx::index_sequence<Is...>) {
-        return (os << ... << Margin<Is>());
+    return ([&]<gsl::index... Is>(gslx::index_sequence<Is...>) {
+        return (os << ... << this->template Margin<Is>());
     })(gslx::index_sequence_for<Ds...>());
 }
 
@@ -130,8 +130,8 @@ template<typename ADerived, typename AParameter, typename T, typename... Ds>
     requires(sizeof...(Ds) >= 2 and Concept::NumericVectorAny<T, sizeof...(Ds)>)
 template<Concept::Character AChar>
 auto JointInterface<ADerived, AParameter, T, Ds...>::StreamInput(std::basic_istream<AChar>& is) & -> decltype(is) {
-    return ([&is]<gsl::index... Is>(gslx::index_sequence<Is...>) {
-        return (is >> ... >> Margin<Is>());
+    return ([&]<gsl::index... Is>(gslx::index_sequence<Is...>) {
+        return (is >> ... >> this->template Margin<Is>());
     })(gslx::index_sequence_for<Ds...>());
 }
 
