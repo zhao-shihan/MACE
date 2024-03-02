@@ -8,6 +8,8 @@
 
 #include "gsl/gsl"
 
+#include "fmt/format.h"
+
 #include <array>
 
 namespace MACE::Detector::Definition {
@@ -46,7 +48,7 @@ auto CDCSuperLayer::Construct(G4bool checkOverlaps) -> void {
         Make<G4PVPlacement>(
             G4Transform3D{},
             logic,
-            name,
+            fmt::format("{}_{}", name, superLayerID),
             Mother().LogicalVolume().get(),
             false,
             superLayerID,

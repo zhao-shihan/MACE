@@ -9,6 +9,8 @@
 
 #include "gsl/gsl"
 
+#include "fmt/format.h"
+
 #include <utility>
 
 namespace MACE::Detector::Definition {
@@ -48,7 +50,7 @@ auto CDCSenseLayer::Construct(G4bool checkOverlaps) -> void {
             Make<G4PVPlacement>(
                 G4Transform3D{},
                 logic,
-                name,
+                fmt::format("{}_{}", name, sense.senseLayerID),
                 Mother().LogicalVolume(super.superLayerID).get(),
                 false,
                 sense.senseLayerID,

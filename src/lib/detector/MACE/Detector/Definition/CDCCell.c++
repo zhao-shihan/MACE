@@ -15,6 +15,8 @@
 #include "G4TwistedTubs.hh"
 #include "G4TwoVector.hh"
 
+#include "fmt/format.h"
+
 #include <cmath>
 #include <memory>
 #include <utility>
@@ -72,7 +74,7 @@ auto CDCCell::Construct(G4bool checkOverlaps) -> void {
                 Make<G4PVPlacement>(
                     G4Transform3D{CLHEP::HepRotationZ{cell.centerAzimuth - phiFWFront}, {}},
                     logicalCell,
-                    cellName,
+                    fmt::format("{}_{}", cellName, cell.cellID),
                     Mother().LogicalVolume(sense.senseLayerID).get(),
                     false,
                     cell.cellID,
@@ -86,7 +88,7 @@ auto CDCCell::Construct(G4bool checkOverlaps) -> void {
             const auto svRIn{sense.innerRadius + cdc.FieldWireDiameter()};
             const auto svROut{sense.outerRadius};
             const auto phiFWBack{std::asin(rFW / (cellRIn + rFW))};
-            const auto phiSV{super.cellAzimuthWidth - phiFWBack-phiFWFront};
+            const auto phiSV{super.cellAzimuthWidth - phiFWBack - phiFWFront};
             const auto solidSV{[&] {
                 if (super.isAxial) {
                     return static_cast<G4VSolid*>(Make<G4Tubs>(
@@ -137,8 +139,8 @@ auto CDCCell::Construct(G4bool checkOverlaps) -> void {
                 fwName)};
             const auto PlaceFW{
                 [&](int copyNo, double r, double phi0) {
-                    return Make<G4PVPlacement>(
-                        G4Transform3D{CLHEP::HepRotationZ{phi0 + phiFWFront}, {}} *
+                    return Make<G4PVPlacement>( // clang-format off
+                        G4Transform3D{CLHEP::HepRotationZ{phi0 + phiFWFront}, {}} * // clang-format on
                             G4Transform3D{CLHEP::HepRotationX{-sense.StereoZenithAngle(r)}, {r, 0, 0}},
                         logicalFW,
                         fwName,
@@ -174,8 +176,8 @@ auto CDCCell::Construct(G4bool checkOverlaps) -> void {
                 solidSW,
                 nist->FindOrBuildMaterial("G4_W"),
                 swName)};
-            Make<G4PVPlacement>(
-                G4Transform3D{CLHEP::HepRotationX{-sense.StereoZenithAngle(rCenterWire)}, {rCenterWire, 0, 0}},
+            Make<G4PVPlacement>( // clang-format off
+                G4Transform3D{CLHEP::HepRotationX{-sense.StereoZenithAngle(rCenterWire)}, {rCenterWire, 0, 0}}, // clang-format on
                 logicalSW,
                 swName,
                 logicalSV,
