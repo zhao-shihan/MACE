@@ -24,7 +24,7 @@ if(MACE_USE_STATIC_G4)
         list(APPEND MACE_G4_REQUIRED_COMPONENTS static)
         message(STATUS "Geant4 static libraries will be linked")
     else()
-        message(NOTICE "***Notice: MACE_USE_STATIC_G4 is ON but Geant4 reports that static libraries are not found. Dynamic libraries will be linked")
+        message(NOTICE "***Notice: MACE_USE_STATIC_G4 is ON but Geant4-static not found. Dynamic libraries will be linked")
     endif()
 endif()
 
