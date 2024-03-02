@@ -28,14 +28,9 @@ auto ParallelizePathInPlace(std::filesystem::path& path, std::string_view extens
             std::filesystem::create_directories(path);
         }
         // wait for create_directories
-        MPI_Request mpiBarrierRequest;
-        MPI_Ibarrier(mpiEnv.CommNode(),
-                     &mpiBarrierRequest);
+        MPI_Barrier(mpiEnv.CommNode());
         // construct full path
         path /= fileName.concat(fmt::format(".mpi{}.", mpiEnv.CommWorldRank())).replace_extension(extension);
-        // wait for create_directories
-        MPI_Wait(&mpiBarrierRequest,
-                 MPI_STATUS_IGNORE);
     } else {
         path.concat(".").replace_extension(extension);
     }
