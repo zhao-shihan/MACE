@@ -59,19 +59,6 @@
 #/vis/viewer/set/lineSegmentsPerCircle 100
 /vis/viewer/zoom 2.5
 
-# Visibility
-/vis/geometry/set/visibility CDCCell             -1 false
-/vis/geometry/set/visibility CDCSuperLayer        0 false
-/vis/geometry/set/visibility EMCPMTCathode        0 false
-/vis/geometry/set/visibility EMCPMTCoupler        0 false
-/vis/geometry/set/visibility EMCField             0 false
-/vis/geometry/set/visibility SolenoidB1Field      0 false
-/vis/geometry/set/visibility SolenoidB2Field      0 false
-/vis/geometry/set/visibility SolenoidS1Field      0 false
-/vis/geometry/set/visibility SolenoidS2Field      0 false
-/vis/geometry/set/visibility SolenoidS3Field      0 false
-/vis/geometry/set/visibility SpectrometerField    0 false
-
 # Colors
 /vis/geometry/set/colour AcceleratorField              0     1     1     1     0.05
 /vis/geometry/set/colour BeamDegrader                  0     1     1     1     0.1
@@ -80,7 +67,7 @@
 /vis/geometry/set/colour CDCCell                       0     1     1     1     0.005
 /vis/geometry/set/colour CDCFieldWire                  0     1     1     1     0.01
 /vis/geometry/set/colour CDCGas                        0     1     1     1     0.005
-/vis/geometry/set/colour CDCSenseLayer                 0     1     1     1     0.015
+/vis/geometry/set/colour CDCSenseLayer                 0     1     1     1     0.005
 /vis/geometry/set/colour CDCSenseWire                  0     1     1     1     0.01
 /vis/geometry/set/colour CDCSensitiveVolume            0     1     1     1     0.005
 /vis/geometry/set/colour CDCSuperLayer                 0     1     1     1     0.005
