@@ -24,7 +24,7 @@
 
 /MACE/Physics/MuonDecay/IPPDecay/BR                      1
 /MACE/Physics/MuonDecay/IPPDecay/MetropolisDelta         0.005
-/MACE/Physics/MuonDecay/IPPDecay/MetropolisDiscard       1000
+/MACE/Physics/MuonDecay/IPPDecay/MetropolisDiscard       10
 
 /MACE/Physics/MuoniumPhysics/Formation/FormationProbability     0.655
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0
@@ -45,5 +45,5 @@
 
 /MACE/Analysis/FilePath   SimMACE_mu2eeevv
 /MACE/Analysis/FileOption NEW
-/run/beamOn 1000000
+/run/beamOn 100000000
 /MPIRun/PrintRunSummary
