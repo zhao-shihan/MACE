@@ -9,7 +9,7 @@
 #include <type_traits>
 #include <version>
 
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
 #    include <cmath>
 #endif
 
@@ -20,7 +20,7 @@ namespace MACE::inline Compatibility::std23 {
 ///////////////////////////////////////////////////////////////////////////////
 
 MACE_ALWAYS_INLINE constexpr auto div(int x, int y) -> std::div_t {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::div(x, y);
 #else // backport
     return {.quot = x / y, .rem = x % y};
@@ -28,7 +28,7 @@ MACE_ALWAYS_INLINE constexpr auto div(int x, int y) -> std::div_t {
 }
 
 MACE_ALWAYS_INLINE constexpr auto div(long x, long y) -> std::ldiv_t {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::div(x, y);
 #else // backport
     return {.quot = x / y, .rem = x % y};
@@ -36,7 +36,7 @@ MACE_ALWAYS_INLINE constexpr auto div(long x, long y) -> std::ldiv_t {
 }
 
 MACE_ALWAYS_INLINE constexpr auto div(long long x, long long y) -> std::lldiv_t {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::div(x, y);
 #else // backport
     return {.quot = x / y, .rem = x % y};
@@ -44,7 +44,7 @@ MACE_ALWAYS_INLINE constexpr auto div(long long x, long long y) -> std::lldiv_t 
 }
 
 MACE_ALWAYS_INLINE constexpr auto ldiv(long x, long y) -> std::ldiv_t {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::ldiv(x, y);
 #else // backport
     return div(x, y);
@@ -52,7 +52,7 @@ MACE_ALWAYS_INLINE constexpr auto ldiv(long x, long y) -> std::ldiv_t {
 }
 
 MACE_ALWAYS_INLINE constexpr auto lldiv(long long x, long long y) -> std::lldiv_t {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::lldiv(x, y);
 #else // backport
     return div(x, y);
@@ -60,7 +60,7 @@ MACE_ALWAYS_INLINE constexpr auto lldiv(long long x, long long y) -> std::lldiv_
 }
 
 // MACE_ALWAYS_INLINE constexpr auto div(std::intmax_t x, std::intmax_t y) -> std::imaxdiv_t {
-// #ifdef __cpp_lib_constexpr_cmath // C++2b
+// #ifdef __cpp_lib_constexpr_cmath // C++23
 //     return std::div(x, y);
 // #else // backport
 //     return {.quot = x / y, .rem = x % y};
@@ -68,7 +68,7 @@ MACE_ALWAYS_INLINE constexpr auto lldiv(long long x, long long y) -> std::lldiv_
 // }
 
 MACE_ALWAYS_INLINE constexpr auto imaxdiv(std::intmax_t x, std::intmax_t y) -> std::imaxdiv_t {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::imaxdiv(x, y);
 #else // backport
     return {.quot = x / y, .rem = x % y};
@@ -80,7 +80,7 @@ MACE_ALWAYS_INLINE constexpr auto imaxdiv(std::intmax_t x, std::intmax_t y) -> s
 ///////////////////////////////////////////////////////////////////////////////
 
 MACE_ALWAYS_INLINE constexpr auto abs(std::floating_point auto x) -> decltype(x) {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::abs(x);
 #else // backport
 #    if defined __clang__ or defined __GNUC__
@@ -98,7 +98,7 @@ MACE_ALWAYS_INLINE constexpr auto abs(std::floating_point auto x) -> decltype(x)
 }
 
 MACE_ALWAYS_INLINE constexpr auto fabs(std::floating_point auto x) -> decltype(x) {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::fabs(x);
 #else // backport
     return abs(x);
@@ -106,7 +106,7 @@ MACE_ALWAYS_INLINE constexpr auto fabs(std::floating_point auto x) -> decltype(x
 }
 
 MACE_ALWAYS_INLINE constexpr auto fabsf(float x) -> float {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::fabsf(x);
 #else // backport
     return abs(x);
@@ -114,7 +114,7 @@ MACE_ALWAYS_INLINE constexpr auto fabsf(float x) -> float {
 }
 
 MACE_ALWAYS_INLINE constexpr auto fabsl(long double x) -> long double {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::fabsl(x);
 #else // backport
     return abs(x);
@@ -122,7 +122,7 @@ MACE_ALWAYS_INLINE constexpr auto fabsl(long double x) -> long double {
 }
 
 MACE_ALWAYS_INLINE constexpr auto fabs(std::integral auto n) -> double {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::fabs(n);
 #else // backport
     return abs(static_cast<double>(n));
@@ -134,7 +134,7 @@ MACE_ALWAYS_INLINE constexpr auto fabs(std::integral auto n) -> double {
 ///////////////////////////////////////////////////////////////////////////////
 
 MACE_ALWAYS_INLINE constexpr auto abs(int n) -> int {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::abs(n);
 #else // backport
     return n >= 0 ? n : -n;
@@ -142,7 +142,7 @@ MACE_ALWAYS_INLINE constexpr auto abs(int n) -> int {
 }
 
 MACE_ALWAYS_INLINE constexpr auto abs(long n) -> long {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::abs(n);
 #else // backport
     return n >= 0 ? n : -n;
@@ -150,7 +150,7 @@ MACE_ALWAYS_INLINE constexpr auto abs(long n) -> long {
 }
 
 MACE_ALWAYS_INLINE constexpr auto abs(long long n) -> long long {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::abs(n);
 #else // backport
     return n >= 0 ? n : -n;
@@ -158,7 +158,7 @@ MACE_ALWAYS_INLINE constexpr auto abs(long long n) -> long long {
 }
 
 MACE_ALWAYS_INLINE constexpr auto labs(long n) -> long {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::labs(n);
 #else // backport
     return abs(n);
@@ -166,7 +166,7 @@ MACE_ALWAYS_INLINE constexpr auto labs(long n) -> long {
 }
 
 MACE_ALWAYS_INLINE constexpr auto llabs(long long n) -> long long {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::llabs(n);
 #else // backport
     return abs(n);
@@ -174,7 +174,7 @@ MACE_ALWAYS_INLINE constexpr auto llabs(long long n) -> long long {
 }
 
 // MACE_ALWAYS_INLINE constexpr auto abs(std::intmax_t n) -> std::intmax_t {
-// #ifdef __cpp_lib_constexpr_cmath // C++2b
+// #ifdef __cpp_lib_constexpr_cmath // C++23
 //     return std::abs(n);
 // #else // backport
 //     return n >= 0 ? n : -n;
@@ -182,7 +182,7 @@ MACE_ALWAYS_INLINE constexpr auto llabs(long long n) -> long long {
 // }
 
 MACE_ALWAYS_INLINE constexpr auto imaxabs(std::intmax_t n) -> std::intmax_t {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::imaxabs(n);
 #else // backport
     return n >= 0 ? n : -n;
@@ -194,7 +194,7 @@ MACE_ALWAYS_INLINE constexpr auto imaxabs(std::intmax_t n) -> std::intmax_t {
 ///////////////////////////////////////////////////////////////////////////////
 
 MACE_ALWAYS_INLINE constexpr auto isnan(const std::floating_point auto x) -> bool {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::isnan(x);
 #else // backport
     return x != x;
@@ -202,7 +202,7 @@ MACE_ALWAYS_INLINE constexpr auto isnan(const std::floating_point auto x) -> boo
 }
 
 MACE_ALWAYS_INLINE constexpr auto isnan(const std::integral auto n) -> bool {
-#ifdef __cpp_lib_constexpr_cmath // C++2b
+#ifdef __cpp_lib_constexpr_cmath // C++23
     return std::isnan(n);
 #else // backport
     if constexpr (std::numeric_limits<double>::is_iec559) {
