@@ -44,11 +44,13 @@ auto ConvertG4GeometryToTMacro(const std::string& name, const std::filesystem::p
         fmt::println(tempMacroFile, R"macro(
 #include <fstream>
 #include <iostream>
-#include <stdexcept>
 
 auto {0}() -> void {{
     std::ofstream gdmlFile{{"{1}"}};
-    if (gdmlFile.fail()) {{ throw std::runtime_error{{"error opening {1}"}}; }}
+    if (gdmlFile.fail()) {{
+        std::cerr << "\nerror opening {1}" << std::endl;
+        return;
+    }}
     gdmlFile << R"{0}({2}){0}""\n";
     std::cout << "\nGDML has been saved to {1}" << std::endl;
 }}
