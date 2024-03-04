@@ -2,6 +2,8 @@
 
 #include "MACE/Detector/Description/DescriptionBase.h++"
 
+#include <algorithm>
+
 namespace MACE::Detector::Description {
 
 class Filter final : public DescriptionSingletonBase<Filter> {
@@ -23,7 +25,7 @@ public:
     auto Length(auto val) -> void { fLength = val; }
     auto Radius(auto val) -> void { fRadius = val; }
     auto Thickness(auto val) -> void { fThickness = val; }
-    auto Count(auto val) -> void { fCount = val; }
+    auto Count(auto val) -> void { fCount = std::max(2, val); }
 
 private:
     auto ImportValues(const YAML::Node& node) -> void override;
