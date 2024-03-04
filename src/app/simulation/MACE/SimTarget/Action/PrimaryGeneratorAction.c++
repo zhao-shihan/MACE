@@ -9,13 +9,11 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
     PassiveSingleton{},
     G4VUserPrimaryGeneratorAction{},
     fSurfaceMuonGenerator{},
-    fMuonsForEachG4Event{},
-    fMessengerRegister{this} {
-    fSurfaceMuonGenerator.PositionZ(-5_cm);
-}
+    fPrimariesForEachG4Event{10},
+    fMessengerRegister{this} {}
 
 auto PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) -> void {
-    for (G4int i = 0; i < fMuonsForEachG4Event; ++i) {
+    for (G4int i{}; i < fPrimariesForEachG4Event; ++i) {
         fSurfaceMuonGenerator.GeneratePrimaryVertex(event);
     }
 }

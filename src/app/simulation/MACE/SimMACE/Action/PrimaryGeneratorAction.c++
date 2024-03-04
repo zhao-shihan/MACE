@@ -1,7 +1,6 @@
 #include "MACE/SimMACE/Action/PrimaryGeneratorAction.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
-#include "G4Event.hh"
 #include "Randomize.hh"
 
 namespace MACE::SimMACE::inline Action {

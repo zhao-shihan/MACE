@@ -2,7 +2,6 @@
 
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimMACE/Messenger/PrimaryGeneratorActionMessenger.h++"
-#include "MACE/Simulation/Generator/SurfaceMuon.h++"
 
 #include "G4GeneralParticleSource.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"

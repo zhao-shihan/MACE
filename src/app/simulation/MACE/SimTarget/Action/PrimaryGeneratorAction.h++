@@ -2,8 +2,8 @@
 
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimTarget/Messenger/PrimaryGeneratorActionMessenger.h++"
-#include "MACE/Simulation/Generator/SurfaceMuon.h++"
 
+#include "G4GeneralParticleSource.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 
 namespace MACE::SimTarget::inline Action {
@@ -13,15 +13,15 @@ class PrimaryGeneratorAction final : public Env::Memory::PassiveSingleton<Primar
 public:
     PrimaryGeneratorAction();
 
-    auto MuonsForEachG4Event(G4int n) -> void { fMuonsForEachG4Event = n; }
-    auto MuonsForEachG4Event() const -> const auto& { return fMuonsForEachG4Event; }
+    auto PrimariesForEachG4Event(G4int n) -> void { fPrimariesForEachG4Event = n; }
+    auto PrimariesForEachG4Event() const -> const auto& { return fPrimariesForEachG4Event; }
 
     auto GeneratePrimaries(G4Event* event) -> void override;
 
 private:
-    Generator::SurfaceMuon fSurfaceMuonGenerator;
+    G4GeneralParticleSource fSurfaceMuonGenerator;
 
-    G4int fMuonsForEachG4Event;
+    G4int fPrimariesForEachG4Event;
 
     PrimaryGeneratorActionMessenger::Register<PrimaryGeneratorAction> fMessengerRegister;
 };

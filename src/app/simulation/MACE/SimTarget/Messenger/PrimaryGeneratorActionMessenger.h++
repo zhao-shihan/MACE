@@ -28,7 +28,7 @@ public:
     auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
-    std::unique_ptr<G4UIcmdWithAnInteger> fMuonsForEachG4Event;
+    std::unique_ptr<G4UIcmdWithAnInteger> fPrimariesForEachG4Event;
 };
 
 } // namespace Messenger

@@ -7,20 +7,20 @@ namespace MACE::SimTarget::inline Messenger {
 
 PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger() :
     SingletonMessenger{},
-    fMuonsForEachG4Event{} {
+    fPrimariesForEachG4Event{} {
 
-    fMuonsForEachG4Event = std::make_unique<G4UIcmdWithAnInteger>("/MACE/Generator/SurfaceMuon/MuonsForEachG4Event", this);
-    fMuonsForEachG4Event->SetGuidance("Set muons generated for each G4 event.");
-    fMuonsForEachG4Event->SetParameterName("n", false);
-    fMuonsForEachG4Event->AvailableForStates(G4State_Idle);
+    fPrimariesForEachG4Event = std::make_unique<G4UIcmdWithAnInteger>("/MACE/Generator/GPS/PrimariesForEachG4Event", this);
+    fPrimariesForEachG4Event->SetGuidance("Set muons generated for each G4 event.");
+    fPrimariesForEachG4Event->SetParameterName("n", false);
+    fPrimariesForEachG4Event->AvailableForStates(G4State_Idle);
 }
 
 PrimaryGeneratorActionMessenger::~PrimaryGeneratorActionMessenger() = default;
 
 auto PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
-    if (command == fMuonsForEachG4Event.get()) {
+    if (command == fPrimariesForEachG4Event.get()) {
         Deliver<PrimaryGeneratorAction>([&](auto&& r) {
-            r.MuonsForEachG4Event(fMuonsForEachG4Event->GetNewIntValue(value));
+            r.PrimariesForEachG4Event(fPrimariesForEachG4Event->GetNewIntValue(value));
         });
     }
 }
