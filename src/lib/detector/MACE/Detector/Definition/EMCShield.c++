@@ -19,6 +19,7 @@ auto EMCShield::Construct(G4bool checkOverlaps) -> void {
     const auto& emcField{Description::EMCField::Instance()};
     const auto& solenoid{Description::Solenoid::Instance()};
 
+    const auto x0{VectorCast<G4ThreeVector>(emcField.Center())};
     const auto pb{G4NistManager::Instance()->FindOrBuildMaterial("G4_Pb")};
 
     const auto solidBody{Make<G4Tubs>(
@@ -33,7 +34,7 @@ auto EMCShield::Construct(G4bool checkOverlaps) -> void {
         pb,
         shield.Name())};
     Make<G4PVPlacement>(
-        G4Transform3D{{}, VectorCast<G4ThreeVector>(emcField.Center())},
+        G4Transform3D{{}, x0},
         logicalBody,
         shield.Name(),
         Mother().LogicalVolume().get(),
@@ -52,16 +53,17 @@ auto EMCShield::Construct(G4bool checkOverlaps) -> void {
         solidCap,
         pb,
         shield.Name())};
-    Make<G4PVPlacement>( // clang-format off
-        G4Transform3D{{}, {0, 0, -shield.InnerLength() / 2 - shield.Thickness() / 2}}, // clang-format on
+    const G4ThreeVector deltaXEnd{0, 0, shield.InnerLength() / 2 + shield.Thickness() / 2};
+    Make<G4PVPlacement>(
+        G4Transform3D{{}, x0 - deltaXEnd},
         logicalCap,
         shield.Name(),
         Mother().LogicalVolume().get(),
         false,
         0,
         checkOverlaps);
-    Make<G4PVPlacement>( // clang-format off
-        G4Transform3D{{}, {0, 0, shield.InnerLength() / 2 + shield.Thickness() / 2}}, // clang-format on
+    Make<G4PVPlacement>(
+        G4Transform3D{{}, x0 + deltaXEnd},
         logicalCap,
         shield.Name(),
         Mother().LogicalVolume().get(),
