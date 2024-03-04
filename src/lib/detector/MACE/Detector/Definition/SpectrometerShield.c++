@@ -1,13 +1,14 @@
 #include "MACE/Detector/Definition/SpectrometerShield.h++"
-#include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Description/SpectrometerShield.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
+#include "G4SubtractionSolid.hh"
 #include "G4Transform3D.hh"
 #include "G4Tubs.hh"
-#include "G4UnionSolid.hh"
+
+#include <cmath>
 
 namespace MACE::Detector::Definition {
 
@@ -15,34 +16,53 @@ using namespace LiteralUnit;
 
 auto SpectrometerShield::Construct(G4bool checkOverlaps) -> void {
     const auto& shield{Description::SpectrometerShield::Instance()};
-    const auto& solenoid{Description::Solenoid::Instance()};
 
-    auto body{Make<G4Tubs>(
-        "_temp",
+    const auto solidBody{Make<G4Tubs>(
+        shield.Name(),
         shield.InnerRadius(),
         shield.InnerRadius() + shield.Thickness(),
         shield.InnerLength() / 2,
         0,
         2_pi)};
-    auto cap{Make<G4Tubs>(
-        "_temp",
-        solenoid.FieldRadius() + shield.GapAroundWindow(),
-        shield.InnerRadius() + shield.Thickness(),
-        shield.Thickness() / 2,
-        0,
-        2_pi)}; // clang-format off
-    auto solid{Make<G4UnionSolid>(
-            shield.Name(),
-            body,
-            cap, 
-        G4Transform3D{{}, {0, 0, -shield.InnerLength() / 2 - shield.Thickness() / 2}})}; // clang-format on
-    auto logic{Make<G4LogicalVolume>(
-        solid,
-        nullptr,
+    const auto logicBody{Make<G4LogicalVolume>(
+        solidBody,
+        G4NistManager::Instance()->FindOrBuildMaterial("G4_Pb"),
         shield.Name())};
     Make<G4PVPlacement>(
         G4Transform3D{},
-        logic,
+        logicBody,
+        shield.Name(),
+        Mother().LogicalVolume().get(),
+        false,
+        0,
+        checkOverlaps);
+
+    const auto zCap{shield.InnerLength() / 2 + shield.Thickness() / 2};
+    const auto solidCap{Make<G4SubtractionSolid>(
+        shield.Name(),
+        Make<G4Tubs>(
+            "_temp",
+            0,
+            shield.InnerRadius() + shield.Thickness(),
+            shield.Thickness() / 2,
+            0,
+            2_pi),
+        Make<G4Tubs>(
+            "_temp",
+            0,
+            shield.WindowRadius(),
+            shield.Thickness(),
+            0,
+            2_pi),
+        nullptr,
+        G4ThreeVector{zCap * std::tan(shield.BeamSlantAngle()), 0, 0})};
+    const auto logicCap{Make<G4LogicalVolume>(
+        solidCap,
+        G4NistManager::Instance()->FindOrBuildMaterial("G4_Pb"),
+        shield.Name())};
+    Make<G4PVPlacement>( // clang-format off
+        G4Transform3D{{}, {0, 0, -zCap}}, // clang-format on
+        logicCap,
         shield.Name(),
         Mother().LogicalVolume().get(),
         false,

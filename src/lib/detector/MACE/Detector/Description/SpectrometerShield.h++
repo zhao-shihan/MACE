@@ -12,15 +12,17 @@ private:
     ~SpectrometerShield() noexcept = default;
 
 public:
-    auto InnerRadius() const -> const auto& { return fInnerRadius; }
-    auto InnerLength() const -> const auto& { return fInnerLength; }
-    auto GapAroundWindow() const -> const auto& { return fGapAroundWindow; }
-    auto Thickness() const -> const auto& { return fThickness; }
+    auto InnerRadius() const -> auto { return fInnerRadius; }
+    auto InnerLength() const -> auto { return fInnerLength; }
+    auto Thickness() const -> auto { return fThickness; }
+    auto WindowRadius() const -> auto { return fWindowRadius; }
+    auto BeamSlantAngle() const -> auto { return fBeamSlantAngle; }
 
     auto InnerRadius(double val) -> void { fInnerRadius = val; }
     auto InnerLength(double val) -> void { fInnerLength = val; }
-    auto GapAroundWindow(double val) -> void { fGapAroundWindow = val; }
     auto Thickness(double val) -> void { fThickness = val; }
+    auto WindowRadius(double val) -> void { fWindowRadius = val; }
+    auto BeamSlantAngle(double val) -> void { fBeamSlantAngle = val; }
 
 private:
     auto ImportValues(const YAML::Node& node) -> void override;
@@ -29,8 +31,9 @@ private:
 private:
     double fInnerRadius;
     double fInnerLength;
-    double fGapAroundWindow;
     double fThickness;
+    double fWindowRadius;
+    double fBeamSlantAngle;
 };
 
 } // namespace MACE::Detector::Description
