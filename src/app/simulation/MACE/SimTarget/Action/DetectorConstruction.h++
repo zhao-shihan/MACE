@@ -5,7 +5,6 @@
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
-#include "MACE/SimTarget/Messenger/DetectorMessenger.h++"
 
 #include "G4VUserDetectorConstruction.hh"
 
@@ -29,9 +28,6 @@ public:
 
     auto Construct() -> G4VPhysicalVolume* override;
 
-    auto TargetDensity(G4double val) -> void { fTargetDensity = val; }
-    auto TargetTemperature(G4double val) -> void { fTargetTemperature = val; }
-
     auto SetCheckOverlaps(G4bool checkOverlaps) -> void { fCheckOverlap = checkOverlaps; }
 
 public:
@@ -44,11 +40,6 @@ private:
     G4bool fCheckOverlap;
 
     std::unique_ptr<Detector::Definition::DefinitionBase> fWorld;
-
-    G4double fTargetDensity;
-    G4double fTargetTemperature;
-
-    DetectorMessenger::Register<DetectorConstruction> fMessengerRegister;
 };
 
 } // namespace SimTarget::inline Action

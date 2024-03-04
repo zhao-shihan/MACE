@@ -17,9 +17,7 @@ DetectorMessenger::DetectorMessenger() :
     fDirectory{},
     fImportDescription{},
     fExportDescription{},
-    fIxportDescription{},
-    fTargetDensity{},
-    fTargetTemperature{} {
+    fIxportDescription{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Detector/");
 
@@ -38,18 +36,6 @@ DetectorMessenger::DetectorMessenger() :
                                     "Exported files have '.prev' (previous) or '.curr' (current) suffix, respectively.");
     fIxportDescription->SetParameterName("yaml", false);
     fIxportDescription->AvailableForStates(G4State_PreInit, G4State_Idle);
-
-    fTargetDensity = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Detector/TargetDensity", this);
-    fTargetDensity->SetGuidance("Set target density.");
-    fTargetDensity->SetParameterName("rho", false);
-    fTargetDensity->SetUnitCategory("Volumic Mass");
-    fTargetDensity->AvailableForStates(G4State_PreInit);
-
-    fTargetTemperature = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Detector/TargetTemperature", this);
-    fTargetTemperature->SetGuidance("Set target temperature.");
-    fTargetTemperature->SetParameterName("T", false);
-    fTargetTemperature->SetUnitCategory("Temperature");
-    fTargetTemperature->AvailableForStates(G4State_PreInit);
 }
 
 DetectorMessenger::~DetectorMessenger() = default;
@@ -63,14 +49,6 @@ auto DetectorMessenger::SetNewValue(G4UIcommand* command, G4String value) -> voi
         DescriptionIO::Export<DescriptionInUse>(std::string_view(value), "SimTarget: geometry description");
     } else if (command == fIxportDescription.get()) {
         DescriptionIO::Ixport<DescriptionInUse>(std::string_view(value), "SimTarget: geometry description");
-    } else if (command == fTargetDensity.get()) {
-        Deliver<DetectorConstruction>([&](auto&& r) {
-            r.TargetDensity(fTargetDensity->GetNewDoubleValue(value));
-        });
-    } else if (command == fTargetTemperature.get()) {
-        Deliver<DetectorConstruction>([&](auto&& r) {
-            r.TargetTemperature(fTargetTemperature->GetNewDoubleValue(value));
-        });
     }
 }
 

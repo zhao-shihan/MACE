@@ -4,24 +4,12 @@
 
 #include <memory>
 
-class G4UIcmdWith3VectorAndUnit;
-class G4UIcmdWithABool;
-class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
 class G4UIdirectory;
 
-namespace MACE::SimTarget {
+namespace MACE::SimTarget::inline Messenger {
 
-inline namespace Action {
-
-class DetectorConstruction;
-
-} // namespace Action
-
-inline namespace Messenger {
-
-class DetectorMessenger final : public Geant4X::SingletonMessenger<DetectorMessenger,
-                                                                   DetectorConstruction> {
+class DetectorMessenger final : public Geant4X::SingletonMessenger<DetectorMessenger> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -36,10 +24,6 @@ private:
     std::unique_ptr<G4UIcmdWithAString> fImportDescription;
     std::unique_ptr<G4UIcmdWithAString> fExportDescription;
     std::unique_ptr<G4UIcmdWithAString> fIxportDescription;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fTargetDensity;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fTargetTemperature;
 };
 
 } // namespace Messenger
-
-} // namespace MACE::SimTarget

@@ -94,7 +94,7 @@ void Analysis::OpenYieldFile() {
 void Analysis::AnalysisAndWriteYield() {
     std::array<unsigned long long, 5> yieldData;
     auto& [nMuon, nFormed, nTargetDecay, nVacuumDecay, nDetectableDecay]{yieldData};
-    nMuon = static_cast<unsigned long long>(PrimaryGeneratorAction::Instance().MuonsForEachG4Event()) *
+    nMuon = static_cast<unsigned long long>(PrimaryGeneratorAction::Instance().PrimariesForEachG4Event()) *
             static_cast<unsigned long long>(fThisRun->GetNumberOfEvent());
     nFormed = fMuoniumTrack.size();
     nTargetDecay = 0;
@@ -108,7 +108,7 @@ void Analysis::AnalysisAndWriteYield() {
             ++nTargetDecay;
         } else {
             ++nVacuumDecay;
-            if (target.TestDetectable(decayPosition)) {
+            if (target.DetectableAt(decayPosition)) {
                 ++nDetectableDecay;
             }
         }

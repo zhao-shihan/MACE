@@ -134,7 +134,6 @@ void MakeMACECDCGeometry() {
     const auto nist = G4NistManager::Instance();
 
     const auto aluminium = nist->FindOrBuildMaterial("G4_Al");
-    beamDegrader.RegisterMaterial(aluminium);
     cdcFieldWire.RegisterMaterial(aluminium);
 
     const auto cdcHeBasedGas = [&nist] {
@@ -157,12 +156,6 @@ void MakeMACECDCGeometry() {
 
     const auto cdcShell = nist->BuildMaterialWithNewDensity("CarbonFiber", "G4_C", 1.7_g_cm3);
     cdcBody.RegisterMaterial(cdcShell);
-
-    const auto plasticScitillator = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
-    beamMonitor.RegisterMaterial(plasticScitillator);
-
-    const auto silicaAerogel = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 27_mg_cm3);
-    target.RegisterMaterial(silicaAerogel);
 
     const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
     acceleratorField.RegisterMaterial(vacuum);

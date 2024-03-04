@@ -1,5 +1,7 @@
 #include "MACE/Detector/Definition/BeamMonitor.h++"
+#include "MACE/Detector/Description/AcceleratorField.h++"
 #include "MACE/Detector/Description/BeamMonitor.h++"
+#include "MACE/Detector/Description/Target.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4Box.hh"
@@ -10,30 +12,37 @@ namespace MACE::Detector::Definition {
 
 using namespace MACE::LiteralUnit::Density;
 
-bool BeamMonitor::Enabled() const {
+auto BeamMonitor::Enabled() const -> bool {
     return Description::BeamMonitor::Instance().Enabled();
 }
 
 auto BeamMonitor::Construct(G4bool checkOverlaps) -> void {
-    const auto& description = Description::BeamMonitor::Instance();
-    const auto name = description.Name();
-    const auto width = description.Width();
-    const auto thickness = description.Thickness();
-    const auto transform = description.CalcTransform();
+    const auto& monitor{Description::BeamMonitor::Instance()};
+    const auto& acceleratorField{Description::AcceleratorField::Instance()};
+    const auto& target{Description::Target::Instance()};
 
-    auto solid = Make<G4Box>(
-        name,
-        width / 2,
-        width / 2,
-        thickness / 2);
-    auto logic = Make<G4LogicalVolume>(
+    G4Transform3D transform;
+    switch (const auto z0{acceleratorField.Length() / 2 - acceleratorField.DownStreamLength()};
+            target.ShapeType()) {
+    case Description::Target::TargetShapeType::Cuboid: // clang-format off
+        transform = {{}, {0, 0, z0 - target.Cuboid().Thickness() - monitor.DistanceToTarget() - monitor.Thickness() / 2}};     // clang-format on
+    case Description::Target::TargetShapeType::MultiLayer: // clang-format off
+        transform = {{}, {0, 0, z0 - target.MultiLayer().Width() / 2 - monitor.DistanceToTarget() - monitor.Thickness() / 2}}; // clang-format on
+    }
+
+    const auto solid{Make<G4Box>(
+        monitor.Name(),
+        monitor.Width() / 2,
+        monitor.Width() / 2,
+        monitor.Thickness() / 2)};
+    const auto logic{Make<G4LogicalVolume>(
         solid,
-        nullptr,
-        name);
+        G4NistManager::Instance()->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE"),
+        monitor.Name())};
     Make<G4PVPlacement>(
         transform,
         logic,
-        name,
+        monitor.Name(),
         Mother().LogicalVolume().get(),
         false,
         0,

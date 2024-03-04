@@ -78,10 +78,10 @@ int main(int argc, char* argv[]) {
               << target.Cuboid().Width() << '\n'
               << target.Cuboid().Thickness() << '\n'
               << std23::to_underlying(target.Cuboid().DetailType()) << '\n'
-              << target.Cuboid().Hole().Extent() << '\n'
-              << target.Cuboid().Hole().Spacing() << '\n'
-              << target.Cuboid().Hole().Diameter() << '\n'
-              << target.Cuboid().Hole().Depth() << '\n'
+              << target.Cuboid().Perforated().Extent() << '\n'
+              << target.Cuboid().Perforated().Spacing() << '\n'
+              << target.Cuboid().Perforated().Diameter() << '\n'
+              << target.Cuboid().Perforated().Depth() << '\n'
               << std::endl;
 
     std::cout << "Shuffled!\n\n";
@@ -89,10 +89,10 @@ int main(int argc, char* argv[]) {
     target.Cuboid().Width(flat(rand));
     target.Cuboid().Thickness(flat(rand));
     target.Cuboid().DetailType(Description::Target::CuboidTarget::ShapeDetailType::Flat);
-    target.Cuboid().Hole().Extent(flat(rand));
-    target.Cuboid().Hole().Spacing(flat(rand));
-    target.Cuboid().Hole().Diameter(flat(rand));
-    target.Cuboid().Hole().Depth(flat(rand));
+    target.Cuboid().Perforated().Extent(flat(rand));
+    target.Cuboid().Perforated().Spacing(flat(rand));
+    target.Cuboid().Perforated().Diameter(flat(rand));
+    target.Cuboid().Perforated().Depth(flat(rand));
 
     Description::DescriptionIO::Export<Description::Target>("tg.yaml");
     std::cout << "After write into yaml:\n"
@@ -100,21 +100,21 @@ int main(int argc, char* argv[]) {
               << target.Cuboid().Width() << '\n'
               << target.Cuboid().Thickness() << '\n'
               << std23::to_underlying(target.Cuboid().DetailType()) << '\n'
-              << target.Cuboid().Hole().Extent() << '\n'
-              << target.Cuboid().Hole().Spacing() << '\n'
-              << target.Cuboid().Hole().Diameter() << '\n'
-              << target.Cuboid().Hole().Depth() << '\n'
+              << target.Cuboid().Perforated().Extent() << '\n'
+              << target.Cuboid().Perforated().Spacing() << '\n'
+              << target.Cuboid().Perforated().Diameter() << '\n'
+              << target.Cuboid().Perforated().Depth() << '\n'
               << std::endl;
 
     std::cout << "Shuffled!\n\n";
     // target.ShapeType();
     target.Cuboid().Width(flat(rand));
     target.Cuboid().Thickness(flat(rand));
-    target.Cuboid().DetailType(Description::Target::CuboidTarget::ShapeDetailType::Hole);
-    target.Cuboid().Hole().Extent(flat(rand));
-    target.Cuboid().Hole().Spacing(flat(rand));
-    target.Cuboid().Hole().Diameter(flat(rand));
-    target.Cuboid().Hole().Depth(flat(rand));
+    target.Cuboid().DetailType(Description::Target::CuboidTarget::ShapeDetailType::Perforated);
+    target.Cuboid().Perforated().Extent(flat(rand));
+    target.Cuboid().Perforated().Spacing(flat(rand));
+    target.Cuboid().Perforated().Diameter(flat(rand));
+    target.Cuboid().Perforated().Depth(flat(rand));
 
     Description::DescriptionIO::ImportInstantiated("tg.yaml");
     std::cout << "After read from yaml:\n"
@@ -122,10 +122,10 @@ int main(int argc, char* argv[]) {
               << target.Cuboid().Width() << '\n'
               << target.Cuboid().Thickness() << '\n'
               << std23::to_underlying(target.Cuboid().DetailType()) << '\n'
-              << target.Cuboid().Hole().Extent() << '\n'
-              << target.Cuboid().Hole().Spacing() << '\n'
-              << target.Cuboid().Hole().Diameter() << '\n'
-              << target.Cuboid().Hole().Depth() << '\n'
+              << target.Cuboid().Perforated().Extent() << '\n'
+              << target.Cuboid().Perforated().Spacing() << '\n'
+              << target.Cuboid().Perforated().Diameter() << '\n'
+              << target.Cuboid().Perforated().Depth() << '\n'
               << std::endl;
 
     return EXIT_SUCCESS;
