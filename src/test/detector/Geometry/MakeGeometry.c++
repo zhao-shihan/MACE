@@ -96,9 +96,9 @@ int main(int argc, char* argv[]) {
 
     auto& cdcGas = cdcBody.NewDaughter<CDCGas>(fCheckOverlap);
 
-    auto& beamDegrader = acceleratorField.NewDaughter<BeamDegrader>(fCheckOverlap);
-    auto& beamMonitor = acceleratorField.NewDaughter<BeamMonitor>(fCheckOverlap);
-    auto& target = acceleratorField.NewDaughter<Target>(fCheckOverlap);
+    /* auto& beamDegrader = */ acceleratorField.NewDaughter<BeamDegrader>(fCheckOverlap);
+    /* auto& beamMonitor = */ acceleratorField.NewDaughter<BeamMonitor>(fCheckOverlap);
+    /* auto& target = */ acceleratorField.NewDaughter<Target>(fCheckOverlap);
 
     // 4
 
