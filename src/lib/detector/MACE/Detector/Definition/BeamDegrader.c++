@@ -26,8 +26,10 @@ auto BeamDegrader::Construct(G4bool checkOverlaps) -> void {
             target.ShapeType()) {
     case Description::Target::TargetShapeType::Cuboid: // clang-format off
         transform = {{}, {0, 0, z0 - target.Cuboid().Thickness() - degrader.DistanceToTarget() - degrader.Thickness() / 2}};     // clang-format on
+        break;
     case Description::Target::TargetShapeType::MultiLayer: // clang-format off
         transform = {{}, {0, 0, z0 - target.MultiLayer().Width() / 2 - degrader.DistanceToTarget() - degrader.Thickness() / 2}}; // clang-format on
+        break;
     }
 
     const auto solid{Make<G4Box>(
