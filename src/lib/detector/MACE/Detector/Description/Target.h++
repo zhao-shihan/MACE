@@ -190,9 +190,11 @@ public:
 
     auto SilicaAerogelDensity() const -> auto { return fSilicaAerogelDensity; }
     auto EffectiveTemperature() const -> auto { return fEffectiveTemperature; }
+    auto MeanFreePath() const -> auto { return fMeanFreePath; }
 
     auto SilicaAerogelDensity(double val) -> void { fSilicaAerogelDensity = val; }
     auto EffectiveTemperature(double val) -> void { fEffectiveTemperature = val; }
+    auto MeanFreePath(double val) -> void { fMeanFreePath = val; }
 
     /// @brief Return true if inside the target volume (include boundary (closed region), don't consider fine structure).
     auto VolumeContain(const Concept::InputVector3D auto& x) const -> bool;
@@ -213,6 +215,7 @@ private:
 
     double fSilicaAerogelDensity;
     double fEffectiveTemperature;
+    double fMeanFreePath;
 };
 
 } // namespace MACE::Detector::Description

@@ -10,7 +10,6 @@ MuoniumPhysicsMessenger<ATarget>::MuoniumPhysicsMessenger() :
     fFormationProbability{},
     fConversionProbability{},
     fTransportProcessDirectory{},
-    fMeanFreePath{},
     fManipulateAllSteps{} {
 
     fMuoniumPhysicsDirectory = std::make_unique<G4UIdirectory>("/MACE/Physics/MuoniumPhysics/");
@@ -34,12 +33,6 @@ MuoniumPhysicsMessenger<ATarget>::MuoniumPhysicsMessenger() :
     fTransportProcessDirectory = std::make_unique<G4UIdirectory>("/MACE/Physics/MuoniumPhysics/Transport/");
     fTransportProcessDirectory->SetGuidance("The transport process of thermal muonium in the target.");
 
-    fMeanFreePath = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Physics/MuoniumPhysics/Transport/MeanFreePath", this),
-    fMeanFreePath->SetGuidance("Set thermal muonium mean free path in the target.");
-    fMeanFreePath->SetParameterName("lambda", false);
-    fMeanFreePath->SetUnitCategory("Length");
-    fMeanFreePath->AvailableForStates(G4State_Idle);
-
     fManipulateAllSteps = std::make_unique<G4UIcmdWithABool>("/MACE/Physics/MuoniumPhysics/Transport/ManipulateAllSteps", this),
     fManipulateAllSteps->SetGuidance("Set whether show each step of thermal random flight of muonium in the target or not.\n"
                                      "Warning: can be time consuming if set to true.");
@@ -56,10 +49,6 @@ auto MuoniumPhysicsMessenger<ATarget>::SetNewValue(G4UIcommand* command, G4Strin
     } else if (command == fConversionProbability.get()) {
         this->template Deliver<MuoniumFormation<ATarget>>([&](auto&& r) {
             r.ConversionProbability(fConversionProbability->GetNewDoubleValue(value));
-        });
-    } else if (command == fMeanFreePath.get()) {
-        this->template Deliver<MuoniumTransport<ATarget>>([&](auto&& r) {
-            r.MeanFreePath(fMeanFreePath->GetNewDoubleValue(value));
         });
     } else if (command == fManipulateAllSteps.get()) {
         this->template Deliver<MuoniumTransport<ATarget>>([&](auto&& r) {

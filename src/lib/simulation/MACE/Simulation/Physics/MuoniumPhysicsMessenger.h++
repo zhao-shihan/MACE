@@ -43,7 +43,6 @@ private:
     std::unique_ptr<G4UIcmdWithADouble> fConversionProbability;
 
     std::unique_ptr<G4UIdirectory> fTransportProcessDirectory;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMeanFreePath;
     std::unique_ptr<G4UIcmdWithABool> fManipulateAllSteps;
 };
 

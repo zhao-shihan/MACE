@@ -22,7 +22,8 @@ Target::Target() :
     fCuboid{},
     fMultiLayer{},
     fSilicaAerogelDensity{27_mg_cm3},
-    fEffectiveTemperature{400_K} {}
+    fEffectiveTemperature{400_K},
+    fMeanFreePath{200_nm} {}
 
 void Target::ImportValues(const YAML::Node& node) {
     ImportValue<std::string>(
@@ -113,6 +114,7 @@ void Target::ImportValues(const YAML::Node& node) {
     }
     ImportValue(node, fSilicaAerogelDensity, "SilicaAerogelDensity");
     ImportValue(node, fEffectiveTemperature, "EffectiveTemperature");
+    ImportValue(node, fMeanFreePath, "MeanFreePath");
 }
 
 void Target::ExportValues(YAML::Node& node) const {
@@ -175,6 +177,7 @@ void Target::ExportValues(YAML::Node& node) const {
     }
     ExportValue(node, fSilicaAerogelDensity, "SilicaAerogelDensity");
     ExportValue(node, fEffectiveTemperature, "EffectiveTemperature");
+    ExportValue(node, fMeanFreePath, "MeanFreePath");
 }
 
 Target::CuboidTarget::CuboidTarget() :

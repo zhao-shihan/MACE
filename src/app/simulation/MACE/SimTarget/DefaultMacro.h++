@@ -44,7 +44,6 @@ constexpr auto defaultMacro = {
     "# Set physics",
     "/MACE/Physics/MuoniumPhysics/Formation/FormationProbability     0.655",
     "/MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0",
-    "/MACE/Physics/MuoniumPhysics/Transport/MeanFreePath             0.2 um",
     "",
     "# kill secondaries",
     "/MACE/Action/KillIrrelevants    true",

@@ -4,6 +4,8 @@
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4Box.hh"
+#include "G4Material.hh"
+#include "G4MaterialPropertiesTable.hh"
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 
@@ -20,6 +22,10 @@ auto Target::Construct(G4bool checkOverlaps) -> void {
     silicaAerogel->AddMaterial(nist->FindOrBuildMaterial("G4_SILICON_DIOXIDE"), 0.625);
     silicaAerogel->AddMaterial(nist->FindOrBuildMaterial("G4_WATER"), 0.374);
     silicaAerogel->AddElement(nist->FindOrBuildElement("C"), 0.001);
+
+    const auto mpt{new G4MaterialPropertiesTable};
+    mpt->AddConstProperty("MUONIUM_MFP", target.MeanFreePath(), true);
+    silicaAerogel->SetMaterialPropertiesTable(mpt);
 
     switch (const auto z0{acceleratorField.Length() / 2 - acceleratorField.DownStreamLength()};
             target.ShapeType()) {
@@ -66,6 +72,7 @@ auto Target::Construct(G4bool checkOverlaps) -> void {
                 k,
                 checkOverlaps);
         }
+        return;
     }
     }
 }

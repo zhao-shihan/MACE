@@ -35,6 +35,7 @@ Target:
       Diameter: 0.184
   SilicaAerogelDensity: 1.6852074501044058e+17
   EffectiveTemperature: 400
+  MeanFreePath: 0.00020000000000000004
 World:
   HalfXExtent: 150
   HalfYExtent: 150
