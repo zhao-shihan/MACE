@@ -24,18 +24,18 @@ DetectorMessenger::DetectorMessenger() :
     fImportDescription = std::make_unique<G4UIcmdWithAString>("/MACE/Detector/Description/Import", this);
     fImportDescription->SetGuidance("Import geometry descriptions required by this program from a yaml file.");
     fImportDescription->SetParameterName("yaml", false);
-    fImportDescription->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fImportDescription->AvailableForStates(G4State_PreInit);
 
     fExportDescription = std::make_unique<G4UIcmdWithAString>("/MACE/Detector/Description/Export", this);
     fExportDescription->SetGuidance("Export geometry descriptions used by this program to a yaml file.");
     fExportDescription->SetParameterName("yaml", false);
-    fExportDescription->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fExportDescription->AvailableForStates(G4State_PreInit);
 
     fIxportDescription = std::make_unique<G4UIcmdWithAString>("/MACE/Detector/Description/Ixport", this);
     fIxportDescription->SetGuidance("Export, Import, then export geometry descriptions used by this program. "
                                     "Exported files have '.prev' (previous) or '.curr' (current) suffix, respectively.");
     fIxportDescription->SetParameterName("yaml", false);
-    fIxportDescription->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fIxportDescription->AvailableForStates(G4State_PreInit);
 }
 
 DetectorMessenger::~DetectorMessenger() = default;
