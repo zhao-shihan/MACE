@@ -21,7 +21,7 @@ class Target final : public DescriptionSingletonBase<Target> {
     friend Env::Memory::SingletonInstantiator;
 
 public:
-    enum class TargetShapeType {
+    enum struct TargetShapeType {
         Cuboid,
         MultiLayer
     };
@@ -43,7 +43,7 @@ public:
 
     class CuboidTarget final : public ShapeBase<CuboidTarget> {
     public:
-        enum class ShapeDetailType {
+        enum struct ShapeDetailType {
             Flat,
             Perforated
         };
@@ -105,7 +105,7 @@ public:
 
     class MultiLayerTarget final : public ShapeBase<MultiLayerTarget> {
     public:
-        enum class ShapeDetailType {
+        enum struct ShapeDetailType {
             Flat,
             Perforated
         };

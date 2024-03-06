@@ -33,7 +33,7 @@ public:
     MACE_ALWAYS_INLINE static auto Instantiated() -> bool { return not NotInstantiated(); }
 
 private:
-    enum class Status {
+    enum struct Status {
         NotInstantiated,
         Available,
         Expired

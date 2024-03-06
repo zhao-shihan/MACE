@@ -41,7 +41,7 @@ private:
     auto ProposeRandomFlight(const G4Track& track) -> void;
 
 private:
-    enum class TransportStatus {
+    enum struct TransportStatus {
         Unknown = -1,
         Decaying,
         InsideTargetVolume,

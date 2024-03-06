@@ -6,7 +6,7 @@
 
 namespace MACE::SimMACE {
 
-enum class RegionType {
+enum struct RegionType {
     CDCFieldWire,
     CDCSenseWire,
     DefaultGaseous,

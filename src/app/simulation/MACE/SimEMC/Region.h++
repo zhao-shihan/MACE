@@ -6,7 +6,7 @@
 
 namespace MACE::SimEMC {
 
-enum class RegionType {
+enum struct RegionType {
     EMCSensitive,
     MCPSensitive,
     SolenoidOrMagnet,
