@@ -29,7 +29,7 @@ DetectorMessenger::DetectorMessenger() :
     fExportDescription = std::make_unique<G4UIcmdWithAString>("/MACE/Detector/Description/Export", this);
     fExportDescription->SetGuidance("Export geometry descriptions used by this program to a yaml file.");
     fExportDescription->SetParameterName("yaml", false);
-    fExportDescription->AvailableForStates(G4State_PreInit);
+    fExportDescription->AvailableForStates(G4State_PreInit, G4State_Idle);
 
     fIxportDescription = std::make_unique<G4UIcmdWithAString>("/MACE/Detector/Description/Ixport", this);
     fIxportDescription->SetGuidance("Export, Import, then export geometry descriptions used by this program. "
