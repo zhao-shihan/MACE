@@ -129,10 +129,6 @@ int main(int argc, char* argv[]) {
         solenoidS3.RegisterMaterial(copper);
         filter.RegisterMaterial(copper);
 
-        const auto lead = nist->FindOrBuildMaterial("G4_Pb");
-        emcShield.RegisterMaterial(lead);
-        spectrometerShield.RegisterMaterial(lead);
-
         const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
         emcField.RegisterMaterial(vacuum);
         solenoidB1Field.RegisterMaterial(vacuum);

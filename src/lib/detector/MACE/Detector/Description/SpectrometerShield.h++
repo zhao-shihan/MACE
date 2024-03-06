@@ -2,6 +2,8 @@
 
 #include "MACE/Detector/Description/DescriptionBase.h++"
 
+#include <string>
+
 namespace MACE::Detector::Description {
 
 class SpectrometerShield final : public DescriptionSingletonBase<SpectrometerShield> {
@@ -9,9 +11,11 @@ class SpectrometerShield final : public DescriptionSingletonBase<SpectrometerShi
 
 private:
     SpectrometerShield();
-    ~SpectrometerShield() noexcept = default;
+    ~SpectrometerShield() = default;
 
 public:
+    // Geometry
+
     auto InnerRadius() const -> auto { return fInnerRadius; }
     auto InnerLength() const -> auto { return fInnerLength; }
     auto Thickness() const -> auto { return fThickness; }
@@ -24,16 +28,28 @@ public:
     auto WindowRadius(double val) -> void { fWindowRadius = val; }
     auto BeamSlantAngle(double val) -> void { fBeamSlantAngle = val; }
 
+    // Material
+
+    auto MaterialName() const -> const auto& { return fMaterialName; }
+
+    auto MaterialName(std::string name) -> void { fMaterialName = std::move(name); }
+
 private:
     auto ImportValues(const YAML::Node& node) -> void override;
     auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
+    // Geometry
+
     double fInnerRadius;
     double fInnerLength;
     double fThickness;
     double fWindowRadius;
     double fBeamSlantAngle;
+
+    // Material
+
+    std::string fMaterialName;
 };
 
 } // namespace MACE::Detector::Description

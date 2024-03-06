@@ -20,7 +20,7 @@ auto EMCShield::Construct(G4bool checkOverlaps) -> void {
     const auto& solenoid{Description::Solenoid::Instance()};
 
     const auto x0{VectorCast<G4ThreeVector>(emcField.Center())};
-    const auto pb{G4NistManager::Instance()->FindOrBuildMaterial("G4_Pb")};
+    const auto pb{G4NistManager::Instance()->FindOrBuildMaterial(shield.MaterialName())};
 
     const auto solidBody{Make<G4Tubs>(
         shield.Name(),

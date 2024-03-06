@@ -17,6 +17,8 @@ using namespace LiteralUnit;
 auto SpectrometerShield::Construct(G4bool checkOverlaps) -> void {
     const auto& shield{Description::SpectrometerShield::Instance()};
 
+    const auto pb{G4NistManager::Instance()->FindOrBuildMaterial(shield.MaterialName())};
+
     const auto solidBody{Make<G4Tubs>(
         shield.Name(),
         shield.InnerRadius(),
@@ -26,7 +28,7 @@ auto SpectrometerShield::Construct(G4bool checkOverlaps) -> void {
         2_pi)};
     const auto logicBody{Make<G4LogicalVolume>(
         solidBody,
-        G4NistManager::Instance()->FindOrBuildMaterial("G4_Pb"),
+        pb,
         shield.Name())};
     Make<G4PVPlacement>(
         G4Transform3D{},
@@ -58,7 +60,7 @@ auto SpectrometerShield::Construct(G4bool checkOverlaps) -> void {
         G4ThreeVector{zCap * std::tan(shield.BeamSlantAngle()), 0, 0})};
     const auto logicCap{Make<G4LogicalVolume>(
         solidCap,
-        G4NistManager::Instance()->FindOrBuildMaterial("G4_Pb"),
+        pb,
         shield.Name())};
     Make<G4PVPlacement>( // clang-format off
         G4Transform3D{{}, {0, 0, -zCap}}, // clang-format on
