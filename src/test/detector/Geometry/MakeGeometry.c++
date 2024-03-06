@@ -83,7 +83,7 @@ int main(int argc, char* argv[]) {
 
     auto& solenoidB2 = solenoidB2Field.NewDaughter<SolenoidB2>(fCheckOverlap);
 
-    auto& filter = solenoidS2Field.NewDaughter<Filter>(fCheckOverlap);
+    /* auto& filter = */ solenoidS2Field.NewDaughter<Filter>(fCheckOverlap);
     auto& solenoidS2 = solenoidS2Field.NewDaughter<SolenoidS2>(fCheckOverlap);
 
     auto& acceleratorField = spectrometerField.NewDaughter<AcceleratorField>(fCheckOverlap);
@@ -119,15 +119,6 @@ int main(int argc, char* argv[]) {
         using namespace MACE::LiteralUnit::Density;
 
         const auto nist = G4NistManager::Instance();
-
-        const auto copper = nist->FindOrBuildMaterial("G4_Cu");
-        spectrometerMagnet.RegisterMaterial(copper);
-        solenoidB1.RegisterMaterial(copper);
-        solenoidS1.RegisterMaterial(copper);
-        solenoidB2.RegisterMaterial(copper);
-        solenoidS2.RegisterMaterial(copper);
-        solenoidS3.RegisterMaterial(copper);
-        filter.RegisterMaterial(copper);
 
         const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
         emcField.RegisterMaterial(vacuum);

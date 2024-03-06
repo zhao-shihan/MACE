@@ -6,6 +6,7 @@
 #include "CLHEP/Vector/RotationZ.h"
 
 #include "G4Box.hh"
+#include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 
 #include <cmath>
@@ -22,29 +23,23 @@ bool Filter::Enabled() const {
 
 auto Filter::Construct(G4bool checkOverlaps) -> void {
     const auto& filter{Description::Filter::Instance()};
-    const auto name{filter.Name()};
-    const auto halfLength{filter.Length() / 2};
-    const auto radius{filter.Radius()};
-    const auto halfThickness{filter.Thickness() / 2};
-    const auto count{filter.Count()};
-    const auto interval{filter.Interval()};
 
-    for (auto i = 0; i < count; ++i) {
-        const auto x{(-radius + interval / 2) + i * interval};
-        const auto halfWidth{std::sqrt(Math::Pow<2>(radius) - Math::Pow<2>(x))};
+    for (auto i = 0; i < filter.Count(); ++i) {
+        const auto x{(-filter.Radius() + filter.Interval() / 2) + i * filter.Interval()};
+        const auto halfWidth{std::sqrt(Math::Pow<2>(filter.Radius()) - Math::Pow<2>(x))};
         const auto solid = Make<G4Box>(
             "",
-            halfThickness,
+            filter.Thickness() / 2,
             halfWidth,
-            halfLength);
+            filter.Length() / 2);
         const auto logic = Make<G4LogicalVolume>(
             solid,
-            nullptr,
-            name);
+            G4NistManager::Instance()->FindOrBuildMaterial(filter.MaterialName()),
+            filter.Name());
         Make<G4PVPlacement>( // clang-format off
             G4Transform3D{{}, {x, 0, 0}}, // clang-format on
             logic,
-            name,
+            filter.Name(),
             Mother().LogicalVolume().get(),
             false,
             0,

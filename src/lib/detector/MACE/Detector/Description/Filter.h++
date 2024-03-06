@@ -3,6 +3,8 @@
 #include "MACE/Detector/Description/DescriptionBase.h++"
 
 #include <algorithm>
+#include <string>
+#include <utility>
 
 namespace MACE::Detector::Description {
 
@@ -14,6 +16,8 @@ private:
     ~Filter() = default;
 
 public:
+    // Geometry
+
     auto Enabled() const -> auto { return fEnabled; }
     auto Length() const -> auto { return fLength; }
     auto Radius() const -> auto { return fRadius; }
@@ -27,16 +31,28 @@ public:
     auto Thickness(auto val) -> void { fThickness = val; }
     auto Count(auto val) -> void { fCount = std::max(2, val); }
 
+    // Material
+
+    auto MaterialName() const -> const auto& { return fMaterialName; }
+
+    auto MaterialName(std::string val) { fMaterialName = std::move(val); }
+
 private:
     auto ImportValues(const YAML::Node& node) -> void override;
     auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
+    // Geometry
+
     bool fEnabled;
     double fLength;
     double fRadius;
     double fThickness;
     int fCount;
+
+    // Material
+
+    std::string fMaterialName;
 };
 
 } // namespace MACE::Detector::Description

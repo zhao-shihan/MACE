@@ -153,9 +153,6 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
         const auto nist = G4NistManager::Instance();
 
-        const auto copper = nist->FindOrBuildMaterial("G4_Cu");
-        filter.RegisterMaterial(copper);
-    
         const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
         emcField.RegisterMaterial(vacuum);
         solenoidB1Field.RegisterMaterial(vacuum);
