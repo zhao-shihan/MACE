@@ -53,17 +53,21 @@ CDC::CDC() :
 auto CDC::GasMaterial() const -> G4Material* {
     constexpr auto materialName{"CDCGas"};
     const auto nist{G4NistManager::Instance()};
+
     auto gas{nist->FindMaterial(materialName)};
     if (gas) { return gas; }
+
     const auto heFraction{1 - fButaneFraction};
     const auto he{nist->FindOrBuildMaterial("G4_He")};
     const auto butane{nist->FindOrBuildMaterial("G4_BUTANE")};
-    gas = new G4Material{"CDCGas",
+
+    gas = new G4Material{materialName,
                          heFraction * he->GetDensity() + fButaneFraction * butane->GetDensity(),
                          2,
                          kStateGas};
     gas->AddMaterial(he, heFraction);
     gas->AddMaterial(butane, fButaneFraction);
+
     return gas;
 }
 

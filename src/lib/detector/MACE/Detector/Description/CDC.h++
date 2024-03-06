@@ -47,23 +47,23 @@ public:
     auto ShellSideThickness() const -> auto { return fShellSideThickness; }
     auto ShellOuterThickness() const -> auto { return fShellOuterThickness; }
 
-    auto EvenSuperLayerIsAxial(bool v) -> void { fEvenSuperLayerIsAxial = v, fCache.Expire(); }
-    auto NSuperLayer(int v) -> void { fNSuperLayer = v, fCache.Expire(); }
-    auto NSenseLayerPerSuper(int v) -> void { fNSenseLayerPerSuper = v, fCache.Expire(); }
-    auto GasInnerRadius(double v) -> void { fGasInnerRadius = v, fCache.Expire(); }
-    auto GasInnerLength(double v) -> void { fGasInnerLength = v, fCache.Expire(); }
-    auto EndCapSlope(double v) -> void { fEndCapSlope = v, fCache.Expire(); }
-    auto MinStereoAngle(double v) -> void { fMinStereoAngle = v, fCache.Expire(); }
-    auto CellWidthLowerBound(double v) -> void { fCellWidthLowerBound = v, fCache.Expire(); }
-    auto ReferenceCellWidth(double v) -> void { fReferenceCellWidth = v, fCache.Expire(); }
-    auto CellWidthUpperBound(double v) -> void { fCellWidthUpperBound = v, fCache.Expire(); }
-    auto FieldWireDiameter(double v) -> void { fFieldWireDiameter = v, fCache.Expire(); }
-    auto SenseWireDiameter(double v) -> void { fSenseWireDiameter = v, fCache.Expire(); }
-    auto MinAdjacentSuperLayersDistance(double v) -> void { fMinAdjacentSuperLayersDistance = v, fCache.Expire(); }
-    auto MinWireAndRadialShellDistance(double v) -> void { fMinWireAndRadialShellDistance = v, fCache.Expire(); }
-    auto ShellInnerThickness(double v) -> void { fShellInnerThickness = v, fCache.Expire(); }
-    auto ShellSideThickness(double v) -> void { fShellSideThickness = v, fCache.Expire(); }
-    auto ShellOuterThickness(double v) -> void { fShellOuterThickness = v, fCache.Expire(); }
+    auto EvenSuperLayerIsAxial(bool val) -> void { fEvenSuperLayerIsAxial = val, fCache.Expire(); }
+    auto NSuperLayer(int val) -> void { fNSuperLayer = val, fCache.Expire(); }
+    auto NSenseLayerPerSuper(int val) -> void { fNSenseLayerPerSuper = val, fCache.Expire(); }
+    auto GasInnerRadius(double val) -> void { fGasInnerRadius = val, fCache.Expire(); }
+    auto GasInnerLength(double val) -> void { fGasInnerLength = val, fCache.Expire(); }
+    auto EndCapSlope(double val) -> void { fEndCapSlope = val, fCache.Expire(); }
+    auto MinStereoAngle(double val) -> void { fMinStereoAngle = val, fCache.Expire(); }
+    auto CellWidthLowerBound(double val) -> void { fCellWidthLowerBound = val, fCache.Expire(); }
+    auto ReferenceCellWidth(double val) -> void { fReferenceCellWidth = val, fCache.Expire(); }
+    auto CellWidthUpperBound(double val) -> void { fCellWidthUpperBound = val, fCache.Expire(); }
+    auto FieldWireDiameter(double val) -> void { fFieldWireDiameter = val, fCache.Expire(); }
+    auto SenseWireDiameter(double val) -> void { fSenseWireDiameter = val, fCache.Expire(); }
+    auto MinAdjacentSuperLayersDistance(double val) -> void { fMinAdjacentSuperLayersDistance = val, fCache.Expire(); }
+    auto MinWireAndRadialShellDistance(double val) -> void { fMinWireAndRadialShellDistance = val, fCache.Expire(); }
+    auto ShellInnerThickness(double val) -> void { fShellInnerThickness = val, fCache.Expire(); }
+    auto ShellSideThickness(double val) -> void { fShellSideThickness = val, fCache.Expire(); }
+    auto ShellOuterThickness(double val) -> void { fShellOuterThickness = val, fCache.Expire(); }
 
     struct SuperLayerConfiguration {
         struct SenseLayerConfiguration {
@@ -118,7 +118,7 @@ public:
 
     auto ButaneFraction() const -> auto { return fButaneFraction; }
 
-    auto ButaneFraction(double v) -> void { fButaneFraction = v; }
+    auto ButaneFraction(double val) -> void { fButaneFraction = val; }
 
     auto GasMaterial() const -> G4Material*;
 
@@ -129,8 +129,8 @@ public:
     auto MeanDriftVelocity() const -> auto { return fMeanDriftVelocity; }
     auto TimeResolutionFWHM() const -> auto { return fTimeResolutionFWHM; }
 
-    auto MeanDriftVelocity(double v) -> void { fMeanDriftVelocity = v; }
-    auto TimeResolutionFWHM(double v) -> void { fTimeResolutionFWHM = v; }
+    auto MeanDriftVelocity(double val) -> void { fMeanDriftVelocity = val; }
+    auto TimeResolutionFWHM(double val) -> void { fTimeResolutionFWHM = val; }
 
 private:
     ///////////////////////////////////////////////////////////
