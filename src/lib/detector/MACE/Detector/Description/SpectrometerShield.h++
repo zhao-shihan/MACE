@@ -3,6 +3,7 @@
 #include "MACE/Detector/Description/DescriptionBase.h++"
 
 #include <string>
+#include <utility>
 
 namespace MACE::Detector::Description {
 
@@ -32,7 +33,7 @@ public:
 
     auto MaterialName() const -> const auto& { return fMaterialName; }
 
-    auto MaterialName(std::string name) -> void { fMaterialName = std::move(name); }
+    auto MaterialName(std::string val) -> void { fMaterialName = std::move(val); }
 
 private:
     auto ImportValues(const YAML::Node& node) -> void override;
