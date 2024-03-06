@@ -58,12 +58,14 @@ EMCShield:
   InnerLength: 1100
   GapAroundWindow: 10
   Thickness: 50
+  MaterialName: G4_Pb
 Filter:
   Enabled: true
   Length: 500
   Radius: 49
   Thickness: 0.20000000000000001
   Count: 85
+  MaterialName: G4_Cu
 MCP:
   Width: 100
   Thickness: 10
@@ -78,6 +80,7 @@ Solenoid:
   InnerRadius: 50
   OuterRadius: 100
   FieldRadius: 101
+  MaterialName: G4_Cu
   MagneticFluxDensity: 0.0001
 SpectrometerField:
   Radius: 610
@@ -87,12 +90,14 @@ SpectrometerMagnet:
   InnerRadius: 500
   OuterRadius: 550
   Length: 2180
+  MaterialName: G4_Cu
 SpectrometerShield:
   InnerRadius: 620
   InnerLength: 2220
   Thickness: 50
   WindowRadius: 30
   BeamSlantAngle: 0
+  MaterialName: G4_Pb
 Target:
   ShapeType: MultiLayer
   Cuboid:
