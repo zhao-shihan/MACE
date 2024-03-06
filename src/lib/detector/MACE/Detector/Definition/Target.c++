@@ -4,9 +4,6 @@
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4Box.hh"
-#include "G4Material.hh"
-#include "G4MaterialPropertiesTable.hh"
-#include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 
 namespace MACE::Detector::Definition {
@@ -16,16 +13,6 @@ using namespace MACE::LiteralUnit::Density;
 auto Target::Construct(G4bool checkOverlaps) -> void {
     const auto& target{Description::Target::Instance()};
     const auto& acceleratorField{Description::AcceleratorField::Instance()};
-
-    const auto nist{G4NistManager::Instance()}; // clang-format off
-    const auto silicaAerogel{new G4Material{"Aerogel", target.SilicaAerogelDensity(), 3, kStateSolid, target.EffectiveTemperature()}}; // clang-format on
-    silicaAerogel->AddMaterial(nist->FindOrBuildMaterial("G4_SILICON_DIOXIDE"), 0.625);
-    silicaAerogel->AddMaterial(nist->FindOrBuildMaterial("G4_WATER"), 0.374);
-    silicaAerogel->AddElement(nist->FindOrBuildElement("C"), 0.001);
-
-    const auto mpt{new G4MaterialPropertiesTable};
-    mpt->AddConstProperty("MUONIUM_MFP", target.MeanFreePath(), true);
-    silicaAerogel->SetMaterialPropertiesTable(mpt);
 
     switch (const auto z0{acceleratorField.Length() / 2 - acceleratorField.DownStreamLength()};
             target.ShapeType()) {
@@ -38,7 +25,7 @@ auto Target::Construct(G4bool checkOverlaps) -> void {
             cuboid.Thickness() / 2)};
         const auto logic{Make<G4LogicalVolume>(
             solid,
-            silicaAerogel,
+            target.Material(),
             target.Name())};
         Make<G4PVPlacement>( // clang-format off
             G4Transform3D{{}, {0, 0, z0 - cuboid.Thickness() / 2}}, // clang-format on
@@ -59,7 +46,7 @@ auto Target::Construct(G4bool checkOverlaps) -> void {
             multiLayer.Width() / 2)};
         const auto logic{Make<G4LogicalVolume>(
             solid,
-            silicaAerogel,
+            target.Material(),
             target.Name())};
         const auto r{multiLayer.Spacing() + multiLayer.Thickness()};
         for (int k{}; k < multiLayer.Count(); ++k) {

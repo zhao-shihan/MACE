@@ -15,6 +15,8 @@
 #include <concepts>
 #include <numbers>
 
+class G4Material;
+
 namespace MACE::Detector::Description {
 
 class Target final : public DescriptionSingletonBase<Target> {
@@ -195,6 +197,8 @@ public:
     auto SilicaAerogelDensity(double val) -> void { fSilicaAerogelDensity = val; }
     auto EffectiveTemperature(double val) -> void { fEffectiveTemperature = val; }
     auto MeanFreePath(double val) -> void { fMeanFreePath = val; }
+
+    auto Material() const -> G4Material*;
 
     /// @brief Return true if inside the target volume (include boundary (closed region), don't consider fine structure).
     auto VolumeContain(const Concept::InputVector3D auto& x) const -> bool;

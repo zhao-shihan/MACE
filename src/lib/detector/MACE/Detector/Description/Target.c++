@@ -5,6 +5,10 @@
 
 #include "CLHEP/Vector/Rotation.h"
 
+#include "G4Material.hh"
+#include "G4MaterialPropertiesTable.hh"
+#include "G4NistManager.hh"
+
 #include "fmt/format.h"
 
 #include <cstdio>
@@ -25,7 +29,26 @@ Target::Target() :
     fEffectiveTemperature{400_K},
     fMeanFreePath{200_nm} {}
 
-void Target::ImportValues(const YAML::Node& node) {
+auto Target::Material() const -> G4Material* {
+    constexpr auto materialName{"SilicaAerogel"};
+    const auto nist{G4NistManager::Instance()};
+
+    auto silicaAerogel{nist->FindMaterial(materialName)};
+    if (silicaAerogel) { return silicaAerogel; }
+
+    silicaAerogel = new G4Material{materialName, fSilicaAerogelDensity, 3, kStateSolid, fEffectiveTemperature};
+    silicaAerogel->AddMaterial(nist->FindOrBuildMaterial("G4_SILICON_DIOXIDE"), 0.625);
+    silicaAerogel->AddMaterial(nist->FindOrBuildMaterial("G4_WATER"), 0.374);
+    silicaAerogel->AddElement(nist->FindOrBuildElement("C"), 0.001);
+
+    const auto mpt{new G4MaterialPropertiesTable};
+    mpt->AddConstProperty("MUONIUM_MFP", fMeanFreePath, true);
+    silicaAerogel->SetMaterialPropertiesTable(mpt);
+
+    return silicaAerogel;
+}
+
+auto Target::ImportValues(const YAML::Node& node) -> void {
     ImportValue<std::string>(
         node, [this](auto&& shape) {
             if (shape == "Cuboid") {
@@ -117,7 +140,7 @@ void Target::ImportValues(const YAML::Node& node) {
     ImportValue(node, fMeanFreePath, "MeanFreePath");
 }
 
-void Target::ExportValues(YAML::Node& node) const {
+auto Target::ExportValues(YAML::Node& node) const -> void {
     using namespace std::string_literals;
     ExportValue(
         node, [this] {
