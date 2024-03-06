@@ -5,6 +5,9 @@
 #include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/Utility/VectorArithmeticOperator.h++"
 
+#include <string>
+#include <utility>
+
 namespace MACE::Detector::Description {
 
 class Solenoid final : public DescriptionSingletonBase<Solenoid> {
@@ -19,23 +22,23 @@ public:
     // Geometry
     ///////////////////////////////////////////////////////////
 
-    auto S1Length() const -> const auto& { return fS1Length; }
-    auto B1Radius() const -> const auto& { return fB1Radius; }
-    auto S2Length() const -> const auto& { return fS2Length; }
-    auto B2Radius() const -> const auto& { return fB2Radius; }
-    auto S3Length() const -> const auto& { return fS3Length; }
-    auto InnerRadius() const -> const auto& { return fInnerRadius; }
-    auto OuterRadius() const -> const auto& { return fOuterRadius; }
-    auto FieldRadius() const -> const auto& { return fFieldRadius; }
+    auto S1Length() const -> auto { return fS1Length; }
+    auto B1Radius() const -> auto { return fB1Radius; }
+    auto S2Length() const -> auto { return fS2Length; }
+    auto B2Radius() const -> auto { return fB2Radius; }
+    auto S3Length() const -> auto { return fS3Length; }
+    auto InnerRadius() const -> auto { return fInnerRadius; }
+    auto OuterRadius() const -> auto { return fOuterRadius; }
+    auto FieldRadius() const -> auto { return fFieldRadius; }
 
-    auto S1Length(auto v) -> void { fS1Length = v; }
-    auto B1Radius(auto v) -> void { fB1Radius = v; }
-    auto S2Length(auto v) -> void { fS2Length = v; }
-    auto B2Radius(auto v) -> void { fB2Radius = v; }
-    auto S3Length(auto v) -> void { fS3Length = v; }
-    auto InnerRadius(auto v) -> void { fInnerRadius = v; }
-    auto OuterRadius(auto v) -> void { fOuterRadius = v; }
-    auto FieldRadius(auto v) -> void { fFieldRadius = v; }
+    auto S1Length(double val) -> void { fS1Length = val; }
+    auto B1Radius(double val) -> void { fB1Radius = val; }
+    auto S2Length(double val) -> void { fS2Length = val; }
+    auto B2Radius(double val) -> void { fB2Radius = val; }
+    auto S3Length(double val) -> void { fS3Length = val; }
+    auto InnerRadius(double val) -> void { fInnerRadius = val; }
+    auto OuterRadius(double val) -> void { fOuterRadius = val; }
+    auto FieldRadius(double val) -> void { fFieldRadius = val; }
 
     auto S1Center() const -> stdx::array3d { return {0, 0, (SpectrometerField::Instance().Length() + fS1Length) / 2}; }
     auto B1Center() const -> stdx::array3d { return S1Center() + stdx::array3d{fB1Radius, 0, fS1Length / 2}; }
@@ -43,13 +46,13 @@ public:
     auto B2Center() const -> stdx::array3d { return S2Center() + stdx::array3d{fS2Length / 2, 0, fB2Radius}; }
     auto S3Center() const -> stdx::array3d { return B2Center() + stdx::array3d{fB2Radius, 0, fS3Length / 2}; }
 
-    // // Next 5 methods should only use for geometry construction.
+    ///////////////////////////////////////////////////////////
+    // Material
+    ///////////////////////////////////////////////////////////
 
-    // HepGeom::Transform3D S1Transform() const;
-    // HepGeom::Transform3D B1Transform() const;
-    // HepGeom::Transform3D S2Transform() const;
-    // HepGeom::Transform3D B2Transform() const;
-    // HepGeom::Transform3D S3Transform() const;
+    auto MaterialName() const -> const auto& { return fMaterialName; }
+
+    auto MaterialName(std::string val) -> void { fMaterialName = std::move(val); }
 
     ///////////////////////////////////////////////////////////
     // Field
@@ -76,6 +79,12 @@ private:
     double fInnerRadius;
     double fOuterRadius;
     double fFieldRadius;
+
+    ///////////////////////////////////////////////////////////
+    // Material
+    ///////////////////////////////////////////////////////////
+
+    std::string fMaterialName;
 
     ///////////////////////////////////////////////////////////
     // Field

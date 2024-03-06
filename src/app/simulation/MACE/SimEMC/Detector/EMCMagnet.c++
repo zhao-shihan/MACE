@@ -13,9 +13,6 @@ using namespace LiteralUnit;
 auto EMCMagnet::Construct(G4bool checkOverlaps) -> void {
     const auto& magnet{MACE::Detector::Description::EMCMagnet::Instance()};
 
-    const auto nist = G4NistManager::Instance();
-    const auto copper = nist->FindOrBuildMaterial("G4_Cu");
-
     const auto solid{Make<G4Tubs>(
         magnet.Name(),
         magnet.InnerRadius(),
@@ -23,12 +20,10 @@ auto EMCMagnet::Construct(G4bool checkOverlaps) -> void {
         magnet.Length() / 2,
         0,
         2_pi)};
-
     const auto logic{Make<G4LogicalVolume>(
         solid,
-        copper,
+        G4NistManager::Instance()->FindOrBuildMaterial(magnet.MaterialName()),
         magnet.Name())};
-
     Make<G4PVPlacement>(
         G4Transform3D(),
         logic,

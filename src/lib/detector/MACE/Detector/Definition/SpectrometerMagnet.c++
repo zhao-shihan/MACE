@@ -1,6 +1,6 @@
 #include "MACE/Detector/Definition/SpectrometerMagnet.h++"
 #include "MACE/Detector/Description/SpectrometerMagnet.h++"
-#include "MACE/Utility/MathConstant.h++"
+#include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -8,30 +8,26 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace MathConstant;
+using namespace LiteralUnit::MathConstantSuffix;
 
 auto SpectrometerMagnet::Construct(G4bool checkOverlaps) -> void {
-    const auto& description = Description::SpectrometerMagnet::Instance();
-    const auto name = description.Name();
-    const auto innerRadius = description.InnerRadius();
-    const auto outerRadius = description.OuterRadius();
-    const auto length = description.Length();
+    const auto& magnet{Description::SpectrometerMagnet::Instance()};
 
-    auto solid = Make<G4Tubs>(
-        name,
-        innerRadius,
-        outerRadius,
-        length / 2,
+    auto solid{Make<G4Tubs>(
+        magnet.Name(),
+        magnet.InnerRadius(),
+        magnet.OuterRadius(),
+        magnet.Length() / 2,
         0,
-        2 * pi);
+        2_pi)};
     auto logic = Make<G4LogicalVolume>(
         solid,
-        nullptr,
-        name);
+        G4NistManager::Instance()->FindOrBuildMaterial(magnet.MaterialName()),
+        magnet.Name());
     Make<G4PVPlacement>(
-        G4Transform3D(),
+        G4Transform3D{},
         logic,
-        name,
+        magnet.Name(),
         Mother().LogicalVolume().get(),
         false,
         0,

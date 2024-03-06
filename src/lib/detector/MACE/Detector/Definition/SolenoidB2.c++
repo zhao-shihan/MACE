@@ -1,6 +1,6 @@
 #include "MACE/Detector/Definition/SolenoidB2.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Utility/MathConstant.h++"
+#include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -8,28 +8,25 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace MathConstant;
+using namespace LiteralUnit::MathConstantSuffix;
 
 auto SolenoidB2::Construct(G4bool checkOverlaps) -> void {
-    const auto& description = Description::Solenoid::Instance();
-    const auto name = "SolenoidB2";
-    const auto innerRadius = description.InnerRadius();
-    const auto outerRadius = description.OuterRadius();
-    const auto bendRadius = description.B2Radius();
+    const auto& solenoid{Description::Solenoid::Instance()};
+    const auto name{solenoid.Name() + "B2"};
 
-    auto solid = Make<G4Torus>(
+    auto solid{Make<G4Torus>(
         name,
-        innerRadius,
-        outerRadius,
-        bendRadius,
-        -pi / 2,
-        pi / 2);
-    auto logic = Make<G4LogicalVolume>(
+        solenoid.InnerRadius(),
+        solenoid.OuterRadius(),
+        solenoid.B2Radius(),
+        -0.5_pi,
+        0.5_pi)};
+    auto logic{Make<G4LogicalVolume>(
         solid,
-        nullptr,
-        name);
+        G4NistManager::Instance()->FindOrBuildMaterial(solenoid.MaterialName()),
+        name)};
     Make<G4PVPlacement>(
-        G4Transform3D(),
+        G4Transform3D{},
         logic,
         name,
         Mother().LogicalVolume().get(),

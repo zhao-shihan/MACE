@@ -8,34 +8,26 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace LiteralUnit;
+using namespace LiteralUnit::MathConstantSuffix;
 
 auto EMCMagnet::Construct(G4bool checkOverlaps) -> void {
-    const auto& description = Description::EMCMagnet::Instance();
-    const auto name = description.Name();
-    const auto innerRadius = description.InnerRadius();
-    const auto outerRadius = description.OuterRadius();
-    const auto length = description.Length();
-
-    const auto nist = G4NistManager::Instance();
-
-    const auto copper = nist->FindOrBuildMaterial("G4_Cu");
+    const auto& magnet{Description::EMCMagnet::Instance()};
 
     const auto solid{Make<G4Tubs>(
-        name,
-        innerRadius,
-        outerRadius,
-        length / 2,
+        magnet.Name(),
+        magnet.InnerRadius(),
+        magnet.OuterRadius(),
+        magnet.Length() / 2,
         0,
         2_pi)};
     const auto logic{Make<G4LogicalVolume>(
         solid,
-        copper,
-        name)};
+        G4NistManager::Instance()->FindOrBuildMaterial(magnet.MaterialName()),
+        magnet.Name())};
     Make<G4PVPlacement>(
-        G4Transform3D(),
+        G4Transform3D{},
         logic,
-        name,
+        magnet.Name(),
         Mother().LogicalVolume().get(),
         false,
         0,
