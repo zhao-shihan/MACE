@@ -4,7 +4,6 @@ template<TargetForMuoniumPhysics ATarget>
 MuoniumFormation<ATarget>::MuoniumFormation() :
     NonMoveableBase{},
     G4VRestProcess{"MuoniumFormation", fUserDefined},
-    fFormationProbability{0.655},
     fConversionProbability{0},
     fParticleChange{},
     fMessengerRegister{this} {
@@ -50,12 +49,15 @@ auto MuoniumFormation<ATarget>::AtRestDoIt(const G4Track& track, const G4Step&) 
 
 template<TargetForMuoniumPhysics ATarget>
 auto MuoniumFormation<ATarget>::GetMeanLifeTime(const G4Track& track, G4ForceCondition*) -> G4double {
-    if (G4Random::getTheEngine()->flat() < fFormationProbability and
-        ATarget::Instance().Contain(track.GetPosition())) {
-        return std::numeric_limits<double>::min();
-    } else {
+    const auto mpt{track.GetNextMaterial()->GetMaterialPropertiesTable()};
+    if (mpt == nullptr or not mpt->ConstPropertyExists("MUONIUM_FORM_PROB")) {
         return std::numeric_limits<double>::max();
     }
+    if (G4Random::getTheEngine()->flat() < mpt->GetConstProperty("MUONIUM_FORM_PROB") and
+        ATarget::Instance().Contain(track.GetPosition())) {
+        return std::numeric_limits<double>::min();
+    }
+    return std::numeric_limits<double>::max();
 }
 
 } // namespace MACE::inline Simulation::inline Physics::inline Process

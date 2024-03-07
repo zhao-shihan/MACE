@@ -27,6 +27,7 @@ Target::Target() :
     fMultiLayer{},
     fSilicaAerogelDensity{27_mg_cm3},
     fEffectiveTemperature{400_K},
+    fFormationProbability{0.655},
     fMeanFreePath{200_nm} {}
 
 auto Target::Material() const -> G4Material* {
@@ -43,6 +44,7 @@ auto Target::Material() const -> G4Material* {
 
     const auto mpt{new G4MaterialPropertiesTable};
     mpt->AddConstProperty("MUONIUM_MFP", fMeanFreePath, true);
+    mpt->AddConstProperty("MUONIUM_FORM_PROB", fFormationProbability, true);
     silicaAerogel->SetMaterialPropertiesTable(mpt);
 
     return silicaAerogel;
@@ -137,6 +139,7 @@ auto Target::ImportValues(const YAML::Node& node) -> void {
     }
     ImportValue(node, fSilicaAerogelDensity, "SilicaAerogelDensity");
     ImportValue(node, fEffectiveTemperature, "EffectiveTemperature");
+    ImportValue(node, fFormationProbability, "FormationProbability");
     ImportValue(node, fMeanFreePath, "MeanFreePath");
 }
 
@@ -200,6 +203,7 @@ auto Target::ExportValues(YAML::Node& node) const -> void {
     }
     ExportValue(node, fSilicaAerogelDensity, "SilicaAerogelDensity");
     ExportValue(node, fEffectiveTemperature, "EffectiveTemperature");
+    ExportValue(node, fFormationProbability, "FormationProbability");
     ExportValue(node, fMeanFreePath, "MeanFreePath");
 }
 

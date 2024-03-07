@@ -24,7 +24,6 @@
 /MACE/Generator/GPS/PulseWidth                 0 ns
 /MACE/Generator/GPS/PrimariesForEachG4Event    1
 
-/MACE/Physics/MuoniumPhysics/Formation/FormationProbability     1
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    1
 
 /MACE/Field/AcceleratorPotential          5 kilovolt

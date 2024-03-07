@@ -28,7 +28,6 @@ constexpr auto defaultMacro = {
     "/MACE/Generator/GPS/PulseWidth                 0 ns",
     "/MACE/Generator/GPS/PrimariesForEachG4Event    1",
     "",
-    "/MACE/Physics/MuoniumPhysics/Formation/FormationProbability     0.655",
     "/MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5",
     "",
     "/MACE/Field/AcceleratorPotential          5 kilovolt",

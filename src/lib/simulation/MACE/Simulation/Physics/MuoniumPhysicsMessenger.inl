@@ -7,7 +7,6 @@ MuoniumPhysicsMessenger<ATarget>::MuoniumPhysicsMessenger() :
                                 MuoniumTransport<ATarget>>{},
     fMuoniumPhysicsDirectory{},
     fFormationProcessDirectory{},
-    fFormationProbability{},
     fConversionProbability{},
     fTransportProcessDirectory{},
     fManipulateAllSteps{} {
@@ -17,12 +16,6 @@ MuoniumPhysicsMessenger<ATarget>::MuoniumPhysicsMessenger() :
 
     fFormationProcessDirectory = std::make_unique<G4UIdirectory>("/MACE/Physics/MuoniumPhysics/Formation/");
     fFormationProcessDirectory->SetGuidance("Muonium formation and transition process.");
-
-    fFormationProbability = std::make_unique<G4UIcmdWithADouble>("/MACE/Physics/MuoniumPhysics/Formation/FormationProbability", this);
-    fFormationProbability->SetGuidance("Set integrated probability of rest mu+ captures a e- in the target.");
-    fFormationProbability->SetParameterName("P", false);
-    fFormationProbability->SetRange("0 <= P && P <= 1");
-    fFormationProbability->AvailableForStates(G4State_Idle);
 
     fConversionProbability = std::make_unique<G4UIcmdWithADouble>("/MACE/Physics/MuoniumPhysics/Formation/ConversionProbability", this);
     fConversionProbability->SetGuidance("Set integrated probability of muonium to anti-muonium conversion.");
@@ -42,11 +35,7 @@ MuoniumPhysicsMessenger<ATarget>::MuoniumPhysicsMessenger() :
 
 template<TargetForMuoniumPhysics ATarget>
 auto MuoniumPhysicsMessenger<ATarget>::SetNewValue(G4UIcommand* command, G4String value) -> void {
-    if (command == fFormationProbability.get()) {
-        this->template Deliver<MuoniumFormation<ATarget>>([&](auto&& r) {
-            r.FormationProbability(fFormationProbability->GetNewDoubleValue(value));
-        });
-    } else if (command == fConversionProbability.get()) {
+    if (command == fConversionProbability.get()) {
         this->template Deliver<MuoniumFormation<ATarget>>([&](auto&& r) {
             r.ConversionProbability(fConversionProbability->GetNewDoubleValue(value));
         });

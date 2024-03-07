@@ -192,10 +192,12 @@ public:
 
     auto SilicaAerogelDensity() const -> auto { return fSilicaAerogelDensity; }
     auto EffectiveTemperature() const -> auto { return fEffectiveTemperature; }
+    auto FormationProbability() const -> auto { return fFormationProbability; }
     auto MeanFreePath() const -> auto { return fMeanFreePath; }
 
     auto SilicaAerogelDensity(double val) -> void { fSilicaAerogelDensity = val; }
     auto EffectiveTemperature(double val) -> void { fEffectiveTemperature = val; }
+    auto FormationProbability(double val) -> void { fFormationProbability = val; }
     auto MeanFreePath(double val) -> void { fMeanFreePath = val; }
 
     auto Material() const -> G4Material*;
@@ -219,6 +221,7 @@ private:
 
     double fSilicaAerogelDensity;
     double fEffectiveTemperature;
+    double fFormationProbability;
     double fMeanFreePath;
 };
 

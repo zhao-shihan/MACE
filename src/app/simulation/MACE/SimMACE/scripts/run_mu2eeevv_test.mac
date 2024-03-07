@@ -28,7 +28,6 @@
 /MACE/Physics/MuonDecay/IPPDecay/MetropolisDelta         0.005
 /MACE/Physics/MuonDecay/IPPDecay/MetropolisDiscard       1000
 
-/MACE/Physics/MuoniumPhysics/Formation/FormationProbability     0.655
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 
 /MACE/Field/AcceleratorPotential          5 kilovolt

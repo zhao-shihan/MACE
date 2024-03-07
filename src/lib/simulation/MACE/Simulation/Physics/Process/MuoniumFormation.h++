@@ -25,7 +25,6 @@ class MuoniumFormation final : public NonMoveableBase,
 public:
     MuoniumFormation();
 
-    auto FormationProbability(G4double p) -> void { fFormationProbability = Math::Clamp<"[]">(p, 0., 1.); }
     auto ConversionProbability(G4double p) -> void { fConversionProbability = Math::Clamp<"[]">(p, 0., 1.); }
 
     auto IsApplicable(const G4ParticleDefinition&) -> G4bool override;
@@ -35,7 +34,6 @@ private:
     auto GetMeanLifeTime(const G4Track& track, G4ForceCondition*) -> G4double override;
 
 private:
-    G4double fFormationProbability;
     G4double fConversionProbability;
 
     G4ParticleChange fParticleChange;

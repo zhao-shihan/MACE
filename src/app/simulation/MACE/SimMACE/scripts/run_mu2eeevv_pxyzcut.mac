@@ -30,7 +30,6 @@
 /MACE/Physics/MuonDecay/IPPDecay/ApplyMACESpecificPxyCut true
 /MACE/Physics/MuonDecay/IPPDecay/ApplyMACESpecificPzCut  true
 
-/MACE/Physics/MuoniumPhysics/Formation/FormationProbability     0.655
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 
 /MACE/Field/AcceleratorPotential          5 kilovolt

@@ -42,7 +42,6 @@ constexpr auto defaultMacro = {
     "/MACE/Generator/GPS/PrimariesForEachG4Event    1",
     "",
     "# Set physics",
-    "/MACE/Physics/MuoniumPhysics/Formation/FormationProbability     0.655",
     "/MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0",
     "",
     "# kill secondaries",
