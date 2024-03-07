@@ -30,7 +30,6 @@ MuonInternalPairProductionDecayChannel::MuonInternalPairProductionDecayChannel(c
     fMetropolisDelta{0.05},
     fMetropolisDiscard{100},
     fApplyMACESpecificPxyCut{},
-    fApplyMACESpecificPzCut{},
     fThermalized{},
     fRAMBO{muon_mass_c2, {electron_mass_c2, electron_mass_c2, electron_mass_c2, 0, 0}},
     fRawState{},
@@ -68,12 +67,6 @@ MuonInternalPairProductionDecayChannel::MuonInternalPairProductionDecayChannel(c
 auto MuonInternalPairProductionDecayChannel::ApplyMACESpecificPxyCut(bool apply) -> void {
     if (apply and not MACESpecificCutApplicable()) { return; }
     fApplyMACESpecificPxyCut = apply;
-    fThermalized = false;
-}
-
-auto MuonInternalPairProductionDecayChannel::ApplyMACESpecificPzCut(bool apply) -> void {
-    if (apply and not MACESpecificCutApplicable()) { return; }
-    fApplyMACESpecificPzCut = apply;
     fThermalized = false;
 }
 
@@ -180,17 +173,6 @@ auto MuonInternalPairProductionDecayChannel::PassCut(const CLHEPX::RAMBO<5>::Eve
 
         passCut1 &= electronPxy > cdcPxyCut and positron1Pxy < cdcPxyCut and positron2Pxy < maxPositronPxy;
         passCut2 &= electronPxy > cdcPxyCut and positron2Pxy < cdcPxyCut and positron1Pxy < maxPositronPxy;
-    }
-
-    if (fApplyMACESpecificPzCut) {
-        const auto acceleratorU{Detector::Description::AcceleratorField::Instance().AcceleratorPotential()};
-        const auto maxPositronAbsPz{std::sqrt(2 * electron_mass_c2 * eplus * acceleratorU)};
-
-        const auto positron1AbsPz{std23::abs(p.z())};
-        const auto positron2AbsPz{std23::abs(p2.z())};
-
-        passCut1 &= positron2AbsPz < maxPositronAbsPz;
-        passCut2 &= positron1AbsPz < maxPositronAbsPz;
     }
 
     return passCut1 or passCut2;

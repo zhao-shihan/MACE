@@ -20,7 +20,6 @@ public:
     auto MetropolisDiscard(int n) -> void { fMetropolisDiscard = std::max(0, n); }
 
     auto ApplyMACESpecificPxyCut(bool apply) -> void;
-    auto ApplyMACESpecificPzCut(bool apply) -> void;
 
     auto DecayIt(G4double) -> G4DecayProducts* override;
 
@@ -37,7 +36,6 @@ private:
     int fMetropolisDiscard;
 
     bool fApplyMACESpecificPxyCut;
-    bool fApplyMACESpecificPzCut;
     bool fThermalized;
 
     CLHEPX::RAMBO<5> fRAMBO;
