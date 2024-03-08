@@ -13,6 +13,7 @@
 #include "MACE/Detector/Description/MCPChamber.h++"
 #include "MACE/Detector/Description/ShieldingWall.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
+#include "MACE/Detector/Description/SpectrometerBeamPipe.h++"
 #include "MACE/Detector/Description/SpectrometerField.h++"
 #include "MACE/Detector/Description/SpectrometerMagnet.h++"
 #include "MACE/Detector/Description/SpectrometerShield.h++"
@@ -75,6 +76,7 @@ public:
                                         Detector::Description::MCPChamber,
                                         Detector::Description::ShieldingWall,
                                         Detector::Description::Solenoid,
+                                        Detector::Description::SpectrometerBeamPipe,
                                         Detector::Description::SpectrometerField,
                                         Detector::Description::SpectrometerMagnet,
                                         Detector::Description::SpectrometerShield,

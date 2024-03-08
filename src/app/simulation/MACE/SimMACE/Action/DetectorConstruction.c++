@@ -26,6 +26,7 @@
 #include "MACE/Detector/Definition/SolenoidS2Field.h++"
 #include "MACE/Detector/Definition/SolenoidS3.h++"
 #include "MACE/Detector/Definition/SolenoidS3Field.h++"
+#include "MACE/Detector/Definition/SpectrometerBeamPipe.h++"
 #include "MACE/Detector/Definition/SpectrometerField.h++"
 #include "MACE/Detector/Definition/SpectrometerMagnet.h++"
 #include "MACE/Detector/Definition/SpectrometerShield.h++"
@@ -122,6 +123,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     auto& acceleratorField = spectrometerField.NewDaughter<Detector::Definition::AcceleratorField>(fCheckOverlap);
     auto& cdcBody = spectrometerField.NewDaughter<Detector::Definition::CDCBody>(fCheckOverlap);
+    auto& spectrometerBeamPipe = spectrometerField.NewDaughter<Detector::Definition::SpectrometerBeamPipe>(fCheckOverlap);
     auto& spectrometerMagnet = spectrometerField.NewDaughter<Detector::Definition::SpectrometerMagnet>(fCheckOverlap);
 
     auto& solenoidS3 = solenoidS3Field.NewDaughter<Detector::Definition::SolenoidS3>(fCheckOverlap);
@@ -204,6 +206,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         filter.RegisterRegion(fDefaultSolidRegion);
         mcpChamber.RegisterRegion(fDefaultSolidRegion);
         shieldingWall.RegisterRegion(fDefaultSolidRegion);
+        spectrometerBeamPipe.RegisterRegion(fDefaultSolidRegion);
 
         // EMCSensitiveRegion
         fEMCSensitiveRegion = new Region("EMCSensitive", RegionType::EMCSensitive);

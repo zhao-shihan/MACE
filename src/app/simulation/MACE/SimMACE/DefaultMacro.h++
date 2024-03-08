@@ -111,6 +111,7 @@ constexpr auto defaultMacro = {
     "/vis/geometry/set/colour SolenoidS2Field               0     1     1     1     0.05",
     "/vis/geometry/set/colour SolenoidS3                    0     1     1     1     0.05",
     "/vis/geometry/set/colour SolenoidS3Field               0     1     1     1     0.05",
+    "/vis/geometry/set/colour SpectrometerBeamPipe          0     1     1     1     0.05",
     "/vis/geometry/set/colour SpectrometerField             0     1     1     1     0.05",
     "/vis/geometry/set/colour SpectrometerMagnet            0     1     1     1     0.05",
     "/vis/geometry/set/colour SpectrometerShield            0     1     1     1     0.05",

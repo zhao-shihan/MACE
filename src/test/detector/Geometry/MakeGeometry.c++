@@ -25,6 +25,7 @@
 #include "MACE/Detector/Definition/SolenoidS2Field.h++"
 #include "MACE/Detector/Definition/SolenoidS3.h++"
 #include "MACE/Detector/Definition/SolenoidS3Field.h++"
+#include "MACE/Detector/Definition/SpectrometerBeamPipe.h++"
 #include "MACE/Detector/Definition/SpectrometerField.h++"
 #include "MACE/Detector/Definition/SpectrometerMagnet.h++"
 #include "MACE/Detector/Definition/SpectrometerShield.h++"
@@ -89,6 +90,7 @@ int main(int argc, char* argv[]) {
 
     auto& acceleratorField = spectrometerField.NewDaughter<AcceleratorField>(fCheckOverlap);
     auto& cdcBody = spectrometerField.NewDaughter<CDCBody>(fCheckOverlap);
+    /* auto& spectrometerBeamPipe = */ spectrometerField.NewDaughter<SpectrometerBeamPipe>(fCheckOverlap);
     auto& spectrometerMagnet = spectrometerField.NewDaughter<SpectrometerMagnet>(fCheckOverlap);
 
     auto& solenoidS3 = solenoidS3Field.NewDaughter<SolenoidS3>(fCheckOverlap);

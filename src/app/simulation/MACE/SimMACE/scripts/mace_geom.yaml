@@ -93,6 +93,10 @@ Solenoid:
   FieldRadius: 101
   MaterialName: G4_Cu
   MagneticFluxDensity: 0.0001
+SpectrometerBeamPipe:
+  InnerRadius: 80
+  Thickness: 0.5
+  Length: 1200
 SpectrometerField:
   Radius: 610
   Length: 2200
