@@ -4,16 +4,7 @@ set(MACE_G4_MINIMUM_REQUIRED 11.0.0)
 
 find_package(Geant4 ${MACE_G4_MINIMUM_REQUIRED} REQUIRED) # to load Geant4Config.cmake
 
-set(MACE_G4_REQUIRED_COMPONENTS "ui_all")
-
-if(MACE_USE_G4GDML)
-    if(Geant4_gdml_FOUND)
-        list(APPEND MACE_G4_REQUIRED_COMPONENTS gdml)
-    else()
-        set(MACE_USE_G4GDML OFF)
-        message(NOTICE "***Notice: Geant4::G4gdml not found. Turning off MACE_USE_G4GDML")
-    endif()
-endif()
+set(MACE_G4_REQUIRED_COMPONENTS ui_all gdml)
 
 if(MACE_USE_G4VIS)
     list(APPEND MACE_G4_REQUIRED_COMPONENTS vis_all)
