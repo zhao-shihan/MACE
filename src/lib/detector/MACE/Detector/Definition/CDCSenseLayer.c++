@@ -51,7 +51,7 @@ auto CDCSenseLayer::Construct(G4bool checkOverlaps) -> void {
                 G4Transform3D{},
                 logic,
                 fmt::format("{}_{}", name, sense.senseLayerID),
-                Mother().LogicalVolume(super.superLayerID).get(),
+                Mother().LogicalVolume(super.superLayerID),
                 false,
                 sense.senseLayerID,
                 checkOverlaps);

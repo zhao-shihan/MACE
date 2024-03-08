@@ -34,7 +34,7 @@ auto SpectrometerShield::Construct(G4bool checkOverlaps) -> void {
         G4Transform3D{},
         logicBody,
         shield.Name(),
-        Mother().LogicalVolume().get(),
+        Mother().LogicalVolume(),
         false,
         0,
         checkOverlaps);
@@ -66,7 +66,7 @@ auto SpectrometerShield::Construct(G4bool checkOverlaps) -> void {
         G4Transform3D{{}, {0, 0, -zCap}}, // clang-format on
         logicCap,
         shield.Name(),
-        Mother().LogicalVolume().get(),
+        Mother().LogicalVolume(),
         false,
         0,
         checkOverlaps);

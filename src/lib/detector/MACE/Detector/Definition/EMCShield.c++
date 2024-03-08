@@ -37,7 +37,7 @@ auto EMCShield::Construct(G4bool checkOverlaps) -> void {
         G4Transform3D{{}, x0},
         logicalBody,
         shield.Name(),
-        Mother().LogicalVolume().get(),
+        Mother().LogicalVolume(),
         false,
         0,
         checkOverlaps);
@@ -58,7 +58,7 @@ auto EMCShield::Construct(G4bool checkOverlaps) -> void {
         G4Transform3D{{}, x0 - deltaXEnd},
         logicalCap,
         shield.Name(),
-        Mother().LogicalVolume().get(),
+        Mother().LogicalVolume(),
         false,
         0,
         checkOverlaps);
@@ -66,7 +66,7 @@ auto EMCShield::Construct(G4bool checkOverlaps) -> void {
         G4Transform3D{{}, x0 + deltaXEnd},
         logicalCap,
         shield.Name(),
-        Mother().LogicalVolume().get(),
+        Mother().LogicalVolume(),
         false,
         0,
         checkOverlaps);

@@ -39,7 +39,7 @@ namespace internal {
 namespace {
 
 template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
-auto RegisterField(const std::unique_ptr<G4LogicalVolume>& logic, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) -> void {
+auto RegisterField(G4LogicalVolume* logic, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) -> void {
     const auto equation{new AEquation{field}};
     const auto stepper{[&equation, &nVarStepper] {
         if constexpr (requires { AStepper{equation, nVarStepper}; }) {
@@ -99,20 +99,45 @@ auto DefinitionBase::RegisterField(std::string_view logicalVolumeName, gsl::inde
 
 template<std::derived_from<G4VSolid> ASolid>
 auto DefinitionBase::Make(auto&&... args) -> gsl::not_null<ASolid*> {
-    auto solid{std::make_unique<ASolid>(std::forward<decltype(args)>(args)...)};
-    return static_cast<ASolid*>(fSolidStore.emplace_back(std::move(solid)).get());
+    return static_cast<ASolid*>(
+        fSolidStore
+            .emplace_back(
+                std::make_unique<ASolid>(std::forward<decltype(args)>(args)...))
+            .get());
 }
 
 template<std::derived_from<G4LogicalVolume> ALogical>
 auto DefinitionBase::Make(auto&&... args) -> gsl::not_null<ALogical*> {
-    auto logic{std::make_unique<ALogical>(std::forward<decltype(args)>(args)...)};
-    return static_cast<ALogical*>(fLogicalVolumes[logic->GetName()].emplace_back(std::move(logic)).get());
+    const auto logic{
+        fLogicalVolumeStore
+            .emplace_back(
+                std::make_unique<ALogical>(std::forward<decltype(args)>(args)...))
+            .get()};
+    fLogicalVolumes[logic->GetName()].emplace_back(logic);
+    if (fFirstLogicalVolumes == nullptr) {
+        assert(fLogicalVolumeStore.size() == 1);
+        assert(fLogicalVolumes.size() == 1);
+        fFirstLogicalVolumes = &fLogicalVolumes.cbegin()->second;
+        assert(fFirstLogicalVolumes->size() == 1);
+    }
+    return static_cast<ALogical*>(logic);
 }
 
 template<std::derived_from<G4VPhysicalVolume> APhysical>
 auto DefinitionBase::Make(auto&&... args) -> gsl::not_null<APhysical*> {
-    auto physics{std::make_unique<APhysical>(std::forward<decltype(args)>(args)...)};
-    return static_cast<APhysical*>(fPhysicalVolumes[physics->GetName()].emplace_back(std::move(physics)).get());
+    const auto physics{
+        fPhysicalVolumeStore
+            .emplace_back(
+                std::make_unique<APhysical>(std::forward<decltype(args)>(args)...))
+            .get()};
+    fPhysicalVolumes[physics->GetName()].emplace_back(physics);
+    if (fFirstPhysicalVolumes == nullptr) {
+        assert(fPhysicalVolumeStore.size() == 1);
+        assert(fPhysicalVolumes.size() == 1);
+        fFirstPhysicalVolumes = &fPhysicalVolumes.cbegin()->second;
+        assert(fFirstPhysicalVolumes->size() == 1);
+    }
+    return static_cast<APhysical*>(physics);
 }
 
 } // namespace MACE::Detector::Definition

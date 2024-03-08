@@ -30,7 +30,7 @@ auto EMCField::Construct(G4bool checkOverlaps) -> void {
         G4Transform3D{{}, VectorCast<G4ThreeVector>(emcField.Center())},
         logic,
         name,
-        Mother().LogicalVolume().get(),
+        Mother().LogicalVolume(),
         false,
         0,
         checkOverlaps);

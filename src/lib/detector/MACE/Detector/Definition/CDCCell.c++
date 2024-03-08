@@ -75,7 +75,7 @@ auto CDCCell::Construct(G4bool checkOverlaps) -> void {
                     G4Transform3D{CLHEP::HepRotationZ{cell.centerAzimuth - phiFWFront}, {}},
                     logicalCell,
                     fmt::format("{}_{}", cellName, cell.cellID),
-                    Mother().LogicalVolume(sense.senseLayerID).get(),
+                    Mother().LogicalVolume(sense.senseLayerID),
                     false,
                     cell.cellID,
                     checkOverlaps);

@@ -40,7 +40,7 @@ auto Filter::Construct(G4bool checkOverlaps) -> void {
             G4Transform3D{{}, {x, 0, 0}}, // clang-format on
             logic,
             filter.Name(),
-            Mother().LogicalVolume().get(),
+            Mother().LogicalVolume(),
             false,
             0,
             checkOverlaps);

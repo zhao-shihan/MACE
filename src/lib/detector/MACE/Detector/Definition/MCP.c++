@@ -36,7 +36,7 @@ auto MCP::Construct(G4bool checkOverlaps) -> void {
             G4ThreeVector(0, 0, thickness / 2)),
         logic,
         name,
-        Mother().LogicalVolume().get(),
+        Mother().LogicalVolume(),
         false,
         0,
         checkOverlaps);

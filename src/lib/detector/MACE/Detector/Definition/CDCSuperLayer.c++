@@ -49,7 +49,7 @@ auto CDCSuperLayer::Construct(G4bool checkOverlaps) -> void {
             G4Transform3D{},
             logic,
             fmt::format("{}_{}", name, superLayerID),
-            Mother().LogicalVolume().get(),
+            Mother().LogicalVolume(),
             false,
             superLayerID,
             checkOverlaps);

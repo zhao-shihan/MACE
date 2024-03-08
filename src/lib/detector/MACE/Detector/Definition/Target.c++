@@ -31,7 +31,7 @@ auto Target::Construct(G4bool checkOverlaps) -> void {
             G4Transform3D{{}, {0, 0, z0 - cuboid.Thickness() / 2}}, // clang-format on
             logic,
             target.Name(),
-            Mother().LogicalVolume().get(),
+            Mother().LogicalVolume(),
             false,
             0,
             checkOverlaps);
@@ -54,7 +54,7 @@ auto Target::Construct(G4bool checkOverlaps) -> void {
                 G4Transform3D{{}, {k * r - r * (multiLayer.Count() - 1) / 2, 0, z0}}, // clang-format on
                 logic,
                 target.Name(),
-                Mother().LogicalVolume().get(),
+                Mother().LogicalVolume(),
                 false,
                 k,
                 checkOverlaps);

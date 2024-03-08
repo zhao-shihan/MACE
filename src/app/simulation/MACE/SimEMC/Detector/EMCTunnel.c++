@@ -60,7 +60,7 @@ auto EMCTunnel::Construct(G4bool checkOverlaps) -> void {
         G4Transform3D(),
         logic,
         "EMCTunnel",
-        Mother().LogicalVolume().get(),
+        Mother().LogicalVolume(),
         false,
         0,
         checkOverlaps);

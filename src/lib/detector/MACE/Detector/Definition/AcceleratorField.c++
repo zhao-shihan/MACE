@@ -31,7 +31,7 @@ auto AcceleratorField::Construct(G4bool checkOverlaps) -> void {
         transform,
         logic,
         name,
-        Mother().LogicalVolume().get(),
+        Mother().LogicalVolume(),
         false,
         0,
         checkOverlaps);

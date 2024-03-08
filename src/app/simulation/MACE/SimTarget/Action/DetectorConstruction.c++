@@ -45,7 +45,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto nist{G4NistManager::Instance()};
     fWorld->RegisterMaterial(nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3, 293_K));
 
-    return fWorld->PhysicalVolume().get();
+    return fWorld->PhysicalVolume();
 }
 
 } // namespace MACE::SimTarget::inline Action

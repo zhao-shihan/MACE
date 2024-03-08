@@ -45,7 +45,7 @@ auto BeamDegrader::Construct(G4bool checkOverlaps) -> void {
         transform,
         logic,
         degrader.Name(),
-        Mother().LogicalVolume().get(),
+        Mother().LogicalVolume(),
         false,
         0,
         checkOverlaps);

@@ -340,7 +340,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
             new EMCField, hMin, 6, 6, false);
     }
 
-    return fWorld->PhysicalVolume().get();
+    return fWorld->PhysicalVolume();
 }
 
 } // namespace MACE::SimMACE::inline Action

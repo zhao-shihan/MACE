@@ -106,7 +106,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     // fWorld->Export("geometry.gdml");
 
-    return fWorld->PhysicalVolume().get();
+    return fWorld->PhysicalVolume();
 }
 
 } // namespace MACE::SimEMC::inline Action

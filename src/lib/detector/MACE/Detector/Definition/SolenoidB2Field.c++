@@ -32,7 +32,7 @@ auto SolenoidB2Field::Construct(G4bool checkOverlaps) -> void {
         G4Transform3D{CLHEP::HepRotationX{pi / 2}, VectorCast<G4ThreeVector>(solenoid.B2Center())},
         logic,
         name,
-        Mother().LogicalVolume().get(),
+        Mother().LogicalVolume(),
         false,
         0,
         checkOverlaps);

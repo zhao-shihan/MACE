@@ -79,15 +79,15 @@ public:
     auto Export(std::filesystem::path gdmlFile, gsl::index iPhysicalVolume = 0) const -> void;
     auto Export(std::filesystem::path gdmlFile, std::string_view physicalVolumeName, gsl::index iPhysicalVolume = 0) const -> void;
 
-    auto LogicalVolumes() const -> const std::vector<std::unique_ptr<G4LogicalVolume>>&;
+    auto LogicalVolumes() const -> const std::vector<G4LogicalVolume*>&;
     auto LogicalVolumes(std::string_view name) const -> const auto& { return fLogicalVolumes.at(std::string{name}); }
-    auto LogicalVolume(gsl::index i = 0) const -> const auto& { return LogicalVolumes().at(i); }
-    auto LogicalVolume(std::string_view name, gsl::index i = 0) const -> const auto& { return LogicalVolumes(name).at(i); }
+    auto LogicalVolume(gsl::index i = 0) const -> auto { return LogicalVolumes().at(i); }
+    auto LogicalVolume(std::string_view name, gsl::index i = 0) const -> auto { return LogicalVolumes(name).at(i); }
 
-    auto PhysicalVolumes() const -> const std::vector<std::unique_ptr<G4VPhysicalVolume>>&;
+    auto PhysicalVolumes() const -> const std::vector<G4VPhysicalVolume*>&;
     auto PhysicalVolumes(std::string_view name) const -> const auto& { return fPhysicalVolumes.at(std::string{name}); }
-    auto PhysicalVolume(gsl::index i = 0) const -> const auto& { return PhysicalVolumes().at(i); }
-    auto PhysicalVolume(std::string_view name, gsl::index i = 0) const -> const auto& { return PhysicalVolumes(name).at(i); }
+    auto PhysicalVolume(gsl::index i = 0) const -> auto { return PhysicalVolumes().at(i); }
+    auto PhysicalVolume(std::string_view name, gsl::index i = 0) const -> auto { return PhysicalVolumes(name).at(i); }
 
 protected:
     // Make a G4Solid and keep it (for deleting when geometry deconstructs).
@@ -109,8 +109,13 @@ private:
     const DefinitionBase* fMother{};
 
     std::vector<std::unique_ptr<G4VSolid>> fSolidStore;
-    std::unordered_map<std::string, std::vector<std::unique_ptr<G4LogicalVolume>>> fLogicalVolumes;
-    std::unordered_map<std::string, std::vector<std::unique_ptr<G4VPhysicalVolume>>> fPhysicalVolumes;
+    std::vector<std::unique_ptr<G4LogicalVolume>> fLogicalVolumeStore;
+    std::vector<std::unique_ptr<G4VPhysicalVolume>> fPhysicalVolumeStore;
+
+    std::unordered_map<std::string, std::vector<G4LogicalVolume*>> fLogicalVolumes;
+    const std::vector<G4LogicalVolume*>* fFirstLogicalVolumes{};
+    std::unordered_map<std::string, std::vector<G4VPhysicalVolume*>> fPhysicalVolumes;
+    const std::vector<G4VPhysicalVolume*>* fFirstPhysicalVolumes{};
 
     std::unordered_map<std::type_index, std::unique_ptr<DefinitionBase>> fDaughters;
 };

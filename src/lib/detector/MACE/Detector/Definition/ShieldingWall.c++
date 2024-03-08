@@ -62,7 +62,7 @@ auto ShieldingWall::Construct(G4bool checkOverlaps) -> void {
         wallTransform,
         logic,
         name,
-        Mother().LogicalVolume().get(),
+        Mother().LogicalVolume(),
         false,
         0,
         checkOverlaps);

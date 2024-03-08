@@ -45,7 +45,7 @@ auto BeamMonitor::Construct(G4bool checkOverlaps) -> void {
         transform,
         logic,
         monitor.Name(),
-        Mother().LogicalVolume().get(),
+        Mother().LogicalVolume(),
         false,
         0,
         checkOverlaps);
