@@ -13,6 +13,7 @@
 #include "MACE/Detector/Definition/EMCShield.h++"
 #include "MACE/Detector/Definition/Filter.h++"
 #include "MACE/Detector/Definition/MCP.h++"
+#include "MACE/Detector/Definition/MCPChamber.h++"
 #include "MACE/Detector/Definition/ShieldingWall.h++"
 #include "MACE/Detector/Definition/SolenoidB1.h++"
 #include "MACE/Detector/Definition/SolenoidB1Field.h++"
@@ -72,10 +73,10 @@ int main(int argc, char* argv[]) {
     // 2
 
     auto& emcCrystal = emcField.NewDaughter<EMCCrystal>(fCheckOverlap);
-    auto& emcPMTAssemblies = emcField.NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
     auto& emcMagnet = emcField.NewDaughter<EMCMagnet>(fCheckOverlap);
-
+    auto& emcPMTAssemblies = emcField.NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
     /* auto& mcp = */ emcField.NewDaughter<MCP>(fCheckOverlap);
+    /* auto& mcpChamber = */ emcField.NewDaughter<MCPChamber>(fCheckOverlap);
 
     auto& solenoidB1 = solenoidB1Field.NewDaughter<SolenoidB1>(fCheckOverlap);
 

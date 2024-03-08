@@ -87,12 +87,13 @@
 /vis/geometry/set/colour EMCCrystal                    0     1     1     1     0.1
 /vis/geometry/set/colour EMCField                      0     1     1     1     0.05
 /vis/geometry/set/colour EMCMagnet                     0     1     1     1     0.05
-/vis/geometry/set/colour EMCShield                     0     1     1     1     0.05
 /vis/geometry/set/colour EMCPMTCathode                 0     1     1     1     0.1
 /vis/geometry/set/colour EMCPMTCoupler                 0     1     1     1     0.1
 /vis/geometry/set/colour EMCPMTShell                   0     1     1     1     0.1
-/vis/geometry/set/colour Filter                        0     1     1     1     0.05
+/vis/geometry/set/colour EMCShield                     0     1     1     1     0.05
+/vis/geometry/set/colour Filter                        0     1     1     1     0.01
 /vis/geometry/set/colour MCP                           0     1     1     1     0.1
+/vis/geometry/set/colour MCPChamber                    0     1     1     1     0.05
 /vis/geometry/set/colour ShieldingWall                 0     1     1     1     0.05
 /vis/geometry/set/colour SolenoidB1                    0     1     1     1     0.05
 /vis/geometry/set/colour SolenoidB1Field               0     1     1     1     0.05

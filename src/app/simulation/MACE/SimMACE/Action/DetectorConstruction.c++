@@ -14,6 +14,7 @@
 #include "MACE/Detector/Definition/EMCShield.h++"
 #include "MACE/Detector/Definition/Filter.h++"
 #include "MACE/Detector/Definition/MCP.h++"
+#include "MACE/Detector/Definition/MCPChamber.h++"
 #include "MACE/Detector/Definition/ShieldingWall.h++"
 #include "MACE/Detector/Definition/SolenoidB1.h++"
 #include "MACE/Detector/Definition/SolenoidB1Field.h++"
@@ -105,10 +106,10 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     // 2
 
     auto& emcCrystal = emcField.NewDaughter<Detector::Definition::EMCCrystal>(fCheckOverlap);
-    auto& emcPMTAssemblies = emcField.NewDaughter<Detector::Definition::EMCPMTAssemblies>(fCheckOverlap);
     auto& emcMagnet = emcField.NewDaughter<Detector::Definition::EMCMagnet>(fCheckOverlap);
-
+    auto& emcPMTAssemblies = emcField.NewDaughter<Detector::Definition::EMCPMTAssemblies>(fCheckOverlap);
     auto& mcp = emcField.NewDaughter<Detector::Definition::MCP>(fCheckOverlap);
+    auto& mcpChamber = emcField.NewDaughter<Detector::Definition::MCPChamber>(fCheckOverlap);
 
     auto& solenoidB1 = solenoidB1Field.NewDaughter<Detector::Definition::SolenoidB1>(fCheckOverlap);
 
@@ -201,6 +202,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         cdcBody.RegisterRegion(fDefaultSolidRegion);
         emcPMTAssemblies.RegisterRegion(fDefaultSolidRegion);
         filter.RegisterRegion(fDefaultSolidRegion);
+        mcpChamber.RegisterRegion(fDefaultSolidRegion);
         shieldingWall.RegisterRegion(fDefaultSolidRegion);
 
         // EMCSensitiveRegion

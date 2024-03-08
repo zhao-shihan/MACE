@@ -2,6 +2,7 @@
 #include "MACE/Detector/Definition/EMCCrystal.h++"
 #include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
 #include "MACE/Detector/Definition/MCP.h++"
+#include "MACE/Detector/Definition/MCPChamber.h++"
 #include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Description/DescriptionIO.h++"
 #include "MACE/Detector/Description/EMC.h++"
@@ -61,6 +62,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& emcCrystal = fWorld->NewDaughter<EMCCrystal>(fCheckOverlap);
     auto& emcPMTAssemblies = fWorld->NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
     auto& mcp = fWorld->NewDaughter<MCP>(fCheckOverlap);
+    /* auto& mcpChamber = */ fWorld->NewDaughter<MCPChamber>(fCheckOverlap);
 
     auto& emcMagnet = fWorld->NewDaughter<SimEMC::Detector::EMCMagnet>(fCheckOverlap);
     auto& emcShield = fWorld->NewDaughter<SimEMC::Detector::EMCShield>(fCheckOverlap);

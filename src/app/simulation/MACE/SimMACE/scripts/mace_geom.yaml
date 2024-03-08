@@ -56,6 +56,11 @@ EMCField:
   Radius: 600
   Length: 1000
   MagneticFluxDensity: 0.0001
+EMCMagnet:
+  InnerRadius: 500
+  OuterRadius: 550
+  Length: 950
+  MaterialName: G4_Cu
 EMCShield:
   InnerRadius: 650
   InnerLength: 1100
@@ -72,6 +77,9 @@ Filter:
 MCP:
   Diameter: 100
   Thickness: 10
+MCPChamber:
+  InnerRadius: 100
+  Thickness: 0.5
 ShieldingWall:
   Thickness: 500
 Solenoid:
