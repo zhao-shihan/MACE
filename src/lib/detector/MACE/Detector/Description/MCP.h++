@@ -12,18 +12,18 @@ private:
     ~MCP() = default;
 
 public:
-    const auto& Width() const { return fWidth; }
-    const auto& Thickness() const { return fThickness; }
+    auto Diameter() const -> auto { return fDiameter; }
+    auto Thickness() const -> auto { return fThickness; }
 
-    void Width(double val) { fWidth = val; }
-    void Thickness(double val) { fThickness = val; }
+    auto Diameter(double val) -> void { fDiameter = val; }
+    auto Thickness(double val) -> void { fThickness = val; }
 
 private:
     auto ImportValues(const YAML::Node& node) -> void override;
     auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
-    double fWidth;
+    double fDiameter;
     double fThickness;
 };
 

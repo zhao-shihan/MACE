@@ -6,17 +6,17 @@ namespace MACE::Detector::Description {
 using namespace LiteralUnit::Length;
 
 MCP::MCP() :
-    DescriptionSingletonBase<MCP>(__func__),
-    fWidth(10_cm),
-    fThickness(1_cm) {}
+    DescriptionSingletonBase{"MCP"},
+    fDiameter{10_cm},
+    fThickness{1_cm} {}
 
-void MCP::ImportValues(const YAML::Node& node) {
-    ImportValue(node, fWidth, "Width");
+auto MCP::ImportValues(const YAML::Node& node) -> void {
+    ImportValue(node, fDiameter, "Diameter");
     ImportValue(node, fThickness, "Thickness");
 }
 
-void MCP::ExportValues(YAML::Node& node) const {
-    ExportValue(node, fWidth, "Width");
+auto MCP::ExportValues(YAML::Node& node) const -> void {
+    ExportValue(node, fDiameter, "Diameter");
     ExportValue(node, fThickness, "Thickness");
 }
 

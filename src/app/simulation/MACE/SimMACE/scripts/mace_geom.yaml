@@ -70,7 +70,7 @@ Filter:
   Count: 85
   MaterialName: G4_Cu
 MCP:
-  Width: 100
+  Diameter: 100
   Thickness: 10
 ShieldingWall:
   Thickness: 500
