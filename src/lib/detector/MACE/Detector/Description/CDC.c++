@@ -40,12 +40,15 @@ CDC::CDC() :
     fSenseWireDiameter{20_um},
     fMinAdjacentSuperLayersDistance{1_mm},
     fMinWireAndRadialShellDistance{2_mm},
-    fShellInnerThickness{250_um},
-    fShellSideThickness{10_mm},
-    fShellOuterThickness{10_mm},
+    fEndCapThickness{15_mm},
+    fInnerShellAlThickness{25_um},
+    fInnerShellMylarThickness{25_um},
+    fOuterShellThickness{10_mm},
     fCache{},
     // Material
-    fButaneFraction{0.15},
+    fGasButaneFraction{0.15},
+    fEndCapMaterialName{"G4_Al"},
+    fOuterShellCFRPDensity{1.95_g_cm3},
     // Detection
     fMeanDriftVelocity{3.5_cm_us},
     fTimeResolutionFWHM{30_ns} {}
@@ -57,16 +60,16 @@ auto CDC::GasMaterial() const -> G4Material* {
     auto gas{nist->FindMaterial(materialName)};
     if (gas) { return gas; }
 
-    const auto heFraction{1 - fButaneFraction};
+    const auto heFraction{1 - fGasButaneFraction};
     const auto he{nist->FindOrBuildMaterial("G4_He")};
     const auto butane{nist->FindOrBuildMaterial("G4_BUTANE")};
 
     gas = new G4Material{materialName,
-                         heFraction * he->GetDensity() + fButaneFraction * butane->GetDensity(),
+                         heFraction * he->GetDensity() + fGasButaneFraction * butane->GetDensity(),
                          2,
                          kStateGas};
     gas->AddMaterial(he, heFraction);
-    gas->AddMaterial(butane, fButaneFraction);
+    gas->AddMaterial(butane, fGasButaneFraction);
 
     return gas;
 }
@@ -263,11 +266,14 @@ auto CDC::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fSenseWireDiameter, "SenseWireDiameter");
     ImportValue(node, fMinAdjacentSuperLayersDistance, "MinAdjacentSuperLayersDistance");
     ImportValue(node, fMinWireAndRadialShellDistance, "MinWireAndRadialShellDistance");
-    ImportValue(node, fShellInnerThickness, "ShellInnerThickness");
-    ImportValue(node, fShellSideThickness, "ShellSideThickness");
-    ImportValue(node, fShellOuterThickness, "ShellOuterThickness");
+    ImportValue(node, fEndCapThickness, "EndCapThickness");
+    ImportValue(node, fInnerShellAlThickness, "InnerShellAlThickness");
+    ImportValue(node, fInnerShellMylarThickness, "InnerShellMylarThickness");
+    ImportValue(node, fOuterShellThickness, "OuterShellThickness");
     // Material
-    ImportValue(node, fButaneFraction, "ButaneFraction");
+    ImportValue(node, fGasButaneFraction, "GasButaneFraction");
+    ImportValue(node, fEndCapMaterialName, "EndCapMaterialName");
+    ImportValue(node, fOuterShellCFRPDensity, "OuterShellCFRPDensity");
     // Detection
     ImportValue(node, fMeanDriftVelocity, "MeanDriftVelocity");
     ImportValue(node, fTimeResolutionFWHM, "TimeResolutionFWHM");
@@ -291,11 +297,14 @@ auto CDC::ExportValues(YAML::Node& node) const -> void {
     ExportValue(node, fSenseWireDiameter, "SenseWireDiameter");
     ExportValue(node, fMinAdjacentSuperLayersDistance, "MinAdjacentSuperLayersDistance");
     ExportValue(node, fMinWireAndRadialShellDistance, "MinWireAndRadialShellDistance");
-    ExportValue(node, fShellInnerThickness, "ShellInnerThickness");
-    ExportValue(node, fShellSideThickness, "ShellSideThickness");
-    ExportValue(node, fShellOuterThickness, "ShellOuterThickness");
+    ExportValue(node, fEndCapThickness, "EndCapThickness");
+    ExportValue(node, fInnerShellAlThickness, "InnerShellAlThickness");
+    ExportValue(node, fInnerShellMylarThickness, "InnerShellMylarThickness");
+    ExportValue(node, fOuterShellThickness, "OuterShellThickness");
     // Material
-    ExportValue(node, fButaneFraction, "ButaneFraction");
+    ExportValue(node, fGasButaneFraction, "GasButaneFraction");
+    ExportValue(node, fEndCapMaterialName, "EndCapMaterialName");
+    ExportValue(node, fOuterShellCFRPDensity, "OuterShellCFRPDensity");
     // Detection
     ExportValue(node, fMeanDriftVelocity, "MeanDriftVelocity");
     ExportValue(node, fTimeResolutionFWHM, "TimeResolutionFWHM");

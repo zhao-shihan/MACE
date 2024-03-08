@@ -30,10 +30,13 @@ CDC:
   SenseWireDiameter: 0.02
   MinAdjacentSuperLayersDistance: 1
   MinWireAndRadialShellDistance: 2
-  ShellInnerThickness: 0.25
-  ShellSideThickness: 10
-  ShellOuterThickness: 10
-  ButaneFraction: 0.14999999999999999
+  EndCapThickness: 15
+  InnerShellAlThickness: 0.025000000000000001
+  InnerShellMylarThickness: 0.025000000000000001
+  OuterShellThickness: 10
+  GasButaneFraction: 0.14999999999999999
+  EndCapMaterialName: G4_Al
+  OuterShellCFRPDensity: 1.2170942695198487e+19
   MeanDriftVelocity: 0.035000000000000003
   TimeResolutionFWHM: 30
 EMC:

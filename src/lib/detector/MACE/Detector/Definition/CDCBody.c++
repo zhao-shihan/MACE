@@ -7,6 +7,7 @@
 #include "G4PVPlacement.hh"
 #include "G4Polycone.hh"
 #include "G4Transform3D.hh"
+#include "G4Tubs.hh"
 
 #include <array>
 #include <cmath>
@@ -19,39 +20,103 @@ using namespace MACE::LiteralUnit::MathConstantSuffix;
 auto CDCBody::Construct(G4bool checkOverlaps) -> void {
     const auto& cdc{Description::CDC::Instance()};
     const auto name{cdc.Name() + "Body"};
-    const auto sideExtension{cdc.ShellSideThickness() * std::sqrt(1 + 1 / Math::Pow<2>(cdc.EndCapSlope())) -
-                             cdc.ShellInnerThickness() / cdc.EndCapSlope()};
-    const auto zI{cdc.GasInnerLength() / 2 + sideExtension};
-    const auto zO{cdc.GasOuterLength() / 2 + sideExtension};
-    const auto rI{cdc.GasInnerRadius() - cdc.ShellInnerThickness()};
-    const auto rOI{cdc.GasOuterRadius() - cdc.ShellInnerThickness()};
-    const auto rOO{cdc.GasOuterRadius() + cdc.ShellOuterThickness()};
 
-    const std::array zPlaneList{-zO, -zI, zI, zO};
-    const std::array rInnerList{rOI, rI, rI, rOI};
-    const std::array rOuterList{rOO, rOO, rOO, rOO};
+    const auto endCapZExtension{cdc.EndCapThickness() * std::sqrt(1 + 1 / Math::Pow<2>(cdc.EndCapSlope()))};
 
-    const auto solid{Make<G4Polycone>(
-        name,
-        0,
-        2_pi,
-        zPlaneList.size(),
-        zPlaneList.data(),
-        rInnerList.data(),
-        rOuterList.data())};
-    auto logic{Make<G4LogicalVolume>(
-        solid,
-        G4NistManager::Instance()
-            ->BuildMaterialWithNewDensity("CarbonFiber", "G4_C", 1.7_g_cm3),
-        name)};
-    Make<G4PVPlacement>(
-        G4Transform3D{},
-        logic,
-        name,
-        Mother().LogicalVolume().get(),
-        false,
-        0,
-        checkOverlaps);
+    const auto nist{G4NistManager::Instance()};
+    { // End cap
+        const auto zI{cdc.GasInnerLength() / 2 + endCapZExtension};
+        const auto zO{cdc.GasOuterLength() / 2 + endCapZExtension};
+        const auto rI{cdc.GasInnerRadius()};
+        const auto rO{cdc.GasOuterRadius()};
+
+        const std::array zPlaneList{-zO, -zI, zI, zO};
+        const std::array rInnerList{rO, rI, rI, rO};
+        const std::array rOuterList{rO, rO, rO, rO};
+
+        const auto solidEndCap{Make<G4Polycone>(
+            name,
+            0,
+            2_pi,
+            zPlaneList.size(),
+            zPlaneList.data(),
+            rInnerList.data(),
+            rOuterList.data())};
+        const auto logicEndCap{Make<G4LogicalVolume>(
+            solidEndCap,
+            nist->FindOrBuildMaterial(cdc.EndCapMaterialName()),
+            name)};
+        Make<G4PVPlacement>(
+            G4Transform3D{},
+            logicEndCap,
+            name,
+            Mother().LogicalVolume(),
+            false,
+            0,
+            checkOverlaps);
+    }
+    { // Inner shell Al Mylar foil
+        const auto solidInnerShellAl{Make<G4Tubs>(
+            name,
+            cdc.GasInnerRadius() - cdc.InnerShellAlThickness(),
+            cdc.GasInnerRadius(),
+            cdc.GasInnerLength() / 2 + endCapZExtension,
+            0,
+            2_pi)};
+        const auto logicInnerShellAl{Make<G4LogicalVolume>(
+            solidInnerShellAl,
+            nist->FindOrBuildMaterial("G4_Al"),
+            name)};
+        Make<G4PVPlacement>(
+            G4Transform3D{},
+            logicInnerShellAl,
+            name,
+            Mother().LogicalVolume(),
+            false,
+            0,
+            checkOverlaps);
+
+        const auto solidInnerShellMylar{Make<G4Tubs>(
+            name,
+            cdc.GasInnerRadius() - cdc.InnerShellAlThickness() - cdc.InnerShellMylarThickness(),
+            cdc.GasInnerRadius() - cdc.InnerShellAlThickness(),
+            cdc.GasInnerLength() / 2 + endCapZExtension,
+            0,
+            2_pi)};
+        const auto logicInnerShellMylar{Make<G4LogicalVolume>(
+            solidInnerShellMylar,
+            nist->FindOrBuildMaterial("G4_MYLAR"),
+            name)};
+        Make<G4PVPlacement>(
+            G4Transform3D{},
+            logicInnerShellMylar,
+            name,
+            Mother().LogicalVolume(),
+            false,
+            0,
+            checkOverlaps);
+    }
+    { // Outer shell CFRP
+        const auto solidOuterShell{Make<G4Tubs>(
+            name,
+            cdc.GasOuterRadius(),
+            cdc.GasOuterRadius() + cdc.OuterShellThickness(),
+            cdc.GasOuterLength() / 2 + endCapZExtension,
+            0,
+            2_pi)};
+        const auto logicOuterShell{Make<G4LogicalVolume>(
+            solidOuterShell,
+            nist->BuildMaterialWithNewDensity("CDCOuterShellCFRP", "G4_C", cdc.OuterShellCFRPDensity()),
+            name)};
+        Make<G4PVPlacement>(
+            G4Transform3D{},
+            logicOuterShell,
+            name,
+            Mother().LogicalVolume(),
+            false,
+            0,
+            checkOverlaps);
+    }
 }
 
 } // namespace MACE::Detector::Definition

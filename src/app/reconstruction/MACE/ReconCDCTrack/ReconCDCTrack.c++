@@ -133,30 +133,6 @@ void MakeMACECDCGeometry() {
 
     const auto nist = G4NistManager::Instance();
 
-    const auto aluminium = nist->FindOrBuildMaterial("G4_Al");
-    cdcFieldWire.RegisterMaterial(aluminium);
-
-    const auto cdcHeBasedGas = [&nist] {
-        constexpr auto heFraction = 0.85;
-        constexpr auto butaneFraction = 1 - heFraction;
-        const auto he = nist->FindOrBuildMaterial("G4_He");
-        const auto butane = nist->FindOrBuildMaterial("G4_BUTANE");
-        const auto gas = new G4Material("CDCGas",
-                                        heFraction * he->GetDensity() +
-                                            butaneFraction * butane->GetDensity(),
-                                        2,
-                                        kStateGas);
-        gas->AddMaterial(he, heFraction);
-        gas->AddMaterial(butane, butaneFraction);
-        return gas;
-    }();
-    cdcGas.RegisterMaterial(cdcHeBasedGas);
-    cdcSenseLayer.RegisterMaterial(cdcHeBasedGas);
-    cdcSuperLayer.RegisterMaterial(cdcHeBasedGas);
-
-    const auto cdcShell = nist->BuildMaterialWithNewDensity("CarbonFiber", "G4_C", 1.7_g_cm3);
-    cdcBody.RegisterMaterial(cdcShell);
-
     const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
     acceleratorField.RegisterMaterial(vacuum);
     spectrometerField.RegisterMaterial(vacuum);

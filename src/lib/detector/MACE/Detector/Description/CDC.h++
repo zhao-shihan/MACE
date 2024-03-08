@@ -43,9 +43,10 @@ public:
     auto SenseWireDiameter() const -> auto { return fSenseWireDiameter; }
     auto MinAdjacentSuperLayersDistance() const -> auto { return fMinAdjacentSuperLayersDistance; }
     auto MinWireAndRadialShellDistance() const -> auto { return fMinWireAndRadialShellDistance; }
-    auto ShellInnerThickness() const -> auto { return fShellInnerThickness; }
-    auto ShellSideThickness() const -> auto { return fShellSideThickness; }
-    auto ShellOuterThickness() const -> auto { return fShellOuterThickness; }
+    auto EndCapThickness() const -> auto { return fEndCapThickness; }
+    auto InnerShellAlThickness() const -> auto { return fInnerShellAlThickness; }
+    auto InnerShellMylarThickness() const -> auto { return fInnerShellMylarThickness; }
+    auto OuterShellThickness() const -> auto { return fOuterShellThickness; }
 
     auto EvenSuperLayerIsAxial(bool val) -> void { fEvenSuperLayerIsAxial = val, fCache.Expire(); }
     auto NSuperLayer(int val) -> void { fNSuperLayer = val, fCache.Expire(); }
@@ -61,9 +62,10 @@ public:
     auto SenseWireDiameter(double val) -> void { fSenseWireDiameter = val, fCache.Expire(); }
     auto MinAdjacentSuperLayersDistance(double val) -> void { fMinAdjacentSuperLayersDistance = val, fCache.Expire(); }
     auto MinWireAndRadialShellDistance(double val) -> void { fMinWireAndRadialShellDistance = val, fCache.Expire(); }
-    auto ShellInnerThickness(double val) -> void { fShellInnerThickness = val, fCache.Expire(); }
-    auto ShellSideThickness(double val) -> void { fShellSideThickness = val, fCache.Expire(); }
-    auto ShellOuterThickness(double val) -> void { fShellOuterThickness = val, fCache.Expire(); }
+    auto EndCapThickness(double val) -> void { fEndCapThickness = val, fCache.Expire(); }
+    auto InnerShellAlThickness(double val) -> void { fInnerShellAlThickness = val, fCache.Expire(); }
+    auto InnerShellMylarThickness(double val) -> void { fInnerShellMylarThickness = val, fCache.Expire(); }
+    auto OuterShellThickness(double val) -> void { fOuterShellThickness = val, fCache.Expire(); }
 
     struct SuperLayerConfiguration {
         struct SenseLayerConfiguration {
@@ -116,9 +118,13 @@ public:
     // Material
     ///////////////////////////////////////////////////////////
 
-    auto ButaneFraction() const -> auto { return fButaneFraction; }
+    auto GasButaneFraction() const -> auto { return fGasButaneFraction; }
+    auto EndCapMaterialName() const -> const auto& { return fEndCapMaterialName; }
+    auto OuterShellCFRPDensity() const -> auto { return fOuterShellCFRPDensity; }
 
-    auto ButaneFraction(double val) -> void { fButaneFraction = val; }
+    auto GasButaneFraction(double val) -> void { fGasButaneFraction = val; }
+    auto EndCapMaterialName(std::string val) -> void { fEndCapMaterialName = std::move(val); }
+    auto OuterShellCFRPDensity(double val) -> void { fOuterShellCFRPDensity = val; }
 
     auto GasMaterial() const -> G4Material*;
 
@@ -187,9 +193,10 @@ private:
     double fSenseWireDiameter;
     double fMinAdjacentSuperLayersDistance;
     double fMinWireAndRadialShellDistance;
-    double fShellInnerThickness;
-    double fShellSideThickness;
-    double fShellOuterThickness;
+    double fEndCapThickness;
+    double fInnerShellAlThickness;
+    double fInnerShellMylarThickness;
+    double fOuterShellThickness;
 
     mutable Cache fCache;
 
@@ -197,7 +204,9 @@ private:
     // Material
     ///////////////////////////////////////////////////////////
 
-    double fButaneFraction;
+    double fGasButaneFraction;
+    std::string fEndCapMaterialName;
+    double fOuterShellCFRPDensity;
 
     ///////////////////////////////////////////////////////////
     // Detection
