@@ -2,6 +2,7 @@
 #include "MACE/Env/CLI/BasicCLI.h++"
 #include "MACE/Version.h++"
 
+#include <algorithm>
 #include <iostream>
 #include <stdexcept>
 
