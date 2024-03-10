@@ -1,26 +1,19 @@
 #pragma once
 
+#include "MACE/Env/CLI/BasicCLI.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/Env/VerboseLevel.h++"
 #include "MACE/Env/internal/EnvBase.h++"
 
-#include "fmt/format.h"
-
-#include <type_traits>
+#include <optional>
+#include <functional>
 
 namespace MACE::Env {
-
-namespace internal {
-
-class NoCLI {};
-
-} // namespace internal
 
 class BasicEnv : public internal::EnvBase,
                  public Memory::PassiveSingleton<BasicEnv> {
 public:
-    template<typename ACLI = internal::NoCLI>
-    BasicEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel = VL::Warning, bool printWelcomeMessage = true);
+    BasicEnv(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> cli = {}, VL verboseLevel = {}, bool printWelcomeMessage = true);
     virtual ~BasicEnv() = default;
 
     auto Argc() const -> auto { return fArgc; }
@@ -42,5 +35,3 @@ private:
 #define MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out) \
     MACE_VERBOSE_LEVEL_CONTROLLED_OUT(                  \
         MACE::Env::BasicEnv::Instance().VerboseLevel(), Threshold, out)
-
-#include "MACE/Env/BasicEnv.inl"

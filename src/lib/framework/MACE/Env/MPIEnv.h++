@@ -1,23 +1,16 @@
 #pragma once
 
 #include "MACE/Env/BasicEnv.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
-#include "MACE/Utility/FixedString.h++"
-
-#include "TROOT.h"
+#include "MACE/Env/Memory/PassiveSingleton.h++"
 
 #include "mpi.h"
 
-#include <algorithm>
-#include <array>
-#include <cstddef>
-#include <iterator>
-#include <map>
-#include <memory>
-#include <stdexcept>
+#include <concepts>
+#include <functional>
+#include <optional>
+#include <ostream>
 #include <string>
 #include <type_traits>
-#include <utility>
 #include <vector>
 
 namespace MACE::Env {
@@ -25,8 +18,7 @@ namespace MACE::Env {
 class MPIEnv : public BasicEnv,
                public Memory::PassiveSingleton<MPIEnv> {
 public:
-    template<typename ACLI = internal::NoCLI>
-    MPIEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel = VL::Warning, bool printWelcomeMessage = true);
+    MPIEnv(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> cli = {}, VL verboseLevel = {}, bool printWelcomeMessage = true);
     virtual ~MPIEnv();
 
     using PassiveSingleton<MPIEnv>::Instance;
@@ -149,5 +141,3 @@ private:
     if (not MACE::Env::MPIEnv::Available() or                             \
         MACE::Env::MPIEnv::Instance().OnCommNodeWorker())                 \
     MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)
-
-#include "MACE/Env/MPIEnv.inl"

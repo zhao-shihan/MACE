@@ -17,6 +17,8 @@ CLIBase::CLIBase() :
     }
 }
 
+CLIBase::~CLIBase() = default;
+
 auto CLIBase::ParseArgs(int argc, char* argv[]) -> void {
     if (not Parsed()) {
         try {
@@ -40,11 +42,11 @@ auto CLIBase::ArgcArgv() const -> ArgcArgvType {
     }
 }
 
-[[noreturn]] void CLIBase::ThrowParsed() {
+[[noreturn]] auto CLIBase::ThrowParsed() -> void {
     throw std::logic_error{"MACE::Env::CLI: Command line arguments has been parsed"};
 }
 
-[[noreturn]] void CLIBase::ThrowNotParsed() {
+[[noreturn]] auto CLIBase::ThrowNotParsed() -> void {
     throw std::logic_error{"MACE::Env::CLI: Command line arguments has not been parsed"};
 }
 

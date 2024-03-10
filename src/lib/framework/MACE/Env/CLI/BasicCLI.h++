@@ -10,7 +10,6 @@ namespace MACE::Env::CLI {
 class BasicCLI : public CLIBase {
 public:
     BasicCLI();
-    virtual ~BasicCLI() = default;
 
     auto VerboseLevel() const -> std::optional<VL>;
 

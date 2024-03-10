@@ -14,7 +14,6 @@ namespace MACE::Env::CLI {
 class Geant4CLI : public BasicCLI {
 public:
     Geant4CLI();
-    virtual ~Geant4CLI() = default;
 
     auto Macro() const -> std::optional<std::string>;
     auto IsInteractive() const -> auto { return not Macro().has_value() or ArgParser().is_used("-i"); }

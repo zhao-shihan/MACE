@@ -2,11 +2,32 @@
 #include "MACE/Env/CLI/BasicCLI.h++"
 #include "MACE/Version.h++"
 
+#include "fmt/format.h"
+
 #include <filesystem>
-#include <stdexcept>
 #include <system_error>
+#include <typeinfo>
 
 namespace MACE::Env {
+
+BasicEnv::BasicEnv(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> cli, VL verboseLevel, bool printWelcomeMessage) :
+    EnvBase{},
+    PassiveSingleton{},
+    fArgc{argc},
+    fArgv{argv},
+    fVerboseLevel{verboseLevel} {
+    // CLI: do parse and get args
+    if (cli) {
+        cli->get().ParseArgs(argc, argv);
+        fVerboseLevel = cli->get().VerboseLevel().value_or(verboseLevel);
+    }
+    // Print startup message after parse
+    if (printWelcomeMessage) {
+        PrintWelcomeMessageSplitLine();
+        PrintWelcomeMessageBody(argc, argv);
+        PrintWelcomeMessageSplitLine();
+    }
+}
 
 auto BasicEnv::PrintWelcomeMessageSplitLine() const -> void {
     if (fVerboseLevel >= VL::Error) {

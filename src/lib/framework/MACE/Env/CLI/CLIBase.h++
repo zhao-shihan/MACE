@@ -10,9 +10,9 @@
 namespace MACE::Env::CLI {
 
 class CLIBase : public NonMoveableBase {
-protected:
+public:
     CLIBase();
-    ~CLIBase() = default;
+    virtual ~CLIBase() = 0;
 
 private:
     struct ArgcArgvType {
