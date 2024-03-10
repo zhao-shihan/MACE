@@ -12,8 +12,7 @@ enum struct VL {
     Error,
     Warning,
     Verbose,
-    MoreVerbose,
-    Undefined = 0xABCDEF
+    MoreVerbose
 };
 
 } // namespace MACE::Env

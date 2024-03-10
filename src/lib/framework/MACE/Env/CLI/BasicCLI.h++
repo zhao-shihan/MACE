@@ -12,7 +12,10 @@ public:
     BasicCLI();
     virtual ~BasicCLI() = default;
 
-    std::optional<VL> GetVerboseLevel() const;
+    auto VerboseLevel() const -> std::optional<VL>;
+
+private:
+    int fVerboseLevelValue;
 };
 
 } // namespace MACE::Env::CLI

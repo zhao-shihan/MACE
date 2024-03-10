@@ -28,7 +28,7 @@ namespace internal {
 FlipG4cout::FlipG4cout() {
     if (const auto& mpiEnv{Env::MPIEnv::Instance()};
         mpiEnv.OnCommWorldWorker() or
-        mpiEnv.GetVerboseLevel() == Env::VL::Quiet) {
+        mpiEnv.VerboseLevel() == Env::VL::Quiet) {
         static std::streambuf* gG4coutBufExchanger{nullptr};
         gG4coutBufExchanger = G4cout.rdbuf(gG4coutBufExchanger);
     }
@@ -44,7 +44,7 @@ MPIRunManager::MPIRunManager() :
     fExecutor{},
     fMessengerRegister{this} {
     printModulo = -1;
-    SetVerboseLevel(std23::to_underlying(Env::MPIEnv::Instance().GetVerboseLevel()));
+    SetVerboseLevel(std23::to_underlying(Env::MPIEnv::Instance().VerboseLevel()));
     fExecutor.TaskName("G4Event");
 }
 

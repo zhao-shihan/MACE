@@ -12,7 +12,7 @@ using namespace MACE::Geant4X::Physics;
 PhysicsList::PhysicsList() :
     PassiveSingleton(),
     G4VModularPhysicsList() {
-    verboseLevel = std23::to_underlying(Env::BasicEnv::Instance().GetVerboseLevel());
+    verboseLevel = std23::to_underlying(Env::BasicEnv::Instance().VerboseLevel());
     RegisterPhysics(new G4EmStandardPhysics_option4(verboseLevel));
     RegisterPhysics(new G4DecayPhysics(verboseLevel));
 }

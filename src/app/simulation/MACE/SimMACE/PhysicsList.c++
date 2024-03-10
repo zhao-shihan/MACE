@@ -14,7 +14,7 @@ namespace MACE::SimMACE {
 
 PhysicsList::PhysicsList() :
     PassiveSingleton{},
-    FTFP_BERT{std23::to_underlying(Env::BasicEnv::Instance().GetVerboseLevel())} {
+    FTFP_BERT{std23::to_underlying(Env::BasicEnv::Instance().VerboseLevel())} {
     // EMZ
     ReplacePhysics(new G4EmStandardPhysics_option4{verboseLevel});
     // Muonium physics

@@ -12,7 +12,7 @@ BasicEnv::BasicEnv(int argc, char* argv[], ACLI&& cli, VL verboseLevel, bool pri
         // Parse
         cli.ParseArgs(argc, argv);
         // Get args
-        fVerboseLevel = cli.GetVerboseLevel().value_or(verboseLevel);
+        fVerboseLevel = cli.VerboseLevel().value_or(verboseLevel);
     }
     // Print startup message after parse
     if (printWelcomeMessage) {

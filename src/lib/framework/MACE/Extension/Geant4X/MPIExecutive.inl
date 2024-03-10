@@ -38,14 +38,14 @@ void MPIExecutive::StartBatchSession(std::initializer_list<T> cmdList) const {
 
 void MPIExecutive::StartSessionImpl(const Geant4CLI& cli, auto&& macFileOrCmdList) const {
     if (cli.IsInteractive()) {
-        auto&& [argc, argv] = cli.GetArgcArgv();
-        if (cli.GetMacro().empty()) {
+        auto&& [argc, argv]{cli.ArgcArgv()};
+        if (cli.Macro().empty()) {
             StartInteractiveSessionImpl(argc, argv, std::forward<decltype(macFileOrCmdList)>(macFileOrCmdList));
         } else {
-            StartInteractiveSessionImpl(argc, argv, cli.GetMacro());
+            StartInteractiveSessionImpl(argc, argv, cli.Macro());
         }
     } else {
-        StartBatchSessionImpl(cli.GetMacro());
+        StartBatchSessionImpl(cli.Macro());
     }
 }
 

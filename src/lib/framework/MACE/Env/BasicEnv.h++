@@ -25,7 +25,7 @@ public:
 
     auto Argc() const -> auto { return fArgc; }
     auto Argv() const -> auto { return fArgv; }
-    auto GetVerboseLevel() const -> const auto& { return fVerboseLevel; }
+    auto VerboseLevel() const -> const auto& { return fVerboseLevel; }
 
 protected:
     auto PrintWelcomeMessageSplitLine() const -> void;
@@ -41,6 +41,6 @@ private:
 
 #define MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out) \
     MACE_VERBOSE_LEVEL_CONTROLLED_OUT(                  \
-        MACE::Env::BasicEnv::Instance().GetVerboseLevel(), Threshold, out)
+        MACE::Env::BasicEnv::Instance().VerboseLevel(), Threshold, out)
 
 #include "MACE/Env/BasicEnv.inl"

@@ -130,8 +130,8 @@ template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 auto Executor<T>::PrintExecutionSummary() const -> void {
     const auto& mpiEnv{Env::MPIEnv::Instance()};
-    if (not(mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error)) { return; }
-    if (fExecuting and mpiEnv.GetVerboseLevel() >= Env::VL::Warning) { fmt::print(stderr, "Execution summary not available for now."); }
+    if (not(mpiEnv.OnCommWorldMaster() and mpiEnv.VerboseLevel() >= Env::VL::Error)) { return; }
+    if (fExecuting and mpiEnv.VerboseLevel() >= Env::VL::Warning) { fmt::print(stderr, "Execution summary not available for now."); }
     fmt::println("+------------------+--------------> Summary <-------------+-------------------+\n"
                  "| Rank in world    | Executed          | Wall time (s)    | CPU time (s)      |\n"
                  "+------------------+-------------------+------------------+-------------------+");
@@ -149,7 +149,7 @@ template<std::integral T>
 auto Executor<T>::PreLoopReport() const -> void {
     if (not fPrintProgress) { return; }
     const auto& mpiEnv{Env::MPIEnv::Instance()};
-    if (not(mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error)) { return; }
+    if (not(mpiEnv.OnCommWorldMaster() and mpiEnv.VerboseLevel() >= Env::VL::Error)) { return; }
     fmt::print("+----------------------------------> Start <----------------------------------+\n"
                "| {:75} |\n"
                "+----------------------------------> Start <----------------------------------+\n",
@@ -162,7 +162,7 @@ template<std::integral T>
 auto Executor<T>::PostTaskReport(T iEnded) const -> void {
     if (not fPrintProgress or fPrintProgressModulo < 0) { return; }
     const auto& mpiEnv{Env::MPIEnv::Instance()};
-    if (mpiEnv.GetVerboseLevel() < Env::VL::Error) { return; }
+    if (mpiEnv.VerboseLevel() < Env::VL::Error) { return; }
     const auto [goodForEstmation, nExecutedTask]{fScheduler->NExecutedTask()};
     const auto secondsElapsed{fWallTimeStopwatch.SecondsElapsed()};
     const auto speed{nExecutedTask / secondsElapsed};
@@ -194,7 +194,7 @@ template<std::integral T>
 auto Executor<T>::PostLoopReport() const -> void {
     if (not fPrintProgress) { return; }
     const auto& mpiEnv{Env::MPIEnv::Instance()};
-    if (not(mpiEnv.OnCommWorldMaster() and mpiEnv.GetVerboseLevel() >= Env::VL::Error)) { return; }
+    if (not(mpiEnv.OnCommWorldMaster() and mpiEnv.VerboseLevel() >= Env::VL::Error)) { return; }
     const auto now{scsc::now()};
     const auto maxWallTime{*std::ranges::max_element(fExecutionWallTimeOfAllProcessKeptByMaster)};
     const auto totalCpuTime{stdx::ranges::reduce(fExecutionCPUTimeOfAllProcessKeptByMaster)};
