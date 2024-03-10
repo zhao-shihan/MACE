@@ -33,8 +33,7 @@ BasicCLI::BasicCLI() :
         .nargs(0)
         .action([this](auto&&) { ++fVerboseLevelValue; });
     AddArgument("-Q", "--quiet")
-        .help("Decrease verbose level (-2: quiet, -1: error, 0: warning (default), 1: verbose, 2: more verbose). "
-              "This is repeatable (e.g. -Q -Q or -QQ) and can be combined with -V or --verbose (e.g. -VVQ (=1) -QV (=0) -QQVQV (=-1)).")
+        .help("Decrease verbose level (see previous).")
         .flag()
         .append()
         .nargs(0)
