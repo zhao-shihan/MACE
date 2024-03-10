@@ -2,6 +2,9 @@
 
 #include "CLHEP/Random/RandomEngine.h"
 
+#include <bit>
+#include <random>
+
 namespace MACE::Env::CLI {
 
 Geant4CLI::Geant4CLI() :
@@ -12,8 +15,8 @@ Geant4CLI::Geant4CLI() :
     AddArgument("-i", "--interactive")
         .help("Run in interactive session even if a macro is provided. The interactive session will be initialized with the provided macro.")
         .nargs(0);
-    AddArgument("--seed")
-        .help("Set random seed.")
+    AddArgument("-s", "--seed")
+        .help("Set random seed. 0 means using random device (non deterministic random seed). Predefined deterministic seed is used by default.")
         .scan<'i', long>();
 }
 
@@ -27,9 +30,12 @@ auto Geant4CLI::Macro() const -> std::optional<std::string> {
 }
 
 auto Geant4CLI::Seed(CLHEP::HepRandomEngine& rng) const -> bool {
-    auto seed{ArgParser().present<long>("--seed")};
+    auto seed{ArgParser().present<long>("-s")};
     if (seed) {
-        rng.setSeed(*seed, 3);
+        rng.setSeed(*seed != 0 ?
+                        *seed :
+                        std::bit_cast<int>(std::random_device{}()),
+                    3);
         return true;
     } else {
         return false;
