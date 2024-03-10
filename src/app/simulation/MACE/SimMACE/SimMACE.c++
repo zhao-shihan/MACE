@@ -13,6 +13,7 @@ auto main(int argc, char* argv[]) -> int {
     Env::MPIEnv mpiEnv(argc, argv, cli);
 
     CLHEPX::Random::Xoshiro512SS randomEngine;
+    cli.Seed(randomEngine);
     G4Random::setTheEngine(&randomEngine);
 
     // PhysicsList, DetectorConstruction, ActionInitialization are instantiated in RunManager constructor.

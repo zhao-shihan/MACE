@@ -1,72 +1,73 @@
 namespace MACE::inline Extension::Geant4X {
 
-void MPIExecutive::StartSession(const Geant4CLI& cli, auto&& macFileOrCmdList) const {
+auto MPIExecutive::StartSession(const Geant4CLI& cli, auto&& macFileOrCmdList) const -> void {
     StartSessionImpl(cli, std::forward<decltype(macFileOrCmdList)>(macFileOrCmdList));
 }
 
 template<typename T>
-void MPIExecutive::StartSession(const Geant4CLI& cli, std::initializer_list<T> cmdList) const {
+auto MPIExecutive::StartSession(const Geant4CLI& cli, std::initializer_list<T> cmdList) const -> void {
     StartSessionImpl(cli, cmdList);
 }
 
-void MPIExecutive::StartSession(int argc, char* argv[], auto&& macFileOrCmdList) const {
+auto MPIExecutive::StartSession(int argc, char* argv[], auto&& macFileOrCmdList) const -> void {
     StartSessionImpl(argc, argv, std::forward<decltype(macFileOrCmdList)>(macFileOrCmdList));
 }
 
 template<typename T>
-void MPIExecutive::StartSession(int argc, char* argv[], std::initializer_list<T> cmdList) const {
+auto MPIExecutive::StartSession(int argc, char* argv[], std::initializer_list<T> cmdList) const -> void {
     StartSessionImpl(argc, argv, cmdList);
 }
 
-void MPIExecutive::StartInteractiveSession(int argc, char* argv[], auto&& macFileOrCmdList) const {
+auto MPIExecutive::StartInteractiveSession(int argc, char* argv[], auto&& macFileOrCmdList) const -> void {
     StartInteractiveSessionImpl(argc, argv, std::forward<decltype(macFileOrCmdList)>(macFileOrCmdList));
 }
 
 template<typename T>
-void MPIExecutive::StartInteractiveSession(int argc, char* argv[], std::initializer_list<T> cmdList) const {
+auto MPIExecutive::StartInteractiveSession(int argc, char* argv[], std::initializer_list<T> cmdList) const -> void {
     StartInteractiveSessionImpl(argc, argv, cmdList);
 }
 
-void MPIExecutive::StartBatchSession(auto&& macFileOrCmdList) const {
+auto MPIExecutive::StartBatchSession(auto&& macFileOrCmdList) const -> void {
     StartBatchSessionImpl(std::forward<decltype(macFileOrCmdList)>(macFileOrCmdList));
 }
 
 template<typename T>
-void MPIExecutive::StartBatchSession(std::initializer_list<T> cmdList) const {
+auto MPIExecutive::StartBatchSession(std::initializer_list<T> cmdList) const -> void {
     StartBatchSessionImpl(cmdList);
 }
 
-void MPIExecutive::StartSessionImpl(const Geant4CLI& cli, auto&& macFileOrCmdList) const {
+auto MPIExecutive::StartSessionImpl(const Geant4CLI& cli, auto&& macFileOrCmdList) const -> void {
     if (cli.IsInteractive()) {
-        auto&& [argc, argv]{cli.ArgcArgv()};
-        if (cli.Macro().empty()) {
-            StartInteractiveSessionImpl(argc, argv, std::forward<decltype(macFileOrCmdList)>(macFileOrCmdList));
+        const auto [argc, argv]{cli.ArgcArgv()};
+        auto macro{cli.Macro()};
+        if (macro) {
+            StartInteractiveSessionImpl(argc, argv, std::move(*macro));
         } else {
-            StartInteractiveSessionImpl(argc, argv, cli.Macro());
+            StartInteractiveSessionImpl(argc, argv, std::forward<decltype(macFileOrCmdList)>(macFileOrCmdList));
         }
     } else {
-        StartBatchSessionImpl(cli.Macro());
+        StartBatchSessionImpl(*cli.Macro());
     }
 }
 
-void MPIExecutive::StartInteractiveSessionImpl(int argc, char* argv[], auto&& macFileOrCmdList) const {
+auto MPIExecutive::StartInteractiveSessionImpl(int argc, char* argv[], auto&& macFileOrCmdList) const -> void {
     CheckSequential();
 #if MACE_USE_G4VIS
-    G4UIExecutive uiExecutive(argc, argv);
+    G4UIExecutive uiExecutive{argc, argv};
     G4VisExecutive visExecutive;
     visExecutive.Initialize();
 #else
-    G4UIExecutive uiExecutive(argc, argv, "tcsh");
+    G4UIExecutive uiExecutive{argc, argv, "tcsh"};
 #endif
     Execute(std::forward<decltype(macFileOrCmdList)>(macFileOrCmdList));
     uiExecutive.SessionStart();
 }
 
-void MPIExecutive::StartBatchSessionImpl(auto&& macFileOrCmdList) const {
+auto MPIExecutive::StartBatchSessionImpl(auto&& macFileOrCmdList) const -> void {
     Execute(std::forward<decltype(macFileOrCmdList)>(macFileOrCmdList));
 }
 
-void MPIExecutive::Execute(const std::ranges::input_range auto& cmdList)
+auto MPIExecutive::Execute(const std::ranges::input_range auto& cmdList) -> void
     requires std::convertible_to<typename std::decay_t<decltype(cmdList)>::value_type, std::string>
 {
     for (auto&& command : cmdList) {
