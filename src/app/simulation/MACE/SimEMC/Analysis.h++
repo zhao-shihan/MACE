@@ -40,13 +40,15 @@ public:
     auto SubmitMCPHC(gsl::not_null<std::vector<gsl::owner<Simulation::MCPHit*>>*> hc) -> void { fMCPHit = hc; }
     auto EventEnd() -> void;
 
-    auto RunEnd(Option_t* option = nullptr) -> void;
+    auto RunEnd(Option_t* option = {}) -> void;
 
 private:
     std::filesystem::path fFilePath;
     std::string fFileOption;
     G4bool fEnableCoincidenceOfEMC;
     G4bool fEnableCoincidenceOfMCP;
+
+    std::filesystem::path fLastUsedFullFilePath;
 
     gsl::owner<TFile*> fFile;
     std::optional<Data::Output<Data::EMCSimHit>> fEMCSimHitOutput;

@@ -1,10 +1,13 @@
+#include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
 #include "MACE/SimEMC/Analysis.h++"
 #include "MACE/Simulation/Hit/EMCHit.h++"
 #include "MACE/Simulation/Hit/EMCPMTHit.h++"
 #include "MACE/Simulation/Hit/MCPHit.h++"
+#include "MACE/Utility/ConvertG4Geometry.h++"
 
 #include "TFile.h"
+#include "TMacro.h"
 
 #include "fmt/format.h"
 
@@ -18,6 +21,7 @@ Analysis::Analysis() :
     fFileOption{"NEW"},
     fEnableCoincidenceOfEMC{true},
     fEnableCoincidenceOfMCP{false},
+    fLastUsedFullFilePath{},
     fFile{},
     fEMCSimHitOutput{},
     fEMCPMTSimHitOutput{},
@@ -28,15 +32,27 @@ Analysis::Analysis() :
     fMessengerRegister{this} {}
 
 auto Analysis::RunBegin(G4int runID) -> void {
-    const auto fullFilePath{MPIX::ParallelizePath(fFilePath, ".root").generic_string()};
-    fFile = TFile::Open(fullFilePath.c_str(), fFileOption.c_str(),
+    // open ROOT file
+    auto fullFilePath{MPIX::ParallelizePath(fFilePath).replace_extension(".root").generic_string()};
+    const auto filePathChanged{fullFilePath != fLastUsedFullFilePath};
+    fFile = TFile::Open(fullFilePath.c_str(), filePathChanged ? fFileOption.c_str() : "UPDATE",
                         "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
     if (fFile == nullptr) {
-        throw std::runtime_error{fmt::format("MACE::SimEMC::Analysis::RunBegin: Cannot open file \"{}\"", fullFilePath)};
+        throw std::runtime_error{fmt::format("MACE::SimEMC::Analysis::RunBegin: Cannot open file '{}' with option '{}'",
+                                             fullFilePath, fFileOption)};
     }
-    fEMCSimHitOutput.emplace(fmt::format("G4Run{}_EMCSimHit", runID));
-    fEMCPMTSimHitOutput.emplace(fmt::format("G4Run{}_EMCPMTSimHit", runID));
-    fMCPSimHitOutput.emplace(fmt::format("G4Run{}_MCPSimHit", runID));
+    fLastUsedFullFilePath = std::move(fullFilePath);
+    // save geometry
+    if (filePathChanged and Env::MPIEnv::Instance().OnCommWorldMaster()) {
+        ConvertG4GeometryToTMacro("SimEMC_gdml", "SimEMC.gdml")->Write();
+    }
+    // cd into run directory
+    const auto runDirectory{fmt::format("G4Run{}", runID)};
+    fFile->mkdir(runDirectory.c_str());
+    fFile->cd(runDirectory.c_str());
+    fEMCSimHitOutput.emplace("EMCSimHit");
+    fEMCPMTSimHitOutput.emplace("EMCPMTSimHit");
+    fMCPSimHitOutput.emplace("MCPSimHit");
 }
 
 auto Analysis::EventEnd() -> void {
@@ -53,9 +69,11 @@ auto Analysis::EventEnd() -> void {
 }
 
 auto Analysis::RunEnd(Option_t* option) -> void {
+    // write data
     fEMCSimHitOutput->Write();
     fEMCPMTSimHitOutput->Write();
     fMCPSimHitOutput->Write();
+    // close file
     fFile->Close(option);
     delete fFile;
 }

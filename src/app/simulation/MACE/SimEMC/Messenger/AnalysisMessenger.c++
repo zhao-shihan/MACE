@@ -13,13 +13,23 @@ namespace MACE::SimEMC::inline Messenger {
 AnalysisMessenger::AnalysisMessenger() :
     SingletonMessenger{},
     fDirectory{},
-    fEnableCoincidenceOfEMC{},
-    fEnableCoincidenceOfMCP{},
     fFilePath{},
-    fFileOption{} {
+    fFileOption{},
+    fEnableCoincidenceOfEMC{},
+    fEnableCoincidenceOfMCP{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Analysis/");
     fDirectory->SetGuidance("MACE::SimEMC::Analysis controller.");
+
+    fFilePath = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/FilePath", this);
+    fFilePath->SetGuidance("Set file path.");
+    fFilePath->SetParameterName("path", false);
+    fFilePath->AvailableForStates(G4State_Idle);
+
+    fFileOption = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/FileOption", this);
+    fFileOption->SetGuidance("Set option (NEW, RECREATE, or UPDATE) for opening ROOT file(s).");
+    fFileOption->SetParameterName("option", false);
+    fFileOption->AvailableForStates(G4State_Idle);
 
     fEnableCoincidenceOfEMC = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/EnableCoincidenceOfEMC", this);
     fEnableCoincidenceOfEMC->SetGuidance("Enable EMC for coincident detection.");
@@ -30,36 +40,26 @@ AnalysisMessenger::AnalysisMessenger() :
     fEnableCoincidenceOfMCP->SetGuidance("Enable atomic shell e-/e+ detector (typically MCP currently) for coincident detection.");
     fEnableCoincidenceOfMCP->SetParameterName("mode", false);
     fEnableCoincidenceOfMCP->AvailableForStates(G4State_Idle);
-
-    fFilePath = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/FilePath", this);
-    fFilePath->SetGuidance("Set file name.");
-    fFilePath->SetParameterName("file name", false);
-    fFilePath->AvailableForStates(G4State_Idle);
-
-    fFileOption = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/FileOption", this);
-    fFileOption->SetGuidance("Set option (NEW, RECREATE, or UPDATE) for opening ROOT file(s).");
-    fFileOption->SetParameterName("option", false);
-    fFileOption->AvailableForStates(G4State_Idle);
 }
 
 AnalysisMessenger::~AnalysisMessenger() = default;
 
 auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
-    if (command == fEnableCoincidenceOfEMC.get()) {
-        Deliver<Analysis>([&](auto&& r) {
-            r.EnableCoincidenceOfEMC(fEnableCoincidenceOfEMC->GetNewBoolValue(value));
-        });
-    } else if (command == fEnableCoincidenceOfMCP.get()) {
-        Deliver<Analysis>([&](auto&& r) {
-            r.EnableCoincidenceOfMCP(fEnableCoincidenceOfMCP->GetNewBoolValue(value));
-        });
-    } else if (command == fFilePath.get()) {
+    if (command == fFilePath.get()) {
         Deliver<Analysis>([&](auto&& r) {
             r.FilePath(std::string_view(value));
         });
     } else if (command == fFileOption.get()) {
         Deliver<Analysis>([&](auto&& r) {
             r.FileOption(value);
+        });
+    } else if (command == fEnableCoincidenceOfEMC.get()) {
+        Deliver<Analysis>([&](auto&& r) {
+            r.EnableCoincidenceOfEMC(fEnableCoincidenceOfEMC->GetNewBoolValue(value));
+        });
+    } else if (command == fEnableCoincidenceOfMCP.get()) {
+        Deliver<Analysis>([&](auto&& r) {
+            r.EnableCoincidenceOfMCP(fEnableCoincidenceOfMCP->GetNewBoolValue(value));
         });
     }
 }

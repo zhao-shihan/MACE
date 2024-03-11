@@ -5,7 +5,6 @@
 #include <memory>
 
 class G4UIcmdWithABool;
-class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
 class G4UIdirectory;
 
@@ -28,10 +27,10 @@ public:
 
 private:
     std::unique_ptr<G4UIdirectory> fDirectory;
-    std::unique_ptr<G4UIcmdWithABool> fEnableCoincidenceOfEMC;
-    std::unique_ptr<G4UIcmdWithABool> fEnableCoincidenceOfMCP;
     std::unique_ptr<G4UIcmdWithAString> fFilePath;
     std::unique_ptr<G4UIcmdWithAString> fFileOption;
+    std::unique_ptr<G4UIcmdWithABool> fEnableCoincidenceOfEMC;
+    std::unique_ptr<G4UIcmdWithABool> fEnableCoincidenceOfMCP;
 };
 
 } // namespace Messenger
