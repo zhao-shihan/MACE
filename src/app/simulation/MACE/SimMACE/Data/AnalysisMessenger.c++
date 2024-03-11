@@ -13,14 +13,24 @@ namespace MACE::SimMACE::Data {
 AnalysisMessenger::AnalysisMessenger() :
     SingletonMessenger{},
     fDirectory{},
+    fFilePath{},
+    fFileOption{},
     fCoincidenceWithCDC{},
     fCoincidenceWithMCP{},
-    fCoincidenceWithEMC{},
-    fFilePath{},
-    fFileOption{} {
+    fCoincidenceWithEMC{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Analysis/");
-    fDirectory->SetGuidance("MACE::SimMACE::Analysis controller.");
+    fDirectory->SetGuidance("MACE::SimMACE::Data::Analysis controller.");
+
+    fFilePath = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/FilePath", this);
+    fFilePath->SetGuidance("Set file path.");
+    fFilePath->SetParameterName("path", false);
+    fFilePath->AvailableForStates(G4State_Idle);
+
+    fFileOption = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/FileOption", this);
+    fFileOption->SetGuidance("Set option (NEW, RECREATE, or UPDATE) for opening ROOT file(s).");
+    fFileOption->SetParameterName("option", false);
+    fFileOption->AvailableForStates(G4State_Idle);
 
     fCoincidenceWithCDC = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/CoincidenceWithCDC", this);
     fCoincidenceWithCDC->SetGuidance("Coincidence with CDC if enabled.");
@@ -36,22 +46,20 @@ AnalysisMessenger::AnalysisMessenger() :
     fCoincidenceWithEMC->SetGuidance("Coincidence with EMC if enabled.");
     fCoincidenceWithEMC->SetParameterName("mode", false);
     fCoincidenceWithEMC->AvailableForStates(G4State_Idle);
-
-    fFilePath = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/FilePath", this);
-    fFilePath->SetGuidance("Set file name.");
-    fFilePath->SetParameterName("file name", false);
-    fFilePath->AvailableForStates(G4State_Idle);
-
-    fFileOption = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/FileOption", this);
-    fFileOption->SetGuidance("Set option (NEW, RECREATE, or UPDATE) for opening ROOT file(s).");
-    fFileOption->SetParameterName("option", false);
-    fFileOption->AvailableForStates(G4State_Idle);
 }
 
 AnalysisMessenger::~AnalysisMessenger() = default;
 
 auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
-    if (command == fCoincidenceWithCDC.get()) {
+    if (command == fFilePath.get()) {
+        Deliver<Analysis>([&](auto&& r) {
+            r.FilePath(std::string_view(value));
+        });
+    } else if (command == fFileOption.get()) {
+        Deliver<Analysis>([&](auto&& r) {
+            r.FileOption(value);
+        });
+    } else if (command == fCoincidenceWithCDC.get()) {
         Deliver<Analysis>([&](auto&& r) {
             r.CoincidenceWithCDC(fCoincidenceWithCDC->GetNewBoolValue(value));
         });
@@ -62,14 +70,6 @@ auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> voi
     } else if (command == fCoincidenceWithEMC.get()) {
         Deliver<Analysis>([&](auto&& r) {
             r.CoincidenceWithEMC(fCoincidenceWithEMC->GetNewBoolValue(value));
-        });
-    } else if (command == fFilePath.get()) {
-        Deliver<Analysis>([&](auto&& r) {
-            r.FilePath(std::string_view(value));
-        });
-    } else if (command == fFileOption.get()) {
-        Deliver<Analysis>([&](auto&& r) {
-            r.FileOption(value);
         });
     }
 }

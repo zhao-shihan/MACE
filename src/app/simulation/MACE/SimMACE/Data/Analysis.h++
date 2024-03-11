@@ -45,7 +45,7 @@ public:
     auto SubmitMCPHC(gsl::not_null<const std::vector<gsl::owner<Simulation::MCPHit*>>*> hc) -> void { fMCPHit = hc; }
     auto EventEnd() -> void;
 
-    auto RunEnd(Option_t* option = nullptr) -> void;
+    auto RunEnd(Option_t* option = {}) -> void;
 
 private:
     std::filesystem::path fFilePath;
@@ -53,6 +53,8 @@ private:
     bool fCoincidenceWithCDC;
     bool fCoincidenceWithMCP;
     bool fCoincidenceWithEMC;
+
+    std::filesystem::path fLastUsedFullFilePath;
 
     gsl::owner<TFile*> fFile;
     std::optional<MACE::Data::Output<Data::DecayVertex>> fDecayVertexOutput;

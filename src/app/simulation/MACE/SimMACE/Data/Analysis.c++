@@ -22,6 +22,7 @@ Analysis::Analysis() :
     fCoincidenceWithCDC{true},
     fCoincidenceWithMCP{true},
     fCoincidenceWithEMC{true},
+    fLastUsedFullFilePath{},
     fFile{},
     fDecayVertexOutput{},
     fCDCSimHitOutput{},
@@ -35,12 +36,21 @@ Analysis::Analysis() :
     fMessengerRegister{this} {}
 
 auto Analysis::RunBegin(G4int runID) -> void {
-    const auto fullFilePath{MPIX::ParallelizePath(fFilePath, ".root").generic_string()};
-    fFile = TFile::Open(fullFilePath.c_str(), runID == 0 ? fFileOption.c_str() : "UPDATE",
+    // open ROOT file
+    auto fullFilePath{MPIX::ParallelizePath(fFilePath).replace_extension(".root").generic_string()};
+    const auto filePathChanged{fullFilePath != fLastUsedFullFilePath};
+    fFile = TFile::Open(fullFilePath.c_str(), filePathChanged ? fFileOption.c_str() : "UPDATE",
                         "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
     if (fFile == nullptr) {
-        throw std::runtime_error{fmt::format("MACE::SimMACE::Analysis::RunBegin: Cannot open file \"{}\"", fullFilePath)};
+        throw std::runtime_error{fmt::format("MACE::SimMACE::Analysis::RunBegin: Cannot open file '{}' with option '{}'",
+                                             fullFilePath, fFileOption)};
     }
+    fLastUsedFullFilePath = std::move(fullFilePath);
+    // save geometry
+    if (filePathChanged and Env::MPIEnv::Instance().OnCommWorldMaster()) {
+        ConvertG4GeometryToTMacro("SimMACE_gdml", "SimMACE.gdml")->Write();
+    }
+    // cd into run directory
     const auto runDirectory{fmt::format("G4Run{}", runID)};
     fFile->mkdir(runDirectory.c_str());
     fFile->cd(runDirectory.c_str());
@@ -70,10 +80,6 @@ auto Analysis::EventEnd() -> void {
 }
 
 auto Analysis::RunEnd(Option_t* option) -> void {
-    // write geometry
-    if (Env::MPIEnv::Instance().OnCommWorldMaster()) {
-        ConvertG4GeometryToTMacro("SimMACE_gdml", "SimMACE.gdml")->Write();
-    }
     // write data
     fDecayVertexOutput->Write();
     fCDCSimHitOutput->Write();
