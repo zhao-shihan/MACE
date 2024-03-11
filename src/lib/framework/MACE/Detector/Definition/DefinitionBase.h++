@@ -76,8 +76,8 @@ public:
     template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
     auto RegisterField(std::string_view logicalVolumeName, gsl::index iLogicalVolume, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void;
 
-    auto Export(std::filesystem::path gdmlFile, gsl::index iPhysicalVolume = 0) const -> void;
-    auto Export(std::filesystem::path gdmlFile, std::string_view physicalVolumeName, gsl::index iPhysicalVolume = 0) const -> void;
+    auto Export(const std::filesystem::path& gdmlFile, gsl::index iPhysicalVolume = 0) const -> void;
+    auto Export(const std::filesystem::path& gdmlFile, std::string_view physicalVolumeName, gsl::index iPhysicalVolume = 0) const -> void;
 
     auto LogicalVolumes() const -> const std::vector<G4LogicalVolume*>&;
     auto LogicalVolumes(std::string_view name) const -> const auto& { return fLogicalVolumes.at(std::string{name}); }

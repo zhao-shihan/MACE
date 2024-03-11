@@ -46,12 +46,15 @@ auto RegisterSD(G4LogicalVolume* logic, gsl::not_null<G4VSensitiveDetector*> sd)
     }
 }
 
-auto Export(std::filesystem::path gdmlFile, G4LogicalVolume* logic) {
-    if (Env::MPIEnv::Available()) { MPIX::ParallelizePathInPlace(gdmlFile); }
+auto Export(const std::filesystem::path& gdmlFile, G4LogicalVolume* logic) {
     G4GDMLParser gdml;
     gdml.SetAddPointerToName(true);
     gdml.SetOutputFileOverwrite(true);
-    gdml.Write(gdmlFile.generic_string(), logic);
+    gdml.Write((Env::MPIEnv::Available() ?
+                    MPIX::ParallelizePath(gdmlFile) :
+                    gdmlFile)
+                   .generic_string(),
+               logic);
 }
 
 } // namespace
@@ -141,12 +144,12 @@ auto DefinitionBase::RegisterSD(std::string_view logicalVolumeName, gsl::index i
     internal::RegisterSD(LogicalVolume(logicalVolumeName, iLogicalVolume), sd);
 }
 
-auto DefinitionBase::Export(std::filesystem::path gdmlFile, gsl::index iPhysicalVolume) const -> void {
+auto DefinitionBase::Export(const std::filesystem::path& gdmlFile, gsl::index iPhysicalVolume) const -> void {
     if (not Ready()) { return; }
     internal::Export(std::move(gdmlFile), LogicalVolume(iPhysicalVolume));
 }
 
-auto DefinitionBase::Export(std::filesystem::path gdmlFile, std::string_view physicalVolumeName, gsl::index iPhysicalVolume) const -> void {
+auto DefinitionBase::Export(const std::filesystem::path& gdmlFile, std::string_view physicalVolumeName, gsl::index iPhysicalVolume) const -> void {
     if (not Ready()) { return; }
     internal::Export(std::move(gdmlFile), LogicalVolume(physicalVolumeName, iPhysicalVolume));
 }
