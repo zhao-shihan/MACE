@@ -15,7 +15,7 @@ class Geant4CLI : public BasicCLI {
 public:
     Geant4CLI();
 
-    auto Macro() const -> std::optional<std::string>;
+    auto Macro() const -> auto { return ArgParser().present("macro"); }
     auto IsInteractive() const -> auto { return not Macro().has_value() or ArgParser().is_used("-i"); }
 
     auto Seed(CLHEP::HepRandomEngine& rng) const -> bool;
