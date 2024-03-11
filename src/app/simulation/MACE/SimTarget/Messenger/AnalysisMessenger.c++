@@ -12,16 +12,22 @@ namespace MACE::SimTarget::inline Messenger {
 AnalysisMessenger::AnalysisMessenger() :
     SingletonMessenger{},
     fDirectory{},
-    fResultPath{},
+    fFilePath{},
+    fFileOption{},
     fEnableYieldAnalysis{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Analysis/");
     fDirectory->SetGuidance("MACE::SimTarget::Analysis controller.");
 
-    fResultPath = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/ResultPath", this),
-    fResultPath->SetGuidance("Set result name.");
-    fResultPath->SetParameterName("result name", false);
-    fResultPath->AvailableForStates(G4State_PreInit);
+    fFilePath = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/FilePath", this),
+    fFilePath->SetGuidance("Set file path.");
+    fFilePath->SetParameterName("path", false);
+    fFilePath->AvailableForStates(G4State_PreInit);
+
+    fFileOption = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/FileOption", this);
+    fFileOption->SetGuidance("Set option (NEW, RECREATE, or UPDATE) for opening ROOT file(s).");
+    fFileOption->SetParameterName("option", false);
+    fFileOption->AvailableForStates(G4State_PreInit);
 
     fEnableYieldAnalysis = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/EnableYieldAnalysis", this),
     fEnableYieldAnalysis->SetGuidance("Enable auto analysis of yield.");
@@ -32,9 +38,13 @@ AnalysisMessenger::AnalysisMessenger() :
 AnalysisMessenger::~AnalysisMessenger() = default;
 
 auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
-    if (command == fResultPath.get()) {
+    if (command == fFilePath.get()) {
         Deliver<Analysis>([&](auto&& r) {
-            r.ResultPath(std::string_view{value});
+            r.FilePath(std::string_view{value});
+        });
+    } else if (command == fFileOption.get()) {
+        Deliver<Analysis>([&](auto&& r) {
+            r.FileOption(value);
         });
     } else if (command == fEnableYieldAnalysis.get()) {
         Deliver<Analysis>([&](auto&& r) {

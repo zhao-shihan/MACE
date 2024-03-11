@@ -14,11 +14,12 @@
 /run/verbose 2
 
 # I/O & Analysis
-/MACE/Analysis/ResultPath                          SimTarget_result
-/MACE/Analysis/EnableYieldAnalysis                    true
+/MACE/Analysis/FilePath                        SimTarget_vis
+/MACE/Analysis/FileOption                      RECREATE
+/MACE/Analysis/EnableYieldAnalysis             true
 
 # Geometry
-#/MACE/Detector/Description/Import                     geom.yaml
+#/MACE/Detector/Description/Import              geom.yaml
 
 # Initialize kernel
 /run/initialize

@@ -27,7 +27,8 @@ public:
 
 private:
     std::unique_ptr<G4UIdirectory> fDirectory;
-    std::unique_ptr<G4UIcmdWithAString> fResultPath;
+    std::unique_ptr<G4UIcmdWithAString> fFilePath;
+    std::unique_ptr<G4UIcmdWithAString> fFileOption;
     std::unique_ptr<G4UIcmdWithABool> fEnableYieldAnalysis;
 };
 

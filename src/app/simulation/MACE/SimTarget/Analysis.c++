@@ -5,8 +5,10 @@
 #include "MACE/SimTarget/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimTarget/Analysis.h++"
 #include "MACE/SimTarget/Messenger/AnalysisMessenger.h++"
+#include "MACE/Utility/ConvertG4Geometry.h++"
 
 #include "TFile.h"
+#include "TMacro.h"
 
 #include "G4Run.hh"
 
@@ -17,8 +19,9 @@
 namespace MACE::SimTarget {
 
 Analysis::Analysis() :
-    PassiveSingleton(),
-    fResultPath{"SimTarget_result"},
+    PassiveSingleton{},
+    fFilePath{"SimTarget_untitled"},
+    fFileOption{"NEW"},
     fEnableYieldAnalysis{true},
     fThisRun{},
     fResultFile{},
@@ -30,25 +33,27 @@ Analysis::~Analysis() {
     Close();
 }
 
-void Analysis::RunBegin(gsl::not_null<const G4Run*> run) {
+auto Analysis::RunBegin(gsl::not_null<const G4Run*> run) -> void {
     fThisRun = run;
-    if (fThisRun->GetRunID() == 0) {
-        Open();
-    }
+    const auto runID{fThisRun->GetRunID()};
+    if (runID == 0) { Open(); }
+    const auto runDirectory{fmt::format("G4Run{}", runID)};
+    fResultFile->mkdir(runDirectory.c_str());
+    fResultFile->cd(runDirectory.c_str());
 }
 
-void Analysis::RunEnd() {
+auto Analysis::RunEnd() -> void {
     Write();
 }
 
-void Analysis::Open() {
+auto Analysis::Open() -> void {
     OpenResultFile();
     if (fEnableYieldAnalysis) {
         OpenYieldFile();
     }
 }
 
-void Analysis::Write() {
+auto Analysis::Write() -> void {
     WriteResult();
     if (fEnableYieldAnalysis) {
         AnalysisAndWriteYield();
@@ -56,42 +61,46 @@ void Analysis::Write() {
     fMuoniumTrack.clear();
 }
 
-void Analysis::Close() {
+auto Analysis::Close() -> void {
     CloseResultFile();
     if (fEnableYieldAnalysis) {
         CloseYieldFile();
     }
 }
 
-void Analysis::OpenResultFile() {
-    const auto fullResultPath{MPIX::ParallelizePath(fResultPath, ".root").generic_string()};
-    fResultFile = TFile::Open(fullResultPath.c_str(), "RECREATE",
+auto Analysis::OpenResultFile() -> void {
+    const auto fullFilePath{MPIX::ParallelizePath(fFilePath).replace_extension(".root").generic_string()};
+    fResultFile = TFile::Open(fullFilePath.c_str(), fFileOption.c_str(),
                               "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
     if (fResultFile == nullptr) {
-        throw std::runtime_error{fmt::format("MACE::SimTarget::Analysis::OpenResultFile: Cannot open file \"{}\"", fullResultPath)};
+        throw std::runtime_error{fmt::format("MACE::SimTarget::Analysis::OpenResultFile: Cannot open file '{}' with option '{}'",
+                                             fullFilePath, fFileOption)};
+    }
+    if (Env::MPIEnv::Instance().OnCommWorldMaster()) {
+        ConvertG4GeometryToTMacro("SimTarget_gdml", "SimTarget.gdml")->Write();
     }
 }
 
-void Analysis::WriteResult() {
-    Data::Output<MuoniumTrack> output{fmt::format("G4Run{}_MTrk", fThisRun->GetRunID())};
+auto Analysis::WriteResult() -> void {
+    Data::Output<MuoniumTrack> output{"MuoniumTrack"};
     output << fMuoniumTrack;
     output.Write();
 }
 
-void Analysis::CloseResultFile() {
+auto Analysis::CloseResultFile() -> void {
     if (fResultFile == nullptr) { return; }
     fResultFile->Close();
     delete fResultFile;
 }
 
-void Analysis::OpenYieldFile() {
+auto Analysis::OpenYieldFile() -> void {
     if (Env::MPIEnv::Instance().OnCommWorldMaster()) {
-        fYieldFile = std::fopen(std::string{fResultPath}.append("_yield.csv").c_str(), "w");
+        fYieldFile = std::fopen(std::string{fFilePath}.append("_yield.csv").c_str(), "w");
         fmt::println(fYieldFile, "runID,nMuon,nMFormed,nMTargetDecay,nMVacuumDecay,nMDetectableDecay");
     }
 }
 
-void Analysis::AnalysisAndWriteYield() {
+auto Analysis::AnalysisAndWriteYield() -> void {
     std::array<unsigned long long, 5> yieldData;
     auto& [nMuon, nFormed, nTargetDecay, nVacuumDecay, nDetectableDecay]{yieldData};
     nMuon = static_cast<unsigned long long>(PrimaryGeneratorAction::Instance().PrimariesForEachG4Event()) *
@@ -147,7 +156,7 @@ void Analysis::AnalysisAndWriteYield() {
     }
 }
 
-void Analysis::CloseYieldFile() {
+auto Analysis::CloseYieldFile() -> void {
     if (fYieldFile == nullptr) { return; }
     std::fclose(fYieldFile);
 }
