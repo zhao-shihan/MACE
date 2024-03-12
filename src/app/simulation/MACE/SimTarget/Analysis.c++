@@ -1,11 +1,11 @@
 #include "MACE/Data/Output.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Env/MPIEnv.h++"
+#include "MACE/Extension/Geant4X/ConvertGeometry.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
 #include "MACE/SimTarget/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimTarget/Analysis.h++"
 #include "MACE/SimTarget/Messenger/AnalysisMessenger.h++"
-#include "MACE/Utility/ConvertG4Geometry.h++"
 
 #include "TFile.h"
 #include "TMacro.h"
@@ -77,7 +77,7 @@ auto Analysis::OpenResultFile() -> void {
                                              fullFilePath, fFileOption)};
     }
     if (Env::MPIEnv::Instance().OnCommWorldMaster()) {
-        ConvertG4GeometryToTMacro("SimTarget_gdml", "SimTarget.gdml")->Write();
+        Geant4X::ConvertGeometryToTMacro("SimTarget_gdml", "SimTarget.gdml")->Write();
     }
 }
 

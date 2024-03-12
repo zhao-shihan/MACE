@@ -1,10 +1,10 @@
 #include "MACE/Env/MPIEnv.h++"
+#include "MACE/Extension/Geant4X/ConvertGeometry.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
 #include "MACE/SimMACE/Data/Analysis.h++"
 #include "MACE/Simulation/Hit/CDCHit.h++"
 #include "MACE/Simulation/Hit/EMCHit.h++"
 #include "MACE/Simulation/Hit/MCPHit.h++"
-#include "MACE/Utility/ConvertG4Geometry.h++"
 
 #include "TFile.h"
 #include "TMacro.h"
@@ -48,7 +48,7 @@ auto Analysis::RunBegin(G4int runID) -> void {
     fLastUsedFullFilePath = std::move(fullFilePath);
     // save geometry
     if (filePathChanged and Env::MPIEnv::Instance().OnCommWorldMaster()) {
-        ConvertG4GeometryToTMacro("SimMACE_gdml", "SimMACE.gdml")->Write();
+        Geant4X::ConvertGeometryToTMacro("SimMACE_gdml", "SimMACE.gdml")->Write();
     }
     // cd into run directory
     const auto runDirectory{fmt::format("G4Run{}", runID)};

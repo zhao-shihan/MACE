@@ -1,4 +1,4 @@
-#include "MACE/Utility/ConvertG4Geometry.h++"
+#include "MACE/Extension/Geant4X/ConvertGeometry.h++"
 #include "MACE/Utility/CreateTemporaryFile.h++"
 
 #include "TMacro.h"
@@ -13,9 +13,9 @@
 #include <sstream>
 #include <stdexcept>
 
-namespace MACE::inline Utility {
+namespace MACE::inline Extension::Geant4X {
 
-auto ConvertG4GeometryToGDMLText(const G4LogicalVolume* g4Geom) -> std::string {
+auto ConvertGeometryToGDMLText(const G4LogicalVolume* g4Geom) -> std::string {
     const auto tempGDMLPath{CreateTemporaryFile("g4geom", ".gdml")};
     {
         G4GDMLParser gdml;
@@ -36,7 +36,7 @@ auto ConvertG4GeometryToGDMLText(const G4LogicalVolume* g4Geom) -> std::string {
     return tempText.str();
 }
 
-auto ConvertG4GeometryToTMacro(const std::string& name, const std::filesystem::path& output, const G4LogicalVolume* g4Geom) -> std::unique_ptr<TMacro> {
+auto ConvertGeometryToTMacro(const std::string& name, const std::filesystem::path& output, const G4LogicalVolume* g4Geom) -> std::unique_ptr<TMacro> {
     const auto tempMacroPath{CreateTemporaryFile(name, ".C")};
     {
         const auto tempMacroFile{std::fopen(tempMacroPath.generic_string().c_str(), "w")};
@@ -55,7 +55,7 @@ auto {0}() -> void {{
     std::cout << "\nGDML has been saved to {1}" << std::endl;
 }}
 )macro",
-                     name, output.generic_string(), ConvertG4GeometryToGDMLText(g4Geom));
+                     name, output.generic_string(), ConvertGeometryToGDMLText(g4Geom));
         std::fclose(tempMacroFile);
     }
     auto macro{std::make_unique<TMacro>(name.c_str(), "Generate GDML file")};
@@ -68,4 +68,4 @@ auto {0}() -> void {{
     return macro;
 }
 
-} // namespace MACE::inline Utility
+} // namespace MACE::inline Extension::Geant4X
