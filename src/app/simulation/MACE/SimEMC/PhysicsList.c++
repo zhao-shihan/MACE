@@ -5,6 +5,7 @@
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4OpticalParameters.hh"
 #include "G4OpticalPhysics.hh"
+#include "G4RadioactiveDecayPhysics.hh"
 
 namespace MACE::SimEMC {
 
@@ -14,6 +15,7 @@ PhysicsList::PhysicsList() :
     fMessengerRegister{this} {
     // EMZ
     ReplacePhysics(new G4EmStandardPhysics_option4{verboseLevel});
+    RegisterPhysics(new G4RadioactiveDecayPhysics(verboseLevel));
 }
 
 auto PhysicsList::UseOpticalPhysics() -> void {
