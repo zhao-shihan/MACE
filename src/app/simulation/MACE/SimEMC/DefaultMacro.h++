@@ -48,7 +48,7 @@ constexpr auto defaultMacro = {
     "/vis/viewer/set/projection o",
     "/vis/viewer/set/style s",
     "/vis/viewer/set/auxiliaryEdge false",
-    "/vis/viewer/set/lineSegmentsPerCircle 100",
+    "#/vis/viewer/set/lineSegmentsPerCircle 100",
     "/vis/viewer/zoom 1.5",
     "#/vis/viewer/addCutawayPlane 0 0 0",
     "",
