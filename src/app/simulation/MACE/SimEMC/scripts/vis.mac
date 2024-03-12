@@ -16,7 +16,7 @@
 /MACE/Generator/SwitchToGPS
 /MACE/Physics/UseOpticalPhysics
 
-/MACE/Detector/Description/Import emc_geom.yaml
+#/MACE/Detector/Description/Import emc_geom.yaml
 
 # Initialize kernel
 /run/initialize
