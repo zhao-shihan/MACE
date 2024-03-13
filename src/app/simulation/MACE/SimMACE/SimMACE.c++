@@ -12,7 +12,7 @@ auto main(int argc, char* argv[]) -> int {
     Env::CLI::Geant4CLI cli;
     Env::MPIEnv env{argc, argv, cli};
 
-    const auto random{UseXoshiro<512>()};
+    UseXoshiro<512> random;
     cli.SeedRandomIfFlagged();
 
     // PhysicsList, DetectorConstruction, ActionInitialization are instantiated in RunManager constructor.
