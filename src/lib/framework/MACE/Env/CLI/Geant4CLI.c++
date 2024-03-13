@@ -1,6 +1,9 @@
 #include "MACE/Env/CLI/Geant4CLI.h++"
+#include "MACE/Math/Random/Generator/SplitMix64.h++"
 
-#include "CLHEP/Random/RandomEngine.h"
+#include "CLHEP/Random/Random.h"
+
+#include "TRandom.h"
 
 #include <bit>
 #include <random>
@@ -20,13 +23,20 @@ Geant4CLI::Geant4CLI() :
         .scan<'i', long>();
 }
 
-auto Geant4CLI::Seed(CLHEP::HepRandomEngine& rng) const -> bool {
+auto Geant4CLI::SeedRandomIfSet() const -> bool {
     auto seed{ArgParser().present<long>("-s")};
     if (seed) {
-        rng.setSeed(*seed != 0 ?
-                        *seed :
-                        std::bit_cast<int>(std::random_device{}()),
-                    3);
+        const auto theSeed{*seed != 0 ? *seed :
+                                        std::bit_cast<int>(std::random_device{}())};
+        if (const auto clhepRandom{CLHEP::HepRandom::getTheEngine()};
+            clhepRandom) {
+            clhepRandom->setSeed(theSeed, 3);
+        }
+        if (gRandom) {
+            // Try to decorrelate with CLHEP
+            const auto rootSeed{Math::Random::SplitMix64{std::bit_cast<unsigned long>(theSeed)}()};
+            gRandom->SetSeed(rootSeed);
+        }
         return true;
     } else {
         return false;
