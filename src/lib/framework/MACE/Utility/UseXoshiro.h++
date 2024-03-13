@@ -1,14 +1,23 @@
 #pragma once
 
-#include <any>
+#include <memory>
 
 namespace MACE::inline Utility {
 
-/// @brief Use Xoshiro random engine for CLHEP and ROOT. Xoshiro** for CLHEP and Xoshiro++ for ROOT.
+/// @brief Use Xoshiro random engine for CLHEP and ROOT, Xoshiro** for CLHEP and Xoshiro++ for ROOT.
 /// @tparam Xoshiro bit width.
-/// @return An internal object holds the Xoshiro CLHEP and ROOT random engine. DO NOT DISCARD return value.
-/// @warning DO NOT DISCARD return value. Otherwise new random engines are destructed immediately.
+/// @note RAII style class. Random engines share lifetime with this class object.
 template<unsigned ABitWidth>
-[[nodiscard]] auto UseXoshiro() -> std::any;
+class UseXoshiro {
+public:
+    UseXoshiro();
+    ~UseXoshiro();
+
+private:
+    struct Random;
+
+private:
+    std::unique_ptr<Random> fRandom;
+};
 
 } // namespace MACE::inline Utility
