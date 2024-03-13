@@ -1,5 +1,4 @@
 #include "MACE/Env/CLI/Geant4CLI.h++"
-#include "MACE/Math/Random/Generator/SplitMix64.h++"
 
 #include "CLHEP/Random/Random.h"
 
@@ -34,7 +33,7 @@ auto Geant4CLI::SeedRandomIfFlagged() const -> bool {
         }
         if (gRandom) {
             // Try to decorrelate with CLHEP
-            const auto rootSeed{Math::Random::SplitMix64{std::bit_cast<unsigned long>(theSeed)}()};
+            const auto rootSeed{std::mt19937_64{static_cast<unsigned long>(theSeed)}()};
             gRandom->SetSeed(rootSeed);
         }
         return true;
