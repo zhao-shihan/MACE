@@ -96,9 +96,9 @@ auto MPIReseedRandomEngine(CLHEP::HepRandomEngine* clhepRng, TRandom* tRandom) -
             }
         }
         if (tRandom != nullptr) {
-            static_assert(std::same_as<decltype(tRandom->Integer(std::numeric_limits<unsigned>::max()) + 1), unsigned>);
+            static_assert(std::same_as<decltype(tRandom->Integer(-1) + 1), unsigned>);
             std::array<unsigned, sizeof(std::uint64_t) / sizeof(unsigned)> xsr256Seed;
-            std::ranges::generate(xsr256Seed, [&] { return tRandom->Integer(std::numeric_limits<unsigned>::max()) + 1; });
+            std::ranges::generate(xsr256Seed, [&] { return tRandom->Integer(-1) + 1; });
             const auto uniqueSeed{internal::MasterMakeUniqueSeedSeries<unsigned>(xsr256Seed)};
             assert(uniqueSeed.size() == seedSend.size());
             for (gsl::index i{}; const auto& s : uniqueSeed) {
