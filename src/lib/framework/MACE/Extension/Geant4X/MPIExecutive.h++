@@ -21,6 +21,8 @@ using Env::CLI::Geant4CLI;
 
 class MPIExecutive final : public Env::Memory::WeakSingleton<MPIExecutive> {
 public:
+    MPIExecutive() = default; // prevent aggregate initialization
+
     auto StartSession(const Geant4CLI& cli, auto&& macFileOrCmdList) const -> void;
     template<typename T>
     auto StartSession(const Geant4CLI& cli, std::initializer_list<T> cmdList = {}) const -> void;
