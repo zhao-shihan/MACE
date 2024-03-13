@@ -131,7 +131,7 @@ template<std::integral T>
 auto Executor<T>::PrintExecutionSummary() const -> void {
     const auto& mpiEnv{Env::MPIEnv::Instance()};
     if (not(mpiEnv.OnCommWorldMaster() and mpiEnv.VerboseLevel() >= Env::VL::Error)) { return; }
-    if (fExecuting and mpiEnv.VerboseLevel() >= Env::VL::Warning) { fmt::print(stderr, "Execution summary not available for now."); }
+    if (fExecuting and mpiEnv.VerboseLevel() >= Env::VL::Warning) { fmt::println(stderr, "Execution summary not available for now."); }
     fmt::println("+------------------+--------------> Summary <-------------+-------------------+\n"
                  "| Rank in world    | Executed          | Wall time (s)    | CPU time (s)      |\n"
                  "+------------------+-------------------+------------------+-------------------+");
