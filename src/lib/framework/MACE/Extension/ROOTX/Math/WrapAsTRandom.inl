@@ -11,7 +11,7 @@ auto WrapAsTRandom<PRBG>::RndmArray(Int_t n, Float_t* array) -> void {
 }
 
 template<MACE::Math::Random::UniformPseudoRandomBitGenerator PRBG>
-auto WrapAsTRandom<PRBG>::RndmArray(Int_t n, Float_t* array) -> void {
+auto WrapAsTRandom<PRBG>::RndmArray(Int_t n, Double_t* array) -> void {
     std::ranges::generate_n(array, n, [this] { return Rndm(); });
 }
 
