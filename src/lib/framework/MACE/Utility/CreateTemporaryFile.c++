@@ -25,9 +25,9 @@ auto CreateTemporaryFile(std::string_view signature, std::filesystem::path exten
     std::FILE* file;
     const auto programName{fs::path{Env::BasicEnv::Instance().Argv()[0]}.filename().generic_string()};
     for (int i{}; i < 100'000; ++i) {
-        path = fs::temp_directory_path() / fmt::format("{}{}{:x}.", programName, signature, random());
+        path = fs::temp_directory_path() / fmt::format("{}{}{:x}_", programName, signature, random());
         if (Env::MPIEnv::Available()) {
-            path.concat(fmt::format("mpi{}.", Env::MPIEnv::Instance().CommWorldRank()));
+            path.concat(fmt::format("mpi{}_", Env::MPIEnv::Instance().CommWorldRank()));
         }
         path.concat("tmp.").replace_extension(extension);
         file = std::fopen(path.generic_string().c_str(), "wx");
