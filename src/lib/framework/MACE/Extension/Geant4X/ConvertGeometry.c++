@@ -8,10 +8,12 @@
 
 #include "fmt/format.h"
 
+#include <cstdio>
 #include <filesystem>
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include <system_error>
 
 namespace MACE::inline Extension::Geant4X {
 
