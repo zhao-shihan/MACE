@@ -23,7 +23,7 @@ Geant4CLI::Geant4CLI() :
         .scan<'i', long>();
 }
 
-auto Geant4CLI::SeedRandomIfSet() const -> bool {
+auto Geant4CLI::SeedRandomIfFlagged() const -> bool {
     auto seed{ArgParser().present<long>("-s")};
     if (seed) {
         const auto theSeed{*seed != 0 ? *seed :

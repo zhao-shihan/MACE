@@ -18,7 +18,7 @@ public:
     auto Macro() const -> auto { return ArgParser().present("macro"); }
     auto IsInteractive() const -> auto { return not Macro().has_value() or ArgParser().is_used("-i"); }
 
-    auto SeedRandomIfSet() const -> bool;
+    auto SeedRandomIfFlagged() const -> bool;
 };
 
 } // namespace MACE::Env::CLI
