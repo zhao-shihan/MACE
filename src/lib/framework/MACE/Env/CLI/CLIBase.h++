@@ -22,6 +22,7 @@ private:
 
 public:
     auto AddArgument(auto&&... args) -> argparse::Argument&;
+    auto AddMutuallyExclusiveGroup(bool required = false) -> argparse::ArgumentParser::MutuallyExclusiveGroup&;
     auto ParseArgs(int argc, char* argv[]) -> void;
     auto Parsed() const -> bool { return fArgcArgv.has_value(); }
     auto ArgParser() const -> const auto& { return fArgParser; }

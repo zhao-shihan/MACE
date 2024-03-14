@@ -19,6 +19,14 @@ CLIBase::CLIBase() :
 
 CLIBase::~CLIBase() = default;
 
+auto CLIBase::AddMutuallyExclusiveGroup(bool required) -> argparse::ArgumentParser::MutuallyExclusiveGroup& {
+    if (not Parsed()) {
+        return fArgParser.add_mutually_exclusive_group(required);
+    } else {
+        ThrowParsed();
+    }
+}
+
 auto CLIBase::ParseArgs(int argc, char* argv[]) -> void {
     if (not Parsed()) {
         try {
