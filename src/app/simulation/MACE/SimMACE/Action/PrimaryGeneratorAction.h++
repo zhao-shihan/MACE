@@ -6,6 +6,8 @@
 #include "G4GeneralParticleSource.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 
+#include <algorithm>
+
 namespace MACE::SimMACE::inline Action {
 
 class PrimaryGeneratorAction final : public Env::Memory::PassiveSingleton<PrimaryGeneratorAction>,
@@ -13,8 +15,8 @@ class PrimaryGeneratorAction final : public Env::Memory::PassiveSingleton<Primar
 public:
     PrimaryGeneratorAction();
 
-    auto PulseWidth(G4double val) -> void { fPulseWidth = val; }
-    auto PrimariesForEachG4Event(G4int n) -> void { fPrimariesForEachG4Event = n; }
+    auto PulseWidth(G4double val) -> void { fPulseWidth = std::max(0., val); }
+    auto PrimariesForEachG4Event(G4int n) -> void { fPrimariesForEachG4Event = std::max(1, n); }
 
     auto GeneratePrimaries(G4Event* event) -> void override;
 
