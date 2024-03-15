@@ -13,8 +13,8 @@ PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger() :
 
     fPulseWidth = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Generator/GPS/PulseWidth", this);
     fPulseWidth->SetGuidance("Set pulse width of beam.");
-    fPulseWidth->SetParameterName("pulse width", false);
-    fPulseWidth->SetUnitCategory("T");
+    fPulseWidth->SetParameterName("T", false);
+    fPulseWidth->SetUnitCategory("Time");
     fPulseWidth->SetRange("T >= 0");
     fPulseWidth->AvailableForStates(G4State_Idle);
 
