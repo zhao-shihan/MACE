@@ -2,6 +2,7 @@
 #include "MACE/External/gfx/timsort.hpp"
 #include "MACE/Math/MidPoint.h++"
 #include "MACE/Simulation/SD/CDCSD.h++"
+#include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/VectorArithmeticOperator.h++"
 #include "MACE/Utility/VectorCast.h++"
 
@@ -17,22 +18,30 @@
 #include "G4VProcess.hh"
 #include "G4VTouchable.hh"
 
-#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <string_view>
+#include <unordered_set>
 #include <utility>
 
 namespace MACE::inline Simulation::inline SD {
 
+using namespace LiteralUnit::Energy;
+
 CDCSD::CDCSD(const G4String& sdName) :
     NonMoveableBase{},
     G4VSensitiveDetector{sdName},
+    fMinIonizingEnergyDepositionForHit{25_eV},
+    fNMinFiredCellForQualifiedTrack{[] {
+        const auto& cdc{Detector::Description::CDC::Instance()};
+        return cdc.NSenseLayerPerSuper() * cdc.NSuperLayer();
+    }()},
     fMeanDriftVelocity{},
     fCellMap{},
     fSplitHit{},
     fHitsCollection{},
-    fTrackData{} {
+    fTrackData{},
+    fMessengerRegister{this} {
     collectionName.emplace_back(sdName + "HC");
 }
 
@@ -56,7 +65,7 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
     assert(0 <= step.GetNonIonizingEnergyDeposit());
     assert(step.GetNonIonizingEnergyDeposit() <= eDep);
-    if (eDep - step.GetNonIonizingEnergyDeposit() < std::numeric_limits<double>::epsilon()) { return false; } // ionizing Edep
+    if (eDep - step.GetNonIonizingEnergyDeposit() < fMinIonizingEnergyDepositionForHit) { return false; }
 
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
@@ -141,11 +150,10 @@ auto CDCSD::BuildHitData() -> void {
                 }
                 if (timeWindowClosed or aSplitHit == splitHit.back()) {
                     // find top hit
-                    const auto iTopHit{std::ranges::min_element(std::as_const(hitCandidate),
+                    const auto topHit{*std::ranges::min_element(std::as_const(hitCandidate),
                                                                 [](const auto& hit1, const auto& hit2) {
                                                                     return Get<"TrkID">(**hit1) < Get<"TrkID">(**hit2);
                                                                 })};
-                    const auto topHit{*iTopHit};
                     // construct real hit
                     Get<"HitID">(**topHit) = hitID++;
                     assert(Get<"CellID">(**topHit) == cellID);
@@ -184,13 +192,15 @@ auto CDCSD::BuildTrackData() -> void {
                  });
     const auto magneticFluxDensity{Detector::Description::SpectrometerField::Instance().MagneticFluxDensity()};
     auto lastTrackID{-1};
-    Data::Tuple<Data::CDCSimTrack>* track{};
+    std::unique_ptr<Data::Tuple<Data::CDCSimTrack>> track;
+    std::unordered_set<int> firedCell;
     for (auto&& pHit : std::as_const(hitData)) {
         const auto& hit{*pHit};
         assert(Get<"TrkID">(hit) >= 0);
-        if (Get<"TrkID">(hit) != lastTrackID) {
+        if (Get<"TrkID">(hit) != lastTrackID or pHit == hitData.back()) {
             lastTrackID = Get<"TrkID">(hit);
-            track = fTrackData.emplace_back(std::make_unique_for_overwrite<Data::Tuple<Data::CDCSimTrack>>()).get();
+            if (track and ssize(firedCell) >= fNMinFiredCellForQualifiedTrack) { fTrackData.emplace_back(std::move(track)); }
+            track = std::make_unique_for_overwrite<Data::Tuple<Data::CDCSimTrack>>();
             Get<"EvtID">(*track) = Get<"EvtID">(hit);
             Get<"TrkID">(*track) = Get<"TrkID">(hit);
             Get<"chi2">(*track) = 0;
@@ -201,8 +211,10 @@ auto CDCSD::BuildTrackData() -> void {
             Get<"p0">(*track) = Get<"p0">(hit);
             Data::CalculateHelix(*track, magneticFluxDensity);
             Get<"CreatProc">(*track) = Get<"CreatProc">(hit);
+            firedCell.clear();
         }
         Get<"HitID">(*track)->emplace_back(Get<"HitID">(hit));
+        firedCell.emplace(Get<"CellID">(hit));
     }
 }
 
