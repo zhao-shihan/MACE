@@ -49,7 +49,7 @@ auto main(int argc, char* argv[]) -> int {
     {
         SmearMACE::Smearer smearer{cli.InputFilePath(), outputName};
         const auto [iFirst, iLast]{cli.DatasetIndexRange()};
-        const auto Smear{[&](const auto& nameFmt, const auto& smearingConfig, const auto& identity) {
+        const auto Smear{[&, iFirst = iFirst, iLast = iLast](const auto& nameFmt, const auto& smearingConfig, const auto& identity) {
             if (smearingConfig or identity) {
                 for (auto i{iFirst}; i < iLast; ++i) {
                     smearer.Smear(fmt::vformat(nameFmt, fmt::make_format_args(i)), smearingConfig);
