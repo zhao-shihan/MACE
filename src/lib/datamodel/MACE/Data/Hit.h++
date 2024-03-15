@@ -14,19 +14,19 @@ using HitEventIDHitID = TupleModel<Value<int, "EvtID", "Event ID">,
 } // namespace internal
 
 using CDCHit = TupleModel<internal::HitEventIDHitID,
-                          Value<int, "CellID", "Hit cell ID">,
+                          Value<short, "CellID", "Hit cell ID">,
                           Value<double, "t", "Signal time">,
-                          Value<double, "tD", "Drift time">,
+                          Value<float, "tD", "Drift time">,
                           Value<float, "d", "Drift distance">,
                           Value<float, "Edep", "Energy deposition">>;
 
 using EMCHit = TupleModel<internal::HitEventIDHitID,
-                          Value<int, "UnitID", "Hit unit ID">,
+                          Value<short, "UnitID", "Hit unit ID">,
                           Value<double, "t", "Hit time">,
                           Value<float, "Edep", "Energy deposition">>;
 
 using EMCPMTHit = TupleModel<internal::HitEventIDHitID,
-                             Value<int, "UnitID", "Hit unit ID">,
+                             Value<short, "UnitID", "Hit unit ID">,
                              Value<double, "t", "Hit time">>;
 
 using MCPHit = TupleModel<internal::HitEventIDHitID,

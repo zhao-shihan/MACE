@@ -91,13 +91,13 @@ auto EnvBase::CheckFundamentalType() -> void {
         }
     }
     if (not std::numeric_limits<float>::is_iec559) {
-        fmt::println(stderr, "Warning: <float> does not fulfill the requirements of IEC 559 (IEEE 754)");
+        fmt::println(stderr, "Warning: 'float' does not fulfill the requirements of IEC 559 (IEEE 754)");
     }
     if (not std::numeric_limits<double>::is_iec559) {
-        fmt::println(stderr, "Warning: <double> does not fulfill the requirements of IEC 559 (IEEE 754)");
+        fmt::println(stderr, "Warning: 'double' does not fulfill the requirements of IEC 559 (IEEE 754)");
     }
     if (not std::numeric_limits<long double>::is_iec559) {
-        fmt::println(stderr, "Warning: <long double> does not fulfill the requirements of IEC 559 (IEEE 754)");
+        fmt::println(stderr, "Warning: 'long double' does not fulfill the requirements of IEC 559 (IEEE 754)");
     }
 }
 
