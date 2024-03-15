@@ -30,6 +30,7 @@ private:
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithCDC;
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithMCP;
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithEMC;
+    std::unique_ptr<G4UIcmdWithABool> fSaveCDCHitData;
 };
 
 } // namespace MACE::SimMACE::Data

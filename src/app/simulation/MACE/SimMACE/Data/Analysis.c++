@@ -22,6 +22,7 @@ Analysis::Analysis() :
     fCoincidenceWithCDC{true},
     fCoincidenceWithMCP{true},
     fCoincidenceWithEMC{true},
+    fSaveCDCHitData{true},
     fLastUsedFullFilePath{},
     fFile{},
     fDecayVertexOutput{},
@@ -62,15 +63,15 @@ auto Analysis::RunBegin(G4int runID) -> void {
 }
 
 auto Analysis::EventEnd() -> void {
-    const auto cdcTriggered{not fCoincidenceWithCDC or fCDCHit == nullptr or fCDCHit->size() > 0};
-    const auto emcTriggered{not fCoincidenceWithEMC or fEMCHit == nullptr or fEMCHit->size() > 0};
-    const auto mcpTriggered{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
-    if (emcTriggered and mcpTriggered and cdcTriggered) {
+    const auto cdcPassed{not fCoincidenceWithCDC or fCDCTrack == nullptr or fCDCTrack->size() > 0};
+    const auto mcpPassed{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
+    const auto emcPassed{not fCoincidenceWithEMC or fEMCHit == nullptr or fEMCHit->size() > 0};
+    if (cdcPassed and mcpPassed and emcPassed) {
         if (fDecayVertex) { *fDecayVertexOutput << *fDecayVertex; }
-        if (fCDCHit) { *fCDCSimHitOutput << *fCDCHit; }
+        if (fCDCHit and fSaveCDCHitData) { *fCDCSimHitOutput << *fCDCHit; }
         if (fCDCTrack) { *fCDCSimTrackOutput << *fCDCTrack; }
-        if (fEMCHit) { *fEMCSimHitOutput << *fEMCHit; }
         if (fMCPHit) { *fMCPSimHitOutput << *fMCPHit; }
+        if (fEMCHit) { *fEMCSimHitOutput << *fEMCHit; }
     }
     fDecayVertex = {};
     fCDCHit = {};
@@ -84,8 +85,8 @@ auto Analysis::RunEnd(Option_t* option) -> void {
     fDecayVertexOutput->Write();
     fCDCSimHitOutput->Write();
     fCDCSimTrackOutput->Write();
-    fEMCSimHitOutput->Write();
     fMCPSimHitOutput->Write();
+    fEMCSimHitOutput->Write();
     // close file
     fFile->Close(option);
     delete fFile;
