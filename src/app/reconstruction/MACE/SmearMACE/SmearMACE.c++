@@ -16,6 +16,7 @@
 
 #include <cstdlib>
 #include <sstream>
+#include <stdexcept>
 
 using namespace MACE;
 
@@ -25,6 +26,7 @@ auto main(int argc, char* argv[]) -> int {
 
     UseXoshiro<512> random;
 
+    const auto outputName{cli.OutputFilePath().generic_string()};
     {
         std::stringstream smearingConfigText;
         const auto AppendConfigText{[&](const auto& nameInConfigText, const auto& smearingConfig, const auto& identity) {
@@ -40,11 +42,12 @@ auto main(int argc, char* argv[]) -> int {
         AppendConfigText("CDCSimTrack", cli.CDCSimTrackSmearingConfig(), cli.CDCSimTrackIdentity());
         AppendConfigText("EMCSimHit", cli.EMCSimHitSmearingConfig(), cli.EMCSimHitIdentity());
         AppendConfigText("MCPSimHit", cli.MCPSimHitSmearingConfig(), cli.MCPSimHitIdentity());
-        TFile file{cli.OutputFilePath().c_str(), cli.OutputFileMode().c_str(), "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
+        TFile file{outputName.c_str(), cli.OutputFileMode().c_str(), "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
+        if (not file.IsOpen()) { throw std::runtime_error{fmt::format("Cannot open file '{}' with mode '{}'", outputName, cli.OutputFileMode())}; }
         MakeTextTMacro(smearingConfigText.str(), "SmearingConfig", "Print SmearMACE smearing configuration")->Write();
     }
     {
-        SmearMACE::Smearer smearer{cli.InputFilePath(), cli.OutputFilePath()};
+        SmearMACE::Smearer smearer{cli.InputFilePath(), outputName};
         const auto [iFirst, iLast]{cli.DatasetIndexRange()};
         const auto Smear{[&](const auto& nameFmt, const auto& smearingConfig, const auto& identity) {
             if (smearingConfig or identity) {
