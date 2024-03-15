@@ -3,14 +3,29 @@
 <img align="right" src="document/picture/MACE_logo_100x100.png"/>
 
 - [MACE](#mace)
+- [Pre-compiled binaries](#pre-compiled-binaries)
 - [Dependencies](#dependencies)
   - [Toolchain](#toolchain)
   - [Libraries](#libraries)
 - [Cite](#cite)
-  - [The offline software system](#the-offline-software-system)
   - [The experiment](#the-experiment)
+  - [The offline software system](#the-offline-software-system)
 
-![SimMACE](document/picture/SimMACE-20220930.png)
+![SimMACE](document/picture/SimMACE_20240315.png)
+
+# Pre-compiled binaries
+
+Pre-compiled binaries are available through [Apptainer](https://apptainer.org/) (formerly known as Singularity).
+
+Obtain the apptainer image file (.sif) by
+```shell
+apptainer pull oras://docker.io/zhaoshh/mace:mpich
+```
+or
+```shell
+apptainer pull oras://docker.io/zhaoshh/mace:openmpi
+```
+depending on the MPI implementation you are using. For more information, please check out [the image repository homepage](https://hub.docker.com/r/zhaoshh/mace).
 
 # Dependencies
 
@@ -40,10 +55,10 @@ Required, built-in if not found (network or pre-downloaded source is required):
 
 # Cite
 
-## The offline software system
-
-1. *En attendant Godot*...
-
 ## The experiment
 
-1. [Snowmass2021 Whitepaper: Muonium to antimuonium conversion. In 2022 Snowmass Summer Study, 3 2022.](https://arxiv.org/pdf/2203.11406)
+1. [A.-Y. Bai et al. (MACE working group), Snowmass2021 Whitepaper: Muonium to antimuonium conversion, in 2022 Snowmass Summer Study (2022), arXiv:2203.11406.](https://arxiv.org/abs/2203.11406)
+
+## The offline software system
+
+1. [Shihan Zhao and Jian Tang, Optimization of muonium yield in perforated silica aerogel, arXiv:2401.00222.](https://arxiv.org/abs/2401.00222)
