@@ -5,7 +5,7 @@
 
 namespace MACE::inline Extension::Geant4X {
 
-void MPIExecutive::CheckSequential() const {
+auto MPIExecutive::CheckSequential() const -> void {
     const auto& mpiEnv = Env::MPIEnv::Instance();
     if (mpiEnv.Parallel()) {
         std::string where("MACE::Geant4X::MPIExecutive::CheckSequential");
@@ -19,13 +19,7 @@ void MPIExecutive::CheckSequential() const {
     }
 }
 
-void MPIExecutive::Execute(const std::string& macro) {
-    if (not macro.empty()) {
-        G4UImanager::GetUIpointer()->ExecuteMacroFile(macro.c_str());
-    }
-}
-
-bool MPIExecutive::ExecuteCommand(const std::string& command) {
+auto MPIExecutive::ExecuteCommand(const std::string& command) -> bool {
     if (command.empty() or
         std::ranges::all_of(command.substr(0, command.find_first_of('#')),
                             [](unsigned char ch) {

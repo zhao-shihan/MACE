@@ -1,38 +1,37 @@
+#include "MACE/Detector/Definition/AcceleratorField.h++"
+#include "MACE/Detector/Definition/BeamDegrader.h++"
+#include "MACE/Detector/Definition/BeamMonitor.h++"
+#include "MACE/Detector/Definition/CDCBody.h++"
+#include "MACE/Detector/Definition/CDCCell.h++"
+#include "MACE/Detector/Definition/CDCGas.h++"
+#include "MACE/Detector/Definition/CDCSenseLayer.h++"
+#include "MACE/Detector/Definition/CDCSuperLayer.h++"
+#include "MACE/Detector/Definition/EMCCrystal.h++"
+#include "MACE/Detector/Definition/EMCField.h++"
+#include "MACE/Detector/Definition/EMCMagnet.h++"
+#include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
+#include "MACE/Detector/Definition/EMCShield.h++"
+#include "MACE/Detector/Definition/Filter.h++"
+#include "MACE/Detector/Definition/MCP.h++"
+#include "MACE/Detector/Definition/MCPChamber.h++"
+#include "MACE/Detector/Definition/ShieldingWall.h++"
+#include "MACE/Detector/Definition/SolenoidB1.h++"
+#include "MACE/Detector/Definition/SolenoidB1Field.h++"
+#include "MACE/Detector/Definition/SolenoidB2.h++"
+#include "MACE/Detector/Definition/SolenoidB2Field.h++"
+#include "MACE/Detector/Definition/SolenoidS1.h++"
+#include "MACE/Detector/Definition/SolenoidS1Field.h++"
+#include "MACE/Detector/Definition/SolenoidS2.h++"
+#include "MACE/Detector/Definition/SolenoidS2Field.h++"
+#include "MACE/Detector/Definition/SolenoidS3.h++"
+#include "MACE/Detector/Definition/SolenoidS3Field.h++"
+#include "MACE/Detector/Definition/SpectrometerBeamPipe.h++"
+#include "MACE/Detector/Definition/SpectrometerField.h++"
+#include "MACE/Detector/Definition/SpectrometerMagnet.h++"
+#include "MACE/Detector/Definition/SpectrometerShield.h++"
+#include "MACE/Detector/Definition/Target.h++"
+#include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Description/DescriptionIO.h++"
-#include "MACE/Detector/Geometry/Fast/AcceleratorField.h++"
-#include "MACE/Detector/Geometry/Fast/BeamDegrader.h++"
-#include "MACE/Detector/Geometry/Fast/BeamMonitor.h++"
-#include "MACE/Detector/Geometry/Fast/CDCBody.h++"
-#include "MACE/Detector/Geometry/Fast/CDCCell.h++"
-#include "MACE/Detector/Geometry/Fast/CDCFieldWire.h++"
-#include "MACE/Detector/Geometry/Fast/CDCGas.h++"
-#include "MACE/Detector/Geometry/Fast/CDCSenseLayer.h++"
-#include "MACE/Detector/Geometry/Fast/CDCSenseWire.h++"
-#include "MACE/Detector/Geometry/Fast/CDCSuperLayer.h++"
-#include "MACE/Detector/Geometry/Fast/EMCCrystal.h++"
-#include "MACE/Detector/Geometry/Fast/EMCField.h++"
-#include "MACE/Detector/Geometry/Fast/EMCPMTCathode.h++"
-#include "MACE/Detector/Geometry/Fast/EMCPMTCoupler.h++"
-#include "MACE/Detector/Geometry/Fast/EMCPMTWindow.h++"
-#include "MACE/Detector/Geometry/Fast/EMCShield.h++"
-#include "MACE/Detector/Geometry/Fast/Filter.h++"
-#include "MACE/Detector/Geometry/Fast/MCP.h++"
-#include "MACE/Detector/Geometry/Fast/ShieldingWall.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidB1.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidB1Field.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidB2.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidB2Field.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidS1.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidS1Field.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidS2.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidS2Field.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidS3.h++"
-#include "MACE/Detector/Geometry/Fast/SolenoidS3Field.h++"
-#include "MACE/Detector/Geometry/Fast/SpectrometerField.h++"
-#include "MACE/Detector/Geometry/Fast/SpectrometerMagnet.h++"
-#include "MACE/Detector/Geometry/Fast/SpectrometerShield.h++"
-#include "MACE/Detector/Geometry/Fast/Target.h++"
-#include "MACE/Detector/Geometry/Fast/World.h++"
 #include "MACE/Env/BasicEnv.h++"
 #include "MACE/Env/CLI/BasicCLI.h++"
 #include "MACE/Utility/LiteralUnit.h++"
@@ -51,7 +50,7 @@ int main(int argc, char* argv[]) {
     // Construct volumes
     ////////////////////////////////////////////////////////////////
 
-    using namespace MACE::Detector::Geometry::Fast;
+    using namespace MACE::Detector::Definition;
 
     constexpr auto fCheckOverlap = true;
 
@@ -75,11 +74,10 @@ int main(int argc, char* argv[]) {
     // 2
 
     auto& emcCrystal = emcField.NewDaughter<EMCCrystal>(fCheckOverlap);
-    auto& emcPMTCoupler = emcField.NewDaughter<EMCPMTCoupler>(fCheckOverlap);
-    auto& emcPMTWindow = emcField.NewDaughter<EMCPMTWindow>(fCheckOverlap);
-    auto& emcPMTCathode = emcField.NewDaughter<EMCPMTCathode>(fCheckOverlap);
-
-    auto& mcp = emcField.NewDaughter<MCP>(fCheckOverlap);
+    auto& emcMagnet = emcField.NewDaughter<EMCMagnet>(fCheckOverlap);
+    auto& emcPMTAssemblies = emcField.NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
+    /* auto& mcp = */ emcField.NewDaughter<MCP>(fCheckOverlap);
+    /* auto& mcpChamber = */ emcField.NewDaughter<MCPChamber>(fCheckOverlap);
 
     auto& solenoidB1 = solenoidB1Field.NewDaughter<SolenoidB1>(fCheckOverlap);
 
@@ -87,11 +85,12 @@ int main(int argc, char* argv[]) {
 
     auto& solenoidB2 = solenoidB2Field.NewDaughter<SolenoidB2>(fCheckOverlap);
 
-    auto& filter = solenoidS2Field.NewDaughter<Filter>(fCheckOverlap);
+    /* auto& filter = */ solenoidS2Field.NewDaughter<Filter>(fCheckOverlap);
     auto& solenoidS2 = solenoidS2Field.NewDaughter<SolenoidS2>(fCheckOverlap);
 
     auto& acceleratorField = spectrometerField.NewDaughter<AcceleratorField>(fCheckOverlap);
     auto& cdcBody = spectrometerField.NewDaughter<CDCBody>(fCheckOverlap);
+    /* auto& spectrometerBeamPipe = */ spectrometerField.NewDaughter<SpectrometerBeamPipe>(fCheckOverlap);
     auto& spectrometerMagnet = spectrometerField.NewDaughter<SpectrometerMagnet>(fCheckOverlap);
 
     auto& solenoidS3 = solenoidS3Field.NewDaughter<SolenoidS3>(fCheckOverlap);
@@ -100,9 +99,9 @@ int main(int argc, char* argv[]) {
 
     auto& cdcGas = cdcBody.NewDaughter<CDCGas>(fCheckOverlap);
 
-    auto& beamDegrader = acceleratorField.NewDaughter<BeamDegrader>(fCheckOverlap);
-    auto& beamMonitor = acceleratorField.NewDaughter<BeamMonitor>(fCheckOverlap);
-    auto& target = acceleratorField.NewDaughter<Target>(fCheckOverlap);
+    /* auto& beamDegrader = */ acceleratorField.NewDaughter<BeamDegrader>(fCheckOverlap);
+    /* auto& beamMonitor = */ acceleratorField.NewDaughter<BeamMonitor>(fCheckOverlap);
+    /* auto& target = */ acceleratorField.NewDaughter<Target>(fCheckOverlap);
 
     // 4
 
@@ -114,12 +113,7 @@ int main(int argc, char* argv[]) {
 
     // 6
 
-    auto& cdcFieldWire = cdcSenseLayer.NewDaughter<CDCFieldWire>(fCheckOverlap);
-    auto& cdcCell = cdcSenseLayer.NewDaughter<CDCCell>(fCheckOverlap);
-
-    // 7
-
-    auto& cdcSenseWire = cdcCell.NewDaughter<CDCSenseWire>(fCheckOverlap);
+    /* auto& cdcCell = */ cdcSenseLayer.NewDaughter<CDCCell>(fCheckOverlap);
 
     ////////////////////////////////////////////////////////////////
     // Register materials
@@ -128,62 +122,6 @@ int main(int argc, char* argv[]) {
         using namespace MACE::LiteralUnit::Density;
 
         const auto nist = G4NistManager::Instance();
-
-        const auto aluminium = nist->FindOrBuildMaterial("G4_Al");
-        beamDegrader.RegisterMaterial(aluminium);
-        cdcFieldWire.RegisterMaterial(aluminium);
-
-        const auto cdcHeBasedGas = [&nist] {
-            constexpr auto heFraction = 0.85;
-            constexpr auto butaneFraction = 1 - heFraction;
-            const auto he = nist->FindOrBuildMaterial("G4_He");
-            const auto butane = nist->FindOrBuildMaterial("G4_BUTANE");
-            const auto gas = new G4Material("CDCGas",
-                                            heFraction * he->GetDensity() +
-                                                butaneFraction * butane->GetDensity(),
-                                            2,
-                                            kStateGas);
-            gas->AddMaterial(he, heFraction);
-            gas->AddMaterial(butane, butaneFraction);
-            return gas;
-        }();
-        cdcCell.RegisterMaterial(cdcHeBasedGas);
-        cdcGas.RegisterMaterial(cdcHeBasedGas);
-        cdcSenseLayer.RegisterMaterial(cdcHeBasedGas);
-        cdcSuperLayer.RegisterMaterial(cdcHeBasedGas);
-
-        const auto cdcShell = nist->BuildMaterialWithNewDensity("CarbonFiber", "G4_C", 1.7_g_cm3);
-        cdcBody.RegisterMaterial(cdcShell);
-
-        const auto copper = nist->FindOrBuildMaterial("G4_Cu");
-        solenoidB1.RegisterMaterial(copper);
-        solenoidS1.RegisterMaterial(copper);
-        solenoidB2.RegisterMaterial(copper);
-        solenoidS2.RegisterMaterial(copper);
-        solenoidS3.RegisterMaterial(copper);
-        filter.RegisterMaterial(copper);
-
-        // const auto csI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
-        // emc.RegisterMaterial(csI);
-
-        const auto iron = nist->FindOrBuildMaterial("G4_Fe");
-        spectrometerMagnet.RegisterMaterial(iron);
-
-        const auto lead = nist->FindOrBuildMaterial("G4_Pb");
-        emcShield.RegisterMaterial(lead);
-        spectrometerShield.RegisterMaterial(lead);
-
-        const auto mcpMaterial = nist->BuildMaterialWithNewDensity("MCP", "G4_GLASS_PLATE", 1.4_g_cm3);
-        mcp.RegisterMaterial(mcpMaterial);
-
-        const auto plasticScitillator = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
-        beamMonitor.RegisterMaterial(plasticScitillator);
-
-        const auto silicaAerogel = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30_mg_cm3);
-        target.RegisterMaterial(silicaAerogel);
-
-        const auto tungsten = nist->FindOrBuildMaterial("G4_W");
-        cdcSenseWire.RegisterMaterial(tungsten);
 
         const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
         emcField.RegisterMaterial(vacuum);
@@ -207,8 +145,6 @@ int main(int argc, char* argv[]) {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#if MACE_USE_G4GDML
-
     cdcSenseLayer.RemoveDaughter<CDCCell>(); // ROOT does not support twisted tube.
     fWorld->Export("test.gdml");
 
@@ -219,13 +155,12 @@ int main(int argc, char* argv[]) {
     // see form https://github.com/root-project/jsroot/blob/master/docs/JSROOT.md#geometry-viewer
 
     geoManager->GetVolume(fWorld->LogicalVolume()->GetName())->SetInvisible();
-    using MACE::Detector::Geometry::GeometryBase;
-    for (auto&& entity : std::initializer_list<std::reference_wrapper<const GeometryBase>>{
+    using MACE::Detector::Definition::DefinitionBase;
+    for (auto&& entity : std::initializer_list<std::reference_wrapper<const DefinitionBase>>{
              emcShield,
              emcCrystal,
-             emcPMTCoupler,
-             emcPMTWindow,
-             emcPMTCathode,
+             emcPMTAssemblies,
+             emcMagnet,
              spectrometerMagnet,
              spectrometerShield,
              shieldingWall,
@@ -238,8 +173,6 @@ int main(int argc, char* argv[]) {
     }
 
     geoManager->Export("test.root");
-
-#endif
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////

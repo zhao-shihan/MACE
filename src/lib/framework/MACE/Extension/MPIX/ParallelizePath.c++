@@ -5,40 +5,32 @@
 
 namespace MACE::inline Extension::MPIX {
 
-auto ParallelizePathInPlace(std::filesystem::path& path) -> void {
-    const auto extension{path.extension().generic_string()};
-    ParallelizePathInPlace(path.replace_extension(), extension);
-}
-
-auto ParallelizePathInPlace(std::filesystem::path& path, std::string_view extension) -> void {
-    // file name without extension
-    auto fileName{path.filename()};
-    if (fileName.empty()) {
-        throw std::logic_error("MACE::Utility::MPIX::ParallelizePathInPlace: Empty name");
+auto ParallelizePath(const std::filesystem::path& path) -> std::filesystem::path {
+    auto stem{path.stem()};
+    if (stem.empty()) {
+        throw std::invalid_argument{"MACE::MPIX::ParallelizePath: Empty file name"};
+    }
+    if (stem == "." or stem == "..") {
+        throw std::invalid_argument{fmt::format("MACE::MPIX::ParallelizePath: Invalid file name '{}'", stem.c_str())};
     }
 
-    if (const auto& mpiEnv = Env::MPIEnv::Instance();
+    if (const auto& mpiEnv{Env::MPIEnv::Instance()};
         mpiEnv.Parallel()) {
-        // root directory
+        // parent directory
+        auto parent{std::filesystem::path{path}.replace_extension()};
         if (mpiEnv.OnCluster()) {
-            path /= mpiEnv.LocalNode().name;
+            parent /= mpiEnv.LocalNode().name;
         }
-        // create root directory
+        // create parent directory
         if (mpiEnv.OnCommNodeMaster()) {
-            std::filesystem::create_directories(path);
+            std::filesystem::create_directories(parent);
         }
         // wait for create_directories
-        MPI_Request mpiBarrierRequest;
-        MPI_Ibarrier(mpiEnv.CommNode(),
-                     &mpiBarrierRequest);
+        MPI_Barrier(mpiEnv.CommNode());
         // construct full path
-        auto rankN{fmt::format(".mpi{}.", mpiEnv.CommWorldRank())};
-        path /= fileName.concat(std::move(rankN)).replace_extension(extension);
-        // wait for create_directories
-        MPI_Wait(&mpiBarrierRequest,
-                 MPI_STATUS_IGNORE);
+        return parent / stem.concat(fmt::format("_mpi{}.", mpiEnv.CommWorldRank())).replace_extension(path.extension());
     } else {
-        path.replace_extension(extension);
+        return path;
     }
 }
 

@@ -2,7 +2,7 @@
 
 #include <version>
 
-#ifdef __cpp_lib_to_underlying // C++2b
+#ifdef __cpp_lib_to_underlying // C++23
 #    include <utility>
 #else // backport
 #    include <type_traits>
@@ -12,7 +12,7 @@ namespace MACE::inline Compatibility::std23 {
 
 template<typename AEnum>
 constexpr std::underlying_type_t<AEnum> to_underlying(AEnum enumValue) noexcept {
-#ifdef __cpp_lib_to_underlying // C++2b
+#ifdef __cpp_lib_to_underlying // C++23
     return std::to_underlying<AEnum>(enumValue);
 #else // backport
     return static_cast<typename std::underlying_type<AEnum>::type>(enumValue);

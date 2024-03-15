@@ -1,16 +1,16 @@
 #include "MACE/SimMACE/Action/RunAction.h++"
-#include "MACE/SimMACE/Analysis.h++"
+#include "MACE/SimMACE/Data/Analysis.h++"
 
 #include "G4Run.hh"
 
 namespace MACE::SimMACE::inline Action {
 
-void RunAction::BeginOfRunAction(const G4Run* run) {
-    Analysis::Instance().RunBegin(run->GetRunID());
+auto RunAction::BeginOfRunAction(const G4Run* run) -> void {
+    Data::Analysis::Instance().RunBegin(run->GetRunID());
 }
 
-void RunAction::EndOfRunAction(const G4Run*) {
-    Analysis::Instance().RunEnd();
+auto RunAction::EndOfRunAction(const G4Run*) -> void {
+    Data::Analysis::Instance().RunEnd();
 }
 
 } // namespace MACE::SimMACE::inline Action

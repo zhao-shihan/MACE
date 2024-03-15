@@ -25,8 +25,8 @@ protected:
 public:
     constexpr auto Seed(std::uint64_t seed) -> void;
 
-    static constexpr auto Min() { return std::numeric_limits<std::uint64_t>::min(); }
-    static constexpr auto Max() { return std::numeric_limits<std::uint64_t>::max(); }
+    static constexpr auto Min() -> auto { return std::numeric_limits<std::uint64_t>::min(); }
+    static constexpr auto Max() -> auto { return std::numeric_limits<std::uint64_t>::max(); }
 
 protected:
     std::array<std::uint64_t, NBit / 64> fState;

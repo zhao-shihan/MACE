@@ -10,20 +10,24 @@
 namespace MACE::SimTarget::inline Messenger {
 
 AnalysisMessenger::AnalysisMessenger() :
-    Singleton(),
-    G4UImessenger(),
-    fAnalysis(nullptr),
-    fDirectory(),
-    fResultPath(),
-    fEnableYieldAnalysis() {
+    SingletonMessenger{},
+    fDirectory{},
+    fFilePath{},
+    fFileMode{},
+    fEnableYieldAnalysis{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Analysis/");
     fDirectory->SetGuidance("MACE::SimTarget::Analysis controller.");
 
-    fResultPath = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/ResultPath", this),
-    fResultPath->SetGuidance("Set result name.");
-    fResultPath->SetParameterName("result name", false);
-    fResultPath->AvailableForStates(G4State_PreInit);
+    fFilePath = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/FilePath", this),
+    fFilePath->SetGuidance("Set file path.");
+    fFilePath->SetParameterName("path", false);
+    fFilePath->AvailableForStates(G4State_PreInit);
+
+    fFileMode = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/FileMode", this);
+    fFileMode->SetGuidance("Set mode (NEW, RECREATE, or UPDATE) for opening ROOT file(s).");
+    fFileMode->SetParameterName("mode", false);
+    fFileMode->AvailableForStates(G4State_PreInit);
 
     fEnableYieldAnalysis = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/EnableYieldAnalysis", this),
     fEnableYieldAnalysis->SetGuidance("Enable auto analysis of yield.");
@@ -33,11 +37,19 @@ AnalysisMessenger::AnalysisMessenger() :
 
 AnalysisMessenger::~AnalysisMessenger() = default;
 
-void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) {
-    if (command == fResultPath.get()) {
-        fAnalysis->ResultPath(std::string_view(value));
+auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
+    if (command == fFilePath.get()) {
+        Deliver<Analysis>([&](auto&& r) {
+            r.FilePath(std::string_view{value});
+        });
+    } else if (command == fFileMode.get()) {
+        Deliver<Analysis>([&](auto&& r) {
+            r.FileMode(value);
+        });
     } else if (command == fEnableYieldAnalysis.get()) {
-        fAnalysis->EnableYieldAnalysis(fEnableYieldAnalysis->GetNewBoolValue(value));
+        Deliver<Analysis>([&](auto&& r) {
+            r.EnableYieldAnalysis(fEnableYieldAnalysis->GetNewBoolValue(value));
+        });
     }
 }
 

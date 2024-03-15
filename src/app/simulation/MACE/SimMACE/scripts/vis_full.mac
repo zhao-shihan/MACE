@@ -1,0 +1,139 @@
+#############################################################################
+# Initialization settings
+#############################################################################
+
+/control/verbose 2
+#/control/saveHistory
+/run/verbose 2
+
+#/MACE/Detector/Description/Ixport mace_geom.yaml
+
+/run/initialize
+
+/gps/particle                                  mu+
+/gps/direction                                 0 0 1        # 0 deg
+/gps/pos/centre                                0 0 -2 m     # 0 deg
+#/gps/direction                                 -0.25 0 2    # 7.125 deg
+#/gps/pos/centre                                0.25 0 -2 m  # 7.125 deg
+/gps/pos/type                                  Beam
+/gps/pos/shape                                 Circle
+/gps/pos/radius                                0 mm
+/gps/pos/sigma_r                               5 mm
+/gps/ene/type                                  Gauss
+/gps/ene/mono                                  3.647 MeV    # momentum 28 MeV
+/gps/ene/sigma                                 0.1793 MeV   # momentum spreading 2.5%
+/MACE/Generator/GPS/PulseWidth                 0 ns
+/MACE/Generator/GPS/PrimariesForEachG4Event    1
+
+/MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5
+
+/MACE/Field/AcceleratorPotential          5 kilovolt
+/MACE/Field/SpectrometerMagneticField     0.1 tesla
+/MACE/Field/SolenoidMagneticField         0.1 tesla
+/MACE/Field/EMCMagneticField              0.1 tesla
+
+/MACE/Analysis/CoincidenceWithCDC     false
+/MACE/Analysis/CoincidenceWithMCP     false
+/MACE/Analysis/CoincidenceWithEMC     false
+
+/MACE/Analysis/FilePath SimMACE_vis
+/MACE/Analysis/FileMode RECREATE
+
+#############################################################################
+# Visualization settings
+#############################################################################
+
+/vis/open OGL
+
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+
+/vis/drawVolume
+
+/vis/viewer/set/viewpointVector -1 0.5 0.5
+/vis/viewer/set/lightsVector -1 1 1
+#/vis/viewer/set/rotationStyle freeRotation
+/vis/viewer/set/projection p
+/vis/viewer/set/style s
+/vis/viewer/set/auxiliaryEdge false
+#/vis/viewer/set/lineSegmentsPerCircle 100
+/vis/viewer/zoom 2.5
+
+# Colors
+/vis/geometry/set/colour AcceleratorField              0     1     1     1     0.05
+/vis/geometry/set/colour BeamDegrader                  0     1     1     1     0.1
+/vis/geometry/set/colour BeamMonitor                   0     1     1     1     0.1
+/vis/geometry/set/colour CDCBody                       0     1     1     1     0.05
+/vis/geometry/set/colour CDCCell                       0     1     1     1     0.005
+/vis/geometry/set/colour CDCFieldWire                  0     1     1     1     0.01
+/vis/geometry/set/colour CDCGas                        0     1     1     1     0.005
+/vis/geometry/set/colour CDCSenseLayer                 0     1     1     1     0.015
+/vis/geometry/set/colour CDCSenseWire                  0     1     1     1     0.01
+/vis/geometry/set/colour CDCSensitiveVolume            0     1     1     1     0.005
+/vis/geometry/set/colour CDCSuperLayer                 0     1     1     1     0.005
+/vis/geometry/set/colour EMCCrystal                    0     1     1     1     0.1
+/vis/geometry/set/colour EMCField                      0     1     1     1     0.05
+/vis/geometry/set/colour EMCMagnet                     0     1     1     1     0.05
+/vis/geometry/set/colour EMCPMTCathode                 0     1     1     1     0.1
+/vis/geometry/set/colour EMCPMTCoupler                 0     1     1     1     0.1
+/vis/geometry/set/colour EMCPMTShell                   0     1     1     1     0.1
+/vis/geometry/set/colour EMCShield                     0     1     1     1     0.05
+/vis/geometry/set/colour Filter                        0     1     1     1     0.01
+/vis/geometry/set/colour MCP                           0     1     1     1     0.1
+/vis/geometry/set/colour MCPChamber                    0     1     1     1     0.05
+/vis/geometry/set/colour ShieldingWall                 0     1     1     1     0.05
+/vis/geometry/set/colour SolenoidB1                    0     1     1     1     0.05
+/vis/geometry/set/colour SolenoidB1Field               0     1     1     1     0.05
+/vis/geometry/set/colour SolenoidB2                    0     1     1     1     0.05
+/vis/geometry/set/colour SolenoidB2Field               0     1     1     1     0.05
+/vis/geometry/set/colour SolenoidS1                    0     1     1     1     0.05
+/vis/geometry/set/colour SolenoidS1Field               0     1     1     1     0.05
+/vis/geometry/set/colour SolenoidS2                    0     1     1     1     0.05
+/vis/geometry/set/colour SolenoidS2Field               0     1     1     1     0.05
+/vis/geometry/set/colour SolenoidS3                    0     1     1     1     0.05
+/vis/geometry/set/colour SolenoidS3Field               0     1     1     1     0.05
+/vis/geometry/set/colour SpectrometerBeamPipe          0     1     1     1     0.05
+/vis/geometry/set/colour SpectrometerField             0     1     1     1     0.05
+/vis/geometry/set/colour SpectrometerMagnet            0     1     1     1     0.05
+/vis/geometry/set/colour SpectrometerShield            0     1     1     1     0.05
+/vis/geometry/set/colour Target                        0     1     1     1     0.1
+/vis/geometry/set/colour World                         0     1     1     1     0.001
+#/vis/geometry/set/colour CarbonFoil                    80    1.0   1.0   1.0   0.5
+
+/vis/scene/add/date
+/vis/scene/add/axes 0 0 0 10 cm
+/vis/scene/add/trajectories smooth #rich
+/vis/scene/add/hits
+
+/vis/filtering/trajectories/create/particleFilter
+/vis/filtering/trajectories/particleFilter-0/add mu+
+/vis/filtering/trajectories/particleFilter-0/add mu-
+/vis/filtering/trajectories/particleFilter-0/add muonium
+/vis/filtering/trajectories/particleFilter-0/add anti_muonium
+/vis/filtering/trajectories/particleFilter-0/add e+
+/vis/filtering/trajectories/particleFilter-0/add e-
+/vis/filtering/trajectories/particleFilter-0/add gamma
+/vis/filtering/trajectories/particleFilter-0/add neutron
+/vis/filtering/trajectories/particleFilter-0/add anti_neutron
+/vis/filtering/trajectories/particleFilter-0/add proton
+/vis/filtering/trajectories/particleFilter-0/add anti_proton
+
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawAuxPts false
+/vis/modeling/trajectories/drawByParticleID-0/default/setAuxPtsSize 2
+/vis/modeling/trajectories/drawByParticleID-0/default/setAuxPtsSizeType screen
+/vis/modeling/trajectories/drawByParticleID-0/default/setAuxPtsType dots
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawLine true
+/vis/modeling/trajectories/drawByParticleID-0/default/setLineWidth 2
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSize 2
+/vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSizeType screen
+/vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsType dots
+
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA muonium 1 0 1 1
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA anti_muonium 1 0 1 1
+
+/vis/scene/endOfEventAction accumulate
+
+/vis/verbose warnings
+/vis/viewer/set/autoRefresh true

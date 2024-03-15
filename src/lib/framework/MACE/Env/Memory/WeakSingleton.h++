@@ -30,19 +30,19 @@ public:
     MACE_ALWAYS_INLINE static auto NotInstantiated() -> bool { return UpdateInstance() == Status::NotInstantiated; }
     MACE_ALWAYS_INLINE static auto Available() -> bool { return UpdateInstance() == Status::Available; }
     MACE_ALWAYS_INLINE static auto Expired() -> bool { return UpdateInstance() == Status::Expired; }
-    MACE_ALWAYS_INLINE static auto Instantiated() -> bool;
+    MACE_ALWAYS_INLINE static auto Instantiated() -> bool { return not NotInstantiated(); }
 
 private:
-    enum class Status {
+    enum struct Status {
         NotInstantiated,
         Available,
         Expired
     };
 
-    static auto UpdateInstance() -> Status;
+    MACE_ALWAYS_INLINE static auto UpdateInstance() -> Status;
 
 private:
-    static void** fgInstance;
+    static std::shared_ptr<void*> fgInstance;
 };
 
 } // namespace MACE::Env::Memory

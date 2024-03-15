@@ -10,23 +10,30 @@
 namespace MACE::Env::CLI {
 
 class CLIBase : public NonMoveableBase {
-protected:
-    CLIBase();
-    ~CLIBase() = default;
-
 public:
-    argparse::Argument& AddArgument(auto&&... args);
-    void ParseArgs(int argc, char* argv[]);
-    auto Parsed() const { return fArguments.has_value(); }
-    const auto& GetArgParser() const { return fArgParser; }
-    const std::pair<int, char**>& GetArgcArgv() const;
-
-protected:
-    [[noreturn]] static void ThrowParsed();
-    [[noreturn]] static void ThrowNotParsed();
+    CLIBase();
+    virtual ~CLIBase() = 0;
 
 private:
-    std::optional<std::pair<int, char**>> fArguments;
+    struct ArgcArgvType {
+        int argc;
+        char** argv;
+    };
+
+public:
+    auto AddArgument(auto&&... args) -> argparse::Argument&;
+    auto AddMutuallyExclusiveGroup(bool required = false) -> argparse::ArgumentParser::MutuallyExclusiveGroup&;
+    auto ParseArgs(int argc, char* argv[]) -> void;
+    auto Parsed() const -> bool { return fArgcArgv.has_value(); }
+    auto ArgParser() const -> const auto& { return fArgParser; }
+    auto ArgcArgv() const -> ArgcArgvType;
+
+protected:
+    [[noreturn]] static auto ThrowParsed() -> void;
+    [[noreturn]] static auto ThrowNotParsed() -> void;
+
+private:
+    std::optional<ArgcArgvType> fArgcArgv;
     argparse::ArgumentParser fArgParser;
 };
 

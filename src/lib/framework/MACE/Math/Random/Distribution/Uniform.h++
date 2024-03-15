@@ -14,29 +14,35 @@ namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
-template<Concept::Arithmetic T, template<typename> class AUniform>
+template<Concept::Arithmetic T, template<typename> typename AUniform>
 class BasicUniformParameter final : public DistributionParameterBase<BasicUniformParameter<T, AUniform>, AUniform<T>> {
 public:
     constexpr BasicUniformParameter();
     constexpr BasicUniformParameter(T inf, T sup);
 
-    constexpr auto Infimum() const { return fInfimum; }
-    constexpr auto Supremum() const { return fSupremum; }
+    constexpr auto Infimum() const -> auto { return fInfimum; }
+    constexpr auto Supremum() const -> auto { return fSupremum; }
 
-    constexpr void Infimum(T inf) { fInfimum = inf; }
-    constexpr void Supremum(T sup) { fSupremum = sup; }
+    constexpr auto Infimum(T inf) -> void { fInfimum = inf; }
+    constexpr auto Supremum(T sup) -> void { fSupremum = sup; }
 
-    template<Concept::Character AChar, Concept::Arithmetic U, template<typename> class V>
-    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicUniformParameter<U, V>& self) -> decltype(os);
-    template<Concept::Character AChar, Concept::Arithmetic U, template<typename> class V>
-    friend auto operator>>(std::basic_istream<AChar>& is, BasicUniformParameter<U, V>& self) -> decltype(is);
+    template<Concept::Character AChar>
+    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicUniformParameter& self) -> decltype(os) { return self.StreamOutput(os); }
+    template<Concept::Character AChar>
+    friend auto operator>>(std::basic_istream<AChar>& is, BasicUniformParameter& self) -> decltype(is) { return self.StreamInput(is); }
+
+private:
+    template<Concept::Character AChar>
+    auto StreamOutput(std::basic_ostream<AChar>& os) const -> decltype(os);
+    template<Concept::Character AChar>
+    auto StreamInput(std::basic_istream<AChar>& is) & -> decltype(is);
 
 private:
     T fInfimum;
     T fSupremum;
 };
 
-template<template<typename> class ADerived, Concept::Arithmetic T>
+template<template<typename> typename ADerived, Concept::Arithmetic T>
 class UniformBase : public RandomNumberDistributionBase<ADerived<T>,
                                                         BasicUniformParameter<T, ADerived>,
                                                         T> {
@@ -54,25 +60,25 @@ protected:
     constexpr ~UniformBase() = default;
 
 public:
-    constexpr void Reset() {}
+    constexpr auto Reset() -> void {}
 
-    constexpr auto Parameter() const { return fParameter; }
-    constexpr auto Infimum() const { return fParameter.Infimum(); }
-    constexpr auto Supremum() const { return fParameter.Supremum(); }
+    constexpr auto Parameter() const -> auto { return fParameter; }
+    constexpr auto Infimum() const -> auto { return fParameter.Infimum(); }
+    constexpr auto Supremum() const -> auto { return fParameter.Supremum(); }
 
-    constexpr void Parameter(const typename Base::ParameterType& p) { fParameter = p; }
-    constexpr void Infimum(T inf) { fParameter.Infimum(inf); }
-    constexpr void Supremum(T sup) { fParameter.Supremum(sup); }
+    constexpr auto Parameter(const typename Base::ParameterType& p) -> void { fParameter = p; }
+    constexpr auto Infimum(T inf) -> void { fParameter.Infimum(inf); }
+    constexpr auto Supremum(T sup) -> void { fParameter.Supremum(sup); }
 
-    constexpr auto Min() const { return Infimum(); }
-    constexpr auto Max() const { return Supremum(); }
+    constexpr auto Min() const -> auto { return Infimum(); }
+    constexpr auto Max() const -> auto { return Supremum(); }
 
-    static constexpr auto Stateless() { return true; }
+    static constexpr auto Stateless() -> bool { return true; }
 
     template<Concept::Character AChar>
-    friend auto& operator<<(std::basic_ostream<AChar>& os, const UniformBase& self) { return os << self.fParameter; }
+    friend auto operator<<(std::basic_ostream<AChar>& os, const UniformBase& self) -> auto& { return os << self.fParameter; }
     template<Concept::Character AChar>
-    friend auto& operator>>(std::basic_istream<AChar>& is, UniformBase& self) { return is >> self.fParameter; }
+    friend auto operator>>(std::basic_istream<AChar>& is, UniformBase& self) -> auto& { return is >> self.fParameter; }
 
 protected:
     typename Base::ParameterType fParameter;
@@ -93,8 +99,8 @@ class UniformCompact final : public internal::UniformBase<UniformCompact, T> {
 public:
     using internal::UniformBase<UniformCompact, T>::UniformBase;
 
-    MACE_ALWAYS_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    MACE_ALWAYS_INLINE constexpr T operator()(UniformRandomBitGenerator auto& g, const UniformCompactParameter<T>& p);
+    MACE_ALWAYS_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) -> auto { return (*this)(g, this->fParameter); }
+    MACE_ALWAYS_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g, const UniformCompactParameter<T>& p) -> T;
 };
 
 template<typename T, typename U>
@@ -127,8 +133,8 @@ class UniformReal final : public internal::UniformBase<Uniform, T> {
 public:
     using internal::UniformBase<Uniform, T>::UniformBase;
 
-    MACE_ALWAYS_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    MACE_ALWAYS_INLINE constexpr T operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p);
+    MACE_ALWAYS_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) -> auto { return (*this)(g, this->fParameter); }
+    MACE_ALWAYS_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p) -> T;
 };
 
 template<typename T, typename U>
@@ -141,8 +147,8 @@ class UniformInteger final : public internal::UniformBase<Uniform, T> {
 public:
     using internal::UniformBase<Uniform, T>::UniformBase;
 
-    MACE_ALWAYS_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    MACE_ALWAYS_INLINE constexpr T operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p);
+    MACE_ALWAYS_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g) -> auto { return (*this)(g, this->fParameter); }
+    MACE_ALWAYS_INLINE constexpr auto operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p) -> T;
 };
 
 template<typename T, typename U>

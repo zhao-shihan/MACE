@@ -9,20 +9,22 @@ using namespace LiteralUnit::MagneticFluxDensity;
 using namespace MathConstant;
 
 Solenoid::Solenoid() :
-    DescriptionSingletonBase<Solenoid>{"Solenoid"},
+    DescriptionSingletonBase{"Solenoid"},
     // Geometry
     fS1Length{20_cm},
     fB1Radius{50_cm},
     fS2Length{100_cm},
     fB2Radius{50_cm},
     fS3Length{20_cm},
-    fInnerRadius{25_mm},
-    fOuterRadius{75_mm},
-    fFieldRadius{76_mm},
+    fInnerRadius{50_mm},
+    fOuterRadius{100_mm},
+    fFieldRadius{101_mm},
+    // Material
+    fMaterialName{"G4_Cu"},
     // Field
     fMagneticFluxDensity(100_mT) {}
 
-void Solenoid::ImportValues(const YAML::Node& node) {
+auto Solenoid::ImportValues(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fS1Length, "S1Length");
     ImportValue(node, fB1Radius, "B1Radius");
@@ -32,11 +34,13 @@ void Solenoid::ImportValues(const YAML::Node& node) {
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fOuterRadius, "OuterRadius");
     ImportValue(node, fFieldRadius, "FieldRadius");
+    // Material
+    ImportValue(node, fMaterialName, "MaterialName");
     // Field
     ImportValue(node, fMagneticFluxDensity, "MagneticFluxDensity");
 }
 
-void Solenoid::ExportValues(YAML::Node& node) const {
+auto Solenoid::ExportValues(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fS1Length, "S1Length");
     ExportValue(node, fB1Radius, "B1Radius");
@@ -46,6 +50,8 @@ void Solenoid::ExportValues(YAML::Node& node) const {
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fOuterRadius, "OuterRadius");
     ExportValue(node, fFieldRadius, "FieldRadius");
+    // Material
+    ExportValue(node, fMaterialName, "MaterialName");
     // Field
     ExportValue(node, fMagneticFluxDensity, "MagneticFluxDensity");
 }

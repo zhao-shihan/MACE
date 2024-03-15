@@ -6,6 +6,7 @@
 #include "MACE/Extension/MPIX/Execution/DynamicScheduler.h++"
 #include "MACE/Extension/MPIX/Execution/Scheduler.h++"
 #include "MACE/Extension/stdx/boolean_testable.h++"
+#include "MACE/Extension/stdx/ranges_numeric.h++"
 #include "MACE/Utility/CPUTimeStopwatch.h++"
 #include "MACE/Utility/WallTimeStopwatch.h++"
 
@@ -14,6 +15,7 @@
 #include "fmt/chrono.h"
 #include "fmt/format.h"
 
+#include <algorithm>
 #include <cassert>
 #include <chrono>
 #include <cmath>
@@ -38,25 +40,13 @@ public:
     template<template<typename> typename S = DynamicScheduler>
         requires std::derived_from<S<T>, Scheduler<T>>
     Executor(ScheduleBy<S> = {});
-    template<template<typename> typename S = DynamicScheduler>
-        requires std::derived_from<S<T>, Scheduler<T>>
-    explicit Executor(typename Scheduler<T>::Task task, ScheduleBy<S> = {});
-    template<template<typename> typename S = DynamicScheduler>
-        requires std::derived_from<S<T>, Scheduler<T>>
-    Executor(T first, T last, ScheduleBy<S> = {});
-    template<template<typename> typename S = DynamicScheduler>
-        requires std::derived_from<S<T>, Scheduler<T>>
-    explicit Executor(T size, ScheduleBy<S> = {});
 
     template<template<typename> typename AScheduler>
         requires std::derived_from<AScheduler<T>, Scheduler<T>>
     auto SwitchScheduler() -> void;
 
-    auto AssignTask(typename Scheduler<T>::Task task) -> void;
-    auto AssignTask(T first, T last) -> void { AssignTask({first, last}); }
-    auto AssignTask(T size) -> void { AssignTask({0, size}); }
-
-    auto PrintProgressModulo(T mod) -> void { fPrintProgressModulo = mod; }
+    auto PrintProgress(bool a) -> void { fPrintProgress = a; }
+    auto PrintProgressModulo(long long mod) -> void { fPrintProgressModulo = mod; }
     auto ExecutionName(std::string name) -> void { fExecutionName = std::move(name); }
     auto TaskName(std::string name) -> void { fTaskName = std::move(name); }
 
@@ -64,11 +54,11 @@ public:
     auto NTask() const -> T { return fScheduler->NTask(); }
     auto Executing() const -> bool { return fExecuting; }
 
-    auto Execute(std::invocable<T> auto&& Func) -> T;
+    auto Execute(typename Scheduler<T>::Task task, std::invocable<T> auto&& F) -> T;
+    auto Execute(T size, std::invocable<T> auto&& F) -> T { return Execute({0, size}, std::forward<decltype(F)>(F)); }
 
     auto ExecutingTask() const -> T { return fScheduler->fExecutingTask; }
     auto NLocalExecutedTask() const -> T { return fScheduler->fNLocalExecutedTask; }
-    auto NExecutedTask() const -> T { return fScheduler->NExecutedTask(); }
 
     auto PrintExecutionSummary() const -> void;
 
@@ -87,7 +77,8 @@ private:
 
     bool fExecuting;
 
-    T fPrintProgressModulo;
+    bool fPrintProgress;
+    long long fPrintProgressModulo;
 
     std::string fExecutionName;
     std::string fTaskName;
@@ -95,12 +86,12 @@ private:
     scsc::time_point fExecutionBeginSystemTime;
     WallTimeStopwatch<double> fWallTimeStopwatch;
     CPUTimeStopwatch<double> fCPUTimeStopwatch;
-    std::array<double, 2> fExecutionWallTimeAndCPUTime;
-    double& fExecutionWallTime;
-    double& fExecutionCPUTime;
+    double fExecutionWallTime;
+    double fExecutionCPUTime;
 
-    std::vector<std::array<double, 2>> fExecutionWallTimeAndCPUTimeOfAllProcessKeptByMaster;
     std::vector<T> fNLocalExecutedTaskOfAllProcessKeptByMaster;
+    std::vector<double> fExecutionWallTimeOfAllProcessKeptByMaster;
+    std::vector<double> fExecutionCPUTimeOfAllProcessKeptByMaster;
 };
 
 } // namespace MACE::inline Extension::MPIX::inline Execution

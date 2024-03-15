@@ -11,7 +11,7 @@ namespace MACE::inline Compatibility::std23 {
 
 MACE_ALWAYS_INLINE constexpr void assume(bool condition) noexcept {
 #if __has_cpp_attribute(assume)
-    [[assume(condition)]]; // C++2b
+    [[assume(condition)]]; // C++23
 #elif defined __clang__
     __builtin_assume(condition);
 #elif defined __GNUC__

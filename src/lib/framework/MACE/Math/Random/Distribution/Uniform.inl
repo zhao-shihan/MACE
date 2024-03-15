@@ -2,68 +2,71 @@ namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
-template<Concept::Arithmetic T, template<typename> class AUniform>
+template<Concept::Arithmetic T, template<typename> typename AUniform>
 constexpr BasicUniformParameter<T, AUniform>::BasicUniformParameter() :
-    BasicUniformParameter(0,
+    BasicUniformParameter{0,
                           std::integral<T> ?
                               std::numeric_limits<T>::max() :
-                              1) {}
+                              1} {}
 
-template<Concept::Arithmetic T, template<typename> class AUniform>
+template<Concept::Arithmetic T, template<typename> typename AUniform>
 constexpr BasicUniformParameter<T, AUniform>::BasicUniformParameter(T inf, T sup) :
     DistributionParameterBase<BasicUniformParameter<T, AUniform>, AUniform<T>>(),
-    fInfimum(inf),
-    fSupremum(sup) {}
+    fInfimum{inf},
+    fSupremum{sup} {}
 
-template<Concept::Character AChar, Concept::Arithmetic U, template<typename> class V>
-auto operator<<(std::basic_ostream<AChar>& os, const BasicUniformParameter<U, V>& self) -> decltype(os) {
-    if constexpr (std::floating_point<U>) {
-        const auto oldPrecision = os.precision(std::numeric_limits<U>::max_digits10);
-        return os << self.fInfimum << ' ' << self.fSupremum
+template<Concept::Arithmetic T, template<typename> typename AUniform>
+template<Concept::Character AChar>
+auto BasicUniformParameter<T, AUniform>::StreamOutput(std::basic_ostream<AChar>& os) const -> decltype(os) {
+    if constexpr (std::floating_point<T>) {
+        const auto oldPrecision{os.precision(std::numeric_limits<T>::max_digits10)};
+        return os << fInfimum << ' ' << fSupremum
                   << std::setprecision(oldPrecision);
     } else {
-        return os << self.fInfimum << ' ' << self.fSupremum;
+        return os << fInfimum << ' ' << fSupremum;
     }
 }
 
-template<Concept::Character AChar, Concept::Arithmetic U, template<typename> class V>
-auto operator>>(std::basic_istream<AChar>& is, BasicUniformParameter<U, V>& self) -> decltype(is) {
-    return is >> self.fInfimum >> self.fSupremum;
+template<Concept::Arithmetic T, template<typename> typename AUniform>
+template<Concept::Character AChar>
+auto BasicUniformParameter<T, AUniform>::StreamInput(std::basic_istream<AChar>& is) & -> decltype(is) {
+    return is >> fInfimum >> fSupremum;
 }
 
-template<template<typename> class ADerived, Concept::Arithmetic T>
+template<template<typename> typename ADerived, Concept::Arithmetic T>
 constexpr UniformBase<ADerived, T>::UniformBase(T inf, T sup) :
-    Base(),
-    fParameter(inf, sup) {}
+    Base{},
+    fParameter{inf, sup} {}
 
-template<template<typename> class ADerived, Concept::Arithmetic T>
+template<template<typename> typename ADerived, Concept::Arithmetic T>
 constexpr UniformBase<ADerived, T>::UniformBase(const typename Base::ParameterType& p) :
-    Base(),
-    fParameter(p) {}
+    Base{},
+    fParameter{p} {}
 
 } // namespace internal
 
 template<std::floating_point T>
-MACE_ALWAYS_INLINE constexpr T UniformCompact<T>::operator()(UniformRandomBitGenerator auto& g, const UniformCompactParameter<T>& p) {
-    const auto u = static_cast<T>(g() - g.Min()) / (g.Max() - g.Min());
+MACE_ALWAYS_INLINE constexpr auto UniformCompact<T>::operator()(UniformRandomBitGenerator auto& g, const UniformCompactParameter<T>& p) -> T {
+    const auto u{static_cast<T>(g() - g.Min()) / (g.Max() - g.Min())};
     std23::assume(0 <= u and u <= 1);
     return p.Infimum() + u * (p.Supremum() - p.Infimum());
 }
 
 template<std::floating_point T>
-MACE_ALWAYS_INLINE constexpr T UniformReal<T>::operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p) {
+MACE_ALWAYS_INLINE constexpr auto UniformReal<T>::operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p) -> T {
     T u;
     do {
-        u = UniformCompact()(g);
+        static_assert(UniformCompact<T>::Stateless());
+        u = UniformCompact<T>{}(g);
         std23::assume(0 <= u and u <= 1);
-    } while (u <= 0 or 1 <= u);
+    } while (u == 0 or u == 1);
     return p.Infimum() + u * (p.Supremum() - p.Infimum());
 }
 
 template<std::integral T>
-MACE_ALWAYS_INLINE constexpr T UniformInteger<T>::operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p) {
+MACE_ALWAYS_INLINE constexpr auto UniformInteger<T>::operator()(UniformRandomBitGenerator auto& g, const UniformParameter<T>& p) -> T {
     // Do we need an independent implementation?
-    return std::uniform_int_distribution<T>(p.Infimum(), p.Supremum())(g);
+    return std::uniform_int_distribution<T>{p.Infimum(), p.Supremum()}(g);
 }
 
 } // namespace MACE::Math::Random::inline Distribution

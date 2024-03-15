@@ -1,27 +1,14 @@
 #pragma once
 
-#include "MACE/SimMACE/Hit/MCPHit.h++"
-#include "MACE/Utility/NonMoveableBase.h++"
-
-#include "G4VSensitiveDetector.hh"
+#include "MACE/Simulation/SD/MCPSD.h++"
 
 namespace MACE::SimMACE::inline SD {
 
-class MCPSD final : public NonMoveableBase,
-                    public G4VSensitiveDetector {
+class MCPSD final : public Simulation::MCPSD {
 public:
-    MCPSD(const G4String& sdName);
+    using Simulation::MCPSD::MCPSD;
 
-    void Initialize(G4HCofThisEvent* hitsCollection) override;
-    G4bool ProcessHits(G4Step* theStep, G4TouchableHistory*) override;
-    void EndOfEvent(G4HCofThisEvent*) override;
-
-    /// Inform this SD of event id in EventAction
-    void EventID(G4int eventID) { fEventID = eventID; }
-
-private:
-    G4int fEventID;
-    MCPHitCollection* fHitsCollection;
+    auto EndOfEvent(G4HCofThisEvent* hc) -> void override;
 };
 
 } // namespace MACE::SimMACE::inline SD

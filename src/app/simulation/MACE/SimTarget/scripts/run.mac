@@ -13,28 +13,33 @@
 /run/verbose 0
 
 # I/O & Analysis
-/MACE/Analysis/ResultPath                          SimTarget_result
-/MACE/Analysis/EnableYieldAnalysis                    true
+/MACE/Analysis/FilePath                        SimTarget_result
+/MACE/Analysis/FileMode                        NEW
+/MACE/Analysis/EnableYieldAnalysis             true
 
 # Geometry
-#/MACE/Detector/Description/Import                     geom.yaml
-/MACE/Detector/TargetDensity                       30 mg/cm3
-/MACE/Detector/TargetTemperature                   293.15 K
+#/MACE/Detector/Description/Import              geom.yaml
 
 # Initialize kernel
 /run/initialize
 
 # Muon beam properties
-/MACE/Generator/SurfaceMuon/Momentum               28 MeV
-/MACE/Generator/SurfaceMuon/MomentumRMS            0.7 MeV
-/MACE/Generator/SurfaceMuon/PositionRMS            5 mm
-/MACE/Generator/SurfaceMuon/PositionZ                -5 cm
-/MACE/Generator/SurfaceMuon/MuonsForEachG4Event    1000
+/gps/particle                                  mu+
+/gps/direction                                 0 0 1        # 0 deg
+/gps/pos/centre                                0 0 -2 m     # 0 deg
+#/gps/direction                                 -0.25 0 2    # 7.125 deg
+#/gps/pos/centre                                0.25 0 -2 m  # 7.125 deg
+/gps/pos/type                                  Beam
+/gps/pos/shape                                 Circle
+/gps/pos/radius                                0 mm
+/gps/pos/sigma_r                               5 mm
+/gps/ene/type                                  Gauss
+/gps/ene/mono                                  3.647 MeV     # momentum 28 MeV
+/gps/ene/sigma                                 0.1793 MeV    # momentum spreading 2.5%
+/MACE/Generator/GPS/PrimariesForEachG4Event    2000          # 50 kHz beam
 
 # Set physics
-/MACE/Physics/MuoniumPhysics/Formation/FormationProbability     0.65
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0
-/MACE/Physics/MuoniumPhysics/Transport/MeanFreePath             0.2 um
 
 # kill secondaries
 /MACE/Action/KillIrrelevants    true
@@ -45,19 +50,5 @@
 
 #/MPIRun/PrintProgressModulo 100
 
-/MPIRun/PrintRunSummary
-
-# Run 0: Flat target
-/MACE/Detector/Description/Import flat.yaml
-/run/beamOn                       80
-/MPIRun/PrintRunSummary
-
-# Run 1: Ablated target with spacing 49.5um, diameter 175um
-/MACE/Detector/Description/Import hole_0.yaml
-/run/beamOn                       80
-/MPIRun/PrintRunSummary
-
-# Run 2: Ablated target with spacing 60um, diameter 300um
-/MACE/Detector/Description/Import hole_1.yaml
-/run/beamOn                       80
+/run/beamOn 1000
 /MPIRun/PrintRunSummary

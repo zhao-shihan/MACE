@@ -11,7 +11,7 @@ namespace MACE::SimTarget {
 RunManager::RunManager() :
     MPIRunManager{},
     fAnalysis{std::make_unique_for_overwrite<Analysis>()} {
-    const auto verboseLevel{Env::BasicEnv::Instance().GetVerboseLevel()};
+    const auto verboseLevel{Env::BasicEnv::Instance().VerboseLevel()};
 
     const auto physicsList{new PhysicsList};
     physicsList->SetVerboseLevel(std23::to_underlying(verboseLevel));

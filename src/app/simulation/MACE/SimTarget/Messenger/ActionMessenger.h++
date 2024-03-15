@@ -1,10 +1,6 @@
 #pragma once
 
-#include "MACE/Env/Memory/Singleton.h++"
-
-#include "G4UImessenger.hh"
-
-#include "gsl/gsl"
+#include "MACE/Extension/Geant4X/SingletonMessenger.h++"
 
 #include <memory>
 
@@ -21,8 +17,8 @@ class SteppingAction;
 
 inline namespace Messenger {
 
-class ActionMessenger final : public Env::Memory::Singleton<ActionMessenger>,
-                              public G4UImessenger {
+class ActionMessenger final : public Geant4X::SingletonMessenger<ActionMessenger,
+                                                                 SteppingAction> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -30,17 +26,13 @@ private:
     ~ActionMessenger();
 
 public:
-    void AssignTo(gsl::not_null<SteppingAction*> sa) { fSteppingAction = sa; }
-
-    void SetNewValue(G4UIcommand* command, G4String value) override;
+    auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
-    SteppingAction* fSteppingAction;
-
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithABool> fKillIrrelevants;
 };
 
-} // inline namespace Messenger
+} // namespace Messenger
 
 } // namespace MACE::SimTarget

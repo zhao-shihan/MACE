@@ -5,7 +5,7 @@
 #include <utility>
 #include <version>
 
-#ifdef __cpp_lib_ranges_iota // C++2b
+#ifdef __cpp_lib_ranges_iota // C++23
 #    include <numeric>
 #else // backport
 #    include <iterator>
@@ -13,7 +13,7 @@
 
 namespace MACE::inline Compatibility::std23::ranges {
 
-#ifdef __cpp_lib_ranges_iota // C++2b
+#ifdef __cpp_lib_ranges_iota // C++23
 
 struct iota_fn {
     template<std::input_or_output_iterator O, std::sentinel_for<O> S, std::weakly_incrementable T>

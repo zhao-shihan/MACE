@@ -3,39 +3,41 @@ namespace MACE::Math::Random::inline Distribution {
 namespace internal {
 
 template<Concept::NumericVector2FloatingPoint T, template<typename> typename AGaussian2DDiagnoal>
-constexpr BasicGaussian2DDiagnoalParameter<T, AGaussian2DDiagnoal>::BasicGaussian2DDiagnoalParameter() :
-    BasicGaussian2DDiagnoalParameter({0, 1},
-                                     {0, 1}) {}
+constexpr BasicGaussian2DDiagnoalParameter<T, AGaussian2DDiagnoal>::BasicGaussian2DDiagnoalParameter() : // clang-format off
+    BasicGaussian2DDiagnoalParameter{{0, 1},
+                                     {0, 1}} {} // clang-format on
 
 template<Concept::NumericVector2FloatingPoint T, template<typename> typename AGaussian2DDiagnoal>
 constexpr BasicGaussian2DDiagnoalParameter<T, AGaussian2DDiagnoal>::BasicGaussian2DDiagnoalParameter(std::pair<VT, VT> pX, std::pair<VT, VT> pY) :
-    Base(),
-    fMuX(pX.first),
-    fSigmaX(pX.second),
-    fMuY(pY.first),
-    fSigmaY(pY.second) {}
+    Base{},
+    fMuX{pX.first},
+    fSigmaX{pX.second},
+    fMuY{pY.first},
+    fSigmaY{pY.second} {}
 
-template<Concept::Character AChar, Concept::NumericVector2FloatingPoint U, template<typename> typename V>
-auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussian2DDiagnoalParameter<U, V>& self) -> decltype(os) {
-    const auto oldPrecision = os.precision(std::numeric_limits<U>::max_digits10);
-    return os << self.fMuX << ' ' << self.fSigmaX << ' ' << self.fMuY << ' ' << self.fSigmaY
+template<Concept::NumericVector2FloatingPoint T, template<typename> typename AGaussian2DDiagnoal>
+template<Concept::Character AChar>
+auto BasicGaussian2DDiagnoalParameter<T, AGaussian2DDiagnoal>::StreamOutput(std::basic_ostream<AChar>& os) const -> decltype(os) {
+    const auto oldPrecision{os.precision(std::numeric_limits<VectorValueType<T>>::max_digits10)};
+    return os << fMuX << ' ' << fSigmaX << ' ' << fMuY << ' ' << fSigmaY
               << std::setprecision(oldPrecision);
 }
 
-template<Concept::Character AChar, Concept::NumericVector2FloatingPoint U, template<typename> typename V>
-auto operator>>(std::basic_istream<AChar>& is, BasicGaussian2DDiagnoalParameter<U, V>& self) -> decltype(is) {
-    return is >> self.fMuX >> self.fSigmaX >> self.fMuY >> self.fSigmaY;
+template<Concept::NumericVector2FloatingPoint T, template<typename> typename AGaussian2DDiagnoal>
+template<Concept::Character AChar>
+auto BasicGaussian2DDiagnoalParameter<T, AGaussian2DDiagnoal>::StreamInput(std::basic_istream<AChar>& is) & -> decltype(is) {
+    return is >> fMuX >> fSigmaX >> fMuY >> fSigmaY;
 }
 
 template<template<typename> typename ADerived, Concept::NumericVector2FloatingPoint T>
 constexpr Gaussian2DDiagnoalBase<ADerived, T>::Gaussian2DDiagnoalBase(std::pair<VT, VT> pX, std::pair<VT, VT> pY) :
-    Base(),
-    fParameter(pX, pY) {}
+    Base{},
+    fParameter{pX, pY} {}
 
 template<template<typename> typename ADerived, Concept::NumericVector2FloatingPoint T>
 constexpr Gaussian2DDiagnoalBase<ADerived, T>::Gaussian2DDiagnoalBase(const typename Base::ParameterType& p) :
-    Base(),
-    fParameter(p) {}
+    Base{},
+    fParameter{p} {}
 
 } // namespace internal
 
@@ -54,13 +56,13 @@ constexpr Gaussian2DDiagnoalBase<ADerived, T>::Gaussian2DDiagnoalBase(const type
     return u;
 
 template<Concept::NumericVector2FloatingPoint T>
-MACE_STRONG_INLINE T Gaussian2DDiagnoal<T>::operator()(UniformRandomBitGenerator auto& g, const Gaussian2DDiagnoalParameter<T>& p) {
-    MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_2D_DIAGNOAL_GENERATOR_SNIPPET(Math::Log)
+MACE_STRONG_INLINE auto Gaussian2DDiagnoal<T>::operator()(UniformRandomBitGenerator auto& g, const Gaussian2DDiagnoalParameter<T>& p) -> T {
+    MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_2D_DIAGNOAL_GENERATOR_SNIPPET(std::log)
 }
 
 template<Concept::NumericVector2FloatingPoint T>
-MACE_STRONG_INLINE T Gaussian2DDiagnoalFast<T>::operator()(UniformRandomBitGenerator auto& g, const Gaussian2DDiagnoalFastParameter<T>& p) {
-    MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_2D_DIAGNOAL_GENERATOR_SNIPPET(internal::FastLogForCompact01)
+MACE_STRONG_INLINE auto Gaussian2DDiagnoalFast<T>::operator()(UniformRandomBitGenerator auto& g, const Gaussian2DDiagnoalFastParameter<T>& p) -> T {
+    MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_2D_DIAGNOAL_GENERATOR_SNIPPET(internal::FastLogForOpen01)
 }
 
 #undef MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_2D_DIAGNOAL_GENERATOR_SNIPPET

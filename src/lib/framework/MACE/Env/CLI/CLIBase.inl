@@ -1,6 +1,6 @@
 namespace MACE::Env::CLI {
 
-argparse::Argument& CLIBase::AddArgument(auto&&... args) {
+auto CLIBase::AddArgument(auto&&... args) -> argparse::Argument& {
     if (not Parsed()) {
         return fArgParser.add_argument(std::forward<decltype(args)>(args)...);
     } else {

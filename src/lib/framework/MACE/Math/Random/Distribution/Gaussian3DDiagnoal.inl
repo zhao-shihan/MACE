@@ -3,56 +3,58 @@ namespace MACE::Math::Random::inline Distribution {
 namespace internal {
 
 template<Concept::NumericVector3FloatingPoint T, template<typename> typename AGaussian3DDiagnoal>
-constexpr BasicGaussian3DDiagnoalParameter<T, AGaussian3DDiagnoal>::BasicGaussian3DDiagnoalParameter() :
-    BasicGaussian3DDiagnoalParameter({0, 1},
+constexpr BasicGaussian3DDiagnoalParameter<T, AGaussian3DDiagnoal>::BasicGaussian3DDiagnoalParameter() : // clang-format off
+    BasicGaussian3DDiagnoalParameter{{0, 1},
                                      {0, 1},
-                                     {0, 1}) {}
+                                     {0, 1}} {} // clang-format on
 
 template<Concept::NumericVector3FloatingPoint T, template<typename> typename AGaussian3DDiagnoal>
 constexpr BasicGaussian3DDiagnoalParameter<T, AGaussian3DDiagnoal>::BasicGaussian3DDiagnoalParameter(std::pair<VT, VT> pX, std::pair<VT, VT> pY, std::pair<VT, VT> pZ) :
-    Base(),
-    fMuX(pX.first),
-    fSigmaX(pX.second),
-    fMuY(pY.first),
-    fSigmaY(pY.second),
-    fMuZ(pZ.first),
-    fSigmaZ(pZ.second) {}
+    Base{},
+    fMuX{pX.first},
+    fSigmaX{pX.second},
+    fMuY{pY.first},
+    fSigmaY{pY.second},
+    fMuZ{pZ.first},
+    fSigmaZ{pZ.second} {}
 
-template<Concept::Character AChar, Concept::NumericVector3FloatingPoint U, template<typename> typename V>
-auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussian3DDiagnoalParameter<U, V>& self) -> decltype(os) {
-    const auto oldPrecision = os.precision(std::numeric_limits<U>::max_digits10);
-    return os << self.fMuX << ' ' << self.fSigmaX << ' '
-              << self.fMuY << ' ' << self.fSigmaY << ' '
-              << self.fMuZ << ' ' << self.fSigmaZ
+template<Concept::NumericVector3FloatingPoint T, template<typename> typename AGaussian3DDiagnoal>
+template<Concept::Character AChar>
+auto BasicGaussian3DDiagnoalParameter<T, AGaussian3DDiagnoal>::StreamOutput(std::basic_ostream<AChar>& os) const -> decltype(os) {
+    const auto oldPrecision{os.precision(std::numeric_limits<VectorValueType<T>>::max_digits10)};
+    return os << fMuX << ' ' << fSigmaX << ' '
+              << fMuY << ' ' << fSigmaY << ' '
+              << fMuZ << ' ' << fSigmaZ
               << std::setprecision(oldPrecision);
 }
 
-template<Concept::Character AChar, Concept::NumericVector3FloatingPoint U, template<typename> typename V>
-auto operator>>(std::basic_istream<AChar>& is, BasicGaussian3DDiagnoalParameter<U, V>& self) -> decltype(is) {
+template<Concept::NumericVector3FloatingPoint T, template<typename> typename AGaussian3DDiagnoal>
+template<Concept::Character AChar>
+auto BasicGaussian3DDiagnoalParameter<T, AGaussian3DDiagnoal>::StreamInput(std::basic_istream<AChar>& is) & -> decltype(is) {
     return is >>
-           self.fMuX >> self.fSigmaX >>
-           self.fMuY >> self.fSigmaY >>
-           self.fMuZ >> self.fSigmaZ;
+           fMuX >> fSigmaX >>
+           fMuY >> fSigmaY >>
+           fMuZ >> fSigmaZ;
 }
 
 template<template<typename> typename ADerived, Concept::NumericVector3FloatingPoint T>
 constexpr Gaussian3DDiagnoalBase<ADerived, T>::Gaussian3DDiagnoalBase(std::pair<VT, VT> pX, std::pair<VT, VT> pY, std::pair<VT, VT> pZ) :
-    Base(),
-    fParameter(pX, pY, pZ) {}
+    Base{},
+    fParameter{pX, pY, pZ} {}
 
 template<template<typename> typename ADerived, Concept::NumericVector3FloatingPoint T>
 constexpr Gaussian3DDiagnoalBase<ADerived, T>::Gaussian3DDiagnoalBase(const typename Base::ParameterType& p) :
-    Base(),
-    fParameter(p) {}
+    Base{},
+    fParameter{p} {}
 
 } // namespace internal
 
 #define MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_3D_DIAGNOAL_GENERATOR_SNIPPET(Suffix) \
-    static_assert(Gaussian2DDiagnoal##Suffix<std::array<VT, 2>>::Stateless());     \
-    Gaussian2DDiagnoal##Suffix<std::array<VT, 2>> standardGaussian2D;              \
-    const auto&& [u, v] = standardGaussian2D(g);                                     \
+    static_assert(Gaussian2DDiagnoal##Suffix<std::array<VT, 2>>::Stateless());       \
+    Gaussian2DDiagnoal##Suffix<std::array<VT, 2>> standardGaussian2D;                \
+    auto&& [u, v]{standardGaussian2D(g)};                                            \
     if ((fSaved = not fSaved)) {                                                     \
-        const auto&& [w, x] = standardGaussian2D(g);                                 \
+        auto&& [w, x]{standardGaussian2D(g)};                                        \
         fSavedValue = x;                                                             \
         return {p.SigmaX() * u + p.MuX(),                                            \
                 p.SigmaY() * v + p.MuY(),                                            \
@@ -64,12 +66,12 @@ constexpr Gaussian3DDiagnoalBase<ADerived, T>::Gaussian3DDiagnoalBase(const type
     }
 
 template<Concept::NumericVector3FloatingPoint T>
-MACE_STRONG_INLINE T Gaussian3DDiagnoal<T>::operator()(UniformRandomBitGenerator auto& g, const Gaussian3DDiagnoalParameter<T>& p) {
+MACE_STRONG_INLINE auto Gaussian3DDiagnoal<T>::operator()(UniformRandomBitGenerator auto& g, const Gaussian3DDiagnoalParameter<T>& p) -> T {
     MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_3D_DIAGNOAL_GENERATOR_SNIPPET()
 }
 
 template<Concept::NumericVector3FloatingPoint T>
-MACE_STRONG_INLINE T Gaussian3DDiagnoalFast<T>::operator()(UniformRandomBitGenerator auto& g, const Gaussian3DDiagnoalFastParameter<T>& p) {
+MACE_STRONG_INLINE auto Gaussian3DDiagnoalFast<T>::operator()(UniformRandomBitGenerator auto& g, const Gaussian3DDiagnoalFastParameter<T>& p) -> T {
     MACE_MATH_RANDOM_DISTRIBUTION_GAUSSIAN_3D_DIAGNOAL_GENERATOR_SNIPPET(Fast)
 }
 

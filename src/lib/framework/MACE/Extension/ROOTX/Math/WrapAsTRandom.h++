@@ -27,7 +27,7 @@ public:
     auto Gaus(Double_t mu = 0, Double_t sigma = 1) -> Double_t override final { return fGaussian(fPRBG, {mu, sigma}); }
 
     auto SetSeed(ULong_t seed) -> void override final { fPRBG.Seed(seed); }
-    auto Rndm() -> Double_t override final { MACE::Math::Random::Uniform<Double_t>{}(fPRBG); }
+    auto Rndm() -> Double_t override final { return MACE::Math::Random::Uniform<Double_t>{}(fPRBG); }
     auto RndmArray(Int_t n, Float_t* array) -> void override final;
     auto RndmArray(Int_t n, Double_t* array) -> void override final;
 
@@ -40,3 +40,5 @@ private:
 };
 
 } // namespace MACE::inline Extension::ROOTX::Math
+
+#include "MACE/Extension/ROOTX/Math/WrapAsTRandom.inl"

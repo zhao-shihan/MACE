@@ -7,13 +7,12 @@
 
 namespace MACE::Env {
 
-enum class VL {
+enum struct VL {
     Quiet = -2,
     Error,
     Warning,
     Verbose,
-    MoreVerbose,
-    Undefined = 0xABCDEF
+    MoreVerbose
 };
 
 } // namespace MACE::Env

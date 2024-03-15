@@ -16,16 +16,16 @@ auto MuoniumPhysics<ATarget>::ConstructParticle() -> void {
 
 template<TargetForMuoniumPhysics ATarget>
 auto MuoniumPhysics<ATarget>::ConstructProcess() -> void {
-    auto muoniumFormation = new MuoniumFormation<ATarget>;
-    auto muoniumTransport = new MuoniumTransport<ATarget>;
+    const auto muoniumFormation{new MuoniumFormation<ATarget>};
+    const auto muoniumTransport{new MuoniumTransport<ATarget>};
 
-    auto muonPlus = G4MuonPlus::Definition()->GetProcessManager();
+    const auto muonPlus{G4MuonPlus::Definition()->GetProcessManager()};
     muonPlus->AddRestProcess(muoniumFormation);
 
-    auto muonium = Muonium::Definition()->GetProcessManager();
+    const auto muonium{Muonium::Definition()->GetProcessManager()};
     muonium->AddContinuousProcess(muoniumTransport);
 
-    auto antiMuonium = Antimuonium::Definition()->GetProcessManager();
+    const auto antiMuonium{Antimuonium::Definition()->GetProcessManager()};
     antiMuonium->AddContinuousProcess(muoniumTransport);
 }
 

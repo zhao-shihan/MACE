@@ -3,6 +3,7 @@
 #include "MACE/Concept/MPIPredefined.h++"
 
 #include <concepts>
+#include <utility>
 
 namespace MACE::inline Extension::MPIX::inline Execution {
 
@@ -15,18 +16,11 @@ template<std::integral T>
 class Scheduler {
     friend class Executor<T>;
 
-protected:
-    struct Task {
-        T first;
-        T last;
-    };
-
 public:
     virtual ~Scheduler() = default;
 
 protected:
     auto NTask() const -> T { return fTask.last - fTask.first; }
-    auto NExecutedTask() const -> T { return fExecutingTask - fTask.first; }
 
 private:
     auto Reset() -> void;
@@ -35,6 +29,14 @@ private:
     virtual auto PreTaskAction() -> void = 0;
     virtual auto PostTaskAction() -> void = 0;
     virtual auto PostLoopAction() -> void = 0;
+
+    virtual auto NExecutedTask() const -> std::pair<bool, T> = 0;
+
+protected:
+    struct Task {
+        T first;
+        T last;
+    };
 
 protected:
     Task fTask;

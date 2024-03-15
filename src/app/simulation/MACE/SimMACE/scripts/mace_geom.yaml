@@ -7,14 +7,14 @@ AcceleratorField:
   AcceleratorPotential: 0.0050000000000000001
 BeamDegrader:
   Enabled: true
-  Width: 60
-  Thickness: 0.42999999999999999
-  DistanceToTargetSurface: 5
+  Width: 50
+  Thickness: 0.29999999999999999
+  DistanceToTarget: 10
 BeamMonitor:
   Enabled: false
   Width: 40
   Thickness: 0.5
-  DistanceToTargetSurface: 5
+  DistanceToTarget: 5
 CDC:
   EvenSuperLayerIsAxial: false
   NSuperLayer: 7
@@ -22,217 +22,64 @@ CDC:
   GasInnerRadius: 150
   GasInnerLength: 1200
   EndCapSlope: 0.75
-  MinStereoAngle: 0.069813170079773182
-  MinCellWidth: 6
+  MinStereoAngle: 0.10471975511965978
+  CellWidthLowerBound: 8
   ReferenceCellWidth: 10
-  MaxCellWidth: 14
+  CellWidthUpperBound: 12
   FieldWireDiameter: 0.080000000000000002
   SenseWireDiameter: 0.02
-  SensitiveWidthFactor: 0.97499999999999998
   MinAdjacentSuperLayersDistance: 1
   MinWireAndRadialShellDistance: 2
-  ShellInnerThickness: 0.25
-  ShellSideThickness: 10
-  ShellOuterThickness: 10
+  EndCapThickness: 15
+  InnerShellAlThickness: 0.025000000000000001
+  InnerShellMylarThickness: 0.025000000000000001
+  OuterShellThickness: 10
+  GasButaneFraction: 0.14999999999999999
+  EndCapMaterialName: G4_Al
+  OuterShellCFRPDensity: 1.2170942695198487e+19
   MeanDriftVelocity: 0.035000000000000003
-  DeadTime: 30
+  TimeResolutionFWHM: 30
 EMC:
   NSubdivision: 2
   InnerRadius: 150
-  CrystalHypotenuse: 150
+  CrystalHypotenuse: 120
   SmallPMTRadius: 25.5
-  LargePMTRadius: 40
+  SmallPMTLength: 144
   SmallPMTCathodeRadius: 23
-  LargePMTCathodeRadius: 36
+  LargePMTRadius: 34
+  LargePMTLength: 156
+  LargePMTCathodeRadius: 32
   PMTCouplerThickness: 0.10000000000000001
   PMTWindowThickness: 1
   PMTCathodeThickness: 2.0000000000000005e-05
-  fCouplerEnergyBin:
-    - 8.0153200000000001e-07
-    - 1.8938599999999999e-06
-    - 1.92915e-06
-    - 2.1092999999999999e-06
-    - 2.2754100000000001e-06
-    - 2.55633e-06
-    - 2.5882800000000001e-06
-  fCouplerRefractiveIndex:
-    - 1.3912
-    - 1.3992
-    - 1.3996999999999999
-    - 1.4015
-    - 1.4034
-    - 1.4071
-    - 1.4076
-  fCsIEnergyBin:
-    - 1.75e-06
-    - 1.77e-06
-    - 1.7799999999999999e-06
-    - 1.7999999999999999e-06
-    - 1.8199999999999999e-06
-    - 1.8300000000000001e-06
-    - 1.8500000000000001e-06
-    - 1.8700000000000001e-06
-    - 1.88e-06
-    - 1.8899999999999999e-06
-    - 1.9099999999999999e-06
-    - 1.9199999999999998e-06
-    - 1.9300000000000002e-06
-    - 1.9400000000000001e-06
-    - 1.95e-06
-    - 1.9599999999999999e-06
-    - 1.9800000000000001e-06
-    - 1.9800000000000001e-06
-    - 1.9999999999999999e-06
-    - 2.0099999999999998e-06
-    - 2.0200000000000001e-06
-    - 2.04e-06
-    - 2.0499999999999999e-06
-    - 2.0700000000000001e-06
-    - 2.08e-06
-    - 2.0899999999999999e-06
-    - 2.1100000000000001e-06
-    - 2.1100000000000001e-06
-    - 2.1299999999999999e-06
-    - 2.1500000000000002e-06
-    - 2.1600000000000001e-06
-    - 2.1799999999999999e-06
-    - 2.2000000000000001e-06
-    - 2.2199999999999999e-06
-    - 2.2500000000000001e-06
-    - 2.2800000000000002e-06
-    - 2.3199999999999998e-06
-    - 2.3499999999999999e-06
-    - 2.3700000000000002e-06
-    - 2.39e-06
-    - 2.4099999999999998e-06
-    - 2.43e-06
-    - 2.4399999999999999e-06
-    - 2.4600000000000002e-06
-    - 2.4700000000000001e-06
-    - 2.4899999999999999e-06
-    - 2.5000000000000002e-06
-    - 2.52e-06
-    - 2.5299999999999999e-06
-    - 2.5500000000000001e-06
-    - 2.5600000000000001e-06
-    - 2.57e-06
-    - 2.5900000000000002e-06
-    - 2.61e-06
-    - 2.6199999999999999e-06
-    - 2.65e-06
-    - 2.6699999999999998e-06
-    - 2.6900000000000001e-06
-    - 2.7199999999999998e-06
-    - 2.74e-06
-    - 2.7700000000000002e-06
-    - 2.7999999999999999e-06
-    - 2.8399999999999999e-06
-    - 2.8700000000000001e-06
-    - 2.92e-06
-    - 2.9799999999999998e-06
-    - 3.0400000000000001e-06
-    - 3.1099999999999999e-06
-    - 3.18e-06
-    - 3.2499999999999998e-06
-    - 3.32e-06
-    - 3.4000000000000001e-06
-    - 3.4800000000000001e-06
-    - 3.5700000000000001e-06
-  fCsIScintillationComponent1:
-    - 0.126974051
-    - 0.14309060600000001
-    - 0.16675108
-    - 0.19144027
-    - 0.21612946099999999
-    - 0.24081865099999999
-    - 0.263450409
-    - 0.28968267399999997
-    - 0.31488622199999999
-    - 0.34111848700000003
-    - 0.36426460300000002
-    - 0.39018825299999998
-    - 0.41518605800000002
-    - 0.441418323
-    - 0.46147829000000001
-    - 0.48805345999999999
-    - 0.515485894
-    - 0.53554586100000001
-    - 0.56212103099999999
-    - 0.58955346500000005
-    - 0.60961343199999996
-    - 0.63749164300000005
-    - 0.66619282700000004
-    - 0.69036765899999997
-    - 0.71711428200000005
-    - 0.73717424899999995
-    - 0.76237779800000005
-    - 0.78243776499999995
-    - 0.81031597600000005
-    - 0.83781699099999996
-    - 0.86662104600000001
-    - 0.89508219600000005
-    - 0.92182881900000002
-    - 0.948061084
-    - 0.974293348
-    - 0.98629503799999996
-    - 0.974293348
-    - 0.94908979999999998
-    - 0.92388625099999999
-    - 0.89919706099999996
-    - 0.86902138399999995
-    - 0.84035449100000004
-    - 0.81381361100000005
-    - 0.78912442100000002
-    - 0.76093759500000002
-    - 0.729973235
-    - 0.69859738900000001
-    - 0.66876461799999998
-    - 0.633273906
-    - 0.59932627000000005
-    - 0.55869197699999995
-    - 0.52577305699999999
-    - 0.49729527099999998
-    - 0.46645041900000001
-    - 0.44080109299999998
-    - 0.40849940200000001
-    - 0.37729500900000001
-    - 0.34945108899999999
-    - 0.32311595199999998
-    - 0.29966122099999998
-    - 0.27219449699999998
-    - 0.250420003
-    - 0.226930981
-    - 0.20327050699999999
-    - 0.18115310800000001
-    - 0.158178444
-    - 0.13691830799999999
-    - 0.117715605
-    - 0.098855806000000004
-    - 0.081367629999999996
-    - 0.063879453000000003
-    - 0.046734181999999999
-    - 0.030960532999999998
-    - 0.015186883
-  fScintillationYield: 54000
-  fScintillationTimeConstant1: 1000
-  fReolutionScale: 1
 EMCField:
-  Radius: 450
-  Length: 900
-  MagneticFluxDensity: 9.9999999999999991e-05
-EMCShield:
-  InnerRadius: 500
-  InnerLength: 1000
-  WindowRadius: 77
-  Thickness: 50
-Filter:
+  Radius: 600
   Length: 1000
-  Radius: 24
+  MagneticFluxDensity: 0.0001
+EMCMagnet:
+  InnerRadius: 500
+  OuterRadius: 550
+  Length: 950
+  MaterialName: G4_Cu
+EMCShield:
+  InnerRadius: 650
+  InnerLength: 1100
+  GapAroundWindow: 10
+  Thickness: 50
+  MaterialName: G4_Pb
+Filter:
+  Enabled: true
+  Length: 500
+  Radius: 49
   Thickness: 0.20000000000000001
-  Count: 42
+  Count: 85
+  MaterialName: G4_Cu
 MCP:
-  Width: 150
+  Diameter: 100
   Thickness: 10
+MCPChamber:
+  InnerRadius: 100
+  Thickness: 0.5
 ShieldingWall:
   Thickness: 500
 Solenoid:
@@ -241,34 +88,58 @@ Solenoid:
   S2Length: 1000
   B2Radius: 500
   S3Length: 200
-  InnerRadius: 25
-  OuterRadius: 75
-  FieldRadius: 76
+  InnerRadius: 50
+  OuterRadius: 100
+  FieldRadius: 101
+  MaterialName: G4_Cu
   MagneticFluxDensity: 0.0001
+SpectrometerBeamPipe:
+  InnerRadius: 100
+  Thickness: 0.5
+  Length: 1200
 SpectrometerField:
   Radius: 610
   Length: 2200
   MagneticFluxDensity: 0.0001
 SpectrometerMagnet:
   InnerRadius: 500
-  OuterRadius: 600
+  OuterRadius: 550
   Length: 2180
+  MaterialName: G4_Cu
 SpectrometerShield:
   InnerRadius: 620
   InnerLength: 2220
-  WindowRadius: 77
   Thickness: 50
+  WindowRadius: 30
+  BeamSlantAngle: 0
+  MaterialName: G4_Pb
 Target:
-  ShapeType: Cuboid
+  ShapeType: MultiLayer
   Cuboid:
     Width: 60
     Thickness: 10
-    DetailType: Hole
-    Hole:
-      AblationExtent: 40
-      Spacing: 0.049500000000000002
-      Diameter: 0.17500000000000002
-      Depth: 3
+    DetailType: Perforated
+    Perforated:
+      Extent: 40
+      Spacing: 0.055
+      Diameter: 0.184
+      Depth: 2
+  MultiLayer:
+    Width: 60
+    Height: 50
+    Thickness: 3
+    Spacing: 2
+    Count: 11
+    DetailType: Perforated
+    Perforated:
+      ExtentZ: 50
+      ExtentY: 40
+      Spacing: 0.055
+      Diameter: 0.184
+  SilicaAerogelDensity: 1.6852074501044058e+17
+  EffectiveTemperature: 400
+  FormationProbability: 0.65500000000000003
+  MeanFreePath: 0.00020000000000000004
 World:
   HalfXExtent: 3000
   HalfYExtent: 1000

@@ -3,12 +3,12 @@
 namespace MACE::Env::CLI {
 
 Geant4CLI::Geant4CLI() :
-    BasicCLI() {
+    MonteCarloCLI{} {
     AddArgument("macro")
-        .help("Run the program with it. If not provided or empty, run in interactive session with default initialization.")
-        .default_value(std::string(""));
-    AddArgument("-i", "--interact")
-        .help("Run in interactive session even if a macro is provided. The once provided macro will initialize the interactive session, override default.")
+        .help("Run the program in batch session with it. If not provided, run in interactive session with default initialization.")
+        .nargs(argparse::nargs_pattern::optional);
+    AddArgument("-i", "--interactive")
+        .help("Run in interactive session despite of a provided macro. The macro will initialize the session.")
         .nargs(0);
 }
 

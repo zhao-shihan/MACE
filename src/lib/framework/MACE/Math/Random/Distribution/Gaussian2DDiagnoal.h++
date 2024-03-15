@@ -3,9 +3,8 @@
 #include "MACE/Concept/NumericVector.h++"
 #include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/Math/Hypot.h++"
-#include "MACE/Math/Log.h++"
-#include "MACE/Math/Random/Distribution/internal/FastLogForCompact01.h++"
 #include "MACE/Math/Random/Distribution/UniformRectangle.h++"
+#include "MACE/Math/Random/Distribution/internal/FastLogForOpen01.h++"
 #include "MACE/Math/Random/RandomNumberDistributionBase.h++"
 #include "MACE/Utility/InlineMacro.h++"
 #include "MACE/Utility/VectorValueType.h++"
@@ -32,20 +31,26 @@ public:
     constexpr BasicGaussian2DDiagnoalParameter();
     constexpr BasicGaussian2DDiagnoalParameter(std::pair<VT, VT> pX, std::pair<VT, VT> pY);
 
-    constexpr auto MuX() const { return fMuX; }
-    constexpr auto SigmaX() const { return fSigmaX; }
-    constexpr auto MuY() const { return fMuY; }
-    constexpr auto SigmaY() const { return fSigmaY; }
+    constexpr auto MuX() const -> auto { return fMuX; }
+    constexpr auto SigmaX() const -> auto { return fSigmaX; }
+    constexpr auto MuY() const -> auto { return fMuY; }
+    constexpr auto SigmaY() const -> auto { return fSigmaY; }
 
-    constexpr void MuX(VT muX) const { fMuX = muX; }
-    constexpr void SigmaX(VT sigmaX) const { fSigmaX = sigmaX; }
-    constexpr void MuY(VT muY) const { fMuY = muY; }
-    constexpr void SigmaY(VT sigmaY) const { fSigmaY = sigmaY; }
+    constexpr auto MuX(VT muX) -> void { fMuX = muX; }
+    constexpr auto SigmaX(VT sigmaX) -> void { fSigmaX = sigmaX; }
+    constexpr auto MuY(VT muY) -> void { fMuY = muY; }
+    constexpr auto SigmaY(VT sigmaY) -> void { fSigmaY = sigmaY; }
 
-    template<Concept::Character AChar, Concept::NumericVector2FloatingPoint U, template<typename> typename V>
-    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussian2DDiagnoalParameter<U, V>& self) -> decltype(os);
-    template<Concept::Character AChar, Concept::NumericVector2FloatingPoint U, template<typename> typename V>
-    friend auto operator>>(std::basic_istream<AChar>& is, BasicGaussian2DDiagnoalParameter<U, V>& self) -> decltype(is);
+    template<Concept::Character AChar>
+    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussian2DDiagnoalParameter& self) -> decltype(os) { return self.StreamOutput(os); }
+    template<Concept::Character AChar>
+    friend auto operator>>(std::basic_istream<AChar>& is, BasicGaussian2DDiagnoalParameter& self) -> decltype(is) { return self.StreamInput(is); }
+
+private:
+    template<Concept::Character AChar>
+    auto StreamOutput(std::basic_ostream<AChar>& os) const -> decltype(os);
+    template<Concept::Character AChar>
+    auto StreamInput(std::basic_istream<AChar>& is) & -> decltype(is);
 
 private:
     VT fMuX;
@@ -75,22 +80,22 @@ protected:
     constexpr ~Gaussian2DDiagnoalBase() = default;
 
 public:
-    constexpr auto Parameter() const { return fParameter; }
-    constexpr auto MuX() const { return fParameter.MuX(); }
-    constexpr auto SigmaX() const { return fParameter.SigmaX(); }
-    constexpr auto MuY() const { return fParameter.MuY(); }
-    constexpr auto SigmaY() const { return fParameter.SigmaY(); }
+    constexpr auto Parameter() const -> auto { return fParameter; }
+    constexpr auto MuX() const -> auto { return fParameter.MuX(); }
+    constexpr auto SigmaX() const -> auto { return fParameter.SigmaX(); }
+    constexpr auto MuY() const -> auto { return fParameter.MuY(); }
+    constexpr auto SigmaY() const -> auto { return fParameter.SigmaY(); }
 
-    constexpr void Parameter(const typename Base::ParameterType& p) { fParameter = p; }
-    constexpr void MuX(VT muX) const { fParameter.MuX(muX); }
-    constexpr void SigmaX(VT sigmaX) const { fParameter.SigmaX(sigmaX); }
-    constexpr void MuY(VT muY) const { fParameter.MuY(muY); }
-    constexpr void SigmaY(VT sigmaY) const { fParameter.SigmaY(sigmaY); }
+    constexpr auto Parameter(const typename Base::ParameterType& p) -> void { fParameter = p; }
+    constexpr auto MuX(VT muX) -> void { fParameter.MuX(muX); }
+    constexpr auto SigmaX(VT sigmaX) -> void { fParameter.SigmaX(sigmaX); }
+    constexpr auto MuY(VT muY) -> void { fParameter.MuY(muY); }
+    constexpr auto SigmaY(VT sigmaY) -> void { fParameter.SigmaY(sigmaY); }
 
     template<Concept::Character AChar>
-    friend auto& operator<<(std::basic_ostream<AChar>& os, const Gaussian2DDiagnoalBase& self) { return os << self.fParameter; }
+    friend auto operator<<(std::basic_ostream<AChar>& os, const Gaussian2DDiagnoalBase& self) -> auto& { return os << self.fParameter; }
     template<Concept::Character AChar>
-    friend auto& operator>>(std::basic_istream<AChar>& is, Gaussian2DDiagnoalBase& self) { return is >> self.fParameter; }
+    friend auto operator>>(std::basic_istream<AChar>& is, Gaussian2DDiagnoalBase& self) -> auto& { return is >> self.fParameter; }
 
 protected:
     typename Base::ParameterType fParameter;
@@ -117,11 +122,11 @@ public:
 
     constexpr void Reset() {}
 
-    MACE_STRONG_INLINE auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    MACE_STRONG_INLINE T operator()(UniformRandomBitGenerator auto& g, const Gaussian2DDiagnoalParameter<T>& p);
+    MACE_STRONG_INLINE auto operator()(UniformRandomBitGenerator auto& g) -> auto { return (*this)(g, this->fParameter); }
+    MACE_STRONG_INLINE auto operator()(UniformRandomBitGenerator auto& g, const Gaussian2DDiagnoalParameter<T>& p) -> T;
 
-    constexpr T Min() const { return {std::numeric_limits<VT>::lowest(), std::numeric_limits<VT>::lowest()}; }
-    constexpr T Max() const { return {std::numeric_limits<VT>::max(), std::numeric_limits<VT>::max()}; }
+    constexpr auto Min() const -> T { return {std::numeric_limits<VT>::lowest(), std::numeric_limits<VT>::lowest()}; }
+    constexpr auto Max() const -> T { return {std::numeric_limits<VT>::max(), std::numeric_limits<VT>::max()}; }
 
     static constexpr auto Stateless() { return true; }
 };
@@ -148,11 +153,11 @@ public:
 
     constexpr void Reset() {}
 
-    auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    T operator()(UniformRandomBitGenerator auto& g, const Gaussian2DDiagnoalFastParameter<T>& p);
+    auto operator()(UniformRandomBitGenerator auto& g) -> auto { return (*this)(g, this->fParameter); }
+    auto operator()(UniformRandomBitGenerator auto& g, const Gaussian2DDiagnoalFastParameter<T>& p) -> T;
 
-    MACE_STRONG_INLINE constexpr T Min() const { return {std::numeric_limits<VT>::lowest(), std::numeric_limits<VT>::lowest()}; }
-    MACE_STRONG_INLINE constexpr T Max() const { return {std::numeric_limits<VT>::max(), std::numeric_limits<VT>::max()}; }
+    MACE_STRONG_INLINE constexpr auto Min() const -> T { return {std::numeric_limits<VT>::lowest(), std::numeric_limits<VT>::lowest()}; }
+    MACE_STRONG_INLINE constexpr auto Max() const -> T { return {std::numeric_limits<VT>::max(), std::numeric_limits<VT>::max()}; }
 
     static constexpr auto Stateless() { return true; }
 };

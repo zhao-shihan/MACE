@@ -4,7 +4,7 @@
 #include "MACE/Math/Random/Distribution/Exponential.h++"
 #include "MACE/Math/Random/Distribution/Gaussian3DDiagnoal.h++"
 #include "MACE/Math/Random/Generator/Xoshiro256Plus.h++"
-#include "MACE/Simulation/Physics/Messenger/MuoniumPhysicsMessenger.h++"
+#include "MACE/Simulation/Physics/MuoniumPhysicsMessenger.h++"
 #include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
 #include "MACE/Simulation/Physics/Particle/Muonium.h++"
 #include "MACE/Simulation/Physics/TargetForMuoniumPhysics.h++"
@@ -14,6 +14,10 @@
 
 #include "G4ParticleChange.hh"
 #include "G4ThreeVector.hh"
+#include "G4Track.hh"
+#include "G4Material.hh"
+#include "G4MaterialPropertiesTable.hh"
+#include "G4VSolid.hh"
 #include "G4VContinuousProcess.hh"
 #include "Randomize.hh"
 
@@ -27,7 +31,6 @@ class MuoniumTransport final : public NonMoveableBase,
 public:
     MuoniumTransport();
 
-    auto MeanFreePath(G4double val) -> void { fMeanFreePath = val; }
     auto ManipulateAllSteps(G4bool val) -> void { fManipulateAllSteps = val; }
 
     auto IsApplicable(const G4ParticleDefinition&) -> G4bool override;
@@ -38,23 +41,26 @@ private:
     auto ProposeRandomFlight(const G4Track& track) -> void;
 
 private:
-    enum class TransportStatus {
+    enum struct TransportStatus {
         Unknown = -1,
         Decaying,
         InsideTargetVolume,
-        ExitingTargetVolume,
         OutsideTargetVolume
     };
 
 private:
     const ATarget* const fTarget;
 
-    G4double fMeanFreePath;
     G4bool fManipulateAllSteps;
 
     G4ParticleChange fParticleChange;
     TransportStatus fTransportStatus;
     G4bool fIsExitingTargetVolume;
+
+    Math::Random::Xoshiro256Plus fXoshiro256Plus;
+    Math::Random::Gaussian3DDiagnoalFast<G4ThreeVector> fStandardGaussian3D;
+
+    typename MuoniumPhysicsMessenger<ATarget>::template Register<MuoniumTransport<ATarget>> fMessengerRegister;
 };
 
 } // namespace MACE::inline Simulation::inline Physics::inline Process

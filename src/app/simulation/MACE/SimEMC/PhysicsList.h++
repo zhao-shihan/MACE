@@ -1,15 +1,21 @@
 #pragma once
 
 #include "MACE/Env/Memory/PassiveSingleton.h++"
+#include "MACE/SimEMC/Messenger/PhysicsListMessenger.h++"
 
-#include "G4VModularPhysicsList.hh"
+#include "FTFP_BERT.hh"
 
 namespace MACE::SimEMC {
 
 class PhysicsList final : public Env::Memory::PassiveSingleton<PhysicsList>,
-                          public G4VModularPhysicsList {
+                          public FTFP_BERT {
 public:
     PhysicsList();
+
+    auto UseOpticalPhysics() -> void;
+
+private:
+    PhysicsListMessenger::Register<PhysicsList> fMessengerRegister;
 };
 
 } // namespace MACE::SimEMC

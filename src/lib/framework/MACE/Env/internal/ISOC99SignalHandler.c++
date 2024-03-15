@@ -2,6 +2,7 @@
 
 #    include "MACE/Env/MPIEnv.h++"
 #    include "MACE/Env/internal/ISOC99SignalHandler.h++"
+#    include "MACE/Utility/InlineMacro.h++"
 #    include "MACE/Utility/PrintStackTrace.h++"
 
 #    include <chrono>
@@ -19,7 +20,7 @@ extern "C" {
 void MACE_ISOC99_SIGINT_SIGTERM_Handler(int sig) {
     static auto called{false};
     static struct Handler {
-        Handler(int sig) {
+        MACE_ALWAYS_INLINE Handler(int sig) {
             if (called) {
                 std::abort();
             } else {
@@ -66,7 +67,7 @@ void MACE_ISOC99_SIGINT_SIGTERM_Handler(int sig) {
 void MACE_ISOC99_SIGFPE_SIGILL_SIGSEGV_Handler(int sig) {
     static auto called{false};
     static struct Handler {
-        Handler(int sig) {
+        MACE_ALWAYS_INLINE Handler(int sig) {
             if (called) {
                 std::abort();
             } else {

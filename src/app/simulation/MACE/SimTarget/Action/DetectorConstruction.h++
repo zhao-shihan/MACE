@@ -13,11 +13,11 @@
 
 namespace MACE {
 
-namespace Detector::Geometry {
+namespace Detector::Definition {
 
-class GeometryBase;
+class DefinitionBase;
 
-} // namespace Detector::Geometry
+} // namespace Detector::Definition
 
 namespace SimTarget::inline Action {
 
@@ -26,12 +26,9 @@ class DetectorConstruction final : public Env::Memory::PassiveSingleton<Detector
 public:
     DetectorConstruction();
 
-    G4VPhysicalVolume* Construct() override;
+    auto Construct() -> G4VPhysicalVolume* override;
 
-    void TargetDensity(G4double val) { fTargetDensity = val; }
-    void TargetTemperature(G4double val) { fTargetTemperature = val; }
-
-    void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlap = checkOverlaps; }
+    auto SetCheckOverlaps(G4bool checkOverlaps) -> void { fCheckOverlap = checkOverlaps; }
 
 public:
     using DescriptionInUse = std::tuple<Detector::Description::BeamDegrader,
@@ -42,10 +39,7 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    std::shared_ptr<Detector::Geometry::GeometryBase> fWorld;
-
-    G4double fTargetDensity;
-    G4double fTargetTemperature;
+    std::unique_ptr<Detector::Definition::DefinitionBase> fWorld;
 };
 
 } // namespace SimTarget::inline Action

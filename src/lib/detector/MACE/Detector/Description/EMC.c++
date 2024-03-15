@@ -154,15 +154,14 @@ EMC::EMC() :
     fInnerRadius{15_cm},
     fCrystalHypotenuse{15_cm},
     fSmallPMTRadius{25.5_mm},
-    fLargePMTRadius{40_mm},
+    fSmallPMTLength{144_mm},
     fSmallPMTCathodeRadius{23_mm},
-    fLargePMTCathodeRadius{36_mm},
+    fLargePMTRadius{39_mm},
+    fLargePMTLength{156_mm},
+    fLargePMTCathodeRadius{35_mm},
     fPMTCouplerThickness{0.1_mm},
     fPMTWindowThickness{1_mm},
     fPMTCathodeThickness{20_nm},
-    fCouplerEnergyBin{8.01532E-07, 1.89386E-06, 1.92915E-06, 2.1093E-06,
-                      2.27541E-06, 2.55633E-06, 2.58828E-06},
-    fCouplerRefractiveIndex{1.3912, 1.3992, 1.3997, 1.4015, 1.4034, 1.4071, 1.4076},
     fPMTWaveLengthBin{715.759, 704.541, 687.714, 670.887, 654.06, 637.234, 620.807, 606.384,
                       592.562, 584.019, 577.939, 571.814, 566.671, 562.542, 558.307, 553.099,
                       547.49, 541.48, 534.669, 527.057, 519.361, 511.903, 505.422, 499.413,
@@ -179,16 +178,16 @@ EMC::EMC() :
                           21.43, 20.344, 19.319, 18.363, 17.294, 16.265, 15.232, 14.053,
                           12.759, 11.486, 10.345, 9.229, 8.193, 7.198, 6.108, 5.136, 4.241,
                           3.37, 2.403, 1.447, 0.466}, // ET 9269B
-    fCsIEnergyBin{1.75E-06, 1.77E-06, 1.78E-06, 1.80E-06, 1.82E-06, 1.83E-06, 1.85E-06, 1.87E-06,
-                  1.88E-06, 1.89E-06, 1.91E-06, 1.92E-06, 1.93E-06, 1.94E-06, 1.95E-06, 1.96E-06,
-                  1.98E-06, 1.98E-06, 2.00E-06, 2.01E-06, 2.02E-06, 2.04E-06, 2.05E-06, 2.07E-06,
-                  2.08E-06, 2.09E-06, 2.11E-06, 2.11E-06, 2.13E-06, 2.15E-06, 2.16E-06, 2.18E-06,
-                  2.20E-06, 2.22E-06, 2.25E-06, 2.28E-06, 2.32E-06, 2.35E-06, 2.37E-06, 2.39E-06,
-                  2.41E-06, 2.43E-06, 2.44E-06, 2.46E-06, 2.47E-06, 2.49E-06, 2.50E-06, 2.52E-06,
-                  2.53E-06, 2.55E-06, 2.56E-06, 2.57E-06, 2.59E-06, 2.61E-06, 2.62E-06, 2.65E-06,
-                  2.67E-06, 2.69E-06, 2.72E-06, 2.74E-06, 2.77E-06, 2.80E-06, 2.84E-06, 2.87E-06,
-                  2.92E-06, 2.98E-06, 3.04E-06, 3.11E-06, 3.18E-06, 3.25E-06, 3.32E-06, 3.40E-06,
-                  3.48E-06, 3.57E-06},
+    fCsIEnergyBin{1.75e-06, 1.77e-06, 1.78e-06, 1.80e-06, 1.82e-06, 1.83e-06, 1.85e-06, 1.87e-06,
+                  1.88e-06, 1.89e-06, 1.91e-06, 1.92e-06, 1.93e-06, 1.94e-06, 1.95e-06, 1.96e-06,
+                  1.98e-06, 1.98e-06, 2.00e-06, 2.01e-06, 2.02e-06, 2.04e-06, 2.05e-06, 2.07e-06,
+                  2.08e-06, 2.09e-06, 2.11e-06, 2.11e-06, 2.13e-06, 2.15e-06, 2.16e-06, 2.18e-06,
+                  2.20e-06, 2.22e-06, 2.25e-06, 2.28e-06, 2.32e-06, 2.35e-06, 2.37e-06, 2.39e-06,
+                  2.41e-06, 2.43e-06, 2.44e-06, 2.46e-06, 2.47e-06, 2.49e-06, 2.50e-06, 2.52e-06,
+                  2.53e-06, 2.55e-06, 2.56e-06, 2.57e-06, 2.59e-06, 2.61e-06, 2.62e-06, 2.65e-06,
+                  2.67e-06, 2.69e-06, 2.72e-06, 2.74e-06, 2.77e-06, 2.80e-06, 2.84e-06, 2.87e-06,
+                  2.92e-06, 2.98e-06, 3.04e-06, 3.11e-06, 3.18e-06, 3.25e-06, 3.32e-06, 3.40e-06,
+                  3.48e-06, 3.57e-06},
     fCsIScintillationComponent1{0.126974051, 0.143090606, 0.16675108, 0.19144027, 0.216129461, 0.240818651, 0.263450409, 0.289682674,
                                 0.314886222, 0.341118487, 0.364264603, 0.390188253, 0.415186058, 0.441418323, 0.46147829, 0.48805346,
                                 0.515485894, 0.535545861, 0.562121031, 0.589553465, 0.609613432, 0.637491643, 0.666192827, 0.690367659,
@@ -268,21 +267,21 @@ auto EMC::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
     ImportValue(node, fSmallPMTRadius, "SmallPMTRadius");
-    ImportValue(node, fLargePMTRadius, "LargePMTRadius");
+    ImportValue(node, fSmallPMTLength, "SmallPMTLength");
     ImportValue(node, fSmallPMTCathodeRadius, "SmallPMTCathodeRadius");
+    ImportValue(node, fLargePMTRadius, "LargePMTRadius");
+    ImportValue(node, fLargePMTLength, "LargePMTLength");
     ImportValue(node, fLargePMTCathodeRadius, "LargePMTCathodeRadius");
     ImportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ImportValue(node, fPMTWindowThickness, "PMTWindowThickness");
     ImportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
-
-    ImportValue(node, fCouplerEnergyBin, "fCouplerEnergyBin");
-    ImportValue(node, fCouplerRefractiveIndex, "fCouplerRefractiveIndex");
-    ImportValue(node, fCsIEnergyBin, "fCsIEnergyBin");
-    ImportValue(node, fCsIScintillationComponent1, "fCsIScintillationComponent1");
-
-    ImportValue(node, fScintillationYield, "fScintillationYield");
-    ImportValue(node, fScintillationTimeConstant1, "fScintillationTimeConstant1");
-    ImportValue(node, fResolutionScale, "fReolutionScale");
+    // ImportValue(node, fPMTWaveLengthBin, "PMTWaveLengthBin");
+    // ImportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
+    // ImportValue(node, fCsIEnergyBin, "CsIEnergyBin");
+    // ImportValue(node, fCsIScintillationComponent1, "CsIScintillationComponent1");
+    // ImportValue(node, fScintillationYield, "ScintillationYield");
+    // ImportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
+    // ImportValue(node, fResolutionScale, "ReolutionScale");
 
     SetGeometryOutdated();
 }
@@ -292,21 +291,21 @@ auto EMC::ExportValues(YAML::Node& node) const -> void {
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
     ExportValue(node, fSmallPMTRadius, "SmallPMTRadius");
-    ExportValue(node, fLargePMTRadius, "LargePMTRadius");
+    ExportValue(node, fSmallPMTLength, "SmallPMTLength");
     ExportValue(node, fSmallPMTCathodeRadius, "SmallPMTCathodeRadius");
+    ExportValue(node, fLargePMTRadius, "LargePMTRadius");
+    ExportValue(node, fLargePMTLength, "LargePMTLength");
     ExportValue(node, fLargePMTCathodeRadius, "LargePMTCathodeRadius");
     ExportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ExportValue(node, fPMTWindowThickness, "PMTWindowThickness");
     ExportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
-
-    ExportValue(node, fCouplerEnergyBin, "fCouplerEnergyBin");
-    ExportValue(node, fCouplerRefractiveIndex, "fCouplerRefractiveIndex");
-    ExportValue(node, fCsIEnergyBin, "fCsIEnergyBin");
-    ExportValue(node, fCsIScintillationComponent1, "fCsIScintillationComponent1");
-
-    ExportValue(node, fScintillationYield, "fScintillationYield");
-    ExportValue(node, fScintillationTimeConstant1, "fScintillationTimeConstant1");
-    ExportValue(node, fResolutionScale, "fReolutionScale");
+    // ExportValue(node, fPMTWaveLengthBin, "PMTWaveLengthBin");
+    // ExportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
+    // ExportValue(node, fCsIEnergyBin, "CsIEnergyBin");
+    // ExportValue(node, fCsIScintillationComponent1, "CsIScintillationComponent1");
+    // ExportValue(node, fScintillationYield, "ScintillationYield");
+    // ExportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
+    // ExportValue(node, fResolutionScale, "ReolutionScale");
 }
 
 } // namespace MACE::Detector::Description

@@ -14,7 +14,7 @@ namespace MACE::Math::Random::inline Distribution {
 
 namespace internal {
 
-template<std::floating_point T, template<typename> class AGaussian>
+template<std::floating_point T, template<typename> typename AGaussian>
 class BasicGaussianParameter final : public DistributionParameterBase<BasicGaussianParameter<T, AGaussian>,
                                                                       AGaussian<T>> {
 private:
@@ -25,23 +25,29 @@ public:
     constexpr BasicGaussianParameter() = default;
     constexpr BasicGaussianParameter(T mu, T sigma);
 
-    constexpr auto Mu() const { return fMu; }
-    constexpr auto Sigma() const { return fSigma; }
+    constexpr auto Mu() const -> auto { return fMu; }
+    constexpr auto Sigma() const -> auto { return fSigma; }
 
-    constexpr void Mu(T mu) { fMu = mu; }
-    constexpr void Sigma(T sigma) { fSigma = sigma; }
+    constexpr auto Mu(T mu) -> void { fMu = mu; }
+    constexpr auto Sigma(T sigma) -> void { fSigma = sigma; }
 
-    template<Concept::Character AChar, std::floating_point U, template<typename> class V>
-    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussianParameter<U, V>& self) -> decltype(os);
-    template<Concept::Character AChar, std::floating_point U, template<typename> class V>
-    friend auto operator>>(std::basic_istream<AChar>& is, BasicGaussianParameter<U, V>& self) -> decltype(is);
+    template<Concept::Character AChar>
+    friend auto operator<<(std::basic_ostream<AChar>& os, const BasicGaussianParameter& self) -> decltype(os) { return self.StreamOutput(os); }
+    template<Concept::Character AChar>
+    friend auto operator>>(std::basic_istream<AChar>& is, BasicGaussianParameter& self) -> decltype(is) { return self.StreamInput(is); }
 
 private:
-    T fMu = 0;
-    T fSigma = 1;
+    template<Concept::Character AChar>
+    auto StreamOutput(std::basic_ostream<AChar>& os) const -> decltype(os);
+    template<Concept::Character AChar>
+    auto StreamInput(std::basic_istream<AChar>& is) & -> decltype(is);
+
+private:
+    T fMu{0};
+    T fSigma{1};
 };
 
-template<std::floating_point T, template<typename> class AGaussian>
+template<std::floating_point T, template<typename> typename AGaussian>
 class GaussianBase : public RandomNumberDistributionBase<AGaussian<T>,
                                                          BasicGaussianParameter<T, AGaussian>,
                                                          T> {
@@ -59,18 +65,24 @@ protected:
     constexpr ~GaussianBase() = default;
 
 public:
-    constexpr auto Parameter() const { return fParameter; }
-    constexpr auto Mu() const { return fParameter.Mu(); }
-    constexpr auto Sigma() const { return fParameter.Sigma(); }
+    constexpr auto Parameter() const -> auto { return fParameter; }
+    constexpr auto Mu() const -> auto { return fParameter.Mu(); }
+    constexpr auto Sigma() const -> auto { return fParameter.Sigma(); }
 
-    constexpr void Parameter(const typename Base::ParameterType& p) { fParameter = p; }
-    constexpr auto Mu(T mu) const { return fParameter.Mu(mu); }
-    constexpr auto Sigma(T sigma) const { return fParameter.Sigma(sigma); }
+    constexpr auto Parameter(const typename Base::ParameterType& p) -> void { fParameter = p; }
+    constexpr auto Mu(T mu) const -> auto { return fParameter.Mu(mu); }
+    constexpr auto Sigma(T sigma) const -> auto { return fParameter.Sigma(sigma); }
 
     template<Concept::Character AChar>
-    friend auto& operator<<(std::basic_ostream<AChar>& os, const GaussianBase& self) { return os << self.fParameter; }
+    friend auto operator<<(std::basic_ostream<AChar>& os, const GaussianBase& self) -> auto& { return os << self.fParameter; }
     template<Concept::Character AChar>
-    friend auto& operator>>(std::basic_istream<AChar>& is, GaussianBase& self) { return is >> self.fParameter; }
+    friend auto operator>>(std::basic_istream<AChar>& is, GaussianBase& self) -> auto& { return is >> self.fParameter; }
+
+private:
+    template<Concept::Character AChar>
+    auto StreamOutput(std::basic_ostream<AChar>& os) const -> decltype(os);
+    template<Concept::Character AChar>
+    auto StreamInput(std::basic_istream<AChar>& is) & -> decltype(is);
 
 protected:
     typename Base::ParameterType fParameter;
@@ -92,18 +104,18 @@ class Gaussian final : public internal::GaussianBase<T, Gaussian> {
 public:
     using internal::GaussianBase<T, Gaussian>::GaussianBase;
 
-    constexpr void Reset() { fSaved = false; }
+    constexpr auto Reset() -> void { fSaved = false; }
 
-    MACE_STRONG_INLINE auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    MACE_STRONG_INLINE T operator()(UniformRandomBitGenerator auto& g, const GaussianParameter<T>& p);
+    MACE_STRONG_INLINE auto operator()(UniformRandomBitGenerator auto& g) -> auto { return (*this)(g, this->fParameter); }
+    MACE_STRONG_INLINE auto operator()(UniformRandomBitGenerator auto& g, const GaussianParameter<T>& p) -> T;
 
-    constexpr auto Min() const { return std::numeric_limits<T>::lowest(); }
-    constexpr auto Max() const { return std::numeric_limits<T>::max(); }
+    constexpr auto Min() const -> auto { return std::numeric_limits<T>::lowest(); }
+    constexpr auto Max() const -> auto { return std::numeric_limits<T>::max(); }
 
-    static constexpr auto Stateless() { return false; }
+    static constexpr auto Stateless() -> bool { return false; }
 
 private:
-    bool fSaved = false;
+    bool fSaved{};
     T fSavedValue;
 };
 
@@ -130,18 +142,18 @@ class GaussianFast final : public internal::GaussianBase<T, GaussianFast> {
 public:
     using internal::GaussianBase<T, GaussianFast>::GaussianBase;
 
-    constexpr void Reset() { fSaved = false; }
+    constexpr auto Reset() -> void { fSaved = false; }
 
-    MACE_STRONG_INLINE auto operator()(UniformRandomBitGenerator auto& g) { return (*this)(g, this->fParameter); }
-    MACE_STRONG_INLINE T operator()(UniformRandomBitGenerator auto& g, const GaussianFastParameter<T>& p);
+    MACE_STRONG_INLINE auto operator()(UniformRandomBitGenerator auto& g) -> auto { return (*this)(g, this->fParameter); }
+    MACE_STRONG_INLINE auto operator()(UniformRandomBitGenerator auto& g, const GaussianFastParameter<T>& p) -> T;
 
-    constexpr auto Min() const { return std::numeric_limits<T>::lowest(); }
-    constexpr auto Max() const { return std::numeric_limits<T>::max(); }
+    constexpr auto Min() const -> auto { return std::numeric_limits<T>::lowest(); }
+    constexpr auto Max() const -> auto { return std::numeric_limits<T>::max(); }
 
-    static constexpr auto Stateless() { return false; }
+    static constexpr auto Stateless() -> bool { return false; }
 
 private:
-    bool fSaved = false;
+    bool fSaved{};
     T fSavedValue;
 };
 

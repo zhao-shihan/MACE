@@ -53,11 +53,6 @@ namespace MACE::inline Extension::MPIX {
 /// When just ./xxx (not in MPI mode) :
 /// Just a single result.root will be created.
 ///
-auto ParallelizePath(std::convertible_to<std::filesystem::path> auto&& path) -> std::filesystem::path;
-auto ParallelizePath(std::convertible_to<std::filesystem::path> auto&& path, std::string_view extension) -> std::filesystem::path;
-auto ParallelizePathInPlace(std::filesystem::path& path) -> void;
-auto ParallelizePathInPlace(std::filesystem::path& path, std::string_view extension) -> void;
+auto ParallelizePath(const std::filesystem::path& path) -> std::filesystem::path;
 
 } // namespace MACE::inline Extension::MPIX
-
-#include "MACE/Extension/MPIX/ParallelizePath.inl"

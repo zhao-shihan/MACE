@@ -30,7 +30,7 @@ public:
     using AField::AField;
     virtual ~WrapAsG4Field() = default;
 
-    void GetFieldValue(const G4double* x, G4double* f) const override final;
+    auto GetFieldValue(const G4double* x, G4double* f) const -> void override final;
 };
 
 } // namespace MACE::Detector::Field

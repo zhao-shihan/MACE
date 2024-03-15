@@ -6,11 +6,14 @@
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Detector/Description/EMCField.h++"
+#include "MACE/Detector/Description/EMCMagnet.h++"
 #include "MACE/Detector/Description/EMCShield.h++"
 #include "MACE/Detector/Description/Filter.h++"
 #include "MACE/Detector/Description/MCP.h++"
+#include "MACE/Detector/Description/MCPChamber.h++"
 #include "MACE/Detector/Description/ShieldingWall.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
+#include "MACE/Detector/Description/SpectrometerBeamPipe.h++"
 #include "MACE/Detector/Description/SpectrometerField.h++"
 #include "MACE/Detector/Description/SpectrometerMagnet.h++"
 #include "MACE/Detector/Description/SpectrometerShield.h++"
@@ -28,11 +31,11 @@
 
 namespace MACE {
 
-namespace Detector::Geometry {
+namespace Detector::Definition {
 
-class GeometryBase;
+class DefinitionBase;
 
-} // namespace Detector::Geometry
+} // namespace Detector::Definition
 
 namespace SimMACE::inline Action {
 
@@ -41,23 +44,23 @@ class DetectorConstruction final : public Env::Memory::PassiveSingleton<Detector
 public:
     DetectorConstruction();
 
-    G4VPhysicalVolume* Construct() override;
+    auto Construct() -> G4VPhysicalVolume* override;
 
-    void SetCheckOverlaps(G4bool checkOverlaps) { fCheckOverlap = checkOverlaps; }
+    auto SetCheckOverlaps(G4bool checkOverlaps) -> void { fCheckOverlap = checkOverlaps; }
 
-    auto& EMCSensitiveRegion() const { return *fEMCSensitiveRegion; }
-    auto& DefaultSolidRegion() const { return *fDefaultSolidRegion; }
-    auto& DefaultGaseousRegion() const { return *fDefaultGaseousRegion; }
-    auto& ShieldRegion() const { return *fShieldRegion; }
-    auto& SolenoidOrMagnetRegion() const { return *fSolenoidOrMagnetRegion; }
-    auto& SpectrometerSensitiveRegion() const { return *fSpectrometerSensitiveRegion; }
-    auto& TargetRegion() const { return *fTargetRegion; }
-    auto& VacuumRegion() const { return *fVacuumRegion; }
-    auto& MCPSensitiveRegion() const { return *fMCPSensitiveRegion; }
+    auto EMCSensitiveRegion() const -> const auto& { return *fEMCSensitiveRegion; }
+    auto DefaultSolidRegion() const -> const auto& { return *fDefaultSolidRegion; }
+    auto DefaultGaseousRegion() const -> const auto& { return *fDefaultGaseousRegion; }
+    auto ShieldRegion() const -> const auto& { return *fShieldRegion; }
+    auto SolenoidOrMagnetRegion() const -> const auto& { return *fSolenoidOrMagnetRegion; }
+    auto CDCSensitiveRegion() const -> const auto& { return *fCDCSensitiveRegion; }
+    auto TargetRegion() const -> const auto& { return *fTargetRegion; }
+    auto VacuumRegion() const -> const auto& { return *fVacuumRegion; }
+    auto MCPSensitiveRegion() const -> const auto& { return *fMCPSensitiveRegion; }
 
-    auto& EMCSD() const { return *fEMCSD; }
-    auto& CDCSD() const { return *fCDCSD; }
-    auto& MCPSD() const { return *fMCPSD; }
+    auto EMCSD() const -> auto& { return *fEMCSD; }
+    auto CDCSD() const -> auto& { return *fCDCSD; }
+    auto MCPSD() const -> auto& { return *fMCPSD; }
 
 public:
     using DescriptionInUse = std::tuple<Detector::Description::AcceleratorField,
@@ -66,11 +69,14 @@ public:
                                         Detector::Description::CDC,
                                         Detector::Description::EMC,
                                         Detector::Description::EMCField,
+                                        Detector::Description::EMCMagnet,
                                         Detector::Description::EMCShield,
                                         Detector::Description::Filter,
                                         Detector::Description::MCP,
+                                        Detector::Description::MCPChamber,
                                         Detector::Description::ShieldingWall,
                                         Detector::Description::Solenoid,
+                                        Detector::Description::SpectrometerBeamPipe,
                                         Detector::Description::SpectrometerField,
                                         Detector::Description::SpectrometerMagnet,
                                         Detector::Description::SpectrometerShield,
@@ -80,7 +86,7 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    std::shared_ptr<Detector::Geometry::GeometryBase> fWorld;
+    std::unique_ptr<Detector::Definition::DefinitionBase> fWorld;
 
     Region* fCDCFieldWireRegion;
     Region* fCDCSenseWireRegion;
@@ -90,7 +96,7 @@ private:
     Region* fMCPSensitiveRegion;
     Region* fShieldRegion;
     Region* fSolenoidOrMagnetRegion;
-    Region* fSpectrometerSensitiveRegion;
+    Region* fCDCSensitiveRegion;
     Region* fTargetRegion;
     Region* fVacuumRegion;
 

@@ -22,15 +22,17 @@
 namespace MACE::inline Extension::MPIX::inline Execution {
 
 template<std::integral T>
-class DynamicScheduler final : public Scheduler<T> {
+class DynamicScheduler : public Scheduler<T> {
 public:
     DynamicScheduler();
 
 private:
-    auto PreLoopAction() -> void override;
-    auto PreTaskAction() -> void override;
-    auto PostTaskAction() -> void override;
-    auto PostLoopAction() -> void override;
+    virtual auto PreLoopAction() -> void override;
+    virtual auto PreTaskAction() -> void override;
+    virtual auto PostTaskAction() -> void override;
+    virtual auto PostLoopAction() -> void override;
+
+    virtual auto NExecutedTask() const -> std::pair<bool, T> override;
 
 private:
     class Comm final {
@@ -113,7 +115,7 @@ private:
     T fBatchSize;
     std::variant<Dummy, Master, Worker> fContext;
 
-    static constexpr auto fgBalanceFactor{0.01};
+    static constexpr auto fgBalancingFactor{0.001};
 };
 
 } // namespace MACE::inline Extension::MPIX::inline Execution

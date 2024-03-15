@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/Env/Memory/PassiveSingleton.h++"
+#include "MACE/SimTarget/Messenger/ActionMessenger.h++"
 
 #include "G4ParticleDefinition.hh"
 #include "G4UserSteppingAction.hh"
@@ -21,6 +22,8 @@ private:
     const G4ParticleDefinition* const fMuonium;
     const G4ParticleDefinition* const fAntimuonium;
     G4bool fKillIrrelevants;
+
+    ActionMessenger::Register<SteppingAction> fMessengerRegister;
 };
 
 } // namespace MACE::SimTarget::inline Action

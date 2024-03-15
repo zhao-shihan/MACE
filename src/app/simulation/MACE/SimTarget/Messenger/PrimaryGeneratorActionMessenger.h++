@@ -1,10 +1,6 @@
 #pragma once
 
-#include "MACE/Env/Memory/Singleton.h++"
-
-#include "G4UImessenger.hh"
-
-#include "gsl/gsl"
+#include "MACE/Extension/Geant4X/SingletonMessenger.h++"
 
 #include <memory>
 
@@ -20,8 +16,8 @@ class PrimaryGeneratorAction;
 
 inline namespace Messenger {
 
-class PrimaryGeneratorActionMessenger final : public Env::Memory::Singleton<PrimaryGeneratorActionMessenger>,
-                                              public G4UImessenger {
+class PrimaryGeneratorActionMessenger final : public Geant4X::SingletonMessenger<PrimaryGeneratorActionMessenger,
+                                                                                 PrimaryGeneratorAction> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -29,16 +25,12 @@ private:
     ~PrimaryGeneratorActionMessenger();
 
 public:
-    void AssignTo(gsl::not_null<PrimaryGeneratorAction*> pga) { fPrimaryGeneratorAction = pga; }
-
-    void SetNewValue(G4UIcommand* command, G4String value) override;
+    auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
-    PrimaryGeneratorAction* fPrimaryGeneratorAction;
-
-    std::unique_ptr<G4UIcmdWithAnInteger> fMuonsForEachG4Event;
+    std::unique_ptr<G4UIcmdWithAnInteger> fPrimariesForEachG4Event;
 };
 
-} // inline namespace Messenger
+} // namespace Messenger
 
 } // namespace MACE::SimTarget

@@ -6,19 +6,19 @@
 #include "MACE/Data/Hit.h++"
 #include "MACE/Data/Sheet.h++"
 #include "MACE/Data/SimHit.h++"
+#include "MACE/Detector/Definition/AcceleratorField.h++"
+#include "MACE/Detector/Definition/BeamDegrader.h++"
+#include "MACE/Detector/Definition/BeamMonitor.h++"
+#include "MACE/Detector/Definition/CDCBody.h++"
+#include "MACE/Detector/Definition/CDCFieldWire.h++"
+#include "MACE/Detector/Definition/CDCGas.h++"
+#include "MACE/Detector/Definition/CDCSenseLayer.h++"
+#include "MACE/Detector/Definition/CDCSuperLayer.h++"
+#include "MACE/Detector/Definition/SpectrometerField.h++"
+#include "MACE/Detector/Definition/Target.h++"
+#include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/SpectrometerField.h++"
-#include "MACE/Detector/Geometry/Fast/AcceleratorField.h++"
-#include "MACE/Detector/Geometry/Fast/BeamDegrader.h++"
-#include "MACE/Detector/Geometry/Fast/BeamMonitor.h++"
-#include "MACE/Detector/Geometry/Fast/CDCBody.h++"
-#include "MACE/Detector/Geometry/Fast/CDCFieldWire.h++"
-#include "MACE/Detector/Geometry/Fast/CDCGas.h++"
-#include "MACE/Detector/Geometry/Fast/CDCSenseLayer.h++"
-#include "MACE/Detector/Geometry/Fast/CDCSuperLayer.h++"
-#include "MACE/Detector/Geometry/Fast/SpectrometerField.h++"
-#include "MACE/Detector/Geometry/Fast/Target.h++"
-#include "MACE/Detector/Geometry/Fast/World.h++"
 #include "MACE/Env/BasicEnv.h++"
 #include "MACE/Env/CLI/BasicCLI.h++"
 #include "MACE/Extension/stdx/arraynx.h++"
@@ -84,7 +84,7 @@ Math::Random::Gaussian Gaussian1D;
 Math::Random::Gaussian3DDiagnoal Gaussian3D;
 
 void MakeMACECDCGeometry() {
-    using namespace Detector::Geometry::Fast;
+    using namespace Detector::Definition;
 
     constexpr auto fCheckOverlap = false;
 
@@ -132,37 +132,6 @@ void MakeMACECDCGeometry() {
     using namespace LiteralUnit::Density;
 
     const auto nist = G4NistManager::Instance();
-
-    const auto aluminium = nist->FindOrBuildMaterial("G4_Al");
-    beamDegrader.RegisterMaterial(aluminium);
-    cdcFieldWire.RegisterMaterial(aluminium);
-
-    const auto cdcHeBasedGas = [&nist] {
-        constexpr auto heFraction = 0.85;
-        constexpr auto butaneFraction = 1 - heFraction;
-        const auto he = nist->FindOrBuildMaterial("G4_He");
-        const auto butane = nist->FindOrBuildMaterial("G4_BUTANE");
-        const auto gas = new G4Material("CDCGas",
-                                        heFraction * he->GetDensity() +
-                                            butaneFraction * butane->GetDensity(),
-                                        2,
-                                        kStateGas);
-        gas->AddMaterial(he, heFraction);
-        gas->AddMaterial(butane, butaneFraction);
-        return gas;
-    }();
-    cdcGas.RegisterMaterial(cdcHeBasedGas);
-    cdcSenseLayer.RegisterMaterial(cdcHeBasedGas);
-    cdcSuperLayer.RegisterMaterial(cdcHeBasedGas);
-
-    const auto cdcShell = nist->BuildMaterialWithNewDensity("CarbonFiber", "G4_C", 1.7_g_cm3);
-    cdcBody.RegisterMaterial(cdcShell);
-
-    const auto plasticScitillator = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
-    beamMonitor.RegisterMaterial(plasticScitillator);
-
-    const auto silicaAerogel = nist->BuildMaterialWithNewDensity("SilicaAerogel", "G4_SILICON_DIOXIDE", 30_mg_cm3);
-    target.RegisterMaterial(silicaAerogel);
 
     const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
     acceleratorField.RegisterMaterial(vacuum);

@@ -18,7 +18,6 @@ class EMCField;
 class EMCShield;
 class AcceleratorField;
 class MCP;
-class SelectorField;
 class SpectrometerField;
 class SpectrometerMagnet;
 class SpectrometerShield;
@@ -27,7 +26,7 @@ class World;
 
 } // namespace Description
 
-class GeometryBase;
+class DefinitionBase;
 
 } // namespace Detector
 
@@ -48,7 +47,6 @@ public:
                                         Detector::Description::EMCShield,
                                         Detector::Description::AcceleratorField,
                                         Detector::Description::MCP,
-                                        Detector::Description::SelectorField,
                                         Detector::Description::SpectrometerField,
                                         Detector::Description::SpectrometerMagnet,
                                         Detector::Description::SpectrometerShield,
@@ -58,26 +56,25 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    std::shared_ptr<Detector::GeometryBase> fCollimator;
-    std::shared_ptr<Detector::GeometryBase> fEMCField;
-    std::shared_ptr<Detector::GeometryBase> fEMCShield;
-    std::shared_ptr<Detector::GeometryBase> fSolenoidB1Field;
-    std::shared_ptr<Detector::GeometryBase> fSolenoidB1;
-    std::shared_ptr<Detector::GeometryBase> fSolenoidS1Field;
-    std::shared_ptr<Detector::GeometryBase> fSolenoidS1;
-    std::shared_ptr<Detector::GeometryBase> fAcceleratorField;
-    std::shared_ptr<Detector::GeometryBase> fMCP;
-    std::shared_ptr<Detector::GeometryBase> fSolenoidB2Field;
-    std::shared_ptr<Detector::GeometryBase> fSolenoidB2;
-    std::shared_ptr<Detector::GeometryBase> fSolenoidS2Field;
-    std::shared_ptr<Detector::GeometryBase> fSolenoidS2;
-    std::shared_ptr<Detector::GeometryBase> fSelectorField;
-    std::shared_ptr<Detector::GeometryBase> fSpectrometerField;
-    std::shared_ptr<Detector::GeometryBase> fSpectrometerMagnet;
-    std::shared_ptr<Detector::GeometryBase> fSpectrometerShield;
-    std::shared_ptr<Detector::GeometryBase> fSolenoidS3Field;
-    std::shared_ptr<Detector::GeometryBase> fSolenoidS3;
-    std::shared_ptr<Detector::GeometryBase> fWorld;
+    std::shared_ptr<Detector::DefinitionBase> fCollimator;
+    std::shared_ptr<Detector::DefinitionBase> fEMCField;
+    std::shared_ptr<Detector::DefinitionBase> fEMCShield;
+    std::shared_ptr<Detector::DefinitionBase> fSolenoidB1Field;
+    std::shared_ptr<Detector::DefinitionBase> fSolenoidB1;
+    std::shared_ptr<Detector::DefinitionBase> fSolenoidS1Field;
+    std::shared_ptr<Detector::DefinitionBase> fSolenoidS1;
+    std::shared_ptr<Detector::DefinitionBase> fAcceleratorField;
+    std::shared_ptr<Detector::DefinitionBase> fMCP;
+    std::shared_ptr<Detector::DefinitionBase> fSolenoidB2Field;
+    std::shared_ptr<Detector::DefinitionBase> fSolenoidB2;
+    std::shared_ptr<Detector::DefinitionBase> fSolenoidS2Field;
+    std::shared_ptr<Detector::DefinitionBase> fSolenoidS2;
+    std::shared_ptr<Detector::DefinitionBase> fSpectrometerField;
+    std::shared_ptr<Detector::DefinitionBase> fSpectrometerMagnet;
+    std::shared_ptr<Detector::DefinitionBase> fSpectrometerShield;
+    std::shared_ptr<Detector::DefinitionBase> fSolenoidS3Field;
+    std::shared_ptr<Detector::DefinitionBase> fSolenoidS3;
+    std::shared_ptr<Detector::DefinitionBase> fWorld;
 };
 
 } // namespace SimTarget::inline Action

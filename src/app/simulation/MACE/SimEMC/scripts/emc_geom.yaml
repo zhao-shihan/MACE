@@ -1,0 +1,19 @@
+# SimEMC: geometry description
+
+EMC:
+  NSubdivision: 2
+  InnerRadius: 150
+  CrystalHypotenuse: 150
+  SmallPMTRadius: 25.5
+  SmallPMTLength: 144
+  SmallPMTCathodeRadius: 23
+  LargePMTRadius: 39
+  LargePMTLength: 156
+  LargePMTCathodeRadius: 35
+  PMTCouplerThickness: 0.10000000000000001
+  PMTWindowThickness: 1
+  PMTCathodeThickness: 2.0000000000000005e-05
+World:
+  HalfXExtent: 2000
+  HalfYExtent: 2000
+  HalfZExtent: 2000

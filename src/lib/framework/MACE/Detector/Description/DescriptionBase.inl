@@ -2,7 +2,7 @@ namespace MACE::Detector::Description {
 
 template<typename AValue, typename AReadAs, std::convertible_to<std::string>... AStrings>
     requires std::assignable_from<AValue&, AReadAs>
-void DescriptionBase::ImportValue(const YAML::Node& node, AValue& value, AStrings&&... nodeNames) {
+auto DescriptionBase::ImportValue(const YAML::Node& node, AValue& value, AStrings&&... nodeNames) -> void {
     if (const auto leaf = UnpackToLeafNodeForImporting(node, nodeNames...);
         leaf.has_value()) {
         value = leaf->template as<AReadAs>();
@@ -12,7 +12,7 @@ void DescriptionBase::ImportValue(const YAML::Node& node, AValue& value, AString
 }
 
 template<typename AReadAs, std::convertible_to<std::string>... AStrings>
-void DescriptionBase::ImportValue(const YAML::Node& node, const std::regular_invocable<AReadAs> auto& ImportAction, AStrings&&... nodeNames) {
+auto DescriptionBase::ImportValue(const YAML::Node& node, const std::regular_invocable<AReadAs> auto& ImportAction, AStrings&&... nodeNames) -> void {
     if (const auto leaf = UnpackToLeafNodeForImporting(node, nodeNames...);
         leaf.has_value()) {
         ImportAction(leaf->template as<AReadAs>());
@@ -23,20 +23,34 @@ void DescriptionBase::ImportValue(const YAML::Node& node, const std::regular_inv
 
 template<typename AValue, typename AWriteAs, std::convertible_to<std::string>... AStrings>
     requires std::convertible_to<const AValue&, AWriteAs>
-void DescriptionBase::ExportValue(YAML::Node& node, const AValue& value, AStrings&&... nodeNames) const {
+auto DescriptionBase::ExportValue(YAML::Node& node, const AValue& value, AStrings&&... nodeNames) const -> void {
     UnpackToLeafNodeForExporting(node, nodeNames...) = static_cast<AWriteAs>(value);
 }
 
+namespace internal {
+namespace {
+
+constexpr void TupleForEach(auto&& tuple, auto&& func) {
+    std::apply(
+        [&func](auto&&... args) {
+            (..., func(std::forward<decltype(args)>(args)));
+        },
+        std::forward<decltype(tuple)>(tuple));
+}
+
+} // namespace
+} // namespace internal
+
 template<std::convertible_to<std::string>... AStrings>
-std::optional<const YAML::Node> DescriptionBase::UnpackToLeafNodeForImporting(const YAML::Node& node, AStrings&&... nodeNames) {
+auto DescriptionBase::UnpackToLeafNodeForImporting(const YAML::Node& node, AStrings&&... nodeNames) -> std::optional<const YAML::Node> {
     try {
         std::array<YAML::Node, sizeof...(nodeNames)> leafNodes;
         gsl::index i = 0;
-        TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
-                     [&node, &leafNodes, &i](auto&& name) {
-                         leafNodes[i] = (i == 0 ? node : leafNodes[i - 1])[name];
-                         ++i;
-                     });
+        internal::TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
+                               [&node, &leafNodes, &i](auto&& name) {
+                                   leafNodes[i] = (i == 0 ? node : leafNodes[i - 1])[name];
+                                   ++i;
+                               });
         return leafNodes.back();
     } catch (const YAML::InvalidNode&) {
         return std::nullopt;
@@ -44,28 +58,28 @@ std::optional<const YAML::Node> DescriptionBase::UnpackToLeafNodeForImporting(co
 }
 
 template<std::convertible_to<std::string>... AStrings>
-YAML::Node DescriptionBase::UnpackToLeafNodeForExporting(YAML::Node& node, AStrings&&... nodeNames) const {
+auto DescriptionBase::UnpackToLeafNodeForExporting(YAML::Node& node, AStrings&&... nodeNames) const -> YAML::Node {
     std::array<YAML::Node, sizeof...(nodeNames)> leafNodes;
     gsl::index i = 0;
-    TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
-                 [&node, &leafNodes, &i](auto&& name) {
-                     leafNodes[i] = (i == 0 ? node : leafNodes[i - 1])[name];
-                     ++i;
-                 });
+    internal::TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
+                           [&node, &leafNodes, &i](auto&& name) {
+                               leafNodes[i] = (i == 0 ? node : leafNodes[i - 1])[name];
+                               ++i;
+                           });
     return leafNodes.back();
 }
 
 template<std::convertible_to<std::string>... AStrings>
-void DescriptionBase::PrintNodeNotFoundWarning(AStrings&&... nodeNames) const {
+auto DescriptionBase::PrintNodeNotFoundWarning(AStrings&&... nodeNames) const -> void {
     if (const auto& env = Env::BasicEnv::Instance();
-        env.GetVerboseLevel() >= Env::VL::Warning) {
+        env.VerboseLevel() >= Env::VL::Warning) {
         std::cout << "MACE::Detector::Description::DescriptionBase: YAML node \"" << fName;
-        TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
-                     [](auto&& name) {
-                         std::cout << '/' << name;
-                     });
+        internal::TupleForEach(std::tie(std::forward<AStrings>(nodeNames)...),
+                               [](auto&& name) {
+                                   std::cout << '/' << name;
+                               });
         std::cout << "\" not defined, skipping" << std::endl;
     }
 }
 
-} // namespace MACE::Detector
+} // namespace MACE::Detector::Description

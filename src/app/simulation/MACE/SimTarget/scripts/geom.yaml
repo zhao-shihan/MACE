@@ -1,0 +1,43 @@
+# SimTarget: geometry description
+
+BeamDegrader:
+  Enabled: true
+  Width: 50
+  Thickness: 0.29999999999999999
+  DistanceToTarget: 10
+BeamMonitor:
+  Enabled: false
+  Width: 40
+  Thickness: 0.5
+  DistanceToTarget: 5
+Target:
+  ShapeType: MultiLayer
+  Cuboid:
+    Width: 60
+    Thickness: 10
+    DetailType: Perforated
+    Perforated:
+      Extent: 40
+      Spacing: 0.055
+      Diameter: 0.184
+      Depth: 2
+  MultiLayer:
+    Width: 60
+    Height: 50
+    Thickness: 3
+    Spacing: 2
+    Count: 11
+    DetailType: Perforated
+    Perforated:
+      ExtentZ: 50
+      ExtentY: 40
+      Spacing: 0.055
+      Diameter: 0.184
+  SilicaAerogelDensity: 1.6852074501044058e+17
+  EffectiveTemperature: 400
+  FormationProbability: 0.65500000000000003
+  MeanFreePath: 0.00020000000000000004
+World:
+  HalfXExtent: 150
+  HalfYExtent: 150
+  HalfZExtent: 150

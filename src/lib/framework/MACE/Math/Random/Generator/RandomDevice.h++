@@ -11,10 +11,12 @@ class RandomDevice final : public UniformRandomBitGeneratorBase<RandomDevice,
 public:
     RandomDevice() = default;
 
-    auto operator()() { return fRD(); }
+    auto operator()() -> auto { return fRD(); }
 
-    static constexpr auto Min() { return std::random_device::min(); }
-    static constexpr auto Max() { return std::random_device::max(); }
+    auto Entropy() const -> auto { return fRD.entropy(); }
+
+    static constexpr auto Min() -> auto { return std::random_device::min(); }
+    static constexpr auto Max() -> auto { return std::random_device::max(); }
 
 private:
     std::random_device fRD;

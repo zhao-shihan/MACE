@@ -5,6 +5,7 @@
 
 #include "gsl/gsl"
 
+#include <functional>
 #include <utility>
 
 namespace MACE::inline Extension::stdx {

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "MACE/Simulation/Physics/Messenger/MuoniumPhysicsMessenger.h++"
+#include "MACE/Math/Clamp.h++"
+#include "MACE/Simulation/Physics/MuoniumPhysicsMessenger.h++"
 #include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
 #include "MACE/Simulation/Physics/Particle/Muonium.h++"
 #include "MACE/Simulation/Physics/TargetForMuoniumPhysics.h++"
@@ -24,26 +25,20 @@ class MuoniumFormation final : public NonMoveableBase,
 public:
     MuoniumFormation();
 
-    auto FormationProbability(G4double val) -> void { fFormationProbability = val; }
-    auto ConversionProbability(G4double val) -> void { fConversionProbability = val; }
+    auto ConversionProbability(G4double p) -> void { fConversionProbability = Math::Clamp<"[]">(p, 0., 1.); }
 
     auto IsApplicable(const G4ParticleDefinition&) -> G4bool override;
-    auto StartTracking(G4Track* track) -> void override;
     auto AtRestDoIt(const G4Track& track, const G4Step&) -> G4VParticleChange* override;
 
 private:
     auto GetMeanLifeTime(const G4Track& track, G4ForceCondition*) -> G4double override;
 
 private:
-    const G4ParticleDefinition* const fMuonium;
-    const G4ParticleDefinition* const fAntimuonium;
-    const ATarget* const fTarget;
-    CLHEP::HepRandomEngine* fRandEng;
-
-    G4double fFormationProbability;
     G4double fConversionProbability;
 
     G4ParticleChange fParticleChange;
+
+    typename MuoniumPhysicsMessenger<ATarget>::template Register<MuoniumFormation<ATarget>> fMessengerRegister;
 };
 
 } // namespace MACE::inline Simulation::inline Physics::inline Process

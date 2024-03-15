@@ -1,5 +1,7 @@
 #pragma once
 
+#include "gsl/gsl"
+
 #include <algorithm>
 #include <cstddef>
 #include <ranges>
@@ -8,7 +10,7 @@
 
 namespace MACE::inline Utility {
 
-/// @brief CETAString for 'ConstEval Template Applicable String'
+/// @brief CETAString for 'ConstEval, Template Applicable String'
 /// @tparam N Size of the string ('\0' included)
 template<std::size_t N>
 struct CETAString {
@@ -24,7 +26,7 @@ public:
     consteval CETAString(const CharString& string);
     constexpr CETAString(const CETAString&) = default;
 
-    constexpr auto CZString() const -> const auto& { return fStringDataImNotAPI.fData; }
+    constexpr auto CZString() const -> const auto& { return fStringDataImNotPublic.fData; }
     constexpr auto StringView() const -> std::string_view { return {CZString(), N - 1}; }
     auto String() const -> std::string { return {CZString(), N - 1}; }
 
@@ -32,9 +34,12 @@ public:
     constexpr operator std::string_view() const { return StringView(); }
     operator std::string() const { return String(); }
 
-    static constexpr auto HasValue() { return true; }
+    constexpr auto operator==(gsl::czstring rhs) const -> bool { return StringView() == std::string_view{rhs}; }
+    constexpr auto operator<=>(gsl::czstring rhs) const -> auto { return StringView() <=> std::string_view{rhs}; }
 
-    const Data fStringDataImNotAPI; // semantic private
+    static constexpr auto HasValue() -> bool { return true; }
+
+    const Data fStringDataImNotPublic; // semantic private
 };
 
 template<>
@@ -44,7 +49,7 @@ struct CETAString<0> {
 
     constexpr auto operator=(const CETAString&) -> CETAString& = delete;
 
-    static constexpr auto HasValue() { return false; }
+    static constexpr auto HasValue() -> bool { return false; }
 };
 
 CETAString(std::nullptr_t) -> CETAString<0>;
@@ -52,9 +57,9 @@ template<std::size_t N>
 CETAString(const char (&)[N]) -> CETAString<N>;
 
 template<std::size_t M, std::size_t N>
-constexpr auto operator==(const CETAString<M>& lhs, const CETAString<N>& rhs) { return lhs.StringView() == rhs.StringView(); }
+constexpr auto operator==(const CETAString<M>& lhs, const CETAString<N>& rhs) -> bool { return lhs.StringView() == rhs.StringView(); }
 template<std::size_t M, std::size_t N>
-constexpr auto operator<=>(const CETAString<M>& lhs, const CETAString<N>& rhs) { return lhs.StringView() <=> rhs.StringView(); }
+constexpr auto operator<=>(const CETAString<M>& lhs, const CETAString<N>& rhs) -> auto { return lhs.StringView() <=> rhs.StringView(); }
 
 } // namespace MACE::inline Utility
 

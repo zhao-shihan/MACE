@@ -1,22 +1,33 @@
 #include "MACE/Env/CLI/CLIBase.h++"
 #include "MACE/Version.h++"
 
+#include <cstdlib>
 #include <stdexcept>
 
 namespace MACE::Env::CLI {
 
 CLIBase::CLIBase() :
-    NonMoveableBase(),
-    fArguments(std::nullopt),
-    fArgParser({}, MACE_VERSION_STRING, argparse::default_arguments::none) {
-    if (static bool gInstantiated = false; gInstantiated) {
-        throw std::logic_error("MACE::Env::CLI::CLIBase: Trying to construct CLI twice");
+    NonMoveableBase{},
+    fArgcArgv{},
+    fArgParser{{}, MACE_VERSION_STRING, argparse::default_arguments::none} {
+    if (static bool gInstantiated{}; gInstantiated) {
+        throw std::logic_error{"MACE::Env::CLI::CLIBase: Trying to construct CLI twice"};
     } else {
         gInstantiated = true;
     }
 }
 
-void CLIBase::ParseArgs(int argc, char* argv[]) {
+CLIBase::~CLIBase() = default;
+
+auto CLIBase::AddMutuallyExclusiveGroup(bool required) -> argparse::ArgumentParser::MutuallyExclusiveGroup& {
+    if (not Parsed()) {
+        return fArgParser.add_mutually_exclusive_group(required);
+    } else {
+        ThrowParsed();
+    }
+}
+
+auto CLIBase::ParseArgs(int argc, char* argv[]) -> void {
     if (not Parsed()) {
         try {
             fArgParser.parse_args(argc, argv);
@@ -25,26 +36,26 @@ void CLIBase::ParseArgs(int argc, char* argv[]) {
                       << "Try: " << argv[0] << " --help" << std::endl;
             std::exit(EXIT_FAILURE);
         }
-        fArguments = {argc, argv};
+        fArgcArgv = {argc, argv};
     } else {
         ThrowParsed();
     }
 }
 
-const std::pair<int, char**>& CLIBase::GetArgcArgv() const {
+auto CLIBase::ArgcArgv() const -> ArgcArgvType {
     if (Parsed()) {
-        return fArguments.value();
+        return fArgcArgv.value();
     } else {
         ThrowNotParsed();
     }
 }
 
-[[noreturn]] void CLIBase::ThrowParsed() {
-    throw std::logic_error("MACE::Env::CLI: Command line arguments has been parsed");
+[[noreturn]] auto CLIBase::ThrowParsed() -> void {
+    throw std::logic_error{"MACE::Env::CLI: Command line arguments has been parsed"};
 }
 
-[[noreturn]] void CLIBase::ThrowNotParsed() {
-    throw std::logic_error("MACE::Env::CLI: Command line arguments has not been parsed");
+[[noreturn]] auto CLIBase::ThrowNotParsed() -> void {
+    throw std::logic_error{"MACE::Env::CLI: Command line arguments has not been parsed"};
 }
 
 } // namespace MACE::Env::CLI

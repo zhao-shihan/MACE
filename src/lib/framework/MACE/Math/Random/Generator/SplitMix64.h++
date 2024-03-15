@@ -21,8 +21,8 @@ public:
     MACE_ALWAYS_INLINE constexpr auto operator()() -> SplitMix64::ResultType;
     constexpr auto Seed(SeedType seed) -> void;
 
-    static constexpr auto Min() { return std::numeric_limits<ResultType>::min(); }
-    static constexpr auto Max() { return std::numeric_limits<ResultType>::max(); }
+    static constexpr auto Min() -> auto { return std::numeric_limits<ResultType>::min(); }
+    static constexpr auto Max() -> auto { return std::numeric_limits<ResultType>::max(); }
 
     template<Concept::Character AChar>
     friend auto operator<<(std::basic_ostream<AChar>& os, const SplitMix64& self) -> decltype(auto) { return os << self.fState; }

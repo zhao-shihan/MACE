@@ -35,13 +35,16 @@ protected:
     constexpr ~RandomNumberDistributionBase() = default;
 
 public:
-    void reset() { static_cast<ADerived*>(this)->Reset(); }
-    auto param() const { return static_cast<const ADerived*>(this)->Parameter(); }
-    void param(const AParameter& p) { static_cast<ADerived*>(this)->Parameter(p); }
-    auto min() const { return static_cast<const ADerived*>(this)->Min(); }
-    auto max() const { return static_cast<const ADerived*>(this)->Max(); }
+    auto reset() -> void { static_cast<ADerived*>(this)->Reset(); }
 
-    constexpr bool operator==(const RandomNumberDistributionBase&) const = default;
+    auto param() const -> auto { return static_cast<const ADerived*>(this)->Parameter(); }
+    auto param(const AParameter& p) -> void { static_cast<ADerived*>(this)->Parameter(p); }
+
+    auto min() const -> auto { return static_cast<const ADerived*>(this)->Min(); }
+    auto max() const -> auto { return static_cast<const ADerived*>(this)->Max(); }
+
+    constexpr auto operator==(const RandomNumberDistributionBase&) const -> bool = default;
+    constexpr auto operator<=>(const RandomNumberDistributionBase&) const -> auto = delete;
 };
 
 } // namespace MACE::Math::Random

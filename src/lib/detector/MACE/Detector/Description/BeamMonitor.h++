@@ -2,8 +2,6 @@
 
 #include "MACE/Detector/Description/DescriptionBase.h++"
 
-#include "CLHEP/Geometry/Transform3D.h"
-
 namespace MACE::Detector::Description {
 
 class BeamMonitor final : public DescriptionSingletonBase<BeamMonitor> {
@@ -14,29 +12,25 @@ private:
     ~BeamMonitor() = default;
 
 public:
-    const auto& Enabled() const { return fIsEnabled; }
-    const auto& Width() const { return fWidth; }
-    const auto& Thickness() const { return fThickness; }
-    const auto& DistanceToTargetSurface() const { return fDistanceToTargetSurface; }
+    auto Enabled() const -> auto { return fEnabled; }
+    auto Width() const -> auto { return fWidth; }
+    auto Thickness() const -> auto { return fThickness; }
+    auto DistanceToTarget() const -> auto { return fDistanceToTarget; }
 
-    void Enabled(bool val) { fIsEnabled = val; }
-    void Width(double val) { fWidth = val; }
-    void Thickness(double val) { fThickness = val; }
-    void DistanceToTargetSurface(double val) { fDistanceToTargetSurface = val; }
-
-    // Next 1 method should only use for geometry construction.
-
-    HepGeom::Transform3D CalcTransform() const;
+    auto Enabled(bool val) -> void { fEnabled = val; }
+    auto Width(double val) -> void { fWidth = val; }
+    auto Thickness(double val) -> void { fThickness = val; }
+    auto DistanceToTarget(double val) -> void { fDistanceToTarget = val; }
 
 private:
     auto ImportValues(const YAML::Node& node) -> void override;
     auto ExportValues(YAML::Node& node) const -> void override;
 
 private:
-    bool fIsEnabled;
+    bool fEnabled;
     double fWidth;
     double fThickness;
-    double fDistanceToTargetSurface;
+    double fDistanceToTarget;
 };
 
 } // namespace MACE::Detector::Description

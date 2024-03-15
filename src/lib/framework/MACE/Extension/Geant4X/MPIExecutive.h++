@@ -21,34 +21,36 @@ using Env::CLI::Geant4CLI;
 
 class MPIExecutive final : public Env::Memory::WeakSingleton<MPIExecutive> {
 public:
-    void StartSession(const Geant4CLI& cli, auto&& macFileOrCmdList) const;
-    template<typename T>
-    void StartSession(const Geant4CLI& cli, std::initializer_list<T> cmdList = {}) const;
+    MPIExecutive() = default; // prevent aggregate initialization
 
-    void StartSession(int argc, char* argv[], auto&& macFileOrCmdList) const;
+    auto StartSession(const Geant4CLI& cli, auto&& macFileOrCmdList) const -> void;
     template<typename T>
-    void StartSession(int argc, char* argv[], std::initializer_list<T> cmdList = {}) const;
+    auto StartSession(const Geant4CLI& cli, std::initializer_list<T> cmdList = {}) const -> void;
 
-    void StartInteractiveSession(int argc, char* argv[], auto&& macFileOrCmdList) const;
+    auto StartSession(int argc, char* argv[], auto&& macFileOrCmdList) const -> void;
     template<typename T>
-    void StartInteractiveSession(int argc, char* argv[], std::initializer_list<T> cmdList = {}) const;
+    auto StartSession(int argc, char* argv[], std::initializer_list<T> cmdList = {}) const -> void;
 
-    void StartBatchSession(auto&& macFileOrCmdList) const;
+    auto StartInteractiveSession(int argc, char* argv[], auto&& macFileOrCmdList) const -> void;
     template<typename T>
-    void StartBatchSession(std::initializer_list<T> cmdList) const;
+    auto StartInteractiveSession(int argc, char* argv[], std::initializer_list<T> cmdList = {}) const -> void;
+
+    auto StartBatchSession(auto&& macFileOrCmdList) const -> void;
+    template<typename T>
+    auto StartBatchSession(std::initializer_list<T> cmdList) const -> void;
 
 private:
-    void StartSessionImpl(const Geant4CLI& cli, auto&& macFileOrCmdList) const;
-    void StartSessionImpl(int argc, char* argv[], auto&& macFileOrCmdList) const;
-    void StartInteractiveSessionImpl(int argc, char* argv[], auto&& macFileOrCmdList) const;
-    void StartBatchSessionImpl(auto&& macFileOrCmdList) const;
+    auto StartSessionImpl(const Geant4CLI& cli, auto&& macFileOrCmdList) const -> void;
+    auto StartSessionImpl(int argc, char* argv[], auto&& macFileOrCmdList) const -> void;
+    auto StartInteractiveSessionImpl(int argc, char* argv[], auto&& macFileOrCmdList) const -> void;
+    auto StartBatchSessionImpl(auto&& macFileOrCmdList) const -> void;
 
-    void CheckSequential() const;
+    auto CheckSequential() const -> void;
 
-    static bool ExecuteCommand(const std::string& command);
+    static auto ExecuteCommand(const std::string& command) -> bool;
 
-    static void Execute(const std::string& macro);
-    static void Execute(const std::ranges::input_range auto& cmdList)
+    static auto Execute(const std::string& macro) -> void { G4UImanager::GetUIpointer()->ExecuteMacroFile(macro.c_str()); }
+    static auto Execute(const std::ranges::input_range auto& cmdList) -> void
         requires std::convertible_to<typename std::decay_t<decltype(cmdList)>::value_type, std::string>;
 };
 

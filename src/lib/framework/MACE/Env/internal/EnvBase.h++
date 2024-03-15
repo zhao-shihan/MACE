@@ -22,6 +22,9 @@ protected:
     ~EnvBase();
 
 private:
+    static auto CheckFundamentalType() -> void;
+
+private:
     std::unique_ptr<Memory::internal::WeakSingletonPool> fWeakSingletonPool;
     std::unique_ptr<Memory::internal::SingletonPool> fSingletonPool;
     std::unique_ptr<Memory::internal::SingletonDeleter> fSingletonDeleter;

@@ -18,7 +18,7 @@ MACE_NOINLINE auto PrintStackTrace(int depth, int skip, std::FILE* stream) -> vo
     backward::TraceResolver resolver;
     resolver.load_stacktrace(stack);
 
-    const auto lineHeader{Env::MPIEnv::Initialized() ?
+    const auto lineHeader{Env::MPIEnv::Available() ?
                               fmt::format("MPI{}> ", Env::MPIEnv::Instance().CommWorldRank()) :
                               ""};
     auto text{lineHeader + "Stack trace (most recent call last):\n"};

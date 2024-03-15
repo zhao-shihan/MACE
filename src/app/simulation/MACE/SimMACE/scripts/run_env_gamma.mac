@@ -1,0 +1,44 @@
+#############################################################################
+# Initialization settings
+#############################################################################
+
+/control/verbose 0
+/run/verbose 0
+
+#/MACE/Detector/Description/Ixport mace_geom.yaml
+
+/run/initialize
+
+/gps/particle                                  gamma
+/gps/pos/type                                  Volume
+/gps/pos/shape                                 Para
+/gps/pos/centre                                2 0 0 m
+/gps/pos/halfx                                 1 m
+/gps/pos/halfy                                 1 m
+/gps/pos/halfz                                 1 m
+/gps/ang/type                                  iso
+/gps/ene/type                                  Lin
+/gps/ene/gradient                              0
+/gps/ene/intercept                             1
+/gps/ene/min                                   1 keV
+/gps/ene/max                                   6 MeV
+/MACE/Generator/GPS/PulseWidth                 0 ns
+/MACE/Generator/GPS/PrimariesForEachG4Event    1000
+
+/MACE/Field/AcceleratorPotential          5 kilovolt
+/MACE/Field/SpectrometerMagneticField     0.1 tesla
+/MACE/Field/SolenoidMagneticField         0.1 tesla
+/MACE/Field/EMCMagneticField              0.1 tesla
+
+/MACE/Analysis/CoincidenceWithCDC     false
+/MACE/Analysis/CoincidenceWithMCP     false
+/MACE/Analysis/CoincidenceWithEMC     false
+
+#############################################################################
+# Run
+#############################################################################
+
+/MACE/Analysis/FilePath SimMACE_env_gamma
+/MACE/Analysis/FileMode NEW
+/run/beamOn 80
+/MPIRun/PrintRunSummary
