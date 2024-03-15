@@ -18,7 +18,7 @@ namespace MACE::SimMACE::Data {
 Analysis::Analysis() :
     PassiveSingleton{},
     fFilePath{"SimMACE_untitled"},
-    fFileOption{"NEW"},
+    fFileMode{"NEW"},
     fCoincidenceWithCDC{true},
     fCoincidenceWithMCP{true},
     fCoincidenceWithEMC{true},
@@ -39,11 +39,11 @@ auto Analysis::RunBegin(G4int runID) -> void {
     // open ROOT file
     auto fullFilePath{MPIX::ParallelizePath(fFilePath).replace_extension(".root").generic_string()};
     const auto filePathChanged{fullFilePath != fLastUsedFullFilePath};
-    fFile = TFile::Open(fullFilePath.c_str(), filePathChanged ? fFileOption.c_str() : "UPDATE",
+    fFile = TFile::Open(fullFilePath.c_str(), filePathChanged ? fFileMode.c_str() : "UPDATE",
                         "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
     if (fFile == nullptr) {
-        throw std::runtime_error{fmt::format("MACE::SimMACE::Analysis::RunBegin: Cannot open file '{}' with option '{}'",
-                                             fullFilePath, fFileOption)};
+        throw std::runtime_error{fmt::format("MACE::SimMACE::Analysis::RunBegin: Cannot open file '{}' with mode '{}'",
+                                             fullFilePath, fFileMode)};
     }
     fLastUsedFullFilePath = std::move(fullFilePath);
     // save geometry

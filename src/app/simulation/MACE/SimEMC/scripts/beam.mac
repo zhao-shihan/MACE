@@ -18,7 +18,7 @@
 
 /MACE/Analysis/EnableCoincidenceOfMCP     true
 
-/MACE/Analysis/FilePath   SimEMC_sig
-/MACE/Analysis/FileOption RECREATE
+/MACE/Analysis/FilePath SimEMC_sig
+/MACE/Analysis/FileMode NEW
 
 /run/beamOn 1000

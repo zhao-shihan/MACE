@@ -39,7 +39,7 @@
 # Run
 #############################################################################
 
-/MACE/Analysis/FilePath   SimMACE_beam_muplus
-/MACE/Analysis/FileOption NEW
+/MACE/Analysis/FilePath SimMACE_beam_muplus
+/MACE/Analysis/FileMode NEW
 /run/beamOn 80
 /MPIRun/PrintRunSummary

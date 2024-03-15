@@ -39,7 +39,7 @@
 # Run
 #############################################################################
 
-/MACE/Analysis/FilePath   SimMACE_signal
-/MACE/Analysis/FileOption NEW
+/MACE/Analysis/FilePath SimMACE_signal
+/MACE/Analysis/FileMode NEW
 /run/beamOn 8000
 /MPIRun/PrintRunSummary

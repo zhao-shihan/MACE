@@ -7,8 +7,8 @@
 
 /run/initialize
 
-/MACE/Analysis/FilePath   SimEMC_crmu
-/MACE/Analysis/FileOption RECREATE
+/MACE/Analysis/FilePath SimEMC_crmu
+/MACE/Analysis/FileMode NEW
 
 /run/beamOn 19350000
 /MPIRun/PrintRunSummary

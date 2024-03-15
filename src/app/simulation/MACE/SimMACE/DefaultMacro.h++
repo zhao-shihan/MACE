@@ -39,8 +39,8 @@ constexpr auto defaultMacro = {
     "/MACE/Analysis/CoincidenceWithMCP     false",
     "/MACE/Analysis/CoincidenceWithEMC     false",
     "",
-    "/MACE/Analysis/FilePath   SimMACE_vis",
-    "/MACE/Analysis/FileOption RECREATE",
+    "/MACE/Analysis/FilePath SimMACE_vis",
+    "/MACE/Analysis/FileMode RECREATE",
     "",
 
 #if MACE_USE_G4VIS

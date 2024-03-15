@@ -37,7 +37,7 @@ public:
     ~Analysis();
 
     auto FilePath(std::filesystem::path path) -> void { fFilePath = std::move(path.replace_extension()); }
-    auto FileOption(std::string option) -> void { fFileOption = std::move(option); }
+    auto FileMode(std::string mode) -> void { fFileMode = std::move(mode); }
     auto EnableYieldAnalysis(bool val) -> void { fEnableYieldAnalysis = val; }
 
     void RunBegin(gsl::not_null<const G4Run*> run);
@@ -59,7 +59,7 @@ private:
 
 private:
     std::filesystem::path fFilePath;
-    std::string fFileOption;
+    std::string fFileMode;
     bool fEnableYieldAnalysis;
 
     const G4Run* fThisRun;

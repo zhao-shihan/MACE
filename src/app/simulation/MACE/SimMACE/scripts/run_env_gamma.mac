@@ -38,7 +38,7 @@
 # Run
 #############################################################################
 
-/MACE/Analysis/FilePath   SimMACE_env_gamma
-/MACE/Analysis/FileOption NEW
+/MACE/Analysis/FilePath SimMACE_env_gamma
+/MACE/Analysis/FileMode NEW
 /run/beamOn 80
 /MPIRun/PrintRunSummary

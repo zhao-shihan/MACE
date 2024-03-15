@@ -21,7 +21,7 @@ namespace MACE::SimTarget {
 Analysis::Analysis() :
     PassiveSingleton{},
     fFilePath{"SimTarget_untitled"},
-    fFileOption{"NEW"},
+    fFileMode{"NEW"},
     fEnableYieldAnalysis{true},
     fThisRun{},
     fResultFile{},
@@ -70,11 +70,11 @@ auto Analysis::Close() -> void {
 
 auto Analysis::OpenResultFile() -> void {
     const auto fullFilePath{MPIX::ParallelizePath(fFilePath).replace_extension(".root").generic_string()};
-    fResultFile = TFile::Open(fullFilePath.c_str(), fFileOption.c_str(),
+    fResultFile = TFile::Open(fullFilePath.c_str(), fFileMode.c_str(),
                               "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
     if (fResultFile == nullptr) {
-        throw std::runtime_error{fmt::format("MACE::SimTarget::Analysis::OpenResultFile: Cannot open file '{}' with option '{}'",
-                                             fullFilePath, fFileOption)};
+        throw std::runtime_error{fmt::format("MACE::SimTarget::Analysis::OpenResultFile: Cannot open file '{}' with mode '{}'",
+                                             fullFilePath, fFileMode)};
     }
     if (Env::MPIEnv::Instance().OnCommWorldMaster()) {
         Geant4X::ConvertGeometryToTMacro("SimTarget_gdml", "SimTarget.gdml")->Write();

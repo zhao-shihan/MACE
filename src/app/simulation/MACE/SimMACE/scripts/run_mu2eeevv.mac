@@ -43,7 +43,7 @@
 # Run
 #############################################################################
 
-/MACE/Analysis/FilePath   SimMACE_mu2eeevv
-/MACE/Analysis/FileOption NEW
+/MACE/Analysis/FilePath SimMACE_mu2eeevv
+/MACE/Analysis/FileMode NEW
 /run/beamOn 100000000
 /MPIRun/PrintRunSummary

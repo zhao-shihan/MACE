@@ -29,7 +29,7 @@ public:
     Analysis();
 
     auto FilePath(std::filesystem::path path) -> void { fFilePath = std::move(path); }
-    auto FileOption(std::string option) -> void { fFileOption = std::move(option); }
+    auto FileMode(std::string mode) -> void { fFileMode = std::move(mode); }
     auto EnableCoincidenceOfEMC(G4bool val) -> void { fEnableCoincidenceOfEMC = val; }
     auto EnableCoincidenceOfMCP(G4bool val) -> void { fEnableCoincidenceOfMCP = val; }
 
@@ -44,7 +44,7 @@ public:
 
 private:
     std::filesystem::path fFilePath;
-    std::string fFileOption;
+    std::string fFileMode;
     G4bool fEnableCoincidenceOfEMC;
     G4bool fEnableCoincidenceOfMCP;
 

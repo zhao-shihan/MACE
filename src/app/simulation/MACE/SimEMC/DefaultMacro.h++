@@ -25,8 +25,8 @@ constexpr auto defaultMacro = {
     "/run/initialize",
     "",
     "# Name of output",
-    "/MACE/Analysis/FilePath   SimEMC_vis",
-    "/MACE/Analysis/FileOption RECREATE",
+    "/MACE/Analysis/FilePath SimEMC_vis",
+    "/MACE/Analysis/FileMode RECREATE",
     "",
 
 #if MACE_USE_G4VIS

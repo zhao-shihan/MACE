@@ -18,7 +18,7 @@ constexpr auto defaultMacro = {
     "",
     "# I/O & Analysis",
     "/MACE/Analysis/FilePath                        SimTarget_vis",
-    "/MACE/Analysis/FileOption                      RECREATE",
+    "/MACE/Analysis/FileMode                        RECREATE",
     "/MACE/Analysis/EnableYieldAnalysis             true",
     "",
     "# Geometry",

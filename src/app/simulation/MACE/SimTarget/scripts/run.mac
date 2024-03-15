@@ -14,7 +14,7 @@
 
 # I/O & Analysis
 /MACE/Analysis/FilePath                        SimTarget_result
-/MACE/Analysis/FileOption                      NEW
+/MACE/Analysis/FileMode                        NEW
 /MACE/Analysis/EnableYieldAnalysis             true
 
 # Geometry

@@ -13,7 +13,7 @@ AnalysisMessenger::AnalysisMessenger() :
     SingletonMessenger{},
     fDirectory{},
     fFilePath{},
-    fFileOption{},
+    fFileMode{},
     fEnableYieldAnalysis{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Analysis/");
@@ -24,10 +24,10 @@ AnalysisMessenger::AnalysisMessenger() :
     fFilePath->SetParameterName("path", false);
     fFilePath->AvailableForStates(G4State_PreInit);
 
-    fFileOption = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/FileOption", this);
-    fFileOption->SetGuidance("Set option (NEW, RECREATE, or UPDATE) for opening ROOT file(s).");
-    fFileOption->SetParameterName("option", false);
-    fFileOption->AvailableForStates(G4State_PreInit);
+    fFileMode = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/FileMode", this);
+    fFileMode->SetGuidance("Set mode (NEW, RECREATE, or UPDATE) for opening ROOT file(s).");
+    fFileMode->SetParameterName("mode", false);
+    fFileMode->AvailableForStates(G4State_PreInit);
 
     fEnableYieldAnalysis = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/EnableYieldAnalysis", this),
     fEnableYieldAnalysis->SetGuidance("Enable auto analysis of yield.");
@@ -42,9 +42,9 @@ auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> voi
         Deliver<Analysis>([&](auto&& r) {
             r.FilePath(std::string_view{value});
         });
-    } else if (command == fFileOption.get()) {
+    } else if (command == fFileMode.get()) {
         Deliver<Analysis>([&](auto&& r) {
-            r.FileOption(value);
+            r.FileMode(value);
         });
     } else if (command == fEnableYieldAnalysis.get()) {
         Deliver<Analysis>([&](auto&& r) {
