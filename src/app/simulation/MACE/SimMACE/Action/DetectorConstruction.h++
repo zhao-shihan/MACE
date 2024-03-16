@@ -21,9 +21,6 @@
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimMACE/Region.h++"
-#include "MACE/SimMACE/SD/CDCSD.h++"
-#include "MACE/SimMACE/SD/EMCSD.h++"
-#include "MACE/SimMACE/SD/MCPSD.h++"
 
 #include "G4VUserDetectorConstruction.hh"
 
@@ -32,12 +29,18 @@
 namespace MACE {
 
 namespace Detector::Definition {
-
 class DefinitionBase;
-
 } // namespace Detector::Definition
 
-namespace SimMACE::inline Action {
+namespace SimMACE {
+
+inline namespace SD {
+class CDCSD;
+class EMCSD;
+class MCPSD;
+} // namespace SD
+
+inline namespace Action {
 
 class DetectorConstruction final : public Env::Memory::PassiveSingleton<DetectorConstruction>,
                                    public G4VUserDetectorConstruction {
@@ -105,6 +108,8 @@ private:
     SD::MCPSD* fMCPSD;
 };
 
-} // namespace SimMACE::inline Action
+} // namespace Action
+
+} // namespace SimMACE
 
 } // namespace MACE
