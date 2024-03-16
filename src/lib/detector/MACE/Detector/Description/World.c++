@@ -7,7 +7,7 @@ using namespace LiteralUnit::Length;
 
 World::World() :
     DescriptionSingletonBase{"World"},
-    fHalfXExtent{3_m},
+    fHalfXExtent{2.5_m},
     fHalfYExtent{1_m},
     fHalfZExtent{4_m} {}
 

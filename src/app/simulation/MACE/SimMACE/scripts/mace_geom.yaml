@@ -69,7 +69,7 @@ EMCShield:
   MaterialName: G4_Pb
 Filter:
   Enabled: true
-  Length: 500
+  Length: 1000
   Radius: 49
   Thickness: 0.20000000000000001
   Count: 85
@@ -85,11 +85,11 @@ MCPChamber:
 ShieldingWall:
   Thickness: 500
 Solenoid:
-  S1Length: 200
-  B1Radius: 500
-  S2Length: 1000
-  B2Radius: 500
-  S3Length: 200
+  S1Length: 150
+  B1Radius: 250
+  S2Length: 1500
+  B2Radius: 250
+  S3Length: 150
   InnerRadius: 50
   OuterRadius: 100
   FieldRadius: 101
@@ -144,6 +144,6 @@ Target:
   FormationProbability: 0.65500000000000003
   MeanFreePath: 0.00020000000000000004
 World:
-  HalfXExtent: 3000
+  HalfXExtent: 2500
   HalfYExtent: 1000
   HalfZExtent: 4000

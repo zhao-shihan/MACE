@@ -11,11 +11,11 @@ using namespace MathConstant;
 Solenoid::Solenoid() :
     DescriptionSingletonBase{"Solenoid"},
     // Geometry
-    fS1Length{20_cm},
-    fB1Radius{50_cm},
-    fS2Length{100_cm},
-    fB2Radius{50_cm},
-    fS3Length{20_cm},
+    fS1Length{15_cm},
+    fB1Radius{25_cm},
+    fS2Length{150_cm},
+    fB2Radius{25_cm},
+    fS3Length{15_cm},
     fInnerRadius{50_mm},
     fOuterRadius{100_mm},
     fFieldRadius{101_mm},
