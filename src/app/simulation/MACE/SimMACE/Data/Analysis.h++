@@ -5,8 +5,8 @@
 #include "MACE/Data/SimHit.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
-#include "MACE/SimMACE/Data/Model/DecayVertex.h++"
 #include "MACE/SimMACE/Data/AnalysisMessenger.h++"
+#include "MACE/SimMACE/Data/Model/DecayVertex.h++"
 
 #include "G4Types.hh"
 
@@ -35,6 +35,7 @@ public:
     auto CoincidenceWithCDC(bool val) -> void { fCoincidenceWithMCP = val; }
     auto CoincidenceWithMCP(bool val) -> void { fCoincidenceWithMCP = val; }
     auto CoincidenceWithEMC(bool val) -> void { fCoincidenceWithEMC = val; }
+    auto SaveCDCHitData(bool val) -> void { fSaveCDCHitData = val; }
 
     auto RunBegin(G4int runID) -> void;
 
@@ -53,6 +54,7 @@ private:
     bool fCoincidenceWithCDC;
     bool fCoincidenceWithMCP;
     bool fCoincidenceWithEMC;
+    bool fSaveCDCHitData;
 
     std::filesystem::path fLastUsedFullFilePath;
 

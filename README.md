@@ -3,19 +3,17 @@
 <img align="right" src="document/picture/MACE_logo_100x100.png"/>
 
 - [MACE](#mace)
-- [Pre-compiled binaries](#pre-compiled-binaries)
+- [Pre-built binaries](#pre-built-binaries)
 - [Dependencies](#dependencies)
   - [Toolchain](#toolchain)
   - [Libraries](#libraries)
 - [Cite](#cite)
-  - [The experiment](#the-experiment)
-  - [The offline software system](#the-offline-software-system)
 
 ![SimMACE](document/picture/SimMACE_20240315.png)
 
-# Pre-compiled binaries
+# Pre-built binaries
 
-Pre-compiled binaries are available through [Apptainer](https://apptainer.org/) (formerly known as Singularity).
+Pre-built, optimized binaries are available through [Apptainer](https://apptainer.org/) (formerly known as Singularity).
 
 Obtain the apptainer image file (.sif) by
 ```shell
@@ -25,7 +23,8 @@ or
 ```shell
 apptainer pull oras://docker.io/zhaoshh/mace:openmpi
 ```
-depending on the MPI implementation you are using. For more information, please check out [the image repository homepage](https://hub.docker.com/r/zhaoshh/mace).
+depending on the MPI implementation you are using.
+For more information, please check out [the image repository homepage](https://hub.docker.com/r/zhaoshh/mace).
 
 # Dependencies
 
@@ -43,22 +42,19 @@ Required:
 1. [MPI](https://www.mpi-forum.org/) (≥ 3.0, [MPICH](https://www.mpich.org/), [OpenMPI](https://www.open-mpi.org/), [Intel MPI](https://www.intel.cn/content/www/cn/zh/developer/tools/oneapi/mpi-library.html), [Microsoft MPI](https://github.com/Microsoft/Microsoft-MPI), etc. On your frequency)
 2. [Eigen](https://eigen.tuxfamily.org/) (≥ 3.4.0)
 3. [Geant4](https://geant4.web.cern.ch/) (≥ 11.0.0, with GDML support)
-4. [ROOT](https://root.cern/) (≥ 6.28.04)
+4. [ROOT](https://root.cern/) (≥ 6.30.00)
 
 Required, built-in if not found (network or pre-downloaded source is required):
 
 1. [argparse](https://github.com/p-ranav/argparse) (≥ 2.6, built-in if not found)
 2. [backward-cpp](https://github.com/bombela/backward-cpp) (≥ 1.6, built-in if not found)
-3. [Microsoft.GSL](https://github.com/Microsoft/GSL) ([ISO C++ guidelines support library](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#gsl-guidelines-support-library)) (≥ 4.0.0, built-in if not found)
-4. [PMP](https://www.pmp-library.org/) (Polygon Mesh Processing Library) (≥ 3.0.0, built-in if not found)
-5. [yaml-cpp](https://github.com/jbeder/yaml-cpp) (≥ 0.8.0, built-in if not found)
+3. [fmt](https://github.com/fmtlib/fmt) (≥ 10.0.0, built-in if not found)
+4. [zhao-shihan/GenFit](https://github.com/zhao-shihan/GenFit) (a GenFit fork, built-in if not found)
+5. [Microsoft.GSL](https://github.com/Microsoft/GSL) ([ISO C++ guidelines support library](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#gsl-guidelines-support-library)) (≥ 4.0.0, built-in if not found)
+6. [PMP](https://www.pmp-library.org/) (Polygon Mesh Processing Library) (≥ 3.0.0, built-in if not found)
+7. [yaml-cpp](https://github.com/jbeder/yaml-cpp) (≥ 0.8.0, built-in if not found)
 
 # Cite
 
-## The experiment
-
 1. [A.-Y. Bai et al. (MACE working group), Snowmass2021 Whitepaper: Muonium to antimuonium conversion, in 2022 Snowmass Summer Study (2022), arXiv:2203.11406.](https://arxiv.org/abs/2203.11406)
-
-## The offline software system
-
-1. [Shihan Zhao and Jian Tang, Optimization of muonium yield in perforated silica aerogel, arXiv:2401.00222.](https://arxiv.org/abs/2401.00222)
+2. [Shihan Zhao and Jian Tang, Optimization of muonium yield in perforated silica aerogel, arXiv:2401.00222.](https://arxiv.org/abs/2401.00222)

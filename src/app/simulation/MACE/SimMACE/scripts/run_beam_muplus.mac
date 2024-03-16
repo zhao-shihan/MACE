@@ -35,6 +35,8 @@
 /MACE/Analysis/CoincidenceWithMCP     false
 /MACE/Analysis/CoincidenceWithEMC     false
 
+/MACE/Analysis/SaveCDCHitData         false
+
 #############################################################################
 # Run
 #############################################################################

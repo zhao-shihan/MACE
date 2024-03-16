@@ -17,7 +17,8 @@ AnalysisMessenger::AnalysisMessenger() :
     fFileMode{},
     fCoincidenceWithCDC{},
     fCoincidenceWithMCP{},
-    fCoincidenceWithEMC{} {
+    fCoincidenceWithEMC{},
+    fSaveCDCHitData{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Analysis/");
     fDirectory->SetGuidance("MACE::SimMACE::Data::Analysis controller.");
@@ -46,6 +47,11 @@ AnalysisMessenger::AnalysisMessenger() :
     fCoincidenceWithEMC->SetGuidance("Coincidence with EMC if enabled.");
     fCoincidenceWithEMC->SetParameterName("mode", false);
     fCoincidenceWithEMC->AvailableForStates(G4State_Idle);
+
+    fSaveCDCHitData = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/SaveCDCHitData", this);
+    fSaveCDCHitData->SetGuidance("Do not save CDC hit data if disabled.");
+    fSaveCDCHitData->SetParameterName("mode", false);
+    fSaveCDCHitData->AvailableForStates(G4State_Idle);
 }
 
 AnalysisMessenger::~AnalysisMessenger() = default;
@@ -70,6 +76,10 @@ auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> voi
     } else if (command == fCoincidenceWithEMC.get()) {
         Deliver<Analysis>([&](auto&& r) {
             r.CoincidenceWithEMC(fCoincidenceWithEMC->GetNewBoolValue(value));
+        });
+    } else if (command == fSaveCDCHitData.get()) {
+        Deliver<Analysis>([&](auto&& r) {
+            r.SaveCDCHitData(fSaveCDCHitData->GetNewBoolValue(value));
         });
     }
 }
