@@ -76,7 +76,9 @@ Filter:
   MaterialName: G4_Cu
 MCP:
   Diameter: 100
-  Thickness: 10
+  Thickness: 1
+  AnodeDistance: 5
+  AnodeThickness: 1
 MCPChamber:
   InnerRadius: 100
   Thickness: 0.5
