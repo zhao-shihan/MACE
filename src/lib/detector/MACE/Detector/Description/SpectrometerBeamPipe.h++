@@ -16,12 +16,14 @@ private:
 
 public:
     auto InnerRadius() const -> auto { return fInnerRadius; }
-    auto Thickness() const -> auto { return fThickness; }
-    auto Length() const -> auto { return fLength; }
+    auto BerylliumLength() const -> auto { return fBerylliumLength; }
+    auto BerylliumThickness() const -> auto { return fBerylliumThickness; }
+    auto AluminiumThickness() const -> auto { return fAluminiumThickness; }
 
     auto InnerRadius(double val) -> void { fInnerRadius = val; }
-    auto Thickness(double val) -> void { fThickness = val; }
-    auto Length(double val) -> void { fLength = val; }
+    auto BerylliumLength(double val) -> void { fBerylliumLength = val; }
+    auto BerylliumThickness(double val) -> void { fBerylliumThickness = val; }
+    auto AluminiumThickness(double val) -> void { fAluminiumThickness = val; }
 
 private:
     auto ImportValues(const YAML::Node& node) -> void override;
@@ -29,8 +31,9 @@ private:
 
 private:
     double fInnerRadius;
-    double fThickness;
-    double fLength;
+    double fBerylliumLength;
+    double fBerylliumThickness;
+    double fAluminiumThickness;
 };
 
 } // namespace MACE::Detector::Description

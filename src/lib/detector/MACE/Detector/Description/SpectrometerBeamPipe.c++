@@ -8,19 +8,22 @@ using namespace LiteralUnit::Length;
 SpectrometerBeamPipe::SpectrometerBeamPipe() :
     DescriptionSingletonBase{"SpectrometerBeamPipe"},
     fInnerRadius{10_cm},
-    fThickness{500_um},
-    fLength{120_cm} {}
+    fBerylliumLength{100_cm},
+    fBerylliumThickness{500_um},
+    fAluminiumThickness{2_mm} {}
 
 auto SpectrometerBeamPipe::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fInnerRadius, "InnerRadius");
-    ImportValue(node, fThickness, "Thickness");
-    ImportValue(node, fLength, "Length");
+    ImportValue(node, fBerylliumLength, "BerylliumLength");
+    ImportValue(node, fBerylliumThickness, "BerylliumThickness");
+    ImportValue(node, fAluminiumThickness, "AluminiumThickness");
 }
 
 auto SpectrometerBeamPipe::ExportValues(YAML::Node& node) const -> void {
     ExportValue(node, fInnerRadius, "InnerRadius");
-    ExportValue(node, fThickness, "Thickness");
-    ExportValue(node, fLength, "Length");
+    ExportValue(node, fBerylliumLength, "BerylliumLength");
+    ExportValue(node, fBerylliumThickness, "BerylliumThickness");
+    ExportValue(node, fAluminiumThickness, "AluminiumThickness");
 }
 
 } // namespace MACE::Detector::Description
