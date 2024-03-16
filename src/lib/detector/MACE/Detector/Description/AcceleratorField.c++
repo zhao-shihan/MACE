@@ -10,10 +10,10 @@ AcceleratorField::AcceleratorField() :
     DescriptionSingletonBase{"AcceleratorField"},
     // Geometry
     fRadius{75_mm},
-    fLength{80_cm},
-    fAccelerateLength{60_cm},
+    fLength{50_cm},
+    fAccelerateLength{30_cm},
     // Field
-    fAcceleratorPotential{5_kV},
+    fAcceleratorPotential{500_V},
     // Cached value
     fAcceleratorFieldStrength{fAcceleratorPotential / fAccelerateLength} {}
 
