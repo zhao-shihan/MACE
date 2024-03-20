@@ -14,7 +14,7 @@ auto Target::Construct(G4bool checkOverlaps) -> void {
     const auto& target{Description::Target::Instance()};
     const auto& acceleratorField{Description::AcceleratorField::Instance()};
 
-    switch (const auto z0{acceleratorField.Length() / 2 - acceleratorField.AccelerateLength()};
+    switch (const auto z0{(acceleratorField.UpstreamLength() - acceleratorField.AccelerateLength()) / 2};
             target.ShapeType()) {
     case Description::Target::TargetShapeType::Cuboid: {
         const auto& cuboid{target.Cuboid()};

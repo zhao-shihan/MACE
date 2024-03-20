@@ -19,11 +19,11 @@ public:
     ///////////////////////////////////////////////////////////
 
     auto Radius() const -> auto { return fRadius; }
-    auto Length() const -> auto { return fLength; }
+    auto UpstreamLength() const -> auto { return fUpstreamLength; }
     auto AccelerateLength() const -> auto { return fAccelerateLength; }
 
     auto Radius(double v) -> void { fRadius = v; }
-    auto Length(double v) -> void { fLength = v; }
+    auto UpstreamLength(double v) -> void { fUpstreamLength = v; }
     auto AccelerateLength(double v) -> void { fAccelerateLength = v, UpdateAcceleratorFieldStrength(); }
 
     ///////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ private:
     ///////////////////////////////////////////////////////////
 
     double fRadius;
-    double fLength;
+    double fUpstreamLength;
     double fAccelerateLength;
 
     ///////////////////////////////////////////////////////////
