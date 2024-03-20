@@ -84,7 +84,6 @@ auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 }
 
 auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
-    const auto scintillationTimeConstant1{Detector::Description::EMC::Instance().ScintillationTimeConstant1()};
     for (int hitID{};
          auto&& [unitID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
@@ -95,23 +94,18 @@ auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
             Get<"HitID">(*hit) = hitID++;
             assert(Get<"UnitID">(*hit) == unitID);
             fHitsCollection->insert(hit.release());
-            splitHit.clear();
         } break;
         default: {
+            const auto scintillationTimeConstant1{Detector::Description::EMC::Instance().ScintillationTimeConstant1()};
             // sort hit by time
             gfx::timsort(splitHit,
                          [](const auto& hit1, const auto& hit2) {
                              return Get<"t">(*hit1) < Get<"t">(*hit2);
                          });
             // loop over all hits on this crystal and cluster to real hits by times
-            auto windowClosingTime{Get<"t">(*splitHit.front()) + scintillationTimeConstant1};
             std::vector<std::unique_ptr<EMCHit>*> hitCandidate;
-            for (auto&& aSplitHit : splitHit) {
-                const auto timeWindowClosed{Get<"t">(*aSplitHit) > windowClosingTime};
-                if (not timeWindowClosed) {
-                    hitCandidate.emplace_back(&aSplitHit);
-                }
-                if (timeWindowClosed or aSplitHit == splitHit.back()) {
+            const auto ClusterAndInsertHit{
+                [&] {
                     // find top hit
                     const auto iTopHit{std::ranges::min_element(std::as_const(hitCandidate),
                                                                 [](const auto& hit1, const auto& hit2) {
@@ -126,17 +120,20 @@ auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                         Get<"Edep">(**topHit) += Get<"Edep">(**hit);
                     }
                     fHitsCollection->insert(topHit->release());
-                    // reset
+                }};
+            for (auto windowClosingTime{Get<"t">(*splitHit.front()) + scintillationTimeConstant1};
+                 auto&& aSplitHit : splitHit) {
+                if (Get<"t">(*aSplitHit) > windowClosingTime) {
+                    ClusterAndInsertHit();
                     hitCandidate.clear();
-                    if (timeWindowClosed) {
-                        hitCandidate.emplace_back(&aSplitHit);
-                        windowClosingTime = Get<"t">(*aSplitHit) + scintillationTimeConstant1;
-                    }
+                    windowClosingTime = Get<"t">(*aSplitHit) + scintillationTimeConstant1;
                 }
+                hitCandidate.emplace_back(&aSplitHit);
             }
-            splitHit.clear();
+            ClusterAndInsertHit();
         } break;
         }
+        splitHit.clear();
     }
     if (fEMCPMTSD != nullptr) {
         auto nHit{fEMCPMTSD->NOpticalPhotonHit()};
