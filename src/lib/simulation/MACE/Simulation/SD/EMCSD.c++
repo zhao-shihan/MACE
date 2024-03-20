@@ -1,5 +1,7 @@
 #include "MACE/Detector/Description/EMC.h++"
+#include "MACE/Extension/stdx/ranges_numeric.h++"
 #include "MACE/External/gfx/timsort.hpp"
+#include "MACE/Math/MidPoint.h++"
 #include "MACE/Simulation/SD/EMCPMTSD.h++"
 #include "MACE/Simulation/SD/EMCSD.h++"
 
@@ -20,8 +22,12 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <iterator>
+#include <functional>
+#include <numeric>
 #include <string_view>
 #include <utility>
+#include <vector>
 
 namespace MACE::inline Simulation::inline SD {
 
@@ -29,9 +35,21 @@ EMCSD::EMCSD(const G4String& sdName, const EMCPMTSD* emcPMTSD) :
     NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fEMCPMTSD{emcPMTSD},
+    fEnergyDepositionThreshold{},
     fSplitHit{},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
+    const auto& emc{Detector::Description::EMC::Instance()};
+    assert(emc.CsIEnergyBin().size() == emc.CsIScintillationComponent1().size());
+    std::vector<double> dE(emc.CsIEnergyBin().size());
+    stdx::ranges::adjacent_difference(emc.CsIEnergyBin(), dE.begin());
+    std::vector<double> spectrum(emc.CsIScintillationComponent1().size());
+    stdx::ranges::adjacent_difference(emc.CsIEnergyBin(), spectrum.begin(), Math::MidPoint<double, double>);
+    const auto integral{std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.)};
+    std::vector<double> meanE(emc.CsIEnergyBin().size());
+    stdx::ranges::adjacent_difference(emc.CsIEnergyBin(), meanE.begin(), Math::MidPoint<double, double>);
+    std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
+    fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
 }
 
 auto EMCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
@@ -49,7 +67,7 @@ auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
     const auto eDep{step.GetTotalEnergyDeposit()};
 
-    if (eDep == 0) { return false; }
+    if (eDep < fEnergyDepositionThreshold) { return false; }
     assert(eDep > 0);
 
     const auto& preStepPoint{*step.GetPreStepPoint()};
