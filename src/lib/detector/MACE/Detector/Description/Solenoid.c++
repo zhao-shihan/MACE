@@ -13,7 +13,7 @@ Solenoid::Solenoid() :
     // Geometry
     fS1Length{15_cm},
     fB1Radius{25_cm},
-    fS2Length{150_cm},
+    fS2Length{131.5_cm},
     fB2Radius{25_cm},
     fS3Length{15_cm},
     fInnerRadius{50_mm},
