@@ -3,7 +3,7 @@
 AcceleratorField:
   Radius: 75
   UpstreamLength: 100
-  AccelerateLength: 280
+  AccelerateLength: 270
   AcceleratorPotential: 0.00050000000000000001
 BeamDegrader:
   Enabled: true
