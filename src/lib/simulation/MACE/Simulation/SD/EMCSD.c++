@@ -1,5 +1,7 @@
 #include "MACE/Detector/Description/EMC.h++"
+#include "MACE/Extension/stdx/ranges_numeric.h++"
 #include "MACE/External/gfx/timsort.hpp"
+#include "MACE/Math/MidPoint.h++"
 #include "MACE/Simulation/SD/EMCPMTSD.h++"
 #include "MACE/Simulation/SD/EMCSD.h++"
 
@@ -20,8 +22,12 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <iterator>
+#include <functional>
+#include <numeric>
 #include <string_view>
 #include <utility>
+#include <vector>
 
 namespace MACE::inline Simulation::inline SD {
 
@@ -29,9 +35,21 @@ EMCSD::EMCSD(const G4String& sdName, const EMCPMTSD* emcPMTSD) :
     NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fEMCPMTSD{emcPMTSD},
+    fEnergyDepositionThreshold{},
     fSplitHit{},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
+    const auto& emc{Detector::Description::EMC::Instance()};
+    assert(emc.CsIEnergyBin().size() == emc.CsIScintillationComponent1().size());
+    std::vector<double> dE(emc.CsIEnergyBin().size());
+    stdx::ranges::adjacent_difference(emc.CsIEnergyBin(), dE.begin());
+    std::vector<double> spectrum(emc.CsIScintillationComponent1().size());
+    stdx::ranges::adjacent_difference(emc.CsIEnergyBin(), spectrum.begin(), Math::MidPoint<double, double>);
+    const auto integral{std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.)};
+    std::vector<double> meanE(emc.CsIEnergyBin().size());
+    stdx::ranges::adjacent_difference(emc.CsIEnergyBin(), meanE.begin(), Math::MidPoint<double, double>);
+    std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
+    fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
 }
 
 auto EMCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
@@ -49,7 +67,7 @@ auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
     const auto eDep{step.GetTotalEnergyDeposit()};
 
-    if (eDep == 0) { return false; }
+    if (eDep < fEnergyDepositionThreshold) { return false; }
     assert(eDep > 0);
 
     const auto& preStepPoint{*step.GetPreStepPoint()};
@@ -84,7 +102,6 @@ auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 }
 
 auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
-    const auto scintillationTimeConstant1{Detector::Description::EMC::Instance().ScintillationTimeConstant1()};
     for (int hitID{};
          auto&& [unitID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
@@ -95,23 +112,18 @@ auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
             Get<"HitID">(*hit) = hitID++;
             assert(Get<"UnitID">(*hit) == unitID);
             fHitsCollection->insert(hit.release());
-            splitHit.clear();
         } break;
         default: {
+            const auto scintillationTimeConstant1{Detector::Description::EMC::Instance().ScintillationTimeConstant1()};
             // sort hit by time
             gfx::timsort(splitHit,
                          [](const auto& hit1, const auto& hit2) {
                              return Get<"t">(*hit1) < Get<"t">(*hit2);
                          });
             // loop over all hits on this crystal and cluster to real hits by times
-            auto windowClosingTime{Get<"t">(*splitHit.front()) + scintillationTimeConstant1};
             std::vector<std::unique_ptr<EMCHit>*> hitCandidate;
-            for (auto&& aSplitHit : splitHit) {
-                const auto timeWindowClosed{Get<"t">(*aSplitHit) > windowClosingTime};
-                if (not timeWindowClosed) {
-                    hitCandidate.emplace_back(&aSplitHit);
-                }
-                if (timeWindowClosed or aSplitHit == splitHit.back()) {
+            const auto ClusterAndInsertHit{
+                [&] {
                     // find top hit
                     const auto iTopHit{std::ranges::min_element(std::as_const(hitCandidate),
                                                                 [](const auto& hit1, const auto& hit2) {
@@ -126,17 +138,20 @@ auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                         Get<"Edep">(**topHit) += Get<"Edep">(**hit);
                     }
                     fHitsCollection->insert(topHit->release());
-                    // reset
+                }};
+            for (auto windowClosingTime{Get<"t">(*splitHit.front()) + scintillationTimeConstant1};
+                 auto&& aSplitHit : splitHit) {
+                if (Get<"t">(*aSplitHit) > windowClosingTime) {
+                    ClusterAndInsertHit();
                     hitCandidate.clear();
-                    if (timeWindowClosed) {
-                        hitCandidate.emplace_back(&aSplitHit);
-                        windowClosingTime = Get<"t">(*aSplitHit) + scintillationTimeConstant1;
-                    }
+                    windowClosingTime = Get<"t">(*aSplitHit) + scintillationTimeConstant1;
                 }
+                hitCandidate.emplace_back(&aSplitHit);
             }
-            splitHit.clear();
+            ClusterAndInsertHit();
         } break;
         }
+        splitHit.clear();
     }
     if (fEMCPMTSD != nullptr) {
         auto nHit{fEMCPMTSD->NOpticalPhotonHit()};

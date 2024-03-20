@@ -5,20 +5,19 @@
 #include <memory>
 
 class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAnInteger;
 class G4UIdirectory;
 
 namespace MACE::inline Simulation::inline SD {
 
-class CDCSD;
+class MCPSD;
 
-class CDCSDMessenger final : public Geant4X::SingletonMessenger<CDCSDMessenger,
-                                                                CDCSD> {
+class MCPSDMessenger final : public Geant4X::SingletonMessenger<MCPSDMessenger,
+                                                                MCPSD> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
-    CDCSDMessenger();
-    ~CDCSDMessenger();
+    MCPSDMessenger();
+    ~MCPSDMessenger();
 
 public:
     auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
@@ -26,7 +25,6 @@ public:
 private:
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fIonizingEnergyDepositionThreshold;
-    std::unique_ptr<G4UIcmdWithAnInteger> fNMinFiredCellForQualifiedTrack;
 };
 
 } // namespace MACE::inline Simulation::inline SD

@@ -95,7 +95,7 @@ auto MPIRunManager::ConfirmBeamOnCondition() -> G4bool {
 auto MPIRunManager::DoEventLoop(G4int nEvent, const char* macroFile, G4int nSelect) -> void {
     InitializeEventLoop(nEvent, macroFile, nSelect);
     // Set name for message
-    fExecutor.ExecutionName(fmt::format("G4Run {}", currentRun->GetRunID()));
+    if (currentRun) { fExecutor.ExecutionName(fmt::format("G4Run {}", currentRun->GetRunID())); }
     // Event loop
     fExecutor.Execute(numberOfEventToBeProcessed,
                       [this](auto eventID) {

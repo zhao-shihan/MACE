@@ -9,7 +9,7 @@ Filter::Filter() :
     DescriptionSingletonBase{"Filter"},
     // Geometry
     fEnabled{true},
-    fLength{50_cm},
+    fLength{100_cm},
     fRadius{49_mm},
     fThickness{200_um},
     fCount{85},

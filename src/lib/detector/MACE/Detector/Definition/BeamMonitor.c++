@@ -22,7 +22,7 @@ auto BeamMonitor::Construct(G4bool checkOverlaps) -> void {
     const auto& target{Description::Target::Instance()};
 
     G4Transform3D transform;
-    switch (const auto z0{acceleratorField.Length() / 2 - acceleratorField.DownStreamLength()};
+    switch (const auto z0{(acceleratorField.UpstreamLength() - acceleratorField.AccelerateLength()) / 2};
             target.ShapeType()) {
     case Description::Target::TargetShapeType::Cuboid: // clang-format off
         transform = {{}, {0, 0, z0 - target.Cuboid().Thickness() - monitor.DistanceToTarget() - monitor.Thickness() / 2}};     // clang-format on

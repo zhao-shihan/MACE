@@ -18,35 +18,33 @@ public:
     // Geometry
     ///////////////////////////////////////////////////////////
 
-    const auto& Radius() const { return fRadius; }
-    const auto& Length() const { return fLength; }
-    const auto& DownStreamLength() const { return fDownStreamLength; }
+    auto Radius() const -> auto { return fRadius; }
+    auto UpstreamLength() const -> auto { return fUpstreamLength; }
+    auto AccelerateLength() const -> auto { return fAccelerateLength; }
 
-    void Radius(auto v) { fRadius = v; }
-    void Length(auto v) { fLength = v; }
-    void DownStreamLength(auto v) { (fDownStreamLength = v, UpdateAcceleratorFieldStrength()); }
-
-    HepGeom::Transform3D CalcTransform() const;
+    auto Radius(double v) -> void { fRadius = v; }
+    auto UpstreamLength(double v) -> void { fUpstreamLength = v; }
+    auto AccelerateLength(double v) -> void { fAccelerateLength = v, UpdateAcceleratorFieldStrength(); }
 
     ///////////////////////////////////////////////////////////
     // Field
     ///////////////////////////////////////////////////////////
 
-    const auto& AcceleratorPotential() const { return fAcceleratorPotential; }
+    auto AcceleratorPotential() const -> auto { return fAcceleratorPotential; }
 
-    void AcceleratorPotential(auto v) { (fAcceleratorPotential = v, UpdateAcceleratorFieldStrength()); }
+    auto AcceleratorPotential(auto v) -> void { fAcceleratorPotential = v, UpdateAcceleratorFieldStrength(); }
 
     ///////////////////////////////////////////////////////////
     // Cached value
     ///////////////////////////////////////////////////////////
 
-    const auto& AcceleratorFieldStrength() const { return fAcceleratorFieldStrength; }
+    auto AcceleratorFieldStrength() const -> auto { return fAcceleratorFieldStrength; }
 
 private:
     auto ImportValues(const YAML::Node& node) -> void override;
     auto ExportValues(YAML::Node& node) const -> void override;
 
-    void UpdateAcceleratorFieldStrength() { fAcceleratorFieldStrength = fAcceleratorPotential / fDownStreamLength; }
+    auto UpdateAcceleratorFieldStrength() -> void { fAcceleratorFieldStrength = fAcceleratorPotential / fAccelerateLength; }
 
 private:
     ///////////////////////////////////////////////////////////
@@ -54,8 +52,8 @@ private:
     ///////////////////////////////////////////////////////////
 
     double fRadius;
-    double fLength;
-    double fDownStreamLength;
+    double fUpstreamLength;
+    double fAccelerateLength;
 
     ///////////////////////////////////////////////////////////
     // Field

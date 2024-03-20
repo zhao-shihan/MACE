@@ -25,6 +25,8 @@ public:
 protected:
     const EMCPMTSD* const fEMCPMTSD;
 
+    double fEnergyDepositionThreshold;
+
     std::unordered_map<int, std::vector<std::unique_ptr<EMCHit>>> fSplitHit;
     EMCHitCollection* fHitsCollection;
 };

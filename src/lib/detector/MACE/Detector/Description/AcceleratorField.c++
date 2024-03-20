@@ -1,42 +1,36 @@
 #include "MACE/Detector/Description/AcceleratorField.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
-#include "CLHEP/Vector/Rotation.h"
-
 namespace MACE::Detector::Description {
 
 using namespace LiteralUnit::Length;
 using namespace LiteralUnit::ElectricPotential;
 
 AcceleratorField::AcceleratorField() :
-    DescriptionSingletonBase<AcceleratorField>(__func__),
+    DescriptionSingletonBase{"AcceleratorField"},
     // Geometry
-    fRadius(75_mm),
-    fLength(100_cm),
-    fDownStreamLength(60_cm),
+    fRadius{75_mm},
+    fUpstreamLength{10_cm},
+    fAccelerateLength{28_cm},
     // Field
-    fAcceleratorPotential(5_kV),
+    fAcceleratorPotential{500_V},
     // Cached value
-    fAcceleratorFieldStrength(fAcceleratorPotential / fDownStreamLength) {}
+    fAcceleratorFieldStrength{fAcceleratorPotential / fAccelerateLength} {}
 
-HepGeom::Transform3D AcceleratorField::CalcTransform() const {
-    return HepGeom::Transform3D({}, {0, 0, fDownStreamLength - fLength / 2});
-}
-
-void AcceleratorField::ImportValues(const YAML::Node& node) {
+auto AcceleratorField::ImportValues(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fRadius, "Radius");
-    ImportValue(node, fLength, "Length");
-    ImportValue(node, fDownStreamLength, "DownStreamLength");
+    ImportValue(node, fUpstreamLength, "UpstreamLength");
+    ImportValue(node, fAccelerateLength, "AccelerateLength");
     // Field
     ImportValue(node, fAcceleratorPotential, "AcceleratorPotential");
 }
 
-void AcceleratorField::ExportValues(YAML::Node& node) const {
+auto AcceleratorField::ExportValues(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fRadius, "Radius");
-    ExportValue(node, fLength, "Length");
-    ExportValue(node, fDownStreamLength, "DownStreamLength");
+    ExportValue(node, fUpstreamLength, "UpstreamLength");
+    ExportValue(node, fAccelerateLength, "AccelerateLength");
     // Field
     ExportValue(node, fAcceleratorPotential, "AcceleratorPotential");
 }

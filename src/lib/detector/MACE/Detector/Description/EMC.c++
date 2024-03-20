@@ -178,16 +178,16 @@ EMC::EMC() :
                           21.43, 20.344, 19.319, 18.363, 17.294, 16.265, 15.232, 14.053,
                           12.759, 11.486, 10.345, 9.229, 8.193, 7.198, 6.108, 5.136, 4.241,
                           3.37, 2.403, 1.447, 0.466}, // ET 9269B
-    fCsIEnergyBin{1.75e-06, 1.77e-06, 1.78e-06, 1.80e-06, 1.82e-06, 1.83e-06, 1.85e-06, 1.87e-06,
-                  1.88e-06, 1.89e-06, 1.91e-06, 1.92e-06, 1.93e-06, 1.94e-06, 1.95e-06, 1.96e-06,
-                  1.98e-06, 1.98e-06, 2.00e-06, 2.01e-06, 2.02e-06, 2.04e-06, 2.05e-06, 2.07e-06,
-                  2.08e-06, 2.09e-06, 2.11e-06, 2.11e-06, 2.13e-06, 2.15e-06, 2.16e-06, 2.18e-06,
-                  2.20e-06, 2.22e-06, 2.25e-06, 2.28e-06, 2.32e-06, 2.35e-06, 2.37e-06, 2.39e-06,
-                  2.41e-06, 2.43e-06, 2.44e-06, 2.46e-06, 2.47e-06, 2.49e-06, 2.50e-06, 2.52e-06,
-                  2.53e-06, 2.55e-06, 2.56e-06, 2.57e-06, 2.59e-06, 2.61e-06, 2.62e-06, 2.65e-06,
-                  2.67e-06, 2.69e-06, 2.72e-06, 2.74e-06, 2.77e-06, 2.80e-06, 2.84e-06, 2.87e-06,
-                  2.92e-06, 2.98e-06, 3.04e-06, 3.11e-06, 3.18e-06, 3.25e-06, 3.32e-06, 3.40e-06,
-                  3.48e-06, 3.57e-06},
+    fCsIEnergyBin{1.75_eV, 1.77_eV, 1.78_eV, 1.80_eV, 1.82_eV, 1.83_eV, 1.85_eV, 1.87_eV,
+                  1.88_eV, 1.89_eV, 1.91_eV, 1.92_eV, 1.93_eV, 1.94_eV, 1.95_eV, 1.96_eV,
+                  1.98_eV, 1.98_eV, 2.00_eV, 2.01_eV, 2.02_eV, 2.04_eV, 2.05_eV, 2.07_eV,
+                  2.08_eV, 2.09_eV, 2.11_eV, 2.11_eV, 2.13_eV, 2.15_eV, 2.16_eV, 2.18_eV,
+                  2.20_eV, 2.22_eV, 2.25_eV, 2.28_eV, 2.32_eV, 2.35_eV, 2.37_eV, 2.39_eV,
+                  2.41_eV, 2.43_eV, 2.44_eV, 2.46_eV, 2.47_eV, 2.49_eV, 2.50_eV, 2.52_eV,
+                  2.53_eV, 2.55_eV, 2.56_eV, 2.57_eV, 2.59_eV, 2.61_eV, 2.62_eV, 2.65_eV,
+                  2.67_eV, 2.69_eV, 2.72_eV, 2.74_eV, 2.77_eV, 2.80_eV, 2.84_eV, 2.87_eV,
+                  2.92_eV, 2.98_eV, 3.04_eV, 3.11_eV, 3.18_eV, 3.25_eV, 3.32_eV, 3.40_eV,
+                  3.48_eV, 3.57_eV},
     fCsIScintillationComponent1{0.126974051, 0.143090606, 0.16675108, 0.19144027, 0.216129461, 0.240818651, 0.263450409, 0.289682674,
                                 0.314886222, 0.341118487, 0.364264603, 0.390188253, 0.415186058, 0.441418323, 0.46147829, 0.48805346,
                                 0.515485894, 0.535545861, 0.562121031, 0.589553465, 0.609613432, 0.637491643, 0.666192827, 0.690367659,
@@ -203,11 +203,11 @@ EMC::EMC() :
     fResolutionScale{1} {}
 
 auto EMC::ComputeMesh() const -> MeshInformation {
-    auto pmpMesh = EMCMesh{fNSubdivision}.Generate();
+    auto pmpMesh{EMCMesh{fNSubdivision}.Generate()};
     MeshInformation mesh;
     auto& [vertex, faceList]{mesh};
-    const auto solenoidInnerRadius = Solenoid::Instance().InnerRadius();
-    const auto point = pmpMesh.vertex_property<pmp::Point>("v:point");
+    const auto solenoidInnerRadius{Solenoid::Instance().InnerRadius()};
+    const auto point{pmpMesh.vertex_property<pmp::Point>("v:point")};
 
     for (auto&& v : pmpMesh.vertices()) {
         vertex.emplace_back(VectorCast<CLHEP::Hep3Vector>(point[v]));
@@ -221,12 +221,12 @@ auto EMC::ComputeMesh() const -> MeshInformation {
             continue;
         }
 
-        const auto centroid = VectorCast<CLHEP::Hep3Vector>(pmp::centroid(pmpMesh, f));
+        const auto centroid{VectorCast<CLHEP::Hep3Vector>(pmp::centroid(pmpMesh, f))};
         if (centroid.perp2() < 1e-3) {
             continue;
         }
 
-        auto& face = faceList.emplace_back();
+        auto& face{faceList.emplace_back()};
         face.centroid = centroid;
         face.normal = VectorCast<CLHEP::Hep3Vector>(pmp::face_normal(pmpMesh, f));
 
@@ -234,14 +234,14 @@ auto EMC::ComputeMesh() const -> MeshInformation {
             face.vertexIndex.emplace_back(v.idx());
         }
 
-        const auto LocalPhi =
+        const auto LocalPhi{
             [uHat = (vertex[face.vertexIndex.front()] - face.centroid).unit(),
              vHat = face.normal.cross(vertex[face.vertexIndex.front()] - face.centroid).unit(),
              &localOrigin = face.centroid,
              &vertex = vertex](const auto& i) {
                 const auto localPoint = vertex[i] - localOrigin;
                 return std::atan2(localPoint.dot(vHat), localPoint.dot(uHat));
-            };
+            }};
         std::ranges::sort(face.vertexIndex,
                           [&LocalPhi](const auto& i, const auto& j) {
                               return LocalPhi(i) < LocalPhi(j);
@@ -250,14 +250,14 @@ auto EMC::ComputeMesh() const -> MeshInformation {
     return mesh;
 }
 auto EMC::ComputeTransformToOuterSurfaceWithOffset(int cellID, double offsetInNormalDirection) const -> HepGeom::Transform3D {
-    const auto& faceList = Mesh().fFaceList;
-    auto&& [centroid, normal, vertexIndex] = faceList[cellID];
+    const auto& faceList{Mesh().fFaceList};
+    auto&& [centroid, normal, vertexIndex]{faceList[cellID]};
 
-    const auto centroidMagnitude = centroid.mag();
-    const auto crystalOuterRadius = (fInnerRadius + fCrystalHypotenuse) * centroidMagnitude;
+    const auto centroidMagnitude{centroid.mag()};
+    const auto crystalOuterRadius{(fInnerRadius + fCrystalHypotenuse) * centroidMagnitude};
 
-    auto crystalOuterCentroid = crystalOuterRadius * centroid / centroidMagnitude;
-    auto rotation = G4Rotate3D{normal.theta(), CLHEP::HepZHat.cross(normal)};
+    const auto crystalOuterCentroid{crystalOuterRadius * centroid / centroidMagnitude};
+    const G4Rotate3D rotation{normal.theta(), CLHEP::HepZHat.cross(normal)};
 
     return G4Translate3D{crystalOuterCentroid + offsetInNormalDirection * normal} * rotation;
 }
@@ -275,13 +275,13 @@ auto EMC::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ImportValue(node, fPMTWindowThickness, "PMTWindowThickness");
     ImportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
-    // ImportValue(node, fPMTWaveLengthBin, "PMTWaveLengthBin");
-    // ImportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
-    // ImportValue(node, fCsIEnergyBin, "CsIEnergyBin");
-    // ImportValue(node, fCsIScintillationComponent1, "CsIScintillationComponent1");
-    // ImportValue(node, fScintillationYield, "ScintillationYield");
-    // ImportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
-    // ImportValue(node, fResolutionScale, "ReolutionScale");
+    ImportValue(node, fPMTWaveLengthBin, "PMTWaveLengthBin");
+    ImportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
+    ImportValue(node, fCsIEnergyBin, "CsIEnergyBin");
+    ImportValue(node, fCsIScintillationComponent1, "CsIScintillationComponent1");
+    ImportValue(node, fScintillationYield, "ScintillationYield");
+    ImportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
+    ImportValue(node, fResolutionScale, "ReolutionScale");
 
     SetGeometryOutdated();
 }
@@ -299,13 +299,13 @@ auto EMC::ExportValues(YAML::Node& node) const -> void {
     ExportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ExportValue(node, fPMTWindowThickness, "PMTWindowThickness");
     ExportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
-    // ExportValue(node, fPMTWaveLengthBin, "PMTWaveLengthBin");
-    // ExportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
-    // ExportValue(node, fCsIEnergyBin, "CsIEnergyBin");
-    // ExportValue(node, fCsIScintillationComponent1, "CsIScintillationComponent1");
-    // ExportValue(node, fScintillationYield, "ScintillationYield");
-    // ExportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
-    // ExportValue(node, fResolutionScale, "ReolutionScale");
+    ExportValue(node, fPMTWaveLengthBin, "PMTWaveLengthBin");
+    ExportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
+    ExportValue(node, fCsIEnergyBin, "CsIEnergyBin");
+    ExportValue(node, fCsIScintillationComponent1, "CsIScintillationComponent1");
+    ExportValue(node, fScintillationYield, "ScintillationYield");
+    ExportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
+    ExportValue(node, fResolutionScale, "ReolutionScale");
 }
 
 } // namespace MACE::Detector::Description

@@ -5,6 +5,9 @@
 namespace MACE::Detector::Definition {
 
 class ShieldingWall final : public DefinitionBase {
+public:
+    auto Enabled() const -> bool override;
+
 private:
     auto Construct(G4bool checkOverlaps) -> void override;
 };
