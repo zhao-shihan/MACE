@@ -64,6 +64,7 @@ auto MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
     Get<"x">(*hit) = hitPosition;
+    Get<"Edep">(*hit) = eDep;
     Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
     Get<"p">(*hit) = preStepPoint.GetMomentum();
     Get<"TrkID">(*hit) = track.GetTrackID();
@@ -107,10 +108,10 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 const auto topHit{*iTopHit};
                 // construct real hit
                 Get<"HitID">(**topHit) = hitID++;
-                /* for (auto&& hit : std::as_const(hitCandidate)) {
+                for (auto&& hit : std::as_const(hitCandidate)) {
                     if (hit == topHit) { continue; }
                     Get<"Edep">(**topHit) += Get<"Edep">(**hit);
-                } */
+                }
                 fHitsCollection->insert(topHit->release());
             }};
         for (auto windowClosingTime{Get<"t">(*fSplitHit.front()) + timeResolutionFWHM};

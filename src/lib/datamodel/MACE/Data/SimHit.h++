@@ -38,6 +38,7 @@ using EMCSimHit = TupleModel<EMCHit,
 using EMCPMTSimHit = TupleModel<EMCPMTHit /* , Value<int, "EMCHitID", "EMC Hit ID (MC truth)"> */>;
 
 using MCPSimHit = TupleModel<MCPHit,
+                             Value<float, "Edep", "Energy deposition">,
                              Value<float, "Ek", "Hit kinetic energy (MC truth)">,
                              Value<stdx::array3f, "p", "Hit momentum (MC truth)">,
                              internal::SimHitVertexTruth>;
