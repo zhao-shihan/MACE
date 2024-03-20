@@ -21,71 +21,79 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace LiteralUnit;
-using namespace MathConstant;
+using namespace LiteralUnit::Length;
+using namespace LiteralUnit::MathConstantSuffix;
+
+auto ShieldingWall::Enabled() const -> bool {
+    return Description::ShieldingWall::Instance().Enabled();
+}
 
 auto ShieldingWall::Construct(G4bool checkOverlaps) -> void {
-    const auto& shieldingWall{Description::ShieldingWall::Instance()};
+    const auto& wall{Description::ShieldingWall::Instance()};
     const auto& world{Description::World::Instance()};
     const auto& solenoid{Description::Solenoid::Instance()};
     const auto& spectrometerShield{Description::SpectrometerShield::Instance()};
     const auto& emcField{Description::EMCField::Instance()};
     const auto& emcShield{Description::EMCShield::Instance()};
 
-    const auto x1{Math::MidPoint(spectrometerShield.InnerRadius() + spectrometerShield.Thickness(),
-                                 emcField.Center()[0] - emcShield.InnerRadius() - emcShield.Thickness())};
+    const G4ThreeVector spectrometerShieldCorner{spectrometerShield.InnerRadius() + spectrometerShield.Thickness(), 0, spectrometerShield.InnerLength() / 2 + spectrometerShield.Thickness()}; // clang-format off
+    const auto emcShieldCorner{VectorCast<G4ThreeVector>(emcField.Center()) + 
+                               G4ThreeVector{-emcShield.InnerRadius() - emcShield.Thickness(), 0 , -emcShield.InnerLength() / 2 - emcShield.Thickness()}}; // clang-format on
+    const auto wall1Displacement{Math::MidPoint(spectrometerShieldCorner, emcShieldCorner)};
+
     const auto concrete{G4NistManager::Instance()->FindOrBuildMaterial("G4_CONCRETE")};
+
     { // wall 1
         const auto box{Make<G4Box>(
-            shieldingWall.Name(),
-            shieldingWall.Thickness() / 2,
+            wall.Name(),
+            wall.Thickness() / 2,
             world.HalfYExtent(),
-            world.HalfZExtent() / 2)};
+            wall.Length() / 2)};
         const auto cylinder{Make<G4Tubs>(
-            shieldingWall.Name(),
+            wall.Name(),
             0,
-            solenoid.FieldRadius() + 2_cm,
-            solenoid.S2Length() / 2 + 2_cm,
+            solenoid.FieldRadius() + 3_cm,
+            world.HalfXExtent(),
             0,
-            2 * pi)}; // clang-format off
-    const G4Transform3D wallTransform{{}, {x1, 0, world.HalfZExtent() / 2}}; // clang-format on
+            2_pi)}; // clang-format off
+    const G4Transform3D wallTransform{CLHEP::HepRotationY{-wall.Rotation()}, wall1Displacement}; // clang-format on
         const auto solid{Make<G4SubtractionSolid>(
             "_temp",
             box,
             cylinder,
-            wallTransform.inverse() * G4Transform3D{CLHEP::HepRotationY{pi / 2}, VectorCast<G4ThreeVector>(solenoid.S2Center())})};
+            wallTransform.inverse() * G4Transform3D{CLHEP::HepRotationY{0.5_pi}, VectorCast<G4ThreeVector>(solenoid.S2Center())})};
         const auto logic{Make<G4LogicalVolume>(
             solid,
             concrete,
-            shieldingWall.Name())};
+            wall.Name())};
         Make<G4PVPlacement>(
             wallTransform,
             logic,
-            shieldingWall.Name(),
+            wall.Name(),
             Mother().LogicalVolume(),
             false,
             0,
             checkOverlaps);
     }
-    { // wall 2
+    /* { // wall 2
         const auto solid{Make<G4Box>(
-            shieldingWall.Name(),
-            world.HalfXExtent() - x1 - shieldingWall.Thickness() / 2,
+            wall.Name(),
+            world.HalfXExtent() - x1 - wall.Thickness() / 2,
             world.HalfYExtent(),
-            shieldingWall.Thickness() / 2)};
+            wall.Thickness() / 2)};
         const auto logic{Make<G4LogicalVolume>(
             solid,
             concrete,
-            shieldingWall.Name())};
+            wall.Name())};
         Make<G4PVPlacement>( // clang-format off
             G4Transform3D{{}, {world.HalfXExtent(), 0, solid->GetZHalfLength()}}, // clang-format on
             logic,
-            shieldingWall.Name(),
+            wall.Name(),
             Mother().LogicalVolume(),
             false,
             0,
             checkOverlaps);
-    }
+    } */
 }
 
 } // namespace MACE::Detector::Definition

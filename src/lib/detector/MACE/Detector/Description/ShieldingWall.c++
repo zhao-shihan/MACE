@@ -5,17 +5,27 @@
 namespace MACE::Detector::Description {
 
 using namespace LiteralUnit::Length;
+using namespace LiteralUnit::Angle;
 
 ShieldingWall::ShieldingWall() :
-    DescriptionSingletonBase<ShieldingWall>("ShieldingWall"),
-    fThickness{50_cm} {}
+    DescriptionSingletonBase{"ShieldingWall"},
+    fEnabled{true},
+    fThickness{50_cm},
+    fLength{5_m},
+    fRotation{30_deg} {}
 
 auto ShieldingWall::ImportValues(const YAML::Node& node) -> void {
+    ImportValue(node, fEnabled, "Enabled");
     ImportValue(node, fThickness, "Thickness");
+    ImportValue(node, fLength, "Length");
+    ImportValue(node, fRotation, "Rotation");
 }
 
 auto ShieldingWall::ExportValues(YAML::Node& node) const -> void {
+    ExportValue(node, fEnabled, "Enabled");
     ExportValue(node, fThickness, "Thickness");
+    ExportValue(node, fLength, "Length");
+    ExportValue(node, fRotation, "Rotation");
 }
 
 } // namespace MACE::Detector::Description
