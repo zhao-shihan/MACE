@@ -132,7 +132,6 @@ auto CDCSD::BuildHitData() -> void {
             Get<"HitID">(*hit) = hitID++;
             assert(Get<"CellID">(*hit) == cellID);
             fHitsCollection->insert(hit.release());
-            splitHit.clear();
         } break;
         default: {
             // sort hit by signal time
@@ -141,19 +140,15 @@ auto CDCSD::BuildHitData() -> void {
                              return Get<"t">(*hit1) < Get<"t">(*hit2);
                          });
             // loop over all hits on this cell and cluster to real hits by signal times
-            auto windowClosingTime{Get<"t">(*splitHit.front()) + timeResolutionFWHM};
             std::vector<std::unique_ptr<CDCHit>*> hitCandidate;
-            for (auto&& aSplitHit : splitHit) {
-                const auto timeWindowClosed{Get<"t">(*aSplitHit) > windowClosingTime};
-                if (not timeWindowClosed) {
-                    hitCandidate.emplace_back(&aSplitHit);
-                }
-                if (timeWindowClosed or aSplitHit == splitHit.back()) {
+            const auto ClusterAndInsertHit{
+                [&] {
                     // find top hit
-                    const auto topHit{*std::ranges::min_element(std::as_const(hitCandidate),
-                                                                [](const auto& hit1, const auto& hit2) {
-                                                                    return Get<"TrkID">(**hit1) < Get<"TrkID">(**hit2);
-                                                                })};
+                    const auto iTopHit{*std::ranges::min_element(std::as_const(hitCandidate),
+                                                                 [](const auto& hit1, const auto& hit2) {
+                                                                     return Get<"TrkID">(**hit1) < Get<"TrkID">(**hit2);
+                                                                 })};
+                    const auto topHit{*iTopHit};
                     // construct real hit
                     Get<"HitID">(**topHit) = hitID++;
                     assert(Get<"CellID">(**topHit) == cellID);
@@ -170,17 +165,20 @@ auto CDCSD::BuildHitData() -> void {
                     Get<"tHit">(**topHit) /= nTopHit; // mean
                     *Get<"x">(**topHit) /= nTopHit;   // mean
                     fHitsCollection->insert(topHit->release());
-                    // reset
+                }};
+            for (auto windowClosingTime{Get<"t">(*splitHit.front()) + timeResolutionFWHM};
+                 auto&& aSplitHit : splitHit) {
+                if (Get<"t">(*aSplitHit) > windowClosingTime) {
+                    ClusterAndInsertHit();
                     hitCandidate.clear();
-                    if (timeWindowClosed) {
-                        hitCandidate.emplace_back(&aSplitHit);
-                        windowClosingTime = Get<"t">(*aSplitHit) + timeResolutionFWHM;
-                    }
+                    windowClosingTime = Get<"t">(*aSplitHit) + timeResolutionFWHM;
                 }
+                hitCandidate.emplace_back(&aSplitHit);
             }
-            splitHit.clear();
+            ClusterAndInsertHit();
         } break;
         }
+        splitHit.clear();
     }
 }
 
@@ -197,7 +195,7 @@ auto CDCSD::BuildTrackData() -> void {
     for (auto&& pHit : std::as_const(hitData)) {
         const auto& hit{*pHit};
         assert(Get<"TrkID">(hit) >= 0);
-        if (Get<"TrkID">(hit) != lastTrackID or pHit == hitData.back()) {
+        if (Get<"TrkID">(hit) != lastTrackID) {
             lastTrackID = Get<"TrkID">(hit);
             if (track and ssize(firedCell) >= fNMinFiredCellForQualifiedTrack) { fTrackData.emplace_back(std::move(track)); }
             track = std::make_unique_for_overwrite<Data::Tuple<Data::CDCSimTrack>>();
@@ -216,6 +214,7 @@ auto CDCSD::BuildTrackData() -> void {
         Get<"HitID">(*track)->emplace_back(Get<"HitID">(hit));
         firedCell.emplace(Get<"CellID">(hit));
     }
+    if (track and ssize(firedCell) >= fNMinFiredCellForQualifiedTrack) { fTrackData.emplace_back(std::move(track)); }
 }
 
 } // namespace MACE::inline Simulation::inline SD
