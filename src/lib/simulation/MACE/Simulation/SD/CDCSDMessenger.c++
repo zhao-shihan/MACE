@@ -10,18 +10,18 @@ namespace MACE::inline Simulation::inline SD {
 CDCSDMessenger::CDCSDMessenger() :
     SingletonMessenger{},
     fDirectory{},
-    fMinIonizingEnergyDepositionForHit{},
+    fIonizingEnergyDepositionThreshold{},
     fNMinFiredCellForQualifiedTrack{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/SD/CDC/");
     fDirectory->SetGuidance("CDC sensitive detector.");
 
-    fMinIonizingEnergyDepositionForHit = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/SD/CDC/MinIonizingEnergyDepositionForHit", this);
-    fMinIonizingEnergyDepositionForHit->SetGuidance("Minimum ionizing energy deposition in a hit.");
-    fMinIonizingEnergyDepositionForHit->SetParameterName("E", false);
-    fMinIonizingEnergyDepositionForHit->SetUnitCategory("Energy");
-    fMinIonizingEnergyDepositionForHit->SetRange("E >= 0");
-    fMinIonizingEnergyDepositionForHit->AvailableForStates(G4State_Idle);
+    fIonizingEnergyDepositionThreshold = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/SD/CDC/IonizingEnergyDepositionThreshold", this);
+    fIonizingEnergyDepositionThreshold->SetGuidance("Ionizing energy deposition threshold for a response.");
+    fIonizingEnergyDepositionThreshold->SetParameterName("E", false);
+    fIonizingEnergyDepositionThreshold->SetUnitCategory("Energy");
+    fIonizingEnergyDepositionThreshold->SetRange("E >= 0");
+    fIonizingEnergyDepositionThreshold->AvailableForStates(G4State_Idle);
 
     fNMinFiredCellForQualifiedTrack = std::make_unique<G4UIcmdWithAnInteger>("/MACE/SD/CDC/NMinFiredCellForQualifiedTrack", this);
     fNMinFiredCellForQualifiedTrack->SetGuidance("Minimum number of cells fired in a track.");
@@ -33,9 +33,9 @@ CDCSDMessenger::CDCSDMessenger() :
 CDCSDMessenger::~CDCSDMessenger() = default;
 
 auto CDCSDMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
-    if (command == fMinIonizingEnergyDepositionForHit.get()) {
+    if (command == fIonizingEnergyDepositionThreshold.get()) {
         Deliver<CDCSD>([&](auto&& r) {
-            r.MinIonizingEnergyDepositionForHit(fMinIonizingEnergyDepositionForHit->GetNewDoubleValue(value));
+            r.IonizingEnergyDepositionThreshold(fIonizingEnergyDepositionThreshold->GetNewDoubleValue(value));
         });
     } else if (command == fNMinFiredCellForQualifiedTrack.get()) {
         Deliver<CDCSD>([&](auto&& r) {

@@ -31,11 +31,8 @@ using namespace LiteralUnit::Energy;
 CDCSD::CDCSD(const G4String& sdName) :
     NonMoveableBase{},
     G4VSensitiveDetector{sdName},
-    fMinIonizingEnergyDepositionForHit{25_eV},
-    fNMinFiredCellForQualifiedTrack{[] {
-        const auto& cdc{Detector::Description::CDC::Instance()};
-        return cdc.NSenseLayerPerSuper() * cdc.NSuperLayer();
-    }()},
+    fIonizingEnergyDepositionThreshold{25_eV},
+    fNMinFiredCellForQualifiedTrack{},
     fMeanDriftVelocity{},
     fCellMap{},
     fSplitHit{},
@@ -43,15 +40,16 @@ CDCSD::CDCSD(const G4String& sdName) :
     fTrackData{},
     fMessengerRegister{this} {
     collectionName.emplace_back(sdName + "HC");
-}
 
-auto CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
     const auto& cdc{Detector::Description::CDC::Instance()};
+    fNMinFiredCellForQualifiedTrack = cdc.NSenseLayerPerSuper() * cdc.NSuperLayer();
     fMeanDriftVelocity = cdc.MeanDriftVelocity();
     fCellMap = &cdc.CellMap();
 
     fSplitHit.reserve(fCellMap->size());
+}
 
+auto CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
     fHitsCollection = new CDCHitCollection(SensitiveDetectorName, collectionName[0]);
     const auto hitsCollectionID{G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection)};
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
@@ -65,7 +63,7 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
     assert(0 <= step.GetNonIonizingEnergyDeposit());
     assert(step.GetNonIonizingEnergyDeposit() <= eDep);
-    if (eDep - step.GetNonIonizingEnergyDeposit() < fMinIonizingEnergyDepositionForHit) { return false; }
+    if (eDep - step.GetNonIonizingEnergyDeposit() < fIonizingEnergyDepositionThreshold) { return false; }
 
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
@@ -121,7 +119,6 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
 }
 
 auto CDCSD::BuildHitData() -> void {
-    const auto timeResolutionFWHM{Detector::Description::CDC::Instance().TimeResolutionFWHM()};
     for (int hitID{};
          auto&& [cellID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
@@ -134,6 +131,7 @@ auto CDCSD::BuildHitData() -> void {
             fHitsCollection->insert(hit.release());
         } break;
         default: {
+            const auto timeResolutionFWHM{Detector::Description::CDC::Instance().TimeResolutionFWHM()};
             // sort hit by signal time
             gfx::timsort(splitHit,
                          [](const auto& hit1, const auto& hit2) {
@@ -144,10 +142,10 @@ auto CDCSD::BuildHitData() -> void {
             const auto ClusterAndInsertHit{
                 [&] {
                     // find top hit
-                    const auto iTopHit{*std::ranges::min_element(std::as_const(hitCandidate),
-                                                                 [](const auto& hit1, const auto& hit2) {
-                                                                     return Get<"TrkID">(**hit1) < Get<"TrkID">(**hit2);
-                                                                 })};
+                    const auto iTopHit{std::ranges::min_element(std::as_const(hitCandidate),
+                                                                [](const auto& hit1, const auto& hit2) {
+                                                                    return Get<"TrkID">(**hit1) < Get<"TrkID">(**hit2);
+                                                                })};
                     const auto topHit{*iTopHit};
                     // construct real hit
                     Get<"HitID">(**topHit) = hitID++;

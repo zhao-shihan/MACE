@@ -21,7 +21,7 @@ class CDCSD : public NonMoveableBase,
 public:
     CDCSD(const G4String& sdName);
 
-    auto MinIonizingEnergyDepositionForHit(double e) -> void { fMinIonizingEnergyDepositionForHit = std::max(0., e); }
+    auto IonizingEnergyDepositionThreshold(double e) -> void { fIonizingEnergyDepositionThreshold = std::max(0., e); }
     auto NMinFiredCellForQualifiedTrack(int n) -> void { fNMinFiredCellForQualifiedTrack = std::max(1, n); }
 
     virtual auto Initialize(G4HCofThisEvent* hitsCollection) -> void override;
@@ -33,7 +33,7 @@ private:
     auto BuildTrackData() -> void;
 
 protected:
-    double fMinIonizingEnergyDepositionForHit;
+    double fIonizingEnergyDepositionThreshold;
     int fNMinFiredCellForQualifiedTrack;
 
     double fMeanDriftVelocity;

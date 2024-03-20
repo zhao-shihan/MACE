@@ -25,7 +25,7 @@ public:
 
 private:
     std::unique_ptr<G4UIdirectory> fDirectory;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMinIonizingEnergyDepositionForHit;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fIonizingEnergyDepositionThreshold;
     std::unique_ptr<G4UIcmdWithAnInteger> fNMinFiredCellForQualifiedTrack;
 };
 
