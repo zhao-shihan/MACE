@@ -6,7 +6,7 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/MPIX/DataType.h++"
 #include "MACE/Extension/MPIX/Execution/Executor.h++"
-#include "MACE/Utility/FindRDFEventSplitPoint.h++"
+#include "MACE/Utility/RDFEventSplitPoint.h++"
 
 #include "ROOT/RDataFrame.hxx"
 
@@ -29,13 +29,14 @@ auto main(int argc, char* argv[]) -> int {
     Env::MPIEnv env{argc, argv, {}};
 
     ROOT::RDataFrame cdcSimHit{"G4Run0/CDCSimHit", argv[1]};
-    const auto eventSplitPoint{FindRDFEventSplitPoint(cdcSimHit)};
+    const auto eventSplitPoint{RDFEventSplitPoint(cdcSimHit)};
 
     MPIX::Executor<unsigned> executor;
     executor.Execute(eventSplitPoint.size() - 1,
                      [&](auto i) {
-                         fmt::print("{} ", Data::Take<Data::CDCSimHit>::From(cdcSimHit.Range(eventSplitPoint[i], eventSplitPoint[i + 1])).size());
-                         // Data::Take<Data::CDCSimHit>::From(cdcSimHit.Range(eventSplitPoint[i], eventSplitPoint[i + 1]));
+                         // fmt::print("{} ", Data::Take<Data::CDCSimHit>::From(cdcSimHit.Range(eventSplitPoint[i], eventSplitPoint[i + 1])).size());
+                         Data::Take<Data::CDCSimHit>::From(cdcSimHit.Range(eventSplitPoint[i], eventSplitPoint[i + 1]));
+                         // *cdcSimHit.Range(eventSplitPoint[i], eventSplitPoint[i + 1]).Count();
                      });
 
     return EXIT_SUCCESS;
