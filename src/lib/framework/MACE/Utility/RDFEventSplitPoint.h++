@@ -10,6 +10,7 @@
 #include "fmt/format.h"
 
 #include <cassert>
+#include <concepts>
 #include <cstdio>
 #include <string>
 #include <unordered_set>
@@ -17,20 +18,20 @@
 
 namespace MACE::inline Utility {
 
-template<typename... Ts>
-auto FindRDFEventSplitPoint(ROOT::RDF::RInterface<Ts...> rdf, std::string eventIDBranchName = "EvtID") -> std::vector<unsigned> {
+template<std::integral T = int, typename... Ts>
+auto RDFEventSplitPoint(ROOT::RDF::RInterface<Ts...> rdf, std::string eventIDBranchName = "EvtID") -> std::vector<unsigned> {
     std::vector<unsigned> eventSplitPoint;
 
     if (Env::MPIEnv::Instance().OnCommWorldMaster()) {
         unsigned index{};
-        int lastEventID{-1};
-        std::unordered_set<int> eventIDSet;
+        T lastEventID{-1};
+        std::unordered_set<T> eventIDSet;
         rdf.Foreach(
-            [&](int eventID) {
+            [&](T eventID) {
                 assert(eventID >= 0);
                 if (eventID != lastEventID) {
                     if (not eventIDSet.emplace(eventID).second) {
-                        fmt::println(stderr, "Dataset is unordered (event {} has appeared previously), result might be incorrect", eventID);
+                        fmt::println(stderr, "Warning: Dataset is disordered (event {} has appeared previously)", eventID);
                     }
                     lastEventID = eventID;
                     eventSplitPoint.emplace_back(index);
