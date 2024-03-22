@@ -1,12 +1,13 @@
 namespace MACE::Data {
 
 template<TupleModelizable... Ts>
-auto Take<Ts...>::From(Concept::InstantiatedFrom<ROOT::RDF::RInterface> auto dataframe) -> std::vector<std::unique_ptr<Tuple<Ts...>>> {
+template<typename... Us>
+auto Take<Ts...>::From(ROOT::RDF::RInterface<Us...> rdf) -> std::vector<std::unique_ptr<Tuple<Ts...>>> {
     std::vector<std::unique_ptr<Tuple<Ts...>>> data;
-    dataframe.Foreach(TakeOne{data, gslx::make_index_sequence<Tuple<Ts...>::Size()>{}},
-                      []<gsl::index... Is>(gslx::index_sequence<Is...>) -> std::vector<std::string> {
-                          return {std::tuple_element_t<Is, Tuple<Ts...>>::Name()...};
-                      }(gslx::make_index_sequence<Tuple<Ts...>::Size()>{}));
+    rdf.Foreach(TakeOne{data, gslx::make_index_sequence<Tuple<Ts...>::Size()>{}},
+                []<gsl::index... Is>(gslx::index_sequence<Is...>) -> std::vector<std::string> {
+                    return {std::tuple_element_t<Is, Tuple<Ts...>>::Name()...};
+                }(gslx::make_index_sequence<Tuple<Ts...>::Size()>{}));
     return data;
 }
 

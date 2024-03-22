@@ -22,7 +22,8 @@ namespace MACE::Data {
 template<TupleModelizable... Ts>
 class Take : public NonConstructibleBase {
 public:
-    static auto From(Concept::InstantiatedFrom<ROOT::RDF::RInterface> auto dataframe) -> std::vector<std::unique_ptr<Tuple<Ts...>>>;
+    template<typename... Us>
+    static auto From(ROOT::RDF::RInterface<Us...> dataframe) -> std::vector<std::unique_ptr<Tuple<Ts...>>>;
 
 private:
     template<gsl::index... Is>
