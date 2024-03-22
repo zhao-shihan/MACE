@@ -18,8 +18,8 @@
 
 namespace MACE::inline Utility {
 
-template<std::integral T = int, typename... Ts>
-auto RDFEventSplitPoint(ROOT::RDF::RInterface<Ts...> rdf, std::string eventIDBranchName = "EvtID") -> std::vector<unsigned> {
+template<std::integral T = int>
+auto RDFEventSplitPoint(ROOT::RDF::RNode rdf, std::string eventIDBranchName = "EvtID") -> std::vector<unsigned> {
     std::vector<unsigned> eventSplitPoint;
 
     if (Env::MPIEnv::Instance().OnCommWorldMaster()) {
