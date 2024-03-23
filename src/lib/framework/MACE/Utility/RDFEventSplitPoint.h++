@@ -2,8 +2,7 @@
 
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/MPIX/DataType.h++"
-
-#include "ROOT/RDF/RInterface.hxx"
+#include "MACE/Extension/ROOTX/RDataFrame.h++"
 
 #include "mpi.h"
 
@@ -19,7 +18,7 @@
 namespace MACE::inline Utility {
 
 template<std::integral T = int>
-auto RDFEventSplitPoint(ROOT::RDF::RNode rdf, std::string eventIDBranchName = "EvtID") -> std::vector<unsigned> {
+auto RDFEventSplitPoint(ROOTX::RDataFrame auto&& rdf, std::string eventIDBranchName = "EvtID") -> std::vector<unsigned> {
     std::vector<unsigned> eventSplitPoint;
 
     if (Env::MPIEnv::Instance().OnCommWorldMaster()) {
