@@ -36,6 +36,7 @@ constexpr auto defaultMacro = {
     "/MACE/Field/EMCMagneticField              0.1 tesla",
     "",
     "/MACE/Analysis/CoincidenceWithCDC     false",
+    "/MACE/Analysis/CoincidenceWithTTC     false",
     "/MACE/Analysis/CoincidenceWithMCP     false",
     "/MACE/Analysis/CoincidenceWithEMC     false",
     "",
