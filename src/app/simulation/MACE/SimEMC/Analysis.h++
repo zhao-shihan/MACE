@@ -30,8 +30,8 @@ public:
 
     auto FilePath(std::filesystem::path path) -> void { fFilePath = std::move(path); }
     auto FileMode(std::string mode) -> void { fFileMode = std::move(mode); }
-    auto EnableCoincidenceOfEMC(G4bool val) -> void { fEnableCoincidenceOfEMC = val; }
-    auto EnableCoincidenceOfMCP(G4bool val) -> void { fEnableCoincidenceOfMCP = val; }
+    auto CoincidenceWithEMC(G4bool val) -> void { fCoincidenceWithEMC = val; }
+    auto CoincidenceWithMCP(G4bool val) -> void { fCoincidenceWithMCP = val; }
 
     auto RunBegin(G4int runID) -> void;
 
@@ -45,8 +45,8 @@ public:
 private:
     std::filesystem::path fFilePath;
     std::string fFileMode;
-    G4bool fEnableCoincidenceOfEMC;
-    G4bool fEnableCoincidenceOfMCP;
+    G4bool fCoincidenceWithEMC;
+    G4bool fCoincidenceWithMCP;
 
     std::filesystem::path fLastUsedFullFilePath;
 
