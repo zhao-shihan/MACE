@@ -71,8 +71,7 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     assert(eDep > 0);
 
     const auto& preStepPoint{*step.GetPreStepPoint()};
-    const auto& touchable{*preStepPoint.GetTouchable()};
-    const auto detectorID{touchable.GetReplicaNumber()};
+    const auto detectorID{preStepPoint.GetTouchable()->GetReplicaNumber()};
     // calculate (Ek0, p0)
     const auto vertexEk{track.GetVertexKineticEnergy()};
     const auto vertexMomentum{track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()))};
@@ -84,9 +83,9 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"DetID">(*hit) = detectorID;
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
-    Get<"Edep">(*hit) = step.GetTotalEnergyDeposit();
+    Get<"Edep">(*hit) = eDep;
     Get<"nOptPho">(*hit) = -1; // to be determined
-    Get<"x">(*hit) = *touchable.GetRotation() * (preStepPoint.GetPosition() - touchable.GetTranslation());
+    Get<"x">(*hit) = preStepPoint.GetPosition();
     Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
     Get<"p">(*hit) = preStepPoint.GetMomentum();
     Get<"TrkID">(*hit) = track.GetTrackID();
