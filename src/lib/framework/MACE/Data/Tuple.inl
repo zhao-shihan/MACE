@@ -7,18 +7,6 @@ constexpr EnableGet<ADerived>::EnableGet() {
 }
 
 template<TupleModelizable... Ts>
-constexpr Tuple<Ts...>::Tuple(std::convertible_to<Ts> auto&&... values) :
-    fTuple{std::forward<decltype(values)>(values)...} {}
-
-template<TupleModelizable... Ts>
-constexpr Tuple<Ts...>::Tuple(const typename std::conditional_t<requires { typename Ts::Type; }, Ts, Dummy>::Type&... values) :
-    fTuple{values...} {}
-
-template<TupleModelizable... Ts>
-constexpr Tuple<Ts...>::Tuple(typename std::conditional_t<requires { typename Ts::Type; }, Ts, Dummy>::Type&&... values) :
-    fTuple{std::move(values)...} {}
-
-template<TupleModelizable... Ts>
 template<TupleLike ATuple>
 constexpr auto Tuple<Ts...>::operator==(const ATuple& that) const -> auto {
     if constexpr (not TupleEquivalent<Tuple, ATuple>) { return false; }

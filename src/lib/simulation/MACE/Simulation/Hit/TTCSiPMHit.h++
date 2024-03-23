@@ -9,10 +9,10 @@
 
 namespace MACE::inline Simulation::inline Hit {
 
-class EMCPMTHit final : public Geant4X::UseG4Allocator<EMCPMTHit>,
-                        public G4VHit,
-                        public Data::Tuple<Data::EMCPMTSimHit> {};
+class TTCSiPMHit final : public Geant4X::UseG4Allocator<TTCSiPMHit>,
+                         public G4VHit,
+                         public Data::Tuple<Data::TTCSiPMSimHit> {};
 
-using EMCPMTHitCollection = G4THitsCollection<EMCPMTHit>;
+using TTCSiPMHitCollection = G4THitsCollection<TTCSiPMHit>;
 
 } // namespace MACE::inline Simulation::inline Hit

@@ -20,6 +20,19 @@ using CDCHit = TupleModel<internal::HitEventIDHitID,
                           Value<float, "d", "Drift distance">,
                           Value<float, "Edep", "Energy deposition">>;
 
+using TTCHit = TupleModel<internal::HitEventIDHitID,
+                          Value<short, "DetID", "Hit detector ID">,
+                          Value<double, "t", "Hit time">,
+                          Value<float, "Edep", "Energy deposition">>;
+
+using TTCSiPMHit = TupleModel<internal::HitEventIDHitID,
+                              Value<short, "DetID", "Hit detector ID">,
+                              Value<double, "t", "Hit time">>;
+
+using MCPHit = TupleModel<internal::HitEventIDHitID,
+                          Value<double, "t", "Hit time">,
+                          Value<stdx::array2f, "x", "Hit position">>;
+
 using EMCHit = TupleModel<internal::HitEventIDHitID,
                           Value<short, "UnitID", "Hit unit ID">,
                           Value<double, "t", "Hit time">,
@@ -28,9 +41,5 @@ using EMCHit = TupleModel<internal::HitEventIDHitID,
 using EMCPMTHit = TupleModel<internal::HitEventIDHitID,
                              Value<short, "UnitID", "Hit unit ID">,
                              Value<double, "t", "Hit time">>;
-
-using MCPHit = TupleModel<internal::HitEventIDHitID,
-                          Value<double, "t", "Hit time">,
-                          Value<stdx::array2f, "x", "Hit position">>;
 
 } // namespace MACE::Data

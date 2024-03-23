@@ -9,14 +9,15 @@ namespace MACE::SimMACE {
 enum struct RegionType {
     CDCFieldWire,
     CDCSenseWire,
+    CDCSensitive,
     DefaultGaseous,
     DefaultSolid,
     EMCSensitive,
     MCPSensitive,
     Shield,
     SolenoidOrMagnet,
-    CDCSensitive,
     Target,
+    TTCSensitive,
     Vacuum
 };
 

@@ -16,6 +16,7 @@ AnalysisMessenger::AnalysisMessenger() :
     fFilePath{},
     fFileMode{},
     fCoincidenceWithCDC{},
+    fCoincidenceWithTTC{},
     fCoincidenceWithMCP{},
     fCoincidenceWithEMC{},
     fSaveCDCHitData{} {
@@ -37,6 +38,11 @@ AnalysisMessenger::AnalysisMessenger() :
     fCoincidenceWithCDC->SetGuidance("Coincidence with CDC if enabled.");
     fCoincidenceWithCDC->SetParameterName("mode", false);
     fCoincidenceWithCDC->AvailableForStates(G4State_Idle);
+
+    fCoincidenceWithTTC = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/CoincidenceWithTTC", this);
+    fCoincidenceWithTTC->SetGuidance("Coincidence with TTC if enabled.");
+    fCoincidenceWithTTC->SetParameterName("mode", false);
+    fCoincidenceWithTTC->AvailableForStates(G4State_Idle);
 
     fCoincidenceWithMCP = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/CoincidenceWithMCP", this);
     fCoincidenceWithMCP->SetGuidance("Coincidence with MCP if enabled.");
@@ -68,6 +74,10 @@ auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> voi
     } else if (command == fCoincidenceWithCDC.get()) {
         Deliver<Analysis>([&](auto&& r) {
             r.CoincidenceWithCDC(fCoincidenceWithCDC->GetNewBoolValue(value));
+        });
+    } else if (command == fCoincidenceWithTTC.get()) {
+        Deliver<Analysis>([&](auto&& r) {
+            r.CoincidenceWithTTC(fCoincidenceWithTTC->GetNewBoolValue(value));
         });
     } else if (command == fCoincidenceWithMCP.get()) {
         Deliver<Analysis>([&](auto&& r) {

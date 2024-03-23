@@ -29,8 +29,8 @@ private:
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithAString> fFilePath;
     std::unique_ptr<G4UIcmdWithAString> fFileMode;
-    std::unique_ptr<G4UIcmdWithABool> fEnableCoincidenceOfEMC;
-    std::unique_ptr<G4UIcmdWithABool> fEnableCoincidenceOfMCP;
+    std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithEMC;
+    std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithMCP;
 };
 
 } // namespace Messenger

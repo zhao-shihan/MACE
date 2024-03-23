@@ -19,8 +19,8 @@ Analysis::Analysis() :
     PassiveSingleton{},
     fFilePath{"SimEMC_untitled"},
     fFileMode{"NEW"},
-    fEnableCoincidenceOfEMC{true},
-    fEnableCoincidenceOfMCP{false},
+    fCoincidenceWithEMC{true},
+    fCoincidenceWithMCP{false},
     fLastUsedFullFilePath{},
     fFile{},
     fEMCSimHitOutput{},
@@ -56,8 +56,8 @@ auto Analysis::RunBegin(G4int runID) -> void {
 }
 
 auto Analysis::EventEnd() -> void {
-    const auto emcTriggered{not fEnableCoincidenceOfEMC or fEMCHit == nullptr or fEMCHit->size() > 0};
-    const auto mcpTriggered{not fEnableCoincidenceOfMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
+    const auto emcTriggered{not fCoincidenceWithEMC or fEMCHit == nullptr or fEMCHit->size() > 0};
+    const auto mcpTriggered{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
     if (emcTriggered and mcpTriggered) {
         if (fEMCHit) { *fEMCSimHitOutput << *fEMCHit; }
         if (fEMCPMTHit) { *fEMCPMTSimHitOutput << *fEMCPMTHit; }
