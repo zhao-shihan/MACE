@@ -39,6 +39,7 @@ inline namespace SD {
 class CDCSD;
 class EMCSD;
 class MCPSD;
+class TTCSD;
 } // namespace SD
 
 inline namespace Action {
@@ -63,9 +64,10 @@ public:
     auto TTCSensitiveRegion() const -> const auto& { return *fTTCSensitiveRegion; }
     auto VacuumRegion() const -> const auto& { return *fVacuumRegion; }
 
-    auto EMCSD() const -> auto& { return *fEMCSD; }
     auto CDCSD() const -> auto& { return *fCDCSD; }
+    auto TTCSD() const -> auto& { return *fTTCSD; }
     auto MCPSD() const -> auto& { return *fMCPSD; }
+    auto EMCSD() const -> auto& { return *fEMCSD; }
 
 public:
     using DescriptionInUse = std::tuple<Detector::Description::AcceleratorField,
@@ -108,8 +110,9 @@ private:
     Region* fVacuumRegion;
 
     SD::CDCSD* fCDCSD;
-    SD::EMCSD* fEMCSD;
+    SD::TTCSD* fTTCSD;
     SD::MCPSD* fMCPSD;
+    SD::EMCSD* fEMCSD;
 };
 
 } // namespace Action

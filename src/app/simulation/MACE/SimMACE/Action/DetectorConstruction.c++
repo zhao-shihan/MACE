@@ -41,6 +41,7 @@
 #include "MACE/SimMACE/SD/CDCSD.h++"
 #include "MACE/SimMACE/SD/EMCSD.h++"
 #include "MACE/SimMACE/SD/MCPSD.h++"
+#include "MACE/SimMACE/SD/TTCSD.h++"
 #include "MACE/Simulation/Field/AcceleratorField.h++"
 #include "MACE/Simulation/Field/EMCField.h++"
 #include "MACE/Simulation/Field/SolenoidB1Field.h++"
@@ -79,11 +80,9 @@ DetectorConstruction::DetectorConstruction() :
     fTTCSensitiveRegion{},
     fVacuumRegion{},
     fCDCSD{},
-    fEMCSD{},
-    fMCPSD{} {
-    /*     Detector::Description::DescriptionIO::Import<DescriptionInUse>(
-    #include "MACE/SimMACE/DefaultGeometry.inlyaml"
-        ); */
+    fTTCSD{},
+    fMCPSD{},
+    fEMCSD{} {
     DetectorMessenger::EnsureInstantiation();
 }
 
@@ -284,11 +283,14 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         fCDCSD = new SD::CDCSD{Detector::Description::CDC::Instance().Name()};
         cdcCell.RegisterSD("CDCSensitiveVolume", fCDCSD);
 
-        fEMCSD = new SD::EMCSD{Detector::Description::EMC::Instance().Name()};
-        emcCrystal.RegisterSD(fEMCSD);
+        fTTCSD = new SD::TTCSD{Detector::Description::TTC::Instance().Name()};
+        ttc.RegisterSD(fTTCSD);
 
         fMCPSD = new SD::MCPSD{Detector::Description::MCP::Instance().Name()};
         mcp.RegisterSD(fMCPSD);
+
+        fEMCSD = new SD::EMCSD{Detector::Description::EMC::Instance().Name()};
+        emcCrystal.RegisterSD(fEMCSD);
     }
 
     ////////////////////////////////////////////////////////////////
