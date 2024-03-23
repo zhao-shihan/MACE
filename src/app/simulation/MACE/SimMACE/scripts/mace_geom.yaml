@@ -344,7 +344,7 @@ EMCShield:
   MaterialName: G4_Pb
 Filter:
   Enabled: true
-  Length: 1000
+  Length: 500
   Radius: 49
   Thickness: 0.20000000000000001
   Count: 85
