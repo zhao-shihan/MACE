@@ -15,4 +15,4 @@ class EMCPMTHit final : public Geant4X::UseG4Allocator<EMCPMTHit>,
 
 using EMCPMTHitCollection = G4THitsCollection<EMCPMTHit>;
 
-} // namespace MACE::Simulation::inline Hit
+} // namespace MACE::inline Simulation::inline Hit
