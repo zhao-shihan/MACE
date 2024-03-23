@@ -111,6 +111,7 @@
 /vis/geometry/set/colour SpectrometerMagnet            0     1     1     1     0.05
 /vis/geometry/set/colour SpectrometerShield            0     1     1     1     0.05
 /vis/geometry/set/colour Target                        0     1     1     1     0.1
+/vis/geometry/set/colour TTC                           0     1     1     1     0.05
 /vis/geometry/set/colour World                         0     1     1     1     0.001
 #/vis/geometry/set/colour CarbonFoil                    80    1.0   1.0   1.0   0.5
 

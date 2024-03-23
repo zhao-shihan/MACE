@@ -8,8 +8,8 @@ using namespace LiteralUnit::Length;
 SpectrometerMagnet::SpectrometerMagnet() :
     DescriptionSingletonBase{"SpectrometerMagnet"},
     // Geometry
-    fInnerRadius{50_cm},
-    fOuterRadius{55_cm},
+    fInnerRadius{55_cm},
+    fOuterRadius{60_cm},
     fLength{218_cm},
     // Material
     fMaterialName{"G4_Cu"} {}

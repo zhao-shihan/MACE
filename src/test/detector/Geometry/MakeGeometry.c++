@@ -29,6 +29,7 @@
 #include "MACE/Detector/Definition/SpectrometerField.h++"
 #include "MACE/Detector/Definition/SpectrometerMagnet.h++"
 #include "MACE/Detector/Definition/SpectrometerShield.h++"
+#include "MACE/Detector/Definition/TTC.h++"
 #include "MACE/Detector/Definition/Target.h++"
 #include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Description/DescriptionIO.h++"
@@ -60,60 +61,61 @@ int main(int argc, char* argv[]) {
 
     // 1
 
-    auto& emcField = fWorld->NewDaughter<EMCField>(fCheckOverlap);
-    auto& emcShield = fWorld->NewDaughter<EMCShield>(fCheckOverlap);
-    auto& solenoidB1Field = fWorld->NewDaughter<SolenoidB1Field>(fCheckOverlap);
-    auto& solenoidB2Field = fWorld->NewDaughter<SolenoidB2Field>(fCheckOverlap);
-    auto& solenoidS1Field = fWorld->NewDaughter<SolenoidS1Field>(fCheckOverlap);
-    auto& solenoidS2Field = fWorld->NewDaughter<SolenoidS2Field>(fCheckOverlap);
-    auto& solenoidS3Field = fWorld->NewDaughter<SolenoidS3Field>(fCheckOverlap);
-    auto& spectrometerField = fWorld->NewDaughter<SpectrometerField>(fCheckOverlap);
-    auto& spectrometerShield = fWorld->NewDaughter<SpectrometerShield>(fCheckOverlap);
-    auto& shieldingWall = fWorld->NewDaughter<ShieldingWall>(fCheckOverlap);
+    auto& emcField{fWorld->NewDaughter<EMCField>(fCheckOverlap)};
+    auto& emcShield{fWorld->NewDaughter<EMCShield>(fCheckOverlap)};
+    auto& solenoidB1Field{fWorld->NewDaughter<SolenoidB1Field>(fCheckOverlap)};
+    auto& solenoidB2Field{fWorld->NewDaughter<SolenoidB2Field>(fCheckOverlap)};
+    auto& solenoidS1Field{fWorld->NewDaughter<SolenoidS1Field>(fCheckOverlap)};
+    auto& solenoidS2Field{fWorld->NewDaughter<SolenoidS2Field>(fCheckOverlap)};
+    auto& solenoidS3Field{fWorld->NewDaughter<SolenoidS3Field>(fCheckOverlap)};
+    auto& spectrometerField{fWorld->NewDaughter<SpectrometerField>(fCheckOverlap)};
+    auto& spectrometerShield{fWorld->NewDaughter<SpectrometerShield>(fCheckOverlap)};
+    auto& shieldingWall{fWorld->NewDaughter<ShieldingWall>(fCheckOverlap)};
 
     // 2
 
-    auto& emcCrystal = emcField.NewDaughter<EMCCrystal>(fCheckOverlap);
-    auto& emcMagnet = emcField.NewDaughter<EMCMagnet>(fCheckOverlap);
-    auto& emcPMTAssemblies = emcField.NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
-    /* auto& mcp = */ emcField.NewDaughter<MCP>(fCheckOverlap);
-    /* auto& mcpChamber = */ emcField.NewDaughter<MCPChamber>(fCheckOverlap);
+    auto& emcCrystal{emcField.NewDaughter<EMCCrystal>(fCheckOverlap)};
+    auto& emcMagnet{emcField.NewDaughter<EMCMagnet>(fCheckOverlap)};
+    auto& emcPMTAssemblies{emcField.NewDaughter<EMCPMTAssemblies>(fCheckOverlap)};
+    /* auto& mcp */ emcField.NewDaughter<MCP>(fCheckOverlap);
+    /* auto& mcpChamber */ emcField.NewDaughter<MCPChamber>(fCheckOverlap);
 
-    auto& solenoidB1 = solenoidB1Field.NewDaughter<SolenoidB1>(fCheckOverlap);
+    auto& solenoidB1{solenoidB1Field.NewDaughter<SolenoidB1>(fCheckOverlap)};
 
-    auto& solenoidS1 = solenoidS1Field.NewDaughter<SolenoidS1>(fCheckOverlap);
+    auto& solenoidS1{solenoidS1Field.NewDaughter<SolenoidS1>(fCheckOverlap)};
 
-    auto& solenoidB2 = solenoidB2Field.NewDaughter<SolenoidB2>(fCheckOverlap);
+    auto& solenoidB2{solenoidB2Field.NewDaughter<SolenoidB2>(fCheckOverlap)};
 
-    /* auto& filter = */ solenoidS2Field.NewDaughter<Filter>(fCheckOverlap);
-    auto& solenoidS2 = solenoidS2Field.NewDaughter<SolenoidS2>(fCheckOverlap);
+    /* auto& filter */ solenoidS2Field.NewDaughter<Filter>(fCheckOverlap);
+    auto& solenoidS2{solenoidS2Field.NewDaughter<SolenoidS2>(fCheckOverlap)};
 
-    auto& acceleratorField = spectrometerField.NewDaughter<AcceleratorField>(fCheckOverlap);
-    auto& cdcBody = spectrometerField.NewDaughter<CDCBody>(fCheckOverlap);
-    /* auto& spectrometerBeamPipe = */ spectrometerField.NewDaughter<SpectrometerBeamPipe>(fCheckOverlap);
-    auto& spectrometerMagnet = spectrometerField.NewDaughter<SpectrometerMagnet>(fCheckOverlap);
+    auto& acceleratorField{spectrometerField.NewDaughter<AcceleratorField>(fCheckOverlap)};
+    auto& cdcBody{spectrometerField.NewDaughter<CDCBody>(fCheckOverlap)};
+    /* auto& spectrometerBeamPipe */ spectrometerField.NewDaughter<SpectrometerBeamPipe>(fCheckOverlap);
+    auto& spectrometerMagnet{spectrometerField.NewDaughter<SpectrometerMagnet>(fCheckOverlap)};
+    /* auto& ttc */ spectrometerField.NewDaughter<TTC>(fCheckOverlap);
 
-    auto& solenoidS3 = solenoidS3Field.NewDaughter<SolenoidS3>(fCheckOverlap);
+    auto& solenoidS3{solenoidS3Field.NewDaughter<SolenoidS3>(fCheckOverlap)};
 
     // 3
 
-    auto& cdcGas = cdcBody.NewDaughter<CDCGas>(fCheckOverlap);
+    auto& cdcGas{cdcBody.NewDaughter<CDCGas>(fCheckOverlap)};
 
-    /* auto& beamDegrader = */ acceleratorField.NewDaughter<BeamDegrader>(fCheckOverlap);
-    /* auto& beamMonitor = */ acceleratorField.NewDaughter<BeamMonitor>(fCheckOverlap);
-    /* auto& target = */ acceleratorField.NewDaughter<Target>(fCheckOverlap);
+    /* auto& beamDegrader */ acceleratorField.NewDaughter<BeamDegrader>(fCheckOverlap);
+    /* auto& beamMonitor */ acceleratorField.NewDaughter<BeamMonitor>(fCheckOverlap);
+    /* auto& target */ acceleratorField.NewDaughter<Target>(fCheckOverlap);
 
     // 4
 
-    auto& cdcSuperLayer = cdcGas.NewDaughter<CDCSuperLayer>(fCheckOverlap);
+    auto& cdcSuperLayer{cdcGas.NewDaughter<CDCSuperLayer>(fCheckOverlap)};
 
     // 5
 
-    auto& cdcSenseLayer = cdcSuperLayer.NewDaughter<CDCSenseLayer>(fCheckOverlap);
+    auto& cdcSenseLayer{cdcSuperLayer.NewDaughter<CDCSenseLayer>(fCheckOverlap)};
 
     // 6
 
-    /* auto& cdcCell = */ cdcSenseLayer.NewDaughter<CDCCell>(fCheckOverlap);
+    /* auto& cdcCell */ cdcSenseLayer.NewDaughter<CDCCell>(fCheckOverlap);
 
     ////////////////////////////////////////////////////////////////
     // Register materials

@@ -384,8 +384,8 @@ SpectrometerField:
   Length: 2200
   MagneticFluxDensity: 0.0001
 SpectrometerMagnet:
-  InnerRadius: 500
-  OuterRadius: 550
+  InnerRadius: 550
+  OuterRadius: 600
   Length: 2180
   MaterialName: G4_Cu
 SpectrometerShield:
@@ -395,6 +395,16 @@ SpectrometerShield:
   WindowRadius: 30
   BeamSlantAngle: 0
   MaterialName: G4_Pb
+TTC:
+  Length: 150
+  Width: 100
+  Thickness: 10
+  DistanceToCDC: 480
+  SlantAngle: 0.26179938779914941
+  NAlongPhi: 42
+  NAlongZ: 18
+  MaterialName: G4_PLASTIC_SC_VINYLTOLUENE
+  TimeResolutionFWHM: 0.050000000000000003
 Target:
   ShapeType: MultiLayer
   Cuboid:
