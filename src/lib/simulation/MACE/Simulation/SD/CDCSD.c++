@@ -98,8 +98,8 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"d">(*hit) = driftDistance;
     Get<"Edep">(*hit) = eDep;
     Get<"tHit">(*hit) = hitTime;
-    Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
     Get<"x">(*hit) = position;
+    Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
     Get<"p">(*hit) = preStepPoint.GetMomentum();
     Get<"TrkID">(*hit) = track.GetTrackID();
     Get<"PDGID">(*hit) = particle.GetPDGEncoding();
