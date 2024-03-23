@@ -24,7 +24,7 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
         ttc.Width() / 2)};
     const auto logic{Make<G4LogicalVolume>(
         solid,
-        G4NistManager::Instance()->FindOrBuildMaterial(ttc.MaterialName()),
+        G4NistManager::Instance()->BuildMaterialWithNewDensity("TTC_PS101", "G4_POLYSTYRENE", ttc.Density()),
         ttc.Name())};
     int detectorID{};
     const auto deltaPhi{2_pi / ttc.NAlongPhi()};
