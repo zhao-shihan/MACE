@@ -358,44 +358,7 @@ MCP:
 MCPChamber:
   InnerRadius: 100
   Thickness: 0.5
-ShieldingWall:
-  Enabled: true
-  Thickness: 500
-  Length: 5000
-  Rotation: 0.52359877559829882
-Solenoid:
-  S1Length: 150
-  B1Radius: 250
-  S2Length: 1315
-  B2Radius: 250
-  S3Length: 150
-  InnerRadius: 50
-  OuterRadius: 100
-  FieldRadius: 101
-  MaterialName: G4_Cu
-  MagneticFluxDensity: 0.0001
-SpectrometerBeamPipe:
-  InnerRadius: 100
-  BerylliumLength: 1000
-  BerylliumThickness: 0.5
-  AluminiumThickness: 2
-SpectrometerField:
-  Radius: 610
-  Length: 2200
-  MagneticFluxDensity: 0.0001
-SpectrometerMagnet:
-  InnerRadius: 550
-  OuterRadius: 600
-  Length: 2180
-  MaterialName: G4_Cu
-SpectrometerShield:
-  InnerRadius: 620
-  InnerLength: 2220
-  Thickness: 50
-  WindowRadius: 30
-  BeamSlantAngle: 0
-  MaterialName: G4_Pb
-TTC:
+STC:
   Length: 150
   Width: 100
   Thickness: 10
@@ -569,6 +532,43 @@ TTC:
   ScintillationYield: 11136
   ScintillationTimeConstant1: 2.3999999999999999
   ResolutionScale: 1
+ShieldingWall:
+  Enabled: true
+  Thickness: 500
+  Length: 5000
+  Rotation: 0.52359877559829882
+Solenoid:
+  S1Length: 150
+  B1Radius: 250
+  S2Length: 1315
+  B2Radius: 250
+  S3Length: 150
+  InnerRadius: 50
+  OuterRadius: 100
+  FieldRadius: 101
+  MaterialName: G4_Cu
+  MagneticFluxDensity: 0.0001
+SpectrometerBeamPipe:
+  InnerRadius: 100
+  BerylliumLength: 1000
+  BerylliumThickness: 0.5
+  AluminiumThickness: 2
+SpectrometerField:
+  Radius: 610
+  Length: 2200
+  MagneticFluxDensity: 0.0001
+SpectrometerMagnet:
+  InnerRadius: 550
+  OuterRadius: 600
+  Length: 2180
+  MaterialName: G4_Cu
+SpectrometerShield:
+  InnerRadius: 620
+  InnerLength: 2220
+  Thickness: 50
+  WindowRadius: 30
+  BeamSlantAngle: 0
+  MaterialName: G4_Pb
 Target:
   ShapeType: MultiLayer
   Cuboid:

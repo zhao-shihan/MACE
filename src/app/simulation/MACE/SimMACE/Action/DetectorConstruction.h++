@@ -11,13 +11,13 @@
 #include "MACE/Detector/Description/Filter.h++"
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Detector/Description/MCPChamber.h++"
+#include "MACE/Detector/Description/STC.h++"
 #include "MACE/Detector/Description/ShieldingWall.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Description/SpectrometerBeamPipe.h++"
 #include "MACE/Detector/Description/SpectrometerField.h++"
 #include "MACE/Detector/Description/SpectrometerMagnet.h++"
 #include "MACE/Detector/Description/SpectrometerShield.h++"
-#include "MACE/Detector/Description/TTC.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
@@ -39,7 +39,7 @@ inline namespace SD {
 class CDCSD;
 class EMCSD;
 class MCPSD;
-class TTCSD;
+class STCSD;
 } // namespace SD
 
 inline namespace Action {
@@ -61,11 +61,11 @@ public:
     auto ShieldRegion() const -> const auto& { return *fShieldRegion; }
     auto SolenoidOrMagnetRegion() const -> const auto& { return *fSolenoidOrMagnetRegion; }
     auto TargetRegion() const -> const auto& { return *fTargetRegion; }
-    auto TTCSensitiveRegion() const -> const auto& { return *fTTCSensitiveRegion; }
+    auto STCSensitiveRegion() const -> const auto& { return *fSTCSensitiveRegion; }
     auto VacuumRegion() const -> const auto& { return *fVacuumRegion; }
 
     auto CDCSD() const -> auto& { return *fCDCSD; }
-    auto TTCSD() const -> auto& { return *fTTCSD; }
+    auto STCSD() const -> auto& { return *fSTCSD; }
     auto MCPSD() const -> auto& { return *fMCPSD; }
     auto EMCSD() const -> auto& { return *fEMCSD; }
 
@@ -87,8 +87,8 @@ public:
                                         Detector::Description::SpectrometerField,
                                         Detector::Description::SpectrometerMagnet,
                                         Detector::Description::SpectrometerShield,
+                                        Detector::Description::STC,
                                         Detector::Description::Target,
-                                        Detector::Description::TTC,
                                         Detector::Description::World>;
 
 private:
@@ -105,12 +105,12 @@ private:
     Region* fMCPSensitiveRegion;
     Region* fShieldRegion;
     Region* fSolenoidOrMagnetRegion;
+    Region* fSTCSensitiveRegion;
     Region* fTargetRegion;
-    Region* fTTCSensitiveRegion;
     Region* fVacuumRegion;
 
     SD::CDCSD* fCDCSD;
-    SD::TTCSD* fTTCSD;
+    SD::STCSD* fSTCSD;
     SD::MCPSD* fMCPSD;
     SD::EMCSD* fEMCSD;
 };

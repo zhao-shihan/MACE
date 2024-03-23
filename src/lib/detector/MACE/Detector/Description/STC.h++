@@ -4,12 +4,12 @@
 
 namespace MACE::Detector::Description {
 
-class TTC final : public DescriptionSingletonBase<TTC> {
+class STC final : public DescriptionSingletonBase<STC> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
-    TTC();
-    ~TTC() = default;
+    STC();
+    ~STC() = default;
 
 public:
     // Geometry

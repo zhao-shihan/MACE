@@ -15,6 +15,7 @@
 #include "MACE/Detector/Definition/Filter.h++"
 #include "MACE/Detector/Definition/MCP.h++"
 #include "MACE/Detector/Definition/MCPChamber.h++"
+#include "MACE/Detector/Definition/STC.h++"
 #include "MACE/Detector/Definition/ShieldingWall.h++"
 #include "MACE/Detector/Definition/SolenoidB1.h++"
 #include "MACE/Detector/Definition/SolenoidB1Field.h++"
@@ -30,7 +31,6 @@
 #include "MACE/Detector/Definition/SpectrometerField.h++"
 #include "MACE/Detector/Definition/SpectrometerMagnet.h++"
 #include "MACE/Detector/Definition/SpectrometerShield.h++"
-#include "MACE/Detector/Definition/TTC.h++"
 #include "MACE/Detector/Definition/Target.h++"
 #include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Description/CDC.h++"
@@ -41,7 +41,7 @@
 #include "MACE/SimMACE/SD/CDCSD.h++"
 #include "MACE/SimMACE/SD/EMCSD.h++"
 #include "MACE/SimMACE/SD/MCPSD.h++"
-#include "MACE/SimMACE/SD/TTCSD.h++"
+#include "MACE/SimMACE/SD/STCSD.h++"
 #include "MACE/Simulation/Field/AcceleratorField.h++"
 #include "MACE/Simulation/Field/EMCField.h++"
 #include "MACE/Simulation/Field/SolenoidB1Field.h++"
@@ -76,11 +76,11 @@ DetectorConstruction::DetectorConstruction() :
     fMCPSensitiveRegion{},
     fShieldRegion{},
     fSolenoidOrMagnetRegion{},
+    fSTCSensitiveRegion{},
     fTargetRegion{},
-    fTTCSensitiveRegion{},
     fVacuumRegion{},
     fCDCSD{},
-    fTTCSD{},
+    fSTCSD{},
     fMCPSD{},
     fEMCSD{} {
     DetectorMessenger::EnsureInstantiation();
@@ -129,7 +129,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& cdcBody{spectrometerField.NewDaughter<Detector::Definition::CDCBody>(fCheckOverlap)};
     auto& spectrometerBeamPipe{spectrometerField.NewDaughter<Detector::Definition::SpectrometerBeamPipe>(fCheckOverlap)};
     auto& spectrometerMagnet{spectrometerField.NewDaughter<Detector::Definition::SpectrometerMagnet>(fCheckOverlap)};
-    auto& ttc{spectrometerField.NewDaughter<Detector::Definition::TTC>(fCheckOverlap)};
+    auto& stc{spectrometerField.NewDaughter<Detector::Definition::STC>(fCheckOverlap)};
 
     auto& solenoidS3{solenoidS3Field.NewDaughter<Detector::Definition::SolenoidS3>(fCheckOverlap)};
 
@@ -250,17 +250,17 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
         cdcCell.RegisterRegion("CDCSensitiveVolume", fCDCSensitiveRegion);
 
+        // STCSensitiveRegionRegion
+        fSTCSensitiveRegion = new Region("STCSensitiveRegion", RegionType::STCSensitive);
+        fSTCSensitiveRegion->SetProductionCuts(defaultCuts);
+
+        stc.RegisterRegion(fSTCSensitiveRegion);
+
         // TargetRegion
         fTargetRegion = new Region("Target", RegionType::Target);
         fTargetRegion->SetProductionCuts(defaultCuts);
 
         target.RegisterRegion(fTargetRegion);
-
-        // TTCSensitiveRegionRegion
-        fTTCSensitiveRegion = new Region("TTCSensitiveRegion", RegionType::TTCSensitive);
-        fTTCSensitiveRegion->SetProductionCuts(defaultCuts);
-
-        ttc.RegisterRegion(fTTCSensitiveRegion);
 
         // VacuumRegion
         fVacuumRegion = new Region("Vacuum", RegionType::Vacuum);
@@ -283,8 +283,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         fCDCSD = new SD::CDCSD{Detector::Description::CDC::Instance().Name()};
         cdcCell.RegisterSD("CDCSensitiveVolume", fCDCSD);
 
-        fTTCSD = new SD::TTCSD{Detector::Description::TTC::Instance().Name()};
-        ttc.RegisterSD(fTTCSD);
+        fSTCSD = new SD::STCSD{Detector::Description::STC::Instance().Name()};
+        stc.RegisterSD(fSTCSD);
 
         fMCPSD = new SD::MCPSD{Detector::Description::MCP::Instance().Name()};
         mcp.RegisterSD(fMCPSD);

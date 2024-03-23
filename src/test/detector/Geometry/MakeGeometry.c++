@@ -29,7 +29,7 @@
 #include "MACE/Detector/Definition/SpectrometerField.h++"
 #include "MACE/Detector/Definition/SpectrometerMagnet.h++"
 #include "MACE/Detector/Definition/SpectrometerShield.h++"
-#include "MACE/Detector/Definition/TTC.h++"
+#include "MACE/Detector/Definition/STC.h++"
 #include "MACE/Detector/Definition/Target.h++"
 #include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Description/DescriptionIO.h++"
@@ -93,7 +93,7 @@ int main(int argc, char* argv[]) {
     auto& cdcBody{spectrometerField.NewDaughter<CDCBody>(fCheckOverlap)};
     /* auto& spectrometerBeamPipe */ spectrometerField.NewDaughter<SpectrometerBeamPipe>(fCheckOverlap);
     auto& spectrometerMagnet{spectrometerField.NewDaughter<SpectrometerMagnet>(fCheckOverlap)};
-    /* auto& ttc */ spectrometerField.NewDaughter<TTC>(fCheckOverlap);
+    /* auto& stc */ spectrometerField.NewDaughter<STC>(fCheckOverlap);
 
     auto& solenoidS3{solenoidS3Field.NewDaughter<SolenoidS3>(fCheckOverlap)};
 

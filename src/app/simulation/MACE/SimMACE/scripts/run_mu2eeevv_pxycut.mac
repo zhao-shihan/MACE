@@ -37,7 +37,7 @@
 /MACE/Field/EMCMagneticField              0.1 tesla
 
 /MACE/Analysis/CoincidenceWithCDC     true
-/MACE/Analysis/CoincidenceWithTTC     true
+/MACE/Analysis/CoincidenceWithSTC     true
 /MACE/Analysis/CoincidenceWithMCP     true
 /MACE/Analysis/CoincidenceWithEMC     true
 
