@@ -26,7 +26,7 @@ BasicCLI::BasicCLI() :
             std::exit(EXIT_SUCCESS);
         });
     AddArgument("-V", "--verbose")
-        .help("Increase verbose level (-2: quiet, -1: error, 0: warning (default), 1: verbose, 2: more verbose). "
+        .help("Increase verbose level (-2: quiet, -1: error, 0: warning (default), 1: informative, 2: verbose). "
               "This is repeatable (e.g. -V -V or -VV) and can be combined with -Q or --quiet (e.g. -VVQ (=1) -QV (=0) -QQVQV (=-1)).")
         .flag()
         .append()
@@ -44,7 +44,7 @@ auto BasicCLI::VerboseLevel() const -> std::optional<VL> {
     if (ArgParser().is_used("-V") or ArgParser().is_used("-Q")) {
         return static_cast<VL>(std::clamp(fVerboseLevelValue,
                                           std23::to_underlying(VL::Quiet),
-                                          std23::to_underlying(VL::MoreVerbose)));
+                                          std23::to_underlying(VL::Verbose)));
     } else {
         return std::nullopt;
     }

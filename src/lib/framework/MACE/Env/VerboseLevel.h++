@@ -11,8 +11,8 @@ enum struct VL {
     Quiet = -2,
     Error,
     Warning,
-    Verbose,
-    MoreVerbose
+    Informative,
+    Verbose
 };
 
 } // namespace MACE::Env

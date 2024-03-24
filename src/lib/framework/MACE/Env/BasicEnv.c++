@@ -55,7 +55,7 @@ auto BasicEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const -> void {
                    " CWD: {}\n",
                    cwd);
     }
-    if (fVerboseLevel >= VL::Verbose) {
+    if (fVerboseLevel >= VL::Informative) {
         fmt::print("\n"
                    " List of all {} command line arguments:\n",
                    argc);

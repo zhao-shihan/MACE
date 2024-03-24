@@ -97,7 +97,6 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
     cathodeSurfacePropertiesTable->AddProperty("EFFICIENCY", cathodeSurfacePropertiesEnergy, cathodeSurfacePropertiesEfficiency);
 
     if (Env::BasicEnv::Instance().VerboseLevel() >= Env::VL::Verbose) {
-        fmt::println("\nPMT Quantum Efficiency:");
         cathodeSurfacePropertiesTable->DumpTable();
     }
 

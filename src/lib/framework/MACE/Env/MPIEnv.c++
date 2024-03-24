@@ -227,9 +227,9 @@ auto MPIEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const -> void {
         // Messages
         std::cout << '\n'
                   << " Parallelized with MPI, running " << (Parallel() ? "in parallel" : "sequentially") << '\n';
-        MACE_VERBOSE_LEVEL_CONTROLLED_OUT(VerboseLevel(), Verbose, std::cout)
+        MACE_VERBOSE_LEVEL_CONTROLLED_OUT(VerboseLevel(), Informative, std::cout)
             << " Compiled with MPI " << MPI_VERSION << '.' << MPI_SUBVERSION << ", running with MPI " << mpiRuntimeVersion.first << '.' << mpiRuntimeVersion.second << '\n';
-        MACE_VERBOSE_LEVEL_CONTROLLED_OUT(VerboseLevel(), MoreVerbose, std::cout)
+        MACE_VERBOSE_LEVEL_CONTROLLED_OUT(VerboseLevel(), Verbose, std::cout)
             << "--------------------> MPI library information (begin) <--------------------\n"
             << mpiLibVersion << '\n'
             << "-------------------->  MPI library information (end)  <--------------------\n";
