@@ -39,7 +39,7 @@ auto RDFEventSplitPoint(ROOTX::RDataFrame auto&& rdf, std::string eventIDBranchN
                 ++index;
             },
             {std::move(eventIDBranchName)});
-        eventSplitPoint.emplace_back(0);
+        eventSplitPoint.emplace_back(index);
     }
 
     auto eventSplitPointSize{eventSplitPoint.size()};
