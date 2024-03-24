@@ -19,15 +19,15 @@ namespace MACE::Env::internal {
 extern "C" {
 
 void MACE_ISOC99_SIGINT_SIGTERM_Handler(int sig) {
-    static auto called{false};
+    std::signal(sig, SIG_DFL);
+    if (static auto called{false};
+        called) {
+        std::abort();
+    } else {
+        called = true;
+    }
     static struct Handler {
         MACE_ALWAYS_INLINE Handler(int sig) {
-            if (called) {
-                std::abort();
-            } else {
-                called = true;
-            }
-            std::signal(sig, SIG_DFL);
             const auto now{std::chrono::system_clock::to_time_t(std::chrono::system_clock::now())};
             const auto lineHeader{MPIEnv::Available() ?
                                       fmt::format("MPI{}> ", MPIEnv::Instance().CommWorldRank()) :
@@ -74,15 +74,15 @@ void MACE_ISOC99_SIGINT_SIGTERM_Handler(int sig) {
 }
 
 void MACE_ISOC99_SIGFPE_SIGILL_SIGSEGV_Handler(int sig) {
-    static auto called{false};
+    std::signal(sig, SIG_DFL);
+    if (static auto called{false};
+        called) {
+        std::abort();
+    } else {
+        called = true;
+    }
     static struct Handler {
         MACE_ALWAYS_INLINE Handler(int sig) {
-            if (called) {
-                std::abort();
-            } else {
-                called = true;
-            }
-            std::signal(sig, SIG_DFL);
             const auto now{std::chrono::system_clock::to_time_t(std::chrono::system_clock::now())};
             const auto lineHeader{MPIEnv::Available() ?
                                       fmt::format("MPI{}> ", MPIEnv::Instance().CommWorldRank()) :
