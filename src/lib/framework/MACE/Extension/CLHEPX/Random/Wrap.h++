@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Env/Print.h++"
 #include "MACE/Math/Parity.h++"
 #include "MACE/Math/Random/Distribution/Uniform.h++"
 #include "MACE/Math/Random/UniformPseudoRandomBitGenerator.h++"
@@ -7,8 +8,6 @@
 #include "CLHEP/Random/RandomEngine.h"
 
 #include "gsl/gsl"
-
-#include "fmt/format.h"
 
 #include <cstdio>
 #include <fstream>

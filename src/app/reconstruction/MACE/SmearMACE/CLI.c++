@@ -1,7 +1,6 @@
+#include "MACE/Env/Print.h++"
 #include "MACE/Math/Parity.h++"
 #include "MACE/SmearMACE/CLI.h++"
-
-#include "fmt/format.h"
 
 #include <cassert>
 #include <cstdio>
@@ -85,11 +84,11 @@ auto CLI::OutputFilePath() const -> std::filesystem::path {
         output) { return *std::move(output); }
     auto inputList{InputFilePath()};
     if (inputList.size() > 1) {
-        fmt::println(stderr, "Cannot automatically construct output file path since # input file path > 1. Use -o or --output");
+        Env::PrintLnError("Cannot automatically construct output file path since # input file path > 1. Use -o or --output");
         std::exit(EXIT_FAILURE);
     }
     if (inputList.front().find('*') != std::string::npos) {
-        fmt::println(stderr, "Cannot automatically construct output file path since input file path includes wildcards. Use -o or --output");
+        Env::PrintLnError("Cannot automatically construct output file path since input file path includes wildcards. Use -o or --output");
         std::exit(EXIT_FAILURE);
     }
     std::filesystem::path input{std::move(inputList.front())};
@@ -105,7 +104,7 @@ auto CLI::ParseSmearingConfig(std::string_view arg) const -> std::optional<std::
     for (gsl::index i{}; i < ssize(*var); i += 2) {
         auto [_, inserted]{config.try_emplace(std::move(var->at(i)), std::move(var->at(i + 1)))};
         if (not inserted) {
-            fmt::println(stderr, "Duplicate variable '{}'", var->at(i));
+            Env::PrintLnError("Duplicate variable '{}'", var->at(i));
             std::exit(EXIT_FAILURE);
         }
     }

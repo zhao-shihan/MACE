@@ -39,8 +39,8 @@ auto Wrap<PRBG>::saveStatus(gsl::czstring filename) const -> void {
     if (os.is_open()) {
         put(os);
     } else {
-        fmt::println(stderr, "Wrap<PRBG>::saveStatus: Cannot open \"{}\", nothing was done. (Wrap<PRBG>::name(): {})",
-                     filename, name());
+        Env::PrintLnError("Wrap<PRBG>::saveStatus: Cannot open '{}', nothing was done. (Wrap<PRBG>::name(): {})",
+                          filename, name());
     }
 }
 
@@ -50,8 +50,8 @@ auto Wrap<PRBG>::restoreStatus(gsl::czstring filename) -> void {
     if (is.is_open()) {
         get(is);
     } else {
-        fmt::println(stderr, "Wrap<PRBG>::restoreStatus: Cannot open \"{}\", nothing was done. (Wrap<PRBG>::name(): {})",
-                     filename, name());
+        Env::PrintLnError("Wrap<PRBG>::restoreStatus: Cannot open '{}', nothing was done. (Wrap<PRBG>::name(): {})",
+                          filename, name());
     }
 }
 
@@ -99,7 +99,7 @@ auto Wrap<PRBG>::get(std::istream& is) -> decltype(is) {
 
 template<Math::Random::UniformPseudoRandomBitGenerator PRBG>
 auto Wrap<PRBG>::getState(std::istream& is) -> decltype(is) {
-    fmt::println(stderr, "Wrap<PRBG>::getState has no effect. Do not use");
+    Env::PrintLnError("Wrap<PRBG>::getState has no effect. Do not use");
     return is;
 }
 

@@ -7,10 +7,9 @@
 
 #include "fmt/format.h"
 
-#include <cstdio>
+#include <memory>
 #include <stdexcept>
 #include <string>
-#include <memory>
 #include <typeindex>
 #include <typeinfo>
 #include <unordered_map>
@@ -31,7 +30,7 @@ public:
     template<WeakSingletonified AWeakSingleton>
     [[nodiscard]] auto Contains() const -> auto { return fInstanceMap.contains(typeid(AWeakSingleton)); }
     template<WeakSingletonified AWeakSingleton>
-    [[nodiscard]] auto Insert(gsl::not_null<AWeakSingleton*> instance) ->  std::shared_ptr<void*>;
+    [[nodiscard]] auto Insert(gsl::not_null<AWeakSingleton*> instance) -> std::shared_ptr<void*>;
 
 private:
     std::unordered_map<std::type_index, const std::weak_ptr<void*>> fInstanceMap;

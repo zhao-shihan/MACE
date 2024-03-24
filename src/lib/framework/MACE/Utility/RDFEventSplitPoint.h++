@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/Env/MPIEnv.h++"
+#include "MACE/Env/Print.h++"
 #include "MACE/Extension/MPIX/DataType.h++"
 #include "MACE/Extension/ROOTX/RDataFrame.h++"
 
@@ -30,7 +31,7 @@ auto RDFEventSplitPoint(ROOTX::RDataFrame auto&& rdf, std::string eventIDBranchN
                 assert(eventID >= 0);
                 if (eventID != lastEventID) {
                     if (not eventIDSet.emplace(eventID).second) {
-                        fmt::println(stderr, "Warning: Dataset is disordered (event {} has appeared previously)", eventID);
+                        Env::PrintLnWarning("Warning: Dataset is disordered (event {} has appeared previously)", eventID);
                     }
                     lastEventID = eventID;
                     eventSplitPoint.emplace_back(index);

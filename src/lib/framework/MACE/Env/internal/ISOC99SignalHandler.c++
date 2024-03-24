@@ -1,6 +1,7 @@
 #if MACE_SIGNAL_HANDLER
 
 #    include "MACE/Env/MPIEnv.h++"
+#    include "MACE/Env/Print.h++"
 #    include "MACE/Env/internal/ISOC99SignalHandler.h++"
 #    include "MACE/Utility/InlineMacro.h++"
 #    include "MACE/Utility/PrintStackTrace.h++"
@@ -10,9 +11,9 @@
 
 #    include <chrono>
 #    include <csignal>
-#    include <cstdio>
 #    include <cstdlib>
 #    include <ctime>
+#    include <iostream>
 
 namespace MACE::Env::internal {
 
@@ -32,23 +33,23 @@ void MACE_ISOC99_SIGINT_SIGTERM_Handler(int sig) {
             const auto lineHeader{MPIEnv::Available() ?
                                       fmt::format("MPI{}> ", MPIEnv::Instance().CommWorldRank()) :
                                       ""};
-            fmt::println(stderr, "");
+            PrintLn(std::clog, "");
             switch (sig) {
             case SIGINT:
-                fmt::println(stderr, "{}***** INTERRUPT (SIGINT) received", lineHeader);
+                PrintLn(std::clog, "{}***** INTERRUPT (SIGINT) received", lineHeader);
                 break;
             case SIGTERM:
-                fmt::println(stderr, "{}***** TERMINATE (SIGTERM) received", lineHeader);
+                PrintLn(std::clog, "{}***** TERMINATE (SIGTERM) received", lineHeader);
                 break;
             }
             if (MPIEnv::Available()) {
                 const auto& mpi{MPIEnv::Instance()};
-                fmt::println(stderr, "{}***** on MPI process {} (node: {})", lineHeader, mpi.CommWorldRank(), mpi.LocalNode().name);
+                PrintLn(std::clog, "{}***** on MPI process {} (node: {})", lineHeader, mpi.CommWorldRank(), mpi.LocalNode().name);
             }
-            fmt::println(stderr, "{}***** at {:%FT%T%z}", lineHeader, fmt::localtime(now));
+            PrintLn(std::clog, "{}***** at {:%FT%T%z}", lineHeader, fmt::localtime(now));
             PrintStackTrace(64, 2);
-            fmt::println(stderr, "");
-            std::fflush(stderr);
+            PrintLn(std::clog, "");
+            flush(std::clog);
             std::raise(sig);
         }
     } handler{sig};
@@ -60,16 +61,16 @@ void MACE_ISOC99_SIGINT_SIGTERM_Handler(int sig) {
     const auto lineHeader{MPIEnv::Available() ?
                               fmt::format("MPI{}> ", MPIEnv::Instance().CommWorldRank()) :
                               ""};
-    fmt::println(stderr, "");
-    fmt::println(stderr, "{}***** ABORT (SIGABRT) received", lineHeader);
+    PrintLn(std::clog, "");
+    PrintLn(std::clog, "{}***** ABORT (SIGABRT) received", lineHeader);
     if (MPIEnv::Available()) {
         const auto& mpi{MPIEnv::Instance()};
-        fmt::println(stderr, "{}***** on MPI process {} (node: {})", lineHeader, mpi.CommWorldRank(), mpi.LocalNode().name);
+        PrintLn(std::clog, "{}***** on MPI process {} (node: {})", lineHeader, mpi.CommWorldRank(), mpi.LocalNode().name);
     }
-    fmt::println(stderr, "{}***** at {:%FT%T%z}", lineHeader, fmt::localtime(now));
+    PrintLn(std::clog, "{}***** at {:%FT%T%z}", lineHeader, fmt::localtime(now));
     PrintStackTrace(64, 2);
-    fmt::println(stderr, "");
-    std::fflush(stderr);
+    PrintLn(std::clog, "");
+    flush(std::clog);
     std::abort();
 }
 
@@ -87,26 +88,26 @@ void MACE_ISOC99_SIGFPE_SIGILL_SIGSEGV_Handler(int sig) {
             const auto lineHeader{MPIEnv::Available() ?
                                       fmt::format("MPI{}> ", MPIEnv::Instance().CommWorldRank()) :
                                       ""};
-            fmt::println(stderr, "");
+            PrintLn(std::clog, "");
             switch (sig) {
             case SIGFPE:
-                fmt::println(stderr, "{}***** ERRONEOUS ARITHMETIC OPERATION (SIGFPE) received", lineHeader);
+                PrintLn(std::clog, "{}***** ERRONEOUS ARITHMETIC OPERATION (SIGFPE) received", lineHeader);
                 break;
             case SIGILL:
-                fmt::println(stderr, "{}***** ILLEGAL INSTRUCTION (SIGILL) received", lineHeader);
+                PrintLn(std::clog, "{}***** ILLEGAL INSTRUCTION (SIGILL) received", lineHeader);
                 break;
             case SIGSEGV:
-                fmt::println(stderr, "{}***** SEGMENTATION VIOLATION (SIGSEGV) received", lineHeader);
+                PrintLn(std::clog, "{}***** SEGMENTATION VIOLATION (SIGSEGV) received", lineHeader);
                 break;
             }
             if (MPIEnv::Available()) {
                 const auto& mpi{MPIEnv::Instance()};
-                fmt::println(stderr, "{}***** on MPI process {} (node: {})", lineHeader, mpi.CommWorldRank(), mpi.LocalNode().name);
+                PrintLn(std::clog, "{}***** on MPI process {} (node: {})", lineHeader, mpi.CommWorldRank(), mpi.LocalNode().name);
             }
-            fmt::println(stderr, "{}***** at {:%FT%T%z}", lineHeader, fmt::localtime(now));
+            PrintLn(std::clog, "{}***** at {:%FT%T%z}", lineHeader, fmt::localtime(now));
             PrintStackTrace(64, 2);
-            fmt::println(stderr, "");
-            std::fflush(stderr);
+            PrintLn(std::clog, "");
+            flush(std::clog);
             std::raise(sig);
         }
     } handler{sig};

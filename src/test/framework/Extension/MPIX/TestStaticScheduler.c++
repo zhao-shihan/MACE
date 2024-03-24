@@ -1,8 +1,7 @@
 #include "MACE/Env/MPIEnv.h++"
+#include "MACE/Env/Print.h++"
 #include "MACE/Extension/MPIX/Execution/Executor.h++"
 #include "MACE/Extension/MPIX/Execution/StaticScheduler.h++"
-
-#include "fmt/format.h"
 
 #include <string>
 #include <thread>
@@ -21,13 +20,13 @@ auto main(int argc, char* argv[]) -> int {
     executor.Execute(n,
                      [&](auto i) {
                          std::this_thread::sleep_for(500ms);
-                         fmt::println("{},{}", i, env.CommWorldRank());
+                         Env::PrintLn("{},{}", i, env.CommWorldRank());
                      });
 
     executor.Execute(n,
                      [&](auto i) {
                          std::this_thread::sleep_for(500ms);
-                         fmt::println("{},{}", i, env.CommWorldRank());
+                         Env::PrintLn("{},{}", i, env.CommWorldRank());
                      });
 
     executor.PrintProgressModulo(1);

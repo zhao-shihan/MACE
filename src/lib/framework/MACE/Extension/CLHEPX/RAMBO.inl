@@ -132,7 +132,7 @@ auto RAMBO<N>::operator()(const std::array<double, 4 * N>& u) const -> Event {
             }
             fb = fun(b) - r;
         }
-        fmt::println(stderr, "(brent:) -> Maximum number of iterations exceeded");
+        Env::PrintLnWarning("(brent:) -> Maximum number of iterations exceeded");
         return 0;
     }};
     const auto xi{ZBrent(

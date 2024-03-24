@@ -33,11 +33,7 @@ auto WrapAsMuoniumDecayChannel<AMuonDecayChannel, AName>::DecayIt(G4double) -> G
     using namespace LiteralUnit::MathConstantSuffix;
     using namespace PhysicalConstant;
 
-#ifdef G4VERBOSE
-    if (this->GetVerboseLevel() > 1) {
-        fmt::println("WrapAsMuoniumDecayChannel::DecayIt");
-    }
-#endif
+    Env::PrintLn<'V'>("WrapAsMuoniumDecayChannel::DecayIt");
 
     auto [pStar, converged]{Math::FindRoot::Secant(
         // CDF - x
@@ -51,8 +47,8 @@ auto WrapAsMuoniumDecayChannel<AMuonDecayChannel, AName>::DecayIt(G4double) -> G
         },
         // most probable p*
         27 / 8_pi)};
-    if (not converged and this->GetVerboseLevel() > 0) {
-        fmt::println(stderr, "WrapAsMuoniumDecayChannel: atomic shell e+/e- momentum disconverged");
+    if (not converged) {
+        Env::PrintLnError("WrapAsMuoniumDecayChannel: atomic shell e+/e- momentum disconverged");
     }
     const auto p{fine_structure_const * muonium_reduced_mass_c2 * pStar * G4RandomDirection()};
 
@@ -60,13 +56,10 @@ auto WrapAsMuoniumDecayChannel<AMuonDecayChannel, AName>::DecayIt(G4double) -> G
     products->Boost(-p.x() / muon_mass_c2, -p.y() / muon_mass_c2, -p.z() / muon_mass_c2); // recoil boost
     products->PushProducts(new G4DynamicParticle{this->G4MT_daughters[fAtomicShellProductIndex], p});
 
-#ifdef G4VERBOSE
-    if (this->GetVerboseLevel() > 1) {
-        fmt::println("WrapAsMuoniumDecayChannel::DecayIt\n"
-                     "\tCreate decay products in rest frame.");
-        products->DumpInfo();
-    }
-#endif
+    Env::PrintLn<'V'>("WrapAsMuoniumDecayChannel::DecayIt\n"
+                      "\tCreate decay products in rest frame.");
+    if (Env::VerboseLevelReach<'V'>()) { products->DumpInfo(); }
+
     return products;
 }
 

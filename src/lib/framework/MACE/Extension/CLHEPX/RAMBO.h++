@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/Compatibility/std23/constexpr_cmath.h++"
+#include "MACE/Env/Print.h++"
 #include "MACE/Extension/stdx/ranges_numeric.h++"
 #include "MACE/Math/Hypot.h++"
 #include "MACE/Math/IntegerPower.h++"
@@ -11,8 +12,6 @@
 #include "CLHEP/Units/SystemOfUnits.h"
 #include "CLHEP/Vector/LorentzVector.h"
 #include "CLHEP/Vector/ThreeVector.h"
-
-#include "fmt/format.h"
 
 #include <algorithm>
 #include <array>
