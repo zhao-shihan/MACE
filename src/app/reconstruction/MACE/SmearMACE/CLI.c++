@@ -12,17 +12,20 @@ CLI::CLI() :
     MonteCarloCLI{} {
     AddArgument("input")
         .nargs(argparse::nargs_pattern::at_least_one)
-        .help("Input file path.");
+        .help("Input file path(s).");
     AddArgument("-o", "--output")
         .help("Output file path. Suffix '_smeared' on input file name by default.");
     AddArgument("-m", "--output-mode")
-        .help("Output file creation mode. NEW by default.");
+        .help("Output file creation mode. Default to 'NEW'.");
 
     AddArgument("-i", "--index-range")
         .nargs(1, 2)
         .scan<'i', gsl::index>()
         .default_value(std::vector<gsl::index>{0, 1})
         .help("Set number of datasets (index in [0, size) range), or index range (in [first, last) pattern)");
+    AddArgument("-b","--batch-size")
+        .scan<'i', unsigned>()
+        .help("Set number of events processed in a batch. Default to 10000.");
 
     auto& cdcHitMutexGroup{AddMutuallyExclusiveGroup()};
     cdcHitMutexGroup.add_argument("--cdc-hit")
@@ -33,7 +36,7 @@ CLI::CLI() :
         .flag()
         .help("Save CDC hit data in output file without smearing.");
     AddArgument("--cdc-hit-name")
-        .help("Set dataset name format ('G4Run{}/CDCSimHit' by default).");
+        .help("Set dataset name format. Default to 'G4Run{}/CDCSimHit'.");
 
     auto& cdcTrkMutexGroup{AddMutuallyExclusiveGroup()};
     cdcTrkMutexGroup.add_argument("--cdc-track")
@@ -44,7 +47,29 @@ CLI::CLI() :
         .flag()
         .help("Save CDC track data in output file without smearing.");
     AddArgument("--cdc-track-name")
-        .help("Set dataset name format ('G4Run{}/CDCSimTrack' by default).");
+        .help("Set dataset name format. Default to 'G4Run{}/CDCSimTrack'.");
+
+    auto& stcHitMutexGroup{AddMutuallyExclusiveGroup()};
+    stcHitMutexGroup.add_argument("--stc-hit")
+        .nargs(2)
+        .append()
+        .help("Smear a simulated STC hit variable by a smearing expression (e.g. --stc-hit t 'gRandom->Gaus(t, 0.05)').");
+    stcHitMutexGroup.add_argument("--stc-hit-id")
+        .flag()
+        .help("Save STC hit data in output file without smearing.");
+    AddArgument("--stc-hit-name")
+        .help("Set dataset name format. Default to 'G4Run{}/STCSimHit'.");
+
+    auto& mcpHitMutexGroup{AddMutuallyExclusiveGroup()};
+    mcpHitMutexGroup.add_argument("--mcp-hit")
+        .nargs(2)
+        .append()
+        .help("Smear a simulated MCP hit variable by a smearing expression (e.g. --mcp-hit t 'gRandom->Gaus(t, 0.5)').");
+    mcpHitMutexGroup.add_argument("--mcp-hit-id")
+        .flag()
+        .help("Save MCP hit data in output file without smearing.");
+    AddArgument("--mcp-hit-name")
+        .help("Set dataset name format. Default to 'G4Run{}/MCPSimHit'.");
 
     auto& emcHitMutexGroup{AddMutuallyExclusiveGroup()};
     emcHitMutexGroup.add_argument("--emc-hit")
@@ -55,18 +80,7 @@ CLI::CLI() :
         .flag()
         .help("Save EMC hit data in output file without smearing.");
     AddArgument("--emc-hit-name")
-        .help("Set dataset name format ('G4Run{}/EMCSimHit' by default).");
-
-    auto& mcpHitMutexGroup{AddMutuallyExclusiveGroup()};
-    mcpHitMutexGroup.add_argument("--mcp-hit")
-        .nargs(2)
-        .append()
-        .help("Smear a simulated MCP hit variable by a smearing expression (e.g. --mcp-hit t 'gRandom->Gaus(t, 0.05)').");
-    mcpHitMutexGroup.add_argument("--mcp-hit-id")
-        .flag()
-        .help("Save MCP hit data in output file without smearing.");
-    AddArgument("--mcp-hit-name")
-        .help("Set dataset name format ('G4Run{}/MCPSimHit' by default).");
+        .help("Set dataset name format. Default to 'G4Run{}/EMCSimHit'.");
 }
 
 auto CLI::DatasetIndexRange() const -> std::pair<gsl::index, gsl::index> {
