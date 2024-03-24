@@ -49,7 +49,3 @@ MACE_ALWAYS_INLINE auto VerboseLevelReach() -> bool {
 }
 
 } // namespace MACE::Env
-
-#define MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out) \
-    MACE_VERBOSE_LEVEL_CONTROLLED_OUT(                  \
-        MACE::Env::BasicEnv::Instance().VerboseLevel(), Threshold, out)

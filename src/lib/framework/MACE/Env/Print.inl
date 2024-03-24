@@ -48,6 +48,12 @@ auto PrintLn(std::wostream& os, fmt::basic_format_string<wchar_t, fmt::type_iden
     fmt::println(os, std::move(fmt), std::forward<Ts>(args)...);
 }
 
+template<char L>
+auto VPrint(auto&&... args) -> void {
+    if (not Env::VerboseLevelReach<L>()) { return; }
+    fmt::vprint(std::forward<decltype(args)>(args)...);
+}
+
 template<typename... Ts>
 auto PrintWarning(fmt::format_string<Ts...> fmt, Ts&&... args) -> void {
     Print<'W'>(stderr, std::move(fmt), std::forward<Ts>(args)...);
@@ -59,6 +65,11 @@ auto PrintLnWarning(fmt::format_string<Ts...> fmt, Ts&&... args) -> void {
 }
 
 template<typename... Ts>
+auto VPrintWarning(auto&&... args) -> void {
+    VPrint<'W'>(stderr, std::forward<decltype(args)>(args)...);
+}
+
+template<typename... Ts>
 auto PrintError(fmt::format_string<Ts...> fmt, Ts&&... args) -> void {
     Print<'E'>(stderr, std::move(fmt), std::forward<Ts>(args)...);
 }
@@ -66,6 +77,11 @@ auto PrintError(fmt::format_string<Ts...> fmt, Ts&&... args) -> void {
 template<typename... Ts>
 auto PrintLnError(fmt::format_string<Ts...> fmt, Ts&&... args) -> void {
     PrintLn<'E'>(stderr, std::move(fmt), std::forward<Ts>(args)...);
+}
+
+template<typename... Ts>
+auto VPrintError(auto&&... args) -> void {
+    VPrint<'E'>(stderr, std::forward<decltype(args)>(args)...);
 }
 
 } // namespace MACE::Env

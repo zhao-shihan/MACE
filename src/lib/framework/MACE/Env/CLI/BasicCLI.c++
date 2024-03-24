@@ -2,6 +2,8 @@
 #include "MACE/Env/CLI/BasicCLI.h++"
 #include "MACE/Version.h++"
 
+#include "fmt/core.h"
+
 #include <algorithm>
 #include <iostream>
 #include <stdexcept>
@@ -15,14 +17,14 @@ BasicCLI::BasicCLI() :
         .help("Show help message and exit.")
         .nargs(0)
         .action([this](auto&&) {
-            std::cout << ArgParser() << std::flush;
+            fmt::println("{}", ArgParser().help().str());
             std::exit(EXIT_SUCCESS);
         });
     AddArgument("-v", "--version")
         .help("Print version and exit.")
         .nargs(0)
         .action([](auto&&) {
-            std::cout << MACE_VERSION_STRING << std::endl;
+            fmt::println("{}", MACE_VERSION_STRING);
             std::exit(EXIT_SUCCESS);
         });
     AddArgument("-V", "--verbose")

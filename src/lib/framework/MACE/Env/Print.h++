@@ -82,6 +82,14 @@ auto Print(std::wostream& os, fmt::basic_format_string<wchar_t, fmt::type_identi
 /// @param ...args Same as `fmt::println`
 template<char L = 'E', typename... Ts>
 auto PrintLn(std::wostream& os, fmt::basic_format_string<wchar_t, fmt::type_identity_t<Ts>...> fmt, Ts&&... args) -> void;
+/// @brief Verbose level controlled print function.
+/// @tparam L Verbose level threshold. Available values are:
+///         'E' (Error), 'W' (Warning), 'I' (Informative), 'V' (Verbose).
+///         Default to 'E' (always print except when verbose level is `Quiet`).
+///         Check `Env::VerboseLevel` and `Env::VerboseLevelReach` for details.
+/// @param ...args Same as `fmt::vprint`
+template<char L = 'E'>
+auto VPrint(auto&&... args) -> void;
 
 /// @brief Same as `Print<'W'>(stderr, ...)`
 /// @param fmt Same as `fmt::print`
@@ -93,6 +101,10 @@ auto PrintWarning(fmt::format_string<Ts...> fmt, Ts&&... args) -> void;
 /// @param ...args Same as `fmt::println`
 template<typename... Ts>
 auto PrintLnWarning(fmt::format_string<Ts...> fmt, Ts&&... args) -> void;
+/// @brief Same as `VPrint<'W'>(stderr, ...)`
+/// @param ...args Same as `fmt::vprint`
+template<typename... Ts>
+auto VPrintWarning(auto&&... args) -> void;
 /// @brief Same as `Print<'E'>(stderr, ...)`
 /// @param fmt Same as `fmt::print`
 /// @param ...args Same as `fmt::print`
@@ -103,6 +115,10 @@ auto PrintError(fmt::format_string<Ts...> fmt, Ts&&... args) -> void;
 /// @param ...args Same as `fmt::println`
 template<typename... Ts>
 auto PrintLnError(fmt::format_string<Ts...> fmt, Ts&&... args) -> void;
+/// @brief Same as `VPrint<'E'>(stderr, ...)`
+/// @param ...args Same as `fmt::vprint`
+template<typename... Ts>
+auto VPrintError(auto&&... args) -> void;
 
 } // namespace MACE::Env
 
