@@ -10,7 +10,7 @@ namespace MACE::Env::CLI {
 
 BasicCLI::BasicCLI() :
     CLIBase{},
-    fVerboseLevelValue{std23::to_underlying(VL::Warning)} {
+    fVerboseLevelValue{std23::to_underlying(VerboseLevel::Warning)} {
     AddArgument("-h", "--help")
         .help("Show help message and exit.")
         .nargs(0)
@@ -40,11 +40,11 @@ BasicCLI::BasicCLI() :
         .action([this](auto&&) { --fVerboseLevelValue; });
 }
 
-auto BasicCLI::VerboseLevel() const -> std::optional<VL> {
+auto BasicCLI::VerboseLevel() const -> std::optional<enum VerboseLevel> {
     if (ArgParser().is_used("-V") or ArgParser().is_used("-Q")) {
-        return static_cast<VL>(std::clamp(fVerboseLevelValue,
-                                          std23::to_underlying(VL::Quiet),
-                                          std23::to_underlying(VL::Verbose)));
+        return static_cast<enum VerboseLevel>(std::clamp(fVerboseLevelValue,
+                                                         std23::to_underlying(VerboseLevel::Quiet),
+                                                         std23::to_underlying(VerboseLevel::Verbose)));
     } else {
         return std::nullopt;
     }

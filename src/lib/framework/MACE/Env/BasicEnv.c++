@@ -10,7 +10,10 @@
 
 namespace MACE::Env {
 
-BasicEnv::BasicEnv(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> cli, VL verboseLevel, bool printWelcomeMessage) :
+BasicEnv::BasicEnv(int argc, char* argv[],
+                   std::optional<std::reference_wrapper<CLI::BasicCLI>> cli,
+                   enum VerboseLevel verboseLevel,
+                   bool printWelcomeMessage) :
     EnvBase{},
     PassiveSingleton{},
     fArgc{argc},
@@ -30,7 +33,7 @@ BasicEnv::BasicEnv(int argc, char* argv[], std::optional<std::reference_wrapper<
 }
 
 auto BasicEnv::PrintWelcomeMessageSplitLine() const -> void {
-    if (fVerboseLevel >= VL::Error) {
+    if (Env::VerboseLevelReach<'E'>()) {
         fmt::print("\n===============================================================================\n");
     }
 }
@@ -40,7 +43,7 @@ auto BasicEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const -> void {
     const auto exe{std::filesystem::path(argv[0]).filename().generic_string()};
     auto cwd{std::filesystem::current_path(cwdError).generic_string()};
     if (cwdError) { cwd = "<Error getting current working directory>"; }
-    if (fVerboseLevel >= VL::Error) {
+    if (Env::VerboseLevelReach<'E'>()) {
         fmt::print("\n"
                    " MACE offline software system {}\n"
                    " Copyright (c) 2020-2024 MACE working group\n"
@@ -55,7 +58,7 @@ auto BasicEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const -> void {
                    " CWD: {}\n",
                    cwd);
     }
-    if (fVerboseLevel >= VL::Informative) {
+    if (Env::VerboseLevelReach<'I'>()) {
         fmt::print("\n"
                    " List of all {} command line arguments:\n",
                    argc);

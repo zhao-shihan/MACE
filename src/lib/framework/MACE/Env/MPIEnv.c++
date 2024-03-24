@@ -17,7 +17,10 @@
 
 namespace MACE::Env {
 
-MPIEnv::MPIEnv(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> cli, VL verboseLevel, bool printWelcomeMessage) :
+MPIEnv::MPIEnv(int argc, char* argv[],
+               std::optional<std::reference_wrapper<CLI::BasicCLI>> cli,
+               enum VerboseLevel verboseLevel,
+               bool printWelcomeMessage) :
     BasicEnv{argc, argv, cli, verboseLevel, false},
     PassiveSingleton<MPIEnv>{},
     fMPIThreadSupport{
@@ -214,7 +217,7 @@ MPIEnv::~MPIEnv() {
 
 auto MPIEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const -> void {
     BasicEnv::PrintWelcomeMessageBody(argc, argv);
-    if (VerboseLevel() >= VL::Error) {
+    if (Env::VerboseLevelReach<'E'>()) {
         // MPI library version
         char mpiLibVersion[MPI_MAX_LIBRARY_VERSION_STRING];
         int mpiLibVersionStringLength;

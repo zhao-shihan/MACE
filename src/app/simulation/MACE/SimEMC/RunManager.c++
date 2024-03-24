@@ -18,7 +18,7 @@ RunManager::RunManager() :
     SetUserInitialization(physicsList);
 
     const auto detectorConstruction{new DetectorConstruction};
-    detectorConstruction->SetCheckOverlaps(verboseLevel >= MACE::Env::VL::Informative);
+    detectorConstruction->SetCheckOverlaps(Env::VerboseLevelReach<'I'>());
     SetUserInitialization(detectorConstruction);
 
     SetUserInitialization(new ActionInitialization);

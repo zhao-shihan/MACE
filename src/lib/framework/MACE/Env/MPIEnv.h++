@@ -18,7 +18,10 @@ namespace MACE::Env {
 class MPIEnv : public BasicEnv,
                public Memory::PassiveSingleton<MPIEnv> {
 public:
-    MPIEnv(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> cli = {}, VL verboseLevel = {}, bool printWelcomeMessage = true);
+    MPIEnv(int argc, char* argv[],
+           std::optional<std::reference_wrapper<CLI::BasicCLI>> cli = {},
+           enum VerboseLevel verboseLevel = {},
+           bool printWelcomeMessage = true);
     virtual ~MPIEnv();
 
     using PassiveSingleton<MPIEnv>::Instance;

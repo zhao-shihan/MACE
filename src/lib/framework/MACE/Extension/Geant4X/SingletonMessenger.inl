@@ -34,7 +34,7 @@ template<typename ARecipient>
 auto SingletonMessenger<ADerived, ARecipients...>::Deliver(std::invocable<ARecipient&> auto&& Action) const -> void {
     const auto& recipientSet{get<std::unordered_set<ARecipient*>>(fRecipientSetTuple)};
     if (recipientSet.empty()) {
-        if (Env::BasicEnv::Instance().VerboseLevel() >= Env::VL::Error) {
+        if (Env::VerboseLevelReach<'E'>()) {
             fmt::println("{} has not registered", typeid(ARecipient).name());
         }
         return;
