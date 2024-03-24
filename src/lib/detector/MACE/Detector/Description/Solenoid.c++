@@ -22,7 +22,7 @@ Solenoid::Solenoid() :
     // Material
     fMaterialName{"G4_Cu"},
     // Field
-    fMagneticFluxDensity(100_mT) {}
+    fMagneticFluxDensity{100_mT} {}
 
 auto Solenoid::ImportValues(const YAML::Node& node) -> void {
     // Geometry
