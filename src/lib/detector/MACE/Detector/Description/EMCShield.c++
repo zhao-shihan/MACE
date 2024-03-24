@@ -10,7 +10,7 @@ EMCShield::EMCShield() :
     DescriptionSingletonBase{"EMCShield"},
     // Geometry
     fInnerRadius{57_cm},
-    fInnerLength{110_cm},
+    fInnerLength{104_cm},
     fGapAroundWindow{1_cm},
     fThickness{5_cm},
     // Material

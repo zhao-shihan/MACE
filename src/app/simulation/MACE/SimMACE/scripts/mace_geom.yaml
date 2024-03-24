@@ -328,17 +328,17 @@ EMC:
   ScintillationTimeConstant1: 1000
   ReolutionScale: 1
 EMCField:
-  Radius: 600
+  Radius: 560
   Length: 1000
   MagneticFluxDensity: 0.0001
 EMCMagnet:
   InnerRadius: 500
   OuterRadius: 550
-  Length: 950
+  Length: 1000
   MaterialName: G4_Cu
 EMCShield:
-  InnerRadius: 650
-  InnerLength: 1100
+  InnerRadius: 570
+  InnerLength: 1040
   GapAroundWindow: 10
   Thickness: 50
   MaterialName: G4_Pb
@@ -560,11 +560,11 @@ SpectrometerField:
 SpectrometerMagnet:
   InnerRadius: 550
   OuterRadius: 600
-  Length: 2180
+  Length: 2200
   MaterialName: G4_Cu
 SpectrometerShield:
   InnerRadius: 620
-  InnerLength: 2220
+  InnerLength: 2240
   Thickness: 50
   WindowRadius: 30
   BeamSlantAngle: 0

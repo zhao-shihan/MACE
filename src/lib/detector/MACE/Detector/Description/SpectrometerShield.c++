@@ -10,7 +10,7 @@ SpectrometerShield::SpectrometerShield() :
     DescriptionSingletonBase{"SpectrometerShield"},
     // Geometry
     fInnerRadius{62_cm},
-    fInnerLength{222_cm},
+    fInnerLength{224_cm},
     fThickness{5_cm},
     fWindowRadius{3_cm},
     fBeamSlantAngle{0_deg},
