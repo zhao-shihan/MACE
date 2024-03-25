@@ -20,7 +20,7 @@ class Region final : public NonMoveableBase,
 public:
     Region(const G4String& name, RegionType type);
 
-    const auto& Type() const { return fRegionType; }
+    auto Type() const -> auto { return fRegionType; }
 
 private:
     const RegionType fRegionType;
