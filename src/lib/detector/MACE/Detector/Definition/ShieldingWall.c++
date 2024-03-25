@@ -4,7 +4,7 @@
 #include "MACE/Detector/Description/EMCShield.h++"
 #include "MACE/Detector/Description/ShieldingWall.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Detector/Description/SpectrometerShield.h++"
+#include "MACE/Detector/Description/MMSShield.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/Math/MidPoint.h++"
 #include "MACE/Utility/LiteralUnit.h++"
@@ -32,14 +32,14 @@ auto ShieldingWall::Construct(G4bool checkOverlaps) -> void {
     const auto& wall{Description::ShieldingWall::Instance()};
     const auto& world{Description::World::Instance()};
     const auto& solenoid{Description::Solenoid::Instance()};
-    const auto& spectrometerShield{Description::SpectrometerShield::Instance()};
+    const auto& mmsShield{Description::MMSShield::Instance()};
     const auto& emcField{Description::EMCField::Instance()};
     const auto& emcShield{Description::EMCShield::Instance()};
 
-    const G4ThreeVector spectrometerShieldCorner{spectrometerShield.InnerRadius() + spectrometerShield.Thickness(), 0, spectrometerShield.InnerLength() / 2 + spectrometerShield.Thickness()}; // clang-format off
+    const G4ThreeVector mmsShieldCorner{mmsShield.InnerRadius() + mmsShield.Thickness(), 0, mmsShield.InnerLength() / 2 + mmsShield.Thickness()}; // clang-format off
     const auto emcShieldCorner{VectorCast<G4ThreeVector>(emcField.Center()) + 
                                G4ThreeVector{-emcShield.InnerRadius() - emcShield.Thickness(), 0 , -emcShield.InnerLength() / 2 - emcShield.Thickness()}}; // clang-format on
-    const auto wall1Displacement{Math::MidPoint(spectrometerShieldCorner, emcShieldCorner)};
+    const auto wall1Displacement{Math::MidPoint(mmsShieldCorner, emcShieldCorner)};
 
     const auto concrete{G4NistManager::Instance()->FindOrBuildMaterial("G4_CONCRETE")};
 

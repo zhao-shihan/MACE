@@ -1,6 +1,6 @@
 #include "MACE/Detector/Definition/SolenoidS2Field.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Detector/Description/SpectrometerField.h++"
+#include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Utility/MathConstant.h++"
 #include "MACE/Utility/VectorCast.h++"
 

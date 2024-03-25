@@ -1,13 +1,13 @@
 #pragma once
 
-#include "MACE/Detector/Field/SpectrometerField.h++"
+#include "MACE/Detector/Field/MMSField.h++"
 #include "MACE/Detector/Field/WrapAsG4Field.h++"
 
 namespace MACE::inline Simulation::inline Field {
 
-class SpectrometerField : public Detector::Field::WrapAsG4Field<Detector::Field::SpectrometerField> {
+class MMSField : public Detector::Field::WrapAsG4Field<Detector::Field::MMSField> {
 public:
-    SpectrometerField();
+    MMSField();
 };
 
 } // namespace MACE::inline Simulation::inline Field

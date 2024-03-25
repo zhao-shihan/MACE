@@ -15,6 +15,10 @@
 #include "MACE/Detector/Definition/Filter.h++"
 #include "MACE/Detector/Definition/MCP.h++"
 #include "MACE/Detector/Definition/MCPChamber.h++"
+#include "MACE/Detector/Definition/MMSBeamPipe.h++"
+#include "MACE/Detector/Definition/MMSField.h++"
+#include "MACE/Detector/Definition/MMSMagnet.h++"
+#include "MACE/Detector/Definition/MMSShield.h++"
 #include "MACE/Detector/Definition/STC.h++"
 #include "MACE/Detector/Definition/ShieldingWall.h++"
 #include "MACE/Detector/Definition/SolenoidB1.h++"
@@ -27,10 +31,6 @@
 #include "MACE/Detector/Definition/SolenoidS2Field.h++"
 #include "MACE/Detector/Definition/SolenoidS3.h++"
 #include "MACE/Detector/Definition/SolenoidS3Field.h++"
-#include "MACE/Detector/Definition/SpectrometerBeamPipe.h++"
-#include "MACE/Detector/Definition/SpectrometerField.h++"
-#include "MACE/Detector/Definition/SpectrometerMagnet.h++"
-#include "MACE/Detector/Definition/SpectrometerShield.h++"
 #include "MACE/Detector/Definition/Target.h++"
 #include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Description/CDC.h++"
@@ -44,12 +44,12 @@
 #include "MACE/SimMACE/SD/STCSD.h++"
 #include "MACE/Simulation/Field/AcceleratorField.h++"
 #include "MACE/Simulation/Field/EMCField.h++"
+#include "MACE/Simulation/Field/MMSField.h++"
 #include "MACE/Simulation/Field/SolenoidB1Field.h++"
 #include "MACE/Simulation/Field/SolenoidB2Field.h++"
 #include "MACE/Simulation/Field/SolenoidS1Field.h++"
 #include "MACE/Simulation/Field/SolenoidS2Field.h++"
 #include "MACE/Simulation/Field/SolenoidS3Field.h++"
-#include "MACE/Simulation/Field/SpectrometerField.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4EqMagElectricField.hh"
@@ -99,14 +99,14 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     auto& emcField{fWorld->NewDaughter<Detector::Definition::EMCField>(fCheckOverlap)};
     auto& emcShield{fWorld->NewDaughter<Detector::Definition::EMCShield>(fCheckOverlap)};
+    auto& mmsField{fWorld->NewDaughter<Detector::Definition::MMSField>(fCheckOverlap)};
+    auto& mmsShield{fWorld->NewDaughter<Detector::Definition::MMSShield>(fCheckOverlap)};
+    auto& shieldingWall{fWorld->NewDaughter<Detector::Definition::ShieldingWall>(fCheckOverlap)};
     auto& solenoidB1Field{fWorld->NewDaughter<Detector::Definition::SolenoidB1Field>(fCheckOverlap)};
     auto& solenoidB2Field{fWorld->NewDaughter<Detector::Definition::SolenoidB2Field>(fCheckOverlap)};
     auto& solenoidS1Field{fWorld->NewDaughter<Detector::Definition::SolenoidS1Field>(fCheckOverlap)};
     auto& solenoidS2Field{fWorld->NewDaughter<Detector::Definition::SolenoidS2Field>(fCheckOverlap)};
     auto& solenoidS3Field{fWorld->NewDaughter<Detector::Definition::SolenoidS3Field>(fCheckOverlap)};
-    auto& spectrometerField{fWorld->NewDaughter<Detector::Definition::SpectrometerField>(fCheckOverlap)};
-    auto& spectrometerShield{fWorld->NewDaughter<Detector::Definition::SpectrometerShield>(fCheckOverlap)};
-    auto& shieldingWall{fWorld->NewDaughter<Detector::Definition::ShieldingWall>(fCheckOverlap)};
 
     // 2
 
@@ -125,11 +125,11 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& filter{solenoidS2Field.NewDaughter<Detector::Definition::Filter>(fCheckOverlap)};
     auto& solenoidS2{solenoidS2Field.NewDaughter<Detector::Definition::SolenoidS2>(fCheckOverlap)};
 
-    auto& acceleratorField{spectrometerField.NewDaughter<Detector::Definition::AcceleratorField>(fCheckOverlap)};
-    auto& cdcBody{spectrometerField.NewDaughter<Detector::Definition::CDCBody>(fCheckOverlap)};
-    auto& spectrometerBeamPipe{spectrometerField.NewDaughter<Detector::Definition::SpectrometerBeamPipe>(fCheckOverlap)};
-    auto& spectrometerMagnet{spectrometerField.NewDaughter<Detector::Definition::SpectrometerMagnet>(fCheckOverlap)};
-    auto& stc{spectrometerField.NewDaughter<Detector::Definition::STC>(fCheckOverlap)};
+    auto& acceleratorField{mmsField.NewDaughter<Detector::Definition::AcceleratorField>(fCheckOverlap)};
+    auto& cdcBody{mmsField.NewDaughter<Detector::Definition::CDCBody>(fCheckOverlap)};
+    auto& mmsBeamPipe{mmsField.NewDaughter<Detector::Definition::MMSBeamPipe>(fCheckOverlap)};
+    auto& mmsMagnet{mmsField.NewDaughter<Detector::Definition::MMSMagnet>(fCheckOverlap)};
+    auto& stc{mmsField.NewDaughter<Detector::Definition::STC>(fCheckOverlap)};
 
     auto& solenoidS3{solenoidS3Field.NewDaughter<Detector::Definition::SolenoidS3>(fCheckOverlap)};
 
@@ -162,13 +162,13 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         const auto nist = G4NistManager::Instance();
 
         const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
-        emcField.RegisterMaterial(vacuum);
-        solenoidB1Field.RegisterMaterial(vacuum);
-        solenoidS1Field.RegisterMaterial(vacuum);
         acceleratorField.RegisterMaterial(vacuum);
+        emcField.RegisterMaterial(vacuum);
+        mmsField.RegisterMaterial(vacuum);
+        solenoidB1Field.RegisterMaterial(vacuum);
         solenoidB2Field.RegisterMaterial(vacuum);
+        solenoidS1Field.RegisterMaterial(vacuum);
         solenoidS2Field.RegisterMaterial(vacuum);
-        spectrometerField.RegisterMaterial(vacuum);
         solenoidS3Field.RegisterMaterial(vacuum);
         fWorld->RegisterMaterial(vacuum);
     }
@@ -210,8 +210,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         emcPMTAssemblies.RegisterRegion(fDefaultSolidRegion);
         filter.RegisterRegion(fDefaultSolidRegion);
         mcpChamber.RegisterRegion(fDefaultSolidRegion);
+        mmsBeamPipe.RegisterRegion(fDefaultSolidRegion);
         shieldingWall.RegisterRegion(fDefaultSolidRegion);
-        spectrometerBeamPipe.RegisterRegion(fDefaultSolidRegion);
 
         // EMCSensitiveRegion
         fEMCSensitiveRegion = new Region("EMCSensitive", RegionType::EMCSensitive);
@@ -230,18 +230,18 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         fShieldRegion->SetProductionCuts(defaultCuts);
 
         emcShield.RegisterRegion(fShieldRegion);
-        spectrometerShield.RegisterRegion(fShieldRegion);
+        mmsShield.RegisterRegion(fShieldRegion);
 
         // SolenoidOrMagnetRegion
         fSolenoidOrMagnetRegion = new Region("SolenoidOrMagnet", RegionType::SolenoidOrMagnet);
         fSolenoidOrMagnetRegion->SetProductionCuts(defaultCuts);
 
-        solenoidB1.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidS1.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidB2.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidS2.RegisterRegion(fSolenoidOrMagnetRegion);
-        spectrometerMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
         emcMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
+        mmsMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
+        solenoidB1.RegisterRegion(fSolenoidOrMagnetRegion);
+        solenoidB2.RegisterRegion(fSolenoidOrMagnetRegion);
+        solenoidS1.RegisterRegion(fSolenoidOrMagnetRegion);
+        solenoidS2.RegisterRegion(fSolenoidOrMagnetRegion);
         solenoidS3.RegisterRegion(fSolenoidOrMagnetRegion);
 
         // CDCSensitiveRegion
@@ -266,13 +266,13 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         fVacuumRegion = new Region("Vacuum", RegionType::Vacuum);
         fVacuumRegion->SetProductionCuts(defaultCuts);
 
-        emcField.RegisterRegion(fVacuumRegion);
-        solenoidB1Field.RegisterRegion(fVacuumRegion);
-        solenoidS1Field.RegisterRegion(fVacuumRegion);
         acceleratorField.RegisterRegion(fVacuumRegion);
+        emcField.RegisterRegion(fVacuumRegion);
+        mmsField.RegisterRegion(fVacuumRegion);
+        solenoidB1Field.RegisterRegion(fVacuumRegion);
         solenoidB2Field.RegisterRegion(fVacuumRegion);
+        solenoidS1Field.RegisterRegion(fVacuumRegion);
         solenoidS2Field.RegisterRegion(fVacuumRegion);
-        spectrometerField.RegisterRegion(fVacuumRegion);
         solenoidS3Field.RegisterRegion(fVacuumRegion);
     }
 
@@ -302,12 +302,12 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
         constexpr auto hMin = 100_um;
 
-        spectrometerField.RegisterField<
-            SpectrometerField,
-            G4TMagFieldEquation<SpectrometerField>,
-            G4TDormandPrince45<G4TMagFieldEquation<SpectrometerField>>,
-            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<SpectrometerField>>>>(
-            new SpectrometerField, hMin, 6, 6, false);
+        mmsField.RegisterField<
+            MMSField,
+            G4TMagFieldEquation<MMSField>,
+            G4TDormandPrince45<G4TMagFieldEquation<MMSField>>,
+            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<MMSField>>>>(
+            new MMSField, hMin, 6, 6, false);
 
         acceleratorField.RegisterField<
             AcceleratorField,

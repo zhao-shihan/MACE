@@ -4,8 +4,8 @@
 #include "MACE/DataModel/Hit/MCPHit.h++"
 #include "MACE/DataModel/Track/CDCHelixTrack.h++"
 #include "MACE/DataModel/Track/CDCPhysicsTrack.h++"
-#include "MACE/Detector/Description/SpectrometerField.h++"
-#include "MACE/Detector/Field/SpectrometerField.h++"
+#include "MACE/Detector/Description/MMSField.h++"
+#include "MACE/Detector/Field/MMSField.h++"
 #include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/Math/Norm.h++"
 #include "MACE/Utility/VectorArithmeticOperator.h++"
@@ -23,7 +23,7 @@ private:
     AFloat ComputePointCircleDCA(const AFloat r, const stdx::array2<AFloat> center, const stdx::array2<AFloat> point) const;
 
 private:
-    Detector::Field::SpectrometerField fSpectrometerField;
+    Detector::Field::MMSField fMMSField;
 };
 
 } // namespace MACE::Analysis

@@ -1,4 +1,4 @@
-#include "MACE/Detector/Description/SpectrometerShield.h++"
+#include "MACE/Detector/Description/MMSShield.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 namespace MACE::Detector::Description {
@@ -6,8 +6,8 @@ namespace MACE::Detector::Description {
 using namespace LiteralUnit::Length;
 using namespace LiteralUnit::Angle;
 
-SpectrometerShield::SpectrometerShield() :
-    DescriptionSingletonBase{"SpectrometerShield"},
+MMSShield::MMSShield() :
+    DescriptionSingletonBase{"MMSShield"},
     // Geometry
     fInnerRadius{62_cm},
     fInnerLength{224_cm},
@@ -17,7 +17,7 @@ SpectrometerShield::SpectrometerShield() :
     // Material
     fMaterialName{"G4_Pb"} {}
 
-auto SpectrometerShield::ImportValues(const YAML::Node& node) -> void {
+auto MMSShield::ImportValues(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fInnerLength, "InnerLength");
@@ -28,7 +28,7 @@ auto SpectrometerShield::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fMaterialName, "MaterialName");
 }
 
-auto SpectrometerShield::ExportValues(YAML::Node& node) const -> void {
+auto MMSShield::ExportValues(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fInnerLength, "InnerLength");

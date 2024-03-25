@@ -4,12 +4,12 @@
 
 namespace MACE::Detector::Description {
 
-class SpectrometerField final : public DescriptionSingletonBase<SpectrometerField> {
+class MMSField final : public DescriptionSingletonBase<MMSField> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
-    SpectrometerField();
-    ~SpectrometerField() = default;
+    MMSField();
+    ~MMSField() = default;
 
 public:
     ///////////////////////////////////////////////////////////

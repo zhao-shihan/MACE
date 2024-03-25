@@ -4,10 +4,10 @@
 #include "MACE/Detector/Description/EMCField.h++"
 #include "MACE/Detector/Description/EMCShield.h++"
 #include "MACE/Detector/Description/MCP.h++"
+#include "MACE/Detector/Description/MMSField.h++"
+#include "MACE/Detector/Description/MMSMagnet.h++"
+#include "MACE/Detector/Description/MMSShield.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Detector/Description/SpectrometerField.h++"
-#include "MACE/Detector/Description/SpectrometerMagnet.h++"
-#include "MACE/Detector/Description/SpectrometerShield.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/SimGuide/Action/DetectorConstruction.h++"
 
@@ -23,13 +23,13 @@ DetectorConstruction::DetectorConstruction() :
     fSolenoidS1{},
     fAcceleratorField{},
     fMCP{},
+    fMMSField{},
+    fMMSMagnet{},
+    fMMSShield{},
     fSolenoidB2Field{},
     fSolenoidB2{},
     fSolenoidS2Field{},
     fSolenoidS2{},
-    fSpectrometerField{},
-    fSpectrometerMagnet{},
-    fSpectrometerShield{},
     fSolenoidS3Field{},
     fSolenoidS3{},
     fWorld{} {

@@ -1,12 +1,12 @@
-#include "MACE/Detector/Description/SpectrometerMagnet.h++"
+#include "MACE/Detector/Description/MMSMagnet.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 namespace MACE::Detector::Description {
 
 using namespace LiteralUnit::Length;
 
-SpectrometerMagnet::SpectrometerMagnet() :
-    DescriptionSingletonBase{"SpectrometerMagnet"},
+MMSMagnet::MMSMagnet() :
+    DescriptionSingletonBase{"MMSMagnet"},
     // Geometry
     fInnerRadius{55_cm},
     fOuterRadius{60_cm},
@@ -14,7 +14,7 @@ SpectrometerMagnet::SpectrometerMagnet() :
     // Material
     fMaterialName{"G4_Cu"} {}
 
-void SpectrometerMagnet::ImportValues(const YAML::Node& node) {
+void MMSMagnet::ImportValues(const YAML::Node& node) {
     // Geometry
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fOuterRadius, "OuterRadius");
@@ -23,7 +23,7 @@ void SpectrometerMagnet::ImportValues(const YAML::Node& node) {
     ImportValue(node, fMaterialName, "MaterialName");
 }
 
-void SpectrometerMagnet::ExportValues(YAML::Node& node) const {
+void MMSMagnet::ExportValues(YAML::Node& node) const {
     // Geometry
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fOuterRadius, "OuterRadius");

@@ -14,6 +14,11 @@
 #include "MACE/Detector/Definition/Filter.h++"
 #include "MACE/Detector/Definition/MCP.h++"
 #include "MACE/Detector/Definition/MCPChamber.h++"
+#include "MACE/Detector/Definition/MMSBeamPipe.h++"
+#include "MACE/Detector/Definition/MMSField.h++"
+#include "MACE/Detector/Definition/MMSMagnet.h++"
+#include "MACE/Detector/Definition/MMSShield.h++"
+#include "MACE/Detector/Definition/STC.h++"
 #include "MACE/Detector/Definition/ShieldingWall.h++"
 #include "MACE/Detector/Definition/SolenoidB1.h++"
 #include "MACE/Detector/Definition/SolenoidB1Field.h++"
@@ -25,11 +30,6 @@
 #include "MACE/Detector/Definition/SolenoidS2Field.h++"
 #include "MACE/Detector/Definition/SolenoidS3.h++"
 #include "MACE/Detector/Definition/SolenoidS3Field.h++"
-#include "MACE/Detector/Definition/SpectrometerBeamPipe.h++"
-#include "MACE/Detector/Definition/SpectrometerField.h++"
-#include "MACE/Detector/Definition/SpectrometerMagnet.h++"
-#include "MACE/Detector/Definition/SpectrometerShield.h++"
-#include "MACE/Detector/Definition/STC.h++"
 #include "MACE/Detector/Definition/Target.h++"
 #include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Description/DescriptionIO.h++"
@@ -63,14 +63,14 @@ int main(int argc, char* argv[]) {
 
     auto& emcField{fWorld->NewDaughter<EMCField>(fCheckOverlap)};
     auto& emcShield{fWorld->NewDaughter<EMCShield>(fCheckOverlap)};
+    auto& mmsField{fWorld->NewDaughter<MMSField>(fCheckOverlap)};
+    auto& mmsShield{fWorld->NewDaughter<MMSShield>(fCheckOverlap)};
+    auto& shieldingWall{fWorld->NewDaughter<ShieldingWall>(fCheckOverlap)};
     auto& solenoidB1Field{fWorld->NewDaughter<SolenoidB1Field>(fCheckOverlap)};
     auto& solenoidB2Field{fWorld->NewDaughter<SolenoidB2Field>(fCheckOverlap)};
     auto& solenoidS1Field{fWorld->NewDaughter<SolenoidS1Field>(fCheckOverlap)};
     auto& solenoidS2Field{fWorld->NewDaughter<SolenoidS2Field>(fCheckOverlap)};
     auto& solenoidS3Field{fWorld->NewDaughter<SolenoidS3Field>(fCheckOverlap)};
-    auto& spectrometerField{fWorld->NewDaughter<SpectrometerField>(fCheckOverlap)};
-    auto& spectrometerShield{fWorld->NewDaughter<SpectrometerShield>(fCheckOverlap)};
-    auto& shieldingWall{fWorld->NewDaughter<ShieldingWall>(fCheckOverlap)};
 
     // 2
 
@@ -89,11 +89,11 @@ int main(int argc, char* argv[]) {
     /* auto& filter */ solenoidS2Field.NewDaughter<Filter>(fCheckOverlap);
     auto& solenoidS2{solenoidS2Field.NewDaughter<SolenoidS2>(fCheckOverlap)};
 
-    auto& acceleratorField{spectrometerField.NewDaughter<AcceleratorField>(fCheckOverlap)};
-    auto& cdcBody{spectrometerField.NewDaughter<CDCBody>(fCheckOverlap)};
-    /* auto& spectrometerBeamPipe */ spectrometerField.NewDaughter<SpectrometerBeamPipe>(fCheckOverlap);
-    auto& spectrometerMagnet{spectrometerField.NewDaughter<SpectrometerMagnet>(fCheckOverlap)};
-    /* auto& stc */ spectrometerField.NewDaughter<STC>(fCheckOverlap);
+    auto& acceleratorField{mmsField.NewDaughter<AcceleratorField>(fCheckOverlap)};
+    auto& cdcBody{mmsField.NewDaughter<CDCBody>(fCheckOverlap)};
+    /* auto& mmsBeamPipe */ mmsField.NewDaughter<MMSBeamPipe>(fCheckOverlap);
+    auto& mmsMagnet{mmsField.NewDaughter<MMSMagnet>(fCheckOverlap)};
+    /* auto& stc */ mmsField.NewDaughter<STC>(fCheckOverlap);
 
     auto& solenoidS3{solenoidS3Field.NewDaughter<SolenoidS3>(fCheckOverlap)};
 
@@ -126,13 +126,13 @@ int main(int argc, char* argv[]) {
         const auto nist = G4NistManager::Instance();
 
         const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
-        emcField.RegisterMaterial(vacuum);
-        solenoidB1Field.RegisterMaterial(vacuum);
-        solenoidS1Field.RegisterMaterial(vacuum);
         acceleratorField.RegisterMaterial(vacuum);
+        emcField.RegisterMaterial(vacuum);
+        mmsField.RegisterMaterial(vacuum);
+        solenoidB1Field.RegisterMaterial(vacuum);
         solenoidB2Field.RegisterMaterial(vacuum);
+        solenoidS1Field.RegisterMaterial(vacuum);
         solenoidS2Field.RegisterMaterial(vacuum);
-        spectrometerField.RegisterMaterial(vacuum);
         solenoidS3Field.RegisterMaterial(vacuum);
         fWorld->RegisterMaterial(vacuum);
     }
@@ -159,12 +159,12 @@ int main(int argc, char* argv[]) {
     geoManager->GetVolume(fWorld->LogicalVolume()->GetName())->SetInvisible();
     using MACE::Detector::Definition::DefinitionBase;
     for (auto&& entity : std::initializer_list<std::reference_wrapper<const DefinitionBase>>{
-             emcShield,
              emcCrystal,
-             emcPMTAssemblies,
              emcMagnet,
-             spectrometerMagnet,
-             spectrometerShield,
+             emcPMTAssemblies,
+             emcShield,
+             mmsMagnet,
+             mmsShield,
              shieldingWall,
              solenoidB1,
              solenoidB2,

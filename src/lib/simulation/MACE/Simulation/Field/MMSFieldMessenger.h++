@@ -9,21 +9,21 @@ class G4UIdirectory;
 
 namespace MACE::inline Simulation::inline Field {
 
-class SpectrometerField;
+class MMSField;
 
-class SpectrometerFieldMessenger final : public Geant4X::SingletonMessenger<SpectrometerFieldMessenger> {
+class MMSFieldMessenger final : public Geant4X::SingletonMessenger<MMSFieldMessenger> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
-    SpectrometerFieldMessenger();
-    ~SpectrometerFieldMessenger();
+    MMSFieldMessenger();
+    ~MMSFieldMessenger();
 
 public:
     auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
     std::unique_ptr<G4UIdirectory> fDirectory;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSpectrometerMagneticField;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMMSMagneticField;
 };
 
 } // namespace MACE::inline Simulation::inline Field

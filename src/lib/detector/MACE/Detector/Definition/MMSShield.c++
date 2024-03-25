@@ -1,5 +1,5 @@
-#include "MACE/Detector/Definition/SpectrometerShield.h++"
-#include "MACE/Detector/Description/SpectrometerShield.h++"
+#include "MACE/Detector/Definition/MMSShield.h++"
+#include "MACE/Detector/Description/MMSShield.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
@@ -14,8 +14,8 @@ namespace MACE::Detector::Definition {
 
 using namespace LiteralUnit;
 
-auto SpectrometerShield::Construct(G4bool checkOverlaps) -> void {
-    const auto& shield{Description::SpectrometerShield::Instance()};
+auto MMSShield::Construct(G4bool checkOverlaps) -> void {
+    const auto& shield{Description::MMSShield::Instance()};
 
     const auto pb{G4NistManager::Instance()->FindOrBuildMaterial(shield.MaterialName())};
 

@@ -358,6 +358,27 @@ MCP:
 MCPChamber:
   InnerRadius: 100
   Thickness: 0.5
+MMSBeamPipe:
+  InnerRadius: 100
+  BerylliumLength: 1000
+  BerylliumThickness: 0.5
+  AluminiumThickness: 2
+MMSField:
+  Radius: 610
+  Length: 2200
+  MagneticFluxDensity: 0.0001
+MMSMagnet:
+  InnerRadius: 550
+  OuterRadius: 600
+  Length: 2200
+  MaterialName: G4_Cu
+MMSShield:
+  InnerRadius: 620
+  InnerLength: 2240
+  Thickness: 50
+  WindowRadius: 30
+  BeamSlantAngle: 0
+  MaterialName: G4_Pb
 STC:
   Length: 150
   Width: 100
@@ -548,27 +569,6 @@ Solenoid:
   FieldRadius: 101
   MaterialName: G4_Cu
   MagneticFluxDensity: 0.0001
-SpectrometerBeamPipe:
-  InnerRadius: 100
-  BerylliumLength: 1000
-  BerylliumThickness: 0.5
-  AluminiumThickness: 2
-SpectrometerField:
-  Radius: 610
-  Length: 2200
-  MagneticFluxDensity: 0.0001
-SpectrometerMagnet:
-  InnerRadius: 550
-  OuterRadius: 600
-  Length: 2200
-  MaterialName: G4_Cu
-SpectrometerShield:
-  InnerRadius: 620
-  InnerLength: 2240
-  Thickness: 50
-  WindowRadius: 30
-  BeamSlantAngle: 0
-  MaterialName: G4_Pb
 Target:
   ShapeType: MultiLayer
   Cuboid:

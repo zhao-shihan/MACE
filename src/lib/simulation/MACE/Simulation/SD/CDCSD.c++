@@ -1,4 +1,4 @@
-#include "MACE/Detector/Description/SpectrometerField.h++"
+#include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/External/gfx/timsort.hpp"
 #include "MACE/Math/MidPoint.h++"
 #include "MACE/Simulation/SD/CDCSD.h++"
@@ -186,7 +186,7 @@ auto CDCSD::BuildTrackData() -> void {
                  [](const auto& hit1, const auto& hit2) {
                      return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
                  });
-    const auto magneticFluxDensity{Detector::Description::SpectrometerField::Instance().MagneticFluxDensity()};
+    const auto magneticFluxDensity{Detector::Description::MMSField::Instance().MagneticFluxDensity()};
     auto lastTrackID{-1};
     std::unique_ptr<Data::Tuple<Data::CDCSimTrack>> track;
     std::unordered_set<int> firedCell;

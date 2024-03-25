@@ -24,6 +24,27 @@ CDC:
   OuterShellCFRPDensity: 1.2170942695198487e+19
   MeanDriftVelocity: 0.035000000000000003
   TimeResolutionFWHM: 30
+MMSBeamPipe:
+  InnerRadius: 100
+  BerylliumLength: 1000
+  BerylliumThickness: 0.5
+  AluminiumThickness: 2
+MMSField:
+  Radius: 610
+  Length: 2200
+  MagneticFluxDensity: 0.0001
+MMSMagnet:
+  InnerRadius: 550
+  OuterRadius: 600
+  Length: 2200
+  MaterialName: G4_Cu
+MMSShield:
+  InnerRadius: 620
+  InnerLength: 2240
+  Thickness: 50
+  WindowRadius: 30
+  BeamSlantAngle: 0
+  MaterialName: G4_Pb
 STC:
   Length: 150
   Width: 100
@@ -198,27 +219,6 @@ STC:
   ScintillationYield: 11136
   ScintillationTimeConstant1: 2.3999999999999999
   ResolutionScale: 1
-SpectrometerBeamPipe:
-  InnerRadius: 100
-  BerylliumLength: 1000
-  BerylliumThickness: 0.5
-  AluminiumThickness: 2
-SpectrometerField:
-  Radius: 610
-  Length: 2200
-  MagneticFluxDensity: 0.0001
-SpectrometerMagnet:
-  InnerRadius: 550
-  OuterRadius: 600
-  Length: 2200
-  MaterialName: G4_Cu
-SpectrometerShield:
-  InnerRadius: 620
-  InnerLength: 2240
-  Thickness: 50
-  WindowRadius: 30
-  BeamSlantAngle: 0
-  MaterialName: G4_Pb
 World:
   HalfXExtent: 3000
   HalfYExtent: 1000

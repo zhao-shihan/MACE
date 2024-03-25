@@ -11,13 +11,13 @@
 #include "MACE/Detector/Description/Filter.h++"
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Detector/Description/MCPChamber.h++"
+#include "MACE/Detector/Description/MMSBeamPipe.h++"
+#include "MACE/Detector/Description/MMSField.h++"
+#include "MACE/Detector/Description/MMSMagnet.h++"
+#include "MACE/Detector/Description/MMSShield.h++"
 #include "MACE/Detector/Description/STC.h++"
 #include "MACE/Detector/Description/ShieldingWall.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Detector/Description/SpectrometerBeamPipe.h++"
-#include "MACE/Detector/Description/SpectrometerField.h++"
-#include "MACE/Detector/Description/SpectrometerMagnet.h++"
-#include "MACE/Detector/Description/SpectrometerShield.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
@@ -81,12 +81,12 @@ public:
                                         Detector::Description::Filter,
                                         Detector::Description::MCP,
                                         Detector::Description::MCPChamber,
+                                        Detector::Description::MMSBeamPipe,
+                                        Detector::Description::MMSField,
+                                        Detector::Description::MMSMagnet,
+                                        Detector::Description::MMSShield,
                                         Detector::Description::ShieldingWall,
                                         Detector::Description::Solenoid,
-                                        Detector::Description::SpectrometerBeamPipe,
-                                        Detector::Description::SpectrometerField,
-                                        Detector::Description::SpectrometerMagnet,
-                                        Detector::Description::SpectrometerShield,
                                         Detector::Description::STC,
                                         Detector::Description::Target,
                                         Detector::Description::World>;

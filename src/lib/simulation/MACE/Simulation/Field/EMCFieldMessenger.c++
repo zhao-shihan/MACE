@@ -10,23 +10,23 @@ namespace MACE::inline Simulation::inline Field {
 EMCFieldMessenger::EMCFieldMessenger() :
     SingletonMessenger{},
     fDirectory{},
-    fSpectrometerMagneticField{} {
+    fEMCMagneticField{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Field/");
     fDirectory->SetGuidance("Detector field controller.");
 
-    fSpectrometerMagneticField = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Field/EMCMagneticField", this);
-    fSpectrometerMagneticField->SetGuidance("Set the magnetic flux density of spectrometer magnetic field.");
-    fSpectrometerMagneticField->SetParameterName("B", false);
-    fSpectrometerMagneticField->SetUnitCategory("Magnetic flux density");
-    fSpectrometerMagneticField->AvailableForStates(G4State_Idle);
+    fEMCMagneticField = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Field/EMCMagneticField", this);
+    fEMCMagneticField->SetGuidance("Set the magnetic flux density of mms magnetic field.");
+    fEMCMagneticField->SetParameterName("B", false);
+    fEMCMagneticField->SetUnitCategory("Magnetic flux density");
+    fEMCMagneticField->AvailableForStates(G4State_Idle);
 }
 
 EMCFieldMessenger::~EMCFieldMessenger() = default;
 
 auto EMCFieldMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
-    if (command == fSpectrometerMagneticField.get()) {
-        Detector::Description::EMCField::Instance().MagneticFluxDensity(fSpectrometerMagneticField->GetNewDoubleValue(value));
+    if (command == fEMCMagneticField.get()) {
+        Detector::Description::EMCField::Instance().MagneticFluxDensity(fEMCMagneticField->GetNewDoubleValue(value));
     }
 }
 

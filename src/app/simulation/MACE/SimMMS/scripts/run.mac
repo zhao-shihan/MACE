@@ -9,13 +9,13 @@
 
 /run/initialize
 
-/gps/particle                                  e+
-/gps/pos/type                                  Point
-/gps/pos/centre                                0 0 0 m
-/gps/ang/type                                  iso
-/gps/ene/mono                                  52.8 MeV
+/gps/particle                         e+
+/gps/pos/type                         Point
+/gps/pos/centre                       0 0 0 m
+/gps/ang/type                         iso
+/gps/ene/mono                         52.8 MeV
 
-/MACE/Field/SpectrometerMagneticField     0.1 tesla
+/MACE/Field/MMSMagneticField          0.1 tesla
 
 /MACE/Analysis/CoincidenceWithCDC     true
 /MACE/Analysis/CoincidenceWithSTC     true

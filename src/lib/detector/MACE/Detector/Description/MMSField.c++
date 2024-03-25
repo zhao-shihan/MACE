@@ -1,4 +1,4 @@
-#include "MACE/Detector/Description/SpectrometerField.h++"
+#include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 namespace MACE::Detector::Description {
@@ -6,15 +6,15 @@ namespace MACE::Detector::Description {
 using namespace LiteralUnit::Length;
 using namespace LiteralUnit::MagneticFluxDensity;
 
-SpectrometerField::SpectrometerField() :
-    DescriptionSingletonBase{"SpectrometerField"},
+MMSField::MMSField() :
+    DescriptionSingletonBase{"MMSField"},
     // Geometry
     fRadius{61_cm},
     fLength{220_cm},
     // Field
     fMagneticFluxDensity{100_mT} {}
 
-void SpectrometerField::ImportValues(const YAML::Node& node) {
+void MMSField::ImportValues(const YAML::Node& node) {
     // Geometry
     ImportValue(node, fRadius, "Radius");
     ImportValue(node, fLength, "Length");
@@ -22,7 +22,7 @@ void SpectrometerField::ImportValues(const YAML::Node& node) {
     ImportValue(node, fMagneticFluxDensity, "MagneticFluxDensity");
 }
 
-void SpectrometerField::ExportValues(YAML::Node& node) const {
+void MMSField::ExportValues(YAML::Node& node) const {
     // Geometry
     ExportValue(node, fRadius, "Radius");
     ExportValue(node, fLength, "Length");

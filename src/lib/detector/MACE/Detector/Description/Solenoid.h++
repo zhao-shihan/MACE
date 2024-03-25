@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Detector/Description/DescriptionBase.h++"
-#include "MACE/Detector/Description/SpectrometerField.h++"
+#include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/Utility/VectorArithmeticOperator.h++"
 
@@ -40,7 +40,7 @@ public:
     auto OuterRadius(double val) -> void { fOuterRadius = val; }
     auto FieldRadius(double val) -> void { fFieldRadius = val; }
 
-    auto S1Center() const -> stdx::array3d { return {0, 0, (SpectrometerField::Instance().Length() + fS1Length) / 2}; }
+    auto S1Center() const -> stdx::array3d { return {0, 0, (MMSField::Instance().Length() + fS1Length) / 2}; }
     auto B1Center() const -> stdx::array3d { return S1Center() + stdx::array3d{fB1Radius, 0, fS1Length / 2}; }
     auto S2Center() const -> stdx::array3d { return B1Center() + stdx::array3d{fS2Length / 2, 0, fB1Radius}; }
     auto B2Center() const -> stdx::array3d { return S2Center() + stdx::array3d{fS2Length / 2, 0, fB2Radius}; }

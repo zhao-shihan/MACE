@@ -18,9 +18,9 @@ class EMCField;
 class EMCShield;
 class AcceleratorField;
 class MCP;
-class SpectrometerField;
-class SpectrometerMagnet;
-class SpectrometerShield;
+class MMSField;
+class MMSMagnet;
+class MMSShield;
 class Solenoid;
 class World;
 
@@ -47,9 +47,9 @@ public:
                                         Detector::Description::EMCShield,
                                         Detector::Description::AcceleratorField,
                                         Detector::Description::MCP,
-                                        Detector::Description::SpectrometerField,
-                                        Detector::Description::SpectrometerMagnet,
-                                        Detector::Description::SpectrometerShield,
+                                        Detector::Description::MMSField,
+                                        Detector::Description::MMSMagnet,
+                                        Detector::Description::MMSShield,
                                         Detector::Description::Solenoid,
                                         Detector::Description::World>;
 
@@ -65,13 +65,13 @@ private:
     std::shared_ptr<Detector::DefinitionBase> fSolenoidS1;
     std::shared_ptr<Detector::DefinitionBase> fAcceleratorField;
     std::shared_ptr<Detector::DefinitionBase> fMCP;
+    std::shared_ptr<Detector::DefinitionBase> fMMSField;
+    std::shared_ptr<Detector::DefinitionBase> fMMSMagnet;
+    std::shared_ptr<Detector::DefinitionBase> fMMSShield;
     std::shared_ptr<Detector::DefinitionBase> fSolenoidB2Field;
     std::shared_ptr<Detector::DefinitionBase> fSolenoidB2;
     std::shared_ptr<Detector::DefinitionBase> fSolenoidS2Field;
     std::shared_ptr<Detector::DefinitionBase> fSolenoidS2;
-    std::shared_ptr<Detector::DefinitionBase> fSpectrometerField;
-    std::shared_ptr<Detector::DefinitionBase> fSpectrometerMagnet;
-    std::shared_ptr<Detector::DefinitionBase> fSpectrometerShield;
     std::shared_ptr<Detector::DefinitionBase> fSolenoidS3Field;
     std::shared_ptr<Detector::DefinitionBase> fSolenoidS3;
     std::shared_ptr<Detector::DefinitionBase> fWorld;

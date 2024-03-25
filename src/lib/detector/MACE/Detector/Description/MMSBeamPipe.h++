@@ -7,12 +7,12 @@
 
 namespace MACE::Detector::Description {
 
-class SpectrometerBeamPipe final : public DescriptionSingletonBase<SpectrometerBeamPipe> {
+class MMSBeamPipe final : public DescriptionSingletonBase<MMSBeamPipe> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
-    SpectrometerBeamPipe();
-    ~SpectrometerBeamPipe() = default;
+    MMSBeamPipe();
+    ~MMSBeamPipe() = default;
 
 public:
     auto InnerRadius() const -> auto { return fInnerRadius; }

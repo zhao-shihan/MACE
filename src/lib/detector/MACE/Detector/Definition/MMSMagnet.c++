@@ -1,5 +1,5 @@
-#include "MACE/Detector/Definition/SpectrometerMagnet.h++"
-#include "MACE/Detector/Description/SpectrometerMagnet.h++"
+#include "MACE/Detector/Definition/MMSMagnet.h++"
+#include "MACE/Detector/Description/MMSMagnet.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
@@ -10,8 +10,8 @@ namespace MACE::Detector::Definition {
 
 using namespace LiteralUnit::MathConstantSuffix;
 
-auto SpectrometerMagnet::Construct(G4bool checkOverlaps) -> void {
-    const auto& magnet{Description::SpectrometerMagnet::Instance()};
+auto MMSMagnet::Construct(G4bool checkOverlaps) -> void {
+    const auto& magnet{Description::MMSMagnet::Instance()};
 
     auto solid{Make<G4Tubs>(
         magnet.Name(),

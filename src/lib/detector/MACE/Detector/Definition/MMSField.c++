@@ -1,5 +1,5 @@
-#include "MACE/Detector/Definition/SpectrometerField.h++"
-#include "MACE/Detector/Description/SpectrometerField.h++"
+#include "MACE/Detector/Definition/MMSField.h++"
+#include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Utility/MathConstant.h++"
 
 #include "G4PVPlacement.hh"
@@ -10,8 +10,8 @@ namespace MACE::Detector::Definition {
 
 using namespace MathConstant;
 
-auto SpectrometerField::Construct(G4bool checkOverlaps) -> void {
-    const auto& description = Description::SpectrometerField::Instance();
+auto MMSField::Construct(G4bool checkOverlaps) -> void {
+    const auto& description = Description::MMSField::Instance();
     auto name = description.Name();
     auto length = description.Length();
     auto radius = description.Radius();

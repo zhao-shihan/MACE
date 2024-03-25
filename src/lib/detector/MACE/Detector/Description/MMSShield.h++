@@ -7,12 +7,12 @@
 
 namespace MACE::Detector::Description {
 
-class SpectrometerShield final : public DescriptionSingletonBase<SpectrometerShield> {
+class MMSShield final : public DescriptionSingletonBase<MMSShield> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
-    SpectrometerShield();
-    ~SpectrometerShield() = default;
+    MMSShield();
+    ~MMSShield() = default;
 
 public:
     // Geometry

@@ -7,12 +7,12 @@
 
 namespace MACE::Detector::Description {
 
-class SpectrometerMagnet final : public DescriptionSingletonBase<SpectrometerMagnet> {
+class MMSMagnet final : public DescriptionSingletonBase<MMSMagnet> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
-    SpectrometerMagnet();
-    ~SpectrometerMagnet() = default;
+    MMSMagnet();
+    ~MMSMagnet() = default;
 
 public:
     // Geometry

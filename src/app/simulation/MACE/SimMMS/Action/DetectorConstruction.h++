@@ -1,11 +1,11 @@
 #pragma once
 
 #include "MACE/Detector/Description/CDC.h++"
+#include "MACE/Detector/Description/MMSBeamPipe.h++"
+#include "MACE/Detector/Description/MMSField.h++"
+#include "MACE/Detector/Description/MMSMagnet.h++"
+#include "MACE/Detector/Description/MMSShield.h++"
 #include "MACE/Detector/Description/STC.h++"
-#include "MACE/Detector/Description/SpectrometerBeamPipe.h++"
-#include "MACE/Detector/Description/SpectrometerField.h++"
-#include "MACE/Detector/Description/SpectrometerMagnet.h++"
-#include "MACE/Detector/Description/SpectrometerShield.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimMMS/Region.h++"
@@ -52,10 +52,10 @@ public:
 
 public:
     using DescriptionInUse = std::tuple<Detector::Description::CDC,
-                                        Detector::Description::SpectrometerBeamPipe,
-                                        Detector::Description::SpectrometerField,
-                                        Detector::Description::SpectrometerMagnet,
-                                        Detector::Description::SpectrometerShield,
+                                        Detector::Description::MMSBeamPipe,
+                                        Detector::Description::MMSField,
+                                        Detector::Description::MMSMagnet,
+                                        Detector::Description::MMSShield,
                                         Detector::Description::STC,
                                         Detector::Description::World>;
 

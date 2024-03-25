@@ -5,11 +5,11 @@
 #include "MACE/Detector/Definition/CDCSuperLayer.h++"
 #include "MACE/Detector/Definition/DefinitionBase.h++"
 #include "MACE/Detector/Definition/Filter.h++"
+#include "MACE/Detector/Definition/MMSBeamPipe.h++"
+#include "MACE/Detector/Definition/MMSField.h++"
+#include "MACE/Detector/Definition/MMSMagnet.h++"
+#include "MACE/Detector/Definition/MMSShield.h++"
 #include "MACE/Detector/Definition/STC.h++"
-#include "MACE/Detector/Definition/SpectrometerBeamPipe.h++"
-#include "MACE/Detector/Definition/SpectrometerField.h++"
-#include "MACE/Detector/Definition/SpectrometerMagnet.h++"
-#include "MACE/Detector/Definition/SpectrometerShield.h++"
 #include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/SimMMS/Action/DetectorConstruction.h++"
@@ -17,7 +17,7 @@
 #include "MACE/SimMMS/SD/CDCSD.h++"
 #include "MACE/SimMMS/SD/STCSD.h++"
 #include "MACE/Simulation/Field/AcceleratorField.h++"
-#include "MACE/Simulation/Field/SpectrometerField.h++"
+#include "MACE/Simulation/Field/MMSField.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4EqMagElectricField.hh"
@@ -61,15 +61,15 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     // 1
 
-    auto& spectrometerField{fWorld->NewDaughter<Detector::Definition::SpectrometerField>(fCheckOverlap)};
-    auto& spectrometerShield{fWorld->NewDaughter<Detector::Definition::SpectrometerShield>(fCheckOverlap)};
+    auto& mmsField{fWorld->NewDaughter<Detector::Definition::MMSField>(fCheckOverlap)};
+    auto& mmsShield{fWorld->NewDaughter<Detector::Definition::MMSShield>(fCheckOverlap)};
 
     // 2
 
-    auto& cdcBody{spectrometerField.NewDaughter<Detector::Definition::CDCBody>(fCheckOverlap)};
-    auto& spectrometerBeamPipe{spectrometerField.NewDaughter<Detector::Definition::SpectrometerBeamPipe>(fCheckOverlap)};
-    auto& spectrometerMagnet{spectrometerField.NewDaughter<Detector::Definition::SpectrometerMagnet>(fCheckOverlap)};
-    auto& stc{spectrometerField.NewDaughter<Detector::Definition::STC>(fCheckOverlap)};
+    auto& cdcBody{mmsField.NewDaughter<Detector::Definition::CDCBody>(fCheckOverlap)};
+    auto& mmsBeamPipe{mmsField.NewDaughter<Detector::Definition::MMSBeamPipe>(fCheckOverlap)};
+    auto& mmsMagnet{mmsField.NewDaughter<Detector::Definition::MMSMagnet>(fCheckOverlap)};
+    auto& stc{mmsField.NewDaughter<Detector::Definition::STC>(fCheckOverlap)};
 
     // 3
 
@@ -96,7 +96,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         const auto nist = G4NistManager::Instance();
 
         const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
-        spectrometerField.RegisterMaterial(vacuum);
+        mmsField.RegisterMaterial(vacuum);
         fWorld->RegisterMaterial(vacuum);
     }
 
@@ -132,19 +132,19 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         fDefaultSolidRegion->SetProductionCuts(defaultCuts);
 
         cdcBody.RegisterRegion(fDefaultSolidRegion);
-        spectrometerBeamPipe.RegisterRegion(fDefaultSolidRegion);
+        mmsBeamPipe.RegisterRegion(fDefaultSolidRegion);
 
         // ShieldRegion
         fShieldRegion = new Region("Shield", RegionType::Shield);
         fShieldRegion->SetProductionCuts(defaultCuts);
 
-        spectrometerShield.RegisterRegion(fShieldRegion);
+        mmsShield.RegisterRegion(fShieldRegion);
 
         // SolenoidOrMagnetRegion
         fSolenoidOrMagnetRegion = new Region("SolenoidOrMagnet", RegionType::SolenoidOrMagnet);
         fSolenoidOrMagnetRegion->SetProductionCuts(defaultCuts);
 
-        spectrometerMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
+        mmsMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
 
         // CDCSensitiveRegion
         fCDCSensitiveRegion = new Region("CDCSensitive", RegionType::CDCSensitive);
@@ -162,7 +162,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         fVacuumRegion = new Region("Vacuum", RegionType::Vacuum);
         fVacuumRegion->SetProductionCuts(defaultCuts);
 
-        spectrometerField.RegisterRegion(fVacuumRegion);
+        mmsField.RegisterRegion(fVacuumRegion);
     }
 
     ////////////////////////////////////////////////////////////////
@@ -185,12 +185,12 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
         constexpr auto hMin = 100_um;
 
-        spectrometerField.RegisterField<
-            SpectrometerField,
-            G4TMagFieldEquation<SpectrometerField>,
-            G4TDormandPrince45<G4TMagFieldEquation<SpectrometerField>>,
-            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<SpectrometerField>>>>(
-            new SpectrometerField, hMin, 6, 6, false);
+        mmsField.RegisterField<
+            MMSField,
+            G4TMagFieldEquation<MMSField>,
+            G4TDormandPrince45<G4TMagFieldEquation<MMSField>>,
+            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<MMSField>>>>(
+            new MMSField, hMin, 6, 6, false);
     }
 
     return fWorld->PhysicalVolume();

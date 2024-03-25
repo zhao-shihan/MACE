@@ -1,6 +1,6 @@
-#include "MACE/Detector/Definition/SpectrometerBeamPipe.h++"
-#include "MACE/Detector/Description/SpectrometerBeamPipe.h++"
-#include "MACE/Detector/Description/SpectrometerField.h++"
+#include "MACE/Detector/Definition/MMSBeamPipe.h++"
+#include "MACE/Detector/Description/MMSBeamPipe.h++"
+#include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
@@ -11,9 +11,9 @@ namespace MACE::Detector::Definition {
 
 using namespace LiteralUnit::MathConstantSuffix;
 
-auto SpectrometerBeamPipe::Construct(G4bool checkOverlaps) -> void {
-    const auto& beamPipe{Description::SpectrometerBeamPipe::Instance()};
-    const auto& spectrometerField{Description::SpectrometerField::Instance()};
+auto MMSBeamPipe::Construct(G4bool checkOverlaps) -> void {
+    const auto& beamPipe{Description::MMSBeamPipe::Instance()};
+    const auto& mmsField{Description::MMSField::Instance()};
 
     { // Beryllium pipe section
         const auto solid{Make<G4Tubs>(
@@ -41,14 +41,14 @@ auto SpectrometerBeamPipe::Construct(G4bool checkOverlaps) -> void {
             beamPipe.Name(),
             beamPipe.InnerRadius(),
             beamPipe.InnerRadius() + beamPipe.AluminiumThickness(),
-            (spectrometerField.Length() - beamPipe.BerylliumLength()) / 4,
+            (mmsField.Length() - beamPipe.BerylliumLength()) / 4,
             0,
             2_pi)};
         const auto logic{Make<G4LogicalVolume>(
             solid,
             G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"),
             beamPipe.Name())};
-        const auto z0{(spectrometerField.Length() + beamPipe.BerylliumLength()) / 4};
+        const auto z0{(mmsField.Length() + beamPipe.BerylliumLength()) / 4};
         Make<G4PVPlacement>( // clang-format off
             G4Transform3D{{}, {0, 0, -z0}}, // clang-format on
             logic,
