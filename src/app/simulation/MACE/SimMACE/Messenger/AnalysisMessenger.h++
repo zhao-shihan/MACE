@@ -11,11 +11,15 @@ class G4UIdirectory;
 namespace MACE::SimMACE {
 
 class Analysis;
+inline namespace Action {
+class TrackingAction;
+} // namespace Action
 
 inline namespace Messenger {
 
 class AnalysisMessenger final : public Geant4X::SingletonMessenger<AnalysisMessenger,
-                                                                   Analysis> {
+                                                                   Analysis,
+                                                                   TrackingAction> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -33,6 +37,7 @@ private:
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithSTC;
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithMCP;
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithEMC;
+    std::unique_ptr<G4UIcmdWithABool> fSaveDecayVertexData;
     std::unique_ptr<G4UIcmdWithABool> fSaveCDCHitData;
 };
 

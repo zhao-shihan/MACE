@@ -1,6 +1,6 @@
 #include "MACE/Data/SimDecayVertex.h++"
-#include "MACE/SimMACE/Action/TrackingAction.h++"
-#include "MACE/SimMACE/Analysis.h++"
+#include "MACE/SimEMC/Action/TrackingAction.h++"
+#include "MACE/SimEMC/Analysis.h++"
 #include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
 #include "MACE/Simulation/Physics/Particle/Muonium.h++"
 
@@ -17,7 +17,7 @@
 #include <cassert>
 #include <vector>
 
-namespace MACE::SimMACE::inline Action {
+namespace MACE::SimEMC::inline Action {
 
 TrackingAction::TrackingAction() :
     PassiveSingleton{},
@@ -55,4 +55,4 @@ auto TrackingAction::UpdateDecayVertexData(const G4Track& track) -> void {
     }
 }
 
-} // namespace MACE::SimMACE::inline Action
+} // namespace MACE::SimEMC::inline Action

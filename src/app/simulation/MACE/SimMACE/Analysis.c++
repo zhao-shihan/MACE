@@ -1,6 +1,7 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/Geant4X/ConvertGeometry.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
+#include "MACE/SimMACE/Action/TrackingAction.h++"
 #include "MACE/SimMACE/Analysis.h++"
 #include "MACE/Simulation/Hit/CDCHit.h++"
 #include "MACE/Simulation/Hit/EMCHit.h++"

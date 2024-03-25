@@ -1,5 +1,6 @@
 #include "MACE/Data/SimDecayVertex.h++"
 #include "MACE/SimMMS/Action/TrackingAction.h++"
+#include "MACE/SimMMS/Analysis.h++"
 #include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
 #include "MACE/Simulation/Physics/Particle/Muonium.h++"
 
@@ -18,27 +19,39 @@
 
 namespace MACE::SimMMS::inline Action {
 
+TrackingAction::TrackingAction() :
+    PassiveSingleton{},
+    G4UserTrackingAction{},
+    fSaveDecayVertexData{true},
+    fDecayVertexData{},
+    fMessengerRegister{this} {}
+
 auto TrackingAction::PostUserTrackingAction(const G4Track* track) -> void {
+    UpdateDecayVertexData(*track);
+}
+
+auto TrackingAction::UpdateDecayVertexData(const G4Track& track) -> void {
+    if (not fSaveDecayVertexData) { return; }
     if (auto& eventManager{*G4EventManager::GetEventManager()};
         eventManager.GetTrackingManager()
             ->GetSteppingManager()
             ->GetfCurrentProcess()
             ->GetProcessType() == fDecay) {
-        assert(track->GetStep()->GetSecondary()->size() >= 2);
+        assert(track.GetStep()->GetSecondary()->size() >= 2);
         std::vector<int> secondaryPDGID;
-        secondaryPDGID.reserve(track->GetStep()->GetSecondary()->size());
-        for (auto&& track : *track->GetStep()->GetSecondary()) {
-            secondaryPDGID.emplace_back(track->GetParticleDefinition()->GetPDGEncoding());
+        secondaryPDGID.reserve(track.GetStep()->GetSecondary()->size());
+        for (auto&& sec : *track.GetStep()->GetSecondary()) {
+            secondaryPDGID.emplace_back(sec->GetParticleDefinition()->GetPDGEncoding());
         }
         auto& vertex{fDecayVertexData.emplace_back(std::make_unique_for_overwrite<Data::Tuple<Data::SimDecayVertex>>())};
         Get<"EvtID">(*vertex) = eventManager.GetConstCurrentEvent()->GetEventID();
-        Get<"TrkID">(*vertex) = track->GetTrackID();
-        Get<"PDGID">(*vertex) = track->GetParticleDefinition()->GetPDGEncoding();
+        Get<"TrkID">(*vertex) = track.GetTrackID();
+        Get<"PDGID">(*vertex) = track.GetParticleDefinition()->GetPDGEncoding();
         Get<"SecPDGID">(*vertex) = std::move(secondaryPDGID);
-        Get<"t">(*vertex) = track->GetGlobalTime();
-        Get<"x">(*vertex) = track->GetPosition();
-        Get<"Ek">(*vertex) = track->GetKineticEnergy();
-        Get<"p">(*vertex) = track->GetMomentum();
+        Get<"t">(*vertex) = track.GetGlobalTime();
+        Get<"x">(*vertex) = track.GetPosition();
+        Get<"Ek">(*vertex) = track.GetKineticEnergy();
+        Get<"p">(*vertex) = track.GetMomentum();
     }
 }
 

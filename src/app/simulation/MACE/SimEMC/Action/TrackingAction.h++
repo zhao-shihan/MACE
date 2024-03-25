@@ -3,14 +3,14 @@
 #include "MACE/Data/SimDecayVertex.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
-#include "MACE/SimMACE/Messenger/AnalysisMessenger.h++"
+#include "MACE/SimEMC/Messenger/AnalysisMessenger.h++"
 
 #include "G4UserTrackingAction.hh"
 
 #include <memory>
 #include <vector>
 
-namespace MACE::SimMACE::inline Action {
+namespace MACE::SimEMC::inline Action {
 
 class TrackingAction final : public Env::Memory::PassiveSingleton<TrackingAction>,
                              public G4UserTrackingAction {
@@ -36,4 +36,4 @@ private:
     AnalysisMessenger::Register<TrackingAction> fMessengerRegister;
 };
 
-} // namespace MACE::SimMACE::inline Action
+} // namespace MACE::SimEMC::inline Action

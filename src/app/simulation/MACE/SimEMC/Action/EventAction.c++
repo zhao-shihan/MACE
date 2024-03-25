@@ -1,16 +1,25 @@
-#include "MACE/SimEMC/Action/DetectorConstruction.h++"
 #include "MACE/SimEMC/Action/EventAction.h++"
+#include "MACE/SimEMC/Action/TrackingAction.h++"
 #include "MACE/SimEMC/Analysis.h++"
-#include "MACE/SimEMC/SD/EMCSD.h++"
-#include "MACE/SimEMC/SD/MCPSD.h++"
-#include "MACE/SimEMC/SD/EMCPMTSD.h++"
 
 #include "G4Event.hh"
 
 namespace MACE::SimEMC::inline Action {
 
+auto EventAction::BeginOfEventAction(const G4Event*) -> void {
+    if (auto& trackingAction{TrackingAction::Instance()};
+        trackingAction.SaveDecayVertexData()) {
+        trackingAction.ClearDecayVertexData();
+    }
+}
+
 auto EventAction::EndOfEventAction(const G4Event*) -> void {
-    Analysis::Instance().EventEnd();
+    auto& analysis{Analysis::Instance()};
+    if (const auto& trackingAction{TrackingAction::Instance()};
+        trackingAction.SaveDecayVertexData()) {
+        analysis.SubmitDecayVertexData(trackingAction.DecayVertexData());
+    }
+    analysis.EventEnd();
 }
 
 } // namespace MACE::SimEMC::inline Action

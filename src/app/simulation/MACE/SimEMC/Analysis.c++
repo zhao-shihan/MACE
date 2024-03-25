@@ -1,6 +1,7 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/Geant4X/ConvertGeometry.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
+#include "MACE/SimEMC/Action/TrackingAction.h++"
 #include "MACE/SimEMC/Analysis.h++"
 #include "MACE/Simulation/Hit/EMCHit.h++"
 #include "MACE/Simulation/Hit/EMCPMTHit.h++"
@@ -23,9 +24,11 @@ Analysis::Analysis() :
     fCoincidenceWithMCP{false},
     fLastUsedFullFilePath{},
     fFile{},
+    fDecayVertexOutput{},
     fEMCSimHitOutput{},
     fEMCPMTSimHitOutput{},
     fMCPSimHitOutput{},
+    fDecayVertex{},
     fEMCHit{},
     fEMCPMTHit{},
     fMCPHit{},
@@ -50,6 +53,7 @@ auto Analysis::RunBegin(G4int runID) -> void {
     const auto runDirectory{fmt::format("G4Run{}", runID)};
     fFile->mkdir(runDirectory.c_str());
     fFile->cd(runDirectory.c_str());
+    fDecayVertexOutput.emplace("SimDecayVertex");
     fEMCSimHitOutput.emplace("EMCSimHit");
     fEMCPMTSimHitOutput.emplace("EMCPMTSimHit");
     fMCPSimHitOutput.emplace("MCPSimHit");
@@ -59,10 +63,12 @@ auto Analysis::EventEnd() -> void {
     const auto emcTriggered{not fCoincidenceWithEMC or fEMCHit == nullptr or fEMCHit->size() > 0};
     const auto mcpTriggered{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
     if (emcTriggered and mcpTriggered) {
+        if (fDecayVertex) { *fDecayVertexOutput << *fDecayVertex; }
         if (fEMCHit) { *fEMCSimHitOutput << *fEMCHit; }
         if (fEMCPMTHit) { *fEMCPMTSimHitOutput << *fEMCPMTHit; }
         if (fMCPHit) { *fMCPSimHitOutput << *fMCPHit; }
     }
+    fDecayVertex = {};
     fEMCHit = {};
     fEMCPMTHit = {};
     fMCPHit = {};
@@ -70,6 +76,7 @@ auto Analysis::EventEnd() -> void {
 
 auto Analysis::RunEnd(Option_t* option) -> void {
     // write data
+    fDecayVertexOutput->Write();
     fEMCSimHitOutput->Write();
     fEMCPMTSimHitOutput->Write();
     fMCPSimHitOutput->Write();

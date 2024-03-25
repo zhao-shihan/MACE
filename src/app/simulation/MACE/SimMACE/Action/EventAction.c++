@@ -7,12 +7,18 @@
 namespace MACE::SimMACE::inline Action {
 
 auto EventAction::BeginOfEventAction(const G4Event*) -> void {
-    TrackingAction::Instance().ClearDecayVertexData();
+    if (auto& trackingAction{TrackingAction::Instance()};
+        trackingAction.SaveDecayVertexData()) {
+        trackingAction.ClearDecayVertexData();
+    }
 }
 
 auto EventAction::EndOfEventAction(const G4Event*) -> void {
     auto& analysis{Analysis::Instance()};
-    analysis.SubmitDecayVertexData(TrackingAction::Instance().DecayVertexData());
+    if (const auto& trackingAction{TrackingAction::Instance()};
+        trackingAction.SaveDecayVertexData()) {
+        analysis.SubmitDecayVertexData(trackingAction.DecayVertexData());
+    }
     analysis.EventEnd();
 }
 

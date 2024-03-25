@@ -1,3 +1,4 @@
+#include "MACE/SimEMC/Action/TrackingAction.h++"
 #include "MACE/SimEMC/Analysis.h++"
 #include "MACE/SimEMC/Messenger/AnalysisMessenger.h++"
 
@@ -16,7 +17,8 @@ AnalysisMessenger::AnalysisMessenger() :
     fFilePath{},
     fFileMode{},
     fCoincidenceWithEMC{},
-    fCoincidenceWithMCP{} {
+    fCoincidenceWithMCP{},
+    fSaveDecayVertexData{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Analysis/");
     fDirectory->SetGuidance("MACE::SimEMC::Analysis controller.");
@@ -40,6 +42,11 @@ AnalysisMessenger::AnalysisMessenger() :
     fCoincidenceWithMCP->SetGuidance("Enable atomic shell e-/e+ detector (typically MCP currently) for coincident detection.");
     fCoincidenceWithMCP->SetParameterName("mode", false);
     fCoincidenceWithMCP->AvailableForStates(G4State_Idle);
+
+    fSaveDecayVertexData = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/SaveDecayVertexData", this);
+    fSaveDecayVertexData->SetGuidance("Do not save decay vertex data if disabled.");
+    fSaveDecayVertexData->SetParameterName("mode", false);
+    fSaveDecayVertexData->AvailableForStates(G4State_Idle);
 }
 
 AnalysisMessenger::~AnalysisMessenger() = default;
@@ -60,6 +67,10 @@ auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> voi
     } else if (command == fCoincidenceWithMCP.get()) {
         Deliver<Analysis>([&](auto&& r) {
             r.CoincidenceWithMCP(fCoincidenceWithMCP->GetNewBoolValue(value));
+        });
+    } else if (command == fSaveDecayVertexData.get()) {
+        Deliver<TrackingAction>([&](auto&& r) {
+            r.SaveDecayVertexData(fSaveDecayVertexData->GetNewBoolValue(value));
         });
     }
 }
