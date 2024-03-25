@@ -17,7 +17,7 @@
 
 /MACE/Field/SpectrometerMagneticField     0.1 tesla
 
-/MACE/Analysis/CoincidenceWithCDC     false
+/MACE/Analysis/CoincidenceWithCDC     true
 /MACE/Analysis/CoincidenceWithSTC     true
 
 #############################################################################
