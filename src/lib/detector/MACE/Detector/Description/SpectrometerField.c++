@@ -7,12 +7,12 @@ using namespace LiteralUnit::Length;
 using namespace LiteralUnit::MagneticFluxDensity;
 
 SpectrometerField::SpectrometerField() :
-    DescriptionSingletonBase<SpectrometerField>(__func__),
+    DescriptionSingletonBase{"SpectrometerField"},
     // Geometry
-    fRadius(61_cm),
-    fLength(220_cm),
+    fRadius{61_cm},
+    fLength{220_cm},
     // Field
-    fMagneticFluxDensity(100_mT) {}
+    fMagneticFluxDensity{100_mT} {}
 
 void SpectrometerField::ImportValues(const YAML::Node& node) {
     // Geometry

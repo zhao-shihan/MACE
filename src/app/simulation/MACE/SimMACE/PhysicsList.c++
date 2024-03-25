@@ -8,13 +8,13 @@
 
 #include "G4EmStandardPhysics_option4.hh"
 
-#include <stdexcept>
+#include <algorithm>
 
 namespace MACE::SimMACE {
 
 PhysicsList::PhysicsList() :
     PassiveSingleton{},
-    FTFP_BERT{std23::to_underlying(Env::BasicEnv::Instance().VerboseLevel())} {
+    FTFP_BERT{std::max({}, std23::to_underlying(Env::BasicEnv::Instance().VerboseLevel()))} {
     // EMZ
     ReplacePhysics(new G4EmStandardPhysics_option4{verboseLevel});
     // Muonium physics

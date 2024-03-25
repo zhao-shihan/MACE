@@ -1,4 +1,4 @@
-#include "MACE/Detector/Description/TTC.h++"
+#include "MACE/Detector/Description/STC.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 namespace MACE::Detector::Description {
@@ -9,8 +9,8 @@ using namespace LiteralUnit::Energy;
 using namespace LiteralUnit::Angle;
 using namespace LiteralUnit::Density;
 
-TTC::TTC() :
-    DescriptionSingletonBase{"TTC"},
+STC::STC() :
+    DescriptionSingletonBase{"STC"},
     // Geometry
     fLength{15_cm},
     fWidth{10_cm},
@@ -51,7 +51,7 @@ TTC::TTC() :
     fScintillationTimeConstant1{2.4_ns},
     fResolutionScale{1} {}
 
-auto TTC::ImportValues(const YAML::Node& node) -> void {
+auto STC::ImportValues(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fLength, "Length");
     ImportValue(node, fWidth, "Width");
@@ -73,7 +73,7 @@ auto TTC::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fResolutionScale, "ResolutionScale");
 }
 
-auto TTC::ExportValues(YAML::Node& node) const -> void {
+auto STC::ExportValues(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fLength, "Length");
     ExportValue(node, fWidth, "Width");

@@ -5,7 +5,7 @@
 #include "MACE/Simulation/Hit/CDCHit.h++"
 #include "MACE/Simulation/Hit/EMCHit.h++"
 #include "MACE/Simulation/Hit/MCPHit.h++"
-#include "MACE/Simulation/Hit/TTCHit.h++"
+#include "MACE/Simulation/Hit/STCHit.h++"
 
 #include "TFile.h"
 #include "TMacro.h"
@@ -21,7 +21,7 @@ Analysis::Analysis() :
     fFilePath{"SimMACE_untitled"},
     fFileMode{"NEW"},
     fCoincidenceWithCDC{true},
-    fCoincidenceWithTTC{true},
+    fCoincidenceWithSTC{true},
     fCoincidenceWithMCP{true},
     fCoincidenceWithEMC{true},
     fSaveCDCHitData{true},
@@ -30,13 +30,13 @@ Analysis::Analysis() :
     fDecayVertexOutput{},
     fCDCSimHitOutput{},
     fCDCSimTrackOutput{},
-    fTTCSimHitOutput{},
+    fSTCSimHitOutput{},
     fMCPSimHitOutput{},
     fEMCSimHitOutput{},
     fDecayVertex{},
     fCDCHit{},
     fCDCTrack{},
-    fTTCHit{},
+    fSTCHit{},
     fMCPHit{},
     fEMCHit{},
     fMessengerRegister{this} {}
@@ -63,28 +63,28 @@ auto Analysis::RunBegin(G4int runID) -> void {
     fDecayVertexOutput.emplace("DecayVertex");
     fCDCSimHitOutput.emplace("CDCSimHit");
     fCDCSimTrackOutput.emplace("CDCSimTrack");
-    fTTCSimHitOutput.emplace("TTCSimHit");
+    fSTCSimHitOutput.emplace("STCSimHit");
     fMCPSimHitOutput.emplace("MCPSimHit");
     fEMCSimHitOutput.emplace("EMCSimHit");
 }
 
 auto Analysis::EventEnd() -> void {
     const auto cdcPassed{not fCoincidenceWithCDC or fCDCTrack == nullptr or fCDCTrack->size() > 0};
-    const auto ttcPassed{not fCoincidenceWithTTC or fTTCHit == nullptr or fTTCHit->size() > 0};
+    const auto stcPassed{not fCoincidenceWithSTC or fSTCHit == nullptr or fSTCHit->size() > 0};
     const auto mcpPassed{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
     const auto emcPassed{not fCoincidenceWithEMC or fEMCHit == nullptr or fEMCHit->size() > 0};
-    if (cdcPassed and ttcPassed and mcpPassed and emcPassed) {
+    if (cdcPassed and stcPassed and mcpPassed and emcPassed) {
         if (fDecayVertex) { *fDecayVertexOutput << *fDecayVertex; }
         if (fCDCHit and fSaveCDCHitData) { *fCDCSimHitOutput << *fCDCHit; }
         if (fCDCTrack) { *fCDCSimTrackOutput << *fCDCTrack; }
-        if (fTTCHit) { *fTTCSimHitOutput << *fTTCHit; }
+        if (fSTCHit) { *fSTCSimHitOutput << *fSTCHit; }
         if (fMCPHit) { *fMCPSimHitOutput << *fMCPHit; }
         if (fEMCHit) { *fEMCSimHitOutput << *fEMCHit; }
     }
     fDecayVertex = {};
     fCDCHit = {};
     fCDCTrack = {};
-    fTTCHit = {};
+    fSTCHit = {};
     fMCPHit = {};
     fEMCHit = {};
 }
@@ -94,7 +94,7 @@ auto Analysis::RunEnd(Option_t* option) -> void {
     fDecayVertexOutput->Write();
     fCDCSimHitOutput->Write();
     fCDCSimTrackOutput->Write();
-    fTTCSimHitOutput->Write();
+    fSTCSimHitOutput->Write();
     fMCPSimHitOutput->Write();
     fEMCSimHitOutput->Write();
     // close file

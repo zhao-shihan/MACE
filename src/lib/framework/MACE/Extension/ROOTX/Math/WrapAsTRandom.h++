@@ -1,12 +1,11 @@
 #pragma once
 
+#include "MACE/Env/Print.h++"
 #include "MACE/Math/Random/Distribution/Gaussian.h++"
 #include "MACE/Math/Random/Distribution/Uniform.h++"
 #include "MACE/Math/Random/UniformPseudoRandomBitGenerator.h++"
 
 #include "TRandom.h"
-
-#include "fmt/format.h"
 
 #include <algorithm>
 #include <cstdio>

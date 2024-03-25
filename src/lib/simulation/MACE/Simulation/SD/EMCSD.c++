@@ -84,9 +84,9 @@ auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"UnitID">(*hit) = unitID;
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
-    Get<"Edep">(*hit) = step.GetTotalEnergyDeposit();
+    Get<"Edep">(*hit) = eDep;
     Get<"nOptPho">(*hit) = -1; // to be determined
-    Get<"x">(*hit) = *touchable.GetRotation() * (preStepPoint.GetPosition() - touchable.GetTranslation());
+    Get<"x">(*hit) = preStepPoint.GetPosition() - touchable.GetTranslation();
     Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
     Get<"p">(*hit) = preStepPoint.GetMomentum();
     Get<"TrkID">(*hit) = track.GetTrackID();

@@ -24,6 +24,7 @@ EnvBase::EnvBase() :
     fSingletonPool{},
     fSingletonDeleter{} {
 
+    static_assert("三清庇佑 运行稳定 结果无偏");
     static_assert("God bless no bugs");
 
     CheckFundamentalType();
@@ -52,42 +53,42 @@ EnvBase::EnvBase() :
 EnvBase::~EnvBase() = default;
 
 auto EnvBase::CheckFundamentalType() -> void {
-    constexpr auto lp32{BitWidthOf<char> == 8 and
-                        BitWidthOf<short> == 16 and
-                        BitWidthOf<int> == 16 and
-                        BitWidthOf<long> == 32 and
-                        BitWidthOf<long long> == 64 and
-                        BitWidthOf<void*> == 32};
-    constexpr auto ilp32{BitWidthOf<char> == 8 and
-                         BitWidthOf<short> == 16 and
-                         BitWidthOf<int> == 32 and
-                         BitWidthOf<long> == 32 and
-                         BitWidthOf<long long> == 64 and
-                         BitWidthOf<void*> == 32};
-    constexpr auto llp64{BitWidthOf<char> == 8 and
-                         BitWidthOf<short> == 16 and
-                         BitWidthOf<int> == 32 and
-                         BitWidthOf<long> == 32 and
-                         BitWidthOf<long long> == 64 and
-                         BitWidthOf<void*> == 64};
-    constexpr auto lp64{BitWidthOf<char> == 8 and
-                        BitWidthOf<short> == 16 and
-                        BitWidthOf<int> == 32 and
-                        BitWidthOf<long> == 64 and
-                        BitWidthOf<long long> == 64 and
-                        BitWidthOf<void*> == 64};
+    constexpr auto lp32{BitWidthOf<char>() == 8 and
+                        BitWidthOf<short>() == 16 and
+                        BitWidthOf<int>() == 16 and
+                        BitWidthOf<long>() == 32 and
+                        BitWidthOf<long long>() == 64 and
+                        BitWidthOf<void*>() == 32};
+    constexpr auto ilp32{BitWidthOf<char>() == 8 and
+                         BitWidthOf<short>() == 16 and
+                         BitWidthOf<int>() == 32 and
+                         BitWidthOf<long>() == 32 and
+                         BitWidthOf<long long>() == 64 and
+                         BitWidthOf<void*>() == 32};
+    constexpr auto llp64{BitWidthOf<char>() == 8 and
+                         BitWidthOf<short>() == 16 and
+                         BitWidthOf<int>() == 32 and
+                         BitWidthOf<long>() == 32 and
+                         BitWidthOf<long long>() == 64 and
+                         BitWidthOf<void*>() == 64};
+    constexpr auto lp64{BitWidthOf<char>() == 8 and
+                        BitWidthOf<short>() == 16 and
+                        BitWidthOf<int>() == 32 and
+                        BitWidthOf<long>() == 64 and
+                        BitWidthOf<long long>() == 64 and
+                        BitWidthOf<void*>() == 64};
     if constexpr (not lp64) {
         if constexpr (llp64) {
-            fmt::println(stderr, "Warning: fundamental data model is LLP64 (not LP64)");
+            fmt::println(stderr, "Warning: The fundamental data model is LLP64 (not LP64)");
         } else if constexpr (ilp32) {
-            fmt::println(stderr, "Warning: fundamental data model is ILP32 (not LP64)");
+            fmt::println(stderr, "Warning: The fundamental data model is ILP32 (not LP64)");
         } else if constexpr (lp32) {
-            fmt::println(stderr, "Warning: fundamental data model is LP32 (not LP64)");
+            fmt::println(stderr, "Warning: The fundamental data model is LP32 (not LP64)");
         } else {
-            fmt::println(stderr, "Warning: using a rare fundamental data model "
-                               "[{}-bits char, {}-bits short, {}-bits int, {}-bits long, {}-bits long long, {}-bits pointer], "
-                               "run at your own risk",
-                       BitWidthOf<char>, BitWidthOf<short>, BitWidthOf<int>, BitWidthOf<long>, BitWidthOf<long long>, BitWidthOf<void*>);
+            fmt::println(stderr, "Warning: Using a rare fundamental data model "
+                                 "[{}-bits char, {}-bits short, {}-bits int, {}-bits long, {}-bits long long, {}-bits pointer], "
+                                 "run at your own risk",
+                         BitWidthOf<char>(), BitWidthOf<short>(), BitWidthOf<int>(), BitWidthOf<long>(), BitWidthOf<long long>(), BitWidthOf<void*>());
         }
     }
     if (not std::numeric_limits<float>::is_iec559) {

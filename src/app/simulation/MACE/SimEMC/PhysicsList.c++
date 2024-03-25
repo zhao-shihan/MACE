@@ -7,11 +7,13 @@
 #include "G4OpticalPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 
+#include <algorithm>
+
 namespace MACE::SimEMC {
 
 PhysicsList::PhysicsList() :
     PassiveSingleton{},
-    FTFP_BERT{std23::to_underlying(Env::BasicEnv::Instance().VerboseLevel())},
+    FTFP_BERT{std::max({}, std23::to_underlying(Env::BasicEnv::Instance().VerboseLevel()))},
     fMessengerRegister{this} {
     // EMZ
     ReplacePhysics(new G4EmStandardPhysics_option4{verboseLevel});

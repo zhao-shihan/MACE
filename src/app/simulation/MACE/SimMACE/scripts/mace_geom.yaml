@@ -328,23 +328,23 @@ EMC:
   ScintillationTimeConstant1: 1000
   ReolutionScale: 1
 EMCField:
-  Radius: 600
+  Radius: 560
   Length: 1000
   MagneticFluxDensity: 0.0001
 EMCMagnet:
   InnerRadius: 500
   OuterRadius: 550
-  Length: 950
+  Length: 1000
   MaterialName: G4_Cu
 EMCShield:
-  InnerRadius: 650
-  InnerLength: 1100
+  InnerRadius: 570
+  InnerLength: 1040
   GapAroundWindow: 10
   Thickness: 50
   MaterialName: G4_Pb
 Filter:
   Enabled: true
-  Length: 1000
+  Length: 500
   Radius: 49
   Thickness: 0.20000000000000001
   Count: 85
@@ -358,44 +358,7 @@ MCP:
 MCPChamber:
   InnerRadius: 100
   Thickness: 0.5
-ShieldingWall:
-  Enabled: true
-  Thickness: 500
-  Length: 5000
-  Rotation: 0.52359877559829882
-Solenoid:
-  S1Length: 150
-  B1Radius: 250
-  S2Length: 1315
-  B2Radius: 250
-  S3Length: 150
-  InnerRadius: 50
-  OuterRadius: 100
-  FieldRadius: 101
-  MaterialName: G4_Cu
-  MagneticFluxDensity: 0.0001
-SpectrometerBeamPipe:
-  InnerRadius: 100
-  BerylliumLength: 1000
-  BerylliumThickness: 0.5
-  AluminiumThickness: 2
-SpectrometerField:
-  Radius: 610
-  Length: 2200
-  MagneticFluxDensity: 0.0001
-SpectrometerMagnet:
-  InnerRadius: 550
-  OuterRadius: 600
-  Length: 2180
-  MaterialName: G4_Cu
-SpectrometerShield:
-  InnerRadius: 620
-  InnerLength: 2220
-  Thickness: 50
-  WindowRadius: 30
-  BeamSlantAngle: 0
-  MaterialName: G4_Pb
-TTC:
+STC:
   Length: 150
   Width: 100
   Thickness: 10
@@ -569,6 +532,43 @@ TTC:
   ScintillationYield: 11136
   ScintillationTimeConstant1: 2.3999999999999999
   ResolutionScale: 1
+ShieldingWall:
+  Enabled: true
+  Thickness: 500
+  Length: 5000
+  Rotation: 0.52359877559829882
+Solenoid:
+  S1Length: 150
+  B1Radius: 250
+  S2Length: 1315
+  B2Radius: 250
+  S3Length: 150
+  InnerRadius: 50
+  OuterRadius: 100
+  FieldRadius: 101
+  MaterialName: G4_Cu
+  MagneticFluxDensity: 0.0001
+SpectrometerBeamPipe:
+  InnerRadius: 100
+  BerylliumLength: 1000
+  BerylliumThickness: 0.5
+  AluminiumThickness: 2
+SpectrometerField:
+  Radius: 610
+  Length: 2200
+  MagneticFluxDensity: 0.0001
+SpectrometerMagnet:
+  InnerRadius: 550
+  OuterRadius: 600
+  Length: 2200
+  MaterialName: G4_Cu
+SpectrometerShield:
+  InnerRadius: 620
+  InnerLength: 2240
+  Thickness: 50
+  WindowRadius: 30
+  BeamSlantAngle: 0
+  MaterialName: G4_Pb
 Target:
   ShapeType: MultiLayer
   Cuboid:

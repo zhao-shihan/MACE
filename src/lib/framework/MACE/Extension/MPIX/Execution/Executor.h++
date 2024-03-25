@@ -3,6 +3,7 @@
 #include "MACE/Compatibility/std23/constexpr_cmath.h++"
 #include "MACE/Concept/MPIPredefined.h++"
 #include "MACE/Env/MPIEnv.h++"
+#include "MACE/Env/Print.h++"
 #include "MACE/Extension/MPIX/Execution/DynamicScheduler.h++"
 #include "MACE/Extension/MPIX/Execution/Scheduler.h++"
 #include "MACE/Extension/stdx/boolean_testable.h++"

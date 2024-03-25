@@ -6,6 +6,8 @@
 namespace MACE::inline Utility {
 
 template<typename T>
-constexpr inline std::size_t BitWidthOf{CHAR_BIT * sizeof(T)};
+constexpr auto BitWidthOf() -> std::size_t {
+    return CHAR_BIT * sizeof(T);
+};
 
 } // namespace MACE::inline Utility

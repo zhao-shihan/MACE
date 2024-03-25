@@ -28,14 +28,14 @@ using CDCSimHit = TupleModel<CDCHit,
                              Value<stdx::array3f, "p", "Hit momentum (MC truth)">,
                              internal::SimHitVertexTruth>;
 
-using TTCSimHit = TupleModel<TTCHit,
+using STCSimHit = TupleModel<STCHit,
                              Value<int, "nOptPho", "Number of optical photon hits on SiPM (MC truth)">,
                              Value<stdx::array3f, "x", "Hit position (MC truth)">,
                              Value<float, "Ek", "Hit kinetic energy (MC truth)">,
                              Value<stdx::array3f, "p", "Hit momentum (MC truth)">,
                              internal::SimHitVertexTruth>;
 
-using TTCSiPMSimHit = TupleModel<TTCSiPMHit /* , Value<int, "TTCHitID", "TTC Hit ID (MC truth)"> */>;
+using STCSiPMSimHit = TupleModel<STCSiPMHit /* , Value<int, "STCHitID", "STC Hit ID (MC truth)"> */>;
 
 using MCPSimHit = TupleModel<MCPHit,
                              Value<float, "Edep", "Energy deposition">,

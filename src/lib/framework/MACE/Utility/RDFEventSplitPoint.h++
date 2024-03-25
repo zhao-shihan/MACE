@@ -1,9 +1,9 @@
 #pragma once
 
 #include "MACE/Env/MPIEnv.h++"
+#include "MACE/Env/Print.h++"
 #include "MACE/Extension/MPIX/DataType.h++"
-
-#include "ROOT/RDF/RInterface.hxx"
+#include "MACE/Extension/ROOTX/RDataFrame.h++"
 
 #include "mpi.h"
 
@@ -19,7 +19,7 @@
 namespace MACE::inline Utility {
 
 template<std::integral T = int>
-auto RDFEventSplitPoint(ROOT::RDF::RNode rdf, std::string eventIDBranchName = "EvtID") -> std::vector<unsigned> {
+auto RDFEventSplitPoint(ROOTX::RDataFrame auto&& rdf, std::string eventIDBranchName = "EvtID") -> std::vector<unsigned> {
     std::vector<unsigned> eventSplitPoint;
 
     if (Env::MPIEnv::Instance().OnCommWorldMaster()) {
@@ -31,7 +31,7 @@ auto RDFEventSplitPoint(ROOT::RDF::RNode rdf, std::string eventIDBranchName = "E
                 assert(eventID >= 0);
                 if (eventID != lastEventID) {
                     if (not eventIDSet.emplace(eventID).second) {
-                        fmt::println(stderr, "Warning: Dataset is disordered (event {} has appeared previously)", eventID);
+                        Env::PrintLnWarning("Warning: Dataset is disordered (event {} has appeared previously)", eventID);
                     }
                     lastEventID = eventID;
                     eventSplitPoint.emplace_back(index);
@@ -39,7 +39,7 @@ auto RDFEventSplitPoint(ROOT::RDF::RNode rdf, std::string eventIDBranchName = "E
                 ++index;
             },
             {std::move(eventIDBranchName)});
-        eventSplitPoint.emplace_back(0);
+        eventSplitPoint.emplace_back(index);
     }
 
     auto eventSplitPointSize{eventSplitPoint.size()};

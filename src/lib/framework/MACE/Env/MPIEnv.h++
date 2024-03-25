@@ -18,7 +18,10 @@ namespace MACE::Env {
 class MPIEnv : public BasicEnv,
                public Memory::PassiveSingleton<MPIEnv> {
 public:
-    MPIEnv(int argc, char* argv[], std::optional<std::reference_wrapper<CLI::BasicCLI>> cli = {}, VL verboseLevel = {}, bool printWelcomeMessage = true);
+    MPIEnv(int argc, char* argv[],
+           std::optional<std::reference_wrapper<CLI::BasicCLI>> cli = {},
+           enum VerboseLevel verboseLevel = {},
+           bool printWelcomeMessage = true);
     virtual ~MPIEnv();
 
     using PassiveSingleton<MPIEnv>::Instance;
@@ -77,67 +80,3 @@ private:
 };
 
 } // namespace MACE::Env
-
-#define MACE_MPI_WORLD_MASTER_OUT(out)                           \
-    static_assert(std::derived_from<std::decay_t<decltype(out)>, \
-                                    std::ostream>);              \
-    if (not MACE::Env::MPIEnv::Available() or                    \
-        MACE::Env::MPIEnv::Instance().OnCommWorldMaster()) out
-
-#define MACE_VERBOSE_LEVEL_CONTROLLED_MPI_WORLD_MASTER_OUT(verboseLevel, Threshold, out) \
-    if (not MACE::Env::MPIEnv::Available() or                                            \
-        MACE::Env::MPIEnv::Instance().OnCommWorldMaster())                               \
-    MACE_VERBOSE_LEVEL_CONTROLLED_OUT(verboseLevel, Threshold, out)
-
-#define MACE_ENVIRONMENT_CONTROLLED_MPI_WORLD_MASTER_OUT(Threshold, out) \
-    if (not MACE::Env::MPIEnv::Available() or                            \
-        MACE::Env::MPIEnv::Instance().OnCommWorldMaster())               \
-    MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)
-
-#define MACE_MPI_WORLD_WORKER_OUT(out)                           \
-    static_assert(std::derived_from<std::decay_t<decltype(out)>, \
-                                    std::ostream>);              \
-    if (not MACE::Env::MPIEnv::Available() or                    \
-        MACE::Env::MPIEnv::Instance().OnCommWorldWorker()) out
-
-#define MACE_VERBOSE_LEVEL_CONTROLLED_MPI_WORLD_WORKER_OUT(verboseLevel, Threshold, out) \
-    if (not MACE::Env::MPIEnv::Available() or                                            \
-        MACE::Env::MPIEnv::Instance().OnCommWorldWorker())                               \
-    MACE_VERBOSE_LEVEL_CONTROLLED_OUT(verboseLevel, Threshold, out)
-
-#define MACE_ENVIRONMENT_CONTROLLED_MPI_WORLD_WORKER_OUT(Threshold, out) \
-    if (not MACE::Env::MPIEnv::Available() or                            \
-        MACE::Env::MPIEnv::Instance().OnCommWorldWorker())               \
-    MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)
-
-#define MACE_MPI_SHARED_MASTER_OUT(out)                          \
-    static_assert(std::derived_from<std::decay_t<decltype(out)>, \
-                                    std::ostream>);              \
-    if (not MACE::Env::MPIEnv::Available() or                    \
-        MACE::Env::MPIEnv::Instance().OnCommNodeMaster()) out
-
-#define MACE_VERBOSE_LEVEL_CONTROLLED_MPI_SHARED_MASTER_OUT(verboseLevel, Threshold, out) \
-    if (not MACE::Env::MPIEnv::Available() or                                             \
-        MACE::Env::MPIEnv::Instance().OnCommNodeMaster())                                 \
-    MACE_VERBOSE_LEVEL_CONTROLLED_OUT(verboseLevel, Threshold, out)
-
-#define MACE_ENVIRONMENT_CONTROLLED_MPI_SHARED_MASTER_OUT(Threshold, out) \
-    if (not MACE::Env::MPIEnv::Available() or                             \
-        MACE::Env::MPIEnv::Instance().OnCommNodeMaster())                 \
-    MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)
-
-#define MACE_MPI_SHARED_WORKER_OUT(out)                          \
-    static_assert(std::derived_from<std::decay_t<decltype(out)>, \
-                                    std::ostream>);              \
-    if (not MACE::Env::MPIEnv::Available() or                    \
-        MACE::Env::MPIEnv::Instance().OnCommNodeWorker()) out
-
-#define MACE_VERBOSE_LEVEL_CONTROLLED_MPI_SHARED_WORKER_OUT(verboseLevel, Threshold, out) \
-    if (not MACE::Env::MPIEnv::Available() or                                             \
-        MACE::Env::MPIEnv::Instance().OnCommNodeWorker())                                 \
-    MACE_VERBOSE_LEVEL_CONTROLLED_OUT(verboseLevel, Threshold, out)
-
-#define MACE_ENVIRONMENT_CONTROLLED_MPI_SHARED_WORKER_OUT(Threshold, out) \
-    if (not MACE::Env::MPIEnv::Available() or                             \
-        MACE::Env::MPIEnv::Instance().OnCommNodeWorker())                 \
-    MACE_ENVIRONMENT_CONTROLLED_OUT(Threshold, out)

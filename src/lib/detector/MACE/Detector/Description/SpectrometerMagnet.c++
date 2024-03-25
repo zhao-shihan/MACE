@@ -10,7 +10,7 @@ SpectrometerMagnet::SpectrometerMagnet() :
     // Geometry
     fInnerRadius{55_cm},
     fOuterRadius{60_cm},
-    fLength{218_cm},
+    fLength{220_cm},
     // Material
     fMaterialName{"G4_Cu"} {}
 

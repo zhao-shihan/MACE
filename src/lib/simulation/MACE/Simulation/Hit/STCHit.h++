@@ -9,10 +9,10 @@
 
 namespace MACE::inline Simulation::inline Hit {
 
-class TTCHit final : public Geant4X::UseG4Allocator<TTCHit>,
+class STCHit final : public Geant4X::UseG4Allocator<STCHit>,
                      public G4VHit,
-                     public Data::Tuple<Data::TTCSimHit> {};
+                     public Data::Tuple<Data::STCSimHit> {};
 
-using TTCHitCollection = G4THitsCollection<TTCHit>;
+using STCHitCollection = G4THitsCollection<STCHit>;
 
 } // namespace MACE::inline Simulation::inline Hit
