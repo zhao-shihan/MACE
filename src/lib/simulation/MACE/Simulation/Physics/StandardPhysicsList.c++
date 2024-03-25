@@ -1,19 +1,18 @@
 #include "MACE/Compatibility/std23/to_underlying.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Env/BasicEnv.h++"
-#include "MACE/SimMACE/PhysicsList.h++"
 #include "MACE/Simulation/Physics/MuonPrecisionDecayPhysics.h++"
 #include "MACE/Simulation/Physics/MuoniumPhysics.h++"
 #include "MACE/Simulation/Physics/MuoniumPrecisionDecayPhysics.h++"
+#include "MACE/Simulation/Physics/StandardPhysicsList.h++"
 
 #include "G4EmStandardPhysics_option4.hh"
 
 #include <algorithm>
 
-namespace MACE::SimMACE {
+namespace MACE::inline Simulation::inline Physics {
 
-PhysicsList::PhysicsList() :
-    PassiveSingleton{},
+StandardPhysicsListBase::StandardPhysicsListBase() :
     FTFP_BERT{std::max({}, std23::to_underlying(Env::BasicEnv::Instance().VerboseLevel()))} {
     // EMZ
     ReplacePhysics(new G4EmStandardPhysics_option4{verboseLevel});
@@ -24,4 +23,4 @@ PhysicsList::PhysicsList() :
     RegisterPhysics(new MuoniumPrecisionDecayPhysics{verboseLevel});
 }
 
-} // namespace MACE::SimMACE
+} // namespace MACE::inline Simulation::inline Physics

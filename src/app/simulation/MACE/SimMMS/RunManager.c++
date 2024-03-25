@@ -3,8 +3,8 @@
 #include "MACE/SimMMS/Action/ActionInitialization.h++"
 #include "MACE/SimMMS/Action/DetectorConstruction.h++"
 #include "MACE/SimMMS/Analysis.h++"
-#include "MACE/SimMMS/PhysicsList.h++"
 #include "MACE/SimMMS/RunManager.h++"
+#include "MACE/Simulation/Physics/StandardPhysicsList.h++"
 
 namespace MACE::SimMMS {
 
@@ -13,7 +13,7 @@ RunManager::RunManager() :
     fAnalysis{std::make_unique_for_overwrite<Analysis>()} {
     const auto verboseLevel{Env::BasicEnv::Instance().VerboseLevel()};
 
-    const auto physicsList{new PhysicsList};
+    const auto physicsList{new StandardPhysicsList};
     physicsList->SetVerboseLevel(std23::to_underlying(verboseLevel));
     SetUserInitialization(physicsList);
 
