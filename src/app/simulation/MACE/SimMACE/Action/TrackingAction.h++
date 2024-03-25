@@ -1,8 +1,8 @@
 #pragma once
 
+#include "MACE/Data/SimDecayVertex.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
-#include "MACE/SimMACE/Data/Model/DecayVertex.h++"
 
 #include "G4UserTrackingAction.hh"
 
@@ -20,7 +20,7 @@ public:
     auto DecayVertexData() const -> const auto& { return fDecayVertexData; }
 
 private:
-    std::vector<std::unique_ptr<MACE::Data::Tuple<Data::DecayVertex>>> fDecayVertexData;
+    std::vector<std::unique_ptr<MACE::Data::Tuple<Data::SimDecayVertex>>> fDecayVertexData;
 };
 
 } // namespace MACE::SimMACE::inline Action

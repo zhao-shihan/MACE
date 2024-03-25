@@ -1,5 +1,5 @@
+#include "MACE/Data/SimDecayVertex.h++"
 #include "MACE/SimMACE/Action/TrackingAction.h++"
-#include "MACE/SimMACE/Data/Model/DecayVertex.h++"
 #include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
 #include "MACE/Simulation/Physics/Particle/Muonium.h++"
 
@@ -30,7 +30,7 @@ auto TrackingAction::PostUserTrackingAction(const G4Track* track) -> void {
         for (auto&& track : *track->GetStep()->GetSecondary()) {
             secondaryPDGID.emplace_back(track->GetParticleDefinition()->GetPDGEncoding());
         }
-        auto& vertex{fDecayVertexData.emplace_back(std::make_unique_for_overwrite<MACE::Data::Tuple<Data::DecayVertex>>())};
+        auto& vertex{fDecayVertexData.emplace_back(std::make_unique_for_overwrite<MACE::Data::Tuple<Data::SimDecayVertex>>())};
         Get<"EvtID">(*vertex) = eventManager.GetConstCurrentEvent()->GetEventID();
         Get<"TrkID">(*vertex) = track->GetTrackID();
         Get<"PDGID">(*vertex) = track->GetParticleDefinition()->GetPDGEncoding();

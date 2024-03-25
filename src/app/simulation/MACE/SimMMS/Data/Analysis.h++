@@ -2,11 +2,11 @@
 
 #include "MACE/Data/CDCTrack.h++"
 #include "MACE/Data/Output.h++"
+#include "MACE/Data/SimDecayVertex.h++"
 #include "MACE/Data/SimHit.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimMMS/Data/AnalysisMessenger.h++"
-#include "MACE/SimMMS/Data/Model/DecayVertex.h++"
 
 #include "G4Types.hh"
 
@@ -37,7 +37,7 @@ public:
 
     auto RunBegin(G4int runID) -> void;
 
-    auto SubmitDecayVertexData(const std::vector<std::unique_ptr<MACE::Data::Tuple<Data::DecayVertex>>>& data) -> void { fDecayVertex = &data; }
+    auto SubmitDecayVertexData(const std::vector<std::unique_ptr<MACE::Data::Tuple<MACE::Data::SimDecayVertex>>>& data) -> void { fDecayVertex = &data; }
     auto SubmitCDCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::CDCHit*>>*> hc) -> void { fCDCHit = hc; }
     auto SubmitCDCTrackData(const std::vector<std::unique_ptr<MACE::Data::Tuple<MACE::Data::CDCSimTrack>>>& data) -> void { fCDCTrack = &data; }
     auto SubmitSTCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::STCHit*>>*> hc) -> void { fSTCHit = hc; }
@@ -55,12 +55,12 @@ private:
     std::filesystem::path fLastUsedFullFilePath;
 
     gsl::owner<TFile*> fFile;
-    std::optional<MACE::Data::Output<Data::DecayVertex>> fDecayVertexOutput;
+    std::optional<MACE::Data::Output<MACE::Data::SimDecayVertex>> fDecayVertexOutput;
     std::optional<MACE::Data::Output<MACE::Data::CDCSimHit>> fCDCSimHitOutput;
     std::optional<MACE::Data::Output<MACE::Data::CDCSimTrack>> fCDCSimTrackOutput;
     std::optional<MACE::Data::Output<MACE::Data::STCSimHit>> fSTCSimHitOutput;
 
-    const std::vector<std::unique_ptr<MACE::Data::Tuple<Data::DecayVertex>>>* fDecayVertex;
+    const std::vector<std::unique_ptr<MACE::Data::Tuple<MACE::Data::SimDecayVertex>>>* fDecayVertex;
     const std::vector<gsl::owner<Simulation::CDCHit*>>* fCDCHit;
     const std::vector<std::unique_ptr<MACE::Data::Tuple<MACE::Data::CDCSimTrack>>>* fCDCTrack;
     const std::vector<gsl::owner<Simulation::STCHit*>>* fSTCHit;

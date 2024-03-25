@@ -60,7 +60,7 @@ auto Analysis::RunBegin(G4int runID) -> void {
     const auto runDirectory{fmt::format("G4Run{}", runID)};
     fFile->mkdir(runDirectory.c_str());
     fFile->cd(runDirectory.c_str());
-    fDecayVertexOutput.emplace("DecayVertex");
+    fDecayVertexOutput.emplace("SimDecayVertex");
     fCDCSimHitOutput.emplace("CDCSimHit");
     fCDCSimTrackOutput.emplace("CDCSimTrack");
     fSTCSimHitOutput.emplace("STCSimHit");
