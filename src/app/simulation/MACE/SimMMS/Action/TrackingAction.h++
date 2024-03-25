@@ -20,7 +20,7 @@ public:
     auto DecayVertexData() const -> const auto& { return fDecayVertexData; }
 
 private:
-    std::vector<std::unique_ptr<MACE::Data::Tuple<Data::SimDecayVertex>>> fDecayVertexData;
+    std::vector<std::unique_ptr<Data::Tuple<Data::SimDecayVertex>>> fDecayVertexData;
 };
 
 } // namespace MACE::SimMMS::inline Action

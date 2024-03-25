@@ -6,7 +6,7 @@
 #include "MACE/Data/SimHit.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
-#include "MACE/SimMACE/Data/AnalysisMessenger.h++"
+#include "MACE/SimMACE/Messenger/AnalysisMessenger.h++"
 
 #include "G4Types.hh"
 
@@ -25,7 +25,7 @@ class MCPHit;
 class STCHit;
 } // namespace MACE::inline Simulation::inline Hit
 
-namespace MACE::SimMACE::Data {
+namespace MACE::SimMACE {
 
 class Analysis final : public Env::Memory::PassiveSingleton<Analysis> {
 public:
@@ -41,9 +41,9 @@ public:
 
     auto RunBegin(G4int runID) -> void;
 
-    auto SubmitDecayVertexData(const std::vector<std::unique_ptr<MACE::Data::Tuple<MACE::Data::SimDecayVertex>>>& data) -> void { fDecayVertex = &data; }
+    auto SubmitDecayVertexData(const std::vector<std::unique_ptr<Data::Tuple<Data::SimDecayVertex>>>& data) -> void { fDecayVertex = &data; }
     auto SubmitCDCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::CDCHit*>>*> hc) -> void { fCDCHit = hc; }
-    auto SubmitCDCTrackData(const std::vector<std::unique_ptr<MACE::Data::Tuple<MACE::Data::CDCSimTrack>>>& data) -> void { fCDCTrack = &data; }
+    auto SubmitCDCTrackData(const std::vector<std::unique_ptr<Data::Tuple<Data::CDCSimTrack>>>& data) -> void { fCDCTrack = &data; }
     auto SubmitSTCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::STCHit*>>*> hc) -> void { fSTCHit = hc; }
     auto SubmitMCPHC(gsl::not_null<const std::vector<gsl::owner<Simulation::MCPHit*>>*> hc) -> void { fMCPHit = hc; }
     auto SubmitEMCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::EMCHit*>>*> hc) -> void { fEMCHit = hc; }
@@ -63,16 +63,16 @@ private:
     std::filesystem::path fLastUsedFullFilePath;
 
     gsl::owner<TFile*> fFile;
-    std::optional<MACE::Data::Output<MACE::Data::SimDecayVertex>> fDecayVertexOutput;
-    std::optional<MACE::Data::Output<MACE::Data::CDCSimHit>> fCDCSimHitOutput;
-    std::optional<MACE::Data::Output<MACE::Data::CDCSimTrack>> fCDCSimTrackOutput;
-    std::optional<MACE::Data::Output<MACE::Data::STCSimHit>> fSTCSimHitOutput;
-    std::optional<MACE::Data::Output<MACE::Data::MCPSimHit>> fMCPSimHitOutput;
-    std::optional<MACE::Data::Output<MACE::Data::EMCSimHit>> fEMCSimHitOutput;
+    std::optional<Data::Output<Data::SimDecayVertex>> fDecayVertexOutput;
+    std::optional<Data::Output<Data::CDCSimHit>> fCDCSimHitOutput;
+    std::optional<Data::Output<Data::CDCSimTrack>> fCDCSimTrackOutput;
+    std::optional<Data::Output<Data::STCSimHit>> fSTCSimHitOutput;
+    std::optional<Data::Output<Data::MCPSimHit>> fMCPSimHitOutput;
+    std::optional<Data::Output<Data::EMCSimHit>> fEMCSimHitOutput;
 
-    const std::vector<std::unique_ptr<MACE::Data::Tuple<MACE::Data::SimDecayVertex>>>* fDecayVertex;
+    const std::vector<std::unique_ptr<Data::Tuple<Data::SimDecayVertex>>>* fDecayVertex;
     const std::vector<gsl::owner<Simulation::CDCHit*>>* fCDCHit;
-    const std::vector<std::unique_ptr<MACE::Data::Tuple<MACE::Data::CDCSimTrack>>>* fCDCTrack;
+    const std::vector<std::unique_ptr<Data::Tuple<Data::CDCSimTrack>>>* fCDCTrack;
     const std::vector<gsl::owner<Simulation::STCHit*>>* fSTCHit;
     const std::vector<gsl::owner<Simulation::MCPHit*>>* fMCPHit;
     const std::vector<gsl::owner<Simulation::EMCHit*>>* fEMCHit;
@@ -80,4 +80,4 @@ private:
     AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };
 
-} // namespace MACE::SimMACE::Data
+} // namespace MACE::SimMACE

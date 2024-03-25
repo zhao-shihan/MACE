@@ -6,9 +6,7 @@
 
 namespace MACE::SimMMS {
 
-namespace Data {
 class Analysis;
-} // namespace Data
 
 class RunManager final : public Geant4X::MPIRunManager {
 public:
@@ -18,7 +16,7 @@ public:
     static auto Instance() -> auto& { return static_cast<RunManager&>(*GetRunManager()); }
 
 private:
-    std::unique_ptr<Data::Analysis> fAnalysis;
+    std::unique_ptr<Analysis> fAnalysis;
 };
 
 } // namespace MACE::SimMMS

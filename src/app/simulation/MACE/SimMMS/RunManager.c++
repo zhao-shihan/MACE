@@ -2,7 +2,7 @@
 #include "MACE/Env/BasicEnv.h++"
 #include "MACE/SimMMS/Action/ActionInitialization.h++"
 #include "MACE/SimMMS/Action/DetectorConstruction.h++"
-#include "MACE/SimMMS/Data/Analysis.h++"
+#include "MACE/SimMMS/Analysis.h++"
 #include "MACE/SimMMS/PhysicsList.h++"
 #include "MACE/SimMMS/RunManager.h++"
 
@@ -10,7 +10,7 @@ namespace MACE::SimMMS {
 
 RunManager::RunManager() :
     MPIRunManager{},
-    fAnalysis{std::make_unique_for_overwrite<Data::Analysis>()} {
+    fAnalysis{std::make_unique_for_overwrite<Analysis>()} {
     const auto verboseLevel{Env::BasicEnv::Instance().VerboseLevel()};
 
     const auto physicsList{new PhysicsList};

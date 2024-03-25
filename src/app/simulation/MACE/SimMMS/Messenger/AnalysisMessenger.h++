@@ -8,9 +8,11 @@ class G4UIcmdWithABool;
 class G4UIcmdWithAString;
 class G4UIdirectory;
 
-namespace MACE::SimMMS::Data {
+namespace MACE::SimMMS {
 
 class Analysis;
+
+inline namespace Messenger {
 
 class AnalysisMessenger final : public Geant4X::SingletonMessenger<AnalysisMessenger,
                                                                    Analysis> {
@@ -32,4 +34,6 @@ private:
     std::unique_ptr<G4UIcmdWithABool> fSaveCDCHitData;
 };
 
-} // namespace MACE::SimMMS::Data
+} // namespace Messenger
+
+} // namespace MACE::SimMMS

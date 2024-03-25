@@ -1,6 +1,6 @@
 #include "MACE/SimMACE/Action/EventAction.h++"
 #include "MACE/SimMACE/Action/TrackingAction.h++"
-#include "MACE/SimMACE/Data/Analysis.h++"
+#include "MACE/SimMACE/Analysis.h++"
 
 #include "G4Event.hh"
 
@@ -11,7 +11,7 @@ auto EventAction::BeginOfEventAction(const G4Event*) -> void {
 }
 
 auto EventAction::EndOfEventAction(const G4Event*) -> void {
-    auto& analysis{Data::Analysis::Instance()};
+    auto& analysis{Analysis::Instance()};
     analysis.SubmitDecayVertexData(TrackingAction::Instance().DecayVertexData());
     analysis.EventEnd();
 }

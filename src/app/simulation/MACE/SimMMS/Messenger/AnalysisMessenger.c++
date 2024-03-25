@@ -1,5 +1,5 @@
-#include "MACE/SimMACE/Data/Analysis.h++"
-#include "MACE/SimMACE/Data/AnalysisMessenger.h++"
+#include "MACE/SimMMS/Analysis.h++"
+#include "MACE/SimMMS/Messenger/AnalysisMessenger.h++"
 
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
@@ -8,7 +8,7 @@
 
 #include <string_view>
 
-namespace MACE::SimMACE::Data {
+namespace MACE::SimMMS::inline Messenger {
 
 AnalysisMessenger::AnalysisMessenger() :
     SingletonMessenger{},
@@ -17,12 +17,10 @@ AnalysisMessenger::AnalysisMessenger() :
     fFileMode{},
     fCoincidenceWithCDC{},
     fCoincidenceWithSTC{},
-    fCoincidenceWithMCP{},
-    fCoincidenceWithEMC{},
     fSaveCDCHitData{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Analysis/");
-    fDirectory->SetGuidance("MACE::SimMACE::Data::Analysis controller.");
+    fDirectory->SetGuidance("MACE::SimMMS::Analysis controller.");
 
     fFilePath = std::make_unique<G4UIcmdWithAString>("/MACE/Analysis/FilePath", this);
     fFilePath->SetGuidance("Set file path.");
@@ -43,16 +41,6 @@ AnalysisMessenger::AnalysisMessenger() :
     fCoincidenceWithSTC->SetGuidance("Coincidence with STC if enabled.");
     fCoincidenceWithSTC->SetParameterName("mode", false);
     fCoincidenceWithSTC->AvailableForStates(G4State_Idle);
-
-    fCoincidenceWithMCP = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/CoincidenceWithMCP", this);
-    fCoincidenceWithMCP->SetGuidance("Coincidence with MCP if enabled.");
-    fCoincidenceWithMCP->SetParameterName("mode", false);
-    fCoincidenceWithMCP->AvailableForStates(G4State_Idle);
-
-    fCoincidenceWithEMC = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/CoincidenceWithEMC", this);
-    fCoincidenceWithEMC->SetGuidance("Coincidence with EMC if enabled.");
-    fCoincidenceWithEMC->SetParameterName("mode", false);
-    fCoincidenceWithEMC->AvailableForStates(G4State_Idle);
 
     fSaveCDCHitData = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/SaveCDCHitData", this);
     fSaveCDCHitData->SetGuidance("Do not save CDC hit data if disabled.");
@@ -79,14 +67,6 @@ auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> voi
         Deliver<Analysis>([&](auto&& r) {
             r.CoincidenceWithSTC(fCoincidenceWithSTC->GetNewBoolValue(value));
         });
-    } else if (command == fCoincidenceWithMCP.get()) {
-        Deliver<Analysis>([&](auto&& r) {
-            r.CoincidenceWithMCP(fCoincidenceWithMCP->GetNewBoolValue(value));
-        });
-    } else if (command == fCoincidenceWithEMC.get()) {
-        Deliver<Analysis>([&](auto&& r) {
-            r.CoincidenceWithEMC(fCoincidenceWithEMC->GetNewBoolValue(value));
-        });
     } else if (command == fSaveCDCHitData.get()) {
         Deliver<Analysis>([&](auto&& r) {
             r.SaveCDCHitData(fSaveCDCHitData->GetNewBoolValue(value));
@@ -94,4 +74,4 @@ auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> voi
     }
 }
 
-} // namespace MACE::SimMACE::Data
+} // namespace MACE::SimMMS::inline Messenger

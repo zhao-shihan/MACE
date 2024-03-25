@@ -30,7 +30,7 @@ auto TrackingAction::PostUserTrackingAction(const G4Track* track) -> void {
         for (auto&& track : *track->GetStep()->GetSecondary()) {
             secondaryPDGID.emplace_back(track->GetParticleDefinition()->GetPDGEncoding());
         }
-        auto& vertex{fDecayVertexData.emplace_back(std::make_unique_for_overwrite<MACE::Data::Tuple<Data::SimDecayVertex>>())};
+        auto& vertex{fDecayVertexData.emplace_back(std::make_unique_for_overwrite<Data::Tuple<Data::SimDecayVertex>>())};
         Get<"EvtID">(*vertex) = eventManager.GetConstCurrentEvent()->GetEventID();
         Get<"TrkID">(*vertex) = track->GetTrackID();
         Get<"PDGID">(*vertex) = track->GetParticleDefinition()->GetPDGEncoding();
