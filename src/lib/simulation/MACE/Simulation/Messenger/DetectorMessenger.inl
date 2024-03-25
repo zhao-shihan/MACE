@@ -1,23 +1,13 @@
-#include "MACE/Detector/Description/DescriptionIO.h++"
-#include "MACE/SimMMS/Action/DetectorConstruction.h++"
-#include "MACE/SimMMS/Messenger/DetectorMessenger.h++"
+namespace MACE::inline Simulation::inline Messenger {
 
-#include "G4UIcmdWith3VectorAndUnit.hh"
-#include "G4UIcmdWithABool.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIdirectory.hh"
-
-#include <string_view>
-
-namespace MACE::SimMMS::inline Messenger {
-
-DetectorMessenger::DetectorMessenger() :
-    SingletonMessenger{},
+template<typename ADerived, std::derived_from<G4VUserDetectorConstruction> ADetectorConstruction, CETAString AAppName>
+DetectorMessenger<ADerived, ADetectorConstruction, AAppName>::DetectorMessenger() :
+    Geant4X::SingletonMessenger<ADerived>{},
     fDirectory{},
     fImportDescription{},
     fExportDescription{},
     fIxportDescription{} {
+    static_assert(std::derived_from<ADerived, DetectorMessenger<ADerived, ADetectorConstruction, AAppName>>);
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Detector/");
 
@@ -38,18 +28,24 @@ DetectorMessenger::DetectorMessenger() :
     fIxportDescription->AvailableForStates(G4State_PreInit);
 }
 
-DetectorMessenger::~DetectorMessenger() = default;
-
-auto DetectorMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
-    using DescriptionInUse = DetectorConstruction::DescriptionInUse;
+template<typename ADerived, std::derived_from<G4VUserDetectorConstruction> ADetectorConstruction, CETAString AAppName>
+auto DetectorMessenger<ADerived, ADetectorConstruction, AAppName>::SetNewValue(G4UIcommand* command, G4String value) -> void {
+    using DescriptionInUse = ADetectorConstruction::DescriptionInUse;
     using Detector::Description::DescriptionIO;
+    const auto annotation{[] {
+        if constexpr (AAppName) {
+            return fmt::format("{}: geometry description", AAppName.StringView());
+        } else {
+            return std::string{};
+        }
+    }()};
     if (command == fImportDescription.get()) {
         DescriptionIO::Import<DescriptionInUse>(std::string_view{value});
     } else if (command == fExportDescription.get()) {
-        DescriptionIO::Export<DescriptionInUse>(std::string_view{value}, "SimMMS: geometry description");
+        DescriptionIO::Export<DescriptionInUse>(std::string_view{value}, annotation);
     } else if (command == fIxportDescription.get()) {
-        DescriptionIO::Ixport<DescriptionInUse>(std::string_view{value}, "SimMMS: geometry description");
+        DescriptionIO::Ixport<DescriptionInUse>(std::string_view{value}, annotation);
     }
 }
 
-} // namespace MACE::SimMMS::inline Messenger
+} // namespace MACE::inline Simulation::inline Messenger
