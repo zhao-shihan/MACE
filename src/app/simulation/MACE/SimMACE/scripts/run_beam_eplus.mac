@@ -35,6 +35,7 @@
 /MACE/Analysis/CoincidenceWithSTC     false
 /MACE/Analysis/CoincidenceWithMCP     false
 /MACE/Analysis/CoincidenceWithEMC     false
+/MACE/Analysis/SaveCDCHitData         false
 
 #############################################################################
 # Run
@@ -42,5 +43,5 @@
 
 /MACE/Analysis/FilePath SimMACE_beam_eplus
 /MACE/Analysis/FileMode NEW
-/run/beamOn 80
+/run/beamOn 1000
 /MPIRun/PrintRunSummary

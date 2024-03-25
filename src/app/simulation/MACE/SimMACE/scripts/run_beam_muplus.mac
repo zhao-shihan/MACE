@@ -31,12 +31,11 @@
 /MACE/Field/SolenoidMagneticField         0.1 tesla
 /MACE/Field/EMCMagneticField              0.1 tesla
 
-/MACE/Analysis/CoincidenceWithCDC     false
-/MACE/Analysis/CoincidenceWithSTC     false
+/hits/inactivate CDC
+/hits/inactivate STC
 /MACE/Analysis/CoincidenceWithMCP     false
 /MACE/Analysis/CoincidenceWithEMC     false
-
-/MACE/Analysis/SaveCDCHitData         false
+/MACE/Analysis/SaveDecayVertexData    false
 
 #############################################################################
 # Run
@@ -44,5 +43,5 @@
 
 /MACE/Analysis/FilePath SimMACE_beam_muplus
 /MACE/Analysis/FileMode NEW
-/run/beamOn 80
+/run/beamOn 100
 /MPIRun/PrintRunSummary
