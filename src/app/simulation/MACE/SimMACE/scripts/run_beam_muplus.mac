@@ -30,7 +30,7 @@
 /MACE/Field/EMCMagneticField              0.1 tesla
 
 /hits/inactivate CDC
-/hits/inactivate STC
+/hits/inactivate TTC
 /MACE/Analysis/CoincidenceWithMCP     false
 /MACE/Analysis/CoincidenceWithEMC     false
 /MACE/Analysis/SaveDecayVertexData    false

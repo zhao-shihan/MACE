@@ -1,9 +1,9 @@
-#include "MACE/Detector/Description/STC.h++"
+#include "MACE/Detector/Description/TTC.h++"
 #include "MACE/Extension/stdx/ranges_numeric.h++"
 #include "MACE/External/gfx/timsort.hpp"
 #include "MACE/Math/MidPoint.h++"
-#include "MACE/Simulation/SD/STCSD.h++"
-#include "MACE/Simulation/SD/STCSiPMSD.h++"
+#include "MACE/Simulation/SD/TTCSD.h++"
+#include "MACE/Simulation/SD/TTCSiPMSD.h++"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -31,34 +31,34 @@
 
 namespace MACE::inline Simulation::inline SD {
 
-STCSD::STCSD(const G4String& sdName, const STCSiPMSD* stcSiPMSD) :
+TTCSD::TTCSD(const G4String& sdName, const TTCSiPMSD* ttcSiPMSD) :
     NonMoveableBase{},
     G4VSensitiveDetector{sdName},
-    fSTCSiPMSD{stcSiPMSD},
+    fTTCSiPMSD{ttcSiPMSD},
     fEnergyDepositionThreshold{},
     fSplitHit{},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
-    const auto& stc{Detector::Description::STC::Instance()};
-    assert(stc.ScintillationComponent1EnergyBin().size() == stc.ScintillationComponent1().size());
-    std::vector<double> dE(stc.ScintillationComponent1EnergyBin().size());
-    stdx::ranges::adjacent_difference(stc.ScintillationComponent1EnergyBin(), dE.begin());
-    std::vector<double> spectrum(stc.ScintillationComponent1().size());
-    stdx::ranges::adjacent_difference(stc.ScintillationComponent1EnergyBin(), spectrum.begin(), Math::MidPoint<double, double>);
+    const auto& ttc{Detector::Description::TTC::Instance()};
+    assert(ttc.ScintillationComponent1EnergyBin().size() == ttc.ScintillationComponent1().size());
+    std::vector<double> dE(ttc.ScintillationComponent1EnergyBin().size());
+    stdx::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), dE.begin());
+    std::vector<double> spectrum(ttc.ScintillationComponent1().size());
+    stdx::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), spectrum.begin(), Math::MidPoint<double, double>);
     const auto integral{std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.)};
-    std::vector<double> meanE(stc.ScintillationComponent1EnergyBin().size());
-    stdx::ranges::adjacent_difference(stc.ScintillationComponent1EnergyBin(), meanE.begin(), Math::MidPoint<double, double>);
+    std::vector<double> meanE(ttc.ScintillationComponent1EnergyBin().size());
+    stdx::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), meanE.begin(), Math::MidPoint<double, double>);
     std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
     fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
 }
 
-auto STCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
-    fHitsCollection = new STCHitCollection(SensitiveDetectorName, collectionName[0]);
+auto TTCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
+    fHitsCollection = new TTCHitCollection(SensitiveDetectorName, collectionName[0]);
     const auto hitsCollectionID{G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection)};
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-auto STCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
+auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& step{*theStep};
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
@@ -78,7 +78,7 @@ auto STCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     // track creator process
     const auto creatorProcess{track.GetCreatorProcess()};
     // new a hit
-    auto hit{std::make_unique_for_overwrite<STCHit>()};
+    auto hit{std::make_unique_for_overwrite<TTCHit>()};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"DetID">(*hit) = detectorID;
@@ -100,7 +100,7 @@ auto STCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     return true;
 }
 
-auto STCSD::EndOfEvent(G4HCofThisEvent*) -> void {
+auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     for (int hitID{};
          auto&& [detectorID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
@@ -113,14 +113,14 @@ auto STCSD::EndOfEvent(G4HCofThisEvent*) -> void {
             fHitsCollection->insert(hit.release());
         } break;
         default: {
-            const auto scintillationTimeConstant1{Detector::Description::STC::Instance().ScintillationTimeConstant1()};
+            const auto scintillationTimeConstant1{Detector::Description::TTC::Instance().ScintillationTimeConstant1()};
             // sort hit by time
             gfx::timsort(splitHit,
                          [](const auto& hit1, const auto& hit2) {
                              return Get<"t">(*hit1) < Get<"t">(*hit2);
                          });
             // loop over all hits on this crystal and cluster to real hits by times
-            std::vector<std::unique_ptr<STCHit>*> hitCandidate;
+            std::vector<std::unique_ptr<TTCHit>*> hitCandidate;
             const auto ClusterAndInsertHit{
                 [&] {
                     // find top hit
@@ -152,8 +152,8 @@ auto STCSD::EndOfEvent(G4HCofThisEvent*) -> void {
         }
         splitHit.clear();
     }
-    if (fSTCSiPMSD != nullptr) {
-        auto nHit{fSTCSiPMSD->NOpticalPhotonHit()};
+    if (fTTCSiPMSD != nullptr) {
+        auto nHit{fTTCSiPMSD->NOpticalPhotonHit()};
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
             Get<"nOptPho">(*hit) = nHit[Get<"DetID">(*hit)];
         }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Simulation/Hit/STCSiPMHit.h++"
+#include "MACE/Simulation/Hit/TTCSiPMHit.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
 #include "G4VSensitiveDetector.hh"
@@ -12,10 +12,10 @@
 
 namespace MACE::inline Simulation::inline SD {
 
-class STCSiPMSD : public NonMoveableBase,
+class TTCSiPMSD : public NonMoveableBase,
                   public G4VSensitiveDetector {
 public:
-    STCSiPMSD(const G4String& sdName);
+    TTCSiPMSD(const G4String& sdName);
 
     virtual auto Initialize(G4HCofThisEvent* hitsCollection) -> void override;
     virtual auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
@@ -24,8 +24,8 @@ public:
     auto NOpticalPhotonHit() const -> std::unordered_map<int, int>;
 
 protected:
-    std::unordered_map<int, std::vector<std::unique_ptr<STCSiPMHit>>> fHit;
-    STCSiPMHitCollection* fHitsCollection;
+    std::unordered_map<int, std::vector<std::unique_ptr<TTCSiPMHit>>> fHit;
+    TTCSiPMHitCollection* fHitsCollection;
 };
 
 } // namespace MACE::inline Simulation::inline SD

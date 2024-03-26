@@ -6,7 +6,7 @@
 #include "MACE/Simulation/Hit/CDCHit.h++"
 #include "MACE/Simulation/Hit/EMCHit.h++"
 #include "MACE/Simulation/Hit/MCPHit.h++"
-#include "MACE/Simulation/Hit/STCHit.h++"
+#include "MACE/Simulation/Hit/TTCHit.h++"
 
 #include "TFile.h"
 #include "TMacro.h"
@@ -22,18 +22,18 @@ Analysis::Analysis() :
     fFilePath{"SimMMS_untitled"},
     fFileMode{"NEW"},
     fCoincidenceWithCDC{true},
-    fCoincidenceWithSTC{true},
+    fCoincidenceWithTTC{true},
     fSaveCDCHitData{true},
     fLastUsedFullFilePath{},
     fFile{},
     fDecayVertexOutput{},
     fCDCSimHitOutput{},
     fCDCSimTrackOutput{},
-    fSTCSimHitOutput{},
+    fTTCSimHitOutput{},
     fDecayVertex{},
     fCDCHit{},
     fCDCTrack{},
-    fSTCHit{},
+    fTTCHit{},
     fMessengerRegister{this} {}
 
 auto Analysis::RunBegin(G4int runID) -> void {
@@ -58,22 +58,22 @@ auto Analysis::RunBegin(G4int runID) -> void {
     fDecayVertexOutput.emplace("SimDecayVertex");
     fCDCSimHitOutput.emplace("CDCSimHit");
     fCDCSimTrackOutput.emplace("CDCSimTrack");
-    fSTCSimHitOutput.emplace("STCSimHit");
+    fTTCSimHitOutput.emplace("TTCSimHit");
 }
 
 auto Analysis::EventEnd() -> void {
     const auto cdcPassed{not fCoincidenceWithCDC or fCDCTrack == nullptr or fCDCTrack->size() > 0};
-    const auto stcPassed{not fCoincidenceWithSTC or fSTCHit == nullptr or fSTCHit->size() > 0};
-    if (cdcPassed and stcPassed) {
+    const auto ttcPassed{not fCoincidenceWithTTC or fTTCHit == nullptr or fTTCHit->size() > 0};
+    if (cdcPassed and ttcPassed) {
         if (fDecayVertex) { *fDecayVertexOutput << *fDecayVertex; }
         if (fCDCHit and fSaveCDCHitData) { *fCDCSimHitOutput << *fCDCHit; }
         if (fCDCTrack) { *fCDCSimTrackOutput << *fCDCTrack; }
-        if (fSTCHit) { *fSTCSimHitOutput << *fSTCHit; }
+        if (fTTCHit) { *fTTCSimHitOutput << *fTTCHit; }
     }
     fDecayVertex = {};
     fCDCHit = {};
     fCDCTrack = {};
-    fSTCHit = {};
+    fTTCHit = {};
 }
 
 auto Analysis::RunEnd(Option_t* option) -> void {
@@ -81,7 +81,7 @@ auto Analysis::RunEnd(Option_t* option) -> void {
     fDecayVertexOutput->Write();
     fCDCSimHitOutput->Write();
     fCDCSimTrackOutput->Write();
-    fSTCSimHitOutput->Write();
+    fTTCSimHitOutput->Write();
     // close file
     fFile->Close(option);
     delete fFile;

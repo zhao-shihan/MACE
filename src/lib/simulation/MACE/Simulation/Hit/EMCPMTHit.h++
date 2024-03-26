@@ -11,7 +11,7 @@ namespace MACE::inline Simulation::inline Hit {
 
 class EMCPMTHit final : public Geant4X::UseG4Allocator<EMCPMTHit>,
                         public G4VHit,
-                        public Data::Tuple<Data::EMCPMTSimHit> {};
+                        public Data::Tuple<Data::EMCPMTHit> {};
 
 using EMCPMTHitCollection = G4THitsCollection<EMCPMTHit>;
 

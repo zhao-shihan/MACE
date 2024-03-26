@@ -26,7 +26,7 @@ Analysis::Analysis() :
     fFile{},
     fDecayVertexOutput{},
     fEMCSimHitOutput{},
-    fEMCPMTSimHitOutput{},
+    fEMCPMTHitOutput{},
     fMCPSimHitOutput{},
     fDecayVertex{},
     fEMCHit{},
@@ -55,7 +55,7 @@ auto Analysis::RunBegin(G4int runID) -> void {
     fFile->cd(runDirectory.c_str());
     fDecayVertexOutput.emplace("SimDecayVertex");
     fEMCSimHitOutput.emplace("EMCSimHit");
-    fEMCPMTSimHitOutput.emplace("EMCPMTSimHit");
+    fEMCPMTHitOutput.emplace("EMCPMTHit");
     fMCPSimHitOutput.emplace("MCPSimHit");
 }
 
@@ -65,7 +65,7 @@ auto Analysis::EventEnd() -> void {
     if (emcTriggered and mcpTriggered) {
         if (fDecayVertex) { *fDecayVertexOutput << *fDecayVertex; }
         if (fEMCHit) { *fEMCSimHitOutput << *fEMCHit; }
-        if (fEMCPMTHit) { *fEMCPMTSimHitOutput << *fEMCPMTHit; }
+        if (fEMCPMTHit) { *fEMCPMTHitOutput << *fEMCPMTHit; }
         if (fMCPHit) { *fMCPSimHitOutput << *fMCPHit; }
     }
     fDecayVertex = {};
@@ -78,7 +78,7 @@ auto Analysis::RunEnd(Option_t* option) -> void {
     // write data
     fDecayVertexOutput->Write();
     fEMCSimHitOutput->Write();
-    fEMCPMTSimHitOutput->Write();
+    fEMCPMTHitOutput->Write();
     fMCPSimHitOutput->Write();
     // close file
     fFile->Close(option);

@@ -15,7 +15,7 @@
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/MMSMagnet.h++"
 #include "MACE/Detector/Description/MMSShield.h++"
-#include "MACE/Detector/Description/STC.h++"
+#include "MACE/Detector/Description/TTC.h++"
 #include "MACE/Detector/Description/ShieldingWall.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Description/Target.h++"
@@ -39,7 +39,7 @@ inline namespace SD {
 class CDCSD;
 class EMCSD;
 class MCPSD;
-class STCSD;
+class TTCSD;
 } // namespace SD
 
 inline namespace Action {
@@ -61,11 +61,11 @@ public:
     auto ShieldRegion() const -> const auto& { return *fShieldRegion; }
     auto SolenoidOrMagnetRegion() const -> const auto& { return *fSolenoidOrMagnetRegion; }
     auto TargetRegion() const -> const auto& { return *fTargetRegion; }
-    auto STCSensitiveRegion() const -> const auto& { return *fSTCSensitiveRegion; }
+    auto TTCSensitiveRegion() const -> const auto& { return *fTTCSensitiveRegion; }
     auto VacuumRegion() const -> const auto& { return *fVacuumRegion; }
 
     auto CDCSD() const -> auto& { return *fCDCSD; }
-    auto STCSD() const -> auto& { return *fSTCSD; }
+    auto TTCSD() const -> auto& { return *fTTCSD; }
     auto MCPSD() const -> auto& { return *fMCPSD; }
     auto EMCSD() const -> auto& { return *fEMCSD; }
 
@@ -87,7 +87,7 @@ public:
                                         Detector::Description::MMSShield,
                                         Detector::Description::ShieldingWall,
                                         Detector::Description::Solenoid,
-                                        Detector::Description::STC,
+                                        Detector::Description::TTC,
                                         Detector::Description::Target,
                                         Detector::Description::World>;
 
@@ -105,12 +105,12 @@ private:
     Region* fMCPSensitiveRegion;
     Region* fShieldRegion;
     Region* fSolenoidOrMagnetRegion;
-    Region* fSTCSensitiveRegion;
+    Region* fTTCSensitiveRegion;
     Region* fTargetRegion;
     Region* fVacuumRegion;
 
     SD::CDCSD* fCDCSD;
-    SD::STCSD* fSTCSD;
+    SD::TTCSD* fTTCSD;
     SD::MCPSD* fMCPSD;
     SD::EMCSD* fEMCSD;
 };

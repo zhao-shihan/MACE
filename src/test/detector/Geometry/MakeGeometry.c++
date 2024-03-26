@@ -18,7 +18,7 @@
 #include "MACE/Detector/Definition/MMSField.h++"
 #include "MACE/Detector/Definition/MMSMagnet.h++"
 #include "MACE/Detector/Definition/MMSShield.h++"
-#include "MACE/Detector/Definition/STC.h++"
+#include "MACE/Detector/Definition/TTC.h++"
 #include "MACE/Detector/Definition/ShieldingWall.h++"
 #include "MACE/Detector/Definition/SolenoidB1.h++"
 #include "MACE/Detector/Definition/SolenoidB1Field.h++"
@@ -93,7 +93,7 @@ int main(int argc, char* argv[]) {
     auto& cdcBody{mmsField.NewDaughter<CDCBody>(fCheckOverlap)};
     /* auto& mmsBeamPipe */ mmsField.NewDaughter<MMSBeamPipe>(fCheckOverlap);
     auto& mmsMagnet{mmsField.NewDaughter<MMSMagnet>(fCheckOverlap)};
-    /* auto& stc */ mmsField.NewDaughter<STC>(fCheckOverlap);
+    /* auto& ttc */ mmsField.NewDaughter<TTC>(fCheckOverlap);
 
     auto& solenoidS3{solenoidS3Field.NewDaughter<SolenoidS3>(fCheckOverlap)};
 

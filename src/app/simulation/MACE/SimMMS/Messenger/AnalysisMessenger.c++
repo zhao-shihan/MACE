@@ -17,7 +17,7 @@ AnalysisMessenger::AnalysisMessenger() :
     fFilePath{},
     fFileMode{},
     fCoincidenceWithCDC{},
-    fCoincidenceWithSTC{},
+    fCoincidenceWithTTC{},
     fSaveDecayVertexData{},
     fSaveCDCHitData{} {
 
@@ -39,10 +39,10 @@ AnalysisMessenger::AnalysisMessenger() :
     fCoincidenceWithCDC->SetParameterName("mode", false);
     fCoincidenceWithCDC->AvailableForStates(G4State_Idle);
 
-    fCoincidenceWithSTC = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/CoincidenceWithSTC", this);
-    fCoincidenceWithSTC->SetGuidance("Coincidence with STC if enabled.");
-    fCoincidenceWithSTC->SetParameterName("mode", false);
-    fCoincidenceWithSTC->AvailableForStates(G4State_Idle);
+    fCoincidenceWithTTC = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/CoincidenceWithTTC", this);
+    fCoincidenceWithTTC->SetGuidance("Coincidence with TTC if enabled.");
+    fCoincidenceWithTTC->SetParameterName("mode", false);
+    fCoincidenceWithTTC->AvailableForStates(G4State_Idle);
 
     fSaveDecayVertexData = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/SaveDecayVertexData", this);
     fSaveDecayVertexData->SetGuidance("Do not save decay vertex data if disabled.");
@@ -70,9 +70,9 @@ auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> voi
         Deliver<Analysis>([&](auto&& r) {
             r.CoincidenceWithCDC(fCoincidenceWithCDC->GetNewBoolValue(value));
         });
-    } else if (command == fCoincidenceWithSTC.get()) {
+    } else if (command == fCoincidenceWithTTC.get()) {
         Deliver<Analysis>([&](auto&& r) {
-            r.CoincidenceWithSTC(fCoincidenceWithSTC->GetNewBoolValue(value));
+            r.CoincidenceWithTTC(fCoincidenceWithTTC->GetNewBoolValue(value));
         });
     } else if (command == fSaveDecayVertexData.get()) {
         Deliver<TrackingAction>([&](auto&& r) {

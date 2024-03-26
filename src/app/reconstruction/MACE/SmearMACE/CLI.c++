@@ -49,16 +49,16 @@ CLI::CLI() :
     AddArgument("--cdc-track-name")
         .help("Set dataset name format. Default to 'G4Run{}/CDCSimTrack'.");
 
-    auto& stcHitMutexGroup{AddMutuallyExclusiveGroup()};
-    stcHitMutexGroup.add_argument("--stc-hit")
+    auto& ttcHitMutexGroup{AddMutuallyExclusiveGroup()};
+    ttcHitMutexGroup.add_argument("--ttc-hit")
         .nargs(2)
         .append()
-        .help("Smear a simulated STC hit variable by a smearing expression (e.g. --stc-hit t 'gRandom->Gaus(t, 0.05)').");
-    stcHitMutexGroup.add_argument("--stc-hit-id")
+        .help("Smear a simulated TTC hit variable by a smearing expression (e.g. --ttc-hit t 'gRandom->Gaus(t, 0.05)').");
+    ttcHitMutexGroup.add_argument("--ttc-hit-id")
         .flag()
-        .help("Save STC hit data in output file without smearing.");
-    AddArgument("--stc-hit-name")
-        .help("Set dataset name format. Default to 'G4Run{}/STCSimHit'.");
+        .help("Save TTC hit data in output file without smearing.");
+    AddArgument("--ttc-hit-name")
+        .help("Set dataset name format. Default to 'G4Run{}/TTCSimHit'.");
 
     auto& mcpHitMutexGroup{AddMutuallyExclusiveGroup()};
     mcpHitMutexGroup.add_argument("--mcp-hit")

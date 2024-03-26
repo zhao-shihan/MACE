@@ -55,7 +55,7 @@ private:
     gsl::owner<TFile*> fFile;
     std::optional<Data::Output<Data::SimDecayVertex>> fDecayVertexOutput;
     std::optional<Data::Output<Data::EMCSimHit>> fEMCSimHitOutput;
-    std::optional<Data::Output<Data::EMCPMTSimHit>> fEMCPMTSimHitOutput;
+    std::optional<Data::Output<Data::EMCPMTHit>> fEMCPMTHitOutput;
     std::optional<Data::Output<Data::MCPSimHit>> fMCPSimHitOutput;
 
     const std::vector<std::unique_ptr<Data::Tuple<Data::SimDecayVertex>>>* fDecayVertex;

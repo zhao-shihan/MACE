@@ -1,4 +1,4 @@
-#include "MACE/Simulation/SD/STCSiPMSD.h++"
+#include "MACE/Simulation/SD/TTCSiPMSD.h++"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -14,7 +14,7 @@
 
 namespace MACE::inline Simulation::inline SD {
 
-STCSiPMSD::STCSiPMSD(const G4String& sdName) :
+TTCSiPMSD::TTCSiPMSD(const G4String& sdName) :
     NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fHit{},
@@ -22,15 +22,15 @@ STCSiPMSD::STCSiPMSD(const G4String& sdName) :
     collectionName.insert(sdName + "HC");
 }
 
-auto STCSiPMSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
-    fHit.clear(); // clear at the begin of event allows STCSD to get optical photon counts at the end of event
+auto TTCSiPMSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
+    fHit.clear(); // clear at the begin of event allows TTCSD to get optical photon counts at the end of event
 
-    fHitsCollection = new STCSiPMHitCollection(SensitiveDetectorName, collectionName[0]);
+    fHitsCollection = new TTCSiPMHitCollection(SensitiveDetectorName, collectionName[0]);
     auto hitsCollectionID{G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection)};
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
 
-auto STCSiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
+auto TTCSiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& step{*theStep};
     const auto& track{*step.GetTrack()};
     const auto& particle{*track.GetDefinition()};
@@ -42,18 +42,18 @@ auto STCSiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto postStepPoint{*step.GetPostStepPoint()};
     const auto detectorID{postStepPoint.GetTouchable()->GetReplicaNumber()};
     // new a hit
-    auto hit{std::make_unique_for_overwrite<STCSiPMHit>()};
+    auto hit{std::make_unique_for_overwrite<TTCSiPMHit>()};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"DetID">(*hit) = detectorID;
     Get<"t">(*hit) = postStepPoint.GetGlobalTime();
-    // Get<"STCHitID">(*hit) = -1; // to be determined
+    // Get<"TTCHitID">(*hit) = -1; // to be determined
     fHit[detectorID].emplace_back(std::move(hit));
 
     return true;
 }
 
-auto STCSiPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
+auto TTCSiPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
     for (int hitID{};
          auto&& [detectorID, hitOfDetector] : fHit) {
         for (auto&& hit : hitOfDetector) {
@@ -64,7 +64,7 @@ auto STCSiPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
     }
 }
 
-auto STCSiPMSD::NOpticalPhotonHit() const -> std::unordered_map<int, int> {
+auto TTCSiPMSD::NOpticalPhotonHit() const -> std::unordered_map<int, int> {
     std::unordered_map<int, int> nHit;
     for (auto&& [detectorID, hit] : fHit) {
         if (hit.size() > 0) {

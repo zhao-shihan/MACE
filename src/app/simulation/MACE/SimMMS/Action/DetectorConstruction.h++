@@ -5,7 +5,7 @@
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/MMSMagnet.h++"
 #include "MACE/Detector/Description/MMSShield.h++"
-#include "MACE/Detector/Description/STC.h++"
+#include "MACE/Detector/Description/TTC.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimMMS/Region.h++"
@@ -24,7 +24,7 @@ namespace SimMMS {
 
 inline namespace SD {
 class CDCSD;
-class STCSD;
+class TTCSD;
 } // namespace SD
 
 inline namespace Action {
@@ -44,11 +44,11 @@ public:
     auto ShieldRegion() const -> const auto& { return *fShieldRegion; }
     auto SolenoidOrMagnetRegion() const -> const auto& { return *fSolenoidOrMagnetRegion; }
     auto TargetRegion() const -> const auto& { return *fTargetRegion; }
-    auto STCSensitiveRegion() const -> const auto& { return *fSTCSensitiveRegion; }
+    auto TTCSensitiveRegion() const -> const auto& { return *fTTCSensitiveRegion; }
     auto VacuumRegion() const -> const auto& { return *fVacuumRegion; }
 
     auto CDCSD() const -> auto& { return *fCDCSD; }
-    auto STCSD() const -> auto& { return *fSTCSD; }
+    auto TTCSD() const -> auto& { return *fTTCSD; }
 
 public:
     using DescriptionInUse = std::tuple<Detector::Description::CDC,
@@ -56,7 +56,7 @@ public:
                                         Detector::Description::MMSField,
                                         Detector::Description::MMSMagnet,
                                         Detector::Description::MMSShield,
-                                        Detector::Description::STC,
+                                        Detector::Description::TTC,
                                         Detector::Description::World>;
 
 private:
@@ -71,12 +71,12 @@ private:
     Region* fDefaultSolidRegion;
     Region* fShieldRegion;
     Region* fSolenoidOrMagnetRegion;
-    Region* fSTCSensitiveRegion;
+    Region* fTTCSensitiveRegion;
     Region* fTargetRegion;
     Region* fVacuumRegion;
 
     SD::CDCSD* fCDCSD;
-    SD::STCSD* fSTCSD;
+    SD::TTCSD* fTTCSD;
 };
 
 } // namespace Action

@@ -20,7 +20,7 @@ class TFile;
 
 namespace MACE::inline Simulation::inline Hit {
 class CDCHit;
-class STCHit;
+class TTCHit;
 } // namespace MACE::inline Simulation::inline Hit
 
 namespace MACE::SimMMS {
@@ -32,7 +32,7 @@ public:
     auto FilePath(std::filesystem::path path) -> void { fFilePath = std::move(path); }
     auto FileMode(std::string mode) -> void { fFileMode = std::move(mode); }
     auto CoincidenceWithCDC(bool val) -> void { fCoincidenceWithCDC = val; }
-    auto CoincidenceWithSTC(bool val) -> void { fCoincidenceWithSTC = val; }
+    auto CoincidenceWithTTC(bool val) -> void { fCoincidenceWithTTC = val; }
     auto SaveCDCHitData(bool val) -> void { fSaveCDCHitData = val; }
 
     auto RunBegin(G4int runID) -> void;
@@ -40,7 +40,7 @@ public:
     auto SubmitDecayVertexData(const std::vector<std::unique_ptr<Data::Tuple<Data::SimDecayVertex>>>& data) -> void { fDecayVertex = &data; }
     auto SubmitCDCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::CDCHit*>>*> hc) -> void { fCDCHit = hc; }
     auto SubmitCDCTrackData(const std::vector<std::unique_ptr<Data::Tuple<Data::CDCSimTrack>>>& data) -> void { fCDCTrack = &data; }
-    auto SubmitSTCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::STCHit*>>*> hc) -> void { fSTCHit = hc; }
+    auto SubmitTTCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::TTCHit*>>*> hc) -> void { fTTCHit = hc; }
     auto EventEnd() -> void;
 
     auto RunEnd(Option_t* option = {}) -> void;
@@ -49,7 +49,7 @@ private:
     std::filesystem::path fFilePath;
     std::string fFileMode;
     bool fCoincidenceWithCDC;
-    bool fCoincidenceWithSTC;
+    bool fCoincidenceWithTTC;
     bool fSaveCDCHitData;
 
     std::filesystem::path fLastUsedFullFilePath;
@@ -58,12 +58,12 @@ private:
     std::optional<Data::Output<Data::SimDecayVertex>> fDecayVertexOutput;
     std::optional<Data::Output<Data::CDCSimHit>> fCDCSimHitOutput;
     std::optional<Data::Output<Data::CDCSimTrack>> fCDCSimTrackOutput;
-    std::optional<Data::Output<Data::STCSimHit>> fSTCSimHitOutput;
+    std::optional<Data::Output<Data::TTCSimHit>> fTTCSimHitOutput;
 
     const std::vector<std::unique_ptr<Data::Tuple<Data::SimDecayVertex>>>* fDecayVertex;
     const std::vector<gsl::owner<Simulation::CDCHit*>>* fCDCHit;
     const std::vector<std::unique_ptr<Data::Tuple<Data::CDCSimTrack>>>* fCDCTrack;
-    const std::vector<gsl::owner<Simulation::STCHit*>>* fSTCHit;
+    const std::vector<gsl::owner<Simulation::TTCHit*>>* fTTCHit;
 
     AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };

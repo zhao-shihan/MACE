@@ -46,7 +46,7 @@ auto main(int argc, char* argv[]) -> int {
         }};
         AppendConfigText("CDCSimHit", cli.CDCSimHitSmearingConfig(), cli.CDCSimHitIdentity());
         AppendConfigText("CDCSimTrack", cli.CDCSimTrackSmearingConfig(), cli.CDCSimTrackIdentity());
-        AppendConfigText("STCSimHit", cli.STCSimHitSmearingConfig(), cli.STCSimHitIdentity());
+        AppendConfigText("TTCSimHit", cli.TTCSimHitSmearingConfig(), cli.TTCSimHitIdentity());
         AppendConfigText("MCPSimHit", cli.MCPSimHitSmearingConfig(), cli.MCPSimHitIdentity());
         AppendConfigText("EMCSimHit", cli.EMCSimHitSmearingConfig(), cli.EMCSimHitIdentity());
         MakeTextTMacro(smearingConfigText.str(), "SmearingConfig", "Print SmearMACE smearing configuration")->Write();
@@ -64,7 +64,7 @@ auto main(int argc, char* argv[]) -> int {
         }};
         Smear(cli.CDCSimHitNameFormat(), cli.CDCSimHitSmearingConfig(), cli.CDCSimHitIdentity());
         Smear(cli.CDCSimTrackNameFormat(), cli.CDCSimTrackSmearingConfig(), cli.CDCSimTrackIdentity());
-        Smear(cli.STCSimHitNameFormat(), cli.STCSimHitSmearingConfig(), cli.STCSimHitIdentity());
+        Smear(cli.TTCSimHitNameFormat(), cli.TTCSimHitSmearingConfig(), cli.TTCSimHitIdentity());
         Smear(cli.MCPSimHitNameFormat(), cli.MCPSimHitSmearingConfig(), cli.MCPSimHitIdentity());
         Smear(cli.EMCSimHitNameFormat(), cli.EMCSimHitSmearingConfig(), cli.EMCSimHitIdentity());
     }

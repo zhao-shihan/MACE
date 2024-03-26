@@ -9,13 +9,13 @@
 #include "MACE/Detector/Definition/MMSField.h++"
 #include "MACE/Detector/Definition/MMSMagnet.h++"
 #include "MACE/Detector/Definition/MMSShield.h++"
-#include "MACE/Detector/Definition/STC.h++"
+#include "MACE/Detector/Definition/TTC.h++"
 #include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/SimMMS/Action/DetectorConstruction.h++"
 #include "MACE/SimMMS/Messenger/DetectorMessenger.h++"
 #include "MACE/SimMMS/SD/CDCSD.h++"
-#include "MACE/SimMMS/SD/STCSD.h++"
+#include "MACE/SimMMS/SD/TTCSD.h++"
 #include "MACE/Simulation/Field/AcceleratorField.h++"
 #include "MACE/Simulation/Field/MMSField.h++"
 #include "MACE/Utility/LiteralUnit.h++"
@@ -42,11 +42,11 @@ DetectorConstruction::DetectorConstruction() :
     fDefaultSolidRegion{},
     fShieldRegion{},
     fSolenoidOrMagnetRegion{},
-    fSTCSensitiveRegion{},
+    fTTCSensitiveRegion{},
     fTargetRegion{},
     fVacuumRegion{},
     fCDCSD{},
-    fSTCSD{} {
+    fTTCSD{} {
     DetectorMessenger::EnsureInstantiation();
 }
 
@@ -69,7 +69,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& cdcBody{mmsField.NewDaughter<Detector::Definition::CDCBody>(fCheckOverlap)};
     auto& mmsBeamPipe{mmsField.NewDaughter<Detector::Definition::MMSBeamPipe>(fCheckOverlap)};
     auto& mmsMagnet{mmsField.NewDaughter<Detector::Definition::MMSMagnet>(fCheckOverlap)};
-    auto& stc{mmsField.NewDaughter<Detector::Definition::STC>(fCheckOverlap)};
+    auto& ttc{mmsField.NewDaughter<Detector::Definition::TTC>(fCheckOverlap)};
 
     // 3
 
@@ -152,11 +152,11 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
         cdcCell.RegisterRegion("CDCSensitiveVolume", fCDCSensitiveRegion);
 
-        // STCSensitiveRegionRegion
-        fSTCSensitiveRegion = new Region("STCSensitiveRegion", RegionType::STCSensitive);
-        fSTCSensitiveRegion->SetProductionCuts(defaultCuts);
+        // TTCSensitiveRegionRegion
+        fTTCSensitiveRegion = new Region("TTCSensitiveRegion", RegionType::TTCSensitive);
+        fTTCSensitiveRegion->SetProductionCuts(defaultCuts);
 
-        stc.RegisterRegion(fSTCSensitiveRegion);
+        ttc.RegisterRegion(fTTCSensitiveRegion);
 
         // VacuumRegion
         fVacuumRegion = new Region("Vacuum", RegionType::Vacuum);
@@ -172,8 +172,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         fCDCSD = new SD::CDCSD{Detector::Description::CDC::Instance().Name()};
         cdcCell.RegisterSD("CDCSensitiveVolume", fCDCSD);
 
-        fSTCSD = new SD::STCSD{Detector::Description::STC::Instance().Name()};
-        stc.RegisterSD(fSTCSD);
+        fTTCSD = new SD::TTCSD{Detector::Description::TTC::Instance().Name()};
+        ttc.RegisterSD(fTTCSD);
     }
 
     ////////////////////////////////////////////////////////////////

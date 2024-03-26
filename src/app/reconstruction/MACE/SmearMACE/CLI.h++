@@ -31,9 +31,9 @@ public:
     auto CDCSimTrackIdentity() const -> bool { return ArgParser().get<bool>("--cdc-track-id"); }
     auto CDCSimTrackNameFormat() const -> auto { return ArgParser().present("--cdc-track-name").value_or("G4Run{}/CDCSimTrack"); }
 
-    auto STCSimHitSmearingConfig() const -> auto { return ParseSmearingConfig("--stc-hit"); }
-    auto STCSimHitIdentity() const -> bool { return ArgParser().get<bool>("--stc-hit-id"); }
-    auto STCSimHitNameFormat() const -> auto { return ArgParser().present("--stc-hit-name").value_or("G4Run{}/STCSimHit"); }
+    auto TTCSimHitSmearingConfig() const -> auto { return ParseSmearingConfig("--ttc-hit"); }
+    auto TTCSimHitIdentity() const -> bool { return ArgParser().get<bool>("--ttc-hit-id"); }
+    auto TTCSimHitNameFormat() const -> auto { return ArgParser().present("--ttc-hit-name").value_or("G4Run{}/TTCSimHit"); }
 
     auto MCPSimHitSmearingConfig() const -> auto { return ParseSmearingConfig("--mcp-hit"); }
     auto MCPSimHitIdentity() const -> bool { return ArgParser().get<bool>("--mcp-hit-id"); }

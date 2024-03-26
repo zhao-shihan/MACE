@@ -31,7 +31,7 @@
 /MACE/Field/EMCMagneticField              0.1 tesla
 
 /MACE/Analysis/CoincidenceWithCDC     false
-/MACE/Analysis/CoincidenceWithSTC     false
+/MACE/Analysis/CoincidenceWithTTC     false
 /MACE/Analysis/CoincidenceWithMCP     false
 /MACE/Analysis/CoincidenceWithEMC     false
 
@@ -109,7 +109,7 @@
 /vis/geometry/set/colour SolenoidS2Field               0     1     1     1     0.05
 /vis/geometry/set/colour SolenoidS3                    0     1     1     1     0.05
 /vis/geometry/set/colour SolenoidS3Field               0     1     1     1     0.05
-/vis/geometry/set/colour STC                           0     1     1     1     0.05
+/vis/geometry/set/colour TTC                           0     1     1     1     0.05
 /vis/geometry/set/colour Target                        0     1     1     1     0.1
 /vis/geometry/set/colour World                         0     1     1     1     0.001
 #/vis/geometry/set/colour CarbonFoil                    80    1.0   1.0   1.0   0.5

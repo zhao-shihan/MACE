@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Definition {
 
-class STC final : public DefinitionBase {
+class TTC final : public DefinitionBase {
 private:
     auto Construct(G4bool checkOverlaps) -> void override;
 };

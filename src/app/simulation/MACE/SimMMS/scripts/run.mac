@@ -19,7 +19,7 @@
 /MACE/Field/MMSMagneticField          0.1 tesla
 
 /MACE/Analysis/CoincidenceWithCDC     true
-/MACE/Analysis/CoincidenceWithSTC     true
+/MACE/Analysis/CoincidenceWithTTC     true
 
 #############################################################################
 # Run

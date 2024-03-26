@@ -14,7 +14,7 @@ enum struct RegionType {
     DefaultSolid,
     Shield,
     SolenoidOrMagnet,
-    STCSensitive,
+    TTCSensitive,
     Vacuum
 };
 

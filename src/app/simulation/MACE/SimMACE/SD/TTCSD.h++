@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MACE/Simulation/SD/STCSD.h++"
+#include "MACE/Simulation/SD/TTCSD.h++"
 
 namespace MACE::SimMACE::inline SD {
 
-class STCSD final : public Simulation::STCSD {
+class TTCSD final : public Simulation::TTCSD {
 public:
-    using Simulation::STCSD::STCSD;
+    using Simulation::TTCSD::TTCSD;
 
     auto EndOfEvent(G4HCofThisEvent* hc) -> void override;
 };

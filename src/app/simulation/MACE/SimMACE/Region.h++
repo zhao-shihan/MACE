@@ -16,7 +16,7 @@ enum struct RegionType {
     MCPSensitive,
     Shield,
     SolenoidOrMagnet,
-    STCSensitive,
+    TTCSensitive,
     Target,
     Vacuum
 };

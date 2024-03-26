@@ -379,7 +379,7 @@ MMSShield:
   WindowRadius: 30
   BeamSlantAngle: 0
   MaterialName: G4_Pb
-STC:
+TTC:
   Length: 150
   Width: 100
   Thickness: 10
