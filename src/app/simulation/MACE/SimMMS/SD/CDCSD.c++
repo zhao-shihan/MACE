@@ -6,7 +6,7 @@ namespace MACE::SimMMS::inline SD {
 auto CDCSD::EndOfEvent(G4HCofThisEvent* hc) -> void {
     Simulation::CDCSD::EndOfEvent(hc);
     Analysis::Instance().SubmitCDCHC(fHitsCollection->GetVector());
-    Analysis::Instance().SubmitCDCTrackData(fTrackData);
+    Analysis::Instance().SubmitMMSTrackData(fTrackData);
 }
 
 } // namespace MACE::SimMMS::inline SD

@@ -15,7 +15,7 @@
 
 namespace MACE::Data {
 
-using CDCTrack = TupleModel<Value<int, "EvtID", "Event ID">,
+using MMSTrack = TupleModel<Value<int, "EvtID", "Event ID">,
                             Value<int, "TrkID", "Track ID">,
                             Value<std::vector<int>, "HitID", "Hit(ID)s in this track">,
                             Value<float, "chi2", "Goodness of fit (chi^{2})">,
@@ -32,13 +32,13 @@ using CDCTrack = TupleModel<Value<int, "EvtID", "Event ID">,
                             Value<float, "z0", "Vertex z coordinate">,
                             Value<float, "theta0", "Reference zenith angle">>;
 
-using CDCSimTrack = TupleModel<CDCTrack,
+using MMSSimTrack = TupleModel<MMSTrack,
                                Value<std::string, "CreatProc", "Track creator process (MC truth)">>;
 
 /// @brief Calculate helix information from known vertex information in-place.
 /// @param track The track
 /// @param magneticFluxDensity Magnetic field B0
-constexpr auto CalculateHelix(TupleContain<Data::Tuple<CDCTrack>> auto& track, double magneticFluxDensity) -> void {
+constexpr auto CalculateHelix(TupleContain<Data::Tuple<MMSTrack>> auto& track, double magneticFluxDensity) -> void {
     using PhysicalConstant::c_light;
 
     const auto charge{Get<"PDGID">(track) > 0 ? -1 : 1};
@@ -70,7 +70,7 @@ constexpr auto CalculateHelix(TupleContain<Data::Tuple<CDCTrack>> auto& track, d
 /// @brief Calculate vertex information from known helix information in-place.
 /// @param track The track
 /// @param magneticFluxDensity Magnetic field B0
-constexpr auto CalculateVertex(TupleContain<Data::Tuple<CDCTrack>> auto& track, double magneticFluxDensity) -> void {
+constexpr auto CalculateVertex(TupleContain<Data::Tuple<MMSTrack>> auto& track, double magneticFluxDensity) -> void {
     using PhysicalConstant::c_light;
     using PhysicalConstant::electron_mass_c2;
 

@@ -23,7 +23,7 @@ CLI::CLI() :
         .scan<'i', gsl::index>()
         .default_value(std::vector<gsl::index>{0, 1})
         .help("Set number of datasets (index in [0, size) range), or index range (in [first, last) pattern)");
-    AddArgument("-b","--batch-size")
+    AddArgument("-b", "--batch-size")
         .scan<'i', unsigned>()
         .help("Set number of events processed in a batch. Default to 10000.");
 
@@ -38,17 +38,6 @@ CLI::CLI() :
     AddArgument("--cdc-hit-name")
         .help("Set dataset name format. Default to 'G4Run{}/CDCSimHit'.");
 
-    auto& cdcTrkMutexGroup{AddMutuallyExclusiveGroup()};
-    cdcTrkMutexGroup.add_argument("--cdc-track")
-        .nargs(2)
-        .append()
-        .help("Smear a simulated CDC track variable by a smearing expression (e.g. --cdc-track Ek 'gRandom->Gaus(Ek, 1)').");
-    cdcTrkMutexGroup.add_argument("--cdc-track-id")
-        .flag()
-        .help("Save CDC track data in output file without smearing.");
-    AddArgument("--cdc-track-name")
-        .help("Set dataset name format. Default to 'G4Run{}/CDCSimTrack'.");
-
     auto& ttcHitMutexGroup{AddMutuallyExclusiveGroup()};
     ttcHitMutexGroup.add_argument("--ttc-hit")
         .nargs(2)
@@ -59,6 +48,17 @@ CLI::CLI() :
         .help("Save TTC hit data in output file without smearing.");
     AddArgument("--ttc-hit-name")
         .help("Set dataset name format. Default to 'G4Run{}/TTCSimHit'.");
+
+    auto& mmsTrackMutexGroup{AddMutuallyExclusiveGroup()};
+    mmsTrackMutexGroup.add_argument("--mms-track")
+        .nargs(2)
+        .append()
+        .help("Smear a simulated CDC track variable by a smearing expression (e.g. --mms-track Ek 'gRandom->Gaus(Ek, 1)').");
+    mmsTrackMutexGroup.add_argument("--mms-track-id")
+        .flag()
+        .help("Save CDC track data in output file without smearing.");
+    AddArgument("--mms-track-name")
+        .help("Set dataset name format. Default to 'G4Run{}/MMSSimTrack'.");
 
     auto& mcpHitMutexGroup{AddMutuallyExclusiveGroup()};
     mcpHitMutexGroup.add_argument("--mcp-hit")

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Data/CDCTrack.h++"
+#include "MACE/Data/MMSTrack.h++"
 #include "MACE/Data/Output.h++"
 #include "MACE/Data/SimDecayVertex.h++"
 #include "MACE/Data/SimHit.h++"
@@ -43,8 +43,8 @@ public:
 
     auto SubmitDecayVertexData(const std::vector<std::unique_ptr<Data::Tuple<Data::SimDecayVertex>>>& data) -> void { fDecayVertex = &data; }
     auto SubmitCDCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::CDCHit*>>*> hc) -> void { fCDCHit = hc; }
-    auto SubmitCDCTrackData(const std::vector<std::unique_ptr<Data::Tuple<Data::CDCSimTrack>>>& data) -> void { fCDCTrack = &data; }
     auto SubmitTTCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::TTCHit*>>*> hc) -> void { fTTCHit = hc; }
+    auto SubmitMMSTrackData(const std::vector<std::unique_ptr<Data::Tuple<Data::MMSSimTrack>>>& data) -> void { fMMSTrack = &data; }
     auto SubmitMCPHC(gsl::not_null<const std::vector<gsl::owner<Simulation::MCPHit*>>*> hc) -> void { fMCPHit = hc; }
     auto SubmitEMCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::EMCHit*>>*> hc) -> void { fEMCHit = hc; }
     auto EventEnd() -> void;
@@ -65,15 +65,15 @@ private:
     gsl::owner<TFile*> fFile;
     std::optional<Data::Output<Data::SimDecayVertex>> fDecayVertexOutput;
     std::optional<Data::Output<Data::CDCSimHit>> fCDCSimHitOutput;
-    std::optional<Data::Output<Data::CDCSimTrack>> fCDCSimTrackOutput;
     std::optional<Data::Output<Data::TTCSimHit>> fTTCSimHitOutput;
+    std::optional<Data::Output<Data::MMSSimTrack>> fMMSSimTrackOutput;
     std::optional<Data::Output<Data::MCPSimHit>> fMCPSimHitOutput;
     std::optional<Data::Output<Data::EMCSimHit>> fEMCSimHitOutput;
 
     const std::vector<std::unique_ptr<Data::Tuple<Data::SimDecayVertex>>>* fDecayVertex;
     const std::vector<gsl::owner<Simulation::CDCHit*>>* fCDCHit;
-    const std::vector<std::unique_ptr<Data::Tuple<Data::CDCSimTrack>>>* fCDCTrack;
     const std::vector<gsl::owner<Simulation::TTCHit*>>* fTTCHit;
+    const std::vector<std::unique_ptr<Data::Tuple<Data::MMSSimTrack>>>* fMMSTrack;
     const std::vector<gsl::owner<Simulation::MCPHit*>>* fMCPHit;
     const std::vector<gsl::owner<Simulation::EMCHit*>>* fEMCHit;
 

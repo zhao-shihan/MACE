@@ -16,8 +16,8 @@ namespace MACE::Analysis {
 
 class DCACalculator final {
 public:
-    AFloat Compute(const DataModel::CDCPhysicsTrack& cdcTrack, const DataModel::MCPHit& mcpHit) const;
-    AFloat Compute(const DataModel::CDCHelixTrack& cdcTrack, const DataModel::MCPHit& mcpHit) const;
+    AFloat Compute(const DataModel::CDCPhysicsTrack& mmsTrack, const DataModel::MCPHit& mcpHit) const;
+    AFloat Compute(const DataModel::CDCHelixTrack& mmsTrack, const DataModel::MCPHit& mcpHit) const;
 
 private:
     AFloat ComputePointCircleDCA(const AFloat r, const stdx::array2<AFloat> center, const stdx::array2<AFloat> point) const;

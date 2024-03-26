@@ -188,7 +188,7 @@ auto CDCSD::BuildTrackData() -> void {
                  });
     const auto magneticFluxDensity{Detector::Description::MMSField::Instance().MagneticFluxDensity()};
     auto lastTrackID{-1};
-    std::unique_ptr<Data::Tuple<Data::CDCSimTrack>> track;
+    std::unique_ptr<Data::Tuple<Data::MMSSimTrack>> track;
     std::unordered_set<int> firedCell;
     for (auto&& pHit : std::as_const(hitData)) {
         const auto& hit{*pHit};
@@ -196,7 +196,7 @@ auto CDCSD::BuildTrackData() -> void {
         if (Get<"TrkID">(hit) != lastTrackID) {
             lastTrackID = Get<"TrkID">(hit);
             if (track and ssize(firedCell) >= fMinNHitForQualifiedTrack) { fTrackData.emplace_back(std::move(track)); }
-            track = std::make_unique_for_overwrite<Data::Tuple<Data::CDCSimTrack>>();
+            track = std::make_unique_for_overwrite<Data::Tuple<Data::MMSSimTrack>>();
             Get<"EvtID">(*track) = Get<"EvtID">(hit);
             Get<"TrkID">(*track) = Get<"TrkID">(hit);
             Get<"chi2">(*track) = 0;

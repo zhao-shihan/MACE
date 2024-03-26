@@ -28,12 +28,12 @@ Analysis::Analysis() :
     fFile{},
     fDecayVertexOutput{},
     fCDCSimHitOutput{},
-    fCDCSimTrackOutput{},
     fTTCSimHitOutput{},
+    fMMSSimTrackOutput{},
     fDecayVertex{},
     fCDCHit{},
-    fCDCTrack{},
     fTTCHit{},
+    fMMSTrack{},
     fMessengerRegister{this} {}
 
 auto Analysis::RunBegin(G4int runID) -> void {
@@ -57,31 +57,31 @@ auto Analysis::RunBegin(G4int runID) -> void {
     fFile->cd(runDirectory.c_str());
     fDecayVertexOutput.emplace("SimDecayVertex");
     fCDCSimHitOutput.emplace("CDCSimHit");
-    fCDCSimTrackOutput.emplace("CDCSimTrack");
     fTTCSimHitOutput.emplace("TTCSimHit");
+    fMMSSimTrackOutput.emplace("MMSSimTrack");
 }
 
 auto Analysis::EventEnd() -> void {
-    const auto cdcPassed{not fCoincidenceWithCDC or fCDCTrack == nullptr or fCDCTrack->size() > 0};
+    const auto cdcPassed{not fCoincidenceWithCDC or fMMSTrack == nullptr or fMMSTrack->size() > 0};
     const auto ttcPassed{not fCoincidenceWithTTC or fTTCHit == nullptr or fTTCHit->size() > 0};
     if (cdcPassed and ttcPassed) {
         if (fDecayVertex) { *fDecayVertexOutput << *fDecayVertex; }
         if (fCDCHit and fSaveCDCHitData) { *fCDCSimHitOutput << *fCDCHit; }
-        if (fCDCTrack) { *fCDCSimTrackOutput << *fCDCTrack; }
         if (fTTCHit) { *fTTCSimHitOutput << *fTTCHit; }
+        if (fMMSTrack) { *fMMSSimTrackOutput << *fMMSTrack; }
     }
     fDecayVertex = {};
     fCDCHit = {};
-    fCDCTrack = {};
     fTTCHit = {};
+    fMMSTrack = {};
 }
 
 auto Analysis::RunEnd(Option_t* option) -> void {
     // write data
     fDecayVertexOutput->Write();
     fCDCSimHitOutput->Write();
-    fCDCSimTrackOutput->Write();
     fTTCSimHitOutput->Write();
+    fMMSSimTrackOutput->Write();
     // close file
     fFile->Close(option);
     delete fFile;

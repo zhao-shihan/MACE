@@ -30,14 +30,14 @@ Analysis::Analysis() :
     fFile{},
     fDecayVertexOutput{},
     fCDCSimHitOutput{},
-    fCDCSimTrackOutput{},
     fTTCSimHitOutput{},
+    fMMSSimTrackOutput{},
     fMCPSimHitOutput{},
     fEMCSimHitOutput{},
     fDecayVertex{},
     fCDCHit{},
-    fCDCTrack{},
     fTTCHit{},
+    fMMSTrack{},
     fMCPHit{},
     fEMCHit{},
     fMessengerRegister{this} {}
@@ -63,29 +63,29 @@ auto Analysis::RunBegin(G4int runID) -> void {
     fFile->cd(runDirectory.c_str());
     fDecayVertexOutput.emplace("SimDecayVertex");
     fCDCSimHitOutput.emplace("CDCSimHit");
-    fCDCSimTrackOutput.emplace("CDCSimTrack");
     fTTCSimHitOutput.emplace("TTCSimHit");
+    fMMSSimTrackOutput.emplace("MMSSimTrack");
     fMCPSimHitOutput.emplace("MCPSimHit");
     fEMCSimHitOutput.emplace("EMCSimHit");
 }
 
 auto Analysis::EventEnd() -> void {
-    const auto cdcPassed{not fCoincidenceWithCDC or fCDCTrack == nullptr or fCDCTrack->size() > 0};
     const auto ttcPassed{not fCoincidenceWithTTC or fTTCHit == nullptr or fTTCHit->size() > 0};
+    const auto cdcPassed{not fCoincidenceWithCDC or fMMSTrack == nullptr or fMMSTrack->size() > 0};
     const auto mcpPassed{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
     const auto emcPassed{not fCoincidenceWithEMC or fEMCHit == nullptr or fEMCHit->size() > 0};
     if (cdcPassed and ttcPassed and mcpPassed and emcPassed) {
         if (fDecayVertex) { *fDecayVertexOutput << *fDecayVertex; }
         if (fCDCHit and fSaveCDCHitData) { *fCDCSimHitOutput << *fCDCHit; }
-        if (fCDCTrack) { *fCDCSimTrackOutput << *fCDCTrack; }
         if (fTTCHit) { *fTTCSimHitOutput << *fTTCHit; }
+        if (fMMSTrack) { *fMMSSimTrackOutput << *fMMSTrack; }
         if (fMCPHit) { *fMCPSimHitOutput << *fMCPHit; }
         if (fEMCHit) { *fEMCSimHitOutput << *fEMCHit; }
     }
     fDecayVertex = {};
     fCDCHit = {};
-    fCDCTrack = {};
     fTTCHit = {};
+    fMMSTrack = {};
     fMCPHit = {};
     fEMCHit = {};
 }
@@ -94,8 +94,8 @@ auto Analysis::RunEnd(Option_t* option) -> void {
     // write data
     fDecayVertexOutput->Write();
     fCDCSimHitOutput->Write();
-    fCDCSimTrackOutput->Write();
     fTTCSimHitOutput->Write();
+    fMMSSimTrackOutput->Write();
     fMCPSimHitOutput->Write();
     fEMCSimHitOutput->Write();
     // close file

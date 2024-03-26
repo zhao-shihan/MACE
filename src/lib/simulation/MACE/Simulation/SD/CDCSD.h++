@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Data/CDCTrack.h++"
+#include "MACE/Data/MMSTrack.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Simulation/Hit/CDCHit.h++"
@@ -42,7 +42,7 @@ protected:
     std::unordered_map<int, std::vector<std::unique_ptr<CDCHit>>> fSplitHit;
     CDCHitCollection* fHitsCollection;
 
-    std::vector<std::unique_ptr<Data::Tuple<Data::CDCSimTrack>>> fTrackData;
+    std::vector<std::unique_ptr<Data::Tuple<Data::MMSSimTrack>>> fTrackData;
 
     CDCSDMessenger::Register<CDCSD> fMessengerRegister;
 };
