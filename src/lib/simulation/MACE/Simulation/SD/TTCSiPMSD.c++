@@ -40,25 +40,25 @@ auto TTCSiPMSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     step.GetTrack()->SetTrackStatus(fStopAndKill);
 
     const auto postStepPoint{*step.GetPostStepPoint()};
-    const auto detectorID{postStepPoint.GetTouchable()->GetReplicaNumber()};
+    const auto tileID{postStepPoint.GetTouchable()->GetReplicaNumber()};
     // new a hit
     auto hit{std::make_unique_for_overwrite<TTCSiPMHit>()};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
-    Get<"DetID">(*hit) = detectorID;
+    Get<"TileID">(*hit) = tileID;
     Get<"t">(*hit) = postStepPoint.GetGlobalTime();
     // Get<"TTCHitID">(*hit) = -1; // to be determined
-    fHit[detectorID].emplace_back(std::move(hit));
+    fHit[tileID].emplace_back(std::move(hit));
 
     return true;
 }
 
 auto TTCSiPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
     for (int hitID{};
-         auto&& [detectorID, hitOfDetector] : fHit) {
+         auto&& [tileID, hitOfDetector] : fHit) {
         for (auto&& hit : hitOfDetector) {
             Get<"HitID">(*hit) = hitID++;
-            assert(Get<"DetID">(*hit) == detectorID);
+            assert(Get<"TileID">(*hit) == tileID);
             fHitsCollection->insert(hit.release());
         }
     }
@@ -66,12 +66,12 @@ auto TTCSiPMSD::EndOfEvent(G4HCofThisEvent*) -> void {
 
 auto TTCSiPMSD::NOpticalPhotonHit() const -> std::unordered_map<int, int> {
     std::unordered_map<int, int> nHit;
-    for (auto&& [detectorID, hit] : fHit) {
+    for (auto&& [tileID, hit] : fHit) {
         if (hit.size() > 0) {
-            nHit[detectorID] = hit.size();
+            nHit[tileID] = hit.size();
         }
     }
     return nHit;
 }
 
-} // namespace MACE::Simulation::inline SD
+} // namespace MACE::inline Simulation::inline SD

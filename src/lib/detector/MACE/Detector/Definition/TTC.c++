@@ -26,20 +26,20 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
         solid,
         G4NistManager::Instance()->BuildMaterialWithNewDensity("TTC_PS101", "G4_POLYSTYRENE", ttc.Density()),
         ttc.Name())};
-    int detectorID{};
+    int tileID{};
     const auto deltaPhi{2_pi / ttc.NAlongPhi()};
     for (int i{}; i < ttc.NAlongZ(); ++i) { // clang-format off
         const auto transform{G4RotateZ3D{Math::IsEven(i) ? 0 : deltaPhi / 2} *
                              G4Translate3D{ttc.Radius(), 0, (1 - ttc.NAlongZ()) * ttc.Width() / 2 + i * ttc.Width()} *
                              G4RotateZ3D{Math::IsEven(i) ? ttc.SlantAngle() : -ttc.SlantAngle()}}; // clang-format on
-        for (int j{}; j < ttc.NAlongPhi(); ++j, ++detectorID) {
+        for (int j{}; j < ttc.NAlongPhi(); ++j, ++tileID) {
             Make<G4PVPlacement>(
                 G4RotateZ3D{j * deltaPhi} * transform,
                 logic,
-                fmt::format("{}_{}", ttc.Name(), detectorID),
+                fmt::format("{}_{}", ttc.Name(), tileID),
                 Mother().LogicalVolume(),
                 false,
-                detectorID,
+                tileID,
                 checkOverlaps);
         }
     }

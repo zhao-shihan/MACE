@@ -71,7 +71,7 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     assert(eDep > 0);
 
     const auto& preStepPoint{*step.GetPreStepPoint()};
-    const auto detectorID{preStepPoint.GetTouchable()->GetReplicaNumber()};
+    const auto tileID{preStepPoint.GetTouchable()->GetReplicaNumber()};
     // calculate (Ek0, p0)
     const auto vertexEk{track.GetVertexKineticEnergy()};
     const auto vertexMomentum{track.GetVertexMomentumDirection() * std::sqrt(vertexEk * (vertexEk + 2 * particle.GetPDGMass()))};
@@ -81,7 +81,7 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     auto hit{std::make_unique_for_overwrite<TTCHit>()};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
-    Get<"DetID">(*hit) = detectorID;
+    Get<"TileID">(*hit) = tileID;
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
     Get<"Edep">(*hit) = eDep;
     Get<"nOptPho">(*hit) = -1; // to be determined
@@ -95,21 +95,21 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"Ek0">(*hit) = vertexEk;
     Get<"p0">(*hit) = vertexMomentum;
     *Get<"CreatProc">(*hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "|0>";
-    fSplitHit[detectorID].emplace_back(std::move(hit));
+    fSplitHit[tileID].emplace_back(std::move(hit));
 
     return true;
 }
 
 auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     for (int hitID{};
-         auto&& [detectorID, splitHit] : fSplitHit) {
+         auto&& [tileID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
         case 0:
             break;
         case 1: {
             auto& hit{splitHit.front()};
             Get<"HitID">(*hit) = hitID++;
-            assert(Get<"DetID">(*hit) == detectorID);
+            assert(Get<"TileID">(*hit) == tileID);
             fHitsCollection->insert(hit.release());
         } break;
         default: {
@@ -131,7 +131,7 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                     const auto topHit{*iTopHit};
                     // construct real hit
                     Get<"HitID">(**topHit) = hitID++;
-                    assert(Get<"DetID">(**topHit) == detectorID);
+                    assert(Get<"TileID">(**topHit) == tileID);
                     for (auto&& hit : std::as_const(hitCandidate)) {
                         if (hit == topHit) { continue; }
                         Get<"Edep">(**topHit) += Get<"Edep">(**hit);
@@ -155,7 +155,7 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     if (fTTCSiPMSD != nullptr) {
         auto nHit{fTTCSiPMSD->NOpticalPhotonHit()};
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
-            Get<"nOptPho">(*hit) = nHit[Get<"DetID">(*hit)];
+            Get<"nOptPho">(*hit) = nHit[Get<"TileID">(*hit)];
         }
     }
 }

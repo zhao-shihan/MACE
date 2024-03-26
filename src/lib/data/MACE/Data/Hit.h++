@@ -3,26 +3,28 @@
 #include "MACE/Data/RawHit.h++"
 #include "MACE/Data/TupleModel.h++"
 #include "MACE/Data/Value.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
 
 namespace MACE::Data {
 
-using CDCHit = TupleModel<CDCRawHit,
+namespace internal {
+
+using HitEventIDHitID = TupleModel<Value<int, "EvtID", "Event ID">,
+                                   Value<int, "HitID", "Hit ID">>;
+
+} // namespace internal
+
+using CDCHit = TupleModel<internal::HitEventIDHitID,
+                          CDCRawHit,
                           Value<float, "tD", "Drift time">,
                           Value<float, "d", "Drift distance">>;
 
 using TTCHit = TupleModel<internal::HitEventIDHitID,
-                          Value<short, "DetID", "Hit detector ID">,
-                          Value<double, "t", "Hit time">,
-                          Value<float, "Edep", "Energy deposition">>;
+                          TTCRawHit>;
 
 using MCPHit = TupleModel<internal::HitEventIDHitID,
-                          Value<double, "t", "Hit time">,
-                          Value<stdx::array2f, "x", "Hit position">>;
+                          MCPRawHit>;
 
 using EMCHit = TupleModel<internal::HitEventIDHitID,
-                          Value<short, "UnitID", "Hit unit ID">,
-                          Value<double, "t", "Hit time">,
-                          Value<float, "Edep", "Energy deposition">>;
+                          EMCRawHit>;
 
 } // namespace MACE::Data

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Data/SimHit.h++"
+#include "MACE/Data/SensorHit.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Extension/Geant4X/UseG4Allocator.h++"
 

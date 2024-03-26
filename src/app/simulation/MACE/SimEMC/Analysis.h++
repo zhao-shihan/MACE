@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/Data/Output.h++"
+#include "MACE/Data/SensorHit.h++"
 #include "MACE/Data/SimDecayVertex.h++"
 #include "MACE/Data/SimHit.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
