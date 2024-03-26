@@ -32,7 +32,7 @@ CDCSD::CDCSD(const G4String& sdName) :
     NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fIonizingEnergyDepositionThreshold{25_eV},
-    fNMinFiredCellForQualifiedTrack{},
+    fMinNHitForQualifiedTrack{},
     fMeanDriftVelocity{},
     fCellMap{},
     fSplitHit{},
@@ -42,7 +42,7 @@ CDCSD::CDCSD(const G4String& sdName) :
     collectionName.emplace_back(sdName + "HC");
 
     const auto& cdc{Detector::Description::CDC::Instance()};
-    fNMinFiredCellForQualifiedTrack = cdc.NSenseLayerPerSuper() * cdc.NSuperLayer();
+    fMinNHitForQualifiedTrack = cdc.NSenseLayerPerSuper() * cdc.NSuperLayer();
     fMeanDriftVelocity = cdc.MeanDriftVelocity();
     fCellMap = &cdc.CellMap();
 
@@ -195,7 +195,7 @@ auto CDCSD::BuildTrackData() -> void {
         assert(Get<"TrkID">(hit) >= 0);
         if (Get<"TrkID">(hit) != lastTrackID) {
             lastTrackID = Get<"TrkID">(hit);
-            if (track and ssize(firedCell) >= fNMinFiredCellForQualifiedTrack) { fTrackData.emplace_back(std::move(track)); }
+            if (track and ssize(firedCell) >= fMinNHitForQualifiedTrack) { fTrackData.emplace_back(std::move(track)); }
             track = std::make_unique_for_overwrite<Data::Tuple<Data::CDCSimTrack>>();
             Get<"EvtID">(*track) = Get<"EvtID">(hit);
             Get<"TrkID">(*track) = Get<"TrkID">(hit);
@@ -212,7 +212,7 @@ auto CDCSD::BuildTrackData() -> void {
         Get<"HitID">(*track)->emplace_back(Get<"HitID">(hit));
         firedCell.emplace(Get<"CellID">(hit));
     }
-    if (track and ssize(firedCell) >= fNMinFiredCellForQualifiedTrack) { fTrackData.emplace_back(std::move(track)); }
+    if (track and ssize(firedCell) >= fMinNHitForQualifiedTrack) { fTrackData.emplace_back(std::move(track)); }
 }
 
 } // namespace MACE::inline Simulation::inline SD

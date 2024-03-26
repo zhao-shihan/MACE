@@ -26,7 +26,7 @@ public:
 private:
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fIonizingEnergyDepositionThreshold;
-    std::unique_ptr<G4UIcmdWithAnInteger> fNMinFiredCellForQualifiedTrack;
+    std::unique_ptr<G4UIcmdWithAnInteger> fMinNHitForQualifiedTrack;
 };
 
 } // namespace MACE::inline Simulation::inline SD

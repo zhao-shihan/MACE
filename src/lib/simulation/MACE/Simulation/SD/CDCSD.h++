@@ -22,7 +22,7 @@ public:
     CDCSD(const G4String& sdName);
 
     auto IonizingEnergyDepositionThreshold(double e) -> void { fIonizingEnergyDepositionThreshold = std::max(0., e); }
-    auto NMinFiredCellForQualifiedTrack(int n) -> void { fNMinFiredCellForQualifiedTrack = std::max(1, n); }
+    auto MinNHitForQualifiedTrack(int n) -> void { fMinNHitForQualifiedTrack = std::max(1, n); }
 
     virtual auto Initialize(G4HCofThisEvent* hitsCollection) -> void override;
     virtual auto ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool override;
@@ -34,7 +34,7 @@ private:
 
 protected:
     double fIonizingEnergyDepositionThreshold;
-    int fNMinFiredCellForQualifiedTrack;
+    int fMinNHitForQualifiedTrack;
 
     double fMeanDriftVelocity;
     const std::vector<Detector::Description::CDC::CellInformation>* fCellMap;
