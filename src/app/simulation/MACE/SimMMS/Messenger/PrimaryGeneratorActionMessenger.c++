@@ -1,9 +1,9 @@
-#include "MACE/SimEMC/Action/PrimaryGeneratorAction.h++"
-#include "MACE/SimEMC/Messenger/PrimaryGeneratorActionMessenger.h++"
+#include "MACE/SimMMS/Action/PrimaryGeneratorAction.h++"
+#include "MACE/SimMMS/Messenger/PrimaryGeneratorActionMessenger.h++"
 
 #include "G4UIcommand.hh"
 
-namespace MACE::SimEMC::inline Messenger {
+namespace MACE::SimMMS::inline Messenger {
 
 PrimaryGeneratorActionMessenger::PrimaryGeneratorActionMessenger() :
     SingletonMessenger{},
@@ -33,4 +33,4 @@ void PrimaryGeneratorActionMessenger::SetNewValue(G4UIcommand* command, G4String
     }
 }
 
-} // namespace MACE::SimEMC::inline Messenger
+} // namespace MACE::SimMMS::inline Messenger

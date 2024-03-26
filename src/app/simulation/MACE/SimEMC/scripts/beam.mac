@@ -3,11 +3,11 @@
 /event/verbose 0
 /tracking/verbose 0
 
-/MACE/Generator/SwitchToGPS
 /MACE/Physics/UseOpticalPhysics
 
 /run/initialize
 
+/MACE/Generator/SwitchToGPSX
 /gps/particle e+
 /gps/direction 0 0 1
 /gps/ene/mono 5 keV

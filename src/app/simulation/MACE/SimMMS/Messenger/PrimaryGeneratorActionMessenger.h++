@@ -4,14 +4,12 @@
 
 #include <memory>
 
-class G4UIcmdWithAnInteger;
+class G4UIcommand;
 
-namespace MACE::SimTarget {
+namespace MACE::SimMMS {
 
 inline namespace Action {
-
 class PrimaryGeneratorAction;
-
 } // namespace Action
 
 inline namespace Messenger {
@@ -28,9 +26,10 @@ public:
     auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
-    std::unique_ptr<G4UIcmdWithAnInteger> fPrimariesForEachG4Event;
+    std::unique_ptr<G4UIcommand> fSwitchToGPSX;
+    std::unique_ptr<G4UIcommand> fSwitchToEcoMug;
 };
 
 } // namespace Messenger
 
-} // namespace MACE::SimTarget
+} // namespace MACE::SimMMS

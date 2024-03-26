@@ -1,10 +1,10 @@
 #pragma once
 
 #include "MACE/Env/Memory/PassiveSingleton.h++"
+#include "MACE/Extension/Geant4X/GeneralParticleSourceX.h++"
 #include "MACE/SimEMC/Messenger/PrimaryGeneratorActionMessenger.h++"
 #include "MACE/Simulation/Generator/EcoMugCosmicRayMuon.h++"
 
-#include "G4GeneralParticleSource.hh"
 #include "G4VPrimaryGenerator.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 
@@ -15,14 +15,14 @@ class PrimaryGeneratorAction final : public Env::Memory::PassiveSingleton<Primar
 public:
     PrimaryGeneratorAction();
 
-    auto SwitchToGPS() -> void { fGenerator = &fAvailableGenerator.gps; }
+    auto SwitchToGPSX() -> void { fGenerator = &fAvailableGenerator.gpsx; }
     auto SwitchToEcoMug() -> void { fGenerator = &fAvailableGenerator.ecoMug; }
 
     auto GeneratePrimaries(G4Event* event) -> void override { fGenerator->GeneratePrimaryVertex(event); }
 
 private:
     struct {
-        G4GeneralParticleSource gps;
+        Geant4X::GeneralParticleSourceX gpsx;
         Generator::EcoMugCosmicRayMuon ecoMug;
     } fAvailableGenerator;
     G4VPrimaryGenerator* fGenerator;

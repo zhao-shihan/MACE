@@ -25,19 +25,20 @@
 /run/initialize
 
 # Muon beam properties
-/gps/particle                                  mu+
-/gps/direction                                 0 0 1        # 0 deg
-/gps/pos/centre                                0 0 -2 m     # 0 deg
-#/gps/direction                                 -0.25 0 2    # 7.125 deg
-#/gps/pos/centre                                0.25 0 -2 m  # 7.125 deg
-/gps/pos/type                                  Beam
-/gps/pos/shape                                 Circle
-/gps/pos/radius                                0 mm
-/gps/pos/sigma_r                               5 mm
-/gps/ene/type                                  Gauss
-/gps/ene/mono                                  3.647 MeV     # momentum 28 MeV
-/gps/ene/sigma                                 0.1793 MeV    # momentum spreading 2.5%
-/MACE/Generator/GPS/PrimariesForEachG4Event    1
+/gps/particle             mu+
+/gps/direction            0 0 1        # 0 deg
+/gps/pos/centre           0 0 -2 m     # 0 deg
+#/gps/direction            -0.25 0 2    # 7.125 deg
+#/gps/pos/centre           0.25 0 -2 m  # 7.125 deg
+/gps/pos/type             Beam
+/gps/pos/shape            Circle
+/gps/pos/radius           0 mm
+/gps/pos/sigma_r          5 mm
+/gps/ene/type             Gauss
+/gps/ene/mono             3.647 MeV    # momentum 28 MeV
+/gps/ene/sigma            0.1793 MeV   # momentum spreading 2.5%
+/gps/number               1
+/GPSX/PulseWidth          0 ns
 
 # Set physics
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0

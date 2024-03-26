@@ -1,6 +1,6 @@
-#include "MACE/SimEMC/Action/PrimaryGeneratorAction.h++"
+#include "MACE/SimMMS/Action/PrimaryGeneratorAction.h++"
 
-namespace MACE::SimEMC::inline Action {
+namespace MACE::SimMMS::inline Action {
 
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
     PassiveSingleton{},
@@ -9,4 +9,4 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() :
     fGenerator{&fAvailableGenerator.gpsx},
     fMessengerRegister{this} {}
 
-} // namespace MACE::SimEMC::inline Action
+} // namespace MACE::SimMMS::inline Action
