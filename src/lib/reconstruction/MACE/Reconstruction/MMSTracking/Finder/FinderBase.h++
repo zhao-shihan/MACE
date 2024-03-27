@@ -1,36 +1,43 @@
 #pragma once
 
-#include "MACE/Data/MMSTrack.h++"
 #include "MACE/Data/Hit.h++"
-#include "MACE/Data/TupleModel.h++"
+#include "MACE/Data/MMSTrack.h++"
+#include "MACE/Data/Tuple.h++"
 #include "MACE/Env/Print.h++"
 
 #include "fmt/ranges.h"
 
+#include <iterator>
 #include <memory>
-#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 namespace MACE::inline Reconstruction::MMSTracking::inline Finder {
 
-template<Data::TupleModelContain<Data::CDCHit> AHit, Data::TupleModelContain<Data::MMSTrack> ATrack>
+template<std::indirectly_readable AHit,
+         Data::TupleContain<Data::Tuple<Data::MMSTrack>> ATrack>
+    requires Data::TupleContain<std::iter_value_t<AHit>, Data::Tuple<Data::CDCHit>>
 class FinderBase {
 public:
-    using HitModel = AHit;
-    using TrackModel = ATrack;
+    using Hit = AHit;
+    using Track = ATrack;
+
+public:
+    virtual ~FinderBase() = 0;
 
 protected:
-    using HitCollection = std::vector<std::shared_ptr<Data::Tuple<AHit>>>;
-
     struct Result {
-        auto NGoodTrack() const -> auto { return ssize(seed); }
-        std::unordered_map<int, std::shared_ptr<Data::Tuple<ATrack>>> seed;
-        std::unordered_map<int, HitCollection> goodies;
-        HitCollection garbage;
+        struct GoodTrack {
+            std::vector<AHit> hitData;
+            std::shared_ptr<ATrack> seed;
+        };
+        auto NGoodTrack() const -> auto { return ssize(good); }
+        std::unordered_map<int, GoodTrack> good;
+        std::vector<AHit> garbage;
     };
 
 protected:
-    static auto GoodHitData(const HitCollection& hitData) -> bool;
+    static auto GoodHitData(const std::vector<AHit>& hitData) -> bool;
 };
 
 } // namespace MACE::inline Reconstruction::MMSTracking::inline Finder

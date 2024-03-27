@@ -1,7 +1,14 @@
 namespace MACE::inline Reconstruction::MMSTracking::inline Finder {
 
-template<Data::TupleModelContain<Data::CDCHit> AHit, Data::TupleModelContain<Data::MMSTrack> ATrack>
-auto FinderBase<AHit, ATrack>::GoodHitData(const HitCollection& hitData) -> bool {
+template<std::indirectly_readable AHit,
+         Data::TupleContain<Data::Tuple<Data::MMSTrack>> ATrack>
+    requires Data::TupleContain<std::iter_value_t<AHit>, Data::Tuple<Data::CDCHit>>
+FinderBase<AHit, ATrack>::~FinderBase() = default;
+
+template<std::indirectly_readable AHit,
+         Data::TupleContain<Data::Tuple<Data::MMSTrack>> ATrack>
+    requires Data::TupleContain<std::iter_value_t<AHit>, Data::Tuple<Data::CDCHit>>
+auto FinderBase<AHit, ATrack>::GoodHitData(const std::vector<AHit>& hitData) -> bool {
     auto good{true};
 
     if (hitData.empty()) [[unlikely]] {
