@@ -18,6 +18,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <ranges>
 #include <string_view>
 
 namespace MACE::inline Simulation::inline SD {
@@ -96,34 +97,30 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
                      [](const auto& hit1, const auto& hit2) {
                          return Get<"t">(*hit1) < Get<"t">(*hit2);
                      });
-        // loop over all hits on this crystal and cluster to real hits by times
-        std::vector<std::unique_ptr<MCPHit>*> hitCandidate;
-        const auto ClusterAndInsertHit{
-            [&] {
-                // find top hit
-                const auto iTopHit{std::ranges::min_element(std::as_const(hitCandidate),
-                                                            [](const auto& hit1, const auto& hit2) {
-                                                                return Get<"TrkID">(**hit1) < Get<"TrkID">(**hit2);
-                                                            })};
-                const auto topHit{*iTopHit};
-                // construct real hit
-                Get<"HitID">(**topHit) = hitID++;
-                for (auto&& hit : std::as_const(hitCandidate)) {
-                    if (hit == topHit) { continue; }
-                    Get<"Edep">(**topHit) += Get<"Edep">(**hit);
-                }
-                fHitsCollection->insert(topHit->release());
-            }};
-        for (auto windowClosingTime{Get<"t">(*fSplitHit.front()) + timeResolutionFWHM};
-             auto&& aSplitHit : fSplitHit) {
-            if (Get<"t">(*aSplitHit) > windowClosingTime) {
-                ClusterAndInsertHit();
-                hitCandidate.clear();
-                windowClosingTime = Get<"t">(*aSplitHit) + timeResolutionFWHM;
+        // loop over all hits and cluster to real hits by times
+        double windowClosingTime;
+        auto clusterFirst{fSplitHit.begin()};
+        auto clusterLast{clusterFirst};
+        do {
+            windowClosingTime = Get<"t">(**clusterFirst) + timeResolutionFWHM;
+            clusterLast = std::ranges::find_if_not(clusterFirst, fSplitHit.end(),
+                                                   [&windowClosingTime](const auto& hit) {
+                                                       return Get<"t">(*hit) < windowClosingTime;
+                                                   });
+            // find top hit
+            auto& topHit{*std::ranges::min_element(clusterFirst, clusterLast,
+                                                   [](const auto& hit1, const auto& hit2) {
+                                                       return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
+                                                   })};
+            // construct real hit
+            Get<"HitID">(*topHit) = hitID++;
+            for (const auto& hit : std::ranges::subrange{clusterFirst, clusterLast}) {
+                if (hit == topHit) { continue; }
+                Get<"Edep">(*topHit) += Get<"Edep">(*hit);
             }
-            hitCandidate.emplace_back(&aSplitHit);
-        }
-        ClusterAndInsertHit();
+            fHitsCollection->insert(topHit.release());
+            clusterFirst = clusterLast;
+        } while (clusterFirst != fSplitHit.end());
     } break;
     }
     fSplitHit.clear();

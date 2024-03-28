@@ -22,9 +22,10 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <iterator>
 #include <functional>
+#include <iterator>
 #include <numeric>
+#include <ranges>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -39,6 +40,7 @@ EMCSD::EMCSD(const G4String& sdName, const EMCPMTSD* emcPMTSD) :
     fSplitHit{},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
+
     const auto& emc{Detector::Description::EMC::Instance()};
     assert(emc.CsIEnergyBin().size() == emc.CsIScintillationComponent1().size());
     std::vector<double> dE(emc.CsIEnergyBin().size());
@@ -50,6 +52,8 @@ EMCSD::EMCSD(const G4String& sdName, const EMCPMTSD* emcPMTSD) :
     stdx::ranges::adjacent_difference(emc.CsIEnergyBin(), meanE.begin(), Math::MidPoint<double, double>);
     std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
     fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
+
+    fSplitHit.reserve(emc.NUnit());
 }
 
 auto EMCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
@@ -102,11 +106,15 @@ auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 }
 
 auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
+    constexpr auto ByTrackID{
+        [](const auto& hit1, const auto& hit2) {
+            return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
+        }};
     for (int hitID{};
          auto&& [unitID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
         case 0:
-            break;
+            std23::unreachable();
         case 1: {
             auto& hit{splitHit.front()};
             Get<"HitID">(*hit) = hitID++;
@@ -121,39 +129,34 @@ auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                              return Get<"t">(*hit1) < Get<"t">(*hit2);
                          });
             // loop over all hits on this crystal and cluster to real hits by times
-            std::vector<std::unique_ptr<EMCHit>*> hitCandidate;
-            const auto ClusterAndInsertHit{
-                [&] {
-                    // find top hit
-                    const auto iTopHit{std::ranges::min_element(std::as_const(hitCandidate),
-                                                                [](const auto& hit1, const auto& hit2) {
-                                                                    return Get<"TrkID">(**hit1) < Get<"TrkID">(**hit2);
-                                                                })};
-                    const auto topHit{*iTopHit};
-                    // construct real hit
-                    Get<"HitID">(**topHit) = hitID++;
-                    assert(Get<"UnitID">(**topHit) == unitID);
-                    for (auto&& hit : std::as_const(hitCandidate)) {
-                        if (hit == topHit) { continue; }
-                        Get<"Edep">(**topHit) += Get<"Edep">(**hit);
-                    }
-                    fHitsCollection->insert(topHit->release());
-                }};
-            for (auto windowClosingTime{Get<"t">(*splitHit.front()) + scintillationTimeConstant1};
-                 auto&& aSplitHit : splitHit) {
-                if (Get<"t">(*aSplitHit) > windowClosingTime) {
-                    ClusterAndInsertHit();
-                    hitCandidate.clear();
-                    windowClosingTime = Get<"t">(*aSplitHit) + scintillationTimeConstant1;
+            double windowClosingTime;
+            auto clusterFirst{splitHit.begin()};
+            auto clusterLast{clusterFirst};
+            do {
+                windowClosingTime = Get<"t">(**clusterFirst) + scintillationTimeConstant1;
+                clusterLast = std::ranges::find_if_not(clusterFirst, splitHit.end(),
+                                                       [&windowClosingTime](const auto& hit) {
+                                                           return Get<"t">(*hit) < windowClosingTime;
+                                                       });
+                // find top hit
+                auto& topHit{*std::ranges::min_element(clusterFirst, clusterLast, ByTrackID)};
+                // construct real hit
+                Get<"HitID">(*topHit) = hitID++;
+                assert(Get<"UnitID">(*topHit) == unitID);
+                for (const auto& hit : std::ranges::subrange{clusterFirst, clusterLast}) {
+                    if (hit == topHit) { continue; }
+                    Get<"Edep">(*topHit) += Get<"Edep">(*hit);
                 }
-                hitCandidate.emplace_back(&aSplitHit);
-            }
-            ClusterAndInsertHit();
+                fHitsCollection->insert(topHit.release());
+                clusterFirst = clusterLast;
+            } while (clusterFirst != splitHit.end());
         } break;
         }
-        splitHit.clear();
     }
-    if (fEMCPMTSD != nullptr) {
+    fSplitHit.clear();
+    gfx::timsort(*fHitsCollection->GetVector(), ByTrackID);
+
+    if (fEMCPMTSD) {
         auto nHit{fEMCPMTSD->NOpticalPhotonHit()};
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
             Get<"nOptPho">(*hit) = nHit[Get<"UnitID">(*hit)];
