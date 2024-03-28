@@ -60,7 +60,7 @@ auto MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     // track creator process
     const auto creatorProcess{track.GetCreatorProcess()};
     // new a hit
-    auto hit{std::make_unique_for_overwrite<MCPHit>()};
+    const auto& hit{fSplitHit.emplace_back(std::make_unique_for_overwrite<MCPHit>())};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
@@ -75,7 +75,6 @@ auto MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"Ek0">(*hit) = vertexEk;
     Get<"p0">(*hit) = vertexMomentum;
     *Get<"CreatProc">(*hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "|0>";
-    fSplitHit.emplace_back(std::move(hit));
 
     return true;
 }

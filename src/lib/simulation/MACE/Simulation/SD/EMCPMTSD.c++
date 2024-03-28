@@ -42,13 +42,12 @@ auto EMCPMTSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto postStepPoint{*step.GetPostStepPoint()};
     const auto unitID{postStepPoint.GetTouchable()->GetReplicaNumber()};
     // new a hit
-    auto hit{std::make_unique_for_overwrite<EMCPMTHit>()};
+    const auto& hit{fHit[unitID].emplace_back(std::make_unique_for_overwrite<EMCPMTHit>())};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"UnitID">(*hit) = unitID;
     Get<"t">(*hit) = postStepPoint.GetGlobalTime();
     // Get<"EMCHitID">(*hit) = -1; // to be determined
-    fHit[unitID].emplace_back(std::move(hit));
 
     return true;
 }
