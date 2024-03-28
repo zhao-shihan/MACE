@@ -27,11 +27,10 @@ TrackingAction::TrackingAction() :
     fMessengerRegister{this} {}
 
 auto TrackingAction::PostUserTrackingAction(const G4Track* track) -> void {
-    UpdateDecayVertexData(*track);
+    if (fSaveDecayVertexData) { UpdateDecayVertexData(*track); }
 }
 
 auto TrackingAction::UpdateDecayVertexData(const G4Track& track) -> void {
-    if (not fSaveDecayVertexData) { return; }
     if (auto& eventManager{*G4EventManager::GetEventManager()};
         eventManager.GetTrackingManager()
             ->GetSteppingManager()
