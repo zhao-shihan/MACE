@@ -19,7 +19,7 @@
 /gps/ene/type             Gauss
 /gps/ene/mono             3.647 MeV    # momentum 28 MeV
 /gps/ene/sigma            0.1793 MeV   # momentum spreading 2.5%
-/gps/number               2000    # 50 kHz beam
+/GPSX/NVertex             2000    # 50 kHz beam
 /GPSX/PulseWidth          0 ns
 
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0

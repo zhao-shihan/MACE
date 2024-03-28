@@ -8,18 +8,18 @@ namespace MACE::inline Extension::Geant4X {
 
 GeneralParticleSourceX::GeneralParticleSourceX() :
     G4GeneralParticleSource{},
+    fNVertex{1},
     fPulseWidth{},
     fMessengerRegister{this} {}
 
 auto GeneralParticleSourceX::GeneratePrimaryVertex(G4Event* event) -> void {
-    const auto nBefore{event->GetNumberOfPrimaryVertex()};
-    G4GeneralParticleSource::GeneratePrimaryVertex(event);
-    const auto nAfter{event->GetNumberOfPrimaryVertex()};
     auto& rand{*G4Random::getTheEngine()};
-    for (auto k{nBefore}; k < nAfter; ++k) {
-        auto& primary{*event->GetPrimaryVertex(k)};
-        primary.SetT0(primary.GetT0() + rand.flat() * fPulseWidth);
+    const auto t0{GetParticleTime()};
+    for (int i{}; i < fNVertex; ++i) {
+        SetParticleTime(t0 + rand.flat() * fPulseWidth);
+        G4GeneralParticleSource::GeneratePrimaryVertex(event);
     }
+    SetParticleTime(t0);
 }
 
 } // namespace MACE::inline Extension::Geant4X

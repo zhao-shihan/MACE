@@ -23,7 +23,7 @@ constexpr auto defaultMacro = {
     "/gps/ene/type             Gauss",
     "/gps/ene/mono             3.647 MeV   # momentum 28 MeV",
     "/gps/ene/sigma            0.1793 MeV  # momentum spreading 2.5%",
-    "/gps/number               1",
+    "/GPSX/NVertex             1",
     "/GPSX/PulseWidth          0 ns",
     "",
     "/MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5",

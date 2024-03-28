@@ -22,7 +22,7 @@
 /gps/ene/intercept        1
 /gps/ene/min              1 keV
 /gps/ene/max              6 MeV
-/gps/number               1000
+/GPSX/NVertex             1000
 /GPSX/PulseWidth          0 ns
 
 /MACE/Field/AcceleratorPotential          500 volt
