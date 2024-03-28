@@ -7,6 +7,7 @@
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimMMS/Messenger/AnalysisMessenger.h++"
+#include "MACE/Simulation/Analysis/MMSTruthTracker.h++"
 
 #include "G4Types.hh"
 
@@ -34,13 +35,13 @@ public:
     auto CoincidenceWithCDC(bool val) -> void { fCoincidenceWithCDC = val; }
     auto CoincidenceWithTTC(bool val) -> void { fCoincidenceWithTTC = val; }
     auto SaveCDCHitData(bool val) -> void { fSaveCDCHitData = val; }
+    auto SaveTTCHitData(bool val) -> void { fSaveTTCHitData = val; }
 
     auto RunBegin(G4int runID) -> void;
 
     auto SubmitDecayVertexData(const std::vector<std::unique_ptr<Data::Tuple<Data::SimDecayVertex>>>& data) -> void { fDecayVertex = &data; }
-    auto SubmitCDCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::CDCHit*>>*> hc) -> void { fCDCHit = hc; }
-    auto SubmitTTCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::TTCHit*>>*> hc) -> void { fTTCHit = hc; }
-    auto SubmitMMSTrackData(const std::vector<std::unique_ptr<Data::Tuple<Data::MMSSimTrack>>>& data) -> void { fMMSTrack = &data; }
+    auto SubmitCDCHC(const std::vector<gsl::owner<CDCHit*>>& hc) -> void { fCDCHit = &hc; }
+    auto SubmitTTCHC(const std::vector<gsl::owner<TTCHit*>>& hc) -> void { fTTCHit = &hc; }
     auto EventEnd() -> void;
 
     auto RunEnd(Option_t* option = {}) -> void;
@@ -51,6 +52,7 @@ private:
     bool fCoincidenceWithCDC;
     bool fCoincidenceWithTTC;
     bool fSaveCDCHitData;
+    bool fSaveTTCHitData;
 
     std::filesystem::path fLastUsedFullFilePath;
 
@@ -61,9 +63,10 @@ private:
     std::optional<Data::Output<Data::MMSSimTrack>> fMMSSimTrackOutput;
 
     const std::vector<std::unique_ptr<Data::Tuple<Data::SimDecayVertex>>>* fDecayVertex;
-    const std::vector<gsl::owner<Simulation::CDCHit*>>* fCDCHit;
-    const std::vector<gsl::owner<Simulation::TTCHit*>>* fTTCHit;
-    const std::vector<std::unique_ptr<Data::Tuple<Data::MMSSimTrack>>>* fMMSTrack;
+    const std::vector<gsl::owner<CDCHit*>>* fCDCHit;
+    const std::vector<gsl::owner<TTCHit*>>* fTTCHit;
+
+    Simulation::Analysis::MMSTruthTracker fMMSTruthTracker;
 
     AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };

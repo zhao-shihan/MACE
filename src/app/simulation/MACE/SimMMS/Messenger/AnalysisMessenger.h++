@@ -37,6 +37,7 @@ private:
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithTTC;
     std::unique_ptr<G4UIcmdWithABool> fSaveDecayVertexData;
     std::unique_ptr<G4UIcmdWithABool> fSaveCDCHitData;
+    std::unique_ptr<G4UIcmdWithABool> fSaveTTCHitData;
 };
 
 } // namespace Messenger

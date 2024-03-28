@@ -19,7 +19,8 @@ AnalysisMessenger::AnalysisMessenger() :
     fCoincidenceWithCDC{},
     fCoincidenceWithTTC{},
     fSaveDecayVertexData{},
-    fSaveCDCHitData{} {
+    fSaveCDCHitData{},
+    fSaveTTCHitData{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Analysis/");
     fDirectory->SetGuidance("MACE::SimMMS::Analysis controller.");
@@ -45,14 +46,19 @@ AnalysisMessenger::AnalysisMessenger() :
     fCoincidenceWithTTC->AvailableForStates(G4State_Idle);
 
     fSaveDecayVertexData = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/SaveDecayVertexData", this);
-    fSaveDecayVertexData->SetGuidance("Do not save decay vertex data if disabled.");
+    fSaveDecayVertexData->SetGuidance("Save decay vertex data if enabled.");
     fSaveDecayVertexData->SetParameterName("mode", false);
     fSaveDecayVertexData->AvailableForStates(G4State_Idle);
 
     fSaveCDCHitData = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/SaveCDCHitData", this);
-    fSaveCDCHitData->SetGuidance("Do not save CDC hit data if disabled.");
+    fSaveCDCHitData->SetGuidance("Save CDC hit data if enabled.");
     fSaveCDCHitData->SetParameterName("mode", false);
     fSaveCDCHitData->AvailableForStates(G4State_Idle);
+
+    fSaveTTCHitData = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/SaveTTCHitData", this);
+    fSaveTTCHitData->SetGuidance("Save TTC hit data if enabled.");
+    fSaveTTCHitData->SetParameterName("mode", false);
+    fSaveTTCHitData->AvailableForStates(G4State_Idle);
 }
 
 AnalysisMessenger::~AnalysisMessenger() = default;
@@ -81,6 +87,10 @@ auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> voi
     } else if (command == fSaveCDCHitData.get()) {
         Deliver<Analysis>([&](auto&& r) {
             r.SaveCDCHitData(fSaveCDCHitData->GetNewBoolValue(value));
+        });
+    } else if (command == fSaveTTCHitData.get()) {
+        Deliver<Analysis>([&](auto&& r) {
+            r.SaveTTCHitData(fSaveTTCHitData->GetNewBoolValue(value));
         });
     }
 }

@@ -5,7 +5,7 @@ namespace MACE::SimMMS::inline SD {
 
 auto TTCSD::EndOfEvent(G4HCofThisEvent* hc) -> void {
     Simulation::TTCSD::EndOfEvent(hc);
-    Analysis::Instance().SubmitTTCHC(fHitsCollection->GetVector());
+    Analysis::Instance().SubmitTTCHC(*fHitsCollection->GetVector());
 }
 
 } // namespace MACE::SimMMS::inline SD

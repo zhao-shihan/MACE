@@ -38,9 +38,9 @@ public:
     auto RunBegin(G4int runID) -> void;
 
     auto SubmitDecayVertexData(const std::vector<std::unique_ptr<Data::Tuple<Data::SimDecayVertex>>>& data) -> void { fDecayVertex = &data; }
-    auto SubmitEMCHC(gsl::not_null<std::vector<gsl::owner<Simulation::EMCHit*>>*> hc) -> void { fEMCHit = hc; }
-    auto SubmitEMCPMTHC(gsl::not_null<std::vector<gsl::owner<Simulation::EMCPMTHit*>>*> hc) -> void { fEMCPMTHit = hc; }
-    auto SubmitMCPHC(gsl::not_null<std::vector<gsl::owner<Simulation::MCPHit*>>*> hc) -> void { fMCPHit = hc; }
+    auto SubmitEMCHC(const std::vector<gsl::owner<EMCHit*>>& hc) -> void { fEMCHit = &hc; }
+    auto SubmitEMCPMTHC(const std::vector<gsl::owner<EMCPMTHit*>>& hc) -> void { fEMCPMTHit = &hc; }
+    auto SubmitMCPHC(const std::vector<gsl::owner<MCPHit*>>& hc) -> void { fMCPHit = &hc; }
     auto EventEnd() -> void;
 
     auto RunEnd(Option_t* option = {}) -> void;
@@ -60,9 +60,9 @@ private:
     std::optional<Data::Output<Data::MCPSimHit>> fMCPSimHitOutput;
 
     const std::vector<std::unique_ptr<Data::Tuple<Data::SimDecayVertex>>>* fDecayVertex;
-    const std::vector<gsl::owner<Simulation::EMCHit*>>* fEMCHit;
-    const std::vector<gsl::owner<Simulation::EMCPMTHit*>>* fEMCPMTHit;
-    const std::vector<gsl::owner<Simulation::MCPHit*>>* fMCPHit;
+    const std::vector<gsl::owner<EMCHit*>>* fEMCHit;
+    const std::vector<gsl::owner<EMCPMTHit*>>* fEMCPMTHit;
+    const std::vector<gsl::owner<MCPHit*>>* fMCPHit;
 
     AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };

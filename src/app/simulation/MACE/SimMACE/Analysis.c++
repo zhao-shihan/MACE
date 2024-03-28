@@ -13,6 +13,7 @@
 
 #include "fmt/format.h"
 
+#include <optional>
 #include <stdexcept>
 
 namespace MACE::SimMACE {
@@ -23,9 +24,11 @@ Analysis::Analysis() :
     fFileMode{"NEW"},
     fCoincidenceWithCDC{true},
     fCoincidenceWithTTC{true},
+    fCoincidenceWithMMS{true},
     fCoincidenceWithMCP{true},
     fCoincidenceWithEMC{true},
     fSaveCDCHitData{true},
+    fSaveTTCHitData{true},
     fLastUsedFullFilePath{},
     fFile{},
     fDecayVertexOutput{},
@@ -37,9 +40,9 @@ Analysis::Analysis() :
     fDecayVertex{},
     fCDCHit{},
     fTTCHit{},
-    fMMSTrack{},
     fMCPHit{},
     fEMCHit{},
+    fMMSTruthTracker{},
     fMessengerRegister{this} {}
 
 auto Analysis::RunBegin(G4int runID) -> void {
@@ -61,46 +64,56 @@ auto Analysis::RunBegin(G4int runID) -> void {
     const auto runDirectory{fmt::format("G4Run{}", runID)};
     fFile->mkdir(runDirectory.c_str());
     fFile->cd(runDirectory.c_str());
-    fDecayVertexOutput.emplace("SimDecayVertex");
-    fCDCSimHitOutput.emplace("CDCSimHit");
-    fTTCSimHitOutput.emplace("TTCSimHit");
+    if (TrackingAction::Instance().SaveDecayVertexData()) { fDecayVertexOutput.emplace("SimDecayVertex"); }
+    if (fSaveCDCHitData) { fCDCSimHitOutput.emplace("CDCSimHit"); }
+    if (fSaveTTCHitData) { fTTCSimHitOutput.emplace("TTCSimHit"); }
     fMMSSimTrackOutput.emplace("MMSSimTrack");
     fMCPSimHitOutput.emplace("MCPSimHit");
     fEMCSimHitOutput.emplace("EMCSimHit");
 }
 
 auto Analysis::EventEnd() -> void {
+    const auto mmsTrack{fCDCHit and fTTCHit ?
+                            std::optional{fMMSTruthTracker(*fCDCHit, *fTTCHit)} :
+                            std::nullopt};
+    const auto cdcPassed{not fCoincidenceWithCDC or fCDCHit == nullptr or fCDCHit->size() > 0};
     const auto ttcPassed{not fCoincidenceWithTTC or fTTCHit == nullptr or fTTCHit->size() > 0};
-    const auto cdcPassed{not fCoincidenceWithCDC or fMMSTrack == nullptr or fMMSTrack->size() > 0};
+    const auto mmsPassed{not fCoincidenceWithMMS or mmsTrack == std::nullopt or mmsTrack->size() > 0};
     const auto mcpPassed{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
     const auto emcPassed{not fCoincidenceWithEMC or fEMCHit == nullptr or fEMCHit->size() > 0};
-    if (cdcPassed and ttcPassed and mcpPassed and emcPassed) {
-        if (fDecayVertex) { *fDecayVertexOutput << *fDecayVertex; }
-        if (fCDCHit and fSaveCDCHitData) { *fCDCSimHitOutput << *fCDCHit; }
-        if (fTTCHit) { *fTTCSimHitOutput << *fTTCHit; }
-        if (fMMSTrack) { *fMMSSimTrackOutput << *fMMSTrack; }
+    if (cdcPassed and ttcPassed and mmsPassed and mcpPassed and emcPassed) {
+        if (fDecayVertex and fDecayVertexOutput) { *fDecayVertexOutput << *fDecayVertex; }
+        if (fCDCHit and fCDCSimHitOutput) { *fCDCSimHitOutput << *fCDCHit; }
+        if (fTTCHit and fTTCSimHitOutput) { *fTTCSimHitOutput << *fTTCHit; }
+        if (mmsTrack) { *fMMSSimTrackOutput << *mmsTrack; }
         if (fMCPHit) { *fMCPSimHitOutput << *fMCPHit; }
         if (fEMCHit) { *fEMCSimHitOutput << *fEMCHit; }
     }
     fDecayVertex = {};
     fCDCHit = {};
     fTTCHit = {};
-    fMMSTrack = {};
     fMCPHit = {};
     fEMCHit = {};
 }
 
 auto Analysis::RunEnd(Option_t* option) -> void {
     // write data
-    fDecayVertexOutput->Write();
-    fCDCSimHitOutput->Write();
-    fTTCSimHitOutput->Write();
+    if (fDecayVertexOutput) { fDecayVertexOutput->Write(); }
+    if (fCDCSimHitOutput) { fCDCSimHitOutput->Write(); }
+    if (fTTCSimHitOutput) { fTTCSimHitOutput->Write(); }
     fMMSSimTrackOutput->Write();
     fMCPSimHitOutput->Write();
     fEMCSimHitOutput->Write();
     // close file
     fFile->Close(option);
     delete fFile;
+    // reset output
+    fDecayVertexOutput.reset();
+    fCDCSimHitOutput.reset();
+    fTTCSimHitOutput.reset();
+    fMMSSimTrackOutput.reset();
+    fMCPSimHitOutput.reset();
+    fEMCSimHitOutput.reset();
 }
 
 } // namespace MACE::SimMACE

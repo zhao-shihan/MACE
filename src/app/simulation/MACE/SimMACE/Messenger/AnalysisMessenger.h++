@@ -35,10 +35,12 @@ private:
     std::unique_ptr<G4UIcmdWithAString> fFileMode;
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithCDC;
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithTTC;
+    std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithMMS;
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithMCP;
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithEMC;
     std::unique_ptr<G4UIcmdWithABool> fSaveDecayVertexData;
     std::unique_ptr<G4UIcmdWithABool> fSaveCDCHitData;
+    std::unique_ptr<G4UIcmdWithABool> fSaveTTCHitData;
 };
 
 } // namespace Messenger

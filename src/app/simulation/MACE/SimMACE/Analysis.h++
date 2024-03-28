@@ -7,6 +7,7 @@
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimMACE/Messenger/AnalysisMessenger.h++"
+#include "MACE/Simulation/Analysis/MMSTruthTracker.h++"
 
 #include "G4Types.hh"
 
@@ -35,18 +36,19 @@ public:
     auto FileMode(std::string mode) -> void { fFileMode = std::move(mode); }
     auto CoincidenceWithCDC(bool val) -> void { fCoincidenceWithCDC = val; }
     auto CoincidenceWithTTC(bool val) -> void { fCoincidenceWithTTC = val; }
+    auto CoincidenceWithMMS(bool val) -> void { fCoincidenceWithMMS = val; }
     auto CoincidenceWithMCP(bool val) -> void { fCoincidenceWithMCP = val; }
     auto CoincidenceWithEMC(bool val) -> void { fCoincidenceWithEMC = val; }
     auto SaveCDCHitData(bool val) -> void { fSaveCDCHitData = val; }
+    auto SaveTTCHitData(bool val) -> void { fSaveTTCHitData = val; }
 
     auto RunBegin(G4int runID) -> void;
 
     auto SubmitDecayVertexData(const std::vector<std::unique_ptr<Data::Tuple<Data::SimDecayVertex>>>& data) -> void { fDecayVertex = &data; }
-    auto SubmitCDCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::CDCHit*>>*> hc) -> void { fCDCHit = hc; }
-    auto SubmitTTCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::TTCHit*>>*> hc) -> void { fTTCHit = hc; }
-    auto SubmitMMSTrackData(const std::vector<std::unique_ptr<Data::Tuple<Data::MMSSimTrack>>>& data) -> void { fMMSTrack = &data; }
-    auto SubmitMCPHC(gsl::not_null<const std::vector<gsl::owner<Simulation::MCPHit*>>*> hc) -> void { fMCPHit = hc; }
-    auto SubmitEMCHC(gsl::not_null<const std::vector<gsl::owner<Simulation::EMCHit*>>*> hc) -> void { fEMCHit = hc; }
+    auto SubmitCDCHC(const std::vector<gsl::owner<CDCHit*>>& hc) -> void { fCDCHit = &hc; }
+    auto SubmitTTCHC(const std::vector<gsl::owner<TTCHit*>>& hc) -> void { fTTCHit = &hc; }
+    auto SubmitMCPHC(const std::vector<gsl::owner<MCPHit*>>& hc) -> void { fMCPHit = &hc; }
+    auto SubmitEMCHC(const std::vector<gsl::owner<EMCHit*>>& hc) -> void { fEMCHit = &hc; }
     auto EventEnd() -> void;
 
     auto RunEnd(Option_t* option = {}) -> void;
@@ -56,9 +58,11 @@ private:
     std::string fFileMode;
     bool fCoincidenceWithCDC;
     bool fCoincidenceWithTTC;
+    bool fCoincidenceWithMMS;
     bool fCoincidenceWithMCP;
     bool fCoincidenceWithEMC;
     bool fSaveCDCHitData;
+    bool fSaveTTCHitData;
 
     std::filesystem::path fLastUsedFullFilePath;
 
@@ -71,11 +75,12 @@ private:
     std::optional<Data::Output<Data::EMCSimHit>> fEMCSimHitOutput;
 
     const std::vector<std::unique_ptr<Data::Tuple<Data::SimDecayVertex>>>* fDecayVertex;
-    const std::vector<gsl::owner<Simulation::CDCHit*>>* fCDCHit;
-    const std::vector<gsl::owner<Simulation::TTCHit*>>* fTTCHit;
-    const std::vector<std::unique_ptr<Data::Tuple<Data::MMSSimTrack>>>* fMMSTrack;
-    const std::vector<gsl::owner<Simulation::MCPHit*>>* fMCPHit;
-    const std::vector<gsl::owner<Simulation::EMCHit*>>* fEMCHit;
+    const std::vector<gsl::owner<CDCHit*>>* fCDCHit;
+    const std::vector<gsl::owner<TTCHit*>>* fTTCHit;
+    const std::vector<gsl::owner<MCPHit*>>* fMCPHit;
+    const std::vector<gsl::owner<EMCHit*>>* fEMCHit;
+
+    Simulation::Analysis::MMSTruthTracker fMMSTruthTracker;
 
     AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };

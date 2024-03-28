@@ -53,17 +53,17 @@ auto Analysis::RunBegin(G4int runID) -> void {
     const auto runDirectory{fmt::format("G4Run{}", runID)};
     fFile->mkdir(runDirectory.c_str());
     fFile->cd(runDirectory.c_str());
-    fDecayVertexOutput.emplace("SimDecayVertex");
+    if (TrackingAction::Instance().SaveDecayVertexData()) { fDecayVertexOutput.emplace("SimDecayVertex"); }
     fEMCSimHitOutput.emplace("EMCSimHit");
     fEMCPMTHitOutput.emplace("EMCPMTHit");
     fMCPSimHitOutput.emplace("MCPSimHit");
 }
 
 auto Analysis::EventEnd() -> void {
-    const auto emcTriggered{not fCoincidenceWithEMC or fEMCHit == nullptr or fEMCHit->size() > 0};
-    const auto mcpTriggered{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
-    if (emcTriggered and mcpTriggered) {
-        if (fDecayVertex) { *fDecayVertexOutput << *fDecayVertex; }
+    const auto emcPassed{not fCoincidenceWithEMC or fEMCHit == nullptr or fEMCHit->size() > 0};
+    const auto mcpPassed{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
+    if (emcPassed and mcpPassed) {
+        if (fDecayVertex and fDecayVertexOutput) { *fDecayVertexOutput << *fDecayVertex; }
         if (fEMCHit) { *fEMCSimHitOutput << *fEMCHit; }
         if (fEMCPMTHit) { *fEMCPMTHitOutput << *fEMCPMTHit; }
         if (fMCPHit) { *fMCPSimHitOutput << *fMCPHit; }
@@ -76,13 +76,18 @@ auto Analysis::EventEnd() -> void {
 
 auto Analysis::RunEnd(Option_t* option) -> void {
     // write data
-    fDecayVertexOutput->Write();
+    if (fDecayVertexOutput) { fDecayVertexOutput->Write(); }
     fEMCSimHitOutput->Write();
     fEMCPMTHitOutput->Write();
     fMCPSimHitOutput->Write();
     // close file
     fFile->Close(option);
     delete fFile;
+    // reset output
+    fDecayVertexOutput.reset();
+    fEMCSimHitOutput.reset();
+    fEMCPMTHitOutput.reset();
+    fMCPSimHitOutput.reset();
 }
 
 } // namespace MACE::SimEMC
