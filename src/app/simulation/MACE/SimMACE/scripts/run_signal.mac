@@ -31,6 +31,7 @@
 
 /MACE/Analysis/CoincidenceWithCDC     true
 /MACE/Analysis/CoincidenceWithTTC     true
+/MACE/Analysis/CoincidenceWithMMS     true
 /MACE/Analysis/CoincidenceWithMCP     true
 /MACE/Analysis/CoincidenceWithEMC     true
 

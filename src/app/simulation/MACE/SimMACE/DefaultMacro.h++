@@ -35,6 +35,7 @@ constexpr auto defaultMacro = {
     "",
     "/MACE/Analysis/CoincidenceWithCDC     false",
     "/MACE/Analysis/CoincidenceWithTTC     false",
+    "/MACE/Analysis/CoincidenceWithMMS     false",
     "/MACE/Analysis/CoincidenceWithMCP     false",
     "/MACE/Analysis/CoincidenceWithEMC     false",
     "",
