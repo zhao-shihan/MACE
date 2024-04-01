@@ -37,7 +37,7 @@ MCPSD::MCPSD(const G4String& sdName) :
 }
 
 auto MCPSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
-    fHitsCollection = new MCPHitCollection(SensitiveDetectorName, collectionName[0]);
+    fHitsCollection = new MCPHitCollection{SensitiveDetectorName, collectionName[0]};
     auto hitsCollectionID{G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection)};
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
@@ -82,6 +82,8 @@ auto MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 }
 
 auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
+    fHitsCollection->GetVector()->reserve(fSplitHit.size());
+
     switch (fSplitHit.size()) {
     case 0:
         break;

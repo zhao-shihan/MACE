@@ -58,7 +58,7 @@ TTCSD::TTCSD(const G4String& sdName, const TTCSiPMSD* ttcSiPMSD) :
 }
 
 auto TTCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
-    fHitsCollection = new TTCHitCollection(SensitiveDetectorName, collectionName[0]);
+    fHitsCollection = new TTCHitCollection{SensitiveDetectorName, collectionName[0]};
     const auto hitsCollectionID{G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection)};
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
@@ -105,6 +105,12 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 }
 
 auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
+    fHitsCollection->GetVector()->reserve(
+        stdx::ranges::accumulate(fSplitHit, 0,
+                                 [](auto&& count, auto&& cellHit) {
+                                     return count + cellHit.second.size();
+                                 }));
+
     constexpr auto ByTrackID{
         [](const auto& hit1, const auto& hit2) {
             return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
@@ -158,6 +164,7 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
         }
     }
     fSplitHit.clear();
+
     gfx::timsort(*fHitsCollection->GetVector(), ByTrackID);
 
     if (fTTCSiPMSD) {

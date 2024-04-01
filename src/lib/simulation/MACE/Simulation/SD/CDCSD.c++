@@ -1,6 +1,7 @@
 #include "MACE/Compatibility/std23/unreachable.h++"
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Env/Print.h++"
+#include "MACE/Extension/stdx/ranges_numeric.h++"
 #include "MACE/External/gfx/timsort.hpp"
 #include "MACE/Math/MidPoint.h++"
 #include "MACE/Simulation/SD/CDCSD.h++"
@@ -49,7 +50,7 @@ CDCSD::CDCSD(const G4String& sdName) :
 }
 
 auto CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
-    fHitsCollection = new CDCHitCollection(SensitiveDetectorName, collectionName[0]);
+    fHitsCollection = new CDCHitCollection{SensitiveDetectorName, collectionName[0]};
     const auto hitsCollectionID{G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection)};
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
@@ -110,6 +111,12 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 }
 
 auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
+    fHitsCollection->GetVector()->reserve(
+        stdx::ranges::accumulate(fSplitHit, 0,
+                                 [](auto&& count, auto&& cellHit) {
+                                     return count + cellHit.second.size();
+                                 }));
+
     constexpr auto ByTrackID{
         [](const auto& hit1, const auto& hit2) {
             return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
@@ -171,6 +178,7 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
         }
     }
     fSplitHit.clear();
+
     gfx::timsort(*fHitsCollection->GetVector(), ByTrackID);
 }
 
