@@ -107,7 +107,7 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
             const auto windowClosingTime{tFirst + timeResolutionFWHM};
             if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                 timeResolutionFWHM != 0) [[unlikely]] {
-                Env::PrintLnWarning("CDCSD Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM);
+                Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM);
             }
             clusterLast = std::ranges::find_if_not(clusterFirst, fSplitHit.end(),
                                                    [&windowClosingTime](const auto& hit) {

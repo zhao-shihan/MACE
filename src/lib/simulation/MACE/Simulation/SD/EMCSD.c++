@@ -137,7 +137,7 @@ auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 const auto windowClosingTime{tFirst + scintillationTimeConstant1};
                 if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                     scintillationTimeConstant1 != 0) [[unlikely]] {
-                    Env::PrintLnWarning("CDCSD Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1);
+                    Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1);
                 }
                 clusterLast = std::ranges::find_if_not(clusterFirst, splitHit.end(),
                                                        [&windowClosingTime](const auto& hit) {
