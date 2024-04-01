@@ -27,7 +27,7 @@
 # Run
 #############################################################################
 
-/MACE/Analysis/FilePath SimMMS_muplus_decay
+/MACE/Analysis/FilePath SimMMS_mup_decay
 /MACE/Analysis/FileMode NEW
 /run/beamOn 10000
 /MPIRun/PrintRunSummary

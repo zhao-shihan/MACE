@@ -9,7 +9,7 @@
 
 /run/initialize
 
-/gps/particle             mu+
+/gps/particle             e+
 /gps/direction            0 0 1        # 0 deg
 /gps/pos/centre           0 0 -2 m     # 0 deg
 /gps/pos/type             Beam
@@ -17,9 +17,9 @@
 /gps/pos/radius           0 mm
 /gps/pos/sigma_r          5 mm
 /gps/ene/type             Gauss
-/gps/ene/mono             3.647 MeV    # momentum 28 MeV
-/gps/ene/sigma            0.1793 MeV   # momentum spreading 2.5%
-/GPSX/NVertex             2000    # 50 kHz beam
+/gps/ene/mono             27.49 MeV    # momentum 28 MeV
+/gps/ene/sigma            0.7 MeV      # momentum spreading 2.5%
+/GPSX/NVertex             1
 /GPSX/PulseWidth          0 ns
 
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0
@@ -41,7 +41,7 @@
 # Run
 #############################################################################
 
-/MACE/Analysis/FilePath SimMACE_beam_muplus
+/MACE/Analysis/FilePath SimMACE_beam_ep
 /MACE/Analysis/FileMode NEW
-/run/beamOn 100
+/run/beamOn 1000
 /MPIRun/PrintRunSummary
