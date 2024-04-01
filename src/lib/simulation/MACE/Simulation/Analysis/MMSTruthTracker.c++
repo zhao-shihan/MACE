@@ -21,60 +21,43 @@ auto MMSTruthTracker::operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitH
     if (ssize(cdcHitHC) < fTrackFinder.NHitThreshold() or
         ssize(ttcHitHC) < fMinNTTCHitForQualifiedTrack) { return {}; }
 
-    [[maybe_unused]] constexpr auto ByTrackID{
+    constexpr auto ByTrackID{
         [](const auto& hit1, const auto& hit2) {
             return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
         }};
+
     assert(std::ranges::is_sorted(cdcHitHC, ByTrackID));
     assert(std::ranges::is_sorted(ttcHitHC, ByTrackID));
 
+    // find CDC hits coincidence with TTC hits
+
+    std::vector<CDCHit*> coincidenceCDCHitHC;
+    coincidenceCDCHitHC.reserve(cdcHitHC.size());
+
+    std::ranges::subrange trackTTCHit{ttcHitHC.cbegin(), ttcHitHC.cbegin()};
+    const auto trackCDCHitFirst{std::ranges::lower_bound(cdcHitHC, ttcHitHC.front(), ByTrackID)};
+    std::ranges::subrange trackCDCHit{trackCDCHitFirst, trackCDCHitFirst};
+    while (trackTTCHit.end() != ttcHitHC.cend() and
+           trackCDCHit.end() != cdcHitHC.cend()) {
+        trackTTCHit = {trackTTCHit.end(), std::ranges::upper_bound(trackTTCHit.end(), ttcHitHC.cend(), *trackTTCHit.end(), ByTrackID)};
+        trackCDCHit = {trackCDCHit.end(), std::ranges::upper_bound(trackCDCHit.end(), cdcHitHC.cend(), trackTTCHit.front(), ByTrackID)};
+        if (std::ranges::ssize(trackTTCHit) >= fMinNTTCHitForQualifiedTrack and
+            std::ranges::ssize(trackCDCHit) >= fTrackFinder.NHitThreshold()) {
+            coincidenceCDCHitHC.insert(coincidenceCDCHitHC.end(), trackCDCHit.begin(), trackCDCHit.end());
+        }
+    }
+
+    if (coincidenceCDCHitHC.empty()) { return {}; }
+
     // build track truths from hit
 
-    auto mmsTrackDataNoCoincidence{fTrackFinder(cdcHitHC).good};
-
-    // find CDC track truths coincidence with TTC hits
+    auto mmsTrackDataNoCoincidence{fTrackFinder(coincidenceCDCHitHC).good};
 
     std::vector<std::shared_ptr<Data::Tuple<Data::MMSSimTrack>>> mmsTrackData;
     mmsTrackData.reserve(mmsTrackDataNoCoincidence.size());
-
-    // iterate over TTC hits
-    auto iTTCHit{ttcHitHC.cbegin()};
-    auto iTrack{mmsTrackDataNoCoincidence.begin()};
-    do {
-        const auto ttcTrackID{Get<"TrkID">(**iTTCHit)};
-        iTrack = std::ranges::find_if(iTrack, mmsTrackDataNoCoincidence.end(),
-                                      [&ttcTrackID](const auto& track) {
-                                          return Get<"TrkID">(*track.second.seed) >= ttcTrackID;
-                                      });
-        if (iTrack == mmsTrackDataNoCoincidence.end()) { break; }
-        const auto nextTTCHit{std::ranges::find_if_not(iTTCHit, ttcHitHC.cend(),
-                                                       [&ttcTrackID](const auto& hit) {
-                                                           return Get<"TrkID">(*hit) == ttcTrackID;
-                                                       })};
-        if (auto& track{iTrack->second.seed};
-            Get<"TrkID">(*track) == ttcTrackID and
-            std::ranges::distance(iTTCHit, nextTTCHit) >= fMinNTTCHitForQualifiedTrack) {
-            mmsTrackData.emplace_back(std::move(track));
-            ++iTrack;
-            /* // following scheme is too strong and lacks flexibility, no better way for now
-            std::set<int> tileID;
-            for (auto&& ttcHit : std::ranges::subrange{iTTCHit, nextTTCHit}) {
-                tileID.emplace(Get<"TileID">(*ttcHit));
-            }
-            // check TTC coincidence
-            if (ssize(tileID) >= fMinNTTCHitForQualifiedTrack) {
-                auto lastID{*std::ranges::prev(tileID.cend())};
-                for (auto&& id : std::as_const(tileID)) {
-                    // if coincidence, break the loop and insert track to result
-                    if (std23::abs(id - lastID) < fMinNTTCHitForQualifiedTrack) {
-                        mmsTrackData.emplace_back(std::move(track));
-                        break;
-                    }
-                }
-            } */
-        }
-        iTTCHit = nextTTCHit;
-    } while (iTTCHit != ttcHitHC.cend());
+    for (auto&& [_, track] : mmsTrackDataNoCoincidence) {
+        mmsTrackData.emplace_back(std::move(track.seed));
+    }
 
     return mmsTrackData;
 }
