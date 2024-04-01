@@ -1,4 +1,5 @@
 #include "MACE/Detector/Description/MCP.h++"
+#include "MACE/Env/Print.h++"
 #include "MACE/External/gfx/timsort.hpp"
 #include "MACE/Simulation/SD/MCPSD.h++"
 #include "MACE/Utility/LiteralUnit.h++"
@@ -29,6 +30,7 @@ MCPSD::MCPSD(const G4String& sdName) :
     NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fIonizingEnergyDepositionThreshold{20_eV},
+    fSplitHit{},
     fHitsCollection{},
     fMessengerRegister{this} {
     collectionName.insert(sdName + "HC");
@@ -90,6 +92,7 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
     } break;
     default: {
         const auto timeResolutionFWHM{Detector::Description::MCP::Instance().TimeResolutionFWHM()};
+        assert(timeResolutionFWHM >= 0);
         int hitID{};
         // sort hit by time
         gfx::timsort(fSplitHit,
@@ -97,14 +100,18 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
                          return Get<"t">(*hit1) < Get<"t">(*hit2);
                      });
         // loop over all hits and cluster to real hits by times
-        double windowClosingTime;
         auto clusterFirst{fSplitHit.begin()};
         auto clusterLast{clusterFirst};
         do {
-            windowClosingTime = Get<"t">(**clusterFirst) + timeResolutionFWHM;
+            const auto tFirst{*Get<"t">(**clusterFirst)};
+            const auto windowClosingTime{tFirst + timeResolutionFWHM};
+            if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
+                timeResolutionFWHM != 0) [[unlikely]] {
+                Env::PrintLnWarning("CDCSD Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM);
+            }
             clusterLast = std::ranges::find_if_not(clusterFirst, fSplitHit.end(),
                                                    [&windowClosingTime](const auto& hit) {
-                                                       return Get<"t">(*hit) < windowClosingTime;
+                                                       return Get<"t">(*hit) <= windowClosingTime;
                                                    });
             // find top hit
             auto& topHit{*std::ranges::min_element(clusterFirst, clusterLast,

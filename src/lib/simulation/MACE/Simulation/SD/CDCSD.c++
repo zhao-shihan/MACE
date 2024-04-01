@@ -1,5 +1,6 @@
 #include "MACE/Compatibility/std23/unreachable.h++"
 #include "MACE/Detector/Description/MMSField.h++"
+#include "MACE/Env/Print.h++"
 #include "MACE/External/gfx/timsort.hpp"
 #include "MACE/Math/MidPoint.h++"
 #include "MACE/Simulation/SD/CDCSD.h++"
@@ -126,20 +127,25 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
         } break;
         default: {
             const auto timeResolutionFWHM{Detector::Description::CDC::Instance().TimeResolutionFWHM()};
+            assert(timeResolutionFWHM >= 0);
             // sort hit by signal time
             gfx::timsort(splitHit,
                          [](const auto& hit1, const auto& hit2) {
                              return Get<"t">(*hit1) < Get<"t">(*hit2);
                          });
             // loop over all hits on this cell and cluster to real hits by signal times
-            double windowClosingTime;
             auto clusterFirst{splitHit.begin()};
             auto clusterLast{clusterFirst};
             do {
-                windowClosingTime = Get<"t">(**clusterFirst) + timeResolutionFWHM;
+                const auto tFirst{*Get<"t">(**clusterFirst)};
+                const auto windowClosingTime{tFirst + timeResolutionFWHM};
+                if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
+                    timeResolutionFWHM != 0) [[unlikely]] {
+                    Env::PrintLnWarning("CDCSD Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM);
+                }
                 clusterLast = std::ranges::find_if_not(clusterFirst, splitHit.end(),
                                                        [&windowClosingTime](const auto& hit) {
-                                                           return Get<"t">(*hit) < windowClosingTime;
+                                                           return Get<"t">(*hit) <= windowClosingTime;
                                                        });
                 // find top hit
                 auto& topHit{*std::ranges::min_element(clusterFirst, clusterLast, ByTrackID)};
