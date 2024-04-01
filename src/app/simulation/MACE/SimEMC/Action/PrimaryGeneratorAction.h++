@@ -1,12 +1,17 @@
 #pragma once
 
+#include "MACE/Data/SimVertex.h++"
+#include "MACE/Data/Tuple.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/Extension/Geant4X/GeneralParticleSourceX.h++"
+#include "MACE/SimEMC/Messenger/AnalysisMessenger.h++"
 #include "MACE/SimEMC/Messenger/PrimaryGeneratorActionMessenger.h++"
 #include "MACE/Simulation/Generator/EcoMugCosmicRayMuon.h++"
 
-#include "G4VPrimaryGenerator.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
+
+#include <memory>
+#include <vector>
 
 namespace MACE::SimEMC::inline Action {
 
@@ -18,7 +23,13 @@ public:
     auto SwitchToGPSX() -> void { fGenerator = &fAvailableGenerator.gpsx; }
     auto SwitchToEcoMug() -> void { fGenerator = &fAvailableGenerator.ecoMug; }
 
-    auto GeneratePrimaries(G4Event* event) -> void override { fGenerator->GeneratePrimaryVertex(event); }
+    auto SavePrimaryVertexData() const -> auto { return fSavePrimaryVertexData; }
+    auto SavePrimaryVertexData(bool val) -> void { fSavePrimaryVertexData = val; }
+
+    auto GeneratePrimaries(G4Event* event) -> void override;
+
+private:
+    auto UpdatePrimaryVertexData(const G4Event& event) -> void;
 
 private:
     struct {
@@ -26,6 +37,9 @@ private:
         Generator::EcoMugCosmicRayMuon ecoMug;
     } fAvailableGenerator;
     G4VPrimaryGenerator* fGenerator;
+
+    bool fSavePrimaryVertexData;
+    std::vector<std::unique_ptr<Data::Tuple<Data::SimPrimaryVertex>>> fPrimaryVertexData;
 
     PrimaryGeneratorActionMessenger::Register<PrimaryGeneratorAction> fMessengerRegister;
 };

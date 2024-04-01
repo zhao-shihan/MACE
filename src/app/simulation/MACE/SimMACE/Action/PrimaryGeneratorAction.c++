@@ -1,23 +1,22 @@
-#include "MACE/SimEMC/Action/PrimaryGeneratorAction.h++"
-#include "MACE/SimEMC/Action/TrackingAction.h++"
-#include "MACE/SimEMC/Analysis.h++"
+#include "MACE/SimMACE/Action/PrimaryGeneratorAction.h++"
+#include "MACE/SimMACE/Action/TrackingAction.h++"
+#include "MACE/SimMACE/Analysis.h++"
 
 #include "G4Event.hh"
 #include "G4PrimaryVertex.hh"
 
-namespace MACE::SimEMC::inline Action {
+namespace MACE::SimMACE::inline Action {
 
 PrimaryGeneratorAction::PrimaryGeneratorAction() :
     PassiveSingleton{},
     G4VUserPrimaryGeneratorAction{},
-    fAvailableGenerator{},
-    fGenerator{&fAvailableGenerator.gpsx},
+    fGPSX{},
     fSavePrimaryVertexData{true},
     fPrimaryVertexData{},
     fMessengerRegister{this} {}
 
 auto PrimaryGeneratorAction::GeneratePrimaries(G4Event* event) -> void {
-    fGenerator->GeneratePrimaryVertex(event);
+    fGPSX.GeneratePrimaryVertex(event);
     if (fSavePrimaryVertexData) { UpdatePrimaryVertexData(*event); }
 }
 
@@ -38,4 +37,4 @@ auto PrimaryGeneratorAction::UpdatePrimaryVertexData(const G4Event& event) -> vo
     Analysis::Instance().SubmitPrimaryVertexData(fPrimaryVertexData);
 }
 
-} // namespace MACE::SimEMC::inline Action
+} // namespace MACE::SimMACE::inline Action

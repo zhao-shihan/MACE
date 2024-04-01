@@ -1,4 +1,5 @@
 #include "MACE/SimMMS/Action/EventAction.h++"
+#include "MACE/SimMMS/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimMMS/Action/TrackingAction.h++"
 #include "MACE/SimMMS/Analysis.h++"
 

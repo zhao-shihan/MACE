@@ -2,8 +2,8 @@
 
 #include "MACE/Data/MMSTrack.h++"
 #include "MACE/Data/Output.h++"
-#include "MACE/Data/SimDecayVertex.h++"
 #include "MACE/Data/SimHit.h++"
+#include "MACE/Data/SimVertex.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimMMS/Messenger/AnalysisMessenger.h++"
@@ -39,6 +39,7 @@ public:
 
     auto RunBegin(G4int runID) -> void;
 
+    auto SubmitPrimaryVertexData(const std::vector<std::unique_ptr<Data::Tuple<Data::SimPrimaryVertex>>>& data) -> void { fPrimaryVertex = &data; }
     auto SubmitDecayVertexData(const std::vector<std::unique_ptr<Data::Tuple<Data::SimDecayVertex>>>& data) -> void { fDecayVertex = &data; }
     auto SubmitCDCHC(const std::vector<gsl::owner<CDCHit*>>& hc) -> void { fCDCHit = &hc; }
     auto SubmitTTCHC(const std::vector<gsl::owner<TTCHit*>>& hc) -> void { fTTCHit = &hc; }
@@ -57,11 +58,13 @@ private:
     std::filesystem::path fLastUsedFullFilePath;
 
     gsl::owner<TFile*> fFile;
+    std::optional<Data::Output<Data::SimPrimaryVertex>> fPrimaryVertexOutput;
     std::optional<Data::Output<Data::SimDecayVertex>> fDecayVertexOutput;
     std::optional<Data::Output<Data::CDCSimHit>> fCDCSimHitOutput;
     std::optional<Data::Output<Data::TTCSimHit>> fTTCSimHitOutput;
     std::optional<Data::Output<Data::MMSSimTrack>> fMMSSimTrackOutput;
 
+    const std::vector<std::unique_ptr<Data::Tuple<Data::SimPrimaryVertex>>>* fPrimaryVertex;
     const std::vector<std::unique_ptr<Data::Tuple<Data::SimDecayVertex>>>* fDecayVertex;
     const std::vector<gsl::owner<CDCHit*>>* fCDCHit;
     const std::vector<gsl::owner<TTCHit*>>* fTTCHit;

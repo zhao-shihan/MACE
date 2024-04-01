@@ -1,6 +1,7 @@
 #include "MACE/SimEMC/Action/EventAction.h++"
 #include "MACE/SimEMC/Action/TrackingAction.h++"
 #include "MACE/SimEMC/Analysis.h++"
+#include "MACE/SimMACE/Action/PrimaryGeneratorAction.h++"
 
 #include "G4Event.hh"
 

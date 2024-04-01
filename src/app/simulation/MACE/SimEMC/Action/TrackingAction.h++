@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Data/SimDecayVertex.h++"
+#include "MACE/Data/SimVertex.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimEMC/Messenger/AnalysisMessenger.h++"

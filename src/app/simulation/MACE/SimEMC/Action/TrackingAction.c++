@@ -1,4 +1,5 @@
-#include "MACE/Data/SimDecayVertex.h++"
+#include "MACE/Data/SimVertex.h++"
+#include "MACE/SimEMC/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimEMC/Action/TrackingAction.h++"
 #include "MACE/SimEMC/Analysis.h++"
 #include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
@@ -36,7 +37,6 @@ auto TrackingAction::UpdateDecayVertexData(const G4Track& track) -> void {
             ->GetSteppingManager()
             ->GetfCurrentProcess()
             ->GetProcessType() == fDecay) {
-        assert(track.GetStep()->GetSecondary()->size() >= 2);
         std::vector<int> secondaryPDGID;
         secondaryPDGID.reserve(track.GetStep()->GetSecondary()->size());
         for (auto&& sec : *track.GetStep()->GetSecondary()) {

@@ -12,6 +12,7 @@ namespace MACE::SimMMS {
 
 class Analysis;
 inline namespace Action {
+class PrimaryGeneratorAction;
 class TrackingAction;
 } // namespace Action
 
@@ -19,7 +20,8 @@ inline namespace Messenger {
 
 class AnalysisMessenger final : public Geant4X::SingletonMessenger<AnalysisMessenger,
                                                                    Analysis,
-                                                                   TrackingAction> {
+                                                                   TrackingAction,
+                                                                   PrimaryGeneratorAction> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -33,9 +35,10 @@ private:
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithAString> fFilePath;
     std::unique_ptr<G4UIcmdWithAString> fFileMode;
+    std::unique_ptr<G4UIcmdWithABool> fSavePrimaryVertexData;
+    std::unique_ptr<G4UIcmdWithABool> fSaveDecayVertexData;
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithCDC;
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithTTC;
-    std::unique_ptr<G4UIcmdWithABool> fSaveDecayVertexData;
     std::unique_ptr<G4UIcmdWithABool> fSaveCDCHitData;
     std::unique_ptr<G4UIcmdWithABool> fSaveTTCHitData;
 };

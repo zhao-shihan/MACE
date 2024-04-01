@@ -1,6 +1,7 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/Geant4X/ConvertGeometry.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
+#include "MACE/SimEMC/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimEMC/Action/TrackingAction.h++"
 #include "MACE/SimEMC/Analysis.h++"
 #include "MACE/Simulation/Hit/EMCHit.h++"
@@ -24,10 +25,12 @@ Analysis::Analysis() :
     fCoincidenceWithMCP{false},
     fLastUsedFullFilePath{},
     fFile{},
+    fPrimaryVertexOutput{},
     fDecayVertexOutput{},
     fEMCSimHitOutput{},
     fEMCPMTHitOutput{},
     fMCPSimHitOutput{},
+    fPrimaryVertex{},
     fDecayVertex{},
     fEMCHit{},
     fEMCPMTHit{},
@@ -53,6 +56,7 @@ auto Analysis::RunBegin(G4int runID) -> void {
     const auto runDirectory{fmt::format("G4Run{}", runID)};
     fFile->mkdir(runDirectory.c_str());
     fFile->cd(runDirectory.c_str());
+    if (PrimaryGeneratorAction::Instance().SavePrimaryVertexData()) { fPrimaryVertexOutput.emplace("SimPrimaryVertex"); }
     if (TrackingAction::Instance().SaveDecayVertexData()) { fDecayVertexOutput.emplace("SimDecayVertex"); }
     fEMCSimHitOutput.emplace("EMCSimHit");
     fEMCPMTHitOutput.emplace("EMCPMTHit");
@@ -63,11 +67,13 @@ auto Analysis::EventEnd() -> void {
     const auto emcPassed{not fCoincidenceWithEMC or fEMCHit == nullptr or fEMCHit->size() > 0};
     const auto mcpPassed{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
     if (emcPassed and mcpPassed) {
+        if (fPrimaryVertex and fPrimaryVertexOutput) { *fPrimaryVertexOutput << *fPrimaryVertex; }
         if (fDecayVertex and fDecayVertexOutput) { *fDecayVertexOutput << *fDecayVertex; }
         if (fEMCHit) { *fEMCSimHitOutput << *fEMCHit; }
         if (fEMCPMTHit) { *fEMCPMTHitOutput << *fEMCPMTHit; }
         if (fMCPHit) { *fMCPSimHitOutput << *fMCPHit; }
     }
+    fPrimaryVertex = {};
     fDecayVertex = {};
     fEMCHit = {};
     fEMCPMTHit = {};
@@ -76,6 +82,7 @@ auto Analysis::EventEnd() -> void {
 
 auto Analysis::RunEnd(Option_t* option) -> void {
     // write data
+    if (fPrimaryVertexOutput) { fPrimaryVertexOutput->Write(); }
     if (fDecayVertexOutput) { fDecayVertexOutput->Write(); }
     fEMCSimHitOutput->Write();
     fEMCPMTHitOutput->Write();
@@ -84,6 +91,7 @@ auto Analysis::RunEnd(Option_t* option) -> void {
     fFile->Close(option);
     delete fFile;
     // reset output
+    fPrimaryVertexOutput.reset();
     fDecayVertexOutput.reset();
     fEMCSimHitOutput.reset();
     fEMCPMTHitOutput.reset();

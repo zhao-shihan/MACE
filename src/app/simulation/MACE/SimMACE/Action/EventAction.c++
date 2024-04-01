@@ -1,4 +1,5 @@
 #include "MACE/SimMACE/Action/EventAction.h++"
+#include "MACE/SimMACE/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimMACE/Action/TrackingAction.h++"
 #include "MACE/SimMACE/Analysis.h++"
 
