@@ -17,24 +17,34 @@ concept Finder =
     requires {
         typename T::Hit;
         typename T::Track;
-        requires std::indirectly_readable<T::Hit>;
-        requires Data::TupleContain<std::iter_value_t<T::Hit>, Data::Tuple<Data::CDCHit>>;
+        requires Data::TupleModelContain<T::Hit, Data::CDCHit>;
         requires Data::TupleModelContain<T::TrackModel, Data::MMSTrack>;
     } and
-    requires(T finder, const int nextTrackID, const std::vector<T::Hit> hitData) {
+    requires(T finder, const int nextTrackID, const int trackID, const std::vector<Data::Tuple<T::Hit>*> hitData) {
         { finder(hitData, nextTrackID) };
-        { finder(hitData, nextTrackID).NGoodTrack() } -> std::integral;
-        { finder(hitData, nextTrackID).seed } -> std::convertible_to<std::unordered_map<int, T::Hit>>;
-        { finder(hitData, nextTrackID).goodies } -> std::convertible_to<std::unordered_map<int, std::vector<T::Hit>>>;
-        { finder(hitData, nextTrackID).garbage } -> std::convertible_to<std::vector<T::Hit>>;
+        { finder(hitData, nextTrackID).good[trackID].hitData } -> std::same_as<std::vector<Data::Tuple<T::Hit>*>>;
+        { finder(hitData, nextTrackID).good[trackID].seed } -> std::same_as<std::shared_ptr<Data::Tuple<ATrack>>>;
+        { finder(hitData, nextTrackID).garbage } -> std::same_as<std::vector<Data::Tuple<T::Hit>*>>;
+    } and
+    requires(T finder, const int nextTrackID, const int trackID, const std::vector<std::unique_ptr<Data::Tuple<T::Hit>>> hitData) {
+        { finder(hitData, nextTrackID) };
+        { finder(hitData, nextTrackID).good[trackID].hitData } -> std::same_as<std::vector<std::unique_ptr<Data::Tuple<T::Hit>>>>;
+        { finder(hitData, nextTrackID).good[trackID].seed } -> std::same_as<std::shared_ptr<Data::Tuple<ATrack>>>;
+        { finder(hitData, nextTrackID).garbage } -> std::same_as<std::vector<std::unique_ptr<Data::Tuple<T::Hit>>>>;
+    } and
+    requires(T finder, const int nextTrackID, const int trackID, const std::vector<std::shared_ptr<Data::Tuple<T::Hit>>> hitData) {
+        { finder(hitData, nextTrackID) };
+        { finder(hitData, nextTrackID).good[trackID].hitData } -> std::same_as<std::vector<std::shared_ptr<Data::Tuple<T::Hit>>>>;
+        { finder(hitData, nextTrackID).good[trackID].seed } -> std::same_as<std::shared_ptr<Data::Tuple<ATrack>>>;
+        { finder(hitData, nextTrackID).garbage } -> std::same_as<std::vector<std::shared_ptr<Data::Tuple<T::Hit>>>>;
     };
 
 template<typename T>
 concept SimFinder =
     requires {
         requires Finder<T>;
-        requires Data::TupleModelContain<T::HitModel, Data::CDCSimHit>;
-        requires Data::TupleModelContain<T::TrackModel, Data::MMSSimTrack>;
+        requires Data::TupleModelContain<T::Hit, Data::CDCSimHit>;
+        requires Data::TupleModelContain<T::Track, Data::MMSSimTrack>;
     };
 
 } // namespace MACE::inline Reconstruction::MMSTracking::inline Finder

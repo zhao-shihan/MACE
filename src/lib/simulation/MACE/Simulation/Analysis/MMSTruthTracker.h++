@@ -31,7 +31,7 @@ public:
 private:
     int fMinNTTCHitForQualifiedTrack;
 
-    MMSTracking::TruthFinder<gsl::owner<CDCHit*>> fTrackFinder;
+    MMSTracking::TruthFinder<> fTrackFinder;
 
     MMSTruthTrackerMessenger::Register<MMSTruthTracker> fMessengerRegister;
 };

@@ -12,16 +12,15 @@
 #include <algorithm>
 #include <iterator>
 #include <ranges>
+#include <unordered_set>
 
 namespace MACE::inline Reconstruction::MMSTracking::inline Finder {
 
-template<std::indirectly_readable AHit = std::shared_ptr<Data::Tuple<Data::CDCSimHit>>,
-         Data::TupleContain<Data::Tuple<Data::MMSSimTrack>> ATrack = Data::Tuple<Data::MMSSimTrack>>
-    requires Data::TupleContain<std::iter_value_t<AHit>, Data::Tuple<Data::CDCSimHit>>
+template<Data::TupleModelContain<Data::CDCHit> AHit = Data::CDCSimHit,
+         Data::TupleModelContain<Data::MMSTrack> ATrack = Data::MMSSimTrack>
 class TruthFinder : public FinderBase<AHit, ATrack> {
 protected:
     using Base = FinderBase<AHit, ATrack>;
-    using Result = Base::Result;
 
 public:
     TruthFinder();
@@ -30,7 +29,9 @@ public:
     auto NHitThreshold() const -> auto { return fNHitThreshold; }
     auto NHitThreshold(int n) -> void { fNHitThreshold = std::max(1, n); }
 
-    auto operator()(const std::vector<AHit>& hitData, int = {}) -> Result;
+    template<std::indirectly_readable AHitPointer>
+        requires std::derived_from<std::decay_t<std::iter_value_t<AHitPointer>>, Data::Tuple<AHit>>
+    auto operator()(const std::vector<AHitPointer>& hitData, int = {}) -> Base::template Result<AHitPointer>;
 
 protected:
     int fNHitThreshold;

@@ -37,12 +37,25 @@ auto MMSTruthTracker::operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitH
     std::ranges::subrange trackTTCHit{ttcHitHC.cbegin(), ttcHitHC.cbegin()};
     const auto trackCDCHitFirst{std::ranges::lower_bound(cdcHitHC, ttcHitHC.front(), ByTrackID)};
     std::ranges::subrange trackCDCHit{trackCDCHitFirst, trackCDCHitFirst};
+
+    std::unordered_set<short> tileHit;
+    tileHit.reserve(fMinNTTCHitForQualifiedTrack);
+
     while (trackTTCHit.end() != ttcHitHC.cend() and
            trackCDCHit.end() != cdcHitHC.cend()) {
         trackTTCHit = {trackTTCHit.end(), std::ranges::upper_bound(trackTTCHit.end(), ttcHitHC.cend(), *trackTTCHit.end(), ByTrackID)};
         trackCDCHit = {trackCDCHit.end(), std::ranges::upper_bound(trackCDCHit.end(), cdcHitHC.cend(), trackTTCHit.front(), ByTrackID)};
-        if (std::ranges::ssize(trackTTCHit) >= fMinNTTCHitForQualifiedTrack and
-            std::ranges::ssize(trackCDCHit) >= fTrackFinder.NHitThreshold()) {
+
+        if (std::ranges::ssize(trackTTCHit) < fMinNTTCHitForQualifiedTrack or
+            std::ranges::ssize(trackCDCHit) < fTrackFinder.NHitThreshold()) {
+            continue;
+        }
+
+        tileHit.clear();
+        for (auto&& hit : trackTTCHit) {
+            tileHit.emplace(Get<"TileID">(*hit));
+        }
+        if (ssize(tileHit) >= fMinNTTCHitForQualifiedTrack) {
             coincidenceCDCHitHC.insert(coincidenceCDCHitHC.end(), trackCDCHit.begin(), trackCDCHit.end());
         }
     }
