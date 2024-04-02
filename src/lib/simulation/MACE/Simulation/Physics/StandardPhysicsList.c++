@@ -7,6 +7,7 @@
 #include "MACE/Simulation/Physics/StandardPhysicsList.h++"
 
 #include "G4EmStandardPhysics_option4.hh"
+#include "G4SpinDecayPhysics.hh"
 
 #include <algorithm>
 
@@ -19,6 +20,7 @@ StandardPhysicsListBase::StandardPhysicsListBase() :
     // Muonium physics
     RegisterPhysics(new MuoniumPhysics<Detector::Description::Target>{verboseLevel});
     // HP decay for muon and muonium
+    ReplacePhysics(new G4SpinDecayPhysics{verboseLevel});
     RegisterPhysics(new MuonPrecisionDecayPhysics{verboseLevel});
     RegisterPhysics(new MuoniumPrecisionDecayPhysics{verboseLevel});
 }
