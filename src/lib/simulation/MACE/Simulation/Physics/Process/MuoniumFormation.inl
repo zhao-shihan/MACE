@@ -22,10 +22,34 @@ auto MuoniumFormation<ATarget>::AtRestDoIt(const G4Track& track, const G4Step&) 
 
     fParticleChange.Initialize(track);
     // The dynamic particle
-    auto muoniumDynamicParticle = new G4DynamicParticle(*track.GetDynamicParticle());
+    const auto muoniumDynamicParticle{new G4DynamicParticle{*track.GetDynamicParticle()}};
     // Determine whether the transition can be observed
-    muoniumDynamicParticle->SetDefinition(rng.flat() < fConversionProbability ? static_cast<G4ParticleDefinition*>(Antimuonium::Definition()) :
-                                                                                static_cast<G4ParticleDefinition*>(Muonium::Definition()));
+    const auto conversion{rng.flat() < fConversionProbability};
+    // Use antimuonium if it will be a conversion... not exactly true since it is not pure antimuonium but mix state. OK for now though.
+    // FIXME: Try always using muonium but behave like mix state in each interaction.
+    muoniumDynamicParticle->SetDefinition(conversion ? static_cast<G4ParticleDefinition*>(Antimuonium::Definition()) :
+                                                       static_cast<G4ParticleDefinition*>(Muonium::Definition()));
+    // Must pre-assign the decay time to ensure correct behaviour of transport and decay
+    // (transport process use this to determine when to stop flight,
+    //  instead of relying on G4 tracking mechanism. See MuoniumTransport process for detail.)
+    if (conversion) {
+        // use the muonium conversion time spectrum (prop. to t^2*exp(-t/tau))
+        const auto [tStar, converged]{Math::FindRoot::Secant(
+            // CDF - x
+            [x = rng.flat()](const auto t) {
+                const auto cdf{1 - std::exp(-t) * Math::QinPolynomial({2, 2, 1}, t) / 2};
+                return cdf - x;
+            },
+            // most probable t*
+            2.)};
+        if (not converged) {
+            Env::PrintLnError("MuoniumFormation::AtRestDoIt: antimuonium decay time disconverged");
+        }
+        muoniumDynamicParticle->SetPreAssignedDecayProperTime(tStar * muonium_lifetime);
+    } else {
+        // use standard exp decay
+        muoniumDynamicParticle->SetPreAssignedDecayProperTime(G4RandExponential::shoot(&rng, muonium_lifetime));
+    }
     // Sampling momentum according to boltzmann distribution
     const auto temperature{track.GetVolume()->GetLogicalVolume()->GetMaterial()->GetTemperature()}; // clang-format off
     const auto momentum{std::sqrt(muonium_mass_c2 * k_Boltzmann * temperature) *
@@ -35,10 +59,6 @@ auto MuoniumFormation<ATarget>::AtRestDoIt(const G4Track& track, const G4Step&) 
     // Set momentum and energy
     muoniumDynamicParticle->SetMomentum(momentum);
     muoniumDynamicParticle->SetKineticEnergy(momentum.mag2() / (2 * muonium_mass_c2));
-    // Must pre-assign the decay time to ensure correct behaviour of transport and decay
-    // (transport process use this to determine when to stop flight,
-    //  instead of relying on G4 tracking mechanism. See MuoniumTransport process for detail.)
-    muoniumDynamicParticle->SetPreAssignedDecayProperTime(G4RandExponential::shoot(&rng, muonium_lifetime));
     // Kill the muon, form the (anti-)muonium
     fParticleChange.ProposeTrackStatus(fStopAndKill);
     fParticleChange.AddSecondary(new G4Track{muoniumDynamicParticle, track.GetGlobalTime(), track.GetPosition()});
