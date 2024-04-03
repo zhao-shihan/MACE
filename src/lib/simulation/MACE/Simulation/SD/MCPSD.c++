@@ -43,9 +43,12 @@ MCPSD::MCPSD(const G4String& sdName) :
     if (mcp.EfficiencyEnergy().size() != mcp.EfficiencyValue().size()) {
         throw std::runtime_error{"mcp.EfficiencyEnergy().size() != mcp.EfficiencyValue().size()"};
     }
+    const auto n{mcp.EfficiencyEnergy().size()};
     fEfficiency = std::make_unique<G4DataInterpolation>(const_cast<double*>(mcp.EfficiencyEnergy().data()), // stupid interface accepts non-const ptr only
                                                         const_cast<double*>(mcp.EfficiencyValue().data()),  // stupid interface accepts non-const ptr only
-                                                        mcp.EfficiencyEnergy().size());
+                                                        n,
+                                                        (mcp.EfficiencyValue()[1] - mcp.EfficiencyValue()[0]) / (mcp.EfficiencyEnergy()[1] - mcp.EfficiencyEnergy()[0]),
+                                                        (mcp.EfficiencyValue()[n - 1] - mcp.EfficiencyValue()[n - 2]) / (mcp.EfficiencyEnergy()[n - 1] - mcp.EfficiencyEnergy()[n - 2]));
 }
 
 MCPSD::~MCPSD() = default;
