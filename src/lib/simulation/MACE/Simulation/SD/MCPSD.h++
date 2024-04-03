@@ -10,12 +10,15 @@
 #include <memory>
 #include <vector>
 
+class G4DataInterpolation;
+
 namespace MACE::inline Simulation::inline SD {
 
 class MCPSD : public NonMoveableBase,
               public G4VSensitiveDetector {
 public:
     MCPSD(const G4String& sdName);
+    ~MCPSD();
 
     auto IonizingEnergyDepositionThreshold(double e) -> void { fIonizingEnergyDepositionThreshold = std::max(0., e); }
 
@@ -25,6 +28,8 @@ public:
 
 protected:
     double fIonizingEnergyDepositionThreshold;
+
+    std::unique_ptr<G4DataInterpolation> fEfficiency;
 
     std::vector<std::unique_ptr<MCPHit>> fSplitHit;
     MCPHitCollection* fHitsCollection;

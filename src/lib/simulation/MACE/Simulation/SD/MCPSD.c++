@@ -4,6 +4,7 @@
 #include "MACE/Simulation/SD/MCPSD.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
+#include "G4DataInterpolation.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
@@ -16,10 +17,12 @@
 #include "G4TwoVector.hh"
 #include "G4VProcess.hh"
 #include "G4VTouchable.hh"
+#include "Randomize.hh"
 
 #include <cassert>
 #include <cmath>
 #include <ranges>
+#include <stdexcept>
 #include <string_view>
 
 namespace MACE::inline Simulation::inline SD {
@@ -30,11 +33,22 @@ MCPSD::MCPSD(const G4String& sdName) :
     NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fIonizingEnergyDepositionThreshold{20_eV},
+    fEfficiency{},
     fSplitHit{},
     fHitsCollection{},
     fMessengerRegister{this} {
     collectionName.insert(sdName + "HC");
+
+    const auto& mcp{Detector::Description::MCP::Instance()};
+    if (mcp.EfficiencyEnergy().size() != mcp.EfficiencyValue().size()) {
+        throw std::runtime_error{"mcp.EfficiencyEnergy().size() != mcp.EfficiencyValue().size()"};
+    }
+    fEfficiency = std::make_unique<G4DataInterpolation>(const_cast<double*>(mcp.EfficiencyEnergy().data()), // stupid interface accepts non-const ptr only
+                                                        const_cast<double*>(mcp.EfficiencyValue().data()),  // stupid interface accepts non-const ptr only
+                                                        mcp.EfficiencyEnergy().size());
 }
+
+MCPSD::~MCPSD() = default;
 
 auto MCPSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
     fHitsCollection = new MCPHitCollection{SensitiveDetectorName, collectionName[0]};
@@ -89,6 +103,7 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
         break;
     case 1: {
         auto& hit{fSplitHit.front()};
+        if (G4UniformRand() > fEfficiency->CubicSplineInterpolation(Get<"Ek">(*hit))) { break; }
         Get<"HitID">(*hit) = 0;
         fHitsCollection->insert(hit.release());
     } break;
@@ -102,33 +117,33 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
                          return Get<"t">(*hit1) < Get<"t">(*hit2);
                      });
         // loop over all hits and cluster to real hits by times
-        auto clusterFirst{fSplitHit.begin()};
-        auto clusterLast{clusterFirst};
-        do {
-            const auto tFirst{*Get<"t">(**clusterFirst)};
+        std::ranges::subrange cluster{fSplitHit.begin(), fSplitHit.begin()};
+        auto& rng{*G4Random::getTheEngine()};
+        while (cluster.end() != fSplitHit.end()) {
+            const auto tFirst{*Get<"t">(**cluster.end())};
             const auto windowClosingTime{tFirst + timeResolutionFWHM};
             if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                 timeResolutionFWHM != 0) [[unlikely]] {
                 Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM);
             }
-            clusterLast = std::ranges::find_if_not(clusterFirst, fSplitHit.end(),
-                                                   [&windowClosingTime](const auto& hit) {
-                                                       return Get<"t">(*hit) <= windowClosingTime;
-                                                   });
+            cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), fSplitHit.end(),
+                                                               [&windowClosingTime](const auto& hit) {
+                                                                   return Get<"t">(*hit) <= windowClosingTime;
+                                                               })};
             // find top hit
-            auto& topHit{*std::ranges::min_element(clusterFirst, clusterLast,
+            auto& topHit{*std::ranges::min_element(cluster,
                                                    [](const auto& hit1, const auto& hit2) {
                                                        return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
                                                    })};
+            if (rng.flat() > fEfficiency->CubicSplineInterpolation(Get<"Ek">(*topHit))) { continue; }
             // construct real hit
             Get<"HitID">(*topHit) = hitID++;
-            for (const auto& hit : std::ranges::subrange{clusterFirst, clusterLast}) {
+            for (const auto& hit : cluster) {
                 if (hit == topHit) { continue; }
                 Get<"Edep">(*topHit) += Get<"Edep">(*hit);
             }
             fHitsCollection->insert(topHit.release());
-            clusterFirst = clusterLast;
-        } while (clusterFirst != fSplitHit.end());
+        }
     } break;
     }
     fSplitHit.clear();
