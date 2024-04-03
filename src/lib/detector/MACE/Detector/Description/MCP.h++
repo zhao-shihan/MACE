@@ -45,6 +45,8 @@ private:
     // Detection
 
     double fTimeResolutionFWHM;
+    std::vector<double> fEfficiencyEnergy;
+    std::vector<double> fEfficiencyValue;
 };
 
 } // namespace MACE::Detector::Description
