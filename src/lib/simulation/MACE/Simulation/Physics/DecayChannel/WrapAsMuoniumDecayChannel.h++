@@ -4,6 +4,7 @@
 #include "MACE/Env/Print.h++"
 #include "MACE/Math/FindRoot.h++"
 #include "MACE/Math/IntegerPower.h++"
+#include "MACE/Math/QinAlgorithm.h++"
 #include "MACE/Utility/CETAString.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/PhysicalConstant.h++"

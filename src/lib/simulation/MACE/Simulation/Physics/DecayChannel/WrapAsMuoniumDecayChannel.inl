@@ -35,15 +35,12 @@ auto WrapAsMuoniumDecayChannel<AMuonDecayChannel, AName>::DecayIt(G4double) -> G
 
     Env::PrintLn<'V'>("WrapAsMuoniumDecayChannel::DecayIt");
 
-    auto [pStar, converged]{Math::FindRoot::Secant(
+    const auto [pStar, converged]{Math::FindRoot::Secant(
         // CDF - x
-        [x = G4UniformRand()](const auto p) {
-            const auto p2 = Math::Pow<2>(p);
-            return (2 / 3_pi) *
-                       (p * (p2 * (3 * p2 + 8) - 3) /
-                            Math::Pow<3>(p2 + 1) +
-                        3 * std::atan(p)) -
-                   x;
+        [x = G4UniformRand()](auto p) {
+            const auto cdf{(2 / 3_pi) * (Math::QinPolynomial({0, -3, 0, 8, 0, 3}, p) / Math::Pow<3>(p * p + 1) +
+                                         3 * std::atan(p))};
+            return cdf - x;
         },
         // most probable p*
         27 / 8_pi)};
