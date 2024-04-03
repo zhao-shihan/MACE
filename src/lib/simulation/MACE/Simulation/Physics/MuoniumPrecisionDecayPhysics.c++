@@ -1,4 +1,4 @@
-#include "MACE/Simulation/Physics/DecayChannel/MuoniumDecayChannel.h++"
+#include "MACE/Simulation/Physics/DecayChannel/MuoniumDecayChannelWithSpin.h++"
 #include "MACE/Simulation/Physics/DecayChannel/MuoniumInternalPairProductionDecayChannel.h++"
 #include "MACE/Simulation/Physics/MuoniumPrecisionDecayPhysics.h++"
 #include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
@@ -18,7 +18,7 @@ auto MuoniumPrecisionDecayPhysics::ConstructProcess() -> void {
         [this](G4ParticleDefinition* muonium) {
             const auto decay{new G4DecayTable};
             // sort by initial BR! we firstly write random BRs in decrease order...
-            decay->Insert(new MuoniumDecayChannel{muonium->GetParticleName(), 1e-1, verboseLevel});
+            decay->Insert(new MuoniumDecayChannelWithSpin{muonium->GetParticleName(), 1e-1, verboseLevel});
             decay->Insert(new MuoniumInternalPairProductionDecayChannel{muonium->GetParticleName(), 1e-2, verboseLevel});
             // delete old table and set new
             delete muonium->GetDecayTable();
