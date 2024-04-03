@@ -1,3 +1,5 @@
+#include "MACE/SimEMC/Action/PrimaryGeneratorAction.h++"
+#include "MACE/SimEMC/Action/TrackingAction.h++"
 #include "MACE/SimEMC/Analysis.h++"
 #include "MACE/SimEMC/Messenger/AnalysisMessenger.h++"
 
@@ -15,8 +17,10 @@ AnalysisMessenger::AnalysisMessenger() :
     fDirectory{},
     fFilePath{},
     fFileMode{},
-    fEnableCoincidenceOfEMC{},
-    fEnableCoincidenceOfMCP{} {
+    fSavePrimaryVertexData{},
+    fSaveDecayVertexData{},
+    fCoincidenceWithEMC{},
+    fCoincidenceWithMCP{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Analysis/");
     fDirectory->SetGuidance("MACE::SimEMC::Analysis controller.");
@@ -31,15 +35,25 @@ AnalysisMessenger::AnalysisMessenger() :
     fFileMode->SetParameterName("mode", false);
     fFileMode->AvailableForStates(G4State_Idle);
 
-    fEnableCoincidenceOfEMC = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/EnableCoincidenceOfEMC", this);
-    fEnableCoincidenceOfEMC->SetGuidance("Enable EMC for coincident detection.");
-    fEnableCoincidenceOfEMC->SetParameterName("mode", false);
-    fEnableCoincidenceOfEMC->AvailableForStates(G4State_Idle);
+    fSavePrimaryVertexData = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/SavePrimaryVertexData", this);
+    fSavePrimaryVertexData->SetGuidance("Save primary vertex data if enabled.");
+    fSavePrimaryVertexData->SetParameterName("mode", false);
+    fSavePrimaryVertexData->AvailableForStates(G4State_Idle);
 
-    fEnableCoincidenceOfMCP = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/EnableCoincidenceOfMCP", this);
-    fEnableCoincidenceOfMCP->SetGuidance("Enable atomic shell e-/e+ detector (typically MCP currently) for coincident detection.");
-    fEnableCoincidenceOfMCP->SetParameterName("mode", false);
-    fEnableCoincidenceOfMCP->AvailableForStates(G4State_Idle);
+    fSaveDecayVertexData = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/SaveDecayVertexData", this);
+    fSaveDecayVertexData->SetGuidance("Save decay vertex data if enabled.");
+    fSaveDecayVertexData->SetParameterName("mode", false);
+    fSaveDecayVertexData->AvailableForStates(G4State_Idle);
+
+    fCoincidenceWithEMC = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/CoincidenceWithEMC", this);
+    fCoincidenceWithEMC->SetGuidance("Enable EMC for coincident detection.");
+    fCoincidenceWithEMC->SetParameterName("mode", false);
+    fCoincidenceWithEMC->AvailableForStates(G4State_Idle);
+
+    fCoincidenceWithMCP = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/CoincidenceWithMCP", this);
+    fCoincidenceWithMCP->SetGuidance("Enable atomic shell e-/e+ detector (typically MCP currently) for coincident detection.");
+    fCoincidenceWithMCP->SetParameterName("mode", false);
+    fCoincidenceWithMCP->AvailableForStates(G4State_Idle);
 }
 
 AnalysisMessenger::~AnalysisMessenger() = default;
@@ -53,13 +67,21 @@ auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> voi
         Deliver<Analysis>([&](auto&& r) {
             r.FileMode(value);
         });
-    } else if (command == fEnableCoincidenceOfEMC.get()) {
-        Deliver<Analysis>([&](auto&& r) {
-            r.EnableCoincidenceOfEMC(fEnableCoincidenceOfEMC->GetNewBoolValue(value));
+    } else if (command == fSavePrimaryVertexData.get()) {
+        Deliver<PrimaryGeneratorAction>([&](auto&& r) {
+            r.SavePrimaryVertexData(fSavePrimaryVertexData->GetNewBoolValue(value));
         });
-    } else if (command == fEnableCoincidenceOfMCP.get()) {
+    } else if (command == fSaveDecayVertexData.get()) {
+        Deliver<TrackingAction>([&](auto&& r) {
+            r.SaveDecayVertexData(fSaveDecayVertexData->GetNewBoolValue(value));
+        });
+    } else if (command == fCoincidenceWithEMC.get()) {
         Deliver<Analysis>([&](auto&& r) {
-            r.EnableCoincidenceOfMCP(fEnableCoincidenceOfMCP->GetNewBoolValue(value));
+            r.CoincidenceWithEMC(fCoincidenceWithEMC->GetNewBoolValue(value));
+        });
+    } else if (command == fCoincidenceWithMCP.get()) {
+        Deliver<Analysis>([&](auto&& r) {
+            r.CoincidenceWithMCP(fCoincidenceWithMCP->GetNewBoolValue(value));
         });
     }
 }

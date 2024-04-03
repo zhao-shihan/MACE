@@ -1,4 +1,7 @@
-#include "MACE/Detector/Description/SpectrometerField.h++"
+#include "MACE/Compatibility/std23/unreachable.h++"
+#include "MACE/Detector/Description/MMSField.h++"
+#include "MACE/Env/Print.h++"
+#include "MACE/Extension/stdx/ranges_numeric.h++"
 #include "MACE/External/gfx/timsort.hpp"
 #include "MACE/Math/MidPoint.h++"
 #include "MACE/Simulation/SD/CDCSD.h++"
@@ -20,8 +23,8 @@
 
 #include <cassert>
 #include <cmath>
+#include <ranges>
 #include <string_view>
-#include <unordered_set>
 #include <utility>
 
 namespace MACE::inline Simulation::inline SD {
@@ -32,17 +35,14 @@ CDCSD::CDCSD(const G4String& sdName) :
     NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fIonizingEnergyDepositionThreshold{25_eV},
-    fNMinFiredCellForQualifiedTrack{},
     fMeanDriftVelocity{},
     fCellMap{},
     fSplitHit{},
     fHitsCollection{},
-    fTrackData{},
     fMessengerRegister{this} {
     collectionName.emplace_back(sdName + "HC");
 
     const auto& cdc{Detector::Description::CDC::Instance()};
-    fNMinFiredCellForQualifiedTrack = cdc.NSenseLayerPerSuper() * cdc.NSuperLayer();
     fMeanDriftVelocity = cdc.MeanDriftVelocity();
     fCellMap = &cdc.CellMap();
 
@@ -50,11 +50,9 @@ CDCSD::CDCSD(const G4String& sdName) :
 }
 
 auto CDCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
-    fHitsCollection = new CDCHitCollection(SensitiveDetectorName, collectionName[0]);
+    fHitsCollection = new CDCHitCollection{SensitiveDetectorName, collectionName[0]};
     const auto hitsCollectionID{G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection)};
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
-
-    fTrackData.clear();
 }
 
 auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
@@ -89,7 +87,7 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     // track creator process
     const auto creatorProcess{track.GetCreatorProcess()};
     // new a hit
-    auto hit{std::make_unique_for_overwrite<CDCHit>()};
+    const auto& hit{fSplitHit[cellID].emplace_back(std::make_unique_for_overwrite<CDCHit>())};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"CellID">(*hit) = cellID;
@@ -98,8 +96,8 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"d">(*hit) = driftDistance;
     Get<"Edep">(*hit) = eDep;
     Get<"tHit">(*hit) = hitTime;
-    Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
     Get<"x">(*hit) = position;
+    Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
     Get<"p">(*hit) = preStepPoint.GetMomentum();
     Get<"TrkID">(*hit) = track.GetTrackID();
     Get<"PDGID">(*hit) = particle.GetPDGEncoding();
@@ -108,22 +106,26 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"Ek0">(*hit) = vertexEk;
     Get<"p0">(*hit) = vertexMomentum;
     *Get<"CreatProc">(*hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "|0>";
-    fSplitHit[cellID].emplace_back(std::move(hit));
 
     return true;
 }
 
 auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
-    BuildHitData();
-    BuildTrackData();
-}
+    fHitsCollection->GetVector()->reserve(
+        stdx::ranges::accumulate(fSplitHit, 0,
+                                 [](auto&& count, auto&& cellHit) {
+                                     return count + cellHit.second.size();
+                                 }));
 
-auto CDCSD::BuildHitData() -> void {
+    constexpr auto ByTrackID{
+        [](const auto& hit1, const auto& hit2) {
+            return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
+        }};
     for (int hitID{};
          auto&& [cellID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
         case 0:
-            break;
+            std23::unreachable();
         case 1: {
             auto& hit{splitHit.front()};
             Get<"HitID">(*hit) = hitID++;
@@ -132,87 +134,52 @@ auto CDCSD::BuildHitData() -> void {
         } break;
         default: {
             const auto timeResolutionFWHM{Detector::Description::CDC::Instance().TimeResolutionFWHM()};
+            assert(timeResolutionFWHM >= 0);
             // sort hit by signal time
             gfx::timsort(splitHit,
                          [](const auto& hit1, const auto& hit2) {
                              return Get<"t">(*hit1) < Get<"t">(*hit2);
                          });
             // loop over all hits on this cell and cluster to real hits by signal times
-            std::vector<std::unique_ptr<CDCHit>*> hitCandidate;
-            const auto ClusterAndInsertHit{
-                [&] {
-                    // find top hit
-                    const auto iTopHit{std::ranges::min_element(std::as_const(hitCandidate),
-                                                                [](const auto& hit1, const auto& hit2) {
-                                                                    return Get<"TrkID">(**hit1) < Get<"TrkID">(**hit2);
-                                                                })};
-                    const auto topHit{*iTopHit};
-                    // construct real hit
-                    Get<"HitID">(**topHit) = hitID++;
-                    assert(Get<"CellID">(**topHit) == cellID);
-                    int nTopHit{};
-                    for (auto&& hit : std::as_const(hitCandidate)) {
-                        if (hit == topHit) { continue; }
-                        Get<"Edep">(**topHit) += Get<"Edep">(**hit); // sum
-                        if (Get<"TrkID">(**hit) == Get<"TrkID">(**topHit)) {
-                            ++nTopHit;
-                            Get<"tHit">(**topHit) += Get<"tHit">(**hit); // mean
-                            *Get<"x">(**topHit) += *Get<"x">(**hit);     // mean
-                        }
-                    }
-                    Get<"tHit">(**topHit) /= nTopHit; // mean
-                    *Get<"x">(**topHit) /= nTopHit;   // mean
-                    fHitsCollection->insert(topHit->release());
-                }};
-            for (auto windowClosingTime{Get<"t">(*splitHit.front()) + timeResolutionFWHM};
-                 auto&& aSplitHit : splitHit) {
-                if (Get<"t">(*aSplitHit) > windowClosingTime) {
-                    ClusterAndInsertHit();
-                    hitCandidate.clear();
-                    windowClosingTime = Get<"t">(*aSplitHit) + timeResolutionFWHM;
+            auto clusterFirst{splitHit.begin()};
+            auto clusterLast{clusterFirst};
+            do {
+                const auto tFirst{*Get<"t">(**clusterFirst)};
+                const auto windowClosingTime{tFirst + timeResolutionFWHM};
+                if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
+                    timeResolutionFWHM != 0) [[unlikely]] {
+                    Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM);
                 }
-                hitCandidate.emplace_back(&aSplitHit);
-            }
-            ClusterAndInsertHit();
+                clusterLast = std::ranges::find_if_not(clusterFirst, splitHit.end(),
+                                                       [&windowClosingTime](const auto& hit) {
+                                                           return Get<"t">(*hit) <= windowClosingTime;
+                                                       });
+                // find top hit
+                auto& topHit{*std::ranges::min_element(clusterFirst, clusterLast, ByTrackID)};
+                // construct real hit
+                Get<"HitID">(*topHit) = hitID++;
+                assert(Get<"CellID">(*topHit) == cellID);
+                int nTopHit{};
+                for (const auto& hit : std::ranges::subrange{clusterFirst, clusterLast}) {
+                    if (hit == topHit) { continue; }
+                    Get<"Edep">(*topHit) += Get<"Edep">(*hit); // sum
+                    if (Get<"TrkID">(*hit) == Get<"TrkID">(*topHit)) {
+                        ++nTopHit;
+                        Get<"tHit">(*topHit) += Get<"tHit">(*hit); // mean
+                        *Get<"x">(*topHit) += *Get<"x">(*hit);     // mean
+                    }
+                }
+                Get<"tHit">(*topHit) /= nTopHit; // mean
+                *Get<"x">(*topHit) /= nTopHit;   // mean
+                fHitsCollection->insert(topHit.release());
+                clusterFirst = clusterLast;
+            } while (clusterFirst != splitHit.end());
         } break;
         }
-        splitHit.clear();
     }
-}
+    fSplitHit.clear();
 
-auto CDCSD::BuildTrackData() -> void {
-    auto& hitData{*fHitsCollection->GetVector()};
-    gfx::timsort(hitData,
-                 [](const auto& hit1, const auto& hit2) {
-                     return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
-                 });
-    const auto magneticFluxDensity{Detector::Description::SpectrometerField::Instance().MagneticFluxDensity()};
-    auto lastTrackID{-1};
-    std::unique_ptr<Data::Tuple<Data::CDCSimTrack>> track;
-    std::unordered_set<int> firedCell;
-    for (auto&& pHit : std::as_const(hitData)) {
-        const auto& hit{*pHit};
-        assert(Get<"TrkID">(hit) >= 0);
-        if (Get<"TrkID">(hit) != lastTrackID) {
-            lastTrackID = Get<"TrkID">(hit);
-            if (track and ssize(firedCell) >= fNMinFiredCellForQualifiedTrack) { fTrackData.emplace_back(std::move(track)); }
-            track = std::make_unique_for_overwrite<Data::Tuple<Data::CDCSimTrack>>();
-            Get<"EvtID">(*track) = Get<"EvtID">(hit);
-            Get<"TrkID">(*track) = Get<"TrkID">(hit);
-            Get<"chi2">(*track) = 0;
-            Get<"t0">(*track) = Get<"t0">(hit);
-            Get<"PDGID">(*track) = Get<"PDGID">(hit);
-            Get<"x0">(*track) = Get<"x0">(hit);
-            Get<"Ek0">(*track) = Get<"Ek0">(hit);
-            Get<"p0">(*track) = Get<"p0">(hit);
-            Data::CalculateHelix(*track, magneticFluxDensity);
-            Get<"CreatProc">(*track) = Get<"CreatProc">(hit);
-            firedCell.clear();
-        }
-        Get<"HitID">(*track)->emplace_back(Get<"HitID">(hit));
-        firedCell.emplace(Get<"CellID">(hit));
-    }
-    if (track and ssize(firedCell) >= fNMinFiredCellForQualifiedTrack) { fTrackData.emplace_back(std::move(track)); }
+    gfx::timsort(*fHitsCollection->GetVector(), ByTrackID);
 }
 
 } // namespace MACE::inline Simulation::inline SD

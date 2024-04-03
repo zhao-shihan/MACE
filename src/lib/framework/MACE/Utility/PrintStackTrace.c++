@@ -1,9 +1,8 @@
 #include "MACE/Env/MPIEnv.h++"
+#include "MACE/Env/Print.h++"
 #include "MACE/Utility/PrintStackTrace.h++"
 
 #include "backward.hpp"
-
-#include "fmt/format.h"
 
 #include <climits>
 #include <string>
@@ -11,7 +10,7 @@
 
 namespace MACE::inline Utility {
 
-MACE_NOINLINE auto PrintStackTrace(int depth, int skip, std::FILE* stream) -> void {
+MACE_NOINLINE auto PrintStackTrace(int depth, int skip, std::ostream& os) -> void {
     const auto trueSkip{skip + 1};
     backward::StackTrace stack;
     stack.load_here(depth + trueSkip);
@@ -42,7 +41,7 @@ MACE_NOINLINE auto PrintStackTrace(int depth, int skip, std::FILE* stream) -> vo
         text += '\n';
     }
 
-    fmt::print(stream, "{}", text);
+    Env::Print(os, "{}", text);
 }
 
 } // namespace MACE::inline Utility

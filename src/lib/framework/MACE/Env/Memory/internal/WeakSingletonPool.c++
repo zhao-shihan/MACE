@@ -1,7 +1,7 @@
 #include "MACE/Env/BasicEnv.h++"
 #include "MACE/Env/Memory/internal/WeakSingletonPool.h++"
+#include "MACE/Env/Print.h++"
 
-#include <cstdio>
 #include <utility>
 
 namespace MACE::Env::Memory::internal {
@@ -22,14 +22,12 @@ WeakSingletonPool::WeakSingletonPool() :
 WeakSingletonPool::~WeakSingletonPool() {
     for (auto&& [type, instance] : std::as_const(fInstanceMap)) {
         if (instance.expired()) {
-            fmt::println(stderr,
-                         "MACE::Env::Memory::internal::WeakSingletonPool::~WeakSingletonPool(): "
+            PrintLnError("MACE::Env::Memory::internal::WeakSingletonPool::~WeakSingletonPool(): "
                          "Instance pointer of {} expired",
                          type.name());
         }
         if (*instance.lock() != nullptr) [[unlikely]] {
-            fmt::println(stderr,
-                         "MACE::Env::Memory::internal::WeakSingletonPool::~WeakSingletonPool(): "
+            PrintLnError("MACE::Env::Memory::internal::WeakSingletonPool::~WeakSingletonPool(): "
                          "Instance of {} survives, "
                          "implies memory leak or following undefined behavior",
                          type.name());

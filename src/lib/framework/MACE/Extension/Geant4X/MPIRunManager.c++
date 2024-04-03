@@ -26,10 +26,9 @@ namespace MACE::inline Extension::Geant4X {
 namespace internal {
 
 FlipG4cout::FlipG4cout() {
-    if (const auto& mpiEnv{Env::MPIEnv::Instance()};
-        mpiEnv.OnCommWorldWorker() or
-        mpiEnv.VerboseLevel() == Env::VL::Quiet) {
-        static std::streambuf* gG4coutBufExchanger{nullptr};
+    if (Env::MPIEnv::Instance().OnCommWorldWorker() or
+        not Env::VerboseLevelReach<'E'>()) {
+        static std::streambuf* gG4coutBufExchanger{};
         gG4coutBufExchanger = G4cout.rdbuf(gG4coutBufExchanger);
     }
 }

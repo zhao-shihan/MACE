@@ -1,7 +1,6 @@
+#include "MACE/Env/Print.h++"
 #include "MACE/Math/Parity.h++"
 #include "MACE/SmearMACE/CLI.h++"
-
-#include "fmt/format.h"
 
 #include <cassert>
 #include <cstdio>
@@ -13,17 +12,20 @@ CLI::CLI() :
     MonteCarloCLI{} {
     AddArgument("input")
         .nargs(argparse::nargs_pattern::at_least_one)
-        .help("Input file path.");
+        .help("Input file path(s).");
     AddArgument("-o", "--output")
         .help("Output file path. Suffix '_smeared' on input file name by default.");
     AddArgument("-m", "--output-mode")
-        .help("Output file creation mode. NEW by default.");
+        .help("Output file creation mode. Default to 'NEW'.");
 
     AddArgument("-i", "--index-range")
         .nargs(1, 2)
         .scan<'i', gsl::index>()
         .default_value(std::vector<gsl::index>{0, 1})
         .help("Set number of datasets (index in [0, size) range), or index range (in [first, last) pattern)");
+    AddArgument("-b", "--batch-size")
+        .scan<'i', unsigned>()
+        .help("Set number of events processed in a batch. Default to 10000.");
 
     auto& cdcHitMutexGroup{AddMutuallyExclusiveGroup()};
     cdcHitMutexGroup.add_argument("--cdc-hit")
@@ -34,18 +36,40 @@ CLI::CLI() :
         .flag()
         .help("Save CDC hit data in output file without smearing.");
     AddArgument("--cdc-hit-name")
-        .help("Set dataset name format ('G4Run{}/CDCSimHit' by default).");
+        .help("Set dataset name format. Default to 'G4Run{}/CDCSimHit'.");
 
-    auto& cdcTrkMutexGroup{AddMutuallyExclusiveGroup()};
-    cdcTrkMutexGroup.add_argument("--cdc-track")
+    auto& ttcHitMutexGroup{AddMutuallyExclusiveGroup()};
+    ttcHitMutexGroup.add_argument("--ttc-hit")
         .nargs(2)
         .append()
-        .help("Smear a simulated CDC track variable by a smearing expression (e.g. --cdc-track Ek 'gRandom->Gaus(Ek, 1)').");
-    cdcTrkMutexGroup.add_argument("--cdc-track-id")
+        .help("Smear a simulated TTC hit variable by a smearing expression (e.g. --ttc-hit t 'gRandom->Gaus(t, 0.05)').");
+    ttcHitMutexGroup.add_argument("--ttc-hit-id")
+        .flag()
+        .help("Save TTC hit data in output file without smearing.");
+    AddArgument("--ttc-hit-name")
+        .help("Set dataset name format. Default to 'G4Run{}/TTCSimHit'.");
+
+    auto& mmsTrackMutexGroup{AddMutuallyExclusiveGroup()};
+    mmsTrackMutexGroup.add_argument("--mms-track")
+        .nargs(2)
+        .append()
+        .help("Smear a simulated CDC track variable by a smearing expression (e.g. --mms-track Ek 'gRandom->Gaus(Ek, 1)').");
+    mmsTrackMutexGroup.add_argument("--mms-track-id")
         .flag()
         .help("Save CDC track data in output file without smearing.");
-    AddArgument("--cdc-track-name")
-        .help("Set dataset name format ('G4Run{}/CDCSimTrack' by default).");
+    AddArgument("--mms-track-name")
+        .help("Set dataset name format. Default to 'G4Run{}/MMSSimTrack'.");
+
+    auto& mcpHitMutexGroup{AddMutuallyExclusiveGroup()};
+    mcpHitMutexGroup.add_argument("--mcp-hit")
+        .nargs(2)
+        .append()
+        .help("Smear a simulated MCP hit variable by a smearing expression (e.g. --mcp-hit t 'gRandom->Gaus(t, 0.5)').");
+    mcpHitMutexGroup.add_argument("--mcp-hit-id")
+        .flag()
+        .help("Save MCP hit data in output file without smearing.");
+    AddArgument("--mcp-hit-name")
+        .help("Set dataset name format. Default to 'G4Run{}/MCPSimHit'.");
 
     auto& emcHitMutexGroup{AddMutuallyExclusiveGroup()};
     emcHitMutexGroup.add_argument("--emc-hit")
@@ -56,18 +80,7 @@ CLI::CLI() :
         .flag()
         .help("Save EMC hit data in output file without smearing.");
     AddArgument("--emc-hit-name")
-        .help("Set dataset name format ('G4Run{}/EMCSimHit' by default).");
-
-    auto& mcpHitMutexGroup{AddMutuallyExclusiveGroup()};
-    mcpHitMutexGroup.add_argument("--mcp-hit")
-        .nargs(2)
-        .append()
-        .help("Smear a simulated MCP hit variable by a smearing expression (e.g. --mcp-hit t 'gRandom->Gaus(t, 0.05)').");
-    mcpHitMutexGroup.add_argument("--mcp-hit-id")
-        .flag()
-        .help("Save MCP hit data in output file without smearing.");
-    AddArgument("--mcp-hit-name")
-        .help("Set dataset name format ('G4Run{}/MCPSimHit' by default).");
+        .help("Set dataset name format. Default to 'G4Run{}/EMCSimHit'.");
 }
 
 auto CLI::DatasetIndexRange() const -> std::pair<gsl::index, gsl::index> {
@@ -85,11 +98,11 @@ auto CLI::OutputFilePath() const -> std::filesystem::path {
         output) { return *std::move(output); }
     auto inputList{InputFilePath()};
     if (inputList.size() > 1) {
-        fmt::println(stderr, "Cannot automatically construct output file path since # input file path > 1. Use -o or --output");
+        Env::PrintLnError("Cannot automatically construct output file path since # input file path > 1. Use -o or --output");
         std::exit(EXIT_FAILURE);
     }
     if (inputList.front().find('*') != std::string::npos) {
-        fmt::println(stderr, "Cannot automatically construct output file path since input file path includes wildcards. Use -o or --output");
+        Env::PrintLnError("Cannot automatically construct output file path since input file path includes wildcards. Use -o or --output");
         std::exit(EXIT_FAILURE);
     }
     std::filesystem::path input{std::move(inputList.front())};
@@ -105,7 +118,7 @@ auto CLI::ParseSmearingConfig(std::string_view arg) const -> std::optional<std::
     for (gsl::index i{}; i < ssize(*var); i += 2) {
         auto [_, inserted]{config.try_emplace(std::move(var->at(i)), std::move(var->at(i + 1)))};
         if (not inserted) {
-            fmt::println(stderr, "Duplicate variable '{}'", var->at(i));
+            Env::PrintLnError("Duplicate variable '{}'", var->at(i));
             std::exit(EXIT_FAILURE);
         }
     }

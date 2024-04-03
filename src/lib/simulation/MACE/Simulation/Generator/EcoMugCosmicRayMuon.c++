@@ -17,6 +17,29 @@
 
 namespace {
 
+/////////////////////////////////////////////////////////////////////////////////////
+// EcoMug: Efficient COsmic MUon Generator                                         //
+// Copyright (C) 2023 Davide Pagano <davide.pagano@unibs.it>                       //
+//                                                                                 //
+// EcoMug is based on the following work:                                          //
+// D. Pagano, G. Bonomi, A. Donzella, A. Zenoni, G. Zumerle, N. Zurlo,             //
+// "EcoMug: an Efficient COsmic MUon Generator for cosmic-ray muons applications", //
+// doi:10.1016/j.nima.2021.165732                                                  //
+//                                                                                 //
+// This program is free software: you can redistribute it and/or modify            //
+// it under the terms of the GNU General Public License as published by            //
+// the Free Software Foundation, either version 3 of the License, or               //
+// (at your option) any later version.                                             //
+//                                                                                 //
+// This program is distributed in the hope that it will be useful,                 //
+// but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                   //
+// GNU General Public License for more details.                                    //
+//                                                                                 //
+// You should have received a copy of the GNU General Public License               //
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.          //
+/////////////////////////////////////////////////////////////////////////////////////
+
 #define ECOMUG_VERSION "2.1"
 
 #ifndef M_PI
@@ -1212,24 +1235,63 @@ EcoMugCosmicRayMuon::EcoMugCosmicRayMuon() :
 
 EcoMugCosmicRayMuon::~EcoMugCosmicRayMuon() = default;
 
+auto EcoMugCosmicRayMuon::UseSky() -> void {
+    std::any_cast<EcoMug&>(fEcoMug).SetUseSky();
+}
+
+auto EcoMugCosmicRayMuon::SkySize(G4TwoVector xy) -> void {
+    std::any_cast<EcoMug&>(fEcoMug).SetSkySize({xy.x(), xy.y()});
+}
+
+auto EcoMugCosmicRayMuon::SkyCenterPosition(G4ThreeVector x0) -> void {
+    std::any_cast<EcoMug&>(fEcoMug).SetSkyCenterPosition({x0.z(), x0.y(), x0.z()});
+}
+
+auto EcoMugCosmicRayMuon::UseCylinder() -> void {
+    std::any_cast<EcoMug&>(fEcoMug).SetUseCylinder();
+}
+
+auto EcoMugCosmicRayMuon::CylinderRadius(double r) -> void {
+    std::any_cast<EcoMug&>(fEcoMug).SetCylinderRadius(r);
+}
+
+auto EcoMugCosmicRayMuon::CylinderHeight(double h) -> void {
+    std::any_cast<EcoMug&>(fEcoMug).SetCylinderHeight(h);
+}
+
+auto EcoMugCosmicRayMuon::CylinderCenterPosition(G4ThreeVector x0) -> void {
+    std::any_cast<EcoMug&>(fEcoMug).SetCylinderCenterPosition({x0.z(), x0.y(), x0.z()});
+}
+
+auto EcoMugCosmicRayMuon::UseHSphere() -> void {
+    std::any_cast<EcoMug&>(fEcoMug).SetUseHSphere();
+}
+
+auto EcoMugCosmicRayMuon::HSphereRadius(double r) -> void {
+    std::any_cast<EcoMug&>(fEcoMug).SetHSphereRadius(r);
+}
+
+auto EcoMugCosmicRayMuon::HSphereCenterPosition(G4ThreeVector x0) -> void {
+    std::any_cast<EcoMug&>(fEcoMug).SetHSphereCenterPosition({x0.z(), x0.y(), x0.z()});
+}
+
 auto EcoMugCosmicRayMuon::GeneratePrimaryVertex(G4Event* event) -> void {
     auto& ecoMug{std::any_cast<EcoMug&>(fEcoMug)};
     ecoMug.Generate();
 
     // The following are all transformed to the Geant4 coordinate system convention
 
+    const auto& [x, y, z]{ecoMug.GetGenerationPosition()};
     std::array<double, 3> p;
     ecoMug.GetGenerationMomentum(p);
-    (p[0] *= GeV, p[1] *= GeV, p[2] *= GeV);
-    const auto primaryParticle = ecoMug.GetCharge() > 0 ?
-                                     new G4PrimaryParticle(G4MuonPlus::Definition(), p[0], p[2], -p[1]) :
-                                     new G4PrimaryParticle(G4MuonMinus::Definition(), p[0], p[2], -p[1]);
+    const auto px{p[0] * GeV};
+    const auto py{p[1] * GeV};
+    const auto pz{p[2] * GeV}; // clang-format off
 
-    const auto& [x, y, z] = ecoMug.GetGenerationPosition();
-    const auto primaryVertex = new G4PrimaryVertex({x, z, -y}, 0);
-
-    primaryVertex->SetPrimary(primaryParticle);
-
+    const auto primaryVertex{new G4PrimaryVertex{{x, z, -y}, 0}}; // clang-format on
+    primaryVertex->SetPrimary(ecoMug.GetCharge() > 0 ?
+                                  new G4PrimaryParticle{G4MuonPlus::Definition(), px, pz, -py} :
+                                  new G4PrimaryParticle{G4MuonMinus::Definition(), px, pz, -py});
     event->AddPrimaryVertex(primaryVertex);
 }
 

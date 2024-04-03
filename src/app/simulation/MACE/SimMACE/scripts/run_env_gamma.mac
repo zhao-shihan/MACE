@@ -9,28 +9,30 @@
 
 /run/initialize
 
-/gps/particle                                  gamma
-/gps/pos/type                                  Volume
-/gps/pos/shape                                 Para
-/gps/pos/centre                                2 0 0 m
-/gps/pos/halfx                                 1 m
-/gps/pos/halfy                                 1 m
-/gps/pos/halfz                                 1 m
-/gps/ang/type                                  iso
-/gps/ene/type                                  Lin
-/gps/ene/gradient                              0
-/gps/ene/intercept                             1
-/gps/ene/min                                   1 keV
-/gps/ene/max                                   6 MeV
-/MACE/Generator/GPS/PulseWidth                 0 ns
-/MACE/Generator/GPS/PrimariesForEachG4Event    1000
+/gps/particle             gamma
+/gps/pos/type             Volume
+/gps/pos/shape            Para
+/gps/pos/centre           2 0 0 m
+/gps/pos/halfx            1 m
+/gps/pos/halfy            1 m
+/gps/pos/halfz            1 m
+/gps/ang/type             iso
+/gps/ene/type             Lin
+/gps/ene/gradient         0
+/gps/ene/intercept        1
+/gps/ene/min              1 keV
+/gps/ene/max              6 MeV
+/GPSX/NVertex             1000
+/GPSX/PulseWidth          0 ns
 
 /MACE/Field/AcceleratorPotential          500 volt
-/MACE/Field/SpectrometerMagneticField     0.1 tesla
+/MACE/Field/MMSMagneticField              0.1 tesla
 /MACE/Field/SolenoidMagneticField         0.1 tesla
 /MACE/Field/EMCMagneticField              0.1 tesla
 
 /MACE/Analysis/CoincidenceWithCDC     false
+/MACE/Analysis/CoincidenceWithTTC     false
+/MACE/Analysis/CoincidenceWithMMS     false
 /MACE/Analysis/CoincidenceWithMCP     false
 /MACE/Analysis/CoincidenceWithEMC     false
 

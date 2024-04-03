@@ -2,13 +2,12 @@
 
 #include "MACE/Env/BasicEnv.h++"
 #include "MACE/Env/Memory/Singleton.h++"
+#include "MACE/Env/Print.h++"
 #include "MACE/Extension/stdx/tuple_contains.h++"
 
 #include "G4UImessenger.hh"
 
 #include "gsl/gsl"
-
-#include "fmt/format.h"
 
 #include <concepts>
 #include <exception>

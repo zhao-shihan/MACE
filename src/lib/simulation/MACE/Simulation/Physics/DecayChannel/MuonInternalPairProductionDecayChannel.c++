@@ -2,8 +2,8 @@
 #include "MACE/Detector/Description/AcceleratorField.h++"
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/Filter.h++"
+#include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Detector/Description/SpectrometerField.h++"
 #include "MACE/Math/Hypot.h++"
 #include "MACE/Math/IntegerPower.h++"
 #include "MACE/Math/Random/Distribution/Uniform.h++"
@@ -158,9 +158,9 @@ auto MuonInternalPairProductionDecayChannel::PassCut(const CLHEPX::RAMBO<5>::Eve
     auto passCut2{true};
 
     if (fApplyMACESpecificPxyCut) {
-        const auto spectrometerB{Detector::Description::SpectrometerField::Instance().MagneticFluxDensity()};
+        const auto mmsB{Detector::Description::MMSField::Instance().MagneticFluxDensity()};
         const auto cdcInnerRadius{Detector::Description::CDC::Instance().GasInnerRadius()};
-        const auto cdcPxyCut{(cdcInnerRadius / 2) * spectrometerB * c_light};
+        const auto cdcPxyCut{(cdcInnerRadius / 2) * mmsB * c_light};
 
         const auto& filter{Detector::Description::Filter::Instance()};
         const auto& solenoid{Detector::Description::Solenoid::Instance()};

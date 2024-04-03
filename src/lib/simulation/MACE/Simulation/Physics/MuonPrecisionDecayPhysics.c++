@@ -3,7 +3,7 @@
 #include "MACE/Simulation/Physics/MuonPrecisionDecayPhysics.h++"
 
 #include "G4DecayTable.hh"
-#include "G4MuonDecayChannel.hh"
+#include "G4MuonDecayChannelWithSpin.hh"
 #include "G4MuonMinus.hh"
 #include "G4MuonPlus.hh"
 
@@ -30,7 +30,7 @@ auto MuonPrecisionDecayPhysics::ConstructProcess() -> void {
         [this](G4ParticleDefinition* muon) {
             const auto decay{new G4DecayTable};
             // sort by initial BR! we firstly write random BRs in decrease order...
-            decay->Insert(new G4MuonDecayChannel{muon->GetParticleName(), 1e-1}), decay->GetDecayChannel(0)->SetVerboseLevel(verboseLevel);
+            decay->Insert(new G4MuonDecayChannelWithSpin{muon->GetParticleName(), 1e-1}), decay->GetDecayChannel(0)->SetVerboseLevel(verboseLevel);
             decay->Insert(new MuonInternalPairProductionDecayChannel{muon->GetParticleName(), 1e-2, verboseLevel});
             // delete old table and set new
             delete muon->GetDecayTable();

@@ -116,8 +116,7 @@ auto DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::strin
         }
         yamlOut << geomYaml << std::endl;
     } catch (const InvalidFile&) {
-        MACE_ENVIRONMENT_CONTROLLED_OUT(Error, std::cout)
-            << "MACE::Detector::Description::DescriptionIO::ExportImpl: Cannot open yaml file, export failed" << std::endl;
+        Env::PrintLnError("MACE::Detector::Description::DescriptionIO::ExportImpl: Cannot open yaml file, export failed");
     }
 }
 

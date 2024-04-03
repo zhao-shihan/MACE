@@ -2,13 +2,12 @@
 
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimEMC/Messenger/PhysicsListMessenger.h++"
-
-#include "FTFP_BERT.hh"
+#include "MACE/Simulation/Physics/StandardPhysicsList.h++"
 
 namespace MACE::SimEMC {
 
 class PhysicsList final : public Env::Memory::PassiveSingleton<PhysicsList>,
-                          public FTFP_BERT {
+                          public StandardPhysicsListBase {
 public:
     PhysicsList();
 

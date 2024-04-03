@@ -21,22 +21,27 @@ public:
     auto OutputFilePath() const -> std::filesystem::path;
 
     auto DatasetIndexRange() const -> std::pair<gsl::index, gsl::index>;
+    auto BatchSize() const -> auto { return ArgParser().present<unsigned>("-b").value_or(10000); }
 
     auto CDCSimHitSmearingConfig() const -> auto { return ParseSmearingConfig("--cdc-hit"); }
     auto CDCSimHitIdentity() const -> bool { return ArgParser().get<bool>("--cdc-hit-id"); }
     auto CDCSimHitNameFormat() const -> auto { return ArgParser().present("--cdc-hit-name").value_or("G4Run{}/CDCSimHit"); }
 
-    auto CDCSimTrackSmearingConfig() const -> auto { return ParseSmearingConfig("--cdc-track"); }
-    auto CDCSimTrackIdentity() const -> bool { return ArgParser().get<bool>("--cdc-track-id"); }
-    auto CDCSimTrackNameFormat() const -> auto { return ArgParser().present("--cdc-track-name").value_or("G4Run{}/CDCSimTrack"); }
+    auto TTCSimHitSmearingConfig() const -> auto { return ParseSmearingConfig("--ttc-hit"); }
+    auto TTCSimHitIdentity() const -> bool { return ArgParser().get<bool>("--ttc-hit-id"); }
+    auto TTCSimHitNameFormat() const -> auto { return ArgParser().present("--ttc-hit-name").value_or("G4Run{}/TTCSimHit"); }
 
-    auto EMCSimHitSmearingConfig() const -> auto { return ParseSmearingConfig("--emc-hit"); }
-    auto EMCSimHitIdentity() const -> bool { return ArgParser().get<bool>("--emc-hit-id"); }
-    auto EMCSimHitNameFormat() const -> auto { return ArgParser().present("--emc-hit-name").value_or("G4Run{}/EMCSimHit"); }
+    auto MMSSimTrackSmearingConfig() const -> auto { return ParseSmearingConfig("--mms-track"); }
+    auto MMSSimTrackIdentity() const -> bool { return ArgParser().get<bool>("--mms-track-id"); }
+    auto MMSSimTrackNameFormat() const -> auto { return ArgParser().present("--mms-track-name").value_or("G4Run{}/MMSSimTrack"); }
 
     auto MCPSimHitSmearingConfig() const -> auto { return ParseSmearingConfig("--mcp-hit"); }
     auto MCPSimHitIdentity() const -> bool { return ArgParser().get<bool>("--mcp-hit-id"); }
     auto MCPSimHitNameFormat() const -> auto { return ArgParser().present("--mcp-hit-name").value_or("G4Run{}/MCPSimHit"); }
+
+    auto EMCSimHitSmearingConfig() const -> auto { return ParseSmearingConfig("--emc-hit"); }
+    auto EMCSimHitIdentity() const -> bool { return ArgParser().get<bool>("--emc-hit-id"); }
+    auto EMCSimHitNameFormat() const -> auto { return ArgParser().present("--emc-hit-name").value_or("G4Run{}/EMCSimHit"); }
 
 private:
     auto ParseSmearingConfig(std::string_view arg) const -> std::optional<std::unordered_map<std::string, std::string>>;

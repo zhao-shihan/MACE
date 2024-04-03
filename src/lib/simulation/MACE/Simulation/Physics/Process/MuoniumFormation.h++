@@ -1,6 +1,9 @@
 #pragma once
 
+#include "MACE/Env/Print.h++"
 #include "MACE/Math/Clamp.h++"
+#include "MACE/Math/FindRoot.h++"
+#include "MACE/Math/QinAlgorithm.h++"
 #include "MACE/Simulation/Physics/MuoniumPhysicsMessenger.h++"
 #include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
 #include "MACE/Simulation/Physics/Particle/Muonium.h++"
@@ -12,6 +15,7 @@
 #include "G4MuonPlus.hh"
 #include "G4ParticleChange.hh"
 #include "G4VRestProcess.hh"
+#include "Randomize.hh"
 
 #include "gsl/gsl"
 

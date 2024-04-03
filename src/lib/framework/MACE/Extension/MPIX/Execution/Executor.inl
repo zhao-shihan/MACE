@@ -130,18 +130,21 @@ template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 auto Executor<T>::PrintExecutionSummary() const -> void {
     const auto& mpiEnv{Env::MPIEnv::Instance()};
-    if (not(mpiEnv.OnCommWorldMaster() and mpiEnv.VerboseLevel() >= Env::VL::Error)) { return; }
-    if (fExecuting and mpiEnv.VerboseLevel() >= Env::VL::Warning) { fmt::println(stderr, "Execution summary not available for now."); }
-    fmt::println("+------------------+--------------> Summary <-------------+-------------------+\n"
-                 "| Rank in world    | Executed          | Wall time (s)    | CPU time (s)      |\n"
-                 "+------------------+-------------------+------------------+-------------------+");
+    if (not mpiEnv.OnCommWorldMaster()) { return; }
+    if (fExecuting) {
+        Env::PrintLnWarning("Execution summary not available for now.");
+        return;
+    }
+    Env::Print("+------------------+--------------> Summary <-------------+-------------------+\n"
+               "| Rank in world    | Executed          | Wall time (s)    | CPU time (s)      |\n"
+               "+------------------+-------------------+------------------+-------------------+\n");
     for (int rank{}; rank < mpiEnv.CommWorldSize(); ++rank) {
         const auto& executed{fNLocalExecutedTaskOfAllProcessKeptByMaster[rank]};
         const auto& wallTime{fExecutionWallTimeOfAllProcessKeptByMaster[rank]};
         const auto& cpuTime{fExecutionCPUTimeOfAllProcessKeptByMaster[rank]};
-        fmt::println("| {:16} | {:17} | {:16.3f} | {:17.3f} |", rank, executed, wallTime, cpuTime);
+        Env::PrintLn("| {:16} | {:17} | {:16.3f} | {:17.3f} |", rank, executed, wallTime, cpuTime);
     }
-    fmt::println("+------------------+--------------> Summary <-------------+-------------------+");
+    Env::PrintLn("+------------------+--------------> Summary <-------------+-------------------+");
 }
 
 template<std::integral T>
@@ -149,8 +152,8 @@ template<std::integral T>
 auto Executor<T>::PreLoopReport() const -> void {
     if (not fPrintProgress) { return; }
     const auto& mpiEnv{Env::MPIEnv::Instance()};
-    if (not(mpiEnv.OnCommWorldMaster() and mpiEnv.VerboseLevel() >= Env::VL::Error)) { return; }
-    fmt::print("+----------------------------------> Start <----------------------------------+\n"
+    if (not mpiEnv.OnCommWorldMaster()) { return; }
+    Env::Print("+----------------------------------> Start <----------------------------------+\n"
                "| {:75} |\n"
                "+----------------------------------> Start <----------------------------------+\n",
                fmt::format("{:%FT%T%z} > {} has started on {} process{}",
@@ -161,8 +164,6 @@ template<std::integral T>
     requires(Concept::MPIPredefined<T> and sizeof(T) >= sizeof(short))
 auto Executor<T>::PostTaskReport(T iEnded) const -> void {
     if (not fPrintProgress or fPrintProgressModulo < 0) { return; }
-    const auto& mpiEnv{Env::MPIEnv::Instance()};
-    if (mpiEnv.VerboseLevel() < Env::VL::Error) { return; }
     const auto [goodForEstmation, nExecutedTask]{fScheduler->NExecutedTask()};
     const auto secondsElapsed{fWallTimeStopwatch.SecondsElapsed()};
     const auto speed{nExecutedTask / secondsElapsed};
@@ -173,7 +174,8 @@ auto Executor<T>::PostTaskReport(T iEnded) const -> void {
         // manual mode
         if ((iEnded + 1) % fPrintProgressModulo != 0) { return; }
     }
-    fmt::print("MPI{}> {:%FT%T%z} > {} {} has ended\n"
+    const auto& mpiEnv{Env::MPIEnv::Instance()};
+    Env::Print("MPI{}> {:%FT%T%z} > {} {} has ended\n"
                "MPI{}>   {} elaps., {}\n",
                mpiEnv.CommWorldRank(), fmt::localtime(scsc::to_time_t(scsc::now())), fTaskName, iEnded,
                mpiEnv.CommWorldRank(), SToDHMS(secondsElapsed),
@@ -194,11 +196,11 @@ template<std::integral T>
 auto Executor<T>::PostLoopReport() const -> void {
     if (not fPrintProgress) { return; }
     const auto& mpiEnv{Env::MPIEnv::Instance()};
-    if (not(mpiEnv.OnCommWorldMaster() and mpiEnv.VerboseLevel() >= Env::VL::Error)) { return; }
+    if (not mpiEnv.OnCommWorldMaster()) { return; }
     const auto now{scsc::now()};
     const auto maxWallTime{*std::ranges::max_element(fExecutionWallTimeOfAllProcessKeptByMaster)};
     const auto totalCpuTime{stdx::ranges::reduce(fExecutionCPUTimeOfAllProcessKeptByMaster)};
-    fmt::print("+-----------------------------------> End <-----------------------------------+\n"
+    Env::Print("+-----------------------------------> End <-----------------------------------+\n"
                "| {:75} |\n"
                "| {:75} |\n"
                "| {:75} |\n"

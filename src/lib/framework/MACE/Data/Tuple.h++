@@ -113,9 +113,15 @@ private:
 
 public:
     constexpr Tuple() = default;
-    constexpr explicit(sizeof...(Ts) == 1) Tuple(std::convertible_to<Ts> auto&&... values);
-    constexpr explicit(sizeof...(Ts) == 1) Tuple(const typename std::conditional_t<requires { typename Ts::Type; }, Ts, Dummy>::Type&... values);
-    constexpr explicit(sizeof...(Ts) == 1) Tuple(typename std::conditional_t<requires { typename Ts::Type; }, Ts, Dummy>::Type&&... values);
+
+    template<typename... Us>
+        requires(sizeof...(Us) == Model::Size() and
+                 []<gsl::index... Is>(gslx::index_sequence<Is...>) {
+                     return (... and std::constructible_from<std::tuple_element_t<Is, typename Model::StdTuple>,
+                                                             std::tuple_element_t<Is, std::tuple<Us...>>&&>);
+                 }(gslx::make_index_sequence<sizeof...(Us)>()))
+    constexpr explicit(sizeof...(Us) == 1) Tuple(Us&&... values) :
+        fTuple{std::forward<Us>(values)...} {}
 
     template<CETAString... ANames>
         requires(sizeof...(ANames) >= 1)
@@ -162,7 +168,7 @@ private:
     constexpr auto GetImpl() const&& -> auto { return Tuple<std::tuple_element_t<Is, Tuple>...>{std::get<Is>(std::move(fTuple))...}; }
 
 private:
-    typename TupleModel<Ts...>::StdTuple fTuple;
+    typename Model::StdTuple fTuple;
 };
 
 template<typename... Ts>

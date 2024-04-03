@@ -1,4 +1,5 @@
 #include "MACE/Detector/Description/EMC.h++"
+#include "MACE/Env/Print.h++"
 #include "MACE/Extension/stdx/ranges_numeric.h++"
 #include "MACE/External/gfx/timsort.hpp"
 #include "MACE/Math/MidPoint.h++"
@@ -22,9 +23,10 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <iterator>
 #include <functional>
+#include <iterator>
 #include <numeric>
+#include <ranges>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -39,6 +41,7 @@ EMCSD::EMCSD(const G4String& sdName, const EMCPMTSD* emcPMTSD) :
     fSplitHit{},
     fHitsCollection{} {
     collectionName.insert(sdName + "HC");
+
     const auto& emc{Detector::Description::EMC::Instance()};
     assert(emc.CsIEnergyBin().size() == emc.CsIScintillationComponent1().size());
     std::vector<double> dE(emc.CsIEnergyBin().size());
@@ -50,10 +53,12 @@ EMCSD::EMCSD(const G4String& sdName, const EMCPMTSD* emcPMTSD) :
     stdx::ranges::adjacent_difference(emc.CsIEnergyBin(), meanE.begin(), Math::MidPoint<double, double>);
     std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
     fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
+
+    fSplitHit.reserve(emc.NUnit());
 }
 
 auto EMCSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
-    fHitsCollection = new EMCHitCollection(SensitiveDetectorName, collectionName[0]);
+    fHitsCollection = new EMCHitCollection{SensitiveDetectorName, collectionName[0]};
     const auto hitsCollectionID{G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection)};
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
@@ -79,15 +84,15 @@ auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     // track creator process
     const auto creatorProcess{track.GetCreatorProcess()};
     // new a hit
-    auto hit{std::make_unique_for_overwrite<EMCHit>()};
+    const auto& hit{fSplitHit[unitID].emplace_back(std::make_unique_for_overwrite<EMCHit>())};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"UnitID">(*hit) = unitID;
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
-    Get<"Edep">(*hit) = step.GetTotalEnergyDeposit();
+    Get<"Edep">(*hit) = eDep;
     Get<"nOptPho">(*hit) = -1; // to be determined
+    Get<"x">(*hit) = preStepPoint.GetPosition() - touchable.GetTranslation();
     Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
-    Get<"x">(*hit) = *touchable.GetRotation() * (preStepPoint.GetPosition() - touchable.GetTranslation());
     Get<"p">(*hit) = preStepPoint.GetMomentum();
     Get<"TrkID">(*hit) = track.GetTrackID();
     Get<"PDGID">(*hit) = particle.GetPDGEncoding();
@@ -96,17 +101,26 @@ auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"Ek0">(*hit) = vertexEk;
     Get<"p0">(*hit) = vertexMomentum;
     *Get<"CreatProc">(*hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "|0>";
-    fSplitHit[unitID].emplace_back(std::move(hit));
 
     return true;
 }
 
 auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
+    fHitsCollection->GetVector()->reserve(
+        stdx::ranges::accumulate(fSplitHit, 0,
+                                 [](auto&& count, auto&& cellHit) {
+                                     return count + cellHit.second.size();
+                                 }));
+
+    constexpr auto ByTrackID{
+        [](const auto& hit1, const auto& hit2) {
+            return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
+        }};
     for (int hitID{};
          auto&& [unitID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
         case 0:
-            break;
+            std23::unreachable();
         case 1: {
             auto& hit{splitHit.front()};
             Get<"HitID">(*hit) = hitID++;
@@ -115,45 +129,46 @@ auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
         } break;
         default: {
             const auto scintillationTimeConstant1{Detector::Description::EMC::Instance().ScintillationTimeConstant1()};
+            assert(scintillationTimeConstant1 >= 0);
             // sort hit by time
             gfx::timsort(splitHit,
                          [](const auto& hit1, const auto& hit2) {
                              return Get<"t">(*hit1) < Get<"t">(*hit2);
                          });
             // loop over all hits on this crystal and cluster to real hits by times
-            std::vector<std::unique_ptr<EMCHit>*> hitCandidate;
-            const auto ClusterAndInsertHit{
-                [&] {
-                    // find top hit
-                    const auto iTopHit{std::ranges::min_element(std::as_const(hitCandidate),
-                                                                [](const auto& hit1, const auto& hit2) {
-                                                                    return Get<"TrkID">(**hit1) < Get<"TrkID">(**hit2);
-                                                                })};
-                    const auto topHit{*iTopHit};
-                    // construct real hit
-                    Get<"HitID">(**topHit) = hitID++;
-                    assert(Get<"UnitID">(**topHit) == unitID);
-                    for (auto&& hit : std::as_const(hitCandidate)) {
-                        if (hit == topHit) { continue; }
-                        Get<"Edep">(**topHit) += Get<"Edep">(**hit);
-                    }
-                    fHitsCollection->insert(topHit->release());
-                }};
-            for (auto windowClosingTime{Get<"t">(*splitHit.front()) + scintillationTimeConstant1};
-                 auto&& aSplitHit : splitHit) {
-                if (Get<"t">(*aSplitHit) > windowClosingTime) {
-                    ClusterAndInsertHit();
-                    hitCandidate.clear();
-                    windowClosingTime = Get<"t">(*aSplitHit) + scintillationTimeConstant1;
+            auto clusterFirst{splitHit.begin()};
+            auto clusterLast{clusterFirst};
+            do {
+                const auto tFirst{*Get<"t">(**clusterFirst)};
+                const auto windowClosingTime{tFirst + scintillationTimeConstant1};
+                if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
+                    scintillationTimeConstant1 != 0) [[unlikely]] {
+                    Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1);
                 }
-                hitCandidate.emplace_back(&aSplitHit);
-            }
-            ClusterAndInsertHit();
+                clusterLast = std::ranges::find_if_not(clusterFirst, splitHit.end(),
+                                                       [&windowClosingTime](const auto& hit) {
+                                                           return Get<"t">(*hit) <= windowClosingTime;
+                                                       });
+                // find top hit
+                auto& topHit{*std::ranges::min_element(clusterFirst, clusterLast, ByTrackID)};
+                // construct real hit
+                Get<"HitID">(*topHit) = hitID++;
+                assert(Get<"UnitID">(*topHit) == unitID);
+                for (const auto& hit : std::ranges::subrange{clusterFirst, clusterLast}) {
+                    if (hit == topHit) { continue; }
+                    Get<"Edep">(*topHit) += Get<"Edep">(*hit);
+                }
+                fHitsCollection->insert(topHit.release());
+                clusterFirst = clusterLast;
+            } while (clusterFirst != splitHit.end());
         } break;
         }
-        splitHit.clear();
     }
-    if (fEMCPMTSD != nullptr) {
+    fSplitHit.clear();
+
+    gfx::timsort(*fHitsCollection->GetVector(), ByTrackID);
+
+    if (fEMCPMTSD) {
         auto nHit{fEMCPMTSD->NOpticalPhotonHit()};
         for (auto&& hit : std::as_const(*fHitsCollection->GetVector())) {
             Get<"nOptPho">(*hit) = nHit[Get<"UnitID">(*hit)];

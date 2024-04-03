@@ -10,7 +10,7 @@ EMCMagnet::EMCMagnet() :
     // Geometry
     fInnerRadius{50_cm},
     fOuterRadius{55_cm},
-    fLength{95_cm},
+    fLength{100_cm},
     // Material
     fMaterialName{"G4_Cu"} {}
 

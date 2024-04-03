@@ -9,13 +9,14 @@ namespace MACE::SimMACE {
 enum struct RegionType {
     CDCFieldWire,
     CDCSenseWire,
+    CDCSensitive,
     DefaultGaseous,
     DefaultSolid,
     EMCSensitive,
     MCPSensitive,
     Shield,
     SolenoidOrMagnet,
-    CDCSensitive,
+    TTCSensitive,
     Target,
     Vacuum
 };
@@ -25,7 +26,7 @@ class Region final : public NonMoveableBase,
 public:
     Region(const G4String& name, RegionType type);
 
-    const auto& Type() const { return fRegionType; }
+    auto Type() const -> auto { return fRegionType; }
 
 private:
     const RegionType fRegionType;

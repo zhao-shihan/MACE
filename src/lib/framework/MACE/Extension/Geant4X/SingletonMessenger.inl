@@ -2,6 +2,8 @@ namespace MACE::inline Extension::Geant4X {
 
 template<typename ADerived, typename... ARecipients>
 SingletonMessenger<ADerived, ARecipients...>::SingletonMessenger() :
+    Env::Memory::Singleton<ADerived>{},
+    G4UImessenger{},
     fDelivering{},
     fRecipientSetTuple{} {
     static_assert(std::derived_from<ADerived, SingletonMessenger<ADerived, ARecipients...>>);
@@ -22,7 +24,7 @@ SingletonMessenger<ADerived, ARecipients...>::Register<ARecipient>::~Register() 
     if (SingletonMessenger::Expired()) { return; }
     auto& messenger{SingletonMessenger::Instance()};
     if (messenger.fDelivering) {
-        fmt::println("Fatal: de-register from SingletonMessenger during delivering");
+        Env::PrintLnError("Fatal: de-register from SingletonMessenger during delivering");
         std::terminate();
     }
     get<std::unordered_set<ARecipient*>>(messenger.fRecipientSetTuple).erase(fRecipient);
@@ -34,9 +36,7 @@ template<typename ARecipient>
 auto SingletonMessenger<ADerived, ARecipients...>::Deliver(std::invocable<ARecipient&> auto&& Action) const -> void {
     const auto& recipientSet{get<std::unordered_set<ARecipient*>>(fRecipientSetTuple)};
     if (recipientSet.empty()) {
-        if (Env::BasicEnv::Instance().VerboseLevel() >= Env::VL::Error) {
-            fmt::println("{} has not registered", typeid(ARecipient).name());
-        }
+        Env::PrintLnError("{} not registered", typeid(ARecipient).name());
         return;
     }
     fDelivering = true;

@@ -23,7 +23,7 @@ public:
 
 private:
     std::unique_ptr<G4UIdirectory> fDirectory;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSpectrometerMagneticField;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fEMCMagneticField;
 };
 
 } // namespace MACE::inline Simulation::inline Field

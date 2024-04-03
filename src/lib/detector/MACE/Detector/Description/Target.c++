@@ -1,6 +1,7 @@
 #include "MACE/Compatibility/std23/unreachable.h++"
 #include "MACE/Detector/Description/AcceleratorField.h++"
 #include "MACE/Detector/Description/Target.h++"
+#include "MACE/Env/Print.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "CLHEP/Vector/Rotation.h"
@@ -9,9 +10,6 @@
 #include "G4MaterialPropertiesTable.hh"
 #include "G4NistManager.hh"
 
-#include "fmt/format.h"
-
-#include <cstdio>
 #include <string>
 
 namespace MACE::Detector::Description {
@@ -58,7 +56,7 @@ auto Target::ImportValues(const YAML::Node& node) -> void {
             } else if (shape == "MultiLayer") {
                 fShapeType = TargetShapeType::MultiLayer;
             } else {
-                fmt::println(stderr, "MACE::Detector::Description::Target::ImportValues: Unknown target shape \"{}\", skipping", shape);
+                Env::PrintLnError("MACE::Detector::Description::Target::ImportValues: Unknown target shape '{}', skipping", shape);
             }
         },
         "ShapeType");
@@ -76,7 +74,7 @@ auto Target::ImportValues(const YAML::Node& node) -> void {
                 } else if (detail == "Perforated") {
                     fCuboid.DetailType(CuboidTarget::ShapeDetailType::Perforated);
                 } else {
-                    fmt::println(stderr, "MACE::Detector::Description::Target::ImportValues: Unknown cuboid target detail \"{}\", skipping", detail);
+                    Env::PrintLnError("MACE::Detector::Description::Target::ImportValues: Unknown cuboid target detail '{}', skipping", detail);
                 }
             },
             "Cuboid", "DetailType");
@@ -118,7 +116,7 @@ auto Target::ImportValues(const YAML::Node& node) -> void {
                 } else if (detail == "Perforated") {
                     fMultiLayer.DetailType(MultiLayerTarget::ShapeDetailType::Perforated);
                 } else {
-                    fmt::println(stderr, "MACE::Detector::Description::Target::ImportValues: Unknown MultiLayer target detail \"{}\", skipping", detail);
+                    Env::PrintError("MACE::Detector::Description::Target::ImportValues: Unknown MultiLayer target detail '{}', skipping", detail);
                 }
             },
             "MultiLayer", "DetailType");

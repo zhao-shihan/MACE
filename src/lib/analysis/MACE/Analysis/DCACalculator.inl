@@ -1,7 +1,7 @@
 /* namespace MACE::Analysis {
 
 template<std::floating_point AFloat>
-AFloat DCACalculator<AFloat>::Compute(const DataModel::CDCPhysicsTrack& /* cdcTrack */, const DataModel::MCPHit& /* mcpHit */) const{
+AFloat DCACalculator<AFloat>::Compute(const DataModel::CDCPhysicsTrack& /* mmsTrack */, const DataModel::MCPHit& /* mcpHit */) const{
 
     /* const auto charge = (particleName.back() == '+') ? 1 : (-1);
     const auto pXY = (charge > 0) ? (-std::sqrt(p.x() * p.x() + p.y() * p.y())) : std::sqrt(p.x() * p.x() + p.y() * p.y());
@@ -13,8 +13,8 @@ AFloat DCACalculator<AFloat>::Compute(const DataModel::CDCPhysicsTrack& /* cdcTr
 }
 
 template<std::floating_point AFloat>
-AFloat DCACalculator<AFloat>::Compute(const DataModel::CDCHelixTrack& cdcTrack, const DataModel::MCPHit& mcpHit) const {
-    return ComputePointCircleDCA(cdcTrack.Radius().Value(), cdcTrack.Center().Value(), mcpHit.Position().Value());
+AFloat DCACalculator<AFloat>::Compute(const DataModel::CDCHelixTrack& mmsTrack, const DataModel::MCPHit& mcpHit) const {
+    return ComputePointCircleDCA(mmsTrack.Radius().Value(), mmsTrack.Center().Value(), mcpHit.Position().Value());
 }
 
 template<std::floating_point AFloat>

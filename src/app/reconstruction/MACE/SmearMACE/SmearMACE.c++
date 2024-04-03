@@ -1,5 +1,7 @@
 #include "MACE/Data/Sheet.h++"
-#include "MACE/Env/BasicEnv.h++"
+#include "MACE/Env/MPIEnv.h++"
+#include "MACE/Extension/MPIX/Execution/Executor.h++"
+#include "MACE/Extension/MPIX/ParallelizePath.h++"
 #include "MACE/SmearMACE/CLI.h++"
 #include "MACE/SmearMACE/Smearer.h++"
 #include "MACE/Utility/MPIReseedRandomEngine.h++"
@@ -22,12 +24,16 @@ using namespace MACE;
 
 auto main(int argc, char* argv[]) -> int {
     SmearMACE::CLI cli;
-    Env::BasicEnv env{argc, argv, cli};
+    Env::MPIEnv env{argc, argv, cli};
 
     UseXoshiro<512> random;
+    MPIReseedRandomEngine();
 
-    const auto outputName{cli.OutputFilePath().generic_string()};
-    {
+    const auto outputName{MPIX::ParallelizePath(cli.OutputFilePath()).generic_string()};
+    [&] {
+        TFile file{outputName.c_str(), cli.OutputFileMode().c_str(), "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
+        if (not file.IsOpen()) { throw std::runtime_error{fmt::format("Cannot open file '{}' with mode '{}'", outputName, cli.OutputFileMode())}; }
+        if (env.OnCommNodeWorker()) { return; }
         std::stringstream smearingConfigText;
         const auto AppendConfigText{[&](const auto& nameInConfigText, const auto& smearingConfig, const auto& identity) {
             if (not(smearingConfig or identity)) { return; }
@@ -39,15 +45,15 @@ auto main(int argc, char* argv[]) -> int {
             }
         }};
         AppendConfigText("CDCSimHit", cli.CDCSimHitSmearingConfig(), cli.CDCSimHitIdentity());
-        AppendConfigText("CDCSimTrack", cli.CDCSimTrackSmearingConfig(), cli.CDCSimTrackIdentity());
-        AppendConfigText("EMCSimHit", cli.EMCSimHitSmearingConfig(), cli.EMCSimHitIdentity());
+        AppendConfigText("TTCSimHit", cli.TTCSimHitSmearingConfig(), cli.TTCSimHitIdentity());
+        AppendConfigText("MMSSimTrack", cli.MMSSimTrackSmearingConfig(), cli.MMSSimTrackIdentity());
         AppendConfigText("MCPSimHit", cli.MCPSimHitSmearingConfig(), cli.MCPSimHitIdentity());
-        TFile file{outputName.c_str(), cli.OutputFileMode().c_str(), "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
-        if (not file.IsOpen()) { throw std::runtime_error{fmt::format("Cannot open file '{}' with mode '{}'", outputName, cli.OutputFileMode())}; }
+        AppendConfigText("EMCSimHit", cli.EMCSimHitSmearingConfig(), cli.EMCSimHitIdentity());
         MakeTextTMacro(smearingConfigText.str(), "SmearingConfig", "Print SmearMACE smearing configuration")->Write();
-    }
+    }();
     {
-        SmearMACE::Smearer smearer{cli.InputFilePath(), outputName};
+        MPIX::Executor<unsigned> executor;
+        SmearMACE::Smearer smearer{cli.InputFilePath(), outputName, cli.BatchSize(), executor};
         const auto [iFirst, iLast]{cli.DatasetIndexRange()};
         const auto Smear{[&, iFirst = iFirst, iLast = iLast](const auto& nameFmt, const auto& smearingConfig, const auto& identity) {
             if (smearingConfig or identity) {
@@ -57,9 +63,10 @@ auto main(int argc, char* argv[]) -> int {
             }
         }};
         Smear(cli.CDCSimHitNameFormat(), cli.CDCSimHitSmearingConfig(), cli.CDCSimHitIdentity());
-        Smear(cli.CDCSimTrackNameFormat(), cli.CDCSimTrackSmearingConfig(), cli.CDCSimTrackIdentity());
-        Smear(cli.EMCSimHitNameFormat(), cli.EMCSimHitSmearingConfig(), cli.EMCSimHitIdentity());
+        Smear(cli.TTCSimHitNameFormat(), cli.TTCSimHitSmearingConfig(), cli.TTCSimHitIdentity());
+        Smear(cli.MMSSimTrackNameFormat(), cli.MMSSimTrackSmearingConfig(), cli.MMSSimTrackIdentity());
         Smear(cli.MCPSimHitNameFormat(), cli.MCPSimHitSmearingConfig(), cli.MCPSimHitIdentity());
+        Smear(cli.EMCSimHitNameFormat(), cli.EMCSimHitSmearingConfig(), cli.EMCSimHitIdentity());
     }
 
     return EXIT_SUCCESS;

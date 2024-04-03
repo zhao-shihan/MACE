@@ -33,26 +33,19 @@ auto WrapAsMuoniumDecayChannel<AMuonDecayChannel, AName>::DecayIt(G4double) -> G
     using namespace LiteralUnit::MathConstantSuffix;
     using namespace PhysicalConstant;
 
-#ifdef G4VERBOSE
-    if (this->GetVerboseLevel() > 1) {
-        fmt::println("WrapAsMuoniumDecayChannel::DecayIt");
-    }
-#endif
+    Env::PrintLn<'V'>("WrapAsMuoniumDecayChannel::DecayIt");
 
-    auto [pStar, converged]{Math::FindRoot::Secant(
+    const auto [pStar, converged]{Math::FindRoot::Secant(
         // CDF - x
-        [x = G4UniformRand()](const auto p) {
-            const auto p2 = Math::Pow<2>(p);
-            return (2 / 3_pi) *
-                       (p * (p2 * (3 * p2 + 8) - 3) /
-                            Math::Pow<3>(p2 + 1) +
-                        3 * std::atan(p)) -
-                   x;
+        [x = G4UniformRand()](auto p) {
+            const auto cdf{(2 / 3_pi) * (Math::QinPolynomial({0, -3, 0, 8, 0, 3}, p) / Math::Pow<3>(p * p + 1) +
+                                         3 * std::atan(p))};
+            return cdf - x;
         },
         // most probable p*
         27 / 8_pi)};
-    if (not converged and this->GetVerboseLevel() > 0) {
-        fmt::println(stderr, "WrapAsMuoniumDecayChannel: atomic shell e+/e- momentum disconverged");
+    if (not converged) {
+        Env::PrintLnError("WrapAsMuoniumDecayChannel: atomic shell e+/e- momentum disconverged");
     }
     const auto p{fine_structure_const * muonium_reduced_mass_c2 * pStar * G4RandomDirection()};
 
@@ -60,13 +53,10 @@ auto WrapAsMuoniumDecayChannel<AMuonDecayChannel, AName>::DecayIt(G4double) -> G
     products->Boost(-p.x() / muon_mass_c2, -p.y() / muon_mass_c2, -p.z() / muon_mass_c2); // recoil boost
     products->PushProducts(new G4DynamicParticle{this->G4MT_daughters[fAtomicShellProductIndex], p});
 
-#ifdef G4VERBOSE
-    if (this->GetVerboseLevel() > 1) {
-        fmt::println("WrapAsMuoniumDecayChannel::DecayIt\n"
-                     "\tCreate decay products in rest frame.");
-        products->DumpInfo();
-    }
-#endif
+    Env::PrintLn<'V'>("WrapAsMuoniumDecayChannel::DecayIt\n"
+                      "\tCreate decay products in rest frame.");
+    if (Env::VerboseLevelReach<'V'>()) { products->DumpInfo(); }
+
     return products;
 }
 

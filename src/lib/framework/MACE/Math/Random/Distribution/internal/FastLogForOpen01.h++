@@ -29,7 +29,7 @@ MACE_ALWAYS_INLINE constexpr auto FastLogForOpen01(T x) -> auto {
                     std::same_as<T, double>, std::uint64_t,
                     void>>;
         constexpr int n{std::numeric_limits<T>::digits - 1};
-        constexpr int k{BitWidthOf<T> - 1 - n};
+        constexpr int k{BitWidthOf<T>() - 1 - n};
         const auto xBits{std::bit_cast<B>(x)};
         std23::assume(xBits > 0);
         std23::assume(xBits < ~(~static_cast<B>(0) >> 1));

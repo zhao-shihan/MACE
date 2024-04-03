@@ -1,6 +1,8 @@
 #include "MACE/Env/MPIEnv.h++"
+#include "MACE/Env/Print.h++"
 #include "MACE/Extension/Geant4X/MPIExecutive.h++"
 
+#include <ostream>
 #include <stdexcept>
 
 namespace MACE::inline Extension::Geant4X {
@@ -25,15 +27,14 @@ auto MPIExecutive::ExecuteCommand(const std::string& command) -> bool {
                             [](unsigned char ch) {
                                 return std::isspace(ch);
                             })) {
-        MACE_ENVIRONMENT_CONTROLLED_OUT(Error, G4cout) << command << G4endl;
+        Env::PrintLn(G4cout, "{}", command);
         return true;
     }
     if (const auto commandStatus = G4UImanager::GetUIpointer()->ApplyCommand(command);
         commandStatus == fCommandSucceeded) [[likely]] {
         return true;
     } else {
-        MACE_ENVIRONMENT_CONTROLLED_OUT(Error, G4cerr)
-            << "MACE::Geant4X::MPIExecutive::Execute: Command \"" << command << "\" failed (G4UIcommandStatus: " << commandStatus << ')' << std::endl;
+        Env::PrintLn(G4cerr, "MACE::Geant4X::MPIExecutive::Execute: Command '{}' failed (G4UIcommandStatus: {})", command, commandStatus), flush(G4cerr);
         return false;
     }
 }
