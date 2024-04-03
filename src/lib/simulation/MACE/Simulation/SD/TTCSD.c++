@@ -135,31 +135,29 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                              return Get<"t">(*hit1) < Get<"t">(*hit2);
                          });
             // loop over all hits on this tile and cluster to real hits by times
-            auto clusterFirst{splitHit.begin()};
-            auto clusterLast{clusterFirst};
-            do {
-                const auto tFirst{*Get<"t">(**clusterFirst)};
+            std::ranges::subrange cluster{splitHit.begin(), splitHit.begin()};
+            while (cluster.end() != splitHit.end()) {
+                const auto tFirst{*Get<"t">(**cluster.end())};
                 const auto windowClosingTime{tFirst + scintillationTimeConstant1};
                 if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                     scintillationTimeConstant1 != 0) [[unlikely]] {
                     Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1);
                 }
-                clusterLast = std::ranges::find_if_not(clusterFirst, splitHit.end(),
-                                                       [&windowClosingTime](const auto& hit) {
-                                                           return Get<"t">(*hit) <= windowClosingTime;
-                                                       });
+                cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), splitHit.end(),
+                                                                   [&windowClosingTime](const auto& hit) {
+                                                                       return Get<"t">(*hit) <= windowClosingTime;
+                                                                   })};
                 // find top hit
-                auto& topHit{*std::ranges::min_element(clusterFirst, clusterLast, ByTrackID)};
+                auto& topHit{*std::ranges::min_element(cluster, ByTrackID)};
                 // construct real hit
                 Get<"HitID">(*topHit) = hitID++;
                 assert(Get<"TileID">(*topHit) == tileID);
-                for (const auto& hit : std::ranges::subrange{clusterFirst, clusterLast}) {
+                for (const auto& hit : cluster) {
                     if (hit == topHit) { continue; }
                     Get<"Edep">(*topHit) += Get<"Edep">(*hit);
                 }
                 fHitsCollection->insert(topHit.release());
-                clusterFirst = clusterLast;
-            } while (clusterFirst != splitHit.end());
+            }
         } break;
         }
     }
