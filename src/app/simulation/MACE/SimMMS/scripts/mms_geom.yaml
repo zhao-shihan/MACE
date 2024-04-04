@@ -44,7 +44,7 @@ MMSShield:
   Thickness: 50
   WindowRadius: 30
   BeamSlantAngle: 0
-  MaterialName: G4_Pb
+  MaterialName: G4_Fe
 TTC:
   Length: 150
   Width: 100

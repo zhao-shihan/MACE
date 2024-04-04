@@ -14,7 +14,7 @@ EMCShield::EMCShield() :
     fGapAroundWindow{1_cm},
     fThickness{5_cm},
     // Material
-    fMaterialName{"G4_Pb"} {}
+    fMaterialName{"G4_Fe"} {}
 
 auto EMCShield::ImportValues(const YAML::Node& node) -> void {
     // Geometry

@@ -12,10 +12,10 @@ MMSShield::MMSShield() :
     fInnerRadius{62_cm},
     fInnerLength{224_cm},
     fThickness{5_cm},
-    fWindowRadius{3_cm},
+    fWindowRadius{105_mm},
     fBeamSlantAngle{0_deg},
     // Material
-    fMaterialName{"G4_Pb"} {}
+    fMaterialName{"G4_Fe"} {}
 
 auto MMSShield::ImportValues(const YAML::Node& node) -> void {
     // Geometry

@@ -43,7 +43,7 @@ auto EMCShield::Construct(G4bool checkOverlaps) -> void {
         G4Transform3D{{}, {0, 0, shield.InnerLength() / 2 + shield.Thickness() / 2}})}; // clang-format on
     const auto logic{Make<G4LogicalVolume>(
         solid,
-        G4NistManager::Instance()->FindOrBuildMaterial("G4_Pb"),
+        G4NistManager::Instance()->FindOrBuildMaterial(shield.MaterialName()),
         shield.Name())};
     Make<G4PVPlacement>(
         G4Transform3D(),
