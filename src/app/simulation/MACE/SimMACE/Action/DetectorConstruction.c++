@@ -1,3 +1,4 @@
+#include "MACE/Detector/Definition/Accelerator.h++"
 #include "MACE/Detector/Definition/AcceleratorField.h++"
 #include "MACE/Detector/Definition/BeamDegrader.h++"
 #include "MACE/Detector/Definition/BeamMonitor.h++"
@@ -19,7 +20,6 @@
 #include "MACE/Detector/Definition/MMSField.h++"
 #include "MACE/Detector/Definition/MMSMagnet.h++"
 #include "MACE/Detector/Definition/MMSShield.h++"
-#include "MACE/Detector/Definition/TTC.h++"
 #include "MACE/Detector/Definition/ShieldingWall.h++"
 #include "MACE/Detector/Definition/SolenoidB1.h++"
 #include "MACE/Detector/Definition/SolenoidB1Field.h++"
@@ -31,6 +31,7 @@
 #include "MACE/Detector/Definition/SolenoidS2Field.h++"
 #include "MACE/Detector/Definition/SolenoidS3.h++"
 #include "MACE/Detector/Definition/SolenoidS3Field.h++"
+#include "MACE/Detector/Definition/TTC.h++"
 #include "MACE/Detector/Definition/Target.h++"
 #include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Description/CDC.h++"
@@ -137,6 +138,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     auto& cdcGas{cdcBody.NewDaughter<Detector::Definition::CDCGas>(fCheckOverlap)};
 
+    auto& accelerator{acceleratorField.NewDaughter<Detector::Definition::Accelerator>(fCheckOverlap)};
     auto& beamDegrader{acceleratorField.NewDaughter<Detector::Definition::BeamDegrader>(fCheckOverlap)};
     auto& beamMonitor{acceleratorField.NewDaughter<Detector::Definition::BeamMonitor>(fCheckOverlap)};
     auto& target{acceleratorField.NewDaughter<Detector::Definition::Target>(fCheckOverlap)};
@@ -204,6 +206,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         fDefaultSolidRegion = new Region("DefaultSolid", RegionType::DefaultSolid);
         fDefaultSolidRegion->SetProductionCuts(defaultCuts);
 
+        accelerator.RegisterRegion(fDefaultSolidRegion);
         beamDegrader.RegisterRegion(fDefaultSolidRegion);
         beamMonitor.RegisterRegion(fDefaultSolidRegion);
         cdcBody.RegisterRegion(fDefaultSolidRegion);

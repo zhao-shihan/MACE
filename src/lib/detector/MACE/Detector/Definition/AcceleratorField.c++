@@ -17,7 +17,7 @@ auto AcceleratorField::Construct(G4bool checkOverlaps) -> void {
     const auto solid{Make<G4Tubs>(
         name,
         0,
-        accelerator.Radius(),
+        accelerator.FieldRadius(),
         (accelerator.UpstreamLength() + accelerator.AccelerateLength()) / 2,
         0,
         2_pi)};

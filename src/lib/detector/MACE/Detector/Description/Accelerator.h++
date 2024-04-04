@@ -2,7 +2,8 @@
 
 #include "MACE/Detector/Description/DescriptionBase.h++"
 
-#include "CLHEP/Geometry/Transform3D.h"
+#include <string>
+#include <utility>
 
 namespace MACE::Detector::Description {
 
@@ -14,58 +15,58 @@ private:
     ~Accelerator() = default;
 
 public:
-    ///////////////////////////////////////////////////////////
     // Geometry
-    ///////////////////////////////////////////////////////////
 
-    auto Radius() const -> auto { return fRadius; }
     auto UpstreamLength() const -> auto { return fUpstreamLength; }
     auto AccelerateLength() const -> auto { return fAccelerateLength; }
+    auto ElectrodePitch() const -> auto { return fElectrodePitch; }
+    auto ElectrodeInnerRadius() const -> auto { return fElectrodeInnerRadius; }
+    auto ElectrodeOuterRadius() const -> auto { return fElectrodeOuterRadius; }
+    auto ElectrodeThickness() const -> auto { return fElectrodeThickness; }
+    auto FieldRadius() const -> auto { return fFieldRadius; }
 
-    auto Radius(double v) -> void { fRadius = v; }
-    auto UpstreamLength(double v) -> void { fUpstreamLength = v; }
-    auto AccelerateLength(double v) -> void { fAccelerateLength = v, UpdateAcceleratorFieldStrength(); }
+    auto UpstreamLength(double val) -> void { fUpstreamLength = val; }
+    auto AccelerateLength(double val) -> void { fAccelerateLength = val; }
+    auto ElectrodePitch(double val) -> void { fElectrodePitch = val; }
+    auto ElectrodeInnerRadius(double val) -> void { fElectrodeInnerRadius = val; }
+    auto ElectrodeOuterRadius(double val) -> void { fElectrodeOuterRadius = val; }
+    auto ElectrodeThickness(double val) -> void { fElectrodeThickness = val; }
+    auto FieldRadius(double val) -> void { fFieldRadius = val; }
 
-    ///////////////////////////////////////////////////////////
-    // Field
-    ///////////////////////////////////////////////////////////
+    // Material
 
     auto AcceleratePotential() const -> auto { return fAcceleratePotential; }
 
-    auto AcceleratePotential(auto v) -> void { fAcceleratePotential = v, UpdateAcceleratorFieldStrength(); }
+    auto AcceleratePotential(double val) -> void { fAcceleratePotential = val; }
 
-    ///////////////////////////////////////////////////////////
-    // Cached value
-    ///////////////////////////////////////////////////////////
+    // Field
 
-    auto AcceleratorFieldStrength() const -> auto { return fAcceleratorFieldStrength; }
+    auto ElectrodeMaterialName() const -> const auto& { return fElectrodeMaterialName; }
+
+    auto ElectrodeMaterialName(std::string val) -> void { fElectrodeMaterialName = std::move(val); }
 
 private:
     auto ImportValues(const YAML::Node& node) -> void override;
     auto ExportValues(YAML::Node& node) const -> void override;
 
-    auto UpdateAcceleratorFieldStrength() -> void { fAcceleratorFieldStrength = fAcceleratePotential / fAccelerateLength; }
-
 private:
-    ///////////////////////////////////////////////////////////
     // Geometry
-    ///////////////////////////////////////////////////////////
 
-    double fRadius;
     double fUpstreamLength;
     double fAccelerateLength;
+    double fElectrodePitch;
+    double fElectrodeInnerRadius;
+    double fElectrodeOuterRadius;
+    double fElectrodeThickness;
+    double fFieldRadius;
 
-    ///////////////////////////////////////////////////////////
+    // Material
+
+    std::string fElectrodeMaterialName;
+
     // Field
-    ///////////////////////////////////////////////////////////
 
     double fAcceleratePotential;
-
-    ///////////////////////////////////////////////////////////
-    // Cached value
-    ///////////////////////////////////////////////////////////
-
-    double fAcceleratorFieldStrength;
 };
 
 } // namespace MACE::Detector::Description

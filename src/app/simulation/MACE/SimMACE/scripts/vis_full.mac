@@ -60,10 +60,11 @@
 /vis/viewer/zoom 2.5
 
 # Colors
+/vis/geometry/set/colour Accelerator                   0     1     1     1     0.1
 /vis/geometry/set/colour AcceleratorField              0     1     1     1     0.05
 /vis/geometry/set/colour BeamDegrader                  0     1     1     1     0.1
 /vis/geometry/set/colour BeamMonitor                   0     1     1     1     0.1
-/vis/geometry/set/colour CDCBody                       0     1     1     1     0.05
+/vis/geometry/set/colour CDCBody                       0     1     1     1     0.01
 /vis/geometry/set/colour CDCCell                       0     1     1     1     0.005
 /vis/geometry/set/colour CDCFieldWire                  0     1     1     1     0.01
 /vis/geometry/set/colour CDCGas                        0     1     1     1     0.005

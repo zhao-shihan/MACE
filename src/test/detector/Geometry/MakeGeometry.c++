@@ -1,3 +1,4 @@
+#include "MACE/Detector/Definition/Accelerator.h++"
 #include "MACE/Detector/Definition/AcceleratorField.h++"
 #include "MACE/Detector/Definition/BeamDegrader.h++"
 #include "MACE/Detector/Definition/BeamMonitor.h++"
@@ -101,6 +102,7 @@ int main(int argc, char* argv[]) {
 
     auto& cdcGas{cdcBody.NewDaughter<CDCGas>(fCheckOverlap)};
 
+    /* auto& accelerator */ acceleratorField.NewDaughter<Accelerator>(fCheckOverlap);
     /* auto& beamDegrader */ acceleratorField.NewDaughter<BeamDegrader>(fCheckOverlap);
     /* auto& beamMonitor */ acceleratorField.NewDaughter<BeamMonitor>(fCheckOverlap);
     /* auto& target */ acceleratorField.NewDaughter<Target>(fCheckOverlap);

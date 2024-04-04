@@ -1,9 +1,14 @@
 # SimMACE: geometry description
 
-AcceleratorField:
-  Radius: 75
+Accelerator:
   UpstreamLength: 100
   AccelerateLength: 270
+  ElectrodePitch: 10
+  ElectrodeInnerRadius: 50
+  ElectrodeOuterRadius: 100
+  ElectrodeThickness: 0.5
+  FieldRadius: 125
+  ElectrodeMaterialName: G4_Be
   AcceleratePotential: 0.00050000000000000001
 BeamDegrader:
   Enabled: true
@@ -429,7 +434,7 @@ MCPChamber:
   InnerRadius: 100
   Thickness: 0.5
 MMSBeamPipe:
-  InnerRadius: 100
+  InnerRadius: 125
   BerylliumLength: 1000
   BerylliumThickness: 0.5
   AluminiumThickness: 2
@@ -446,7 +451,7 @@ MMSShield:
   InnerRadius: 620
   InnerLength: 2240
   Thickness: 50
-  WindowRadius: 30
+  WindowRadius: 105
   BeamSlantAngle: 0
   MaterialName: G4_Fe
 ShieldingWall:
