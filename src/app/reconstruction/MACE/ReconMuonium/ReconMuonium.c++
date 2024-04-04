@@ -4,7 +4,7 @@
 #include "MACE/DataModel/SimHit/MCPSimHit.h++"
 #include "MACE/DataModel/Track/CDCHelixTrack.h++"
 #include "MACE/DataModel/Track/CDCPhysicsTrack.h++"
-#include "MACE/Detector/Description/AcceleratorField.h++"
+#include "MACE/Detector/Description/Accelerator.h++"
 #include "MACE/Detector/Description/EMCField.h++"
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/Solenoid.h++"

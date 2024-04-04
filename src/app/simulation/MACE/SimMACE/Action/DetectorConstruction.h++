@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Detector/Description/AcceleratorField.h++"
+#include "MACE/Detector/Description/Accelerator.h++"
 #include "MACE/Detector/Description/BeamDegrader.h++"
 #include "MACE/Detector/Description/BeamMonitor.h++"
 #include "MACE/Detector/Description/CDC.h++"
@@ -15,9 +15,9 @@
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/MMSMagnet.h++"
 #include "MACE/Detector/Description/MMSShield.h++"
-#include "MACE/Detector/Description/TTC.h++"
 #include "MACE/Detector/Description/ShieldingWall.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
+#include "MACE/Detector/Description/TTC.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
@@ -70,7 +70,7 @@ public:
     auto EMCSD() const -> auto& { return *fEMCSD; }
 
 public:
-    using DescriptionInUse = std::tuple<Detector::Description::AcceleratorField,
+    using DescriptionInUse = std::tuple<Detector::Description::Accelerator,
                                         Detector::Description::BeamDegrader,
                                         Detector::Description::BeamMonitor,
                                         Detector::Description::CDC,

@@ -23,7 +23,7 @@ public:
 
 private:
     std::unique_ptr<G4UIdirectory> fDirectory;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fAcceleratorPotential;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fAcceleratePotential;
 };
 
 } // namespace MACE::inline Simulation::inline Field

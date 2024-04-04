@@ -1,5 +1,4 @@
 #include "MACE/Compatibility/std23/unreachable.h++"
-#include "MACE/Detector/Description/AcceleratorField.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Env/Print.h++"
 #include "MACE/Utility/LiteralUnit.h++"

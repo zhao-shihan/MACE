@@ -1,4 +1,4 @@
-#include "MACE/Detector/Description/AcceleratorField.h++"
+#include "MACE/Detector/Description/Accelerator.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 namespace MACE::Detector::Description {
@@ -6,33 +6,33 @@ namespace MACE::Detector::Description {
 using namespace LiteralUnit::Length;
 using namespace LiteralUnit::ElectricPotential;
 
-AcceleratorField::AcceleratorField() :
-    DescriptionSingletonBase{"AcceleratorField"},
+Accelerator::Accelerator() :
+    DescriptionSingletonBase{"Accelerator"},
     // Geometry
     fRadius{75_mm},
     fUpstreamLength{100_mm},
     fAccelerateLength{270_mm},
     // Field
-    fAcceleratorPotential{500_V},
+    fAcceleratePotential{500_V},
     // Cached value
-    fAcceleratorFieldStrength{fAcceleratorPotential / fAccelerateLength} {}
+    fAcceleratorFieldStrength{fAcceleratePotential / fAccelerateLength} {}
 
-auto AcceleratorField::ImportValues(const YAML::Node& node) -> void {
+auto Accelerator::ImportValues(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fRadius, "Radius");
     ImportValue(node, fUpstreamLength, "UpstreamLength");
     ImportValue(node, fAccelerateLength, "AccelerateLength");
     // Field
-    ImportValue(node, fAcceleratorPotential, "AcceleratorPotential");
+    ImportValue(node, fAcceleratePotential, "AcceleratePotential");
 }
 
-auto AcceleratorField::ExportValues(YAML::Node& node) const -> void {
+auto Accelerator::ExportValues(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fRadius, "Radius");
     ExportValue(node, fUpstreamLength, "UpstreamLength");
     ExportValue(node, fAccelerateLength, "AccelerateLength");
     // Field
-    ExportValue(node, fAcceleratorPotential, "AcceleratorPotential");
+    ExportValue(node, fAcceleratePotential, "AcceleratePotential");
 }
 
 } // namespace MACE::Detector::Description

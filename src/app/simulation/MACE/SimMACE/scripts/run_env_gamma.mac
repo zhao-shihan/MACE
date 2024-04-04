@@ -25,7 +25,7 @@
 /GPSX/NVertex             1000
 /GPSX/PulseWidth          0 ns
 
-/MACE/Field/AcceleratorPotential          500 volt
+/MACE/Field/AcceleratePotential           500 volt
 /MACE/Field/MMSMagneticField              0.1 tesla
 /MACE/Field/SolenoidMagneticField         0.1 tesla
 /MACE/Field/EMCMagneticField              0.1 tesla

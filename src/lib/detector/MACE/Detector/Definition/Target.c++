@@ -1,5 +1,5 @@
 #include "MACE/Detector/Definition/Target.h++"
-#include "MACE/Detector/Description/AcceleratorField.h++"
+#include "MACE/Detector/Description/Accelerator.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
@@ -12,9 +12,9 @@ using namespace MACE::LiteralUnit::Density;
 
 auto Target::Construct(G4bool checkOverlaps) -> void {
     const auto& target{Description::Target::Instance()};
-    const auto& acceleratorField{Description::AcceleratorField::Instance()};
+    const auto& accelerator{Description::Accelerator::Instance()};
 
-    switch (const auto z0{(acceleratorField.UpstreamLength() - acceleratorField.AccelerateLength()) / 2};
+    switch (const auto z0{(accelerator.UpstreamLength() - accelerator.AccelerateLength()) / 2};
             target.ShapeType()) {
     case Description::Target::TargetShapeType::Cuboid: {
         const auto& cuboid{target.Cuboid()};

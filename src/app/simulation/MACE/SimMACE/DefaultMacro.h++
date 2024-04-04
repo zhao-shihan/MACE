@@ -28,7 +28,7 @@ constexpr auto defaultMacro = {
     "",
     "/MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5",
     "",
-    "/MACE/Field/AcceleratorPotential          500 volt",
+    "/MACE/Field/AcceleratePotential           500 volt",
     "/MACE/Field/MMSMagneticField              0.1 tesla",
     "/MACE/Field/SolenoidMagneticField         0.1 tesla",
     "/MACE/Field/EMCMagneticField              0.1 tesla",

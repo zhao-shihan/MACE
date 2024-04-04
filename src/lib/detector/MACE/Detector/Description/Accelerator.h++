@@ -6,12 +6,12 @@
 
 namespace MACE::Detector::Description {
 
-class AcceleratorField final : public DescriptionSingletonBase<AcceleratorField> {
+class Accelerator final : public DescriptionSingletonBase<Accelerator> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
-    AcceleratorField();
-    ~AcceleratorField() = default;
+    Accelerator();
+    ~Accelerator() = default;
 
 public:
     ///////////////////////////////////////////////////////////
@@ -30,9 +30,9 @@ public:
     // Field
     ///////////////////////////////////////////////////////////
 
-    auto AcceleratorPotential() const -> auto { return fAcceleratorPotential; }
+    auto AcceleratePotential() const -> auto { return fAcceleratePotential; }
 
-    auto AcceleratorPotential(auto v) -> void { fAcceleratorPotential = v, UpdateAcceleratorFieldStrength(); }
+    auto AcceleratePotential(auto v) -> void { fAcceleratePotential = v, UpdateAcceleratorFieldStrength(); }
 
     ///////////////////////////////////////////////////////////
     // Cached value
@@ -44,7 +44,7 @@ private:
     auto ImportValues(const YAML::Node& node) -> void override;
     auto ExportValues(YAML::Node& node) const -> void override;
 
-    auto UpdateAcceleratorFieldStrength() -> void { fAcceleratorFieldStrength = fAcceleratorPotential / fAccelerateLength; }
+    auto UpdateAcceleratorFieldStrength() -> void { fAcceleratorFieldStrength = fAcceleratePotential / fAccelerateLength; }
 
 private:
     ///////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ private:
     // Field
     ///////////////////////////////////////////////////////////
 
-    double fAcceleratorPotential;
+    double fAcceleratePotential;
 
     ///////////////////////////////////////////////////////////
     // Cached value

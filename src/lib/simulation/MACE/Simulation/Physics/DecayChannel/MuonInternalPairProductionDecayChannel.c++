@@ -1,5 +1,5 @@
 #include "MACE/Compatibility/std23/constexpr_cmath.h++"
-#include "MACE/Detector/Description/AcceleratorField.h++"
+#include "MACE/Detector/Description/Accelerator.h++"
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/Filter.h++"
 #include "MACE/Detector/Description/MMSField.h++"

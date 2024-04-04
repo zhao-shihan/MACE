@@ -1,5 +1,5 @@
 #include "MACE/Detector/Definition/BeamDegrader.h++"
-#include "MACE/Detector/Description/AcceleratorField.h++"
+#include "MACE/Detector/Description/Accelerator.h++"
 #include "MACE/Detector/Description/BeamDegrader.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Utility/LiteralUnit.h++"
@@ -18,11 +18,11 @@ auto BeamDegrader::Enabled() const -> bool {
 
 auto BeamDegrader::Construct(G4bool checkOverlaps) -> void {
     const auto& degrader{Description::BeamDegrader::Instance()};
-    const auto& acceleratorField{Description::AcceleratorField::Instance()};
+    const auto& accelerator{Description::Accelerator::Instance()};
     const auto& target{Description::Target::Instance()};
 
     G4Transform3D transform;
-    switch (const auto z0{(acceleratorField.UpstreamLength() - acceleratorField.AccelerateLength()) / 2};
+    switch (const auto z0{(accelerator.UpstreamLength() - accelerator.AccelerateLength()) / 2};
             target.ShapeType()) {
     case Description::Target::TargetShapeType::Cuboid: // clang-format off
         transform = {{}, {0, 0, z0 - target.Cuboid().Thickness() - degrader.DistanceToTarget() - degrader.Thickness() / 2}};     // clang-format on

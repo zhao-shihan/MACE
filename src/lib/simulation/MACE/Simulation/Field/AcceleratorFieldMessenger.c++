@@ -1,4 +1,4 @@
-#include "MACE/Detector/Description/AcceleratorField.h++"
+#include "MACE/Detector/Description/Accelerator.h++"
 #include "MACE/Simulation/Field/AcceleratorField.h++"
 #include "MACE/Simulation/Field/AcceleratorFieldMessenger.h++"
 
@@ -10,23 +10,23 @@ namespace MACE::inline Simulation::inline Field {
 AcceleratorFieldMessenger::AcceleratorFieldMessenger() :
     SingletonMessenger{},
     fDirectory{},
-    fAcceleratorPotential{} {
+    fAcceleratePotential{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Field/");
     fDirectory->SetGuidance("Detector field controller.");
 
-    fAcceleratorPotential = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Field/AcceleratorPotential", this);
-    fAcceleratorPotential->SetGuidance("Set accelerator electric potential.");
-    fAcceleratorPotential->SetParameterName("V", false);
-    fAcceleratorPotential->SetUnitCategory("Electric potential");
-    fAcceleratorPotential->AvailableForStates(G4State_Idle);
+    fAcceleratePotential = std::make_unique<G4UIcmdWithADoubleAndUnit>("/MACE/Field/AcceleratePotential", this);
+    fAcceleratePotential->SetGuidance("Set accelerator electric potential.");
+    fAcceleratePotential->SetParameterName("V", false);
+    fAcceleratePotential->SetUnitCategory("Electric potential");
+    fAcceleratePotential->AvailableForStates(G4State_Idle);
 }
 
 AcceleratorFieldMessenger::~AcceleratorFieldMessenger() = default;
 
 auto AcceleratorFieldMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
-    if (command == fAcceleratorPotential.get()) {
-        Detector::Description::AcceleratorField::Instance().AcceleratorPotential(fAcceleratorPotential->GetNewDoubleValue(value));
+    if (command == fAcceleratePotential.get()) {
+        Detector::Description::Accelerator::Instance().AcceleratePotential(fAcceleratePotential->GetNewDoubleValue(value));
     }
 }
 
