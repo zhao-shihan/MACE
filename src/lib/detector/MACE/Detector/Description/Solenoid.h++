@@ -10,7 +10,7 @@
 
 namespace MACE::Detector::Description {
 
-class Solenoid final : public DescriptionSingletonBase<Solenoid> {
+class Solenoid final : public DescriptionBase<Solenoid> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -63,8 +63,8 @@ public:
     void MagneticFluxDensity(auto v) { fMagneticFluxDensity = v; }
 
 private:
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     ///////////////////////////////////////////////////////////

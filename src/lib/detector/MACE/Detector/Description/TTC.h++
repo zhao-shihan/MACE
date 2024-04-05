@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Description {
 
-class TTC final : public DescriptionSingletonBase<TTC> {
+class TTC final : public DescriptionBase<TTC> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -55,8 +55,8 @@ public:
     auto ResolutionScale(double val) -> void { fResolutionScale = val; }
 
 private:
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     // Geometry

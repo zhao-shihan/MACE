@@ -6,7 +6,7 @@ namespace MACE::Detector::Description {
 using namespace LiteralUnit::Length;
 
 Filter::Filter() :
-    DescriptionSingletonBase{"Filter"},
+    DescriptionBase{"Filter"},
     // Geometry
     fEnabled{true},
     fLength{500_mm},
@@ -16,7 +16,7 @@ Filter::Filter() :
     // Material
     fMaterialName{"G4_Cu"} {}
 
-auto Filter::ImportValues(const YAML::Node& node) -> void {
+auto Filter::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fEnabled, "Enabled");
     ImportValue(node, fLength, "Length");
@@ -27,7 +27,7 @@ auto Filter::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fMaterialName, "MaterialName");
 }
 
-auto Filter::ExportValues(YAML::Node& node) const -> void {
+auto Filter::ExportAllValue(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fEnabled, "Enabled");
     ExportValue(node, fLength, "Length");

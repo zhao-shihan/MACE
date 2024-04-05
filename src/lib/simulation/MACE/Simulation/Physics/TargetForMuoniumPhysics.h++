@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "MACE/Detector/Description/Description.h++"
 
 #include "G4ThreeVector.hh"
 
@@ -16,4 +16,4 @@ concept TargetForMuoniumPhysics =
         { target.Contain(x) } -> std::convertible_to<bool>;
     };
 
-} // namespace MACE::inline Simulation::Physics
+} // namespace MACE::inline Simulation::inline Physics

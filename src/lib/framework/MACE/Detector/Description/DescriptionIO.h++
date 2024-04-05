@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Detector/Description/Description.h++"
 #include "MACE/Detector/Description/DescriptionBase.h++"
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Env/Print.h++"
@@ -51,7 +52,7 @@ public:
     static auto Import(const std::ranges::range auto& yamlText) -> void
         requires std::convertible_to<typename std::decay_t<decltype(yamlText)>::value_type, std::string>;
 
-    static auto AddInstance(gsl::not_null<DescriptionBase*> instance) -> void { fgInstanceSet.emplace(instance); }
+    static auto AddInstance(gsl::not_null<DescriptionBase<>*> instance) -> void { fgInstanceSet.emplace(instance); }
     static auto ImportInstantiated(const std::filesystem::path& yamlFile) -> void { ImportImpl(yamlFile, fgInstanceSet); }
     static auto ExportInstantiated(const std::filesystem::path& yamlFile, const std::string& fileComment = {}) -> void { ExportImpl(yamlFile, fileComment, fgInstanceSet); }
 
@@ -61,7 +62,7 @@ private:
     static auto IxportImpl(const std::filesystem::path& yamlFile, const std::string& fileComment, const std::ranges::input_range auto& descriptions) -> void;
 
 private:
-    static std::set<gsl::not_null<DescriptionBase*>> fgInstanceSet;
+    static std::set<gsl::not_null<DescriptionBase<>*>> fgInstanceSet;
 };
 
 } // namespace MACE::Detector::Description

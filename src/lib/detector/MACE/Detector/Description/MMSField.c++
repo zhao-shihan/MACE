@@ -7,14 +7,14 @@ using namespace LiteralUnit::Length;
 using namespace LiteralUnit::MagneticFluxDensity;
 
 MMSField::MMSField() :
-    DescriptionSingletonBase{"MMSField"},
+    DescriptionBase{"MMSField"},
     // Geometry
     fRadius{61_cm},
     fLength{220_cm},
     // Field
     fMagneticFluxDensity{100_mT} {}
 
-void MMSField::ImportValues(const YAML::Node& node) {
+void MMSField::ImportAllValue(const YAML::Node& node) {
     // Geometry
     ImportValue(node, fRadius, "Radius");
     ImportValue(node, fLength, "Length");
@@ -22,7 +22,7 @@ void MMSField::ImportValues(const YAML::Node& node) {
     ImportValue(node, fMagneticFluxDensity, "MagneticFluxDensity");
 }
 
-void MMSField::ExportValues(YAML::Node& node) const {
+void MMSField::ExportAllValue(YAML::Node& node) const {
     // Geometry
     ExportValue(node, fRadius, "Radius");
     ExportValue(node, fLength, "Length");

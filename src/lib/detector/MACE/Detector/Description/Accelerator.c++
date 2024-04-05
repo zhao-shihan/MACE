@@ -7,7 +7,7 @@ using namespace LiteralUnit::Length;
 using namespace LiteralUnit::ElectricPotential;
 
 Accelerator::Accelerator() :
-    DescriptionSingletonBase{"Accelerator"},
+    DescriptionBase{"Accelerator"},
     // Geometry
     fUpstreamLength{50_mm},
     fAccelerateLength{270_mm},
@@ -21,7 +21,7 @@ Accelerator::Accelerator() :
     // Field
     fAcceleratePotential{500_V} {}
 
-auto Accelerator::ImportValues(const YAML::Node& node) -> void {
+auto Accelerator::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fUpstreamLength, "UpstreamLength");
     ImportValue(node, fAccelerateLength, "AccelerateLength");
@@ -36,7 +36,7 @@ auto Accelerator::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fAcceleratePotential, "AcceleratePotential");
 }
 
-auto Accelerator::ExportValues(YAML::Node& node) const -> void {
+auto Accelerator::ExportAllValue(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fUpstreamLength, "UpstreamLength");
     ExportValue(node, fAccelerateLength, "AccelerateLength");

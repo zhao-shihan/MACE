@@ -6,18 +6,18 @@ namespace MACE::Detector::Description {
 using namespace LiteralUnit::Length;
 
 World::World() :
-    DescriptionSingletonBase{"World"},
+    DescriptionBase{"World"},
     fHalfXExtent{3_m},
     fHalfYExtent{1_m},
     fHalfZExtent{4_m} {}
 
-auto World::ImportValues(const YAML::Node& node) -> void {
+auto World::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fHalfXExtent, "HalfXExtent");
     ImportValue(node, fHalfYExtent, "HalfYExtent");
     ImportValue(node, fHalfZExtent, "HalfZExtent");
 }
 
-auto World::ExportValues(YAML::Node& node) const -> void {
+auto World::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fHalfXExtent, "HalfXExtent");
     ExportValue(node, fHalfYExtent, "HalfYExtent");
     ExportValue(node, fHalfZExtent, "HalfZExtent");

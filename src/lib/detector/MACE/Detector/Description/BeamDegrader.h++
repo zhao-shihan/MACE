@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Description {
 
-class BeamDegrader final : public DescriptionSingletonBase<BeamDegrader> {
+class BeamDegrader final : public DescriptionBase<BeamDegrader> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -23,8 +23,8 @@ public:
     auto DistanceToTarget(double val) -> void { fDistanceToTarget = val; }
 
 private:
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     bool fEnabled;

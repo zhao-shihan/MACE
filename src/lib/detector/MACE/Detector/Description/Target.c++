@@ -18,7 +18,7 @@ using namespace LiteralUnit::Density;
 using namespace LiteralUnit::Temperature;
 
 Target::Target() :
-    DescriptionSingletonBase{"Target"},
+    DescriptionBase{"Target"},
     fShapeType{TargetShapeType::MultiLayer},
     fCuboid{},
     fMultiLayer{},
@@ -47,7 +47,7 @@ auto Target::Material() const -> G4Material* {
     return silicaAerogel;
 }
 
-auto Target::ImportValues(const YAML::Node& node) -> void {
+auto Target::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue<std::string>(
         node, [this](auto&& shape) {
             if (shape == "Cuboid") {
@@ -55,7 +55,7 @@ auto Target::ImportValues(const YAML::Node& node) -> void {
             } else if (shape == "MultiLayer") {
                 fShapeType = TargetShapeType::MultiLayer;
             } else {
-                Env::PrintLnError("MACE::Detector::Description::Target::ImportValues: Unknown target shape '{}', skipping", shape);
+                Env::PrintLnError("MACE::Detector::Description::Target::ImportAllValue: Unknown target shape '{}', skipping", shape);
             }
         },
         "ShapeType");
@@ -73,7 +73,7 @@ auto Target::ImportValues(const YAML::Node& node) -> void {
                 } else if (detail == "Perforated") {
                     fCuboid.DetailType(CuboidTarget::ShapeDetailType::Perforated);
                 } else {
-                    Env::PrintLnError("MACE::Detector::Description::Target::ImportValues: Unknown cuboid target detail '{}', skipping", detail);
+                    Env::PrintLnError("MACE::Detector::Description::Target::ImportAllValue: Unknown cuboid target detail '{}', skipping", detail);
                 }
             },
             "Cuboid", "DetailType");
@@ -115,7 +115,7 @@ auto Target::ImportValues(const YAML::Node& node) -> void {
                 } else if (detail == "Perforated") {
                     fMultiLayer.DetailType(MultiLayerTarget::ShapeDetailType::Perforated);
                 } else {
-                    Env::PrintError("MACE::Detector::Description::Target::ImportValues: Unknown MultiLayer target detail '{}', skipping", detail);
+                    Env::PrintError("MACE::Detector::Description::Target::ImportAllValue: Unknown MultiLayer target detail '{}', skipping", detail);
                 }
             },
             "MultiLayer", "DetailType");
@@ -140,7 +140,7 @@ auto Target::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fMeanFreePath, "MeanFreePath");
 }
 
-auto Target::ExportValues(YAML::Node& node) const -> void {
+auto Target::ExportAllValue(YAML::Node& node) const -> void {
     using namespace std::string_literals;
     ExportValue(
         node, [this] {

@@ -17,7 +17,7 @@ class G4Material;
 
 namespace MACE::Detector::Description {
 
-class CDC final : public DescriptionSingletonBase<CDC> {
+class CDC final : public DescriptionBase<CDC> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -171,8 +171,8 @@ private:
     auto ComputeCellMap() const -> std::vector<CellInformation>;
     auto ComputeCellMapFromSenseLayerIDAndLocalCellID() const -> CellMapFromSenseLayerIDAndLocalCellIDType;
 
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     ///////////////////////////////////////////////////////////

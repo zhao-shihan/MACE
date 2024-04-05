@@ -1,8 +1,10 @@
 #pragma once
 
+#include "MACE/Detector/Description/Description.h++"
 #include "MACE/Env/BasicEnv.h++"
 #include "MACE/Env/Memory/Singleton.h++"
 #include "MACE/Env/Memory/Singletonified.h++"
+#include "MACE/Env/Print.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
 #include "yaml-cpp/yaml.h"
@@ -14,12 +16,18 @@
 #include <iostream>
 #include <optional>
 #include <string>
+#include <utility>
 
 namespace MACE::Detector::Description {
 
-class DescriptionBase : public NonMoveableBase {
+template<typename... Ts>
+    requires(sizeof...(Ts) <= 1)
+class DescriptionBase;
+
+template<>
+class DescriptionBase<> : public NonMoveableBase {
 protected:
-    DescriptionBase(const std::string& name);
+    DescriptionBase(std::string name);
     ~DescriptionBase() = default;
 
 public:
@@ -39,8 +47,8 @@ protected:
     auto ExportValue(YAML::Node& node, const AValue& value, AStrings&&... nodeNames) const -> void;
 
 private:
-    virtual void ImportValues(const YAML::Node& node) = 0;
-    virtual void ExportValues(YAML::Node& node) const = 0;
+    virtual void ImportAllValue(const YAML::Node& node) = 0;
+    virtual void ExportAllValue(YAML::Node& node) const = 0;
 
     template<std::convertible_to<std::string>... AStrings>
     auto UnpackToLeafNodeForImporting(const YAML::Node& node, AStrings&&... nodeNames) -> std::optional<const YAML::Node>;
@@ -54,19 +62,12 @@ private:
 };
 
 template<typename ADerived>
-class DescriptionSingletonBase : public Env::Memory::Singleton<ADerived>,
-                                 public DescriptionBase {
+class DescriptionBase<ADerived> : public Env::Memory::Singleton<ADerived>,
+                                  public DescriptionBase<> {
 protected:
-    using DescriptionBase::DescriptionBase;
+    DescriptionBase(std::string name);
+    ~DescriptionBase() = default;
 };
-
-template<typename T>
-concept Description =
-    requires {
-        requires std::derived_from<T, DescriptionBase>;
-        requires std::derived_from<T, DescriptionSingletonBase<T>>;
-        requires Env::Memory::Singletonified<T>;
-    };
 
 } // namespace MACE::Detector::Description
 

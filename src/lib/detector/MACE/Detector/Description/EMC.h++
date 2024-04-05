@@ -10,7 +10,7 @@
 
 namespace MACE::Detector::Description {
 
-class EMC final : public DescriptionSingletonBase<EMC> {
+class EMC final : public DescriptionBase<EMC> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -93,8 +93,8 @@ private:
     inline auto SetGeometryOutdated() const -> void;
     auto ComputeMesh() const -> MeshInformation;
 
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     int fNSubdivision;

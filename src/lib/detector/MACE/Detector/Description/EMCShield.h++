@@ -8,7 +8,7 @@
 
 namespace MACE::Detector::Description {
 
-class EMCShield final : public DescriptionSingletonBase<EMCShield> {
+class EMCShield final : public DescriptionBase<EMCShield> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -35,8 +35,8 @@ public:
     auto MaterialName(std::string val) -> void { fMaterialName = std::move(val); }
 
 private:
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     // Geometry

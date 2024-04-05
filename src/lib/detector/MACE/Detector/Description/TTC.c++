@@ -10,7 +10,7 @@ using namespace LiteralUnit::Angle;
 using namespace LiteralUnit::Density;
 
 TTC::TTC() :
-    DescriptionSingletonBase{"TTC"},
+    DescriptionBase{"TTC"},
     // Geometry
     fLength{15_cm},
     fWidth{10_cm},
@@ -51,7 +51,7 @@ TTC::TTC() :
     fScintillationTimeConstant1{2.4_ns},
     fResolutionScale{1} {}
 
-auto TTC::ImportValues(const YAML::Node& node) -> void {
+auto TTC::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fLength, "Length");
     ImportValue(node, fWidth, "Width");
@@ -73,7 +73,7 @@ auto TTC::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fResolutionScale, "ResolutionScale");
 }
 
-auto TTC::ExportValues(YAML::Node& node) const -> void {
+auto TTC::ExportAllValue(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fLength, "Length");
     ExportValue(node, fWidth, "Width");

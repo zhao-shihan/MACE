@@ -7,7 +7,7 @@ using namespace LiteralUnit::Length;
 using namespace LiteralUnit::Angle;
 
 MMSShield::MMSShield() :
-    DescriptionSingletonBase{"MMSShield"},
+    DescriptionBase{"MMSShield"},
     // Geometry
     fInnerRadius{62_cm},
     fInnerLength{224_cm},
@@ -17,7 +17,7 @@ MMSShield::MMSShield() :
     // Material
     fMaterialName{"G4_Fe"} {}
 
-auto MMSShield::ImportValues(const YAML::Node& node) -> void {
+auto MMSShield::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fInnerLength, "InnerLength");
@@ -28,7 +28,7 @@ auto MMSShield::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fMaterialName, "MaterialName");
 }
 
-auto MMSShield::ExportValues(YAML::Node& node) const -> void {
+auto MMSShield::ExportAllValue(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fInnerLength, "InnerLength");

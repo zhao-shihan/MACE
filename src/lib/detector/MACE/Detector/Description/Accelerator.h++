@@ -8,7 +8,7 @@
 
 namespace MACE::Detector::Description {
 
-class Accelerator final : public DescriptionSingletonBase<Accelerator> {
+class Accelerator final : public DescriptionBase<Accelerator> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -49,8 +49,8 @@ public:
     auto ElectrodeMaterialName(std::string val) -> void { fElectrodeMaterialName = std::move(val); }
 
 private:
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     // Geometry

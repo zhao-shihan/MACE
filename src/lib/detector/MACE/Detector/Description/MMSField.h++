@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Description {
 
-class MMSField final : public DescriptionSingletonBase<MMSField> {
+class MMSField final : public DescriptionBase<MMSField> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -31,8 +31,8 @@ public:
     void MagneticFluxDensity(auto v) { fMagneticFluxDensity = v; }
 
 private:
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     ///////////////////////////////////////////////////////////

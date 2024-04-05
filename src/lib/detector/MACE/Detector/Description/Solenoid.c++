@@ -9,7 +9,7 @@ using namespace LiteralUnit::MagneticFluxDensity;
 using namespace MathConstant;
 
 Solenoid::Solenoid() :
-    DescriptionSingletonBase{"Solenoid"},
+    DescriptionBase{"Solenoid"},
     // Geometry
     fS1Length{15_cm},
     fB1Radius{25_cm},
@@ -24,7 +24,7 @@ Solenoid::Solenoid() :
     // Field
     fMagneticFluxDensity{100_mT} {}
 
-auto Solenoid::ImportValues(const YAML::Node& node) -> void {
+auto Solenoid::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fS1Length, "S1Length");
     ImportValue(node, fB1Radius, "B1Radius");
@@ -40,7 +40,7 @@ auto Solenoid::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fMagneticFluxDensity, "MagneticFluxDensity");
 }
 
-auto Solenoid::ExportValues(YAML::Node& node) const -> void {
+auto Solenoid::ExportAllValue(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fS1Length, "S1Length");
     ExportValue(node, fB1Radius, "B1Radius");

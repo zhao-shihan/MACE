@@ -149,7 +149,7 @@ using namespace LiteralUnit::Energy;
 using namespace PhysicalConstant;
 
 EMC::EMC() :
-    DescriptionSingletonBase{__func__},
+    DescriptionBase{__func__},
     fNSubdivision{2},
     fInnerRadius{15_cm},
     fCrystalHypotenuse{15_cm},
@@ -262,7 +262,7 @@ auto EMC::ComputeTransformToOuterSurfaceWithOffset(int cellID, double offsetInNo
     return G4Translate3D{crystalOuterCentroid + offsetInNormalDirection * normal} * rotation;
 }
 
-auto EMC::ImportValues(const YAML::Node& node) -> void {
+auto EMC::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fNSubdivision, "NSubdivision");
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
@@ -286,7 +286,7 @@ auto EMC::ImportValues(const YAML::Node& node) -> void {
     SetGeometryOutdated();
 }
 
-auto EMC::ExportValues(YAML::Node& node) const -> void {
+auto EMC::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fNSubdivision, "NSubdivision");
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");

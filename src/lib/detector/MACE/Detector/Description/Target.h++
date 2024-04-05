@@ -19,7 +19,7 @@ class G4Material;
 
 namespace MACE::Detector::Description {
 
-class Target final : public DescriptionSingletonBase<Target> {
+class Target final : public DescriptionBase<Target> {
     friend Env::Memory::SingletonInstantiator;
 
 public:
@@ -211,8 +211,8 @@ public:
     auto DetectableAt(const Concept::InputVector3D auto& x) const -> bool;
 
 private:
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     TargetShapeType fShapeType;

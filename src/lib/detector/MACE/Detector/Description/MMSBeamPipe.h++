@@ -7,7 +7,7 @@
 
 namespace MACE::Detector::Description {
 
-class MMSBeamPipe final : public DescriptionSingletonBase<MMSBeamPipe> {
+class MMSBeamPipe final : public DescriptionBase<MMSBeamPipe> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -26,8 +26,8 @@ public:
     auto AluminiumThickness(double val) -> void { fAluminiumThickness = val; }
 
 private:
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     double fInnerRadius;

@@ -7,14 +7,14 @@ using namespace LiteralUnit::Length;
 using namespace LiteralUnit::MagneticFluxDensity;
 
 EMCField::EMCField() :
-    DescriptionSingletonBase{"EMCField"},
+    DescriptionBase{"EMCField"},
     // Geometry
     fRadius{56_cm},
     fLength{100_cm},
     // Field
     fMagneticFluxDensity{100_mT} {}
 
-auto EMCField::ImportValues(const YAML::Node& node) -> void {
+auto EMCField::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fRadius, "Radius");
     ImportValue(node, fLength, "Length");
@@ -22,7 +22,7 @@ auto EMCField::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fMagneticFluxDensity, "MagneticFluxDensity");
 }
 
-auto EMCField::ExportValues(YAML::Node& node) const -> void {
+auto EMCField::ExportAllValue(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fRadius, "Radius");
     ExportValue(node, fLength, "Length");
