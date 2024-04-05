@@ -9,8 +9,8 @@ using namespace LiteralUnit::Angle;
 MMSShield::MMSShield() :
     DescriptionBase{"MMSShield"},
     // Geometry
-    fInnerRadius{62_cm},
-    fInnerLength{224_cm},
+    fInnerRadius{65_cm},
+    fInnerLength{230_cm},
     fThickness{5_cm},
     fWindowRadius{105_mm},
     fBeamSlantAngle{0_deg},
