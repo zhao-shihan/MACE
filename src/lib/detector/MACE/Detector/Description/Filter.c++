@@ -14,7 +14,7 @@ Filter::Filter() :
     fThickness{0.2_mm},
     fPitch{1.15_mm},
     // Material
-    fMaterialName{"G4_Cu"} {}
+    fMaterialName{"G4_BRONZE"} {}
 
 auto Filter::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
