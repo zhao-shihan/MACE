@@ -1,8 +1,8 @@
 #pragma once
 
 #include "MACE/Detector/Description/DescriptionBase.h++"
+#include "MACE/Math/LLPiecewise.h++"
 
-#include <algorithm>
 #include <string>
 #include <utility>
 
@@ -22,14 +22,14 @@ public:
     auto Length() const -> auto { return fLength; }
     auto Radius() const -> auto { return fRadius; }
     auto Thickness() const -> auto { return fThickness; }
-    auto Count() const -> auto { return fCount; }
-    auto Interval() const -> auto { return 2 * fRadius / fCount; }
+    auto Pitch() const -> auto { return fPitch; }
+    auto Count() const -> auto { return Math::LLTrunc((2 * fRadius - fThickness) / fPitch) + 1; }
 
     auto Enabled(bool val) -> void { fEnabled = val; }
     auto Length(auto val) -> void { fLength = val; }
     auto Radius(auto val) -> void { fRadius = val; }
     auto Thickness(auto val) -> void { fThickness = val; }
-    auto Count(auto val) -> void { fCount = std::max(2, val); }
+    auto Pitch(auto val) -> void { fPitch = val; }
 
     // Material
 
@@ -48,7 +48,7 @@ private:
     double fLength;
     double fRadius;
     double fThickness;
-    int fCount;
+    double fPitch;
 
     // Material
 

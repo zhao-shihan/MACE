@@ -9,10 +9,10 @@ Filter::Filter() :
     DescriptionSingletonBase{"Filter"},
     // Geometry
     fEnabled{true},
-    fLength{50_cm},
+    fLength{500_mm},
     fRadius{49_mm},
-    fThickness{200_um},
-    fCount{85},
+    fThickness{0.2_mm},
+    fPitch{1.15_mm},
     // Material
     fMaterialName{"G4_Cu"} {}
 
@@ -22,7 +22,7 @@ auto Filter::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fLength, "Length");
     ImportValue(node, fRadius, "Radius");
     ImportValue(node, fThickness, "Thickness");
-    ImportValue(node, fCount, "Count");
+    ImportValue(node, fPitch, "Pitch");
     // Material
     ImportValue(node, fMaterialName, "MaterialName");
 }
@@ -33,7 +33,7 @@ auto Filter::ExportValues(YAML::Node& node) const -> void {
     ExportValue(node, fLength, "Length");
     ExportValue(node, fRadius, "Radius");
     ExportValue(node, fThickness, "Thickness");
-    ExportValue(node, fCount, "Count");
+    ExportValue(node, fPitch, "Pitch");
     // Material
     ExportValue(node, fMaterialName, "MaterialName");
 }
