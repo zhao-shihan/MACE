@@ -35,6 +35,11 @@
 #include "MACE/Detector/Definition/SolenoidS1.h++"
 #include "MACE/Detector/Definition/SolenoidS2.h++"
 #include "MACE/Detector/Definition/SolenoidS3.h++"
+#include "MACE/Detector/Definition/SolenoidShieldB1.h++"
+#include "MACE/Detector/Definition/SolenoidShieldB2.h++"
+#include "MACE/Detector/Definition/SolenoidShieldS1.h++"
+#include "MACE/Detector/Definition/SolenoidShieldS2.h++"
+#include "MACE/Detector/Definition/SolenoidShieldS3.h++"
 #include "MACE/Detector/Definition/TTC.h++"
 #include "MACE/Detector/Definition/Target.h++"
 #include "MACE/Detector/Definition/World.h++"
@@ -88,16 +93,20 @@ int main(int argc, char* argv[]) {
 
     /* auto& solenoidB1 */ solenoidFieldB1.NewDaughter<SolenoidB1>(fCheckOverlap);
     /* auto& solenoidBeamPipeB1 */ solenoidFieldB1.NewDaughter<SolenoidBeamPipeB1>(fCheckOverlap);
+    /* auto& solenoidShieldB1 */ solenoidFieldB1.NewDaughter<SolenoidShieldB1>(fCheckOverlap);
 
     /* auto& solenoidBeamPipeS1 */ solenoidFieldS1.NewDaughter<SolenoidBeamPipeS1>(fCheckOverlap);
     /* auto& solenoidS1 */ solenoidFieldS1.NewDaughter<SolenoidS1>(fCheckOverlap);
+    /* auto& solenoidShieldS1 */ solenoidFieldS1.NewDaughter<SolenoidShieldS1>(fCheckOverlap);
 
     /* auto& solenoidB2 */ solenoidFieldB2.NewDaughter<SolenoidB2>(fCheckOverlap);
     /* auto& solenoidBeamPipeB2 */ solenoidFieldB2.NewDaughter<SolenoidBeamPipeB2>(fCheckOverlap);
+    /* auto& solenoidShieldB2 */ solenoidFieldB2.NewDaughter<SolenoidShieldB2>(fCheckOverlap);
 
     /* auto& filter */ solenoidFieldS2.NewDaughter<Filter>(fCheckOverlap);
     /* auto& solenoidBeamPipeS2 */ solenoidFieldS2.NewDaughter<SolenoidBeamPipeS2>(fCheckOverlap);
     /* auto& solenoidS2 */ solenoidFieldS2.NewDaughter<SolenoidS2>(fCheckOverlap);
+    /* auto& solenoidShieldS2 */ solenoidFieldS2.NewDaughter<SolenoidShieldS2>(fCheckOverlap);
 
     auto& acceleratorField{mmsField.NewDaughter<AcceleratorField>(fCheckOverlap)};
     auto& cdcBody{mmsField.NewDaughter<CDCBody>(fCheckOverlap)};
@@ -107,6 +116,7 @@ int main(int argc, char* argv[]) {
 
     /* auto& solenoidBeamPipeS3 */ solenoidFieldS3.NewDaughter<SolenoidBeamPipeS3>(fCheckOverlap);
     /* auto& solenoidS3 */ solenoidFieldS3.NewDaughter<SolenoidS3>(fCheckOverlap);
+    /* auto& solenoidShieldS3 */ solenoidFieldS3.NewDaughter<SolenoidShieldS3>(fCheckOverlap);
 
     // 3
 
