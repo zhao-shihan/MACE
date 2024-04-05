@@ -12,7 +12,7 @@ MMSShield::MMSShield() :
     fInnerRadius{65_cm},
     fInnerLength{230_cm},
     fThickness{5_cm},
-    fWindowRadius{105_mm},
+    fWindowRadius{132_mm},
     fBeamSlantAngle{0_deg},
     // Material
     fMaterialName{"G4_Fe"} {}

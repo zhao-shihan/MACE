@@ -17,8 +17,8 @@ Solenoid::Solenoid() :
     fB2Radius{250_mm},
     fS3Length{150_mm},
     fInnerRadius{60_mm},
-    fOuterRadius{110_mm},
-    fFieldRadius{171_mm},
+    fOuterRadius{90_mm},
+    fFieldRadius{131_mm},
     // Material
     fMaterialName{"G4_Cu"},
     // Field

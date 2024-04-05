@@ -9,8 +9,8 @@ using namespace LiteralUnit::Length;
 SolenoidShield::SolenoidShield() :
     DescriptionBase{"SolenoidShield"},
     // Geometry
-    fInnerRadius{120_mm},
-    fOuterRadius{170_mm},
+    fInnerRadius{100_mm},
+    fOuterRadius{130_mm},
     // Material
     fMaterialName{"G4_Fe"} {}
 
