@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/Detector/Description/DescriptionBase.h++"
+#include "MACE/Math/LLPiecewise.h++"
 
 #include <string>
 #include <utility>
@@ -24,6 +25,8 @@ public:
     auto ElectrodeOuterRadius() const -> auto { return fElectrodeOuterRadius; }
     auto ElectrodeThickness() const -> auto { return fElectrodeThickness; }
     auto FieldRadius() const -> auto { return fFieldRadius; }
+    auto FullLength() const -> auto { return fUpstreamLength + fAccelerateLength; }
+    auto NElectrode() const -> auto { return Math::LLTrunc((FullLength() - fElectrodeThickness) / fElectrodePitch) + 1; }
 
     auto UpstreamLength(double val) -> void { fUpstreamLength = val; }
     auto AccelerateLength(double val) -> void { fAccelerateLength = val; }

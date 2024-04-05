@@ -1,6 +1,5 @@
 #include "MACE/Detector/Definition/Accelerator.h++"
 #include "MACE/Detector/Description/Accelerator.h++"
-#include "MACE/Math/LLPiecewise.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4LogicalVolume.hh"
@@ -29,12 +28,10 @@ auto Accelerator::Construct(G4bool checkOverlaps) -> void {
         G4NistManager::Instance()->FindOrBuildMaterial(accelerator.ElectrodeMaterialName()),
         name)};
 
-    const auto fullLength{accelerator.UpstreamLength() + accelerator.AccelerateLength()};
-    const auto nElectrode{Math::LLTrunc((fullLength - accelerator.ElectrodeThickness()) / accelerator.ElectrodePitch()) + 1};
-    const auto z0{(nElectrode - 1) * accelerator.ElectrodePitch() / 2};
-    for (int k{}; k < nElectrode; ++k) {
+    const auto z0{-(accelerator.NElectrode() - 1) * accelerator.ElectrodePitch() / 2};
+    for (int k{}; k < accelerator.NElectrode(); ++k) {
         Make<G4PVPlacement>( // clang-format off
-            G4Transform3D{{}, {0, 0, -z0 + k * accelerator.ElectrodePitch()}}, // clang-format on
+            G4Transform3D{{}, {0, 0, z0 + k * accelerator.ElectrodePitch()}}, // clang-format on
             logic,
             name,
             Mother().LogicalVolume(),
