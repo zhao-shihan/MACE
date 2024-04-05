@@ -11,14 +11,14 @@ using namespace MathConstant;
 Solenoid::Solenoid() :
     DescriptionBase{"Solenoid"},
     // Geometry
-    fS1Length{15_cm},
-    fB1Radius{25_cm},
-    fS2Length{131.5_cm},
-    fB2Radius{25_cm},
-    fS3Length{15_cm},
-    fInnerRadius{50_mm},
-    fOuterRadius{100_mm},
-    fFieldRadius{101_mm},
+    fS1Length{150_mm},
+    fB1Radius{250_mm},
+    fS2Length{1314.6_mm},
+    fB2Radius{250_mm},
+    fS3Length{150_mm},
+    fInnerRadius{60_mm},
+    fOuterRadius{110_mm},
+    fFieldRadius{171_mm},
     // Material
     fMaterialName{"G4_Cu"},
     // Field

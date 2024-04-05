@@ -23,6 +23,11 @@
 #include "MACE/Detector/Definition/ShieldingWall.h++"
 #include "MACE/Detector/Definition/SolenoidB1.h++"
 #include "MACE/Detector/Definition/SolenoidB2.h++"
+#include "MACE/Detector/Definition/SolenoidBeamPipeB1.h++"
+#include "MACE/Detector/Definition/SolenoidBeamPipeB2.h++"
+#include "MACE/Detector/Definition/SolenoidBeamPipeS1.h++"
+#include "MACE/Detector/Definition/SolenoidBeamPipeS2.h++"
+#include "MACE/Detector/Definition/SolenoidBeamPipeS3.h++"
 #include "MACE/Detector/Definition/SolenoidFieldB1.h++"
 #include "MACE/Detector/Definition/SolenoidFieldB2.h++"
 #include "MACE/Detector/Definition/SolenoidFieldS1.h++"
@@ -118,12 +123,16 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& mcpChamber{emcField.NewDaughter<Detector::Definition::MCPChamber>(fCheckOverlap)};
 
     auto& solenoidB1{solenoidFieldB1.NewDaughter<Detector::Definition::SolenoidB1>(fCheckOverlap)};
+    auto& solenoidBeamPipeB1{solenoidFieldB1.NewDaughter<Detector::Definition::SolenoidBeamPipeB1>(fCheckOverlap)};
 
+    auto& solenoidBeamPipeS1{solenoidFieldS1.NewDaughter<Detector::Definition::SolenoidBeamPipeS1>(fCheckOverlap)};
     auto& solenoidS1{solenoidFieldS1.NewDaughter<Detector::Definition::SolenoidS1>(fCheckOverlap)};
 
     auto& solenoidB2{solenoidFieldB2.NewDaughter<Detector::Definition::SolenoidB2>(fCheckOverlap)};
+    auto& solenoidBeamPipeB2{solenoidFieldB2.NewDaughter<Detector::Definition::SolenoidBeamPipeB2>(fCheckOverlap)};
 
     auto& filter{solenoidFieldS2.NewDaughter<Detector::Definition::Filter>(fCheckOverlap)};
+    auto& solenoidBeamPipeS2{solenoidFieldS2.NewDaughter<Detector::Definition::SolenoidBeamPipeS2>(fCheckOverlap)};
     auto& solenoidS2{solenoidFieldS2.NewDaughter<Detector::Definition::SolenoidS2>(fCheckOverlap)};
 
     auto& acceleratorField{mmsField.NewDaughter<Detector::Definition::AcceleratorField>(fCheckOverlap)};
@@ -132,6 +141,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& mmsMagnet{mmsField.NewDaughter<Detector::Definition::MMSMagnet>(fCheckOverlap)};
     auto& ttc{mmsField.NewDaughter<Detector::Definition::TTC>(fCheckOverlap)};
 
+    auto& solenoidBeamPipeS3{solenoidFieldS3.NewDaughter<Detector::Definition::SolenoidBeamPipeS3>(fCheckOverlap)};
     auto& solenoidS3{solenoidFieldS3.NewDaughter<Detector::Definition::SolenoidS3>(fCheckOverlap)};
 
     // 3
@@ -215,6 +225,11 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         mcpChamber.RegisterRegion(fDefaultSolidRegion);
         mmsBeamPipe.RegisterRegion(fDefaultSolidRegion);
         shieldingWall.RegisterRegion(fDefaultSolidRegion);
+        solenoidBeamPipeB1.RegisterRegion(fDefaultSolidRegion);
+        solenoidBeamPipeB2.RegisterRegion(fDefaultSolidRegion);
+        solenoidBeamPipeS1.RegisterRegion(fDefaultSolidRegion);
+        solenoidBeamPipeS2.RegisterRegion(fDefaultSolidRegion);
+        solenoidBeamPipeS3.RegisterRegion(fDefaultSolidRegion);
 
         // EMCSensitiveRegion
         fEMCSensitiveRegion = new Region("EMCSensitive", RegionType::EMCSensitive);

@@ -1,5 +1,6 @@
-#include "MACE/Detector/Definition/SolenoidS2.h++"
+#include "MACE/Detector/Definition/SolenoidBeamPipeS2.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
+#include "MACE/Detector/Description/SolenoidBeamPipe.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
@@ -10,21 +11,24 @@ namespace MACE::Detector::Definition {
 
 using namespace LiteralUnit::MathConstantSuffix;
 
-auto SolenoidS2::Construct(G4bool checkOverlaps) -> void {
+auto SolenoidBeamPipeS2::Construct(G4bool checkOverlaps) -> void {
     const auto& solenoid{Description::Solenoid::Instance()};
-    const auto name{solenoid.Name() + "S1"};
+    const auto& beamPipe{Description::SolenoidBeamPipe::Instance()};
+    const auto name{beamPipe.Name() + "S2"};
 
     const auto solid{Make<G4Tubs>(
         name,
-        solenoid.InnerRadius(),
-        solenoid.OuterRadius(),
+        beamPipe.InnerRadius(),
+        beamPipe.InnerRadius() + beamPipe.Thickness(),
         solenoid.S2Length() / 2,
         0,
         2_pi)};
+
     const auto logic{Make<G4LogicalVolume>(
         solid,
-        G4NistManager::Instance()->FindOrBuildMaterial(solenoid.MaterialName()),
+        G4NistManager::Instance()->FindOrBuildMaterial(beamPipe.MaterialName()),
         name)};
+
     Make<G4PVPlacement>(
         G4Transform3D{},
         logic,

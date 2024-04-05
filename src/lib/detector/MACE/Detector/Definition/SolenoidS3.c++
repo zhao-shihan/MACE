@@ -14,14 +14,14 @@ auto SolenoidS3::Construct(G4bool checkOverlaps) -> void {
     const auto& solenoid{Description::Solenoid::Instance()};
     const auto name{solenoid.Name() + "S3"};
 
-    auto solid{Make<G4Tubs>(
+    const auto solid{Make<G4Tubs>(
         name,
         solenoid.InnerRadius(),
         solenoid.OuterRadius(),
         solenoid.S3Length() / 2,
         0,
         2_pi)};
-    auto logic{Make<G4LogicalVolume>(
+    const auto logic{Make<G4LogicalVolume>(
         solid,
         G4NistManager::Instance()->FindOrBuildMaterial(solenoid.MaterialName()),
         name)};
