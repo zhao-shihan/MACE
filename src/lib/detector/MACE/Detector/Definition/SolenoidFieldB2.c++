@@ -1,4 +1,4 @@
-#include "MACE/Detector/Definition/SolenoidB2Field.h++"
+#include "MACE/Detector/Definition/SolenoidFieldB2.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Utility/MathConstant.h++"
 #include "MACE/Utility/VectorCast.h++"
@@ -13,9 +13,9 @@ namespace MACE::Detector::Definition {
 
 using namespace MathConstant;
 
-auto SolenoidB2Field::Construct(G4bool checkOverlaps) -> void {
+auto SolenoidFieldB2::Construct(G4bool checkOverlaps) -> void {
     const auto& solenoid{Description::Solenoid::Instance()};
-    const auto name{"SolenoidB2Field"};
+    const auto name{"SolenoidFieldB2"};
 
     auto solid = Make<G4Torus>(
         name,

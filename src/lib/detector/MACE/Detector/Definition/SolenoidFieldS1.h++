@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Definition {
 
-class SolenoidS2Field final : public DefinitionBase {
+class SolenoidFieldS1 final : public DefinitionBase {
 private:
     auto Construct(G4bool checkOverlaps) -> void override;
 };

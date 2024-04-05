@@ -1,7 +1,7 @@
 namespace MACE::Detector::Field {
 
-inline SolenoidS3Field::SolenoidS3Field() :
-    MagneticFieldBase<SolenoidS3Field>{},
+inline SolenoidFieldS1::SolenoidFieldS1() :
+    MagneticFieldBase<SolenoidFieldS1>{},
     fSolenoid{Description::Solenoid::Instance()} {}
 
 } // namespace MACE::Detector::Field

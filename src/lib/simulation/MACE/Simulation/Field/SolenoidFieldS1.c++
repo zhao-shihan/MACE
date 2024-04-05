@@ -1,9 +1,9 @@
 #include "MACE/Simulation/Field/SolenoidFieldMessenger.h++"
-#include "MACE/Simulation/Field/SolenoidS3Field.h++"
+#include "MACE/Simulation/Field/SolenoidFieldS1.h++"
 
 namespace MACE::inline Simulation::inline Field {
 
-SolenoidS3Field::SolenoidS3Field() :
+SolenoidFieldS1::SolenoidFieldS1() :
     WrapAsG4Field{} {
     SolenoidFieldMessenger::EnsureInstantiation();
 }

@@ -6,9 +6,9 @@
 
 namespace MACE::Detector::Field {
 
-class SolenoidS3Field : public MagneticFieldBase<SolenoidS3Field> {
+class SolenoidFieldS1 : public MagneticFieldBase<SolenoidFieldS1> {
 public:
-    inline SolenoidS3Field();
+    inline SolenoidFieldS1();
 
     template<Concept::NumericVector3D T>
     auto BFieldAt(T) const -> T { return {0, 0, fSolenoid.MagneticFluxDensity()}; }
@@ -19,4 +19,4 @@ private:
 
 } // namespace MACE::Detector::Field
 
-#include "MACE/Detector/Field/SolenoidS3Field.inl"
+#include "MACE/Detector/Field/SolenoidFieldS1.inl"

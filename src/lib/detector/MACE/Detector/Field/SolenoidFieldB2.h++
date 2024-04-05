@@ -8,9 +8,9 @@
 
 namespace MACE::Detector::Field {
 
-class SolenoidB1Field : public MagneticFieldBase<SolenoidB1Field> {
+class SolenoidFieldB2 : public MagneticFieldBase<SolenoidFieldB2> {
 public:
-    inline SolenoidB1Field();
+    inline SolenoidFieldB2();
 
     template<Concept::NumericVector3D T>
     inline auto BFieldAt(T) const -> T;
@@ -21,4 +21,4 @@ private:
 
 } // namespace MACE::Detector::Field
 
-#include "MACE/Detector/Field/SolenoidB1Field.inl"
+#include "MACE/Detector/Field/SolenoidFieldB2.inl"

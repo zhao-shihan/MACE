@@ -1,4 +1,4 @@
-#include "MACE/Detector/Definition/SolenoidS2Field.h++"
+#include "MACE/Detector/Definition/SolenoidFieldS2.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Utility/MathConstant.h++"
@@ -14,9 +14,9 @@ namespace MACE::Detector::Definition {
 
 using namespace MathConstant;
 
-auto SolenoidS2Field::Construct(G4bool checkOverlaps) -> void {
+auto SolenoidFieldS2::Construct(G4bool checkOverlaps) -> void {
     const auto& solenoid{Description::Solenoid::Instance()};
-    const auto name{"SolenoidS2Field"};
+    const auto name{"SolenoidFieldS2"};
 
     auto solid = Make<G4Tubs>(
         name,

@@ -21,15 +21,15 @@
 #include "MACE/Detector/Definition/MMSShield.h++"
 #include "MACE/Detector/Definition/ShieldingWall.h++"
 #include "MACE/Detector/Definition/SolenoidB1.h++"
-#include "MACE/Detector/Definition/SolenoidB1Field.h++"
 #include "MACE/Detector/Definition/SolenoidB2.h++"
-#include "MACE/Detector/Definition/SolenoidB2Field.h++"
+#include "MACE/Detector/Definition/SolenoidFieldB1.h++"
+#include "MACE/Detector/Definition/SolenoidFieldB2.h++"
+#include "MACE/Detector/Definition/SolenoidFieldS1.h++"
+#include "MACE/Detector/Definition/SolenoidFieldS2.h++"
+#include "MACE/Detector/Definition/SolenoidFieldS3.h++"
 #include "MACE/Detector/Definition/SolenoidS1.h++"
-#include "MACE/Detector/Definition/SolenoidS1Field.h++"
 #include "MACE/Detector/Definition/SolenoidS2.h++"
-#include "MACE/Detector/Definition/SolenoidS2Field.h++"
 #include "MACE/Detector/Definition/SolenoidS3.h++"
-#include "MACE/Detector/Definition/SolenoidS3Field.h++"
 #include "MACE/Detector/Definition/TTC.h++"
 #include "MACE/Detector/Definition/Target.h++"
 #include "MACE/Detector/Definition/World.h++"
@@ -67,11 +67,11 @@ int main(int argc, char* argv[]) {
     auto& mmsField{fWorld->NewDaughter<MMSField>(fCheckOverlap)};
     /* auto& mmsShield */ fWorld->NewDaughter<MMSShield>(fCheckOverlap);
     /* auto& shieldingWall */ fWorld->NewDaughter<ShieldingWall>(fCheckOverlap);
-    auto& solenoidB1Field{fWorld->NewDaughter<SolenoidB1Field>(fCheckOverlap)};
-    auto& solenoidB2Field{fWorld->NewDaughter<SolenoidB2Field>(fCheckOverlap)};
-    auto& solenoidS1Field{fWorld->NewDaughter<SolenoidS1Field>(fCheckOverlap)};
-    auto& solenoidS2Field{fWorld->NewDaughter<SolenoidS2Field>(fCheckOverlap)};
-    auto& solenoidS3Field{fWorld->NewDaughter<SolenoidS3Field>(fCheckOverlap)};
+    auto& solenoidFieldB1{fWorld->NewDaughter<SolenoidFieldB1>(fCheckOverlap)};
+    auto& solenoidFieldB2{fWorld->NewDaughter<SolenoidFieldB2>(fCheckOverlap)};
+    auto& solenoidFieldS1{fWorld->NewDaughter<SolenoidFieldS1>(fCheckOverlap)};
+    auto& solenoidFieldS2{fWorld->NewDaughter<SolenoidFieldS2>(fCheckOverlap)};
+    auto& solenoidFieldS3{fWorld->NewDaughter<SolenoidFieldS3>(fCheckOverlap)};
 
     // 2
 
@@ -81,14 +81,14 @@ int main(int argc, char* argv[]) {
     /* auto& mcp */ emcField.NewDaughter<MCP>(fCheckOverlap);
     /* auto& mcpChamber */ emcField.NewDaughter<MCPChamber>(fCheckOverlap);
 
-    /* auto& solenoidB1 */ solenoidB1Field.NewDaughter<SolenoidB1>(fCheckOverlap);
+    /* auto& solenoidB1 */ solenoidFieldB1.NewDaughter<SolenoidB1>(fCheckOverlap);
 
-    /* auto& solenoidS1 */ solenoidS1Field.NewDaughter<SolenoidS1>(fCheckOverlap);
+    /* auto& solenoidS1 */ solenoidFieldS1.NewDaughter<SolenoidS1>(fCheckOverlap);
 
-    /* auto& solenoidB2 */ solenoidB2Field.NewDaughter<SolenoidB2>(fCheckOverlap);
+    /* auto& solenoidB2 */ solenoidFieldB2.NewDaughter<SolenoidB2>(fCheckOverlap);
 
-    /* auto& filter */ solenoidS2Field.NewDaughter<Filter>(fCheckOverlap);
-    /* auto& solenoidS2 */ solenoidS2Field.NewDaughter<SolenoidS2>(fCheckOverlap);
+    /* auto& filter */ solenoidFieldS2.NewDaughter<Filter>(fCheckOverlap);
+    /* auto& solenoidS2 */ solenoidFieldS2.NewDaughter<SolenoidS2>(fCheckOverlap);
 
     auto& acceleratorField{mmsField.NewDaughter<AcceleratorField>(fCheckOverlap)};
     auto& cdcBody{mmsField.NewDaughter<CDCBody>(fCheckOverlap)};
@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
     /* auto& mmsMagnet */ mmsField.NewDaughter<MMSMagnet>(fCheckOverlap);
     /* auto& ttc */ mmsField.NewDaughter<TTC>(fCheckOverlap);
 
-    /* auto& solenoidS3 */ solenoidS3Field.NewDaughter<SolenoidS3>(fCheckOverlap);
+    /* auto& solenoidS3 */ solenoidFieldS3.NewDaughter<SolenoidS3>(fCheckOverlap);
 
     // 3
 
@@ -131,11 +131,11 @@ int main(int argc, char* argv[]) {
         acceleratorField.RegisterMaterial(vacuum);
         emcField.RegisterMaterial(vacuum);
         mmsField.RegisterMaterial(vacuum);
-        solenoidB1Field.RegisterMaterial(vacuum);
-        solenoidB2Field.RegisterMaterial(vacuum);
-        solenoidS1Field.RegisterMaterial(vacuum);
-        solenoidS2Field.RegisterMaterial(vacuum);
-        solenoidS3Field.RegisterMaterial(vacuum);
+        solenoidFieldB1.RegisterMaterial(vacuum);
+        solenoidFieldB2.RegisterMaterial(vacuum);
+        solenoidFieldS1.RegisterMaterial(vacuum);
+        solenoidFieldS2.RegisterMaterial(vacuum);
+        solenoidFieldS3.RegisterMaterial(vacuum);
         fWorld->RegisterMaterial(vacuum);
     }
 

@@ -3,17 +3,15 @@
 #include "MACE/Concept/NumericVector.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Field/MagneticFieldBase.h++"
-#include "MACE/Math/Norm.h++"
-#include "MACE/Utility/VectorArithmeticOperator.h++"
 
 namespace MACE::Detector::Field {
 
-class SolenoidB2Field : public MagneticFieldBase<SolenoidB2Field> {
+class SolenoidFieldS3 : public MagneticFieldBase<SolenoidFieldS3> {
 public:
-    inline SolenoidB2Field();
+    inline SolenoidFieldS3();
 
     template<Concept::NumericVector3D T>
-    inline auto BFieldAt(T) const -> T;
+    auto BFieldAt(T) const -> T { return {0, 0, fSolenoid.MagneticFluxDensity()}; }
 
 private:
     const Description::Solenoid& fSolenoid;
@@ -21,4 +19,4 @@ private:
 
 } // namespace MACE::Detector::Field
 
-#include "MACE/Detector/Field/SolenoidB2Field.inl"
+#include "MACE/Detector/Field/SolenoidFieldS3.inl"
