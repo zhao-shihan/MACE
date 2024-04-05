@@ -20,7 +20,7 @@ auto SolenoidFieldB2::Construct(G4bool checkOverlaps) -> void {
     auto solid = Make<G4Torus>(
         name,
         0,
-        solenoid.OuterRadius(),
+        solenoid.FieldRadius(),
         solenoid.B2Radius(),
         -pi / 2,
         pi / 2);

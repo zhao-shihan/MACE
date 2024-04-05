@@ -18,7 +18,7 @@ auto SolenoidFieldS1::Construct(G4bool checkOverlaps) -> void {
     auto solid = Make<G4Tubs>(
         name,
         0,
-        solenoid.OuterRadius(),
+        solenoid.FieldRadius(),
         solenoid.S1Length() / 2,
         0,
         pi * 2);
