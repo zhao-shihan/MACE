@@ -26,7 +26,7 @@
 #include <stdexcept>
 #include <vector>
 
-namespace MACE::inline Simulation::inline Physics::inline DecayChannel {
+namespace MACE::inline Extension::Geant4X {
 
 template<std::derived_from<G4VDecayChannel> AMuonDecayChannel, CETAString AName>
 class WrapAsMuoniumDecayChannel : public AMuonDecayChannel {
@@ -39,6 +39,6 @@ private:
     int fAtomicShellProductIndex;
 };
 
-} // namespace MACE::inline Simulation::inline Physics::inline DecayChannel
+} // namespace MACE::inline Extension::Geant4X
 
-#include "MACE/Simulation/Physics/DecayChannel/WrapAsMuoniumDecayChannel.inl"
+#include "MACE/Extension/Geant4X/WrapAsMuoniumDecayChannel.inl"

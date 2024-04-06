@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
-#include "MACE/Simulation/Physics/Particle/Muonium.h++"
+#include "MACE/Extension/Geant4X/Antimuonium.h++"
+#include "MACE/Extension/Geant4X/Muonium.h++"
 #include "MACE/Simulation/Physics/Process/MuoniumFormation.h++"
 #include "MACE/Simulation/Physics/Process/MuoniumTransport.h++"
 #include "MACE/Simulation/Physics/TargetForMuoniumPhysics.h++"

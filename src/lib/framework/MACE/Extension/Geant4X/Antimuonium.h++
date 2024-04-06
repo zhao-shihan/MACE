@@ -4,7 +4,7 @@
 
 #include "G4ParticleDefinition.hh"
 
-namespace MACE::inline Simulation::inline Physics::inline Particle {
+namespace MACE::inline Extension::Geant4X {
 
 class Antimuonium final : public Env::Memory::Singleton<Antimuonium>,
                           public G4ParticleDefinition {
@@ -17,4 +17,4 @@ public:
     static auto Definition() -> auto { return &Instance(); }
 };
 
-} // namespace MACE::inline Simulation::inline Physics::inline Particle
+} // namespace MACE::inline Extension::Geant4X

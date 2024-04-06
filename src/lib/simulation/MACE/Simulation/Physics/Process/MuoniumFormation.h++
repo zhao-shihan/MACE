@@ -1,12 +1,12 @@
 #pragma once
 
 #include "MACE/Env/Print.h++"
+#include "MACE/Extension/Geant4X/Antimuonium.h++"
+#include "MACE/Extension/Geant4X/Muonium.h++"
 #include "MACE/Math/Clamp.h++"
 #include "MACE/Math/FindRoot.h++"
 #include "MACE/Math/QinAlgorithm.h++"
 #include "MACE/Simulation/Physics/MuoniumPhysicsMessenger.h++"
-#include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
-#include "MACE/Simulation/Physics/Particle/Muonium.h++"
 #include "MACE/Simulation/Physics/TargetForMuoniumPhysics.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/NonMoveableBase.h++"

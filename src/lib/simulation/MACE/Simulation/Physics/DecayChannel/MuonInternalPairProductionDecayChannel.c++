@@ -151,6 +151,10 @@ auto MuonInternalPairProductionDecayChannel::UpdateState(double delta) -> void {
     }
 }
 
+/// @todo Make PassCut virtual and decouple with detector description! -- Default PassCut (in this class) returns true,
+/// and derived class can override it by setting up cut using detector description.
+/// Therefore IPP decay will no longer depend on libMACEDetector and can go into libMACEFramework.
+/// IPP decay with cut can still be implement in libMACESimulation by inherting this class and overriding PassCut.
 auto MuonInternalPairProductionDecayChannel::PassCut(const CLHEPX::RAMBO<5>::Event& event) const -> bool {
     const auto& [p, p1, p2, k1, k2]{event.state};
 

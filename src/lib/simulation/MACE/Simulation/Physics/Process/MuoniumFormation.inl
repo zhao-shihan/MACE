@@ -27,8 +27,8 @@ auto MuoniumFormation<ATarget>::AtRestDoIt(const G4Track& track, const G4Step&) 
     const auto conversion{rng.flat() < fConversionProbability};
     // Use antimuonium if it will be a conversion... not exactly true since it is not pure antimuonium but mix state. OK for now though.
     // FIXME: Try always using muonium but behave like mix state in each interaction.
-    muoniumDynamicParticle->SetDefinition(conversion ? static_cast<G4ParticleDefinition*>(Antimuonium::Definition()) :
-                                                       static_cast<G4ParticleDefinition*>(Muonium::Definition()));
+    muoniumDynamicParticle->SetDefinition(conversion ? static_cast<G4ParticleDefinition*>(Geant4X::Antimuonium::Definition()) :
+                                                       static_cast<G4ParticleDefinition*>(Geant4X::Muonium::Definition()));
     // Must pre-assign the decay time to ensure correct behaviour of transport and decay
     // (transport process use this to determine when to stop flight,
     //  instead of relying on G4 tracking mechanism. See MuoniumTransport process for detail.)

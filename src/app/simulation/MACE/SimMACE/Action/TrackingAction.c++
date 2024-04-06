@@ -2,8 +2,6 @@
 #include "MACE/SimMACE/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimMACE/Action/TrackingAction.h++"
 #include "MACE/SimMACE/Analysis.h++"
-#include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
-#include "MACE/Simulation/Physics/Particle/Muonium.h++"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"

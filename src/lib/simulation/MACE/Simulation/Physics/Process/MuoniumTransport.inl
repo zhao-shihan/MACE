@@ -18,8 +18,8 @@ MuoniumTransport<ATarget>::MuoniumTransport() :
 
 template<TargetForMuoniumPhysics ATarget>
 auto MuoniumTransport<ATarget>::IsApplicable(const G4ParticleDefinition& particle) -> G4bool {
-    return &particle == Muonium::Definition() or
-           &particle == Antimuonium::Definition();
+    return &particle == Geant4X::Muonium::Definition() or
+           &particle == Geant4X::Antimuonium::Definition();
 }
 
 template<TargetForMuoniumPhysics ATarget>

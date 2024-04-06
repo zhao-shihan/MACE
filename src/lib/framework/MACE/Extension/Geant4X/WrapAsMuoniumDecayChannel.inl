@@ -1,4 +1,4 @@
-namespace MACE::inline Simulation::inline Physics::inline DecayChannel {
+namespace MACE::inline Extension::Geant4X {
 
 template<std::derived_from<G4VDecayChannel> AMuonDecayChannel, CETAString AName>
 WrapAsMuoniumDecayChannel<AMuonDecayChannel, AName>::WrapAsMuoniumDecayChannel(const G4String& parentName, G4double br, G4int verbose) :
@@ -60,4 +60,4 @@ auto WrapAsMuoniumDecayChannel<AMuonDecayChannel, AName>::DecayIt(G4double) -> G
     return products;
 }
 
-} // namespace MACE::inline Simulation::inline Physics::inline DecayChannel
+} // namespace MACE::inline Extension::Geant4X

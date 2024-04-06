@@ -1,17 +1,17 @@
-#include "MACE/Simulation/Physics/DecayChannel/MuoniumDecayChannel.h++"
-#include "MACE/Simulation/Physics/Particle/Muonium.h++"
+#include "MACE/Extension/Geant4X/Antimuonium.h++"
+#include "MACE/Extension/Geant4X/MuoniumDecayChannel.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
 
 #include "G4DecayTable.hh"
 #include "G4ParticleTable.hh"
 
-namespace MACE::inline Simulation::inline Physics::inline Particle {
+namespace MACE::inline Extension::Geant4X {
 
 using namespace PhysicalConstant;
 
-Muonium::Muonium() :
+Antimuonium::Antimuonium() :
     Singleton{},
-    G4ParticleDefinition{"muonium",                      // name
+    G4ParticleDefinition{"anti_muonium",                 // name
                          muonium_mass_c2,                // mass
                          hbar_Planck / muonium_lifetime, // width
                          0,                              // charge
@@ -24,7 +24,7 @@ Muonium::Muonium() :
                          "lepton",                       // particle type
                          0,                              // lepton number
                          0,                              // baryon number
-                         990013111,                      // PDG encoding
+                         -990013111,                     // PDG encoding
                          false,                          // stable
                          muonium_lifetime,               // lifetime
                          nullptr,                        // decay table
@@ -36,13 +36,13 @@ Muonium::Muonium() :
     constexpr auto muBohrMu{0.5 * eplus * hbar_Planck / (muon_mass_c2 / c_squared)};
     constexpr auto muBohrE{-0.5 * eplus * hbar_Planck / (electron_mass_c2 / c_squared)};
     constexpr auto muBohrM{1.0011659208 * muBohrMu + 1.0011596521859 * muBohrE};
-    SetPDGMagneticMoment(muBohrM);
+    SetPDGMagneticMoment(-muBohrM); // Negative for anti-muonium
 
     // create Decay Table
     const auto table{new G4DecayTable};
     // create a decay channel
-    table->Insert(new MuoniumDecayChannel{"muonium", 1});
+    table->Insert(new MuoniumDecayChannel{"anti_muonium", 1});
     SetDecayTable(table);
 }
 
-} // namespace MACE::inline Simulation::inline Physics::inline Particle
+} // namespace MACE::inline Extension::Geant4X
