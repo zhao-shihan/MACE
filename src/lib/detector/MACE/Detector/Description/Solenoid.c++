@@ -18,6 +18,8 @@ Solenoid::Solenoid() :
     fS3Length{150_mm},
     fInnerRadius{60_mm},
     fOuterRadius{90_mm},
+    fCoilThickness{30_mm},
+    fReferenceCoilSpacing{30_mm},
     fFieldRadius{131_mm},
     // Material
     fMaterialName{"G4_Cu"},
@@ -33,6 +35,8 @@ auto Solenoid::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fS3Length, "S3Length");
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fOuterRadius, "OuterRadius");
+    ImportValue(node, fCoilThickness, "CoilThickness");
+    ImportValue(node, fReferenceCoilSpacing, "ReferenceCoilSpacing");
     ImportValue(node, fFieldRadius, "FieldRadius");
     // Material
     ImportValue(node, fMaterialName, "MaterialName");
@@ -49,6 +53,8 @@ auto Solenoid::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fS3Length, "S3Length");
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fOuterRadius, "OuterRadius");
+    ExportValue(node, fCoilThickness, "CoilThickness");
+    ExportValue(node, fReferenceCoilSpacing, "ReferenceCoilSpacing");
     ExportValue(node, fFieldRadius, "FieldRadius");
     // Material
     ExportValue(node, fMaterialName, "MaterialName");
