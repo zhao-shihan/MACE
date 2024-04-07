@@ -7,6 +7,7 @@
 #include "MACE/Simulation/Physics/TargetForMuoniumPhysics.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
+#include "G4EmBuilder.hh"
 #include "G4MuonPlus.hh"
 #include "G4ProcessManager.hh"
 #include "G4VPhysicsConstructor.hh"

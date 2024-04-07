@@ -9,6 +9,7 @@ MuoniumPhysics<ATarget>::MuoniumPhysics(G4int verbose) :
 
 template<TargetForMuoniumPhysics ATarget>
 auto MuoniumPhysics<ATarget>::ConstructParticle() -> void {
+    G4EmBuilder::ConstructMinimalEmSet();
     G4MuonPlus::Definition();
     Geant4X::Muonium::Definition();
     Geant4X::Antimuonium::Definition();
