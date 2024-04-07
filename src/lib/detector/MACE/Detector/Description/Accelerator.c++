@@ -15,7 +15,7 @@ Accelerator::Accelerator() :
     fElectrodeInnerRadius{50_mm},
     fElectrodeOuterRadius{100_mm},
     fElectrodeThickness{0.5_mm},
-    fFieldRadius{125_mm},
+    fFieldRadius{120_mm},
     // Material
     fElectrodeMaterialName{"G4_Be"},
     // Field
