@@ -21,7 +21,7 @@ auto SolenoidBeamPipeB1::Construct(G4bool checkOverlaps) -> void {
         beamPipe.InnerRadius(),
         beamPipe.InnerRadius() + beamPipe.Thickness(),
         solenoid.B1Radius(),
-        0.5_pi,
+        1_pi,
         0.5_pi)};
 
     const auto logic{Make<G4LogicalVolume>(

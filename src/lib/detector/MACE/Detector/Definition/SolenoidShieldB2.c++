@@ -21,7 +21,7 @@ auto SolenoidShieldB2::Construct(G4bool checkOverlaps) -> void {
         shield.InnerRadius(),
         shield.OuterRadius(),
         solenoid.B2Radius(),
-        -0.5_pi,
+        0,
         0.5_pi)};
 
     const auto logic{Make<G4LogicalVolume>(
