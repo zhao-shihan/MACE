@@ -26,6 +26,7 @@
 /MACE/Physics/MuonDecay/IPPDecay/MetropolisDelta         0.0025
 /MACE/Physics/MuonDecay/IPPDecay/MetropolisDiscard       1000
 /MACE/Physics/MuonDecay/IPPDecay/ApplyMACESpecificPxyCut true
+/MACE/Physics/MuonDecay/RadiativeDecay/BR                0
 
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 

@@ -24,6 +24,7 @@ public:
 
 private:
     std::unique_ptr<G4UIdirectory> fDirectory;
+    std::unique_ptr<G4UIcmdWithADouble> fRadiativeDecayBR;
     std::unique_ptr<G4UIcmdWithADouble> fIPPDecayBR;
 };
 
