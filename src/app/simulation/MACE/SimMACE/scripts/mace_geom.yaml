@@ -1,20 +1,21 @@
 # SimMACE: geometry description
 
 Accelerator:
-  UpstreamLength: 100
+  UpstreamLength: 50
   AccelerateLength: 270
   ElectrodePitch: 10
   ElectrodeInnerRadius: 50
   ElectrodeOuterRadius: 100
   ElectrodeThickness: 0.5
-  FieldRadius: 125
+  FieldRadius: 120
   ElectrodeMaterialName: G4_Be
   AcceleratePotential: 0.00050000000000000001
 BeamDegrader:
   Enabled: true
   Width: 50
-  Thickness: 0.29999999999999999
+  Thickness: 0.5
   DistanceToTarget: 10
+  MaterialName: G4_MYLAR
 BeamMonitor:
   Enabled: false
   Width: 40
@@ -342,8 +343,8 @@ EMCMagnet:
   Length: 1000
   MaterialName: G4_Cu
 EMCShield:
-  InnerRadius: 570
-  InnerLength: 1040
+  InnerRadius: 600
+  InnerLength: 1100
   GapAroundWindow: 10
   Thickness: 50
   MaterialName: G4_Fe
@@ -352,8 +353,8 @@ Filter:
   Length: 500
   Radius: 49
   Thickness: 0.20000000000000001
-  Count: 85
-  MaterialName: G4_Cu
+  Pitch: 1.1499999999999999
+  MaterialName: G4_BRONZE
 MCP:
   Diameter: 100
   Thickness: 1
@@ -434,7 +435,7 @@ MCPChamber:
   InnerRadius: 100
   Thickness: 0.5
 MMSBeamPipe:
-  InnerRadius: 125
+  InnerRadius: 120
   BerylliumLength: 1000
   BerylliumThickness: 0.5
   AluminiumThickness: 2
@@ -448,10 +449,10 @@ MMSMagnet:
   Length: 2200
   MaterialName: G4_Cu
 MMSShield:
-  InnerRadius: 620
-  InnerLength: 2240
+  InnerRadius: 650
+  InnerLength: 2300
   Thickness: 50
-  WindowRadius: 105
+  WindowRadius: 132
   BeamSlantAngle: 0
   MaterialName: G4_Fe
 ShieldingWall:
@@ -462,12 +463,14 @@ ShieldingWall:
 Solenoid:
   S1Length: 150
   B1Radius: 250
-  S2Length: 1315
+  S2Length: 1314.5999999999999
   B2Radius: 250
   S3Length: 150
-  InnerRadius: 50
-  OuterRadius: 100
-  FieldRadius: 101
+  InnerRadius: 60
+  OuterRadius: 90
+  CoilThickness: 30
+  ReferenceCoilSpacing: 30
+  FieldRadius: 131
   MaterialName: G4_Cu
   MagneticFluxDensity: 0.0001
 TTC:
