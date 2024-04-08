@@ -39,7 +39,7 @@ auto BeamDegrader::Construct(G4bool checkOverlaps) -> void {
         degrader.Thickness() / 2)};
     const auto logic{Make<G4LogicalVolume>(
         solid,
-        G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"),
+        G4NistManager::Instance()->FindOrBuildMaterial(degrader.MaterialName()),
         degrader.Name())};
     Make<G4PVPlacement>(
         transform,

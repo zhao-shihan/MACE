@@ -2,6 +2,9 @@
 
 #include "MACE/Detector/Description/DescriptionBase.h++"
 
+#include <string>
+#include <utility>
+
 namespace MACE::Detector::Description {
 
 class BeamDegrader final : public DescriptionBase<BeamDegrader> {
@@ -13,14 +16,24 @@ private:
 
 public:
     auto Enabled() const -> auto { return fEnabled; }
+
+    auto Enabled(bool val) -> void { fEnabled = val; }
+
+    // Geometry
+
     auto Width() const -> auto { return fWidth; }
     auto Thickness() const -> auto { return fThickness; }
     auto DistanceToTarget() const -> auto { return fDistanceToTarget; }
 
-    auto Enabled(bool val) -> void { fEnabled = val; }
     auto Width(double val) -> void { fWidth = val; }
     auto Thickness(double val) -> void { fThickness = val; }
     auto DistanceToTarget(double val) -> void { fDistanceToTarget = val; }
+
+    // Material
+
+    auto MaterialName() const -> const auto& { return fMaterialName; }
+
+    auto MaterialName(std::string val) { fMaterialName = std::move(val); }
 
 private:
     auto ImportAllValue(const YAML::Node& node) -> void override;
@@ -28,9 +41,16 @@ private:
 
 private:
     bool fEnabled;
+
+    // Geometry
+
     double fWidth;
     double fThickness;
     double fDistanceToTarget;
+
+    // Material
+
+    std::string fMaterialName;
 };
 
 } // namespace MACE::Detector::Description
