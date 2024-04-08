@@ -1,5 +1,5 @@
 #include "MACE/Detector/Description/EMC.h++"
-#include "MACE/Detector/Description/Solenoid.h++"
+#include "MACE/Detector/Description/SolenoidBeamPipe.h++"
 #include "MACE/Math/Hypot.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/MathConstant.h++"
@@ -149,7 +149,7 @@ using namespace LiteralUnit::Energy;
 using namespace PhysicalConstant;
 
 EMC::EMC() :
-    DescriptionBase{__func__},
+    DescriptionBase{"EMC"},
     fNSubdivision{2},
     fInnerRadius{15_cm},
     fCrystalHypotenuse{15_cm},
@@ -206,7 +206,7 @@ auto EMC::ComputeMesh() const -> MeshInformation {
     auto pmpMesh{EMCMesh{fNSubdivision}.Generate()};
     MeshInformation mesh;
     auto& [vertex, faceList]{mesh};
-    const auto solenoidInnerRadius{Solenoid::Instance().InnerRadius()};
+    const auto beamPipeRadius{SolenoidBeamPipe::Instance().InnerRadius()};
     const auto point{pmpMesh.vertex_property<pmp::Point>("v:point")};
 
     for (auto&& v : pmpMesh.vertices()) {
@@ -214,15 +214,16 @@ auto EMC::ComputeMesh() const -> MeshInformation {
     }
 
     for (auto&& f : pmpMesh.faces()) {
-        if (std::ranges::any_of(pmpMesh.vertices(f), [&](const auto& v) {
-                CLHEP::Hep2Vector p{point[v][0] * fInnerRadius, point[v][1] * fInnerRadius};
-                return p.mag() < solenoidInnerRadius and point[v][2] < 0;
-            })) {
+        if (std::ranges::any_of(pmpMesh.vertices(f),
+                                [&](const auto& v) {
+                                    CLHEP::Hep2Vector p{point[v][0] * fInnerRadius, point[v][1] * fInnerRadius};
+                                    return p.mag() < beamPipeRadius and point[v][2] < 0;
+                                })) {
             continue;
         }
 
         const auto centroid{VectorCast<CLHEP::Hep3Vector>(pmp::centroid(pmpMesh, f))};
-        if (centroid.perp2() < 1e-3) {
+        if (centroid.perp() < 1_nm) {
             continue;
         }
 
@@ -249,6 +250,7 @@ auto EMC::ComputeMesh() const -> MeshInformation {
     }
     return mesh;
 }
+
 auto EMC::ComputeTransformToOuterSurfaceWithOffset(int cellID, double offsetInNormalDirection) const -> HepGeom::Transform3D {
     const auto& faceList{Mesh().fFaceList};
     auto&& [centroid, normal, vertexIndex]{faceList[cellID]};
