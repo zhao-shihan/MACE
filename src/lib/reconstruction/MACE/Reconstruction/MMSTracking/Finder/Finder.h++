@@ -17,8 +17,8 @@ concept Finder =
     requires {
         typename T::Hit;
         typename T::Track;
-        requires Data::TupleModelContain<T::Hit, Data::CDCHit>;
-        requires Data::TupleModelContain<T::TrackModel, Data::MMSTrack>;
+        requires Data::SuperTupleModel<T::Hit, Data::CDCHit>;
+        requires Data::SuperTupleModel<T::TrackModel, Data::MMSTrack>;
     } and
     requires(T finder, const int nextTrackID, const int trackID, const std::vector<Data::Tuple<T::Hit>*> hitData) {
         { finder(hitData, nextTrackID) };
@@ -43,8 +43,8 @@ template<typename T>
 concept SimFinder =
     requires {
         requires Finder<T>;
-        requires Data::TupleModelContain<T::Hit, Data::CDCSimHit>;
-        requires Data::TupleModelContain<T::Track, Data::MMSSimTrack>;
+        requires Data::SuperTupleModel<T::Hit, Data::CDCSimHit>;
+        requires Data::SuperTupleModel<T::Track, Data::MMSSimTrack>;
     };
 
 } // namespace MACE::inline Reconstruction::MMSTracking::inline Finder

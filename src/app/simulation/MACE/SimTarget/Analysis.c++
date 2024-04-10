@@ -83,7 +83,7 @@ auto Analysis::OpenResultFile() -> void {
 
 auto Analysis::WriteResult() -> void {
     Data::Output<MuoniumTrack> output{"MuoniumTrack"};
-    output << fMuoniumTrack;
+    output.Fill(fMuoniumTrack);
     output.Write();
 }
 

@@ -1,7 +1,7 @@
 namespace MACE::inline Reconstruction::MMSTracking::inline Finder {
 
-template<Data::TupleModelContain<Data::CDCHit> AHit,
-         Data::TupleModelContain<Data::MMSTrack> ATrack>
+template<Data::SuperTupleModel<Data::CDCHit> AHit,
+         Data::SuperTupleModel<Data::MMSTrack> ATrack>
 TruthFinder<AHit, ATrack>::TruthFinder() :
     Base{},
     fNHitThreshold{} {
@@ -9,8 +9,8 @@ TruthFinder<AHit, ATrack>::TruthFinder() :
     fNHitThreshold = cdc.NSenseLayerPerSuper() * cdc.NSuperLayer();
 }
 
-template<Data::TupleModelContain<Data::CDCHit> AHit,
-         Data::TupleModelContain<Data::MMSTrack> ATrack>
+template<Data::SuperTupleModel<Data::CDCHit> AHit,
+         Data::SuperTupleModel<Data::MMSTrack> ATrack>
 template<std::indirectly_readable AHitPointer>
     requires std::derived_from<std::decay_t<std::iter_value_t<AHitPointer>>, Data::Tuple<AHit>>
 auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitData, int) -> Base::template Result<AHitPointer> {

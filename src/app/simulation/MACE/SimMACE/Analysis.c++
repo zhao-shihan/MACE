@@ -63,17 +63,14 @@ auto Analysis::RunBegin(G4int runID) -> void {
     if (filePathChanged and Env::MPIEnv::Instance().OnCommWorldMaster()) {
         Geant4X::ConvertGeometryToTMacro("SimMACE_gdml", "SimMACE.gdml")->Write();
     }
-    // cd into run directory
-    const auto runDirectory{fmt::format("G4Run{}", runID)};
-    fFile->mkdir(runDirectory.c_str());
-    fFile->cd(runDirectory.c_str());
-    if (PrimaryGeneratorAction::Instance().SavePrimaryVertexData()) { fPrimaryVertexOutput.emplace("SimPrimaryVertex"); }
-    if (TrackingAction::Instance().SaveDecayVertexData()) { fDecayVertexOutput.emplace("SimDecayVertex"); }
-    if (fSaveCDCHitData) { fCDCSimHitOutput.emplace("CDCSimHit"); }
-    if (fSaveTTCHitData) { fTTCSimHitOutput.emplace("TTCSimHit"); }
-    fMMSSimTrackOutput.emplace("MMSSimTrack");
-    fMCPSimHitOutput.emplace("MCPSimHit");
-    fEMCSimHitOutput.emplace("EMCSimHit");
+    // initialize outputs
+    if (PrimaryGeneratorAction::Instance().SavePrimaryVertexData()) { fPrimaryVertexOutput.emplace(fmt::format("G4Run{}/SimPrimaryVertex", runID)); }
+    if (TrackingAction::Instance().SaveDecayVertexData()) { fDecayVertexOutput.emplace(fmt::format("G4Run{}/SimDecayVertex", runID)); }
+    if (fSaveCDCHitData) { fCDCSimHitOutput.emplace(fmt::format("G4Run{}/CDCSimHit", runID)); }
+    if (fSaveTTCHitData) { fTTCSimHitOutput.emplace(fmt::format("G4Run{}/TTCSimHit", runID)); }
+    fMMSSimTrackOutput.emplace(fmt::format("G4Run{}/MMSSimTrack", runID));
+    fMCPSimHitOutput.emplace(fmt::format("G4Run{}/MCPSimHit", runID));
+    fEMCSimHitOutput.emplace(fmt::format("G4Run{}/EMCSimHit", runID));
 }
 
 auto Analysis::EventEnd() -> void {
@@ -86,13 +83,13 @@ auto Analysis::EventEnd() -> void {
     const auto mcpPassed{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
     const auto emcPassed{not fCoincidenceWithEMC or fEMCHit == nullptr or fEMCHit->size() > 0};
     if (cdcPassed and ttcPassed and mmsPassed and mcpPassed and emcPassed) {
-        if (fPrimaryVertex and fPrimaryVertexOutput) { *fPrimaryVertexOutput << *fPrimaryVertex; }
-        if (fDecayVertex and fDecayVertexOutput) { *fDecayVertexOutput << *fDecayVertex; }
-        if (fCDCHit and fCDCSimHitOutput) { *fCDCSimHitOutput << *fCDCHit; }
-        if (fTTCHit and fTTCSimHitOutput) { *fTTCSimHitOutput << *fTTCHit; }
-        if (mmsTrack) { *fMMSSimTrackOutput << *mmsTrack; }
-        if (fMCPHit) { *fMCPSimHitOutput << *fMCPHit; }
-        if (fEMCHit) { *fEMCSimHitOutput << *fEMCHit; }
+        if (fPrimaryVertex and fPrimaryVertexOutput) { fPrimaryVertexOutput->Fill(*fPrimaryVertex); }
+        if (fDecayVertex and fDecayVertexOutput) { fDecayVertexOutput->Fill(*fDecayVertex); }
+        if (fCDCHit and fCDCSimHitOutput) { fCDCSimHitOutput->Fill(*fCDCHit); }
+        if (fTTCHit and fTTCSimHitOutput) { fTTCSimHitOutput->Fill(*fTTCHit); }
+        if (mmsTrack) { fMMSSimTrackOutput->Fill(*mmsTrack); }
+        if (fMCPHit) { fMCPSimHitOutput->Fill(*fMCPHit); }
+        if (fEMCHit) { fEMCSimHitOutput->Fill(*fEMCHit); }
     }
     fPrimaryVertex = {};
     fDecayVertex = {};

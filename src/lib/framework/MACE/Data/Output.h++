@@ -4,21 +4,27 @@
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Data/TupleModel.h++"
 #include "MACE/Data/internal/BranchHelper.h++"
+#include "MACE/Env/Print.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
+#include "TDirectory.h"
 #include "TLeaf.h"
 #include "TTree.h"
 
 #include "fmt/format.h"
 
+#include <algorithm>
 #include <concepts>
 #include <cstddef>
+#include <filesystem>
 #include <initializer_list>
 #include <iterator>
 #include <memory>
 #include <ranges>
 #include <string>
 #include <type_traits>
+
+class TFile;
 
 namespace MACE::Data {
 
@@ -33,29 +39,24 @@ public:
     template<typename T = Tuple<Ts...>>
         requires std::assignable_from<Tuple<Ts...>&, T&&>
     auto Fill(T&& tuple) -> std::size_t;
-    template<typename T = Tuple<Ts...>>
-        requires std::assignable_from<Tuple<Ts...>&, T&&>
-    auto operator<<(T&& tuple) -> const auto& { return Fill(std::forward<T>(tuple)), *this; }
+    template<typename T>
+        requires ProperSubTuple<Tuple<Ts...>, std::decay_t<T>>
+    auto Fill(T&& tuple) -> std::size_t;
 
     template<std::ranges::input_range R = std::initializer_list<Tuple<Ts...>>>
-        requires std::assignable_from<Tuple<Ts...>&, std::ranges::range_reference_t<R>>
+        requires std::assignable_from<Tuple<Ts...>&, std::ranges::range_reference_t<R>> or
+                 ProperSubTuple<Tuple<Ts...>, std::ranges::range_value_t<R>>
     auto Fill(R&& data) -> std::size_t;
-    template<std::ranges::input_range R = std::initializer_list<Tuple<Ts...>>>
-        requires std::assignable_from<Tuple<Ts...>&, std::ranges::range_reference_t<R>>
-    auto operator<<(R&& data) -> const auto& { return Fill(std::forward<R>(data)), *this; }
 
     template<std::ranges::input_range R>
-        requires std::indirectly_readable<std::ranges::range_value_t<R>> and
-                 std::assignable_from<Tuple<Ts...>&, std::iter_reference_t<std::ranges::range_value_t<R>>>
-    auto Fill(const R& data) -> std::size_t;
-    template<std::ranges::input_range R>
-        requires std::indirectly_readable<std::ranges::range_value_t<R>> and
-                 std::assignable_from<Tuple<Ts...>&, std::iter_reference_t<std::ranges::range_value_t<R>>>
-    auto operator<<(const R& data) -> const auto& { return Fill(data), *this; }
+        requires std::indirectly_readable<std::ranges::range_reference_t<R>> and
+                 (std::assignable_from<Tuple<Ts...>&, std::iter_reference_t<std::ranges::range_value_t<R>>> or
+                  ProperSubTuple<Tuple<Ts...>, std::iter_value_t<std::ranges::range_value_t<R>>>)
+    auto Fill(R&& data) -> std::size_t;
 
     auto Entry() -> auto { return OutputIterator{this}; }
 
-    auto Write(int option = 0, int bufferSize = 0) const -> auto { return fTree.Write(nullptr, option, bufferSize); }
+    auto Write(int option = 0, int bufferSize = 0) const -> auto;
 
 private:
     class OutputIterator final {
@@ -81,9 +82,9 @@ private:
     };
 
 private:
-    TTree fTree;
     Tuple<Ts...> fEntry;
-
+    std::string fROOTPath;
+    std::unique_ptr<TTree> fTree;
     internal::BranchHelper<Tuple<Ts...>> fBranchHelper;
 };
 

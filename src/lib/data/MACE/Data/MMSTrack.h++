@@ -38,7 +38,7 @@ using MMSSimTrack = TupleModel<MMSTrack,
 /// @brief Calculate helix information from known vertex information in-place.
 /// @param track The track
 /// @param magneticFluxDensity Magnetic field B0
-constexpr auto CalculateHelix(TupleContain<Data::Tuple<MMSTrack>> auto& track, double magneticFluxDensity) -> void {
+constexpr auto CalculateHelix(SuperTuple<Data::Tuple<MMSTrack>> auto& track, double magneticFluxDensity) -> void {
     using PhysicalConstant::c_light;
 
     const auto charge{Get<"PDGID">(track) > 0 ? -1 : 1};
@@ -70,7 +70,7 @@ constexpr auto CalculateHelix(TupleContain<Data::Tuple<MMSTrack>> auto& track, d
 /// @brief Calculate vertex information from known helix information in-place.
 /// @param track The track
 /// @param magneticFluxDensity Magnetic field B0
-constexpr auto CalculateVertex(TupleContain<Data::Tuple<MMSTrack>> auto& track, double magneticFluxDensity) -> void {
+constexpr auto CalculateVertex(SuperTuple<Data::Tuple<MMSTrack>> auto& track, double magneticFluxDensity) -> void {
     using PhysicalConstant::c_light;
     using PhysicalConstant::electron_mass_c2;
 

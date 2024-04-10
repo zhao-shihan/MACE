@@ -15,8 +15,8 @@
 
 namespace MACE::inline Reconstruction::MMSTracking::inline Finder {
 
-template<Data::TupleModelContain<Data::CDCHit> AHit,
-         Data::TupleModelContain<Data::MMSTrack> ATrack>
+template<Data::SuperTupleModel<Data::CDCHit> AHit,
+         Data::SuperTupleModel<Data::MMSTrack> ATrack>
 class FinderBase {
 public:
     using Hit = AHit;
