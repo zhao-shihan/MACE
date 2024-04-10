@@ -14,7 +14,7 @@ Output<Ts...>::Output(const std::string& name, const std::string& title) :
     fTree = std::make_unique<TTree>(treeNameIndex != std::string::npos ?
                                         name.substr(treeNameIndex, -1).c_str() :
                                         name.c_str(),
-                                    title.c_str());
+                                    title.c_str(), 99, nullptr);
 
     [this]<gsl::index... Is>(gslx::index_sequence<Is...>) {
         (...,
