@@ -16,7 +16,6 @@
 #    include "MACE/Utility/PrintStackTrace.h++"
 
 #    include "fmt/chrono.h"
-#    include "fmt/format.h"
 
 #    include <chrono>
 #    include <csignal>
@@ -138,6 +137,7 @@ auto TerminateHandler() -> void {
     if (DefaultTerminateHandler) {
         DefaultTerminateHandler();
     } else {
+        Env::PrintLnError("std::terminate called");
         std::abort();
     }
 }
