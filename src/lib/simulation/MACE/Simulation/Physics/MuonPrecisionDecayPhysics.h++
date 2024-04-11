@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Math/Clamp.h++"
 #include "MACE/Simulation/Physics/MuonPrecisionDecayPhysicsMessenger.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
