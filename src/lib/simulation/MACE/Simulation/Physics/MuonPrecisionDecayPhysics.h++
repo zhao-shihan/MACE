@@ -18,15 +18,15 @@ class MuonPrecisionDecayPhysics : public NonMoveableBase,
 public:
     MuonPrecisionDecayPhysics(G4int verbose);
 
-    auto RadiativeDecayBR(double br) -> void;
-    auto IPPDecayBR(double br) -> void;
+    auto RadiativeDecayBR(double br) -> void { fRadiativeDecayBR = Math::Clamp<"[]">(br, 0., 1.); }
+    auto IPPDecayBR(double br) -> void { fIPPDecayBR = Math::Clamp<"[]">(br, 0., 1.); }
+    virtual auto UpdateDecayBR() -> void;
 
     virtual auto ConstructParticle() -> void override;
     virtual auto ConstructProcess() -> void override;
 
 protected:
-    auto UpdateBRFor(const G4ParticleDefinition* mu) -> void;
-    virtual auto UpdateBR() -> void;
+    auto UpdateDecayBRFor(const G4ParticleDefinition* mu) -> void;
     virtual auto InsertDecayChannel(const G4String& parentName, gsl::not_null<G4DecayTable*> decay) -> void;
     virtual auto AssignRareDecayBR(gsl::not_null<G4DecayTable*> decay) -> void;
 

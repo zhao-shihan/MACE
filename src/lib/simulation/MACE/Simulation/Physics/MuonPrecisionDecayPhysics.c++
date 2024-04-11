@@ -14,6 +14,7 @@
 #include "G4PionPlus.hh"
 #include "G4ProcessTable.hh"
 
+#include <limits>
 #include <stdexcept>
 
 namespace MACE::inline Simulation::inline Physics {
@@ -24,16 +25,6 @@ MuonPrecisionDecayPhysics::MuonPrecisionDecayPhysics(G4int verbose) :
     fRadiativeDecayBR{0.014},
     fIPPDecayBR{3.4e-5},
     fMessengerRegister{this} {}
-
-auto MuonPrecisionDecayPhysics::RadiativeDecayBR(double br) -> void {
-    fRadiativeDecayBR = Math::Clamp<"[]">(br, 0., 1.);
-    UpdateBR();
-}
-
-auto MuonPrecisionDecayPhysics::IPPDecayBR(double br) -> void {
-    fIPPDecayBR = Math::Clamp<"[]">(br, 0., 1.);
-    UpdateBR();
-}
 
 auto MuonPrecisionDecayPhysics::ConstructParticle() -> void {
     G4EmBuilder::ConstructMinimalEmSet();
@@ -48,7 +39,7 @@ auto MuonPrecisionDecayPhysics::ConstructParticle() -> void {
     NewDecayTableFor(G4MuonPlus::Definition());
     NewDecayTableFor(G4MuonMinus::Definition());
 
-    UpdateBR(); // set BR here
+    UpdateDecayBR(); // set BR here
 
     G4PionPlus::Definition();
     G4PionMinus::Definition();
@@ -86,7 +77,7 @@ auto MuonPrecisionDecayPhysics::ConstructProcess() -> void {
     ReplacePionDecayPhysics(G4PionMinus::Definition());
 }
 
-auto MuonPrecisionDecayPhysics::UpdateBRFor(const G4ParticleDefinition* mu) -> void {
+auto MuonPrecisionDecayPhysics::UpdateDecayBRFor(const G4ParticleDefinition* mu) -> void {
     const auto decay{mu->GetDecayTable()};
     // set rare decay mode first
     AssignRareDecayBR(decay);
@@ -95,16 +86,16 @@ auto MuonPrecisionDecayPhysics::UpdateBRFor(const G4ParticleDefinition* mu) -> v
     for (auto i{1}; i < decay->entries(); ++i) {
         mainDecayBR -= decay->GetDecayChannel(i)->GetBR();
     }
-    if (mainDecayBR < 0) {
+    if (mainDecayBR < -std::numeric_limits<double>::epsilon()) {
         decay->DumpInfo();
         throw std::runtime_error{"Impossible to normalize decay branching ratio (sum of rare channel BR > 1)"};
     }
-    decay->GetDecayChannel(0)->SetBR(mainDecayBR);
+    decay->GetDecayChannel(0)->SetBR(std::max(0., mainDecayBR));
 }
 
-auto MuonPrecisionDecayPhysics::UpdateBR() -> void {
-    UpdateBRFor(G4MuonPlus::Definition());
-    UpdateBRFor(G4MuonMinus::Definition());
+auto MuonPrecisionDecayPhysics::UpdateDecayBR() -> void {
+    UpdateDecayBRFor(G4MuonPlus::Definition());
+    UpdateDecayBRFor(G4MuonMinus::Definition());
 }
 
 auto MuonPrecisionDecayPhysics::InsertDecayChannel(const G4String& parentName, gsl::not_null<G4DecayTable*> decay) -> void {

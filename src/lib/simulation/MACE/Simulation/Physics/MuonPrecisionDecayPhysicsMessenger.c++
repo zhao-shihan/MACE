@@ -2,6 +2,8 @@
 #include "MACE/Simulation/Physics/MuonPrecisionDecayPhysicsMessenger.h++"
 
 #include "G4UIcmdWithADouble.hh"
+#include "G4UIcmdWithoutParameter.hh"
+#include "G4UIcommand.hh"
 #include "G4UIdirectory.hh"
 
 namespace MACE::inline Simulation::inline Physics {
@@ -10,7 +12,8 @@ MuonPrecisionDecayPhysicsMessenger::MuonPrecisionDecayPhysicsMessenger() :
     SingletonMessenger{},
     fDirectory{},
     fRadiativeDecayBR{},
-    fIPPDecayBR{} {
+    fIPPDecayBR{},
+    fUpdateDecayBR{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Physics/MuonDecay/");
     fDirectory->SetGuidance("About muon(ium) decay channel and decay generators.");
@@ -26,6 +29,10 @@ MuonPrecisionDecayPhysicsMessenger::MuonPrecisionDecayPhysicsMessenger() :
     fIPPDecayBR->SetParameterName("BR", false);
     fIPPDecayBR->SetRange("0 <= BR && BR <= 1");
     fIPPDecayBR->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+    fUpdateDecayBR = std::make_unique<G4UIcmdWithoutParameter>("/MACE/Physics/MuonDecay/UpdateDecayBR", this);
+    fUpdateDecayBR->SetGuidance("Update decay branching ratio.");
+    fUpdateDecayBR->AvailableForStates(G4State_Idle);
 }
 
 MuonPrecisionDecayPhysicsMessenger::~MuonPrecisionDecayPhysicsMessenger() = default;
@@ -38,6 +45,10 @@ auto MuonPrecisionDecayPhysicsMessenger::SetNewValue(G4UIcommand* command, G4Str
     } else if (command == fIPPDecayBR.get()) {
         Deliver<MuonPrecisionDecayPhysics>([&](auto&& r) {
             r.IPPDecayBR(fIPPDecayBR->GetNewDoubleValue(value));
+        });
+    } else if (command == fUpdateDecayBR.get()) {
+        Deliver<MuonPrecisionDecayPhysics>([&](auto&& r) {
+            r.UpdateDecayBR();
         });
     }
 }

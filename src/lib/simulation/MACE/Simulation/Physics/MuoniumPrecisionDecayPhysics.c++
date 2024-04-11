@@ -30,7 +30,7 @@ auto MuoniumPrecisionDecayPhysics::ConstructParticle() -> void {
     NewDecayTableFor(Geant4X::Muonium::Definition());
     NewDecayTableFor(Geant4X::Antimuonium::Definition());
 
-    UpdateBR(); // set BR here
+    UpdateDecayBR(); // set BR here
 }
 
 auto MuoniumPrecisionDecayPhysics::ConstructProcess() -> void {
@@ -50,9 +50,9 @@ auto MuoniumPrecisionDecayPhysics::ConstructProcess() -> void {
     ReplaceDecayPhysics(Geant4X::Antimuonium::Definition());
 }
 
-auto MuoniumPrecisionDecayPhysics::UpdateBR() -> void {
-    UpdateBRFor(Geant4X::Muonium::Definition());
-    UpdateBRFor(Geant4X::Antimuonium::Definition());
+auto MuoniumPrecisionDecayPhysics::UpdateDecayBR() -> void {
+    UpdateDecayBRFor(Geant4X::Muonium::Definition());
+    UpdateDecayBRFor(Geant4X::Antimuonium::Definition());
 }
 
 auto MuoniumPrecisionDecayPhysics::InsertDecayChannel(const G4String& parentName, gsl::not_null<G4DecayTable*> decay) -> void {
