@@ -9,7 +9,7 @@ public:
     auto Enabled() const -> bool override;
 
 private:
-    auto Construct(G4bool checkOverlaps) -> void override;
+    auto Construct(bool checkOverlaps) -> void override;
 };
 
 } // namespace MACE::Detector::Definition

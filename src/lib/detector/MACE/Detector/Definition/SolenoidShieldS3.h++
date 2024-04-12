@@ -6,7 +6,7 @@ namespace MACE::Detector::Definition {
 
 class SolenoidShieldS3 final : public DefinitionBase {
 private:
-    auto Construct(G4bool checkOverlaps) -> void override;
+    auto Construct(bool checkOverlaps) -> void override;
 };
 
 } // namespace MACE::Detector::Definition
