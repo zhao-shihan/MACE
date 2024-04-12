@@ -1,3 +1,4 @@
+#include "MACE/Detector/Definition/Accelerator.h++"
 #include "MACE/Detector/Definition/AcceleratorField.h++"
 #include "MACE/Detector/Definition/BeamDegrader.h++"
 #include "MACE/Detector/Definition/BeamMonitor.h++"
@@ -14,22 +15,32 @@
 #include "MACE/Detector/Definition/Filter.h++"
 #include "MACE/Detector/Definition/MCP.h++"
 #include "MACE/Detector/Definition/MCPChamber.h++"
+#include "MACE/Detector/Definition/MMSBeamPipe.h++"
+#include "MACE/Detector/Definition/MMSField.h++"
+#include "MACE/Detector/Definition/MMSMagnet.h++"
+#include "MACE/Detector/Definition/MMSShield.h++"
 #include "MACE/Detector/Definition/ShieldingWall.h++"
 #include "MACE/Detector/Definition/SolenoidB1.h++"
-#include "MACE/Detector/Definition/SolenoidB1Field.h++"
 #include "MACE/Detector/Definition/SolenoidB2.h++"
-#include "MACE/Detector/Definition/SolenoidB2Field.h++"
+#include "MACE/Detector/Definition/SolenoidBeamPipeB1.h++"
+#include "MACE/Detector/Definition/SolenoidBeamPipeB2.h++"
+#include "MACE/Detector/Definition/SolenoidBeamPipeS1.h++"
+#include "MACE/Detector/Definition/SolenoidBeamPipeS2.h++"
+#include "MACE/Detector/Definition/SolenoidBeamPipeS3.h++"
+#include "MACE/Detector/Definition/SolenoidFieldB1.h++"
+#include "MACE/Detector/Definition/SolenoidFieldB2.h++"
+#include "MACE/Detector/Definition/SolenoidFieldS1.h++"
+#include "MACE/Detector/Definition/SolenoidFieldS2.h++"
+#include "MACE/Detector/Definition/SolenoidFieldS3.h++"
 #include "MACE/Detector/Definition/SolenoidS1.h++"
-#include "MACE/Detector/Definition/SolenoidS1Field.h++"
 #include "MACE/Detector/Definition/SolenoidS2.h++"
-#include "MACE/Detector/Definition/SolenoidS2Field.h++"
 #include "MACE/Detector/Definition/SolenoidS3.h++"
-#include "MACE/Detector/Definition/SolenoidS3Field.h++"
-#include "MACE/Detector/Definition/SpectrometerBeamPipe.h++"
-#include "MACE/Detector/Definition/SpectrometerField.h++"
-#include "MACE/Detector/Definition/SpectrometerMagnet.h++"
-#include "MACE/Detector/Definition/SpectrometerShield.h++"
-#include "MACE/Detector/Definition/STC.h++"
+#include "MACE/Detector/Definition/SolenoidShieldB1.h++"
+#include "MACE/Detector/Definition/SolenoidShieldB2.h++"
+#include "MACE/Detector/Definition/SolenoidShieldS1.h++"
+#include "MACE/Detector/Definition/SolenoidShieldS2.h++"
+#include "MACE/Detector/Definition/SolenoidShieldS3.h++"
+#include "MACE/Detector/Definition/TTC.h++"
 #include "MACE/Detector/Definition/Target.h++"
 #include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Description/DescriptionIO.h++"
@@ -62,45 +73,56 @@ int main(int argc, char* argv[]) {
     // 1
 
     auto& emcField{fWorld->NewDaughter<EMCField>(fCheckOverlap)};
-    auto& emcShield{fWorld->NewDaughter<EMCShield>(fCheckOverlap)};
-    auto& solenoidB1Field{fWorld->NewDaughter<SolenoidB1Field>(fCheckOverlap)};
-    auto& solenoidB2Field{fWorld->NewDaughter<SolenoidB2Field>(fCheckOverlap)};
-    auto& solenoidS1Field{fWorld->NewDaughter<SolenoidS1Field>(fCheckOverlap)};
-    auto& solenoidS2Field{fWorld->NewDaughter<SolenoidS2Field>(fCheckOverlap)};
-    auto& solenoidS3Field{fWorld->NewDaughter<SolenoidS3Field>(fCheckOverlap)};
-    auto& spectrometerField{fWorld->NewDaughter<SpectrometerField>(fCheckOverlap)};
-    auto& spectrometerShield{fWorld->NewDaughter<SpectrometerShield>(fCheckOverlap)};
-    auto& shieldingWall{fWorld->NewDaughter<ShieldingWall>(fCheckOverlap)};
+    /* auto& emcShield */ fWorld->NewDaughter<EMCShield>(fCheckOverlap);
+    auto& mmsField{fWorld->NewDaughter<MMSField>(fCheckOverlap)};
+    /* auto& mmsShield */ fWorld->NewDaughter<MMSShield>(fCheckOverlap);
+    /* auto& shieldingWall */ fWorld->NewDaughter<ShieldingWall>(fCheckOverlap);
+    auto& solenoidFieldB1{fWorld->NewDaughter<SolenoidFieldB1>(fCheckOverlap)};
+    auto& solenoidFieldB2{fWorld->NewDaughter<SolenoidFieldB2>(fCheckOverlap)};
+    auto& solenoidFieldS1{fWorld->NewDaughter<SolenoidFieldS1>(fCheckOverlap)};
+    auto& solenoidFieldS2{fWorld->NewDaughter<SolenoidFieldS2>(fCheckOverlap)};
+    auto& solenoidFieldS3{fWorld->NewDaughter<SolenoidFieldS3>(fCheckOverlap)};
 
     // 2
 
-    auto& emcCrystal{emcField.NewDaughter<EMCCrystal>(fCheckOverlap)};
-    auto& emcMagnet{emcField.NewDaughter<EMCMagnet>(fCheckOverlap)};
-    auto& emcPMTAssemblies{emcField.NewDaughter<EMCPMTAssemblies>(fCheckOverlap)};
+    /* auto& emcCrystal */ emcField.NewDaughter<EMCCrystal>(fCheckOverlap);
+    /* auto& emcMagnet */ emcField.NewDaughter<EMCMagnet>(fCheckOverlap);
+    /* auto& emcPMTAssemblies */ emcField.NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
     /* auto& mcp */ emcField.NewDaughter<MCP>(fCheckOverlap);
     /* auto& mcpChamber */ emcField.NewDaughter<MCPChamber>(fCheckOverlap);
 
-    auto& solenoidB1{solenoidB1Field.NewDaughter<SolenoidB1>(fCheckOverlap)};
+    /* auto& solenoidB1 */ solenoidFieldB1.NewDaughter<SolenoidB1>(fCheckOverlap);
+    /* auto& solenoidBeamPipeB1 */ solenoidFieldB1.NewDaughter<SolenoidBeamPipeB1>(fCheckOverlap);
+    /* auto& solenoidShieldB1 */ solenoidFieldB1.NewDaughter<SolenoidShieldB1>(fCheckOverlap);
 
-    auto& solenoidS1{solenoidS1Field.NewDaughter<SolenoidS1>(fCheckOverlap)};
+    /* auto& solenoidBeamPipeS1 */ solenoidFieldS1.NewDaughter<SolenoidBeamPipeS1>(fCheckOverlap);
+    /* auto& solenoidS1 */ solenoidFieldS1.NewDaughter<SolenoidS1>(fCheckOverlap);
+    /* auto& solenoidShieldS1 */ solenoidFieldS1.NewDaughter<SolenoidShieldS1>(fCheckOverlap);
 
-    auto& solenoidB2{solenoidB2Field.NewDaughter<SolenoidB2>(fCheckOverlap)};
+    /* auto& solenoidB2 */ solenoidFieldB2.NewDaughter<SolenoidB2>(fCheckOverlap);
+    /* auto& solenoidBeamPipeB2 */ solenoidFieldB2.NewDaughter<SolenoidBeamPipeB2>(fCheckOverlap);
+    /* auto& solenoidShieldB2 */ solenoidFieldB2.NewDaughter<SolenoidShieldB2>(fCheckOverlap);
 
-    /* auto& filter */ solenoidS2Field.NewDaughter<Filter>(fCheckOverlap);
-    auto& solenoidS2{solenoidS2Field.NewDaughter<SolenoidS2>(fCheckOverlap)};
+    /* auto& filter */ solenoidFieldS2.NewDaughter<Filter>(fCheckOverlap);
+    /* auto& solenoidBeamPipeS2 */ solenoidFieldS2.NewDaughter<SolenoidBeamPipeS2>(fCheckOverlap);
+    /* auto& solenoidS2 */ solenoidFieldS2.NewDaughter<SolenoidS2>(fCheckOverlap);
+    /* auto& solenoidShieldS2 */ solenoidFieldS2.NewDaughter<SolenoidShieldS2>(fCheckOverlap);
 
-    auto& acceleratorField{spectrometerField.NewDaughter<AcceleratorField>(fCheckOverlap)};
-    auto& cdcBody{spectrometerField.NewDaughter<CDCBody>(fCheckOverlap)};
-    /* auto& spectrometerBeamPipe */ spectrometerField.NewDaughter<SpectrometerBeamPipe>(fCheckOverlap);
-    auto& spectrometerMagnet{spectrometerField.NewDaughter<SpectrometerMagnet>(fCheckOverlap)};
-    /* auto& stc */ spectrometerField.NewDaughter<STC>(fCheckOverlap);
+    auto& acceleratorField{mmsField.NewDaughter<AcceleratorField>(fCheckOverlap)};
+    auto& cdcBody{mmsField.NewDaughter<CDCBody>(fCheckOverlap)};
+    /* auto& mmsBeamPipe */ mmsField.NewDaughter<MMSBeamPipe>(fCheckOverlap);
+    /* auto& mmsMagnet */ mmsField.NewDaughter<MMSMagnet>(fCheckOverlap);
+    /* auto& ttc */ mmsField.NewDaughter<TTC>(fCheckOverlap);
 
-    auto& solenoidS3{solenoidS3Field.NewDaughter<SolenoidS3>(fCheckOverlap)};
+    /* auto& solenoidBeamPipeS3 */ solenoidFieldS3.NewDaughter<SolenoidBeamPipeS3>(fCheckOverlap);
+    /* auto& solenoidS3 */ solenoidFieldS3.NewDaughter<SolenoidS3>(fCheckOverlap);
+    /* auto& solenoidShieldS3 */ solenoidFieldS3.NewDaughter<SolenoidShieldS3>(fCheckOverlap);
 
     // 3
 
     auto& cdcGas{cdcBody.NewDaughter<CDCGas>(fCheckOverlap)};
 
+    /* auto& accelerator */ acceleratorField.NewDaughter<Accelerator>(fCheckOverlap);
     /* auto& beamDegrader */ acceleratorField.NewDaughter<BeamDegrader>(fCheckOverlap);
     /* auto& beamMonitor */ acceleratorField.NewDaughter<BeamMonitor>(fCheckOverlap);
     /* auto& target */ acceleratorField.NewDaughter<Target>(fCheckOverlap);
@@ -126,14 +148,14 @@ int main(int argc, char* argv[]) {
         const auto nist = G4NistManager::Instance();
 
         const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
-        emcField.RegisterMaterial(vacuum);
-        solenoidB1Field.RegisterMaterial(vacuum);
-        solenoidS1Field.RegisterMaterial(vacuum);
         acceleratorField.RegisterMaterial(vacuum);
-        solenoidB2Field.RegisterMaterial(vacuum);
-        solenoidS2Field.RegisterMaterial(vacuum);
-        spectrometerField.RegisterMaterial(vacuum);
-        solenoidS3Field.RegisterMaterial(vacuum);
+        emcField.RegisterMaterial(vacuum);
+        mmsField.RegisterMaterial(vacuum);
+        solenoidFieldB1.RegisterMaterial(vacuum);
+        solenoidFieldB2.RegisterMaterial(vacuum);
+        solenoidFieldS1.RegisterMaterial(vacuum);
+        solenoidFieldS2.RegisterMaterial(vacuum);
+        solenoidFieldS3.RegisterMaterial(vacuum);
         fWorld->RegisterMaterial(vacuum);
     }
 
@@ -153,18 +175,18 @@ int main(int argc, char* argv[]) {
     auto geoManager = std::make_unique<TGeoManager>("MACEGeom", "MACE Geometry");
     geoManager->Import("test.gdml");
 
-    // set transparency for jsroot display
+    /* // set transparency for jsroot display
     // see form https://github.com/root-project/jsroot/blob/master/docs/JSROOT.md#geometry-viewer
 
     geoManager->GetVolume(fWorld->LogicalVolume()->GetName())->SetInvisible();
     using MACE::Detector::Definition::DefinitionBase;
     for (auto&& entity : std::initializer_list<std::reference_wrapper<const DefinitionBase>>{
-             emcShield,
              emcCrystal,
-             emcPMTAssemblies,
              emcMagnet,
-             spectrometerMagnet,
-             spectrometerShield,
+             emcPMTAssemblies,
+             emcShield,
+             mmsMagnet,
+             mmsShield,
              shieldingWall,
              solenoidB1,
              solenoidB2,
@@ -172,7 +194,7 @@ int main(int argc, char* argv[]) {
              solenoidS2,
              solenoidS3}) {
         geoManager->GetVolume(entity.get().LogicalVolume()->GetName())->SetTransparency(60);
-    }
+    } */
 
     geoManager->Export("test.root");
 

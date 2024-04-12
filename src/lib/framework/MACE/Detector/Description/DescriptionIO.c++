@@ -2,6 +2,6 @@
 
 namespace MACE::Detector::Description {
 
-std::set<gsl::not_null<DescriptionBase*>> DescriptionIO::fgInstanceSet = {};
+std::set<gsl::not_null<DescriptionBase<>*>> DescriptionIO::fgInstanceSet{};
 
 } // namespace MACE::Detector

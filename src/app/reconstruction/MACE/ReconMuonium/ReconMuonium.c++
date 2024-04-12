@@ -4,15 +4,15 @@
 #include "MACE/DataModel/SimHit/MCPSimHit.h++"
 #include "MACE/DataModel/Track/CDCHelixTrack.h++"
 #include "MACE/DataModel/Track/CDCPhysicsTrack.h++"
+#include "MACE/Detector/Description/Accelerator.h++"
 #include "MACE/Detector/Description/EMCField.h++"
-#include "MACE/Detector/Description/AcceleratorField.h++"
-#include "MACE/Detector/Description/SpectrometerField.h++"
+#include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Env/MPIEnv.h++"
-#include "MACE/ReconMuonium/MuoniumSimVertex.h++"
-#include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Extension/MPIX/AllocMPIJobs.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
+#include "MACE/ReconMuonium/MuoniumSimVertex.h++"
+#include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
 #include "MACE/Utility/VectorArithmeticOperator.h++"
 #include "MACE/Utility/VectorCast.h++"
@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
     // flight
     const auto& transportLine = Solenoid::Instance();
     const auto flightLength =
-        SpectrometerField::Instance().Length() / 2 - acceleratorLength +
+        MMSField::Instance().Length() / 2 - acceleratorLength +
         transportLine.S1Length() +
         transportLine.B1Radius() * halfpi +
         transportLine.S2Length() +

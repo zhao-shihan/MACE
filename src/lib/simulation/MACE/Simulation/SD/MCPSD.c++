@@ -1,8 +1,10 @@
 #include "MACE/Detector/Description/MCP.h++"
+#include "MACE/Env/Print.h++"
 #include "MACE/External/gfx/timsort.hpp"
 #include "MACE/Simulation/SD/MCPSD.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
+#include "G4DataInterpolation.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
@@ -15,9 +17,12 @@
 #include "G4TwoVector.hh"
 #include "G4VProcess.hh"
 #include "G4VTouchable.hh"
+#include "Randomize.hh"
 
 #include <cassert>
 #include <cmath>
+#include <ranges>
+#include <stdexcept>
 #include <string_view>
 
 namespace MACE::inline Simulation::inline SD {
@@ -28,13 +33,28 @@ MCPSD::MCPSD(const G4String& sdName) :
     NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fIonizingEnergyDepositionThreshold{20_eV},
+    fEfficiency{},
+    fSplitHit{},
     fHitsCollection{},
     fMessengerRegister{this} {
     collectionName.insert(sdName + "HC");
+
+    const auto& mcp{Detector::Description::MCP::Instance()};
+    if (mcp.EfficiencyEnergy().size() != mcp.EfficiencyValue().size()) {
+        throw std::runtime_error{"mcp.EfficiencyEnergy().size() != mcp.EfficiencyValue().size()"};
+    }
+    const auto n{mcp.EfficiencyEnergy().size()};
+    fEfficiency = std::make_unique<G4DataInterpolation>(const_cast<double*>(mcp.EfficiencyEnergy().data()), // stupid interface accepts non-const ptr only
+                                                        const_cast<double*>(mcp.EfficiencyValue().data()),  // stupid interface accepts non-const ptr only
+                                                        n,
+                                                        (mcp.EfficiencyValue()[1] - mcp.EfficiencyValue()[0]) / (mcp.EfficiencyEnergy()[1] - mcp.EfficiencyEnergy()[0]),
+                                                        (mcp.EfficiencyValue()[n - 1] - mcp.EfficiencyValue()[n - 2]) / (mcp.EfficiencyEnergy()[n - 1] - mcp.EfficiencyEnergy()[n - 2]));
 }
 
+MCPSD::~MCPSD() = default;
+
 auto MCPSD::Initialize(G4HCofThisEvent* hitsCollectionOfThisEvent) -> void {
-    fHitsCollection = new MCPHitCollection(SensitiveDetectorName, collectionName[0]);
+    fHitsCollection = new MCPHitCollection{SensitiveDetectorName, collectionName[0]};
     auto hitsCollectionID{G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection)};
     hitsCollectionOfThisEvent->AddHitsCollection(hitsCollectionID, fHitsCollection);
 }
@@ -59,7 +79,7 @@ auto MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     // track creator process
     const auto creatorProcess{track.GetCreatorProcess()};
     // new a hit
-    auto hit{std::make_unique_for_overwrite<MCPHit>()};
+    const auto& hit{fSplitHit.emplace_back(std::make_unique_for_overwrite<MCPHit>())};
     Get<"EvtID">(*hit) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
@@ -74,56 +94,59 @@ auto MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"Ek0">(*hit) = vertexEk;
     Get<"p0">(*hit) = vertexMomentum;
     *Get<"CreatProc">(*hit) = creatorProcess ? std::string_view{creatorProcess->GetProcessName()} : "|0>";
-    fSplitHit.emplace_back(std::move(hit));
 
     return true;
 }
 
 auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
+    fHitsCollection->GetVector()->reserve(fSplitHit.size());
+
     switch (fSplitHit.size()) {
     case 0:
         break;
     case 1: {
         auto& hit{fSplitHit.front()};
+        if (G4UniformRand() > fEfficiency->CubicSplineInterpolation(Get<"Ek">(*hit))) { break; }
         Get<"HitID">(*hit) = 0;
         fHitsCollection->insert(hit.release());
     } break;
     default: {
         const auto timeResolutionFWHM{Detector::Description::MCP::Instance().TimeResolutionFWHM()};
+        assert(timeResolutionFWHM >= 0);
         int hitID{};
         // sort hit by time
         gfx::timsort(fSplitHit,
                      [](const auto& hit1, const auto& hit2) {
                          return Get<"t">(*hit1) < Get<"t">(*hit2);
                      });
-        // loop over all hits on this crystal and cluster to real hits by times
-        std::vector<std::unique_ptr<MCPHit>*> hitCandidate;
-        const auto ClusterAndInsertHit{
-            [&] {
-                // find top hit
-                const auto iTopHit{std::ranges::min_element(std::as_const(hitCandidate),
-                                                            [](const auto& hit1, const auto& hit2) {
-                                                                return Get<"TrkID">(**hit1) < Get<"TrkID">(**hit2);
-                                                            })};
-                const auto topHit{*iTopHit};
-                // construct real hit
-                Get<"HitID">(**topHit) = hitID++;
-                for (auto&& hit : std::as_const(hitCandidate)) {
-                    if (hit == topHit) { continue; }
-                    Get<"Edep">(**topHit) += Get<"Edep">(**hit);
-                }
-                fHitsCollection->insert(topHit->release());
-            }};
-        for (auto windowClosingTime{Get<"t">(*fSplitHit.front()) + timeResolutionFWHM};
-             auto&& aSplitHit : fSplitHit) {
-            if (Get<"t">(*aSplitHit) > windowClosingTime) {
-                ClusterAndInsertHit();
-                hitCandidate.clear();
-                windowClosingTime = Get<"t">(*aSplitHit) + timeResolutionFWHM;
+        // loop over all hits and cluster to real hits by times
+        std::ranges::subrange cluster{fSplitHit.begin(), fSplitHit.begin()};
+        auto& rng{*G4Random::getTheEngine()};
+        while (cluster.end() != fSplitHit.end()) {
+            const auto tFirst{*Get<"t">(**cluster.end())};
+            const auto windowClosingTime{tFirst + timeResolutionFWHM};
+            if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
+                timeResolutionFWHM != 0) [[unlikely]] {
+                Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, timeResolutionFWHM);
             }
-            hitCandidate.emplace_back(&aSplitHit);
+            cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), fSplitHit.end(),
+                                                               [&windowClosingTime](const auto& hit) {
+                                                                   return Get<"t">(*hit) <= windowClosingTime;
+                                                               })};
+            // find top hit
+            auto& topHit{*std::ranges::min_element(cluster,
+                                                   [](const auto& hit1, const auto& hit2) {
+                                                       return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
+                                                   })};
+            if (rng.flat() > fEfficiency->CubicSplineInterpolation(Get<"Ek">(*topHit))) { continue; }
+            // construct real hit
+            Get<"HitID">(*topHit) = hitID++;
+            for (const auto& hit : cluster) {
+                if (hit == topHit) { continue; }
+                Get<"Edep">(*topHit) += Get<"Edep">(*hit);
+            }
+            fHitsCollection->insert(topHit.release());
         }
-        ClusterAndInsertHit();
     } break;
     }
     fSplitHit.clear();

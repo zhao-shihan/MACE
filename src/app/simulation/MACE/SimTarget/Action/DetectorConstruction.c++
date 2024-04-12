@@ -2,7 +2,7 @@
 #include "MACE/Detector/Definition/BeamMonitor.h++"
 #include "MACE/Detector/Definition/Target.h++"
 #include "MACE/Detector/Definition/World.h++"
-#include "MACE/Detector/Description/AcceleratorField.h++"
+#include "MACE/Detector/Description/Accelerator.h++"
 #include "MACE/Detector/Description/DescriptionIO.h++"
 #include "MACE/SimTarget/Action/DetectorConstruction.h++"
 #include "MACE/SimTarget/Messenger/DetectorMessenger.h++"
@@ -34,8 +34,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     using namespace MACE::Detector::Definition;
 
     // AcceleratorField is target's mother by default, modified it to adapt global frame
-    Detector::Description::AcceleratorField::Instance().UpstreamLength(0);
-    Detector::Description::AcceleratorField::Instance().AccelerateLength(0);
+    Detector::Description::Accelerator::Instance().UpstreamLength(0);
+    Detector::Description::Accelerator::Instance().AccelerateLength(0);
 
     fWorld = std::make_unique<World>();
     fWorld->NewDaughter<BeamMonitor>(fCheckOverlap);

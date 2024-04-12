@@ -1,7 +1,9 @@
 #pragma once
 
 #include "MACE/Data/Output.h++"
+#include "MACE/Data/SensorHit.h++"
 #include "MACE/Data/SimHit.h++"
+#include "MACE/Data/SimVertex.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimEMC/Messenger/AnalysisMessenger.h++"
 
@@ -35,9 +37,11 @@ public:
 
     auto RunBegin(G4int runID) -> void;
 
-    auto SubmitEMCHC(gsl::not_null<std::vector<gsl::owner<Simulation::EMCHit*>>*> hc) -> void { fEMCHit = hc; }
-    auto SubmitEMCPMTHC(gsl::not_null<std::vector<gsl::owner<Simulation::EMCPMTHit*>>*> hc) -> void { fEMCPMTHit = hc; }
-    auto SubmitMCPHC(gsl::not_null<std::vector<gsl::owner<Simulation::MCPHit*>>*> hc) -> void { fMCPHit = hc; }
+    auto SubmitPrimaryVertexData(const std::vector<std::unique_ptr<Data::Tuple<Data::SimPrimaryVertex>>>& data) -> void { fPrimaryVertex = &data; }
+    auto SubmitDecayVertexData(const std::vector<std::unique_ptr<Data::Tuple<Data::SimDecayVertex>>>& data) -> void { fDecayVertex = &data; }
+    auto SubmitEMCHC(const std::vector<gsl::owner<EMCHit*>>& hc) -> void { fEMCHit = &hc; }
+    auto SubmitEMCPMTHC(const std::vector<gsl::owner<EMCPMTHit*>>& hc) -> void { fEMCPMTHit = &hc; }
+    auto SubmitMCPHC(const std::vector<gsl::owner<MCPHit*>>& hc) -> void { fMCPHit = &hc; }
     auto EventEnd() -> void;
 
     auto RunEnd(Option_t* option = {}) -> void;
@@ -51,13 +55,17 @@ private:
     std::filesystem::path fLastUsedFullFilePath;
 
     gsl::owner<TFile*> fFile;
+    std::optional<Data::Output<Data::SimPrimaryVertex>> fPrimaryVertexOutput;
+    std::optional<Data::Output<Data::SimDecayVertex>> fDecayVertexOutput;
     std::optional<Data::Output<Data::EMCSimHit>> fEMCSimHitOutput;
-    std::optional<Data::Output<Data::EMCPMTSimHit>> fEMCPMTSimHitOutput;
+    std::optional<Data::Output<Data::EMCPMTHit>> fEMCPMTHitOutput;
     std::optional<Data::Output<Data::MCPSimHit>> fMCPSimHitOutput;
 
-    const std::vector<gsl::owner<Simulation::EMCHit*>>* fEMCHit;
-    const std::vector<gsl::owner<Simulation::EMCPMTHit*>>* fEMCPMTHit;
-    const std::vector<gsl::owner<Simulation::MCPHit*>>* fMCPHit;
+    const std::vector<std::unique_ptr<Data::Tuple<Data::SimPrimaryVertex>>>* fPrimaryVertex;
+    const std::vector<std::unique_ptr<Data::Tuple<Data::SimDecayVertex>>>* fDecayVertex;
+    const std::vector<gsl::owner<EMCHit*>>* fEMCHit;
+    const std::vector<gsl::owner<EMCPMTHit*>>* fEMCPMTHit;
+    const std::vector<gsl::owner<MCPHit*>>* fMCPHit;
 
     AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };

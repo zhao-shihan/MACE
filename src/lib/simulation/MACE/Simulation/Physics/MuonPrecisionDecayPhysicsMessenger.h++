@@ -5,6 +5,7 @@
 #include <memory>
 
 class G4UIcmdWithADouble;
+class G4UIcmdWithoutParameter;
 class G4UIdirectory;
 
 namespace MACE::inline Simulation::inline Physics {
@@ -24,7 +25,10 @@ public:
 
 private:
     std::unique_ptr<G4UIdirectory> fDirectory;
+    std::unique_ptr<G4UIcmdWithADouble> fRadiativeDecayBR;
     std::unique_ptr<G4UIcmdWithADouble> fIPPDecayBR;
+    std::unique_ptr<G4UIcmdWithADouble> fIPPDecayBR;
+    std::unique_ptr<G4UIcmdWithoutParameter> fUpdateDecayBR;
 };
 
 } // namespace MACE::inline Simulation::inline Physics

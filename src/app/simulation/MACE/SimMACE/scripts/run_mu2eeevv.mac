@@ -9,34 +9,35 @@
 
 /run/initialize
 
-/gps/particle                                  mu+
-/gps/direction                                 0 0 1        # 0 deg
-/gps/pos/centre                                0 0 -2 m     # 0 deg
-#/gps/direction                                 -0.25 0 2    # 7.125 deg
-#/gps/pos/centre                                0.25 0 -2 m  # 7.125 deg
-/gps/pos/type                                  Beam
-/gps/pos/shape                                 Circle
-/gps/pos/radius                                0 mm
-/gps/pos/sigma_r                               5 mm
-/gps/ene/type                                  Gauss
-/gps/ene/mono                                  3.647 MeV    # momentum 28 MeV
-/gps/ene/sigma                                 0.1793 MeV   # momentum spreading 2.5%
-/MACE/Generator/GPS/PulseWidth                 0 ns
-/MACE/Generator/GPS/PrimariesForEachG4Event    10
+/gps/particle             mu+
+/gps/direction            0 0 1        # 0 deg
+/gps/pos/centre           0 0 -2 m     # 0 deg
+/gps/pos/type             Beam
+/gps/pos/shape            Circle
+/gps/pos/radius           0 mm
+/gps/pos/sigma_r          5 mm
+/gps/ene/type             Gauss
+/gps/ene/mono             3.647 MeV    # momentum 28 MeV
+/gps/ene/sigma            0.1793 MeV   # momentum spreading 2.5%
+/GPSX/NVertex             10
+/GPSX/PulseWidth          0 ns
 
 /MACE/Physics/MuonDecay/IPPDecay/BR                      1
 /MACE/Physics/MuonDecay/IPPDecay/MetropolisDelta         0.005
 /MACE/Physics/MuonDecay/IPPDecay/MetropolisDiscard       10
+/MACE/Physics/MuonDecay/RadiativeDecay/BR                0
+/MACE/Physics/MuonDecay/UpdateDecayBR
 
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 
-/MACE/Field/AcceleratorPotential          500 volt
-/MACE/Field/SpectrometerMagneticField     0.1 tesla
+/MACE/Field/AcceleratePotential           500 volt
+/MACE/Field/MMSMagneticField              0.1 tesla
 /MACE/Field/SolenoidMagneticField         0.1 tesla
 /MACE/Field/EMCMagneticField              0.1 tesla
 
 /MACE/Analysis/CoincidenceWithCDC     true
-/MACE/Analysis/CoincidenceWithSTC     true
+/MACE/Analysis/CoincidenceWithTTC     true
+/MACE/Analysis/CoincidenceWithMMS     true
 /MACE/Analysis/CoincidenceWithMCP     true
 /MACE/Analysis/CoincidenceWithEMC     true
 

@@ -1,6 +1,8 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/Geant4X/ConvertGeometry.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
+#include "MACE/SimEMC/Action/PrimaryGeneratorAction.h++"
+#include "MACE/SimEMC/Action/TrackingAction.h++"
 #include "MACE/SimEMC/Analysis.h++"
 #include "MACE/Simulation/Hit/EMCHit.h++"
 #include "MACE/Simulation/Hit/EMCPMTHit.h++"
@@ -23,9 +25,13 @@ Analysis::Analysis() :
     fCoincidenceWithMCP{false},
     fLastUsedFullFilePath{},
     fFile{},
+    fPrimaryVertexOutput{},
+    fDecayVertexOutput{},
     fEMCSimHitOutput{},
-    fEMCPMTSimHitOutput{},
+    fEMCPMTHitOutput{},
     fMCPSimHitOutput{},
+    fPrimaryVertex{},
+    fDecayVertex{},
     fEMCHit{},
     fEMCPMTHit{},
     fMCPHit{},
@@ -46,23 +52,26 @@ auto Analysis::RunBegin(G4int runID) -> void {
     if (filePathChanged and Env::MPIEnv::Instance().OnCommWorldMaster()) {
         Geant4X::ConvertGeometryToTMacro("SimEMC_gdml", "SimEMC.gdml")->Write();
     }
-    // cd into run directory
-    const auto runDirectory{fmt::format("G4Run{}", runID)};
-    fFile->mkdir(runDirectory.c_str());
-    fFile->cd(runDirectory.c_str());
-    fEMCSimHitOutput.emplace("EMCSimHit");
-    fEMCPMTSimHitOutput.emplace("EMCPMTSimHit");
-    fMCPSimHitOutput.emplace("MCPSimHit");
+    // initialize outputs
+    if (PrimaryGeneratorAction::Instance().SavePrimaryVertexData()) { fPrimaryVertexOutput.emplace(fmt::format("G4Run{}/SimPrimaryVertex", runID)); }
+    if (TrackingAction::Instance().SaveDecayVertexData()) { fDecayVertexOutput.emplace(fmt::format("G4Run{}/SimDecayVertex", runID)); }
+    fEMCSimHitOutput.emplace(fmt::format("G4Run{}/EMCSimHit", runID));
+    fEMCPMTHitOutput.emplace(fmt::format("G4Run{}/EMCPMTHit", runID));
+    fMCPSimHitOutput.emplace(fmt::format("G4Run{}/MCPSimHit", runID));
 }
 
 auto Analysis::EventEnd() -> void {
-    const auto emcTriggered{not fCoincidenceWithEMC or fEMCHit == nullptr or fEMCHit->size() > 0};
-    const auto mcpTriggered{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
-    if (emcTriggered and mcpTriggered) {
-        if (fEMCHit) { *fEMCSimHitOutput << *fEMCHit; }
-        if (fEMCPMTHit) { *fEMCPMTSimHitOutput << *fEMCPMTHit; }
-        if (fMCPHit) { *fMCPSimHitOutput << *fMCPHit; }
+    const auto emcPassed{not fCoincidenceWithEMC or fEMCHit == nullptr or fEMCHit->size() > 0};
+    const auto mcpPassed{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
+    if (emcPassed and mcpPassed) {
+        if (fPrimaryVertex and fPrimaryVertexOutput) { fPrimaryVertexOutput->Fill(*fPrimaryVertex); }
+        if (fDecayVertex and fDecayVertexOutput) { fDecayVertexOutput->Fill(*fDecayVertex); }
+        if (fEMCHit) { fEMCSimHitOutput->Fill(*fEMCHit); }
+        if (fEMCPMTHit) { fEMCPMTHitOutput->Fill(*fEMCPMTHit); }
+        if (fMCPHit) { fMCPSimHitOutput->Fill(*fMCPHit); }
     }
+    fPrimaryVertex = {};
+    fDecayVertex = {};
     fEMCHit = {};
     fEMCPMTHit = {};
     fMCPHit = {};
@@ -70,12 +79,20 @@ auto Analysis::EventEnd() -> void {
 
 auto Analysis::RunEnd(Option_t* option) -> void {
     // write data
+    if (fPrimaryVertexOutput) { fPrimaryVertexOutput->Write(); }
+    if (fDecayVertexOutput) { fDecayVertexOutput->Write(); }
     fEMCSimHitOutput->Write();
-    fEMCPMTSimHitOutput->Write();
+    fEMCPMTHitOutput->Write();
     fMCPSimHitOutput->Write();
     // close file
     fFile->Close(option);
     delete fFile;
+    // reset output
+    fPrimaryVertexOutput.reset();
+    fDecayVertexOutput.reset();
+    fEMCSimHitOutput.reset();
+    fEMCPMTHitOutput.reset();
+    fMCPSimHitOutput.reset();
 }
 
 } // namespace MACE::SimEMC

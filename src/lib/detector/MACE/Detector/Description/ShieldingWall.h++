@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Description {
 
-class ShieldingWall final : public DescriptionSingletonBase<ShieldingWall> {
+class ShieldingWall final : public DescriptionBase<ShieldingWall> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -23,8 +23,8 @@ public:
     auto Rotation(double val) -> void { fRotation = val; }
 
 private:
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     bool fEnabled;

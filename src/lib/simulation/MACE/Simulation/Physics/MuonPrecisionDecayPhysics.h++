@@ -5,7 +5,11 @@
 
 #include "G4VPhysicsConstructor.hh"
 
+#include "gsl/gsl"
+
+class G4DecayTable;
 class G4ParticleDefinition;
+class G4String;
 
 namespace MACE::inline Simulation::inline Physics {
 
@@ -14,21 +18,23 @@ class MuonPrecisionDecayPhysics : public NonMoveableBase,
 public:
     MuonPrecisionDecayPhysics(G4int verbose);
 
-    auto IPPDecayBR(double br) -> void;
+    auto RadiativeDecayBR(double br) -> void { fRadiativeDecayBR = Math::Clamp<"[]">(br, 0., 1.); }
+    auto IPPDecayBR(double br) -> void { fIPPDecayBR = Math::Clamp<"[]">(br, 0., 1.); }
+    virtual auto UpdateDecayBR() -> void;
 
-    virtual auto ConstructParticle() -> void override { UpdateBR(); }
+    virtual auto ConstructParticle() -> void override;
     virtual auto ConstructProcess() -> void override;
 
 protected:
-    virtual auto UpdateBR() -> void;
-
-    auto UpdateBRFor(const G4ParticleDefinition* mu) -> void;
+    auto UpdateDecayBRFor(const G4ParticleDefinition* mu) -> void;
+    virtual auto InsertDecayChannel(const G4String& parentName, gsl::not_null<G4DecayTable*> decay) -> void;
+    virtual auto AssignRareDecayBR(gsl::not_null<G4DecayTable*> decay) -> void;
 
 protected:
+    double fRadiativeDecayBR;
     double fIPPDecayBR;
 
-    bool fDecayTableConstructed;
-
+private:
     MuonPrecisionDecayPhysicsMessenger::Register<MuonPrecisionDecayPhysics> fMessengerRegister;
 };
 

@@ -9,11 +9,11 @@ class G4UIdirectory;
 
 namespace MACE::inline Simulation::inline Field {
 
-class SolenoidB1Field;
-class SolenoidB2Field;
-class SolenoidS1Field;
-class SolenoidS2Field;
-class SolenoidS3Field;
+class SolenoidFieldB1;
+class SolenoidFieldB2;
+class SolenoidFieldS1;
+class SolenoidFieldS2;
+class SolenoidFieldS3;
 
 class SolenoidFieldMessenger final : public Geant4X::SingletonMessenger<SolenoidFieldMessenger> {
     friend Env::Memory::SingletonInstantiator;

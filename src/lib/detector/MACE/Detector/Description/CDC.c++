@@ -24,7 +24,7 @@ using namespace LiteralUnit;
 using namespace PhysicalConstant;
 
 CDC::CDC() :
-    DescriptionSingletonBase<CDC>("CDC"),
+    DescriptionBase{"CDC"},
     // Geometry
     fEvenSuperLayerIsAxial{},
     fNSuperLayer{7},
@@ -250,7 +250,7 @@ auto CDC::ComputeCellMapFromSenseLayerIDAndLocalCellID() const -> CellMapFromSen
     return cellMapFromSenseLayerIDAndLocalCellID;
 }
 
-auto CDC::ImportValues(const YAML::Node& node) -> void {
+auto CDC::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fEvenSuperLayerIsAxial, "EvenSuperLayerIsAxial");
     ImportValue(node, fNSuperLayer, "NSuperLayer");
@@ -281,7 +281,7 @@ auto CDC::ImportValues(const YAML::Node& node) -> void {
     fCache.Expire();
 }
 
-auto CDC::ExportValues(YAML::Node& node) const -> void {
+auto CDC::ExportAllValue(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fEvenSuperLayerIsAxial, "EvenSuperLayerIsAxial");
     ExportValue(node, fNSuperLayer, "NSuperLayer");

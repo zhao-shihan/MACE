@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Detector/Description/AcceleratorField.h++"
+#include "MACE/Detector/Description/Accelerator.h++"
 #include "MACE/Detector/Description/BeamDegrader.h++"
 #include "MACE/Detector/Description/BeamMonitor.h++"
 #include "MACE/Detector/Description/CDC.h++"
@@ -11,13 +11,13 @@
 #include "MACE/Detector/Description/Filter.h++"
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Detector/Description/MCPChamber.h++"
-#include "MACE/Detector/Description/STC.h++"
+#include "MACE/Detector/Description/MMSBeamPipe.h++"
+#include "MACE/Detector/Description/MMSField.h++"
+#include "MACE/Detector/Description/MMSMagnet.h++"
+#include "MACE/Detector/Description/MMSShield.h++"
 #include "MACE/Detector/Description/ShieldingWall.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Detector/Description/SpectrometerBeamPipe.h++"
-#include "MACE/Detector/Description/SpectrometerField.h++"
-#include "MACE/Detector/Description/SpectrometerMagnet.h++"
-#include "MACE/Detector/Description/SpectrometerShield.h++"
+#include "MACE/Detector/Description/TTC.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
@@ -39,7 +39,7 @@ inline namespace SD {
 class CDCSD;
 class EMCSD;
 class MCPSD;
-class STCSD;
+class TTCSD;
 } // namespace SD
 
 inline namespace Action {
@@ -61,16 +61,16 @@ public:
     auto ShieldRegion() const -> const auto& { return *fShieldRegion; }
     auto SolenoidOrMagnetRegion() const -> const auto& { return *fSolenoidOrMagnetRegion; }
     auto TargetRegion() const -> const auto& { return *fTargetRegion; }
-    auto STCSensitiveRegion() const -> const auto& { return *fSTCSensitiveRegion; }
+    auto TTCSensitiveRegion() const -> const auto& { return *fTTCSensitiveRegion; }
     auto VacuumRegion() const -> const auto& { return *fVacuumRegion; }
 
     auto CDCSD() const -> auto& { return *fCDCSD; }
-    auto STCSD() const -> auto& { return *fSTCSD; }
+    auto TTCSD() const -> auto& { return *fTTCSD; }
     auto MCPSD() const -> auto& { return *fMCPSD; }
     auto EMCSD() const -> auto& { return *fEMCSD; }
 
 public:
-    using DescriptionInUse = std::tuple<Detector::Description::AcceleratorField,
+    using DescriptionInUse = std::tuple<Detector::Description::Accelerator,
                                         Detector::Description::BeamDegrader,
                                         Detector::Description::BeamMonitor,
                                         Detector::Description::CDC,
@@ -81,13 +81,13 @@ public:
                                         Detector::Description::Filter,
                                         Detector::Description::MCP,
                                         Detector::Description::MCPChamber,
+                                        Detector::Description::MMSBeamPipe,
+                                        Detector::Description::MMSField,
+                                        Detector::Description::MMSMagnet,
+                                        Detector::Description::MMSShield,
                                         Detector::Description::ShieldingWall,
                                         Detector::Description::Solenoid,
-                                        Detector::Description::SpectrometerBeamPipe,
-                                        Detector::Description::SpectrometerField,
-                                        Detector::Description::SpectrometerMagnet,
-                                        Detector::Description::SpectrometerShield,
-                                        Detector::Description::STC,
+                                        Detector::Description::TTC,
                                         Detector::Description::Target,
                                         Detector::Description::World>;
 
@@ -105,12 +105,12 @@ private:
     Region* fMCPSensitiveRegion;
     Region* fShieldRegion;
     Region* fSolenoidOrMagnetRegion;
-    Region* fSTCSensitiveRegion;
+    Region* fTTCSensitiveRegion;
     Region* fTargetRegion;
     Region* fVacuumRegion;
 
     SD::CDCSD* fCDCSD;
-    SD::STCSD* fSTCSD;
+    SD::TTCSD* fTTCSD;
     SD::MCPSD* fMCPSD;
     SD::EMCSD* fEMCSD;
 };

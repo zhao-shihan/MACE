@@ -2,6 +2,8 @@ namespace MACE::inline Extension::Geant4X {
 
 template<typename ADerived, typename... ARecipients>
 SingletonMessenger<ADerived, ARecipients...>::SingletonMessenger() :
+    Env::Memory::Singleton<ADerived>{},
+    G4UImessenger{},
     fDelivering{},
     fRecipientSetTuple{} {
     static_assert(std::derived_from<ADerived, SingletonMessenger<ADerived, ARecipients...>>);

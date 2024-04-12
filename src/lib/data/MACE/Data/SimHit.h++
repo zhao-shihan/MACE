@@ -28,14 +28,12 @@ using CDCSimHit = TupleModel<CDCHit,
                              Value<stdx::array3f, "p", "Hit momentum (MC truth)">,
                              internal::SimHitVertexTruth>;
 
-using STCSimHit = TupleModel<STCHit,
+using TTCSimHit = TupleModel<TTCHit,
                              Value<int, "nOptPho", "Number of optical photon hits on SiPM (MC truth)">,
                              Value<stdx::array3f, "x", "Hit position (MC truth)">,
                              Value<float, "Ek", "Hit kinetic energy (MC truth)">,
                              Value<stdx::array3f, "p", "Hit momentum (MC truth)">,
                              internal::SimHitVertexTruth>;
-
-using STCSiPMSimHit = TupleModel<STCSiPMHit /* , Value<int, "STCHitID", "STC Hit ID (MC truth)"> */>;
 
 using MCPSimHit = TupleModel<MCPHit,
                              Value<float, "Edep", "Energy deposition">,
@@ -49,7 +47,5 @@ using EMCSimHit = TupleModel<EMCHit,
                              Value<float, "Ek", "Hit kinetic energy (MC truth)">,
                              Value<stdx::array3f, "p", "Hit momentum (MC truth)">,
                              internal::SimHitVertexTruth>;
-
-using EMCPMTSimHit = TupleModel<EMCPMTHit /* , Value<int, "EMCHitID", "EMC Hit ID (MC truth)"> */>;
 
 } // namespace MACE::Data

@@ -220,7 +220,7 @@ auto NoneOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 
 // template<CETAString... ANames,
 //          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
-//          TupleEquivalent<Tuple<typename I::Model::template ValueOf<ANames>...>> ATuple = Tuple<typename I::Model::template ValueOf<ANames>...>,
+//          EquivalentTuple<Tuple<typename I::Model::template ValueOf<ANames>...>> ATuple = Tuple<typename I::Model::template ValueOf<ANames>...>,
 //          std::invocable<typename I::Model::template ValueOf<ANames>...> P = TuplifyIdentity>
 // auto Count(I first, S last, const ATuple& tuple, P&& Proj = {}) -> decltype(auto) {
 //     return internal::CountFind<ANames...>(std::ranges::count,
@@ -241,7 +241,7 @@ auto NoneOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 
 // template<CETAString... ANames,
 //          internal::SheetRange S,
-//          TupleEquivalent<Tuple<typename std::decay_t<S>::Model::template ValueOf<ANames>...>> ATuple = Tuple<typename std::decay_t<S>::Model::template ValueOf<ANames>...>,
+//          EquivalentTuple<Tuple<typename std::decay_t<S>::Model::template ValueOf<ANames>...>> ATuple = Tuple<typename std::decay_t<S>::Model::template ValueOf<ANames>...>,
 //          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P = TuplifyIdentity>
 // auto Count(S&& sheet, const ATuple& tuple, P&& Proj = {}) -> decltype(auto) {
 //     return Count<ANames...>(std::ranges::begin(sheet),
@@ -321,7 +321,7 @@ auto CountIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 //          typename F = std::equal_to<>,
 //          std::invocable<typename I::Model::template ValueOf<ANames>...> P1 = TuplifyIdentity,
 //          typename P2 = TuplifyIdentity>
-//     requires TupleEquivalent<std::decay_t<std::ranges::range_value_t<R>>, Tuple<typename I::Model::template ValueOf<ANames>...>> and
+//     requires EquivalentTuple<std::decay_t<std::ranges::range_value_t<R>>, Tuple<typename I::Model::template ValueOf<ANames>...>> and
 //              std::invocable<P2, typename std::decay_t<std::ranges::range_value_t<R>>::Model::template ValueOf<ANames>...> and
 //              std::predicate<F, std::invoke_result_t<P1, typename I::Model::template ValueOf<ANames>...>,
 //                             std::invoke_result_t<P2, typename std::decay_t<std::ranges::range_value_t<R>>::Model::template ValueOf<ANames>...>>
@@ -355,7 +355,7 @@ auto CountIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 //          typename F = std::equal_to<>,
 //          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P1 = TuplifyIdentity,
 //          typename P2 = TuplifyIdentity>
-//     requires TupleEquivalent<std::decay_t<std::ranges::range_value_t<R>>, Tuple<typename std::decay_t<S>::Model::template ValueOf<ANames>...>> and
+//     requires EquivalentTuple<std::decay_t<std::ranges::range_value_t<R>>, Tuple<typename std::decay_t<S>::Model::template ValueOf<ANames>...>> and
 //              std::invocable<P2, typename std::decay_t<std::ranges::range_value_t<R>>::Model::template ValueOf<ANames>...> and
 //              std::predicate<F, std::invoke_result_t<P1, typename std::decay_t<S>::Model::template ValueOf<ANames>...>,
 //                             std::invoke_result_t<P2, typename std::decay_t<std::ranges::range_value_t<R>>::Model::template ValueOf<ANames>...>>
@@ -382,7 +382,7 @@ auto CountIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 
 // template<CETAString... ANames,
 //          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
-//          TupleEquivalent<Tuple<typename I::Model::template ValueOf<ANames>...>> ATuple = Tuple<typename I::Model::template ValueOf<ANames>...>,
+//          EquivalentTuple<Tuple<typename I::Model::template ValueOf<ANames>...>> ATuple = Tuple<typename I::Model::template ValueOf<ANames>...>,
 //          std::invocable<typename I::Model::template ValueOf<ANames>...> P = TuplifyIdentity>
 // auto Find(I first, S last, const ATuple& tuple, P&& Proj = {}) -> decltype(auto) {
 //     return internal::CountFind<ANames...>(std::ranges::find,
@@ -403,7 +403,7 @@ auto CountIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 
 // template<CETAString... ANames,
 //          internal::SheetRange S,
-//          TupleEquivalent<Tuple<typename std::decay_t<S>::Model::template ValueOf<ANames>...>> ATuple = Tuple<typename std::decay_t<S>::Model::template ValueOf<ANames>...>,
+//          EquivalentTuple<Tuple<typename std::decay_t<S>::Model::template ValueOf<ANames>...>> ATuple = Tuple<typename std::decay_t<S>::Model::template ValueOf<ANames>...>,
 //          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P = TuplifyIdentity>
 // auto Find(S&& sheet, const ATuple& tuple, P&& Proj = {}) -> decltype(auto) {
 //     return Find<ANames...>(std::ranges::begin(sheet),
@@ -524,7 +524,7 @@ auto FindIfNot(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 //          std::invocable<typename I::Model::template ValueOf<ANames>...> P1 = TuplifyIdentity,
 //          typename P2 = TuplifyIdentity>
 //     requires TupleLike<std::decay_t<std::ranges::range_value_t<R>>> and
-//              TupleEquivalent<std::decay_t<std::ranges::range_value_t<R>>, Tuple<typename I::Model::template ValueOf<ANames>...>> and
+//              EquivalentTuple<std::decay_t<std::ranges::range_value_t<R>>, Tuple<typename I::Model::template ValueOf<ANames>...>> and
 //              std::invocable<P2, typename std::decay_t<std::ranges::range_value_t<R>>::Model::template ValueOf<ANames>...> and
 //              std::predicate<F, std::invoke_result_t<P1, typename I::Model::template ValueOf<ANames>...>,
 //                             std::invoke_result_t<P2, typename std::decay_t<std::ranges::range_value_t<R>>::Model::template ValueOf<ANames>...>>
@@ -547,7 +547,7 @@ auto FindIfNot(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 //          typename F = std::equal_to<>,
 //          std::invocable<typename I::Model::template ValueOf<ANames>...> P1 = TuplifyIdentity,
 //          typename P2 = TuplifyIdentity>
-//     requires TupleEquivalent<std::decay_t<std::ranges::range_value_t<R>>, Tuple<typename I::Model::template ValueOf<ANames>...>> and
+//     requires EquivalentTuple<std::decay_t<std::ranges::range_value_t<R>>, Tuple<typename I::Model::template ValueOf<ANames>...>> and
 //              std::invocable<P2, typename std::decay_t<std::ranges::range_value_t<R>>::Model::template ValueOf<ANames>...> and
 //              std::predicate<F, std::invoke_result_t<P1, typename I::Model::template ValueOf<ANames>...>,
 //                             std::invoke_result_t<P2, typename std::decay_t<std::ranges::range_value_t<R>>::Model::template ValueOf<ANames>...>>

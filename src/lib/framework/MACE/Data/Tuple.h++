@@ -39,18 +39,25 @@ concept TupleLike = requires {
     };
 };
 
-template<typename I1, typename I2>
-concept TupleContain = requires {
-    requires TupleLike<I1>;
-    requires TupleLike<I2>;
-    requires TupleModelContain<typename I1::Model, typename I2::Model>;
-};
+template<typename T1, typename T2>
+concept EquivalentTuple = TupleLike<T1> and TupleLike<T2> and
+                          EquivalentTupleModel<typename T1::Model, typename T2::Model>;
 
-template<typename I1, typename I2>
-concept TupleEquivalent = requires {
-    requires TupleContain<I1, I2>;
-    requires TupleContain<I2, I1>;
-};
+template<typename T1, typename T2>
+concept SubTuple = TupleLike<T1> and TupleLike<T2> and
+                   SubTupleModel<typename T1::Model, typename T2::Model>;
+
+template<typename T1, typename T2>
+concept SuperTuple = TupleLike<T1> and TupleLike<T2> and
+                     SuperTupleModel<typename T1::Model, typename T2::Model>;
+
+template<typename T1, typename T2>
+concept ProperSubTuple = TupleLike<T1> and TupleLike<T2> and
+                         ProperSubTupleModel<typename T1::Model, typename T2::Model>;
+
+template<typename T1, typename T2>
+concept ProperSuperTuple = TupleLike<T1> and TupleLike<T2> and
+                           ProperSuperTupleModel<typename T1::Model, typename T2::Model>;
 
 } // namespace MACE::Data
 
@@ -114,6 +121,16 @@ private:
 public:
     constexpr Tuple() = default;
 
+    template<TupleModelizable... Us>
+        requires std::constructible_from<typename Model::StdTuple, const typename Tuple<Us...>::Model::StdTuple&>
+    constexpr Tuple(const Tuple<Us...>& tuple) :
+        fTuple{tuple.fTuple} {}
+
+    template<TupleModelizable... Us>
+        requires std::constructible_from<typename Model::StdTuple, typename Tuple<Us...>::Model::StdTuple&&>
+    constexpr Tuple(Tuple<Us...>&& tuple) :
+        fTuple{std::move(tuple.fTuple)} {}
+
     template<typename... Us>
         requires(sizeof...(Us) == Model::Size() and
                  []<gsl::index... Is>(gslx::index_sequence<Is...>) {
@@ -135,6 +152,11 @@ public:
     template<CETAString... ANames>
         requires(sizeof...(ANames) >= 1)
     constexpr auto Get() const&& -> decltype(auto) { return std::move(*this).template GetImpl<Model::template Index<ANames>()...>(); }
+
+    template<SubTuple<Tuple<Ts...>> ATuple>
+    constexpr auto As() const -> auto { return AsImpl<ATuple>(); }
+    template<std::same_as<Tuple<Ts...>> ATuple>
+    constexpr auto As() const -> const auto& { return *this; }
 
     template<TupleLike ATuple>
     constexpr auto operator==(const ATuple& that) const -> auto;
@@ -166,6 +188,9 @@ private:
     template<gsl::index... Is>
         requires((sizeof...(Is) >= 2) and ... and (0 <= Is and Is < Model::Size()))
     constexpr auto GetImpl() const&& -> auto { return Tuple<std::tuple_element_t<Is, Tuple>...>{std::get<Is>(std::move(fTuple))...}; }
+
+    template<TupleLike ATuple>
+    constexpr auto AsImpl() const -> ATuple;
 
 private:
     typename Model::StdTuple fTuple;

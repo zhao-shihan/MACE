@@ -7,16 +7,16 @@ namespace MACE::Detector::Description {
 using namespace LiteralUnit::Length;
 
 EMCShield::EMCShield() :
-    DescriptionSingletonBase{"EMCShield"},
+    DescriptionBase{"EMCShield"},
     // Geometry
-    fInnerRadius{57_cm},
-    fInnerLength{104_cm},
+    fInnerRadius{60_cm},
+    fInnerLength{110_cm},
     fGapAroundWindow{1_cm},
     fThickness{5_cm},
     // Material
-    fMaterialName{"G4_Pb"} {}
+    fMaterialName{"G4_Fe"} {}
 
-auto EMCShield::ImportValues(const YAML::Node& node) -> void {
+auto EMCShield::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fInnerLength, "InnerLength");
@@ -26,7 +26,7 @@ auto EMCShield::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fMaterialName, "MaterialName");
 }
 
-auto EMCShield::ExportValues(YAML::Node& node) const -> void {
+auto EMCShield::ExportAllValue(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fInnerLength, "InnerLength");

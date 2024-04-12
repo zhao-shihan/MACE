@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Data/SimHit.h++"
+#include "MACE/Data/SensorHit.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Extension/Geant4X/UseG4Allocator.h++"
 
@@ -11,7 +11,7 @@ namespace MACE::inline Simulation::inline Hit {
 
 class EMCPMTHit final : public Geant4X::UseG4Allocator<EMCPMTHit>,
                         public G4VHit,
-                        public Data::Tuple<Data::EMCPMTSimHit> {};
+                        public Data::Tuple<Data::EMCPMTHit> {};
 
 using EMCPMTHitCollection = G4THitsCollection<EMCPMTHit>;
 

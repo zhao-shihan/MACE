@@ -5,7 +5,7 @@ namespace {
 
 template<std::intmax_t i, typename T>
 struct FillDescriptionArray {
-    constexpr void operator()(std::array<DescriptionBase*, std::tuple_size_v<T>>& descriptions) const {
+    constexpr void operator()(std::array<DescriptionBase<>*, std::tuple_size_v<T>>& descriptions) const {
         std::get<i>(descriptions) = std::addressof(std::tuple_element_t<i, T>::Instance());
     }
 };
@@ -29,23 +29,23 @@ constexpr void StaticForEach(auto&&... args) {
 
 template<stdx::tuple_like T>
 auto DescriptionIO::Import(const std::filesystem::path& yamlFile) -> void {
-    std::array<DescriptionBase*, std::tuple_size_v<T>> descriptions;
+    std::array<DescriptionBase<>*, std::tuple_size_v<T>> descriptions;
     internal::StaticForEach<0, descriptions.size(),
                             internal::FillDescriptionArray, T>(descriptions);
     ImportImpl(yamlFile, descriptions);
 }
 
 template<stdx::tuple_like T>
-auto DescriptionIO::Export(const std::filesystem::path& yamlFile, std::string_view fileComment) -> void {
-    std::array<DescriptionBase*, std::tuple_size_v<T>> descriptions;
+auto DescriptionIO::Export(const std::filesystem::path& yamlFile, const std::string& fileComment) -> void {
+    std::array<DescriptionBase<>*, std::tuple_size_v<T>> descriptions;
     internal::StaticForEach<0, descriptions.size(),
                             internal::FillDescriptionArray, T>(descriptions);
     ExportImpl(yamlFile, fileComment, descriptions);
 }
 
 template<stdx::tuple_like T>
-auto DescriptionIO::Ixport(const std::filesystem::path& yamlFile, std::string_view fileComment) -> void {
-    std::array<DescriptionBase*, std::tuple_size_v<T>> descriptions;
+auto DescriptionIO::Ixport(const std::filesystem::path& yamlFile, const std::string& fileComment) -> void {
+    std::array<DescriptionBase<>*, std::tuple_size_v<T>> descriptions;
     internal::StaticForEach<0, descriptions.size(),
                             internal::FillDescriptionArray, T>(descriptions);
     IxportImpl(yamlFile, fileComment, descriptions);
@@ -79,8 +79,8 @@ auto DescriptionIO::ImportImpl(const std::filesystem::path& yamlFile, std::range
     }
 }
 
-auto DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::input_range auto& descriptions) -> void {
-    std::vector<std::pair<std::string_view, DescriptionBase*>> sortedDescriptions;
+auto DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, const std::string& fileComment, const std::ranges::input_range auto& descriptions) -> void {
+    std::vector<std::pair<std::string_view, DescriptionBase<>*>> sortedDescriptions;
     sortedDescriptions.reserve(descriptions.size());
     for (auto&& description : descriptions) {
         sortedDescriptions.emplace_back(description->Name(), description);
@@ -108,19 +108,20 @@ auto DescriptionIO::ExportImpl(const std::filesystem::path& yamlFile, std::strin
         } catch (const std::filesystem::filesystem_error&) { throw InvalidFile{}; }
         if (not yamlOut.is_open()) { throw InvalidFile{}; }
 
+        YAML::Emitter yamlEmitter{yamlOut};
+        yamlEmitter << YAML::Block;
         if (not fileComment.empty()) {
-            const auto firstLineFeed{fileComment.find_first_of('\n')};
-            const auto begin{fileComment.begin()};
-            const auto end{(firstLineFeed == std::string_view::npos) ? fileComment.end() : std::next(begin, firstLineFeed)};
-            yamlOut << "# " << std::string_view(begin, end) << "\n\n";
+            yamlEmitter << YAML::Comment(fileComment)
+                        << YAML::Newline;
         }
-        yamlOut << geomYaml << std::endl;
+        yamlEmitter << geomYaml
+                    << YAML::Newline;
     } catch (const InvalidFile&) {
         Env::PrintLnError("MACE::Detector::Description::DescriptionIO::ExportImpl: Cannot open yaml file, export failed");
     }
 }
 
-auto DescriptionIO::IxportImpl(const std::filesystem::path& yamlFile, std::string_view fileComment, const std::ranges::input_range auto& descriptions) -> void {
+auto DescriptionIO::IxportImpl(const std::filesystem::path& yamlFile, const std::string& fileComment, const std::ranges::input_range auto& descriptions) -> void {
     ExportImpl(std::filesystem::path(yamlFile).replace_extension(".prev.yaml"), fileComment, descriptions);
     ImportImpl(yamlFile, descriptions);
     ExportImpl(std::filesystem::path(yamlFile).replace_extension(".curr.yaml"), fileComment, descriptions);

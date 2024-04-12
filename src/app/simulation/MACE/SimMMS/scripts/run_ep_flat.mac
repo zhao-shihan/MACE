@@ -1,0 +1,37 @@
+#############################################################################
+# Initialization settings
+#############################################################################
+
+/control/verbose 0
+/run/verbose 0
+
+#/MACE/Detector/Description/Ixport mms_geom.yaml
+
+/run/initialize
+
+/MACE/Generator/SwitchToGPSX
+/gps/particle                         e+
+/gps/pos/type                         Point
+/gps/pos/centre                       0 0 0 m
+/gps/ang/type                         iso
+/gps/ene/type                         Lin
+/gps/ene/gradient                     0
+/gps/ene/intercept                    1
+/gps/ene/min                          1 keV
+/gps/ene/max                          52.32 MeV
+
+/MACE/Field/MMSMagneticField          0.1 tesla
+
+/MACE/Analysis/CoincidenceWithCDC     true
+/MACE/Analysis/CoincidenceWithTTC     true
+#/MACE/Analysis/SaveCDCHitData         false
+#/MACE/Analysis/SaveTTCHitData         false
+
+#############################################################################
+# Run
+#############################################################################
+
+/MACE/Analysis/FilePath SimMMS_ep_flat
+/MACE/Analysis/FileMode NEW
+/run/beamOn 10000
+/MPIRun/PrintRunSummary

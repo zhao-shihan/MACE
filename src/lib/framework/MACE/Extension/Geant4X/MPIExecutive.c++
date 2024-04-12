@@ -2,6 +2,7 @@
 #include "MACE/Env/Print.h++"
 #include "MACE/Extension/Geant4X/MPIExecutive.h++"
 
+#include <ostream>
 #include <stdexcept>
 
 namespace MACE::inline Extension::Geant4X {
@@ -33,7 +34,7 @@ auto MPIExecutive::ExecuteCommand(const std::string& command) -> bool {
         commandStatus == fCommandSucceeded) [[likely]] {
         return true;
     } else {
-        Env::PrintLn(G4cerr, "MACE::Geant4X::MPIExecutive::Execute: Command '{}' failed (G4UIcommandStatus: {})", command, commandStatus);
+        Env::PrintLn(G4cerr, "MACE::Geant4X::MPIExecutive::Execute: Command '{}' failed (G4UIcommandStatus: {})", command, commandStatus), flush(G4cerr);
         return false;
     }
 }

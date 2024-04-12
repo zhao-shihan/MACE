@@ -44,7 +44,7 @@ private:
     double fWeightedM2;
 
     Math::Random::Xoshiro256Plus fXoshiro256Plus;
-    unsigned char fReseedCounter;
+    unsigned int fReseedCounter : 8;
 
     MuonInternalPairProductionDecayChannelMessenger::Register<MuonInternalPairProductionDecayChannel> fMessengerRegister;
 };

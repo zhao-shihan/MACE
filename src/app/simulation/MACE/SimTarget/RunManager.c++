@@ -3,8 +3,10 @@
 #include "MACE/SimTarget/Action/ActionInitialization.h++"
 #include "MACE/SimTarget/Action/DetectorConstruction.h++"
 #include "MACE/SimTarget/Analysis.h++"
-#include "MACE/SimTarget/PhysicsList.h++"
 #include "MACE/SimTarget/RunManager.h++"
+#include "MACE/Simulation/Physics/StandardPhysicsList.h++"
+
+#include "G4PhysicsListHelper.hh"
 
 namespace MACE::SimTarget {
 
@@ -13,7 +15,9 @@ RunManager::RunManager() :
     fAnalysis{std::make_unique_for_overwrite<Analysis>()} {
     const auto verboseLevel{Env::BasicEnv::Instance().VerboseLevel()};
 
-    const auto physicsList{new PhysicsList};
+    G4PhysicsListHelper::GetPhysicsListHelper()->UseLowLooperThresholds();
+
+    const auto physicsList{new StandardPhysicsList};
     physicsList->SetVerboseLevel(std23::to_underlying(verboseLevel));
     SetUserInitialization(physicsList);
 

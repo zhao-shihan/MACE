@@ -2,9 +2,12 @@
 
 #include "MACE/Detector/Description/DescriptionBase.h++"
 
+#include <utility>
+#include <vector>
+
 namespace MACE::Detector::Description {
 
-class MCP final : public DescriptionSingletonBase<MCP> {
+class MCP final : public DescriptionBase<MCP> {
     friend Env::Memory::SingletonInstantiator;
 
 private:
@@ -27,12 +30,16 @@ public:
     // Detection
 
     auto TimeResolutionFWHM() const -> auto { return fTimeResolutionFWHM; }
+    auto EfficiencyEnergy() const -> const auto& { return fEfficiencyEnergy; }
+    auto EfficiencyValue() const -> const auto& { return fEfficiencyValue; }
 
     auto TimeResolutionFWHM(double val) -> void { fTimeResolutionFWHM = val; }
+    auto EfficiencyEnergy(std::vector<double> val) -> void { fEfficiencyEnergy = std::move(val); }
+    auto EfficiencyValue(std::vector<double> val) -> void { fEfficiencyValue = std::move(val); }
 
 private:
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     // Geometry
@@ -45,6 +52,8 @@ private:
     // Detection
 
     double fTimeResolutionFWHM;
+    std::vector<double> fEfficiencyEnergy;
+    std::vector<double> fEfficiencyValue;
 };
 
 } // namespace MACE::Detector::Description

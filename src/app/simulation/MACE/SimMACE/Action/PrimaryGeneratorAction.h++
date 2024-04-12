@@ -1,12 +1,15 @@
 #pragma once
 
+#include "MACE/Data/SimVertex.h++"
+#include "MACE/Data/Tuple.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
-#include "MACE/SimMACE/Messenger/PrimaryGeneratorActionMessenger.h++"
+#include "MACE/Extension/Geant4X/GeneralParticleSourceX.h++"
+#include "MACE/SimMACE/Messenger/AnalysisMessenger.h++"
 
-#include "G4GeneralParticleSource.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 
-#include <algorithm>
+#include <memory>
+#include <vector>
 
 namespace MACE::SimMACE::inline Action {
 
@@ -15,18 +18,21 @@ class PrimaryGeneratorAction final : public Env::Memory::PassiveSingleton<Primar
 public:
     PrimaryGeneratorAction();
 
-    auto PulseWidth(G4double val) -> void { fPulseWidth = std::max(0., val); }
-    auto PrimariesForEachG4Event(G4int n) -> void { fPrimariesForEachG4Event = std::max(1, n); }
+    auto SavePrimaryVertexData() const -> auto { return fSavePrimaryVertexData; }
+    auto SavePrimaryVertexData(bool val) -> void { fSavePrimaryVertexData = val; }
 
     auto GeneratePrimaries(G4Event* event) -> void override;
 
 private:
-    G4GeneralParticleSource fGeneralParticleSource;
+    auto UpdatePrimaryVertexData(const G4Event& event) -> void;
 
-    G4double fPulseWidth;
-    G4int fPrimariesForEachG4Event;
+private:
+    Geant4X::GeneralParticleSourceX fGPSX;
 
-    PrimaryGeneratorActionMessenger::Register<PrimaryGeneratorAction> fMessengerRegister;
+    bool fSavePrimaryVertexData;
+    std::vector<std::unique_ptr<Data::Tuple<Data::SimPrimaryVertex>>> fPrimaryVertexData;
+
+    AnalysisMessenger::Register<PrimaryGeneratorAction> fMessengerRegister;
 };
 
 } // namespace MACE::SimMACE::inline Action

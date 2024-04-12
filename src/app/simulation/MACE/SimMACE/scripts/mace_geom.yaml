@@ -1,15 +1,21 @@
 # SimMACE: geometry description
 
-AcceleratorField:
-  Radius: 75
-  UpstreamLength: 100
+Accelerator:
+  UpstreamLength: 50
   AccelerateLength: 270
-  AcceleratorPotential: 0.00050000000000000001
+  ElectrodePitch: 10
+  ElectrodeInnerRadius: 50
+  ElectrodeOuterRadius: 100
+  ElectrodeThickness: 0.5
+  FieldRadius: 120
+  ElectrodeMaterialName: G4_Be
+  AcceleratePotential: 0.00050000000000000001
 BeamDegrader:
   Enabled: true
   Width: 50
-  Thickness: 0.29999999999999999
+  Thickness: 0.5
   DistanceToTarget: 10
+  MaterialName: G4_MYLAR
 BeamMonitor:
   Enabled: false
   Width: 40
@@ -337,28 +343,137 @@ EMCMagnet:
   Length: 1000
   MaterialName: G4_Cu
 EMCShield:
-  InnerRadius: 570
-  InnerLength: 1040
+  InnerRadius: 600
+  InnerLength: 1100
   GapAroundWindow: 10
   Thickness: 50
-  MaterialName: G4_Pb
+  MaterialName: G4_Fe
 Filter:
   Enabled: true
   Length: 500
   Radius: 49
   Thickness: 0.20000000000000001
-  Count: 85
-  MaterialName: G4_Cu
+  Pitch: 1.1499999999999999
+  MaterialName: G4_BRONZE
 MCP:
   Diameter: 100
   Thickness: 1
   AnodeDistance: 5
   AnodeThickness: 1
   TimeResolutionFWHM: 1
+  EfficiencyEnergy:
+    - 4.8435842442662531e-05
+    - 5.7186028346342754e-05
+    - 6.7516980671905724e-05
+    - 7.9714273064078337e-05
+    - 9.4115069526184305e-05
+    - 0.00011111744448573568
+    - 0.00013119138657816535
+    - 0.00015489179032110529
+    - 0.00018287379480193876
+    - 0.00021591089337873542
+    - 0.00025491631499249357
+    - 0.00030096826812422506
+    - 0.00035533974520368672
+    - 0.00041953371133897881
+    - 0.0004953246500724722
+    - 0.0005848076145928109
+    - 0.00069045614030251688
+    - 0.00081519061959100039
+    - 0.00096245902886459803
+    - 0.0011363322393328624
+    - 0.0013416165461822432
+    - 0.0015839865267280526
+    - 0.0018701419000799794
+    - 0.0022079927243189319
+    - 0.0026068780505034629
+    - 0.0030778240776553971
+    - 0.0036338489447812015
+    - 0.0042903225851513103
+    - 0.0050653915901195294
+    - 0.0059804808267928285
+    - 0.0070608856755322736
+    - 0.0083364712582271339
+    - 0.0098424979857796926
+    - 0.011408137229828988
+  EfficiencyValue:
+    - 0.45226243044550063
+    - 0.49040650423529331
+    - 0.52298784832041012
+    - 0.55227388215628115
+    - 0.58055785239879021
+    - 0.60477340384295319
+    - 0.62904622629882867
+    - 0.65083646613768764
+    - 0.66982389279728394
+    - 0.68624229690803307
+    - 0.70146882662707455
+    - 0.70947671747735419
+    - 0.71055132067625959
+    - 0.71055132067625959
+    - 0.70626264911813441
+    - 0.69565387610224905
+    - 0.68003875665906255
+    - 0.66076177033983197
+    - 0.63863922773324111
+    - 0.61446105923368588
+    - 0.58896553536307406
+    - 0.56282164670422252
+    - 0.53540175970855508
+    - 0.50701042244417116
+    - 0.47867348777543223
+    - 0.45123684895193761
+    - 0.42344580308379676
+    - 0.3961653626140163
+    - 0.37036208410556459
+    - 0.3441496442080233
+    - 0.32003448808214219
+    - 0.29581284422432463
+    - 0.27301088914452576
+    - 0.25382566113539401
 MCPChamber:
   InnerRadius: 100
   Thickness: 0.5
-STC:
+MMSBeamPipe:
+  InnerRadius: 120
+  BerylliumLength: 1000
+  BerylliumThickness: 0.5
+  AluminiumThickness: 2
+MMSField:
+  Radius: 610
+  Length: 2200
+  MagneticFluxDensity: 0.0001
+MMSMagnet:
+  InnerRadius: 550
+  OuterRadius: 600
+  Length: 2200
+  MaterialName: G4_Cu
+MMSShield:
+  InnerRadius: 650
+  InnerLength: 2300
+  Thickness: 50
+  WindowRadius: 132
+  BeamSlantAngle: 0
+  MaterialName: G4_Fe
+ShieldingWall:
+  Enabled: true
+  Thickness: 500
+  Length: 5000
+  Rotation: 0.52359877559829882
+Solenoid:
+  S1Length: 150
+  B1Radius: 250
+  S2Length: 1314.5999999999999
+  B2Radius: 250
+  S3Length: 150
+  InnerRadius: 60
+  OuterRadius: 90
+  CoilThickness: 30
+  ReferenceCoilSpacing: 30
+  FieldRadius: 131
+  MaterialName: G4_Cu
+  MagneticFluxDensity: 0.0001
+TTC:
   Length: 150
   Width: 100
   Thickness: 10
@@ -532,43 +647,6 @@ STC:
   ScintillationYield: 11136
   ScintillationTimeConstant1: 2.3999999999999999
   ResolutionScale: 1
-ShieldingWall:
-  Enabled: true
-  Thickness: 500
-  Length: 5000
-  Rotation: 0.52359877559829882
-Solenoid:
-  S1Length: 150
-  B1Radius: 250
-  S2Length: 1315
-  B2Radius: 250
-  S3Length: 150
-  InnerRadius: 50
-  OuterRadius: 100
-  FieldRadius: 101
-  MaterialName: G4_Cu
-  MagneticFluxDensity: 0.0001
-SpectrometerBeamPipe:
-  InnerRadius: 100
-  BerylliumLength: 1000
-  BerylliumThickness: 0.5
-  AluminiumThickness: 2
-SpectrometerField:
-  Radius: 610
-  Length: 2200
-  MagneticFluxDensity: 0.0001
-SpectrometerMagnet:
-  InnerRadius: 550
-  OuterRadius: 600
-  Length: 2200
-  MaterialName: G4_Cu
-SpectrometerShield:
-  InnerRadius: 620
-  InnerLength: 2240
-  Thickness: 50
-  WindowRadius: 30
-  BeamSlantAngle: 0
-  MaterialName: G4_Pb
 Target:
   ShapeType: MultiLayer
   Cuboid:

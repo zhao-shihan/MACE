@@ -1,8 +1,8 @@
 #pragma once
 
 #include "MACE/Concept/NumericVector.h++"
-#include "MACE/Detector/Description/AcceleratorField.h++"
-#include "MACE/Detector/Description/SpectrometerField.h++"
+#include "MACE/Detector/Description/Accelerator.h++"
+#include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Field/ElectromagneticFieldBase.h++"
 
 namespace MACE::Detector::Field {
@@ -12,13 +12,13 @@ public:
     inline AcceleratorField();
 
     template<Concept::NumericVector3D T>
-    auto BFieldAt(T) const -> T { return {0, 0, fSpectrometerField.MagneticFluxDensity()}; }
+    auto BFieldAt(T) const -> T { return {0, 0, fMMSField.MagneticFluxDensity()}; }
     template<Concept::NumericVector3D T>
-    auto EFieldAt(T) const -> T { return {0, 0, fAcceleratorField.AcceleratorFieldStrength()}; }
+    auto EFieldAt(T) const -> T { return {0, 0, fAccelerator.AcceleratePotential() / fAccelerator.AccelerateLength()}; }
 
 private:
-    const Description::SpectrometerField& fSpectrometerField;
-    const Description::AcceleratorField& fAcceleratorField;
+    const Description::MMSField& fMMSField;
+    const Description::Accelerator& fAccelerator;
 };
 
 } // namespace MACE::Detector::Field

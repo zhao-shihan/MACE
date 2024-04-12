@@ -13,13 +13,14 @@
 #include <concepts>
 #include <cstdio>
 #include <string>
+#include <string_view>
 #include <unordered_set>
 #include <vector>
 
 namespace MACE::inline Utility {
 
 template<std::integral T = int>
-auto RDFEventSplitPoint(ROOTX::RDataFrame auto&& rdf, std::string eventIDBranchName = "EvtID") -> std::vector<unsigned> {
+auto RDFEventSplitPoint(ROOTX::RDataFrame auto&& rdf, std::string_view eventIDBranchName = "EvtID") -> std::vector<unsigned> {
     std::vector<unsigned> eventSplitPoint;
 
     if (Env::MPIEnv::Instance().OnCommWorldMaster()) {
@@ -31,14 +32,14 @@ auto RDFEventSplitPoint(ROOTX::RDataFrame auto&& rdf, std::string eventIDBranchN
                 assert(eventID >= 0);
                 if (eventID != lastEventID) {
                     if (not eventIDSet.emplace(eventID).second) {
-                        Env::PrintLnWarning("Warning: Dataset is disordered (event {} has appeared previously)", eventID);
+                        Env::PrintLnWarning("Warning: Disordered dataset (event {} has appeared before)", eventID);
                     }
                     lastEventID = eventID;
                     eventSplitPoint.emplace_back(index);
                 }
                 ++index;
             },
-            {std::move(eventIDBranchName)});
+            {std::string{eventIDBranchName}});
         eventSplitPoint.emplace_back(index);
     }
 

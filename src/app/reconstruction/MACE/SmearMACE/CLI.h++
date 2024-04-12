@@ -27,13 +27,13 @@ public:
     auto CDCSimHitIdentity() const -> bool { return ArgParser().get<bool>("--cdc-hit-id"); }
     auto CDCSimHitNameFormat() const -> auto { return ArgParser().present("--cdc-hit-name").value_or("G4Run{}/CDCSimHit"); }
 
-    auto CDCSimTrackSmearingConfig() const -> auto { return ParseSmearingConfig("--cdc-track"); }
-    auto CDCSimTrackIdentity() const -> bool { return ArgParser().get<bool>("--cdc-track-id"); }
-    auto CDCSimTrackNameFormat() const -> auto { return ArgParser().present("--cdc-track-name").value_or("G4Run{}/CDCSimTrack"); }
+    auto TTCSimHitSmearingConfig() const -> auto { return ParseSmearingConfig("--ttc-hit"); }
+    auto TTCSimHitIdentity() const -> bool { return ArgParser().get<bool>("--ttc-hit-id"); }
+    auto TTCSimHitNameFormat() const -> auto { return ArgParser().present("--ttc-hit-name").value_or("G4Run{}/TTCSimHit"); }
 
-    auto STCSimHitSmearingConfig() const -> auto { return ParseSmearingConfig("--stc-hit"); }
-    auto STCSimHitIdentity() const -> bool { return ArgParser().get<bool>("--stc-hit-id"); }
-    auto STCSimHitNameFormat() const -> auto { return ArgParser().present("--stc-hit-name").value_or("G4Run{}/STCSimHit"); }
+    auto MMSSimTrackSmearingConfig() const -> auto { return ParseSmearingConfig("--mms-track"); }
+    auto MMSSimTrackIdentity() const -> bool { return ArgParser().get<bool>("--mms-track-id"); }
+    auto MMSSimTrackNameFormat() const -> auto { return ArgParser().present("--mms-track-name").value_or("G4Run{}/MMSSimTrack"); }
 
     auto MCPSimHitSmearingConfig() const -> auto { return ParseSmearingConfig("--mcp-hit"); }
     auto MCPSimHitIdentity() const -> bool { return ArgParser().get<bool>("--mcp-hit-id"); }

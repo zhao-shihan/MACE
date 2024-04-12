@@ -1,10 +1,10 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/CLHEPX/Random/Xoshiro.h++"
+#include "MACE/Extension/Geant4X/Antimuonium.h++"
+#include "MACE/Extension/Geant4X/Muonium.h++"
 #include "MACE/Extension/MPIX/Execution/Executor.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
 #include "MACE/Simulation/Physics/DecayChannel/MuoniumInternalPairProductionDecayChannel.h++"
-#include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
-#include "MACE/Simulation/Physics/Particle/Muonium.h++"
 #include "MACE/Utility/MPIReseedRandomEngine.h++"
 
 #include "TFile.h"
@@ -34,7 +34,7 @@ auto main(int argc, char* argv[]) -> int {
     MPIReseedRandomEngine();
 
     G4ParticleTable::GetParticleTable()->SetReadiness();
-    Antimuonium::Definition();
+    Geant4X::Antimuonium::Definition();
     G4AntiNeutrinoE::Definition();
     G4AntiNeutrinoMu::Definition();
     G4Electron::Definition();
@@ -43,7 +43,7 @@ auto main(int argc, char* argv[]) -> int {
     G4NeutrinoE::Definition();
     G4NeutrinoMu::Definition();
     G4Positron::Definition();
-    Muonium::Definition();
+    Geant4X::Muonium::Definition();
 
     MuoniumInternalPairProductionDecayChannel ippDecay{"anti_muonium", 1};
     ippDecay.MetropolisDelta(std::stod(argv[2]));

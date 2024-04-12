@@ -1,6 +1,6 @@
+#include "MACE/Extension/Geant4X/Antimuonium.h++"
+#include "MACE/Extension/Geant4X/Muonium.h++"
 #include "MACE/SimTarget/Action/TrackingAction.h++"
-#include "MACE/Simulation/Physics/Particle/Antimuonium.h++"
-#include "MACE/Simulation/Physics/Particle/Muonium.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
 
 #include "G4Event.hh"
@@ -20,7 +20,7 @@ TrackingAction::TrackingAction() :
 
 auto TrackingAction::PreUserTrackingAction(const G4Track* track) -> void {
     if (const auto particle{track->GetParticleDefinition()};
-        particle == Muonium::Definition() or particle == Antimuonium::Definition()) {
+        particle == Geant4X::Muonium::Definition() or particle == Geant4X::Antimuonium::Definition()) {
         fMuoniumTrack = Analysis::Instance().NewMuoniumTrack();
         Get<"EvtID">(*fMuoniumTrack) = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
         Get<"TrkID">(*fMuoniumTrack) = track->GetTrackID();
@@ -34,7 +34,7 @@ auto TrackingAction::PreUserTrackingAction(const G4Track* track) -> void {
 
 auto TrackingAction::PostUserTrackingAction(const G4Track* track) -> void {
     if (const auto particle{track->GetParticleDefinition()};
-        particle == Muonium::Definition() or particle == Antimuonium::Definition()) {
+        particle == Geant4X::Muonium::Definition() or particle == Geant4X::Antimuonium::Definition()) {
         Get<"t">(*fMuoniumTrack) = track->GetGlobalTime();
         Get<"x">(*fMuoniumTrack) = track->GetPosition();
         Get<"Ek">(*fMuoniumTrack) = track->GetKineticEnergy();

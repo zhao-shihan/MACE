@@ -37,6 +37,8 @@ public:
     constexpr auto operator==(gsl::czstring rhs) const -> bool { return StringView() == std::string_view{rhs}; }
     constexpr auto operator<=>(gsl::czstring rhs) const -> auto { return StringView() <=> std::string_view{rhs}; }
 
+    constexpr operator bool() const { return HasValue(); }
+
     static constexpr auto HasValue() -> bool { return true; }
 
     const Data fStringDataImNotPublic; // semantic private
@@ -49,9 +51,12 @@ struct CETAString<0> {
 
     constexpr auto operator=(const CETAString&) -> CETAString& = delete;
 
+    constexpr operator bool() const { return HasValue(); }
+
     static constexpr auto HasValue() -> bool { return false; }
 };
 
+CETAString() -> CETAString<0>;
 CETAString(std::nullptr_t) -> CETAString<0>;
 template<std::size_t N>
 CETAString(const char (&)[N]) -> CETAString<N>;

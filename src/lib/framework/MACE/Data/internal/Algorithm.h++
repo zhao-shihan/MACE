@@ -231,7 +231,7 @@ auto CountFind(auto&& count_find, I first, S last, const UnderlyingType<I, AName
 
 template<CETAString... ANames,
          SheetIterator I, SheetSentinelFor<I> S,
-         TupleEquivalent<TupleType<I, ANames...>> ATuple,
+         EquivalentTuple<TupleType<I, ANames...>> ATuple,
          InvocableByName<I, ANames...> P>
 auto CountFind(auto&& count_find, I first, S last, const ATuple& tuple, P&& Proj) -> decltype(auto) {
     return CheckAndGetSheetFromFirstLast(first, last)
@@ -273,7 +273,7 @@ auto CountFind(auto&& count_find, I first, S last, const ATuple& tuple, P&& Proj
 //          typename F,
 //          InvocableByName<I, ANames...> P1,
 //          typename P2>
-//     requires TupleEquivalent<std::decay_t<std::iter_value_t<I2>>, TupleType<I, ANames...>> and
+//     requires EquivalentTuple<std::decay_t<std::iter_value_t<I2>>, TupleType<I, ANames...>> and
 //              std::invocable<P2, typename std::decay_t<std::iter_value_t<I2>>::Model::template ValueOf<ANames>...> and
 //              std::predicate<F, std::invoke_result_t<P1, typename I::Model::template ValueOf<ANames>...>,
 //                             std::invoke_result_t<P2, typename std::decay_t<std::ranges::range_value_t<R>>::Model::template ValueOf<ANames>...>>

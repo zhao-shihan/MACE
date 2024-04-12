@@ -5,7 +5,6 @@
 #include <memory>
 
 class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAnInteger;
 class G4UIdirectory;
 
 namespace MACE::inline Simulation::inline SD {
@@ -26,7 +25,6 @@ public:
 private:
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fIonizingEnergyDepositionThreshold;
-    std::unique_ptr<G4UIcmdWithAnInteger> fNMinFiredCellForQualifiedTrack;
 };
 
 } // namespace MACE::inline Simulation::inline SD

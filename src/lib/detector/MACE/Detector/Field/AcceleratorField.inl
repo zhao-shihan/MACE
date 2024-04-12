@@ -2,7 +2,7 @@ namespace MACE::Detector::Field {
 
 inline AcceleratorField::AcceleratorField() :
     ElectromagneticFieldBase<AcceleratorField>{},
-    fSpectrometerField{Description::SpectrometerField::Instance()},
-    fAcceleratorField{Description::AcceleratorField::Instance()} {}
+    fMMSField{Description::MMSField::Instance()},
+    fAccelerator{Description::Accelerator::Instance()} {}
 
 } // namespace MACE::Detector::Field
