@@ -21,10 +21,8 @@
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4ChordFinder.hh"
-#include "G4IntegrationDriver.hh"
 #include "G4InterpolationDriver.hh"
 #include "G4NistManager.hh"
-#include "G4NystromRK4.hh"
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4TDormandPrince45.hh"
@@ -188,12 +186,12 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         constexpr auto hMin{1_um};
 
         using Equation = G4TMagFieldEquation<MMSField>;
-        using Stepper = G4NystromRK4;
-        using Driver = G4IntegrationDriver<Stepper>;
+        using Stepper = G4TDormandPrince45<Equation, 6>;
+        using Driver = G4InterpolationDriver<Stepper>;
         const auto field{new MMSField};
         const auto equation{new Equation{field}};
-        const auto stepper{new Stepper{equation}}; // clang-format off
-        const auto driver{new Driver{hMin, stepper}}; // clang-format on
+        const auto stepper{new Stepper{equation, 6}}; // clang-format off
+        const auto driver{new Driver{hMin, stepper, 6}}; // clang-format on
         const auto chordFinder{new G4ChordFinder{driver}};
         mmsField.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), false);
     }

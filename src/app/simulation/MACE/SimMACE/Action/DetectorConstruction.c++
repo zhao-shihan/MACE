@@ -65,10 +65,8 @@
 
 #include "G4ChordFinder.hh"
 #include "G4EqMagElectricField.hh"
-#include "G4IntegrationDriver.hh"
 #include "G4InterpolationDriver.hh"
 #include "G4NistManager.hh"
-#include "G4NystromRK4.hh"
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4TDormandPrince45.hh"
@@ -339,26 +337,15 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         using namespace LiteralUnit::MagneticFluxDensity;
 
         constexpr auto hMin{1_um};
-        { // EM field
-            using Equation = G4EqMagElectricField;
-            using Stepper = G4TDormandPrince45<Equation, 8>;
-            using Driver = G4InterpolationDriver<Stepper>;
-            const auto field{new AcceleratorField};
-            const auto equation{new Equation{field}}; // clang-format off
-            const auto stepper{new Stepper{equation, 8}};
-            const auto driver{new Driver{hMin, stepper, 8}}; // clang-format on
-            const auto chordFinder{new G4ChordFinder{driver}};
-            acceleratorField.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), false);
-        }
         { // magnetic field
             const auto RegisterMagneticField{
                 []<typename AField>(Detector::Definition::DefinitionBase& detector, AField* field, bool forceToAllDaughters) {
                     using Equation = G4TMagFieldEquation<AField>;
-                    using Stepper = G4NystromRK4;
-                    using Driver = G4IntegrationDriver<Stepper>;
+                    using Stepper = G4TDormandPrince45<Equation, 6>;
+                    using Driver = G4InterpolationDriver<Stepper>;
                     const auto equation{new Equation{field}};
-                    const auto stepper{new Stepper{equation}}; // clang-format off
-                    const auto driver{new Driver{hMin, stepper}}; // clang-format on
+                    const auto stepper{new Stepper{equation, 6}}; // clang-format off
+                    const auto driver{new Driver{hMin, stepper, 6}}; // clang-format on
                     const auto chordFinder{new G4ChordFinder{driver}};
                     detector.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), forceToAllDaughters);
                 }};
@@ -369,6 +356,17 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
             RegisterMagneticField(solenoidFieldB2, new SolenoidFieldB2, false);
             RegisterMagneticField(solenoidFieldS3, new SolenoidFieldS3, false);
             RegisterMagneticField(emcField, new EMCField, false);
+        }
+        { // EM field, must be reigstered after MMS magnetic field! but why?
+            using Equation = G4EqMagElectricField;
+            using Stepper = G4TDormandPrince45<Equation, 8>;
+            using Driver = G4InterpolationDriver<Stepper>;
+            const auto field{new AcceleratorField};
+            const auto equation{new Equation{field}}; // clang-format off
+            const auto stepper{new Stepper{equation, 8}};
+            const auto driver{new Driver{hMin, stepper, 8}}; // clang-format on
+            const auto chordFinder{new G4ChordFinder{driver}};
+            acceleratorField.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), false);
         }
     }
 
