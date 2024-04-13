@@ -63,11 +63,12 @@
 #include "MACE/Simulation/Field/SolenoidFieldS3.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
-#include "G4BFieldIntegrationDriver.hh"
+#include "G4ChordFinder.hh"
 #include "G4EqMagElectricField.hh"
-#include "G4HelixHeum.hh"
+#include "G4IntegrationDriver.hh"
 #include "G4InterpolationDriver.hh"
 #include "G4NistManager.hh"
+#include "G4NystromRK4.hh"
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4TDormandPrince45.hh"
@@ -337,32 +338,27 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         using namespace LiteralUnit::Length;
         using namespace LiteralUnit::MagneticFluxDensity;
 
-        constexpr auto hMin{100_um};
+        constexpr auto hMin{1_um};
         { // EM field
             using Equation = G4EqMagElectricField;
-            using Stepper = G4TDormandPrince45<G4EqMagElectricField, 8>;
-            using Driver = G4InterpolationDriver<G4TDormandPrince45<G4EqMagElectricField, 8>>;
+            using Stepper = G4TDormandPrince45<Equation, 8>;
+            using Driver = G4InterpolationDriver<Stepper>;
             const auto field{new AcceleratorField};
             const auto equation{new Equation{field}}; // clang-format off
             const auto stepper{new Stepper{equation, 8}};
             const auto driver{new Driver{hMin, stepper, 8}}; // clang-format on
             const auto chordFinder{new G4ChordFinder{driver}};
-            detector.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), false);
+            acceleratorField.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), false);
         }
         { // magnetic field
             const auto RegisterMagneticField{
-                [&hMin]<typename AField>(Detector::Definition& detector, gsl::not_null<AField*> field, bool forceToAllDaughters) {
-                    using Equation = G4TMagFieldEquation<MMSField>;
-                    using SmallStepper = G4TDormandPrince45<Equation>;
-                    using SmallStepDriver = G4InterpolationDriver<SmallStepper>;
-                    using LargeStepper = G4HelixHeum;
-                    using LargeStepDriver = G4IntegrationDriver<LargeStepper>;
+                []<typename AField>(Detector::Definition::DefinitionBase& detector, AField* field, bool forceToAllDaughters) {
+                    using Equation = G4TMagFieldEquation<AField>;
+                    using Stepper = G4NystromRK4;
+                    using Driver = G4IntegrationDriver<Stepper>;
                     const auto equation{new Equation{field}};
-                    const auto regularStepper{new SmallStepper{equation}};
-                    const auto longStepper{new LargeStepper{equation}};
-                    const auto nVar{regularStepper->GetNumberOfVariables()}; // clang-format off
-                    const auto driver{new G4BFieldIntegrationDriver{std::make_unique<SmallStepDriver>(hMin, regularStepper, nVar),
-                                                                    std::make_unique<LargeStepDriver>(hMin, longStepper, nVar)}}; // clang-format on
+                    const auto stepper{new Stepper{equation}}; // clang-format off
+                    const auto driver{new Driver{hMin, stepper}}; // clang-format on
                     const auto chordFinder{new G4ChordFinder{driver}};
                     detector.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), forceToAllDaughters);
                 }};
