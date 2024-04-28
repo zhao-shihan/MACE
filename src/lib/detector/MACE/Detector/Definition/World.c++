@@ -1,6 +1,5 @@
 #include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Description/World.h++"
-#include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4Box.hh"
 #include "G4NistManager.hh"
@@ -8,29 +7,22 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace LiteralUnit::Density;
-using namespace LiteralUnit::Temperature;
-
 auto World::Construct(G4bool checkOverlaps) -> void {
-    const auto& description = Description::World::Instance();
-    auto name = description.Name();
-    auto halfX = description.HalfXExtent();
-    auto halfY = description.HalfYExtent();
-    auto halfZ = description.HalfZExtent();
+    const auto& world{Description::World::Instance()};
 
-    auto solid = Make<G4Box>(
-        name,
-        halfX,
-        halfY,
-        halfZ);
-    auto logic = Make<G4LogicalVolume>(
+    const auto solid{Make<G4Box>(
+        world.Name(),
+        world.HalfXExtent(),
+        world.HalfYExtent(),
+        world.HalfZExtent())};
+    const auto logic{Make<G4LogicalVolume>(
         solid,
         nullptr,
-        name);
+        world.Name())};
     Make<G4PVPlacement>(
-        G4Transform3D(),
+        G4Transform3D{},
         logic,
-        name,
+        world.Name(),
         nullptr,
         false,
         0,

@@ -12,13 +12,13 @@ private:
     ~World() = default;
 
 public:
-    const auto& HalfXExtent() const { return fHalfXExtent; }
-    const auto& HalfYExtent() const { return fHalfYExtent; }
-    const auto& HalfZExtent() const { return fHalfZExtent; }
+    auto HalfXExtent() const -> auto { return fHalfXExtent; }
+    auto HalfYExtent() const -> auto { return fHalfYExtent; }
+    auto HalfZExtent() const -> auto { return fHalfZExtent; }
 
-    void HalfXExtent(double val) { fHalfXExtent = val; }
-    void HalfYExtent(double val) { fHalfYExtent = val; }
-    void HalfZExtent(double val) { fHalfZExtent = val; }
+    auto HalfXExtent(double val) -> void { fHalfXExtent = val; }
+    auto HalfYExtent(double val) -> void { fHalfYExtent = val; }
+    auto HalfZExtent(double val) -> void { fHalfZExtent = val; }
 
 private:
     auto ImportAllValue(const YAML::Node& node) -> void override;
