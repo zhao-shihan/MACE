@@ -1,8 +1,8 @@
 #pragma once
 
 #include "MACE/Detector/Description/EMC.h++"
-#include "MACE/Detector/Description/World.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
+#include "MACE/PhaseI/Detector/Description/World.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Region.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/SD/EMCPMTSD.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/SD/EMCSD.h++"
@@ -40,13 +40,13 @@ public:
     auto EMCPMTSD() const -> auto& { return *fEMCPMTSD; }
 
 public:
-    using DescriptionInUse = std::tuple<Detector::Description::EMC,
-                                        Detector::Description::World>;
+    using DescriptionInUse = std::tuple<MACE::Detector::Description::EMC,
+                                        PhaseI::Detector::Description::World>;
 
 private:
     G4bool fCheckOverlap;
 
-    std::unique_ptr<Detector::Definition::DefinitionBase> fWorld;
+    std::unique_ptr<MACE::Detector::Definition::DefinitionBase> fWorld;
 
     Region* fDefaultGaseousRegion;
     Region* fDefaultSolidRegion;
@@ -59,6 +59,6 @@ private:
     SD::EMCPMTSD* fEMCPMTSD;
 };
 
-} // namespace SimMACEPhaseI::inline Action
+} // namespace PhaseI::SimMACEPhaseI::inline Action
 
 } // namespace MACE

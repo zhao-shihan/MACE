@@ -1,0 +1,33 @@
+#pragma once
+
+#include "MACE/Detector/Description/DescriptionBase.h++"
+
+namespace MACE::PhaseI::Detector::Description {
+
+class World final : public MACE::Detector::Description::DescriptionBase<World> {
+    friend Env::Memory::SingletonInstantiator;
+
+private:
+    World();
+    ~World() = default;
+
+public:
+    auto HalfXExtent() const -> auto { return fHalfXExtent; }
+    auto HalfYExtent() const -> auto { return fHalfYExtent; }
+    auto HalfZExtent() const -> auto { return fHalfZExtent; }
+
+    auto HalfXExtent(double val) -> void { fHalfXExtent = val; }
+    auto HalfYExtent(double val) -> void { fHalfYExtent = val; }
+    auto HalfZExtent(double val) -> void { fHalfZExtent = val; }
+
+private:
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
+
+private:
+    double fHalfXExtent;
+    double fHalfYExtent;
+    double fHalfZExtent;
+};
+
+} // namespace MACE::PhaseI::Detector::Description
