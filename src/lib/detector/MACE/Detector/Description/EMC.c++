@@ -1,5 +1,4 @@
 #include "MACE/Detector/Description/EMC.h++"
-#include "MACE/Detector/Description/SolenoidBeamPipe.h++"
 #include "MACE/Math/Hypot.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/MathConstant.h++"
@@ -153,6 +152,8 @@ EMC::EMC() :
     fNSubdivision{2},
     fInnerRadius{15_cm},
     fCrystalHypotenuse{15_cm},
+    fUpstreamWindowRadius{50_mm},
+    fDownstreamWindowRadius{5_mm},
     fSmallPMTRadius{25.5_mm},
     fSmallPMTLength{144_mm},
     fSmallPMTCathodeRadius{23_mm},
@@ -206,7 +207,6 @@ auto EMC::ComputeMesh() const -> MeshInformation {
     auto pmpMesh{EMCMesh{fNSubdivision}.Generate()};
     MeshInformation mesh;
     auto& [vertex, faceList]{mesh};
-    const auto beamPipeRadius{SolenoidBeamPipe::Instance().InnerRadius()};
     const auto point{pmpMesh.vertex_property<pmp::Point>("v:point")};
 
     for (auto&& v : pmpMesh.vertices()) {
@@ -214,16 +214,22 @@ auto EMC::ComputeMesh() const -> MeshInformation {
     }
 
     for (auto&& f : pmpMesh.faces()) {
+        const auto centroid{VectorCast<CLHEP::Hep3Vector>(pmp::centroid(pmpMesh, f))};
+        if (const auto rXY{fInnerRadius * centroid.perp()};
+            centroid.z() < 0) {
+            if (rXY < fUpstreamWindowRadius) { continue; }
+        } else {
+            if (rXY < fDownstreamWindowRadius) { continue; }
+        }
         if (std::ranges::any_of(pmpMesh.vertices(f),
                                 [&](const auto& v) {
-                                    CLHEP::Hep2Vector p{point[v][0] * fInnerRadius, point[v][1] * fInnerRadius};
-                                    return p.mag() < beamPipeRadius and point[v][2] < 0;
+                                    const auto rXY{fInnerRadius * Math::Hypot(point[v][0], point[v][1])};
+                                    if (point[v][2] < 0) {
+                                        return rXY < fUpstreamWindowRadius;
+                                    } else {
+                                        return rXY < fDownstreamWindowRadius;
+                                    }
                                 })) {
-            continue;
-        }
-
-        const auto centroid{VectorCast<CLHEP::Hep3Vector>(pmp::centroid(pmpMesh, f))};
-        if (centroid.perp() < 1_nm) {
             continue;
         }
 
@@ -268,6 +274,8 @@ auto EMC::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fNSubdivision, "NSubdivision");
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
+    ImportValue(node, fUpstreamWindowRadius, "UpstreamWindowRadius");
+    ImportValue(node, fDownstreamWindowRadius, "DownstreamWindowRadius");
     ImportValue(node, fSmallPMTRadius, "SmallPMTRadius");
     ImportValue(node, fSmallPMTLength, "SmallPMTLength");
     ImportValue(node, fSmallPMTCathodeRadius, "SmallPMTCathodeRadius");
@@ -292,6 +300,8 @@ auto EMC::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fNSubdivision, "NSubdivision");
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
+    ExportValue(node, fUpstreamWindowRadius, "UpstreamWindowRadius");
+    ExportValue(node, fDownstreamWindowRadius, "DownstreamWindowRadius");
     ExportValue(node, fSmallPMTRadius, "SmallPMTRadius");
     ExportValue(node, fSmallPMTLength, "SmallPMTLength");
     ExportValue(node, fSmallPMTCathodeRadius, "SmallPMTCathodeRadius");

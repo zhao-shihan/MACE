@@ -49,6 +49,8 @@ EMC:
   NSubdivision: 2
   InnerRadius: 150
   CrystalHypotenuse: 150
+  UpstreamWindowRadius: 50
+  DownstreamWindowRadius: 5
   SmallPMTRadius: 25.5
   SmallPMTLength: 144
   SmallPMTCathodeRadius: 23

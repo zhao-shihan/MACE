@@ -21,6 +21,8 @@ public:
     auto NSubdivision() const -> auto { return fNSubdivision; }
     auto InnerRadius() const -> auto { return fInnerRadius; }
     auto CrystalHypotenuse() const -> auto { return fCrystalHypotenuse; }
+    auto UpstreamWindowRadius() const -> auto { return fUpstreamWindowRadius; }
+    auto DownstreamWindowRadius() const -> auto { return fDownstreamWindowRadius; }
     auto SmallPMTRadius() const -> auto { return fSmallPMTRadius; }
     auto SmallPMTLength() const -> auto { return fSmallPMTLength; }
     auto SmallPMTCathodeRadius() const -> auto { return fSmallPMTCathodeRadius; }
@@ -48,6 +50,8 @@ public:
     auto NSubdivision(int val) -> void { fNSubdivision = val, SetGeometryOutdated(); }
     auto InnerRadius(double val) -> void { fInnerRadius = val, SetGeometryOutdated(); }
     auto CrystalHypotenuse(double val) -> void { fCrystalHypotenuse = val, SetGeometryOutdated(); }
+    auto UpstreamWindowRadius(double val) -> void { fUpstreamWindowRadius = val, SetGeometryOutdated(); }
+    auto DownstreamWindowRadius(double val) -> void { fDownstreamWindowRadius = val, SetGeometryOutdated(); }
     auto SmallPMTRadius(double val) -> void { fSmallPMTRadius = val; }
     auto SmallPMTLength(double val) -> void { fSmallPMTLength = val; }
     auto SmallPMTCathodeRadius(double val) -> void { fSmallPMTCathodeRadius = val; }
@@ -100,6 +104,8 @@ private:
     int fNSubdivision;
     double fInnerRadius;
     double fCrystalHypotenuse;
+    double fUpstreamWindowRadius;
+    double fDownstreamWindowRadius;
     double fSmallPMTRadius;
     double fSmallPMTLength;
     double fSmallPMTCathodeRadius;

@@ -8,7 +8,7 @@
 
 /MACE/Physics/UseOpticalPhysics
 
-#/MACE/Detector/Description/Import emc_geom.yaml
+#/MACE/Detector/Description/Import SimEMC_geom.yaml
 
 /run/initialize
 
