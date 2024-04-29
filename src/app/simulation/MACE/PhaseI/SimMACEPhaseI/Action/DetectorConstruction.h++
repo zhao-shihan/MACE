@@ -2,6 +2,7 @@
 
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
+#include "MACE/PhaseI/Detector/Description/CentralBeamPipe.h++"
 #include "MACE/PhaseI/Detector/Description/World.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Region.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/SD/EMCPMTSD.h++"
@@ -41,6 +42,7 @@ public:
 
 public:
     using DescriptionInUse = std::tuple<MACE::Detector::Description::EMC,
+                                        PhaseI::Detector::Description::CentralBeamPipe,
                                         PhaseI::Detector::Description::World>;
 
 private:

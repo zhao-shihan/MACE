@@ -1,9 +1,9 @@
 #include "MACE/Detector/Definition/DefinitionBase.h++"
 #include "MACE/Detector/Definition/EMCCrystal.h++"
 #include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
-#include "MACE/Detector/Definition/MCPChamber.h++"
 #include "MACE/Detector/Description/DescriptionIO.h++"
 #include "MACE/Detector/Description/EMC.h++"
+#include "MACE/PhaseI/Detector/Definition/CentralBeamPipe.h++"
 #include "MACE/PhaseI/Detector/Definition/World.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Action/DetectorConstruction.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Messenger/DetectorMessenger.h++"
@@ -46,7 +46,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     fWorld = std::make_unique<PhaseI::World>();
     auto& emcCrystal{fWorld->NewDaughter<EMCCrystal>(fCheckOverlap)};
     auto& emcPMTAssemblies{fWorld->NewDaughter<EMCPMTAssemblies>(fCheckOverlap)};
-    /* auto& mcpChamber = */ fWorld->NewDaughter<MCPChamber>(fCheckOverlap);
+    auto& centralBeamPipe{fWorld->NewDaughter<PhaseI::CentralBeamPipe>(fCheckOverlap)};
 
     const auto defaultCuts{G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts()};
 
@@ -54,8 +54,9 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     fEMCSensitiveRegion->SetProductionCuts(defaultCuts);
     emcCrystal.RegisterRegion(fEMCSensitiveRegion);
 
-    fShieldRegion = new Region("Shield", RegionType::Shield);
-    fShieldRegion->SetProductionCuts(defaultCuts);
+    fDefaultSolidRegion = new Region("DefaultSolid", RegionType::DefaultSolid);
+    fDefaultSolidRegion->SetProductionCuts(defaultCuts);
+    centralBeamPipe.RegisterRegion(fDefaultSolidRegion);
 
     const auto& emcName{MACE::Detector::Description::EMC::Instance().Name()};
 
