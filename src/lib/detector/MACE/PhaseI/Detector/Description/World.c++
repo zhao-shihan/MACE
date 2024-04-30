@@ -7,9 +7,9 @@ using namespace LiteralUnit::Length;
 
 World::World() :
     DescriptionBase{"World"},
-    fHalfXExtent{1_m},
-    fHalfYExtent{1_m},
-    fHalfZExtent{1_m} {}
+    fHalfXExtent{0.5_m},
+    fHalfYExtent{0.5_m},
+    fHalfZExtent{0.5_m} {}
 
 auto World::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fHalfXExtent, "HalfXExtent");
