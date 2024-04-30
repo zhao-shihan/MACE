@@ -25,7 +25,8 @@ class Target final : public DescriptionBase<Target> {
 public:
     enum struct TargetShapeType {
         Cuboid,
-        MultiLayer
+        MultiLayer,
+        Cylinder
     };
 
     template<typename ADerivedShape>
@@ -177,6 +178,25 @@ public:
         PerforatedMultiLayer fPerforated;
     };
 
+    class CylinderTarget final : public ShapeBase<CylinderTarget> {
+    public:
+        CylinderTarget();
+
+        auto Radius() const -> auto { return fRadius; }
+        auto Thickness() const -> auto { return fThickness; }
+
+        auto Radius(double val) -> void { fRadius = val; }
+        auto Thickness(double val) -> void { fThickness = val; }
+
+        auto VolumeContain(const Concept::InputVector3D auto& x) const -> bool;
+        auto Contain(const Concept::InputVector3D auto&, bool insideVolume) const -> bool { return insideVolume; }
+        auto DetectableAt(const Concept::InputVector3D auto& x) const -> bool;
+
+    private:
+        double fRadius;
+        double fThickness;
+    };
+
 private:
     Target();
     ~Target() = default;
@@ -189,6 +209,8 @@ public:
     auto Cuboid() -> auto& { return fCuboid; }
     auto MultiLayer() const -> const auto& { return fMultiLayer; }
     auto MultiLayer() -> auto& { return fMultiLayer; }
+    auto Cylinder() const -> const auto& { return fCylinder; }
+    auto Cylinder() -> auto& { return fCylinder; }
 
     auto SilicaAerogelDensity() const -> auto { return fSilicaAerogelDensity; }
     auto EffectiveTemperature() const -> auto { return fEffectiveTemperature; }
@@ -218,6 +240,7 @@ private:
     TargetShapeType fShapeType;
     CuboidTarget fCuboid;
     MultiLayerTarget fMultiLayer;
+    CylinderTarget fCylinder;
 
     double fSilicaAerogelDensity;
     double fEffectiveTemperature;

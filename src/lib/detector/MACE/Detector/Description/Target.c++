@@ -22,6 +22,7 @@ Target::Target() :
     fShapeType{TargetShapeType::MultiLayer},
     fCuboid{},
     fMultiLayer{},
+    fCylinder{},
     fSilicaAerogelDensity{27_mg_cm3},
     fEffectiveTemperature{400_K},
     fFormationProbability{0.655},
@@ -134,6 +135,14 @@ auto Target::ImportAllValue(const YAML::Node& node) -> void {
                 "MultiLayer", "Perforated", "Diameter");
         }
     }
+    {
+        ImportValue<double>(
+            node, [this](auto value) { fCylinder.Radius(value); },
+            "Cylinder", "Radius");
+        ImportValue<double>(
+            node, [this](auto value) { fCylinder.Thickness(value); },
+            "Cylinder", "Thickness");
+    }
     ImportValue(node, fSilicaAerogelDensity, "SilicaAerogelDensity");
     ImportValue(node, fEffectiveTemperature, "EffectiveTemperature");
     ImportValue(node, fFormationProbability, "FormationProbability");
@@ -198,6 +207,10 @@ auto Target::ExportAllValue(YAML::Node& node) const -> void {
             ExportValue(node, fMultiLayer.Perforated().Diameter(), "MultiLayer", "Perforated", "Diameter");
         }
     }
+    {
+        ExportValue(node, fCylinder.Radius(), "Cylinder", "Radius");
+        ExportValue(node, fCylinder.Thickness(), "Cylinder", "Thickness");
+    }
     ExportValue(node, fSilicaAerogelDensity, "SilicaAerogelDensity");
     ExportValue(node, fEffectiveTemperature, "EffectiveTemperature");
     ExportValue(node, fFormationProbability, "FormationProbability");
@@ -234,5 +247,10 @@ Target::MultiLayerTarget::PerforatedMultiLayer::PerforatedMultiLayer() :
     fHalfExtentY{4_cm / 2},
     fSpacing{55_um},
     fRadius{184_um / 2} {}
+
+Target::CylinderTarget::CylinderTarget() :
+    ShapeBase{},
+    fRadius{30_mm},
+    fThickness{60_mm} {}
 
 } // namespace MACE::Detector::Description

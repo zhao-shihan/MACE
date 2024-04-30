@@ -5,10 +5,12 @@
 
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
+#include "G4Tubs.hh"
 
 namespace MACE::Detector::Definition {
 
 using namespace MACE::LiteralUnit::Density;
+using namespace MACE::LiteralUnit::MathConstantSuffix;
 
 auto Target::Construct(G4bool checkOverlaps) -> void {
     const auto& target{Description::Target::Instance()};
@@ -59,6 +61,29 @@ auto Target::Construct(G4bool checkOverlaps) -> void {
                 k,
                 checkOverlaps);
         }
+        return;
+    }
+    case Description::Target::TargetShapeType::Cylinder: {
+        const auto& cylinder{target.Cylinder()};
+        const auto solid{Make<G4Tubs>(
+            target.Name(),
+            0,
+            cylinder.Radius(),
+            cylinder.Thickness() / 2,
+            0,
+            2_pi)};
+        const auto logic{Make<G4LogicalVolume>(
+            solid,
+            target.Material(),
+            target.Name())};
+        Make<G4PVPlacement>( // clang-format off
+            G4Transform3D{{}, {0, 0, z0}}, // clang-format on
+            logic,
+            target.Name(),
+            Mother().LogicalVolume(),
+            false,
+            0,
+            checkOverlaps);
         return;
     }
     }
