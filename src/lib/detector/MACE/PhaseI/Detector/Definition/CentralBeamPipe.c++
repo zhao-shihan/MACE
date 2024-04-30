@@ -17,6 +17,31 @@ auto CentralBeamPipe::Construct(G4bool checkOverlaps) -> void {
 
     const auto nist{G4NistManager::Instance()};
 
+    { // Vacuum
+        const auto air{nist->FindOrBuildMaterial("G4_AIR")};
+        const auto density{beamPipe.VacuumPressure() * air->GetMassOfMolecule() / (k_Boltzmann * STP_Temperature)};
+        const auto vacuum{nist->BuildMaterialWithNewDensity(beamPipe.Name() + "Vacuum", "G4_AIR", density, STP_Temperature, beamPipe.VacuumPressure())};
+
+        const auto solid{Make<G4Tubs>(
+            beamPipe.Name(),
+            0,
+            beamPipe.InnerRadius(),
+            beamPipe.Length() / 2,
+            0,
+            2_pi)};
+        const auto logic{Make<G4LogicalVolume>(
+            solid,
+            vacuum,
+            beamPipe.Name())};
+        Make<G4PVPlacement>(
+            G4Transform3D{},
+            logic,
+            beamPipe.Name(),
+            Mother().LogicalVolume(),
+            false,
+            0,
+            checkOverlaps);
+    }
     { // Beryllium pipe section
         const auto solid{Make<G4Tubs>(
             beamPipe.Name(),
@@ -63,32 +88,6 @@ auto CentralBeamPipe::Construct(G4bool checkOverlaps) -> void {
             G4Transform3D{{}, {0, 0, z0}}, // clang-format on
             logic,
             beamPipe.Name(),
-            Mother().LogicalVolume(),
-            false,
-            0,
-            checkOverlaps);
-    }
-    { // Vacuum
-        const auto vacuumName{beamPipe.Name() + "Vacuum"};
-        const auto air{nist->FindOrBuildMaterial("G4_AIR")};
-        const auto density{beamPipe.VacuumPressure() * air->GetMassOfMolecule() / (k_Boltzmann * STP_Temperature)};
-        const auto vacuum{nist->BuildMaterialWithNewDensity(vacuumName, "G4_AIR", density, STP_Temperature, beamPipe.VacuumPressure())};
-
-        const auto solid{Make<G4Tubs>(
-            vacuumName,
-            0,
-            beamPipe.InnerRadius(),
-            beamPipe.Length() / 2,
-            0,
-            2_pi)};
-        const auto logic{Make<G4LogicalVolume>(
-            solid,
-            vacuum,
-            vacuumName)};
-        Make<G4PVPlacement>(
-            G4Transform3D{},
-            logic,
-            vacuumName,
             Mother().LogicalVolume(),
             false,
             0,
