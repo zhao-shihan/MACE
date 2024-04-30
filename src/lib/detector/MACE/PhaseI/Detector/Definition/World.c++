@@ -12,9 +12,9 @@ auto World::Construct(G4bool checkOverlaps) -> void {
 
     const auto solid{Make<G4Box>(
         world.Name(),
-        world.HalfXExtent(),
-        world.HalfYExtent(),
-        world.HalfZExtent())};
+        world.XExtent() / 2,
+        world.YExtent() / 2,
+        world.ZExtent() / 2)};
     const auto logic{Make<G4LogicalVolume>(
         solid,
         G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR"),

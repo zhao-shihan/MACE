@@ -12,22 +12,22 @@ private:
     ~World() = default;
 
 public:
-    auto HalfXExtent() const -> auto { return fHalfXExtent; }
-    auto HalfYExtent() const -> auto { return fHalfYExtent; }
-    auto HalfZExtent() const -> auto { return fHalfZExtent; }
+    auto XExtent() const -> auto { return fXExtent; }
+    auto YExtent() const -> auto { return fYExtent; }
+    auto ZExtent() const -> auto { return fZExtent; }
 
-    auto HalfXExtent(double val) -> void { fHalfXExtent = val; }
-    auto HalfYExtent(double val) -> void { fHalfYExtent = val; }
-    auto HalfZExtent(double val) -> void { fHalfZExtent = val; }
+    auto XExtent(double val) -> void { fXExtent = val; }
+    auto YExtent(double val) -> void { fYExtent = val; }
+    auto ZExtent(double val) -> void { fZExtent = val; }
 
 private:
     auto ImportAllValue(const YAML::Node& node) -> void override;
     auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
-    double fHalfXExtent;
-    double fHalfYExtent;
-    double fHalfZExtent;
+    double fXExtent;
+    double fYExtent;
+    double fZExtent;
 };
 
 } // namespace MACE::PhaseI::Detector::Description
