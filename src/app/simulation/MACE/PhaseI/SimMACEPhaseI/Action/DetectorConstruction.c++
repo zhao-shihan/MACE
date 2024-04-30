@@ -5,6 +5,7 @@
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/PhaseI/Detector/Definition/CentralBeamPipe.h++"
 #include "MACE/PhaseI/Detector/Definition/World.h++"
+#include "MACE/PhaseI/Detector/Description/UsePhaseIDefault.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Action/DetectorConstruction.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Messenger/DetectorMessenger.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/SD/EMCPMTSD.h++"
@@ -37,6 +38,7 @@ DetectorConstruction::DetectorConstruction() :
     fEMCSD{},
     fEMCPMTSD{} {
     DetectorMessenger::EnsureInstantiation();
+    Detector::Description::UsePhaseIDefault();
 }
 
 auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
