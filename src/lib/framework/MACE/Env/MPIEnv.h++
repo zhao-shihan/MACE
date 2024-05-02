@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/Env/BasicEnv.h++"
+#include "MACE/Env/CLI/CLI.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 
 #include "mpi.h"
@@ -19,7 +20,7 @@ class MPIEnv : public BasicEnv,
                public Memory::PassiveSingleton<MPIEnv> {
 public:
     MPIEnv(int argc, char* argv[],
-           std::optional<std::reference_wrapper<CLI::BasicCLI>> cli = {},
+           std::optional<std::reference_wrapper<CLI::CLI<>>> cli = {},
            enum VerboseLevel verboseLevel = {},
            bool printWelcomeMessage = true);
     virtual ~MPIEnv();

@@ -1,4 +1,4 @@
-#include "MACE/Env/CLI/MonteCarloCLI.h++"
+#include "MACE/Env/CLI/Module/MonteCarloModule.h++"
 
 #include "CLHEP/Random/Random.h"
 
@@ -7,16 +7,17 @@
 #include <bit>
 #include <random>
 
-namespace MACE::Env::CLI {
+namespace MACE::Env::CLI::inline Module {
 
-MonteCarloCLI::MonteCarloCLI() :
-    BasicCLI{} {
-    AddArgument("-s", "--seed")
+MonteCarloModule::MonteCarloModule(argparse::ArgumentParser& argParser) :
+    ModuleBase{argParser} {
+    ArgParser()
+        .add_argument("-s", "--seed")
         .help("Set random seed. 0 means using random device (non deterministic random seed). Predefined deterministic seed is used by default.")
         .scan<'i', long>();
 }
 
-auto MonteCarloCLI::SeedRandomIfFlagged() const -> bool {
+auto MonteCarloModule::SeedRandomIfFlagged() const -> bool {
     auto seed{ArgParser().present<long>("-s")};
     if (not seed.has_value()) { return false; }
     const auto theSeed{*seed != 0 ? *seed :
@@ -33,4 +34,4 @@ auto MonteCarloCLI::SeedRandomIfFlagged() const -> bool {
     return true;
 }
 
-} // namespace MACE::Env::CLI
+} // namespace MACE::Env::CLI::inline Module

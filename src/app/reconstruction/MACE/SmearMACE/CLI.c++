@@ -8,82 +8,102 @@
 
 namespace MACE::SmearMACE {
 
-CLI::CLI() :
-    MonteCarloCLI{} {
-    AddArgument("input")
+CLIModule::CLIModule(argparse::ArgumentParser& argParser) :
+    ModuleBase{argParser} {
+    ArgParser()
+        .add_argument("input")
         .nargs(argparse::nargs_pattern::at_least_one)
         .help("Input file path(s).");
-    AddArgument("-o", "--output")
+    ArgParser()
+        .add_argument("-o", "--output")
         .help("Output file path. Suffix '_smeared' on input file name by default.");
-    AddArgument("-m", "--output-mode")
+    ArgParser()
+        .add_argument("-m", "--output-mode")
         .help("Output file creation mode. Default to 'NEW'.");
 
-    AddArgument("-i", "--index-range")
+    ArgParser()
+        .add_argument("-i", "--index-range")
         .nargs(1, 2)
         .scan<'i', gsl::index>()
         .default_value(std::vector<gsl::index>{0, 1})
         .help("Set number of datasets (index in [0, size) range), or index range (in [first, last) pattern)");
-    AddArgument("-b", "--batch-size")
+    ArgParser()
+        .add_argument("-b", "--batch-size")
         .scan<'i', unsigned>()
         .help("Set number of events processed in a batch. Default to 10000.");
 
-    auto& cdcHitMutexGroup{AddMutuallyExclusiveGroup()};
-    cdcHitMutexGroup.add_argument("--cdc-hit")
+    auto& cdcHitMutexGroup{ArgParser().add_mutually_exclusive_group()};
+    cdcHitMutexGroup
+        .add_argument("--cdc-hit")
         .nargs(2)
         .append()
         .help("Smear a simulated CDC hit variable by a smearing expression (e.g. --cdc-hit d 'gRandom->Gaus(d, 0.2*sqrt(d/5))').");
-    cdcHitMutexGroup.add_argument("--cdc-hit-id")
+    cdcHitMutexGroup
+        .add_argument("--cdc-hit-id")
         .flag()
         .help("Save CDC hit data in output file without smearing.");
-    AddArgument("--cdc-hit-name")
+    ArgParser()
+        .add_argument("--cdc-hit-name")
         .help("Set dataset name format. Default to 'G4Run{}/CDCSimHit'.");
 
-    auto& ttcHitMutexGroup{AddMutuallyExclusiveGroup()};
-    ttcHitMutexGroup.add_argument("--ttc-hit")
+    auto& ttcHitMutexGroup{ArgParser().add_mutually_exclusive_group()};
+    ttcHitMutexGroup
+        .add_argument("--ttc-hit")
         .nargs(2)
         .append()
         .help("Smear a simulated TTC hit variable by a smearing expression (e.g. --ttc-hit t 'gRandom->Gaus(t, 0.05)').");
-    ttcHitMutexGroup.add_argument("--ttc-hit-id")
+    ttcHitMutexGroup
+        .add_argument("--ttc-hit-id")
         .flag()
         .help("Save TTC hit data in output file without smearing.");
-    AddArgument("--ttc-hit-name")
+    ArgParser()
+        .add_argument("--ttc-hit-name")
         .help("Set dataset name format. Default to 'G4Run{}/TTCSimHit'.");
 
-    auto& mmsTrackMutexGroup{AddMutuallyExclusiveGroup()};
-    mmsTrackMutexGroup.add_argument("--mms-track")
+    auto& mmsTrackMutexGroup{ArgParser().add_mutually_exclusive_group()};
+    mmsTrackMutexGroup
+        .add_argument("--mms-track")
         .nargs(2)
         .append()
         .help("Smear a simulated CDC track variable by a smearing expression (e.g. --mms-track Ek 'gRandom->Gaus(Ek, 1)').");
-    mmsTrackMutexGroup.add_argument("--mms-track-id")
+    mmsTrackMutexGroup
+        .add_argument("--mms-track-id")
         .flag()
         .help("Save CDC track data in output file without smearing.");
-    AddArgument("--mms-track-name")
+    ArgParser()
+        .add_argument("--mms-track-name")
         .help("Set dataset name format. Default to 'G4Run{}/MMSSimTrack'.");
 
-    auto& mcpHitMutexGroup{AddMutuallyExclusiveGroup()};
-    mcpHitMutexGroup.add_argument("--mcp-hit")
+    auto& mcpHitMutexGroup{ArgParser().add_mutually_exclusive_group()};
+    mcpHitMutexGroup
+        .add_argument("--mcp-hit")
         .nargs(2)
         .append()
         .help("Smear a simulated MCP hit variable by a smearing expression (e.g. --mcp-hit t 'gRandom->Gaus(t, 0.5)').");
-    mcpHitMutexGroup.add_argument("--mcp-hit-id")
+    mcpHitMutexGroup
+        .add_argument("--mcp-hit-id")
         .flag()
         .help("Save MCP hit data in output file without smearing.");
-    AddArgument("--mcp-hit-name")
+    ArgParser()
+        .add_argument("--mcp-hit-name")
         .help("Set dataset name format. Default to 'G4Run{}/MCPSimHit'.");
 
-    auto& emcHitMutexGroup{AddMutuallyExclusiveGroup()};
-    emcHitMutexGroup.add_argument("--emc-hit")
+    auto& emcHitMutexGroup{ArgParser().add_mutually_exclusive_group()};
+    emcHitMutexGroup
+        .add_argument("--emc-hit")
         .nargs(2)
         .append()
         .help("Smear a simulated EMC hit variable by a smearing expression (e.g. --emc-hit Edep 'gRandom->Gaus(Edep, 0.041*sqrt(E/0.511))').");
-    emcHitMutexGroup.add_argument("--emc-hit-id")
+    emcHitMutexGroup
+        .add_argument("--emc-hit-id")
         .flag()
         .help("Save EMC hit data in output file without smearing.");
-    AddArgument("--emc-hit-name")
+    ArgParser()
+        .add_argument("--emc-hit-name")
         .help("Set dataset name format. Default to 'G4Run{}/EMCSimHit'.");
 }
 
-auto CLI::DatasetIndexRange() const -> std::pair<gsl::index, gsl::index> {
+auto CLIModule::DatasetIndexRange() const -> std::pair<gsl::index, gsl::index> {
     auto var{ArgParser().get<std::vector<gsl::index>>("-i")};
     assert(var.size() == 1 or var.size() == 2);
     if (var.size() == 1) {
@@ -93,7 +113,7 @@ auto CLI::DatasetIndexRange() const -> std::pair<gsl::index, gsl::index> {
     }
 }
 
-auto CLI::OutputFilePath() const -> std::filesystem::path {
+auto CLIModule::OutputFilePath() const -> std::filesystem::path {
     if (auto output{ArgParser().present("-o")};
         output) { return *std::move(output); }
     auto inputList{InputFilePath()};
@@ -110,7 +130,7 @@ auto CLI::OutputFilePath() const -> std::filesystem::path {
     return input.replace_extension().concat("_smeared").replace_extension(extension);
 }
 
-auto CLI::ParseSmearingConfig(std::string_view arg) const -> std::optional<std::unordered_map<std::string, std::string>> {
+auto CLIModule::ParseSmearingConfig(std::string_view arg) const -> std::optional<std::unordered_map<std::string, std::string>> {
     auto var{ArgParser().present<std::vector<std::string>>(arg)};
     if (not var.has_value()) { return {}; }
     std::unordered_map<std::string, std::string> config;

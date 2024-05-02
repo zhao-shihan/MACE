@@ -1,21 +1,10 @@
 #pragma once
 
-#include "MACE/Env/CLI/CLIBase.h++"
-#include "MACE/Env/VerboseLevel.h++"
-
-#include <optional>
-#include <type_traits>
+#include "MACE/Env/CLI/CLI.h++"
+#include "MACE/Env/CLI/Module/BasicModule.h++"
 
 namespace MACE::Env::CLI {
 
-class BasicCLI : public CLIBase {
-public:
-    BasicCLI();
-
-    auto VerboseLevel() const -> std::optional<enum VerboseLevel>;
-
-private:
-    std::underlying_type_t<enum VerboseLevel> fVerboseLevelValue;
-};
+using BasicCLI = CLI<BasicModule>;
 
 } // namespace MACE::Env::CLI

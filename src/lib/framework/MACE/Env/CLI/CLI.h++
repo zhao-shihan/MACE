@@ -1,18 +1,25 @@
 #pragma once
 
+#include "MACE/Env/CLI/Module/ModuleBase.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
 #include "argparse/argparse.hpp"
 
+#include <concepts>
+#include <memory>
 #include <optional>
 #include <utility>
 
 namespace MACE::Env::CLI {
 
-class CLIBase : public NonMoveableBase {
+template<std::derived_from<ModuleBase>... AModules>
+class CLI;
+
+template<>
+class CLI<> : public NonMoveableBase {
 public:
-    CLIBase();
-    virtual ~CLIBase() = 0;
+    CLI();
+    virtual ~CLI() = 0;
 
 private:
     struct ArgcArgvType {
@@ -21,12 +28,13 @@ private:
     };
 
 public:
-    auto AddArgument(auto&&... args) -> argparse::Argument&;
-    auto AddMutuallyExclusiveGroup(bool required = false) -> argparse::ArgumentParser::MutuallyExclusiveGroup&;
     auto ParseArgs(int argc, char* argv[]) -> void;
     auto Parsed() const -> bool { return fArgcArgv.has_value(); }
-    auto ArgParser() const -> const auto& { return fArgParser; }
     auto ArgcArgv() const -> ArgcArgvType;
+
+protected:
+    auto ArgParser() const -> const auto& { return *fArgParser; }
+    auto ArgParser() -> auto& { return *fArgParser; }
 
 protected:
     [[noreturn]] static auto ThrowParsed() -> void;
@@ -34,9 +42,16 @@ protected:
 
 private:
     std::optional<ArgcArgvType> fArgcArgv;
-    argparse::ArgumentParser fArgParser;
+    std::unique_ptr<argparse::ArgumentParser> fArgParser;
+};
+
+template<std::derived_from<ModuleBase>... AModules>
+class CLI : public CLI<>,
+            public AModules... {
+public:
+    CLI();
 };
 
 } // namespace MACE::Env::CLI
 
-#include "MACE/Env/CLI/CLIBase.inl"
+#include "MACE/Env/CLI/CLI.inl"
