@@ -158,6 +158,8 @@ auto Target::ExportAllValue(YAML::Node& node) const -> void {
                 return "Cuboid"s;
             case TargetShapeType::MultiLayer:
                 return "MultiLayer"s;
+            case TargetShapeType::Cylinder:
+                return "Cylinder"s;
             }
             std23::unreachable();
         }(),
