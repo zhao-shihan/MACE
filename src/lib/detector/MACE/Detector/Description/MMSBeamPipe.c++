@@ -7,7 +7,7 @@ using namespace LiteralUnit::Length;
 
 MMSBeamPipe::MMSBeamPipe() :
     DescriptionBase{"MMSBeamPipe"},
-    fInnerRadius{120_mm},
+    fInnerRadius{70_mm},
     fBerylliumLength{100_cm},
     fBerylliumThickness{500_um},
     fAluminiumThickness{2_mm} {}
