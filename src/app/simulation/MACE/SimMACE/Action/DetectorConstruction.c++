@@ -63,6 +63,7 @@
 #include "MACE/Simulation/Field/SolenoidFieldS3.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
+#include "G4ChordFinder.hh"
 #include "G4EqMagElectricField.hh"
 #include "G4InterpolationDriver.hh"
 #include "G4NistManager.hh"
@@ -70,6 +71,8 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4TDormandPrince45.hh"
 #include "G4TMagFieldEquation.hh"
+
+#include "gsl/gsl"
 
 namespace MACE::SimMACE::inline Action {
 
@@ -333,63 +336,38 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         using namespace LiteralUnit::Length;
         using namespace LiteralUnit::MagneticFluxDensity;
 
-        constexpr auto hMin = 100_um;
-
-        mmsField.RegisterField<
-            MMSField,
-            G4TMagFieldEquation<MMSField>,
-            G4TDormandPrince45<G4TMagFieldEquation<MMSField>>,
-            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<MMSField>>>>(
-            new MMSField, hMin, 6, 6, false);
-
-        acceleratorField.RegisterField<
-            AcceleratorField,
-            G4EqMagElectricField,
-            G4TDormandPrince45<G4EqMagElectricField, 8>,
-            G4InterpolationDriver<G4TDormandPrince45<G4EqMagElectricField, 8>>>(
-            new AcceleratorField, hMin, 8, 8, false);
-
-        solenoidFieldS1.RegisterField<
-            SolenoidFieldS1,
-            G4TMagFieldEquation<SolenoidFieldS1>,
-            G4TDormandPrince45<G4TMagFieldEquation<SolenoidFieldS1>>,
-            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<SolenoidFieldS1>>>>(
-            new SolenoidFieldS1, hMin, 6, 6, false);
-
-        solenoidFieldB1.RegisterField<
-            SolenoidFieldB1,
-            G4TMagFieldEquation<SolenoidFieldB1>,
-            G4TDormandPrince45<G4TMagFieldEquation<SolenoidFieldB1>>,
-            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<SolenoidFieldB1>>>>(
-            new SolenoidFieldB1, hMin, 6, 6, false);
-
-        solenoidFieldS2.RegisterField<
-            SolenoidFieldS2,
-            G4TMagFieldEquation<SolenoidFieldS2>,
-            G4TDormandPrince45<G4TMagFieldEquation<SolenoidFieldS2>>,
-            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<SolenoidFieldS2>>>>(
-            new SolenoidFieldS2, hMin, 6, 6, false);
-
-        solenoidFieldB2.RegisterField<
-            SolenoidFieldB2,
-            G4TMagFieldEquation<SolenoidFieldB2>,
-            G4TDormandPrince45<G4TMagFieldEquation<SolenoidFieldB2>>,
-            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<SolenoidFieldB2>>>>(
-            new SolenoidFieldB2, hMin, 6, 6, false);
-
-        solenoidFieldS3.RegisterField<
-            SolenoidFieldS3,
-            G4TMagFieldEquation<SolenoidFieldS3>,
-            G4TDormandPrince45<G4TMagFieldEquation<SolenoidFieldS3>>,
-            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<SolenoidFieldS3>>>>(
-            new SolenoidFieldS3, hMin, 6, 6, false);
-
-        emcField.RegisterField<
-            EMCField,
-            G4TMagFieldEquation<EMCField>,
-            G4TDormandPrince45<G4TMagFieldEquation<EMCField>>,
-            G4InterpolationDriver<G4TDormandPrince45<G4TMagFieldEquation<EMCField>>>>(
-            new EMCField, hMin, 6, 6, false);
+        constexpr auto hMin{1_um};
+        { // magnetic field
+            const auto RegisterMagneticField{
+                []<typename AField>(Detector::Definition::DefinitionBase& detector, AField* field, bool forceToAllDaughters) {
+                    using Equation = G4TMagFieldEquation<AField>;
+                    using Stepper = G4TDormandPrince45<Equation, 6>;
+                    using Driver = G4InterpolationDriver<Stepper>;
+                    const auto equation{new Equation{field}};
+                    const auto stepper{new Stepper{equation, 6}}; // clang-format off
+                    const auto driver{new Driver{hMin, stepper, 6}}; // clang-format on
+                    const auto chordFinder{new G4ChordFinder{driver}};
+                    detector.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), forceToAllDaughters);
+                }};
+            RegisterMagneticField(mmsField, new MMSField, false);
+            RegisterMagneticField(solenoidFieldS1, new SolenoidFieldS1, false);
+            RegisterMagneticField(solenoidFieldB1, new SolenoidFieldB1, false);
+            RegisterMagneticField(solenoidFieldS2, new SolenoidFieldS2, false);
+            RegisterMagneticField(solenoidFieldB2, new SolenoidFieldB2, false);
+            RegisterMagneticField(solenoidFieldS3, new SolenoidFieldS3, false);
+            RegisterMagneticField(emcField, new EMCField, false);
+        }
+        { // EM field, must be reigstered after MMS magnetic field! but why?
+            using Equation = G4EqMagElectricField;
+            using Stepper = G4TDormandPrince45<Equation, 8>;
+            using Driver = G4InterpolationDriver<Stepper>;
+            const auto field{new AcceleratorField};
+            const auto equation{new Equation{field}}; // clang-format off
+            const auto stepper{new Stepper{equation, 8}};
+            const auto driver{new Driver{hMin, stepper, 8}}; // clang-format on
+            const auto chordFinder{new G4ChordFinder{driver}};
+            acceleratorField.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), false);
+        }
     }
 
     return fWorld->PhysicalVolume();

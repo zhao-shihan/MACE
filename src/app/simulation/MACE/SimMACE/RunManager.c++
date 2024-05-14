@@ -5,17 +5,24 @@
 #include "MACE/SimMACE/Analysis.h++"
 #include "MACE/SimMACE/RunManager.h++"
 #include "MACE/Simulation/Physics/StandardPhysicsList.h++"
+#include "MACE/Utility/LiteralUnit.h++"
 
-#include "G4PhysicsListHelper.hh"
+#include "G4TransportationParameters.hh"
 
 namespace MACE::SimMACE {
+
+using namespace LiteralUnit::Energy;
 
 RunManager::RunManager() :
     MPIRunManager{},
     fAnalysis{std::make_unique_for_overwrite<Analysis>()} {
     const auto verboseLevel{Env::BasicEnv::Instance().VerboseLevel()};
 
-    G4PhysicsListHelper::GetPhysicsListHelper()->UseLowLooperThresholds();
+    // control of the parameters for killing looping particles
+    auto& transportParams{*G4TransportationParameters::Instance()};
+    transportParams.SetWarningEnergy(50_eV);
+    transportParams.SetImportantEnergy(50_eV);
+    transportParams.SetNumberOfTrials(1000);
 
     const auto physicsList{new StandardPhysicsList};
     physicsList->SetVerboseLevel(std23::to_underlying(verboseLevel));

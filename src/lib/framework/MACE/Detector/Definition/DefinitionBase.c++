@@ -2,8 +2,14 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
 
+#include "G4Exception.hh"
+#include "G4FieldManager.hh"
 #include "G4GDMLParser.hh"
+#include "G4Region.hh"
 #include "G4SDManager.hh"
+#include "G4VIntegrationDriver.hh"
+#include "G4VSensitiveDetector.hh"
+#include "G4VSolid.hh"
 
 #include "fmt/format.h"
 
@@ -12,18 +18,18 @@ namespace MACE::Detector::Definition {
 namespace internal {
 namespace {
 
-auto RegisterMaterial(G4LogicalVolume* logic, gsl::not_null<G4Material*> material) -> void {
+auto RegisterMaterial(gsl::not_null<G4LogicalVolume*> logic, gsl::not_null<G4Material*> material) -> void {
     logic->SetMaterial(material);
 }
 
-auto RegisterRegion(G4LogicalVolume* logic, gsl::not_null<G4Region*> region) -> void {
+auto RegisterRegion(gsl::not_null<G4LogicalVolume*> logic, gsl::not_null<G4Region*> region) -> void {
     if (logic->GetRegion() != region) {
         logic->SetRegion(region);
         region->AddRootLogicalVolume(logic);
     }
 }
 
-auto RegisterSD(G4LogicalVolume* logic, gsl::not_null<G4VSensitiveDetector*> sd) -> void {
+auto RegisterSD(gsl::not_null<G4LogicalVolume*> logic, gsl::not_null<G4VSensitiveDetector*> sd) -> void {
     if (logic->GetSensitiveDetector() == nullptr) {
         // Register to logicalVolume
         logic->SetSensitiveDetector(sd);
@@ -46,7 +52,11 @@ auto RegisterSD(G4LogicalVolume* logic, gsl::not_null<G4VSensitiveDetector*> sd)
     }
 }
 
-auto Export(const std::filesystem::path& gdmlFile, G4LogicalVolume* logic) {
+auto RegisterField(gsl::not_null<G4LogicalVolume*> logic, gsl::not_null<G4FieldManager*> fieldManager, bool forceToAllDaughters) -> void {
+    logic->SetFieldManager(fieldManager, forceToAllDaughters);
+}
+
+auto Export(const std::filesystem::path& gdmlFile, gsl::not_null<G4LogicalVolume*> logic) {
     G4GDMLParser gdml;
     gdml.SetAddPointerToName(true);
     gdml.SetOutputFileOverwrite(true);
@@ -142,6 +152,38 @@ auto DefinitionBase::RegisterSD(gsl::index iLogicalVolume, gsl::not_null<G4VSens
 auto DefinitionBase::RegisterSD(std::string_view logicalVolumeName, gsl::index iLogicalVolume, gsl::not_null<G4VSensitiveDetector*> sd) const -> void {
     if (not Ready()) { return; }
     internal::RegisterSD(LogicalVolume(logicalVolumeName, iLogicalVolume), sd);
+}
+
+auto DefinitionBase::RegisterField(std::unique_ptr<G4FieldManager> fieldManager, bool forceToAllDaughters) -> void {
+    if (not Ready()) { return; }
+    const auto& lvs{LogicalVolumes()};
+    assert(lvs.size() > 0);
+    for (auto&& lv : lvs) {
+        internal::RegisterField(lv, fieldManager.get(), forceToAllDaughters);
+    }
+    fFieldStore.emplace_back(std::move(fieldManager));
+}
+
+auto DefinitionBase::RegisterField(std::string_view logicalVolumeName, std::unique_ptr<G4FieldManager> fieldManager, bool forceToAllDaughters) -> void {
+    if (not Ready()) { return; }
+    const auto& lvs{LogicalVolumes(logicalVolumeName)};
+    assert(lvs.size() > 0);
+    for (auto&& lv : lvs) {
+        internal::RegisterField(lv, fieldManager.get(), forceToAllDaughters);
+    }
+    fFieldStore.emplace_back(std::move(fieldManager));
+}
+
+auto DefinitionBase::RegisterField(gsl::index iLogicalVolume, std::unique_ptr<G4FieldManager> fieldManager, bool forceToAllDaughters) -> void {
+    if (not Ready()) { return; }
+    internal::RegisterField(LogicalVolume(iLogicalVolume), fieldManager.get(), forceToAllDaughters);
+    fFieldStore.emplace_back(std::move(fieldManager));
+}
+
+auto DefinitionBase::RegisterField(std::string_view logicalVolumeName, gsl::index iLogicalVolume, std::unique_ptr<G4FieldManager> fieldManager, bool forceToAllDaughters) -> void {
+    if (not Ready()) { return; }
+    internal::RegisterField(LogicalVolume(logicalVolumeName, iLogicalVolume), fieldManager.get(), forceToAllDaughters);
+    fFieldStore.emplace_back(std::move(fieldManager));
 }
 
 auto DefinitionBase::Export(const std::filesystem::path& gdmlFile, gsl::index iPhysicalVolume) const -> void {

@@ -1,5 +1,5 @@
 #include "MACE/Env/BasicEnv.h++"
-#include "MACE/Env/CLI/BasicCLI.h++"
+#include "MACE/Env/CLI/Module/BasicModule.h++"
 #include "MACE/Env/Print.h++"
 #include "MACE/Version.h++"
 
@@ -10,7 +10,7 @@
 namespace MACE::Env {
 
 BasicEnv::BasicEnv(int argc, char* argv[],
-                   std::optional<std::reference_wrapper<CLI::BasicCLI>> cli,
+                   std::optional<std::reference_wrapper<CLI::CLI<>>> cli,
                    enum VerboseLevel verboseLevel,
                    bool printWelcomeMessage) :
     EnvBase{},
@@ -20,8 +20,10 @@ BasicEnv::BasicEnv(int argc, char* argv[],
     fVerboseLevel{verboseLevel} {
     // CLI: do parse and get args
     if (cli) {
-        cli->get().ParseArgs(argc, argv);
-        fVerboseLevel = cli->get().VerboseLevel().value_or(verboseLevel);
+        const auto pCLI{&cli->get()};
+        pCLI->ParseArgs(argc, argv);
+        const auto basicCLI{dynamic_cast<const CLI::BasicModule*>(pCLI)};
+        if (basicCLI) { fVerboseLevel = basicCLI->VerboseLevel().value_or(verboseLevel); }
     }
     // Print startup message after parse
     if (printWelcomeMessage) {

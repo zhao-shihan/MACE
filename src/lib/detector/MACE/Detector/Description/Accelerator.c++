@@ -9,13 +9,13 @@ using namespace LiteralUnit::ElectricPotential;
 Accelerator::Accelerator() :
     DescriptionBase{"Accelerator"},
     // Geometry
-    fUpstreamLength{50_mm},
+    fUpstreamLength{110_mm},
     fAccelerateLength{270_mm},
-    fElectrodePitch{10_mm},
+    fElectrodePitch{20_mm},
     fElectrodeInnerRadius{50_mm},
-    fElectrodeOuterRadius{100_mm},
+    fElectrodeOuterRadius{60_mm},
     fElectrodeThickness{0.5_mm},
-    fFieldRadius{120_mm},
+    fFieldRadius{70_mm},
     // Material
     fElectrodeMaterialName{"G4_Be"},
     // Field

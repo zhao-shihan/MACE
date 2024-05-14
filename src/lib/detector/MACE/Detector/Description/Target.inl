@@ -6,6 +6,8 @@ auto Target::VolumeContain(const Concept::InputVector3D auto& x) const -> bool {
         return fCuboid.VolumeContain(x);
     case TargetShapeType::MultiLayer:
         return fMultiLayer.VolumeContain(x);
+    case TargetShapeType::Cylinder:
+        return fCylinder.VolumeContain(x);
     }
     std23::unreachable();
 }
@@ -16,6 +18,8 @@ auto Target::Contain(const Concept::InputVector3D auto& x, bool insideVolume) co
         return fCuboid.Contain(x, insideVolume);
     case TargetShapeType::MultiLayer:
         return fMultiLayer.Contain(x, insideVolume);
+    case TargetShapeType::Cylinder:
+        return fCylinder.Contain(x, insideVolume);
     }
     std23::unreachable();
 }
@@ -26,6 +30,8 @@ auto Target::DetectableAt(const Concept::InputVector3D auto& x) const -> bool {
         return fCuboid.DetectableAt(x);
     case TargetShapeType::MultiLayer:
         return fMultiLayer.DetectableAt(x);
+    case TargetShapeType::Cylinder:
+        return fCylinder.DetectableAt(x);
     }
     std23::unreachable();
 }
@@ -168,6 +174,16 @@ auto Target::MultiLayerTarget::PerforatedMultiLayer::DetailContain(const Concept
     const auto pDeltaZ{p * deltaZ};
     return deltaZY2MinusR2PlusP2 > std23::abs(2 * pDeltaZ) and
            deltaZY2MinusR2PlusP2 > std23::abs(pDeltaZ + sqrt3 * p * deltaY);
+}
+
+auto Target::CylinderTarget::VolumeContain(const Concept::InputVector3D auto& x) const -> bool {
+    return -fThickness / 2 <= x[2] and x[2] <= fThickness / 2 and
+           Math::Hypot2(x[0], x[1]) <= Math::Pow<2>(fRadius);
+}
+
+auto Target::CylinderTarget::DetectableAt(const Concept::InputVector3D auto& x) const -> bool {
+    return x[2] > fThickness / 2 or
+           Math::Hypot2(x[0], x[1]) > Math::Pow<2>(fRadius);
 }
 
 } // namespace MACE::Detector::Description

@@ -6,16 +6,12 @@
 #include "MACE/SimMMS/RunManager.h++"
 #include "MACE/Simulation/Physics/StandardPhysicsList.h++"
 
-#include "G4PhysicsListHelper.hh"
-
 namespace MACE::SimMMS {
 
 RunManager::RunManager() :
     MPIRunManager{},
     fAnalysis{std::make_unique_for_overwrite<Analysis>()} {
     const auto verboseLevel{Env::BasicEnv::Instance().VerboseLevel()};
-
-    G4PhysicsListHelper::GetPhysicsListHelper()->UseLowLooperThresholds();
 
     const auto physicsList{new StandardPhysicsList};
     physicsList->SetVerboseLevel(std23::to_underlying(verboseLevel));

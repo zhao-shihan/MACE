@@ -2,16 +2,9 @@
 
 #include "MACE/Utility/NonMoveableBase.h++"
 
-#include "G4ChordFinder.hh"
-#include "G4EquationOfMotion.hh"
-#include "G4Exception.hh"
-#include "G4Field.hh"
 #include "G4FieldManager.hh"
 #include "G4LogicalVolume.hh"
-#include "G4Region.hh"
-#include "G4VIntegrationDriver.hh"
 #include "G4VPhysicalVolume.hh"
-#include "G4VSensitiveDetector.hh"
 #include "G4VSolid.hh"
 
 #include "gsl/gsl"
@@ -29,6 +22,10 @@
 #include <utility>
 #include <vector>
 
+class G4Material;
+class G4Region;
+class G4VSensitiveDetector;
+
 namespace MACE::Detector::Definition {
 
 class DefinitionBase : public NonMoveableBase {
@@ -44,7 +41,7 @@ public:
     virtual auto Enabled() const -> bool { return true; }
 
     template<std::derived_from<DefinitionBase> ADefinition>
-    auto NewDaughter(G4bool checkOverlaps) -> ADefinition&;
+    auto NewDaughter(bool checkOverlaps) -> ADefinition&;
     template<std::derived_from<DefinitionBase> ADefinition>
     auto FindDaughter() const -> ADefinition*;
     template<std::derived_from<DefinitionBase> ADefinition>
@@ -67,14 +64,10 @@ public:
     auto RegisterSD(gsl::index iLogicalVolume, gsl::not_null<G4VSensitiveDetector*> sd) const -> void;
     auto RegisterSD(std::string_view logicalVolumeName, gsl::index iLogicalVolume, gsl::not_null<G4VSensitiveDetector*> sd) const -> void;
 
-    template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
-    auto RegisterField(gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void;
-    template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
-    auto RegisterField(std::string_view logicalVolumeName, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void;
-    template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
-    auto RegisterField(gsl::index iLogicalVolume, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void;
-    template<std::derived_from<G4Field> AField, std::derived_from<G4EquationOfMotion> AEquation, typename AStepper, std::derived_from<G4VIntegrationDriver> ADriver>
-    auto RegisterField(std::string_view logicalVolumeName, gsl::index iLogicalVolume, gsl::not_null<AField*> field, G4double hMin, G4int nVarStepper, G4int nVarDriver, G4bool forceToAllDaughters) const -> void;
+    auto RegisterField(std::unique_ptr<G4FieldManager> fieldManager, bool forceToAllDaughters) -> void;
+    auto RegisterField(std::string_view logicalVolumeName, std::unique_ptr<G4FieldManager> fieldManager, bool forceToAllDaughters) -> void;
+    auto RegisterField(gsl::index iLogicalVolume, std::unique_ptr<G4FieldManager> fieldManager, bool forceToAllDaughters) -> void;
+    auto RegisterField(std::string_view logicalVolumeName, gsl::index iLogicalVolume, std::unique_ptr<G4FieldManager> fieldManager, bool forceToAllDaughters) -> void;
 
     auto Export(const std::filesystem::path& gdmlFile, gsl::index iPhysicalVolume = 0) const -> void;
     auto Export(const std::filesystem::path& gdmlFile, std::string_view physicalVolumeName, gsl::index iPhysicalVolume = 0) const -> void;
@@ -101,7 +94,7 @@ protected:
     auto Make(auto&&... args) -> gsl::not_null<APhysical*>;
 
 private:
-    virtual auto Construct(G4bool checkOverlaps) -> void = 0;
+    virtual auto Construct(bool checkOverlaps) -> void = 0;
 
     auto Ready() const -> bool { return fPhysicalVolumes.size() > 0; }
 
@@ -116,6 +109,8 @@ private:
     const std::vector<G4LogicalVolume*>* fFirstLogicalVolumes{};
     std::unordered_map<std::string, std::vector<G4VPhysicalVolume*>> fPhysicalVolumes;
     const std::vector<G4VPhysicalVolume*>* fFirstPhysicalVolumes{};
+
+    std::vector<std::unique_ptr<G4FieldManager>> fFieldStore;
 
     std::unordered_map<std::type_index, std::unique_ptr<DefinitionBase>> fDaughters;
 };

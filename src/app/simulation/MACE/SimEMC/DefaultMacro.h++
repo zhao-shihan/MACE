@@ -36,7 +36,7 @@ constexpr auto defaultMacro = {
     "/vis/viewer/set/viewpointVector -1 0.5 0.5",
     "#/vis/viewer/set/lightsVector -1 1 1",
     "#/vis/viewer/set/rotationStyle freeRotation",
-    "/vis/viewer/set/projection o",
+    "/vis/viewer/set/projection p",
     "/vis/viewer/set/style s",
     "/vis/viewer/set/auxiliaryEdge false",
     "#/vis/viewer/set/lineSegmentsPerCircle 100",

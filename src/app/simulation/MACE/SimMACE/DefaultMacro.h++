@@ -9,7 +9,7 @@ constexpr auto defaultMacro = {
     "#/control/saveHistory",
     "/run/verbose 2",
     "",
-    "#/MACE/Detector/Description/Ixport mace_geom.yaml",
+    "#/MACE/Detector/Description/Ixport SimMACE_geom.yaml",
     "",
     "/run/initialize",
     "",

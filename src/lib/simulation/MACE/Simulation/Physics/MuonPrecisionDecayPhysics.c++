@@ -1,4 +1,3 @@
-#include "MACE/Math/Clamp.h++"
 #include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
 #include "MACE/Simulation/Physics/MuonPrecisionDecayPhysics.h++"
 

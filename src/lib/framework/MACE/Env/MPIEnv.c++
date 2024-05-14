@@ -19,7 +19,7 @@
 namespace MACE::Env {
 
 MPIEnv::MPIEnv(int argc, char* argv[],
-               std::optional<std::reference_wrapper<CLI::BasicCLI>> cli,
+               std::optional<std::reference_wrapper<CLI::CLI<>>> cli,
                enum VerboseLevel verboseLevel,
                bool printWelcomeMessage) :
     BasicEnv{argc, argv, cli, verboseLevel, false},

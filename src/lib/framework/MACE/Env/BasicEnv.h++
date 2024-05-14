@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Env/CLI/BasicCLI.h++"
+#include "MACE/Env/CLI/CLI.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/Env/VerboseLevel.h++"
 #include "MACE/Env/internal/EnvBase.h++"
@@ -17,7 +17,7 @@ class BasicEnv : public internal::EnvBase,
                  public Memory::PassiveSingleton<BasicEnv> {
 public:
     BasicEnv(int argc, char* argv[],
-             std::optional<std::reference_wrapper<CLI::BasicCLI>> cli = {},
+             std::optional<std::reference_wrapper<CLI::CLI<>>> cli = {},
              enum VerboseLevel verboseLevel = {},
              bool printWelcomeMessage = true);
     virtual ~BasicEnv() = default;

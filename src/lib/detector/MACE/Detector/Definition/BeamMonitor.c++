@@ -25,10 +25,13 @@ auto BeamMonitor::Construct(G4bool checkOverlaps) -> void {
     switch (const auto z0{(accelerator.UpstreamLength() - accelerator.AccelerateLength()) / 2};
             target.ShapeType()) {
     case Description::Target::TargetShapeType::Cuboid: // clang-format off
-        transform = {{}, {0, 0, z0 - target.Cuboid().Thickness() - monitor.DistanceToTarget() - monitor.Thickness() / 2}};     // clang-format on
+        transform = {{}, {0, 0, z0 - target.Cuboid().Thickness() - monitor.DistanceToTarget() - monitor.Thickness() / 2}}; // clang-format on
         break;
     case Description::Target::TargetShapeType::MultiLayer: // clang-format off
         transform = {{}, {0, 0, z0 - target.MultiLayer().Width() / 2 - monitor.DistanceToTarget() - monitor.Thickness() / 2}}; // clang-format on
+        break;
+    case Description::Target::TargetShapeType::Cylinder: // clang-format off
+        transform = {{}, {0, 0, z0 - target.Cylinder().Thickness() / 2 - monitor.DistanceToTarget() - monitor.Thickness() / 2}}; // clang-format on
         break;
     }
 
