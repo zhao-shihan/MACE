@@ -35,6 +35,8 @@ MuoniumTwoBodyDecayPhysicsMessenger::MuoniumTwoBodyDecayPhysicsMessenger() :
     fUpdateDecayBR->AvailableForStates(G4State_Idle);
 }
 
+MuoniumTwoBodyDecayPhysicsMessenger::~MuoniumTwoBodyDecayPhysicsMessenger() = default;
+
 auto MuoniumTwoBodyDecayPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fAnnihilationBR.get()) {
         Deliver<MuoniumTwoBodyDecayPhysics>([&](auto&& r) {

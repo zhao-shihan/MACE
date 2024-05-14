@@ -1,10 +1,8 @@
 #pragma once
 
 #include "MACE/Math/Clamp.h++"
+#include "MACE/Simulation/Physics/DecayPhysicsBase.h++"
 #include "MACE/Simulation/Physics/MuonPrecisionDecayPhysicsMessenger.h++"
-#include "MACE/Utility/NonMoveableBase.h++"
-
-#include "G4VPhysicsConstructor.hh"
 
 #include "gsl/gsl"
 
@@ -14,8 +12,7 @@ class G4String;
 
 namespace MACE::inline Simulation::inline Physics {
 
-class MuonPrecisionDecayPhysics : public NonMoveableBase,
-                                  public G4VPhysicsConstructor {
+class MuonPrecisionDecayPhysics : public DecayPhysicsBase {
 public:
     MuonPrecisionDecayPhysics(G4int verbose);
 
@@ -27,7 +24,6 @@ public:
     virtual auto ConstructProcess() -> void override;
 
 protected:
-    auto UpdateDecayBRFor(const G4ParticleDefinition* mu) -> void;
     virtual auto InsertDecayChannel(const G4String& parentName, gsl::not_null<G4DecayTable*> decay) -> void;
     virtual auto AssignRareDecayBR(gsl::not_null<G4DecayTable*> decay) -> void;
 

@@ -13,9 +13,7 @@
 namespace MACE::inline Simulation::inline Physics {
 
 MuoniumPrecisionDecayPhysics::MuoniumPrecisionDecayPhysics(G4int verbose) :
-    MuonPrecisionDecayPhysics{verbose} {
-    namePhysics = "MuoniumPrecisionDecayPhysics";
-}
+    DecayPhysicsBase{"MuoniumPrecisionDecayPhysics", verbose} {}
 
 auto MuoniumPrecisionDecayPhysics::ConstructParticle() -> void {
     G4EmBuilder::ConstructMinimalEmSet();

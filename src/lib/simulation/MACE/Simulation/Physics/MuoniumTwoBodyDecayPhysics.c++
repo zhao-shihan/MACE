@@ -14,12 +14,12 @@
 namespace MACE::inline Simulation::inline Physics {
 
 MuoniumTwoBodyDecayPhysics::MuoniumTwoBodyDecayPhysics(G4int verbose) :
-    MuonPrecisionDecayPhysics{verbose},
+    DecayPhysicsBase{"MuoniumTwoBodyDecayPhysics", verbose},
+    fRadiativeDecayBR{},
+    fIPPDecayBR{},
     fAnnihilationBR{},
     fTwoBodyDecayBR{},
-    fMessengerRegister{this} {
-    namePhysics = "MuoniumTwoBodyDecayPhysics";
-}
+    fMessengerRegister{this} {}
 
 auto MuoniumTwoBodyDecayPhysics::ConstructParticle() -> void {
     G4EmBuilder::ConstructMinimalEmSet();

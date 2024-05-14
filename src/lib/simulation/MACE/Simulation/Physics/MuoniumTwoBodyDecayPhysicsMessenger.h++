@@ -18,7 +18,7 @@ class MuoniumTwoBodyDecayPhysicsMessenger final : public Geant4X::SingletonMesse
 
 private:
     MuoniumTwoBodyDecayPhysicsMessenger();
-    ~MuoniumTwoBodyDecayPhysicsMessenger() = default;
+    ~MuoniumTwoBodyDecayPhysicsMessenger();
 
 public:
     auto SetNewValue(G4UIcommand* command, G4String value) -> void override;

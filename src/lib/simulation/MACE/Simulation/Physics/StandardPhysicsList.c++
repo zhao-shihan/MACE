@@ -4,6 +4,7 @@
 #include "MACE/Simulation/Physics/MuonPrecisionDecayPhysics.h++"
 #include "MACE/Simulation/Physics/MuoniumPhysics.h++"
 #include "MACE/Simulation/Physics/MuoniumPrecisionDecayPhysics.h++"
+#include "MACE/Simulation/Physics/MuoniumTwoBodyDecayPhysics.h++"
 #include "MACE/Simulation/Physics/StandardPhysicsList.h++"
 
 #include "G4EmStandardPhysics_option4.hh"
@@ -23,6 +24,7 @@ StandardPhysicsListBase::StandardPhysicsListBase() :
     ReplacePhysics(new G4SpinDecayPhysics{verboseLevel});
     RegisterPhysics(new MuonPrecisionDecayPhysics{verboseLevel});
     RegisterPhysics(new MuoniumPrecisionDecayPhysics{verboseLevel});
+    RegisterPhysics(new MuoniumTwoBodyDecayPhysics{verboseLevel});
 }
 
 } // namespace MACE::inline Simulation::inline Physics

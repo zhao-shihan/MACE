@@ -1,6 +1,7 @@
 #pragma once
 
-#include "MACE/Simulation/Physics/MuonPrecisionDecayPhysics.h++"
+#include "MACE/Math/Clamp.h++"
+#include "MACE/Simulation/Physics/DecayPhysicsBase.h++"
 #include "MACE/Simulation/Physics/MuoniumTwoBodyDecayPhysicsMessenger.h++"
 
 #include "gsl/gsl"
@@ -10,11 +11,13 @@ class G4String;
 
 namespace MACE::inline Simulation::inline Physics {
 
-class MuoniumTwoBodyDecayPhysics : public MuonPrecisionDecayPhysics {
+class MuoniumTwoBodyDecayPhysics : public DecayPhysicsBase {
 
 public:
     MuoniumTwoBodyDecayPhysics(G4int verbose);
 
+    auto RadiativeDecayBR(double br) -> void { fRadiativeDecayBR = Math::Clamp<"[]">(br, 0., 1.); }
+    auto IPPDecayBR(double br) -> void { fIPPDecayBR = Math::Clamp<"[]">(br, 0., 1.); }
     auto AnnihilationBR(double br) -> void { fAnnihilationBR = Math::Clamp<"[]">(br, 0., 1.); }
     auto TwoBodyDecayBR(double br) -> void { fTwoBodyDecayBR = Math::Clamp<"[]">(br, 0., 1.); }
 
@@ -27,6 +30,8 @@ protected:
     virtual auto AssignRareDecayBR(gsl::not_null<G4DecayTable*> decay) -> void override;
 
 protected:
+    double fRadiativeDecayBR;
+    double fIPPDecayBR;
     double fAnnihilationBR;
     double fTwoBodyDecayBR;
 
