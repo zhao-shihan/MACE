@@ -33,7 +33,7 @@ auto MasterMakeUniqueSeedSeries(auto xsr256Seed) -> std::set<T> {
 
     static_assert(std::same_as<Math::Random::Xoshiro256PP::SeedType, std::uint64_t>);
     Math::Random::Xoshiro256PP xsr256{std::bit_cast<std::uint64_t>(xsr256Seed)};
-    Math::Random::Uniform<T> uniform{1, std::numeric_limits<T>::max() - 1};
+    Math::Random::Uniform<T> uniform{1, std::numeric_limits<T>::max() - 1}; // not 0x00...00 and not 0xff...ff
 
     std::set<T> uniqueSeeds;
     const auto worldSize{mpiEnv.CommWorldSize()};
@@ -123,11 +123,11 @@ auto MPIReseedRandomEngine(CLHEP::HepRandomEngine* clhepRng, TRandom* tRandom) -
     if (seedRecv.clhepNull xor (clhepRng == nullptr)) { throw std::logic_error{"CLHEP random engine null/!null inconsistent"}; }
     if (seedRecv.rootNull xor (tRandom == nullptr)) { throw std::logic_error{"ROOT random engine null/!null inconsistent"}; }
     if (clhepRng != nullptr) {
-        assert(0 < seedRecv.clhep and seedRecv.clhep < std::numeric_limits<decltype(seedRecv.clhep)>::max());
+        assert(seedRecv.clhep != 0 and seedRecv.clhep != -1); // not 0x00...00 and not 0xff...ff
         clhepRng->setSeed(seedRecv.clhep, 3);
     }
     if (tRandom != nullptr) {
-        assert(0 < seedRecv.root and seedRecv.root < std::numeric_limits<decltype(seedRecv.root)>::max());
+        assert(seedRecv.root != 0 and seedRecv.root != static_cast<decltype(seedRecv.root)>(-1)); // not 0x00...00 and not 0xff...ff
         tRandom->SetSeed(seedRecv.root);
     }
 }
