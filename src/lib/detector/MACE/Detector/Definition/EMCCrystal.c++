@@ -3,6 +3,7 @@
 #include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Env/BasicEnv.h++"
+#include "MACE/Math/Hypot.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/MathConstant.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
@@ -20,6 +21,7 @@
 #include "fmt/format.h"
 
 #include <algorithm>
+#include <map>
 #include <utility>
 
 namespace MACE::Detector::Definition {
@@ -94,6 +96,10 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
     // Construct Volumes
     /////////////////////////////////////////////
 
+    double length{0};
+    std::vector<double> edgeLengthLast{0};
+    std::size_t typeID{0};
+
     for (int copyNo{};
          auto&& [centroid, _, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
         const auto centroidMagnitude{centroid.mag()};
@@ -116,6 +122,42 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
                 std::vector<G4ThreeVector> outerVertexHere(vertexIndex.size());
                 std::ranges::transform(vertexIndex, outerVertexHere.begin(),
                                        [&](const auto& i) { return outerHypotenuseHere * vertex[i]; });
+
+                // sort by edge length
+                std::vector<double> edgeLengthHere;
+                for (int i{}; i < std::ssize(innerVertexHere); ++i) {
+
+                    length = Math::Hypot(innerVertexHere[i].x() - innerVertexHere[i + 1].x(), innerVertexHere[i].y() - innerVertexHere[i + 1].y(), innerVertexHere[i].z() - innerVertexHere[i + 1].z());
+
+                    if (i == std::ssize(innerVertexHere) - 1) {
+                        length = Math::Hypot(innerVertexHere[0].x() - innerVertexHere[i].x(), innerVertexHere[0].y() - innerVertexHere[i].y(), innerVertexHere[0].z() - innerVertexHere[i].z());
+                    }
+
+                    edgeLengthHere.push_back(length);
+                };
+
+                std::sort(edgeLengthHere.begin(), edgeLengthHere.end());
+
+                std::cout << "CopyNO: " << copyNo << std::endl;
+                for (auto& i : edgeLengthHere) {
+                    std::cout << "edgeLengthHere: " << std::fixed << std::setprecision(5) << i << std::endl;
+                }
+
+                constexpr auto tolerance{1e-5};
+
+                const auto compareEqual = [&](const std::vector<double>& a, const std::vector<double>& b) {
+                    if (a.size() != b.size()) return false;
+                    return std::equal(a.begin(), a.end(), b.begin(), b.end(),
+                                      [&](double x, double y) { return std::abs(x - y) <= tolerance; });
+                };
+
+                if (compareEqual(edgeLengthHere, edgeLengthLast)) {
+                    fCopyNo2TypeID[copyNo] = typeID;
+                } else {
+                    typeID++;
+                    fCopyNo2TypeID[copyNo] = typeID;
+                    edgeLengthLast = edgeLengthHere;
+                }
 
                 // clang-format off
 
@@ -231,6 +273,11 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
         }
 
         ++copyNo;
+    }
+
+    std::cout << "Map contents:" << std::endl;
+    for (auto it = fCopyNo2TypeID.begin(); it != fCopyNo2TypeID.end(); ++it) {
+        std::cout << "copyNo: " << it->first << " typeID: " << it->second << std::endl;
     }
 }
 
