@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16)
 
 # Enable MSVC_RUNTIME_LIBRARY target property
 # See https://cmake.org/cmake/help/latest/policy/CMP0091.html
