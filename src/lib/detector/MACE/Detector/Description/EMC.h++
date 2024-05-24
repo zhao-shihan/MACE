@@ -81,6 +81,7 @@ public:
     public:
         std::vector<HepGeom::Point3D<double>> fVertex;
         std::vector<Face> fFaceList;
+        std::map<int, int> fTypeMap;
     };
 
 private:

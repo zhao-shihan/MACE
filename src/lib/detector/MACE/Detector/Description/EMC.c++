@@ -8,6 +8,7 @@
 #include "CLHEP/Vector/TwoVector.h"
 
 #include "G4SystemOfUnits.hh"
+#include "G4ThreeVector.hh"
 #include "G4Transform3D.hh"
 
 #include "pmp/algorithms/differential_geometry.h"
@@ -149,7 +150,7 @@ using namespace PhysicalConstant;
 
 EMC::EMC() :
     DescriptionBase{"EMC"},
-    fNSubdivision{2},
+    fNSubdivision{3},
     fInnerRadius{15_cm},
     fCrystalHypotenuse{15_cm},
     fUpstreamWindowRadius{50_mm},
@@ -206,7 +207,7 @@ EMC::EMC() :
 auto EMC::ComputeMesh() const -> MeshInformation {
     auto pmpMesh{EMCMesh{fNSubdivision}.Generate()};
     MeshInformation mesh;
-    auto& [vertex, faceList]{mesh};
+    auto& [vertex, faceList, typeMap]{mesh};
     const auto point{pmpMesh.vertex_property<pmp::Point>("v:point")};
 
     for (auto&& v : pmpMesh.vertices()) {
@@ -215,6 +216,7 @@ auto EMC::ComputeMesh() const -> MeshInformation {
 
     for (auto&& f : pmpMesh.faces()) {
         const auto centroid{VectorCast<CLHEP::Hep3Vector>(pmp::centroid(pmpMesh, f))};
+
         if (const auto rXY{fInnerRadius * centroid.perp()};
             centroid.z() < 0) {
             if (rXY < fUpstreamWindowRadius) { continue; }
@@ -254,12 +256,41 @@ auto EMC::ComputeMesh() const -> MeshInformation {
                               return LocalPhi(i) < LocalPhi(j);
                           });
     }
+
+    std::map<std::vector<float>, std::vector<int>> edgeLengthSet;
+
+    for (int unitID{};
+         auto&& [centroid, _, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
+        // sort by edge length
+        std::vector<float> edgeLength; // magic conversion (double to float)
+        std::vector<G4ThreeVector> xV{vertexIndex.size()};
+
+        std::ranges::transform(vertexIndex, xV.begin(),
+                               [&](const auto& i) { return vertex[i]; });
+
+        for (int i{}; i < std::ssize(xV); ++i) {
+            edgeLength.emplace_back(i != std::ssize(xV) - 1 ? (xV[i + 1] - xV[i]).mag() :
+                                                              (xV[0] - xV[i]).mag());
+        };
+
+        std::ranges::sort(edgeLength);
+        edgeLengthSet[edgeLength].emplace_back(unitID++);
+    }
+
+    int typeID{1};
+    for (const auto& pair : edgeLengthSet) {
+        for (const auto& value : pair.second) {
+            mesh.fTypeMap[value] = typeID;
+        }
+        typeID++;
+    }
+
     return mesh;
 }
 
-auto EMC::ComputeTransformToOuterSurfaceWithOffset(int cellID, double offsetInNormalDirection) const -> HepGeom::Transform3D {
+auto EMC::ComputeTransformToOuterSurfaceWithOffset(int unitID, double offsetInNormalDirection) const -> HepGeom::Transform3D {
     const auto& faceList{Mesh().fFaceList};
-    auto&& [centroid, normal, vertexIndex]{faceList[cellID]};
+    auto&& [centroid, normal, vertexIndex]{faceList[unitID]};
 
     const auto centroidMagnitude{centroid.mag()};
     const auto crystalOuterRadius{(fInnerRadius + fCrystalHypotenuse) * centroidMagnitude};
