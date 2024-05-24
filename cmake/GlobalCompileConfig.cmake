@@ -50,10 +50,14 @@ endif()
 
 if(MACE_ENABLE_ASAN_IN_DEBUG_BUILD)
     if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-        add_compile_options($<$<CONFIG:Debug>:-fsanitize=address> $<$<CONFIG:Debug>:-fno-omit-frame-pointer>
-                            $<$<CONFIG:RelWithDebInfo>:-fsanitize=address>)
-        add_link_options($<$<CONFIG:Debug>:-fsanitize=address> $<$<CONFIG:Debug>:-fno-omit-frame-pointer>
-                         $<$<CONFIG:RelWithDebInfo>:-fsanitize=address>)
+        add_compile_options($<$<CONFIG:Debug>:-fsanitize=undefined>
+                            $<$<CONFIG:Debug>:-fno-omit-frame-pointer>
+                            $<$<CONFIG:RelWithDebInfo>:-fsanitize=undefined>
+                            $<$<CONFIG:RelWithDebInfo>:-fno-omit-frame-pointer>)
+        add_link_options($<$<CONFIG:Debug>:-fsanitize=undefined>
+                         $<$<CONFIG:Debug>:-fno-omit-frame-pointer>
+                         $<$<CONFIG:RelWithDebInfo>:-fsanitize=undefined>
+                         $<$<CONFIG:RelWithDebInfo>:-fno-omit-frame-pointer>)
         if(DEFINED CMAKE_CONFIGURATION_TYPES)
             # multi-config generator
             message(STATUS "AddressSanitizer will be enabled in debug build (-fsanitize=address)")

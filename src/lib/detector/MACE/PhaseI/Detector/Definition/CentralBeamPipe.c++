@@ -9,7 +9,7 @@
 
 namespace MACE::PhaseI::Detector::Definition {
 
-using namespace LiteralUnit::MathConstantSuffix;
+using namespace LiteralUnit;
 using namespace PhysicalConstant;
 
 auto CentralBeamPipe::Construct(G4bool checkOverlaps) -> void {
@@ -18,9 +18,8 @@ auto CentralBeamPipe::Construct(G4bool checkOverlaps) -> void {
     const auto nist{G4NistManager::Instance()};
 
     { // Vacuum
-        const auto air{nist->FindOrBuildMaterial("G4_AIR")};
-        const auto density{beamPipe.VacuumPressure() * air->GetMassOfMolecule() / (k_Boltzmann * STP_Temperature)};
-        const auto vacuum{nist->BuildMaterialWithNewDensity(beamPipe.Name() + "Vacuum", "G4_AIR", density, STP_Temperature, beamPipe.VacuumPressure())};
+        const auto density{beamPipe.VacuumPressure() / 1_atm * 1.177_kg_m3};
+        const auto vacuum{nist->BuildMaterialWithNewDensity(beamPipe.Name() + "Vacuum", "G4_AIR", density, 293.15_K, beamPipe.VacuumPressure())};
 
         const auto solid{Make<G4Tubs>(
             beamPipe.Name(),

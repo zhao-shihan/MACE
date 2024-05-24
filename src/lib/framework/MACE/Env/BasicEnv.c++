@@ -44,7 +44,7 @@ auto BasicEnv::PrintWelcomeMessageBody(int argc, char* argv[]) const -> void {
     if (cwdError) { cwd = "<Error getting current working directory>"; }
     Print("\n"
           " MACE offline software system {}\n"
-          " Copyright (c) 2020-2024 MACE working group\n"
+          " Copyright 2020-2024 MACE working group\n"
           "\n"
           " Exe: {}",
           MACE_VERSION_STRING,
