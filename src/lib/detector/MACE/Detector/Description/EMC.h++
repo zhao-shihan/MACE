@@ -23,12 +23,7 @@ public:
     auto CrystalHypotenuse() const -> auto { return fCrystalHypotenuse; }
     auto UpstreamWindowRadius() const -> auto { return fUpstreamWindowRadius; }
     auto DownstreamWindowRadius() const -> auto { return fDownstreamWindowRadius; }
-    auto SmallPMTRadius() const -> auto { return fSmallPMTRadius; }
-    auto SmallPMTLength() const -> auto { return fSmallPMTLength; }
-    auto SmallPMTCathodeRadius() const -> auto { return fSmallPMTCathodeRadius; }
-    auto LargePMTRadius() const -> auto { return fLargePMTRadius; }
-    auto LargePMTCathodeRadius() const -> auto { return fLargePMTCathodeRadius; }
-    auto LargePMTLength() const -> auto { return fLargePMTLength; }
+    auto PMTDimensions() const -> const auto { return fPMTDimensions; }
     auto PMTCouplerThickness() const -> auto { return fPMTCouplerThickness; }
     auto PMTWindowThickness() const -> auto { return fPMTWindowThickness; }
     auto PMTCathodeThickness() const -> auto { return fPMTCathodeThickness; }
@@ -52,12 +47,7 @@ public:
     auto CrystalHypotenuse(double val) -> void { fCrystalHypotenuse = val, SetGeometryOutdated(); }
     auto UpstreamWindowRadius(double val) -> void { fUpstreamWindowRadius = val, SetGeometryOutdated(); }
     auto DownstreamWindowRadius(double val) -> void { fDownstreamWindowRadius = val, SetGeometryOutdated(); }
-    auto SmallPMTRadius(double val) -> void { fSmallPMTRadius = val; }
-    auto SmallPMTLength(double val) -> void { fSmallPMTLength = val; }
-    auto SmallPMTCathodeRadius(double val) -> void { fSmallPMTCathodeRadius = val; }
-    auto LargePMTRadius(double val) -> void { fLargePMTRadius = val; }
-    auto LargePMTLength(double val) -> void { fLargePMTLength = val; }
-    auto LargePMTCathodeRadius(double val) -> void { fLargePMTCathodeRadius = val; }
+    auto PMTDimensions(std::vector<std::vector<double>> val) -> void { fPMTDimensions = std::move(val); }
     auto PMTCouplerThickness(double val) -> void { fPMTCouplerThickness = val; }
     auto PMTWindowThickness(double val) -> void { fPMTWindowThickness = val; }
     auto PMTCathodeThickness(double val) -> void { fPMTCathodeThickness = val; }
@@ -107,12 +97,7 @@ private:
     double fCrystalHypotenuse;
     double fUpstreamWindowRadius;
     double fDownstreamWindowRadius;
-    double fSmallPMTRadius;
-    double fSmallPMTLength;
-    double fSmallPMTCathodeRadius;
-    double fLargePMTRadius;
-    double fLargePMTLength;
-    double fLargePMTCathodeRadius;
+    std::vector<std::vector<double>> fPMTDimensions;
     double fPMTCouplerThickness;
     double fPMTWindowThickness;
     double fPMTCathodeThickness;

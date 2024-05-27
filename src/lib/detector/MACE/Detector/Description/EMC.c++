@@ -149,18 +149,26 @@ using namespace LiteralUnit::Energy;
 using namespace PhysicalConstant;
 
 EMC::EMC() :
-    DescriptionBase{"EMC"},
+    DescriptionBase{
+        "EMC"
+},
     fNSubdivision{3},
     fInnerRadius{15_cm},
     fCrystalHypotenuse{15_cm},
     fUpstreamWindowRadius{50_mm},
     fDownstreamWindowRadius{5_mm},
-    fSmallPMTRadius{25.5_mm},
-    fSmallPMTLength{144_mm},
-    fSmallPMTCathodeRadius{23_mm},
-    fLargePMTRadius{39_mm},
-    fLargePMTLength{156_mm},
-    fLargePMTCathodeRadius{35_mm},
+    fPMTDimensions{
+        {29.3_mm, 25_mm, 87_mm},   // 9442B Type-HEX01
+        {29.3_mm, 25_mm, 87_mm},   // 9442B Type-PEN
+        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX02
+        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX03
+        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX04
+        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX05
+        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX06
+        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX07
+        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX08
+        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX09
+    },
     fPMTCouplerThickness{0.1_mm},
     fPMTWindowThickness{1_mm},
     fPMTCathodeThickness{20_nm},
@@ -277,12 +285,28 @@ auto EMC::ComputeMesh() const -> MeshInformation {
         edgeLengthSet[edgeLength].emplace_back(unitID++);
     }
 
-    int typeID{1};
-    for (const auto& pair : edgeLengthSet) {
-        for (const auto& value : pair.second) {
+    for (auto&& pair : edgeLengthSet) {
+        std::cout << "Key: [";
+        for (auto&& value : pair.first) {
+            std::cout << value << ", ";
+        }
+        std::cout << "], Value: [";
+        for (auto&& value : pair.second) {
+            std::cout << value << ", ";
+        }
+        std::cout << "]" << std::endl;
+    }
+
+    int typeID{};
+    for (auto&& pair : edgeLengthSet) {
+        for (auto&& value : pair.second) {
             mesh.fTypeMap[value] = typeID;
         }
         typeID++;
+    }
+
+    for (auto&& pair : mesh.fTypeMap) {
+        std::cout << "unitID: " << pair.first << " typeID: " << pair.second << std::endl;
     }
 
     return mesh;
@@ -307,12 +331,7 @@ auto EMC::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
     ImportValue(node, fUpstreamWindowRadius, "UpstreamWindowRadius");
     ImportValue(node, fDownstreamWindowRadius, "DownstreamWindowRadius");
-    ImportValue(node, fSmallPMTRadius, "SmallPMTRadius");
-    ImportValue(node, fSmallPMTLength, "SmallPMTLength");
-    ImportValue(node, fSmallPMTCathodeRadius, "SmallPMTCathodeRadius");
-    ImportValue(node, fLargePMTRadius, "LargePMTRadius");
-    ImportValue(node, fLargePMTLength, "LargePMTLength");
-    ImportValue(node, fLargePMTCathodeRadius, "LargePMTCathodeRadius");
+    ImportValue(node, fPMTDimensions, "PMTDimensions");
     ImportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ImportValue(node, fPMTWindowThickness, "PMTWindowThickness");
     ImportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
@@ -333,12 +352,7 @@ auto EMC::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
     ExportValue(node, fUpstreamWindowRadius, "UpstreamWindowRadius");
     ExportValue(node, fDownstreamWindowRadius, "DownstreamWindowRadius");
-    ExportValue(node, fSmallPMTRadius, "SmallPMTRadius");
-    ExportValue(node, fSmallPMTLength, "SmallPMTLength");
-    ExportValue(node, fSmallPMTCathodeRadius, "SmallPMTCathodeRadius");
-    ExportValue(node, fLargePMTRadius, "LargePMTRadius");
-    ExportValue(node, fLargePMTLength, "LargePMTLength");
-    ExportValue(node, fLargePMTCathodeRadius, "LargePMTCathodeRadius");
+    ExportValue(node, fPMTDimensions, "PMTDimensions");
     ExportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ExportValue(node, fPMTWindowThickness, "PMTWindowThickness");
     ExportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
