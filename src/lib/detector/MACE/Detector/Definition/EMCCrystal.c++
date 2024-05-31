@@ -104,10 +104,11 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
         const auto outerHypotenuse{innerRadius + crystalHypotenuse};
 
         if (unitID != 0) {
-            std::cout << centroid.x() << " " << centroid.y() << " " << centroid.z() << std::endl;
             unitID++;
             continue;
         }
+
+        std::cout << centroid.x() << " " << centroid.y() << " " << centroid.z() << std::endl;
 
         // make a crystal-shaped solid with certain shrinkage (e.g. shrink with coat thickness)
 
@@ -220,7 +221,8 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
         // Construct Optical Surface
         /////////////////////////////////////////////
 
-        const auto rfSurface{new G4OpticalSurface("reflector", unified, polished, dielectric_metal)};
+        // const auto rfSurface{new G4OpticalSurface("reflector", unified, polished, dielectric_metal)};
+        const auto rfSurface{new G4OpticalSurface("reflector", DAVIS, PolishedESR_LUT, dielectric_LUTDAVIS)};
         new G4LogicalSkinSurface{"reflectorSurface", logicCrystal, rfSurface};
         rfSurface->SetMaterialPropertiesTable(rfSurfacePropertiesTable);
 
