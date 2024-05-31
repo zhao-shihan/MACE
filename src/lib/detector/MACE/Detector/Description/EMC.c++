@@ -285,17 +285,19 @@ auto EMC::ComputeMesh() const -> MeshInformation {
         edgeLengthSet[edgeLength].emplace_back(unitID++);
     }
 
+    std::cout << "===== Crystal Sorting =====" << std::endl;
     for (auto&& pair : edgeLengthSet) {
-        std::cout << "Key: [";
+        std::cout << "EdgeLength Set: [";
         for (auto&& value : pair.first) {
             std::cout << value << ", ";
         }
-        std::cout << "], Value: [";
+        std::cout << "], UnitID: [";
         for (auto&& value : pair.second) {
             std::cout << value << ", ";
         }
         std::cout << "]" << std::endl;
     }
+    std::cout << "\n";
 
     int typeID{};
     for (auto&& pair : edgeLengthSet) {
@@ -303,10 +305,6 @@ auto EMC::ComputeMesh() const -> MeshInformation {
             mesh.fTypeMap[value] = typeID;
         }
         typeID++;
-    }
-
-    for (auto&& pair : mesh.fTypeMap) {
-        std::cout << "unitID: " << pair.first << " typeID: " << pair.second << std::endl;
     }
 
     return mesh;

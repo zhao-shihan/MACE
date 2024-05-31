@@ -15,5 +15,5 @@
 /MACE/Analysis/FilePath typePEN
 /MACE/Analysis/FileMode RECREATE
 
-/run/beamOn 100000
+/run/beamOn 50000
 /MPIRun/PrintRunSummary
