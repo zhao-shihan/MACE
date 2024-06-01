@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/Detector/Description/DescriptionBase.h++"
+#include "MACE/Extension/stdx/arraynx.h++"
 
 #include "CLHEP/Geometry/Point3D.h"
 #include "CLHEP/Geometry/Transform3D.h"
@@ -47,7 +48,7 @@ public:
     auto CrystalHypotenuse(double val) -> void { fCrystalHypotenuse = val, SetGeometryOutdated(); }
     auto UpstreamWindowRadius(double val) -> void { fUpstreamWindowRadius = val, SetGeometryOutdated(); }
     auto DownstreamWindowRadius(double val) -> void { fDownstreamWindowRadius = val, SetGeometryOutdated(); }
-    auto PMTDimensions(std::vector<std::vector<double>> val) -> void { fPMTDimensions = std::move(val); }
+    auto PMTDimensions(std::vector<stdx::array3d> val) -> void { fPMTDimensions = std::move(val); }
     auto PMTCouplerThickness(double val) -> void { fPMTCouplerThickness = val; }
     auto PMTWindowThickness(double val) -> void { fPMTWindowThickness = val; }
     auto PMTCathodeThickness(double val) -> void { fPMTCathodeThickness = val; }
@@ -97,7 +98,7 @@ private:
     double fCrystalHypotenuse;
     double fUpstreamWindowRadius;
     double fDownstreamWindowRadius;
-    std::vector<std::vector<double>> fPMTDimensions;
+    std::vector<stdx::array3d> fPMTDimensions;
     double fPMTCouplerThickness;
     double fPMTWindowThickness;
     double fPMTCathodeThickness;
