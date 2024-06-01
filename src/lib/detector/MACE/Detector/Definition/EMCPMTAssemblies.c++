@@ -149,7 +149,7 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
         const auto solidGlassBox{Make<G4Tubs>("temp", 0, pmtDiameter / 2, pmtLength / 2, 0, 2 * pi)};
         const auto solidPMTVacuum{Make<G4Tubs>("temp", 0, pmtDiameter / 2 - pmtWindowThickness, pmtLength / 2 - pmtWindowThickness, 0, 2 * pi)};
         const auto solidPMTShell{Make<G4SubtractionSolid>("EMCPMTShell", solidGlassBox, solidPMTVacuum)};
-        const auto logicPMTShell{Make<G4LogicalVolume>(solidPMTShell, glass, "EMCPMTShell")};
+        const auto logicPMTShell{Make<G4LogicalVolume>(solidPMTShell, bialkali, "EMCPMTShell")};
         Make<G4PVPlacement>(shellTransform,
                             logicPMTShell,
                             "EMCPMTShell",
@@ -158,15 +158,15 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
                             unitID,
                             checkOverlaps);
 
-        const auto solidCathode{Make<G4Tubs>("temp", 0, cathodeDiameter / 2, pmtCathodeThickness / 2, 0, 2 * pi)};
-        const auto logicCathode{Make<G4LogicalVolume>(solidCathode, bialkali, "EMCPMTCathode")};
-        Make<G4PVPlacement>(cathodeTransform,
-                            logicCathode,
-                            "EMCPMTCathode",
-                            Mother().LogicalVolume(),
-                            true,
-                            unitID,
-                            checkOverlaps);
+        // const auto solidCathode{Make<G4Tubs>("temp", 0, cathodeDiameter / 2, pmtCathodeThickness / 2, 0, 2 * pi)};
+        // const auto logicCathode{Make<G4LogicalVolume>(solidCathode, bialkali, "EMCPMTCathode")};
+        // Make<G4PVPlacement>(cathodeTransform,
+        //                     logicCathode,
+        //                     "EMCPMTCathode",
+        //                     Mother().LogicalVolume(),
+        //                     true,
+        //                     unitID,
+        //                     checkOverlaps);
 
         /////////////////////////////////////////////
         // Construct Optical Surface
@@ -183,7 +183,7 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
         }
 
         const auto cathodeSurface{new G4OpticalSurface("Cathode", unified, polished, dielectric_metal)};
-        new G4LogicalSkinSurface{"cathodeSkinSurface", logicCathode, cathodeSurface};
+        new G4LogicalSkinSurface{"cathodeSkinSurface", logicPMTShell, cathodeSurface};
         cathodeSurface->SetMaterialPropertiesTable(cathodeSurfacePropertiesTable);
 
         ++unitID;
