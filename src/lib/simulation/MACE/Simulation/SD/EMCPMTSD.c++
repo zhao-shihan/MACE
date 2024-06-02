@@ -1,4 +1,5 @@
 #include "MACE/Simulation/SD/EMCPMTSD.h++"
+#include "MACE/Utility/PhysicalConstant.h++"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -13,6 +14,8 @@
 #include <cassert>
 
 namespace MACE::inline Simulation::inline SD {
+
+using namespace PhysicalConstant;
 
 EMCPMTSD::EMCPMTSD(const G4String& sdName) :
     NonMoveableBase{},
@@ -47,6 +50,7 @@ auto EMCPMTSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"UnitID">(*hit) = unitID;
     Get<"t">(*hit) = postStepPoint.GetGlobalTime();
+    Get<"lambda">(*hit) = h_Planck * c_light / postStepPoint.GetKineticEnergy();
     // Get<"EMCHitID">(*hit) = -1; // to be determined
 
     return true;
@@ -73,4 +77,4 @@ auto EMCPMTSD::NOpticalPhotonHit() const -> std::unordered_map<int, int> {
     return nHit;
 }
 
-} // namespace MACE::Simulation::inline SD
+} // namespace MACE::inline Simulation::inline SD

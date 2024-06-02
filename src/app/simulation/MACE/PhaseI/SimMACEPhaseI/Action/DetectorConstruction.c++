@@ -70,7 +70,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     const auto& emcName{MACE::Detector::Description::EMC::Instance().Name()};
 
     fEMCPMTSD = new SD::EMCPMTSD{emcName + "PMT"};
-    emcPMTAssemblies.RegisterSD("EMCPMTShell", fEMCPMTSD);
+    emcPMTAssemblies.RegisterSD("EMCPMTCathode", fEMCPMTSD);
 
     fEMCSD = new SD::EMCSD{emcName, fEMCPMTSD};
     emcCrystal.RegisterSD(fEMCSD);
