@@ -99,7 +99,8 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
 
     const auto cathodeSurfacePropertiesTable{new G4MaterialPropertiesTable};
     cathodeSurfacePropertiesTable->AddProperty("REFLECTIVITY", fEnergyPair, {0., 0.});
-    cathodeSurfacePropertiesTable->AddProperty("EFFICIENCY", cathodeSurfacePropertiesEnergy, cathodeSurfacePropertiesEfficiency);
+    cathodeSurfacePropertiesTable->AddProperty("EFFICIENCY", fEnergyPair, {0., 0.});
+    // cathodeSurfacePropertiesTable->AddProperty("EFFICIENCY", cathodeSurfacePropertiesEnergy, cathodeSurfacePropertiesEfficiency);
 
     if (Env::VerboseLevelReach<'V'>()) {
         cathodeSurfacePropertiesTable->DumpTable();
@@ -158,15 +159,15 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
                             unitID,
                             checkOverlaps);
 
-        // const auto solidCathode{Make<G4Tubs>("temp", 0, cathodeDiameter / 2, pmtCathodeThickness / 2, 0, 2 * pi)};
-        // const auto logicCathode{Make<G4LogicalVolume>(solidCathode, bialkali, "EMCPMTCathode")};
-        // Make<G4PVPlacement>(cathodeTransform,
-        //                     logicCathode,
-        //                     "EMCPMTCathode",
-        //                     Mother().LogicalVolume(),
-        //                     true,
-        //                     unitID,
-        //                     checkOverlaps);
+        const auto solidCathode{Make<G4Tubs>("temp", 0, cathodeDiameter / 2, pmtCathodeThickness / 2, 0, 2 * pi)};
+        const auto logicCathode{Make<G4LogicalVolume>(solidCathode, bialkali, "EMCPMTCathode")};
+        Make<G4PVPlacement>(cathodeTransform,
+                            logicCathode,
+                            "EMCPMTCathode",
+                            Mother().LogicalVolume(),
+                            true,
+                            unitID,
+                            checkOverlaps);
 
         /////////////////////////////////////////////
         // Construct Optical Surface
