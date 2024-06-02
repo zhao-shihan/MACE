@@ -30,4 +30,4 @@ document/doxygen/rtf/
 document/doxygen/xml/
 thirdparty/
 pen*/
-surfaceTest/
+*.root
