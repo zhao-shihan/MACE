@@ -24,7 +24,7 @@ public:
     auto CrystalHypotenuse() const -> auto { return fCrystalHypotenuse; }
     auto UpstreamWindowRadius() const -> auto { return fUpstreamWindowRadius; }
     auto DownstreamWindowRadius() const -> auto { return fDownstreamWindowRadius; }
-    auto PMTDimensions() const -> const auto { return fPMTDimensions; }
+    auto PMTDimensions() const -> const auto& { return fPMTDimensions; }
     auto PMTCouplerThickness() const -> auto { return fPMTCouplerThickness; }
     auto PMTWindowThickness() const -> auto { return fPMTWindowThickness; }
     auto PMTCathodeThickness() const -> auto { return fPMTCathodeThickness; }
