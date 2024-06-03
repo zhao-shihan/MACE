@@ -103,12 +103,12 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
         const auto crystalLength{crystalHypotenuse * centroidMagnitude};
         const auto outerHypotenuse{innerRadius + crystalHypotenuse};
 
-        // if (unitID != 0) {
-        //     unitID++;
-        //     continue;
-        // }
+        if (unitID != 0) {
+            unitID++;
+            continue;
+        }
 
-        std::cout << centroid.x() << " " << centroid.y() << " " << centroid.z() << std::endl;
+        // std::cout << centroid.x() << " " << centroid.y() << " " << centroid.z() << std::endl;
 
         // make a crystal-shaped solid with certain shrinkage (e.g. shrink with coat thickness)
 
@@ -222,22 +222,24 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
         /////////////////////////////////////////////
 
         const auto rfSurface{new G4OpticalSurface("reflector", unified, polished, dielectric_metal)};
-        new G4LogicalSkinSurface{"reflectorSurface", logicCrystal, rfSurface};
+        // new G4LogicalSkinSurface{"reflectorSurface", logicCrystal, rfSurface};
+        new G4LogicalBorderSurface{"reflectorSurface", physicalCrystal, Mother().PhysicalVolume(), rfSurface};
+
         rfSurface->SetMaterialPropertiesTable(rfSurfacePropertiesTable);
 
         const auto airPaintSurface{new G4OpticalSurface("AirPaint", unified, polished, dielectric_metal)};
         new G4LogicalBorderSurface{"airPaintSurface", Mother().PhysicalVolume(), physicalCrystal, airPaintSurface};
         airPaintSurface->SetMaterialPropertiesTable(airPaintSurfacePropertiesTable);
 
-        const auto emcPMTCoupler{FindSibling<EMCPMTAssemblies>()};
-        if (emcPMTCoupler) {
-            const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
-            new G4LogicalBorderSurface{"couplerSurface",
-                                       physicalCrystal,
-                                       emcPMTCoupler->PhysicalVolume("EMCPMTCoupler", unitID),
-                                       couplerSurface};
-            couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
-        }
+        // const auto emcPMTCoupler{FindSibling<EMCPMTAssemblies>()};
+        // if (emcPMTCoupler) {
+        //     const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
+        //     new G4LogicalBorderSurface{"couplerSurface",
+        //                                physicalCrystal,
+        //                                emcPMTCoupler->PhysicalVolume("EMCPMTCoupler", unitID),
+        //                                couplerSurface};
+        //     couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
+        // }
 
         ++unitID;
     }

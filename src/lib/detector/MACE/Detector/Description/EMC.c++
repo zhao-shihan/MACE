@@ -158,8 +158,9 @@ EMC::EMC() :
     fUpstreamWindowRadius{50_mm},
     fDownstreamWindowRadius{5_mm},
     fPMTDimensions{
-        {29.3_mm, 25_mm, 87_mm},   // 9442B Type-HEX01
-        {29.3_mm, 25_mm, 87_mm},   // 9442B Type-PEN
+        {29.3_mm, 25_mm, 87_mm}, // 9442B Type-HEX01
+        // {29.3_mm, 25_mm, 87_mm},   // 9442B Type-PEN
+        {51_mm, 48_mm, 87_mm},     // 9442B Type-PEN
         {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX02
         {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX03
         {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX04
@@ -285,19 +286,19 @@ auto EMC::ComputeMesh() const -> MeshInformation {
         edgeLengthSet[edgeLength].emplace_back(unitID++);
     }
 
-    std::cout << "===== Crystal Sorting =====" << std::endl;
-    for (auto&& pair : edgeLengthSet) {
-        std::cout << "EdgeLength Set: [";
-        for (auto&& value : pair.first) {
-            std::cout << value << ", ";
-        }
-        std::cout << "], UnitID: [";
-        for (auto&& value : pair.second) {
-            std::cout << value << ", ";
-        }
-        std::cout << "]" << std::endl;
-    }
-    std::cout << "\n";
+    // std::cout << "===== Crystal Sorting =====" << std::endl;
+    // for (auto&& pair : edgeLengthSet) {
+    //     std::cout << "EdgeLength Set: [";
+    //     for (auto&& value : pair.first) {
+    //         std::cout << value << ", ";
+    //     }
+    //     std::cout << "], UnitID: [";
+    //     for (auto&& value : pair.second) {
+    //         std::cout << value << ", ";
+    //     }
+    //     std::cout << "]" << std::endl;
+    // }
+    // std::cout << "\n";
 
     int typeID{};
     for (auto&& pair : edgeLengthSet) {
