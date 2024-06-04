@@ -39,7 +39,7 @@
 #/vis/viewer/addCutawayPlane 0 0 0
 
 # Colors
-#/vis/geometry/set/colour EMCCrystal                    0     1     1     1     0.1
+/vis/geometry/set/colour EMCCrystal                    0     1     1     1     0.1
 /vis/geometry/set/colour EMCPMTCathode                 0     1     1     1     0.1
 /vis/geometry/set/colour EMCPMTCoupler                 0     1     1     1     0.1
 /vis/geometry/set/colour EMCPMTShell                   0     1     1     1     0.1

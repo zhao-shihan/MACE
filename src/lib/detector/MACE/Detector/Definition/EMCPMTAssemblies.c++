@@ -99,8 +99,8 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
 
     const auto cathodeSurfacePropertiesTable{new G4MaterialPropertiesTable};
     cathodeSurfacePropertiesTable->AddProperty("REFLECTIVITY", fEnergyPair, {0., 0.});
-    cathodeSurfacePropertiesTable->AddProperty("EFFICIENCY", fEnergyPair, {1., 1.});
-    // cathodeSurfacePropertiesTable->AddProperty("EFFICIENCY", cathodeSurfacePropertiesEnergy, cathodeSurfacePropertiesEfficiency);
+    // cathodeSurfacePropertiesTable->AddProperty("EFFICIENCY", fEnergyPair, {1., 1.});
+    cathodeSurfacePropertiesTable->AddProperty("EFFICIENCY", cathodeSurfacePropertiesEnergy, cathodeSurfacePropertiesEfficiency);
 
     if (Env::VerboseLevelReach<'V'>()) {
         cathodeSurfacePropertiesTable->DumpTable();
@@ -113,10 +113,10 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
     for (int unitID{};
          auto&& [_1, _2, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
 
-        if (unitID != 0) {
-            unitID++;
-            continue;
-        }
+        // if (unitID != 0) {
+        //     unitID++;
+        //     continue;
+        // }
 
         double pmtDiameter{};
         double cathodeDiameter{};
@@ -147,49 +147,45 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
                                                        unitID,
                                                        checkOverlaps)};
 
-        // const auto solidGlassBox{Make<G4Tubs>("temp", 0, pmtDiameter / 2, pmtLength / 2, 0, 2 * pi)};
-        // const auto solidPMTVacuum{Make<G4Tubs>("temp", 0, pmtDiameter / 2 - pmtWindowThickness, pmtLength / 2 - pmtWindowThickness, 0, 2 * pi)};
-        // const auto solidPMTShell{Make<G4SubtractionSolid>("EMCPMTShell", solidGlassBox, solidPMTVacuum)};
-        // const auto logicPMTShell{Make<G4LogicalVolume>(solidPMTShell, glass, "EMCPMTShell")};
-        // Make<G4PVPlacement>(shellTransform,
-        //                     logicPMTShell,
-        //                     "EMCPMTShell",
-        //                     Mother().LogicalVolume(),
-        //                     true,
-        //                     unitID,
-        //                     checkOverlaps);
+        const auto solidGlassBox{Make<G4Tubs>("temp", 0, pmtDiameter / 2, pmtLength / 2, 0, 2 * pi)};
+        const auto solidPMTVacuum{Make<G4Tubs>("temp", 0, pmtDiameter / 2 - pmtWindowThickness, pmtLength / 2 - pmtWindowThickness, 0, 2 * pi)};
+        const auto solidPMTShell{Make<G4SubtractionSolid>("EMCPMTShell", solidGlassBox, solidPMTVacuum)};
+        const auto logicPMTShell{Make<G4LogicalVolume>(solidPMTShell, glass, "EMCPMTShell")};
+        Make<G4PVPlacement>(shellTransform,
+                            logicPMTShell,
+                            "EMCPMTShell",
+                            Mother().LogicalVolume(),
+                            true,
+                            unitID,
+                            checkOverlaps);
 
-        // const auto solidCathode{Make<G4Tubs>("temp", 0, cathodeDiameter / 2, pmtCathodeThickness / 2, 0, 2 * pi)};
-        // const auto logicCathode{Make<G4LogicalVolume>(solidCathode, bialkali, "EMCPMTCathode")};
-        // Make<G4PVPlacement>(cathodeTransform,
-        //                     logicCathode,
-        //                     "EMCPMTCathode",
-        //                     Mother().LogicalVolume(),
-        //                     true,
-        //                     unitID,
-        //                     checkOverlaps);
+        const auto solidCathode{Make<G4Tubs>("temp", 0, cathodeDiameter / 2, pmtCathodeThickness / 2, 0, 2 * pi)};
+        const auto logicCathode{Make<G4LogicalVolume>(solidCathode, bialkali, "EMCPMTCathode")};
+        Make<G4PVPlacement>(cathodeTransform,
+                            logicCathode,
+                            "EMCPMTCathode",
+                            Mother().LogicalVolume(),
+                            true,
+                            unitID,
+                            checkOverlaps);
 
         /////////////////////////////////////////////
         // Construct Optical Surface
         /////////////////////////////////////////////
 
-        // const auto emcCrystal{FindSibling<EMCCrystal>()};
-        // if (emcCrystal) {
-        //     const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
-        //     new G4LogicalBorderSurface{"couplerSurface",
-        //                                emcCrystal->PhysicalVolume(fmt::format("EMCCrystal_{}", unitID)),
-        //                                physicalCoupler,
-        //                                couplerSurface};
-        //     couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
-        // }
+        const auto emcCrystal{FindSibling<EMCCrystal>()};
+        if (emcCrystal) {
+            const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
+            new G4LogicalBorderSurface{"couplerSurface",
+                                       emcCrystal->PhysicalVolume(fmt::format("EMCCrystal_{}", unitID)),
+                                       physicalCoupler,
+                                       couplerSurface};
+            couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
+        }
 
-        const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_metal)};
-        new G4LogicalSkinSurface{"couplerSkinSurface", logicCoupler, couplerSurface};
-        couplerSurface->SetMaterialPropertiesTable(cathodeSurfacePropertiesTable);
-
-        // const auto cathodeSurface{new G4OpticalSurface("Cathode", unified, polished, dielectric_metal)};
-        // new G4LogicalSkinSurface{"cathodeSkinSurface", logicCathode, cathodeSurface};
-        // cathodeSurface->SetMaterialPropertiesTable(cathodeSurfacePropertiesTable);
+        const auto cathodeSurface{new G4OpticalSurface("Cathode", unified, polished, dielectric_metal)};
+        new G4LogicalSkinSurface{"cathodeSkinSurface", logicCathode, cathodeSurface};
+        cathodeSurface->SetMaterialPropertiesTable(cathodeSurfacePropertiesTable);
 
         ++unitID;
     }

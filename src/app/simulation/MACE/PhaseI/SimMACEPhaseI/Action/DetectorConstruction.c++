@@ -49,9 +49,9 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     fWorld = std::make_unique<PhaseI::World>();
     auto& emcCrystal{fWorld->NewDaughter<EMCCrystal>(fCheckOverlap)};
     auto& emcPMTAssemblies{fWorld->NewDaughter<EMCPMTAssemblies>(fCheckOverlap)};
-    // auto& centralBeamPipe{fWorld->NewDaughter<PhaseI::CentralBeamPipe>(fCheckOverlap)};
+    auto& centralBeamPipe{fWorld->NewDaughter<PhaseI::CentralBeamPipe>(fCheckOverlap)};
 
-    // auto& target{centralBeamPipe.NewDaughter<Target>(fCheckOverlap)};
+    auto& target{centralBeamPipe.NewDaughter<Target>(fCheckOverlap)};
 
     const auto defaultCuts{G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts()};
 
@@ -59,18 +59,18 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     fEMCSensitiveRegion->SetProductionCuts(defaultCuts);
     emcCrystal.RegisterRegion(fEMCSensitiveRegion);
 
-    // fDefaultSolidRegion = new Region{"DefaultSolid", RegionType::DefaultSolid};
-    // fDefaultSolidRegion->SetProductionCuts(defaultCuts);
-    // centralBeamPipe.RegisterRegion(fDefaultSolidRegion);
+    fDefaultSolidRegion = new Region{"DefaultSolid", RegionType::DefaultSolid};
+    fDefaultSolidRegion->SetProductionCuts(defaultCuts);
+    centralBeamPipe.RegisterRegion(fDefaultSolidRegion);
 
-    // fTargetRegion = new Region{"Target", RegionType::Target};
-    // fTargetRegion->SetProductionCuts(defaultCuts);
-    // target.RegisterRegion(fTargetRegion);
+    fTargetRegion = new Region{"Target", RegionType::Target};
+    fTargetRegion->SetProductionCuts(defaultCuts);
+    target.RegisterRegion(fTargetRegion);
 
     const auto& emcName{MACE::Detector::Description::EMC::Instance().Name()};
 
     fEMCPMTSD = new SD::EMCPMTSD{emcName + "PMT"};
-    emcPMTAssemblies.RegisterSD("EMCPMTCoupler", fEMCPMTSD);
+    emcPMTAssemblies.RegisterSD("EMCPMTCathode", fEMCPMTSD);
 
     fEMCSD = new SD::EMCSD{emcName, fEMCPMTSD};
     emcCrystal.RegisterSD(fEMCSD);
