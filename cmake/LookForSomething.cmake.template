@@ -28,7 +28,7 @@ if(MACE_BUILTIN_<LIB_NAME>)
         set(MACE_BUILTIN_<LIB_NAME>_VERSION ${MACE_<LIB_NAME>_MINIMUM_REQUIRED})
     endif()
     # set download dest and URL
-    set(MACE_BUILTIN_<LIB_NAME>_SRC_DIR "${MACE_PROJECT_3RDPARTY_DIR}/<src_dir>")
+    set(MACE_BUILTIN_<LIB_NAME>_SRC_DIR "${MACE_PROJECT_3RDPARTY_DIR}/<src_dir_with_version>")
     set(MACE_BUILTIN_<LIB_NAME>_URL "<url_with_version>")
     # reuse or download
     include(FetchContent)

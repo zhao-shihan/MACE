@@ -30,6 +30,8 @@ if(MACE_BUILTIN_MSGSL)
                                    URL "${MACE_BUILTIN_MSGSL_URL}")
         message(STATUS "Microsoft.GSL will be downloaded from ${MACE_BUILTIN_MSGSL_URL} to ${MACE_BUILTIN_MSGSL_SRC_DIR}")
     endif()
+    # set options
+    set(GSL_INSTALL ON CACHE INTERNAL "")
     # configure it
     message(STATUS "Downloading (if required) and configuring Microsoft.GSL (version: ${MACE_BUILTIN_MSGSL_VERSION})")
     FetchContent_MakeAvailable(MSGSL)
