@@ -41,6 +41,7 @@ option(MACE_BUILTIN_FMT "Use built-in fmt (network or pre-downloaded source is r
 option(MACE_BUILTIN_GENFIT "Use built-in GenFit (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_GENFIT_EVENT_DISPLAY "Build GenFit event display module if GenFit is built-in." ON)
 option(MACE_BUILTIN_MSGSL "Use built-in Microsoft.GSL (network or pre-downloaded source is required)." OFF)
+option(MACE_BUILTIN_MUC "Use built-in muc (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_PMP "Use built-in pmp (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_YAML_CPP "Use built-in yaml-cpp (network or pre-downloaded source is required)." OFF)
 option(MACE_SIGNAL_HANDLER "Build with signal handling. Signal handlers are registered at the construction of environment." ON)
@@ -98,6 +99,8 @@ include(${MACE_PROJECT_CMAKE_DIR}/LookForFmt.cmake)
 include(${MACE_PROJECT_CMAKE_DIR}/LookForGenFit.cmake)
 # Microsoft.GSL
 include(${MACE_PROJECT_CMAKE_DIR}/LookForMicrosoftGSL.cmake)
+# muc
+include(${MACE_PROJECT_CMAKE_DIR}/LookForMUC.cmake)
 # PMP
 include(${MACE_PROJECT_CMAKE_DIR}/LookForPMP.cmake)
 # yaml-cpp

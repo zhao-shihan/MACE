@@ -50,9 +50,10 @@ Required, built-in if not found (network or pre-downloaded source is required):
 2. [backward-cpp](https://github.com/bombela/backward-cpp) (≥ 1.6, built-in if not found)
 3. [fmt](https://github.com/fmtlib/fmt) (≥ 10.0.0, built-in if not found)
 4. [zhao-shihan/GenFit](https://github.com/zhao-shihan/GenFit) (a GenFit fork, built-in if not found)
-5. [Microsoft.GSL](https://github.com/Microsoft/GSL) ([ISO C++ guidelines support library](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#gsl-guidelines-support-library)) (≥ 4.0.0, built-in if not found)
-6. [PMP](https://www.pmp-library.org/) (Polygon Mesh Processing Library) (≥ 3.0.0, built-in if not found)
-7. [yaml-cpp](https://github.com/jbeder/yaml-cpp) (≥ 0.8.0, built-in if not found)
+5. [muc](https://github.com/zhao-shihan/muc) (≥ 0.0.1, built-in if not found)
+6. [Microsoft.GSL](https://github.com/Microsoft/GSL) ([ISO C++ guidelines support library](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#gsl-guidelines-support-library)) (≥ 4.0.0, built-in if not found)
+7. [PMP](https://www.pmp-library.org/) (Polygon Mesh Processing Library) (≥ 3.0.0, built-in if not found)
+8. [yaml-cpp](https://github.com/jbeder/yaml-cpp) (≥ 0.8.0, built-in if not found)
 
 # Cite
 
