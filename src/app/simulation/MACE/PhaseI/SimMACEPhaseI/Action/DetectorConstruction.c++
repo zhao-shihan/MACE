@@ -48,7 +48,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     fWorld = std::make_unique<PhaseI::World>();
     auto& emcCrystal{fWorld->NewDaughter<EMCCrystal>(fCheckOverlap)};
-    auto& emcPMTAssemblies{fWorld->NewDaughter<EMCPMTAssemblies>(fCheckOverlap)};
+    // auto& emcPMTAssemblies{fWorld->NewDaughter<EMCPMTAssemblies>(fCheckOverlap)};
     // auto& centralBeamPipe{fWorld->NewDaughter<PhaseI::CentralBeamPipe>(fCheckOverlap)};
 
     // auto& target{centralBeamPipe.NewDaughter<Target>(fCheckOverlap)};
@@ -69,11 +69,13 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     const auto& emcName{MACE::Detector::Description::EMC::Instance().Name()};
 
-    fEMCPMTSD = new SD::EMCPMTSD{emcName + "PMT"};
-    emcPMTAssemblies.RegisterSD("EMCPMTCathode", fEMCPMTSD);
+    // fEMCPMTSD = new SD::EMCPMTSD{emcName + "PMT"};
+    // emcPMTAssemblies.RegisterSD("EMCPMTCathode", fEMCPMTSD);
 
     fEMCSD = new SD::EMCSD{emcName, fEMCPMTSD};
     emcCrystal.RegisterSD(fEMCSD);
+
+    // fWorld->Export("EMCPhaseI.gdml");
 
     return fWorld->PhysicalVolume();
 }
