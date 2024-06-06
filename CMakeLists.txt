@@ -37,6 +37,7 @@ include(CMakeDependentOption)
 option(MACE_BUILD_TEST "Build MACE with test programs." ON)
 option(MACE_BUILTIN_ARGPARSE "Use built-in argparse (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_BACKWARD "Use built-in backward-cpp (network or pre-downloaded source is required)." OFF)
+option(MACE_BUILTIN_EFM "Use built-in EFM (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_FMT "Use built-in fmt (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_GENFIT "Use built-in GenFit (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_GENFIT_EVENT_DISPLAY "Build GenFit event display module if GenFit is built-in." ON)
@@ -62,8 +63,10 @@ cmake_dependent_option(MACE_ENABLE_UNITY_BUILD "Build MACE with unity build tech
 cmake_dependent_option(MACE_SHOW_MORE_COMPILER_WARNINGS "Show compiler warnings raise from external dependencies." OFF "NOT MACE_SHOW_EVEN_MORE_COMPILER_WARNINGS" ON)
 set(MACE_BUILTIN_ARGPARSE_VERSION 3.0 CACHE STRING "Set built-in argparse version (if required).")
 set(MACE_BUILTIN_BACKWARD_VERSION 1.6 CACHE STRING "Set built-in backward-cpp version (if required).")
+set(MACE_BUILTIN_EFM_VERSION 0.0.1 CACHE STRING "Set built-in EFM version (if required).")
 set(MACE_BUILTIN_FMT_VERSION 10.2.1 CACHE STRING "Set built-in fmt version (if required).")
 set(MACE_BUILTIN_MSGSL_VERSION 4.0.0 CACHE STRING "Set built-in Microsoft.GSL version (if required).")
+set(MACE_BUILTIN_MUC_VERSION 0.0.1 CACHE STRING "Set built-in muc version (if required).")
 set(MACE_BUILTIN_PMP_VERSION 3.0.0 CACHE STRING "Set built-in fmt version (if required).")
 set(MACE_BUILTIN_TIMSORT_VERSION 3.0.0 CACHE STRING "Set built-in TimSort version (if required).")
 set(MACE_BUILTIN_YAML_CPP_VERSION 0.8.0 CACHE STRING "Set built-in yaml-cpp version (if required).")
@@ -95,6 +98,8 @@ include(${MACE_PROJECT_CMAKE_DIR}/LookForROOT.cmake)
 include(${MACE_PROJECT_CMAKE_DIR}/LookForArgparse.cmake)
 # backward-cpp
 include(${MACE_PROJECT_CMAKE_DIR}/LookForBackward.cmake)
+# EFM
+include(${MACE_PROJECT_CMAKE_DIR}/LookForEFM.cmake)
 # fmt
 include(${MACE_PROJECT_CMAKE_DIR}/LookForFmt.cmake)
 # GenFit

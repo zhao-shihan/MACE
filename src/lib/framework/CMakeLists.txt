@@ -11,6 +11,8 @@ target_compile_definitions(MACEFramework PUBLIC ${MACE_COMPILE_DEFINITIONS})
 target_link_libraries(MACEFramework PUBLIC timsort)
 # muc
 target_link_libraries(MACEFramework PUBLIC muc)
+# EFM
+target_link_libraries(MACEFramework PUBLIC EFM)
 # argparse
 target_link_libraries(MACEFramework PUBLIC argparse::argparse)
 # Microsoft.GSL
