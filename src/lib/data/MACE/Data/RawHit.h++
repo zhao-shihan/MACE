@@ -2,7 +2,8 @@
 
 #include "MACE/Data/TupleModel.h++"
 #include "MACE/Data/Value.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
+
+#include "muc/array"
 
 namespace MACE::Data {
 
@@ -15,7 +16,7 @@ using TTCRawHit = TupleModel<Value<short, "TileID", "Hit detector ID">,
                              Value<float, "Edep", "Energy deposition">>;
 
 using MCPRawHit = TupleModel<Value<double, "t", "Hit time">,
-                             Value<stdx::array2f, "x", "Hit position">>;
+                             Value<muc::array2f, "x", "Hit position">>;
 
 using EMCRawHit = TupleModel<Value<short, "UnitID", "Hit unit ID">,
                              Value<double, "t", "Hit time">,

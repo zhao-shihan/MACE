@@ -1,7 +1,8 @@
 #pragma once
 
 #include "MACE/Detector/Field/ElectromagneticField.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
+
+#include "muc/array"
 
 #include <concepts>
 
@@ -11,8 +12,8 @@ template<typename F>
 concept ElectricField =
     requires {
         requires ElectromagneticField<F>;
-        { F::template BFieldAt<stdx::array3d>({}) } -> std::same_as<stdx::array3d>;
-        requires F::template BFieldAt<stdx::array3d>({}) == stdx::array3d{};
+        { F::template BFieldAt<muc::array3d>({}) } -> std::same_as<muc::array3d>;
+        requires F::template BFieldAt<muc::array3d>({}) == muc::array3d{};
     };
 
 } // namespace MACE::Detector::Field

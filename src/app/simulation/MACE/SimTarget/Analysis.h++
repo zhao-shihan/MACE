@@ -3,8 +3,9 @@
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Data/TupleModel.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/SimTarget/Messenger/AnalysisMessenger.h++"
+
+#include "muc/array"
 
 #include "gsl/gsl"
 
@@ -23,13 +24,13 @@ using MuoniumTrack = Data::TupleModel<Data::Value<int, "EvtID", "Event ID">,
                                       Data::Value<int, "TrkID", "Track ID">,
                                       Data::Value<int, "PDGID", "Particle PDG ID">,
                                       Data::Value<float, "t0", "Vertex time">,
-                                      Data::Value<stdx::array3f, "x0", "Vertex position">,
+                                      Data::Value<muc::array3f, "x0", "Vertex position">,
                                       Data::Value<float, "Ek0", "Vertex kinetic energy">,
-                                      Data::Value<stdx::array3f, "p0", "Vertex momentum">,
+                                      Data::Value<muc::array3f, "p0", "Vertex momentum">,
                                       Data::Value<double, "t", "Decay time">,
-                                      Data::Value<stdx::array3f, "x", "Decay position">,
+                                      Data::Value<muc::array3f, "x", "Decay position">,
                                       Data::Value<float, "Ek", "Kinetic energy just before decay">,
-                                      Data::Value<stdx::array3f, "p", "Momentum just before decay">>;
+                                      Data::Value<muc::array3f, "p", "Momentum just before decay">>;
 
 class Analysis final : public Env::Memory::PassiveSingleton<Analysis> {
 public:

@@ -199,7 +199,7 @@ auto FitTrack(std::vector<Data::ReadIterator<Data::CDCSimHit>> hitData) -> std::
     genfit::KalmanFitterRefTrack fitter;
 
     // generate momentum seed by smearing true value
-    const auto MomentumSeed = [&](stdx::array3d p) {
+    const auto MomentumSeed = [&](muc::array3d p) {
         constexpr auto resolution = 0.2;
         const auto sigma = resolution * Math::Norm(p) / 2.355; // clang-format off
         p += Gaussian3D(rng, {{0., sigma}, {0., sigma}, {0., sigma}}); // clang-format on
@@ -219,7 +219,7 @@ auto FitTrack(std::vector<Data::ReadIterator<Data::CDCSimHit>> hitData) -> std::
 
         // do the fit
         const auto trackRep = new genfit::RKTrackRep(firstHit->PDGCodeTruth());
-        auto& genfitTrack = genfitTrackData.emplace_back(trackRep, TVector3(0, 0, 0), MomentumSeed(firstHit->VertexMomentumTruth().As<stdx::array3d>()));
+        auto& genfitTrack = genfitTrackData.emplace_back(trackRep, TVector3(0, 0, 0), MomentumSeed(firstHit->VertexMomentumTruth().As<muc::array3d>()));
         for (auto hitID = 0;
              auto&& hit : rawTrack) {
             const auto cellID = hit->CellID();
@@ -627,7 +627,7 @@ int main(int argc, char* argv[]) {
             dataFactory.CreateAndFillTree<DataModel::CDCPhysicsSimTrack>(coincidentCDCTrackData, eventID)->Write();
             dataFactory.CreateAndFillTree<DataModel::CDCHelixTrack>(coincidentCDCHelixData, eventID)->Write();
 
-            const auto xMCP = VectorCast<stdx::array2d>(xMCPRVec);
+            const auto xMCP = VectorCast<muc::array2d>(xMCPRVec);
             std::vector<std::pair<double, double>> dcaTOF;
             for (auto&& helix : std::as_const(coincidentCDCHelixData)) {
                 const auto dca = std23::abs(Math::Norm(helix->Center()() - xMCP) - helix->Radius()());

@@ -2,8 +2,9 @@
 
 #include "MACE/Concept/NumericVector.h++"
 #include "MACE/Detector/Field/ElectromagneticField.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/Utility/VectorCast.h++"
+
+#include "muc/array"
 
 #include <concepts>
 

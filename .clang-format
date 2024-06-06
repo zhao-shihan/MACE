@@ -86,15 +86,17 @@ IncludeCategories:
     Priority: 10
   - Regex: '"mpi.*\.h"'
     Priority: 11
-  - Regex: '"gsl/.*"'
+  - Regex: '"muc/.*"'
     Priority: 12
-  - Regex: '"fmt/.*\.h"'
+  - Regex: '"gsl/.*"'
     Priority: 13
+  - Regex: '"fmt/.*\.h"'
+    Priority: 14
   # very general
   - Regex: '".*"'
     Priority: 1
   - Regex: '<.*>'
-    Priority: 14
+    Priority: 15
 IndentAccessModifiers: false
 IndentCaseBlocks: false
 IndentCaseLabels: false

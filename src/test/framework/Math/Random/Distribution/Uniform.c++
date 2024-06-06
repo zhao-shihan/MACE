@@ -1,9 +1,10 @@
-#include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/Math/Random/Distribution/Uniform.h++"
 #include "MACE/Math/Random/Distribution/UniformRectangle.h++"
 #include "MACE/Math/Random/Generator/MT1993764.h++"
 
 #include "ROOT/RDataFrame.hxx"
+
+#include "muc/array"
 
 using namespace MACE;
 
@@ -28,18 +29,18 @@ int main(int argc, char* argv[]) {
                 [&] { return Math::Random::Uniform<int>(a1, b1)(mt1993764); })
 
         .Define("ucr",
-                [&] { return Math::Random::UniformCompactRectangle<stdx::array2d>({a1, b1}, {a2, b2})(mt1993764); })
+                [&] { return Math::Random::UniformCompactRectangle<muc::array2d>({a1, b1}, {a2, b2})(mt1993764); })
         .Define("urr",
-                [&] { return Math::Random::UniformRectangle<stdx::array2d>({a1, b1}, {a2, b2})(mt1993764); })
+                [&] { return Math::Random::UniformRectangle<muc::array2d>({a1, b1}, {a2, b2})(mt1993764); })
         .Define("uir",
-                [&] { return Math::Random::UniformRectangle<stdx::array2i>({(int)a1, (int)b1}, {(int)a2, (int)b2})(mt1993764); })
+                [&] { return Math::Random::UniformRectangle<muc::array2i>({(int)a1, (int)b1}, {(int)a2, (int)b2})(mt1993764); })
 
         // .Define("ucc",
-        //         [&] { return Math::Random::UniformCompactCuboid<stdx::array3d>({a1, b1}, {a2, b2}, {a3, b3})(mt1993764); })
+        //         [&] { return Math::Random::UniformCompactCuboid<muc::array3d>({a1, b1}, {a2, b2}, {a3, b3})(mt1993764); })
         // .Define("urc",
-        //         [&] { return Math::Random::UniformCuboid<stdx::array3d>({a1, b1}, {a2, b2}, {a3, b3})(mt1993764); })
+        //         [&] { return Math::Random::UniformCuboid<muc::array3d>({a1, b1}, {a2, b2}, {a3, b3})(mt1993764); })
         // .Define("uic",
-        //         [&] { return Math::Random::UniformCuboid<stdx::array3i>({(int)a1, (int)b1}, {(int)a2, (int)b2}, {(int)a3, (int)b3})(mt1993764); })
+        //         [&] { return Math::Random::UniformCuboid<muc::array3i>({(int)a1, (int)b1}, {(int)a2, (int)b2}, {(int)a3, (int)b3})(mt1993764); })
 
         .Snapshot("uniform", "uniform.root");
 

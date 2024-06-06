@@ -1,10 +1,11 @@
 #pragma once
 
 #include "MACE/Detector/Description/DescriptionBase.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/Math/IntegerPower.h++"
 
 #include "Eigen/Core"
+
+#include "muc/array"
 
 #include "gsl/gsl"
 
@@ -144,13 +145,13 @@ private:
     ///////////////////////////////////////////////////////////
 
     struct HashArray2i32 {
-        constexpr auto operator()(stdx::array2i32 i) const -> std::size_t {
+        constexpr auto operator()(muc::array2i32 i) const -> std::size_t {
             return std::bit_cast<std::uint64_t>(i);
         }
     };
 
 public:
-    using CellMapFromSenseLayerIDAndLocalCellIDType = std::unordered_map<stdx::array2i32, CellInformation, HashArray2i32>;
+    using CellMapFromSenseLayerIDAndLocalCellIDType = std::unordered_map<muc::array2i32, CellInformation, HashArray2i32>;
 
 private:
     class Cache {

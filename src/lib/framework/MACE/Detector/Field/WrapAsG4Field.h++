@@ -3,13 +3,14 @@
 #include "MACE/Detector/Field/ElectricField.h++"
 #include "MACE/Detector/Field/ElectromagneticField.h++"
 #include "MACE/Detector/Field/MagneticField.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 #include "MACE/Utility/VectorCast.h++"
 
 #include "G4ElectricField.hh"
 #include "G4ElectroMagneticField.hh"
 #include "G4MagneticField.hh"
+
+#include "muc/array"
 
 #include <algorithm>
 #include <bit>

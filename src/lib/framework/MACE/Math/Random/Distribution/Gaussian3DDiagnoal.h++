@@ -1,10 +1,11 @@
 #pragma once
 
 #include "MACE/Concept/NumericVector.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/Math/Random/Distribution/Gaussian.h++"
 #include "MACE/Math/Random/RandomNumberDistributionBase.h++"
 #include "MACE/Utility/VectorValueType.h++"
+
+#include "muc/array"
 
 #include <array>
 #include <concepts>
@@ -112,7 +113,7 @@ protected:
 
 /// @brief
 /// @tparam T The result vector type. It must be 2-dimensional and has floating-point type.
-template<Concept::NumericVector3FloatingPoint T = stdx::array3d>
+template<Concept::NumericVector3FloatingPoint T = muc::array3d>
 class Gaussian3DDiagnoal;
 
 template<Concept::NumericVector3FloatingPoint T>
@@ -147,7 +148,7 @@ Gaussian3DDiagnoal(std::initializer_list<T>, std::initializer_list<U>, std::init
 
 /// @brief
 /// @tparam T The result vector type. It must be 2-dimensional and has floating-point type.
-template<Concept::NumericVector3FloatingPoint T = stdx::array3d>
+template<Concept::NumericVector3FloatingPoint T = muc::array3d>
 class Gaussian3DDiagnoalFast;
 
 template<Concept::NumericVector3FloatingPoint T>

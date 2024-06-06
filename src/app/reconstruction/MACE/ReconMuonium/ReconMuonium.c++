@@ -30,7 +30,6 @@ using namespace MACE;
 using namespace MACE::LiteralUnit;
 using namespace MACE::MPIX;
 using namespace PhysicalConstant;
-using namespace MACE::stdx::array_arithmetic;
 
 using MACE::Core::DataFactory;
 using MACE::Env::MPIEnv;

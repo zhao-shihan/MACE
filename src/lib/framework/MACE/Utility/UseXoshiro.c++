@@ -1,11 +1,12 @@
 #include "MACE/Extension/CLHEPX/Random/Xoshiro.h++"
 #include "MACE/Extension/ROOTX/Math/Xoshiro.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/Utility/UseXoshiro.h++"
 
 #include "CLHEP/Random/Random.h"
 
 #include "TRandom.h"
+
+#include "muc/array"
 
 #include <memory>
 #include <random>
@@ -28,7 +29,7 @@ namespace MACE::inline Utility {
         delete gRandom, gRandom = &fRandom->root;                                     \
         /* Try to decorrelate Xoshiro++ from Xoshiro** */                             \
         gRandom->SetSeed(std::mt19937_64{std::bit_cast<std::uint64_t>(                \
-            stdx::array2u32{gRandom->Integer(-1) + 1, gRandom->Integer(-1) + 1})}()); \
+            muc::array2u32{gRandom->Integer(-1) + 1, gRandom->Integer(-1) + 1})}()); \
     }                                                                                 \
                                                                                       \
     template<>                                                                        \

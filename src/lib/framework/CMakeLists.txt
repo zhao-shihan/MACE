@@ -27,6 +27,8 @@ target_link_libraries(MACEFramework PUBLIC fmt::fmt)
 target_link_libraries(MACEFramework PUBLIC Eigen3::Eigen)
 # Microsoft.GSL
 target_link_libraries(MACEFramework PUBLIC Microsoft.GSL::GSL)
+# muc
+target_link_libraries(MACEFramework PUBLIC muc)
 # yaml-cpp
 target_link_libraries(MACEFramework PUBLIC yaml-cpp)
 # MPI

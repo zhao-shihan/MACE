@@ -5,10 +5,11 @@
 #include "MACE/DataModel/BranchSocket/ShortStringBranchSocket.h++"
 #include "MACE/DataModel/BranchSocket/VectorBranchSocket.h++"
 #include "MACE/DataModel/DataFactory.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/ReconMuonium/MuoniumVertex.h++"
 #include "MACE/Utility/VectorAssign.h++"
 #include "MACE/Utility/VectorCast.h++"
+
+#include "muc/array"
 
 #include <array>
 #include <string_view>
@@ -36,10 +37,10 @@ public:
     const auto& TrueParticles() const { return fTrueParticles; }
 
     void TrueVertexTime(double val) { fTrueVertexTime = val; }
-    void TrueVertexPosition(const stdx::array3d& x) { fTrueVertexPosition = x; }
+    void TrueVertexPosition(const muc::array3d& x) { fTrueVertexPosition = x; }
     void TrueVertexPosition(auto&& x) { fTrueVertexPosition <<= std::forward<decltype(x)>(x); }
     void TrueVertexEnergy(double val) { fTrueVertexEnergy = val; }
-    void TrueVertexMomentum(const stdx::array3d& p) { fTrueVertexMomentum = p; }
+    void TrueVertexMomentum(const muc::array3d& p) { fTrueVertexMomentum = p; }
     void TrueVertexMomentum(auto&& p) { fTrueVertexMomentum <<= std::forward<decltype(p)>(p); }
     void TrueParticles(auto&& p) { fTrueParticles = std::forward<decltype(p)>(p); }
 
@@ -50,9 +51,9 @@ public:
 
 private:
     double fTrueVertexTime;
-    stdx::array3d fTrueVertexPosition;
+    muc::array3d fTrueVertexPosition;
     double fTrueVertexEnergy;
-    stdx::array3d fTrueVertexMomentum;
+    muc::array3d fTrueVertexMomentum;
     String15 fTrueParticles;
 
     static DoubleBranchSocket fgTrueVertexTime;

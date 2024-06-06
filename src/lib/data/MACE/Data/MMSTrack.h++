@@ -3,12 +3,13 @@
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Data/TupleModel.h++"
 #include "MACE/Data/Value.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/Math/Hypot.h++"
 #include "MACE/Math/IntegerPower.h++"
 #include "MACE/Math/Norm.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
 #include "MACE/Utility/VectorArithmeticOperator.h++"
+
+#include "muc/array"
 
 #include <cmath>
 #include <vector>
@@ -22,11 +23,11 @@ using MMSTrack = TupleModel<Value<int, "EvtID", "Event ID">,
                             Value<double, "t0", "Vertex time">,
                             // vertex information
                             Value<int, "PDGID", "Particle PDG ID">,
-                            Value<stdx::array3f, "x0", "Vertex position">,
+                            Value<muc::array3f, "x0", "Vertex position">,
                             Value<float, "Ek0", "Vertex kinetic energy">,
-                            Value<stdx::array3f, "p0", "Vertex momentum">,
+                            Value<muc::array3f, "p0", "Vertex momentum">,
                             // helix information
-                            Value<stdx::array2f, "c0", "Transverse center">,
+                            Value<muc::array2f, "c0", "Transverse center">,
                             Value<float, "r0", "Transverse radius">,
                             Value<float, "phi0", "Vertex azimuth angle">,
                             Value<float, "z0", "Vertex z coordinate">,
@@ -42,16 +43,16 @@ constexpr auto CalculateHelix(SuperTuple<Data::Tuple<MMSTrack>> auto& track, dou
     using PhysicalConstant::c_light;
 
     const auto charge{Get<"PDGID">(track) > 0 ? -1 : 1};
-    const auto x0{Get<"x0">(track).template As<stdx::array3d>()};
-    const auto p0{Get<"p0">(track).template As<stdx::array3d>()};
+    const auto x0{Get<"x0">(track).template As<muc::array3d>()};
+    const auto p0{Get<"p0">(track).template As<muc::array3d>()};
 
     const auto absPXY{Math::Hypot(p0[0], p0[1])};
     const auto pXY{charge < 0 ? absPXY : -absPXY};
     const auto r0{pXY / (-charge * magneticFluxDensity * c_light)};
-    const stdx::array2d x0Local{r0 * (p0[1] / pXY),
+    const muc::array2d x0Local{r0 * (p0[1] / pXY),
                                 r0 * (-p0[0] / pXY)};
     const auto phi0{std::atan2(-x0Local[1], -x0Local[0])};
-    const stdx::array2d c0{x0[0] - x0Local[0],
+    const muc::array2d c0{x0[0] - x0Local[0],
                            x0[1] - x0Local[1]};
 
     // const auto absDeltaPhi{std::acos(-c0 * x0Local) / std::sqrt(Math::Norm2(c0) * Math::Norm2(x0Local))};
@@ -85,14 +86,14 @@ constexpr auto CalculateVertex(SuperTuple<Data::Tuple<MMSTrack>> auto& track, do
 
     const auto cos0{std::cos(phi0)};
     const auto sin0{std::sin(phi0)};
-    const stdx::array3d x0{c0[0] + r0 * cos0,
+    const muc::array3d x0{c0[0] + r0 * cos0,
                            c0[1] + r0 * sin0,
                            z0};
 
     const auto pXY{-charge * magneticFluxDensity * c_light * r0};
     const auto pZ{pXY / std::tan(theta0)};
     const auto ek0{std::sqrt(Math::Hypot2(pXY, pZ) + Math::Pow<2>(electron_mass_c2)) - electron_mass_c2};
-    const stdx::array3d p0{-pXY * sin0,
+    const muc::array3d p0{-pXY * sin0,
                            pXY * cos0,
                            pZ};
 

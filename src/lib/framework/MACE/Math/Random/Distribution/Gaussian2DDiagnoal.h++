@@ -1,13 +1,14 @@
 #pragma once
 
 #include "MACE/Concept/NumericVector.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/Math/Hypot.h++"
 #include "MACE/Math/Random/Distribution/UniformRectangle.h++"
 #include "MACE/Math/Random/Distribution/internal/FastLogForOpen01.h++"
 #include "MACE/Math/Random/RandomNumberDistributionBase.h++"
 #include "MACE/Utility/InlineMacro.h++"
 #include "MACE/Utility/VectorValueType.h++"
+
+#include "muc/array"
 
 #include <array>
 #include <concepts>
@@ -105,7 +106,7 @@ protected:
 
 /// @brief
 /// @tparam T The result vector type. It must be 2-dimensional and has floating-point type.
-template<Concept::NumericVector2FloatingPoint T = stdx::array2d>
+template<Concept::NumericVector2FloatingPoint T = muc::array2d>
 class Gaussian2DDiagnoal;
 
 template<Concept::NumericVector2FloatingPoint T>
@@ -136,7 +137,7 @@ Gaussian2DDiagnoal(std::initializer_list<T>, std::initializer_list<U>) -> Gaussi
 
 /// @brief
 /// @tparam T The result vector type. It must be 2-dimensional and has floating-point type.
-template<Concept::NumericVector2FloatingPoint T = stdx::array2d>
+template<Concept::NumericVector2FloatingPoint T = muc::array2d>
 class Gaussian2DDiagnoalFast;
 
 template<Concept::NumericVector2FloatingPoint T>

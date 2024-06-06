@@ -2,11 +2,12 @@
 
 #include "MACE/Detector/Description/DescriptionBase.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/Utility/InlineMacro.h++"
 #include "MACE/Utility/VectorArithmeticOperator.h++"
 
 #include "CLHEP/Geometry/Transform3D.h"
+
+#include "muc/array"
 
 namespace MACE::Detector::Description {
 
@@ -28,7 +29,7 @@ public:
     auto Radius(auto v) -> void { fRadius = v; }
     auto Length(auto v) -> void { fLength = v; }
 
-    MACE_ALWAYS_INLINE auto Center() const -> stdx::array3d;
+    MACE_ALWAYS_INLINE auto Center() const -> muc::array3d;
 
     ///////////////////////////////////////////////////////////
     // Field

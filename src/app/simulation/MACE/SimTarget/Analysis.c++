@@ -112,7 +112,7 @@ auto Analysis::AnalysisAndWriteYield() -> void {
 
     const auto& target{Detector::Description::Target::Instance()};
     for (auto&& track : std::as_const(fMuoniumTrack)) {
-        const auto& decayPosition{Get<"x">(*track).As<stdx::array3d>()};
+        const auto& decayPosition{Get<"x">(*track).As<muc::array3d>()};
         if (target.Contain(decayPosition)) {
             ++nTargetDecay;
         } else {

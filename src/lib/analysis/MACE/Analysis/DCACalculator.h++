@@ -20,7 +20,7 @@ public:
     AFloat Compute(const DataModel::CDCHelixTrack& mmsTrack, const DataModel::MCPHit& mcpHit) const;
 
 private:
-    AFloat ComputePointCircleDCA(const AFloat r, const stdx::array2<AFloat> center, const stdx::array2<AFloat> point) const;
+    AFloat ComputePointCircleDCA(const AFloat r, const muc::array2<AFloat> center, const muc::array2<AFloat> point) const;
 
 private:
     Detector::Field::MMSField fMMSField;

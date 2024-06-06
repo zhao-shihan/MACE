@@ -1,6 +1,5 @@
 #include "MACE/Concept/MathVector.h++"
 #include "MACE/Concept/NumericVector.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
 
 #include "CLHEP/Vector/LorentzVector.h"
 #include "CLHEP/Vector/ThreeVector.h"
@@ -10,11 +9,12 @@
 
 #include "Eigen/Core"
 
+#include "muc/array"
+
 #include <array>
 #include <iostream>
 #include <vector>
 
-namespace stdx = MACE::stdx;
 using namespace MACE::Compatibility::CLHEPDefectFix::Hep2VectorDivisionAssignment;
 using namespace MACE::Concept;
 
@@ -46,12 +46,12 @@ static_assert(not NumericVector<const float[3], float, 3>);
 static_assert(not NumericVector<const double[3], double, 3>);
 static_assert(not NumericVector<const long double[3], long double, 3>);
 
-static_assert(NumericVector<stdx::array2f, float, 2>);
-static_assert(NumericVector<stdx::array3f, float, 3>);
-static_assert(NumericVector<stdx::array4f, float, 4>);
-static_assert(NumericVector<stdx::array2d, double, 2>);
-static_assert(NumericVector<stdx::array3d, double, 3>);
-static_assert(NumericVector<stdx::array4d, double, 4>);
+static_assert(NumericVector<muc::array2f, float, 2>);
+static_assert(NumericVector<muc::array3f, float, 3>);
+static_assert(NumericVector<muc::array4f, float, 4>);
+static_assert(NumericVector<muc::array2d, double, 2>);
+static_assert(NumericVector<muc::array3d, double, 3>);
+static_assert(NumericVector<muc::array4d, double, 4>);
 
 // static_assert(not NumericVector<std::vector<float>, float, 2>);
 // static_assert(not NumericVector<std::vector<float>, float, 3>);

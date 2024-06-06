@@ -3,13 +3,14 @@
 #include "MACE/Concept/InstantiatedFrom.h++"
 #include "MACE/Concept/MathVector.h++"
 #include "MACE/Concept/NumericVector.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/Math/Hypot.h++"
 #include "MACE/Math/IntegerPower.h++"
 #include "MACE/Math/Random/Distribution/UniformRectangle.h++"
 #include "MACE/Math/Random/RandomNumberDistributionBase.h++"
 #include "MACE/Utility/InlineMacro.h++"
 #include "MACE/Utility/VectorValueType.h++"
+
+#include "muc/array"
 
 #include <array>
 #include <cmath>
@@ -117,7 +118,7 @@ protected:
 
 } // namespace internal
 
-template<Concept::NumericVector2Any T = stdx::array2d>
+template<Concept::NumericVector2Any T = muc::array2d>
 class UniformCompactDisk;
 
 template<Concept::NumericVector2Any T>
@@ -139,7 +140,7 @@ UniformCompactDisk(T, U, V) -> UniformCompactDisk<std::array<std::common_type_t<
 template<typename T>
 UniformCompactDisk(T) -> UniformCompactDisk<std::array<T, 2>>;
 
-template<Concept::NumericVector2Any T = stdx::array2d>
+template<Concept::NumericVector2Any T = muc::array2d>
 class UniformDisk;
 
 template<Concept::NumericVector2Any T>

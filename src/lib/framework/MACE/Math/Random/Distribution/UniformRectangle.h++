@@ -1,11 +1,12 @@
 #pragma once
 
 #include "MACE/Concept/NumericVector.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
 #include "MACE/Math/Random/Distribution/Joint.h++"
 #include "MACE/Math/Random/Distribution/Uniform.h++"
 #include "MACE/Math/Random/RandomNumberDistributionBase.h++"
 #include "MACE/Utility/VectorValueType.h++"
+
+#include "muc/array"
 
 #include <array>
 #include <concepts>
@@ -86,7 +87,7 @@ public:
 
 /// @brief Generates 2D uniform random vector on a compact (including boundary) rectangular region.
 /// @tparam T The result vector type. It must be 2-dimensional and has floating-point type.
-template<Concept::NumericVector2FloatingPoint T = stdx::array2d>
+template<Concept::NumericVector2FloatingPoint T = muc::array2d>
 class UniformCompactRectangle final : public internal::UniformRectangleBase<UniformCompactRectangle, T, UniformCompact> {
 public:
     using internal::UniformRectangleBase<UniformCompactRectangle, T, UniformCompact>::UniformRectangleBase;
@@ -100,20 +101,20 @@ using UniformCompactRectangleParameter = internal::BasicUniformRectangleParamete
 
 /// @brief Generates 2D uniform random vector on a open (excluding boundary) rectangular region.
 /// @tparam T The result vector type. It must be 2-dimensional and has floating-point type.
-template<Concept::NumericVector2FloatingPoint T = stdx::array2d>
+template<Concept::NumericVector2FloatingPoint T = muc::array2d>
 class UniformRealRectangle;
 
 /// @brief Generates 2D uniform random integral vector on a rectangular region.
 /// @tparam T The result vector type. It must be 2-dimensional and has integral type.
-template<Concept::NumericVector2Integral T = stdx::array2i>
+template<Concept::NumericVector2Integral T = muc::array2i>
 class UniformIntegerRectangle;
 
 /// @brief Generates 2D uniform random vector on a rectangular region.
 /// @tparam T The result vector type.
 template<Concept::NumericVector2Any T>
 using UniformRectangle = std::conditional_t<std::floating_point<VectorValueType<T>>,
-                                            UniformRealRectangle<std::conditional_t<std::floating_point<VectorValueType<T>>, T, stdx::array2d>>,
-                                            UniformIntegerRectangle<std::conditional_t<std::integral<VectorValueType<T>>, T, stdx::array2i>>>;
+                                            UniformRealRectangle<std::conditional_t<std::floating_point<VectorValueType<T>>, T, muc::array2d>>,
+                                            UniformIntegerRectangle<std::conditional_t<std::integral<VectorValueType<T>>, T, muc::array2i>>>;
 
 template<Concept::NumericVector2Any T>
 using UniformRectangleParameter = internal::BasicUniformRectangleParameter<T, UniformRectangle, Uniform>;
