@@ -1,6 +1,7 @@
-#include "MACE/Compatibility/std23/unreachable.h++"
 #include "MACE/Detector/Description/BeamMonitor.h++"
 #include "MACE/Utility/LiteralUnit.h++"
+
+#include "muc/utility"
 
 namespace MACE::Detector::Description {
 

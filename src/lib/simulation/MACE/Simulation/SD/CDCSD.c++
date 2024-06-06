@@ -1,4 +1,3 @@
-#include "MACE/Compatibility/std23/unreachable.h++"
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Env/Print.h++"
 #include "MACE/External/gfx/timsort.hpp"
@@ -20,6 +19,7 @@
 #include "G4VTouchable.hh"
 
 #include "muc/numeric"
+#include "muc/utility"
 
 #include <cassert>
 #include <cmath>
@@ -113,9 +113,9 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     fHitsCollection->GetVector()->reserve(
         muc::ranges::accumulate(fSplitHit, 0,
-                                 [](auto&& count, auto&& cellHit) {
-                                     return count + cellHit.second.size();
-                                 }));
+                                [](auto&& count, auto&& cellHit) {
+                                    return count + cellHit.second.size();
+                                }));
 
     constexpr auto ByTrackID{
         [](const auto& hit1, const auto& hit2) {
@@ -125,7 +125,7 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
          auto&& [cellID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
         case 0:
-            std23::unreachable();
+            muc::unreachable();
         case 1: {
             auto& hit{splitHit.front()};
             Get<"HitID">(*hit) = hitID++;

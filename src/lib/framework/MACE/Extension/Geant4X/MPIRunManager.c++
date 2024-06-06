@@ -1,4 +1,3 @@
-#include "MACE/Compatibility/std23/to_underlying.h++"
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/Geant4X/MPIRunManager.h++"
 #include "MACE/Utility/MPIReseedRandomEngine.h++"
@@ -10,6 +9,7 @@
 #include "Randomize.hh"
 
 #include "muc/math"
+#include "muc/utility"
 
 #include "fmt/chrono.h"
 #include "fmt/format.h"
@@ -43,7 +43,7 @@ MPIRunManager::MPIRunManager() :
     fExecutor{},
     fMessengerRegister{this} {
     printModulo = -1;
-    SetVerboseLevel(std23::to_underlying(Env::MPIEnv::Instance().VerboseLevel()));
+    SetVerboseLevel(muc::to_underlying(Env::MPIEnv::Instance().VerboseLevel()));
     fExecutor.TaskName("G4Event");
 }
 

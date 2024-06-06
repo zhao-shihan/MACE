@@ -1,12 +1,13 @@
 #pragma once
 
-#include "MACE/Compatibility/std23/unreachable.h++"
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/MPIX/DataType.h++"
 #include "MACE/Extension/MPIX/Execution/Scheduler.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
 #include "mpi.h"
+
+#include "muc/utility"
 
 #include <array>
 #include <cmath>
@@ -51,10 +52,10 @@ private:
     };
 
     struct Dummy final : std::monostate {
-        auto PreLoopAction() -> void { std23::unreachable(); }
-        auto PreTaskAction() -> void { std23::unreachable(); }
-        auto PostTaskAction() -> void { std23::unreachable(); }
-        auto PostLoopAction() -> void { std23::unreachable(); }
+        auto PreLoopAction() -> void { muc::unreachable(); }
+        auto PreTaskAction() -> void { muc::unreachable(); }
+        auto PostTaskAction() -> void { muc::unreachable(); }
+        auto PostLoopAction() -> void { muc::unreachable(); }
     };
 
     class Master final : public NonMoveableBase {

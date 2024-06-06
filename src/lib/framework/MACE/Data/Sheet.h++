@@ -5,7 +5,6 @@
 #include "MACE/Data/TupleModel.h++"
 #include "MACE/Data/internal/BranchHelper.h++"
 #include "MACE/Extension/gslx/index_sequence.h++"
-#include "MACE/Extension/stdx/to_signed.h++"
 #include "MACE/Math/Statistic.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
@@ -14,6 +13,7 @@
 
 #include "muc/ceta_string"
 #include "muc/tuple"
+#include "muc/utility"
 
 #include "gsl/gsl"
 

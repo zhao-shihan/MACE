@@ -7,14 +7,14 @@ VectorBranchSocket<T, N>::VectorBranchSocket(const std::string& branchName, cons
         [&leafNames] {
             std::string leafList;
             leafList.append(leafNames[0]).append(std::string{'/', ROOTX::LeafTypeCode<T>()});
-            for (gsl::index i = 1; i < stdx::to_signed(N); ++i) {
+            for (gsl::index i = 1; i < muc::to_signed(N); ++i) {
                 leafList.append(":").append(leafNames[i]);
             }
             return leafList;
         }()),
     fVector() {
     // Initialize vector
-    for (gsl::index i = 0; i < stdx::to_signed(N); ++i) {
+    for (gsl::index i = 0; i < muc::to_signed(N); ++i) {
         fVector[i] = defaultValues[i];
     }
 }

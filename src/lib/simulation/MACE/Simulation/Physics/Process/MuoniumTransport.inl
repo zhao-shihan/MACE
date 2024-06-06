@@ -27,7 +27,7 @@ auto MuoniumTransport<ATarget>::AlongStepDoIt(const G4Track& track, const G4Step
     fParticleChange.Initialize(track);
     switch (fTransportStatus) {
     case TransportStatus::Unknown:
-        std23::unreachable();
+        muc::unreachable();
         break;
     case TransportStatus::Decaying:
         // Do nothing

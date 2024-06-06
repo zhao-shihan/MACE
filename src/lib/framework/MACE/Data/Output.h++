@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MACE/Compatibility/std23/forward_like.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Data/TupleModel.h++"
 #include "MACE/Data/internal/BranchHelper.h++"
@@ -10,6 +9,8 @@
 #include "TDirectory.h"
 #include "TLeaf.h"
 #include "TTree.h"
+
+#include "muc/utility"
 
 #include "fmt/format.h"
 
@@ -45,13 +46,13 @@ public:
 
     template<std::ranges::input_range R = std::initializer_list<Tuple<Ts...>>>
         requires std::assignable_from<Tuple<Ts...>&, std::ranges::range_reference_t<R>> or
-                 ProperSubTuple<Tuple<Ts...>, std::ranges::range_value_t<R>>
+                     ProperSubTuple<Tuple<Ts...>, std::ranges::range_value_t<R>>
     auto Fill(R&& data) -> std::size_t;
 
     template<std::ranges::input_range R>
         requires std::indirectly_readable<std::ranges::range_reference_t<R>> and
-                 (std::assignable_from<Tuple<Ts...>&, std::iter_reference_t<std::ranges::range_value_t<R>>> or
-                  ProperSubTuple<Tuple<Ts...>, std::iter_value_t<std::ranges::range_value_t<R>>>)
+                     (std::assignable_from<Tuple<Ts...>&, std::iter_reference_t<std::ranges::range_value_t<R>>> or
+                      ProperSubTuple<Tuple<Ts...>, std::iter_value_t<std::ranges::range_value_t<R>>>)
     auto Fill(R&& data) -> std::size_t;
 
     auto Entry() -> auto { return OutputIterator{this}; }

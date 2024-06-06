@@ -1,4 +1,3 @@
-#include "MACE/Compatibility/std23/unreachable.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Env/Print.h++"
 #include "MACE/Utility/LiteralUnit.h++"
@@ -8,6 +7,8 @@
 #include "G4Material.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4NistManager.hh"
+
+#include "muc/utility"
 
 #include <string>
 
@@ -161,7 +162,7 @@ auto Target::ExportAllValue(YAML::Node& node) const -> void {
             case TargetShapeType::Cylinder:
                 return "Cylinder"s;
             }
-            std23::unreachable();
+            muc::unreachable();
         }(),
         "ShapeType");
     {
@@ -175,7 +176,7 @@ auto Target::ExportAllValue(YAML::Node& node) const -> void {
                 case CuboidTarget::ShapeDetailType::Perforated:
                     return "Perforated"s;
                 }
-                std23::unreachable();
+                muc::unreachable();
             }(),
             "Cuboid", "DetailType");
         {
@@ -199,7 +200,7 @@ auto Target::ExportAllValue(YAML::Node& node) const -> void {
                 case MultiLayerTarget::ShapeDetailType::Perforated:
                     return "Perforated"s;
                 }
-                std23::unreachable();
+                muc::unreachable();
             }(),
             "MultiLayer", "DetailType");
         {

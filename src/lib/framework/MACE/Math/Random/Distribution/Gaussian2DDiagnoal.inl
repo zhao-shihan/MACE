@@ -48,7 +48,7 @@ constexpr Gaussian2DDiagnoalBase<ADerived, T>::Gaussian2DDiagnoalBase(const type
         static_assert(UniformCompactRectangle<T>::Stateless());                      \
         u = UniformCompactRectangle<T>({-0.5, 0.5}, {-0.5, 0.5})(g);                 \
         x = muc::hypot2(u[0], u[1]);                                                \
-        std23::assume(0 <= x and x < 0.5);                                           \
+        muc::assume(0 <= x and x < 0.5);                                           \
     } while (x == 0 or x > 0.25);                                                    \
     x = std::sqrt(-2 * (TheLog(x) + 2 * std::numbers::ln2_v<VT>) / x);               \
     u[0] = p.SigmaX() * (x * u[0]) + p.MuX();                                        \

@@ -9,7 +9,7 @@ auto Target::VolumeContain(const Concept::InputVector3D auto& x) const -> bool {
     case TargetShapeType::Cylinder:
         return fCylinder.VolumeContain(x);
     }
-    std23::unreachable();
+    muc::unreachable();
 }
 
 auto Target::Contain(const Concept::InputVector3D auto& x, bool insideVolume) const -> bool {
@@ -21,7 +21,7 @@ auto Target::Contain(const Concept::InputVector3D auto& x, bool insideVolume) co
     case TargetShapeType::Cylinder:
         return fCylinder.Contain(x, insideVolume);
     }
-    std23::unreachable();
+    muc::unreachable();
 }
 
 auto Target::DetectableAt(const Concept::InputVector3D auto& x) const -> bool {
@@ -33,7 +33,7 @@ auto Target::DetectableAt(const Concept::InputVector3D auto& x) const -> bool {
     case TargetShapeType::Cylinder:
         return fCylinder.DetectableAt(x);
     }
-    std23::unreachable();
+    muc::unreachable();
 }
 
 template<typename ADerivedShape>
@@ -74,7 +74,7 @@ auto Target::CuboidTarget::Contain(const Concept::InputVector3D auto& x, bool in
         return insideVolume and
                fPerforated.DetailContain(x);
     }
-    std23::unreachable();
+    muc::unreachable();
 }
 
 auto Target::CuboidTarget::DetectableAt(const Concept::InputVector3D auto& x) const -> bool {
@@ -88,7 +88,7 @@ auto Target::CuboidTarget::DetectableAt(const Concept::InputVector3D auto& x) co
         return notShadowed or
                fPerforated.DetailDetectable(x);
     }
-    std23::unreachable();
+    muc::unreachable();
 }
 
 auto Target::CuboidTarget::PerforatedCuboid::DetailContain(const Concept::InputVector3D auto& x) const -> bool {
@@ -132,7 +132,7 @@ auto Target::MultiLayerTarget::Contain(const Concept::InputVector3D auto& x, boo
         return insideVolume and
                fPerforated.DetailContain(x);
     }
-    std23::unreachable();
+    muc::unreachable();
 }
 
 auto Target::MultiLayerTarget::DetectableAt(const Concept::InputVector3D auto& x) const -> bool {
@@ -150,7 +150,7 @@ auto Target::MultiLayerTarget::DetectableAt(const Concept::InputVector3D auto& x
         return notShadowed or
                fPerforated.DetailDetectable(x);
     }
-    std23::unreachable();
+    muc::unreachable();
 }
 
 auto Target::MultiLayerTarget::PerforatedMultiLayer::DetailContain(const Concept::InputVector3D auto& x) const -> bool {

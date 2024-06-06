@@ -3,12 +3,13 @@
 #include "MACE/Concept/FundamentalType.h++"
 #include "MACE/DataModel/BranchSocketBase.h++"
 #include "MACE/Extension/ROOTX/LeafTypeCode.h++"
-#include "MACE/Extension/stdx/to_signed.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 #include "MACE/Utility/VectorAssign.h++"
 #include "MACE/Utility/VectorCast.h++"
 
 #include "TTree.h"
+
+#include "muc/utility"
 
 #include "gsl/gsl"
 

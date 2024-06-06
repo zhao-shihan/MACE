@@ -2,12 +2,12 @@
 
 #include "MACE/Concept/NumericVector.h++"
 #include "MACE/Extension/gslx/index_sequence.h++"
-#include "MACE/Extension/stdx/to_signed.h++"
 #include "MACE/Utility/VectorCast.h++"
 #include "MACE/Utility/VectorDimension.h++"
 #include "MACE/Utility/VectorValueType.h++"
 
 #include "muc/math"
+#include "muc/utility"
 
 #include "gsl/gsl"
 

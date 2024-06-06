@@ -1,4 +1,3 @@
-#include "MACE/Compatibility/std23/unreachable.h++"
 #include "MACE/Detector/Description/TTC.h++"
 #include "MACE/Env/Print.h++"
 #include "MACE/External/gfx/timsort.hpp"
@@ -20,6 +19,7 @@
 #include "G4VTouchable.hh"
 
 #include "muc/numeric"
+#include "muc/utility"
 
 #include <algorithm>
 #include <cassert>
@@ -119,7 +119,7 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
          auto&& [tileID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
         case 0:
-            std23::unreachable();
+            muc::unreachable();
         case 1: {
             auto& hit{splitHit.front()};
             Get<"HitID">(*hit) = hitID++;

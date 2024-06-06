@@ -120,7 +120,7 @@ auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
          auto&& [unitID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
         case 0:
-            std23::unreachable();
+            muc::unreachable();
         case 1: {
             auto& hit{splitHit.front()};
             Get<"HitID">(*hit) = hitID++;

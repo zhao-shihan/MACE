@@ -21,7 +21,7 @@ namespace MACE::Math::Random::inline Distribution::internal {
 template<std::floating_point T>
 MACE_ALWAYS_INLINE constexpr auto FastLogForOpen01(T x) -> auto {
     assert(0 < x and x < 1);
-    std23::assume(0 < x and x < 1);
+    muc::assume(0 < x and x < 1);
     if constexpr (std::numeric_limits<T>::is_iec559) {
         using B =
             std::conditional_t<
@@ -32,8 +32,8 @@ MACE_ALWAYS_INLINE constexpr auto FastLogForOpen01(T x) -> auto {
         constexpr int n{std::numeric_limits<T>::digits - 1};
         constexpr int k{muc::bit_size<T> - 1 - n};
         const auto xBits{std::bit_cast<B>(x)};
-        std23::assume(xBits > 0);
-        std23::assume(xBits < ~(~static_cast<B>(0) >> 1));
+        muc::assume(xBits > 0);
+        muc::assume(xBits < ~(~static_cast<B>(0) >> 1));
         x = std::bit_cast<T>((xBits | ~static_cast<B>(0) << n) << 2 >> 2);
         const auto r{QinRational({1.00000000000000000000000000000000000L,
                                   0.583383967700472856709787286973478877L},

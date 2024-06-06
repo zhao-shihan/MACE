@@ -1,8 +1,9 @@
-#include "MACE/Compatibility/std23/to_underlying.h++"
 #include "MACE/Detector/Description/DescriptionIO.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Env/BasicEnv.h++"
+
+#include "muc/utility"
 
 #include <random>
 
@@ -74,10 +75,10 @@ int main(int argc, char* argv[]) {
 
     auto& target = Description::Target::Instance();
     std::cout << "Default:\n"
-              << std23::to_underlying(target.ShapeType()) << '\n'
+              << muc::to_underlying(target.ShapeType()) << '\n'
               << target.Cuboid().Width() << '\n'
               << target.Cuboid().Thickness() << '\n'
-              << std23::to_underlying(target.Cuboid().DetailType()) << '\n'
+              << muc::to_underlying(target.Cuboid().DetailType()) << '\n'
               << target.Cuboid().Perforated().Extent() << '\n'
               << target.Cuboid().Perforated().Spacing() << '\n'
               << target.Cuboid().Perforated().Diameter() << '\n'
@@ -96,10 +97,10 @@ int main(int argc, char* argv[]) {
 
     Description::DescriptionIO::Export<Description::Target>("tg.yaml");
     std::cout << "After write into yaml:\n"
-              << std23::to_underlying(target.ShapeType()) << '\n'
+              << muc::to_underlying(target.ShapeType()) << '\n'
               << target.Cuboid().Width() << '\n'
               << target.Cuboid().Thickness() << '\n'
-              << std23::to_underlying(target.Cuboid().DetailType()) << '\n'
+              << muc::to_underlying(target.Cuboid().DetailType()) << '\n'
               << target.Cuboid().Perforated().Extent() << '\n'
               << target.Cuboid().Perforated().Spacing() << '\n'
               << target.Cuboid().Perforated().Diameter() << '\n'
@@ -118,10 +119,10 @@ int main(int argc, char* argv[]) {
 
     Description::DescriptionIO::ImportInstantiated("tg.yaml");
     std::cout << "After read from yaml:\n"
-              << std23::to_underlying(target.ShapeType()) << '\n'
+              << muc::to_underlying(target.ShapeType()) << '\n'
               << target.Cuboid().Width() << '\n'
               << target.Cuboid().Thickness() << '\n'
-              << std23::to_underlying(target.Cuboid().DetailType()) << '\n'
+              << muc::to_underlying(target.Cuboid().DetailType()) << '\n'
               << target.Cuboid().Perforated().Extent() << '\n'
               << target.Cuboid().Perforated().Spacing() << '\n'
               << target.Cuboid().Perforated().Diameter() << '\n'

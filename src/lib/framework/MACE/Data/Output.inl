@@ -53,7 +53,7 @@ template<std::ranges::input_range R>
 auto Output<Ts...>::Fill(R&& data) -> std::size_t {
     std::size_t nByte{};
     for (auto&& tuple : std::forward<R>(data)) {
-        nByte += Fill(std23::forward_like<R>(tuple));
+        nByte += Fill(muc::forward_like<R>(tuple));
     }
     return nByte;
 }

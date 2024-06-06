@@ -11,7 +11,7 @@ Sheet<Ts...>::Sheet(const std::string& name, const R& files) :
     fEntry{},
     fData{std::make_shared<Dataset>(name, files)} {
     fEntry.reserve(fData->Size());
-    for (gsl::index i{0}; i < stdx::to_signed(fData->Size()); ++i) {
+    for (gsl::index i{0}; i < muc::to_signed(fData->Size()); ++i) {
         fEntry.emplace_back(i, *fData);
     }
     fEntry.shrink_to_fit();

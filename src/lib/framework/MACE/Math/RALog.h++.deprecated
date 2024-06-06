@@ -1,8 +1,9 @@
 #pragma once
 
-#include "MACE/Compatibility/std23/assume.h++"
 #include "MACE/Math/QinAlgorithm.h++"
 #include "MACE/Utility/InlineMacro.h++"
+
+#include "muc/utility"
 
 #include <bit>
 #include <cfenv>

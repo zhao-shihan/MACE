@@ -1,9 +1,10 @@
 #pragma once
 
-#include "MACE/Compatibility/std23/assume.h++"
 #include "MACE/Concept/FundamentalType.h++"
 #include "MACE/Math/Random/Distribution/Gaussian2DDiagnoal.h++"
 #include "MACE/Math/Random/RandomNumberDistributionBase.h++"
+
+#include "muc/utility"
 
 #include <array>
 #include <cmath>

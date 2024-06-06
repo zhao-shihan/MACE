@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MACE/Compatibility/std23/unreachable.h++"
 #include "MACE/Extension/Geant4X/Antimuonium.h++"
 #include "MACE/Extension/Geant4X/Muonium.h++"
 #include "MACE/Math/Random/Distribution/Exponential.h++"
@@ -20,6 +19,8 @@
 #include "G4VContinuousProcess.hh"
 #include "G4VSolid.hh"
 #include "Randomize.hh"
+
+#include "muc/utility"
 
 #include <random>
 

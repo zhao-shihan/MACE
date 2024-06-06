@@ -1,6 +1,7 @@
-#include "MACE/Compatibility/std23/to_underlying.h++"
 #include "MACE/Env/CLI/Module/BasicModule.h++"
 #include "MACE/Version.h++"
+
+#include "muc/utility"
 
 #include "fmt/core.h"
 
@@ -12,7 +13,7 @@ namespace MACE::Env::CLI::inline Module {
 
 BasicModule::BasicModule(argparse::ArgumentParser& argParser) :
     ModuleBase{argParser},
-    fVerboseLevelValue{std23::to_underlying(VerboseLevel::Warning)} {
+    fVerboseLevelValue{muc::to_underlying(VerboseLevel::Warning)} {
     ArgParser()
         .add_argument("-h", "--help")
         .help("Show help message and exit.")
@@ -49,8 +50,8 @@ BasicModule::BasicModule(argparse::ArgumentParser& argParser) :
 auto BasicModule::VerboseLevel() const -> std::optional<enum VerboseLevel> {
     if (ArgParser().is_used("-V") or ArgParser().is_used("-Q")) {
         return static_cast<enum VerboseLevel>(std::clamp(fVerboseLevelValue,
-                                                         std23::to_underlying(VerboseLevel::Quiet),
-                                                         std23::to_underlying(VerboseLevel::Verbose)));
+                                                         muc::to_underlying(VerboseLevel::Quiet),
+                                                         muc::to_underlying(VerboseLevel::Verbose)));
     } else {
         return std::nullopt;
     }

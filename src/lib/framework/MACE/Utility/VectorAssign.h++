@@ -4,9 +4,10 @@
 #include "MACE/Concept/Indirectable.h++"
 #include "MACE/Concept/InputVector.h++"
 #include "MACE/Concept/NumericVector.h++"
-#include "MACE/Extension/stdx/to_signed.h++"
 #include "MACE/Utility/VectorDimension.h++"
 #include "MACE/Utility/VectorValueType.h++"
+
+#include "muc/utility"
 
 #include "gsl/gsl"
 
@@ -56,7 +57,7 @@ auto VectorAssign(Concept::NumericVectorAny auto& lhs, auto&& rhs) -> auto& //
              not std::assignable_from<decltype(lhs), decltype(rhs)> and
              not std::ranges::input_range<decltype(rhs)>) //
 {
-    for (gsl::index i = 0; i < stdx::to_signed(VectorDimension<std::decay_t<decltype(lhs)>>); ++i) {
+    for (gsl::index i = 0; i < muc::to_signed(VectorDimension<std::decay_t<decltype(lhs)>>); ++i) {
         lhs[i] = std::forward<decltype(rhs)>(rhs)[i];
     }
     return lhs;

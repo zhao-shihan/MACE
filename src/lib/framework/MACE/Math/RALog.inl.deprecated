@@ -17,11 +17,11 @@ namespace MACE::Math {
                 constexpr int n = std::numeric_limits<T>::digits - 1;                  \
                 constexpr int k = CHAR_BIT * sizeof(T) - 1 - n;                        \
                 const auto xBits = std::bit_cast<B>(x);                                \
-                std23::assume(xBits > 0);                                              \
-                std23::assume(xBits < ~(~static_cast<B>(0) >> 1));                     \
+                muc::assume(xBits > 0);                                              \
+                muc::assume(xBits < ~(~static_cast<B>(0) >> 1));                     \
                 const auto eBits = static_cast<int>(xBits >> n);                       \
-                std23::assume(eBits > 0);                                              \
-                std23::assume(eBits < 1 << k);                                         \
+                muc::assume(eBits > 0);                                              \
+                muc::assume(eBits < 1 << k);                                         \
                 if (eBits != (1 << k) - 1) [[likely]] {                                \
                     const auto exponent = eBits - ((1 << (k - 1)) - 1);                \
                     x = std::bit_cast<T>((xBits | ~static_cast<B>(0) << n) << 2 >> 2); \
@@ -38,7 +38,7 @@ namespace MACE::Math {
                     return std::numeric_limits<T>::quiet_NaN();                        \
                 }                                                                      \
             } else {                                                                   \
-                std23::assume(x != x);                                                 \
+                muc::assume(x != x);                                                 \
                 return x;                                                              \
             }                                                                          \
         } else {                                                                       \
