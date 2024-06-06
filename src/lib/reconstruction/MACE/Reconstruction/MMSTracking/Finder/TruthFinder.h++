@@ -6,8 +6,9 @@
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Env/Print.h++"
-#include "MACE/External/gfx/timsort.hpp"
 #include "MACE/Reconstruction/MMSTracking/Finder/FinderBase.h++"
+
+#include "gfx/timsort.hpp"
 
 #include <algorithm>
 #include <iterator>

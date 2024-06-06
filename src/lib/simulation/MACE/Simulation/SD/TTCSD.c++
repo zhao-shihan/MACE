@@ -1,6 +1,5 @@
 #include "MACE/Detector/Description/TTC.h++"
 #include "MACE/Env/Print.h++"
-#include "MACE/External/gfx/timsort.hpp"
 #include "MACE/Simulation/SD/TTCSD.h++"
 #include "MACE/Simulation/SD/TTCSiPMSD.h++"
 
@@ -20,6 +19,8 @@
 
 #include "muc/numeric"
 #include "muc/utility"
+
+#include "gfx/timsort.hpp"
 
 #include <algorithm>
 #include <cassert>

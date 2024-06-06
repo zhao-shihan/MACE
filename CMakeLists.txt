@@ -43,6 +43,7 @@ option(MACE_BUILTIN_GENFIT_EVENT_DISPLAY "Build GenFit event display module if G
 option(MACE_BUILTIN_MSGSL "Use built-in Microsoft.GSL (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_MUC "Use built-in muc (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_PMP "Use built-in pmp (network or pre-downloaded source is required)." OFF)
+option(MACE_BUILTIN_TIMSORT "Use built-in TimSort (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_YAML_CPP "Use built-in yaml-cpp (network or pre-downloaded source is required)." OFF)
 option(MACE_SIGNAL_HANDLER "Build with signal handling. Signal handlers are registered at the construction of environment." ON)
 option(MACE_USE_G4VIS "Build Geant4 applications of MACE with available visualization. Note that whether Geant4 supports visualization is determined by options with which Geant4 is built. MACE does not, and cannot, affect whether G4 enables visualization." ON)
@@ -64,6 +65,7 @@ set(MACE_BUILTIN_BACKWARD_VERSION 1.6 CACHE STRING "Set built-in backward-cpp ve
 set(MACE_BUILTIN_FMT_VERSION 10.2.1 CACHE STRING "Set built-in fmt version (if required).")
 set(MACE_BUILTIN_MSGSL_VERSION 4.0.0 CACHE STRING "Set built-in Microsoft.GSL version (if required).")
 set(MACE_BUILTIN_PMP_VERSION 3.0.0 CACHE STRING "Set built-in fmt version (if required).")
+set(MACE_BUILTIN_TIMSORT_VERSION 3.0.0 CACHE STRING "Set built-in TimSort version (if required).")
 set(MACE_BUILTIN_YAML_CPP_VERSION 0.8.0 CACHE STRING "Set built-in yaml-cpp version (if required).")
 
 # =============================================================================
@@ -103,6 +105,8 @@ include(${MACE_PROJECT_CMAKE_DIR}/LookForMicrosoftGSL.cmake)
 include(${MACE_PROJECT_CMAKE_DIR}/LookForMUC.cmake)
 # PMP
 include(${MACE_PROJECT_CMAKE_DIR}/LookForPMP.cmake)
+# TimSort
+include(${MACE_PROJECT_CMAKE_DIR}/LookForTimSort.cmake)
 # yaml-cpp
 include(${MACE_PROJECT_CMAKE_DIR}/LookForYamlCpp.cmake)
 

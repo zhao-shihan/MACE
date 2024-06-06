@@ -7,8 +7,14 @@ add_library(MACEFramework STATIC ${MACE_FRAMEWORK_SRC})
 target_include_directories(MACEFramework PUBLIC ${MACE_PROJECT_SRC_DIR}/lib/framework)
 target_compile_options(MACEFramework PUBLIC ${MACE_COMPILE_OPTIONS})
 target_compile_definitions(MACEFramework PUBLIC ${MACE_COMPILE_DEFINITIONS})
+# TimSort
+target_link_libraries(MACEFramework PUBLIC timsort)
+# muc
+target_link_libraries(MACEFramework PUBLIC muc)
 # argparse
 target_link_libraries(MACEFramework PUBLIC argparse::argparse)
+# Microsoft.GSL
+target_link_libraries(MACEFramework PUBLIC Microsoft.GSL::GSL)
 # backward-cpp
 target_include_directories(MACEFramework PRIVATE ${BACKWARD_INCLUDE_DIRS})
 target_compile_definitions(MACEFramework PRIVATE ${BACKWARD_DEFINITIONS})
@@ -25,10 +31,6 @@ endif()
 target_link_libraries(MACEFramework PUBLIC fmt::fmt)
 # Eigen
 target_link_libraries(MACEFramework PUBLIC Eigen3::Eigen)
-# Microsoft.GSL
-target_link_libraries(MACEFramework PUBLIC Microsoft.GSL::GSL)
-# muc
-target_link_libraries(MACEFramework PUBLIC muc)
 # yaml-cpp
 target_link_libraries(MACEFramework PUBLIC yaml-cpp)
 # MPI

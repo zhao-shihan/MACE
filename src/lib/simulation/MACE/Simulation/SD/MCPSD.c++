@@ -1,6 +1,5 @@
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Env/Print.h++"
-#include "MACE/External/gfx/timsort.hpp"
 #include "MACE/Simulation/SD/MCPSD.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
@@ -18,6 +17,8 @@
 #include "G4VProcess.hh"
 #include "G4VTouchable.hh"
 #include "Randomize.hh"
+
+#include "gfx/timsort.hpp"
 
 #include <cassert>
 #include <cmath>

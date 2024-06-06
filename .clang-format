@@ -88,15 +88,17 @@ IncludeCategories:
     Priority: 11
   - Regex: '"muc/.*"'
     Priority: 12
-  - Regex: '"gsl/.*"'
+  - Regex: '"gfx/timsort.hpp"'
     Priority: 13
-  - Regex: '"fmt/.*\.h"'
+  - Regex: '"gsl/.*"'
     Priority: 14
+  - Regex: '"fmt/.*\.h"'
+    Priority: 15
   # very general
   - Regex: '".*"'
     Priority: 1
   - Regex: '<.*>'
-    Priority: 15
+    Priority: 16
 IndentAccessModifiers: false
 IndentCaseBlocks: false
 IndentCaseLabels: false

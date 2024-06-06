@@ -1,6 +1,5 @@
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Env/Print.h++"
-#include "MACE/External/gfx/timsort.hpp"
 #include "MACE/Simulation/SD/CDCSD.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/VectorArithmeticOperator.h++"
@@ -20,6 +19,8 @@
 
 #include "muc/numeric"
 #include "muc/utility"
+
+#include "gfx/timsort.hpp"
 
 #include <cassert>
 #include <cmath>

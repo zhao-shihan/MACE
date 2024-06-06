@@ -1,7 +1,8 @@
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/TTC.h++"
-#include "MACE/External/gfx/timsort.hpp"
 #include "MACE/Simulation/Analysis/MMSTruthTracker.h++"
+
+#include "gfx/timsort.hpp"
 
 #include <cassert>
 #include <utility>

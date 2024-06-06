@@ -1,6 +1,5 @@
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Env/Print.h++"
-#include "MACE/External/gfx/timsort.hpp"
 #include "MACE/Simulation/SD/EMCPMTSD.h++"
 #include "MACE/Simulation/SD/EMCSD.h++"
 
@@ -19,6 +18,8 @@
 #include "G4VTouchable.hh"
 
 #include "muc/numeric"
+
+#include "gfx/timsort.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -108,9 +109,9 @@ auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     fHitsCollection->GetVector()->reserve(
         muc::ranges::accumulate(fSplitHit, 0,
-                                 [](auto&& count, auto&& cellHit) {
-                                     return count + cellHit.second.size();
-                                 }));
+                                [](auto&& count, auto&& cellHit) {
+                                    return count + cellHit.second.size();
+                                }));
 
     constexpr auto ByTrackID{
         [](const auto& hit1, const auto& hit2) {
