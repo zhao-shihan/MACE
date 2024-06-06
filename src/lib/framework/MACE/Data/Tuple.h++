@@ -4,7 +4,8 @@
 #include "MACE/Data/TupleModel.h++"
 #include "MACE/Data/Value.h++"
 #include "MACE/Extension/gslx/index_sequence.h++"
-#include "MACE/Utility/CETAString.h++"
+
+#include "muc/ceta_string"
 
 #include "gsl/gsl"
 
@@ -81,16 +82,16 @@ namespace MACE::Data {
 
 template<typename ADerived>
 class EnableGet {
-    template<CETAString... ANames>
+    template<muc::ceta_string... ANames>
         requires(sizeof...(ANames) >= 1)
     friend constexpr auto Get(const ADerived& t) -> decltype(auto) { return t.template Get<ANames...>(); }
-    template<CETAString... ANames>
+    template<muc::ceta_string... ANames>
         requires(sizeof...(ANames) >= 1)
     friend constexpr auto Get(ADerived& t) -> decltype(auto) { return t.template Get<ANames...>(); }
-    template<CETAString... ANames>
+    template<muc::ceta_string... ANames>
         requires(sizeof...(ANames) >= 1)
     friend constexpr auto Get(ADerived&& t) -> decltype(auto) { return std::move(t).template Get<ANames...>(); }
-    template<CETAString... ANames>
+    template<muc::ceta_string... ANames>
         requires(sizeof...(ANames) >= 1)
     friend constexpr auto Get(const ADerived&& t) -> decltype(auto) { return std::move(t).template Get<ANames...>(); }
 
@@ -140,16 +141,16 @@ public:
     constexpr explicit(sizeof...(Us) == 1) Tuple(Us&&... values) :
         fTuple{std::forward<Us>(values)...} {}
 
-    template<CETAString... ANames>
+    template<muc::ceta_string... ANames>
         requires(sizeof...(ANames) >= 1)
     constexpr auto Get() const& -> decltype(auto) { return GetImpl<Model::template Index<ANames>()...>(); }
-    template<CETAString... ANames>
+    template<muc::ceta_string... ANames>
         requires(sizeof...(ANames) >= 1)
     constexpr auto Get() & -> decltype(auto) { return GetImpl<Model::template Index<ANames>()...>(); }
-    template<CETAString... ANames>
+    template<muc::ceta_string... ANames>
         requires(sizeof...(ANames) >= 1)
     constexpr auto Get() && -> decltype(auto) { return std::move(*this).template GetImpl<Model::template Index<ANames>()...>(); }
-    template<CETAString... ANames>
+    template<muc::ceta_string... ANames>
         requires(sizeof...(ANames) >= 1)
     constexpr auto Get() const&& -> decltype(auto) { return std::move(*this).template GetImpl<Model::template Index<ANames>()...>(); }
 

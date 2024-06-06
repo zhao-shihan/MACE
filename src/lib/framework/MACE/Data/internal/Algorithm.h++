@@ -66,7 +66,7 @@ concept ForwardRangeOfTupleLike =
 
 namespace internal {
 
-template<typename IOrR, CETAString AName>
+template<typename IOrR, muc::ceta_string AName>
 auto ValueTypeHelper() -> auto {
     if constexpr (IteratorOfTupleLike<IOrR>) {
         return typename std::decay_t<std::iter_reference_t<IOrR>>::Model::template ValueOf<AName>{};
@@ -77,19 +77,19 @@ auto ValueTypeHelper() -> auto {
 
 } // namespace internal
 
-template<typename IOrR, CETAString AName>
+template<typename IOrR, muc::ceta_string AName>
     requires IteratorOfTupleLike<IOrR> or RangeOfTupleLike<IOrR>
 using ValueType = decltype(internal::ValueTypeHelper<IOrR, AName>());
 
-template<typename IOrR, CETAString AName>
+template<typename IOrR, muc::ceta_string AName>
     requires IteratorOfTupleLike<IOrR> or RangeOfTupleLike<IOrR>
 using UnderlyingType = typename ValueType<IOrR, AName>::Type;
 
-template<typename IOrR, CETAString... ANames>
+template<typename IOrR, muc::ceta_string... ANames>
     requires IteratorOfTupleLike<IOrR> or RangeOfTupleLike<IOrR>
 using TupleType = Tuple<ValueType<IOrR, ANames>...>;
 
-template<typename F, typename IOrR, CETAString... ANames>
+template<typename F, typename IOrR, muc::ceta_string... ANames>
 concept InvocableByName =
     requires {
         requires IteratorOfTupleLike<IOrR> or RangeOfTupleLike<IOrR>;
@@ -98,7 +98,7 @@ concept InvocableByName =
                  (sizeof...(ANames) >= 2 and std::invocable<F, ValueType<IOrR, ANames>...>));
     };
 
-template<typename F, typename S, CETAString... ANames>
+template<typename F, typename S, muc::ceta_string... ANames>
     requires InvocableByName<F, S, ANames...>
 using InvokeByNameResult = std::invoke_result_t<F, std::conditional_t<sizeof...(ANames) == 1,
                                                                       UnderlyingType<S, ANames>,
@@ -140,7 +140,7 @@ auto CheckAndGetSheetFromFirstLast(I first, S last) -> const auto& {
 
 } // namespace
 
-template<CETAString AName,
+template<muc::ceta_string AName,
          SheetIterator I, SheetSentinelFor<I> S,
          InvocableByName<I, AName> P,
          std::predicate<InvokeByNameResult<P, I, AName>> F>
@@ -158,7 +158,7 @@ auto AllAnyNoneOfCountFindIfOrNot(auto&& all_any_none_of_count_find_if_or_not, I
         });
 }
 
-template<CETAString... ANames,
+template<muc::ceta_string... ANames,
          SheetIterator I, SheetSentinelFor<I> S,
          InvocableByName<I, ANames...> P,
          stdx::predicate_applicable<InvokeByNameResult<P, I, ANames...>> F>
@@ -177,7 +177,7 @@ auto AllAnyNoneOfCountFindIfOrNot(auto&& all_any_none_of_count_find_if_or_not, I
         });
 }
 
-template<CETAString AName,
+template<muc::ceta_string AName,
          SheetIterator I, SheetSentinelFor<I> S,
          InvocableByName<I, AName> P,
          std::invocable<InvokeByNameResult<P, I, AName>> F>
@@ -195,7 +195,7 @@ auto ForEach(auto&& for_each, I first, S last, F&& Func, P&& Proj) -> decltype(a
         });
 }
 
-template<CETAString... ANames,
+template<muc::ceta_string... ANames,
          SheetIterator I, SheetSentinelFor<I> S,
          InvocableByName<I, ANames...> P,
          stdx::applicable<InvokeByNameResult<P, I, ANames...>> F>
@@ -214,7 +214,7 @@ auto ForEach(auto&& for_each, I first, S last, F&& Func, P&& Proj) -> decltype(a
         });
 }
 
-template<CETAString AName,
+template<muc::ceta_string AName,
          SheetIterator I, SheetSentinelFor<I> S,
          InvocableByName<I, AName> P>
 auto CountFind(auto&& count_find, I first, S last, const UnderlyingType<I, AName>& value, P&& Proj) -> decltype(auto) {
@@ -229,7 +229,7 @@ auto CountFind(auto&& count_find, I first, S last, const UnderlyingType<I, AName
         });
 }
 
-template<CETAString... ANames,
+template<muc::ceta_string... ANames,
          SheetIterator I, SheetSentinelFor<I> S,
          EquivalentTuple<TupleType<I, ANames...>> ATuple,
          InvocableByName<I, ANames...> P>
@@ -245,7 +245,7 @@ auto CountFind(auto&& count_find, I first, S last, const ATuple& tuple, P&& Proj
         });
 }
 
-// template<CETAString AName,
+// template<muc::ceta_string AName,
 //          SheetIterator I, SheetSentinelFor<I> S,
 //          std::input_iterator I2, std::sentinel_for<I2> S2,
 //          InvocableByName<I, AName> P1,
@@ -267,7 +267,7 @@ auto CountFind(auto&& count_find, I first, S last, const ATuple& tuple, P&& Proj
 //         });
 // }
 
-// template<CETAString... ANames,
+// template<muc::ceta_string... ANames,
 //          SheetIterator I, SheetSentinelFor<I> S,
 //          std::input_iterator I2, std::sentinel_for<I2> S2,
 //          typename F,

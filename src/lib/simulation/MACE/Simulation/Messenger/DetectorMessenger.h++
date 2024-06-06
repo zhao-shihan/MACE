@@ -2,7 +2,6 @@
 
 #include "MACE/Detector/Description/DescriptionIO.h++"
 #include "MACE/Extension/Geant4X/SingletonMessenger.h++"
-#include "MACE/Utility/CETAString.h++"
 
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWithABool.hh"
@@ -10,6 +9,8 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIdirectory.hh"
 #include "G4VUserDetectorConstruction.hh"
+
+#include "muc/ceta_string"
 
 #include "fmt/format.h"
 
@@ -19,7 +20,7 @@
 
 namespace MACE::inline Simulation::inline Messenger {
 
-template<typename ADerived, std::derived_from<G4VUserDetectorConstruction> ADetectorConstruction, CETAString AAppName = nullptr>
+template<typename ADerived, std::derived_from<G4VUserDetectorConstruction> ADetectorConstruction, muc::ceta_string AAppName = nullptr>
 class DetectorMessenger : public Geant4X::SingletonMessenger<ADerived> {
 protected:
     DetectorMessenger();

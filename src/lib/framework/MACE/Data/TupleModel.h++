@@ -4,8 +4,9 @@
 #include "MACE/Data/Value.h++"
 #include "MACE/Extension/gslx/index_sequence.h++"
 #include "MACE/Extension/stdx/tuple_concat.h++"
-#include "MACE/Utility/CETAString.h++"
 #include "MACE/Utility/NonConstructibleBase.h++"
+
+#include "muc/ceta_string"
 
 #include "gsl/gsl"
 
@@ -43,15 +44,15 @@ struct ModelBase : ModelSignature {
 
     static constexpr auto Size() { return std::tuple_size_v<StdTuple>; }
 
-    template<CETAString AName>
+    template<muc::ceta_string AName>
     static constexpr auto Index() { return IndexImpl<AName>(); }
 
-    template<CETAString AName>
+    template<muc::ceta_string AName>
     using ValueOf = std::tuple_element_t<Index<AName>(), StdTuple>;
 
 private:
     static auto StopConsteval() -> gsl::index { return -1; }
-    template<CETAString AName, gsl::index I = 0>
+    template<muc::ceta_string AName, gsl::index I = 0>
     static consteval auto IndexImpl() -> gsl::index;
 };
 
@@ -71,7 +72,7 @@ struct TupleModel<AModel, AOthers...> final
                           stdx::tuple_concat_t<typename AModel::StdTuple,
                                                typename TupleModel<AOthers...>::StdTuple>> {};
 
-template<ValueAcceptable T, CETAString AName, CETAString ADescription, TupleModelizable... AOthers>
+template<ValueAcceptable T, muc::ceta_string AName, muc::ceta_string ADescription, TupleModelizable... AOthers>
 struct TupleModel<Value<T, AName, ADescription>, AOthers...> final
     : internal::ModelBase<TupleModel<Value<T, AName, ADescription>, AOthers...>,
                           stdx::tuple_concat_t<std::tuple<Value<T, AName, ADescription>>,

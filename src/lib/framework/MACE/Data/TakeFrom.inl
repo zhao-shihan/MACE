@@ -5,7 +5,7 @@ auto Take<Ts...>::From(ROOTX::RDataFrame auto&& rdf) -> std::vector<std::shared_
     std::vector<std::shared_ptr<Tuple<Ts...>>> data;
     rdf.Foreach(TakeOne{data, gslx::make_index_sequence<Tuple<Ts...>::Size()>{}},
                 []<gsl::index... Is>(gslx::index_sequence<Is...>) -> std::vector<std::string> {
-                    return {std::tuple_element_t<Is, Tuple<Ts...>>::Name()...};
+                    return {std::tuple_element_t<Is, Tuple<Ts...>>::Name().s()...};
                 }(gslx::make_index_sequence<Tuple<Ts...>::Size()>{}));
     return data;
 }

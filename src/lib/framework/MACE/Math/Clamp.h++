@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Utility/CETAString.h++"
+#include "muc/ceta_string"
 
 #include <cassert>
 #include <cmath>
@@ -8,7 +8,7 @@
 
 namespace MACE::Math {
 
-template<CETAString<3> AMode, std::floating_point T1, std::floating_point T2, std::floating_point T3>
+template<muc::ceta_string<3> AMode, std::floating_point T1, std::floating_point T2, std::floating_point T3>
     requires(AMode == "[]" or
              AMode == "[)" or
              AMode == "(]" or

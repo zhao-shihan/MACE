@@ -16,7 +16,7 @@ struct TuplifyIdentity {
 
 // std::ranges::all_of
 
-template<CETAString AName,
+template<muc::ceta_string AName,
          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
          internal::InvocableByName<I, AName> P = std::identity,
          std::predicate<internal::InvokeByNameResult<P, I, AName>> F>
@@ -27,7 +27,7 @@ auto AllOf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
                                                          std::forward<P>(Proj));
 }
 
-template<CETAString... ANames,
+template<muc::ceta_string... ANames,
          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
          internal::InvocableByName<I, ANames...> P = TuplifyIdentity,
          stdx::predicate_applicable<internal::InvokeByNameResult<P, I, ANames...>> F>
@@ -39,7 +39,7 @@ auto AllOf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
                                                              std::forward<P>(Proj));
 }
 
-template<CETAString AName,
+template<muc::ceta_string AName,
          internal::SheetRange S,
          std::invocable<typename std::decay_t<S>::Model::template ValueOf<AName>::Type> P = std::identity,
          std::predicate<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<AName>::Type>> F>
@@ -50,7 +50,7 @@ auto AllOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
                         std::forward<P>(Proj));
 }
 
-template<CETAString... ANames,
+template<muc::ceta_string... ANames,
          internal::SheetRange S,
          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P = TuplifyIdentity,
          stdx::predicate_applicable<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
@@ -64,7 +64,7 @@ auto AllOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 
 // std::ranges::any_of
 
-template<CETAString AName,
+template<muc::ceta_string AName,
          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
          internal::InvocableByName<I, AName> P = std::identity,
          std::predicate<internal::InvokeByNameResult<P, I, AName>> F>
@@ -75,7 +75,7 @@ auto AnyOf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
                                                          std::forward<P>(Proj));
 }
 
-template<CETAString... ANames,
+template<muc::ceta_string... ANames,
          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
          internal::InvocableByName<I, ANames...> P = TuplifyIdentity,
          stdx::predicate_applicable<internal::InvokeByNameResult<P, I, ANames...>> F>
@@ -87,7 +87,7 @@ auto AnyOf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
                                                              std::forward<P>(Proj));
 }
 
-template<CETAString AName,
+template<muc::ceta_string AName,
          internal::SheetRange S,
          std::invocable<typename std::decay_t<S>::Model::template ValueOf<AName>::Type> P = std::identity,
          std::predicate<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<AName>::Type>> F>
@@ -98,7 +98,7 @@ auto AnyOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
                         std::forward<P>(Proj));
 }
 
-template<CETAString... ANames,
+template<muc::ceta_string... ANames,
          internal::SheetRange S,
          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P = TuplifyIdentity,
          stdx::predicate_applicable<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
@@ -112,7 +112,7 @@ auto AnyOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 
 // std::ranges::none_of
 
-template<CETAString AName,
+template<muc::ceta_string AName,
          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
          internal::InvocableByName<I, AName> P = std::identity,
          std::predicate<internal::InvokeByNameResult<P, I, AName>> F>
@@ -123,7 +123,7 @@ auto NoneOf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
                                                          std::forward<P>(Proj));
 }
 
-template<CETAString... ANames,
+template<muc::ceta_string... ANames,
          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
          internal::InvocableByName<I, ANames...> P = TuplifyIdentity,
          stdx::predicate_applicable<internal::InvokeByNameResult<P, I, ANames...>> F>
@@ -135,7 +135,7 @@ auto NoneOf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
                                                              std::forward<P>(Proj));
 }
 
-template<CETAString AName,
+template<muc::ceta_string AName,
          internal::SheetRange S,
          std::invocable<typename std::decay_t<S>::Model::template ValueOf<AName>::Type> P = std::identity,
          std::predicate<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<AName>::Type>> F>
@@ -146,7 +146,7 @@ auto NoneOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
                          std::forward<P>(Proj));
 }
 
-template<CETAString... ANames,
+template<muc::ceta_string... ANames,
          internal::SheetRange S,
          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P = TuplifyIdentity,
          stdx::predicate_applicable<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
@@ -160,7 +160,7 @@ auto NoneOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 
 // // std::ranges::for_each
 
-// template<CETAString AName,
+// template<muc::ceta_string AName,
 //          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
 //          std::invocable<typename I::Model::template ValueOf<AName>::Type> P = std::identity,
 //          std::invocable<std::invoke_result_t<P, typename I::Model::template ValueOf<AName>::Type>> F>
@@ -171,7 +171,7 @@ auto NoneOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 //                                     std::forward<P>(Proj));
 // }
 
-// template<CETAString... ANames,
+// template<muc::ceta_string... ANames,
 //          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
 //          std::invocable<typename I::Model::template ValueOf<ANames>...> P = TuplifyIdentity,
 //          stdx::applicable<std::invoke_result_t<P, typename I::Model::template ValueOf<ANames>...>> F>
@@ -183,7 +183,7 @@ auto NoneOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 //                                         std::forward<P>(Proj));
 // }
 
-// template<CETAString AName,
+// template<muc::ceta_string AName,
 //          internal::SheetRange S,
 //          std::invocable<typename std::decay_t<S>::Model::template ValueOf<AName>::Type> P = std::identity,
 //          std::invocable<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<AName>::Type>> F>
@@ -194,7 +194,7 @@ auto NoneOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 //                           std::forward<P>(Proj));
 // }
 
-// template<CETAString... ANames,
+// template<muc::ceta_string... ANames,
 //          internal::SheetRange S,
 //          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P = TuplifyIdentity,
 //          stdx::applicable<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
@@ -208,7 +208,7 @@ auto NoneOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 
 // // std::ranges::count
 
-// template<CETAString AName,
+// template<muc::ceta_string AName,
 //          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
 //          std::invocable<typename I::Model::template ValueOf<AName>::Type> P = std::identity>
 // auto Count(I first, S last, const typename I::Model::template ValueOf<AName>::Type& value, P&& Proj = {}) -> decltype(auto) {
@@ -218,7 +218,7 @@ auto NoneOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 //                                       std::forward<P>(Proj));
 // }
 
-// template<CETAString... ANames,
+// template<muc::ceta_string... ANames,
 //          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
 //          EquivalentTuple<Tuple<typename I::Model::template ValueOf<ANames>...>> ATuple = Tuple<typename I::Model::template ValueOf<ANames>...>,
 //          std::invocable<typename I::Model::template ValueOf<ANames>...> P = TuplifyIdentity>
@@ -229,7 +229,7 @@ auto NoneOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 //                                           std::forward<P>(Proj));
 // }
 
-// template<CETAString AName,
+// template<muc::ceta_string AName,
 //          internal::SheetRange S,
 //          std::invocable<typename std::decay_t<S>::Model::template ValueOf<AName>::Type> P = std::identity>
 // auto Count(S&& sheet, const typename std::decay_t<S>::Model::template ValueOf<AName>::Type& value, P&& Proj = {}) -> decltype(auto) {
@@ -239,7 +239,7 @@ auto NoneOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 //                         std::forward<P>(Proj));
 // }
 
-// template<CETAString... ANames,
+// template<muc::ceta_string... ANames,
 //          internal::SheetRange S,
 //          EquivalentTuple<Tuple<typename std::decay_t<S>::Model::template ValueOf<ANames>...>> ATuple = Tuple<typename std::decay_t<S>::Model::template ValueOf<ANames>...>,
 //          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P = TuplifyIdentity>
@@ -252,7 +252,7 @@ auto NoneOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 
 // std::ranges::count_if
 
-template<CETAString AName,
+template<muc::ceta_string AName,
          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
          internal::InvocableByName<I, AName> P = std::identity,
          std::predicate<internal::InvokeByNameResult<P, I, AName>> F>
@@ -263,7 +263,7 @@ auto CountIf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
                                                          std::forward<P>(Proj));
 }
 
-template<CETAString... ANames,
+template<muc::ceta_string... ANames,
          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
          internal::InvocableByName<I, ANames...> P = TuplifyIdentity,
          stdx::predicate_applicable<internal::InvokeByNameResult<P, I, ANames...>> F>
@@ -275,7 +275,7 @@ auto CountIf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
                                                              std::forward<P>(Proj));
 }
 
-template<CETAString AName,
+template<muc::ceta_string AName,
          internal::SheetRange S,
          std::invocable<typename std::decay_t<S>::Model::template ValueOf<AName>::Type> P = std::identity,
          std::predicate<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<AName>::Type>> F>
@@ -286,7 +286,7 @@ auto CountIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
                           std::forward<P>(Proj));
 }
 
-template<CETAString... ANames,
+template<muc::ceta_string... ANames,
          internal::SheetRange S,
          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P = TuplifyIdentity,
          stdx::predicate_applicable<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
@@ -300,7 +300,7 @@ auto CountIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 
 // // std::ranges::mismatch
 
-// template<CETAString AName,
+// template<muc::ceta_string AName,
 //          SheetIterator I, SheetSentinelFor<I> S,
 //          std::ranges::input_range R = std::initializer_list<typename I::Model::template ValueOf<AName>::Type>,
 //          std::invocable<typename I::Model::template ValueOf<AName>::Type> P1 = std::identity,
@@ -315,7 +315,7 @@ auto CountIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 //                                      std::forward<P2>(Proj2));
 // }
 
-// template<CETAString... ANames,
+// template<muc::ceta_string... ANames,
 //          SheetIterator I, SheetSentinelFor<I> S,
 //          std::ranges::input_range R = std::initializer_list<Tuple<typename I::Model::template ValueOf<ANames>...>>,
 //          typename F = std::equal_to<>,
@@ -334,7 +334,7 @@ auto CountIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 //                                          std::forward<P2>(Proj2));
 // }
 
-// template<CETAString AName,
+// template<muc::ceta_string AName,
 //          internal::SheetRange S,
 //          std::ranges::input_range R = std::initializer_list<typename std::decay_t<S>::Model::template ValueOf<AName>::Type>,
 //          std::invocable<typename std::decay_t<S>::Model::template ValueOf<AName>::Type> P1 = std::identity,
@@ -349,7 +349,7 @@ auto CountIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 //                            std::forward<P2>(Proj2));
 // }
 
-// template<CETAString... ANames,
+// template<muc::ceta_string... ANames,
 //          internal::SheetRange S,
 //          std::ranges::input_range R = std::initializer_list<Tuple<typename std::decay_t<S>::Model::template ValueOf<ANames>...>>,
 //          typename F = std::equal_to<>,
@@ -370,7 +370,7 @@ auto CountIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 
 // // std::ranges::find
 
-// template<CETAString AName,
+// template<muc::ceta_string AName,
 //          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
 //          std::invocable<typename I::Model::template ValueOf<AName>::Type> P = std::identity>
 // auto Find(I first, S last, const typename I::Model::template ValueOf<AName>::Type& value, P&& Proj = {}) -> decltype(auto) {
@@ -380,7 +380,7 @@ auto CountIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 //                                       std::forward<P>(Proj));
 // }
 
-// template<CETAString... ANames,
+// template<muc::ceta_string... ANames,
 //          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
 //          EquivalentTuple<Tuple<typename I::Model::template ValueOf<ANames>...>> ATuple = Tuple<typename I::Model::template ValueOf<ANames>...>,
 //          std::invocable<typename I::Model::template ValueOf<ANames>...> P = TuplifyIdentity>
@@ -391,7 +391,7 @@ auto CountIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 //                                           std::forward<P>(Proj));
 // }
 
-// template<CETAString AName,
+// template<muc::ceta_string AName,
 //          internal::SheetRange S,
 //          std::invocable<typename std::decay_t<S>::Model::template ValueOf<AName>::Type> P = std::identity>
 // auto Find(S&& sheet, const typename std::decay_t<S>::Model::template ValueOf<AName>::Type& value, P&& Proj = {}) -> decltype(auto) {
@@ -401,7 +401,7 @@ auto CountIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 //                        std::forward<P>(Proj));
 // }
 
-// template<CETAString... ANames,
+// template<muc::ceta_string... ANames,
 //          internal::SheetRange S,
 //          EquivalentTuple<Tuple<typename std::decay_t<S>::Model::template ValueOf<ANames>...>> ATuple = Tuple<typename std::decay_t<S>::Model::template ValueOf<ANames>...>,
 //          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P = TuplifyIdentity>
@@ -414,7 +414,7 @@ auto CountIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 
 // std::ranges::find_if
 
-template<CETAString AName,
+template<muc::ceta_string AName,
          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
          internal::InvocableByName<I, AName> P = std::identity,
          std::predicate<internal::InvokeByNameResult<P, I, AName>> F>
@@ -425,7 +425,7 @@ auto FindIf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
                                                          std::forward<P>(Proj));
 }
 
-template<CETAString... ANames,
+template<muc::ceta_string... ANames,
          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
          internal::InvocableByName<I, ANames...> P = TuplifyIdentity,
          stdx::predicate_applicable<internal::InvokeByNameResult<P, I, ANames...>> F>
@@ -437,7 +437,7 @@ auto FindIf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
                                                              std::forward<P>(Proj));
 }
 
-template<CETAString AName,
+template<muc::ceta_string AName,
          internal::SheetRange S,
          std::invocable<typename std::decay_t<S>::Model::template ValueOf<AName>::Type> P = std::identity,
          std::predicate<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<AName>::Type>> F>
@@ -448,7 +448,7 @@ auto FindIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
                          std::forward<P>(Proj));
 }
 
-template<CETAString... ANames,
+template<muc::ceta_string... ANames,
          internal::SheetRange S,
          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P = TuplifyIdentity,
          stdx::predicate_applicable<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
@@ -462,7 +462,7 @@ auto FindIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 
 // std::ranges::find_if_not
 
-template<CETAString AName,
+template<muc::ceta_string AName,
          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
          internal::InvocableByName<I, AName> P = std::identity,
          std::predicate<internal::InvokeByNameResult<P, I, AName>> F>
@@ -473,7 +473,7 @@ auto FindIfNot(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
                                                          std::forward<P>(Proj));
 }
 
-template<CETAString... ANames,
+template<muc::ceta_string... ANames,
          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
          internal::InvocableByName<I, ANames...> P = TuplifyIdentity,
          stdx::predicate_applicable<internal::InvokeByNameResult<P, I, ANames...>> F>
@@ -485,7 +485,7 @@ auto FindIfNot(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
                                                              std::forward<P>(Proj));
 }
 
-template<CETAString AName,
+template<muc::ceta_string AName,
          internal::SheetRange S,
          std::invocable<typename std::decay_t<S>::Model::template ValueOf<AName>::Type> P = std::identity,
          std::predicate<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<AName>::Type>> F>
@@ -496,7 +496,7 @@ auto FindIfNot(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
                             std::forward<P>(Proj));
 }
 
-template<CETAString... ANames,
+template<muc::ceta_string... ANames,
          internal::SheetRange S,
          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P = TuplifyIdentity,
          stdx::predicate_applicable<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
@@ -510,7 +510,7 @@ auto FindIfNot(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 
 // // std::ranges::find_end
 
-// template<CETAString AName,
+// template<muc::ceta_string AName,
 //          std::ranges::input_range R = std::initializer_list<typename I::Model::template ValueOf<AName>::Type>,
 //          std::invocable<typename I::Model::template ValueOf<AName>::Type> P1 = std::identity,
 //          std::invocable<std::ranges::range_value_t<R>> P2 = std::identity,
@@ -518,7 +518,7 @@ auto FindIfNot(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 // auto FindEnd(R&& r, F&& Pred = {}, P1&& Proj1 = {}, P2&& Proj2 = {}) -> decltype(auto) {
 //     return internal::FindEndFirstOf<AName>(std::ranges::mismatch, std::forward<R>(r), std::forward<F>(Pred), std::forward<P1>(Proj1), std::forward<P2>(Proj2));
 // }
-// template<CETAString... ANames,
+// template<muc::ceta_string... ANames,
 //          std::ranges::input_range R = std::initializer_list<Tuple<typename I::Model::template ValueOf<ANames>...>>,
 //          typename F = std::equal_to<>,
 //          std::invocable<typename I::Model::template ValueOf<ANames>...> P1 = TuplifyIdentity,
@@ -534,7 +534,7 @@ auto FindIfNot(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 
 // // std::ranges::find_first_of
 
-// template<CETAString AName,
+// template<muc::ceta_string AName,
 //          std::ranges::input_range R = std::initializer_list<typename I::Model::template ValueOf<AName>::Type>,
 //          std::invocable<typename I::Model::template ValueOf<AName>::Type> P1 = std::identity,
 //          std::invocable<std::ranges::range_value_t<R>> P2 = std::identity,
@@ -542,7 +542,7 @@ auto FindIfNot(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 // auto FindFirstOf(R&& r, F&& Pred = {}, P1&& Proj1 = {}, P2&& Proj2 = {}) -> decltype(auto) {
 //     return internal::FindEndFirstOf<AName>(std::ranges::mismatch, std::forward<R>(r), std::forward<F>(Pred), std::forward<P1>(Proj1), std::forward<P2>(Proj2));
 // }
-// template<CETAString... ANames,
+// template<muc::ceta_string... ANames,
 //          std::ranges::input_range R = std::initializer_list<Tuple<typename I::Model::template ValueOf<ANames>...>>,
 //          typename F = std::equal_to<>,
 //          std::invocable<typename I::Model::template ValueOf<ANames>...> P1 = TuplifyIdentity,

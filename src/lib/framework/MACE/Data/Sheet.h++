@@ -9,11 +9,12 @@
 #include "MACE/Extension/stdx/apply.h++"
 #include "MACE/Extension/stdx/to_signed.h++"
 #include "MACE/Math/Statistic.h++"
-#include "MACE/Utility/CETAString.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
 
 #include "TBranch.h"
 #include "TChain.h"
+
+#include "muc/ceta_string"
 
 #include "gsl/gsl"
 
@@ -65,13 +66,13 @@ public:
     auto Empty() const { return Size() == 0; }
     auto DataEmpty() const -> auto { return DataSize() == 0; }
 
-    template<CETAString... ANames>
+    template<muc::ceta_string... ANames>
     auto DoWith(std::invocable auto&& F) const -> decltype(auto);
-    template<CETAString... ANames>
+    template<muc::ceta_string... ANames>
     auto DoWithout(std::invocable auto&& F) const -> decltype(auto);
 
 public:
-    template<CETAString ANames>
+    template<muc::ceta_string ANames>
     auto Statistic() const -> decltype(auto) {}
 
     auto begin() noexcept -> auto { return iterator{fEntry.begin(), this}; }
@@ -94,11 +95,11 @@ private:
 
         auto Size() const noexcept -> auto { return fSize; }
 
-        template<CETAString AName>
+        template<muc::ceta_string AName>
         auto Status() const noexcept -> const auto& { return std::get<TupleModel<Ts...>::template Index<AName>()>(fStatus); }
         auto Status() const noexcept -> const auto& { return fStatus; }
 
-        template<CETAString AName>
+        template<muc::ceta_string AName>
         auto Status(bool s) -> void;
         auto Status(const std::array<bool, EntrySize()>& s) -> void;
         auto Status(bool s) -> void;
@@ -130,7 +131,7 @@ private:
         /// @exception If (any of) specified value(s) is/are disabled, this call will raise a std::logic_error.
         /// @tparam ...ANames Value name(s).
         /// @return The value or a data tuple of specified values.
-        template<CETAString... ANames>
+        template<muc::ceta_string... ANames>
         auto Get() const -> auto;
         /// @brief Get the data tuple of this entry.
         /// @note If only one (or some of) value(s) are required, it is recommended to get specific value(s) instead of get the whole data tuple,
@@ -192,7 +193,7 @@ private:
         S* fSheet;
     };
 
-    // template<CETAString... ANames>
+    // template<muc::ceta_string... ANames>
     // class [[nodiscard]] Statistic : public Math::Statistic<(... +
     //                                                         ([] {
     //                                                             using ValueType = typename ValueOf<ANames>::Type;

@@ -1,7 +1,7 @@
 namespace MACE::Data::internal {
 
 template<typename ADerived, internal::UniqueStdTuple AStdTuple>
-template<CETAString AName, gsl::index I>
+template<muc::ceta_string AName, gsl::index I>
 consteval auto ModelBase<ADerived, AStdTuple>::IndexImpl() -> gsl::index {
     if constexpr (I == Size()) {
         static_assert(I < Size(), "no such value of this name within this data model");

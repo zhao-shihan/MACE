@@ -1,10 +1,11 @@
 #pragma once
 
 #include "MACE/Data/internal/TypeTraits.h++"
-#include "MACE/Utility/CETAString.h++"
 #include "MACE/Utility/NonConstructibleBase.h++"
 #include "MACE/Utility/VectorAssign.h++"
 #include "MACE/Utility/VectorCast.h++"
+
+#include "muc/ceta_string"
 
 #include "gsl/gsl"
 
@@ -34,7 +35,7 @@ concept ValueAcceptable =
         return std::is_class_v<T>;
     }();
 
-template<ValueAcceptable T, CETAString AName, CETAString ADescription = nullptr>
+template<ValueAcceptable T, muc::ceta_string AName, muc::ceta_string ADescription = nullptr>
 class [[nodiscard]] Value final {
 public:
     using Type = T;
@@ -87,9 +88,9 @@ public:
         requires requires(const T fObject) { std::move(fObject)[std::forward<decltype(i)>(i)]; }
     { return std::move(fObject)[std::forward<decltype(i)>(i)]; }
 
-    template<ValueAcceptable U, CETAString N, CETAString D>
+    template<ValueAcceptable U, muc::ceta_string N, muc::ceta_string D>
     constexpr auto operator==(const Value<U, N, D>& that) const -> auto { return **this == *that; }
-    template<ValueAcceptable U, CETAString N, CETAString D>
+    template<ValueAcceptable U, muc::ceta_string N, muc::ceta_string D>
     constexpr auto operator<=>(const Value<U, N, D>& that) const -> auto { return **this <=> *that; }
 
     static constexpr auto Name() { return AName; }
@@ -105,7 +106,7 @@ template<typename>
 struct IsValue
     : std::false_type {};
 
-template<ValueAcceptable T, CETAString AName, CETAString ADescription>
+template<ValueAcceptable T, muc::ceta_string AName, muc::ceta_string ADescription>
 struct IsValue<Value<T, AName, ADescription>>
     : std::true_type {};
 

@@ -1,6 +1,6 @@
 namespace MACE::inline Extension::Geant4X {
 
-template<std::derived_from<G4VDecayChannel> AMuonDecayChannel, CETAString AName>
+template<std::derived_from<G4VDecayChannel> AMuonDecayChannel, muc::ceta_string AName>
 WrapAsMuoniumDecayChannel<AMuonDecayChannel, AName>::WrapAsMuoniumDecayChannel(const G4String& parentName, G4double br, G4int verbose) :
     AMuonDecayChannel{parentName == "muonium" ? "mu+" : "mu-", br},
     fAtomicShellProductIndex{this->numberOfDaughters} {
@@ -19,7 +19,7 @@ WrapAsMuoniumDecayChannel<AMuonDecayChannel, AName>::WrapAsMuoniumDecayChannel(c
         throw std::invalid_argument{fmt::format("WrapAsMuoniumDecayChannel: parent particle is not muonium or anti_muonium but {}", parentName)};
     }
     // set muonium decay info
-    this->kinematics_name = AName.StringView();
+    this->kinematics_name = AName.sv();
     this->SetParent(parentName);
     this->SetBR(br);
     this->SetNumberOfDaughters(daughter.size());
@@ -28,7 +28,7 @@ WrapAsMuoniumDecayChannel<AMuonDecayChannel, AName>::WrapAsMuoniumDecayChannel(c
     }
 }
 
-template<std::derived_from<G4VDecayChannel> AMuonDecayChannel, CETAString AName>
+template<std::derived_from<G4VDecayChannel> AMuonDecayChannel, muc::ceta_string AName>
 auto WrapAsMuoniumDecayChannel<AMuonDecayChannel, AName>::DecayIt(G4double) -> G4DecayProducts* {
     using namespace LiteralUnit::MathConstantSuffix;
     using namespace PhysicalConstant;

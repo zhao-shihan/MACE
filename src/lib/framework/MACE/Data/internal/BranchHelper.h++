@@ -5,9 +5,10 @@
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Data/internal/TypeTraits.h++"
 #include "MACE/Extension/gslx/index_sequence.h++"
-#include "MACE/Utility/CETAString.h++"
 
 #include "TTree.h"
+
+#include "muc/ceta_string"
 
 #include "gsl/gsl"
 
@@ -23,11 +24,11 @@ class BranchHelper {
 public:
     BranchHelper(ATuple& tuple);
 
-    template<CETAString AName>
+    template<muc::ceta_string AName>
     auto CreateBranch(std::derived_from<TTree> auto& tree) -> TBranch*;
-    template<CETAString AName>
+    template<muc::ceta_string AName>
     auto ConnectBranch(std::derived_from<TTree> auto& tree) -> std::pair<int, TBranch*>;
-    template<CETAString AName>
+    template<muc::ceta_string AName>
     auto ConnectBranchNoCheck(std::derived_from<TTree> auto& tree) -> TBranch*;
 
 private:

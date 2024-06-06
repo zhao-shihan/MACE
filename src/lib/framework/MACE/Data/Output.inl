@@ -22,8 +22,8 @@ Output<Ts...>::Output(const std::string& name, const std::string& title) :
              using TheValue = std::tuple_element_t<I, Tuple<Ts...>>;
              const auto branch{fBranchHelper.template CreateBranch<TheValue::Name()>(*fTree)};
              branch->SetAutoDelete(false);
-             if constexpr (TheValue::Description().HasValue()) {
-                 const auto title{fmt::format("({}) {}", branch->GetLeaf(TheValue::Name())->GetTypeName(), TheValue::Description().StringView())};
+             if constexpr (TheValue::Description().has_value()) {
+                 const auto title{fmt::format("({}) {}", branch->GetLeaf(TheValue::Name())->GetTypeName(), TheValue::Description().sv())};
                  branch->SetTitle(title.c_str());
              }
          }(std::integral_constant<gsl::index, Is>{}));

@@ -6,7 +6,7 @@ BranchHelper<ATuple>::BranchHelper(ATuple& tuple) :
     fClassPointer{} {}
 
 template<Concept::InstantiatedFrom<Tuple> ATuple>
-template<CETAString AName>
+template<muc::ceta_string AName>
 auto BranchHelper<ATuple>::CreateBranch(std::derived_from<TTree> auto& tree) -> TBranch* {
     using ObjectType = typename ATuple::Model::template ValueOf<AName>::Type;
     ObjectType& object{*Get<AName>(*fTuple)};
@@ -21,7 +21,7 @@ auto BranchHelper<ATuple>::CreateBranch(std::derived_from<TTree> auto& tree) -> 
 }
 
 template<Concept::InstantiatedFrom<Tuple> ATuple>
-template<CETAString AName>
+template<muc::ceta_string AName>
 auto BranchHelper<ATuple>::ConnectBranch(std::derived_from<TTree> auto& tree) -> std::pair<int, TBranch*> {
     using ObjectType = typename ATuple::Model::template ValueOf<AName>::Type;
     ObjectType& object{*Get<AName>(*fTuple)};
@@ -39,7 +39,7 @@ auto BranchHelper<ATuple>::ConnectBranch(std::derived_from<TTree> auto& tree) ->
 }
 
 template<Concept::InstantiatedFrom<Tuple> ATuple>
-template<CETAString AName>
+template<muc::ceta_string AName>
 auto BranchHelper<ATuple>::ConnectBranchNoCheck(std::derived_from<TTree> auto& tree) -> TBranch* {
     using ObjectType = typename ATuple::Model::template ValueOf<AName>::Type;
     ObjectType& object{*Get<AName>(*fTuple)};

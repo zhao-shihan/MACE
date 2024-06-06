@@ -5,7 +5,6 @@
 #include "MACE/Math/FindRoot.h++"
 #include "MACE/Math/IntegerPower.h++"
 #include "MACE/Math/QinAlgorithm.h++"
-#include "MACE/Utility/CETAString.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
 
@@ -15,6 +14,8 @@
 #include "G4String.hh"
 #include "G4VDecayChannel.hh"
 #include "Randomize.hh"
+
+#include "muc/ceta_string"
 
 #include "gsl/gsl"
 
@@ -28,7 +29,7 @@
 
 namespace MACE::inline Extension::Geant4X {
 
-template<std::derived_from<G4VDecayChannel> AMuonDecayChannel, CETAString AName>
+template<std::derived_from<G4VDecayChannel> AMuonDecayChannel, muc::ceta_string AName>
 class WrapAsMuoniumDecayChannel : public AMuonDecayChannel {
 public:
     WrapAsMuoniumDecayChannel(const G4String& parentName, G4double br, G4int verbose = 1);

@@ -1,46 +1,46 @@
 namespace MACE::Data {
 
-template<ValueAcceptable T, CETAString AName, CETAString ADescription>
+template<ValueAcceptable T, muc::ceta_string AName, muc::ceta_string ADescription>
 constexpr Value<T, AName, ADescription>::Value(const T& object) :
     fObject{object} {}
 
-template<ValueAcceptable T, CETAString AName, CETAString ADescription>
+template<ValueAcceptable T, muc::ceta_string AName, muc::ceta_string ADescription>
 constexpr Value<T, AName, ADescription>::Value(T&& object) noexcept :
     fObject{std::move_if_noexcept(object)} {}
 
-// template<ValueAcceptable T, CETAString AName, CETAString ADescription>
+// template<ValueAcceptable T, muc::ceta_string AName, muc::ceta_string ADescription>
 // template<typename SF>
 //     requires std::same_as<SF, typename Value<typename SF::Type>::template Tuple<SF::AModel>> and
 //              std::constructible_from<T, const typename SF::Type&>
 // constexpr Value<T, AName, ADescription>::Value(const SF& that) :
 //     fObject{that} {}
 
-// template<ValueAcceptable T, CETAString AName, CETAString ADescription>
+// template<ValueAcceptable T, muc::ceta_string AName, muc::ceta_string ADescription>
 // template<typename SF>
 //     requires std::same_as<SF, typename Value<typename SF::Type>::template Tuple<SF::AModel>> and
 //              std::constructible_from<T, const typename SF::Type&>
 // constexpr Value<T, AName, ADescription>::Value(SF&& that) :
 //     fObject{std::move(that)} {}
 
-// template<ValueAcceptable T, CETAString AName, CETAString ADescription>
+// template<ValueAcceptable T, muc::ceta_string AName, muc::ceta_string ADescription>
 // constexpr Value<T, AName, ADescription>::Value(auto&& v) // clang-format off
 //     requires requires { VectorCast<T>(std::forward<decltype(v)>(v)); } : // clang-format on
 //     fObject{VectorCast<T>(std::forward<decltype(v)>(v))} {}
 
-template<ValueAcceptable T, CETAString AName, CETAString ADescription>
+template<ValueAcceptable T, muc::ceta_string AName, muc::ceta_string ADescription>
 template<typename U>
     requires(std::constructible_from<T, U> and not std::same_as<std::remove_cvref_t<U>, T>)
 constexpr Value<T, AName, ADescription>::Value(U&& object) :
     fObject{static_cast<T>(std::forward<U>(object))} {}
 
-template<ValueAcceptable T, CETAString AName, CETAString ADescription>
+template<ValueAcceptable T, muc::ceta_string AName, muc::ceta_string ADescription>
 template<typename U>
     requires(internal::IsStdArray<T>::value and not std::constructible_from<T, U> and not std::same_as<std::remove_cvref_t<U>, T> and
              requires(U&& object) { VectorCast<T>(std::forward<U>(object)); })
 constexpr Value<T, AName, ADescription>::Value(U&& object) :
     fObject{VectorCast<T>(std::forward<U>(object))} {}
 
-template<ValueAcceptable T, CETAString AName, CETAString ADescription>
+template<ValueAcceptable T, muc::ceta_string AName, muc::ceta_string ADescription>
 template<typename U>
     requires(internal::IsStdArray<T>::value and not std::constructible_from<T, U> and not std::same_as<std::remove_cvref_t<U>, T> and
              requires(T fObject, U&& object) { VectorAssign(fObject, std::forward<U>(object)); })
@@ -49,7 +49,7 @@ constexpr auto Value<T, AName, ADescription>::operator=(U&& object) -> auto& {
     return *this;
 }
 
-template<ValueAcceptable T, CETAString AName, CETAString ADescription>
+template<ValueAcceptable T, muc::ceta_string AName, muc::ceta_string ADescription>
 template<typename U>
 constexpr auto Value<T, AName, ADescription>::As() const& -> std::conditional_t<std::same_as<T, U>, const T&, U> {
     if constexpr (std::same_as<T, U> or std::convertible_to<const T&, U>) {
@@ -65,7 +65,7 @@ constexpr auto Value<T, AName, ADescription>::As() const& -> std::conditional_t<
     }
 }
 
-template<ValueAcceptable T, CETAString AName, CETAString ADescription>
+template<ValueAcceptable T, muc::ceta_string AName, muc::ceta_string ADescription>
 template<typename U>
 constexpr auto Value<T, AName, ADescription>::As() && -> U {
     if constexpr (std::convertible_to<T, U>) {

@@ -1,6 +1,6 @@
 namespace MACE::inline Simulation::inline Messenger {
 
-template<typename ADerived, std::derived_from<G4VUserDetectorConstruction> ADetectorConstruction, CETAString AAppName>
+template<typename ADerived, std::derived_from<G4VUserDetectorConstruction> ADetectorConstruction, muc::ceta_string AAppName>
 DetectorMessenger<ADerived, ADetectorConstruction, AAppName>::DetectorMessenger() :
     Geant4X::SingletonMessenger<ADerived>{},
     fDirectory{},
@@ -28,13 +28,13 @@ DetectorMessenger<ADerived, ADetectorConstruction, AAppName>::DetectorMessenger(
     fIxportDescription->AvailableForStates(G4State_PreInit);
 }
 
-template<typename ADerived, std::derived_from<G4VUserDetectorConstruction> ADetectorConstruction, CETAString AAppName>
+template<typename ADerived, std::derived_from<G4VUserDetectorConstruction> ADetectorConstruction, muc::ceta_string AAppName>
 auto DetectorMessenger<ADerived, ADetectorConstruction, AAppName>::SetNewValue(G4UIcommand* command, G4String value) -> void {
     using DescriptionInUse = ADetectorConstruction::DescriptionInUse;
     using Detector::Description::DescriptionIO;
     const auto annotation{[] {
         if constexpr (AAppName) {
-            return fmt::format("{}: geometry description", AAppName.StringView());
+            return fmt::format("{}: geometry description", AAppName.sv());
         } else {
             return std::string{};
         }

@@ -18,7 +18,7 @@ Sheet<Ts...>::Sheet(const std::string& name, const R& files) :
 }
 
 template<TupleModelizable... Ts>
-template<CETAString... ANames>
+template<muc::ceta_string... ANames>
 auto Sheet<Ts...>::DoWith(std::invocable auto&& F) const -> decltype(auto) {
     const auto originalStatus = fData->Status();
     fData->Status(false);
@@ -31,7 +31,7 @@ auto Sheet<Ts...>::DoWith(std::invocable auto&& F) const -> decltype(auto) {
 }
 
 template<TupleModelizable... Ts>
-template<CETAString... ANames>
+template<muc::ceta_string... ANames>
 auto Sheet<Ts...>::DoWithout(std::invocable auto&& F) const -> decltype(auto) {
     const auto originalStatus = fData->Status();
     fData->Status(true);
@@ -104,7 +104,7 @@ Sheet<Ts...>::Dataset::Dataset(const std::string& name, const R& files) :
 }
 
 template<TupleModelizable... Ts>
-template<CETAString AName>
+template<muc::ceta_string AName>
 auto Sheet<Ts...>::Dataset::Status(bool s) -> void {
     fChain.SetBranchStatus(AName, s);
     std::get<TupleModel<Ts...>::template Index<AName>()>(fStatus) = s;
@@ -153,7 +153,7 @@ Sheet<Ts...>::Entry::Entry(gsl::index index, Dataset& data) :
     fData{&data} {}
 
 template<TupleModelizable... Ts>
-template<CETAString... ANames>
+template<muc::ceta_string... ANames>
 auto Sheet<Ts...>::Entry::Get() const -> auto {
     if ((... or (fData->template Status<ANames>() == false))) {
         throw std::logic_error{"MACE::Data::Sheet<Ts...>::Dataset: "
