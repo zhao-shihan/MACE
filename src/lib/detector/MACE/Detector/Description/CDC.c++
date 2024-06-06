@@ -1,6 +1,4 @@
 #include "MACE/Detector/Description/CDC.h++"
-#include "MACE/Extension/stdx/ranges_numeric.h++"
-#include "MACE/Math/MidPoint.h++"
 #include "MACE/Math/Parity.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
@@ -9,6 +7,8 @@
 #include "G4NistManager.hh"
 
 #include "Eigen/Geometry"
+
+#include "muc/numeric"
 
 #include <algorithm>
 #include <cmath>
@@ -201,16 +201,16 @@ auto CDC::ComputeCellMap() const -> std::vector<CellInformation> {
     const auto rFieldWire{fFieldWireDiameter / 2};
 
     const auto& layerConfig{LayerConfiguration()};
-    cellMap.reserve(stdx::ranges::transform_reduce(layerConfig, 0ull, std::plus{},
-                                                   [this](const auto& super) {
-                                                       return super.nCellPerSenseLayer * fNSenseLayerPerSuper;
-                                                   }));
+    cellMap.reserve(muc::ranges::transform_reduce(layerConfig, 0ull, std::plus{},
+                                                  [this](const auto& super) {
+                                                      return super.nCellPerSenseLayer * fNSenseLayerPerSuper;
+                                                  }));
 
     for (int superLayerID{};
          auto&& super : layerConfig) {
         for (int senseLayerLocalID{};
              auto&& sense : super.sense) {
-            const auto wireRadialPosition{Math::MidPoint(sense.innerRadius, sense.outerRadius) + rFieldWire}; // clang-format off
+            const auto wireRadialPosition{muc::midpoint(sense.innerRadius, sense.outerRadius) + rFieldWire}; // clang-format off
             const Eigen::AngleAxisd stereoRotation{-sense.StereoZenithAngle(wireRadialPosition), Eigen::Vector3d{1, 0, 0}};
             for (int cellLocalID{};
                  auto&& cell : sense.cell) {

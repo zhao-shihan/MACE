@@ -2,11 +2,10 @@
 #include "MACE/Detector/Definition/ShieldingWall.h++"
 #include "MACE/Detector/Description/EMCField.h++"
 #include "MACE/Detector/Description/EMCShield.h++"
+#include "MACE/Detector/Description/MMSShield.h++"
 #include "MACE/Detector/Description/ShieldingWall.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Detector/Description/MMSShield.h++"
 #include "MACE/Detector/Description/World.h++"
-#include "MACE/Math/MidPoint.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/MathConstant.h++"
 #include "MACE/Utility/VectorCast.h++"
@@ -18,6 +17,8 @@
 #include "G4PVPlacement.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4Tubs.hh"
+
+#include "muc/numeric"
 
 namespace MACE::Detector::Definition {
 
@@ -39,7 +40,7 @@ auto ShieldingWall::Construct(G4bool checkOverlaps) -> void {
     const G4ThreeVector mmsShieldCorner{mmsShield.InnerRadius() + mmsShield.Thickness(), 0, mmsShield.InnerLength() / 2 + mmsShield.Thickness()}; // clang-format off
     const auto emcShieldCorner{VectorCast<G4ThreeVector>(emcField.Center()) + 
                                G4ThreeVector{-emcShield.InnerRadius() - emcShield.Thickness(), 0 , -emcShield.InnerLength() / 2 - emcShield.Thickness()}}; // clang-format on
-    const auto wall1Displacement{Math::MidPoint(mmsShieldCorner, emcShieldCorner)};
+    const auto wall1Displacement{muc::midpoint(mmsShieldCorner, emcShieldCorner)};
 
     const auto concrete{G4NistManager::Instance()->FindOrBuildMaterial("G4_CONCRETE")};
 

@@ -1,9 +1,7 @@
 #include "MACE/Compatibility/std23/unreachable.h++"
 #include "MACE/Detector/Description/TTC.h++"
 #include "MACE/Env/Print.h++"
-#include "MACE/Extension/stdx/ranges_numeric.h++"
 #include "MACE/External/gfx/timsort.hpp"
-#include "MACE/Math/MidPoint.h++"
 #include "MACE/Simulation/SD/TTCSD.h++"
 #include "MACE/Simulation/SD/TTCSiPMSD.h++"
 
@@ -20,6 +18,8 @@
 #include "G4TwoVector.hh"
 #include "G4VProcess.hh"
 #include "G4VTouchable.hh"
+
+#include "muc/numeric"
 
 #include <algorithm>
 #include <cassert>
@@ -45,12 +45,12 @@ TTCSD::TTCSD(const G4String& sdName, const TTCSiPMSD* ttcSiPMSD) :
     const auto& ttc{Detector::Description::TTC::Instance()};
     assert(ttc.ScintillationComponent1EnergyBin().size() == ttc.ScintillationComponent1().size());
     std::vector<double> dE(ttc.ScintillationComponent1EnergyBin().size());
-    stdx::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), dE.begin());
+    muc::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), dE.begin());
     std::vector<double> spectrum(ttc.ScintillationComponent1().size());
-    stdx::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), spectrum.begin(), Math::MidPoint<double, double>);
+    muc::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), spectrum.begin(), muc::midpoint<double>);
     const auto integral{std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.)};
     std::vector<double> meanE(ttc.ScintillationComponent1EnergyBin().size());
-    stdx::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), meanE.begin(), Math::MidPoint<double, double>);
+    muc::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), meanE.begin(), muc::midpoint<double>);
     std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
     fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
 
@@ -106,10 +106,10 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
 auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     fHitsCollection->GetVector()->reserve(
-        stdx::ranges::accumulate(fSplitHit, 0,
-                                 [](auto&& count, auto&& cellHit) {
-                                     return count + cellHit.second.size();
-                                 }));
+        muc::ranges::accumulate(fSplitHit, 0,
+                                [](auto&& count, auto&& cellHit) {
+                                    return count + cellHit.second.size();
+                                }));
 
     constexpr auto ByTrackID{
         [](const auto& hit1, const auto& hit2) {

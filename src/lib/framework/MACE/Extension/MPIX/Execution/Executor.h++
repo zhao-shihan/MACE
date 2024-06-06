@@ -5,11 +5,11 @@
 #include "MACE/Env/Print.h++"
 #include "MACE/Extension/MPIX/Execution/DynamicScheduler.h++"
 #include "MACE/Extension/MPIX/Execution/Scheduler.h++"
-#include "MACE/Extension/stdx/ranges_numeric.h++"
 
 #include "mpi.h"
 
 #include "muc/math"
+#include "muc/numeric"
 #include "muc/time"
 
 #include "fmt/chrono.h"

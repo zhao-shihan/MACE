@@ -1,7 +1,5 @@
 #include "MACE/Detector/Definition/CDCCell.h++"
 #include "MACE/Detector/Description/CDC.h++"
-#include "MACE/Math/Lerp.h++"
-#include "MACE/Math/MidPoint.h++"
 #include "MACE/Math/Parity.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
@@ -15,6 +13,7 @@
 #include "G4TwoVector.hh"
 
 #include "muc/math"
+#include "muc/numeric"
 
 #include "fmt/format.h"
 
@@ -152,7 +151,7 @@ auto CDCCell::Construct(G4bool checkOverlaps) -> void {
                 }};
             const auto rInnerWire{sense.innerRadius + rFW};
             const auto rOuterWire{sense.outerRadius + rFW};
-            const auto rCenterWire{Math::MidPoint(rInnerWire, rOuterWire)};
+            const auto rCenterWire{muc::midpoint(rInnerWire, rOuterWire)};
             PlaceFW(0, rInnerWire, -super.cellAzimuthWidth / 2);
             PlaceFW(1, rInnerWire, 0);
             PlaceFW(2, rCenterWire, -super.cellAzimuthWidth / 2);

@@ -34,7 +34,7 @@ auto MuoniumFormation<ATarget>::AtRestDoIt(const G4Track& track, const G4Step&) 
     //  instead of relying on G4 tracking mechanism. See MuoniumTransport process for detail.)
     if (conversion) {
         // use the muonium conversion time spectrum (prop. to t^2*exp(-t/tau))
-        const auto [tStar, converged]{Math::FindRoot::Secant(
+        const auto [tStar, converged]{muc::find_root::secant(
             // CDF - x
             [x = rng.flat()](const auto t) {
                 const auto cdf{1 - std::exp(-t) * Math::QinPolynomial({2, 2, 1}, t) / 2};

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MACE/Env/Print.h++"
-#include "MACE/Extension/stdx/ranges_numeric.h++"
 
 #include "CLHEP/Random/RandFlat.h"
 #include "CLHEP/Random/Random.h"
@@ -11,6 +10,7 @@
 #include "CLHEP/Vector/ThreeVector.h"
 
 #include "muc/math"
+#include "muc/numeric"
 
 #include <algorithm>
 #include <array>

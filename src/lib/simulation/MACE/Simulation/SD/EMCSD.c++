@@ -1,8 +1,6 @@
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Env/Print.h++"
-#include "MACE/Extension/stdx/ranges_numeric.h++"
 #include "MACE/External/gfx/timsort.hpp"
-#include "MACE/Math/MidPoint.h++"
 #include "MACE/Simulation/SD/EMCPMTSD.h++"
 #include "MACE/Simulation/SD/EMCSD.h++"
 
@@ -19,6 +17,8 @@
 #include "G4TwoVector.hh"
 #include "G4VProcess.hh"
 #include "G4VTouchable.hh"
+
+#include "muc/numeric"
 
 #include <algorithm>
 #include <cassert>
@@ -45,12 +45,12 @@ EMCSD::EMCSD(const G4String& sdName, const EMCPMTSD* emcPMTSD) :
     const auto& emc{Detector::Description::EMC::Instance()};
     assert(emc.CsIEnergyBin().size() == emc.CsIScintillationComponent1().size());
     std::vector<double> dE(emc.CsIEnergyBin().size());
-    stdx::ranges::adjacent_difference(emc.CsIEnergyBin(), dE.begin());
+    muc::ranges::adjacent_difference(emc.CsIEnergyBin(), dE.begin());
     std::vector<double> spectrum(emc.CsIScintillationComponent1().size());
-    stdx::ranges::adjacent_difference(emc.CsIEnergyBin(), spectrum.begin(), Math::MidPoint<double, double>);
+    muc::ranges::adjacent_difference(emc.CsIEnergyBin(), spectrum.begin(), muc::midpoint<double>);
     const auto integral{std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.)};
     std::vector<double> meanE(emc.CsIEnergyBin().size());
-    stdx::ranges::adjacent_difference(emc.CsIEnergyBin(), meanE.begin(), Math::MidPoint<double, double>);
+    muc::ranges::adjacent_difference(emc.CsIEnergyBin(), meanE.begin(), muc::midpoint<double>);
     std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
     fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
 
@@ -107,7 +107,7 @@ auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
 auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     fHitsCollection->GetVector()->reserve(
-        stdx::ranges::accumulate(fSplitHit, 0,
+        muc::ranges::accumulate(fSplitHit, 0,
                                  [](auto&& count, auto&& cellHit) {
                                      return count + cellHit.second.size();
                                  }));

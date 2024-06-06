@@ -1,9 +1,7 @@
 #include "MACE/Compatibility/std23/unreachable.h++"
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Env/Print.h++"
-#include "MACE/Extension/stdx/ranges_numeric.h++"
 #include "MACE/External/gfx/timsort.hpp"
-#include "MACE/Math/MidPoint.h++"
 #include "MACE/Simulation/SD/CDCSD.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/VectorArithmeticOperator.h++"
@@ -20,6 +18,8 @@
 #include "G4TwoVector.hh"
 #include "G4VProcess.hh"
 #include "G4VTouchable.hh"
+
+#include "muc/numeric"
 
 #include <cassert>
 #include <cmath>
@@ -68,7 +68,7 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto& preStepPoint{*step.GetPreStepPoint()};
     const auto& postStepPoint{*step.GetPostStepPoint()};
     const auto& touchable{*preStepPoint.GetTouchable()};
-    const auto position{Math::MidPoint(preStepPoint.GetPosition(), postStepPoint.GetPosition())};
+    const auto position{muc::midpoint(preStepPoint.GetPosition(), postStepPoint.GetPosition())};
     // retrive wire position
     const auto cellID{touchable.GetReplicaNumber(1)};
     const auto& cellInfo{fCellMap->at(cellID)};
@@ -76,10 +76,10 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto xWire{VectorCast<G4TwoVector>(cellInfo.position)};
     const auto tWire{VectorCast<G4ThreeVector>(cellInfo.direction)};
     // calculate drift distance
-    const auto commonNormal{tWire.cross(Math::MidPoint(preStepPoint.GetMomentum(), postStepPoint.GetMomentum()))};
+    const auto commonNormal{tWire.cross(muc::midpoint(preStepPoint.GetMomentum(), postStepPoint.GetMomentum()))};
     const auto driftDistance{std::abs((position - xWire).dot(commonNormal)) / commonNormal.mag()};
     const auto driftTime{driftDistance / fMeanDriftVelocity};
-    const auto hitTime{Math::MidPoint(preStepPoint.GetGlobalTime(), postStepPoint.GetGlobalTime())};
+    const auto hitTime{muc::midpoint(preStepPoint.GetGlobalTime(), postStepPoint.GetGlobalTime())};
     const auto signalTime{hitTime + driftTime};
     // vertex Ek and p
     const auto vertexEk{track.GetVertexKineticEnergy()};
@@ -112,7 +112,7 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
 auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     fHitsCollection->GetVector()->reserve(
-        stdx::ranges::accumulate(fSplitHit, 0,
+        muc::ranges::accumulate(fSplitHit, 0,
                                  [](auto&& count, auto&& cellHit) {
                                      return count + cellHit.second.size();
                                  }));

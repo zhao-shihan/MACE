@@ -35,7 +35,7 @@ auto WrapAsMuoniumDecayChannel<AMuonDecayChannel, AName>::DecayIt(G4double) -> G
 
     Env::PrintLn<'V'>("WrapAsMuoniumDecayChannel::DecayIt");
 
-    const auto [pStar, converged]{Math::FindRoot::Secant(
+    const auto [pStar, converged]{muc::find_root::secant(
         // CDF - x
         [x = G4UniformRand()](auto p) {
             const auto cdf{(2 / 3_pi) * (Math::QinPolynomial({0, -3, 0, 8, 0, 3}, p) / muc::pow<3>(p * p + 1) +

@@ -199,7 +199,7 @@ auto Executor<T>::PostLoopReport() const -> void {
     if (not mpiEnv.OnCommWorldMaster()) { return; }
     const auto now{scsc::now()};
     const auto maxWallTime{*std::ranges::max_element(fExecutionWallTimeOfAllProcessKeptByMaster)};
-    const auto totalCpuTime{stdx::ranges::reduce(fExecutionCPUTimeOfAllProcessKeptByMaster)};
+    const auto totalCpuTime{muc::ranges::reduce(fExecutionCPUTimeOfAllProcessKeptByMaster)};
     Env::Print("+-----------------------------------> End <-----------------------------------+\n"
                "| {:75} |\n"
                "| {:75} |\n"

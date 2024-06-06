@@ -1,8 +1,8 @@
-#include "MACE/Compatibility/std23/ranges_iota.h++"
 #include "MACE/Math/Random/Generator/MT1993732.h++"
 
 #include "Eigen/Core"
 
+#include "muc/numeric"
 #include "muc/time"
 
 #include <algorithm>
@@ -36,14 +36,14 @@ int main() {
     std::cout << "Shuffle a std::array<double, 16> 1 million times:" << std::endl;
     std::array<double, 16> arr16;
 
-    std23::ranges::iota(arr16, 0);
+    muc::ranges::iota(arr16, 0);
     for (int i = 0; i < 100'000; ++i) { std::ranges::shuffle(arr16, stdMT1993732); }
     stopWatch = {};
     for (int i = 0; i < 1'000'000; ++i) { std::ranges::shuffle(arr16, stdMT1993732); }
     time = stopWatch.ms_elapsed();
     std::cout << "       std::mt19937 : " << time << " ms (first element: " << arr16.front() << ')' << std::endl;
 
-    std23::ranges::iota(arr16, 0);
+    muc::ranges::iota(arr16, 0);
     for (int i = 0; i < 100'000; ++i) { std::ranges::shuffle(arr16, mt1993732); }
     stopWatch = {};
     for (int i = 0; i < 1'000'000; ++i) { std::ranges::shuffle(arr16, mt1993732); }
@@ -53,14 +53,14 @@ int main() {
     std::cout << "Shuffle a std::array<double, 4096> 10k times:" << std::endl;
     std::array<double, 4096> arr4096;
 
-    std23::ranges::iota(arr4096, 0);
+    muc::ranges::iota(arr4096, 0);
     for (int i = 0; i < 1'000; ++i) { std::ranges::shuffle(arr4096, stdMT1993732); }
     stopWatch = {};
     for (int i = 0; i < 10'000; ++i) { std::ranges::shuffle(arr4096, stdMT1993732); }
     time = stopWatch.ms_elapsed();
     std::cout << "       std::mt19937 : " << time << " ms (first element: " << arr4096.front() << ')' << std::endl;
 
-    std23::ranges::iota(arr4096, 0);
+    muc::ranges::iota(arr4096, 0);
     for (int i = 0; i < 1'000; ++i) { std::ranges::shuffle(arr4096, mt1993732); }
     stopWatch = {};
     for (int i = 0; i < 10'000; ++i) { std::ranges::shuffle(arr4096, mt1993732); }
