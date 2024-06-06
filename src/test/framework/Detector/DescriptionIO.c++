@@ -9,7 +9,6 @@
 
 using namespace MACE::Detector;
 using namespace MACE::Env;
-using namespace MACE::Compatibility;
 
 int main(int argc, char* argv[]) {
     BasicEnv environment(argc, argv, {});
