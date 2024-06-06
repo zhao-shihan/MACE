@@ -8,10 +8,10 @@
 #include "MACE/Extension/MPIX/Execution/Scheduler.h++"
 #include "MACE/Extension/stdx/boolean_testable.h++"
 #include "MACE/Extension/stdx/ranges_numeric.h++"
-#include "MACE/Utility/CPUTimeStopwatch.h++"
-#include "MACE/Utility/WallTimeStopwatch.h++"
 
 #include "mpi.h"
+
+#include "muc/time"
 
 #include "fmt/chrono.h"
 #include "fmt/format.h"
@@ -85,8 +85,8 @@ private:
     std::string fTaskName;
 
     scsc::time_point fExecutionBeginSystemTime;
-    WallTimeStopwatch<double> fWallTimeStopwatch;
-    CPUTimeStopwatch<double> fCPUTimeStopwatch;
+    muc::wall_time_stopwatch<> fWallTimeStopwatch;
+    muc::cpu_time_stopwatch<> fCPUTimeStopwatch;
     double fExecutionWallTime;
     double fExecutionCPUTime;
 

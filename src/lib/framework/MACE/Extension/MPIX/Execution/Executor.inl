@@ -71,8 +71,8 @@ auto Executor<T>::Execute(typename Scheduler<T>::Task task, std::invocable<T> au
         PostTaskReport(taskID);
     }
     // finalize
-    fExecutionWallTime = fWallTimeStopwatch.SecondsElapsed();
-    fExecutionCPUTime = fCPUTimeStopwatch.SecondsUsed();
+    fExecutionWallTime = fWallTimeStopwatch.s_elapsed();
+    fExecutionCPUTime = fCPUTimeStopwatch.s_used();
     struct GatheringDataType {
         T nLocalExecutedTask;
         double wallTime;
@@ -165,7 +165,7 @@ template<std::integral T>
 auto Executor<T>::PostTaskReport(T iEnded) const -> void {
     if (not fPrintProgress or fPrintProgressModulo < 0) { return; }
     const auto [goodForEstmation, nExecutedTask]{fScheduler->NExecutedTask()};
-    const auto secondsElapsed{fWallTimeStopwatch.SecondsElapsed()};
+    const auto secondsElapsed{fWallTimeStopwatch.s_elapsed()};
     const auto speed{nExecutedTask / secondsElapsed};
     if (fPrintProgressModulo == 0) {
         // adaptive mode, print every ~3s

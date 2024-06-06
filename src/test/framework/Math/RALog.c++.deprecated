@@ -1,7 +1,8 @@
 #include "MACE/Math/RALog.h++"
 #include "MACE/Math/Random/Distribution/Uniform.h++"
 #include "MACE/Math/Random/Generator/Xoshiro256Plus.h++"
-#include "MACE/Utility/CPUTimeStopwatch.h++"
+
+#include "muc/time"
 
 #include <algorithm>
 #include <cmath>

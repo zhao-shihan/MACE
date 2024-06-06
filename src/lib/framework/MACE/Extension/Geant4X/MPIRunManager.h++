@@ -3,9 +3,7 @@
 #include "MACE/Extension/Geant4X/MPIRunMessenger.h++"
 #include "MACE/Extension/MPIX/Execution/Executor.h++"
 #include "MACE/Math/Statistic.h++"
-#include "MACE/Utility/CPUTimeStopwatch.h++"
 #include "MACE/Utility/NonMoveableBase.h++"
-#include "MACE/Utility/WallTimeStopwatch.h++"
 
 #include "G4RunManager.hh"
 
