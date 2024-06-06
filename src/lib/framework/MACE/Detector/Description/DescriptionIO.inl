@@ -27,7 +27,7 @@ constexpr void StaticForEach(auto&&... args) {
 } // namespace
 } // namespace internal
 
-template<stdx::tuple_like T>
+template<muc::tuple_like T>
 auto DescriptionIO::Import(const std::filesystem::path& yamlFile) -> void {
     std::array<DescriptionBase<>*, std::tuple_size_v<T>> descriptions;
     internal::StaticForEach<0, descriptions.size(),
@@ -35,7 +35,7 @@ auto DescriptionIO::Import(const std::filesystem::path& yamlFile) -> void {
     ImportImpl(yamlFile, descriptions);
 }
 
-template<stdx::tuple_like T>
+template<muc::tuple_like T>
 auto DescriptionIO::Export(const std::filesystem::path& yamlFile, const std::string& fileComment) -> void {
     std::array<DescriptionBase<>*, std::tuple_size_v<T>> descriptions;
     internal::StaticForEach<0, descriptions.size(),
@@ -43,7 +43,7 @@ auto DescriptionIO::Export(const std::filesystem::path& yamlFile, const std::str
     ExportImpl(yamlFile, fileComment, descriptions);
 }
 
-template<stdx::tuple_like T>
+template<muc::tuple_like T>
 auto DescriptionIO::Ixport(const std::filesystem::path& yamlFile, const std::string& fileComment) -> void {
     std::array<DescriptionBase<>*, std::tuple_size_v<T>> descriptions;
     internal::StaticForEach<0, descriptions.size(),

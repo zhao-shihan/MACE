@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MACE/Concept/InstantiatedFrom.h++"
 #include "MACE/Data/Value.h++"
 #include "MACE/Extension/gslx/index_sequence.h++"
-#include "MACE/Extension/stdx/tuple_concat.h++"
 #include "MACE/Utility/NonConstructibleBase.h++"
 
 #include "muc/ceta_string"
+#include "muc/concepts"
+#include "muc/tuple"
 
 #include "gsl/gsl"
 
@@ -28,7 +28,7 @@ namespace internal {
 template<typename T>
 concept UniqueStdTuple =
     requires {
-        requires Concept::InstantiatedFrom<T, std::tuple>;
+        requires muc::instantiated_from<T, std::tuple>;
         requires([]<gsl::index... Is>(gslx::index_sequence<Is...>) {
             return (... and ([]<gsl::index... Js, gsl::index I>(gslx::index_sequence<Js...>, std::integral_constant<gsl::index, I>) {
                         return (... and static_cast<bool>((I != Js) xor (std::tuple_element_t<I, T>::Name() == std::tuple_element_t<Js, T>::Name())));
@@ -69,19 +69,19 @@ struct TupleModel final
 template<std::derived_from<internal::ModelSignature> AModel, TupleModelizable... AOthers>
 struct TupleModel<AModel, AOthers...> final
     : internal::ModelBase<TupleModel<AModel, AOthers...>,
-                          stdx::tuple_concat_t<typename AModel::StdTuple,
+                          muc::tuple_concat_t<typename AModel::StdTuple,
                                                typename TupleModel<AOthers...>::StdTuple>> {};
 
 template<ValueAcceptable T, muc::ceta_string AName, muc::ceta_string ADescription, TupleModelizable... AOthers>
 struct TupleModel<Value<T, AName, ADescription>, AOthers...> final
     : internal::ModelBase<TupleModel<Value<T, AName, ADescription>, AOthers...>,
-                          stdx::tuple_concat_t<std::tuple<Value<T, AName, ADescription>>,
+                          muc::tuple_concat_t<std::tuple<Value<T, AName, ADescription>>,
                                                typename TupleModel<AOthers...>::StdTuple>> {};
 
 template<typename M1, typename M2>
 concept SubTupleModel = requires {
-    requires Concept::InstantiatedFrom<M1, TupleModel>;
-    requires Concept::InstantiatedFrom<M2, TupleModel>;
+    requires muc::instantiated_from<M1, TupleModel>;
+    requires muc::instantiated_from<M2, TupleModel>;
     requires M1::Size() <= M2::Size();
     requires([]<gsl::index... Is>(gslx::index_sequence<Is...>) {
         return (... and

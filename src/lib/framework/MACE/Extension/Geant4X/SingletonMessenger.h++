@@ -3,9 +3,10 @@
 #include "MACE/Env/BasicEnv.h++"
 #include "MACE/Env/Memory/Singleton.h++"
 #include "MACE/Env/Print.h++"
-#include "MACE/Extension/stdx/tuple_contains.h++"
 
 #include "G4UImessenger.hh"
+
+#include "muc/tuple"
 
 #include "gsl/gsl"
 
@@ -39,7 +40,7 @@ public:
 
 protected:
     template<typename ARecipient>
-        requires stdx::tuple_contains_unique_v<std::tuple<ARecipients...>, ARecipient>
+        requires muc::tuple_contains_unique_v<std::tuple<ARecipients...>, ARecipient>
     auto Deliver(std::invocable<ARecipient&> auto&& Action) const -> void;
 
 private:

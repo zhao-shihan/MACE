@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MACE/Concept/InstantiatedFrom.h++"
 #include "MACE/Concept/MathVector.h++"
 #include "MACE/Concept/NumericVector.h++"
 #include "MACE/Math/Hypot.h++"

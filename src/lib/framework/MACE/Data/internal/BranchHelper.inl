@@ -1,11 +1,11 @@
 namespace MACE::Data::internal {
 
-template<Concept::InstantiatedFrom<Tuple> ATuple>
+template<muc::instantiated_from<Tuple> ATuple>
 BranchHelper<ATuple>::BranchHelper(ATuple& tuple) :
     fTuple{&tuple},
     fClassPointer{} {}
 
-template<Concept::InstantiatedFrom<Tuple> ATuple>
+template<muc::instantiated_from<Tuple> ATuple>
 template<muc::ceta_string AName>
 auto BranchHelper<ATuple>::CreateBranch(std::derived_from<TTree> auto& tree) -> TBranch* {
     using ObjectType = typename ATuple::Model::template ValueOf<AName>::Type;
@@ -20,7 +20,7 @@ auto BranchHelper<ATuple>::CreateBranch(std::derived_from<TTree> auto& tree) -> 
     }
 }
 
-template<Concept::InstantiatedFrom<Tuple> ATuple>
+template<muc::instantiated_from<Tuple> ATuple>
 template<muc::ceta_string AName>
 auto BranchHelper<ATuple>::ConnectBranch(std::derived_from<TTree> auto& tree) -> std::pair<int, TBranch*> {
     using ObjectType = typename ATuple::Model::template ValueOf<AName>::Type;
@@ -38,7 +38,7 @@ auto BranchHelper<ATuple>::ConnectBranch(std::derived_from<TTree> auto& tree) ->
     return {ec, branch};
 }
 
-template<Concept::InstantiatedFrom<Tuple> ATuple>
+template<muc::instantiated_from<Tuple> ATuple>
 template<muc::ceta_string AName>
 auto BranchHelper<ATuple>::ConnectBranchNoCheck(std::derived_from<TTree> auto& tree) -> TBranch* {
     using ObjectType = typename ATuple::Model::template ValueOf<AName>::Type;

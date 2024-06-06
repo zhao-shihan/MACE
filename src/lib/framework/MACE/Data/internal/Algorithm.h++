@@ -1,9 +1,10 @@
 #pragma once
 
-#include "MACE/Concept/InstantiatedFrom.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Data/TupleModel.h++"
-#include "MACE/Extension/stdx/applicable.h++"
+
+#include "muc/concepts"
+#include "muc/tuple"
 
 #include "fmt/format.h"
 
@@ -161,7 +162,7 @@ auto AllAnyNoneOfCountFindIfOrNot(auto&& all_any_none_of_count_find_if_or_not, I
 template<muc::ceta_string... ANames,
          SheetIterator I, SheetSentinelFor<I> S,
          InvocableByName<I, ANames...> P,
-         stdx::predicate_applicable<InvokeByNameResult<P, I, ANames...>> F>
+         muc::predicate_applicable_on<InvokeByNameResult<P, I, ANames...>> F>
     requires(sizeof...(ANames) >= 2)
 auto AllAnyNoneOfCountFindIfOrNot(auto&& all_any_none_of_count_find_if_or_not, I first, S last, F&& Pred, P&& Proj) -> decltype(auto) {
     return CheckAndGetSheetFromFirstLast(first, last)
@@ -169,7 +170,7 @@ auto AllAnyNoneOfCountFindIfOrNot(auto&& all_any_none_of_count_find_if_or_not, I
             return all_any_none_of_count_find_if_or_not(
                 first, last,
                 [&Pred](auto&& t) {
-                    return stdx::apply(std::forward<F>(Pred), std::forward<decltype(t)>(t));
+                    return muc::apply(std::forward<F>(Pred), std::forward<decltype(t)>(t));
                 },
                 [&Proj](auto&& entry) {
                     return std::forward<P>(Proj)(std::move(Get<ANames>(entry))...);
@@ -198,7 +199,7 @@ auto ForEach(auto&& for_each, I first, S last, F&& Func, P&& Proj) -> decltype(a
 template<muc::ceta_string... ANames,
          SheetIterator I, SheetSentinelFor<I> S,
          InvocableByName<I, ANames...> P,
-         stdx::applicable<InvokeByNameResult<P, I, ANames...>> F>
+         muc::applicable_on<InvokeByNameResult<P, I, ANames...>> F>
     requires(sizeof...(ANames) >= 2)
 auto ForEach(auto&& for_each, I first, S last, F&& Func, P&& Proj) -> decltype(auto) {
     return CheckAndGetSheetFromFirstLast(first, last)
@@ -206,7 +207,7 @@ auto ForEach(auto&& for_each, I first, S last, F&& Func, P&& Proj) -> decltype(a
             return for_each(
                 first, last,
                 [&Func](auto&& t) {
-                    stdx::apply(std::forward<F>(Func), std::forward<decltype(t)>(t));
+                    muc::apply(std::forward<F>(Func), std::forward<decltype(t)>(t));
                 },
                 [&Proj](auto&& entry) {
                     return std::forward<P>(Proj)(std::move(Get<ANames>(entry))...);

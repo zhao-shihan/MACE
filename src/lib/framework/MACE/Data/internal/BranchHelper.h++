@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MACE/Concept/InstantiatedFrom.h++"
 #include "MACE/Concept/ROOTFundamental.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Data/internal/TypeTraits.h++"
@@ -9,6 +8,7 @@
 #include "TTree.h"
 
 #include "muc/ceta_string"
+#include "muc/concepts"
 
 #include "gsl/gsl"
 
@@ -19,7 +19,7 @@
 
 namespace MACE::Data::internal {
 
-template<Concept::InstantiatedFrom<Tuple> ATuple>
+template<muc::instantiated_from<Tuple> ATuple>
 class BranchHelper {
 public:
     BranchHelper(ATuple& tuple);

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MACE/Concept/InstantiatedFrom.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Data/internal/TypeTraits.h++"
 #include "MACE/Extension/ROOTX/RDataFrame.h++"
@@ -8,6 +7,8 @@
 #include "MACE/Utility/NonConstructibleBase.h++"
 
 #include "ROOT/RVec.hxx"
+
+#include "muc/concepts"
 
 #include "gsl/gsl"
 

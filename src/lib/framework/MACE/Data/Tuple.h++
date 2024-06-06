@@ -1,11 +1,11 @@
 #pragma once
 
-#include "MACE/Concept/InstantiatedFrom.h++"
 #include "MACE/Data/TupleModel.h++"
 #include "MACE/Data/Value.h++"
 #include "MACE/Extension/gslx/index_sequence.h++"
 
 #include "muc/ceta_string"
+#include "muc/concepts"
 
 #include "gsl/gsl"
 
@@ -19,7 +19,7 @@ namespace MACE::Data {
 template<typename T>
 concept TupleLike = requires {
     typename T::Model;
-    requires Concept::InstantiatedFrom<typename T::Model, TupleModel>;
+    requires muc::instantiated_from<typename T::Model, TupleModel>;
     { T::Size() } -> std::same_as<std::size_t>;
     requires T::Size() >= 0;
     requires([]<gsl::index... Is>(gslx::index_sequence<Is...>) {
@@ -66,13 +66,13 @@ namespace std {
 
 template<typename T>
     requires requires { typename T::Model; } and
-             MACE::Concept::InstantiatedFrom<typename T::Model, MACE::Data::TupleModel>
+             muc::instantiated_from<typename T::Model, MACE::Data::TupleModel>
 struct tuple_size<T>
     : tuple_size<typename T::Model::StdTuple> {};
 
 template<std::size_t I, typename T>
     requires requires { typename T::Model; } and
-             MACE::Concept::InstantiatedFrom<typename T::Model, MACE::Data::TupleModel>
+             muc::instantiated_from<typename T::Model, MACE::Data::TupleModel>
 struct tuple_element<I, T>
     : tuple_element<I, typename T::Model::StdTuple> {};
 

@@ -7,14 +7,14 @@ SingletonMessenger<ADerived, ARecipients...>::SingletonMessenger() :
     fDelivering{},
     fRecipientSetTuple{} {
     static_assert(std::derived_from<ADerived, SingletonMessenger<ADerived, ARecipients...>>);
-    static_assert((... and stdx::tuple_contains_unique_v<std::tuple<ARecipients...>, ARecipients>));
+    static_assert((... and muc::tuple_contains_unique_v<std::tuple<ARecipients...>, ARecipients>));
 }
 
 template<typename ADerived, typename... ARecipients>
 template<typename ARecipient>
 SingletonMessenger<ADerived, ARecipients...>::Register<ARecipient>::Register(gsl::not_null<ARecipient*> recipient) :
     fRecipient{recipient} {
-    static_assert(stdx::tuple_contains_unique_v<std::tuple<ARecipients...>, ARecipient>);
+    static_assert(muc::tuple_contains_unique_v<std::tuple<ARecipients...>, ARecipient>);
     get<std::unordered_set<ARecipient*>>(SingletonMessenger::Instance().fRecipientSetTuple).emplace(fRecipient);
 }
 
@@ -32,7 +32,7 @@ SingletonMessenger<ADerived, ARecipients...>::Register<ARecipient>::~Register() 
 
 template<typename ADerived, typename... ARecipients>
 template<typename ARecipient>
-    requires stdx::tuple_contains_unique_v<std::tuple<ARecipients...>, ARecipient>
+    requires muc::tuple_contains_unique_v<std::tuple<ARecipients...>, ARecipient>
 auto SingletonMessenger<ADerived, ARecipients...>::Deliver(std::invocable<ARecipient&> auto&& Action) const -> void {
     const auto& recipientSet{get<std::unordered_set<ARecipient*>>(fRecipientSetTuple)};
     if (recipientSet.empty()) {

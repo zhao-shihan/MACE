@@ -6,7 +6,6 @@
 #include "MACE/Env/Print.h++"
 #include "MACE/Extension/MPIX/Execution/DynamicScheduler.h++"
 #include "MACE/Extension/MPIX/Execution/Scheduler.h++"
-#include "MACE/Extension/stdx/boolean_testable.h++"
 #include "MACE/Extension/stdx/ranges_numeric.h++"
 
 #include "mpi.h"

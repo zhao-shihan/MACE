@@ -2,6 +2,8 @@
 
 #include "MACE/Data/internal/Algorithm.h++"
 
+#include "muc/tuple"
+
 #include <algorithm>
 #include <concepts>
 #include <type_traits>
@@ -30,7 +32,7 @@ auto AllOf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 template<muc::ceta_string... ANames,
          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
          internal::InvocableByName<I, ANames...> P = TuplifyIdentity,
-         stdx::predicate_applicable<internal::InvokeByNameResult<P, I, ANames...>> F>
+         muc::predicate_applicable_on<internal::InvokeByNameResult<P, I, ANames...>> F>
     requires(sizeof...(ANames) >= 2)
 auto AllOf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
     return internal::AllAnyNoneOfCountFindIfOrNot<ANames...>(std::ranges::all_of,
@@ -53,7 +55,7 @@ auto AllOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 template<muc::ceta_string... ANames,
          internal::SheetRange S,
          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P = TuplifyIdentity,
-         stdx::predicate_applicable<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
+         muc::predicate_applicable_on<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
     requires(sizeof...(ANames) >= 2)
 auto AllOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
     return AllOf<ANames...>(std::ranges::begin(sheet),
@@ -78,7 +80,7 @@ auto AnyOf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 template<muc::ceta_string... ANames,
          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
          internal::InvocableByName<I, ANames...> P = TuplifyIdentity,
-         stdx::predicate_applicable<internal::InvokeByNameResult<P, I, ANames...>> F>
+         muc::predicate_applicable_on<internal::InvokeByNameResult<P, I, ANames...>> F>
     requires(sizeof...(ANames) >= 2)
 auto AnyOf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
     return internal::AllAnyNoneOfCountFindIfOrNot<ANames...>(std::ranges::any_of,
@@ -101,7 +103,7 @@ auto AnyOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 template<muc::ceta_string... ANames,
          internal::SheetRange S,
          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P = TuplifyIdentity,
-         stdx::predicate_applicable<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
+         muc::predicate_applicable_on<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
     requires(sizeof...(ANames) >= 2)
 auto AnyOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
     return AnyOf<ANames...>(std::ranges::begin(sheet),
@@ -126,7 +128,7 @@ auto NoneOf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 template<muc::ceta_string... ANames,
          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
          internal::InvocableByName<I, ANames...> P = TuplifyIdentity,
-         stdx::predicate_applicable<internal::InvokeByNameResult<P, I, ANames...>> F>
+         muc::predicate_applicable_on<internal::InvokeByNameResult<P, I, ANames...>> F>
     requires(sizeof...(ANames) >= 2)
 auto NoneOf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
     return internal::AllAnyNoneOfCountFindIfOrNot<ANames...>(std::ranges::none_of,
@@ -149,7 +151,7 @@ auto NoneOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 template<muc::ceta_string... ANames,
          internal::SheetRange S,
          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P = TuplifyIdentity,
-         stdx::predicate_applicable<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
+         muc::predicate_applicable_on<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
     requires(sizeof...(ANames) >= 2)
 auto NoneOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
     return NoneOf<ANames...>(std::ranges::begin(sheet),
@@ -174,7 +176,7 @@ auto NoneOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 // template<muc::ceta_string... ANames,
 //          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
 //          std::invocable<typename I::Model::template ValueOf<ANames>...> P = TuplifyIdentity,
-//          stdx::applicable<std::invoke_result_t<P, typename I::Model::template ValueOf<ANames>...>> F>
+//          muc::applicable<std::invoke_result_t<P, typename I::Model::template ValueOf<ANames>...>> F>
 //     requires(sizeof...(ANames) >= 2)
 // auto ForEach(I first, S last, F&& Func, P&& Proj = {}) -> decltype(auto) {
 //     return internal::ForEach<ANames...>(std::ranges::for_each,
@@ -197,7 +199,7 @@ auto NoneOf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 // template<muc::ceta_string... ANames,
 //          internal::SheetRange S,
 //          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P = TuplifyIdentity,
-//          stdx::applicable<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
+//          muc::applicable<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
 //     requires(sizeof...(ANames) >= 2)
 // auto ForEach(S&& sheet, F&& Func, P&& Proj = {}) -> decltype(auto) {
 //     return ForEach<ANames...>(std::ranges::begin(sheet),
@@ -266,7 +268,7 @@ auto CountIf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 template<muc::ceta_string... ANames,
          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
          internal::InvocableByName<I, ANames...> P = TuplifyIdentity,
-         stdx::predicate_applicable<internal::InvokeByNameResult<P, I, ANames...>> F>
+         muc::predicate_applicable_on<internal::InvokeByNameResult<P, I, ANames...>> F>
     requires(sizeof...(ANames) >= 2)
 auto CountIf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
     return internal::AllAnyNoneOfCountFindIfOrNot<ANames...>(std::ranges::count_if,
@@ -289,7 +291,7 @@ auto CountIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 template<muc::ceta_string... ANames,
          internal::SheetRange S,
          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P = TuplifyIdentity,
-         stdx::predicate_applicable<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
+         muc::predicate_applicable_on<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
     requires(sizeof...(ANames) >= 2)
 auto CountIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
     return CountIf<ANames...>(std::ranges::begin(sheet),
@@ -428,7 +430,7 @@ auto FindIf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 template<muc::ceta_string... ANames,
          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
          internal::InvocableByName<I, ANames...> P = TuplifyIdentity,
-         stdx::predicate_applicable<internal::InvokeByNameResult<P, I, ANames...>> F>
+         muc::predicate_applicable_on<internal::InvokeByNameResult<P, I, ANames...>> F>
     requires(sizeof...(ANames) >= 2)
 auto FindIf(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
     return internal::AllAnyNoneOfCountFindIfOrNot<ANames...>(std::ranges::find_if,
@@ -451,7 +453,7 @@ auto FindIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 template<muc::ceta_string... ANames,
          internal::SheetRange S,
          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P = TuplifyIdentity,
-         stdx::predicate_applicable<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
+         muc::predicate_applicable_on<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
     requires(sizeof...(ANames) >= 2)
 auto FindIf(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
     return FindIf<ANames...>(std::ranges::begin(sheet),
@@ -476,7 +478,7 @@ auto FindIfNot(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 template<muc::ceta_string... ANames,
          internal::SheetIterator I, internal::SheetSentinelFor<I> S,
          internal::InvocableByName<I, ANames...> P = TuplifyIdentity,
-         stdx::predicate_applicable<internal::InvokeByNameResult<P, I, ANames...>> F>
+         muc::predicate_applicable_on<internal::InvokeByNameResult<P, I, ANames...>> F>
     requires(sizeof...(ANames) >= 2)
 auto FindIfNot(I first, S last, F&& Pred, P&& Proj = {}) -> decltype(auto) {
     return internal::AllAnyNoneOfCountFindIfOrNot<ANames...>(std::ranges::find_if_not,
@@ -499,7 +501,7 @@ auto FindIfNot(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
 template<muc::ceta_string... ANames,
          internal::SheetRange S,
          std::invocable<typename std::decay_t<S>::Model::template ValueOf<ANames>...> P = TuplifyIdentity,
-         stdx::predicate_applicable<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
+         muc::predicate_applicable_on<std::invoke_result_t<P, typename std::decay_t<S>::Model::template ValueOf<ANames>...>> F>
     requires(sizeof...(ANames) >= 2)
 auto FindIfNot(S&& sheet, F&& Pred, P&& Proj = {}) -> decltype(auto) {
     return FindIfNot<ANames...>(std::ranges::begin(sheet),

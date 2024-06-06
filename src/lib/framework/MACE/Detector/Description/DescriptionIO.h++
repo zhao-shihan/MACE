@@ -5,11 +5,12 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Env/Print.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
-#include "MACE/Extension/stdx/tuple_like.h++"
 #include "MACE/Utility/CreateTemporaryFile.h++"
 #include "MACE/Utility/NonConstructibleBase.h++"
 
 #include "yaml-cpp/yaml.h"
+
+#include "muc/tuple"
 
 #include "gsl/gsl"
 
@@ -41,11 +42,11 @@ public:
     static auto Export(const std::filesystem::path& yamlFile, const std::string& fileComment = {}) -> void { Export<std::tuple<Ds...>>(yamlFile, fileComment); }
     template<Description... Ds>
     static auto Ixport(const std::filesystem::path& yamlFile, const std::string& fileComment = {}) -> void { Ixport<std::tuple<Ds...>>(yamlFile, fileComment); }
-    template<stdx::tuple_like T>
+    template<muc::tuple_like T>
     static auto Import(const std::filesystem::path& yamlFile) -> void;
-    template<stdx::tuple_like T>
+    template<muc::tuple_like T>
     static auto Export(const std::filesystem::path& yamlFile, const std::string& fileComment = {}) -> void;
-    template<stdx::tuple_like T>
+    template<muc::tuple_like T>
     static auto Ixport(const std::filesystem::path& yamlFile, const std::string& fileComment = {}) -> void;
 
     template<typename... ArgsOfImport>

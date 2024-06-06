@@ -31,7 +31,7 @@ private:
 
     template<gsl::index I>
     using ReadType = std::conditional_t<internal::IsStdArray<typename std::tuple_element_t<I, Tuple<Ts...>>::Type>{} or
-                                            Concept::InstantiatedFrom<typename std::tuple_element_t<I, Tuple<Ts...>>::Type, std::vector>,
+                                            muc::instantiated_from<typename std::tuple_element_t<I, Tuple<Ts...>>::Type, std::vector>,
                                         ROOT::RVec<typename ValueTypeHelper<typename std::tuple_element_t<I, Tuple<Ts...>>::Type>::Type>,
                                         typename std::tuple_element_t<I, Tuple<Ts...>>::Type>;
 
