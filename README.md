@@ -39,21 +39,23 @@ For more information, please check out [the image repository homepage](https://h
 
 Required:
 
-1. [MPI](https://www.mpi-forum.org/) (≥ 3.0, [MPICH](https://www.mpich.org/), [OpenMPI](https://www.open-mpi.org/), [Intel MPI](https://www.intel.cn/content/www/cn/zh/developer/tools/oneapi/mpi-library.html), [Microsoft MPI](https://github.com/Microsoft/Microsoft-MPI), etc. On your frequency)
-2. [Eigen](https://eigen.tuxfamily.org/) (≥ 3.4.0)
-3. [Geant4](https://geant4.web.cern.ch/) (≥ 11.0.0, with GDML support)
-4. [ROOT](https://root.cern/) (≥ 6.30.00)
+1. [MPI (Message Passing Interface)](https://www.mpi-forum.org/) (≥ 3.0, [MPICH](https://www.mpich.org/), [OpenMPI](https://www.open-mpi.org/), [Intel MPI](https://www.intel.cn/content/www/cn/zh/developer/tools/oneapi/mpi-library.html), [Microsoft MPI](https://github.com/Microsoft/Microsoft-MPI), etc.)
+2. [Eigen (A C++ template library for linear algebra)](https://eigen.tuxfamily.org/) (≥ 3.4.0)
+3. [Geant4 (Toolkit for the simulation of the passage of particles through matter)](https://geant4.org/) (≥ 11.0.0, **with GDML**)
+4. [ROOT (An open-source data analysis framework)](https://root.cern/) (≥ 6.30.00, **with GDML**)
 
 Required, built-in if not found (network or pre-downloaded source is required):
 
-1. [argparse](https://github.com/p-ranav/argparse) (≥ 2.6, built-in if not found)
-2. [backward-cpp](https://github.com/bombela/backward-cpp) (≥ 1.6, built-in if not found)
-3. [fmt](https://github.com/fmtlib/fmt) (≥ 10.0.0, built-in if not found)
-4. [zhao-shihan/GenFit](https://github.com/zhao-shihan/GenFit) (a GenFit fork, built-in if not found)
-5. [muc](https://github.com/zhao-shihan/muc) (≥ 0.0.1, built-in if not found)
-6. [Microsoft.GSL](https://github.com/Microsoft/GSL) ([ISO C++ guidelines support library](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#gsl-guidelines-support-library)) (≥ 4.0.0, built-in if not found)
-7. [PMP](https://www.pmp-library.org/) (Polygon Mesh Processing Library) (≥ 3.0.0, built-in if not found)
-8. [yaml-cpp](https://github.com/jbeder/yaml-cpp) (≥ 0.8.0, built-in if not found)
+1. [argparse (Argument Parser for Modern C++)](https://github.com/p-ranav/argparse) (≥ 2.6, built-in if not found)
+2. [backward-cpp (A beautiful stack trace pretty printer for C++)](https://github.com/bombela/backward-cpp) (≥ 1.6, built-in if not found)
+3. [EFM (A generic bilinear/trilinear interpolator)](https://github.com/zhao-shihan/EFM) (≥ 0.0.1, built-in if not found)
+4. [fmt (A modern formatting library)](https://github.com/fmtlib/fmt) (≥ 10.0.0, built-in if not found)
+5. [zhao-shihan/GenFit (A generic track-fitting toolkit)](https://github.com/zhao-shihan/GenFit) (a GenFit fork, built-in if not found)
+6. [muc (A standard non-standard C++ library)](https://github.com/zhao-shihan/muc) (≥ 0.0.1, built-in if not found)
+7. [Microsoft.GSL](https://github.com/Microsoft/GSL) ([ISO C++ guidelines support library](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#gsl-guidelines-support-library)) (≥ 4.0.0, built-in if not found)
+8. [PMP (Polygon Mesh Processing Library)](https://www.pmp-library.org/) (≥ 3.0.0, built-in if not found)
+9. [TimSort (A C++ implementation of timsort)](https://github.com/timsort/cpp-TimSort) (≥ 3.0.0, built-in if not found)
+10. [yaml-cpp (A YAML parser and emitter in C++)](https://github.com/jbeder/yaml-cpp) (≥ 0.8.0, built-in if not found)
 
 # Cite
 
