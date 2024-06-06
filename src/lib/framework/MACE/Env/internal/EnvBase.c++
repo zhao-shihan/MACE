@@ -2,7 +2,8 @@
 #include "MACE/Env/Memory/internal/SingletonPool.h++"
 #include "MACE/Env/Memory/internal/WeakSingletonPool.h++"
 #include "MACE/Env/internal/EnvBase.h++"
-#include "MACE/Utility/BitWidthOf.h++"
+
+#include "muc/bit"
 
 #include "fmt/format.h"
 
@@ -182,30 +183,30 @@ EnvBase::EnvBase() :
 EnvBase::~EnvBase() = default;
 
 auto EnvBase::CheckFundamentalType() -> void {
-    constexpr auto lp32{BitWidthOf<char>() == 8 and
-                        BitWidthOf<short>() == 16 and
-                        BitWidthOf<int>() == 16 and
-                        BitWidthOf<long>() == 32 and
-                        BitWidthOf<long long>() == 64 and
-                        BitWidthOf<void*>() == 32};
-    constexpr auto ilp32{BitWidthOf<char>() == 8 and
-                         BitWidthOf<short>() == 16 and
-                         BitWidthOf<int>() == 32 and
-                         BitWidthOf<long>() == 32 and
-                         BitWidthOf<long long>() == 64 and
-                         BitWidthOf<void*>() == 32};
-    constexpr auto llp64{BitWidthOf<char>() == 8 and
-                         BitWidthOf<short>() == 16 and
-                         BitWidthOf<int>() == 32 and
-                         BitWidthOf<long>() == 32 and
-                         BitWidthOf<long long>() == 64 and
-                         BitWidthOf<void*>() == 64};
-    constexpr auto lp64{BitWidthOf<char>() == 8 and
-                        BitWidthOf<short>() == 16 and
-                        BitWidthOf<int>() == 32 and
-                        BitWidthOf<long>() == 64 and
-                        BitWidthOf<long long>() == 64 and
-                        BitWidthOf<void*>() == 64};
+    constexpr auto lp32{muc::bit_size<char> == 8 and
+                        muc::bit_size<short> == 16 and
+                        muc::bit_size<int> == 16 and
+                        muc::bit_size<long> == 32 and
+                        muc::bit_size<long long> == 64 and
+                        muc::bit_size<void*> == 32};
+    constexpr auto ilp32{muc::bit_size<char> == 8 and
+                         muc::bit_size<short> == 16 and
+                         muc::bit_size<int> == 32 and
+                         muc::bit_size<long> == 32 and
+                         muc::bit_size<long long> == 64 and
+                         muc::bit_size<void*> == 32};
+    constexpr auto llp64{muc::bit_size<char> == 8 and
+                         muc::bit_size<short> == 16 and
+                         muc::bit_size<int> == 32 and
+                         muc::bit_size<long> == 32 and
+                         muc::bit_size<long long> == 64 and
+                         muc::bit_size<void*> == 64};
+    constexpr auto lp64{muc::bit_size<char> == 8 and
+                        muc::bit_size<short> == 16 and
+                        muc::bit_size<int> == 32 and
+                        muc::bit_size<long> == 64 and
+                        muc::bit_size<long long> == 64 and
+                        muc::bit_size<void*> == 64};
     if constexpr (not lp64) {
         if constexpr (llp64) {
             fmt::println(stderr, "Warning: The fundamental data model is LLP64 (not LP64)");
@@ -217,7 +218,7 @@ auto EnvBase::CheckFundamentalType() -> void {
             fmt::println(stderr, "Warning: Using a rare fundamental data model "
                                  "[{}-bits char, {}-bits short, {}-bits int, {}-bits long, {}-bits long long, {}-bits pointer], "
                                  "run at your own risk",
-                         BitWidthOf<char>(), BitWidthOf<short>(), BitWidthOf<int>(), BitWidthOf<long>(), BitWidthOf<long long>(), BitWidthOf<void*>());
+                         muc::bit_size<char>, muc::bit_size<short>, muc::bit_size<int>, muc::bit_size<long>, muc::bit_size<long long>, muc::bit_size<void*>);
         }
     }
     if (not std::numeric_limits<float>::is_iec559) {
