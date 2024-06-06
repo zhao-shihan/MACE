@@ -1,11 +1,12 @@
 #include "MACE/Detector/Definition/SolenoidS2.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Math/LLPiecewise.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
+
+#include "muc/math"
 
 namespace MACE::Detector::Definition {
 
@@ -28,7 +29,7 @@ auto SolenoidS2::Construct(G4bool checkOverlaps) -> void {
         G4NistManager::Instance()->FindOrBuildMaterial(solenoid.MaterialName()),
         name)};
 
-    const auto nCoil{Math::LLTrunc(solenoid.S2Length() / (solenoid.CoilThickness() + solenoid.ReferenceCoilSpacing()))};
+    const auto nCoil{muc::lltrunc(solenoid.S2Length() / (solenoid.CoilThickness() + solenoid.ReferenceCoilSpacing()))};
     const auto spacing{solenoid.S2Length() / nCoil - solenoid.ReferenceCoilSpacing()};
     const auto z0{-solenoid.S2Length() / 2 + spacing / 2 + solenoid.CoilThickness() / 2};
     for (int k{}; k < nCoil; ++k) {

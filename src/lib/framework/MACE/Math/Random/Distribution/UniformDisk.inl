@@ -68,7 +68,7 @@ constexpr UniformDiskBase<T, AUniformDisk>::UniformDiskBase(const typename Base:
     VectorValueType<T> r2;                                              \
     do {                                                                \
         r = UniformCompactRectangle<T>({-0.5, 0.5}, {-0.5, 0.5})(g);    \
-        r2 = Math::Hypot2(r[0], r[1]);                                  \
+        r2 = muc::hypot2(r[0], r[1]);                                  \
         std23::assume(0 <= r2 and r2 <= 0.5);                           \
     } while (rejection);                                                \
     if constexpr (Concept::MathVector2Any<T>) {                         \

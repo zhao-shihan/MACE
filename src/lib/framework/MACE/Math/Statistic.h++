@@ -2,11 +2,12 @@
 
 #include "MACE/Concept/FundamentalType.h++"
 #include "MACE/Concept/InputVector.h++"
-#include "MACE/Math/IntegerPower.h++"
 #include "MACE/Math/QinAlgorithm.h++"
 #include "MACE/Utility/VectorCast.h++"
 
 #include "Eigen/Core"
+
+#include "muc/math"
 
 #include <cmath>
 #include <concepts>
@@ -61,9 +62,9 @@ public:
     constexpr auto Variance() const -> decltype(auto) { return CentralMoment<2>(); }
     auto StdDev() const -> decltype(auto) { return std::sqrt(Variance()); }
 
-    auto Skewness() const -> decltype(auto) { return CentralMoment<3>() / Math::Pow<3>(StdDev()); }
+    auto Skewness() const -> decltype(auto) { return CentralMoment<3>() / muc::pow<3>(StdDev()); }
 
-    constexpr auto Kurtosis() const -> decltype(auto) { return CentralMoment<4>() / Math::Pow<2>(Variance()); }
+    constexpr auto Kurtosis() const -> decltype(auto) { return CentralMoment<4>() / muc::pow<2>(Variance()); }
 
     constexpr auto VarianceOfMean() const -> decltype(auto) { return Variance() / fSumW; }
     auto StdDevOfMean() const -> decltype(auto) { return std::sqrt(VarianceOfMean()); }
@@ -148,10 +149,10 @@ public:
     auto StdDev() const -> decltype(auto) { return Variance().cwiseSqrt().eval(); }
     auto Covariance() const -> decltype(auto) { return Mixed2ndCentralMoment(); }
 
-    auto Skewness(int i) const -> decltype(auto) { return CentralMoment<3>(i) / Math::Pow<3>(StdDev(i)); }
+    auto Skewness(int i) const -> decltype(auto) { return CentralMoment<3>(i) / muc::pow<3>(StdDev(i)); }
     auto Skewness() const -> Eigen::Vector<double, N>;
 
-    auto Kurtosis(int i) const -> decltype(auto) { return CentralMoment<4>(i) / Math::Pow<2>(Variance(i)); }
+    auto Kurtosis(int i) const -> decltype(auto) { return CentralMoment<4>(i) / muc::pow<2>(Variance(i)); }
     auto Kurtosis() const -> Eigen::Vector<double, N>;
 
 private:

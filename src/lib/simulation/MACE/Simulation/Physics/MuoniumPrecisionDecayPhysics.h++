@@ -1,7 +1,8 @@
 #pragma once
 
-#include "MACE/Math/Clamp.h++"
 #include "MACE/Simulation/Physics/DecayPhysicsBase.h++"
+
+#include "muc/math"
 
 #include "gsl/gsl"
 
@@ -14,8 +15,8 @@ class MuoniumPrecisionDecayPhysics : public DecayPhysicsBase {
 public:
     MuoniumPrecisionDecayPhysics(G4int verbose);
 
-    auto RadiativeDecayBR(double br) -> void { fRadiativeDecayBR = Math::Clamp<"[]">(br, 0., 1.); }
-    auto IPPDecayBR(double br) -> void { fIPPDecayBR = Math::Clamp<"[]">(br, 0., 1.); }
+    auto RadiativeDecayBR(double br) -> void { fRadiativeDecayBR = muc::clamp<"[]">(br, 0., 1.); }
+    auto IPPDecayBR(double br) -> void { fIPPDecayBR = muc::clamp<"[]">(br, 0., 1.); }
 
     virtual auto ConstructParticle() -> void override;
     virtual auto ConstructProcess() -> void override;

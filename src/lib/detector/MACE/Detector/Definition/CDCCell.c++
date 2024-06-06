@@ -1,6 +1,5 @@
 #include "MACE/Detector/Definition/CDCCell.h++"
 #include "MACE/Detector/Description/CDC.h++"
-#include "MACE/Math/IntegerPower.h++"
 #include "MACE/Math/Lerp.h++"
 #include "MACE/Math/MidPoint.h++"
 #include "MACE/Math/Parity.h++"
@@ -14,6 +13,8 @@
 #include "G4Tubs.hh"
 #include "G4TwistedTubs.hh"
 #include "G4TwoVector.hh"
+
+#include "muc/math"
 
 #include "fmt/format.h"
 

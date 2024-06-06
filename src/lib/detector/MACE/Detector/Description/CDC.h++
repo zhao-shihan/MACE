@@ -1,11 +1,11 @@
 #pragma once
 
 #include "MACE/Detector/Description/DescriptionBase.h++"
-#include "MACE/Math/IntegerPower.h++"
 
 #include "Eigen/Core"
 
 #include "muc/array"
+#include "muc/math"
 
 #include "gsl/gsl"
 
@@ -81,7 +81,7 @@ public:
             double halfLength;
             double stereoAzimuthAngle;
             auto TanStereoZenithAngle(double r) const -> auto { return r * std::tan(stereoAzimuthAngle / 2) / halfLength; }
-            auto SecStereoZenithAngle(double r) const -> auto { return std::sqrt(1 + Math::Pow<2>(TanStereoZenithAngle(r))); }
+            auto SecStereoZenithAngle(double r) const -> auto { return std::sqrt(1 + muc::pow<2>(TanStereoZenithAngle(r))); }
             auto CosStereoZenithAngle(double r) const -> auto { return 1 / SecStereoZenithAngle(r); }
             auto SinStereoZenithAngle(double r) const -> auto { return TanStereoZenithAngle(r) / SecStereoZenithAngle(r); }
             auto StereoZenithAngle(double r) const -> auto { return std::atan(TanStereoZenithAngle(r)); }

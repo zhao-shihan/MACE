@@ -1,5 +1,4 @@
 #include "MACE/Detector/Description/EMC.h++"
-#include "MACE/Math/Hypot.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 #include "MACE/Utility/MathConstant.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
@@ -15,6 +14,8 @@
 #include "pmp/algorithms/subdivision.h"
 #include "pmp/algorithms/utilities.h"
 #include "pmp/surface_mesh.h"
+
+#include "muc/math"
 
 #include <ranges>
 
@@ -55,8 +56,8 @@ auto EMCMesh::GenerateIcosahedron() -> void {
     constexpr auto a0 = 1.0;
     constexpr auto b0 = 1.0 / phi;
     // normalized vertices coordinates
-    const auto a = a0 / Math::Hypot(a0, b0);
-    const auto b = b0 / Math::Hypot(a0, b0);
+    const auto a = a0 / muc::hypot(a0, b0);
+    const auto b = b0 / muc::hypot(a0, b0);
 
     // add normalized vertices
     const auto v1 = fPMPMesh.add_vertex(pmp::Point{0, b, -a});
@@ -223,7 +224,7 @@ auto EMC::ComputeMesh() const -> MeshInformation {
         }
         if (std::ranges::any_of(pmpMesh.vertices(f),
                                 [&](const auto& v) {
-                                    const auto rXY{fInnerRadius * Math::Hypot(point[v][0], point[v][1])};
+                                    const auto rXY{fInnerRadius * muc::hypot(point[v][0], point[v][1])};
                                     if (point[v][2] < 0) {
                                         return rXY < fUpstreamWindowRadius;
                                     } else {

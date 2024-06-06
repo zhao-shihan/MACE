@@ -2,14 +2,13 @@
 
 #include "MACE/Concept/MathVector.h++"
 #include "MACE/Concept/NumericVector.h++"
-#include "MACE/Math/Hypot.h++"
-#include "MACE/Math/IntegerPower.h++"
 #include "MACE/Math/Random/Distribution/UniformRectangle.h++"
 #include "MACE/Math/Random/RandomNumberDistributionBase.h++"
 #include "MACE/Utility/InlineMacro.h++"
 #include "MACE/Utility/VectorValueType.h++"
 
 #include "muc/array"
+#include "muc/math"
 
 #include <array>
 #include <cmath>

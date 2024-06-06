@@ -3,7 +3,6 @@
 #include "MACE/Env/Print.h++"
 #include "MACE/Extension/Geant4X/Antimuonium.h++"
 #include "MACE/Extension/Geant4X/Muonium.h++"
-#include "MACE/Math/Clamp.h++"
 #include "MACE/Math/FindRoot.h++"
 #include "MACE/Math/QinAlgorithm.h++"
 #include "MACE/Simulation/Physics/MuoniumPhysicsMessenger.h++"
@@ -17,6 +16,8 @@
 #include "G4VRestProcess.hh"
 #include "Randomize.hh"
 
+#include "muc/math"
+
 #include "gsl/gsl"
 
 #include <limits>
@@ -29,7 +30,7 @@ class MuoniumFormation final : public NonMoveableBase,
 public:
     MuoniumFormation();
 
-    auto ConversionProbability(G4double p) -> void { fConversionProbability = Math::Clamp<"[]">(p, 0., 1.); }
+    auto ConversionProbability(G4double p) -> void { fConversionProbability = muc::clamp<"[]">(p, 0., 1.); }
 
     auto IsApplicable(const G4ParticleDefinition&) -> G4bool override;
     auto AtRestDoIt(const G4Track& track, const G4Step&) -> G4VParticleChange* override;

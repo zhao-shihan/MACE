@@ -1,11 +1,12 @@
 #pragma once
 
 #include "MACE/Extension/CLHEPX/RAMBO.h++"
-#include "MACE/Math/Clamp.h++"
 #include "MACE/Math/Random/Generator/Xoshiro256Plus.h++"
 #include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannelMessenger.h++"
 
 #include "G4VDecayChannel.hh"
+
+#include "muc/math"
 
 #include <algorithm>
 #include <array>
@@ -16,7 +17,7 @@ class MuonInternalPairProductionDecayChannel : public G4VDecayChannel {
 public:
     MuonInternalPairProductionDecayChannel(const G4String& parentName, G4double br, G4int verbose = 1);
 
-    auto MetropolisDelta(double delta) -> void { fMetropolisDelta = Math::Clamp<"()">(delta, 0., 0.5); }
+    auto MetropolisDelta(double delta) -> void { fMetropolisDelta = muc::clamp<"()">(delta, 0., 0.5); }
     auto MetropolisDiscard(int n) -> void { fMetropolisDiscard = std::max(0, n); }
 
     auto ApplyMACESpecificPxyCut(bool apply) -> void;

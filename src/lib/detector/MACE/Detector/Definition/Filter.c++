@@ -1,6 +1,5 @@
 #include "MACE/Detector/Definition/Filter.h++"
 #include "MACE/Detector/Description/Filter.h++"
-#include "MACE/Math/IntegerPower.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "CLHEP/Vector/RotationZ.h"
@@ -8,6 +7,8 @@
 #include "G4Box.hh"
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
+
+#include "muc/math"
 
 #include <cmath>
 
@@ -27,7 +28,7 @@ auto Filter::Construct(G4bool checkOverlaps) -> void {
     const auto x0{-(filter.Count() - 1) * filter.Pitch() / 2};
     for (int k{}; k < filter.Count(); ++k) {
         const auto x{x0 + k * filter.Pitch()};
-        const auto halfWidth{std::sqrt(Math::Pow<2>(filter.Radius()) - Math::Pow<2>(x))};
+        const auto halfWidth{std::sqrt(muc::pow<2>(filter.Radius()) - muc::pow<2>(x))};
 
         const auto solid{Make<G4Box>(
             "",

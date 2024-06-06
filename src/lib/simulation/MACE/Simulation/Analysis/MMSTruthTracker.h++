@@ -1,12 +1,13 @@
 #pragma once
 
-#include "MACE/Compatibility/std23/constexpr_cmath.h++"
 #include "MACE/Data/MMSTrack.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Reconstruction/MMSTracking/Finder/TruthFinder.h++"
 #include "MACE/Simulation/Analysis/MMSTruthTrackerMessenger.h++"
 #include "MACE/Simulation/Hit/CDCHit.h++"
 #include "MACE/Simulation/Hit/TTCHit.h++"
+
+#include "muc/math"
 
 #include "gsl/gsl"
 

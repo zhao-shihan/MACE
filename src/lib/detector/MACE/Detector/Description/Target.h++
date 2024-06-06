@@ -1,14 +1,12 @@
 #pragma once
 
-#include "MACE/Compatibility/std23/constexpr_cmath.h++"
 #include "MACE/Compatibility/std23/unreachable.h++"
 #include "MACE/Concept/InputVector.h++"
 #include "MACE/Detector/Description/DescriptionBase.h++"
 #include "MACE/Env/Memory/WeakSingleton.h++"
-#include "MACE/Math/Hypot.h++"
-#include "MACE/Math/IntegerPower.h++"
-#include "MACE/Math/LLPiecewise.h++"
 #include "MACE/Math/Parity.h++"
+
+#include "muc/math"
 
 #include <algorithm>
 #include <cmath>

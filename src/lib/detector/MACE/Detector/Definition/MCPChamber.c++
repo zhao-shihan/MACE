@@ -2,7 +2,6 @@
 #include "MACE/Detector/Description/EMCField.h++"
 #include "MACE/Detector/Description/MCPChamber.h++"
 #include "MACE/Detector/Description/SolenoidBeamPipe.h++"
-#include "MACE/Math/IntegerPower.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
@@ -11,6 +10,8 @@
 #include "G4SubtractionSolid.hh"
 #include "G4ThreeVector.hh"
 #include "G4Tubs.hh"
+
+#include "muc/math"
 
 #include <cmath>
 
@@ -64,7 +65,7 @@ auto MCPChamber::Construct(G4bool checkOverlaps) -> void {
     }
 
     { // Pipe
-        const auto radiusCos{mcpChamber.InnerRadius() * std::sqrt(1 - Math::Pow<2>(solenoidBeamPipe.InnerRadius() / mcpChamber.InnerRadius()))};
+        const auto radiusCos{mcpChamber.InnerRadius() * std::sqrt(1 - muc::pow<2>(solenoidBeamPipe.InnerRadius() / mcpChamber.InnerRadius()))};
         const auto halfLength{(emcField.Length() / 2 - radiusCos) / 2};
 
         const auto solid{Make<G4Tubs>(

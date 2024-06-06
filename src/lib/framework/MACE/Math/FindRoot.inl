@@ -8,10 +8,10 @@ auto NewtonRaphson(const std::regular_invocable<T> auto& f,
                    T tolerance) -> std::pair<T, bool> {
     auto x1{x0 - f(x0) / df(x0)};
     for (int i{}; i < maxIterations; ++i) {
-        if (std23::isnan(x1)) {
+        if (muc::isnan(x1)) {
             break;
         }
-        if (std23::abs(x1 - x0) <= std23::abs(Math::MidPoint(x1, x0)) * tolerance) {
+        if (muc::abs(x1 - x0) <= muc::abs(Math::MidPoint(x1, x0)) * tolerance) {
             return {x1, true};
         }
         x0 = x1;
@@ -34,10 +34,10 @@ auto Secant(const std::regular_invocable<T> auto& f,
     auto fx1{f(x1)};
     auto x2{(x0 * fx1 - x1 * fx0) / (fx1 - fx0)};
     for (int i{}; i < maxIterations; ++i) {
-        if (std23::isnan(x2)) {
+        if (muc::isnan(x2)) {
             break;
         }
-        if (std23::abs(x2 - x1) <= std23::abs(Math::MidPoint(x2, x1)) * tolerance) {
+        if (muc::abs(x2 - x1) <= muc::abs(Math::MidPoint(x2, x1)) * tolerance) {
             return {x2, true};
         }
         x0 = x1;

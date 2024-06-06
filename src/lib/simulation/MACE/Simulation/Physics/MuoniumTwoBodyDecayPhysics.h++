@@ -1,8 +1,9 @@
 #pragma once
 
-#include "MACE/Math/Clamp.h++"
 #include "MACE/Simulation/Physics/DecayPhysicsBase.h++"
 #include "MACE/Simulation/Physics/MuoniumTwoBodyDecayPhysicsMessenger.h++"
+
+#include "muc/math"
 
 #include "gsl/gsl"
 
@@ -16,10 +17,10 @@ class MuoniumTwoBodyDecayPhysics : public DecayPhysicsBase {
 public:
     MuoniumTwoBodyDecayPhysics(G4int verbose);
 
-    auto RadiativeDecayBR(double br) -> void { fRadiativeDecayBR = Math::Clamp<"[]">(br, 0., 1.); }
-    auto IPPDecayBR(double br) -> void { fIPPDecayBR = Math::Clamp<"[]">(br, 0., 1.); }
-    auto AnnihilationBR(double br) -> void { fAnnihilationBR = Math::Clamp<"[]">(br, 0., 1.); }
-    auto TwoBodyDecayBR(double br) -> void { fTwoBodyDecayBR = Math::Clamp<"[]">(br, 0., 1.); }
+    auto RadiativeDecayBR(double br) -> void { fRadiativeDecayBR = muc::clamp<"[]">(br, 0., 1.); }
+    auto IPPDecayBR(double br) -> void { fIPPDecayBR = muc::clamp<"[]">(br, 0., 1.); }
+    auto AnnihilationBR(double br) -> void { fAnnihilationBR = muc::clamp<"[]">(br, 0., 1.); }
+    auto TwoBodyDecayBR(double br) -> void { fTwoBodyDecayBR = muc::clamp<"[]">(br, 0., 1.); }
 
     virtual auto ConstructParticle() -> void override;
     virtual auto ConstructProcess() -> void override;

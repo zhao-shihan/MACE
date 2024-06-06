@@ -1,11 +1,12 @@
 #include "MACE/Detector/Definition/SolenoidB2.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Math/LLPiecewise.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
+
+#include "muc/math"
 
 #include <cmath>
 
@@ -32,7 +33,7 @@ auto SolenoidB2::Construct(G4bool checkOverlaps) -> void {
 
     const auto referenceAngularSpacing{2 * std::asin(solenoid.ReferenceCoilSpacing() / (2 * solenoid.B2Radius()))};
     const auto coilAngularThickness{2 * std::asin(solenoid.CoilThickness() / (2 * solenoid.B2Radius()))};
-    const auto nCoil{Math::LLTrunc(0.5_pi / (coilAngularThickness + referenceAngularSpacing))};
+    const auto nCoil{muc::lltrunc(0.5_pi / (coilAngularThickness + referenceAngularSpacing))};
     const auto angularSpacing{0.5_pi / nCoil - referenceAngularSpacing};
     const auto phi0{angularSpacing / 2 + coilAngularThickness / 2}; // clang-format off
     const auto basicTransform{G4TranslateX3D{solenoid.B2Radius()} *

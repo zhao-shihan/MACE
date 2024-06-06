@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MACE/Concept/NumericVector.h++"
-#include "MACE/Math/Hypot.h++"
 #include "MACE/Math/Random/Distribution/UniformRectangle.h++"
 #include "MACE/Math/Random/Distribution/internal/FastLogForOpen01.h++"
 #include "MACE/Math/Random/RandomNumberDistributionBase.h++"
@@ -9,6 +8,7 @@
 #include "MACE/Utility/VectorValueType.h++"
 
 #include "muc/array"
+#include "muc/math"
 
 #include <array>
 #include <concepts>

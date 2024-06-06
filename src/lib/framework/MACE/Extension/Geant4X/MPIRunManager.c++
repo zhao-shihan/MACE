@@ -1,8 +1,6 @@
-#include "MACE/Compatibility/std23/constexpr_cmath.h++"
 #include "MACE/Compatibility/std23/to_underlying.h++"
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/Geant4X/MPIRunManager.h++"
-#include "MACE/Math/IntegerPower.h++"
 #include "MACE/Utility/MPIReseedRandomEngine.h++"
 
 #include "G4ApplicationState.hh"
@@ -10,6 +8,8 @@
 #include "G4Run.hh"
 #include "G4StateManager.hh"
 #include "Randomize.hh"
+
+#include "muc/math"
 
 #include "fmt/chrono.h"
 #include "fmt/format.h"

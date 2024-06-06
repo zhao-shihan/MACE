@@ -62,8 +62,8 @@ Target::ShapeBase<ADerivedShape>::DetailBase<ADerivedDetail>::DetailBase() {
 
 auto Target::CuboidTarget::VolumeContain(const Concept::InputVector3D auto& x) const -> bool {
     return -fThickness <= x[2] and x[2] <= 0 and
-           std23::abs(x[0]) <= fWidth / 2 and
-           std23::abs(x[1]) <= fWidth / 2;
+           muc::abs(x[0]) <= fWidth / 2 and
+           muc::abs(x[1]) <= fWidth / 2;
 }
 
 auto Target::CuboidTarget::Contain(const Concept::InputVector3D auto& x, bool insideVolume) const -> bool {
@@ -79,8 +79,8 @@ auto Target::CuboidTarget::Contain(const Concept::InputVector3D auto& x, bool in
 
 auto Target::CuboidTarget::DetectableAt(const Concept::InputVector3D auto& x) const -> bool {
     const auto notShadowed{x[2] > 0 or
-                           std23::abs(x[0]) > fWidth / 2 or
-                           std23::abs(x[1]) > fWidth / 2};
+                           muc::abs(x[0]) > fWidth / 2 or
+                           muc::abs(x[1]) > fWidth / 2};
     switch (fDetailType) {
     case ShapeDetailType::Flat:
         return notShadowed;
@@ -92,36 +92,36 @@ auto Target::CuboidTarget::DetectableAt(const Concept::InputVector3D auto& x) co
 }
 
 auto Target::CuboidTarget::PerforatedCuboid::DetailContain(const Concept::InputVector3D auto& x) const -> bool {
-    if (x[2] < -fDepth or std23::abs(x[0]) > fHalfExtent or std23::abs(x[1]) > fHalfExtent) {
+    if (x[2] < -fDepth or muc::abs(x[0]) > fHalfExtent or muc::abs(x[1]) > fHalfExtent) {
         return true;
     }
     using std::numbers::sqrt3;
     const auto p{Pitch()};
 
-    const auto u0{p * Math::LLRound((x[0] - (1 / sqrt3) * x[1]) / p)};
-    const auto v0{p * Math::LLRound((2 / sqrt3) * x[1] / p)};
+    const auto u0{p * muc::llround((x[0] - (1 / sqrt3) * x[1]) / p)};
+    const auto v0{p * muc::llround((2 / sqrt3) * x[1] / p)};
     const auto x0{u0 + v0 / 2};
     const auto y0{(sqrt3 / 2) * v0};
 
     const auto deltaX{x[0] - x0};
     const auto deltaY{x[1] - y0};
-    const auto deltaXY2MinusR2{Math::Pow<2>(deltaX) + (deltaY + fRadius) * (deltaY - fRadius)};
+    const auto deltaXY2MinusR2{muc::pow<2>(deltaX) + (deltaY + fRadius) * (deltaY - fRadius)};
 
     if (deltaXY2MinusR2 <= 0) { return false; }
-    const auto deltaXY2MinusR2PlusP2{deltaXY2MinusR2 + Math::Pow<2>(p)};
+    const auto deltaXY2MinusR2PlusP2{deltaXY2MinusR2 + muc::pow<2>(p)};
     const auto pDeltaX{p * deltaX};
-    return deltaXY2MinusR2PlusP2 > std23::abs(2 * pDeltaX) and
-           deltaXY2MinusR2PlusP2 > std23::abs(pDeltaX + sqrt3 * p * deltaY);
+    return deltaXY2MinusR2PlusP2 > muc::abs(2 * pDeltaX) and
+           deltaXY2MinusR2PlusP2 > muc::abs(pDeltaX + sqrt3 * p * deltaY);
 }
 
 auto Target::MultiLayerTarget::VolumeContain(const Concept::InputVector3D auto& x) const -> bool {
     const auto x0{Math::IsEven(fCount) ? fSpacing / 2 : -fThickness / 2};
     const auto r{fSpacing + fThickness};
     const auto u{(x[0] + x0) / r};
-    return u - Math::LLRound(u - 0.5) >= fSpacing / r and
-           std23::abs(x[0]) <= fCount * r and
-           std23::abs(x[1]) <= fHeight / 2 and
-           std23::abs(x[2]) <= fWidth / 2;
+    return u - muc::llround(u - 0.5) >= fSpacing / r and
+           muc::abs(x[0]) <= fCount * r and
+           muc::abs(x[1]) <= fHeight / 2 and
+           muc::abs(x[2]) <= fWidth / 2;
 }
 
 auto Target::MultiLayerTarget::Contain(const Concept::InputVector3D auto& x, bool insideVolume) const -> bool {
@@ -139,9 +139,9 @@ auto Target::MultiLayerTarget::DetectableAt(const Concept::InputVector3D auto& x
     const auto x0{Math::IsEven(fCount) ? fSpacing / 2 : -fThickness / 2};
     const auto r{fSpacing + fThickness};
     const auto u{(x[0] + x0) / r};
-    const auto notShadowed{u - Math::LLRound(u - 0.5) < fSpacing / r or
-                           std23::abs(x[0]) > fCount * r or
-                           std23::abs(x[1]) > fHeight / 2 or
+    const auto notShadowed{u - muc::llround(u - 0.5) < fSpacing / r or
+                           muc::abs(x[0]) > fCount * r or
+                           muc::abs(x[1]) > fHeight / 2 or
                            x[2] > fWidth / 2};
     switch (fDetailType) {
     case ShapeDetailType::Flat:
@@ -154,36 +154,36 @@ auto Target::MultiLayerTarget::DetectableAt(const Concept::InputVector3D auto& x
 }
 
 auto Target::MultiLayerTarget::PerforatedMultiLayer::DetailContain(const Concept::InputVector3D auto& x) const -> bool {
-    if (std23::abs(x[2]) > fHalfExtentZ or std23::abs(x[1]) > fHalfExtentY) {
+    if (muc::abs(x[2]) > fHalfExtentZ or muc::abs(x[1]) > fHalfExtentY) {
         return true;
     }
     using std::numbers::sqrt3;
     const auto p{Pitch()};
 
-    const auto u0{p * Math::LLRound((x[2] - (1 / sqrt3) * x[1]) / p)};
-    const auto v0{p * Math::LLRound((2 / sqrt3) * x[1] / p)};
+    const auto u0{p * muc::llround((x[2] - (1 / sqrt3) * x[1]) / p)};
+    const auto v0{p * muc::llround((2 / sqrt3) * x[1] / p)};
     const auto z0{u0 + v0 / 2};
     const auto y0{(sqrt3 / 2) * v0};
 
     const auto deltaZ{x[2] - z0};
     const auto deltaY{x[1] - y0};
-    const auto deltaZY2MinusR2{Math::Pow<2>(deltaZ) + (deltaY + fRadius) * (deltaY - fRadius)};
+    const auto deltaZY2MinusR2{muc::pow<2>(deltaZ) + (deltaY + fRadius) * (deltaY - fRadius)};
 
     if (deltaZY2MinusR2 <= 0) { return false; }
-    const auto deltaZY2MinusR2PlusP2{deltaZY2MinusR2 + Math::Pow<2>(p)};
+    const auto deltaZY2MinusR2PlusP2{deltaZY2MinusR2 + muc::pow<2>(p)};
     const auto pDeltaZ{p * deltaZ};
-    return deltaZY2MinusR2PlusP2 > std23::abs(2 * pDeltaZ) and
-           deltaZY2MinusR2PlusP2 > std23::abs(pDeltaZ + sqrt3 * p * deltaY);
+    return deltaZY2MinusR2PlusP2 > muc::abs(2 * pDeltaZ) and
+           deltaZY2MinusR2PlusP2 > muc::abs(pDeltaZ + sqrt3 * p * deltaY);
 }
 
 auto Target::CylinderTarget::VolumeContain(const Concept::InputVector3D auto& x) const -> bool {
     return -fThickness / 2 <= x[2] and x[2] <= fThickness / 2 and
-           Math::Hypot2(x[0], x[1]) <= Math::Pow<2>(fRadius);
+           muc::hypot2(x[0], x[1]) <= muc::pow<2>(fRadius);
 }
 
 auto Target::CylinderTarget::DetectableAt(const Concept::InputVector3D auto& x) const -> bool {
     return x[2] > fThickness / 2 or
-           Math::Hypot2(x[0], x[1]) > Math::Pow<2>(fRadius);
+           muc::hypot2(x[0], x[1]) > muc::pow<2>(fRadius);
 }
 
 } // namespace MACE::Detector::Description

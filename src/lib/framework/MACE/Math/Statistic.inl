@@ -23,9 +23,9 @@ constexpr Statistic<1>::Statistic(const S& sample, const W& weight) :
 
 constexpr auto Statistic<1>::Fill(double sample, double weight) -> void {
     fSumWX += weight * sample;
-    fSumWX2 += weight * Math::Pow<2>(sample);
-    fSumWX3 += weight * Math::Pow<3>(sample);
-    fSumWX4 += weight * Math::Pow<4>(sample);
+    fSumWX2 += weight * muc::pow<2>(sample);
+    fSumWX3 += weight * muc::pow<3>(sample);
+    fSumWX4 += weight * muc::pow<4>(sample);
     fSumW += weight;
 }
 
@@ -66,7 +66,7 @@ template<int K>
 constexpr auto Statistic<1>::CentralMoment() const -> double {
     if constexpr (K == 0) { return 1; }
     if constexpr (K == 1) { return 0; }
-    if constexpr (K == 2) { return Moment<2>() - Math::Pow<2>(Moment<1>()); }
+    if constexpr (K == 2) { return Moment<2>() - muc::pow<2>(Moment<1>()); }
     if constexpr (K == 3) { return Math::QinPolynomial({Moment<3>(), -3 * Moment<2>(), 0, 2}, Moment<1>()); }
     if constexpr (K == 4) { return Math::QinPolynomial({Moment<4>(), -4 * Moment<3>(), 6 * Moment<2>(), 0, -3}, Moment<1>()); }
 }
@@ -170,7 +170,7 @@ template<int K>
 auto Statistic<N>::CentralMoment(int i) const -> double {
     if constexpr (K == 0) { return 1; }
     if constexpr (K == 1) { return 0; }
-    if constexpr (K == 2) { return Moment<2>(i) - Math::Pow<2>(Moment<1>(i)); }
+    if constexpr (K == 2) { return Moment<2>(i) - muc::pow<2>(Moment<1>(i)); }
     if constexpr (K == 3) { return Math::QinPolynomial({Moment<3>(i), -3 * Moment<2>(i), 0, 2}, Moment<1>(i)); }
     if constexpr (K == 4) { return Math::QinPolynomial({Moment<4>(i), -4 * Moment<3>(i), 6 * Moment<2>(i), 0, -3}, Moment<1>(i)); }
 }

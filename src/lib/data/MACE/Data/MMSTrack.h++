@@ -3,13 +3,12 @@
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Data/TupleModel.h++"
 #include "MACE/Data/Value.h++"
-#include "MACE/Math/Hypot.h++"
-#include "MACE/Math/IntegerPower.h++"
 #include "MACE/Math/Norm.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
 #include "MACE/Utility/VectorArithmeticOperator.h++"
 
 #include "muc/array"
+#include "muc/math"
 
 #include <cmath>
 #include <vector>
@@ -46,14 +45,14 @@ constexpr auto CalculateHelix(SuperTuple<Data::Tuple<MMSTrack>> auto& track, dou
     const auto x0{Get<"x0">(track).template As<muc::array3d>()};
     const auto p0{Get<"p0">(track).template As<muc::array3d>()};
 
-    const auto absPXY{Math::Hypot(p0[0], p0[1])};
+    const auto absPXY{muc::hypot(p0[0], p0[1])};
     const auto pXY{charge < 0 ? absPXY : -absPXY};
     const auto r0{pXY / (-charge * magneticFluxDensity * c_light)};
     const muc::array2d x0Local{r0 * (p0[1] / pXY),
-                                r0 * (-p0[0] / pXY)};
+                               r0 * (-p0[0] / pXY)};
     const auto phi0{std::atan2(-x0Local[1], -x0Local[0])};
     const muc::array2d c0{x0[0] - x0Local[0],
-                           x0[1] - x0Local[1]};
+                          x0[1] - x0Local[1]};
 
     // const auto absDeltaPhi{std::acos(-c0 * x0Local) / std::sqrt(Math::Norm2(c0) * Math::Norm2(x0Local))};
     // const auto deltaPhi{x0Local[0] * c0[1] - c0[0] * x0Local[1] > 0 ? absDeltaPhi : -absDeltaPhi};
@@ -87,15 +86,15 @@ constexpr auto CalculateVertex(SuperTuple<Data::Tuple<MMSTrack>> auto& track, do
     const auto cos0{std::cos(phi0)};
     const auto sin0{std::sin(phi0)};
     const muc::array3d x0{c0[0] + r0 * cos0,
-                           c0[1] + r0 * sin0,
-                           z0};
+                          c0[1] + r0 * sin0,
+                          z0};
 
     const auto pXY{-charge * magneticFluxDensity * c_light * r0};
     const auto pZ{pXY / std::tan(theta0)};
-    const auto ek0{std::sqrt(Math::Hypot2(pXY, pZ) + Math::Pow<2>(electron_mass_c2)) - electron_mass_c2};
+    const auto ek0{std::sqrt(muc::hypot2(pXY, pZ) + muc::pow<2>(electron_mass_c2)) - electron_mass_c2};
     const muc::array3d p0{-pXY * sin0,
-                           pXY * cos0,
-                           pZ};
+                          pXY * cos0,
+                          pZ};
 
     Get<"PDGID">(track) = pdgID;
     Get<"x0">(track) = x0;

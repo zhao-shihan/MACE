@@ -19,7 +19,7 @@ AFloat DCACalculator<AFloat>::Compute(const DataModel::CDCHelixTrack& mmsTrack, 
 
 template<std::floating_point AFloat>
 AFloat DCACalculator<AFloat>::ComputePointCircleDCA(const AFloat r, const muc::array2<AFloat> center, const muc::array2<AFloat> point) const{
-    return std23::abs(r - Math::Norm(point - center));
+    return muc::abs(r - Math::Norm(point - center));
 }
 
 } // namespace MACE::Analysis

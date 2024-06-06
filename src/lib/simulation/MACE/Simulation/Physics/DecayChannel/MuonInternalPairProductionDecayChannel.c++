@@ -1,11 +1,8 @@
-#include "MACE/Compatibility/std23/constexpr_cmath.h++"
 #include "MACE/Detector/Description/Accelerator.h++"
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/Filter.h++"
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Math/Hypot.h++"
-#include "MACE/Math/IntegerPower.h++"
 #include "MACE/Math/Random/Distribution/Uniform.h++"
 #include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
@@ -13,6 +10,8 @@
 #include "G4DecayProducts.hh"
 #include "G4DynamicParticle.hh"
 #include "Randomize.hh"
+
+#include "muc/math"
 
 #include "gsl/gsl"
 
@@ -171,9 +170,9 @@ auto MuonInternalPairProductionDecayChannel::PassCut(const CLHEPX::RAMBO<5>::Eve
         const auto maxPositronRxy{filter.Enabled() ? 5 * filter.Pitch() : solenoid.InnerRadius()};
         const auto maxPositronPxy{maxPositronRxy * solenoid.MagneticFluxDensity() * c_light};
 
-        const auto positron1Pxy{Math::Hypot(p.x(), p.y())};
-        const auto electronPxy{Math::Hypot(p1.x(), p1.y())};
-        const auto positron2Pxy{Math::Hypot(p2.x(), p2.y())};
+        const auto positron1Pxy{muc::hypot(p.x(), p.y())};
+        const auto electronPxy{muc::hypot(p1.x(), p1.y())};
+        const auto positron2Pxy{muc::hypot(p2.x(), p2.y())};
 
         passCut1 &= electronPxy > cdcPxyCut and positron1Pxy < cdcPxyCut and positron2Pxy < maxPositronPxy;
         passCut2 &= electronPxy > cdcPxyCut and positron2Pxy < cdcPxyCut and positron1Pxy < maxPositronPxy;
