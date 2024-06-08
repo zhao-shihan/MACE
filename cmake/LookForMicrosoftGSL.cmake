@@ -38,6 +38,7 @@ if(MACE_BUILTIN_MSGSL)
     message(STATUS "Downloading (if required) and configuring Microsoft.GSL (version: ${MACE_BUILTIN_MSGSL_VERSION}) - done")
     # check download
     if(NOT EXISTS "${MACE_BUILTIN_MSGSL_SRC_DIR}/CMakeLists.txt")
+        file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/msgsl-build")
         file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/msgsl-subbuild")
         message(FATAL_ERROR "It seems that the download of Microsoft.GSL is not successful. You can try to run cmake again, or manually download Microsoft.GSL from ${MACE_BUILTIN_MSGSL_URL} and extract it to ${MACE_PROJECT_3RDPARTY_DIR} (and keep the directory structure). If the error persists, you can try to clean the build tree and restart the build.")
     endif()

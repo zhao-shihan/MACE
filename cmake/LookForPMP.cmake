@@ -45,6 +45,7 @@ if(MACE_BUILTIN_PMP)
     message(STATUS "Downloading (if required) and configuring pmp (version: ${MACE_BUILTIN_PMP_VERSION}) - done")
     # check download
     if(NOT EXISTS "${MACE_BUILTIN_PMP_SRC_DIR}/CMakeLists.txt")
+        file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/pmp-build")
         file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/pmp-subbuild")
         message(FATAL_ERROR "It seems that the download of pmp is not successful. You can try to run cmake again, or manually download pmp from ${MACE_BUILTIN_PMP_URL} and extract it to ${MACE_PROJECT_3RDPARTY_DIR} (and keep the directory structure). If the error persists, you can try to clean the build tree and restart the build.")
     endif()

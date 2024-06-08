@@ -18,8 +18,8 @@ if(MACE_BUILTIN_TIMSORT)
         set(MACE_BUILTIN_TIMSORT_VERSION ${MACE_TIMSORT_MINIMUM_REQUIRED})
     endif()
     # set download dest and URL
-    set(MACE_BUILTIN_TIMSORT_SRC_DIR "${MACE_PROJECT_3RDPARTY_DIR}/cpp-TimSort-${MACE_BUILTIN_TIMSORT_VERSION}")
-    set(MACE_BUILTIN_TIMSORT_URL "https://github.com/timsort/cpp-TimSort/archive/refs/tags/v3.0.0.tar.gz")
+    set(MACE_BUILTIN_TIMSORT_SRC_DIR "${MACE_PROJECT_3RDPARTY_DIR}/cpp-TimSort-3.x.y")
+    set(MACE_BUILTIN_TIMSORT_URL "https://github.com/zhao-shihan/cpp-TimSort/archive/refs/heads/3.x.y.zip")
     # reuse or download
     include(FetchContent)
     if(EXISTS "${MACE_BUILTIN_TIMSORT_SRC_DIR}/CMakeLists.txt")
@@ -30,14 +30,13 @@ if(MACE_BUILTIN_TIMSORT)
                                       URL "${MACE_BUILTIN_TIMSORT_URL}")
         message(STATUS "timsort will be downloaded from ${MACE_BUILTIN_TIMSORT_URL} to ${MACE_BUILTIN_TIMSORT_SRC_DIR}")
     endif()
-    # set options
-    # uses CACHE INTERNAL variables to propagate options. see https://discourse.cmake.org/t/what-is-the-correct-way-to-set-options-of-a-project-before-fetch-content/268/4
     # configure it
     message(STATUS "Downloading (if required) and configuring timsort (version: ${MACE_BUILTIN_TIMSORT_VERSION})")
     FetchContent_MakeAvailable(timsort)
     message(STATUS "Downloading (if required) and configuring timsort (version: ${MACE_BUILTIN_TIMSORT_VERSION}) - done")
     # check download
     if(NOT EXISTS "${MACE_BUILTIN_TIMSORT_SRC_DIR}/CMakeLists.txt")
+        file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/timsort-build")
         file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/timsort-subbuild")
         message(FATAL_ERROR "It seems that the download of timsort is not successful. You can try to run cmake again, or manually download timsort from ${MACE_BUILTIN_TIMSORT_URL} and extract it to ${MACE_PROJECT_3RDPARTY_DIR} (and keep the directory structure). If the error persists, you can try to clean the build tree and restart the build.")
     endif()

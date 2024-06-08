@@ -30,14 +30,13 @@ if(MACE_BUILTIN_EFM)
                                       URL "${MACE_BUILTIN_EFM_URL}")
         message(STATUS "EFM will be downloaded from ${MACE_BUILTIN_EFM_URL} to ${MACE_BUILTIN_EFM_SRC_DIR}")
     endif()
-    # set options
-    # uses CACHE INTERNAL variables to propagate options. see https://discourse.cmake.org/t/what-is-the-correct-way-to-set-options-of-a-project-before-fetch-content/268/4
     # configure it
     message(STATUS "Downloading (if required) and configuring EFM (version: ${MACE_BUILTIN_EFM_VERSION})")
     FetchContent_MakeAvailable(EFM)
     message(STATUS "Downloading (if required) and configuring EFM (version: ${MACE_BUILTIN_EFM_VERSION}) - done")
     # check download
     if(NOT EXISTS "${MACE_BUILTIN_EFM_SRC_DIR}/CMakeLists.txt")
+        file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/EFM-build")
         file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/EFM-subbuild")
         message(FATAL_ERROR "It seems that the download of EFM is not successful. You can try to run cmake again, or manually download EFM from ${MACE_BUILTIN_EFM_URL} and extract it to ${MACE_PROJECT_3RDPARTY_DIR} (and keep the directory structure). If the error persists, you can try to clean the build tree and restart the build.")
     endif()

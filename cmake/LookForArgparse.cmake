@@ -36,6 +36,7 @@ if(MACE_BUILTIN_ARGPARSE)
     message(STATUS "Downloading (if required) and configuring argparse (version: ${MACE_BUILTIN_ARGPARSE_VERSION}) - done")
     # check download
     if(NOT EXISTS "${MACE_BUILTIN_ARGPARSE_SRC_DIR}/CMakeLists.txt")
+        file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/argparse-build")
         file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/argparse-subbuild")
         message(FATAL_ERROR "It seems that the download of argparse is not successful. You can try to run cmake again, or manually download argparse from ${MACE_BUILTIN_ARGPARSE_URL} and extract it to ${MACE_PROJECT_3RDPARTY_DIR} (and keep the directory structure). If the error persists, you can try to clean the build tree and restart the build.")
     endif()

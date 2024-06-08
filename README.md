@@ -54,7 +54,7 @@ Required, built-in if not found (network or pre-downloaded source is required):
 6. [muc (A standard non-standard C++ library)](https://github.com/zhao-shihan/muc) (≥ 0.0.1, built-in if not found)
 7. [Microsoft.GSL](https://github.com/Microsoft/GSL) ([ISO C++ guidelines support library](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#gsl-guidelines-support-library)) (≥ 4.0.0, built-in if not found)
 8. [PMP (Polygon Mesh Processing Library)](https://www.pmp-library.org/) (≥ 3.0.0, built-in if not found)
-9. [TimSort (A C++ implementation of timsort)](https://github.com/timsort/cpp-TimSort) (≥ 3.0.0, built-in if not found)
+9. [zhao-shihan/cpp-TimSort (A C++ implementation of timsort)](https://github.com/timsort/cpp-TimSort) (a cpp-TimSort fork, built-in if not found)
 10. [yaml-cpp (A YAML parser and emitter in C++)](https://github.com/jbeder/yaml-cpp) (≥ 0.8.0, built-in if not found)
 
 # Cite

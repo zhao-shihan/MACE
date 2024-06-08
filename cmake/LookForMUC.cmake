@@ -39,6 +39,7 @@ if(MACE_BUILTIN_MUC)
     message(STATUS "Downloading (if required) and configuring muc (version: ${MACE_BUILTIN_MUC_VERSION}) - done")
     # check download
     if(NOT EXISTS "${MACE_BUILTIN_MUC_SRC_DIR}/CMakeLists.txt")
+        file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/muc-build")
         file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/muc-subbuild")
         message(FATAL_ERROR "It seems that the download of muc is not successful. You can try to run cmake again, or manually download muc from ${MACE_BUILTIN_MUC_URL} and extract it to ${MACE_PROJECT_3RDPARTY_DIR} (and keep the directory structure). If the error persists, you can try to clean the build tree and restart the build.")
     endif()

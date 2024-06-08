@@ -33,6 +33,7 @@ if(MACE_BUILTIN_GENFIT)
     message(STATUS "Downloading (if required) and configuring GenFit (version: 2.2.0) - done")
     # check download
     if(NOT EXISTS "${MACE_BUILTIN_GENFIT_SRC_DIR}/CMakeLists.txt")
+        file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/GenFit-build")
         file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/GenFit-subbuild")
         message(FATAL_ERROR "It seems that the download of GenFit is not successful. You can try to run cmake again, or manually download GenFit from ${MACE_BUILTIN_GENFIT_URL} and extract it to ${MACE_PROJECT_3RDPARTY_DIR} (and keep the directory structure). If the error persists, you can try to clean the build tree and restart the build.")
     endif()
