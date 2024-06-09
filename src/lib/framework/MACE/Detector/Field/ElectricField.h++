@@ -12,8 +12,8 @@ template<typename F>
 concept ElectricField =
     requires {
         requires ElectromagneticField<F>;
-        { F::template BFieldAt<muc::array3d>({}) } -> std::same_as<muc::array3d>;
-        requires F::template BFieldAt<muc::array3d>({}) == muc::array3d{};
+        { F::template B<muc::array3d>({}) } -> std::same_as<muc::array3d>;
+        requires F::template B<muc::array3d>({}) == muc::array3d{};
     };
 
 } // namespace MACE::Detector::Field

@@ -19,7 +19,7 @@ protected:
 
 public:
     template<Concept::NumericVector3D T>
-    static constexpr auto EFieldAt(T) -> T { return {0, 0, 0}; }
+    static constexpr auto E(T) -> T { return {0, 0, 0}; }
 };
 
 } // namespace MACE::Detector::Field

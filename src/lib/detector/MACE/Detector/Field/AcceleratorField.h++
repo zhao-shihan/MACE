@@ -12,9 +12,9 @@ public:
     inline AcceleratorField();
 
     template<Concept::NumericVector3D T>
-    auto BFieldAt(T) const -> T { return {0, 0, fMMSField.MagneticFluxDensity()}; }
+    auto B(T) const -> T { return {0, 0, fMMSField.MagneticFluxDensity()}; }
     template<Concept::NumericVector3D T>
-    auto EFieldAt(T) const -> T { return {0, 0, fAccelerator.AcceleratePotential() / fAccelerator.AccelerateLength()}; }
+    auto E(T) const -> T { return {0, 0, fAccelerator.AcceleratePotential() / fAccelerator.AccelerateLength()}; }
 
 private:
     const Description::MMSField& fMMSField;

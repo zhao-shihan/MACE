@@ -25,7 +25,7 @@ public:
 
 public:
     template<Concept::NumericVector3D T>
-    constexpr auto BEFieldAt(T x) const -> F<T>;
+    constexpr auto BE(T x) const -> F<T>;
 };
 
 } // namespace MACE::Detector::Field

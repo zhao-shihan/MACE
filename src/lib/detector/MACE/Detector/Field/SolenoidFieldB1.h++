@@ -13,7 +13,7 @@ public:
     inline SolenoidFieldB1();
 
     template<Concept::NumericVector3D T>
-    inline auto BFieldAt(T) const -> T;
+    inline auto B(T) const -> T;
 
 private:
     const Description::Solenoid& fSolenoid;

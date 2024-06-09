@@ -11,7 +11,7 @@ public:
     inline SolenoidFieldS1();
 
     template<Concept::NumericVector3D T>
-    auto BFieldAt(T) const -> T { return {0, 0, fSolenoid.MagneticFluxDensity()}; }
+    auto B(T) const -> T { return {0, 0, fSolenoid.MagneticFluxDensity()}; }
 
 private:
     const Description::Solenoid& fSolenoid;
