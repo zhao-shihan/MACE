@@ -2,7 +2,6 @@
 
 #include "MACE/Concept/NumericVector.h++"
 #include "MACE/Detector/Field/ElectromagneticField.h++"
-#include "MACE/Utility/VectorCast.h++"
 
 #include "muc/array"
 
@@ -10,22 +9,25 @@
 
 namespace MACE::Detector::Field {
 
+namespace internal {
+
+template<Concept::NumericVector3D T>
+struct BEFieldValue {
+    T B;
+    T E;
+};
+
+} // namespace internal
+
 template<typename ADerived>
 class ElectromagneticFieldBase {
+public:
+    template<Concept::NumericVector3D T>
+    using F = internal::BEFieldValue<T>;
+
 protected:
-    constexpr ElectromagneticFieldBase() = default;
+    constexpr ElectromagneticFieldBase();
     constexpr ~ElectromagneticFieldBase() = default;
-
-public:
-    template<Concept::NumericVector3D T>
-    struct F {
-        T B;
-        T E;
-    };
-
-public:
-    template<Concept::NumericVector3D T>
-    constexpr auto BE(T x) const -> F<T>;
 };
 
 } // namespace MACE::Detector::Field

@@ -14,6 +14,10 @@ class ElectricFieldBase;
 
 template<typename ADerived>
 class MagneticFieldBase : public ElectromagneticFieldBase<ADerived> {
+private:
+    template<Concept::NumericVector3D T>
+    using F = typename ElectromagneticFieldBase<ADerived>::F<T>;
+
 protected:
     constexpr MagneticFieldBase();
     constexpr ~MagneticFieldBase() = default;
@@ -21,6 +25,8 @@ protected:
 public:
     template<Concept::NumericVector3D T>
     static constexpr auto E(T) -> T { return {0, 0, 0}; }
+    template<Concept::NumericVector3D T>
+    constexpr auto BE(T x) const -> F<T> { return {static_cast<const ADerived*>(this)->B(x), E(x)}; }
 };
 
 } // namespace MACE::Detector::Field
