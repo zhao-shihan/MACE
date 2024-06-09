@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Concept/NumericVector.h++"
 #include "MACE/Detector/Field/ElectricFieldBase.h++"
 #include "MACE/Detector/Field/ElectromagneticFieldBase.h++"
 #include "MACE/Detector/Field/MagneticField.h++"
