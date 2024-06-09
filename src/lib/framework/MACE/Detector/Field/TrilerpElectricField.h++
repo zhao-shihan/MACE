@@ -10,6 +10,9 @@
 
 namespace MACE::Detector::Field {
 
+/// @brief An electric field interpolated from data.
+/// Initialization and interpolation are performed by EFM.
+/// @tparam AStorageVector 6D vector type passed to EFM for internal stroage.
 template<Concept::MathVector3D AStorageVector = Eigen::Vector3d>
 class TrilerpElectricField : public ElectricFieldBase<TrilerpElectricField<AStorageVector>>,
                              public EFM::FieldMap3D<AStorageVector> {

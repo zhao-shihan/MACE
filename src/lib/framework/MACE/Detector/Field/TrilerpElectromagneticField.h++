@@ -15,8 +15,9 @@
 namespace MACE::Detector::Field {
 
 /// @brief An electromagnetic field interpolated from data.
+/// Initialization and interpolation are performed by EFM.
 /// @tparam ACache A string literal, can be "WithCache" or "NoCache".
-/// @tparam AStorageVector 6D vector type for internal stroage.
+/// @tparam AStorageVector 6D vector type passed to EFM for internal stroage.
 /// @note "WithCache" and "NoCache" decides whether field cache will be used.
 /// "WithCache" field will reuse the field value calculated in last calculation if
 /// this calculation happens exactly at the same position. In principle, "WithCache"
@@ -28,7 +29,7 @@ template<muc::ceta_string ACache = "WithCache", Concept::MathVector<double, 6> A
     requires(ACache == "WithCache" or ACache == "NoCache")
 class TrilerpElectromagneticField;
 
-template<Concept::MathVector<double, 6> AStorageVector = Eigen::Vector<double, 6>>
+template<Concept::MathVector<double, 6> AStorageVector>
 class TrilerpElectromagneticField<"WithCache", AStorageVector> : public ElectromagneticFieldBase<TrilerpElectromagneticField<"WithCache", AStorageVector>>,
                                                                  public EFM::FieldMap3D<AStorageVector> {
 private:
@@ -46,11 +47,11 @@ public:
     auto BE(T x) const -> F<T>;
 
 private:
-    Eigen::Vector3d fCachedX;
-    std::optional<AStorageVector> fCache;
+    mutable Eigen::Vector3d fCachedX;
+    mutable std::optional<AStorageVector> fCache;
 };
 
-template<Concept::MathVector<double, 6> AStorageVector = Eigen::Vector<double, 6>>
+template<Concept::MathVector<double, 6> AStorageVector>
 class TrilerpElectromagneticField<"NoCache", AStorageVector> : public ElectromagneticFieldBase<TrilerpElectromagneticField<"NoCache", AStorageVector>>,
                                                                public EFM::FieldMap3D<AStorageVector> {
 private:

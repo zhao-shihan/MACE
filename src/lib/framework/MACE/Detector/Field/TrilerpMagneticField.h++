@@ -10,6 +10,9 @@
 
 namespace MACE::Detector::Field {
 
+/// @brief A megnetic field interpolated from data.
+/// Initialization and interpolation are performed by EFM.
+/// @tparam AStorageVector 6D vector type passed to EFM for internal stroage.
 template<Concept::MathVector3D AStorageVector = Eigen::Vector3d>
 class TrilerpMagneticField : public MagneticFieldBase<TrilerpMagneticField<AStorageVector>>,
                              public EFM::FieldMap3D<AStorageVector> {
