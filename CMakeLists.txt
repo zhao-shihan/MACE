@@ -72,6 +72,15 @@ set(MACE_BUILTIN_TIMSORT_VERSION 3.0.0 CACHE STRING "Set built-in TimSort versio
 set(MACE_BUILTIN_YAML_CPP_VERSION 0.8.0 CACHE STRING "Set built-in yaml-cpp version (if required).")
 
 # =============================================================================
+# Installation path
+# =============================================================================
+
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set_property(CACHE CMAKE_INSTALL_PREFIX PROPERTY VALUE ${MACE_PROJECT_ROOT_DIR}/install)
+endif()
+message(STATUS "Install path: ${CMAKE_INSTALL_PREFIX} (add -DCMAKE_INSTALL_PREFIX=<install_path> into CMake command if you wish to change it)")
+
+# =============================================================================
 # Global compile options
 # =============================================================================
 

@@ -30,6 +30,8 @@ if(MACE_BUILTIN_EFM)
                                  URL "${MACE_BUILTIN_EFM_URL}")
         message(STATUS "EFM will be downloaded from ${MACE_BUILTIN_EFM_URL} to ${MACE_BUILTIN_EFM_SRC_DIR}")
     endif()
+    # set options
+    set(EFM_INSTALL ON CACHE INTERNAL "")
     # configure it
     message(STATUS "Downloading (if required) and configuring EFM (version: ${MACE_BUILTIN_EFM_VERSION})")
     FetchContent_MakeAvailable(EFM)
