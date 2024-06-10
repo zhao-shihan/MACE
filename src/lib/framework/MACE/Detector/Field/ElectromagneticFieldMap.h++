@@ -37,7 +37,7 @@ class ElectromagneticFieldMap<"WithCache", AFieldMap> : public ElectromagneticFi
                                                         public AFieldMap {
 private:
     template<Concept::NumericVector3D T>
-    using F = typename ElectromagneticFieldBase<ElectromagneticFieldMap<"WithCache", AFieldMap>>::F<T>;
+    using F = typename ElectromagneticFieldBase<ElectromagneticFieldMap<"WithCache", AFieldMap>>::template F<T>;
 
 public:
     using AFieldMap::AFieldMap;
@@ -59,7 +59,7 @@ class ElectromagneticFieldMap<"NoCache", AFieldMap> : public ElectromagneticFiel
                                                       public AFieldMap {
 private:
     template<Concept::NumericVector3D T>
-    using F = typename ElectromagneticFieldBase<ElectromagneticFieldMap<"NoCache", AFieldMap>>::F<T>;
+    using F = typename ElectromagneticFieldBase<ElectromagneticFieldMap<"NoCache", AFieldMap>>::template F<T>;
 
 public:
     using AFieldMap::AFieldMap;

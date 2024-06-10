@@ -16,10 +16,10 @@ namespace MACE::Detector::Field {
 /// `EFM::FieldMap3DSymZ<Eigen::Vector3d>`.
 template<typename AFieldMap = EFM::FieldMap3D<Eigen::Vector3d>>
     requires std::same_as<typename AFieldMap::CoordinateType, double>
-class MagneticFieldMap : public MagneticFieldBase<MagneticFieldMap<AStorageVector>>,
+class MagneticFieldMap : public MagneticFieldBase<MagneticFieldMap<AFieldMap>>,
                          public AFieldMap {
 public:
-    using AFieldMap::FieldMap3D;
+    using AFieldMap::AFieldMap;
 
     template<Concept::NumericVector3D T>
     auto B(T x) const -> T { return VectorCast<T>((*this)(x[0], x[1], x[2])); }

@@ -14,9 +14,9 @@ class ElectricFieldBase;
 
 template<typename ADerived>
 class MagneticFieldBase : public ElectromagneticFieldBase<ADerived> {
-private:
+public:
     template<Concept::NumericVector3D T>
-    using F = typename ElectromagneticFieldBase<ADerived>::F<T>;
+    using F = typename ElectromagneticFieldBase<ADerived>::template F<T>;
 
 protected:
     constexpr MagneticFieldBase();
