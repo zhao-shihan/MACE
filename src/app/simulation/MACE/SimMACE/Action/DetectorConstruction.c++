@@ -47,6 +47,8 @@
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Detector/Description/MCP.h++"
+#include "MACE/Detector/Field/EMCField.h++"
+#include "MACE/Detector/Field/WrapAsG4Field.h++"
 #include "MACE/SimMACE/Action/DetectorConstruction.h++"
 #include "MACE/SimMACE/Messenger/DetectorMessenger.h++"
 #include "MACE/SimMACE/SD/CDCSD.h++"
@@ -54,7 +56,6 @@
 #include "MACE/SimMACE/SD/MCPSD.h++"
 #include "MACE/SimMACE/SD/TTCSD.h++"
 #include "MACE/Simulation/Field/AcceleratorField.h++"
-#include "MACE/Simulation/Field/EMCField.h++"
 #include "MACE/Simulation/Field/MMSField.h++"
 #include "MACE/Simulation/Field/SolenoidFieldB1.h++"
 #include "MACE/Simulation/Field/SolenoidFieldB2.h++"
@@ -343,8 +344,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
                     using Equation = G4TMagFieldEquation<AField>;
                     using Stepper = G4TDormandPrince45<Equation, 6>;
                     using Driver = G4InterpolationDriver<Stepper>;
-                    const auto equation{new Equation{field}};
-                    const auto stepper{new Stepper{equation, 6}}; // clang-format off
+                    const auto equation{new Equation{field}}; // clang-format off
+                    const auto stepper{new Stepper{equation, 6}};
                     const auto driver{new Driver{hMin, stepper, 6}}; // clang-format on
                     const auto chordFinder{new G4ChordFinder{driver}};
                     detector.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), forceToAllDaughters);
@@ -355,7 +356,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
             RegisterMagneticField(solenoidFieldS2, new SolenoidFieldS2, false);
             RegisterMagneticField(solenoidFieldB2, new SolenoidFieldB2, false);
             RegisterMagneticField(solenoidFieldS3, new SolenoidFieldS3, false);
-            RegisterMagneticField(emcField, new EMCField, false);
+            RegisterMagneticField(emcField, new Detector::Field::WrapAsG4Field<Detector::Field::EMCField>, false);
         }
         { // EM field, must be reigstered after MMS magnetic field! but why?
             using Equation = G4EqMagElectricField;

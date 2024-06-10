@@ -9,6 +9,8 @@
 
 #include "muc/array"
 
+#include <utility>
+
 namespace MACE::Detector::Description {
 
 class EMCField final : public DescriptionBase<EMCField> {
@@ -35,9 +37,28 @@ public:
     // Field
     ///////////////////////////////////////////////////////////
 
-    auto MagneticFluxDensity() const -> const auto& { return fMagneticFluxDensity; }
+    class FieldType {
+        friend class EMCField;
 
-    auto MagneticFluxDensity(auto v) -> void { fMagneticFluxDensity = v; }
+    public:
+        FieldType();
+
+        auto UseFast() const -> auto { return fUseFast; }
+        auto FastField() const -> auto { return fFastField; }
+        auto FieldMap() const -> const auto& { return fFieldMap; }
+
+        auto UseFast(bool val) -> void { fUseFast = val; }
+        auto FastField(double val) -> void { fFastField = val; }
+        auto FieldMap(std::string val) -> void { fFieldMap = std::move(val); }
+
+    private:
+        bool fUseFast;
+        double fFastField;
+        std::string fFieldMap;
+    };
+
+    auto Field() const -> const auto& { return fField; }
+    auto Field() -> auto& { return fField; }
 
 private:
     auto ImportAllValue(const YAML::Node& node) -> void override;
@@ -55,7 +76,7 @@ private:
     // Field
     ///////////////////////////////////////////////////////////
 
-    double fMagneticFluxDensity;
+    FieldType fField;
 };
 
 } // namespace MACE::Detector::Description
