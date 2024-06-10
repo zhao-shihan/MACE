@@ -28,7 +28,7 @@ if(MACE_BUILTIN_MUC)
         message(STATUS "Reusing muc source ${MACE_BUILTIN_MUC_SRC_DIR}")
     else()
         FetchContent_Declare(muc SOURCE_DIR "${MACE_BUILTIN_MUC_SRC_DIR}"
-                                      URL "${MACE_BUILTIN_MUC_URL}")
+                                 URL "${MACE_BUILTIN_MUC_URL}")
         message(STATUS "muc will be downloaded from ${MACE_BUILTIN_MUC_URL} to ${MACE_BUILTIN_MUC_SRC_DIR}")
     endif()
     # set options
