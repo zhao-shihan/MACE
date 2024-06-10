@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Concept/MathVector.h++"
+#include "MACE/Concept/NumericVector.h++"
 #include "MACE/Detector/Field/ElectromagneticFieldBase.h++"
 #include "MACE/Utility/VectorCast.h++"
 
@@ -10,14 +10,16 @@
 
 #include "muc/ceta_string"
 
+#include <concepts>
 #include <optional>
 
 namespace MACE::Detector::Field {
 
 /// @brief An electromagnetic field interpolated from data.
-/// Initialization and interpolation are performed by EFM.
+/// Initialization and interpolation are performed by `AFieldMap`.
 /// @tparam ACache A string literal, can be "WithCache" or "NoCache".
-/// @tparam AStorageVector 6D vector type passed to EFM for internal stroage.
+/// @tparam AFieldMap A field map type, e.g. `EFM::FieldMap3D<Eigen::Vector<double, 6>>` or
+/// `EFM::FieldMap3DSymZ<Eigen::Vector<double, 6>>`.
 /// @note "WithCache" and "NoCache" decides whether field cache will be used.
 /// "WithCache" field will reuse the field value calculated in last calculation if
 /// this calculation happens exactly at the same position. In principle, "WithCache"
@@ -25,19 +27,20 @@ namespace MACE::Detector::Field {
 ///     Something(field.E(x), field.B(x));
 /// However, if these cases do not matter or you need maximum performace in EB then
 /// "NoCache" would be better.
-template<muc::ceta_string ACache = "WithCache", Concept::MathVector<double, 6> AStorageVector = Eigen::Vector<double, 6>>
-    requires(ACache == "WithCache" or ACache == "NoCache")
-class TrilerpElectromagneticField;
+template<muc::ceta_string ACache = "WithCache", typename AFieldMap = EFM::FieldMap3D<Eigen::Vector<double, 6>>>
+    requires((ACache == "WithCache" or ACache == "NoCache") and
+             std::same_as<typename AFieldMap::CoordinateType, double>)
+class ElectromagneticFieldMap;
 
-template<Concept::MathVector<double, 6> AStorageVector>
-class TrilerpElectromagneticField<"WithCache", AStorageVector> : public ElectromagneticFieldBase<TrilerpElectromagneticField<"WithCache", AStorageVector>>,
-                                                                 public EFM::FieldMap3D<AStorageVector> {
+template<typename AFieldMap>
+class ElectromagneticFieldMap<"WithCache", AFieldMap> : public ElectromagneticFieldBase<ElectromagneticFieldMap<"WithCache", AFieldMap>>,
+                                                        public AFieldMap {
 private:
     template<Concept::NumericVector3D T>
-    using F = typename ElectromagneticFieldBase<TrilerpElectromagneticField<"WithCache", AStorageVector>>::F<T>;
+    using F = typename ElectromagneticFieldBase<ElectromagneticFieldMap<"WithCache", AFieldMap>>::F<T>;
 
 public:
-    using EFM::FieldMap3D<AStorageVector>::FieldMap3D;
+    using AFieldMap::AFieldMap;
 
     template<Concept::NumericVector3D T>
     auto B(T x) const -> T;
@@ -48,18 +51,18 @@ public:
 
 private:
     mutable Eigen::Vector3d fCachedX;
-    mutable std::optional<AStorageVector> fCache;
+    mutable std::optional<typename AFieldMap::ValueType> fCache;
 };
 
-template<Concept::MathVector<double, 6> AStorageVector>
-class TrilerpElectromagneticField<"NoCache", AStorageVector> : public ElectromagneticFieldBase<TrilerpElectromagneticField<"NoCache", AStorageVector>>,
-                                                               public EFM::FieldMap3D<AStorageVector> {
+template<typename AFieldMap>
+class ElectromagneticFieldMap<"NoCache", AFieldMap> : public ElectromagneticFieldBase<ElectromagneticFieldMap<"NoCache", AFieldMap>>,
+                                                      public AFieldMap {
 private:
     template<Concept::NumericVector3D T>
-    using F = typename ElectromagneticFieldBase<TrilerpElectromagneticField<"NoCache", AStorageVector>>::F<T>;
+    using F = typename ElectromagneticFieldBase<ElectromagneticFieldMap<"NoCache", AFieldMap>>::F<T>;
 
 public:
-    using EFM::FieldMap3D<AStorageVector>::FieldMap3D;
+    using AFieldMap::AFieldMap;
 
     template<Concept::NumericVector3D T>
     auto B(T x) const -> T;
@@ -71,4 +74,4 @@ public:
 
 } // namespace MACE::Detector::Field
 
-#include "MACE/Detector/Field/TrilerpElectromagneticField.inl"
+#include "MACE/Detector/Field/ElectromagneticFieldMap.inl"
