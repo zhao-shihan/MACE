@@ -10,9 +10,9 @@ target_compile_definitions(MACEFramework PUBLIC ${MACE_COMPILE_DEFINITIONS})
 # TimSort
 target_link_libraries(MACEFramework PUBLIC timsort)
 # muc
-target_link_libraries(MACEFramework PUBLIC muc)
+target_link_libraries(MACEFramework PUBLIC muc::muc)
 # EFM
-target_link_libraries(MACEFramework PUBLIC EFM)
+target_link_libraries(MACEFramework PUBLIC EFM::EFM)
 # argparse
 target_link_libraries(MACEFramework PUBLIC argparse::argparse)
 # Microsoft.GSL
@@ -34,7 +34,7 @@ target_link_libraries(MACEFramework PUBLIC fmt::fmt)
 # Eigen
 target_link_libraries(MACEFramework PUBLIC Eigen3::Eigen)
 # yaml-cpp
-target_link_libraries(MACEFramework PUBLIC yaml-cpp)
+target_link_libraries(MACEFramework PUBLIC yaml-cpp::yaml-cpp)
 # MPI
 target_link_libraries(MACEFramework PUBLIC MPI::MPI_C)
 # Geant4
