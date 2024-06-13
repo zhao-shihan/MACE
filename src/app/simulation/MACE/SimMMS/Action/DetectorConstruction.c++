@@ -13,7 +13,7 @@
 #include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Field/MMSField.h++"
-#include "MACE/Detector/Field/WrapAsG4Field.h++"
+#include "MACE/Detector/Field/AsG4Field.h++"
 #include "MACE/SimMMS/Action/DetectorConstruction.h++"
 #include "MACE/SimMMS/Messenger/DetectorMessenger.h++"
 #include "MACE/SimMMS/SD/CDCSD.h++"
@@ -185,10 +185,10 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
         constexpr auto hMin{1_um};
 
-        using Equation = G4TMagFieldEquation<Detector::Field::WrapAsG4Field<Detector::Field::MMSField>>;
+        using Equation = G4TMagFieldEquation<Detector::Field::AsG4Field<Detector::Field::MMSField>>;
         using Stepper = G4TDormandPrince45<Equation, 6>;
         using Driver = G4InterpolationDriver<Stepper>;
-        const auto field{new Detector::Field::WrapAsG4Field<Detector::Field::MMSField>};
+        const auto field{new Detector::Field::AsG4Field<Detector::Field::MMSField>};
         const auto equation{new Equation{field}};
         const auto stepper{
             new Stepper{equation, 6}

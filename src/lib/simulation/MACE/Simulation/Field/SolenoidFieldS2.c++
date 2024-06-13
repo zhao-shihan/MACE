@@ -4,7 +4,7 @@
 namespace MACE::inline Simulation::inline Field {
 
 SolenoidFieldS2::SolenoidFieldS2() :
-    WrapAsG4Field{} {
+    AsG4Field{} {
     SolenoidFieldMessenger::EnsureInstantiation();
 }
 
