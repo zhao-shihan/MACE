@@ -1,0 +1,19 @@
+#include "MACE/Detector/Description/FieldOption.h++"
+#include "MACE/Detector/Description/MMSField.h++"
+#include "MACE/Detector/Field/MMSField.h++"
+
+namespace MACE::Detector::Field {
+
+MMSField::MMSField() :
+    MagneticFieldBase<MMSField>{},
+    fField{FastField{{}}} {
+    const auto& fieldOption{Detector::Description::FieldOption::Instance()};
+    const auto& emcField{Detector::Description::MMSField::Instance()};
+    if (fieldOption.UseFast()) {
+        fField = FastField{0, 0, emcField.FastField()};
+    } else {
+        fField = FieldMap{fieldOption.FieldDataFileName(), "MMSField"};
+    }
+}
+
+} // namespace MACE::Detector::Field
