@@ -2,8 +2,9 @@
 
 #include "MACE/Detector/Description/DescriptionBase.h++"
 
+#include "envparse/parse.h++"
+
 #include <string>
-#include "MACE/Utility/ParseEnv.h++"
 
 namespace MACE::Detector::Description {
 
@@ -16,7 +17,7 @@ private:
 
 public:
     auto UseFast() const -> auto { return fUseFast; }
-    auto FieldDataFileName() const -> auto { return ParseEnv(fFieldDataFileName); }
+    auto FieldDataFileName() const -> auto { return envparse::parse(fFieldDataFileName); }
     auto RawFieldDataFileName() const -> const auto& { return fFieldDataFileName; }
 
     auto UseFast(bool val) -> void { fUseFast = val; }

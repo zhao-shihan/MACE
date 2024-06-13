@@ -2,7 +2,6 @@
 #include "MACE/Detector/Description/FieldOption.h++"
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Field/AcceleratorField.h++"
-#include "MACE/Utility/ParseEnv.h++"
 
 namespace MACE::Detector::Field {
 
