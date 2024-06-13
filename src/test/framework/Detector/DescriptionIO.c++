@@ -19,9 +19,9 @@ int main(int argc, char* argv[]) {
     auto& transportLine = Description::Solenoid::Instance();
     std::cout << "Default:\n"
               << transportLine.S1Length() << '\n'
-              << transportLine.B1Radius() << '\n'
+              << transportLine.T1Radius() << '\n'
               << transportLine.S2Length() << '\n'
-              << transportLine.B2Radius() << '\n'
+              << transportLine.T2Radius() << '\n'
               << transportLine.S3Length() << '\n'
               << transportLine.InnerRadius() << '\n'
               << transportLine.OuterRadius() << '\n'
@@ -30,9 +30,9 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Shuffled!\n\n";
     transportLine.S1Length(flat(rand));
-    transportLine.B1Radius(flat(rand));
+    transportLine.T1Radius(flat(rand));
     transportLine.S2Length(flat(rand));
-    transportLine.B2Radius(flat(rand));
+    transportLine.T2Radius(flat(rand));
     transportLine.S3Length(flat(rand));
     transportLine.InnerRadius(flat(rand));
     transportLine.OuterRadius(flat(rand));
@@ -41,9 +41,9 @@ int main(int argc, char* argv[]) {
     Description::DescriptionIO::Export<Description::Solenoid>("tl.yaml");
     std::cout << "After write into yaml:\n"
               << transportLine.S1Length() << '\n'
-              << transportLine.B1Radius() << '\n'
+              << transportLine.T1Radius() << '\n'
               << transportLine.S2Length() << '\n'
-              << transportLine.B2Radius() << '\n'
+              << transportLine.T2Radius() << '\n'
               << transportLine.S3Length() << '\n'
               << transportLine.InnerRadius() << '\n'
               << transportLine.OuterRadius() << '\n'
@@ -52,9 +52,9 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Shuffled!\n\n";
     transportLine.S1Length(flat(rand));
-    transportLine.B1Radius(flat(rand));
+    transportLine.T1Radius(flat(rand));
     transportLine.S2Length(flat(rand));
-    transportLine.B2Radius(flat(rand));
+    transportLine.T2Radius(flat(rand));
     transportLine.S3Length(flat(rand));
     transportLine.InnerRadius(flat(rand));
     transportLine.OuterRadius(flat(rand));
@@ -63,9 +63,9 @@ int main(int argc, char* argv[]) {
     Description::DescriptionIO::ImportInstantiated("tl.yaml");
     std::cout << "After read from yaml:\n"
               << transportLine.S1Length() << '\n'
-              << transportLine.B1Radius() << '\n'
+              << transportLine.T1Radius() << '\n'
               << transportLine.S2Length() << '\n'
-              << transportLine.B2Radius() << '\n'
+              << transportLine.T2Radius() << '\n'
               << transportLine.S3Length() << '\n'
               << transportLine.InnerRadius() << '\n'
               << transportLine.OuterRadius() << '\n'

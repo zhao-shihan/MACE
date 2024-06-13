@@ -1,6 +1,6 @@
-#include "MACE/Detector/Definition/SolenoidBeamPipeB1.h++"
+#include "MACE/Detector/Definition/SolenoidShieldT1.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Detector/Description/SolenoidBeamPipe.h++"
+#include "MACE/Detector/Description/SolenoidShield.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
@@ -11,22 +11,22 @@ namespace MACE::Detector::Definition {
 
 using namespace LiteralUnit::MathConstantSuffix;
 
-auto SolenoidBeamPipeB1::Construct(G4bool checkOverlaps) -> void {
+auto SolenoidShieldT1::Construct(G4bool checkOverlaps) -> void {
     const auto& solenoid{Description::Solenoid::Instance()};
-    const auto& beamPipe{Description::SolenoidBeamPipe::Instance()};
-    const auto name{beamPipe.Name() + "B1"};
+    const auto& shield{Description::SolenoidShield::Instance()};
+    const auto name{shield.Name() + "T1"};
 
     const auto solid{Make<G4Torus>(
         name,
-        beamPipe.InnerRadius(),
-        beamPipe.InnerRadius() + beamPipe.Thickness(),
-        solenoid.B1Radius(),
+        shield.InnerRadius(),
+        shield.OuterRadius(),
+        solenoid.T1Radius(),
         1_pi,
         0.5_pi)};
 
     const auto logic{Make<G4LogicalVolume>(
         solid,
-        G4NistManager::Instance()->FindOrBuildMaterial(beamPipe.MaterialName()),
+        G4NistManager::Instance()->FindOrBuildMaterial(shield.MaterialName()),
         name)};
 
     Make<G4PVPlacement>(

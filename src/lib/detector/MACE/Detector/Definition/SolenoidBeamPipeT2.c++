@@ -1,4 +1,4 @@
-#include "MACE/Detector/Definition/SolenoidBeamPipeB2.h++"
+#include "MACE/Detector/Definition/SolenoidBeamPipeT2.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Description/SolenoidBeamPipe.h++"
 #include "MACE/Utility/LiteralUnit.h++"
@@ -11,16 +11,16 @@ namespace MACE::Detector::Definition {
 
 using namespace LiteralUnit::MathConstantSuffix;
 
-auto SolenoidBeamPipeB2::Construct(G4bool checkOverlaps) -> void {
+auto SolenoidBeamPipeT2::Construct(G4bool checkOverlaps) -> void {
     const auto& solenoid{Description::Solenoid::Instance()};
     const auto& beamPipe{Description::SolenoidBeamPipe::Instance()};
-    const auto name{beamPipe.Name() + "B2"};
+    const auto name{beamPipe.Name() + "T2"};
 
     const auto solid{Make<G4Torus>(
         name,
         beamPipe.InnerRadius(),
         beamPipe.InnerRadius() + beamPipe.Thickness(),
-        solenoid.B2Radius(),
+        solenoid.T2Radius(),
         0,
         0.5_pi)};
 

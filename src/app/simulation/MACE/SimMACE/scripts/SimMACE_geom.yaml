@@ -464,9 +464,9 @@ ShieldingWall:
   Rotation: 0.52359877559829882
 Solenoid:
   S1Length: 150
-  B1Radius: 250
+  T1Radius: 250
   S2Length: 1314.5999999999999
-  B2Radius: 250
+  T2Radius: 250
   S3Length: 150
   InnerRadius: 60
   OuterRadius: 90

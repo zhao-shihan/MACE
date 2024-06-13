@@ -57,9 +57,9 @@ int main(int argc, char* argv[]) {
     const auto flightLength =
         MMSField::Instance().Length() / 2 - acceleratorLength +
         transportLine.S1Length() +
-        transportLine.B1Radius() * halfpi +
+        transportLine.T1Radius() * halfpi +
         transportLine.S2Length() +
-        transportLine.B2Radius() * halfpi +
+        transportLine.T2Radius() * halfpi +
         transportLine.S3Length() +
         EMCField::Instance().Length() / 2;
     // muonium survival length (5 tau_mu @ 300K)

@@ -9,9 +9,9 @@
 
 namespace MACE::Detector::Field {
 
-class SolenoidFieldB1 : public MagneticFieldBase<SolenoidFieldB1> {
+class SolenoidFieldT1 : public MagneticFieldBase<SolenoidFieldT1> {
 public:
-    SolenoidFieldB1();
+    SolenoidFieldT1();
 
     template<Concept::NumericVector3D T> // clang-format off
     auto B(T x) const -> T { return std::visit([&x](auto&& f) { return f.B(x); }, fField); } // clang-format on
