@@ -11,6 +11,8 @@
 
 #include "Eigen/Core"
 
+#include "muc/functional"
+
 namespace MACE::Detector::Field {
 
 /// @brief A functional type converts B-field SI field value
@@ -38,38 +40,24 @@ public:
 };
 
 /// @brief An YZ plane mirror symmetry magnetic field interpolated from data.
-/// @tparam ACache Use cache or not. See `MagneticFieldMap`.
-template<muc::ceta_string ACache = "WithCache">
-using MagneticFieldMapSymX = MagneticFieldMap<ACache, EFM::FieldMap3DSymX<Eigen::Vector3d, double, BFieldSI2CLHEP>>;
+using MagneticFieldMapSymX = MagneticFieldMap<EFM::FieldMap3DSymX<Eigen::Vector3d, double, BFieldSI2CLHEP>>;
 
 /// @brief An ZX plane mirror symmetry magnetic field interpolated from data.
-/// @tparam ACache Use cache or not. See `MagneticFieldMap`.
-template<muc::ceta_string ACache = "WithCache">
-using MagneticFieldMapSymY = MagneticFieldMap<ACache, EFM::FieldMap3DSymY<Eigen::Vector3d, double, BFieldSI2CLHEP>>;
+using MagneticFieldMapSymY = MagneticFieldMap<EFM::FieldMap3DSymY<Eigen::Vector3d, double, BFieldSI2CLHEP>>;
 
 /// @brief An XY plane mirror symmetry magnetic field interpolated from data.
-/// @tparam ACache Use cache or not. See `MagneticFieldMap`.
-template<muc::ceta_string ACache = "WithCache">
-using MagneticFieldMapSymZ = MagneticFieldMap<ACache, EFM::FieldMap3DSymZ<Eigen::Vector3d, double, BFieldSI2CLHEP>>;
+using MagneticFieldMapSymZ = MagneticFieldMap<EFM::FieldMap3DSymZ<Eigen::Vector3d, double, BFieldSI2CLHEP>>;
 
 /// @brief An YZ, ZX plane mirror symmetry magnetic field interpolated from data.
-/// @tparam ACache Use cache or not. See `MagneticFieldMap`.
-template<muc::ceta_string ACache = "WithCache">
-using MagneticFieldMapSymXY = MagneticFieldMap<ACache, EFM::FieldMap3DSymXY<Eigen::Vector3d, double, BFieldSI2CLHEP>>;
+using MagneticFieldMapSymXY = MagneticFieldMap<EFM::FieldMap3DSymXY<Eigen::Vector3d, double, BFieldSI2CLHEP>>;
 
 /// @brief An XY, YZ plane mirror symmetry magnetic field interpolated from data.
-/// @tparam ACache Use cache or not. See `MagneticFieldMap`.
-template<muc::ceta_string ACache = "WithCache">
-using MagneticFieldMapSymXZ = MagneticFieldMap<ACache, EFM::FieldMap3DSymXZ<Eigen::Vector3d, double, BFieldSI2CLHEP>>;
+using MagneticFieldMapSymXZ = MagneticFieldMap<EFM::FieldMap3DSymXZ<Eigen::Vector3d, double, BFieldSI2CLHEP>>;
 
 /// @brief An ZX, XY plane mirror symmetry magnetic field interpolated from data.
-/// @tparam ACache Use cache or not. See `MagneticFieldMap`.
-template<muc::ceta_string ACache = "WithCache">
-using MagneticFieldMapSymYZ = MagneticFieldMap<ACache, EFM::FieldMap3DSymYZ<Eigen::Vector3d, double, BFieldSI2CLHEP>>;
+using MagneticFieldMapSymYZ = MagneticFieldMap<EFM::FieldMap3DSymYZ<Eigen::Vector3d, double, BFieldSI2CLHEP>>;
 
 /// @brief An XY, YZ, ZX plane mirror symmetry magnetic field interpolated from data.
-/// @tparam ACache Use cache or not. See `MagneticFieldMap`.
-template<muc::ceta_string ACache = "WithCache">
-using MagneticFieldMapSymXYZ = MagneticFieldMap<ACache, EFM::FieldMap3DSymXYZ<Eigen::Vector3d, double, BFieldSI2CLHEP>>;
+using MagneticFieldMapSymXYZ = MagneticFieldMap<EFM::FieldMap3DSymXYZ<Eigen::Vector3d, double, BFieldSI2CLHEP>>;
 
 } // namespace MACE::Detector::Field

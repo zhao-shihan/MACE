@@ -11,6 +11,8 @@
 
 #include "Eigen/Core"
 
+#include "muc/functional"
+
 namespace MACE::Detector::Field {
 
 /// @brief A functional type converts E-field SI field value
@@ -38,38 +40,24 @@ public:
 };
 
 /// @brief An YZ plane mirror symmetry electric field interpolated from data.
-/// @tparam ACache Use cache or not. See `ElectricFieldMap`.
-template<muc::ceta_string ACache = "WithCache">
-using ElectricFieldMapSymX = ElectricFieldMap<ACache, EFM::FieldMap3DSymX<Eigen::Vector3d, double, EFieldSI2CLHEP>>;
+using ElectricFieldMapSymX = ElectricFieldMap<EFM::FieldMap3DSymX<Eigen::Vector3d, double, EFieldSI2CLHEP>>;
 
 /// @brief An ZX plane mirror symmetry electric field interpolated from data.
-/// @tparam ACache Use cache or not. See `ElectricFieldMap`.
-template<muc::ceta_string ACache = "WithCache">
-using ElectricFieldMapSymY = ElectricFieldMap<ACache, EFM::FieldMap3DSymY<Eigen::Vector3d, double, EFieldSI2CLHEP>>;
+using ElectricFieldMapSymY = ElectricFieldMap<EFM::FieldMap3DSymY<Eigen::Vector3d, double, EFieldSI2CLHEP>>;
 
 /// @brief An XY plane mirror symmetry electric field interpolated from data.
-/// @tparam ACache Use cache or not. See `ElectricFieldMap`.
-template<muc::ceta_string ACache = "WithCache">
-using ElectricFieldMapSymZ = ElectricFieldMap<ACache, EFM::FieldMap3DSymZ<Eigen::Vector3d, double, EFieldSI2CLHEP>>;
+using ElectricFieldMapSymZ = ElectricFieldMap<EFM::FieldMap3DSymZ<Eigen::Vector3d, double, EFieldSI2CLHEP>>;
 
 /// @brief An YZ, ZX plane mirror symmetry electric field interpolated from data.
-/// @tparam ACache Use cache or not. See `ElectricFieldMap`.
-template<muc::ceta_string ACache = "WithCache">
-using ElectricFieldMapSymXY = ElectricFieldMap<ACache, EFM::FieldMap3DSymXY<Eigen::Vector3d, double, EFieldSI2CLHEP>>;
+using ElectricFieldMapSymXY = ElectricFieldMap<EFM::FieldMap3DSymXY<Eigen::Vector3d, double, EFieldSI2CLHEP>>;
 
 /// @brief An XY, YZ plane mirror symmetry electric field interpolated from data.
-/// @tparam ACache Use cache or not. See `ElectricFieldMap`.
-template<muc::ceta_string ACache = "WithCache">
-using ElectricFieldMapSymXZ = ElectricFieldMap<ACache, EFM::FieldMap3DSymXZ<Eigen::Vector3d, double, EFieldSI2CLHEP>>;
+using ElectricFieldMapSymXZ = ElectricFieldMap<EFM::FieldMap3DSymXZ<Eigen::Vector3d, double, EFieldSI2CLHEP>>;
 
 /// @brief An ZX, XY plane mirror symmetry electric field interpolated from data.
-/// @tparam ACache Use cache or not. See `ElectricFieldMap`.
-template<muc::ceta_string ACache = "WithCache">
-using ElectricFieldMapSymYZ = ElectricFieldMap<ACache, EFM::FieldMap3DSymYZ<Eigen::Vector3d, double, EFieldSI2CLHEP>>;
+using ElectricFieldMapSymYZ = ElectricFieldMap<EFM::FieldMap3DSymYZ<Eigen::Vector3d, double, EFieldSI2CLHEP>>;
 
 /// @brief An XY, YZ, ZX plane mirror symmetry electric field interpolated from data.
-/// @tparam ACache Use cache or not. See `ElectricFieldMap`.
-template<muc::ceta_string ACache = "WithCache">
-using ElectricFieldMapSymXYZ = ElectricFieldMap<ACache, EFM::FieldMap3DSymXYZ<Eigen::Vector3d, double, EFieldSI2CLHEP>>;
+using ElectricFieldMapSymXYZ = ElectricFieldMap<EFM::FieldMap3DSymXYZ<Eigen::Vector3d, double, EFieldSI2CLHEP>>;
 
 } // namespace MACE::Detector::Field
