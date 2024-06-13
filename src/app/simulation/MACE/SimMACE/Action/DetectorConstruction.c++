@@ -48,20 +48,20 @@
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Detector/Field/AcceleratorField.h++"
+#include "MACE/Detector/Field/AsG4Field.h++"
 #include "MACE/Detector/Field/EMCField.h++"
 #include "MACE/Detector/Field/MMSField.h++"
-#include "MACE/Detector/Field/AsG4Field.h++"
+#include "MACE/Detector/Field/SolenoidFieldB1.h++"
+#include "MACE/Detector/Field/SolenoidFieldB2.h++"
+#include "MACE/Detector/Field/SolenoidFieldS1.h++"
+#include "MACE/Detector/Field/SolenoidFieldS2.h++"
+#include "MACE/Detector/Field/SolenoidFieldS3.h++"
 #include "MACE/SimMACE/Action/DetectorConstruction.h++"
 #include "MACE/SimMACE/Messenger/DetectorMessenger.h++"
 #include "MACE/SimMACE/SD/CDCSD.h++"
 #include "MACE/SimMACE/SD/EMCSD.h++"
 #include "MACE/SimMACE/SD/MCPSD.h++"
 #include "MACE/SimMACE/SD/TTCSD.h++"
-#include "MACE/Simulation/Field/SolenoidFieldB1.h++"
-#include "MACE/Simulation/Field/SolenoidFieldB2.h++"
-#include "MACE/Simulation/Field/SolenoidFieldS1.h++"
-#include "MACE/Simulation/Field/SolenoidFieldS2.h++"
-#include "MACE/Simulation/Field/SolenoidFieldS3.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4ChordFinder.hh"
@@ -351,11 +351,11 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
                     detector.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), forceToAllDaughters);
                 }};
             RegisterMagneticField(mmsField, new Detector::Field::AsG4Field<Detector::Field::MMSField>, false);
-            RegisterMagneticField(solenoidFieldS1, new SolenoidFieldS1, false);
-            RegisterMagneticField(solenoidFieldB1, new SolenoidFieldB1, false);
-            RegisterMagneticField(solenoidFieldS2, new SolenoidFieldS2, false);
-            RegisterMagneticField(solenoidFieldB2, new SolenoidFieldB2, false);
-            RegisterMagneticField(solenoidFieldS3, new SolenoidFieldS3, false);
+            RegisterMagneticField(solenoidFieldS1, new Detector::Field::AsG4Field<Detector::Field::SolenoidFieldS1>, false);
+            RegisterMagneticField(solenoidFieldB1, new Detector::Field::AsG4Field<Detector::Field::SolenoidFieldB1>, false);
+            RegisterMagneticField(solenoidFieldS2, new Detector::Field::AsG4Field<Detector::Field::SolenoidFieldS2>, false);
+            RegisterMagneticField(solenoidFieldB2, new Detector::Field::AsG4Field<Detector::Field::SolenoidFieldB2>, false);
+            RegisterMagneticField(solenoidFieldS3, new Detector::Field::AsG4Field<Detector::Field::SolenoidFieldS3>, false);
             RegisterMagneticField(emcField, new Detector::Field::AsG4Field<Detector::Field::EMCField>, false);
         }
         { // EM field, must be reigstered after MMS magnetic field! but why?

@@ -24,7 +24,7 @@ Solenoid::Solenoid() :
     // Material
     fMaterialName{"G4_Cu"},
     // Field
-    fMagneticFluxDensity{100_mT} {}
+    fFastField{100_mT} {}
 
 auto Solenoid::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
@@ -41,7 +41,7 @@ auto Solenoid::ImportAllValue(const YAML::Node& node) -> void {
     // Material
     ImportValue(node, fMaterialName, "MaterialName");
     // Field
-    ImportValue(node, fMagneticFluxDensity, "MagneticFluxDensity");
+    ImportValue(node, fFastField, "FastField");
 }
 
 auto Solenoid::ExportAllValue(YAML::Node& node) const -> void {
@@ -59,7 +59,7 @@ auto Solenoid::ExportAllValue(YAML::Node& node) const -> void {
     // Material
     ExportValue(node, fMaterialName, "MaterialName");
     // Field
-    ExportValue(node, fMagneticFluxDensity, "MagneticFluxDensity");
+    ExportValue(node, fFastField, "FastField");
 }
 
 } // namespace MACE::Detector::Description

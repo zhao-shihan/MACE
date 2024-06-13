@@ -168,7 +168,7 @@ auto MuonInternalPairProductionDecayChannel::PassCut(const CLHEPX::RAMBO<5>::Eve
         const auto& filter{Detector::Description::Filter::Instance()};
         const auto& solenoid{Detector::Description::Solenoid::Instance()};
         const auto maxPositronRxy{filter.Enabled() ? 5 * filter.Pitch() : solenoid.InnerRadius()};
-        const auto maxPositronPxy{maxPositronRxy * solenoid.MagneticFluxDensity() * c_light};
+        const auto maxPositronPxy{maxPositronRxy * solenoid.FastField() * c_light};
 
         const auto positron1Pxy{muc::hypot(p.x(), p.y())};
         const auto electronPxy{muc::hypot(p1.x(), p1.y())};

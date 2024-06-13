@@ -57,9 +57,9 @@ public:
 
     // Field
 
-    auto MagneticFluxDensity() const -> auto { return fMagneticFluxDensity; }
+    auto FastField() const -> auto { return fFastField; }
 
-    auto MagneticFluxDensity(double val) -> void { fMagneticFluxDensity = val; }
+    auto FastField(double val) -> void { fFastField = val; }
 
 private:
     auto ImportAllValue(const YAML::Node& node) -> void override;
@@ -85,7 +85,7 @@ private:
 
     // Field
 
-    double fMagneticFluxDensity;
+    double fFastField;
 };
 
 } // namespace MACE::Detector::Description
