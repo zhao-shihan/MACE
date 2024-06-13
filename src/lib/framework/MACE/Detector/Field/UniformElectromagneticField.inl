@@ -10,8 +10,8 @@ constexpr UniformElectromagneticField::UniformElectromagneticField(double bx, do
     fEy{ey},
     fEz{ez} {}
 
-template<Concept::InputVector3D T>
-constexpr UniformElectromagneticField::UniformElectromagneticField(T b, T e) :
+template<Concept::InputVector3D T1, Concept::InputVector3D T2>
+constexpr UniformElectromagneticField::UniformElectromagneticField(T1 b, T2 e) :
     UniformElectromagneticField{b[0], b[1], b[2],
                                 e[0], e[1], e[2]} {}
 

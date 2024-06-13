@@ -12,8 +12,8 @@ class UniformElectromagneticField : public ElectromagneticFieldBase<UniformElect
 public:
     constexpr UniformElectromagneticField(double bx, double by, double bz,
                                           double ex, double ey, double ez);
-    template<Concept::InputVector3D T = muc::array3d>
-    constexpr UniformElectromagneticField(T b, T e);
+    template<Concept::InputVector3D T1 = muc::array3d, Concept::InputVector3D T2 = muc::array3d>
+    constexpr UniformElectromagneticField(T1 b, T2 e);
 
     template<Concept::NumericVector3D T>
     constexpr auto B(T) const -> T { return {fBx, fBy, fBz}; }
