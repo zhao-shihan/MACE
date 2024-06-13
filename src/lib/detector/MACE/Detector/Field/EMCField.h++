@@ -3,10 +3,7 @@
 #include "MACE/Concept/NumericVector.h++"
 #include "MACE/Detector/Field/MagneticFieldBase.h++"
 #include "MACE/Detector/Field/MagneticFieldMap.h++"
-
-#include "EFM/FieldMap3D.h++"
-
-#include "Eigen/Core"
+#include "MACE/Detector/Field/UniformMagneticField.h++"
 
 #include <variant>
 
@@ -14,17 +11,7 @@ namespace MACE::Detector::Field {
 
 class EMCField : public MagneticFieldBase<EMCField> {
 private:
-    class FastField : public MagneticFieldBase<FastField> {
-    public:
-        FastField(double b);
-
-        template<Concept::NumericVector3D T>
-        auto B(T) const -> T { return {0, 0, fB}; }
-
-    private:
-        double fB;
-    };
-
+    using FastField = UniformMagneticField;
     using FieldMap = MagneticFieldMapSymY;
 
 public:

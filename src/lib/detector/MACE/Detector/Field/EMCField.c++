@@ -4,17 +4,14 @@
 
 namespace MACE::Detector::Field {
 
-EMCField::FastField::FastField(double b) :
-    MagneticFieldBase<FastField>{},
-    fB{b} {}
-
 EMCField::EMCField() :
-    MagneticFieldBase<EMCField>{},
-    fField{0} {
+    MagneticFieldBase<EMCField>{
+},
+    fField{FastField{0, 0, 0}} {
     const auto& fieldOption{Detector::Description::FieldOption::Instance()};
     const auto& emcField{Detector::Description::EMCField::Instance()};
     if (fieldOption.UseFast()) {
-        fField = FastField{emcField.FastField()};
+        fField = FastField{0, 0, emcField.FastField()};
     } else {
         fField = FieldMap{fieldOption.FieldDataFileName(), "EMCField"};
     }
