@@ -20,8 +20,6 @@
 /gps/ene/min                          1 keV
 /gps/ene/max                          52.32 MeV
 
-/MACE/Field/MMSMagneticField          0.1 tesla
-
 /MACE/Analysis/CoincidenceWithCDC     true
 /MACE/Analysis/CoincidenceWithTTC     true
 #/MACE/Analysis/SaveCDCHitData         false
