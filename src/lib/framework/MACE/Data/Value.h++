@@ -29,9 +29,6 @@ concept ValueAcceptable =
             return Concept::ROOTFundamental<typename T::value_type> and
                    not std::same_as<std::decay_t<typename T::value_type>, gsl::zstring>;
         }
-        if constexpr (internal::IsFixedString<T>{}) {
-            return true;
-        }
         return std::is_class_v<T>;
     }();
 

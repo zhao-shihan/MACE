@@ -1,6 +1,5 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Env/Print.h++"
-#include "MACE/Utility/FixedString.h++"
 
 #include "TROOT.h"
 
@@ -52,39 +51,38 @@ MPIEnv::MPIEnv(int argc, char* argv[],
         }()},
     fCluster{
         [this] {
-            using NameFixedString = FixedString<MPI_MAX_PROCESSOR_NAME>;
             // Member fCluster to be initialized
             std::remove_cv_t<decltype(fCluster)> cluster;
             // Each process get its processor name
-            NameFixedString nodeNameSend;
+            std::array<char, MPI_MAX_PROCESSOR_NAME> nodeNameSend;
             int nameLength;
-            MPI_Get_processor_name(nodeNameSend.Data(), // name
+            MPI_Get_processor_name(nodeNameSend.data(), // name
                                    &nameLength);        // resultlen
             // Master collects processor names
-            std::vector<NameFixedString> nodeNamesRecv;
+            std::vector<std::array<char, MPI_MAX_PROCESSOR_NAME>> nodeNamesRecv;
             if (OnCommWorldMaster()) { nodeNamesRecv.resize(fCommWorldSize); }
             MPI_Request gatherNodeNamesRequest;
-            MPI_Igather(nodeNameSend.CString(),        // sendbuf
-                        NameFixedString::Occupation(), // sendcount
-                        MPI_CHAR,                      // sendtype
-                        nodeNamesRecv.data(),          // recvbuf
-                        NameFixedString::Occupation(), // recvcount
-                        MPI_CHAR,                      // recvtype
-                        0,                             // root
-                        MPI_COMM_WORLD,                // comm
-                        &gatherNodeNamesRequest);      // request
+            MPI_Igather(nodeNameSend.data(),      // sendbuf
+                        MPI_MAX_PROCESSOR_NAME,   // sendcount
+                        MPI_CHAR,                 // sendtype
+                        nodeNamesRecv.data(),     // recvbuf
+                        MPI_MAX_PROCESSOR_NAME,   // recvcount
+                        MPI_CHAR,                 // recvtype
+                        0,                        // root
+                        MPI_COMM_WORLD,           // comm
+                        &gatherNodeNamesRequest); // request
             // Processor name list
             std::vector<int> nodeIDSend;
             int nodeIDRecv;
             int nodeCount;
             struct NodeInfoForMPI {
                 int size;
-                NameFixedString name;
+                std::array<char, MPI_MAX_PROCESSOR_NAME> name;
             };
             MPI_Datatype structNodeInfoForMPI;
             MPI_Type_create_struct(2,                                                      // count
                                    std::array<int, 2>{1,                                   // array_of_block_lengths
-                                                      NameFixedString::Occupation()}       // array_of_block_lengths
+                                                      MPI_MAX_PROCESSOR_NAME}              // array_of_block_lengths
                                        .data(),                                            // array_of_block_lengths
                                    std::array<MPI_Aint, 2>{offsetof(NodeInfoForMPI, size), // array_of_displacements
                                                            offsetof(NodeInfoForMPI, name)} // array_of_displacements
@@ -100,13 +98,13 @@ MPIEnv::MPIEnv(int argc, char* argv[],
             std::vector<NodeInfoForMPI> nodeList;
             if (OnCommWorldMaster()) {
                 // key: node name, mapped: rank
-                std::multimap<const NameFixedString&, int> nodeMap;
+                std::multimap<const std::array<char, MPI_MAX_PROCESSOR_NAME>&, int> nodeMap;
                 for (int rank{};
                      auto&& name : std::as_const(nodeNamesRecv)) {
                     nodeMap.emplace(name, rank++);
                 }
 
-                std::vector<std::pair<std::vector<int>, const NameFixedString*>> rankNode;
+                std::vector<std::pair<std::vector<int>, const std::array<char, MPI_MAX_PROCESSOR_NAME>*>> rankNode;
                 auto currentNodeName{&nodeMap.begin()->first};
                 rankNode.push_back({{}, currentNodeName});
                 for (auto&& [nodeName, rank] : std::as_const(nodeMap)) {
@@ -157,7 +155,7 @@ MPIEnv::MPIEnv(int argc, char* argv[],
             // Assign to the list, convert node names to std::string
             cluster.node.reserve(nodeCount);
             for (auto&& [size, name] : std::as_const(nodeList)) {
-                cluster.node.push_back({size, name});
+                cluster.node.push_back({size, name.data()});
                 cluster.node.back().name.shrink_to_fit();
             }
             cluster.node.shrink_to_fit();

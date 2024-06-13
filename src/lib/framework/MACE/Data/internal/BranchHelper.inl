@@ -12,8 +12,6 @@ auto BranchHelper<ATuple>::CreateBranch(std::derived_from<TTree> auto& tree) -> 
     ObjectType& object{*Get<AName>(*fTuple)};
     if constexpr (Concept::ROOTFundamental<ObjectType> or IsStdArray<ObjectType>{}) {
         return tree.Branch(AName, &object);
-    } else if constexpr (IsFixedString<ObjectType>{}) {
-        return tree.Branch(AName, object.CString(), (AName.String() + "/C").c_str());
     } else if constexpr (std::is_class_v<ObjectType>) {
         constexpr auto i = ATuple::Model::template Index<AName>();
         return tree.Branch(AName, &(std::get<i>(fClassPointer) = std::addressof(object)));
@@ -29,8 +27,6 @@ auto BranchHelper<ATuple>::ConnectBranch(std::derived_from<TTree> auto& tree) ->
     TBranch* branch{};
     if constexpr (Concept::ROOTFundamental<ObjectType> or IsStdArray<ObjectType>{}) {
         ec = tree.SetBranchAddress(AName, &object, &branch);
-    } else if constexpr (IsFixedString<ObjectType>{}) {
-        ec = tree.SetBranchAddress(AName, object.CString(), &branch);
     } else if constexpr (std::is_class_v<ObjectType>) {
         constexpr auto i{ATuple::Model::template Index<AName>()};
         ec = tree.SetBranchAddress(AName, &(std::get<i>(fClassPointer) = std::addressof(object)), &branch);
@@ -46,8 +42,6 @@ auto BranchHelper<ATuple>::ConnectBranchNoCheck(std::derived_from<TTree> auto& t
     void* objectPointer{};
     if constexpr (Concept::ROOTFundamental<ObjectType> or IsStdArray<ObjectType>{}) {
         objectPointer = &object;
-    } else if constexpr (IsFixedString<ObjectType>{}) {
-        objectPointer = object.CString();
     } else if constexpr (std::is_class_v<ObjectType>) {
         constexpr auto i{ATuple::Model::template Index<AName>()};
         objectPointer = &(std::get<i>(fClassPointer) = std::addressof(object));
