@@ -39,15 +39,15 @@ public:
 
     // Material
 
-    auto AcceleratePotential() const -> auto { return fAcceleratePotential; }
-
-    auto AcceleratePotential(double val) -> void { fAcceleratePotential = val; }
-
-    // Field
-
     auto ElectrodeMaterialName() const -> const auto& { return fElectrodeMaterialName; }
 
     auto ElectrodeMaterialName(std::string val) -> void { fElectrodeMaterialName = std::move(val); }
+
+    // Field
+
+    auto FastField() const -> auto { return fFastField; }
+
+    auto FastField(double val) -> void { fFastField = val; }
 
 private:
     auto ImportAllValue(const YAML::Node& node) -> void override;
@@ -70,7 +70,7 @@ private:
 
     // Field
 
-    double fAcceleratePotential;
+    double fFastField;
 };
 
 } // namespace MACE::Detector::Description

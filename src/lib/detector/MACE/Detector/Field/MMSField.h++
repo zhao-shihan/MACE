@@ -11,7 +11,7 @@ public:
     inline MMSField();
 
     template<Concept::NumericVector3D T>
-    auto B(T) const -> T { return {0, 0, fMMSField.MagneticFluxDensity()}; }
+    auto B(T) const -> T { return {0, 0, fMMSField.FastField()}; }
 
 private:
     const Description::MMSField& fMMSField;

@@ -1,38 +1,38 @@
 #pragma once
 
 #include "MACE/Concept/NumericVector.h++"
-#include "MACE/Detector/Description/Accelerator.h++"
-#include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Field/ElectromagneticFieldBase.h++"
-#include "MACE/Detector/Field/TrilerpElectromagneticField.h++"
+#include "MACE/Detector/Field/ElectromagneticFieldMap.h++"
+
+#include "EFM/FieldMap3D.h++"
+
+#include "Eigen/Core"
 
 #include <variant>
 
 namespace MACE::Detector::Field {
-
 class AcceleratorField : public ElectromagneticFieldBase<AcceleratorField> {
 private:
     class FastField : public ElectromagneticFieldBase<FastField> {
     public:
-        FastField();
+        FastField(double b, double e);
 
         template<Concept::NumericVector3D T>
-        auto B(T) const -> T { return {0, 0, fMMSField.MagneticFluxDensity()}; }
+        auto B(T) const -> T { return {0, 0, fB}; }
         template<Concept::NumericVector3D T>
-        auto E(T) const -> T { return {0, 0, fAccelerator.AcceleratePotential() / fAccelerator.AccelerateLength()}; }
+        auto E(T) const -> T { return {0, 0, fE}; }
         template<Concept::NumericVector3D T>
         auto BE(T x) const -> F<T> { return {B(x), E(x)}; }
 
     private:
-        const Description::MMSField& fMMSField;
-        const Description::Accelerator& fAccelerator;
+        double fB;
+        double fE;
     };
 
-    using TrilerpField = TrilerpElectromagneticField<"NoCache">;
+    using FieldMap = ElectromagneticFieldMapSymY<"NoCache">;
 
 public:
-    AcceleratorField() = default;
-    AcceleratorField(std::string_view fileName, std::string_view nTupleName);
+    AcceleratorField();
 
     template<Concept::NumericVector3D T> // clang-format off
     auto B(T x) const -> T { return std::visit([&x](auto&& f) { return f.B(x); }, fField); }
@@ -42,7 +42,7 @@ public:
     auto BE(T x) const -> F<T> { return std::visit([&x](auto&& f) { return f.BE(x); }, fField); } // clang-format on
 
 private:
-    std::variant<FastField, TrilerpField> fField;
+    std::variant<FastField, FieldMap> fField;
 };
 
 } // namespace MACE::Detector::Field

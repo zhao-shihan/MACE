@@ -25,11 +25,11 @@ public:
     // Geometry
     ///////////////////////////////////////////////////////////
 
-    auto Radius() const -> const auto& { return fRadius; }
-    auto Length() const -> const auto& { return fLength; }
+    auto Radius() const -> auto { return fRadius; }
+    auto Length() const -> auto { return fLength; }
 
-    auto Radius(auto v) -> void { fRadius = v; }
-    auto Length(auto v) -> void { fLength = v; }
+    auto Radius(double v) -> void { fRadius = v; }
+    auto Length(double v) -> void { fLength = v; }
 
     MACE_ALWAYS_INLINE auto Center() const -> muc::array3d;
 
@@ -37,28 +37,9 @@ public:
     // Field
     ///////////////////////////////////////////////////////////
 
-    class FieldType {
-        friend class EMCField;
+    auto FastField() const -> auto { return fFastField; }
 
-    public:
-        FieldType();
-
-        auto UseFast() const -> auto { return fUseFast; }
-        auto FastField() const -> auto { return fFastField; }
-        auto FieldMap() const -> const auto& { return fFieldMap; }
-
-        auto UseFast(bool val) -> void { fUseFast = val; }
-        auto FastField(double val) -> void { fFastField = val; }
-        auto FieldMap(std::string val) -> void { fFieldMap = std::move(val); }
-
-    private:
-        bool fUseFast;
-        double fFastField;
-        std::string fFieldMap;
-    };
-
-    auto Field() const -> const auto& { return fField; }
-    auto Field() -> auto& { return fField; }
+    auto FastField(double val) -> void { fFastField = val; }
 
 private:
     auto ImportAllValue(const YAML::Node& node) -> void override;
@@ -76,7 +57,7 @@ private:
     // Field
     ///////////////////////////////////////////////////////////
 
-    FieldType fField;
+    double fFastField;
 };
 
 } // namespace MACE::Detector::Description

@@ -19,13 +19,13 @@ private:
         FastField(double b);
 
         template<Concept::NumericVector3D T>
-        auto B(T) const -> T { return {0, 0, fEMCField}; }
+        auto B(T) const -> T { return {0, 0, fB}; }
 
     private:
-        double fEMCField;
+        double fB;
     };
 
-    using FieldMap = MagneticFieldMap<EFM::FieldMap3DSymY<Eigen::Vector3d>>;
+    using FieldMap = MagneticFieldMapSymY;
 
 public:
     EMCField();

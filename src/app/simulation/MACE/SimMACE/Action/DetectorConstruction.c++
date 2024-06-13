@@ -48,6 +48,7 @@
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Detector/Field/EMCField.h++"
+#include "MACE/Detector/Field/MMSField.h++"
 #include "MACE/Detector/Field/WrapAsG4Field.h++"
 #include "MACE/SimMACE/Action/DetectorConstruction.h++"
 #include "MACE/SimMACE/Messenger/DetectorMessenger.h++"
@@ -56,7 +57,6 @@
 #include "MACE/SimMACE/SD/MCPSD.h++"
 #include "MACE/SimMACE/SD/TTCSD.h++"
 #include "MACE/Simulation/Field/AcceleratorField.h++"
-#include "MACE/Simulation/Field/MMSField.h++"
 #include "MACE/Simulation/Field/SolenoidFieldB1.h++"
 #include "MACE/Simulation/Field/SolenoidFieldB2.h++"
 #include "MACE/Simulation/Field/SolenoidFieldS1.h++"
@@ -350,7 +350,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
                     const auto chordFinder{new G4ChordFinder{driver}};
                     detector.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), forceToAllDaughters);
                 }};
-            RegisterMagneticField(mmsField, new MMSField, false);
+            RegisterMagneticField(mmsField, new Detector::Field::WrapAsG4Field<Detector::Field::MMSField>, false);
             RegisterMagneticField(solenoidFieldS1, new SolenoidFieldS1, false);
             RegisterMagneticField(solenoidFieldB1, new SolenoidFieldB1, false);
             RegisterMagneticField(solenoidFieldS2, new SolenoidFieldS2, false);

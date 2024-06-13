@@ -8,6 +8,7 @@
 #include "MACE/Detector/Description/EMCField.h++"
 #include "MACE/Detector/Description/EMCMagnet.h++"
 #include "MACE/Detector/Description/EMCShield.h++"
+#include "MACE/Detector/Description/FieldOption.h++"
 #include "MACE/Detector/Description/Filter.h++"
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Detector/Description/MCPChamber.h++"
@@ -78,6 +79,7 @@ public:
                                         Detector::Description::EMCField,
                                         Detector::Description::EMCMagnet,
                                         Detector::Description::EMCShield,
+                                        Detector::Description::FieldOption,
                                         Detector::Description::Filter,
                                         Detector::Description::MCP,
                                         Detector::Description::MCPChamber,

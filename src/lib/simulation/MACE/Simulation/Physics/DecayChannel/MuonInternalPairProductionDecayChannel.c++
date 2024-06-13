@@ -161,7 +161,7 @@ auto MuonInternalPairProductionDecayChannel::PassCut(const CLHEPX::RAMBO<5>::Eve
     auto passCut2{true};
 
     if (fApplyMACESpecificPxyCut) {
-        const auto mmsB{Detector::Description::MMSField::Instance().MagneticFluxDensity()};
+        const auto mmsB{Detector::Description::MMSField::Instance().FastField()};
         const auto cdcInnerRadius{Detector::Description::CDC::Instance().GasInnerRadius()};
         const auto cdcPxyCut{(cdcInnerRadius / 2) * mmsB * c_light};
 

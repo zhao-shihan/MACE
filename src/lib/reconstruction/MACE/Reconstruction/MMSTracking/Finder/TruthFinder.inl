@@ -23,7 +23,7 @@ auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitDa
     r.good.reserve(hitData.size() / fNHitThreshold);
     r.garbage.reserve(hitData.size());
 
-    const auto magneticFluxDensity{Detector::Description::MMSField::Instance().MagneticFluxDensity()};
+    const auto magneticFluxDensity{Detector::Description::MMSField::Instance().FastField()};
 
     std::ranges::subrange track{hitData.cbegin(), hitData.cbegin()};
     const auto CollectGarbage{

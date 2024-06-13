@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/Detector/Description/CDC.h++"
+#include "MACE/Detector/Description/FieldOption.h++"
 #include "MACE/Detector/Description/MMSBeamPipe.h++"
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/MMSMagnet.h++"
@@ -52,6 +53,7 @@ public:
 
 public:
     using DescriptionInUse = std::tuple<Detector::Description::CDC,
+                                        Detector::Description::FieldOption,
                                         Detector::Description::MMSBeamPipe,
                                         Detector::Description::MMSField,
                                         Detector::Description::MMSMagnet,

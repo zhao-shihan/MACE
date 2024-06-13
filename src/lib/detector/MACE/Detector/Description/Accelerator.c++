@@ -4,7 +4,7 @@
 namespace MACE::Detector::Description {
 
 using namespace LiteralUnit::Length;
-using namespace LiteralUnit::ElectricPotential;
+using namespace LiteralUnit::ElectricFieldStrength;
 
 Accelerator::Accelerator() :
     DescriptionBase{"Accelerator"},
@@ -19,7 +19,7 @@ Accelerator::Accelerator() :
     // Material
     fElectrodeMaterialName{"G4_Be"},
     // Field
-    fAcceleratePotential{500_V} {}
+    fFastField{1670_V_m} {}
 
 auto Accelerator::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
@@ -33,7 +33,7 @@ auto Accelerator::ImportAllValue(const YAML::Node& node) -> void {
     // Material
     ImportValue(node, fElectrodeMaterialName, "ElectrodeMaterialName");
     // Field
-    ImportValue(node, fAcceleratePotential, "AcceleratePotential");
+    ImportValue(node, fFastField, "FastField");
 }
 
 auto Accelerator::ExportAllValue(YAML::Node& node) const -> void {
@@ -48,7 +48,7 @@ auto Accelerator::ExportAllValue(YAML::Node& node) const -> void {
     // Material
     ExportValue(node, fElectrodeMaterialName, "ElectrodeMaterialName");
     // Field
-    ExportValue(node, fAcceleratePotential, "AcceleratePotential");
+    ExportValue(node, fFastField, "FastField");
 }
 
 } // namespace MACE::Detector::Description

@@ -1,14 +1,27 @@
+#include "MACE/Detector/Description/Accelerator.h++"
+#include "MACE/Detector/Description/FieldOption.h++"
+#include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Field/AcceleratorField.h++"
+#include "MACE/Utility/ParseEnv.h++"
 
 namespace MACE::Detector::Field {
 
-AcceleratorField::FastField::FastField() :
+AcceleratorField::FastField::FastField(double b, double e) :
     ElectromagneticFieldBase<FastField>{},
-    fMMSField{Description::MMSField::Instance()},
-    fAccelerator{Description::Accelerator::Instance()} {}
+    fB{b},
+    fE{e} {}
 
-AcceleratorField::AcceleratorField(std::string_view fileName, std::string_view nTupleName) : // clang-format off
+AcceleratorField::AcceleratorField() : // clang-format off
     ElectromagneticFieldBase<AcceleratorField>{}, // clang-format on
-    fField{TrilerpField{fileName, nTupleName}} {}
+    fField{FastField{0, 0}} {
+    const auto& fieldOption{Detector::Description::FieldOption::Instance()};
+    const auto& acceleratorField{Description::Accelerator::Instance()};
+    if (fieldOption.UseFast()) {
+        const auto& mmsField{Detector::Description::MMSField::Instance()};
+        fField = FastField{mmsField.FastField(), acceleratorField.FastField()};
+    } else {
+        fField = FieldMap{fieldOption.FieldDataFileName(), "AcceleratorField"};
+    }
+}
 
 } // namespace MACE::Detector::Field

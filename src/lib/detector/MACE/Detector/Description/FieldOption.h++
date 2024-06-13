@@ -1,0 +1,34 @@
+#pragma once
+
+#include "MACE/Detector/Description/DescriptionBase.h++"
+
+#include <string>
+#include "MACE/Utility/ParseEnv.h++"
+
+namespace MACE::Detector::Description {
+
+class FieldOption final : public DescriptionBase<FieldOption> {
+    friend Env::Memory::SingletonInstantiator;
+
+private:
+    FieldOption();
+    ~FieldOption() = default;
+
+public:
+    auto UseFast() const -> auto { return fUseFast; }
+    auto FieldDataFileName() const -> auto { return ParseEnv(fFieldDataFileName); }
+    auto RawFieldDataFileName() const -> const auto& { return fFieldDataFileName; }
+
+    auto UseFast(bool val) -> void { fUseFast = val; }
+    auto FieldDataFileName(std::string val) -> void { fFieldDataFileName = std::move(val); }
+
+private:
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
+
+private:
+    bool fUseFast;
+    std::string fFieldDataFileName;
+};
+
+} // namespace MACE::Detector::Description
