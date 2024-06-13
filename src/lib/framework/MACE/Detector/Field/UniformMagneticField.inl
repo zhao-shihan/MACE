@@ -6,4 +6,8 @@ constexpr UniformMagneticField::UniformMagneticField(double bx, double by, doubl
     fBy{by},
     fBz{bz} {}
 
+template<Concept::InputVector3D T>
+constexpr UniformMagneticField::UniformMagneticField(T b) :
+    UniformMagneticField{b[0], b[1], b[2]} {}
+
 } // namespace MACE::Detector::Field

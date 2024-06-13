@@ -4,10 +4,9 @@
 
 namespace MACE::Detector::Field {
 
-EMCField::EMCField() :
-    MagneticFieldBase<EMCField>{
-},
-    fField{FastField{0, 0, 0}} {
+EMCField::EMCField() : // clang-format off
+    MagneticFieldBase<EMCField>{}, // clang-format on
+    fField{FastField{{}}} {
     const auto& fieldOption{Detector::Description::FieldOption::Instance()};
     const auto& emcField{Detector::Description::EMCField::Instance()};
     if (fieldOption.UseFast()) {

@@ -6,19 +6,14 @@
 
 namespace MACE::Detector::Field {
 
-AcceleratorField::FastField::FastField(double b, double e) :
-    ElectromagneticFieldBase<FastField>{},
-    fB{b},
-    fE{e} {}
-
 AcceleratorField::AcceleratorField() : // clang-format off
     ElectromagneticFieldBase<AcceleratorField>{}, // clang-format on
-    fField{FastField{0, 0}} {
+    fField{FastField{{}, {}}} {
     const auto& fieldOption{Detector::Description::FieldOption::Instance()};
     const auto& acceleratorField{Description::Accelerator::Instance()};
     if (fieldOption.UseFast()) {
         const auto& mmsField{Detector::Description::MMSField::Instance()};
-        fField = FastField{mmsField.FastField(), acceleratorField.FastField()};
+        fField = FastField{0, 0, mmsField.FastField(), 0, 0, acceleratorField.FastField()};
     } else {
         fField = FieldMap{fieldOption.FieldDataFileName(), "AcceleratorField"};
     }

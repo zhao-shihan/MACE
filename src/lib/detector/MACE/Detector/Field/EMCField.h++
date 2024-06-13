@@ -10,15 +10,15 @@
 namespace MACE::Detector::Field {
 
 class EMCField : public MagneticFieldBase<EMCField> {
-private:
-    using FastField = UniformMagneticField;
-    using FieldMap = MagneticFieldMapSymY;
-
 public:
     EMCField();
 
     template<Concept::NumericVector3D T> // clang-format off
     auto B(T x) const -> T { return std::visit([&x](auto&& f) { return f.B(x); }, fField); } // clang-format on
+
+private:
+    using FastField = UniformMagneticField;
+    using FieldMap = MagneticFieldMapSymY;
 
 private:
     std::variant<FastField, FieldMap> fField;

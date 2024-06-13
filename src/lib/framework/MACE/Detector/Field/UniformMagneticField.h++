@@ -1,13 +1,18 @@
 #pragma once
 
+#include "MACE/Concept/InputVector.h++"
 #include "MACE/Concept/NumericVector.h++"
 #include "MACE/Detector/Field/MagneticFieldBase.h++"
+
+#include "muc/array"
 
 namespace MACE::Detector::Field {
 
 class UniformMagneticField : public MagneticFieldBase<UniformMagneticField> {
 public:
     constexpr UniformMagneticField(double bx, double by, double bz);
+    template<Concept::InputVector3D T = muc::array3d>
+    constexpr UniformMagneticField(T b);
 
     template<Concept::NumericVector3D T>
     constexpr auto B(T) const -> T { return {fBx, fBy, fBz}; }
