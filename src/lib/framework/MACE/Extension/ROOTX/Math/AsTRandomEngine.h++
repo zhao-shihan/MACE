@@ -10,12 +10,12 @@
 namespace MACE::inline Extension::ROOTX::Math {
 
 template<MACE::Math::Random::UniformPseudoRandomBitGenerator PRBG>
-class WrapAsTRandomEngine : public ROOT::Math::TRandomEngine {
+class AsTRandomEngine : public ROOT::Math::TRandomEngine {
 public:
-    WrapAsTRandomEngine() = default;
-    explicit WrapAsTRandomEngine(typename PRBG::SeedType seed);
+    AsTRandomEngine() = default;
+    explicit AsTRandomEngine(typename PRBG::SeedType seed);
 
-    virtual ~WrapAsTRandomEngine() override = default;
+    virtual ~AsTRandomEngine() override = default;
 
     auto Rndm() -> double override final { MACE::Math::Random::Uniform<double>{}(fPRBG); }
 
@@ -33,4 +33,4 @@ private:
 
 } // namespace MACE::inline Extension::ROOTX::Math
 
-#include "MACE/Extension/ROOTX/Math/WrapAsTRandomEngine.inl"
+#include "MACE/Extension/ROOTX/Math/AsTRandomEngine.inl"

@@ -16,12 +16,12 @@ namespace MACE::inline Extension::ROOTX::Math {
 /// @tparam PRBG A uniform pseudo random bit generator.
 /// @warning DO NOT USE any member involves TRandom::fSeed. GetSeed,
 template<MACE::Math::Random::UniformPseudoRandomBitGenerator PRBG>
-class WrapAsTRandom : public TRandom {
+class AsTRandom : public TRandom {
 public:
-    WrapAsTRandom() = default;
-    WrapAsTRandom(typename PRBG::SeedType seed);
+    AsTRandom() = default;
+    AsTRandom(typename PRBG::SeedType seed);
 
-    virtual ~WrapAsTRandom() override = default;
+    virtual ~AsTRandom() override = default;
 
     auto Gaus(Double_t mu = 0, Double_t sigma = 1) -> Double_t override final { return fGaussian(fPRBG, {mu, sigma}); }
 
@@ -40,4 +40,4 @@ private:
 
 } // namespace MACE::inline Extension::ROOTX::Math
 
-#include "MACE/Extension/ROOTX/Math/WrapAsTRandom.inl"
+#include "MACE/Extension/ROOTX/Math/AsTRandom.inl"
