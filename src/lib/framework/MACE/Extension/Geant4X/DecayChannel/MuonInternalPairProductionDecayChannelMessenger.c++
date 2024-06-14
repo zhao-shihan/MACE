@@ -1,7 +1,6 @@
 #include "MACE/Extension/Geant4X/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
 #include "MACE/Extension/Geant4X/DecayChannel/MuonInternalPairProductionDecayChannelMessenger.h++"
 
-#include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIdirectory.hh"
@@ -12,8 +11,7 @@ MuonInternalPairProductionDecayChannelMessenger::MuonInternalPairProductionDecay
     SingletonMessenger{},
     fDirectory{},
     fMetropolisDelta{},
-    fMetropolisDiscard{},
-    fApplyMACESpecificPxyCut{} {
+    fMetropolisDiscard{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Physics/MuonDecay/IPPDecay/");
     fDirectory->SetGuidance("Muon(ium) internal pair production decay channel (mu->eeevv / M->eeevve).");
@@ -35,11 +33,6 @@ MuonInternalPairProductionDecayChannelMessenger::MuonInternalPairProductionDecay
     fMetropolisDiscard->SetParameterName("n", false);
     fMetropolisDiscard->SetRange("n >= 0");
     fMetropolisDiscard->AvailableForStates(G4State_Idle);
-
-    fApplyMACESpecificPxyCut = std::make_unique<G4UIcmdWithABool>("/MACE/Physics/MuonDecay/IPPDecay/ApplyMACESpecificPxyCut", this);
-    fApplyMACESpecificPxyCut->SetGuidance("If true, apply MACE specific transverse momentum cut to mu+ IPP decay products. Check source code for details.");
-    fApplyMACESpecificPxyCut->SetParameterName("apply", false);
-    fApplyMACESpecificPxyCut->AvailableForStates(G4State_Idle);
 }
 
 MuonInternalPairProductionDecayChannelMessenger::~MuonInternalPairProductionDecayChannelMessenger() = default;
@@ -52,10 +45,6 @@ auto MuonInternalPairProductionDecayChannelMessenger::SetNewValue(G4UIcommand* c
     } else if (command == fMetropolisDiscard.get()) {
         Deliver<MuonInternalPairProductionDecayChannel>([&](auto&& r) {
             r.MetropolisDiscard(fMetropolisDiscard->GetNewIntValue(value));
-        });
-    } else if (command == fApplyMACESpecificPxyCut.get()) {
-        Deliver<MuonInternalPairProductionDecayChannel>([&](auto&& r) {
-            r.ApplyMACESpecificPxyCut(fApplyMACESpecificPxyCut->GetNewBoolValue(value));
         });
     }
 }

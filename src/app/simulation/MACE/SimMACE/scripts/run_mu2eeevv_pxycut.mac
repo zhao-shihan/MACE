@@ -22,11 +22,11 @@
 /GPSX/NVertex             10
 /GPSX/PulseWidth          1.5 us
 
-/MACE/Physics/MuonDecay/IPPDecay/BR                      1
-/MACE/Physics/MuonDecay/IPPDecay/MetropolisDelta         0.0025
-/MACE/Physics/MuonDecay/IPPDecay/MetropolisDiscard       10
-/MACE/Physics/MuonDecay/IPPDecay/ApplyMACESpecificPxyCut true
-/MACE/Physics/MuonDecay/RadiativeDecay/BR                0
+/MACE/Physics/MuonDecay/IPPDecay/BR                   1
+/MACE/Physics/MuonDecay/IPPDecay/MetropolisDelta      0.0025
+/MACE/Physics/MuonDecay/IPPDecay/MetropolisDiscard    10
+/MACE/Physics/MuonDecay/IPPDecay/ApplyMACEPxyCut      true
+/MACE/Physics/MuonDecay/RadiativeDecay/BR             0
 /MACE/Physics/MuonDecay/UpdateDecayBR
 
 /MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0

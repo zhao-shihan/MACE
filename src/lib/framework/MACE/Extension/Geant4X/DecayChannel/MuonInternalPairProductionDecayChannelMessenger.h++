@@ -4,7 +4,6 @@
 
 #include <memory>
 
-class G4UIcmdWithABool;
 class G4UIcmdWithADouble;
 class G4UIcmdWithAnInteger;
 class G4UIdirectory;
@@ -28,7 +27,6 @@ private:
     std::unique_ptr<G4UIdirectory> fDirectory;
     std::unique_ptr<G4UIcmdWithADouble> fMetropolisDelta;
     std::unique_ptr<G4UIcmdWithAnInteger> fMetropolisDiscard;
-    std::unique_ptr<G4UIcmdWithABool> fApplyMACESpecificPxyCut;
 };
 
 } // namespace MACE::inline Extension::Geant4X::inline DecayChannel

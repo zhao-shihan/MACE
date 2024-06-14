@@ -2,8 +2,8 @@
 #include "MACE/SimMACE/Action/ActionInitialization.h++"
 #include "MACE/SimMACE/Action/DetectorConstruction.h++"
 #include "MACE/SimMACE/Analysis.h++"
+#include "MACE/SimMACE/PhysicsList.h++"
 #include "MACE/SimMACE/RunManager.h++"
-#include "MACE/Simulation/Physics/StandardPhysicsList.h++"
 #include "MACE/Utility/LiteralUnit.h++"
 
 #include "G4TransportationParameters.hh"
@@ -25,7 +25,7 @@ RunManager::RunManager() :
     transportParams.SetImportantEnergy(50_eV);
     transportParams.SetNumberOfTrials(1000);
 
-    const auto physicsList{new StandardPhysicsList};
+    const auto physicsList{new PhysicsList};
     physicsList->SetVerboseLevel(muc::to_underlying(verboseLevel));
     SetUserInitialization(physicsList);
 

@@ -25,8 +25,8 @@ auto MuoniumPrecisionDecayPhysics::ConstructParticle() -> void {
             delete muonium->GetDecayTable();
             muonium->SetDecayTable(decay);
         }};
-    NewDecayTableFor(Geant4X::Muonium::Definition());
-    NewDecayTableFor(Geant4X::Antimuonium::Definition());
+    NewDecayTableFor(Muonium::Definition());
+    NewDecayTableFor(Antimuonium::Definition());
 
     UpdateDecayBR(); // set BR here
 }
@@ -44,19 +44,19 @@ auto MuoniumPrecisionDecayPhysics::ConstructProcess() -> void {
             manager->SetProcessOrdering(decayWithSpin, idxPostStep);
             manager->SetProcessOrdering(decayWithSpin, idxAtRest);
         }};
-    ReplaceDecayPhysics(Geant4X::Muonium::Definition());
-    ReplaceDecayPhysics(Geant4X::Antimuonium::Definition());
+    ReplaceDecayPhysics(Muonium::Definition());
+    ReplaceDecayPhysics(Antimuonium::Definition());
 }
 
 auto MuoniumPrecisionDecayPhysics::UpdateDecayBR() -> void {
-    UpdateDecayBRFor(Geant4X::Muonium::Definition());
-    UpdateDecayBRFor(Geant4X::Antimuonium::Definition());
+    UpdateDecayBRFor(Muonium::Definition());
+    UpdateDecayBRFor(Antimuonium::Definition());
 }
 
 auto MuoniumPrecisionDecayPhysics::InsertDecayChannel(const G4String& parentName, gsl::not_null<G4DecayTable*> decay) -> void {
     // sort by initial BR! we firstly write random BRs in decrease order...
-    decay->Insert(new Geant4X::MuoniumDecayChannelWithSpin{parentName, 1e-1, verboseLevel});
-    decay->Insert(new Geant4X::MuoniumRadiativeDecayChannelWithSpin{parentName, 1e-2, verboseLevel});
+    decay->Insert(new MuoniumDecayChannelWithSpin{parentName, 1e-1, verboseLevel});
+    decay->Insert(new MuoniumRadiativeDecayChannelWithSpin{parentName, 1e-2, verboseLevel});
     decay->Insert(new MuoniumInternalPairProductionDecayChannel{parentName, 1e-3, verboseLevel});
 }
 

@@ -5,12 +5,7 @@
 
 namespace MACE::inline Extension::Geant4X::inline DecayChannel {
 
-class MuoniumInternalPairProductionDecayChannel : public Geant4X::AsMuoniumDecayChannel<MuonInternalPairProductionDecayChannel,
-                                                                                        "MuoniumIPPDecay"> {
-public:
-    using AsMuoniumDecayChannel::AsMuoniumDecayChannel;
-
-    virtual auto PassCutApplicable() const -> bool override { return GetParentName() == "muonium"; }
-};
+using MuoniumInternalPairProductionDecayChannel = Geant4X::AsMuoniumDecayChannel<MuonInternalPairProductionDecayChannel,
+                                                                                 "MuoniumIPPDecay">;
 
 } // namespace MACE::inline Extension::Geant4X::inline DecayChannel

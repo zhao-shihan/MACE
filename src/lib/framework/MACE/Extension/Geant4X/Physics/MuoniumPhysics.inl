@@ -11,8 +11,8 @@ template<TargetForMuoniumPhysics ATarget>
 auto MuoniumPhysics<ATarget>::ConstructParticle() -> void {
     G4EmBuilder::ConstructMinimalEmSet();
     G4MuonPlus::Definition();
-    Geant4X::Muonium::Definition();
-    Geant4X::Antimuonium::Definition();
+    Muonium::Definition();
+    Antimuonium::Definition();
 }
 
 template<TargetForMuoniumPhysics ATarget>
@@ -23,10 +23,10 @@ auto MuoniumPhysics<ATarget>::ConstructProcess() -> void {
     const auto muonPlus{G4MuonPlus::Definition()->GetProcessManager()};
     muonPlus->AddRestProcess(muoniumFormation);
 
-    const auto muonium{Geant4X::Muonium::Definition()->GetProcessManager()};
+    const auto muonium{Muonium::Definition()->GetProcessManager()};
     muonium->AddContinuousProcess(muoniumTransport);
 
-    const auto antiMuonium{Geant4X::Antimuonium::Definition()->GetProcessManager()};
+    const auto antiMuonium{Antimuonium::Definition()->GetProcessManager()};
     antiMuonium->AddContinuousProcess(muoniumTransport);
 }
 

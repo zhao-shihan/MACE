@@ -1,8 +1,3 @@
-// #include "MACE/Detector/Description/Accelerator.h++"
-// #include "MACE/Detector/Description/CDC.h++"
-// #include "MACE/Detector/Description/Filter.h++"
-// #include "MACE/Detector/Description/MMSField.h++"
-// #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Extension/Geant4X/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
 #include "MACE/Math/Random/Distribution/Uniform.h++"
 #include "MACE/Utility/PhysicalConstant.h++"
@@ -19,6 +14,7 @@
 
 #include <algorithm>
 #include <bit>
+#include <limits>
 
 namespace MACE::inline Extension::Geant4X::inline DecayChannel {
 
@@ -26,10 +22,10 @@ using namespace PhysicalConstant;
 
 MuonInternalPairProductionDecayChannel::MuonInternalPairProductionDecayChannel(const G4String& parentName, G4double br, G4int verbose) : // clang-format off
     G4VDecayChannel{"MuonIPPDecay", verbose}, // clang-format on
+    fThermalized{},
     fMetropolisDelta{0.05},
     fMetropolisDiscard{100},
-    fApplyMACESpecificPxyCut{},
-    fThermalized{},
+    fPassCut{[](auto&&) { return true; }},
     fRAMBO{muon_mass_c2, {electron_mass_c2, electron_mass_c2, electron_mass_c2, 0, 0}},
     fRawState{},
     fEvent{},
@@ -63,12 +59,6 @@ MuonInternalPairProductionDecayChannel::MuonInternalPairProductionDecayChannel(c
     }
 }
 
-auto MuonInternalPairProductionDecayChannel::ApplyMACESpecificPxyCut(bool apply) -> void {
-    if (apply and not PassCutApplicable()) { return; }
-    fApplyMACESpecificPxyCut = apply;
-    fThermalized = false;
-}
-
 auto MuonInternalPairProductionDecayChannel::DecayIt(G4double) -> G4DecayProducts* {
 #ifdef G4VERBOSE
     if (GetVerboseLevel() > 1) {
@@ -91,7 +81,7 @@ auto MuonInternalPairProductionDecayChannel::DecayIt(G4double) -> G4DecayProduct
         do {
             std::ranges::generate(fRawState, [this] { return Math::Random::Uniform<double>{}(fXoshiro256Plus); });
             fEvent = fRAMBO(fRawState);
-        } while (PassCut(fEvent) == false);
+        } while (fPassCut(fEvent) == false);
         fWeightedM2 = WeightedM2(fEvent);
         // thermalize
         constexpr long double deltaSA0{0.1};
@@ -137,7 +127,7 @@ auto MuonInternalPairProductionDecayChannel::UpdateState(double delta) -> void {
                                        return u;
                                    });
             newEvent = fRAMBO(newRawState);
-        } while (PassCut(newEvent) == false);
+        } while (fPassCut(newEvent) == false);
         const auto newWeightedM2{WeightedM2(newEvent)};
         if (newWeightedM2 >= fWeightedM2 or
             newWeightedM2 >= fWeightedM2 * Math::Random::Distribution::Uniform<double>{}(fXoshiro256Plus)) {
@@ -149,37 +139,6 @@ auto MuonInternalPairProductionDecayChannel::UpdateState(double delta) -> void {
         }
     }
 }
-
-// /// @todo Make PassCut virtual and decouple with detector description! -- Default PassCut (in this class) returns true,
-// /// and derived class can override it by setting up cut using detector description.
-// /// Therefore IPP decay will no longer depend on libMACEDetector and can go into libMACEFramework.
-// /// IPP decay with cut can still be implement in libMACESimulation by inherting this class and overriding PassCut.
-// auto MuonInternalPairProductionDecayChannel::PassCut(const CLHEPX::RAMBO<5>::Event& event) const -> bool {
-//     const auto& [p, p1, p2, k1, k2]{event.state};
-
-// auto passCut1{true};
-// auto passCut2{true};
-
-// if (fApplyMACESpecificPxyCut) {
-//     const auto mmsB{Detector::Description::MMSField::Instance().FastField()};
-//     const auto cdcInnerRadius{Detector::Description::CDC::Instance().GasInnerRadius()};
-//     const auto cdcPxyCut{(cdcInnerRadius / 2) * mmsB * c_light};
-
-// const auto& filter{Detector::Description::Filter::Instance()};
-// const auto& solenoid{Detector::Description::Solenoid::Instance()};
-// const auto maxPositronRxy{filter.Enabled() ? 5 * filter.Pitch() : solenoid.InnerRadius()};
-// const auto maxPositronPxy{maxPositronRxy * solenoid.FastField() * c_light};
-
-// const auto positron1Pxy{muc::hypot(p.x(), p.y())};
-// const auto electronPxy{muc::hypot(p1.x(), p1.y())};
-// const auto positron2Pxy{muc::hypot(p2.x(), p2.y())};
-
-// passCut1 &= electronPxy > cdcPxyCut and positron1Pxy < cdcPxyCut and positron2Pxy < maxPositronPxy;
-// passCut2 &= electronPxy > cdcPxyCut and positron2Pxy < cdcPxyCut and positron1Pxy < maxPositronPxy;
-// }
-
-// return passCut1 or passCut2;
-// }
 
 auto MuonInternalPairProductionDecayChannel::WeightedM2(const CLHEPX::RAMBO<5>::Event& event) -> double {
     // Tree level mu -> eeevv (2 diagrams)

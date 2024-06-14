@@ -10,6 +10,8 @@
 
 #include <algorithm>
 #include <array>
+#include <functional>
+#include <utility>
 
 namespace MACE::inline Extension::Geant4X::inline DecayChannel {
 
@@ -19,25 +21,22 @@ public:
 
     auto MetropolisDelta(double delta) -> void { fMetropolisDelta = muc::clamp<"()">(delta, 0., 0.5); }
     auto MetropolisDiscard(int n) -> void { fMetropolisDiscard = std::max(0, n); }
-
-    auto ApplyMACESpecificPxyCut(bool apply) -> void;
+    auto PassCut(std::function<bool(const CLHEPX::RAMBO<5>::Event&)> PassCut) -> void { fPassCut = std::move(PassCut); }
 
     auto DecayIt(G4double) -> G4DecayProducts* override;
 
 private:
-    virtual auto PassCutApplicable() const -> bool { return GetParentName() == "mu+"; }
-    virtual auto PassCut(const CLHEPX::RAMBO<5>::Event& event) const -> bool { return true; }
-
     auto UpdateState(double delta) -> void;
 
     static auto WeightedM2(const CLHEPX::RAMBO<5>::Event& event) -> double;
 
+protected:
+    bool fThermalized;
+
 private:
     double fMetropolisDelta;
     int fMetropolisDiscard;
-
-    bool fApplyMACESpecificPxyCut;
-    bool fThermalized;
+    std::function<bool(const CLHEPX::RAMBO<5>::Event&)> fPassCut;
 
     CLHEPX::RAMBO<5> fRAMBO;
     std::array<double, 5 * 4> fRawState;
