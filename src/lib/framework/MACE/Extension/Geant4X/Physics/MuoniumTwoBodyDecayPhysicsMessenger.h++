@@ -25,8 +25,8 @@ public:
 
 private:
     std::unique_ptr<G4UIdirectory> fDirectory;
-    std::unique_ptr<G4UIcmdWithADouble> fAnnihilationBR;
-    std::unique_ptr<G4UIcmdWithADouble> fTwoBodyDecayBR;
+    std::unique_ptr<G4UIcmdWithADouble> fAnnihilationDecayBR;
+    std::unique_ptr<G4UIcmdWithADouble> fM2eeDecayBR;
     std::unique_ptr<G4UIcmdWithoutParameter> fUpdateDecayBR;
 };
 

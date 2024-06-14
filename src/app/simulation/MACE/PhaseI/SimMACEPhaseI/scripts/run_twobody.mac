@@ -21,8 +21,8 @@
 /GPSX/NVertex             1
 /GPSX/PulseWidth          0 ns
 
-/MACE/Physics/MuoniumDecay/Annihilation/BR 0
-/MACE/Physics/MuoniumDecay/TwoBodyDecay/BR 1
+/MACE/Physics/MuoniumDecay/AnnihilationDecay/BR 0
+/MACE/Physics/MuoniumDecay/M2eeDecay/BR 1
 /MACE/Physics/MuoniumDecay/UpdateDecayBR
 
 #############################################################################

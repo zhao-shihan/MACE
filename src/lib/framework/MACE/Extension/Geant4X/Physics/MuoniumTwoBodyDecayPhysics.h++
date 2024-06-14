@@ -19,8 +19,8 @@ public:
 
     auto RadiativeDecayBR(double br) -> void { fRadiativeDecayBR = muc::clamp<"[]">(br, 0., 1.); }
     auto IPPDecayBR(double br) -> void { fIPPDecayBR = muc::clamp<"[]">(br, 0., 1.); }
-    auto AnnihilationBR(double br) -> void { fAnnihilationBR = muc::clamp<"[]">(br, 0., 1.); }
-    auto TwoBodyDecayBR(double br) -> void { fTwoBodyDecayBR = muc::clamp<"[]">(br, 0., 1.); }
+    auto AnnihilationDecayBR(double br) -> void { fAnnihilationDecayBR = muc::clamp<"[]">(br, 0., 1.); }
+    auto M2eeDecayBR(double br) -> void { fM2eeDecayBR = muc::clamp<"[]">(br, 0., 1.); }
 
     virtual auto ConstructParticle() -> void override;
     virtual auto ConstructProcess() -> void override;
@@ -33,8 +33,8 @@ protected:
 protected:
     double fRadiativeDecayBR;
     double fIPPDecayBR;
-    double fAnnihilationBR;
-    double fTwoBodyDecayBR;
+    double fAnnihilationDecayBR;
+    double fM2eeDecayBR;
 
 private:
     MuoniumTwoBodyDecayPhysicsMessenger::Register<MuoniumTwoBodyDecayPhysics> fMessengerRegister;

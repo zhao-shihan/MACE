@@ -17,8 +17,8 @@ MuoniumTwoBodyDecayPhysics::MuoniumTwoBodyDecayPhysics(G4int verbose) :
     DecayPhysicsBase{"MuoniumTwoBodyDecayPhysics", verbose},
     fRadiativeDecayBR{},
     fIPPDecayBR{},
-    fAnnihilationBR{},
-    fTwoBodyDecayBR{},
+    fAnnihilationDecayBR{},
+    fM2eeDecayBR{},
     fMessengerRegister{this} {}
 
 auto MuoniumTwoBodyDecayPhysics::ConstructParticle() -> void {
@@ -72,8 +72,8 @@ auto MuoniumTwoBodyDecayPhysics::AssignRareDecayBR(gsl::not_null<G4DecayTable*> 
     // set BR here
     decay->GetDecayChannel(1)->SetBR(fRadiativeDecayBR);
     decay->GetDecayChannel(2)->SetBR(fIPPDecayBR);
-    decay->GetDecayChannel(3)->SetBR(fAnnihilationBR);
-    decay->GetDecayChannel(4)->SetBR(fTwoBodyDecayBR);
+    decay->GetDecayChannel(3)->SetBR(fAnnihilationDecayBR);
+    decay->GetDecayChannel(4)->SetBR(fM2eeDecayBR);
 }
 
 } // namespace MACE::inline Extension::Geant4X::inline Physics

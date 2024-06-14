@@ -11,24 +11,24 @@ namespace MACE::inline Extension::Geant4X::inline Physics {
 MuoniumTwoBodyDecayPhysicsMessenger::MuoniumTwoBodyDecayPhysicsMessenger() :
     SingletonMessenger{},
     fDirectory{},
-    fAnnihilationBR{},
-    fTwoBodyDecayBR{},
+    fAnnihilationDecayBR{},
+    fM2eeDecayBR{},
     fUpdateDecayBR{} {
 
     fDirectory = std::make_unique<G4UIdirectory>("/MACE/Physics/MuoniumDecay/");
     fDirectory->SetGuidance("About muon(ium) decay channel and decay generators.");
 
-    fAnnihilationBR = std::make_unique<G4UIcmdWithADouble>("/MACE/Physics/MuoniumDecay/Annihilation/BR", this);
-    fAnnihilationBR->SetGuidance("Set branching ratio for muonium annihilation decay channel.");
-    fAnnihilationBR->SetParameterName("BR", false);
-    fAnnihilationBR->SetRange("0 <= BR && BR <= 1");
-    fAnnihilationBR->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fAnnihilationDecayBR = std::make_unique<G4UIcmdWithADouble>("/MACE/Physics/MuoniumDecay/AnnihilationDecay/BR", this);
+    fAnnihilationDecayBR->SetGuidance("Set branching ratio for muonium annihilation decay channel.");
+    fAnnihilationDecayBR->SetParameterName("BR", false);
+    fAnnihilationDecayBR->SetRange("0 <= BR && BR <= 1");
+    fAnnihilationDecayBR->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-    fTwoBodyDecayBR = std::make_unique<G4UIcmdWithADouble>("/MACE/Physics/MuoniumDecay/TwoBodyDecay/BR", this);
-    fTwoBodyDecayBR->SetGuidance("Set branching ratio for muonium two-body decay channel.");
-    fTwoBodyDecayBR->SetParameterName("BR", false);
-    fTwoBodyDecayBR->SetRange("0 <= BR && BR <= 1");
-    fTwoBodyDecayBR->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fM2eeDecayBR = std::make_unique<G4UIcmdWithADouble>("/MACE/Physics/MuoniumDecay/M2eeDecay/BR", this);
+    fM2eeDecayBR->SetGuidance("Set branching ratio for muonium two-body decay channel.");
+    fM2eeDecayBR->SetParameterName("BR", false);
+    fM2eeDecayBR->SetRange("0 <= BR && BR <= 1");
+    fM2eeDecayBR->AvailableForStates(G4State_PreInit, G4State_Idle);
 
     fUpdateDecayBR = std::make_unique<G4UIcmdWithoutParameter>("/MACE/Physics/MuoniumDecay/UpdateDecayBR", this);
     fUpdateDecayBR->SetGuidance("Update decay branching ratio.");
@@ -38,13 +38,13 @@ MuoniumTwoBodyDecayPhysicsMessenger::MuoniumTwoBodyDecayPhysicsMessenger() :
 MuoniumTwoBodyDecayPhysicsMessenger::~MuoniumTwoBodyDecayPhysicsMessenger() = default;
 
 auto MuoniumTwoBodyDecayPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
-    if (command == fAnnihilationBR.get()) {
+    if (command == fAnnihilationDecayBR.get()) {
         Deliver<MuoniumTwoBodyDecayPhysics>([&](auto&& r) {
-            r.AnnihilationBR(fAnnihilationBR->GetNewDoubleValue(value));
+            r.AnnihilationDecayBR(fAnnihilationDecayBR->GetNewDoubleValue(value));
         });
-    } else if (command == fTwoBodyDecayBR.get()) {
+    } else if (command == fM2eeDecayBR.get()) {
         Deliver<MuoniumTwoBodyDecayPhysics>([&](auto&& r) {
-            r.TwoBodyDecayBR(fTwoBodyDecayBR->GetNewDoubleValue(value));
+            r.M2eeDecayBR(fM2eeDecayBR->GetNewDoubleValue(value));
         });
     } else if (command == fUpdateDecayBR.get()) {
         Deliver<MuoniumTwoBodyDecayPhysics>([&](auto&& r) {
