@@ -1,5 +1,5 @@
 #include "MACE/Env/MPIEnv.h++"
-#include "MACE/Extension/Geant4X/MPIExecutive.h++"
+#include "MACE/Extension/Geant4X/Interface/MPIExecutive.h++"
 #include "MACE/SimEMC/DefaultMacro.h++"
 #include "MACE/SimEMC/RunManager.h++"
 #include "MACE/Utility/UseXoshiro.h++"

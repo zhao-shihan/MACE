@@ -3,10 +3,10 @@
 #include "MACE/Data/SimVertex.h++"
 #include "MACE/Data/Tuple.h++"
 #include "MACE/Env/Memory/PassiveSingleton.h++"
-#include "MACE/Extension/Geant4X/GeneralParticleSourceX.h++"
+#include "MACE/Extension/Geant4X/Generator/EcoMugCosmicRayMuon.h++"
+#include "MACE/Extension/Geant4X/Generator/GeneralParticleSourceX.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Messenger/AnalysisMessenger.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Messenger/PrimaryGeneratorActionMessenger.h++"
-#include "MACE/Simulation/Generator/EcoMugCosmicRayMuon.h++"
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 
@@ -34,7 +34,7 @@ private:
 private:
     struct {
         Geant4X::GeneralParticleSourceX gpsx;
-        Generator::EcoMugCosmicRayMuon ecoMug;
+        Geant4X::EcoMugCosmicRayMuon ecoMug;
     } fAvailableGenerator;
     G4VPrimaryGenerator* fGenerator;
 

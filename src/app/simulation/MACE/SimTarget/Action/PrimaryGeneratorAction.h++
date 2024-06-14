@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MACE/Env/Memory/PassiveSingleton.h++"
-#include "MACE/Extension/Geant4X/GeneralParticleSourceX.h++"
+#include "MACE/Extension/Geant4X/Generator/GeneralParticleSourceX.h++"
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 

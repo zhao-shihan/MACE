@@ -1,8 +1,8 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/CLHEPX/Random/Xoshiro.h++"
+#include "MACE/Extension/Geant4X/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
 #include "MACE/Extension/MPIX/Execution/Executor.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
-#include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
 #include "MACE/Utility/MPIReseedRandomEngine.h++"
 
 #include "TFile.h"
@@ -39,7 +39,7 @@ auto main(int argc, char* argv[]) -> int {
     G4NeutrinoMu::Definition();
     G4Positron::Definition();
 
-    MuonInternalPairProductionDecayChannel ippDecay{"mu+", 1};
+    Geant4X::MuonInternalPairProductionDecayChannel ippDecay{"mu+", 1};
     ippDecay.MetropolisDelta(std::stod(argv[2]));
     ippDecay.MetropolisDiscard(std::stod(argv[3]));
     if (argc >= 5) { ippDecay.ApplyMACESpecificPxyCut(std::stoll(argv[4])); }

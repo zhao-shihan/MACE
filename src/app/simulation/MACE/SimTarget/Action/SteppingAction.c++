@@ -1,5 +1,5 @@
-#include "MACE/Extension/Geant4X/Antimuonium.h++"
-#include "MACE/Extension/Geant4X/Muonium.h++"
+#include "MACE/Extension/Geant4X/Particle/Antimuonium.h++"
+#include "MACE/Extension/Geant4X/Particle/Muonium.h++"
 #include "MACE/SimTarget/Action/SteppingAction.h++"
 
 #include "G4MuonPlus.hh"

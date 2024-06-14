@@ -1,7 +1,7 @@
 #include "MACE/Data/Output.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Env/MPIEnv.h++"
-#include "MACE/Extension/Geant4X/ConvertGeometry.h++"
+#include "MACE/Extension/Geant4X/Utility/ConvertGeometry.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
 #include "MACE/SimTarget/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimTarget/Analysis.h++"

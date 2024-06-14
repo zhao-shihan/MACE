@@ -1,10 +1,10 @@
 #include "MACE/Env/MPIEnv.h++"
 #include "MACE/Extension/CLHEPX/Random/Xoshiro.h++"
-#include "MACE/Extension/Geant4X/Antimuonium.h++"
-#include "MACE/Extension/Geant4X/Muonium.h++"
+#include "MACE/Extension/Geant4X/DecayChannel/MuoniumInternalPairProductionDecayChannel.h++"
+#include "MACE/Extension/Geant4X/Particle/Antimuonium.h++"
+#include "MACE/Extension/Geant4X/Particle/Muonium.h++"
 #include "MACE/Extension/MPIX/Execution/Executor.h++"
 #include "MACE/Extension/MPIX/ParallelizePath.h++"
-#include "MACE/Simulation/Physics/DecayChannel/MuoniumInternalPairProductionDecayChannel.h++"
 #include "MACE/Utility/MPIReseedRandomEngine.h++"
 
 #include "TFile.h"
@@ -45,7 +45,7 @@ auto main(int argc, char* argv[]) -> int {
     G4Positron::Definition();
     Geant4X::Muonium::Definition();
 
-    MuoniumInternalPairProductionDecayChannel ippDecay{"anti_muonium", 1};
+    Geant4X::MuoniumInternalPairProductionDecayChannel ippDecay{"anti_muonium", 1};
     ippDecay.MetropolisDelta(std::stod(argv[2]));
     ippDecay.MetropolisDiscard(std::stod(argv[3]));
     if (argc >= 5) { ippDecay.ApplyMACESpecificPxyCut(std::stoll(argv[4])); }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Extension/Geant4X/MPIRunManager.h++"
+#include "MACE/Extension/Geant4X/Run/MPIRunManager.h++"
 
 #include <memory>
 

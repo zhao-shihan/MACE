@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Extension/Geant4X/SingletonMessenger.h++"
+#include "MACE/Extension/Geant4X/Interface/SingletonMessenger.h++"
 
 #include <memory>
 
