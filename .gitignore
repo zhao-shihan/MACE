@@ -13,6 +13,7 @@
 **/*.o
 **/*.obj
 **/*.out
+**/*.root
 **/*.so*
 **/*.swp
 **/build/
@@ -29,5 +30,3 @@ document/doxygen/man/
 document/doxygen/rtf/
 document/doxygen/xml/
 thirdparty/
-pen*/
-*.root

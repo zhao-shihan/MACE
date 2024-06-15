@@ -31,7 +31,6 @@ using namespace PhysicalConstant;
 auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
     const auto& emc{Description::EMC::Instance()};
     const auto name{emc.Name()};
-    // const auto nSubdivision{emc.NSubdivision()};
     const auto& faceList{emc.Mesh().fFaceList};
     const auto& typeMap{emc.Mesh().fTypeMap};
 

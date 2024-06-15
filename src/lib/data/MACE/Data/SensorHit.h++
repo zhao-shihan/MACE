@@ -17,7 +17,8 @@ using TTCSiPMHit = TupleModel<internal::HitEventIDHitID,
                               TTCSiPMRawHit>;
 
 using EMCPMTHit = TupleModel<internal::HitEventIDHitID,
-                             EMCPMTRawHit,
-                             Value<double, "lambda", "Wavelength of the photon">>;
+                             EMCPMTRawHit /* ,
+                              Value<double, "lambda", "Wavelength of the photon"> */
+                             >;
 
 } // namespace MACE::Data
