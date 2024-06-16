@@ -1,6 +1,7 @@
 #include "MACE/Detector/Definition/SolenoidBeamPipeT1.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Description/SolenoidBeamPipe.h++"
+
 #include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"

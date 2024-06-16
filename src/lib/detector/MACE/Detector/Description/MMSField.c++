@@ -1,4 +1,5 @@
 #include "MACE/Detector/Description/MMSField.h++"
+
 #include "Mustard/Utility/LiteralUnit.h++"
 
 namespace MACE::Detector::Description {

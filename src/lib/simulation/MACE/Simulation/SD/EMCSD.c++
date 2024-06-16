@@ -1,7 +1,8 @@
 #include "MACE/Detector/Description/EMC.h++"
-#include "Mustard/Env/Print.h++"
 #include "MACE/Simulation/SD/EMCPMTSD.h++"
 #include "MACE/Simulation/SD/EMCSD.h++"
+
+#include "Mustard/Env/Print.h++"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"

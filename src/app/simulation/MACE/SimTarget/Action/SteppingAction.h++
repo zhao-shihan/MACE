@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Mustard/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimTarget/Messenger/ActionMessenger.h++"
+
+#include "Mustard/Env/Memory/PassiveSingleton.h++"
 
 #include "G4ParticleDefinition.hh"
 #include "G4UserSteppingAction.hh"

@@ -1,6 +1,7 @@
+#include "MACE/SmearMACE/Smearer.h++"
+
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Env/Print.h++"
-#include "MACE/SmearMACE/Smearer.h++"
 #include "Mustard/Utility/RDFEventSplitPoint.h++"
 
 #include "ROOT/RDataFrame.hxx"

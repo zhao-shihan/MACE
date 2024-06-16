@@ -1,5 +1,6 @@
 #include "MACE/Detector/Definition/MMSShield.h++"
 #include "MACE/Detector/Description/MMSShield.h++"
+
 #include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"

@@ -1,9 +1,10 @@
 #pragma once
 
 #include "MACE/Data/SimVertex.h++"
+#include "MACE/PhaseI/SimMACEPhaseI/Messenger/AnalysisMessenger.h++"
+
 #include "Mustard/Data/Tuple.h++"
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
-#include "MACE/PhaseI/SimMACEPhaseI/Messenger/AnalysisMessenger.h++"
 
 #include "G4UserTrackingAction.hh"
 

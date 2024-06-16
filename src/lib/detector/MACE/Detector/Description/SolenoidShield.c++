@@ -1,4 +1,5 @@
 #include "MACE/Detector/Description/SolenoidShield.h++"
+
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/MathConstant.h++"
 

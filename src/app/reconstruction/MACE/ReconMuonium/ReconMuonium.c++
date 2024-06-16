@@ -8,10 +8,11 @@
 #include "MACE/Detector/Description/EMCField.h++"
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
+#include "MACE/ReconMuonium/MuoniumSimVertex.h++"
+
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Extension/MPIX/AllocMPIJobs.h++"
 #include "Mustard/Extension/MPIX/ParallelizePath.h++"
-#include "MACE/ReconMuonium/MuoniumSimVertex.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/PhysicalConstant.h++"
 #include "Mustard/Utility/VectorArithmeticOperator.h++"

@@ -56,4 +56,3 @@ private:
 };
 
 } // namespace MACE::Detector::Description
-

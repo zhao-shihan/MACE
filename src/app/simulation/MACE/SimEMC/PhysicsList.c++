@@ -1,5 +1,6 @@
-#include "Mustard/Env/BasicEnv.h++"
 #include "MACE/SimEMC/PhysicsList.h++"
+
+#include "Mustard/Env/BasicEnv.h++"
 
 #include "G4OpticalParameters.hh"
 #include "G4OpticalPhysics.hh"

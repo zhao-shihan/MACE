@@ -1,4 +1,5 @@
 #include "MACE/Detector/Description/FieldOption.h++"
+
 #include "Mustard/Utility/LiteralUnit.h++"
 
 namespace MACE::Detector::Description {

@@ -1,5 +1,6 @@
 #include "MACE/Detector/Description/EMCShield.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
+
 #include "Mustard/Utility/LiteralUnit.h++"
 
 namespace MACE::Detector::Description {

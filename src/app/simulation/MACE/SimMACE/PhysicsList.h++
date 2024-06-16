@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Mustard/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimMACE/Messenger/PhysicsListMessenger.h++"
 #include "MACE/Simulation/Physics/StandardPhysicsList.h++"
+
+#include "Mustard/Env/Memory/PassiveSingleton.h++"
 
 #include "G4ParticleDefinition.hh"
 #include "G4VDecayChannel.hh"

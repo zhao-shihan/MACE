@@ -1,5 +1,6 @@
 #include "MACE/Detector/Definition/SolenoidT1.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
+
 #include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"

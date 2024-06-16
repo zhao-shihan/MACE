@@ -1,11 +1,12 @@
 #pragma once
 
-#include "Mustard/Data/Output.h++"
 #include "MACE/Data/SensorHit.h++"
 #include "MACE/Data/SimHit.h++"
 #include "MACE/Data/SimVertex.h++"
-#include "Mustard/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimEMC/Messenger/AnalysisMessenger.h++"
+
+#include "Mustard/Data/Output.h++"
+#include "Mustard/Env/Memory/PassiveSingleton.h++"
 
 #include "G4Types.hh"
 

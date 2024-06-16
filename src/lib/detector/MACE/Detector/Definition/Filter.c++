@@ -1,5 +1,6 @@
 #include "MACE/Detector/Definition/Filter.h++"
 #include "MACE/Detector/Description/Filter.h++"
+
 #include "Mustard/Utility/LiteralUnit.h++"
 
 #include "CLHEP/Vector/RotationZ.h"

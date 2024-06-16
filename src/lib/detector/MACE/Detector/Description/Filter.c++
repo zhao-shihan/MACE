@@ -1,4 +1,5 @@
 #include "MACE/Detector/Description/Filter.h++"
+
 #include "Mustard/Utility/LiteralUnit.h++"
 
 namespace MACE::Detector::Description {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/SimTarget/Analysis.h++"
+
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
 
 #include "G4Types.hh"

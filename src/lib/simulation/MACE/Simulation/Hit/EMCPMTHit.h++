@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/Data/SensorHit.h++"
+
 #include "Mustard/Data/Tuple.h++"
 #include "Mustard/Extension/Geant4X/Memory/UseG4Allocator.h++"
 

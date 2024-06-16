@@ -1,4 +1,5 @@
 #include "MACE/Detector/Description/SolenoidBeamPipe.h++"
+
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/MathConstant.h++"
 

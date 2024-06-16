@@ -1,8 +1,6 @@
-#include "Mustard/Detector/Definition/DefinitionBase.h++"
 #include "MACE/Detector/Definition/EMCCrystal.h++"
 #include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
 #include "MACE/Detector/Definition/Target.h++"
-#include "Mustard/Detector/Description/DescriptionIO.h++"
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/PhaseI/Detector/Definition/CentralBeamPipe.h++"
 #include "MACE/PhaseI/Detector/Definition/World.h++"
@@ -11,6 +9,9 @@
 #include "MACE/PhaseI/SimMACEPhaseI/Messenger/DetectorMessenger.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/SD/EMCPMTSD.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/SD/EMCSD.h++"
+
+#include "Mustard/Detector/Definition/DefinitionBase.h++"
+#include "Mustard/Detector/Description/DescriptionIO.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4ProductionCuts.hh"

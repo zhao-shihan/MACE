@@ -1,7 +1,8 @@
 #include "MACE/Detector/Description/TTC.h++"
-#include "Mustard/Env/Print.h++"
 #include "MACE/Simulation/SD/TTCSD.h++"
 #include "MACE/Simulation/SD/TTCSiPMSD.h++"
+
+#include "Mustard/Env/Print.h++"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"

@@ -1,6 +1,7 @@
+#include "MACE/SmearMACE/CLI.h++"
+
 #include "Mustard/Env/Print.h++"
 #include "Mustard/Math/Parity.h++"
-#include "MACE/SmearMACE/CLI.h++"
 
 #include <cassert>
 #include <cstdio>

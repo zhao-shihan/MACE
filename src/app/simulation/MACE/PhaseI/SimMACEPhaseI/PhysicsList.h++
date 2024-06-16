@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Mustard/Env/Memory/PassiveSingleton.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Messenger/PhysicsListMessenger.h++"
 #include "MACE/Simulation/Physics/StandardPhysicsList.h++"
+
+#include "Mustard/Env/Memory/PassiveSingleton.h++"
 
 namespace MACE::PhaseI::SimMACEPhaseI {
 

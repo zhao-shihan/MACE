@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/Data/RawHit.h++"
+
 #include "Mustard/Data/TupleModel.h++"
 #include "Mustard/Data/Value.h++"
 
@@ -8,23 +9,28 @@ namespace MACE::Data {
 
 namespace internal {
 
-using HitEventIDHitID = Mustard::Data::TupleModel<Mustard::Data::Value<int, "EvtID", "Event ID">,
-                                   Mustard::Data::Value<int, "HitID", "Hit ID">>;
+using HitEventIDHitID = Mustard::Data::TupleModel<
+    Mustard::Data::Value<int, "EvtID", "Event ID">,
+    Mustard::Data::Value<int, "HitID", "Hit ID">>;
 
 } // namespace internal
 
-using CDCHit = Mustard::Data::TupleModel<internal::HitEventIDHitID,
-                          CDCRawHit,
-                          Mustard::Data::Value<float, "tD", "Drift time">,
-                          Mustard::Data::Value<float, "d", "Drift distance">>;
+using CDCHit = Mustard::Data::TupleModel<
+    internal::HitEventIDHitID,
+    CDCRawHit,
+    Mustard::Data::Value<float, "tD", "Drift time">,
+    Mustard::Data::Value<float, "d", "Drift distance">>;
 
-using TTCHit = Mustard::Data::TupleModel<internal::HitEventIDHitID,
-                          TTCRawHit>;
+using TTCHit = Mustard::Data::TupleModel<
+    internal::HitEventIDHitID,
+    TTCRawHit>;
 
-using MCPHit = Mustard::Data::TupleModel<internal::HitEventIDHitID,
-                          MCPRawHit>;
+using MCPHit = Mustard::Data::TupleModel<
+    internal::HitEventIDHitID,
+    MCPRawHit>;
 
-using EMCHit = Mustard::Data::TupleModel<internal::HitEventIDHitID,
-                          EMCRawHit>;
+using EMCHit = Mustard::Data::TupleModel<
+    internal::HitEventIDHitID,
+    EMCRawHit>;
 
 } // namespace MACE::Data

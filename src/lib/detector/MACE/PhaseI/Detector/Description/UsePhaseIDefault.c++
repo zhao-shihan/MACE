@@ -2,6 +2,7 @@
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/PhaseI/Detector/Description/UsePhaseIDefault.h++"
+
 #include "Mustard/Utility/LiteralUnit.h++"
 
 namespace MACE::PhaseI::Detector::Description {

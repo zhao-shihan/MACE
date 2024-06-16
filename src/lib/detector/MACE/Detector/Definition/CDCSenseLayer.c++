@@ -1,5 +1,6 @@
 #include "MACE/Detector/Definition/CDCSenseLayer.h++"
 #include "MACE/Detector/Description/CDC.h++"
+
 #include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4Hype.hh"

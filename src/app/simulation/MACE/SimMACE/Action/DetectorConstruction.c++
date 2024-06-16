@@ -7,7 +7,6 @@
 #include "MACE/Detector/Definition/CDCGas.h++"
 #include "MACE/Detector/Definition/CDCSenseLayer.h++"
 #include "MACE/Detector/Definition/CDCSuperLayer.h++"
-#include "Mustard/Detector/Definition/DefinitionBase.h++"
 #include "MACE/Detector/Definition/EMCCrystal.h++"
 #include "MACE/Detector/Definition/EMCField.h++"
 #include "MACE/Detector/Definition/EMCMagnet.h++"
@@ -48,7 +47,6 @@
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Detector/Field/AcceleratorField.h++"
-#include "Mustard/Detector/Field/AsG4Field.h++"
 #include "MACE/Detector/Field/EMCField.h++"
 #include "MACE/Detector/Field/MMSField.h++"
 #include "MACE/Detector/Field/SolenoidFieldS1.h++"
@@ -62,6 +60,9 @@
 #include "MACE/SimMACE/SD/EMCSD.h++"
 #include "MACE/SimMACE/SD/MCPSD.h++"
 #include "MACE/SimMACE/SD/TTCSD.h++"
+
+#include "Mustard/Detector/Definition/DefinitionBase.h++"
+#include "Mustard/Detector/Field/AsG4Field.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4ChordFinder.hh"

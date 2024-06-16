@@ -1,12 +1,13 @@
 #pragma once
 
 #include "MACE/Data/SimVertex.h++"
-#include "Mustard/Data/Tuple.h++"
-#include "Mustard/Env/Memory/PassiveSingleton.h++"
-#include "Mustard/Extension/Geant4X/Generator/GeneralParticleSourceX.h++"
 #include "MACE/SimEMC/Messenger/AnalysisMessenger.h++"
 #include "MACE/SimEMC/Messenger/PrimaryGeneratorActionMessenger.h++"
+
+#include "Mustard/Data/Tuple.h++"
+#include "Mustard/Env/Memory/PassiveSingleton.h++"
 #include "Mustard/Extension/Geant4X/Generator/EcoMugCosmicRayMuon.h++"
+#include "Mustard/Extension/Geant4X/Generator/GeneralParticleSourceX.h++"
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 

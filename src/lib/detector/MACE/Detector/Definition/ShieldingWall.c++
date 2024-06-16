@@ -1,4 +1,3 @@
-#include "Mustard/Detector/Definition/DefinitionBase.h++"
 #include "MACE/Detector/Definition/ShieldingWall.h++"
 #include "MACE/Detector/Description/EMCField.h++"
 #include "MACE/Detector/Description/EMCShield.h++"
@@ -6,6 +5,8 @@
 #include "MACE/Detector/Description/ShieldingWall.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Description/World.h++"
+
+#include "Mustard/Detector/Definition/DefinitionBase.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/MathConstant.h++"
 #include "Mustard/Utility/VectorCast.h++"

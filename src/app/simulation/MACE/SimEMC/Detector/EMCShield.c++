@@ -1,7 +1,8 @@
-#include "Mustard/Detector/Description/DescriptionIO.h++"
 #include "MACE/Detector/Description/EMCShield.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/SimEMC/Detector/EMCShield.h++"
+
+#include "Mustard/Detector/Description/DescriptionIO.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"

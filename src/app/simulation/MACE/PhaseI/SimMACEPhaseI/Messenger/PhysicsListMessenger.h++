@@ -13,7 +13,7 @@ class PhysicsList;
 inline namespace Messenger {
 
 class PhysicsListMessenger final : public Mustard::Geant4X::SingletonMessenger<PhysicsListMessenger,
-                                                                      PhysicsList> {
+                                                                               PhysicsList> {
     friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:

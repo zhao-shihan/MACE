@@ -1,7 +1,10 @@
 #include "MACE/Detector/Description/MCP.h++"
-#include "Mustard/Env/Print.h++"
 #include "MACE/Simulation/SD/MCPSD.h++"
+
+#include "Mustard/Env/Print.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
+
+#include "Randomize.hh"
 
 #include "G4DataInterpolation.hh"
 #include "G4Event.hh"
@@ -16,7 +19,6 @@
 #include "G4TwoVector.hh"
 #include "G4VProcess.hh"
 #include "G4VTouchable.hh"
-#include "Randomize.hh"
 
 #include "gfx/timsort.hpp"
 

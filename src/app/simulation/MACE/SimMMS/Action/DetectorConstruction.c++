@@ -3,7 +3,6 @@
 #include "MACE/Detector/Definition/CDCGas.h++"
 #include "MACE/Detector/Definition/CDCSenseLayer.h++"
 #include "MACE/Detector/Definition/CDCSuperLayer.h++"
-#include "Mustard/Detector/Definition/DefinitionBase.h++"
 #include "MACE/Detector/Definition/Filter.h++"
 #include "MACE/Detector/Definition/MMSBeamPipe.h++"
 #include "MACE/Detector/Definition/MMSField.h++"
@@ -13,11 +12,13 @@
 #include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Field/MMSField.h++"
-#include "Mustard/Detector/Field/AsG4Field.h++"
 #include "MACE/SimMMS/Action/DetectorConstruction.h++"
 #include "MACE/SimMMS/Messenger/DetectorMessenger.h++"
 #include "MACE/SimMMS/SD/CDCSD.h++"
 #include "MACE/SimMMS/SD/TTCSD.h++"
+
+#include "Mustard/Detector/Definition/DefinitionBase.h++"
+#include "Mustard/Detector/Field/AsG4Field.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4ChordFinder.hh"

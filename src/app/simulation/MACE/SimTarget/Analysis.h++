@@ -1,9 +1,10 @@
 #pragma once
 
+#include "MACE/SimTarget/Messenger/AnalysisMessenger.h++"
+
 #include "Mustard/Data/Tuple.h++"
 #include "Mustard/Data/TupleModel.h++"
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
-#include "MACE/SimTarget/Messenger/AnalysisMessenger.h++"
 
 #include "muc/array"
 
@@ -21,16 +22,16 @@ class TFile;
 namespace MACE::SimTarget {
 
 using MuoniumTrack = Mustard::Data::TupleModel<Mustard::Data::Value<int, "EvtID", "Event ID">,
-                                      Mustard::Data::Value<int, "TrkID", "Track ID">,
-                                      Mustard::Data::Value<int, "PDGID", "Particle PDG ID">,
-                                      Mustard::Data::Value<float, "t0", "Vertex time">,
-                                      Mustard::Data::Value<muc::array3f, "x0", "Vertex position">,
-                                      Mustard::Data::Value<float, "Ek0", "Vertex kinetic energy">,
-                                      Mustard::Data::Value<muc::array3f, "p0", "Vertex momentum">,
-                                      Mustard::Data::Value<double, "t", "Decay time">,
-                                      Mustard::Data::Value<muc::array3f, "x", "Decay position">,
-                                      Mustard::Data::Value<float, "Ek", "Kinetic energy just before decay">,
-                                      Mustard::Data::Value<muc::array3f, "p", "Momentum just before decay">>;
+                                               Mustard::Data::Value<int, "TrkID", "Track ID">,
+                                               Mustard::Data::Value<int, "PDGID", "Particle PDG ID">,
+                                               Mustard::Data::Value<float, "t0", "Vertex time">,
+                                               Mustard::Data::Value<muc::array3f, "x0", "Vertex position">,
+                                               Mustard::Data::Value<float, "Ek0", "Vertex kinetic energy">,
+                                               Mustard::Data::Value<muc::array3f, "p0", "Vertex momentum">,
+                                               Mustard::Data::Value<double, "t", "Decay time">,
+                                               Mustard::Data::Value<muc::array3f, "x", "Decay position">,
+                                               Mustard::Data::Value<float, "Ek", "Kinetic energy just before decay">,
+                                               Mustard::Data::Value<muc::array3f, "p", "Momentum just before decay">>;
 
 class Analysis final : public Mustard::Env::Memory::PassiveSingleton<Analysis> {
 public:

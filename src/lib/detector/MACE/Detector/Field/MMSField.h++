@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Mustard/Concept/NumericVector.h++"
 #include "MACE/Detector/Description/MMSField.h++"
+
+#include "Mustard/Concept/NumericVector.h++"
 #include "Mustard/Detector/Field/MagneticFieldBase.h++"
 #include "Mustard/Detector/Field/MagneticFieldMap.h++"
 #include "Mustard/Detector/Field/UniformMagneticField.h++"

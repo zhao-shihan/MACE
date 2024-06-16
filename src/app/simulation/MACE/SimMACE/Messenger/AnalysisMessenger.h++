@@ -19,9 +19,9 @@ class PrimaryGeneratorAction;
 inline namespace Messenger {
 
 class AnalysisMessenger final : public Mustard::Geant4X::SingletonMessenger<AnalysisMessenger,
-                                                                   Analysis,
-                                                                   TrackingAction,
-                                                                   PrimaryGeneratorAction> {
+                                                                            Analysis,
+                                                                            TrackingAction,
+                                                                            PrimaryGeneratorAction> {
     friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:

@@ -1,10 +1,11 @@
 #pragma once
 
 #include "MACE/Data/SimVertex.h++"
+#include "MACE/SimMACE/Messenger/AnalysisMessenger.h++"
+
 #include "Mustard/Data/Tuple.h++"
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
 #include "Mustard/Extension/Geant4X/Generator/GeneralParticleSourceX.h++"
-#include "MACE/SimMACE/Messenger/AnalysisMessenger.h++"
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 

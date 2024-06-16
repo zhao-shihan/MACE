@@ -4,6 +4,7 @@
 #include "MACE/DataModel/BranchSocket/ShortStringBranchSocket.h++"
 #include "MACE/DataModel/BranchSocket/VectorBranchSocket.h++"
 #include "MACE/DataModel/DataFactory.h++"
+
 #include "Mustard/Utility/VectorAssign.h++"
 
 #include "muc/array"

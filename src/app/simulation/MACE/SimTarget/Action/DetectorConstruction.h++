@@ -4,6 +4,7 @@
 #include "MACE/Detector/Description/BeamMonitor.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Detector/Description/World.h++"
+
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
 
 #include "G4VUserDetectorConstruction.hh"
@@ -13,7 +14,7 @@
 
 namespace Mustard::Detector::Definition {
 class DefinitionBase;
-} // namespace Detector::Definition
+} // namespace Mustard::Detector::Definition
 
 namespace MACE {
 

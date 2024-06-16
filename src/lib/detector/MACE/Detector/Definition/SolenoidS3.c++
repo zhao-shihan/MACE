@@ -1,5 +1,6 @@
 #include "MACE/Detector/Definition/SolenoidS3.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
+
 #include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
@@ -30,7 +31,7 @@ auto SolenoidS3::Construct(G4bool checkOverlaps) -> void {
         name)};
 
     const auto nCoil{muc::lltrunc((solenoid.S3Length() - solenoid.ReferenceCoilSpacing() / 2) /
-                                   (solenoid.CoilThickness() + solenoid.ReferenceCoilSpacing()))};
+                                  (solenoid.CoilThickness() + solenoid.ReferenceCoilSpacing()))};
     const auto z0{-solenoid.S3Length() / 2 + solenoid.ReferenceCoilSpacing() / 2 + solenoid.CoilThickness() / 2};
     for (int k{}; k < nCoil; ++k) {
         Make<G4PVPlacement>(

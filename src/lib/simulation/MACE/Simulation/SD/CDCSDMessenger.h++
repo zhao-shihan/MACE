@@ -12,7 +12,7 @@ namespace MACE::inline Simulation::inline SD {
 class CDCSD;
 
 class CDCSDMessenger final : public Mustard::Geant4X::SingletonMessenger<CDCSDMessenger,
-                                                                CDCSD> {
+                                                                         CDCSD> {
     friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:

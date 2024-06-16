@@ -1,12 +1,13 @@
 #pragma once
 
 #include "MACE/Detector/Description/EMC.h++"
-#include "Mustard/Env/Memory/PassiveSingleton.h++"
 #include "MACE/PhaseI/Detector/Description/CentralBeamPipe.h++"
 #include "MACE/PhaseI/Detector/Description/World.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Region.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/SD/EMCPMTSD.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/SD/EMCSD.h++"
+
+#include "Mustard/Env/Memory/PassiveSingleton.h++"
 
 #include "G4VUserDetectorConstruction.hh"
 
@@ -15,7 +16,7 @@
 
 namespace Mustard::Detector::Definition {
 class DefinitionBase;
-} // namespace Detector::Definition
+} // namespace Mustard::Detector::Definition
 
 namespace MACE {
 

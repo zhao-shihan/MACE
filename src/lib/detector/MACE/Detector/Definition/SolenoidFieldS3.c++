@@ -1,5 +1,6 @@
 #include "MACE/Detector/Definition/SolenoidFieldS3.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
+
 #include "Mustard/Utility/MathConstant.h++"
 #include "Mustard/Utility/VectorCast.h++"
 

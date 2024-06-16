@@ -1,13 +1,14 @@
 #pragma once
 
-#include "Mustard/Extension/Geant4X/Interface/DetectorMessenger.h++"
 #include "MACE/SimMACE/Action/DetectorConstruction.h++"
+
+#include "Mustard/Extension/Geant4X/Interface/DetectorMessenger.h++"
 
 namespace MACE::SimMACE::inline Messenger {
 
 class DetectorMessenger final : public Mustard::Geant4X::DetectorMessenger<DetectorMessenger,
-                                                                  DetectorConstruction,
-                                                                  "SimMACE"> {
+                                                                           DetectorConstruction,
+                                                                           "SimMACE"> {
     friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:

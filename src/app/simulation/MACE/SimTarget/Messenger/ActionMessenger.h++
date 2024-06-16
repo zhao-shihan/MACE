@@ -18,7 +18,7 @@ class SteppingAction;
 inline namespace Messenger {
 
 class ActionMessenger final : public Mustard::Geant4X::SingletonMessenger<ActionMessenger,
-                                                                 SteppingAction> {
+                                                                          SteppingAction> {
     friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:

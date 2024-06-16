@@ -2,11 +2,12 @@
 
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Detector/Description/World.h++"
-#include "Mustard/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimEMC/Region.h++"
 #include "MACE/SimEMC/SD/EMCPMTSD.h++"
 #include "MACE/SimEMC/SD/EMCSD.h++"
 #include "MACE/SimEMC/SD/MCPSD.h++"
+
+#include "Mustard/Env/Memory/PassiveSingleton.h++"
 
 #include "G4VUserDetectorConstruction.hh"
 
@@ -15,7 +16,7 @@
 
 namespace Mustard::Detector::Definition {
 class DefinitionBase;
-} // namespace Detector::Definition
+} // namespace Mustard::Detector::Definition
 
 namespace MACE {
 

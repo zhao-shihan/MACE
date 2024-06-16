@@ -1,13 +1,14 @@
 #pragma once
 
 #include "MACE/Data/MMSTrack.h++"
-#include "Mustard/Data/Output.h++"
 #include "MACE/Data/SimHit.h++"
 #include "MACE/Data/SimVertex.h++"
-#include "Mustard/Data/Tuple.h++"
-#include "Mustard/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimMACE/Messenger/AnalysisMessenger.h++"
 #include "MACE/Simulation/Analysis/MMSTruthTracker.h++"
+
+#include "Mustard/Data/Output.h++"
+#include "Mustard/Data/Tuple.h++"
+#include "Mustard/Env/Memory/PassiveSingleton.h++"
 
 #include "G4Types.hh"
 

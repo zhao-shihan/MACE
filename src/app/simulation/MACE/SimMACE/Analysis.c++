@@ -1,6 +1,3 @@
-#include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Extension/Geant4X/Utility/ConvertGeometry.h++"
-#include "Mustard/Extension/MPIX/ParallelizePath.h++"
 #include "MACE/SimMACE/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimMACE/Action/TrackingAction.h++"
 #include "MACE/SimMACE/Analysis.h++"
@@ -8,6 +5,10 @@
 #include "MACE/Simulation/Hit/EMCHit.h++"
 #include "MACE/Simulation/Hit/MCPHit.h++"
 #include "MACE/Simulation/Hit/TTCHit.h++"
+
+#include "Mustard/Env/MPIEnv.h++"
+#include "Mustard/Extension/Geant4X/Utility/ConvertGeometry.h++"
+#include "Mustard/Extension/MPIX/ParallelizePath.h++"
 
 #include "TFile.h"
 #include "TMacro.h"

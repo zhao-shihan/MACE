@@ -1,11 +1,12 @@
 #pragma once
 
-#include "Mustard/Concept/NumericVector.h++"
 #include "MACE/DataModel/BranchSocket/FundamentalBranchSocket.h++"
 #include "MACE/DataModel/BranchSocket/ShortStringBranchSocket.h++"
 #include "MACE/DataModel/BranchSocket/VectorBranchSocket.h++"
 #include "MACE/DataModel/DataFactory.h++"
 #include "MACE/ReconMuonium/MuoniumVertex.h++"
+
+#include "Mustard/Concept/NumericVector.h++"
 #include "Mustard/Utility/VectorAssign.h++"
 #include "Mustard/Utility/VectorCast.h++"
 

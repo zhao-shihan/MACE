@@ -2,12 +2,13 @@
 #include "MACE/Detector/Description/Filter.h++"
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
+#include "MACE/SimMACE/PhysicsList.h++"
+
 #include "Mustard/Extension/Geant4X/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
 #include "Mustard/Extension/Geant4X/DecayChannel/MuoniumInternalPairProductionDecayChannel.h++"
 #include "Mustard/Extension/Geant4X/Particle/Antimuonium.h++"
 #include "Mustard/Extension/Geant4X/Particle/Muonium.h++"
 #include "Mustard/Extension/Geant4X/Physics/MuoniumPrecisionDecayPhysics.h++"
-#include "MACE/SimMACE/PhysicsList.h++"
 
 #include "G4DecayTable.hh"
 #include "G4MuonPlus.hh"

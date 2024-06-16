@@ -1,5 +1,6 @@
 #include "MACE/Detector/Definition/MMSMagnet.h++"
 #include "MACE/Detector/Description/MMSMagnet.h++"
+
 #include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"

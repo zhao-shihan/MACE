@@ -11,7 +11,7 @@ namespace MACE::inline Simulation::Analysis {
 class MMSTruthTracker;
 
 class MMSTruthTrackerMessenger final : public Mustard::Geant4X::SingletonMessenger<MMSTruthTrackerMessenger,
-                                                                          MMSTruthTracker> {
+                                                                                   MMSTruthTracker> {
     friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:

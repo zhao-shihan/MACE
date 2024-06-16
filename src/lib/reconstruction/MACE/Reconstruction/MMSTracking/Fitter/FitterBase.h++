@@ -1,7 +1,8 @@
 #pragma once
 
-#include "MACE/Data/MMSTrack.h++"
 #include "MACE/Data/Hit.h++"
+#include "MACE/Data/MMSTrack.h++"
+
 #include "Mustard/Data/TupleModel.h++"
 
 #include <memory>

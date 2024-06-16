@@ -1,4 +1,5 @@
 #include "MACE/PhaseI/Detector/Description/CentralBeamPipe.h++"
+
 #include "Mustard/Utility/LiteralUnit.h++"
 
 namespace MACE::PhaseI::Detector::Description {

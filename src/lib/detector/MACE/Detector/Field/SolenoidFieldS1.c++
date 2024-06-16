@@ -1,5 +1,5 @@
-#include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Description/FieldOption.h++"
+#include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Field/SolenoidFieldS1.h++"
 
 namespace MACE::Detector::Field {

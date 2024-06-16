@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Mustard/Detector/Description/DescriptionBase.h++"
 #include "MACE/Detector/Description/EMCField.h++"
+
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include <string>
 #include <utility>

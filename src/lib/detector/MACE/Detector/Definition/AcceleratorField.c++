@@ -1,5 +1,6 @@
 #include "MACE/Detector/Definition/AcceleratorField.h++"
 #include "MACE/Detector/Description/Accelerator.h++"
+
 #include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4LogicalVolume.hh"

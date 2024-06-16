@@ -1,7 +1,8 @@
-#include "Mustard/Detector/Definition/DefinitionBase.h++"
 #include "MACE/Detector/Definition/EMCCrystal.h++"
 #include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
 #include "MACE/Detector/Description/EMC.h++"
+
+#include "Mustard/Detector/Definition/DefinitionBase.h++"
 #include "Mustard/Env/BasicEnv.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/MathConstant.h++"

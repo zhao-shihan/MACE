@@ -1,4 +1,5 @@
 #include "MACE/Detector/Description/BeamDegrader.h++"
+
 #include "Mustard/Utility/LiteralUnit.h++"
 
 #include "muc/utility"

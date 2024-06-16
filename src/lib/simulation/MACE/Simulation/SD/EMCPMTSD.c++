@@ -73,4 +73,4 @@ auto EMCPMTSD::NOpticalPhotonHit() const -> std::unordered_map<int, int> {
     return nHit;
 }
 
-} // namespace MACE::Simulation::inline SD
+} // namespace MACE::inline Simulation::inline SD
