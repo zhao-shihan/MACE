@@ -1,7 +1,7 @@
 #include "MACE/Detector/Definition/MMSBeamPipe.h++"
 #include "MACE/Detector/Description/MMSBeamPipe.h++"
 #include "MACE/Detector/Description/MMSField.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -9,7 +9,7 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace LiteralUnit::MathConstantSuffix;
+using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
 auto MMSBeamPipe::Construct(G4bool checkOverlaps) -> void {
     const auto& beamPipe{Description::MMSBeamPipe::Instance()};

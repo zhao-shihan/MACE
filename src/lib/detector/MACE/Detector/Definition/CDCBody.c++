@@ -1,6 +1,6 @@
 #include "MACE/Detector/Definition/CDCBody.h++"
 #include "MACE/Detector/Description/CDC.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -15,8 +15,8 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace MACE::LiteralUnit::Density;
-using namespace MACE::LiteralUnit::MathConstantSuffix;
+using namespace Mustard::LiteralUnit::Density;
+using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
 auto CDCBody::Construct(G4bool checkOverlaps) -> void {
     const auto& cdc{Description::CDC::Instance()};

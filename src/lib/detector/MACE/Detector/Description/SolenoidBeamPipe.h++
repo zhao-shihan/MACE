@@ -1,14 +1,14 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include <string>
 #include <utility>
 
 namespace MACE::Detector::Description {
 
-class SolenoidBeamPipe final : public DescriptionBase<SolenoidBeamPipe> {
-    friend Env::Memory::SingletonInstantiator;
+class SolenoidBeamPipe final : public Mustard::Detector::Description::DescriptionBase<SolenoidBeamPipe> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     SolenoidBeamPipe();

@@ -1,24 +1,24 @@
 #pragma once
 
-#include "MACE/Concept/NumericVector.h++"
-#include "MACE/Detector/Field/MagneticFieldBase.h++"
-#include "MACE/Detector/Field/MagneticFieldMap.h++"
-#include "MACE/Detector/Field/UniformMagneticField.h++"
+#include "Mustard/Concept/NumericVector.h++"
+#include "Mustard/Detector/Field/MagneticFieldBase.h++"
+#include "Mustard/Detector/Field/MagneticFieldMap.h++"
+#include "Mustard/Detector/Field/UniformMagneticField.h++"
 
 #include <variant>
 
 namespace MACE::Detector::Field {
 
-class SolenoidFieldS1 : public MagneticFieldBase<SolenoidFieldS1> {
+class SolenoidFieldS1 : public Mustard::Detector::Field::MagneticFieldBase<SolenoidFieldS1> {
 public:
     SolenoidFieldS1();
 
-    template<Concept::NumericVector3D T> // clang-format off
+    template<Mustard::Concept::NumericVector3D T> // clang-format off
     auto B(T x) const -> T { return std::visit([&x](auto&& f) { return f.B(x); }, fField); } // clang-format on
 
 private:
-    using FastField = UniformMagneticField;
-    using FieldMap = MagneticFieldMapSymY;
+    using FastField = Mustard::Detector::Field::UniformMagneticField;
+    using FieldMap = Mustard::Detector::Field::MagneticFieldMapSymY;
 
 private:
     std::variant<FastField, FieldMap> fField;

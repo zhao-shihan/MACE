@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include "Eigen/Core"
 
@@ -18,8 +18,8 @@ class G4Material;
 
 namespace MACE::Detector::Description {
 
-class CDC final : public DescriptionBase<CDC> {
-    friend Env::Memory::SingletonInstantiator;
+class CDC final : public Mustard::Detector::Description::DescriptionBase<CDC> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     CDC();

@@ -1,6 +1,6 @@
 #include "MACE/Detector/Definition/CDCSenseLayer.h++"
 #include "MACE/Detector/Description/CDC.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4Hype.hh"
 #include "G4NistManager.hh"
@@ -16,7 +16,7 @@
 namespace MACE::Detector::Definition {
 
 auto CDCSenseLayer::Construct(G4bool checkOverlaps) -> void {
-    using namespace MACE::LiteralUnit::MathConstantSuffix;
+    using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
     const auto& cdc{Description::CDC::Instance()};
     const auto name{cdc.Name() + "SenseLayer"};

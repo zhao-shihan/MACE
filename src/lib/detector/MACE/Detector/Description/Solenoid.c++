@@ -1,12 +1,12 @@
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Utility/LiteralUnit.h++"
-#include "MACE/Utility/MathConstant.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/MathConstant.h++"
 
 namespace MACE::Detector::Description {
 
-using namespace LiteralUnit::Length;
-using namespace LiteralUnit::MagneticFluxDensity;
-using namespace MathConstant;
+using namespace Mustard::LiteralUnit::Length;
+using namespace Mustard::LiteralUnit::MagneticFluxDensity;
+using namespace Mustard::MathConstant;
 
 Solenoid::Solenoid() :
     DescriptionBase{"Solenoid"},

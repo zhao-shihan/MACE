@@ -1,6 +1,6 @@
 #include "MACE/Detector/Definition/MCP.h++"
 #include "MACE/Detector/Description/MCP.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -8,7 +8,7 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace MACE::LiteralUnit;
+using namespace Mustard::LiteralUnit;
 
 auto MCP::Construct(G4bool checkOverlaps) -> void {
     const auto& mcp{Description::MCP::Instance()};

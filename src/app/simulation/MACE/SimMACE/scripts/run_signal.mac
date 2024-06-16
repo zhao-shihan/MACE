@@ -22,7 +22,7 @@
 /GPSX/NVertex             1
 /GPSX/PulseWidth          1.5 us
 
-/MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    1
+/Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    1
 
 /MACE/Analysis/CoincidenceWithCDC     true
 /MACE/Analysis/CoincidenceWithTTC     true

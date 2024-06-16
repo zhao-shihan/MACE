@@ -44,7 +44,7 @@ constexpr auto defaultMacro = {
     "/GPSX/PulseWidth          0 ns",
     "",
     "# Set physics",
-    "/MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0",
+    "/Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0",
     "",
     "# kill secondaries",
     "/MACE/Action/KillIrrelevants    true",

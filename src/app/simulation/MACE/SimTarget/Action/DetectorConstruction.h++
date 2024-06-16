@@ -4,24 +4,22 @@
 #include "MACE/Detector/Description/BeamMonitor.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Detector/Description/World.h++"
-#include "MACE/Env/Memory/PassiveSingleton.h++"
+#include "Mustard/Env/Memory/PassiveSingleton.h++"
 
 #include "G4VUserDetectorConstruction.hh"
 
 #include <memory>
 #include <tuple>
 
-namespace MACE {
-
-namespace Detector::Definition {
-
+namespace Mustard::Detector::Definition {
 class DefinitionBase;
-
 } // namespace Detector::Definition
+
+namespace MACE {
 
 namespace SimTarget::inline Action {
 
-class DetectorConstruction final : public Env::Memory::PassiveSingleton<DetectorConstruction>,
+class DetectorConstruction final : public Mustard::Env::Memory::PassiveSingleton<DetectorConstruction>,
                                    public G4VUserDetectorConstruction {
 public:
     DetectorConstruction();
@@ -39,7 +37,7 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    std::unique_ptr<Detector::Definition::DefinitionBase> fWorld;
+    std::unique_ptr<Mustard::Detector::Definition::DefinitionBase> fWorld;
 };
 
 } // namespace SimTarget::inline Action

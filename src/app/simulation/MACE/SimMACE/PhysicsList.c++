@@ -2,11 +2,11 @@
 #include "MACE/Detector/Description/Filter.h++"
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Extension/Geant4X/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
-#include "MACE/Extension/Geant4X/DecayChannel/MuoniumInternalPairProductionDecayChannel.h++"
-#include "MACE/Extension/Geant4X/Particle/Antimuonium.h++"
-#include "MACE/Extension/Geant4X/Particle/Muonium.h++"
-#include "MACE/Extension/Geant4X/Physics/MuoniumPrecisionDecayPhysics.h++"
+#include "Mustard/Extension/Geant4X/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
+#include "Mustard/Extension/Geant4X/DecayChannel/MuoniumInternalPairProductionDecayChannel.h++"
+#include "Mustard/Extension/Geant4X/Particle/Antimuonium.h++"
+#include "Mustard/Extension/Geant4X/Particle/Muonium.h++"
+#include "Mustard/Extension/Geant4X/Physics/MuoniumPrecisionDecayPhysics.h++"
 #include "MACE/SimMACE/PhysicsList.h++"
 
 #include "G4DecayTable.hh"
@@ -25,12 +25,12 @@ PhysicsList::PhysicsList() :
     fMessengerRegister{this} {}
 
 auto PhysicsList::ApplyMACEPxyCut(bool apply) -> void {
-    auto& muonPlusIPPDecay{FindIPPDecayChannel<Geant4X::MuonInternalPairProductionDecayChannel>(G4MuonPlus::Definition())};
-    auto& antimuoniumIPPDecay{FindIPPDecayChannel<Geant4X::MuoniumInternalPairProductionDecayChannel>(Geant4X::Antimuonium::Definition())};
+    auto& muonPlusIPPDecay{FindIPPDecayChannel<Mustard::Geant4X::MuonInternalPairProductionDecayChannel>(G4MuonPlus::Definition())};
+    auto& antimuoniumIPPDecay{FindIPPDecayChannel<Mustard::Geant4X::MuoniumInternalPairProductionDecayChannel>(Mustard::Geant4X::Antimuonium::Definition())};
     if (apply) {
         constexpr auto PxyCut{
             [](auto&& event) {
-                using PhysicalConstant::c_light;
+                using Mustard::PhysicalConstant::c_light;
 
                 const auto& [p, p1, p2, k1, k2]{event.state};
 

@@ -1,4 +1,4 @@
-#include "MACE/Detector/Definition/DefinitionBase.h++"
+#include "Mustard/Detector/Definition/DefinitionBase.h++"
 #include "MACE/Detector/Definition/ShieldingWall.h++"
 #include "MACE/Detector/Description/EMCField.h++"
 #include "MACE/Detector/Description/EMCShield.h++"
@@ -6,9 +6,9 @@
 #include "MACE/Detector/Description/ShieldingWall.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Description/World.h++"
-#include "MACE/Utility/LiteralUnit.h++"
-#include "MACE/Utility/MathConstant.h++"
-#include "MACE/Utility/VectorCast.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/MathConstant.h++"
+#include "Mustard/Utility/VectorCast.h++"
 
 #include "CLHEP/Vector/RotationY.h"
 
@@ -22,8 +22,8 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace LiteralUnit::Length;
-using namespace LiteralUnit::MathConstantSuffix;
+using namespace Mustard::LiteralUnit::Length;
+using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
 auto ShieldingWall::Enabled() const -> bool {
     return Description::ShieldingWall::Instance().Enabled();
@@ -38,7 +38,7 @@ auto ShieldingWall::Construct(G4bool checkOverlaps) -> void {
     const auto& emcShield{Description::EMCShield::Instance()};
 
     const G4ThreeVector mmsShieldCorner{mmsShield.InnerRadius() + mmsShield.Thickness(), 0, mmsShield.InnerLength() / 2 + mmsShield.Thickness()}; // clang-format off
-    const auto emcShieldCorner{VectorCast<G4ThreeVector>(emcField.Center()) + 
+    const auto emcShieldCorner{Mustard::VectorCast<G4ThreeVector>(emcField.Center()) + 
                                G4ThreeVector{-emcShield.InnerRadius() - emcShield.Thickness(), 0 , -emcShield.InnerLength() / 2 - emcShield.Thickness()}}; // clang-format on
     const auto wall1Displacement{muc::midpoint(mmsShieldCorner, emcShieldCorner)};
 
@@ -62,7 +62,7 @@ auto ShieldingWall::Construct(G4bool checkOverlaps) -> void {
             "_temp",
             box,
             cylinder,
-            wallTransform.inverse() * G4Transform3D{CLHEP::HepRotationY{0.5_pi}, VectorCast<G4ThreeVector>(solenoid.S2Center())})};
+            wallTransform.inverse() * G4Transform3D{CLHEP::HepRotationY{0.5_pi}, Mustard::VectorCast<G4ThreeVector>(solenoid.S2Center())})};
         const auto logic{Make<G4LogicalVolume>(
             solid,
             concrete,

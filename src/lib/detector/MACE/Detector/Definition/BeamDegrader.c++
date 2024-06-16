@@ -2,7 +2,7 @@
 #include "MACE/Detector/Description/Accelerator.h++"
 #include "MACE/Detector/Description/BeamDegrader.h++"
 #include "MACE/Detector/Description/Target.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4Box.hh"
 #include "G4NistManager.hh"
@@ -10,7 +10,7 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace MACE::LiteralUnit::Density;
+using namespace Mustard::LiteralUnit::Density;
 
 auto BeamDegrader::Enabled() const -> bool {
     return Description::BeamDegrader::Instance().Enabled();

@@ -18,7 +18,7 @@ MMSTruthTracker::MMSTruthTracker() :
 }
 
 auto MMSTruthTracker::operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitHC,
-                                 const std::vector<gsl::owner<TTCHit*>>& ttcHitHC) -> std::vector<std::shared_ptr<Data::Tuple<Data::MMSSimTrack>>> {
+                                 const std::vector<gsl::owner<TTCHit*>>& ttcHitHC) -> std::vector<std::shared_ptr<Mustard::Data::Tuple<Data::MMSSimTrack>>> {
     if (ssize(cdcHitHC) < fTrackFinder.NHitThreshold() or
         ssize(ttcHitHC) < fMinNTTCHitForQualifiedTrack) { return {}; }
 
@@ -67,7 +67,7 @@ auto MMSTruthTracker::operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitH
 
     auto mmsTrackDataNoCoincidence{fTrackFinder(coincidenceCDCHitHC).good};
 
-    std::vector<std::shared_ptr<Data::Tuple<Data::MMSSimTrack>>> mmsTrackData;
+    std::vector<std::shared_ptr<Mustard::Data::Tuple<Data::MMSSimTrack>>> mmsTrackData;
     mmsTrackData.reserve(mmsTrackDataNoCoincidence.size());
     for (auto&& [_, track] : mmsTrackDataNoCoincidence) {
         mmsTrackData.emplace_back(std::move(track.seed));

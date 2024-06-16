@@ -1,14 +1,14 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include <string>
 #include <utility>
 
 namespace MACE::Detector::Description {
 
-class MMSMagnet final : public DescriptionBase<MMSMagnet> {
-    friend Env::Memory::SingletonInstantiator;
+class MMSMagnet final : public Mustard::Detector::Description::DescriptionBase<MMSMagnet> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     MMSMagnet();

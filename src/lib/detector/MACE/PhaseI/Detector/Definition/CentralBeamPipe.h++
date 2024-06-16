@@ -1,10 +1,10 @@
 #pragma once
 
-#include "MACE/Detector/Definition/DefinitionBase.h++"
+#include "Mustard/Detector/Definition/DefinitionBase.h++"
 
 namespace MACE::PhaseI::Detector::Definition {
 
-class CentralBeamPipe final : public MACE::Detector::Definition::DefinitionBase {
+class CentralBeamPipe final : public Mustard::Detector::Definition::DefinitionBase {
 private:
     auto Construct(bool checkOverlaps) -> void override;
 };

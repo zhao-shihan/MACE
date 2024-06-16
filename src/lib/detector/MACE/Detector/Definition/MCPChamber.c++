@@ -2,7 +2,7 @@
 #include "MACE/Detector/Description/EMCField.h++"
 #include "MACE/Detector/Description/MCPChamber.h++"
 #include "MACE/Detector/Description/SolenoidBeamPipe.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -17,7 +17,7 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace MACE::LiteralUnit;
+using namespace Mustard::LiteralUnit;
 
 auto MCPChamber::Construct(G4bool checkOverlaps) -> void {
     const auto& mcpChamber{Description::MCPChamber::Instance()};

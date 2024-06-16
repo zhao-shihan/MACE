@@ -1,7 +1,7 @@
 #include "MACE/Detector/Definition/SolenoidFieldT1.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Utility/LiteralUnit.h++"
-#include "MACE/Utility/VectorCast.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/VectorCast.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -11,7 +11,7 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace LiteralUnit::MathConstantSuffix;
+using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
 auto SolenoidFieldT1::Construct(G4bool checkOverlaps) -> void {
     const auto& solenoid{Description::Solenoid::Instance()};
@@ -31,7 +31,7 @@ auto SolenoidFieldT1::Construct(G4bool checkOverlaps) -> void {
         name)};
 
     Make<G4PVPlacement>(
-        G4Translate3D{VectorCast<G4ThreeVector>(solenoid.T1Center())} * G4RotateX3D{-0.5_pi},
+        G4Translate3D{Mustard::VectorCast<G4ThreeVector>(solenoid.T1Center())} * G4RotateX3D{-0.5_pi},
         logic,
         name,
         Mother().LogicalVolume(),

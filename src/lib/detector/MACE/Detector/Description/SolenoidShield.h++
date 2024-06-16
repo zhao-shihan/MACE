@@ -1,14 +1,14 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include <string>
 #include <utility>
 
 namespace MACE::Detector::Description {
 
-class SolenoidShield final : public DescriptionBase<SolenoidShield> {
-    friend Env::Memory::SingletonInstantiator;
+class SolenoidShield final : public Mustard::Detector::Description::DescriptionBase<SolenoidShield> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     SolenoidShield();

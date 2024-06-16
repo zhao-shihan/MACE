@@ -30,7 +30,7 @@ For more information, please check out [the image repository homepage](https://h
 
 ## Toolchain
 
-1. A C++ compiler (that supports ≥ C++20. [GCC](https://gcc.gnu.org/) ≥ 12, [LLVM Clang](https://clang.llvm.org/) ≥ 15, or MSVC ≥ 19.30 (i.e., [Visual Studio](https://visualstudio.microsoft.com/) 2022 ≥ 17.0))
+1. A C++ compiler (that supports ≥ C++20. [GCC](https://gcc.gnu.org/) ≥ 12, [LLVM Clang](https://clang.llvm.org/) ≥ 16, or MSVC ≥ 19.30 (i.e., [Visual Studio](https://visualstudio.microsoft.com/) 2022 ≥ 17.0))
 2. A C++ library (that supports ≥ C++20. [libstdc++](https://gcc.gnu.org/onlinedocs/libstdc++/) ≥ 12, or [MSVC STL](https://github.com/microsoft/STL) with [Visual Studio](https://visualstudio.microsoft.com/) 2022 ≥ 17.0)
 3. [CMake](https://cmake.org/) (≥ 3.16)
 4. A build system compatible with CMake ([GNU Make](https://www.gnu.org/software/make/), [Ninja](https://ninja-build.org), or etc.)
@@ -39,23 +39,12 @@ For more information, please check out [the image repository homepage](https://h
 
 Required:
 
-1. [MPI (Message Passing Interface)](https://www.mpi-forum.org/) (≥ 3.0, [MPICH](https://www.mpich.org/), [OpenMPI](https://www.open-mpi.org/), [Intel MPI](https://www.intel.cn/content/www/cn/zh/developer/tools/oneapi/mpi-library.html), [Microsoft MPI](https://github.com/Microsoft/Microsoft-MPI), etc.)
-2. [Eigen (A C++ template library for linear algebra)](https://eigen.tuxfamily.org/) (≥ 3.4.0)
-3. [Geant4 (Toolkit for the simulation of the passage of particles through matter)](https://geant4.org/) (≥ 11.0.0, **with GDML**)
-4. [ROOT (An open-source data analysis framework)](https://root.cern/) (≥ 6.30.00, **with GDML**)
+1. [Mustard (A modern offline software framework for HEP experiment )](https://github.com/zhao-shihan/Mustard) (≥ 0.0.1, built-in if not found)
 
 Required, built-in if not found (network or pre-downloaded source is required):
 
-1. [argparse (Argument Parser for Modern C++)](https://github.com/p-ranav/argparse) (≥ 2.6, built-in if not found)
-2. [backward-cpp (A beautiful stack trace pretty printer for C++)](https://github.com/bombela/backward-cpp) (≥ 1.6, built-in if not found)
-3. [EFM (A generic bilinear/trilinear interpolator)](https://github.com/zhao-shihan/EFM) (≥ 0.0.1, built-in if not found)
-4. [fmt (A modern formatting library)](https://github.com/fmtlib/fmt) (≥ 10.0.0, built-in if not found)
-5. [zhao-shihan/GenFit (A generic track-fitting toolkit)](https://github.com/zhao-shihan/GenFit) (a GenFit fork, built-in if not found)
-6. [muc (A standard non-standard C++ library)](https://github.com/zhao-shihan/muc) (≥ 0.0.1, built-in if not found)
-7. [Microsoft.GSL](https://github.com/Microsoft/GSL) ([ISO C++ guidelines support library](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#gsl-guidelines-support-library)) (≥ 4.0.0, built-in if not found)
-8. [PMP (Polygon Mesh Processing Library)](https://www.pmp-library.org/) (≥ 3.0.0, built-in if not found)
-9. [zhao-shihan/cpp-TimSort (A C++ implementation of timsort)](https://github.com/timsort/cpp-TimSort) (a cpp-TimSort fork, built-in if not found)
-10. [yaml-cpp (A YAML parser and emitter in C++)](https://github.com/jbeder/yaml-cpp) (≥ 0.8.0, built-in if not found)
+1. [zhao-shihan/GenFit (A generic track-fitting toolkit)](https://github.com/zhao-shihan/GenFit) (a GenFit fork, built-in if not found)
+2. [PMP (Polygon Mesh Processing Library)](https://www.pmp-library.org/) (≥ 3.0.0, built-in if not found)
 
 # Cite
 

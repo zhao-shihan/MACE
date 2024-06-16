@@ -1,11 +1,11 @@
 #pragma once
 
 #include "MACE/Data/MMSTrack.h++"
-#include "MACE/Data/Tuple.h++"
+#include "Mustard/Data/Tuple.h++"
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Simulation/Hit/CDCHit.h++"
 #include "MACE/Simulation/SD/CDCSDMessenger.h++"
-#include "MACE/Utility/NonMoveableBase.h++"
+#include "Mustard/Utility/NonMoveableBase.h++"
 
 #include "G4VSensitiveDetector.hh"
 
@@ -16,7 +16,7 @@
 
 namespace MACE::inline Simulation::inline SD {
 
-class CDCSD : public NonMoveableBase,
+class CDCSD : public Mustard::NonMoveableBase,
               public G4VSensitiveDetector {
 public:
     CDCSD(const G4String& sdName);

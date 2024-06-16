@@ -1,5 +1,5 @@
 #include "MACE/Detector/Description/EMC.h++"
-#include "MACE/Env/Print.h++"
+#include "Mustard/Env/Print.h++"
 #include "MACE/Simulation/SD/EMCPMTSD.h++"
 #include "MACE/Simulation/SD/EMCSD.h++"
 
@@ -35,7 +35,7 @@
 namespace MACE::inline Simulation::inline SD {
 
 EMCSD::EMCSD(const G4String& sdName, const EMCPMTSD* emcPMTSD) :
-    NonMoveableBase{},
+    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fEMCPMTSD{emcPMTSD},
     fEnergyDepositionThreshold{},
@@ -143,7 +143,7 @@ auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 const auto windowClosingTime{tFirst + scintillationTimeConstant1};
                 if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                     scintillationTimeConstant1 != 0) [[unlikely]] {
-                    Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1);
+                    Mustard::Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1);
                 }
                 cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), splitHit.end(),
                                                                    [&windowClosingTime](const auto& hit) {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include "CLHEP/Geometry/Point3D.h"
 #include "CLHEP/Geometry/Transform3D.h"
@@ -10,8 +10,8 @@
 
 namespace MACE::Detector::Description {
 
-class EMC final : public DescriptionBase<EMC> {
-    friend Env::Memory::SingletonInstantiator;
+class EMC final : public Mustard::Detector::Description::DescriptionBase<EMC> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     EMC();

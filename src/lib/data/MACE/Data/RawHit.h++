@@ -1,25 +1,29 @@
 #pragma once
 
-#include "MACE/Data/TupleModel.h++"
-#include "MACE/Data/Value.h++"
+#include "Mustard/Data/TupleModel.h++"
+#include "Mustard/Data/Value.h++"
 
 #include "muc/array"
 
 namespace MACE::Data {
 
-using CDCRawHit = TupleModel<Value<short, "CellID", "Hit cell ID">,
-                             Value<double, "t", "Signal time">,
-                             Value<float, "Edep", "Energy deposition">>;
+using CDCRawHit = Mustard::Data::TupleModel<
+    Mustard::Data::Value<short, "CellID", "Hit cell ID">,
+    Mustard::Data::Value<double, "t", "Signal time">,
+    Mustard::Data::Value<float, "Edep", "Energy deposition">>;
 
-using TTCRawHit = TupleModel<Value<short, "TileID", "Hit detector ID">,
-                             Value<double, "t", "Hit time">,
-                             Value<float, "Edep", "Energy deposition">>;
+using TTCRawHit = Mustard::Data::TupleModel<
+    Mustard::Data::Value<short, "TileID", "Hit detector ID">,
+    Mustard::Data::Value<double, "t", "Hit time">,
+    Mustard::Data::Value<float, "Edep", "Energy deposition">>;
 
-using MCPRawHit = TupleModel<Value<double, "t", "Hit time">,
-                             Value<muc::array2f, "x", "Hit position">>;
+using MCPRawHit = Mustard::Data::TupleModel<
+    Mustard::Data::Value<double, "t", "Hit time">,
+    Mustard::Data::Value<muc::array2f, "x", "Hit position">>;
 
-using EMCRawHit = TupleModel<Value<short, "UnitID", "Hit unit ID">,
-                             Value<double, "t", "Hit time">,
-                             Value<float, "Edep", "Energy deposition">>;
+using EMCRawHit = Mustard::Data::TupleModel<
+    Mustard::Data::Value<short, "UnitID", "Hit unit ID">,
+    Mustard::Data::Value<double, "t", "Hit time">,
+    Mustard::Data::Value<float, "Edep", "Energy deposition">>;
 
 } // namespace MACE::Data

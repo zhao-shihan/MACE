@@ -1,14 +1,14 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include <string>
 #include <utility>
 
 namespace MACE::Detector::Description {
 
-class BeamDegrader final : public DescriptionBase<BeamDegrader> {
-    friend Env::Memory::SingletonInstantiator;
+class BeamDegrader final : public Mustard::Detector::Description::DescriptionBase<BeamDegrader> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     BeamDegrader();

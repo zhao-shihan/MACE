@@ -1,10 +1,13 @@
 #include "MACE/Detector/Description/EMCField.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+#include "MACE/Detector/Description/Solenoid.h++"
+
+#include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/VectorArithmeticOperator.h++"
 
 namespace MACE::Detector::Description {
 
-using namespace LiteralUnit::Length;
-using namespace LiteralUnit::MagneticFluxDensity;
+using namespace Mustard::LiteralUnit::Length;
+using namespace Mustard::LiteralUnit::MagneticFluxDensity;
 
 EMCField::EMCField() : // clang-format off
     DescriptionBase{"EMCField"}, // clang-format on
@@ -13,6 +16,12 @@ EMCField::EMCField() : // clang-format off
     fLength{100_cm},
     // Field
     fFastField{0.1_T} {}
+
+auto EMCField::Center() const -> muc::array3d {
+    using namespace Mustard::VectorArithmeticOperator;
+    const auto& solenoid{Solenoid::Instance()};
+    return solenoid.S3Center() + muc::array3d{0, 0, (solenoid.S3Length() + fLength) / 2};
+}
 
 auto EMCField::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry

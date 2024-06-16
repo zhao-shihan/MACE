@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Extension/Geant4X/Interface/SingletonMessenger.h++"
+#include "Mustard/Extension/Geant4X/Interface/SingletonMessenger.h++"
 
 #include <memory>
 
@@ -10,9 +10,9 @@ namespace MACE::inline Simulation::Analysis {
 
 class MMSTruthTracker;
 
-class MMSTruthTrackerMessenger final : public Geant4X::SingletonMessenger<MMSTruthTrackerMessenger,
+class MMSTruthTrackerMessenger final : public Mustard::Geant4X::SingletonMessenger<MMSTruthTrackerMessenger,
                                                                           MMSTruthTracker> {
-    friend Env::Memory::SingletonInstantiator;
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     MMSTruthTrackerMessenger();

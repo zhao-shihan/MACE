@@ -43,10 +43,10 @@
 #include "MACE/Detector/Definition/TTC.h++"
 #include "MACE/Detector/Definition/Target.h++"
 #include "MACE/Detector/Definition/World.h++"
-#include "MACE/Detector/Description/DescriptionIO.h++"
-#include "MACE/Env/BasicEnv.h++"
-#include "MACE/Env/CLI/BasicCLI.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+#include "Mustard/Detector/Description/DescriptionIO.h++"
+#include "Mustard/Env/BasicEnv.h++"
+#include "Mustard/Env/CLI/BasicCLI.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "TGeoManager.h"
 
@@ -55,8 +55,8 @@
 #include <functional>
 
 int main(int argc, char* argv[]) {
-    MACE::Env::CLI::BasicCLI cli;
-    MACE::Env::BasicEnv env(argc, argv, cli);
+    Mustard::Env::CLI::BasicCLI cli;
+    Mustard::Env::BasicEnv env(argc, argv, cli);
 
     ////////////////////////////////////////////////////////////////
     // Construct volumes
@@ -143,7 +143,7 @@ int main(int argc, char* argv[]) {
     // Register materials
     ////////////////////////////////////////////////////////////////
     {
-        using namespace MACE::LiteralUnit::Density;
+        using namespace Mustard::LiteralUnit::Density;
 
         const auto nist = G4NistManager::Instance();
 
@@ -163,7 +163,7 @@ int main(int argc, char* argv[]) {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-    MACE::Detector::Description::DescriptionIO::ExportInstantiated("test.yaml");
+    Mustard::Detector::Description::DescriptionIO::ExportInstantiated("test.yaml");
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -179,7 +179,7 @@ int main(int argc, char* argv[]) {
     // see form https://github.com/root-project/jsroot/blob/master/docs/JSROOT.md#geometry-viewer
 
     geoManager->GetVolume(fWorld->LogicalVolume()->GetName())->SetInvisible();
-    using MACE::Detector::Definition::DefinitionBase;
+    using Mustard::Detector::Definition::DefinitionBase;
     for (auto&& entity : std::initializer_list<std::reference_wrapper<const DefinitionBase>>{
              emcCrystal,
              emcMagnet,

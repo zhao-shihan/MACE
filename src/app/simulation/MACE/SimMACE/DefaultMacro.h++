@@ -26,7 +26,7 @@ constexpr auto defaultMacro = {
     "/GPSX/NVertex             1",
     "/GPSX/PulseWidth          0 ns",
     "",
-    "/MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5",
+    "/Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5",
     "",
     "/MACE/Analysis/CoincidenceWithCDC     false",
     "/MACE/Analysis/CoincidenceWithTTC     false",

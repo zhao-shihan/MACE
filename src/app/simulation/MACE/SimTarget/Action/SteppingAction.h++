@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Env/Memory/PassiveSingleton.h++"
+#include "Mustard/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimTarget/Messenger/ActionMessenger.h++"
 
 #include "G4ParticleDefinition.hh"
@@ -8,7 +8,7 @@
 
 namespace MACE::SimTarget::inline Action {
 
-class SteppingAction final : public Env::Memory::PassiveSingleton<SteppingAction>,
+class SteppingAction final : public Mustard::Env::Memory::PassiveSingleton<SteppingAction>,
                              public G4UserSteppingAction {
 public:
     SteppingAction();

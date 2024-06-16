@@ -1,11 +1,11 @@
-#include "MACE/Detector/Definition/DefinitionBase.h++"
+#include "Mustard/Detector/Definition/DefinitionBase.h++"
 #include "MACE/Detector/Definition/EMCCrystal.h++"
 #include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
 #include "MACE/Detector/Description/EMC.h++"
-#include "MACE/Env/BasicEnv.h++"
-#include "MACE/Utility/LiteralUnit.h++"
-#include "MACE/Utility/MathConstant.h++"
-#include "MACE/Utility/PhysicalConstant.h++"
+#include "Mustard/Env/BasicEnv.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/MathConstant.h++"
+#include "Mustard/Utility/PhysicalConstant.h++"
 
 #include "G4Box.hh"
 #include "G4IntersectionSolid.hh"
@@ -24,9 +24,9 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace LiteralUnit;
-using namespace MathConstant;
-using namespace PhysicalConstant;
+using namespace Mustard::LiteralUnit;
+using namespace Mustard::MathConstant;
+using namespace Mustard::PhysicalConstant;
 
 auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
     const auto& emc{Description::EMC::Instance()};
@@ -77,7 +77,7 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
     csiPropertiesTable->AddConstProperty("RESOLUTIONSCALE", resolutionScale);
     csI->SetMaterialPropertiesTable(csiPropertiesTable);
 
-    if (Env::VerboseLevelReach<'V'>()) {
+    if (Mustard::Env::VerboseLevelReach<'V'>()) {
         csiPropertiesTable->DumpTable();
     }
 

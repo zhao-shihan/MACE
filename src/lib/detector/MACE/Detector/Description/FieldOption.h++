@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include "envparse/parse.h++"
 
@@ -8,8 +8,8 @@
 
 namespace MACE::Detector::Description {
 
-class FieldOption final : public DescriptionBase<FieldOption> {
-    friend Env::Memory::SingletonInstantiator;
+class FieldOption final : public Mustard::Detector::Description::DescriptionBase<FieldOption> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     FieldOption();

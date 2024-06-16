@@ -1,6 +1,6 @@
 #include "MACE/Detector/Definition/MMSShield.h++"
 #include "MACE/Detector/Description/MMSShield.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -12,7 +12,7 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace LiteralUnit;
+using namespace Mustard::LiteralUnit;
 
 auto MMSShield::Construct(G4bool checkOverlaps) -> void {
     const auto& shield{Description::MMSShield::Instance()};

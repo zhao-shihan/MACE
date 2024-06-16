@@ -1,8 +1,9 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
 #include "MACE/Detector/Description/MMSField.h++"
-#include "MACE/Utility/VectorArithmeticOperator.h++"
+
+#include "Mustard/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Utility/VectorArithmeticOperator.h++"
 
 #include "muc/array"
 
@@ -11,8 +12,10 @@
 
 namespace MACE::Detector::Description {
 
-class Solenoid final : public DescriptionBase<Solenoid> {
-    friend Env::Memory::SingletonInstantiator;
+using namespace Mustard::VectorArithmeticOperator;
+
+class Solenoid final : public Mustard::Detector::Description::DescriptionBase<Solenoid> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     Solenoid();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include "muc/math"
 
@@ -9,8 +9,8 @@
 
 namespace MACE::Detector::Description {
 
-class Filter final : public DescriptionBase<Filter> {
-    friend Env::Memory::SingletonInstantiator;
+class Filter final : public Mustard::Detector::Description::DescriptionBase<Filter> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     Filter();

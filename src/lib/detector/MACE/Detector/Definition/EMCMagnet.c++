@@ -1,6 +1,6 @@
 #include "MACE/Detector/Definition/EMCMagnet.h++"
 #include "MACE/Detector/Description/EMCMagnet.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -8,7 +8,7 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace LiteralUnit::MathConstantSuffix;
+using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
 auto EMCMagnet::Construct(G4bool checkOverlaps) -> void {
     const auto& magnet{Description::EMCMagnet::Instance()};

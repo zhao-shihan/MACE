@@ -1,6 +1,6 @@
 #include "MACE/Detector/Definition/CDCSuperLayer.h++"
 #include "MACE/Detector/Description/CDC.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4PVPlacement.hh"
 #include "G4Polycone.hh"
@@ -14,7 +14,7 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace MACE::LiteralUnit::MathConstantSuffix;
+using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
 auto CDCSuperLayer::Construct(G4bool checkOverlaps) -> void {
     const auto& cdc{Description::CDC::Instance()};

@@ -162,3 +162,9 @@ if(CMAKE_CXX_PLATFORM_ID STREQUAL "MinGW")
     list(APPEND MACE_COMPILE_DEFINITIONS EIGEN_DONT_VECTORIZE=1)
     message(NOTICE "***Notice: Building on Windows with MinGW, disabling vectorization of Eigen")
 endif()
+
+# =============================================================================
+# Add definition here
+# =============================================================================
+
+add_compile_definitions(${MACE_COMPILE_DEFINITIONS})

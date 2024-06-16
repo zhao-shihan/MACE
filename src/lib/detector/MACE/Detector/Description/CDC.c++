@@ -1,7 +1,7 @@
 #include "MACE/Detector/Description/CDC.h++"
-#include "MACE/Math/Parity.h++"
-#include "MACE/Utility/LiteralUnit.h++"
-#include "MACE/Utility/PhysicalConstant.h++"
+#include "Mustard/Math/Parity.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/PhysicalConstant.h++"
 
 #include "G4Material.hh"
 #include "G4NistManager.hh"
@@ -20,8 +20,8 @@
 
 namespace MACE::Detector::Description {
 
-using namespace LiteralUnit;
-using namespace PhysicalConstant;
+using namespace Mustard::LiteralUnit;
+using namespace Mustard::PhysicalConstant;
 
 CDC::CDC() :
     DescriptionBase{"CDC"},
@@ -86,8 +86,8 @@ auto CDC::ComputeLayerConfiguration() const -> std::vector<SuperLayerConfigurati
                                   layerConfig.front()};
 
         super.isAxial = fEvenSuperLayerIsAxial ?
-                            Math::IsEven(superLayerID) :
-                            Math::IsOdd(superLayerID);
+                            Mustard::Math::IsEven(superLayerID) :
+                            Mustard::Math::IsOdd(superLayerID);
         super.superLayerID = superLayerID;
         super.innerRadius = superLayerID > 0 ?
                                 lastSuper.outerRadius + fMinAdjacentSuperLayersDistance :
@@ -170,7 +170,7 @@ auto CDC::ComputeLayerConfiguration() const -> std::vector<SuperLayerConfigurati
                                                          lastSuper.sense.back().cell.back().cellID + 1 :
                                                          0) +
                                                     senseLayerLocalID * super.nCellPerSenseLayer)};
-            const auto firstCellAzimuth{Math::IsEven(sense.senseLayerID) ?
+            const auto firstCellAzimuth{Mustard::Math::IsEven(sense.senseLayerID) ?
                                             0 :
                                             halfPhiCell};
             sense.cell.reserve(super.nCellPerSenseLayer);

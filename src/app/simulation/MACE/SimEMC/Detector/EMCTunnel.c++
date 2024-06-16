@@ -1,6 +1,6 @@
 #include "MACE/SimEMC/Detector/EMCTunnel.h++"
-#include "MACE/Utility/LiteralUnit.h++"
-#include "MACE/Utility/MathConstant.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/MathConstant.h++"
 
 #include "G4Box.hh"
 #include "G4NistManager.hh"
@@ -12,8 +12,8 @@
 
 namespace MACE::SimEMC::Detector {
 
-using namespace LiteralUnit;
-using namespace MathConstant;
+using namespace Mustard::LiteralUnit;
+using namespace Mustard::MathConstant;
 
 auto EMCTunnel::Construct(G4bool checkOverlaps) -> void {
     const auto width = 50_m;

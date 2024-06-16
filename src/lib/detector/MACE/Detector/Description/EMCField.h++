@@ -1,11 +1,6 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
-#include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Utility/InlineMacro.h++"
-#include "MACE/Utility/VectorArithmeticOperator.h++"
-
-#include "CLHEP/Geometry/Transform3D.h"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include "muc/array"
 
@@ -13,8 +8,8 @@
 
 namespace MACE::Detector::Description {
 
-class EMCField final : public DescriptionBase<EMCField> {
-    friend Env::Memory::SingletonInstantiator;
+class EMCField final : public Mustard::Detector::Description::DescriptionBase<EMCField> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     EMCField();
@@ -31,7 +26,7 @@ public:
     auto Radius(double v) -> void { fRadius = v; }
     auto Length(double v) -> void { fLength = v; }
 
-    MACE_ALWAYS_INLINE auto Center() const -> muc::array3d;
+    auto Center() const -> muc::array3d;
 
     ///////////////////////////////////////////////////////////
     // Field
@@ -62,4 +57,3 @@ private:
 
 } // namespace MACE::Detector::Description
 
-#include "MACE/Detector/Description/EMCField.inl"

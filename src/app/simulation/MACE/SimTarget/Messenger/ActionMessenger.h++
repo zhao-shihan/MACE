@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Extension/Geant4X/Interface/SingletonMessenger.h++"
+#include "Mustard/Extension/Geant4X/Interface/SingletonMessenger.h++"
 
 #include <memory>
 
@@ -17,9 +17,9 @@ class SteppingAction;
 
 inline namespace Messenger {
 
-class ActionMessenger final : public Geant4X::SingletonMessenger<ActionMessenger,
+class ActionMessenger final : public Mustard::Geant4X::SingletonMessenger<ActionMessenger,
                                                                  SteppingAction> {
-    friend Env::Memory::SingletonInstantiator;
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     ActionMessenger();

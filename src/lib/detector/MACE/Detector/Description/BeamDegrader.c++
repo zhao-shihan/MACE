@@ -1,11 +1,11 @@
 #include "MACE/Detector/Description/BeamDegrader.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "muc/utility"
 
 namespace MACE::Detector::Description {
 
-using namespace LiteralUnit::Length;
+using namespace Mustard::LiteralUnit::Length;
 
 BeamDegrader::BeamDegrader() :
     DescriptionBase{"BeamDegrader"},

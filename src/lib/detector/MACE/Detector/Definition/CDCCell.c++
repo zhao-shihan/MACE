@@ -1,7 +1,7 @@
 #include "MACE/Detector/Definition/CDCCell.h++"
 #include "MACE/Detector/Description/CDC.h++"
-#include "MACE/Math/Parity.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+#include "Mustard/Math/Parity.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "CLHEP/Vector/RotationZ.h"
 
@@ -24,7 +24,7 @@
 namespace MACE::Detector::Definition {
 
 auto CDCCell::Construct(G4bool checkOverlaps) -> void {
-    using namespace MACE::LiteralUnit::MathConstantSuffix;
+    using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
     const auto& cdc{Description::CDC::Instance()};
     const auto cellName{cdc.Name() + "Cell"};
