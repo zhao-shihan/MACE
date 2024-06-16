@@ -103,12 +103,12 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
         const auto crystalLength{crystalHypotenuse * centroidMagnitude};
         const auto outerHypotenuse{innerRadius + crystalHypotenuse};
 
-        // if (unitID != 0) {
-        //     unitID++;
-        //     continue;
-        // }
+        if (unitID != 222) {
+            unitID++;
+            continue;
+        }
 
-        // std::cout << centroid.x() << " " << centroid.y() << " " << centroid.z() << std::endl;
+        std::cout << centroid.x() << " " << centroid.y() << " " << centroid.z() << std::endl;
 
         // make a crystal-shaped solid with certain shrinkage (e.g. shrink with coat thickness)
 

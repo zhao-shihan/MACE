@@ -1,45 +1,19 @@
 #!/bin/bash
 
-V=pen-5cm
-echo "$V is running..."
-cd ~/work/mace/$V/src/app/simulation/MACE/PhaseI/SimMACEPhaseI
-mpirun ./SimMACEPhaseI test.mac
-hadd -ff $V.root typePEN/*.root
-mv $V.root ~/work/mace/lengthTest
+start_time=$(date +%s)
 
-V=pen-6cm
-echo "$V is running..."
-cd ~/work/mace/$V/src/app/simulation/MACE/PhaseI/SimMACEPhaseI
-mpirun ./SimMACEPhaseI test.mac
-hadd -ff $V.root typePEN/*.root
-mv $V.root ~/work/mace/lengthTest
+for ((i=5; i<=15; i++)); do
+    for ((j=15; j<=25; j++)); do
+        NAME="test_${i}X0_${j}"
+        echo "$NAME is running..."
+        cd ~/work/mace/build/src/app/simulation/MACE/SimEMC
+        rgb zstrun ./SimEMC $NAME.mac
+        rgb hadd -ff $NAME.root $NAME/*.root
+    done
+done
 
-V=pen-7cm
-echo "$V is running..."
-cd ~/work/mace/$V/src/app/simulation/MACE/PhaseI/SimMACEPhaseI
-mpirun ./SimMACEPhaseI test.mac
-hadd -ff $V.root typePEN/*.root
-mv $V.root ~/work/mace/lengthTest
-
-V=pen-8cm
-echo "$V is running..."
-cd ~/work/mace/$V/src/app/simulation/MACE/PhaseI/SimMACEPhaseI
-mpirun ./SimMACEPhaseI test.mac
-hadd -ff $V.root typePEN/*.root
-mv $V.root ~/work/mace/lengthTest
-
-V=pen-9cm
-echo "$V is running..."
-cd ~/work/mace/$V/src/app/simulation/MACE/PhaseI/SimMACEPhaseI
-mpirun ./SimMACEPhaseI test.mac
-hadd -ff $V.root typePEN/*.root
-mv $V.root ~/work/mace/lengthTest
-
-V=pen-10cm
-echo "$V is running..."
-cd ~/work/mace/$V/src/app/simulation/MACE/PhaseI/SimMACEPhaseI
-mpirun ./SimMACEPhaseI test.mac
-hadd -ff $V.root typePEN/*.root
-mv $V.root ~/work/mace/lengthTest
+end_time=$(date +%s)
+execution_time=$((end_time - start_time))
 
 echo "All simulations are done!"
+echo "Total execution time: $(($execution_time / 60)) minutes"

@@ -164,7 +164,8 @@ EMC::EMC() :
         {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX03
         {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX04
         {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX05
-        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX06
+        // {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX06
+        {150_mm, 140_mm, 98.5_mm}, // 9902B Type-HEX06
         {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX07
         {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX08
         {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX09

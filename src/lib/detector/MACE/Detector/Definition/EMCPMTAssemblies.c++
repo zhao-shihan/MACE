@@ -112,10 +112,10 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
     for (int unitID{};
          auto&& [_1, _2, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
 
-        // if (unitID != 0) {
-        //     unitID++;
-        //     continue;
-        // }
+        if (unitID != 222) {
+            unitID++;
+            continue;
+        }
 
         double pmtDiameter{};
         double cathodeDiameter{};
