@@ -99,7 +99,7 @@ private:
     double fCrystalHypotenuse;
     double fUpstreamWindowRadius;
     double fDownstreamWindowRadius;
-    std::vector<stdx::array3d> fPMTDimensions;
+    std::vector<muc::array3d> fPMTDimensions;
     double fPMTCouplerThickness;
     double fPMTWindowThickness;
     double fPMTCathodeThickness;
