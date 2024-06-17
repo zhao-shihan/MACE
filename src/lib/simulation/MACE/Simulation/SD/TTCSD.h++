@@ -1,7 +1,8 @@
 #pragma once
 
 #include "MACE/Simulation/Hit/TTCHit.h++"
-#include "MACE/Utility/NonMoveableBase.h++"
+
+#include "Mustard/Utility/NonMoveableBase.h++"
 
 #include "G4VSensitiveDetector.hh"
 
@@ -13,7 +14,7 @@ namespace MACE::inline Simulation::inline SD {
 
 class TTCSiPMSD;
 
-class TTCSD : public NonMoveableBase,
+class TTCSD : public Mustard::NonMoveableBase,
               public G4VSensitiveDetector {
 public:
     TTCSD(const G4String& sdName, const TTCSiPMSD* ttcSiPMSD = {});

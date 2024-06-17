@@ -1,7 +1,8 @@
 #pragma once
 
 #include "MACE/Simulation/Hit/EMCHit.h++"
-#include "MACE/Utility/NonMoveableBase.h++"
+
+#include "Mustard/Utility/NonMoveableBase.h++"
 
 #include "G4VSensitiveDetector.hh"
 
@@ -13,7 +14,7 @@ namespace MACE::inline Simulation::inline SD {
 
 class EMCPMTSD;
 
-class EMCSD : public NonMoveableBase,
+class EMCSD : public Mustard::NonMoveableBase,
               public G4VSensitiveDetector {
 public:
     EMCSD(const G4String& sdName, const EMCPMTSD* emcPMTSD = {});

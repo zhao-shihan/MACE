@@ -1,10 +1,11 @@
 #include "MACE/Detector/Description/MMSField.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+
+#include "Mustard/Utility/LiteralUnit.h++"
 
 namespace MACE::Detector::Description {
 
-using namespace LiteralUnit::Length;
-using namespace LiteralUnit::MagneticFluxDensity;
+using namespace Mustard::LiteralUnit::Length;
+using namespace Mustard::LiteralUnit::MagneticFluxDensity;
 
 MMSField::MMSField() :
     DescriptionBase{"MMSField"},
@@ -12,14 +13,14 @@ MMSField::MMSField() :
     fRadius{61_cm},
     fLength{220_cm},
     // Field
-    fMagneticFluxDensity{100_mT} {}
+    fFastField{100_mT} {}
 
 void MMSField::ImportAllValue(const YAML::Node& node) {
     // Geometry
     ImportValue(node, fRadius, "Radius");
     ImportValue(node, fLength, "Length");
     // Field
-    ImportValue(node, fMagneticFluxDensity, "MagneticFluxDensity");
+    ImportValue(node, fFastField, "FastField");
 }
 
 void MMSField::ExportAllValue(YAML::Node& node) const {
@@ -27,7 +28,7 @@ void MMSField::ExportAllValue(YAML::Node& node) const {
     ExportValue(node, fRadius, "Radius");
     ExportValue(node, fLength, "Length");
     // Field
-    ExportValue(node, fMagneticFluxDensity, "MagneticFluxDensity");
+    ExportValue(node, fFastField, "FastField");
 }
 
 } // namespace MACE::Detector::Description

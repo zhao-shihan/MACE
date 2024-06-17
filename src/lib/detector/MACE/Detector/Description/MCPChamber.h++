@@ -1,11 +1,11 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 namespace MACE::Detector::Description {
 
-class MCPChamber final : public DescriptionBase<MCPChamber> {
-    friend Env::Memory::SingletonInstantiator;
+class MCPChamber final : public Mustard::Detector::Description::DescriptionBase<MCPChamber> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     MCPChamber();

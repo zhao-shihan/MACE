@@ -1,7 +1,7 @@
 #include "MACE/Detector/Definition/CDCBody.h++"
 #include "MACE/Detector/Description/CDC.h++"
-#include "MACE/Math/IntegerPower.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -9,19 +9,21 @@
 #include "G4Transform3D.hh"
 #include "G4Tubs.hh"
 
+#include "muc/math"
+
 #include <array>
 #include <cmath>
 
 namespace MACE::Detector::Definition {
 
-using namespace MACE::LiteralUnit::Density;
-using namespace MACE::LiteralUnit::MathConstantSuffix;
+using namespace Mustard::LiteralUnit::Density;
+using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
 auto CDCBody::Construct(G4bool checkOverlaps) -> void {
     const auto& cdc{Description::CDC::Instance()};
     const auto name{cdc.Name() + "Body"};
 
-    const auto endCapZExtension{cdc.EndCapThickness() * std::sqrt(1 + 1 / Math::Pow<2>(cdc.EndCapSlope()))};
+    const auto endCapZExtension{cdc.EndCapThickness() * std::sqrt(1 + 1 / muc::pow<2>(cdc.EndCapSlope()))};
 
     const auto nist{G4NistManager::Instance()};
     { // End cap

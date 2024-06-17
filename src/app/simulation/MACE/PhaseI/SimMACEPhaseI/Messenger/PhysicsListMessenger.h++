@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Extension/Geant4X/SingletonMessenger.h++"
+#include "Mustard/Extension/Geant4X/Interface/SingletonMessenger.h++"
 
 #include <memory>
 
@@ -12,9 +12,9 @@ class PhysicsList;
 
 inline namespace Messenger {
 
-class PhysicsListMessenger final : public Geant4X::SingletonMessenger<PhysicsListMessenger,
-                                                                      PhysicsList> {
-    friend Env::Memory::SingletonInstantiator;
+class PhysicsListMessenger final : public Mustard::Geant4X::SingletonMessenger<PhysicsListMessenger,
+                                                                               PhysicsList> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     PhysicsListMessenger();

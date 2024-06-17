@@ -1,10 +1,8 @@
 #include "MACE/Detector/Definition/CDCCell.h++"
 #include "MACE/Detector/Description/CDC.h++"
-#include "MACE/Math/IntegerPower.h++"
-#include "MACE/Math/Lerp.h++"
-#include "MACE/Math/MidPoint.h++"
-#include "MACE/Math/Parity.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+
+#include "Mustard/Math/Parity.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "CLHEP/Vector/RotationZ.h"
 
@@ -15,6 +13,9 @@
 #include "G4TwistedTubs.hh"
 #include "G4TwoVector.hh"
 
+#include "muc/math"
+#include "muc/numeric"
+
 #include "fmt/format.h"
 
 #include <cmath>
@@ -24,7 +25,7 @@
 namespace MACE::Detector::Definition {
 
 auto CDCCell::Construct(G4bool checkOverlaps) -> void {
-    using namespace MACE::LiteralUnit::MathConstantSuffix;
+    using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
     const auto& cdc{Description::CDC::Instance()};
     const auto cellName{cdc.Name() + "Cell"};
@@ -151,7 +152,7 @@ auto CDCCell::Construct(G4bool checkOverlaps) -> void {
                 }};
             const auto rInnerWire{sense.innerRadius + rFW};
             const auto rOuterWire{sense.outerRadius + rFW};
-            const auto rCenterWire{Math::MidPoint(rInnerWire, rOuterWire)};
+            const auto rCenterWire{muc::midpoint(rInnerWire, rOuterWire)};
             PlaceFW(0, rInnerWire, -super.cellAzimuthWidth / 2);
             PlaceFW(1, rInnerWire, 0);
             PlaceFW(2, rCenterWire, -super.cellAzimuthWidth / 2);

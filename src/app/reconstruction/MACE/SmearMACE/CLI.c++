@@ -1,6 +1,7 @@
-#include "MACE/Env/Print.h++"
-#include "MACE/Math/Parity.h++"
 #include "MACE/SmearMACE/CLI.h++"
+
+#include "Mustard/Env/Print.h++"
+#include "Mustard/Math/Parity.h++"
 
 #include <cassert>
 #include <cstdio>
@@ -118,11 +119,11 @@ auto CLIModule::OutputFilePath() const -> std::filesystem::path {
         output) { return *std::move(output); }
     auto inputList{InputFilePath()};
     if (inputList.size() > 1) {
-        Env::PrintLnError("Cannot automatically construct output file path since # input file path > 1. Use -o or --output");
+        Mustard::Env::PrintLnError("Cannot automatically construct output file path since # input file path > 1. Use -o or --output");
         std::exit(EXIT_FAILURE);
     }
     if (inputList.front().find('*') != std::string::npos) {
-        Env::PrintLnError("Cannot automatically construct output file path since input file path includes wildcards. Use -o or --output");
+        Mustard::Env::PrintLnError("Cannot automatically construct output file path since input file path includes wildcards. Use -o or --output");
         std::exit(EXIT_FAILURE);
     }
     std::filesystem::path input{std::move(inputList.front())};
@@ -134,11 +135,11 @@ auto CLIModule::ParseSmearingConfig(std::string_view arg) const -> std::optional
     auto var{ArgParser().present<std::vector<std::string>>(arg)};
     if (not var.has_value()) { return {}; }
     std::unordered_map<std::string, std::string> config;
-    assert(Math::IsEven(var->size()));
+    assert(Mustard::Math::IsEven(var->size()));
     for (gsl::index i{}; i < ssize(*var); i += 2) {
         auto [_, inserted]{config.try_emplace(std::move(var->at(i)), std::move(var->at(i + 1)))};
         if (not inserted) {
-            Env::PrintLnError("Duplicate variable '{}'", var->at(i));
+            Mustard::Env::PrintLnError("Duplicate variable '{}'", var->at(i));
             std::exit(EXIT_FAILURE);
         }
     }

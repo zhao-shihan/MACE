@@ -1,14 +1,14 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include <utility>
 #include <vector>
 
 namespace MACE::Detector::Description {
 
-class MCP final : public DescriptionBase<MCP> {
-    friend Env::Memory::SingletonInstantiator;
+class MCP final : public Mustard::Detector::Description::DescriptionBase<MCP> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     MCP();

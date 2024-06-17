@@ -1,6 +1,7 @@
-#include "MACE/Extension/Geant4X/Antimuonium.h++"
-#include "MACE/Extension/Geant4X/Muonium.h++"
 #include "MACE/SimTarget/Action/SteppingAction.h++"
+
+#include "Mustard/Extension/Geant4X/Particle/Antimuonium.h++"
+#include "Mustard/Extension/Geant4X/Particle/Muonium.h++"
 
 #include "G4MuonPlus.hh"
 #include "G4Step.hh"
@@ -13,8 +14,8 @@ SteppingAction::SteppingAction() :
     PassiveSingleton{},
     G4UserSteppingAction{},
     fMuonPlus{gsl::not_null{G4MuonPlus::Definition()}},
-    fMuonium{gsl::not_null{Geant4X::Muonium::Definition()}},
-    fAntimuonium{gsl::not_null{Geant4X::Antimuonium::Definition()}},
+    fMuonium{gsl::not_null{Mustard::Geant4X::Muonium::Definition()}},
+    fAntimuonium{gsl::not_null{Mustard::Geant4X::Antimuonium::Definition()}},
     fKillIrrelevants{false},
     fMessengerRegister{this} {}
 

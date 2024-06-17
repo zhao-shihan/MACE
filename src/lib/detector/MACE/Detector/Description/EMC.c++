@@ -1,9 +1,9 @@
 #include "MACE/Detector/Description/EMC.h++"
-#include "MACE/Math/Hypot.h++"
-#include "MACE/Utility/LiteralUnit.h++"
-#include "MACE/Utility/MathConstant.h++"
-#include "MACE/Utility/PhysicalConstant.h++"
-#include "MACE/Utility/VectorCast.h++"
+
+#include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/MathConstant.h++"
+#include "Mustard/Utility/PhysicalConstant.h++"
+#include "Mustard/Utility/VectorCast.h++"
 
 #include "CLHEP/Vector/TwoVector.h"
 
@@ -17,13 +17,15 @@
 #include "pmp/algorithms/utilities.h"
 #include "pmp/surface_mesh.h"
 
+#include "muc/math"
+
 #include <ranges>
 
 namespace MACE::Detector::Description {
 
 namespace {
 
-using namespace MathConstant;
+using namespace Mustard::MathConstant;
 
 class EMCMesh {
 public:
@@ -56,8 +58,8 @@ auto EMCMesh::GenerateIcosahedron() -> void {
     constexpr auto a0 = 1.0;
     constexpr auto b0 = 1.0 / phi;
     // normalized vertices coordinates
-    const auto a = a0 / Math::Hypot(a0, b0);
-    const auto b = b0 / Math::Hypot(a0, b0);
+    const auto a = a0 / muc::hypot(a0, b0);
+    const auto b = b0 / muc::hypot(a0, b0);
 
     // add normalized vertices
     const auto v1 = fPMPMesh.add_vertex(pmp::Point{0, b, -a});
@@ -143,10 +145,10 @@ auto EMCMesh::GenerateDualMesh() -> void {
 
 } // namespace
 
-using namespace LiteralUnit::Length;
-using namespace LiteralUnit::Time;
-using namespace LiteralUnit::Energy;
-using namespace PhysicalConstant;
+using namespace Mustard::LiteralUnit::Length;
+using namespace Mustard::LiteralUnit::Time;
+using namespace Mustard::LiteralUnit::Energy;
+using namespace Mustard::PhysicalConstant;
 
 EMC::EMC() :
     DescriptionBase{
@@ -220,12 +222,11 @@ auto EMC::ComputeMesh() const -> MeshInformation {
     const auto point{pmpMesh.vertex_property<pmp::Point>("v:point")};
 
     for (auto&& v : pmpMesh.vertices()) {
-        vertex.emplace_back(VectorCast<CLHEP::Hep3Vector>(point[v]));
+        vertex.emplace_back(Mustard::VectorCast<CLHEP::Hep3Vector>(point[v]));
     }
 
     for (auto&& f : pmpMesh.faces()) {
-        const auto centroid{VectorCast<CLHEP::Hep3Vector>(pmp::centroid(pmpMesh, f))};
-
+        const auto centroid{Mustard::VectorCast<CLHEP::Hep3Vector>(pmp::centroid(pmpMesh, f))};
         if (const auto rXY{fInnerRadius * centroid.perp()};
             centroid.z() < 0) {
             if (rXY < fUpstreamWindowRadius) { continue; }
@@ -234,7 +235,7 @@ auto EMC::ComputeMesh() const -> MeshInformation {
         }
         if (std::ranges::any_of(pmpMesh.vertices(f),
                                 [&](const auto& v) {
-                                    const auto rXY{fInnerRadius * Math::Hypot(point[v][0], point[v][1])};
+                                    const auto rXY{fInnerRadius * muc::hypot(point[v][0], point[v][1])};
                                     if (point[v][2] < 0) {
                                         return rXY < fUpstreamWindowRadius;
                                     } else {
@@ -246,7 +247,7 @@ auto EMC::ComputeMesh() const -> MeshInformation {
 
         auto& face{faceList.emplace_back()};
         face.centroid = centroid;
-        face.normal = VectorCast<CLHEP::Hep3Vector>(pmp::face_normal(pmpMesh, f));
+        face.normal = Mustard::VectorCast<CLHEP::Hep3Vector>(pmp::face_normal(pmpMesh, f));
 
         for (auto&& v : pmpMesh.vertices(f)) {
             face.vertexIndex.emplace_back(v.idx());

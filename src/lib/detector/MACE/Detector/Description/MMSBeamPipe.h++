@@ -1,14 +1,14 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include <string>
 #include <utility>
 
 namespace MACE::Detector::Description {
 
-class MMSBeamPipe final : public DescriptionBase<MMSBeamPipe> {
-    friend Env::Memory::SingletonInstantiator;
+class MMSBeamPipe final : public Mustard::Detector::Description::DescriptionBase<MMSBeamPipe> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     MMSBeamPipe();

@@ -1,10 +1,8 @@
 #include "MACE/Detector/Description/EMC.h++"
-#include "MACE/Env/Print.h++"
-#include "MACE/Extension/stdx/ranges_numeric.h++"
-#include "MACE/External/gfx/timsort.hpp"
-#include "MACE/Math/MidPoint.h++"
 #include "MACE/Simulation/SD/EMCPMTSD.h++"
 #include "MACE/Simulation/SD/EMCSD.h++"
+
+#include "Mustard/Env/Print.h++"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -20,6 +18,10 @@
 #include "G4VProcess.hh"
 #include "G4VTouchable.hh"
 
+#include "muc/numeric"
+
+#include "gfx/timsort.hpp"
+
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -34,7 +36,7 @@
 namespace MACE::inline Simulation::inline SD {
 
 EMCSD::EMCSD(const G4String& sdName, const EMCPMTSD* emcPMTSD) :
-    NonMoveableBase{},
+    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fEMCPMTSD{emcPMTSD},
     fEnergyDepositionThreshold{},
@@ -45,12 +47,12 @@ EMCSD::EMCSD(const G4String& sdName, const EMCPMTSD* emcPMTSD) :
     const auto& emc{Detector::Description::EMC::Instance()};
     assert(emc.CsIEnergyBin().size() == emc.CsIScintillationComponent1().size());
     std::vector<double> dE(emc.CsIEnergyBin().size());
-    stdx::ranges::adjacent_difference(emc.CsIEnergyBin(), dE.begin());
+    muc::ranges::adjacent_difference(emc.CsIEnergyBin(), dE.begin());
     std::vector<double> spectrum(emc.CsIScintillationComponent1().size());
-    stdx::ranges::adjacent_difference(emc.CsIEnergyBin(), spectrum.begin(), Math::MidPoint<double, double>);
+    muc::ranges::adjacent_difference(emc.CsIEnergyBin(), spectrum.begin(), muc::midpoint<double>);
     const auto integral{std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.)};
     std::vector<double> meanE(emc.CsIEnergyBin().size());
-    stdx::ranges::adjacent_difference(emc.CsIEnergyBin(), meanE.begin(), Math::MidPoint<double, double>);
+    muc::ranges::adjacent_difference(emc.CsIEnergyBin(), meanE.begin(), muc::midpoint<double>);
     std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
     fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
 
@@ -107,10 +109,10 @@ auto EMCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
 auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     fHitsCollection->GetVector()->reserve(
-        stdx::ranges::accumulate(fSplitHit, 0,
-                                 [](auto&& count, auto&& cellHit) {
-                                     return count + cellHit.second.size();
-                                 }));
+        muc::ranges::accumulate(fSplitHit, 0,
+                                [](auto&& count, auto&& cellHit) {
+                                    return count + cellHit.second.size();
+                                }));
 
     constexpr auto ByTrackID{
         [](const auto& hit1, const auto& hit2) {
@@ -120,7 +122,7 @@ auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
          auto&& [unitID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
         case 0:
-            std23::unreachable();
+            muc::unreachable();
         case 1: {
             auto& hit{splitHit.front()};
             Get<"HitID">(*hit) = hitID++;
@@ -142,7 +144,7 @@ auto EMCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 const auto windowClosingTime{tFirst + scintillationTimeConstant1};
                 if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                     scintillationTimeConstant1 != 0) [[unlikely]] {
-                    Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1);
+                    Mustard::Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1);
                 }
                 cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), splitHit.end(),
                                                                    [&windowClosingTime](const auto& hit) {

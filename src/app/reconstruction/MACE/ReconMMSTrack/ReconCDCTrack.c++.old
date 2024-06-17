@@ -4,7 +4,7 @@
 #include "MACE/Compatibility/std23/constexpr_cmath.h++"
 #include "MACE/Data/MMSTrack.h++"
 #include "MACE/Data/Hit.h++"
-#include "MACE/Data/Sheet.h++"
+#include "Mustard/Data/Sheet.h++"
 #include "MACE/Data/SimHit.h++"
 #include "MACE/Detector/Definition/AcceleratorField.h++"
 #include "MACE/Detector/Definition/BeamDegrader.h++"
@@ -19,20 +19,20 @@
 #include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/SpectrometerField.h++"
-#include "MACE/Env/BasicEnv.h++"
-#include "MACE/Env/CLI/BasicCLI.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
-#include "MACE/Extension/stdx/to_signed.h++"
-#include "MACE/Math/Hypot.h++"
-#include "MACE/Math/IntegerPower.h++"
-#include "MACE/Math/Norm.h++"
-#include "MACE/Math/Random/Distribution/Gaussian.h++"
-#include "MACE/Math/Random/Distribution/Gaussian3DDiagnoal.h++"
-#include "MACE/Math/Random/Generator/Xoshiro512SS.h++"
-#include "MACE/Utility/LiteralUnit.h++"
-#include "MACE/Utility/PhysicalConstant.h++"
-#include "MACE/Utility/VectorArithmeticOperator.h++"
-#include "MACE/Utility/VectorCast.h++"
+#include "Mustard/Env/BasicEnv.h++"
+#include "Mustard/Env/CLI/BasicCLI.h++"
+#include "Mustard/Extension/stdx/arraynx.h++"
+#include "Mustard/Extension/stdx/to_signed.h++"
+#include "Mustard/Math/Hypot.h++"
+#include "Mustard/Math/IntegerPower.h++"
+#include "Mustard/Math/Norm.h++"
+#include "Mustard/Math/Random/Distribution/Gaussian.h++"
+#include "Mustard/Math/Random/Distribution/Gaussian3DDiagnoal.h++"
+#include "Mustard/Math/Random/Generator/Xoshiro512SS.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/PhysicalConstant.h++"
+#include "Mustard/Utility/VectorArithmeticOperator.h++"
+#include "Mustard/Utility/VectorCast.h++"
 
 #include "ConstField.h"
 #include "EventDisplay.h"
@@ -75,8 +75,8 @@
 #include <vector>
 
 using namespace MACE;
-using namespace LiteralUnit;
-using namespace PhysicalConstant;
+using namespace Mustard::LiteralUnit;
+using namespace Mustard::PhysicalConstant;
 
 // rng
 Math::Random::Xoshiro512SS rng;
@@ -129,7 +129,7 @@ void MakeMACECDCGeometry() {
     // Material
     //
 
-    using namespace LiteralUnit::Density;
+    using namespace Mustard::LiteralUnit::Density;
 
     const auto nist = G4NistManager::Instance();
 
@@ -145,7 +145,7 @@ void MakeMACECDCGeometry() {
     // Export to root
     //
 
-    using namespace LiteralUnit::MagneticFluxDensity;
+    using namespace Mustard::LiteralUnit::MagneticFluxDensity;
 
     new TGeoManager("MACECDC", "MACE CDC Geometry");
     gGeoManager->Import(tempGDMLFile.c_str());
@@ -199,9 +199,9 @@ auto FitTrack(std::vector<Data::ReadIterator<Data::CDCSimHit>> hitData) -> std::
     genfit::KalmanFitterRefTrack fitter;
 
     // generate momentum seed by smearing true value
-    const auto MomentumSeed = [&](stdx::array3d p) {
+    const auto MomentumSeed = [&](muc::array3d p) {
         constexpr auto resolution = 0.2;
-        const auto sigma = resolution * Math::Norm(p) / 2.355; // clang-format off
+        const auto sigma = resolution * Mustard::Math::Norm(p) / 2.355; // clang-format off
         p += Gaussian3D(rng, {{0., sigma}, {0., sigma}, {0., sigma}}); // clang-format on
         TVector3 pSeed(p[0], p[1], p[2]);
         return pSeed * 0.001;
@@ -219,7 +219,7 @@ auto FitTrack(std::vector<Data::ReadIterator<Data::CDCSimHit>> hitData) -> std::
 
         // do the fit
         const auto trackRep = new genfit::RKTrackRep(firstHit->PDGCodeTruth());
-        auto& genfitTrack = genfitTrackData.emplace_back(trackRep, TVector3(0, 0, 0), MomentumSeed(firstHit->VertexMomentumTruth().As<stdx::array3d>()));
+        auto& genfitTrack = genfitTrackData.emplace_back(trackRep, TVector3(0, 0, 0), MomentumSeed(firstHit->VertexMomentumTruth().As<muc::array3d>()));
         for (auto hitID = 0;
              auto&& hit : rawTrack) {
             const auto cellID = hit->CellID();
@@ -287,7 +287,7 @@ auto FitTrack(std::vector<Data::ReadIterator<Data::CDCSimHit>> hitData) -> std::
             rawHitCov[6][3] = 0;
             rawHitCov[6][4] = 0;
             rawHitCov[6][5] = 0;
-            rawHitCov[6][6] = Math::Pow<2>(100_um / 2.355 / 10);
+            rawHitCov[6][6] = Mustard::Math::Pow<2>(100_um / 2.355 / 10);
 
             const auto wireMeasurement = new genfit::WireMeasurement(rawHitCoords,
                                                                      rawHitCov,
@@ -319,10 +319,10 @@ auto FitTrack(std::vector<Data::ReadIterator<Data::CDCSimHit>> hitData) -> std::
         const auto pFirst = state.getMom() * 1000;
         const auto mass = state.getMass() * 1000;
         const auto charge = state.getCharge();
-        const auto kineticEnergy = std::sqrt(pFirst.Mag2() + Math::Pow<2>(mass)) - mass;
+        const auto kineticEnergy = std::sqrt(pFirst.Mag2() + Mustard::Math::Pow<2>(mass)) - mass;
 
         static const auto bField = Detector::Description::SpectrometerField::Instance().MagneticFluxDensity();
-        const auto pT = Math::Hypot(pFirst.x(), pFirst.y());
+        const auto pT = Mustard::Math::Hypot(pFirst.x(), pFirst.y());
         const auto radius = pT / (/* charge * */ bField * c_light);
         const Eigen::Vector2d center = {xFirst.x() - radius * (pFirst.y() / pT), xFirst.y() - radius * (-pFirst.x() / pT)};
         const auto theta = std::atan2(pT, pFirst.z());
@@ -373,7 +373,7 @@ auto FitTrack(std::vector<Data::ReadIterator<Data::CDCSimHit>> hitData) -> std::
 }
 
 int main(int argc, char* argv[]) {
-    Env::BasicEnv env(argc, argv, {});
+    Mustard::Env::BasicEnv env(argc, argv, {});
 
     // init geometry and mag. field
     MakeMACECDCGeometry();
@@ -529,7 +529,7 @@ int main(int argc, char* argv[]) {
 
             std::vector<std::pair<double, double>> dcaTOF;
             for (auto&& helix : std::as_const(coincidentCDCHelixData)) {
-                const auto dca = Math::Norm(helix->Center()() - xMCP()) - helix->Radius();
+                const auto dca = Mustard::Math::Norm(helix->Center()() - xMCP()) - helix->Radius();
                 const auto tof = tMCP - helix->VertexTime();
                 dcaTOFData.Fill(dca, tof);
             }
@@ -627,10 +627,10 @@ int main(int argc, char* argv[]) {
             dataFactory.CreateAndFillTree<DataModel::CDCPhysicsSimTrack>(coincidentCDCTrackData, eventID)->Write();
             dataFactory.CreateAndFillTree<DataModel::CDCHelixTrack>(coincidentCDCHelixData, eventID)->Write();
 
-            const auto xMCP = VectorCast<stdx::array2d>(xMCPRVec);
+            const auto xMCP = Mustard::VectorCast<muc::array2d>(xMCPRVec);
             std::vector<std::pair<double, double>> dcaTOF;
             for (auto&& helix : std::as_const(coincidentCDCHelixData)) {
-                const auto dca = std23::abs(Math::Norm(helix->Center()() - xMCP) - helix->Radius()());
+                const auto dca = std23::abs(Mustard::Math::Norm(helix->Center()() - xMCP) - helix->Radius()());
                 std::cout << dca << std::endl;
             }
 

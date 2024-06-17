@@ -1,20 +1,21 @@
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Utility/LiteralUnit.h++"
-#include "MACE/Utility/MathConstant.h++"
+
+#include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/MathConstant.h++"
 
 namespace MACE::Detector::Description {
 
-using namespace LiteralUnit::Length;
-using namespace LiteralUnit::MagneticFluxDensity;
-using namespace MathConstant;
+using namespace Mustard::LiteralUnit::Length;
+using namespace Mustard::LiteralUnit::MagneticFluxDensity;
+using namespace Mustard::MathConstant;
 
 Solenoid::Solenoid() :
     DescriptionBase{"Solenoid"},
     // Geometry
     fS1Length{150_mm},
-    fB1Radius{250_mm},
+    fT1Radius{250_mm},
     fS2Length{1314.6_mm},
-    fB2Radius{250_mm},
+    fT2Radius{250_mm},
     fS3Length{150_mm},
     fInnerRadius{60_mm},
     fOuterRadius{90_mm},
@@ -24,14 +25,14 @@ Solenoid::Solenoid() :
     // Material
     fMaterialName{"G4_Cu"},
     // Field
-    fMagneticFluxDensity{100_mT} {}
+    fFastField{100_mT} {}
 
 auto Solenoid::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fS1Length, "S1Length");
-    ImportValue(node, fB1Radius, "B1Radius");
+    ImportValue(node, fT1Radius, "T1Radius");
     ImportValue(node, fS2Length, "S2Length");
-    ImportValue(node, fB2Radius, "B2Radius");
+    ImportValue(node, fT2Radius, "T2Radius");
     ImportValue(node, fS3Length, "S3Length");
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fOuterRadius, "OuterRadius");
@@ -41,15 +42,15 @@ auto Solenoid::ImportAllValue(const YAML::Node& node) -> void {
     // Material
     ImportValue(node, fMaterialName, "MaterialName");
     // Field
-    ImportValue(node, fMagneticFluxDensity, "MagneticFluxDensity");
+    ImportValue(node, fFastField, "FastField");
 }
 
 auto Solenoid::ExportAllValue(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fS1Length, "S1Length");
-    ExportValue(node, fB1Radius, "B1Radius");
+    ExportValue(node, fT1Radius, "T1Radius");
     ExportValue(node, fS2Length, "S2Length");
-    ExportValue(node, fB2Radius, "B2Radius");
+    ExportValue(node, fT2Radius, "T2Radius");
     ExportValue(node, fS3Length, "S3Length");
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fOuterRadius, "OuterRadius");
@@ -59,7 +60,7 @@ auto Solenoid::ExportAllValue(YAML::Node& node) const -> void {
     // Material
     ExportValue(node, fMaterialName, "MaterialName");
     // Field
-    ExportValue(node, fMagneticFluxDensity, "MagneticFluxDensity");
+    ExportValue(node, fFastField, "FastField");
 }
 
 } // namespace MACE::Detector::Description

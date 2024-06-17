@@ -1,15 +1,16 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
 #include "MACE/Detector/Description/EMCField.h++"
+
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include <string>
 #include <utility>
 
 namespace MACE::Detector::Description {
 
-class EMCShield final : public DescriptionBase<EMCShield> {
-    friend Env::Memory::SingletonInstantiator;
+class EMCShield final : public Mustard::Detector::Description::DescriptionBase<EMCShield> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     EMCShield();

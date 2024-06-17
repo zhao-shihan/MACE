@@ -1,15 +1,16 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
-#include "MACE/Math/LLPiecewise.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
+
+#include "muc/math"
 
 #include <string>
 #include <utility>
 
 namespace MACE::Detector::Description {
 
-class Accelerator final : public DescriptionBase<Accelerator> {
-    friend Env::Memory::SingletonInstantiator;
+class Accelerator final : public Mustard::Detector::Description::DescriptionBase<Accelerator> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     Accelerator();
@@ -26,7 +27,7 @@ public:
     auto ElectrodeThickness() const -> auto { return fElectrodeThickness; }
     auto FieldRadius() const -> auto { return fFieldRadius; }
     auto FullLength() const -> auto { return fUpstreamLength + fAccelerateLength; }
-    auto NElectrode() const -> auto { return Math::LLTrunc((FullLength() - fElectrodeThickness) / fElectrodePitch) + 1; }
+    auto NElectrode() const -> auto { return muc::lltrunc((FullLength() - fElectrodeThickness) / fElectrodePitch) + 1; }
 
     auto UpstreamLength(double val) -> void { fUpstreamLength = val; }
     auto AccelerateLength(double val) -> void { fAccelerateLength = val; }
@@ -38,15 +39,15 @@ public:
 
     // Material
 
-    auto AcceleratePotential() const -> auto { return fAcceleratePotential; }
-
-    auto AcceleratePotential(double val) -> void { fAcceleratePotential = val; }
-
-    // Field
-
     auto ElectrodeMaterialName() const -> const auto& { return fElectrodeMaterialName; }
 
     auto ElectrodeMaterialName(std::string val) -> void { fElectrodeMaterialName = std::move(val); }
+
+    // Field
+
+    auto FastField() const -> auto { return fFastField; }
+
+    auto FastField(double val) -> void { fFastField = val; }
 
 private:
     auto ImportAllValue(const YAML::Node& node) -> void override;
@@ -69,7 +70,7 @@ private:
 
     // Field
 
-    double fAcceleratePotential;
+    double fFastField;
 };
 
 } // namespace MACE::Detector::Description

@@ -4,8 +4,10 @@
 #include "MACE/DataModel/BranchSocket/ShortStringBranchSocket.h++"
 #include "MACE/DataModel/BranchSocket/VectorBranchSocket.h++"
 #include "MACE/DataModel/DataFactory.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
-#include "MACE/Utility/VectorAssign.h++"
+
+#include "Mustard/Utility/VectorAssign.h++"
+
+#include "muc/array"
 
 #include <array>
 #include <string_view>
@@ -55,11 +57,11 @@ private:
     double fTCACDC;
     double fTCAMCP;
     double fDeltaTCA;
-    stdx::array3d fCPACDC;
-    stdx::array2d fCPAMCP;
+    muc::array3d fCPACDC;
+    muc::array2d fCPAMCP;
     double fDCA;
     double fVertexEnergy;
-    stdx::array3d fVertexMomentum;
+    muc::array3d fVertexMomentum;
     String15 fParticles;
 
     static DoubleBranchSocket fgTCACDC;

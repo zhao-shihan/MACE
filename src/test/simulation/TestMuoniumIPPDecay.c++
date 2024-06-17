@@ -1,11 +1,11 @@
-#include "MACE/Env/MPIEnv.h++"
-#include "MACE/Extension/CLHEPX/Random/Xoshiro.h++"
-#include "MACE/Extension/Geant4X/Antimuonium.h++"
-#include "MACE/Extension/Geant4X/Muonium.h++"
-#include "MACE/Extension/MPIX/Execution/Executor.h++"
-#include "MACE/Extension/MPIX/ParallelizePath.h++"
-#include "MACE/Simulation/Physics/DecayChannel/MuoniumInternalPairProductionDecayChannel.h++"
-#include "MACE/Utility/MPIReseedRandomEngine.h++"
+#include "Mustard/Env/MPIEnv.h++"
+#include "Mustard/Extension/CLHEPX/Random/Xoshiro.h++"
+#include "Mustard/Extension/Geant4X/DecayChannel/MuoniumInternalPairProductionDecayChannel.h++"
+#include "Mustard/Extension/Geant4X/Particle/Antimuonium.h++"
+#include "Mustard/Extension/Geant4X/Particle/Muonium.h++"
+#include "Mustard/Extension/MPIX/Execution/Executor.h++"
+#include "Mustard/Extension/MPIX/ParallelizePath.h++"
+#include "Mustard/Utility/MPIReseedRandomEngine.h++"
 
 #include "TFile.h"
 #include "TNtuple.h"
@@ -24,17 +24,15 @@
 
 #include "fmt/format.h"
 
-using namespace MACE;
-
 auto main(int argc, char* argv[]) -> int {
-    Env::MPIEnv env{argc, argv, {}};
+    Mustard::Env::MPIEnv env{argc, argv, {}};
 
-    CLHEPX::Random::Xoshiro256Plus rng;
+    Mustard::CLHEPX::Random::Xoshiro256Plus rng;
     CLHEP::HepRandom::setTheEngine(&rng);
-    MPIReseedRandomEngine();
+    Mustard::MPIReseedRandomEngine();
 
     G4ParticleTable::GetParticleTable()->SetReadiness();
-    Geant4X::Antimuonium::Definition();
+    Mustard::Geant4X::Antimuonium::Definition();
     G4AntiNeutrinoE::Definition();
     G4AntiNeutrinoMu::Definition();
     G4Electron::Definition();
@@ -43,17 +41,17 @@ auto main(int argc, char* argv[]) -> int {
     G4NeutrinoE::Definition();
     G4NeutrinoMu::Definition();
     G4Positron::Definition();
-    Geant4X::Muonium::Definition();
+    Mustard::Geant4X::Muonium::Definition();
 
-    MuoniumInternalPairProductionDecayChannel ippDecay{"anti_muonium", 1};
+    Mustard::Geant4X::MuoniumInternalPairProductionDecayChannel ippDecay{"anti_muonium", 1};
     ippDecay.MetropolisDelta(std::stod(argv[2]));
     ippDecay.MetropolisDiscard(std::stod(argv[3]));
-    if (argc >= 5) { ippDecay.ApplyMACESpecificPxyCut(std::stoll(argv[4])); }
+    // if (argc >= 5) { ippDecay.ApplyMACEPxyCut(std::stoll(argv[4])); }
 
-    TFile file{MPIX::ParallelizePath("M2eeevve.root").generic_string().c_str(), "RECREATE", "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
+    TFile file{Mustard::MPIX::ParallelizePath("M2eeevve.root").generic_string().c_str(), "RECREATE", "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
     TNtuple t{"eeevve", "eeevve", "e1:e2:e3:e4:e5:e6"};
 
-    MPIX::Executor<unsigned long long> executor;
+    Mustard::MPIX::Executor<unsigned long long> executor;
     executor.Execute(std::stoull(argv[1]),
                      [&](auto) {
                          const auto product{ippDecay.DecayIt(0)};

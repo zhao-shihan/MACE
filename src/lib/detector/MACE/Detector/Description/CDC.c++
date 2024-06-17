@@ -1,14 +1,15 @@
 #include "MACE/Detector/Description/CDC.h++"
-#include "MACE/Extension/stdx/ranges_numeric.h++"
-#include "MACE/Math/MidPoint.h++"
-#include "MACE/Math/Parity.h++"
-#include "MACE/Utility/LiteralUnit.h++"
-#include "MACE/Utility/PhysicalConstant.h++"
+
+#include "Mustard/Math/Parity.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/PhysicalConstant.h++"
 
 #include "G4Material.hh"
 #include "G4NistManager.hh"
 
 #include "Eigen/Geometry"
+
+#include "muc/numeric"
 
 #include <algorithm>
 #include <cmath>
@@ -20,8 +21,8 @@
 
 namespace MACE::Detector::Description {
 
-using namespace LiteralUnit;
-using namespace PhysicalConstant;
+using namespace Mustard::LiteralUnit;
+using namespace Mustard::PhysicalConstant;
 
 CDC::CDC() :
     DescriptionBase{"CDC"},
@@ -86,8 +87,8 @@ auto CDC::ComputeLayerConfiguration() const -> std::vector<SuperLayerConfigurati
                                   layerConfig.front()};
 
         super.isAxial = fEvenSuperLayerIsAxial ?
-                            Math::IsEven(superLayerID) :
-                            Math::IsOdd(superLayerID);
+                            Mustard::Math::IsEven(superLayerID) :
+                            Mustard::Math::IsOdd(superLayerID);
         super.superLayerID = superLayerID;
         super.innerRadius = superLayerID > 0 ?
                                 lastSuper.outerRadius + fMinAdjacentSuperLayersDistance :
@@ -156,13 +157,13 @@ auto CDC::ComputeLayerConfiguration() const -> std::vector<SuperLayerConfigurati
                  lastRIn{notFirstSenseLayerOfThisSuperLayer ?
                              lastSense.innerRadius / std::cos(lastSense.stereoAzimuthAngle / 2) :
                              super.innerRadius},
-                 tan2ThetaS{Math::Pow<2>(tanInnerStereoZenithAngle)}] {
+                 tan2ThetaS{muc::pow<2>(tanInnerStereoZenithAngle)}] {
                     return (lastHL +
                             eta * (std::sqrt(
-                                       Math::Pow<2>(rIn) +
+                                       muc::pow<2>(rIn) +
                                        (lastHL + eta * (rIn - lastRIn)) * (lastHL - eta * (rIn + lastRIn)) * tan2ThetaS) -
                                    lastRIn)) /
-                           (1 - Math::Pow<2>(eta) * tan2ThetaS);
+                           (1 - muc::pow<2>(eta) * tan2ThetaS);
                 }();
             sense.stereoAzimuthAngle = 2 * std::atan(sense.halfLength / sense.innerRadius * tanInnerStereoZenithAngle);
 
@@ -170,7 +171,7 @@ auto CDC::ComputeLayerConfiguration() const -> std::vector<SuperLayerConfigurati
                                                          lastSuper.sense.back().cell.back().cellID + 1 :
                                                          0) +
                                                     senseLayerLocalID * super.nCellPerSenseLayer)};
-            const auto firstCellAzimuth{Math::IsEven(sense.senseLayerID) ?
+            const auto firstCellAzimuth{Mustard::Math::IsEven(sense.senseLayerID) ?
                                             0 :
                                             halfPhiCell};
             sense.cell.reserve(super.nCellPerSenseLayer);
@@ -201,16 +202,16 @@ auto CDC::ComputeCellMap() const -> std::vector<CellInformation> {
     const auto rFieldWire{fFieldWireDiameter / 2};
 
     const auto& layerConfig{LayerConfiguration()};
-    cellMap.reserve(stdx::ranges::transform_reduce(layerConfig, 0ull, std::plus{},
-                                                   [this](const auto& super) {
-                                                       return super.nCellPerSenseLayer * fNSenseLayerPerSuper;
-                                                   }));
+    cellMap.reserve(muc::ranges::transform_reduce(layerConfig, 0ull, std::plus{},
+                                                  [this](const auto& super) {
+                                                      return super.nCellPerSenseLayer * fNSenseLayerPerSuper;
+                                                  }));
 
     for (int superLayerID{};
          auto&& super : layerConfig) {
         for (int senseLayerLocalID{};
              auto&& sense : super.sense) {
-            const auto wireRadialPosition{Math::MidPoint(sense.innerRadius, sense.outerRadius) + rFieldWire}; // clang-format off
+            const auto wireRadialPosition{muc::midpoint(sense.innerRadius, sense.outerRadius) + rFieldWire}; // clang-format off
             const Eigen::AngleAxisd stereoRotation{-sense.StereoZenithAngle(wireRadialPosition), Eigen::Vector3d{1, 0, 0}};
             for (int cellLocalID{};
                  auto&& cell : sense.cell) {

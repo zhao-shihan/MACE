@@ -1,7 +1,8 @@
 #include "MACE/Detector/Definition/Target.h++"
 #include "MACE/Detector/Description/Accelerator.h++"
 #include "MACE/Detector/Description/Target.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
@@ -9,8 +10,8 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace MACE::LiteralUnit::Density;
-using namespace MACE::LiteralUnit::MathConstantSuffix;
+using namespace Mustard::LiteralUnit::Density;
+using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
 auto Target::Construct(G4bool checkOverlaps) -> void {
     const auto& target{Description::Target::Instance()};

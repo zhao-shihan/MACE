@@ -16,8 +16,6 @@
 /gps/ang/type                         iso
 /gps/ene/mono                         0 MeV
 
-/MACE/Field/MMSMagneticField          0.1 tesla
-
 /MACE/Analysis/CoincidenceWithCDC     true
 /MACE/Analysis/CoincidenceWithTTC     true
 #/MACE/Analysis/SaveCDCHitData         false

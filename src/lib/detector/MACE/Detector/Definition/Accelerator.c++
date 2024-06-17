@@ -1,6 +1,7 @@
 #include "MACE/Detector/Definition/Accelerator.h++"
 #include "MACE/Detector/Description/Accelerator.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4LogicalVolume.hh"
 #include "G4NistManager.hh"
@@ -9,7 +10,7 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace LiteralUnit::MathConstantSuffix;
+using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
 auto Accelerator::Construct(G4bool checkOverlaps) -> void {
     const auto& accelerator{Description::Accelerator::Instance()};

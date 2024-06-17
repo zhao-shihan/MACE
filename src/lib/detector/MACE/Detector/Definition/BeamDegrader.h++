@@ -1,10 +1,10 @@
 #pragma once
 
-#include "MACE/Detector/Definition/DefinitionBase.h++"
+#include "Mustard/Detector/Definition/DefinitionBase.h++"
 
 namespace MACE::Detector::Definition {
 
-class BeamDegrader final : public DefinitionBase {
+class BeamDegrader final : public Mustard::Detector::Definition::DefinitionBase {
 public:
     bool Enabled() const override;
 

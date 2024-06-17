@@ -18,7 +18,7 @@ namespace MACE::inline Simulation::inline SD {
 using namespace PhysicalConstant;
 
 EMCPMTSD::EMCPMTSD(const G4String& sdName) :
-    NonMoveableBase{},
+    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fHit{},
     fHitsCollection{} {

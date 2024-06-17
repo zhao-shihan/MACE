@@ -1,8 +1,6 @@
-project(MACE)
-
-file(GLOB_RECURSE SimMACE_srcs ${PROJECT_SOURCE_DIR}/*.c++)
+file(GLOB_RECURSE SimMACE_srcs ${CMAKE_CURRENT_SOURCE_DIR}/*.c++)
 add_executable(SimMACE ${SimMACE_srcs})
-target_link_libraries(SimMACE MACEData MACEDetector MACEFramework MACESimulation)
+target_link_libraries(SimMACE MACEData MACEDetector Mustard::Mustard MACESimulation)
 
 file(GLOB SimMACE_SCRIPTS ${PROJECT_SOURCE_DIR}/scripts/*)
 foreach(_scripts ${SimMACE_SCRIPTS})

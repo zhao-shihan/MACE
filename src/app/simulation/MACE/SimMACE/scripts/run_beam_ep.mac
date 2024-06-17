@@ -20,14 +20,9 @@
 /gps/ene/mono             27.49 MeV    # momentum 28 MeV
 /gps/ene/sigma            0.7 MeV      # momentum spreading 2.5%
 /GPSX/NVertex             1
-/GPSX/PulseWidth          0 ns
+/GPSX/PulseWidth          1.5 us
 
-/MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0
-
-/MACE/Field/AcceleratePotential           500 volt
-/MACE/Field/MMSMagneticField              0.1 tesla
-/MACE/Field/SolenoidMagneticField         0.1 tesla
-/MACE/Field/EMCMagneticField              0.1 tesla
+/Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 
 /MACE/Analysis/CoincidenceWithCDC     false
 /MACE/Analysis/CoincidenceWithTTC     false

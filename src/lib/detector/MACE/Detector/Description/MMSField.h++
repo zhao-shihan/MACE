@@ -1,11 +1,11 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 namespace MACE::Detector::Description {
 
-class MMSField final : public DescriptionBase<MMSField> {
-    friend Env::Memory::SingletonInstantiator;
+class MMSField final : public Mustard::Detector::Description::DescriptionBase<MMSField> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     MMSField();
@@ -16,19 +16,19 @@ public:
     // Geometry
     ///////////////////////////////////////////////////////////
 
-    const auto& Radius() const { return fRadius; }
-    const auto& Length() const { return fLength; }
+    auto Radius() const -> auto { return fRadius; }
+    auto Length() const -> auto { return fLength; }
 
-    void Radius(auto val) { fRadius = val; }
-    void Length(auto val) { fLength = val; }
+    auto Radius(double val) -> void { fRadius = val; }
+    auto Length(double val) -> void { fLength = val; }
 
     ///////////////////////////////////////////////////////////
     // Field
     ///////////////////////////////////////////////////////////
 
-    const auto& MagneticFluxDensity() const { return fMagneticFluxDensity; }
+    auto FastField() const -> auto { return fFastField; }
 
-    void MagneticFluxDensity(auto v) { fMagneticFluxDensity = v; }
+    auto FastField(double v) -> void { fFastField = v; }
 
 private:
     auto ImportAllValue(const YAML::Node& node) -> void override;
@@ -46,7 +46,7 @@ private:
     // Field
     ///////////////////////////////////////////////////////////
 
-    double fMagneticFluxDensity;
+    double fFastField;
 };
 
 } // namespace MACE::Detector::Description

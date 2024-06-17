@@ -1,7 +1,8 @@
 #include "MACE/Detector/Definition/EMCField.h++"
 #include "MACE/Detector/Description/EMCField.h++"
-#include "MACE/Utility/MathConstant.h++"
-#include "MACE/Utility/VectorCast.h++"
+
+#include "Mustard/Utility/MathConstant.h++"
+#include "Mustard/Utility/VectorCast.h++"
 
 #include "G4PVPlacement.hh"
 #include "G4Transform3D.hh"
@@ -9,7 +10,7 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace MathConstant;
+using namespace Mustard::MathConstant;
 
 auto EMCField::Construct(G4bool checkOverlaps) -> void {
     const auto& emcField{Description::EMCField::Instance()};
@@ -27,7 +28,7 @@ auto EMCField::Construct(G4bool checkOverlaps) -> void {
         nullptr,
         name);
     Make<G4PVPlacement>(
-        G4Transform3D{{}, VectorCast<G4ThreeVector>(emcField.Center())},
+        G4Transform3D{{}, Mustard::VectorCast<G4ThreeVector>(emcField.Center())},
         logic,
         name,
         Mother().LogicalVolume(),

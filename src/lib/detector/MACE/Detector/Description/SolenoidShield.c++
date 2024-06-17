@@ -1,10 +1,11 @@
 #include "MACE/Detector/Description/SolenoidShield.h++"
-#include "MACE/Utility/LiteralUnit.h++"
-#include "MACE/Utility/MathConstant.h++"
+
+#include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/MathConstant.h++"
 
 namespace MACE::Detector::Description {
 
-using namespace LiteralUnit::Length;
+using namespace Mustard::LiteralUnit::Length;
 
 SolenoidShield::SolenoidShield() :
     DescriptionBase{"SolenoidShield"},

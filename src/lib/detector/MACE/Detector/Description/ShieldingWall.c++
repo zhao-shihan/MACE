@@ -1,11 +1,12 @@
 #include "MACE/Detector/Description/ShieldingWall.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+
+#include "Mustard/Utility/LiteralUnit.h++"
 
 namespace MACE::Detector::Description {
 
-using namespace LiteralUnit::Length;
-using namespace LiteralUnit::Angle;
+using namespace Mustard::LiteralUnit::Length;
+using namespace Mustard::LiteralUnit::Angle;
 
 ShieldingWall::ShieldingWall() :
     DescriptionBase{"ShieldingWall"},

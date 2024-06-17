@@ -1,11 +1,11 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 namespace MACE::Detector::Description {
 
-class BeamMonitor final : public DescriptionBase<BeamMonitor> {
-    friend Env::Memory::SingletonInstantiator;
+class BeamMonitor final : public Mustard::Detector::Description::DescriptionBase<BeamMonitor> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     BeamMonitor();

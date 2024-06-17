@@ -2,7 +2,8 @@
 
 #include "MACE/Simulation/Hit/MCPHit.h++"
 #include "MACE/Simulation/SD/MCPSDMessenger.h++"
-#include "MACE/Utility/NonMoveableBase.h++"
+
+#include "Mustard/Utility/NonMoveableBase.h++"
 
 #include "G4VSensitiveDetector.hh"
 
@@ -14,7 +15,7 @@ class G4DataInterpolation;
 
 namespace MACE::inline Simulation::inline SD {
 
-class MCPSD : public NonMoveableBase,
+class MCPSD : public Mustard::NonMoveableBase,
               public G4VSensitiveDetector {
 public:
     MCPSD(const G4String& sdName);

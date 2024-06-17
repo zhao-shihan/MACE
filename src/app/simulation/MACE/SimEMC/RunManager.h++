@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Extension/Geant4X/MPIRunManager.h++"
+#include "Mustard/Extension/Geant4X/Run/MPIRunManager.h++"
 
 #include <memory>
 
@@ -8,7 +8,7 @@ namespace MACE::SimEMC {
 
 class Analysis;
 
-class RunManager final : public Geant4X::MPIRunManager {
+class RunManager final : public Mustard::Geant4X::MPIRunManager {
 public:
     RunManager();
     ~RunManager();

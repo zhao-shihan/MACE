@@ -1,14 +1,16 @@
 #pragma once
 
-#include "MACE/Data/TupleModel.h++"
-#include "MACE/Data/Value.h++"
+#include "Mustard/Data/TupleModel.h++"
+#include "Mustard/Data/Value.h++"
 
 namespace MACE::Data {
 
-using TTCSiPMRawHit = TupleModel<Value<short, "TileID", "Hit detector ID">,
-                                 Value<double, "t", "Optical photon hit time">>;
+using TTCSiPMRawHit = Mustard::Data::TupleModel<
+    Mustard::Data::Value<short, "TileID", "Hit detector ID">,
+    Mustard::Data::Value<double, "t", "Optical photon hit time">>;
 
-using EMCPMTRawHit = TupleModel<Value<short, "UnitID", "Hit unit ID">,
-                                Value<double, "t", "Optical photon hit time">>;
+using EMCPMTRawHit = Mustard::Data::TupleModel<
+    Mustard::Data::Value<short, "UnitID", "Hit unit ID">,
+    Mustard::Data::Value<double, "t", "Optical photon hit time">>;
 
 } // namespace MACE::Data

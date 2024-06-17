@@ -26,7 +26,7 @@ auto PrimaryGeneratorAction::UpdatePrimaryVertexData(const G4Event& event) -> vo
     fPrimaryVertexData.reserve(event.GetNumberOfPrimaryVertex());
     for (const auto* pv{event.GetPrimaryVertex()}; pv; pv = pv->GetNext()) {
         for (const auto* pp{pv->GetPrimary()}; pp; pp = pp->GetNext()) {
-            const auto& v{fPrimaryVertexData.emplace_back(std::make_unique_for_overwrite<Data::Tuple<Data::SimPrimaryVertex>>())};
+            const auto& v{fPrimaryVertexData.emplace_back(std::make_unique_for_overwrite<Mustard::Data::Tuple<Data::SimPrimaryVertex>>())};
             Get<"EvtID">(*v) = event.GetEventID();
             Get<"PDGID">(*v) = pp->GetPDGcode();
             Get<"t0">(*v) = pv->GetT0();

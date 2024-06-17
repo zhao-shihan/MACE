@@ -1,26 +1,30 @@
 #pragma once
 
-#include "MACE/Concept/NumericVector.h++"
-#include "MACE/Detector/Description/Accelerator.h++"
-#include "MACE/Detector/Description/MMSField.h++"
-#include "MACE/Detector/Field/ElectromagneticFieldBase.h++"
+#include "Mustard/Concept/NumericVector.h++"
+#include "Mustard/Detector/Field/ElectromagneticFieldBase.h++"
+#include "Mustard/Detector/Field/ElectromagneticFieldMap.h++"
+#include "Mustard/Detector/Field/UniformElectromagneticField.h++"
+
+#include <variant>
 
 namespace MACE::Detector::Field {
-
-class AcceleratorField : public ElectromagneticFieldBase<AcceleratorField> {
+class AcceleratorField : public Mustard::Detector::Field::ElectromagneticFieldBase<AcceleratorField> {
 public:
-    inline AcceleratorField();
+    AcceleratorField();
 
-    template<Concept::NumericVector3D T>
-    auto BFieldAt(T) const -> T { return {0, 0, fMMSField.MagneticFluxDensity()}; }
-    template<Concept::NumericVector3D T>
-    auto EFieldAt(T) const -> T { return {0, 0, fAccelerator.AcceleratePotential() / fAccelerator.AccelerateLength()}; }
+    template<Mustard::Concept::NumericVector3D T> // clang-format off
+    auto B(T x) const -> T { return std::visit([&x](auto&& f) { return f.B(x); }, fField); }
+    template<Mustard::Concept::NumericVector3D T>
+    auto E(T x) const -> T { return std::visit([&x](auto&& f) { return f.E(x); }, fField); }
+    template<Mustard::Concept::NumericVector3D T>
+    auto BE(T x) const -> F<T> { return std::visit([&x](auto&& f) { return f.BE(x); }, fField); } // clang-format on
 
 private:
-    const Description::MMSField& fMMSField;
-    const Description::Accelerator& fAccelerator;
+    using FastField = Mustard::Detector::Field::UniformElectromagneticField;
+    using FieldMap = Mustard::Detector::Field::ElectromagneticFieldMapSymY<"NoCache">;
+
+private:
+    std::variant<FastField, FieldMap> fField;
 };
 
 } // namespace MACE::Detector::Field
-
-#include "MACE/Detector/Field/AcceleratorField.inl"

@@ -22,18 +22,19 @@ if(MACE_BUILTIN_GENFIT)
         message(STATUS "Reusing GenFit source ${MACE_BUILTIN_GENFIT_SRC_DIR}")
     else()
         FetchContent_Declare(genfit SOURCE_DIR "${MACE_BUILTIN_GENFIT_SRC_DIR}"
-                                      URL "${MACE_BUILTIN_GENFIT_URL}")
+                                    URL "${MACE_BUILTIN_GENFIT_URL}")
         message(STATUS "GenFit will be downloaded from ${MACE_BUILTIN_GENFIT_URL} to ${MACE_BUILTIN_GENFIT_SRC_DIR}")
     endif()
     # set options
-    set(GF_BUILD_EVENT_DISPLAY ${MACE_BUILTIN_GENFIT_EVENT_DISPLAY})
+    set(GF_BUILD_EVENT_DISPLAY ${MACE_BUILTIN_GENFIT_EVENT_DISPLAY} CACHE INTERNAL "")
     # configure it
     message(STATUS "Downloading (if required) and configuring GenFit (version: 2.2.0)")
     FetchContent_MakeAvailable(genfit)
     message(STATUS "Downloading (if required) and configuring GenFit (version: 2.2.0) - done")
     # check download
     if(NOT EXISTS "${MACE_BUILTIN_GENFIT_SRC_DIR}/CMakeLists.txt")
-        file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/GenFit-subbuild")
+        file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/genfit-build")
+        file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_deps/genfit-subbuild")
         message(FATAL_ERROR "It seems that the download of GenFit is not successful. You can try to run cmake again, or manually download GenFit from ${MACE_BUILTIN_GENFIT_URL} and extract it to ${MACE_PROJECT_3RDPARTY_DIR} (and keep the directory structure). If the error persists, you can try to clean the build tree and restart the build.")
     endif()
 endif()

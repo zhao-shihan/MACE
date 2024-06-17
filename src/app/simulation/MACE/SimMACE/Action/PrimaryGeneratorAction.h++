@@ -1,10 +1,11 @@
 #pragma once
 
 #include "MACE/Data/SimVertex.h++"
-#include "MACE/Data/Tuple.h++"
-#include "MACE/Env/Memory/PassiveSingleton.h++"
-#include "MACE/Extension/Geant4X/GeneralParticleSourceX.h++"
 #include "MACE/SimMACE/Messenger/AnalysisMessenger.h++"
+
+#include "Mustard/Data/Tuple.h++"
+#include "Mustard/Env/Memory/PassiveSingleton.h++"
+#include "Mustard/Extension/Geant4X/Generator/GeneralParticleSourceX.h++"
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 
@@ -13,7 +14,7 @@
 
 namespace MACE::SimMACE::inline Action {
 
-class PrimaryGeneratorAction final : public Env::Memory::PassiveSingleton<PrimaryGeneratorAction>,
+class PrimaryGeneratorAction final : public Mustard::Env::Memory::PassiveSingleton<PrimaryGeneratorAction>,
                                      public G4VUserPrimaryGeneratorAction {
 public:
     PrimaryGeneratorAction();
@@ -27,10 +28,10 @@ private:
     auto UpdatePrimaryVertexData(const G4Event& event) -> void;
 
 private:
-    Geant4X::GeneralParticleSourceX fGPSX;
+    Mustard::Geant4X::GeneralParticleSourceX fGPSX;
 
     bool fSavePrimaryVertexData;
-    std::vector<std::unique_ptr<Data::Tuple<Data::SimPrimaryVertex>>> fPrimaryVertexData;
+    std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimPrimaryVertex>>> fPrimaryVertexData;
 
     AnalysisMessenger::Register<PrimaryGeneratorAction> fMessengerRegister;
 };

@@ -1,8 +1,6 @@
-project(MACE)
-
-file(GLOB_RECURSE SmearMACE_srcs ${PROJECT_SOURCE_DIR}/*.c++)
+file(GLOB_RECURSE SmearMACE_srcs ${CMAKE_CURRENT_SOURCE_DIR}/*.c++)
 add_executable(SmearMACE ${SmearMACE_srcs})
-target_link_libraries(SmearMACE MACEData MACEDetector MACEFramework)
+target_link_libraries(SmearMACE MACEData MACEDetector Mustard::Mustard)
 
 file(GLOB SimEMC_SCRIPTS ${PROJECT_SOURCE_DIR}/scripts/*)
 foreach(_scripts ${SimEMC_SCRIPTS})

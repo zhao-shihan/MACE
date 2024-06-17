@@ -1,15 +1,16 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
-#include "MACE/Math/LLPiecewise.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
+
+#include "muc/math"
 
 #include <string>
 #include <utility>
 
 namespace MACE::Detector::Description {
 
-class Filter final : public DescriptionBase<Filter> {
-    friend Env::Memory::SingletonInstantiator;
+class Filter final : public Mustard::Detector::Description::DescriptionBase<Filter> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     Filter();
@@ -23,7 +24,7 @@ public:
     auto Radius() const -> auto { return fRadius; }
     auto Thickness() const -> auto { return fThickness; }
     auto Pitch() const -> auto { return fPitch; }
-    auto Count() const -> auto { return Math::LLTrunc((2 * fRadius - fThickness) / fPitch) + 1; }
+    auto Count() const -> auto { return muc::lltrunc((2 * fRadius - fThickness) / fPitch) + 1; }
 
     auto Enabled(bool val) -> void { fEnabled = val; }
     auto Length(auto val) -> void { fLength = val; }

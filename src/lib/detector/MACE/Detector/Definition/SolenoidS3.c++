@@ -1,15 +1,17 @@
 #include "MACE/Detector/Definition/SolenoidS3.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Math/LLPiecewise.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4Tubs.hh"
 
+#include "muc/math"
+
 namespace MACE::Detector::Definition {
 
-using namespace LiteralUnit::MathConstantSuffix;
+using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
 auto SolenoidS3::Construct(G4bool checkOverlaps) -> void {
     const auto& solenoid{Description::Solenoid::Instance()};
@@ -28,8 +30,8 @@ auto SolenoidS3::Construct(G4bool checkOverlaps) -> void {
         G4NistManager::Instance()->FindOrBuildMaterial(solenoid.MaterialName()),
         name)};
 
-    const auto nCoil{Math::LLTrunc((solenoid.S3Length() - solenoid.ReferenceCoilSpacing() / 2) /
-                                   (solenoid.CoilThickness() + solenoid.ReferenceCoilSpacing()))};
+    const auto nCoil{muc::lltrunc((solenoid.S3Length() - solenoid.ReferenceCoilSpacing() / 2) /
+                                  (solenoid.CoilThickness() + solenoid.ReferenceCoilSpacing()))};
     const auto z0{-solenoid.S3Length() / 2 + solenoid.ReferenceCoilSpacing() / 2 + solenoid.CoilThickness() / 2};
     for (int k{}; k < nCoil; ++k) {
         Make<G4PVPlacement>(

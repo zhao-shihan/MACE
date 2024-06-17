@@ -1,8 +1,9 @@
-#include "MACE/Detector/Description/DescriptionIO.h++"
 #include "MACE/Detector/Description/EMCShield.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/SimEMC/Detector/EMCShield.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+
+#include "Mustard/Detector/Description/DescriptionIO.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -11,7 +12,7 @@
 
 namespace MACE::SimEMC::Detector {
 
-using namespace LiteralUnit;
+using namespace Mustard::LiteralUnit;
 
 auto EMCShield::Construct(G4bool checkOverlaps) -> void {
     const auto& shield{MACE::Detector::Description::EMCShield::Instance()};

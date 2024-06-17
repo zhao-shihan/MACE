@@ -1,10 +1,10 @@
 #pragma once
 
-#include "MACE/Detector/Definition/DefinitionBase.h++"
+#include "Mustard/Detector/Definition/DefinitionBase.h++"
 
 namespace MACE::Detector::Definition {
 
-class SolenoidS2 final : public DefinitionBase {
+class SolenoidS2 final : public Mustard::Detector::Definition::DefinitionBase {
 private:
     auto Construct(bool checkOverlaps) -> void override;
 };

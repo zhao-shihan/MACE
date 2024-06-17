@@ -1,24 +1,26 @@
 #pragma once
 
 #include "MACE/Data/SensorRawHit.h++"
-#include "MACE/Data/TupleModel.h++"
-#include "MACE/Data/Value.h++"
+
+#include "Mustard/Data/TupleModel.h++"
+#include "Mustard/Data/Value.h++"
 
 namespace MACE::Data {
 
 namespace internal {
 
-using HitEventIDHitID = TupleModel<Value<int, "EvtID", "Event ID">,
-                                   Value<int, "HitID", "Hit ID">>;
+using HitEventIDHitID = Mustard::Data::TupleModel<
+    Mustard::Data::Value<int, "EvtID", "Event ID">,
+    Mustard::Data::Value<int, "HitID", "Hit ID">>;
 
 } // namespace internal
 
-using TTCSiPMHit = TupleModel<internal::HitEventIDHitID,
-                              TTCSiPMRawHit>;
+using TTCSiPMHit = Mustard::Data::TupleModel<
+    internal::HitEventIDHitID,
+    TTCSiPMRawHit>;
 
-using EMCPMTHit = TupleModel<internal::HitEventIDHitID,
-                             EMCPMTRawHit /* ,
-                              Value<double, "lambda", "Wavelength of the photon"> */
-                             >;
+using EMCPMTHit = Mustard::Data::TupleModel<
+    internal::HitEventIDHitID,
+    EMCPMTRawHit>;
 
 } // namespace MACE::Data

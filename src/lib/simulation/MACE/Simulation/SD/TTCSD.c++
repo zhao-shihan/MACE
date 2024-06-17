@@ -1,11 +1,8 @@
-#include "MACE/Compatibility/std23/unreachable.h++"
 #include "MACE/Detector/Description/TTC.h++"
-#include "MACE/Env/Print.h++"
-#include "MACE/Extension/stdx/ranges_numeric.h++"
-#include "MACE/External/gfx/timsort.hpp"
-#include "MACE/Math/MidPoint.h++"
 #include "MACE/Simulation/SD/TTCSD.h++"
 #include "MACE/Simulation/SD/TTCSiPMSD.h++"
+
+#include "Mustard/Env/Print.h++"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -21,6 +18,11 @@
 #include "G4VProcess.hh"
 #include "G4VTouchable.hh"
 
+#include "muc/numeric"
+#include "muc/utility"
+
+#include "gfx/timsort.hpp"
+
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -34,7 +36,7 @@
 namespace MACE::inline Simulation::inline SD {
 
 TTCSD::TTCSD(const G4String& sdName, const TTCSiPMSD* ttcSiPMSD) :
-    NonMoveableBase{},
+    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fTTCSiPMSD{ttcSiPMSD},
     fEnergyDepositionThreshold{},
@@ -45,12 +47,12 @@ TTCSD::TTCSD(const G4String& sdName, const TTCSiPMSD* ttcSiPMSD) :
     const auto& ttc{Detector::Description::TTC::Instance()};
     assert(ttc.ScintillationComponent1EnergyBin().size() == ttc.ScintillationComponent1().size());
     std::vector<double> dE(ttc.ScintillationComponent1EnergyBin().size());
-    stdx::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), dE.begin());
+    muc::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), dE.begin());
     std::vector<double> spectrum(ttc.ScintillationComponent1().size());
-    stdx::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), spectrum.begin(), Math::MidPoint<double, double>);
+    muc::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), spectrum.begin(), muc::midpoint<double>);
     const auto integral{std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.)};
     std::vector<double> meanE(ttc.ScintillationComponent1EnergyBin().size());
-    stdx::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), meanE.begin(), Math::MidPoint<double, double>);
+    muc::ranges::adjacent_difference(ttc.ScintillationComponent1EnergyBin(), meanE.begin(), muc::midpoint<double>);
     std::ranges::transform(spectrum, meanE, spectrum.begin(), std::multiplies{});
     fEnergyDepositionThreshold = std::inner_product(next(spectrum.cbegin()), spectrum.cend(), next(dE.cbegin()), 0.) / integral;
 
@@ -106,10 +108,10 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
 
 auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     fHitsCollection->GetVector()->reserve(
-        stdx::ranges::accumulate(fSplitHit, 0,
-                                 [](auto&& count, auto&& cellHit) {
-                                     return count + cellHit.second.size();
-                                 }));
+        muc::ranges::accumulate(fSplitHit, 0,
+                                [](auto&& count, auto&& cellHit) {
+                                    return count + cellHit.second.size();
+                                }));
 
     constexpr auto ByTrackID{
         [](const auto& hit1, const auto& hit2) {
@@ -119,7 +121,7 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
          auto&& [tileID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
         case 0:
-            std23::unreachable();
+            muc::unreachable();
         case 1: {
             auto& hit{splitHit.front()};
             Get<"HitID">(*hit) = hitID++;
@@ -141,7 +143,7 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 const auto windowClosingTime{tFirst + scintillationTimeConstant1};
                 if (tFirst == windowClosingTime and // Notice: bad numeric with huge Get<"t">(**clusterFirst)!
                     scintillationTimeConstant1 != 0) [[unlikely]] {
-                    Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1);
+                    Mustard::Env::PrintLnWarning("Warning: A huge time ({}) completely rounds off the time resolution ({})", tFirst, scintillationTimeConstant1);
                 }
                 cluster = {cluster.end(), std::ranges::find_if_not(cluster.end(), splitHit.end(),
                                                                    [&windowClosingTime](const auto& hit) {

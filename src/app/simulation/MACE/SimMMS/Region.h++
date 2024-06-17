@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Utility/NonMoveableBase.h++"
+#include "Mustard/Utility/NonMoveableBase.h++"
 
 #include "G4Region.hh"
 
@@ -18,7 +18,7 @@ enum struct RegionType {
     Vacuum
 };
 
-class Region final : public NonMoveableBase,
+class Region final : public Mustard::NonMoveableBase,
                      public G4Region {
 public:
     Region(const G4String& name, RegionType type);
