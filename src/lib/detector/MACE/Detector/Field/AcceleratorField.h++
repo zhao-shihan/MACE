@@ -21,7 +21,7 @@ public:
 
 private:
     using FastField = Mustard::Detector::Field::UniformElectromagneticField;
-    using FieldMap = Mustard::Detector::Field::ElectromagneticFieldMapSymY<"NoCache">;
+    using FieldMap = Mustard::Detector::Field::ElectromagneticFieldMapSymmetryY<"NoCache">;
 
 private:
     std::variant<FastField, FieldMap> fField;

@@ -18,7 +18,7 @@ public:
 
 private:
     using FastField = Mustard::Detector::Field::UniformMagneticField;
-    using FieldMap = Mustard::Detector::Field::MagneticFieldMapSymY;
+    using FieldMap = Mustard::Detector::Field::MagneticFieldMapSymmetryY<>;
 
 private:
     std::variant<FastField, FieldMap> fField;

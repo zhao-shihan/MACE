@@ -14,7 +14,7 @@ namespace MACE::Detector::Field {
 class MMSField : public Mustard::Detector::Field::MagneticFieldBase<MMSField> {
 private:
     using FastField = Mustard::Detector::Field::UniformMagneticField;
-    using FieldMap = Mustard::Detector::Field::MagneticFieldMapSymY;
+    using FieldMap = Mustard::Detector::Field::MagneticFieldMapSymmetryY<>;
 
 public:
     MMSField();
