@@ -1,14 +1,14 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include <string>
 #include <utility>
 
 namespace MACE::Detector::Description {
 
-class EMCMagnet final : public DescriptionSingletonBase<EMCMagnet> {
-    friend Env::Memory::SingletonInstantiator;
+class EMCMagnet final : public Mustard::Detector::Description::DescriptionBase<EMCMagnet> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     EMCMagnet();
@@ -32,8 +32,8 @@ public:
     auto MaterialName(std::string val) { fMaterialName = std::move(val); }
 
 private:
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     // Geometry

@@ -77,7 +77,7 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 endif()
 
 # Surpress some, if needed
-if(MACE_SURPRESS_USELESS_COMPILE_WARNINGS)
+if(NOT MACE_SHOW_MORE_COMPILER_WARNINGS)
     if(CMAKE_COMPILER_IS_GNUCXX)
         # # OpenMPI
         # list(APPEND MACE_COMPILE_OPTIONS -Wno-cast-function-type)
@@ -106,7 +106,7 @@ if(MACE_SURPRESS_USELESS_COMPILE_WARNINGS)
         list(APPEND MACE_COMPILE_OPTIONS /wd5054)
     endif()
 # Even more warnings, if needed
-elseif(MACE_SHOW_EVEN_MORE_COMPILE_WARNINGS)
+elseif(MACE_SHOW_EVEN_MORE_COMPILER_WARNINGS)
     if(CMAKE_COMPILER_IS_GNUCXX)
         list(APPEND MACE_COMPILE_OPTIONS -Weffc++)
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -162,3 +162,9 @@ if(CMAKE_CXX_PLATFORM_ID STREQUAL "MinGW")
     list(APPEND MACE_COMPILE_DEFINITIONS EIGEN_DONT_VECTORIZE=1)
     message(NOTICE "***Notice: Building on Windows with MinGW, disabling vectorization of Eigen")
 endif()
+
+# =============================================================================
+# Add definition here
+# =============================================================================
+
+add_compile_definitions(${MACE_COMPILE_DEFINITIONS})

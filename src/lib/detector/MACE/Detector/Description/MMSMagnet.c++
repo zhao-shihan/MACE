@@ -1,12 +1,13 @@
 #include "MACE/Detector/Description/MMSMagnet.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+
+#include "Mustard/Utility/LiteralUnit.h++"
 
 namespace MACE::Detector::Description {
 
-using namespace LiteralUnit::Length;
+using namespace Mustard::LiteralUnit::Length;
 
 MMSMagnet::MMSMagnet() :
-    DescriptionSingletonBase{"MMSMagnet"},
+    DescriptionBase{"MMSMagnet"},
     // Geometry
     fInnerRadius{55_cm},
     fOuterRadius{60_cm},
@@ -14,7 +15,7 @@ MMSMagnet::MMSMagnet() :
     // Material
     fMaterialName{"G4_Cu"} {}
 
-void MMSMagnet::ImportValues(const YAML::Node& node) {
+void MMSMagnet::ImportAllValue(const YAML::Node& node) {
     // Geometry
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fOuterRadius, "OuterRadius");
@@ -23,7 +24,7 @@ void MMSMagnet::ImportValues(const YAML::Node& node) {
     ImportValue(node, fMaterialName, "MaterialName");
 }
 
-void MMSMagnet::ExportValues(YAML::Node& node) const {
+void MMSMagnet::ExportAllValue(YAML::Node& node) const {
     // Geometry
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fOuterRadius, "OuterRadius");

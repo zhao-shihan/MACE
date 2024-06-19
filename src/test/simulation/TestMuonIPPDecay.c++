@@ -1,9 +1,9 @@
-#include "MACE/Env/MPIEnv.h++"
-#include "MACE/Extension/CLHEPX/Random/Xoshiro.h++"
-#include "MACE/Extension/MPIX/Execution/Executor.h++"
-#include "MACE/Extension/MPIX/ParallelizePath.h++"
-#include "MACE/Simulation/Physics/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
-#include "MACE/Utility/MPIReseedRandomEngine.h++"
+#include "Mustard/Env/MPIEnv.h++"
+#include "Mustard/Extension/CLHEPX/Random/Xoshiro.h++"
+#include "Mustard/Extension/Geant4X/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
+#include "Mustard/Extension/MPIX/Execution/Executor.h++"
+#include "Mustard/Extension/MPIX/ParallelizePath.h++"
+#include "Mustard/Utility/MPIReseedRandomEngine.h++"
 
 #include "TFile.h"
 #include "TNtuple.h"
@@ -20,14 +20,12 @@
 #include "G4ParticleTable.hh"
 #include "G4Positron.hh"
 
-using namespace MACE;
-
 auto main(int argc, char* argv[]) -> int {
-    Env::MPIEnv env{argc, argv, {}};
+    Mustard::Env::MPIEnv env{argc, argv, {}};
 
-    CLHEPX::Random::Xoshiro256Plus rng;
+    Mustard::CLHEPX::Random::Xoshiro256Plus rng;
     CLHEP::HepRandom::setTheEngine(&rng);
-    MPIReseedRandomEngine();
+    Mustard::MPIReseedRandomEngine();
 
     G4ParticleTable::GetParticleTable()->SetReadiness();
     G4AntiNeutrinoE::Definition();
@@ -39,15 +37,15 @@ auto main(int argc, char* argv[]) -> int {
     G4NeutrinoMu::Definition();
     G4Positron::Definition();
 
-    MuonInternalPairProductionDecayChannel ippDecay{"mu+", 1};
+    Mustard::Geant4X::MuonInternalPairProductionDecayChannel ippDecay{"mu+", 1};
     ippDecay.MetropolisDelta(std::stod(argv[2]));
     ippDecay.MetropolisDiscard(std::stod(argv[3]));
-    if (argc >= 5) { ippDecay.ApplyMACESpecificPxyCut(std::stoll(argv[4])); }
+    // if (argc >= 5) { ippDecay.ApplyMACEPxyCut(std::stoll(argv[4])); }
 
-    TFile file{MPIX::ParallelizePath("mu2eeevv.root").generic_string().c_str(), "RECREATE", "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
+    TFile file{Mustard::MPIX::ParallelizePath("mu2eeevv.root").generic_string().c_str(), "RECREATE", "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
     TNtuple t{"eeevv", "eeevv", "e1:e2:e3:e4:e5"};
 
-    MPIX::Executor<unsigned long long> executor;
+    Mustard::MPIX::Executor<unsigned long long> executor;
     executor.Execute(std::stoull(argv[1]),
                      [&](auto) {
                          const auto product{ippDecay.DecayIt(0)};

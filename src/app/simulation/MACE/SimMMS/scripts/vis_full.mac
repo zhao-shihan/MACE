@@ -17,8 +17,6 @@
 /gps/ang/type                         iso
 /gps/ene/mono                         52.8 MeV
 
-/MACE/Field/MMSMagneticField          0.1 tesla
-
 /MACE/Analysis/CoincidenceWithCDC     false
 /MACE/Analysis/CoincidenceWithTTC     false
 

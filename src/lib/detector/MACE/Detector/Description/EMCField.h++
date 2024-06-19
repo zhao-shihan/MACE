@@ -1,17 +1,15 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
-#include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
-#include "MACE/Utility/InlineMacro.h++"
-#include "MACE/Utility/VectorArithmeticOperator.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
-#include "CLHEP/Geometry/Transform3D.h"
+#include "muc/array"
+
+#include <utility>
 
 namespace MACE::Detector::Description {
 
-class EMCField final : public DescriptionSingletonBase<EMCField> {
-    friend Env::Memory::SingletonInstantiator;
+class EMCField final : public Mustard::Detector::Description::DescriptionBase<EMCField> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     EMCField();
@@ -22,25 +20,25 @@ public:
     // Geometry
     ///////////////////////////////////////////////////////////
 
-    auto Radius() const -> const auto& { return fRadius; }
-    auto Length() const -> const auto& { return fLength; }
+    auto Radius() const -> auto { return fRadius; }
+    auto Length() const -> auto { return fLength; }
 
-    auto Radius(auto v) -> void { fRadius = v; }
-    auto Length(auto v) -> void { fLength = v; }
+    auto Radius(double v) -> void { fRadius = v; }
+    auto Length(double v) -> void { fLength = v; }
 
-    MACE_ALWAYS_INLINE auto Center() const -> stdx::array3d;
+    auto Center() const -> muc::array3d;
 
     ///////////////////////////////////////////////////////////
     // Field
     ///////////////////////////////////////////////////////////
 
-    auto MagneticFluxDensity() const -> const auto& { return fMagneticFluxDensity; }
+    auto FastField() const -> auto { return fFastField; }
 
-    auto MagneticFluxDensity(auto v) -> void { fMagneticFluxDensity = v; }
+    auto FastField(double val) -> void { fFastField = val; }
 
 private:
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     ///////////////////////////////////////////////////////////
@@ -54,9 +52,7 @@ private:
     // Field
     ///////////////////////////////////////////////////////////
 
-    double fMagneticFluxDensity;
+    double fFastField;
 };
 
 } // namespace MACE::Detector::Description
-
-#include "MACE/Detector/Description/EMCField.inl"

@@ -5,7 +5,7 @@
 /control/verbose 0
 /run/verbose 0
 
-#/MACE/Detector/Description/Ixport mace_geom.yaml
+#/MACE/Detector/Description/Ixport SimMACE_geom.yaml
 
 /run/initialize
 
@@ -24,11 +24,6 @@
 /gps/ene/max              6 MeV
 /GPSX/NVertex             1000
 /GPSX/PulseWidth          0 ns
-
-/MACE/Field/AcceleratorPotential          500 volt
-/MACE/Field/MMSMagneticField              0.1 tesla
-/MACE/Field/SolenoidMagneticField         0.1 tesla
-/MACE/Field/EMCMagneticField              0.1 tesla
 
 /MACE/Analysis/CoincidenceWithCDC     false
 /MACE/Analysis/CoincidenceWithTTC     false

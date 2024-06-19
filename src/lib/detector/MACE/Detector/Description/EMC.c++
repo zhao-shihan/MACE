@@ -1,10 +1,9 @@
 #include "MACE/Detector/Description/EMC.h++"
-#include "MACE/Detector/Description/Solenoid.h++"
-#include "MACE/Math/Hypot.h++"
-#include "MACE/Utility/LiteralUnit.h++"
-#include "MACE/Utility/MathConstant.h++"
-#include "MACE/Utility/PhysicalConstant.h++"
-#include "MACE/Utility/VectorCast.h++"
+
+#include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/MathConstant.h++"
+#include "Mustard/Utility/PhysicalConstant.h++"
+#include "Mustard/Utility/VectorCast.h++"
 
 #include "CLHEP/Vector/TwoVector.h"
 
@@ -17,13 +16,15 @@
 #include "pmp/algorithms/utilities.h"
 #include "pmp/surface_mesh.h"
 
+#include "muc/math"
+
 #include <ranges>
 
 namespace MACE::Detector::Description {
 
 namespace {
 
-using namespace MathConstant;
+using namespace Mustard::MathConstant;
 
 class EMCMesh {
 public:
@@ -56,8 +57,8 @@ auto EMCMesh::GenerateIcosahedron() -> void {
     constexpr auto a0 = 1.0;
     constexpr auto b0 = 1.0 / phi;
     // normalized vertices coordinates
-    const auto a = a0 / Math::Hypot(a0, b0);
-    const auto b = b0 / Math::Hypot(a0, b0);
+    const auto a = a0 / muc::hypot(a0, b0);
+    const auto b = b0 / muc::hypot(a0, b0);
 
     // add normalized vertices
     const auto v1 = fPMPMesh.add_vertex(pmp::Point{0, b, -a});
@@ -143,16 +144,18 @@ auto EMCMesh::GenerateDualMesh() -> void {
 
 } // namespace
 
-using namespace LiteralUnit::Length;
-using namespace LiteralUnit::Time;
-using namespace LiteralUnit::Energy;
-using namespace PhysicalConstant;
+using namespace Mustard::LiteralUnit::Length;
+using namespace Mustard::LiteralUnit::Time;
+using namespace Mustard::LiteralUnit::Energy;
+using namespace Mustard::PhysicalConstant;
 
 EMC::EMC() :
-    DescriptionSingletonBase{__func__},
+    DescriptionBase{"EMC"},
     fNSubdivision{2},
     fInnerRadius{15_cm},
     fCrystalHypotenuse{15_cm},
+    fUpstreamWindowRadius{50_mm},
+    fDownstreamWindowRadius{5_mm},
     fSmallPMTRadius{25.5_mm},
     fSmallPMTLength{144_mm},
     fSmallPMTCathodeRadius{23_mm},
@@ -206,29 +209,35 @@ auto EMC::ComputeMesh() const -> MeshInformation {
     auto pmpMesh{EMCMesh{fNSubdivision}.Generate()};
     MeshInformation mesh;
     auto& [vertex, faceList]{mesh};
-    const auto solenoidInnerRadius{Solenoid::Instance().InnerRadius()};
     const auto point{pmpMesh.vertex_property<pmp::Point>("v:point")};
 
     for (auto&& v : pmpMesh.vertices()) {
-        vertex.emplace_back(VectorCast<CLHEP::Hep3Vector>(point[v]));
+        vertex.emplace_back(Mustard::VectorCast<CLHEP::Hep3Vector>(point[v]));
     }
 
     for (auto&& f : pmpMesh.faces()) {
-        if (std::ranges::any_of(pmpMesh.vertices(f), [&](const auto& v) {
-                CLHEP::Hep2Vector p{point[v][0] * fInnerRadius, point[v][1] * fInnerRadius};
-                return p.mag() < solenoidInnerRadius and point[v][2] < 0;
-            })) {
-            continue;
+        const auto centroid{Mustard::VectorCast<CLHEP::Hep3Vector>(pmp::centroid(pmpMesh, f))};
+        if (const auto rXY{fInnerRadius * centroid.perp()};
+            centroid.z() < 0) {
+            if (rXY < fUpstreamWindowRadius) { continue; }
+        } else {
+            if (rXY < fDownstreamWindowRadius) { continue; }
         }
-
-        const auto centroid{VectorCast<CLHEP::Hep3Vector>(pmp::centroid(pmpMesh, f))};
-        if (centroid.perp2() < 1e-3) {
+        if (std::ranges::any_of(pmpMesh.vertices(f),
+                                [&](const auto& v) {
+                                    const auto rXY{fInnerRadius * muc::hypot(point[v][0], point[v][1])};
+                                    if (point[v][2] < 0) {
+                                        return rXY < fUpstreamWindowRadius;
+                                    } else {
+                                        return rXY < fDownstreamWindowRadius;
+                                    }
+                                })) {
             continue;
         }
 
         auto& face{faceList.emplace_back()};
         face.centroid = centroid;
-        face.normal = VectorCast<CLHEP::Hep3Vector>(pmp::face_normal(pmpMesh, f));
+        face.normal = Mustard::VectorCast<CLHEP::Hep3Vector>(pmp::face_normal(pmpMesh, f));
 
         for (auto&& v : pmpMesh.vertices(f)) {
             face.vertexIndex.emplace_back(v.idx());
@@ -249,6 +258,7 @@ auto EMC::ComputeMesh() const -> MeshInformation {
     }
     return mesh;
 }
+
 auto EMC::ComputeTransformToOuterSurfaceWithOffset(int cellID, double offsetInNormalDirection) const -> HepGeom::Transform3D {
     const auto& faceList{Mesh().fFaceList};
     auto&& [centroid, normal, vertexIndex]{faceList[cellID]};
@@ -262,10 +272,12 @@ auto EMC::ComputeTransformToOuterSurfaceWithOffset(int cellID, double offsetInNo
     return G4Translate3D{crystalOuterCentroid + offsetInNormalDirection * normal} * rotation;
 }
 
-auto EMC::ImportValues(const YAML::Node& node) -> void {
+auto EMC::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fNSubdivision, "NSubdivision");
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
+    ImportValue(node, fUpstreamWindowRadius, "UpstreamWindowRadius");
+    ImportValue(node, fDownstreamWindowRadius, "DownstreamWindowRadius");
     ImportValue(node, fSmallPMTRadius, "SmallPMTRadius");
     ImportValue(node, fSmallPMTLength, "SmallPMTLength");
     ImportValue(node, fSmallPMTCathodeRadius, "SmallPMTCathodeRadius");
@@ -286,10 +298,12 @@ auto EMC::ImportValues(const YAML::Node& node) -> void {
     SetGeometryOutdated();
 }
 
-auto EMC::ExportValues(YAML::Node& node) const -> void {
+auto EMC::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fNSubdivision, "NSubdivision");
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
+    ExportValue(node, fUpstreamWindowRadius, "UpstreamWindowRadius");
+    ExportValue(node, fDownstreamWindowRadius, "DownstreamWindowRadius");
     ExportValue(node, fSmallPMTRadius, "SmallPMTRadius");
     ExportValue(node, fSmallPMTLength, "SmallPMTLength");
     ExportValue(node, fSmallPMTCathodeRadius, "SmallPMTCathodeRadius");

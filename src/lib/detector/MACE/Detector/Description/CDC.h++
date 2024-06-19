@@ -1,10 +1,11 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
-#include "MACE/Extension/stdx/arraynx.h++"
-#include "MACE/Math/IntegerPower.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include "Eigen/Core"
+
+#include "muc/array"
+#include "muc/math"
 
 #include "gsl/gsl"
 
@@ -17,8 +18,8 @@ class G4Material;
 
 namespace MACE::Detector::Description {
 
-class CDC final : public DescriptionSingletonBase<CDC> {
-    friend Env::Memory::SingletonInstantiator;
+class CDC final : public Mustard::Detector::Description::DescriptionBase<CDC> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     CDC();
@@ -80,7 +81,7 @@ public:
             double halfLength;
             double stereoAzimuthAngle;
             auto TanStereoZenithAngle(double r) const -> auto { return r * std::tan(stereoAzimuthAngle / 2) / halfLength; }
-            auto SecStereoZenithAngle(double r) const -> auto { return std::sqrt(1 + Math::Pow<2>(TanStereoZenithAngle(r))); }
+            auto SecStereoZenithAngle(double r) const -> auto { return std::sqrt(1 + muc::pow<2>(TanStereoZenithAngle(r))); }
             auto CosStereoZenithAngle(double r) const -> auto { return 1 / SecStereoZenithAngle(r); }
             auto SinStereoZenithAngle(double r) const -> auto { return TanStereoZenithAngle(r) / SecStereoZenithAngle(r); }
             auto StereoZenithAngle(double r) const -> auto { return std::atan(TanStereoZenithAngle(r)); }
@@ -144,13 +145,13 @@ private:
     ///////////////////////////////////////////////////////////
 
     struct HashArray2i32 {
-        constexpr auto operator()(stdx::array2i32 i) const -> std::size_t {
+        constexpr auto operator()(muc::array2i32 i) const -> std::size_t {
             return std::bit_cast<std::uint64_t>(i);
         }
     };
 
 public:
-    using CellMapFromSenseLayerIDAndLocalCellIDType = std::unordered_map<stdx::array2i32, CellInformation, HashArray2i32>;
+    using CellMapFromSenseLayerIDAndLocalCellIDType = std::unordered_map<muc::array2i32, CellInformation, HashArray2i32>;
 
 private:
     class Cache {
@@ -171,8 +172,8 @@ private:
     auto ComputeCellMap() const -> std::vector<CellInformation>;
     auto ComputeCellMapFromSenseLayerIDAndLocalCellID() const -> CellMapFromSenseLayerIDAndLocalCellIDType;
 
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     ///////////////////////////////////////////////////////////

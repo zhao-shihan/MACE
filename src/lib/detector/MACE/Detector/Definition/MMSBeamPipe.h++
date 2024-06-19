@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MACE/Detector/Definition/DefinitionBase.h++"
+#include "Mustard/Detector/Definition/DefinitionBase.h++"
 
 namespace MACE::Detector::Definition {
 
-class MMSBeamPipe final : public DefinitionBase {
+class MMSBeamPipe final : public Mustard::Detector::Definition::DefinitionBase {
 private:
-    auto Construct(G4bool checkOverlaps) -> void override;
+    auto Construct(bool checkOverlaps) -> void override;
 };
 
 } // namespace MACE::Detector::Definition

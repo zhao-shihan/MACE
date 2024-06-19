@@ -1,22 +1,27 @@
 #pragma once
 
-#include "MACE/Concept/NumericVector.h++"
-#include "MACE/Detector/Description/EMCField.h++"
-#include "MACE/Detector/Field/MagneticFieldBase.h++"
+#include "Mustard/Concept/NumericVector.h++"
+#include "Mustard/Detector/Field/MagneticFieldBase.h++"
+#include "Mustard/Detector/Field/MagneticFieldMap.h++"
+#include "Mustard/Detector/Field/UniformMagneticField.h++"
+
+#include <variant>
 
 namespace MACE::Detector::Field {
 
-class EMCField : public MagneticFieldBase<EMCField> {
+class EMCField : public Mustard::Detector::Field::MagneticFieldBase<EMCField> {
 public:
-    inline EMCField();
+    EMCField();
 
-    template<Concept::NumericVector3D T>
-    auto BFieldAt(T) const -> T { return {0, 0, fEMCField.MagneticFluxDensity()}; }
+    template<Mustard::Concept::NumericVector3D T> // clang-format off
+    auto B(T x) const -> T { return std::visit([&x](auto&& f) { return f.B(x); }, fField); } // clang-format on
 
 private:
-    const Description::EMCField& fEMCField;
+    using FastField = Mustard::Detector::Field::UniformMagneticField;
+    using FieldMap = Mustard::Detector::Field::MagneticFieldMapSymmetryY<>;
+
+private:
+    std::variant<FastField, FieldMap> fField;
 };
 
 } // namespace MACE::Detector::Field
-
-#include "MACE/Detector/Field/EMCField.inl"

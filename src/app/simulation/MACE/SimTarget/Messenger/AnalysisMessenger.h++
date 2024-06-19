@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Extension/Geant4X/SingletonMessenger.h++"
+#include "Mustard/Extension/Geant4X/Interface/SingletonMessenger.h++"
 
 #include <memory>
 
@@ -14,9 +14,9 @@ class Analysis;
 
 inline namespace Messenger {
 
-class AnalysisMessenger final : public Geant4X::SingletonMessenger<AnalysisMessenger,
-                                                                   Analysis> {
-    friend Env::Memory::SingletonInstantiator;
+class AnalysisMessenger final : public Mustard::Geant4X::SingletonMessenger<AnalysisMessenger,
+                                                                            Analysis> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     AnalysisMessenger();

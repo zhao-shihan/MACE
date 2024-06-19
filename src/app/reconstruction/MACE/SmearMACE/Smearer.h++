@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Extension/MPIX/Execution/Executor.h++"
+#include "Mustard/Extension/MPIX/Execution/Executor.h++"
 
 #include <optional>
 #include <string>
@@ -11,7 +11,7 @@ namespace MACE::SmearMACE {
 
 class Smearer {
 public:
-    Smearer(std::vector<std::string> inputFile, std::string outputFile, unsigned batchSize, MPIX::Executor<unsigned>& executor);
+    Smearer(std::vector<std::string> inputFile, std::string outputFile, unsigned batchSize, Mustard::MPIX::Executor<unsigned>& executor);
 
     auto Smear(std::string_view treeName, const std::optional<std::unordered_map<std::string, std::string>>& smearingConfig) const -> void;
 
@@ -20,7 +20,7 @@ private:
     std::string fOutputFile;
 
     unsigned fBatchSize;
-    MPIX::Executor<unsigned>& fExecutor;
+    Mustard::MPIX::Executor<unsigned>& fExecutor;
 };
 
 } // namespace MACE::SmearMACE

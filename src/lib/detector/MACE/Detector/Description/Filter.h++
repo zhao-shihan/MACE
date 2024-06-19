@@ -1,15 +1,16 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
-#include <algorithm>
+#include "muc/math"
+
 #include <string>
 #include <utility>
 
 namespace MACE::Detector::Description {
 
-class Filter final : public DescriptionSingletonBase<Filter> {
-    friend Env::Memory::SingletonInstantiator;
+class Filter final : public Mustard::Detector::Description::DescriptionBase<Filter> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     Filter();
@@ -22,14 +23,14 @@ public:
     auto Length() const -> auto { return fLength; }
     auto Radius() const -> auto { return fRadius; }
     auto Thickness() const -> auto { return fThickness; }
-    auto Count() const -> auto { return fCount; }
-    auto Interval() const -> auto { return 2 * fRadius / fCount; }
+    auto Pitch() const -> auto { return fPitch; }
+    auto Count() const -> auto { return muc::lltrunc((2 * fRadius - fThickness) / fPitch) + 1; }
 
     auto Enabled(bool val) -> void { fEnabled = val; }
     auto Length(auto val) -> void { fLength = val; }
     auto Radius(auto val) -> void { fRadius = val; }
     auto Thickness(auto val) -> void { fThickness = val; }
-    auto Count(auto val) -> void { fCount = std::max(2, val); }
+    auto Pitch(auto val) -> void { fPitch = val; }
 
     // Material
 
@@ -38,8 +39,8 @@ public:
     auto MaterialName(std::string val) { fMaterialName = std::move(val); }
 
 private:
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     // Geometry
@@ -48,7 +49,7 @@ private:
     double fLength;
     double fRadius;
     double fThickness;
-    int fCount;
+    double fPitch;
 
     // Material
 

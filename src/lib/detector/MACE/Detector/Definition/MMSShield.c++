@@ -1,6 +1,7 @@
 #include "MACE/Detector/Definition/MMSShield.h++"
 #include "MACE/Detector/Description/MMSShield.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -12,12 +13,12 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace LiteralUnit;
+using namespace Mustard::LiteralUnit;
 
 auto MMSShield::Construct(G4bool checkOverlaps) -> void {
     const auto& shield{Description::MMSShield::Instance()};
 
-    const auto pb{G4NistManager::Instance()->FindOrBuildMaterial(shield.MaterialName())};
+    const auto material{G4NistManager::Instance()->FindOrBuildMaterial(shield.MaterialName())};
 
     const auto solidBody{Make<G4Tubs>(
         shield.Name(),
@@ -28,7 +29,7 @@ auto MMSShield::Construct(G4bool checkOverlaps) -> void {
         2_pi)};
     const auto logicBody{Make<G4LogicalVolume>(
         solidBody,
-        pb,
+        material,
         shield.Name())};
     Make<G4PVPlacement>(
         G4Transform3D{},
@@ -60,10 +61,18 @@ auto MMSShield::Construct(G4bool checkOverlaps) -> void {
         G4ThreeVector{zCap * std::tan(shield.BeamSlantAngle()), 0, 0})};
     const auto logicCap{Make<G4LogicalVolume>(
         solidCap,
-        pb,
+        material,
         shield.Name())};
     Make<G4PVPlacement>( // clang-format off
         G4Transform3D{{}, {0, 0, -zCap}}, // clang-format on
+        logicCap,
+        shield.Name(),
+        Mother().LogicalVolume(),
+        false,
+        0,
+        checkOverlaps);
+    Make<G4PVPlacement>( // clang-format off
+        G4Transform3D{{}, {0, 0, zCap}}, // clang-format on
         logicCap,
         shield.Name(),
         Mother().LogicalVolume(),

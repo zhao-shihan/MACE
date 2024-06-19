@@ -1,11 +1,11 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 namespace MACE::Detector::Description {
 
-class BeamMonitor final : public DescriptionSingletonBase<BeamMonitor> {
-    friend Env::Memory::SingletonInstantiator;
+class BeamMonitor final : public Mustard::Detector::Description::DescriptionBase<BeamMonitor> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     BeamMonitor();
@@ -23,8 +23,8 @@ public:
     auto DistanceToTarget(double val) -> void { fDistanceToTarget = val; }
 
 private:
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     bool fEnabled;

@@ -1,15 +1,16 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
 #include "MACE/Detector/Description/EMCField.h++"
+
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include <string>
 #include <utility>
 
 namespace MACE::Detector::Description {
 
-class EMCShield final : public DescriptionSingletonBase<EMCShield> {
-    friend Env::Memory::SingletonInstantiator;
+class EMCShield final : public Mustard::Detector::Description::DescriptionBase<EMCShield> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     EMCShield();
@@ -35,8 +36,8 @@ public:
     auto MaterialName(std::string val) -> void { fMaterialName = std::move(val); }
 
 private:
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     // Geometry

@@ -15,7 +15,7 @@
 namespace MACE::inline Simulation::inline SD {
 
 EMCPMTSD::EMCPMTSD(const G4String& sdName) :
-    NonMoveableBase{},
+    Mustard::NonMoveableBase{},
     G4VSensitiveDetector{sdName},
     fHit{},
     fHitsCollection{} {
@@ -73,4 +73,4 @@ auto EMCPMTSD::NOpticalPhotonHit() const -> std::unordered_map<int, int> {
     return nHit;
 }
 
-} // namespace MACE::Simulation::inline SD
+} // namespace MACE::inline Simulation::inline SD

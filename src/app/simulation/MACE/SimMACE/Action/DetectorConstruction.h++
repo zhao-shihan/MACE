@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Detector/Description/AcceleratorField.h++"
+#include "MACE/Detector/Description/Accelerator.h++"
 #include "MACE/Detector/Description/BeamDegrader.h++"
 #include "MACE/Detector/Description/BeamMonitor.h++"
 #include "MACE/Detector/Description/CDC.h++"
@@ -8,6 +8,7 @@
 #include "MACE/Detector/Description/EMCField.h++"
 #include "MACE/Detector/Description/EMCMagnet.h++"
 #include "MACE/Detector/Description/EMCShield.h++"
+#include "MACE/Detector/Description/FieldOption.h++"
 #include "MACE/Detector/Description/Filter.h++"
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Detector/Description/MCPChamber.h++"
@@ -15,25 +16,24 @@
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/MMSMagnet.h++"
 #include "MACE/Detector/Description/MMSShield.h++"
-#include "MACE/Detector/Description/TTC.h++"
 #include "MACE/Detector/Description/ShieldingWall.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
+#include "MACE/Detector/Description/TTC.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Detector/Description/World.h++"
-#include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimMACE/Region.h++"
+
+#include "Mustard/Env/Memory/PassiveSingleton.h++"
 
 #include "G4VUserDetectorConstruction.hh"
 
 #include <memory>
 
-namespace MACE {
-
-namespace Detector::Definition {
+namespace Mustard::Detector::Definition {
 class DefinitionBase;
-} // namespace Detector::Definition
+} // namespace Mustard::Detector::Definition
 
-namespace SimMACE {
+namespace MACE::SimMACE {
 
 inline namespace SD {
 class CDCSD;
@@ -44,7 +44,7 @@ class TTCSD;
 
 inline namespace Action {
 
-class DetectorConstruction final : public Env::Memory::PassiveSingleton<DetectorConstruction>,
+class DetectorConstruction final : public Mustard::Env::Memory::PassiveSingleton<DetectorConstruction>,
                                    public G4VUserDetectorConstruction {
 public:
     DetectorConstruction();
@@ -70,7 +70,7 @@ public:
     auto EMCSD() const -> auto& { return *fEMCSD; }
 
 public:
-    using DescriptionInUse = std::tuple<Detector::Description::AcceleratorField,
+    using DescriptionInUse = std::tuple<Detector::Description::Accelerator,
                                         Detector::Description::BeamDegrader,
                                         Detector::Description::BeamMonitor,
                                         Detector::Description::CDC,
@@ -78,6 +78,7 @@ public:
                                         Detector::Description::EMCField,
                                         Detector::Description::EMCMagnet,
                                         Detector::Description::EMCShield,
+                                        Detector::Description::FieldOption,
                                         Detector::Description::Filter,
                                         Detector::Description::MCP,
                                         Detector::Description::MCPChamber,
@@ -94,7 +95,7 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    std::unique_ptr<Detector::Definition::DefinitionBase> fWorld;
+    std::unique_ptr<Mustard::Detector::Definition::DefinitionBase> fWorld;
 
     Region* fCDCFieldWireRegion;
     Region* fCDCSenseWireRegion;
@@ -117,6 +118,4 @@ private:
 
 } // namespace Action
 
-} // namespace SimMACE
-
-} // namespace MACE
+} // namespace MACE::SimMACE

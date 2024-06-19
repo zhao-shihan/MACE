@@ -1,7 +1,8 @@
 #include "MACE/Detector/Definition/TTC.h++"
 #include "MACE/Detector/Description/TTC.h++"
-#include "MACE/Math/Parity.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+
+#include "Mustard/Math/Parity.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4Box.hh"
 #include "G4NistManager.hh"
@@ -12,7 +13,7 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace MACE::LiteralUnit::MathConstantSuffix;
+using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
 auto TTC::Construct(G4bool checkOverlaps) -> void {
     const auto& ttc{Description::TTC::Instance()};
@@ -29,9 +30,9 @@ auto TTC::Construct(G4bool checkOverlaps) -> void {
     int tileID{};
     const auto deltaPhi{2_pi / ttc.NAlongPhi()};
     for (int i{}; i < ttc.NAlongZ(); ++i) { // clang-format off
-        const auto transform{G4RotateZ3D{Math::IsEven(i) ? 0 : deltaPhi / 2} *
+        const auto transform{G4RotateZ3D{Mustard::Math::IsEven(i) ? 0 : deltaPhi / 2} *
                              G4Translate3D{ttc.Radius(), 0, (1 - ttc.NAlongZ()) * ttc.Width() / 2 + i * ttc.Width()} *
-                             G4RotateZ3D{Math::IsEven(i) ? ttc.SlantAngle() : -ttc.SlantAngle()}}; // clang-format on
+                             G4RotateZ3D{Mustard::Math::IsEven(i) ? ttc.SlantAngle() : -ttc.SlantAngle()}}; // clang-format on
         for (int j{}; j < ttc.NAlongPhi(); ++j, ++tileID) {
             Make<G4PVPlacement>(
                 G4RotateZ3D{j * deltaPhi} * transform,

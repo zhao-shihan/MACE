@@ -6,7 +6,7 @@
 #/control/saveHistory
 /run/verbose 2
 
-#/MACE/Detector/Description/Ixport mace_geom.yaml
+#/MACE/Detector/Description/Ixport SimMACE_geom.yaml
 
 /run/initialize
 
@@ -21,14 +21,9 @@
 /gps/ene/mono             3.647 MeV    # momentum 28 MeV
 /gps/ene/sigma            0.1793 MeV   # momentum spreading 2.5%
 /GPSX/NVertex             1
-/GPSX/PulseWidth          0 ns
+/GPSX/PulseWidth          1.5 us
 
-/MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5
-
-/MACE/Field/AcceleratorPotential          500 volt
-/MACE/Field/MMSMagneticField              0.1 tesla
-/MACE/Field/SolenoidMagneticField         0.1 tesla
-/MACE/Field/EMCMagneticField              0.1 tesla
+/Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5
 
 /MACE/Analysis/CoincidenceWithCDC     false
 /MACE/Analysis/CoincidenceWithTTC     false
@@ -60,10 +55,11 @@
 /vis/viewer/zoom 2.5
 
 # Colors
+/vis/geometry/set/colour Accelerator                   0     1     1     1     0.1
 /vis/geometry/set/colour AcceleratorField              0     1     1     1     0.05
 /vis/geometry/set/colour BeamDegrader                  0     1     1     1     0.1
 /vis/geometry/set/colour BeamMonitor                   0     1     1     1     0.1
-/vis/geometry/set/colour CDCBody                       0     1     1     1     0.05
+/vis/geometry/set/colour CDCBody                       0     1     1     1     0.01
 /vis/geometry/set/colour CDCCell                       0     1     1     1     0.005
 /vis/geometry/set/colour CDCFieldWire                  0     1     1     1     0.01
 /vis/geometry/set/colour CDCGas                        0     1     1     1     0.005
@@ -87,18 +83,28 @@
 /vis/geometry/set/colour MMSMagnet                     0     1     1     1     0.05
 /vis/geometry/set/colour MMSShield                     0     1     1     1     0.05
 /vis/geometry/set/colour ShieldingWall                 0     1     1     1     0.05
-/vis/geometry/set/colour SolenoidB1                    0     1     1     1     0.05
-/vis/geometry/set/colour SolenoidB1Field               0     1     1     1     0.05
-/vis/geometry/set/colour SolenoidB2                    0     1     1     1     0.05
-/vis/geometry/set/colour SolenoidB2Field               0     1     1     1     0.05
+/vis/geometry/set/colour SolenoidBeamPipeS1            0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidBeamPipeS2            0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidBeamPipeS3            0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidBeamPipeT1            0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidBeamPipeT2            0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidFieldS1               0     1     1     1     0.05
+/vis/geometry/set/colour SolenoidFieldS2               0     1     1     1     0.05
+/vis/geometry/set/colour SolenoidFieldS3               0     1     1     1     0.05
+/vis/geometry/set/colour SolenoidFieldT1               0     1     1     1     0.05
+/vis/geometry/set/colour SolenoidFieldT2               0     1     1     1     0.05
 /vis/geometry/set/colour SolenoidS1                    0     1     1     1     0.05
-/vis/geometry/set/colour SolenoidS1Field               0     1     1     1     0.05
 /vis/geometry/set/colour SolenoidS2                    0     1     1     1     0.05
-/vis/geometry/set/colour SolenoidS2Field               0     1     1     1     0.05
 /vis/geometry/set/colour SolenoidS3                    0     1     1     1     0.05
-/vis/geometry/set/colour SolenoidS3Field               0     1     1     1     0.05
-/vis/geometry/set/colour TTC                           0     1     1     1     0.05
+/vis/geometry/set/colour SolenoidShieldS1              0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidShieldS2              0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidShieldS3              0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidShieldT1              0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidShieldT2              0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidT1                    0     1     1     1     0.05
+/vis/geometry/set/colour SolenoidT2                    0     1     1     1     0.05
 /vis/geometry/set/colour Target                        0     1     1     1     0.1
+/vis/geometry/set/colour TTC                           0     1     1     1     0.05
 /vis/geometry/set/colour World                         0     1     1     1     0.001
 #/vis/geometry/set/colour CarbonFoil                    80    1.0   1.0   1.0   0.5
 

@@ -1,6 +1,7 @@
 #include "MACE/Detector/Definition/MMSField.h++"
 #include "MACE/Detector/Description/MMSField.h++"
-#include "MACE/Utility/MathConstant.h++"
+
+#include "Mustard/Utility/MathConstant.h++"
 
 #include "G4PVPlacement.hh"
 #include "G4ThreeVector.hh"
@@ -8,7 +9,7 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace MathConstant;
+using namespace Mustard::MathConstant;
 
 auto MMSField::Construct(G4bool checkOverlaps) -> void {
     const auto& description = Description::MMSField::Instance();

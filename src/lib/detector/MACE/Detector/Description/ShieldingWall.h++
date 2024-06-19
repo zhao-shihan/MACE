@@ -1,11 +1,11 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 namespace MACE::Detector::Description {
 
-class ShieldingWall final : public DescriptionSingletonBase<ShieldingWall> {
-    friend Env::Memory::SingletonInstantiator;
+class ShieldingWall final : public Mustard::Detector::Description::DescriptionBase<ShieldingWall> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     ShieldingWall();
@@ -23,8 +23,8 @@ public:
     auto Rotation(double val) -> void { fRotation = val; }
 
 private:
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     bool fEnabled;

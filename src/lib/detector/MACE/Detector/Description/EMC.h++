@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include "CLHEP/Geometry/Point3D.h"
 #include "CLHEP/Geometry/Transform3D.h"
@@ -10,8 +10,8 @@
 
 namespace MACE::Detector::Description {
 
-class EMC final : public DescriptionSingletonBase<EMC> {
-    friend Env::Memory::SingletonInstantiator;
+class EMC final : public Mustard::Detector::Description::DescriptionBase<EMC> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     EMC();
@@ -21,6 +21,8 @@ public:
     auto NSubdivision() const -> auto { return fNSubdivision; }
     auto InnerRadius() const -> auto { return fInnerRadius; }
     auto CrystalHypotenuse() const -> auto { return fCrystalHypotenuse; }
+    auto UpstreamWindowRadius() const -> auto { return fUpstreamWindowRadius; }
+    auto DownstreamWindowRadius() const -> auto { return fDownstreamWindowRadius; }
     auto SmallPMTRadius() const -> auto { return fSmallPMTRadius; }
     auto SmallPMTLength() const -> auto { return fSmallPMTLength; }
     auto SmallPMTCathodeRadius() const -> auto { return fSmallPMTCathodeRadius; }
@@ -48,6 +50,8 @@ public:
     auto NSubdivision(int val) -> void { fNSubdivision = val, SetGeometryOutdated(); }
     auto InnerRadius(double val) -> void { fInnerRadius = val, SetGeometryOutdated(); }
     auto CrystalHypotenuse(double val) -> void { fCrystalHypotenuse = val, SetGeometryOutdated(); }
+    auto UpstreamWindowRadius(double val) -> void { fUpstreamWindowRadius = val, SetGeometryOutdated(); }
+    auto DownstreamWindowRadius(double val) -> void { fDownstreamWindowRadius = val, SetGeometryOutdated(); }
     auto SmallPMTRadius(double val) -> void { fSmallPMTRadius = val; }
     auto SmallPMTLength(double val) -> void { fSmallPMTLength = val; }
     auto SmallPMTCathodeRadius(double val) -> void { fSmallPMTCathodeRadius = val; }
@@ -93,13 +97,15 @@ private:
     inline auto SetGeometryOutdated() const -> void;
     auto ComputeMesh() const -> MeshInformation;
 
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     int fNSubdivision;
     double fInnerRadius;
     double fCrystalHypotenuse;
+    double fUpstreamWindowRadius;
+    double fDownstreamWindowRadius;
     double fSmallPMTRadius;
     double fSmallPMTLength;
     double fSmallPMTCathodeRadius;

@@ -1,12 +1,13 @@
-#include "MACE/Env/MPIEnv.h++"
-#include "MACE/Extension/Geant4X/ConvertGeometry.h++"
-#include "MACE/Extension/MPIX/ParallelizePath.h++"
 #include "MACE/SimEMC/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimEMC/Action/TrackingAction.h++"
 #include "MACE/SimEMC/Analysis.h++"
 #include "MACE/Simulation/Hit/EMCHit.h++"
 #include "MACE/Simulation/Hit/EMCPMTHit.h++"
 #include "MACE/Simulation/Hit/MCPHit.h++"
+
+#include "Mustard/Env/MPIEnv.h++"
+#include "Mustard/Extension/Geant4X/Utility/ConvertGeometry.h++"
+#include "Mustard/Extension/MPIX/ParallelizePath.h++"
 
 #include "TFile.h"
 #include "TMacro.h"
@@ -39,7 +40,7 @@ Analysis::Analysis() :
 
 auto Analysis::RunBegin(G4int runID) -> void {
     // open ROOT file
-    auto fullFilePath{MPIX::ParallelizePath(fFilePath).replace_extension(".root").generic_string()};
+    auto fullFilePath{Mustard::MPIX::ParallelizePath(fFilePath).replace_extension(".root").generic_string()};
     const auto filePathChanged{fullFilePath != fLastUsedFullFilePath};
     fFile = TFile::Open(fullFilePath.c_str(), filePathChanged ? fFileMode.c_str() : "UPDATE",
                         "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
@@ -49,29 +50,26 @@ auto Analysis::RunBegin(G4int runID) -> void {
     }
     fLastUsedFullFilePath = std::move(fullFilePath);
     // save geometry
-    if (filePathChanged and Env::MPIEnv::Instance().OnCommWorldMaster()) {
-        Geant4X::ConvertGeometryToTMacro("SimEMC_gdml", "SimEMC.gdml")->Write();
+    if (filePathChanged and Mustard::Env::MPIEnv::Instance().OnCommWorldMaster()) {
+        Mustard::Geant4X::ConvertGeometryToTMacro("SimEMC_gdml", "SimEMC.gdml")->Write();
     }
-    // cd into run directory
-    const auto runDirectory{fmt::format("G4Run{}", runID)};
-    fFile->mkdir(runDirectory.c_str());
-    fFile->cd(runDirectory.c_str());
-    if (PrimaryGeneratorAction::Instance().SavePrimaryVertexData()) { fPrimaryVertexOutput.emplace("SimPrimaryVertex"); }
-    if (TrackingAction::Instance().SaveDecayVertexData()) { fDecayVertexOutput.emplace("SimDecayVertex"); }
-    fEMCSimHitOutput.emplace("EMCSimHit");
-    fEMCPMTHitOutput.emplace("EMCPMTHit");
-    fMCPSimHitOutput.emplace("MCPSimHit");
+    // initialize outputs
+    if (PrimaryGeneratorAction::Instance().SavePrimaryVertexData()) { fPrimaryVertexOutput.emplace(fmt::format("G4Run{}/SimPrimaryVertex", runID)); }
+    if (TrackingAction::Instance().SaveDecayVertexData()) { fDecayVertexOutput.emplace(fmt::format("G4Run{}/SimDecayVertex", runID)); }
+    fEMCSimHitOutput.emplace(fmt::format("G4Run{}/EMCSimHit", runID));
+    fEMCPMTHitOutput.emplace(fmt::format("G4Run{}/EMCPMTHit", runID));
+    fMCPSimHitOutput.emplace(fmt::format("G4Run{}/MCPSimHit", runID));
 }
 
 auto Analysis::EventEnd() -> void {
     const auto emcPassed{not fCoincidenceWithEMC or fEMCHit == nullptr or fEMCHit->size() > 0};
     const auto mcpPassed{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
     if (emcPassed and mcpPassed) {
-        if (fPrimaryVertex and fPrimaryVertexOutput) { *fPrimaryVertexOutput << *fPrimaryVertex; }
-        if (fDecayVertex and fDecayVertexOutput) { *fDecayVertexOutput << *fDecayVertex; }
-        if (fEMCHit) { *fEMCSimHitOutput << *fEMCHit; }
-        if (fEMCPMTHit) { *fEMCPMTHitOutput << *fEMCPMTHit; }
-        if (fMCPHit) { *fMCPSimHitOutput << *fMCPHit; }
+        if (fPrimaryVertex and fPrimaryVertexOutput) { fPrimaryVertexOutput->Fill(*fPrimaryVertex); }
+        if (fDecayVertex and fDecayVertexOutput) { fDecayVertexOutput->Fill(*fDecayVertex); }
+        if (fEMCHit) { fEMCSimHitOutput->Fill(*fEMCHit); }
+        if (fEMCPMTHit) { fEMCPMTHitOutput->Fill(*fEMCPMTHit); }
+        if (fMCPHit) { fMCPSimHitOutput->Fill(*fMCPHit); }
     }
     fPrimaryVertex = {};
     fDecayVertex = {};

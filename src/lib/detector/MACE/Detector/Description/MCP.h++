@@ -1,14 +1,14 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include <utility>
 #include <vector>
 
 namespace MACE::Detector::Description {
 
-class MCP final : public DescriptionSingletonBase<MCP> {
-    friend Env::Memory::SingletonInstantiator;
+class MCP final : public Mustard::Detector::Description::DescriptionBase<MCP> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     MCP();
@@ -38,8 +38,8 @@ public:
     auto EfficiencyValue(std::vector<double> val) -> void { fEfficiencyValue = std::move(val); }
 
 private:
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     // Geometry

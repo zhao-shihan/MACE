@@ -1,14 +1,14 @@
 #pragma once
 
-#include "MACE/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionBase.h++"
 
 #include <string>
 #include <utility>
 
 namespace MACE::Detector::Description {
 
-class MMSShield final : public DescriptionSingletonBase<MMSShield> {
-    friend Env::Memory::SingletonInstantiator;
+class MMSShield final : public Mustard::Detector::Description::DescriptionBase<MMSShield> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     MMSShield();
@@ -36,8 +36,8 @@ public:
     auto MaterialName(std::string val) -> void { fMaterialName = std::move(val); }
 
 private:
-    auto ImportValues(const YAML::Node& node) -> void override;
-    auto ExportValues(YAML::Node& node) const -> void override;
+    auto ImportAllValue(const YAML::Node& node) -> void override;
+    auto ExportAllValue(YAML::Node& node) const -> void override;
 
 private:
     // Geometry

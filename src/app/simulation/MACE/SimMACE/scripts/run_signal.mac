@@ -5,7 +5,7 @@
 /control/verbose 0
 /run/verbose 0
 
-#/MACE/Detector/Description/Ixport mace_geom.yaml
+#/MACE/Detector/Description/Ixport SimMACE_geom.yaml
 
 /run/initialize
 
@@ -20,14 +20,9 @@
 /gps/ene/mono             3.647 MeV    # momentum 28 MeV
 /gps/ene/sigma            0.1793 MeV   # momentum spreading 2.5%
 /GPSX/NVertex             1
-/GPSX/PulseWidth          0 ns
+/GPSX/PulseWidth          1.5 us
 
-/MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    1
-
-/MACE/Field/AcceleratorPotential          500 volt
-/MACE/Field/MMSMagneticField              0.1 tesla
-/MACE/Field/SolenoidMagneticField         0.1 tesla
-/MACE/Field/EMCMagneticField              0.1 tesla
+/Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    1
 
 /MACE/Analysis/CoincidenceWithCDC     true
 /MACE/Analysis/CoincidenceWithTTC     true

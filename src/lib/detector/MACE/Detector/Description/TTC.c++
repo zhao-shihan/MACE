@@ -1,16 +1,17 @@
 #include "MACE/Detector/Description/TTC.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+
+#include "Mustard/Utility/LiteralUnit.h++"
 
 namespace MACE::Detector::Description {
 
-using namespace LiteralUnit::Time;
-using namespace LiteralUnit::Length;
-using namespace LiteralUnit::Energy;
-using namespace LiteralUnit::Angle;
-using namespace LiteralUnit::Density;
+using namespace Mustard::LiteralUnit::Time;
+using namespace Mustard::LiteralUnit::Length;
+using namespace Mustard::LiteralUnit::Energy;
+using namespace Mustard::LiteralUnit::Angle;
+using namespace Mustard::LiteralUnit::Density;
 
 TTC::TTC() :
-    DescriptionSingletonBase{"TTC"},
+    DescriptionBase{"TTC"},
     // Geometry
     fLength{15_cm},
     fWidth{10_cm},
@@ -51,7 +52,7 @@ TTC::TTC() :
     fScintillationTimeConstant1{2.4_ns},
     fResolutionScale{1} {}
 
-auto TTC::ImportValues(const YAML::Node& node) -> void {
+auto TTC::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fLength, "Length");
     ImportValue(node, fWidth, "Width");
@@ -73,7 +74,7 @@ auto TTC::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fResolutionScale, "ResolutionScale");
 }
 
-auto TTC::ExportValues(YAML::Node& node) const -> void {
+auto TTC::ExportAllValue(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fLength, "Length");
     ExportValue(node, fWidth, "Width");

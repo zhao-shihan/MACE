@@ -2,28 +2,27 @@
 
 #include "MACE/Detector/Description/EMC.h++"
 #include "MACE/Detector/Description/World.h++"
-#include "MACE/Env/Memory/PassiveSingleton.h++"
 #include "MACE/SimEMC/Region.h++"
 #include "MACE/SimEMC/SD/EMCPMTSD.h++"
 #include "MACE/SimEMC/SD/EMCSD.h++"
 #include "MACE/SimEMC/SD/MCPSD.h++"
+
+#include "Mustard/Env/Memory/PassiveSingleton.h++"
 
 #include "G4VUserDetectorConstruction.hh"
 
 #include <memory>
 #include <tuple>
 
-namespace MACE {
-
-namespace Detector::Definition {
-
+namespace Mustard::Detector::Definition {
 class DefinitionBase;
+} // namespace Mustard::Detector::Definition
 
-} // namespace Detector::Definition
+namespace MACE {
 
 namespace SimEMC::inline Action {
 
-class DetectorConstruction final : public Env::Memory::PassiveSingleton<DetectorConstruction>,
+class DetectorConstruction final : public Mustard::Env::Memory::PassiveSingleton<DetectorConstruction>,
                                    public G4VUserDetectorConstruction {
 public:
     DetectorConstruction();
@@ -49,7 +48,7 @@ public:
 private:
     G4bool fCheckOverlap;
 
-    std::unique_ptr<MACE::Detector::Definition::DefinitionBase> fWorld;
+    std::unique_ptr<Mustard::Detector::Definition::DefinitionBase> fWorld;
 
     Region* fEMCSensitiveRegion;
     Region* fMCPSensitiveRegion;

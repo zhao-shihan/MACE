@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/Extension/Geant4X/SingletonMessenger.h++"
+#include "Mustard/Extension/Geant4X/Interface/SingletonMessenger.h++"
 
 #include <memory>
 
@@ -11,9 +11,9 @@ namespace MACE::inline Simulation::inline SD {
 
 class CDCSD;
 
-class CDCSDMessenger final : public Geant4X::SingletonMessenger<CDCSDMessenger,
-                                                                CDCSD> {
-    friend Env::Memory::SingletonInstantiator;
+class CDCSDMessenger final : public Mustard::Geant4X::SingletonMessenger<CDCSDMessenger,
+                                                                         CDCSD> {
+    friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
     CDCSDMessenger();

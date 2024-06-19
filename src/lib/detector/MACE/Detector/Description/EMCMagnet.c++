@@ -1,12 +1,13 @@
 #include "MACE/Detector/Description/EMCMagnet.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+
+#include "Mustard/Utility/LiteralUnit.h++"
 
 namespace MACE::Detector::Description {
 
-using namespace LiteralUnit::Length;
+using namespace Mustard::LiteralUnit::Length;
 
 EMCMagnet::EMCMagnet() :
-    DescriptionSingletonBase{"EMCMagnet"},
+    DescriptionBase{"EMCMagnet"},
     // Geometry
     fInnerRadius{50_cm},
     fOuterRadius{55_cm},
@@ -14,7 +15,7 @@ EMCMagnet::EMCMagnet() :
     // Material
     fMaterialName{"G4_Cu"} {}
 
-auto EMCMagnet::ImportValues(const YAML::Node& node) -> void {
+auto EMCMagnet::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fOuterRadius, "OuterRadius");
@@ -23,7 +24,7 @@ auto EMCMagnet::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fMaterialName, "MaterialName");
 }
 
-auto EMCMagnet::ExportValues(YAML::Node& node) const -> void {
+auto EMCMagnet::ExportAllValue(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fOuterRadius, "OuterRadius");

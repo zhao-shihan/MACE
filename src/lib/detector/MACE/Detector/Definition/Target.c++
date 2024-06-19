@@ -1,20 +1,23 @@
 #include "MACE/Detector/Definition/Target.h++"
-#include "MACE/Detector/Description/AcceleratorField.h++"
+#include "MACE/Detector/Description/Accelerator.h++"
 #include "MACE/Detector/Description/Target.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
+#include "G4Tubs.hh"
 
 namespace MACE::Detector::Definition {
 
-using namespace MACE::LiteralUnit::Density;
+using namespace Mustard::LiteralUnit::Density;
+using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
 auto Target::Construct(G4bool checkOverlaps) -> void {
     const auto& target{Description::Target::Instance()};
-    const auto& acceleratorField{Description::AcceleratorField::Instance()};
+    const auto& accelerator{Description::Accelerator::Instance()};
 
-    switch (const auto z0{(acceleratorField.UpstreamLength() - acceleratorField.AccelerateLength()) / 2};
+    switch (const auto z0{(accelerator.UpstreamLength() - accelerator.AccelerateLength()) / 2};
             target.ShapeType()) {
     case Description::Target::TargetShapeType::Cuboid: {
         const auto& cuboid{target.Cuboid()};
@@ -59,6 +62,29 @@ auto Target::Construct(G4bool checkOverlaps) -> void {
                 k,
                 checkOverlaps);
         }
+        return;
+    }
+    case Description::Target::TargetShapeType::Cylinder: {
+        const auto& cylinder{target.Cylinder()};
+        const auto solid{Make<G4Tubs>(
+            target.Name(),
+            0,
+            cylinder.Radius(),
+            cylinder.Thickness() / 2,
+            0,
+            2_pi)};
+        const auto logic{Make<G4LogicalVolume>(
+            solid,
+            target.Material(),
+            target.Name())};
+        Make<G4PVPlacement>( // clang-format off
+            G4Transform3D{{}, {0, 0, z0}}, // clang-format on
+            logic,
+            target.Name(),
+            Mother().LogicalVolume(),
+            false,
+            0,
+            checkOverlaps);
         return;
     }
     }

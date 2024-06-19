@@ -26,10 +26,10 @@
 
 # Muon beam properties
 /gps/particle             mu+
-/gps/direction            0 0 1        # 0 deg
-/gps/pos/centre           0 0 -2 m     # 0 deg
-#/gps/direction            -0.25 0 2    # 7.125 deg
-#/gps/pos/centre           0.25 0 -2 m  # 7.125 deg
+/gps/direction            0 0 1       # 0 deg
+/gps/pos/centre           0 0 -10 cm  # 0 deg
+#/gps/direction            -1.25 0 10     # 7.125 deg
+#/gps/pos/centre           1.25 0 -10 cm  # 7.125 deg
 /gps/pos/type             Beam
 /gps/pos/shape            Circle
 /gps/pos/radius           0 mm
@@ -41,7 +41,7 @@
 /GPSX/PulseWidth          0 ns
 
 # Set physics
-/MACE/Physics/MuoniumPhysics/Formation/ConversionProbability    0
+/Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 
 # kill secondaries
 /MACE/Action/KillIrrelevants    true

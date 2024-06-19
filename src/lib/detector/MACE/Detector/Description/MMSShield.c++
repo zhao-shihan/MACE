@@ -1,23 +1,24 @@
 #include "MACE/Detector/Description/MMSShield.h++"
-#include "MACE/Utility/LiteralUnit.h++"
+
+#include "Mustard/Utility/LiteralUnit.h++"
 
 namespace MACE::Detector::Description {
 
-using namespace LiteralUnit::Length;
-using namespace LiteralUnit::Angle;
+using namespace Mustard::LiteralUnit::Length;
+using namespace Mustard::LiteralUnit::Angle;
 
 MMSShield::MMSShield() :
-    DescriptionSingletonBase{"MMSShield"},
+    DescriptionBase{"MMSShield"},
     // Geometry
-    fInnerRadius{62_cm},
-    fInnerLength{224_cm},
+    fInnerRadius{65_cm},
+    fInnerLength{230_cm},
     fThickness{5_cm},
-    fWindowRadius{3_cm},
+    fWindowRadius{132_mm},
     fBeamSlantAngle{0_deg},
     // Material
-    fMaterialName{"G4_Pb"} {}
+    fMaterialName{"G4_Fe"} {}
 
-auto MMSShield::ImportValues(const YAML::Node& node) -> void {
+auto MMSShield::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fInnerRadius, "InnerRadius");
     ImportValue(node, fInnerLength, "InnerLength");
@@ -28,7 +29,7 @@ auto MMSShield::ImportValues(const YAML::Node& node) -> void {
     ImportValue(node, fMaterialName, "MaterialName");
 }
 
-auto MMSShield::ExportValues(YAML::Node& node) const -> void {
+auto MMSShield::ExportAllValue(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fInnerRadius, "InnerRadius");
     ExportValue(node, fInnerLength, "InnerLength");
