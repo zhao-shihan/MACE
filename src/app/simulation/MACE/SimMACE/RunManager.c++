@@ -24,7 +24,7 @@ RunManager::RunManager() :
     auto& transportParams{*G4TransportationParameters::Instance()};
     transportParams.SetWarningEnergy(50_eV);
     transportParams.SetImportantEnergy(50_eV);
-    transportParams.SetNumberOfTrials(1000);
+    transportParams.SetNumberOfTrials(10000);
 
     const auto physicsList{new PhysicsList};
     physicsList->SetVerboseLevel(muc::to_underlying(verboseLevel));
