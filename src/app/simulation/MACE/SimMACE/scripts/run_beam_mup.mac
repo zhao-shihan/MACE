@@ -24,6 +24,8 @@
 
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 
+/MACE/Analysis/SavePrimaryVertexData  false
+/MACE/Analysis/SaveDecayVertexData    false
 /MACE/Analysis/CoincidenceWithCDC     false
 /MACE/Analysis/CoincidenceWithTTC     false
 /MACE/Analysis/CoincidenceWithMMS     false

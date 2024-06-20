@@ -1,8 +1,8 @@
-#include "MACE/SimMACE/Action/ActionInitialization.h++"
-#include "MACE/SimMACE/Action/DetectorConstruction.h++"
-#include "MACE/SimMACE/Analysis.h++"
-#include "MACE/SimMACE/PhysicsList.h++"
-#include "MACE/SimMACE/RunManager.h++"
+#include "MACE/SimPTS/Action/ActionInitialization.h++"
+#include "MACE/SimPTS/Action/DetectorConstruction.h++"
+#include "MACE/SimPTS/Analysis.h++"
+#include "MACE/SimPTS/PhysicsList.h++"
+#include "MACE/SimPTS/RunManager.h++"
 
 #include "Mustard/Env/BasicEnv.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
@@ -11,7 +11,7 @@
 
 #include "muc/utility"
 
-namespace MACE::SimMACE {
+namespace MACE::SimPTS {
 
 using namespace Mustard::LiteralUnit::Energy;
 
@@ -39,4 +39,4 @@ RunManager::RunManager() :
 
 RunManager::~RunManager() = default;
 
-} // namespace MACE::SimMACE
+} // namespace MACE::SimPTS
