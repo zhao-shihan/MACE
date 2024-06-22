@@ -298,6 +298,7 @@ auto EMC::ComputeMesh() const -> MeshInformation {
     //         std::cout << value << ", ";
     //     }
     //     std::cout << "]" << std::endl;
+    //     std::cout << std::ssize(pair.second) << std::endl;
     // }
     // std::cout << "\n";
 

@@ -6,6 +6,8 @@ for i in range(5, 16):
             "EMC": {
                 "InnerRadius": j * 10,
                 "CrystalHypotenuse": i * 1.86 * 10,
+                "UpstreamWindowRadius":0,
+                "DownstreamWindowRadius":0,
             }
         }
 
@@ -25,7 +27,7 @@ for i in range(5, 16):
 /tracking/verbose 0
 
 /MACE/Physics/UseOpticalPhysics
-/MACE/Detector/Description/Import {yaml_filename}
+/Mustard/Detector/Description/Import {yaml_filename}
 
 /run/initialize
 
@@ -34,7 +36,7 @@ for i in range(5, 16):
 /gps/particle gamma
 /gps/ene/mono 0.511 MeV
 /gps/pos/centre 0. 0. 0. cm
-/gps/direction 0.386541 0.231259 0.883817
+/gps/direction -0.231259 0.883817 -0.386541
 
 /MACE/Analysis/FilePath {root_filename}
 /MACE/Analysis/FileMode RECREATE

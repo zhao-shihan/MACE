@@ -4,7 +4,7 @@
 /tracking/verbose 0
 
 /MACE/Physics/UseOpticalPhysics
-#/MACE/Detector/Description/Import test.yaml
+/Mustard/Detector/Description/Import test_5X0_25.yaml
 
 /run/initialize
 
@@ -13,9 +13,9 @@
 /gps/particle gamma
 /gps/ene/mono 0.511 MeV
 /gps/pos/centre 0. 0. 0. cm
-/gps/direction 0.386541 0.231259 0.883817
+/gps/direction -0.231259 0.883817 -0.386541
 
 /MACE/Analysis/FilePath test
 /MACE/Analysis/FileMode RECREATE
-/run/beamOn 5000
+/run/beamOn 10000
 /MPIRun/PrintRunSummary

@@ -2,6 +2,7 @@
 
 #include "Mustard/Env/BasicEnv.h++"
 
+#include "G4EmParameters.hh"
 #include "G4OpticalParameters.hh"
 #include "G4OpticalPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
@@ -22,6 +23,7 @@ PhysicsList::PhysicsList() :
 auto PhysicsList::UseOpticalPhysics() -> void {
     RegisterPhysics(new G4OpticalPhysics{verboseLevel});
     G4OpticalParameters::Instance()->SetBoundaryInvokeSD(true);
+    G4EmParameters::Instance()->SetBirksActive(false);
 }
 
 } // namespace MACE::SimEMC
