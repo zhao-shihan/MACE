@@ -3,7 +3,7 @@ message(STATUS "Looking for GenFit")
 set(MACE_GENFIT_MINIMUM_REQUIRED 2.2.0)
 
 if(NOT MACE_BUILTIN_GENFIT)
-    find_package(genfit ${MACE_GENFIT_MINIMUM_REQUIRED} QUIET)
+    find_package(genfit ${MACE_GENFIT_MINIMUM_REQUIRED})
     if(NOT genfit_FOUND)
         set(MACE_BUILTIN_GENFIT ON)
         message(NOTICE "***Notice: GenFit not found (minimum required is ${MACE_GENFIT_MINIMUM_REQUIRED}). Turning on MACE_BUILTIN_GENFIT")

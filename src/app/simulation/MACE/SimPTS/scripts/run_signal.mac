@@ -1,0 +1,27 @@
+#############################################################################
+# Initialization settings
+#############################################################################
+
+/control/verbose 0
+/run/verbose 0
+
+#/MACE/Detector/Description/Ixport SimPTS_geom.yaml
+
+/run/initialize
+
+/gps/particle             anti_muonium
+/gps/pos/type             Volume
+/gps/pos/shape            Ellipsoid
+/gps/pos/halfx            2 cm
+/gps/pos/halfy            2 cm
+/gps/pos/halfz            3 cm
+/gps/ene/mono             0 eV
+
+#############################################################################
+# Run
+#############################################################################
+
+/MACE/Analysis/FilePath SimPTS_signal
+/MACE/Analysis/FileMode NEW
+/run/beamOn 10000
+/MPIRun/PrintRunSummary

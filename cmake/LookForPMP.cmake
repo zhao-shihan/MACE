@@ -3,7 +3,7 @@ message(STATUS "Looking for pmp")
 set(MACE_PMP_MINIMUM_REQUIRED 3.0.0)
 
 if(NOT MACE_BUILTIN_PMP)
-    find_package(pmp ${MACE_PMP_MINIMUM_REQUIRED} QUIET)
+    find_package(pmp ${MACE_PMP_MINIMUM_REQUIRED})
     if(NOT pmp_FOUND)
         set(MACE_BUILTIN_PMP ON)
         message(NOTICE "***Notice: pmp not found (minimum required is ${MACE_PMP_MINIMUM_REQUIRED}). Turning on MACE_BUILTIN_PMP")

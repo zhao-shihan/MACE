@@ -26,7 +26,6 @@ StandardPhysicsListBase::StandardPhysicsListBase() :
     ReplacePhysics(new G4SpinDecayPhysics{verboseLevel});
     RegisterPhysics(new Mustard::Geant4X::MuonPrecisionDecayPhysics{verboseLevel});
     RegisterPhysics(new Mustard::Geant4X::MuoniumPrecisionDecayPhysics{verboseLevel});
-    RegisterPhysics(new Mustard::Geant4X::MuoniumTwoBodyDecayPhysics{verboseLevel});
 }
 
 } // namespace MACE::inline Simulation::inline Physics

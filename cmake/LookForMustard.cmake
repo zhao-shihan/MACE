@@ -3,7 +3,7 @@ message(STATUS "Looking for Mustard")
 set(MACE_MUSTARD_MINIMUM_REQUIRED 0.0.1)
 
 if(NOT MACE_BUILTIN_MUSTARD)
-    find_package(Mustard ${MACE_MUSTARD_MINIMUM_REQUIRED} QUIET)
+    find_package(Mustard ${MACE_MUSTARD_MINIMUM_REQUIRED})
     if(NOT Mustard_FOUND)
         set(MACE_BUILTIN_MUSTARD ON)
         message(NOTICE "***Notice: Mustard not found (minimum required is ${MACE_MUSTARD_MINIMUM_REQUIRED}). Turning on MACE_BUILTIN_MUSTARD")
