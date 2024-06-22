@@ -23,7 +23,6 @@ PhysicsList::PhysicsList() :
 auto PhysicsList::UseOpticalPhysics() -> void {
     RegisterPhysics(new G4OpticalPhysics{verboseLevel});
     G4OpticalParameters::Instance()->SetBoundaryInvokeSD(true);
-    G4EmParameters::Instance()->SetBirksActive(false);
 }
 
 } // namespace MACE::SimEMC
