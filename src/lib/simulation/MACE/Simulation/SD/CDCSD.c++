@@ -18,10 +18,9 @@
 #include "G4VProcess.hh"
 #include "G4VTouchable.hh"
 
+#include "muc/algorithm"
 #include "muc/numeric"
 #include "muc/utility"
-
-#include "gfx/timsort.hpp"
 
 #include <cassert>
 #include <cmath>
@@ -139,7 +138,7 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
             const auto timeResolutionFWHM{Detector::Description::CDC::Instance().TimeResolutionFWHM()};
             assert(timeResolutionFWHM >= 0);
             // sort hit by signal time
-            gfx::timsort(splitHit,
+            muc::timsort(splitHit,
                          [](const auto& hit1, const auto& hit2) {
                              return Get<"t">(*hit1) < Get<"t">(*hit2);
                          });
@@ -180,7 +179,7 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     }
     fSplitHit.clear();
 
-    gfx::timsort(*fHitsCollection->GetVector(), ByTrackID);
+    muc::timsort(*fHitsCollection->GetVector(), ByTrackID);
 }
 
 } // namespace MACE::inline Simulation::inline SD

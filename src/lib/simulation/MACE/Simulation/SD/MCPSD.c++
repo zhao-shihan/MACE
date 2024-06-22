@@ -20,7 +20,7 @@
 #include "G4VProcess.hh"
 #include "G4VTouchable.hh"
 
-#include "gfx/timsort.hpp"
+#include "muc/algorithm"
 
 #include <cassert>
 #include <cmath>
@@ -118,7 +118,7 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
         assert(timeResolutionFWHM >= 0);
         int hitID{};
         // sort hit by time
-        gfx::timsort(fSplitHit,
+        muc::timsort(fSplitHit,
                      [](const auto& hit1, const auto& hit2) {
                          return Get<"t">(*hit1) < Get<"t">(*hit2);
                      });

@@ -76,31 +76,27 @@ IncludeCategories:
     Priority: 5
   - Regex: '"pmp/.*"'
     Priority: 6
-  - Regex: '"backward\.hpp"'
-    Priority: 7
   - Regex: '"yaml-cpp/.*"'
-    Priority: 8
+    Priority: 7
   - Regex: '"argparse/.*"'
-    Priority: 9
+    Priority: 8
   - Regex: '"Eigen/.*"'
-    Priority: 10
+    Priority: 9
   - Regex: '"gsl.*\.h"'
-    Priority: 11
+    Priority: 10
   - Regex: '"mpi.*\.h"'
-    Priority: 12
+    Priority: 11
   - Regex: '"muc/.*"'
-    Priority: 13
-  - Regex: '"gfx/timsort.hpp"'
-    Priority: 14
+    Priority: 12
   - Regex: '"gsl/.*"'
-    Priority: 15
+    Priority: 13
   - Regex: '"fmt/.*\.h"'
-    Priority: 16
+    Priority: 14
   # very general
   - Regex: '".*"'
     Priority: 2
   - Regex: '<.*>'
-    Priority: 17
+    Priority: 15
 IndentAccessModifiers: false
 IndentCaseBlocks: false
 IndentCaseLabels: false
