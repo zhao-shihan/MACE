@@ -15,9 +15,7 @@ message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
 # By default, no C++ extensions available for MACE
 # =============================================================================
 
-if(NOT DEFINED CMAKE_CXX_EXTENSIONS)
-    set(CMAKE_CXX_EXTENSIONS OFF)
-endif()
+set(CMAKE_CXX_EXTENSIONS OFF CACHE INTERNAL "Boolean specifying whether compiler specific extensions are requested.")
 
 # =============================================================================
 # Unity build for MACE
