@@ -14,7 +14,7 @@ message(STATUS "Looking for <lib_cmake_name>")
 set(MACE_<LIB_NAME>_MINIMUM_REQUIRED <min_version>)
 
 if(NOT MACE_BUILTIN_<LIB_NAME>)
-    find_package(<lib_cmake_name> ${MACE_<LIB_NAME>_MINIMUM_REQUIRED} QUIET)
+    find_package(<lib_cmake_name> ${MACE_<LIB_NAME>_MINIMUM_REQUIRED})
     if(NOT <lib_cmake_name>_FOUND)
         set(MACE_BUILTIN_<LIB_NAME> ON)
         message(NOTICE "***Notice: <lib_cmake_name> not found (minimum required is ${MACE_<LIB_NAME>_MINIMUM_REQUIRED}). Turning on MACE_BUILTIN_<LIB_NAME>")
