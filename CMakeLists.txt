@@ -21,10 +21,14 @@ project(MACE VERSION 0.0.0
 # =============================================================================
 
 # Dirs
-set(MACE_PROJECT_ROOT_DIR "${PROJECT_SOURCE_DIR}")
-set(MACE_PROJECT_CMAKE_DIR "${MACE_PROJECT_ROOT_DIR}/cmake")
-set(PROJECT_SOURCE_DIR "${MACE_PROJECT_ROOT_DIR}/src")
-set(MACE_PROJECT_3RDPARTY_DIR "${MACE_PROJECT_ROOT_DIR}/thirdparty")
+set(MACE_PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
+set(MACE_PROJECT_CMAKE_DIR ${MACE_PROJECT_ROOT_DIR}/cmake)
+set(PROJECT_SOURCE_DIR ${MACE_PROJECT_ROOT_DIR}/src)
+set(MACE_PROJECT_3RDPARTY_DIR ${MACE_PROJECT_ROOT_DIR}/thirdparty)
+
+# Install dirs
+include(GNUInstallDirs)
+set(MACE_DATAROOTDIR ${CMAKE_INSTALL_DATAROOTDIR}/MACE)
 
 # =============================================================================
 # Options
