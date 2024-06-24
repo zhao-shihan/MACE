@@ -25,13 +25,21 @@ public:
     auto CrystalHypotenuse() const -> auto { return fCrystalHypotenuse; }
     auto UpstreamWindowRadius() const -> auto { return fUpstreamWindowRadius; }
     auto DownstreamWindowRadius() const -> auto { return fDownstreamWindowRadius; }
+
     auto PMTDimensions() const -> const auto& { return fPMTDimensions; }
     auto PMTCouplerThickness() const -> auto { return fPMTCouplerThickness; }
     auto PMTWindowThickness() const -> auto { return fPMTWindowThickness; }
     auto PMTCathodeThickness() const -> auto { return fPMTCathodeThickness; }
-
     auto PMTWaveLengthBin() const -> const auto& { return fPMTWaveLengthBin; }
     auto PMTQuantumEfficiency() const -> const auto& { return fPMTQuantumEfficiency; }
+
+    auto MPPCWidthSet() const -> const auto& { return fMPPCWidthSet; }
+    auto MPPCThickness() const -> auto { return fMPPCThickness; }
+    auto MPPCCouplerThickness() const -> auto { return fMPPCCouplerThickness; }
+    auto MPPCWindowThickness() const -> auto { return fMPPCWindowThickness; }
+    auto MPPCWaveLengthBin() const -> const auto& { return fMPPCWaveLengthBin; }
+    auto MPPCEfficiency() const -> const auto& { return fMPPCEfficiency; }
+
     auto CsIEnergyBin() const -> const auto& { return fCsIEnergyBin; }
     auto CsIScintillationComponent1() const -> const auto& { return fCsIScintillationComponent1; }
     auto ScintillationYield() const -> auto { return fScintillationYield; }
@@ -49,13 +57,21 @@ public:
     auto CrystalHypotenuse(double val) -> void { fCrystalHypotenuse = val, SetGeometryOutdated(); }
     auto UpstreamWindowRadius(double val) -> void { fUpstreamWindowRadius = val, SetGeometryOutdated(); }
     auto DownstreamWindowRadius(double val) -> void { fDownstreamWindowRadius = val, SetGeometryOutdated(); }
+
     auto PMTDimensions(std::vector<muc::array3d> val) -> void { fPMTDimensions = std::move(val); }
     auto PMTCouplerThickness(double val) -> void { fPMTCouplerThickness = val; }
     auto PMTWindowThickness(double val) -> void { fPMTWindowThickness = val; }
     auto PMTCathodeThickness(double val) -> void { fPMTCathodeThickness = val; }
-
     auto PMTWaveLengthBin(std::vector<double> val) -> void { fPMTWaveLengthBin = std::move(val); }
     auto PMTQuantumEfficiency(std::vector<double> val) -> void { fPMTQuantumEfficiency = std::move(val); }
+
+    auto MPPCWidthSet(std::vector<double> val) -> void { fMPPCWidthSet = std::move(val); }
+    auto MPPCThickness(double val) -> void { fMPPCThickness = val; }
+    auto MPPCCouplerThickness(double val) -> void { fMPPCCouplerThickness = val; }
+    auto MPPCWindowThickness(double val) -> void { fMPPCWindowThickness = val; }
+    auto MPPCWaveLengthBin(std::vector<double> val) -> void { fMPPCWaveLengthBin = std::move(val); }
+    auto MPPCEfficiency(std::vector<double> val) -> void { fMPPCEfficiency = std::move(val); }
+
     auto CsIEnergyBin(std::vector<double> val) -> void { fCsIEnergyBin = std::move(val); }
     auto CsIScintillationComponent1(std::vector<double> val) -> void { fCsIScintillationComponent1 = std::move(val); }
     auto ScintillationYield(double val) -> void { fScintillationYield = val; }
@@ -99,13 +115,21 @@ private:
     double fCrystalHypotenuse;
     double fUpstreamWindowRadius;
     double fDownstreamWindowRadius;
+
     std::vector<muc::array3d> fPMTDimensions;
     double fPMTCouplerThickness;
     double fPMTWindowThickness;
     double fPMTCathodeThickness;
-
     std::vector<double> fPMTWaveLengthBin;
     std::vector<double> fPMTQuantumEfficiency;
+
+    std::vector<double> fMPPCWidthSet;
+    double fMPPCThickness;
+    double fMPPCCouplerThickness;
+    double fMPPCWindowThickness;
+    std::vector<double> fMPPCWaveLengthBin;
+    std::vector<double> fMPPCEfficiency;
+
     std::vector<double> fCsIEnergyBin;
     std::vector<double> fCsIScintillationComponent1;
     double fScintillationYield;
