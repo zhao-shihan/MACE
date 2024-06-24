@@ -147,9 +147,9 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
                                                        unitID,
                                                        checkOverlaps)};
 
-        const auto solidGlassBox{Make<G4Tubs>("temp", 0, pmtDiameter / 2, pmtLength / 2, 0, 2 * pi)};
+        const auto solidGlassTube{Make<G4Tubs>("temp", 0, pmtDiameter / 2, pmtLength / 2, 0, 2 * pi)};
         const auto solidPMTVacuum{Make<G4Tubs>("temp", 0, pmtDiameter / 2 - pmtWindowThickness, pmtLength / 2 - pmtWindowThickness, 0, 2 * pi)};
-        const auto solidPMTShell{Make<G4SubtractionSolid>("EMCPMTShell", solidGlassBox, solidPMTVacuum)};
+        const auto solidPMTShell{Make<G4SubtractionSolid>("EMCPMTShell", solidGlassTube, solidPMTVacuum)};
         const auto logicPMTShell{Make<G4LogicalVolume>(solidPMTShell, glass, "EMCPMTShell")};
         Make<G4PVPlacement>(shellTransform,
                             logicPMTShell,
