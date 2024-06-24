@@ -36,7 +36,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     // AcceleratorField is target's mother by default, modified it to adapt global frame
     Detector::Description::Accelerator::Instance().UpstreamLength(0);
-    Detector::Description::Accelerator::Instance().AccelerateLength(0);
+    Detector::Description::Accelerator::Instance().DownstreamLength(0);
 
     fWorld = std::make_unique<World>();
     fWorld->NewDaughter<BeamMonitor>(fCheckOverlap);

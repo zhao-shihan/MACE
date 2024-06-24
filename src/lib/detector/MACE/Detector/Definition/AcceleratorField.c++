@@ -19,7 +19,7 @@ auto AcceleratorField::Construct(G4bool checkOverlaps) -> void {
         name,
         0,
         accelerator.FieldRadius(),
-        (accelerator.UpstreamLength() + accelerator.AccelerateLength()) / 2,
+        accelerator.FullLength() / 2,
         0,
         2_pi)};
     const auto logic{Make<G4LogicalVolume>(
@@ -27,7 +27,7 @@ auto AcceleratorField::Construct(G4bool checkOverlaps) -> void {
         nullptr,
         name)};
     Make<G4PVPlacement>( // clang-format off
-        G4Transform3D{{}, {0, 0, (accelerator.AccelerateLength() - accelerator.UpstreamLength()) / 2}}, // clang-format on
+        G4Transform3D{{}, {0, 0, (accelerator.DownstreamLength() - accelerator.UpstreamLength()) / 2}}, // clang-format on
         logic,
         name,
         Mother().LogicalVolume(),

@@ -20,7 +20,24 @@ public:
     auto BE(T x) const -> F<T> { return std::visit([&x](auto&& f) { return f.BE(x); }, fField); } // clang-format on
 
 private:
-    using FastField = Mustard::Detector::Field::UniformElectromagneticField;
+    class FastField : public Mustard::Detector::Field::ElectromagneticFieldBase<FastField> {
+    public:
+        FastField();
+
+        template<Mustard::Concept::NumericVector3D T>
+        auto B(T) const -> T { return {0, 0, fB}; }
+        template<Mustard::Concept::NumericVector3D T>
+        auto E(T x) const -> T { return {0, 0, x[2] < fZ0 ? fE1 : fE2}; }
+        template<Mustard::Concept::NumericVector3D T>
+        auto BE(T x) const -> F<T> { return {B(x), E(x)}; }
+
+    private:
+        double fB;
+        double fZ0;
+        double fE1;
+        double fE2;
+    };
+
     using FieldMap = Mustard::Detector::Field::ElectromagneticFieldMapSymmetryY<"NoCache">;
 
 private:

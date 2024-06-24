@@ -7,15 +7,19 @@ namespace MACE::Detector::Field {
 
 AcceleratorField::AcceleratorField() : // clang-format off
     ElectromagneticFieldBase<AcceleratorField>{}, // clang-format on
-    fField{FastField{{}, {}}} {
+    fField{} {
     const auto& fieldOption{Detector::Description::FieldOption::Instance()};
-    const auto& acceleratorField{Description::Accelerator::Instance()};
-    if (fieldOption.UseFast()) {
-        const auto& mmsField{Detector::Description::MMSField::Instance()};
-        fField = FastField{0, 0, mmsField.FastField(), 0, 0, acceleratorField.FastField()};
-    } else {
+    if (not fieldOption.UseFast()) {
         fField = FieldMap{fieldOption.ParsedFieldDataFilePath().generic_string(), "AcceleratorField"};
     }
+}
+
+AcceleratorField::FastField::FastField() :
+    fB{Detector::Description::MMSField::Instance().FastField()} {
+    const auto& accelerator{Description::Accelerator::Instance()};
+    fZ0 = accelerator.MaxPotentialPosition();
+    fE1 = -accelerator.MaxPotential() / accelerator.DecelerateLength();
+    fE2 = accelerator.MaxPotential() / accelerator.AccelerateLength();
 }
 
 } // namespace MACE::Detector::Field

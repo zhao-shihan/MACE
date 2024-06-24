@@ -31,7 +31,7 @@ auto VirtualDetectorA::Construct(bool checkOverlaps) -> void {
         Mother().LogicalVolume()->GetMaterial(),
         virtualDetectorA.Name())};
     Make<G4PVPlacement>(
-        G4TranslateZ3D{accelerator.AccelerateLength() + virtualDetectorA.Thickness() / 2},
+        G4TranslateZ3D{accelerator.DownstreamLength() + virtualDetectorA.Thickness() / 2},
         logic,
         virtualDetectorA.Name(),
         Mother().LogicalVolume(),
