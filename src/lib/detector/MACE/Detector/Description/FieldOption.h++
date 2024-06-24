@@ -4,6 +4,7 @@
 
 #include "envparse/parse.h++"
 
+#include <filesystem>
 #include <string>
 
 namespace MACE::Detector::Description {
@@ -17,11 +18,11 @@ private:
 
 public:
     auto UseFast() const -> auto { return fUseFast; }
-    auto FieldDataFileName() const -> auto { return envparse::parse(fFieldDataFileName); }
-    auto RawFieldDataFileName() const -> const auto& { return fFieldDataFileName; }
+    auto FieldDataFilePath() const -> const auto& { return fFieldDataFilePath; }
+    auto ParsedFieldDataFilePath() const -> std::filesystem::path { return envparse::parse(fFieldDataFilePath); }
 
     auto UseFast(bool val) -> void { fUseFast = val; }
-    auto FieldDataFileName(std::string val) -> void { fFieldDataFileName = std::move(val); }
+    auto FieldDataFilePath(std::string val) -> void { fFieldDataFilePath = std::move(val); }
 
 private:
     auto ImportAllValue(const YAML::Node& node) -> void override;
@@ -29,7 +30,7 @@ private:
 
 private:
     bool fUseFast;
-    std::string fFieldDataFileName;
+    std::string fFieldDataFilePath;
 };
 
 } // namespace MACE::Detector::Description

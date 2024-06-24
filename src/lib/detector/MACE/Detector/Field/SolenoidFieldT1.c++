@@ -12,7 +12,7 @@ SolenoidFieldT1::SolenoidFieldT1() : // clang-format off
     if (fieldOption.UseFast()) { // clang-format off
         fField = FastField{solenoid.FastField(), solenoid.T1Radius(), solenoid.T1Center(), {0, 0, 1}}; // clang-format on
     } else {
-        fField = FieldMap{fieldOption.FieldDataFileName(), "SolenoidFieldT1"};
+        fField = FieldMap{fieldOption.ParsedFieldDataFilePath().generic_string(), "SolenoidFieldT1"};
     }
 }
 

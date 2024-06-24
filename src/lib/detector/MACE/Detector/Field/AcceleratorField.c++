@@ -14,7 +14,7 @@ AcceleratorField::AcceleratorField() : // clang-format off
         const auto& mmsField{Detector::Description::MMSField::Instance()};
         fField = FastField{0, 0, mmsField.FastField(), 0, 0, acceleratorField.FastField()};
     } else {
-        fField = FieldMap{fieldOption.FieldDataFileName(), "AcceleratorField"};
+        fField = FieldMap{fieldOption.ParsedFieldDataFilePath().generic_string(), "AcceleratorField"};
     }
 }
 

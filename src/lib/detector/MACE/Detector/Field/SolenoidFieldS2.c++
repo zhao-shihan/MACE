@@ -12,7 +12,7 @@ SolenoidFieldS2::SolenoidFieldS2() : // clang-format off
     if (fieldOption.UseFast()) {
         fField = FastField{solenoid.FastField(), 0, 0};
     } else {
-        fField = FieldMap{fieldOption.FieldDataFileName(), "SolenoidFieldS2"};
+        fField = FieldMap{fieldOption.ParsedFieldDataFilePath().generic_string(), "SolenoidFieldS2"};
     }
 }
 

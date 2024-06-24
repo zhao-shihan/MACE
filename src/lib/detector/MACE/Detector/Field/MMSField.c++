@@ -12,7 +12,7 @@ MMSField::MMSField() :
     if (fieldOption.UseFast()) {
         fField = FastField{0, 0, emcField.FastField()};
     } else {
-        fField = FieldMap{fieldOption.FieldDataFileName(), "MMSField"};
+        fField = FieldMap{fieldOption.ParsedFieldDataFilePath().generic_string(), "MMSField"};
     }
 }
 
