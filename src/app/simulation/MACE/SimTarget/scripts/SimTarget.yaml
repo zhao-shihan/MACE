@@ -34,6 +34,9 @@ Target:
       ExtentY: 40
       Spacing: 0.055
       Diameter: 0.184
+  Cylinder:
+    Radius: 30
+    Thickness: 60
   SilicaAerogelDensity: 1.6852074501044058e+17
   EffectiveTemperature: 400
   FormationProbability: 0.65500000000000003
