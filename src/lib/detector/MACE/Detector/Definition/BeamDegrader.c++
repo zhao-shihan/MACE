@@ -23,7 +23,7 @@ auto BeamDegrader::Construct(G4bool checkOverlaps) -> void {
     const auto& target{Description::Target::Instance()};
 
     G4Transform3D transform;
-    switch (const auto z0{(accelerator.UpstreamLength() - accelerator.DownstreamLength()) / 2};
+    switch (const auto z0{(accelerator.UpstreamFieldLength() - accelerator.DownstreamFieldLength()) / 2};
             target.ShapeType()) {
     case Description::Target::TargetShapeType::Cuboid: // clang-format off
         transform = {{}, {0, 0, z0 - target.Cuboid().Thickness() - degrader.DistanceToTarget() - degrader.Thickness() / 2}}; // clang-format on

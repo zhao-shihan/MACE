@@ -26,8 +26,13 @@ public:
     auto ElectrodeOuterRadius() const -> auto { return fElectrodeOuterRadius; }
     auto ElectrodeThickness() const -> auto { return fElectrodeThickness; }
     auto FieldRadius() const -> auto { return fFieldRadius; }
+    auto DecelerateFieldLength() const -> auto { return fDecelerateFieldLength; }
+    auto AccelerateFieldLength() const -> auto { return fAccelerateFieldLength; }
     auto FullLength() const -> auto { return fUpstreamLength + fDownstreamLength; }
     auto NElectrode() const -> auto { return muc::lltrunc((FullLength() - fElectrodeThickness) / fElectrodePitch) + 1; }
+    auto UpstreamFieldLength() const -> auto { return fDecelerateFieldLength - fMaxPotentialPosition; }
+    auto DownstreamFieldLength() const -> auto { return fAccelerateFieldLength + fMaxPotentialPosition; }
+    auto FullFieldLength() const -> auto { return fDecelerateFieldLength + fAccelerateFieldLength; }
 
     auto UpstreamLength(double val) -> void { fUpstreamLength = val; }
     auto DownstreamLength(double val) -> void { fDownstreamLength = val; }
@@ -36,6 +41,8 @@ public:
     auto ElectrodeOuterRadius(double val) -> void { fElectrodeOuterRadius = val; }
     auto ElectrodeThickness(double val) -> void { fElectrodeThickness = val; }
     auto FieldRadius(double val) -> void { fFieldRadius = val; }
+    auto DecelerateFieldLength(double val) -> void { fDecelerateFieldLength = val; }
+    auto AccelerateFieldLength(double val) -> void { fAccelerateFieldLength = val; }
 
     // Material
 
@@ -47,13 +54,9 @@ public:
 
     auto MaxPotential() const -> auto { return fMaxPotential; }
     auto MaxPotentialPosition() const -> auto { return fMaxPotentialPosition; }
-    auto DecelerateLength() const -> auto { return fDecelerateLength; }
-    auto AccelerateLength() const -> auto { return fAccelerateLength; }
 
     auto MaxPotential(double val) -> void { fMaxPotential = val; }
     auto MaxPotentialPosition(double val) -> void { fMaxPotentialPosition = val; }
-    auto DecelerateLength(double val) -> void { fDecelerateLength = val; }
-    auto AccelerateLength(double val) -> void { fAccelerateLength = val; }
 
 private:
     auto ImportAllValue(const YAML::Node& node) -> void override;
@@ -69,6 +72,8 @@ private:
     double fElectrodeOuterRadius;
     double fElectrodeThickness;
     double fFieldRadius;
+    double fDecelerateFieldLength;
+    double fAccelerateFieldLength;
 
     // Material
 
@@ -78,8 +83,6 @@ private:
 
     double fMaxPotential;
     double fMaxPotentialPosition;
-    double fDecelerateLength;
-    double fAccelerateLength;
 };
 
 } // namespace MACE::Detector::Description

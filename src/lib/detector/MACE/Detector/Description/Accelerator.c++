@@ -17,13 +17,13 @@ Accelerator::Accelerator() :
     fElectrodeOuterRadius{60_mm},
     fElectrodeThickness{0.5_mm},
     fFieldRadius{70_mm},
+    fDecelerateFieldLength{165_mm},
+    fAccelerateFieldLength{360_mm},
     // Material
     fElectrodeMaterialName{"G4_Be"},
     // Field
     fMaxPotential{586.7_V},
-    fMaxPotentialPosition{-65_mm},
-    fDecelerateLength{165_mm},
-    fAccelerateLength{360_mm} {}
+    fMaxPotentialPosition{-65_mm} {}
 
 auto Accelerator::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
@@ -34,13 +34,13 @@ auto Accelerator::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fElectrodeOuterRadius, "ElectrodeOuterRadius");
     ImportValue(node, fElectrodeThickness, "ElectrodeThickness");
     ImportValue(node, fFieldRadius, "FieldRadius");
+    ImportValue(node, fDecelerateFieldLength, "DecelerateFieldLength");
+    ImportValue(node, fAccelerateFieldLength, "AccelerateFieldLength");
     // Material
     ImportValue(node, fElectrodeMaterialName, "ElectrodeMaterialName");
     // Field
     ImportValue(node, fMaxPotential, "MaxPotential");
     ImportValue(node, fMaxPotentialPosition, "MaxPotentialPosition");
-    ImportValue(node, fDecelerateLength, "DecelerateLength");
-    ImportValue(node, fAccelerateLength, "AccelerateLength");
 }
 
 auto Accelerator::ExportAllValue(YAML::Node& node) const -> void {
@@ -52,13 +52,13 @@ auto Accelerator::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fElectrodeOuterRadius, "ElectrodeOuterRadius");
     ExportValue(node, fElectrodeThickness, "ElectrodeThickness");
     ExportValue(node, fFieldRadius, "FieldRadius");
+    ExportValue(node, fDecelerateFieldLength, "DecelerateFieldLength");
+    ExportValue(node, fAccelerateFieldLength, "AccelerateFieldLength");
     // Material
     ExportValue(node, fElectrodeMaterialName, "ElectrodeMaterialName");
     // Field
     ExportValue(node, fMaxPotential, "MaxPotential");
     ExportValue(node, fMaxPotentialPosition, "MaxPotentialPosition");
-    ExportValue(node, fDecelerateLength, "DecelerateLength");
-    ExportValue(node, fAccelerateLength, "AccelerateLength");
 }
 
 } // namespace MACE::Detector::Description

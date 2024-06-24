@@ -18,8 +18,8 @@ AcceleratorField::FastField::FastField() :
     fB{Detector::Description::MMSField::Instance().FastField()} {
     const auto& accelerator{Description::Accelerator::Instance()};
     fZ0 = accelerator.MaxPotentialPosition();
-    fE1 = -accelerator.MaxPotential() / accelerator.DecelerateLength();
-    fE2 = accelerator.MaxPotential() / accelerator.AccelerateLength();
+    fE1 = -accelerator.MaxPotential() / accelerator.DecelerateFieldLength();
+    fE2 = accelerator.MaxPotential() / accelerator.AccelerateFieldLength();
 }
 
 } // namespace MACE::Detector::Field
