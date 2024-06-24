@@ -9,7 +9,7 @@
 #include "Mustard/Data/Tuple.h++"
 #include "Mustard/Env/Print.h++"
 
-#include "gfx/timsort.hpp"
+#include "muc/algorithm"
 
 #include <algorithm>
 #include <iterator>

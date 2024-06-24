@@ -15,9 +15,7 @@ message(STATUS "MACE will be compiled with C++${CMAKE_CXX_STANDARD}")
 # By default, no C++ extensions available for MACE
 # =============================================================================
 
-if(NOT DEFINED CMAKE_CXX_EXTENSIONS)
-    set(CMAKE_CXX_EXTENSIONS OFF)
-endif()
+set(CMAKE_CXX_EXTENSIONS OFF CACHE INTERNAL "Boolean specifying whether compiler specific extensions are requested.")
 
 # =============================================================================
 # Unity build for MACE
@@ -75,36 +73,30 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     list(APPEND MACE_COMPILE_OPTIONS /W4)
 endif()
 
-# Surpress some, if needed
+# Surpress some, if required
 if(NOT MACE_SHOW_MORE_COMPILER_WARNINGS)
     if(CMAKE_COMPILER_IS_GNUCXX)
-        # # OpenMPI
-        # list(APPEND MACE_COMPILE_OPTIONS -Wno-cast-function-type)
+        # nothing for now
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-        # if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 15.0.0)
-        #     # backward-cpp
-        #     list(APPEND MACE_COMPILE_OPTIONS -Wno-unqualified-std-cast-call)
-        # endif()
-        if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS_EQUAL 15.0.0)
-            list(APPEND MACE_COMPILE_OPTIONS -Wno-unsupported-friend)
-        endif()
+        # nothing for now
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-        # ROOT (conditional expression is constant)
-        list(APPEND MACE_COMPILE_OPTIONS /wd4127)
-        # Common ('argument': conversion from 'type1' to 'type2', possible loss of data)
-        list(APPEND MACE_COMPILE_OPTIONS /wd4244)
-        # Common ('var': conversion from 'size_t' to 'type', possible loss of data)
-        list(APPEND MACE_COMPILE_OPTIONS /wd4267)
-        # MSVC std::tuple ('derived class' : destructor was implicitly defined as deleted because a base class destructor is inaccessible or deleted)
-        list(APPEND MACE_COMPILE_OPTIONS /wd4624)
-        # Common (The file contains a character that cannot be represented in the current code page (number). Save the file in Unicode format to prevent data loss)
-        list(APPEND MACE_COMPILE_OPTIONS /wd4819)
-        # ROOT (using a function, class member, variable, or typedef that's marked deprecated)
-        list(APPEND MACE_COMPILE_OPTIONS /wd4996)
-        # Eigen (operator 'operator-name': deprecated between enumerations of different types)
-        list(APPEND MACE_COMPILE_OPTIONS /wd5054)
+        # TODO: below is ancient; need update.
+        # # ROOT (conditional expression is constant)
+        # list(APPEND MACE_COMPILE_OPTIONS /wd4127)
+        # # Common ('argument': conversion from 'type1' to 'type2', possible loss of data)
+        # list(APPEND MACE_COMPILE_OPTIONS /wd4244)
+        # # Common ('var': conversion from 'size_t' to 'type', possible loss of data)
+        # list(APPEND MACE_COMPILE_OPTIONS /wd4267)
+        # # MSVC std::tuple ('derived class' : destructor was implicitly defined as deleted because a base class destructor is inaccessible or deleted)
+        # list(APPEND MACE_COMPILE_OPTIONS /wd4624)
+        # # Common (The file contains a character that cannot be represented in the current code page (number). Save the file in Unicode format to prevent data loss)
+        # list(APPEND MACE_COMPILE_OPTIONS /wd4819)
+        # # ROOT (using a function, class member, variable, or typedef that's marked deprecated)
+        # list(APPEND MACE_COMPILE_OPTIONS /wd4996)
+        # # Eigen (operator 'operator-name': deprecated between enumerations of different types)
+        # list(APPEND MACE_COMPILE_OPTIONS /wd5054)
     endif()
-# Even more warnings, if needed
+# Even more warnings, if required
 elseif(MACE_SHOW_EVEN_MORE_COMPILER_WARNINGS)
     if(CMAKE_COMPILER_IS_GNUCXX)
         list(APPEND MACE_COMPILE_OPTIONS -Weffc++)

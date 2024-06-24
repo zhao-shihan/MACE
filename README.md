@@ -30,12 +30,13 @@ For more information, please check out [the image repository homepage](https://g
 
 Required:
 
-1. [Mustard (A modern offline software framework for HEP experiment )](https://github.com/zhao-shihan/Mustard) (≥ 0.0.1, built-in if not found)
+1. [Mustard (A modern, distributed offline software framework for HEP experiments)](https://github.com/zhao-shihan/Mustard) (≥ 0.0.1, built-in if not found)
 
 Required, built-in if not found (network or pre-downloaded source is required):
 
 1. [zhao-shihan/GenFit (A generic track-fitting toolkit)](https://github.com/zhao-shihan/GenFit) (a GenFit fork, built-in if not found)
 2. [PMP (Polygon Mesh Processing Library)](https://www.pmp-library.org/) (≥ 3.0.0, built-in if not found)
+3. [MACE offline data](http://gitlab.iyu.icu:6680/zhaoshihan/mace_offline_data) (built-in if not found)
 
 ## Cite
 

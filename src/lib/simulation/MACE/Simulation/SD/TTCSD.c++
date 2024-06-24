@@ -18,10 +18,9 @@
 #include "G4VProcess.hh"
 #include "G4VTouchable.hh"
 
+#include "muc/algorithm"
 #include "muc/numeric"
 #include "muc/utility"
-
-#include "gfx/timsort.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -132,7 +131,7 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
             const auto scintillationTimeConstant1{Detector::Description::TTC::Instance().ScintillationTimeConstant1()};
             assert(scintillationTimeConstant1 >= 0);
             // sort hit by time
-            gfx::timsort(splitHit,
+            muc::timsort(splitHit,
                          [](const auto& hit1, const auto& hit2) {
                              return Get<"t">(*hit1) < Get<"t">(*hit2);
                          });
@@ -165,7 +164,7 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     }
     fSplitHit.clear();
 
-    gfx::timsort(*fHitsCollection->GetVector(), ByTrackID);
+    muc::timsort(*fHitsCollection->GetVector(), ByTrackID);
 
     if (fTTCSiPMSD) {
         auto nHit{fTTCSiPMSD->NOpticalPhotonHit()};
