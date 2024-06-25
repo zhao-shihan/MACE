@@ -156,9 +156,9 @@ EMC::EMC() :
 },
     fNSubdivision{3},
     fInnerRadius{15_cm},
-    fCrystalHypotenuse{15_cm},
-    fUpstreamWindowRadius{50_mm},
-    fDownstreamWindowRadius{5_mm},
+    fCrystalHypotenuse{10_cm},
+    fUpstreamWindowRadius{0_mm},
+    fDownstreamWindowRadius{0_mm},
     fPMTDimensions{
         {29.3_mm, 25_mm, 87_mm},   // 9442B Type-HEX01
         {29.3_mm, 25_mm, 87_mm},   // 9442B Type-PEN
@@ -203,7 +203,7 @@ EMC::EMC() :
         24_mm,
         24_mm,
     },
-    fMPPCThickness{1_mm},
+    fMPPCThickness{0.1_mm},
     fMPPCCouplerThickness{0.1_mm},
     fMPPCWindowThickness{0.15_mm},
     fMPPCWaveLengthBin{886.244, 871.228, 856.21, 841.193, 826.176, 810.974, 796.366, 781.121, 766.101, 751.082,

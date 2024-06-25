@@ -109,10 +109,10 @@ auto EMCMPPC::Construct(G4bool checkOverlaps) -> void {
     for (int unitID{};
          auto&& [_1, _2, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
 
-        if (unitID != 222) {
-            unitID++;
-            continue;
-        }
+        // if (unitID != 222) {
+        //     unitID++;
+        //     continue;
+        // }
 
         auto typeMapIt = typeMap.find(unitID);
         double mppcWidth{mppcWidthSet.at(typeMapIt->second)};
@@ -127,11 +127,11 @@ auto EMCMPPC::Construct(G4bool checkOverlaps) -> void {
         const auto cathodeTransform{emc.ComputeTransformToOuterSurfaceWithOffset(unitID,
                                                                                  mppcCouplerThickness + mppcWindowThickness + mppcThickness / 2)};
 
-        const auto solidCoupler{Make<G4Box>("temp", mppcWidth / 2, mppcWidth / 2, mppcThickness / 2)};
+        const auto solidCoupler{Make<G4Box>("temp", mppcWidth / 2, mppcWidth / 2, mppcCouplerThickness / 2)};
         const auto logicCoupler{Make<G4LogicalVolume>(solidCoupler, siliconeGrease, "EMCMPPCCoupler")};
         const auto physicalCoupler{Make<G4PVPlacement>(couplerTransform,
                                                        logicCoupler,
-                                                       "EMCPMTCoupler",
+                                                       "EMCMPPCCoupler",
                                                        Mother().LogicalVolume(),
                                                        true,
                                                        unitID,
@@ -147,7 +147,7 @@ auto EMCMPPC::Construct(G4bool checkOverlaps) -> void {
                             unitID,
                             checkOverlaps);
 
-        const auto solidMPPC{Make<G4Box>("temp", mppcWidth / 2, mppcWidth / 2, mppcWindowThickness / 2)};
+        const auto solidMPPC{Make<G4Box>("temp", mppcWidth / 2, mppcWidth / 2, mppcThickness / 2)};
         const auto logicMPPC{Make<G4LogicalVolume>(solidMPPC, silicon, "EMCMPPC")};
         Make<G4PVPlacement>(cathodeTransform,
                             logicMPPC,

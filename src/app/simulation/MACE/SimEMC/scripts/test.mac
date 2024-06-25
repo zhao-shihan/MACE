@@ -4,7 +4,7 @@
 /tracking/verbose 0
 
 /MACE/Physics/UseOpticalPhysics
-/Mustard/Detector/Description/Import test_5X0_25.yaml
+#/Mustard/Detector/Description/Import test_5X0_25.yaml
 
 /run/initialize
 
@@ -17,5 +17,5 @@
 
 /MACE/Analysis/FilePath test
 /MACE/Analysis/FileMode RECREATE
-/run/beamOn 10000
+/run/beamOn 5000
 /MPIRun/PrintRunSummary

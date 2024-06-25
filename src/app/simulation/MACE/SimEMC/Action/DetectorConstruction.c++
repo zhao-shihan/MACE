@@ -1,4 +1,5 @@
 #include "MACE/Detector/Definition/EMCCrystal.h++"
+#include "MACE/Detector/Definition/EMCMPPC.h++"
 #include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
 #include "MACE/Detector/Definition/MCP.h++"
 #include "MACE/Detector/Definition/MCPChamber.h++"
@@ -61,7 +62,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     fWorld = std::make_unique<World>();
     auto& emcCrystal = fWorld->NewDaughter<EMCCrystal>(fCheckOverlap);
-    auto& emcPMTAssemblies = fWorld->NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
+    // auto& emcPMTAssemblies = fWorld->NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
+    auto& emcMPPC = fWorld->NewDaughter<EMCMPPC>(fCheckOverlap);
     // auto& mcp = fWorld->NewDaughter<MCP>(fCheckOverlap);
     /* auto& mcpChamber = */
     // fWorld->NewDaughter<MCPChamber>(fCheckOverlap);
@@ -99,8 +101,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     const auto& emcName{MACE::Detector::Description::EMC::Instance().Name()};
 
-    fEMCPMTSD = new SD::EMCPMTSD{emcName + "PMT"};
-    emcPMTAssemblies.RegisterSD("EMCPMTCathode", fEMCPMTSD);
+    // fEMCPMTSD = new SD::EMCPMTSD{emcName + "PMT"};
+    // emcPMTAssemblies.RegisterSD("EMCPMTCathode", fEMCPMTSD);
 
     fEMCSD = new SD::EMCSD{emcName, fEMCPMTSD};
     emcCrystal.RegisterSD(fEMCSD);

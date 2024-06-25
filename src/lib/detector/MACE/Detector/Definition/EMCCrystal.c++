@@ -102,10 +102,10 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
         const auto crystalLength{crystalHypotenuse * centroidMagnitude};
         const auto outerHypotenuse{innerRadius + crystalHypotenuse};
 
-        if (unitID != 222) {
-            unitID++;
-            continue;
-        }
+        // if (unitID != 222) {
+        //     unitID++;
+        //     continue;
+        // }
 
         std::cout << centroid.x() << " " << centroid.y() << " " << centroid.z() << std::endl;
 
