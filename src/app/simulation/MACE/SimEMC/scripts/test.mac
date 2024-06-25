@@ -4,7 +4,7 @@
 /tracking/verbose 0
 
 /MACE/Physics/UseOpticalPhysics
-#/Mustard/Detector/Description/Import test_5X0_25.yaml
+#/Mustard/Detector/Description/Import test_10L_15R.yaml
 
 /run/initialize
 

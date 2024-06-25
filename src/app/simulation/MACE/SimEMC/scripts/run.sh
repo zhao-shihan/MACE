@@ -2,11 +2,11 @@
 
 start_time=$(date +%s)
 
-for ((i=5; i<=15; i++)); do
-    for ((j=15; j<=25; j++)); do
-        NAME="test_${i}X0_${j}"
+for ((i=10; i<20; i++)); do
+    for ((j=15; j<25; j++)); do
+        NAME="test_${i}L_${j}R"
         echo "$NAME is running..."
-        cd ~/work/mace/build/src/app/simulation/MACE/SimEMC
+        cd /home/mpi/synology/chensiyuan/mace/build/src/app/simulation/MACE/SimEMC
         rgb zstrun ./SimEMC $NAME.mac
         rgb hadd -ff $NAME.root $NAME/*.root
     done
