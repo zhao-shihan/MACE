@@ -25,34 +25,36 @@ using namespace Mustard::LiteralUnit;
 using namespace Mustard::PhysicalConstant;
 
 CDC::CDC() :
-    DescriptionBase{"CDC"},
+    DescriptionWithCacheBase{"CDC"},
     // Geometry
-    fEvenSuperLayerIsAxial{},
-    fNSuperLayer{7},
-    fNSenseLayerPerSuper{3},
-    fGasInnerRadius{15_cm},
-    fGasInnerLength{120_cm},
-    fEndCapSlope{0.75},
-    fMinStereoAngle{6_deg},
-    fCellWidthLowerBound{8_mm},
-    fReferenceCellWidth{10_mm},
-    fCellWidthUpperBound{12_mm},
-    fFieldWireDiameter{80_um},
-    fSenseWireDiameter{20_um},
-    fMinAdjacentSuperLayersDistance{1_mm},
-    fMinWireAndRadialShellDistance{2_mm},
-    fEndCapThickness{15_mm},
-    fInnerShellAlThickness{25_um},
-    fInnerShellMylarThickness{25_um},
-    fOuterShellThickness{10_mm},
-    fCache{},
+    fEvenSuperLayerIsAxial{this},
+    fNSuperLayer{this, 7},
+    fNSenseLayerPerSuper{this, 3},
+    fGasInnerRadius{this, 15_cm},
+    fGasInnerLength{this, 120_cm},
+    fEndCapSlope{this, 0.75},
+    fMinStereoAngle{this, 6_deg},
+    fCellWidthLowerBound{this, 8_mm},
+    fReferenceCellWidth{this, 10_mm},
+    fCellWidthUpperBound{this, 12_mm},
+    fFieldWireDiameter{this, 80_um},
+    fSenseWireDiameter{this, 20_um},
+    fMinAdjacentSuperLayersDistance{this, 1_mm},
+    fMinWireAndRadialShellDistance{this, 2_mm},
+    fEndCapThickness{this, 15_mm},
+    fInnerShellAlThickness{this, 25_um},
+    fInnerShellMylarThickness{this, 25_um},
+    fOuterShellThickness{this, 10_mm},
+    fLayerConfiguration{this, [this] { return CalculateLayerConfiguration(); }},
+    fCellMap{this, [this] { return CalculateCellMap(); }},
+    fCellMapFromSenseLayerIDAndLocalCellID{this, [this] { return CalculateCellMapFromSenseLayerIDAndLocalCellID(); }},
     // Material
-    fGasButaneFraction{0.15},
-    fEndCapMaterialName{"G4_Al"},
-    fOuterShellCFRPDensity{1.95_g_cm3},
+    fGasButaneFraction{this, 0.15},
+    fEndCapMaterialName{this, "G4_Al"},
+    fOuterShellCFRPDensity{this, 1.95_g_cm3},
     // Detection
-    fMeanDriftVelocity{3.5_cm_us},
-    fTimeResolutionFWHM{30_ns} {}
+    fMeanDriftVelocity{this, 3.5_cm_us},
+    fTimeResolutionFWHM{this, 30_ns} {}
 
 auto CDC::GasMaterial() const -> G4Material* {
     constexpr auto materialName{"CDCGas"};
@@ -75,7 +77,7 @@ auto CDC::GasMaterial() const -> G4Material* {
     return gas;
 }
 
-auto CDC::ComputeLayerConfiguration() const -> std::vector<SuperLayerConfiguration> {
+auto CDC::CalculateLayerConfiguration() const -> std::vector<SuperLayerConfiguration> {
     std::vector<SuperLayerConfiguration> layerConfig;
 
     layerConfig.reserve(fNSuperLayer);
@@ -115,7 +117,7 @@ auto CDC::ComputeLayerConfiguration() const -> std::vector<SuperLayerConfigurati
 
         const auto firstInnerStereoZenithAngle{
             [this,
-             isAxial{super.isAxial},
+             isAxial = super.isAxial,
              superLayerID] {
                 if (isAxial) { return 0.0; }
                 if ((fEvenSuperLayerIsAxial ? superLayerID + 3 : superLayerID) % 4 == 0) {
@@ -139,9 +141,9 @@ auto CDC::ComputeLayerConfiguration() const -> std::vector<SuperLayerConfigurati
                     lastSense.outerRadius :
                     super.innerRadius;
             sense.outerRadius =
-                [rIn{sense.innerRadius},
-                 dFW{fFieldWireDiameter},
-                 halfPhiCell] {
+                [&rIn = sense.innerRadius,
+                 &dFW = fFieldWireDiameter,
+                 &halfPhiCell] {
                     return (rIn + (rIn + dFW) * halfPhiCell) / (1 - halfPhiCell);
                 }();
             sense.cellWidth = sense.outerRadius - sense.innerRadius;
@@ -149,21 +151,21 @@ auto CDC::ComputeLayerConfiguration() const -> std::vector<SuperLayerConfigurati
                                                      lastSense.TanStereoZenithAngle(lastSense.outerRadius) :
                                                      std::tan(firstInnerStereoZenithAngle)};
             sense.halfLength =
-                [eta{fEndCapSlope},
-                 lastHL{notFirstSenseLayerOfThisSuperLayer ?
-                            lastSense.halfLength :
-                            super.innerHalfLength},
-                 rIn{sense.innerRadius},
-                 lastRIn{notFirstSenseLayerOfThisSuperLayer ?
-                             lastSense.innerRadius / std::cos(lastSense.stereoAzimuthAngle / 2) :
-                             super.innerRadius},
-                 tan2ThetaS{muc::pow<2>(tanInnerStereoZenithAngle)}] {
+                [&eta = fEndCapSlope,
+                 lastHL = notFirstSenseLayerOfThisSuperLayer ?
+                              lastSense.halfLength :
+                              super.innerHalfLength,
+                 rIn = sense.innerRadius,
+                 lastRIn = notFirstSenseLayerOfThisSuperLayer ?
+                               lastSense.innerRadius / std::cos(lastSense.stereoAzimuthAngle / 2) :
+                               super.innerRadius,
+                 tan2ThetaS = muc::pow<2>(tanInnerStereoZenithAngle)] {
                     return (lastHL +
                             eta * (std::sqrt(
                                        muc::pow<2>(rIn) +
                                        (lastHL + eta * (rIn - lastRIn)) * (lastHL - eta * (rIn + lastRIn)) * tan2ThetaS) -
                                    lastRIn)) /
-                           (1 - muc::pow<2>(eta) * tan2ThetaS);
+                           (1 - muc::pow<2>(*eta) * tan2ThetaS);
                 }();
             sense.stereoAzimuthAngle = 2 * std::atan(sense.halfLength / sense.innerRadius * tanInnerStereoZenithAngle);
 
@@ -185,7 +187,7 @@ auto CDC::ComputeLayerConfiguration() const -> std::vector<SuperLayerConfigurati
         super.sense.shrink_to_fit();
 
         super.outerRadius =
-            [dFW{fFieldWireDiameter},
+            [&dFW = fFieldWireDiameter,
              &lastSense = std::as_const(super).sense.back()] {
                 return (lastSense.outerRadius + dFW) / std::cos(lastSense.stereoAzimuthAngle / 2);
             }();
@@ -196,7 +198,7 @@ auto CDC::ComputeLayerConfiguration() const -> std::vector<SuperLayerConfigurati
     return layerConfig;
 }
 
-auto CDC::ComputeCellMap() const -> std::vector<CellInformation> {
+auto CDC::CalculateCellMap() const -> std::vector<CellInformation> {
     std::vector<CellInformation> cellMap;
 
     const auto rFieldWire{fFieldWireDiameter / 2};
@@ -241,7 +243,7 @@ auto CDC::ComputeCellMap() const -> std::vector<CellInformation> {
     return cellMap;
 }
 
-auto CDC::ComputeCellMapFromSenseLayerIDAndLocalCellID() const -> CellMapFromSenseLayerIDAndLocalCellIDType {
+auto CDC::CalculateCellMapFromSenseLayerIDAndLocalCellID() const -> CellMapFromSenseLayerIDAndLocalCellIDType {
     CellMapFromSenseLayerIDAndLocalCellIDType cellMapFromSenseLayerIDAndLocalCellID;
     const auto& cellMap{CellMap()};
     cellMapFromSenseLayerIDAndLocalCellID.reserve(cellMap.size());
@@ -278,8 +280,6 @@ auto CDC::ImportAllValue(const YAML::Node& node) -> void {
     // Detection
     ImportValue(node, fMeanDriftVelocity, "MeanDriftVelocity");
     ImportValue(node, fTimeResolutionFWHM, "TimeResolutionFWHM");
-
-    fCache.Expire();
 }
 
 auto CDC::ExportAllValue(YAML::Node& node) const -> void {
