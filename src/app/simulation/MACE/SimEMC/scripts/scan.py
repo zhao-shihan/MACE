@@ -43,7 +43,7 @@ for i in range(10, 20):
 
 /MACE/Analysis/FilePath {name}
 /MACE/Analysis/FileMode RECREATE
-/run/beamOn 5000
+/run/beamOn 2000
 /MPIRun/PrintRunSummary
 """)
 

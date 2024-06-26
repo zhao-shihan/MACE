@@ -128,36 +128,39 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
         pmtLength = pmtDimensions.at(typeMapIt->second).at(2);
         // std::cout << "unitID: " << unitID << ", typeID:" << typeMapIt->second << ", pmtDiameter: " << pmtDiameter << ", cathodeDiameter: " << cathodeDiameter << ", pmtLength: " << pmtLength << std::endl;
 
-        const auto couplerTransform{emc.ComputeTransformToOuterSurfaceWithOffset(unitID,
-                                                                                 pmtCouplerThickness / 2)};
+        // const auto couplerTransform{emc.ComputeTransformToOuterSurfaceWithOffset(unitID,
+        //                                                                          pmtCouplerThickness / 2)};
 
-        const auto shellTransform{emc.ComputeTransformToOuterSurfaceWithOffset(unitID,
-                                                                               pmtCouplerThickness + pmtLength / 2)};
+        // const auto shellTransform{emc.ComputeTransformToOuterSurfaceWithOffset(unitID,
+        //                                                                        pmtCouplerThickness + pmtLength / 2)};
+
+        // const auto cathodeTransform{emc.ComputeTransformToOuterSurfaceWithOffset(unitID,
+        //                                                                          pmtCouplerThickness + pmtWindowThickness + pmtCathodeThickness / 2)};
 
         const auto cathodeTransform{emc.ComputeTransformToOuterSurfaceWithOffset(unitID,
-                                                                                 pmtCouplerThickness + pmtWindowThickness + pmtCathodeThickness / 2)};
+                                                                                 pmtCathodeThickness / 2)};
 
-        const auto solidCoupler{Make<G4Tubs>("temp", 0, pmtDiameter / 2, pmtCouplerThickness / 2, 0, 2 * pi)};
-        const auto logicCoupler{Make<G4LogicalVolume>(solidCoupler, siliconeGrease, "EMCPMTCoupler")};
-        const auto physicalCoupler{Make<G4PVPlacement>(couplerTransform,
-                                                       logicCoupler,
-                                                       "EMCPMTCoupler",
-                                                       Mother().LogicalVolume(),
-                                                       true,
-                                                       unitID,
-                                                       checkOverlaps)};
+        // const auto solidCoupler{Make<G4Tubs>("temp", 0, pmtDiameter / 2, pmtCouplerThickness / 2, 0, 2 * pi)};
+        // const auto logicCoupler{Make<G4LogicalVolume>(solidCoupler, siliconeGrease, "EMCPMTCoupler")};
+        // const auto physicalCoupler{Make<G4PVPlacement>(couplerTransform,
+        //                                                logicCoupler,
+        //                                                "EMCPMTCoupler",
+        //                                                Mother().LogicalVolume(),
+        //                                                true,
+        //                                                unitID,
+        //                                                checkOverlaps)};
 
-        const auto solidGlassTube{Make<G4Tubs>("temp", 0, pmtDiameter / 2, pmtLength / 2, 0, 2 * pi)};
-        const auto solidPMTVacuum{Make<G4Tubs>("temp", 0, pmtDiameter / 2 - pmtWindowThickness, pmtLength / 2 - pmtWindowThickness, 0, 2 * pi)};
-        const auto solidPMTShell{Make<G4SubtractionSolid>("EMCPMTShell", solidGlassTube, solidPMTVacuum)};
-        const auto logicPMTShell{Make<G4LogicalVolume>(solidPMTShell, glass, "EMCPMTShell")};
-        Make<G4PVPlacement>(shellTransform,
-                            logicPMTShell,
-                            "EMCPMTShell",
-                            Mother().LogicalVolume(),
-                            true,
-                            unitID,
-                            checkOverlaps);
+        // const auto solidGlassTube{Make<G4Tubs>("temp", 0, pmtDiameter / 2, pmtLength / 2, 0, 2 * pi)};
+        // const auto solidPMTVacuum{Make<G4Tubs>("temp", 0, pmtDiameter / 2 - pmtWindowThickness, pmtLength / 2 - pmtWindowThickness, 0, 2 * pi)};
+        // const auto solidPMTShell{Make<G4SubtractionSolid>("EMCPMTShell", solidGlassTube, solidPMTVacuum)};
+        // const auto logicPMTShell{Make<G4LogicalVolume>(solidPMTShell, glass, "EMCPMTShell")};
+        // Make<G4PVPlacement>(shellTransform,
+        //                     logicPMTShell,
+        //                     "EMCPMTShell",
+        //                     Mother().LogicalVolume(),
+        //                     true,
+        //                     unitID,
+        //                     checkOverlaps);
 
         const auto solidCathode{Make<G4Tubs>("temp", 0, cathodeDiameter / 2, pmtCathodeThickness / 2, 0, 2 * pi)};
         const auto logicCathode{Make<G4LogicalVolume>(solidCathode, bialkali, "EMCPMTCathode")};
@@ -173,15 +176,15 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
         // Construct Optical Surface
         /////////////////////////////////////////////
 
-        const auto emcCrystal{FindSibling<EMCCrystal>()};
-        if (emcCrystal) {
-            const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
-            new G4LogicalBorderSurface{"couplerSurface",
-                                       emcCrystal->PhysicalVolume(fmt::format("EMCCrystal_{}", unitID)),
-                                       physicalCoupler,
-                                       couplerSurface};
-            couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
-        }
+        // const auto emcCrystal{FindSibling<EMCCrystal>()};
+        // if (emcCrystal) {
+        //     const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
+        //     new G4LogicalBorderSurface{"couplerSurface",
+        //                                emcCrystal->PhysicalVolume(fmt::format("EMCCrystal_{}", unitID)),
+        //                                physicalCoupler,
+        //                                couplerSurface};
+        //     couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
+        // }
 
         const auto cathodeSurface{new G4OpticalSurface("Cathode", unified, polished, dielectric_metal)};
         new G4LogicalSkinSurface{"cathodeSkinSurface", logicCathode, cathodeSurface};
