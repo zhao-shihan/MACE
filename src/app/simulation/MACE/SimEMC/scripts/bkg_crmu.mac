@@ -11,4 +11,4 @@
 /MACE/Analysis/FileMode NEW
 
 /run/beamOn 19350000
-/MPIRun/PrintRunSummary
+/Mustard/Run/PrintRunSummary

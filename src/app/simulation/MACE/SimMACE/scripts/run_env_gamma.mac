@@ -39,4 +39,4 @@
 /MACE/Analysis/FilePath SimMACE_env_gamma
 /MACE/Analysis/FileMode NEW
 /run/beamOn 80
-/MPIRun/PrintRunSummary
+/Mustard/Run/PrintRunSummary

@@ -40,4 +40,4 @@
 /MACE/Analysis/FilePath SimMACE_env_neutron
 /MACE/Analysis/FileMode NEW
 /run/beamOn 80
-/MPIRun/PrintRunSummary
+/Mustard/Run/PrintRunSummary

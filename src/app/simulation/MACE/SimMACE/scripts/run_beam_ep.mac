@@ -40,4 +40,4 @@
 /MACE/Analysis/FilePath SimMACE_beam_ep
 /MACE/Analysis/FileMode NEW
 /run/beamOn 1000
-/MPIRun/PrintRunSummary
+/Mustard/Run/PrintRunSummary

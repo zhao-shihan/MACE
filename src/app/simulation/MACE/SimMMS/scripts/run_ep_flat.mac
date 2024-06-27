@@ -32,4 +32,4 @@
 /MACE/Analysis/FilePath SimMMS_ep_flat
 /MACE/Analysis/FileMode NEW
 /run/beamOn 10000
-/MPIRun/PrintRunSummary
+/Mustard/Run/PrintRunSummary

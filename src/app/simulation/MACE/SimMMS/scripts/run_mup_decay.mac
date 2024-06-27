@@ -28,4 +28,4 @@
 /MACE/Analysis/FilePath SimMMS_mup_decay
 /MACE/Analysis/FileMode NEW
 /run/beamOn 10000
-/MPIRun/PrintRunSummary
+/Mustard/Run/PrintRunSummary
