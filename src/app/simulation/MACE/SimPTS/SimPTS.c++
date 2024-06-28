@@ -11,7 +11,7 @@
 using namespace MACE;
 
 auto main(int argc, char* argv[]) -> int {
-    Mustard::Env::CLI::Geant4CLI cli;
+    Mustard::Env::CLI::Geant4CLI<> cli;
     Mustard::Env::MPIEnv env{argc, argv, cli};
 
     Mustard::UseXoshiro<512> random;
