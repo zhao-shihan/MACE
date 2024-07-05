@@ -56,7 +56,7 @@
 #include <functional>
 
 int main(int argc, char* argv[]) {
-    Mustard::Env::CLI::BasicCLI cli;
+    Mustard::Env::CLI::BasicCLI<> cli;
     Mustard::Env::BasicEnv env(argc, argv, cli);
 
     ////////////////////////////////////////////////////////////////
