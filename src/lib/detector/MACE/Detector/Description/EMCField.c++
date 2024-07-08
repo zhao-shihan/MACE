@@ -12,7 +12,7 @@ using namespace Mustard::LiteralUnit::MagneticFluxDensity;
 EMCField::EMCField() : // clang-format off
     DescriptionBase{"EMCField"}, // clang-format on
     // Geometry
-    fRadius{56_cm},
+    fRadius{60_cm},
     fLength{100_cm},
     // Field
     fFastField{0.1_T} {}

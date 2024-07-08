@@ -21,7 +21,7 @@ Solenoid::Solenoid() :
     fOuterRadius{90_mm},
     fCoilThickness{30_mm},
     fReferenceCoilSpacing{30_mm},
-    fFieldRadius{131_mm},
+    fFieldRadius{130_mm},
     // Material
     fMaterialName{"G4_Cu"},
     // Field
