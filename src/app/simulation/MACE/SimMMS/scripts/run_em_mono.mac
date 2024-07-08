@@ -28,4 +28,4 @@
 /MACE/Analysis/FilePath SimMMS_em_mono
 /MACE/Analysis/FileMode NEW
 /run/beamOn 10000
-/MPIRun/PrintRunSummary
+/Mustard/Run/PrintRunSummary

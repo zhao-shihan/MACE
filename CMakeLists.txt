@@ -44,6 +44,7 @@ option(MACE_BUILTIN_GENFIT_EVENT_DISPLAY "Build GenFit event display module if G
 option(MACE_BUILTIN_MACE_OFFLINE_DATA "Use built-in offline data (network or pre-downloaded data are required)." OFF)
 option(MACE_BUILTIN_MUSTARD "Use built-in Mustard (network or pre-downloaded source is required)." OFF)
 option(MACE_BUILTIN_PMP "Use built-in pmp (network or pre-downloaded source is required)." OFF)
+option(MACE_INSTALL_OFFLINE_DATA "Install offline data. If disabled, offline data need to be installed manually." ON)
 option(MACE_USE_G4VIS "Build Geant4 applications of MACE with available visualization. Note that whether Geant4 supports visualization is determined by options with which Geant4 is built. MACE does not, and cannot, affect whether G4 enables visualization." ON)
 
 # Advance
@@ -59,7 +60,7 @@ cmake_dependent_option(MACE_ENABLE_UNITY_BUILD "Build MACE with unity build tech
 cmake_dependent_option(MACE_SHOW_MORE_COMPILER_WARNINGS "Show compiler warnings raise from external dependencies." OFF "NOT MACE_SHOW_EVEN_MORE_COMPILER_WARNINGS" ON)
 set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "Build using shared libraries")
 set(MACE_BUILTIN_MACE_OFFLINE_DATA_VERSION 0.0.1 CACHE STRING "Set built-in offline data version (if required).")
-set(MACE_BUILTIN_MUSTARD_VERSION 0.0.1 CACHE STRING "Set built-in Mustard version (if required).")
+set(MACE_BUILTIN_MUSTARD_VERSION 0.1.0 CACHE STRING "Set built-in Mustard version (if required).")
 set(MACE_BUILTIN_PMP_VERSION 3.0.0 CACHE STRING "Set built-in fmt version (if required).")
 
 # =============================================================================
@@ -94,7 +95,11 @@ include(${MACE_PROJECT_CMAKE_DIR}/LookForGenFit.cmake)
 include(${MACE_PROJECT_CMAKE_DIR}/LookForPMP.cmake)
 
 # data
-include(${MACE_PROJECT_CMAKE_DIR}/LookForMACEOfflineData.cmake)
+if(MACE_INSTALL_OFFLINE_DATA)
+    include(${MACE_PROJECT_CMAKE_DIR}/LookForMACEOfflineData.cmake)
+else()
+    message(NOTICE "***Notice: Offline data installation disabled, offline data need to be installed manually")
+endif()
 
 # =============================================================================
 # Let's go!

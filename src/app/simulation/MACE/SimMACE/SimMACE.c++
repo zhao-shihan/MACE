@@ -1,6 +1,7 @@
 #include "MACE/SimMACE/DefaultMacro.h++"
 #include "MACE/SimMACE/RunManager.h++"
 
+#include "Mustard/Env/CLI/Geant4CLI.h++"
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Extension/Geant4X/Interface/MPIExecutive.h++"
 #include "Mustard/Utility/UseXoshiro.h++"
@@ -10,7 +11,7 @@
 using namespace MACE;
 
 auto main(int argc, char* argv[]) -> int {
-    Mustard::Env::CLI::Geant4CLI cli;
+    Mustard::Env::CLI::Geant4CLI<> cli;
     Mustard::Env::MPIEnv env{argc, argv, cli};
 
     Mustard::UseXoshiro<512> random;
