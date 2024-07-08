@@ -8,6 +8,7 @@
 #include "Mustard/Extension/Geant4X/Physics/MuoniumTwoBodyDecayPhysics.h++"
 
 #include "G4EmStandardPhysics_option4.hh"
+#include "G4PhysicsListHelper.hh"
 #include "G4SpinDecayPhysics.hh"
 
 #include "muc/utility"
@@ -26,6 +27,9 @@ StandardPhysicsListBase::StandardPhysicsListBase() :
     ReplacePhysics(new G4SpinDecayPhysics{verboseLevel});
     RegisterPhysics(new Mustard::Geant4X::MuonPrecisionDecayPhysics{verboseLevel});
     RegisterPhysics(new Mustard::Geant4X::MuoniumPrecisionDecayPhysics{verboseLevel});
+
+    // Use low values for the looper thresholds: Warning 1 keV, Important 1 MeV, trials 10
+    G4PhysicsListHelper::GetPhysicsListHelper()->UseLowLooperThresholds();
 }
 
 } // namespace MACE::inline Simulation::inline Physics

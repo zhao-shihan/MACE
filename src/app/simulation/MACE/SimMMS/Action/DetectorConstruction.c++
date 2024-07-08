@@ -36,7 +36,7 @@ DetectorConstruction::DetectorConstruction() :
     PassiveSingleton{},
     G4VUserDetectorConstruction{},
     fCheckOverlap{},
-    fMinDriverStep{0.1_um},
+    fMinDriverStep{1_um},
     fDeltaChord{1_um},
     fWorld{},
     fCDCFieldWireRegion{},

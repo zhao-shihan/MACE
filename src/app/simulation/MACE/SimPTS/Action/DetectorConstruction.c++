@@ -51,11 +51,8 @@
 #include "Mustard/Detector/Field/AsG4Field.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 
-#include "G4BFieldIntegrationDriver.hh"
 #include "G4ChordFinder.hh"
 #include "G4EqMagElectricField.hh"
-#include "G4HelixHeum.hh"
-#include "G4IntegrationDriver.hh"
 #include "G4InterpolationDriver.hh"
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
@@ -72,7 +69,7 @@ DetectorConstruction::DetectorConstruction() :
     PassiveSingleton{},
     G4VUserDetectorConstruction{},
     fCheckOverlap{},
-    fMinDriverStep{0.1_um},
+    fMinDriverStep{1_um},
     fDeltaChord{1_um},
     fWorld{},
     fDefaultGaseousRegion{},
@@ -236,15 +233,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     // Register background fields
     ////////////////////////////////////////////////////////////////
     {
-        const auto fieldOfMMSField{new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::MMSField>};
-        const auto fieldOfSolenoidFieldS1{new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS1>};
-        const auto fieldOfSolenoidFieldT1{new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldT1>};
-        const auto fieldOfSolenoidFieldS2{new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS2>};
-        const auto fieldOfSolenoidFieldT2{new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldT2>};
-        const auto fieldOfSolenoidFieldS3{new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS3>};
-        const auto fieldOfEMCField{new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::EMCField>};
-
-        { // Regular magnetic field
+        { // Magnetic fields
             const auto RegisterField{
                 [this]<typename AField>(Mustard::Detector::Definition::DefinitionBase& detector, AField* field, bool forceToAllDaughters) {
                     using Equation = G4TMagFieldEquation<AField>;
@@ -257,41 +246,13 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
                     chordFinder->SetDeltaChord(fDeltaChord);
                     detector.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), forceToAllDaughters);
                 }};
-            RegisterField(mmsField, fieldOfMMSField, false);
-            RegisterField(solenoidFieldS1, fieldOfSolenoidFieldS1, false);
-            RegisterField(solenoidFieldT1, fieldOfSolenoidFieldT1, false);
-            RegisterField(solenoidFieldS2, fieldOfSolenoidFieldS2, false);
-            RegisterField(solenoidFieldT2, fieldOfSolenoidFieldT2, false);
-            RegisterField(solenoidFieldS3, fieldOfSolenoidFieldS3, false);
-            RegisterField(emcField, fieldOfEMCField, false);
-        }
-        { // Magnetic field in vacuum, use helix-based driver
-            const auto RegisterField{
-                [this]<typename AField>(Mustard::Detector::Definition::DefinitionBase& detector, std::string_view name,
-                                        AField* field, bool forceToAllDaughters) {
-                    using Equation = G4TMagFieldEquation<AField>;
-                    using ShortStepper = G4TDormandPrince45<Equation, 6>;
-                    using LongStepper = G4HelixHeum;
-                    using ShortStepDriver = G4InterpolationDriver<ShortStepper>;
-                    using LongStepDriver = G4IntegrationDriver<LongStepper>;
-                    const auto equation{new Equation{field}};
-                    const auto shortStepper{new ShortStepper{equation}};
-                    const auto longStepper{new LongStepper{equation}};
-                    auto shortdriver{std::make_unique<ShortStepDriver>(fMinDriverStep, shortStepper, 6)};
-                    auto longDriver{std::make_unique<LongStepDriver>(fMinDriverStep, longStepper, 6)}; // clang-format off
-                    const auto driver{new G4BFieldIntegrationDriver{std::move(shortdriver), std::move(longDriver)}}; // clang-format on
-                    const auto chordFinder{new G4ChordFinder{driver}};
-                    chordFinder->SetDeltaChord(fDeltaChord);
-                    detector.RegisterField(name, std::make_unique<G4FieldManager>(field, chordFinder), forceToAllDaughters);
-                }};
-            RegisterField(mmsBeamPipe, "MMSBeamPipeVacuum", fieldOfMMSField, false);
-            RegisterField(solenoidBeamPipeS1, "SolenoidBeamPipeS1Vacuum", fieldOfSolenoidFieldS1, false);
-            RegisterField(solenoidBeamPipeT1, "SolenoidBeamPipeT1Vacuum", fieldOfSolenoidFieldT1, false);
-            RegisterField(solenoidBeamPipeS2, "SolenoidBeamPipeS2Vacuum", fieldOfSolenoidFieldS2, false);
-            RegisterField(solenoidBeamPipeT2, "SolenoidBeamPipeT2Vacuum", fieldOfSolenoidFieldT2, false);
-            RegisterField(solenoidBeamPipeS3, "SolenoidBeamPipeS3Vacuum", fieldOfSolenoidFieldS3, false);
-            RegisterField(mcpChamber, "MCPChamberPipeVacuum", fieldOfEMCField, false);
-            RegisterField(mcpChamber, "MCPChamberVacuum", fieldOfEMCField, false);
+            RegisterField(mmsField, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::MMSField>, false);
+            RegisterField(solenoidFieldS1, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS1>, false);
+            RegisterField(solenoidFieldT1, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldT1>, false);
+            RegisterField(solenoidFieldS2, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS2>, false);
+            RegisterField(solenoidFieldT2, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldT2>, false);
+            RegisterField(solenoidFieldS3, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS3>, false);
+            RegisterField(emcField, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::EMCField>, false);
         }
         { // Accelerator EM field, must be reigstered after MMS magnetic field
             using Field = Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::AcceleratorField>;

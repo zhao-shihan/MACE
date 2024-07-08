@@ -7,8 +7,6 @@
 #include "Mustard/Env/BasicEnv.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 
-#include "G4TransportationParameters.hh"
-
 #include "muc/utility"
 
 namespace MACE::SimMACE {
@@ -19,12 +17,6 @@ RunManager::RunManager() :
     MPIRunManager{},
     fAnalysis{std::make_unique_for_overwrite<Analysis>()} {
     const auto verboseLevel{Mustard::Env::BasicEnv::Instance().VerboseLevel()};
-
-    // control of the parameters for killing looping particles
-    auto& transportParams{*G4TransportationParameters::Instance()};
-    transportParams.SetWarningEnergy(50_eV);
-    transportParams.SetImportantEnergy(50_eV);
-    transportParams.SetNumberOfTrials(10000);
 
     const auto physicsList{new PhysicsList};
     physicsList->SetVerboseLevel(muc::to_underlying(verboseLevel));
