@@ -155,10 +155,10 @@ EMC::EMC() :
         "EMC"
 },
     fNSubdivision{3},
-    fInnerRadius{15_cm},
+    fInnerRadius{20_cm},
     fCrystalHypotenuse{10_cm},
-    fUpstreamWindowRadius{0_mm},
-    fDownstreamWindowRadius{0_mm},
+    fUpstreamWindowRadius{50_mm},
+    fDownstreamWindowRadius{5_mm},
     fPMTDimensions{
         {29.3_mm, 25_mm, 87_mm},   // 9442B Type-HEX01
         {29.3_mm, 25_mm, 87_mm},   // 9442B Type-PEN
@@ -166,8 +166,7 @@ EMC::EMC() :
         {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX03
         {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX04
         {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX05
-        // {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX06
-        {150_mm, 140_mm, 98.5_mm}, // 9902B Type-HEX06
+        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX06
         {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX07
         {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX08
         {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX09

@@ -11,9 +11,10 @@ for i in range(10, 20):
                 "CrystalHypotenuse": i * 10,
                 "UpstreamWindowRadius": 0,
                 "DownstreamWindowRadius": 0,
+                "fNSubdivision": 2,
             }
         }
-        name = "test_{}L_{}R".format(i, j)
+        name = "test3_{}L_{}R".format(i, j)
 
         with open(name + ".yaml", "w") as f:
             yaml.safe_dump(test, f)
@@ -29,21 +30,21 @@ for i in range(10, 20):
 /event/verbose 0
 /tracking/verbose 0
 
-/MACE/Physics/UseOpticalPhysics
+#/MACE/Physics/UseOpticalPhysics
 /Mustard/Detector/Description/Import {yaml_filename}
 
 /run/initialize
 
 /MACE/Generator/SwitchToGPSX
 
-/gps/particle gamma
-/gps/ene/mono 0.511 MeV
+/gps/particle e-
+/gps/ene/mono 53 MeV
 /gps/pos/centre 0. 0. 0. cm
 /gps/direction -0.231259 0.883817 -0.386541
 
 /MACE/Analysis/FilePath {name}
 /MACE/Analysis/FileMode RECREATE
-/run/beamOn 2000
+/run/beamOn 1000000
 /MPIRun/PrintRunSummary
 """)
 
