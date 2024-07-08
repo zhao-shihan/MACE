@@ -30,6 +30,11 @@ auto MCPChamber::Construct(G4bool checkOverlaps) -> void {
     const auto& vacuum{Description::Vacuum::Instance()};
 
     const auto nist{G4NistManager::Instance()};
+    auto vacuumMaterial{nist->FindMaterial(vacuum.Name())};
+    if (not vacuumMaterial) {
+        vacuumMaterial = nist->BuildMaterialWithNewDensity(vacuum.Name(), "G4_AIR", vacuum.Density(), 293.15_K, vacuum.Pressure());
+    }
+
     const auto zWeld{std::sqrt(muc::pow<2>(mcpChamber.InnerRadius()) - muc::pow<2>(beamPipe.InnerRadius()))};
 
     { // Spherical chamber
@@ -71,7 +76,7 @@ auto MCPChamber::Construct(G4bool checkOverlaps) -> void {
             G4ThreeVector{0, 0, -mcpChamber.InnerRadius() - zWeld})};
         const auto logicVacuum{Make<G4LogicalVolume>(
             solidVacuum,
-            nist->FindOrBuildMaterial("G4_Be"),
+            vacuumMaterial,
             vacuumName)};
         Make<G4PVPlacement>(
             G4Transform3D{},
@@ -81,11 +86,6 @@ auto MCPChamber::Construct(G4bool checkOverlaps) -> void {
             false,
             0,
             checkOverlaps);
-    }
-
-    auto vacuumMaterial{nist->FindMaterial(vacuum.Name())};
-    if (not vacuumMaterial) {
-        vacuumMaterial = nist->BuildMaterialWithNewDensity(vacuum.Name(), "G4_AIR", vacuum.Density(), 293.15_K, vacuum.Pressure());
     }
 
     { // Pipe
