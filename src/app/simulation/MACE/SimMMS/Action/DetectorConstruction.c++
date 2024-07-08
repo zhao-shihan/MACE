@@ -30,10 +30,14 @@
 
 namespace MACE::SimMMS::inline Action {
 
+using namespace Mustard::LiteralUnit::Length;
+
 DetectorConstruction::DetectorConstruction() :
     PassiveSingleton{},
     G4VUserDetectorConstruction{},
     fCheckOverlap{},
+    fMinDriverStep{0.1_um},
+    fDeltaChord{1_um},
     fWorld{},
     fCDCFieldWireRegion{},
     fCDCSenseWireRegion{},
@@ -46,7 +50,8 @@ DetectorConstruction::DetectorConstruction() :
     fTargetRegion{},
     fVacuumRegion{},
     fCDCSD{},
-    fTTCSD{} {
+    fTTCSD{},
+    fNumericMessengerRegister{this} {
     DetectorMessenger::EnsureInstantiation();
 }
 
@@ -168,21 +173,16 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     // Register background fields
     ////////////////////////////////////////////////////////////////
     {
-        using namespace Mustard::LiteralUnit::Length;
-        using namespace Mustard::LiteralUnit::MagneticFluxDensity;
-
-        constexpr auto hMin{1_um};
-
-        using Equation = G4TMagFieldEquation<Mustard::Detector::Field::AsG4Field<Detector::Field::MMSField>>;
+        using Field = Mustard::Detector::Field::AsG4Field<Detector::Field::MMSField>;
+        using Equation = G4TMagFieldEquation<Field>;
         using Stepper = G4TDormandPrince45<Equation, 6>;
         using Driver = G4InterpolationDriver<Stepper>;
-        const auto field{new Mustard::Detector::Field::AsG4Field<Detector::Field::MMSField>};
-        const auto equation{new Equation{field}};
-        const auto stepper{
-            new Stepper{equation, 6}
-        }; // clang-format off
-        const auto driver{new Driver{hMin, stepper, 6}}; // clang-format on
+        const auto field{new Field};
+        const auto equation{new Equation{field}}; // clang-format off
+        const auto stepper{new Stepper{equation, 6}};
+        const auto driver{new Driver{fMinDriverStep, stepper, 6}}; // clang-format on
         const auto chordFinder{new G4ChordFinder{driver}};
+        chordFinder->SetDeltaChord(fDeltaChord);
         mmsField.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), false);
     }
 
