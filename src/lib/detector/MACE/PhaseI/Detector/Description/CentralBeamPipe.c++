@@ -18,6 +18,11 @@ CentralBeamPipe::CentralBeamPipe() :
     // Material
     fVacuumPressure{1e-4_Pa} {}
 
+auto CentralBeamPipe::VacuumDensity() const -> double {
+    using namespace Mustard::LiteralUnit::Density;
+    return fVacuumPressure / 1_atm * 1.177_kg_m3;
+}
+
 auto CentralBeamPipe::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fLength, "Length");

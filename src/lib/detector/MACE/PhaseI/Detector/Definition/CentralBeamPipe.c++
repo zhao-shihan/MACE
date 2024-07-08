@@ -19,8 +19,7 @@ auto CentralBeamPipe::Construct(G4bool checkOverlaps) -> void {
     const auto nist{G4NistManager::Instance()};
 
     { // Vacuum
-        const auto density{beamPipe.VacuumPressure() / 1_atm * 1.177_kg_m3};
-        const auto vacuum{nist->BuildMaterialWithNewDensity(beamPipe.Name() + "Vacuum", "G4_AIR", density, 293.15_K, beamPipe.VacuumPressure())};
+        const auto vacuum{nist->BuildMaterialWithNewDensity(beamPipe.Name() + "Vacuum", "G4_AIR", beamPipe.VacuumDensity(), 293.15_K, beamPipe.VacuumPressure())};
 
         const auto solid{Make<G4Tubs>(
             beamPipe.Name(),
