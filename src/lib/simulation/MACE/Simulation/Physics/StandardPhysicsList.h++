@@ -2,11 +2,11 @@
 
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
 
-#include "FTFP_BERT.hh"
+#include "QBBC.hh"
 
 namespace MACE::inline Simulation::inline Physics {
 
-class StandardPhysicsListBase : public FTFP_BERT {
+class StandardPhysicsListBase : public QBBC {
 public:
     StandardPhysicsListBase();
     virtual ~StandardPhysicsListBase() override = default;
