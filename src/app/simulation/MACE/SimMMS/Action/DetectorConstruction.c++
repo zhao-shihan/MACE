@@ -23,7 +23,6 @@
 
 #include "G4ChordFinder.hh"
 #include "G4InterpolationDriver.hh"
-#include "G4NistManager.hh"
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4TDormandPrince45.hh"
@@ -89,19 +88,6 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& cdcCell{cdcSenseLayer.NewDaughter<Detector::Definition::CDCCell>(fCheckOverlap)};
 
     ////////////////////////////////////////////////////////////////
-    // Register materials
-    ////////////////////////////////////////////////////////////////
-    {
-        using namespace Mustard::LiteralUnit::Density;
-
-        const auto nist = G4NistManager::Instance();
-
-        const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
-        mmsField.RegisterMaterial(vacuum);
-        fWorld->RegisterMaterial(vacuum);
-    }
-
-    ////////////////////////////////////////////////////////////////
     // Register regions
     ////////////////////////////////////////////////////////////////
     {
@@ -127,6 +113,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         cdcGas.RegisterRegion(fDefaultGaseousRegion);
         cdcSenseLayer.RegisterRegion(fDefaultGaseousRegion);
         cdcSuperLayer.RegisterRegion(fDefaultGaseousRegion);
+        mmsField.RegisterRegion(fDefaultGaseousRegion);
 
         // DefaultSolidRegion
         fDefaultSolidRegion = new Region("DefaultSolid", RegionType::DefaultSolid);
@@ -163,7 +150,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         fVacuumRegion = new Region("Vacuum", RegionType::Vacuum);
         fVacuumRegion->SetProductionCuts(defaultCuts);
 
-        mmsField.RegisterRegion(fVacuumRegion);
+        mmsBeamPipe.RegisterRegion("MMSBeamPipeVacuum", fVacuumRegion);
     }
 
     ////////////////////////////////////////////////////////////////

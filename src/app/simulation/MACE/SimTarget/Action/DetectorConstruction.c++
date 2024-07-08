@@ -11,8 +11,6 @@
 
 #include "G4NistManager.hh"
 
-#include <array>
-
 namespace MACE::SimTarget::inline Action {
 
 using namespace Mustard::LiteralUnit::Length;
@@ -35,16 +33,17 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     using namespace MACE::Detector::Definition;
 
     // AcceleratorField is target's mother by default, modified it to adapt global frame
-    Detector::Description::Accelerator::Instance().UpstreamLength(0);
-    Detector::Description::Accelerator::Instance().DownstreamLength(0);
+    auto& accelerator{Detector::Description::Accelerator::Instance()};
+    accelerator.DecelerateFieldLength(0);
+    accelerator.AccelerateFieldLength(0);
+    accelerator.MaxPotentialPosition(0);
 
     fWorld = std::make_unique<World>();
     fWorld->NewDaughter<BeamMonitor>(fCheckOverlap);
     fWorld->NewDaughter<BeamDegrader>(fCheckOverlap);
     fWorld->NewDaughter<Target>(fCheckOverlap);
 
-    auto nist{G4NistManager::Instance()};
-    fWorld->RegisterMaterial(nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3, 293_K));
+    fWorld->LogicalVolume()->SetMaterial(G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic"));
 
     return fWorld->PhysicalVolume();
 }

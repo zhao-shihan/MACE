@@ -71,7 +71,6 @@
 #include "G4HelixHeum.hh"
 #include "G4IntegrationDriver.hh"
 #include "G4InterpolationDriver.hh"
-#include "G4NistManager.hh"
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4TDormandPrince45.hh"
@@ -137,14 +136,12 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& emcCrystal{emcField.NewDaughter<Detector::Definition::EMCCrystal>(fCheckOverlap)};
     auto& emcMagnet{emcField.NewDaughter<Detector::Definition::EMCMagnet>(fCheckOverlap)};
     auto& emcPMTAssemblies{emcField.NewDaughter<Detector::Definition::EMCPMTAssemblies>(fCheckOverlap)};
-    auto& mcp{emcField.NewDaughter<Detector::Definition::MCP>(fCheckOverlap)};
     auto& mcpChamber{emcField.NewDaughter<Detector::Definition::MCPChamber>(fCheckOverlap)};
 
     auto& solenoidBeamPipeS1{solenoidFieldS1.NewDaughter<Detector::Definition::SolenoidBeamPipeS1>(fCheckOverlap)};
     auto& solenoidS1{solenoidFieldS1.NewDaughter<Detector::Definition::SolenoidS1>(fCheckOverlap)};
     auto& solenoidShieldS1{solenoidFieldS1.NewDaughter<Detector::Definition::SolenoidShieldS1>(fCheckOverlap)};
 
-    auto& filter{solenoidFieldS2.NewDaughter<Detector::Definition::Filter>(fCheckOverlap)};
     auto& solenoidBeamPipeS2{solenoidFieldS2.NewDaughter<Detector::Definition::SolenoidBeamPipeS2>(fCheckOverlap)};
     auto& solenoidS2{solenoidFieldS2.NewDaughter<Detector::Definition::SolenoidS2>(fCheckOverlap)};
     auto& solenoidShieldS2{solenoidFieldS2.NewDaughter<Detector::Definition::SolenoidShieldS2>(fCheckOverlap)};
@@ -161,7 +158,6 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& solenoidShieldT2{solenoidFieldT2.NewDaughter<Detector::Definition::SolenoidShieldT2>(fCheckOverlap)};
     auto& solenoidT2{solenoidFieldT2.NewDaughter<Detector::Definition::SolenoidT2>(fCheckOverlap)};
 
-    auto& acceleratorField{mmsField.NewDaughter<Detector::Definition::AcceleratorField>(fCheckOverlap)};
     auto& cdcBody{mmsField.NewDaughter<Detector::Definition::CDCBody>(fCheckOverlap)};
     auto& mmsBeamPipe{mmsField.NewDaughter<Detector::Definition::MMSBeamPipe>(fCheckOverlap)};
     auto& mmsMagnet{mmsField.NewDaughter<Detector::Definition::MMSMagnet>(fCheckOverlap)};
@@ -169,14 +165,20 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     // 3
 
+    auto& mcp{mcpChamber.NewDaughter<Detector::Definition::MCP>(fCheckOverlap)};
+
+    auto& acceleratorField{mmsBeamPipe.NewDaughter<Detector::Definition::AcceleratorField>(fCheckOverlap)};
+
+    auto& filter{solenoidBeamPipeS2.NewDaughter<Detector::Definition::Filter>(fCheckOverlap)};
+
     auto& cdcGas{cdcBody.NewDaughter<Detector::Definition::CDCGas>(fCheckOverlap)};
+
+    // 4
 
     auto& accelerator{acceleratorField.NewDaughter<Detector::Definition::Accelerator>(fCheckOverlap)};
     auto& beamDegrader{acceleratorField.NewDaughter<Detector::Definition::BeamDegrader>(fCheckOverlap)};
     auto& beamMonitor{acceleratorField.NewDaughter<Detector::Definition::BeamMonitor>(fCheckOverlap)};
     auto& target{acceleratorField.NewDaughter<Detector::Definition::Target>(fCheckOverlap)};
-
-    // 4
 
     auto& cdcSuperLayer{cdcGas.NewDaughter<Detector::Definition::CDCSuperLayer>(fCheckOverlap)};
 
@@ -187,26 +189,6 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     // 6
 
     auto& cdcCell{cdcSenseLayer.NewDaughter<Detector::Definition::CDCCell>(fCheckOverlap)};
-
-    ////////////////////////////////////////////////////////////////
-    // Register materials
-    ////////////////////////////////////////////////////////////////
-    {
-        using namespace Mustard::LiteralUnit::Density;
-
-        const auto nist = G4NistManager::Instance();
-
-        const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
-        acceleratorField.RegisterMaterial(vacuum);
-        emcField.RegisterMaterial(vacuum);
-        fWorld->RegisterMaterial(vacuum);
-        mmsField.RegisterMaterial(vacuum);
-        solenoidFieldS1.RegisterMaterial(vacuum);
-        solenoidFieldS2.RegisterMaterial(vacuum);
-        solenoidFieldS3.RegisterMaterial(vacuum);
-        solenoidFieldT1.RegisterMaterial(vacuum);
-        solenoidFieldT2.RegisterMaterial(vacuum);
-    }
 
     ////////////////////////////////////////////////////////////////
     // Register regions
@@ -234,6 +216,13 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         cdcGas.RegisterRegion(fDefaultGaseousRegion);
         cdcSenseLayer.RegisterRegion(fDefaultGaseousRegion);
         cdcSuperLayer.RegisterRegion(fDefaultGaseousRegion);
+        emcField.RegisterRegion(fDefaultGaseousRegion);
+        mmsField.RegisterRegion(fDefaultGaseousRegion);
+        solenoidFieldS1.RegisterRegion(fDefaultGaseousRegion);
+        solenoidFieldS2.RegisterRegion(fDefaultGaseousRegion);
+        solenoidFieldS3.RegisterRegion(fDefaultGaseousRegion);
+        solenoidFieldT1.RegisterRegion(fDefaultGaseousRegion);
+        solenoidFieldT2.RegisterRegion(fDefaultGaseousRegion);
 
         // DefaultSolidRegion
         fDefaultSolidRegion = new Region("DefaultSolid", RegionType::DefaultSolid);
@@ -313,13 +302,14 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         fVacuumRegion->SetProductionCuts(defaultCuts);
 
         acceleratorField.RegisterRegion(fVacuumRegion);
-        emcField.RegisterRegion(fVacuumRegion);
-        mmsField.RegisterRegion(fVacuumRegion);
-        solenoidFieldS1.RegisterRegion(fVacuumRegion);
-        solenoidFieldS2.RegisterRegion(fVacuumRegion);
-        solenoidFieldS3.RegisterRegion(fVacuumRegion);
-        solenoidFieldT1.RegisterRegion(fVacuumRegion);
-        solenoidFieldT2.RegisterRegion(fVacuumRegion);
+        mcpChamber.RegisterRegion("MCPChamberPipeVacuum", fVacuumRegion);
+        mcpChamber.RegisterRegion("MCPChamberVacuum", fVacuumRegion);
+        mmsBeamPipe.RegisterRegion("MMSBeamPipeVacuum", fVacuumRegion);
+        solenoidBeamPipeS1.RegisterRegion("SolenoidBeamPipeS1Vacuum", fVacuumRegion);
+        solenoidBeamPipeS2.RegisterRegion("SolenoidBeamPipeS2Vacuum", fVacuumRegion);
+        solenoidBeamPipeS3.RegisterRegion("SolenoidBeamPipeS3Vacuum", fVacuumRegion);
+        solenoidBeamPipeT1.RegisterRegion("SolenoidBeamPipeT1Vacuum", fVacuumRegion);
+        solenoidBeamPipeT2.RegisterRegion("SolenoidBeamPipeT2Vacuum", fVacuumRegion);
     }
 
     ////////////////////////////////////////////////////////////////

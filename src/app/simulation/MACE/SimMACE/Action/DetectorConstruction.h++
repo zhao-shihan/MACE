@@ -20,6 +20,7 @@
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/Detector/Description/TTC.h++"
 #include "MACE/Detector/Description/Target.h++"
+#include "MACE/Detector/Description/Vacuum.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/SimMACE/Region.h++"
 #include "MACE/Simulation/Messenger/NumericMessenger.h++"
@@ -92,8 +93,9 @@ public:
                                         Detector::Description::MMSShield,
                                         Detector::Description::ShieldingWall,
                                         Detector::Description::Solenoid,
-                                        Detector::Description::TTC,
                                         Detector::Description::Target,
+                                        Detector::Description::TTC,
+                                        Detector::Description::Vacuum,
                                         Detector::Description::World>;
 
 private:

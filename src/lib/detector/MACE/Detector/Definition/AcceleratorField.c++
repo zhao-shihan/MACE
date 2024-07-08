@@ -1,5 +1,6 @@
 #include "MACE/Detector/Definition/AcceleratorField.h++"
 #include "MACE/Detector/Description/Accelerator.h++"
+#include "MACE/Detector/Description/MMSBeamPipe.h++"
 
 #include "Mustard/Utility/LiteralUnit.h++"
 
@@ -13,8 +14,10 @@ using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
 auto AcceleratorField::Construct(G4bool checkOverlaps) -> void {
     const auto& accelerator{Description::Accelerator::Instance()};
+    const auto& beamPipe{Description::MMSBeamPipe::Instance()};
     const auto name{accelerator.Name() + "Field"};
 
+    const auto mother{Mother().LogicalVolume(beamPipe.Name() + "Vacuum")};
     const auto solid{Make<G4Tubs>(
         name,
         0,
@@ -24,13 +27,13 @@ auto AcceleratorField::Construct(G4bool checkOverlaps) -> void {
         2_pi)};
     const auto logic{Make<G4LogicalVolume>(
         solid,
-        nullptr,
+        mother->GetMaterial(),
         name)};
     Make<G4PVPlacement>( // clang-format off
         G4Transform3D{{}, {0, 0, (accelerator.DownstreamFieldLength() - accelerator.UpstreamFieldLength()) / 2}}, // clang-format on
         logic,
         name,
-        Mother().LogicalVolume(),
+        mother,
         false,
         0,
         checkOverlaps);
