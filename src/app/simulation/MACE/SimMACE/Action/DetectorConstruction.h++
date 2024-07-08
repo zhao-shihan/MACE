@@ -22,6 +22,7 @@
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/SimMACE/Region.h++"
+#include "MACE/Simulation/Messenger/NumericMessenger.h++"
 
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
 
@@ -49,9 +50,12 @@ class DetectorConstruction final : public Mustard::Env::Memory::PassiveSingleton
 public:
     DetectorConstruction();
 
-    auto Construct() -> G4VPhysicalVolume* override;
-
     auto SetCheckOverlaps(G4bool checkOverlaps) -> void { fCheckOverlap = checkOverlaps; }
+
+    auto MinDriverStep(double val) -> void { fMinDriverStep = val; }
+    auto DeltaChord(double val) -> void { fDeltaChord = val; }
+
+    auto Construct() -> G4VPhysicalVolume* override;
 
     auto CDCSensitiveRegion() const -> const auto& { return *fCDCSensitiveRegion; }
     auto DefaultGaseousRegion() const -> const auto& { return *fDefaultGaseousRegion; }
@@ -95,6 +99,9 @@ public:
 private:
     G4bool fCheckOverlap;
 
+    double fMinDriverStep;
+    double fDeltaChord;
+
     std::unique_ptr<Mustard::Detector::Definition::DefinitionBase> fWorld;
 
     Region* fCDCFieldWireRegion;
@@ -114,6 +121,8 @@ private:
     SD::TTCSD* fTTCSD;
     SD::MCPSD* fMCPSD;
     SD::EMCSD* fEMCSD;
+
+    NumericMessenger<DetectorConstruction>::Register<DetectorConstruction> fNumericMessengerRegister;
 };
 
 } // namespace Action

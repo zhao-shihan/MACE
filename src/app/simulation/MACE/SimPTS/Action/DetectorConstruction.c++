@@ -51,8 +51,11 @@
 #include "Mustard/Detector/Field/AsG4Field.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 
+#include "G4BFieldIntegrationDriver.hh"
 #include "G4ChordFinder.hh"
 #include "G4EqMagElectricField.hh"
+#include "G4HelixHeum.hh"
+#include "G4IntegrationDriver.hh"
 #include "G4InterpolationDriver.hh"
 #include "G4NistManager.hh"
 #include "G4ProductionCuts.hh"
@@ -64,16 +67,21 @@
 
 namespace MACE::SimPTS::inline Action {
 
+using namespace Mustard::LiteralUnit::Length;
+
 DetectorConstruction::DetectorConstruction() :
     PassiveSingleton{},
     G4VUserDetectorConstruction{},
     fCheckOverlap{},
+    fMinDriverStep{0.5_um},
+    fDeltaChord{5_um},
     fWorld{},
     fDefaultGaseousRegion{},
     fDefaultSolidRegion{},
     fShieldRegion{},
     fSolenoidOrMagnetRegion{},
-    fVacuumRegion{} {
+    fVacuumRegion{},
+    fNumericMessengerRegister{this} {
     DetectorMessenger::EnsureInstantiation();
 }
 
@@ -239,23 +247,39 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     // Register background fields
     ////////////////////////////////////////////////////////////////
     {
-        using namespace Mustard::LiteralUnit::Length;
         using namespace Mustard::LiteralUnit::MagneticFluxDensity;
 
-        constexpr auto hMin{1_um};
-        { // magnetic field
+        { // magnetic field in gas
+            using Field = Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::MMSField>;
+            using Equation = G4TMagFieldEquation<Field>;
+            using Stepper = G4TDormandPrince45<Equation, 6>;
+            using Driver = G4InterpolationDriver<Stepper>;
+            const auto field{new Field};
+            const auto equation{new Equation{field}}; // clang-format off
+            const auto stepper{new Stepper{equation, 6}};
+            const auto driver{new Driver{fMinDriverStep, stepper, 6}}; // clang-format on
+            const auto chordFinder{new G4ChordFinder{driver}};
+            chordFinder->SetDeltaChord(fDeltaChord);
+            mmsField.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), false);
+        }
+        { // magnetic field in vacuum
             const auto RegisterMagneticField{
-                []<typename AField>(Mustard::Detector::Definition::DefinitionBase& detector, AField* field, bool forceToAllDaughters) {
+                [this]<typename AField>(Mustard::Detector::Definition::DefinitionBase& detector, AField* field, bool forceToAllDaughters) {
                     using Equation = G4TMagFieldEquation<AField>;
-                    using Stepper = G4TDormandPrince45<Equation, 6>;
-                    using Driver = G4InterpolationDriver<Stepper>;
-                    const auto equation{new Equation{field}}; // clang-format off
-                    const auto stepper{new Stepper{equation, 6}};
-                    const auto driver{new Driver{hMin, stepper, 6}}; // clang-format on
+                    using ShortStepper = G4TDormandPrince45<Equation, 6>;
+                    using LongStepper = G4HelixHeum;
+                    using ShortStepDriver = G4InterpolationDriver<ShortStepper>;
+                    using LongStepDriver = G4IntegrationDriver<LongStepper>;
+                    const auto equation{new Equation{field}};
+                    const auto shortStepper{new ShortStepper{equation}};
+                    const auto longStepper{new LongStepper{equation}};
+                    auto shortdriver{std::make_unique<ShortStepDriver>(fMinDriverStep, shortStepper, 6)};
+                    auto longDriver{std::make_unique<LongStepDriver>(fMinDriverStep, longStepper, 6)}; // clang-format off
+                    const auto driver{new G4BFieldIntegrationDriver{std::move(shortdriver), std::move(longDriver)}}; // clang-format on
                     const auto chordFinder{new G4ChordFinder{driver}};
+                    chordFinder->SetDeltaChord(fDeltaChord);
                     detector.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), forceToAllDaughters);
                 }};
-            RegisterMagneticField(mmsField, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::MMSField>, false);
             RegisterMagneticField(solenoidFieldS1, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS1>, false);
             RegisterMagneticField(solenoidFieldT1, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldT1>, false);
             RegisterMagneticField(solenoidFieldS2, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS2>, false);
@@ -263,15 +287,17 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
             RegisterMagneticField(solenoidFieldS3, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS3>, false);
             RegisterMagneticField(emcField, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::EMCField>, false);
         }
-        { // EM field, must be reigstered after MMS magnetic field! but why?
+        { // Accelerator EM field, must be reigstered after MMS magnetic field
+            using Field = Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::AcceleratorField>;
             using Equation = G4EqMagElectricField;
             using Stepper = G4TDormandPrince45<Equation, 8>;
             using Driver = G4InterpolationDriver<Stepper>;
-            const auto field{new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::AcceleratorField>};
+            const auto field{new Field};
             const auto equation{new Equation{field}}; // clang-format off
             const auto stepper{new Stepper{equation, 8}};
-            const auto driver{new Driver{hMin, stepper, 8}}; // clang-format on
+            const auto driver{new Driver{fMinDriverStep, stepper, 8}}; // clang-format on
             const auto chordFinder{new G4ChordFinder{driver}};
+            chordFinder->SetDeltaChord(fDeltaChord);
             acceleratorField.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), false);
         }
     }
