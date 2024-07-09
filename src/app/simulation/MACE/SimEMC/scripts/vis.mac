@@ -8,7 +8,7 @@
 
 /MACE/Physics/UseOpticalPhysics
 
-#/Mustard/Detector/Description/Import test_5X0_25.yaml
+#/MACE/Detector/Description/Import SimEMC.yaml
 
 /run/initialize
 

@@ -1,7 +1,5 @@
 #include "MACE/Simulation/SD/EMCPMTSD.h++"
 
-#include "Mustard/Utility/PhysicalConstant.h++"
-
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
@@ -15,8 +13,6 @@
 #include <cassert>
 
 namespace MACE::inline Simulation::inline SD {
-
-using namespace Mustard::PhysicalConstant;
 
 EMCPMTSD::EMCPMTSD(const G4String& sdName) :
     Mustard::NonMoveableBase{},

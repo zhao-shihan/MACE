@@ -31,11 +31,6 @@ using namespace Mustard::PhysicalConstant;
 
 auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
     const auto& emc{Description::EMC::Instance()};
-    const auto name{emc.Name()};
-    const auto& faceList{emc.Mesh().fFaceList};
-    const auto& typeMap{emc.Mesh().fTypeMap};
-
-    const auto pmtDimensions{emc.PMTDimensions()};
 
     const auto pmtCouplerThickness{emc.PMTCouplerThickness()};
     const auto pmtWindowThickness{emc.PMTWindowThickness()};
@@ -99,8 +94,7 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
 
     const auto cathodeSurfacePropertiesTable{new G4MaterialPropertiesTable};
     cathodeSurfacePropertiesTable->AddProperty("REFLECTIVITY", fEnergyPair, {0., 0.});
-    cathodeSurfacePropertiesTable->AddProperty("EFFICIENCY", fEnergyPair, {1., 1.});
-    // cathodeSurfacePropertiesTable->AddProperty("EFFICIENCY", cathodeSurfacePropertiesEnergy, cathodeSurfacePropertiesEfficiency);
+    cathodeSurfacePropertiesTable->AddProperty("EFFICIENCY", cathodeSurfacePropertiesEnergy, cathodeSurfacePropertiesEfficiency);
 
     if (Mustard::Env::VerboseLevelReach<'V'>()) {
         cathodeSurfacePropertiesTable->DumpTable();
@@ -110,22 +104,16 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
     // Construct Volumes
     /////////////////////////////////////////////
 
+    const auto& faceList{emc.Mesh().fFaceList};
+    const auto& typeMap{emc.Mesh().fTypeMap};
+    const auto& pmtDimensions{emc.PMTDimensions()};
+
     for (int unitID{};
          auto&& [_1, _2, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
-
-        // if (unitID != 222) {
-        //     unitID++;
-        //     continue;
-        // }
-
-        double pmtDiameter{};
-        double cathodeDiameter{};
-        double pmtLength{};
-
         auto typeMapIt = typeMap.find(unitID);
-        pmtDiameter = pmtDimensions.at(typeMapIt->second).at(0);
-        cathodeDiameter = pmtDimensions.at(typeMapIt->second).at(1);
-        pmtLength = pmtDimensions.at(typeMapIt->second).at(2);
+        auto pmtDiameter = pmtDimensions.at(typeMapIt->second).at(0);
+        auto cathodeDiameter = pmtDimensions.at(typeMapIt->second).at(1);
+        auto pmtLength = pmtDimensions.at(typeMapIt->second).at(2);
 
         // std::cout << "unitID: " << unitID << ", typeID:" << typeMapIt->second << ", pmtDiameter: " << pmtDiameter << ", cathodeDiameter: " << cathodeDiameter << ", pmtLength: " << pmtLength << std::endl;
 

@@ -2,7 +2,6 @@
 
 #include "Mustard/Env/BasicEnv.h++"
 
-#include "G4EmParameters.hh"
 #include "G4OpticalParameters.hh"
 #include "G4OpticalPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"

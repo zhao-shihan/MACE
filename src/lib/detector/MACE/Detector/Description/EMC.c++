@@ -151,9 +151,7 @@ using namespace Mustard::LiteralUnit::Energy;
 using namespace Mustard::PhysicalConstant;
 
 EMC::EMC() :
-    DescriptionBase{
-        "EMC"
-},
+    DescriptionBase{"EMC"},
     fNSubdivision{3},
     fInnerRadius{20_cm},
     fCrystalHypotenuse{10_cm},
@@ -313,21 +311,6 @@ auto EMC::ComputeMesh() const -> MeshInformation {
         edgeLengthSet[edgeLength].emplace_back(unitID++);
     }
 
-    // std::cout << "===== Crystal Sorting =====" << std::endl;
-    // for (auto&& pair : edgeLengthSet) {
-    //     std::cout << "EdgeLength Set: [";
-    //     for (auto&& value : pair.first) {
-    //         std::cout << value << ", ";
-    //     }
-    //     std::cout << "], UnitID: [";
-    //     for (auto&& value : pair.second) {
-    //         std::cout << value << ", ";
-    //     }
-    //     std::cout << "]" << std::endl;
-    //     std::cout << std::ssize(pair.second) << std::endl;
-    // }
-    // std::cout << "\n";
-
     int typeID{};
     for (auto&& pair : edgeLengthSet) {
         for (auto&& value : pair.second) {
@@ -364,6 +347,12 @@ auto EMC::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
     ImportValue(node, fPMTWaveLengthBin, "PMTWaveLengthBin");
     ImportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
+    ImportValue(node, fMPPCWidthSet, "MPPCWidthSet");
+    ImportValue(node, fMPPCThickness, "MPPCThickness");
+    ImportValue(node, fMPPCCouplerThickness, "MPPCCouplerThickness");
+    ImportValue(node, fMPPCWindowThickness, "MPPCWindowThickness");
+    ImportValue(node, fMPPCWaveLengthBin, "MPPCWaveLengthBin");
+    ImportValue(node, fMPPCEfficiency, "MPPCEfficiency");
     ImportValue(node, fCsIEnergyBin, "CsIEnergyBin");
     ImportValue(node, fCsIScintillationComponent1, "CsIScintillationComponent1");
     ImportValue(node, fScintillationYield, "ScintillationYield");
@@ -385,6 +374,12 @@ auto EMC::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
     ExportValue(node, fPMTWaveLengthBin, "PMTWaveLengthBin");
     ExportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
+    ExportValue(node, fMPPCWidthSet, "MPPCWidthSet");
+    ExportValue(node, fMPPCThickness, "MPPCThickness");
+    ExportValue(node, fMPPCCouplerThickness, "MPPCCouplerThickness");
+    ExportValue(node, fMPPCWindowThickness, "MPPCWindowThickness");
+    ExportValue(node, fMPPCWaveLengthBin, "MPPCWaveLengthBin");
+    ExportValue(node, fMPPCEfficiency, "MPPCEfficiency");
     ExportValue(node, fCsIEnergyBin, "CsIEnergyBin");
     ExportValue(node, fCsIScintillationComponent1, "CsIScintillationComponent1");
     ExportValue(node, fScintillationYield, "ScintillationYield");

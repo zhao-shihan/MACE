@@ -108,15 +108,8 @@ auto EMCMPPC::Construct(G4bool checkOverlaps) -> void {
 
     for (int unitID{};
          auto&& [_1, _2, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
-
-        // if (unitID != 222) {
-        //     unitID++;
-        //     continue;
-        // }
-
         auto typeMapIt = typeMap.find(unitID);
         double mppcWidth{mppcWidthSet.at(typeMapIt->second)};
-        // std::cout << "unitID: " << unitID << ", typeID:" << typeMapIt->second << ", pmtDiameter: " << pmtDiameter << ", cathodeDiameter: " << cathodeDiameter << ", pmtLength: " << pmtLength << std::endl;
 
         const auto couplerTransform{emc.ComputeTransformToOuterSurfaceWithOffset(unitID,
                                                                                  mppcCouplerThickness / 2)};
