@@ -51,8 +51,6 @@ auto EMCPMTSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"UnitID">(*hit) = unitID;
     Get<"t">(*hit) = postStepPoint.GetGlobalTime();
-    // Get<"lambda">(*hit) = h_Planck * c_light / postStepPoint.GetKineticEnergy();
-    // Get<"EMCHitID">(*hit) = -1; // to be determined
 
     return true;
 }
