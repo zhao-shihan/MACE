@@ -1,5 +1,5 @@
 #include "MACE/Detector/Definition/EMCCrystal.h++"
-#include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
+#include "MACE/Detector/Definition/EMCMPPC.h++"
 #include "MACE/Detector/Description/EMC.h++"
 
 #include "Mustard/Detector/Definition/DefinitionBase.h++"
@@ -29,15 +29,19 @@ using namespace Mustard::LiteralUnit;
 using namespace Mustard::MathConstant;
 using namespace Mustard::PhysicalConstant;
 
-auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
+auto EMCMPPC::Construct(G4bool checkOverlaps) -> void {
     const auto& emc{Description::EMC::Instance()};
+    const auto name{emc.Name()};
+    const auto& faceList{emc.Mesh().fFaceList};
+    const auto& typeMap{emc.Mesh().fTypeMap};
 
-    const auto pmtCouplerThickness{emc.PMTCouplerThickness()};
-    const auto pmtWindowThickness{emc.PMTWindowThickness()};
-    const auto pmtCathodeThickness{emc.PMTCathodeThickness()};
+    const auto mppcWidthSet{emc.MPPCWidthSet()};
+    const auto mppcThickness{emc.MPPCThickness()};
+    const auto mppcCouplerThickness{emc.MPPCCouplerThickness()};
+    const auto mppcWindowThickness{emc.MPPCWindowThickness()};
 
-    const auto pmtWaveLengthBin{emc.PMTWaveLengthBin()};
-    const auto pmtQuantumEfficiency{emc.PMTQuantumEfficiency()};
+    const auto mppcWaveLengthBin{emc.MPPCWaveLengthBin()};
+    const auto mppcEfficiency{emc.MPPCEfficiency()};
 
     /////////////////////////////////////////////
     // Define Element and Material
@@ -48,9 +52,8 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
     const auto carbonElement{nistManager->FindOrBuildElement("C")};
     const auto oxygenElement{nistManager->FindOrBuildElement("O")};
     const auto siliconElement{nistManager->FindOrBuildElement("Si")};
-    const auto potassiumElement{nistManager->FindOrBuildElement("K")};
-    const auto antimonyElement{nistManager->FindOrBuildElement("Sb")};
-    const auto cesiumElement{nistManager->FindOrBuildElement("Cs")};
+
+    const auto silicon = nistManager->FindOrBuildMaterial("G4_Si");
 
     const auto siliconeGrease{new G4Material("siliconeGrease", 1.06_g_cm3, 4, kStateLiquid)};
     siliconeGrease->AddElement(carbonElement, 2);
@@ -58,11 +61,10 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
     siliconeGrease->AddElement(oxygenElement, 1);
     siliconeGrease->AddElement(siliconElement, 1);
 
-    const auto glass{nistManager->FindOrBuildMaterial("G4_GLASS_PLATE")};
-    const auto bialkali{new G4Material("Bialkali", 2.0_g_cm3, 3, kStateSolid)};
-    bialkali->AddElement(potassiumElement, 2);
-    bialkali->AddElement(cesiumElement, 1);
-    bialkali->AddElement(antimonyElement, 1);
+    const auto epoxy = new G4Material("epoxy", 1.18_g_cm3, 3, kStateSolid);
+    epoxy->AddElement(carbonElement, 0.7362);
+    epoxy->AddElement(hydrogenElement, 0.0675);
+    epoxy->AddElement(oxygenElement, 0.1963);
 
     //////////////////////////////////////////////////
     // Construct Material Optical Properties Tables
@@ -79,80 +81,70 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
     siliconeGrease->SetMaterialPropertiesTable(siliconeGreasePropertiesTable);
 
     const auto windowPropertiesTable{new G4MaterialPropertiesTable};
-    windowPropertiesTable->AddProperty("RINDEX", fEnergyPair, {1.49, 1.49}); // ET 9269B 9956B
-    glass->SetMaterialPropertiesTable(windowPropertiesTable);
+    windowPropertiesTable->AddProperty("RINDEX", fEnergyPair, {1.57, 1.57});
+    epoxy->SetMaterialPropertiesTable(windowPropertiesTable);
 
-    std::vector<G4double> cathodeSurfacePropertiesEnergy(pmtWaveLengthBin.size());
-    std::vector<G4double> cathodeSurfacePropertiesEfficiency(pmtQuantumEfficiency.size());
-    std::transform(pmtWaveLengthBin.begin(), pmtWaveLengthBin.end(), cathodeSurfacePropertiesEnergy.begin(),
+    std::vector<G4double> mppcSurfacePropertiesEnergy(mppcWaveLengthBin.size());
+    std::vector<G4double> mppcSurfacePropertiesEfficiency(mppcEfficiency.size());
+    std::transform(mppcWaveLengthBin.begin(), mppcWaveLengthBin.end(), mppcSurfacePropertiesEnergy.begin(),
                    [](auto val) { return h_Planck * c_light / (val * nm / mm); });
-    std::transform(pmtQuantumEfficiency.begin(), pmtQuantumEfficiency.end(), cathodeSurfacePropertiesEfficiency.begin(),
+    std::transform(mppcEfficiency.begin(), mppcEfficiency.end(), mppcSurfacePropertiesEfficiency.begin(),
                    [](auto n) { return n * perCent; });
 
     const auto couplerSurfacePropertiesTable{new G4MaterialPropertiesTable};
     couplerSurfacePropertiesTable->AddProperty("TRANSMITTANCE", fEnergyPair, {1, 1});
 
-    const auto cathodeSurfacePropertiesTable{new G4MaterialPropertiesTable};
-    cathodeSurfacePropertiesTable->AddProperty("REFLECTIVITY", fEnergyPair, {0., 0.});
-    cathodeSurfacePropertiesTable->AddProperty("EFFICIENCY", cathodeSurfacePropertiesEnergy, cathodeSurfacePropertiesEfficiency);
+    const auto mppcSurfacePropertiesTable{new G4MaterialPropertiesTable};
+    mppcSurfacePropertiesTable->AddProperty("REFLECTIVITY", fEnergyPair, {0., 0.});
+    mppcSurfacePropertiesTable->AddProperty("EFFICIENCY", mppcSurfacePropertiesEnergy, mppcSurfacePropertiesEfficiency);
 
     if (Mustard::Env::VerboseLevelReach<'V'>()) {
-        cathodeSurfacePropertiesTable->DumpTable();
+        mppcSurfacePropertiesTable->DumpTable();
     }
 
     /////////////////////////////////////////////
     // Construct Volumes
     /////////////////////////////////////////////
 
-    const auto& faceList{emc.Mesh().fFaceList};
-    const auto& typeMap{emc.Mesh().fTypeMap};
-    const auto& pmtDimensions{emc.PMTDimensions()};
-
     for (int unitID{};
          auto&& [_1, _2, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
         auto typeMapIt = typeMap.find(unitID);
-        auto pmtDiameter = pmtDimensions.at(typeMapIt->second).at(0);
-        auto cathodeDiameter = pmtDimensions.at(typeMapIt->second).at(1);
-        auto pmtLength = pmtDimensions.at(typeMapIt->second).at(2);
-
-        // std::cout << "unitID: " << unitID << ", typeID:" << typeMapIt->second << ", pmtDiameter: " << pmtDiameter << ", cathodeDiameter: " << cathodeDiameter << ", pmtLength: " << pmtLength << std::endl;
+        double mppcWidth{mppcWidthSet.at(typeMapIt->second)};
 
         const auto couplerTransform{emc.ComputeTransformToOuterSurfaceWithOffset(unitID,
-                                                                                 pmtCouplerThickness / 2)};
+                                                                                 mppcCouplerThickness / 2)};
 
-        const auto shellTransform{emc.ComputeTransformToOuterSurfaceWithOffset(unitID,
-                                                                               pmtCouplerThickness + pmtLength / 2)};
+        const auto windowTransform{emc.ComputeTransformToOuterSurfaceWithOffset(unitID,
+                                                                                mppcCouplerThickness + mppcWindowThickness / 2)};
 
         const auto cathodeTransform{emc.ComputeTransformToOuterSurfaceWithOffset(unitID,
-                                                                                 pmtCouplerThickness + pmtWindowThickness + pmtCathodeThickness / 2)};
+                                                                                 mppcCouplerThickness + mppcWindowThickness + mppcThickness / 2)};
 
-        const auto solidCoupler{Make<G4Tubs>("temp", 0, pmtDiameter / 2, pmtCouplerThickness / 2, 0, 2 * pi)};
-        const auto logicCoupler{Make<G4LogicalVolume>(solidCoupler, siliconeGrease, "EMCPMTCoupler")};
+        const auto solidCoupler{Make<G4Box>("temp", mppcWidth / 2, mppcWidth / 2, mppcCouplerThickness / 2)};
+        const auto logicCoupler{Make<G4LogicalVolume>(solidCoupler, siliconeGrease, "EMCMPPCCoupler")};
         const auto physicalCoupler{Make<G4PVPlacement>(couplerTransform,
                                                        logicCoupler,
-                                                       "EMCPMTCoupler",
+                                                       "EMCMPPCCoupler",
                                                        Mother().LogicalVolume(),
                                                        true,
                                                        unitID,
                                                        checkOverlaps)};
 
-        const auto solidGlassTube{Make<G4Tubs>("temp", 0, pmtDiameter / 2, pmtLength / 2, 0, 2 * pi)};
-        const auto solidPMTVacuum{Make<G4Tubs>("temp", 0, pmtDiameter / 2 - pmtWindowThickness, pmtLength / 2 - pmtWindowThickness, 0, 2 * pi)};
-        const auto solidPMTShell{Make<G4SubtractionSolid>("EMCPMTShell", solidGlassTube, solidPMTVacuum)};
-        const auto logicPMTShell{Make<G4LogicalVolume>(solidPMTShell, glass, "EMCPMTShell")};
-        Make<G4PVPlacement>(shellTransform,
-                            logicPMTShell,
-                            "EMCPMTShell",
+        const auto solidWindow{Make<G4Box>("temp", mppcWidth / 2, mppcWidth / 2, mppcWindowThickness / 2)};
+        const auto logicWindow{Make<G4LogicalVolume>(solidWindow, epoxy, "EMCMPPCWindow")};
+        Make<G4PVPlacement>(windowTransform,
+                            logicWindow,
+                            "EMCMPPCWindow",
                             Mother().LogicalVolume(),
                             true,
                             unitID,
                             checkOverlaps);
 
-        const auto solidCathode{Make<G4Tubs>("temp", 0, cathodeDiameter / 2, pmtCathodeThickness / 2, 0, 2 * pi)};
-        const auto logicCathode{Make<G4LogicalVolume>(solidCathode, bialkali, "EMCPMTCathode")};
+        const auto solidMPPC{Make<G4Box>("temp", mppcWidth / 2, mppcWidth / 2, mppcThickness / 2)};
+        const auto logicMPPC{Make<G4LogicalVolume>(solidMPPC, silicon, "EMCMPPC")};
         Make<G4PVPlacement>(cathodeTransform,
-                            logicCathode,
-                            "EMCPMTCathode",
+                            logicMPPC,
+                            "EMCMPPC",
                             Mother().LogicalVolume(),
                             true,
                             unitID,
@@ -172,9 +164,9 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
             couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
         }
 
-        const auto cathodeSurface{new G4OpticalSurface("Cathode", unified, polished, dielectric_metal)};
-        new G4LogicalSkinSurface{"cathodeSkinSurface", logicCathode, cathodeSurface};
-        cathodeSurface->SetMaterialPropertiesTable(cathodeSurfacePropertiesTable);
+        const auto cathodeSurface{new G4OpticalSurface("MPPC", unified, polished, dielectric_metal)};
+        new G4LogicalSkinSurface{"mppcSkinSurface", logicMPPC, cathodeSurface};
+        cathodeSurface->SetMaterialPropertiesTable(mppcSurfacePropertiesTable);
 
         ++unitID;
     }

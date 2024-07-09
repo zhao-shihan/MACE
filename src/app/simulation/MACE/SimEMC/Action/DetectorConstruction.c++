@@ -1,4 +1,5 @@
 #include "MACE/Detector/Definition/EMCCrystal.h++"
+#include "MACE/Detector/Definition/EMCMPPC.h++"
 #include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
 #include "MACE/Detector/Definition/MCP.h++"
 #include "MACE/Detector/Definition/MCPChamber.h++"
@@ -49,19 +50,19 @@ DetectorConstruction::DetectorConstruction() :
 auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     using namespace MACE::Detector::Definition;
 
-    auto& description = MACE::Detector::Description::World::Instance();
-    description.HalfXExtent(26_m);
-    description.HalfYExtent(20_m);
-    description.HalfZExtent(26_m);
+    // auto& description = MACE::Detector::Description::World::Instance();
+    // description.HalfXExtent(26_m);
+    // description.HalfYExtent(20_m);
+    // description.HalfZExtent(26_m);
 
     fWorld = std::make_unique<World>();
     auto& emcCrystal = fWorld->NewDaughter<EMCCrystal>(fCheckOverlap);
     auto& emcPMTAssemblies = fWorld->NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
     auto& mcpChamber = fWorld->NewDaughter<MCPChamber>(fCheckOverlap);
 
-    auto& emcMagnet = fWorld->NewDaughter<SimEMC::Detector::EMCMagnet>(fCheckOverlap);
-    auto& emcShield = fWorld->NewDaughter<SimEMC::Detector::EMCShield>(fCheckOverlap);
-    auto& emcTunnel = fWorld->NewDaughter<SimEMC::Detector::EMCTunnel>(fCheckOverlap);
+    // auto& emcMagnet = fWorld->NewDaughter<SimEMC::Detector::EMCMagnet>(fCheckOverlap);
+    // auto& emcShield = fWorld->NewDaughter<SimEMC::Detector::EMCShield>(fCheckOverlap);
+    // auto& emcTunnel = fWorld->NewDaughter<SimEMC::Detector::EMCTunnel>(fCheckOverlap);
 
     auto& mcp = mcpChamber.NewDaughter<MCP>(fCheckOverlap);
 
@@ -71,23 +72,23 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     fEMCSensitiveRegion->SetProductionCuts(defaultCuts);
     emcCrystal.RegisterRegion(fEMCSensitiveRegion);
 
-    fMCPSensitiveRegion = new Region("MCPSensitive", RegionType::MCPSensitive);
-    fMCPSensitiveRegion->SetProductionCuts(defaultCuts);
-    mcp.RegisterRegion(fMCPSensitiveRegion);
+    // fMCPSensitiveRegion = new Region("MCPSensitive", RegionType::MCPSensitive);
+    // fMCPSensitiveRegion->SetProductionCuts(defaultCuts);
+    // mcp.RegisterRegion(fMCPSensitiveRegion);
 
-    fSolenoidOrMagnetRegion = new Region("SolenoidOrMagnet", RegionType::SolenoidOrMagnet);
-    fSolenoidOrMagnetRegion->SetProductionCuts(defaultCuts);
-    emcMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
+    // fSolenoidOrMagnetRegion = new Region("SolenoidOrMagnet", RegionType::SolenoidOrMagnet);
+    // fSolenoidOrMagnetRegion->SetProductionCuts(defaultCuts);
+    // emcMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
 
-    fShieldRegion = new Region("Shield", RegionType::Shield);
-    fShieldRegion->SetProductionCuts(defaultCuts);
-    emcShield.RegisterRegion(fShieldRegion);
+    // fShieldRegion = new Region("Shield", RegionType::Shield);
+    // fShieldRegion->SetProductionCuts(defaultCuts);
+    // emcShield.RegisterRegion(fShieldRegion);
 
-    fTunnelRegion = new Region("Tunnel", RegionType::Tunnel);
-    const auto cuts = new G4ProductionCuts;
-    cuts->SetProductionCut(2.5_cm);
-    fTunnelRegion->SetProductionCuts(cuts);
-    emcTunnel.RegisterRegion(fTunnelRegion);
+    // fTunnelRegion = new Region("Tunnel", RegionType::Tunnel);
+    // const auto cuts = new G4ProductionCuts;
+    // cuts->SetProductionCut(2.5_cm);
+    // fTunnelRegion->SetProductionCuts(cuts);
+    // emcTunnel.RegisterRegion(fTunnelRegion);
 
     const auto& emcName{MACE::Detector::Description::EMC::Instance().Name()};
 
@@ -97,10 +98,10 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     fEMCSD = new SD::EMCSD{emcName, fEMCPMTSD};
     emcCrystal.RegisterSD(fEMCSD);
 
-    fMCPSD = new SD::MCPSD{MACE::Detector::Description::MCP::Instance().Name()};
-    mcp.RegisterSD(fMCPSD);
+    // fMCPSD = new SD::MCPSD{MACE::Detector::Description::MCP::Instance().Name()};
+    // mcp.RegisterSD(fMCPSD);
 
-    // fWorld->Export("geometry.gdml");
+    // fWorld->Export("EMCPhaseII.gdml");
 
     return fWorld->PhysicalVolume();
 }
