@@ -76,8 +76,6 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     fEMCSD = new SD::EMCSD{emcName, fEMCPMTSD};
     emcCrystal.RegisterSD(fEMCSD);
 
-    // fWorld->Export("EMCPhaseI.gdml");
-
     return fWorld->PhysicalVolume();
 }
 
