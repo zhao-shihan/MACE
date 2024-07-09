@@ -18,6 +18,7 @@ auto SolenoidFieldT2::Construct(G4bool checkOverlaps) -> void {
     const auto& solenoid{Description::Solenoid::Instance()};
     const auto name{solenoid.Name() + "FieldT2"};
 
+    const auto mother{Mother().LogicalVolume()};
     const auto solid{Make<G4Torus>(
         name,
         0,
@@ -25,17 +26,15 @@ auto SolenoidFieldT2::Construct(G4bool checkOverlaps) -> void {
         solenoid.T2Radius(),
         0,
         0.5_pi)};
-
     const auto logic{Make<G4LogicalVolume>(
         solid,
-        nullptr,
+        mother->GetMaterial(),
         name)};
-
     Make<G4PVPlacement>(
         G4Translate3D{Mustard::VectorCast<G4ThreeVector>(solenoid.T2Center())} * G4RotateX3D{-0.5_pi},
         logic,
         name,
-        Mother().LogicalVolume(),
+        mother,
         false,
         0,
         checkOverlaps);

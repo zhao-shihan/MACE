@@ -17,7 +17,7 @@ auto World::Construct(G4bool checkOverlaps) -> void {
         world.HalfZExtent())};
     const auto logic{Make<G4LogicalVolume>(
         solid,
-        nullptr,
+        G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR"),
         world.Name())};
     Make<G4PVPlacement>(
         G4Transform3D{},

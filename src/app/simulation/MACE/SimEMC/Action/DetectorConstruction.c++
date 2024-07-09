@@ -20,7 +20,6 @@
 #include "Mustard/Detector/Description/DescriptionIO.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 
-#include "G4NistManager.hh"
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4Region.hh"
@@ -45,10 +44,6 @@ DetectorConstruction::DetectorConstruction() :
     fVacuumRegion{},
     fEMCSD{},
     fEMCPMTSD{} {
-    // Detector::Description::DescriptionIO::Import<DescriptionInUse>(
-    // #include "MACE/SimEMC/DefaultGeometry.inlyaml"
-    // );
-    // GeometryMessenger::Instance().Register(this);
     DetectorMessenger::EnsureInstantiation();
 }
 
@@ -63,17 +58,13 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     fWorld = std::make_unique<World>();
     auto& emcCrystal = fWorld->NewDaughter<EMCCrystal>(fCheckOverlap);
     auto& emcPMTAssemblies = fWorld->NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
-    // auto& emcMPPC = fWorld->NewDaughter<EMCMPPC>(fCheckOverlap);
-    // auto& mcp = fWorld->NewDaughter<MCP>(fCheckOverlap);
-    /* auto& mcpChamber = */
-    // fWorld->NewDaughter<MCPChamber>(fCheckOverlap);
+    auto& mcpChamber = fWorld->NewDaughter<MCPChamber>(fCheckOverlap);
 
     // auto& emcMagnet = fWorld->NewDaughter<SimEMC::Detector::EMCMagnet>(fCheckOverlap);
     // auto& emcShield = fWorld->NewDaughter<SimEMC::Detector::EMCShield>(fCheckOverlap);
     // auto& emcTunnel = fWorld->NewDaughter<SimEMC::Detector::EMCTunnel>(fCheckOverlap);
 
-    auto nist = G4NistManager::Instance();
-    fWorld->RegisterMaterial(nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3));
+    auto& mcp = mcpChamber.NewDaughter<MCP>(fCheckOverlap);
 
     const auto defaultCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts();
 

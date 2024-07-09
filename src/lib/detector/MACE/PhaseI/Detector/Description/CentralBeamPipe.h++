@@ -32,6 +32,7 @@ public:
     // Material
 
     auto VacuumPressure() const -> auto { return fVacuumPressure; }
+    auto VacuumDensity() const -> double;
 
     auto VacuumPressure(double val) -> void { fVacuumPressure = val; }
 

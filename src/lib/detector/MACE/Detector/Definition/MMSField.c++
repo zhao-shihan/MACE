@@ -1,7 +1,7 @@
 #include "MACE/Detector/Definition/MMSField.h++"
 #include "MACE/Detector/Description/MMSField.h++"
 
-#include "Mustard/Utility/MathConstant.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4PVPlacement.hh"
 #include "G4ThreeVector.hh"
@@ -9,30 +9,28 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace Mustard::MathConstant;
+using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
 auto MMSField::Construct(G4bool checkOverlaps) -> void {
-    const auto& description = Description::MMSField::Instance();
-    auto name = description.Name();
-    auto length = description.Length();
-    auto radius = description.Radius();
+    const auto& mmsField{Description::MMSField::Instance()};
 
-    auto solid = Make<G4Tubs>(
-        name,
+    const auto mother{Mother().LogicalVolume()};
+    const auto solid{Make<G4Tubs>(
+        mmsField.Name(),
         0,
-        radius,
-        length / 2,
+        mmsField.Radius(),
+        mmsField.Length() / 2,
         0,
-        2 * pi);
-    auto logic = Make<G4LogicalVolume>(
+        2_pi)};
+    const auto logic{Make<G4LogicalVolume>(
         solid,
-        nullptr,
-        name);
+        mother->GetMaterial(),
+        mmsField.Name())};
     Make<G4PVPlacement>(
         G4Transform3D(),
         logic,
-        name,
-        Mother().LogicalVolume(),
+        mmsField.Name(),
+        mother,
         false,
         0,
         checkOverlaps);

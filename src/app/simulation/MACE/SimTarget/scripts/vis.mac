@@ -16,7 +16,7 @@
 # I/O & Analysis
 /MACE/Analysis/FilePath                        SimTarget_vis
 /MACE/Analysis/FileMode                        RECREATE
-/MACE/Analysis/EnableYieldAnalysis             true
+/MACE/Analysis/EnableYieldAnalysis             yes
 
 # Geometry
 #/MACE/Detector/Description/Import              geom.yaml
@@ -44,7 +44,7 @@
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 
 # kill secondaries
-/MACE/Action/KillIrrelevants    true
+/MACE/Action/KillIrrelevants    yes
 
 #############################################################################
 # Visualization settings
@@ -52,7 +52,7 @@
 
 /vis/open OGL
 
-/vis/viewer/set/autoRefresh false
+/vis/viewer/set/autoRefresh no
 /vis/verbose errors
 
 /vis/drawVolume
@@ -62,7 +62,7 @@
 #/vis/viewer/set/rotationStyle freeRotation
 /vis/viewer/set/projection p
 /vis/viewer/set/style s
-/vis/viewer/set/auxiliaryEdge false
+/vis/viewer/set/auxiliaryEdge no
 /vis/viewer/set/lineSegmentsPerCircle 100
 /vis/viewer/zoom 1
 
@@ -86,13 +86,13 @@
 /vis/filtering/trajectories/particleFilter-0/add mu+
 
 /vis/modeling/trajectories/create/drawByParticleID
-/vis/modeling/trajectories/drawByParticleID-0/default/setDrawAuxPts false
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawAuxPts no
 /vis/modeling/trajectories/drawByParticleID-0/default/setAuxPtsSize 2
 /vis/modeling/trajectories/drawByParticleID-0/default/setAuxPtsSizeType screen
 /vis/modeling/trajectories/drawByParticleID-0/default/setAuxPtsType dots
-/vis/modeling/trajectories/drawByParticleID-0/default/setDrawLine true
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawLine yes
 /vis/modeling/trajectories/drawByParticleID-0/default/setLineWidth 2
-/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts yes
 /vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSize 2
 /vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSizeType screen
 /vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsType dots
@@ -103,4 +103,4 @@
 /vis/scene/endOfEventAction accumulate
 
 /vis/verbose warnings
-/vis/viewer/set/autoRefresh true
+/vis/viewer/set/autoRefresh yes

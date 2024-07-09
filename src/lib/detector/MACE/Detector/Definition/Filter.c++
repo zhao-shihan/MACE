@@ -1,5 +1,6 @@
 #include "MACE/Detector/Definition/Filter.h++"
 #include "MACE/Detector/Description/Filter.h++"
+#include "MACE/Detector/Description/SolenoidBeamPipe.h++"
 
 #include "Mustard/Utility/LiteralUnit.h++"
 
@@ -25,6 +26,7 @@ bool Filter::Enabled() const {
 
 auto Filter::Construct(G4bool checkOverlaps) -> void {
     const auto& filter{Description::Filter::Instance()};
+    const auto& beamPipe{Description::SolenoidBeamPipe::Instance()};
 
     const auto x0{-(filter.Count() - 1) * filter.Pitch() / 2};
     for (int k{}; k < filter.Count(); ++k) {
@@ -32,7 +34,7 @@ auto Filter::Construct(G4bool checkOverlaps) -> void {
         const auto halfWidth{std::sqrt(muc::pow<2>(filter.Radius()) - muc::pow<2>(x))};
 
         const auto solid{Make<G4Box>(
-            "",
+            filter.Name(),
             filter.Thickness() / 2,
             halfWidth,
             filter.Length() / 2)};
@@ -46,7 +48,7 @@ auto Filter::Construct(G4bool checkOverlaps) -> void {
             G4Transform3D{{}, {x, 0, 0}}, // clang-format on
             logic,
             filter.Name(),
-            Mother().LogicalVolume(),
+            Mother().LogicalVolume(beamPipe.Name() + "S2Vacuum"),
             false,
             k,
             checkOverlaps);

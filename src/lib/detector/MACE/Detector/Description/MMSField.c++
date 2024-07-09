@@ -10,7 +10,7 @@ using namespace Mustard::LiteralUnit::MagneticFluxDensity;
 MMSField::MMSField() :
     DescriptionBase{"MMSField"},
     // Geometry
-    fRadius{61_cm},
+    fRadius{65_cm},
     fLength{220_cm},
     // Field
     fFastField{100_mT} {}

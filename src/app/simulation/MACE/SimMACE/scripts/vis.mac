@@ -12,7 +12,7 @@
 
 /gps/particle             mu+
 /gps/direction            0 0 1        # 0 deg
-/gps/pos/centre           0 0 -2 m     # 0 deg
+/gps/pos/centre           0 0 -1 m     # 0 deg
 /gps/pos/type             Beam
 /gps/pos/shape            Circle
 /gps/pos/radius           0 mm
@@ -25,11 +25,11 @@
 
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5
 
-/MACE/Analysis/CoincidenceWithCDC     false
-/MACE/Analysis/CoincidenceWithTTC     false
-/MACE/Analysis/CoincidenceWithMMS     false
-/MACE/Analysis/CoincidenceWithMCP     false
-/MACE/Analysis/CoincidenceWithEMC     false
+/MACE/Analysis/CoincidenceWithCDC     no
+/MACE/Analysis/CoincidenceWithTTC     no
+/MACE/Analysis/CoincidenceWithMMS     no
+/MACE/Analysis/CoincidenceWithMCP     no
+/MACE/Analysis/CoincidenceWithEMC     no
 
 /MACE/Analysis/FilePath SimMACE_vis
 /MACE/Analysis/FileMode RECREATE
@@ -40,7 +40,7 @@
 
 /vis/open OGL
 
-/vis/viewer/set/autoRefresh false
+/vis/viewer/set/autoRefresh no
 /vis/verbose errors
 
 /vis/drawVolume
@@ -50,22 +50,22 @@
 #/vis/viewer/set/rotationStyle freeRotation
 /vis/viewer/set/projection p
 /vis/viewer/set/style s
-/vis/viewer/set/auxiliaryEdge false
+/vis/viewer/set/auxiliaryEdge no
 #/vis/viewer/set/lineSegmentsPerCircle 100
 /vis/viewer/zoom 2.5
 
 # Visibility
-/vis/geometry/set/visibility CDCCell             -1 false
-/vis/geometry/set/visibility CDCSuperLayer        0 false
-/vis/geometry/set/visibility EMCField             0 false
-/vis/geometry/set/visibility EMCPMTCathode        0 false
-/vis/geometry/set/visibility EMCPMTCoupler        0 false
-/vis/geometry/set/visibility MMSField             0 false
-/vis/geometry/set/visibility SolenoidFieldS1      0 false
-/vis/geometry/set/visibility SolenoidFieldS2      0 false
-/vis/geometry/set/visibility SolenoidFieldS3      0 false
-/vis/geometry/set/visibility SolenoidFieldT1      0 false
-/vis/geometry/set/visibility SolenoidFieldT2      0 false
+/vis/geometry/set/visibility CDCCell             -1 no
+/vis/geometry/set/visibility CDCSuperLayer        0 no
+/vis/geometry/set/visibility EMCField             0 no
+/vis/geometry/set/visibility EMCPMTCathode        0 no
+/vis/geometry/set/visibility EMCPMTCoupler        0 no
+/vis/geometry/set/visibility MMSField             0 no
+/vis/geometry/set/visibility SolenoidFieldS1      0 no
+/vis/geometry/set/visibility SolenoidFieldS2      0 no
+/vis/geometry/set/visibility SolenoidFieldS3      0 no
+/vis/geometry/set/visibility SolenoidFieldT1      0 no
+/vis/geometry/set/visibility SolenoidFieldT2      0 no
 
 # Colors
 /vis/geometry/set/colour Accelerator                   0     1     1     1     0.1
@@ -91,16 +91,25 @@
 /vis/geometry/set/colour MCP                           0     1     1     1     0.1
 /vis/geometry/set/colour MCPAnode                      0     1     1     1     0.1
 /vis/geometry/set/colour MCPChamber                    0     1     1     1     0.05
+/vis/geometry/set/colour MCPChamberPipe                0     1     1     1     0.05
+/vis/geometry/set/colour MCPChamberPipeVacuum          0     1     1     1     0.05
+/vis/geometry/set/colour MCPChamberVacuum              0     1     1     1     0.05
 /vis/geometry/set/colour MMSBeamPipe                   0     1     1     1     0.05
+/vis/geometry/set/colour MMSBeamPipeVacuum             0     1     1     1     0.01
 /vis/geometry/set/colour MMSField                      0     1     1     1     0.05
 /vis/geometry/set/colour MMSMagnet                     0     1     1     1     0.05
 /vis/geometry/set/colour MMSShield                     0     1     1     1     0.05
 /vis/geometry/set/colour ShieldingWall                 0     1     1     1     0.05
 /vis/geometry/set/colour SolenoidBeamPipeS1            0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidBeamPipeS1Vacuum      0     1     1     1     0.01
 /vis/geometry/set/colour SolenoidBeamPipeS2            0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidBeamPipeS2Vacuum      0     1     1     1     0.01
 /vis/geometry/set/colour SolenoidBeamPipeS3            0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidBeamPipeS3Vacuum      0     1     1     1     0.01
 /vis/geometry/set/colour SolenoidBeamPipeT1            0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidBeamPipeT1Vacuum      0     1     1     1     0.01
 /vis/geometry/set/colour SolenoidBeamPipeT2            0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidBeamPipeT2Vacuum      0     1     1     1     0.01
 /vis/geometry/set/colour SolenoidFieldS1               0     1     1     1     0.05
 /vis/geometry/set/colour SolenoidFieldS2               0     1     1     1     0.05
 /vis/geometry/set/colour SolenoidFieldS3               0     1     1     1     0.05
@@ -119,7 +128,6 @@
 /vis/geometry/set/colour Target                        0     1     1     1     0.1
 /vis/geometry/set/colour TTC                           0     1     1     1     0.05
 /vis/geometry/set/colour World                         0     1     1     1     0.001
-#/vis/geometry/set/colour CarbonFoil                    80    1.0   1.0   1.0   0.5
 
 /vis/scene/add/date
 /vis/scene/add/axes 0 0 0 10 cm
@@ -144,13 +152,13 @@
 /vis/filtering/trajectories/particleFilter-0/add pi0
 
 /vis/modeling/trajectories/create/drawByParticleID
-/vis/modeling/trajectories/drawByParticleID-0/default/setDrawAuxPts false
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawAuxPts no
 /vis/modeling/trajectories/drawByParticleID-0/default/setAuxPtsSize 2
 /vis/modeling/trajectories/drawByParticleID-0/default/setAuxPtsSizeType screen
 /vis/modeling/trajectories/drawByParticleID-0/default/setAuxPtsType dots
-/vis/modeling/trajectories/drawByParticleID-0/default/setDrawLine true
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawLine yes
 /vis/modeling/trajectories/drawByParticleID-0/default/setLineWidth 2
-/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts yes
 /vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSize 2
 /vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSizeType screen
 /vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsType dots
@@ -161,4 +169,4 @@
 /vis/scene/endOfEventAction accumulate
 
 /vis/verbose warnings
-/vis/viewer/set/autoRefresh true
+/vis/viewer/set/autoRefresh yes

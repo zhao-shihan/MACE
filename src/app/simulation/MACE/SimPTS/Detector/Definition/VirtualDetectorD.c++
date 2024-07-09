@@ -15,6 +15,7 @@ auto VirtualDetectorD::Construct(bool checkOverlaps) -> void {
     const auto& mcpChamber{MACE::Detector::Description::MCPChamber::Instance()};
     const auto& virtualDetectorD{Description::VirtualDetectorD::Instance()};
 
+    const auto mother{Mother().LogicalVolume("MCPChamberVacuum")};
     const auto solid{Make<G4Tubs>(
         virtualDetectorD.Name(),
         0,
@@ -24,13 +25,13 @@ auto VirtualDetectorD::Construct(bool checkOverlaps) -> void {
         2_pi)};
     const auto logic{Make<G4LogicalVolume>(
         solid,
-        Mother().LogicalVolume()->GetMaterial(),
+        mother->GetMaterial(),
         virtualDetectorD.Name())};
     Make<G4PVPlacement>(
         G4Transform3D{},
         logic,
         virtualDetectorD.Name(),
-        Mother().LogicalVolume(),
+        mother,
         false,
         3,
         checkOverlaps);

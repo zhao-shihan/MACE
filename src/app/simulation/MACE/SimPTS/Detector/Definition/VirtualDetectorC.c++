@@ -15,8 +15,9 @@ namespace MACE::SimPTS::Detector::Definition {
 auto VirtualDetectorC::Construct(bool checkOverlaps) -> void {
     const auto& solenoid{MACE::Detector::Description::Solenoid::Instance()};
     const auto& solenoidBeamPipe{MACE::Detector::Description::SolenoidBeamPipe::Instance()};
-    const auto& virtualDetectorC{Description::VirtualDetectorA::Instance()};
+    const auto& virtualDetectorC{Description::VirtualDetectorC::Instance()};
 
+    const auto mother{Mother().LogicalVolume("SolenoidBeamPipeS2Vacuum")};
     const auto solid{Make<G4Tubs>(
         virtualDetectorC.Name(),
         0,
@@ -26,13 +27,13 @@ auto VirtualDetectorC::Construct(bool checkOverlaps) -> void {
         2_pi)};
     const auto logic{Make<G4LogicalVolume>(
         solid,
-        Mother().LogicalVolume()->GetMaterial(),
+        mother->GetMaterial(),
         virtualDetectorC.Name())};
     Make<G4PVPlacement>(
         G4TranslateZ3D{solenoid.S2Length() / 2 - virtualDetectorC.Thickness() / 2},
         logic,
         virtualDetectorC.Name(),
-        Mother().LogicalVolume(),
+        mother,
         false,
         2,
         checkOverlaps);
