@@ -22,11 +22,21 @@
 /GPSX/NVertex             2000    # 50 kHz beam
 /GPSX/PulseWidth          1.5 us
 
+/MACE/Analysis/MapNBinX 300
+/MACE/Analysis/MapXMin -3 m
+/MACE/Analysis/MapXMax 3 m
+/MACE/Analysis/MapNBinY 100
+/MACE/Analysis/MapYMin -1 m
+/MACE/Analysis/MapYMax 1 m
+/MACE/Analysis/MapNBinZ 400
+/MACE/Analysis/MapZMin -4 m
+/MACE/Analysis/MapZMax 4 m
+
 #############################################################################
 # Run
 #############################################################################
 
-/Mustard/Analysis/FilePath SimDose_beam_mup
+/Mustard/Analysis/FilePath SimDose_all
 /Mustard/Analysis/FileMode NEW
 /run/beamOn 100
 /Mustard/Run/PrintRunSummary

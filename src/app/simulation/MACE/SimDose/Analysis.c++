@@ -12,37 +12,43 @@ namespace MACE::SimDose {
 Analysis::Analysis() :
     AnalysisBase{},
     fMapNBinX{300},
-    fMapXRange{},
+    fMapXMin{},
+    fMapXMax{},
     fMapNBinY{100},
-    fMapYRange{},
+    fMapYMin{},
+    fMapYMax{},
     fMapNBinZ{400},
-    fMapZRange{},
+    fMapZMin{},
+    fMapZMax{},
     fEdepMap{},
     fDoseMap{},
     fMessengerRegister{this} {
     const auto& world{Detector::Description::World::Instance()};
-    fMapXRange = {-world.HalfXExtent(), world.HalfXExtent()};
-    fMapYRange = {-world.HalfYExtent(), world.HalfYExtent()};
-    fMapZRange = {-world.HalfZExtent(), world.HalfZExtent()};
+    fMapXMin = -world.HalfXExtent();
+    fMapXMax = world.HalfXExtent();
+    fMapYMin = -world.HalfYExtent();
+    fMapYMax = world.HalfYExtent();
+    fMapZMin = -world.HalfZExtent();
+    fMapZMax = world.HalfZExtent();
 }
 
 auto Analysis::FillMap(G4ThreeVector x, double eDep, double density) const -> void {
-    const auto deltaV{((fMapXRange.second - fMapXRange.first) / fMapNBinX) *
-                      ((fMapYRange.second - fMapYRange.first) / fMapNBinY) *
-                      ((fMapZRange.second - fMapZRange.first) / fMapNBinZ)};
+    const auto deltaV{((fMapXMax - fMapXMin) / fMapNBinX) *
+                      ((fMapYMax - fMapYMin) / fMapNBinY) *
+                      ((fMapZMax - fMapZMin) / fMapNBinZ)};
     fEdepMap->Fill(x.x(), x.y(), x.z(), eDep / joule);
     fDoseMap->Fill(x.x(), x.y(), x.z(), eDep / (density * deltaV) / gray);
 }
 
 auto Analysis::RunBeginUserAction(int) -> void {
     fEdepMap = new TH3F{"EdepMap", "Energy deposition (J)",
-                        fMapNBinX, fMapXRange.first, fMapXRange.second,
-                        fMapNBinY, fMapYRange.first, fMapYRange.second,
-                        fMapNBinZ, fMapZRange.first, fMapZRange.second};
+                        fMapNBinX, fMapXMin, fMapXMax,
+                        fMapNBinY, fMapYMin, fMapYMax,
+                        fMapNBinZ, fMapZMin, fMapZMax};
     fDoseMap = new TH3F{"DoseMap", "Absorbed dose (Gy)",
-                        fMapNBinX, fMapXRange.first, fMapXRange.second,
-                        fMapNBinY, fMapYRange.first, fMapYRange.second,
-                        fMapNBinZ, fMapZRange.first, fMapZRange.second};
+                        fMapNBinX, fMapXMin, fMapXMax,
+                        fMapNBinY, fMapYMin, fMapYMax,
+                        fMapNBinZ, fMapZMin, fMapZMax};
 }
 
 auto Analysis::RunEndUserAction(int runID) -> void {

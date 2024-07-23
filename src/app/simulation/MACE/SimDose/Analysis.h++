@@ -17,11 +17,14 @@ public:
     Analysis();
 
     auto MapNBinX(int n) { fMapNBinX = n; }
-    auto MapXRange(double xMin, double xMax) { fMapXRange = {xMin, xMax}; }
+    auto MapXMin(double val) { fMapXMin = val; }
+    auto MapXMax(double val) { fMapXMax = val; }
     auto MapNBinY(int n) { fMapNBinY = n; }
-    auto MapYRange(double yMin, double yMax) { fMapYRange = {yMin, yMax}; }
+    auto MapYMin(double val) { fMapYMin = val; }
+    auto MapYMax(double val) { fMapYMax = val; }
     auto MapNBinZ(int n) { fMapNBinZ = n; }
-    auto MapZRange(double zMin, double zMax) { fMapZRange = {zMin, zMax}; }
+    auto MapZMin(double val) { fMapZMin = val; }
+    auto MapZMax(double val) { fMapZMax = val; }
 
     auto FillMap(G4ThreeVector x, double eDep, double density) const -> void;
 
@@ -32,11 +35,14 @@ private:
 
 private:
     int fMapNBinX;
-    std::pair<double, double> fMapXRange;
+    double fMapXMin;
+    double fMapXMax;
     int fMapNBinY;
-    std::pair<double, double> fMapYRange;
+    double fMapYMin;
+    double fMapYMax;
     int fMapNBinZ;
-    std::pair<double, double> fMapZRange;
+    double fMapZMin;
+    double fMapZMax;
 
     TH3F* fEdepMap;
     TH3F* fDoseMap;

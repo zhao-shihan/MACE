@@ -4,8 +4,8 @@
 
 #include <memory>
 
-class G4UIcmdWithABool;
-class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithADoubleAndUnit;
 class G4UIdirectory;
 
 namespace MACE::SimDose {
@@ -27,6 +27,16 @@ public:
 
 private:
     std::unique_ptr<G4UIdirectory> fDirectory;
+
+    std::unique_ptr<G4UIcmdWithAnInteger> fMapNBinX;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMapXMin;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMapXMax;
+    std::unique_ptr<G4UIcmdWithAnInteger> fMapNBinY;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMapYMin;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMapYMax;
+    std::unique_ptr<G4UIcmdWithAnInteger> fMapNBinZ;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMapZMin;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMapZMax;
 };
 
 } // namespace Messenger
