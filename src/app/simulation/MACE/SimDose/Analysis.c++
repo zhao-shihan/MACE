@@ -3,6 +3,8 @@
 
 #include "Mustard/Env/MPIEnv.h++"
 
+#include "G4SystemOfUnits.hh"
+
 #include "fmt/core.h"
 
 namespace MACE::SimDose {
@@ -28,16 +30,16 @@ auto Analysis::FillMap(G4ThreeVector x, double eDep, double density) const -> vo
     const auto deltaV{((fMapXRange.second - fMapXRange.first) / fMapNBinX) *
                       ((fMapYRange.second - fMapYRange.first) / fMapNBinY) *
                       ((fMapZRange.second - fMapZRange.first) / fMapNBinZ)};
-    fEdepMap->Fill(x.x(), x.y(), x.z(), eDep);
-    fDoseMap->Fill(x.x(), x.y(), x.z(), eDep / (density * deltaV));
+    fEdepMap->Fill(x.x(), x.y(), x.z(), eDep / joule);
+    fDoseMap->Fill(x.x(), x.y(), x.z(), eDep / (density * deltaV) / gray);
 }
 
 auto Analysis::RunBeginUserAction(int) -> void {
-    fEdepMap = new TH3F{"EdepMap", "Energy deposition map",
+    fEdepMap = new TH3F{"EdepMap", "Energy deposition (J)",
                         fMapNBinX, fMapXRange.first, fMapXRange.second,
                         fMapNBinY, fMapYRange.first, fMapYRange.second,
                         fMapNBinZ, fMapZRange.first, fMapZRange.second};
-    fDoseMap = new TH3F{"DoseMap", "Dose map",
+    fDoseMap = new TH3F{"DoseMap", "Absorbed dose (Gy)",
                         fMapNBinX, fMapXRange.first, fMapXRange.second,
                         fMapNBinY, fMapYRange.first, fMapYRange.second,
                         fMapNBinZ, fMapZRange.first, fMapZRange.second};
