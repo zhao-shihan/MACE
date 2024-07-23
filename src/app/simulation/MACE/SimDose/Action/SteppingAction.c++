@@ -7,11 +7,10 @@
 namespace MACE::SimDose::inline Action {
 
 auto SteppingAction::UserSteppingAction(const G4Step* step) -> void {
-    const auto post{step->GetPostStepPoint()};
-    if (step->GetTotalEnergyDeposit() > 0 and post->GetMaterial()) {
-        Analysis::Instance().FillMap(post->GetPosition(),
+    if (step->GetTotalEnergyDeposit() > 0) {
+        Analysis::Instance().FillMap(step->GetPostStepPoint()->GetPosition(),
                                      step->GetTotalEnergyDeposit(),
-                                     post->GetMaterial()->GetDensity());
+                                     step->GetPreStepPoint()->GetMaterial()->GetDensity());
     }
 }
 
