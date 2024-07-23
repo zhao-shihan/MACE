@@ -17,7 +17,7 @@
 namespace MACE::inline Simulation::inline Physics {
 
 StandardPhysicsListBase::StandardPhysicsListBase() :
-    FTFP_BERT{std::max({}, muc::to_underlying(Mustard::Env::BasicEnv::Instance().VerboseLevel()))} {
+    QBBC{std::max({}, muc::to_underlying(Mustard::Env::BasicEnv::Instance().VerboseLevel()))} {
     // EMZ
     ReplacePhysics(new G4EmStandardPhysics_option4{verboseLevel});
     // Muonium physics

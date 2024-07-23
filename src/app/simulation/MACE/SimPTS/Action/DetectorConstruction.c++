@@ -54,7 +54,6 @@
 #include "G4ChordFinder.hh"
 #include "G4EqMagElectricField.hh"
 #include "G4InterpolationDriver.hh"
-#include "G4NistManager.hh"
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4TDormandPrince45.hh"
@@ -64,16 +63,21 @@
 
 namespace MACE::SimPTS::inline Action {
 
+using namespace Mustard::LiteralUnit::Length;
+
 DetectorConstruction::DetectorConstruction() :
     PassiveSingleton{},
     G4VUserDetectorConstruction{},
     fCheckOverlap{},
+    fMinDriverStep{2_um},
+    fDeltaChord{2_um},
     fWorld{},
     fDefaultGaseousRegion{},
     fDefaultSolidRegion{},
     fShieldRegion{},
     fSolenoidOrMagnetRegion{},
-    fVacuumRegion{} {
+    fVacuumRegion{},
+    fNumericMessengerRegister{this} {
     DetectorMessenger::EnsureInstantiation();
 }
 
@@ -103,18 +107,14 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     auto& emcMagnet{emcField.NewDaughter<MACE::Detector::Definition::EMCMagnet>(fCheckOverlap)};
     auto& mcpChamber{emcField.NewDaughter<MACE::Detector::Definition::MCPChamber>(fCheckOverlap)};
-    auto& virtualDetectorD{emcField.NewDaughter<Detector::Definition::VirtualDetectorD>(fCheckOverlap)};
 
     auto& solenoidBeamPipeS1{solenoidFieldS1.NewDaughter<MACE::Detector::Definition::SolenoidBeamPipeS1>(fCheckOverlap)};
     auto& solenoidS1{solenoidFieldS1.NewDaughter<MACE::Detector::Definition::SolenoidS1>(fCheckOverlap)};
     auto& solenoidShieldS1{solenoidFieldS1.NewDaughter<MACE::Detector::Definition::SolenoidShieldS1>(fCheckOverlap)};
 
-    auto& filter{solenoidFieldS2.NewDaughter<MACE::Detector::Definition::Filter>(fCheckOverlap)};
     auto& solenoidBeamPipeS2{solenoidFieldS2.NewDaughter<MACE::Detector::Definition::SolenoidBeamPipeS2>(fCheckOverlap)};
     auto& solenoidS2{solenoidFieldS2.NewDaughter<MACE::Detector::Definition::SolenoidS2>(fCheckOverlap)};
     auto& solenoidShieldS2{solenoidFieldS2.NewDaughter<MACE::Detector::Definition::SolenoidShieldS2>(fCheckOverlap)};
-    auto& virtualDetectorB{solenoidFieldS2.NewDaughter<Detector::Definition::VirtualDetectorB>(fCheckOverlap)};
-    auto& virtualDetectorC{solenoidFieldS2.NewDaughter<Detector::Definition::VirtualDetectorC>(fCheckOverlap)};
 
     auto& solenoidBeamPipeS3{solenoidFieldS3.NewDaughter<MACE::Detector::Definition::SolenoidBeamPipeS3>(fCheckOverlap)};
     auto& solenoidS3{solenoidFieldS3.NewDaughter<MACE::Detector::Definition::SolenoidS3>(fCheckOverlap)};
@@ -128,38 +128,23 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& solenoidShieldT2{solenoidFieldT2.NewDaughter<MACE::Detector::Definition::SolenoidShieldT2>(fCheckOverlap)};
     auto& solenoidT2{solenoidFieldT2.NewDaughter<MACE::Detector::Definition::SolenoidT2>(fCheckOverlap)};
 
-    auto& acceleratorField{mmsField.NewDaughter<MACE::Detector::Definition::AcceleratorField>(fCheckOverlap)};
     auto& mmsBeamPipe{mmsField.NewDaughter<MACE::Detector::Definition::MMSBeamPipe>(fCheckOverlap)};
     auto& mmsMagnet{mmsField.NewDaughter<MACE::Detector::Definition::MMSMagnet>(fCheckOverlap)};
-    auto& virtualDetectorA{mmsField.NewDaughter<Detector::Definition::VirtualDetectorA>(fCheckOverlap)};
 
     // 3
 
+    auto& virtualDetectorD{mcpChamber.NewDaughter<Detector::Definition::VirtualDetectorD>(fCheckOverlap)};
+
+    auto& filter{solenoidBeamPipeS2.NewDaughter<MACE::Detector::Definition::Filter>(fCheckOverlap)};
+    auto& virtualDetectorB{solenoidBeamPipeS2.NewDaughter<Detector::Definition::VirtualDetectorB>(fCheckOverlap)};
+    auto& virtualDetectorC{solenoidBeamPipeS2.NewDaughter<Detector::Definition::VirtualDetectorC>(fCheckOverlap)};
+
+    auto& acceleratorField{mmsBeamPipe.NewDaughter<MACE::Detector::Definition::AcceleratorField>(fCheckOverlap)};
+    auto& virtualDetectorA{mmsBeamPipe.NewDaughter<Detector::Definition::VirtualDetectorA>(fCheckOverlap)};
+
+    // 4
+
     auto& accelerator{acceleratorField.NewDaughter<MACE::Detector::Definition::Accelerator>(fCheckOverlap)};
-
-    ////////////////////////////////////////////////////////////////
-    // Register materials
-    ////////////////////////////////////////////////////////////////
-    {
-        using namespace Mustard::LiteralUnit::Density;
-
-        const auto nist{G4NistManager::Instance()};
-
-        const auto vacuum{nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3)};
-        acceleratorField.RegisterMaterial(vacuum);
-        emcField.RegisterMaterial(vacuum);
-        fWorld->RegisterMaterial(vacuum);
-        mmsField.RegisterMaterial(vacuum);
-        solenoidFieldS1.RegisterMaterial(vacuum);
-        solenoidFieldS2.RegisterMaterial(vacuum);
-        solenoidFieldS3.RegisterMaterial(vacuum);
-        solenoidFieldT1.RegisterMaterial(vacuum);
-        solenoidFieldT2.RegisterMaterial(vacuum);
-        virtualDetectorA.RegisterMaterial(vacuum);
-        virtualDetectorB.RegisterMaterial(vacuum);
-        virtualDetectorC.RegisterMaterial(vacuum);
-        virtualDetectorD.RegisterMaterial(vacuum);
-    }
 
     ////////////////////////////////////////////////////////////////
     // Register regions
@@ -170,6 +155,14 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         // DefaultGaseousRegion
         fDefaultGaseousRegion = new Region("DefaultGaseous", RegionType::DefaultGaseous);
         fDefaultGaseousRegion->SetProductionCuts(defaultCuts);
+
+        emcField.RegisterRegion(fDefaultGaseousRegion);
+        mmsField.RegisterRegion(fDefaultGaseousRegion);
+        solenoidFieldS1.RegisterRegion(fDefaultGaseousRegion);
+        solenoidFieldS2.RegisterRegion(fDefaultGaseousRegion);
+        solenoidFieldS3.RegisterRegion(fDefaultGaseousRegion);
+        solenoidFieldT1.RegisterRegion(fDefaultGaseousRegion);
+        solenoidFieldT2.RegisterRegion(fDefaultGaseousRegion);
 
         // DefaultSolidRegion
         fDefaultSolidRegion = new Region("DefaultSolid", RegionType::DefaultSolid);
@@ -215,13 +208,14 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         fVacuumRegion->SetProductionCuts(defaultCuts);
 
         acceleratorField.RegisterRegion(fVacuumRegion);
-        emcField.RegisterRegion(fVacuumRegion);
-        mmsField.RegisterRegion(fVacuumRegion);
-        solenoidFieldS1.RegisterRegion(fVacuumRegion);
-        solenoidFieldS2.RegisterRegion(fVacuumRegion);
-        solenoidFieldS3.RegisterRegion(fVacuumRegion);
-        solenoidFieldT1.RegisterRegion(fVacuumRegion);
-        solenoidFieldT2.RegisterRegion(fVacuumRegion);
+        mcpChamber.RegisterRegion("MCPChamberPipeVacuum", fVacuumRegion);
+        mcpChamber.RegisterRegion("MCPChamberVacuum", fVacuumRegion);
+        mmsBeamPipe.RegisterRegion("MMSBeamPipeVacuum", fVacuumRegion);
+        solenoidBeamPipeS1.RegisterRegion("SolenoidBeamPipeS1Vacuum", fVacuumRegion);
+        solenoidBeamPipeS2.RegisterRegion("SolenoidBeamPipeS2Vacuum", fVacuumRegion);
+        solenoidBeamPipeS3.RegisterRegion("SolenoidBeamPipeS3Vacuum", fVacuumRegion);
+        solenoidBeamPipeT1.RegisterRegion("SolenoidBeamPipeT1Vacuum", fVacuumRegion);
+        solenoidBeamPipeT2.RegisterRegion("SolenoidBeamPipeT2Vacuum", fVacuumRegion);
     }
 
     ////////////////////////////////////////////////////////////////
@@ -239,39 +233,38 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     // Register background fields
     ////////////////////////////////////////////////////////////////
     {
-        using namespace Mustard::LiteralUnit::Length;
-        using namespace Mustard::LiteralUnit::MagneticFluxDensity;
-
-        constexpr auto hMin{1_um};
-        { // magnetic field
-            const auto RegisterMagneticField{
-                []<typename AField>(Mustard::Detector::Definition::DefinitionBase& detector, AField* field, bool forceToAllDaughters) {
+        { // Magnetic fields
+            const auto RegisterField{
+                [this]<typename AField>(Mustard::Detector::Definition::DefinitionBase& detector, AField* field, bool forceToAllDaughters) {
                     using Equation = G4TMagFieldEquation<AField>;
                     using Stepper = G4TDormandPrince45<Equation, 6>;
                     using Driver = G4InterpolationDriver<Stepper>;
                     const auto equation{new Equation{field}}; // clang-format off
                     const auto stepper{new Stepper{equation, 6}};
-                    const auto driver{new Driver{hMin, stepper, 6}}; // clang-format on
+                    const auto driver{new Driver{fMinDriverStep, stepper, 6}}; // clang-format on
                     const auto chordFinder{new G4ChordFinder{driver}};
+                    chordFinder->SetDeltaChord(fDeltaChord);
                     detector.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), forceToAllDaughters);
                 }};
-            RegisterMagneticField(mmsField, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::MMSField>, false);
-            RegisterMagneticField(solenoidFieldS1, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS1>, false);
-            RegisterMagneticField(solenoidFieldT1, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldT1>, false);
-            RegisterMagneticField(solenoidFieldS2, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS2>, false);
-            RegisterMagneticField(solenoidFieldT2, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldT2>, false);
-            RegisterMagneticField(solenoidFieldS3, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS3>, false);
-            RegisterMagneticField(emcField, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::EMCField>, false);
+            RegisterField(mmsField, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::MMSField>, false);
+            RegisterField(solenoidFieldS1, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS1>, false);
+            RegisterField(solenoidFieldT1, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldT1>, false);
+            RegisterField(solenoidFieldS2, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS2>, false);
+            RegisterField(solenoidFieldT2, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldT2>, false);
+            RegisterField(solenoidFieldS3, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS3>, false);
+            RegisterField(emcField, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::EMCField>, false);
         }
-        { // EM field, must be reigstered after MMS magnetic field! but why?
+        { // Accelerator EM field, must be reigstered after MMS magnetic field
+            using Field = Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::AcceleratorField>;
             using Equation = G4EqMagElectricField;
             using Stepper = G4TDormandPrince45<Equation, 8>;
             using Driver = G4InterpolationDriver<Stepper>;
-            const auto field{new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::AcceleratorField>};
+            const auto field{new Field};
             const auto equation{new Equation{field}}; // clang-format off
             const auto stepper{new Stepper{equation, 8}};
-            const auto driver{new Driver{hMin, stepper, 8}}; // clang-format on
+            const auto driver{new Driver{fMinDriverStep, stepper, 8}}; // clang-format on
             const auto chordFinder{new G4ChordFinder{driver}};
+            chordFinder->SetDeltaChord(fDeltaChord);
             acceleratorField.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), false);
         }
     }

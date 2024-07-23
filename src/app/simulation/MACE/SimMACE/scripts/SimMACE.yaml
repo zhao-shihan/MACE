@@ -1,15 +1,18 @@
 # SimMACE: geometry description
 
 Accelerator:
-  UpstreamLength: 50
-  AccelerateLength: 270
-  ElectrodePitch: 10
+  UpstreamLength: 110
+  DownstreamLength: 270
+  ElectrodePitch: 20
   ElectrodeInnerRadius: 50
-  ElectrodeOuterRadius: 100
+  ElectrodeOuterRadius: 60
   ElectrodeThickness: 0.5
-  FieldRadius: 120
+  FieldRadius: 70
+  DecelerateFieldLength: 165
+  AccelerateFieldLength: 360
   ElectrodeMaterialName: G4_Be
-  AcceleratePotential: 0.00050000000000000001
+  MaxPotential: 0.0005867
+  MaxPotentialPosition: -65
 BeamDegrader:
   Enabled: true
   Width: 50
@@ -338,7 +341,7 @@ EMC:
 EMCField:
   Radius: 560
   Length: 1000
-  MagneticFluxDensity: 0.0001
+  FastField: 0.0001
 EMCMagnet:
   InnerRadius: 500
   OuterRadius: 550
@@ -350,6 +353,9 @@ EMCShield:
   GapAroundWindow: 10
   Thickness: 50
   MaterialName: G4_Fe
+FieldOption:
+  UseFast: false
+  FieldDataFilePath: ${MACE_DATA_DIR}/mace_field_data.root
 Filter:
   Enabled: true
   Length: 500
@@ -437,14 +443,14 @@ MCPChamber:
   InnerRadius: 100
   Thickness: 0.5
 MMSBeamPipe:
-  InnerRadius: 120
+  InnerRadius: 70
   BerylliumLength: 1000
   BerylliumThickness: 0.5
   AluminiumThickness: 2
 MMSField:
   Radius: 610
   Length: 2200
-  MagneticFluxDensity: 0.0001
+  FastField: 9.9999999999999991e-05
 MMSMagnet:
   InnerRadius: 550
   OuterRadius: 600
@@ -454,7 +460,7 @@ MMSShield:
   InnerRadius: 650
   InnerLength: 2300
   Thickness: 50
-  WindowRadius: 132
+  WindowRadius: 250
   BeamSlantAngle: 0
   MaterialName: G4_Fe
 ShieldingWall:
@@ -474,7 +480,7 @@ Solenoid:
   ReferenceCoilSpacing: 30
   FieldRadius: 131
   MaterialName: G4_Cu
-  MagneticFluxDensity: 0.0001
+  FastField: 9.9999999999999991e-05
 TTC:
   Length: 150
   Width: 100
@@ -672,6 +678,9 @@ Target:
       ExtentY: 40
       Spacing: 0.055
       Diameter: 0.184
+  Cylinder:
+    Radius: 30
+    Thickness: 60
   SilicaAerogelDensity: 1.6852074501044058e+17
   EffectiveTemperature: 400
   FormationProbability: 0.65500000000000003

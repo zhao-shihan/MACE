@@ -1,7 +1,7 @@
 #include "MACE/Detector/Definition/SolenoidFieldS1.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 
-#include "Mustard/Utility/MathConstant.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/VectorCast.h++"
 
 #include "G4PVPlacement.hh"
@@ -10,28 +10,29 @@
 
 namespace MACE::Detector::Definition {
 
-using namespace Mustard::MathConstant;
+using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
 auto SolenoidFieldS1::Construct(G4bool checkOverlaps) -> void {
     const auto& solenoid{Description::Solenoid::Instance()};
-    const auto name{"SolenoidFieldS1"};
+    const auto name{solenoid.Name() + "FieldS1"};
 
-    auto solid = Make<G4Tubs>(
+    const auto mother{Mother().LogicalVolume()};
+    const auto solid{Make<G4Tubs>(
         name,
         0,
         solenoid.FieldRadius(),
         solenoid.S1Length() / 2,
         0,
-        pi * 2);
-    auto logic = Make<G4LogicalVolume>(
+        2_pi)};
+   const  auto logic{Make<G4LogicalVolume>(
         solid,
-        nullptr,
-        name);
+        mother->GetMaterial(),
+        name)};
     Make<G4PVPlacement>(
         G4Transform3D{{}, Mustard::VectorCast<G4ThreeVector>(solenoid.S1Center())},
         logic,
         name,
-        Mother().LogicalVolume(),
+        mother,
         false,
         0,
         checkOverlaps);

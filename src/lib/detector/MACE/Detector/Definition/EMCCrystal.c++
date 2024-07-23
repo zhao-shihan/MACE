@@ -21,6 +21,7 @@
 #include "fmt/format.h"
 
 #include <algorithm>
+#include <map>
 #include <utility>
 
 namespace MACE::Detector::Definition {
@@ -95,13 +96,11 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
     // Construct Volumes
     /////////////////////////////////////////////
 
-    for (int copyNo{};
+    for (int unitID{};
          auto&& [centroid, _, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
         const auto centroidMagnitude{centroid.mag()};
         const auto crystalLength{crystalHypotenuse * centroidMagnitude};
         const auto outerHypotenuse{innerRadius + crystalHypotenuse};
-
-        // make a crystal-shaped solid with certain shrinkage (e.g. shrink with coat thickness)
 
         const auto MakeTessellatedSolid{
             [&, &centroid = centroid, &vertexIndex = vertexIndex](const auto& name) {
@@ -119,7 +118,6 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
                                        [&](const auto& i) { return outerHypotenuseHere * vertex[i]; });
 
                 // clang-format off
-
                 /* Pentagon:
                  *      0
                  *   /  |  \
@@ -176,12 +174,12 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
                 return solid;
             }};
 
-        const auto crystalTransform{emc.ComputeTransformToOuterSurfaceWithOffset(copyNo,
+        const auto crystalTransform{emc.ComputeTransformToOuterSurfaceWithOffset(unitID,
                                                                                  -crystalLength / 2)};
 
         // Crystal
 
-        const auto solidCrystal{MakeTessellatedSolid(fmt::format("temp_{}", copyNo))};
+        const auto solidCrystal{MakeTessellatedSolid(fmt::format("temp_{}", unitID))};
         const auto cutCrystalBox{
             Make<G4Box>(
                 "temp",
@@ -203,10 +201,10 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
             Make<G4PVPlacement>(
                 G4Transform3D{},
                 logicCrystal,
-                fmt::format("EMCCrystal_{}", copyNo),
+                fmt::format("EMCCrystal_{}", unitID),
                 Mother().LogicalVolume(),
                 true,
-                copyNo,
+                unitID,
                 checkOverlaps)};
 
         /////////////////////////////////////////////
@@ -226,12 +224,12 @@ auto EMCCrystal::Construct(G4bool checkOverlaps) -> void {
             const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
             new G4LogicalBorderSurface{"couplerSurface",
                                        physicalCrystal,
-                                       emcPMTCoupler->PhysicalVolume("EMCPMTCoupler", copyNo),
+                                       emcPMTCoupler->PhysicalVolume("EMCPMTCoupler", unitID),
                                        couplerSurface};
             couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
         }
 
-        ++copyNo;
+        ++unitID;
     }
 }
 

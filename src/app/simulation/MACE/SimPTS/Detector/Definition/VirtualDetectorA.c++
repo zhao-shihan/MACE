@@ -19,6 +19,7 @@ auto VirtualDetectorA::Construct(bool checkOverlaps) -> void {
     const auto& mmsBeamPipe{MACE::Detector::Description::MMSBeamPipe::Instance()};
     const auto& virtualDetectorA{Description::VirtualDetectorA::Instance()};
 
+    const auto mother{Mother().LogicalVolume("MMSBeamPipeVacuum")};
     const auto solid{Make<G4Tubs>(
         virtualDetectorA.Name(),
         0,
@@ -28,13 +29,13 @@ auto VirtualDetectorA::Construct(bool checkOverlaps) -> void {
         2_pi)};
     const auto logic{Make<G4LogicalVolume>(
         solid,
-        Mother().LogicalVolume()->GetMaterial(),
+        mother->GetMaterial(),
         virtualDetectorA.Name())};
     Make<G4PVPlacement>(
-        G4TranslateZ3D{accelerator.AccelerateLength() + virtualDetectorA.Thickness() / 2},
+        G4TranslateZ3D{accelerator.DownstreamFieldLength() + virtualDetectorA.Thickness() / 2},
         logic,
         virtualDetectorA.Name(),
-        Mother().LogicalVolume(),
+        mother,
         false,
         0,
         checkOverlaps);

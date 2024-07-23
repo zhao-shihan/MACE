@@ -19,6 +19,7 @@
 #include "MACE/SimPTS/Detector/Description/VirtualDetectorC.h++"
 #include "MACE/SimPTS/Detector/Description/VirtualDetectorD.h++"
 #include "MACE/SimPTS/Region.h++"
+#include "MACE/Simulation/Messenger/NumericMessenger.h++"
 
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
 
@@ -43,9 +44,12 @@ class DetectorConstruction final : public Mustard::Env::Memory::PassiveSingleton
 public:
     DetectorConstruction();
 
-    auto Construct() -> G4VPhysicalVolume* override;
-
     auto SetCheckOverlaps(G4bool checkOverlaps) -> void { fCheckOverlap = checkOverlaps; }
+
+    auto MinDriverStep(double val) -> void { fMinDriverStep = val; }
+    auto DeltaChord(double val) -> void { fDeltaChord = val; }
+
+    auto Construct() -> G4VPhysicalVolume* override;
 
     auto DefaultGaseousRegion() const -> const auto& { return *fDefaultGaseousRegion; }
     auto DefaultSolidRegion() const -> const auto& { return *fDefaultSolidRegion; }
@@ -78,6 +82,9 @@ public:
 private:
     G4bool fCheckOverlap;
 
+    double fMinDriverStep;
+    double fDeltaChord;
+
     std::unique_ptr<Mustard::Detector::Definition::DefinitionBase> fWorld;
 
     Region* fDefaultGaseousRegion;
@@ -87,6 +94,8 @@ private:
     Region* fVacuumRegion;
 
     SD::VirtualSD* fVirtualSD;
+
+    NumericMessenger<DetectorConstruction>::Register<DetectorConstruction> fNumericMessengerRegister;
 };
 
 } // namespace Action

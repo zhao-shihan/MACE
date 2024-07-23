@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) {
     const auto sigmaZCDC = std::stod(argv[5]);
 
     // accelerator
-    const auto acceleratorLength = AcceleratorField::Instance().AccelerateLength();
+    const auto acceleratorLength = AcceleratorField::Instance().AccelerateFieldLength();
     const auto accE = 7_kV / (acceleratorLength - 13.05_mm);
     // flight
     const auto& transportLine = Solenoid::Instance();

@@ -27,7 +27,7 @@
 
 /vis/open OGL
 
-/vis/viewer/set/autoRefresh false
+/vis/viewer/set/autoRefresh no
 /vis/verbose errors
 
 /vis/drawVolume
@@ -37,7 +37,7 @@
 #/vis/viewer/set/rotationStyle freeRotation
 /vis/viewer/set/projection p
 /vis/viewer/set/style s
-/vis/viewer/set/auxiliaryEdge false
+/vis/viewer/set/auxiliaryEdge no
 #/vis/viewer/set/lineSegmentsPerCircle 100
 /vis/viewer/zoom 2.5
 
@@ -49,16 +49,25 @@
 /vis/geometry/set/colour EMCShield                     0     1     1     1     0.05
 /vis/geometry/set/colour Filter                        0     1     1     1     0.01
 /vis/geometry/set/colour MCPChamber                    0     1     1     1     0.05
+/vis/geometry/set/colour MCPChamberPipe                0     1     1     1     0.05
+/vis/geometry/set/colour MCPChamberPipeVacuum          0     1     1     1     0.01
+/vis/geometry/set/colour MCPChamberVacuum              0     1     1     1     0.01
 /vis/geometry/set/colour MMSBeamPipe                   0     1     1     1     0.05
+/vis/geometry/set/colour MMSBeamPipeVacuum             0     1     1     1     0.01
 /vis/geometry/set/colour MMSField                      0     1     1     1     0.05
 /vis/geometry/set/colour MMSMagnet                     0     1     1     1     0.05
 /vis/geometry/set/colour MMSShield                     0     1     1     1     0.05
 /vis/geometry/set/colour ShieldingWall                 0     1     1     1     0.05
 /vis/geometry/set/colour SolenoidBeamPipeS1            0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidBeamPipeS1Vacuum      0     1     1     1     0.01
 /vis/geometry/set/colour SolenoidBeamPipeS2            0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidBeamPipeS2Vacuum      0     1     1     1     0.01
 /vis/geometry/set/colour SolenoidBeamPipeS3            0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidBeamPipeS3Vacuum      0     1     1     1     0.01
 /vis/geometry/set/colour SolenoidBeamPipeT1            0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidBeamPipeT1Vacuum      0     1     1     1     0.01
 /vis/geometry/set/colour SolenoidBeamPipeT2            0     1     1     1     0.1
+/vis/geometry/set/colour SolenoidBeamPipeT2Vacuum      0     1     1     1     0.01
 /vis/geometry/set/colour SolenoidFieldS1               0     1     1     1     0.05
 /vis/geometry/set/colour SolenoidFieldS2               0     1     1     1     0.05
 /vis/geometry/set/colour SolenoidFieldS3               0     1     1     1     0.05
@@ -103,13 +112,13 @@
 /vis/filtering/trajectories/particleFilter-0/add pi0
 
 /vis/modeling/trajectories/create/drawByParticleID
-/vis/modeling/trajectories/drawByParticleID-0/default/setDrawAuxPts false
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawAuxPts no
 /vis/modeling/trajectories/drawByParticleID-0/default/setAuxPtsSize 2
 /vis/modeling/trajectories/drawByParticleID-0/default/setAuxPtsSizeType screen
 /vis/modeling/trajectories/drawByParticleID-0/default/setAuxPtsType dots
-/vis/modeling/trajectories/drawByParticleID-0/default/setDrawLine true
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawLine yes
 /vis/modeling/trajectories/drawByParticleID-0/default/setLineWidth 2
-/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts yes
 /vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSize 2
 /vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSizeType screen
 /vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsType dots
@@ -120,4 +129,4 @@
 /vis/scene/endOfEventAction accumulate
 
 /vis/verbose warnings
-/vis/viewer/set/autoRefresh true
+/vis/viewer/set/autoRefresh yes

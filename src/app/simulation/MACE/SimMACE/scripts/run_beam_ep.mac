@@ -11,7 +11,7 @@
 
 /gps/particle             e+
 /gps/direction            0 0 1        # 0 deg
-/gps/pos/centre           0 0 -2 m     # 0 deg
+/gps/pos/centre           0 0 -1 m     # 0 deg
 /gps/pos/type             Beam
 /gps/pos/shape            Circle
 /gps/pos/radius           0 mm
@@ -24,14 +24,14 @@
 
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 
-/MACE/Analysis/SavePrimaryVertexData  false
-/MACE/Analysis/CoincidenceWithCDC     false
-/MACE/Analysis/CoincidenceWithTTC     false
-/MACE/Analysis/CoincidenceWithMMS     false
-/MACE/Analysis/CoincidenceWithMCP     false
-/MACE/Analysis/CoincidenceWithEMC     false
-/MACE/Analysis/SaveCDCHitData         false
-/MACE/Analysis/SaveTTCHitData         false
+/MACE/Analysis/SavePrimaryVertexData  no
+/MACE/Analysis/CoincidenceWithCDC     no
+/MACE/Analysis/CoincidenceWithTTC     no
+/MACE/Analysis/CoincidenceWithMMS     no
+/MACE/Analysis/CoincidenceWithMCP     no
+/MACE/Analysis/CoincidenceWithEMC     no
+/MACE/Analysis/SaveCDCHitData         no
+/MACE/Analysis/SaveTTCHitData         no
 
 #############################################################################
 # Run
@@ -40,4 +40,4 @@
 /MACE/Analysis/FilePath SimMACE_beam_ep
 /MACE/Analysis/FileMode NEW
 /run/beamOn 1000
-/MPIRun/PrintRunSummary
+/Mustard/Run/PrintRunSummary

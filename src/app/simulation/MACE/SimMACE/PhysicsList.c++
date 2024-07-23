@@ -6,7 +6,6 @@
 
 #include "Mustard/Extension/Geant4X/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
 #include "Mustard/Extension/Geant4X/DecayChannel/MuoniumInternalPairProductionDecayChannel.h++"
-#include "Mustard/Extension/Geant4X/Particle/Antimuonium.h++"
 #include "Mustard/Extension/Geant4X/Particle/Muonium.h++"
 #include "Mustard/Extension/Geant4X/Physics/MuoniumPrecisionDecayPhysics.h++"
 
@@ -27,13 +26,13 @@ PhysicsList::PhysicsList() :
 
 auto PhysicsList::ApplyMACEPxyCut(bool apply) -> void {
     auto& muonPlusIPPDecay{FindIPPDecayChannel<Mustard::Geant4X::MuonInternalPairProductionDecayChannel>(G4MuonPlus::Definition())};
-    auto& antimuoniumIPPDecay{FindIPPDecayChannel<Mustard::Geant4X::MuoniumInternalPairProductionDecayChannel>(Mustard::Geant4X::Antimuonium::Definition())};
+    auto& muoniumIPPDecay{FindIPPDecayChannel<Mustard::Geant4X::MuoniumInternalPairProductionDecayChannel>(Mustard::Geant4X::Muonium::Definition())};
     if (apply) {
         constexpr auto PxyCut{
             [](auto&& event) {
                 using Mustard::PhysicalConstant::c_light;
 
-                const auto& [p, p1, p2, k1, k2]{event.state};
+                const auto& [p, p1, p2, k1, k2]{event};
 
                 auto passCut1{true};
                 auto passCut2{true};
@@ -57,10 +56,10 @@ auto PhysicsList::ApplyMACEPxyCut(bool apply) -> void {
                 return passCut1 or passCut2;
             }};
         muonPlusIPPDecay.PassCut(PxyCut);
-        antimuoniumIPPDecay.PassCut(PxyCut);
+        muoniumIPPDecay.PassCut(PxyCut);
     } else {
         muonPlusIPPDecay.PassCut([](auto&&) { return true; });
-        antimuoniumIPPDecay.PassCut([](auto&&) { return true; });
+        muoniumIPPDecay.PassCut([](auto&&) { return true; });
     }
 }
 

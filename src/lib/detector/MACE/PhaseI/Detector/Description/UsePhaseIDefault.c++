@@ -13,7 +13,7 @@ auto UsePhaseIDefault() -> void {
     { // set accelerator up/downstream length to a random equal value
         auto& accelerator{MACE::Accelerator::Instance()};
         accelerator.UpstreamLength(2);
-        accelerator.AccelerateLength(2);
+        accelerator.DownstreamLength(2);
     }
     { // Use cylinder target
         auto& target{MACE::Target::Instance()};

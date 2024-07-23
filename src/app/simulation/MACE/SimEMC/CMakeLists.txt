@@ -7,8 +7,8 @@ foreach(_scripts ${SimEMC_SCRIPTS})
     configure_file(${_scripts} ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
 endforeach()
 
-install(TARGETS SimEMC DESTINATION bin)
+install(TARGETS SimEMC DESTINATION ${CMAKE_INSTALL_BINDIR})
 foreach(_scripts ${SimEMC_SCRIPTS})
-    install(FILES ${_scripts} DESTINATION share/SimEMC)
+    install(FILES ${_scripts} DESTINATION ${MACE_DATAROOTDIR}/SimEMC)
 endforeach()
 

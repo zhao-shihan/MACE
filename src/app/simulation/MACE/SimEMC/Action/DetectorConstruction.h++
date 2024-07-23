@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MACE/Detector/Description/EMC.h++"
+#include "MACE/Detector/Description/Vacuum.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/SimEMC/Region.h++"
 #include "MACE/SimEMC/SD/EMCPMTSD.h++"
@@ -43,6 +44,7 @@ public:
 
 public:
     using DescriptionInUse = std::tuple<MACE::Detector::Description::EMC,
+                                        MACE::Detector::Description::Vacuum,
                                         MACE::Detector::Description::World>;
 
 private:

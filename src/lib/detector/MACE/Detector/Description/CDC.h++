@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Mustard/Detector/Description/DescriptionBase.h++"
+#include "Mustard/Detector/Description/DescriptionWithCacheBase.h++"
 
 #include "Eigen/Core"
 
@@ -11,14 +11,13 @@
 
 #include <bit>
 #include <cinttypes>
-#include <optional>
 #include <vector>
 
 class G4Material;
 
 namespace MACE::Detector::Description {
 
-class CDC final : public Mustard::Detector::Description::DescriptionBase<CDC> {
+class CDC final : public Mustard::Detector::Description::DescriptionWithCacheBase<CDC> {
     friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
@@ -30,44 +29,74 @@ public:
     // Geometry
     ///////////////////////////////////////////////////////////
 
-    auto EvenSuperLayerIsAxial() const -> auto { return fEvenSuperLayerIsAxial; }
-    auto NSuperLayer() const -> auto { return fNSuperLayer; }
-    auto NSenseLayerPerSuper() const -> auto { return fNSenseLayerPerSuper; }
-    auto GasInnerRadius() const -> auto { return fGasInnerRadius; }
-    auto GasInnerLength() const -> auto { return fGasInnerLength; }
-    auto EndCapSlope() const -> auto { return fEndCapSlope; }
-    auto MinStereoAngle() const -> auto { return fMinStereoAngle; }
-    auto CellWidthLowerBound() const -> auto { return fCellWidthLowerBound; }
-    auto ReferenceCellWidth() const -> auto { return fReferenceCellWidth; }
-    auto CellWidthUpperBound() const -> auto { return fCellWidthUpperBound; }
-    auto FieldWireDiameter() const -> auto { return fFieldWireDiameter; }
-    auto SenseWireDiameter() const -> auto { return fSenseWireDiameter; }
-    auto MinAdjacentSuperLayersDistance() const -> auto { return fMinAdjacentSuperLayersDistance; }
-    auto MinWireAndRadialShellDistance() const -> auto { return fMinWireAndRadialShellDistance; }
-    auto EndCapThickness() const -> auto { return fEndCapThickness; }
-    auto InnerShellAlThickness() const -> auto { return fInnerShellAlThickness; }
-    auto InnerShellMylarThickness() const -> auto { return fInnerShellMylarThickness; }
-    auto OuterShellThickness() const -> auto { return fOuterShellThickness; }
+    auto EvenSuperLayerIsAxial() const -> auto { return *fEvenSuperLayerIsAxial; }
+    auto NSuperLayer() const -> auto { return *fNSuperLayer; }
+    auto NSenseLayerPerSuper() const -> auto { return *fNSenseLayerPerSuper; }
+    auto GasInnerRadius() const -> auto { return *fGasInnerRadius; }
+    auto GasInnerLength() const -> auto { return *fGasInnerLength; }
+    auto EndCapSlope() const -> auto { return *fEndCapSlope; }
+    auto MinStereoAngle() const -> auto { return *fMinStereoAngle; }
+    auto CellWidthLowerBound() const -> auto { return *fCellWidthLowerBound; }
+    auto ReferenceCellWidth() const -> auto { return *fReferenceCellWidth; }
+    auto CellWidthUpperBound() const -> auto { return *fCellWidthUpperBound; }
+    auto FieldWireDiameter() const -> auto { return *fFieldWireDiameter; }
+    auto SenseWireDiameter() const -> auto { return *fSenseWireDiameter; }
+    auto MinAdjacentSuperLayersDistance() const -> auto { return *fMinAdjacentSuperLayersDistance; }
+    auto MinWireAndRadialShellDistance() const -> auto { return *fMinWireAndRadialShellDistance; }
+    auto EndCapThickness() const -> auto { return *fEndCapThickness; }
+    auto InnerShellAlThickness() const -> auto { return *fInnerShellAlThickness; }
+    auto InnerShellMylarThickness() const -> auto { return *fInnerShellMylarThickness; }
+    auto OuterShellThickness() const -> auto { return *fOuterShellThickness; }
+    auto LayerConfiguration() const -> const auto& { return *fLayerConfiguration; }
+    auto GasOuterRadius() const -> auto { return LayerConfiguration().back().outerRadius + fMinWireAndRadialShellDistance; }
+    auto GasOuterLength() const -> auto { return fGasInnerLength + 2 * fEndCapSlope * (GasOuterRadius() - fGasInnerRadius); }
+    auto CellMap() const -> const auto& { return *fCellMap; }
+    auto CellMapFromSenseLayerIDAndLocalCellID() const -> const auto& { return *fCellMapFromSenseLayerIDAndLocalCellID; }
 
-    auto EvenSuperLayerIsAxial(bool val) -> void { fEvenSuperLayerIsAxial = val, fCache.Expire(); }
-    auto NSuperLayer(int val) -> void { fNSuperLayer = val, fCache.Expire(); }
-    auto NSenseLayerPerSuper(int val) -> void { fNSenseLayerPerSuper = val, fCache.Expire(); }
-    auto GasInnerRadius(double val) -> void { fGasInnerRadius = val, fCache.Expire(); }
-    auto GasInnerLength(double val) -> void { fGasInnerLength = val, fCache.Expire(); }
-    auto EndCapSlope(double val) -> void { fEndCapSlope = val, fCache.Expire(); }
-    auto MinStereoAngle(double val) -> void { fMinStereoAngle = val, fCache.Expire(); }
-    auto CellWidthLowerBound(double val) -> void { fCellWidthLowerBound = val, fCache.Expire(); }
-    auto ReferenceCellWidth(double val) -> void { fReferenceCellWidth = val, fCache.Expire(); }
-    auto CellWidthUpperBound(double val) -> void { fCellWidthUpperBound = val, fCache.Expire(); }
-    auto FieldWireDiameter(double val) -> void { fFieldWireDiameter = val, fCache.Expire(); }
-    auto SenseWireDiameter(double val) -> void { fSenseWireDiameter = val, fCache.Expire(); }
-    auto MinAdjacentSuperLayersDistance(double val) -> void { fMinAdjacentSuperLayersDistance = val, fCache.Expire(); }
-    auto MinWireAndRadialShellDistance(double val) -> void { fMinWireAndRadialShellDistance = val, fCache.Expire(); }
-    auto EndCapThickness(double val) -> void { fEndCapThickness = val, fCache.Expire(); }
-    auto InnerShellAlThickness(double val) -> void { fInnerShellAlThickness = val, fCache.Expire(); }
-    auto InnerShellMylarThickness(double val) -> void { fInnerShellMylarThickness = val, fCache.Expire(); }
-    auto OuterShellThickness(double val) -> void { fOuterShellThickness = val, fCache.Expire(); }
+    auto EvenSuperLayerIsAxial(bool val) -> void { fEvenSuperLayerIsAxial = val; }
+    auto NSuperLayer(int val) -> void { fNSuperLayer = val; }
+    auto NSenseLayerPerSuper(int val) -> void { fNSenseLayerPerSuper = val; }
+    auto GasInnerRadius(double val) -> void { fGasInnerRadius = val; }
+    auto GasInnerLength(double val) -> void { fGasInnerLength = val; }
+    auto EndCapSlope(double val) -> void { fEndCapSlope = val; }
+    auto MinStereoAngle(double val) -> void { fMinStereoAngle = val; }
+    auto CellWidthLowerBound(double val) -> void { fCellWidthLowerBound = val; }
+    auto ReferenceCellWidth(double val) -> void { fReferenceCellWidth = val; }
+    auto CellWidthUpperBound(double val) -> void { fCellWidthUpperBound = val; }
+    auto FieldWireDiameter(double val) -> void { fFieldWireDiameter = val; }
+    auto SenseWireDiameter(double val) -> void { fSenseWireDiameter = val; }
+    auto MinAdjacentSuperLayersDistance(double val) -> void { fMinAdjacentSuperLayersDistance = val; }
+    auto MinWireAndRadialShellDistance(double val) -> void { fMinWireAndRadialShellDistance = val; }
+    auto EndCapThickness(double val) -> void { fEndCapThickness = val; }
+    auto InnerShellAlThickness(double val) -> void { fInnerShellAlThickness = val; }
+    auto InnerShellMylarThickness(double val) -> void { fInnerShellMylarThickness = val; }
+    auto OuterShellThickness(double val) -> void { fOuterShellThickness = val; }
 
+    ///////////////////////////////////////////////////////////
+    // Material
+    ///////////////////////////////////////////////////////////
+
+    auto GasButaneFraction() const -> auto { return *fGasButaneFraction; }
+    auto EndCapMaterialName() const -> const auto& { return *fEndCapMaterialName; }
+    auto OuterShellCFRPDensity() const -> auto { return *fOuterShellCFRPDensity; }
+
+    auto GasButaneFraction(double val) -> void { fGasButaneFraction = val; }
+    auto EndCapMaterialName(std::string val) -> void { fEndCapMaterialName = std::move(val); }
+    auto OuterShellCFRPDensity(double val) -> void { fOuterShellCFRPDensity = val; }
+
+    auto GasMaterial() const -> G4Material*;
+
+    ///////////////////////////////////////////////////////////
+    // Detection
+    ///////////////////////////////////////////////////////////
+
+    auto MeanDriftVelocity() const -> auto { return *fMeanDriftVelocity; }
+    auto TimeResolutionFWHM() const -> auto { return *fTimeResolutionFWHM; }
+
+    auto MeanDriftVelocity(double val) -> void { fMeanDriftVelocity = val; }
+    auto TimeResolutionFWHM(double val) -> void { fTimeResolutionFWHM = val; }
+
+public:
     struct SuperLayerConfiguration {
         struct SenseLayerConfiguration {
             struct CellConfiguration {
@@ -98,10 +127,6 @@ public:
         std::vector<SenseLayerConfiguration> sense;
     };
 
-    auto LayerConfiguration() const -> const auto& { return fCache.LayerConfiguration(this); }
-    auto GasOuterRadius() const -> auto { return LayerConfiguration().back().outerRadius + fMinWireAndRadialShellDistance; }
-    auto GasOuterLength() const -> auto { return fGasInnerLength + 2 * fEndCapSlope * (GasOuterRadius() - fGasInnerRadius); }
-
     struct CellInformation {
         int cellID;
         int cellLocalID;
@@ -112,38 +137,7 @@ public:
         Eigen::Vector3d direction;
     };
 
-    auto CellMap() const -> const auto& { return fCache.CellMap(this); }
-    auto CellMapFromSenseLayerIDAndLocalCellID() const -> const auto& { return fCache.CellMapFromSenseLayerIDAndLocalCellID(this); }
-
-    ///////////////////////////////////////////////////////////
-    // Material
-    ///////////////////////////////////////////////////////////
-
-    auto GasButaneFraction() const -> auto { return fGasButaneFraction; }
-    auto EndCapMaterialName() const -> const auto& { return fEndCapMaterialName; }
-    auto OuterShellCFRPDensity() const -> auto { return fOuterShellCFRPDensity; }
-
-    auto GasButaneFraction(double val) -> void { fGasButaneFraction = val; }
-    auto EndCapMaterialName(std::string val) -> void { fEndCapMaterialName = std::move(val); }
-    auto OuterShellCFRPDensity(double val) -> void { fOuterShellCFRPDensity = val; }
-
-    auto GasMaterial() const -> G4Material*;
-
-    ///////////////////////////////////////////////////////////
-    // Detection
-    ///////////////////////////////////////////////////////////
-
-    auto MeanDriftVelocity() const -> auto { return fMeanDriftVelocity; }
-    auto TimeResolutionFWHM() const -> auto { return fTimeResolutionFWHM; }
-
-    auto MeanDriftVelocity(double val) -> void { fMeanDriftVelocity = val; }
-    auto TimeResolutionFWHM(double val) -> void { fTimeResolutionFWHM = val; }
-
 private:
-    ///////////////////////////////////////////////////////////
-    // Geometry
-    ///////////////////////////////////////////////////////////
-
     struct HashArray2i32 {
         constexpr auto operator()(muc::array2i32 i) const -> std::size_t {
             return std::bit_cast<std::uint64_t>(i);
@@ -154,23 +148,9 @@ public:
     using CellMapFromSenseLayerIDAndLocalCellIDType = std::unordered_map<muc::array2i32, CellInformation, HashArray2i32>;
 
 private:
-    class Cache {
-    public:
-        inline auto Expire() -> void;
-
-        inline auto LayerConfiguration(const CDC* cdc) -> const std::vector<SuperLayerConfiguration>&;
-        inline auto CellMap(const CDC* cdc) -> const std::vector<CellInformation>&;
-        inline auto CellMapFromSenseLayerIDAndLocalCellID(const CDC* cdc) -> const CellMapFromSenseLayerIDAndLocalCellIDType&;
-
-    private:
-        std::optional<std::vector<SuperLayerConfiguration>> fLayerConfiguration{};
-        std::optional<std::vector<CellInformation>> fCellMap{};
-        std::optional<CellMapFromSenseLayerIDAndLocalCellIDType> fCellMapFromSenseLayerIDAndLocalCellID{};
-    };
-
-    auto ComputeLayerConfiguration() const -> std::vector<SuperLayerConfiguration>;
-    auto ComputeCellMap() const -> std::vector<CellInformation>;
-    auto ComputeCellMapFromSenseLayerIDAndLocalCellID() const -> CellMapFromSenseLayerIDAndLocalCellIDType;
+    auto CalculateLayerConfiguration() const -> std::vector<SuperLayerConfiguration>;
+    auto CalculateCellMap() const -> std::vector<CellInformation>;
+    auto CalculateCellMapFromSenseLayerIDAndLocalCellID() const -> CellMapFromSenseLayerIDAndLocalCellIDType;
 
     auto ImportAllValue(const YAML::Node& node) -> void override;
     auto ExportAllValue(YAML::Node& node) const -> void override;
@@ -180,43 +160,43 @@ private:
     // Geometry
     ///////////////////////////////////////////////////////////
 
-    bool fEvenSuperLayerIsAxial; // true: AVAUAVAU..., false: VAUAVAUA...
-    int fNSuperLayer;
-    int fNSenseLayerPerSuper;
-    double fGasInnerRadius;
-    double fGasInnerLength;
-    double fEndCapSlope;
-    double fMinStereoAngle;
-    double fCellWidthLowerBound;
-    double fReferenceCellWidth;
-    double fCellWidthUpperBound;
-    double fFieldWireDiameter;
-    double fSenseWireDiameter;
-    double fMinAdjacentSuperLayersDistance;
-    double fMinWireAndRadialShellDistance;
-    double fEndCapThickness;
-    double fInnerShellAlThickness;
-    double fInnerShellMylarThickness;
-    double fOuterShellThickness;
+    Simple<bool> fEvenSuperLayerIsAxial; // true: AVAUAVAU..., false: VAUAVAUA...
+    Simple<int> fNSuperLayer;
+    Simple<int> fNSenseLayerPerSuper;
+    Simple<double> fGasInnerRadius;
+    Simple<double> fGasInnerLength;
+    Simple<double> fEndCapSlope;
+    Simple<double> fMinStereoAngle;
+    Simple<double> fCellWidthLowerBound;
+    Simple<double> fReferenceCellWidth;
+    Simple<double> fCellWidthUpperBound;
+    Simple<double> fFieldWireDiameter;
+    Simple<double> fSenseWireDiameter;
+    Simple<double> fMinAdjacentSuperLayersDistance;
+    Simple<double> fMinWireAndRadialShellDistance;
+    Simple<double> fEndCapThickness;
+    Simple<double> fInnerShellAlThickness;
+    Simple<double> fInnerShellMylarThickness;
+    Simple<double> fOuterShellThickness;
 
-    mutable Cache fCache;
+    Cached<std::vector<SuperLayerConfiguration>> fLayerConfiguration;
+    Cached<std::vector<CellInformation>> fCellMap;
+    Cached<CellMapFromSenseLayerIDAndLocalCellIDType> fCellMapFromSenseLayerIDAndLocalCellID;
 
     ///////////////////////////////////////////////////////////
     // Material
     ///////////////////////////////////////////////////////////
 
-    double fGasButaneFraction;
-    std::string fEndCapMaterialName;
-    double fOuterShellCFRPDensity;
+    Simple<double> fGasButaneFraction;
+    Simple<std::string> fEndCapMaterialName;
+    Simple<double> fOuterShellCFRPDensity;
 
     ///////////////////////////////////////////////////////////
     // Detection
     ///////////////////////////////////////////////////////////
 
-    double fMeanDriftVelocity;
-    double fTimeResolutionFWHM;
+    Simple<double> fMeanDriftVelocity;
+    Simple<double> fTimeResolutionFWHM;
 };
 
 } // namespace MACE::Detector::Description
-
-#include "MACE/Detector/Description/CDC.inl"

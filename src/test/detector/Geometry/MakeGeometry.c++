@@ -51,12 +51,10 @@
 
 #include "TGeoManager.h"
 
-#include "G4NistManager.hh"
-
 #include <functional>
 
 int main(int argc, char* argv[]) {
-    Mustard::Env::CLI::BasicCLI cli;
+    Mustard::Env::CLI::BasicCLI<> cli;
     Mustard::Env::BasicEnv env(argc, argv, cli);
 
     ////////////////////////////////////////////////////////////////
@@ -69,96 +67,79 @@ int main(int argc, char* argv[]) {
 
     // 0
 
-    const auto fWorld = std::make_unique_for_overwrite<World>();
+    const auto fWorld{std::make_unique_for_overwrite<World>()};
 
     // 1
 
-    auto& emcField{fWorld->NewDaughter<EMCField>(fCheckOverlap)};
-    /* auto& emcShield */ fWorld->NewDaughter<EMCShield>(fCheckOverlap);
-    auto& mmsField{fWorld->NewDaughter<MMSField>(fCheckOverlap)};
-    /* auto& mmsShield */ fWorld->NewDaughter<MMSShield>(fCheckOverlap);
-    /* auto& shieldingWall */ fWorld->NewDaughter<ShieldingWall>(fCheckOverlap);
-    auto& solenoidFieldS1{fWorld->NewDaughter<SolenoidFieldS1>(fCheckOverlap)};
-    auto& solenoidFieldS2{fWorld->NewDaughter<SolenoidFieldS2>(fCheckOverlap)};
-    auto& solenoidFieldS3{fWorld->NewDaughter<SolenoidFieldS3>(fCheckOverlap)};
-    auto& solenoidFieldT1{fWorld->NewDaughter<SolenoidFieldT1>(fCheckOverlap)};
-    auto& solenoidFieldT2{fWorld->NewDaughter<SolenoidFieldT2>(fCheckOverlap)};
+    [[maybe_unused]] auto& emcField{fWorld->NewDaughter<EMCField>(fCheckOverlap)};
+    [[maybe_unused]] auto& emcShield{fWorld->NewDaughter<EMCShield>(fCheckOverlap)};
+    [[maybe_unused]] auto& mmsField{fWorld->NewDaughter<MMSField>(fCheckOverlap)};
+    [[maybe_unused]] auto& mmsShield{fWorld->NewDaughter<MMSShield>(fCheckOverlap)};
+    [[maybe_unused]] auto& shieldingWall{fWorld->NewDaughter<ShieldingWall>(fCheckOverlap)};
+    [[maybe_unused]] auto& solenoidFieldS1{fWorld->NewDaughter<SolenoidFieldS1>(fCheckOverlap)};
+    [[maybe_unused]] auto& solenoidFieldS2{fWorld->NewDaughter<SolenoidFieldS2>(fCheckOverlap)};
+    [[maybe_unused]] auto& solenoidFieldS3{fWorld->NewDaughter<SolenoidFieldS3>(fCheckOverlap)};
+    [[maybe_unused]] auto& solenoidFieldT1{fWorld->NewDaughter<SolenoidFieldT1>(fCheckOverlap)};
+    [[maybe_unused]] auto& solenoidFieldT2{fWorld->NewDaughter<SolenoidFieldT2>(fCheckOverlap)};
 
     // 2
 
-    /* auto& emcCrystal */ emcField.NewDaughter<EMCCrystal>(fCheckOverlap);
-    /* auto& emcMagnet */ emcField.NewDaughter<EMCMagnet>(fCheckOverlap);
-    /* auto& emcPMTAssemblies */ emcField.NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
-    /* auto& mcp */ emcField.NewDaughter<MCP>(fCheckOverlap);
-    /* auto& mcpChamber */ emcField.NewDaughter<MCPChamber>(fCheckOverlap);
+    [[maybe_unused]] auto& emcCrystal{emcField.NewDaughter<EMCCrystal>(fCheckOverlap)};
+    [[maybe_unused]] auto& emcMagnet{emcField.NewDaughter<EMCMagnet>(fCheckOverlap)};
+    [[maybe_unused]] auto& emcPMTAssemblies{emcField.NewDaughter<EMCPMTAssemblies>(fCheckOverlap)};
+    [[maybe_unused]] auto& mcpChamber{emcField.NewDaughter<MCPChamber>(fCheckOverlap)};
 
-    auto& acceleratorField{mmsField.NewDaughter<AcceleratorField>(fCheckOverlap)};
-    auto& cdcBody{mmsField.NewDaughter<CDCBody>(fCheckOverlap)};
-    /* auto& mmsBeamPipe */ mmsField.NewDaughter<MMSBeamPipe>(fCheckOverlap);
-    /* auto& mmsMagnet */ mmsField.NewDaughter<MMSMagnet>(fCheckOverlap);
-    /* auto& ttc */ mmsField.NewDaughter<TTC>(fCheckOverlap);
+    [[maybe_unused]] auto& solenoidBeamPipeS1{solenoidFieldS1.NewDaughter<SolenoidBeamPipeS1>(fCheckOverlap)};
+    [[maybe_unused]] auto& solenoidS1{solenoidFieldS1.NewDaughter<SolenoidS1>(fCheckOverlap)};
+    [[maybe_unused]] auto& solenoidShieldS1{solenoidFieldS1.NewDaughter<SolenoidShieldS1>(fCheckOverlap)};
 
-    /* auto& solenoidBeamPipeS1 */ solenoidFieldS1.NewDaughter<SolenoidBeamPipeS1>(fCheckOverlap);
-    /* auto& solenoidS1 */ solenoidFieldS1.NewDaughter<SolenoidS1>(fCheckOverlap);
-    /* auto& solenoidShieldS1 */ solenoidFieldS1.NewDaughter<SolenoidShieldS1>(fCheckOverlap);
+    [[maybe_unused]] auto& solenoidBeamPipeS2{solenoidFieldS2.NewDaughter<SolenoidBeamPipeS2>(fCheckOverlap)};
+    [[maybe_unused]] auto& solenoidS2{solenoidFieldS2.NewDaughter<SolenoidS2>(fCheckOverlap)};
+    [[maybe_unused]] auto& solenoidShieldS2{solenoidFieldS2.NewDaughter<SolenoidShieldS2>(fCheckOverlap)};
 
-    /* auto& filter */ solenoidFieldS2.NewDaughter<Filter>(fCheckOverlap);
-    /* auto& solenoidBeamPipeS2 */ solenoidFieldS2.NewDaughter<SolenoidBeamPipeS2>(fCheckOverlap);
-    /* auto& solenoidS2 */ solenoidFieldS2.NewDaughter<SolenoidS2>(fCheckOverlap);
-    /* auto& solenoidShieldS2 */ solenoidFieldS2.NewDaughter<SolenoidShieldS2>(fCheckOverlap);
+    [[maybe_unused]] auto& solenoidBeamPipeS3{solenoidFieldS3.NewDaughter<SolenoidBeamPipeS3>(fCheckOverlap)};
+    [[maybe_unused]] auto& solenoidS3{solenoidFieldS3.NewDaughter<SolenoidS3>(fCheckOverlap)};
+    [[maybe_unused]] auto& solenoidShieldS3{solenoidFieldS3.NewDaughter<SolenoidShieldS3>(fCheckOverlap)};
 
-    /* auto& solenoidBeamPipeS3 */ solenoidFieldS3.NewDaughter<SolenoidBeamPipeS3>(fCheckOverlap);
-    /* auto& solenoidS3 */ solenoidFieldS3.NewDaughter<SolenoidS3>(fCheckOverlap);
-    /* auto& solenoidShieldS3 */ solenoidFieldS3.NewDaughter<SolenoidShieldS3>(fCheckOverlap);
+    [[maybe_unused]] auto& solenoidBeamPipeT1{solenoidFieldT1.NewDaughter<SolenoidBeamPipeT1>(fCheckOverlap)};
+    [[maybe_unused]] auto& solenoidShieldT1{solenoidFieldT1.NewDaughter<SolenoidShieldT1>(fCheckOverlap)};
+    [[maybe_unused]] auto& solenoidT1{solenoidFieldT1.NewDaughter<SolenoidT1>(fCheckOverlap)};
 
-    /* auto& solenoidT1 */ solenoidFieldT1.NewDaughter<SolenoidT1>(fCheckOverlap);
-    /* auto& solenoidBeamPipeT1 */ solenoidFieldT1.NewDaughter<SolenoidBeamPipeT1>(fCheckOverlap);
-    /* auto& solenoidShieldT1 */ solenoidFieldT1.NewDaughter<SolenoidShieldT1>(fCheckOverlap);
+    [[maybe_unused]] auto& solenoidBeamPipeT2{solenoidFieldT2.NewDaughter<SolenoidBeamPipeT2>(fCheckOverlap)};
+    [[maybe_unused]] auto& solenoidShieldT2{solenoidFieldT2.NewDaughter<SolenoidShieldT2>(fCheckOverlap)};
+    [[maybe_unused]] auto& solenoidT2{solenoidFieldT2.NewDaughter<SolenoidT2>(fCheckOverlap)};
 
-    /* auto& solenoidT2 */ solenoidFieldT2.NewDaughter<SolenoidT2>(fCheckOverlap);
-    /* auto& solenoidBeamPipeT2 */ solenoidFieldT2.NewDaughter<SolenoidBeamPipeT2>(fCheckOverlap);
-    /* auto& solenoidShieldT2 */ solenoidFieldT2.NewDaughter<SolenoidShieldT2>(fCheckOverlap);
+    [[maybe_unused]] auto& cdcBody{mmsField.NewDaughter<CDCBody>(fCheckOverlap)};
+    [[maybe_unused]] auto& mmsBeamPipe{mmsField.NewDaughter<MMSBeamPipe>(fCheckOverlap)};
+    [[maybe_unused]] auto& mmsMagnet{mmsField.NewDaughter<MMSMagnet>(fCheckOverlap)};
+    [[maybe_unused]] auto& ttc{mmsField.NewDaughter<TTC>(fCheckOverlap)};
 
     // 3
 
-    auto& cdcGas{cdcBody.NewDaughter<CDCGas>(fCheckOverlap)};
+    [[maybe_unused]] auto& mcp{mcpChamber.NewDaughter<MCP>(fCheckOverlap)};
 
-    /* auto& accelerator */ acceleratorField.NewDaughter<Accelerator>(fCheckOverlap);
-    /* auto& beamDegrader */ acceleratorField.NewDaughter<BeamDegrader>(fCheckOverlap);
-    /* auto& beamMonitor */ acceleratorField.NewDaughter<BeamMonitor>(fCheckOverlap);
-    /* auto& target */ acceleratorField.NewDaughter<Target>(fCheckOverlap);
+    [[maybe_unused]] auto& acceleratorField{mmsBeamPipe.NewDaughter<AcceleratorField>(fCheckOverlap)};
+
+    [[maybe_unused]] auto& filter{solenoidBeamPipeS2.NewDaughter<Filter>(fCheckOverlap)};
+
+    [[maybe_unused]] auto& cdcGas{cdcBody.NewDaughter<CDCGas>(fCheckOverlap)};
 
     // 4
 
-    auto& cdcSuperLayer{cdcGas.NewDaughter<CDCSuperLayer>(fCheckOverlap)};
+    [[maybe_unused]] auto& accelerator{acceleratorField.NewDaughter<Accelerator>(fCheckOverlap)};
+    [[maybe_unused]] auto& beamDegrader{acceleratorField.NewDaughter<BeamDegrader>(fCheckOverlap)};
+    [[maybe_unused]] auto& beamMonitor{acceleratorField.NewDaughter<BeamMonitor>(fCheckOverlap)};
+    [[maybe_unused]] auto& target{acceleratorField.NewDaughter<Target>(fCheckOverlap)};
+
+    [[maybe_unused]] auto& cdcSuperLayer{cdcGas.NewDaughter<CDCSuperLayer>(fCheckOverlap)};
 
     // 5
 
-    auto& cdcSenseLayer{cdcSuperLayer.NewDaughter<CDCSenseLayer>(fCheckOverlap)};
+    [[maybe_unused]] auto& cdcSenseLayer{cdcSuperLayer.NewDaughter<CDCSenseLayer>(fCheckOverlap)};
 
     // 6
 
-    /* auto& cdcCell */ cdcSenseLayer.NewDaughter<CDCCell>(fCheckOverlap);
-
-    ////////////////////////////////////////////////////////////////
-    // Register materials
-    ////////////////////////////////////////////////////////////////
-    {
-        using namespace Mustard::LiteralUnit::Density;
-
-        const auto nist = G4NistManager::Instance();
-
-        const auto vacuum = nist->BuildMaterialWithNewDensity("Vacuum", "G4_AIR", 1e-12_g_cm3);
-        acceleratorField.RegisterMaterial(vacuum);
-        emcField.RegisterMaterial(vacuum);
-        fWorld->RegisterMaterial(vacuum);
-        mmsField.RegisterMaterial(vacuum);
-        solenoidFieldS1.RegisterMaterial(vacuum);
-        solenoidFieldS2.RegisterMaterial(vacuum);
-        solenoidFieldS3.RegisterMaterial(vacuum);
-        solenoidFieldT1.RegisterMaterial(vacuum);
-        solenoidFieldT2.RegisterMaterial(vacuum);
-    }
+    [[maybe_unused]] auto& cdcCell{cdcSenseLayer.NewDaughter<CDCCell>(fCheckOverlap)};
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////

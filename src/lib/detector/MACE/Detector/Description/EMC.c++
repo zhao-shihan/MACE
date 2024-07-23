@@ -8,6 +8,7 @@
 #include "CLHEP/Vector/TwoVector.h"
 
 #include "G4SystemOfUnits.hh"
+#include "G4ThreeVector.hh"
 #include "G4Transform3D.hh"
 
 #include "pmp/algorithms/differential_geometry.h"
@@ -151,17 +152,23 @@ using namespace Mustard::PhysicalConstant;
 
 EMC::EMC() :
     DescriptionBase{"EMC"},
-    fNSubdivision{2},
-    fInnerRadius{15_cm},
-    fCrystalHypotenuse{15_cm},
+    fNSubdivision{3},
+    fInnerRadius{20_cm},
+    fCrystalHypotenuse{10_cm},
     fUpstreamWindowRadius{50_mm},
     fDownstreamWindowRadius{5_mm},
-    fSmallPMTRadius{25.5_mm},
-    fSmallPMTLength{144_mm},
-    fSmallPMTCathodeRadius{23_mm},
-    fLargePMTRadius{39_mm},
-    fLargePMTLength{156_mm},
-    fLargePMTCathodeRadius{35_mm},
+    fPMTDimensions{
+        {29.3_mm, 25_mm, 87_mm},   // 9442B Type-HEX01
+        {29.3_mm, 25_mm, 87_mm},   // 9442B Type-PEN
+        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX02
+        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX03
+        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX04
+        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX05
+        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX06
+        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX07
+        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX08
+        {39.9_mm, 32_mm, 98.5_mm}, // 9902B Type-HEX09
+    },
     fPMTCouplerThickness{0.1_mm},
     fPMTWindowThickness{1_mm},
     fPMTCathodeThickness{20_nm},
@@ -181,6 +188,33 @@ EMC::EMC() :
                           21.43, 20.344, 19.319, 18.363, 17.294, 16.265, 15.232, 14.053,
                           12.759, 11.486, 10.345, 9.229, 8.193, 7.198, 6.108, 5.136, 4.241,
                           3.37, 2.403, 1.447, 0.466}, // ET 9269B
+    fMPPCWidthSet{
+        12_mm,
+        12_mm,
+        24_mm,
+        24_mm,
+        24_mm,
+        24_mm,
+        24_mm,
+        24_mm,
+        24_mm,
+        24_mm,
+    },
+    fMPPCThickness{0.1_mm},
+    fMPPCCouplerThickness{0.1_mm},
+    fMPPCWindowThickness{0.15_mm},
+    fMPPCWaveLengthBin{886.244, 871.228, 856.21, 841.193, 826.176, 810.974, 796.366, 781.121, 766.101, 751.082,
+                       736.061, 721.04, 705.896, 694.41, 682.947, 669.145, 657.534, 647.289, 637.726, 628.163,
+                       618.599, 606.122, 595.757, 585.127, 576.93, 568.732, 560.534, 552.336, 544.138, 536.29,
+                       527.266, 517.491, 509.566, 502.072, 494.349, 485.647, 475.13, 460.112, 445.101, 430.094,
+                       417.538, 402.822, 386.469, 375.348, 356.387, 335.359, 319.688, 310.159, 302.229, 299.024,
+                       296.299, 294.815, 291.379, 289.225, 282.082},
+    fMPPCEfficiency{0.045, 0.053, 0.061, 0.069, 0.077, 0.088, 0.096, 0.105, 0.116, 0.127,
+                    0.139, 0.152, 0.164, 0.177, 0.188, 0.201, 0.216, 0.229, 0.242, 0.255,
+                    0.269, 0.287, 0.302, 0.317, 0.33, 0.342, 0.354, 0.367, 0.38, 0.393,
+                    0.408, 0.425, 0.44, 0.454, 0.468, 0.485, 0.497, 0.505, 0.507, 0.502,
+                    0.493, 0.477, 0.449, 0.422, 0.397, 0.373, 0.346, 0.318, 0.28, 0.25,
+                    0.217, 0.184, 0.083, 0.051, 0.025}, // S14161
     fCsIEnergyBin{1.75_eV, 1.77_eV, 1.78_eV, 1.80_eV, 1.82_eV, 1.83_eV, 1.85_eV, 1.87_eV,
                   1.88_eV, 1.89_eV, 1.91_eV, 1.92_eV, 1.93_eV, 1.94_eV, 1.95_eV, 1.96_eV,
                   1.98_eV, 1.98_eV, 2.00_eV, 2.01_eV, 2.02_eV, 2.04_eV, 2.05_eV, 2.07_eV,
@@ -208,7 +242,7 @@ EMC::EMC() :
 auto EMC::ComputeMesh() const -> MeshInformation {
     auto pmpMesh{EMCMesh{fNSubdivision}.Generate()};
     MeshInformation mesh;
-    auto& [vertex, faceList]{mesh};
+    auto& [vertex, faceList, typeMap]{mesh};
     const auto point{pmpMesh.vertex_property<pmp::Point>("v:point")};
 
     for (auto&& v : pmpMesh.vertices()) {
@@ -256,12 +290,41 @@ auto EMC::ComputeMesh() const -> MeshInformation {
                               return LocalPhi(i) < LocalPhi(j);
                           });
     }
+
+    std::map<std::vector<float>, std::vector<int>> edgeLengthSet;
+
+    for (int unitID{};
+         auto&& [centroid, _, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
+        // sort by edge length
+        std::vector<float> edgeLength; // magic conversion (double to float)
+        std::vector<G4ThreeVector> xV{vertexIndex.size()};
+
+        std::ranges::transform(vertexIndex, xV.begin(),
+                               [&](const auto& i) { return vertex[i]; });
+
+        for (int i{}; i < std::ssize(xV); ++i) {
+            edgeLength.emplace_back(i != std::ssize(xV) - 1 ? (xV[i + 1] - xV[i]).mag() :
+                                                              (xV[0] - xV[i]).mag());
+        };
+
+        std::ranges::sort(edgeLength);
+        edgeLengthSet[edgeLength].emplace_back(unitID++);
+    }
+
+    int typeID{};
+    for (auto&& pair : edgeLengthSet) {
+        for (auto&& value : pair.second) {
+            mesh.fTypeMap[value] = typeID;
+        }
+        typeID++;
+    }
+
     return mesh;
 }
 
-auto EMC::ComputeTransformToOuterSurfaceWithOffset(int cellID, double offsetInNormalDirection) const -> HepGeom::Transform3D {
+auto EMC::ComputeTransformToOuterSurfaceWithOffset(int unitID, double offsetInNormalDirection) const -> HepGeom::Transform3D {
     const auto& faceList{Mesh().fFaceList};
-    auto&& [centroid, normal, vertexIndex]{faceList[cellID]};
+    auto&& [centroid, normal, vertexIndex]{faceList[unitID]};
 
     const auto centroidMagnitude{centroid.mag()};
     const auto crystalOuterRadius{(fInnerRadius + fCrystalHypotenuse) * centroidMagnitude};
@@ -278,17 +341,18 @@ auto EMC::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
     ImportValue(node, fUpstreamWindowRadius, "UpstreamWindowRadius");
     ImportValue(node, fDownstreamWindowRadius, "DownstreamWindowRadius");
-    ImportValue(node, fSmallPMTRadius, "SmallPMTRadius");
-    ImportValue(node, fSmallPMTLength, "SmallPMTLength");
-    ImportValue(node, fSmallPMTCathodeRadius, "SmallPMTCathodeRadius");
-    ImportValue(node, fLargePMTRadius, "LargePMTRadius");
-    ImportValue(node, fLargePMTLength, "LargePMTLength");
-    ImportValue(node, fLargePMTCathodeRadius, "LargePMTCathodeRadius");
+    ImportValue(node, fPMTDimensions, "PMTDimensions");
     ImportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ImportValue(node, fPMTWindowThickness, "PMTWindowThickness");
     ImportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
     ImportValue(node, fPMTWaveLengthBin, "PMTWaveLengthBin");
     ImportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
+    ImportValue(node, fMPPCWidthSet, "MPPCWidthSet");
+    ImportValue(node, fMPPCThickness, "MPPCThickness");
+    ImportValue(node, fMPPCCouplerThickness, "MPPCCouplerThickness");
+    ImportValue(node, fMPPCWindowThickness, "MPPCWindowThickness");
+    ImportValue(node, fMPPCWaveLengthBin, "MPPCWaveLengthBin");
+    ImportValue(node, fMPPCEfficiency, "MPPCEfficiency");
     ImportValue(node, fCsIEnergyBin, "CsIEnergyBin");
     ImportValue(node, fCsIScintillationComponent1, "CsIScintillationComponent1");
     ImportValue(node, fScintillationYield, "ScintillationYield");
@@ -304,17 +368,18 @@ auto EMC::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fCrystalHypotenuse, "CrystalHypotenuse");
     ExportValue(node, fUpstreamWindowRadius, "UpstreamWindowRadius");
     ExportValue(node, fDownstreamWindowRadius, "DownstreamWindowRadius");
-    ExportValue(node, fSmallPMTRadius, "SmallPMTRadius");
-    ExportValue(node, fSmallPMTLength, "SmallPMTLength");
-    ExportValue(node, fSmallPMTCathodeRadius, "SmallPMTCathodeRadius");
-    ExportValue(node, fLargePMTRadius, "LargePMTRadius");
-    ExportValue(node, fLargePMTLength, "LargePMTLength");
-    ExportValue(node, fLargePMTCathodeRadius, "LargePMTCathodeRadius");
+    ExportValue(node, fPMTDimensions, "PMTDimensions");
     ExportValue(node, fPMTCouplerThickness, "PMTCouplerThickness");
     ExportValue(node, fPMTWindowThickness, "PMTWindowThickness");
     ExportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
     ExportValue(node, fPMTWaveLengthBin, "PMTWaveLengthBin");
     ExportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
+    ExportValue(node, fMPPCWidthSet, "MPPCWidthSet");
+    ExportValue(node, fMPPCThickness, "MPPCThickness");
+    ExportValue(node, fMPPCCouplerThickness, "MPPCCouplerThickness");
+    ExportValue(node, fMPPCWindowThickness, "MPPCWindowThickness");
+    ExportValue(node, fMPPCWaveLengthBin, "MPPCWaveLengthBin");
+    ExportValue(node, fMPPCEfficiency, "MPPCEfficiency");
     ExportValue(node, fCsIEnergyBin, "CsIEnergyBin");
     ExportValue(node, fCsIScintillationComponent1, "CsIScintillationComponent1");
     ExportValue(node, fScintillationYield, "ScintillationYield");

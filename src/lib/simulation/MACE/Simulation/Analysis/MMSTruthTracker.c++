@@ -2,7 +2,7 @@
 #include "MACE/Detector/Description/TTC.h++"
 #include "MACE/Simulation/Analysis/MMSTruthTracker.h++"
 
-#include "gfx/timsort.hpp"
+#include "muc/algorithm"
 
 #include <cassert>
 #include <utility>

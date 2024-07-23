@@ -12,7 +12,7 @@ EMCField::EMCField() : // clang-format off
     if (fieldOption.UseFast()) {
         fField = FastField{0, 0, emcField.FastField()};
     } else {
-        fField = FieldMap{fieldOption.FieldDataFileName(), "EMCField"};
+        fField = FieldMap{fieldOption.ParsedFieldDataFilePath().generic_string(), "EMCField"};
     }
 }
 

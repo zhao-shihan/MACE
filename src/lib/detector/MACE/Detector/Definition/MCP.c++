@@ -1,5 +1,6 @@
 #include "MACE/Detector/Definition/MCP.h++"
 #include "MACE/Detector/Description/MCP.h++"
+#include "MACE/Detector/Description/MCPChamber.h++"
 
 #include "Mustard/Utility/LiteralUnit.h++"
 
@@ -15,6 +16,7 @@ auto MCP::Construct(G4bool checkOverlaps) -> void {
     const auto& mcp{Description::MCP::Instance()};
 
     const auto nist{G4NistManager::Instance()};
+    const auto mother{Mother().LogicalVolume(Description::MCPChamber::Instance().Name() + "Vacuum")};
 
     { // MCP
         const auto solid{Make<G4Tubs>(
@@ -32,7 +34,7 @@ auto MCP::Construct(G4bool checkOverlaps) -> void {
         G4Transform3D{{}, {0, 0, mcp.Thickness() / 2}}, // clang-format on
             logic,
             mcp.Name(),
-            Mother().LogicalVolume(),
+            mother,
             false,
             0,
             checkOverlaps);
@@ -54,7 +56,7 @@ auto MCP::Construct(G4bool checkOverlaps) -> void {
         G4Transform3D{{}, {0, 0, mcp.Thickness() + mcp.AnodeDistance()}}, // clang-format on
             logic,
             name,
-            Mother().LogicalVolume(),
+            mother,
             false,
             0,
             checkOverlaps);

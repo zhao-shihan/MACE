@@ -1,0 +1,20 @@
+/control/verbose 0
+/run/verbose 0
+
+/MACE/Physics/UseOpticalPhysics
+/MACE/Detector/Description/Import test.yaml
+
+/run/initialize
+
+/MACE/Generator/SwitchToGPSX
+
+/gps/particle gamma
+/gps/ene/mono 53.085 MeV
+/gps/pos/centre 0. 0. 0. cm
+/gps/direction 0.523352 0.846801 -1.13048e-18
+
+/MACE/Analysis/FilePath resTest
+/MACE/Analysis/FileMode RECREATE
+
+/run/beamOn 1000
+/MPIRun/PrintRunSummary

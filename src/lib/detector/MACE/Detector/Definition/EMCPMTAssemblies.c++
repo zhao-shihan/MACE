@@ -31,7 +31,6 @@ using namespace Mustard::PhysicalConstant;
 
 auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
     const auto& emc{Description::EMC::Instance()};
-    const auto name{emc.Name()};
 
     const auto pmtCouplerThickness{emc.PMTCouplerThickness()};
     const auto pmtWindowThickness{emc.PMTWindowThickness()};
@@ -106,23 +105,17 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
     /////////////////////////////////////////////
 
     const auto& faceList{emc.Mesh().fFaceList};
+    const auto& typeMap{emc.Mesh().fTypeMap};
+    const auto& pmtDimensions{emc.PMTDimensions()};
 
     for (int unitID{};
          auto&& [_1, _2, vertexIndex] : std::as_const(faceList)) { // loop over all EMC face
+        auto typeMapIt = typeMap.find(unitID);
+        auto pmtDiameter = pmtDimensions.at(typeMapIt->second).at(0);
+        auto cathodeDiameter = pmtDimensions.at(typeMapIt->second).at(1);
+        auto pmtLength = pmtDimensions.at(typeMapIt->second).at(2);
 
-        double cathodeRadius{};
-        double pmtRadius{};
-        double pmtLength{};
-
-        if (vertexIndex.size() == 5) {
-            pmtRadius = emc.SmallPMTRadius();
-            pmtLength = emc.SmallPMTLength();
-            cathodeRadius = emc.SmallPMTCathodeRadius();
-        } else if (vertexIndex.size() == 6) {
-            pmtRadius = emc.LargePMTRadius();
-            pmtLength = emc.LargePMTLength();
-            cathodeRadius = emc.LargePMTCathodeRadius();
-        }
+        // std::cout << "unitID: " << unitID << ", typeID:" << typeMapIt->second << ", pmtDiameter: " << pmtDiameter << ", cathodeDiameter: " << cathodeDiameter << ", pmtLength: " << pmtLength << std::endl;
 
         const auto couplerTransform{emc.ComputeTransformToOuterSurfaceWithOffset(unitID,
                                                                                  pmtCouplerThickness / 2)};
@@ -133,7 +126,7 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
         const auto cathodeTransform{emc.ComputeTransformToOuterSurfaceWithOffset(unitID,
                                                                                  pmtCouplerThickness + pmtWindowThickness + pmtCathodeThickness / 2)};
 
-        const auto solidCoupler{Make<G4Tubs>("temp", 0, pmtRadius, pmtCouplerThickness / 2, 0, 2 * pi)};
+        const auto solidCoupler{Make<G4Tubs>("temp", 0, pmtDiameter / 2, pmtCouplerThickness / 2, 0, 2 * pi)};
         const auto logicCoupler{Make<G4LogicalVolume>(solidCoupler, siliconeGrease, "EMCPMTCoupler")};
         const auto physicalCoupler{Make<G4PVPlacement>(couplerTransform,
                                                        logicCoupler,
@@ -143,9 +136,9 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
                                                        unitID,
                                                        checkOverlaps)};
 
-        const auto solidGlassBox{Make<G4Tubs>("temp", 0, pmtRadius, pmtLength / 2, 0, 2 * pi)};
-        const auto solidPMTVacuum{Make<G4Tubs>("temp", 0, pmtRadius - pmtWindowThickness, pmtLength / 2 - pmtWindowThickness, 0, 2 * pi)};
-        const auto solidPMTShell{Make<G4SubtractionSolid>("EMCPMTShell", solidGlassBox, solidPMTVacuum)};
+        const auto solidGlassTube{Make<G4Tubs>("temp", 0, pmtDiameter / 2, pmtLength / 2, 0, 2 * pi)};
+        const auto solidPMTVacuum{Make<G4Tubs>("temp", 0, pmtDiameter / 2 - pmtWindowThickness, pmtLength / 2 - pmtWindowThickness, 0, 2 * pi)};
+        const auto solidPMTShell{Make<G4SubtractionSolid>("EMCPMTShell", solidGlassTube, solidPMTVacuum)};
         const auto logicPMTShell{Make<G4LogicalVolume>(solidPMTShell, glass, "EMCPMTShell")};
         Make<G4PVPlacement>(shellTransform,
                             logicPMTShell,
@@ -155,7 +148,7 @@ auto EMCPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
                             unitID,
                             checkOverlaps);
 
-        const auto solidCathode{Make<G4Tubs>("temp", 0, cathodeRadius, pmtCathodeThickness / 2, 0, 2 * pi)};
+        const auto solidCathode{Make<G4Tubs>("temp", 0, cathodeDiameter / 2, pmtCathodeThickness / 2, 0, 2 * pi)};
         const auto logicCathode{Make<G4LogicalVolume>(solidCathode, bialkali, "EMCPMTCathode")};
         Make<G4PVPlacement>(cathodeTransform,
                             logicCathode,

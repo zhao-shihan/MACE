@@ -1,0 +1,94 @@
+# SimPTS: geometry description
+
+Accelerator:
+  UpstreamLength: 110
+  DownstreamLength: 270
+  ElectrodePitch: 20
+  ElectrodeInnerRadius: 50
+  ElectrodeOuterRadius: 60
+  ElectrodeThickness: 0.5
+  FieldRadius: 70
+  DecelerateFieldLength: 165
+  AccelerateFieldLength: 360
+  ElectrodeMaterialName: G4_Be
+  MaxPotential: 0.0005867
+  MaxPotentialPosition: -65
+EMCField:
+  Radius: 560
+  Length: 1000
+  FastField: 0.0001
+EMCMagnet:
+  InnerRadius: 500
+  OuterRadius: 550
+  Length: 1000
+  MaterialName: G4_Cu
+EMCShield:
+  InnerRadius: 600
+  InnerLength: 1100
+  GapAroundWindow: 10
+  Thickness: 50
+  MaterialName: G4_Fe
+FieldOption:
+  UseFast: false
+  FieldDataFilePath: ${MACE_DATA_DIR}/mace_field_data.root
+Filter:
+  Enabled: true
+  Length: 500
+  Radius: 49
+  Thickness: 0.20000000000000001
+  Pitch: 1.1499999999999999
+  MaterialName: G4_BRONZE
+MCPChamber:
+  InnerRadius: 100
+  Thickness: 0.5
+MMSBeamPipe:
+  InnerRadius: 70
+  BerylliumLength: 1000
+  BerylliumThickness: 0.5
+  AluminiumThickness: 2
+MMSField:
+  Radius: 610
+  Length: 2200
+  FastField: 9.9999999999999991e-05
+MMSMagnet:
+  InnerRadius: 550
+  OuterRadius: 600
+  Length: 2200
+  MaterialName: G4_Cu
+MMSShield:
+  InnerRadius: 650
+  InnerLength: 2300
+  Thickness: 50
+  WindowRadius: 250
+  BeamSlantAngle: 0
+  MaterialName: G4_Fe
+ShieldingWall:
+  Enabled: true
+  Thickness: 500
+  Length: 5000
+  Rotation: 0.52359877559829882
+Solenoid:
+  S1Length: 150
+  T1Radius: 250
+  S2Length: 1314.5999999999999
+  T2Radius: 250
+  S3Length: 150
+  InnerRadius: 60
+  OuterRadius: 90
+  CoilThickness: 30
+  ReferenceCoilSpacing: 30
+  FieldRadius: 131
+  MaterialName: G4_Cu
+  FastField: 9.9999999999999991e-05
+VirtualDetectorA:
+  Thickness: 1.0000000000000002e-06
+VirtualDetectorB:
+  Thickness: 1.0000000000000002e-06
+VirtualDetectorC:
+  Thickness: 1.0000000000000002e-06
+VirtualDetectorD:
+  Thickness: 1.0000000000000002e-06
+World:
+  HalfXExtent: 3000
+  HalfYExtent: 1000
+  HalfZExtent: 4000

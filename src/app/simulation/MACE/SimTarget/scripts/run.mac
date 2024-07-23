@@ -15,7 +15,7 @@
 # I/O & Analysis
 /MACE/Analysis/FilePath                        SimTarget_result
 /MACE/Analysis/FileMode                        NEW
-/MACE/Analysis/EnableYieldAnalysis             true
+/MACE/Analysis/EnableYieldAnalysis             yes
 
 # Geometry
 #/MACE/Detector/Description/Import              geom.yaml
@@ -43,13 +43,11 @@
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 
 # kill secondaries
-/MACE/Action/KillIrrelevants    true
+/MACE/Action/KillIrrelevants    yes
 
 #############################################################################
 # Run
 #############################################################################
 
-#/MPIRun/PrintProgressModulo 100
-
 /run/beamOn 1000
-/MPIRun/PrintRunSummary
+/Mustard/Run/PrintRunSummary

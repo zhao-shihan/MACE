@@ -13,7 +13,7 @@ BeamDegrader::BeamDegrader() :
     fEnabled{true},
     // Geometry
     fWidth{5_cm},
-    fThickness{500_um},
+    fThickness{400_um},
     fDistanceToTarget{1_cm},
     // Material
     fMaterialName{"G4_MYLAR"} {}

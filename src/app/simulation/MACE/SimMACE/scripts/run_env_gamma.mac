@@ -25,12 +25,12 @@
 /GPSX/NVertex             1000
 /GPSX/PulseWidth          0 ns
 
-/MACE/Analysis/SavePrimaryVertexData  false
-/MACE/Analysis/CoincidenceWithCDC     false
-/MACE/Analysis/CoincidenceWithTTC     false
-/MACE/Analysis/CoincidenceWithMMS     false
-/MACE/Analysis/CoincidenceWithMCP     false
-/MACE/Analysis/CoincidenceWithEMC     false
+/MACE/Analysis/SavePrimaryVertexData  no
+/MACE/Analysis/CoincidenceWithCDC     no
+/MACE/Analysis/CoincidenceWithTTC     no
+/MACE/Analysis/CoincidenceWithMMS     no
+/MACE/Analysis/CoincidenceWithMCP     no
+/MACE/Analysis/CoincidenceWithEMC     no
 
 #############################################################################
 # Run
@@ -39,4 +39,4 @@
 /MACE/Analysis/FilePath SimMACE_env_gamma
 /MACE/Analysis/FileMode NEW
 /run/beamOn 80
-/MPIRun/PrintRunSummary
+/Mustard/Run/PrintRunSummary
