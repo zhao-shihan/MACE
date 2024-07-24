@@ -69,7 +69,7 @@ DetectorConstruction::DetectorConstruction() :
     PassiveSingleton{},
     G4VUserDetectorConstruction{},
     fCheckOverlap{},
-    fMinDriverStep{2_um},
+    fMinDriverStep{200_nm},
     fDeltaChord{2_um},
     fWorld{},
     fDefaultGaseousRegion{},
