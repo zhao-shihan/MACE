@@ -6,9 +6,8 @@
 
 #include "TH3F.h"
 
+#include "G4Step.hh"
 #include "G4ThreeVector.hh"
-
-#include <utility>
 
 namespace MACE::SimDose {
 
@@ -29,35 +28,39 @@ public:
     auto MapDeltaY() const -> auto { return ((fMapYMax - fMapYMin) / fMapNBinY); }
     auto MapDeltaZ() const -> auto { return ((fMapZMax - fMapZMin) / fMapNBinZ); }
 
-    auto MapNBinX(short n) { fMapNBinX = n; }
+    auto MapNBinX(int n) { fMapNBinX = n; }
     auto MapXMin(double val) { fMapXMin = val; }
     auto MapXMax(double val) { fMapXMax = val; }
-    auto MapNBinY(short n) { fMapNBinY = n; }
+    auto MapNBinY(int n) { fMapNBinY = n; }
     auto MapYMin(double val) { fMapYMin = val; }
     auto MapYMax(double val) { fMapYMax = val; }
-    auto MapNBinZ(short n) { fMapNBinZ = n; }
+    auto MapNBinZ(int n) { fMapNBinZ = n; }
     auto MapZMin(double val) { fMapZMin = val; }
     auto MapZMax(double val) { fMapZMax = val; }
 
-    auto FillMap(G4ThreeVector x, double eDep, double density) const -> void;
+    auto FillMap(const G4Step& step) const -> void;
 
 private:
     auto RunBeginUserAction(int) -> void override;
     auto EventEndUserAction() -> void override {}
     auto RunEndUserAction(int runID) -> void override;
 
+    auto FillMapByPoint(G4ThreeVector x, double eDep, double dose) const -> void;
+    auto FillMapBySegment(G4ThreeVector x0, G4ThreeVector x, double eDep, double dose) const -> void;
+
 private:
-    short fMapNBinX;
+    int fMapNBinX;
     double fMapXMin;
     double fMapXMax;
-    short fMapNBinY;
+    int fMapNBinY;
     double fMapYMin;
     double fMapYMax;
-    short fMapNBinZ;
+    int fMapNBinZ;
     double fMapZMin;
     double fMapZMax;
 
     double fCachedMapDeltaV;
+    double fCachedMapMinDeltaX;
 
     TH3F* fEdepMap;
     TH3F* fDoseMap;
