@@ -4,10 +4,12 @@
 
 #include "Mustard/Simulation/AnalysisBase.h++"
 
-#include "TH3F.h"
-
 #include "G4Step.hh"
 #include "G4ThreeVector.hh"
+
+#include <vector>
+
+class TH3F;
 
 namespace MACE::SimDose {
 
@@ -15,28 +17,16 @@ class Analysis final : public Mustard::Simulation::AnalysisBase<Analysis, "SimDo
 public:
     Analysis();
 
-    auto MapNBinX() const -> auto { return fMapNBinX; }
-    auto MapXMin() const -> auto { return fMapXMin; }
-    auto MapXMax() const -> auto { return fMapXMax; }
-    auto MapNBinY() const -> auto { return fMapNBinY; }
-    auto MapYMin() const -> auto { return fMapYMin; }
-    auto MapYMax() const -> auto { return fMapYMax; }
-    auto MapNBinZ() const -> auto { return fMapNBinZ; }
-    auto MapZMin() const -> auto { return fMapZMin; }
-    auto MapZMax() const -> auto { return fMapZMax; }
-    auto MapDeltaX() const -> auto { return ((fMapXMax - fMapXMin) / fMapNBinX); }
-    auto MapDeltaY() const -> auto { return ((fMapYMax - fMapYMin) / fMapNBinY); }
-    auto MapDeltaZ() const -> auto { return ((fMapZMax - fMapZMin) / fMapNBinZ); }
-
-    auto MapNBinX(int n) { fMapNBinX = n; }
-    auto MapXMin(double val) { fMapXMin = val; }
-    auto MapXMax(double val) { fMapXMax = val; }
-    auto MapNBinY(int n) { fMapNBinY = n; }
-    auto MapYMin(double val) { fMapYMin = val; }
-    auto MapYMax(double val) { fMapYMax = val; }
-    auto MapNBinZ(int n) { fMapNBinZ = n; }
-    auto MapZMin(double val) { fMapZMin = val; }
-    auto MapZMax(double val) { fMapZMax = val; }
+    auto AddMap(std::string name) -> void;
+    auto MapNBinX(int val) -> void;
+    auto MapXMin(double val) -> void;
+    auto MapXMax(double val) -> void;
+    auto MapNBinY(int val) -> void;
+    auto MapYMin(double val) -> void;
+    auto MapYMax(double val) -> void;
+    auto MapNBinZ(int val) -> void;
+    auto MapZMin(double val) -> void;
+    auto MapZMax(double val) -> void;
 
     auto FillMap(const G4Step& step) const -> void;
 
@@ -45,25 +35,32 @@ private:
     auto EventEndUserAction() -> void override {}
     auto RunEndUserAction(int runID) -> void override;
 
-    auto FillMapByPoint(G4ThreeVector x, double eDep, double dose) const -> void;
-    auto FillMapBySegment(G4ThreeVector x0, G4ThreeVector x, double eDep, double dose) const -> void;
+    auto CheckMapAdded() -> void;
 
 private:
-    int fMapNBinX;
-    double fMapXMin;
-    double fMapXMax;
-    int fMapNBinY;
-    double fMapYMin;
-    double fMapYMax;
-    int fMapNBinZ;
-    double fMapZMin;
-    double fMapZMax;
+    struct MapModel {
+        std::string name;
+        int nBinX;
+        double xMin;
+        double xMax;
+        int nBinY;
+        double yMin;
+        double yMax;
+        int nBinZ;
+        double zMin;
+        double zMax;
+    };
 
-    double fCachedMapDeltaV;
-    double fCachedMapMinDeltaX;
+    struct MapData {
+        TH3F* eDepMap;
+        TH3F* doseMap;
+        double deltaV;
+        double minDelta;
+    };
 
-    TH3F* fEdepMap;
-    TH3F* fDoseMap;
+private:
+    std::vector<MapModel> fMapModel;
+    std::vector<MapData> fMap;
 
     AnalysisMessenger::Register<Analysis> fMessengerRegister;
 };

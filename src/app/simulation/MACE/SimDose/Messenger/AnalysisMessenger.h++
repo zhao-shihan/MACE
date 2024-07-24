@@ -4,8 +4,9 @@
 
 #include <memory>
 
-class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithAString;
 class G4UIdirectory;
 
 namespace MACE::SimDose {
@@ -28,6 +29,7 @@ public:
 private:
     std::unique_ptr<G4UIdirectory> fDirectory;
 
+    std::unique_ptr<G4UIcmdWithAString> fAddMap;
     std::unique_ptr<G4UIcmdWithAnInteger> fMapNBinX;
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMapXMin;
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMapXMax;

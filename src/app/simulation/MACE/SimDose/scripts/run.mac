@@ -22,53 +22,7 @@
 /GPSX/NVertex             2000    # 50 kHz beam
 /GPSX/PulseWidth          1.5 us
 
-#############################################################################
-# Run
-#############################################################################
-
-/Mustard/Analysis/FilePath SimDose
-/Mustard/Analysis/FileMode NEW
-
-# Target
-/MACE/Analysis/MapNBinX 200
-/MACE/Analysis/MapXMin -100 mm
-/MACE/Analysis/MapXMax 100 mm
-/MACE/Analysis/MapNBinY 200
-/MACE/Analysis/MapYMin -100 mm
-/MACE/Analysis/MapYMax 100 mm
-/MACE/Analysis/MapNBinZ 200
-/MACE/Analysis/MapZMin -100 mm
-/MACE/Analysis/MapZMax 100 mm
-/run/beamOn 100
-/Mustard/Run/PrintRunSummary
-
-# CDC
-/MACE/Analysis/MapNBinX 200
-/MACE/Analysis/MapXMin -500 mm
-/MACE/Analysis/MapXMax 500 mm
-/MACE/Analysis/MapNBinY 200
-/MACE/Analysis/MapYMin -500 mm
-/MACE/Analysis/MapYMax 500 mm
-/MACE/Analysis/MapNBinZ 360
-/MACE/Analysis/MapZMin -900 mm
-/MACE/Analysis/MapZMax 900 mm
-/run/beamOn 100
-/Mustard/Run/PrintRunSummary
-
-# Solenoid
-/MACE/Analysis/MapNBinX 423
-/MACE/Analysis/MapXMin -150 mm
-/MACE/Analysis/MapXMax 1965 mm
-/MACE/Analysis/MapNBinY 60
-/MACE/Analysis/MapYMin -150 mm
-/MACE/Analysis/MapYMax 150 mm
-/MACE/Analysis/MapNBinZ 160
-/MACE/Analysis/MapZMin 1000 mm
-/MACE/Analysis/MapZMax 1800 mm
-/run/beamOn 100
-/Mustard/Run/PrintRunSummary
-
-# all
+/MACE/Analysis/AddMap World
 /MACE/Analysis/MapNBinX 300
 /MACE/Analysis/MapXMin -3 m
 /MACE/Analysis/MapXMax 3 m
@@ -78,5 +32,46 @@
 /MACE/Analysis/MapNBinZ 400
 /MACE/Analysis/MapZMin -4 m
 /MACE/Analysis/MapZMax 4 m
+
+/MACE/Analysis/AddMap Target
+/MACE/Analysis/MapNBinX 200
+/MACE/Analysis/MapXMin -100 mm
+/MACE/Analysis/MapXMax 100 mm
+/MACE/Analysis/MapNBinY 200
+/MACE/Analysis/MapYMin -100 mm
+/MACE/Analysis/MapYMax 100 mm
+/MACE/Analysis/MapNBinZ 200
+/MACE/Analysis/MapZMin -100 mm
+/MACE/Analysis/MapZMax 100 mm
+
+/MACE/Analysis/AddMap CDC
+/MACE/Analysis/MapNBinX 200
+/MACE/Analysis/MapXMin -500 mm
+/MACE/Analysis/MapXMax 500 mm
+/MACE/Analysis/MapNBinY 200
+/MACE/Analysis/MapYMin -500 mm
+/MACE/Analysis/MapYMax 500 mm
+/MACE/Analysis/MapNBinZ 360
+/MACE/Analysis/MapZMin -900 mm
+/MACE/Analysis/MapZMax 900 mm
+
+/MACE/Analysis/AddMap Solenoid
+/MACE/Analysis/MapNBinX 423
+/MACE/Analysis/MapXMin -150 mm
+/MACE/Analysis/MapXMax 1965 mm
+/MACE/Analysis/MapNBinY 60
+/MACE/Analysis/MapYMin -150 mm
+/MACE/Analysis/MapYMax 150 mm
+/MACE/Analysis/MapNBinZ 160
+/MACE/Analysis/MapZMin 1000 mm
+/MACE/Analysis/MapZMax 1800 mm
+
+#############################################################################
+# Run
+#############################################################################
+
+/Mustard/Analysis/FilePath SimDose
+/Mustard/Analysis/FileMode NEW
+
 /run/beamOn 100
 /Mustard/Run/PrintRunSummary
