@@ -20,6 +20,7 @@ Analysis::Analysis() :
     fMapNBinZ{400},
     fMapZMin{},
     fMapZMax{},
+    fCachedMapDeltaV{},
     fEdepMap{},
     fDoseMap{},
     fMessengerRegister{this} {
@@ -33,12 +34,12 @@ Analysis::Analysis() :
 }
 
 auto Analysis::FillMap(G4ThreeVector x, double eDep, double density) const -> void {
-    const auto deltaV{MapDeltaX() * MapDeltaY() * MapDeltaZ()};
     fEdepMap->Fill(x.x(), x.y(), x.z(), eDep / joule);
-    fDoseMap->Fill(x.x(), x.y(), x.z(), eDep / (density * deltaV) / gray);
+    fDoseMap->Fill(x.x(), x.y(), x.z(), eDep / (density * fCachedMapDeltaV) / gray);
 }
 
 auto Analysis::RunBeginUserAction(int) -> void {
+    fCachedMapDeltaV = MapDeltaX() * MapDeltaY() * MapDeltaZ();
     fEdepMap = new TH3F{"EdepMap", "Energy deposition (J)",
                         fMapNBinX, fMapXMin, fMapXMax,
                         fMapNBinY, fMapYMin, fMapYMax,

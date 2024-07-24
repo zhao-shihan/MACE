@@ -57,6 +57,8 @@ private:
     double fMapZMin;
     double fMapZMax;
 
+    double fCachedMapDeltaV;
+
     TH3F* fEdepMap;
     TH3F* fDoseMap;
 
