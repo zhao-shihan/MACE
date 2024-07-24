@@ -7,6 +7,10 @@
 #include "G4ParticleDefinition.hh"
 #include "G4StepPoint.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4VContinuousDiscreteProcess.hh"
+#include "G4VContinuousProcess.hh"
+#include "G4VRestContinuousDiscreteProcess.hh"
+#include "G4VRestContinuousProcess.hh"
 
 #include "muc/math"
 
@@ -82,7 +86,12 @@ auto Analysis::FillMap(const G4Step& step) const -> void {
     const auto& post{*step.GetPostStepPoint()};
     const auto x0{pre.GetPosition()};
     const auto x{post.GetPosition()};
-    const auto neutral{step.GetTrack()->GetParticleDefinition()->GetPDGCharge() == 0};
+
+    const auto definingProcess{post.GetProcessDefinedStep()};
+    const auto continuousProcessDefined{dynamic_cast<const G4VContinuousDiscreteProcess*>(definingProcess) or
+                                        dynamic_cast<const G4VContinuousProcess*>(definingProcess) or
+                                        dynamic_cast<const G4VRestContinuousDiscreteProcess*>(definingProcess) or
+                                        dynamic_cast<const G4VRestContinuousProcess*>(definingProcess)};
 
     for (auto&& [eDepMap, doseMap, deltaV, minDelta] : std::as_const(fMap)) {
         const auto Fill{
@@ -94,7 +103,7 @@ auto Analysis::FillMap(const G4Step& step) const -> void {
         const auto deltaM{pre.GetMaterial()->GetDensity() * deltaV};
         const auto dose{eDep / deltaM};
 
-        if (neutral or step.GetStepLength() < minDelta) {
+        if (not continuousProcessDefined) {
             Fill(x, eDep, dose);
         } else {
             const auto segment{x - x0};
