@@ -82,21 +82,11 @@ DetectorConstruction::DetectorConstruction() :
     fMinDriverStep{2_um},
     fDeltaChord{2_um},
     fWorld{},
-    fCDCFieldWireRegion{},
-    fCDCSenseWireRegion{},
-    fCDCSensitiveRegion{},
-    fDefaultGaseousRegion{},
-    fDefaultSolidRegion{},
-    fEMCSensitiveRegion{},
-    fMCPSensitiveRegion{},
-    fShieldRegion{},
-    fSolenoidOrMagnetRegion{},
-    fTTCSensitiveRegion{},
-    fTargetRegion{},
-    fVacuumRegion{},
     fNumericMessengerRegister{this} {
     DetectorMessenger::EnsureInstantiation();
 }
+
+DetectorConstruction::~DetectorConstruction() = default;
 
 auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     ////////////////////////////////////////////////////////////////
@@ -178,128 +168,6 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     // 6
 
     auto& cdcCell{cdcSenseLayer.NewDaughter<Detector::Definition::CDCCell>(fCheckOverlap)};
-
-    ////////////////////////////////////////////////////////////////
-    // Register regions
-    ////////////////////////////////////////////////////////////////
-    {
-        const auto defaultCuts{G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts()};
-
-        // CDCFieldWireRegion
-        fCDCFieldWireRegion = new Region("CDCFieldWire", RegionType::CDCFieldWire);
-        fCDCFieldWireRegion->SetProductionCuts(defaultCuts);
-
-        cdcCell.RegisterRegion("CDCFieldWire", fCDCFieldWireRegion);
-
-        // CDCSenseWireRegion
-        fCDCSenseWireRegion = new Region("CDCSenseWire", RegionType::CDCSenseWire);
-        fCDCSenseWireRegion->SetProductionCuts(defaultCuts);
-
-        cdcCell.RegisterRegion("CDCSenseWire", fCDCSenseWireRegion);
-
-        // DefaultGaseousRegion
-        fDefaultGaseousRegion = new Region("DefaultGaseous", RegionType::DefaultGaseous);
-        fDefaultGaseousRegion->SetProductionCuts(defaultCuts);
-
-        cdcCell.RegisterRegion("CDCCell", fDefaultGaseousRegion);
-        cdcGas.RegisterRegion(fDefaultGaseousRegion);
-        cdcSenseLayer.RegisterRegion(fDefaultGaseousRegion);
-        cdcSuperLayer.RegisterRegion(fDefaultGaseousRegion);
-        emcField.RegisterRegion(fDefaultGaseousRegion);
-        mmsField.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldS1.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldS2.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldS3.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldT1.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldT2.RegisterRegion(fDefaultGaseousRegion);
-
-        // DefaultSolidRegion
-        fDefaultSolidRegion = new Region("DefaultSolid", RegionType::DefaultSolid);
-        fDefaultSolidRegion->SetProductionCuts(defaultCuts);
-
-        accelerator.RegisterRegion(fDefaultSolidRegion);
-        beamDegrader.RegisterRegion(fDefaultSolidRegion);
-        beamMonitor.RegisterRegion(fDefaultSolidRegion);
-        cdcBody.RegisterRegion(fDefaultSolidRegion);
-        emcPMTAssemblies.RegisterRegion(fDefaultSolidRegion);
-        filter.RegisterRegion(fDefaultSolidRegion);
-        mcpChamber.RegisterRegion(fDefaultSolidRegion);
-        mmsBeamPipe.RegisterRegion(fDefaultSolidRegion);
-        shieldingWall.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeS1.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeS2.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeS3.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeT1.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeT2.RegisterRegion(fDefaultSolidRegion);
-
-        // EMCSensitiveRegion
-        fEMCSensitiveRegion = new Region("EMCSensitive", RegionType::EMCSensitive);
-        fEMCSensitiveRegion->SetProductionCuts(defaultCuts);
-
-        emcCrystal.RegisterRegion(fEMCSensitiveRegion);
-
-        // MCPSensitiveRegion
-        fMCPSensitiveRegion = new Region("MCPSensitive", RegionType::MCPSensitive);
-        fMCPSensitiveRegion->SetProductionCuts(defaultCuts);
-
-        mcp.RegisterRegion(fMCPSensitiveRegion);
-
-        // ShieldRegion
-        fShieldRegion = new Region("Shield", RegionType::Shield);
-        fShieldRegion->SetProductionCuts(defaultCuts);
-
-        emcShield.RegisterRegion(fShieldRegion);
-        mmsShield.RegisterRegion(fShieldRegion);
-        solenoidShieldS1.RegisterRegion(fShieldRegion);
-        solenoidShieldS2.RegisterRegion(fShieldRegion);
-        solenoidShieldS3.RegisterRegion(fShieldRegion);
-        solenoidShieldT1.RegisterRegion(fShieldRegion);
-        solenoidShieldT2.RegisterRegion(fShieldRegion);
-
-        // SolenoidOrMagnetRegion
-        fSolenoidOrMagnetRegion = new Region("SolenoidOrMagnet", RegionType::SolenoidOrMagnet);
-        fSolenoidOrMagnetRegion->SetProductionCuts(defaultCuts);
-
-        emcMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
-        mmsMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidS1.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidS2.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidS3.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidT1.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidT2.RegisterRegion(fSolenoidOrMagnetRegion);
-
-        // CDCSensitiveRegion
-        fCDCSensitiveRegion = new Region("CDCSensitive", RegionType::CDCSensitive);
-        fCDCSensitiveRegion->SetProductionCuts(defaultCuts);
-
-        cdcCell.RegisterRegion("CDCSensitiveVolume", fCDCSensitiveRegion);
-
-        // TTCSensitiveRegionRegion
-        fTTCSensitiveRegion = new Region("TTCSensitiveRegion", RegionType::TTCSensitive);
-        fTTCSensitiveRegion->SetProductionCuts(defaultCuts);
-
-        ttc.RegisterRegion(fTTCSensitiveRegion);
-
-        // TargetRegion
-        fTargetRegion = new Region("Target", RegionType::Target);
-        fTargetRegion->SetProductionCuts(defaultCuts);
-
-        target.RegisterRegion(fTargetRegion);
-
-        // VacuumRegion
-        fVacuumRegion = new Region("Vacuum", RegionType::Vacuum);
-        fVacuumRegion->SetProductionCuts(defaultCuts);
-
-        acceleratorField.RegisterRegion(fVacuumRegion);
-        mcpChamber.RegisterRegion("MCPChamberPipeVacuum", fVacuumRegion);
-        mcpChamber.RegisterRegion("MCPChamberVacuum", fVacuumRegion);
-        mmsBeamPipe.RegisterRegion("MMSBeamPipeVacuum", fVacuumRegion);
-        solenoidBeamPipeS1.RegisterRegion("SolenoidBeamPipeS1Vacuum", fVacuumRegion);
-        solenoidBeamPipeS2.RegisterRegion("SolenoidBeamPipeS2Vacuum", fVacuumRegion);
-        solenoidBeamPipeS3.RegisterRegion("SolenoidBeamPipeS3Vacuum", fVacuumRegion);
-        solenoidBeamPipeT1.RegisterRegion("SolenoidBeamPipeT1Vacuum", fVacuumRegion);
-        solenoidBeamPipeT2.RegisterRegion("SolenoidBeamPipeT2Vacuum", fVacuumRegion);
-    }
 
     ////////////////////////////////////////////////////////////////
     // Register background fields

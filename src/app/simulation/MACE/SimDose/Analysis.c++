@@ -33,9 +33,7 @@ Analysis::Analysis() :
 }
 
 auto Analysis::FillMap(G4ThreeVector x, double eDep, double density) const -> void {
-    const auto deltaV{((fMapXMax - fMapXMin) / fMapNBinX) *
-                      ((fMapYMax - fMapYMin) / fMapNBinY) *
-                      ((fMapZMax - fMapZMin) / fMapNBinZ)};
+    const auto deltaV{MapDeltaX() * MapDeltaY() * MapDeltaZ()};
     fEdepMap->Fill(x.x(), x.y(), x.z(), eDep / joule);
     fDoseMap->Fill(x.x(), x.y(), x.z(), eDep / (density * deltaV) / gray);
 }
