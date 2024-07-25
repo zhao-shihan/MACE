@@ -1,15 +1,12 @@
 #pragma once
 
-#include "Mustard/Env/Memory/PassiveSingleton.h++"
-
-#include "G4UserSteppingAction.hh"
+#include "MACE/Simulation/Action/NeutrinoKillerSteppingAction.h++"
 
 namespace MACE::SimDose::inline Action {
 
-class SteppingAction final : public Mustard::Env::Memory::PassiveSingleton<SteppingAction>,
-                             public G4UserSteppingAction {
-public:
-    auto UserSteppingAction(const G4Step* step) -> void override;
+class SteppingAction final : public NeutrinoKillerSteppingAction<SteppingAction> {
+private:
+    auto SteppingActionWithoutNeutrino(const G4Step& step) -> void override;
 };
 
 } // namespace MACE::SimDose::inline Action

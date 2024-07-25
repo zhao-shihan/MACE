@@ -6,8 +6,8 @@
 
 namespace MACE::SimDose::inline Action {
 
-auto SteppingAction::UserSteppingAction(const G4Step* step) -> void {
-    Analysis::Instance().FillMap(*step);
+auto SteppingAction::SteppingActionWithoutNeutrino(const G4Step& step) -> void {
+    Analysis::Instance().FillMap(step);
 }
 
 } // namespace MACE::SimDose::inline Action
