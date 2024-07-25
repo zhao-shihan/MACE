@@ -49,6 +49,9 @@ public:
     auto MinDriverStep(double val) -> void { fMinDriverStep = val; }
     auto DeltaChord(double val) -> void { fDeltaChord = val; }
 
+    auto VacuumStepLimit() const -> double;
+    auto VacuumStepLimit(double val) -> void;
+
     auto Construct() -> G4VPhysicalVolume* override;
 
 public:
@@ -80,6 +83,8 @@ private:
 
     double fMinDriverStep;
     double fDeltaChord;
+
+    std::unique_ptr<G4UserLimits> fVacuumStepLimit;
 
     std::unique_ptr<Mustard::Detector::Definition::DefinitionBase> fWorld;
 

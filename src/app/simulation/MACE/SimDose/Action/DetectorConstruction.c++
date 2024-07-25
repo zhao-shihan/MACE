@@ -68,6 +68,8 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4TDormandPrince45.hh"
 #include "G4TMagFieldEquation.hh"
+#include "G4Track.hh"
+#include "G4UserLimits.hh"
 
 #include "gsl/gsl"
 
@@ -81,12 +83,21 @@ DetectorConstruction::DetectorConstruction() :
     fCheckOverlap{},
     fMinDriverStep{2_um},
     fDeltaChord{2_um},
+    fVacuumStepLimit{std::make_unique_for_overwrite<G4UserLimits>()},
     fWorld{},
     fNumericMessengerRegister{this} {
     DetectorMessenger::EnsureInstantiation();
 }
 
 DetectorConstruction::~DetectorConstruction() = default;
+
+auto DetectorConstruction::VacuumStepLimit() const -> double {
+    return fVacuumStepLimit->GetMaxAllowedStep({});
+}
+
+auto DetectorConstruction::VacuumStepLimit(double val) -> void {
+    fVacuumStepLimit->SetMaxAllowedStep(val);
+}
 
 auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     ////////////////////////////////////////////////////////////////
@@ -168,6 +179,23 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     // 6
 
     auto& cdcCell{cdcSenseLayer.NewDaughter<Detector::Definition::CDCCell>(fCheckOverlap)};
+
+    ////////////////////////////////////////////////////////////////
+    // Register regions and apply limit
+    ////////////////////////////////////////////////////////////////
+    {
+        const auto vacuumRegion{new G4Region{"Vacuum"}};
+        vacuumRegion->SetUserLimits(fVacuumStepLimit.get());
+
+        mcpChamber.RegisterRegion("MCPChamberPipeVacuum", vacuumRegion);
+        mcpChamber.RegisterRegion("MCPChamberVacuum", vacuumRegion);
+        mmsBeamPipe.RegisterRegion("MMSBeamPipeVacuum", vacuumRegion);
+        solenoidBeamPipeS1.RegisterRegion("SolenoidBeamPipeS1Vacuum", vacuumRegion);
+        solenoidBeamPipeS2.RegisterRegion("SolenoidBeamPipeS2Vacuum", vacuumRegion);
+        solenoidBeamPipeS3.RegisterRegion("SolenoidBeamPipeS3Vacuum", vacuumRegion);
+        solenoidBeamPipeT1.RegisterRegion("SolenoidBeamPipeT1Vacuum", vacuumRegion);
+        solenoidBeamPipeT2.RegisterRegion("SolenoidBeamPipeT2Vacuum", vacuumRegion);
+    }
 
     ////////////////////////////////////////////////////////////////
     // Register background fields

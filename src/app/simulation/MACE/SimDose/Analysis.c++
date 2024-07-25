@@ -1,3 +1,4 @@
+#include "MACE/SimDose/Action/DetectorConstruction.h++"
 #include "MACE/SimDose/Analysis.h++"
 
 #include "Mustard/Env/MPIEnv.h++"
@@ -15,6 +16,7 @@
 #include "fmt/core.h"
 
 #include <algorithm>
+#include <limits>
 #include <stdexcept>
 #include <utility>
 #include <vector>
@@ -147,6 +149,11 @@ auto Analysis::RunBeginUserAction(int) -> void {
         const auto dz{(zMax - zMin) / nBinZ};
         map.deltaV = dx * dy * dz;
         map.minDelta = std::min({dx, dy, dz});
+
+        auto& detectorConstruction{DetectorConstruction::Instance()};
+        if (map.minDelta < detectorConstruction.VacuumStepLimit()) {
+            detectorConstruction.VacuumStepLimit(map.minDelta);
+        }
     }
 }
 
@@ -157,6 +164,7 @@ auto Analysis::RunEndUserAction(int runID) -> void {
         doseMap->Write();
     }
     fMap.clear();
+    DetectorConstruction::Instance().VacuumStepLimit(std::numeric_limits<double>::max());
 }
 
 auto Analysis::CheckMapAdded() -> void {

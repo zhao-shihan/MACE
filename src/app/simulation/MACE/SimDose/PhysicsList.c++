@@ -9,6 +9,7 @@
 
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4SpinDecayPhysics.hh"
+#include "G4StepLimiterPhysics.hh"
 
 #include "muc/utility"
 
@@ -26,6 +27,8 @@ PhysicsList::PhysicsList() :
     ReplacePhysics(new G4SpinDecayPhysics{verboseLevel});
     RegisterPhysics(new Mustard::Geant4X::MuonPrecisionDecayPhysics{verboseLevel});
     RegisterPhysics(new Mustard::Geant4X::MuoniumPrecisionDecayPhysics{verboseLevel});
+    // Step limit
+    ReplacePhysics(new G4StepLimiterPhysics);
 }
 
 } // namespace MACE::SimDose
