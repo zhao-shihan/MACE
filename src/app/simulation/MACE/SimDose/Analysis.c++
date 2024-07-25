@@ -6,11 +6,9 @@
 
 #include "G4ParticleDefinition.hh"
 #include "G4StepPoint.hh"
+#include "G4StepStatus.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4VContinuousDiscreteProcess.hh"
-#include "G4VContinuousProcess.hh"
-#include "G4VRestContinuousDiscreteProcess.hh"
-#include "G4VRestContinuousProcess.hh"
+#include "G4Transportation.hh"
 
 #include "muc/math"
 
@@ -79,33 +77,32 @@ auto Analysis::MapZMax(double val) -> void {
 }
 
 auto Analysis::FillMap(const G4Step& step) const -> void {
-    if (step.GetTotalEnergyDeposit() == 0) { return; }
+    const auto& post{*step.GetPostStepPoint()};
+    const auto status{post.GetStepStatus()};
+    if (status == fGeomBoundary or status == fWorldBoundary) { return; }
 
     const auto eDep{step.GetTotalEnergyDeposit()};
+    if (eDep == 0) { return; }
+
+    if (dynamic_cast<const G4Transportation*>(post.GetProcessDefinedStep())) { return; }
+
     const auto& pre{*step.GetPreStepPoint()};
-    const auto& post{*step.GetPostStepPoint()};
     const auto x0{pre.GetPosition()};
     const auto x{post.GetPosition()};
-
-    const auto definingProcess{post.GetProcessDefinedStep()};
-    const auto continuousProcessDefined{dynamic_cast<const G4VContinuousDiscreteProcess*>(definingProcess) or
-                                        dynamic_cast<const G4VContinuousProcess*>(definingProcess) or
-                                        dynamic_cast<const G4VRestContinuousDiscreteProcess*>(definingProcess) or
-                                        dynamic_cast<const G4VRestContinuousProcess*>(definingProcess)};
-
     for (auto&& [eDepMap, doseMap, deltaV, minDelta] : std::as_const(fMap)) {
         const auto Fill{
             [&](G4ThreeVector x, double eDep, double dose) {
                 eDepMap->Fill(x.x(), x.y(), x.z(), eDep / joule);
                 doseMap->Fill(x.x(), x.y(), x.z(), dose / gray);
             }};
-
-        const auto deltaM{pre.GetMaterial()->GetDensity() * deltaV};
-        const auto dose{eDep / deltaM};
-
-        if (not continuousProcessDefined) {
+        if (status != fAlongStepDoItProc) {
+            const auto deltaM{post.GetMaterial()->GetDensity() * deltaV};
+            const auto dose{eDep / deltaM};
             Fill(x, eDep, dose);
         } else {
+            const auto deltaM{pre.GetMaterial()->GetDensity() * deltaV};
+            const auto dose{eDep / deltaM};
+
             const auto segment{x - x0};
             const auto nFill{muc::lltrunc(segment.mag() / minDelta) + 1};
 
