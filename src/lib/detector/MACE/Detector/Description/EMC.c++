@@ -19,11 +19,14 @@
 
 #include "muc/math"
 
+#include <concepts>
 #include <ranges>
 
 namespace MACE::Detector::Description {
 
 namespace {
+
+static_assert(std::same_as<pmp::Scalar, double>, "PMP should be compiled with PMP_SCALAR_TYPE_64");
 
 using namespace Mustard::MathConstant;
 
@@ -151,7 +154,9 @@ using namespace Mustard::LiteralUnit::Energy;
 using namespace Mustard::PhysicalConstant;
 
 EMC::EMC() :
-    DescriptionBase{"EMC"},
+    DescriptionBase{
+        "EMC"
+},
     fNSubdivision{3},
     fInnerRadius{20_cm},
     fCrystalHypotenuse{10_cm},
