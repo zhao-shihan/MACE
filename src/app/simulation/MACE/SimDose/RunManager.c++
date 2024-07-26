@@ -20,7 +20,7 @@ namespace MACE::SimDose {
 
 using namespace Mustard::LiteralUnit::Energy;
 
-RunManager::RunManager(Mustard::Env::CLI::Geant4ReferencePhysicsListModule<"QGSP_BIC_HP_EMZ">& cli) :
+RunManager::RunManager(Mustard::Env::CLI::Geant4ReferencePhysicsListModule<"QBBC_EMZ">& cli) :
     MPIRunManager{},
     fAnalysis{std::make_unique_for_overwrite<Analysis>()} {
     const auto verboseLevel{muc::to_underlying(Mustard::Env::BasicEnv::Instance().VerboseLevel())};

@@ -10,7 +10,7 @@
 using namespace MACE;
 
 auto main(int argc, char* argv[]) -> int {
-    Mustard::Env::CLI::Geant4CLI<Mustard::Env::CLI::Geant4ReferencePhysicsListModule<"QGSP_BIC_HP_EMZ">> cli;
+    Mustard::Env::CLI::Geant4CLI<Mustard::Env::CLI::Geant4ReferencePhysicsListModule<"QBBC_EMZ">> cli;
     Mustard::Env::MPIEnv env{argc, argv, cli};
 
     Mustard::UseXoshiro<512> random;
