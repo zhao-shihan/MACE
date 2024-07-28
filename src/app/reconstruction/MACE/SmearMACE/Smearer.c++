@@ -20,7 +20,7 @@ Smearer::Smearer(std::vector<std::string> inputFile, std::string outputFile, uns
 
 auto Smearer::Smear(std::string_view treeName, const std::optional<std::unordered_map<std::string, std::string>>& smearingConfig) const -> void {
     ROOT::RDataFrame data{treeName, fInputFile};
-    const auto esp{Mustard::RDFEventSplitPoint(data)};
+    const auto esp{Mustard::RDFEventSplitPoint(data, "EvtID")};
 
     ROOT::RDF::RNode newData{data};
     if (smearingConfig) {
