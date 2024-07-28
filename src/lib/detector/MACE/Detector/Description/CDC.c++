@@ -230,7 +230,7 @@ auto CDC::CalculateCellMap() const -> std::vector<CellInformation> {
                 // const auto& t0 = cellMap.back().direction;
                 // const auto& l0 = 2 * sense.halfLength * sense.SecStereoZenithAngle(sense.innerRadius + sense.cellWidth / 2 + fFieldWireDiameter / 2);
                 // const auto oldCoutPrecision = std::cout.precision(std::numeric_limits<double>::max_digits10);
-                // std::cout << x0.x() << '\t' << x0.y() << '\t' << t0.x() << '\t' << t0.y() << '\t' << t0.z() << '\t' << l0 << std::endl;
+                // std::cout << cell.cellID << '\t' << x0.x() << '\t' << x0.y() << '\t' << t0.x() << '\t' << t0.y() << '\t' << t0.z() << '\t' << l0 << std::endl;
                 // std::cout.precision(oldCoutPrecision);
                 ++cellLocalID;
             }
