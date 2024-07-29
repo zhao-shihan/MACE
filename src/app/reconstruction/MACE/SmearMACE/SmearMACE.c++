@@ -1,7 +1,6 @@
 #include "MACE/SmearMACE/CLI.h++"
 #include "MACE/SmearMACE/Smearer.h++"
 
-#include "Mustard/Data/Sheet.h++"
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Extension/MPIX/Execution/Executor.h++"
 #include "Mustard/Extension/MPIX/ParallelizePath.h++"
