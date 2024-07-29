@@ -40,8 +40,8 @@ auto main(int argc, char* argv[]) -> int {
     MMSTracking::TruthFinder finder;
 
     Mustard::Data::Processor processor;
-    processor.Process<"EvtID", Data::CDCSimHit>(
-        ROOT::RDataFrame{"G4Run0/CDCSimHit", files},
+    processor.Process<Data::CDCSimHit>(
+        ROOT::RDataFrame{"G4Run0/CDCSimHit", files}, "EvtID",
         [&](auto&& event) {
             for (auto&& [trackID, good] : finder(event).good) {
                 reconTrack.Fill(*good.seed);
