@@ -7,6 +7,7 @@
 #include "MACE/Reconstruction/MMSTracking/Finder/FinderBase.h++"
 
 #include "Mustard/Data/Tuple.h++"
+#include "Mustard/Data/TupleModel.h++"
 #include "Mustard/Env/Print.h++"
 
 #include "muc/algorithm"
@@ -18,8 +19,8 @@
 
 namespace MACE::inline Reconstruction::MMSTracking::inline Finder {
 
-template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit = Data::CDCSimHit,
-         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack = Data::MMSSimTrack>
+template<Mustard::Data::SuperTupleModel<Data::CDCSimHit> AHit = Data::CDCSimHit,
+         Mustard::Data::SuperTupleModel<Data::MMSSimTrack> ATrack = Data::MMSSimTrack>
 class TruthFinder : public FinderBase<AHit, ATrack> {
 protected:
     using Base = FinderBase<AHit, ATrack>;
@@ -32,7 +33,7 @@ public:
     auto NHitThreshold(int n) -> void { fNHitThreshold = std::max(1, n); }
 
     template<std::indirectly_readable AHitPointer>
-        requires std::derived_from<std::decay_t<std::iter_value_t<AHitPointer>>, Mustard::Data::Tuple<AHit>>
+        requires Mustard::Data::SuperTupleModel<typename std::iter_value_t<AHitPointer>::Model, AHit>
     auto operator()(const std::vector<AHitPointer>& hitData, int = {}) -> Base::template Result<AHitPointer>;
 
 protected:

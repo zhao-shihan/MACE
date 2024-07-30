@@ -10,13 +10,15 @@
 
 namespace MACE::inline Reconstruction::MMSTracking::inline Fitter {
 
-template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit, Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack>
+template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
+         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack>
 class FitterBase {
 public:
-    virtual ~FitterBase() = default;
+    using Hit = AHit;
+    using Track = ATrack;
 
-    virtual auto operator()(std::shared_ptr<const Mustard::Data::Tuple<ATrack>> seed,
-                            const std::vector<std::shared_ptr<Mustard::Data::Tuple<AHit>>>& hitData) -> std::shared_ptr<Mustard::Data::Tuple<ATrack>> = 0;
+public:
+    virtual ~FitterBase() = default;
 };
 
 } // namespace MACE::inline Reconstruction::MMSTracking::inline Fitter

@@ -18,34 +18,34 @@ concept Finder =
     requires {
         typename T::Hit;
         typename T::Track;
-        requires Mustard::Data::SuperTupleModel<T::Hit, Data::CDCHit>;
-        requires Mustard::Data::SuperTupleModel<T::TrackModel, Data::MMSTrack>;
+        requires Mustard::Data::SuperTupleModel<typename T::Hit, Data::CDCHit>;
+        requires Mustard::Data::SuperTupleModel<typename T::Track, Data::MMSTrack>;
     } and
-    requires(T finder, const int nextTrackID, const int trackID, const std::vector<Mustard::Data::Tuple<T::Hit>*> hitData) {
+    requires(T finder, const int nextTrackID, const int trackID, const std::vector<Mustard::Data::Tuple<typename T::Hit>*> hitData) {
         { finder(hitData, nextTrackID) };
-        { finder(hitData, nextTrackID).good[trackID].hitData } -> std::same_as<std::vector<Mustard::Data::Tuple<T::Hit>*>>;
-        { finder(hitData, nextTrackID).good[trackID].seed } -> std::same_as<std::shared_ptr<Mustard::Data::Tuple<ATrack>>>;
-        { finder(hitData, nextTrackID).garbage } -> std::same_as<std::vector<Mustard::Data::Tuple<T::Hit>*>>;
+        { finder(hitData, nextTrackID).good[trackID].hitData } -> std::same_as<std::vector<Mustard::Data::Tuple<typename T::Hit>*>>;
+        { finder(hitData, nextTrackID).good[trackID].seed } -> std::same_as<std::shared_ptr<Mustard::Data::Tuple<typename T::Track>>>;
+        { finder(hitData, nextTrackID).garbage } -> std::same_as<std::vector<Mustard::Data::Tuple<typename T::Hit>*>>;
     } and
-    requires(T finder, const int nextTrackID, const int trackID, const std::vector<std::unique_ptr<Mustard::Data::Tuple<T::Hit>>> hitData) {
+    requires(T finder, const int nextTrackID, const int trackID, const std::vector<std::unique_ptr<Mustard::Data::Tuple<typename T::Hit>>> hitData) {
         { finder(hitData, nextTrackID) };
-        { finder(hitData, nextTrackID).good[trackID].hitData } -> std::same_as<std::vector<std::unique_ptr<Mustard::Data::Tuple<T::Hit>>>>;
-        { finder(hitData, nextTrackID).good[trackID].seed } -> std::same_as<std::shared_ptr<Mustard::Data::Tuple<ATrack>>>;
-        { finder(hitData, nextTrackID).garbage } -> std::same_as<std::vector<std::unique_ptr<Mustard::Data::Tuple<T::Hit>>>>;
+        { finder(hitData, nextTrackID).good[trackID].hitData } -> std::same_as<std::vector<std::unique_ptr<Mustard::Data::Tuple<typename T::Hit>>>>;
+        { finder(hitData, nextTrackID).good[trackID].seed } -> std::same_as<std::shared_ptr<Mustard::Data::Tuple<typename T::Track>>>;
+        { finder(hitData, nextTrackID).garbage } -> std::same_as<std::vector<std::unique_ptr<Mustard::Data::Tuple<typename T::Hit>>>>;
     } and
-    requires(T finder, const int nextTrackID, const int trackID, const std::vector<std::shared_ptr<Mustard::Data::Tuple<T::Hit>>> hitData) {
+    requires(T finder, const int nextTrackID, const int trackID, const std::vector<std::shared_ptr<Mustard::Data::Tuple<typename T::Hit>>> hitData) {
         { finder(hitData, nextTrackID) };
-        { finder(hitData, nextTrackID).good[trackID].hitData } -> std::same_as<std::vector<std::shared_ptr<Mustard::Data::Tuple<T::Hit>>>>;
-        { finder(hitData, nextTrackID).good[trackID].seed } -> std::same_as<std::shared_ptr<Mustard::Data::Tuple<ATrack>>>;
-        { finder(hitData, nextTrackID).garbage } -> std::same_as<std::vector<std::shared_ptr<Mustard::Data::Tuple<T::Hit>>>>;
+        { finder(hitData, nextTrackID).good[trackID].hitData } -> std::same_as<std::vector<std::shared_ptr<Mustard::Data::Tuple<typename T::Hit>>>>;
+        { finder(hitData, nextTrackID).good[trackID].seed } -> std::same_as<std::shared_ptr<Mustard::Data::Tuple<typename T::Track>>>;
+        { finder(hitData, nextTrackID).garbage } -> std::same_as<std::vector<std::shared_ptr<Mustard::Data::Tuple<typename T::Hit>>>>;
     };
 
 template<typename T>
 concept SimFinder =
     requires {
         requires Finder<T>;
-        requires Mustard::Data::SuperTupleModel<T::Hit, Data::CDCSimHit>;
-        requires Mustard::Data::SuperTupleModel<T::Track, Data::MMSSimTrack>;
+        requires Mustard::Data::SuperTupleModel<typename T::Hit, Data::CDCSimHit>;
+        requires Mustard::Data::SuperTupleModel<typename T::Track, Data::MMSSimTrack>;
     };
 
 } // namespace MACE::inline Reconstruction::MMSTracking::inline Finder

@@ -2,6 +2,7 @@
 #include "MACE/Data/MMSTrack.h++"
 #include "MACE/Data/SimHit.h++"
 #include "MACE/Reconstruction/MMSTracking/Finder/TruthFinder.h++"
+#include "MACE/Reconstruction/MMSTracking/Fitter/TruthFitter.h++"
 
 #include "Mustard/Data/Output.h++"
 #include "Mustard/Data/Processor.h++"
@@ -13,8 +14,6 @@
 
 #include "ROOT/RDataFrame.hxx"
 #include "TFile.h"
-
-#include "mpi.h"
 
 #include <algorithm>
 #include <array>
@@ -38,13 +37,15 @@ auto main(int argc, char* argv[]) -> int {
     Mustard::Data::Output<Data::MMSTrack> reconTrack{"G4Run0/MMSTrack"};
 
     MMSTracking::TruthFinder finder;
+    MMSTracking::TruthFitter fitter;
 
     Mustard::Data::Processor processor;
     processor.Process<Data::CDCSimHit>(
         ROOT::RDataFrame{"G4Run0/CDCSimHit", files}, "EvtID",
-        [&](auto&& event) {
+        [&](bool byPass, auto&& event) {
+            if (byPass) { return; }
             for (auto&& [trackID, good] : finder(event).good) {
-                reconTrack.Fill(*good.seed);
+                reconTrack.Fill(*fitter(good.hitData, good.seed));
             }
         });
 
