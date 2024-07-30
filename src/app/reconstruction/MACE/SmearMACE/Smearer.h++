@@ -1,8 +1,16 @@
 #pragma once
 
-#include "Mustard/Extension/MPIX/Execution/Executor.h++"
+#include "Mustard/Data/Output.h++"
+#include "Mustard/Data/Processor.h++"
+#include "Mustard/Data/TupleModel.h++"
 
-#include <optional>
+#include "ROOT/RDataFrame.hxx"
+#include "TF1.h"
+
+#include "muc/concepts"
+
+#include "fmt/core.h"
+
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -11,16 +19,17 @@ namespace MACE::SmearMACE {
 
 class Smearer {
 public:
-    Smearer(std::vector<std::string> inputFile, std::string outputFile, unsigned batchSize, Mustard::MPIX::Executor<unsigned>& executor);
+    Smearer(std::vector<std::string> inputFile, Mustard::Data::Processor<>& processor);
 
-    auto Smear(std::string_view treeName, const std::optional<std::unordered_map<std::string, std::string>>& smearingConfig) const -> void;
+    template<Mustard::Data::TupleModelizable... Ts>
+    auto Smear(std::string_view treeName, const std::unordered_map<std::string, std::string>& smearingConfig) const -> void;
 
 private:
     std::vector<std::string> fInputFile;
-    std::string fOutputFile;
 
-    unsigned fBatchSize;
-    Mustard::MPIX::Executor<unsigned>& fExecutor;
+    Mustard::Data::Processor<>& fProcessor;
 };
 
 } // namespace MACE::SmearMACE
+
+#include "MACE/SmearMACE/Smearer.inl"

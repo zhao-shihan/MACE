@@ -29,9 +29,9 @@ CLIModule::CLIModule(argparse::ArgumentParser& argParser) :
         .default_value(std::vector<gsl::index>{0, 1})
         .help("Set number of datasets (index in [0, size) range), or index range (in [first, last) pattern)");
     ArgParser()
-        .add_argument("-b", "--batch-size")
+        .add_argument("-b", "--batch-size-proposal")
         .scan<'i', unsigned>()
-        .help("Set number of events processed in a batch. Default to 10000.");
+        .help("Propose number of entries processed in a batch.");
 
     auto& cdcHitMutexGroup{ArgParser().add_mutually_exclusive_group()};
     cdcHitMutexGroup
@@ -131,7 +131,7 @@ auto CLIModule::OutputFilePath() const -> std::filesystem::path {
     return input.replace_extension().concat("_smeared").replace_extension(extension);
 }
 
-auto CLIModule::ParseSmearingConfig(std::string_view arg) const -> std::optional<std::unordered_map<std::string, std::string>> {
+auto CLIModule::ParseSmearingConfig(std::string_view arg) const -> std::unordered_map<std::string, std::string> {
     auto var{ArgParser().present<std::vector<std::string>>(arg)};
     if (not var.has_value()) { return {}; }
     std::unordered_map<std::string, std::string> config;

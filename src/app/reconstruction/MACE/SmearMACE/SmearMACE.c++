@@ -1,15 +1,18 @@
+#include "MACE/Data/MMSTrack.h++"
+#include "MACE/Data/SimHit.h++"
 #include "MACE/SmearMACE/CLI.h++"
 #include "MACE/SmearMACE/Smearer.h++"
 
+#include "Mustard/Data/Processor.h++"
+#include "Mustard/Data/TupleModel.h++"
 #include "Mustard/Env/MPIEnv.h++"
-#include "Mustard/Extension/MPIX/Execution/Executor.h++"
 #include "Mustard/Extension/MPIX/ParallelizePath.h++"
 #include "Mustard/Utility/MPIReseedRandomEngine.h++"
 #include "Mustard/Utility/MakeTextTMacro.h++"
 #include "Mustard/Utility/UseXoshiro.h++"
 
-#include "ROOT/RDataFrame.hxx"
 #include "TFile.h"
+#include "TInterpreter.h"
 #include "TMacro.h"
 
 #include "gsl/gsl"
@@ -26,47 +29,60 @@ auto main(int argc, char* argv[]) -> int {
     SmearMACE::CLI cli;
     Mustard::Env::MPIEnv env{argc, argv, cli};
 
-    Mustard::UseXoshiro<512> random;
+    Mustard::UseXoshiro<256> random;
     Mustard::MPIReseedRandomEngine();
+    gInterpreter->ProcessLine(R"(
+        const auto Gauss{
+            [](auto mu, auto sigma) {
+                return gRandom->Gaus(mu, sigma);
+            }};
+    )");
 
-    const auto outputName{Mustard::MPIX::ParallelizePath(cli.OutputFilePath()).generic_string()};
-    [&] {
-        TFile file{outputName.c_str(), cli.OutputFileMode().c_str(), "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
-        if (not file.IsOpen()) { throw std::runtime_error{fmt::format("Cannot open file '{}' with mode '{}'", outputName, cli.OutputFileMode())}; }
-        if (env.OnCommNodeWorker()) { return; }
+    const auto outputName{Mustard::MPIX::ParallelizePath(cli.OutputFilePath()).replace_extension(".root").generic_string()};
+    TFile file{outputName.c_str(), cli.OutputFileMode().c_str(), "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
+    if (not file.IsOpen()) { throw std::runtime_error{fmt::format("Cannot open file '{}' with mode '{}'", outputName, cli.OutputFileMode())}; }
+    do {
+        if (env.OnCommNodeWorker()) { break; }
         std::stringstream smearingConfigText;
-        const auto AppendConfigText{[&](const auto& nameInConfigText, const auto& smearingConfig, const auto& identity) {
-            if (not(smearingConfig or identity)) { return; }
-            smearingConfigText << fmt::format("{}:\n", nameInConfigText);
-            if (smearingConfig) {
-                for (auto&& [var, smear] : *smearingConfig) {
-                    smearingConfigText << fmt::format("  {}: {}\n", var, smear);
+        const auto AppendConfigText{
+            [&](const auto& nameInConfigText, const auto& smearingConfig, const auto& identity) {
+                if (smearingConfig.empty() and not identity) { return; }
+                fmt::print(smearingConfigText, "{}:\n", nameInConfigText);
+                if (not smearingConfig.empty()) {
+                    for (auto&& [var, smear] : smearingConfig) {
+                        fmt::print(smearingConfigText, "  {}: {}\n", var, smear);
+                    }
                 }
-            }
-        }};
+            }};
         AppendConfigText("CDCSimHit", cli.CDCSimHitSmearingConfig(), cli.CDCSimHitIdentity());
         AppendConfigText("TTCSimHit", cli.TTCSimHitSmearingConfig(), cli.TTCSimHitIdentity());
         AppendConfigText("MMSSimTrack", cli.MMSSimTrackSmearingConfig(), cli.MMSSimTrackIdentity());
         AppendConfigText("MCPSimHit", cli.MCPSimHitSmearingConfig(), cli.MCPSimHitIdentity());
         AppendConfigText("EMCSimHit", cli.EMCSimHitSmearingConfig(), cli.EMCSimHitIdentity());
         Mustard::MakeTextTMacro(smearingConfigText.str(), "SmearingConfig", "Print SmearMACE smearing configuration")->Write();
-    }();
+    } while (false);
     {
-        Mustard::MPIX::Executor<unsigned> executor;
-        SmearMACE::Smearer smearer{cli.InputFilePath(), outputName, cli.BatchSize(), executor};
+        Mustard::Data::Processor<> processor;
+        const auto batchSizeProposal{cli.BatchSize()};
+        if (batchSizeProposal) { processor.BatchSizeProposal(*batchSizeProposal); }
+
+        SmearMACE::Smearer smearer{cli.InputFilePath(), processor};
         const auto [iFirst, iLast]{cli.DatasetIndexRange()};
-        const auto Smear{[&, iFirst = iFirst, iLast = iLast](const auto& nameFmt, const auto& smearingConfig, const auto& identity) {
-            if (smearingConfig or identity) {
-                for (auto i{iFirst}; i < iLast; ++i) {
-                    smearer.Smear(fmt::vformat(nameFmt, fmt::make_format_args(i)), smearingConfig);
+        const auto Smear{
+            [&, iFirst = iFirst, iLast = iLast]<
+                typename... Ts>(std::type_identity<Ts...>, const auto& nameFmt, const auto& smearingConfig, const auto& identity) {
+                if (not smearingConfig.empty() or identity) {
+                    for (auto i{iFirst}; i < iLast; ++i) {
+                        smearer.Smear<Ts...>(fmt::vformat(nameFmt, fmt::make_format_args(i)), smearingConfig);
+                    }
                 }
-            }
-        }};
-        Smear(cli.CDCSimHitNameFormat(), cli.CDCSimHitSmearingConfig(), cli.CDCSimHitIdentity());
-        Smear(cli.TTCSimHitNameFormat(), cli.TTCSimHitSmearingConfig(), cli.TTCSimHitIdentity());
-        Smear(cli.MMSSimTrackNameFormat(), cli.MMSSimTrackSmearingConfig(), cli.MMSSimTrackIdentity());
-        Smear(cli.MCPSimHitNameFormat(), cli.MCPSimHitSmearingConfig(), cli.MCPSimHitIdentity());
-        Smear(cli.EMCSimHitNameFormat(), cli.EMCSimHitSmearingConfig(), cli.EMCSimHitIdentity());
+            }};
+
+        Smear(std::type_identity<Data::CDCSimHit>{}, cli.CDCSimHitNameFormat(), cli.CDCSimHitSmearingConfig(), cli.CDCSimHitIdentity());
+        Smear(std::type_identity<Data::TTCSimHit>{}, cli.TTCSimHitNameFormat(), cli.TTCSimHitSmearingConfig(), cli.TTCSimHitIdentity());
+        Smear(std::type_identity<Data::MMSSimTrack>{}, cli.MMSSimTrackNameFormat(), cli.MMSSimTrackSmearingConfig(), cli.MMSSimTrackIdentity());
+        Smear(std::type_identity<Data::MCPSimHit>{}, cli.MCPSimHitNameFormat(), cli.MCPSimHitSmearingConfig(), cli.MCPSimHitIdentity());
+        Smear(std::type_identity<Data::EMCSimHit>{}, cli.EMCSimHitNameFormat(), cli.EMCSimHitSmearingConfig(), cli.EMCSimHitIdentity());
     }
 
     return EXIT_SUCCESS;

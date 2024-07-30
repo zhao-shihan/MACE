@@ -8,7 +8,6 @@
 #include "gsl/gsl"
 
 #include <filesystem>
-#include <optional>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -24,7 +23,7 @@ public:
     auto OutputFilePath() const -> std::filesystem::path;
 
     auto DatasetIndexRange() const -> std::pair<gsl::index, gsl::index>;
-    auto BatchSize() const -> auto { return ArgParser().present<unsigned>("-b").value_or(10000); }
+    auto BatchSize() const -> auto { return ArgParser().present<unsigned>("-b"); }
 
     auto CDCSimHitSmearingConfig() const -> auto { return ParseSmearingConfig("--cdc-hit"); }
     auto CDCSimHitIdentity() const -> bool { return ArgParser().get<bool>("--cdc-hit-id"); }
@@ -47,7 +46,7 @@ public:
     auto EMCSimHitNameFormat() const -> auto { return ArgParser().present("--emc-hit-name").value_or("G4Run{}/EMCSimHit"); }
 
 private:
-    auto ParseSmearingConfig(std::string_view arg) const -> std::optional<std::unordered_map<std::string, std::string>>;
+    auto ParseSmearingConfig(std::string_view arg) const -> std::unordered_map<std::string, std::string>;
 };
 
 using CLI = Mustard::Env::CLI::CLI<Mustard::Env::CLI::BasicModule,
