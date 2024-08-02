@@ -160,7 +160,7 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                 // construct real hit
                 Get<"HitID">(*topHit) = hitID++;
                 assert(Get<"CellID">(*topHit) == cellID);
-                int nTopHit{};
+                auto nTopHit{1};
                 for (const auto& hit : cluster) {
                     if (hit == topHit) { continue; }
                     Get<"Edep">(*topHit) += Get<"Edep">(*hit); // sum
