@@ -27,6 +27,7 @@
 #include <ranges>
 #include <stdexcept>
 #include <string_view>
+#include <tuple>
 
 namespace MACE::inline Simulation::inline SD {
 
@@ -153,6 +154,12 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
     } break;
     }
     fSplitHit.clear();
+
+    muc::timsort(*fHitsCollection->GetVector(),
+                 [](const auto& hit1, const auto& hit2) {
+                     return std::tie(Get<"TrkID">(*hit1), Get<"HitID">(*hit1)) <
+                            std::tie(Get<"TrkID">(*hit2), Get<"HitID">(*hit2));
+                 });
 }
 
 } // namespace MACE::inline Simulation::inline SD

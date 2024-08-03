@@ -29,6 +29,7 @@
 #include <iterator>
 #include <numeric>
 #include <string_view>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -112,10 +113,6 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                     return count + cellHit.second.size();
                                 }));
 
-    constexpr auto ByTrackID{
-        [](const auto& hit1, const auto& hit2) {
-            return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
-        }};
     for (int hitID{};
          auto&& [tileID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
@@ -149,7 +146,10 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                                                        return Get<"t">(*hit) <= windowClosingTime;
                                                                    })};
                 // find top hit
-                auto& topHit{*std::ranges::min_element(cluster, ByTrackID)};
+                auto& topHit{*std::ranges::min_element(cluster,
+                                                       [](const auto& hit1, const auto& hit2) {
+                                                           return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
+                                                       })};
                 // construct real hit
                 Get<"HitID">(*topHit) = hitID++;
                 assert(Get<"TileID">(*topHit) == tileID);
@@ -164,7 +164,11 @@ auto TTCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     }
     fSplitHit.clear();
 
-    muc::timsort(*fHitsCollection->GetVector(), ByTrackID);
+    muc::timsort(*fHitsCollection->GetVector(),
+                 [](const auto& hit1, const auto& hit2) {
+                     return std::tie(Get<"TrkID">(*hit1), Get<"HitID">(*hit1)) <
+                            std::tie(Get<"TrkID">(*hit2), Get<"HitID">(*hit2));
+                 });
 
     if (fTTCSiPMSD) {
         auto nHit{fTTCSiPMSD->NOpticalPhotonHit()};
