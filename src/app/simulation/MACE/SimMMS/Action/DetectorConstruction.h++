@@ -1,12 +1,6 @@
 #pragma once
 
-#include "MACE/Detector/Description/CDC.h++"
-#include "MACE/Detector/Description/FieldOption.h++"
-#include "MACE/Detector/Description/MMSBeamPipe.h++"
-#include "MACE/Detector/Description/MMSField.h++"
-#include "MACE/Detector/Description/MMSMagnet.h++"
-#include "MACE/Detector/Description/MMSShield.h++"
-#include "MACE/Detector/Description/TTC.h++"
+#include "MACE/Detector/Assembly/MMS.h++"
 #include "MACE/Detector/Description/World.h++"
 #include "MACE/SimMMS/Region.h++"
 #include "MACE/Simulation/Messenger/NumericMessenger.h++"
@@ -14,6 +8,8 @@
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
 
 #include "G4VUserDetectorConstruction.hh"
+
+#include "muc/tuple"
 
 #include <memory>
 
@@ -55,14 +51,8 @@ public:
     auto TTCSD() const -> auto& { return *fTTCSD; }
 
 public:
-    using DescriptionInUse = std::tuple<Detector::Description::CDC,
-                                        Detector::Description::FieldOption,
-                                        Detector::Description::MMSBeamPipe,
-                                        Detector::Description::MMSField,
-                                        Detector::Description::MMSMagnet,
-                                        Detector::Description::MMSShield,
-                                        Detector::Description::TTC,
-                                        Detector::Description::World>;
+    using DescriptionInUse = muc::tuple_concat_t<Detector::Assembly::MMS::DescriptionInUse,
+                                                 std::tuple<Detector::Description::World>>;
 
 private:
     G4bool fCheckOverlap;
