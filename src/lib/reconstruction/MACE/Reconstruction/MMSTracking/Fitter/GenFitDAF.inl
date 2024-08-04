@@ -18,12 +18,7 @@ auto GenFitDAF<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitData
 
     try {
         fGenFitter.processTrack(genfitTrack.get(), true);
-        genfitTrack->getFittedState() /* .Print() */;
     } catch (const genfit::Exception&) {
-        return {};
-    }
-
-    if (not genfitTrack->getFitStatus()->isFitConvergedPartially()) {
         return {};
     }
 

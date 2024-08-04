@@ -11,7 +11,6 @@
 #include "Mustard/Utility/LiteralUnit.h++"
 
 #include "DAF.h"
-#include "KalmanFitStatus.h"
 
 #include "muc/array"
 #include "muc/math"

@@ -106,14 +106,22 @@ auto GenFitterBase<AHit, ATrack>::Finalize(std::shared_ptr<genfit::Track> genfit
                                            const std::unordered_map<const genfit::AbsMeasurement*, AHitPointer>& measurementHitMap)
     -> std::pair<std::shared_ptr<Mustard::Data::Tuple<ATrack>>,
                  std::vector<AHitPointer>> {
-    const auto& point{genfitTrack->getPointsWithMeasurement()};
     const auto& status{*genfitTrack->getFitStatus()};
-    const auto& firstState{genfitTrack->getFittedState()};
+    if (not status.isFitted()) { return {}; }
 
-    const auto x0{Mustard::ToG4<"Length">(firstState.getPos())};
-    const auto p0{Mustard::ToG4<"Energy">(firstState.getMom())};
-    const auto mass{Mustard::ToG4<"Energy">(firstState.getMass())};
-    const auto pdgID{firstState.getPDG()};
+    const genfit::MeasuredStateOnPlane* firstState;
+    try {
+        firstState = &genfitTrack->getFittedState();
+    } catch (const genfit::Exception&) {
+        return {};
+    }
+
+    const auto& point{genfitTrack->getPointsWithMeasurement()};
+
+    const auto x0{Mustard::ToG4<"Length">(firstState->getPos())};
+    const auto p0{Mustard::ToG4<"Energy">(firstState->getMom())};
+    const auto mass{Mustard::ToG4<"Energy">(firstState->getMass())};
+    const auto pdgID{firstState->getPDG()};
     const auto ek0{std::sqrt(p0.Mag2() + muc::pow<2>(mass)) - mass};
 
     const auto& track{std::make_shared_for_overwrite<Mustard::Data::Tuple<ATrack>>()};

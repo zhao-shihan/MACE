@@ -18,12 +18,7 @@ auto GenFitKalmanFitterRefTrack<AHit, ATrack>::operator()(const std::vector<AHit
 
     try {
         fGenFitter.processTrack(genfitTrack.get(), true);
-        genfitTrack->getFittedState() /* .Print() */;
     } catch (const genfit::Exception&) {
-        return {};
-    }
-
-    if (not genfitTrack->getFitStatus()->isFitConvergedPartially()) {
         return {};
     }
 

@@ -10,7 +10,6 @@
 #include "Mustard/Data/TupleModel.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 
-#include "KalmanFitStatus.h"
 #include "KalmanFitterRefTrack.h"
 
 #include "muc/array"
