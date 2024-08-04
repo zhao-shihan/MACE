@@ -215,6 +215,7 @@ auto CDC::CalculateCellMap() const -> std::vector<CellInformation> {
              auto&& sense : super.sense) {
             const auto wireRadialPosition{muc::midpoint(sense.innerRadius, sense.outerRadius) + rFieldWire}; // clang-format off
             const Eigen::AngleAxisd stereoRotation{-sense.StereoZenithAngle(wireRadialPosition), Eigen::Vector3d{1, 0, 0}};
+            const auto senseWireHalfLength{sense.halfLength * sense.SecStereoZenithAngle(sense.innerRadius + fFieldWireDiameter / 2 + sense.cellWidth / 2)};
             for (int cellLocalID{};
                  auto&& cell : sense.cell) {
                 cellMap.push_back({cell.cellID,
@@ -225,12 +226,12 @@ auto CDC::CalculateCellMap() const -> std::vector<CellInformation> {
                                    Eigen::Rotation2Dd{cell.centerAzimuth} *
                                        Eigen::Vector2d{wireRadialPosition, 0},
                                    Eigen::AngleAxisd{cell.centerAzimuth, Eigen::Vector3d{0, 0, 1}} *
-                                       (stereoRotation * Eigen::Vector3d{0, 0, 1})}); // clang-format on
-                // const auto& x0 = cellMap.back().position;
-                // const auto& t0 = cellMap.back().direction;
-                // const auto& l0 = 2 * sense.halfLength * sense.SecStereoZenithAngle(sense.innerRadius + sense.cellWidth / 2 + fFieldWireDiameter / 2);
+                                       (stereoRotation * Eigen::Vector3d{0, 0, 1}),
+                                   senseWireHalfLength}); // clang-format on
+                // const auto& x0{cellMap.back().position};
+                // const auto& t0{cellMap.back().direction};
                 // const auto oldCoutPrecision = std::cout.precision(std::numeric_limits<double>::max_digits10);
-                // std::cout << cell.cellID << '\t' << x0.x() << '\t' << x0.y() << '\t' << t0.x() << '\t' << t0.y() << '\t' << t0.z() << '\t' << l0 << std::endl;
+                // std::cout << cell.cellID << '\t' << x0.x() << '\t' << x0.y() << '\t' << t0.x() << '\t' << t0.y() << '\t' << t0.z() << '\t' << 2 * senseWireHalfLength << std::endl;
                 // std::cout.precision(oldCoutPrecision);
                 ++cellLocalID;
             }

@@ -135,6 +135,7 @@ public:
         int superLayerID;
         Eigen::Vector2d position;
         Eigen::Vector3d direction;
+        double senseWireHalfLength;
     };
 
 private:
