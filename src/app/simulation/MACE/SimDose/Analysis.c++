@@ -81,7 +81,7 @@ auto Analysis::MapZMax(double val) -> void {
 auto Analysis::FillMap(const G4Step& step) const -> void {
     const auto& post{*step.GetPostStepPoint()};
     const auto status{post.GetStepStatus()};
-    if (status == fGeomBoundary or status == fWorldBoundary) { return; }
+    if (status == fGeomBoundary or status == fWorldBoundary or status == fUndefined) { return; }
 
     const auto eDep{step.GetTotalEnergyDeposit()};
     if (eDep == 0) { return; }
