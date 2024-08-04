@@ -17,7 +17,7 @@
 
 ## Geometry Definition
 The GRASP is a spheroid detector formed by 162 CsI(Tl) scintillator units coupled with PMT.
-`src/lib/detector/MACE/Detector/Description/EMC.c++` where the parameters such as dimensions, optical properties and etc. can be initialized and modified, generate the GRASP's geometry definition.
+`src/lib/detector/Mustard/Detector/Description/EMC.c++` where the parameters such as dimensions, optical properties and etc. can be initialized and modified, generate the GRASP's geometry definition.
 
 ## Physics
 ### Optical

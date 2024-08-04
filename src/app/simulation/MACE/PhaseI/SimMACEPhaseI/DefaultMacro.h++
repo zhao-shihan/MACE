@@ -11,7 +11,7 @@ constexpr auto defaultMacro = {
     "",
     "#/MACE/Physics/UseOpticalPhysics",
     "",
-    "#/MACE/Detector/Description/Import SimMACEPhaseI_geom.yaml",
+    "#/Mustard/Detector/Description/Import SimMACEPhaseI_geom.yaml",
     "",
     "/run/initialize",
     "",

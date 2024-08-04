@@ -5,7 +5,7 @@
 /control/verbose 0
 /run/verbose 0
 
-#/MACE/Detector/Description/Ixport SimPTS_geom.yaml
+#/Mustard/Detector/Description/Ixport SimPTS_geom.yaml
 
 /run/initialize
 
