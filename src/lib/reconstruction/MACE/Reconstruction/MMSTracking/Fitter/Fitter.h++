@@ -9,6 +9,7 @@
 #include <concepts>
 #include <iterator>
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace MACE::inline Reconstruction::MMSTracking::inline Fitter {
@@ -22,13 +23,13 @@ concept Fitter =
         requires Mustard::Data::SuperTupleModel<typename T::Track, Data::MMSTrack>;
     } and
     requires(T fitter, const std::vector<Mustard::Data::Tuple<typename T::Hit>*> hitData, const Mustard::Data::Tuple<typename T::Track>* seed) {
-        { fitter(hitData, seed) } -> std::same_as<std::shared_ptr<Mustard::Data::Tuple<typename T::Track>>>;
+        { fitter(hitData, seed) } -> std::same_as<std::pair<std::shared_ptr<Mustard::Data::Tuple<typename T::Track>>, std::vector<std::shared_ptr<Mustard::Data::Tuple<Data::CDCHit>>>>>;
     } and
     requires(T fitter, const std::vector<std::unique_ptr<Mustard::Data::Tuple<typename T::Hit>>> hitData, const std::unique_ptr<Mustard::Data::Tuple<typename T::Track>> seed) {
-        { fitter(hitData, seed) } -> std::same_as<std::shared_ptr<Mustard::Data::Tuple<typename T::Track>>>;
+        { fitter(hitData, seed) } -> std::same_as<std::pair<std::shared_ptr<Mustard::Data::Tuple<typename T::Track>>, std::vector<std::shared_ptr<Mustard::Data::Tuple<Data::CDCHit>>>>>;
     } and
     requires(T fitter, const std::vector<std::shared_ptr<Mustard::Data::Tuple<typename T::Hit>>> hitData, const std::shared_ptr<Mustard::Data::Tuple<typename T::Track>> seed) {
-        { fitter(hitData, seed) } -> std::same_as<std::shared_ptr<Mustard::Data::Tuple<typename T::Track>>>;
+        { fitter(hitData, seed) } -> std::same_as<std::pair<std::shared_ptr<Mustard::Data::Tuple<typename T::Track>>, std::vector<std::shared_ptr<Mustard::Data::Tuple<Data::CDCHit>>>>>;
     };
 
 template<typename T>

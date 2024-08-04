@@ -28,7 +28,6 @@ public:
     virtual ~TruthFitter() = default;
 
     auto CheckHitDataConsistency() const -> auto { return fCheckHitDataConsistency; }
-
     auto CheckHitDataConsistency(bool val) -> void { fCheckHitDataConsistency = val; }
 
     template<std::indirectly_readable AHitPointer, std::indirectly_readable ASeedPointer>

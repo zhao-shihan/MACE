@@ -2,6 +2,7 @@
 #include "MACE/Data/MMSTrack.h++"
 #include "MACE/Data/SimHit.h++"
 #include "MACE/Reconstruction/MMSTracking/Finder/TruthFinder.h++"
+#include "MACE/Reconstruction/MMSTracking/Fitter/GenFitDAF.h++"
 #include "MACE/Reconstruction/MMSTracking/Fitter/TruthFitter.h++"
 
 #include "Mustard/Data/Output.h++"
@@ -37,7 +38,9 @@ auto main(int argc, char* argv[]) -> int {
     Mustard::Data::Output<Data::MMSTrack> reconTrack{"G4Run0/MMSTrack"};
 
     MMSTracking::TruthFinder finder;
-    MMSTracking::TruthFitter fitter;
+    // MMSTracking::TruthFitter fitter;
+    MMSTracking::GenFitDAF fitter{0.1};
+    // fitter.EnableEventDisplay(true);
 
     Mustard::Data::Processor processor;
     processor.Process<Data::CDCSimHit>(
@@ -45,11 +48,13 @@ auto main(int argc, char* argv[]) -> int {
         [&](bool byPass, auto&& event) {
             if (byPass) { return; }
             for (auto&& [trackID, good] : finder(event).good) {
-                reconTrack.Fill(*fitter(good.hitData, good.seed));
+                const auto [track, _]{fitter(good.hitData, good.seed)};
+                if (track) { reconTrack.Fill(*track); }
             }
         });
 
     reconTrack.Write();
+    // fitter.OpenEventDisplay();
 
     return EXIT_SUCCESS;
 }

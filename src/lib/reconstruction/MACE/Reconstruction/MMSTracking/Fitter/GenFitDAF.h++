@@ -10,8 +10,8 @@
 #include "Mustard/Data/TupleModel.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 
+#include "DAF.h"
 #include "KalmanFitStatus.h"
-#include "KalmanFitterRefTrack.h"
 
 #include "muc/array"
 #include "muc/math"
@@ -29,14 +29,14 @@ namespace MACE::inline Reconstruction::MMSTracking::inline Fitter {
 
 template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit = Data::CDCHit,
          Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack = Data::MMSTrack>
-class GenFitKalmanFitterRefTrack : public GenFitterBase<AHit, ATrack> {
+class GenFitDAF : public GenFitterBase<AHit, ATrack> {
 public:
     using Hit = AHit;
     using Track = ATrack;
 
 public:
-    GenFitKalmanFitterRefTrack(double driftErrorRMS);
-    virtual ~GenFitKalmanFitterRefTrack() = default;
+    GenFitDAF(double driftErrorRMS);
+    virtual ~GenFitDAF() = default;
 
     auto GenFitter() const -> const auto& { return fGenFitter; }
     auto GenFitter() -> auto& { return fGenFitter; }
@@ -48,9 +48,9 @@ public:
                                                                                              std::vector<std::iter_value_t<AHitPointer>*>>;
 
 private:
-    genfit::KalmanFitterRefTrack fGenFitter;
+    genfit::DAF fGenFitter;
 };
 
 } // namespace MACE::inline Reconstruction::MMSTracking::inline Fitter
 
-#include "MACE/Reconstruction/MMSTracking/Fitter/GenFitKalmanFitterRefTrack.inl"
+#include "MACE/Reconstruction/MMSTracking/Fitter/GenFitDAF.inl"
