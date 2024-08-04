@@ -2,6 +2,7 @@
 #include "MACE/SimDose/Analysis.h++"
 
 #include "Mustard/Env/MPIEnv.h++"
+#include "Mustard/Env/Print.h++"
 
 #include "TH3F.h"
 
@@ -34,47 +35,47 @@ auto Analysis::AddMap(std::string name) -> void {
 }
 
 auto Analysis::MapNBinX(int val) -> void {
-    CheckMapAdded();
+    if (not CheckMapAdded()) { return; }
     fMapModel.back().nBinX = val;
 }
 
 auto Analysis::MapXMin(double val) -> void {
-    CheckMapAdded();
+    if (not CheckMapAdded()) { return; }
     fMapModel.back().xMin = val;
 }
 
 auto Analysis::MapXMax(double val) -> void {
-    CheckMapAdded();
+    if (not CheckMapAdded()) { return; }
     fMapModel.back().xMax = val;
 }
 
 auto Analysis::MapNBinY(int val) -> void {
-    CheckMapAdded();
+    if (not CheckMapAdded()) { return; }
     fMapModel.back().nBinY = val;
 }
 
 auto Analysis::MapYMin(double val) -> void {
-    CheckMapAdded();
+    if (not CheckMapAdded()) { return; }
     fMapModel.back().yMin = val;
 }
 
 auto Analysis::MapYMax(double val) -> void {
-    CheckMapAdded();
+    if (not CheckMapAdded()) { return; }
     fMapModel.back().yMax = val;
 }
 
 auto Analysis::MapNBinZ(int val) -> void {
-    CheckMapAdded();
+    if (not CheckMapAdded()) { return; }
     fMapModel.back().nBinZ = val;
 }
 
 auto Analysis::MapZMin(double val) -> void {
-    CheckMapAdded();
+    if (not CheckMapAdded()) { return; }
     fMapModel.back().zMin = val;
 }
 
 auto Analysis::MapZMax(double val) -> void {
-    CheckMapAdded();
+    if (not CheckMapAdded()) { return; }
     fMapModel.back().zMax = val;
 }
 
@@ -167,10 +168,12 @@ auto Analysis::RunEndUserAction(int runID) -> void {
     DetectorConstruction::Instance().VacuumStepLimit(std::numeric_limits<double>::max());
 }
 
-auto Analysis::CheckMapAdded() -> void {
+auto Analysis::CheckMapAdded() -> bool {
     if (fMapModel.empty()) {
-        throw std::runtime_error{"no map was added"};
+        Env::PrintLnWarning("MACE::SimDose::Analysis::CheckMapAdded: No map was added");
+        return false;
     }
+    return true;
 }
 
 } // namespace MACE::SimDose

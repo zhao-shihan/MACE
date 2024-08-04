@@ -35,7 +35,7 @@ private:
     auto EventEndUserAction() -> void override {}
     auto RunEndUserAction(int runID) -> void override;
 
-    auto CheckMapAdded() -> void;
+    auto CheckMapAdded() -> bool;
 
 private:
     struct MapModel {
