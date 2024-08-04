@@ -2,25 +2,19 @@ namespace MACE::inline Reconstruction::MMSTracking::inline Finder {
 
 template<Mustard::Data::SuperTupleModel<Data::CDCSimHit> AHit,
          Mustard::Data::SuperTupleModel<Data::MMSSimTrack> ATrack>
-TruthFinder<AHit, ATrack>::TruthFinder() :
-    Base{},
-    fNHitThreshold{} {
-    const auto& cdc{Detector::Description::CDC::Instance()};
-    fNHitThreshold = cdc.NSenseLayerPerSuper() * cdc.NSuperLayer();
-}
-
-template<Mustard::Data::SuperTupleModel<Data::CDCSimHit> AHit,
-         Mustard::Data::SuperTupleModel<Data::MMSSimTrack> ATrack>
 template<std::indirectly_readable AHitPointer>
     requires Mustard::Data::SuperTupleModel<typename std::iter_value_t<AHitPointer>::Model, AHit>
-auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitData, int) -> Base::template Result<AHitPointer> {
+auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitData, int) const -> Base::template Result<AHitPointer> {
     using Result = Base::template Result<AHitPointer>;
 
     if (not this->GoodHitData(hitData) or
-        ssize(hitData) < fNHitThreshold) { return {}; }
+        ssize(hitData) < this->fNHitThreshold or
+        GetAs<"x0", CLHEP::Hep3Vector>(*hitData.front()).perp2() > muc::pow<2>(this->fMaxVertexRxy)) {
+        return {};
+    }
 
     Result r;
-    r.good.reserve(hitData.size() / fNHitThreshold);
+    r.good.reserve(hitData.size() / this->fNHitThreshold);
     r.garbage.reserve(hitData.size());
 
     std::ranges::subrange track{hitData.cbegin(), hitData.cbegin()};
@@ -28,7 +22,7 @@ auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitDa
         [&] { r.garbage.insert(r.garbage.end(), track.begin(), track.end()); }};
 
     std::unordered_set<short> cellHit;
-    cellHit.reserve(fNHitThreshold);
+    cellHit.reserve(this->fNHitThreshold);
 
     while (track.end() != hitData.end()) {
         track = {track.end(), std::ranges::upper_bound(track.end(), hitData.end(), *track.end(),
@@ -36,7 +30,7 @@ auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitDa
                                                            return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
                                                        })};
 
-        if (std::ranges::ssize(track) < fNHitThreshold) {
+        if (std::ranges::ssize(track) < this->fNHitThreshold) {
             CollectGarbage();
             continue;
         }
@@ -45,7 +39,7 @@ auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitDa
         for (auto&& hit : track) {
             cellHit.emplace(Get<"CellID">(*hit));
         }
-        if (ssize(cellHit) < fNHitThreshold) {
+        if (ssize(cellHit) < this->fNHitThreshold) {
             CollectGarbage();
             continue;
         }
