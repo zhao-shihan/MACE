@@ -14,6 +14,7 @@
 #include "Mustard/Data/TupleModel.h++"
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Extension/MPIX/DataType.h++"
+#include "Mustard/Math/Norm.h++"
 #include "Mustard/Utility/ConvertG3G4Unit.h++"
 #include "Mustard/Utility/CreateTemporaryFile.h++"
 #include "Mustard/Utility/InlineMacro.h++"
@@ -39,9 +40,9 @@
 #include "TVector3.h"
 #include "TVectorD.h"
 
-#include "Eigen/Core"
-
 #include "mpi.h"
+
+#include "muc/math"
 
 #include <iterator>
 #include <memory>
@@ -57,7 +58,7 @@ public:
     using Measurement = genfit::WireMeasurement;
 
 protected:
-    GenFitterBase(double driftErrorRMS, double lowestMomentum = 500 * CLHEP::keV);
+    GenFitterBase(double driftErrorRMS, double lowestMomentum = 1 * CLHEP::MeV);
     virtual ~GenFitterBase() = default;
 
 public:

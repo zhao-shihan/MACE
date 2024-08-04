@@ -47,7 +47,7 @@ template<std::indirectly_readable AHitPointer, std::indirectly_readable ASeedPoi
 auto GenFitterBase<AHit, ATrack>::Initialize(const std::vector<AHitPointer>& hitData, ASeedPointer seed)
     -> std::pair<std::shared_ptr<genfit::Track>,
                  std::unordered_map<const genfit::AbsMeasurement*, std::iter_value_t<AHitPointer>*>> {
-    if (GetAs<"p0", Eigen::Vector3f>(*seed).norm() < fLowestMomentum) {
+    if (Mustard::Math::Norm2(*Get<"p0">(*seed)) < muc::pow<2>(fLowestMomentum)) {
         return {};
     }
 
@@ -107,7 +107,7 @@ auto GenFitterBase<AHit, ATrack>::Finalize(std::shared_ptr<genfit::Track> genfit
     -> std::pair<std::shared_ptr<Mustard::Data::Tuple<ATrack>>,
                  std::vector<AHitPointer>> {
     const auto& status{*genfitTrack->getFitStatus()};
-    if (not status.isFitted()) { return {}; }
+    if (not status.isFitConvergedPartially()) { return {}; }
 
     const genfit::MeasuredStateOnPlane* firstState;
     try {
