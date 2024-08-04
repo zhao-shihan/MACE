@@ -77,7 +77,14 @@ auto GenFitterBase<AHit, ATrack>::Initialize(const std::vector<AHitPointer>& hit
         rawHitCoords[6] = Mustard::ToG3<"Length">(*Get<"d">(*hit));
 
         TMatrixDSym rawHitCov(7);
-        rawHitCov[6][6] = muc::pow<2>(Mustard::ToG3<"Length">(this->DriftErrorRMS()));
+        const auto varD{muc::pow<2>(Mustard::ToG3<"Length">(this->DriftErrorRMS()))};
+        rawHitCov(0, 0) = varD;
+        rawHitCov(1, 1) = varD;
+        rawHitCov(2, 2) = varD;
+        rawHitCov(3, 3) = varD;
+        rawHitCov(4, 4) = varD;
+        rawHitCov(5, 5) = varD;
+        rawHitCov(6, 6) = varD;
 
         // clang-format off
         const auto measurement{new Measurement{rawHitCoords, rawHitCov,
