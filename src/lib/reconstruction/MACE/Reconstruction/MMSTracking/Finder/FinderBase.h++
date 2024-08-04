@@ -2,6 +2,7 @@
 
 #include "MACE/Data/Hit.h++"
 #include "MACE/Data/MMSTrack.h++"
+#include "MACE/Detector/Description/CDC.h++"
 
 #include "Mustard/Data/Tuple.h++"
 #include "Mustard/Data/TupleModel.h++"
@@ -24,7 +25,14 @@ public:
     using Track = ATrack;
 
 public:
+    FinderBase();
     virtual ~FinderBase() = 0;
+
+    auto NHitThreshold() const -> auto { return fNHitThreshold; }
+    auto MaxVertexRxy() const -> auto { return fMaxVertexRxy; }
+
+    auto NHitThreshold(int n) -> void { fNHitThreshold = std::max(1, n); }
+    auto MaxVertexRxy(double r) -> void { fMaxVertexRxy = std::max(0., r); }
 
 protected:
     template<std::indirectly_readable AHitPointer>
@@ -43,6 +51,10 @@ protected:
     template<std::indirectly_readable AHitPointer>
         requires std::derived_from<std::decay_t<std::iter_value_t<AHitPointer>>, Mustard::Data::Tuple<AHit>>
     static auto GoodHitData(const std::vector<AHitPointer>& hitData) -> bool;
+
+protected:
+    int fNHitThreshold;
+    double fMaxVertexRxy;
 };
 
 } // namespace MACE::inline Reconstruction::MMSTracking::inline Finder
