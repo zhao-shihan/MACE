@@ -16,21 +16,21 @@ GenFitterBase<AHit, ATrack>::GenFitterBase(double driftErrorRMS, double lowestMo
     const auto& mpiEnv{Mustard::Env::MPIEnv::Instance()};
     std::filesystem::path gdmlFSPath;
     std::filesystem::path::string_type gdmlPath;
-    if (mpiEnv.OnCommWorldMaster()) {
+    if (mpiEnv.OnCommNodeMaster()) {
         gdmlFSPath = Mustard::CreateTemporaryFile("mms_temp", ".gdml");
         world.Export(gdmlFSPath);
         gdmlPath = gdmlFSPath;
     }
     auto gdmlPathLength{gdmlPath.length()};
-    MPI_Bcast(&gdmlPathLength, 1, Mustard::MPIX::DataType(gdmlPathLength), 0, MPI_COMM_WORLD);
+    MPI_Bcast(&gdmlPathLength, 1, Mustard::MPIX::DataType(gdmlPathLength), 0, mpiEnv.CommNode());
     gdmlPath.resize(gdmlPathLength);
-    MPI_Bcast(gdmlPath.data(), gdmlPathLength, Mustard::MPIX::DataType(gdmlPath.data()), 0, MPI_COMM_WORLD);
+    MPI_Bcast(gdmlPath.data(), gdmlPathLength, Mustard::MPIX::DataType(gdmlPath.data()), 0, mpiEnv.CommNode());
     // gdml -> root
     fGeoManager = std::unique_ptr<TGeoManager>{TGeoManager::Import(gdmlPath.c_str())};
     fGeoManager->GetTopVolume()->SetInvisible();
     // remove gdml
-    MPI_Barrier(MPI_COMM_WORLD);
-    if (mpiEnv.OnCommWorldMaster()) {
+    MPI_Barrier(mpiEnv.CommNode());
+    if (mpiEnv.OnCommNodeMaster()) {
         std::error_code ec;
         std::filesystem::remove(gdmlFSPath, ec);
     }
