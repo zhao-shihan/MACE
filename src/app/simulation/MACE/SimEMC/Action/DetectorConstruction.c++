@@ -101,7 +101,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     // fMCPSD = new SD::MCPSD{MACE::Detector::Description::MCP::Instance().Name()};
     // mcp.RegisterSD(fMCPSD);
 
-    // fWorld->Export("EMCPhaseII.gdml");
+    // fWorld->ParallelExport("EMCPhaseII.gdml");
 
     return fWorld->PhysicalVolume();
 }

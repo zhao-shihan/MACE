@@ -139,7 +139,7 @@ void MakeMACECDCGeometry() {
     world->RegisterMaterial(vacuum);
 
     const auto tempGDMLFile = (std::filesystem::temp_directory_path() / "MACECDCGeometry.gdml").generic_string();
-    world->Export(tempGDMLFile);
+    world->ParallelExport(tempGDMLFile);
 
     //
     // Export to root
