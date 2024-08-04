@@ -11,7 +11,7 @@ GenFitterBase<AHit, ATrack>::GenFitterBase(double driftErrorRMS, double lowestMo
     // geant4 geometry
     Detector::Definition::World world;
     Detector::Assembly::MMS mms{world, false};
-    mms.Get<Detector::Definition::CDCSenseLayer>().RemoveDaughter<Detector::Definition::CDCCell>();
+    mms.Get<Detector::Definition::CDCGas>().RemoveDaughter<Detector::Definition::CDCSuperLayer>();
     // geant4 -> gdml
     const auto& mpiEnv{Mustard::Env::MPIEnv::Instance()};
     std::filesystem::path gdmlFSPath;
