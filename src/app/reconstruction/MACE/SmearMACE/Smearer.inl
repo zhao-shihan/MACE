@@ -12,12 +12,14 @@ auto Smearer::Smear(std::string_view treeName, const std::unordered_map<std::str
 
     fProcessor.Process<Ts...>(
         ROOT::RDataFrame{treeName, fInputFile}, "EvtID",
-        [&](bool byPass, auto&& entry) {
+        [&](bool byPass, auto&& event) {
             if (byPass) { return; }
-            for (auto&& [var, smear] : smearAction) {
-                entry->Visit(var, [&](muc::arithmetic auto& x) { x = smear(x); });
+            for (auto&& entry : event) {
+                for (auto&& [var, smear] : smearAction) {
+                    entry->Visit(var, [&](muc::arithmetic auto& x) { x = smear(x); });
+                }
+                output.Fill(*entry);
             }
-            output.Fill(*entry);
         });
 
     output.Write();
