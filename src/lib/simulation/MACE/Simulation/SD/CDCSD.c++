@@ -79,8 +79,17 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto xWire{Mustard::VectorCast<G4TwoVector>(cellInfo.position)};
     const auto tWire{Mustard::VectorCast<G4ThreeVector>(cellInfo.direction)};
     // calculate drift distance
-    const auto commonNormal{tWire.cross(muc::midpoint(preStepPoint.GetMomentum(), postStepPoint.GetMomentum()))};
-    const auto driftDistance{std::abs((position - xWire).dot(commonNormal)) / commonNormal.mag()};
+    double driftDistance;
+    if (const auto pHat{muc::midpoint(preStepPoint.GetMomentumDirection(), postStepPoint.GetMomentumDirection())};
+        not pHat.isParallel(tWire)) {
+        const auto n{tWire.cross(pHat)};
+        driftDistance = std::abs((position - xWire).dot(n)) / n.mag();
+    } else {
+        const auto delta{position - xWire};
+        const auto n{tWire.dot(delta) * tWire - delta}; // == t x (t x delta)
+        const auto n2{n.mag2()};
+        driftDistance = std::isnormal(n2) ? std::abs(delta.dot(n)) / std::sqrt(n2) : 0;
+    }
     const auto driftTime{driftDistance / fMeanDriftVelocity};
     const auto hitTime{muc::midpoint(preStepPoint.GetGlobalTime(), postStepPoint.GetGlobalTime())};
     const auto signalTime{hitTime + driftTime};
