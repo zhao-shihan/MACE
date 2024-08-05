@@ -4,7 +4,9 @@ template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
          Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack>
 GenFitKalmanFitterRefTrack<AHit, ATrack>::GenFitKalmanFitterRefTrack(double driftErrorRMS) :
     GenFitterBase<AHit, ATrack>{driftErrorRMS},
-    fGenFitter{} {}
+    fGenFitter{} {
+    fGenFitter.setMultipleMeasurementHandling(genfit::weightedClosestToReferenceWire);
+}
 
 template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
          Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack>
