@@ -26,17 +26,18 @@
 /GPSX/PulseWidth          0 ns
 
 /MACE/Analysis/SavePrimaryVertexData  no
-/MACE/Analysis/CoincidenceWithCDC     no
-/MACE/Analysis/CoincidenceWithTTC     no
+/MACE/Analysis/SaveDecayVertexData    yes
 /MACE/Analysis/CoincidenceWithMMS     no
 /MACE/Analysis/CoincidenceWithMCP     no
 /MACE/Analysis/CoincidenceWithEMC     no
+/MACE/Analysis/SaveTTCHitData         yes
+/MACE/Analysis/SaveCDCHitData         yes
 
 #############################################################################
 # Run
 #############################################################################
 
-/MACE/Analysis/FilePath SimMACE_env_gamma
-/MACE/Analysis/FileMode NEW
+/Mustard/Analysis/FilePath SimMACE_env_gamma
+/Mustard/Analysis/FileMode NEW
 /run/beamOn 80
 /Mustard/Run/PrintRunSummary

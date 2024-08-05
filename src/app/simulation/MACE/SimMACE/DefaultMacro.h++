@@ -28,14 +28,12 @@ constexpr auto defaultMacro = {
     "",
     "/Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5",
     "",
-    "/MACE/Analysis/CoincidenceWithCDC     false",
-    "/MACE/Analysis/CoincidenceWithTTC     false",
     "/MACE/Analysis/CoincidenceWithMMS     false",
     "/MACE/Analysis/CoincidenceWithMCP     false",
     "/MACE/Analysis/CoincidenceWithEMC     false",
     "",
-    "/MACE/Analysis/FilePath SimMACE_vis",
-    "/MACE/Analysis/FileMode RECREATE",
+    "/Mustard/Analysis/FilePath SimMACE_vis",
+    "/Mustard/Analysis/FileMode RECREATE",
     "",
 
 #if MACE_USE_G4VIS

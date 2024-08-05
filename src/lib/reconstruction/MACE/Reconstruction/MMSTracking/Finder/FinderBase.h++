@@ -42,7 +42,6 @@ protected:
             std::vector<AHitPointer> hitData;
             std::shared_ptr<Mustard::Data::Tuple<ATrack>> seed;
         };
-        auto NGoodTrack() const -> auto { return ssize(good); }
         std::unordered_map<int, GoodTrack> good;
         std::vector<AHitPointer> garbage;
     };

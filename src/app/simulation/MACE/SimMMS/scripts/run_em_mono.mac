@@ -16,16 +16,14 @@
 /gps/ang/type                         iso
 /gps/ene/mono                         52.32 MeV
 
-/MACE/Analysis/CoincidenceWithCDC     yes
-/MACE/Analysis/CoincidenceWithTTC     yes
-/MACE/Analysis/SaveCDCHitData         yes
 /MACE/Analysis/SaveTTCHitData         yes
+/MACE/Analysis/SaveCDCHitData         yes
 
 #############################################################################
 # Run
 #############################################################################
 
-/MACE/Analysis/FilePath SimMMS_em_mono
-/MACE/Analysis/FileMode NEW
+/Mustard/Analysis/FilePath SimMMS_em_mono
+/Mustard/Analysis/FileMode NEW
 /run/beamOn 10000
 /Mustard/Run/PrintRunSummary

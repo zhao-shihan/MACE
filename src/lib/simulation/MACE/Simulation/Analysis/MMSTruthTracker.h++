@@ -8,6 +8,8 @@
 
 #include "Mustard/Data/Tuple.h++"
 
+#include "G4ThreeVector.hh"
+
 #include "muc/math"
 
 #include "gsl/gsl"

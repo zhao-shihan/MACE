@@ -104,9 +104,10 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"CellID">(*hit) = cellID;
     Get<"t">(*hit) = signalTime;
+    Get<"Edep">(*hit) = eDep;
     Get<"tD">(*hit) = driftTime;
     Get<"d">(*hit) = driftDistance;
-    Get<"Edep">(*hit) = eDep;
+    Get<"Good">(*hit) = false; // to be determined
     Get<"tHit">(*hit) = hitTime;
     Get<"x">(*hit) = position;
     Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();

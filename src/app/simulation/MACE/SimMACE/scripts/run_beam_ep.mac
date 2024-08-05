@@ -25,19 +25,18 @@
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 
 /MACE/Analysis/SavePrimaryVertexData  no
-/MACE/Analysis/CoincidenceWithCDC     no
-/MACE/Analysis/CoincidenceWithTTC     no
+/MACE/Analysis/SaveDecayVertexData    yes
 /MACE/Analysis/CoincidenceWithMMS     no
 /MACE/Analysis/CoincidenceWithMCP     no
 /MACE/Analysis/CoincidenceWithEMC     no
-/MACE/Analysis/SaveCDCHitData         no
 /MACE/Analysis/SaveTTCHitData         no
+/MACE/Analysis/SaveCDCHitData         no
 
 #############################################################################
 # Run
 #############################################################################
 
-/MACE/Analysis/FilePath SimMACE_beam_ep
-/MACE/Analysis/FileMode NEW
+/Mustard/Analysis/FilePath SimMACE_beam_ep
+/Mustard/Analysis/FileMode NEW
 /run/beamOn 1000
 /Mustard/Run/PrintRunSummary

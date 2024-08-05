@@ -24,24 +24,26 @@
 
 /Mustard/Physics/MuonDecay/IPPDecay/BR                   1
 /Mustard/Physics/MuonDecay/IPPDecay/MetropolisDelta      0.0025
-/Mustard/Physics/MuonDecay/IPPDecay/MetropolisDiscard    1000
+/Mustard/Physics/MuonDecay/IPPDecay/MetropolisDiscard    10
 /MACE/Physics/MuonDecay/IPPDecay/ApplyMACEPxyCut         yes
 /Mustard/Physics/MuonDecay/RadiativeDecay/BR             0
 /Mustard/Physics/MuonDecay/UpdateDecayBR
 
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 
-/MACE/Analysis/CoincidenceWithCDC     yes
-/MACE/Analysis/CoincidenceWithTTC     yes
+/MACE/Analysis/SavePrimaryVertexData  yes
+/MACE/Analysis/SaveDecayVertexData    yes
 /MACE/Analysis/CoincidenceWithMMS     yes
 /MACE/Analysis/CoincidenceWithMCP     yes
 /MACE/Analysis/CoincidenceWithEMC     yes
+/MACE/Analysis/SaveTTCHitData         yes
+/MACE/Analysis/SaveCDCHitData         yes
 
 #############################################################################
 # Run
 #############################################################################
 
-/MACE/Analysis/FilePath SimMACE_mu2eeevv
-/MACE/Analysis/FileMode NEW
-/run/beamOn 1000000
+/Mustard/Analysis/FilePath SimMACE_mu2eeevv_with_cut
+/Mustard/Analysis/FileMode NEW
+/run/beamOn 100000000
 /Mustard/Run/PrintRunSummary

@@ -91,6 +91,7 @@ auto TTCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"TileID">(*hit) = tileID;
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
     Get<"Edep">(*hit) = eDep;
+    Get<"Good">(*hit) = false; // to be determined
     Get<"nOptPho">(*hit) = -1; // to be determined
     Get<"x">(*hit) = preStepPoint.GetPosition();
     Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();

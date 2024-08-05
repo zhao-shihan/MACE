@@ -25,14 +25,12 @@
 
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0.5
 
-/MACE/Analysis/CoincidenceWithCDC     no
-/MACE/Analysis/CoincidenceWithTTC     no
 /MACE/Analysis/CoincidenceWithMMS     no
 /MACE/Analysis/CoincidenceWithMCP     no
 /MACE/Analysis/CoincidenceWithEMC     no
 
-/MACE/Analysis/FilePath SimMACE_vis
-/MACE/Analysis/FileMode RECREATE
+/Mustard/Analysis/FilePath SimMACE_vis
+/Mustard/Analysis/FileMode RECREATE
 
 #############################################################################
 # Visualization settings

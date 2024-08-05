@@ -17,11 +17,8 @@
 /gps/ang/type                         iso
 /gps/ene/mono                         52.8 MeV
 
-/MACE/Analysis/CoincidenceWithCDC     no
-/MACE/Analysis/CoincidenceWithTTC     no
-
-/MACE/Analysis/FilePath SimMACE_vis
-/MACE/Analysis/FileMode RECREATE
+/Mustard/Analysis/FilePath SimMACE_vis
+/Mustard/Analysis/FileMode RECREATE
 
 #############################################################################
 # Visualization settings

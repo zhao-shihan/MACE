@@ -20,16 +20,14 @@
 /gps/ene/min                          1 keV
 /gps/ene/max                          52.32 MeV
 
-/MACE/Analysis/CoincidenceWithCDC     yes
-/MACE/Analysis/CoincidenceWithTTC     yes
-/MACE/Analysis/SaveCDCHitData         yes
 /MACE/Analysis/SaveTTCHitData         yes
+/MACE/Analysis/SaveCDCHitData         yes
 
 #############################################################################
 # Run
 #############################################################################
 
-/MACE/Analysis/FilePath SimMMS_em_flat
-/MACE/Analysis/FileMode NEW
+/Mustard/Analysis/FilePath SimMMS_em_flat
+/Mustard/Analysis/FileMode NEW
 /run/beamOn 10000
 /Mustard/Run/PrintRunSummary
