@@ -50,6 +50,9 @@ auto GenFitterBase<AHit, ATrack>::Initialize(const std::vector<AHitPointer>& hit
     if (Mustard::Math::Norm2(*Get<"p0">(*seed)) < muc::pow<2>(fLowestMomentum)) {
         return {};
     }
+    if (TDatabasePDG::Instance()->GetParticle(Get<"PDGID">(*seed)) == nullptr) {
+        return {};
+    }
 
     const auto genfitTrack{
         std::make_shared<genfit::Track>(new genfit::RKTrackRep{Get<"PDGID">(*seed)}, // track rep will be deleted when genfit::Track destructs
@@ -116,30 +119,38 @@ auto GenFitterBase<AHit, ATrack>::Finalize(std::shared_ptr<genfit::Track> genfit
         return {};
     }
 
-    const auto& point{genfitTrack->getPointsWithMeasurement()};
-
     const auto x0{Mustard::ToG4<"Length">(firstState->getPos())};
     const auto p0{Mustard::ToG4<"Energy">(firstState->getMom())};
     const auto mass{Mustard::ToG4<"Energy">(firstState->getMass())};
     const auto pdgID{firstState->getPDG()};
     const auto ek0{std::sqrt(p0.Mag2() + muc::pow<2>(mass)) - mass};
 
+    const auto& allPoint{genfitTrack->getPointsWithMeasurement()};
+    std::vector<const genfit::TrackPoint*> fittedPoint;
+    fittedPoint.reserve(allPoint.size());
+    for (const auto cardinalRep{genfitTrack->getCardinalRep()};
+         auto&& point : allPoint) {
+        if (point->hasFitterInfo(cardinalRep)) {
+            fittedPoint.emplace_back(point);
+        }
+    }
+
     const auto& track{std::make_shared_for_overwrite<Mustard::Data::Tuple<ATrack>>()};
     Get<"EvtID">(*track) = Get<"EvtID">(*seed);
     Get<"TrkID">(*track) = Get<"TrkID">(*seed);
-    Get<"HitID">(*track)->resize(point.size());
-    std::ranges::transform(point, Get<"HitID">(*track)->begin(),
+    Get<"HitID">(*track)->resize(fittedPoint.size());
+    std::ranges::transform(fittedPoint, Get<"HitID">(*track)->begin(),
                            [](auto&& p) { return p->getRawMeasurement()->getHitId(); });
-    Get<"chi2">(*track) = status.getChi2();
+    Get<"chi2">(*track) = status.getChi2() / status.getNdf();
     Get<"t0">(*track) = Get<"t0">(*seed);
     Get<"PDGID">(*track) = pdgID;
     Get<"x0">(*track) = this->template FromTVector3<muc::array3d>(x0);
     Get<"Ek0">(*track) = ek0;
     Get<"p0">(*track) = this->template FromTVector3<muc::array3d>(p0);
-    Data::CalculateHelix(*seed, Detector::Description::MMSField::Instance().FastField());
+    Data::CalculateHelix(*track, Detector::Description::MMSField::Instance().FastField());
 
-    std::vector<std::iter_value_t<AHitPointer>*> trackHit(point.size());
-    std::ranges::transform(point, trackHit.begin(),
+    std::vector<std::iter_value_t<AHitPointer>*> trackHit(fittedPoint.size());
+    std::ranges::transform(fittedPoint, trackHit.begin(),
                            [&](auto&& p) { return measurementHitMap.at(p->getRawMeasurement()); });
 
     if (fEnableEventDisplay) {

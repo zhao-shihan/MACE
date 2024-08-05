@@ -33,6 +33,7 @@
 
 #include "CLHEP/Units/SystemOfUnits.h"
 
+#include "TDatabasePDG.h"
 #include "TGeoManager.h"
 #include "TGeoMaterialInterface.h"
 #include "TMatrixDSymfwd.h"
