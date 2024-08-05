@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MACE/Detector/Assembly/MMS.h++"
 #include "MACE/Detector/Description/Accelerator.h++"
 #include "MACE/Detector/Description/BeamDegrader.h++"
 #include "MACE/Detector/Description/BeamMonitor.h++"
@@ -28,6 +29,8 @@
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
 
 #include "G4VUserDetectorConstruction.hh"
+
+#include "muc/tuple"
 
 #include <memory>
 
@@ -75,28 +78,23 @@ public:
     auto EMCSD() const -> auto& { return *fEMCSD; }
 
 public:
-    using DescriptionInUse = std::tuple<Detector::Description::Accelerator,
-                                        Detector::Description::BeamDegrader,
-                                        Detector::Description::BeamMonitor,
-                                        Detector::Description::CDC,
-                                        Detector::Description::EMC,
-                                        Detector::Description::EMCField,
-                                        Detector::Description::EMCMagnet,
-                                        Detector::Description::EMCShield,
-                                        Detector::Description::FieldOption,
-                                        Detector::Description::Filter,
-                                        Detector::Description::MCP,
-                                        Detector::Description::MCPChamber,
-                                        Detector::Description::MMSBeamPipe,
-                                        Detector::Description::MMSField,
-                                        Detector::Description::MMSMagnet,
-                                        Detector::Description::MMSShield,
-                                        Detector::Description::ShieldingWall,
-                                        Detector::Description::Solenoid,
-                                        Detector::Description::Target,
-                                        Detector::Description::TTC,
-                                        Detector::Description::Vacuum,
-                                        Detector::Description::World>;
+    using DescriptionInUse = muc::tuple_concat_t<
+        Detector::Assembly::MMS::DescriptionInUse,
+        std::tuple<Detector::Description::Accelerator,
+                   Detector::Description::BeamDegrader,
+                   Detector::Description::BeamMonitor,
+                   Detector::Description::EMC,
+                   Detector::Description::EMCField,
+                   Detector::Description::EMCMagnet,
+                   Detector::Description::EMCShield,
+                   Detector::Description::Filter,
+                   Detector::Description::MCP,
+                   Detector::Description::MCPChamber,
+                   Detector::Description::ShieldingWall,
+                   Detector::Description::Solenoid,
+                   Detector::Description::Target,
+                   Detector::Description::Vacuum,
+                   Detector::Description::World>>;
 
 private:
     G4bool fCheckOverlap;

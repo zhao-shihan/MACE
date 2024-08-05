@@ -117,10 +117,10 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     // 1
 
+    Detector::Assembly::MMS mms{*fWorld, fCheckOverlap};
+
     auto& emcField{fWorld->NewDaughter<Detector::Definition::EMCField>(fCheckOverlap)};
     auto& emcShield{fWorld->NewDaughter<Detector::Definition::EMCShield>(fCheckOverlap)};
-    auto& mmsField{fWorld->NewDaughter<Detector::Definition::MMSField>(fCheckOverlap)};
-    auto& mmsShield{fWorld->NewDaughter<Detector::Definition::MMSShield>(fCheckOverlap)};
     auto& shieldingWall{fWorld->NewDaughter<Detector::Definition::ShieldingWall>(fCheckOverlap)};
     auto& solenoidFieldS1{fWorld->NewDaughter<Detector::Definition::SolenoidFieldS1>(fCheckOverlap)};
     auto& solenoidFieldS2{fWorld->NewDaughter<Detector::Definition::SolenoidFieldS2>(fCheckOverlap)};
@@ -155,20 +155,13 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& solenoidShieldT2{solenoidFieldT2.NewDaughter<Detector::Definition::SolenoidShieldT2>(fCheckOverlap)};
     auto& solenoidT2{solenoidFieldT2.NewDaughter<Detector::Definition::SolenoidT2>(fCheckOverlap)};
 
-    auto& cdcBody{mmsField.NewDaughter<Detector::Definition::CDCBody>(fCheckOverlap)};
-    auto& mmsBeamPipe{mmsField.NewDaughter<Detector::Definition::MMSBeamPipe>(fCheckOverlap)};
-    auto& mmsMagnet{mmsField.NewDaughter<Detector::Definition::MMSMagnet>(fCheckOverlap)};
-    auto& ttc{mmsField.NewDaughter<Detector::Definition::TTC>(fCheckOverlap)};
-
     // 3
 
     auto& mcp{mcpChamber.NewDaughter<Detector::Definition::MCP>(fCheckOverlap)};
 
-    auto& acceleratorField{mmsBeamPipe.NewDaughter<Detector::Definition::AcceleratorField>(fCheckOverlap)};
+    auto& acceleratorField{mms.Get<Detector::Definition::MMSBeamPipe>().NewDaughter<Detector::Definition::AcceleratorField>(fCheckOverlap)};
 
     auto& filter{solenoidBeamPipeS2.NewDaughter<Detector::Definition::Filter>(fCheckOverlap)};
-
-    auto& cdcGas{cdcBody.NewDaughter<Detector::Definition::CDCGas>(fCheckOverlap)};
 
     // 4
 
@@ -176,16 +169,6 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& beamDegrader{acceleratorField.NewDaughter<Detector::Definition::BeamDegrader>(fCheckOverlap)};
     auto& beamMonitor{acceleratorField.NewDaughter<Detector::Definition::BeamMonitor>(fCheckOverlap)};
     auto& target{acceleratorField.NewDaughter<Detector::Definition::Target>(fCheckOverlap)};
-
-    auto& cdcSuperLayer{cdcGas.NewDaughter<Detector::Definition::CDCSuperLayer>(fCheckOverlap)};
-
-    // 5
-
-    auto& cdcSenseLayer{cdcSuperLayer.NewDaughter<Detector::Definition::CDCSenseLayer>(fCheckOverlap)};
-
-    // 6
-
-    auto& cdcCell{cdcSenseLayer.NewDaughter<Detector::Definition::CDCCell>(fCheckOverlap)};
 
     ////////////////////////////////////////////////////////////////
     // Register regions
@@ -197,24 +180,24 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         fCDCFieldWireRegion = new Region("CDCFieldWire", RegionType::CDCFieldWire);
         fCDCFieldWireRegion->SetProductionCuts(defaultCuts);
 
-        cdcCell.RegisterRegion("CDCFieldWire", fCDCFieldWireRegion);
+        mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCFieldWire", fCDCFieldWireRegion);
 
         // CDCSenseWireRegion
         fCDCSenseWireRegion = new Region("CDCSenseWire", RegionType::CDCSenseWire);
         fCDCSenseWireRegion->SetProductionCuts(defaultCuts);
 
-        cdcCell.RegisterRegion("CDCSenseWire", fCDCSenseWireRegion);
+        mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCSenseWire", fCDCSenseWireRegion);
 
         // DefaultGaseousRegion
         fDefaultGaseousRegion = new Region("DefaultGaseous", RegionType::DefaultGaseous);
         fDefaultGaseousRegion->SetProductionCuts(defaultCuts);
 
-        cdcCell.RegisterRegion("CDCCell", fDefaultGaseousRegion);
-        cdcGas.RegisterRegion(fDefaultGaseousRegion);
-        cdcSenseLayer.RegisterRegion(fDefaultGaseousRegion);
-        cdcSuperLayer.RegisterRegion(fDefaultGaseousRegion);
+        mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCCell", fDefaultGaseousRegion);
+        mms.Get<Detector::Definition::CDCGas>().RegisterRegion(fDefaultGaseousRegion);
+        mms.Get<Detector::Definition::CDCSenseLayer>().RegisterRegion(fDefaultGaseousRegion);
+        mms.Get<Detector::Definition::CDCSuperLayer>().RegisterRegion(fDefaultGaseousRegion);
         emcField.RegisterRegion(fDefaultGaseousRegion);
-        mmsField.RegisterRegion(fDefaultGaseousRegion);
+        mms.Get<Detector::Definition::MMSField>().RegisterRegion(fDefaultGaseousRegion);
         solenoidFieldS1.RegisterRegion(fDefaultGaseousRegion);
         solenoidFieldS2.RegisterRegion(fDefaultGaseousRegion);
         solenoidFieldS3.RegisterRegion(fDefaultGaseousRegion);
@@ -228,11 +211,11 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         accelerator.RegisterRegion(fDefaultSolidRegion);
         beamDegrader.RegisterRegion(fDefaultSolidRegion);
         beamMonitor.RegisterRegion(fDefaultSolidRegion);
-        cdcBody.RegisterRegion(fDefaultSolidRegion);
+        mms.Get<Detector::Definition::CDCBody>().RegisterRegion(fDefaultSolidRegion);
         emcPMTAssemblies.RegisterRegion(fDefaultSolidRegion);
         filter.RegisterRegion(fDefaultSolidRegion);
         mcpChamber.RegisterRegion(fDefaultSolidRegion);
-        mmsBeamPipe.RegisterRegion(fDefaultSolidRegion);
+        mms.Get<Detector::Definition::MMSBeamPipe>().RegisterRegion(fDefaultSolidRegion);
         shieldingWall.RegisterRegion(fDefaultSolidRegion);
         solenoidBeamPipeS1.RegisterRegion(fDefaultSolidRegion);
         solenoidBeamPipeS2.RegisterRegion(fDefaultSolidRegion);
@@ -257,7 +240,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         fShieldRegion->SetProductionCuts(defaultCuts);
 
         emcShield.RegisterRegion(fShieldRegion);
-        mmsShield.RegisterRegion(fShieldRegion);
+        mms.Get<Detector::Definition::MMSShield>().RegisterRegion(fShieldRegion);
         solenoidShieldS1.RegisterRegion(fShieldRegion);
         solenoidShieldS2.RegisterRegion(fShieldRegion);
         solenoidShieldS3.RegisterRegion(fShieldRegion);
@@ -269,7 +252,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         fSolenoidOrMagnetRegion->SetProductionCuts(defaultCuts);
 
         emcMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
-        mmsMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
+        mms.Get<Detector::Definition::MMSMagnet>().RegisterRegion(fSolenoidOrMagnetRegion);
         solenoidS1.RegisterRegion(fSolenoidOrMagnetRegion);
         solenoidS2.RegisterRegion(fSolenoidOrMagnetRegion);
         solenoidS3.RegisterRegion(fSolenoidOrMagnetRegion);
@@ -280,13 +263,13 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         fCDCSensitiveRegion = new Region("CDCSensitive", RegionType::CDCSensitive);
         fCDCSensitiveRegion->SetProductionCuts(defaultCuts);
 
-        cdcCell.RegisterRegion("CDCSensitiveVolume", fCDCSensitiveRegion);
+        mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCSensitiveVolume", fCDCSensitiveRegion);
 
         // TTCSensitiveRegionRegion
         fTTCSensitiveRegion = new Region("TTCSensitiveRegion", RegionType::TTCSensitive);
         fTTCSensitiveRegion->SetProductionCuts(defaultCuts);
 
-        ttc.RegisterRegion(fTTCSensitiveRegion);
+        mms.Get<Detector::Definition::TTC>().RegisterRegion(fTTCSensitiveRegion);
 
         // TargetRegion
         fTargetRegion = new Region("Target", RegionType::Target);
@@ -301,7 +284,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         acceleratorField.RegisterRegion(fVacuumRegion);
         mcpChamber.RegisterRegion("MCPChamberPipeVacuum", fVacuumRegion);
         mcpChamber.RegisterRegion("MCPChamberVacuum", fVacuumRegion);
-        mmsBeamPipe.RegisterRegion("MMSBeamPipeVacuum", fVacuumRegion);
+        mms.Get<Detector::Definition::MMSBeamPipe>().RegisterRegion("MMSBeamPipeVacuum", fVacuumRegion);
         solenoidBeamPipeS1.RegisterRegion("SolenoidBeamPipeS1Vacuum", fVacuumRegion);
         solenoidBeamPipeS2.RegisterRegion("SolenoidBeamPipeS2Vacuum", fVacuumRegion);
         solenoidBeamPipeS3.RegisterRegion("SolenoidBeamPipeS3Vacuum", fVacuumRegion);
@@ -314,10 +297,10 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     ////////////////////////////////////////////////////////////////
     {
         fCDCSD = new SD::CDCSD{Detector::Description::CDC::Instance().Name()};
-        cdcCell.RegisterSD("CDCSensitiveVolume", fCDCSD);
+        mms.Get<Detector::Definition::CDCCell>().RegisterSD("CDCSensitiveVolume", fCDCSD);
 
         fTTCSD = new SD::TTCSD{Detector::Description::TTC::Instance().Name()};
-        ttc.RegisterSD(fTTCSD);
+        mms.Get<Detector::Definition::TTC>().RegisterSD(fTTCSD);
 
         fMCPSD = new SD::MCPSD{Detector::Description::MCP::Instance().Name()};
         mcp.RegisterSD(fMCPSD);
@@ -343,7 +326,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
                     chordFinder->SetDeltaChord(fDeltaChord);
                     detector.RegisterField(std::make_unique<G4FieldManager>(field, chordFinder), forceToAllDaughters);
                 }};
-            RegisterField(mmsField, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::MMSField>, false);
+            RegisterField(mms.Get<Detector::Definition::MMSField>(), new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::MMSField>, false);
             RegisterField(solenoidFieldS1, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS1>, false);
             RegisterField(solenoidFieldT1, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldT1>, false);
             RegisterField(solenoidFieldS2, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS2>, false);

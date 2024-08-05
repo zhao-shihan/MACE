@@ -51,8 +51,9 @@ public:
     auto TTCSD() const -> auto& { return *fTTCSD; }
 
 public:
-    using DescriptionInUse = muc::tuple_concat_t<Detector::Assembly::MMS::DescriptionInUse,
-                                                 std::tuple<Detector::Description::World>>;
+    using DescriptionInUse = muc::tuple_concat_t<
+        Detector::Assembly::MMS::DescriptionInUse,
+        std::tuple<Detector::Description::World>>;
 
 private:
     G4bool fCheckOverlap;
