@@ -69,7 +69,6 @@
 #include "G4EqMagElectricField.hh"
 #include "G4InterpolationDriver.hh"
 #include "G4ProductionCuts.hh"
-#include "G4ProductionCutsTable.hh"
 #include "G4TDormandPrince45.hh"
 #include "G4TMagFieldEquation.hh"
 
@@ -86,22 +85,6 @@ DetectorConstruction::DetectorConstruction() :
     fMinDriverStep{2_um},
     fDeltaChord{2_um},
     fWorld{},
-    fCDCFieldWireRegion{},
-    fCDCSenseWireRegion{},
-    fCDCSensitiveRegion{},
-    fDefaultGaseousRegion{},
-    fDefaultSolidRegion{},
-    fEMCSensitiveRegion{},
-    fMCPSensitiveRegion{},
-    fShieldRegion{},
-    fSolenoidOrMagnetRegion{},
-    fTTCSensitiveRegion{},
-    fTargetRegion{},
-    fVacuumRegion{},
-    fCDCSD{},
-    fTTCSD{},
-    fMCPSD{},
-    fEMCSD{},
     fNumericMessengerRegister{this} {
     DetectorMessenger::EnsureInstantiation();
 }
@@ -171,142 +154,64 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& target{acceleratorField.NewDaughter<Detector::Definition::Target>(fCheckOverlap)};
 
     ////////////////////////////////////////////////////////////////
-    // Register regions
+    // Set production cuts
     ////////////////////////////////////////////////////////////////
     {
-        const auto defaultCuts{G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts()};
+        // Dense-to-thin region
 
-        // CDCFieldWireRegion
-        fCDCFieldWireRegion = new Region("CDCFieldWire", RegionType::CDCFieldWire);
-        fCDCFieldWireRegion->SetProductionCuts(defaultCuts);
+        const auto denseToThinRegionCut{new G4ProductionCuts};
+        denseToThinRegionCut->SetProductionCut(0, "e-");
+        denseToThinRegionCut->SetProductionCut(0, "e+");
+        denseToThinRegionCut->SetProductionCut(0, "proton");
+        const auto denseToThinRegion{new G4Region{"DenseToThin"}};
+        denseToThinRegion->SetProductionCuts(denseToThinRegionCut);
 
-        mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCFieldWire", fCDCFieldWireRegion);
+        accelerator.RegisterRegion(denseToThinRegion);
+        beamDegrader.RegisterRegion(denseToThinRegion);
+        beamMonitor.RegisterRegion(denseToThinRegion);
+        filter.RegisterRegion(denseToThinRegion);
+        mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCFieldWire", denseToThinRegion);
+        mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCSenseWire", denseToThinRegion);
+        target.RegisterRegion(denseToThinRegion);
 
-        // CDCSenseWireRegion
-        fCDCSenseWireRegion = new Region("CDCSenseWire", RegionType::CDCSenseWire);
-        fCDCSenseWireRegion->SetProductionCuts(defaultCuts);
+        // Shield region
 
-        mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCSenseWire", fCDCSenseWireRegion);
+        const auto shieldRegionCut{new G4ProductionCuts};
+        shieldRegionCut->SetProductionCut(2_mm);
+        const auto shieldRegion{new G4Region{"Shield"}};
+        shieldRegion->SetProductionCuts(shieldRegionCut);
 
-        // DefaultGaseousRegion
-        fDefaultGaseousRegion = new Region("DefaultGaseous", RegionType::DefaultGaseous);
-        fDefaultGaseousRegion->SetProductionCuts(defaultCuts);
+        emcShield.RegisterRegion(shieldRegion);
+        mms.Get<Detector::Definition::MMSShield>().RegisterRegion(shieldRegion);
+        solenoidShieldS1.RegisterRegion(shieldRegion);
+        solenoidShieldS2.RegisterRegion(shieldRegion);
+        solenoidShieldS3.RegisterRegion(shieldRegion);
+        solenoidShieldT1.RegisterRegion(shieldRegion);
+        solenoidShieldT2.RegisterRegion(shieldRegion);
 
-        mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCCell", fDefaultGaseousRegion);
-        mms.Get<Detector::Definition::CDCGas>().RegisterRegion(fDefaultGaseousRegion);
-        mms.Get<Detector::Definition::CDCSenseLayer>().RegisterRegion(fDefaultGaseousRegion);
-        mms.Get<Detector::Definition::CDCSuperLayer>().RegisterRegion(fDefaultGaseousRegion);
-        emcField.RegisterRegion(fDefaultGaseousRegion);
-        mms.Get<Detector::Definition::MMSField>().RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldS1.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldS2.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldS3.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldT1.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldT2.RegisterRegion(fDefaultGaseousRegion);
+        // Wall region
 
-        // DefaultSolidRegion
-        fDefaultSolidRegion = new Region("DefaultSolid", RegionType::DefaultSolid);
-        fDefaultSolidRegion->SetProductionCuts(defaultCuts);
+        const auto wallRegionCut{new G4ProductionCuts};
+        wallRegionCut->SetProductionCut(3_cm);
+        const auto wallRegion{new G4Region{"Wall"}};
+        wallRegion->SetProductionCuts(wallRegionCut);
 
-        accelerator.RegisterRegion(fDefaultSolidRegion);
-        beamDegrader.RegisterRegion(fDefaultSolidRegion);
-        beamMonitor.RegisterRegion(fDefaultSolidRegion);
-        mms.Get<Detector::Definition::CDCBody>().RegisterRegion(fDefaultSolidRegion);
-        emcPMTAssemblies.RegisterRegion(fDefaultSolidRegion);
-        filter.RegisterRegion(fDefaultSolidRegion);
-        mcpChamber.RegisterRegion(fDefaultSolidRegion);
-        mms.Get<Detector::Definition::MMSBeamPipe>().RegisterRegion(fDefaultSolidRegion);
-        shieldingWall.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeS1.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeS2.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeS3.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeT1.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeT2.RegisterRegion(fDefaultSolidRegion);
+        shieldingWall.RegisterRegion(wallRegion);
 
-        // EMCSensitiveRegion
-        fEMCSensitiveRegion = new Region("EMCSensitive", RegionType::EMCSensitive);
-        fEMCSensitiveRegion->SetProductionCuts(defaultCuts);
+        /* // Beam dump region
 
-        emcCrystal.RegisterRegion(fEMCSensitiveRegion);
-
-        // MCPSensitiveRegion
-        fMCPSensitiveRegion = new Region("MCPSensitive", RegionType::MCPSensitive);
-        fMCPSensitiveRegion->SetProductionCuts(defaultCuts);
-
-        mcp.RegisterRegion(fMCPSensitiveRegion);
-
-        // ShieldRegion
-        fShieldRegion = new Region("Shield", RegionType::Shield);
-        fShieldRegion->SetProductionCuts(defaultCuts);
-
-        emcShield.RegisterRegion(fShieldRegion);
-        mms.Get<Detector::Definition::MMSShield>().RegisterRegion(fShieldRegion);
-        solenoidShieldS1.RegisterRegion(fShieldRegion);
-        solenoidShieldS2.RegisterRegion(fShieldRegion);
-        solenoidShieldS3.RegisterRegion(fShieldRegion);
-        solenoidShieldT1.RegisterRegion(fShieldRegion);
-        solenoidShieldT2.RegisterRegion(fShieldRegion);
-
-        // SolenoidOrMagnetRegion
-        fSolenoidOrMagnetRegion = new Region("SolenoidOrMagnet", RegionType::SolenoidOrMagnet);
-        fSolenoidOrMagnetRegion->SetProductionCuts(defaultCuts);
-
-        emcMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
-        mms.Get<Detector::Definition::MMSMagnet>().RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidS1.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidS2.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidS3.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidT1.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidT2.RegisterRegion(fSolenoidOrMagnetRegion);
-
-        // CDCSensitiveRegion
-        fCDCSensitiveRegion = new Region("CDCSensitive", RegionType::CDCSensitive);
-        fCDCSensitiveRegion->SetProductionCuts(defaultCuts);
-
-        mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCSensitiveVolume", fCDCSensitiveRegion);
-
-        // TTCSensitiveRegionRegion
-        fTTCSensitiveRegion = new Region("TTCSensitiveRegion", RegionType::TTCSensitive);
-        fTTCSensitiveRegion->SetProductionCuts(defaultCuts);
-
-        mms.Get<Detector::Definition::TTC>().RegisterRegion(fTTCSensitiveRegion);
-
-        // TargetRegion
-        fTargetRegion = new Region("Target", RegionType::Target);
-        fTargetRegion->SetProductionCuts(defaultCuts);
-
-        target.RegisterRegion(fTargetRegion);
-
-        // VacuumRegion
-        fVacuumRegion = new Region("Vacuum", RegionType::Vacuum);
-        fVacuumRegion->SetProductionCuts(defaultCuts);
-
-        acceleratorField.RegisterRegion(fVacuumRegion);
-        mcpChamber.RegisterRegion("MCPChamberPipeVacuum", fVacuumRegion);
-        mcpChamber.RegisterRegion("MCPChamberVacuum", fVacuumRegion);
-        mms.Get<Detector::Definition::MMSBeamPipe>().RegisterRegion("MMSBeamPipeVacuum", fVacuumRegion);
-        solenoidBeamPipeS1.RegisterRegion("SolenoidBeamPipeS1Vacuum", fVacuumRegion);
-        solenoidBeamPipeS2.RegisterRegion("SolenoidBeamPipeS2Vacuum", fVacuumRegion);
-        solenoidBeamPipeS3.RegisterRegion("SolenoidBeamPipeS3Vacuum", fVacuumRegion);
-        solenoidBeamPipeT1.RegisterRegion("SolenoidBeamPipeT1Vacuum", fVacuumRegion);
-        solenoidBeamPipeT2.RegisterRegion("SolenoidBeamPipeT2Vacuum", fVacuumRegion);
+        const auto beamDumpRegionCut{new G4ProductionCuts};
+        beamDumpRegionCut->SetProductionCut(10_cm); */
     }
 
     ////////////////////////////////////////////////////////////////
     // Register SDs
     ////////////////////////////////////////////////////////////////
     {
-        fCDCSD = new SD::CDCSD{Detector::Description::CDC::Instance().Name()};
-        mms.Get<Detector::Definition::CDCCell>().RegisterSD("CDCSensitiveVolume", fCDCSD);
-
-        fTTCSD = new SD::TTCSD{Detector::Description::TTC::Instance().Name()};
-        mms.Get<Detector::Definition::TTC>().RegisterSD(fTTCSD);
-
-        fMCPSD = new SD::MCPSD{Detector::Description::MCP::Instance().Name()};
-        mcp.RegisterSD(fMCPSD);
-
-        fEMCSD = new SD::EMCSD{Detector::Description::EMC::Instance().Name()};
-        emcCrystal.RegisterSD(fEMCSD);
+        mms.Get<Detector::Definition::CDCCell>().RegisterSD("CDCSensitiveVolume", new SD::CDCSD{Detector::Description::CDC::Instance().Name()});
+        mms.Get<Detector::Definition::TTC>().RegisterSD(new SD::TTCSD{Detector::Description::TTC::Instance().Name()});
+        mcp.RegisterSD(new SD::MCPSD{Detector::Description::MCP::Instance().Name()});
+        emcCrystal.RegisterSD(new SD::EMCSD{Detector::Description::EMC::Instance().Name()});
     }
 
     ////////////////////////////////////////////////////////////////

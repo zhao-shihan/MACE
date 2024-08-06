@@ -72,11 +72,6 @@ DetectorConstruction::DetectorConstruction() :
     fMinDriverStep{2_um},
     fDeltaChord{2_um},
     fWorld{},
-    fDefaultGaseousRegion{},
-    fDefaultSolidRegion{},
-    fShieldRegion{},
-    fSolenoidOrMagnetRegion{},
-    fVacuumRegion{},
     fNumericMessengerRegister{this} {
     DetectorMessenger::EnsureInstantiation();
 }
@@ -147,86 +142,55 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& accelerator{acceleratorField.NewDaughter<MACE::Detector::Definition::Accelerator>(fCheckOverlap)};
 
     ////////////////////////////////////////////////////////////////
-    // Register regions
+    // Set production cuts
     ////////////////////////////////////////////////////////////////
     {
-        const auto defaultCuts{G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts()};
+        // Dense-to-thin region
 
-        // DefaultGaseousRegion
-        fDefaultGaseousRegion = new Region("DefaultGaseous", RegionType::DefaultGaseous);
-        fDefaultGaseousRegion->SetProductionCuts(defaultCuts);
+        const auto denseToThinRegionCut{new G4ProductionCuts};
+        denseToThinRegionCut->SetProductionCut(0, "e-");
+        denseToThinRegionCut->SetProductionCut(0, "e+");
+        denseToThinRegionCut->SetProductionCut(0, "proton");
+        const auto denseToThinRegion{new G4Region{"DenseToThin"}};
+        denseToThinRegion->SetProductionCuts(denseToThinRegionCut);
 
-        emcField.RegisterRegion(fDefaultGaseousRegion);
-        mmsField.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldS1.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldS2.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldS3.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldT1.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldT2.RegisterRegion(fDefaultGaseousRegion);
+        accelerator.RegisterRegion(denseToThinRegion);
+        filter.RegisterRegion(denseToThinRegion);
 
-        // DefaultSolidRegion
-        fDefaultSolidRegion = new Region("DefaultSolid", RegionType::DefaultSolid);
-        fDefaultSolidRegion->SetProductionCuts(defaultCuts);
+        // Shield region
 
-        accelerator.RegisterRegion(fDefaultSolidRegion);
-        filter.RegisterRegion(fDefaultSolidRegion);
-        mcpChamber.RegisterRegion(fDefaultSolidRegion);
-        mmsBeamPipe.RegisterRegion(fDefaultSolidRegion);
-        shieldingWall.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeS1.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeS2.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeS3.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeT1.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeT2.RegisterRegion(fDefaultSolidRegion);
+        const auto shieldRegionCut{new G4ProductionCuts};
+        shieldRegionCut->SetProductionCut(2_mm);
+        const auto shieldRegion{new G4Region{"Shield"}};
+        shieldRegion->SetProductionCuts(shieldRegionCut);
 
-        // ShieldRegion
-        fShieldRegion = new Region("Shield", RegionType::Shield);
-        fShieldRegion->SetProductionCuts(defaultCuts);
+        emcShield.RegisterRegion(shieldRegion);
+        mmsShield.RegisterRegion(shieldRegion);
+        solenoidShieldS1.RegisterRegion(shieldRegion);
+        solenoidShieldS2.RegisterRegion(shieldRegion);
+        solenoidShieldS3.RegisterRegion(shieldRegion);
+        solenoidShieldT1.RegisterRegion(shieldRegion);
+        solenoidShieldT2.RegisterRegion(shieldRegion);
 
-        emcShield.RegisterRegion(fShieldRegion);
-        mmsShield.RegisterRegion(fShieldRegion);
-        solenoidShieldS1.RegisterRegion(fShieldRegion);
-        solenoidShieldS2.RegisterRegion(fShieldRegion);
-        solenoidShieldS3.RegisterRegion(fShieldRegion);
-        solenoidShieldT1.RegisterRegion(fShieldRegion);
-        solenoidShieldT2.RegisterRegion(fShieldRegion);
+        // Wall region
 
-        // SolenoidOrMagnetRegion
-        fSolenoidOrMagnetRegion = new Region("SolenoidOrMagnet", RegionType::SolenoidOrMagnet);
-        fSolenoidOrMagnetRegion->SetProductionCuts(defaultCuts);
+        const auto wallRegionCut{new G4ProductionCuts};
+        wallRegionCut->SetProductionCut(3_cm);
+        const auto wallRegion{new G4Region{"Wall"}};
+        wallRegion->SetProductionCuts(wallRegionCut);
 
-        emcMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
-        mmsMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidS1.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidS2.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidS3.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidT1.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidT2.RegisterRegion(fSolenoidOrMagnetRegion);
-
-        // VacuumRegion
-        fVacuumRegion = new Region("Vacuum", RegionType::Vacuum);
-        fVacuumRegion->SetProductionCuts(defaultCuts);
-
-        acceleratorField.RegisterRegion(fVacuumRegion);
-        mcpChamber.RegisterRegion("MCPChamberPipeVacuum", fVacuumRegion);
-        mcpChamber.RegisterRegion("MCPChamberVacuum", fVacuumRegion);
-        mmsBeamPipe.RegisterRegion("MMSBeamPipeVacuum", fVacuumRegion);
-        solenoidBeamPipeS1.RegisterRegion("SolenoidBeamPipeS1Vacuum", fVacuumRegion);
-        solenoidBeamPipeS2.RegisterRegion("SolenoidBeamPipeS2Vacuum", fVacuumRegion);
-        solenoidBeamPipeS3.RegisterRegion("SolenoidBeamPipeS3Vacuum", fVacuumRegion);
-        solenoidBeamPipeT1.RegisterRegion("SolenoidBeamPipeT1Vacuum", fVacuumRegion);
-        solenoidBeamPipeT2.RegisterRegion("SolenoidBeamPipeT2Vacuum", fVacuumRegion);
+        shieldingWall.RegisterRegion(wallRegion);
     }
 
     ////////////////////////////////////////////////////////////////
     // Register SDs
     ////////////////////////////////////////////////////////////////
     {
-        fVirtualSD = new SD::VirtualSD{"VirtualDetector"};
-        virtualDetectorA.RegisterSD(fVirtualSD);
-        virtualDetectorB.RegisterSD(fVirtualSD);
-        virtualDetectorC.RegisterSD(fVirtualSD);
-        virtualDetectorD.RegisterSD(fVirtualSD);
+        const auto virtualSD{new SD::VirtualSD{"VirtualDetector"}};
+        virtualDetectorA.RegisterSD(virtualSD);
+        virtualDetectorB.RegisterSD(virtualSD);
+        virtualDetectorC.RegisterSD(virtualSD);
+        virtualDetectorD.RegisterSD(virtualSD);
     }
 
     ////////////////////////////////////////////////////////////////

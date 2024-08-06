@@ -21,7 +21,6 @@
 #include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4ProductionCuts.hh"
-#include "G4ProductionCutsTable.hh"
 #include "G4Region.hh"
 #include "G4SDManager.hh"
 #include "G4SystemOfUnits.hh"
@@ -36,14 +35,7 @@ DetectorConstruction::DetectorConstruction() :
     PassiveSingleton{},
     G4VUserDetectorConstruction{},
     fCheckOverlap{false},
-    fWorld{},
-    fEMCSensitiveRegion{},
-    fMCPSensitiveRegion{},
-    fSolenoidOrMagnetRegion{},
-    fTunnelRegion{},
-    fVacuumRegion{},
-    fEMCSD{},
-    fEMCPMTSD{} {
+    fWorld{} {
     DetectorMessenger::EnsureInstantiation();
 }
 
@@ -56,50 +48,31 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     // description.HalfZExtent(26_m);
 
     fWorld = std::make_unique<World>();
-    auto& emcCrystal = fWorld->NewDaughter<EMCCrystal>(fCheckOverlap);
-    auto& emcPMTAssemblies = fWorld->NewDaughter<EMCPMTAssemblies>(fCheckOverlap);
-    auto& mcpChamber = fWorld->NewDaughter<MCPChamber>(fCheckOverlap);
+    auto& emcCrystal{fWorld->NewDaughter<EMCCrystal>(fCheckOverlap)};
+    auto& emcPMTAssemblies{fWorld->NewDaughter<EMCPMTAssemblies>(fCheckOverlap)};
+    auto& mcpChamber{fWorld->NewDaughter<MCPChamber>(fCheckOverlap)};
 
-    // auto& emcMagnet = fWorld->NewDaughter<SimEMC::Detector::EMCMagnet>(fCheckOverlap);
-    // auto& emcShield = fWorld->NewDaughter<SimEMC::Detector::EMCShield>(fCheckOverlap);
+    auto& emcMagnet = fWorld->NewDaughter<SimEMC::Detector::EMCMagnet>(fCheckOverlap);
+    auto& emcShield = fWorld->NewDaughter<SimEMC::Detector::EMCShield>(fCheckOverlap);
     // auto& emcTunnel = fWorld->NewDaughter<SimEMC::Detector::EMCTunnel>(fCheckOverlap);
 
-    auto& mcp = mcpChamber.NewDaughter<MCP>(fCheckOverlap);
+    auto& mcp{mcpChamber.NewDaughter<MCP>(fCheckOverlap)};
 
-    const auto defaultCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts();
+    // Shield region
 
-    fEMCSensitiveRegion = new Region("EMCSensitive", RegionType::EMCSensitive);
-    fEMCSensitiveRegion->SetProductionCuts(defaultCuts);
-    emcCrystal.RegisterRegion(fEMCSensitiveRegion);
+    const auto shieldRegionCut{new G4ProductionCuts};
+    shieldRegionCut->SetProductionCut(2_mm);
+    const auto shieldRegion{new G4Region{"Shield"}};
+    shieldRegion->SetProductionCuts(shieldRegionCut);
 
-    // fMCPSensitiveRegion = new Region("MCPSensitive", RegionType::MCPSensitive);
-    // fMCPSensitiveRegion->SetProductionCuts(defaultCuts);
-    // mcp.RegisterRegion(fMCPSensitiveRegion);
-
-    // fSolenoidOrMagnetRegion = new Region("SolenoidOrMagnet", RegionType::SolenoidOrMagnet);
-    // fSolenoidOrMagnetRegion->SetProductionCuts(defaultCuts);
-    // emcMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
-
-    // fShieldRegion = new Region("Shield", RegionType::Shield);
-    // fShieldRegion->SetProductionCuts(defaultCuts);
-    // emcShield.RegisterRegion(fShieldRegion);
-
-    // fTunnelRegion = new Region("Tunnel", RegionType::Tunnel);
-    // const auto cuts = new G4ProductionCuts;
-    // cuts->SetProductionCut(2.5_cm);
-    // fTunnelRegion->SetProductionCuts(cuts);
-    // emcTunnel.RegisterRegion(fTunnelRegion);
+    emcShield.RegisterRegion(shieldRegion);
 
     const auto& emcName{MACE::Detector::Description::EMC::Instance().Name()};
+    const auto emcPMTSD{new SD::EMCPMTSD{emcName + "PMT"}};
+    emcPMTAssemblies.RegisterSD("EMCPMTCathode", emcPMTSD);
+    emcCrystal.RegisterSD(new SD::EMCSD{emcName, emcPMTSD});
 
-    fEMCPMTSD = new SD::EMCPMTSD{emcName + "PMT"};
-    emcPMTAssemblies.RegisterSD("EMCPMTCathode", fEMCPMTSD);
-
-    fEMCSD = new SD::EMCSD{emcName, fEMCPMTSD};
-    emcCrystal.RegisterSD(fEMCSD);
-
-    // fMCPSD = new SD::MCPSD{MACE::Detector::Description::MCP::Instance().Name()};
-    // mcp.RegisterSD(fMCPSD);
+    // mcp.RegisterSD(new SD::MCPSD{MACE::Detector::Description::MCP::Instance().Name()});
 
     // fWorld->ParallelExport("EMCPhaseII.gdml");
 

@@ -23,7 +23,6 @@
 #include "G4ChordFinder.hh"
 #include "G4InterpolationDriver.hh"
 #include "G4ProductionCuts.hh"
-#include "G4ProductionCutsTable.hh"
 #include "G4TDormandPrince45.hh"
 #include "G4TMagFieldEquation.hh"
 
@@ -38,18 +37,6 @@ DetectorConstruction::DetectorConstruction() :
     fMinDriverStep{2_um},
     fDeltaChord{2_um},
     fWorld{},
-    fCDCFieldWireRegion{},
-    fCDCSenseWireRegion{},
-    fCDCSensitiveRegion{},
-    fDefaultGaseousRegion{},
-    fDefaultSolidRegion{},
-    fShieldRegion{},
-    fSolenoidOrMagnetRegion{},
-    fTTCSensitiveRegion{},
-    fTargetRegion{},
-    fVacuumRegion{},
-    fCDCSD{},
-    fTTCSD{},
     fNumericMessengerRegister{this} {
     DetectorMessenger::EnsureInstantiation();
 }
@@ -63,80 +50,39 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     Detector::Assembly::MMS mms{*fWorld, fCheckOverlap};
 
     ////////////////////////////////////////////////////////////////
-    // Register regions
+    // Set production cuts
     ////////////////////////////////////////////////////////////////
     {
-        const auto defaultCuts{G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts()};
+        // Dense-to-thin region
 
-        // CDCFieldWireRegion
-        fCDCFieldWireRegion = new Region("CDCFieldWire", RegionType::CDCFieldWire);
-        fCDCFieldWireRegion->SetProductionCuts(defaultCuts);
+        const auto denseToThinRegionCut{new G4ProductionCuts};
+        denseToThinRegionCut->SetProductionCut(0, "e-");
+        denseToThinRegionCut->SetProductionCut(0, "e+");
+        denseToThinRegionCut->SetProductionCut(0, "proton");
+        const auto denseToThinRegion{new G4Region{"DenseToThin"}};
+        denseToThinRegion->SetProductionCuts(denseToThinRegionCut);
 
-        mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCFieldWire", fCDCFieldWireRegion);
+        mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCFieldWire", denseToThinRegion);
+        mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCSenseWire", denseToThinRegion);
 
-        // CDCSenseWireRegion
-        fCDCSenseWireRegion = new Region("CDCSenseWire", RegionType::CDCSenseWire);
-        fCDCSenseWireRegion->SetProductionCuts(defaultCuts);
+        // Shield region
 
-        mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCSenseWire", fCDCSenseWireRegion);
+        const auto shieldRegionCut{new G4ProductionCuts};
+        shieldRegionCut->SetProductionCut(2_mm);
+        const auto shieldRegion{new G4Region{"Shield"}};
+        shieldRegion->SetProductionCuts(shieldRegionCut);
 
-        // DefaultGaseousRegion
-        fDefaultGaseousRegion = new Region("DefaultGaseous", RegionType::DefaultGaseous);
-        fDefaultGaseousRegion->SetProductionCuts(defaultCuts);
-
-        mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCCell", fDefaultGaseousRegion);
-        mms.Get<Detector::Definition::CDCGas>().RegisterRegion(fDefaultGaseousRegion);
-        mms.Get<Detector::Definition::CDCSenseLayer>().RegisterRegion(fDefaultGaseousRegion);
-        mms.Get<Detector::Definition::CDCSuperLayer>().RegisterRegion(fDefaultGaseousRegion);
-        mms.Get<Detector::Definition::MMSField>().RegisterRegion(fDefaultGaseousRegion);
-
-        // DefaultSolidRegion
-        fDefaultSolidRegion = new Region("DefaultSolid", RegionType::DefaultSolid);
-        fDefaultSolidRegion->SetProductionCuts(defaultCuts);
-
-        mms.Get<Detector::Definition::CDCBody>().RegisterRegion(fDefaultSolidRegion);
-        mms.Get<Detector::Definition::MMSBeamPipe>().RegisterRegion(fDefaultSolidRegion);
-
-        // ShieldRegion
-        fShieldRegion = new Region("Shield", RegionType::Shield);
-        fShieldRegion->SetProductionCuts(defaultCuts);
-
-        mms.Get<Detector::Definition::MMSShield>().RegisterRegion(fShieldRegion);
-
-        // SolenoidOrMagnetRegion
-        fSolenoidOrMagnetRegion = new Region("SolenoidOrMagnet", RegionType::SolenoidOrMagnet);
-        fSolenoidOrMagnetRegion->SetProductionCuts(defaultCuts);
-
-        mms.Get<Detector::Definition::MMSMagnet>().RegisterRegion(fSolenoidOrMagnetRegion);
-
-        // CDCSensitiveRegion
-        fCDCSensitiveRegion = new Region("CDCSensitive", RegionType::CDCSensitive);
-        fCDCSensitiveRegion->SetProductionCuts(defaultCuts);
-
-        mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCSensitiveVolume", fCDCSensitiveRegion);
-
-        // TTCSensitiveRegionRegion
-        fTTCSensitiveRegion = new Region("TTCSensitiveRegion", RegionType::TTCSensitive);
-        fTTCSensitiveRegion->SetProductionCuts(defaultCuts);
-
-        mms.Get<Detector::Definition::TTC>().RegisterRegion(fTTCSensitiveRegion);
-
-        // VacuumRegion
-        fVacuumRegion = new Region("Vacuum", RegionType::Vacuum);
-        fVacuumRegion->SetProductionCuts(defaultCuts);
-
-        mms.Get<Detector::Definition::MMSBeamPipe>().RegisterRegion("MMSBeamPipeVacuum", fVacuumRegion);
+        mms.Get<Detector::Definition::MMSShield>().RegisterRegion(shieldRegion);
     }
 
     ////////////////////////////////////////////////////////////////
     // Register SDs
     ////////////////////////////////////////////////////////////////
     {
-        fCDCSD = new SD::CDCSD{Detector::Description::CDC::Instance().Name()};
-        mms.Get<Detector::Definition::CDCCell>().RegisterSD("CDCSensitiveVolume", fCDCSD);
-
-        fTTCSD = new SD::TTCSD{Detector::Description::TTC::Instance().Name()};
-        mms.Get<Detector::Definition::TTC>().RegisterSD(fTTCSD);
+        mms.Get<Detector::Definition::CDCCell>()
+            .RegisterSD("CDCSensitiveVolume", new SD::CDCSD{Detector::Description::CDC::Instance().Name()});
+        mms.Get<Detector::Definition::TTC>()
+            .RegisterSD(new SD::TTCSD{Detector::Description::TTC::Instance().Name()});
     }
 
     ////////////////////////////////////////////////////////////////
