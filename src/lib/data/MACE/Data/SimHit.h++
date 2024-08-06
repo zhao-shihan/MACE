@@ -42,6 +42,7 @@ using TTCSimHit = Mustard::Data::TupleModel<
 
 using MCPSimHit = Mustard::Data::TupleModel<
     MCPHit,
+    Mustard::Data::Value<bool, "Trig", "Trigger flag">,
     Mustard::Data::Value<float, "Edep", "Energy deposition">,
     Mustard::Data::Value<float, "Ek", "Hit kinetic energy (MC truth)">,
     Mustard::Data::Value<muc::array3f, "p", "Hit momentum (MC truth)">,
