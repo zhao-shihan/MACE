@@ -2,8 +2,8 @@
 #include "MACE/Data/MMSTrack.h++"
 #include "MACE/Data/SimHit.h++"
 #include "MACE/Reconstruction/MMSTracking/Finder/TruthFinder.h++"
-#include "MACE/Reconstruction/MMSTracking/Fitter/GenFitDAF.h++"
-#include "MACE/Reconstruction/MMSTracking/Fitter/GenFitKalmanFitterRefTrack.h++"
+#include "MACE/Reconstruction/MMSTracking/Fitter/GenFitDAFFitter.h++"
+#include "MACE/Reconstruction/MMSTracking/Fitter/GenFitReferenceKalmanFitter.h++"
 #include "MACE/Reconstruction/MMSTracking/Fitter/TruthFitter.h++"
 
 #include "Mustard/Data/Output.h++"
@@ -42,7 +42,7 @@ auto main(int argc, char* argv[]) -> int {
 
     MMSTracking::TruthFinder finder;
     // MMSTracking::TruthFitter fitter;
-    MMSTracking::GenFitDAF fitter{0.2};
+    MMSTracking::GenFitDAFFitter fitter{0.2};
     // fitter.EnableEventDisplay(true);
 
     Mustard::Data::Processor processor;

@@ -10,7 +10,7 @@
 #include "Mustard/Data/TupleModel.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 
-#include "DAF.h"
+#include "KalmanFitter.h"
 
 #include "muc/array"
 #include "muc/math"
@@ -28,28 +28,22 @@ namespace MACE::inline Reconstruction::MMSTracking::inline Fitter {
 
 template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit = Data::CDCHit,
          Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack = Data::MMSTrack>
-class GenFitDAF : public GenFitterBase<AHit, ATrack> {
+class GenFitReferenceKalmanFitter : public GenFitterBase<AHit, ATrack, genfit::KalmanFitter> {
 public:
     using Hit = AHit;
     using Track = ATrack;
 
 public:
-    GenFitDAF(double driftErrorRMS);
-    virtual ~GenFitDAF() = default;
-
-    auto GenFitter() const -> const auto& { return fGenFitter; }
-    auto GenFitter() -> auto& { return fGenFitter; }
+    GenFitReferenceKalmanFitter(double driftErrorRMS);
+    virtual ~GenFitReferenceKalmanFitter() = default;
 
     template<std::indirectly_readable AHitPointer, std::indirectly_readable ASeedPointer>
         requires(Mustard::Data::SuperTupleModel<typename std::iter_value_t<AHitPointer>::Model, AHit> and
                  Mustard::Data::SuperTupleModel<typename std::iter_value_t<ASeedPointer>::Model, ATrack>)
     auto operator()(const std::vector<AHitPointer>& hitData, ASeedPointer seed) -> std::pair<std::shared_ptr<Mustard::Data::Tuple<ATrack>>,
                                                                                              std::vector<std::iter_value_t<AHitPointer>*>>;
-
-private:
-    genfit::DAF fGenFitter;
 };
 
 } // namespace MACE::inline Reconstruction::MMSTracking::inline Fitter
 
-#include "MACE/Reconstruction/MMSTracking/Fitter/GenFitDAF.inl"
+#include "MACE/Reconstruction/MMSTracking/Fitter/GenFitReferenceKalmanFitter.inl"

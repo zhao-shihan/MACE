@@ -19,6 +19,7 @@
 #include "Mustard/Utility/CreateTemporaryFile.h++"
 #include "Mustard/Utility/InlineMacro.h++"
 
+#include "AbsFitter.h"
 #include "AbsMeasurement.h"
 #include "EventDisplay.h"
 #include "FieldManager.h"
@@ -53,7 +54,8 @@
 namespace MACE::inline Reconstruction::MMSTracking::inline Fitter {
 
 template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
-         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack>
+         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack,
+         std::derived_from<genfit::AbsFitter> AFitter>
 class GenFitterBase : public FitterBase<AHit, ATrack> {
 public:
     using Measurement = genfit::WireMeasurement;
@@ -70,6 +72,9 @@ public:
     auto DriftErrorRMS(double val) -> void { fDriftErrorRMS = val; }
     auto LowestMomentum(double val) -> void { fLowestMomentum = val; }
     auto EnableEventDisplay(bool val) -> void { fEnableEventDisplay = val; }
+
+    auto GenFitter() const -> const auto& { return fGenFitter; }
+    auto GenFitter() -> auto& { return fGenFitter; }
 
     auto OpenEventDisplay(bool clearUponClose = true) -> void;
     auto ClearEventDisplayTrackStore() -> void { fEventDisplayTrackStore.clear(); }
@@ -101,6 +106,8 @@ private:
 
     std::unique_ptr<TGeoManager> fGeoManager;
     std::vector<std::shared_ptr<genfit::Track>> fEventDisplayTrackStore;
+
+    AFitter fGenFitter;
 };
 
 } // namespace MACE::inline Reconstruction::MMSTracking::inline Fitter

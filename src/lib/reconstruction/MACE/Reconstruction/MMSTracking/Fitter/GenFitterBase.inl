@@ -1,13 +1,15 @@
 namespace MACE::inline Reconstruction::MMSTracking::inline Fitter {
 
 template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
-         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack>
-GenFitterBase<AHit, ATrack>::GenFitterBase(double driftErrorRMS, double lowestMomentum) :
+         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack,
+         std::derived_from<genfit::AbsFitter> AFitter>
+GenFitterBase<AHit, ATrack, AFitter>::GenFitterBase(double driftErrorRMS, double lowestMomentum) :
     fDriftErrorRMS{driftErrorRMS},
     fLowestMomentum{lowestMomentum},
     fEnableEventDisplay{false},
     fGeoManager{},
-    fEventDisplayTrackStore{} {
+    fEventDisplayTrackStore{},
+    fGenFitter{} {
     // geant4 geometry
     Detector::Definition::World world;
     Detector::Assembly::MMS mms{world, false};
@@ -40,11 +42,12 @@ GenFitterBase<AHit, ATrack>::GenFitterBase(double driftErrorRMS, double lowestMo
 }
 
 template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
-         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack>
+         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack,
+         std::derived_from<genfit::AbsFitter> AFitter>
 template<std::indirectly_readable AHitPointer, std::indirectly_readable ASeedPointer>
     requires(Mustard::Data::SuperTupleModel<typename std::iter_value_t<AHitPointer>::Model, AHit> and
              Mustard::Data::SuperTupleModel<typename std::iter_value_t<ASeedPointer>::Model, ATrack>)
-auto GenFitterBase<AHit, ATrack>::Initialize(const std::vector<AHitPointer>& hitData, ASeedPointer seed)
+auto GenFitterBase<AHit, ATrack, AFitter>::Initialize(const std::vector<AHitPointer>& hitData, ASeedPointer seed)
     -> std::pair<std::shared_ptr<genfit::Track>,
                  std::unordered_map<const genfit::AbsMeasurement*, std::iter_value_t<AHitPointer>*>> {
     if (Mustard::Math::Norm2(*Get<"p0">(*seed)) < muc::pow<2>(fLowestMomentum)) {
@@ -101,11 +104,12 @@ auto GenFitterBase<AHit, ATrack>::Initialize(const std::vector<AHitPointer>& hit
 }
 
 template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
-         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack>
+         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack,
+         std::derived_from<genfit::AbsFitter> AFitter>
 template<std::indirectly_readable AHitPointer, std::indirectly_readable ASeedPointer>
     requires(Mustard::Data::SuperTupleModel<typename std::iter_value_t<AHitPointer>::Model, AHit> and
              Mustard::Data::SuperTupleModel<typename std::iter_value_t<ASeedPointer>::Model, ATrack>)
-auto GenFitterBase<AHit, ATrack>::Finalize(std::shared_ptr<genfit::Track> genfitTrack, ASeedPointer seed,
+auto GenFitterBase<AHit, ATrack, AFitter>::Finalize(std::shared_ptr<genfit::Track> genfitTrack, ASeedPointer seed,
                                            const std::unordered_map<const genfit::AbsMeasurement*, AHitPointer>& measurementHitMap)
     -> std::pair<std::shared_ptr<Mustard::Data::Tuple<ATrack>>,
                  std::vector<AHitPointer>> {
@@ -162,16 +166,18 @@ auto GenFitterBase<AHit, ATrack>::Finalize(std::shared_ptr<genfit::Track> genfit
 }
 
 template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
-         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack>
-auto GenFitterBase<AHit, ATrack>::OpenEventDisplay(bool clearUponClose) -> void {
+         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack,
+         std::derived_from<genfit::AbsFitter> AFitter>
+auto GenFitterBase<AHit, ATrack, AFitter>::OpenEventDisplay(bool clearUponClose) -> void {
     genfit::EventDisplay::getInstance()->open();
     if (clearUponClose) { ClearEventDisplayTrackStore(); }
 }
 
 template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
-         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack>
+         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack,
+         std::derived_from<genfit::AbsFitter> AFitter>
 template<Mustard::Concept::NumericVector3FloatingPoint T>
-MUSTARD_ALWAYS_INLINE auto GenFitterBase<AHit, ATrack>::ToTVector3(T src) -> TVector3 {
+MUSTARD_ALWAYS_INLINE auto GenFitterBase<AHit, ATrack, AFitter>::ToTVector3(T src) -> TVector3 {
     TVector3 dest;
     dest[0] = src[0];
     dest[1] = src[1];
@@ -180,9 +186,10 @@ MUSTARD_ALWAYS_INLINE auto GenFitterBase<AHit, ATrack>::ToTVector3(T src) -> TVe
 }
 
 template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
-         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack>
+         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack,
+         std::derived_from<genfit::AbsFitter> AFitter>
 template<Mustard::Concept::NumericVector3FloatingPoint T>
-MUSTARD_ALWAYS_INLINE auto GenFitterBase<AHit, ATrack>::FromTVector3(const TVector3& src) -> T {
+MUSTARD_ALWAYS_INLINE auto GenFitterBase<AHit, ATrack, AFitter>::FromTVector3(const TVector3& src) -> T {
     T dest;
     dest[0] = src[0];
     dest[1] = src[1];
