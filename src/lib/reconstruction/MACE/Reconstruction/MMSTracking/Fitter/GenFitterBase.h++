@@ -31,6 +31,7 @@
 #include "Track.h"
 #include "TrackPoint.h"
 #include "WireMeasurement.h"
+#include "WireMeasurementNew.h"
 
 #include "CLHEP/Units/SystemOfUnits.h"
 
@@ -57,8 +58,8 @@ template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
          Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack,
          std::derived_from<genfit::AbsFitter> AFitter>
 class GenFitterBase : public FitterBase<AHit, ATrack> {
-public:
-    using Measurement = genfit::WireMeasurement;
+private:
+    using Base = FitterBase<AHit, ATrack>;
 
 protected:
     GenFitterBase(double driftErrorRMS, double lowestMomentum = 1 * CLHEP::MeV);
@@ -85,14 +86,13 @@ protected:
                  Mustard::Data::SuperTupleModel<typename std::iter_value_t<ASeedPointer>::Model, ATrack>)
     auto Initialize(const std::vector<AHitPointer>& hitData, ASeedPointer seed)
         -> std::pair<std::shared_ptr<genfit::Track>,
-                     std::unordered_map<const genfit::AbsMeasurement*, std::iter_value_t<AHitPointer>*>>;
+                     std::unordered_map<const genfit::AbsMeasurement*, AHitPointer>>;
     template<std::indirectly_readable AHitPointer, std::indirectly_readable ASeedPointer>
         requires(Mustard::Data::SuperTupleModel<typename std::iter_value_t<AHitPointer>::Model, AHit> and
                  Mustard::Data::SuperTupleModel<typename std::iter_value_t<ASeedPointer>::Model, ATrack>)
     auto Finalize(std::shared_ptr<genfit::Track> genfitTrack, ASeedPointer seed,
                   const std::unordered_map<const genfit::AbsMeasurement*, AHitPointer>& measurementHitMap)
-        -> std::pair<std::shared_ptr<Mustard::Data::Tuple<ATrack>>,
-                     std::vector<AHitPointer>>;
+        -> Base::template Result<AHitPointer>;
 
     template<Mustard::Concept::NumericVector3FloatingPoint T>
     MUSTARD_ALWAYS_INLINE static auto ToTVector3(T src) -> TVector3;

@@ -29,6 +29,9 @@ namespace MACE::inline Reconstruction::MMSTracking::inline Fitter {
 template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit = Data::CDCHit,
          Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack = Data::MMSTrack>
 class GenFitReferenceKalmanFitter : public GenFitterBase<AHit, ATrack, genfit::KalmanFitterRefTrack> {
+private:
+    using Base = GenFitterBase<AHit, ATrack, genfit::DAF>;
+
 public:
     using Hit = AHit;
     using Track = ATrack;
@@ -40,8 +43,7 @@ public:
     template<std::indirectly_readable AHitPointer, std::indirectly_readable ASeedPointer>
         requires(Mustard::Data::SuperTupleModel<typename std::iter_value_t<AHitPointer>::Model, AHit> and
                  Mustard::Data::SuperTupleModel<typename std::iter_value_t<ASeedPointer>::Model, ATrack>)
-    auto operator()(const std::vector<AHitPointer>& hitData, ASeedPointer seed) -> std::pair<std::shared_ptr<Mustard::Data::Tuple<ATrack>>,
-                                                                                             std::vector<std::iter_value_t<AHitPointer>*>>;
+    auto operator()(const std::vector<AHitPointer>& hitData, ASeedPointer seed) -> Base::template Result<AHitPointer>;
 };
 
 } // namespace MACE::inline Reconstruction::MMSTracking::inline Fitter

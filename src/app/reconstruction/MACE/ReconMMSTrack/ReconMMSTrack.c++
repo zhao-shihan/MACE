@@ -51,7 +51,7 @@ auto main(int argc, char* argv[]) -> int {
         [&](bool byPass, auto&& event) {
             if (byPass) { return; }
             for (auto&& [trackID, good] : finder(event).good) {
-                const auto [track, _]{fitter(good.hitData, good.seed)};
+                const auto track{fitter(good.hitData, good.seed).track};
                 if (track == nullptr) { continue; }
                 reconTrack.Fill(*track);
 

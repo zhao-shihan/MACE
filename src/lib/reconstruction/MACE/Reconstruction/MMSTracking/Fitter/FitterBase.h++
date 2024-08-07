@@ -19,6 +19,15 @@ public:
 
 public:
     virtual ~FitterBase() = default;
+
+protected:
+    template<std::indirectly_readable AHitPointer>
+        requires Mustard::Data::SuperTupleModel<typename std::iter_value_t<AHitPointer>::Model, AHit>
+    struct Result {
+        std::shared_ptr<Mustard::Data::Tuple<ATrack>> track;
+        std::vector<AHitPointer> fitted;
+        std::vector<AHitPointer> failed;
+    };
 };
 
 } // namespace MACE::inline Reconstruction::MMSTracking::inline Fitter

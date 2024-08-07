@@ -23,13 +23,16 @@ concept Fitter =
         requires Mustard::Data::SuperTupleModel<typename T::Track, Data::MMSTrack>;
     } and
     requires(T fitter, const std::vector<Mustard::Data::Tuple<typename T::Hit>*> hitData, const Mustard::Data::Tuple<typename T::Track>* seed) {
-        { fitter(hitData, seed) } -> std::same_as<std::pair<std::shared_ptr<Mustard::Data::Tuple<typename T::Track>>, std::vector<std::shared_ptr<Mustard::Data::Tuple<Data::CDCHit>>>>>;
-    } and
-    requires(T fitter, const std::vector<std::unique_ptr<Mustard::Data::Tuple<typename T::Hit>>> hitData, const std::unique_ptr<Mustard::Data::Tuple<typename T::Track>> seed) {
-        { fitter(hitData, seed) } -> std::same_as<std::pair<std::shared_ptr<Mustard::Data::Tuple<typename T::Track>>, std::vector<std::shared_ptr<Mustard::Data::Tuple<Data::CDCHit>>>>>;
+        { fitter(hitData, seed) };
+        { fitter(hitData, seed).track } -> std::same_as<std::shared_ptr<Mustard::Data::Tuple<typename T::Track>>>;
+        { fitter(hitData, seed).fitted } -> std::same_as<std::vector<Mustard::Data::Tuple<typename T::Hit>*>>;
+        { fitter(hitData, seed).failed } -> std::same_as<std::vector<Mustard::Data::Tuple<typename T::Hit>*>>;
     } and
     requires(T fitter, const std::vector<std::shared_ptr<Mustard::Data::Tuple<typename T::Hit>>> hitData, const std::shared_ptr<Mustard::Data::Tuple<typename T::Track>> seed) {
-        { fitter(hitData, seed) } -> std::same_as<std::pair<std::shared_ptr<Mustard::Data::Tuple<typename T::Track>>, std::vector<std::shared_ptr<Mustard::Data::Tuple<Data::CDCHit>>>>>;
+        { fitter(hitData, seed) };
+        { fitter(hitData, seed).track } -> std::same_as<std::shared_ptr<Mustard::Data::Tuple<typename T::Track>>>;
+        { fitter(hitData, seed).fitted } -> std::same_as<std::vector<std::shared_ptr<Mustard::Data::Tuple<typename T::Hit>>>>;
+        { fitter(hitData, seed).failed } -> std::same_as<std::vector<std::shared_ptr<Mustard::Data::Tuple<typename T::Hit>>>>;
     };
 
 template<typename T>
