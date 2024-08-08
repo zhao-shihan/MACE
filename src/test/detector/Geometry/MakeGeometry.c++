@@ -7,12 +7,12 @@
 #include "MACE/Detector/Definition/CDCGas.h++"
 #include "MACE/Detector/Definition/CDCSenseLayer.h++"
 #include "MACE/Detector/Definition/CDCSuperLayer.h++"
+#include "MACE/Detector/Definition/Collimator.h++"
 #include "MACE/Detector/Definition/ECalCrystal.h++"
 #include "MACE/Detector/Definition/ECalField.h++"
 #include "MACE/Detector/Definition/ECalMagnet.h++"
 #include "MACE/Detector/Definition/ECalPMTAssemblies.h++"
 #include "MACE/Detector/Definition/ECalShield.h++"
-#include "MACE/Detector/Definition/Filter.h++"
 #include "MACE/Detector/Definition/MCP.h++"
 #include "MACE/Detector/Definition/MCPChamber.h++"
 #include "MACE/Detector/Definition/MMSBeamPipe.h++"
@@ -120,7 +120,7 @@ int main(int argc, char* argv[]) {
 
     [[maybe_unused]] auto& acceleratorField{mmsBeamPipe.NewDaughter<AcceleratorField>(fCheckOverlap)};
 
-    [[maybe_unused]] auto& filter{solenoidBeamPipeS2.NewDaughter<Filter>(fCheckOverlap)};
+    [[maybe_unused]] auto& collimator{solenoidBeamPipeS2.NewDaughter<Collimator>(fCheckOverlap)};
 
     [[maybe_unused]] auto& cdcGas{cdcBody.NewDaughter<CDCGas>(fCheckOverlap)};
 

@@ -356,7 +356,7 @@ ECalShield:
 FieldOption:
   UseFast: false
   FieldDataFilePath: ${MACE_DATA_DIR}/mace_field_data.root
-Filter:
+Collimator:
   Enabled: true
   Length: 500
   Radius: 49

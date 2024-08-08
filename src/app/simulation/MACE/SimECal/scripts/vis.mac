@@ -39,10 +39,10 @@
 #/vis/viewer/addCutawayPlane 0 0 0
 
 # Colors
-/vis/geometry/set/colour ECalCrystal                    0     1     1     1     0.1
-/vis/geometry/set/colour ECalPMTCathode                 0     1     1     1     0.1
-/vis/geometry/set/colour ECalPMTCoupler                 0     1     1     1     0.1
-/vis/geometry/set/colour ECalPMTShell                   0     1     1     1     0.1
+/vis/geometry/set/colour ECalCrystal                   0     1     1     1     0.1
+/vis/geometry/set/colour ECalPMTCathode                0     1     1     1     0.1
+/vis/geometry/set/colour ECalPMTCoupler                0     1     1     1     0.1
+/vis/geometry/set/colour ECalPMTShell                  0     1     1     1     0.1
 
 /vis/scene/add/date
 /vis/scene/add/axes 0 0 0 10 cm

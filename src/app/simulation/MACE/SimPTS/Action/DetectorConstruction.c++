@@ -1,9 +1,9 @@
 #include "MACE/Detector/Definition/Accelerator.h++"
 #include "MACE/Detector/Definition/AcceleratorField.h++"
+#include "MACE/Detector/Definition/Collimator.h++"
 #include "MACE/Detector/Definition/ECalField.h++"
 #include "MACE/Detector/Definition/ECalMagnet.h++"
 #include "MACE/Detector/Definition/ECalShield.h++"
-#include "MACE/Detector/Definition/Filter.h++"
 #include "MACE/Detector/Definition/MCPChamber.h++"
 #include "MACE/Detector/Definition/MMSBeamPipe.h++"
 #include "MACE/Detector/Definition/MMSField.h++"
@@ -130,7 +130,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     auto& virtualDetectorD{mcpChamber.NewDaughter<Detector::Definition::VirtualDetectorD>(fCheckOverlap)};
 
-    auto& filter{solenoidBeamPipeS2.NewDaughter<MACE::Detector::Definition::Filter>(fCheckOverlap)};
+    auto& collimator{solenoidBeamPipeS2.NewDaughter<MACE::Detector::Definition::Collimator>(fCheckOverlap)};
     auto& virtualDetectorB{solenoidBeamPipeS2.NewDaughter<Detector::Definition::VirtualDetectorB>(fCheckOverlap)};
     auto& virtualDetectorC{solenoidBeamPipeS2.NewDaughter<Detector::Definition::VirtualDetectorC>(fCheckOverlap)};
 
@@ -155,7 +155,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         denseToThinRegion->SetProductionCuts(denseToThinRegionCut);
 
         accelerator.RegisterRegion(denseToThinRegion);
-        filter.RegisterRegion(denseToThinRegion);
+        collimator.RegisterRegion(denseToThinRegion);
 
         // Shield region
 

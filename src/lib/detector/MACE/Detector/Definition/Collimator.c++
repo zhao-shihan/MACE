@@ -1,5 +1,5 @@
-#include "MACE/Detector/Definition/Filter.h++"
-#include "MACE/Detector/Description/Filter.h++"
+#include "MACE/Detector/Definition/Collimator.h++"
+#include "MACE/Detector/Description/Collimator.h++"
 #include "MACE/Detector/Description/SolenoidBeamPipe.h++"
 
 #include "Mustard/Utility/LiteralUnit.h++"
@@ -20,34 +20,34 @@ using namespace Mustard::LiteralUnit::Angle;
 using namespace Mustard::LiteralUnit::Length;
 using namespace Mustard::LiteralUnit::MathConstantSuffix;
 
-bool Filter::Enabled() const {
-    return Description::Filter::Instance().Enabled();
+bool Collimator::Enabled() const {
+    return Description::Collimator::Instance().Enabled();
 }
 
-auto Filter::Construct(G4bool checkOverlaps) -> void {
-    const auto& filter{Description::Filter::Instance()};
+auto Collimator::Construct(G4bool checkOverlaps) -> void {
+    const auto& collimator{Description::Collimator::Instance()};
     const auto& beamPipe{Description::SolenoidBeamPipe::Instance()};
 
-    const auto x0{-(filter.Count() - 1) * filter.Pitch() / 2};
-    for (int k{}; k < filter.Count(); ++k) {
-        const auto x{x0 + k * filter.Pitch()};
-        const auto halfWidth{std::sqrt(muc::pow<2>(filter.Radius()) - muc::pow<2>(x))};
+    const auto x0{-(collimator.Count() - 1) * collimator.Pitch() / 2};
+    for (int k{}; k < collimator.Count(); ++k) {
+        const auto x{x0 + k * collimator.Pitch()};
+        const auto halfWidth{std::sqrt(muc::pow<2>(collimator.Radius()) - muc::pow<2>(x))};
 
         const auto solid{Make<G4Box>(
-            filter.Name(),
-            filter.Thickness() / 2,
+            collimator.Name(),
+            collimator.Thickness() / 2,
             halfWidth,
-            filter.Length() / 2)};
+            collimator.Length() / 2)};
 
         const auto logic{Make<G4LogicalVolume>(
             solid,
-            G4NistManager::Instance()->FindOrBuildMaterial(filter.MaterialName()),
-            filter.Name())};
+            G4NistManager::Instance()->FindOrBuildMaterial(collimator.MaterialName()),
+            collimator.Name())};
 
         Make<G4PVPlacement>( // clang-format off
             G4Transform3D{{}, {x, 0, 0}}, // clang-format on
             logic,
-            filter.Name(),
+            collimator.Name(),
             Mother().LogicalVolume(beamPipe.Name() + "S2Vacuum"),
             false,
             k,

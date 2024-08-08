@@ -66,10 +66,10 @@
 
 # Colors
 /vis/geometry/set/colour CentralBeamPipe               0     1     1     1     0.1
-/vis/geometry/set/colour ECalCrystal                    0     1     1     1     0.1
-/vis/geometry/set/colour ECalPMTCathode                 0     1     1     1     0.1
-/vis/geometry/set/colour ECalPMTCoupler                 0     1     1     1     0.1
-/vis/geometry/set/colour ECalPMTShell                   0     1     1     1     0.1
+/vis/geometry/set/colour ECalCrystal                   0     1     1     1     0.1
+/vis/geometry/set/colour ECalPMTCathode                0     1     1     1     0.1
+/vis/geometry/set/colour ECalPMTCoupler                0     1     1     1     0.1
+/vis/geometry/set/colour ECalPMTShell                  0     1     1     1     0.1
 /vis/geometry/set/colour Target                        0     1     1     1     0.1
 
 /vis/scene/add/date

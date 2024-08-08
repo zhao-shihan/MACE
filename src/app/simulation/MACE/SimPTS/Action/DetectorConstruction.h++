@@ -1,11 +1,11 @@
 #pragma once
 
 #include "MACE/Detector/Description/Accelerator.h++"
+#include "MACE/Detector/Description/Collimator.h++"
 #include "MACE/Detector/Description/ECalField.h++"
 #include "MACE/Detector/Description/ECalMagnet.h++"
 #include "MACE/Detector/Description/ECalShield.h++"
 #include "MACE/Detector/Description/FieldOption.h++"
-#include "MACE/Detector/Description/Filter.h++"
 #include "MACE/Detector/Description/MCPChamber.h++"
 #include "MACE/Detector/Description/MMSBeamPipe.h++"
 #include "MACE/Detector/Description/MMSField.h++"
@@ -53,11 +53,11 @@ public:
                    Detector::Description::VirtualDetectorC,
                    Detector::Description::VirtualDetectorD,
                    MACE::Detector::Description::Accelerator,
+                   MACE::Detector::Description::Collimator,
                    MACE::Detector::Description::ECalField,
                    MACE::Detector::Description::ECalMagnet,
                    MACE::Detector::Description::ECalShield,
                    MACE::Detector::Description::FieldOption,
-                   MACE::Detector::Description::Filter,
                    MACE::Detector::Description::MCPChamber,
                    MACE::Detector::Description::MMSBeamPipe,
                    MACE::Detector::Description::MMSField,

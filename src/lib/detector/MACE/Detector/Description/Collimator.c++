@@ -1,4 +1,4 @@
-#include "MACE/Detector/Description/Filter.h++"
+#include "MACE/Detector/Description/Collimator.h++"
 
 #include "Mustard/Utility/LiteralUnit.h++"
 
@@ -6,8 +6,8 @@ namespace MACE::Detector::Description {
 
 using namespace Mustard::LiteralUnit::Length;
 
-Filter::Filter() :
-    DescriptionBase{"Filter"},
+Collimator::Collimator() :
+    DescriptionBase{"Collimator"},
     // Geometry
     fEnabled{true},
     fLength{500_mm},
@@ -17,7 +17,7 @@ Filter::Filter() :
     // Material
     fMaterialName{"G4_BRONZE"} {}
 
-auto Filter::ImportAllValue(const YAML::Node& node) -> void {
+auto Collimator::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry
     ImportValue(node, fEnabled, "Enabled");
     ImportValue(node, fLength, "Length");
@@ -28,7 +28,7 @@ auto Filter::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fMaterialName, "MaterialName");
 }
 
-auto Filter::ExportAllValue(YAML::Node& node) const -> void {
+auto Collimator::ExportAllValue(YAML::Node& node) const -> void {
     // Geometry
     ExportValue(node, fEnabled, "Enabled");
     ExportValue(node, fLength, "Length");

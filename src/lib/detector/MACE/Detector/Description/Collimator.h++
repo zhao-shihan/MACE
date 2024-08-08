@@ -9,12 +9,12 @@
 
 namespace MACE::Detector::Description {
 
-class Filter final : public Mustard::Detector::Description::DescriptionBase<Filter> {
+class Collimator final : public Mustard::Detector::Description::DescriptionBase<Collimator> {
     friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
-    Filter();
-    ~Filter() = default;
+    Collimator();
+    ~Collimator() = default;
 
 public:
     // Geometry

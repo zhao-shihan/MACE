@@ -7,12 +7,12 @@
 #include "MACE/Detector/Definition/CDCGas.h++"
 #include "MACE/Detector/Definition/CDCSenseLayer.h++"
 #include "MACE/Detector/Definition/CDCSuperLayer.h++"
+#include "MACE/Detector/Definition/Collimator.h++"
 #include "MACE/Detector/Definition/ECalCrystal.h++"
 #include "MACE/Detector/Definition/ECalField.h++"
 #include "MACE/Detector/Definition/ECalMagnet.h++"
 #include "MACE/Detector/Definition/ECalPMTAssemblies.h++"
 #include "MACE/Detector/Definition/ECalShield.h++"
-#include "MACE/Detector/Definition/Filter.h++"
 #include "MACE/Detector/Definition/MCP.h++"
 #include "MACE/Detector/Definition/MCPChamber.h++"
 #include "MACE/Detector/Definition/MMSBeamPipe.h++"
@@ -144,7 +144,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     auto& acceleratorField{mms.Get<Detector::Definition::MMSBeamPipe>().NewDaughter<Detector::Definition::AcceleratorField>(fCheckOverlap)};
 
-    auto& filter{solenoidBeamPipeS2.NewDaughter<Detector::Definition::Filter>(fCheckOverlap)};
+    auto& collimator{solenoidBeamPipeS2.NewDaughter<Detector::Definition::Collimator>(fCheckOverlap)};
 
     // 4
 
@@ -169,7 +169,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         accelerator.RegisterRegion(denseToThinRegion);
         beamDegrader.RegisterRegion(denseToThinRegion);
         beamMonitor.RegisterRegion(denseToThinRegion);
-        filter.RegisterRegion(denseToThinRegion);
+        collimator.RegisterRegion(denseToThinRegion);
         mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCFieldWire", denseToThinRegion);
         mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCSenseWire", denseToThinRegion);
         target.RegisterRegion(denseToThinRegion);

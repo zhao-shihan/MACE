@@ -4,7 +4,7 @@
 
 namespace MACE::Detector::Definition {
 
-class Filter final : public Mustard::Detector::Definition::DefinitionBase {
+class Collimator final : public Mustard::Detector::Definition::DefinitionBase {
 public:
     bool Enabled() const override;
 
