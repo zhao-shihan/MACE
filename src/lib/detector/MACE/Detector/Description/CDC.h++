@@ -136,6 +136,7 @@ public:
         Eigen::Vector2d position;
         Eigen::Vector3d direction;
         double senseWireHalfLength;
+        double centerAzimuth;
     };
 
 private:

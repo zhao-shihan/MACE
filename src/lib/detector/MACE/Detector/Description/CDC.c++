@@ -227,7 +227,8 @@ auto CDC::CalculateCellMap() const -> std::vector<CellInformation> {
                                        Eigen::Vector2d{wireRadialPosition, 0},
                                    Eigen::AngleAxisd{cell.centerAzimuth, Eigen::Vector3d{0, 0, 1}} *
                                        (stereoRotation * Eigen::Vector3d{0, 0, 1}),
-                                   senseWireHalfLength}); // clang-format on
+                                   senseWireHalfLength,
+                                   cell.centerAzimuth}); // clang-format on
                 // const auto& x0{cellMap.back().position};
                 // const auto& t0{cellMap.back().direction};
                 // const auto oldCoutPrecision = std::cout.precision(std::numeric_limits<double>::max_digits10);
