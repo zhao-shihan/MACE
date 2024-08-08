@@ -1,14 +1,14 @@
-#include "MACE/Detector/Definition/EMCCrystal.h++"
-#include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
+#include "MACE/Detector/Definition/ECalCrystal.h++"
+#include "MACE/Detector/Definition/ECalPMTAssemblies.h++"
 #include "MACE/Detector/Definition/Target.h++"
-#include "MACE/Detector/Description/EMC.h++"
+#include "MACE/Detector/Description/ECal.h++"
 #include "MACE/PhaseI/Detector/Definition/CentralBeamPipe.h++"
 #include "MACE/PhaseI/Detector/Definition/World.h++"
 #include "MACE/PhaseI/Detector/Description/UsePhaseIDefault.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Action/DetectorConstruction.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Messenger/DetectorMessenger.h++"
-#include "MACE/PhaseI/SimMACEPhaseI/SD/EMCPMTSD.h++"
-#include "MACE/PhaseI/SimMACEPhaseI/SD/EMCSD.h++"
+#include "MACE/PhaseI/SimMACEPhaseI/SD/ECalPMTSD.h++"
+#include "MACE/PhaseI/SimMACEPhaseI/SD/ECalSD.h++"
 
 #include "Mustard/Detector/Definition/DefinitionBase.h++"
 #include "Mustard/Detector/Description/DescriptionIO.h++"
@@ -33,12 +33,12 @@ DetectorConstruction::DetectorConstruction() :
     fWorld{},
     fDefaultGaseousRegion{},
     fDefaultSolidRegion{},
-    fEMCSensitiveRegion{},
+    fECalSensitiveRegion{},
     fShieldRegion{},
     fTargetRegion{},
     fVacuumRegion{},
-    fEMCSD{},
-    fEMCPMTSD{} {
+    fECalSD{},
+    fECalPMTSD{} {
     DetectorMessenger::EnsureInstantiation();
     Detector::Description::UsePhaseIDefault();
 }
@@ -48,17 +48,17 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     using namespace MACE::Detector::Definition;
 
     fWorld = std::make_unique<PhaseI::World>();
-    auto& emcCrystal{fWorld->NewDaughter<EMCCrystal>(fCheckOverlap)};
-    auto& emcPMTAssemblies{fWorld->NewDaughter<EMCPMTAssemblies>(fCheckOverlap)};
+    auto& eCalCrystal{fWorld->NewDaughter<ECalCrystal>(fCheckOverlap)};
+    auto& eCalPMTAssemblies{fWorld->NewDaughter<ECalPMTAssemblies>(fCheckOverlap)};
     auto& centralBeamPipe{fWorld->NewDaughter<PhaseI::CentralBeamPipe>(fCheckOverlap)};
 
     auto& target{centralBeamPipe.NewDaughter<Target>(fCheckOverlap)};
 
     const auto defaultCuts{G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts()};
 
-    fEMCSensitiveRegion = new Region{"EMCSensitive", RegionType::EMCSensitive};
-    fEMCSensitiveRegion->SetProductionCuts(defaultCuts);
-    emcCrystal.RegisterRegion(fEMCSensitiveRegion);
+    fECalSensitiveRegion = new Region{"ECalSensitive", RegionType::ECalSensitive};
+    fECalSensitiveRegion->SetProductionCuts(defaultCuts);
+    eCalCrystal.RegisterRegion(fECalSensitiveRegion);
 
     fDefaultSolidRegion = new Region{"DefaultSolid", RegionType::DefaultSolid};
     fDefaultSolidRegion->SetProductionCuts(defaultCuts);
@@ -68,13 +68,13 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     fTargetRegion->SetProductionCuts(defaultCuts);
     target.RegisterRegion(fTargetRegion);
 
-    const auto& emcName{MACE::Detector::Description::EMC::Instance().Name()};
+    const auto& eCalName{MACE::Detector::Description::ECal::Instance().Name()};
 
-    fEMCPMTSD = new SD::EMCPMTSD{emcName + "PMT"};
-    emcPMTAssemblies.RegisterSD("EMCPMTCathode", fEMCPMTSD);
+    fECalPMTSD = new SD::ECalPMTSD{eCalName + "PMT"};
+    eCalPMTAssemblies.RegisterSD("ECalPMTCathode", fECalPMTSD);
 
-    fEMCSD = new SD::EMCSD{emcName, fEMCPMTSD};
-    emcCrystal.RegisterSD(fEMCSD);
+    fECalSD = new SD::ECalSD{eCalName, fECalPMTSD};
+    eCalCrystal.RegisterSD(fECalSD);
 
     return fWorld->PhysicalVolume();
 }

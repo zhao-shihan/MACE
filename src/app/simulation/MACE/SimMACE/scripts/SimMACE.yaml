@@ -48,7 +48,7 @@ CDC:
   OuterShellCFRPDensity: 1.2170942695198487e+19
   MeanDriftVelocity: 0.035000000000000003
   TimeResolutionFWHM: 30
-EMC:
+ECal:
   NSubdivision: 2
   InnerRadius: 150
   CrystalHypotenuse: 150
@@ -338,16 +338,16 @@ EMC:
   ScintillationYield: 54000
   ScintillationTimeConstant1: 1000
   ReolutionScale: 1
-EMCField:
+ECalField:
   Radius: 560
   Length: 1000
   FastField: 0.0001
-EMCMagnet:
+ECalMagnet:
   InnerRadius: 500
   OuterRadius: 550
   Length: 1000
   MaterialName: G4_Cu
-EMCShield:
+ECalShield:
   InnerRadius: 600
   InnerLength: 1100
   GapAroundWindow: 10

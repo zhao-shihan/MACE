@@ -7,11 +7,11 @@
 #include "MACE/Detector/Definition/CDCGas.h++"
 #include "MACE/Detector/Definition/CDCSenseLayer.h++"
 #include "MACE/Detector/Definition/CDCSuperLayer.h++"
-#include "MACE/Detector/Definition/EMCCrystal.h++"
-#include "MACE/Detector/Definition/EMCField.h++"
-#include "MACE/Detector/Definition/EMCMagnet.h++"
-#include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
-#include "MACE/Detector/Definition/EMCShield.h++"
+#include "MACE/Detector/Definition/ECalCrystal.h++"
+#include "MACE/Detector/Definition/ECalField.h++"
+#include "MACE/Detector/Definition/ECalMagnet.h++"
+#include "MACE/Detector/Definition/ECalPMTAssemblies.h++"
+#include "MACE/Detector/Definition/ECalShield.h++"
 #include "MACE/Detector/Definition/Filter.h++"
 #include "MACE/Detector/Definition/MCP.h++"
 #include "MACE/Detector/Definition/MCPChamber.h++"
@@ -44,10 +44,10 @@
 #include "MACE/Detector/Definition/Target.h++"
 #include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Description/CDC.h++"
-#include "MACE/Detector/Description/EMC.h++"
+#include "MACE/Detector/Description/ECal.h++"
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Detector/Field/AcceleratorField.h++"
-#include "MACE/Detector/Field/EMCField.h++"
+#include "MACE/Detector/Field/ECalField.h++"
 #include "MACE/Detector/Field/MMSField.h++"
 #include "MACE/Detector/Field/SolenoidFieldS1.h++"
 #include "MACE/Detector/Field/SolenoidFieldS2.h++"
@@ -110,8 +110,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     // 1
 
-    auto& emcField{fWorld->NewDaughter<Detector::Definition::EMCField>(fCheckOverlap)};
-    auto& emcShield{fWorld->NewDaughter<Detector::Definition::EMCShield>(fCheckOverlap)};
+    auto& eCalField{fWorld->NewDaughter<Detector::Definition::ECalField>(fCheckOverlap)};
+    auto& eCalShield{fWorld->NewDaughter<Detector::Definition::ECalShield>(fCheckOverlap)};
     auto& mmsField{fWorld->NewDaughter<Detector::Definition::MMSField>(fCheckOverlap)};
     auto& mmsShield{fWorld->NewDaughter<Detector::Definition::MMSShield>(fCheckOverlap)};
     auto& shieldingWall{fWorld->NewDaughter<Detector::Definition::ShieldingWall>(fCheckOverlap)};
@@ -123,10 +123,10 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     // 2
 
-    auto& emcCrystal{emcField.NewDaughter<Detector::Definition::EMCCrystal>(fCheckOverlap)};
-    auto& emcMagnet{emcField.NewDaughter<Detector::Definition::EMCMagnet>(fCheckOverlap)};
-    auto& emcPMTAssemblies{emcField.NewDaughter<Detector::Definition::EMCPMTAssemblies>(fCheckOverlap)};
-    auto& mcpChamber{emcField.NewDaughter<Detector::Definition::MCPChamber>(fCheckOverlap)};
+    auto& eCalCrystal{eCalField.NewDaughter<Detector::Definition::ECalCrystal>(fCheckOverlap)};
+    auto& eCalMagnet{eCalField.NewDaughter<Detector::Definition::ECalMagnet>(fCheckOverlap)};
+    auto& eCalPMTAssemblies{eCalField.NewDaughter<Detector::Definition::ECalPMTAssemblies>(fCheckOverlap)};
+    auto& mcpChamber{eCalField.NewDaughter<Detector::Definition::MCPChamber>(fCheckOverlap)};
 
     auto& solenoidBeamPipeS1{solenoidFieldS1.NewDaughter<Detector::Definition::SolenoidBeamPipeS1>(fCheckOverlap)};
     auto& solenoidS1{solenoidFieldS1.NewDaughter<Detector::Definition::SolenoidS1>(fCheckOverlap)};
@@ -220,7 +220,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
             RegisterField(solenoidFieldS2, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS2>, false);
             RegisterField(solenoidFieldT2, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldT2>, false);
             RegisterField(solenoidFieldS3, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS3>, false);
-            RegisterField(emcField, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::EMCField>, false);
+            RegisterField(eCalField, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::ECalField>, false);
         }
         { // Accelerator EM field, must be reigstered after MMS magnetic field
             using Field = Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::AcceleratorField>;

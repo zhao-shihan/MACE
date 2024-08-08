@@ -19,7 +19,7 @@ AnalysisMessenger::AnalysisMessenger() :
     fSaveDecayVertexData{},
     fCoincidenceWithMMS{},
     fCoincidenceWithMCP{},
-    fCoincidenceWithEMC{},
+    fCoincidenceWithECal{},
     fSaveTTCHitData{},
     fSaveCDCHitData{} {
 
@@ -46,10 +46,10 @@ AnalysisMessenger::AnalysisMessenger() :
     fCoincidenceWithMCP->SetParameterName("mode", false);
     fCoincidenceWithMCP->AvailableForStates(G4State_Idle);
 
-    fCoincidenceWithEMC = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/CoincidenceWithEMC", this);
-    fCoincidenceWithEMC->SetGuidance("Coincidence with EMC if enabled.");
-    fCoincidenceWithEMC->SetParameterName("mode", false);
-    fCoincidenceWithEMC->AvailableForStates(G4State_Idle);
+    fCoincidenceWithECal = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/CoincidenceWithECal", this);
+    fCoincidenceWithECal->SetGuidance("Coincidence with ECal if enabled.");
+    fCoincidenceWithECal->SetParameterName("mode", false);
+    fCoincidenceWithECal->AvailableForStates(G4State_Idle);
 
     fSaveTTCHitData = std::make_unique<G4UIcmdWithABool>("/MACE/Analysis/SaveTTCHitData", this);
     fSaveTTCHitData->SetGuidance("Save TTC hit data if enabled.");
@@ -81,9 +81,9 @@ auto AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value) -> voi
         Deliver<Analysis>([&](auto&& r) {
             r.CoincidenceWithMCP(fCoincidenceWithMCP->GetNewBoolValue(value));
         });
-    } else if (command == fCoincidenceWithEMC.get()) {
+    } else if (command == fCoincidenceWithECal.get()) {
         Deliver<Analysis>([&](auto&& r) {
-            r.CoincidenceWithEMC(fCoincidenceWithEMC->GetNewBoolValue(value));
+            r.CoincidenceWithECal(fCoincidenceWithECal->GetNewBoolValue(value));
         });
     } else if (command == fSaveTTCHitData.get()) {
         Deliver<Analysis>([&](auto&& r) {

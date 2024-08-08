@@ -5,10 +5,10 @@
 #include "MACE/Detector/Description/BeamDegrader.h++"
 #include "MACE/Detector/Description/BeamMonitor.h++"
 #include "MACE/Detector/Description/CDC.h++"
-#include "MACE/Detector/Description/EMC.h++"
-#include "MACE/Detector/Description/EMCField.h++"
-#include "MACE/Detector/Description/EMCMagnet.h++"
-#include "MACE/Detector/Description/EMCShield.h++"
+#include "MACE/Detector/Description/ECal.h++"
+#include "MACE/Detector/Description/ECalField.h++"
+#include "MACE/Detector/Description/ECalMagnet.h++"
+#include "MACE/Detector/Description/ECalShield.h++"
 #include "MACE/Detector/Description/FieldOption.h++"
 #include "MACE/Detector/Description/Filter.h++"
 #include "MACE/Detector/Description/MCP.h++"
@@ -57,10 +57,10 @@ public:
         std::tuple<Detector::Description::Accelerator,
                    Detector::Description::BeamDegrader,
                    Detector::Description::BeamMonitor,
-                   Detector::Description::EMC,
-                   Detector::Description::EMCField,
-                   Detector::Description::EMCMagnet,
-                   Detector::Description::EMCShield,
+                   Detector::Description::ECal,
+                   Detector::Description::ECalField,
+                   Detector::Description::ECalMagnet,
+                   Detector::Description::ECalShield,
                    Detector::Description::Filter,
                    Detector::Description::MCP,
                    Detector::Description::MCPChamber,

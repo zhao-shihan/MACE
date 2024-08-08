@@ -58,7 +58,7 @@ auto main(int argc, char* argv[]) -> int {
         AppendConfigText("TTCSimHit", cli.TTCSimHitSmearingConfig(), cli.TTCSimHitIdentity());
         AppendConfigText("MMSSimTrack", cli.MMSSimTrackSmearingConfig(), cli.MMSSimTrackIdentity());
         AppendConfigText("MCPSimHit", cli.MCPSimHitSmearingConfig(), cli.MCPSimHitIdentity());
-        AppendConfigText("EMCSimHit", cli.EMCSimHitSmearingConfig(), cli.EMCSimHitIdentity());
+        AppendConfigText("ECalSimHit", cli.ECalSimHitSmearingConfig(), cli.ECalSimHitIdentity());
         Mustard::MakeTextTMacro(smearingConfigText.str(), "SmearingConfig", "Print SmearMACE smearing configuration")->Write();
     } while (false);
     {
@@ -82,7 +82,7 @@ auto main(int argc, char* argv[]) -> int {
         Smear(std::type_identity<Data::TTCSimHit>{}, cli.TTCSimHitNameFormat(), cli.TTCSimHitSmearingConfig(), cli.TTCSimHitIdentity());
         Smear(std::type_identity<Data::MMSSimTrack>{}, cli.MMSSimTrackNameFormat(), cli.MMSSimTrackSmearingConfig(), cli.MMSSimTrackIdentity());
         Smear(std::type_identity<Data::MCPSimHit>{}, cli.MCPSimHitNameFormat(), cli.MCPSimHitSmearingConfig(), cli.MCPSimHitIdentity());
-        Smear(std::type_identity<Data::EMCSimHit>{}, cli.EMCSimHitNameFormat(), cli.EMCSimHitSmearingConfig(), cli.EMCSimHitIdentity());
+        Smear(std::type_identity<Data::ECalSimHit>{}, cli.ECalSimHitNameFormat(), cli.ECalSimHitSmearingConfig(), cli.ECalSimHitIdentity());
     }
 
     return EXIT_SUCCESS;

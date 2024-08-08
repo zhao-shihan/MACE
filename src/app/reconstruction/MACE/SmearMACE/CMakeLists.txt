@@ -2,8 +2,8 @@ file(GLOB_RECURSE SmearMACE_srcs ${CMAKE_CURRENT_SOURCE_DIR}/*.c++)
 add_executable(SmearMACE ${SmearMACE_srcs})
 target_link_libraries(SmearMACE MACEData MACEDetector Mustard::Mustard)
 
-file(GLOB SimEMC_SCRIPTS ${CMAKE_CURRENT_SOURCE_DIR}/scripts/*)
-foreach(_scripts ${SimEMC_SCRIPTS})
+file(GLOB SimECal_SCRIPTS ${CMAKE_CURRENT_SOURCE_DIR}/scripts/*)
+foreach(_scripts ${SimECal_SCRIPTS})
     configure_file(${_scripts} ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
 endforeach()
 

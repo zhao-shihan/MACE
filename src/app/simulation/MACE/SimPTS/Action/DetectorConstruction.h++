@@ -1,9 +1,9 @@
 #pragma once
 
 #include "MACE/Detector/Description/Accelerator.h++"
-#include "MACE/Detector/Description/EMCField.h++"
-#include "MACE/Detector/Description/EMCMagnet.h++"
-#include "MACE/Detector/Description/EMCShield.h++"
+#include "MACE/Detector/Description/ECalField.h++"
+#include "MACE/Detector/Description/ECalMagnet.h++"
+#include "MACE/Detector/Description/ECalShield.h++"
 #include "MACE/Detector/Description/FieldOption.h++"
 #include "MACE/Detector/Description/Filter.h++"
 #include "MACE/Detector/Description/MCPChamber.h++"
@@ -53,9 +53,9 @@ public:
                    Detector::Description::VirtualDetectorC,
                    Detector::Description::VirtualDetectorD,
                    MACE::Detector::Description::Accelerator,
-                   MACE::Detector::Description::EMCField,
-                   MACE::Detector::Description::EMCMagnet,
-                   MACE::Detector::Description::EMCShield,
+                   MACE::Detector::Description::ECalField,
+                   MACE::Detector::Description::ECalMagnet,
+                   MACE::Detector::Description::ECalShield,
                    MACE::Detector::Description::FieldOption,
                    MACE::Detector::Description::Filter,
                    MACE::Detector::Description::MCPChamber,

@@ -44,9 +44,9 @@
 # Colors
 /vis/geometry/set/colour Accelerator                   0     1     1     1     0.1
 /vis/geometry/set/colour AcceleratorField              0     1     1     1     0.05
-/vis/geometry/set/colour EMCField                      0     1     1     1     0.05
-/vis/geometry/set/colour EMCMagnet                     0     1     1     1     0.05
-/vis/geometry/set/colour EMCShield                     0     1     1     1     0.05
+/vis/geometry/set/colour ECalField                      0     1     1     1     0.05
+/vis/geometry/set/colour ECalMagnet                     0     1     1     1     0.05
+/vis/geometry/set/colour ECalShield                     0     1     1     1     0.05
 /vis/geometry/set/colour Filter                        0     1     1     1     0.01
 /vis/geometry/set/colour MCPChamber                    0     1     1     1     0.05
 /vis/geometry/set/colour MCPChamberPipe                0     1     1     1     0.05

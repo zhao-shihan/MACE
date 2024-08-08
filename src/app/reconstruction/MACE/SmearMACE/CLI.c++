@@ -89,19 +89,19 @@ CLIModule::CLIModule(argparse::ArgumentParser& argParser) :
         .add_argument("--mcp-hit-name")
         .help("Set dataset name format. Default to 'G4Run{}/MCPSimHit'.");
 
-    auto& emcHitMutexGroup{ArgParser().add_mutually_exclusive_group()};
-    emcHitMutexGroup
-        .add_argument("--emc-hit")
+    auto& eCalHitMutexGroup{ArgParser().add_mutually_exclusive_group()};
+    eCalHitMutexGroup
+        .add_argument("--ecal-hit")
         .nargs(2)
         .append()
-        .help("Smear a simulated EMC hit variable by a smearing expression (e.g. --emc-hit Edep 'gRandom->Gaus(Edep, 0.041*sqrt(E/0.511))').");
-    emcHitMutexGroup
-        .add_argument("--emc-hit-id")
+        .help("Smear a simulated ECal hit variable by a smearing expression (e.g. --ecal-hit Edep 'gRandom->Gaus(Edep, 0.041*sqrt(E/0.511))').");
+    eCalHitMutexGroup
+        .add_argument("--ecal-hit-id")
         .flag()
-        .help("Save EMC hit data in output file without smearing.");
+        .help("Save ECal hit data in output file without smearing.");
     ArgParser()
-        .add_argument("--emc-hit-name")
-        .help("Set dataset name format. Default to 'G4Run{}/EMCSimHit'.");
+        .add_argument("--ecal-hit-name")
+        .help("Set dataset name format. Default to 'G4Run{}/ECalSimHit'.");
 }
 
 auto CLIModule::DatasetIndexRange() const -> std::pair<gsl::index, gsl::index> {

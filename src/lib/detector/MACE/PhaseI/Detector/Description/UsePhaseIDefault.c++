@@ -1,5 +1,5 @@
 #include "MACE/Detector/Description/Accelerator.h++"
-#include "MACE/Detector/Description/EMC.h++"
+#include "MACE/Detector/Description/ECal.h++"
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/PhaseI/Detector/Description/UsePhaseIDefault.h++"
 
@@ -19,10 +19,10 @@ auto UsePhaseIDefault() -> void {
         auto& target{MACE::Target::Instance()};
         target.ShapeType(MACE::Target::TargetShapeType::Cylinder);
     }
-    { // bigger windows for EMC
-        auto& emc{MACE::EMC::Instance()};
-        emc.UpstreamWindowRadius(100_mm);
-        emc.DownstreamWindowRadius(100_mm);
+    { // bigger windows for ECal
+        auto& eCal{MACE::ECal::Instance()};
+        eCal.UpstreamWindowRadius(100_mm);
+        eCal.DownstreamWindowRadius(100_mm);
     }
 }
 

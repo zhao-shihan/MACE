@@ -1,0 +1,14 @@
+/control/verbose 0
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+
+/run/initialize
+
+/MACE/Generator/SwitchToEcoMug
+
+/MACE/Analysis/FilePath SimECal_crmu
+/MACE/Analysis/FileMode NEW
+
+/run/beamOn 19350000
+/Mustard/Run/PrintRunSummary

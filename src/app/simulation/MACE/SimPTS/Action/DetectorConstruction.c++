@@ -1,8 +1,8 @@
 #include "MACE/Detector/Definition/Accelerator.h++"
 #include "MACE/Detector/Definition/AcceleratorField.h++"
-#include "MACE/Detector/Definition/EMCField.h++"
-#include "MACE/Detector/Definition/EMCMagnet.h++"
-#include "MACE/Detector/Definition/EMCShield.h++"
+#include "MACE/Detector/Definition/ECalField.h++"
+#include "MACE/Detector/Definition/ECalMagnet.h++"
+#include "MACE/Detector/Definition/ECalShield.h++"
 #include "MACE/Detector/Definition/Filter.h++"
 #include "MACE/Detector/Definition/MCPChamber.h++"
 #include "MACE/Detector/Definition/MMSBeamPipe.h++"
@@ -32,7 +32,7 @@
 #include "MACE/Detector/Definition/SolenoidT2.h++"
 #include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Field/AcceleratorField.h++"
-#include "MACE/Detector/Field/EMCField.h++"
+#include "MACE/Detector/Field/ECalField.h++"
 #include "MACE/Detector/Field/MMSField.h++"
 #include "MACE/Detector/Field/SolenoidFieldS1.h++"
 #include "MACE/Detector/Field/SolenoidFieldS2.h++"
@@ -87,8 +87,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     // 1
 
-    auto& emcField{fWorld->NewDaughter<MACE::Detector::Definition::EMCField>(fCheckOverlap)};
-    auto& emcShield{fWorld->NewDaughter<MACE::Detector::Definition::EMCShield>(fCheckOverlap)};
+    auto& eCalField{fWorld->NewDaughter<MACE::Detector::Definition::ECalField>(fCheckOverlap)};
+    auto& eCalShield{fWorld->NewDaughter<MACE::Detector::Definition::ECalShield>(fCheckOverlap)};
     auto& mmsField{fWorld->NewDaughter<MACE::Detector::Definition::MMSField>(fCheckOverlap)};
     auto& mmsShield{fWorld->NewDaughter<MACE::Detector::Definition::MMSShield>(fCheckOverlap)};
     auto& shieldingWall{fWorld->NewDaughter<MACE::Detector::Definition::ShieldingWall>(fCheckOverlap)};
@@ -100,8 +100,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     // 2
 
-    auto& emcMagnet{emcField.NewDaughter<MACE::Detector::Definition::EMCMagnet>(fCheckOverlap)};
-    auto& mcpChamber{emcField.NewDaughter<MACE::Detector::Definition::MCPChamber>(fCheckOverlap)};
+    auto& eCalMagnet{eCalField.NewDaughter<MACE::Detector::Definition::ECalMagnet>(fCheckOverlap)};
+    auto& mcpChamber{eCalField.NewDaughter<MACE::Detector::Definition::MCPChamber>(fCheckOverlap)};
 
     auto& solenoidBeamPipeS1{solenoidFieldS1.NewDaughter<MACE::Detector::Definition::SolenoidBeamPipeS1>(fCheckOverlap)};
     auto& solenoidS1{solenoidFieldS1.NewDaughter<MACE::Detector::Definition::SolenoidS1>(fCheckOverlap)};
@@ -164,7 +164,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         const auto shieldRegion{new G4Region{"Shield"}};
         shieldRegion->SetProductionCuts(shieldRegionCut);
 
-        emcShield.RegisterRegion(shieldRegion);
+        eCalShield.RegisterRegion(shieldRegion);
         mmsShield.RegisterRegion(shieldRegion);
         solenoidShieldS1.RegisterRegion(shieldRegion);
         solenoidShieldS2.RegisterRegion(shieldRegion);
@@ -216,7 +216,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
             RegisterField(solenoidFieldS2, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS2>, false);
             RegisterField(solenoidFieldT2, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldT2>, false);
             RegisterField(solenoidFieldS3, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS3>, false);
-            RegisterField(emcField, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::EMCField>, false);
+            RegisterField(eCalField, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::ECalField>, false);
         }
         { // Accelerator EM field, must be reigstered after MMS magnetic field
             using Field = Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::AcceleratorField>;

@@ -21,7 +21,7 @@ using MCPRawHit = Mustard::Data::TupleModel<
     Mustard::Data::Value<double, "t", "Hit time">,
     Mustard::Data::Value<muc::array2f, "x", "Hit position">>;
 
-using EMCRawHit = Mustard::Data::TupleModel<
+using ECalRawHit = Mustard::Data::TupleModel<
     Mustard::Data::Value<short, "UnitID", "Hit unit ID">,
     Mustard::Data::Value<double, "t", "Hit time">,
     Mustard::Data::Value<float, "Edep", "Energy deposition">>;

@@ -41,9 +41,9 @@ public:
     auto MCPSimHitIdentity() const -> bool { return ArgParser().get<bool>("--mcp-hit-id"); }
     auto MCPSimHitNameFormat() const -> auto { return ArgParser().present("--mcp-hit-name").value_or("G4Run{}/MCPSimHit"); }
 
-    auto EMCSimHitSmearingConfig() const -> auto { return ParseSmearingConfig("--emc-hit"); }
-    auto EMCSimHitIdentity() const -> bool { return ArgParser().get<bool>("--emc-hit-id"); }
-    auto EMCSimHitNameFormat() const -> auto { return ArgParser().present("--emc-hit-name").value_or("G4Run{}/EMCSimHit"); }
+    auto ECalSimHitSmearingConfig() const -> auto { return ParseSmearingConfig("--ecal-hit"); }
+    auto ECalSimHitIdentity() const -> bool { return ArgParser().get<bool>("--ecal-hit-id"); }
+    auto ECalSimHitNameFormat() const -> auto { return ArgParser().present("--ecal-hit-name").value_or("G4Run{}/ECalSimHit"); }
 
 private:
     auto ParseSmearingConfig(std::string_view arg) const -> std::unordered_map<std::string, std::string>;

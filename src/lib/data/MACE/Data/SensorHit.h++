@@ -19,8 +19,8 @@ using TTCSiPMHit = Mustard::Data::TupleModel<
     internal::HitEventIDHitID,
     TTCSiPMRawHit>;
 
-using EMCPMTHit = Mustard::Data::TupleModel<
+using ECalPMTHit = Mustard::Data::TupleModel<
     internal::HitEventIDHitID,
-    EMCPMTRawHit>;
+    ECalPMTRawHit>;
 
 } // namespace MACE::Data

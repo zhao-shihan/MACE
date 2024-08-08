@@ -93,9 +93,9 @@
 # Visibility
 /vis/geometry/set/visibility CDCCell             -1 no
 /vis/geometry/set/visibility CDCSuperLayer        0 no
-/vis/geometry/set/visibility EMCField             0 no
-/vis/geometry/set/visibility EMCPMTCathode        0 no
-/vis/geometry/set/visibility EMCPMTCoupler        0 no
+/vis/geometry/set/visibility ECalField             0 no
+/vis/geometry/set/visibility ECalPMTCathode        0 no
+/vis/geometry/set/visibility ECalPMTCoupler        0 no
 /vis/geometry/set/visibility MMSField             0 no
 /vis/geometry/set/visibility SolenoidFieldS1      0 no
 /vis/geometry/set/visibility SolenoidFieldS2      0 no
@@ -116,13 +116,13 @@
 /vis/geometry/set/colour CDCSenseWire                  0     1     1     1     0.01
 /vis/geometry/set/colour CDCSensitiveVolume            0     1     1     1     0.005
 /vis/geometry/set/colour CDCSuperLayer                 0     1     1     1     0.005
-/vis/geometry/set/colour EMCCrystal                    0     1     1     1     0.1
-/vis/geometry/set/colour EMCField                      0     1     1     1     0.05
-/vis/geometry/set/colour EMCMagnet                     0     1     1     1     0.05
-/vis/geometry/set/colour EMCPMTCathode                 0     1     1     1     0.1
-/vis/geometry/set/colour EMCPMTCoupler                 0     1     1     1     0.1
-/vis/geometry/set/colour EMCPMTShell                   0     1     1     1     0.1
-/vis/geometry/set/colour EMCShield                     0     1     1     1     0.05
+/vis/geometry/set/colour ECalCrystal                    0     1     1     1     0.1
+/vis/geometry/set/colour ECalField                      0     1     1     1     0.05
+/vis/geometry/set/colour ECalMagnet                     0     1     1     1     0.05
+/vis/geometry/set/colour ECalPMTCathode                 0     1     1     1     0.1
+/vis/geometry/set/colour ECalPMTCoupler                 0     1     1     1     0.1
+/vis/geometry/set/colour ECalPMTShell                   0     1     1     1     0.1
+/vis/geometry/set/colour ECalShield                     0     1     1     1     0.05
 /vis/geometry/set/colour Filter                        0     1     1     1     0.01
 /vis/geometry/set/colour MCP                           0     1     1     1     0.1
 /vis/geometry/set/colour MCPAnode                      0     1     1     1     0.1

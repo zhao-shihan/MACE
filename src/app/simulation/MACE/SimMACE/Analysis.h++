@@ -20,7 +20,7 @@ class TFile;
 
 namespace MACE::inline Simulation::inline Hit {
 class CDCHit;
-class EMCHit;
+class ECalHit;
 class MCPHit;
 class TTCHit;
 } // namespace MACE::inline Simulation::inline Hit
@@ -33,7 +33,7 @@ public:
 
     auto CoincidenceWithMMS(bool val) -> void { fCoincidenceWithMMS = val; }
     auto CoincidenceWithMCP(bool val) -> void { fCoincidenceWithMCP = val; }
-    auto CoincidenceWithEMC(bool val) -> void { fCoincidenceWithEMC = val; }
+    auto CoincidenceWithECal(bool val) -> void { fCoincidenceWithECal = val; }
     auto SaveCDCHitData(bool val) -> void { fSaveCDCHitData = val; }
     auto SaveTTCHitData(bool val) -> void { fSaveTTCHitData = val; }
 
@@ -42,7 +42,7 @@ public:
     auto SubmitTTCHC(const std::vector<gsl::owner<TTCHit*>>& hc) -> void { fTTCHit = &hc; }
     auto SubmitCDCHC(const std::vector<gsl::owner<CDCHit*>>& hc) -> void { fCDCHit = &hc; }
     auto SubmitMCPHC(const std::vector<gsl::owner<MCPHit*>>& hc) -> void { fMCPHit = &hc; }
-    auto SubmitEMCHC(const std::vector<gsl::owner<EMCHit*>>& hc) -> void { fEMCHit = &hc; }
+    auto SubmitECalHC(const std::vector<gsl::owner<ECalHit*>>& hc) -> void { fECalHit = &hc; }
 
 private:
     auto RunBeginUserAction(int runID) -> void override;
@@ -52,7 +52,7 @@ private:
 private:
     bool fCoincidenceWithMMS;
     bool fCoincidenceWithMCP;
-    bool fCoincidenceWithEMC;
+    bool fCoincidenceWithECal;
     bool fSaveCDCHitData;
     bool fSaveTTCHitData;
 
@@ -62,14 +62,14 @@ private:
     std::optional<Mustard::Data::Output<Data::CDCSimHit>> fCDCSimHitOutput;
     std::optional<Mustard::Data::Output<Data::MMSSimTrack>> fMMSSimTrackOutput;
     std::optional<Mustard::Data::Output<Data::MCPSimHit>> fMCPSimHitOutput;
-    std::optional<Mustard::Data::Output<Data::EMCSimHit>> fEMCSimHitOutput;
+    std::optional<Mustard::Data::Output<Data::ECalSimHit>> fECalSimHitOutput;
 
     const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimPrimaryVertex>>>* fPrimaryVertex;
     const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimDecayVertex>>>* fDecayVertex;
     const std::vector<gsl::owner<TTCHit*>>* fTTCHit;
     const std::vector<gsl::owner<CDCHit*>>* fCDCHit;
     const std::vector<gsl::owner<MCPHit*>>* fMCPHit;
-    const std::vector<gsl::owner<EMCHit*>>* fEMCHit;
+    const std::vector<gsl::owner<ECalHit*>>* fECalHit;
 
     Simulation::Analysis::MMSTruthTracker fMMSTruthTracker;
 

@@ -7,11 +7,11 @@
 #include "MACE/Detector/Definition/CDCGas.h++"
 #include "MACE/Detector/Definition/CDCSenseLayer.h++"
 #include "MACE/Detector/Definition/CDCSuperLayer.h++"
-#include "MACE/Detector/Definition/EMCCrystal.h++"
-#include "MACE/Detector/Definition/EMCField.h++"
-#include "MACE/Detector/Definition/EMCMagnet.h++"
-#include "MACE/Detector/Definition/EMCPMTAssemblies.h++"
-#include "MACE/Detector/Definition/EMCShield.h++"
+#include "MACE/Detector/Definition/ECalCrystal.h++"
+#include "MACE/Detector/Definition/ECalField.h++"
+#include "MACE/Detector/Definition/ECalMagnet.h++"
+#include "MACE/Detector/Definition/ECalPMTAssemblies.h++"
+#include "MACE/Detector/Definition/ECalShield.h++"
 #include "MACE/Detector/Definition/Filter.h++"
 #include "MACE/Detector/Definition/MCP.h++"
 #include "MACE/Detector/Definition/MCPChamber.h++"
@@ -71,8 +71,8 @@ int main(int argc, char* argv[]) {
 
     // 1
 
-    [[maybe_unused]] auto& emcField{fWorld->NewDaughter<EMCField>(fCheckOverlap)};
-    [[maybe_unused]] auto& emcShield{fWorld->NewDaughter<EMCShield>(fCheckOverlap)};
+    [[maybe_unused]] auto& eCalField{fWorld->NewDaughter<ECalField>(fCheckOverlap)};
+    [[maybe_unused]] auto& eCalShield{fWorld->NewDaughter<ECalShield>(fCheckOverlap)};
     [[maybe_unused]] auto& mmsField{fWorld->NewDaughter<MMSField>(fCheckOverlap)};
     [[maybe_unused]] auto& mmsShield{fWorld->NewDaughter<MMSShield>(fCheckOverlap)};
     [[maybe_unused]] auto& shieldingWall{fWorld->NewDaughter<ShieldingWall>(fCheckOverlap)};
@@ -84,10 +84,10 @@ int main(int argc, char* argv[]) {
 
     // 2
 
-    [[maybe_unused]] auto& emcCrystal{emcField.NewDaughter<EMCCrystal>(fCheckOverlap)};
-    [[maybe_unused]] auto& emcMagnet{emcField.NewDaughter<EMCMagnet>(fCheckOverlap)};
-    [[maybe_unused]] auto& emcPMTAssemblies{emcField.NewDaughter<EMCPMTAssemblies>(fCheckOverlap)};
-    [[maybe_unused]] auto& mcpChamber{emcField.NewDaughter<MCPChamber>(fCheckOverlap)};
+    [[maybe_unused]] auto& eCalCrystal{eCalField.NewDaughter<ECalCrystal>(fCheckOverlap)};
+    [[maybe_unused]] auto& eCalMagnet{eCalField.NewDaughter<ECalMagnet>(fCheckOverlap)};
+    [[maybe_unused]] auto& eCalPMTAssemblies{eCalField.NewDaughter<ECalPMTAssemblies>(fCheckOverlap)};
+    [[maybe_unused]] auto& mcpChamber{eCalField.NewDaughter<MCPChamber>(fCheckOverlap)};
 
     [[maybe_unused]] auto& solenoidBeamPipeS1{solenoidFieldS1.NewDaughter<SolenoidBeamPipeS1>(fCheckOverlap)};
     [[maybe_unused]] auto& solenoidS1{solenoidFieldS1.NewDaughter<SolenoidS1>(fCheckOverlap)};
@@ -164,10 +164,10 @@ int main(int argc, char* argv[]) {
     geoManager->GetVolume(fWorld->LogicalVolume()->GetName())->SetInvisible();
     using Mustard::Detector::Definition::DefinitionBase;
     for (auto&& entity : std::initializer_list<std::reference_wrapper<const DefinitionBase>>{
-             emcCrystal,
-             emcMagnet,
-             emcPMTAssemblies,
-             emcShield,
+             eCalCrystal,
+             eCalMagnet,
+             eCalPMTAssemblies,
+             eCalShield,
              mmsMagnet,
              mmsShield,
              shieldingWall,
