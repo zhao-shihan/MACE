@@ -3,11 +3,9 @@ namespace MACE::inline Reconstruction::MMSTracking::inline Finder {
 template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
          Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack>
 FinderBase<AHit, ATrack>::FinderBase() :
-    fNHitThreshold{},
-    fMaxVertexRxy{} {
+    fMinNHit{} {
     const auto& cdc{Detector::Description::CDC::Instance()};
-    fNHitThreshold = cdc.NSenseLayerPerSuper() * cdc.NSuperLayer();
-    fMaxVertexRxy = cdc.GasInnerRadius();
+    fMinNHit = cdc.NSenseLayerPerSuper() * cdc.NSuperLayer();
 }
 
 template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,

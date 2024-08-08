@@ -23,15 +23,22 @@ namespace MACE::inline Reconstruction::MMSTracking::inline Finder {
 template<Mustard::Data::SuperTupleModel<Data::CDCSimHit> AHit = Data::CDCSimHit,
          Mustard::Data::SuperTupleModel<Data::MMSSimTrack> ATrack = Data::MMSSimTrack>
 class TruthFinder : public FinderBase<AHit, ATrack> {
-protected:
+private:
     using Base = FinderBase<AHit, ATrack>;
 
 public:
+    TruthFinder();
     virtual ~TruthFinder() override = default;
+
+    auto MaxVertexRxy() const -> auto { return fMaxVertexRxy; }
+    auto MaxVertexRxy(double r) -> void { fMaxVertexRxy = std::max(0., r); }
 
     template<std::indirectly_readable AHitPointer>
         requires Mustard::Data::SuperTupleModel<typename std::iter_value_t<AHitPointer>::Model, AHit>
     auto operator()(const std::vector<AHitPointer>& hitData, int = {}) const -> Base::template Result<AHitPointer>;
+
+private:
+    double fMaxVertexRxy;
 };
 
 } // namespace MACE::inline Reconstruction::MMSTracking::inline Finder

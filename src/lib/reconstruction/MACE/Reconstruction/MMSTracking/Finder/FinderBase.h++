@@ -28,11 +28,8 @@ public:
     FinderBase();
     virtual ~FinderBase() = 0;
 
-    auto NHitThreshold() const -> auto { return fNHitThreshold; }
-    auto MaxVertexRxy() const -> auto { return fMaxVertexRxy; }
-
-    auto NHitThreshold(int n) -> void { fNHitThreshold = std::max(1, n); }
-    auto MaxVertexRxy(double r) -> void { fMaxVertexRxy = std::max(0., r); }
+    auto MinNHit() const -> auto { return fMinNHit; }
+    auto MinNHit(int n) -> void { fMinNHit = std::max(1, n); }
 
 protected:
     template<std::indirectly_readable AHitPointer>
@@ -51,9 +48,8 @@ protected:
         requires Mustard::Data::SuperTupleModel<typename std::iter_value_t<AHitPointer>::Model, AHit>
     static auto GoodHitData(const std::vector<AHitPointer>& hitData) -> bool;
 
-protected:
-    int fNHitThreshold;
-    double fMaxVertexRxy;
+private:
+    int fMinNHit;
 };
 
 } // namespace MACE::inline Reconstruction::MMSTracking::inline Finder

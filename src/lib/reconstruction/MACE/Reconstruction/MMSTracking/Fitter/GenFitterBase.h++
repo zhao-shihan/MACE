@@ -46,9 +46,13 @@
 #include "mpi.h"
 
 #include "muc/math"
+#include "muc/numeric"
+
+#include "gsl/gsl"
 
 #include <iterator>
 #include <memory>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -104,7 +108,6 @@ private:
     double fLowestMomentum;
     bool fEnableEventDisplay;
 
-    std::unique_ptr<TGeoManager> fGeoManager;
     std::vector<std::shared_ptr<genfit::Track>> fEventDisplayTrackStore;
 
     AFitter fGenFitter;

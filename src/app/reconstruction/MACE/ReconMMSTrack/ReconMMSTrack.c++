@@ -46,11 +46,12 @@ auto main(int argc, char* argv[]) -> int {
     // fitter.EnableEventDisplay(true);
 
     Mustard::Data::Processor processor;
+    auto nextTrackID{0};
     processor.Process<Data::CDCSimHit>(
         ROOT::RDataFrame{"G4Run0/CDCSimHit", files}, "EvtID",
         [&](bool byPass, auto&& event) {
             if (byPass) { return; }
-            for (auto&& [trackID, good] : finder(event).good) {
+            for (auto&& [trackID, good] : finder(event, nextTrackID).good) {
                 const auto track{fitter(good.hitData, good.seed).track};
                 if (track == nullptr) { continue; }
                 reconTrack.Fill(*track);
@@ -72,6 +73,8 @@ auto main(int argc, char* argv[]) -> int {
                 Get<"z0">(trackError) = Get<"z0">(*track) - Get<"z0">(*good.seed);
                 Get<"theta0">(trackError) = Get<"theta0">(*track) - Get<"theta0">(*good.seed);
                 reconTrackError.Fill(std::move(trackError));
+
+                nextTrackID = trackID;
             }
         });
 

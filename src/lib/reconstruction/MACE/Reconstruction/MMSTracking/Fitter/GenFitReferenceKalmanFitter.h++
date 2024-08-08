@@ -30,7 +30,7 @@ template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit = Data::CDCHit,
          Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack = Data::MMSTrack>
 class GenFitReferenceKalmanFitter : public GenFitterBase<AHit, ATrack, genfit::KalmanFitterRefTrack> {
 private:
-    using Base = GenFitterBase<AHit, ATrack, genfit::DAF>;
+    using Base = GenFitterBase<AHit, ATrack, genfit::KalmanFitterRefTrack>;
 
 public:
     using Hit = AHit;

@@ -8,34 +8,37 @@ GenFitterBase<AHit, ATrack, AFitter>::GenFitterBase(double driftErrorRMS, double
     fDriftErrorRMS{driftErrorRMS},
     fLowestMomentum{lowestMomentum},
     fEnableEventDisplay{false},
-    fGeoManager{},
     fEventDisplayTrackStore{},
     fGenFitter{} {
-    // geant4 geometry
-    Detector::Definition::World world;
-    Detector::Assembly::MMS mms{world, false};
-    mms.Get<Detector::Definition::CDCGas>().RemoveDaughter<Detector::Definition::CDCSuperLayer>();
-    // geant4 -> gdml
-    const auto& mpiEnv{Mustard::Env::MPIEnv::Instance()};
-    std::filesystem::path gdmlFSPath;
-    std::filesystem::path::string_type gdmlPath;
-    if (mpiEnv.OnCommNodeMaster()) {
-        gdmlFSPath = Mustard::CreateTemporaryFile("mms_temp", ".gdml");
-        world.Export(gdmlFSPath);
-        gdmlPath = gdmlFSPath;
-    }
-    auto gdmlPathLength{gdmlPath.length()};
-    MPI_Bcast(&gdmlPathLength, 1, Mustard::MPIX::DataType(gdmlPathLength), 0, mpiEnv.CommNode());
-    gdmlPath.resize(gdmlPathLength);
-    MPI_Bcast(gdmlPath.data(), gdmlPathLength, Mustard::MPIX::DataType(gdmlPath.data()), 0, mpiEnv.CommNode());
-    // gdml -> root
-    fGeoManager = std::unique_ptr<TGeoManager>{TGeoManager::Import(gdmlPath.c_str())};
-    fGeoManager->GetTopVolume()->SetInvisible();
-    // remove gdml
-    MPI_Barrier(mpiEnv.CommNode());
-    if (mpiEnv.OnCommNodeMaster()) {
-        std::error_code ec;
-        std::filesystem::remove(gdmlFSPath, ec);
+    if (const auto name{"MACEMMS"};
+        gGeoManager == nullptr or std::string_view{gGeoManager->GetName()} != name) {
+        // geant4 geometry
+        Detector::Definition::World world;
+        Detector::Assembly::MMS mms{world, false};
+        mms.Get<Detector::Definition::CDCGas>().RemoveDaughter<Detector::Definition::CDCSuperLayer>();
+        // geant4 -> gdml
+        const auto& mpiEnv{Mustard::Env::MPIEnv::Instance()};
+        std::filesystem::path gdmlFSPath;
+        std::filesystem::path::string_type gdmlPath;
+        if (mpiEnv.OnCommNodeMaster()) {
+            gdmlFSPath = Mustard::CreateTemporaryFile("mms_temp", ".gdml");
+            world.Export(gdmlFSPath);
+            gdmlPath = gdmlFSPath;
+        }
+        auto gdmlPathLength{gdmlPath.length()};
+        MPI_Bcast(&gdmlPathLength, 1, Mustard::MPIX::DataType(gdmlPathLength), 0, mpiEnv.CommNode());
+        gdmlPath.resize(gdmlPathLength);
+        MPI_Bcast(gdmlPath.data(), gdmlPathLength, Mustard::MPIX::DataType(gdmlPath.data()), 0, mpiEnv.CommNode());
+        // gdml -> root
+        TGeoManager::Import(gdmlPath.c_str());
+        gGeoManager->SetName(name);
+        gGeoManager->GetTopVolume()->SetInvisible();
+        // remove gdml
+        MPI_Barrier(mpiEnv.CommNode());
+        if (mpiEnv.OnCommNodeMaster()) {
+            std::error_code ec;
+            std::filesystem::remove(gdmlFSPath, ec);
+        }
     }
     // setup genfit
     genfit::MaterialEffects::getInstance()->init(new genfit::TGeoMaterialInterface);
@@ -133,17 +136,28 @@ auto GenFitterBase<AHit, ATrack, AFitter>::Finalize(std::shared_ptr<genfit::Trac
         return {};
     }
 
+    const auto cardinalRep{genfitTrack->getCardinalRep()};
     const auto& allPoint{genfitTrack->getPointsWithMeasurement()};
     std::vector<AHitPointer> fitted;
     fitted.reserve(allPoint.size());
     std::vector<AHitPointer> failed;
     failed.reserve(allPoint.size());
-    for (const auto cardinalRep{genfitTrack->getCardinalRep()};
-         auto&& point : allPoint) {
-        (point->hasFitterInfo(cardinalRep) ? fitted : failed)
-            .emplace_back(measurementHitMap.at(point->getRawMeasurement()));
+    int lastFittedID{};
+    for (gsl::index i{}; i < ssize(allPoint); ++i) {
+        const auto fit{allPoint[i]->hasFitterInfo(cardinalRep)};
+        (fit ? fitted : failed)
+            .emplace_back(measurementHitMap.at(allPoint[i]->getRawMeasurement()));
+        if (fit) {
+            lastFittedID = i;
+        }
     }
 
+    const auto t0{/* muc::ranges::transform_reduce(
+                      fitted, 0., std::plus<>{},
+                      [](auto&& hit) { return Get<"tT">(*hit); }) /
+                      fitted.size() -
+                  genfitTrack->getTOF(cardinalRep, 0, lastFittedID) */
+                  Get<"t0">(*seed)};
     const auto x0{Mustard::ToG4<"Length">(firstState->getPos())};
     const auto p0{Mustard::ToG4<"Energy">(firstState->getMom())};
     const auto mass{Mustard::ToG4<"Energy">(firstState->getMass())};
@@ -157,7 +171,7 @@ auto GenFitterBase<AHit, ATrack, AFitter>::Finalize(std::shared_ptr<genfit::Trac
     std::ranges::transform(fitted, Get<"HitID">(*track)->begin(),
                            [](auto&& hit) { return Get<"HitID">(*hit); });
     Get<"chi2">(*track) = status.getChi2() / status.getNdf();
-    Get<"t0">(*track) = Get<"t0">(*seed);
+    Get<"t0">(*track) = t0;
     Get<"PDGID">(*track) = pdgID;
     Get<"x0">(*track) = this->template FromTVector3<muc::array3d>(x0);
     Get<"Ek0">(*track) = ek0;
