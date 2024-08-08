@@ -18,7 +18,6 @@ using HitEventIDHitID = Mustard::Data::TupleModel<
 using CDCHit = Mustard::Data::TupleModel<
     internal::HitEventIDHitID,
     CDCRawHit,
-    Mustard::Data::Value<float, "tD", "Drift time">,
     Mustard::Data::Value<float, "d", "Drift distance">,
     Mustard::Data::Value<bool, "Good", "Good flag">>;
 
