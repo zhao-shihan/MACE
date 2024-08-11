@@ -15,6 +15,7 @@ MMSTruthTracker::MMSTruthTracker() :
     fMessengerRegister{this} {
     const auto& cdc{Detector::Description::CDC::Instance()};
     fTrackFinder.MinNHit(cdc.NSenseLayerPerSuper() * cdc.NSuperLayer());
+    fTrackFinder.MaxVertexRxy(cdc.GasInnerRadius());
 }
 
 auto MMSTruthTracker::operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitHC,
