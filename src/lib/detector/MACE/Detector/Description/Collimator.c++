@@ -15,7 +15,7 @@ Collimator::Collimator() :
     fThickness{0.2_mm},
     fPitch{1.15_mm},
     // Material
-    fMaterialName{"G4_BRONZE"} {}
+    fMaterialName{"G4_BRASS"} {}
 
 auto Collimator::ImportAllValue(const YAML::Node& node) -> void {
     // Geometry

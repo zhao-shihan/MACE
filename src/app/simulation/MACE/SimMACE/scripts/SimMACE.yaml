@@ -362,7 +362,7 @@ Collimator:
   Radius: 49
   Thickness: 0.20000000000000001
   Pitch: 1.1499999999999999
-  MaterialName: G4_BRONZE
+  MaterialName: G4_BRASS
 MCP:
   Diameter: 100
   Thickness: 1
