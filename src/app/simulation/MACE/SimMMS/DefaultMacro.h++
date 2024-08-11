@@ -9,7 +9,7 @@ constexpr auto defaultMacro = {
     "#/control/saveHistory",
     "/run/verbose 2",
     "",
-    "#/MACE/Detector/Description/Ixport mms_geom.yaml",
+    "#/Mustard/Detector/Description/Ixport mms_geom.yaml",
     "",
     "/run/initialize",
     "",
@@ -19,11 +19,8 @@ constexpr auto defaultMacro = {
     "/gps/ang/type                         iso",
     "/gps/ene/mono                         52.8 MeV",
     "",
-    "/MACE/Analysis/CoincidenceWithCDC     false",
-    "/MACE/Analysis/CoincidenceWithTTC     false",
-    "",
-    "/MACE/Analysis/FilePath SimMMS_vis",
-    "/MACE/Analysis/FileMode RECREATE",
+    "/Mustard/Analysis/FilePath SimMMS_vis",
+    "/Mustard/Analysis/FileMode RECREATE",
     "",
 
 #if MACE_USE_G4VIS

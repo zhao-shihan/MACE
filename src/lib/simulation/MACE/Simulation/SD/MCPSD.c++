@@ -27,6 +27,7 @@
 #include <ranges>
 #include <stdexcept>
 #include <string_view>
+#include <tuple>
 
 namespace MACE::inline Simulation::inline SD {
 
@@ -87,6 +88,7 @@ auto MCPSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"t">(*hit) = preStepPoint.GetGlobalTime();
     Get<"x">(*hit) = hitPosition;
+    Get<"Trig">(*hit) = false; // to be determined
     Get<"Edep">(*hit) = eDep;
     Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
     Get<"p">(*hit) = preStepPoint.GetMomentum();
@@ -141,7 +143,9 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                                    [](const auto& hit1, const auto& hit2) {
                                                        return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
                                                    })};
-            if (rng.flat() > fEfficiency->CubicSplineInterpolation(Get<"Ek">(*topHit))) { continue; }
+            if (rng.flat() < fEfficiency->CubicSplineInterpolation(Get<"Ek">(*topHit))) {
+                Get<"Trig">(*topHit) = true;
+            }
             // construct real hit
             Get<"HitID">(*topHit) = hitID++;
             for (const auto& hit : cluster) {
@@ -153,6 +157,12 @@ auto MCPSD::EndOfEvent(G4HCofThisEvent*) -> void {
     } break;
     }
     fSplitHit.clear();
+
+    muc::timsort(*fHitsCollection->GetVector(),
+                 [](const auto& hit1, const auto& hit2) {
+                     return std::tie(Get<"TrkID">(*hit1), Get<"HitID">(*hit1)) <
+                            std::tie(Get<"TrkID">(*hit2), Get<"HitID">(*hit2));
+                 });
 }
 
 } // namespace MACE::inline Simulation::inline SD

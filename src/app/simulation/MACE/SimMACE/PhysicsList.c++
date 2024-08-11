@@ -1,5 +1,5 @@
 #include "MACE/Detector/Description/CDC.h++"
-#include "MACE/Detector/Description/Filter.h++"
+#include "MACE/Detector/Description/Collimator.h++"
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/SimMACE/PhysicsList.h++"
@@ -41,9 +41,9 @@ auto PhysicsList::ApplyMACEPxyCut(bool apply) -> void {
                 const auto cdcInnerRadius{Detector::Description::CDC::Instance().GasInnerRadius()};
                 const auto cdcPxyCut{(cdcInnerRadius / 2) * mmsB * c_light};
 
-                const auto& filter{Detector::Description::Filter::Instance()};
+                const auto& collimator{Detector::Description::Collimator::Instance()};
                 const auto& solenoid{Detector::Description::Solenoid::Instance()};
-                const auto maxPositronRxy{filter.Enabled() ? 5 * filter.Pitch() : solenoid.InnerRadius()};
+                const auto maxPositronRxy{collimator.Enabled() ? 5 * collimator.Pitch() : solenoid.InnerRadius()};
                 const auto maxPositronPxy{maxPositronRxy * solenoid.FastField() * c_light};
 
                 const auto positron1Pxy{muc::hypot(p.x(), p.y())};

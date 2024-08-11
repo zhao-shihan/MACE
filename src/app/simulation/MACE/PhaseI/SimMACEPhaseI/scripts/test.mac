@@ -2,7 +2,7 @@
 /run/verbose 0
 
 /MACE/Physics/UseOpticalPhysics
-/MACE/Detector/Description/Import test.yaml
+/Mustard/Detector/Description/Import test.yaml
 
 /run/initialize
 

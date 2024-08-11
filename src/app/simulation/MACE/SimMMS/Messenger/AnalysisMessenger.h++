@@ -33,14 +33,10 @@ public:
 
 private:
     std::unique_ptr<G4UIdirectory> fDirectory;
-    std::unique_ptr<G4UIcmdWithAString> fFilePath;
-    std::unique_ptr<G4UIcmdWithAString> fFileMode;
     std::unique_ptr<G4UIcmdWithABool> fSavePrimaryVertexData;
     std::unique_ptr<G4UIcmdWithABool> fSaveDecayVertexData;
-    std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithCDC;
-    std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithTTC;
-    std::unique_ptr<G4UIcmdWithABool> fSaveCDCHitData;
     std::unique_ptr<G4UIcmdWithABool> fSaveTTCHitData;
+    std::unique_ptr<G4UIcmdWithABool> fSaveCDCHitData;
 };
 
 } // namespace Messenger

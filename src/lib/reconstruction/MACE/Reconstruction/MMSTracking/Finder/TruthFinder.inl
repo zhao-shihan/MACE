@@ -1,36 +1,37 @@
 namespace MACE::inline Reconstruction::MMSTracking::inline Finder {
 
-template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
-         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack>
+template<Mustard::Data::SuperTupleModel<Data::CDCSimHit> AHit,
+         Mustard::Data::SuperTupleModel<Data::MMSSimTrack> ATrack>
 TruthFinder<AHit, ATrack>::TruthFinder() :
     Base{},
-    fNHitThreshold{} {
+    fMaxVertexRxy{} {
     const auto& cdc{Detector::Description::CDC::Instance()};
-    fNHitThreshold = cdc.NSenseLayerPerSuper() * cdc.NSuperLayer();
+    fMaxVertexRxy = cdc.GasInnerRadius();
 }
 
-template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
-         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack>
+template<Mustard::Data::SuperTupleModel<Data::CDCSimHit> AHit,
+         Mustard::Data::SuperTupleModel<Data::MMSSimTrack> ATrack>
 template<std::indirectly_readable AHitPointer>
-    requires std::derived_from<std::decay_t<std::iter_value_t<AHitPointer>>, Mustard::Data::Tuple<AHit>>
-auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitData, int) -> Base::template Result<AHitPointer> {
+    requires Mustard::Data::SuperTupleModel<typename std::iter_value_t<AHitPointer>::Model, AHit>
+auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitData, int) const -> Base::template Result<AHitPointer> {
     using Result = Base::template Result<AHitPointer>;
 
     if (not this->GoodHitData(hitData) or
-        ssize(hitData) < fNHitThreshold) { return {}; }
+        ssize(hitData) < this->MinNHit() or
+        GetAs<"x0", CLHEP::Hep3Vector>(*hitData.front()).perp2() > muc::pow<2>(fMaxVertexRxy)) {
+        return {.garbage = hitData};
+    }
 
     Result r;
-    r.good.reserve(hitData.size() / fNHitThreshold);
+    r.good.reserve(hitData.size() / this->MinNHit());
     r.garbage.reserve(hitData.size());
-
-    const auto magneticFluxDensity{Detector::Description::MMSField::Instance().FastField()};
 
     std::ranges::subrange track{hitData.cbegin(), hitData.cbegin()};
     const auto CollectGarbage{
         [&] { r.garbage.insert(r.garbage.end(), track.begin(), track.end()); }};
 
     std::unordered_set<short> cellHit;
-    cellHit.reserve(fNHitThreshold);
+    cellHit.reserve(this->MinNHit());
 
     while (track.end() != hitData.end()) {
         track = {track.end(), std::ranges::upper_bound(track.end(), hitData.end(), *track.end(),
@@ -38,7 +39,7 @@ auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitDa
                                                            return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
                                                        })};
 
-        if (std::ranges::ssize(track) < fNHitThreshold) {
+        if (std::ranges::ssize(track) < this->MinNHit()) {
             CollectGarbage();
             continue;
         }
@@ -47,12 +48,14 @@ auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitDa
         for (auto&& hit : track) {
             cellHit.emplace(Get<"CellID">(*hit));
         }
-        if (ssize(cellHit) < fNHitThreshold) {
+        if (ssize(cellHit) < this->MinNHit()) {
             CollectGarbage();
             continue;
         }
 
-        auto outputTrackID{*Get<"TrkID">(**track.begin())};
+        const auto& firstHit{**track.begin()};
+
+        auto outputTrackID{*Get<"TrkID">(firstHit)};
         auto [iGoodTrack, inserted]{r.good.try_emplace(outputTrackID, typename Result::GoodTrack{})};
         while (not inserted) {
             Mustard::Env::PrintLnWarning("Warning: Disordered dataset (track {} has appeared before), attempting to assign track ID {}", outputTrackID, outputTrackID + 1);
@@ -66,7 +69,6 @@ auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitDa
         }
 
         seed = std::make_shared_for_overwrite<Mustard::Data::Tuple<Data::MMSSimTrack>>();
-        const auto& firstHit{**track.begin()};
         Get<"EvtID">(*seed) = Get<"EvtID">(firstHit);
         Get<"TrkID">(*seed) = outputTrackID;
         Get<"HitID">(*seed)->reserve(track.size());
@@ -77,7 +79,7 @@ auto TruthFinder<AHit, ATrack>::operator()(const std::vector<AHitPointer>& hitDa
         Get<"x0">(*seed) = Get<"x0">(firstHit);
         Get<"Ek0">(*seed) = Get<"Ek0">(firstHit);
         Get<"p0">(*seed) = Get<"p0">(firstHit);
-        Data::CalculateHelix(*seed, magneticFluxDensity);
+        Data::CalculateHelix(*seed, Detector::Description::MMSField::Instance().FastField());
         Get<"CreatProc">(*seed) = Get<"CreatProc">(firstHit);
     }
 

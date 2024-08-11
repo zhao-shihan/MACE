@@ -5,7 +5,7 @@
 /control/verbose 0
 /run/verbose 0
 
-#/MACE/Detector/Description/Ixport SimMACE_geom.yaml
+#/Mustard/Detector/Description/Ixport SimMACE_geom.yaml
 
 /run/initialize
 
@@ -30,17 +30,19 @@
 
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 
-/MACE/Analysis/CoincidenceWithCDC     yes
-/MACE/Analysis/CoincidenceWithTTC     yes
+/MACE/Analysis/SavePrimaryVertexData  yes
+/MACE/Analysis/SaveDecayVertexData    yes
 /MACE/Analysis/CoincidenceWithMMS     yes
 /MACE/Analysis/CoincidenceWithMCP     yes
-/MACE/Analysis/CoincidenceWithEMC     yes
+/MACE/Analysis/CoincidenceWithECal    yes
+/MACE/Analysis/SaveTTCHitData         yes
+/MACE/Analysis/SaveCDCHitData         yes
 
 #############################################################################
 # Run
 #############################################################################
 
-/MACE/Analysis/FilePath SimMACE_mu2eeevv
-/MACE/Analysis/FileMode NEW
+/Mustard/Analysis/FilePath SimMACE_mu2eeevv
+/Mustard/Analysis/FileMode NEW
 /run/beamOn 100000000
 /Mustard/Run/PrintRunSummary

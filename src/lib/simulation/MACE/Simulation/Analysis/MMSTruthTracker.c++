@@ -14,12 +14,13 @@ MMSTruthTracker::MMSTruthTracker() :
     fTrackFinder{},
     fMessengerRegister{this} {
     const auto& cdc{Detector::Description::CDC::Instance()};
-    fTrackFinder.NHitThreshold(cdc.NSenseLayerPerSuper() * cdc.NSuperLayer());
+    fTrackFinder.MinNHit(cdc.NSenseLayerPerSuper() * cdc.NSuperLayer());
+    fTrackFinder.MaxVertexRxy(cdc.GasInnerRadius());
 }
 
 auto MMSTruthTracker::operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitHC,
                                  const std::vector<gsl::owner<TTCHit*>>& ttcHitHC) -> std::vector<std::shared_ptr<Mustard::Data::Tuple<Data::MMSSimTrack>>> {
-    if (ssize(cdcHitHC) < fTrackFinder.NHitThreshold() or
+    if (ssize(cdcHitHC) < fTrackFinder.MinNHit() or
         ssize(ttcHitHC) < fMinNTTCHitForQualifiedTrack) { return {}; }
 
     constexpr auto ByTrackID{
@@ -32,15 +33,15 @@ auto MMSTruthTracker::operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitH
 
     // find CDC hits coincidence with TTC hits
 
-    std::vector<CDCHit*> coincidenceCDCHitHC;
-    coincidenceCDCHitHC.reserve(cdcHitHC.size());
+    std::vector<std::shared_ptr<Mustard::Data::Tuple<Data::MMSSimTrack>>> mmsTrackData;
+    mmsTrackData.reserve(cdcHitHC.size() / fTrackFinder.MinNHit());
 
     std::ranges::subrange trackTTCHit{ttcHitHC.cbegin(), ttcHitHC.cbegin()};
     const auto trackCDCHitFirst{std::ranges::lower_bound(cdcHitHC, ttcHitHC.front(), ByTrackID)};
     std::ranges::subrange trackCDCHit{trackCDCHitFirst, trackCDCHitFirst};
 
     std::unordered_set<short> tileHit;
-    tileHit.reserve(fMinNTTCHitForQualifiedTrack);
+    tileHit.reserve(2 * fMinNTTCHitForQualifiedTrack);
 
     while (trackTTCHit.end() != ttcHitHC.cend() and
            trackCDCHit.end() != cdcHitHC.cend()) {
@@ -48,7 +49,8 @@ auto MMSTruthTracker::operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitH
         trackCDCHit = {trackCDCHit.end(), std::ranges::upper_bound(trackCDCHit.end(), cdcHitHC.cend(), trackTTCHit.front(), ByTrackID)};
 
         if (std::ranges::ssize(trackTTCHit) < fMinNTTCHitForQualifiedTrack or
-            std::ranges::ssize(trackCDCHit) < fTrackFinder.NHitThreshold()) {
+            std::ranges::ssize(trackCDCHit) < fTrackFinder.MinNHit() or
+            GetAs<"x0", G4ThreeVector>(**trackCDCHit.begin()).perp2() > muc::pow<2>(fTrackFinder.MaxVertexRxy())) {
             continue;
         }
 
@@ -56,21 +58,24 @@ auto MMSTruthTracker::operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitH
         for (auto&& hit : trackTTCHit) {
             tileHit.emplace(Get<"TileID">(*hit));
         }
-        if (ssize(tileHit) >= fMinNTTCHitForQualifiedTrack) {
-            coincidenceCDCHitHC.insert(coincidenceCDCHitHC.end(), trackCDCHit.begin(), trackCDCHit.end());
+        if (ssize(tileHit) < fMinNTTCHitForQualifiedTrack) {
+            continue;
         }
-    }
 
-    if (coincidenceCDCHitHC.empty()) { return {}; }
+        auto mmsTrack{fTrackFinder(std::vector(trackCDCHit.begin(), trackCDCHit.end())).good};
+        if (mmsTrack.empty()) {
+            continue;
+        }
 
-    // build track truths from hit
-
-    auto mmsTrackDataNoCoincidence{fTrackFinder(coincidenceCDCHitHC).good};
-
-    std::vector<std::shared_ptr<Mustard::Data::Tuple<Data::MMSSimTrack>>> mmsTrackData;
-    mmsTrackData.reserve(mmsTrackDataNoCoincidence.size());
-    for (auto&& [_, track] : mmsTrackDataNoCoincidence) {
-        mmsTrackData.emplace_back(std::move(track.seed));
+        for (auto&& hit : trackTTCHit) {
+            Get<"Good">(*hit) = true;
+        }
+        for (auto&& [_, track] : mmsTrack) {
+            for (auto&& hit : track.hitData) {
+                Get<"Good">(*hit) = true;
+            }
+            mmsTrackData.emplace_back(std::move(track.seed));
+        }
     }
 
     return mmsTrackData;

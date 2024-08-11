@@ -2,21 +2,21 @@
 #include "MACE/Data/MMSTrack.h++"
 #include "MACE/Data/SimHit.h++"
 #include "MACE/Reconstruction/MMSTracking/Finder/TruthFinder.h++"
+#include "MACE/Reconstruction/MMSTracking/Fitter/GenFitDAFFitter.h++"
+#include "MACE/Reconstruction/MMSTracking/Fitter/GenFitReferenceKalmanFitter.h++"
+#include "MACE/Reconstruction/MMSTracking/Fitter/TruthFitter.h++"
 
 #include "Mustard/Data/Output.h++"
-#include "Mustard/Data/TakeFrom.h++"
+#include "Mustard/Data/Processor.h++"
 #include "Mustard/Data/Tuple.h++"
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Env/Print.h++"
 #include "Mustard/Extension/MPIX/DataType.h++"
-#include "Mustard/Extension/MPIX/Execution/Executor.h++"
 #include "Mustard/Extension/MPIX/ParallelizePath.h++"
-#include "Mustard/Utility/RDFEventSplitPoint.h++"
+#include "Mustard/Utility/VectorArithmeticOperator.h++"
 
 #include "ROOT/RDataFrame.hxx"
 #include "TFile.h"
-
-#include "mpi.h"
 
 #include <algorithm>
 #include <array>
@@ -36,23 +36,51 @@ auto main(int argc, char* argv[]) -> int {
     std::vector<std::string> files;
     for (auto i{1}; i < argc; ++i) { files.emplace_back(argv[i]); }
 
-    ROOT::RDataFrame cdcSimHit{"G4Run0/CDCSimHit", files};
-    const auto eventSplitPoint{Mustard::RDFEventSplitPoint(cdcSimHit)};
-
-    MMSTracking::TruthFinder finder;
-
     TFile file{Mustard::MPIX::ParallelizePath("output.root").generic_string().c_str(), "RECREATE"};
     Mustard::Data::Output<Data::MMSTrack> reconTrack{"G4Run0/MMSTrack"};
+    Mustard::Data::Output<Data::MMSTrack> reconTrackError{"G4Run0/MMSTrackError"};
 
-    Mustard::MPIX::Executor<unsigned> executor;
-    executor.Execute(eventSplitPoint.size() - 1,
-                     [&](auto i) {
-                         for (auto&& [trackID, good] : finder(Mustard::Data::Take<Data::CDCSimHit>::From(cdcSimHit.Range(eventSplitPoint[i], eventSplitPoint[i + 1]))).good) {
-                             reconTrack.Fill(*good.seed);
-                         }
-                     });
+    MMSTracking::TruthFinder finder;
+    // MMSTracking::TruthFitter fitter;
+    MMSTracking::GenFitDAFFitter fitter{0.2};
+    // fitter.EnableEventDisplay(true);
+
+    Mustard::Data::Processor processor;
+    auto nextTrackID{0};
+    processor.Process<Data::CDCSimHit>(
+        ROOT::RDataFrame{"G4Run0/CDCSimHit", files}, "EvtID",
+        [&](bool byPass, auto&& event) {
+            if (byPass) { return; }
+            for (auto&& [trackID, good] : finder(event, nextTrackID).good) {
+                const auto track{fitter(good.hitData, good.seed).track};
+                if (track == nullptr) { continue; }
+                reconTrack.Fill(*track);
+
+                using namespace Mustard::VectorArithmeticOperator;
+                Mustard::Data::Tuple<Data::MMSTrack> trackError;
+                Get<"EvtID">(trackError) = Get<"EvtID">(*track);
+                Get<"TrkID">(trackError) = Get<"TrkID">(*track);
+                Get<"HitID">(trackError) = Get<"HitID">(*track);
+                Get<"chi2">(trackError) = Get<"chi2">(*track);
+                Get<"t0">(trackError) = Get<"t0">(*track) - Get<"t0">(*good.seed);
+                Get<"PDGID">(trackError) = Get<"PDGID">(*track) - Get<"PDGID">(*good.seed);
+                Get<"x0">(trackError) = *Get<"x0">(*track) - *Get<"x0">(*good.seed);
+                Get<"Ek0">(trackError) = Get<"Ek0">(*track) - Get<"Ek0">(*good.seed);
+                Get<"p0">(trackError) = *Get<"p0">(*track) - *Get<"p0">(*good.seed);
+                Get<"c0">(trackError) = *Get<"c0">(*track) - *Get<"c0">(*good.seed);
+                Get<"r0">(trackError) = Get<"r0">(*track) - Get<"r0">(*good.seed);
+                Get<"phi0">(trackError) = Get<"phi0">(*track) - Get<"phi0">(*good.seed);
+                Get<"z0">(trackError) = Get<"z0">(*track) - Get<"z0">(*good.seed);
+                Get<"theta0">(trackError) = Get<"theta0">(*track) - Get<"theta0">(*good.seed);
+                reconTrackError.Fill(std::move(trackError));
+
+                nextTrackID = trackID;
+            }
+        });
 
     reconTrack.Write();
+    reconTrackError.Write();
+    // fitter.OpenEventDisplay();
 
     return EXIT_SUCCESS;
 }

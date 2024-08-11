@@ -26,6 +26,7 @@
 #include <cmath>
 #include <ranges>
 #include <string_view>
+#include <tuple>
 #include <utility>
 
 namespace MACE::inline Simulation::inline SD {
@@ -78,8 +79,17 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     const auto xWire{Mustard::VectorCast<G4TwoVector>(cellInfo.position)};
     const auto tWire{Mustard::VectorCast<G4ThreeVector>(cellInfo.direction)};
     // calculate drift distance
-    const auto commonNormal{tWire.cross(muc::midpoint(preStepPoint.GetMomentum(), postStepPoint.GetMomentum()))};
-    const auto driftDistance{std::abs((position - xWire).dot(commonNormal)) / commonNormal.mag()};
+    double driftDistance;
+    if (const auto pHat{muc::midpoint(preStepPoint.GetMomentumDirection(), postStepPoint.GetMomentumDirection())};
+        not pHat.isParallel(tWire)) {
+        const auto n{tWire.cross(pHat)};
+        driftDistance = std::abs((position - xWire).dot(n)) / n.mag();
+    } else {
+        const auto delta{position - xWire};
+        const auto n{tWire.dot(delta) * tWire - delta}; // == t x (t x delta)
+        const auto n2{n.mag2()};
+        driftDistance = std::isnormal(n2) ? std::abs(delta.dot(n)) / std::sqrt(n2) : 0;
+    }
     const auto driftTime{driftDistance / fMeanDriftVelocity};
     const auto hitTime{muc::midpoint(preStepPoint.GetGlobalTime(), postStepPoint.GetGlobalTime())};
     const auto signalTime{hitTime + driftTime};
@@ -94,9 +104,9 @@ auto CDCSD::ProcessHits(G4Step* theStep, G4TouchableHistory*) -> G4bool {
     Get<"HitID">(*hit) = -1; // to be determined
     Get<"CellID">(*hit) = cellID;
     Get<"t">(*hit) = signalTime;
-    Get<"tD">(*hit) = driftTime;
-    Get<"d">(*hit) = driftDistance;
     Get<"Edep">(*hit) = eDep;
+    Get<"d">(*hit) = driftDistance;
+    Get<"Good">(*hit) = false; // to be determined
     Get<"tHit">(*hit) = hitTime;
     Get<"x">(*hit) = position;
     Get<"Ek">(*hit) = preStepPoint.GetKineticEnergy();
@@ -119,10 +129,6 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                     return count + cellHit.second.size();
                                 }));
 
-    constexpr auto ByTrackID{
-        [](const auto& hit1, const auto& hit2) {
-            return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
-        }};
     for (int hitID{};
          auto&& [cellID, splitHit] : fSplitHit) {
         switch (splitHit.size()) {
@@ -156,11 +162,14 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
                                                                        return Get<"t">(*hit) <= windowClosingTime;
                                                                    })};
                 // find top hit
-                auto& topHit{*std::ranges::min_element(cluster, ByTrackID)};
+                auto& topHit{*std::ranges::min_element(cluster,
+                                                       [](const auto& hit1, const auto& hit2) {
+                                                           return Get<"TrkID">(*hit1) < Get<"TrkID">(*hit2);
+                                                       })};
                 // construct real hit
                 Get<"HitID">(*topHit) = hitID++;
                 assert(Get<"CellID">(*topHit) == cellID);
-                int nTopHit{};
+                auto nTopHit{1};
                 for (const auto& hit : cluster) {
                     if (hit == topHit) { continue; }
                     Get<"Edep">(*topHit) += Get<"Edep">(*hit); // sum
@@ -179,7 +188,11 @@ auto CDCSD::EndOfEvent(G4HCofThisEvent*) -> void {
     }
     fSplitHit.clear();
 
-    muc::timsort(*fHitsCollection->GetVector(), ByTrackID);
+    muc::timsort(*fHitsCollection->GetVector(),
+                 [](const auto& hit1, const auto& hit2) {
+                     return std::tie(Get<"TrkID">(*hit1), Get<"HitID">(*hit1)) <
+                            std::tie(Get<"TrkID">(*hit2), Get<"HitID">(*hit2));
+                 });
 }
 
 } // namespace MACE::inline Simulation::inline SD

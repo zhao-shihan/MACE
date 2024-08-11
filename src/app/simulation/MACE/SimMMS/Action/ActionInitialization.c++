@@ -3,6 +3,7 @@
 #include "MACE/SimMMS/Action/PrimaryGeneratorAction.h++"
 #include "MACE/SimMMS/Action/RunAction.h++"
 #include "MACE/SimMMS/Action/TrackingAction.h++"
+#include "MACE/Simulation/Action/NeutrinoKillerSteppingAction.h++"
 
 namespace MACE::SimMMS {
 
@@ -11,6 +12,7 @@ auto ActionInitialization::Build() const -> void {
     SetUserAction(new PrimaryGeneratorAction);
     SetUserAction(new EventAction);
     SetUserAction(new TrackingAction);
+    SetUserAction(new NeutrinoKillerSteppingAction<>);
 }
 
 } // namespace MACE::SimMMS

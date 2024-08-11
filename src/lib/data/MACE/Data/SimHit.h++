@@ -42,13 +42,14 @@ using TTCSimHit = Mustard::Data::TupleModel<
 
 using MCPSimHit = Mustard::Data::TupleModel<
     MCPHit,
+    Mustard::Data::Value<bool, "Trig", "Trigger flag">,
     Mustard::Data::Value<float, "Edep", "Energy deposition">,
     Mustard::Data::Value<float, "Ek", "Hit kinetic energy (MC truth)">,
     Mustard::Data::Value<muc::array3f, "p", "Hit momentum (MC truth)">,
     internal::SimHitVertexTruth>;
 
-using EMCSimHit = Mustard::Data::TupleModel<
-    EMCHit,
+using ECalSimHit = Mustard::Data::TupleModel<
+    ECalHit,
     Mustard::Data::Value<int, "nOptPho", "Number of optical photon hits on PMT (MC truth)">,
     Mustard::Data::Value<muc::array3f, "x", "Hit position (MC truth)">,
     Mustard::Data::Value<float, "Ek", "Hit kinetic energy (MC truth)">,

@@ -22,7 +22,7 @@ constexpr auto defaultMacro = {
     "/MACE/Analysis/EnableYieldAnalysis             true",
     "",
     "# Geometry",
-    "#/MACE/Detector/Description/Import              geom.yaml",
+    "#/Mustard/Detector/Description/Import              geom.yaml",
     "",
     "# Initialize kernel",
     "/run/initialize",

@@ -12,8 +12,8 @@ namespace MACE::SimMACE {
 
 class Analysis;
 inline namespace Action {
-class TrackingAction;
 class PrimaryGeneratorAction;
+class TrackingAction;
 } // namespace Action
 
 inline namespace Messenger {
@@ -33,17 +33,13 @@ public:
 
 private:
     std::unique_ptr<G4UIdirectory> fDirectory;
-    std::unique_ptr<G4UIcmdWithAString> fFilePath;
-    std::unique_ptr<G4UIcmdWithAString> fFileMode;
     std::unique_ptr<G4UIcmdWithABool> fSavePrimaryVertexData;
     std::unique_ptr<G4UIcmdWithABool> fSaveDecayVertexData;
-    std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithCDC;
-    std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithTTC;
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithMMS;
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithMCP;
-    std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithEMC;
-    std::unique_ptr<G4UIcmdWithABool> fSaveCDCHitData;
+    std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithECal;
     std::unique_ptr<G4UIcmdWithABool> fSaveTTCHitData;
+    std::unique_ptr<G4UIcmdWithABool> fSaveCDCHitData;
 };
 
 } // namespace Messenger

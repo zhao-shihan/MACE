@@ -5,7 +5,7 @@
 /control/verbose 0
 /run/verbose 0
 
-#/MACE/Detector/Description/Ixport mms_geom.yaml
+#/Mustard/Detector/Description/Ixport mms_geom.yaml
 
 /run/initialize
 
@@ -20,16 +20,14 @@
 /gps/ene/min                          1 keV
 /gps/ene/max                          52.32 MeV
 
-/MACE/Analysis/CoincidenceWithCDC     yes
-/MACE/Analysis/CoincidenceWithTTC     yes
-/MACE/Analysis/SaveCDCHitData         yes
 /MACE/Analysis/SaveTTCHitData         yes
+/MACE/Analysis/SaveCDCHitData         yes
 
 #############################################################################
 # Run
 #############################################################################
 
-/MACE/Analysis/FilePath SimMMS_ep_flat
-/MACE/Analysis/FileMode NEW
+/Mustard/Analysis/FilePath SimMMS_ep_flat
+/Mustard/Analysis/FileMode NEW
 /run/beamOn 10000
 /Mustard/Run/PrintRunSummary

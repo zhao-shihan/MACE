@@ -1,9 +1,9 @@
 #include "MACE/Detector/Definition/Accelerator.h++"
 #include "MACE/Detector/Definition/AcceleratorField.h++"
-#include "MACE/Detector/Definition/EMCField.h++"
-#include "MACE/Detector/Definition/EMCMagnet.h++"
-#include "MACE/Detector/Definition/EMCShield.h++"
-#include "MACE/Detector/Definition/Filter.h++"
+#include "MACE/Detector/Definition/Collimator.h++"
+#include "MACE/Detector/Definition/ECalField.h++"
+#include "MACE/Detector/Definition/ECalMagnet.h++"
+#include "MACE/Detector/Definition/ECalShield.h++"
 #include "MACE/Detector/Definition/MCPChamber.h++"
 #include "MACE/Detector/Definition/MMSBeamPipe.h++"
 #include "MACE/Detector/Definition/MMSField.h++"
@@ -32,7 +32,7 @@
 #include "MACE/Detector/Definition/SolenoidT2.h++"
 #include "MACE/Detector/Definition/World.h++"
 #include "MACE/Detector/Field/AcceleratorField.h++"
-#include "MACE/Detector/Field/EMCField.h++"
+#include "MACE/Detector/Field/ECalField.h++"
 #include "MACE/Detector/Field/MMSField.h++"
 #include "MACE/Detector/Field/SolenoidFieldS1.h++"
 #include "MACE/Detector/Field/SolenoidFieldS2.h++"
@@ -72,11 +72,6 @@ DetectorConstruction::DetectorConstruction() :
     fMinDriverStep{2_um},
     fDeltaChord{2_um},
     fWorld{},
-    fDefaultGaseousRegion{},
-    fDefaultSolidRegion{},
-    fShieldRegion{},
-    fSolenoidOrMagnetRegion{},
-    fVacuumRegion{},
     fNumericMessengerRegister{this} {
     DetectorMessenger::EnsureInstantiation();
 }
@@ -92,8 +87,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     // 1
 
-    auto& emcField{fWorld->NewDaughter<MACE::Detector::Definition::EMCField>(fCheckOverlap)};
-    auto& emcShield{fWorld->NewDaughter<MACE::Detector::Definition::EMCShield>(fCheckOverlap)};
+    auto& eCalField{fWorld->NewDaughter<MACE::Detector::Definition::ECalField>(fCheckOverlap)};
+    auto& eCalShield{fWorld->NewDaughter<MACE::Detector::Definition::ECalShield>(fCheckOverlap)};
     auto& mmsField{fWorld->NewDaughter<MACE::Detector::Definition::MMSField>(fCheckOverlap)};
     auto& mmsShield{fWorld->NewDaughter<MACE::Detector::Definition::MMSShield>(fCheckOverlap)};
     auto& shieldingWall{fWorld->NewDaughter<MACE::Detector::Definition::ShieldingWall>(fCheckOverlap)};
@@ -105,8 +100,8 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     // 2
 
-    auto& emcMagnet{emcField.NewDaughter<MACE::Detector::Definition::EMCMagnet>(fCheckOverlap)};
-    auto& mcpChamber{emcField.NewDaughter<MACE::Detector::Definition::MCPChamber>(fCheckOverlap)};
+    auto& eCalMagnet{eCalField.NewDaughter<MACE::Detector::Definition::ECalMagnet>(fCheckOverlap)};
+    auto& mcpChamber{eCalField.NewDaughter<MACE::Detector::Definition::MCPChamber>(fCheckOverlap)};
 
     auto& solenoidBeamPipeS1{solenoidFieldS1.NewDaughter<MACE::Detector::Definition::SolenoidBeamPipeS1>(fCheckOverlap)};
     auto& solenoidS1{solenoidFieldS1.NewDaughter<MACE::Detector::Definition::SolenoidS1>(fCheckOverlap)};
@@ -135,7 +130,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
 
     auto& virtualDetectorD{mcpChamber.NewDaughter<Detector::Definition::VirtualDetectorD>(fCheckOverlap)};
 
-    auto& filter{solenoidBeamPipeS2.NewDaughter<MACE::Detector::Definition::Filter>(fCheckOverlap)};
+    auto& collimator{solenoidBeamPipeS2.NewDaughter<MACE::Detector::Definition::Collimator>(fCheckOverlap)};
     auto& virtualDetectorB{solenoidBeamPipeS2.NewDaughter<Detector::Definition::VirtualDetectorB>(fCheckOverlap)};
     auto& virtualDetectorC{solenoidBeamPipeS2.NewDaughter<Detector::Definition::VirtualDetectorC>(fCheckOverlap)};
 
@@ -147,86 +142,55 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     auto& accelerator{acceleratorField.NewDaughter<MACE::Detector::Definition::Accelerator>(fCheckOverlap)};
 
     ////////////////////////////////////////////////////////////////
-    // Register regions
+    // Set production cuts
     ////////////////////////////////////////////////////////////////
     {
-        const auto defaultCuts{G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts()};
+        // Dense-to-thin region
 
-        // DefaultGaseousRegion
-        fDefaultGaseousRegion = new Region("DefaultGaseous", RegionType::DefaultGaseous);
-        fDefaultGaseousRegion->SetProductionCuts(defaultCuts);
+        const auto denseToThinRegionCut{new G4ProductionCuts};
+        denseToThinRegionCut->SetProductionCut(0, "e-");
+        denseToThinRegionCut->SetProductionCut(0, "e+");
+        denseToThinRegionCut->SetProductionCut(0, "proton");
+        const auto denseToThinRegion{new G4Region{"DenseToThin"}};
+        denseToThinRegion->SetProductionCuts(denseToThinRegionCut);
 
-        emcField.RegisterRegion(fDefaultGaseousRegion);
-        mmsField.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldS1.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldS2.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldS3.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldT1.RegisterRegion(fDefaultGaseousRegion);
-        solenoidFieldT2.RegisterRegion(fDefaultGaseousRegion);
+        accelerator.RegisterRegion(denseToThinRegion);
+        collimator.RegisterRegion(denseToThinRegion);
 
-        // DefaultSolidRegion
-        fDefaultSolidRegion = new Region("DefaultSolid", RegionType::DefaultSolid);
-        fDefaultSolidRegion->SetProductionCuts(defaultCuts);
+        // Shield region
 
-        accelerator.RegisterRegion(fDefaultSolidRegion);
-        filter.RegisterRegion(fDefaultSolidRegion);
-        mcpChamber.RegisterRegion(fDefaultSolidRegion);
-        mmsBeamPipe.RegisterRegion(fDefaultSolidRegion);
-        shieldingWall.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeS1.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeS2.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeS3.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeT1.RegisterRegion(fDefaultSolidRegion);
-        solenoidBeamPipeT2.RegisterRegion(fDefaultSolidRegion);
+        const auto shieldRegionCut{new G4ProductionCuts};
+        shieldRegionCut->SetProductionCut(2_mm);
+        const auto shieldRegion{new G4Region{"Shield"}};
+        shieldRegion->SetProductionCuts(shieldRegionCut);
 
-        // ShieldRegion
-        fShieldRegion = new Region("Shield", RegionType::Shield);
-        fShieldRegion->SetProductionCuts(defaultCuts);
+        eCalShield.RegisterRegion(shieldRegion);
+        mmsShield.RegisterRegion(shieldRegion);
+        solenoidShieldS1.RegisterRegion(shieldRegion);
+        solenoidShieldS2.RegisterRegion(shieldRegion);
+        solenoidShieldS3.RegisterRegion(shieldRegion);
+        solenoidShieldT1.RegisterRegion(shieldRegion);
+        solenoidShieldT2.RegisterRegion(shieldRegion);
 
-        emcShield.RegisterRegion(fShieldRegion);
-        mmsShield.RegisterRegion(fShieldRegion);
-        solenoidShieldS1.RegisterRegion(fShieldRegion);
-        solenoidShieldS2.RegisterRegion(fShieldRegion);
-        solenoidShieldS3.RegisterRegion(fShieldRegion);
-        solenoidShieldT1.RegisterRegion(fShieldRegion);
-        solenoidShieldT2.RegisterRegion(fShieldRegion);
+        // Wall region
 
-        // SolenoidOrMagnetRegion
-        fSolenoidOrMagnetRegion = new Region("SolenoidOrMagnet", RegionType::SolenoidOrMagnet);
-        fSolenoidOrMagnetRegion->SetProductionCuts(defaultCuts);
+        const auto wallRegionCut{new G4ProductionCuts};
+        wallRegionCut->SetProductionCut(3_cm);
+        const auto wallRegion{new G4Region{"Wall"}};
+        wallRegion->SetProductionCuts(wallRegionCut);
 
-        emcMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
-        mmsMagnet.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidS1.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidS2.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidS3.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidT1.RegisterRegion(fSolenoidOrMagnetRegion);
-        solenoidT2.RegisterRegion(fSolenoidOrMagnetRegion);
-
-        // VacuumRegion
-        fVacuumRegion = new Region("Vacuum", RegionType::Vacuum);
-        fVacuumRegion->SetProductionCuts(defaultCuts);
-
-        acceleratorField.RegisterRegion(fVacuumRegion);
-        mcpChamber.RegisterRegion("MCPChamberPipeVacuum", fVacuumRegion);
-        mcpChamber.RegisterRegion("MCPChamberVacuum", fVacuumRegion);
-        mmsBeamPipe.RegisterRegion("MMSBeamPipeVacuum", fVacuumRegion);
-        solenoidBeamPipeS1.RegisterRegion("SolenoidBeamPipeS1Vacuum", fVacuumRegion);
-        solenoidBeamPipeS2.RegisterRegion("SolenoidBeamPipeS2Vacuum", fVacuumRegion);
-        solenoidBeamPipeS3.RegisterRegion("SolenoidBeamPipeS3Vacuum", fVacuumRegion);
-        solenoidBeamPipeT1.RegisterRegion("SolenoidBeamPipeT1Vacuum", fVacuumRegion);
-        solenoidBeamPipeT2.RegisterRegion("SolenoidBeamPipeT2Vacuum", fVacuumRegion);
+        shieldingWall.RegisterRegion(wallRegion);
     }
 
     ////////////////////////////////////////////////////////////////
     // Register SDs
     ////////////////////////////////////////////////////////////////
     {
-        fVirtualSD = new SD::VirtualSD{"VirtualDetector"};
-        virtualDetectorA.RegisterSD(fVirtualSD);
-        virtualDetectorB.RegisterSD(fVirtualSD);
-        virtualDetectorC.RegisterSD(fVirtualSD);
-        virtualDetectorD.RegisterSD(fVirtualSD);
+        const auto virtualSD{new SD::VirtualSD{"VirtualDetector"}};
+        virtualDetectorA.RegisterSD(virtualSD);
+        virtualDetectorB.RegisterSD(virtualSD);
+        virtualDetectorC.RegisterSD(virtualSD);
+        virtualDetectorD.RegisterSD(virtualSD);
     }
 
     ////////////////////////////////////////////////////////////////
@@ -252,7 +216,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
             RegisterField(solenoidFieldS2, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS2>, false);
             RegisterField(solenoidFieldT2, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldT2>, false);
             RegisterField(solenoidFieldS3, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS3>, false);
-            RegisterField(emcField, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::EMCField>, false);
+            RegisterField(eCalField, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::ECalField>, false);
         }
         { // Accelerator EM field, must be reigstered after MMS magnetic field
             using Field = Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::AcceleratorField>;

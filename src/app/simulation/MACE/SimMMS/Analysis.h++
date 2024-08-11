@@ -8,9 +8,7 @@
 
 #include "Mustard/Data/Output.h++"
 #include "Mustard/Data/Tuple.h++"
-#include "Mustard/Env/Memory/PassiveSingleton.h++"
-
-#include "G4Types.hh"
+#include "Mustard/Simulation/AnalysisBase.h++"
 
 #include "gsl/gsl"
 
@@ -27,42 +25,31 @@ class TTCHit;
 
 namespace MACE::SimMMS {
 
-class Analysis final : public Mustard::Env::Memory::PassiveSingleton<Analysis> {
+class Analysis final : public Mustard::Simulation::AnalysisBase<Analysis, "SimMMS"> {
 public:
     Analysis();
 
-    auto FilePath(std::filesystem::path path) -> void { fFilePath = std::move(path); }
-    auto FileMode(std::string mode) -> void { fFileMode = std::move(mode); }
-    auto CoincidenceWithCDC(bool val) -> void { fCoincidenceWithCDC = val; }
-    auto CoincidenceWithTTC(bool val) -> void { fCoincidenceWithTTC = val; }
     auto SaveCDCHitData(bool val) -> void { fSaveCDCHitData = val; }
     auto SaveTTCHitData(bool val) -> void { fSaveTTCHitData = val; }
-
-    auto RunBegin(G4int runID) -> void;
 
     auto SubmitPrimaryVertexData(const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimPrimaryVertex>>>& data) -> void { fPrimaryVertex = &data; }
     auto SubmitDecayVertexData(const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimDecayVertex>>>& data) -> void { fDecayVertex = &data; }
     auto SubmitCDCHC(const std::vector<gsl::owner<CDCHit*>>& hc) -> void { fCDCHit = &hc; }
     auto SubmitTTCHC(const std::vector<gsl::owner<TTCHit*>>& hc) -> void { fTTCHit = &hc; }
-    auto EventEnd() -> void;
-
-    auto RunEnd(Option_t* option = {}) -> void;
 
 private:
-    std::filesystem::path fFilePath;
-    std::string fFileMode;
-    bool fCoincidenceWithCDC;
-    bool fCoincidenceWithTTC;
+    auto RunBeginUserAction(int runID) -> void override;
+    auto EventEndUserAction() -> void override;
+    auto RunEndUserAction(int) -> void override;
+
+private:
     bool fSaveCDCHitData;
     bool fSaveTTCHitData;
 
-    std::filesystem::path fLastUsedFullFilePath;
-
-    gsl::owner<TFile*> fFile;
     std::optional<Mustard::Data::Output<Data::SimPrimaryVertex>> fPrimaryVertexOutput;
     std::optional<Mustard::Data::Output<Data::SimDecayVertex>> fDecayVertexOutput;
-    std::optional<Mustard::Data::Output<Data::CDCSimHit>> fCDCSimHitOutput;
     std::optional<Mustard::Data::Output<Data::TTCSimHit>> fTTCSimHitOutput;
+    std::optional<Mustard::Data::Output<Data::CDCSimHit>> fCDCSimHitOutput;
     std::optional<Mustard::Data::Output<Data::MMSSimTrack>> fMMSSimTrackOutput;
 
     const std::vector<std::unique_ptr<Mustard::Data::Tuple<Data::SimPrimaryVertex>>>* fPrimaryVertex;

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "MACE/Detector/Description/EMC.h++"
+#include "MACE/Detector/Description/ECal.h++"
 #include "MACE/PhaseI/Detector/Description/CentralBeamPipe.h++"
 #include "MACE/PhaseI/Detector/Description/World.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Region.h++"
-#include "MACE/PhaseI/SimMACEPhaseI/SD/EMCPMTSD.h++"
-#include "MACE/PhaseI/SimMACEPhaseI/SD/EMCSD.h++"
+#include "MACE/PhaseI/SimMACEPhaseI/SD/ECalPMTSD.h++"
+#include "MACE/PhaseI/SimMACEPhaseI/SD/ECalSD.h++"
 
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
 
@@ -33,16 +33,16 @@ public:
 
     auto DefaultGaseousRegion() const -> const auto& { return fDefaultGaseousRegion; }
     auto DefaultSolidRegion() const -> const auto& { return fDefaultSolidRegion; }
-    auto EMCSensitiveRegion() const -> const auto& { return fEMCSensitiveRegion; }
+    auto ECalSensitiveRegion() const -> const auto& { return fECalSensitiveRegion; }
     auto ShieldRegion() const -> const auto& { return fShieldRegion; }
     auto TargetRegion() const -> const auto& { return fTargetRegion; }
     auto VacuumRegion() const -> const auto& { return fVacuumRegion; }
 
-    auto EMCSD() const -> auto& { return *fEMCSD; }
-    auto EMCPMTSD() const -> auto& { return *fEMCPMTSD; }
+    auto ECalSD() const -> auto& { return *fECalSD; }
+    auto ECalPMTSD() const -> auto& { return *fECalPMTSD; }
 
 public:
-    using DescriptionInUse = std::tuple<MACE::Detector::Description::EMC,
+    using DescriptionInUse = std::tuple<MACE::Detector::Description::ECal,
                                         PhaseI::Detector::Description::CentralBeamPipe,
                                         PhaseI::Detector::Description::World>;
 
@@ -53,13 +53,13 @@ private:
 
     Region* fDefaultGaseousRegion;
     Region* fDefaultSolidRegion;
-    Region* fEMCSensitiveRegion;
+    Region* fECalSensitiveRegion;
     Region* fShieldRegion;
     Region* fTargetRegion;
     Region* fVacuumRegion;
 
-    SD::EMCSD* fEMCSD;
-    SD::EMCPMTSD* fEMCPMTSD;
+    SD::ECalSD* fECalSD;
+    SD::ECalPMTSD* fECalPMTSD;
 };
 
 } // namespace PhaseI::SimMACEPhaseI::inline Action

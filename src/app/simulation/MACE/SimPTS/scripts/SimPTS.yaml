@@ -13,16 +13,16 @@ Accelerator:
   ElectrodeMaterialName: G4_Be
   MaxPotential: 0.0005867
   MaxPotentialPosition: -65
-EMCField:
+ECalField:
   Radius: 560
   Length: 1000
   FastField: 0.0001
-EMCMagnet:
+ECalMagnet:
   InnerRadius: 500
   OuterRadius: 550
   Length: 1000
   MaterialName: G4_Cu
-EMCShield:
+ECalShield:
   InnerRadius: 600
   InnerLength: 1100
   GapAroundWindow: 10
@@ -31,7 +31,7 @@ EMCShield:
 FieldOption:
   UseFast: false
   FieldDataFilePath: ${MACE_DATA_DIR}/mace_field_data.root
-Filter:
+Collimator:
   Enabled: true
   Length: 500
   Radius: 49

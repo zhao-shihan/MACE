@@ -9,7 +9,7 @@ using TTCSiPMRawHit = Mustard::Data::TupleModel<
     Mustard::Data::Value<short, "TileID", "Hit detector ID">,
     Mustard::Data::Value<double, "t", "Optical photon hit time">>;
 
-using EMCPMTRawHit = Mustard::Data::TupleModel<
+using ECalPMTRawHit = Mustard::Data::TupleModel<
     Mustard::Data::Value<short, "UnitID", "Hit unit ID">,
     Mustard::Data::Value<double, "t", "Optical photon hit time">>;
 

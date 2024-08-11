@@ -6,8 +6,11 @@
 #include "Mustard/Extension/Geant4X/Physics/MuoniumPhysics.h++"
 #include "Mustard/Extension/Geant4X/Physics/MuoniumPrecisionDecayPhysics.h++"
 #include "Mustard/Extension/Geant4X/Physics/MuoniumTwoBodyDecayPhysics.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
 
+#include "G4EmParameters.hh"
 #include "G4EmStandardPhysics_option4.hh"
+#include "G4MscStepLimitType.hh"
 #include "G4SpinDecayPhysics.hh"
 
 #include "muc/utility"
@@ -26,6 +29,17 @@ StandardPhysicsListBase::StandardPhysicsListBase() :
     ReplacePhysics(new G4SpinDecayPhysics{verboseLevel});
     RegisterPhysics(new Mustard::Geant4X::MuonPrecisionDecayPhysics{verboseLevel});
     RegisterPhysics(new Mustard::Geant4X::MuoniumPrecisionDecayPhysics{verboseLevel});
+
+    // Set EM parameters
+    using namespace Mustard::LiteralUnit::Energy;
+    auto& emParameter{*G4EmParameters::Instance()};
+    emParameter.SetLowestElectronEnergy(0.1_eV);
+    emParameter.SetLowestMuHadEnergy(0.1_eV);
+    emParameter.SetLowestTripletEnergy(0.1_eV);
+    emParameter.SetMaxNIELEnergy(100_keV);
+    emParameter.SetMinEnergy(0.1_eV);
+    emParameter.SetMscMuHadStepLimitType(fUseSafetyPlus);
+    emParameter.SetMscPositronCorrection(true);
 }
 
 } // namespace MACE::inline Simulation::inline Physics

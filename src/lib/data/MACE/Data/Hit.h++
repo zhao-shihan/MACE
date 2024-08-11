@@ -18,19 +18,20 @@ using HitEventIDHitID = Mustard::Data::TupleModel<
 using CDCHit = Mustard::Data::TupleModel<
     internal::HitEventIDHitID,
     CDCRawHit,
-    Mustard::Data::Value<float, "tD", "Drift time">,
-    Mustard::Data::Value<float, "d", "Drift distance">>;
+    Mustard::Data::Value<float, "d", "Drift distance">,
+    Mustard::Data::Value<bool, "Good", "Good flag">>;
 
 using TTCHit = Mustard::Data::TupleModel<
     internal::HitEventIDHitID,
-    TTCRawHit>;
+    TTCRawHit,
+    Mustard::Data::Value<bool, "Good", "Good flag">>;
 
 using MCPHit = Mustard::Data::TupleModel<
     internal::HitEventIDHitID,
     MCPRawHit>;
 
-using EMCHit = Mustard::Data::TupleModel<
+using ECalHit = Mustard::Data::TupleModel<
     internal::HitEventIDHitID,
-    EMCRawHit>;
+    ECalRawHit>;
 
 } // namespace MACE::Data

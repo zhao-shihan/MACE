@@ -2,6 +2,7 @@
 
 #include "MACE/Data/Hit.h++"
 #include "MACE/Data/MMSTrack.h++"
+#include "MACE/Detector/Description/CDC.h++"
 
 #include "Mustard/Data/Tuple.h++"
 #include "Mustard/Data/TupleModel.h++"
@@ -24,25 +25,31 @@ public:
     using Track = ATrack;
 
 public:
+    FinderBase();
     virtual ~FinderBase() = 0;
+
+    auto MinNHit() const -> auto { return fMinNHit; }
+    auto MinNHit(int n) -> void { fMinNHit = std::max(1, n); }
 
 protected:
     template<std::indirectly_readable AHitPointer>
-        requires std::derived_from<std::decay_t<std::iter_value_t<AHitPointer>>, Mustard::Data::Tuple<AHit>>
+        requires Mustard::Data::SuperTupleModel<typename std::iter_value_t<AHitPointer>::Model, AHit>
     struct Result {
         struct GoodTrack {
             std::vector<AHitPointer> hitData;
             std::shared_ptr<Mustard::Data::Tuple<ATrack>> seed;
         };
-        auto NGoodTrack() const -> auto { return ssize(good); }
         std::unordered_map<int, GoodTrack> good;
         std::vector<AHitPointer> garbage;
     };
 
 protected:
     template<std::indirectly_readable AHitPointer>
-        requires std::derived_from<std::decay_t<std::iter_value_t<AHitPointer>>, Mustard::Data::Tuple<AHit>>
+        requires Mustard::Data::SuperTupleModel<typename std::iter_value_t<AHitPointer>::Model, AHit>
     static auto GoodHitData(const std::vector<AHitPointer>& hitData) -> bool;
+
+private:
+    int fMinNHit;
 };
 
 } // namespace MACE::inline Reconstruction::MMSTracking::inline Finder

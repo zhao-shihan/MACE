@@ -2,12 +2,20 @@ namespace MACE::inline Reconstruction::MMSTracking::inline Finder {
 
 template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
          Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack>
+FinderBase<AHit, ATrack>::FinderBase() :
+    fMinNHit{} {
+    const auto& cdc{Detector::Description::CDC::Instance()};
+    fMinNHit = cdc.NSenseLayerPerSuper() * cdc.NSuperLayer();
+}
+
+template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
+         Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack>
 FinderBase<AHit, ATrack>::~FinderBase() = default;
 
 template<Mustard::Data::SuperTupleModel<Data::CDCHit> AHit,
          Mustard::Data::SuperTupleModel<Data::MMSTrack> ATrack>
 template<std::indirectly_readable AHitPointer>
-    requires std::derived_from<std::decay_t<std::iter_value_t<AHitPointer>>, Mustard::Data::Tuple<AHit>>
+    requires Mustard::Data::SuperTupleModel<typename std::iter_value_t<AHitPointer>::Model, AHit>
 auto FinderBase<AHit, ATrack>::GoodHitData(const std::vector<AHitPointer>& hitData) -> bool {
     if (hitData.empty()) [[unlikely]] {
         Mustard::Env::PrintLnWarning("Warning: Empty hit data");

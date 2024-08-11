@@ -8,6 +8,8 @@
 
 #include "Mustard/Data/Tuple.h++"
 
+#include "G4ThreeVector.hh"
+
 #include "muc/math"
 
 #include "gsl/gsl"
@@ -24,7 +26,7 @@ class MMSTruthTracker {
 public:
     MMSTruthTracker();
 
-    auto MinNCDCHitForQualifiedTrack(int n) -> void { fTrackFinder.NHitThreshold(std::max(1, n)); }
+    auto MinNCDCHitForQualifiedTrack(int n) -> void { fTrackFinder.MinNHit(std::max(1, n)); }
     auto MinNTTCHitForQualifiedTrack(int n) -> void { fMinNTTCHitForQualifiedTrack = std::max(1, n); }
 
     auto operator()(const std::vector<gsl::owner<CDCHit*>>& cdcHitHC,
