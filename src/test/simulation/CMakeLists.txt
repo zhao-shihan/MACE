@@ -1,5 +1,5 @@
-add_executable(TestMuonIPPDecay TestMuonIPPDecay.c++)
-target_link_libraries(TestMuonIPPDecay MACESimulation)
+add_executable(TestMuonICDecay TestMuonICDecay.c++)
+target_link_libraries(TestMuonICDecay MACESimulation)
 
-add_executable(TestMuoniumIPPDecay TestMuoniumIPPDecay.c++)
-target_link_libraries(TestMuoniumIPPDecay MACESimulation)
+add_executable(TestMuoniumICDecay TestMuoniumICDecay.c++)
+target_link_libraries(TestMuoniumICDecay MACESimulation)

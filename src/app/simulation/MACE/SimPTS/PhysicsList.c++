@@ -1,7 +1,7 @@
 #include "MACE/SimPTS/PhysicsList.h++"
 
-#include "Mustard/Extension/Geant4X/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
-#include "Mustard/Extension/Geant4X/DecayChannel/MuoniumInternalPairProductionDecayChannel.h++"
+#include "Mustard/Extension/Geant4X/DecayChannel/MuonInternalConversionDecayChannel.h++"
+#include "Mustard/Extension/Geant4X/DecayChannel/MuoniumInternalConversionDecayChannel.h++"
 #include "Mustard/Extension/Geant4X/Particle/Antimuonium.h++"
 #include "Mustard/Extension/Geant4X/Particle/Muonium.h++"
 #include "Mustard/Extension/Geant4X/Physics/MuoniumPrecisionDecayPhysics.h++"

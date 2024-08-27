@@ -3,8 +3,8 @@
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/SimMACE/PhysicsList.h++"
 
-#include "Mustard/Extension/Geant4X/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
-#include "Mustard/Extension/Geant4X/DecayChannel/MuoniumInternalPairProductionDecayChannel.h++"
+#include "Mustard/Extension/Geant4X/DecayChannel/MuonInternalConversionDecayChannel.h++"
+#include "Mustard/Extension/Geant4X/DecayChannel/MuoniumInternalConversionDecayChannel.h++"
 #include "Mustard/Extension/Geant4X/Particle/Muonium.h++"
 #include "Mustard/Extension/Geant4X/Physics/MuoniumPrecisionDecayPhysics.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
@@ -29,8 +29,8 @@ PhysicsList::PhysicsList() :
     fMessengerRegister{this} {}
 
 auto PhysicsList::ApplyMACEPxyCut(bool apply) -> void {
-    auto& muonPlusICDecay{FindICDecayChannel<Mustard::Geant4X::MuonInternalPairProductionDecayChannel>(G4MuonPlus::Definition())};
-    auto& muoniumICDecay{FindICDecayChannel<Mustard::Geant4X::MuoniumInternalPairProductionDecayChannel>(Mustard::Geant4X::Muonium::Definition())};
+    auto& muonPlusICDecay{FindICDecayChannel<Mustard::Geant4X::MuonInternalConversionDecayChannel>(G4MuonPlus::Definition())};
+    auto& muoniumICDecay{FindICDecayChannel<Mustard::Geant4X::MuoniumInternalConversionDecayChannel>(Mustard::Geant4X::Muonium::Definition())};
     if (apply) {
         const auto PxyCut{
             [this](auto&& event) {

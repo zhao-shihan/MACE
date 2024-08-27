@@ -22,9 +22,9 @@
 /GPSX/NVertex             10
 /GPSX/PulseWidth          1.5 us
 
-/Mustard/Physics/MuonDecay/IPPDecay/BR                      1
-/Mustard/Physics/MuonDecay/IPPDecay/MetropolisDelta         0.005
-/Mustard/Physics/MuonDecay/IPPDecay/MetropolisDiscard       1000
+/Mustard/Physics/MuonDecay/ICDecay/BR                      1
+/Mustard/Physics/MuonDecay/ICDecay/MetropolisDelta         0.005
+/Mustard/Physics/MuonDecay/ICDecay/MetropolisDiscard       1000
 /Mustard/Physics/MuonDecay/RadiativeDecay/BR                0
 /Mustard/Physics/MuonDecay/UpdateDecayBR
 

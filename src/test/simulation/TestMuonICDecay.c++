@@ -1,6 +1,6 @@
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Extension/CLHEPX/Random/Xoshiro.h++"
-#include "Mustard/Extension/Geant4X/DecayChannel/MuonInternalPairProductionDecayChannel.h++"
+#include "Mustard/Extension/Geant4X/DecayChannel/MuonInternalConversionDecayChannel.h++"
 #include "Mustard/Extension/MPIX/Execution/Executor.h++"
 #include "Mustard/Extension/MPIX/ParallelizePath.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
@@ -46,7 +46,7 @@ auto main(int argc, char* argv[]) -> int {
     G4NeutrinoMu::Definition();
     G4Positron::Definition();
 
-    Mustard::Geant4X::MuonInternalPairProductionDecayChannel ippDecay{"mu+", 1};
+    Mustard::Geant4X::MuonInternalConversionDecayChannel ippDecay{"mu+", 1};
     ippDecay.MetropolisDelta(std::stod(argv[2]));
     ippDecay.MetropolisDiscard(std::stod(argv[3]));
     if (argc >= 5) {

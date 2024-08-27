@@ -5,6 +5,7 @@
 #include <memory>
 
 class G4UIcmdWithABool;
+class G4UIcmdWithADoubleAndUnit;
 
 namespace MACE::SimMACE {
 
@@ -24,6 +25,7 @@ public:
     auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
 
 private:
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMACEPxyCutMaxLowerPositronEk;
     std::unique_ptr<G4UIcmdWithABool> fApplyMACEPxyCut;
 };
 
