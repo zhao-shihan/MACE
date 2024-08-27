@@ -36,7 +36,6 @@ StandardPhysicsListBase::StandardPhysicsListBase() :
     emParameter.SetLowestElectronEnergy(0.1_eV);
     emParameter.SetLowestMuHadEnergy(0.1_eV);
     emParameter.SetLowestTripletEnergy(0.1_eV);
-    emParameter.SetMaxNIELEnergy(100_keV);
     emParameter.SetMinEnergy(0.1_eV);
     emParameter.SetMscMuHadStepLimitType(fUseSafetyPlus);
     emParameter.SetMscPositronCorrection(true);
