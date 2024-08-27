@@ -5,7 +5,6 @@
 #include "Mustard/Extension/Geant4X/Physics/MuonPrecisionDecayPhysics.h++"
 #include "Mustard/Extension/Geant4X/Physics/MuoniumPhysics.h++"
 #include "Mustard/Extension/Geant4X/Physics/MuoniumPrecisionDecayPhysics.h++"
-#include "Mustard/Extension/Geant4X/Physics/MuoniumTwoBodyDecayPhysics.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 
 #include "G4EmParameters.hh"
