@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MACE/SimMACE/Messenger/PhysicsListMessenger.h++"
+#include "MACE/SimMACE/Messenger/PhysicsMessenger.h++"
 #include "MACE/Simulation/Physics/StandardPhysicsList.h++"
 
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
@@ -24,7 +24,7 @@ private:
     auto FindIPPDecayChannel(const P* particle) -> C&;
 
 private:
-    PhysicsListMessenger::Register<PhysicsList> fMessengerRegister;
+    PhysicsMessenger::Register<PhysicsList> fMessengerRegister;
 };
 
 } // namespace MACE::SimMACE

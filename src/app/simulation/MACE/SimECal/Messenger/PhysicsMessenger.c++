@@ -1,12 +1,12 @@
-#include "MACE/PhaseI/SimMACEPhaseI/Messenger/PhysicsListMessenger.h++"
-#include "MACE/PhaseI/SimMACEPhaseI/PhysicsList.h++"
+#include "MACE/SimECal/Messenger/PhysicsMessenger.h++"
+#include "MACE/SimECal/PhysicsList.h++"
 
 #include "G4UIcommand.hh"
 #include "G4UnitsTable.hh"
 
-namespace MACE::PhaseI::SimMACEPhaseI::inline Messenger {
+namespace MACE::SimECal::inline Messenger {
 
-PhysicsListMessenger::PhysicsListMessenger() :
+PhysicsMessenger::PhysicsMessenger() :
     SingletonMessenger{},
     fUseOpticalPhysics{} {
 
@@ -15,9 +15,9 @@ PhysicsListMessenger::PhysicsListMessenger() :
     fUseOpticalPhysics->AvailableForStates(G4State_PreInit);
 }
 
-PhysicsListMessenger::~PhysicsListMessenger() = default;
+PhysicsMessenger::~PhysicsMessenger() = default;
 
-auto PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String) -> void {
+auto PhysicsMessenger::SetNewValue(G4UIcommand* command, G4String) -> void {
     if (command == fUseOpticalPhysics.get()) {
         Deliver<PhysicsList>([&](auto&& r) {
             r.UseOpticalPhysics();
@@ -25,4 +25,4 @@ auto PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String) -> void {
     }
 }
 
-} // namespace MACE::PhaseI::SimMACEPhaseI::inline Messenger
+} // namespace MACE::SimECal::inline Messenger

@@ -50,10 +50,8 @@ auto PhysicsList::ApplyMACEPxyCut(bool apply) -> void {
                 const auto electronPxy{muc::hypot(p1.x(), p1.y())};
                 const auto positron2Pxy{muc::hypot(p2.x(), p2.y())};
 
-                passCut1 &= electronPxy > cdcPxyCut and positron1Pxy < cdcPxyCut and positron2Pxy < maxPositronPxy;
-                passCut2 &= electronPxy > cdcPxyCut and positron2Pxy < cdcPxyCut and positron1Pxy < maxPositronPxy;
-
-                return passCut1 or passCut2;
+                return electronPxy > cdcPxyCut and ((positron1Pxy < cdcPxyCut and positron2Pxy < maxPositronPxy) or
+                                                    (positron2Pxy < cdcPxyCut and positron1Pxy < maxPositronPxy));
             }};
         muonPlusIPPDecay.PassCut(PxyCut);
         muoniumIPPDecay.PassCut(PxyCut);

@@ -1,11 +1,11 @@
-#include "MACE/SimMACE/Messenger/PhysicsListMessenger.h++"
+#include "MACE/SimMACE/Messenger/PhysicsMessenger.h++"
 #include "MACE/SimMACE/PhysicsList.h++"
 
 #include "G4UIcmdWithABool.hh"
 
 namespace MACE::SimMACE::inline Messenger {
 
-PhysicsListMessenger::PhysicsListMessenger() :
+PhysicsMessenger::PhysicsMessenger() :
     SingletonMessenger{},
     fApplyMACEPxyCut{} {
 
@@ -15,9 +15,9 @@ PhysicsListMessenger::PhysicsListMessenger() :
     fApplyMACEPxyCut->AvailableForStates(G4State_Idle);
 }
 
-PhysicsListMessenger::~PhysicsListMessenger() = default;
+PhysicsMessenger::~PhysicsMessenger() = default;
 
-auto PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
+auto PhysicsMessenger::SetNewValue(G4UIcommand* command, G4String value) -> void {
     if (command == fApplyMACEPxyCut.get()) {
         Deliver<PhysicsList>([&](auto&& r) {
             r.ApplyMACEPxyCut(fApplyMACEPxyCut->GetNewBoolValue(value));

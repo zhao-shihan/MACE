@@ -6,19 +6,19 @@
 
 class G4UIcommand;
 
-namespace MACE::PhaseI::SimMACEPhaseI {
+namespace MACE::SimECal {
 
 class PhysicsList;
 
 inline namespace Messenger {
 
-class PhysicsListMessenger final : public Mustard::Geant4X::SingletonMessenger<PhysicsListMessenger,
-                                                                               PhysicsList> {
+class PhysicsMessenger final : public Mustard::Geant4X::SingletonMessenger<PhysicsMessenger,
+                                                                           PhysicsList> {
     friend Mustard::Env::Memory::SingletonInstantiator;
 
 private:
-    PhysicsListMessenger();
-    ~PhysicsListMessenger();
+    PhysicsMessenger();
+    ~PhysicsMessenger();
 
 public:
     auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
@@ -29,4 +29,4 @@ private:
 
 } // namespace Messenger
 
-} // namespace MACE::PhaseI::SimMACEPhaseI
+} // namespace MACE::SimECal

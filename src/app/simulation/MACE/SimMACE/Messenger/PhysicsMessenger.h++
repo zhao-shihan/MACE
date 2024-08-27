@@ -12,13 +12,13 @@ class PhysicsList;
 
 inline namespace Messenger {
 
-class PhysicsListMessenger final : public Mustard::Geant4X::SingletonMessenger<PhysicsListMessenger,
-                                                                               PhysicsList> {
+class PhysicsMessenger final : public Mustard::Geant4X::SingletonMessenger<PhysicsMessenger,
+                                                                           PhysicsList> {
     friend class Mustard::Env::Memory::SingletonInstantiator;
 
 private:
-    PhysicsListMessenger();
-    ~PhysicsListMessenger();
+    PhysicsMessenger();
+    ~PhysicsMessenger();
 
 public:
     auto SetNewValue(G4UIcommand* command, G4String value) -> void override;
