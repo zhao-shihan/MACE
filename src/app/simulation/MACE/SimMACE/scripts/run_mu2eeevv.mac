@@ -30,6 +30,8 @@
 
 /Mustard/Physics/MuoniumPhysics/Formation/ConversionProbability    0
 
+/MACE/Physics/ApplyProductionCutNearTarget                         yes
+
 /MACE/Analysis/SavePrimaryVertexData  yes
 /MACE/Analysis/SaveDecayVertexData    yes
 /MACE/Analysis/CoincidenceWithMMS     yes

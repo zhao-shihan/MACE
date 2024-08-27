@@ -69,6 +69,8 @@
 #include "G4EqMagElectricField.hh"
 #include "G4InterpolationDriver.hh"
 #include "G4ProductionCuts.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4RegionStore.hh"
 #include "G4TDormandPrince45.hh"
 #include "G4TMagFieldEquation.hh"
 
@@ -85,8 +87,21 @@ DetectorConstruction::DetectorConstruction() :
     fMinDriverStep{2_um},
     fDeltaChord{2_um},
     fWorld{},
+    fPhysicsMessengerRegister{this},
     fNumericMessengerRegister{this} {
     DetectorMessenger::EnsureInstantiation();
+}
+
+auto DetectorConstruction::ApplyProductionCutNearTarget(bool apply) const -> void {
+    const auto cut{G4RegionStore::GetInstance()->GetRegion("NearTargetDenseToThin")->GetProductionCuts()};
+    if (apply) {
+        auto defaultCut{G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts()->GetProductionCuts()};
+        cut->SetProductionCuts(defaultCut);
+    } else {
+        cut->SetProductionCut(0, "e-");
+        cut->SetProductionCut(0, "e+");
+        cut->SetProductionCut(0, "proton");
+    }
 }
 
 auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
@@ -166,13 +181,23 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
         const auto denseToThinRegion{new G4Region{"DenseToThin"}};
         denseToThinRegion->SetProductionCuts(denseToThinRegionCut);
 
-        accelerator.RegisterRegion(denseToThinRegion);
-        beamDegrader.RegisterRegion(denseToThinRegion);
-        beamMonitor.RegisterRegion(denseToThinRegion);
         collimator.RegisterRegion(denseToThinRegion);
         mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCFieldWire", denseToThinRegion);
         mms.Get<Detector::Definition::CDCCell>().RegisterRegion("CDCSenseWire", denseToThinRegion);
-        target.RegisterRegion(denseToThinRegion);
+
+        // Near-target-dense-to-thin region
+
+        const auto nearTargetDenseToThinRegionCut{new G4ProductionCuts};
+        nearTargetDenseToThinRegionCut->SetProductionCut(0, "e-");
+        nearTargetDenseToThinRegionCut->SetProductionCut(0, "e+");
+        nearTargetDenseToThinRegionCut->SetProductionCut(0, "proton");
+        const auto nearTargetDenseToThinRegion{new G4Region{"NearTargetDenseToThin"}};
+        nearTargetDenseToThinRegion->SetProductionCuts(nearTargetDenseToThinRegionCut);
+
+        accelerator.RegisterRegion(nearTargetDenseToThinRegion);
+        beamDegrader.RegisterRegion(nearTargetDenseToThinRegion);
+        beamMonitor.RegisterRegion(nearTargetDenseToThinRegion);
+        target.RegisterRegion(nearTargetDenseToThinRegion);
 
         // Shield region
 
@@ -239,7 +264,7 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
             RegisterField(solenoidFieldS3, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::SolenoidFieldS3>, false);
             RegisterField(eCalField, new Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::ECalField>, false);
         }
-        { // Accelerator EM field, must be reigstered after MMS magnetic field
+        { // Accelerator EM field, must be registered after MMS magnetic field
             using Field = Mustard::Detector::Field::AsG4Field<MACE::Detector::Field::AcceleratorField>;
             using Equation = G4EqMagElectricField;
             using Stepper = G4TDormandPrince45<Equation, 8>;

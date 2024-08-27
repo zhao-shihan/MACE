@@ -23,6 +23,7 @@
 #include "MACE/Detector/Description/Target.h++"
 #include "MACE/Detector/Description/Vacuum.h++"
 #include "MACE/Detector/Description/World.h++"
+#include "MACE/SimMACE/Messenger/PhysicsMessenger.h++"
 #include "MACE/Simulation/Messenger/NumericMessenger.h++"
 
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
@@ -48,6 +49,8 @@ public:
 
     auto MinDriverStep(double val) -> void { fMinDriverStep = val; }
     auto DeltaChord(double val) -> void { fDeltaChord = val; }
+
+    auto ApplyProductionCutNearTarget(bool apply) const -> void;
 
     auto Construct() -> G4VPhysicalVolume* override;
 
@@ -78,6 +81,7 @@ private:
 
     std::unique_ptr<Mustard::Detector::Definition::DefinitionBase> fWorld;
 
+    PhysicsMessenger::Register<DetectorConstruction> fPhysicsMessengerRegister;
     NumericMessenger<DetectorConstruction>::Register<DetectorConstruction> fNumericMessengerRegister;
 };
 
