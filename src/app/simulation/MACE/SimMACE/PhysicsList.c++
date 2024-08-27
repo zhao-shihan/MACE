@@ -1,5 +1,4 @@
 #include "MACE/Detector/Description/CDC.h++"
-#include "MACE/Detector/Description/Collimator.h++"
 #include "MACE/Detector/Description/MMSField.h++"
 #include "MACE/Detector/Description/Solenoid.h++"
 #include "MACE/SimMACE/PhysicsList.h++"
@@ -8,6 +7,8 @@
 #include "Mustard/Extension/Geant4X/DecayChannel/MuoniumInternalPairProductionDecayChannel.h++"
 #include "Mustard/Extension/Geant4X/Particle/Muonium.h++"
 #include "Mustard/Extension/Geant4X/Physics/MuoniumPrecisionDecayPhysics.h++"
+#include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/PhysicalConstant.h++"
 
 #include "G4DecayTable.hh"
 #include "G4MuonPlus.hh"
@@ -19,50 +20,48 @@
 
 namespace MACE::SimMACE {
 
+using namespace Mustard::LiteralUnit::Energy;
+
 PhysicsList::PhysicsList() :
     PassiveSingleton<PhysicsList>{},
     StandardPhysicsListBase{},
+    fMACEPxyCutMaxLowerPositronEk{50_keV},
     fMessengerRegister{this} {}
 
 auto PhysicsList::ApplyMACEPxyCut(bool apply) -> void {
-    auto& muonPlusIPPDecay{FindIPPDecayChannel<Mustard::Geant4X::MuonInternalPairProductionDecayChannel>(G4MuonPlus::Definition())};
-    auto& muoniumIPPDecay{FindIPPDecayChannel<Mustard::Geant4X::MuoniumInternalPairProductionDecayChannel>(Mustard::Geant4X::Muonium::Definition())};
+    auto& muonPlusICDecay{FindICDecayChannel<Mustard::Geant4X::MuonInternalPairProductionDecayChannel>(G4MuonPlus::Definition())};
+    auto& muoniumICDecay{FindICDecayChannel<Mustard::Geant4X::MuoniumInternalPairProductionDecayChannel>(Mustard::Geant4X::Muonium::Definition())};
     if (apply) {
-        constexpr auto PxyCut{
-            [](auto&& event) {
+        const auto PxyCut{
+            [this](auto&& event) {
                 using Mustard::PhysicalConstant::c_light;
-
-                const auto& [p, p1, p2, k1, k2]{event};
-
-                auto passCut1{true};
-                auto passCut2{true};
+                using Mustard::PhysicalConstant::electron_mass_c2;
 
                 const auto mmsB{Detector::Description::MMSField::Instance().FastField()};
-                const auto cdcInnerRadius{Detector::Description::CDC::Instance().GasInnerRadius()};
-                const auto cdcPxyCut{(cdcInnerRadius / 2) * mmsB * c_light};
+                const auto& cdc{Detector::Description::CDC::Instance()};
+                const auto cdcInnerPxyCut{(cdc.GasInnerRadius() / 2) * mmsB * c_light};
+                const auto cdcOuterPxyCut{((cdc.GasOuterRadius() - cdc.GasInnerRadius()) / 2) * mmsB * c_light};
 
-                const auto& collimator{Detector::Description::Collimator::Instance()};
-                const auto& solenoid{Detector::Description::Solenoid::Instance()};
-                const auto maxPositronRxy{collimator.Enabled() ? 5 * collimator.Pitch() : solenoid.InnerRadius()};
-                const auto maxPositronPxy{maxPositronRxy * solenoid.FastField() * c_light};
+                // .         e+ e-  e+  v   v
+                const auto& [p, p1, p2, k1, k2]{event};
 
-                const auto positron1Pxy{muc::hypot(p.x(), p.y())};
-                const auto electronPxy{muc::hypot(p1.x(), p1.y())};
-                const auto positron2Pxy{muc::hypot(p2.x(), p2.y())};
-
-                return electronPxy > cdcPxyCut and ((positron1Pxy < cdcPxyCut and positron2Pxy < maxPositronPxy) or
-                                                    (positron2Pxy < cdcPxyCut and positron1Pxy < maxPositronPxy));
+                // electronPxy > cdcOuterPxyCut and
+                // ((positron1Pxy < cdcInnerPxyCut and positron2Ek < fMACEPxyCutMaxLowerPositronEk) or
+                //  (positron2Pxy < cdcInnerPxyCut and positron1Ek < fMACEPxyCutMaxLowerPositronEk));
+                return muc::hypot(p1.x(), p1.y()) > cdcOuterPxyCut and
+                       ((muc::hypot(p.x(), p.y()) < cdcInnerPxyCut and p2.e() - electron_mass_c2 < fMACEPxyCutMaxLowerPositronEk) or
+                        (muc::hypot(p2.x(), p2.y()) < cdcInnerPxyCut and p.e() - electron_mass_c2 < fMACEPxyCutMaxLowerPositronEk));
             }};
-        muonPlusIPPDecay.PassCut(PxyCut);
-        muoniumIPPDecay.PassCut(PxyCut);
+        muonPlusICDecay.PassCut(PxyCut);
+        muoniumICDecay.PassCut(PxyCut);
     } else {
-        muonPlusIPPDecay.PassCut([](auto&&) { return true; });
-        muoniumIPPDecay.PassCut([](auto&&) { return true; });
+        muonPlusICDecay.PassCut([](auto&&) { return true; });
+        muoniumICDecay.PassCut([](auto&&) { return true; });
     }
 }
 
 template<std::derived_from<G4VDecayChannel> C, std::derived_from<G4ParticleDefinition> P>
-auto PhysicsList::FindIPPDecayChannel(const P* particle) -> C& {
+auto PhysicsList::FindICDecayChannel(const P* particle) -> C& {
     const auto decayTable{particle->GetDecayTable()};
     C* ippDecay{};
     for (int i{}; i < decayTable->entries(); ++i) {
