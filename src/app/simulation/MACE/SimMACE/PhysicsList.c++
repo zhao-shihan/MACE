@@ -25,10 +25,10 @@ using namespace Mustard::LiteralUnit::Energy;
 PhysicsList::PhysicsList() :
     PassiveSingleton<PhysicsList>{},
     StandardPhysicsListBase{},
-    fMACEPxyCutMaxLowerPositronEk{50_keV},
+    fMACECutMaxLowerPositronEk{10_keV},
     fMessengerRegister{this} {}
 
-auto PhysicsList::ApplyMACEPxyCut(bool apply) -> void {
+auto PhysicsList::ApplyMACECut(bool apply) -> void {
     auto& muonPlusICDecay{FindICDecayChannel<Mustard::Geant4X::MuonInternalConversionDecayChannel>(G4MuonPlus::Definition())};
     auto& muoniumICDecay{FindICDecayChannel<Mustard::Geant4X::MuoniumInternalConversionDecayChannel>(Mustard::Geant4X::Muonium::Definition())};
     if (apply) {
@@ -46,11 +46,11 @@ auto PhysicsList::ApplyMACEPxyCut(bool apply) -> void {
                 const auto& [p, p1, p2, k1, k2]{event};
 
                 // electronPxy > cdcOuterPxyCut and
-                // ((positron1Pxy < cdcInnerPxyCut and positron2Ek < fMACEPxyCutMaxLowerPositronEk) or
-                //  (positron2Pxy < cdcInnerPxyCut and positron1Ek < fMACEPxyCutMaxLowerPositronEk));
+                // ((positron1Pxy < cdcInnerPxyCut and positron2Ek < fMACECutMaxLowerPositronEk) or
+                //  (positron2Pxy < cdcInnerPxyCut and positron1Ek < fMACECutMaxLowerPositronEk));
                 return muc::hypot(p1.x(), p1.y()) > cdcOuterPxyCut and
-                       ((muc::hypot(p.x(), p.y()) < cdcInnerPxyCut and p2.e() - electron_mass_c2 < fMACEPxyCutMaxLowerPositronEk) or
-                        (muc::hypot(p2.x(), p2.y()) < cdcInnerPxyCut and p.e() - electron_mass_c2 < fMACEPxyCutMaxLowerPositronEk));
+                       ((muc::hypot(p.x(), p.y()) < cdcInnerPxyCut and p2.e() - electron_mass_c2 < fMACECutMaxLowerPositronEk) or
+                        (muc::hypot(p2.x(), p2.y()) < cdcInnerPxyCut and p.e() - electron_mass_c2 < fMACECutMaxLowerPositronEk));
             }};
         muonPlusICDecay.PassCut(PxyCut);
         muoniumICDecay.PassCut(PxyCut);

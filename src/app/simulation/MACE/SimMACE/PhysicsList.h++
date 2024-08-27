@@ -17,17 +17,17 @@ class PhysicsList final : public Mustard::Env::Memory::PassiveSingleton<PhysicsL
 public:
     PhysicsList();
 
-    auto MACEPxyCutMaxLowerPositronEk() const -> auto { return fMACEPxyCutMaxLowerPositronEk; }
-    auto MACEPxyCutMaxLowerPositronEk(double val) -> void { fMACEPxyCutMaxLowerPositronEk = val; }
+    auto MACECutMaxLowerPositronEk() const -> auto { return fMACECutMaxLowerPositronEk; }
+    auto MACECutMaxLowerPositronEk(double val) -> void { fMACECutMaxLowerPositronEk = val; }
 
-    auto ApplyMACEPxyCut(bool apply) -> void;
+    auto ApplyMACECut(bool apply) -> void;
 
 private:
     template<std::derived_from<G4VDecayChannel> C, std::derived_from<G4ParticleDefinition> P>
     auto FindICDecayChannel(const P* particle) -> C&;
 
 private:
-    double fMACEPxyCutMaxLowerPositronEk; // for mu+ and M IC decay
+    double fMACECutMaxLowerPositronEk; // for mu+ and M IC decay
 
     PhysicsMessenger::Register<PhysicsList> fMessengerRegister;
 };

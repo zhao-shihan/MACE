@@ -30,8 +30,8 @@ public:
 
 private:
     std::unique_ptr<G4UIcmdWithABool> fApplyProductionCutNearTarget;
-    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMACEPxyCutMaxLowerPositronEk;
-    std::unique_ptr<G4UIcmdWithABool> fApplyMACEPxyCut;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fMACECutMaxLowerPositronEk;
+    std::unique_ptr<G4UIcmdWithABool> fApplyMACECut;
 };
 
 } // namespace Messenger
