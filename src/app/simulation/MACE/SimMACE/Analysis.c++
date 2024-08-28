@@ -13,8 +13,9 @@
 #include "TFile.h"
 #include "TMacro.h"
 
-#include "fmt/format.h"
+#include "fmt/core.h"
 
+#include <algorithm>
 #include <optional>
 #include <stdexcept>
 
@@ -55,10 +56,10 @@ auto Analysis::RunBeginUserAction(int runID) -> void {
 
 auto Analysis::EventEndUserAction() -> void {
     const auto mmsTrack{fCDCHit and fTTCHit ?
-                           std::optional{fMMSTruthTracker(*fCDCHit, *fTTCHit)} :
-                           std::nullopt};
+                            std::optional{fMMSTruthTracker(*fCDCHit, *fTTCHit)} :
+                            std::nullopt};
     const auto mmsPassed{not fCoincidenceWithMMS or mmsTrack == std::nullopt or mmsTrack->size() > 0};
-    const auto mcpPassed{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
+    const auto mcpPassed{not fCoincidenceWithMCP or fMCPHit == nullptr or std::ranges::any_of(*fMCPHit, [](auto&& hit) { return Get<"Trig">(*hit); })};
     const auto eCalPassed{not fCoincidenceWithECal or fECalHit == nullptr or fECalHit->size() > 0};
     if (mmsPassed and mcpPassed and eCalPassed) {
         if (fPrimaryVertex and fPrimaryVertexOutput) { fPrimaryVertexOutput->Fill(*fPrimaryVertex); }

@@ -12,8 +12,9 @@
 #include "TFile.h"
 #include "TMacro.h"
 
-#include "fmt/format.h"
+#include "fmt/core.h"
 
+#include <algorithm>
 #include <stdexcept>
 
 namespace MACE::SimECal {
@@ -63,7 +64,7 @@ auto Analysis::RunBegin(G4int runID) -> void {
 
 auto Analysis::EventEnd() -> void {
     const auto eCalPassed{not fCoincidenceWithECal or fECalHit == nullptr or fECalHit->size() > 0};
-    const auto mcpPassed{not fCoincidenceWithMCP or fMCPHit == nullptr or fMCPHit->size() > 0};
+    const auto mcpPassed{not fCoincidenceWithMCP or fMCPHit == nullptr or std::ranges::any_of(*fMCPHit, [](auto&& hit) { return Get<"Trig">(*hit); })};
     if (eCalPassed and mcpPassed) {
         if (fPrimaryVertex and fPrimaryVertexOutput) { fPrimaryVertexOutput->Fill(*fPrimaryVertex); }
         if (fDecayVertex and fDecayVertexOutput) { fDecayVertexOutput->Fill(*fDecayVertex); }
