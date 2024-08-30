@@ -1,6 +1,7 @@
 #include "MACE/PhaseI/SimMACEPhaseI/PhysicsList.h++"
 
 #include "Mustard/Env/BasicEnv.h++"
+#include "Mustard/Extension/Geant4X/Physics/MuoniumRareDecayPhysics.h++"
 
 #include "G4OpticalParameters.hh"
 #include "G4OpticalPhysics.hh"
@@ -17,6 +18,7 @@ PhysicsList::PhysicsList() :
     StandardPhysicsListBase{},
     fMessengerRegister{this} {
     RegisterPhysics(new G4RadioactiveDecayPhysics{verboseLevel});
+    ReplacePhysics(new Mustard::Geant4X::MuoniumRareDecayPhysics{verboseLevel});
 }
 
 auto PhysicsList::UseOpticalPhysics() -> void {
