@@ -29,7 +29,7 @@
 # Run
 #############################################################################
 
-/MACE/Analysis/FilePath SimMACEPhaseI
+/MACE/Analysis/FilePath SimMACEPhaseI_bkg
 /MACE/Analysis/FileMode RECREATE
 /run/beamOn 10000
 /Mustard/Run/PrintRunSummary
