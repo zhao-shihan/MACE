@@ -21,7 +21,7 @@
 
 /gps/particle             mu+
 /gps/direction            0 0 1        # 0 deg
-/gps/pos/centre           0 0 -50 cm     # 0 deg
+/gps/pos/centre           0 0 -50 cm   # 0 deg
 /gps/pos/type             Beam
 /gps/pos/shape            Circle
 /gps/pos/radius           0 mm
@@ -32,8 +32,12 @@
 /GPSX/NVertex             1
 /GPSX/PulseWidth          0 ns
 
-/Mustard/Physics/MuoniumDecay/AnnihilationDecay/BR 1
-/Mustard/Physics/MuoniumDecay/M2eeDecay/BR 0
+/Mustard/Physics/MuonDecay/RadiativeDecay/BR 0
+/Mustard/Physics/MuonDecay/ICDecay/BR 0
+/Mustard/Physics/MuonDecay/UpdateDecayBR
+
+/Mustard/Physics/MuoniumDecay/DoubleRadiativeDecay/BR 0
+/Mustard/Physics/MuoniumDecay/ElectronPairDecay/BR 1
 /Mustard/Physics/MuoniumDecay/UpdateDecayBR
 
 /MACE/Analysis/FilePath SimMACEPhaseI_vis
