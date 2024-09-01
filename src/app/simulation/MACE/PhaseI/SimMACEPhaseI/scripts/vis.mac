@@ -13,12 +13,6 @@
 /run/initialize
 
 /MACE/Generator/SwitchToGPSX
-#/gps/particle gamma
-#/gps/ene/mono 53.085 MeV
-#/gps/pos/centre 0. 0. 0. cm
-#/gps/direction 0 0.370438 -0.599382
-#/gps/ang/type iso
-
 /gps/particle             mu+
 /gps/direction            0 0 1        # 0 deg
 /gps/pos/centre           0 0 -50 cm   # 0 deg
@@ -34,8 +28,6 @@
 
 /Mustard/Physics/MuonDecay/RadiativeDecay/BR 0
 /Mustard/Physics/MuonDecay/ICDecay/BR 0
-/Mustard/Physics/MuonDecay/UpdateDecayBR
-
 /Mustard/Physics/MuoniumDecay/DoubleRadiativeDecay/BR 0
 /Mustard/Physics/MuoniumDecay/ElectronPairDecay/BR 1
 /Mustard/Physics/MuoniumDecay/UpdateDecayBR
