@@ -6,7 +6,6 @@
 #include "Mustard/Extension/Geant4X/DecayChannel/MuonInternalConversionDecayChannel.h++"
 #include "Mustard/Extension/Geant4X/DecayChannel/MuoniumInternalConversionDecayChannel.h++"
 #include "Mustard/Extension/Geant4X/Particle/Muonium.h++"
-#include "Mustard/Extension/Geant4X/Physics/MuoniumPrecisionDecayPhysics.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
 #include "Mustard/Utility/PhysicalConstant.h++"
 

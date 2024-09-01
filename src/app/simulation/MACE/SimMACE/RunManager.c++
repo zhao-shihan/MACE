@@ -16,11 +16,8 @@ using namespace Mustard::LiteralUnit::Energy;
 RunManager::RunManager() :
     MPIRunManager{},
     fAnalysis{std::make_unique_for_overwrite<Analysis>()} {
-    const auto verboseLevel{Mustard::Env::BasicEnv::Instance().VerboseLevel()};
 
-    const auto physicsList{new PhysicsList};
-    physicsList->SetVerboseLevel(muc::to_underlying(verboseLevel));
-    SetUserInitialization(physicsList);
+    SetUserInitialization(new StandardPhysicsList);
 
     const auto detectorConstruction{new DetectorConstruction};
     detectorConstruction->SetCheckOverlaps(Mustard::Env::VerboseLevelReach<'I'>());

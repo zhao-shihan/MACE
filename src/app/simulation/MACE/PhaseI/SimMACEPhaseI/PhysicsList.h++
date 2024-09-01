@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MACE/PhaseI/SimMACEPhaseI/Messenger/PhysicsMessenger.h++"
 #include "MACE/Simulation/Physics/StandardPhysicsList.h++"
 
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
@@ -11,11 +10,6 @@ class PhysicsList final : public Mustard::Env::Memory::PassiveSingleton<PhysicsL
                           public StandardPhysicsListBase {
 public:
     PhysicsList();
-
-    auto UseOpticalPhysics() -> void;
-
-private:
-    PhysicsMessenger::Register<PhysicsList> fMessengerRegister;
 };
 
 } // namespace MACE::PhaseI::SimMACEPhaseI

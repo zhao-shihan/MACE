@@ -9,6 +9,7 @@ constexpr auto defaultMacro = {
     "/control/saveHistory",
     "/run/verbose 2",
     "",
+    "/MACE/Physics/UseRadioactiveDecayPhysics",
     "/MACE/Physics/UseOpticalPhysics",
     "",
     "/run/initialize",

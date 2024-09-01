@@ -3,6 +3,7 @@
 /event/verbose 0
 /tracking/verbose 0
 
+/MACE/Physics/UseRadioactiveDecayPhysics
 #/MACE/Physics/UseOpticalPhysics
 
 /run/initialize
