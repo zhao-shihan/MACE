@@ -19,7 +19,7 @@ if(MACE_BUILTIN_MACE_OFFLINE_DATA)
     endif()
     # set download dest and URL
     set(MACE_BUILTIN_MACE_OFFLINE_DATA_SRC_DIR "${MACE_PROJECT_3RDPARTY_DIR}/mace_offline_data-main")
-    set(MACE_BUILTIN_MACE_OFFLINE_DATA_URL "http://172.22.107.14:6680/zhaoshihan/mace_offline_data/-/archive/main/mace_offline_data-main.tar.gz")
+    set(MACE_BUILTIN_MACE_OFFLINE_DATA_URL "https://code.ihep.ac.cn/zhaoshh7/mace_offline_data/-/archive/main/mace_offline_data-main.tar.gz")
     # reuse or download
     include(FetchContent)
     if(EXISTS "${MACE_BUILTIN_MACE_OFFLINE_DATA_SRC_DIR}/CMakeLists.txt")
