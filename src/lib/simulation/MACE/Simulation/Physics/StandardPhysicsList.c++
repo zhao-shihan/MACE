@@ -25,7 +25,6 @@ StandardPhysicsListBase::StandardPhysicsListBase() :
     // Muonium physics
     RegisterPhysics(new Mustard::Geant4X::MuoniumPhysics<Detector::Description::Target>{verboseLevel});
     // HP decay for muon and muonium
-    ReplacePhysics(new G4SpinDecayPhysics{verboseLevel});
     RegisterPhysics(new Mustard::Geant4X::MuonPrecisionDecayPhysics{verboseLevel});
     RegisterPhysics(new Mustard::Geant4X::MuoniumPrecisionDecayPhysics{verboseLevel});
 
