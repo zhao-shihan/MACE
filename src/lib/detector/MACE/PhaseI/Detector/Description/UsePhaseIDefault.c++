@@ -12,8 +12,8 @@ auto UsePhaseIDefault() -> void {
     namespace MACE = MACE::Detector::Description;
     { // set accelerator up/downstream length to a random equal value
         auto& accelerator{MACE::Accelerator::Instance()};
-        accelerator.UpstreamLength(2);
-        accelerator.DownstreamLength(2);
+        accelerator.UpstreamFieldLength(2);
+        accelerator.DownstreamFieldLength(2);
     }
     { // Use cylinder target
         auto& target{MACE::Target::Instance()};
