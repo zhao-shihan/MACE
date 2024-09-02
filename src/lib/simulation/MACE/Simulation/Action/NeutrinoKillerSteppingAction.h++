@@ -4,13 +4,24 @@
 
 #include "Mustard/Env/Memory/PassiveSingleton.h++"
 
+#include "G4AntiNeutrinoE.hh"
+#include "G4AntiNeutrinoMu.hh"
+#include "G4AntiNeutrinoTau.hh"
+#include "G4NeutrinoE.hh"
+#include "G4NeutrinoMu.hh"
+#include "G4NeutrinoTau.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4ProcessTable.hh"
+#include "G4ProcessType.hh"
+#include "G4RunManager.hh"
 #include "G4Step.hh"
 #include "G4Track.hh"
 #include "G4TrackStatus.hh"
 #include "G4UserSteppingAction.hh"
 
 #include "muc/math"
+
+#include "gsl/gsl"
 
 namespace MACE::inline Simulation::inline Action {
 
@@ -20,7 +31,7 @@ class NeutrinoKillerSteppingAction : public Mustard::Env::Memory::PassiveSinglet
 public:
     NeutrinoKillerSteppingAction();
 
-    auto EnableNeutrinoKiller(bool val) { fEnableNeutrinoKiller = val; }
+    auto EnableNeutrinoKiller(bool val) -> void;
 
     auto UserSteppingAction(const G4Step* step) -> void override final;
 
