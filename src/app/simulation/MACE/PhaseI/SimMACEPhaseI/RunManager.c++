@@ -17,7 +17,7 @@ RunManager::RunManager() :
     MPIRunManager{},
     fAnalysis{std::make_unique_for_overwrite<Analysis>()} {
 
-    SetUserInitialization(new StandardPhysicsList);
+    SetUserInitialization(new PhysicsList);
 
     const auto detectorConstruction{new DetectorConstruction};
     detectorConstruction->SetCheckOverlaps(Mustard::Env::VerboseLevelReach<'I'>());
