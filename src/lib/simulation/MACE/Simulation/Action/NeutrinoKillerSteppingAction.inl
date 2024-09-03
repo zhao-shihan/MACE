@@ -39,7 +39,7 @@ auto NeutrinoKillerSteppingAction<ADerived>::UserSteppingAction(const G4Step* st
         case 12:
         case 14:
         case 16:
-            track.SetTrackStatus(fStopAndKill);
+            track.SetTrackStatus(fKillTrackAndSecondaries);
             SteppingActionForNeutrino(*step);
             return;
         }
