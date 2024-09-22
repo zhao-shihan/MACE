@@ -406,7 +406,7 @@ auto ECal::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fScintillationComponent1, "ScintillationComponent1");
     ImportValue(node, fScintillationYield, "ScintillationYield");
     ImportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
-    ImportValue(node, fResolutionScale, "ReolutionScale");
+    ImportValue(node, fResolutionScale, "ResolutionScale");
 
     SetGeometryOutdated();
 }
@@ -433,7 +433,7 @@ auto ECal::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fScintillationComponent1, "ScintillationComponent1");
     ExportValue(node, fScintillationYield, "ScintillationYield");
     ExportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
-    ExportValue(node, fResolutionScale, "ReolutionScale");
+    ExportValue(node, fResolutionScale, "ResolutionScale");
 }
 
 } // namespace MACE::Detector::Description

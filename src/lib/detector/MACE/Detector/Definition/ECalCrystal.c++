@@ -54,12 +54,12 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
 
     const auto iodideElement{nistManager->FindOrBuildElement("I")};
     const auto cesiumElement{nistManager->FindOrBuildElement("Cs")};
-    const auto thaliumElement{nistManager->FindOrBuildElement("Tl")};
+    const auto thalliumElement{nistManager->FindOrBuildElement("Tl")};
 
     const auto csI{new G4Material("CsI", 4.51_g_cm3, 3, kStateSolid)};
     csI->AddElement(cesiumElement, 0.507556);
     csI->AddElement(iodideElement, 0.484639);
-    csI->AddElement(thaliumElement, 0.007805);
+    csI->AddElement(thalliumElement, 0.007805);
 
     //////////////////////////////////////////////////
     // Construct Material Optical Properties Tables
@@ -186,7 +186,7 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
                 1_m,
                 1_m,
                 crystalLength / 2)};
-        const auto cutSoildCrystal{
+        const auto cutSolidCrystal{
             Make<G4IntersectionSolid>(
                 "ECalCrystal",
                 solidCrystal,
@@ -194,7 +194,7 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
                 crystalTransform)};
         const auto logicCrystal{
             Make<G4LogicalVolume>(
-                cutSoildCrystal,
+                cutSolidCrystal,
                 csI,
                 "ECalCrystal")};
         const auto physicalCrystal{
