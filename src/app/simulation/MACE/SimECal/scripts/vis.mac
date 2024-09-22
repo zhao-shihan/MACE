@@ -39,11 +39,20 @@
 /vis/viewer/zoom 1.5
 #/vis/viewer/addCutawayPlane 0 0 0
 
+# Visibility
+/vis/geometry/set/visibility ECalField             0 no
+/vis/geometry/set/visibility ECalPMTCathode        0 no
+/vis/geometry/set/visibility ECalPMTCoupler        0 no
+
+
 # Colors
 /vis/geometry/set/colour ECalCrystal                   0     1     1     1     0.1
+/vis/geometry/set/colour ECalField                     0     1     1     1     0.05
+/vis/geometry/set/colour ECalMagnet                    0     1     1     1     0.05
 /vis/geometry/set/colour ECalPMTCathode                0     1     1     1     0.1
 /vis/geometry/set/colour ECalPMTCoupler                0     1     1     1     0.1
 /vis/geometry/set/colour ECalPMTShell                  0     1     1     1     0.1
+/vis/geometry/set/colour ECalShield                    0     1     1     1     0.05
 
 /vis/scene/add/date
 /vis/scene/add/axes 0 0 0 10 cm
