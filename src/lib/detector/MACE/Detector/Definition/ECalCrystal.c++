@@ -37,8 +37,8 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
     const auto innerRadius{eCal.InnerRadius()};
     const auto crystalHypotenuse{eCal.CrystalHypotenuse()};
 
-    const auto csiEnergyBin{eCal.CsIEnergyBin()};
-    const auto csiScintillationComponent1{eCal.CsIScintillationComponent1()};
+    const auto scintillationWavelengthBin{eCal.ScintillationWavelengthBin()};
+    const auto scintillationComponent1{eCal.ScintillationComponent1()};
     const auto scintillationYield{eCal.ScintillationYield()};
     const auto scintillationTimeConstant1{eCal.ScintillationTimeConstant1()};
     const auto resolutionScale{eCal.ResolutionScale()};
@@ -73,7 +73,7 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
     const auto csiPropertiesTable{new G4MaterialPropertiesTable};
     csiPropertiesTable->AddProperty("RINDEX", fEnergyPair, {1.79, 1.79});
     csiPropertiesTable->AddProperty("ABSLENGTH", fEnergyPair, {370_mm, 370_mm});
-    csiPropertiesTable->AddProperty("SCINTILLATIONCOMPONENT1", csiEnergyBin, csiScintillationComponent1);
+    csiPropertiesTable->AddProperty("SCINTILLATIONCOMPONENT1", scintillationWavelengthBin, scintillationComponent1);
     csiPropertiesTable->AddConstProperty("SCINTILLATIONYIELD", scintillationYield);
     csiPropertiesTable->AddConstProperty("SCINTILLATIONTIMECONSTANT1", scintillationTimeConstant1);
     csiPropertiesTable->AddConstProperty("RESOLUTIONSCALE", resolutionScale);
@@ -175,7 +175,7 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
             }};
 
         const auto crystalTransform{eCal.ComputeTransformToOuterSurfaceWithOffset(unitID,
-                                                                                 -crystalLength / 2)};
+                                                                                  -crystalLength / 2)};
 
         // Crystal
 

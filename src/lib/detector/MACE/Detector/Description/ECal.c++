@@ -20,6 +20,7 @@
 #include "muc/math"
 
 #include <concepts>
+#include <queue>
 #include <ranges>
 
 namespace MACE::Detector::Description {
@@ -220,34 +221,46 @@ ECal::ECal() :
                     0.408, 0.425, 0.44, 0.454, 0.468, 0.485, 0.497, 0.505, 0.507, 0.502,
                     0.493, 0.477, 0.449, 0.422, 0.397, 0.373, 0.346, 0.318, 0.28, 0.25,
                     0.217, 0.184, 0.083, 0.051, 0.025}, // S14161
-    fCsIEnergyBin{1.75_eV, 1.77_eV, 1.78_eV, 1.80_eV, 1.82_eV, 1.83_eV, 1.85_eV, 1.87_eV,
-                  1.88_eV, 1.89_eV, 1.91_eV, 1.92_eV, 1.93_eV, 1.94_eV, 1.95_eV, 1.96_eV,
-                  1.98_eV, 1.98_eV, 2.00_eV, 2.01_eV, 2.02_eV, 2.04_eV, 2.05_eV, 2.07_eV,
-                  2.08_eV, 2.09_eV, 2.11_eV, 2.11_eV, 2.13_eV, 2.15_eV, 2.16_eV, 2.18_eV,
-                  2.20_eV, 2.22_eV, 2.25_eV, 2.28_eV, 2.32_eV, 2.35_eV, 2.37_eV, 2.39_eV,
-                  2.41_eV, 2.43_eV, 2.44_eV, 2.46_eV, 2.47_eV, 2.49_eV, 2.50_eV, 2.52_eV,
-                  2.53_eV, 2.55_eV, 2.56_eV, 2.57_eV, 2.59_eV, 2.61_eV, 2.62_eV, 2.65_eV,
-                  2.67_eV, 2.69_eV, 2.72_eV, 2.74_eV, 2.77_eV, 2.80_eV, 2.84_eV, 2.87_eV,
-                  2.92_eV, 2.98_eV, 3.04_eV, 3.11_eV, 3.18_eV, 3.25_eV, 3.32_eV, 3.40_eV,
-                  3.48_eV, 3.57_eV},
-    fCsIScintillationComponent1{0.126974051, 0.143090606, 0.16675108, 0.19144027, 0.216129461, 0.240818651, 0.263450409, 0.289682674,
-                                0.314886222, 0.341118487, 0.364264603, 0.390188253, 0.415186058, 0.441418323, 0.46147829, 0.48805346,
-                                0.515485894, 0.535545861, 0.562121031, 0.589553465, 0.609613432, 0.637491643, 0.666192827, 0.690367659,
-                                0.717114282, 0.737174249, 0.762377798, 0.782437765, 0.810315976, 0.837816991, 0.866621046, 0.895082196,
-                                0.921828819, 0.948061084, 0.974293348, 0.986295038, 0.974293348, 0.9490898, 0.923886251, 0.899197061,
-                                0.869021384, 0.840354491, 0.813813611, 0.789124421, 0.760937595, 0.729973235, 0.698597389, 0.668764618,
-                                0.633273906, 0.59932627, 0.558691977, 0.525773057, 0.497295271, 0.466450419, 0.440801093, 0.408499402,
-                                0.377295009, 0.349451089, 0.323115952, 0.299661221, 0.272194497, 0.250420003, 0.226930981, 0.203270507,
-                                0.181153108, 0.158178444, 0.136918308, 0.117715605, 0.098855806, 0.08136763, 0.063879453, 0.046734182,
-                                0.030960533, 0.015186883},
+    fScintillationWavelengthBin{1.75_eV, 1.77_eV, 1.78_eV, 1.80_eV, 1.82_eV, 1.83_eV, 1.85_eV, 1.87_eV,
+                                1.88_eV, 1.89_eV, 1.91_eV, 1.92_eV, 1.93_eV, 1.94_eV, 1.95_eV, 1.96_eV,
+                                1.98_eV, 1.98_eV, 2.00_eV, 2.01_eV, 2.02_eV, 2.04_eV, 2.05_eV, 2.07_eV,
+                                2.08_eV, 2.09_eV, 2.11_eV, 2.11_eV, 2.13_eV, 2.15_eV, 2.16_eV, 2.18_eV,
+                                2.20_eV, 2.22_eV, 2.25_eV, 2.28_eV, 2.32_eV, 2.35_eV, 2.37_eV, 2.39_eV,
+                                2.41_eV, 2.43_eV, 2.44_eV, 2.46_eV, 2.47_eV, 2.49_eV, 2.50_eV, 2.52_eV,
+                                2.53_eV, 2.55_eV, 2.56_eV, 2.57_eV, 2.59_eV, 2.61_eV, 2.62_eV, 2.65_eV,
+                                2.67_eV, 2.69_eV, 2.72_eV, 2.74_eV, 2.77_eV, 2.80_eV, 2.84_eV, 2.87_eV,
+                                2.92_eV, 2.98_eV, 3.04_eV, 3.11_eV, 3.18_eV, 3.25_eV, 3.32_eV, 3.40_eV,
+                                3.48_eV, 3.57_eV},
+    fScintillationComponent1{0.126974051, 0.143090606, 0.16675108, 0.19144027, 0.216129461, 0.240818651, 0.263450409, 0.289682674,
+                             0.314886222, 0.341118487, 0.364264603, 0.390188253, 0.415186058, 0.441418323, 0.46147829, 0.48805346,
+                             0.515485894, 0.535545861, 0.562121031, 0.589553465, 0.609613432, 0.637491643, 0.666192827, 0.690367659,
+                             0.717114282, 0.737174249, 0.762377798, 0.782437765, 0.810315976, 0.837816991, 0.866621046, 0.895082196,
+                             0.921828819, 0.948061084, 0.974293348, 0.986295038, 0.974293348, 0.9490898, 0.923886251, 0.899197061,
+                             0.869021384, 0.840354491, 0.813813611, 0.789124421, 0.760937595, 0.729973235, 0.698597389, 0.668764618,
+                             0.633273906, 0.59932627, 0.558691977, 0.525773057, 0.497295271, 0.466450419, 0.440801093, 0.408499402,
+                             0.377295009, 0.349451089, 0.323115952, 0.299661221, 0.272194497, 0.250420003, 0.226930981, 0.203270507,
+                             0.181153108, 0.158178444, 0.136918308, 0.117715605, 0.098855806, 0.08136763, 0.063879453, 0.046734182,
+                             0.030960533, 0.015186883},
     fScintillationYield{54000},
     fScintillationTimeConstant1{1000_ns},
+    // fScintillationWavelengthBin{635.961, 630.508, 623.237, 615.967, 608.697, 601.426, 594.156, 586.885, 579.615, 572.345,
+    //               565.756, 559.849, 554.169, 548.716, 543.263, 538.037, 533.266, 528.722, 523.724, 517.817,
+    //               511.228, 504.184, 496.914, 489.644, 482.373, 475.103, 467.832, 460.789, 454.882, 450.338,
+    //               446.476, 442.840, 439.205, 435.570, 432.162, 428.981, 425.800, 422.620, 419.439, 416.258,
+    //               413.077, 409.896, 406.488, 402.853, 398.764, 393.992, 388.767, 383.314, 379.096, 374.932},
+    // fScintillationComponent1{0.114, 0.134, 0.163, 0.195, 0.228, 0.264, 0.301, 0.339, 0.379, 0.419,
+    //                             0.461, 0.500, 0.540, 0.581, 0.624, 0.666, 0.707, 0.748, 0.791, 0.832,
+    //                             0.874, 0.916, 0.954, 0.981, 0.994, 0.991, 0.969, 0.934, 0.891, 0.850,
+    //                             0.809, 0.768, 0.725, 0.681, 0.639, 0.597, 0.554, 0.510, 0.464, 0.419,
+    //                             0.374, 0.331, 0.287, 0.245, 0.203, 0.160, 0.117, 0.076, 0.046, 0.015},
+    // fScintillationYield{54000},
+    // fScintillationTimeConstant1{1000_ns},
     fResolutionScale{1} {}
 
 auto ECal::ComputeMesh() const -> MeshInformation {
     auto pmpMesh{ECalMesh{fNSubdivision}.Generate()};
     MeshInformation mesh;
-    auto& [vertex, faceList, typeMap]{mesh};
+    auto& [vertex, faceList, typeMap, clusterMap]{mesh};
     const auto point{pmpMesh.vertex_property<pmp::Point>("v:point")};
 
     for (auto&& v : pmpMesh.vertices()) {
@@ -298,8 +311,8 @@ auto ECal::ComputeMesh() const -> MeshInformation {
 
     std::map<std::vector<float>, std::vector<int>> edgeLengthSet;
 
-    for (int unitID{};
-         auto&& [centroid, _, vertexIndex] : std::as_const(faceList)) { // loop over all ECal face
+    for (int moduleID{};
+         auto&& [centroid, _, vertexIndex] : std::as_const(faceList)) { // module types and clusters sorting
         // sort by edge length
         std::vector<float> edgeLength; // magic conversion (double to float)
         std::vector<G4ThreeVector> xV{vertexIndex.size()};
@@ -313,13 +326,44 @@ auto ECal::ComputeMesh() const -> MeshInformation {
         };
 
         std::ranges::sort(edgeLength);
-        edgeLengthSet[edgeLength].emplace_back(unitID++);
+        edgeLengthSet[edgeLength].emplace_back(moduleID);
+
+        // sort by centroid distance to other faces
+        std::pair<float, int> clusterInfo;
+
+        auto cmp = [](
+                       const std::pair<float, int>& p,
+                       const std::pair<float, int>& q) { return p.first > q.first; };
+
+        std::priority_queue<std::pair<float, int>,
+                            std::vector<std::pair<float, int>>,
+                            decltype(cmp)>
+            centroidPriority(cmp);
+
+        for (int i{}; auto&& [adjacentCentroid, _1, _2] : std::as_const(faceList)) {
+            if (centroid == adjacentCentroid) {
+                i++;
+                continue;
+            }
+            clusterInfo.first = (centroid - adjacentCentroid).mag();
+            clusterInfo.second = i;
+            centroidPriority.push(clusterInfo);
+            i++;
+        }
+
+        for (int i{}; i < std::ssize(vertexIndex); ++i) {
+            auto top = centroidPriority.top();
+            if (top.first > 0.2) { continue; }
+            clusterMap[moduleID].emplace_back(top.second);
+            centroidPriority.pop();
+        }
+        moduleID++;
     }
 
     int typeID{};
     for (auto&& pair : edgeLengthSet) {
         for (auto&& value : pair.second) {
-            mesh.fTypeMap[value] = typeID;
+            typeMap[value] = typeID;
         }
         typeID++;
     }
@@ -327,9 +371,9 @@ auto ECal::ComputeMesh() const -> MeshInformation {
     return mesh;
 }
 
-auto ECal::ComputeTransformToOuterSurfaceWithOffset(int unitID, double offsetInNormalDirection) const -> HepGeom::Transform3D {
+auto ECal::ComputeTransformToOuterSurfaceWithOffset(int moduleID, double offsetInNormalDirection) const -> HepGeom::Transform3D {
     const auto& faceList{Mesh().fFaceList};
-    auto&& [centroid, normal, vertexIndex]{faceList[unitID]};
+    auto&& [centroid, normal, vertexIndex]{faceList[moduleID]};
 
     const auto centroidMagnitude{centroid.mag()};
     const auto crystalOuterRadius{(fInnerRadius + fCrystalHypotenuse) * centroidMagnitude};
@@ -358,8 +402,8 @@ auto ECal::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fMPPCWindowThickness, "MPPCWindowThickness");
     ImportValue(node, fMPPCWaveLengthBin, "MPPCWaveLengthBin");
     ImportValue(node, fMPPCEfficiency, "MPPCEfficiency");
-    ImportValue(node, fCsIEnergyBin, "CsIEnergyBin");
-    ImportValue(node, fCsIScintillationComponent1, "CsIScintillationComponent1");
+    ImportValue(node, fScintillationWavelengthBin, "ScintillationWavelengthBin");
+    ImportValue(node, fScintillationComponent1, "ScintillationComponent1");
     ImportValue(node, fScintillationYield, "ScintillationYield");
     ImportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
     ImportValue(node, fResolutionScale, "ReolutionScale");
@@ -385,8 +429,8 @@ auto ECal::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fMPPCWindowThickness, "MPPCWindowThickness");
     ExportValue(node, fMPPCWaveLengthBin, "MPPCWaveLengthBin");
     ExportValue(node, fMPPCEfficiency, "MPPCEfficiency");
-    ExportValue(node, fCsIEnergyBin, "CsIEnergyBin");
-    ExportValue(node, fCsIScintillationComponent1, "CsIScintillationComponent1");
+    ExportValue(node, fScintillationWavelengthBin, "ScintillationWavelengthBin");
+    ExportValue(node, fScintillationComponent1, "ScintillationComponent1");
     ExportValue(node, fScintillationYield, "ScintillationYield");
     ExportValue(node, fScintillationTimeConstant1, "ScintillationTimeConstant1");
     ExportValue(node, fResolutionScale, "ReolutionScale");
