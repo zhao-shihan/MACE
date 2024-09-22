@@ -106,18 +106,18 @@ auto ECalMPPC::Construct(G4bool checkOverlaps) -> void {
     // Construct Volumes
     /////////////////////////////////////////////
 
-    for (int unitID{};
+    for (int moduleID{};
          auto&& [_1, _2, vertexIndex] : std::as_const(faceList)) { // loop over all ECal face
-        auto typeMapIt = typeMap.find(unitID);
+        auto typeMapIt = typeMap.find(moduleID);
         double mppcWidth{mppcWidthSet.at(typeMapIt->second)};
 
-        const auto couplerTransform{eCal.ComputeTransformToOuterSurfaceWithOffset(unitID,
+        const auto couplerTransform{eCal.ComputeTransformToOuterSurfaceWithOffset(moduleID,
                                                                                  mppcCouplerThickness / 2)};
 
-        const auto windowTransform{eCal.ComputeTransformToOuterSurfaceWithOffset(unitID,
+        const auto windowTransform{eCal.ComputeTransformToOuterSurfaceWithOffset(moduleID,
                                                                                 mppcCouplerThickness + mppcWindowThickness / 2)};
 
-        const auto cathodeTransform{eCal.ComputeTransformToOuterSurfaceWithOffset(unitID,
+        const auto cathodeTransform{eCal.ComputeTransformToOuterSurfaceWithOffset(moduleID,
                                                                                  mppcCouplerThickness + mppcWindowThickness + mppcThickness / 2)};
 
         const auto solidCoupler{Make<G4Box>("temp", mppcWidth / 2, mppcWidth / 2, mppcCouplerThickness / 2)};
@@ -127,7 +127,7 @@ auto ECalMPPC::Construct(G4bool checkOverlaps) -> void {
                                                        "ECalMPPCCoupler",
                                                        Mother().LogicalVolume(),
                                                        true,
-                                                       unitID,
+                                                       moduleID,
                                                        checkOverlaps)};
 
         const auto solidWindow{Make<G4Box>("temp", mppcWidth / 2, mppcWidth / 2, mppcWindowThickness / 2)};
@@ -137,7 +137,7 @@ auto ECalMPPC::Construct(G4bool checkOverlaps) -> void {
                             "ECalMPPCWindow",
                             Mother().LogicalVolume(),
                             true,
-                            unitID,
+                            moduleID,
                             checkOverlaps);
 
         const auto solidMPPC{Make<G4Box>("temp", mppcWidth / 2, mppcWidth / 2, mppcThickness / 2)};
@@ -147,7 +147,7 @@ auto ECalMPPC::Construct(G4bool checkOverlaps) -> void {
                             "ECalMPPC",
                             Mother().LogicalVolume(),
                             true,
-                            unitID,
+                            moduleID,
                             checkOverlaps);
 
         /////////////////////////////////////////////
@@ -158,7 +158,7 @@ auto ECalMPPC::Construct(G4bool checkOverlaps) -> void {
         if (eCalCrystal) {
             const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
             new G4LogicalBorderSurface{"couplerSurface",
-                                       eCalCrystal->PhysicalVolume(fmt::format("ECalCrystal_{}", unitID)),
+                                       eCalCrystal->PhysicalVolume(fmt::format("ECalCrystal_{}", moduleID)),
                                        physicalCoupler,
                                        couplerSurface};
             couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
@@ -168,7 +168,7 @@ auto ECalMPPC::Construct(G4bool checkOverlaps) -> void {
         new G4LogicalSkinSurface{"mppcSkinSurface", logicMPPC, cathodeSurface};
         cathodeSurface->SetMaterialPropertiesTable(mppcSurfacePropertiesTable);
 
-        ++unitID;
+        ++moduleID;
     }
 }
 

@@ -96,7 +96,7 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
     // Construct Volumes
     /////////////////////////////////////////////
 
-    for (int unitID{};
+    for (int moduleID{};
          auto&& [centroid, _, vertexIndex] : std::as_const(faceList)) { // loop over all ECal face
         const auto centroidMagnitude{centroid.mag()};
         const auto crystalLength{crystalHypotenuse * centroidMagnitude};
@@ -174,12 +174,12 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
                 return solid;
             }};
 
-        const auto crystalTransform{eCal.ComputeTransformToOuterSurfaceWithOffset(unitID,
+        const auto crystalTransform{eCal.ComputeTransformToOuterSurfaceWithOffset(moduleID,
                                                                                   -crystalLength / 2)};
 
         // Crystal
 
-        const auto solidCrystal{MakeTessellatedSolid(fmt::format("temp_{}", unitID))};
+        const auto solidCrystal{MakeTessellatedSolid(fmt::format("temp_{}", moduleID))};
         const auto cutCrystalBox{
             Make<G4Box>(
                 "temp",
@@ -201,10 +201,10 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
             Make<G4PVPlacement>(
                 G4Transform3D{},
                 logicCrystal,
-                fmt::format("ECalCrystal_{}", unitID),
+                fmt::format("ECalCrystal_{}", moduleID),
                 Mother().LogicalVolume(),
                 true,
-                unitID,
+                moduleID,
                 checkOverlaps)};
 
         /////////////////////////////////////////////
@@ -224,12 +224,12 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
             const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
             new G4LogicalBorderSurface{"couplerSurface",
                                        physicalCrystal,
-                                       eCalPMTCoupler->PhysicalVolume("ECalPMTCoupler", unitID),
+                                       eCalPMTCoupler->PhysicalVolume("ECalPMTCoupler", moduleID),
                                        couplerSurface};
             couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
         }
 
-        ++unitID;
+        ++moduleID;
     }
 }
 
