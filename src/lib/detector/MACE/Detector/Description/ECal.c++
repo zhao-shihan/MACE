@@ -313,8 +313,34 @@ auto ECal::ComputeMesh() const -> MeshInformation {
         };
 
         std::ranges::sort(edgeLength);
-        edgeLengthSet[edgeLength].emplace_back(unitID++);
+        edgeLengthSet[edgeLength].emplace_back(unitID);
+        if(unitID == 213){
+            std::cout << "\n>>>>><<<<<NO.213 centroid: " << centroid << "\n";
+            //>>>>><<<<<NO.213 centroid: (-0.231259,0.883817,-0.386541)
+        }
+        unitID++;
     }
+
+    //
+    {
+        std::cout << ">>--->>edgeLengthSet" << "\n";
+        for (int type{1}; auto&& pair : edgeLengthSet) {
+            std::ranges::sort(pair.second);
+            std::cout << "--->>type " << type << " : " << "\n";
+            std::cout << ">>lengths: " << "\n";
+            for (auto&& value : pair.first) {
+                std::cout << value << " ";
+            }
+            std::cout << "\n>>units(" << pair.second.size() << "units total): " << "\n";
+            for (auto&& value : pair.second) {
+                std::cout << value << " ";
+            }
+            std::cout << "\n";
+            std::cout << "======================================================\n";
+            type++;
+        }
+    }
+    //
 
     int typeID{};
     for (auto&& pair : edgeLengthSet) {
