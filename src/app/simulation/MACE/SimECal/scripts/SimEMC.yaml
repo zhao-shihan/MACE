@@ -1,7 +1,7 @@
 # SimECal: geometry description
 
 ECal:
-  NSubdivision: 2
+  NSubdivision: 3
   InnerRadius: 150
   CrystalHypotenuse: 150
   UpstreamWindowRadius: 50
