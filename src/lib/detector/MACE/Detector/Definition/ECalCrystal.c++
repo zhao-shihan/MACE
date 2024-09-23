@@ -98,6 +98,12 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
 
     for (int unitID{};
          auto&& [centroid, _, vertexIndex] : std::as_const(faceList)) { // loop over all ECal face
+
+        if(unitID != 213){
+            unitID++;
+            continue;
+        }
+
         const auto centroidMagnitude{centroid.mag()};
         const auto crystalLength{crystalHypotenuse * centroidMagnitude};
         const auto outerHypotenuse{innerRadius + crystalHypotenuse};
@@ -229,7 +235,6 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
             couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
         }
 
-        ++unitID;
     }
 }
 

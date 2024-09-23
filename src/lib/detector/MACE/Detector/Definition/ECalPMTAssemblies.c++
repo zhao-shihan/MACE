@@ -110,6 +110,12 @@ auto ECalPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
 
     for (int unitID{};
          auto&& [_1, _2, vertexIndex] : std::as_const(faceList)) { // loop over all ECal face
+        
+        if(unitID != 213){
+            unitID++;
+            continue;
+        }
+
         auto typeMapIt = typeMap.find(unitID);
         auto pmtDiameter = pmtDimensions.at(typeMapIt->second).at(0);
         auto cathodeDiameter = pmtDimensions.at(typeMapIt->second).at(1);
@@ -176,7 +182,6 @@ auto ECalPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
         new G4LogicalSkinSurface{"cathodeSkinSurface", logicCathode, cathodeSurface};
         cathodeSurface->SetMaterialPropertiesTable(cathodeSurfacePropertiesTable);
 
-        ++unitID;
     }
 }
 

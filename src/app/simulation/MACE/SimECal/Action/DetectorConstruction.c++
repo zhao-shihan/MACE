@@ -50,22 +50,22 @@ auto DetectorConstruction::Construct() -> G4VPhysicalVolume* {
     fWorld = std::make_unique<World>();
     auto& eCalCrystal{fWorld->NewDaughter<ECalCrystal>(fCheckOverlap)};
     auto& eCalPMTAssemblies{fWorld->NewDaughter<ECalPMTAssemblies>(fCheckOverlap)};
-    auto& mcpChamber{fWorld->NewDaughter<MCPChamber>(fCheckOverlap)};
+    // auto& mcpChamber{fWorld->NewDaughter<MCPChamber>(fCheckOverlap)};
 
-    auto& eCalMagnet = fWorld->NewDaughter<SimECal::Detector::ECalMagnet>(fCheckOverlap);
-    auto& eCalShield = fWorld->NewDaughter<SimECal::Detector::ECalShield>(fCheckOverlap);
+    // auto& eCalMagnet = fWorld->NewDaughter<SimECal::Detector::ECalMagnet>(fCheckOverlap);
+    // auto& eCalShield = fWorld->NewDaughter<SimECal::Detector::ECalShield>(fCheckOverlap);
     // auto& eCalTunnel = fWorld->NewDaughter<SimECal::Detector::ECalTunnel>(fCheckOverlap);
 
-    auto& mcp{mcpChamber.NewDaughter<MCP>(fCheckOverlap)};
+    // auto& mcp{mcpChamber.NewDaughter<MCP>(fCheckOverlap)};
 
     // Shield region
 
-    const auto shieldRegionCut{new G4ProductionCuts};
-    shieldRegionCut->SetProductionCut(2_mm);
-    const auto shieldRegion{new G4Region{"Shield"}};
-    shieldRegion->SetProductionCuts(shieldRegionCut);
+    // const auto shieldRegionCut{new G4ProductionCuts};
+    // shieldRegionCut->SetProductionCut(2_mm);
+    // const auto shieldRegion{new G4Region{"Shield"}};
+    // shieldRegion->SetProductionCuts(shieldRegionCut);
 
-    eCalShield.RegisterRegion(shieldRegion);
+    // eCalShield.RegisterRegion(shieldRegion);
 
     const auto& eCalName{MACE::Detector::Description::ECal::Instance().Name()};
     const auto eCalPMTSD{new SD::ECalPMTSD{eCalName + "PMT"}};
