@@ -8,9 +8,9 @@ MMSField::MMSField() :
     MagneticFieldBase<MMSField>{},
     fField{FastField{{}}} {
     const auto& fieldOption{Detector::Description::FieldOption::Instance()};
-    const auto& eCalField{Detector::Description::MMSField::Instance()};
+    const auto& ecalField{Detector::Description::MMSField::Instance()};
     if (fieldOption.UseFast()) {
-        fField = FastField{0, 0, eCalField.FastField()};
+        fField = FastField{0, 0, ecalField.FastField()};
     } else {
         fField = FieldMap{fieldOption.ParsedFieldDataFilePath().generic_string(), "MMSField"};
     }

@@ -9,7 +9,7 @@ namespace MACE::PhaseI::SimMACEPhaseI {
 enum struct RegionType {
     DefaultGaseous,
     DefaultSolid,
-    ECalSensitive,
+    ECALSensitive,
     Shield,
     Target,
     Vacuum

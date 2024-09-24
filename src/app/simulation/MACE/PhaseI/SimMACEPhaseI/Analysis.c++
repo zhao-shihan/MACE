@@ -1,8 +1,8 @@
 #include "MACE/PhaseI/SimMACEPhaseI/Action/PrimaryGeneratorAction.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Action/TrackingAction.h++"
 #include "MACE/PhaseI/SimMACEPhaseI/Analysis.h++"
-#include "MACE/Simulation/Hit/ECalHit.h++"
-#include "MACE/Simulation/Hit/ECalPMTHit.h++"
+#include "MACE/Simulation/Hit/ECALHit.h++"
+#include "MACE/Simulation/Hit/ECALPMTHit.h++"
 
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Extension/Geant4X/Utility/ConvertGeometry.h++"
@@ -21,17 +21,17 @@ Analysis::Analysis() :
     PassiveSingleton{},
     fFilePath{"SimMACEPhaseI_untitled"},
     fFileMode{"NEW"},
-    fCoincidenceWithECal{true},
+    fCoincidenceWithECAL{true},
     fLastUsedFullFilePath{},
     fFile{},
     fPrimaryVertexOutput{},
     fDecayVertexOutput{},
-    fECalSimHitOutput{},
-    fECalPMTHitOutput{},
+    fECALSimHitOutput{},
+    fECALPMTHitOutput{},
     fPrimaryVertex{},
     fDecayVertex{},
-    fECalHit{},
-    fECalPMTHit{},
+    fECALHit{},
+    fECALPMTHit{},
     fMessengerRegister{this} {}
 
 auto Analysis::RunBegin(G4int runID) -> void {
@@ -52,38 +52,38 @@ auto Analysis::RunBegin(G4int runID) -> void {
     // initialize outputs
     if (PrimaryGeneratorAction::Instance().SavePrimaryVertexData()) { fPrimaryVertexOutput.emplace(fmt::format("G4Run{}/SimPrimaryVertex", runID)); }
     if (TrackingAction::Instance().SaveDecayVertexData()) { fDecayVertexOutput.emplace(fmt::format("G4Run{}/SimDecayVertex", runID)); }
-    fECalSimHitOutput.emplace(fmt::format("G4Run{}/ECalSimHit", runID));
-    fECalPMTHitOutput.emplace(fmt::format("G4Run{}/ECalPMTHit", runID));
+    fECALSimHitOutput.emplace(fmt::format("G4Run{}/ECALSimHit", runID));
+    fECALPMTHitOutput.emplace(fmt::format("G4Run{}/ECALPMTHit", runID));
 }
 
 auto Analysis::EventEnd() -> void {
-    const auto eCalPassed{not fCoincidenceWithECal or fECalHit == nullptr or fECalHit->size() > 0};
-    if (eCalPassed) {
+    const auto ecalPassed{not fCoincidenceWithECAL or fECALHit == nullptr or fECALHit->size() > 0};
+    if (ecalPassed) {
         if (fPrimaryVertex and fPrimaryVertexOutput) { fPrimaryVertexOutput->Fill(*fPrimaryVertex); }
         if (fDecayVertex and fDecayVertexOutput) { fDecayVertexOutput->Fill(*fDecayVertex); }
-        if (fECalHit) { fECalSimHitOutput->Fill(*fECalHit); }
-        if (fECalPMTHit) { fECalPMTHitOutput->Fill(*fECalPMTHit); }
+        if (fECALHit) { fECALSimHitOutput->Fill(*fECALHit); }
+        if (fECALPMTHit) { fECALPMTHitOutput->Fill(*fECALPMTHit); }
     }
     fPrimaryVertex = {};
     fDecayVertex = {};
-    fECalHit = {};
-    fECalPMTHit = {};
+    fECALHit = {};
+    fECALPMTHit = {};
 }
 
 auto Analysis::RunEnd(Option_t* option) -> void {
     // write data
     if (fPrimaryVertexOutput) { fPrimaryVertexOutput->Write(); }
     if (fDecayVertexOutput) { fDecayVertexOutput->Write(); }
-    fECalSimHitOutput->Write();
-    fECalPMTHitOutput->Write();
+    fECALSimHitOutput->Write();
+    fECALPMTHitOutput->Write();
     // close file
     fFile->Close(option);
     delete fFile;
     // reset output
     fPrimaryVertexOutput.reset();
     fDecayVertexOutput.reset();
-    fECalSimHitOutput.reset();
-    fECalPMTHitOutput.reset();
+    fECALSimHitOutput.reset();
+    fECALPMTHitOutput.reset();
 }
 
 } // namespace MACE::PhaseI::SimMACEPhaseI

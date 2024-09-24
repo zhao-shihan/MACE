@@ -2,7 +2,7 @@
 #include "MACE/SimMACE/Action/TrackingAction.h++"
 #include "MACE/SimMACE/Analysis.h++"
 #include "MACE/Simulation/Hit/CDCHit.h++"
-#include "MACE/Simulation/Hit/ECalHit.h++"
+#include "MACE/Simulation/Hit/ECALHit.h++"
 #include "MACE/Simulation/Hit/MCPHit.h++"
 #include "MACE/Simulation/Hit/TTCHit.h++"
 
@@ -25,7 +25,7 @@ Analysis::Analysis() :
     AnalysisBase{},
     fCoincidenceWithMMS{true},
     fCoincidenceWithMCP{true},
-    fCoincidenceWithECal{true},
+    fCoincidenceWithECAL{true},
     fSaveCDCHitData{true},
     fSaveTTCHitData{true},
     fPrimaryVertexOutput{},
@@ -34,13 +34,13 @@ Analysis::Analysis() :
     fCDCSimHitOutput{},
     fMMSSimTrackOutput{},
     fMCPSimHitOutput{},
-    fECalSimHitOutput{},
+    fECALSimHitOutput{},
     fPrimaryVertex{},
     fDecayVertex{},
     fCDCHit{},
     fTTCHit{},
     fMCPHit{},
-    fECalHit{},
+    fECALHit{},
     fMMSTruthTracker{},
     fMessengerRegister{this} {}
 
@@ -51,7 +51,7 @@ auto Analysis::RunBeginUserAction(int runID) -> void {
     if (fSaveCDCHitData) { fCDCSimHitOutput.emplace(fmt::format("G4Run{}/CDCSimHit", runID)); }
     fMMSSimTrackOutput.emplace(fmt::format("G4Run{}/MMSSimTrack", runID));
     fMCPSimHitOutput.emplace(fmt::format("G4Run{}/MCPSimHit", runID));
-    fECalSimHitOutput.emplace(fmt::format("G4Run{}/ECalSimHit", runID));
+    fECALSimHitOutput.emplace(fmt::format("G4Run{}/ECALSimHit", runID));
 }
 
 auto Analysis::EventEndUserAction() -> void {
@@ -60,8 +60,8 @@ auto Analysis::EventEndUserAction() -> void {
                             std::nullopt};
     const auto mmsPassed{not fCoincidenceWithMMS or mmsTrack == std::nullopt or mmsTrack->size() > 0};
     const auto mcpPassed{not fCoincidenceWithMCP or fMCPHit == nullptr or std::ranges::any_of(*fMCPHit, [](auto&& hit) { return Get<"Trig">(*hit); })};
-    const auto eCalPassed{not fCoincidenceWithECal or fECalHit == nullptr or fECalHit->size() > 0};
-    if (mmsPassed and mcpPassed and eCalPassed) {
+    const auto ecalPassed{not fCoincidenceWithECAL or fECALHit == nullptr or fECALHit->size() > 0};
+    if (mmsPassed and mcpPassed and ecalPassed) {
         if (fPrimaryVertex and fPrimaryVertexOutput) { fPrimaryVertexOutput->Fill(*fPrimaryVertex); }
         if (fDecayVertex and fDecayVertexOutput) { fDecayVertexOutput->Fill(*fDecayVertex); }
         if (mmsTrack) {
@@ -70,14 +70,14 @@ auto Analysis::EventEndUserAction() -> void {
             fMMSSimTrackOutput->Fill(*mmsTrack);
         }
         if (fMCPHit) { fMCPSimHitOutput->Fill(*fMCPHit); }
-        if (fECalHit) { fECalSimHitOutput->Fill(*fECalHit); }
+        if (fECALHit) { fECALSimHitOutput->Fill(*fECALHit); }
     }
     fPrimaryVertex = {};
     fDecayVertex = {};
     fCDCHit = {};
     fTTCHit = {};
     fMCPHit = {};
-    fECalHit = {};
+    fECALHit = {};
 }
 
 auto Analysis::RunEndUserAction(int runID) -> void {
@@ -88,7 +88,7 @@ auto Analysis::RunEndUserAction(int runID) -> void {
     if (fCDCSimHitOutput) { fCDCSimHitOutput->Write(); }
     fMMSSimTrackOutput->Write();
     fMCPSimHitOutput->Write();
-    fECalSimHitOutput->Write();
+    fECALSimHitOutput->Write();
     // reset output
     fPrimaryVertexOutput.reset();
     fDecayVertexOutput.reset();
@@ -96,7 +96,7 @@ auto Analysis::RunEndUserAction(int runID) -> void {
     fCDCSimHitOutput.reset();
     fMMSSimTrackOutput.reset();
     fMCPSimHitOutput.reset();
-    fECalSimHitOutput.reset();
+    fECALSimHitOutput.reset();
 }
 
 } // namespace MACE::SimMACE

@@ -6,10 +6,10 @@
 #include "MACE/Detector/Description/BeamMonitor.h++"
 #include "MACE/Detector/Description/CDC.h++"
 #include "MACE/Detector/Description/Collimator.h++"
-#include "MACE/Detector/Description/ECal.h++"
-#include "MACE/Detector/Description/ECalField.h++"
-#include "MACE/Detector/Description/ECalMagnet.h++"
-#include "MACE/Detector/Description/ECalShield.h++"
+#include "MACE/Detector/Description/ECAL.h++"
+#include "MACE/Detector/Description/ECALField.h++"
+#include "MACE/Detector/Description/ECALMagnet.h++"
+#include "MACE/Detector/Description/ECALShield.h++"
 #include "MACE/Detector/Description/FieldOption.h++"
 #include "MACE/Detector/Description/MCP.h++"
 #include "MACE/Detector/Description/MCPChamber.h++"
@@ -61,10 +61,10 @@ public:
                    Detector::Description::BeamDegrader,
                    Detector::Description::BeamMonitor,
                    Detector::Description::Collimator,
-                   Detector::Description::ECal,
-                   Detector::Description::ECalField,
-                   Detector::Description::ECalMagnet,
-                   Detector::Description::ECalShield,
+                   Detector::Description::ECAL,
+                   Detector::Description::ECALField,
+                   Detector::Description::ECALMagnet,
+                   Detector::Description::ECALShield,
                    Detector::Description::MCP,
                    Detector::Description::MCPChamber,
                    Detector::Description::ShieldingWall,

@@ -37,7 +37,7 @@ private:
     std::unique_ptr<G4UIcmdWithABool> fSaveDecayVertexData;
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithMMS;
     std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithMCP;
-    std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithECal;
+    std::unique_ptr<G4UIcmdWithABool> fCoincidenceWithECAL;
     std::unique_ptr<G4UIcmdWithABool> fSaveTTCHitData;
     std::unique_ptr<G4UIcmdWithABool> fSaveCDCHitData;
 };
