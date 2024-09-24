@@ -108,29 +108,27 @@ auto ECalPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
     const auto& typeMap{eCal.Mesh().fTypeMap};
     const auto& pmtDimensions{eCal.PMTDimensions()};
 
-    for (int unitID{};
+    for (int moduleID{};
          auto&& [_1, _2, vertexIndex] : std::as_const(faceList)) { // loop over all ECal face
         
-        if(unitID != 213){
-            unitID++;
+        if(moduleID != 213){
+            moduleID++;
             continue;
         }
 
-        auto typeMapIt = typeMap.find(unitID);
+        auto typeMapIt = typeMap.find(moduleID);
         auto pmtDiameter = pmtDimensions.at(typeMapIt->second).at(0);
         auto cathodeDiameter = pmtDimensions.at(typeMapIt->second).at(1);
         auto pmtLength = pmtDimensions.at(typeMapIt->second).at(2);
 
-        // std::cout << "unitID: " << unitID << ", typeID:" << typeMapIt->second << ", pmtDiameter: " << pmtDiameter << ", cathodeDiameter: " << cathodeDiameter << ", pmtLength: " << pmtLength << std::endl;
+        const auto couplerTransform{eCal.ComputeTransformToOuterSurfaceWithOffset(moduleID,
+                                                                                  pmtCouplerThickness / 2)};
 
-        const auto couplerTransform{eCal.ComputeTransformToOuterSurfaceWithOffset(unitID,
-                                                                                 pmtCouplerThickness / 2)};
+        const auto shellTransform{eCal.ComputeTransformToOuterSurfaceWithOffset(moduleID,
+                                                                                pmtCouplerThickness + pmtLength / 2)};
 
-        const auto shellTransform{eCal.ComputeTransformToOuterSurfaceWithOffset(unitID,
-                                                                               pmtCouplerThickness + pmtLength / 2)};
-
-        const auto cathodeTransform{eCal.ComputeTransformToOuterSurfaceWithOffset(unitID,
-                                                                                 pmtCouplerThickness + pmtWindowThickness + pmtCathodeThickness / 2)};
+        const auto cathodeTransform{eCal.ComputeTransformToOuterSurfaceWithOffset(moduleID,
+                                                                                  pmtCouplerThickness + pmtWindowThickness + pmtCathodeThickness / 2)};
 
         const auto solidCoupler{Make<G4Tubs>("temp", 0, pmtDiameter / 2, pmtCouplerThickness / 2, 0, 2 * pi)};
         const auto logicCoupler{Make<G4LogicalVolume>(solidCoupler, siliconeGrease, "ECalPMTCoupler")};
@@ -139,7 +137,7 @@ auto ECalPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
                                                        "ECalPMTCoupler",
                                                        Mother().LogicalVolume(),
                                                        true,
-                                                       unitID,
+                                                       moduleID,
                                                        checkOverlaps)};
 
         const auto solidGlassTube{Make<G4Tubs>("temp", 0, pmtDiameter / 2, pmtLength / 2, 0, 2 * pi)};
@@ -151,7 +149,7 @@ auto ECalPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
                             "ECalPMTShell",
                             Mother().LogicalVolume(),
                             true,
-                            unitID,
+                            moduleID,
                             checkOverlaps);
 
         const auto solidCathode{Make<G4Tubs>("temp", 0, cathodeDiameter / 2, pmtCathodeThickness / 2, 0, 2 * pi)};
@@ -161,7 +159,7 @@ auto ECalPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
                             "ECalPMTCathode",
                             Mother().LogicalVolume(),
                             true,
-                            unitID,
+                            moduleID,
                             checkOverlaps);
 
         /////////////////////////////////////////////
@@ -172,7 +170,7 @@ auto ECalPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
         if (eCalCrystal) {
             const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
             new G4LogicalBorderSurface{"couplerSurface",
-                                       eCalCrystal->PhysicalVolume(fmt::format("ECalCrystal_{}", unitID)),
+                                       eCalCrystal->PhysicalVolume(fmt::format("ECalCrystal_{}", moduleID)),
                                        physicalCoupler,
                                        couplerSurface};
             couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
@@ -182,6 +180,7 @@ auto ECalPMTAssemblies::Construct(G4bool checkOverlaps) -> void {
         new G4LogicalSkinSurface{"cathodeSkinSurface", logicCathode, cathodeSurface};
         cathodeSurface->SetMaterialPropertiesTable(cathodeSurfacePropertiesTable);
 
+        ++moduleID;
     }
 }
 

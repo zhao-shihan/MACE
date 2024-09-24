@@ -6,7 +6,7 @@
 /control/saveHistory
 /run/verbose 2
 
-/MACE/Physics/UseRadioactiveDecayPhysics
+#/MACE/Physics/UseRadioactiveDecayPhysics
 #/MACE/Physics/UseOpticalPhysics
 
 #/Mustard/Detector/Description/Import SimMACEPhaseI_geom.yaml
@@ -60,6 +60,8 @@
 # Visibility
 /vis/geometry/set/visibility CentralBeamPipeVacuum     0 no
 /vis/geometry/set/visibility World                     0 no
+/vis/geometry/set/visibility ECalPMTCathode        0 no
+/vis/geometry/set/visibility ECalPMTCoupler        0 no
 
 # Colors
 /vis/geometry/set/colour CentralBeamPipe               0     1     1     1     0.1

@@ -40,8 +40,8 @@ public:
     auto MPPCWaveLengthBin() const -> const auto& { return fMPPCWaveLengthBin; }
     auto MPPCEfficiency() const -> const auto& { return fMPPCEfficiency; }
 
-    auto CsIEnergyBin() const -> const auto& { return fCsIEnergyBin; }
-    auto CsIScintillationComponent1() const -> const auto& { return fCsIScintillationComponent1; }
+    auto ScintillationWavelengthBin() const -> const auto& { return fScintillationWavelengthBin; }
+    auto ScintillationComponent1() const -> const auto& { return fScintillationComponent1; }
     auto ScintillationYield() const -> auto { return fScintillationYield; }
     auto ScintillationTimeConstant1() const -> auto { return fScintillationTimeConstant1; }
     auto ResolutionScale() const -> auto { return fResolutionScale; }
@@ -72,8 +72,8 @@ public:
     auto MPPCWaveLengthBin(std::vector<double> val) -> void { fMPPCWaveLengthBin = std::move(val); }
     auto MPPCEfficiency(std::vector<double> val) -> void { fMPPCEfficiency = std::move(val); }
 
-    auto CsIEnergyBin(std::vector<double> val) -> void { fCsIEnergyBin = std::move(val); }
-    auto CsIScintillationComponent1(std::vector<double> val) -> void { fCsIScintillationComponent1 = std::move(val); }
+    auto ScintillationWavelengthBin(std::vector<double> val) -> void { fScintillationWavelengthBin = std::move(val); }
+    auto ScintillationComponent1(std::vector<double> val) -> void { fScintillationComponent1 = std::move(val); }
     auto ScintillationYield(double val) -> void { fScintillationYield = val; }
     auto ScintillationTimeConstant1(double val) -> void { fScintillationTimeConstant1 = val; }
     auto ResolutionScale(double val) -> void { fResolutionScale = val; }
@@ -90,6 +90,7 @@ public:
         std::vector<HepGeom::Point3D<double>> fVertex;
         std::vector<Face> fFaceList;
         std::map<int, int> fTypeMap;
+        std::map<int, std::vector<int>> fClusterMap;
     };
 
 private:
@@ -130,8 +131,8 @@ private:
     std::vector<double> fMPPCWaveLengthBin;
     std::vector<double> fMPPCEfficiency;
 
-    std::vector<double> fCsIEnergyBin;
-    std::vector<double> fCsIScintillationComponent1;
+    std::vector<double> fScintillationWavelengthBin;
+    std::vector<double> fScintillationComponent1;
     double fScintillationYield;
     double fScintillationTimeConstant1;
     double fResolutionScale;
