@@ -37,8 +37,8 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
     const auto innerRadius{eCal.InnerRadius()};
     const auto crystalHypotenuse{eCal.CrystalHypotenuse()};
 
-    const auto csiEnergyBin{eCal.CsIEnergyBin()};
-    const auto csiScintillationComponent1{eCal.CsIScintillationComponent1()};
+    const auto scintillationWavelengthBin{eCal.ScintillationWavelengthBin()};
+    const auto scintillationComponent1{eCal.ScintillationComponent1()};
     const auto scintillationYield{eCal.ScintillationYield()};
     const auto scintillationTimeConstant1{eCal.ScintillationTimeConstant1()};
     const auto resolutionScale{eCal.ResolutionScale()};
@@ -54,12 +54,12 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
 
     const auto iodideElement{nistManager->FindOrBuildElement("I")};
     const auto cesiumElement{nistManager->FindOrBuildElement("Cs")};
-    const auto thaliumElement{nistManager->FindOrBuildElement("Tl")};
+    const auto thalliumElement{nistManager->FindOrBuildElement("Tl")};
 
     const auto csI{new G4Material("CsI", 4.51_g_cm3, 3, kStateSolid)};
     csI->AddElement(cesiumElement, 0.507556);
     csI->AddElement(iodideElement, 0.484639);
-    csI->AddElement(thaliumElement, 0.007805);
+    csI->AddElement(thalliumElement, 0.007805);
 
     //////////////////////////////////////////////////
     // Construct Material Optical Properties Tables
@@ -73,7 +73,7 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
     const auto csiPropertiesTable{new G4MaterialPropertiesTable};
     csiPropertiesTable->AddProperty("RINDEX", fEnergyPair, {1.79, 1.79});
     csiPropertiesTable->AddProperty("ABSLENGTH", fEnergyPair, {370_mm, 370_mm});
-    csiPropertiesTable->AddProperty("SCINTILLATIONCOMPONENT1", csiEnergyBin, csiScintillationComponent1);
+    csiPropertiesTable->AddProperty("SCINTILLATIONCOMPONENT1", scintillationWavelengthBin, scintillationComponent1);
     csiPropertiesTable->AddConstProperty("SCINTILLATIONYIELD", scintillationYield);
     csiPropertiesTable->AddConstProperty("SCINTILLATIONTIMECONSTANT1", scintillationTimeConstant1);
     csiPropertiesTable->AddConstProperty("RESOLUTIONSCALE", resolutionScale);
@@ -96,7 +96,7 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
     // Construct Volumes
     /////////////////////////////////////////////
 
-    for (int unitID{};
+    for (int moduleID{};
          auto&& [centroid, _, vertexIndex] : std::as_const(faceList)) { // loop over all ECal face
         const auto centroidMagnitude{centroid.mag()};
         const auto crystalLength{crystalHypotenuse * centroidMagnitude};
@@ -174,19 +174,19 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
                 return solid;
             }};
 
-        const auto crystalTransform{eCal.ComputeTransformToOuterSurfaceWithOffset(unitID,
-                                                                                 -crystalLength / 2)};
+        const auto crystalTransform{eCal.ComputeTransformToOuterSurfaceWithOffset(moduleID,
+                                                                                  -crystalLength / 2)};
 
         // Crystal
 
-        const auto solidCrystal{MakeTessellatedSolid(fmt::format("temp_{}", unitID))};
+        const auto solidCrystal{MakeTessellatedSolid(fmt::format("temp_{}", moduleID))};
         const auto cutCrystalBox{
             Make<G4Box>(
                 "temp",
                 1_m,
                 1_m,
                 crystalLength / 2)};
-        const auto cutSoildCrystal{
+        const auto cutSolidCrystal{
             Make<G4IntersectionSolid>(
                 "ECalCrystal",
                 solidCrystal,
@@ -194,17 +194,17 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
                 crystalTransform)};
         const auto logicCrystal{
             Make<G4LogicalVolume>(
-                cutSoildCrystal,
+                cutSolidCrystal,
                 csI,
                 "ECalCrystal")};
         const auto physicalCrystal{
             Make<G4PVPlacement>(
                 G4Transform3D{},
                 logicCrystal,
-                fmt::format("ECalCrystal_{}", unitID),
+                fmt::format("ECalCrystal_{}", moduleID),
                 Mother().LogicalVolume(),
                 true,
-                unitID,
+                moduleID,
                 checkOverlaps)};
 
         /////////////////////////////////////////////
@@ -224,12 +224,12 @@ auto ECalCrystal::Construct(G4bool checkOverlaps) -> void {
             const auto couplerSurface{new G4OpticalSurface("coupler", unified, polished, dielectric_dielectric)};
             new G4LogicalBorderSurface{"couplerSurface",
                                        physicalCrystal,
-                                       eCalPMTCoupler->PhysicalVolume("ECalPMTCoupler", unitID),
+                                       eCalPMTCoupler->PhysicalVolume("ECalPMTCoupler", moduleID),
                                        couplerSurface};
             couplerSurface->SetMaterialPropertiesTable(couplerSurfacePropertiesTable);
         }
 
-        ++unitID;
+        ++moduleID;
     }
 }
 
