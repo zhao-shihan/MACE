@@ -194,21 +194,63 @@ ECal::ECal() :
                           21.43, 20.344, 19.319, 18.363, 17.294, 16.265, 15.232, 14.053,
                           12.759, 11.486, 10.345, 9.229, 8.193, 7.198, 6.108, 5.136, 4.241,
                           3.37, 2.403, 1.447, 0.466}, // ET 9269B
-    fMPPCWidthSet{
-        12_mm,
-        12_mm,
-        24_mm,
-        24_mm,
-        24_mm,
-        24_mm,
-        24_mm,
-        24_mm,
-        24_mm,
-        24_mm,
+    // fMPPCWidthSet{
+    //     12_mm,
+    //     12_mm,
+    //     24_mm,
+    //     24_mm,
+    //     24_mm,
+    //     24_mm,
+    //     24_mm,
+    //     24_mm,
+    //     24_mm,
+    //     24_mm,
+    // },
+    // fMPPCThickness{0.1_mm},
+    // fMPPCCouplerThickness{0.1_mm},
+    // fMPPCWindowThickness{0.15_mm},
+    // fMPPCWaveLengthBin{886.244, 871.228, 856.21, 841.193, 826.176, 810.974, 796.366, 781.121, 766.101, 751.082,
+    //                    736.061, 721.04, 705.896, 694.41, 682.947, 669.145, 657.534, 647.289, 637.726, 628.163,
+    //                    618.599, 606.122, 595.757, 585.127, 576.93, 568.732, 560.534, 552.336, 544.138, 536.29,
+    //                    527.266, 517.491, 509.566, 502.072, 494.349, 485.647, 475.13, 460.112, 445.101, 430.094,
+    //                    417.538, 402.822, 386.469, 375.348, 356.387, 335.359, 319.688, 310.159, 302.229, 299.024,
+    //                    296.299, 294.815, 291.379, 289.225, 282.082},
+    // fMPPCEfficiency{0.045, 0.053, 0.061, 0.069, 0.077, 0.088, 0.096, 0.105, 0.116, 0.127,
+    //                 0.139, 0.152, 0.164, 0.177, 0.188, 0.201, 0.216, 0.229, 0.242, 0.255,
+    //                 0.269, 0.287, 0.302, 0.317, 0.33, 0.342, 0.354, 0.367, 0.38, 0.393,
+    //                 0.408, 0.425, 0.44, 0.454, 0.468, 0.485, 0.497, 0.505, 0.507, 0.502,
+    //                 0.493, 0.477, 0.449, 0.422, 0.397, 0.373, 0.346, 0.318, 0.28, 0.25,
+    //                 0.217, 0.184, 0.083, 0.051, 0.025}, // S14161
+
+    fMPPCNPixelRows{
+        3,
+        3,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
     },
-    fMPPCThickness{0.1_mm},
+    fMPPCPixelSizeSet{3_mm,
+                    3_mm,
+                    3_mm,
+                    3_mm,
+                    3_mm,
+                    3_mm,
+                    3_mm,
+                    3_mm,
+                    3_mm,
+                    3_mm
+    },
+    fMPPCPitch{0.2_mm},//gap between pixels
+    fMPPCThickness{0.1_mm},//cathode
     fMPPCCouplerThickness{0.1_mm},
-    fMPPCWindowThickness{0.15_mm},
+    fMPPCWindowThickness{0.2_mm},
+    //0.1(epoxy)+0.1(cathode),window change  from epoxy to epoxy&silicon Pixels, may change name "window" later
+
     fMPPCWaveLengthBin{886.244, 871.228, 856.21, 841.193, 826.176, 810.974, 796.366, 781.121, 766.101, 751.082,
                        736.061, 721.04, 705.896, 694.41, 682.947, 669.145, 657.534, 647.289, 637.726, 628.163,
                        618.599, 606.122, 595.757, 585.127, 576.93, 568.732, 560.534, 552.336, 544.138, 536.29,
@@ -220,7 +262,9 @@ ECal::ECal() :
                     0.269, 0.287, 0.302, 0.317, 0.33, 0.342, 0.354, 0.367, 0.38, 0.393,
                     0.408, 0.425, 0.44, 0.454, 0.468, 0.485, 0.497, 0.505, 0.507, 0.502,
                     0.493, 0.477, 0.449, 0.422, 0.397, 0.373, 0.346, 0.318, 0.28, 0.25,
-                    0.217, 0.184, 0.083, 0.051, 0.025}, // S14161
+                    0.217, 0.184, 0.083, 0.051, 0.025}, // S13361
+
+
     fScintillationWavelengthBin{1.75_eV, 1.77_eV, 1.78_eV, 1.80_eV, 1.82_eV, 1.83_eV, 1.85_eV, 1.87_eV,
                                 1.88_eV, 1.89_eV, 1.91_eV, 1.92_eV, 1.93_eV, 1.94_eV, 1.95_eV, 1.96_eV,
                                 1.98_eV, 1.98_eV, 2.00_eV, 2.01_eV, 2.02_eV, 2.04_eV, 2.05_eV, 2.07_eV,
@@ -253,8 +297,8 @@ ECal::ECal() :
     //                             0.874, 0.916, 0.954, 0.981, 0.994, 0.991, 0.969, 0.934, 0.891, 0.850,
     //                             0.809, 0.768, 0.725, 0.681, 0.639, 0.597, 0.554, 0.510, 0.464, 0.419,
     //                             0.374, 0.331, 0.287, 0.245, 0.203, 0.160, 0.117, 0.076, 0.046, 0.015},
-    // fScintillationYield{54000},
-    // fScintillationTimeConstant1{1000_ns},
+    // fScintillationYield{10000},
+    // fScintillationTimeConstant1{300_ns},
     fResolutionScale{1} {}
 
 auto ECal::ComputeMesh() const -> MeshInformation {
@@ -417,7 +461,10 @@ auto ECal::ImportAllValue(const YAML::Node& node) -> void {
     ImportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
     ImportValue(node, fPMTWaveLengthBin, "PMTWaveLengthBin");
     ImportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
-    ImportValue(node, fMPPCWidthSet, "MPPCWidthSet");
+    ImportValue(node, fMPPCNPixelRows, "MPPCNPixelRows");
+    ImportValue(node, fMPPCPixelSizeSet,
+    "MPPCPixelSizeSet");
+    ImportValue(node, fMPPCPitch,"MPPCPitch");
     ImportValue(node, fMPPCThickness, "MPPCThickness");
     ImportValue(node, fMPPCCouplerThickness, "MPPCCouplerThickness");
     ImportValue(node, fMPPCWindowThickness, "MPPCWindowThickness");
@@ -444,7 +491,10 @@ auto ECal::ExportAllValue(YAML::Node& node) const -> void {
     ExportValue(node, fPMTCathodeThickness, "PMTCathodeThickness");
     ExportValue(node, fPMTWaveLengthBin, "PMTWaveLengthBin");
     ExportValue(node, fPMTQuantumEfficiency, "PMTQuantumEfficiency");
-    ExportValue(node, fMPPCWidthSet, "MPPCWidthSet");
+    ExportValue(node, fMPPCNPixelRows, "MPPCNPixelRows");
+    ExportValue(node, fMPPCPixelSizeSet,
+    "MPPCPixelSizeSet");
+    ExportValue(node, fMPPCPitch,"MPPCPitch");
     ExportValue(node, fMPPCThickness, "MPPCThickness");
     ExportValue(node, fMPPCCouplerThickness, "MPPCCouplerThickness");
     ExportValue(node, fMPPCWindowThickness, "MPPCWindowThickness");

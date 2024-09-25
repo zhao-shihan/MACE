@@ -26,6 +26,8 @@ public:
     auto UpstreamWindowRadius() const -> auto { return fUpstreamWindowRadius; }
     auto DownstreamWindowRadius() const -> auto { return fDownstreamWindowRadius; }
 
+    auto UseMPPC() const -> auto { return fUseMPPC; }
+
     auto PMTDimensions() const -> const auto& { return fPMTDimensions; }
     auto PMTCouplerThickness() const -> auto { return fPMTCouplerThickness; }
     auto PMTWindowThickness() const -> auto { return fPMTWindowThickness; }
@@ -33,7 +35,9 @@ public:
     auto PMTWaveLengthBin() const -> const auto& { return fPMTWaveLengthBin; }
     auto PMTQuantumEfficiency() const -> const auto& { return fPMTQuantumEfficiency; }
 
-    auto MPPCWidthSet() const -> const auto& { return fMPPCWidthSet; }
+    auto MPPCNPixelRows() const -> const auto& { return fMPPCNPixelRows; }
+    auto MPPCPixelSizeSet() const -> const auto& { return fMPPCPixelSizeSet; }
+    auto MPPCPitch() const -> auto { return fMPPCPitch; }
     auto MPPCThickness() const -> auto { return fMPPCThickness; }
     auto MPPCCouplerThickness() const -> auto { return fMPPCCouplerThickness; }
     auto MPPCWindowThickness() const -> auto { return fMPPCWindowThickness; }
@@ -58,6 +62,8 @@ public:
     auto UpstreamWindowRadius(double val) -> void { fUpstreamWindowRadius = val, SetGeometryOutdated(); }
     auto DownstreamWindowRadius(double val) -> void { fDownstreamWindowRadius = val, SetGeometryOutdated(); }
 
+    auto UseMPPC(bool val) -> void { fUseMPPC = val; }
+
     auto PMTDimensions(std::vector<muc::array3d> val) -> void { fPMTDimensions = std::move(val); }
     auto PMTCouplerThickness(double val) -> void { fPMTCouplerThickness = val; }
     auto PMTWindowThickness(double val) -> void { fPMTWindowThickness = val; }
@@ -65,7 +71,9 @@ public:
     auto PMTWaveLengthBin(std::vector<double> val) -> void { fPMTWaveLengthBin = std::move(val); }
     auto PMTQuantumEfficiency(std::vector<double> val) -> void { fPMTQuantumEfficiency = std::move(val); }
 
-    auto MPPCWidthSet(std::vector<double> val) -> void { fMPPCWidthSet = std::move(val); }
+    auto MPPCNPixelRows(std::vector<int> val) -> void { fMPPCNPixelRows = std::move(val); }
+    auto MPPCPixelSizeSet(std::vector<double> val) -> void { fMPPCPixelSizeSet = std::move(val); }
+    auto MPPCPitch(double val) -> void { fMPPCPitch = val; }
     auto MPPCThickness(double val) -> void { fMPPCThickness = val; }
     auto MPPCCouplerThickness(double val) -> void { fMPPCCouplerThickness = val; }
     auto MPPCWindowThickness(double val) -> void { fMPPCWindowThickness = val; }
@@ -117,6 +125,8 @@ private:
     double fUpstreamWindowRadius;
     double fDownstreamWindowRadius;
 
+    bool fUseMPPC {true};
+
     std::vector<muc::array3d> fPMTDimensions;
     double fPMTCouplerThickness;
     double fPMTWindowThickness;
@@ -124,7 +134,9 @@ private:
     std::vector<double> fPMTWaveLengthBin;
     std::vector<double> fPMTQuantumEfficiency;
 
-    std::vector<double> fMPPCWidthSet;
+    std::vector<int> fMPPCNPixelRows;
+    std::vector<double> fMPPCPixelSizeSet;
+    double fMPPCPitch;
     double fMPPCThickness;
     double fMPPCCouplerThickness;
     double fMPPCWindowThickness;
