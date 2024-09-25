@@ -7,6 +7,7 @@
 
 #include "Mustard/Data/Tuple.h++"
 #include "Mustard/Data/TupleModel.h++"
+#include "Mustard/Utility/PrettyLog.h++"
 
 #include <concepts>
 #include <iterator>

@@ -8,6 +8,7 @@
 #include "Mustard/Env/MPIEnv.h++"
 #include "Mustard/Extension/Geant4X/Utility/ConvertGeometry.h++"
 #include "Mustard/Extension/MPIX/ParallelizePath.h++"
+#include "Mustard/Utility/PrettyLog.h++"
 
 #include "TFile.h"
 #include "TMacro.h"
@@ -46,8 +47,8 @@ auto Analysis::RunBegin(G4int runID) -> void {
     fFile = TFile::Open(fullFilePath.c_str(), filePathChanged ? fFileMode.c_str() : "UPDATE",
                         "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose);
     if (fFile == nullptr) {
-        throw std::runtime_error{fmt::format("MACE::SimECAL::Analysis::RunBegin: Cannot open file '{}' with mode '{}'",
-                                             fullFilePath, fFileMode)};
+        throw std::runtime_error{Mustard::PrettyException(fmt::format("Cannot open file '{}' with mode '{}'",
+                                                                      fullFilePath, fFileMode))};
     }
     fLastUsedFullFilePath = std::move(fullFilePath);
     // save geometry

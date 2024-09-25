@@ -3,6 +3,7 @@
 
 #include "Mustard/Env/Print.h++"
 #include "Mustard/Utility/LiteralUnit.h++"
+#include "Mustard/Utility/PrettyLog.h++"
 
 #include "Randomize.hh"
 
@@ -45,7 +46,7 @@ MCPSD::MCPSD(const G4String& sdName) :
 
     const auto& mcp{Detector::Description::MCP::Instance()};
     if (mcp.EfficiencyEnergy().size() != mcp.EfficiencyValue().size()) {
-        throw std::runtime_error{"mcp.EfficiencyEnergy().size() != mcp.EfficiencyValue().size()"};
+        throw std::runtime_error{Mustard::PrettyException("mcp.EfficiencyEnergy().size() != mcp.EfficiencyValue().size()")};
     }
     const auto n{mcp.EfficiencyEnergy().size()};
     fEfficiency = std::make_unique<G4DataInterpolation>(const_cast<double*>(mcp.EfficiencyEnergy().data()), // stupid interface accepts non-const ptr only

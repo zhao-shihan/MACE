@@ -9,6 +9,7 @@
 #include "Mustard/Extension/MPIX/ParallelizePath.h++"
 #include "Mustard/Utility/MPIReseedRandomEngine.h++"
 #include "Mustard/Utility/MakeTextTMacro.h++"
+#include "Mustard/Utility/PrettyLog.h++"
 #include "Mustard/Utility/UseXoshiro.h++"
 
 #include "TFile.h"
@@ -40,7 +41,9 @@ auto main(int argc, char* argv[]) -> int {
 
     const auto outputName{Mustard::MPIX::ParallelizePath(cli.OutputFilePath()).replace_extension(".root").generic_string()};
     TFile file{outputName.c_str(), cli.OutputFileMode().c_str(), "", ROOT::RCompressionSetting::EDefaults::kUseGeneralPurpose};
-    if (not file.IsOpen()) { throw std::runtime_error{fmt::format("Cannot open file '{}' with mode '{}'", outputName, cli.OutputFileMode())}; }
+    if (not file.IsOpen()) {
+        throw std::runtime_error{Mustard::PrettyException(fmt::format("Cannot open file '{}' with mode '{}'", outputName, cli.OutputFileMode()))};
+    }
     do {
         if (env.OnCommNodeWorker()) { break; }
         std::stringstream smearingConfigText;
