@@ -1,7 +1,5 @@
 # MACE
 
-<img align="right" src="document/picture/MACE_logo_100x100.png"/>
-
 - [MACE](#mace)
   - [Pre-built binaries](#pre-built-binaries)
   - [Dependencies](#dependencies)
@@ -9,7 +7,7 @@
     - [Libraries](#libraries)
   - [Cite](#cite)
 
-![SimMACE](document/picture/SimMACE_20240315.png)
+![MACE](document/picture/MACE_logo_v2.svg)
 
 ## Pre-built binaries
 
